@@ -1,0 +1,95 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+    exception_to_status:
+        InvalidArgumentException: 400
+        Slik\User\Domain\Exception\InvalidCredentialsException: 401
+        Slik\User\Domain\Exception\ForbiddenException: 403
+        Slik\Shared\Infrastructure\ReadModel\Exception\NotFoundException: 404
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        public: false
+
+    _instanceof:
+        Slik\Shared\Application\Command\CommandHandlerInterface:
+            public: true
+            tags:
+                - { name: messenger.message_handler, bus: messenger.bus.command }
+
+        Slik\Shared\Application\Query\QueryHandlerInterface:
+            public: true
+            tags:
+                - { name: messenger.message_handler, bus: messenger.bus.query }
+
+        Slik\Shared\Infrastructure\MessageBus\Event\EventHandlerInterface:
+            public: true
+            tags:
+                - { name: messenger.message_handler, bus: messenger.bus.event.async }
+
+    ## EventSauce
+    EventSauce\EventSourcing\Serialization\MessageSerializer:
+        class: EventSauce\EventSourcing\Serialization\ConstructingMessageSerializer
+        tags:
+            - { name: 'event_sauce.message_serializer' }
+
+    event_sauce.message_serializer: '@EventSauce\EventSourcing\Serialization\MessageSerializer'
+
+    EventSauce\IdEncoding\IdEncoder:
+        class: EventSauce\IdEncoding\StringIdEncoder
+        tags:
+            - { name: 'event_sauce.id_encoder' }
+
+    event_sauce.id_encoder: '@EventSauce\IdEncoding\IdEncoder'
+
+    EventSauce\EventSourcing\MessageRepository:
+        class: EventSauce\MessageRepository\DoctrineMessageRepository\DoctrineMessageRepository
+        arguments:
+            - '@doctrine.dbal.event_store_connection'
+            - 'event_store'
+            - '@event_sauce.message_serializer'
+            - 0
+            - null
+            - '@event_sauce.id_encoder'
+        tags:
+            - { name: 'event_sauce.message_repository' }
+
+
+    EventSauce\EventSourcing\MessageDispatcher:
+        class: Slik\Shared\Infrastructure\MessageBus\Event\EventDispatcher
+
+    ## End EventSauce
+
+    Slik\:
+        resource: '../src/Slik/*'
+        exclude: '../src/Slik/**/{Migrations,EventSubscriber,Kernel.php}'
+
+    UI\:
+        resource: '../src/UI/*'
+        exclude: '../src/UI/**/{EventSubscriber}'
+
+    Slik\Shared\Infrastructure\MessageBus\Command\MessengerCommandBus:
+        arguments:
+            - '@messenger.bus.command'
+
+    Slik\Shared\Infrastructure\MessageBus\Query\MessengerQueryBus:
+        arguments:
+            - '@messenger.bus.query'
+
+    Slik\Shared\Infrastructure\MessageBus\Event\MessengerEventBus:
+        arguments:
+            - '@messenger.bus.event'
+
+
+    UI\Http\Rest\EventSubscriber\ExceptionSubscriber:
+        arguments:
+            - "%kernel.environment%"
+            - "%exception_to_status%"
+        tags:
+            - { name: 'kernel.event_listener', event: 'kernel.exception' }

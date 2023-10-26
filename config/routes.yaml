@@ -1,0 +1,9 @@
+controllers:
+    resource:
+        path: ../src/UI
+        namespace: UI
+    type: attribute
+
+#kernel:
+#    path: ../src/Kernel.php
+#    type: attribute

@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  slink:
+    build:
+        context: .
+        target: prod
+    image: anirdev/slink:latest
+    container_name: slink
+    environment:
+      - SWOOLE_WORKER_NUM=4
+    ports:
+      - "8080:80"
