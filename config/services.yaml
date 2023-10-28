@@ -8,7 +8,7 @@ parameters:
         InvalidArgumentException: 400
         Slik\User\Domain\Exception\InvalidCredentialsException: 401
         Slik\User\Domain\Exception\ForbiddenException: 403
-        Slik\Shared\Infrastructure\ReadModel\Exception\NotFoundException: 404
+        Slik\Shared\Infrastructure\Exception\NotFoundException: 404
 
 services:
     # default configuration for services in *this* file
