@@ -31,6 +31,10 @@ RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS autoconf g++ make linu
 # Copy supervisor config
 COPY ./docker/supervisord.conf /etc/supervisord.conf
 
+# Copy startup script
+COPY ./docker/startup.sh /usr/local/bin/startup.sh
+RUN chmod +x /usr/local/bin/startup.sh
+
 # Set working directory
 WORKDIR /app
 
