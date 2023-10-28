@@ -12,18 +12,21 @@ final readonly class SignUpCommand implements CommandInterface {
 
   public function __construct(
     #[SensitiveParameter]
+    #[Assert\NotBlank]
     #[Assert\Email]
     private string $email,
 
     #[SensitiveParameter]
+    #[Assert\NotBlank]
     #[Assert\PasswordStrength(minScore: Assert\PasswordStrength::STRENGTH_MEDIUM)]
     private string $password,
 
     #[SensitiveParameter]
-    #[Assert\PasswordStrength(minScore: Assert\PasswordStrength::STRENGTH_MEDIUM)]
+    #[Assert\NotBlank]
     #[Assert\IdenticalTo(propertyPath: 'password', message: 'Passwords do not match')]
     private string $confirm,
 
+    #[Assert\NotBlank]
     #[Assert\Length(min: 3)]
     private string $displayName,
   ) {}

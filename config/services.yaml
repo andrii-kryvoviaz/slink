@@ -93,3 +93,7 @@ services:
             - "%exception_to_status%"
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.exception' }
+
+    UI\Http\Rest\EventSubscriber\RequestArgumentSubscriber:
+        tags:
+            - { name: 'kernel.event_listener', event: 'kernel.controller_arguments' }

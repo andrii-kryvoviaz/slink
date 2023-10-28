@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final readonly class FindByEmailQuery implements QueryInterface {
   public function __construct(
+    #[Assert\NotBlank]
     #[Assert\Email]
     private string $email,
   ) {

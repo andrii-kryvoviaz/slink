@@ -50,13 +50,21 @@ final readonly class ExceptionSubscriber implements EventSubscriberInterface {
 
     if ($previous instanceof ValidationFailedException) {
       $error['message'] = 'Validation Error';
-
+      
+      $violations = [];
+      
       foreach ($previous->getViolations() as $violation) {
-        $error['violations'][] = [
+        if(isset($violations[$violation->getPropertyPath()])) {
+          continue;
+        }
+        
+        $violations[$violation->getPropertyPath()] = [
           'property' => $violation->getPropertyPath(),
           'message' => $violation->getMessage(),
         ];
       }
+      
+      $error['violations'] = array_values($violations);
     }
 
     $meta = $this->isDev() ? [
