@@ -20,17 +20,23 @@ doctrine:
     orm:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true
-        report_fields_where_declared: true
-        validate_xml_mapping: true
-        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
-        auto_mapping: true
-        mappings:
-            User:
-                is_bundle: false
-                dir: '%kernel.project_dir%/src/Slik/User/Infrastructure/ReadModel/View'
-                type: attribute
-                prefix: 'Slik\User\Infrastructure\ReadModel\View'
-                alias: User
+        default_entity_manager: read_model
+        entity_managers:
+            event_store:
+                connection: event_store
+            read_model:
+                connection: read_model
+                report_fields_where_declared: true
+                validate_xml_mapping: true
+                naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+                auto_mapping: true
+                mappings:
+                    User:
+                        is_bundle: false
+                        dir: '%kernel.project_dir%/src/Slik/User/Infrastructure/ReadModel/View'
+                        type: attribute
+                        prefix: 'Slik\User\Infrastructure\ReadModel\View'
+                        alias: User
 
 when@test:
     doctrine:
