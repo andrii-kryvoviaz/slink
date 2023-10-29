@@ -8,6 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Slik\Shared\Domain\Exception\DateTimeException;
 use Slik\Shared\Domain\ValueObject\DateTime;
 use Slik\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
+use Slik\User\Domain\ValueObject\Auth\HashedPassword;
+use Slik\User\Domain\ValueObject\Email;
 use Slik\User\Infrastructure\ReadModel\Repository\UserRepository;
 
 #[ORM\Table(name: '`user`')]
@@ -19,10 +21,10 @@ final readonly class UserView extends AbstractView {
     private string $uuid,
 
     #[ORM\Column(type: 'email', unique: true)]
-    private string $email,
+    private Email $email,
 
     #[ORM\Column(type: 'hashed_password')]
-    private string $password,
+    private HashedPassword $password,
 
     #[ORM\Column(type: 'datetime_immutable')]
     private DateTime $createdAt,
@@ -38,8 +40,8 @@ final readonly class UserView extends AbstractView {
   public static function deserialize(array $payload): static {
     return new self(
       $payload['id'],
-      $payload['credentials']['email'],
-      $payload['credentials']['password'],
+      Email::fromString($payload['credentials']['email']),
+      HashedPassword::fromHash($payload['credentials']['password']),
       DateTime::fromString($payload['createdAt']),
       isset($payload['updatedAt']) ? DateTime::fromString($payload['updatedAt']) : null,
     );
@@ -49,11 +51,11 @@ final readonly class UserView extends AbstractView {
     return $this->uuid;
   }
 
-  public function getEmail(): string {
+  public function getEmail(): Email {
     return $this->email;
   }
 
-  public function getPassword(): string {
+  public function getPassword(): HashedPassword {
     return $this->password;
   }
 

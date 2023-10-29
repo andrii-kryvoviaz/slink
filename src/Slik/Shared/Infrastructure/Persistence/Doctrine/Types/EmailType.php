@@ -12,15 +12,15 @@ use Throwable;
 
 final class EmailType extends StringType {
     private const TYPE = 'email';
-
-    /**
-     * @param mixed $value
-     *
-     * @return mixed|string|null
-     *
-     * @throws ConversionException
-     */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform) {
+  
+  /**
+   * @param mixed $value
+   * @param AbstractPlatform $platform
+   * @return string|null
+   *
+   * @throws ConversionException
+   */
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string {
         if (null === $value) {
             return null;
         }
@@ -31,15 +31,15 @@ final class EmailType extends StringType {
 
         return $value->toString();
     }
-
-    /**
-     * @param Email|string|null $value
-     *
-     * @return Email|null
-     *
-     * @throws ConversionException
-     */
-    public function convertToPHPValue($value, AbstractPlatform $platform) {
+  
+  /**
+   * @param Email|string|null $value
+   * @param AbstractPlatform $platform
+   * @return Email|null
+   *
+   * @throws ConversionException
+   */
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?Email {
         if (null === $value || $value instanceof Email) {
             return $value;
         }
@@ -56,14 +56,14 @@ final class EmailType extends StringType {
     /**
      * {@inheritdoc}
      */
-    public function requiresSQLCommentHint(AbstractPlatform $platform) {
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool {
         return true;
     }
 
     /**
      * @return string
      */
-    public function getName() {
+    public function getName(): string {
         return self::TYPE;
     }
 }
