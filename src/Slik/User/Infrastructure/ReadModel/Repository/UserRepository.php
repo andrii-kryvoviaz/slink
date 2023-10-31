@@ -55,7 +55,6 @@ final class UserRepository extends AbstractRepository implements CheckUserByEmai
 
   public function add(UserView $userView): void {
     $this->_em->persist($userView);
-    $this->_em->flush();
   }
 
   static function entityClass(): string {

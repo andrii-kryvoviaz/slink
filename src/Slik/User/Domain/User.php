@@ -12,7 +12,6 @@ use Slik\Shared\Domain\ValueObject\DateTime;
 use Slik\Shared\Domain\ValueObject\ID;
 use Slik\User\Domain\Event\UserSignedIn;
 use Slik\User\Domain\Event\UserWasCreated;
-use Slik\User\Domain\Exception\EmailAlreadyExistException;
 use Slik\User\Domain\Exception\InvalidCredentialsException;
 use Slik\User\Domain\Specification\UniqueEmailSpecificationInterface;
 use Slik\User\Domain\ValueObject\Auth\Credentials;
