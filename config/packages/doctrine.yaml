@@ -37,6 +37,12 @@ doctrine:
                         type: attribute
                         prefix: 'Slik\User\Infrastructure\ReadModel\View'
                         alias: User
+                    Image:
+                        is_bundle: false
+                        dir: '%kernel.project_dir%/src/Slik/Image/Infrastructure/ReadModel/View'
+                        type: attribute
+                        prefix: 'Slik\Image\Infrastructure\ReadModel\View'
+                        alias: Image
 
 when@test:
     doctrine:
