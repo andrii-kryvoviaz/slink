@@ -9,14 +9,3 @@ services:
       - ./:/app
     extra_hosts:
       - "host.docker.internal:host-gateway"
-
-#  db:
-#    image: postgres:16.0-alpine
-#    container_name: slink_db
-#    restart: always
-#    ports:
-#      - "5432:5432"
-#    environment:
-#        POSTGRES_USER: slink
-#        POSTGRES_PASSWORD: exoJNGah9C6b4Ara
-#        POSTGRES_DB: slink

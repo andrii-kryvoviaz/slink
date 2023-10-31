@@ -7,6 +7,7 @@ services:
         target: prod
     image: anirdev/slink:latest
     container_name: slink
+    restart: always
     environment:
       - SWOOLE_WORKER_NUM=4
     ports:
