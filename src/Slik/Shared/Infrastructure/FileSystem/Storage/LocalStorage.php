@@ -30,4 +30,14 @@ final readonly class LocalStorage implements StorageInterface {
     
     $file->move($path, $fileName);
   }
+  
+  public function getPath(string $fileName, ?string $path = null): string {
+    $path = $path ? $this->projectPublicDir . '/' . $path : $this->projectPublicDir;
+    
+    return $path . '/' . $fileName;
+  }
+  
+  public function url(string $fileName, ?string $path = null): string {
+    return $path ? '/' . $path . '/' . $fileName : '/' . $fileName;
+  }
 }
