@@ -25,6 +25,13 @@ final class DateTime extends DateTimeImmutable {
   public static function fromString(string $dateTime): self {
     return self::create($dateTime);
   }
+  
+  /**
+   * @throws DateTimeException
+   */
+  public static function fromTimeStamp(int $timestamp): self {
+    return self::create('@' . $timestamp);
+  }
 
   /**
    * @throws DateTimeException

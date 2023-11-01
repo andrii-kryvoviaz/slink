@@ -10,7 +10,9 @@ use Slik\Image\Infrastructure\ReadModel\View\ImageView;
 use Slik\Shared\Infrastructure\Persistence\ReadModel\AbstractProjection;
 
 final class ImageProjection extends AbstractProjection {
-  public function __construct(private readonly ImageRepository $repository) {
+  public function __construct(
+    private readonly ImageRepository $repository,
+  ) {
   }
   
   public function handleImageWasCreated(ImageWasCreated $event): void {

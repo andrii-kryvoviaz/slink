@@ -23,7 +23,7 @@ RUN apk update && apk upgrade &&\
 # Install Common PHP extensions
 RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS autoconf g++ make linux-headers imagemagick-dev curl-dev postgresql-dev icu-dev libpng-dev libmcrypt-dev libjpeg-turbo-dev oniguruma-dev && \
     docker-php-ext-configure gd && \
-    docker-php-ext-install curl intl mysqli pdo_pgsql mbstring gd && \
+    docker-php-ext-install curl intl mysqli pdo_pgsql mbstring gd exif && \
     pecl install mcrypt redis imagick && \
     docker-php-ext-enable mcrypt redis imagick && \
     apk del .build-deps

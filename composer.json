@@ -8,6 +8,7 @@
         "ext-amqp": "*",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "ext-exif": "*",
         "beberlei/assert": "^3.3",
         "doctrine/doctrine-bundle": "^2.10",
         "doctrine/doctrine-migrations-bundle": "^3.2",
