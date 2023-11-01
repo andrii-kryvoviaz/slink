@@ -5,47 +5,34 @@ declare(strict_types=1);
 namespace Slik\Image\Infrastructure\ReadModel\View;
 
 use Doctrine\ORM\Mapping as ORM;
+use EventSauce\EventSourcing\Serialization\SerializablePayload;
 use Slik\Image\Domain\Event\ImageWasCreated;
+use Slik\Image\Domain\ValueObject\ImageAttributes;
 use Slik\Image\Infrastructure\ReadModel\Repository\ImageRepository;
+use Slik\Shared\Domain\Exception\DateTimeException;
 use Slik\Shared\Domain\ValueObject\DateTime;
+use Slik\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
 
 #[ORM\Table(name: '`image`')]
 #[ORM\Entity(repositoryClass: ImageRepository::class)]
-final readonly class ImageView {
+final readonly class ImageView extends AbstractView {
   public function __construct(
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]
     private string $uuid,
 
-    #[ORM\Column(type: 'string')]
-    private string $fileName,
-
-    #[ORM\Column(type: 'string')]
-    private string $description,
-
-    #[ORM\Column(type: 'boolean')]
-    private bool $isPublic,
-
-    #[ORM\Column(type: 'datetime_immutable')]
-    private DateTime $createdAt,
-
-    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    private ?DateTime $updatedAt,
-    
-    #[ORM\Column(type: 'integer')]
-    private ?int $views = 0,
+    #[ORM\Embedded(class: ImageAttributes::class, columnPrefix: false)]
+    private ImageAttributes $attributes,
   ) {
   }
   
-  public static function fromEvent(ImageWasCreated $event): self {
+  /**
+   * @throws DateTimeException
+   */
+  public static function deserialize(array $payload): static {
     return new self(
-      $event->id->toString(),
-      $event->attributes->getFileName(),
-      $event->attributes->getDescription(),
-      $event->attributes->isPublic(),
-      $event->attributes->getCreatedAt(),
-      $event->attributes->getUpdatedAt(),
-      $event->attributes->getViews(),
+      $payload['id'],
+      ImageAttributes::fromPayload($payload['attributes']),
     );
   }
   
@@ -53,27 +40,7 @@ final readonly class ImageView {
     return $this->uuid;
   }
   
-  public function getFileName(): string {
-    return $this->fileName;
-  }
-  
-  public function getDescription(): string {
-    return $this->description;
-  }
-  
-  public function isPublic(): bool {
-    return $this->isPublic;
-  }
-  
-  public function getViews(): int {
-    return $this->views;
-  }
-  
-  public function getCreatedAt(): DateTime {
-    return $this->createdAt;
-  }
-  
-  public function getUpdatedAt(): ?DateTime {
-    return $this->updatedAt;
+  public function getAttributes(): ImageAttributes {
+    return $this->attributes;
   }
 }

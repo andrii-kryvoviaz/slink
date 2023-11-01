@@ -7,7 +7,9 @@ namespace Slik\Image\Domain\ValueObject;
 use Slik\Shared\Domain\Exception\DateTimeException;
 use Slik\Shared\Domain\ValueObject\AbstractCompoundValueObject;
 use Slik\Shared\Domain\ValueObject\DateTime;
+use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Embeddable]
 final readonly class ImageAttributes extends AbstractCompoundValueObject {
   /**
    * @param string $fileName
@@ -18,11 +20,22 @@ final readonly class ImageAttributes extends AbstractCompoundValueObject {
    * @param int|null $views
    */
   private function __construct(
+    #[ORM\Column(type: 'string')]
     private string $fileName,
+    
+    #[ORM\Column(type: 'string')]
     private string $description,
+    
+    #[ORM\Column(type: 'boolean')]
     private bool $isPublic,
+    
+    #[ORM\Column(type: 'datetime_immutable')]
     private DateTime $createdAt,
-    private ?DateTime $updatedAt = null,
+    
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?DateTime $updatedAt,
+    
+    #[ORM\Column(type: 'integer')]
     private ?int $views = 0,
   ) {
   }

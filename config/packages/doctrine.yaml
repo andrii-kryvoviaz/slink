@@ -1,3 +1,6 @@
+imports:
+    - { resource: '../doctrine/mappings.yaml' }
+
 doctrine:
     dbal:
         connections:
@@ -30,19 +33,7 @@ doctrine:
                 validate_xml_mapping: true
                 naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
                 auto_mapping: true
-                mappings:
-                    User:
-                        is_bundle: false
-                        dir: '%kernel.project_dir%/src/Slik/User/Infrastructure/ReadModel/View'
-                        type: attribute
-                        prefix: 'Slik\User\Infrastructure\ReadModel\View'
-                        alias: User
-                    Image:
-                        is_bundle: false
-                        dir: '%kernel.project_dir%/src/Slik/Image/Infrastructure/ReadModel/View'
-                        type: attribute
-                        prefix: 'Slik\Image\Infrastructure\ReadModel\View'
-                        alias: Image
+                mappings: '%doctrine_mappings%'
 
 when@test:
     doctrine:
