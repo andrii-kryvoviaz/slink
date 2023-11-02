@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Slik\Image\Infrastructure\ReadModel\Projection;
 
+use Doctrine\ORM\NonUniqueResultException;
+use Slik\Image\Domain\Event\ImageAttributesWasUpdated;
 use Slik\Image\Domain\Event\ImageWasCreated;
 use Slik\Image\Infrastructure\ReadModel\Repository\ImageRepository;
 use Slik\Image\Infrastructure\ReadModel\View\ImageView;
+use Slik\Shared\Infrastructure\Exception\NotFoundException;
 use Slik\Shared\Infrastructure\Persistence\ReadModel\AbstractProjection;
 
 final class ImageProjection extends AbstractProjection {
@@ -19,5 +22,15 @@ final class ImageProjection extends AbstractProjection {
     $image = ImageView::fromEvent($event);
     
     $this->repository->add($image);
+  }
+  
+  /**
+   * @throws NotFoundException
+   * @throws NonUniqueResultException
+   */
+  public function handleImageAttributesWasUpdated(ImageAttributesWasUpdated $event): void {
+    $image = $this->repository->oneById($event->id->toString());
+    
+    $image->merge(ImageView::fromEvent($event));
   }
 }

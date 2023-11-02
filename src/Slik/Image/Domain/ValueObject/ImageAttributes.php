@@ -90,6 +90,17 @@ final readonly class ImageAttributes extends AbstractCompoundValueObject {
     return $this->views;
   }
   
+  public function addView(): self {
+    return new self(
+      $this->fileName,
+      $this->description,
+      $this->isPublic,
+      $this->createdAt,
+      $this->updatedAt,
+      $this->views + 1,
+    );
+  }
+  
   public function toPayload(): array {
     return [
       'fileName' => $this->fileName,

@@ -6,13 +6,13 @@ namespace Slik\Image\Domain;
 
 use EventSauce\EventSourcing\AggregateRoot;
 use EventSauce\EventSourcing\AggregateRootBehaviour;
-use Slik\Image\Domain\Event\ImageMetadataWasAdded;
+use Slik\Image\Domain\Event\ImageAttributesWasUpdated;
 use Slik\Image\Domain\Event\ImageWasCreated;
 use Slik\Image\Domain\ValueObject\ImageAttributes;
 use Slik\Image\Domain\ValueObject\ImageMetadata;
 use Slik\Shared\Domain\ValueObject\ID;
 
-class Image implements AggregateRoot {
+final class Image implements AggregateRoot {
   use AggregateRootBehaviour;
   
   private ImageAttributes $attributes;
@@ -45,11 +45,21 @@ class Image implements AggregateRoot {
     return $image;
   }
   
+  public function addView(): void {
+    $attributes = $this->getAttributes()->addView();
+    
+    $this->recordThat(new ImageAttributesWasUpdated($this->aggregateRootId(), $attributes));
+  }
+  
   public function applyImageWasCreated(ImageWasCreated $event): void {
     $this->setAttributes($event->attributes);
     
     if ($event->metadata) {
       $this->setMetadata($event->metadata);
     }
+  }
+  
+  public function applyImageAttributesWasUpdated(ImageAttributesWasUpdated $event): void {
+    $this->setAttributes($event->attributes);
   }
 }

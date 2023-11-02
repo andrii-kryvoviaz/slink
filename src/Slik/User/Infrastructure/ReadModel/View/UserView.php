@@ -14,11 +14,11 @@ use Slik\User\Infrastructure\ReadModel\Repository\UserRepository;
 
 #[ORM\Table(name: '`user`')]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-final readonly class UserView extends AbstractView {
+final class UserView extends AbstractView {
   public function __construct(
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]
-    private string $uuid,
+    private readonly string $uuid,
 
     #[ORM\Column(type: 'email', unique: true)]
     private Email $email,
@@ -27,7 +27,7 @@ final readonly class UserView extends AbstractView {
     private HashedPassword $password,
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private DateTime $createdAt,
+    private readonly DateTime $createdAt,
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?DateTime $updatedAt,

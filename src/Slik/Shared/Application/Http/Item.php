@@ -7,7 +7,7 @@ namespace Slik\Shared\Application\Http;
 final readonly class Item {
   private function __construct(
     public string $type,
-    public array|object $resource,
+    public array|object|string $resource,
     public array $relationships = []
   ) {
   }
@@ -17,6 +17,13 @@ final readonly class Item {
       self::typeFromString($type),
       $payload,
       $relations
+    );
+  }
+  
+  public static function fromContent(string $content): self {
+    return new self(
+      'FileData',
+      $content
     );
   }
   

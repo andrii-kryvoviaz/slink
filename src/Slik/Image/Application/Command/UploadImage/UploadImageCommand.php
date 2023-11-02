@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Slik\Image\Application\Command;
+namespace Slik\Image\Application\Command\UploadImage;
 
 use Slik\Shared\Application\Command\CommandInterface;
 use Symfony\Component\HttpFoundation\File\File;

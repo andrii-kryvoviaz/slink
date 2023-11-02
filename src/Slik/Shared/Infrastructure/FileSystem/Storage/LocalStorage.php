@@ -11,18 +11,18 @@ final readonly class LocalStorage implements StorageInterface {
   
   /**
    * @param string $projectPublicDir
+   * @param string $directory
    */
-  public function __construct(private string $projectPublicDir) {
+  public function __construct(private string $projectPublicDir, private string $directory = self::PUBLIC_PATH) {
   }
   
   /**
    * @param File $file
    * @param string $fileName
-   * @param string|null $path
    * @return void
    */
-  public function upload(File $file, string $fileName, ?string $path = null): void {
-    $path = $path ? $this->projectPublicDir . '/' . $path : $this->projectPublicDir;
+  public function upload(File $file, string $fileName): void {
+    $path = $this->directory ? $this->projectPublicDir . '/' . $this->directory : $this->projectPublicDir;
     
     if (!is_dir($path)) {
       mkdir($path, 0777, true);
@@ -31,13 +31,21 @@ final readonly class LocalStorage implements StorageInterface {
     $file->move($path, $fileName);
   }
   
-  public function getPath(string $fileName, ?string $path = null): string {
-    $path = $path ? $this->projectPublicDir . '/' . $path : $this->projectPublicDir;
+  public function getPath(string $fileName): string {
+    $path = $this->directory ? $this->projectPublicDir . '/' . $this->directory : $this->projectPublicDir;
     
     return $path . '/' . $fileName;
   }
   
-  public function url(string $fileName, ?string $path = null): string {
-    return $path ? '/' . $path . '/' . $fileName : '/' . $fileName;
+  public function delete(string $fileName): void {
+    unlink($this->getPath($fileName));
+  }
+  
+  public function exists(string $fileName): bool {
+    return file_exists($this->getPath($fileName));
+  }
+  
+  public function getImageContent(string $fileName): string {
+    return file_get_contents($this->getPath($fileName));
   }
 }

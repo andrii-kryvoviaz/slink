@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Slik\Image\Application\Command;
+namespace Slik\Image\Application\Command\UploadImage;
 
 use Ramsey\Uuid\Uuid;
 use Slik\Image\Domain\Image;
@@ -11,9 +11,9 @@ use Slik\Image\Domain\ValueObject\ImageAttributes;
 use Slik\Image\Domain\ValueObject\ImageMetadata;
 use Slik\Shared\Application\Command\CommandHandlerInterface;
 use Slik\Shared\Domain\Exception\DateTimeException;
-use Slik\Shared\Domain\ValueObject\DateTime;
 use Slik\Shared\Domain\ValueObject\ID;
 use Slik\Shared\Infrastructure\FileSystem\FileUploader;
+use Slik\Shared\Infrastructure\FileSystem\Storage\StorageInterface;
 
 final readonly class UploadImageHandler implements CommandHandlerInterface {
   
@@ -32,10 +32,11 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
       $parsedMetadata = null;
     }
     
-    $fileName = $this->fileUploader->upload($file, 'images');
+    $imageId = ID::generate();
+    $fileName = $this->fileUploader->upload($file, $imageId->toString());
     
     $image = Image::create(
-      ID::fromString(Uuid::uuid4()->toString()),
+      $imageId,
       ImageAttributes::create(
         $fileName,
         $command->getDescription(),
