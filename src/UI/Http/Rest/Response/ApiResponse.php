@@ -18,9 +18,9 @@ class ApiResponse extends JsonResponse {
     return new self(null, $status);
   }
   
-  public static function created(string $location = null): self {
+  public static function created(string $id = null, string $location = null): self {
     return new self(
-      null,
+      $id ? ['id' => $id] : null,
       self::HTTP_CREATED,
       ($location) ? ['location' => $location] : []
     );

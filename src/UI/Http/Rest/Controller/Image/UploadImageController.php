@@ -24,6 +24,6 @@ final class UploadImageController {
   ): ApiResponse {
     $this->handle($command);
     
-    return ApiResponse::created('/upload');
+    return ApiResponse::created($command->getId()->toString(),"image/{$command->getId()}/detail");
   }
 }

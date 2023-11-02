@@ -25,6 +25,7 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
    */
   public function __invoke(UploadImageCommand $command): void {
     $file = $command->getImageFile();
+    $imageId = $command->getId();
     
     try {
       $parsedMetadata = exif_read_data($file->getRealPath());
@@ -32,7 +33,6 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
       $parsedMetadata = null;
     }
     
-    $imageId = ID::generate();
     $fileName = $this->fileUploader->upload($file, $imageId->toString());
     
     $image = Image::create(
