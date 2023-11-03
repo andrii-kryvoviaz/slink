@@ -13,96 +13,35 @@ use Slik\Shared\Domain\ValueObject\DateTime;
 final readonly class ImageMetadata extends AbstractCompoundValueObject{
   
   public function __construct(
-    #[ORM\Column(type: 'string')]
-    private string $originalName,
-    
-    #[ORM\Column(type: 'datetime_immutable')]
-    private DateTime $fileDateTime,
-    
     #[ORM\Column(type: 'integer')]
-    private int $fileSize,
+    private int    $size,
     
     #[ORM\Column(type: 'string')]
     private string $mimeType,
     
     #[ORM\Column(type: 'integer')]
-    private int $width,
+    private int    $width,
     
     #[ORM\Column(type: 'integer')]
-    private int $height,
-    
-    #[ORM\Column(type: 'boolean')]
-    private bool $isColor,
+    private int    $height,
   ) {
   }
   
   public function toPayload(): array {
     return [
-      'originalName' => $this->originalName,
-      'fileDateTime' => $this->fileDateTime->toString(),
-      'fileSize' => $this->fileSize,
+      'size' => $this->size,
       'mimeType' => $this->mimeType,
       'width' => $this->width,
       'height' => $this->height,
-      'isColor' => $this->isColor,
     ];
   }
   
-  /**
-   * @throws DateTimeException
-   */
   public static function fromPayload(array $payload): static {
     return new self(
-      $payload['originalName'],
-      DateTime::fromString($payload['fileDateTime']),
-      $payload['fileSize'],
+      $payload['size'],
       $payload['mimeType'],
       $payload['width'],
       $payload['height'],
-      $payload['isColor'],
     );
-  }
-  
-  /**
-   * @throws DateTimeException
-   */
-  public static function fromExifData(array $exifData): static {
-    return new self(
-      $exifData['FileName'],
-      DateTime::fromTimeStamp($exifData['FileDateTime']),
-      $exifData['FileSize'],
-      $exifData['MimeType'],
-      $exifData['COMPUTED']['Width'],
-      $exifData['COMPUTED']['Height'],
-      (bool) $exifData['COMPUTED']['IsColor'],
-    );
-  }
-  
-  public function getOriginalName(): string {
-    return $this->originalName;
-  }
-  
-  public function getFileDateTime(): DateTime {
-    return $this->fileDateTime;
-  }
-  
-  public function getFileSize(): int {
-    return $this->fileSize;
-  }
-  
-  public function getMimeType(): string {
-    return $this->mimeType;
-  }
-  
-  public function getWidth(): int {
-    return $this->width;
-  }
-  
-  public function getHeight(): int {
-    return $this->height;
-  }
-  
-  public function isColor(): bool {
-    return $this->isColor;
   }
 }

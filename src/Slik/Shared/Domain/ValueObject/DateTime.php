@@ -32,6 +32,29 @@ final class DateTime extends DateTimeImmutable {
   public static function fromTimeStamp(int $timestamp): self {
     return self::create('@' . $timestamp);
   }
+  
+  /**
+   * @throws DateTimeException
+   */
+  public static function fromUnknown(mixed $dateTime): self {
+    if ($dateTime instanceof DateTime) {
+      return $dateTime;
+    }
+    
+    if ($dateTime instanceof DateTimeImmutable) {
+      return self::fromString($dateTime->format(self::FORMAT));
+    }
+    
+    if (is_string($dateTime)) {
+      return self::fromString($dateTime);
+    }
+    
+    if (is_int($dateTime)) {
+      return self::fromTimeStamp($dateTime);
+    }
+    
+    throw new DateTimeException(new Exception('Invalid date time format'));
+  }
 
   /**
    * @throws DateTimeException
