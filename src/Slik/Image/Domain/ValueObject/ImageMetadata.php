@@ -27,6 +27,22 @@ final readonly class ImageMetadata extends AbstractCompoundValueObject{
   ) {
   }
   
+  public function getSize(): int {
+    return $this->size;
+  }
+  
+  public function getMimeType(): string {
+    return $this->mimeType;
+  }
+  
+  public function getWidth(): int {
+    return $this->width;
+  }
+  
+  public function getHeight(): int {
+    return $this->height;
+  }
+  
   public function toPayload(): array {
     return [
       'size' => $this->size,
