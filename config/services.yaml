@@ -11,6 +11,12 @@ parameters:
         Slik\Shared\Infrastructure\Exception\NotFoundException: 404
     project_public_dir: '%kernel.project_dir%/public'
 
+    storage_options:
+        local:
+            class: Slik\Shared\Infrastructure\FileSystem\Storage\LocalStorage
+            arguments:
+                projectPublicDir: '%project_public_dir%'
+
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -19,7 +25,6 @@ services:
         public: false
         bind:
             $projectPublicDir: '%project_public_dir%'
-
     _instanceof:
         Slik\Shared\Application\Command\CommandHandlerInterface:
             public: true
@@ -35,6 +40,13 @@ services:
             public: true
             tags:
                 - { name: messenger.message_handler, bus: messenger.bus.event.async }
+
+
+    Slik\Shared\Infrastructure\FileSystem\Storage\StorageInterface:
+        factory: ['@Slik\Shared\Infrastructure\FileSystem\StorageFactory', 'create']
+        arguments:
+            $storageOptions: '%storage_options%'
+            $storageProvider: '%env(STORAGE_PROVIDER)%'
 
     ## EventSauce
     EventSauce\EventSourcing\Serialization\MessageSerializer:
