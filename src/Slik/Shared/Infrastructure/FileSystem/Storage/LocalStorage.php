@@ -40,6 +40,14 @@ final class LocalStorage extends AbstractStorage {
   public function getImageContent(ImageOptions|string $image): string {
     $path = $this->getAbsolutePath($image);
     
+    if ($this->isModified($image)) {
+      // Handle transformations such as resize, crop, etc.
+      // Cache the image in the cache directory
+      $originalPath = $this->getOriginalPath($image);
+      
+      
+    }
+    
     try {
       return file_get_contents($path);
     } catch (\Exception $e) {

@@ -6,12 +6,14 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
   
   /**
    * @param string $fileName
+   * @param string $mimeType
    * @param int|null $width
    * @param int|null $height
    * @param int|null $quality
    */
   private function __construct(
     private string $fileName,
+    private string $mimeType,
     private ?int $width = null,
     private ?int $height = null,
     private ?int $quality = null,
@@ -23,6 +25,8 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
    */
   public function toPayload(): array {
     return [
+      'fileName' => $this->fileName,
+      'mimeType' => $this->mimeType,
       'width' => $this->width,
       'height' => $this->height,
       'quality' => $this->quality,
@@ -36,19 +40,10 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
   public static function fromPayload(array $payload): static {
     return new static(
       fileName: $payload['fileName'],
+      mimeType: $payload['mimeType'],
       width: $payload['width'] ?? null,
       height: $payload['height'] ?? null,
       quality: $payload['quality'] ?? null,
-    );
-  }
-  
-  /**
-   * @param string $fileName
-   * @return static
-   */
-  public static function fromFileName(string $fileName): static {
-    return new static(
-      fileName: $fileName,
     );
   }
   
@@ -57,6 +52,40 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
    */
   public function getFileName(): string {
     return $this->fileName;
+  }
+  
+  /**
+   * @return string
+   */
+  public function getMimeType(): string {
+    return $this->mimeType;
+  }
+  
+  /**
+   * @return string
+   */
+  public function getCacheFileName(): string {
+    [$name, $extension] = explode('.', $this->fileName);
+    
+    $reflection = new \ReflectionClass($this);
+    
+    $options = array_reduce($reflection->getProperties(), function ($carry, $property) {
+      $value = $property->getValue($this);
+      
+      if ($property->getName() === 'fileName') {
+        return $carry;
+      }
+      
+      if ($value === null) {
+        return $carry;
+      }
+      
+      $carry[] = sprintf('%s-%s', $property->getName(), $value);
+      
+      return $carry;
+    }, []);
+    
+    return sprintf('%s-%s.%s', $name, implode('-', $options), $extension);
   }
   
   /**
@@ -104,6 +133,10 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
    * @return bool
    */
   public function isModified(): bool {
+    if(in_array($this->mimeType, ['image/svg+xml', 'image/gif'])) {
+      return false;
+    }
+    
     return !$this->isEmpty();
   }
   
@@ -115,5 +148,12 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
     return $this->width === $other->width
       && $this->height === $other->height
       && $this->quality === $other->quality;
+  }
+  
+  /**
+   * @return string
+   */
+  public function __toString(): string {
+    return $this->fileName;
   }
 }

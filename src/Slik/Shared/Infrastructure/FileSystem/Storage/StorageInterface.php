@@ -12,8 +12,6 @@ interface StorageInterface {
   
   public function getImageContent(ImageOptions|string $image): string;
   
-  public function getPath(ImageOptions|string $image): string;
-  
   public function delete(ImageOptions|string $image): void;
   
   public function exists(ImageOptions|string $image): bool;
