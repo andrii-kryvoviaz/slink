@@ -24,3 +24,4 @@
 ###< symfony/phpunit-bridge ###
 
 /public/images
+/public/slink

@@ -4,48 +4,58 @@ declare(strict_types=1);
 
 namespace Slik\Shared\Infrastructure\FileSystem\Storage;
 
-use Slik\Shared\Infrastructure\FileSystem\Storage\StorageInterface;
+use Slik\Shared\Domain\ValueObject\ImageOptions;
+use Slik\Shared\Infrastructure\Exception\NotFoundException;
 use Symfony\Component\HttpFoundation\File\File;
 
-final readonly class LocalStorage implements StorageInterface {
+final class LocalStorage extends AbstractStorage {
   
   /**
    * @param string $projectPublicDir
-   * @param string $directory
    */
-  public function __construct(private string $projectPublicDir, private string $directory = self::PUBLIC_PATH) {
+  public function __construct(string $projectPublicDir) {
+    $this->setServerRoot($projectPublicDir);
   }
   
   /**
    * @param File $file
-   * @param string $fileName
+   * @param ImageOptions|string $image
    * @return void
    */
-  public function upload(File $file, string $fileName): void {
-    $path = $this->directory ? $this->projectPublicDir . '/' . $this->directory : $this->projectPublicDir;
+  public function upload(File $file, ImageOptions|string $image): void {
+    $path = $this->getAbsolutePath($image, onlyDir: true);
     
     if (!is_dir($path)) {
       mkdir($path, 0777, true);
     }
     
+    $fileName = $this->getFileName($image);
+    
     $file->move($path, $fileName);
   }
   
-  public function getPath(string $fileName): string {
-    $path = $this->directory ? $this->projectPublicDir . '/' . $this->directory : $this->projectPublicDir;
+  /**
+   * @throws NotFoundException
+   */
+  public function getImageContent(ImageOptions|string $image): string {
+    $path = $this->getAbsolutePath($image);
     
-    return $path . '/' . $fileName;
+    try {
+      return file_get_contents($path);
+    } catch (\Exception $e) {
+      throw new NotFoundException();
+    }
   }
   
-  public function delete(string $fileName): void {
-    unlink($this->getPath($fileName));
+  public function delete(ImageOptions|string $image): void {
+    $path = $this->getAbsolutePath($image);
+    
+    unlink($path);
   }
   
-  public function exists(string $fileName): bool {
-    return file_exists($this->getPath($fileName));
-  }
-  
-  public function getImageContent(string $fileName): string {
-    return file_get_contents($this->getPath($fileName));
+  public function exists(ImageOptions|string $image): bool {
+    $path = $this->getAbsolutePath($image);
+    
+    return file_exists($path);
   }
 }

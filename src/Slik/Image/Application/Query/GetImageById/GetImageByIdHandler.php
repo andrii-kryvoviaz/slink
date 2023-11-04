@@ -40,7 +40,7 @@ final readonly class GetImageByIdHandler implements QueryHandlerInterface {
       'url' => implode('/',
         [
           $this->request->getSchemeAndHttpHost(),
-          StorageInterface::PUBLIC_PATH,
+          'image',
           $imageView->getAttributes()->getFileName()
         ]),
     ]);

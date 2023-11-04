@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace Slik\Shared\Infrastructure\FileSystem\Storage;
 
-use Icewind\SMB\Exception\AlreadyExistsException;
 use Icewind\SMB\Exception\InvalidTypeException;
+use Icewind\SMB\Exception\AlreadyExistsException;
 use Icewind\SMB\Exception\NotFoundException;
 use Icewind\SMB\IShare;
+use Slik\Shared\Domain\ValueObject\ImageOptions;
 use Symfony\Component\HttpFoundation\File\File;
 
-final class SmbStorage implements StorageInterface {
+final class SmbStorage extends AbstractStorage {
   
-  private string $directory = self::PUBLIC_PATH;
-  
-  public function __construct(private IShare $share) {
+  public function __construct(private readonly IShare $share) {
   }
   
   /**
@@ -22,28 +21,45 @@ final class SmbStorage implements StorageInterface {
    * @throws AlreadyExistsException
    * @throws InvalidTypeException
    */
-  public function upload(File $file, string $fileName): void {
-    $path = $this->directory ?? '';
+  public function upload(File $file, ImageOptions|string $image): void {
+    $path = $this->getAbsolutePath($image, onlyDir: true);
+    $parts = explode('/', $path);
     
-    if(!$this->dirExists($path)) {
-      $this->share->mkdir($path);
-    }
+    array_reduce($parts, function ($carry, $item) {
+      $carry .= $item . '/';
+      
+      if(!$this->dirExists($carry)) {
+        $this->share->mkdir($carry);
+      }
+      
+      return $carry;
+    }, '');
     
-    $this->share->put($file->getPathname(), $this->getPath($fileName));
-  }
-  
-  public function getPath(string $fileName): string {
-    $path = $this->directory ?? '';
+    $fullPath = $this->getAbsolutePath($image);
     
-    return $path . '/' . $fileName;
+    $this->share->put($file->getPathname(), $fullPath);
   }
   
   /**
    * @throws NotFoundException
    * @throws InvalidTypeException
    */
-  public function delete(string $fileName): void {
-    $this->share->del($this->getPath($fileName));
+  public function getImageContent(ImageOptions|string $image): string {
+    $path = $this->getAbsolutePath($image);
+    
+    $stream = $this->share->read($path);
+    
+    return stream_get_contents($stream);
+  }
+  
+  /**
+   * @throws NotFoundException
+   * @throws InvalidTypeException
+   */
+  public function delete(ImageOptions|string $image): void {
+    $path = $this->getAbsolutePath($image);
+    
+    $this->share->del($path);
   }
   
   public function dirExists(string $path): bool {
@@ -56,23 +72,15 @@ final class SmbStorage implements StorageInterface {
     }
   }
   
-  public function exists(string $fileName): bool {
+  public function exists(ImageOptions|string $image): bool {
+    $path = $this->getAbsolutePath($image);
+    
     try {
-      $this->share->stat($this->getPath($fileName));
+      $this->share->stat($path);
       
       return true;
     } catch (NotFoundException) {
       return false;
     }
-  }
-  
-  /**
-   * @throws NotFoundException
-   * @throws InvalidTypeException
-   */
-  public function getImageContent(string $fileName): string {
-    $stream = $this->share->read($this->getPath($fileName));
-    
-    return stream_get_contents($stream);
   }
 }
