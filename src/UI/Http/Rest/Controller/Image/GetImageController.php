@@ -24,13 +24,13 @@ final readonly class GetImageController {
    * @throws NotFoundException
    */
   public function __invoke(string $id, string $ext): ContentResponse {
-    $this->handle(new AddImageViewCountCommand($id));
-    
     $imageView = $this->ask(new GetImageByIdQuery($id, false));
     
     if($imageView->getAttributes()->getFileName() !== "$id.$ext") {
       throw new NotFoundException();
     }
+    
+    $this->handle(new AddImageViewCountCommand($id));
     
     $imageData = $this->ask(new GetImageContentQuery($imageView->getAttributes()->getFileName()));
     
