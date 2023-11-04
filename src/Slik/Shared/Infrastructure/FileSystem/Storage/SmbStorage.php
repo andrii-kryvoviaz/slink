@@ -4,29 +4,17 @@ declare(strict_types=1);
 
 namespace Slik\Shared\Infrastructure\FileSystem\Storage;
 
-use Icewind\SMB\BasicAuth;
 use Icewind\SMB\Exception\AlreadyExistsException;
-use Icewind\SMB\Exception\DependencyException;
 use Icewind\SMB\Exception\InvalidTypeException;
 use Icewind\SMB\Exception\NotFoundException;
 use Icewind\SMB\IShare;
-use Icewind\SMB\ServerFactory;
 use Symfony\Component\HttpFoundation\File\File;
 
 final class SmbStorage implements StorageInterface {
-  private IShare $share;
   
   private string $directory = self::PUBLIC_PATH;
   
-  /**
-   * @throws DependencyException
-   */
-  public function __construct(string $host, string $username, string $password, string $share) {
-    $serverFactory = new ServerFactory();
-    $auth = new BasicAuth($username, 'workgroup', $password);
-    $server = $serverFactory->createServer($host, $auth);
-    
-    $this->share = $server->getShare($share);
+  public function __construct(private IShare $share) {
   }
   
   /**

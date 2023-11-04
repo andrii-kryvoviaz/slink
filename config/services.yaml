@@ -19,10 +19,7 @@ parameters:
         smb:
             class: Slik\Shared\Infrastructure\FileSystem\Storage\SmbStorage
             arguments:
-                host: '%env(SMB_HOST)%'
-                username: '%env(SMB_USERNAME)%'
-                password: '%env(SMB_PASSWORD)%'
-                share: '%env(SMB_SHARE)%'
+                share: 'smb.share'
 
 services:
     # default configuration for services in *this* file
@@ -47,12 +44,40 @@ services:
             tags:
                 - { name: messenger.message_handler, bus: messenger.bus.event.async }
 
+    Symfony\Component\DependencyInjection\ContainerInterface:
+        alias: 'service_container'
 
+    ## Storage Configuration
     Slik\Shared\Infrastructure\FileSystem\Storage\StorageInterface:
         factory: ['@Slik\Shared\Infrastructure\FileSystem\StorageFactory', 'create']
         arguments:
             $storageOptions: '%storage_options%'
             $storageProvider: '%env(STORAGE_PROVIDER)%'
+
+    ## SMB Configuration
+    Icewind\SMB\ServerFactory:
+        class: Icewind\SMB\ServerFactory
+
+    smb.client.server:
+        class: Icewind\SMB\IServer
+        factory: [ '@Icewind\SMB\ServerFactory', 'createServer' ]
+        arguments:
+            - '%env(SMB_HOST)%'
+            - '@Icewind\SMB\BasicAuth'
+
+    smb.share:
+        public: true
+        class: Icewind\SMB\IShare
+        factory: [ '@smb.client.server', 'getShare' ]
+        arguments:
+            - '%env(SMB_SHARE)%'
+
+    Icewind\SMB\BasicAuth:
+        class: Icewind\SMB\BasicAuth
+        arguments:
+            - '%env(SMB_USERNAME)%'
+            - 'workgroup'
+            - '%env(SMB_PASSWORD)%'
 
     ## EventSauce
     EventSauce\EventSourcing\Serialization\MessageSerializer:
