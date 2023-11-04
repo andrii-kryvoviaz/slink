@@ -9,13 +9,12 @@ parameters:
         Slik\User\Domain\Exception\InvalidCredentialsException: 401
         Slik\User\Domain\Exception\ForbiddenException: 403
         Slik\Shared\Infrastructure\Exception\NotFoundException: 404
-    project_public_dir: '%kernel.project_dir%/public'
 
     storage_options:
         local:
             class: Slik\Shared\Infrastructure\FileSystem\Storage\LocalStorage
             arguments:
-                projectPublicDir: '%project_public_dir%'
+                projectPublicDir: '%kernel.project_dir%/public'
 
 services:
     # default configuration for services in *this* file
@@ -23,8 +22,7 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         public: false
-        bind:
-            $projectPublicDir: '%project_public_dir%'
+
     _instanceof:
         Slik\Shared\Application\Command\CommandHandlerInterface:
             public: true
