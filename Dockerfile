@@ -14,6 +14,7 @@ RUN apk update && apk upgrade &&\
     libmcrypt \
     libcurl \
     libpng \
+    libsmbclient \
     libjpeg-turbo \
     freetype \
     imagemagick \
@@ -21,11 +22,11 @@ RUN apk update && apk upgrade &&\
     icu-libs
 
 # Install Common PHP extensions
-RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS autoconf g++ make linux-headers imagemagick-dev curl-dev postgresql-dev icu-dev libpng-dev libmcrypt-dev libjpeg-turbo-dev oniguruma-dev && \
+RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS autoconf g++ make linux-headers imagemagick-dev curl-dev postgresql-dev icu-dev libpng-dev libmcrypt-dev libjpeg-turbo-dev oniguruma-dev samba-dev && \
     docker-php-ext-configure gd && \
     docker-php-ext-install curl intl mysqli pdo_pgsql mbstring gd && \
-    pecl install mcrypt redis imagick && \
-    docker-php-ext-enable mcrypt redis imagick && \
+    pecl install mcrypt redis imagick smbclient && \
+    docker-php-ext-enable mcrypt redis imagick smbclient && \
     apk del .build-deps
 
 # Copy supervisor config

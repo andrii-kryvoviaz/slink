@@ -9,12 +9,20 @@ parameters:
         Slik\User\Domain\Exception\InvalidCredentialsException: 401
         Slik\User\Domain\Exception\ForbiddenException: 403
         Slik\Shared\Infrastructure\Exception\NotFoundException: 404
+        Icewind\SMB\Exception\NotFoundException: 404
 
     storage_options:
         local:
             class: Slik\Shared\Infrastructure\FileSystem\Storage\LocalStorage
             arguments:
                 projectPublicDir: '%kernel.project_dir%/public'
+        smb:
+            class: Slik\Shared\Infrastructure\FileSystem\Storage\SmbStorage
+            arguments:
+                host: '%env(SMB_HOST)%'
+                username: '%env(SMB_USERNAME)%'
+                password: '%env(SMB_PASSWORD)%'
+                share: '%env(SMB_SHARE)%'
 
 services:
     # default configuration for services in *this* file
