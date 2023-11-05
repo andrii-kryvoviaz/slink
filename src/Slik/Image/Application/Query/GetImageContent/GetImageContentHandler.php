@@ -13,7 +13,7 @@ final readonly class GetImageContentHandler implements QueryHandlerInterface {
   }
   
   public function __invoke(GetImageContentQuery $query): Item {
-    $imageContent = $this->storage->getImageContent($query->getFileName());
+    $imageContent = $this->storage->getImage($query->getImageOptions());
     
     return Item::fromContent($imageContent);
   }

@@ -2,8 +2,13 @@
 
 namespace Slik\Shared\Infrastructure\FileSystem\Storage;
 
+use Gumlet\ImageResizeException;
+use Icewind\SMB\Exception\InvalidTypeException;
+use Icewind\SMB\Exception\NotFoundException;
+use Slik\Image\Domain\Service\ImageTransformerInterface;
+use Slik\Image\Infrastructure\Service\ImageTransformer;
 use Slik\Shared\Domain\ValueObject\ImageOptions;
-use Slik\Shared\Infrastructure\FileSystem\Storage\Enum\StorageEntity;
+use Symfony\Contracts\Service\Attribute\Required;
 
 abstract class AbstractStorage implements StorageInterface {
   /**
@@ -63,6 +68,43 @@ abstract class AbstractStorage implements StorageInterface {
   }
   
   /**
+   * @throws ImageResizeException
+   */
+  protected function getActualPath(ImageOptions|string $image): string {
+    if (!$this->isModified($image)) {
+      return $this->getAbsolutePath($image);
+    }
+    
+    // Handle transformations such as resize, crop, etc.
+    // Cache the image in the cache directory
+    $cachePath = $this->getAbsolutePath($image, onlyDir: true);
+    
+    if (!$this->exists($cachePath)) {
+      $this->mkdir($cachePath);
+    }
+    
+    $originalImagePath = $this->getOriginalPath($image);
+    $cacheImagePath = $this->getAbsolutePath($image);
+    
+    if (!$this->exists($cacheImagePath)) {
+      // apply transformations
+      $imageTransformer = ImageTransformer::create();
+      
+      $content = $imageTransformer->transform($this->read($originalImagePath), $image->toPayload());
+      
+      $this->write($cacheImagePath, $content);
+    }
+    
+    return $cacheImagePath;
+  }
+  
+  /**
+   */
+  public function getImage(ImageOptions|string $image): string {
+    return $this->read($this->getActualPath($image));
+  }
+  
+  /**
    * @param ImageOptions|string $image
    * @param bool $onlyDir
    * @return string
@@ -116,6 +158,10 @@ abstract class AbstractStorage implements StorageInterface {
    * @return string
    */
   protected function getFileName(ImageOptions|string $image): string {
+    if(is_string($image)) {
+      return $image;
+    }
+    
     if ($this->isModified($image)) {
       return $image->getCacheFileName();
     }

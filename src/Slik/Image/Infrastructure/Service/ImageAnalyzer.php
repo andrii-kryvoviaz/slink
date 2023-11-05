@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Slik\Image\Domain\Service;
+namespace Slik\Image\Infrastructure\Service;
 
+use Slik\Image\Domain\Service\ImageAnalyzerInterface;
 use Symfony\Component\HttpFoundation\File\File;
 
-final class ImageAnalyzer {
+final class ImageAnalyzer implements ImageAnalyzerInterface {
+  private File $file;
   
   /**
    * @var int|null
@@ -18,10 +20,10 @@ final class ImageAnalyzer {
    */
   private ?int $height = null;
   
-  /**
-   * @param File $file
-   */
-  private function __construct(private readonly File $file) {
+  public function setFile(File $file): self {
+    $this->file = $file;
+    
+    return $this;
   }
   
   /**
@@ -29,7 +31,8 @@ final class ImageAnalyzer {
    * @return self
    */
   public static function fromFile(File $file): self {
-    return new self($file);
+    $instance = new self();
+    return $instance->setFile($file);
   }
   
   /**
@@ -37,13 +40,18 @@ final class ImageAnalyzer {
    * @return self
    */
   public static function fromPath(string $path): self {
-    return new self(new File($path));
+    $file = new File($path);
+    
+    return self::fromFile($file);
   }
   
   /**
+   * @param File $file
    * @return void
    */
-  public function analyze(): void {
+  public function analyze(File $file): void {
+    $this->setFile($file);
+    
     $mimeType = $this->file->getMimeType();
     
     if ($mimeType === 'image/svg+xml') {

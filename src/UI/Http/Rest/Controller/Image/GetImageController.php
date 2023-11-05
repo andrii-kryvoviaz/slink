@@ -10,6 +10,8 @@ use Slik\Image\Application\Query\GetImageContent\GetImageContentQuery;
 use Slik\Shared\Application\Command\CommandTrait;
 use Slik\Shared\Application\Query\QueryTrait;
 use Slik\Shared\Infrastructure\Exception\NotFoundException;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use UI\Http\Rest\Response\ContentResponse;
@@ -20,6 +22,11 @@ final readonly class GetImageController {
   use CommandTrait;
   use QueryTrait;
   
+  private Request $request;
+  
+  public function __construct(RequestStack $requestStack) {
+    $this->request = $requestStack->getCurrentRequest();
+  }
   /**
    * @throws NotFoundException
    */
@@ -32,7 +39,12 @@ final readonly class GetImageController {
     
     $this->handle(new AddImageViewCountCommand($id));
     
-    $imageData = $this->ask(new GetImageContentQuery($imageView->getAttributes()->getFileName()));
+    $imageData = $this->ask(new GetImageContentQuery(
+      $imageView->getAttributes()->getFileName(),
+      $imageView->getMetadata()->getMimeType(),
+      $this->request->query->get('width', null),
+      $this->request->query->get('height', null)
+    ));
     
     return ContentResponse::file($imageData, $imageView->getMetadata()->getMimeType());
   }

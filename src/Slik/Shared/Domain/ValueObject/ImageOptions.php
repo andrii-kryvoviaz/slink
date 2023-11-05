@@ -4,6 +4,13 @@ namespace Slik\Shared\Domain\ValueObject;
 
 final readonly class ImageOptions extends AbstractCompoundValueObject {
   
+  private const SKIP_PROPERTIES = ['fileName', 'mimeType'];
+  private const PROPERTY_MAP = [
+    'width' => 'w',
+    'height' => 'h',
+    'quality' => 'q',
+  ];
+  
   /**
    * @param string $fileName
    * @param string $mimeType
@@ -72,7 +79,7 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
     $options = array_reduce($reflection->getProperties(), function ($carry, $property) {
       $value = $property->getValue($this);
       
-      if ($property->getName() === 'fileName') {
+      if (in_array($property->getName(), self::SKIP_PROPERTIES)) {
         return $carry;
       }
       
@@ -80,7 +87,9 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
         return $carry;
       }
       
-      $carry[] = sprintf('%s-%s', $property->getName(), $value);
+      $name = self::PROPERTY_MAP[$property->getName()] ?? $property->getName()[0];
+      
+      $carry[] = sprintf('%s%s', $name, $value);
       
       return $carry;
     }, []);
@@ -116,12 +125,11 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
     $reflection = new \ReflectionClass($this);
     
     foreach ($reflection->getProperties() as $property) {
-      // Skip fileName
-      if ($property->getName() === 'fileName') {
+      if (in_array($property->getName(), self::SKIP_PROPERTIES)) {
         continue;
       }
       
-      if ($property->getValue($this) !== null) {
+      if ($property->getValue($this)) {
         return false;
       }
     }

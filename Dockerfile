@@ -7,6 +7,9 @@ RUN composer install --ignore-platform-reqs --no-interaction --no-scripts --pref
 
 
 FROM php:8.2-alpine as base
+
+ARG MEMORY_LIMIT=512M
+
 # Install dependencies
 RUN apk update && apk upgrade &&\
     apk add --no-cache \
@@ -23,8 +26,8 @@ RUN apk update && apk upgrade &&\
 
 # Install Common PHP extensions
 RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS autoconf g++ make linux-headers imagemagick-dev curl-dev postgresql-dev icu-dev libpng-dev libmcrypt-dev libjpeg-turbo-dev oniguruma-dev samba-dev && \
-    docker-php-ext-configure gd && \
-    docker-php-ext-install curl intl mysqli pdo_pgsql mbstring gd && \
+    docker-php-ext-configure gd --with-jpeg && \
+    docker-php-ext-install curl intl mysqli pdo_pgsql mbstring gd exif && \
     pecl install mcrypt redis imagick smbclient && \
     docker-php-ext-enable mcrypt redis imagick smbclient && \
     apk del .build-deps
@@ -35,6 +38,9 @@ COPY ./docker/supervisord.conf /etc/supervisord.conf
 # Copy startup script
 COPY ./docker/startup.sh /usr/local/bin/startup.sh
 RUN chmod +x /usr/local/bin/startup.sh
+
+# Set memory limit
+RUN echo "memory_limit=${MEMORY_LIMIT}" > /usr/local/etc/php/conf.d/memory-limit.ini
 
 # Set working directory
 WORKDIR /app

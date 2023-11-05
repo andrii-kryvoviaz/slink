@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace Slik\Image\Application\Command\UploadImage;
 
 use Psr\Log\LoggerInterface;
-use Ramsey\Uuid\Uuid;
 use Slik\Image\Domain\Image;
 use Slik\Image\Domain\Repository\ImageStoreRepositoryInterface;
-use Slik\Image\Domain\Service\ImageAnalyzer;
+use Slik\Image\Domain\Service\ImageAnalyzerInterface;
 use Slik\Image\Domain\ValueObject\ImageAttributes;
 use Slik\Image\Domain\ValueObject\ImageMetadata;
 use Slik\Shared\Application\Command\CommandHandlerInterface;
@@ -17,7 +16,12 @@ use Slik\Shared\Infrastructure\FileSystem\FileUploader;
 
 final readonly class UploadImageHandler implements CommandHandlerInterface {
   
-  public function __construct(private LoggerInterface $logger,private FileUploader $fileUploader, private ImageStoreRepositoryInterface $imageRepository) {
+  public function __construct(
+    private LoggerInterface $logger,
+    private FileUploader $fileUploader,
+    private ImageStoreRepositoryInterface $imageRepository,
+    private ImageAnalyzerInterface $imageAnalyzer,
+  ) {
   }
   
   /**
@@ -27,15 +31,13 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
     $file = $command->getImageFile();
     $imageId = $command->getId();
     
-    $imageAnalyzer = ImageAnalyzer::fromFile($file);
-    
     try {
-      $imageAnalyzer->analyze();
+      $this->imageAnalyzer->analyze($file);
     } catch (\Exception $e) {
       $this->logger->error($e->getMessage());
     }
     
-    $metadata = $imageAnalyzer->toPayload();
+    $metadata = $this->imageAnalyzer->toPayload();
     
     $fileName = $this->fileUploader->upload($file, $imageId->toString());
     

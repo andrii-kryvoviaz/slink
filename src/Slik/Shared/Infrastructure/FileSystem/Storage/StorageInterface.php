@@ -10,9 +10,15 @@ use Symfony\Component\HttpFoundation\File\File;
 interface StorageInterface {
   public function upload(File $file, ImageOptions|string $image): void;
   
-  public function getImageContent(ImageOptions|string $image): string;
+  public function getImage(ImageOptions|string $image): string;
   
   public function delete(ImageOptions|string $image): void;
   
-  public function exists(ImageOptions|string $image): bool;
+  public function exists(string $path): bool;
+  
+  public function mkdir(string $path): void;
+  
+  public function write(string $path, string $content): void;
+  
+  public function read(string $path): string;
 }

@@ -29,7 +29,7 @@ final class SmbStorage extends AbstractStorage {
       $carry .= $item . '/';
       
       if(!$this->dirExists($carry)) {
-        $this->share->mkdir($carry);
+        $this->mkdir($carry);
       }
       
       return $carry;
@@ -44,13 +44,23 @@ final class SmbStorage extends AbstractStorage {
    * @throws NotFoundException
    * @throws InvalidTypeException
    */
-  public function getImageContent(ImageOptions|string $image): string {
-    $path = $this->getAbsolutePath($image);
+  public function write(string $path, string $content): void {
+    $stream = $this->share->write($path);
     
+    fwrite($stream, $content);
+  }
+  
+  /**
+   * @throws NotFoundException
+   * @throws InvalidTypeException
+   */
+  public function read(string $path): string {
     $stream = $this->share->read($path);
     
     return stream_get_contents($stream);
   }
+  
+  
   
   /**
    * @throws NotFoundException
@@ -72,9 +82,7 @@ final class SmbStorage extends AbstractStorage {
     }
   }
   
-  public function exists(ImageOptions|string $image): bool {
-    $path = $this->getAbsolutePath($image);
-    
+  public function exists(string $path): bool {
     try {
       $this->share->stat($path);
       
@@ -82,5 +90,13 @@ final class SmbStorage extends AbstractStorage {
     } catch (NotFoundException) {
       return false;
     }
+  }
+  
+  /**
+   * @throws NotFoundException
+   * @throws AlreadyExistsException
+   */
+  public function mkdir(string $path): void {
+    $this->share->mkdir($path);
   }
 }

@@ -26,7 +26,7 @@ final class LocalStorage extends AbstractStorage {
     $path = $this->getAbsolutePath($image, onlyDir: true);
     
     if (!is_dir($path)) {
-      mkdir($path, 0777, true);
+      $this->mkdir($path);
     }
     
     $fileName = $this->getFileName($image);
@@ -34,22 +34,16 @@ final class LocalStorage extends AbstractStorage {
     $file->move($path, $fileName);
   }
   
+  public function write(string $path, string $content): void {
+    file_put_contents($path, $content);
+  }
+  
   /**
    * @throws NotFoundException
    */
-  public function getImageContent(ImageOptions|string $image): string {
-    $path = $this->getAbsolutePath($image);
-    
-    if ($this->isModified($image)) {
-      // Handle transformations such as resize, crop, etc.
-      // Cache the image in the cache directory
-      $originalPath = $this->getOriginalPath($image);
-      
-      
-    }
-    
+  public function read(string $path): string {
     try {
-      return file_get_contents($path);
+      return file_get_contents($path, false);
     } catch (\Exception $e) {
       throw new NotFoundException();
     }
@@ -61,9 +55,11 @@ final class LocalStorage extends AbstractStorage {
     unlink($path);
   }
   
-  public function exists(ImageOptions|string $image): bool {
-    $path = $this->getAbsolutePath($image);
-    
+  public function exists(string $path): bool {
     return file_exists($path);
+  }
+  
+  public function mkdir(string $path): void {
+    mkdir($path, 0777, true);
   }
 }
