@@ -10,5 +10,4 @@ services:
     restart: always
     environment:
       - SWOOLE_WORKER_NUM=4
-    ports:
-      - "3000:3000"
+      - API_ENABLED=true

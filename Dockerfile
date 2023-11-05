@@ -1,5 +1,4 @@
 ARG NODE_VERSION=20.9.0
-ARG YARN_VERSION=1.22.19
 
 ARG PHP_VERSION=8.2.12
 ARG PHP_MEMORY_LIMIT=512M
@@ -33,9 +32,6 @@ RUN composer install --ignore-platform-reqs --no-interaction --no-scripts --pref
 ## Base image
 ## Used to run application and provide base for development and production images
 FROM php:${PHP_VERSION}-alpine as base
-ARG PHP_MEMORY_LIMIT
-ARG YARN_VERSION
-
 # Install dependencies
 RUN apk update && apk upgrade &&\
     apk add --no-cache \
@@ -66,6 +62,7 @@ COPY ./docker/startup.sh /usr/local/bin/startup.sh
 RUN chmod +x /usr/local/bin/startup.sh
 
 # Set memory limit
+ARG PHP_MEMORY_LIMIT
 RUN echo "memory_limit=${PHP_MEMORY_LIMIT}" > /usr/local/etc/php/conf.d/memory-limit.ini
 
 # Add NodeJS
@@ -74,10 +71,11 @@ COPY --from=node /usr/local/lib /usr/local/lib
 COPY --from=node /usr/local/include /usr/local/include
 COPY --from=node /usr/local/bin /usr/local/bin
 
+# Enable API for external requests
+ENV API_ENABLED=false
+
 # Set working directory
 WORKDIR /app
-
-EXPOSE 8080
 
 # Run entrypoint
 CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisord.conf"]
@@ -108,6 +106,7 @@ RUN npm install -g yarn --force
 
 # Set environment variables
 ENV APP_ENV=dev
+ENV NODE_ENV=development
 ENV SWOOLE_ENABLED=false
 ENV PHP_IDE_CONFIG="serverName=localhost"
 
@@ -145,6 +144,7 @@ RUN chown -R www-data:www-data /app
 
 # Set environment variables
 ENV APP_ENV=prod
+ENV NODE_ENV=production
 ENV SWOOLE_ENABLED=true
 
 # Use Swoole Runtime
