@@ -9,7 +9,7 @@ if (filter_var($_ENV['SWOOLE_ENABLED'],FILTER_VALIDATE_BOOLEAN)) {
 
   $_SERVER['APP_RUNTIME_OPTIONS'] = [
     'host' => '0.0.0.0',
-    'port' => 80,
+    'port' => 8080,
     'settings' => [
       \Swoole\Constant::OPTION_WORKER_NUM => $_ENV['SWOOLE_WORKER_NUM'] ?? 1,
       \Swoole\Constant::OPTION_DOCUMENT_ROOT => dirname(__DIR__).'/public'
