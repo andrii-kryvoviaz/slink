@@ -22,4 +22,4 @@ class Client {
   public image: ImageResource;
 }
 
-export const ApiClient = Client.create(import.meta.env.VITE_API_URL as string);
+export const ApiClient = Client.create('/api');
