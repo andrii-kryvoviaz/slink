@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --sat: env(safe-area-inset-top);
+  --sar: env(safe-area-inset-right);
+  --sab: env(safe-area-inset-bottom);
+  --sal: env(safe-area-inset-left);
+
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+
+  word-break: break-word;
+  overflow-anchor: none;
+
+  @apply bg-gray-100 text-gray-800;
+}
+
+.dark {
+  @apply bg-zinc-800 text-gray-100;
+}
+
+html,
+body {
+  @apply h-full;
+}
+
+.dropzone button {
+  @apply relative overflow-hidden;
+}
+
+.dropzone input[type='file'] {
+  @apply absolute inset-0 block h-full w-full cursor-pointer opacity-0;
+}
