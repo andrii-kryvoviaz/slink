@@ -55,7 +55,7 @@
 
     try {
       const response = await ApiClient.image.upload(file);
-      goto(`/image/${response.id}`);
+      await goto(`/image/${response.id}`);
 
       toast.success('Image uploaded successfully');
     } catch (error: any) {
