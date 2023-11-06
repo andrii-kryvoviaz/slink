@@ -1,4 +1,4 @@
-import { ImageResource } from './resources/ImageResource';
+import { ImageResource } from './Resources/ImageResource';
 
 class Client {
   private _baseUrl: string;

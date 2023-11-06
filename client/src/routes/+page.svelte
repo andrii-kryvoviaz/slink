@@ -4,13 +4,15 @@
   import { ApiClient } from '../api/Client';
   import { goto } from '$app/navigation';
   import { toast } from '../store/toast';
-  import { ValidationException } from '../api/exceptions/ValidationException';
+  import { ValidationException } from '../api/Exceptions/ValidationException';
 
   let isLoading: boolean = false;
   let isLogged: boolean = true;
 
+  type FileEvent = DragEvent | ClipboardEvent | Event;
+
   const getFilesFromEvent = function (
-    event: Event | DragEvent | ClipboardEvent
+    event: FileEvent
   ): FileList | undefined | null {
     if (event instanceof DragEvent) {
       return event.dataTransfer?.files;
@@ -21,7 +23,7 @@
     return (event.target as HTMLInputElement).files;
   };
 
-  const handleChange = (event: any) => {
+  const handleChange = (event: FileEvent) => {
     event.preventDefault();
 
     const fileList = getFilesFromEvent(event);
@@ -110,9 +112,9 @@
   </Dropzone>
   <p class="p-4 text-sm text-color-secondary">
     {#if isLogged}
-      <a href="#" class="text-color-accent">Login</a> to see your images
+      <a href="/login" class="text-color-accent">Login</a> to see your images
     {:else}
-      <a href="#" class="text-color-accent">Explore all images</a>
+      <a href="/explore" class="text-color-accent">Explore all images</a>
     {/if}
   </p>
 </div>

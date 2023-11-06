@@ -1,5 +1,5 @@
 import type { ViolationResponse } from './Response/Error/ViolationResponse';
-import { ValidationException } from './exceptions/ValidationException';
+import { ValidationException } from './Exceptions/ValidationException';
 
 export abstract class AbstractResource {
   private _baseUrl: string;
