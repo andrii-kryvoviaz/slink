@@ -71,9 +71,6 @@ COPY --from=node /usr/local/lib /usr/local/lib
 COPY --from=node /usr/local/include /usr/local/include
 COPY --from=node /usr/local/bin /usr/local/bin
 
-# Enable API for external requests
-ENV API_ENABLED=false
-
 # Set working directory
 WORKDIR /app
 
@@ -105,6 +102,7 @@ RUN apk add --no-cache symfony-cli
 RUN npm install -g yarn --force
 
 # Set environment variables
+ENV API_ENABLED=true
 ENV APP_ENV=dev
 ENV NODE_ENV=development
 ENV SWOOLE_ENABLED=false
@@ -143,6 +141,7 @@ COPY --from=node-dependencies /temp/build ./client
 RUN chown -R www-data:www-data /app
 
 # Set environment variables
+ENV API_ENABLED=false
 ENV APP_ENV=prod
 ENV NODE_ENV=production
 ENV SWOOLE_ENABLED=true
