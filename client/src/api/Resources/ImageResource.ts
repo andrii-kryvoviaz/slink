@@ -1,5 +1,7 @@
 import { AbstractResource } from '../AbstractResource';
 
+import type { ImageDetailsResponse } from '../Response/ImageDetailsResponse';
+
 import type { UploadedImageResponse } from '../Response/UploadedImageResponse';
 
 export class ImageResource extends AbstractResource {
@@ -8,5 +10,9 @@ export class ImageResource extends AbstractResource {
     body.append('image', image);
 
     return this.post('/upload', { body });
+  }
+
+  public async getDetails(id: string): Promise<ImageDetailsResponse> {
+    return this.get(`/image/${id}/detail`);
   }
 }

@@ -4,15 +4,28 @@ import { ValidationException } from './Exceptions/ValidationException';
 export abstract class AbstractResource {
   private _baseUrl: string;
 
+  private _fetch: Function = fetch;
+
   constructor(baseUrl: string) {
     this._baseUrl = baseUrl;
   }
 
+  public using(fetchFn: Function) {
+    this._fetch = fetchFn;
+    return this;
+  }
+
+  protected resetFetch() {
+    this._fetch = fetch;
+  }
+
   private async baseRequest(path: string, options?: RequestInit) {
-    const response = await fetch(`${this._baseUrl}${path}`, options);
+    const response = await this._fetch(`${this._baseUrl}${path}`, options);
+
+    this.resetFetch();
 
     if (response.ok && response.status < 400) {
-      return response.json();
+      return (await response.json()).data;
     }
 
     if (response.status === 422) {
