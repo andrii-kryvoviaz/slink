@@ -25,7 +25,8 @@ export abstract class AbstractResource {
     this.resetFetch();
 
     if (response.ok && response.status < 400) {
-      return (await response.json()).data;
+      const parsed = await response.json();
+      return parsed?.data ?? parsed;
     }
 
     if (response.status === 422) {
