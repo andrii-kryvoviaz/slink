@@ -6,7 +6,6 @@
     "require": {
         "php": ">=8.2",
         "ext-gd": "*",
-        "beberlei/assert": "^3.3",
         "doctrine/doctrine-bundle": "^2.10",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.16",
@@ -22,7 +21,6 @@
         "ramsey/uuid": "^4.7",
         "ramsey/uuid-doctrine": "^2.0",
         "runtime/swoole": "^0.3.1",
-        "symfony/amqp-messenger": "6.3.*",
         "symfony/console": "^6.3",
         "symfony/doctrine-messenger": "6.3.*",
         "symfony/dotenv": "^6.3",
