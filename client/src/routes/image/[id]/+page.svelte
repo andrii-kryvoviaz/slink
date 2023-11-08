@@ -1,9 +1,24 @@
 <script lang="ts">
+  import ImagePlaceholder from '../../../components/Image/Preview/ImagePlaceholder.svelte';
   import type { PageData } from './$types';
 
   export let data: PageData;
 </script>
 
-<img src="/api/{data.url}?width=400" alt="" />
-
-hello world
+<div class="flex justify-center p-8">
+  <div class="container flex max-w-[1280px] gap-6">
+    <ImagePlaceholder
+      src="/api/{data.url}"
+      height={32}
+      aspectRatio={data.height / data.width}
+      metadata={data}
+    />
+    <div class="px-2 py-8">
+      <h1
+        class="border-l-4 border-slate-800 pl-2 text-xl font-bold text-slate-900 dark:border-slate-400 dark:text-slate-100"
+      >
+        {data.description || 'No description provided yet.'}
+      </h1>
+    </div>
+  </div>
+</div>

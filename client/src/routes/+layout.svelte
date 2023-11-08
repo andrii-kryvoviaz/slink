@@ -10,6 +10,7 @@
     'clarity:error-standard-line',
     'clarity:info-standard-line',
     'clarity:warning-standard-line',
+    'system-uicons:external',
   ];
 
   loadIcons(appIcons, (loaded, missing, pending, unsubscribe) => {
