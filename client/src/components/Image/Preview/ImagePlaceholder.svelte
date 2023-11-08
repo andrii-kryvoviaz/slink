@@ -48,8 +48,8 @@
   class="rounded-m relative w-full overflow-hidden"
   style:width="{width}rem"
   style:height="{height}rem"
-  style:max-width="{maxWidth}px"
-  style:max-height="{maxHeight}px"
+  style:max-width="min({maxWidth}px, 100%)"
+  style:max-height="min({maxHeight}px, {height}rem)"
   bind:this={container}
 >
   <img
@@ -59,7 +59,7 @@
     on:load={() => {
       isLoaded = true;
     }}
-    class="h-full w-full object-contain transition-all"
+    class="h-full w-full object-contain transition-opacity"
     class:hidden={!isLoaded}
   />
   {#if isLoaded}

@@ -6,7 +6,7 @@
 </script>
 
 <div class="flex justify-center p-8">
-  <div class="container flex max-w-[1280px] gap-6">
+  <div class="container flex max-w-[1280px] flex-col gap-6 lg:flex-row">
     <ImagePlaceholder
       src="/api/{data.url}"
       height={32}
