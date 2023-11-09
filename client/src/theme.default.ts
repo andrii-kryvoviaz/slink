@@ -1,22 +1,20 @@
-import { Theme } from 'tailwindcss-theme-cutomizer';
-import { ThemeConfig } from 'tailwindcss/types/config';
+import type { Theme } from 'tailwindcss-theme-cutomizer';
+import type { ThemeConfig } from 'tailwindcss/types/config';
 
 export const defaultTheme: Theme = {
-  variables: {
-    
-  },
+  variables: {},
   variants: {
     dark: {
-    bgMainFrom: 'slate.900',
-    bgMainTo: 'black',
-    colorTextPrimary: 'gray.200',
-    colorTextSecondary: 'gray.400',
-    colorAccent: 'violet.800',
-    colorBorderPrimary: 'slate.800',
-    colorBorderSecondary: 'slate.700',
-    bgCardPrimary: 'slate.900',
-    bgCardSecondary: 'slate.800',
-    bgButtonPrimary: 'blue.500',
+      bgMainFrom: 'slate.900',
+      bgMainTo: 'black',
+      colorTextPrimary: 'gray.200',
+      colorTextSecondary: 'gray.400',
+      colorAccent: 'violet.800',
+      colorBorderPrimary: 'slate.800',
+      colorBorderSecondary: 'slate.700',
+      bgCardPrimary: 'slate.900',
+      bgCardSecondary: 'slate.800',
+      bgButtonPrimary: 'blue.500',
     },
   },
 };
@@ -24,20 +22,23 @@ export const defaultTheme: Theme = {
 // go recursivelly through the object and replace the values
 // starting with 'var(--var-name)' with rgb(var(--var-name) / <alpha-value>)
 function injectAlphaPlaceholder(object: any): any {
-  return Object.keys(object).reduce((newObj, key) => {
-    const value = object[key];
-    if (typeof value === 'string') {
-      newObj[key] = value.replace(
-        /^var\(--(.+?)\)$/,
-        'rgb(var(--$1) / <alpha-value>)'
-      );
-    } else if (typeof value === 'object' && value !== null) {
-      newObj[key] = injectAlphaPlaceholder(value); // Recurse for nested objects
-    } else {
-      newObj[key] = value;
-    }
-    return newObj;
-  }, Array.isArray(object) ? [] : {});
+  return Object.keys(object).reduce(
+    (newObj: any, key: string) => {
+      const value = object[key];
+      if (typeof value === 'string') {
+        newObj[key] = value.replace(
+          /^var\(--(.+?)\)$/,
+          'rgb(var(--$1) / <alpha-value>)'
+        );
+      } else if (typeof value === 'object' && value !== null) {
+        newObj[key] = injectAlphaPlaceholder(value); // Recurse for nested objects
+      } else {
+        newObj[key] = value;
+      }
+      return newObj;
+    },
+    Array.isArray(object) ? [] : {}
+  );
 }
 
 export const tailwindcssTheme: Partial<ThemeConfig> = injectAlphaPlaceholder({
@@ -71,6 +72,4 @@ export const tailwindcssTheme: Partial<ThemeConfig> = injectAlphaPlaceholder({
       end: 'var(--bg-main-to)',
     },
   },
-})
-
-
+});

@@ -2,7 +2,7 @@ import type { Config } from 'tailwindcss';
 
 import { ThemeCustomizerPlugin } from 'tailwindcss-theme-cutomizer';
 
-import { defaultTheme, tailwindcssTheme } from './theme.default';
+import { defaultTheme, tailwindcssTheme } from './src/theme.default';
 
 export default {
   content: [
