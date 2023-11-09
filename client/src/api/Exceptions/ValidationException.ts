@@ -1,7 +1,7 @@
 import type {
   Violation,
   ViolationResponse,
-} from '../Response/Error/ViolationResponse';
+} from '@slink/api/Response/Error/ViolationResponse';
 
 export class ValidationException extends Error {
   private _violations: Violation[];

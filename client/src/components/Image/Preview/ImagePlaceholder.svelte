@@ -1,6 +1,6 @@
 <script lang="ts">
   import { fade } from 'svelte/transition';
-  import { bytesToSize } from '../../../utils/bytesConverter';
+  import { bytesToSize } from '@slink/utils/bytesConverter';
   import Icon from '@iconify/svelte';
   import { Tooltip } from 'flowbite-svelte';
 

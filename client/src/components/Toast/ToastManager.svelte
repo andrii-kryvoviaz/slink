@@ -1,7 +1,7 @@
 <script lang="ts">
   import Icon from '@iconify/svelte';
-  import Toast from './Toast.svelte';
-  import { toast } from '../../store/toast';
+  import Toast from '@slink/components/Toast/Toast.svelte';
+  import { toast } from '@slink/store/toast';
 
   let toasts = toast.list;
 </script>

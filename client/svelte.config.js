@@ -20,6 +20,12 @@ const config = {
     csrf: {
       checkOrigin: process.env.API_ENABLED !== 'true',
     },
+    alias: {
+      '@slink/api': './src/api',
+      '@slink/utils': './src/utils',
+      '@slink/components': './src/components',
+      '@slink/store': './src/store',
+    },
   },
 };
 
