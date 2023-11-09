@@ -28,36 +28,6 @@
   overflow-anchor: none;
 
   @apply bg-gradient-to-b from-bg-start to-bg-end;
-
-  --color-bg-from: theme('colors.white');
-  --color-bg-to: theme('colors.slate.200');
-
-  --color-accent: theme('colors.violet.600');
-
-  --color-text-primary: theme('colors.gray.800');
-  --color-text-secondary: theme('colors.gray.600');
-
-  --color-border-primary: theme('colors.slate.200');
-  --color-border-secondary: theme('colors.slate.300');
-
-  --bg-card-primary: theme('colors.slate.50');
-  --bg-card-secondary: theme('colors.slate.200');
-}
-
-.dark {
-  --color-bg-from: theme('colors.slate.900');
-  --color-bg-to: theme('colors.black');
-
-  --color-accent: theme('colors.violet.800');
-
-  --color-text-primary: theme('colors.gray.200');
-  --color-text-secondary: theme('colors.gray.400');
-
-  --color-border-primary: theme('colors.slate.800');
-  --color-border-secondary: theme('colors.slate.700');
-
-  --bg-card-primary: theme('colors.slate.900');
-  --bg-card-secondary: theme('colors.slate.800');
 }
 
 html,

@@ -1388,6 +1388,7 @@ tailwind-merge@^2.0.0:
   dependencies:
     "@babel/runtime" "^7.23.1"
 
+  version "1.0.0"
 tailwindcss@^3.3.5:
   version "3.3.5"
   resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-3.3.5.tgz#22a59e2fbe0ecb6660809d9cc5f3976b077be3b8"

@@ -1,6 +1,8 @@
-import { error, type Handle } from '@sveltejs/kit';
-
 import dotenv from 'dotenv';
+
+import { error } from '@sveltejs/kit';
+
+import type { Handle } from '@sveltejs/kit';
 
 dotenv.config();
 
@@ -9,8 +11,6 @@ const PROXY_PATH = '/api';
 
 const handleApiProxy: Handle = async ({ event }) => {
   const origin = event.request.headers.get('Origin');
-
-  console.log('api enabled: ', process.env.API_ENABLED);
 
   // reject requests that don't come from the webapp, to avoid your proxy being abused.
   if (
