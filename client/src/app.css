@@ -27,7 +27,7 @@
   word-break: break-word;
   overflow-anchor: none;
 
-  @apply bg-gray-100 text-gray-800;
+  @apply bg-gradient-to-b from-bg-start to-bg-end;
 
   --color-bg-from: theme('colors.white');
   --color-bg-to: theme('colors.slate.200');
@@ -62,7 +62,7 @@
 
 html,
 body {
-  @apply h-full;
+  @apply h-full min-h-full overflow-y-auto;
 }
 
 .dropzone button {
