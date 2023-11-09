@@ -20,6 +20,8 @@
     "@types/dotenv": "^8.2.0",
     "@types/node": "^20.8.10",
     "autoprefixer": "^10.4.16",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
     "dotenv": "^16.3.1",
     "flowbite": "^2.0.0",
     "flowbite-svelte": "^0.44.18",
