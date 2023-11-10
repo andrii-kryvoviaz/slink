@@ -84,7 +84,7 @@
     }}
     on:change={handleChange}
     disabled={isLoading}
-    defaultClass="flex flex-col justify-center items-center w-full h-64 bg-card-primary rounded-lg border-2 border-primary border-dashed cursor-pointer hover:border-secondary hover:bg-card-secondary max-h-[400px] max-w-[600px]"
+    defaultClass="flex flex-col justify-center items-center w-full h-64 bg-card-primary rounded-lg border-2 border-dropzone-primary border-dashed cursor-pointer hover:border-dropzone-secondary hover:bg-card-secondary max-h-[400px] max-w-[600px]"
   >
     {#if !isLoading}
       <div class="flex flex-col">
