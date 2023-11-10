@@ -1,5 +1,6 @@
 import type { ViolationResponse } from './Response/Error/ViolationResponse';
 import { ValidationException } from './Exceptions/ValidationException';
+import { error } from '@sveltejs/kit';
 
 export abstract class AbstractResource {
   private _baseUrl: string;
@@ -27,6 +28,12 @@ export abstract class AbstractResource {
     if (response.ok && response.status < 400) {
       const parsed = await response.json();
       return parsed?.data ?? parsed;
+    }
+
+    if (response.status === 404) {
+      throw error(404, {
+        message: 'Not found',
+      });
     }
 
     if (response.status === 422) {
