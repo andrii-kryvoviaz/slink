@@ -5,6 +5,7 @@
   import { goto } from '$app/navigation';
   import { toast } from '../store/toast';
   import { ValidationException } from '../api/Exceptions/ValidationException';
+  import { fade } from 'svelte/transition';
 
   let isLoading: boolean = false;
   let isLogged: boolean = true;
@@ -77,44 +78,52 @@
 <div
   class="content dropzone flex h-full w-full flex-col items-center justify-center p-12"
 >
-  <Dropzone
-    on:drop={handleChange}
-    on:dragover={(event) => {
-      event.preventDefault();
-    }}
-    on:change={handleChange}
-    disabled={isLoading}
-    defaultClass="flex flex-col justify-center items-center w-full h-64 bg-card-primary rounded-lg border-2 border-dropzone-primary border-dashed cursor-pointer hover:border-dropzone-secondary hover:bg-card-secondary max-h-[400px] max-w-[600px]"
+  <div
+    in:fade={{ duration: 300 }}
+    class="flex w-full flex-col items-center justify-center"
   >
-    {#if !isLoading}
-      <div class="flex flex-col">
-        <div class=" text-sm text-color-primary">
-          <p class="flex items-center gap-x-[3px]">
-            <Icon icon="material-symbols-light:upload" class="h-10 w-10" />
-            <span class="font-semibold">Drag & Drop</span> or
-            <span class="font-semibold">paste</span> your image here
+    <Dropzone
+      on:drop={handleChange}
+      on:dragover={(event) => {
+        event.preventDefault();
+      }}
+      on:change={handleChange}
+      disabled={isLoading}
+      defaultClass="flex flex-col justify-center items-center w-full h-64 bg-card-primary rounded-lg border-2 border-dropzone-primary border-dashed cursor-pointer hover:border-dropzone-secondary hover:bg-card-secondary max-h-[400px] max-w-[600px]"
+    >
+      {#if !isLoading}
+        <div class="flex flex-col">
+          <div class=" text-sm text-color-primary">
+            <p class="flex items-center gap-x-[3px]">
+              <Icon icon="material-symbols-light:upload" class="h-10 w-10" />
+              <span class="font-semibold">Drag & Drop</span> or
+              <span class="font-semibold">paste</span> your image here
+            </p>
+          </div>
+
+          <p class="text-xs text-color-secondary">
+            SVG, PNG, JPG, WEBP or GIF (MAX. 3MB)
           </p>
         </div>
-
-        <p class="text-xs text-color-secondary">
-          SVG, PNG, JPG, WEBP or GIF (MAX. 3MB)
-        </p>
-      </div>
-    {:else}
-      <div class="flex flex-col items-center justify-center">
-        <Icon
-          icon="mingcute:loading-line"
-          class="h-10 w-10 animate-spin text-color-primary"
-        />
-        <p class="text-sm text-color-primary">Uploading, please wait...</p>
-      </div>
-    {/if}
-  </Dropzone>
-  <p class="p-4 text-sm text-color-secondary">
-    {#if isLogged}
-      <a href="/login" class="text-color-accent">Login</a> to see your images
-    {:else}
-      <a href="/explore" class="text-color-accent">Explore all images</a>
-    {/if}
-  </p>
+      {:else}
+        <div class="flex flex-col items-center justify-center">
+          <Icon
+            icon="mingcute:loading-line"
+            class="h-10 w-10 animate-spin text-color-primary"
+          />
+          <p class="text-sm text-color-primary">Uploading, please wait...</p>
+        </div>
+      {/if}
+    </Dropzone>
+    <p class="p-4 text-sm text-color-secondary">
+      {#if isLogged}
+        <a
+          href="/image/c3c104ac-025c-4ef6-80b8-2f140f723eba"
+          class="text-color-accent">Login</a
+        > to see your images
+      {:else}
+        <a href="/explore" class="text-color-accent">Explore all images</a>
+      {/if}
+    </p>
+  </div>
 </div>

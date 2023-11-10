@@ -2,11 +2,15 @@
   import Button from '@slink/components/Shared/Action/Button.svelte';
   import ImagePlaceholder from '../../../components/Image/Preview/ImagePlaceholder.svelte';
   import type { PageData } from './$types';
+  import { fly } from 'svelte/transition';
 
   export let data: PageData;
 </script>
 
-<div class="flex justify-center p-8">
+<div
+  in:fly={{ y: 100, duration: 500, delay: 100 }}
+  class="flex justify-center p-8"
+>
   <div
     class="container flex max-w-[1280px] flex-col items-center gap-6 lg:flex-row lg:items-start"
   >
