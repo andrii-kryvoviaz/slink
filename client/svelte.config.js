@@ -25,6 +25,7 @@ const config = {
       '@slink/utils': './src/utils',
       '@slink/components': './src/components',
       '@slink/store': './src/store',
+      '@slink': './src',
     },
   },
 };

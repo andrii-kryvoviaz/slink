@@ -14,7 +14,8 @@
       "@slink/utils/*": ["utils/*"],
       "@slink/components/*": ["components/*"],
       "@slink/api/*": ["api/*"],
-      "@slink/store/*": ["store/*"]
+      "@slink/store/*": ["store/*"],
+      "@slink/*": ["*"]
     }
   }
   // Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
