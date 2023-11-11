@@ -46,7 +46,7 @@ final readonly class GetImageByIdHandler implements QueryHandlerInterface {
         [
           // it is not necessary when client is using the same domain and has a reverse proxy
           //$this->request->getSchemeAndHttpHost(),
-          'image',
+          '/image',
           $imageView->getAttributes()->getFileName()
         ]),
     ]);
