@@ -12,11 +12,9 @@
   in:fly={{ y: 100, duration: 500, delay: 100 }}
   class="flex justify-center p-8"
 >
-  <div
-    class="container flex max-w-[1280px] flex-col items-center gap-6 lg:flex-row lg:items-start"
-  >
-    <div class="w-full">
-      <div class="flex justify-center">
+  <div class="container flex max-w-[1280px] flex-row flex-wrap gap-6">
+    <div class="w-auto">
+      <div class="flex justify-start">
         <ImagePlaceholder
           src={data.url}
           height={32}
@@ -35,7 +33,7 @@
       >
     </div>
 
-    <div class="w-full px-2">
+    <div class="flex-grow px-2">
       <p
         class="mb-4 mt-8 border-l-4 border-slate-800 pl-2 text-xl font-bold text-slate-900 dark:border-slate-400 dark:text-slate-100"
       >
