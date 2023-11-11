@@ -1,0 +1,63 @@
+<script lang="ts">
+  import Icon from '@iconify/svelte';
+  import Button, {
+    type ButtonVariant,
+  } from '@slink/components/Shared/Action/Button.svelte';
+  import { getBaseUrl } from '@slink/utils/getBaseUrl';
+  import { fly } from 'svelte/transition';
+
+  export let value: string;
+  export let delay: number = 2000;
+
+  const base: string | undefined = getBaseUrl();
+
+  let isCopiedActive: boolean = false;
+  let variant: ButtonVariant = 'primary';
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(value);
+
+    isCopiedActive = true;
+
+    setTimeout(() => {
+      isCopiedActive = false;
+    }, delay);
+  };
+
+  $: if (value && !value.startsWith('http') && base) {
+    value = `${base}${value}`;
+  }
+
+  $: variant = isCopiedActive ? 'success' : 'primary';
+</script>
+
+<div class="flex items-center">
+  <div
+    class="flex flex-row items-center justify-center rounded-full border border-button-default p-1"
+  >
+    <input
+      class="bg-transparent px-3 text-xs focus:outline-none"
+      type="text"
+      {value}
+      readonly
+    />
+    <Button
+      class="ml-2 min-w-[5rem]"
+      {variant}
+      size="xs"
+      rounded="full"
+      disabled={isCopiedActive}
+      on:click={handleCopy}
+    >
+      {#if isCopiedActive}
+        <div in:fly={{ duration: 300 }}>
+          <slot name="copied-text">
+            <Icon icon="mdi:check" class="h-4 w-4" />
+          </slot>
+        </div>
+      {:else}
+        <slot name="copy-text">Copy</slot>
+      {/if}
+    </Button>
+  </div>
+</div>
