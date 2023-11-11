@@ -1400,10 +1400,10 @@ tailwind-merge@^2.0.0:
   dependencies:
     "@babel/runtime" "^7.23.1"
 
-tailwindcss-theme-customizer@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/tailwindcss-theme-customizer/-/tailwindcss-theme-customizer-1.0.3.tgz#3f85aa46a09640abbee3a0fdffab47f69b1431cd"
-  integrity sha512-JgJ2DrRS8dmZ6z3Fm1l9NaHGAIhCz4aH407ZqjzeMOa+FyqiAYutwisWtGWMFomgPpXZmlvJbAqOsDO71rcMSA==
+tailwindcss-theme-customizer@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/tailwindcss-theme-customizer/-/tailwindcss-theme-customizer-1.0.4.tgz#d0fab68bba8a62efc5913274edfc34a74fcdb84a"
+  integrity sha512-BPlhJ6sJA+d3Wo7Z0+/pwR0N1ey0i+7rfp9pPW4OrFWMSyuEn4KQV7JKUA3t7YGw/eNe+41nvZgaeiMLbx1GsA==
 
 tailwindcss@^3.3.5:
   version "3.3.5"
