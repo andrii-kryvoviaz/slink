@@ -7,9 +7,11 @@ doctrine:
             event_store:
                 url: '%env(resolve:ES_DATABASE_URL)%'
                 profiling_collect_backtrace: '%kernel.debug%'
+                use_savepoints: true
             read_model:
                 url: '%env(resolve:DATABASE_URL)%'
                 profiling_collect_backtrace: '%kernel.debug%'
+                use_savepoints: true
         default_connection: read_model
 
         types:
