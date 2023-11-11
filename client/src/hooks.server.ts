@@ -22,8 +22,14 @@ const handleApiProxy: Handle = async ({ event }) => {
 
   console.log('Proxying request to: ', event.request.url);
 
-  // strip `/api` from the request path
-  const strippedPath = event.url.pathname.substring(PROXY_PATH.length);
+  // Ensure that PROXY_PATH is escaped properly for use in a regex pattern:
+  const escapedProxyPath = PROXY_PATH.replace(/[-[/\]{}()*+?.\\^$|]/g, '\\$&');
+
+  // Create a RegExp object with the escaped proxy path:
+  const proxyPathRegex = new RegExp(`^${escapedProxyPath}`);
+
+  // strip `/api` from the request path before proxying
+  const strippedPath = event.url.pathname.replace(proxyPathRegex, '');
 
   // build the new URL path with your API base URL, the stripped path and the query string
   const urlPath = `${MY_API_BASE_URL}${strippedPath}${event.url.search}`;
@@ -50,8 +56,11 @@ const handleApiProxy: Handle = async ({ event }) => {
 };
 
 export const handle: Handle = async ({ event, resolve }) => {
-  // intercept requests to `/api` and handle them with `handleApiProxy`
-  if (event.url.pathname.startsWith(PROXY_PATH)) {
+  // intercept requests
+  const paths = [PROXY_PATH, '/image'];
+  const pathRegex = new RegExp(`^(${paths.join('|')})`);
+
+  if (pathRegex.test(event.url.pathname)) {
     return handleApiProxy({ event, resolve });
   }
 
