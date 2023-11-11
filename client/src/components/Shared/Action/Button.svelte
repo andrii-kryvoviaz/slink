@@ -17,6 +17,12 @@
           invisible:
             'rounded bg-none text-button-accent hover:bg-button-accent',
           link: 'bg-transparent dark:bg-transparent underline-offset-4 hover:underline text-button-default hover:bg-transparent',
+          success:
+            'bg-button-success text-button-accent bg-opacity-80 hover:bg-opacity-100',
+          danger:
+            'bg-button-danger text-button-accent bg-opacity-80 hover:bg-opacity-100',
+          warning:
+            'bg-button-warning text-button-accent bg-opacity-80 hover:bg-opacity-100',
         },
         size: {
           xs: 'text-xs px-3 py-1.5',

@@ -21,6 +21,9 @@ export const defaultTheme: Theme = {
       borderButtonDefault: 'zinc.800',
       bgButtonDefaultHover: 'gray.700',
       textButtonDefaultHover: 'gray.200',
+      bgSuccess: 'teal.500',
+      bgDanger: 'rose.800',
+      bgWarning: 'amber.500',
     },
   },
 };
@@ -36,6 +39,9 @@ export const tailwindcssTheme: Partial<ThemeConfig> = injectAlphaPlaceholder({
         default: 'var(--bg-button-default-hover)',
       },
       accent: 'var(--bg-button-accent)',
+      success: 'var(--bg-success)',
+      danger: 'var(--bg-danger)',
+      warning: 'var(--bg-warning)',
     },
   },
   borderColor: {
