@@ -7,7 +7,7 @@ services:
       target: dev
     volumes:
       - ./:/app
-      - node_modules:/app/node_modules
+      - node_modules:/app/client/node_modules
     ports:
       - "5173:5173"
     extra_hosts:
