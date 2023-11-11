@@ -56,7 +56,7 @@
 
     try {
       const response = await ApiClient.image.upload(file);
-      await goto(`/image/${response.id}`);
+      await goto(`/info/${response.id}`);
 
       toast.success('Image uploaded successfully');
     } catch (error: any) {
@@ -115,15 +115,14 @@
         </div>
       {/if}
     </Dropzone>
-    <p class="p-4 text-sm text-color-secondary">
+    <!-- <p class="p-4 text-sm text-color-secondary">
       {#if isLogged}
         <a
-          href="/image/c3c104ac-025c-4ef6-80b8-2f140f723eba"
-          class="text-color-accent">Login</a
+          href="/login">Login</a
         > to see your images
       {:else}
         <a href="/explore" class="text-color-accent">Explore all images</a>
       {/if}
-    </p>
+    </p> -->
   </div>
 </div>
