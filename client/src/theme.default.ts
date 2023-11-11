@@ -1,4 +1,4 @@
-import type { Theme } from 'tailwindcss-theme-cutomizer';
+import type { Theme } from 'tailwindcss-theme-customizer';
 import type { ThemeConfig } from 'tailwindcss/types/config';
 
 export const defaultTheme: Theme = {
