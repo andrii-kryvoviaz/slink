@@ -14,4 +14,17 @@ export class ImageResource extends AbstractResource {
   public async getDetails(id: string): Promise<ImageDetailsResponse> {
     return this.get(`/image/${id}/detail`);
   }
+
+  public async updateDetails(
+    id: string,
+    details: {
+      description?: string;
+      isPublic?: boolean;
+    }
+  ): Promise<ImageDetailsResponse> {
+    return this.patch(`/image/${id}`, {
+      body: JSON.stringify(details),
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
 }
