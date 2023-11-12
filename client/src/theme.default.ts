@@ -24,6 +24,7 @@ export const defaultTheme: Theme = {
       bgSuccess: 'teal.500',
       bgDanger: 'rose.700',
       bgWarning: 'amber.500',
+      borderDescription: 'slate.400',
     },
   },
 };
@@ -53,6 +54,7 @@ export const tailwindcssTheme: Partial<ThemeConfig> = injectAlphaPlaceholder({
       default: 'var(--border-button-default)',
       accent: 'var(--border-button-accent)',
     },
+    description: 'var(--border-description)',
   },
   textColor: {
     color: {

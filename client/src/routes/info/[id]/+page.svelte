@@ -11,6 +11,10 @@
   } from '@slink/components/Image/Types/ImageParams';
   import Icon from '@iconify/svelte';
   import { Tooltip } from 'flowbite-svelte';
+  import ImageDescription from '@slink/components/Image/Preview/ImageDescription.svelte';
+  import { ApiClient } from '@slink/api/Client';
+  import { toast } from '@slink/store/toast';
+  import { ValidationException } from '@slink/api/Exceptions/ValidationException';
 
   export let data: PageData;
 
@@ -43,6 +47,32 @@
     return `${url}?${paramsString}`;
   };
 
+  let descriptionIsLoading: boolean = false;
+
+  const handleSaveDescription = async (description: string) => {
+    try {
+      descriptionIsLoading = true;
+
+      await ApiClient.image.updateDetails(data.id, {
+        description,
+      });
+
+      data.description = description;
+
+      toast.success('Description has been updated');
+    } catch (error: any) {
+      if (error instanceof ValidationException) {
+        error.violations.forEach((violation) => {
+          toast.error(violation.message);
+        });
+      } else {
+        toast.error('Something went wrong');
+      }
+    } finally {
+      descriptionIsLoading = false;
+    }
+  };
+
   $: url = formatImageUrl(data.url, params);
 </script>
 
@@ -71,21 +101,23 @@
       >
     </div>
 
-    <div class="flex-grow px-2">
-      <p
-        class="mb-4 mt-8 border-l-4 border-slate-800 pl-2 text-xl font-bold text-slate-900 dark:border-slate-400 dark:text-slate-100"
-      >
-        {data.description || 'No description provided yet.'}
+    <div class="min-w-0 flex-grow px-2">
+      <p class="mb-4 mt-8 w-full">
+        <ImageDescription
+          description={data.description}
+          isLoading={descriptionIsLoading}
+          on:descriptionChange={(e) => handleSaveDescription(e.detail)}
+        />
       </p>
-      <div class="mb-4">
+      <div class="mb-2">
         <CopyContainer value={url} />
       </div>
       {#if filterResizable(data.mimeType)}
-        <div class="mb-4 flex items-center gap-3">
+        <div class="mb-2 flex items-center gap-3">
           <ImageSizePicker
             width={data.width}
             height={data.height}
-            onChange={handleImageSizeChange}
+            on:change={(e) => handleImageSizeChange(e.detail)}
           />
           <Icon
             icon="ep:info-filled"
