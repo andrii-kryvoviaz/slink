@@ -24,7 +24,7 @@ final class RequestArgumentSubscriber implements EventSubscriberInterface {
   #[NoReturn] public function onKernelControllerArguments(ControllerArgumentsEvent $event): void {
     $arguments = $event->getArguments();
     
-    foreach ($arguments as $key => $argument) {
+    foreach ($arguments as $argument) {
       if (!$argument instanceof MapQueryString && !$argument instanceof MapRequestPayload) {
         continue;
       }
@@ -32,6 +32,7 @@ final class RequestArgumentSubscriber implements EventSubscriberInterface {
       $method = $argument instanceof MapQueryString ? 'query' : 'request';
       
       $request = $event->getRequest();
+      $format = $request->getContentTypeFormat();
       
       if (!$type = $argument->metadata->getType()) {
         continue;
@@ -40,6 +41,11 @@ final class RequestArgumentSubscriber implements EventSubscriberInterface {
       // skip if class does not exist
       if (!class_exists($type)) {
         continue;
+      }
+      
+      if ($format === 'json') {
+        $data = json_decode($request->getContent(), true);
+        $request->{$method}->replace($data);
       }
       
       $typeReflection = new \ReflectionClass($type);
