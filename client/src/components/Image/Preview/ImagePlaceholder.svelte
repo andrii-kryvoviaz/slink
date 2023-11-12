@@ -47,6 +47,11 @@
     maxHeight = Math.max(metadata.height, 200);
     maxWidth = maxHeight / aspectRatio;
   }
+
+  // fallback for when the image is already loaded and the on:load event is not triggered
+  $: if (image && image.complete) {
+    isLoaded = true;
+  }
 </script>
 
 <div
