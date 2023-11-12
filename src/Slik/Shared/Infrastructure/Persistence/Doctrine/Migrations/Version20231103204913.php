@@ -19,18 +19,26 @@ final class Version20231103204913 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE image DROP time_created');
-        $this->addSql('ALTER TABLE image DROP time_modified');
+        $platform = $this->connection->getDatabasePlatform();
+        
+        if($platform instanceof \Doctrine\DBAL\Platforms\PostgreSQLPlatform) {
+            // this up() migration is auto-generated, please modify it to your needs
+            $this->addSql('ALTER TABLE image DROP time_created');
+            $this->addSql('ALTER TABLE image DROP time_modified');
+        }
     }
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE SCHEMA public');
-        $this->addSql('ALTER TABLE "image" ADD time_created TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL');
-        $this->addSql('ALTER TABLE "image" ADD time_modified TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL');
-        $this->addSql('COMMENT ON COLUMN "image".time_created IS \'(DC2Type:datetime_immutable)\'');
-        $this->addSql('COMMENT ON COLUMN "image".time_modified IS \'(DC2Type:datetime_immutable)\'');
+        $platform = $this->connection->getDatabasePlatform();
+        
+        if($platform instanceof \Doctrine\DBAL\Platforms\PostgreSQLPlatform) {
+            // this down() migration is auto-generated, please modify it to your needs
+            $this->addSql('CREATE SCHEMA public');
+            $this->addSql('ALTER TABLE "image" ADD time_created TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL');
+            $this->addSql('ALTER TABLE "image" ADD time_modified TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL');
+            $this->addSql('COMMENT ON COLUMN "image".time_created IS \'(DC2Type:datetime_immutable)\'');
+            $this->addSql('COMMENT ON COLUMN "image".time_modified IS \'(DC2Type:datetime_immutable)\'');
+        }
     }
 }
