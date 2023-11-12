@@ -34,19 +34,19 @@
   }
 
   $: if (isLoaded) {
-    // Reset the heigt to auto so that the image can resize freely
+    // Reset the height to auto so that the image can resize freely
     container.style.height = `auto`;
   }
 
   $: if (metadata) {
-    maxWidth = metadata.width;
-    maxHeight = metadata.height;
+    maxHeight = Math.max(metadata.height, 200);
+    maxWidth = maxHeight / aspectRatio;
   }
 </script>
 
 <div
-  class="rounded-m relative w-full overflow-hidden"
-  style:width="{width}rem"
+  class="rounded-m relative max-w-full overflow-hidden"
+  style:width="min({width}rem, {maxWidth}px)"
   style:height="{height}rem"
   style:max-width="min({maxWidth}px, 100%)"
   style:max-height="min({maxHeight}px, {height}rem)"

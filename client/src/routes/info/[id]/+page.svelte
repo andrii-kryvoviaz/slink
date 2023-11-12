@@ -13,7 +13,7 @@
   class="flex justify-center p-8"
 >
   <div class="container flex max-w-[1280px] flex-row flex-wrap gap-6">
-    <div class="w-auto">
+    <div class="flex-shrink">
       <div class="flex justify-start">
         <ImagePlaceholder
           src={data.url}
