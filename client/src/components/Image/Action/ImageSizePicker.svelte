@@ -10,23 +10,23 @@
 
   const dispatch = createEventDispatcher();
 
-  let calculatedWidth = 0;
-  let calculatedHeight = 0;
+  let calculatedWidth: number = 0;
+  let calculatedHeight: number = 0;
 
   let aspectRatioLinked = true;
   let aspectRatio = 0;
 
   const adjustBooundaries = () => {
-    if (calculatedWidth < 5) {
-      calculatedWidth = 5;
+    if (calculatedWidth < 0) {
+      calculatedWidth = 0;
     }
 
     if (calculatedWidth > width) {
       calculatedWidth = width;
     }
 
-    if (calculatedHeight < 5) {
-      calculatedHeight = 5;
+    if (calculatedHeight < 0) {
+      calculatedHeight = 0;
     }
 
     if (calculatedHeight > height) {
@@ -54,20 +54,17 @@
   };
 
   const handleSubmit = () => {
-    adjustBooundaries();
-
     const sizeChange: Partial<ImageSize> = {};
 
-    if (calculatedWidth !== width) {
+    if (calculatedWidth && calculatedWidth !== width) {
       sizeChange.width = calculatedWidth;
     }
 
-    if (calculatedHeight !== height) {
+    if (calculatedHeight && calculatedHeight !== height) {
       sizeChange.height = calculatedHeight;
     }
 
     if (Object.keys(sizeChange).length > 0) {
-      // onChange(sizeChange);
       dispatch('change', sizeChange);
 
       return;
@@ -75,7 +72,6 @@
 
     // fallback to original values
     dispatch('change');
-    // onChange();
   };
 
   const handleChange = (caller: 'width' | 'height') => {
@@ -83,10 +79,14 @@
 
     if (aspectRatioLinked) {
       if (caller === 'width') {
-        calculatedHeight = Math.floor(calculatedWidth / aspectRatio);
+        calculatedHeight = Math.floor(
+          Math.max(calculatedWidth, 10) / aspectRatio
+        );
       }
       if (caller === 'height') {
-        calculatedWidth = Math.floor(calculatedHeight * aspectRatio);
+        calculatedWidth = Math.floor(
+          Math.max(calculatedHeight, 10) * aspectRatio
+        );
       }
     }
 
