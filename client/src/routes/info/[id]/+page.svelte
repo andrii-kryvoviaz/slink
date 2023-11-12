@@ -50,9 +50,9 @@
   in:fly={{ y: 100, duration: 500, delay: 100 }}
   class="flex justify-center p-8"
 >
-  <div class="container flex max-w-[1280px] flex-row flex-wrap gap-6">
-    <div class="flex-shrink">
-      <div class="flex justify-start">
+  <div class="container flex flex-row flex-wrap gap-6">
+    <div class="max-w-full flex-shrink">
+      <div class="flex max-w-full justify-start">
         <ImagePlaceholder
           src={data.url}
           height={32}

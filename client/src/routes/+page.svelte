@@ -102,7 +102,7 @@
           </div>
 
           <p class="text-xs text-color-secondary">
-            SVG, PNG, JPG, WEBP or GIF (MAX. 3MB)
+            SVG, PNG, JPG, WEBP or GIF (MAX. 5MB)
           </p>
         </div>
       {:else}

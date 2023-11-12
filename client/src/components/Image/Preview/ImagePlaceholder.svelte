@@ -51,7 +51,7 @@
 
 <div
   class="relative max-w-full overflow-hidden rounded-md"
-  style:width="min({width}rem, {maxWidth}px, 100%)"
+  style:width="min({width}rem, {maxWidth}px)"
   style:height="{height}rem"
   style:max-width="min({maxWidth}px, 100%)"
   style:max-height="min({maxHeight}px, {height}rem)"
