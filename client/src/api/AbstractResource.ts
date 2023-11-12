@@ -1,6 +1,7 @@
 import type { ViolationResponse } from './Response/Error/ViolationResponse';
-import { ValidationException } from './Exceptions/ValidationException';
 import { error } from '@sveltejs/kit';
+
+import { ValidationException } from './Exceptions/ValidationException';
 
 export abstract class AbstractResource {
   private _baseUrl: string;
@@ -24,6 +25,10 @@ export abstract class AbstractResource {
     const response = await this._fetch(`${this._baseUrl}${path}`, options);
 
     this.resetFetch();
+
+    if (response.status === 204) {
+      return;
+    }
 
     if (response.ok && response.status < 400) {
       const parsed = await response.json();
