@@ -10,6 +10,8 @@ services:
       - node_modules:/app/client/node_modules
     ports:
       - "5173:5173"
+    environment:
+      - API_ENABLED=true
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
