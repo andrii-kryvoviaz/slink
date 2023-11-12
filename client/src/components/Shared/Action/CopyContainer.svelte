@@ -31,12 +31,12 @@
   $: variant = isCopiedActive ? 'success' : 'primary';
 </script>
 
-<div class="flex items-center">
+<div class="flex w-full max-w-[25rem] items-center">
   <div
-    class="flex flex-row items-center justify-center rounded-full border border-button-default p-1"
+    class="flex w-full flex-row items-center justify-center rounded-full border border-button-default p-1"
   >
     <input
-      class="bg-transparent px-3 text-xs focus:outline-none"
+      class="flex-grow bg-transparent px-3 text-xs focus:outline-none"
       type="text"
       {value}
       readonly
