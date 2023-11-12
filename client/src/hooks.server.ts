@@ -1,27 +1,13 @@
 import dotenv from 'dotenv';
 
-import { error } from '@sveltejs/kit';
-
 import type { Handle } from '@sveltejs/kit';
 
 dotenv.config();
 
-const MY_API_BASE_URL = 'http://localhost:8080';
+const API_BASE_URL = 'http://localhost:8080';
 const PROXY_PATH = '/api';
 
 const handleApiProxy: Handle = async ({ event }) => {
-  const origin = event.request.headers.get('Origin');
-
-  // reject requests that don't come from the webapp, to avoid your proxy being abused.
-  if (
-    (!origin || new URL(origin).origin !== event.url.origin) &&
-    process.env.API_ENABLED !== 'true'
-  ) {
-    throw error(403, 'Forbidden');
-  }
-
-  console.log('Proxying request to: ', event.request.url);
-
   // Ensure that PROXY_PATH is escaped properly for use in a regex pattern:
   const escapedProxyPath = PROXY_PATH.replace(/[-[/\]{}()*+?.\\^$|]/g, '\\$&');
 
@@ -32,7 +18,7 @@ const handleApiProxy: Handle = async ({ event }) => {
   const strippedPath = event.url.pathname.replace(proxyPathRegex, '');
 
   // build the new URL path with your API base URL, the stripped path and the query string
-  const urlPath = `${MY_API_BASE_URL}${strippedPath}${event.url.search}`;
+  const urlPath = `${API_BASE_URL}${strippedPath}${event.url.search}`;
   const proxiedUrl = new URL(urlPath);
 
   // Strip off header added by SvelteKit yet forbidden by underlying HTTP request
