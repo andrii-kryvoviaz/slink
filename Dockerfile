@@ -12,7 +12,8 @@ FROM node as node-dependencies
 WORKDIR /temp
 
 COPY client/package.json client/yarn.lock ./
-RUN yarn install --frozen-lockfile --non-interactive --production=true
+RUN yarn install --frozen-lockfile --non-interactive --production=true && \
+    yarn add vite
 
 COPY client ./
 
@@ -38,20 +39,16 @@ RUN apk update && apk upgrade &&\
     supervisor \
     libmcrypt \
     libcurl \
-    libpng \
     libsmbclient \
-    libjpeg-turbo \
-    freetype \
     imagemagick \
-    postgresql-libs \
-    icu-libs
+    postgresql-libs
 
 # Install Common PHP extensions
-RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS autoconf g++ make linux-headers imagemagick-dev curl-dev postgresql-dev icu-dev libpng-dev libmcrypt-dev libjpeg-turbo-dev oniguruma-dev samba-dev && \
+RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS autoconf g++ make linux-headers curl-dev libmcrypt-dev imagemagick-dev postgresql-dev libpng-dev libjpeg-turbo-dev oniguruma-dev samba-dev && \
     docker-php-ext-configure gd --with-jpeg && \
-    docker-php-ext-install curl intl mysqli pdo_pgsql mbstring gd exif && \
-    pecl install mcrypt redis imagick smbclient && \
-    docker-php-ext-enable mcrypt redis imagick smbclient && \
+    docker-php-ext-install curl mysqli pdo_pgsql mbstring gd exif && \
+    pecl install mcrypt imagick smbclient && \
+    docker-php-ext-enable mcrypt imagick smbclient && \
     apk del .build-deps
 
 # Copy supervisor config
@@ -136,15 +133,25 @@ COPY --from=vendor /app/vendor/ ./vendor/
 
 # Copy client app
 COPY --from=node-dependencies /temp/build ./client
-
-# Change owner of project files
-RUN chown -R www-data:www-data /app
+COPY --from=node-dependencies /temp/package.json ./client/package.json
 
 # Set environment variables
 ENV API_ENABLED=false
 ENV APP_ENV=prod
 ENV NODE_ENV=production
 ENV SWOOLE_ENABLED=true
+
+## Node doesn't have to verify SSL certificates within the container
+ENV NODE_TLS_REJECT_UNAUTHORIZED=0
+# Set Node Adapter Size Limit to 50MB
+ENV BODY_SIZE_LIMIT=52428800
+
+# Set database URLs
+ENV DATABASE_URL=sqlite:///%kernel.project_dir%/var/data/slink.db
+ENV ES_DATABASE_URL=sqlite:///%kernel.project_dir%/var/data/slink_store.db
+
+# Set storage provider
+ENV STORAGE_PROVIDER=local
 
 # Use Swoole Runtime
 COPY docker/runtime/production.conf /etc/supervisor/conf.d/production.conf
