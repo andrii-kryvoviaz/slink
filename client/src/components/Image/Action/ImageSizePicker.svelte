@@ -3,10 +3,12 @@
   import type { ImageSize } from '@slink/components/Image/Types/ImageParams';
   import Button from '@slink/components/Shared/Action/Button.svelte';
   import { Tooltip } from 'flowbite-svelte';
+  import { createEventDispatcher } from 'svelte';
 
   export let width: number;
   export let height: number;
-  export let onChange: (value?: Partial<ImageSize>) => void;
+
+  const dispatch = createEventDispatcher();
 
   let calculatedWidth = 0;
   let calculatedHeight = 0;
@@ -65,13 +67,15 @@
     }
 
     if (Object.keys(sizeChange).length > 0) {
-      onChange(sizeChange);
+      // onChange(sizeChange);
+      dispatch('change', sizeChange);
 
       return;
     }
 
     // fallback to original values
-    onChange();
+    dispatch('change');
+    // onChange();
   };
 
   const handleChange = (caller: 'width' | 'height') => {
