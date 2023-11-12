@@ -25,6 +25,11 @@
   let image: HTMLImageElement;
   let container: HTMLDivElement;
 
+  const filterResizable = (mimeType: string | undefined) => {
+    if (!mimeType) return false;
+    return !new RegExp('svg').test(mimeType);
+  };
+
   $: if (aspectRatio) {
     width = height / aspectRatio;
   }
@@ -51,6 +56,7 @@
   style:max-width="min({maxWidth}px, 100%)"
   style:max-height="min({maxHeight}px, {height}rem)"
   bind:this={container}
+  class:bg-white={!filterResizable(metadata?.mimeType)}
 >
   <img
     bind:this={image}
@@ -86,7 +92,9 @@
         class="absolute bottom-0 left-0 right-0 flex items-center justify-between bg-slate-800 bg-opacity-50 p-2 text-xs text-slate-200 backdrop-blur-sm backdrop-filter"
       >
         <div class="group">
-          <p>{metadata.width}x{metadata.height} pixels</p>
+          {#if filterResizable(metadata.mimeType)}
+            <p>{metadata.width}x{metadata.height} pixels</p>
+          {/if}
           <p>{metadata.mimeType}</p>
         </div>
 
