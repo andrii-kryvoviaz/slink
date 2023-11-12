@@ -22,7 +22,7 @@
   let url: string;
 
   const filterResizable = (mimeType: string) => {
-    return !new RegExp('svg|gif').test(mimeType);
+    return !new RegExp('svg|gif|webp').test(mimeType);
   };
 
   const handleImageSizeChange = (value?: Partial<ImageSize>) => {
