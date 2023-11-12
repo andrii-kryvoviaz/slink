@@ -22,7 +22,7 @@ export const defaultTheme: Theme = {
       bgButtonDefaultHover: 'gray.700',
       textButtonDefaultHover: 'gray.200',
       bgSuccess: 'teal.500',
-      bgDanger: 'rose.800',
+      bgDanger: 'rose.700',
       bgWarning: 'amber.500',
     },
   },

@@ -9,6 +9,9 @@ const icons: string[] = [
   'clarity:warning-standard-line',
   'system-uicons:external',
   'mdi:check',
+  'carbon:link',
+  'carbon:unlink',
+  'ep:info-filled',
 ];
 
 export const Icons = {
