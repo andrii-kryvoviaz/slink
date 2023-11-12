@@ -1,6 +1,6 @@
 import type { Config } from 'tailwindcss';
 
-import { ThemeCustomizerPlugin } from 'tailwindcss-theme-cutomizer';
+import { ThemeCustomizerPlugin } from 'tailwindcss-theme-customizer';
 
 import { defaultTheme, tailwindcssTheme } from './src/theme.default';
 
