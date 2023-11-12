@@ -51,6 +51,10 @@ final class Image implements AggregateRoot {
     $this->recordThat(new ImageAttributesWasUpdated($this->aggregateRootId(), $attributes));
   }
   
+  public function updateAttributes(ImageAttributes $attributes): void {
+    $this->recordThat(new ImageAttributesWasUpdated($this->aggregateRootId(), $attributes));
+  }
+  
   public function applyImageWasCreated(ImageWasCreated $event): void {
     $this->setAttributes($event->attributes);
     
