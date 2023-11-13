@@ -15,7 +15,7 @@ parameters:
         local:
             class: Slik\Shared\Infrastructure\FileSystem\Storage\LocalStorage
             arguments:
-                projectPublicDir: '%kernel.project_dir%/public'
+                projectPublicDir: '%kernel.project_dir%'
         smb:
             class: Slik\Shared\Infrastructure\FileSystem\Storage\SmbStorage
             arguments:
