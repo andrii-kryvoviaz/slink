@@ -5,10 +5,10 @@
 
 <div class="flex h-full w-full flex-col items-center justify-center">
   <div class="flex flex-col items-center justify-center p-12">
-    <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100">
+    <h1 class="text-[8rem] font-light">
       {$page.status}
     </h1>
-    <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100">
+    <h2 class="text-2xl font-bold">
       {$page.error?.message}
     </h2>
   </div>
