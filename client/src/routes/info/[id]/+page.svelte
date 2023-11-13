@@ -78,7 +78,7 @@
 
 <div
   in:fly={{ y: 100, duration: 500, delay: 100 }}
-  class="flex justify-center p-8"
+  class="flex justify-center p-2 sm:p-8"
 >
   <div class="container flex flex-row flex-wrap gap-6">
     <div class="max-w-full flex-shrink">
@@ -122,7 +122,7 @@
           <Icon
             icon="ep:info-filled"
             id="open-resize-info-tooltip"
-            class="cursor-help"
+            class="hidden cursor-help xs:block"
           />
           <Tooltip
             triggeredBy="[id^='open-resize-info-tooltip']"
