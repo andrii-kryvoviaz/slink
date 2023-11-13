@@ -24,12 +24,6 @@ final readonly class ExceptionSubscriber implements EventSubscriberInterface {
   }
 
   public function onKernelException(ExceptionEvent $event): void {
-    $request = $event->getRequest();
-
-    if ($request->getContentTypeFormat() !== 'json' && !$this->isDev()) {
-      return;
-    }
-
     $exception = $event->getThrowable();
 
     $response = new JsonResponse();
