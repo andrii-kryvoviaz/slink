@@ -100,7 +100,7 @@
   }
 </script>
 
-<div class="flex gap-4 text-xs">
+<div class="flex gap-4 text-[0.5rem] xs:text-xs">
   <div class="flex gap-2 rounded-full border border-button-default p-1">
     <input
       type="number"
@@ -145,7 +145,7 @@
       rounded="full"
       variant="danger"
       size="xs"
-      class="px-4"
+      class="px-4 text-[0.5rem] xs:text-xs"
       on:click={resetValues}>Reset</Button
     >
   </div>
