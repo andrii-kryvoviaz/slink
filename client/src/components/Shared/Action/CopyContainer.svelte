@@ -31,18 +31,18 @@
   $: variant = isCopiedActive ? 'success' : 'primary';
 </script>
 
-<div class="flex w-full max-w-[25rem] items-center">
+<div class="flex w-full max-w-[25rem] items-center text-[0.5rem] xs:text-xs">
   <div
     class="flex w-full flex-row items-center justify-center rounded-full border border-button-default p-1"
   >
     <input
-      class="flex-grow bg-transparent px-3 text-xs focus:outline-none"
+      class="flex-grow bg-transparent px-3 focus:outline-none"
       type="text"
       {value}
       readonly
     />
     <Button
-      class="ml-2 min-w-[5rem]"
+      class="ml-2 min-w-[5rem] text-[0.5rem] xs:text-xs"
       {variant}
       size="xs"
       rounded="full"
