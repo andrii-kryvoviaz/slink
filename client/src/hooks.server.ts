@@ -1,8 +1,4 @@
-import dotenv from 'dotenv';
-
 import type { Handle } from '@sveltejs/kit';
-
-dotenv.config();
 
 const API_BASE_URL = 'http://localhost:8080';
 const PROXY_PATH = '/api';
@@ -22,8 +18,6 @@ const handleApiProxy: Handle = async ({ event }) => {
   const proxiedUrl = new URL(urlPath);
 
   // Strip off header added by SvelteKit yet forbidden by underlying HTTP request
-  // library `undici`.
-  // https://github.com/nodejs/undici/issues/1470
   event.request.headers.delete('connection');
 
   const options: any = {
@@ -33,6 +27,8 @@ const handleApiProxy: Handle = async ({ event }) => {
     headers: event.request.headers,
     // is not set explicitly by some Node.js versions, may cause problems with upload
     duplex: 'half',
+    // Node doesn't have to verify SSL certificates within the container
+    rejectUnauthorized: false,
   };
 
   return fetch(proxiedUrl.toString(), options).catch((err) => {

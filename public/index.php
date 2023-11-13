@@ -6,13 +6,16 @@ use Slik\Shared\Infrastructure\Kernel;
 
 if (filter_var($_ENV['SWOOLE_ENABLED'],FILTER_VALIDATE_BOOLEAN)) {
   $_SERVER['APP_RUNTIME'] = Runtime::class;
+  
+  $packageMaxLength = (int) ($_ENV['UPLOAD_MAX_FILESIZE_IN_BYTES'] ?? 1024 * 1024 * 20);
 
   $_SERVER['APP_RUNTIME_OPTIONS'] = [
     'host' => '0.0.0.0',
     'port' => 8080,
     'settings' => [
       \Swoole\Constant::OPTION_WORKER_NUM => $_ENV['SWOOLE_WORKER_NUM'] ?? 1,
-      \Swoole\Constant::OPTION_DOCUMENT_ROOT => dirname(__DIR__).'/public'
+      \Swoole\Constant::OPTION_DOCUMENT_ROOT => dirname(__DIR__).'/public',
+      \Swoole\Constant::OPTION_PACKAGE_MAX_LENGTH => $packageMaxLength
     ],
   ];
 }
