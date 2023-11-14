@@ -1,95 +1,65 @@
-# Symfony Swoole Runtime Template
-This is a simple example of how to use Symfony with Swoole Runtime. It uses Docker to run the application.
+# Slink: Image Sharing Platform
 
-## Requirements
-- Docker
-- Docker Compose Plugin
-- Make (optional)
+![Docker Image Version (latest semver)](https://img.shields.io/docker/v/anirdev/slink?color=blue)
+![Docker Pulls](https://img.shields.io/docker/pulls/anirdev/slink)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-## Usage
-To run the application, you need to have Docker installed. Then, run the following command:
+![Slink](screens/8fb748c7-b3bd-46f4-add9-d21f257ec34d.png)
+This is a self-hosted image sharing platform built with [Symfony](https://symfony.com/) and [SvelteKit](https://kit.svelte.dev/).
 
+**Note:** This project is still under development. Before using it in production, make sure to secure your application properly.
+
+## Installation
+To install the application, you need to have [Docker](https://docs.docker.com/get-docker/) installed on your system.
+
+Just run the following command to start the application:
 ```bash
-make run
+docker run -d \
+    --name slink \
+    -p 3000:3000 \
+    -v ./slink/var/data:/app/var/data \
+    -v ./slink/images:/app/slink/images \
+    anirdev/slink:latest
 ```
 
-The above will build the Docker image and run the application in `production` mode. You can access the application at http://localhost:8080.
+### Docker Compose
 
-Alternatively, you can run the following command:
-
-```bash
-docker compose -f docker-compose.yaml up -d --build
+You can also use [Docker Compose](https://docs.docker.com/compose/) to start the application.
+```yaml
+slink:
+    image: anirdev/slink:latest
+    container_name: slink
+    volumes:
+      # Persist the database
+      - ./slink/var/data:/app/var/data
+      # Persist the uploaded images
+      - ./slink/images:/app/slink/images
+    ports:
+      # Expose the application on port 3000
+      - "3000:3000"
 ```
 
-To run the application in `development` mode, run the following command:
+## Configuration
+The application can be configured using environment variables. The following environment variables are available:
 
-```bash
-make run-dev
-```
+| Variable | Description                                                      | Default Value |
+| -------- |------------------------------------------------------------------|---------------|
+| `STORAGE_PROVIDER` | Storage provider to use. Available options are `local` and `smb` | `local` |
+| `SMB_HOST` | SMB host to connect to. Required if `STORAGE_PROVIDER` is set to `smb` | `null` |
+| `SMB_USERNAME` | SMB username to use. Required if `STORAGE_PROVIDER` is set to `smb` | `null` |
+| `SMB_PASSWORD` | SMB password to use. Required if `STORAGE_PROVIDER` is set to `smb` | `null` |
+| `SMB_SHARE` | SMB share to use. Required if `STORAGE_PROVIDER` is set to `smb` | `null` |
 
-or with Docker Compose:
+## Security
+As of now, the application doesn't have any security measures in place. So, make sure to secure your application properly before using it in production.
 
-```bash
-docker compose -f docker-compose.yaml -f docker-compose.dev.yaml up -d --build
-```
+Some of the routes has to be protected from unauthorized access.
+Make sure that `/` and `/api/upload` are not accessible from outside your network.
 
-**Be aware that the development mode will not use the Swoole Runtime, but the Symfony Web Server instead.**
+**Note:** In the upcoming releases, authentication will be added to the application. Which will address some of the security concerns.
 
-### PhpStorm Xdebug Configuration
-
-The `development` mode has Xdebug enabled. To use it with PhpStorm, you need to configure the following:
-
-1. Navigate to `Settings > PHP > Servers` and add a new server with the following configuration:
-    - Name: `localhost`
-    - Host: `localhost`
-    - Port: `8080`
-    - Debugger: `Xdebug`
-    - Use path mappings: `Yes`
-    - Absolute path on the server: `/app`
-    - Absolute path on the local machine: `<path-to-project>/app`
-
-
-2. Navigate to `Settings > PHP > CLI Interpreter` and create a new one based on the docker compose file:
-    - Name: `Docker Compose Interpreter`
-    - Server: `Docker`
-    - Configuration file: `docker-compose.yaml`
-    - Service: `app`
-    - Connect to existing container: `Yes`
-   
-
-3. Create new `Run/Debug Configuration` of type `PHP Remote Debug` with the following configuration:
-    - Name: `Docker Compose`
-    - Server: `localhost`
-    - Ide key(session id): `PHPSTORM`
-    - Filter debug connection by IDE key: `Yes`
-
-Now you can run the application in `development` mode and debug it with PhpStorm.
-
-## Customizing PHP Runtime
-
-The template is configured to use Swoole Runtime for `production` mode and Symfony Web Server for `development`.
-The following supervisor configuration files could be found in the `docker/runtime` directory.
-
-Be aware that it might require some additional configuration and adjustments made in Dockerfile to work properly.
-
-Here is an example of a `PHP-FPM` configuration file:
-
-```ini
-[program:php-fpm]
-command = /usr/local/sbin/php-fpm --force-stderr --nodaemonize --fpm-config /usr/local/etc/php-fpm.d/www.conf
-autostart=true
-autorestart=true
-priority=5
-stdout_events_enabled=true
-stderr_events_enabled=true
-stdout_logfile=/dev/stdout
-stdout_logfile_maxbytes=0
-stderr_logfile=/dev/stderr
-stderr_logfile_maxbytes=0
-stopsignal=QUIT
-```
-
-This will require to use `php-fpm` image and configuring a reverse proxy to it. e.g. `Nginx`.
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 ## License
 
