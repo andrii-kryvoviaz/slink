@@ -35,6 +35,10 @@ final class Image implements AggregateRoot {
     return $this->metadata;
   }
   
+  public function hasExtension(string $extension): bool {
+    return $this->getAttributes()->getExtension() === $extension;
+  }
+  
   /**
    */
   public static function create(ID $id, ImageAttributes $attributes, ImageMetadata $metadata = null): self {
