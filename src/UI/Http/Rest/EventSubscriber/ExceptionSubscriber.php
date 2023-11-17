@@ -14,7 +14,11 @@ use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Throwable;
 
 final readonly class ExceptionSubscriber implements EventSubscriberInterface {
-  public function __construct(private string $environment, private array $exceptionToStatus = []) {
+  public function __construct(
+    private string $environment,
+    private array $exceptionToStatus = [],
+    private array $exceptionCodeToMessage = []
+  ) {
   }
 
   public static function getSubscribedEvents(): array {
@@ -77,7 +81,8 @@ final readonly class ExceptionSubscriber implements EventSubscriberInterface {
   }
 
   private function getExceptionMessage(Throwable $exception): string {
-    return $exception->getMessage();
+    $statusCode = $this->determineStatusCode($exception);
+    return $this->exceptionCodeToMessage[$statusCode] ?? $exception->getMessage();
   }
 
   private function determineStatusCode(Throwable $exception): int {
