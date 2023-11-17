@@ -36,10 +36,6 @@ final readonly class GetImageByIdHandler implements QueryHandlerInterface {
     
     $imageView = $this->repository->oneById($query->getId());
     
-    if(!$query->isWrapped()) {
-      return $imageView;
-    }
-    
     return Item::fromPayload(ImageRepository::entityClass(), [
       ...$imageView->toPayload(),
       'url' => implode('/',

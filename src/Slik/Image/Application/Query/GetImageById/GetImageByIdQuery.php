@@ -11,16 +11,10 @@ final readonly class GetImageByIdQuery implements QueryInterface {
   public function __construct(
     #[Assert\NotBlank]
     private string $id,
-    
-    private bool $wrapped = true
   ) {
   }
   
   public function getId(): string {
     return $this->id;
-  }
-  
-  public function isWrapped(): bool {
-    return $this->wrapped;
   }
 }

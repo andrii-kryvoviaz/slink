@@ -7,6 +7,7 @@ namespace UI\Http\Rest\Controller\Image;
 use Slik\Image\Application\Command\AddImageViewCount\AddImageViewCountCommand;
 use Slik\Image\Application\Query\GetImageById\GetImageByIdQuery;
 use Slik\Image\Application\Query\GetImageContent\GetImageContentQuery;
+use Slik\Image\Infrastructure\ReadModel\View\ImageView;
 use Slik\Shared\Application\Command\CommandTrait;
 use Slik\Shared\Application\Query\QueryTrait;
 use Slik\Shared\Infrastructure\Exception\NotFoundException;
@@ -26,15 +27,14 @@ final readonly class GetImageController {
   /**
    * @throws NotFoundException
    */
-  public function __invoke(string $id, string $ext): ContentResponse {
+  public function __invoke(ImageView $imageView, string $ext): ContentResponse {
     $request = $this->requestStack->getCurrentRequest();
-    $imageView = $this->ask(new GetImageByIdQuery($id, false));
     
-    if($imageView->getAttributes()->getFileName() !== "$id.$ext") {
+    if($imageView->getAttributes()->getExtension() !== $ext) {
       throw new NotFoundException();
     }
     
-    $this->handle(new AddImageViewCountCommand($id));
+    $this->handle(new AddImageViewCountCommand($imageView->getUuid()));
     
     $imageData = $this->ask(new GetImageContentQuery(
       $imageView->getAttributes()->getFileName(),
