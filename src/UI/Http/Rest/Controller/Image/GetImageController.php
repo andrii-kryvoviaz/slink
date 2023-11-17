@@ -7,6 +7,7 @@ namespace UI\Http\Rest\Controller\Image;
 use Slik\Image\Application\Command\AddImageViewCount\AddImageViewCountCommand;
 use Slik\Image\Application\Query\GetImageById\GetImageByIdQuery;
 use Slik\Image\Application\Query\GetImageContent\GetImageContentQuery;
+use Slik\Image\Domain\Image;
 use Slik\Image\Infrastructure\ReadModel\View\ImageView;
 use Slik\Shared\Application\Command\CommandTrait;
 use Slik\Shared\Application\Query\QueryTrait;
@@ -27,22 +28,22 @@ final readonly class GetImageController {
   /**
    * @throws NotFoundException
    */
-  public function __invoke(ImageView $imageView, string $ext): ContentResponse {
+  public function __invoke(Image $image, string $ext): ContentResponse {
     $request = $this->requestStack->getCurrentRequest();
     
-    if($imageView->getAttributes()->getExtension() !== $ext) {
+    if(!$image->hasExtension($ext)) {
       throw new NotFoundException();
     }
     
-    $this->handle(new AddImageViewCountCommand($imageView->getUuid()));
+    $this->handle(new AddImageViewCountCommand($image->aggregateRootId()->toString()));
     
     $imageData = $this->ask(new GetImageContentQuery(
-      $imageView->getAttributes()->getFileName(),
-      $imageView->getMetadata()->getMimeType(),
+      $image->getAttributes()->getFileName(),
+      $image->getMetadata()->getMimeType(),
       $request->query->get('width', null),
       $request->query->get('height', null)
     ));
     
-    return ContentResponse::file($imageData, $imageView->getMetadata()->getMimeType());
+    return ContentResponse::file($imageData, $image->getMetadata()->getMimeType());
   }
 }
