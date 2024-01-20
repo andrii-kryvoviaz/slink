@@ -16,13 +16,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 final readonly class GetImageByIdHandler implements QueryHandlerInterface {
-  private Request $request;
   
   public function __construct(
     private ImageRepository $repository,
-    RequestStack $requestStack,
   ) {
-    $this->request = $requestStack->getCurrentRequest();
   }
   
   /**
@@ -40,8 +37,6 @@ final readonly class GetImageByIdHandler implements QueryHandlerInterface {
       ...$imageView->toPayload(),
       'url' => implode('/',
         [
-          // it is not necessary when client is using the same domain and has a reverse proxy
-          //$this->request->getSchemeAndHttpHost(),
           '/image',
           $imageView->getAttributes()->getFileName()
         ]),
