@@ -14,7 +14,7 @@ class ApiResponse extends JsonResponse {
     return new self($payload, $status);
   }
   
-  public static function empty(int $status): self {
+  public static function empty(int $status = self::HTTP_NO_CONTENT): self {
     return new self(null, $status);
   }
   
