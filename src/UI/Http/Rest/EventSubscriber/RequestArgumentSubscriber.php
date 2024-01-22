@@ -43,8 +43,7 @@ final class RequestArgumentSubscriber implements EventSubscriberInterface {
         continue;
       }
       
-      if ($format === 'json') {
-        $data = json_decode($request->getContent(), true);
+      if ($format === 'json' && $data = json_decode($request->getContent(), true)) {
         $request->{$method}->replace($data);
       }
       
