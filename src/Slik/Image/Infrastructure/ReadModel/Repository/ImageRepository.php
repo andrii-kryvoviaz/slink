@@ -15,7 +15,7 @@ final class ImageRepository extends AbstractRepository {
     $this->_em->persist($image);
   }
   
-  static function entityClass(): string {
+  static protected function entityClass(): string {
     return ImageView::class;
   }
   

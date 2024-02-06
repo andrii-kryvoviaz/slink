@@ -57,7 +57,7 @@ final class UserRepository extends AbstractRepository implements CheckUserByEmai
     $this->_em->persist($userView);
   }
 
-  static function entityClass(): string {
+  static protected function entityClass(): string {
     return UserView::class;
   }
   

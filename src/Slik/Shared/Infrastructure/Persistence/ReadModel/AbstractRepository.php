@@ -12,7 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Slik\Shared\Infrastructure\Exception\NotFoundException;
 
 abstract class AbstractRepository extends ServiceEntityRepository {
-  abstract static function entityClass(): string;
+  abstract static protected function entityClass(): string;
 
   public function __construct(protected ManagerRegistry $registry) {
     parent::__construct($registry, static::entityClass());

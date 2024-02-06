@@ -10,6 +10,7 @@ use Slik\Shared\Application\Query\QueryHandlerInterface;
 use Slik\Shared\Infrastructure\Exception\NotFoundException;
 use Slik\User\Domain\ValueObject\Email;
 use Slik\User\Infrastructure\ReadModel\Repository\UserRepository;
+use Slik\User\Infrastructure\ReadModel\View\UserView;
 
 final readonly class FindByEmailHandler implements QueryHandlerInterface {
   public function __construct(private UserRepository $repository) {
@@ -23,6 +24,6 @@ final readonly class FindByEmailHandler implements QueryHandlerInterface {
     $email = Email::fromString($query->getEmail());
     $userView = $this->repository->oneByEmail($email);
 
-    return Item::fromPayload(UserRepository::entityClass(), $userView);
+    return Item::fromPayload(UserView::class, $userView);
   }
 }

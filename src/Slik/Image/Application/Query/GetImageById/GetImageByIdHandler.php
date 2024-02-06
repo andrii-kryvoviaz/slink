@@ -11,9 +11,6 @@ use Slik\Image\Infrastructure\ReadModel\View\ImageView;
 use Slik\Shared\Application\Http\Item;
 use Slik\Shared\Application\Query\QueryHandlerInterface;
 use Slik\Shared\Infrastructure\Exception\NotFoundException;
-use Slik\Shared\Infrastructure\FileSystem\Storage\StorageInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 final readonly class GetImageByIdHandler implements QueryHandlerInterface {
   
@@ -33,7 +30,7 @@ final readonly class GetImageByIdHandler implements QueryHandlerInterface {
     
     $imageView = $this->repository->oneById($query->getId());
     
-    return Item::fromPayload(ImageRepository::entityClass(), [
+    return Item::fromPayload(ImageView::class, [
       ...$imageView->toPayload(),
       'url' => implode('/',
         [
