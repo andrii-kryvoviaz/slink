@@ -12,10 +12,11 @@ use Slik\Shared\Infrastructure\Exception\NotFoundException;
 use Slik\Shared\Infrastructure\Persistence\ReadModel\AbstractRepository;
 use Slik\User\Domain\Repository\CheckUserByEmailInterface;
 use Slik\User\Domain\Repository\GetUserCredentialsByEmailInterface;
+use Slik\User\Domain\Repository\UserRepositoryInterface;
 use Slik\User\Domain\ValueObject\Email;
 use Slik\User\Infrastructure\ReadModel\View\UserView;
 
-final class UserRepository extends AbstractRepository implements CheckUserByEmailInterface, GetUserCredentialsByEmailInterface {
+final class UserRepository extends AbstractRepository implements CheckUserByEmailInterface, GetUserCredentialsByEmailInterface, UserRepositoryInterface {
   
   /**
    * @throws NonUniqueResultException
@@ -56,10 +57,6 @@ final class UserRepository extends AbstractRepository implements CheckUserByEmai
   public function add(UserView $userView): void {
     $this->_em->persist($userView);
   }
-
-  static protected function entityClass(): string {
-    return UserView::class;
-  }
   
   /**
    * @throws NonUniqueResultException
@@ -84,5 +81,9 @@ final class UserRepository extends AbstractRepository implements CheckUserByEmai
       $user['email'],
       $user['password'],
     ];
+  }
+  
+  static protected function entityClass(): string {
+    return UserView::class;
   }
 }

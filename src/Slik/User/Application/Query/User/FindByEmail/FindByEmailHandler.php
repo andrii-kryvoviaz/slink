@@ -8,12 +8,12 @@ use Doctrine\ORM\NonUniqueResultException;
 use Slik\Shared\Application\Http\Item;
 use Slik\Shared\Application\Query\QueryHandlerInterface;
 use Slik\Shared\Infrastructure\Exception\NotFoundException;
+use Slik\User\Domain\Repository\UserRepositoryInterface;
 use Slik\User\Domain\ValueObject\Email;
-use Slik\User\Infrastructure\ReadModel\Repository\UserRepository;
 use Slik\User\Infrastructure\ReadModel\View\UserView;
 
 final readonly class FindByEmailHandler implements QueryHandlerInterface {
-  public function __construct(private UserRepository $repository) {
+  public function __construct(private UserRepositoryInterface $repository) {
   }
   
   /**

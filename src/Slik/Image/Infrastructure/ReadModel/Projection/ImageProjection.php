@@ -7,14 +7,14 @@ namespace Slik\Image\Infrastructure\ReadModel\Projection;
 use Doctrine\ORM\NonUniqueResultException;
 use Slik\Image\Domain\Event\ImageAttributesWasUpdated;
 use Slik\Image\Domain\Event\ImageWasCreated;
-use Slik\Image\Infrastructure\ReadModel\Repository\ImageRepository;
+use Slik\Image\Domain\Repository\ImageRepositoryInterface;
 use Slik\Image\Infrastructure\ReadModel\View\ImageView;
 use Slik\Shared\Infrastructure\Exception\NotFoundException;
 use Slik\Shared\Infrastructure\Persistence\ReadModel\AbstractProjection;
 
 final class ImageProjection extends AbstractProjection {
   public function __construct(
-    private readonly ImageRepository $repository,
+    private readonly ImageRepositoryInterface $repository,
   ) {
   }
   

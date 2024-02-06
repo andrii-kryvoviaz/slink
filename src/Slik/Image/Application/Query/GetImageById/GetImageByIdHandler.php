@@ -6,7 +6,7 @@ namespace Slik\Image\Application\Query\GetImageById;
 
 use Doctrine\ORM\NonUniqueResultException;
 use Ramsey\Uuid\Uuid;
-use Slik\Image\Infrastructure\ReadModel\Repository\ImageRepository;
+use Slik\Image\Domain\Repository\ImageRepositoryInterface;
 use Slik\Image\Infrastructure\ReadModel\View\ImageView;
 use Slik\Shared\Application\Http\Item;
 use Slik\Shared\Application\Query\QueryHandlerInterface;
@@ -15,7 +15,7 @@ use Slik\Shared\Infrastructure\Exception\NotFoundException;
 final readonly class GetImageByIdHandler implements QueryHandlerInterface {
   
   public function __construct(
-    private ImageRepository $repository,
+    private ImageRepositoryInterface $repository,
   ) {
   }
   
