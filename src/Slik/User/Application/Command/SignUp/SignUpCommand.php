@@ -38,6 +38,10 @@ final readonly class SignUpCommand implements CommandInterface {
   public function getPassword(): string {
     return $this->password;
   }
+  
+  public function getConfirm(): string {
+    return $this->confirm;
+  }
 
   public function getDisplayName(): string {
     return $this->displayName;

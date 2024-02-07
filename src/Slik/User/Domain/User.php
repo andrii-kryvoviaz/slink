@@ -32,19 +32,7 @@ class User implements AggregateRoot {
     $this->hashedPassword = $hashedPassword;
   }
 
-  public function setCreatedAt(?DateTime $createdAt): void {
-    $this->createdAt = $createdAt;
-  }
-
-  public function setUpdatedAt(?DateTime $updatedAt): void {
-    $this->updatedAt = $updatedAt;
-  }
-
   private HashedPassword $hashedPassword;
-
-  private ?DateTime $createdAt = null;
-
-  private ?DateTime $updatedAt = null;
 
   /**
    * @throws DateTimeException
@@ -62,7 +50,6 @@ class User implements AggregateRoot {
   public function applyUserWasCreated(UserWasCreated $event): void {
     $this->setEmail($event->credentials->email);
     $this->setHashedPassword($event->credentials->password);
-    $this->setCreatedAt($event->createdAt);
   }
   
   public function signIn(#[SensitiveParameter] string $password): void {

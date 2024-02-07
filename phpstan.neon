@@ -1,0 +1,20 @@
+parameters:
+    level: 5
+    paths:
+        - bin/
+        - config/
+        - public/
+        - src/
+        - tests/
+    ignoreErrors:
+        -
+            messages:
+                - '#^Class [a-zA-Z0-9\\_]+ has an uninitialized readonly property [a-zA-Z0-9\$_]+\. Assign it in the constructor\.$#'
+                - '#^Readonly property [a-zA-Z0-9\\_]+\:\:[a-zA-Z0-9\$_]+ is assigned outside of the constructor\.$#'
+            paths:
+                - src/UI/Http/Rest/Controller/*
+                - src/Slik/*/ValueObject/*
+        -
+            message: '#^Access to constant [A-Z0-9_]+ on an unknown class Swoole\\Constant\.$#'
+            paths:
+                - public/index.php

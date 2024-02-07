@@ -15,7 +15,11 @@ final class ImageStore extends AbstractStoreRepository implements ImageStoreRepo
   }
   
   public function get(ID $id): Image {
-    return $this->retrieve($id);
+    $image = $this->retrieve($id);
+    if (!$image instanceof Image) {
+      throw new \RuntimeException('Expected instance of Image, got ' . get_class($image));
+    }
+    return $image;
   }
   
   public function store(Image $image): void {

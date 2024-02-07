@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slik\Image\Domain\Event;
 
+use EventSauce\EventSourcing\AggregateRootId;
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
 use Slik\Image\Domain\ValueObject\ImageAttributes;
 use Slik\Shared\Domain\Exception\DateTimeException;
@@ -12,7 +13,7 @@ use Slik\Shared\Domain\ValueObject\ID;
 final readonly class ImageAttributesWasUpdated implements SerializablePayload{
   
   public function __construct(
-    public ID $id,
+    public ID|AggregateRootId $id,
     public ImageAttributes $attributes,
   ) {
   }

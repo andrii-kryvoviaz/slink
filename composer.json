@@ -36,7 +36,9 @@
         "symfony/yaml": "^6.3"
     },
     "require-dev": {
-        "phpstan/phpstan": "^1.4.6",
+        "dg/bypass-finals": "dev-master",
+        "phpstan/phpstan": "^1.10",
+        "phpunit/phpunit": "^10.4",
         "symfony/phpunit-bridge": "^6.3",
         "symfony/stopwatch": "^6.3",
         "symfony/web-profiler-bundle": "^6.3"
@@ -57,7 +59,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Slik\\Tests\\": "tests/"
+            "Tests\\": "tests/"
         }
     },
     "replace": {

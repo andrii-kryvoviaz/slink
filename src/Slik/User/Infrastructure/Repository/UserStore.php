@@ -15,7 +15,11 @@ final class UserStore extends AbstractStoreRepository implements UserStoreReposi
   }
 
   public function get(ID $id): User {
-    return $this->retrieve($id);
+    $user = $this->retrieve($id);
+    if (!$user instanceof User) {
+      throw new \RuntimeException('Expected instance of User, got ' . get_class($user));
+    }
+    return $user;
   }
 
   public function store(User $user): void {
