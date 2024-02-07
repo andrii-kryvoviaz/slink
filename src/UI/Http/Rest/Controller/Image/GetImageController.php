@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace UI\Http\Rest\Controller\Image;
 
 use Slik\Image\Application\Command\AddImageViewCount\AddImageViewCountCommand;
-use Slik\Image\Application\Query\GetImageById\GetImageByIdQuery;
 use Slik\Image\Application\Query\GetImageContent\GetImageContentQuery;
 use Slik\Image\Domain\Image;
-use Slik\Image\Infrastructure\ReadModel\View\ImageView;
 use Slik\Shared\Application\Command\CommandTrait;
 use Slik\Shared\Application\Query\QueryTrait;
 use Slik\Shared\Infrastructure\Exception\NotFoundException;
