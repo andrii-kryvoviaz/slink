@@ -8,9 +8,12 @@ use Slik\Shared\Domain\Exception\DateTimeException;
 use Slik\Shared\Domain\ValueObject\AbstractCompoundValueObject;
 use Slik\Shared\Domain\ValueObject\DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Slik\Shared\Domain\ValueObject\MutableValueObject;
 
 #[ORM\Embeddable]
 final readonly class ImageAttributes extends AbstractCompoundValueObject {
+  use MutableValueObject;
+  
   /**
    * @param string $fileName
    * @param string $description
@@ -128,5 +131,13 @@ final readonly class ImageAttributes extends AbstractCompoundValueObject {
       isset($payload['updatedAt']) ? DateTime::fromString($payload['updatedAt']) : null,
       $payload['views'],
     );
+  }
+  
+  public function withDescription(?string $description): self {
+    return $this->markForUpdate('description', $description);
+  }
+
+  public function withIsPublic(?bool $isPublic): self {
+    return $this->markForUpdate('isPublic', $isPublic);
   }
 }

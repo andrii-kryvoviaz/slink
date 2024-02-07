@@ -17,20 +17,14 @@ final readonly class UpdateImageHandler implements CommandHandlerInterface {
   ) {
   }
   
-  /**
-   * @throws DateTimeException
-   */
   public function __invoke(UpdateImageCommand $command): void {
     $image = $this->imageRepository->get($command->getId());
     
-    $attributesPayload = $image->getAttributes()->toPayload();
+    $attributes = clone $image->getAttributes()
+      ->withDescription($command->getDescription())
+      ->withIsPublic($command->getIsPublic());
     
-    $attributesPayload['description'] = $command->getDescription() ?? $attributesPayload['description'];
-    $attributesPayload['isPublic'] = $command->getIsPublic() ?? $attributesPayload['isPublic'];
-    
-    $attributesPayload['updatedAt'] = DateTime::now()->toString();
-    
-    $image->updateAttributes(ImageAttributes::fromPayload($attributesPayload));
+    $image->updateAttributes($attributes);
     
     $this->imageRepository->store($image);
   }
