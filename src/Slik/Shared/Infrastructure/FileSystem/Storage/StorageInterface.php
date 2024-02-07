@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\File\File;
 interface StorageInterface {
   public function upload(File $file, ImageOptions|string $image): void;
   
-  public function getImage(ImageOptions|string $image): string;
+  public function getImage(ImageOptions|string|null $image): ?string;
   
   public function delete(ImageOptions|string $image): void;
   
@@ -20,5 +20,5 @@ interface StorageInterface {
   
   public function write(string $path, string $content): void;
   
-  public function read(string $path): string;
+  public function read(string $path): ?string;
 }

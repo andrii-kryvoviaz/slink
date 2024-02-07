@@ -41,9 +41,10 @@ final class LocalStorage extends AbstractStorage {
   /**
    * @throws NotFoundException
    */
-  public function read(string $path): string {
+  public function read(string $path): ?string {
     try {
-      return file_get_contents($path, false);
+      $content = file_get_contents($path);
+      return $content === false ? null : $content;
     } catch (\Exception $e) {
       throw new NotFoundException();
     }

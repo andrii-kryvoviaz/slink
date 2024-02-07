@@ -9,7 +9,6 @@ use Slik\Shared\Domain\ValueObject\ID;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class UpdateImageCommand implements CommandInterface {
-  
   private string $id;
   
   public function __construct(
@@ -21,7 +20,7 @@ final class UpdateImageCommand implements CommandInterface {
   ) {
   }
   
-  public function getId(): ?ID {
+  public function getId(): ID {
     return ID::fromString($this->id);
   }
   

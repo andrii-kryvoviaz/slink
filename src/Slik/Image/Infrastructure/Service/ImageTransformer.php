@@ -8,11 +8,18 @@ use Slik\Image\Domain\Service\ImageTransformerInterface;
 
 class ImageTransformer implements ImageTransformerInterface {
   
+  /**
+   * @return self
+   */
   public static function create(): self {
     return new self();
   }
   
   /**
+   * @param string $content
+   * @param int|null $width
+   * @param int|null $height
+   * @return string
    * @throws ImageResizeException
    */
   public function resizeFromString(string $content, ?int $width, ?int $height): string {
@@ -34,6 +41,8 @@ class ImageTransformer implements ImageTransformerInterface {
   }
   
   /**
+   * @param string $content
+   * @param array<string, mixed> $payload
    * @throws ImageResizeException
    */
   public function transform(string $content, array $payload): string {

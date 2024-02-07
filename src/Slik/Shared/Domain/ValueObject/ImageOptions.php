@@ -4,8 +4,8 @@ namespace Slik\Shared\Domain\ValueObject;
 
 final readonly class ImageOptions extends AbstractCompoundValueObject {
   
-  private const SKIP_PROPERTIES = ['fileName', 'mimeType'];
-  private const PROPERTY_MAP = [
+  private const array SKIP_PROPERTIES = ['fileName', 'mimeType'];
+  private const array PROPERTY_MAP = [
     'width' => 'w',
     'height' => 'h',
     'quality' => 'q',
@@ -28,7 +28,7 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
   }
   
   /**
-   * @return array
+   * @return array<string, mixed>
    */
   public function toPayload(): array {
     return [
@@ -41,7 +41,7 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
   }
   
   /**
-   * @param array $payload
+   * @param array<string, mixed> $payload
    * @return static
    */
   public static function fromPayload(array $payload): static {

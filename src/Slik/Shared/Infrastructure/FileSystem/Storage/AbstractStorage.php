@@ -22,7 +22,7 @@ abstract class AbstractStorage implements StorageInterface {
   /**
    *
    */
-  private const APP_DIRECTORY = 'slink';
+  private const string APP_DIRECTORY = 'slink';
   
   /**
    * @var string|null
@@ -69,6 +69,7 @@ abstract class AbstractStorage implements StorageInterface {
   
   /**
    * @throws ImageResizeException
+   * @throws NotFoundException
    */
   protected function getActualPath(ImageOptions|string $image): string {
     if (!$this->isModified($image)) {
@@ -90,7 +91,17 @@ abstract class AbstractStorage implements StorageInterface {
       // apply transformations
       $imageTransformer = ImageTransformer::create();
       
-      $content = $imageTransformer->transform($this->read($originalImagePath), $image->toPayload());
+      if(is_string($image)) {
+        return $originalImagePath;
+      }
+      
+      $originalContent = $this->read($originalImagePath);
+      
+      if(!$originalContent) {
+        throw new NotFoundException(sprintf('Image not found: %s', $originalImagePath));
+      }
+      
+      $content = $imageTransformer->transform($originalContent, $image->toPayload());
       
       $this->write($cacheImagePath, $content);
     }
@@ -99,8 +110,15 @@ abstract class AbstractStorage implements StorageInterface {
   }
   
   /**
+   * @param ImageOptions|string|null $image
+   * @return string|null
+   * @throws ImageResizeException|NotFoundException
    */
-  public function getImage(ImageOptions|string $image): string {
+  public function getImage(ImageOptions|string|null $image): ?string {
+    if(!$image) {
+      return null;
+    }
+    
     return $this->read($this->getActualPath($image));
   }
   

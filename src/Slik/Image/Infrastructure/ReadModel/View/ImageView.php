@@ -65,7 +65,7 @@ final class ImageView extends AbstractView {
   }
   
   /**
-   * @return array
+   * @return array<string, mixed>
    */
   public function toPayload(): array {
     return [

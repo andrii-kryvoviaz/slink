@@ -35,10 +35,12 @@ final class UserRepository extends AbstractRepository implements CheckUserByEmai
   }
   
   /**
+   * @param Email $email
+   * @return UserView
    * @throws NonUniqueResultException
    * @throws NotFoundException
    */
-  public function oneByEmail(Email $email) {
+  public function oneByEmail(Email $email): UserView {
     $qb = $this->_em
       ->createQueryBuilder()
       ->from(UserView::class, 'user')
@@ -59,6 +61,8 @@ final class UserRepository extends AbstractRepository implements CheckUserByEmai
   }
   
   /**
+   * @param Email $email
+   * @return array<int, mixed>
    * @throws NonUniqueResultException
    * @throws NotFoundException
    */

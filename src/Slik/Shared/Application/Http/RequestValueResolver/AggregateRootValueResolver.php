@@ -14,11 +14,15 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 
 final readonly class AggregateRootValueResolver implements ValueResolverInterface {
   
+  /**
+   * @param MessageRepository $messageRepository
+   */
   public function __construct(private MessageRepository $messageRepository) {
   }
   
   /**
    * @inheritDoc
+   * @return iterable<AggregateRoot>
    */
   public function resolve(Request $request, ArgumentMetadata $argument): iterable {
     $argumentType = $argument->getType();
@@ -42,6 +46,10 @@ final readonly class AggregateRootValueResolver implements ValueResolverInterfac
     return [$aggregateRoot];
   }
   
+  /**
+   * @param AggregateRootId $aggregateRootId
+   * @return Generator
+   */
   private function retrieveAllEvents(AggregateRootId $aggregateRootId): Generator {
     /** @var Generator<Message> $messages */
     $messages = $this->messageRepository->retrieveAll($aggregateRootId);

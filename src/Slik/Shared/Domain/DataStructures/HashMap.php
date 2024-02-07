@@ -6,13 +6,13 @@ namespace Slik\Shared\Domain\DataStructures;
 
 class HashMap {
   /**
-   * @param array $_values
+   * @param array<string|int, mixed> $_values
    */
   public function __construct(private array $_values = []) {
   }
   
   /**
-   * @param array $array
+   * @param array<string|int, mixed> $array
    * @return self
    */
   static public function fromArray(array $array): self {
@@ -60,7 +60,7 @@ class HashMap {
   }
   
   /**
-   * @return array
+   * @return array<int|string, mixed>
    */
   public function toArray(): array {
     return $this->_values;
@@ -74,14 +74,14 @@ class HashMap {
   }
   
   /**
-   * @return array
+   * @return array<int, int|string>
    */
   public function keys(): array {
     return array_keys($this->_values);
   }
   
   /**
-   * @return array
+   * @return array<int, mixed>
    */
   public function values(): array {
     return array_values($this->_values);

@@ -38,8 +38,8 @@ final readonly class GetImageController {
     $imageData = $this->ask(new GetImageContentQuery(
       $image->getAttributes()->getFileName(),
       $image->getMetadata()->getMimeType(),
-      $request->query->get('width', null),
-      $request->query->get('height', null)
+      (string) $request?->query->get('width', null),
+      (string) $request?->query->get('height', null)
     ));
     
     return ContentResponse::file($imageData, $image->getMetadata()->getMimeType());

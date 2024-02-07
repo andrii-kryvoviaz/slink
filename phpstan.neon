@@ -1,11 +1,9 @@
 parameters:
-    level: 5
+    level: 8
     paths:
-        - bin/
-        - config/
-        - public/
         - src/
         - tests/
+    checkGenericClassInNonGenericObjectType: false
     ignoreErrors:
         -
             messages:
@@ -15,6 +13,6 @@ parameters:
                 - src/UI/Http/Rest/Controller/*
                 - src/Slik/*/ValueObject/*
         -
-            message: '#^Access to constant [A-Z0-9_]+ on an unknown class Swoole\\Constant\.$#'
+            message: '#^Return type of call to method PHPUnit\\Framework\\TestCase\:\:createMock\(\) contains unresolvable type\.$#'
             paths:
-                - public/index.php
+                - tests/*

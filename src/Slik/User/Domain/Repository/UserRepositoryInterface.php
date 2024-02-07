@@ -15,7 +15,7 @@ interface UserRepositoryInterface extends ServiceEntityRepositoryInterface {
    * @throws NonUniqueResultException
    * @throws NotFoundException
    */
-  public function oneByEmail(Email $email);
+  public function oneByEmail(Email $email): UserView;
   
   public function add(UserView $userView): void;
 }

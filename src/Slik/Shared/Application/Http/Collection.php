@@ -9,6 +9,10 @@ use Slik\Shared\Infrastructure\Exception\NotFoundException;
 
 final readonly class Collection {
   /**
+   * @param int $page
+   * @param int $limit
+   * @param int $total
+   * @param array<int, Item> $data
    * @throws NotFoundException
    */
   public function __construct(

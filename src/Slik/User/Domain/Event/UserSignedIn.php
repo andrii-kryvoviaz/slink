@@ -10,9 +10,16 @@ use Slik\User\Domain\ValueObject\Email;
 
 final readonly class UserSignedIn implements SerializablePayload {
   
+  /**
+   * @param ID $id
+   * @param Email $email
+   */
   public function __construct(public ID $id, public Email $email) {
   }
   
+  /**
+   * @return array<string, mixed>
+   */
   public function toPayload(): array {
     return [
       'id' => $this->id->toString(),
@@ -20,6 +27,10 @@ final readonly class UserSignedIn implements SerializablePayload {
     ];
   }
   
+  /**
+   * @param array<string, mixed> $payload
+   * @return static
+   */
   public static function fromPayload(array $payload): static {
     return new self(
       ID::fromString($payload['id']),

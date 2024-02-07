@@ -8,8 +8,17 @@ use Slik\Shared\Application\Query\QueryInterface;
 use Slik\Shared\Domain\ValueObject\ImageOptions;
 
 final class GetImageContentQuery implements QueryInterface {
+  /**
+   * @var ImageOptions|null
+   */
   private ?ImageOptions $imageOptions = null;
   
+  /**
+   * @param string $fileName
+   * @param string $mimeType
+   * @param string|null $width
+   * @param string|null $height
+   */
   public function __construct(
     string $fileName,
     string $mimeType,
@@ -24,7 +33,10 @@ final class GetImageContentQuery implements QueryInterface {
     ]);
   }
   
-  public function getImageOptions(): ImageOptions {
+  /**
+   * @return ImageOptions|null
+   */
+  public function getImageOptions(): ?ImageOptions {
     return $this->imageOptions;
   }
 }

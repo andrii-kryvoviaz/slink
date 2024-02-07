@@ -13,6 +13,7 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Symfony\Component\Serializer\Exception\PartialDenormalizationException;
 use Symfony\Component\Serializer\Exception\UnsupportedFormatException;
@@ -27,7 +28,7 @@ final class FileRequestValueResolver implements ValueResolverInterface, EventSub
    * @see \Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer::DISABLE_TYPE_ENFORCEMENT
    * @see DenormalizerInterface::COLLECT_DENORMALIZATION_ERRORS
    */
-  private const CONTEXT_DENORMALIZE = [
+  private const array CONTEXT_DENORMALIZE = [
     'disable_type_enforcement' => true,
     'collect_denormalization_errors' => true,
   ];
@@ -35,22 +36,34 @@ final class FileRequestValueResolver implements ValueResolverInterface, EventSub
   /**
    * @see DenormalizerInterface::COLLECT_DENORMALIZATION_ERRORS
    */
-  private const CONTEXT_DESERIALIZE = [
+  private const array CONTEXT_DESERIALIZE = [
     'collect_denormalization_errors' => true,
   ];
   
+  /**
+   * @param SerializerInterface&DenormalizerInterface $serializer
+   * @param ValidatorInterface|null $validator
+   */
   public function __construct(
     private readonly SerializerInterface&DenormalizerInterface $serializer,
     private readonly ?ValidatorInterface $validator = null,
   ) {
   }
   
+  /**
+   * @return string[]
+   */
   public static function getSubscribedEvents() {
     return [
       KernelEvents::CONTROLLER_ARGUMENTS => 'onKernelControllerArguments',
     ];
   }
   
+  /**
+   * @param Request $request
+   * @param ArgumentMetadata $argument
+   * @return iterable<MapRequestPayload>
+   */
   public function resolve(Request $request, ArgumentMetadata $argument): iterable {
     $attribute = $argument->getAttributesOfType(MapRequestPayload::class, ArgumentMetadata::IS_INSTANCEOF)[0] ?? null;
     
@@ -67,6 +80,10 @@ final class FileRequestValueResolver implements ValueResolverInterface, EventSub
     return [$attribute];
   }
   
+  /**
+   * @param ControllerArgumentsEvent $event
+   * @return void
+   */
   public function onKernelControllerArguments(ControllerArgumentsEvent $event): void {
     $arguments = $event->getArguments();
     
@@ -119,6 +136,14 @@ final class FileRequestValueResolver implements ValueResolverInterface, EventSub
     
     $event->setArguments($arguments);
   }
+  
+  /**
+   * @param Request $request
+   * @param string $type
+   * @param MapRequestPayload $attribute
+   * @return object|null
+   * @throws ExceptionInterface
+   */
   private function mapRequestPayload(Request $request, string $type, MapRequestPayload $attribute): ?object {
     if (null === $format = $request->getContentTypeFormat()) {
       throw new HttpException(Response::HTTP_UNSUPPORTED_MEDIA_TYPE, 'Unsupported format.');

@@ -67,21 +67,31 @@ final class ImageAnalyzer implements ImageAnalyzerInterface {
   private function handleSvg(): void {
     $svg = \simplexml_load_file($this->file->getRealPath());
     
-    $this->width = (int) $svg['width'];
-    $this->height = (int) $svg['height'];
+    if ($svg === false) {
+      return;
+    }
+    
+    $this->width = (int) $svg->attributes()->width;
+    $this->height = (int) $svg->attributes()->height;
   }
   
   /**
    * @return void
    */
   private function handleImage(): void {
-    [$this->width, $this->height] = \getimagesize($this->file->getRealPath());
+    $result = \getimagesize($this->file->getRealPath());
+    
+    if ($result === false) {
+      return;
+    }
+    
+    [$this->width, $this->height] = $result;
   }
   
   /**
-   * @return string
+   * @return ?string
    */
-  public function getMimeType(): string {
+  public function getMimeType(): ?string {
     return $this->file->getMimeType();
   }
   
@@ -110,14 +120,14 @@ final class ImageAnalyzer implements ImageAnalyzerInterface {
    * @return int
    */
   public function getWidth(): int {
-    return $this->width;
+    return $this->width ?? 0;
   }
   
   /**
    * @return int
    */
   public function getHeight(): int {
-    return $this->height;
+    return $this->height ?? 0;
   }
   
   /**
@@ -147,7 +157,7 @@ final class ImageAnalyzer implements ImageAnalyzerInterface {
   }
   
   /**
-   * @return array
+   * @return array<string, mixed>
    */
   public function toPayload(): array {
     return [

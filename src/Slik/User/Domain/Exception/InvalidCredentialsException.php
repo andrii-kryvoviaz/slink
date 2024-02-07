@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Slik\User\Domain\Exception;
 
 class InvalidCredentialsException extends \RuntimeException {
-  public function __construct(...$args) {
+  /**
+   * @param mixed ...$args
+   */
+  public function __construct(mixed ...$args) {
     if (empty($args)) {
       $args = ['Invalid credentials'];
     }

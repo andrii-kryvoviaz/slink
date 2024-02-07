@@ -24,6 +24,6 @@ final readonly class FindByEmailHandler implements QueryHandlerInterface {
     $email = Email::fromString($query->getEmail());
     $userView = $this->repository->oneByEmail($email);
 
-    return Item::fromPayload(UserView::class, $userView);
+    return Item::fromPayload(UserView::class, (array)$userView);
   }
 }

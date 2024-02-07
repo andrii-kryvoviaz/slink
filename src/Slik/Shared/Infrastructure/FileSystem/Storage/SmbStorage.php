@@ -54,13 +54,11 @@ final class SmbStorage extends AbstractStorage {
    * @throws NotFoundException
    * @throws InvalidTypeException
    */
-  public function read(string $path): string {
+  public function read(string $path): ?string {
     $stream = $this->share->read($path);
-    
-    return stream_get_contents($stream);
+    $content = stream_get_contents($stream);
+    return $content === false ? null : $content;
   }
-  
-  
   
   /**
    * @throws NotFoundException

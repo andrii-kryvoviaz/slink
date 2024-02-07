@@ -11,7 +11,6 @@ use Slik\Shared\Domain\Exception\DateTimeException;
 use Slik\Shared\Domain\ValueObject\ID;
 
 final readonly class ImageWasCreated implements SerializablePayload {
-  
   /**
    * @param ID $id
    * @param ImageAttributes $attributes
@@ -24,6 +23,9 @@ final readonly class ImageWasCreated implements SerializablePayload {
   ) {
   }
   
+  /**
+   * @return array<string, mixed>
+   */
   public function toPayload(): array {
     return [
       'id' => $this->id->toString(),
@@ -33,6 +35,8 @@ final readonly class ImageWasCreated implements SerializablePayload {
   }
   
   /**
+   * @param array<string, mixed> $payload
+   * @return static
    * @throws DateTimeException
    */
   public static function fromPayload(array $payload): static {

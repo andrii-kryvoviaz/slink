@@ -9,9 +9,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 final readonly class StorageFactory {
   
+  /**
+   * @param ContainerInterface $container
+   */
   public function __construct(private ContainerInterface $container) {
   }
   
+  /**
+   * @param array<string, mixed> $storageOptions
+   * @param string $storageProvider
+   * @return StorageInterface
+   */
   public function create(array $storageOptions, string $storageProvider = 'local'): StorageInterface {
     $storageProviderConfig = $storageOptions[$storageProvider] ?? null;
     
@@ -26,7 +34,7 @@ final readonly class StorageFactory {
         return $argument;
       }, $storageProviderConfig['arguments'] ?? []);
       
-      return new $storageProviderClass(...$storageProviderArguments);
+      return new $storageProviderClass(...$storageProviderArguments); // @phpstan-ignore-line
     }
     
     $message = sprintf('Invalid Storage provider `%s`', $storageProvider);

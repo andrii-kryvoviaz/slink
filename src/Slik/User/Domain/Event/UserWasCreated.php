@@ -14,7 +14,13 @@ use Slik\User\Domain\ValueObject\DisplayName;
 use Slik\User\Domain\ValueObject\Email;
 
 final readonly class UserWasCreated implements SerializablePayload {
-
+  
+  /**
+   * @param ID $id
+   * @param Credentials $credentials
+   * @param DisplayName $displayName
+   * @param DateTime $createdAt
+   */
   public function __construct(
     public ID $id,
     public Credentials $credentials,
@@ -22,7 +28,10 @@ final readonly class UserWasCreated implements SerializablePayload {
     public DateTime $createdAt,
   ) {
   }
-
+  
+  /**
+   * @return array<string, mixed>
+   */
   public function toPayload(): array {
     return [
       'id' => $this->id->toString(),
@@ -36,6 +45,7 @@ final readonly class UserWasCreated implements SerializablePayload {
   }
 
   /**
+   * @param array<string, mixed> $payload
    * @throws DateTimeException
    */
   public static function fromPayload(array $payload): static {

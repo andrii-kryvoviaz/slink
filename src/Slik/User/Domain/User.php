@@ -19,6 +19,9 @@ use Slik\User\Domain\ValueObject\Auth\HashedPassword;
 use Slik\User\Domain\ValueObject\DisplayName;
 use Slik\User\Domain\ValueObject\Email;
 
+/**
+ * @implements AggregateRoot<ID>
+ */
 class User implements AggregateRoot {
   use AggregateRootBehaviour;
 

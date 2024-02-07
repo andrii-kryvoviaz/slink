@@ -35,6 +35,7 @@ final class UserView extends AbstractView {
   }
 
   /**
+   * @param array<string, mixed> $payload
    * @throws DateTimeException
    */
   public static function deserialize(array $payload): static {

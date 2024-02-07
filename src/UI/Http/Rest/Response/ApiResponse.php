@@ -10,14 +10,28 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ApiResponse extends JsonResponse {
   
+  /**
+   * @param array<string, mixed> $payload
+   * @param int $status
+   * @return self
+   */
   public static function fromPayload(array $payload, int $status): self {
     return new self($payload, $status);
   }
   
+  /**
+   * @param int $status
+   * @return self
+   */
   public static function empty(int $status = self::HTTP_NO_CONTENT): self {
     return new self(null, $status);
   }
   
+  /**
+   * @param string|null $id
+   * @param string|null $location
+   * @return self
+   */
   public static function created(string $id = null, string $location = null): self {
     return new self(
       $id ? ['id' => $id] : null,
@@ -26,6 +40,11 @@ class ApiResponse extends JsonResponse {
     );
   }
   
+  /**
+   * @param Item $resource
+   * @param int $status
+   * @return self
+   */
   public static function one(Item $resource, int $status = self::HTTP_OK): self {
     return new self(
       [
@@ -36,15 +55,20 @@ class ApiResponse extends JsonResponse {
     );
   }
   
+  /**
+   * @param Collection $collection
+   * @param int $status
+   * @return self
+   */
   public static function collection(Collection $collection, int $status = self::HTTP_OK): self {
     /**
      * @psalm-suppress MissingClosureParamType
      *
      * @param array|Item $data
      *
-     * @return array
+     * @return array<string, mixed>|object|string
      */
-    $transformer = fn(array|Item $data): array => $data instanceof Item ? self::model($data) : $data;
+    $transformer = fn(array|Item $data): array|object|string => $data instanceof Item ? self::model($data) : $data;
     
     $resources = \array_map($transformer, $collection->data);
     
@@ -61,12 +85,17 @@ class ApiResponse extends JsonResponse {
     );
   }
   
-  private static function model(Item $item): array {
+  /**
+   * @param Item $item
+   * @return array<string, mixed>|object|string
+   */
+  private static function model(Item $item): array|object|string {
     return $item->resource;
   }
   
   /**
    * @param Item[] $relations
+   * @return array<string, mixed>
    */
   private static function relations(array $relations): array {
     $result = [];

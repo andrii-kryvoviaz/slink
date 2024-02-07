@@ -24,7 +24,7 @@ interface ImageAnalyzerInterface {
   public function analyze(File $file): void;
  
   /**
-   * @return array
+   * @return array<string, mixed>
    */
   public function toPayload(): array;
 }
