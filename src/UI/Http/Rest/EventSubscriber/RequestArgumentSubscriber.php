@@ -2,7 +2,6 @@
 
 namespace UI\Http\Rest\EventSubscriber;
 
-use JetBrains\PhpStorm\NoReturn;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -21,7 +20,7 @@ final class RequestArgumentSubscriber implements EventSubscriberInterface {
     ];
   }
   
-  #[NoReturn] public function onKernelControllerArguments(ControllerArgumentsEvent $event): void {
+  public function onKernelControllerArguments(ControllerArgumentsEvent $event): void {
     $arguments = $event->getArguments();
     
     foreach ($arguments as $argument) {
