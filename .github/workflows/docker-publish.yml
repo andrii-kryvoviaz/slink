@@ -6,8 +6,38 @@ on:
       - 'v*'
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Touch APP_ENV
+        run: echo "APP_ENV=test" > .env
+
+      - uses: php-actions/composer@v6
+        env:
+          APP_ENV: test
+        with:
+          args: --ignore-platform-reqs
+
+      - name: PHPStan Static Analysis
+        uses: php-actions/phpstan@v3
+        with:
+          configuration: phpstan.neon
+          memory_limit: 256M
+
+      - name: PHPUnit tests
+        uses: php-actions/phpunit@v3
+        with:
+          php_extensions: xdebug curl mysqli pdo_pgsql mbstring gd exif mcrypt imagick smbclient
+          configuration: phpunit.xml
+
   build-and-push:
     runs-on: ubuntu-latest
+    needs: test
+
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
