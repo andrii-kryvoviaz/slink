@@ -56,7 +56,7 @@
 <script lang="ts">
   import type { HTMLButtonAttributes } from 'svelte/elements';
 
-  type target = '_blank' | '_self' | '_parent' | '_top';
+  type target = '_blank' | '_self' | '_parent' | '_top' | undefined;
   type LinkAttributes = {
     href?: string;
     target?: target extends LinkAttributes['href'] ? target : never;
@@ -67,7 +67,7 @@
   }
 
   export let href: $$Props['href'] = undefined;
-  export let target: $$Props['target'] = '_blank';
+  export let target: $$Props['target'] = undefined;
   export let variant: $$Props['variant'] = 'default';
   export let size: $$Props['size'] = 'md';
   export let rounded: $$Props['rounded'] = 'lg';
