@@ -41,21 +41,21 @@ final class ContentResponseTest extends TestCase {
   public static function providePayloads(): array {
     return [
       'null' => [
-        'payload' => null,
+        'content' => null,
         'contentType' => 'application/json',
         'expectedException' => NotFoundException::class
       ],
       'type-error' => [
-        'payload' => 123,
+        'content' => 123,
         'contentType' => 'application/json',
         'expectedException' => \TypeError::class
       ],
       'empty string' => [
-        'payload' => '',
+        'content' => '',
         'contentType' => 'application/json',
       ],
       'image/png' => [
-        'payload' => 'binary data',
+        'content' => 'binary data',
         'contentType' => 'image/png',
       ],
     ];
