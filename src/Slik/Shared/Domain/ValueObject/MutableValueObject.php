@@ -42,6 +42,11 @@ trait MutableValueObject {
    * @return void
    */
   public function __clone(): void {
+    if(!isset($this->_updates)) {
+      $this->_updates = HashMap::fromArray([]);
+      return;
+    }
+    
     foreach ($this->_updates->toArray() as $property => $value) {
       $this->$property = $value;
     }
