@@ -59,7 +59,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Unit\\Slik\\": "tests/Unit/Slik"
         }
     },
     "replace": {
