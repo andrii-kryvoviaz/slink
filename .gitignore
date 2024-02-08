@@ -15,6 +15,13 @@
 .vscode/
 .env
 .DS_Store
+yarn-error.log
+npm-debug.log
+node_modules/
+
+/public/images
+/public/slink
+/slink
 
 ###> lexik/jwt-authentication-bundle ###
 /config/jwt/*.pem
@@ -24,6 +31,3 @@
 .phpunit.result.cache
 ###< symfony/phpunit-bridge ###
 
-/public/images
-/public/slink
-/slink
