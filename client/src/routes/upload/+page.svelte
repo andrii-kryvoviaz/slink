@@ -1,11 +1,12 @@
 <script lang="ts">
   import { Dropzone } from 'flowbite-svelte';
   import Icon from '@iconify/svelte';
-  import { ApiClient } from '../api/Client';
+
   import { goto } from '$app/navigation';
-  import { toast } from '../store/toast';
-  import { ValidationException } from '../api/Exceptions/ValidationException';
   import { fade } from 'svelte/transition';
+  import { ApiClient } from '@slink/api/Client';
+  import { ValidationException } from '@slink/api/Exceptions/ValidationException';
+  import { toast } from '@slink/store/toast';
 
   let isLoading: boolean = false;
   let isLogged: boolean = true;
