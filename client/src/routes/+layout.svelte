@@ -2,14 +2,16 @@
   import '@slink/app.css';
   import { Icons } from '@slink/theme.icons';
   import ToastManager from '@slink/components/Toast/ToastManager.svelte';
+  import Navbar from '@slink/components/Layout/Navbar.svelte';
+  import { currentTheme } from '@slink/store/settings';
+  import { theme } from '@slink/lib/actions/theme';
 
   Icons.init();
 </script>
 
-<svelte:head>
-  <title>Slink: Image Share Service</title>
-</svelte:head>
+<div use:theme={$currentTheme}>
+  <ToastManager />
+  <Navbar />
+  <slot />
+</div>
 
-<ToastManager />
-
-<slot />
