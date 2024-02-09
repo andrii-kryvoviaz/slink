@@ -2,7 +2,19 @@ import type { Theme } from 'tailwindcss-theme-customizer';
 import type { ThemeConfig } from 'tailwindcss/types/config';
 
 export const defaultTheme: Theme = {
-  variables: {},
+  variables: {
+    bgButtonAccent: 'blue.500',
+    borderButtonAccent: 'blue.500',
+    textButtonAccent: 'white',
+    textButtonDefault: 'gray.400',
+    borderButtonDefault: 'zinc.800',
+    bgButtonDefaultHover: 'gray.700',
+    textButtonDefaultHover: 'gray.200',
+    bgSuccess: 'teal.500',
+    bgDanger: 'rose.700',
+    bgWarning: 'amber.500',
+    borderDescription: 'slate.400',
+  },
   variants: {
     dark: {
       bgMainFrom: 'slate.900',
@@ -14,18 +26,18 @@ export const defaultTheme: Theme = {
       borderDropzoneSecondary: 'slate.700',
       bgCardPrimary: 'slate.900',
       bgCardSecondary: 'slate.800',
-      bgButtonAccent: 'blue.500',
-      borderButtonAccent: 'blue.500',
-      textButtonAccent: 'white',
-      textButtonDefault: 'gray.400',
-      borderButtonDefault: 'zinc.800',
-      bgButtonDefaultHover: 'gray.700',
-      textButtonDefaultHover: 'gray.200',
-      bgSuccess: 'teal.500',
-      bgDanger: 'rose.700',
-      bgWarning: 'amber.500',
-      borderDescription: 'slate.400',
     },
+    light: {
+      bgMainFrom: 'white',
+      bgMainTo: 'gray.100',
+      colorTextPrimary: 'gray.800',
+      colorTextSecondary: 'gray.600',
+      colorAccent: 'violet.600',
+      borderDropzonePrimary: 'gray.200',
+      borderDropzoneSecondary: 'gray.300',
+      bgCardPrimary: 'white',
+      bgCardSecondary: 'gray.100',
+    }
   },
 };
 
