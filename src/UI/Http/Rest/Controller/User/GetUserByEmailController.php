@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace UI\Http\Rest\Controller\User;
 
-use Slik\Shared\Application\Query\QueryTrait;
-use Slik\User\Application\Query\User\FindByEmail\FindByEmailQuery;
+use Slink\Shared\Application\Query\QueryTrait;
+use Slink\User\Application\Query\User\FindByEmail\FindByEmailQuery;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Annotation\Route;

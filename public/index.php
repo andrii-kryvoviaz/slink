@@ -2,7 +2,7 @@
 
 
 use Runtime\Swoole\Runtime;
-use Slik\Shared\Infrastructure\Kernel;
+use Slink\Shared\Infrastructure\Kernel;
 
 if (filter_var($_ENV['SWOOLE_ENABLED'],FILTER_VALIDATE_BOOLEAN)) {
   $_SERVER['APP_RUNTIME'] = Runtime::class;

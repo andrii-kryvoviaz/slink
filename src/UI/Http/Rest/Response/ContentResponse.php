@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace UI\Http\Rest\Response;
 
-use Slik\Shared\Application\Http\Item;
+use Slink\Shared\Application\Http\Item;
 use Symfony\Component\HttpFoundation\Response;
 
 final class ContentResponse extends Response {

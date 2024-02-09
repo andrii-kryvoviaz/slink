@@ -6,9 +6,9 @@
 parameters:
     exception_to_status:
         InvalidArgumentException: 400
-        Slik\User\Domain\Exception\InvalidCredentialsException: 401
-        Slik\User\Domain\Exception\ForbiddenException: 403
-        Slik\Shared\Infrastructure\Exception\NotFoundException: 404
+        Slink\User\Domain\Exception\InvalidCredentialsException: 401
+        Slink\User\Domain\Exception\ForbiddenException: 403
+        Slink\Shared\Infrastructure\Exception\NotFoundException: 404
         Icewind\SMB\Exception\NotFoundException: 404
 
     exception_code_to_message:
@@ -20,11 +20,11 @@ parameters:
 
     storage_options:
         local:
-            class: Slik\Shared\Infrastructure\FileSystem\Storage\LocalStorage
+            class: Slink\Shared\Infrastructure\FileSystem\Storage\LocalStorage
             arguments:
                 projectPublicDir: '%kernel.project_dir%'
         smb:
-            class: Slik\Shared\Infrastructure\FileSystem\Storage\SmbStorage
+            class: Slink\Shared\Infrastructure\FileSystem\Storage\SmbStorage
             arguments:
                 share: 'smb.share'
 
@@ -36,17 +36,17 @@ services:
         public: false
 
     _instanceof:
-        Slik\Shared\Application\Command\CommandHandlerInterface:
+        Slink\Shared\Application\Command\CommandHandlerInterface:
             public: true
             tags:
                 - { name: messenger.message_handler, bus: messenger.bus.command }
 
-        Slik\Shared\Application\Query\QueryHandlerInterface:
+        Slink\Shared\Application\Query\QueryHandlerInterface:
             public: true
             tags:
                 - { name: messenger.message_handler, bus: messenger.bus.query }
 
-        Slik\Shared\Infrastructure\MessageBus\Event\EventHandlerInterface:
+        Slink\Shared\Infrastructure\MessageBus\Event\EventHandlerInterface:
             public: true
             tags:
                 - { name: messenger.message_handler, bus: messenger.bus.event.async }
@@ -55,8 +55,8 @@ services:
         alias: 'service_container'
 
     ## Storage Configuration
-    Slik\Shared\Infrastructure\FileSystem\Storage\StorageInterface:
-        factory: ['@Slik\Shared\Infrastructure\FileSystem\StorageFactory', 'create']
+    Slink\Shared\Infrastructure\FileSystem\Storage\StorageInterface:
+        factory: ['@Slink\Shared\Infrastructure\FileSystem\StorageFactory', 'create']
         arguments:
             $storageOptions: '%storage_options%'
             $storageProvider: '%env(STORAGE_PROVIDER)%'
@@ -113,27 +113,27 @@ services:
 
 
     EventSauce\EventSourcing\MessageDispatcher:
-        class: Slik\Shared\Infrastructure\MessageBus\Event\EventDispatcher
+        class: Slink\Shared\Infrastructure\MessageBus\Event\EventDispatcher
 
     ## End EventSauce
 
-    Slik\:
-        resource: '../src/Slik/*'
-        exclude: '../src/Slik/**/{Migrations,EventSubscriber,Kernel.php}'
+    Slink\:
+        resource: '../src/Slink/*'
+        exclude: '../src/Slink/**/{Migrations,EventSubscriber,Kernel.php}'
 
     UI\:
         resource: '../src/UI/*'
         exclude: '../src/UI/**/{EventSubscriber}'
 
-    Slik\Shared\Infrastructure\MessageBus\Command\MessengerCommandBus:
+    Slink\Shared\Infrastructure\MessageBus\Command\MessengerCommandBus:
         arguments:
             - '@messenger.bus.command'
 
-    Slik\Shared\Infrastructure\MessageBus\Query\MessengerQueryBus:
+    Slink\Shared\Infrastructure\MessageBus\Query\MessengerQueryBus:
         arguments:
             - '@messenger.bus.query'
 
-    Slik\Shared\Infrastructure\MessageBus\Event\MessengerEventBus:
+    Slink\Shared\Infrastructure\MessageBus\Event\MessengerEventBus:
         arguments:
             - '@messenger.bus.event'
 

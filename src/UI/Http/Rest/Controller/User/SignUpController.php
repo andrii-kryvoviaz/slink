@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace UI\Http\Rest\Controller\User;
 
 
-use Slik\Shared\Application\Command\CommandTrait;
-use Slik\User\Application\Command\SignUp\SignUpCommand;
+use Slink\Shared\Application\Command\CommandTrait;
+use Slink\User\Application\Command\SignUp\SignUpCommand;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;

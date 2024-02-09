@@ -6,8 +6,8 @@ namespace Tests\Unit\UI\Http\Rest\Response;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Slik\Shared\Application\Http\Item;
-use Slik\Shared\Infrastructure\Exception\NotFoundException;
+use Slink\Shared\Application\Http\Item;
+use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use UI\Http\Rest\Response\ContentResponse;
 

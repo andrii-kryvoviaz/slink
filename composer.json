@@ -53,13 +53,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Slik\\": "src/Slik",
+            "Slink\\": "src/Slink",
             "UI\\": "src/UI"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Unit\\Slik\\": "tests/Unit/Slik"
+            "Unit\\Slink\\": "tests/Unit/Slink"
         }
     },
     "replace": {

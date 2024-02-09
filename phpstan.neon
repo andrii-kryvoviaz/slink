@@ -11,7 +11,7 @@ parameters:
                 - '#^Readonly property [a-zA-Z0-9\\_]+\:\:[a-zA-Z0-9\$_]+ is assigned outside of the constructor\.$#'
             paths:
                 - src/UI/Http/Rest/Controller/*
-                - src/Slik/*/ValueObject/*
+                - src/Slink/*/ValueObject/*
         -
             message: '#^Return type of call to method PHPUnit\\Framework\\TestCase\:\:createMock\(\) contains unresolvable type\.$#'
             paths:

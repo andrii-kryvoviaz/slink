@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace UI\Http\Rest\Controller\Image;
 
-use Slik\Image\Application\Command\AddImageViewCount\AddImageViewCountCommand;
-use Slik\Image\Application\Query\GetImageContent\GetImageContentQuery;
-use Slik\Image\Domain\Image;
-use Slik\Shared\Application\Command\CommandTrait;
-use Slik\Shared\Application\Query\QueryTrait;
-use Slik\Shared\Infrastructure\Exception\NotFoundException;
+use Slink\Image\Application\Command\AddImageViewCount\AddImageViewCountCommand;
+use Slink\Image\Application\Query\GetImageContent\GetImageContentQuery;
+use Slink\Image\Domain\Image;
+use Slink\Shared\Application\Command\CommandTrait;
+use Slink\Shared\Application\Query\QueryTrait;
+use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace UI\Http\Rest\Response;
 
-use Slik\Shared\Application\Http\Collection;
-use Slik\Shared\Application\Http\Item;
+use Slink\Shared\Application\Http\Collection;
+use Slink\Shared\Application\Http\Item;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ApiResponse extends JsonResponse {

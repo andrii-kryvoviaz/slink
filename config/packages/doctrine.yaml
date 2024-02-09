@@ -15,9 +15,9 @@ doctrine:
         default_connection: read_model
 
         types:
-            datetime_immutable: Slik\Shared\Infrastructure\Persistence\Doctrine\Types\DateTimeType
-            email: Slik\Shared\Infrastructure\Persistence\Doctrine\Types\EmailType
-            hashed_password: Slik\Shared\Infrastructure\Persistence\Doctrine\Types\HashedPasswordType
+            datetime_immutable: Slink\Shared\Infrastructure\Persistence\Doctrine\Types\DateTimeType
+            email: Slink\Shared\Infrastructure\Persistence\Doctrine\Types\EmailType
+            hashed_password: Slink\Shared\Infrastructure\Persistence\Doctrine\Types\HashedPasswordType
 
         # IMPORTANT: You MUST configure your server version,
         # either here or in the DATABASE_URL env var (see .env file)

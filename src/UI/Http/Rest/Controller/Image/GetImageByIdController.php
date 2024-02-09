@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace UI\Http\Rest\Controller\Image;
 
-use Slik\Image\Application\Query\GetImageById\GetImageByIdQuery;
-use Slik\Shared\Application\Query\QueryTrait;
+use Slink\Image\Application\Query\GetImageById\GetImageByIdQuery;
+use Slink\Shared\Application\Query\QueryTrait;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use UI\Http\Rest\Response\ApiResponse;

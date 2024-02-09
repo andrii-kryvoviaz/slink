@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace UI\Http\Rest\Controller\Image;
 
-use Slik\Image\Application\Command\UploadImage\UploadImageCommand;
-use Slik\Shared\Application\Command\CommandTrait;
-use Slik\Shared\Application\Http\RequestValueResolver\FileRequestValueResolver;
+use Slink\Image\Application\Command\UploadImage\UploadImageCommand;
+use Slink\Shared\Application\Command\CommandTrait;
+use Slink\Shared\Application\Http\RequestValueResolver\FileRequestValueResolver;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;

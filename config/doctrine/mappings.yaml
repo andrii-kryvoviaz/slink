@@ -1,11 +1,11 @@
 parameters:
   doctrine_mappings:
     User:
-      dir: '%kernel.project_dir%/src/Slik/User/Infrastructure/ReadModel/View'
-      prefix: 'Slik\User\Infrastructure\ReadModel\View'
+      dir: '%kernel.project_dir%/src/Slink/User/Infrastructure/ReadModel/View'
+      prefix: 'Slink\User\Infrastructure\ReadModel\View'
     Image:
-      dir: '%kernel.project_dir%/src/Slik/Image/Infrastructure/ReadModel/View'
-      prefix: 'Slik\Image\Infrastructure\ReadModel\View'
+      dir: '%kernel.project_dir%/src/Slink/Image/Infrastructure/ReadModel/View'
+      prefix: 'Slink\Image\Infrastructure\ReadModel\View'
     ImageEmbedded:
-      dir: '%kernel.project_dir%/src/Slik/Image/Domain/ValueObject'
-      prefix: 'Slik\Image\Domain\ValueObject'
+      dir: '%kernel.project_dir%/src/Slink/Image/Domain/ValueObject'
+      prefix: 'Slink\Image\Domain\ValueObject'

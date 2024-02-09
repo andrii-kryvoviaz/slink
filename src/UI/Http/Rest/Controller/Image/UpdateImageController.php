@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace UI\Http\Rest\Controller\Image;
 
-use Slik\Image\Application\Command\UpdateImage\UpdateImageCommand;
-use Slik\Shared\Application\Command\CommandTrait;
+use Slink\Image\Application\Command\UpdateImage\UpdateImageCommand;
+use Slink\Shared\Application\Command\CommandTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
