@@ -6,10 +6,6 @@ export const defaultTheme: Theme = {
     bgButtonAccent: 'blue.500',
     borderButtonAccent: 'blue.500',
     textButtonAccent: 'white',
-    textButtonDefault: 'gray.400',
-    borderButtonDefault: 'zinc.800',
-    bgButtonDefaultHover: 'gray.700',
-    textButtonDefaultHover: 'gray.200',
     bgSuccess: 'teal.500',
     bgDanger: 'rose.700',
     bgWarning: 'amber.500',
@@ -26,6 +22,10 @@ export const defaultTheme: Theme = {
       borderDropzoneSecondary: 'slate.700',
       bgCardPrimary: 'slate.900',
       bgCardSecondary: 'slate.800',
+      textButtonDefault: 'gray.400',
+      borderButtonDefault: 'zinc.800',
+      bgButtonDefaultHover: 'gray.700',
+      textButtonDefaultHover: 'gray.200',
     },
     light: {
       bgMainFrom: 'white',
@@ -37,6 +37,10 @@ export const defaultTheme: Theme = {
       borderDropzoneSecondary: 'gray.300',
       bgCardPrimary: 'white',
       bgCardSecondary: 'gray.100',
+      textButtonDefault: 'gray.800',
+      borderButtonDefault: 'gray.200',
+      bgButtonDefaultHover: 'gray.100',
+      textButtonDefaultHover: 'gray.900',
     }
   },
 };
