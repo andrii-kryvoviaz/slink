@@ -79,7 +79,7 @@ export const tailwindcssTheme: Partial<ThemeConfig> = injectAlphaPlaceholder({
   },
 });
 
-// go recursivelly through the object and replace the values
+// go recursively through the object and replace the values
 // starting with 'var(--var-name)' with rgb(var(--var-name) / <alpha-value>)
 function injectAlphaPlaceholder(object: any): any {
   return Object.keys(object).reduce(
