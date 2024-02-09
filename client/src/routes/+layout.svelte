@@ -9,7 +9,7 @@
   Icons.init();
 </script>
 
-<div use:theme={$currentTheme}>
+<div class="h-full flex flex-col" use:theme={$currentTheme}>
   <ToastManager />
   <Navbar />
   <slot />
