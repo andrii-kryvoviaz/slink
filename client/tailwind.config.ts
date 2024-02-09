@@ -3,6 +3,7 @@ import type { Config } from 'tailwindcss';
 import { ThemeCustomizerPlugin } from 'tailwindcss-theme-customizer';
 
 import { defaultTheme, tailwindcssTheme } from './src/theme.default';
+import daisyui from 'daisyui';
 
 export default {
   content: [
@@ -21,5 +22,6 @@ export default {
       '3xl': '1920px',
     },
   },
-  plugins: [ThemeCustomizerPlugin(defaultTheme)],
+  darkMode: 'class',
+  plugins: [ThemeCustomizerPlugin(defaultTheme), daisyui],
 } satisfies Config;
