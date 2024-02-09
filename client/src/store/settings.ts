@@ -1,32 +1,18 @@
-import { derived, writable } from 'svelte/store';
-import { browser } from '$app/environment';
+import { derived, type Readable } from 'svelte/store';
+import { cookie } from '@slink/utils/cookie';
+import { cookieReadableStore } from '@slink/lib/store/cookieStore';
 
-type Theme = 'light' | 'dark';
-
-let initialTheme: Theme = 'dark';
-
-if (browser) {
-  initialTheme = localStorage.getItem('theme') as Theme || 'dark';
+export enum Theme {
+  LIGHT = 'light',
+  DARK = 'dark',
 }
 
-const theme = writable<Theme>(initialTheme);
+const theme = cookieReadableStore<Theme>('theme', Theme.DARK);
 
 export const setTheme = (value: Theme) => {
-  if (browser) {
-    localStorage.setItem('theme', value);
-  }
-  theme.set(value);
+  cookie.set('theme', value);
 };
 
-export const isDarkTheme = derived(theme, ($theme) => $theme === 'dark');
-
-// run side effect to toggle dark mode
-theme.subscribe(($theme) => {
-  if(!browser) return;
-
-  if ($theme === 'dark') {
-    document.documentElement.classList.add('dark');
-  } else {
-    document.documentElement.classList.remove('dark');
-  }
-});
+export const isDarkTheme: Readable<boolean> = derived(theme, ($theme): boolean => $theme === Theme.DARK);
+export const isLightTheme: Readable<boolean> = derived(theme, ($theme): boolean => $theme === Theme.LIGHT);
+export const currentTheme: Readable<Theme> = theme;
