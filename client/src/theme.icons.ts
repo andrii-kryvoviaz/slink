@@ -12,6 +12,9 @@ const icons: string[] = [
   'carbon:link',
   'carbon:unlink',
   'ep:info-filled',
+  'akar-icons:github-fill',
+  'ph:moon-thin',
+  'ph:sun-thin',
 ];
 
 export const Icons = {
