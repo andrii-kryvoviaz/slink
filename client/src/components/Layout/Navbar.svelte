@@ -15,7 +15,7 @@
     </div>
 
     <div class="hidden lg:flex lg:flex-1 lg:justify-end lg:items-center gap-2">
-      <Button href='/upload' variant='default' size='sm'>
+      <Button href='/upload' variant='invisible' size='sm' class="rounded-full">
         <Icon icon="simple-line-icons:plus" class="h-5 w-5" />
       </Button>
       <Button href='https://github.com/andrii-kryvoviaz/slink' variant='link' target='_blank'>
