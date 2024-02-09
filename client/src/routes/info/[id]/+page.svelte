@@ -90,15 +90,6 @@
           metadata={data}
         />
       </div>
-
-      <Button
-        class="mr-2 mt-4"
-        variant="secondary"
-        size="md"
-        rounded="full"
-        target="_self"
-        href="/">Upload More</Button
-      >
     </div>
 
     <div class="min-w-0 flex-grow px-2">
