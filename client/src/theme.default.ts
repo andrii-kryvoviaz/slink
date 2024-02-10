@@ -26,6 +26,7 @@ export const defaultTheme: Theme = {
       borderButtonDefault: 'zinc.800',
       bgButtonDefaultHover: 'gray.700',
       textButtonDefaultHover: 'gray.200',
+      textButtonInvisible: 'white',
       bgToggle: 'gray.800',
       bgToggleChecked: 'violet.900',
       colorToggle: 'gray.300',
@@ -45,6 +46,7 @@ export const defaultTheme: Theme = {
       borderButtonDefault: 'gray.200',
       bgButtonDefaultHover: 'gray.100',
       textButtonDefaultHover: 'gray.900',
+      textButtonInvisible: 'gray.800',
       bgToggle: 'gray.100',
       bgToggleChecked: 'violet.300',
       colorToggle: 'gray.600',
@@ -97,6 +99,7 @@ export const tailwindcssTheme: Partial<ThemeConfig> = injectAlphaPlaceholder({
       },
       default: 'var(--text-button-default)',
       accent: 'var(--text-button-accent)',
+      invisible: 'var(--text-button-invisible)',
     },
   },
   gradientColorStops: {

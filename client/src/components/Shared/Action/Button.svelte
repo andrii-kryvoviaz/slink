@@ -15,7 +15,7 @@
           secondary:
             'border bg-none text-button-default border-button-default hover:bg-button-accent hover:text-button-accent hover:border-button-accent',
           invisible:
-            'rounded bg-none text-button-accent hover:bg-button-accent',
+            'rounded bg-none text-button-invisible hover:bg-button-accent hover:text-button-accent',
           link: 'bg-transparent dark:bg-transparent underline-offset-4 hover:underline text-button-default hover:bg-transparent',
           success:
             'bg-button-success text-button-accent bg-opacity-80 hover:bg-opacity-100',
