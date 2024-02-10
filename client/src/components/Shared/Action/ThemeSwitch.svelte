@@ -1,6 +1,7 @@
 <script lang="ts">
   import Icon from '@iconify/svelte';
   import { isDarkTheme, setTheme, Theme } from '@slink/store/settings';
+  import Toggle from '@slink/components/Form/Toggle.svelte';
 
   export let disabled = false;
 
@@ -9,10 +10,7 @@
   };
 </script>
 
-{#if !disabled}
-  <label class="flex cursor-pointer gap-2 items-center">
-    <Icon icon="ph:sun-thin" width="20" height="20"/>
-    <input type="checkbox" class="toggle theme-controller" on:change={toggleTheme} checked={$isDarkTheme} />
-    <Icon icon="ph:moon-thin" width="20" height="20"/>
-  </label>
-{/if}
+<Toggle on:change={toggleTheme} checked={$isDarkTheme} {disabled}>
+  <Icon slot="pre-icon" icon="ph:sun-thin" width="20" height="20"/>
+  <Icon slot="post-icon" icon="ph:moon-thin" width="20" height="20"/>
+</Toggle>

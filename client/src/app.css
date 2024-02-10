@@ -31,14 +31,6 @@ body {
   @apply h-full min-h-full overflow-y-auto;
 }
 
-html.dark {
-  --fallback-b1: #1a1a1a;
-}
-
-html.light {
-  --fallback-b1: #f9f9f9;
-}
-
 .dropzone button {
   @apply relative overflow-hidden;
 }

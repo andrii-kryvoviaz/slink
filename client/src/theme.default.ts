@@ -26,6 +26,10 @@ export const defaultTheme: Theme = {
       borderButtonDefault: 'zinc.800',
       bgButtonDefaultHover: 'gray.700',
       textButtonDefaultHover: 'gray.200',
+      bgToggle: 'gray.800',
+      bgToggleChecked: 'violet.900',
+      colorToggle: 'gray.300',
+      colorToggleChecked: 'gray.200',
     },
     light: {
       bgMainFrom: 'white',
@@ -41,6 +45,10 @@ export const defaultTheme: Theme = {
       borderButtonDefault: 'gray.200',
       bgButtonDefaultHover: 'gray.100',
       textButtonDefaultHover: 'gray.900',
+      bgToggle: 'gray.100',
+      bgToggleChecked: 'violet.300',
+      colorToggle: 'gray.600',
+      colorToggleChecked: 'gray.600',
     }
   },
 };
@@ -78,6 +86,10 @@ export const tailwindcssTheme: Partial<ThemeConfig> = injectAlphaPlaceholder({
       secondary: 'var(--color-text-secondary)',
       disabled: 'var(--color-text-disabled)',
       accent: 'var(--color-accent)',
+    },
+    toggle: {
+      default: 'var(--color-toggle)',
+      checked: 'var(--color-toggle-checked)',
     },
     button: {
       hover: {
