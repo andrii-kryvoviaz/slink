@@ -37,6 +37,9 @@ class ServerCookieProvider implements CookieProvider {
   set(key: string, value: string, ttl?: number): void {
     this._cookies.set(key, value, {
       maxAge: ttl,
+      secure: true,
+      httpOnly: true,
+      sameSite: 'strict',
     });
   }
 
