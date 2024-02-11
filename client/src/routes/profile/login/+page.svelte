@@ -1,5 +1,9 @@
-<script>
-  import Button from '@slink/components/Shared/Action/Button.svelte';
+<script lang="ts">
+  import Button, { type ButtonVariant } from '@slink/components/Shared/Action/Button.svelte';
+  import { isLightTheme } from '@slink/store/settings.js';
+
+  let buttonVariant: ButtonVariant = 'primary';
+  $: buttonVariant = $isLightTheme ? 'dark' : 'primary';
 </script>
 
 <div class="flex justify-center items-center flex-grow">
@@ -24,7 +28,7 @@
       </div>
 
       <div class="mt-6">
-        <Button variant="primary" size="md" class="w-full">
+        <Button variant={buttonVariant} size="md" class="w-full">
           Sign In
         </Button>
       </div>
