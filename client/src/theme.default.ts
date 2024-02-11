@@ -29,9 +29,9 @@ export const defaultTheme: Theme = {
       textButtonDefaultHover: 'gray.200',
       textButtonInvisible: 'white',
       bgToggle: 'gray.800',
-      bgToggleChecked: 'violet.900',
+      bgToggleChecked: 'indigo.600',
       colorToggle: 'gray.300',
-      colorToggleChecked: 'gray.200',
+      colorToggleChecked: 'gray.300',
     },
     light: {
       bgMainFrom: 'white',
