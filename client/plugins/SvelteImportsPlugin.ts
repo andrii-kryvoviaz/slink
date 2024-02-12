@@ -1,6 +1,7 @@
-import type { Plugin } from 'vite';
+import type { Plugin, ViteDevServer } from 'vite';
 import fs, { Dirent } from 'fs';
 import path from 'path';
+import chokidar from 'chokidar';
 
 interface FileInfo {
   path: string;
@@ -45,27 +46,103 @@ async function createIndexFile(dir: string) {
   fs.writeFileSync(path.join(dir, 'index.ts'), indexContent);
 }
 
-export default function SvelteImportsPlugin(options: { dirs: string[] }): Plugin {
+interface PluginOptions {
+  dirs: string[],
+  libraryMode?: boolean,
+  usePolling?: boolean,
+}
+
+function flattenDirectories(dirs: string[]): string[] {
+  return dirs.reduce((acc: string[], dir: string) => {
+    const subDirs = fs.readdirSync(dir, { withFileTypes: true })
+      .filter((dirent) => dirent.isDirectory())
+      .map((dirent) => `${dir}/${dirent.name}`);
+    return acc.concat(subDirs);
+  }, []);
+}
+
+function findIndexDir(file: string): string|undefined {
+  let dir = path.relative(process.cwd(), path.dirname(file));
+
+  while (dir !== path.dirname(dir)) {
+    if (fs.existsSync(path.join(dir, 'package.json')) || dir === '/') {
+      return;
+    }
+
+    if (fs.existsSync(path.join(dir, 'index.ts'))) {
+      break;
+    }
+
+    dir = path.dirname(dir);
+  }
+
+  return dir;
+}
+
+function createRunner(modules: string[]) {
+  const isRunning: Map<string, boolean> = new Map();
+
+  for(const path of modules) {
+    isRunning.set(path, false);
+  }
+
+  return async (file: string) => {
+    const dir = findIndexDir(file);
+
+    if(!dir) return;
+
+    if (modules.includes(dir)) {
+      if(isRunning.get(dir)) {
+        return;
+      }
+
+      isRunning.set(dir, true);
+
+      await createIndexFile(dir);
+
+      isRunning.set(dir, false)
+    }
+  }
+}
+
+export default function SvelteImportsPlugin({ dirs, libraryMode, usePolling }: PluginOptions): Plugin {
+  const modules = libraryMode ? dirs : flattenDirectories(dirs);
+  const run = createRunner(modules);
+
   return {
     name: 'vite-svelte-imports-plugin',
     async buildStart() {
-      for (const dir of options.dirs) {
+      for (const dir of modules) {
         await createIndexFile(dir);
       }
     },
-    async handleHotUpdate({ file }) {
-      let dir = path.dirname(file);
+    async configureServer(server: ViteDevServer) {
+      const absoluteDirs = modules.map((dir:string) => path.resolve(dir));
 
-      while (dir !== path.dirname(dir)) {
-        if (fs.existsSync(path.join(dir, 'index.ts'))) {
-          break;
-        }
-        dir = path.dirname(dir);
-      }
+      // use chokidar directly instead of ViteDevServer to be able to set polling
+      // since docker volumes might not propagate unlink event correctly
+      // vite implementation does not use polling by default
+      try {
+        const watcher = usePolling
+          ? chokidar.watch(absoluteDirs, {
+            ignoreInitial: true,
+            usePolling,
+            ignored: /index\.ts$/
+          })
+          : server.watcher;
 
-      if (options.dirs.includes(dir)) {
-        await createIndexFile(dir);
-      }
-    },
+        watcher.on('all', async (event, file) => {
+          if (!['add', 'unlink'].includes(event)) {
+            return;
+          }
+
+          if (event === 'unlink') {
+            watcher.unwatch(file);
+          }
+
+          await run(file);
+        });
+      } catch (error) {}
+    }
   };
 }
