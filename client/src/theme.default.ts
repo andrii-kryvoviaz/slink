@@ -32,6 +32,12 @@ export const defaultTheme: Theme = {
       bgToggleChecked: 'indigo.600',
       colorToggle: 'gray.300',
       colorToggleChecked: 'gray.300',
+      colorInputLabelDefault: 'gray.200',
+      colorInputDefault: 'gray.300',
+      bgInputDefault: 'gray.800',
+      borderInputDefault: 'gray.600',
+      borderInputDefaultFocus: 'blue.300',
+      ringInputDefaultFocus: 'blue.300',
     },
     light: {
       bgMainFrom: 'white',
@@ -52,6 +58,12 @@ export const defaultTheme: Theme = {
       bgToggleChecked: 'violet.300',
       colorToggle: 'gray.600',
       colorToggleChecked: 'gray.600',
+      colorInputLabelDefault: 'gray.800',
+      colorInputDefault: 'gray.700',
+      bgInputDefault: 'white',
+      borderInputDefault: 'gray.300',
+      borderInputDefaultFocus: 'blue.400',
+      ringInputDefaultFocus: 'blue.400',
     }
   },
 };
@@ -72,6 +84,9 @@ export const tailwindcssTheme: Partial<ThemeConfig> = injectAlphaPlaceholder({
       danger: 'var(--bg-danger)',
       warning: 'var(--bg-warning)',
     },
+    input: {
+      default: 'var(--bg-input-default)',
+    }
   },
   borderColor: {
     dropzone: {
@@ -83,6 +98,12 @@ export const tailwindcssTheme: Partial<ThemeConfig> = injectAlphaPlaceholder({
       accent: 'var(--border-button-accent)',
     },
     description: 'var(--border-description)',
+    input: {
+      focus: {
+        default: 'var(--border-input-default-focus)',
+      },
+      default: 'var(--border-input-default)',
+    }
   },
   textColor: {
     color: {
@@ -103,6 +124,17 @@ export const tailwindcssTheme: Partial<ThemeConfig> = injectAlphaPlaceholder({
       accent: 'var(--text-button-accent)',
       invisible: 'var(--text-button-invisible)',
     },
+    label: {
+      default: 'var(--color-input-label)',
+    },
+    input: {
+      default: 'var(--color-input-default)',
+    }
+  },
+  ringColor: {
+    input: {
+      focus: 'var(--ring-input-default-focus)',
+    }
   },
   gradientColorStops: {
     bg: {
