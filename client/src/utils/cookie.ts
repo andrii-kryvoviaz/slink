@@ -17,7 +17,7 @@ class BrowserCookieProvider implements CookieProvider {
   set(key: string, value: string, ttl: number = 3600): void {
     const date = new Date();
     date.setTime(date.getTime() + ttl * 1000);
-    document.cookie = `${key}=${value};expires=${date.toUTCString()};Secure;SameSite=Strict`;
+    document.cookie = `${key}=${value};expires=${date.toUTCString()};path=/;Secure;SameSite=Strict`;
   }
 
   remove(key: string): void {
@@ -40,6 +40,7 @@ class ServerCookieProvider implements CookieProvider {
       secure: true,
       httpOnly: true,
       sameSite: 'strict',
+      path: '/',
     });
   }
 
