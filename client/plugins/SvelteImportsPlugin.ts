@@ -28,7 +28,7 @@ function* walkSync(dir: string): Generator<FileInfo> {
   }
 }
 
-async function createIndexFile(dir: string) {
+async function createIndexFile(dir: string): Promise<string> {
   const files: FileInfo[] = Array.from(walkSync(dir));
 
   const indexContent: string = files.map(file => {
@@ -43,13 +43,17 @@ async function createIndexFile(dir: string) {
       : `export * from './${relativePath}';`;
   }).join('\n');
 
-  fs.writeFileSync(path.join(dir, 'index.ts'), indexContent);
+  const output = path.join(dir, 'index.ts');
+  fs.writeFileSync(output, indexContent);
+
+  return output;
 }
 
 interface PluginOptions {
   dirs: string[],
   libraryMode?: boolean,
   usePolling?: boolean,
+  enableLogging?: boolean
 }
 
 function flattenDirectories(dirs: string[]): string[] {
@@ -79,41 +83,61 @@ function findIndexDir(file: string): string|undefined {
   return dir;
 }
 
-function createRunner(modules: string[]) {
+const name = 'vite-svelte-imports-plugin';
+
+function createRunner(modules: string[], {enableLogging = false}: Partial<PluginOptions>) {
   const isRunning: Map<string, boolean> = new Map();
 
   for(const path of modules) {
     isRunning.set(path, false);
   }
 
-  return async (file: string) => {
+  return async (file: string): Promise<boolean> => {
     const dir = findIndexDir(file);
 
-    if(!dir) return;
+    if(!dir) return false;
 
-    if (modules.includes(dir)) {
-      if(isRunning.get(dir)) {
-        return;
-      }
-
-      isRunning.set(dir, true);
-
-      await createIndexFile(dir);
-
-      isRunning.set(dir, false)
+    if (!modules.includes(dir)) {
+      return false;
     }
+
+    if(isRunning.get(dir)) {
+      return false;
+    }
+
+    isRunning.set(dir, true);
+    const path = await createIndexFile(dir);
+    isRunning.set(dir, false)
+
+    if (enableLogging) {
+      console.info(`[${name}] Created index file: ${path}`);
+    }
+
+    return true;
   }
 }
 
-export default function SvelteImportsPlugin({ dirs, libraryMode, usePolling }: PluginOptions): Plugin {
+function createWatcher(dirs: string[], usePolling: boolean) {
+  return chokidar.watch(dirs, {
+    ignoreInitial: true,
+    usePolling,
+    ignored: /index\.ts$/
+  });
+}
+
+export default function SvelteImportsPlugin({ dirs, libraryMode, usePolling, enableLogging }: PluginOptions): Plugin {
   const modules = libraryMode ? dirs : flattenDirectories(dirs);
-  const run = createRunner(modules);
+  const run = createRunner(modules, { enableLogging });
 
   return {
-    name: 'vite-svelte-imports-plugin',
+    name,
     async buildStart() {
       for (const dir of modules) {
-        await createIndexFile(dir);
+        const path = await createIndexFile(dir);
+
+        if (enableLogging) {
+          console.info(`[${name}] Created index file: ${path}`);
+        }
       }
     },
     async configureServer(server: ViteDevServer) {
@@ -124,11 +148,7 @@ export default function SvelteImportsPlugin({ dirs, libraryMode, usePolling }: P
       // vite implementation does not use polling by default
       try {
         const watcher = usePolling
-          ? chokidar.watch(absoluteDirs, {
-            ignoreInitial: true,
-            usePolling,
-            ignored: /index\.ts$/
-          })
+          ? createWatcher(absoluteDirs, usePolling)
           : server.watcher;
 
         watcher.on('all', async (event, file) => {
@@ -136,11 +156,15 @@ export default function SvelteImportsPlugin({ dirs, libraryMode, usePolling }: P
             return;
           }
 
-          if (event === 'unlink') {
+          if (event === 'unlink' && usePolling) {
             watcher.unwatch(file);
           }
 
-          await run(file);
+          const result = await run(file);
+
+          if (enableLogging && result) {
+            console.info(`[${name}][${event}] ${file}`);
+          }
         });
       } catch (error) {}
     }

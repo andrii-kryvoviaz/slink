@@ -6,7 +6,7 @@ import fs from 'fs';
 
 export default defineConfig({
   plugins: [
-    svelteImports({ dirs: ['src/components'], usePolling: false }),
+    svelteImports({ dirs: ['src/components'], enableLogging: true }),
     sveltekit(),
   ],
 });
