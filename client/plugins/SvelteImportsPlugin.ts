@@ -156,6 +156,10 @@ export default function SvelteImportsPlugin({ dirs, libraryMode, usePolling, ena
             return;
           }
 
+          if(file.endsWith('index.ts')) {
+            return;
+          }
+
           if (event === 'unlink' && usePolling) {
             watcher.unwatch(file);
           }
