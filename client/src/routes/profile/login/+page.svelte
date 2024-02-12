@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Button, { type ButtonVariant } from '@slink/components/Shared/Action/Button.svelte';
+  import { Button, type ButtonVariant } from '@slink/components/Common';
   import { isLightTheme } from '@slink/store/settings.js';
 
   let buttonVariant: ButtonVariant = 'primary';

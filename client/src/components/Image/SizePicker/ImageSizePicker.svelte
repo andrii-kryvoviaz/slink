@@ -1,9 +1,9 @@
 <script lang="ts">
   import Icon from '@iconify/svelte';
-  import type { ImageSize } from '@slink/components/Image/Types/ImageParams';
-  import Button from '@slink/components/Shared/Action/Button.svelte';
   import { Tooltip } from 'flowbite-svelte';
   import { createEventDispatcher } from 'svelte';
+  import type { ImageSize } from '@slink/components/Image';
+  import { Button } from '@slink/components/Common';
 
   export let width: number;
   export let height: number;
@@ -16,7 +16,7 @@
   let aspectRatioLinked = true;
   let aspectRatio = 0;
 
-  const adjustBooundaries = () => {
+  const adjustBoundaries = () => {
     if (calculatedWidth < 0) {
       calculatedWidth = 0;
     }
@@ -75,7 +75,7 @@
   };
 
   const handleChange = (caller: 'width' | 'height') => {
-    adjustBooundaries();
+    adjustBoundaries();
 
     if (aspectRatioLinked) {
       if (caller === 'width') {

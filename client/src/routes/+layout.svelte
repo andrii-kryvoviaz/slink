@@ -1,10 +1,10 @@
 <script lang="ts">
   import '@slink/app.css';
   import { Icons } from '@slink/theme.icons';
-  import ToastManager from '@slink/components/Toast/ToastManager.svelte';
-  import Navbar from '@slink/components/Layout/Navbar.svelte';
   import { currentTheme } from '@slink/store/settings';
   import { theme } from '@slink/lib/actions/theme';
+  import { ToastManager } from '@slink/components/Toast';
+  import { Navbar } from '@slink/components/Layout';
 
   Icons.init();
 </script>

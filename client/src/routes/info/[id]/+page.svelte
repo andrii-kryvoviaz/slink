@@ -1,20 +1,19 @@
 <script lang="ts">
-  import Button from '@slink/components/Shared/Action/Button.svelte';
-  import ImagePlaceholder from '../../../components/Image/Preview/ImagePlaceholder.svelte';
   import type { PageData } from './$types';
   import { fly } from 'svelte/transition';
-  import CopyContainer from '@slink/components/Shared/Action/CopyContainer.svelte';
-  import ImageSizePicker from '@slink/components/Image/Action/ImageSizePicker.svelte';
-  import type {
-    ImageParams,
-    ImageSize,
-  } from '@slink/components/Image/Types/ImageParams';
   import Icon from '@iconify/svelte';
   import { Tooltip } from 'flowbite-svelte';
-  import ImageDescription from '@slink/components/Image/Preview/ImageDescription.svelte';
   import { ApiClient } from '@slink/api/Client';
   import { toast } from '@slink/store/toast';
   import { ValidationException } from '@slink/api/Exceptions/ValidationException';
+  import {
+    ImageDescription,
+    type ImageParams,
+    ImagePlaceholder,
+    type ImageSize,
+    ImageSizePicker
+  } from '@slink/components/Image';
+  import { CopyContainer } from '@slink/components/Common';
 
   export let data: PageData;
 

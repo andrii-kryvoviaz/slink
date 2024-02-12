@@ -1,7 +1,6 @@
 <script lang="ts">
-  import Icon from '@iconify/svelte';
-  import Button from '@slink/components/Shared/Action/Button.svelte';
   import { createEventDispatcher } from 'svelte';
+  import { Button } from '@slink/components/Common';
 
   export let description: string;
   export let isLoading: boolean = false;

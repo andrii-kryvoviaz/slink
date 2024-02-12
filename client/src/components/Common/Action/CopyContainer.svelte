@@ -1,10 +1,8 @@
 <script lang="ts">
   import Icon from '@iconify/svelte';
-  import Button, {
-    type ButtonVariant,
-  } from '@slink/components/Shared/Action/Button.svelte';
   import { getBaseUrl } from '@slink/utils/getBaseUrl';
   import { fly } from 'svelte/transition';
+  import { Button, type ButtonVariant } from '@slink/components/Common';
 
   export let value: string;
   export let delay: number = 2000;

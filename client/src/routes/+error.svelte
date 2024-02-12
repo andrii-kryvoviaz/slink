@@ -1,6 +1,6 @@
 <script>
   import { page } from '$app/stores';
-  import Button from '@slink/components/Shared/Action/Button.svelte';
+  import { Button } from '@slink/components/Common';
 </script>
 
 <div class="flex h-full w-full flex-col items-center justify-center">
@@ -13,6 +13,5 @@
     </h2>
   </div>
   <Button variant="primary" size="lg" rounded="full" target="_self" href="/"
-    >Go Home</Button
-  >
+    >Go Home</Button>
 </div>
