@@ -146,6 +146,7 @@ ENV PHP_IDE_CONFIG="serverName=localhost"
 
 # Expose client app port
 EXPOSE 5173
+EXPOSE 8080
 
 
 ## Production image
