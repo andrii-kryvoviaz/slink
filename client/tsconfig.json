@@ -11,10 +11,10 @@
     "strict": true,
     "baseUrl": "./src",
     "paths": {
-      "@slink/utils/*": ["utils/*"],
+      "@slink/utils/*": ["lib/utils/*"],
       "@slink/components/*": ["components/*"],
       "@slink/api/*": ["api/*"],
-      "@slink/store/*": ["store/*"],
+      "@slink/store/*": ["lib/store/*"],
       "@slink/*": ["*"]
     }
   }

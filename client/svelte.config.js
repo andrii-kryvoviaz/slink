@@ -19,9 +19,9 @@ const config = {
     },
     alias: {
       '@slink/api': './src/api',
-      '@slink/utils': './src/utils',
+      '@slink/utils': './src/lib/utils',
       '@slink/components': './src/components',
-      '@slink/store': './src/store',
+      '@slink/store': './src/lib/store',
       '@slink': './src',
     },
   },
