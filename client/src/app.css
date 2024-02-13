@@ -38,3 +38,11 @@ body {
 .dropzone input[type='file'] {
   @apply absolute inset-0 block h-full w-full cursor-pointer opacity-0;
 }
+
+.kbd {
+  @apply font-mono text-white bg-gray-800 border-gray-600;
+}
+
+.light .kbd {
+  @apply bg-gray-100 text-gray-900 border-gray-200;
+}
