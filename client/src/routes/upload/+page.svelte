@@ -98,7 +98,9 @@
             <p class="flex items-center gap-x-[3px]">
               <Icon icon="material-symbols-light:upload" class="h-10 w-10" />
               <span class="font-semibold">Drag & Drop</span> or
-              <span class="font-semibold">paste</span> your image here
+              <span class="ml-1">
+                <kbd class="kbd kbd-sm">⌘</kbd> / <kbd class="kbd kbd-sm">ctrl</kbd> + <kbd class="kbd kbd-sm">v</kbd>
+              </span>
             </p>
           </div>
 
