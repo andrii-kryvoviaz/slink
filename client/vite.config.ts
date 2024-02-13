@@ -9,4 +9,7 @@ export default defineConfig({
     svelteImports({ dirs: ['src/components'], enableLogging: true }),
     sveltekit(),
   ],
+  server: {
+    host: '0.0.0.0',
+  }
 });
