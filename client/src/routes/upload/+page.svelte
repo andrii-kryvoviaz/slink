@@ -97,21 +97,28 @@
       defaultClass='flex flex-col justify-center items-center w-full h-64 bg-card-primary rounded-lg border-2 border-dropzone-primary border-dashed cursor-pointer hover:border-dropzone-secondary hover:bg-card-secondary max-h-[400px] max-w-[600px]'
     >
       {#if !isLoading}
-        <div class='flex flex-col'>
-          <div class=' text-sm text-color-primary'>
-            <p class='flex items-center gap-x-[3px]'>
+        <div class='flex flex-col xs:w-[170%] p-6'>
+          <div class='text-sm text-color-primary'>
+            <p class='flex items-center justify-center gap-x-[3px] p-3'>
               <Icon icon='material-symbols-light:upload' class='h-10 w-10' />
-              <span class='font-semibold'>Drag & Drop</span> or
-              <span class='ml-1'>
-                {#if data.os.name === 'Mac OS' || data.device.vendor === 'Apple'}
-                  <span class="kbd">⌘ cmd</span>
-                {:else}
-                  <kbd class="kbd">ctrl</kbd>
-                {/if}
-                + <kbd class="kbd">v</kbd>
+              <span class='font-semibold'>
+                Drag & Drop
+                <span class='font-normal'>your image here</span>
               </span>
             </p>
           </div>
+
+          <p class='divider'>or</p>
+
+          <p class='mb-4 mt-2'>
+            {#if data.os.name === 'Mac OS' || data.device.vendor === 'Apple'}
+              <span class='kbd'>⌘ cmd</span>
+            {:else}
+              <kbd class='kbd'>ctrl</kbd>
+            {/if}
+            <span class='m-1'>+</span>
+            <kbd class='kbd'>v</kbd>
+          </p>
 
           <p class='text-xs text-color-secondary'>
             SVG, PNG, JPG, WEBP or GIF (MAX. 5MB)
