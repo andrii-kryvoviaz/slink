@@ -19,6 +19,7 @@
     "@sveltejs/kit": "^1.20.4",
     "@types/dotenv": "^8.2.0",
     "@types/node": "^20.8.10",
+    "@types/ua-parser-js": "^0.7.39",
     "autoprefixer": "^10.4.16",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
@@ -36,6 +37,7 @@
     "tailwindcss-theme-customizer": "^1.0.4",
     "tslib": "^2.4.1",
     "typescript": "^5.0.0",
+    "ua-parser-js": "^1.0.37",
     "vite": "^4.4.2"
   },
   "type": "module"
