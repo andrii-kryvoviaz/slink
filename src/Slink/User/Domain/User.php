@@ -12,6 +12,7 @@ use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Event\UserSignedIn;
 use Slink\User\Domain\Event\UserWasCreated;
 use Slink\User\Domain\Exception\InvalidCredentialsException;
+use Slink\User\Domain\Exception\EmailAlreadyExistException;
 use Slink\User\Domain\Specification\UniqueEmailSpecificationInterface;
 use Slink\User\Domain\ValueObject\Auth\Credentials;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;
@@ -35,7 +36,9 @@ final class User extends AbstractAggregateRoot {
    * @throws DateTimeException
    */
   public static function create(ID $id, Credentials $credentials, DisplayName $displayName, UniqueEmailSpecificationInterface $uniqueEmailSpecification): self {
-    $uniqueEmailSpecification->isUnique($credentials->email);
+    if(!$uniqueEmailSpecification->isUnique($credentials->email)) {
+      throw new EmailAlreadyExistException();
+    }
 
     $user = new self($id);
 
