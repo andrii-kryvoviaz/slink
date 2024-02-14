@@ -4,26 +4,42 @@ declare(strict_types=1);
 
 namespace Slink\Shared\Domain\ValueObject;
 
+use Slink\Shared\Domain\Strategy\JsonSerializableBehaviour;
+
 abstract readonly class AbstractValueObject implements \JsonSerializable, \Stringable {
-  abstract public function toString(): string;
+  use JsonSerializableBehaviour;
   
+  /**
+   * @param AbstractValueObject $other
+   * @return bool
+   */
   public function equals(self $other): bool {
-    $properties = get_object_vars($this);
+    $properties = method_exists($this, 'getProperties')
+      ? $this->getProperties()
+      : get_class_vars(static::class);
     
     foreach ($properties as $property => $value) {
-      if ($value !== $other->{$property}) {
+      if ($value !== $other->{'get' . \ucfirst($property)}()) {
         return false;
       }
     }
     
     return true;
   }
-
+  
+  /**
+   * @return string
+   */
   public function __toString(): string {
     return $this->toString();
   }
-
-  public function jsonSerialize(): string {
-    return $this->toString();
+  
+  /**
+   * @return string
+   */
+  public function toString(): string {
+    return (string) \json_encode(
+      $this->jsonSerialize()
+    );
   }
 }
