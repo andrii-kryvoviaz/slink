@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\User\Domain\Exception;
 
-class InvalidCredentialsException extends \RuntimeException {
+class InvalidCredentialsException extends \LogicException {
   /**
    * @param mixed ...$args
    */
