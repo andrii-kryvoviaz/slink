@@ -15,7 +15,7 @@ class ApiResponse extends JsonResponse {
    * @param int $status
    * @return self
    */
-  public static function fromPayload(array $payload, int $status): self {
+  public static function fromPayload(array $payload, int $status = self::HTTP_OK): self {
     return new self($payload, $status);
   }
   
@@ -108,5 +108,4 @@ class ApiResponse extends JsonResponse {
     
     return $result;
   }
-  
 }
