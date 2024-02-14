@@ -101,8 +101,12 @@ final readonly class ExceptionSubscriber implements EventSubscriberInterface {
    * @return string
    */
   private function getExceptionMessage(Throwable $exception): string {
+    if($exception->getMessage()) {
+      return $exception->getMessage();
+    }
+    
     $statusCode = $this->determineStatusCode($exception);
-    return $this->exceptionCodeToMessage[$statusCode] ?? $exception->getMessage();
+    return $this->exceptionCodeToMessage[$statusCode];
   }
   
   /**
