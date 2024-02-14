@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Slink\User\Domain;
 
-use EventSauce\EventSourcing\AggregateRoot;
-use EventSauce\EventSourcing\AggregateRootBehaviour;
 use SensitiveParameter;
+use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\Exception\DateTimeException;
 use Slink\Shared\Domain\ValueObject\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
@@ -19,12 +18,7 @@ use Slink\User\Domain\ValueObject\Auth\HashedPassword;
 use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Email;
 
-/**
- * @implements AggregateRoot<ID>
- */
-class User implements AggregateRoot {
-  use AggregateRootBehaviour;
-
+final class User extends AbstractAggregateRoot {
   private Email $email;
   
   public function setEmail(Email $email): void {
@@ -60,13 +54,10 @@ class User implements AggregateRoot {
       throw new InvalidCredentialsException();
     }
     
-    $id = ID::fromString($this->aggregateRootId->toString());
-    
-    $this->recordThat(new UserSignedIn($id, $this->email));
+    $this->recordThat(new UserSignedIn($this->aggregateRootId(), $this->email));
   }
   
   public function applyUserSignedIn(UserSignedIn $event): void {
     $this->setEmail($event->email);
   }
-  
 }

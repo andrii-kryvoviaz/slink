@@ -4,17 +4,14 @@ declare(strict_types=1);
 
 namespace Slink\Image\Domain;
 
-use EventSauce\EventSourcing\AggregateRoot;
-use EventSauce\EventSourcing\AggregateRootBehaviour;
 use Slink\Image\Domain\Event\ImageAttributesWasUpdated;
 use Slink\Image\Domain\Event\ImageWasCreated;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Domain\ValueObject\ImageMetadata;
+use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\ValueObject\ID;
 
-final class Image implements AggregateRoot {
-  use AggregateRootBehaviour;
-  
+final class Image extends AbstractAggregateRoot {
   private ImageAttributes $attributes;
   
   private ImageMetadata $metadata;

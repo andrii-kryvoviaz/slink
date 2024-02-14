@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Slink\Image\Domain\Event;
 
-use EventSauce\EventSourcing\AggregateRootId;
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Shared\Domain\Exception\DateTimeException;
@@ -12,11 +11,11 @@ use Slink\Shared\Domain\ValueObject\ID;
 
 final readonly class ImageAttributesWasUpdated implements SerializablePayload{
   /**
-   * @param ID|AggregateRootId $id
+   * @param ID $id
    * @param ImageAttributes $attributes
    */
   public function __construct(
-    public ID|AggregateRootId $id,
+    public ID $id,
     public ImageAttributes $attributes,
   ) {
   }
