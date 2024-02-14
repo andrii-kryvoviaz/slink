@@ -38,6 +38,7 @@ export const defaultTheme: Theme = {
       borderInputDefault: 'gray.600',
       borderInputDefaultFocus: 'blue.300',
       ringInputDefaultFocus: 'blue.300',
+      borderHeaderColor: 'gray.800',
     },
     light: {
       bgMainFrom: 'white',
@@ -64,6 +65,7 @@ export const defaultTheme: Theme = {
       borderInputDefault: 'gray.300',
       borderInputDefaultFocus: 'blue.400',
       ringInputDefaultFocus: 'blue.400',
+      borderHeaderColor: 'gray.100',
     }
   },
 };
@@ -89,6 +91,7 @@ export const tailwindcssTheme: Partial<ThemeConfig> = injectAlphaPlaceholder({
     }
   },
   borderColor: {
+    header: 'var(--border-header-color)',
     dropzone: {
       primary: 'var(--border-dropzone-primary)',
       secondary: 'var(--border-dropzone-secondary)',
