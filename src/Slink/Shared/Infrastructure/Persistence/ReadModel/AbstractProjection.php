@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Shared\Infrastructure\Persistence\ReadModel;
 
-use EventSauce\EventSourcing\EventConsumption\EventConsumer;
-use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
+use Slink\Shared\Infrastructure\MessageBus\Event\AbstractEventConsumer;
 
-#[Autoconfigure(tags: ['event_sauce.event_consumer'])]
-abstract class AbstractProjection extends EventConsumer {
+abstract class AbstractProjection extends AbstractEventConsumer {
 }
