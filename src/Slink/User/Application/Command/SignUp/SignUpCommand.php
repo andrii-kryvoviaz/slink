@@ -6,9 +6,12 @@ namespace Slink\User\Application\Command\SignUp;
 
 use SensitiveParameter;
 use Slink\Shared\Application\Command\CommandInterface;
+use Slink\Shared\Domain\ValueObject\ID;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final readonly class SignUpCommand implements CommandInterface {
+  
+  private ID $id;
 
   public function __construct(
     #[SensitiveParameter]
@@ -29,7 +32,13 @@ final readonly class SignUpCommand implements CommandInterface {
     #[Assert\NotBlank]
     #[Assert\Length(min: 3)]
     private string $displayName,
-  ) {}
+  ) {
+    $this->id = ID::generate();
+  }
+  
+  public function getId(): ID {
+    return $this->id;
+  }
 
   public function getEmail(): string {
     return $this->email;

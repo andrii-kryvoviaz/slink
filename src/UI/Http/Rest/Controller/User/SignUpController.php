@@ -23,6 +23,6 @@ final class SignUpController {
   ): ApiResponse {
     $this->handle($command);
 
-    return ApiResponse::created('/user');
+    return ApiResponse::created($command->getId()->toString(),'/user');
   }
 }

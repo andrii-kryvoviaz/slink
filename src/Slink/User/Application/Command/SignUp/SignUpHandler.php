@@ -24,7 +24,7 @@ final readonly class SignUpHandler implements CommandHandlerInterface {
    */
   public function __invoke(SignUpCommand $command): void {
     $user = User::create(
-      ID::fromString(Uuid::uuid4()->toString()),
+      $command->getId(),
       Credentials::fromString($command->getEmail(), $command->getPassword()),
       DisplayName::fromString($command->getDisplayName()),
       $this->uniqueEmailSpecification
