@@ -31,8 +31,10 @@ final readonly class GenerateTokenPairHandler implements QueryHandlerInterface {
     $accessToken = $this->authenticationProvider->generateAccessToken($uuid, $email, $hashedPassword);
     $refreshToken = $this->authenticationProvider->generateRefreshToken();
     
-    $user = $this->userStore->get(ID::fromString($uuid->toString()));
-    $user->registerRefreshToken(HashedRefreshToken::encode($refreshToken));
+    $userId = ID::fromString($uuid->toString());
+    
+    $user = $this->userStore->get($userId);
+    $user->refreshToken->issue(HashedRefreshToken::encode($refreshToken));
     $this->userStore->store($user);
     
     return TokenPair::fromTokens($accessToken, $refreshToken);
