@@ -8,5 +8,5 @@ use EventSauce\EventSourcing\EventConsumption\EventConsumer;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
 #[Autoconfigure(tags: ['event_sauce.event_consumer'])]
-class AbstractProjection extends EventConsumer {
+abstract class AbstractProjection extends EventConsumer {
 }
