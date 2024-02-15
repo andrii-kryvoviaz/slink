@@ -7,8 +7,7 @@ namespace UI\Http\Rest\Controller\User;
 use Slink\Shared\Application\Command\CommandTrait;
 use Slink\Shared\Application\Query\QueryTrait;
 use Slink\User\Application\Command\SignIn\SignInCommand;
-use Slink\User\Application\Query\Auth\GetToken\GetTokenQuery;
-use Symfony\Component\HttpFoundation\Response;
+use Slink\User\Application\Query\Auth\GenerateTokenPair\GenerateTokenPairQuery;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,10 +22,10 @@ class SignInController {
   public function __invoke(
     #[MapRequestPayload] SignInCommand $command,
   ): ApiResponse {
+    
+    $tokenPair = $this->ask(new GenerateTokenPairQuery($command->getUsername()));
     $this->handle($command);
     
-    $token = $this->ask(new GetTokenQuery($command->getUsername()));
-    
-    return ApiResponse::fromPayload(['token' => $token], Response::HTTP_OK);
+    return ApiResponse::fromPayload($tokenPair->jsonSerialize());
   }
 }

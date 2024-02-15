@@ -9,5 +9,7 @@ use Slink\User\Domain\ValueObject\Email;
 use Ramsey\Uuid\UuidInterface;
 
 interface AuthProviderInterface {
-  public function generateToken(UuidInterface $uuid, Email $email, HashedPassword $hashedPassword): string;
+  public function generateAccessToken(UuidInterface $uuid, Email $email, HashedPassword $hashedPassword): string;
+  
+  public function generateRefreshToken(?int $ttl): string;
 }
