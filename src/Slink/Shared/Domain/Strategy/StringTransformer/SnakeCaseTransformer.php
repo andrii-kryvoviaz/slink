@@ -8,6 +8,12 @@ final class SnakeCaseTransformer implements StringTransformer {
   
   #[\Override]
   public function transform(string $value): string {
-    return \strtolower(\preg_replace('/(?<!^)[A-Z]/', '_$0', $value));
+    $replaced = \preg_replace('/(?<!^)[A-Z]/', '_$0', $value);
+    
+    if ($replaced === null) {
+      throw new \RuntimeException('Error while transforming string to snake case');
+    }
+    
+    return \strtolower($replaced);
   }
 }
