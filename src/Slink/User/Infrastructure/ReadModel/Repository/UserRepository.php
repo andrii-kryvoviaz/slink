@@ -4,19 +4,25 @@ declare(strict_types=1);
 
 namespace Slink\User\Infrastructure\ReadModel\Repository;
 
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
 use Ramsey\Uuid\UuidInterface;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractRepository;
 use Slink\User\Domain\Repository\CheckUserByEmailInterface;
-use Slink\User\Domain\Repository\GetUserCredentialsByEmailInterface;
+use Slink\User\Domain\Repository\GetUserByRefreshTokenInterface;
 use Slink\User\Domain\Repository\UserRepositoryInterface;
 use Slink\User\Domain\ValueObject\Email;
+use Slink\User\Infrastructure\ReadModel\View\RefreshTokenView;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
 
-final class UserRepository extends AbstractRepository implements CheckUserByEmailInterface, GetUserCredentialsByEmailInterface, UserRepositoryInterface {
+final class UserRepository extends AbstractRepository implements
+  CheckUserByEmailInterface,
+  GetUserByRefreshTokenInterface,
+  UserRepositoryInterface
+{
+  static protected function entityClass(): string {
+    return UserView::class;
+  }
   
   /**
    * @throws NonUniqueResultException
@@ -87,7 +93,20 @@ final class UserRepository extends AbstractRepository implements CheckUserByEmai
     ];
   }
   
-  static protected function entityClass(): string {
-    return UserView::class;
+  /**
+   * @throws NonUniqueResultException
+   * @throws NotFoundException
+   */
+  #[\Override]
+  public function getUserByRefreshToken(string $hashedRefreshToken): UserView {
+    $qb = $this->_em
+      ->createQueryBuilder()
+      ->from(UserView::class, 'user')
+      ->select('user')
+      ->join(RefreshTokenView::class, 'rt', 'WITH', 'user.uuid = rt.userUuid')
+      ->where('rt.token = :hashedRefreshToken')
+      ->setParameter('hashedRefreshToken', $hashedRefreshToken);
+    
+    return $this->oneOrException($qb);
   }
 }
