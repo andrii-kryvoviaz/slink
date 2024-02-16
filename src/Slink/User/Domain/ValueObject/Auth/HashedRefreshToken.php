@@ -51,7 +51,7 @@ final readonly class HashedRefreshToken extends AbstractValueObject {
    * @return string
    */
   private static function hash(#[\SensitiveParameter] string $plainRefreshToken): string {
-    return \password_hash($plainRefreshToken, PASSWORD_BCRYPT);
+    return hash('sha256', $plainRefreshToken);
   }
   
   /**
