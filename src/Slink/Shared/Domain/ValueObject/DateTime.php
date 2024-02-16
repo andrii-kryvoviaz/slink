@@ -66,7 +66,26 @@ final class DateTime extends DateTimeImmutable {
       throw new DateTimeException(new Exception($e->getMessage(), (int) $e->getCode(), $e));
     }
   }
-
+  
+  /**
+   * @param DateTime $now
+   * @return bool
+   */
+  public function isBefore(DateTime $now): bool {
+    return $this < $now;
+  }
+  
+  /**
+   * @param DateTime $now
+   * @return bool
+   */
+  public function isAfter(DateTime $now): bool {
+    return $this > $now;
+  }
+  
+  /**
+   * @return string
+   */
   public function toString(): string {
     return $this->format(self::FORMAT);
   }
