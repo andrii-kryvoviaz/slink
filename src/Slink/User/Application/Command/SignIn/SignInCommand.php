@@ -6,9 +6,11 @@ namespace Slink\User\Application\Command\SignIn;
 
 use SensitiveParameter;
 use Slink\Shared\Application\Command\CommandInterface;
+use Slink\Shared\Infrastructure\MessageBus\EnvelopedMessage;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final readonly class SignInCommand implements CommandInterface {
+  use EnvelopedMessage;
   
   public function __construct(
     #[SensitiveParameter]

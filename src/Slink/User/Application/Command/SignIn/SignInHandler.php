@@ -5,35 +5,35 @@ declare(strict_types=1);
 namespace Slink\User\Application\Command\SignIn;
 
 use Slink\Shared\Application\Command\CommandHandlerInterface;
-use Slink\Shared\Domain\ValueObject\ID;
+use Slink\Shared\Domain\Exception\DateTimeException;
 use Slink\User\Domain\Exception\InvalidCredentialsException;
-use Slink\User\Domain\Repository\CheckUserByEmailInterface;
 use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
+use Slink\User\Domain\ValueObject\Auth\HashedRefreshToken;
 use Slink\User\Domain\ValueObject\Email;
 
 final readonly class SignInHandler implements CommandHandlerInterface {
-  public function __construct(private readonly UserStoreRepositoryInterface $userStore, private readonly CheckUserByEmailInterface $userRepository) {
+  public function __construct(
+    private UserStoreRepositoryInterface $userStore,
+  ) {
   }
   
-  public function __invoke(SignInCommand $command): void {
-    $email = Email::fromString($command->getUsername());
+  /**
+   * @throws DateTimeException
+   */
+  public function __invoke(SignInCommand $command, string $refreshToken): void {
+    $username = Email::fromString($command->getUsername());
+    $user = $this->userStore->getByUsername($username);
     
-    $uuid = $this->uuidFromEmail($email);
-    
-    $user = $this->userStore->get($uuid);
-    
-    $user->signIn($command->getPassword());
-    
-    $this->userStore->store($user);
-  }
-  
-  private function uuidFromEmail(Email $email): ID {
-    $uuid = $this->userRepository->existsEmail($email);
-    
-    if (null === $uuid) {
+    if (null === $user) {
       throw new InvalidCredentialsException();
     }
     
-    return ID::fromString($uuid->toString());
+    if($refreshToken) {
+      $user->refreshToken->issue(HashedRefreshToken::encode($refreshToken));
+    }
+    
+    $user->signIn($command->getPassword());
+
+    $this->userStore->store($user);
   }
 }

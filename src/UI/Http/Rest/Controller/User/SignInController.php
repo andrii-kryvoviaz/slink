@@ -22,10 +22,12 @@ class SignInController {
   public function __invoke(
     #[MapRequestPayload] SignInCommand $command,
   ): ApiResponse {
-    
     $tokenPair = $this->ask(new GenerateTokenPairQuery($command->getUsername()));
-    $this->handle($command);
     
-    return ApiResponse::fromPayload($tokenPair->jsonSerialize());
+    $this->handle($command->withContext([
+      'refreshToken' => $tokenPair->getRefreshToken(),
+    ]));
+    
+    return ApiResponse::fromSerializable($tokenPair);
   }
 }
