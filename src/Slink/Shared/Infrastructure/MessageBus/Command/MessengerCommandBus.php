@@ -7,6 +7,7 @@ namespace Slink\Shared\Infrastructure\MessageBus\Command;
 use Slink\Shared\Application\Command\CommandBusInterface;
 use Slink\Shared\Application\Command\CommandInterface;
 use Slink\Shared\Infrastructure\MessageBus\MessageBusExceptionTrait;
+use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Throwable;
@@ -20,7 +21,7 @@ final class MessengerCommandBus implements CommandBusInterface {
   /**
    * @throws Throwable
    */
-  public function handle(CommandInterface $command): void {
+  public function handle(CommandInterface|Envelope $command): void {
     try {
       $this->messageBus->dispatch($command);
     } catch (HandlerFailedException $e) {

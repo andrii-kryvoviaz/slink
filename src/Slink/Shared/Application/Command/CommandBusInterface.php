@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Slink\Shared\Application\Command;
 
+use Symfony\Component\Messenger\Envelope;
+
 interface CommandBusInterface {
-  public function handle(CommandInterface $command): void;
+  public function handle(CommandInterface|Envelope $command): void;
 }
