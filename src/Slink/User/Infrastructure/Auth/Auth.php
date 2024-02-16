@@ -4,49 +4,45 @@ declare(strict_types=1);
 
 namespace Slink\User\Infrastructure\Auth;
 
-use Ramsey\Uuid\UuidInterface;
-use Slink\User\Domain\ValueObject\Auth\HashedPassword;
-use Slink\User\Domain\ValueObject\Email;
-use Symfony\Component\PasswordHasher\Hasher\PasswordHasherAwareInterface;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Slink\User\Domain\Contracts\UserInterface as User;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-final readonly class Auth implements UserInterface, PasswordHasherAwareInterface, PasswordAuthenticatedUserInterface, \Stringable {
+final readonly class Auth implements UserInterface {
   
+  /**
+   * @param string $identifier
+   * @param array<string> $roles
+   */
   private function __construct(
-    private UuidInterface $uuid,
-    private Email $email,
-    private HashedPassword $hashedPassword
+    private string $identifier,
+    private array $roles
   ) {}
   
-  public static function create(UuidInterface $uuid, Email $email, HashedPassword $hashedPassword): self {
-    return new self($uuid, $email, $hashedPassword);
+  /**
+   * @param User $user
+   * @return self
+   */
+  public static function createFromUser(User $user): self {
+    return new self($user->getIdentifier(), $user->getRoles());
   }
   
-  public function getPassword(): ?string {
-    return $this->hashedPassword->toString();
-  }
-  
-  public function getPasswordHasherName(): ?string {
-    return 'hasher';
-  }
-  
-  public function __toString(): string {
-    return $this->email->toString();
-  }
-  
-  public function getRoles(): array {
-    return ['ROLE_USER'];
-  }
-  
-  public function eraseCredentials(): void {
-  }
-  
+  /**
+   * @return string
+   */
   public function getUserIdentifier(): string {
-    return $this->email->toString();
+    return $this->identifier;
   }
   
-  public function uuid(): UuidInterface {
-    return $this->uuid;
+  /**
+   * @return array<string>
+   */
+  public function getRoles(): array {
+    return $this->roles;
+  }
+  
+  /**
+   * @return void
+   */
+  public function eraseCredentials(): void {
   }
 }

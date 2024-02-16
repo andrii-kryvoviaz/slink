@@ -6,19 +6,20 @@ namespace Slink\User\Infrastructure\Auth;
 
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTDecodeFailureException;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
-use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
-use Slink\User\Domain\ValueObject\Auth\HashedPassword;
-use Slink\User\Domain\ValueObject\Email;
+use Slink\Shared\Domain\ValueObject\ID;
+use Slink\User\Domain\Contracts\AuthProviderInterface;
+use Slink\User\Domain\Contracts\UserInterface;
+use Slink\User\Domain\ValueObject\Auth\TokenPair;
+use Slink\User\Domain\ValueObject\Auth\TokenParams;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 final readonly class JwtAuthProvider implements AuthProviderInterface {
   
   /**
-   * @param JWTTokenManagerInterface $JWTManager
+   * @param JWTTokenManagerInterface $jwtManager
    */
   public function __construct(
-    private readonly JWTTokenManagerInterface $JWTManager
+    private readonly JWTTokenManagerInterface $jwtManager
   ) {}
   
   /**
@@ -27,24 +28,40 @@ final readonly class JwtAuthProvider implements AuthProviderInterface {
    * @throws JWTDecodeFailureException
    */
   public function decodeToken(TokenInterface $token): array | false {
-    return $this->JWTManager->decode($token);
+    return $this->jwtManager->decode($token);
   }
   
   /**
-   * @param UuidInterface $uuid
-   * @param Email $email
-   * @param HashedPassword $hashedPassword
+   * @param UserInterface $user
+   * @param array<string, mixed> $payload
    * @return string
    */
-  public function generateAccessToken(UuidInterface $uuid, Email $email, HashedPassword $hashedPassword): string {
-    return $this->JWTManager->create(Auth::create($uuid, $email, $hashedPassword));
+  public function generateAccessToken(UserInterface $user, array $payload = []): string {
+    return $this->jwtManager->createFromPayload(Auth::createFromUser($user), $payload);
   }
   
   /**
    * @param ?int $ttl
    * @return string
    */
-  public function generateRefreshToken(?int $ttl = 60 * 60 * 24 * 30): string {
-    return sprintf('%s.%s', Uuid::uuid4()->toString(), time() + $ttl);
+  public function generateRefreshToken(?int $ttl = 2592000): string {
+    return sprintf('%s.%s', ID::generate()->toString(), time() + $ttl);
+  }
+  
+  /**
+   * @param UserInterface $user
+   * @param ?TokenParams $params
+   * @return TokenPair
+   */
+  #[\Override]
+  public function generateTokenPair(UserInterface $user, ?TokenParams $params = null): TokenPair {
+    if(!$params) {
+      $params = TokenParams::create();
+    }
+    
+    $accessToken = $this->generateAccessToken($user, $params->getPayload());
+    $refreshToken = $this->generateRefreshToken($params->getTtl());
+    
+    return TokenPair::fromTokens($accessToken, $refreshToken);
   }
 }
