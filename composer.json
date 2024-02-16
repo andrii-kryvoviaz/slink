@@ -59,7 +59,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Unit\\Slink\\": "tests/Unit/Slink"
+            "Unit\\Slink\\": "tests/Unit/Slink",
+            "Tests\\": "tests"
         }
     },
     "replace": {
