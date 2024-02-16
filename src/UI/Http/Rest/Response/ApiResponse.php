@@ -20,6 +20,15 @@ class ApiResponse extends JsonResponse {
   }
   
   /**
+   * @param \JsonSerializable $serializable
+   * @param int $status
+   * @return self
+   */
+  public static function fromSerializable(\JsonSerializable $serializable, int $status = self::HTTP_OK): self {
+    return self::fromPayload($serializable->jsonSerialize(), $status);
+  }
+  
+  /**
    * @param int $status
    * @return self
    */
