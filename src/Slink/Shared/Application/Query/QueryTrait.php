@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Shared\Application\Query;
 
+use Symfony\Component\Messenger\Envelope;
 use Symfony\Contracts\Service\Attribute\Required;
 
 trait QueryTrait {
@@ -14,7 +15,7 @@ trait QueryTrait {
     $this->queryBus = $queryBus;
   }
 
-  protected function ask(QueryInterface $query): mixed {
+  protected function ask(QueryInterface|Envelope $query): mixed {
     return $this->queryBus->ask($query);
   }
 }

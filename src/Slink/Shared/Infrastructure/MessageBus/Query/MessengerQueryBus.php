@@ -24,7 +24,7 @@ final class MessengerQueryBus implements QueryBusInterface {
   /**
    * @throws Throwable
    */
-  public function ask(QueryInterface $query): mixed {
+  public function ask(QueryInterface|Envelope $query): mixed {
     try {
       $this->envelope = $this->messageBus->dispatch($query);
     } catch (HandlerFailedException $e) {
