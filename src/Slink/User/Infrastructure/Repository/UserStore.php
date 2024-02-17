@@ -7,23 +7,31 @@ namespace Slink\User\Infrastructure\Repository;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Persistence\EventStore\AbstractStoreRepository;
 use Slink\User\Domain\Repository\CheckUserByEmailInterface;
+use Slink\User\Domain\Repository\CheckUserByRefreshTokenInterface;
 use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
 use Slink\User\Domain\User;
+use Slink\User\Domain\ValueObject\Auth\HashedRefreshToken;
 use Slink\User\Domain\ValueObject\Email;
 use Symfony\Contracts\Service\Attribute\Required;
 
 final class UserStore extends AbstractStoreRepository implements UserStoreRepositoryInterface {
   private CheckUserByEmailInterface $checkUserByEmail;
+  private CheckUserByRefreshTokenInterface $getUserByRefreshToken;
   
   #[Required]
   public function setCheckUserByEmail(CheckUserByEmailInterface $checkUserByEmail): void {
     $this->checkUserByEmail = $checkUserByEmail;
   }
   
+  #[Required]
+  public function setGetUserByRefreshToken(CheckUserByRefreshTokenInterface $getUserByRefreshToken): void {
+    $this->getUserByRefreshToken = $getUserByRefreshToken;
+  }
+  
   static function getAggregateRootClass(): string {
     return User::class;
   }
-
+  
   /**
    * @param ID $id
    * @return User
@@ -36,15 +44,28 @@ final class UserStore extends AbstractStoreRepository implements UserStoreReposi
     }
     return $user;
   }
-
+  
   /**
    * @param Email $username
    * @return User|null
-   * @throws \RuntimeException
    */
   #[\Override]
   public function getByUsername(Email $username): ?User {
     $id = $this->checkUserByEmail->existsEmail($username);
+    if ($id === null) {
+      return null;
+    }
+    
+    return $this->get(ID::fromString($id->toString()));
+  }
+  
+  /**
+   * @param HashedRefreshToken $hashedRefreshToken
+   * @return User|null
+   */
+  #[\Override]
+  public function getByRefreshToken(HashedRefreshToken $hashedRefreshToken): ?User {
+    $id = $this->getUserByRefreshToken->existsByRefreshToken($hashedRefreshToken);
     if ($id === null) {
       return null;
     }
@@ -58,6 +79,8 @@ final class UserStore extends AbstractStoreRepository implements UserStoreReposi
    */
   #[\Override]
   public function store(User $user): void {
+    $user->refreshToken->clearDanglingRefreshTokens();
+    
     $this->persist($user);
   }
 }

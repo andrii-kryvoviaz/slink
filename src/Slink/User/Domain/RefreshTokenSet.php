@@ -6,8 +6,10 @@ namespace Slink\User\Domain;
 
 use Ramsey\Collection\Set;
 use Slink\Shared\Domain\AbstractEventSourcedAggregate;
+use Slink\Shared\Domain\Exception\DateTimeException;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Event\Auth\RefreshTokenIssued;
+use Slink\User\Domain\Event\Auth\RefreshTokenRevoked;
 use Slink\User\Domain\ValueObject\Auth\HashedRefreshToken;
 
 final class RefreshTokenSet extends AbstractEventSourcedAggregate {
@@ -26,6 +28,24 @@ final class RefreshTokenSet extends AbstractEventSourcedAggregate {
    */
   private function __construct(private readonly ID $userId) {
     $this->hashedRefreshTokenCollection = new Set(HashedRefreshToken::class);
+  }
+  
+  /**
+   * @return void
+   */
+  public function clearDanglingRefreshTokens(): void {
+    $this->hashedRefreshTokenCollection->map(function(HashedRefreshToken $hashedRefreshToken) {
+      if ($hashedRefreshToken->isExpired()) {
+        $this->revoke($hashedRefreshToken);
+      }
+    });
+  }
+  
+  /**
+   * @return void
+   */
+  public function clear(): void {
+    $this->hashedRefreshTokenCollection->clear();
   }
   
   /**
@@ -50,5 +70,21 @@ final class RefreshTokenSet extends AbstractEventSourcedAggregate {
    */
   public function applyRefreshTokenIssued(RefreshTokenIssued $event): void {
     $this->setHashedRefreshToken($event->hashedRefreshToken);
+  }
+  
+  /**
+   * @param HashedRefreshToken $hashedRefreshToken
+   * @return void
+   */
+  public function revoke(HashedRefreshToken $hashedRefreshToken): void {
+    $this->recordThat(new RefreshTokenRevoked($this->userId, $hashedRefreshToken));
+  }
+  
+  /**
+   * @param RefreshTokenRevoked $event
+   * @return void
+   */
+  public function applyRefreshTokenRevoked(RefreshTokenRevoked $event): void {
+    $this->hashedRefreshTokenCollection->remove($event->hashedRefreshToken);
   }
 }

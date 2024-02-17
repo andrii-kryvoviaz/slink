@@ -9,6 +9,7 @@ use Slink\Shared\Domain\Exception\DateTimeException;
 use Slink\Shared\Domain\ValueObject\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Contracts\UserInterface;
+use Slink\User\Domain\Event\UserLoggedOut;
 use Slink\User\Domain\Event\UserSignedIn;
 use Slink\User\Domain\Event\UserWasCreated;
 use Slink\User\Domain\Exception\InvalidCredentialsException;
@@ -114,5 +115,20 @@ final class User extends AbstractAggregateRoot implements UserInterface {
    */
   public function applyUserSignedIn(UserSignedIn $event): void {
     $this->setEmail($event->email);
+  }
+  
+  /**
+   * @return void
+   */
+  public function logout(): void {
+    $this->recordThat(new UserLoggedOut($this->aggregateRootId(), $this->email));
+  }
+  
+  /**
+   * @param UserLoggedOut $event
+   * @return void
+   */
+  public function applyUserLoggedOut(UserLoggedOut $event): void {
+    $this->refreshToken->clear();
   }
 }
