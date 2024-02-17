@@ -87,4 +87,14 @@ final class RefreshTokenSet extends AbstractEventSourcedAggregate {
   public function applyRefreshTokenRevoked(RefreshTokenRevoked $event): void {
     $this->hashedRefreshTokenCollection->remove($event->hashedRefreshToken);
   }
+  
+  /**
+   * @param HashedRefreshToken $refreshTokenToRotate
+   * @param HashedRefreshToken $updatedRefreshToken
+   * @return void
+   */
+  public function rotate(HashedRefreshToken $refreshTokenToRotate, HashedRefreshToken $updatedRefreshToken): void {
+    $this->revoke($refreshTokenToRotate);
+    $this->issue($updatedRefreshToken);
+  }
 }
