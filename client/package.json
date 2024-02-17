@@ -38,7 +38,7 @@
     "tslib": "^2.4.1",
     "typescript": "^5.0.0",
     "ua-parser-js": "^1.0.37",
-    "vite": "^4.4.2"
+    "vite": "^5.1.0"
   },
   "type": "module"
 }
