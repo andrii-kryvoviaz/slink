@@ -36,7 +36,7 @@ export abstract class AbstractResource {
     }
 
     if (response.status === 404) {
-      throw error(404, {
+      error(404, {
         message: 'Not found',
       });
     }
