@@ -1,86 +1,12 @@
 import type { Plugin, ViteDevServer } from 'vite';
-import fs, { Dirent } from 'fs';
 import path from 'path';
-import chokidar from 'chokidar';
-
-interface FileInfo {
-  path: string;
-  name: string;
-  extension?: string;
-}
-
-function* walkSync(dir: string): Generator<FileInfo> {
-  const entries: Dirent[] = fs.readdirSync(dir, { withFileTypes: true });
-
-  for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name);
-
-    if (entry.isDirectory()) {
-      yield* walkSync(fullPath);
-    } else if (entry.isFile()) {
-      const extension = path.extname(entry.name);
-      const name = path.basename(entry.name, extension);
-
-      if (name !== 'index') {
-        yield { path: dir, name, extension };
-      }
-    }
-  }
-}
-
-async function createIndexFile(dir: string): Promise<string> {
-  const files: FileInfo[] = Array.from(walkSync(dir));
-
-  const indexContent: string = files.map(file => {
-    let relativePath: string = path.relative(dir, path.join(file.path, file.name));
-
-    if(relativePath.startsWith('/')) {
-      relativePath = relativePath.slice(1);
-    }
-
-    return file.extension === '.svelte'
-      ? `export { default as ${file.name} } from './${relativePath}${file.extension}';`
-      : `export * from './${relativePath}';`;
-  }).join('\n');
-
-  const output = path.join(dir, 'index.ts');
-  fs.writeFileSync(output, indexContent);
-
-  return output;
-}
+import { createIndexFile, createWatcher, findIndexDir, flattenDirectories } from './helpers';
 
 interface PluginOptions {
   dirs: string[],
   libraryMode?: boolean,
   usePolling?: boolean,
   enableLogging?: boolean
-}
-
-function flattenDirectories(dirs: string[]): string[] {
-  return dirs.reduce((acc: string[], dir: string) => {
-    const subDirs = fs.readdirSync(dir, { withFileTypes: true })
-      .filter((dirent) => dirent.isDirectory())
-      .map((dirent) => `${dir}/${dirent.name}`);
-    return acc.concat(subDirs);
-  }, []);
-}
-
-function findIndexDir(file: string): string|undefined {
-  let dir = path.relative(process.cwd(), path.dirname(file));
-
-  while (dir !== path.dirname(dir)) {
-    if (fs.existsSync(path.join(dir, 'package.json')) || dir === '/') {
-      return;
-    }
-
-    if (fs.existsSync(path.join(dir, 'index.ts'))) {
-      break;
-    }
-
-    dir = path.dirname(dir);
-  }
-
-  return dir;
 }
 
 const name = 'vite-svelte-imports-plugin';
@@ -115,14 +41,6 @@ function createRunner(modules: string[], {enableLogging = false}: Partial<Plugin
 
     return true;
   }
-}
-
-function createWatcher(dirs: string[], usePolling: boolean) {
-  return chokidar.watch(dirs, {
-    ignoreInitial: true,
-    usePolling,
-    ignored: /index\.ts$/
-  });
 }
 
 export default function SvelteImportsPlugin({ dirs, libraryMode, usePolling, enableLogging }: PluginOptions): Plugin {

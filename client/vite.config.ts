@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 
 import { sveltekit } from '@sveltejs/kit/vite';
-import svelteImports from './plugins/SvelteImportsPlugin';
+import svelteImports from './plugins/vite-svelte-imports';
 import iconifyExport from './plugins/vite-iconify-export';
 
 export default defineConfig({
