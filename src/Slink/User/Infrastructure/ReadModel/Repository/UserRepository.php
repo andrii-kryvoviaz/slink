@@ -6,6 +6,7 @@ namespace Slink\User\Infrastructure\ReadModel\Repository;
 
 use Doctrine\ORM\NonUniqueResultException;
 use Ramsey\Uuid\UuidInterface;
+use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractRepository;
 use Slink\User\Domain\Repository\CheckUserByEmailInterface;
@@ -60,6 +61,23 @@ final class UserRepository extends AbstractRepository implements
   }
   
   /**
+   * @param ID $id
+   * @return UserView
+   * @throws NonUniqueResultException
+   * @throws NotFoundException
+   */
+  public function one(ID $id): UserView {
+    $qb = $this->_em
+      ->createQueryBuilder()
+      ->from(UserView::class, 'user')
+      ->select('user')
+      ->where('user.uuid = :uuid')
+      ->setParameter('uuid', $id->toString());
+    
+    return $this->oneOrException($qb);
+  }
+  
+  /**
    * @param Email $email
    * @return UserView
    * @throws NonUniqueResultException
@@ -69,18 +87,17 @@ final class UserRepository extends AbstractRepository implements
     $qb = $this->_em
       ->createQueryBuilder()
       ->from(UserView::class, 'user')
-      ->select('
-        user.uuid,
-        user.email,
-        user.createdAt,
-        user.updatedAt'
-      )
+      ->select('user')
       ->where('user.email = :email')
       ->setParameter('email', $email->toString());
     
     return $this->oneOrException($qb);
   }
-
+  
+  /**
+   * @param UserView $userView
+   * @return void
+   */
   public function add(UserView $userView): void {
     $this->_em->persist($userView);
   }
