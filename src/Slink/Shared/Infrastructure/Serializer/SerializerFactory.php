@@ -8,6 +8,7 @@ use Slink\Shared\Infrastructure\Serializer\Enum\Encoder;
 use Slink\Shared\Infrastructure\Serializer\Enum\Normalizer;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AttributeLoader;
+use Symfony\Component\Serializer\NameConverter\MetadataAwareNameConverter;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
@@ -37,7 +38,8 @@ abstract class SerializerFactory {
     }
     
     $classMetadataFactory = new ClassMetadataFactory(new AttributeLoader());
-    $normalizerArgs = is_subclass_of($normalizerClass, AbstractNormalizer::class) ? [$classMetadataFactory] : [];
+    $metadataAwareNameConverter = new MetadataAwareNameConverter($classMetadataFactory);
+    $normalizerArgs = is_subclass_of($normalizerClass, AbstractNormalizer::class) ? [$classMetadataFactory, $metadataAwareNameConverter] : [];
     
     // @phpstan-ignore-next-line
     $normalizers = [new $normalizerClass(...$normalizerArgs)];
