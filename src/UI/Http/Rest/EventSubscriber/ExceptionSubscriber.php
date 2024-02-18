@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace UI\Http\Rest\EventSubscriber;
 
+use Slink\Shared\Domain\Exception\SpecificationException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -55,13 +56,24 @@ final readonly class ExceptionSubscriber implements EventSubscriberInterface {
    * @return array<string, mixed>
    */
   private function getErrorMessage(Throwable $exception): array {
-    $previous = $exception->getPrevious();
-
     $error = [
       'title' => \str_replace('\\', '.', $exception::class),
       'message' => $this->getExceptionMessage($exception),
     ];
-
+    
+    if($exception instanceof SpecificationException) {
+      $violations = [
+        [
+          'property' => $exception->getProperty(),
+          'message' => $exception->getMessage(),
+        ],
+      ];
+      
+      $error['violations'] = $violations;
+      $error['message'] = 'Specification Error';
+    }
+    
+    $previous = $exception->getPrevious();
     if ($previous instanceof ValidationFailedException) {
       $error['message'] = 'Validation Error';
       
