@@ -108,32 +108,34 @@
       on:keyup={() => handleChange('width')}
       on:change={() => handleChange('width')}
     />
-    <Button
-      size="xs"
-      variant="invisible"
-      rounded="full"
-      class="min-w-[3rem]"
-      on:click={toggleAspectRatioLink}
-      id="open-link-tooltip"
-    >
-      {#if aspectRatioLinked}
-        <Icon icon="carbon:unlink" />
-      {:else}
-        <Icon icon="carbon:link" />
-      {/if}
-    </Button>
-    <Tooltip
-      triggeredBy="[id^='open-link-tooltip']"
-      class="p-2 text-xs"
-      color="dark"
-      placement="bottom"
-    >
-      {#if aspectRatioLinked}
-        <span>Unlink aspect ratio</span>
-      {:else}
-        <span>Link to aspect ratio</span>
-      {/if}
-    </Tooltip>
+    <div>
+      <Button
+        size="xs"
+        variant="invisible"
+        rounded="full"
+        class="min-w-[3rem]"
+        on:click={toggleAspectRatioLink}
+        id="open-link-tooltip"
+      >
+        {#if aspectRatioLinked}
+          <Icon icon="carbon:unlink" />
+        {:else}
+          <Icon icon="carbon:link" />
+        {/if}
+      </Button>
+      <Tooltip
+        triggeredBy="[id^='open-link-tooltip']"
+        class="p-2 text-xs"
+        color="dark"
+        placement="bottom"
+      >
+        {#if aspectRatioLinked}
+          <span>Unlink aspect ratio</span>
+        {:else}
+          <span>Link to aspect ratio</span>
+        {/if}
+      </Tooltip>
+    </div>
 
     <input
       type="number"
