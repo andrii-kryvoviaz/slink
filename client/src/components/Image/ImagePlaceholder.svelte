@@ -86,7 +86,7 @@
 
     <Tooltip
       triggeredBy="[id^='open-tooltip']"
-      class="p-2 text-xs"
+      class="p-2 text-xs min-w-[7rem]"
       color="dark"
     >
       Open in new tab</Tooltip

@@ -16,42 +16,45 @@
     </div>
 
     <div class="hidden sm:flex lg:flex-1 lg:justify-end lg:items-center gap-3">
-      <Button
-        href="/upload"
-        variant="link"
-        size="sm"
-        rounded="full"
-        id="uploadImageLink"
-      >
-        <Icon icon="simple-line-icons:plus" class="h-5 w-5" />
-      </Button>
+      <div>
+        <Button
+          href="/upload"
+          variant="link"
+          size="sm"
+          rounded="full"
+          id="uploadImageLink"
+        >
+          <Icon icon="simple-line-icons:plus" class="h-5 w-5" />
+        </Button>
+        <Tooltip
+          triggeredBy="[id^='uploadImageLink']"
+          class="max-w-[10rem] p-2 text-center text-xs"
+          color="dark"
+          placement="bottom"
+        >
+          Upload an image
+        </Tooltip>
+      </div>
 
-      <Tooltip
-        triggeredBy="[id^='uploadImageLink']"
-        class="max-w-[10rem] p-2 text-center text-xs"
-        color="dark"
-        placement="bottom"
-      >
-        Upload an image
-      </Tooltip>
-
-      <Button
-        href='https://github.com/andrii-kryvoviaz/slink'
-        variant='link'
-        target='_blank'
-        id="projectLink"
-        class="p-2"
-      >
-        <Icon icon="akar-icons:github-fill" class="h-5 w-5" />
-      </Button>
-      <Tooltip
-        triggeredBy="[id^='projectLink']"
-        class="max-w-[10rem] p-2 text-center text-xs"
-        color="dark"
-        placement="bottom"
-      >
-        Project on GitHub
-      </Tooltip>
+      <div>
+        <Button
+          href='https://github.com/andrii-kryvoviaz/slink'
+          variant='link'
+          target='_blank'
+          id="projectLink"
+          class="p-2"
+        >
+          <Icon icon="akar-icons:github-fill" class="h-5 w-5" />
+        </Button>
+        <Tooltip
+          triggeredBy="[id^='projectLink']"
+          class="max-w-[10rem] p-2 text-center text-xs"
+          color="dark"
+          placement="bottom"
+        >
+          Project on GitHub
+        </Tooltip>
+      </div>
 
       <p class='divider divider-horizontal py-0 m-0'></p>
 
