@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Slink\Shared\Application\Http;
 
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
+use Slink\Shared\Infrastructure\Serializer\SerializerFactory;
 
 final readonly class Item {
   /**
@@ -13,9 +14,9 @@ final readonly class Item {
    * @param array<string, mixed> $relationships
    */
   private function __construct(
-    public string $type,
+    public string              $type,
     public array|object|string $resource,
-    public array $relationships = []
+    public array               $relationships = []
   ) {
   }
   
@@ -52,14 +53,21 @@ final readonly class Item {
   /**
    * @param object $entity
    * @param array<string, mixed> $relations
+   * @param array<string> $groups
    * @return self
    */
-  public static function fromEntity(object $entity, array $relations = []): self {
-    return new self(
-      self::type($entity),
-      $entity,
-      $relations
-    );
+  public static function fromEntity(object $entity, array $relations = [], array $groups = ['public'] ): self {
+    try {
+      /** @var array<string, mixed> $payload */
+      $payload = SerializerFactory::create()->normalize($entity, context: ['groups' => $groups]);
+    } catch(\Throwable $e) {
+    }
+    
+    if(!isset($payload)) {
+      throw new \RuntimeException();
+    }
+    
+    return self::fromPayload(self::type($entity), $payload, $relations);
   }
   
   /**
