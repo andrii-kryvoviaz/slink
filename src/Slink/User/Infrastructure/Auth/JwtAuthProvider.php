@@ -37,7 +37,7 @@ final readonly class JwtAuthProvider implements AuthProviderInterface {
    * @return string
    */
   public function generateAccessToken(UserInterface $user, array $payload = []): string {
-    return $this->jwtManager->createFromPayload(Auth::createFromUser($user), $payload);
+    return $this->jwtManager->createFromPayload(JwtUser::createFromUser($user), $payload);
   }
   
   /**

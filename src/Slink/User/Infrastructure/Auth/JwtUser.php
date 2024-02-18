@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Slink\User\Infrastructure\Auth;
 
+use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
 use Slink\User\Domain\Contracts\UserInterface as User;
-use Symfony\Component\Security\Core\User\UserInterface;
 
-final readonly class Auth implements UserInterface {
+final readonly class JwtUser implements User, JWTUserInterface {
   
   /**
    * @param string $identifier
@@ -24,6 +24,16 @@ final readonly class Auth implements UserInterface {
    */
   public static function createFromUser(User $user): self {
     return new self($user->getIdentifier(), $user->getRoles());
+  }
+  
+  /**
+   * @param $username
+   * @param array<string, mixed> $payload
+   * @return JWTUserInterface|self
+   */
+  #[\Override]
+  public static function createFromPayload($username, array $payload): JwtUser|JWTUserInterface {
+    return new self($username, $payload['roles']);
   }
   
   /**
@@ -44,5 +54,10 @@ final readonly class Auth implements UserInterface {
    * @return void
    */
   public function eraseCredentials(): void {
+  }
+  
+  #[\Override]
+  public function getIdentifier(): string {
+    return $this->getUserIdentifier();
   }
 }
