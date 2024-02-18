@@ -15,7 +15,7 @@ const config = {
       out: 'build',
     }),
     csrf: {
-      checkOrigin: false,
+      checkOrigin: true,
     },
     alias: {
       '@slink/api': './src/api',
