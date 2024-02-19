@@ -7,6 +7,7 @@ use Icewind\SMB\Exception\InvalidTypeException;
 use Icewind\SMB\Exception\NotFoundException;
 use Slink\Image\Domain\Service\ImageTransformerInterface;
 use Slink\Image\Infrastructure\Service\ImageTransformer;
+use Slink\Settings\Domain\Service\ConfigurationProvider;
 use Slink\Shared\Domain\ValueObject\ImageOptions;
 use Symfony\Contracts\Service\Attribute\Required;
 
@@ -28,6 +29,12 @@ abstract class AbstractStorage implements StorageInterface {
    * @var string|null
    */
   private ?string $serverRoot = null;
+  
+  /**
+   * @param ConfigurationProvider $configurationProvider
+   * @return static
+   */
+  abstract static function create(ConfigurationProvider $configurationProvider): self;
   
   /**
    * @param string $serverRoot

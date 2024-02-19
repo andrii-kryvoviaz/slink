@@ -4,16 +4,40 @@ declare(strict_types=1);
 
 namespace Slink\Shared\Infrastructure\FileSystem\Storage;
 
+use Icewind\SMB\BasicAuth;
+use Icewind\SMB\Exception\DependencyException;
 use Icewind\SMB\Exception\InvalidTypeException;
 use Icewind\SMB\Exception\AlreadyExistsException;
 use Icewind\SMB\Exception\NotFoundException;
 use Icewind\SMB\IShare;
+use Icewind\SMB\ServerFactory;
+use Slink\Settings\Domain\Service\ConfigurationProvider;
 use Slink\Shared\Domain\ValueObject\ImageOptions;
 use Symfony\Component\HttpFoundation\File\File;
 
 final class SmbStorage extends AbstractStorage {
   
   public function __construct(private readonly IShare $share) {
+  }
+  
+  /**
+   * @param ConfigurationProvider $configurationProvider
+   * @return self
+   * @throws DependencyException
+   */
+  #[\Override]
+  static function create(ConfigurationProvider $configurationProvider): self {
+    $config = $configurationProvider->get('storage.provider.smb');
+    [$host, $share, $workgroup, $username, $password] = array_values($config);
+    
+    $basicAuth = new BasicAuth(
+      username: $username,
+      workgroup: $workgroup ?? 'workgroup',
+      password: $password,
+    );
+    
+    $smbClientServer = (new ServerFactory())->createServer($host, $basicAuth);
+    return new self($smbClientServer->getShare($share));
   }
   
   /**

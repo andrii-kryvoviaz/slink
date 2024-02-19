@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Shared\Infrastructure\FileSystem\Storage;
 
+use Slink\Settings\Domain\Service\ConfigurationProvider;
 use Slink\Shared\Domain\ValueObject\ImageOptions;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Symfony\Component\HttpFoundation\File\File;
@@ -13,8 +14,18 @@ final class LocalStorage extends AbstractStorage {
   /**
    * @param string $projectPublicDir
    */
-  public function __construct(string $projectPublicDir) {
+  private function __construct(string $projectPublicDir) {
     $this->setServerRoot($projectPublicDir);
+  }
+  
+  /**
+   * @param ConfigurationProvider $configurationProvider
+   * @return static
+   */
+  #[\Override]
+  static function create(ConfigurationProvider $configurationProvider): self {
+    $config = $configurationProvider->get('storage.provider.local');
+    return new self($config['dir']);
   }
   
   /**
