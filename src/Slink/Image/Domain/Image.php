@@ -12,9 +12,15 @@ use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\ValueObject\ID;
 
 final class Image extends AbstractAggregateRoot {
+  private ID $userId;
+  
   private ImageAttributes $attributes;
   
   private ImageMetadata $metadata;
+  
+  public function setUserId(ID $userId): void {
+    $this->userId = $userId;
+  }
   
   public function getAttributes(): ImageAttributes {
     return $this->attributes;
@@ -38,10 +44,10 @@ final class Image extends AbstractAggregateRoot {
   
   /**
    */
-  public static function create(ID $id, ImageAttributes $attributes, ImageMetadata $metadata = null): self {
+  public static function create(ID $id, ID $userId, ImageAttributes $attributes, ImageMetadata $metadata = null): self {
     $image = new self($id);
     
-    $image->recordThat(new ImageWasCreated($id, $attributes, $metadata));
+    $image->recordThat(new ImageWasCreated($id, $userId, $attributes, $metadata));
     
     return $image;
   }
@@ -57,6 +63,7 @@ final class Image extends AbstractAggregateRoot {
   }
   
   public function applyImageWasCreated(ImageWasCreated $event): void {
+    $this->setUserId($event->userId);
     $this->setAttributes($event->attributes);
     
     if ($event->metadata) {

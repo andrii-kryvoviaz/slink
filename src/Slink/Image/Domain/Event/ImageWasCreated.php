@@ -13,11 +13,13 @@ use Slink\Shared\Domain\ValueObject\ID;
 final readonly class ImageWasCreated implements SerializablePayload {
   /**
    * @param ID $id
+   * @param ID $userId
    * @param ImageAttributes $attributes
    * @param ImageMetadata|null $metadata
    */
   public function __construct(
     public ID $id,
+    public ID $userId,
     public ImageAttributes $attributes,
     public ?ImageMetadata $metadata = null,
   ) {
@@ -29,6 +31,7 @@ final readonly class ImageWasCreated implements SerializablePayload {
   public function toPayload(): array {
     return [
       'id' => $this->id->toString(),
+      'userId' => $this->userId->toString(),
       'attributes' => $this->attributes->toPayload(),
       ...($this->metadata? ['metadata' => $this->metadata->toPayload()] : []),
     ];
@@ -42,6 +45,7 @@ final readonly class ImageWasCreated implements SerializablePayload {
   public static function fromPayload(array $payload): static {
     return new self(
       ID::fromString($payload['id']),
+      ID::fromString($payload['userId']),
       ImageAttributes::fromPayload($payload['attributes']),
       $payload['metadata']? ImageMetadata::fromPayload($payload['metadata']) : null,
     );

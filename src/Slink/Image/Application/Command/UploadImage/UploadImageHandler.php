@@ -12,6 +12,7 @@ use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Domain\ValueObject\ImageMetadata;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\Exception\DateTimeException;
+use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\FileSystem\FileUploader;
 
 final readonly class UploadImageHandler implements CommandHandlerInterface {
@@ -27,9 +28,12 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
   /**
    * @throws DateTimeException
    */
-  public function __invoke(UploadImageCommand $command): void {
+  public function __invoke(UploadImageCommand $command, ?string $userId): void {
     $file = $command->getImageFile();
     $imageId = $command->getId();
+    $userId = $userId
+      ? ID::fromString($userId)
+      : ID::generate();
     
     try {
       $this->imageAnalyzer->analyze($file);
@@ -43,6 +47,7 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
     
     $image = Image::create(
       $imageId,
+      $userId,
       ImageAttributes::create(
         $fileName,
         $command->getDescription(),
