@@ -12,6 +12,12 @@ interface ConfigurationProvider {
   public function get(string $key): mixed;
   
   /**
+   * @param array<string> $keys
+   * @return array<int, mixed>
+   */
+  public function getBulk(array $keys): array;
+  
+  /**
    * @param string $key
    * @param mixed $value
    * @return void

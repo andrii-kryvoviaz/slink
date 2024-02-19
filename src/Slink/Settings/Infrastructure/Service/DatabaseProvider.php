@@ -54,6 +54,15 @@ final class DatabaseProvider implements ConfigurationProvider {
   }
   
   /**
+   * @param array<string> $keys
+   * @return array<int, mixed>
+   */
+  #[\Override]
+  public function getBulk(array $keys): array {
+    return array_map(fn($key) => $this->get($key), $keys);
+  }
+  
+  /**
    * @param string $key
    * @param mixed $value
    * @return void
