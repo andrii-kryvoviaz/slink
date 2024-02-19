@@ -9,3 +9,6 @@ parameters:
     ImageEmbedded:
       dir: '%kernel.project_dir%/src/Slink/Image/Domain/ValueObject'
       prefix: 'Slink\Image\Domain\ValueObject'
+    Settings:
+      dir: '%kernel.project_dir%/src/Slink/Settings/Infrastructure/ReadModel/View'
+      prefix: 'Slink\Settings\Infrastructure\ReadModel\View'

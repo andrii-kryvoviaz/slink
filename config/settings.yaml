@@ -1,0 +1,10 @@
+parameters:
+  storage.provider: '%env(string:STORAGE_PROVIDER)%'
+  storage.provider.local:
+    dir: '%kernel.project_dir%'
+  storage.provider.smb:
+    host: '%env(string:default::SMB_HOST)%'
+    share: '%env(string:default::SMB_SHARE)%'
+    username: '%env(string:default::SMB_USERNAME)%'
+    password: '%env(string:default::SMB_PASSWORD)%'
+  user.approvalRequired: '%env(bool:USER_APPROVAL_REQUIRED)%'
