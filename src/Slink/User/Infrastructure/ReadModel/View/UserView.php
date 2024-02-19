@@ -19,6 +19,15 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 #[ORM\Table(name: '`user`')]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 final class UserView extends AbstractView {
+  /**
+   * @param string $uuid
+   * @param Email $email
+   * @param DisplayName $displayName
+   * @param HashedPassword $password
+   * @param DateTime $createdAt
+   * @param DateTime|null $updatedAt
+   * @param UserStatus $status
+   */
   public function __construct(
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]
@@ -71,31 +80,60 @@ final class UserView extends AbstractView {
     );
   }
   
+  /**
+   * @return string
+   */
   public function getUuid(): string {
     return $this->uuid;
   }
   
+  /**
+   * @return string
+   */
   public function getEmail(): string {
     return $this->email->toString();
   }
   
+  /**
+   * @return string
+   */
   public function getDisplayName(): string {
     return $this->displayName->toString();
   }
   
+  /**
+   * @return HashedPassword
+   */
   public function getPassword(): HashedPassword {
     return $this->password;
   }
   
+  /**
+   * @return DateTime
+   */
   public function getCreatedAt(): DateTime {
     return $this->createdAt;
   }
   
+  /**
+   * @return DateTime|null
+   */
   public function getUpdatedAt(): ?DateTime {
     return $this->updatedAt;
   }
   
+  /**
+   * @return string
+   */
   public function getStatus(): string {
     return $this->status->value;
+  }
+  
+  /**
+   * @param UserStatus $status
+   * @return void
+   */
+  public function setStatus(UserStatus $status): void {
+    $this->status = $status;
   }
 }

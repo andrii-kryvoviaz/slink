@@ -119,7 +119,7 @@ final class UserRepository extends AbstractRepository implements
    * @param UserView $userView
    * @return void
    */
-  public function add(UserView $userView): void {
+  public function save(UserView $userView): void {
     $this->_em->persist($userView);
   }
   

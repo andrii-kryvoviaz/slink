@@ -61,7 +61,7 @@ final readonly class UserWasCreated implements SerializablePayload {
       ),
       DisplayName::fromString($payload['displayName']),
       DateTime::fromString($payload['createdAt']),
-      $payload['status'],
+      UserStatus::tryFrom($payload['status']) ?? UserStatus::Active,
     );
   }
 }

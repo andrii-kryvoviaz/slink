@@ -13,6 +13,7 @@ use Slink\User\Domain\Contracts\UserInterface;
 use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\Event\UserLoggedOut;
 use Slink\User\Domain\Event\UserSignedIn;
+use Slink\User\Domain\Event\UserStatusWasChanged;
 use Slink\User\Domain\Event\UserWasCreated;
 use Slink\User\Domain\Exception\DisplayNameAlreadyExistException;
 use Slink\User\Domain\Exception\InvalidCredentialsException;
@@ -26,6 +27,8 @@ use Slink\User\Domain\ValueObject\Email;
 final class User extends AbstractAggregateRoot implements UserInterface {
   private Email $email;
   private HashedPassword $hashedPassword;
+  
+  private UserStatus $status;
   
   /**
    * @var array<string>
@@ -143,5 +146,21 @@ final class User extends AbstractAggregateRoot implements UserInterface {
    */
   public function applyUserLoggedOut(UserLoggedOut $event): void {
     $this->refreshToken->clear();
+  }
+  
+  /**
+   * @param UserStatus $status
+   * @return void
+   */
+  public function changeStatus(UserStatus $status): void {
+    $this->recordThat(new UserStatusWasChanged($this->aggregateRootId(), $status));
+  }
+  
+  /**
+   * @param UserStatusWasChanged $event
+   * @return void
+   */
+  public function applyUserStatusWasChanged(UserStatusWasChanged $event): void {
+    $this->status = $event->status;
   }
 }

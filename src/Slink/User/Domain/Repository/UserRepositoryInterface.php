@@ -24,5 +24,5 @@ interface UserRepositoryInterface extends ServiceEntityRepositoryInterface {
    */
   public function one(ID $id): UserView;
   
-  public function add(UserView $userView): void;
+  public function save(UserView $userView): void;
 }
