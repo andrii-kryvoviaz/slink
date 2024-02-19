@@ -5,6 +5,6 @@ export const load: PageLoad = async ({ params, fetch, url }) => {
   const response = await ApiClient.image.using(fetch).getDetails(params.id);
   return {
     ...response,
-    url: `${url.origin}${response.url}`
+    url: `${url?.origin}${response.url}`
   }
 };
