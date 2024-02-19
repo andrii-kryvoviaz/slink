@@ -33,6 +33,11 @@ trait JsonSerializableBehaviour {
       $reflection->getProperties(),
       function ($carry, $property) use ($transformer) {
         $propertyName = $transformer->transform($property->getName());
+        
+        if(!$property->isInitialized($this)) {
+          return $carry;
+        }
+        
         $carry[$propertyName] = $property->getValue($this);
         return $carry;
       },
