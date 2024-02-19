@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Slink\Shared\Domain\Exception\DateTimeException;
 use Slink\Shared\Domain\ValueObject\DateTime;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
+use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;
 use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Email;
@@ -47,6 +48,10 @@ final class UserView extends AbstractView {
     #[Groups(['internal'])]
     #[SerializedName('updated_at')]
     private ?DateTime $updatedAt,
+    
+    #[ORM\Column(enumType: UserStatus::class, options: ['default' => UserStatus::Active])]
+    #[Groups(['internal'])]
+    private UserStatus $status,
   ) {
   }
 
@@ -62,6 +67,7 @@ final class UserView extends AbstractView {
       HashedPassword::fromHash($payload['credentials']['password']),
       DateTime::fromString($payload['createdAt']),
       isset($payload['updatedAt']) ? DateTime::fromString($payload['updatedAt']) : null,
+      $payload['status'],
     );
   }
   
@@ -87,5 +93,9 @@ final class UserView extends AbstractView {
   
   public function getUpdatedAt(): ?DateTime {
     return $this->updatedAt;
+  }
+  
+  public function getStatus(): string {
+    return $this->status->value;
   }
 }

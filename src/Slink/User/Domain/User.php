@@ -10,6 +10,7 @@ use Slink\Shared\Domain\ValueObject\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Context\UserCreationContext;
 use Slink\User\Domain\Contracts\UserInterface;
+use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\Event\UserLoggedOut;
 use Slink\User\Domain\Event\UserSignedIn;
 use Slink\User\Domain\Event\UserWasCreated;
@@ -83,6 +84,7 @@ final class User extends AbstractAggregateRoot implements UserInterface {
     ID $id,
     Credentials $credentials,
     DisplayName $displayName,
+    UserStatus $status,
     UserCreationContext $userCreationContext,
   ): self {
     if(!$userCreationContext->uniqueEmailSpecification->isUnique($credentials->email)) {
@@ -94,7 +96,7 @@ final class User extends AbstractAggregateRoot implements UserInterface {
     }
 
     $user = new self($id);
-    $user->recordThat(new UserWasCreated($id, $credentials, $displayName, DateTime::now()));
+    $user->recordThat(new UserWasCreated($id, $credentials, $displayName, DateTime::now(), $status));
 
     return $user;
   }

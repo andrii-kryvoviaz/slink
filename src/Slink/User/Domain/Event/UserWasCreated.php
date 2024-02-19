@@ -8,6 +8,7 @@ use EventSauce\EventSourcing\Serialization\SerializablePayload;
 use Slink\Shared\Domain\Exception\DateTimeException;
 use Slink\Shared\Domain\ValueObject\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
+use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\ValueObject\Auth\Credentials;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;
 use Slink\User\Domain\ValueObject\DisplayName;
@@ -20,12 +21,14 @@ final readonly class UserWasCreated implements SerializablePayload {
    * @param Credentials $credentials
    * @param DisplayName $displayName
    * @param DateTime $createdAt
+   * @param UserStatus $status
    */
   public function __construct(
     public ID $id,
     public Credentials $credentials,
     public DisplayName $displayName,
     public DateTime $createdAt,
+    public UserStatus $status = UserStatus::Active,
   ) {
   }
   
@@ -41,6 +44,7 @@ final readonly class UserWasCreated implements SerializablePayload {
       ],
       'displayName' => $this->displayName->toString(),
       'createdAt' => $this->createdAt->toString(),
+      'status' => $this->status
     ];
   }
 
@@ -57,6 +61,7 @@ final readonly class UserWasCreated implements SerializablePayload {
       ),
       DisplayName::fromString($payload['displayName']),
       DateTime::fromString($payload['createdAt']),
+      $payload['status'],
     );
   }
 }
