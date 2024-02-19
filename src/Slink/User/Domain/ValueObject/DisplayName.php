@@ -10,7 +10,7 @@ final readonly class DisplayName extends AbstractValueObject {
   /**
    * @return string
    */
-  private static function getSystemName(): string {
+  private function getReservedName(): string {
     return 'Anonymous';
   }
   
@@ -18,6 +18,9 @@ final readonly class DisplayName extends AbstractValueObject {
    * @param string|null $displayName
    */
   private function __construct(private ?string $displayName) {
+    if ($displayName !== null) {
+      $this->validate($displayName);
+    }
   }
   
   /**
@@ -37,8 +40,6 @@ final readonly class DisplayName extends AbstractValueObject {
    * @return self
    */
   public static function fromString(string $displayName): self {
-    self::validate($displayName);
-
     return new self($displayName);
   }
   
@@ -46,14 +47,14 @@ final readonly class DisplayName extends AbstractValueObject {
    * @return string
    */
   public function toString(): string {
-    return $this->displayName ?? self::getSystemName();
+    return $this->displayName ?? $this->getReservedName();
   }
   
   /**
    * @param string $displayName
    * @return void
    */
-  private static function validate(string $displayName): void {
+  private function validate(string $displayName): void {
     if (strlen($displayName) < 3) {
       throw new \InvalidArgumentException('Display name must be at least 3 characters long');
     }
@@ -62,8 +63,8 @@ final readonly class DisplayName extends AbstractValueObject {
       throw new \InvalidArgumentException('Display name must be at most 30 characters long');
     }
     
-    if(strtolower($displayName) === strtolower(self::getSystemName())) {
-      throw new \InvalidArgumentException(sprintf('`%s` is a reserved display name', self::getSystemName()));
+    if(strtolower($displayName) === strtolower($this->getReservedName())) {
+      throw new \InvalidArgumentException(sprintf('`%s` is a reserved display name', $this->getReservedName()));
     }
   }
 }
