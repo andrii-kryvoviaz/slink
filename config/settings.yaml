@@ -5,6 +5,7 @@ parameters:
   storage.provider.smb:
     host: '%env(string:default::SMB_HOST)%'
     share: '%env(string:default::SMB_SHARE)%'
+    workgroup: '%env(string:default::SMB_WORKGROUP)%'
     username: '%env(string:default::SMB_USERNAME)%'
     password: '%env(string:default::SMB_PASSWORD)%'
   user.approvalRequired: '%env(bool:USER_APPROVAL_REQUIRED)%'

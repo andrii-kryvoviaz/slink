@@ -1,8 +1,7 @@
 imports:
     - { resource: 'settings.yaml' }
+    - { resource: 'services/*.yaml' }
 
-# Put parameters here that don't need to change on each machine where the app is deployed
-# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     exception_to_status:
         LogicException: 400
@@ -10,7 +9,6 @@ parameters:
         Slink\User\Domain\Exception\InvalidCredentialsException: 401
         Slink\User\Domain\Exception\ForbiddenException: 403
         Slink\Shared\Infrastructure\Exception\NotFoundException: 404
-        Icewind\SMB\Exception\NotFoundException: 404
 
     exception_code_to_message:
         400: 'Bad Request'
@@ -19,21 +17,10 @@ parameters:
         404: 'Not Found'
         500: 'Internal Server Error'
 
-    storage_options:
-        local:
-            class: Slink\Shared\Infrastructure\FileSystem\Storage\LocalStorage
-            arguments:
-                projectPublicDir: '%kernel.project_dir%'
-        smb:
-            class: Slink\Shared\Infrastructure\FileSystem\Storage\SmbStorage
-            arguments:
-                share: 'smb.share'
-
 services:
-    # default configuration for services in *this* file
     _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
-        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        autowire: true
+        autoconfigure: true
         public: false
 
     _instanceof:
@@ -52,79 +39,12 @@ services:
             tags:
                 - { name: messenger.message_handler, bus: messenger.bus.event.async }
 
-    Symfony\Component\DependencyInjection\ContainerInterface:
-        alias: 'service_container'
-
-    ## Storage Configuration
-    Slink\Shared\Infrastructure\FileSystem\Storage\StorageInterface:
-        factory: ['@Slink\Shared\Infrastructure\FileSystem\StorageFactory', 'create']
-        arguments:
-            $storageOptions: '%storage_options%'
-            $storageProvider: '%env(STORAGE_PROVIDER)%'
-
-    ## SMB Configuration
-    Icewind\SMB\ServerFactory:
-        class: Icewind\SMB\ServerFactory
-
-    smb.client.server:
-        class: Icewind\SMB\IServer
-        factory: [ '@Icewind\SMB\ServerFactory', 'createServer' ]
-        arguments:
-            - '%env(SMB_HOST)%'
-            - '@Icewind\SMB\BasicAuth'
-
-    smb.share:
-        public: true
-        class: Icewind\SMB\IShare
-        factory: [ '@smb.client.server', 'getShare' ]
-        arguments:
-            - '%env(SMB_SHARE)%'
-
-    Icewind\SMB\BasicAuth:
-        class: Icewind\SMB\BasicAuth
-        arguments:
-            - '%env(SMB_USERNAME)%'
-            - 'workgroup'
-            - '%env(SMB_PASSWORD)%'
-
-    ## EventSauce
-    EventSauce\EventSourcing\Serialization\MessageSerializer:
-        class: EventSauce\EventSourcing\Serialization\ConstructingMessageSerializer
-        tags:
-            - { name: 'event_sauce.message_serializer' }
-
-    event_sauce.message_serializer: '@EventSauce\EventSourcing\Serialization\MessageSerializer'
-
-    EventSauce\IdEncoding\IdEncoder:
-        class: EventSauce\IdEncoding\StringIdEncoder
-        tags:
-            - { name: 'event_sauce.id_encoder' }
-
-    event_sauce.id_encoder: '@EventSauce\IdEncoding\IdEncoder'
-
-    EventSauce\EventSourcing\MessageRepository:
-        class: EventSauce\MessageRepository\DoctrineMessageRepository\DoctrineMessageRepository
-        arguments:
-            $connection: '@doctrine.dbal.event_store_connection'
-            $tableName: 'event_store'
-            $serializer: '@event_sauce.message_serializer'
-            $aggregateRootIdEncoder: '@event_sauce.id_encoder'
-        tags:
-            - { name: 'event_sauce.message_repository' }
-
-
-    EventSauce\EventSourcing\MessageDispatcher:
-        class: Slink\Shared\Infrastructure\MessageBus\Event\EventDispatcher
-
-    ## End EventSauce
-
     Slink\:
         resource: '../src/Slink/*'
-        exclude: '../src/Slink/**/{Migrations,EventSubscriber,Kernel.php}'
+        exclude: '../src/Slink/**/{Migrations,Kernel.php}'
 
     UI\:
         resource: '../src/UI/*'
-        exclude: '../src/UI/**/{EventSubscriber}'
 
     Slink\Shared\Infrastructure\MessageBus\Command\MessengerCommandBus:
         arguments:
@@ -144,9 +64,3 @@ services:
             - "%kernel.environment%"
             - "%exception_to_status%"
             - "%exception_code_to_message%"
-        tags:
-            - { name: 'kernel.event_listener', event: 'kernel.exception' }
-
-    UI\Http\Rest\EventSubscriber\RequestArgumentSubscriber:
-        tags:
-            - { name: 'kernel.event_listener', event: 'kernel.controller_arguments' }

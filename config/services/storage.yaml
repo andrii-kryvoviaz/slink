@@ -1,0 +1,15 @@
+parameters:
+  storage_options:
+    local: Slink\Shared\Infrastructure\FileSystem\Storage\LocalStorage
+    smb: Slink\Shared\Infrastructure\FileSystem\Storage\SmbStorage
+
+services:
+  Slink\Settings\Domain\Service\ConfigurationProvider:
+    class: Slink\Settings\Infrastructure\Service\ParameterBagProvider
+    arguments:
+      $parameterBag: '@parameter_bag'
+
+  Slink\Shared\Infrastructure\FileSystem\Storage\StorageInterface:
+    factory: ['@Slink\Shared\Infrastructure\FileSystem\StorageFactory', 'create']
+    arguments:
+      $storageOptions: '%storage_options%'
