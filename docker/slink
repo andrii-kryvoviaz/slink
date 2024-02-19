@@ -1,0 +1,2 @@
+#!/bin/sh
+/app/bin/console "$@"

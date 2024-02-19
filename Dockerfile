@@ -22,7 +22,7 @@ COPY client ./
 RUN yarn build
 
 
-## Source backand files
+## Source backend files
 FROM alpine as source
 WORKDIR /source
 
@@ -85,6 +85,10 @@ COPY ./docker/supervisord.conf /etc/supervisord.conf
 # Copy startup script
 COPY ./docker/startup.sh /usr/local/bin/startup.sh
 RUN chmod +x /usr/local/bin/startup.sh
+
+# Copy Slink executable
+COPY ./docker/slink /usr/local/bin/slink
+RUN chmod +x /usr/local/bin/slink
 
 # Set memory limit
 ARG PHP_MEMORY_LIMIT
