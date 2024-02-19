@@ -17,6 +17,7 @@ doctrine:
         types:
             datetime_immutable: Slink\Shared\Infrastructure\Persistence\Doctrine\Types\DateTimeType
             email: Slink\Shared\Infrastructure\Persistence\Doctrine\Types\EmailType
+            display_name: Slink\Shared\Infrastructure\Persistence\Doctrine\Types\DisplayNameType
             hashed_password: Slink\Shared\Infrastructure\Persistence\Doctrine\Types\HashedPasswordType
 
         # IMPORTANT: You MUST configure your server version,

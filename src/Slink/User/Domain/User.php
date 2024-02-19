@@ -8,10 +8,12 @@ use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\Exception\DateTimeException;
 use Slink\Shared\Domain\ValueObject\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
+use Slink\User\Domain\Context\UserCreationContext;
 use Slink\User\Domain\Contracts\UserInterface;
 use Slink\User\Domain\Event\UserLoggedOut;
 use Slink\User\Domain\Event\UserSignedIn;
 use Slink\User\Domain\Event\UserWasCreated;
+use Slink\User\Domain\Exception\DisplayNameAlreadyExistException;
 use Slink\User\Domain\Exception\InvalidCredentialsException;
 use Slink\User\Domain\Exception\EmailAlreadyExistException;
 use Slink\User\Domain\Specification\UniqueEmailSpecificationInterface;
@@ -77,9 +79,18 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   /**
    * @throws DateTimeException
    */
-  public static function create(ID $id, Credentials $credentials, DisplayName $displayName, UniqueEmailSpecificationInterface $uniqueEmailSpecification): self {
-    if(!$uniqueEmailSpecification->isUnique($credentials->email)) {
+  public static function create(
+    ID $id,
+    Credentials $credentials,
+    DisplayName $displayName,
+    UserCreationContext $userCreationContext,
+  ): self {
+    if(!$userCreationContext->uniqueEmailSpecification->isUnique($credentials->email)) {
       throw new EmailAlreadyExistException();
+    }
+    
+    if(!$userCreationContext->uniqueDisplayNameSpecification->isUnique($displayName)) {
+      throw new DisplayNameAlreadyExistException();
     }
 
     $user = new self($id);

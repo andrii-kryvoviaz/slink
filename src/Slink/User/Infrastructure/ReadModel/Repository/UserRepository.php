@@ -9,16 +9,19 @@ use Ramsey\Uuid\UuidInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractRepository;
+use Slink\User\Domain\Repository\CheckUserByDisplayNameInterface;
 use Slink\User\Domain\Repository\CheckUserByEmailInterface;
 use Slink\User\Domain\Repository\CheckUserByRefreshTokenInterface;
 use Slink\User\Domain\Repository\UserRepositoryInterface;
 use Slink\User\Domain\ValueObject\Auth\HashedRefreshToken;
+use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Email;
 use Slink\User\Infrastructure\ReadModel\View\RefreshTokenView;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
 
 final class UserRepository extends AbstractRepository implements
   CheckUserByEmailInterface,
+  CheckUserByDisplayNameInterface,
   CheckUserByRefreshTokenInterface,
   UserRepositoryInterface
 {
@@ -29,6 +32,7 @@ final class UserRepository extends AbstractRepository implements
   /**
    * @throws NonUniqueResultException
    */
+  #[\Override]
   public function existsEmail(Email $email): ?UuidInterface {
     $result = $this->_em
       ->createQueryBuilder()
@@ -36,6 +40,23 @@ final class UserRepository extends AbstractRepository implements
       ->select('user.uuid')
       ->where('user.email = :email')
       ->setParameter('email', $email->toString())
+      ->getQuery()
+      ->getOneOrNullResult();
+    
+    return $result['uuid'] ?? null;
+  }
+  
+  /**
+   * @throws NonUniqueResultException
+   */
+  #[\Override]
+  public function existsDisplayName(DisplayName $displayName): ?UuidInterface {
+    $result = $this->_em
+      ->createQueryBuilder()
+      ->from(UserView::class, 'user')
+      ->select('user.uuid')
+      ->where('user.displayName = :displayName')
+      ->setParameter('displayName', $displayName->toString())
       ->getQuery()
       ->getOneOrNullResult();
     

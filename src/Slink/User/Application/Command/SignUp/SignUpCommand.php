@@ -26,12 +26,16 @@ final readonly class SignUpCommand implements CommandInterface {
 
     #[SensitiveParameter]
     #[Assert\NotBlank]
-    #[Assert\IdenticalTo(propertyPath: 'password', message: 'Passwords do not match')]
+    #[Assert\IdenticalTo(propertyPath: 'password', message: 'Passwords do not match.')]
     private string $confirm,
 
     #[Assert\NotBlank]
-    #[Assert\Length(min: 3)]
-    private string $displayName,
+    #[Assert\Length(min: 3, max: 30)]
+    #[Assert\Regex(pattern: '/^[a-zA-Z0-9_\-]+$/', message: 'Display name can only contain letters, numbers, and underscores or hyphens.')]
+    #[Assert\Regex(pattern: '/^(?!.*(_|-){2})/', message: 'Display name cannot contain consecutive underscores or hyphens.')]
+    #[Assert\NotEqualTo(propertyPath: 'email', message: 'Display name cannot be the same as email.')]
+    #[Assert\NotEqualTo(value: 'Anonymous', message: '`Anonymous` is a reserved display name.')]
+    private string $display_name,
   ) {
     $this->id = ID::generate();
   }
@@ -53,6 +57,6 @@ final readonly class SignUpCommand implements CommandInterface {
   }
 
   public function getDisplayName(): string {
-    return $this->displayName;
+    return $this->display_name;
   }
 }

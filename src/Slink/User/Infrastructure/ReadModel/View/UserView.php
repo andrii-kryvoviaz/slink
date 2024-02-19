@@ -9,9 +9,11 @@ use Slink\Shared\Domain\Exception\DateTimeException;
 use Slink\Shared\Domain\ValueObject\DateTime;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;
+use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Email;
 use Slink\User\Infrastructure\ReadModel\Repository\UserRepository;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\SerializedName;
 
 #[ORM\Table(name: '`user`')]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -20,11 +22,17 @@ final class UserView extends AbstractView {
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]
     #[Groups(['public', 'internal'])]
+    #[SerializedName('id')]
     private readonly string $uuid,
 
     #[ORM\Column(type: 'email', unique: true)]
     #[Groups(['public', 'internal'])]
     private Email $email,
+    
+    #[ORM\Column(type: 'display_name', unique: true, nullable: true)]
+    #[Groups(['public', 'internal'])]
+    #[SerializedName('display_name')]
+    private DisplayName $displayName,
 
     #[ORM\Column(type: 'hashed_password')]
     #[Groups(['internal'])]
@@ -32,10 +40,12 @@ final class UserView extends AbstractView {
 
     #[ORM\Column(type: 'datetime_immutable')]
     #[Groups(['internal'])]
+    #[SerializedName('created_at')]
     private readonly DateTime $createdAt,
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     #[Groups(['internal'])]
+    #[SerializedName('updated_at')]
     private ?DateTime $updatedAt,
   ) {
   }
@@ -48,6 +58,7 @@ final class UserView extends AbstractView {
     return new self(
       $payload['id'],
       Email::fromString($payload['credentials']['email']),
+      DisplayName::fromString($payload['displayName']),
       HashedPassword::fromHash($payload['credentials']['password']),
       DateTime::fromString($payload['createdAt']),
       isset($payload['updatedAt']) ? DateTime::fromString($payload['updatedAt']) : null,
@@ -60,6 +71,10 @@ final class UserView extends AbstractView {
   
   public function getEmail(): string {
     return $this->email->toString();
+  }
+  
+  public function getDisplayName(): string {
+    return $this->displayName->toString();
   }
   
   public function getPassword(): HashedPassword {
