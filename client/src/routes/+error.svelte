@@ -13,5 +13,6 @@
     </h2>
   </div>
   <Button variant="primary" size="lg" rounded="full" target="_self" href="/"
-    >Go Home</Button>
+    >Go Home</Button
+  >
 </div>

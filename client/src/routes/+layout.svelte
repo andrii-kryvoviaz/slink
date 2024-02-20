@@ -10,9 +10,8 @@
   preloadIconSet(themeIcons);
 </script>
 
-<div class="h-full flex flex-col" use:theme={$currentTheme}>
+<div class="flex h-full flex-col" use:theme={$currentTheme}>
   <ToastManager />
   <Navbar />
   <slot />
 </div>
-

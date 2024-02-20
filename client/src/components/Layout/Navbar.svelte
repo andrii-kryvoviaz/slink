@@ -2,20 +2,21 @@
   import Icon from '@iconify/svelte';
   import { Tooltip } from 'flowbite-svelte';
   import { Button, ThemeSwitch } from '@slink/components/Common';
-
 </script>
 
-<header class="w-full backdrop-blur border-b-2 border-header/70">
-  <nav class="mx-auto flex container items-center justify-between py-4 px-5 lg:px-8">
+<header class="w-full border-b-2 border-header/70 backdrop-blur">
+  <nav
+    class="container mx-auto flex items-center justify-between px-5 py-4 lg:px-8"
+  >
     <div class="flex lg:flex-1">
-      <a href="/" class="-m-1.5 p-1.5 flex items-center gap-2">
+      <a href="/" class="-m-1.5 flex items-center gap-2 p-1.5">
         <span class="sr-only">Slink</span>
-        <img class="h-8 w-auto" src="/favicon.png" alt="">
+        <img class="h-8 w-auto" src="/favicon.png" alt="" />
         <span>Slink</span>
       </a>
     </div>
 
-    <div class="hidden sm:flex lg:flex-1 lg:justify-end lg:items-center gap-3">
+    <div class="hidden gap-3 sm:flex lg:flex-1 lg:items-center lg:justify-end">
       <div>
         <Button
           href="/upload"
@@ -58,20 +59,21 @@
         </Tooltip>
       </div>
 
-      <p class="divider divider-horizontal py-0 m-0"></p>
+      <p class="divider divider-horizontal m-0 py-0" />
 
       <ThemeSwitch />
 
-      <p class="divider divider-horizontal py-0 m-0"></p>
+      <p class="divider divider-horizontal m-0 py-0" />
 
-      <Button href="/profile/login"
-              motion="hover:opacity"
-              variant="link"
-              class="hover:no-underline"
+      <Button
+        href="/profile/login"
+        motion="hover:opacity"
+        variant="link"
+        class="hover:no-underline"
       >
         <span class="text-sm font-semibold leading-6">
           <span>Log in</span>
-          <Icon icon="solar:login-broken" class="inline w-6 h-6" />
+          <Icon icon="solar:login-broken" class="inline h-6 w-6" />
         </span>
       </Button>
     </div>

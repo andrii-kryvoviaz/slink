@@ -22,9 +22,13 @@
   export let fontWeight: $$Props['fontWeight'] = 'medium';
   export let motion: $$Props['motion'] = 'none';
 
-  $: classes = `${ButtonVariants({ variant, size, rounded, fontWeight, motion })} ${
-    $$props.class
-  }`;
+  $: classes = `${ButtonVariants({
+    variant,
+    size,
+    rounded,
+    fontWeight,
+    motion,
+  })} ${$$props.class}`;
 </script>
 
 {#if href}

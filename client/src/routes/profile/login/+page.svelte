@@ -7,21 +7,30 @@
   $: buttonVariant = $isLightTheme ? 'dark' : 'primary';
 </script>
 
-<div class="flex justify-center items-center flex-grow">
-  <div class="w-full max-w-sm p-6 m-auto mx-auto bg-white rounded-lg shadow-md dark:bg-gray-800">
-    <div class="flex justify-center mx-auto">
-      <img class="w-auto h-7 sm:h-8" src="/favicon.png" alt="">
+<div class="flex flex-grow items-center justify-center">
+  <div
+    class="m-auto mx-auto w-full max-w-sm rounded-lg bg-white p-6 shadow-md dark:bg-gray-800"
+  >
+    <div class="mx-auto flex justify-center">
+      <img class="h-7 w-auto sm:h-8" src="/favicon.png" alt="" />
     </div>
 
     <form class="mt-6">
-      <div class='mt-4'>
-        <Input label="Username" name="username" />
-      </div>
+      <div class="flex flex-col gap-4">
+        <div>
+          <Input label="Username" name="username" />
+        </div>
 
-      <div class="mt-4">
-        <Input label="Password" name="password" type="password">
-          <a slot="postfix" href="/profile/forget" class="text-xs text-gray-600 dark:text-gray-400 hover:underline">Forget Password?</a>
-        </Input>
+        <div>
+          <Input label="Password" name="password" type="password">
+            <a
+              slot="postfix"
+              href="/profile/forget"
+              class="text-xs text-gray-600 hover:underline dark:text-gray-400"
+              >Forget Password?</a
+            >
+          </Input>
+        </div>
       </div>
 
       <div class="mt-6">
@@ -31,6 +40,12 @@
       </div>
     </form>
 
-    <p class="mt-8 text-xs font-light text-center text-gray-400"> Don't have an account? <a href="/profile/signup" class="font-medium text-gray-700 dark:text-gray-200 hover:underline">Create One</a></p>
+    <p class="mt-8 text-center text-xs font-light text-gray-400">
+      Don't have an account? <a
+        href="/profile/signup"
+        class="font-medium text-gray-700 hover:underline dark:text-gray-200"
+        >Create One</a
+      >
+    </p>
   </div>
 </div>

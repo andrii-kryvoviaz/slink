@@ -3,9 +3,9 @@ import type { Cookies } from '@sveltejs/kit';
 import { ListenerAware } from '@slink/lib/listener';
 
 interface CookieProvider {
-  get: (key: string, defaultValue?: string) => string
-  set: (key: string, value: string, ttl?: number) => void
-  remove: (key: string) => void
+  get: (key: string, defaultValue?: string) => string;
+  set: (key: string, value: string, ttl?: number) => void;
+  remove: (key: string) => void;
 }
 
 class BrowserCookieProvider implements CookieProvider {
@@ -51,7 +51,7 @@ class ServerCookieProvider implements CookieProvider {
 
 class Cookie extends ListenerAware {
   private _providers: {
-    [key: string]: CookieProvider
+    [key: string]: CookieProvider;
   } = {
     browser: new BrowserCookieProvider(),
   };

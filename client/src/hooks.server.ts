@@ -44,7 +44,8 @@ export const handle: Handle = async ({ event, resolve }) => {
     return handleApiProxy({ event, resolve });
   }
 
-  return resolve(event,  {
-    transformPageChunk: ({ html }) => html.replace('%app.theme%', cookie.get('theme', Theme.DARK))
+  return resolve(event, {
+    transformPageChunk: ({ html }) =>
+      html.replace('%app.theme%', cookie.get('theme', Theme.DARK)),
   });
 };

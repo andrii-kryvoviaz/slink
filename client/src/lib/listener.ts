@@ -1,5 +1,6 @@
 export class Listener {
-  private listeners: Map<string, Map<number, (value: string) => void>> = new Map();
+  private listeners: Map<string, Map<number, (value: string) => void>> =
+    new Map();
   private nextListenerId: number = 0;
 
   public add(key: string, listener: (value: string) => void): number {
@@ -17,7 +18,7 @@ export class Listener {
   }
 
   public notify(key: string, value: string): void {
-    this.listeners.get(key)?.forEach(listener => listener(value));
+    this.listeners.get(key)?.forEach((listener) => listener(value));
   }
 }
 

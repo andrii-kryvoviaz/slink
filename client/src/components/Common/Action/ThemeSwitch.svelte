@@ -11,6 +11,6 @@
 </script>
 
 <Toggle on:change={toggleTheme} checked={$isDarkTheme} {disabled}>
-  <Icon slot="pre-icon" icon="ph:sun-thin" width="20" height="20"/>
-  <Icon slot="post-icon" icon="ph:moon-thin" width="20" height="20"/>
+  <Icon slot="pre-icon" icon="ph:sun-thin" width="20" height="20" />
+  <Icon slot="post-icon" icon="ph:moon-thin" width="20" height="20" />
 </Toggle>

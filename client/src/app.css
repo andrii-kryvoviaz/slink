@@ -40,9 +40,9 @@ body {
 }
 
 .kbd {
-  @apply font-mono text-white bg-gray-800 border-gray-600;
+  @apply border-gray-600 bg-gray-800 font-mono text-white;
 }
 
 .light .kbd {
-  @apply bg-gray-100 text-gray-900 border-gray-200;
+  @apply border-gray-200 bg-gray-100 text-gray-900;
 }

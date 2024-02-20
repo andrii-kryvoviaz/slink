@@ -43,11 +43,15 @@ export const ButtonVariants = cva(
       },
       motion: {
         none: 'transition-none',
-        'hover:opacity': 'transition-opacity duration-300 ease-in-out opacity-75 hover:opacity-100',
-        'hover:scale': 'transition-transform duration-300 ease-in-out transform hover:scale-110',
-        'hover:translate': 'transition-transform duration-300 ease-in-out transform hover:translate-y-1',
-        'hover:rotate': 'transition-transform duration-300 ease-in-out transform hover:rotate-180',
-      }
+        'hover:opacity':
+          'transition-opacity duration-300 ease-in-out opacity-75 hover:opacity-100',
+        'hover:scale':
+          'transition-transform duration-300 ease-in-out transform hover:scale-110',
+        'hover:translate':
+          'transition-transform duration-300 ease-in-out transform hover:translate-y-1',
+        'hover:rotate':
+          'transition-transform duration-300 ease-in-out transform hover:rotate-180',
+      },
     },
   }
 );

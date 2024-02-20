@@ -11,7 +11,7 @@
     type ImageParams,
     ImagePlaceholder,
     type ImageSize,
-    ImageSizePicker
+    ImageSizePicker,
   } from '@slink/components/Image';
   import { CopyContainer } from '@slink/components/Common';
 

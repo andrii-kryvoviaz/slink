@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
   import { Dropzone } from 'flowbite-svelte';
   import Icon from '@iconify/svelte';
 
@@ -17,7 +17,7 @@
 
   type FileEvent = DragEvent | ClipboardEvent | Event;
 
-  const getFilesFromEvent = function(
+  const getFilesFromEvent = function (
     event: FileEvent
   ): FileList | undefined | null {
     if (event instanceof DragEvent) {
@@ -81,11 +81,11 @@
 <svelte:document on:paste={handleChange} />
 
 <div
-  class='content dropzone flex h-full w-full flex-col items-center justify-center p-12'
+  class="content dropzone flex h-full w-full flex-col items-center justify-center p-12"
 >
   <div
     in:fade={{ duration: 300 }}
-    class='flex w-full flex-col items-center justify-center'
+    class="flex w-full flex-col items-center justify-center"
   >
     <Dropzone
       on:drop={handleChange}
@@ -94,43 +94,43 @@
       }}
       on:change={handleChange}
       disabled={isLoading}
-      defaultClass='flex flex-col justify-center items-center w-full h-64 bg-card-primary rounded-lg border-2 border-dropzone-primary border-dashed cursor-pointer hover:border-dropzone-secondary hover:bg-card-secondary max-h-[400px] max-w-[600px]'
+      defaultClass="flex flex-col justify-center items-center w-full h-64 bg-card-primary rounded-lg border-2 border-dropzone-primary border-dashed cursor-pointer hover:border-dropzone-secondary hover:bg-card-secondary max-h-[400px] max-w-[600px]"
     >
       {#if !isLoading}
-        <div class='flex flex-col xs:w-[170%] p-6'>
-          <div class='text-sm text-color-primary'>
-            <p class='flex items-center justify-center gap-x-[3px] p-3'>
-              <Icon icon='material-symbols-light:upload' class='h-10 w-10' />
-              <span class='font-semibold'>
+        <div class="flex flex-col p-6 xs:w-[170%]">
+          <div class="text-sm text-color-primary">
+            <p class="flex items-center justify-center gap-x-[3px] p-3">
+              <Icon icon="material-symbols-light:upload" class="h-10 w-10" />
+              <span class="font-semibold">
                 Drag & Drop
-                <span class='font-normal'>your image here</span>
+                <span class="font-normal">your image here</span>
               </span>
             </p>
           </div>
 
-          <p class='divider'>or</p>
+          <p class="divider">or</p>
 
-          <p class='mb-4 mt-2'>
+          <p class="mb-4 mt-2">
             {#if data.os.name === 'Mac OS' || data.device.vendor === 'Apple'}
-              <span class='kbd'>⌘ cmd</span>
+              <span class="kbd">⌘ cmd</span>
             {:else}
-              <kbd class='kbd'>ctrl</kbd>
+              <kbd class="kbd">ctrl</kbd>
             {/if}
-            <span class='m-1'>+</span>
-            <kbd class='kbd'>v</kbd>
+            <span class="m-1">+</span>
+            <kbd class="kbd">v</kbd>
           </p>
 
-          <p class='text-xs text-color-secondary'>
+          <p class="text-xs text-color-secondary">
             SVG, PNG, JPG, WEBP or GIF (MAX. 5MB)
           </p>
         </div>
       {:else}
-        <div class='flex flex-col items-center justify-center'>
+        <div class="flex flex-col items-center justify-center">
           <Icon
-            icon='mingcute:loading-line'
-            class='h-10 w-10 animate-spin text-color-primary'
+            icon="mingcute:loading-line"
+            class="h-10 w-10 animate-spin text-color-primary"
           />
-          <p class='text-sm text-color-primary'>Uploading, please wait...</p>
+          <p class="text-sm text-color-primary">Uploading, please wait...</p>
         </div>
       {/if}
     </Dropzone>

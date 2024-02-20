@@ -16,4 +16,5 @@ export const themeIcons: string[] = [
   'material-symbols-light:upload',
   'mingcute:loading-line',
   'solar:login-broken',
+  'fa6-solid:chevron-right',
 ];
