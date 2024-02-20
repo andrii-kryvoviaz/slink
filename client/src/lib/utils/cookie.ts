@@ -45,7 +45,12 @@ class ServerCookieProvider implements CookieProvider {
   }
 
   remove(key: string): void {
-    this._cookies.delete(key);
+    this._cookies.delete(key, {
+      secure: true,
+      httpOnly: true,
+      sameSite: 'strict',
+      path: '/',
+    });
   }
 }
 
@@ -68,7 +73,7 @@ class Cookie extends ListenerAware {
     if (browser) {
       return this._providers.browser.get(key, defaultValue);
     }
-    return this._providers?.server.get(key, defaultValue) || '';
+    return this._providers?.server.get(key, defaultValue) || defaultValue || '';
   }
 
   set(key: string, value: string, ttl?: number): void {
