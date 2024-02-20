@@ -71,6 +71,13 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   }
   
   /**
+   * @return UserStatus
+   */
+  public function getStatus(): UserStatus {
+    return $this->status;
+  }
+  
+  /**
    * @param ID $id
    */
   protected function __construct(ID $id) {
