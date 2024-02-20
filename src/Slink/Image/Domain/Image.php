@@ -18,28 +18,58 @@ final class Image extends AbstractAggregateRoot {
   
   private ImageMetadata $metadata;
   
+  /**
+   * @param ID $userId
+   * @return void
+   */
   public function setUserId(ID $userId): void {
     $this->userId = $userId;
   }
   
+  /**
+   * @return ImageAttributes
+   */
   public function getAttributes(): ImageAttributes {
     return $this->attributes;
   }
   
+  /**
+   * @param ImageAttributes $attributes
+   * @return void
+   */
   public function setAttributes(ImageAttributes $attributes): void {
     $this->attributes = $attributes;
   }
   
+  /**
+   * @param ImageMetadata $metadata
+   * @return void
+   */
   public function setMetadata(ImageMetadata $metadata): void {
     $this->metadata = $metadata;
   }
   
+  /**
+   * @return ImageMetadata
+   */
   public function getMetadata(): ImageMetadata {
     return $this->metadata;
   }
   
+  /**
+   * @param string $extension
+   * @return bool
+   */
   public function hasExtension(string $extension): bool {
     return $this->getAttributes()->getExtension() === $extension;
+  }
+  
+  /**
+   * @param ID $userId
+   * @return bool
+   */
+  public function isOwedBy(ID $userId): bool {
+    return $this->userId->equals($userId);
   }
   
   /**
@@ -52,16 +82,27 @@ final class Image extends AbstractAggregateRoot {
     return $image;
   }
   
+  /**
+   * @return void
+   */
   public function addView(): void {
     $attributes = $this->getAttributes()->addView();
     
     $this->recordThat(new ImageAttributesWasUpdated($this->aggregateRootId(), $attributes));
   }
   
+  /**
+   * @param ImageAttributes $attributes
+   * @return void
+   */
   public function updateAttributes(ImageAttributes $attributes): void {
     $this->recordThat(new ImageAttributesWasUpdated($this->aggregateRootId(), $attributes));
   }
   
+  /**
+   * @param ImageWasCreated $event
+   * @return void
+   */
   public function applyImageWasCreated(ImageWasCreated $event): void {
     $this->setUserId($event->userId);
     $this->setAttributes($event->attributes);
@@ -71,6 +112,10 @@ final class Image extends AbstractAggregateRoot {
     }
   }
   
+  /**
+   * @param ImageAttributesWasUpdated $event
+   * @return void
+   */
   public function applyImageAttributesWasUpdated(ImageAttributesWasUpdated $event): void {
     $this->setAttributes($event->attributes);
   }
