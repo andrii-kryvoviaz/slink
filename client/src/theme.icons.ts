@@ -15,4 +15,5 @@ export const themeIcons: string[] = [
   'ep:info-filled',
   'material-symbols-light:upload',
   'mingcute:loading-line',
+  'solar:login-broken',
 ];

@@ -5,12 +5,12 @@
 
 </script>
 
-<header class='w-full backdrop-blur border-b-2 border-header/70'>
+<header class="w-full backdrop-blur border-b-2 border-header/70">
   <nav class="mx-auto flex container items-center justify-between py-4 px-5 lg:px-8">
     <div class="flex lg:flex-1">
-      <a href='/' class="-m-1.5 p-1.5 flex items-center gap-2">
+      <a href="/" class="-m-1.5 p-1.5 flex items-center gap-2">
         <span class="sr-only">Slink</span>
-        <img class="h-8 w-auto" src='/favicon.png' alt="">
+        <img class="h-8 w-auto" src="/favicon.png" alt="">
         <span>Slink</span>
       </a>
     </div>
@@ -22,6 +22,7 @@
           variant="link"
           size="sm"
           rounded="full"
+          motion="hover:opacity"
           id="uploadImageLink"
         >
           <Icon icon="simple-line-icons:plus" class="h-5 w-5" />
@@ -38,9 +39,10 @@
 
       <div>
         <Button
-          href='https://github.com/andrii-kryvoviaz/slink'
-          variant='link'
-          target='_blank'
+          href="https://github.com/andrii-kryvoviaz/slink"
+          variant="link"
+          target="_blank"
+          motion="hover:opacity"
           id="projectLink"
           class="p-2"
         >
@@ -56,14 +58,21 @@
         </Tooltip>
       </div>
 
-      <p class='divider divider-horizontal py-0 m-0'></p>
+      <p class="divider divider-horizontal py-0 m-0"></p>
 
       <ThemeSwitch />
 
-      <p class='divider divider-horizontal py-0 m-0'></p>
+      <p class="divider divider-horizontal py-0 m-0"></p>
 
-      <Button href='/profile/login' variant='link'>
-        <span class="text-sm font-semibold leading-6">Log in <span aria-hidden="true">&rarr;</span></span>
+      <Button href="/profile/login"
+              motion="hover:opacity"
+              variant="link"
+              class="hover:no-underline"
+      >
+        <span class="text-sm font-semibold leading-6">
+          <span>Log in</span>
+          <Icon icon="solar:login-broken" class="inline w-6 h-6" />
+        </span>
       </Button>
     </div>
   </nav>
