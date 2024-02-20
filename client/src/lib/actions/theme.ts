@@ -19,8 +19,5 @@ export const theme: Action<HTMLElement, string> = (
 
   return {
     update,
-    destroy() {
-      node.classList.remove(themeName);
-    },
   };
 };
