@@ -20,8 +20,9 @@
   export let size: $$Props['size'] = 'md';
   export let rounded: $$Props['rounded'] = 'lg';
   export let fontWeight: $$Props['fontWeight'] = 'medium';
+  export let motion: $$Props['motion'] = 'none';
 
-  $: classes = `${ButtonVariants({ variant, size, rounded, fontWeight })} ${
+  $: classes = `${ButtonVariants({ variant, size, rounded, fontWeight, motion })} ${
     $$props.class
   }`;
 </script>
