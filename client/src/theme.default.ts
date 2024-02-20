@@ -11,6 +11,7 @@ export const defaultTheme: Theme = {
     bgDanger: 'rose.700',
     bgWarning: 'amber.500',
     borderDescription: 'slate.400',
+    colorInputError: 'red.500',
   },
   variants: {
     dark: {
@@ -104,8 +105,10 @@ export const tailwindcssTheme: Partial<ThemeConfig> = injectAlphaPlaceholder({
     input: {
       focus: {
         default: 'var(--border-input-default-focus)',
+        error: 'var(--color-input-error)',
       },
       default: 'var(--border-input-default)',
+      error: 'var(--color-input-error)',
     },
   },
   textColor: {
@@ -132,11 +135,15 @@ export const tailwindcssTheme: Partial<ThemeConfig> = injectAlphaPlaceholder({
     },
     input: {
       default: 'var(--color-input-default)',
+      error: 'var(--color-input-error)',
     },
   },
   ringColor: {
     input: {
-      focus: 'var(--ring-input-default-focus)',
+      focus: {
+        default: 'var(--ring-input-default-focus)',
+        error: 'var(--color-input-error)',
+      },
     },
   },
   gradientColorStops: {
