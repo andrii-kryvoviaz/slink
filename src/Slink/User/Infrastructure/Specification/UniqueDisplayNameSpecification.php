@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\User\Infrastructure\Specification;
 
+use Doctrine\ORM\NonUniqueResultException;
 use Slink\User\Domain\Repository\CheckUserByDisplayNameInterface;
 use Slink\User\Domain\Specification\UniqueDisplayNameSpecificationInterface;
 use Slink\User\Domain\ValueObject\DisplayName;

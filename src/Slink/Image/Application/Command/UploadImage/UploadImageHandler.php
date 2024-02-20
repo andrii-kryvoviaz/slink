@@ -28,7 +28,7 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
   /**
    * @throws DateTimeException
    */
-  public function __invoke(UploadImageCommand $command, ?string $userId): void {
+  public function __invoke(UploadImageCommand $command, ?string $userId = null): void {
     $file = $command->getImageFile();
     $imageId = $command->getId();
     $userId = $userId

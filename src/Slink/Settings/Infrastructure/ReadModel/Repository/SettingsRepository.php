@@ -58,6 +58,7 @@ final class SettingsRepository extends AbstractRepository implements SettingsRep
    */
   #[\Override]
   public function all(): array {
+    /** @var array<SettingsView> */
     return $this->findAll();
   }
   
