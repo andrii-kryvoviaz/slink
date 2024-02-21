@@ -11,7 +11,12 @@ export default {
     './node_modules/flowbite-svelte/**/*.{html,js,svelte,ts}',
   ],
   theme: {
-    extend: tailwindcssTheme,
+    extend: {
+      animation: {
+        'spin-slow': 'spin 2s linear infinite',
+      },
+      ...tailwindcssTheme,
+    },
     screens: {
       xs: '480px',
       sm: '640px',
