@@ -2,7 +2,7 @@
   import { fade } from 'svelte/transition';
   import { bytesToSize } from '@slink/utils/bytesConverter';
   import Icon from '@iconify/svelte';
-  import { Tooltip } from 'flowbite-svelte';
+  import { Tooltip } from '@slink/components/Common';
 
   export let src: string;
   export let alt: string = '';

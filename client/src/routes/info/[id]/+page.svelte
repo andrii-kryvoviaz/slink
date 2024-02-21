@@ -2,7 +2,7 @@
   import type { PageData } from './$types';
   import { fly } from 'svelte/transition';
   import Icon from '@iconify/svelte';
-  import { Tooltip } from 'flowbite-svelte';
+  import { Tooltip } from '@slink/components/Common';
   import { ApiClient } from '@slink/api/Client';
   import { toast } from '@slink/store/toast';
   import { ValidationException } from '@slink/api/Exceptions/ValidationException';

@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { Dropzone } from 'flowbite-svelte';
   import Icon from '@iconify/svelte';
 
   import { goto } from '$app/navigation';
@@ -9,6 +8,7 @@
   import { toast } from '@slink/store/toast';
 
   import type { PageData } from './$types';
+  import { Dropzone } from '@slink/components/Form';
 
   export let data: PageData;
 
@@ -97,7 +97,7 @@
       defaultClass="flex flex-col justify-center items-center w-full h-64 bg-card-primary rounded-lg border-2 border-dropzone-primary border-dashed cursor-pointer hover:border-dropzone-secondary hover:bg-card-secondary max-h-[400px] max-w-[600px]"
     >
       {#if !isLoading}
-        <div class="flex flex-col p-6 xs:w-[170%]">
+        <div class="flex flex-col p-6 xs:w-[80%]">
           <div class="text-sm text-color-primary">
             <p class="flex items-center justify-center gap-x-[3px] p-3">
               <Icon icon="material-symbols-light:upload" class="h-10 w-10" />
@@ -134,14 +134,5 @@
         </div>
       {/if}
     </Dropzone>
-    <!-- <p class="p-4 text-sm text-color-secondary">
-      {#if isLogged}
-        <a
-          href="/login">Login</a
-        > to see your images
-      {:else}
-        <a href="/explore" class="text-color-accent">Explore all images</a>
-      {/if}
-    </p> -->
   </div>
 </div>

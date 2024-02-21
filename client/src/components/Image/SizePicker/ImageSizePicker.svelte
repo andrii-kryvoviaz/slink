@@ -1,6 +1,6 @@
 <script lang="ts">
   import Icon from '@iconify/svelte';
-  import { Tooltip } from 'flowbite-svelte';
+  import { Tooltip } from '@slink/components/Common';
   import { createEventDispatcher } from 'svelte';
   import type { ImageSize } from '@slink/components/Image';
   import { Button } from '@slink/components/Common';
@@ -108,7 +108,7 @@
       on:keyup={() => handleChange('width')}
       on:change={() => handleChange('width')}
     />
-    <div>
+    <div class="flex">
       <Button
         size="xs"
         variant="invisible"

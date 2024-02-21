@@ -1,6 +1,6 @@
 <script lang="ts">
   import Icon from '@iconify/svelte';
-  import { Tooltip } from 'flowbite-svelte';
+  import { Tooltip } from '@slink/components/Common';
   import { Button, ThemeSwitch } from '@slink/components/Common';
 </script>
 
