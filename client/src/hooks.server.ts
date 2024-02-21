@@ -1,51 +1,50 @@
 import type { Handle } from '@sveltejs/kit';
-import { cookie } from '@slink/utils/cookie';
+import { cookie, setServerCookiesHandle } from '@slink/utils/cookie';
 import { Theme } from '@slink/store/settings';
+import { setFetchHandle } from '@slink/api/Client';
+import { sequence } from '@sveltejs/kit/hooks';
 
-const API_BASE_URL = 'http://localhost:8080';
-const PROXY_PATH = '/api';
+const handleApiProxy: Handle = async ({ event, resolve }) => {
+  const API_BASE_URL = 'http://localhost:8080';
+  const PROXY_PATH = '/api';
+  const PROXY_PATHS = [PROXY_PATH, '/image'];
+  const pathRegex = new RegExp(`^(${PROXY_PATHS.join('|')})`);
 
-const handleApiProxy: Handle = async ({ event }) => {
-  const escapedProxyPath = PROXY_PATH.replace(/[-[/\]{}()*+?.\\^$|]/g, '\\$&');
+  const { url, fetch, request } = event;
 
-  const proxyPathRegex = new RegExp(`^${escapedProxyPath}`);
+  if (!pathRegex.test(url.pathname)) {
+    return resolve(event);
+  }
 
-  // strip `/api` from the request path before proxying
-  const strippedPath = event.url.pathname.replace(proxyPathRegex, '');
-
-  const urlPath = `${API_BASE_URL}${strippedPath}${event.url.search}`;
-  const proxiedUrl = new URL(urlPath);
-
-  event.request.headers.delete('connection');
+  const strippedPath = url.pathname.replace(new RegExp(`^${PROXY_PATH}`), '');
+  const proxyUrl = `${API_BASE_URL}${strippedPath}${url.search}`;
 
   const options: any = {
-    body: event.request.body,
-    method: event.request.method,
-    headers: event.request.headers,
-    // is not set explicitly by some Node.js versions, may cause problems with upload
+    body: request.body,
+    method: request.method,
+    headers: request.headers,
+    // may cause problems with uploads in some Node versions if not set
     duplex: 'half',
     // Node doesn't have to verify SSL certificates within the container
     rejectUnauthorized: false,
   };
 
-  return fetch(proxiedUrl.toString(), options).catch((err) => {
+  return fetch(proxyUrl, options).catch((err) => {
     console.log('Could not proxy API request: ', err);
     throw err;
   });
 };
 
-export const handle: Handle = async ({ event, resolve }) => {
-  const paths = [PROXY_PATH, '/image'];
-  const pathRegex = new RegExp(`^(${paths.join('|')})`);
-
-  cookie.setServerCookies(event.cookies || []);
-
-  if (pathRegex.test(event.url.pathname)) {
-    return handleApiProxy({ event, resolve });
-  }
-
+const handleTheme: Handle = async ({ event, resolve }) => {
   return resolve(event, {
     transformPageChunk: ({ html }) =>
       html.replace('%app.theme%', cookie.get('theme', Theme.DARK)),
   });
 };
+
+export const handle = sequence(
+  setFetchHandle,
+  setServerCookiesHandle,
+  handleApiProxy,
+  handleTheme
+);

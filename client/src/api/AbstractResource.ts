@@ -4,27 +4,23 @@ import { error } from '@sveltejs/kit';
 import { ValidationException } from './Exceptions/ValidationException';
 
 export abstract class AbstractResource {
-  private _baseUrl: string;
+  private _fetch: Function | null = null;
 
-  private _fetch: Function = fetch;
+  constructor(private readonly _baseUrl: string) {}
 
-  constructor(baseUrl: string) {
-    this._baseUrl = baseUrl;
-  }
-
-  public using(fetchFn: Function) {
+  public useFetch(fetchFn: Function) {
     this._fetch = fetchFn;
-    return this;
-  }
-
-  protected resetFetch() {
-    this._fetch = fetch;
   }
 
   private async baseRequest(path: string, options?: RequestInit) {
-    const response = await this._fetch(`${this._baseUrl}${path}`, options);
+    if (!this._fetch) {
+      this._fetch = fetch;
+      console.warn(
+        'API client is not initialized with fetch function, falling back to global fetch function. To utilize SSR, add `ApiClient.use(fetch)` to your `load` function.'
+      );
+    }
 
-    this.resetFetch();
+    const response = await this._fetch(`${this._baseUrl}${path}`, options);
 
     if (response.status === 204) {
       return;

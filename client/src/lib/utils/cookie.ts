@@ -1,5 +1,5 @@
 import { browser } from '$app/environment';
-import type { Cookies } from '@sveltejs/kit';
+import type { Cookies, Handle } from '@sveltejs/kit';
 import { ListenerAware } from '@slink/lib/listener';
 
 interface CookieProvider {
@@ -96,3 +96,7 @@ class Cookie extends ListenerAware {
 }
 
 export const cookie = Cookie.create();
+export const setServerCookiesHandle: Handle = async ({ event, resolve }) => {
+  cookie.setServerCookies(event.cookies || []);
+  return resolve(event);
+};

@@ -1,25 +1,52 @@
 import { ImageResource } from './Resources/ImageResource';
+import type { Handle } from '@sveltejs/kit';
+import type { AbstractResource } from '@slink/api/AbstractResource';
+
+type Resource<T extends AbstractResource> = { new (baseUrl: string): T };
+
+const RESOURCES: Record<string, Resource<any>> = {
+  image: ImageResource,
+};
+
+type Resources = {
+  [K in keyof typeof RESOURCES]: InstanceType<(typeof RESOURCES)[K]>;
+};
+
+type ApiClient = Resources & {
+  use: (fetchFn: Function) => Resources;
+};
 
 class Client {
-  private _baseUrl: string;
-  private static _instance: Client;
+  private static _resources: Resources = {};
 
-  private constructor(baseUrl: string) {
-    this._baseUrl = baseUrl;
+  public static create(baseUrl: string): ApiClient {
+    this.initializeResources(baseUrl);
 
-    // Initialize resources
-    this.image = new ImageResource(this._baseUrl);
+    return {
+      ...this._resources,
+      use: (fetchFn: Function) => {
+        this.useFetch(fetchFn);
+        return this._resources;
+      },
+    };
   }
 
-  public static create(baseUrl: string) {
-    if (!this._instance) {
-      this._instance = new Client(baseUrl);
+  public static useFetch(fetchFn: Function) {
+    for (const resource of Object.values(this._resources)) {
+      resource.useFetch(fetchFn);
     }
-
-    return this._instance;
   }
 
-  public image: ImageResource;
+  private static initializeResources(baseUrl: string) {
+    for (const resource in RESOURCES) {
+      const resourceClass = RESOURCES[resource];
+      this._resources[resource] = new resourceClass(baseUrl);
+    }
+  }
 }
 
 export const ApiClient = Client.create('/api');
+export const setFetchHandle: Handle = async ({ event, resolve }) => {
+  Client.useFetch(event.fetch);
+  return resolve(event);
+};
