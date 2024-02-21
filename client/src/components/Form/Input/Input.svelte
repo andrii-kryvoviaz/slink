@@ -1,5 +1,28 @@
 <script lang="ts">
-  export let label: string;
+  import type { HTMLInputAttributes as BaseHTMLInputAttributes } from 'svelte/elements';
+  import type { InputProps } from '@slink/components/Form/Input/Input.types';
+  import { InputVariants } from '@slink/components/Form/Input/Input.variants';
+  import { className } from '@slink/utils/className';
+
+  type HTMLInputAttributes = Omit<BaseHTMLInputAttributes, 'size'>;
+
+  interface $$Props extends HTMLInputAttributes, InputProps {
+    key?: string;
+    label?: string;
+  }
+
+  export let label: $$Props['label'] = '';
+  export let variant: $$Props['variant'] = 'default';
+  export let size: $$Props['size'] = 'md';
+  export let rounded: $$Props['rounded'] = 'lg';
+
+  $: variant = $$slots.error ? 'error' : variant;
+
+  $: classes = `${InputVariants({
+    variant,
+    size,
+    rounded,
+  })} ${$$props.class}`;
 </script>
 
 <div>
@@ -23,12 +46,9 @@
     {/if}
     <input
       {...$$props}
+      class={className(classes)}
       class:pl-10={$$slots.leftIcon}
       class:pr-10={$$slots.rightIcon}
-      class:border-input-error={$$slots.error}
-      class:focus:border-input-error={$$slots.error}
-      class:focus:ring-input-focus-error={$$slots.error}
-      class="mt-2 block w-full rounded-lg border border-input-default bg-input-default px-4 py-2 text-input-default focus:border-input-focus-default focus:outline-none focus:ring focus:ring-input-focus-default focus:ring-opacity-40"
     />
     {#if $$slots.rightIcon}
       <div
