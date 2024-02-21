@@ -1,6 +1,6 @@
 import { cva } from 'class-variance-authority';
 
-export const ButtonVariants = cva(
+export const ButtonTheme = cva(
   `inline-flex items-center justify-center text-center select-none cursor-pointer focus:outline-none focus-visable:outline-none whitespace-nowrap`,
   {
     variants: {

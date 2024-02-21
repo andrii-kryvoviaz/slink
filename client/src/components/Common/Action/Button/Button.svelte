@@ -1,9 +1,11 @@
 <script lang="ts">
   import type { HTMLButtonAttributes } from 'svelte/elements';
-
   import { className } from '@slink/utils/className';
-  import { type ButtonProps, ButtonVariants } from '@slink/components/Common';
-  import ButtonIcon from '@slink/components/Common/Action/Button/ButtonIcon.svelte';
+  import {
+    ButtonIcon,
+    type ButtonProps,
+    ButtonTheme,
+  } from '@slink/components/Common';
 
   type target = '_blank' | '_self' | '_parent' | '_top' | undefined;
   type LinkAttributes = {
@@ -30,7 +32,7 @@
   $: state = disabled ? 'disabled' : state;
   $: disabled = loading || disabled;
 
-  $: classes = `${ButtonVariants({
+  $: classes = `${ButtonTheme({
     variant,
     size,
     rounded,

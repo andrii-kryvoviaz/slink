@@ -1,8 +1,7 @@
 <script lang="ts">
   import type { HTMLInputAttributes as BaseHTMLInputAttributes } from 'svelte/elements';
-  import type { InputProps } from '@slink/components/Form/Input/Input.types';
-  import { InputVariants } from '@slink/components/Form/Input/Input.variants';
   import { className } from '@slink/utils/className';
+  import { type InputProps, InputTheme } from '@slink/components/Form';
 
   type HTMLInputAttributes = Omit<BaseHTMLInputAttributes, 'size'>;
 
@@ -18,7 +17,7 @@
 
   $: variant = $$slots.error ? 'error' : variant;
 
-  $: classes = `${InputVariants({
+  $: classes = `${InputTheme({
     variant,
     size,
     rounded,

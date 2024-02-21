@@ -1,6 +1,6 @@
 import type { VariantProps } from 'class-variance-authority';
-import type { InputVariants } from '@slink/components/Form/Input/Input.variants';
+import type { InputTheme } from '@slink/components/Form/Input/Input.theme';
 
-export type InputProps = VariantProps<typeof InputVariants>;
+export type InputProps = VariantProps<typeof InputTheme>;
 
 export type InputVariant = InputProps['variant'];

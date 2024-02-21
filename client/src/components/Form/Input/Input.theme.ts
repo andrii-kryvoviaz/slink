@@ -1,6 +1,6 @@
 import { cva } from 'class-variance-authority';
 
-export const InputVariants = cva(
+export const InputTheme = cva(
   `mt-2 block w-full border bg-input-default text-input-default focus:outline-none focus:ring focus:ring-opacity-40`,
   {
     variants: {
