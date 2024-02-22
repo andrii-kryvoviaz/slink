@@ -1,21 +1,37 @@
 <script lang="ts">
-  import Icon from '@iconify/svelte';
-
   import { goto } from '$app/navigation';
+  import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
+
   import { ApiClient } from '@slink/api/Client';
-  import { ValidationException } from '@slink/api/Exceptions/ValidationException';
+  import { ReactiveState } from '@slink/api/ReactiveState';
+  import type { UploadedImageResponse } from '@slink/api/Response/UploadedImageResponse';
   import { toast } from '@slink/store/toast';
 
-  import type { PageData } from './$types';
+  import { printErrorsAsToastMessage } from '@slink/utils/printErrorsAsToastMessage';
+
   import { Dropzone } from '@slink/components/Form';
+
+  import type { PageData } from './$types';
 
   export let data: PageData;
 
-  let isLoading: boolean = false;
-  let isLogged: boolean = true;
+  let processing: boolean = false;
 
   type FileEvent = DragEvent | ClipboardEvent | Event;
+
+  const {
+    data: uploadedImage,
+    error: uploadError,
+    action: uploadImage,
+    isLoading,
+  } = ReactiveState<UploadedImageResponse>((file: File) =>
+    ApiClient.image.upload(file)
+  );
+
+  const { isLoading: pageIsChanging, action: redirectToInfo } = ReactiveState(
+    (imageId: number) => goto(`/info/${imageId}`)
+  );
 
   const getFilesFromEvent = function (
     event: FileEvent
@@ -51,31 +67,20 @@
       return;
     }
 
-    handleSend(file);
+    uploadImage(file);
   };
 
-  const handleSend = async (file: File) => {
-    if (isLoading) return;
+  const successHandler = async (response: UploadedImageResponse) => {
+    await redirectToInfo(response.id);
 
-    isLoading = true;
-
-    try {
-      const response = await ApiClient.image.upload(file);
-      await goto(`/info/${response.id}`);
-
-      toast.success('Image uploaded successfully');
-    } catch (error: any) {
-      if (error instanceof ValidationException) {
-        error.violations.forEach((violation) => {
-          toast.error(violation.message);
-        });
-      } else {
-        toast.error('Something went wrong');
-      }
-    } finally {
-      isLoading = false;
-    }
+    toast.success('Image uploaded successfully');
   };
+
+  const errorHandler = printErrorsAsToastMessage;
+
+  $: $uploadedImage && successHandler($uploadedImage);
+  $: $uploadError && errorHandler($uploadError);
+  $: processing = $isLoading || $pageIsChanging;
 </script>
 
 <svelte:document on:paste={handleChange} />
@@ -93,10 +98,10 @@
         event.preventDefault();
       }}
       on:change={handleChange}
-      disabled={isLoading}
+      disabled={processing}
       defaultClass="flex flex-col justify-center items-center w-full h-64 bg-card-primary rounded-lg border-2 border-dropzone-primary border-dashed cursor-pointer hover:border-dropzone-secondary hover:bg-card-secondary max-h-[400px] max-w-[600px]"
     >
-      {#if !isLoading}
+      {#if !processing}
         <div class="flex flex-col p-6 xs:w-[80%]">
           <div class="text-sm text-color-primary">
             <p class="flex items-center justify-center gap-x-[3px] p-3">

@@ -1,11 +1,15 @@
 <script lang="ts">
-  import type { PageData } from './$types';
-  import { fly } from 'svelte/transition';
   import Icon from '@iconify/svelte';
-  import { Tooltip } from '@slink/components/Common';
+  import { fly } from 'svelte/transition';
+
   import { ApiClient } from '@slink/api/Client';
+  import { ReactiveState } from '@slink/api/ReactiveState';
   import { toast } from '@slink/store/toast';
-  import { ValidationException } from '@slink/api/Exceptions/ValidationException';
+
+  import { printErrorsAsToastMessage } from '@slink/utils/printErrorsAsToastMessage';
+
+  import { Tooltip } from '@slink/components/Common';
+  import { CopyContainer } from '@slink/components/Common';
   import {
     ImageDescription,
     type ImageParams,
@@ -13,7 +17,8 @@
     type ImageSize,
     ImageSizePicker,
   } from '@slink/components/Image';
-  import { CopyContainer } from '@slink/components/Common';
+
+  import type { PageData } from './$types';
 
   export let data: PageData;
 
@@ -46,31 +51,31 @@
     return `${url}?${paramsString}`;
   };
 
-  let descriptionIsLoading: boolean = false;
+  const {
+    isLoading: descriptionIsLoading,
+    action: updateDescription,
+    error: updateDescriptionError,
+    reset: resetUpdateDescriptionState,
+  } = ReactiveState((imageId: number, description: string) => {
+    return ApiClient.image.updateDetails(imageId, {
+      description,
+    });
+  });
 
   const handleSaveDescription = async (description: string) => {
-    try {
-      descriptionIsLoading = true;
+    await updateDescription(data.id, description);
 
-      await ApiClient.image.updateDetails(data.id, {
-        description,
-      });
-
-      data.description = description;
-
-      toast.success('Description has been updated');
-    } catch (error: any) {
-      if (error instanceof ValidationException) {
-        error.violations.forEach((violation) => {
-          toast.error(violation.message);
-        });
-      } else {
-        toast.error('Something went wrong');
-      }
-    } finally {
-      descriptionIsLoading = false;
+    if ($updateDescriptionError) {
+      resetUpdateDescriptionState();
+      return;
     }
+
+    data.description = description;
+    toast.success('Description has been updated');
   };
+
+  $: $updateDescriptionError &&
+    printErrorsAsToastMessage($updateDescriptionError);
 
   $: url = formatImageUrl(data.url, params);
 </script>
@@ -95,7 +100,7 @@
       <p class="mb-4 mt-8 w-full">
         <ImageDescription
           description={data.description}
-          isLoading={descriptionIsLoading}
+          isLoading={$descriptionIsLoading}
           on:descriptionChange={(e) => handleSaveDescription(e.detail)}
         />
       </p>
