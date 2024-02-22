@@ -21,15 +21,15 @@
   type FileEvent = DragEvent | ClipboardEvent | Event;
 
   const {
+    isLoading,
     data: uploadedImage,
     error: uploadError,
-    action: uploadImage,
-    isLoading,
+    run: uploadImage,
   } = ReactiveState<UploadedImageResponse>((file: File) =>
     ApiClient.image.upload(file)
   );
 
-  const { isLoading: pageIsChanging, action: redirectToInfo } = ReactiveState(
+  const { isLoading: pageIsChanging, run: redirectToInfo } = ReactiveState(
     (imageId: number) => goto(`/info/${imageId}`)
   );
 

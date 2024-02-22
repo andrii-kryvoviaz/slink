@@ -1,44 +1,52 @@
-import { type Writable, writable } from 'svelte/store';
+import { type Readable } from 'svelte/store';
+
+import { inMemoryReadable } from '@slink/store/provider/inMemoryReadable';
 
 type RequestStatus = 'idle' | 'loading' | 'finished' | 'error';
 
 export type RequestState<T> = {
-  status: Writable<RequestStatus>;
-  isLoading: Writable<boolean>;
-  action: (...args: any[]) => Promise<void>;
-  data: Writable<T | null>;
-  error: Writable<Error | null>;
+  status: Readable<RequestStatus>;
+  isLoading: Readable<boolean>;
+  data: Readable<T | null>;
+  error: Readable<Error | null>;
+  run: (...args: any[]) => Promise<void>;
   reset: () => void;
 };
 
 export function ReactiveState<T>(func: Function): RequestState<T> {
-  const state: RequestState<T> = {
-    status: writable('idle'),
-    isLoading: writable(false),
-    data: writable(null),
-    error: writable(null),
+  const [status, setStatus] = inMemoryReadable<RequestStatus>('idle');
+  const [isLoading, setIsLoading] = inMemoryReadable<boolean>(false);
+  const [data, setData] = inMemoryReadable<T | null>(null);
+  const [error, setError] = inMemoryReadable<Error | null>(null);
 
-    action: async (...args: any[]) => {
-      state.status.set('loading');
-      state.isLoading.set(true);
+  async function run(...args: any[]): Promise<void> {
+    setStatus('loading');
+    setIsLoading(true);
 
-      try {
-        const data = await func(...args);
-        state.data.set(data);
-        state.status.set('finished');
-      } catch (error: any) {
-        state.error.set(error);
-        state.status.set('error');
-      } finally {
-        state.isLoading.set(false);
-      }
-    },
-    reset: () => {
-      state.data.set(null);
-      state.error.set(null);
-      state.status.set('idle');
-    },
+    try {
+      const result = await func(...args);
+      setData(result);
+      setStatus('finished');
+    } catch (err: any) {
+      setError(err);
+      setStatus('error');
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  function reset() {
+    setData(null);
+    setError(null);
+    setStatus('idle');
+  }
+
+  return {
+    status,
+    isLoading,
+    data,
+    error,
+    run,
+    reset,
   };
-
-  return state;
 }

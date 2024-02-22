@@ -53,8 +53,8 @@
 
   const {
     isLoading: descriptionIsLoading,
-    action: updateDescription,
     error: updateDescriptionError,
+    run: updateDescription,
     reset: resetUpdateDescriptionState,
   } = ReactiveState((imageId: number, description: string) => {
     return ApiClient.image.updateDetails(imageId, {
