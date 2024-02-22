@@ -4,15 +4,25 @@ declare(strict_types=1);
 
 namespace Slink\User\Domain\Exception;
 
-class InvalidCredentialsException extends \LogicException {
+use Slink\Shared\Domain\Exception\SpecificationException;
+
+class InvalidCredentialsException extends SpecificationException {
   /**
    * @param mixed ...$args
    */
   public function __construct(mixed ...$args) {
     if (empty($args)) {
-      $args = ['Invalid credentials'];
+      $args = ['Invalid credentials. Please check your email and password and try again.'];
     }
     
     parent::__construct(...$args);
+  }
+  
+  /**
+   * @return string
+   */
+  #[\Override]
+  function getProperty(): string {
+    return 'credentials';
   }
 }
