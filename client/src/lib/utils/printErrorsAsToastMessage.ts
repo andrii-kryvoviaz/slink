@@ -1,12 +1,14 @@
-import { ValidationException } from '@slink/api/Exceptions/ValidationException';
+import { HttpException } from '@slink/api/Exceptions';
 import { toast } from '@slink/store/toast';
 
 export function printErrorsAsToastMessage(error: Error) {
-  if (error instanceof ValidationException) {
-    error.violations.forEach((violation) => {
-      toast.error(violation.message);
+  if (error instanceof HttpException) {
+    error.errors.forEach((error) => {
+      toast.error(error.message);
     });
-  } else {
-    toast.error('Something went wrong');
+
+    return;
   }
+
+  toast.error('Something went wrong');
 }

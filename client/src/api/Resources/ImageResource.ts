@@ -22,8 +22,7 @@ export class ImageResource extends AbstractResource {
     }
   ): Promise<ImageDetailsResponse> {
     return this.patch(`/image/${id}`, {
-      body: JSON.stringify(details),
-      headers: { 'Content-Type': 'application/json' },
+      json: details,
     });
   }
 }
