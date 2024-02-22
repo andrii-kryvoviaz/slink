@@ -1,8 +1,10 @@
 import type { Handle } from '@sveltejs/kit';
-import { cookie, setServerCookiesHandle } from '@slink/utils/cookie';
-import { Theme } from '@slink/store/settings';
-import { setFetchHandle } from '@slink/api/Client';
 import { sequence } from '@sveltejs/kit/hooks';
+
+import { setFetchHandle } from '@slink/api/Client';
+import { Theme } from '@slink/store/settings';
+
+import { cookie, setServerCookiesHandle } from '@slink/utils/cookie';
 
 const handleApiProxy: Handle = async ({ event, resolve }) => {
   const API_BASE_URL = 'http://localhost:8080';

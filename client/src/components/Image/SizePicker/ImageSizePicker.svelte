@@ -1,9 +1,11 @@
 <script lang="ts">
-  import Icon from '@iconify/svelte';
-  import { Tooltip } from '@slink/components/Common';
   import { createEventDispatcher } from 'svelte';
-  import type { ImageSize } from '@slink/components/Image';
+
+  import Icon from '@iconify/svelte';
+
+  import { Tooltip } from '@slink/components/Common';
   import { Button } from '@slink/components/Common';
+  import type { ImageSize } from '@slink/components/Image';
 
   export let width: number;
   export let height: number;

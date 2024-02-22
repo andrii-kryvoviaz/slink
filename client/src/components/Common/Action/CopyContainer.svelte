@@ -1,7 +1,9 @@
 <script lang="ts">
   import Icon from '@iconify/svelte';
-  import { getBaseUrl } from '@slink/utils/getBaseUrl';
   import { fly } from 'svelte/transition';
+
+  import { getBaseUrl } from '@slink/utils/getBaseUrl';
+
   import { Button, type ButtonVariant } from '@slink/components/Common';
 
   export let value: string;

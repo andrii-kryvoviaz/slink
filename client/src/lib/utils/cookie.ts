@@ -1,6 +1,7 @@
-import { browser } from '$app/environment';
-import type { Cookies, Handle } from '@sveltejs/kit';
 import { ListenerAware } from '@slink/lib/listener';
+import type { Cookies, Handle } from '@sveltejs/kit';
+
+import { browser } from '$app/environment';
 
 interface CookieProvider {
   get: (key: string, defaultValue?: string) => string;

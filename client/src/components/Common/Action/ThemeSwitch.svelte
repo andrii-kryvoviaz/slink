@@ -1,6 +1,8 @@
 <script lang="ts">
   import Icon from '@iconify/svelte';
-  import { isDarkTheme, setTheme, Theme } from '@slink/store/settings';
+
+  import { Theme, isDarkTheme, setTheme } from '@slink/store/settings';
+
   import { Toggle } from '@slink/components/Form';
 
   export let disabled = false;

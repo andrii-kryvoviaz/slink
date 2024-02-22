@@ -1,7 +1,7 @@
-import type { ViolationResponse } from './Response/Error/ViolationResponse';
 import { error } from '@sveltejs/kit';
 
-import { ValidationException } from './Exceptions/ValidationException';
+import { ValidationException } from '@slink/api/Exceptions/ValidationException';
+import type { ViolationResponse } from '@slink/api/Response/Error/ViolationResponse';
 
 export abstract class AbstractResource {
   private _fetch: Function | null = null;

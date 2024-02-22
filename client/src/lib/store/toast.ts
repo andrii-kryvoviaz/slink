@@ -1,8 +1,7 @@
 import { writable } from 'svelte/store';
+import type { Writable } from 'svelte/store';
 
 import { createTimer } from '@slink/utils/timer';
-
-import type { Writable } from 'svelte/store';
 
 type ToastVariant = 'success' | 'warning' | 'error' | 'info';
 

@@ -1,8 +1,9 @@
 <script lang="ts">
   // ToDo: Implement better tooltip. For now it is okay.
   import type { ComponentProps } from 'svelte';
-  import Popper from './Popper.svelte';
   import { twMerge } from 'tailwind-merge';
+
+  import Popper from './Popper.svelte';
 
   interface $$Props extends ComponentProps<Popper> {
     type?: 'dark' | 'light' | 'auto' | 'custom';

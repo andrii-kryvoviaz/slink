@@ -1,7 +1,6 @@
 import { AbstractResource } from '@slink/api/AbstractResource';
-
-import type { UploadedImageResponse } from '@slink/api/Response/UploadedImageResponse';
 import type { ImageDetailsResponse } from '@slink/api/Response/ImageDetailsResponse';
+import type { UploadedImageResponse } from '@slink/api/Response/UploadedImageResponse';
 
 export class ImageResource extends AbstractResource {
   public async upload(image: File): Promise<UploadedImageResponse> {

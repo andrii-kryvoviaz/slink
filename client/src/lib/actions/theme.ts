@@ -1,4 +1,5 @@
 import type { Action } from 'svelte/action';
+
 import { Theme } from '@slink/store/settings';
 
 export const theme: Action<HTMLElement, string> = (

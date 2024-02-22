@@ -1,6 +1,7 @@
-import { ImageResource } from './Resources/ImageResource';
 import type { Handle } from '@sveltejs/kit';
+
 import type { AbstractResource } from '@slink/api/AbstractResource';
+import { ImageResource } from '@slink/api/Resources/ImageResource';
 
 type Resource<T extends AbstractResource> = { new (baseUrl: string): T };
 

@@ -1,5 +1,6 @@
 <script lang="ts">
   import Icon from '@iconify/svelte';
+
   export let loading = false;
   export let customLoadingIcon: boolean = false;
 

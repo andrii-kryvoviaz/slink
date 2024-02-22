@@ -19,6 +19,7 @@
     "@sveltejs/adapter-node": "^2.0.0",
     "@sveltejs/kit": "^2.5.0",
     "@sveltejs/vite-plugin-svelte": "^3.0.0",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/dotenv": "^8.2.0",
     "@types/node": "^20.11.19",
     "@types/ua-parser-js": "^0.7.39",

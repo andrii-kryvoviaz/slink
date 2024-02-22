@@ -6,8 +6,9 @@
     Side,
   } from '@floating-ui/dom';
   import * as dom from '@floating-ui/dom';
-  import { onMount, type ComponentProps, createEventDispatcher } from 'svelte';
+  import { type ComponentProps, createEventDispatcher, onMount } from 'svelte';
   import { twJoin } from 'tailwind-merge';
+
   import Frame from './Frame.svelte';
 
   // propagate props type from underlying Frame
