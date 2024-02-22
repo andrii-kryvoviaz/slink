@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Slink\User\Domain\ValueObject;
 
 use Slink\Shared\Domain\ValueObject\AbstractValueObject;
+use Slink\User\Domain\Exception\InvalidEmailException;
 
 final readonly class Email extends AbstractValueObject{
   private function __construct(private string $email) {
@@ -22,7 +23,7 @@ final readonly class Email extends AbstractValueObject{
 
   private static function validate(string $email): void {
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-      throw new \InvalidArgumentException('Invalid email address');
+      throw new InvalidEmailException('Invalid email address.');
     }
   }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Slink\User\Domain\ValueObject;
 
 use Slink\Shared\Domain\ValueObject\AbstractValueObject;
+use Slink\User\Domain\Exception\InvalidDisplayNameException;
 
 final readonly class DisplayName extends AbstractValueObject {
   /**
@@ -56,15 +57,15 @@ final readonly class DisplayName extends AbstractValueObject {
    */
   private function validate(string $displayName): void {
     if (strlen($displayName) < 3) {
-      throw new \InvalidArgumentException('Display name must be at least 3 characters long');
+      throw new InvalidDisplayNameException('Display name must be at least 3 characters long');
     }
     
     if (strlen($displayName) > 30) {
-      throw new \InvalidArgumentException('Display name must be at most 30 characters long');
+      throw new InvalidDisplayNameException('Display name must be at most 30 characters long');
     }
     
     if(strtolower($displayName) === strtolower($this->getReservedName())) {
-      throw new \InvalidArgumentException(sprintf('`%s` is a reserved display name', $this->getReservedName()));
+      throw new InvalidDisplayNameException(sprintf('`%s` is a reserved display name', $this->getReservedName()));
     }
   }
 }

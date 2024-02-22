@@ -6,6 +6,7 @@ namespace Slink\User\Domain\ValueObject\Auth;
 
 use RuntimeException;
 use Slink\Shared\Domain\ValueObject\AbstractValueObject;
+use Slink\User\Domain\Exception\InvalidPasswordException;
 
 final readonly class HashedPassword extends AbstractValueObject {
   private const int COST = 12;
@@ -46,7 +47,7 @@ final readonly class HashedPassword extends AbstractValueObject {
    */
   private static function hash(#[\SensitiveParameter] string $plainPassword): string {
     if (\mb_strlen($plainPassword) < 6) {
-      throw new \InvalidArgumentException('Min 6 characters password');
+      throw new InvalidPasswordException('Min 6 characters password');
     }
 
     /** @var string|bool|null $hashedPassword */
