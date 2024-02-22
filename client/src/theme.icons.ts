@@ -17,5 +17,8 @@ export const themeIcons: string[] = [
   'mingcute:loading-line',
   'solar:login-broken',
   'fa6-solid:chevron-right',
+  'ph:user',
+  'mdi-light:email',
+  'ph:password-light',
   'eos-icons:three-dots-loading',
 ];

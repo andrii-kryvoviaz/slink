@@ -1,6 +1,9 @@
 <script lang="ts">
-  import { Button, type ButtonVariant } from '@slink/components/Common';
+  import Icon from '@iconify/svelte';
+
   import { isLightTheme } from '@slink/store/settings.js';
+
+  import { Button, type ButtonVariant } from '@slink/components/Common';
   import { Input } from '@slink/components/Form';
 
   let buttonVariant: ButtonVariant = 'primary';
@@ -15,16 +18,23 @@
       <img class="h-7 w-auto sm:h-8" src="/favicon.png" alt="" />
     </div>
 
+    <h2 class="mt-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+      Welcome Back
+    </h2>
+
     <form class="mt-6">
       <div class="flex flex-col gap-4">
         <div>
-          <Input label="Username" name="username" />
+          <Input label="Username" name="username">
+            <Icon icon="ph:user" slot="leftIcon" />
+          </Input>
         </div>
 
         <div>
           <Input label="Password" name="password" type="password">
+            <Icon icon="ph:password-light" slot="leftIcon" />
             <a
-              slot="postfix"
+              slot="topRightText"
               href="/profile/forget"
               class="text-xs text-gray-600 hover:underline dark:text-gray-400"
               >Forget Password?</a
