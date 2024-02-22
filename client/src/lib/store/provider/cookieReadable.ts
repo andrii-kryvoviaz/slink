@@ -7,7 +7,7 @@ import type {
 
 import { cookie } from '@slink/utils/cookie';
 
-class CookieStore<T> implements Readable<T> {
+class CookieReadableStore<T> implements Readable<T> {
   constructor(
     private readonly cookieName: string,
     private readonly defaultValue?: T
@@ -30,9 +30,9 @@ class CookieStore<T> implements Readable<T> {
   }
 }
 
-export function cookieReadableStore<T>(
+export function cookieReadable<T>(
   cookieName: string,
   defaultValue?: T
 ): Readable<T> {
-  return new CookieStore<T>(cookieName, defaultValue);
+  return new CookieReadableStore<T>(cookieName, defaultValue);
 }

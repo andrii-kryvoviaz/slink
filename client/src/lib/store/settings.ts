@@ -1,6 +1,6 @@
 import { type Readable, derived } from 'svelte/store';
 
-import { cookieReadableStore } from '@slink/store/provider/cookieStore';
+import { cookieReadable } from '@slink/store/provider/cookieReadable';
 
 import { cookie } from '@slink/utils/cookie';
 
@@ -9,7 +9,7 @@ export enum Theme {
   DARK = 'dark',
 }
 
-const theme = cookieReadableStore<Theme>('theme', Theme.DARK);
+const theme = cookieReadable<Theme>('theme', Theme.DARK);
 
 export const setTheme = (value: Theme) => {
   cookie.set('theme', value);
