@@ -4,7 +4,7 @@ import { sequence } from '@sveltejs/kit/hooks';
 import { setFetchHandle } from '@slink/api/Client';
 import { Theme } from '@slink/store/settings';
 
-import { cookie, setServerCookiesHandle } from '@slink/utils/http/cookie';
+import { setServerCookiesHandle } from '@slink/utils/http/cookie';
 
 const handleApiProxy: Handle = async ({ event, resolve }) => {
   const API_BASE_URL = 'http://localhost:8080';
@@ -44,9 +44,10 @@ const handleApiProxy: Handle = async ({ event, resolve }) => {
 };
 
 const handleTheme: Handle = async ({ event, resolve }) => {
+  const theme = event.cookies.get('theme') || Theme.DARK;
+
   return resolve(event, {
-    transformPageChunk: ({ html }) =>
-      html.replace('%app.theme%', cookie.get('theme', Theme.DARK)),
+    transformPageChunk: ({ html }) => html.replace('%app.theme%', theme),
   });
 };
 

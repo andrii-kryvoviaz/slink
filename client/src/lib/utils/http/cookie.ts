@@ -31,79 +31,52 @@ class BrowserCookieProvider implements CookieProvider {
   }
 }
 
-class ServerCookieProvider implements CookieProvider {
-  private _cookies: Cookies;
-  constructor(cookies: Cookies) {
-    this._cookies = cookies;
-  }
-
-  get(key: string, defaultValue: string = ''): string {
-    return this._cookies.get(key) || defaultValue;
-  }
-  set(key: string, value: string, ttl?: number): void {
-    console.log('set', key, value, ttl);
-    this._cookies.set(key, value, {
-      maxAge: ttl,
-      secure: true,
-      httpOnly: true,
-      sameSite: 'strict',
-      path: '/',
-    });
-  }
-
-  remove(key: string): void {
-    this._cookies.delete(key, {
-      secure: true,
-      httpOnly: true,
-      sameSite: 'strict',
-      path: '/',
-    });
-  }
-}
-
 class Cookie extends ListenerAware {
-  private _providers: {
-    [key: string]: CookieProvider;
-  } = {
-    browser: new BrowserCookieProvider(),
-  };
-
-  static create(): Cookie {
-    return new Cookie();
-  }
+  private _provider: CookieProvider = new BrowserCookieProvider();
+  private _serverCookies: Cookies | null = null;
 
   setServerCookies(cookies: Cookies) {
-    this._providers.server = new ServerCookieProvider(cookies);
+    this._serverCookies = cookies;
   }
 
-  get(key: string, defaultValue?: string): string {
-    if (browser) {
-      return this._providers.browser.get(key, defaultValue);
+  private _warningMessage() {
+    console.warn(
+      `You are currently running in a server environment. Use SvelteKit's cookies to manage cookies on the server.`
+    );
+  }
+
+  get(key: string, defaultValue?: string): string | undefined {
+    if (!browser) {
+      // allow server-side read only
+      // helps to prerender e.g. the theme
+      return this._serverCookies?.get(key) || defaultValue;
     }
-    return this._providers?.server.get(key, defaultValue) || defaultValue || '';
+
+    return this._provider.get(key, defaultValue);
   }
 
   set(key: string, value: string, ttl?: number): void {
-    if (browser) {
-      this._providers.browser.set(key, value, ttl);
-    } else {
-      this._providers?.server.set(key, value, ttl);
+    if (!browser) {
+      this._warningMessage();
+      return;
     }
 
+    this._provider.set(key, value, ttl);
     this._listener.notify(key, value);
   }
 
   remove(key: string): void {
-    if (browser) {
-      this._providers.browser.remove(key);
-    } else {
-      this._providers?.server.remove(key);
+    if (!browser) {
+      this._warningMessage();
+      return;
     }
+
+    this._provider.remove(key);
   }
 }
 
-export const cookie = Cookie.create();
+export const cookie = new Cookie();
 export const setServerCookiesHandle: Handle = async ({ event, resolve }) => {
-  cookie.setServerCookies(event.cookies || []);
+  cookie.setServerCookies(event.cookies);
   return resolve(event);
 };

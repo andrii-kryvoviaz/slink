@@ -17,9 +17,7 @@ class CookieReadableStore<T> implements Readable<T> {
     run: Subscriber<T>,
     invalidate?: Invalidator<T>
   ): Unsubscriber {
-    run(
-      cookie.get(this.cookieName, this.defaultValue as unknown as string) as T
-    );
+    run(cookie.get(this.cookieName, this.defaultValue as string) as T);
 
     const listener = (value: string) => run(value as unknown as T);
     let listenerId = cookie.subscribe(this.cookieName, listener);
