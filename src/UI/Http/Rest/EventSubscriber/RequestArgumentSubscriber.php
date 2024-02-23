@@ -47,18 +47,20 @@ final class RequestArgumentSubscriber implements EventSubscriberInterface {
       }
       
       $typeReflection = new \ReflectionClass($type);
-      $typeProperties = $typeReflection->getProperties();
+      $constructor = $typeReflection->getConstructor();
+      $typeProperties = $constructor?->getParameters() ?? [];
       
       foreach ($typeProperties as $typeProperty) {
+        if($typeProperty->isOptional() || $typeProperty->getType()?->allowsNull()) {
+          continue;
+        }
+        
         if (!$request->{$method}->has($typeProperty->getName())) {
-          if($typeProperty->hasDefaultValue()) {
-            $request->{$method}->set($typeProperty->getName(), $typeProperty->getDefaultValue());
-            continue;
-          }
+          $defaultValue = $typeProperty->isDefaultValueAvailable() ? $typeProperty->getDefaultValue() : null;
           
           // if property is missing in request, create it with empty value
           // so symfony mapping can validate it properly
-          $request->{$method}->set($typeProperty->getName(), '');
+          $request->{$method}->set($typeProperty->getName(), $defaultValue);
         }
       }
     }
