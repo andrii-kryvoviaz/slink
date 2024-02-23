@@ -10,6 +10,7 @@
 
   import { Tooltip } from '@slink/components/Common';
   import { CopyContainer } from '@slink/components/Common';
+  import { Toggle } from '@slink/components/Form';
   import {
     ImageDescription,
     type ImageParams,
@@ -62,20 +63,40 @@
     });
   });
 
+  const {
+    isLoading: visibilityIsLoading,
+    error: updateVisibilityError,
+    run: updateVisibility,
+    reset: resetUpdateVisibilityState,
+  } = ReactiveState((imageId: number, isPublic: boolean) => {
+    return ApiClient.image.updateDetails(imageId, {
+      isPublic,
+    });
+  });
+
   const handleSaveDescription = async (description: string) => {
     await updateDescription(data.id, description);
 
     if ($updateDescriptionError) {
+      printErrorsAsToastMessage($updateDescriptionError);
       resetUpdateDescriptionState();
       return;
     }
 
     data.description = description;
-    toast.success('Description has been updated');
   };
 
-  $: $updateDescriptionError &&
-    printErrorsAsToastMessage($updateDescriptionError);
+  const handleVisibilityChange = async (isPublic: boolean) => {
+    await updateVisibility(data.id, isPublic);
+
+    if ($updateVisibilityError) {
+      toast.error('Failed to update visibility. Please try again later.');
+      resetUpdateVisibilityState();
+      return;
+    }
+
+    data.isPublic = isPublic;
+  };
 
   $: url = formatImageUrl(data.url, params);
 </script>
@@ -104,7 +125,11 @@
           on:descriptionChange={(e) => handleSaveDescription(e.detail)}
         />
       </p>
-      <div class="mb-2">
+      <div class="mb-2 mt-8">
+        <p class="my-2 text-xs font-extralight">
+          Copy the direct image url to use it on your website or share it with
+          others.
+        </p>
         <CopyContainer value={url} />
       </div>
       {#if filterResizable(data.mimeType)}
@@ -129,6 +154,28 @@
           </Tooltip>
         </div>
       {/if}
+      <div class="mt-8">
+        <p class="my-2 text-xs font-extralight">
+          Make image publicly available under <a
+            class="font-normal hover:underline"
+            href="/">listing</a
+          > page, so anyone can see it (does not affect direct link).
+        </p>
+        <div class="mt-2 flex items-center">
+          <Toggle
+            checked={data.isPublic}
+            disabled={$visibilityIsLoading}
+            on:change={({ detail }) => handleVisibilityChange(detail)}
+          />
+          <p class="ml-2 text-sm font-extralight">
+            {#if $visibilityIsLoading}
+              <Icon icon="mdi-light:loading" class="h-4 w-4 animate-spin" />
+            {:else}
+              {data.isPublic ? 'Public' : 'Private'}
+            {/if}
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </div>
