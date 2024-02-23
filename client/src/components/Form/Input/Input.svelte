@@ -10,14 +10,17 @@
   interface $$Props extends HTMLInputAttributes, InputProps {
     key?: string;
     label?: string;
+    error?: string | boolean;
   }
 
   export let label: $$Props['label'] = '';
   export let variant: $$Props['variant'] = 'default';
   export let size: $$Props['size'] = 'md';
   export let rounded: $$Props['rounded'] = 'lg';
+  export let error: $$Props['error'] = false;
 
-  $: variant = $$slots.error ? 'error' : variant;
+  let originalVariant = variant;
+  $: variant = error ? 'error' : originalVariant;
 
   $: classes = `${InputTheme({
     variant,
@@ -60,9 +63,9 @@
     {/if}
   </div>
 
-  {#if $$slots.error}
+  {#if error && typeof error === 'string'}
     <div class="mt-1 text-xs text-input-error">
-      <slot name="error" />
+      {error}
     </div>
   {/if}
 </div>
