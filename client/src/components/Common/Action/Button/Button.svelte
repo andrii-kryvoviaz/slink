@@ -31,8 +31,8 @@
   export let disabled: $$Props['disabled'] = false;
   export let loading: $$Props['loading'] = false;
 
-  $: state = disabled ? 'disabled' : state;
-  $: disabled = loading || disabled;
+  $: state = disabled ? 'disabled' : 'active';
+  $: disabled = loading ?? disabled;
 
   $: classes = `${ButtonTheme({
     variant,
