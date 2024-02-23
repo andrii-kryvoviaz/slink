@@ -17,7 +17,7 @@
       </a>
     </div>
 
-    <div class="hidden gap-3 sm:flex lg:flex-1 lg:items-center lg:justify-end">
+    <div class="hidden items-center justify-end gap-3 sm:flex lg:flex-1">
       <div>
         <Button
           href="/upload"
