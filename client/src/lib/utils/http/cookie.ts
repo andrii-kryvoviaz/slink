@@ -15,7 +15,12 @@ class BrowserCookieProvider implements CookieProvider {
     return match ? match[2] : defaultValue;
   }
 
-  set(key: string, value: string, ttl: number = 3600): void {
+  set(key: string, value: string, ttl?: number): void {
+    if (!ttl) {
+      document.cookie = `${key}=${value};path=/;Secure;SameSite=Strict`;
+      return;
+    }
+
     const date = new Date();
     date.setTime(date.getTime() + ttl * 1000);
     document.cookie = `${key}=${value};expires=${date.toUTCString()};path=/;Secure;SameSite=Strict`;
@@ -36,6 +41,7 @@ class ServerCookieProvider implements CookieProvider {
     return this._cookies.get(key) || defaultValue;
   }
   set(key: string, value: string, ttl?: number): void {
+    console.log('set', key, value, ttl);
     this._cookies.set(key, value, {
       maxAge: ttl,
       secure: true,

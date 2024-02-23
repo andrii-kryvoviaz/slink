@@ -5,7 +5,7 @@
 
   import { currentTheme } from '@slink/store/settings';
 
-  import { preloadIconSet } from '@slink/utils/preloadIconSet';
+  import { preloadIconSet } from '@slink/utils/ui/preloadIconSet';
 
   import { Navbar } from '@slink/components/Layout';
   import { ToastManager } from '@slink/components/Toast';

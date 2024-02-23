@@ -6,7 +6,7 @@
   import { ReactiveState } from '@slink/api/ReactiveState';
   import { toast } from '@slink/store/toast';
 
-  import { printErrorsAsToastMessage } from '@slink/utils/printErrorsAsToastMessage';
+  import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
 
   import { Tooltip } from '@slink/components/Common';
   import { CopyContainer } from '@slink/components/Common';

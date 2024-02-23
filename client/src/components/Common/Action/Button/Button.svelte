@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { HTMLButtonAttributes } from 'svelte/elements';
 
-  import { className } from '@slink/utils/className';
+  import { className } from '@slink/utils/ui/className';
 
   import {
     ButtonIcon,

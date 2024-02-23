@@ -1,4 +1,4 @@
-import { parseUserAgentFromRequest } from '@slink/utils/userAgentParser';
+import { parseUserAgentFromRequest } from '@slink/utils/http/userAgentParser';
 
 import type { PageServerLoad } from './$types';
 

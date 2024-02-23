@@ -8,7 +8,7 @@
   import type { UploadedImageResponse } from '@slink/api/Response/UploadedImageResponse';
   import { toast } from '@slink/store/toast';
 
-  import { printErrorsAsToastMessage } from '@slink/utils/printErrorsAsToastMessage';
+  import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
 
   import { Dropzone } from '@slink/components/Form';
 

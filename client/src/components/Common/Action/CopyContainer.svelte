@@ -2,7 +2,7 @@
   import Icon from '@iconify/svelte';
   import { fly } from 'svelte/transition';
 
-  import { getBaseUrl } from '@slink/utils/getBaseUrl';
+  import { getBaseUrl } from '@slink/utils/http/getBaseUrl';
 
   import { Button, type ButtonVariant } from '@slink/components/Common';
 

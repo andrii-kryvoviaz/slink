@@ -3,9 +3,13 @@ import { toast } from '@slink/store/toast';
 
 export function printErrorsAsToastMessage(error: Error) {
   if (error instanceof HttpException) {
-    error.errors.forEach((error) => {
-      toast.error(error.message);
-    });
+    for (const key in error.errors) {
+      const message =
+        !parseInt(key) && key
+          ? `[${key.capitalizeFirstLetter()}] ${error.errors[key]}`
+          : error.errors[key];
+      toast.error(message);
+    }
 
     return;
   }

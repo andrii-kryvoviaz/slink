@@ -2,7 +2,7 @@ import { type Readable, derived } from 'svelte/store';
 
 import { cookieReadable } from '@slink/store/provider/cookieReadable';
 
-import { cookie } from '@slink/utils/cookie';
+import { cookie } from '@slink/utils/http/cookie';
 
 export enum Theme {
   LIGHT = 'light',

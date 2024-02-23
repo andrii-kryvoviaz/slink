@@ -5,7 +5,7 @@ import type {
   Unsubscriber,
 } from 'svelte/store';
 
-import { cookie } from '@slink/utils/cookie';
+import { cookie } from '@slink/utils/http/cookie';
 
 class CookieReadableStore<T> implements Readable<T> {
   constructor(

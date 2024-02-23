@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { HTMLInputAttributes as BaseHTMLInputAttributes } from 'svelte/elements';
 
-  import { className } from '@slink/utils/className';
+  import { className } from '@slink/utils/ui/className';
 
   import { type InputProps, InputTheme } from '@slink/components/Form';
 
