@@ -1,5 +1,7 @@
 import { ApiClient } from '@slink/api/Client';
 
+import '@slink/utils/string/stringExtensions';
+
 import type { LayoutLoad } from './$types';
 
 export const load: LayoutLoad = async ({ params, fetch, url }) => {
