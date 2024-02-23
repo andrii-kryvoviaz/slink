@@ -5,6 +5,8 @@ import '@slink/utils/string/stringExtensions';
 import type { LayoutLoad } from './$types';
 
 export const load: LayoutLoad = async ({ params, fetch, url }) => {
+  // Set API fetch function to the one provided by SvelteKit
+  // In order to avoid race condition, the child page load function should await for the parent
+  // e.g. await parent();
   ApiClient.use(fetch);
-  // ToDo: Investigate race condition of layout load function which might be executed before page load function. This might eliminate the need for passing fetch function on every page.
 };
