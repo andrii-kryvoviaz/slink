@@ -22,19 +22,25 @@ const handleApiProxy: Handle = async ({ event, resolve }) => {
   const proxyUrl = `${API_BASE_URL}${strippedPath}${url.search}`;
 
   const options: any = {
-    body: request.body,
     method: request.method,
     headers: request.headers,
-    // may cause problems with uploads in some Node versions if not set
-    duplex: 'half',
     // Node doesn't have to verify SSL certificates within the container
     rejectUnauthorized: false,
   };
 
-  return fetch(proxyUrl, options).catch((err) => {
-    console.log('Could not proxy API request: ', err);
-    throw err;
-  });
+  const contentType = request.headers.get('content-type');
+
+  if (contentType && /^(application\/json.*)/.test(contentType)) {
+    options.body = await request.arrayBuffer();
+  }
+
+  if (contentType && /^(multipart\/form-data.*)/.test(contentType)) {
+    options.body = request.body;
+    // is required by newer Node.js versions
+    options.duplex = 'half';
+  }
+
+  return fetch(proxyUrl, options);
 };
 
 const handleTheme: Handle = async ({ event, resolve }) => {
