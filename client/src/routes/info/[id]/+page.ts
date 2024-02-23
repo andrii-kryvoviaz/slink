@@ -8,8 +8,5 @@ export const load: PageLoad = async ({ params, fetch, url }) => {
   const response: ImageDetailsResponse = await ApiClient.image.getDetails(
     params.id
   );
-  return {
-    ...response,
-    url: `${url?.origin}${response.url}`,
-  };
+  return response;
 };

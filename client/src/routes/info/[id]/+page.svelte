@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { page } from '$app/stores';
   import Icon from '@iconify/svelte';
   import { fly } from 'svelte/transition';
 
@@ -24,7 +25,7 @@
   export let data: PageData;
 
   let params: Partial<ImageParams> = {};
-  let url: string;
+  let directLink: string;
 
   const filterResizable = (mimeType: string) => {
     return !new RegExp('svg|gif|webp').test(mimeType);
@@ -39,7 +40,12 @@
     };
   };
 
-  const formatImageUrl = (url: string, params: Partial<ImageParams>) => {
+  const formatImageUrl = (
+    url: string | string[],
+    params: Partial<ImageParams>
+  ) => {
+    url = Array.isArray(url) ? url.join('') : url;
+
     if (!params || Object.keys(params).length === 0) {
       return url;
     }
@@ -49,7 +55,7 @@
       .map(([key, value]) => `${key}=${value}`)
       .join('&');
 
-    return `${url}?${paramsString}`;
+    return [url, paramsString].join('?');
   };
 
   const {
@@ -98,7 +104,7 @@
     data.isPublic = isPublic;
   };
 
-  $: url = formatImageUrl(data.url, params);
+  $: directLink = formatImageUrl([$page.url.origin, data.url], params);
 </script>
 
 <div
@@ -127,10 +133,10 @@
       </p>
       <div class="mb-2 mt-8">
         <p class="my-2 text-xs font-extralight">
-          Copy the direct image url to use it on your website or share it with
+          Copy the direct image link to use it on your website or share it with
           others.
         </p>
-        <CopyContainer value={url} />
+        <CopyContainer value={directLink} />
       </div>
       {#if filterResizable(data.mimeType)}
         <div class="mb-2 flex items-center gap-3">
@@ -157,9 +163,14 @@
       <div class="mt-8">
         <p class="my-2 text-xs font-extralight">
           Make image publicly available under <a
-            class="font-normal hover:underline"
+            class="font-normal text-primary hover:underline"
             href="/">listing</a
-          > page, so anyone can see it (does not affect direct link).
+          >
+          page, so anyone can see it.
+          <span class="mt-1 block text-[0.8em] font-extralight">
+            <strong>*</strong> This will not affect the direct link. Therefore, it
+            is always accessible to anyone who holds the link.
+          </span>
         </p>
         <div class="mt-2 flex items-center">
           <Toggle

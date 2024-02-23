@@ -120,9 +120,9 @@
         id="open-link-tooltip"
       >
         {#if aspectRatioLinked}
-          <Icon icon="carbon:unlink" />
-        {:else}
           <Icon icon="carbon:link" />
+        {:else}
+          <Icon icon="carbon:unlink" />
         {/if}
       </Button>
       <Tooltip
