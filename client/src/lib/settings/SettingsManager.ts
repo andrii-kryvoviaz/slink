@@ -15,12 +15,8 @@ import { useWritable } from '@slink/store/contextAwareStore';
 import { cookie } from '@slink/utils/http/cookie';
 
 export class SettingsManager {
-  private static _instance: SettingsManager;
   public static get instance(): SettingsManager {
-    if (!SettingsManager._instance) {
-      SettingsManager._instance = new SettingsManager();
-    }
-    return SettingsManager._instance;
+    return new SettingsManager();
   }
 
   private _settings: SettingsMap = new SettingsMap();
