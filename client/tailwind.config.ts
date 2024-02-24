@@ -1,9 +1,8 @@
+import daisyui from 'daisyui';
 import type { Config } from 'tailwindcss';
-
 import { ThemeCustomizerPlugin } from 'tailwindcss-theme-customizer';
 
 import { defaultTheme, tailwindcssTheme } from './src/theme.default';
-import daisyui from 'daisyui';
 
 export default {
   content: [
@@ -28,5 +27,8 @@ export default {
     },
   },
   darkMode: 'class',
+  daisyui: {
+    logs: false,
+  },
   plugins: [ThemeCustomizerPlugin(defaultTheme), daisyui],
 } satisfies Config;
