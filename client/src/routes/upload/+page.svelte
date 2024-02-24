@@ -6,9 +6,9 @@
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { UploadedImageResponse } from '@slink/api/Response/UploadedImageResponse';
-  import { toast } from '@slink/store/toast';
 
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
+  import { toast } from '@slink/utils/ui/toast';
 
   import { Dropzone } from '@slink/components/Form';
 

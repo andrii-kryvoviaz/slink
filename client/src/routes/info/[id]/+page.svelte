@@ -5,9 +5,9 @@
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
-  import { toast } from '@slink/store/toast';
 
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
+  import { toast } from '@slink/utils/ui/toast';
 
   import { Tooltip } from '@slink/components/Common';
   import { CopyContainer } from '@slink/components/Common';
