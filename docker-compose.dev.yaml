@@ -7,13 +7,14 @@ services:
       target: dev
     volumes:
       - ./:/app
-      - client:/app/client
+      - node_modules:/app/client/node_modules
     ports:
       - "8080:8080"
+      - "5173:5173"
     environment:
       - API_ENABLED=true
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
 volumes:
-  client:
+  node_modules:

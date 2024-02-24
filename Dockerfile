@@ -105,6 +105,12 @@ WORKDIR /app
 # Create .env file
 COPY .env.example .env
 
+# Set environment variables
+ENV API_URL=http://localhost:8080
+ENV API_PREFIX=/api
+ENV PROXY_PREFIXES="/api;/image"
+ENV ORIGIN=http://localhost:3000
+
 # Run entrypoint
 CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisord.conf"]
 
