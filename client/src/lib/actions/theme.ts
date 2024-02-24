@@ -1,6 +1,6 @@
-import type { Action } from 'svelte/action';
+import { Theme } from '@slink/lib/settings';
 
-import { Theme } from '@slink/store/settings';
+import type { Action } from 'svelte/action';
 
 export const theme: Action<HTMLElement, string> = (
   node: HTMLElement,

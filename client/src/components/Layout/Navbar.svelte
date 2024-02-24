@@ -2,7 +2,7 @@
   import Icon from '@iconify/svelte';
 
   import { Tooltip } from '@slink/components/Common';
-  import { Button, ThemeSwitch } from '@slink/components/Common';
+  import { Button } from '@slink/components/Common';
 </script>
 
 <header class="w-full border-b-2 border-header/70 backdrop-blur">
@@ -60,23 +60,17 @@
         </Tooltip>
       </div>
 
-      <p class="divider divider-horizontal m-0 py-0" />
+      {#if $$slots.themeSwitch}
+        <p class="divider divider-horizontal m-0 py-0" />
+      {/if}
 
-      <ThemeSwitch />
+      <slot name="themeSwitch" />
 
-      <p class="divider divider-horizontal m-0 py-0" />
+      {#if $$slots.profile}
+        <p class="divider divider-horizontal m-0 py-0" />
+      {/if}
 
-      <Button
-        href="/profile/login"
-        motion="hover:opacity"
-        variant="link"
-        class="hover:no-underline"
-      >
-        <span class="text-sm font-semibold leading-6">
-          <span>Log in</span>
-          <Icon icon="solar:login-broken" class="inline h-6 w-6" />
-        </span>
-      </Button>
+      <slot name="profile" />
     </div>
   </nav>
 </header>

@@ -1,6 +1,3 @@
-import { ListenerAware } from '@slink/lib/listener';
-import type { Cookies, Handle } from '@sveltejs/kit';
-
 import { browser } from '$app/environment';
 
 interface CookieProvider {
@@ -31,13 +28,8 @@ class BrowserCookieProvider implements CookieProvider {
   }
 }
 
-class Cookie extends ListenerAware {
+class Cookie {
   private _provider: CookieProvider = new BrowserCookieProvider();
-  private _serverCookies: Cookies | null = null;
-
-  setServerCookies(cookies: Cookies) {
-    this._serverCookies = cookies;
-  }
 
   private _warningMessage() {
     console.warn(
@@ -47,9 +39,7 @@ class Cookie extends ListenerAware {
 
   get(key: string, defaultValue?: string): string | undefined {
     if (!browser) {
-      // allow server-side read only
-      // helps to prerender e.g. the theme
-      return this._serverCookies?.get(key) || defaultValue;
+      return defaultValue;
     }
 
     return this._provider.get(key, defaultValue);
@@ -62,7 +52,6 @@ class Cookie extends ListenerAware {
     }
 
     this._provider.set(key, value, ttl);
-    this._listener.notify(key, value);
   }
 
   remove(key: string): void {
@@ -76,7 +65,3 @@ class Cookie extends ListenerAware {
 }
 
 export const cookie = new Cookie();
-export const setServerCookiesHandle: Handle = async ({ event, resolve }) => {
-  cookie.setServerCookies(event.cookies);
-  return resolve(event);
-};

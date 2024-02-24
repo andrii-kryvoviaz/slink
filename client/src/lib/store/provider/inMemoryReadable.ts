@@ -1,4 +1,5 @@
-import type { Readable } from 'svelte/store';
+import { browser } from '$app/environment';
+import { type Readable, readable } from 'svelte/store';
 
 class InMemoryReadableStore<T> implements Readable<T> {
   private subscriber: ((value: T) => void) | null = null;
@@ -32,5 +33,8 @@ class InMemoryReadableStore<T> implements Readable<T> {
 export function inMemoryReadable<T>(
   defaultValue: T
 ): [Readable<T>, (value: T) => void] {
+  if (!browser) {
+    return [readable(defaultValue), (value: T) => {}];
+  }
   return InMemoryReadableStore.create(defaultValue);
 }

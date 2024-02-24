@@ -1,4 +1,4 @@
-import type { Handle } from '@sveltejs/kit';
+import { Theme, setCookieSettingsOnLocals } from '@slink/lib/settings';
 import { sequence } from '@sveltejs/kit/hooks';
 
 import { setFetchHandle } from '@slink/api/Client';
@@ -55,5 +55,6 @@ export const handle = sequence(
   setFetchHandle,
   setServerCookiesHandle,
   handleApiProxy,
+  setCookieSettingsOnLocals,
   handleTheme
 );
