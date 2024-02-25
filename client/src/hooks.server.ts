@@ -1,31 +1,26 @@
+import { env } from '$env/dynamic/private';
 import { Theme, setCookieSettingsOnLocals } from '@slink/lib/settings';
+import type { Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
-import { setFetchHandle } from '@slink/api/Client';
-import { Theme } from '@slink/store/settings';
-
-import { setServerCookiesHandle } from '@slink/utils/http/cookie';
-
 const handleApiProxy: Handle = async ({ event, resolve }) => {
-  const API_BASE_URL = 'http://localhost:8080';
-  const PROXY_PATH = '/api';
-  const PROXY_PATHS = [PROXY_PATH, '/image'];
-  const pathRegex = new RegExp(`^(${PROXY_PATHS.join('|')})`);
-
   const { url, fetch, request } = event;
+  const pathRegex = new RegExp(`^(${env.PROXY_PREFIXES.replace(';', '|')})`);
 
   if (!pathRegex.test(url.pathname)) {
     return resolve(event);
   }
 
-  const strippedPath = url.pathname.replace(new RegExp(`^${PROXY_PATH}`), '');
-  const proxyUrl = `${API_BASE_URL}${strippedPath}${url.search}`;
+  const strippedPath = url.pathname.replace(
+    new RegExp(`^${env.API_PREFIX}`),
+    ''
+  );
+
+  const proxyUrl = `${env.API_URL}${strippedPath}${url.search}`;
 
   const options: any = {
     method: request.method,
     headers: request.headers,
-    // Node doesn't have to verify SSL certificates within the container
-    rejectUnauthorized: false,
   };
 
   const contentType = request.headers.get('content-type');
@@ -43,6 +38,15 @@ const handleApiProxy: Handle = async ({ event, resolve }) => {
   return fetch(proxyUrl, options);
 };
 
+const handleResponseHeaders: Handle = async ({ event, resolve }) => {
+  const headers = ['location', 'content-type'];
+  return resolve(event, {
+    filterSerializedResponseHeaders: (name) => {
+      return name.startsWith('x-') || headers.includes(name);
+    },
+  });
+};
+
 const handleTheme: Handle = async ({ event, resolve }) => {
   const theme = event.cookies.get('theme') || Theme.DARK;
 
@@ -52,8 +56,7 @@ const handleTheme: Handle = async ({ event, resolve }) => {
 };
 
 export const handle = sequence(
-  setFetchHandle,
-  setServerCookiesHandle,
+  handleResponseHeaders,
   handleApiProxy,
   setCookieSettingsOnLocals,
   handleTheme
