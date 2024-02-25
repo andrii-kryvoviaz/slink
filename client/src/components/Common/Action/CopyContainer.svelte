@@ -2,14 +2,10 @@
   import Icon from '@iconify/svelte';
   import { fly } from 'svelte/transition';
 
-  import { getBaseUrl } from '@slink/utils/http/getBaseUrl';
-
   import { Button, type ButtonVariant } from '@slink/components/Common';
 
   export let value: string;
   export let delay: number = 2000;
-
-  const base: string | undefined = getBaseUrl();
 
   let isCopiedActive: boolean = false;
   let variant: ButtonVariant = 'primary';
@@ -23,10 +19,6 @@
       isCopiedActive = false;
     }, delay);
   };
-
-  $: if (value && !value.startsWith('http') && base) {
-    value = `${base}${value}`;
-  }
 
   $: variant = isCopiedActive ? 'success' : 'primary';
 </script>
