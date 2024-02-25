@@ -5,12 +5,14 @@ import {
 import { IgnoreAuthHeader } from '@slink/api/Mapper/IgnoreAuthHeader';
 import { JsonMapper } from '@slink/api/Mapper/JsonMapper';
 import { AuthResource, ImageResource } from '@slink/api/Resources';
+import { UserResource } from '@slink/api/Resources/UserResource';
 import type { RequestMapper } from '@slink/api/Type/RequestMapper';
 import type { RequestOptions } from '@slink/api/Type/RequestOptions';
 
 const RESOURCES = {
   image: ImageResource,
   auth: AuthResource,
+  user: UserResource,
 };
 
 type ResourceType = keyof typeof RESOURCES;
