@@ -31,6 +31,10 @@ final readonly class RotateTokenPairHandler implements QueryHandlerInterface {
       throw new InvalidCredentialsException();
     }
     
+    if($user->getStatus()->isRestricted()) {
+      throw new InvalidCredentialsException();
+    }
+    
     return $this->authenticationProvider->generateTokenPair($user);
   }
 }

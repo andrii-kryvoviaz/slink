@@ -20,12 +20,17 @@ final readonly class GenerateTokenPairHandler implements QueryHandlerInterface {
   
   /**
    * @param GenerateTokenPairQuery $query
+   * @param bool $approvalRequired
    * @return TokenPair
    */
-  public function __invoke(GenerateTokenPairQuery $query): TokenPair {
+  public function __invoke(GenerateTokenPairQuery $query, bool $approvalRequired): TokenPair {
     $user = $this->userStore->getByUsername(Email::fromString($query->getEmail()));
     
     if($user === null) {
+      throw new InvalidCredentialsException();
+    }
+    
+    if($approvalRequired && $user->getStatus()->isRestricted()) {
       throw new InvalidCredentialsException();
     }
     

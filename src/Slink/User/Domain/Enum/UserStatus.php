@@ -29,4 +29,8 @@ enum UserStatus: string {
   public function isBanned(): bool {
     return $this->equals(self::Banned);
   }
+  
+  public function isRestricted(): bool {
+    return $this->isSuspended() || $this->isBanned() || $this->isInactive();
+  }
 }
