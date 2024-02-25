@@ -62,7 +62,6 @@
     isLoading: descriptionIsLoading,
     error: updateDescriptionError,
     run: updateDescription,
-    reset: resetUpdateDescriptionState,
   } = ReactiveState((imageId: number, description: string) => {
     return ApiClient.image.updateDetails(imageId, {
       description,
@@ -73,19 +72,20 @@
     isLoading: visibilityIsLoading,
     error: updateVisibilityError,
     run: updateVisibility,
-    reset: resetUpdateVisibilityState,
-  } = ReactiveState((imageId: number, isPublic: boolean) => {
-    return ApiClient.image.updateDetails(imageId, {
-      isPublic,
-    });
-  });
+  } = ReactiveState(
+    (imageId: number, isPublic: boolean) => {
+      return ApiClient.image.updateDetails(imageId, {
+        isPublic,
+      });
+    },
+    { minExecutionTime: 300 }
+  );
 
   const handleSaveDescription = async (description: string) => {
     await updateDescription(data.id, description);
 
     if ($updateDescriptionError) {
       printErrorsAsToastMessage($updateDescriptionError);
-      resetUpdateDescriptionState();
       return;
     }
 
@@ -97,7 +97,6 @@
 
     if ($updateVisibilityError) {
       toast.error('Failed to update visibility. Please try again later.');
-      resetUpdateVisibilityState();
       return;
     }
 
