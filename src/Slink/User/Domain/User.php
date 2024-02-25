@@ -57,6 +57,14 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   }
   
   /**
+   * @param UserStatus $status
+   * @return void
+   */
+  public function setStatus(UserStatus $status): void {
+    $this->status = $status;
+  }
+  
+  /**
    * @return string
    */
   public function getIdentifier(): string {
@@ -118,6 +126,7 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   public function applyUserWasCreated(UserWasCreated $event): void {
     $this->setEmail($event->credentials->email);
     $this->setHashedPassword($event->credentials->password);
+    $this->setStatus($event->status);
   }
   
   /**
@@ -168,6 +177,6 @@ final class User extends AbstractAggregateRoot implements UserInterface {
    * @return void
    */
   public function applyUserStatusWasChanged(UserStatusWasChanged $event): void {
-    $this->status = $event->status;
+    $this->setStatus($event->status);
   }
 }
