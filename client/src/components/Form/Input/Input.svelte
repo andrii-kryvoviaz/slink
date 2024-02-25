@@ -63,9 +63,10 @@
     {/if}
   </div>
 
-  {#if error && typeof error === 'string'}
-    <div class="mt-1 text-xs text-input-error">
+  <div class="mt-1 text-xs text-input-error">
+    {#if error && typeof error === 'string'}
       {error}
-    </div>
-  {/if}
+    {/if}
+    &nbsp;
+  </div>
 </div>
