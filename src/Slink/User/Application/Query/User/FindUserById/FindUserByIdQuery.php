@@ -5,15 +5,16 @@ declare(strict_types=1);
 namespace Slink\User\Application\Query\User\FindUserById;
 
 use Slink\Shared\Application\Query\QueryInterface;
+use Slink\Shared\Infrastructure\MessageBus\EnvelopedMessage;
 
 final readonly class FindUserByIdQuery implements QueryInterface {
+  use EnvelopedMessage;
+  
   /**
    * @param string $id
-   * @param array<string> $groups
    */
   public function __construct(
     private string $id,
-    private array $groups = ['public']
   ) {
   }
   
@@ -22,12 +23,5 @@ final readonly class FindUserByIdQuery implements QueryInterface {
    */
   public function getId(): string {
     return $this->id;
-  }
-  
-  /**
-   * @return array<string>
-   */
-  public function getGroups(): array {
-    return $this->groups;
   }
 }

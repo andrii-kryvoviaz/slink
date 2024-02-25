@@ -17,13 +17,16 @@ final readonly class FindUserByIdHandler implements QueryHandlerInterface {
   }
   
   /**
+   * @param FindUserByIdQuery $query
+   * @param array<string> $groups
+   * @return Item
    * @throws NonUniqueResultException
    * @throws NotFoundException
    */
-  public function __invoke(FindUserByIdQuery $query): Item {
+  public function __invoke(FindUserByIdQuery $query, array $groups = ['public']): Item {
     $id = ID::fromString($query->getId());
     $userView = $this->repository->one($id);
     
-    return Item::fromEntity($userView, groups: $query->getGroups());
+    return Item::fromEntity($userView, groups: $groups);
   }
 }
