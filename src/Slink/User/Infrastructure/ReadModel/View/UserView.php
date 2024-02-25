@@ -59,7 +59,7 @@ final class UserView extends AbstractView {
     private ?DateTime $updatedAt,
     
     #[ORM\Column(enumType: UserStatus::class, options: ['default' => UserStatus::Active])]
-    #[Groups(['internal'])]
+    #[Groups(['internal', 'status_check'])]
     private UserStatus $status,
   ) {
   }

@@ -24,6 +24,6 @@ final readonly class FindUserByIdHandler implements QueryHandlerInterface {
     $id = ID::fromString($query->getId());
     $userView = $this->repository->one($id);
     
-    return Item::fromEntity($userView);
+    return Item::fromEntity($userView, groups: $query->getGroups());
   }
 }

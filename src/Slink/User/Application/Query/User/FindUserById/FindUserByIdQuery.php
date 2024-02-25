@@ -9,9 +9,11 @@ use Slink\Shared\Application\Query\QueryInterface;
 final readonly class FindUserByIdQuery implements QueryInterface {
   /**
    * @param string $id
+   * @param array<string> $groups
    */
   public function __construct(
-    private string $id
+    private string $id,
+    private array $groups = ['public']
   ) {
   }
   
@@ -20,5 +22,12 @@ final readonly class FindUserByIdQuery implements QueryInterface {
    */
   public function getId(): string {
     return $this->id;
+  }
+  
+  /**
+   * @return array<string>
+   */
+  public function getGroups(): array {
+    return $this->groups;
   }
 }
