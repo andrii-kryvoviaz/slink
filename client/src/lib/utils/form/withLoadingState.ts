@@ -1,11 +1,24 @@
+import type { ActionResult } from '@sveltejs/kit';
+
+import { applyAction } from '$app/forms';
+import { invalidateAll } from '$app/navigation';
 import type { Writable } from 'svelte/store';
 
-export function withLoadingState(loading: Writable<boolean>) {
+export function withLoadingState(
+  loading: Writable<boolean>,
+  invalidate: boolean = false
+) {
   return () => {
     loading.set(true);
-    return async ({ update }: { update: Function }) => {
+
+    return async ({ result }: { update: Function; result: ActionResult }) => {
       loading.set(false);
-      update();
+
+      if (invalidate) {
+        await invalidateAll();
+      }
+
+      await applyAction(result);
     };
   };
 }
