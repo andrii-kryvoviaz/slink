@@ -1,25 +1,28 @@
-import { type Handle, error } from '@sveltejs/kit';
-
-import type { AbstractResource } from '@slink/api/AbstractResource';
 import {
   BadRequestException,
-  ForbiddenException,
-  NotFoundException,
   ValidationException,
 } from '@slink/api/Exceptions';
+import { IgnoreAuthHeader } from '@slink/api/Mapper/IgnoreAuthHeader';
 import { JsonMapper } from '@slink/api/Mapper/JsonMapper';
-import { ImageResource } from '@slink/api/Resources/ImageResource';
+import { AuthResource, ImageResource } from '@slink/api/Resources';
 import type { RequestMapper } from '@slink/api/Type/RequestMapper';
 import type { RequestOptions } from '@slink/api/Type/RequestOptions';
 
-type Resource<T extends AbstractResource> = { new (client: Client): T };
-
-const RESOURCES: Record<string, Resource<any>> = {
+const RESOURCES = {
   image: ImageResource,
+  auth: AuthResource,
 };
 
+type ResourceType = keyof typeof RESOURCES;
+
+type Resource<T extends ResourceType> = InstanceType<(typeof RESOURCES)[T]>;
+
+type ResourceConstructor<T extends ResourceType> = new (
+  client: Client
+) => Resource<T>;
+
 type Resources = {
-  [K in keyof typeof RESOURCES]: InstanceType<(typeof RESOURCES)[K]>;
+  [K in ResourceType]: Resource<K>;
 };
 
 type FetchFunction = typeof fetch;
@@ -28,18 +31,21 @@ type ApiClient = Resources & {
   use: (callable: FetchFunction) => Resources;
 };
 
-export class Client implements ApiClient {
-  private static _resources: Resources = {};
-  private static _instance: ApiClient;
+export class Client {
+  private static _resources: Resources = {} as Resources;
+  private static _instance: Client;
 
   private _fetch: FetchFunction | null = null;
-  private _mappers: Set<RequestMapper> = new Set([JsonMapper]);
+  private _mappers: Set<RequestMapper> = new Set([
+    JsonMapper,
+    IgnoreAuthHeader,
+  ]);
 
   private constructor(private readonly _basePath: string) {}
 
   public static create(basePath: string): ApiClient {
     const client = this._instance ?? new Client(basePath);
-    this.initializeResources(client as Client);
+    this.initializeResources(client);
 
     return {
       ...this._resources,
@@ -48,9 +54,11 @@ export class Client implements ApiClient {
   }
 
   private static initializeResources(client: Client) {
-    for (const resource in RESOURCES) {
-      const resourceClass = RESOURCES[resource];
-      this._resources[resource] = new resourceClass(client);
+    let ResourceType: ResourceType;
+
+    for (ResourceType in RESOURCES) {
+      const resourceClass: ResourceConstructor<any> = RESOURCES[ResourceType];
+      this._resources[ResourceType] = new resourceClass(client);
     }
   }
 
@@ -74,21 +82,17 @@ export class Client implements ApiClient {
       return;
     }
 
-    if (response.status === 403) {
-      throw new ForbiddenException(response.status);
-    }
-
-    if (response.status === 404) {
-      throw new NotFoundException(response.status);
+    if ([401, 403, 404].includes(response.status)) {
+      return;
     }
 
     const responseBody = await response.json();
 
-    if (response.status === 400) {
+    if (response.status === 400 && !responseBody.error?.violations) {
       throw new BadRequestException(responseBody.error, response.status);
     }
 
-    if (response.status === 422) {
+    if (response.status === 422 || responseBody.error?.violations) {
       throw new ValidationException(responseBody.error, response.status);
     }
 
@@ -104,8 +108,3 @@ export class Client implements ApiClient {
 }
 
 export const ApiClient = Client.create('/api');
-
-export const setFetchHandle: Handle = async ({ event, resolve }) => {
-  ApiClient.use(event.fetch);
-  return resolve(event);
-};

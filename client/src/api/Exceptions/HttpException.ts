@@ -1,4 +1,4 @@
-export type ErrorList = { name: string; message: string }[];
+export type ErrorList = { [name: string]: string };
 export abstract class HttpException extends Error {
   constructor(message: string, public status: number) {
     super(message);
@@ -8,11 +8,6 @@ export abstract class HttpException extends Error {
   }
 
   get errors(): ErrorList {
-    return [
-      {
-        name: 'error',
-        message: this.message,
-      },
-    ];
+    return { error: this.message };
   }
 }

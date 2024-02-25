@@ -17,11 +17,9 @@ export class ValidationException extends HttpException {
   }
 
   get errors(): ErrorList {
-    return this._violations.map((violation) => {
-      return {
-        name: violation.property,
-        message: violation.message,
-      };
-    });
+    return this._violations.reduce((errors: ErrorList, violation) => {
+      errors[violation.property] = violation.message;
+      return errors;
+    }, {});
   }
 }
