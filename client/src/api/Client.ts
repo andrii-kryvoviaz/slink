@@ -97,7 +97,10 @@ export class Client {
     }
 
     if (response.ok && response.status < 400) {
-      return responseBody?.data ?? responseBody;
+      return {
+        ...(responseBody.data || responseBody),
+        headers: response.headers,
+      };
     }
   }
 
