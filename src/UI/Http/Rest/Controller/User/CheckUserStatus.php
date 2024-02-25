@@ -16,7 +16,10 @@ final class CheckUserStatus {
   use QueryTrait;
   
   public function __invoke(string $id): ApiResponse {
-    $user = $this->ask(new FindUserByIdQuery($id, groups: ['status_check']));
+    $query = new FindUserByIdQuery($id);
+    $user = $this->ask($query->withContext([
+      'groups' => ['status_check'],
+    ]));
     
     return ApiResponse::one($user);
   }
