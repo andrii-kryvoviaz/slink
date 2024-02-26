@@ -1,11 +1,12 @@
+import { RedisSessionProvider } from '@slink/lib/auth/SessionProvider/RedisSessionProvider';
+import type { SessionProviderInterface } from '@slink/lib/auth/SessionProvider/SessionProviderInterface';
 import type { User } from '@slink/lib/auth/Type/User';
 import type { Cookies } from '@sveltejs/kit';
 
 import { browser } from '$app/environment';
-import { type Writable, get, writable } from 'svelte/store';
 
-type SessionItem<T> = {
-  data: Writable<T>;
+type SessionItem = {
+  data: SessionData;
   expires: number;
 };
 
@@ -23,25 +24,33 @@ class SessionManager {
     return this._instance ?? (this._instance = new SessionManager());
   }
 
-  private _store: Record<string, SessionItem<SessionData>> = {};
+  private _provider: SessionProviderInterface = null as any;
 
-  private constructor() {}
+  public setProvider(provider: SessionProviderInterface) {
+    this._provider = provider;
 
-  public create(cookies: Cookies, ttl: number = 0): string {
-    const sessionId = crypto.randomUUID();
+    return this;
+  }
 
-    if (cookies.get('sessionId')) {
-      return cookies.get('sessionId') as string;
+  public async create(
+    cookies: Cookies,
+    ttl: number | null = null
+  ): Promise<string> {
+    const existingSessionId = cookies.get('sessionId');
+
+    if (existingSessionId) {
+      const session = await this._provider.get<SessionItem>(existingSessionId);
+
+      if (session) {
+        return existingSessionId;
+      } else {
+        await this.destroy(cookies);
+      }
     }
 
-    const data = writable({
-      user: null,
-    });
+    const sessionId = crypto.randomUUID();
 
-    this._store[sessionId] = {
-      data,
-      expires: ttl ? Date.now() + ttl : 0,
-    };
+    await this._provider.create(sessionId, ttl);
 
     cookies.set('sessionId', sessionId, {
       sameSite: 'strict',
@@ -52,32 +61,40 @@ class SessionManager {
     return sessionId;
   }
 
-  public get(sessionId: string | undefined): SessionData | undefined {
+  public async get(
+    sessionId: string | undefined
+  ): Promise<SessionData | undefined> {
     if (!sessionId) return;
 
-    const session = this._store[sessionId];
+    const session = await this._provider.get<SessionItem>(sessionId);
 
     if (!session) return;
 
-    if (session.expires && session.expires < Date.now()) {
-      delete this._store[sessionId];
+    if (session && session.expires && session.expires < Date.now()) {
+      await this._provider.destroy(sessionId);
       return;
     }
 
-    return get(session.data);
+    return session.data;
   }
 
-  public set(sessionId: string | undefined, data: Partial<SessionData>) {
+  public async set(
+    sessionId: string | undefined,
+    data: Partial<SessionData>,
+    ttl: number | null = null
+  ) {
     if (!sessionId) return;
 
-    const session = this._store[sessionId];
+    const session = await this._provider.get<SessionItem>(sessionId);
 
     if (!session) return;
 
-    session.data.update((current) => ({ ...current, ...data }));
+    session.data = { ...session.data, ...data };
+
+    await this._provider.set(sessionId, session, ttl);
   }
 
-  public destroy(cookies: Cookies) {
+  public async destroy(cookies: Cookies) {
     const sessionId = cookies.get('sessionId');
 
     if (!sessionId) return;
@@ -88,8 +105,10 @@ class SessionManager {
       secure: true,
     });
 
-    delete this._store[sessionId];
+    await this._provider.destroy(sessionId);
   }
 }
 
-export const Session = SessionManager.instance;
+const provider = await RedisSessionProvider.createClient();
+
+export const Session = SessionManager.instance.setProvider(provider);

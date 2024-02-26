@@ -10,7 +10,7 @@ type ApiOptions = {
 export const ApiConnector = (options: ApiOptions): Handle => {
   return async ({ event, resolve }) => {
     const { url, fetch, request, cookies, locals } = event;
-    const session = Session.get(cookies.get('sessionId'));
+    const session = await Session.get(cookies.get('sessionId'));
 
     const pathRegex = new RegExp(`^(${options.registeredPaths.join('|')})`);
 

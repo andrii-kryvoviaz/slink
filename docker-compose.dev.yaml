@@ -11,8 +11,7 @@ services:
     ports:
       - "8080:8080"
       - "5173:5173"
-    environment:
-      - API_ENABLED=true
+      - "6379:6379"
     extra_hosts:
       - "host.docker.internal:host-gateway"
 

@@ -19,6 +19,7 @@
 /public/images
 /public/slink
 /slink
+dump.rdb
 
 ###> lexik/jwt-authentication-bundle ###
 /config/jwt/*.pem

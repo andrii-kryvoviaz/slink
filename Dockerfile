@@ -52,6 +52,7 @@ FROM php:${PHP_VERSION}-alpine as base
 RUN apk update && apk upgrade &&\
     apk add --no-cache \
     supervisor \
+    redis \
     libmcrypt \
     libcurl \
     libsmbclient \

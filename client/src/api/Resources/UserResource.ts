@@ -7,7 +7,13 @@ export class UserResource extends AbstractResource {
     return this.get(`/user/${userId}/status`);
   }
 
-  public async getCurrentUser(): Promise<AuthenticatedUser> {
-    return this.get('/user');
+  public async getCurrentUser(
+    accessToken?: string
+  ): Promise<AuthenticatedUser> {
+    const headers = accessToken
+      ? { Authorization: `Bearer ${accessToken}` }
+      : ({} as Record<string, string>);
+
+    return this.get('/user', { headers });
   }
 }

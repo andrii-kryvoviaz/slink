@@ -33,14 +33,8 @@ export class Auth {
       secure: true,
     });
 
+    const response = await ApiClient.user.getCurrentUser(accessToken);
     const claims = parseJwt<{ roles: string[] }>(accessToken);
-    console.log('Claims', claims);
-
-    const sessionId = Session.create(cookies);
-
-    Session.set(sessionId, { accessToken });
-
-    const response = await ApiClient.user.getCurrentUser();
 
     const user = {
       id: response.id,
@@ -49,7 +43,8 @@ export class Auth {
       roles: claims.roles,
     };
 
-    Session.set(sessionId, { user });
+    const sessionId = await Session.create(cookies);
+    await Session.set(sessionId, { user, accessToken });
 
     return user;
   }
@@ -63,7 +58,7 @@ export class Auth {
     const response = await ApiClient.auth.login(username, password);
     const { access_token, refresh_token } = response;
 
-    Session.destroy(cookies);
+    await Session.destroy(cookies);
 
     const user = await this._authenticateUser({
       accessToken: access_token,
@@ -106,6 +101,6 @@ export class Auth {
       secure: true,
     });
 
-    Session.destroy(cookies);
+    await Session.destroy(cookies);
   }
 }
