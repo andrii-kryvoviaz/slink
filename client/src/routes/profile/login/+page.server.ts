@@ -1,7 +1,7 @@
+import { env } from '$env/dynamic/private';
 import { Auth } from '@slink/lib/auth/Auth';
 import { fail, redirect } from '@sveltejs/kit';
 
-import { ApiClient } from '@slink/api/Client';
 import { HttpException } from '@slink/api/Exceptions';
 
 import { formData } from '@slink/utils/form/formData';
@@ -25,6 +25,10 @@ export const actions: Actions = {
           username,
           errors: e.errors,
         });
+      }
+
+      if (env.NODE_ENV === 'development') {
+        console.error(e);
       }
 
       return fail(500, {
