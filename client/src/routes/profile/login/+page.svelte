@@ -1,51 +1,91 @@
 <script lang="ts">
-  import Icon from '@iconify/svelte';
+  import { settings } from '@slink/lib/settings';
 
-  import { isLightTheme } from '@slink/store/settings.js';
+  import { enhance } from '$app/forms';
+  import Icon from '@iconify/svelte';
+  import { fade } from 'svelte/transition';
+
+  import { useWritable } from '@slink/store/contextAwareStore';
+
+  import { withLoadingState } from '@slink/utils/form/withLoadingState';
+  import { toast } from '@slink/utils/ui/toast';
 
   import { Button, type ButtonVariant } from '@slink/components/Common';
   import { Input } from '@slink/components/Form';
 
+  import type { PageData } from './$types';
+
+  export let form;
+  export let data: PageData;
+
+  let isLoading = useWritable('loginFormLoadingState', false);
   let buttonVariant: ButtonVariant = 'primary';
-  $: buttonVariant = $isLightTheme ? 'dark' : 'primary';
+
+  const { isLight } = settings.get('theme', data.settings.theme);
+
+  $: buttonVariant = $isLight ? 'dark' : 'primary';
+  $: if (form?.errors.message) {
+    toast.error(form.errors.message);
+  }
 </script>
 
-<div class="flex flex-grow items-center justify-center">
+<div
+  class="flex flex-grow items-center justify-center"
+  in:fade={{ duration: 200 }}
+>
   <div
     class="m-auto mx-auto w-full max-w-sm rounded-lg bg-white p-6 shadow-md dark:bg-gray-800"
   >
-    <div class="mx-auto flex justify-center">
+    <h2
+      class="mt-4 flex gap-3 text-2xl font-light text-gray-700 dark:text-gray-200"
+    >
       <img class="h-7 w-auto sm:h-8" src="/favicon.png" alt="" />
-    </div>
-
-    <h2 class="mt-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
       Welcome Back
     </h2>
 
-    <form class="mt-6">
-      <div class="flex flex-col gap-4">
+    <form class="mt-6" method="POST" use:enhance={withLoadingState(isLoading)}>
+      <div class="flex flex-col gap-2">
         <div>
-          <Input label="Username" name="username">
+          <Input
+            label="Username"
+            name="username"
+            value={form?.username || ''}
+            error={form?.errors.username ||
+              form?.errors.email ||
+              !!form?.errors.credentials}
+          >
             <Icon icon="ph:user" slot="leftIcon" />
           </Input>
         </div>
 
         <div>
-          <Input label="Password" name="password" type="password">
+          <Input
+            label="Password"
+            name="password"
+            type="password"
+            error={form?.errors.password || form?.errors.credentials}
+          >
             <Icon icon="ph:password-light" slot="leftIcon" />
+          </Input>
+          <!-- ToDo: Implement forget password feature
             <a
               slot="topRightText"
               href="/profile/forget"
               class="text-xs text-gray-600 hover:underline dark:text-gray-400"
               >Forget Password?</a
-            >
-          </Input>
+            >-->
         </div>
       </div>
 
       <div class="mt-6">
-        <Button variant={buttonVariant} size="md" class="w-full">
-          Sign In
+        <Button
+          variant={buttonVariant}
+          size="md"
+          class="w-full"
+          loading={$isLoading}
+        >
+          <span>Sign In</span>
+          <Icon icon="fluent:chevron-right-48-regular" slot="rightIcon" />
         </Button>
       </div>
     </form>
