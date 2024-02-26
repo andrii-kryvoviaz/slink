@@ -8,6 +8,7 @@
   import { useWritable } from '@slink/store/contextAwareStore';
 
   import { withLoadingState } from '@slink/utils/form/withLoadingState';
+  import { toast } from '@slink/utils/ui/toast';
 
   import { Button, type ButtonVariant } from '@slink/components/Common';
   import { Input } from '@slink/components/Form';
@@ -22,6 +23,9 @@
 
   const { isLight } = settings.get('theme', data.settings.theme);
   $: buttonVariant = $isLight ? 'dark' : 'primary';
+  $: if (form?.errors.message) {
+    toast.error(form.errors.message);
+  }
 </script>
 
 <div

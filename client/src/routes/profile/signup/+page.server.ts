@@ -43,7 +43,9 @@ const defaultAction: Action = async ({ locals, request, cookies }) => {
       });
     }
 
-    return fail(500);
+    return fail(500, {
+      errors: { message: 'Something went wrong. Please try again later.' },
+    });
   }
 
   if (redirectUrl) {
