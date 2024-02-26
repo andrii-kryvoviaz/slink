@@ -1,3 +1,4 @@
+import { Theme } from '@slink/lib/settings/Settings.enums';
 import type {
   CookieSettings,
   SettingsKey,
@@ -9,11 +10,15 @@ export * from './Settings.enums';
 
 export const settings = SettingsManager.instance;
 
+const defaultSettings: { [K in SettingsKey]?: any } = {
+  theme: Theme.DARK,
+};
+
 export const setCookieSettingsOnLocals: Handle = async ({ event, resolve }) => {
   const settingsKeys = settings.getSettingKeys();
 
   event.locals.settings = settingsKeys.reduce((acc, key: SettingsKey) => {
-    acc[key] = event.cookies.get(key) || '';
+    acc[key] = event.cookies.get(key) || defaultSettings[key] || null;
     return acc;
   }, {} as CookieSettings);
 
