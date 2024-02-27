@@ -7,16 +7,37 @@ type UserDropdownGroup = {
   badge?: string;
 };
 
-type UserDropdownItem = {
+export type UserDropdownItem = {
   title: string;
   access: string[];
   icon: string;
   link: string;
+  isForm?: boolean;
   state?: 'active' | 'inactive' | 'hidden';
   badge?: string;
 };
 
 export const UserDropdownItems: UserDropdownGroup[] = [
+  {
+    title: 'Account',
+    access: ['USER_ROLE'],
+    items: [
+      {
+        title: 'View Profile',
+        access: ['USER_ROLE', 'ADMIN_ROLE'],
+        icon: 'ph:user',
+        link: '/profile',
+        state: 'active',
+      },
+      {
+        title: 'Upload History',
+        access: ['USER_ROLE', 'ADMIN_ROLE'],
+        icon: 'material-symbols-light:history',
+        link: '/history',
+        state: 'active',
+      },
+    ],
+  },
   {
     title: 'Admin',
     access: ['ADMIN_ROLE'],
@@ -39,27 +60,6 @@ export const UserDropdownItems: UserDropdownGroup[] = [
     ],
   },
   {
-    title: 'Account',
-    access: ['USER_ROLE'],
-    items: [
-      {
-        title: 'View Profile',
-        access: ['USER_ROLE', 'ADMIN_ROLE'],
-        icon: 'ph:user',
-        link: '/profile',
-        state: 'active',
-      },
-      {
-        title: 'Upload History',
-        access: ['USER_ROLE', 'ADMIN_ROLE'],
-        icon: 'material-symbols-light:history',
-        link: '/history',
-        state: 'active',
-      },
-    ],
-  },
-
-  {
     title: 'System',
     access: ['USER_ROLE', 'ADMIN_ROLE'],
     items: [
@@ -74,8 +74,9 @@ export const UserDropdownItems: UserDropdownGroup[] = [
         title: 'Logout',
         access: ['USER_ROLE', 'ADMIN_ROLE'],
         icon: 'solar:logout-line-duotone',
-        link: '/logout',
+        link: '/profile/logout',
         state: 'active',
+        isForm: true,
       },
     ],
   },

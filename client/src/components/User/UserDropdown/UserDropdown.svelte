@@ -5,8 +5,10 @@
   import { quintOut } from 'svelte/easing';
   import { fade } from 'svelte/transition';
 
+  import { TextEllipsis } from '@slink/components/Common';
   import { UserAvatar } from '@slink/components/User';
   import { UserDropdownItems } from '@slink/components/User/UserDropdown/UserDropdown.items';
+  import UserDropdownItem from '@slink/components/User/UserDropdown/UserDropdownItem.svelte';
 
   export let user: User | null = null;
   export let isDark = false;
@@ -31,36 +33,34 @@
 
 <div class="dropdown relative inline-block">
   <button
-    class="dropdown-caller z-100 relative flex items-center rounded-md border border-transparent bg-white p-2 text-sm text-gray-600 focus:border-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:bg-gray-800 dark:text-white dark:focus:ring-blue-400 dark:focus:ring-opacity-40"
+    class="dropdown-caller z-100 relative flex items-center gap-2 rounded-md border border-transparent bg-gray-200/70 p-2 text-sm focus:border-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:bg-slate-800 dark:text-white dark:focus:ring-blue-400 dark:focus:ring-opacity-40"
     on:click={() => (isOpen = !isOpen)}
   >
-    <span class="mx-1">{user?.displayName}</span>
-    <Icon icon="mdi:chevron-up-down" class="mx-1 h-5 w-5" />
+    <UserAvatar size="xs" variant="default" class="mx-1" {user} />
+    <TextEllipsis
+      class="justify-center"
+      fadeClass="from-gray-200/70 dark:from-slate-800"
+    >
+      {user?.displayName}
+    </TextEllipsis>
+    {#if isOpen}
+      <Icon icon="entypo:chevron-small-up" class="h-5 w-5" />
+    {:else}
+      <Icon icon="entypo:chevron-small-down" class="h-5 w-5" />
+    {/if}
   </button>
 
   {#if isOpen}
     <div
       transition:fade={{ duration: 400, easing: quintOut }}
-      class="absolute right-0 z-50 mt-2 w-56 origin-top-right overflow-hidden
-      rounded-md bg-white py-2 shadow-xl dark:bg-gray-800"
+      class="absolute right-0 z-50 mt-2 w-56 origin-top-right overflow-hidden rounded-md border bg-gray-50 py-0 shadow-xl dark:border-header/70 dark:bg-gray-800"
     >
-      <div
-        class="-mt-2 flex transform cursor-auto select-none items-center p-3 text-sm text-gray-600 transition-colors duration-300 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white"
-      >
-        <UserAvatar size="sm" variant="ring" class="mx-2" />
-        <div class="mx-1">
-          <h1 class="text-sm font-semibold text-gray-700 dark:text-gray-200">
-            {user?.displayName}
-          </h1>
-          <p class="text-sm text-gray-500 dark:text-gray-400">
-            {user?.email}
-          </p>
-        </div>
-      </div>
+      {#each UserDropdownItems as group, index (group.title)}
+        {#if index > 0}
+          <hr class="border-gray-200 dark:border-gray-700" />
+        {/if}
 
-      {#each UserDropdownItems as group (group.title)}
-        <div class="relative" class:dark={isDark}>
-          <hr class=" border-gray-200 dark:border-gray-700" />
+        <div class="relative">
           {#if group.badge}
             <span
               class="absolute -top-2 right-2 z-10 mx-1 rounded-full bg-primary px-2 py-1 text-[0.5rem] text-white"
@@ -71,24 +71,20 @@
 
           {#each group.items as item (item.title)}
             {#if item.state !== 'hidden'}
-              <a
-                href={item.state === 'active' ? item.link : '#'}
-                class="flex transform items-center justify-between p-3 text-sm capitalize text-gray-600 transition-colors duration-300 hover:bg-primary hover:text-white dark:text-gray-300"
-                class:inactive={item.state === 'inactive'}
-              >
-                <span class="flex">
+              <UserDropdownItem {item} {isDark}>
+                <span class="flex gap-1">
                   <Icon icon={item.icon} class="mx-1 h-5 w-5" />
 
-                  <span class="mx-1">{item.title}</span>
+                  <span>{item.title}</span>
                 </span>
                 {#if item.badge}
                   <span
-                    class="mx-1 rounded-full bg-primary px-2 py-[0.1rem] text-[0.5rem] text-white"
+                    class="rounded-full bg-primary px-2 py-[0.1rem] text-[0.5rem] text-white"
                   >
                     {item.badge}
                   </span>
                 {/if}
-              </a>
+              </UserDropdownItem>
             {/if}
           {/each}
         </div>
@@ -96,21 +92,3 @@
     </div>
   {/if}
 </div>
-
-<style>
-  .dark .inactive {
-    @apply cursor-not-allowed bg-gray-600 text-gray-300 opacity-60;
-  }
-
-  .dark .inactive:hover {
-    @apply bg-gray-600;
-  }
-
-  .inactive {
-    @apply bg-gray-100 text-gray-400;
-  }
-
-  .inactive:hover {
-    @apply bg-gray-100;
-  }
-</style>

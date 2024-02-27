@@ -26,13 +26,13 @@
       on:change={({ detail }) => settings.set('theme', detail)}
     />
 
-    <div slot="profile">
+    <div slot="profile" class="max-h-10">
       {#if !data.user}
         <Button
           href="/profile/login"
           motion="hover:opacity"
           variant="link"
-          class="hover:no-underline"
+          class="py-0 hover:no-underline"
         >
           <span class="text-sm font-semibold leading-6">
             <span>Log in</span>
