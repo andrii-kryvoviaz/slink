@@ -5,7 +5,7 @@
   import { Button } from '@slink/components/Common';
 </script>
 
-<header class="w-full border-b-2 border-header/70 backdrop-blur">
+<header class="z-30 w-full border-b-2 border-header/70 backdrop-blur">
   <nav
     class="container mx-auto flex items-center justify-between px-5 py-4 lg:px-8"
   >

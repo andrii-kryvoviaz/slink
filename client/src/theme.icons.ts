@@ -23,4 +23,10 @@ export const themeIcons: string[] = [
   'mdi-light:loading',
   'solar:login-broken',
   'fa6-solid:chevron-right',
+  'mdi:chevron-up-down',
+  'material-symbols-light:history',
+  'mingcute:settings-7-line',
+  'solar:graph-line-duotone',
+  'solar:logout-line-duotone',
+  'material-symbols-light:conversion-path',
 ];

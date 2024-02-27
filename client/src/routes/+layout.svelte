@@ -8,6 +8,7 @@
   import { Button, ThemeSwitch } from '@slink/components/Common';
   import { Navbar } from '@slink/components/Layout';
   import { ToastManager } from '@slink/components/Toast';
+  import { UserDropdown } from '@slink/components/User';
 
   import type { LayoutData } from './$types';
 
@@ -26,17 +27,21 @@
     />
 
     <div slot="profile">
-      <Button
-        href="/profile/login"
-        motion="hover:opacity"
-        variant="link"
-        class="hover:no-underline"
-      >
-        <span class="text-sm font-semibold leading-6">
-          <span>Log in</span>
-          <Icon icon="solar:login-broken" class="inline h-6 w-6" />
-        </span>
-      </Button>
+      {#if !data.user}
+        <Button
+          href="/profile/login"
+          motion="hover:opacity"
+          variant="link"
+          class="hover:no-underline"
+        >
+          <span class="text-sm font-semibold leading-6">
+            <span>Log in</span>
+            <Icon icon="solar:login-broken" class="inline h-6 w-6" />
+          </span>
+        </Button>
+      {:else}
+        <UserDropdown user={data.user} isDark={$isDark} />
+      {/if}
     </div>
   </Navbar>
 
