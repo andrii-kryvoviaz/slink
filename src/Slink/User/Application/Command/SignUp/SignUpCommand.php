@@ -31,8 +31,8 @@ final readonly class SignUpCommand implements CommandInterface {
 
     #[Assert\NotBlank]
     #[Assert\Length(min: 3, max: 30)]
-    #[Assert\Regex(pattern: '/^[a-zA-Z0-9_\-]+$/', message: 'Display name can only contain letters, numbers, and underscores or hyphens.')]
-    #[Assert\Regex(pattern: '/^(?!.*(_|-){2})/', message: 'Display name cannot contain consecutive underscores or hyphens.')]
+    #[Assert\Regex(pattern: '/^[a-zA-Z0-9_\-\s\.]+$/', message: 'Display name can only contain letters, numbers, underscores, hyphens, spaces, and periods.')]
+    #[Assert\Regex(pattern: '/^(?!.*(_|-|\s\.){2})/', message: 'Display name cannot contain consecutive characters of the same type.')]
     #[Assert\NotEqualTo(propertyPath: 'email', message: 'Display name cannot be the same as email.')]
     #[Assert\Regex(pattern: '/^(?!anonymous$)/i', message: '`Anonymous` is a reserved display name.')]
     private string $display_name,
