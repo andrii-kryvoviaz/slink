@@ -7,7 +7,7 @@
 
 <header class="z-30 w-full border-b-2 border-header/70 backdrop-blur">
   <nav
-    class="container mx-auto flex items-center justify-between px-5 py-4 lg:px-8"
+    class="container mx-auto flex min-h-[5rem] items-center justify-between px-5 py-4 lg:px-8"
   >
     <div class="flex lg:flex-1">
       <a href="/" class="-m-1.5 flex items-center gap-2 p-1.5">
