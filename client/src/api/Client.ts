@@ -2,7 +2,6 @@ import {
   BadRequestException,
   ValidationException,
 } from '@slink/api/Exceptions';
-import { IgnoreAuthHeader } from '@slink/api/Mapper/IgnoreAuthHeader';
 import { JsonMapper } from '@slink/api/Mapper/JsonMapper';
 import { AuthResource, ImageResource } from '@slink/api/Resources';
 import { UserResource } from '@slink/api/Resources/UserResource';
@@ -38,10 +37,7 @@ export class Client {
   private static _instance: Client;
 
   private _fetch: FetchFunction | null = null;
-  private _mappers: Set<RequestMapper> = new Set([
-    JsonMapper,
-    IgnoreAuthHeader,
-  ]);
+  private _mappers: Set<RequestMapper> = new Set([JsonMapper]);
 
   private constructor(private readonly _basePath: string) {}
 
