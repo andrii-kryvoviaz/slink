@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use UI\Http\Rest\Response\ApiResponse;
 
 #[AsController]
-#[Route(path: '/logout', name: 'logout', methods: ['POST'])]
+#[Route(path: '/auth/logout', name: 'logout', methods: ['POST'])]
 final class LogOutController {
   use CommandTrait;
   

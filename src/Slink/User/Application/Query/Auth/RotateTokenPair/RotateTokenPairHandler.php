@@ -28,11 +28,11 @@ final readonly class RotateTokenPairHandler implements QueryHandlerInterface {
     $user = $this->userStore->getByRefreshToken(HashedRefreshToken::encode($query->getRefreshToken()));
     
     if($user === null) {
-      throw new InvalidCredentialsException();
+      throw new InvalidCredentialsException('Invalid refresh token');
     }
     
     if($user->getStatus()->isRestricted()) {
-      throw new InvalidCredentialsException();
+      throw new InvalidCredentialsException('User is restricted');
     }
     
     return $this->authenticationProvider->generateTokenPair($user);

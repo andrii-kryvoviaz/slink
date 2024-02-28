@@ -1,6 +1,7 @@
 export * from './Auth/LoginResponse';
 export * from './Auth/SignupResponse';
 export * from './EmptyResponse';
+export * from './Error/GenericError';
 export * from './Error/ViolationResponse';
 export * from './Image/ImageDetailsResponse';
 export * from './Image/UploadedImageResponse';

@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use UI\Http\Rest\Response\ApiResponse;
 
 #[AsController]
-#[Route(path: '/user', name: 'signup_user', methods: ['POST'])]
+#[Route(path: '/auth/signup', name: 'signup_user', methods: ['POST'])]
 final class SignUpController {
   use CommandTrait;
 

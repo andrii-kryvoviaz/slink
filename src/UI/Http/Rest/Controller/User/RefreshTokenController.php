@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use UI\Http\Rest\Response\ApiResponse;
 
 #[AsController]
-#[Route('/refresh', name: 'refresh_token', methods: ['POST'])]
+#[Route('/auth/refresh', name: 'refresh_token', methods: ['POST'])]
 final class RefreshTokenController {
   use CommandTrait;
   use QueryTrait;

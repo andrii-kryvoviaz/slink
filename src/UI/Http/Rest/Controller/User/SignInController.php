@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use UI\Http\Rest\Response\ApiResponse;
 
 #[AsController]
-#[Route(path: '/auth', name: 'auth_user', methods: ['POST'])]
+#[Route(path: '/auth/login', name: 'auth_user', methods: ['POST'])]
 class SignInController {
   use CommandTrait;
   use QueryTrait;
