@@ -75,7 +75,10 @@ export class Auth {
     return user;
   }
 
-  public static async refresh({ cookies, fetch }: AuthDependencies) {
+  public static async refresh({
+    cookies,
+    fetch,
+  }: AuthDependencies): Promise<TokenPair | undefined> {
     if (fetch) ApiClient.use(fetch);
 
     const refreshToken = cookies.get('refreshToken');
@@ -85,13 +88,25 @@ export class Auth {
     }
 
     const response = await ApiClient.auth.refresh(refreshToken);
+
+    if (response?.error) {
+      await Auth.logout(cookies);
+
+      return;
+    }
+
     const { access_token, refresh_token } = response;
 
-    return this._authenticateUser({
+    await this._authenticateUser({
       accessToken: access_token,
       refreshToken: refresh_token,
       cookies,
     });
+
+    return {
+      accessToken: access_token,
+      refreshToken: refresh_token,
+    };
   }
 
   public static async logout(cookies: Cookies) {

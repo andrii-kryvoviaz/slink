@@ -1,5 +1,6 @@
+import { Auth } from '@slink/lib/auth/Auth';
 import { Session } from '@slink/lib/auth/Session';
-import type { Handle } from '@sveltejs/kit';
+import { type Handle } from '@sveltejs/kit';
 
 type ApiOptions = {
   baseUrl: string;
@@ -12,6 +13,10 @@ export const ApiConnector = (options: ApiOptions): Handle => {
     const { url, fetch, request, cookies, locals } = event;
     const session = await Session.get(cookies.get('sessionId'));
 
+    if (!session) {
+      await Auth.logout(cookies);
+    }
+
     const pathRegex = new RegExp(`^(${options.registeredPaths.join('|')})`);
 
     if (!pathRegex.test(url.pathname)) {
@@ -22,18 +27,8 @@ export const ApiConnector = (options: ApiOptions): Handle => {
       return resolve(event);
     }
 
-    const isDirectApiCall = request.headers.has('Authorization');
-
-    if (
-      !(
-        request.headers.has('x-ignore-auth') &&
-        request.headers.get('x-ignore-auth') === 'true'
-      ) &&
-      !isDirectApiCall
-    ) {
-      if (session?.accessToken) {
-        request.headers.set('Authorization', `Bearer ${session.accessToken}`);
-      }
+    if (session?.accessToken && !request.headers.has('Authorization')) {
+      request.headers.set('Authorization', `Bearer ${session.accessToken}`);
     }
 
     const strippedPath = url.pathname.replace(
@@ -58,15 +53,29 @@ export const ApiConnector = (options: ApiOptions): Handle => {
     }
 
     if (contentType && /^(multipart\/form-data.*)/.test(contentType)) {
-      requestOptions.body = request.body;
+      requestOptions.body = request.clone().body;
       // is required by newer Node.js versions
       requestOptions.duplex = 'half';
     }
 
     const response = await fetch(proxyUrl, requestOptions);
 
-    if (isDirectApiCall) {
-      return response;
+    if (response.status === 401) {
+      const tokens = await Auth.refresh({ cookies, fetch });
+
+      if (!tokens) {
+        return response;
+      }
+
+      const { accessToken, refreshToken } = tokens;
+
+      requestOptions.headers.set('Authorization', `Bearer ${accessToken}`);
+
+      if (requestOptions.body) {
+        requestOptions.body = request.clone().body;
+      }
+
+      return await fetch(proxyUrl, requestOptions);
     }
 
     return response;
