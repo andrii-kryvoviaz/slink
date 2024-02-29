@@ -7,10 +7,24 @@ namespace Slink\Shared\Domain\ValueObject;
 use Slink\Shared\Domain\Exception\DateTimeException;
 use DateTimeImmutable;
 use Exception;
+use Slink\Shared\Infrastructure\Attribute\Groups;
+use Slink\Shared\Infrastructure\Attribute\SerializedName;
 use Throwable;
 
 final class DateTime extends DateTimeImmutable {
-  public const FORMAT = 'Y-m-d\TH:i:s.uP';
+  public const string FORMAT = 'Y-m-d\TH:i:s.uP';
+  
+  #[Groups(['public'])]
+  #[SerializedName('formatted_date')]
+  public function getDateString(): string {
+    return $this->format('Y-m-d H:i:s');
+  }
+  
+  #[Groups(['public'])]
+  #[SerializedName('timestamp')]
+  public function getUnixTimeStamp(): int {
+    return $this->getTimeStamp();
+  }
 
   /**
    * @throws DateTimeException

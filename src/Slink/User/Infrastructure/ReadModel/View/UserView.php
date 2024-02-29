@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 
 #[ORM\Table(name: '`user`')]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-final class UserView extends AbstractView {
+class UserView extends AbstractView {
   /**
    * @param string $uuid
    * @param Email $email
@@ -33,7 +33,7 @@ final class UserView extends AbstractView {
     #[ORM\Column(type: 'uuid')]
     #[Groups(['public', 'internal'])]
     #[SerializedName('id')]
-    private readonly string $uuid,
+    private string $uuid,
 
     #[ORM\Column(type: 'email', unique: true)]
     #[Groups(['public', 'internal'])]

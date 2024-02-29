@@ -9,6 +9,8 @@ use Slink\Shared\Domain\ValueObject\AbstractCompoundValueObject;
 use Slink\Shared\Domain\ValueObject\DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Slink\Shared\Domain\ValueObject\MutableValueObject;
+use Slink\Shared\Infrastructure\Attribute\Groups;
+use Slink\Shared\Infrastructure\Attribute\SerializedName;
 
 #[ORM\Embeddable]
 final readonly class ImageAttributes extends AbstractCompoundValueObject {
@@ -24,21 +26,29 @@ final readonly class ImageAttributes extends AbstractCompoundValueObject {
    */
   private function __construct(
     #[ORM\Column(type: 'string')]
+    #[SerializedName('file_name')]
     private string $fileName,
     
     #[ORM\Column(type: 'string')]
+    #[Groups(['public'])]
     private string $description,
     
     #[ORM\Column(type: 'boolean')]
+    #[Groups(['public'])]
+    #[SerializedName('is_public')]
     private bool $isPublic,
     
     #[ORM\Column(type: 'datetime_immutable')]
+    #[Groups(['public'])]
+    #[SerializedName('created_at')]
     private DateTime $createdAt,
     
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[SerializedName('updated_at')]
     private ?DateTime $updatedAt,
     
     #[ORM\Column(type: 'integer')]
+    #[Groups(['public'])]
     private ?int $views = 0,
   ) {
   }

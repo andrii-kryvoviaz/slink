@@ -61,10 +61,7 @@ final readonly class Item {
       /** @var array<string, mixed> $payload */
       $payload = SerializerFactory::create()->normalize($entity, context: ['groups' => $groups]);
     } catch(\Throwable $e) {
-    }
-    
-    if(!isset($payload)) {
-      throw new \RuntimeException();
+      throw new \RuntimeException($e->getMessage());
     }
     
     return self::fromPayload(self::type($entity), $payload, $relations);

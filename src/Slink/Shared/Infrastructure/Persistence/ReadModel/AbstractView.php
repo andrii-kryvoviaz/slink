@@ -9,10 +9,17 @@ use EventSauce\EventSourcing\Serialization\SerializablePayload;
 abstract class AbstractView {
   /**
    * @param SerializablePayload $event
+   * @param callable|null $transformer
    * @return static
    */
-  public static function fromEvent(SerializablePayload $event): static {
-    return static::deserialize($event->toPayload());
+  public static function fromEvent(SerializablePayload $event, Callable $transformer = null): static {
+    $payload = $event->toPayload();
+    
+    if ($transformer) {
+      $payload = $transformer($payload);
+    }
+    
+    return static::deserialize($payload);
   }
   
   /**

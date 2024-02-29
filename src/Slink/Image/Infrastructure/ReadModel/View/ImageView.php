@@ -10,28 +10,38 @@ use Slink\Image\Domain\ValueObject\ImageMetadata;
 use Slink\Image\Infrastructure\ReadModel\Repository\ImageRepository;
 use Slink\Shared\Domain\Exception\DateTimeException;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
+use Slink\User\Infrastructure\ReadModel\View\UserView;
+use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\SerializedName;
 
 #[ORM\Table(name: '`image`')]
 #[ORM\Entity(repositoryClass: ImageRepository::class)]
 final class ImageView extends AbstractView {
   /**
    * @param string $uuid
-   * @param string $userId
+   * @param ?UserView $user
    * @param ImageAttributes $attributes
    * @param ImageMetadata|null $metadata
    */
   public function __construct(
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]
+    #[Groups(['public'])]
+    #[SerializedName('id')]
     private readonly string $uuid,
     
-    #[ORM\Column(type: 'uuid', nullable: true)]
-    private readonly string $userId,
+    #[ORM\ManyToOne(targetEntity: UserView::class, fetch: 'EAGER')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'uuid')]
+    #[Groups(['public'])]
+    #[SerializedName('owner')]
+    private readonly ?UserView $user,
 
     #[ORM\Embedded(class: ImageAttributes::class, columnPrefix: false)]
+    #[Groups(['public'])]
     private ImageAttributes $attributes,
     
     #[ORM\Embedded(class: ImageMetadata::class, columnPrefix: false)]
+    #[Groups(['public'])]
     private ?ImageMetadata $metadata = null,
   ) {
   }
@@ -42,7 +52,7 @@ final class ImageView extends AbstractView {
   public static function deserialize(array $payload): static {
     return new self(
       $payload['id'],
-      $payload['userId'] ?? '',
+      $payload['userId'] ?? null,
       ImageAttributes::fromPayload($payload['attributes']),
       isset($payload['metadata'])? ImageMetadata::fromPayload($payload['metadata']) : null,
     );
@@ -56,10 +66,10 @@ final class ImageView extends AbstractView {
   }
   
   /**
-   * @return string
+   * @return ?UserView
    */
-  public function getUserId(): string {
-    return $this->userId;
+  public function getUser(): ?UserView {
+    return $this->user;
   }
   
   /**
@@ -82,7 +92,7 @@ final class ImageView extends AbstractView {
   public function toPayload(): array {
     return [
       'id' => $this->uuid,
-      'userId' => $this->userId,
+      'user' => $this->user,
       ...$this->attributes->toPayload(),
       ...$this->metadata? $this->metadata->toPayload() : []
     ];

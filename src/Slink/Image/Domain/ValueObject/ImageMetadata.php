@@ -5,24 +5,29 @@ declare(strict_types=1);
 namespace Slink\Image\Domain\ValueObject;
 
 use Doctrine\ORM\Mapping as ORM;
-use Slink\Shared\Domain\Exception\DateTimeException;
 use Slink\Shared\Domain\ValueObject\AbstractCompoundValueObject;
-use Slink\Shared\Domain\ValueObject\DateTime;
+use Slink\Shared\Infrastructure\Attribute\Groups;
+use Slink\Shared\Infrastructure\Attribute\SerializedName;
 
 #[ORM\Embeddable]
 final readonly class ImageMetadata extends AbstractCompoundValueObject{
   
   public function __construct(
     #[ORM\Column(type: 'integer')]
+    #[Groups(['public'])]
     private int    $size,
     
     #[ORM\Column(type: 'string')]
+    #[Groups(['public'])]
+    #[SerializedName('mime_type')]
     private string $mimeType,
     
     #[ORM\Column(type: 'integer')]
+    #[Groups(['public'])]
     private int    $width,
     
     #[ORM\Column(type: 'integer')]
+    #[Groups(['public'])]
     private int    $height,
   ) {
   }
