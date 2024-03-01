@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Shared\Domain\ValueObject;
 
-abstract readonly class AbstractCompoundValueObject extends AbstractValueObject{
+abstract readonly class AbstractCompoundValueObject extends AbstractValueObject {
   /**
    * @return array<string, mixed>
    */

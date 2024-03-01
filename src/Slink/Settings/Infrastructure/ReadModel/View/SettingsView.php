@@ -25,17 +25,4 @@ final class SettingsView extends AbstractView {
     public string $type,
   ) {
   }
-  
-  /**
-   * @param array<string, mixed> $payload
-   * @return static
-   */
-  #[\Override]
-  public static function deserialize(array $payload): static {
-    return new self(
-      $payload['key'],
-      $payload['value'],
-      $payload['type']
-    );
-  }
 }

@@ -22,7 +22,7 @@ final readonly class UserSignedIn implements SerializablePayload {
    */
   public function toPayload(): array {
     return [
-      'id' => $this->id->toString(),
+      'uuid' => $this->id->toString(),
       'email' => $this->email->toString(),
     ];
   }
@@ -33,7 +33,7 @@ final readonly class UserSignedIn implements SerializablePayload {
    */
   public static function fromPayload(array $payload): static {
     return new self(
-      ID::fromString($payload['id']),
+      ID::fromString($payload['uuid']),
       Email::fromString($payload['email']),
     );
   }

@@ -21,7 +21,7 @@ final readonly class UserStatusWasChanged implements SerializablePayload {
   #[\Override]
   public function toPayload(): array {
     return [
-      'id' => $this->id->toString(),
+      'uuid' => $this->id->toString(),
       'status' => $this->status
     ];
   }
@@ -33,7 +33,7 @@ final readonly class UserStatusWasChanged implements SerializablePayload {
   #[\Override]
   public static function fromPayload(array $payload): static {
     return new static(
-      ID::fromString($payload['id']),
+      ID::fromString($payload['uuid']),
       UserStatus::tryFrom($payload['status']) ?? UserStatus::Active
     );
   }

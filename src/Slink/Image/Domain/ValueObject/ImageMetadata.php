@@ -10,7 +10,7 @@ use Slink\Shared\Infrastructure\Attribute\Groups;
 use Slink\Shared\Infrastructure\Attribute\SerializedName;
 
 #[ORM\Embeddable]
-final readonly class ImageMetadata extends AbstractCompoundValueObject{
+final readonly class ImageMetadata extends AbstractCompoundValueObject {
   
   public function __construct(
     #[ORM\Column(type: 'integer')]

@@ -27,7 +27,7 @@ final readonly class SignUpHandler implements CommandHandlerInterface {
    * @throws DateTimeException
    */
   public function __invoke(SignUpCommand $command): void {
-    $credentials = Credentials::fromString($command->getEmail(), $command->getPassword());
+    $credentials = Credentials::fromPlainCredentials($command->getEmail(), $command->getPassword());
     $displayName = DisplayName::fromString($command->getDisplayName());
     
     $status = $this->configurationProvider->get('user.approvalRequired') ? UserStatus::Inactive : UserStatus::Active;

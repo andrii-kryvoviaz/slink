@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Slink\User\Infrastructure\ReadModel\View;
 
 use Doctrine\ORM\Mapping as ORM;
-use Slink\Shared\Domain\Exception\DateTimeException;
 use Slink\Shared\Domain\ValueObject\DateTime;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
 use Slink\User\Domain\Enum\UserStatus;
@@ -62,22 +61,6 @@ class UserView extends AbstractView {
     #[Groups(['internal', 'status_check'])]
     private UserStatus $status,
   ) {
-  }
-
-  /**
-   * @param array<string, mixed> $payload
-   * @throws DateTimeException
-   */
-  public static function deserialize(array $payload): static {
-    return new self(
-      $payload['id'],
-      Email::fromString($payload['credentials']['email']),
-      DisplayName::fromString($payload['displayName']),
-      HashedPassword::fromHash($payload['credentials']['password']),
-      DateTime::fromString($payload['createdAt']),
-      isset($payload['updatedAt']) ? DateTime::fromString($payload['updatedAt']) : null,
-      $payload['status'],
-    );
   }
   
   /**

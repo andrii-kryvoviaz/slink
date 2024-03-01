@@ -30,8 +30,8 @@ final readonly class ImageWasCreated implements SerializablePayload {
    */
   public function toPayload(): array {
     return [
-      'id' => $this->id->toString(),
-      'userId' => $this->userId->toString(),
+      'uuid' => $this->id->toString(),
+      'user' => $this->userId->toString(),
       'attributes' => $this->attributes->toPayload(),
       ...($this->metadata? ['metadata' => $this->metadata->toPayload()] : []),
     ];
@@ -44,8 +44,8 @@ final readonly class ImageWasCreated implements SerializablePayload {
    */
   public static function fromPayload(array $payload): static {
     return new self(
-      ID::fromString($payload['id']),
-      ID::fromString($payload['userId']),
+      ID::fromString($payload['uuid']),
+      ID::fromString($payload['user']),
       ImageAttributes::fromPayload($payload['attributes']),
       $payload['metadata']? ImageMetadata::fromPayload($payload['metadata']) : null,
     );

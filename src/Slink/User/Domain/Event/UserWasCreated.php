@@ -37,11 +37,9 @@ final readonly class UserWasCreated implements SerializablePayload {
    */
   public function toPayload(): array {
     return [
-      'id' => $this->id->toString(),
-      'credentials' => [
-        'email' => $this->credentials->email->toString(),
-        'password' => $this->credentials->password->toString(),
-      ],
+      'uuid' => $this->id->toString(),
+      'email' => $this->credentials->email->toString(),
+      'password' => $this->credentials->password->toString(),
       'displayName' => $this->displayName->toString(),
       'createdAt' => $this->createdAt->toString(),
       'status' => $this->status
@@ -54,10 +52,10 @@ final readonly class UserWasCreated implements SerializablePayload {
    */
   public static function fromPayload(array $payload): static {
     return new self(
-      ID::fromString($payload['id']),
-      new Credentials(
-        Email::fromString($payload['credentials']['email']),
-        HashedPassword::fromHash($payload['credentials']['password']),
+      ID::fromString($payload['uuid']),
+      Credentials::fromCredentials(
+        Email::fromString($payload['email']),
+        HashedPassword::fromHash($payload['password']),
       ),
       DisplayName::fromString($payload['displayName']),
       DateTime::fromString($payload['createdAt']),

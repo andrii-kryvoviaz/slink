@@ -8,7 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Domain\ValueObject\ImageMetadata;
 use Slink\Image\Infrastructure\ReadModel\Repository\ImageRepository;
-use Slink\Shared\Domain\Exception\DateTimeException;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -44,18 +43,6 @@ final class ImageView extends AbstractView {
     #[Groups(['public'])]
     private ?ImageMetadata $metadata = null,
   ) {
-  }
-  
-  /**
-   * @throws DateTimeException
-   */
-  public static function deserialize(array $payload): static {
-    return new self(
-      $payload['id'],
-      $payload['userId'] ?? null,
-      ImageAttributes::fromPayload($payload['attributes']),
-      isset($payload['metadata'])? ImageMetadata::fromPayload($payload['metadata']) : null,
-    );
   }
   
   /**

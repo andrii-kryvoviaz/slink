@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\User\Infrastructure\ReadModel\View;
 
+use Slink\Shared\Domain\ValueObject\DateTime;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
 use Doctrine\ORM\Mapping as ORM;
 use Slink\User\Infrastructure\ReadModel\Repository\RefreshTokenRepository;
@@ -15,7 +16,7 @@ final class RefreshTokenView extends AbstractView {
   /**
    * @param string $userUuid
    * @param string $token
-   * @param \DateTimeImmutable $expiresAt
+   * @param DateTime $expiresAt
    */
   public function __construct(
     #[ORM\Column(type: 'uuid')]
@@ -26,20 +27,8 @@ final class RefreshTokenView extends AbstractView {
     private string $token,
     
     #[ORM\Column(type: 'datetime_immutable')]
-    private \DateTimeImmutable $expiresAt,
+    private DateTime $expiresAt,
   ) {
-  }
-  
-  /**
-   * @throws \Exception
-   */
-  #[\Override]
-  public static function deserialize(array $payload): static {
-    return new self(
-      $payload['userId'],
-      $payload['hashedRefreshToken'],
-      new \DateTimeImmutable($payload['expiresAt']),
-    );
   }
   
   /**
@@ -57,9 +46,9 @@ final class RefreshTokenView extends AbstractView {
   }
   
   /**
-   * @return \DateTimeImmutable
+   * @return DateTime
    */
-  public function getExpiresAt(): \DateTimeImmutable {
+  public function getExpiresAt(): DateTime {
     return $this->expiresAt;
   }
 }

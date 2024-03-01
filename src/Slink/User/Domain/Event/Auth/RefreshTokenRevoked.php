@@ -25,8 +25,8 @@ final readonly class RefreshTokenRevoked implements SerializablePayload {
   #[\Override]
   public function toPayload(): array {
     return [
-      'userId' => $this->userId->toString(),
-      'hashedRefreshToken' => $this->hashedRefreshToken->toString(),
+      'userUuid' => $this->userId->toString(),
+      'token' => $this->hashedRefreshToken->toString(),
       'expiresAt' => $this->hashedRefreshToken->getExpiresAt()->toString()
     ];
   }
@@ -39,8 +39,8 @@ final readonly class RefreshTokenRevoked implements SerializablePayload {
   #[\Override]
   public static function fromPayload(array $payload): static {
     return new self(
-      ID::fromString($payload['userId']),
-      HashedRefreshToken::createFromHashed($payload['hashedRefreshToken'], $payload['expiresAt']),
+      ID::fromString($payload['userUuid']),
+      HashedRefreshToken::createFromHashed($payload['token'], $payload['expiresAt']),
     );
   }
 }

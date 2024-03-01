@@ -25,7 +25,7 @@ final readonly class ImageAttributesWasUpdated implements SerializablePayload{
    */
   public function toPayload(): array {
     return [
-      'id' => $this->id->toString(),
+      'uuid' => $this->id->toString(),
       'attributes' => $this->attributes->toPayload(),
     ];
   }
@@ -37,7 +37,7 @@ final readonly class ImageAttributesWasUpdated implements SerializablePayload{
    */
   public static function fromPayload(array $payload): static {
     return new self(
-      ID::fromString($payload['id']),
+      ID::fromString($payload['uuid']),
       ImageAttributes::fromPayload($payload['attributes']),
     );
   }

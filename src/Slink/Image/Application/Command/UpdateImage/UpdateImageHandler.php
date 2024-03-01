@@ -9,6 +9,7 @@ use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\Exception\DateTimeException;
 use Slink\Shared\Domain\ValueObject\DateTime;
+use Slink\Shared\Infrastructure\Exception\NotFoundException;
 
 final readonly class UpdateImageHandler implements CommandHandlerInterface {
   
@@ -17,8 +18,15 @@ final readonly class UpdateImageHandler implements CommandHandlerInterface {
   ) {
   }
   
+  /**
+   * @throws NotFoundException
+   */
   public function __invoke(UpdateImageCommand $command): void {
     $image = $this->imageRepository->get($command->getId());
+    
+    if (!$image->aggregateRootVersion()) {
+      throw new NotFoundException();
+    }
     
     $attributes = clone $image->getAttributes()
       ->withDescription($command->getDescription())
