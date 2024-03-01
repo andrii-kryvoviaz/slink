@@ -5,7 +5,7 @@
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
-  import type { UploadedImageResponse } from '@slink/api/Response/UploadedImageResponse';
+  import type { UploadedImageResponse } from '@slink/api/Response';
 
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
   import { toast } from '@slink/utils/ui/toast';
@@ -72,8 +72,6 @@
 
   const successHandler = async (response: UploadedImageResponse) => {
     await redirectToInfo(response.id);
-
-    toast.success('Image uploaded successfully');
   };
 
   const errorHandler = printErrorsAsToastMessage;
