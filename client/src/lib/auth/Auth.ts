@@ -117,7 +117,11 @@ export class Auth {
       return;
     }
 
-    await ApiClient.auth.logout(refreshToken);
+    try {
+      await ApiClient.auth.logout(refreshToken);
+    } catch (error) {
+      console.warn('Refresh token has already been invalidated.');
+    }
 
     cookies.delete('refreshToken', {
       sameSite: 'strict',
