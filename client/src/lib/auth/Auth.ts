@@ -110,6 +110,15 @@ export class Auth {
   }
 
   public static async logout(cookies: Cookies) {
+    const refreshToken = cookies.get('refreshToken');
+    const sessionId = cookies.get('sessionId');
+
+    if (!refreshToken || !sessionId) {
+      return;
+    }
+
+    await ApiClient.auth.logout(refreshToken);
+
     cookies.delete('refreshToken', {
       sameSite: 'strict',
       path: '/',
