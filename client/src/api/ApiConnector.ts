@@ -13,10 +13,6 @@ export const ApiConnector = (options: ApiOptions): Handle => {
     const { url, fetch, request, cookies, locals } = event;
     const session = await Session.get(cookies.get('sessionId'));
 
-    if (!session) {
-      await Auth.logout(cookies);
-    }
-
     const pathRegex = new RegExp(`^(${options.registeredPaths.join('|')})`);
 
     if (!pathRegex.test(url.pathname)) {
