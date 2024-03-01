@@ -55,6 +55,7 @@ RUN apk update && apk upgrade &&\
     redis \
     libmcrypt \
     libcurl \
+    icu-libs \
     libsmbclient \
     imagemagick \
     libjpeg-turbo \
@@ -64,9 +65,9 @@ RUN apk update && apk upgrade &&\
     postgresql-libs
 
 # Install Common PHP extensions
-RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS git autoconf g++ make linux-headers curl-dev libmcrypt-dev imagemagick-dev postgresql-dev libpng-dev libwebp-dev freetype-dev libjpeg-turbo-dev oniguruma-dev samba-dev && \
+RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS git autoconf g++ make linux-headers curl-dev libmcrypt-dev icu-dev imagemagick-dev postgresql-dev libpng-dev libwebp-dev freetype-dev libjpeg-turbo-dev oniguruma-dev samba-dev && \
     docker-php-ext-configure gd --with-jpeg --with-freetype --with-webp && \
-    docker-php-ext-install curl mysqli pdo_pgsql mbstring gd exif && \
+    docker-php-ext-install curl intl mysqli pdo_pgsql mbstring gd exif && \
     pecl install mcrypt smbclient && \
     # Imagick PHP 8.3 bug (https://github.com/Imagick/imagick/pull/641)
     git clone https://github.com/Imagick/imagick.git --depth 1 /tmp/imagick && \
