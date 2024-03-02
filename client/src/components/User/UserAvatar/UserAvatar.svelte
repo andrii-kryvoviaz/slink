@@ -10,14 +10,14 @@
 
   interface $$Props extends UserAvatarProps {
     class?: string;
-    user?: User;
+    user?: Partial<User>;
   }
 
   export let variant: $$Props['variant'] = 'default';
 
   export let size: $$Props['size'] = 'md';
 
-  export let user: $$Props['user'] = null;
+  export let user: $$Props['user'] = {};
 
   $: classes = `${UserAvatarTheme({
     variant,

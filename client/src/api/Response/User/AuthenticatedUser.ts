@@ -1,5 +1,5 @@
 export type AuthenticatedUser = {
   id: string;
-  display_name: string;
+  displayName: string;
   email: string;
 };

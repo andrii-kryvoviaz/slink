@@ -15,7 +15,7 @@ final class DateTime extends DateTimeImmutable {
   public const string FORMAT = 'Y-m-d\TH:i:s.uP';
   
   #[Groups(['public'])]
-  #[SerializedName('formatted_date')]
+  #[SerializedName('formattedDate')]
   public function getDateString(): string {
     return $this->format('Y-m-d H:i:s');
   }

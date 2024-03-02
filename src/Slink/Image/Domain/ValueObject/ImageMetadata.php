@@ -19,7 +19,6 @@ final readonly class ImageMetadata extends AbstractCompoundValueObject {
     
     #[ORM\Column(type: 'string')]
     #[Groups(['public'])]
-    #[SerializedName('mime_type')]
     private string $mimeType,
     
     #[ORM\Column(type: 'integer')]

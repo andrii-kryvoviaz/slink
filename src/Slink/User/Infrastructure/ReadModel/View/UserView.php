@@ -40,7 +40,6 @@ class UserView extends AbstractView {
     
     #[ORM\Column(type: 'display_name', unique: true, nullable: true)]
     #[Groups(['public', 'internal'])]
-    #[SerializedName('display_name')]
     private DisplayName $displayName,
 
     #[ORM\Column(type: 'hashed_password')]
@@ -49,12 +48,10 @@ class UserView extends AbstractView {
 
     #[ORM\Column(type: 'datetime_immutable')]
     #[Groups(['internal'])]
-    #[SerializedName('created_at')]
     private readonly DateTime $createdAt,
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     #[Groups(['internal'])]
-    #[SerializedName('updated_at')]
     private ?DateTime $updatedAt,
     
     #[ORM\Column(enumType: UserStatus::class, options: ['default' => UserStatus::Active])]

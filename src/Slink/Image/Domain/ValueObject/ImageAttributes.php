@@ -26,7 +26,7 @@ final readonly class ImageAttributes extends AbstractCompoundValueObject {
    */
   private function __construct(
     #[ORM\Column(type: 'string')]
-    #[SerializedName('file_name')]
+    #[Groups(['public'])]
     private string $fileName,
     
     #[ORM\Column(type: 'string')]
@@ -35,16 +35,13 @@ final readonly class ImageAttributes extends AbstractCompoundValueObject {
     
     #[ORM\Column(type: 'boolean')]
     #[Groups(['public'])]
-    #[SerializedName('is_public')]
     private bool $isPublic,
     
     #[ORM\Column(type: 'datetime_immutable')]
     #[Groups(['public'])]
-    #[SerializedName('created_at')]
     private DateTime $createdAt,
     
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    #[SerializedName('updated_at')]
     private ?DateTime $updatedAt,
     
     #[ORM\Column(type: 'integer')]

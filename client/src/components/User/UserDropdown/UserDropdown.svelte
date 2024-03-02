@@ -10,7 +10,7 @@
   import { UserDropdownItems } from '@slink/components/User/UserDropdown/UserDropdown.items';
   import UserDropdownItem from '@slink/components/User/UserDropdown/UserDropdownItem.svelte';
 
-  export let user: User | null = null;
+  export let user: Partial<User> = {};
   export let isDark = false;
 
   let isOpen = false;
@@ -23,7 +23,7 @@
 
   const isAuthorized = (roles: string[]) => {
     if (user) {
-      return roles.some((role) => user?.roles.includes(role));
+      return roles.some((role) => user?.roles?.includes(role));
     }
     return false;
   };
