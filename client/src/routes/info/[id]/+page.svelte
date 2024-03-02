@@ -62,7 +62,7 @@
     isLoading: descriptionIsLoading,
     error: updateDescriptionError,
     run: updateDescription,
-  } = ReactiveState((imageId: number, description: string) => {
+  } = ReactiveState((imageId: string, description: string) => {
     return ApiClient.image.updateDetails(imageId, {
       description,
     });
@@ -73,7 +73,7 @@
     error: updateVisibilityError,
     run: updateVisibility,
   } = ReactiveState(
-    (imageId: number, isPublic: boolean) => {
+    (imageId: string, isPublic: boolean) => {
       return ApiClient.image.updateDetails(imageId, {
         isPublic,
       });

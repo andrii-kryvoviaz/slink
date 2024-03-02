@@ -18,6 +18,10 @@
   export let aspectRatio: number = 0;
   export let height = 24;
 
+  export let uniqueId = Math.random().toString(36).substring(2);
+
+  let originalImage: string | undefined;
+
   let width = 0;
   let isLoaded = false;
 
@@ -50,6 +54,10 @@
     maxWidth = maxHeight / aspectRatio;
   }
 
+  $: if (src && src !== originalImage) {
+    originalImage = src.split('?')[0];
+  }
+
   // fallback for when the image is already loaded and the on:load event is not triggered
   $: if (image && image.complete) {
     isLoaded = true;
@@ -77,17 +85,17 @@
   />
   {#if isLoaded}
     <a
-      href={src}
+      href={originalImage || src}
       target="_blank"
       rel="noopener noreferrer"
       class="absolute right-0 top-0 p-2 text-slate-200 hover:text-slate-100"
-      id="open-tooltip"
+      id={`open-tooltip-${uniqueId}`}
     >
       <Icon icon="system-uicons:external" />
     </a>
 
     <Tooltip
-      triggeredBy="[id^='open-tooltip']"
+      triggeredBy={`[id^='open-tooltip-${uniqueId}']`}
       class="min-w-[7rem] p-2 text-xs"
       color="dark"
     >

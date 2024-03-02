@@ -62,7 +62,7 @@
         <slot name="loadingIcon" slot="loading" />
       </ButtonIcon>
     {:else}
-      <div class="flex w-full items-center justify-between">
+      <div class="flex w-full items-center justify-between gap-2">
         {#if $$slots.leftIcon}
           <ButtonIcon {...buttonIconProps}>
             <slot name="loadingIcon" slot="loading" />

@@ -30,4 +30,5 @@ export const themeIcons: string[] = [
   'material-symbols-light:conversion-path',
   'entypo:chevron-small-down',
   'entypo:chevron-small-up',
+  'mynaui:chevron-double-right',
 ];

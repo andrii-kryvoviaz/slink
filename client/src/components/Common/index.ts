@@ -6,5 +6,7 @@ export { default as CopyContainer } from './Action/CopyContainer.svelte';
 export { default as ThemeSwitch } from './Action/ThemeSwitch.svelte';
 export { default as Frame } from './Frame.svelte';
 export { default as Popper } from './Popper.svelte';
+export { default as ExpandableText } from './Text/ExpandableText.svelte';
+export { default as FormattedDate } from './Text/FormattedDate.svelte';
 export { default as TextEllipsis } from './Text/TextEllipsis.svelte';
 export { default as Tooltip } from './Tooltip.svelte';
