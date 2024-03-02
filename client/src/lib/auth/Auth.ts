@@ -39,7 +39,7 @@ export class Auth {
     const user = {
       id: response.id,
       email: response.email,
-      displayName: response.display_name,
+      displayName: response.displayName,
       roles: claims.roles,
     };
 
@@ -117,12 +117,6 @@ export class Auth {
       return;
     }
 
-    try {
-      await ApiClient.auth.logout(refreshToken);
-    } catch (error) {
-      console.warn('Refresh token has already been invalidated.');
-    }
-
     cookies.delete('refreshToken', {
       sameSite: 'strict',
       path: '/',
@@ -130,5 +124,11 @@ export class Auth {
     });
 
     await Session.destroy(cookies);
+
+    try {
+      await ApiClient.auth.logout(refreshToken);
+    } catch (error) {
+      console.warn('Refresh token has already been invalidated.');
+    }
   }
 }
