@@ -96,12 +96,24 @@ export class Client {
 
     if (response.ok && response.status < 400) {
       return {
-        ...(responseBody.data || responseBody),
+        ...this.parseBody(responseBody),
         ...((options as RequestOptions)?.includeResponseHeaders
           ? { headers: response.headers }
           : {}),
       };
     }
+  }
+
+  private parseBody(body: any) {
+    if (body.meta && body.data) {
+      return body;
+    }
+
+    if (body.data) {
+      return body.data;
+    }
+
+    return body;
   }
 
   public use(callable: FetchFunction): Resources {

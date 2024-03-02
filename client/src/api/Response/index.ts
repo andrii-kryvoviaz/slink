@@ -4,6 +4,7 @@ export * from './EmptyResponse';
 export * from './Error/GenericError';
 export * from './Error/ViolationResponse';
 export * from './Image/ImageDetailsResponse';
+export * from './Image/ImageListingResponse';
 export * from './Image/UploadedImageResponse';
 export * from './ResponseWithHeaders';
 export * from './User/AuthenticatedUser';

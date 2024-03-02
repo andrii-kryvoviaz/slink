@@ -1,6 +1,7 @@
 import { AbstractResource } from '@slink/api/AbstractResource';
 import type {
   ImageDetailsResponse,
+  ImageListingResponse,
   UploadedImageResponse,
 } from '@slink/api/Response';
 
@@ -26,5 +27,12 @@ export class ImageResource extends AbstractResource {
     return this.patch(`/image/${id}`, {
       json: details,
     });
+  }
+
+  public async getPublicImages(
+    page: number = 1,
+    limit: number = 10
+  ): Promise<ImageListingResponse> {
+    return this.get(`/images/${page}/?limit=${limit}`);
   }
 }
