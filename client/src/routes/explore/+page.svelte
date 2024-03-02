@@ -1,5 +1,6 @@
 <script lang="ts">
   import Icon from '@iconify/svelte';
+  import { fade } from 'svelte/transition';
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
@@ -41,7 +42,7 @@
   $: showLoadMore = meta.page < Math.ceil(meta.total / meta.size);
 </script>
 
-<section>
+<section in:fade={{ duration: 300 }}>
   <div class="container mx-auto flex flex-col px-6 py-10">
     <div>
       <h1
@@ -76,7 +77,6 @@
             />
           {/each}
         </div>
-        <hr />
         <p class="text-[3rem] opacity-70">Oops! Here be nothing yet.</p>
         <p class="text-normal opacity-70">Be the first to upload something.</p>
         <Button class="mt-4" size="md" variant="primary" href="/upload">
