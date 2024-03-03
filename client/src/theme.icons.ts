@@ -31,4 +31,5 @@ export const themeIcons: string[] = [
   'entypo:chevron-small-down',
   'entypo:chevron-small-up',
   'mynaui:chevron-double-right',
+  'carbon:password',
 ];
