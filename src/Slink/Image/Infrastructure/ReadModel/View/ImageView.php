@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 
 #[ORM\Table(name: '`image`')]
 #[ORM\Entity(repositoryClass: ImageRepository::class)]
-final class ImageView extends AbstractView {
+class ImageView extends AbstractView {
   /**
    * @param string $uuid
    * @param ?UserView $user

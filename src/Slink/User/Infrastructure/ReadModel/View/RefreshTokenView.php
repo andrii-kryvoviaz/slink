@@ -11,7 +11,7 @@ use Slink\User\Infrastructure\ReadModel\Repository\RefreshTokenRepository;
 
 #[ORM\Table(name: 'refresh_token')]
 #[ORM\Entity(repositoryClass: RefreshTokenRepository::class)]
-final class RefreshTokenView extends AbstractView {
+class RefreshTokenView extends AbstractView {
   
   /**
    * @param string $userUuid
