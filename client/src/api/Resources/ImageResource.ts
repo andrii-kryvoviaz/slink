@@ -35,4 +35,11 @@ export class ImageResource extends AbstractResource {
   ): Promise<ImageListingResponse> {
     return this.get(`/images/${page}/?limit=${limit}`);
   }
+
+  public async getHistory(
+    page: number = 1,
+    limit: number = 10
+  ): Promise<ImageListingResponse> {
+    return this.get(`/images/history/${page}/?limit=${limit}`);
+  }
 }
