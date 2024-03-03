@@ -11,7 +11,6 @@ use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractRepository;
-use Slink\User\Infrastructure\ReadModel\View\UserView;
 
 final class ImageRepository extends AbstractRepository implements ImageRepositoryInterface {
   static protected function entityClass(): string {
@@ -58,6 +57,11 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
     if ($imageListFilter->getIsPublic() !== null) {
       $qb->andWhere('image.attributes.isPublic = :isPublic')
         ->setParameter('isPublic', $imageListFilter->getIsPublic());
+    }
+    
+    if ($imageListFilter->getUserId() !== null) {
+      $qb->andWhere('image.user = :user')
+        ->setParameter('user', $imageListFilter->getUserId());
     }
     
     $qb->orderBy('image.' . $imageListFilter->getOrderBy(), $imageListFilter->getOrder());

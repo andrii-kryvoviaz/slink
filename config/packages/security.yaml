@@ -13,7 +13,7 @@ security:
             security: false
 
         api:
-            pattern: ^/(?!auth|image)
+            pattern: ^/(?!auth|image\/)
             stateless: true
             jwt: ~
 

@@ -6,23 +6,28 @@ namespace UI\Http\Rest\Controller\Image;
 
 use Slink\Image\Application\Query\GetImageList\GetImageListQuery;
 use Slink\Shared\Application\Query\QueryTrait;
+use Slink\User\Infrastructure\Auth\JwtUser;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use UI\Http\Rest\Response\ApiResponse;
 
 #[AsController]
-#[Route('/images/{page}', name: 'get_image_list', requirements: ['page' => '\d+'], methods: ['GET'])]
-final class GetImageListController {
+#[Route('/images/history/{page}', name: 'get_image_history', methods: ['GET'])]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
+final readonly class GetImageHistoryController {
   use QueryTrait;
   
   public function __invoke(
     #[MapQueryString] GetImageListQuery $query,
+    #[CurrentUser] JwtUser $user,
     int $page = 1
   ): ApiResponse {
     $images = $this->ask($query->withContext([
       'page' => $page,
-      'isPublic' => true
+      'userId' => $user->getIdentifier(),
     ]));
     
     return ApiResponse::collection($images);

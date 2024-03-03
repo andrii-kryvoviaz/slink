@@ -20,12 +20,13 @@ final readonly class GetImageListHandler implements QueryHandlerInterface {
   /**
    * @throws NotFoundException
    */
-  public function __invoke(GetImageListQuery $query, int $page): Collection {
+  public function __invoke(GetImageListQuery $query, int $page, ?bool $isPublic = null, ?string $userId = null): Collection {
     $images = $this->repository->geImageList($page, new ImageListFilter(
       limit: $query->getLimit(),
-      isPublic: $query->isPublic(),
       orderBy: $query->getOrderBy(),
       order: $query->getOrder(),
+      isPublic: $isPublic,
+      userId: $userId
     ));
     
     $items = array_map(fn($image) => Item::fromEntity($image), iterator_to_array($images));
