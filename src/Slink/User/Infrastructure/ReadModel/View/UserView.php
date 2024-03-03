@@ -116,4 +116,12 @@ class UserView extends AbstractView {
   public function setStatus(UserStatus $status): void {
     $this->status = $status;
   }
+  
+  /**
+   * @param HashedPassword $password
+   * @return void
+   */
+  public function setPassword(HashedPassword $password): void {
+    $this->password = $password;
+  }
 }

@@ -12,13 +12,14 @@ use Slink\User\Domain\Context\UserCreationContext;
 use Slink\User\Domain\Contracts\UserInterface;
 use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\Event\UserLoggedOut;
+use Slink\User\Domain\Event\UserPasswordWasChanged;
 use Slink\User\Domain\Event\UserSignedIn;
 use Slink\User\Domain\Event\UserStatusWasChanged;
 use Slink\User\Domain\Event\UserWasCreated;
 use Slink\User\Domain\Exception\DisplayNameAlreadyExistException;
 use Slink\User\Domain\Exception\InvalidCredentialsException;
 use Slink\User\Domain\Exception\EmailAlreadyExistException;
-use Slink\User\Domain\Specification\UniqueEmailSpecificationInterface;
+use Slink\User\Domain\Exception\InvalidOldPassword;
 use Slink\User\Domain\ValueObject\Auth\Credentials;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;
 use Slink\User\Domain\ValueObject\DisplayName;
@@ -127,6 +128,27 @@ final class User extends AbstractAggregateRoot implements UserInterface {
     $this->setEmail($event->credentials->email);
     $this->setHashedPassword($event->credentials->password);
     $this->setStatus($event->status);
+  }
+  
+  /**
+   * @param string $oldPassword
+   * @param HashedPassword $password
+   * @return void
+   */
+  public function changePassword(#[\SensitiveParameter] string $oldPassword, HashedPassword $password): void {
+    if (!$this->hashedPassword->match($oldPassword)) {
+      throw new InvalidOldPassword();
+    }
+    
+    $this->recordThat(new UserPasswordWasChanged($this->aggregateRootId(), $password));
+  }
+  
+  /**
+   * @param UserPasswordWasChanged $event
+   * @return void
+   */
+  public function applyUserPasswordWasChanged(UserPasswordWasChanged $event): void {
+    $this->setHashedPassword($event->password);
   }
   
   /**
