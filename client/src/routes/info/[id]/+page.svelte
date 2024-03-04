@@ -110,7 +110,7 @@
   in:fly={{ y: 100, duration: 500, delay: 100 }}
   class="flex justify-center p-2 sm:p-8"
 >
-  <div class="container flex flex-row flex-wrap gap-6">
+  <div class="container flex flex-row flex-wrap justify-center gap-6">
     <div class="max-w-full flex-shrink">
       <div class="flex max-w-full justify-start">
         <ImagePlaceholder
@@ -122,7 +122,7 @@
       </div>
     </div>
 
-    <div class="min-w-0 flex-grow px-2">
+    <div class="min-w-0 px-2">
       <p class="mb-4 mt-8 w-full">
         <ImageDescription
           description={data.description}

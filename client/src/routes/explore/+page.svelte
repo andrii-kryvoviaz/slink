@@ -107,11 +107,12 @@
               <FormattedDate date={image.attributes.createdAt.timestamp} />
             </div>
           </div>
-          <div class="relative flex justify-center">
+          <div class="relative flex justify-center shadow">
             <ImagePlaceholder
               uniqueId={image.id}
-              src={`/image/${image.attributes.fileName}?height=400`}
+              src={`/image/${image.attributes.fileName}?width=400`}
               metadata={image.metadata}
+              height={54}
             />
           </div>
 
