@@ -1,27 +1,32 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
+
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
-  import type { ImageListingResponse } from '@slink/api/Response';
+  import type {
+    ImageListingItem,
+    ImageListingResponse,
+    ListingMetadata,
+  } from '@slink/api/Response';
 
-  import { Button } from '@slink/components/Common';
+  import { Button, Loader } from '@slink/components/Common';
   import FormattedDate from '@slink/components/Common/Text/FormattedDate.svelte';
 
-  import type { PageServerData } from './$types';
-
-  export let data: PageServerData;
-
-  let { images, meta, page, limit } = data;
+  let images: ImageListingItem[] = [];
+  let meta: ListingMetadata;
+  let page = 1;
 
   const {
     run: fetchImages,
     data: response,
     isLoading,
+    status,
   } = ReactiveState<ImageListingResponse>(
     () => {
-      return ApiClient.image.getHistory(++page, limit);
+      return ApiClient.image.getHistory(page++);
     },
     { debounce: 300 }
   );
@@ -33,12 +38,19 @@
     }
   }
 
-  $: showLoadMore = meta.page < Math.ceil(meta.total / meta.size);
+  $: showLoadMore =
+    meta && meta.page < Math.ceil(meta.total / meta.size) && $status !== 'idle';
+
+  $: showPreloader = !images.length && $status !== 'finished';
+
+  $: itemsNotFound = !images.length && $status === 'finished';
+
+  onMount(fetchImages);
 </script>
 
 <section in:fade={{ duration: 300 }}>
   <div class="container mx-auto flex flex-col px-6 py-10">
-    {#if images.length}
+    {#if !itemsNotFound}
       <div>
         <h1
           class="text-center text-2xl font-semibold capitalize text-gray-800 dark:text-white lg:text-3xl"
@@ -64,6 +76,14 @@
           <span>Take me to <b>Upload</b></span>
           <Icon icon="mynaui:chevron-double-right" class="ml-3" />
         </Button>
+      </div>
+    {/if}
+
+    {#if showPreloader}
+      <div class="mt-8">
+        <Loader>
+          <span>Loading history...</span>
+        </Loader>
       </div>
     {/if}
 

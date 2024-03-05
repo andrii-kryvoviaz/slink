@@ -1,10 +1,10 @@
-type ListingMetadata = {
+export type ListingMetadata = {
   size: number;
   page: number;
   total: number;
 };
 
-type ImageListingItem = {
+export type ImageListingItem = {
   id: string;
   owner: {
     id: string;

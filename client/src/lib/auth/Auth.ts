@@ -109,7 +109,7 @@ export class Auth {
     };
   }
 
-  public static async logout(cookies: Cookies) {
+  public static logout(cookies: Cookies) {
     const refreshToken = cookies.get('refreshToken');
     const sessionId = cookies.get('sessionId');
 
@@ -123,12 +123,10 @@ export class Auth {
       secure: true,
     });
 
-    await Session.destroy(cookies);
+    Session.destroy(cookies);
 
-    try {
-      await ApiClient.auth.logout(refreshToken);
-    } catch (error) {
+    ApiClient.auth.logout(refreshToken).catch(() => {
       console.warn('Refresh token has already been invalidated.');
-    }
+    });
   }
 }

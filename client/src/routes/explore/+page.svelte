@@ -1,33 +1,39 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
+
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
-  import type { ImageListingResponse } from '@slink/api/Response';
+  import type {
+    ImageListingItem,
+    ImageListingResponse,
+    ListingMetadata,
+  } from '@slink/api/Response';
 
   import {
     Button,
     ExpandableText,
     TextEllipsis,
   } from '@slink/components/Common';
+  import Loader from '@slink/components/Common/Loader.svelte';
   import FormattedDate from '@slink/components/Common/Text/FormattedDate.svelte';
   import { ImagePlaceholder } from '@slink/components/Image';
   import { UserAvatar } from '@slink/components/User';
 
-  import type { PageServerData } from './$types';
-
-  export let data: PageServerData;
-
-  let { images, meta, page, limit } = data;
+  let images: ImageListingItem[] = [];
+  let meta: ListingMetadata;
+  let page = 1;
 
   const {
     run: fetchImages,
     data: response,
     isLoading,
+    status,
   } = ReactiveState<ImageListingResponse>(
     () => {
-      return ApiClient.image.getPublicImages(++page, limit);
+      return ApiClient.image.getPublicImages(page++);
     },
     { debounce: 300 }
   );
@@ -39,7 +45,14 @@
     }
   }
 
-  $: showLoadMore = meta.page < Math.ceil(meta.total / meta.size);
+  $: showLoadMore =
+    meta && meta.page < Math.ceil(meta.total / meta.size) && $status !== 'idle';
+
+  $: showPreloader = !images.length && $status !== 'finished';
+
+  $: itemsNotFound = !images.length && $status === 'finished';
+
+  onMount(fetchImages);
 </script>
 
 <section in:fade={{ duration: 300 }}>
@@ -66,7 +79,15 @@
       </p>
     </div>
 
-    {#if !images.length}
+    {#if showPreloader}
+      <div class="mt-8">
+        <Loader>
+          <span>Loading images...</span>
+        </Loader>
+      </div>
+    {/if}
+
+    {#if itemsNotFound}
       <div
         class="mt-8 flex flex-grow flex-col items-center justify-center font-extralight"
       >
