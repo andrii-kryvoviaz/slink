@@ -36,7 +36,7 @@ final readonly class UpdateImageHandler implements CommandHandlerInterface {
       throw new NotFoundException();
     }
     
-    if(!$image->getUserId()->equals($userId)) {
+    if($user && !$image->getUserId()->equals($userId)) {
       throw new AccessDeniedException();
     }
     
