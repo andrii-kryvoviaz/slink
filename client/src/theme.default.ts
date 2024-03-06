@@ -13,6 +13,7 @@ export const defaultTheme: Theme = {
     borderDescription: 'slate.400',
     colorInputError: 'red.500',
     bgDropdownAccent: 'indigo.500',
+    colorLoaderDefault: 'indigo.500',
   },
   variants: {
     dark: {
@@ -113,6 +114,9 @@ export const tailwindcssTheme: Partial<ThemeConfig> = injectAlphaPlaceholder({
       },
       default: 'var(--border-input-default)',
       error: 'var(--color-input-error)',
+    },
+    loader: {
+      default: 'var(--color-loader-default)',
     },
   },
   textColor: {

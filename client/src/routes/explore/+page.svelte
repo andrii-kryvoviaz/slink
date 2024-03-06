@@ -17,8 +17,7 @@
     ExpandableText,
     TextEllipsis,
   } from '@slink/components/Common';
-  import Loader from '@slink/components/Common/Loader.svelte';
-  import FormattedDate from '@slink/components/Common/Text/FormattedDate.svelte';
+  import { FormattedDate, Loader } from '@slink/components/Common';
   import { ImagePlaceholder } from '@slink/components/Image';
   import { UserAvatar } from '@slink/components/User';
 
