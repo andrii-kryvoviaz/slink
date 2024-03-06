@@ -12,21 +12,21 @@ use Slink\Image\Application\Command\UpdateImage\UpdateImageHandler;
 use Slink\Image\Domain\Image;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
-use Slink\Shared\Domain\Exception\DateTimeException;
-use Slink\Shared\Domain\ValueObject\ID;
+use Slink\Shared\Infrastructure\Exception\NotFoundException;
 
 final class UpdateImageHandlerTest extends TestCase {
   /**
    * @throws Exception
+   * @throws NotFoundException
    */
   #[Test]
   public function itHandlesUpdateImageCommand(): void {
     $command = new UpdateImageCommand( 'New Description', true);
-    $command->withId('123');
     
     $image = $this->createMock(Image::class);
     $attributes = $this->createMock(ImageAttributes::class);
     $image->method('getAttributes')->willReturn($attributes);
+    $image->method('aggregateRootVersion')->willReturn(1);
     $image->expects($this->once())->method('updateAttributes');
     
     $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
@@ -34,6 +34,6 @@ final class UpdateImageHandlerTest extends TestCase {
     $imageRepository->expects($this->once())->method('store')->with($image);
     
     $handler = new UpdateImageHandler($imageRepository);
-    $handler($command);
+    $handler($command, null, '123');
   }
 }

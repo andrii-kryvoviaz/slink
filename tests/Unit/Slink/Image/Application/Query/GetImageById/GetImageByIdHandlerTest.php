@@ -49,7 +49,7 @@ final class GetImageByIdHandlerTest extends TestCase {
 
     $handler = new GetImageByIdHandler($this->repository);
 
-    $result = $handler($query);
+    $result = $handler($query, null);
 
     $this->assertInstanceOf(Item::class, $result);
   }
@@ -68,6 +68,6 @@ final class GetImageByIdHandlerTest extends TestCase {
 
     $this->expectException(NotFoundException::class);
 
-    $handler($query);
+    $handler($query, null);
   }
 }
