@@ -8,7 +8,7 @@
   export let data: PageServerData;
 </script>
 
-<section class="flex h-full items-center">
+<section class="flex h-full items-start">
   <div
     class="container mx-auto flex flex-col items-center gap-4 px-4 py-12 text-center"
     in:fly={{ y: 100, duration: 500, delay: 100 }}

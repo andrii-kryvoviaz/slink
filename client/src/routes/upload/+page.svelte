@@ -10,6 +10,7 @@
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
   import { toast } from '@slink/utils/ui/toast';
 
+  import { Button, Loader } from '@slink/components/Common';
   import { Dropzone } from '@slink/components/Form';
 
   import type { PageData } from './$types';
@@ -45,7 +46,9 @@
     return (event.target as HTMLInputElement).files;
   };
 
-  const handleChange = (event: FileEvent) => {
+  const handleChange = async (event: FileEvent) => {
+    if (processing) return;
+
     event.preventDefault();
 
     const fileList = getFilesFromEvent(event);
@@ -67,7 +70,9 @@
       return;
     }
 
-    uploadImage(file);
+    await uploadImage(file);
+
+    (event.target as HTMLInputElement).value = '';
   };
 
   const successHandler = async (response: UploadedImageResponse) => {
@@ -90,52 +95,76 @@
     in:fade={{ duration: 300 }}
     class="flex w-full flex-col items-center justify-center"
   >
-    <Dropzone
-      on:drop={handleChange}
-      on:dragover={(event) => {
-        event.preventDefault();
-      }}
-      on:change={handleChange}
-      disabled={processing}
-      defaultClass="flex flex-col justify-center items-center w-full h-64 bg-card-primary rounded-lg border-2 border-dropzone-primary border-dashed cursor-pointer hover:border-dropzone-secondary hover:bg-card-secondary max-h-[400px] max-w-[600px]"
-    >
-      {#if !processing}
-        <div class="flex flex-col p-6 xs:w-[80%]">
-          <div class="text-sm text-color-primary">
-            <p class="flex items-center justify-center gap-x-[3px] p-3">
-              <Icon icon="material-symbols-light:upload" class="h-10 w-10" />
-              <span class="font-semibold">
-                Drag & Drop
-                <span class="font-normal">your image here</span>
-              </span>
-            </p>
-          </div>
-
-          <p class="divider">or</p>
-
-          <p class="mb-4 mt-2">
-            {#if data.os.name === 'Mac OS' || data.device.vendor === 'Apple'}
-              <span class="kbd">⌘ cmd</span>
-            {:else}
-              <kbd class="kbd">ctrl</kbd>
-            {/if}
-            <span class="m-1">+</span>
-            <kbd class="kbd">v</kbd>
-          </p>
-
-          <p class="text-xs text-color-secondary">
-            SVG, PNG, JPG, WEBP or GIF (MAX. 5MB)
-          </p>
-        </div>
-      {:else}
-        <div class="flex flex-col items-center justify-center">
+    <div class="flex w-full max-w-[600px] flex-col gap-6">
+      {#if !data.user}
+        <div
+          role="alert"
+          class="alert rounded-lg border-gray-400/20 bg-indigo-600/70 text-white dark:text-gray-200"
+        >
           <Icon
-            icon="mingcute:loading-line"
-            class="h-10 w-10 animate-spin text-color-primary"
+            icon="material-symbols-light:warning-outline"
+            class="h-6 w-6 text-gray-300 dark:text-gray-400"
           />
-          <p class="text-sm text-color-primary">Uploading, please wait...</p>
+          <span class="text-sm">
+            You must be logged in to be able to upload images. Anonymous uploads
+            are not allowed.
+          </span>
+          <div>
+            <Button size="sm" variant="dark" href="/profile/login">
+              <span>Log in</span>
+            </Button>
+          </div>
         </div>
       {/if}
-    </Dropzone>
+      <Dropzone
+        on:drop={handleChange}
+        on:dragover={(event) => {
+          event.preventDefault();
+        }}
+        on:change={handleChange}
+        disabled={processing}
+        defaultClass="flex flex-col justify-center items-center w-full h-64 bg-card-primary rounded-lg border-2 border-dropzone-primary border-dashed cursor-pointer hover:border-dropzone-secondary hover:bg-card-secondary max-h-[400px] "
+      >
+        {#if !processing}
+          <div class="flex flex-col p-6 xs:w-[80%]">
+            <div class="text-sm text-color-primary">
+              <p class="flex items-center justify-center gap-x-[3px] p-3">
+                <Icon icon="material-symbols-light:upload" class="h-10 w-10" />
+                <span class="font-semibold">
+                  Drag & Drop
+                  <span class="font-normal">your image here</span>
+                </span>
+              </p>
+            </div>
+
+            <p class="divider">or</p>
+
+            <p class="mb-4 mt-2">
+              {#if data.os?.name === 'Mac OS' || data.device?.vendor === 'Apple'}
+                <span class="kbd">⌘ cmd</span>
+              {:else}
+                <kbd class="kbd">ctrl</kbd>
+              {/if}
+              <span class="m-1">+</span>
+              <kbd class="kbd">v</kbd>
+            </p>
+
+            <p class="text-xs text-color-secondary">
+              SVG, PNG, JPG, WEBP or GIF (MAX. 5MB)
+            </p>
+          </div>
+        {:else}
+          <div class="flex flex-col items-center justify-center">
+            <Loader>
+              <p
+                class="text-md font-extralight tracking-wide text-color-primary"
+              >
+                Uploading, please wait...
+              </p>
+            </Loader>
+          </div>
+        {/if}
+      </Dropzone>
+    </div>
   </div>
 </div>

@@ -9,7 +9,10 @@ use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\Exception\DateTimeException;
 use Slink\Shared\Domain\ValueObject\DateTime;
+use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
+use Slink\User\Infrastructure\Auth\JwtUser;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final readonly class UpdateImageHandler implements CommandHandlerInterface {
   
@@ -21,11 +24,20 @@ final readonly class UpdateImageHandler implements CommandHandlerInterface {
   /**
    * @throws NotFoundException
    */
-  public function __invoke(UpdateImageCommand $command): void {
-    $image = $this->imageRepository->get($command->getId());
+  public function __invoke(
+    UpdateImageCommand $command,
+    ?JwtUser $user,
+    string $id
+  ): void {
+    $image = $this->imageRepository->get(ID::fromString($id));
+    $userId = ID::fromString($user?->getIdentifier() ?? '');
     
     if (!$image->aggregateRootVersion()) {
       throw new NotFoundException();
+    }
+    
+    if(!$image->getUserId()->equals($userId)) {
+      throw new AccessDeniedException();
     }
     
     $attributes = clone $image->getAttributes()

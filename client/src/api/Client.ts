@@ -1,5 +1,8 @@
 import {
   BadRequestException,
+  ForbiddenException,
+  NotFoundException,
+  UnauthorizedException,
   ValidationException,
 } from '@slink/api/Exceptions';
 import { JsonMapper } from '@slink/api/Mapper/JsonMapper';
@@ -80,8 +83,16 @@ export class Client {
       return;
     }
 
-    if ([401, 403, 404].includes(response.status)) {
-      return;
+    if (response.status === 401) {
+      throw new UnauthorizedException(response.status);
+    }
+
+    if (response.status === 403) {
+      throw new ForbiddenException(response.status);
+    }
+
+    if (response.status === 404) {
+      throw new NotFoundException(response.status);
     }
 
     const responseBody = await response.json();

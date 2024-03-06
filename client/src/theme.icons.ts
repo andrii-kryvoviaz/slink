@@ -14,7 +14,6 @@ export const themeIcons: string[] = [
   'clarity:error-standard-line',
   'ep:info-filled',
   'material-symbols-light:upload',
-  'mingcute:loading-line',
   'ph:user',
   'mdi-light:email',
   'ph:password-light',
@@ -33,4 +32,5 @@ export const themeIcons: string[] = [
   'mynaui:chevron-double-right',
   'carbon:password',
   'mynaui:external-link',
+  'material-symbols-light:warning-outline',
 ];

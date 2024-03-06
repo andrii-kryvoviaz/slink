@@ -5,7 +5,14 @@ import type { CookieSettings } from '@slink/lib/settings';
 
 declare global {
   namespace App {
-    // interface Error {}
+    interface Error {
+      status?: number;
+      message?: string;
+      button?: {
+        text: string;
+        href: string;
+      };
+    }
     interface Locals {
       settings: CookieSettings;
       user: User | null;

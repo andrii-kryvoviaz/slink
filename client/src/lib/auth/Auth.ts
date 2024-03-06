@@ -90,7 +90,7 @@ export class Auth {
     const response = await ApiClient.auth.refresh(refreshToken);
 
     if (response?.error) {
-      await Auth.logout(cookies);
+      Auth.logout(cookies);
 
       return;
     }

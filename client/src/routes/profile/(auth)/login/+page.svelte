@@ -30,11 +30,11 @@
 </script>
 
 <div
-  class="flex flex-grow items-center justify-center"
+  class="flex flex-grow items-center justify-center py-12"
   in:fade={{ duration: 200 }}
 >
   <div
-    class="m-auto mx-auto w-full max-w-sm rounded-lg bg-white p-6 shadow-md dark:bg-gray-800"
+    class="w-full max-w-sm rounded-lg bg-white p-6 shadow-md dark:bg-gray-800"
   >
     <h2
       class="mt-4 flex gap-3 text-2xl font-light text-gray-700 dark:text-gray-200"

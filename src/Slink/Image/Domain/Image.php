@@ -19,6 +19,13 @@ final class Image extends AbstractAggregateRoot {
   private ImageMetadata $metadata;
   
   /**
+   * @return ID
+   */
+  public function getUserId(): ID {
+    return $this->userId;
+  }
+  
+  /**
    * @param ID $userId
    * @return void
    */

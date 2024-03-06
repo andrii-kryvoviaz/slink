@@ -9,6 +9,12 @@ import { formData } from '@slink/utils/form/formData';
 import type { Action, Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ request, parent, locals }) => {
+  await parent();
+
+  if (locals.user) {
+    throw redirect(302, '/profile');
+  }
+
   return locals;
 };
 
