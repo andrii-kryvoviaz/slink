@@ -20,7 +20,7 @@ jobs:
         env:
           APP_ENV: test
         with:
-          args: --ignore-platform-reqs
+          args: --ignore-platform-reqs --no-scripts --no-interaction
 
       - name: PHPStan Static Analysis
         uses: php-actions/phpstan@v3
