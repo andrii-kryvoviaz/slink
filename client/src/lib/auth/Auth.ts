@@ -1,8 +1,9 @@
 import { Session } from '@slink/lib/auth/Session';
 import { parseJwt } from '@slink/lib/auth/parseJwt';
-import type { Cookies } from '@sveltejs/kit';
+import { type Cookies } from '@sveltejs/kit';
 
 import { ApiClient } from '@slink/api/Client';
+import { ValidationException } from '@slink/api/Exceptions';
 
 type TokenPair = {
   accessToken: string;
@@ -87,26 +88,27 @@ export class Auth {
       return;
     }
 
-    const response = await ApiClient.auth.refresh(refreshToken);
+    try {
+      const response = await ApiClient.auth.refresh(refreshToken);
+      const { access_token, refresh_token } = response;
 
-    if (response?.error) {
-      Auth.logout(cookies);
+      await this._authenticateUser({
+        accessToken: access_token,
+        refreshToken: refresh_token,
+        cookies,
+      });
+
+      return {
+        accessToken: access_token,
+        refreshToken: refresh_token,
+      };
+    } catch (e) {
+      if (e instanceof ValidationException) {
+        Auth.logout(cookies);
+      }
 
       return;
     }
-
-    const { access_token, refresh_token } = response;
-
-    await this._authenticateUser({
-      accessToken: access_token,
-      refreshToken: refresh_token,
-      cookies,
-    });
-
-    return {
-      accessToken: access_token,
-      refreshToken: refresh_token,
-    };
   }
 
   public static logout(cookies: Cookies) {
