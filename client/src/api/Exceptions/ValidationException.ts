@@ -7,8 +7,8 @@ import type { Violation, ViolationResponse } from '@slink/api/Response';
 export class ValidationException extends HttpException {
   private _violations: Violation[];
 
-  constructor(violationResponse: ViolationResponse, status: number = 422) {
-    super(violationResponse.message, status);
+  constructor(violationResponse: ViolationResponse) {
+    super(violationResponse.message, 422);
     this._violations = violationResponse.violations;
   }
 

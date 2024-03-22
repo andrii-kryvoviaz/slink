@@ -84,25 +84,25 @@ export class Client {
     }
 
     if (response.status === 401) {
-      throw new UnauthorizedException(response.status);
+      throw new UnauthorizedException();
     }
 
     if (response.status === 403) {
-      throw new ForbiddenException(response.status);
+      throw new ForbiddenException();
     }
 
     if (response.status === 404) {
-      throw new NotFoundException(response.status);
+      throw new NotFoundException();
     }
 
     const responseBody = await response.json();
 
     if (response.status === 400 && !responseBody.error?.violations) {
-      throw new BadRequestException(responseBody.error, response.status);
+      throw new BadRequestException(responseBody.error);
     }
 
     if (response.status === 422 || responseBody.error?.violations) {
-      throw new ValidationException(responseBody.error, response.status);
+      throw new ValidationException(responseBody.error);
     }
 
     if (response.ok && response.status < 400) {
