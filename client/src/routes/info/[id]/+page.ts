@@ -16,6 +16,7 @@ export const load: PageLoad = async ({ params, fetch, parent }) => {
 
     return response;
   } catch (e: any) {
+    console.error(e);
     if (e instanceof UnauthorizedException) {
       throw redirect(302, '/profile/login');
     }
@@ -25,7 +26,7 @@ export const load: PageLoad = async ({ params, fetch, parent }) => {
         message: e.message,
         button: {
           text: 'Take me to my Uploads',
-          href: '/profile/history',
+          href: '/history',
         },
       });
     }
