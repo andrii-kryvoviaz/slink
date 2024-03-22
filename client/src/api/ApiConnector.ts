@@ -2,6 +2,9 @@ import { Auth } from '@slink/lib/auth/Auth';
 import { Session } from '@slink/lib/auth/Session';
 import { type Handle } from '@sveltejs/kit';
 
+import { cloneRequestBody } from '@slink/utils/http/cloneRequestBody';
+import { getResponseWithCookies } from '@slink/utils/http/cookie';
+
 type ApiOptions = {
   baseUrl: string;
   urlPrefix: string;
@@ -23,7 +26,11 @@ export const ApiConnector = (options: ApiOptions): Handle => {
       return resolve(event);
     }
 
-    if (session?.accessToken && !request.headers.has('Authorization')) {
+    if (
+      session?.accessToken &&
+      !request.headers.has('Authorization') &&
+      !/.+\/.+\..{3,4}$/.test(url.pathname)
+    ) {
       request.headers.set('Authorization', `Bearer ${session.accessToken}`);
     }
 
@@ -34,46 +41,39 @@ export const ApiConnector = (options: ApiOptions): Handle => {
 
     const proxyUrl = `${options.baseUrl}${strippedPath}${url.search}`;
 
+    const { method, headers } = request;
+    const body = await cloneRequestBody(request);
+
     const requestOptions: any = {
-      method: request.method,
-      headers: request.headers,
+      method,
+      headers,
+      body,
       credentials: 'omit',
+      duplex: 'half',
     };
 
     requestOptions.headers.delete('cookie');
 
-    const contentType = requestOptions.headers.get('content-type');
-
-    if (contentType && /^(application\/json.*)/.test(contentType)) {
-      requestOptions.body = await request.arrayBuffer();
-    }
-
-    if (contentType && /^(multipart\/form-data.*)/.test(contentType)) {
-      requestOptions.body = request.clone().body;
-      // is required by newer Node.js versions
-      requestOptions.duplex = 'half';
-    }
-
-    const response = await fetch(proxyUrl, requestOptions);
+    let response = await fetch(proxyUrl, requestOptions);
 
     if (response.status === 401) {
       const tokens = await Auth.refresh({ cookies, fetch });
 
-      if (!tokens) {
-        return response;
+      if (tokens) {
+        const { accessToken } = tokens;
+
+        if (request.headers.has('Authorization')) {
+          requestOptions.headers.set('Authorization', `Bearer ${accessToken}`);
+        }
+
+        if (requestOptions.body) {
+          requestOptions.body = await cloneRequestBody(request);
+        }
+
+        response = await fetch(proxyUrl, requestOptions);
       }
-
-      const { accessToken, refreshToken } = tokens;
-
-      requestOptions.headers.set('Authorization', `Bearer ${accessToken}`);
-
-      if (requestOptions.body) {
-        requestOptions.body = request.clone().body;
-      }
-
-      return await fetch(proxyUrl, requestOptions);
     }
 
-    return response;
+    return getResponseWithCookies(response, cookies);
   };
 };

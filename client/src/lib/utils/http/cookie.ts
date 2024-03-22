@@ -1,3 +1,5 @@
+import type { Cookies } from '@sveltejs/kit';
+
 import { browser } from '$app/environment';
 
 interface CookieProvider {
@@ -65,3 +67,26 @@ class Cookie {
 }
 
 export const cookie = new Cookie();
+
+export const getResponseWithCookies = (
+  response: Response,
+  cookies: Cookies
+): Response => {
+  const { body, status } = response;
+  const headers = new Headers(response.headers);
+
+  cookies.getAll().forEach(({ name, value }) => {
+    let cookieString = `${name}=${value}; Path=/; HttpOnly; Secure; SameSite=Strict;`;
+
+    if (!value) {
+      cookieString = `${cookieString} Max-Age=0;`;
+    }
+
+    headers.append('Set-Cookie', cookieString);
+  });
+
+  return new Response(body, {
+    status,
+    headers,
+  });
+};
