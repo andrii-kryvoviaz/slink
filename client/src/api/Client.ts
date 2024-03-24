@@ -33,7 +33,23 @@ type FetchFunction = typeof fetch;
 
 type ApiClient = Resources & {
   use: (callable: FetchFunction) => Resources;
+  on: (event: EventType, listener: EventListener) => void;
 };
+
+type EventType =
+  | 'unauthorized'
+  | 'forbidden'
+  | 'not-found'
+  | 'bad-request'
+  | 'validation'
+  | 'error';
+
+type Event<T> = {
+  type: EventType;
+  data?: T;
+};
+
+type EventListener = (event: Event<any>) => void;
 
 export class Client {
   private static _resources: Resources = {} as Resources;
@@ -41,6 +57,7 @@ export class Client {
 
   private _fetch: FetchFunction | null = null;
   private _mappers: Set<RequestMapper> = new Set([JsonMapper]);
+  private _eventListeners: Map<EventType, EventListener[]> = new Map();
 
   private constructor(private readonly _basePath: string) {}
 
@@ -51,6 +68,7 @@ export class Client {
     return {
       ...this._resources,
       use: client.use.bind(client),
+      on: client.on.bind(client),
     };
   }
 
@@ -84,25 +102,57 @@ export class Client {
     }
 
     if (response.status === 401) {
-      throw new UnauthorizedException();
+      const { handled } = this.emit({
+        event: 'unauthorized',
+      });
+
+      if (!handled) {
+        throw new UnauthorizedException();
+      }
     }
 
     if (response.status === 403) {
-      throw new ForbiddenException();
+      const { handled } = this.emit({
+        event: 'forbidden',
+      });
+
+      if (!handled) {
+        throw new ForbiddenException();
+      }
     }
 
     if (response.status === 404) {
-      throw new NotFoundException();
+      const { handled } = this.emit({
+        event: 'not-found',
+      });
+
+      if (!handled) {
+        throw new NotFoundException();
+      }
     }
 
     const responseBody = await response.json();
 
     if (response.status === 400 && !responseBody.error?.violations) {
-      throw new BadRequestException(responseBody.error);
+      const { handled } = this.emit({
+        event: 'bad-request',
+        data: responseBody.error,
+      });
+
+      if (!handled) {
+        throw new BadRequestException(responseBody.error);
+      }
     }
 
     if (response.status === 422 || responseBody.error?.violations) {
-      throw new ValidationException(responseBody.error);
+      const { handled } = this.emit({
+        event: 'validation',
+        data: responseBody.error,
+      });
+
+      if (!handled) {
+        throw new ValidationException(responseBody.error);
+      }
     }
 
     if (response.ok && response.status < 400) {
@@ -130,6 +180,36 @@ export class Client {
   public use(callable: FetchFunction): Resources {
     this._fetch = callable;
     return Client._resources;
+  }
+
+  private emit<T>({ event, data }: { event: EventType; data?: T }): {
+    handled: boolean;
+  } {
+    const listeners = this._eventListeners.get(event);
+
+    if (listeners) {
+      listeners.forEach((listener) => listener({ type: event, data }));
+
+      return {
+        handled: true,
+      };
+    } else {
+      return {
+        handled: false,
+      };
+    }
+  }
+
+  public on(event: EventType, listener: EventListener) {
+    let listeners = this._eventListeners.get(event);
+
+    if (!listeners || !listeners.length) {
+      listeners = [];
+    }
+
+    listeners.push(listener);
+
+    this._eventListeners.set(event, listeners);
   }
 }
 
