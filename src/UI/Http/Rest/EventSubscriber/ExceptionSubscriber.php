@@ -28,11 +28,11 @@ final readonly class ExceptionSubscriber implements EventSubscriberInterface {
   }
   
   /**
-   * @return array<string, array<int, int|string>>
+   * @return array<string, string>
    */
   public static function getSubscribedEvents(): array {
     return [
-      KernelEvents::EXCEPTION => ['onKernelException', -10],
+      KernelEvents::EXCEPTION => 'onKernelException',
     ];
   }
   
@@ -118,7 +118,7 @@ final readonly class ExceptionSubscriber implements EventSubscriberInterface {
     }
     
     $statusCode = $this->determineStatusCode($exception);
-    return $this->exceptionCodeToMessage[$statusCode];
+    return $this->exceptionCodeToMessage[$statusCode] ?? 'An error occurred';
   }
   
   /**
