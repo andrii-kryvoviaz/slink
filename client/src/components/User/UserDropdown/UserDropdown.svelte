@@ -21,12 +21,18 @@
     }
   };
 
+  const handleToggle = () => {
+    isOpen = !isOpen;
+  };
+
   const isAuthorized = (roles: string[]) => {
     if (user) {
       return roles.some((role) => user?.roles?.includes(role));
     }
     return false;
   };
+
+  $: icon = isOpen ? 'entypo:chevron-small-up' : 'entypo:chevron-small-down';
 </script>
 
 <svelte:body on:click={handleOutsideClick} />
@@ -34,7 +40,7 @@
 <div class="dropdown relative inline-block">
   <button
     class="dropdown-caller z-100 relative flex items-center gap-2 rounded-md border border-transparent bg-gray-200/70 p-2 text-sm focus:border-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:bg-slate-800 dark:text-white dark:focus:ring-blue-400 dark:focus:ring-opacity-40"
-    on:click={() => (isOpen = !isOpen)}
+    on:click={handleToggle}
   >
     <UserAvatar size="xs" variant="default" class="mx-1" {user} />
     <TextEllipsis
@@ -43,11 +49,7 @@
     >
       {user?.displayName}
     </TextEllipsis>
-    {#if isOpen}
-      <Icon icon="entypo:chevron-small-up" class="h-5 w-5" />
-    {:else}
-      <Icon icon="entypo:chevron-small-down" class="h-5 w-5" />
-    {/if}
+    <Icon {icon} class="h-5 w-5" />
   </button>
 
   {#if isOpen}
