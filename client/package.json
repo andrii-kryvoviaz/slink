@@ -1,6 +1,6 @@
 {
   "name": "slink-client",
-  "version": "1.0.0-rc4",
+  "version": "1.0.0-rc5",
   "private": true,
   "scripts": {
     "dev": "vite dev",
