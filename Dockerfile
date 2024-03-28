@@ -10,15 +10,28 @@ ARG UPLOAD_MAX_FILESIZE_IN_BYTES=52428800
 FROM node:${NODE_VERSION}-alpine as node
 
 
+# Prevent Docker from invalidating cache when package.json version changes
+# Since it is not used in the build process
+FROM node as plain-package-json
+COPY client/package.json client/yarn.lock ./
+RUN yarn version --new-version 0.0.0
+
+
 FROM node as node-dependencies
 WORKDIR /
 
-COPY client/package.json client/yarn.lock ./
+COPY --from=plain-package-json /package.json /yarn.lock ./
+
 RUN yarn install --frozen-lockfile --non-interactive --production=true && \
     yarn add vite
 
-COPY client ./
+# Copy client source files
+COPY client/plugins ./plugins
+COPY client/src ./src
+COPY client/static ./static
+COPY client/svelte.config.js client/tsconfig.json client/vite.config.ts client/postcss.config.js client/tailwind.config.ts ./
 
+# Build client app
 RUN yarn build
 
 
@@ -115,6 +128,32 @@ ENV ORIGIN=http://localhost:3000
 
 # Run entrypoint
 CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisord.conf"]
+
+
+# Test image
+## A lightweight image used to run unit tests and linting
+FROM php:${PHP_VERSION}-alpine as test
+# Copy composer executable
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+WORKDIR /app
+
+# Copy composer files
+COPY composer.json composer.lock ./
+
+# Install development dependencies
+RUN composer install --ignore-platform-reqs --no-interaction --no-scripts
+
+# Copy backend app
+COPY --chown=www-data:www-data . .
+
+# Set environment variables
+RUN mv .env.example .env
+ENV APP_ENV=test
+
+# Set memory limit
+ARG PHP_MEMORY_LIMIT
+RUN echo "memory_limit=${PHP_MEMORY_LIMIT}" > /usr/local/etc/php/conf.d/memory-limit.ini
 
 
 ## Development image

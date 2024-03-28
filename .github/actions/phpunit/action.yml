@@ -1,0 +1,18 @@
+name: 'Test'
+description: 'Run PHPUnit tests'
+inputs:
+  image:
+    description: 'The name of the Docker image'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - uses: ./.github/actions/build-test-image
+      with:
+        image: ${{ inputs.image }}
+
+    - shell: bash
+      run: |
+        docker run --rm ${{ inputs.image }} \
+          php /app/vendor/bin/phpunit --configuration phpunit.xml

@@ -1,0 +1,22 @@
+name: 'Build Test Docker Image'
+description: 'Builds a Docker image for testing and linting'
+inputs:
+  image:
+    description: 'The name of the Docker image to build'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build and Load Test Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        target: test
+        load: true
+        tags: ${{ inputs.image }}
+        cache-from: type=gha,scope=monolithic-test-build
+        cache-to: type=gha,scope=monolithic-test-build
