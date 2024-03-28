@@ -6,6 +6,8 @@ export { default as CopyContainer } from './Action/CopyContainer.svelte';
 export { default as ThemeSwitch } from './Action/ThemeSwitch.svelte';
 export { default as Frame } from './Frame.svelte';
 export { default as Loader } from './Loader/Loader.svelte';
+export * from './Loader/Loader.theme';
+export * from './Loader/Loader.types';
 export { default as Popper } from './Popper.svelte';
 export { default as ExpandableText } from './Text/ExpandableText.svelte';
 export { default as FormattedDate } from './Text/FormattedDate.svelte';
