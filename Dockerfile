@@ -176,15 +176,15 @@ COPY docker/runtime/production.conf /etc/supervisor/conf.d/production.conf
 # Copy node executable
 COPY --from=node /usr/local/bin/node /usr/local/bin/node
 
-# Copy backend app
-COPY --from=source --chown=www-data:www-data /source ./
-
 # Copy vendor files
 COPY --from=vendor /dependencies/vendor ./vendor
 
 # Copy client app
 COPY --from=node-dependencies --chown=www-data:www-data /build ./svelte-kit
 COPY --from=node-dependencies /package.json ./svelte-kit/package.json
+
+# Copy backend app
+COPY --from=source --chown=www-data:www-data /source ./
 
 # Create data directory for database storage
 RUN mkdir -p /app/var/data
