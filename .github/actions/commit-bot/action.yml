@@ -1,0 +1,33 @@
+name: 'GitHub Actions Bot'
+description: 'Commit bot for GitHub Actions'
+inputs:
+  commit-message:
+    description: 'Commit message'
+    required: true
+  files:
+    description: 'Files to commit'
+    required: false
+    default: '.'
+  push:
+    description: 'Push changes to the repository'
+    required: false
+    default: 'false'
+
+runs:
+  using: 'composite'
+  steps:
+    - shell: bash
+      run: |
+        git config user.name 'github-actions[bot]'
+        git config user.email 'github-actions[bot]@users.noreply.github.com'
+        git remote set-url origin https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}
+
+    - shell: bash
+      run: |
+        git add ${{ inputs.files }}
+        git commit -m "${{ inputs.commit-message }}" -m "This is an automated commit" || echo "No changes to commit"
+
+    - if: ${{ inputs.push == 'true'}}
+      shell: bash
+      run: |
+          git push origin HEAD:main

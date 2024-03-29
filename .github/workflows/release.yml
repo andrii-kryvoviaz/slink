@@ -89,19 +89,16 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Configure Git
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git remote set-url origin https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}
-
       - name: Bump client version
         run: |
           npm --prefix ./client version ${{ env.tag }}
 
       - name: Commit version
-        run: |
-          git commit -m "chore: Bump version to ${{ env.tag }}" -m "This is an automated commit" ./client/package.json
+        uses: ./.github/actions/commit-bot
+        with:
+          commit-message: "chore: Bump version to ${{ env.tag }}"
+          files: ./client/package.json
+          push: false
 
       - name: Tag version
         run: |
