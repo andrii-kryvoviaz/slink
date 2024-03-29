@@ -1,6 +1,6 @@
 # Slink: Image Sharing Platform
 
-![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/andrii-kryvoviaz/slink/docker-publish.yml?logo=github)
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/andrii-kryvoviaz/slink/release.yml?logo=github)
 ![Docker Image Version (latest semver)](https://img.shields.io/docker/v/anirdev/slink?color=blue)
 ![Docker Pulls](https://img.shields.io/docker/pulls/anirdev/slink?logo=docker)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
