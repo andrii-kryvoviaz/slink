@@ -10,3 +10,7 @@ node_modules/
 !.env.example
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+#vite-svelte-imports plugin
+src/api/**/index.ts
+src/components/**/index.ts

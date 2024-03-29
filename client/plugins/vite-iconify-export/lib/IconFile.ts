@@ -40,8 +40,6 @@ export class IconFile {
       }
     );
 
-    console.log(parsedIcons);
-
     if (!parsedIcons.length) {
       return;
     }
