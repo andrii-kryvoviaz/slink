@@ -1,0 +1,26 @@
+name: 'Prettier'
+description: 'Run Prettier on the codebase'
+
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'yarn'
+        cache-dependency-path: './client/yarn.lock'
+
+    - run: yarn --cwd ./client install --frozen-lockfile
+      shell: bash
+
+    - run: yarn --cwd ./client run lint
+      shell: bash
+      continue-on-error: true
+
+    - run: yarn --cwd ./client run format
+      shell: bash
+
+    - uses: ./.github/actions/commit-bot
+      with:
+        commit-message: 'chore(prettier): Format codebase'
+        push: true
