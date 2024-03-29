@@ -1,49 +1,63 @@
-import type { Plugin, ViteDevServer } from 'vite';
 import path from 'path';
-import { createIndexFile, createWatcher, findIndexDir, flattenDirectories } from './helpers';
+import type { Plugin, ViteDevServer } from 'vite';
+
+import {
+  createIndexFile,
+  createWatcher,
+  findIndexDir,
+  flattenDirectories,
+} from './helpers';
 
 interface PluginOptions {
-  dirs: string[],
-  libraryMode?: boolean,
-  usePolling?: boolean,
-  enableLogging?: boolean
+  dirs: string[];
+  libraryMode?: boolean;
+  usePolling?: boolean;
+  enableLogging?: boolean;
 }
 
 const name = 'vite-svelte-imports-plugin';
 
-function createRunner(modules: string[], {enableLogging = false}: Partial<PluginOptions>) {
+function createRunner(
+  modules: string[],
+  { enableLogging = false }: Partial<PluginOptions>
+) {
   const isRunning: Map<string, boolean> = new Map();
 
-  for(const path of modules) {
+  for (const path of modules) {
     isRunning.set(path, false);
   }
 
   return async (file: string): Promise<boolean> => {
     const dir = findIndexDir(file);
 
-    if(!dir) return false;
+    if (!dir) return false;
 
     if (!modules.includes(dir)) {
       return false;
     }
 
-    if(isRunning.get(dir)) {
+    if (isRunning.get(dir)) {
       return false;
     }
 
     isRunning.set(dir, true);
     const path = await createIndexFile(dir);
-    isRunning.set(dir, false)
+    isRunning.set(dir, false);
 
     if (enableLogging) {
       console.info(`[${name}] Created index file: ${path}`);
     }
 
     return true;
-  }
+  };
 }
 
-export default function SvelteImportsPlugin({ dirs, libraryMode, usePolling, enableLogging }: PluginOptions): Plugin {
+export default function SvelteImportsPlugin({
+  dirs,
+  libraryMode,
+  usePolling,
+  enableLogging,
+}: PluginOptions): Plugin {
   const modules = libraryMode ? dirs : flattenDirectories(dirs);
   const run = createRunner(modules, { enableLogging });
 
@@ -59,7 +73,7 @@ export default function SvelteImportsPlugin({ dirs, libraryMode, usePolling, ena
       }
     },
     async configureServer(server: ViteDevServer) {
-      const absoluteDirs = modules.map((dir:string) => path.resolve(dir));
+      const absoluteDirs = modules.map((dir: string) => path.resolve(dir));
 
       // use chokidar directly instead of ViteDevServer to be able to set polling
       // since docker volumes might not propagate unlink event correctly
@@ -74,7 +88,7 @@ export default function SvelteImportsPlugin({ dirs, libraryMode, usePolling, ena
             return;
           }
 
-          if(file.endsWith('index.ts')) {
+          if (file.endsWith('index.ts')) {
             return;
           }
 
@@ -89,6 +103,6 @@ export default function SvelteImportsPlugin({ dirs, libraryMode, usePolling, ena
           }
         });
       } catch (error) {}
-    }
+    },
   };
 }

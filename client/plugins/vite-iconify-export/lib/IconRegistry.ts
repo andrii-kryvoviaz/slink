@@ -16,8 +16,12 @@ export class IconRegistry {
     this.version++;
   }
 
-  private addLinkToMap(map: Map<string, Set<string>>, key: string, value: string): void {
-    if(!map.has(key)) {
+  private addLinkToMap(
+    map: Map<string, Set<string>>,
+    key: string,
+    value: string
+  ): void {
+    if (!map.has(key)) {
       map.set(key, new Set());
     }
     map.get(key)?.add(value);

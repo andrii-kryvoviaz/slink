@@ -2,10 +2,19 @@
   "tabWidth": 2,
   "useTabs": false,
   "singleQuote": true,
-  "plugins": ["prettier-plugin-svelte", "prettier-plugin-tailwindcss", "@trivago/prettier-plugin-sort-imports"],
+  "plugins": [
+    "prettier-plugin-svelte",
+    "prettier-plugin-tailwindcss",
+    "@trivago/prettier-plugin-sort-imports"
+  ],
   "pluginSearchDirs": false,
-  "formatOnSave": true,
-  "importOrder": ["^(.app|.lib|svelte|@iconify)/(.*)$", "^@slink/(api|store)/(.*)$", "^@slink/utils/(.*)$", "^@slink/components/(.*)$", "^[./]"],
+  "importOrder": [
+    "^(.app|.lib|svelte|@iconify)/(.*)$",
+    "^@slink/(api|store)/(.*)$",
+    "^@slink/utils/(.*)$",
+    "^@slink/components/(.*)$",
+    "^[./]"
+  ],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true,
   "overrides": [
