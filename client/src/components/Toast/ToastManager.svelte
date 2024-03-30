@@ -23,7 +23,7 @@
             />
           </span>
 
-          <span>{message}</span>
+          <span>{@html message}</span>
         </Toast>
       </button>
     {/each}
