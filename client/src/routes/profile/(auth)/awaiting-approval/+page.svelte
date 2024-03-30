@@ -8,6 +8,10 @@
   export let data: PageServerData;
 </script>
 
+<svelte:head>
+  <title>Awaiting User Approval | Slink</title>
+</svelte:head>
+
 <section class="flex h-full items-start">
   <div
     class="container mx-auto flex flex-col items-center gap-4 px-4 py-12 text-center"

@@ -37,6 +37,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>{user.displayName} | Slink</title>
+</svelte:head>
+
 <div class="container mx-auto px-6 py-8">
   <div class="flex flex-col justify-evenly gap-6 md:flex-row">
     <div class="flex">

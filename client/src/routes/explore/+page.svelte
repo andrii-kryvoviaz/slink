@@ -54,6 +54,10 @@
   onMount(fetchImages);
 </script>
 
+<svelte:head>
+  <title>Explore Public Images | Slink</title>
+</svelte:head>
+
 <section in:fade={{ duration: 300 }}>
   <div class="container mx-auto flex flex-col px-6 py-10">
     <div>

@@ -90,6 +90,10 @@
   $: processing = $isLoading || $pageIsChanging;
 </script>
 
+<svelte:head>
+  <title>Upload | Slink</title>
+</svelte:head>
+
 <svelte:document on:paste={handleChange} />
 
 <div

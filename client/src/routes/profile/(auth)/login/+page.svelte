@@ -29,6 +29,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>Login | Slink</title>
+</svelte:head>
+
 <div
   class="flex flex-grow items-center justify-center py-12"
   in:fade={{ duration: 200 }}

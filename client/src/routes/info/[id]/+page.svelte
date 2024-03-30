@@ -106,6 +106,10 @@
   $: directLink = formatImageUrl([$page.url.origin, data.url], params);
 </script>
 
+<svelte:head>
+  <title>Detailed View | Slink</title>
+</svelte:head>
+
 <div
   in:fly={{ y: 100, duration: 500, delay: 100 }}
   class="flex justify-center p-2 sm:p-8"
