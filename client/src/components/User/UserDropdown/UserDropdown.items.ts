@@ -71,6 +71,13 @@ export const UserDropdownItems: UserDropdownGroup[] = [
         state: 'hidden',
       },
       {
+        title: 'Help',
+        access: ['USER_ROLE', 'ADMIN_ROLE'],
+        icon: 'fluent:chat-help-20-regular',
+        link: '/help/faq',
+        state: 'active',
+      },
+      {
         title: 'Logout',
         access: ['USER_ROLE', 'ADMIN_ROLE'],
         icon: 'solar:logout-line-duotone',

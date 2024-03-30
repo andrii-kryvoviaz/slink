@@ -66,7 +66,11 @@
     const file = fileList.item(0) as File;
 
     if (!file?.type.startsWith('image/')) {
-      toast.warning('Only images allowed');
+      toast.warning(`Unsupported file format.
+        <a href="/help/faq#supported-image-formats"
+            class="text-indigo-500 hover:text-indigo-700 mt-1 block"
+        >See supported formats</a>
+      `);
       return;
     }
 
@@ -152,6 +156,13 @@
             <p class="text-xs text-color-secondary">
               SVG, PNG, JPG, WEBP or GIF (MAX. 5MB)
             </p>
+            <a
+              href="/help/faq#supported-image-formats"
+              class="mt-1 block text-[0.75em] text-gray-600 hover:text-color-primary"
+              on:click={(event) => event.stopPropagation()}
+            >
+              See all supported formats
+            </a>
           </div>
         {:else}
           <div class="flex flex-col items-center justify-center">

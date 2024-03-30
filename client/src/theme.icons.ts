@@ -34,4 +34,7 @@ export const themeIcons: string[] = [
   'carbon:password',
   'material-symbols-light:warning-outline',
   'material-symbols-light:upload',
+  'fluent:chat-help-20-regular',
+  'ep:minus',
+  'ep:plus',
 ];
