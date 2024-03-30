@@ -4,6 +4,7 @@ export const faqQuestions = [
     title: 'What image formats Slink supports ?',
     content: `Slink supports the following mime types:
       <div class="mt-2 w-full">
+        <span class="badge badge-primary badge-outline">image/bmp</span>
         <span class="badge badge-primary badge-outline">image/png</span>
         <span class="badge badge-primary badge-outline">image/jpeg</span>
         <span class="badge badge-primary badge-outline">image/jpg</span>
@@ -11,6 +12,9 @@ export const faqQuestions = [
         <span class="badge badge-primary badge-outline">image/webp</span>
         <span class="badge badge-primary badge-outline">image/svg+xml</span>
         <span class="badge badge-primary badge-outline">image/svg</span>
+        <span class="badge badge-primary badge-outline">image/x-icon</span>
+        <span class="badge badge-primary badge-outline">image/vnd.microsoft.icon</span>
+        <span class="badge badge-primary badge-outline">image/x-tga</span>
       </div>`,
   },
   {
