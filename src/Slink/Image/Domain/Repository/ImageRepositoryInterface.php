@@ -14,6 +14,8 @@ use Slink\Shared\Infrastructure\Exception\NotFoundException;
 interface ImageRepositoryInterface extends ServiceEntityRepositoryInterface {
   public function add(ImageView $image): void;
   
+  public function remove(ImageView $image): void;
+  
   /**
    * @throws NotFoundException
    * @throws NonUniqueResultException

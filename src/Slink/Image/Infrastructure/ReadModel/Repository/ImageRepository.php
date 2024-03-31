@@ -17,8 +17,20 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
     return ImageView::class;
   }
   
+  /**
+   * @param ImageView $image
+   * @return void
+   */
   public function add(ImageView $image): void {
     $this->_em->persist($image);
+  }
+  
+  /**
+   * @param ImageView $image
+   * @return void
+   */
+  public function remove(ImageView $image): void {
+    $this->_em->remove($image);
   }
   
   /**

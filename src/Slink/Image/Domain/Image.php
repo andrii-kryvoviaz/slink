@@ -6,6 +6,7 @@ namespace Slink\Image\Domain;
 
 use Slink\Image\Domain\Event\ImageAttributesWasUpdated;
 use Slink\Image\Domain\Event\ImageWasCreated;
+use Slink\Image\Domain\Event\ImageWasDeleted;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Domain\ValueObject\ImageMetadata;
 use Slink\Shared\Domain\AbstractAggregateRoot;
@@ -17,6 +18,8 @@ final class Image extends AbstractAggregateRoot {
   private ImageAttributes $attributes;
   
   private ImageMetadata $metadata;
+  
+  private bool $deleted = false;
   
   /**
    * @return ID
@@ -72,6 +75,13 @@ final class Image extends AbstractAggregateRoot {
   }
   
   /**
+   * @return bool
+   */
+  public function isDeleted(): bool {
+    return $this->deleted;
+  }
+  
+  /**
    * @param ID $userId
    * @return bool
    */
@@ -87,6 +97,19 @@ final class Image extends AbstractAggregateRoot {
     $image->recordThat(new ImageWasCreated($id, $userId, $attributes, $metadata));
     
     return $image;
+  }
+  
+  /**
+   * @param ImageWasCreated $event
+   * @return void
+   */
+  public function applyImageWasCreated(ImageWasCreated $event): void {
+    $this->setUserId($event->userId);
+    $this->setAttributes($event->attributes);
+    
+    if ($event->metadata) {
+      $this->setMetadata($event->metadata);
+    }
   }
   
   /**
@@ -107,23 +130,26 @@ final class Image extends AbstractAggregateRoot {
   }
   
   /**
-   * @param ImageWasCreated $event
-   * @return void
-   */
-  public function applyImageWasCreated(ImageWasCreated $event): void {
-    $this->setUserId($event->userId);
-    $this->setAttributes($event->attributes);
-    
-    if ($event->metadata) {
-      $this->setMetadata($event->metadata);
-    }
-  }
-  
-  /**
    * @param ImageAttributesWasUpdated $event
    * @return void
    */
   public function applyImageAttributesWasUpdated(ImageAttributesWasUpdated $event): void {
     $this->setAttributes($event->attributes);
+  }
+  
+  /**
+   * @param bool $preserveOnDisk
+   * @return void
+   */
+  public function delete(bool $preserveOnDisk = false): void {
+    $this->recordThat(new ImageWasDeleted($this->aggregateRootId(), $preserveOnDisk));
+  }
+  
+  /**
+   * @param ImageWasDeleted $event
+   * @return void
+   */
+  public function applyImageWasDeleted(ImageWasDeleted $event): void {
+    $this->deleted = true;
   }
 }
