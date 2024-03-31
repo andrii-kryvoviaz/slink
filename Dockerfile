@@ -195,9 +195,6 @@ ENV NODE_ENV=development
 ENV SWOOLE_ENABLED=false
 ENV PHP_IDE_CONFIG="serverName=localhost"
 
-# Point to the persistent data directory
-WORKDIR /app/var/data
-
 # Expose client app port
 EXPOSE 5173
 EXPOSE 8080
@@ -240,10 +237,6 @@ ENV SWOOLE_ENABLED=true
 # Set Node Adapter Size Limit
 ARG UPLOAD_MAX_FILESIZE_IN_BYTES
 ENV BODY_SIZE_LIMIT=${UPLOAD_MAX_FILESIZE_IN_BYTES}
-
-# Point to the persistent data directory
-# Redis and other services can store data here
-WORKDIR /app/var/data
 
 # Expose client app port
 EXPOSE 3000
