@@ -1,0 +1,114 @@
+<script lang="ts">
+  import { createEventDispatcher } from 'svelte';
+
+  import Icon from '@iconify/svelte';
+  import { fade } from 'svelte/transition';
+
+  import { Button, type ButtonVariant } from '@slink/components/Common/index';
+
+  export let open = true;
+  export let loading = false;
+  export let variant: ButtonVariant | undefined = undefined;
+
+  const dispatch = createEventDispatcher<{
+    confirm: undefined;
+  }>();
+
+  let innerModal: HTMLElement;
+
+  const closeModal = (e?: MouseEvent) => {
+    // Prevent closing the modal when clicking inside of innerModal
+    if (e && innerModal.contains(e.target as Node)) return;
+
+    open = false;
+  };
+
+  const handleConfirm = () => {
+    dispatch('confirm');
+  };
+
+  const confirmButtonDefaultClasses =
+    'mt-2 w-full transform rounded-md px-4 py-2 text-sm font-medium capitalize tracking-wide transition-colors duration-300 focus:outline-none focus:ring focus:ring-opacity-40 sm:mt-0 sm:w-auto';
+
+  const confirmButtonDefaultAccentClasses =
+    'bg-blue-600 text-white hover:bg-blue-500 focus:ring-blue-300';
+
+  $: confirmButtonClasses = !variant
+    ? `${confirmButtonDefaultClasses} ${confirmButtonDefaultAccentClasses}`
+    : confirmButtonDefaultClasses;
+</script>
+
+<svelte:window on:keydown|window={(e) => e.key === 'Escape' && closeModal()} />
+
+{#if open}
+  <div
+    in:fade
+    class="fixed inset-0 z-40 overflow-y-auto bg-black bg-opacity-50 backdrop-blur-sm"
+    aria-labelledby="modal-title"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    on:click={closeModal}
+  >
+    <div
+      class="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0"
+    >
+      <span
+        class="hidden sm:inline-block sm:h-screen sm:align-middle"
+        aria-hidden="true">&#8203;</span
+      >
+
+      <div
+        bind:this={innerModal}
+        class="relative inline-block transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left align-bottom shadow-xl transition-all rtl:text-right dark:bg-gray-900 sm:my-8 sm:w-full sm:max-w-sm sm:p-6 sm:align-middle"
+      >
+        <div>
+          <div class="flex items-center justify-center">
+            <slot name="icon" />
+          </div>
+
+          <div class="mt-2 text-center">
+            <h3
+              class="text-lg font-medium capitalize leading-6 text-gray-800 dark:text-white"
+              id="modal-title"
+            >
+              <slot name="title" />
+            </h3>
+            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+              <slot name="content">Are you sure?</slot>
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-5 sm:flex sm:items-end sm:justify-between">
+          <slot name="extra">&nbsp;</slot>
+
+          <div class="sm:flex sm:items-center">
+            <Button
+              class="mt-2 w-full transform rounded-md border border-gray-200 px-4 py-2 text-sm font-medium capitalize tracking-wide text-gray-700 transition-colors duration-300 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-40 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800 sm:mx-2 sm:mt-0 sm:w-auto"
+              on:click={() => closeModal()}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              {variant}
+              class={confirmButtonClasses}
+              disabled={loading}
+              on:click={handleConfirm}
+            >
+              {#if loading}
+                <Icon
+                  slot="loadingIcon"
+                  icon="mdi-light:loading"
+                  class="mr-4 h-5 w-5 animate-spin"
+                />
+              {/if}
+              <slot name="confirm">Confirm</slot>
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{/if}
