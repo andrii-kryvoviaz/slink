@@ -5,7 +5,7 @@
 ![Docker Pulls](https://img.shields.io/docker/pulls/anirdev/slink?logo=docker)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-![Slink](screens/1a3c5849-b05d-4e3f-b796-8cd85f3c78a0.png)
+![Slink](screens/e98ea79e-01bb-4e23-98ba-b18841d09c9b.png)
 **Slink** is a self-hosted image sharing platform built with [Symfony](https://symfony.com/) and [SvelteKit](https://kit.svelte.dev/) with ❤️.
 
 Solves the problem of sharing images with friends, family, and colleagues without relying on third-party services. It also offers a platform for artists to share their work with the community. Additionally, developers may find it useful for self-hosting screenshots of personal projects, which can then be used on GitHub, portfolios, blogs, etc.
