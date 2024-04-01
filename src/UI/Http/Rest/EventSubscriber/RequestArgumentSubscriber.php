@@ -51,10 +51,6 @@ final class RequestArgumentSubscriber implements EventSubscriberInterface {
       $typeProperties = $constructor?->getParameters() ?? [];
       
       foreach ($typeProperties as $typeProperty) {
-        if($typeProperty->isOptional() || $typeProperty->getType()?->allowsNull()) {
-          continue;
-        }
-        
         if (!$request->{$method}->has($typeProperty->getName())) {
           $defaultValue = $typeProperty->isDefaultValueAvailable() ? $typeProperty->getDefaultValue() : null;
           
