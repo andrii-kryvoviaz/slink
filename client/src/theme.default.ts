@@ -8,8 +8,11 @@ export const defaultTheme: Theme = {
     textButtonAccent: 'white',
     bgButtonDark: 'gray.800',
     bgSuccess: 'teal.500',
+    ringSuccess: 'teal.500',
     bgDanger: 'rose.700',
+    ringDanger: 'rose.500',
     bgWarning: 'amber.500',
+    ringWarning: 'amber.500',
     borderDescription: 'slate.400',
     colorInputError: 'red.500',
     bgDropdownAccent: 'indigo.500',
@@ -155,6 +158,11 @@ export const tailwindcssTheme: Partial<ThemeConfig> = injectAlphaPlaceholder({
         default: 'var(--ring-input-default-focus)',
         error: 'var(--color-input-error)',
       },
+    },
+    button: {
+      success: 'var(--ring-success)',
+      danger: 'var(--ring-danger)',
+      warning: 'var(--ring-warning)',
     },
   },
   gradientColorStops: {

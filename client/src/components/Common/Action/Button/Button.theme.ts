@@ -16,11 +16,11 @@ export const ButtonTheme = cva(
           'rounded bg-none text-button-invisible hover:bg-button-hover-invisible/25 hover:text-button-primary',
         link: 'bg-transparent dark:bg-transparent underline-offset-4 hover:underline text-button-default hover:bg-transparent',
         success:
-          'bg-button-success text-button-accent bg-opacity-80 hover:bg-opacity-100',
+          'bg-button-success text-button-accent bg-opacity-80 hover:bg-opacity-100 focus:ring-button-success',
         danger:
-          'bg-button-danger text-button-accent bg-opacity-80 hover:bg-opacity-100',
+          'bg-button-danger text-button-accent bg-opacity-80 hover:bg-opacity-100 focus:ring-button-danger',
         warning:
-          'bg-button-warning text-button-accent bg-opacity-80 hover:bg-opacity-100',
+          'bg-button-warning text-button-accent bg-opacity-80 hover:bg-opacity-100 focus:ring-button-warning',
       },
       size: {
         xs: 'text-xs px-3 py-1.5',
