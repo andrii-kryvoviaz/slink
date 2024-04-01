@@ -13,6 +13,15 @@ export class ImageResource extends AbstractResource {
     return this.post('/upload', { body });
   }
 
+  public async remove(
+    id: string,
+    preserveOnDisk: boolean = false
+  ): Promise<void> {
+    return this.delete(`/image/${id}`, {
+      json: { preserveOnDisk },
+    });
+  }
+
   public async getDetails(id: string): Promise<ImageDetailsResponse> {
     return this.get(`/image/${id}/detail`);
   }
