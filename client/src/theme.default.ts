@@ -30,6 +30,7 @@ export const defaultTheme: Theme = {
       borderButtonDefault: 'zinc.800',
       bgButtonDefaultHover: 'gray.700',
       textButtonDefaultHover: 'gray.200',
+      bgButtonInvisibleHover: 'white',
       textButtonInvisible: 'white',
       bgToggle: 'gray.800',
       bgToggleChecked: 'indigo.600',
@@ -57,6 +58,7 @@ export const defaultTheme: Theme = {
       borderButtonDefault: 'gray.200',
       bgButtonDefaultHover: 'gray.100',
       textButtonDefaultHover: 'gray.900',
+      bgButtonInvisibleHover: 'gray.400',
       textButtonInvisible: 'gray.800',
       bgToggle: 'gray.100',
       bgToggleChecked: 'violet.600',
@@ -82,6 +84,7 @@ export const tailwindcssTheme: Partial<ThemeConfig> = injectAlphaPlaceholder({
     button: {
       hover: {
         default: 'var(--bg-button-default-hover)',
+        invisible: 'var(--bg-button-invisible-hover)',
       },
       accent: 'var(--bg-button-accent)',
       dark: 'var(--bg-button-dark)',
