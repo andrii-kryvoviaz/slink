@@ -6,12 +6,12 @@
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
 
+  import { downloadByLink } from '@slink/utils/http/downloadByLink.js';
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
   import { toast } from '@slink/utils/ui/toast';
 
-  import { Tooltip } from '@slink/components/Common';
+  import { Button, Tooltip } from '@slink/components/Common';
   import { CopyContainer } from '@slink/components/Common';
-  import { Toggle } from '@slink/components/Form';
   import {
     ImageDescription,
     type ImageParams,
@@ -127,6 +127,90 @@
     </div>
 
     <div class="min-w-0 px-2">
+      <div class="mb-12 flex items-center gap-2">
+        <Button
+          variant="primary"
+          size="md"
+          on:click={() => downloadByLink(directLink, data.fileName)}
+        >
+          <span class="mr-2 hidden text-sm font-light xs:block">Download</span>
+          <Icon
+            icon="material-symbols-light:download"
+            slot="rightIcon"
+            class="h-5 w-5"
+          />
+        </Button>
+
+        <div>
+          <Button
+            variant="invisible"
+            size="md"
+            class="px-3 transition-colors"
+            id="open-visibility-tooltip"
+            on:click={() => handleVisibilityChange(!data.isPublic)}
+            disabled={$visibilityIsLoading}
+          >
+            {#if $visibilityIsLoading}
+              <Icon icon="mdi-light:loading" class="h-5 w-5 animate-spin" />
+            {:else if data.isPublic}
+              <Icon icon="ph:eye-light" class="h-5 w-5" />
+            {:else}
+              <Icon icon="ph:eye-slash-light" class="h-5 w-5" />
+            {/if}
+          </Button>
+          <Tooltip
+            triggeredBy="[id^='open-visibility-tooltip']"
+            class="max-w-[10rem] p-2 text-center text-xs"
+            color="dark"
+            placement="bottom"
+          >
+            {#if data.isPublic}
+              Make Private
+            {:else}
+              Make Public
+            {/if}
+          </Tooltip>
+        </div>
+
+        <div>
+          <Button
+            variant="invisible"
+            size="md"
+            class="px-3 transition-colors"
+            id="open-share-tooltip"
+            href="/help/faq#share-feature"
+          >
+            <Icon icon="mdi-light:share-variant" class="h-5 w-5" />
+          </Button>
+          <Tooltip
+            triggeredBy="[id^='open-share-tooltip']"
+            class="max-w-[10rem] p-2 text-center text-xs"
+            color="dark"
+            placement="bottom"
+          >
+            Share Policy
+          </Tooltip>
+        </div>
+
+        <div>
+          <Button
+            variant="invisible"
+            size="md"
+            class="px-3 transition-colors hover:bg-button-danger hover:text-white"
+            id="open-delete-tooltip"
+          >
+            <Icon icon="solar:trash-bin-minimalistic-broken" class="h-5 w-5" />
+          </Button>
+          <Tooltip
+            triggeredBy="[id^='open-delete-tooltip']"
+            class="max-w-[10rem] p-2 text-center text-xs"
+            color="dark"
+            placement="bottom"
+          >
+            Delete Image
+          </Tooltip>
+        </div>
+      </div>
       <p class="mb-4 mt-8 w-full">
         <ImageDescription
           description={data.description}
@@ -137,7 +221,7 @@
       <div class="mb-2 mt-8">
         <p class="my-2 text-xs font-extralight">
           Copy the direct image link to use it on your website or share it with
-          others.
+          others
         </p>
         <CopyContainer value={directLink} />
       </div>
@@ -163,33 +247,6 @@
           </Tooltip>
         </div>
       {/if}
-      <div class="mt-8">
-        <p class="my-2 text-xs font-extralight">
-          Make image publicly available under <a
-            class="font-normal text-primary hover:underline"
-            href="/">listing</a
-          >
-          page, so anyone can see it.
-          <span class="mt-1 block text-[0.8em] font-extralight">
-            <strong>*</strong> This will not affect the direct link. Therefore, it
-            is always accessible to anyone who holds the link.
-          </span>
-        </p>
-        <div class="mt-2 flex items-center">
-          <Toggle
-            checked={data.isPublic}
-            disabled={$visibilityIsLoading}
-            on:change={({ detail }) => handleVisibilityChange(detail)}
-          />
-          <p class="ml-2 text-sm font-extralight">
-            {#if $visibilityIsLoading}
-              <Icon icon="mdi-light:loading" class="h-4 w-4 animate-spin" />
-            {:else}
-              {data.isPublic ? 'Public' : 'Private'}
-            {/if}
-          </p>
-        </div>
-      </div>
     </div>
   </div>
 </div>

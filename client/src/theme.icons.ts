@@ -26,7 +26,6 @@ export const themeIcons: string[] = [
   'mynaui:chevron-double-right',
   'mynaui:external-link',
   'ep:info-filled',
-  'mdi-light:loading',
   'ph:password-light',
   'fluent:chevron-right-48-regular',
   'mdi-light:email',
@@ -37,4 +36,10 @@ export const themeIcons: string[] = [
   'fluent:chat-help-20-regular',
   'ep:minus',
   'ep:plus',
+  'mdi-light:loading',
+  'solar:trash-bin-minimalistic-broken',
+  'material-symbols-light:download',
+  'mdi-light:share-variant',
+  'ph:eye-light',
+  'ph:eye-slash-light',
 ];
