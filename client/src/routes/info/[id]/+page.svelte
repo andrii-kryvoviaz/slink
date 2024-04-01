@@ -283,6 +283,7 @@
 
 <Modal
   variant="danger"
+  align="top"
   bind:open={deleteModalVisible}
   loading={$deleteImageIsLoading}
   on:confirm={handleDeleteImage}
