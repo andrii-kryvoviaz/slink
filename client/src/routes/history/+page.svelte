@@ -13,11 +13,14 @@
   } from '@slink/api/Response';
 
   import { Button, Loader } from '@slink/components/Common';
-  import FormattedDate from '@slink/components/Common/Text/FormattedDate.svelte';
+  import { HistoryListView } from '@slink/components/Layout';
 
-  let images: ImageListingItem[] = [];
-  let meta: ListingMetadata;
-  let page = 1;
+  let items: ImageListingItem[] = [];
+  let meta: ListingMetadata = {
+    page: 1,
+    size: 9,
+    total: 0,
+  };
 
   const {
     run: fetchImages,
@@ -25,27 +28,32 @@
     isLoading,
     status,
   } = ReactiveState<ImageListingResponse>(
-    () => {
-      return ApiClient.image.getHistory(page++);
+    (page: number, limit: number) => {
+      return ApiClient.image.getHistory(page, limit);
     },
     { debounce: 300 }
   );
 
   $: {
     if ($response) {
-      images = [...images, ...$response.data];
+      items = $response.data;
       meta = $response.meta;
     }
   }
 
+  const onUpdate = () => {
+    // rerun the fetchImages function with the current page and size
+    fetchImages(meta.page, meta.size);
+  };
+
   $: showLoadMore =
     meta && meta.page < Math.ceil(meta.total / meta.size) && $status !== 'idle';
 
-  $: showPreloader = !images.length && $status !== 'finished';
+  $: showPreloader = !items.length && $status !== 'finished';
 
-  $: itemsNotFound = !images.length && $status === 'finished';
+  $: itemsNotFound = !items.length && $status === 'finished';
 
-  onMount(fetchImages);
+  onMount(() => fetchImages(1, meta.size));
 </script>
 
 <svelte:head>
@@ -130,9 +138,9 @@
           size="md"
           variant="secondary"
           loading={$isLoading}
-          on:click={fetchImages}
+          on:click={() => fetchImages(meta.page + 1, meta.size)}
         >
-          <span>View More</span>
+          <span>Next</span>
           <Icon icon="mynaui:chevron-double-right" slot="rightIcon" />
         </Button>
       </div>
