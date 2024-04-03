@@ -14,15 +14,11 @@ final readonly class HashedRefreshToken extends AbstractValueObject {
   /**
    * @param string $hashedRefreshToken
    * @param DateTime $expiresAt
-   * @throws DateTimeException
    */
   private function __construct(
     private string $hashedRefreshToken,
     private DateTime $expiresAt,
   ) {
-    if($expiresAt->isBefore(DateTime::now())) {
-      throw new InvalidRefreshToken();
-    }
   }
   
   /**
@@ -51,7 +47,13 @@ final readonly class HashedRefreshToken extends AbstractValueObject {
       throw new InvalidRefreshToken();
     }
     
-    return new self(self::hash($plainRefreshToken), DateTime::fromTimestamp((int) $expiresAt));
+    $expiresAt = DateTime::fromTimestamp((int) $expiresAt);
+    
+    if($expiresAt->isBefore(DateTime::now())) {
+      throw new InvalidRefreshToken();
+    }
+    
+    return new self(self::hash($plainRefreshToken), $expiresAt);
   }
   
   /**
