@@ -72,7 +72,7 @@
   }
 
   const onResize = () => {
-    if (container && width) {
+    if (container && width && stretch) {
       const remContainerWidth = Math.floor(container.offsetWidth / 16);
 
       if (remContainerWidth < width) {
@@ -87,7 +87,7 @@
 <svelte:window on:resize={onResize} />
 
 <div
-  class="relative flex max-w-full items-center justify-center overflow-hidden rounded-md border-slate-500/10"
+  class="relative flex max-h-full max-w-full items-center justify-center overflow-hidden rounded-md border-slate-500/10"
   class:border={showMetadata || showOpenInNewTab}
   style:width="{width}rem"
   style:height="{height}rem"
