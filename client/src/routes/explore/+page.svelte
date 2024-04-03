@@ -136,7 +136,8 @@
               uniqueId={image.id}
               src={`/image/${image.attributes.fileName}?width=400`}
               metadata={image.metadata}
-              height={54}
+              width={28}
+              stretch={true}
             />
           </div>
 

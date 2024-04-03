@@ -89,7 +89,6 @@
       <div class="flex max-w-full justify-start">
         <ImagePlaceholder
           src={data.url}
-          height={32}
           aspectRatio={data.height / data.width}
           metadata={data}
         />

@@ -12,46 +12,54 @@
   export let metadata: {
     height: number;
     width: number;
-    mimeType: string;
-    size: number;
+    mimeType: string | undefined;
+    size: number | undefined;
   } | null = null;
+
   export let aspectRatio: number = 0;
-  export let height = 24;
+  export let height: number | null = null;
+  export let width: number | null = null;
+  export let stretch: boolean = false;
+  export let showMetadata = true;
+  export let showOpenInNewTab = true;
 
   export let uniqueId = Math.random().toString(36).substring(2);
 
   let originalImage: string | undefined;
-
-  let width = 0;
   let isLoaded = false;
-
-  let maxWidth = 0;
-  let maxHeight = 0;
 
   let image: HTMLImageElement;
   let container: HTMLDivElement;
-
-  const filterResizable = (mimeType: string | undefined) => {
-    if (!mimeType) return false;
-    return !new RegExp('svg').test(mimeType);
-  };
-
-  $: if (aspectRatio) {
-    width = height / aspectRatio;
-  }
 
   $: if (isLoaded && !aspectRatio) {
     aspectRatio = image.naturalHeight / image.naturalWidth;
   }
 
-  $: if (isLoaded) {
+  $: if (isLoaded && height) {
     // Reset the height to auto so that the image can resize freely
-    container.style.height = `auto`;
+    const remImageHeight = Math.floor(image.naturalHeight / 16) - 1;
+    if (remImageHeight > height) {
+      container.style.height = `auto`;
+    }
   }
 
   $: if (metadata) {
-    maxHeight = Math.max(metadata.height, 200);
-    maxWidth = maxHeight / aspectRatio;
+    aspectRatio = metadata.height / metadata.width;
+
+    if (height && !width) {
+      width = height / aspectRatio;
+    }
+
+    if (width && !height) {
+      height = width * aspectRatio;
+    }
+  }
+
+  $: if (metadata && !height && !width) {
+    const remHeight = Math.floor(metadata.height / 16) - 1;
+
+    height = Math.min(Math.max(remHeight, 14), 30);
+    width = Math.floor(height / aspectRatio);
   }
 
   $: if (src && src !== originalImage) {
@@ -62,16 +70,28 @@
   $: if (image && image.complete) {
     isLoaded = true;
   }
+
+  const onResize = () => {
+    if (container && width) {
+      const remContainerWidth = Math.floor(container.offsetWidth / 16);
+
+      if (remContainerWidth < width) {
+        height = remContainerWidth * aspectRatio;
+      } else {
+        height = width * aspectRatio;
+      }
+    }
+  };
 </script>
 
+<svelte:window on:resize={onResize} />
+
 <div
-  class="relative max-w-full overflow-hidden rounded-md"
-  style:width="min({width}rem, {maxWidth}px)"
+  class="relative flex max-w-full items-center justify-center overflow-hidden rounded-md border-slate-500/10"
+  class:border={showMetadata || showOpenInNewTab}
+  style:width="{width}rem"
   style:height="{height}rem"
-  style:max-width="min({maxWidth}px, 100%)"
-  style:max-height="min({maxHeight}px, {height}rem)"
   bind:this={container}
-  class:bg-white={!filterResizable(metadata?.mimeType)}
 >
   <img
     bind:this={image}
@@ -80,40 +100,46 @@
     on:load={() => {
       isLoaded = true;
     }}
-    class="h-full w-full object-contain transition-opacity"
+    class="transition-opacity"
+    class:w-full={stretch}
+    class:h-full={stretch}
     class:hidden={!isLoaded}
   />
   {#if isLoaded}
-    <a
-      href={originalImage || src}
-      target="_blank"
-      rel="noopener noreferrer"
-      class="absolute right-0 top-0 p-2 text-slate-200 hover:text-slate-100"
-      id={`open-tooltip-${uniqueId}`}
-    >
-      <Icon icon="system-uicons:external" />
-    </a>
+    {#if showOpenInNewTab}
+      <a
+        href={originalImage || src}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="absolute right-0 top-0 p-2 text-slate-200 hover:text-slate-100"
+        id={`open-tooltip-${uniqueId}`}
+      >
+        <Icon icon="system-uicons:external" />
+      </a>
 
-    <Tooltip
-      triggeredBy={`[id^='open-tooltip-${uniqueId}']`}
-      class="min-w-[7rem] p-2 text-xs"
-      color="dark"
-    >
-      Open in new tab</Tooltip
-    >
+      <Tooltip
+        triggeredBy={`[id^='open-tooltip-${uniqueId}']`}
+        class="min-w-[7rem] p-2 text-xs"
+        color="dark"
+      >
+        Open in new tab</Tooltip
+      >
+    {/if}
 
-    {#if metadata}
+    {#if metadata && showMetadata}
       <div
         class="absolute bottom-0 left-0 right-0 flex items-center justify-between bg-slate-800 bg-opacity-50 p-2 text-xs text-slate-200 backdrop-blur-sm backdrop-filter"
       >
         <div class="group">
-          {#if filterResizable(metadata.mimeType)}
-            <p>{metadata.width}x{metadata.height} pixels</p>
+          <p>{metadata.width}x{metadata.height} pixels</p>
+          {#if metadata.mimeType}
+            <p>{metadata.mimeType}</p>
           {/if}
-          <p>{metadata.mimeType}</p>
         </div>
 
-        <p>{bytesToSize(metadata.size)}</p>
+        {#if metadata.size}
+          <p>{bytesToSize(metadata.size)}</p>
+        {/if}
       </div>
     {/if}
   {/if}
