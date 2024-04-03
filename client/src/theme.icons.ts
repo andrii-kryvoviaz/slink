@@ -38,8 +38,10 @@ export const themeIcons: string[] = [
   'ep:plus',
   'mdi-light:loading',
   'solar:trash-bin-minimalistic-broken',
-  'material-symbols-light:download',
   'mdi-light:share-variant',
   'ph:eye-light',
   'ph:eye-slash-light',
+  'material-symbols-light:download',
+  'lets-icons:copy-light',
+  'mdi-light:check',
 ];
