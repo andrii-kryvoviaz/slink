@@ -33,10 +33,6 @@
   let params: Partial<ImageParams> = {};
   let directLink: string;
 
-  const filterResizable = (mimeType: string) => {
-    return !new RegExp('svg|gif|webp').test(mimeType);
-  };
-
   const handleImageSizeChange = (value?: Partial<ImageSize>) => {
     let { width, height, ...rest } = params;
 
@@ -255,7 +251,7 @@
         </p>
         <CopyContainer value={directLink} />
       </div>
-      {#if filterResizable(data.mimeType)}
+      {#if data.supportsResize}
         <div class="mb-2 flex items-center gap-3">
           <ImageSizePicker
             width={data.width}

@@ -11,4 +11,5 @@ export type ImageDetailsResponse = {
   height: number;
   views: number;
   url: string;
+  supportsResize: boolean;
 };
