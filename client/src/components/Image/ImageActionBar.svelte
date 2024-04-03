@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte';
+
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   import Icon from '@iconify/svelte';
@@ -15,7 +17,6 @@
 
   export let image: {
     id: string;
-    url: string;
     fileName: string;
     isPublic: boolean;
   };
@@ -29,6 +30,8 @@
   ];
 
   const isButtonVisible = (button: actionButton) => buttons.includes(button);
+
+  const dispatch = createEventDispatcher<{ imageDeleted: string }>();
 
   const {
     isLoading: visibilityIsLoading,
@@ -74,7 +77,8 @@
 
     await goto('/history');
 
-    toast.success('Image deleted successfully');
+    deleteModalVisible = false;
+    dispatch('imageDeleted', image.id);
   };
 
   let isCopiedActive = false;
@@ -88,16 +92,16 @@
     }, 1000);
   };
 
-  $: directLink = [$page.url.origin, image.url].join('');
+  $: directLink = `${$page.url.origin}/image/${image.fileName}`;
 </script>
 
-<div class="mb-12 flex items-center gap-2">
+<div class="flex items-center gap-2">
   {#if isButtonVisible('download')}
     <div>
       <Button
         variant="primary"
         size="md"
-        on:click={() => downloadByLink(image.url, image.fileName)}
+        on:click={() => downloadByLink(directLink, image.fileName)}
       >
         <span class="mr-2 hidden text-sm font-light xs:block">Download</span>
         <Icon
@@ -115,7 +119,7 @@
         variant="invisible"
         size="md"
         class="px-3 transition-colors"
-        id="open-visibility-tooltip"
+        id="open-visibility-tooltip-{image.id}"
         on:click={() => handleVisibilityChange(!image.isPublic)}
         disabled={$visibilityIsLoading}
       >
@@ -128,8 +132,8 @@
         {/if}
       </Button>
       <Tooltip
-        triggeredBy="[id^='open-visibility-tooltip']"
-        class="max-w-[10rem] p-2 text-center text-xs"
+        triggeredBy="[id^='open-visibility-tooltip-{image.id}'"
+        class="max-w-[10rem] p-2 text-center text-xs shadow-none"
         color="dark"
         placement="bottom"
       >
@@ -148,14 +152,14 @@
         variant="invisible"
         size="md"
         class="px-3 transition-colors"
-        id="open-share-tooltip"
+        id="open-share-tooltip-{image.id}"
         href="/help/faq#share-feature"
       >
         <Icon icon="mdi-light:share-variant" class="h-5 w-5" />
       </Button>
       <Tooltip
-        triggeredBy="[id^='open-share-tooltip']"
-        class="max-w-[10rem] p-2 text-center text-xs"
+        triggeredBy="[id^='open-share-tooltip-{image.id}']"
+        class="max-w-[10rem] p-2 text-center text-xs shadow-none"
         color="dark"
         placement="bottom"
       >
@@ -170,7 +174,7 @@
         variant="invisible"
         size="md"
         class="px-3 transition-colors"
-        id="open-copy-tooltip"
+        id="open-copy-tooltip-{image.id}"
         on:click={handleCopy}
         disabled={isCopiedActive}
       >
@@ -185,8 +189,8 @@
         {/if}
       </Button>
       <Tooltip
-        triggeredBy="[id^='open-copy-tooltip']"
-        class="max-w-[10rem] p-2 text-center text-xs"
+        triggeredBy="[id^='open-copy-tooltip-{image.id}']"
+        class="max-w-[10rem] p-2 text-center text-xs shadow-none"
         color="dark"
         placement="bottom"
       >
@@ -201,14 +205,14 @@
         variant="invisible"
         size="md"
         class="px-3 transition-colors hover:bg-button-danger hover:text-white"
-        id="open-delete-tooltip"
+        id="open-delete-tooltip-{image.id}"
         on:click={() => (deleteModalVisible = true)}
       >
         <Icon icon="solar:trash-bin-minimalistic-broken" class="h-5 w-5" />
       </Button>
       <Tooltip
-        triggeredBy="[id^='open-delete-tooltip']"
-        class="max-w-[10rem] p-2 text-center text-xs"
+        triggeredBy="[id^='open-delete-tooltip-{image.id}']"
+        class="max-w-[10rem] p-2 text-center text-xs shadow-none"
         color="dark"
         placement="bottom"
       >

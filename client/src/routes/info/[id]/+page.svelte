@@ -96,7 +96,10 @@
     </div>
 
     <div class="min-w-0 px-2">
-      <ImageActionBar image={data} />
+      <div class="mb-12">
+        <ImageActionBar image={data} />
+      </div>
+
       <p class="mb-4 mt-8 w-full">
         <ImageDescription
           description={data.description}
