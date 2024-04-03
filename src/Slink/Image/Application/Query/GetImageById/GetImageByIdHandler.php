@@ -7,6 +7,7 @@ namespace Slink\Image\Application\Query\GetImageById;
 use Doctrine\ORM\NonUniqueResultException;
 use Ramsey\Uuid\Uuid;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
+use Slink\Image\Domain\Service\ImageAnalyzerInterface;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Application\Query\QueryHandlerInterface;
@@ -18,6 +19,7 @@ final readonly class GetImageByIdHandler implements QueryHandlerInterface {
   
   public function __construct(
     private ImageRepositoryInterface $repository,
+    private ImageAnalyzerInterface $imageAnalyzer
   ) {
   }
   
@@ -36,8 +38,11 @@ final readonly class GetImageByIdHandler implements QueryHandlerInterface {
       throw new AccessDeniedException();
     }
     
+    $imageMimeType = $imageView->getMetadata()?->getMimeType() ?? 'unknown';
+    
     return Item::fromPayload(ImageView::class, [
       ...$imageView->toPayload(),
+      'supportsResize' => $this->imageAnalyzer->supportsResize($imageMimeType),
       'url' => implode('/',
         [
           '/image',

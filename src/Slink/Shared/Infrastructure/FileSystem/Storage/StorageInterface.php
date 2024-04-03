@@ -17,22 +17,22 @@ interface StorageInterface {
   
   /**
    * @param File $file
-   * @param ImageOptions|string $image
+   * @param string $fileName
    * @return void
    */
-  public function upload(File $file, ImageOptions|string $image): void;
+  public function upload(File $file, string $fileName): void;
   
   /**
-   * @param ImageOptions|string|null $image
+   * @param ImageOptions $image
    * @return string|null
    */
-  public function getImage(ImageOptions|string|null $image): ?string;
+  public function getImage(ImageOptions $image): ?string;
   
   /**
-   * @param ImageOptions|string $image
+   * @param string $fileName
    * @return void
    */
-  public function delete(ImageOptions|string $image): void;
+  public function delete(string $fileName): void;
   
   /**
    * @param string $path

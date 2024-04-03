@@ -30,19 +30,11 @@ final class LocalStorage extends AbstractStorage {
   
   /**
    * @param File $file
-   * @param ImageOptions|string $image
+   * @param string $fileName
    * @return void
    */
-  public function upload(File $file, ImageOptions|string $image): void {
-    $path = $this->getAbsolutePath($image, onlyDir: true);
-    
-    if (!is_dir($path)) {
-      $this->mkdir($path);
-    }
-    
-    $fileName = $this->getFileName($image);
-    
-    $file->move($path, $fileName);
+  public function upload(File $file, string $fileName): void {
+    $file->move($this->getPath(), $fileName);
   }
   
   public function write(string $path, string $content): void {
@@ -61,8 +53,8 @@ final class LocalStorage extends AbstractStorage {
     }
   }
   
-  public function delete(ImageOptions|string $image): void {
-    $path = $this->getAbsolutePath($image);
+  public function delete(string $fileName): void {
+    $path = $this->getPath() . '/' . $fileName;
     
     unlink($path);
   }

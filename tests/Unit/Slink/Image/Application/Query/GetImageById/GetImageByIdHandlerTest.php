@@ -13,6 +13,7 @@ use Ramsey\Uuid\Uuid;
 use Slink\Image\Application\Query\GetImageById\GetImageByIdHandler;
 use Slink\Image\Application\Query\GetImageById\GetImageByIdQuery;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
+use Slink\Image\Domain\Service\ImageAnalyzerInterface;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Shared\Application\Http\Item;
@@ -21,6 +22,7 @@ use Slink\Shared\Infrastructure\Exception\NotFoundException;
 final class GetImageByIdHandlerTest extends TestCase {
 
   private ImageRepositoryInterface&MockObject $repository;
+  private ImageAnalyzerInterface&MockObject $analyser;
   
   /**
    * @throws Exception
@@ -29,6 +31,7 @@ final class GetImageByIdHandlerTest extends TestCase {
     parent::setUp();
     
     $this->repository = $this->createMock(ImageRepositoryInterface::class);
+    $this->analyser = $this->createMock(ImageAnalyzerInterface::class);
   }
   
   /**
@@ -47,7 +50,7 @@ final class GetImageByIdHandlerTest extends TestCase {
     $imageView->method('getAttributes')->willReturn($imageAttributes);
     $this->repository->expects($this->once())->method('oneById')->with($id)->willReturn($imageView);
 
-    $handler = new GetImageByIdHandler($this->repository);
+    $handler = new GetImageByIdHandler($this->repository, $this->analyser);
 
     $result = $handler($query, null);
 
@@ -64,7 +67,7 @@ final class GetImageByIdHandlerTest extends TestCase {
 
     $this->repository->expects($this->never())->method('oneById');
 
-    $handler = new GetImageByIdHandler($this->repository);
+    $handler = new GetImageByIdHandler($this->repository, $this->analyser);
 
     $this->expectException(NotFoundException::class);
 

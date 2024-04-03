@@ -27,8 +27,8 @@ final class ContentResponseTest extends TestCase {
       $this->expectException($expectedException);
     }
     
-    $payload = Item::fromContent($content);
-    $response = ContentResponse::file($payload, $contentType, $status);
+    $payload = Item::fromContent($content, $contentType);
+    $response = ContentResponse::file($payload, $status);
     
     $this->assertEquals($status, $response->getStatusCode());
     $this->assertEquals($payload->resource, $response->getContent());
@@ -43,7 +43,7 @@ final class ContentResponseTest extends TestCase {
       'null' => [
         'content' => null,
         'contentType' => 'application/json',
-        'expectedException' => NotFoundException::class
+        'expectedException' => \TypeError::class
       ],
       'type-error' => [
         'content' => 123,

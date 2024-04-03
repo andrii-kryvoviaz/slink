@@ -1,0 +1,5 @@
+services:
+  Slink\Settings\Domain\Service\ConfigurationProvider:
+    class: Slink\Settings\Infrastructure\Service\ParameterBagProvider
+    arguments:
+      $parameterBag: '@parameter_bag'

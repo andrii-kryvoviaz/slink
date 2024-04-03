@@ -35,17 +35,13 @@ final readonly class Item {
   }
   
   /**
-   * @param string|null $content
+   * @param string $content
+   * @param string $mimeType
    * @return self
-   * @throws NotFoundException
    */
-  public static function fromContent(?string $content): self {
-    if($content === null) {
-      throw new NotFoundException();
-    }
-    
+  public static function fromContent(string $content, string $mimeType): self {
     return new self(
-      'FileData',
+      $mimeType,
       $content
     );
   }

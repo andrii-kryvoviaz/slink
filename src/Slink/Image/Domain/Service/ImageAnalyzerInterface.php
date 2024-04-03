@@ -7,21 +7,15 @@ use Symfony\Component\HttpFoundation\File\File;
 interface ImageAnalyzerInterface {
   /**
    * @param File $file
-   * @return self
-   */
-  public static function fromFile(File $file): self;
-  
-  /**
-   * @param string $path
-   * @return self
-   */
-  public static function fromPath(string $path): self;
-  
-  /**
-   * @param File $file
    * @return void
    */
   public function analyze(File $file): void;
+  
+  /**
+   * @param string $mimeType
+   * @return bool
+   */
+  public function supportsResize(string $mimeType): bool;
  
   /**
    * @return array<string, mixed>

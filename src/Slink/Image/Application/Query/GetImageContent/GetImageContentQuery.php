@@ -6,37 +6,50 @@ namespace Slink\Image\Application\Query\GetImageContent;
 
 use Slink\Shared\Application\Query\QueryInterface;
 use Slink\Shared\Domain\ValueObject\ImageOptions;
+use Slink\Shared\Infrastructure\MessageBus\EnvelopedMessage;
 
-final class GetImageContentQuery implements QueryInterface {
-  /**
-   * @var ImageOptions|null
-   */
-  private ?ImageOptions $imageOptions = null;
+final readonly class GetImageContentQuery implements QueryInterface {
+  use EnvelopedMessage;
   
   /**
-   * @param string $fileName
-   * @param string $mimeType
-   * @param string|null $width
-   * @param string|null $height
+   * @param int|null $width
+   * @param int|null $height
+   * @param int|null $quality
+   * @param bool $crop
    */
   public function __construct(
-    string $fileName,
-    string $mimeType,
-    ?string $width = null,
-    ?string $height = null
+    private ?int $width = null,
+    private ?int $height = null,
+    private ?int $quality = null,
+    private bool $crop = false
   ) {
-    $this->imageOptions = ImageOptions::fromPayload([
-      'fileName' => $fileName,
-      'mimeType' => $mimeType,
-      'width' => $width ? (int) $width : null,
-      'height' => $height ? (int) $height : null,
-    ]);
   }
   
   /**
-   * @return ImageOptions|null
+   * @return int|null
    */
-  public function getImageOptions(): ?ImageOptions {
-    return $this->imageOptions;
+  public function getWidth(): ?int {
+    return $this->width;
+  }
+  
+  /**
+   * @return int|null
+   */
+  public function getHeight(): ?int {
+    return $this->height;
+  }
+  
+  /**
+   * @return int|null
+   */
+  public function getQuality(): ?int {
+    return $this->quality;
+  }
+  
+  /**
+   * @return bool
+   */
+  public function isCropped(): bool {
+    return $this->crop;
   }
 }

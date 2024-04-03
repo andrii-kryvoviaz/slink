@@ -17,6 +17,7 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
    * @param int|null $width
    * @param int|null $height
    * @param int|null $quality
+   * @param bool|null $crop
    */
   private function __construct(
     private string $fileName,
@@ -24,6 +25,7 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
     private ?int $width = null,
     private ?int $height = null,
     private ?int $quality = null,
+    private ?bool $crop = null,
   ) {
   }
   
@@ -37,6 +39,7 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
       'width' => $this->width,
       'height' => $this->height,
       'quality' => $this->quality,
+      'crop' => $this->crop,
     ];
   }
   
@@ -51,6 +54,7 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
       width: $payload['width'] ?? null,
       height: $payload['height'] ?? null,
       quality: $payload['quality'] ?? null,
+      crop: $payload['crop'] ?? null,
     );
   }
   
@@ -87,7 +91,15 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
         return $carry;
       }
       
-      $name = self::PROPERTY_MAP[$property->getName()] ?? $property->getName()[0];
+      $name = self::PROPERTY_MAP[$property->getName()] ?? $property->getName();
+      
+      if(is_bool($value)) {
+        if($value) {
+          $carry[] = $name;
+        }
+
+        return $carry;
+      }
       
       $carry[] = sprintf('%s%s', $name, $value);
       
@@ -121,6 +133,13 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
   /**
    * @return bool
    */
+  public function isCropped(): bool {
+    return (bool) $this->crop;
+  }
+  
+  /**
+   * @return bool
+   */
   public function isEmpty(): bool {
     $reflection = new \ReflectionClass($this);
     
@@ -141,21 +160,7 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
    * @return bool
    */
   public function isModified(): bool {
-    if(in_array($this->mimeType, ['image/svg+xml', 'image/gif'])) {
-      return false;
-    }
-    
     return !$this->isEmpty();
-  }
-  
-  /**
-   * @param ImageOptions $other
-   * @return bool
-   */
-  public function compare(self $other): bool {
-    return $this->width === $other->width
-      && $this->height === $other->height
-      && $this->quality === $other->quality;
   }
   
   /**

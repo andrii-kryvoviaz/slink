@@ -45,8 +45,8 @@ final class SmbStorage extends AbstractStorage {
    * @throws AlreadyExistsException
    * @throws InvalidTypeException
    */
-  public function upload(File $file, ImageOptions|string $image): void {
-    $path = $this->getAbsolutePath($image, onlyDir: true);
+  public function upload(File $file, string $fileName): void {
+    $path = $this->getPath();
     $parts = explode('/', $path);
     
     array_reduce($parts, function ($carry, $item) {
@@ -59,7 +59,7 @@ final class SmbStorage extends AbstractStorage {
       return $carry;
     }, '');
     
-    $fullPath = $this->getAbsolutePath($image);
+    $fullPath = $path . '/' . $fileName;
     
     $this->share->put($file->getPathname(), $fullPath);
   }
@@ -88,9 +88,8 @@ final class SmbStorage extends AbstractStorage {
    * @throws NotFoundException
    * @throws InvalidTypeException
    */
-  public function delete(ImageOptions|string $image): void {
-    $path = $this->getAbsolutePath($image);
-    
+  public function delete(string $fileName): void {
+    $path = $this->getPath() . '/' . $fileName;
     $this->share->del($path);
   }
   

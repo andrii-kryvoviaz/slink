@@ -5,6 +5,7 @@ namespace Slink\Shared\Infrastructure\FileSystem\Storage;
 use Gumlet\ImageResizeException;
 use Icewind\SMB\Exception\InvalidTypeException;
 use Icewind\SMB\Exception\NotFoundException;
+use Slink\Image\Domain\Service\ImageAnalyzerInterface;
 use Slink\Image\Domain\Service\ImageTransformerInterface;
 use Slink\Image\Infrastructure\Service\ImageTransformer;
 use Slink\Settings\Domain\Service\ConfigurationProvider;
@@ -25,6 +26,9 @@ abstract class AbstractStorage implements StorageInterface {
    */
   private const string APP_DIRECTORY = 'slink';
   
+  private ImageAnalyzerInterface $imageAnalyzer;
+  private ImageTransformerInterface $imageTransformer;
+  
   /**
    * @var string|null
    */
@@ -35,6 +39,22 @@ abstract class AbstractStorage implements StorageInterface {
    * @return static
    */
   abstract static function create(ConfigurationProvider $configurationProvider): self;
+  
+  /**
+   * @param ImageAnalyzerInterface $imageAnalyzer
+   * @return void
+   */
+  public function setImageAnalyzer(ImageAnalyzerInterface $imageAnalyzer): void {
+    $this->imageAnalyzer = $imageAnalyzer;
+  }
+  
+  /**
+   * @param ImageTransformerInterface $imageTransformer
+   * @return void
+   */
+  public function setImageTransformer(ImageTransformerInterface $imageTransformer): void {
+    $this->imageTransformer = $imageTransformer;
+  }
   
   /**
    * @param string $serverRoot
@@ -61,6 +81,13 @@ abstract class AbstractStorage implements StorageInterface {
   }
   
   /**
+   * @return string|null
+   */
+  private function getServerRoot(): ?string {
+    return $this->serverRoot;
+  }
+  
+  /**
    * @return string
    */
   private function getImageDir(): string {
@@ -75,134 +102,80 @@ abstract class AbstractStorage implements StorageInterface {
   }
   
   /**
-   * @throws ImageResizeException
+   * @param ImageOptions $image
+   * @return string|null
    * @throws NotFoundException
    */
-  protected function getActualPath(ImageOptions|string $image): string {
-    if (!$this->isModified($image)) {
-      return $this->getAbsolutePath($image);
+  public function getImage(ImageOptions $image): ?string {
+    if(!$image->isModified()
+      || !$this->imageAnalyzer->supportsResize($image->getMimeType())
+    ) {
+      return $this->read($this->getPath($image));
     }
     
-    // Handle transformations such as resize, crop, etc.
-    // Cache the image in the cache directory
-    $cachePath = $this->getAbsolutePath($image, onlyDir: true);
+    $imageContent = $this->tryFromCache($image);
     
-    if (!$this->exists($cachePath)) {
-      $this->mkdir($cachePath);
+    if(!$imageContent) {
+      throw new NotFoundException(sprintf('Image not found: %s', $this->getPath($image)));
     }
     
-    $originalImagePath = $this->getOriginalPath($image);
-    $cacheImagePath = $this->getAbsolutePath($image);
-    
-    if (!$this->exists($cacheImagePath)) {
-      // apply transformations
-      $imageTransformer = ImageTransformer::create();
-      
-      if(is_string($image)) {
-        return $originalImagePath;
-      }
-      
-      $originalContent = $this->read($originalImagePath);
-      
-      if(!$originalContent) {
-        throw new NotFoundException(sprintf('Image not found: %s', $originalImagePath));
-      }
-      
-      $content = $imageTransformer->transform($originalContent, $image->toPayload());
-      
-      $this->write($cacheImagePath, $content);
-    }
-    
-    return $cacheImagePath;
+    return $imageContent;
   }
   
   /**
-   * @param ImageOptions|string|null $image
-   * @return string|null
-   * @throws ImageResizeException|NotFoundException
+   * @param ?ImageOptions $image
+   * @param bool $isCache
+   * @return string
    */
-  public function getImage(ImageOptions|string|null $image): ?string {
+  protected function getPath(?ImageOptions $image = null, bool $isCache = false): string {
+    $serverRoot = $this->getServerRoot();
+    
+    $path = $serverRoot
+      ? [$serverRoot, self::APP_DIRECTORY]
+      : [self::APP_DIRECTORY];
+    
+    $path[] = $isCache
+      ? $this->getCacheDir()
+      : $this->getImageDir();
+    
+    $absolutePath = implode('/', $path);
+    
+    if(!$this->exists($absolutePath)) {
+      $this->mkdir($absolutePath);
+    }
+    
     if(!$image) {
+      return $absolutePath;
+    }
+    
+    $filename = $isCache
+      ? $image->getCacheFileName()
+      : $image->getFileName();
+    
+    return implode('/', [$absolutePath, $filename]);
+  }
+  
+  /**
+   * @param ImageOptions $image
+   * @return string|null
+   */
+  private function tryFromCache(ImageOptions $image): ?string {
+    $originalPath = $this->getPath($image);
+    $cachePath = $this->getPath($image, isCache: true);
+    
+    if($this->exists($cachePath)) {
+      return $this->read($cachePath);
+    }
+    
+    $originalContent = $this->read($originalPath);
+    
+    if(!$originalContent) {
       return null;
     }
     
-    return $this->read($this->getActualPath($image));
-  }
-  
-  /**
-   * @param ImageOptions|string $image
-   * @param bool $onlyDir
-   * @return string
-   */
-  protected function getRelativePath(ImageOptions|string $image, bool $onlyDir = false): string {
-    $path = $this->getPath($image);
-    $fileName = $this->getFileName($image);
+    $content = $this->imageTransformer->transform($originalContent, $image);
+    $this->write($cachePath, $content);
     
-    if ($onlyDir) {
-      return implode('/', [self::APP_DIRECTORY, $path]);
-    }
-    
-    return implode('/', [self::APP_DIRECTORY, $path, $fileName]);
-  }
-  
-  /**
-   * @param ImageOptions|string $image
-   * @param bool $onlyDir
-   * @return string
-   */
-  protected function getAbsolutePath(ImageOptions|string $image, bool $onlyDir = false): string {
-    if(!$this->serverRoot) {
-      return sprintf('/%s', $this->getRelativePath($image, $onlyDir));
-    }
-    
-    return implode('/', [$this->serverRoot, $this->getRelativePath($image, $onlyDir)]);
-  }
-  
-  /**
-   * @param ImageOptions|string $image
-   * @return string
-   */
-  protected function getOriginalPath(ImageOptions|string $image): string {
-    return $this->getAbsolutePath((string) $image);
-  }
-  
-  /**
-   * @param ImageOptions|string $image
-   * @return string
-   */
-  protected function getPath(ImageOptions|string $image): string {
-    if ($this->isModified($image)) {
-      return $this->getCacheDir();
-    }
-    
-    return $this->getImageDir();
-  }
-  
-  /**
-   * @param ImageOptions|string $image
-   * @return string
-   */
-  protected function getFileName(ImageOptions|string $image): string {
-    if(is_string($image)) {
-      return $image;
-    }
-    
-    if ($this->isModified($image)) {
-      return $image->getCacheFileName();
-    }
-    
-    return $image->getFileName();
-  }
-  
-  /**
-   * @param ImageOptions|string $image
-   * @return bool
-   */
-  protected function isModified(ImageOptions|string $image): bool {
-    if ($image instanceof ImageOptions) {
-      return $image->isModified();
-    }
-    
-    return false;
+    return $content;
   }
 }

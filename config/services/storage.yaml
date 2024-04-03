@@ -3,11 +3,18 @@ parameters:
     local: Slink\Shared\Infrastructure\FileSystem\Storage\LocalStorage
     smb: Slink\Shared\Infrastructure\FileSystem\Storage\SmbStorage
 
+  supports_resize:
+    - 'image/bmp'
+    - 'image/png'
+    - 'image/jpeg'
+    - 'image/jpg'
+    - 'image/webp'
+
 services:
-  Slink\Settings\Domain\Service\ConfigurationProvider:
-    class: Slink\Settings\Infrastructure\Service\ParameterBagProvider
+  Slink\Image\Domain\Service\ImageAnalyzerInterface:
+    class: Slink\Image\Infrastructure\Service\ImageAnalyzer
     arguments:
-      $parameterBag: '@parameter_bag'
+      $resizableMimeTypes: '%supports_resize%'
 
   Slink\Shared\Infrastructure\FileSystem\Storage\StorageInterface:
     factory: ['@Slink\Shared\Infrastructure\FileSystem\StorageFactory', 'create']

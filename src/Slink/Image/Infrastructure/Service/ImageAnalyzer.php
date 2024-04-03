@@ -8,6 +8,12 @@ use Slink\Image\Domain\Service\ImageAnalyzerInterface;
 use Symfony\Component\HttpFoundation\File\File;
 
 final class ImageAnalyzer implements ImageAnalyzerInterface {
+  /**
+   * @param array<string> $resizableMimeTypes
+   */
+  public function __construct(private readonly array $resizableMimeTypes) {
+  }
+  
   private File $file;
   
   /**
@@ -28,25 +34,6 @@ final class ImageAnalyzer implements ImageAnalyzerInterface {
   
   /**
    * @param File $file
-   * @return self
-   */
-  public static function fromFile(File $file): self {
-    $instance = new self();
-    return $instance->setFile($file);
-  }
-  
-  /**
-   * @param string $path
-   * @return self
-   */
-  public static function fromPath(string $path): self {
-    $file = new File($path);
-    
-    return self::fromFile($file);
-  }
-  
-  /**
-   * @param File $file
    * @return void
    */
   public function analyze(File $file): void {
@@ -59,6 +46,14 @@ final class ImageAnalyzer implements ImageAnalyzerInterface {
     } else {
       $this->handleImage();
     }
+  }
+  
+  /**
+   * @param string $mimeType
+   * @return bool
+   */
+  public function supportsResize(string $mimeType): bool {
+    return \in_array($mimeType, $this->resizableMimeTypes, true);
   }
   
   /**

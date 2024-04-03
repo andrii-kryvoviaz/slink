@@ -5,16 +5,9 @@ namespace Slink\Image\Infrastructure\Service;
 use Gumlet\ImageResize;
 use Gumlet\ImageResizeException;
 use Slink\Image\Domain\Service\ImageTransformerInterface;
+use Slink\Shared\Domain\ValueObject\ImageOptions;
 
 class ImageTransformer implements ImageTransformerInterface {
-  
-  /**
-   * @return self
-   */
-  public static function create(): self {
-    return new self();
-  }
-  
   /**
    * @param string $content
    * @param int|null $width
@@ -22,7 +15,7 @@ class ImageTransformer implements ImageTransformerInterface {
    * @return string
    * @throws ImageResizeException
    */
-  public function resizeFromString(string $content, ?int $width, ?int $height): string {
+  public function resize(string $content, ?int $width, ?int $height): string {
     $image = ImageResize::createFromString($content);
 
     if ($width === null && $height === null) {
@@ -42,12 +35,42 @@ class ImageTransformer implements ImageTransformerInterface {
   
   /**
    * @param string $content
-   * @param array<string, mixed> $payload
+   * @param int|null $width
+   * @param int|null $height
+   * @return string
    * @throws ImageResizeException
    */
-  public function transform(string $content, array $payload): string {
-    if($payload['width'] || $payload['height']) {
-      $content = $this->resizeFromString($content, $payload['width'], $payload['height']);
+  public function crop(string $content, ?int $width, ?int $height): string {
+    $image = ImageResize::createFromString($content);
+    
+    if (!$width) {
+      $width = (int) $height;
+    }
+    
+    if (!$height) {
+      $height = (int) $width;
+    }
+    
+    if(!$width && !$height) {
+      return $content;
+    }
+    
+    return $image->crop($width, $height)->getImageAsString();
+  }
+  
+  /**
+   * @param string $content
+   * @param ImageOptions $imageOptions
+   * @return string
+   */
+  public function transform(string $content, ImageOptions $imageOptions): string {
+    
+    if($imageOptions->getWidth() || $imageOptions->getHeight()) {
+      $methodName = $imageOptions->isCropped()
+        ? 'crop'
+        : 'resize';
+      
+      $content = $this->{$methodName}($content, $imageOptions->getWidth(), $imageOptions->getHeight());
     }
     
     return $content;
