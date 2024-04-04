@@ -13,18 +13,20 @@
 
   export let items: ImageListingItem[] = [];
 
-  const dispatch = createEventDispatcher<{ updatePagination: number }>();
+  const dispatch = createEventDispatcher<{
+    updateListing: ImageListingItem[];
+  }>();
 
   const onImageDelete = ({ detail }: { detail: string }) => {
-    items = items.filter((item) => item.id !== detail);
-
-    // event to recalculate the limit
-    dispatch('updatePagination', items.length);
+    listItems = items.filter((item) => item.id !== detail);
+    dispatch('updateListing', listItems);
   };
+
+  $: listItems = items;
 </script>
 
 <div class="mt-8 flex flex-col items-center gap-6">
-  {#each items as item (item.id)}
+  {#each listItems as item (item.id)}
     <div
       out:fade={{ duration: 500 }}
       class="image-container w-[48rem] max-w-full break-inside-avoid rounded-lg border bg-gray-200/5 p-4 dark:border-gray-800/50"

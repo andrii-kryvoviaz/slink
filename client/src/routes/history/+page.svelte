@@ -18,7 +18,7 @@
   let items: ImageListingItem[] = [];
   let meta: ListingMetadata = {
     page: 1,
-    size: 9,
+    size: 12, // good both for 2 and 3 columns
     total: 0,
   };
 
@@ -34,16 +34,30 @@
     { debounce: 300 }
   );
 
-  $: {
-    if ($response) {
-      items = $response.data;
-      meta = $response.meta;
-    }
+  // this has to be a standalone function
+  // in order not to trigger reactivity on items change
+  const updateListing = (detail: ImageListingItem[]) => {
+    // filter out the items that are already in the list
+    const newItems = detail.filter(
+      (item) => !items.some((i) => i.id === item.id)
+    );
+    items = items.concat(newItems);
+  };
+
+  $: if ($response) {
+    updateListing($response.data);
+    meta = $response.meta;
   }
 
-  const onUpdate = () => {
+  const onUpdate = ({ detail }: { detail: ImageListingItem[] }) => {
+    // reassign the items with the new item list
+    items = detail;
+
     // rerun the fetchImages function with the current page and size
-    fetchImages(meta.page, meta.size);
+    // in order to have fully filled page with items
+    if (items.length > 0) {
+      fetchImages(meta.page, meta.size);
+    }
   };
 
   $: showLoadMore =
@@ -99,37 +113,7 @@
       </div>
     {/if}
 
-    <div class="mt-8 flex flex-col gap-6">
-      {#each images as image}
-        <div
-          class="image-container break-inside-avoid rounded-lg border bg-gray-200/10 p-4 backdrop-blur dark:border-gray-800/50"
-        >
-          <div class="mb-4 flex items-center justify-between">
-            <div>
-              <Button
-                href={`/info/${image.id}`}
-                variant="link"
-                class="p-0 text-sm font-light opacity-70 hover:opacity-100"
-              >
-                {image.attributes.fileName}
-                <Icon icon="mynaui:external-link" class="ml-1" />
-              </Button>
-            </div>
-            <div class="text-xs">
-              <FormattedDate date={image.attributes.createdAt.timestamp} />
-            </div>
-          </div>
-          <div class="flex items-center justify-between text-xs">
-            <div class="text-xs">
-              {image.metadata.width}x{image.metadata.height} pixels
-              <div>
-                {image.metadata.mimeType}
-              </div>
-            </div>
-          </div>
-        </div>
-      {/each}
-    </div>
+    <HistoryListView {items} on:updateListing={onUpdate} />
 
     {#if showLoadMore}
       <div class="mt-8 flex justify-center">
@@ -140,7 +124,7 @@
           loading={$isLoading}
           on:click={() => fetchImages(meta.page + 1, meta.size)}
         >
-          <span>Next</span>
+          <span>View More</span>
           <Icon icon="mynaui:chevron-double-right" slot="rightIcon" />
         </Button>
       </div>
