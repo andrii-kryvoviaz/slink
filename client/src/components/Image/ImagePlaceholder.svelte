@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
+
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
@@ -82,6 +84,8 @@
       }
     }
   };
+
+  onMount(onResize);
 </script>
 
 <svelte:window on:resize={onResize} />
