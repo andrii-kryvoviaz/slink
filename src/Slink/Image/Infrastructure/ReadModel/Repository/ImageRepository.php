@@ -37,7 +37,7 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
    * @throws NotFoundException
    * @throws NonUniqueResultException
    */
-  public function oneById(string $id): ImageView {
+  public function oneById(string $id, ?string $extension = null): ImageView {
     $qb = $this->_em
       ->createQueryBuilder()
       ->from(ImageView::class, 'image')
@@ -46,6 +46,23 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
       )
       ->where('image.uuid = :id')
       ->setParameter('id', $id);
+    
+    return $this->oneOrException($qb);
+  }
+  
+  /**
+   * @throws NonUniqueResultException
+   * @throws NotFoundException
+   */
+  public function oneByFileName(string $fileName): ImageView {
+    $qb = $this->_em
+      ->createQueryBuilder()
+      ->from(ImageView::class, 'image')
+      ->select('
+        image'
+      )
+      ->where('image.attributes.fileName = :fileName')
+      ->setParameter('fileName', $fileName);
     
     return $this->oneOrException($qb);
   }

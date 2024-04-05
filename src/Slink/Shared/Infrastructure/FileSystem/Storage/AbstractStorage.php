@@ -2,15 +2,10 @@
 
 namespace Slink\Shared\Infrastructure\FileSystem\Storage;
 
-use Gumlet\ImageResizeException;
-use Icewind\SMB\Exception\InvalidTypeException;
 use Icewind\SMB\Exception\NotFoundException;
-use Slink\Image\Domain\Service\ImageAnalyzerInterface;
 use Slink\Image\Domain\Service\ImageTransformerInterface;
-use Slink\Image\Infrastructure\Service\ImageTransformer;
 use Slink\Settings\Domain\Service\ConfigurationProvider;
 use Slink\Shared\Domain\ValueObject\ImageOptions;
-use Symfony\Contracts\Service\Attribute\Required;
 
 abstract class AbstractStorage implements StorageInterface {
   /**
@@ -26,7 +21,6 @@ abstract class AbstractStorage implements StorageInterface {
    */
   private const string APP_DIRECTORY = 'slink';
   
-  private ImageAnalyzerInterface $imageAnalyzer;
   private ImageTransformerInterface $imageTransformer;
   
   /**
@@ -39,14 +33,6 @@ abstract class AbstractStorage implements StorageInterface {
    * @return static
    */
   abstract static function create(ConfigurationProvider $configurationProvider): self;
-  
-  /**
-   * @param ImageAnalyzerInterface $imageAnalyzer
-   * @return void
-   */
-  public function setImageAnalyzer(ImageAnalyzerInterface $imageAnalyzer): void {
-    $this->imageAnalyzer = $imageAnalyzer;
-  }
   
   /**
    * @param ImageTransformerInterface $imageTransformer
@@ -107,9 +93,7 @@ abstract class AbstractStorage implements StorageInterface {
    * @throws NotFoundException
    */
   public function getImage(ImageOptions $image): ?string {
-    if(!$image->isModified()
-      || !$this->imageAnalyzer->supportsResize($image->getMimeType())
-    ) {
+    if(!$image->isModified()) {
       return $this->read($this->getPath($image));
     }
     

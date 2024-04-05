@@ -26,8 +26,7 @@ final readonly class GetImageController {
   ): ContentResponse {
     
     $imageData = $this->ask($query->withContext([
-      'id' => $id,
-      'ext' => $ext,
+      'fileName' => "{$id}.{$ext}",
     ]));
     
     $this->handle(new AddImageViewCountCommand($id));

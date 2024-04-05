@@ -52,4 +52,16 @@ final readonly class GetImageContentQuery implements QueryInterface {
   public function isCropped(): bool {
     return $this->crop;
   }
+  
+  /**
+   * @return array<string, mixed>
+   */
+  public function getTransformParams(): array {
+    return [
+      'width' => $this->width,
+      'height' => $this->height,
+      'quality' => $this->quality,
+      'crop' => $this->crop,
+    ];
+  }
 }

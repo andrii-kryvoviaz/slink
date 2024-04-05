@@ -74,6 +74,27 @@ class ImageView extends AbstractView {
   }
   
   /**
+   * @return string
+   */
+  public function getFileName(): string {
+    return $this->attributes->getFileName();
+  }
+  
+  /**
+   * @return string|null
+   */
+  public function getDescription(): ?string {
+    return $this->attributes->getDescription();
+  }
+  
+  /**
+   * @return string
+   */
+  public function getMimeType(): string {
+    return $this->metadata?->getMimeType() ?? 'unknown';
+  }
+  
+  /**
    * @return array<string, mixed>
    */
   public function toPayload(): array {

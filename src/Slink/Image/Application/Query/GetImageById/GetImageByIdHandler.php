@@ -38,15 +38,13 @@ final readonly class GetImageByIdHandler implements QueryHandlerInterface {
       throw new AccessDeniedException();
     }
     
-    $imageMimeType = $imageView->getMetadata()?->getMimeType() ?? 'unknown';
-    
     return Item::fromPayload(ImageView::class, [
       ...$imageView->toPayload(),
-      'supportsResize' => $this->imageAnalyzer->supportsResize($imageMimeType),
+      'supportsResize' => $this->imageAnalyzer->supportsResize($imageView->getMimeType()),
       'url' => implode('/',
         [
           '/image',
-          $imageView->getAttributes()->getFileName()
+          $imageView->getFileName()
         ]),
     ]);
   }
