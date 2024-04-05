@@ -7,11 +7,16 @@ namespace Slink\Image\Domain\ValueObject;
 use Doctrine\ORM\Mapping as ORM;
 use Slink\Shared\Domain\ValueObject\AbstractCompoundValueObject;
 use Slink\Shared\Infrastructure\Attribute\Groups;
-use Slink\Shared\Infrastructure\Attribute\SerializedName;
 
 #[ORM\Embeddable]
 final readonly class ImageMetadata extends AbstractCompoundValueObject {
   
+  /**
+   * @param int $size
+   * @param string $mimeType
+   * @param int $width
+   * @param int $height
+   */
   public function __construct(
     #[ORM\Column(type: 'integer')]
     #[Groups(['public'])]
@@ -31,22 +36,37 @@ final readonly class ImageMetadata extends AbstractCompoundValueObject {
   ) {
   }
   
+  /**
+   * @return int
+   */
   public function getSize(): int {
     return $this->size;
   }
   
+  /**
+   * @return string
+   */
   public function getMimeType(): string {
     return $this->mimeType;
   }
   
+  /**
+   * @return int
+   */
   public function getWidth(): int {
     return $this->width;
   }
   
+  /**
+   * @return int
+   */
   public function getHeight(): int {
     return $this->height;
   }
   
+  /**
+   * @return array|mixed[]
+   */
   public function toPayload(): array {
     return [
       'size' => $this->size,
@@ -56,6 +76,10 @@ final readonly class ImageMetadata extends AbstractCompoundValueObject {
     ];
   }
   
+  /**
+   * @param array<string, mixed> $payload
+   * @return static
+   */
   public static function fromPayload(array $payload): static {
     return new self(
       $payload['size'],

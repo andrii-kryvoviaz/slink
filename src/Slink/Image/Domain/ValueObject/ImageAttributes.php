@@ -8,6 +8,7 @@ use Slink\Shared\Domain\Exception\DateTimeException;
 use Slink\Shared\Domain\ValueObject\AbstractCompoundValueObject;
 use Slink\Shared\Domain\ValueObject\DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Domain\ValueObject\MutableValueObject;
 use Slink\Shared\Infrastructure\Attribute\Groups;
 use Slink\Shared\Infrastructure\Attribute\SerializedName;
@@ -60,7 +61,14 @@ final readonly class ImageAttributes extends AbstractCompoundValueObject {
    * @return self
    * @throws DateTimeException
    */
-  public static function create(string $fileName, string $description, bool $isPublic, ?DateTime $createdAt = null, ?DateTime $updatedAt = null, ?int $views = 0): self {
+  public static function create(
+    string $fileName,
+    string $description,
+    bool $isPublic,
+    ?DateTime $createdAt = null,
+    ?DateTime $updatedAt = null,
+    ?int $views = 0
+  ): self {
     return new self($fileName, $description, $isPublic, $createdAt ?? DateTime::now(), $updatedAt, $views);
   }
   

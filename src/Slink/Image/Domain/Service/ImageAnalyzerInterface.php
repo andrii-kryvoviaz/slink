@@ -7,9 +7,9 @@ use Symfony\Component\HttpFoundation\File\File;
 interface ImageAnalyzerInterface {
   /**
    * @param File $file
-   * @return void
+   * @return array<string, mixed>
    */
-  public function analyze(File $file): void;
+  public function analyze(File $file): array;
   
   /**
    * @param string $mimeType

@@ -34,18 +34,14 @@ final class ImageAnalyzer implements ImageAnalyzerInterface {
   
   /**
    * @param File $file
-   * @return void
+   * @return array<string, mixed>
    */
-  public function analyze(File $file): void {
+  public function analyze(File $file): array {
     $this->setFile($file);
     
-    $mimeType = $this->file->getMimeType();
+    [$this->width, $this->height] = getimagesize($file->getPathname()) ?: [1, 1];
     
-    if ($mimeType === 'image/svg+xml') {
-      $this->handleSvg();
-    } else {
-      $this->handleImage();
-    }
+    return $this->toPayload();
   }
   
   /**
@@ -54,33 +50,6 @@ final class ImageAnalyzer implements ImageAnalyzerInterface {
    */
   public function supportsResize(string $mimeType): bool {
     return \in_array($mimeType, $this->resizableMimeTypes, true);
-  }
-  
-  /**
-   * @return void
-   */
-  private function handleSvg(): void {
-    $svg = \simplexml_load_file($this->file->getRealPath());
-    
-    if ($svg === false) {
-      return;
-    }
-    
-    $this->width = (int) $svg->attributes()->width;
-    $this->height = (int) $svg->attributes()->height;
-  }
-  
-  /**
-   * @return void
-   */
-  private function handleImage(): void {
-    $result = \getimagesize($this->file->getRealPath());
-    
-    if ($result === false) {
-      return;
-    }
-    
-    [$this->width, $this->height] = $result;
   }
   
   /**

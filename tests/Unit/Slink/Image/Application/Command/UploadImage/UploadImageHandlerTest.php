@@ -7,14 +7,13 @@ namespace Tests\Unit\Slink\Image\Application\Command\UploadImage;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Slink\Image\Application\Command\UploadImage\UploadImageCommand;
 use Slink\Image\Application\Command\UploadImage\UploadImageHandler;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Image\Domain\Service\ImageAnalyzerInterface;
 use Slink\Shared\Domain\Exception\DateTimeException;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\Shared\Infrastructure\FileSystem\FileUploader;
+use Slink\Shared\Infrastructure\FileSystem\Storage\StorageInterface;
 use Symfony\Component\HttpFoundation\File\File;
 
 class UploadImageHandlerTest extends TestCase {
@@ -25,35 +24,33 @@ class UploadImageHandlerTest extends TestCase {
    */
   #[Test]
   public function itHandlesUploadImageCommand(): void {
-    $logger = $this->createMock(LoggerInterface::class);
-    $fileUploader = $this->createMock(FileUploader::class);
     $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
     $imageAnalyzer = $this->createMock(ImageAnalyzerInterface::class);
-    
-    $imageAnalyzer->method('toPayload')->willReturn([
-      'width' => 100,
-      'height' => 100,
-      'size' => 100,
-      'mimeType' => 'image/jpeg',
-    ]);
+    $storage = $this->createMock(StorageInterface::class);
     
     $handler = new UploadImageHandler(
-      $logger,
-      $fileUploader,
       $imageRepository,
-      $imageAnalyzer
+      $imageAnalyzer,
+      $storage
     );
-    
+
     $file = $this->createMock(File::class);
+    $file->method('guessExtension')->willReturn('jpg');
+    $imageAnalyzer->method('analyze')->willReturn([
+      'size' => 100,
+      'mimeType' => 'image/jpeg',
+      'width' => 100,
+      'height' => 100,
+    ]);
     
     $command = $this->createMock(UploadImageCommand::class);
     $command->method('getImageFile')->willReturn($file);
     $command->method('getId')->willReturn(ID::fromString('123'));
     
-    $imageAnalyzer->expects($this->once())->method('analyze')->with($file);
-    $fileUploader->expects($this->once())->method('upload')->with($file, '123')->willReturn('123.jpg');
+    $fileName = '123.jpg';
+    $storage->expects($this->once())->method('upload')->with($file, $fileName);
     $imageRepository->expects($this->once())->method('store');
-    
+
     $handler($command);
   }
 }
