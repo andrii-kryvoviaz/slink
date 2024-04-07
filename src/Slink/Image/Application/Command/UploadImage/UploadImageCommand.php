@@ -22,20 +22,6 @@ final readonly class UploadImageCommand implements CommandInterface {
    */
   public function __construct(
     #[Assert\Image(
-      maxSize: '5M',
-      mimeTypes: [
-        'image/bmp',
-        'image/png',
-        'image/jpeg',
-        'image/jpg',
-        'image/gif',
-        'image/webp',
-        'image/svg+xml',
-        'image/svg',
-        'image/x-icon',
-        'image/vnd.microsoft.icon',
-        'image/x-tga',
-      ],
       mimeTypesMessage: <<<'MESSAGE'
         The mime type {{ type }} is not supported.
         <a href="/help/faq#supported-image-formats"

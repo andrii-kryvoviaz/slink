@@ -1,0 +1,21 @@
+parameters:
+  supported_image_formats:
+    - 'image/bmp'
+    - 'image/png'
+    - 'image/jpeg'
+    - 'image/jpg'
+    - 'image/gif'
+    - 'image/webp'
+    - 'image/svg+xml'
+    - 'image/svg'
+    - 'image/x-icon'
+    - 'image/vnd.microsoft.icon'
+    - 'image/x-tga'
+
+  supports_resize: ['image/bmp', 'image/png', 'image/jpeg', 'image/jpg', 'image/webp']
+
+services:
+  Slink\Image\Domain\Service\ImageAnalyzerInterface:
+    class: Slink\Image\Infrastructure\Service\ImageAnalyzer
+    arguments:
+      $resizableMimeTypes: '%supports_resize%'
