@@ -18,7 +18,28 @@ final readonly class ParameterBagProvider implements ConfigurationProvider {
    */
   #[\Override]
   public function get(string $key): mixed {
-    return $this->parameterBag->get($key);
+    if($this->parameterBag->has($key)) {
+      return $this->parameterBag->get($key);
+    }
+    
+    $keyParts = explode('.', $key);
+    $firstKey = array_shift($keyParts) ?: '';
+    
+    if($this->parameterBag->has($firstKey)) {
+      $value = $this->parameterBag->get($firstKey);
+      
+      foreach ($keyParts as $keyPart) {
+        if(is_array($value) && array_key_exists($keyPart, $value)) {
+          $value = $value[$keyPart];
+        } else {
+          return null;
+        }
+      }
+      
+      return $value;
+    }
+    
+    return null;
   }
   
   /**
