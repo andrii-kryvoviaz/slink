@@ -13,7 +13,7 @@ Solves the problem of sharing images with friends, family, and colleagues withou
 ## Features
 - **Authentication**: Users can sign up and log in to the platform.
 - **User Approval**: Require user approval before they can upload images.
-- **Image Upload**: _SVG_, _PNG_, _JPG_, _WEBP_ or _GIF_ images can be uploaded.
+- **Image Upload**: _SVG_, _PNG_, _JPG_, _WEBP_, _BMP_, _ICO_ or _GIF_ images can be uploaded.
 - **Share Links**: Users can share links to their uploaded images and customize the image size.
 - **Upload History**: Provides an overview of all images uploaded by the user.
 - **Storage Providers**: Support for _local_ and _SMB_ storage providers.
@@ -95,14 +95,15 @@ Simply set the environment variables when starting the Docker container or in yo
 
 The following environment variables are available:
 
-| Variable | Description                                                      | Default Value |
-| -------- |------------------------------------------------------------------|---------------|
-| `USER_APPROVAL_REQUIRED` | Whether to require user approval before they can upload images. Available options are `true` and `false` | `true`        |
-| `STORAGE_PROVIDER` | Storage provider to use. Available options are `local` and `smb` | `local`       |
-| `SMB_HOST` | SMB host to connect to. Required if `STORAGE_PROVIDER` is set to `smb` | `null`        |
-| `SMB_USERNAME` | SMB username to use. Required if `STORAGE_PROVIDER` is set to `smb` | `null`        |
-| `SMB_PASSWORD` | SMB password to use. Required if `STORAGE_PROVIDER` is set to `smb` | `null`        |
-| `SMB_SHARE` | SMB share to use. Required if `STORAGE_PROVIDER` is set to `smb` | `null`        |
+| Variable | Description                                                                                              | Default Value |
+| -------- |----------------------------------------------------------------------------------------------------------|--------------|
+| `USER_APPROVAL_REQUIRED` | Whether to require user approval before they can upload images. Available options are `true` and `false` | `true`       |
+| `IMAGE_MAX_SIZE` | Maximum image size allowed to be uploaded (no more than 50M).                                            | `15M`        |
+| `STORAGE_PROVIDER` | Storage provider to use. Available options are `local` and `smb`                                         | `local`      |
+| `SMB_HOST` | SMB host to connect to. Required if `STORAGE_PROVIDER` is set to `smb`                                   | `null`       |
+| `SMB_USERNAME` | SMB username to use. Required if `STORAGE_PROVIDER` is set to `smb`                                      | `null`       |
+| `SMB_PASSWORD` | SMB password to use. Required if `STORAGE_PROVIDER` is set to `smb`                                      | `null`       |
+| `SMB_SHARE` | SMB share to use. Required if `STORAGE_PROVIDER` is set to `smb`                                         | `null`       |
 
 ## Public Image Listing
 
