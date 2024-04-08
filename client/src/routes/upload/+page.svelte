@@ -158,7 +158,7 @@
             </p>
 
             <p class="text-xs text-color-secondary">
-              SVG, PNG, JPG, WEBP, BMP, GIF or ICO (MAX. 5MB)
+              SVG, PNG, JPG, WEBP, BMP, GIF or ICO
             </p>
             <a
               href="/help/faq#supported-image-formats"
