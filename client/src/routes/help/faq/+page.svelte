@@ -61,7 +61,7 @@
       {#each faqQuestions as { title, content, slug }, i}
         <div id={slug}>
           <button
-            class="flex items-center focus:outline-none"
+            class="flex w-full items-center focus:outline-none"
             on:click={() => openQuestion(slug)}
           >
             {#if openedQuestion === slug}

@@ -244,7 +244,7 @@
   </div>
   <div
     slot="extra"
-    class="flex flex-grow items-center justify-center gap-2 pb-2 sm:flex-col sm:justify-between sm:pb-0"
+    class="flex items-center justify-center gap-2 pb-2 sm:flex-col sm:justify-between sm:pb-0"
   >
     <div class="flex items-center justify-center gap-2 sm:flex-grow">
       <Toggle

@@ -63,15 +63,17 @@
               </Button>
             </div>
 
-            <ImageActionBar
-              image={{
-                id: item.id,
-                fileName: item.attributes.fileName,
-                isPublic: item.attributes.isPublic,
-              }}
-              buttons={['download', 'visibility', 'copy', 'delete']}
-              on:imageDeleted={onImageDelete}
-            />
+            <div class="mb-6">
+              <ImageActionBar
+                image={{
+                  id: item.id,
+                  fileName: item.attributes.fileName,
+                  isPublic: item.attributes.isPublic,
+                }}
+                buttons={['download', 'visibility', 'copy', 'delete']}
+                on:imageDeleted={onImageDelete}
+              />
+            </div>
 
             <div
               class="hidden flex-grow items-center justify-between gap-8 pr-8 sm:flex"
