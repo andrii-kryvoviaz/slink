@@ -24,6 +24,7 @@
   export let height: number | null = null;
   export let width: number | null = null;
   export let stretch: boolean = false;
+  export let stretchThreshold: number = 0.4;
   export let showMetadata = true;
   export let showOpenInNewTab = true;
 
@@ -108,7 +109,8 @@
     if (!height || !width) return true;
 
     return (
-      metadata?.height < height * 16 * 0.6 || metadata?.width < width * 16 * 0.6
+      metadata?.height < height * 16 * stretchThreshold ||
+      metadata?.width < width * 16 * stretchThreshold
     );
   };
 
