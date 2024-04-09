@@ -1,11 +1,27 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
+  import { twMerge } from 'tailwind-merge';
 
   import type { HTMLInputAttributes } from 'svelte/elements';
 
-  interface $$Props extends HTMLInputAttributes {}
+  import { ToggleTheme } from '@slink/components/Form/Toggle/Toggle.theme';
+  import type { ToggleProps } from '@slink/components/Form/Toggle/Toggle.types';
 
-  const inputClasses = `toggle theme-controller text-toggle-default checked:text-toggle-checked [--tglbg:rgb(var(--bg-toggle))] checked:[--tglbg:rgb(var(--bg-toggle-checked))] ${$$props.class}`;
+  interface $$Props extends Omit<HTMLInputAttributes, 'size'>, ToggleProps {
+    class?: string;
+  }
+
+  export let variant: $$Props['variant'] = 'default';
+  export let size: $$Props['size'] = 'md';
+
+  $: classes = twMerge(
+    `${ToggleTheme({
+      variant,
+      size,
+    })} ${$$props.class}`
+  );
+
+  delete $$props.size;
 
   const dispatch = createEventDispatcher<{ change: boolean }>();
   const handleChange = (event: Event) => {
@@ -20,7 +36,7 @@
   <input
     {...$$props}
     type="checkbox"
-    class={inputClasses}
+    class={classes}
     on:change={handleChange}
   />
   <slot name="post-icon" />

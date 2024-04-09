@@ -16,7 +16,7 @@
   };
 </script>
 
-<Toggle on:change={handleThemeChange} {checked} {disabled}>
+<Toggle variant="primary" {checked} {disabled} on:change={handleThemeChange}>
   <Icon slot="pre-icon" icon="ph:sun-thin" width="20" height="20" />
   <Icon slot="post-icon" icon="ph:moon-thin" width="20" height="20" />
 </Toggle>
