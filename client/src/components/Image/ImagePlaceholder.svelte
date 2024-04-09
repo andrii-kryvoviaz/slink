@@ -178,13 +178,13 @@
   {/if}
   {#if !isLoaded}
     <div
-      class="absolute inset-0 flex animate-pulse items-center justify-center bg-slate-800 duration-1000"
+      class="absolute inset-0 flex animate-pulse items-center justify-center bg-slate-600/10 duration-1000 dark:bg-slate-800"
       out:fade
     >
       <svg
         width="48"
         height="48"
-        class="text-gray-200"
+        class="text-gray-700 dark:text-gray-200"
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
         fill="currentColor"
