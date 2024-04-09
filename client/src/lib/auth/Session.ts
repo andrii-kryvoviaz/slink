@@ -55,7 +55,6 @@ class SessionManager {
     cookies.set('sessionId', sessionId, {
       sameSite: 'strict',
       path: '/',
-      secure: true,
     });
 
     return sessionId;
@@ -102,7 +101,6 @@ class SessionManager {
     cookies.delete('sessionId', {
       sameSite: 'strict',
       path: '/',
-      secure: true,
     });
 
     await this._provider.destroy(sessionId);

@@ -31,7 +31,6 @@ export class Auth {
     cookies.set('refreshToken', refreshToken, {
       sameSite: 'strict',
       path: '/',
-      secure: true,
     });
 
     const response = await ApiClient.user.getCurrentUser(accessToken);
@@ -70,7 +69,6 @@ export class Auth {
     cookies.delete('createdUserId', {
       sameSite: 'strict',
       path: '/',
-      secure: true,
     });
 
     return user;
@@ -122,7 +120,6 @@ export class Auth {
     cookies.delete('refreshToken', {
       sameSite: 'strict',
       path: '/',
-      secure: true,
     });
 
     Session.destroy(cookies);

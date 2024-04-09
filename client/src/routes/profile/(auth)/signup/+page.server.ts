@@ -36,8 +36,6 @@ const defaultAction: Action = async ({ locals, request, cookies }) => {
     cookies.set('createdUserId', id, {
       sameSite: 'strict',
       path: '/',
-      httpOnly: true,
-      secure: true,
     });
 
     redirectUrl = headers.get('location');
