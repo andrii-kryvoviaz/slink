@@ -18,6 +18,8 @@
     size: number | undefined;
   } | null = null;
 
+  type Metadata = typeof metadata;
+
   export let aspectRatio: number = 0;
   export let height: number | null = null;
   export let width: number | null = null;
@@ -33,10 +35,6 @@
   let image: HTMLImageElement;
   let container: HTMLDivElement;
 
-  $: if (isLoaded && !aspectRatio) {
-    aspectRatio = image.naturalHeight / image.naturalWidth;
-  }
-
   $: if (isLoaded && height) {
     // Reset the height to auto so that the image can resize freely
     const remImageHeight = Math.floor(image.naturalHeight / 16) - 1;
@@ -45,8 +43,18 @@
     }
   }
 
+  const isSquared = (src: string) => {
+    // if only width or height is provided, the image is considered square
+    const urlParams = new URLSearchParams(src.split('?')[1]);
+
+    return (
+      urlParams.has('width') !== urlParams.has('height') &&
+      urlParams.has('crop')
+    );
+  };
+
   $: if (metadata) {
-    aspectRatio = metadata.height / metadata.width;
+    aspectRatio = !isSquared(src) ? metadata.height / metadata.width : 1;
 
     if (height && !width) {
       width = height / aspectRatio;
@@ -74,24 +82,44 @@
   }
 
   const onResize = () => {
-    if (container && width && stretch) {
-      const remContainerWidth = Math.floor(container.offsetWidth / 16);
+    if (container && width) {
+      const remContainerWidth = Math.floor(
+        (container.parentElement?.offsetWidth || container.offsetWidth) / 16
+      );
 
       if (remContainerWidth < width) {
         height = remContainerWidth * aspectRatio;
       } else {
+        // if image is loaded recalculate the aspect ratio
+        aspectRatio = image.naturalHeight / image.naturalWidth;
+
+        width = remContainerWidth;
         height = width * aspectRatio;
       }
     }
   };
 
   onMount(onResize);
+  $: isLoaded && onResize();
+
+  const tooSmallToStretch = (metadata: Metadata) => {
+    if (!metadata) return true;
+
+    if (!height || !width) return true;
+
+    return (
+      metadata?.height < height * 16 * 0.6 || metadata?.width < width * 16 * 0.6
+    );
+  };
+
+  $: isImageStretched =
+    (stretch && !tooSmallToStretch(metadata)) || src.includes('.svg');
 </script>
 
 <svelte:window on:resize={onResize} />
 
 <div
-  class="relative flex max-h-full max-w-full items-center justify-center overflow-hidden rounded-md border-slate-500/10"
+  class="relative flex max-h-full max-w-full items-center justify-center overflow-hidden rounded-md border-slate-500/10 bg-white/0"
   class:border={showMetadata || showOpenInNewTab}
   style:width="{width}rem"
   style:height="{height}rem"
@@ -105,8 +133,7 @@
       isLoaded = true;
     }}
     class="transition-opacity"
-    class:w-full={stretch}
-    class:h-full={stretch}
+    class:w-full={isImageStretched}
     class:hidden={!isLoaded}
   />
   {#if isLoaded}

@@ -44,4 +44,5 @@ export const themeIcons: string[] = [
   'material-symbols-light:download',
   'lets-icons:copy-light',
   'mdi-light:check',
+  'material-symbols-light:menu',
 ];

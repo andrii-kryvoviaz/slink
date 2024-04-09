@@ -39,7 +39,9 @@
         process.
       </p>
 
-      <div class=" flex w-full items-center justify-center gap-2">
+      <div
+        class="mt-6 flex w-full flex-col items-center justify-center gap-2 md:flex-row"
+      >
         <span class="text-gray-500 dark:text-gray-300">Here is your ID:</span>
         <CopyContainer value={data.userId} />
       </div>

@@ -242,8 +242,11 @@
       This action cannot be undone.
     </p>
   </div>
-  <div slot="extra" class="flex flex-grow flex-col justify-between gap-2">
-    <div class="flex flex-grow items-center gap-2">
+  <div
+    slot="extra"
+    class="flex flex-grow items-center justify-center gap-2 pb-2 sm:flex-col sm:justify-between sm:pb-0"
+  >
+    <div class="flex items-center justify-center gap-2 sm:flex-grow">
       <Toggle
         checked={!preserveOnDiskAfterDeletion}
         on:change={({ detail }) => (preserveOnDiskAfterDeletion = !detail)}

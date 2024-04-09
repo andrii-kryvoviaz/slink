@@ -85,14 +85,12 @@
   class="flex justify-center p-2 sm:p-8"
 >
   <div class="container flex flex-row flex-wrap justify-center gap-6">
-    <div class="max-w-full flex-shrink">
-      <div class="flex max-w-full justify-start">
-        <ImagePlaceholder
-          src={data.url}
-          aspectRatio={data.height / data.width}
-          metadata={data}
-        />
-      </div>
+    <div class="flex w-fit max-w-full justify-start">
+      <ImagePlaceholder
+        src={data.url}
+        aspectRatio={data.height / data.width}
+        metadata={data}
+      />
     </div>
 
     <div class="min-w-0 px-2">

@@ -97,7 +97,7 @@
 <svelte:document on:paste={handleChange} />
 
 <div
-  class="content dropzone flex h-full w-full flex-col items-center justify-center p-12"
+  class="content dropzone flex h-full w-full flex-col items-center p-4 sm:justify-center sm:p-12"
 >
   <div
     in:fade={{ duration: 300 }}
@@ -111,14 +111,19 @@
         >
           <Icon
             icon="material-symbols-light:warning-outline"
-            class="h-6 w-6 text-gray-300 dark:text-gray-400"
+            class="hidden h-6 w-6 text-gray-300 dark:text-gray-400 md:block"
           />
           <span class="text-sm">
             You must be logged in to be able to upload images. Anonymous uploads
             are not allowed.
           </span>
-          <div>
-            <Button size="sm" variant="dark" href="/profile/login">
+          <div class="w-full sm:w-auto">
+            <Button
+              size="sm"
+              variant="dark"
+              href="/profile/login"
+              class="w-full"
+            >
               <span>Log in</span>
             </Button>
           </div>
@@ -138,16 +143,17 @@
             <div class="text-sm text-color-primary">
               <p class="flex items-center justify-center gap-x-[3px] p-3">
                 <Icon icon="material-symbols-light:upload" class="h-10 w-10" />
-                <span class="font-semibold">
+                <span class="hidden font-semibold sm:block">
                   Drag & Drop
                   <span class="font-normal">your image here</span>
                 </span>
+                <span class="block font-semibold sm:hidden">Upload Image</span>
               </p>
             </div>
 
-            <p class="divider">or</p>
+            <p class="divider hidden sm:flex">or</p>
 
-            <p class="mb-4 mt-2">
+            <p class="mb-4 mt-2 hidden sm:block">
               {#if data.os?.name === 'Mac OS' || data.device?.vendor === 'Apple'}
                 <span class="kbd">⌘ cmd</span>
               {:else}

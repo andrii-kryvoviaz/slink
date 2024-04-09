@@ -40,19 +40,26 @@
     : confirmButtonDefaultClasses;
 
   const innerModalDefaultClasses =
-    'relative inline-block transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left align-bottom shadow-xl transition-all rtl:text-right dark:bg-gray-900 sm:my-8 sm:w-full sm:max-w-sm sm:p-6 sm:align-middle';
+    'relative inline-block transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all rtl:text-right dark:bg-gray-900 sm:my-8 sm:w-full sm:max-w-sm sm:p-6 align-middle';
+
+  const modalContainerDefaultClasses =
+    'flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:p-0';
 
   const getAlignClasses = () => {
     switch (align) {
       case 'top':
-        return 'sm:align-top';
+        return 'items-start';
       case 'bottom':
-        return 'sm:align-bottom';
+        return 'items-end';
       default:
-        return 'sm:align-middle';
+        return 'items-center';
     }
   };
-  $: innerModalClasses = twMerge(innerModalDefaultClasses, getAlignClasses());
+
+  $: modalContainerClasses = twMerge(
+    modalContainerDefaultClasses,
+    getAlignClasses()
+  );
 </script>
 
 <svelte:window on:keydown|window={(e) => e.key === 'Escape' && closeModal()} />
@@ -67,15 +74,13 @@
     aria-hidden="true"
     on:click={closeModal}
   >
-    <div
-      class="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0"
-    >
+    <div class={modalContainerClasses}>
       <span
         class="hidden sm:inline-block sm:h-screen sm:align-middle"
         aria-hidden="true">&#8203;</span
       >
 
-      <div bind:this={innerModal} class={innerModalClasses}>
+      <div bind:this={innerModal} class={innerModalDefaultClasses}>
         <div>
           <div class="flex items-center justify-center">
             <slot name="icon" />

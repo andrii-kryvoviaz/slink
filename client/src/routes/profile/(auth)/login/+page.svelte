@@ -34,7 +34,7 @@
 </svelte:head>
 
 <div
-  class="flex flex-grow items-center justify-center py-12"
+  class="flex flex-grow items-start justify-center p-4 sm:items-center"
   in:fade={{ duration: 200 }}
 >
   <div

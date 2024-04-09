@@ -29,24 +29,30 @@
   {#each listItems as item (item.id)}
     <div
       out:fade={{ duration: 500 }}
-      class="image-container w-[48rem] max-w-full break-inside-avoid rounded-lg border bg-gray-200/5 p-4 dark:border-gray-800/50"
+      class="image-container w-full max-w-full break-inside-avoid rounded-lg border bg-gray-200/5 p-4 dark:border-gray-800/50 sm:w-[48rem]"
     >
       <div class="mb-4 flex items-center justify-between">
-        <div class="flex flex-grow gap-4">
-          <a href={`/info/${item.id}`}>
+        <div
+          class="flex max-w-full flex-grow flex-col items-center gap-4 sm:flex-row sm:items-start"
+        >
+          <a
+            href={`/info/${item.id}`}
+            class="block w-full max-w-full flex-shrink sm:h-40 sm:w-40"
+          >
             <ImagePlaceholder
-              src={`/image/${item.attributes.fileName}?width=160&crop=true`}
+              src={`/image/${item.attributes.fileName}?width=350&crop=true`}
               metadata={item.metadata}
               uniqueId={item.id}
               showOpenInNewTab={false}
               showMetadata={false}
+              stretch={true}
               width={10}
               height={10}
             />
           </a>
 
           <div class="flex flex-grow flex-col gap-4">
-            <div class="flex justify-between">
+            <div class="hidden justify-between sm:flex">
               <Button
                 href={`/info/${item.id}`}
                 variant="link"
@@ -67,26 +73,28 @@
               on:imageDeleted={onImageDelete}
             />
 
-            <div class="flex flex-grow items-center justify-between gap-8 pr-8">
+            <div
+              class="hidden flex-grow items-center justify-between gap-8 pr-8 sm:flex"
+            >
               <div class="flex flex-col gap-1 text-xs">
                 <p class="badge badge-primary badge-outline">
                   {item.metadata.mimeType}
                 </p>
               </div>
 
-              <div class="text-center text-xs">
-                <p class=" font-semibold">Dimensions</p>
+              <div class="hidden text-center text-xs lg:block">
+                <p class="font-semibold">Dimensions</p>
                 <p>
                   {item.metadata.width}x{item.metadata.height} pixels
                 </p>
               </div>
 
-              <div class="text-center text-xs">
+              <div class="hidden text-center text-xs lg:block">
                 <p class="font-semibold">Size</p>
                 <p>{bytesToSize(item.metadata.size)}</p>
               </div>
 
-              <div class="text-center text-xs">
+              <div class="hidden text-center text-xs lg:block">
                 <p class="font-semibold">Uploaded on</p>
                 <FormattedDate date={item.attributes.createdAt.timestamp} />
               </div>

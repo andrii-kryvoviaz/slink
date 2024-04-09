@@ -33,10 +33,10 @@
 </svelte:head>
 
 <div
-  class="flex flex-grow items-center justify-center py-12"
+  class="flex flex-grow items-start justify-center p-4 sm:items-center"
   in:fade={{ duration: 200 }}
 >
-  <div class="flex w-full max-w-3xl items-center p-8 lg:w-3/5 lg:px-12">
+  <div class="flex w-full max-w-3xl items-center lg:w-3/5">
     <div
       class="m-auto mx-auto w-full max-w-xl rounded-lg bg-white p-6 shadow-md dark:bg-gray-800"
     >
