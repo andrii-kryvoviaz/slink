@@ -18,7 +18,8 @@ export const setCookieSettingsOnLocals: Handle = async ({ event, resolve }) => {
   const settingsKeys = settings.getSettingKeys();
 
   event.locals.settings = settingsKeys.reduce((acc, key: SettingsKey) => {
-    acc[key] = event.cookies.get(key) || defaultSettings[key] || null;
+    acc[key] =
+      event.cookies.get(`settings.${key}`) || defaultSettings[key] || null;
     return acc;
   }, {} as CookieSettings);
 

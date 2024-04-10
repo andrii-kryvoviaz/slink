@@ -21,7 +21,7 @@ const filterResponseHeaders: Handle = async ({ event, resolve }) => {
 };
 
 const applyClientTheme: Handle = async ({ event, resolve }) => {
-  const theme = event.cookies.get('theme') || Theme.DARK;
+  const theme = event.cookies.get('settings.theme') || Theme.DARK;
 
   return resolve(event, {
     transformPageChunk: ({ html }) => html.replace('%app.theme%', theme),

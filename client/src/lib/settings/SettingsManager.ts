@@ -38,7 +38,8 @@ export class SettingsManager {
 
   public set<T extends SettingsKey>(key: T, value: any): void {
     this._setValue(key, value);
-    cookie.set(key, value);
+
+    cookie.set(`settings.${key}`, value);
   }
 
   public getSettingKeys(): SettingsKey[] {
@@ -65,7 +66,7 @@ export class SettingsManager {
     defaultValue: any
   ): SettingsCombinedValue<T> {
     if (browser) {
-      this._setValue(key, cookie.get(key, defaultValue));
+      this._setValue(key, cookie.get(`settings.${key}`, defaultValue));
       return this._formReturnValue(this._settings.get(key) as Settings[T]);
     }
 

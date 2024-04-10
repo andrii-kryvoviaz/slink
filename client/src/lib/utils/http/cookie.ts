@@ -76,13 +76,15 @@ export const getResponseWithCookies = (
   const headers = new Headers(response.headers);
 
   cookies.getAll().forEach(({ name, value }) => {
-    let cookieString = `${name}=${value}; Path=/; HttpOnly; Secure; SameSite=Strict;`;
+    if (!name.startsWith('settings.')) {
+      let cookieString = `${name}=${value}; Path=/; HttpOnly; Secure; SameSite=Strict;`;
 
-    if (!value) {
-      cookieString = `${cookieString} Max-Age=0;`;
+      if (!value) {
+        cookieString = `${cookieString} Max-Age=0;`;
+      }
+
+      headers.append('Set-Cookie', cookieString);
     }
-
-    headers.append('Set-Cookie', cookieString);
   });
 
   return new Response(body, {
