@@ -47,7 +47,7 @@
   };
 
   const handleChange = async (event: FileEvent) => {
-    if (processing) return;
+    if (disabled) return;
 
     event.preventDefault();
 
@@ -88,6 +88,7 @@
   $: $uploadedImage && successHandler($uploadedImage);
   $: $uploadError && errorHandler($uploadError);
   $: processing = $isLoading || $pageIsChanging;
+  $: disabled = processing || !data.user;
 </script>
 
 <svelte:head>
@@ -135,7 +136,7 @@
           event.preventDefault();
         }}
         on:change={handleChange}
-        disabled={processing}
+        {disabled}
         defaultClass="flex flex-col justify-center items-center w-full h-64 bg-card-primary rounded-lg border-2 border-dropzone-primary border-dashed cursor-pointer hover:border-dropzone-secondary hover:bg-card-secondary max-h-[400px] "
       >
         {#if !processing}
