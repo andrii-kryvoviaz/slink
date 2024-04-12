@@ -6,7 +6,7 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ![Slink](screens/e98ea79e-01bb-4e23-98ba-b18841d09c9b.png)
-**Slink** is a self-hosted image sharing platform built with [Symfony](https://symfony.com/) and [SvelteKit](https://kit.svelte.dev/) with ❤️.
+**Slink** is a self-hosted image sharing platform built with [Symfony](https://symfony.com/) and [SvelteKit](https://kit.svelte.dev/)️.
 
 Solves the problem of sharing images with friends, family, and colleagues without relying on third-party services. It also offers a platform for artists to share their work with the community. Additionally, developers may find it useful for self-hosting screenshots of personal projects, which can then be used on GitHub, portfolios, blogs, etc.
 
@@ -72,6 +72,8 @@ slink:
       - ORIGIN=https://your-domain.com
       # Require user approval before they can upload images
       - USER_APPROVAL_REQUIRED=true
+      # Maximum image size allowed to be uploaded (no more than 50M)
+      - IMAGE_MAX_SIZE=15M
       # Storage provider to use. 
       # Available options are local and smb
       - STORAGE_PROVIDER=local
@@ -165,6 +167,22 @@ to add additional security features like SSL, rate limiting, etc.
 > [!TIP]
 >
 > If you don't want to expose the entire application to the public, you can only expose the `/image` route via the reverse proxy.
+
+## Overriding PHP Configuration
+If you need to override the PHP configuration, you can do so by mounting a custom `php.ini` file to the `/usr/local/etc/php/conf.d/` directory in the container.
+
+Here is an example of how you can override the `upload_max_filesize` and `post_max_size` settings:
+
+```yaml
+slink:
+    # Your existing configuration
+    volumes:
+      # Your existing volumes
+      
+      # Overriding this file will allow to overcome the default 50M upload limit
+      # Change the values according to your needs for both upload_max_filesize and post_max_size
+      - ./custom-php.ini:/usr/local/etc/php/conf.d/uploads.ini
+```
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
