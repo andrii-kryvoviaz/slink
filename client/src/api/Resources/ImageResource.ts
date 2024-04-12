@@ -40,9 +40,10 @@ export class ImageResource extends AbstractResource {
 
   public async getPublicImages(
     page: number = 1,
-    limit: number = 10
+    limit: number = 10,
+    orderBy: string = 'attributes.updatedAt'
   ): Promise<ImageListingResponse> {
-    return this.get(`/images/${page}/?limit=${limit}`);
+    return this.get(`/images/${page}/?limit=${limit}&orderBy=${orderBy}`);
   }
 
   public async getHistory(
