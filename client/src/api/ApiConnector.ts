@@ -26,14 +26,6 @@ export const ApiConnector = (options: ApiOptions): Handle => {
       return resolve(event);
     }
 
-    if (
-      session?.accessToken &&
-      !request.headers.has('Authorization') &&
-      !/.+\/.+\..{3,4}$/.test(url.pathname)
-    ) {
-      request.headers.set('Authorization', `Bearer ${session.accessToken}`);
-    }
-
     const strippedPath = url.pathname.replace(
       new RegExp(`^${options.urlPrefix}`),
       ''
@@ -41,7 +33,20 @@ export const ApiConnector = (options: ApiOptions): Handle => {
 
     const proxyUrl = `${options.baseUrl}${strippedPath}${url.search}`;
 
-    const { method, headers } = request;
+    const { method } = request;
+
+    const headers = new Headers({
+      'Content-Type': request.headers.get('Content-Type') || 'application/json',
+      Authorization:
+        request.headers.get('Authorization') ||
+        `Bearer ${session?.accessToken}`,
+    });
+
+    // don't send Authorization header for static files
+    if (/.+\/.+\..{3,4}$/.test(url.pathname)) {
+      headers.delete('Authorization');
+    }
+
     const body = await cloneRequestBody(request);
 
     const requestOptions: any = {
@@ -52,8 +57,6 @@ export const ApiConnector = (options: ApiOptions): Handle => {
       duplex: 'half',
     };
 
-    requestOptions.headers.delete('cookie');
-
     let response = await fetch(proxyUrl, requestOptions);
 
     if (response.status === 401) {
@@ -62,7 +65,7 @@ export const ApiConnector = (options: ApiOptions): Handle => {
       if (tokens) {
         const { accessToken } = tokens;
 
-        if (request.headers.has('Authorization')) {
+        if (accessToken) {
           requestOptions.headers.set('Authorization', `Bearer ${accessToken}`);
         }
 
