@@ -65,26 +65,33 @@ docker run -d \
 You can also use [Docker Compose](https://docs.docker.com/compose/) to start the application.
 ```yaml
 slink:
-    image: anirdev/slink:latest
-    container_name: slink
-    environment:
-      # Your application hostname
-      - ORIGIN=https://your-domain.com
-      # Require user approval before they can upload images
-      - USER_APPROVAL_REQUIRED=true
-      # Maximum image size allowed to be uploaded (no more than 50M)
-      - IMAGE_MAX_SIZE=15M
-      # Storage provider to use. 
-      # Available options are local and smb
-      - STORAGE_PROVIDER=local
-    volumes:
-      # Persist the database
-      - ./slink/var/data:/app/var/data
-      # Persist the uploaded images
-      - ./slink/images:/app/slink/images
-    ports:
-      # Expose the application on port 3000
-      - "3000:3000"
+  image: anirdev/slink:latest
+  container_name: slink
+  environment:
+    # Your application hostname
+    - ORIGIN=https://your-domain.com
+    
+    # Require user approval before they can upload images
+    - USER_APPROVAL_REQUIRED=true
+    
+    # User password requirements
+    - USER_PASSWORD_MIN_LENGTH=8
+    - USER_PASSWORD_REQUIREMENTS=15 # bitmask of requirements 
+    
+    # Maximum image size allowed to be uploaded (no more than 50M)
+    - IMAGE_MAX_SIZE=15M
+    
+    # Storage provider to use. 
+    # Available options are local and smb
+    - STORAGE_PROVIDER=local
+  volumes:
+    # Persist the database
+    - ./slink/var/data:/app/var/data
+    # Persist the uploaded images
+    - ./slink/images:/app/slink/images
+  ports:
+    # Expose the application on port 3000
+    - "3000:3000"
 ```
 
 > [!TIP]
@@ -97,15 +104,17 @@ Simply set the environment variables when starting the Docker container or in yo
 
 The following environment variables are available:
 
-| Variable | Description                                                                                              | Default Value |
-| -------- |----------------------------------------------------------------------------------------------------------|--------------|
-| `USER_APPROVAL_REQUIRED` | Whether to require user approval before they can upload images. Available options are `true` and `false` | `true`       |
-| `IMAGE_MAX_SIZE` | Maximum image size allowed to be uploaded (no more than 50M).                                            | `15M`        |
-| `STORAGE_PROVIDER` | Storage provider to use. Available options are `local` and `smb`                                         | `local`      |
-| `SMB_HOST` | SMB host to connect to. Required if `STORAGE_PROVIDER` is set to `smb`                                   | `null`       |
-| `SMB_USERNAME` | SMB username to use. Required if `STORAGE_PROVIDER` is set to `smb`                                      | `null`       |
-| `SMB_PASSWORD` | SMB password to use. Required if `STORAGE_PROVIDER` is set to `smb`                                      | `null`       |
-| `SMB_SHARE` | SMB share to use. Required if `STORAGE_PROVIDER` is set to `smb`                                         | `null`       |
+| Variable | Description                                                                                                                                | Default Value |
+| -------- |--------------------------------------------------------------------------------------------------------------------------------------------|---------------|
+| `USER_APPROVAL_REQUIRED` | Whether to require user approval before they can upload images. Available options are `true` and `false`                                   | `true`        |
+| `USER_PASSWORD_MIN_LENGTH` | Minimum password length required for users.                                                                                                | `6`           |
+| `USER_PASSWORD_REQUIREMENTS` | Bitmask of password requirements. Sum of the following options: `1` (numbers), `2` (lowercase), `4` (uppercase), `8` (special characters). | `15` |
+| `IMAGE_MAX_SIZE` | Maximum image size allowed to be uploaded (no more than 50M).                                                                              | `15M`         |
+| `STORAGE_PROVIDER` | Storage provider to use. Available options are `local` and `smb`                                                                           | `local`       |
+| `SMB_HOST` | SMB host to connect to. Required if `STORAGE_PROVIDER` is set to `smb`                                                                     | `null`        |
+| `SMB_USERNAME` | SMB username to use. Required if `STORAGE_PROVIDER` is set to `smb`                                                                        | `null`        |
+| `SMB_PASSWORD` | SMB password to use. Required if `STORAGE_PROVIDER` is set to `smb`                                                                        | `null`        |
+| `SMB_SHARE` | SMB share to use. Required if `STORAGE_PROVIDER` is set to `smb`                                                                           | `null`        |
 
 ## Public Image Listing
 
