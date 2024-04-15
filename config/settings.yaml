@@ -12,5 +12,8 @@ parameters:
         password: '%env(string:default::SMB_PASSWORD)%'
   user:
     approvalRequired: '%env(bool:USER_APPROVAL_REQUIRED)%'
+    password:
+      minLength: '%env(int:USER_PASSWORD_MIN_LENGTH)%'
+      requirements: '%env(int:USER_PASSWORD_REQUIREMENTS)%'
   image:
     maxSize: '%env(string:IMAGE_MAX_SIZE)%'

@@ -8,6 +8,7 @@ use SensitiveParameter;
 use Slink\Shared\Application\Command\CommandInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Symfony\Component\Validator\Constraints as Assert;
+use Slink\User\Infrastructure\Validator\PasswordComplexity;
 
 final readonly class SignUpCommand implements CommandInterface {
   
@@ -20,8 +21,7 @@ final readonly class SignUpCommand implements CommandInterface {
     private string $email,
 
     #[SensitiveParameter]
-    #[Assert\NotBlank]
-    #[Assert\PasswordStrength(minScore: Assert\PasswordStrength::STRENGTH_MEDIUM)]
+    #[PasswordComplexity]
     private string $password,
 
     #[SensitiveParameter]
