@@ -117,9 +117,6 @@ RUN echo "upload_max_filesize = $((UPLOAD_MAX_FILESIZE_IN_BYTES / 1024 / 1024))M
 # Set working directory
 WORKDIR /app
 
-# Create .env file
-COPY .env.example .env
-
 # Set environment variables
 ENV API_URL=http://localhost:8080
 ENV API_PREFIX=/api
@@ -188,6 +185,9 @@ COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
 # Add Yarn dependencies
 COPY --from=node /opt /opt
 
+# Create .env file
+COPY .env.example .env
+
 # Set environment variables
 ENV API_ENABLED=true
 ENV APP_ENV=dev
@@ -227,6 +227,9 @@ COPY --from=source --chown=www-data:www-data /source ./
 
 # Create data directory for database storage
 RUN mkdir -p /app/var/data
+
+# Create .env file
+COPY .env.example .env
 
 # Set environment variables
 ENV API_ENABLED=false
