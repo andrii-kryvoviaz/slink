@@ -14,6 +14,15 @@ final readonly class ParameterBagProvider implements ConfigurationProvider {
   
   /**
    * @param string $key
+   * @return bool
+   */
+  #[\Override]
+  public function has(string $key): bool {
+    return $this->get($key) !== null;
+  }
+  
+  /**
+   * @param string $key
    * @return mixed
    */
   #[\Override]
@@ -59,14 +68,5 @@ final readonly class ParameterBagProvider implements ConfigurationProvider {
   #[\Override]
   public function set(string $key, mixed $value): void {
     $this->parameterBag->set($key, $value);
-  }
-  
-  /**
-   * @param string $key
-   * @return bool
-   */
-  #[\Override]
-  public function has(string $key): bool {
-    return $this->parameterBag->has($key);
   }
 }
