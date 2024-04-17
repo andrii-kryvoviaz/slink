@@ -61,6 +61,7 @@ services:
 
     UI\Http\Rest\EventSubscriber\ExceptionSubscriber:
         arguments:
+            - '@logger'
             - "%kernel.environment%"
             - "%exception_to_status%"
             - "%exception_code_to_message%"

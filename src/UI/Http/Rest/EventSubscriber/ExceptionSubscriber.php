@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace UI\Http\Rest\EventSubscriber;
 
+use Psr\Log\LoggerInterface;
 use Slink\Shared\Domain\Exception\SpecificationException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,14 +17,16 @@ use Throwable;
 
 final readonly class ExceptionSubscriber implements EventSubscriberInterface {
   /**
+   * @param LoggerInterface $logger
    * @param string $environment
    * @param array<string, int> $exceptionToStatus
    * @param array<int, string> $exceptionCodeToMessage
    */
   public function __construct(
+    private LoggerInterface $logger,
     private string $environment,
     private array $exceptionToStatus = [],
-    private array $exceptionCodeToMessage = []
+    private array $exceptionCodeToMessage = [],
   ) {
   }
   
@@ -43,12 +46,23 @@ final readonly class ExceptionSubscriber implements EventSubscriberInterface {
   public function onKernelException(ExceptionEvent $event): void {
     $exception = $event->getThrowable();
 
-    $response = new JsonResponse();
-    $response->headers->set('Content-Type', 'application/vnd.api+json');
-    $response->setStatusCode($this->determineStatusCode($exception));
-    $response->setData($this->getErrorMessage($exception));
-
-    $event->setResponse($response);
+    try {
+      $response = new JsonResponse();
+      $response->headers->set('Content-Type', 'application/vnd.api+json');
+      $response->setStatusCode($this->determineStatusCode($exception));
+      $response->setData($this->getErrorMessage($exception));
+      
+      $event->setResponse($response);
+    } catch (\Throwable $exception) {
+      $this->logger->error(sprintf('An error occurred: %s in %s:%s', $exception->getMessage(), $exception->getFile(), $exception->getLine()));
+      
+      $event->setResponse(new JsonResponse([
+        'error' => [
+          'title' => 'Internal Server Error',
+          'message' => 'An error occurred, while processing the request',
+        ],
+      ], Response::HTTP_INTERNAL_SERVER_ERROR));
+    }
   }
   
   /**
