@@ -2,7 +2,6 @@ import { themeIcons } from '@slink/theme.icons';
 import { redirect } from '@sveltejs/kit';
 
 import { browser } from '$app/environment';
-import { invalidateAll } from '$app/navigation';
 
 import { ApiClient } from '@slink/api/Client';
 
@@ -20,9 +19,7 @@ export const load: LayoutLoad = async ({ fetch, data }) => {
   // Set Unauthorized handler
   ApiClient.on('unauthorized', () => {
     // Redirect to login page
-    if (browser) {
-      invalidateAll();
-    } else {
+    if (!browser) {
       throw redirect(302, '/profile/login');
     }
   });
