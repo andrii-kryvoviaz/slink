@@ -11,6 +11,8 @@ type ApiOptions = {
   registeredPaths: string[];
 };
 
+const refreshRequests: Map<string, Promise<any>> = new Map();
+
 export const ApiConnector = (options: ApiOptions): Handle => {
   return async ({ event, resolve }) => {
     const { url, fetch, request, cookies, locals } = event;
@@ -37,14 +39,15 @@ export const ApiConnector = (options: ApiOptions): Handle => {
 
     const headers = new Headers({
       'Content-Type': request.headers.get('Content-Type') || 'application/json',
-      Authorization:
-        request.headers.get('Authorization') ||
-        `Bearer ${session?.accessToken}`,
     });
 
-    // don't send Authorization header for static files
-    if (/.+\/.+\..{3,4}$/.test(url.pathname)) {
-      headers.delete('Authorization');
+    if (request.headers.has('Authorization')) {
+      headers.set(
+        'Authorization',
+        request.headers.get('Authorization') as string
+      );
+    } else if (session?.accessToken) {
+      headers.set('Authorization', `Bearer ${session.accessToken}`);
     }
 
     const body = await cloneRequestBody(request);
@@ -59,14 +62,28 @@ export const ApiConnector = (options: ApiOptions): Handle => {
 
     let response = await fetch(proxyUrl, requestOptions);
 
-    if (response.status === 401) {
-      const tokens = await Auth.refresh({ cookies, fetch });
+    if (response.status === 401 && cookies.get('sessionId')) {
+      const sessionId = cookies.get('sessionId') as string;
+
+      if (!refreshRequests.has(sessionId)) {
+        refreshRequests.set(sessionId, Auth.refresh({ cookies, fetch }));
+      }
+
+      const tokens = await refreshRequests.get(sessionId);
+      refreshRequests.delete(sessionId);
 
       if (tokens) {
-        const { accessToken } = tokens;
+        const { accessToken, refreshToken } = tokens;
 
         if (accessToken) {
           requestOptions.headers.set('Authorization', `Bearer ${accessToken}`);
+        }
+
+        if (refreshToken && cookies.get('refreshToken') !== refreshToken) {
+          cookies.set('refreshToken', refreshToken, {
+            sameSite: 'strict',
+            path: '/',
+          });
         }
 
         if (requestOptions.body) {
