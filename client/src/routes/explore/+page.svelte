@@ -138,6 +138,7 @@
               metadata={image.metadata}
               width={28}
               stretch={true}
+              showMetadata={false}
             />
           </div>
 
