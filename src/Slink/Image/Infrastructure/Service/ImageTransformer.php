@@ -4,6 +4,8 @@ namespace Slink\Image\Infrastructure\Service;
 
 use Gumlet\ImageResize;
 use Gumlet\ImageResizeException;
+use Imagick;
+use ImagickException;
 use Slink\Image\Domain\Service\ImageTransformerInterface;
 use Slink\Shared\Domain\ValueObject\ImageOptions;
 
@@ -74,5 +76,32 @@ class ImageTransformer implements ImageTransformerInterface {
     }
     
     return $content;
+  }
+  
+  /**
+   * @param string $path
+   * @return string
+   */
+  public function stripExifMetadata(string $path): string {
+    try {
+      $image = new Imagick($path);
+      $image->autoOrient();
+      
+      $profiles = $image->getImageProfiles('icc');
+      $image->stripImage();
+      
+      if (!empty($profiles)) {
+        $image->profileImage("icc", $profiles['icc']);
+      }
+      
+      $image->writeImage($path);
+      
+      $image->clear();
+      $image->destroy();
+    } catch (ImagickException $exception) {
+      // do nothing hence the image format is not supported
+    } finally {
+      return $path;
+    }
   }
 }

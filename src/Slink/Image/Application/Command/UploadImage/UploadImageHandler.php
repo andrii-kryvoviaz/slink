@@ -7,8 +7,10 @@ namespace Slink\Image\Application\Command\UploadImage;
 use Slink\Image\Domain\Image;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Image\Domain\Service\ImageAnalyzerInterface;
+use Slink\Image\Domain\Service\ImageTransformerInterface;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Domain\ValueObject\ImageMetadata;
+use Slink\Settings\Domain\Service\ConfigurationProvider;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\Exception\DateTimeException;
 use Slink\Shared\Domain\ValueObject\ID;
@@ -17,8 +19,10 @@ use Slink\Shared\Infrastructure\FileSystem\Storage\StorageInterface;
 final readonly class UploadImageHandler implements CommandHandlerInterface {
   
   public function __construct(
+    private ConfigurationProvider $configurationProvider,
     private ImageStoreRepositoryInterface $imageRepository,
     private ImageAnalyzerInterface $imageAnalyzer,
+    private ImageTransformerInterface $imageTransformer,
     private StorageInterface $storage
   ) {
   }
@@ -44,6 +48,10 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
       $command->getDescription(),
       $command->isPublic(),
     );
+    
+    if($this->configurationProvider->get('image.stripExifMetadata')) {
+      $this->imageTransformer->stripExifMetadata($file->getPathname());
+    }
     
     $this->storage->upload($file, $fileName);
     

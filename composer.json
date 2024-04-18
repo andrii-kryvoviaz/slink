@@ -6,6 +6,7 @@
     "require": {
         "php": ">=8.3",
         "ext-gd": "*",
+        "ext-imagick": "*",
         "doctrine/doctrine-bundle": "^2.10",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.16",

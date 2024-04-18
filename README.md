@@ -110,6 +110,7 @@ The following environment variables are available:
 | `USER_PASSWORD_MIN_LENGTH` | Minimum password length required for users.                                                                                                | `6`           |
 | `USER_PASSWORD_REQUIREMENTS` | Bitmask of password requirements. Sum of the following options: `1` (numbers), `2` (lowercase), `4` (uppercase), `8` (special characters). | `15` |
 | `IMAGE_MAX_SIZE` | Maximum image size allowed to be uploaded (no more than 50M).                                                                              | `15M`         |
+| `IMAGE_STRIP_EXIF_METADATA` | Whether to strip EXIF metadata from the uploaded images. Available options are `true` and `false`                                         | `true`        |
 | `STORAGE_PROVIDER` | Storage provider to use. Available options are `local` and `smb`                                                                           | `local`       |
 | `SMB_HOST` | SMB host to connect to. Required if `STORAGE_PROVIDER` is set to `smb`                                                                     | `null`        |
 | `SMB_USERNAME` | SMB username to use. Required if `STORAGE_PROVIDER` is set to `smb`                                                                        | `null`        |

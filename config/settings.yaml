@@ -17,3 +17,4 @@ parameters:
       requirements: '%env(int:USER_PASSWORD_REQUIREMENTS)%'
   image:
     maxSize: '%env(string:IMAGE_MAX_SIZE)%'
+    stripExifMetadata: '%env(bool:IMAGE_STRIP_EXIF_METADATA)%'

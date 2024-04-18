@@ -27,4 +27,10 @@ interface ImageTransformerInterface {
    * @return string
    */
   public function transform(string $content, ImageOptions $imageOptions): string;
+  
+  /**
+   * @param string $path
+   * @return string
+   */
+  public function stripExifMetadata(string $path): string;
 }
