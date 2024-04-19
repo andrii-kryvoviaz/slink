@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
+  import { browser } from '$app/environment';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
@@ -21,9 +22,19 @@
   import { ImagePlaceholder } from '@slink/components/Image';
   import { UserAvatar } from '@slink/components/User';
 
+  import type { PageServerData } from './$types';
+
+  export let data: PageServerData;
+
   let images: ImageListingItem[] = [];
   let meta: ListingMetadata;
   let page = 1;
+
+  const resetPage = () => {
+    page = 1;
+    images = [];
+    meta = undefined;
+  };
 
   const {
     run: fetchImages,
@@ -45,11 +56,14 @@
   }
 
   $: showLoadMore =
-    meta && meta.page < Math.ceil(meta.total / meta.size) && $status !== 'idle';
-
+    meta && page < Math.ceil(meta.total / meta.size) && $status !== 'idle';
   $: showPreloader = !images.length && $status !== 'finished';
-
   $: itemsNotFound = !images.length && $status === 'finished';
+
+  $: if (!data.user) {
+    resetPage();
+    fetchImages();
+  }
 
   onMount(fetchImages);
 </script>
