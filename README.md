@@ -107,6 +107,7 @@ The following environment variables are available:
 | Variable | Description                                                                                                                                | Default Value |
 | -------- |--------------------------------------------------------------------------------------------------------------------------------------------|---------------|
 | `USER_APPROVAL_REQUIRED` | Whether to require user approval before they can upload images. Available options are `true` and `false`                                   | `true`        |
+| `USER_ALLOW_UNAUTHENTICATED_ACCESS` | Whether to allow unauthenticated users to access public routes. Available options are `true` and `false`                                   | `true`        |
 | `USER_PASSWORD_MIN_LENGTH` | Minimum password length required for users.                                                                                                | `6`           |
 | `USER_PASSWORD_REQUIREMENTS` | Bitmask of password requirements. Sum of the following options: `1` (numbers), `2` (lowercase), `4` (uppercase), `8` (special characters). | `15` |
 | `IMAGE_MAX_SIZE` | Maximum image size allowed to be uploaded (no more than 50M).                                                                              | `15M`         |
