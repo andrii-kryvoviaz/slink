@@ -20,6 +20,7 @@
 /public/slink
 /slink
 dump.rdb
+docker-compose.prod.yaml
 
 ###> lexik/jwt-authentication-bundle ###
 /config/jwt/*.pem
