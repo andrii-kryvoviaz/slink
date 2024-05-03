@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Slink\User\Infrastructure\ReadModel\Repository;
 
 use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractRepository;
 use Slink\User\Domain\Repository\UserRoleRepositoryInterface;
 use Slink\User\Infrastructure\ReadModel\View\UserRoleView;
@@ -33,6 +32,6 @@ class UserRoleRepository extends AbstractRepository implements UserRoleRepositor
       ->getQuery()
       ->getOneOrNullResult();
     
-    return $result['role'] ?? false;
+    return (bool) $result;
   }
 }

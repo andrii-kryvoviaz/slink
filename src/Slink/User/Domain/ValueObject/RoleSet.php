@@ -4,17 +4,21 @@ declare(strict_types=1);
 
 namespace Slink\User\Domain\ValueObject;
 
-use Ramsey\Collection\Set;
+use Slink\Shared\Domain\DataStructures\HashMap;
 use Slink\Shared\Domain\ValueObject\AbstractValueObject;
 
 final readonly class RoleSet extends AbstractValueObject {
-  private Set $roles;
+  private HashMap $roles;
   
   /**
    * @param array<Role> $roles
    */
   private function __construct(array $roles) {
-    $this->roles = new Set(Role::class, $roles);
+    $this->roles = new HashMap();
+    
+    foreach($roles as $role) {
+      $this->addRole($role);
+    }
   }
   
   /**
@@ -34,14 +38,17 @@ final readonly class RoleSet extends AbstractValueObject {
    * @return array<Role>
    */
   public function getRoles(): array {
-    return $this->roles->toArray();
+    return array_values($this->roles->toArray());
   }
   
   /**
    * @return  array<string>
    */
   public function toArray(): array {
-    return array_map(fn(Role $role) => $role->getRole(), $this->getRoles());
+    return array_map(
+      fn(Role $role) => $role->getRole(),
+      $this->getRoles()
+    );
   }
   
   /**
@@ -49,13 +56,7 @@ final readonly class RoleSet extends AbstractValueObject {
    * @return bool
    */
   public function contains(Role $role): bool {
-    foreach($this->roles as $r) {
-      if($r->getRole() === $role->getRole()) {
-        return true;
-      }
-    }
-    
-    return false;
+    return $this->roles->has($role->getRole());
   }
   
   /**
@@ -66,13 +67,13 @@ final readonly class RoleSet extends AbstractValueObject {
       return;
     }
     
-    $this->roles->add($role);
+    $this->roles->set($role->getRole(), $role);
   }
   
   /**
    * @param Role $role
    */
   public function removeRole(Role $role): void {
-    $this->roles->remove($role);
+    $this->roles->remove($role->getRole());
   }
 }
