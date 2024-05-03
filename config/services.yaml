@@ -45,6 +45,7 @@ services:
 
     UI\:
         resource: '../src/UI/*'
+        exclude: '../src/UI/Console/**/Abstract*'
 
     Slink\Shared\Infrastructure\MessageBus\Command\MessengerCommandBus:
         arguments:
