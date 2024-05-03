@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\User\Infrastructure\ReadModel\View;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Slink\Shared\Domain\ValueObject\DateTime;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
@@ -26,6 +27,7 @@ class UserView extends AbstractView {
    * @param DateTime $createdAt
    * @param DateTime|null $updatedAt
    * @param UserStatus $status
+   * @param Collection $roles
    */
   public function __construct(
     #[ORM\Id]
@@ -56,7 +58,14 @@ class UserView extends AbstractView {
     
     #[ORM\Column(enumType: UserStatus::class, options: ['default' => UserStatus::Active])]
     #[Groups(['internal', 'status_check'])]
-    private UserStatus $status,
+    private UserStatus          $status,
+    
+    #[ORM\ManyToMany(targetEntity: UserRoleView::class)]
+    #[ORM\JoinTable(name: 'user_to_role')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'uuid')]
+    #[ORM\InverseJoinColumn(name: 'role', referencedColumnName: 'role')]
+    #[Groups(['internal'])]
+    private readonly Collection $roles,
   ) {
   }
   
@@ -115,6 +124,29 @@ class UserView extends AbstractView {
    */
   public function setStatus(UserStatus $status): void {
     $this->status = $status;
+  }
+  
+  /**
+   * @param UserRoleView $role
+   * @return void
+   */
+  public function addRole(UserRoleView $role): void {
+    $this->roles->add($role);
+  }
+  
+  /**
+   * @param UserRoleView $role
+   * @return void
+   */
+  public function removeRole(UserRoleView $role): void {
+    $this->roles->removeElement($role);
+  }
+  
+  /**
+   * @return array<string>
+   */
+  public function getRoles(): array {
+    return $this->roles->map(fn(UserRoleView $role) => $role->getRole())->toArray();
   }
   
   /**
