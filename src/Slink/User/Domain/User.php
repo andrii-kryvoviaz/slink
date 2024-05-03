@@ -238,9 +238,18 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   
   /**
    * @param Role $role
+   * @param UserRoleExistSpecificationInterface $userRoleExistSpecification
    * @return void
    */
-  public function revokeRole(Role $role): void {
+  public function revokeRole(Role $role, UserRoleExistSpecificationInterface $userRoleExistSpecification): void {
+    if(!$userRoleExistSpecification->isSatisfiedBy($role)) {
+      throw new InvalidUserRole($role);
+    }
+    
+    if(!$this->roles->contains($role)) {
+      return;
+    }
+    
     $this->recordThat(new UserRevokedRole($this->aggregateRootId(), $role));
   }
   
