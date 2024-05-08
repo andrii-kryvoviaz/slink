@@ -1,1 +1,1 @@
-export type UserRole = 'USER_ROLE' | 'ADMIN_ROLE' | 'GUEST_ROLE';
+export type UserRole = 'ROLE_USER' | 'ROLE_ADMIN' | 'ROLE_GUEST';

@@ -27,8 +27,9 @@
 
   const isAuthorized = (roles: string[]) => {
     if (user) {
-      return roles.some((role) => user?.roles?.includes(role));
+      return roles.some((role) => user.roles.includes(role));
     }
+
     return false;
   };
 
@@ -70,38 +71,40 @@
       class="fixed right-0 top-20 z-50 h-[calc(100vh-80px)] w-full origin-top-right overflow-hidden border bg-gray-50 py-0 shadow-xl dark:border-header/70 dark:bg-gray-800 sm:absolute sm:top-auto sm:mt-2 sm:h-auto sm:w-56 sm:rounded-md"
     >
       {#each UserDropdownItems as group, index (group.title)}
-        {#if index > 0}
-          <hr class="border-gray-200 dark:border-gray-700" />
-        {/if}
-
-        <div class="relative">
-          {#if group.badge}
-            <span
-              class="absolute -top-2 right-2 z-10 mx-1 rounded-full bg-primary px-2 py-1 text-[0.5rem] text-white"
-            >
-              {group.badge}
-            </span>
+        {#if isAuthorized(group.access)}
+          {#if index > 0}
+            <hr class="border-gray-200 dark:border-gray-700" />
           {/if}
 
-          {#each group.items as item (item.title)}
-            {#if item.state !== 'hidden'}
-              <UserDropdownItem {item} {isDark}>
-                <span class="flex gap-1">
-                  <Icon icon={item.icon} class="mx-1 h-5 w-5" />
-
-                  <span>{item.title}</span>
-                </span>
-                {#if item.badge}
-                  <span
-                    class="rounded-full bg-primary px-2 py-[0.1rem] text-[0.5rem] text-white"
-                  >
-                    {item.badge}
-                  </span>
-                {/if}
-              </UserDropdownItem>
+          <div class="relative">
+            {#if group.badge}
+              <span
+                class="absolute -top-2 right-2 z-10 mx-1 rounded-full bg-primary px-2 py-1 text-[0.5rem] text-white"
+              >
+                {group.badge}
+              </span>
             {/if}
-          {/each}
-        </div>
+
+            {#each group.items as item (item.title)}
+              {#if item.state !== 'hidden' && isAuthorized(item.access)}
+                <UserDropdownItem {item} {isDark}>
+                  <span class="flex gap-1">
+                    <Icon icon={item.icon} class="mx-1 h-5 w-5" />
+
+                    <span>{item.title}</span>
+                  </span>
+                  {#if item.badge}
+                    <span
+                      class="rounded-full bg-primary px-2 py-[0.1rem] text-[0.5rem] text-white"
+                    >
+                      {item.badge}
+                    </span>
+                  {/if}
+                </UserDropdownItem>
+              {/if}
+            {/each}
+          </div>
+        {/if}
       {/each}
     </div>
   {/if}
