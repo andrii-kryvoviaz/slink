@@ -45,7 +45,6 @@ class UserView extends AbstractView {
     private DisplayName $displayName,
 
     #[ORM\Column(type: 'hashed_password')]
-    #[Groups(['internal'])]
     private HashedPassword $password,
 
     #[ORM\Column(type: 'datetime_immutable')]
