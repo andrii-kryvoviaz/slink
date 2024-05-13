@@ -18,7 +18,7 @@
 </script>
 
 <div
-  class="flex h-full flex-col items-center justify-between border-r border-header/70 bg-gray-800/20"
+  class="flex h-full flex-col items-center justify-between border-r border-header/70 bg-gray-300/10 dark:bg-gray-800/20"
 >
   <div class="main-area flex flex-col">
     <SidebarItem
