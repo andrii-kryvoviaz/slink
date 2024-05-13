@@ -24,7 +24,7 @@
   };
 
   const baseClass = 'w-full border-none no-underline';
-  const expandedClass = 'pr-10';
+  const expandedClass = 'pr-14';
 
   $: classes = `${baseClass} ${expanded ? expandedClass : ''}`;
   $: variant = active ? 'primary' : 'default';
@@ -32,7 +32,7 @@
 </script>
 
 <div class="w-full">
-  <Button {id} class={baseClass} {variant} rounded="none" on:click={onClick}>
+  <Button {id} class={classes} {variant} rounded="none" on:click={onClick}>
     <span slot="leftIcon">
       <Icon {icon} class="h-5 w-5 opacity-60" />
     </span>
