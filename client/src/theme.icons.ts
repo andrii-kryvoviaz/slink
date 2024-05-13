@@ -45,4 +45,6 @@ export const themeIcons: string[] = [
   'lets-icons:copy-light',
   'mdi-light:check',
   'material-symbols-light:menu',
+  'ooui:folder-placeholder-ltr',
+  'fluent:panel-left-expand-20-filled',
 ];
