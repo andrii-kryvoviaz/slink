@@ -47,4 +47,5 @@ export const themeIcons: string[] = [
   'material-symbols-light:menu',
   'ooui:folder-placeholder-ltr',
   'fluent:panel-left-expand-20-filled',
+  'fluent:panel-right-expand-20-filled',
 ];

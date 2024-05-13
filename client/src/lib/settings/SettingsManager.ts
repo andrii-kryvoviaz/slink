@@ -5,6 +5,7 @@ import type {
   SettingsKey,
 } from '@slink/lib/settings/Settings.types';
 import { SettingsMap } from '@slink/lib/settings/SettingsMap';
+import { SidebarSetter } from '@slink/lib/settings/setters/sidebar';
 import { ThemeSetter } from '@slink/lib/settings/setters/theme';
 
 import { browser } from '$app/environment';
@@ -13,6 +14,7 @@ import { type Writable, writable } from 'svelte/store';
 import { useWritable } from '@slink/store/contextAwareStore';
 
 import { cookie } from '@slink/utils/http/cookie';
+import { tryJson } from '@slink/utils/string/json';
 
 export class SettingsManager {
   public static get instance(): SettingsManager {
@@ -23,6 +25,7 @@ export class SettingsManager {
 
   private _setters: Record<SettingsKey, Setter<SettingsKey, any>> = {
     theme: ThemeSetter,
+    sidebar: SidebarSetter,
   };
 
   public get<T extends SettingsKey>(
@@ -38,6 +41,10 @@ export class SettingsManager {
 
   public set<T extends SettingsKey>(key: T, value: any): void {
     this._setValue(key, value);
+
+    if (typeof value === 'object') {
+      value = JSON.stringify(value);
+    }
 
     cookie.set(`settings.${key}`, value);
   }
@@ -66,7 +73,9 @@ export class SettingsManager {
     defaultValue: any
   ): SettingsCombinedValue<T> {
     if (browser) {
-      this._setValue(key, cookie.get(`settings.${key}`, defaultValue));
+      const cookieValue = cookie.get(`settings.${key}`, defaultValue);
+
+      this._setValue(key, tryJson(cookieValue));
       return this._formReturnValue(this._settings.get(key) as Settings[T]);
     }
 
