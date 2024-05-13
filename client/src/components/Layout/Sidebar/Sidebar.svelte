@@ -1,6 +1,7 @@
 <script>
   import { SidebarItem } from '@slink/components/Layout';
   import { createEventDispatcher } from 'svelte';
+  import Icon from '@iconify/svelte';
 
   export let expanded = false;
 
@@ -42,5 +43,7 @@
       {expanded}
       action={handleExpandClicked}
     />
+    <!-- Fallback icon ToDo: fix parsing plagin-->
+    <Icon icon="fluent:panel-right-expand-20-filled" class="hidden h-6 w-6" />
   </div>
 </div>
