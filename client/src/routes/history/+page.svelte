@@ -13,7 +13,7 @@
   } from '@slink/api/Response';
 
   import { Button, Loader } from '@slink/components/Common';
-  import { HistoryListView } from '@slink/components/Layout';
+  import { Heading, HistoryListView } from '@slink/components/Layout';
 
   let items: ImageListingItem[] = [];
   let meta: ListingMetadata = {
@@ -77,19 +77,7 @@
 <section in:fade={{ duration: 300 }}>
   <div class="container mx-auto flex flex-col px-6 py-10">
     {#if !itemsNotFound}
-      <div>
-        <h1
-          class="text-center text-2xl font-semibold capitalize text-gray-800 dark:text-white lg:text-3xl"
-        >
-          Upload History
-        </h1>
-
-        <div class="mx-auto mt-6 flex justify-center">
-          <span class="inline-block h-1 w-40 rounded-full bg-indigo-500" />
-          <span class="mx-1 inline-block h-1 w-3 rounded-full bg-indigo-500" />
-          <span class="inline-block h-1 w-1 rounded-full bg-indigo-500" />
-        </div>
-      </div>
+      <Heading>Upload History</Heading>
     {:else}
       <div
         class="mt-8 flex flex-grow flex-col items-center justify-center font-extralight"
