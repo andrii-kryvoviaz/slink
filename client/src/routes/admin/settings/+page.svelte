@@ -1,1 +1,1 @@
-<div class="p-4">Dashboard</div>
+<div class="p-4">Settings</div>
