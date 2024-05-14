@@ -31,6 +31,7 @@
   </div>
 
   <div class="flex w-full flex-col items-center">
+    <hr class="w-[calc(100%-1.5rem)] border-t border-header/70" />
     <SidebarItem
       to="/admin/settings"
       icon="mingcute:settings-7-line"
