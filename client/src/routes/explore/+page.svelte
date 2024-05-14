@@ -20,6 +20,7 @@
   } from '@slink/components/Common';
   import { FormattedDate, Loader } from '@slink/components/Common';
   import { ImagePlaceholder } from '@slink/components/Image';
+  import { Heading } from '@slink/components/Layout';
   import { UserAvatar } from '@slink/components/User';
 
   import type { PageServerData } from './$types';
@@ -75,17 +76,7 @@
 <section in:fade={{ duration: 300 }}>
   <div class="container mx-auto flex flex-col px-6 py-10">
     <div>
-      <h1
-        class="text-center text-2xl font-semibold capitalize text-gray-800 dark:text-white lg:text-3xl"
-      >
-        Discover Uploads
-      </h1>
-
-      <div class="mx-auto mt-6 flex justify-center">
-        <span class="inline-block h-1 w-40 rounded-full bg-indigo-500" />
-        <span class="mx-1 inline-block h-1 w-3 rounded-full bg-indigo-500" />
-        <span class="inline-block h-1 w-1 rounded-full bg-indigo-500" />
-      </div>
+      <Heading>Discover Uploads</Heading>
 
       <p
         class="mx-auto mt-6 max-w-2xl text-center text-gray-500 dark:text-gray-300"
