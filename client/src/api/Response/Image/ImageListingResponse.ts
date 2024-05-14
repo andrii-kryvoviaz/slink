@@ -1,8 +1,4 @@
-export type ListingMetadata = {
-  size: number;
-  page: number;
-  total: number;
-};
+import type { ListingMetadata } from '@slink/api/Response/Common/ListingMetadata';
 
 export type ImageListingItem = {
   id: string;
