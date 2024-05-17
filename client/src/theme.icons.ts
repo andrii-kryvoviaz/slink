@@ -48,4 +48,5 @@ export const themeIcons: string[] = [
   'ooui:folder-placeholder-ltr',
   'fluent:panel-left-expand-20-filled',
   'fluent:panel-right-expand-20-filled',
+  'mynaui:chevron-double-down',
 ];

@@ -12,7 +12,9 @@
     UserListingResponse,
   } from '@slink/api/Response';
 
-  import { Button, Loader } from '@slink/components/Common';
+  import { Loader } from '@slink/components/Common';
+  import { LoadMoreButton } from '@slink/components/Common';
+  import Badge from '@slink/components/Content/Badge/Badge.svelte';
   import { Heading } from '@slink/components/Layout';
   import { UserAvatar } from '@slink/components/User';
 
@@ -52,53 +54,48 @@
 
 <section in:fade={{ duration: 300 }} class="flex-grow">
   <div class="relative flex h-full flex-col px-6 py-4">
-    <Heading alignment="left" size="sm" fontWeight="normal">
-      <span>Users</span>
-    </Heading>
+    <div class="flex-grow">
+      <Heading alignment="left" size="sm" fontWeight="normal">
+        <span>Users</span>
+      </Heading>
 
-    {#if itemsNotFound}
-      <div class="mt-8 flex flex-grow flex-col items-start font-extralight">
-        <p class="text-[2rem] opacity-70">Oops! Here be nothing yet.</p>
-      </div>
-    {/if}
+      {#if itemsNotFound}
+        <div class="mt-8 flex flex-grow flex-col items-start font-extralight">
+          <p class="text-[2rem] opacity-70">Oops! Here be nothing yet.</p>
+        </div>
+      {/if}
 
-    {#if showPreloader}
-      <div
-        class="absolute inset-0 z-10 flex items-center justify-center bg-gray-500/10 backdrop-blur-sm"
-      >
-        <Loader>
-          <span>Loading users...</span>
-        </Loader>
-      </div>
-    {/if}
+      {#if showPreloader}
+        <div
+          class="absolute inset-0 z-10 flex items-center justify-center bg-gray-500/10 backdrop-blur-sm"
+        >
+          <Loader>
+            <span>Loading users...</span>
+          </Loader>
+        </div>
+      {/if}
 
-    <div class="mt-8 flex flex-col space-y-4">
-      {#each items as item (item.id)}
-        <div class="flex items-center justify-between">
-          <div class="flex items-center space-x-4">
-            <UserAvatar class="h-12 w-12" user={item} />
-            <div class="flex flex-col">
-              <span class="text-lg font-semibold">{item.displayName}</span>
-              <span class="text-sm text-gray-500">{item.email}</span>
+      <div class="mt-8 flex flex-col space-y-4">
+        {#each items as item (item.id)}
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+              <UserAvatar class="h-12 w-12" user={item} />
+              <div class="flex flex-col">
+                <span class="text-lg font-semibold">{item.displayName}</span>
+                <span class="text-sm text-gray-500">{item.email}</span>
+              </div>
+              <Badge variant="success" size="sm" outline="true">Active</Badge>
             </div>
           </div>
-        </div>
-      {/each}
+        {/each}
+      </div>
     </div>
 
-    {#if showLoadMore}
-      <div class="mt-8 flex justify-center">
-        <Button
-          class="w-40"
-          size="md"
-          variant="secondary"
-          loading={$isLoading}
-          on:click={() => fetchUsers(meta.page + 1, meta.size)}
-        >
-          <span>View More</span>
-          <Icon icon="mynaui:chevron-double-right" slot="rightIcon" />
-        </Button>
-      </div>
-    {/if}
+    <LoadMoreButton
+      visible={showLoadMore}
+      loading={$isLoading}
+      class="mt-8"
+      on:click={() => fetchUsers(meta.page + 1, meta.size)}
+    />
   </div>
 </section>
