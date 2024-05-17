@@ -1,7 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  import { browser } from '$app/environment';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
@@ -16,6 +15,7 @@
   import {
     Button,
     ExpandableText,
+    LoadMoreButton,
     TextEllipsis,
   } from '@slink/components/Common';
   import { FormattedDate, Loader } from '@slink/components/Common';
@@ -28,13 +28,15 @@
   export let data: PageServerData;
 
   let images: ImageListingItem[] = [];
-  let meta: ListingMetadata;
-  let page = 1;
+  let meta: ListingMetadata = {
+    page: 1,
+    size: 10,
+    total: 0,
+  };
 
   const resetPage = () => {
-    page = 1;
     images = [];
-    meta = undefined;
+    meta = { page: 1, size: 10, total: 0 };
   };
 
   const {
@@ -43,8 +45,8 @@
     isLoading,
     status,
   } = ReactiveState<ImageListingResponse>(
-    () => {
-      return ApiClient.image.getPublicImages(page++);
+    (page: number, limit: number) => {
+      return ApiClient.image.getPublicImages(page, limit);
     },
     { debounce: 300 }
   );
@@ -57,8 +59,10 @@
   }
 
   $: showLoadMore =
-    meta && page < Math.ceil(meta.total / meta.size) && $status !== 'idle';
+    meta && meta.page < Math.ceil(meta.total / meta.size) && $status !== 'idle';
+
   $: showPreloader = !images.length && $status !== 'finished';
+
   $: itemsNotFound = !images.length && $status === 'finished';
 
   $: if (!data.user) {
@@ -66,7 +70,7 @@
     fetchImages();
   }
 
-  onMount(fetchImages);
+  onMount(() => fetchImages(1, meta.size));
 </script>
 
 <svelte:head>
@@ -152,19 +156,14 @@
       {/each}
     </div>
 
-    {#if showLoadMore}
-      <div class="mt-8 flex justify-center">
-        <Button
-          class="w-40"
-          size="md"
-          variant="secondary"
-          loading={$isLoading}
-          on:click={fetchImages}
-        >
-          <span>View More</span>
-          <Icon icon="mynaui:chevron-double-right" slot="rightIcon" />
-        </Button>
-      </div>
-    {/if}
+    <LoadMoreButton
+      visible={showLoadMore}
+      loading={$isLoading}
+      class="mt-8"
+      on:click={() => fetchImages(meta.page + 1, meta.size)}
+    >
+      <span slot="text">View More</span>
+      <Icon icon="mynaui:chevron-double-right" slot="icon" />
+    </LoadMoreButton>
   </div>
 </section>

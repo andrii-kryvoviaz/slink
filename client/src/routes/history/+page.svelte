@@ -12,7 +12,7 @@
     ListingMetadata,
   } from '@slink/api/Response';
 
-  import { Button, Loader } from '@slink/components/Common';
+  import { Button, LoadMoreButton, Loader } from '@slink/components/Common';
   import { Heading, HistoryListView } from '@slink/components/Layout';
 
   let items: ImageListingItem[] = [];
@@ -103,19 +103,14 @@
 
     <HistoryListView {items} on:updateListing={onUpdate} />
 
-    {#if showLoadMore}
-      <div class="mt-8 flex justify-center">
-        <Button
-          class="w-40"
-          size="md"
-          variant="secondary"
-          loading={$isLoading}
-          on:click={() => fetchImages(meta.page + 1, meta.size)}
-        >
-          <span>View More</span>
-          <Icon icon="mynaui:chevron-double-right" slot="rightIcon" />
-        </Button>
-      </div>
-    {/if}
+    <LoadMoreButton
+      visible={showLoadMore}
+      loading={$isLoading}
+      class="mt-8"
+      on:click={() => fetchImages(meta.page + 1, meta.size)}
+    >
+      <span slot="text">View More</span>
+      <Icon icon="mynaui:chevron-double-right" slot="icon" />
+    </LoadMoreButton>
   </div>
 </section>
