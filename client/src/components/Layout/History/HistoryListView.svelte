@@ -9,6 +9,7 @@
   import { bytesToSize } from '@slink/utils/bytesConverter';
 
   import { Button, FormattedDate } from '@slink/components/Common';
+  import Badge from '@slink/components/Content/Badge/Badge.svelte';
   import { ImageActionBar, ImagePlaceholder } from '@slink/components/Image';
 
   export let items: ImageListingItem[] = [];
@@ -79,9 +80,9 @@
               class="hidden flex-grow items-center justify-between gap-8 pr-8 sm:flex"
             >
               <div class="flex flex-col gap-1 text-xs">
-                <p class="badge badge-primary badge-outline">
+                <Badge variant="primary" outline="true">
                   {item.metadata.mimeType}
-                </p>
+                </Badge>
               </div>
 
               <div class="hidden text-center text-xs lg:block">

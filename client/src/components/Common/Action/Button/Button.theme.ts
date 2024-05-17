@@ -54,7 +54,6 @@ export const ButtonTheme = cva(
       },
       state: {
         disabled: 'cursor-not-allowed pointer-events-none opacity-70',
-        active: '',
       },
     },
   }
