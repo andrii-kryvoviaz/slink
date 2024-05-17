@@ -1,7 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
   import { ApiClient } from '@slink/api/Client';
@@ -14,9 +13,12 @@
 
   import { Loader } from '@slink/components/Common';
   import { LoadMoreButton } from '@slink/components/Common';
-  import Badge from '@slink/components/Content/Badge/Badge.svelte';
   import { Heading } from '@slink/components/Layout';
-  import { UserAvatar } from '@slink/components/User';
+  import { UserCard } from '@slink/components/User';
+
+  import type { PageServerData } from './$types';
+
+  export let data: PageServerData;
 
   let items: UserListingItem[] = [];
   let meta: ListingMetadata = {
@@ -53,11 +55,13 @@
 </script>
 
 <section in:fade={{ duration: 300 }} class="flex-grow">
-  <div class="relative flex h-full flex-col px-6 py-4">
-    <div class="flex-grow">
-      <Heading alignment="left" size="sm" fontWeight="normal">
-        <span>Users</span>
-      </Heading>
+  <div class="relative flex h-full flex-col justify-between py-4">
+    <div class="flex h-full flex-grow flex-col">
+      <div class="px-6">
+        <Heading alignment="left" size="sm" fontWeight="normal">
+          <span>Users</span>
+        </Heading>
+      </div>
 
       {#if itemsNotFound}
         <div class="mt-8 flex flex-grow flex-col items-start font-extralight">
@@ -75,27 +79,19 @@
         </div>
       {/if}
 
-      <div class="mt-8 flex flex-col space-y-4">
-        {#each items as item (item.id)}
-          <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-4">
-              <UserAvatar class="h-12 w-12" user={item} />
-              <div class="flex flex-col">
-                <span class="text-lg font-semibold">{item.displayName}</span>
-                <span class="text-sm text-gray-500">{item.email}</span>
-              </div>
-              <Badge variant="success" size="sm" outline="true">Active</Badge>
-            </div>
-          </div>
+      <div class="mt-8 grid flex-grow grid-cols-2 gap-4 overflow-y-auto px-6">
+        {#each items as user (user.id)}
+          <UserCard {user} loggedInUser={data.user} />
         {/each}
       </div>
     </div>
 
-    <LoadMoreButton
-      visible={showLoadMore}
-      loading={$isLoading}
-      class="mt-8"
-      on:click={() => fetchUsers(meta.page + 1, meta.size)}
-    />
+    <div class="pt-8">
+      <LoadMoreButton
+        visible={showLoadMore}
+        loading={$isLoading}
+        on:click={() => fetchUsers(meta.page + 1, meta.size)}
+      />
+    </div>
   </div>
 </section>

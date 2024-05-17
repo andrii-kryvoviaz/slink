@@ -9,7 +9,7 @@
   import { bytesToSize } from '@slink/utils/bytesConverter';
 
   import { Button, FormattedDate } from '@slink/components/Common';
-  import Badge from '@slink/components/Content/Badge/Badge.svelte';
+  import { Badge } from '@slink/components/Content';
   import { ImageActionBar, ImagePlaceholder } from '@slink/components/Image';
 
   export let items: ImageListingItem[] = [];

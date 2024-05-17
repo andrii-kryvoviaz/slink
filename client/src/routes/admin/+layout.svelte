@@ -20,7 +20,7 @@
     <Sidebar expanded={$expanded} on:change={handleSidebarChange} />
   </div>
 
-  <div class="flex flex-grow">
+  <div class="flex max-w-full flex-grow">
     <slot />
   </div>
 </div>
