@@ -54,44 +54,47 @@
   onMount(() => fetchUsers(1, meta.size));
 </script>
 
-<section in:fade={{ duration: 300 }} class="flex-grow">
-  <div class="relative flex h-full flex-col justify-between py-4">
-    <div class="flex h-full flex-grow flex-col">
-      <div class="px-6">
-        <Heading alignment="left" size="sm" fontWeight="normal">
-          <span>Users</span>
-        </Heading>
+<section
+  in:fade={{ duration: 300 }}
+  class="relative flex h-full flex-grow flex-col py-4"
+>
+  <div class="flex h-full flex-col">
+    <div class="px-6">
+      <Heading alignment="left" size="sm" fontWeight="normal">
+        <span>Users</span>
+      </Heading>
+    </div>
+
+    {#if itemsNotFound}
+      <div class="flex flex-grow flex-col items-start pt-8 font-extralight">
+        <p class="text-[2rem] opacity-70">Oops! Here be nothing yet.</p>
       </div>
+    {/if}
 
-      {#if itemsNotFound}
-        <div class="mt-8 flex flex-grow flex-col items-start font-extralight">
-          <p class="text-[2rem] opacity-70">Oops! Here be nothing yet.</p>
-        </div>
-      {/if}
+    {#if showPreloader}
+      <div
+        class="absolute inset-0 z-10 flex items-center justify-center bg-gray-500/10 backdrop-blur-sm"
+      >
+        <Loader>
+          <span>Loading users...</span>
+        </Loader>
+      </div>
+    {/if}
 
-      {#if showPreloader}
-        <div
-          class="absolute inset-0 z-10 flex items-center justify-center bg-gray-500/10 backdrop-blur-sm"
-        >
-          <Loader>
-            <span>Loading users...</span>
-          </Loader>
-        </div>
-      {/if}
-
-      <div class="mt-8 grid flex-grow grid-cols-2 gap-4 overflow-y-auto px-6">
+    <div class="h-full overflow-y-auto">
+      <div class="mt-8 grid grid-cols-1 gap-4 px-6 md:grid-cols-2">
         {#each items as user (user.id)}
           <UserCard {user} loggedInUser={data.user} />
         {/each}
       </div>
-    </div>
 
-    <div class="pt-8">
-      <LoadMoreButton
-        visible={showLoadMore}
-        loading={$isLoading}
-        on:click={() => fetchUsers(meta.page + 1, meta.size)}
-      />
+      <div class="pt-8">
+        <LoadMoreButton
+          visible={showLoadMore}
+          loading={$isLoading}
+          on:click={() => fetchUsers(meta.page + 1, meta.size)}
+        />
+      </div>
     </div>
   </div>
 </section>

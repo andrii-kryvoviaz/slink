@@ -1,5 +1,3 @@
-// export type UserStatus = 'active' | 'inactive' | 'suspended' | 'banned';
-
 export enum UserStatus {
   Active = 'active',
   Inactive = 'inactive',

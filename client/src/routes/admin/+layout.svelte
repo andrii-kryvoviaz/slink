@@ -15,7 +15,7 @@
   };
 </script>
 
-<div class="flex h-full">
+<div class="flex h-full overflow-y-auto">
   <div>
     <Sidebar expanded={$expanded} on:change={handleSidebarChange} />
   </div>
