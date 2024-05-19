@@ -49,4 +49,9 @@ export const themeIcons: string[] = [
   'fluent:panel-left-expand-20-filled',
   'fluent:panel-right-expand-20-filled',
   'mynaui:chevron-double-down',
+  'akar-icons:chevron-down',
+  'ic:round-edit',
+  'bi:pin-angle-fill',
+  'ic:round-delete',
+  'akar-icons:chevron-up',
 ];
