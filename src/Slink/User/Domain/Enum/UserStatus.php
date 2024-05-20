@@ -33,4 +33,11 @@ enum UserStatus: string {
   public function isRestricted(): bool {
     return $this->isSuspended() || $this->isBanned() || $this->isInactive();
   }
+  
+  /**
+   * @return array<string>
+   */
+  public static function values(): array {
+    return array_map(static fn (\BackedEnum $item): string => $item->value, self::cases());
+  }
 }
