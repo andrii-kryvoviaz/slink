@@ -8,6 +8,9 @@
   import type { DropdownPosition } from '@slink/components/Common/Dropdown/Dropdown.types';
 
   export let position: DropdownPosition = 'bottom-right';
+  export let close = () => {
+    isOpen = false;
+  };
 
   let container: HTMLElement;
   let isOpen = false;

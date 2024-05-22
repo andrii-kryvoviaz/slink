@@ -3,6 +3,7 @@ export enum UserStatus {
   Inactive = 'inactive',
   Suspended = 'suspended',
   Banned = 'banned',
+  Deleted = 'deleted',
 }
 
 export type User = {
