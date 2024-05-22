@@ -11,13 +11,13 @@
 
   $: {
     if (status === UserStatus.Active) {
-      $$props.variant = 'accent';
+      $$props.variant = 'success';
     } else if (status === UserStatus.Inactive) {
       $$props.variant = 'neutral';
     } else if (status === UserStatus.Suspended) {
-      $$props.variant = 'secondary';
+      $$props.variant = 'error-tinted';
     } else if (status === UserStatus.Banned) {
-      $$props.variant = 'danger';
+      $$props.variant = 'error';
     } else {
       $$props.variant = 'default';
     }

@@ -42,7 +42,7 @@
 <div class="relative" bind:this={container}>
   <div on:click={toggleDropdown}>
     <slot name="button">
-      <Button variant="default" size="xs" rounded="full">
+      <Button variant="invisible" size="xs" rounded="full">
         <div class:hidden={!isOpen}>
           <Icon icon="akar-icons:chevron-up" />
         </div>
