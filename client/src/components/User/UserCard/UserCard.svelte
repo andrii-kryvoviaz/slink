@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { User } from '@slink/lib/auth/Type/User';
   import { UserStatus as UserStatusEnum } from '@slink/lib/auth/Type/User';
+  import { createEventDispatcher } from 'svelte';
 
   import Icon from '@iconify/svelte';
 
@@ -18,6 +19,8 @@
   export let user: Partial<User> = {};
   export let loggedInUser: Partial<User> = {};
 
+  const dispatch = createEventDispatcher<{ userDeleted: string }>();
+
   $: isAdmin = user.roles?.includes('ROLE_ADMIN');
   $: isCurrentUser = user.id === loggedInUser.id;
 
@@ -34,15 +37,6 @@
     { minExecutionTime: 300 }
   );
 
-  const successHandler = async (response: SingleUserResponse) => {
-    user.status = response.status;
-  };
-
-  const errorHandler = (error: Error) => {
-    statusToChange = null;
-    printErrorsAsToastMessage(error);
-  };
-
   let closeDropdown: () => void;
   let deleteModalVisible = false;
   let statusToChange: UserStatusEnum;
@@ -55,6 +49,16 @@
   const handleDelete = async () => {
     await changeUserStatus(UserStatusEnum.Deleted);
     deleteModalVisible = false;
+    dispatch('userDeleted', user.id);
+  };
+
+  const successHandler = async (response: SingleUserResponse) => {
+    user.status = response.status;
+  };
+
+  const errorHandler = (error: Error) => {
+    statusToChange = null;
+    printErrorsAsToastMessage(error);
   };
 
   const resetState = () => {
