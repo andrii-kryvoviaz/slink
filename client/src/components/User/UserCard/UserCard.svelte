@@ -8,9 +8,10 @@
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { SingleUserResponse } from '@slink/api/Response/User/SingleUserResponse';
 
+  import { debounce } from '@slink/utils/time/debounce';
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
 
-  import { Dropdown, DropdownItem } from '@slink/components/Common';
+  import { Dropdown, DropdownItem, Modal } from '@slink/components/Common';
   import { Badge } from '@slink/components/Content';
   import { UserAvatar, UserStatus } from '@slink/components/User';
 
@@ -30,7 +31,7 @@
       statusToChange = status;
       return ApiClient.user.changeUserStatus(user.id, status);
     },
-    { debounce: 300 }
+    { minExecutionTime: 300 }
   );
 
   const successHandler = async (response: SingleUserResponse) => {
@@ -43,11 +44,28 @@
   };
 
   let closeDropdown: () => void;
+  let deleteModalVisible = false;
   let statusToChange: UserStatusEnum;
+
+  const openModal = () => {
+    deleteModalVisible = true;
+    closeDropdown();
+  };
+
+  const handleDelete = async () => {
+    await changeUserStatus(UserStatusEnum.Deleted);
+    deleteModalVisible = false;
+  };
+
+  const resetState = () => {
+    deleteModalVisible = false;
+    statusToChange = null;
+    closeDropdown();
+  };
 
   $: $userResponse && successHandler($userResponse);
   $: $statusError && errorHandler($statusError);
-  $: ($statusError || $userResponse) && closeDropdown();
+  $: ($statusError || $userResponse) && resetState();
 </script>
 
 <div
@@ -92,7 +110,7 @@
               <hr class="border-gray-500/70" />
               <DropdownItem
                 danger="true"
-                on:click={() => changeUserStatus(UserStatusEnum.Deleted)}
+                on:click={openModal}
                 loading={isLoading && statusToChange === UserStatusEnum.Deleted}
               >
                 <Icon icon="ic:round-delete" slot="icon" />
@@ -117,3 +135,28 @@
     </div>
   </div>
 </div>
+
+<Modal
+  variant="danger"
+  align="top"
+  bind:open={deleteModalVisible}
+  loading={isLoading && statusToChange === UserStatusEnum.Deleted}
+  on:confirm={debounce(handleDelete, 300)}
+>
+  <div slot="icon">
+    <Icon
+      icon="clarity:warning-standard-line"
+      class="h-10 w-10 text-red-600/90"
+    />
+  </div>
+  <p slot="title">User Deletion</p>
+  <div class="text-sm" slot="content">
+    <p>
+      Are you sure you want to delete this user? <br />
+      This action is hard to be undone.
+    </p>
+  </div>
+  <div slot="confirm" class="flex items-center justify-between">
+    <span>Delete</span>
+  </div>
+</Modal>
