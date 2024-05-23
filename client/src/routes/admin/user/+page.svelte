@@ -23,7 +23,7 @@
   let items: UserListingItem[] = [];
   let meta: ListingMetadata = {
     page: 1,
-    size: 10,
+    size: 20,
     total: 0,
   };
 
@@ -40,9 +40,24 @@
   );
 
   $: if ($response) {
-    items = items.concat($response.data);
+    updateListing($response.data);
     meta = $response.meta;
   }
+
+  const updateListing = (detail: UserListingItem[]) => {
+    const newItems = detail.filter(
+      (item) => !items.some((i) => i.id === item.id)
+    );
+    items = items.concat(newItems);
+  };
+
+  const onDelete = ({ detail }: { detail: string }) => {
+    items = items.filter((item) => item.id !== detail);
+
+    if (items.length > 0) {
+      fetchUsers(meta.page, meta.size);
+    }
+  };
 
   $: showLoadMore =
     meta && meta.page < Math.ceil(meta.total / meta.size) && $status !== 'idle';
@@ -50,6 +65,8 @@
   $: showPreloader = !items.length && $status !== 'finished';
 
   $: itemsNotFound = !items.length && $status === 'finished';
+
+  $: loggedInUser = data.user;
 
   onMount(() => fetchUsers(1, meta.size));
 </script>
@@ -84,7 +101,7 @@
     <div class="h-full overflow-y-auto">
       <div class="mt-8 grid grid-cols-1 gap-4 px-6 md:grid-cols-2">
         {#each items as user (user.id)}
-          <UserCard {user} loggedInUser={data.user} />
+          <UserCard {user} {loggedInUser} on:userDeleted={onDelete} />
         {/each}
       </div>
 
