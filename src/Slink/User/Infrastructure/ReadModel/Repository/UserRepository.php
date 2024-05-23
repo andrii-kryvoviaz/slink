@@ -10,6 +10,7 @@ use Ramsey\Uuid\UuidInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractRepository;
+use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\Filter\UserListFilter;
 use Slink\User\Domain\Repository\CheckUserByDisplayNameInterface;
 use Slink\User\Domain\Repository\CheckUserByEmailInterface;
@@ -127,6 +128,8 @@ final class UserRepository extends AbstractRepository implements
       ->createQueryBuilder()
       ->from(UserView::class, 'user')
       ->select('user')
+      ->where('user.status != :status')
+      ->setParameter('status', UserStatus::Deleted)
       ->orderBy('user.' . $filter->getOrderBy(), $filter->getOrder())
       ->setFirstResult(($page - 1) * $filter->getLimit())
       ->setMaxResults($filter->getLimit());
