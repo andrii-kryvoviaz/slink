@@ -15,6 +15,7 @@
 .vscode/
 .env
 .DS_Store
+.phpactor.json
 
 /public/images
 /public/slink
