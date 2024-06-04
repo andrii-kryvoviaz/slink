@@ -16,7 +16,6 @@
   export let alignment: $$Props['alignment'] = 'center';
 
   $: textClasses = HeadingText({
-    variant,
     size,
     fontWeight,
   });

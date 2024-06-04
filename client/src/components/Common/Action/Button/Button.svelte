@@ -4,21 +4,12 @@
   import { className } from '@slink/utils/ui/className';
 
   import {
+    type ButtonAttributes,
     ButtonIcon,
-    type ButtonProps,
     ButtonTheme,
   } from '@slink/components/Common';
 
-  type target = '_blank' | '_self' | '_parent' | '_top' | undefined;
-  type LinkAttributes = {
-    href?: string;
-    target?: target extends LinkAttributes['href'] ? target : never;
-  };
-
-  interface $$Props extends HTMLButtonAttributes, LinkAttributes, ButtonProps {
-    key?: string;
-    loading?: boolean;
-  }
+  interface $$Props extends ButtonAttributes {}
 
   export let href: $$Props['href'] = undefined;
   export let target: $$Props['target'] = undefined;

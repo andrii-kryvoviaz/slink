@@ -4,7 +4,7 @@
   import { Badge, type BadgeProps } from '@slink/components/Content';
 
   interface $$Props extends BadgeProps {
-    status: UserStatus;
+    status?: UserStatus;
   }
 
   export let status: UserStatus = UserStatus.Active;
@@ -24,6 +24,8 @@
   }
 </script>
 
-<Badge size="sm" outline="true" {...$$props}>
-  <span class="capitalize">{status}</span>
-</Badge>
+{#if status}
+  <Badge size="sm" outline {...$$props}>
+    <span class="capitalize">{status}</span>
+  </Badge>
+{/if}

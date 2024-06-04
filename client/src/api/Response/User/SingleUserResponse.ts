@@ -1,3 +1,4 @@
+import { UserStatus } from '@slink/lib/auth/Type/User';
 import type { UserRole } from '@slink/lib/auth/Type/UserRole';
 
 export type SingleUserResponse = {
@@ -9,6 +10,6 @@ export type SingleUserResponse = {
     timestamp: number;
   };
   updatedAt: null;
-  status: string;
+  status: UserStatus;
   roles: UserRole[];
 };
