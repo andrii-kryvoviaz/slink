@@ -23,6 +23,7 @@
     "@types/dotenv": "^8.2.0",
     "@types/node": "^20.11.19",
     "@types/ua-parser-js": "^0.7.39",
+    "apexcharts": "^3.49.1",
     "autoprefixer": "^10.4.16",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
