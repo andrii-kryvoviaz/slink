@@ -6,8 +6,10 @@ import {
   HeadingText,
 } from '@slink/components/Layout';
 
-type HeadingTheme = typeof HeadingText &
-  typeof HeadingDecoration &
-  typeof HeadingContainer;
+type HeadingTextTheme = VariantProps<typeof HeadingText>;
+type HeadingDecorationTheme = VariantProps<typeof HeadingDecoration>;
+type HeadingContainerTheme = VariantProps<typeof HeadingContainer>;
 
-export type HeadingProps = VariantProps<HeadingTheme>;
+export type HeadingProps = HeadingTextTheme &
+  HeadingDecorationTheme &
+  HeadingContainerTheme;

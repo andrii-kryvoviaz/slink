@@ -1,14 +1,13 @@
 <script lang="ts">
   import Icon from '@iconify/svelte';
 
-  import { Button, type ButtonProps } from '@slink/components/Common';
+  import { Button, type ButtonAttributes } from '@slink/components/Common';
 
-  interface $$Props extends ButtonProps {
+  interface $$Props extends ButtonAttributes {
     visible?: boolean;
   }
 
   export let visible: $$Props['visible'] = true;
-  export let loading: $$Props['loading'] = false;
 
   $$props.class = `${$$props.class} w-40`;
 </script>

@@ -16,13 +16,13 @@
   import { Badge } from '@slink/components/Content';
   import { UserAvatar, UserStatus } from '@slink/components/User';
 
-  export let user: Partial<User> = {};
-  export let loggedInUser: Partial<User> = {};
+  export let user: User = {} as User;
+  export let loggedInUser: User | null = null;
 
   const dispatch = createEventDispatcher<{ userDeleted: string }>();
 
   $: isAdmin = user.roles?.includes('ROLE_ADMIN');
-  $: isCurrentUser = user.id === loggedInUser.id;
+  $: isCurrentUser = user.id === loggedInUser?.id;
 
   const {
     isLoading,
@@ -39,7 +39,7 @@
 
   let closeDropdown: () => void;
   let deleteModalVisible = false;
-  let statusToChange: UserStatusEnum;
+  let statusToChange: UserStatusEnum | null = null;
 
   const openModal = () => {
     deleteModalVisible = true;
@@ -113,7 +113,7 @@
               {/if}
               <hr class="border-gray-500/70" />
               <DropdownItem
-                danger="true"
+                danger={true}
                 on:click={openModal}
                 loading={isLoading && statusToChange === UserStatusEnum.Deleted}
               >
@@ -128,10 +128,10 @@
       <span class="text-sm text-gray-500">{user.email}</span>
       <div class="badges mt-2 space-x-1">
         {#if isAdmin}
-          <Badge variant="primary" size="sm" outline="true">Admin</Badge>
+          <Badge variant="primary" size="sm" outline>Admin</Badge>
         {/if}
         {#if isCurrentUser}
-          <Badge variant="warning" size="sm" outline="true">You</Badge>
+          <Badge variant="warning" size="sm" outline>You</Badge>
         {:else}
           <UserStatus status={user.status} />
         {/if}
