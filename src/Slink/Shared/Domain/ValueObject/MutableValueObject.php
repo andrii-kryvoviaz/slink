@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Slink\Shared\Domain\ValueObject;
 
 use Slink\Shared\Domain\DataStructures\HashMap;
-use Slink\Shared\Domain\Exception\DateTimeException;
+use Slink\Shared\Domain\Exception\Date\DateTimeException;
+use Slink\Shared\Domain\ValueObject\Date\DateTime;
 
 trait MutableValueObject {
   /**

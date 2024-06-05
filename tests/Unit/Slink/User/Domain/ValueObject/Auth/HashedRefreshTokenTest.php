@@ -5,12 +5,12 @@ namespace Unit\Slink\User\Domain\ValueObject\Auth;
 use DateInterval;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
-use Slink\Shared\Domain\Exception\DateTimeException;
-use Slink\Shared\Domain\ValueObject\DateTime;
+use Slink\Shared\Domain\Exception\Date\DateTimeException;
+use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\User\Domain\Exception\InvalidRefreshToken;
 use Slink\User\Domain\ValueObject\Auth\HashedRefreshToken;
-use PHPUnit\Framework\TestCase;
 use Tests\Traits\PrivatePropertyTrait;
 
 final class HashedRefreshTokenTest extends TestCase {

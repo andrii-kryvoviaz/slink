@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Slink\User\Domain\Event;
 
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
-use Slink\Shared\Domain\Exception\DateTimeException;
-use Slink\Shared\Domain\ValueObject\DateTime;
+use Slink\Shared\Domain\Exception\Date\DateTimeException;
+use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\ValueObject\Auth\Credentials;

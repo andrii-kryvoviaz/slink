@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Slink\User\Infrastructure\ReadModel\View;
 
-use Slink\Shared\Domain\ValueObject\DateTime;
-use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
 use Doctrine\ORM\Mapping as ORM;
+use Slink\Shared\Domain\ValueObject\Date\DateTime;
+use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
 use Slink\User\Infrastructure\ReadModel\Repository\RefreshTokenRepository;
 
 #[ORM\Table(name: 'refresh_token')]

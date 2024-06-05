@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Slink\Image\Domain\ValueObject;
 
-use Slink\Shared\Domain\Exception\DateTimeException;
-use Slink\Shared\Domain\ValueObject\AbstractCompoundValueObject;
-use Slink\Shared\Domain\ValueObject\DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Slink\Shared\Domain\ValueObject\ID;
+use Slink\Shared\Domain\Exception\Date\DateTimeException;
+use Slink\Shared\Domain\ValueObject\AbstractCompoundValueObject;
+use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\MutableValueObject;
 use Slink\Shared\Infrastructure\Attribute\Groups;
-use Slink\Shared\Infrastructure\Attribute\SerializedName;
 
 #[ORM\Embeddable]
 final readonly class ImageAttributes extends AbstractCompoundValueObject {

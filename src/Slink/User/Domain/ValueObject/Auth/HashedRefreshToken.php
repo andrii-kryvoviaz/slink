@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Slink\User\Domain\ValueObject\Auth;
 
 use Ramsey\Uuid\Uuid;
-use Slink\Shared\Domain\Exception\DateTimeException;
+use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\AbstractValueObject;
-use Slink\Shared\Domain\ValueObject\DateTime;
+use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\User\Domain\Exception\InvalidRefreshToken;
 
 final readonly class HashedRefreshToken extends AbstractValueObject {

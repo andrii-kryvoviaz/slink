@@ -6,7 +6,7 @@ namespace Slink\User\Application\Command\SignUp;
 
 use Slink\Settings\Domain\Service\ConfigurationProvider;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
-use Slink\Shared\Domain\Exception\DateTimeException;
+use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\User\Domain\Context\UserCreationContext;
 use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
