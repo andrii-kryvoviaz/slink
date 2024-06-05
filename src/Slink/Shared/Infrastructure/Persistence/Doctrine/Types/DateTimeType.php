@@ -8,8 +8,8 @@ use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\DateTimeImmutableType;
-use Slink\Shared\Domain\Exception\DateTimeException;
-use Slink\Shared\Domain\ValueObject\DateTime;
+use Slink\Shared\Domain\Exception\Date\DateTimeException;
+use Slink\Shared\Domain\ValueObject\Date\DateTime;
 
 class DateTimeType extends DateTimeImmutableType {
     /**

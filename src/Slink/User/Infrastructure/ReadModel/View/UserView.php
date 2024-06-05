@@ -6,7 +6,7 @@ namespace Slink\User\Infrastructure\ReadModel\View;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Slink\Shared\Domain\ValueObject\DateTime;
+use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
 use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;

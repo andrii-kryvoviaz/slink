@@ -5,10 +5,7 @@ declare(strict_types=1);
 namespace Slink\Image\Application\Command\UpdateImage;
 
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
-use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
-use Slink\Shared\Domain\Exception\DateTimeException;
-use Slink\Shared\Domain\ValueObject\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\User\Infrastructure\Auth\JwtUser;

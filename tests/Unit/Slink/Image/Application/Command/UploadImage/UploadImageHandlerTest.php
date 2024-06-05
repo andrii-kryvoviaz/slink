@@ -13,7 +13,7 @@ use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Image\Domain\Service\ImageAnalyzerInterface;
 use Slink\Image\Domain\Service\ImageTransformerInterface;
 use Slink\Settings\Domain\Service\ConfigurationProvider;
-use Slink\Shared\Domain\Exception\DateTimeException;
+use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\FileSystem\Storage\StorageInterface;
 use Symfony\Component\HttpFoundation\File\File;

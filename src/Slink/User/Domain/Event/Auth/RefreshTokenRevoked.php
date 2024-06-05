@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Slink\User\Domain\Event\Auth;
 
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
-use Slink\Shared\Domain\Exception\DateTimeException;
+use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\ValueObject\Auth\HashedRefreshToken;
 

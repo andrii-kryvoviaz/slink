@@ -12,7 +12,7 @@ use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Domain\ValueObject\ImageMetadata;
 use Slink\Settings\Domain\Service\ConfigurationProvider;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
-use Slink\Shared\Domain\Exception\DateTimeException;
+use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\FileSystem\Storage\StorageInterface;
 

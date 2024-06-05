@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Slink\User\Application\Command\RefreshToken;
 
 use Slink\Shared\Application\Command\CommandHandlerInterface;
-use Slink\Shared\Domain\Exception\DateTimeException;
+use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\User\Domain\Exception\InvalidRefreshToken;
 use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
 use Slink\User\Domain\ValueObject\Auth\HashedRefreshToken;

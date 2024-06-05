@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Slink\Shared\Domain\ValueObject;
+namespace Slink\Shared\Domain\ValueObject\Date;
 
-use Slink\Shared\Domain\Exception\DateTimeException;
 use DateTimeImmutable;
 use Exception;
+use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Infrastructure\Attribute\Groups;
 use Slink\Shared\Infrastructure\Attribute\SerializedName;
 use Throwable;
