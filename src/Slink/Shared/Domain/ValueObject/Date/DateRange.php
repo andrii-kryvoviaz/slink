@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Slink\Shared\Domain\ValueObject\Date;
 
 use Slink\Shared\Domain\Enum\Date\DateInterval;
+use Slink\Shared\Domain\Enum\Date\DateStep;
 use Slink\Shared\Domain\Exception\Date\DateIntervalException;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\AbstractValueObject;
@@ -45,6 +46,9 @@ final readonly class DateRange extends AbstractValueObject {
     $end = DateTime::now();
     
     switch($dateInterval) {
+      case DateInterval::TODAY:
+        $start = $start->modify('today');
+        break;
       case DateInterval::CURRENT_WEEK:
         $start = $start->modify('this week');
         break;
@@ -88,6 +92,27 @@ final readonly class DateRange extends AbstractValueObject {
    */
   public function getEnd(): DateTime {
     return $this->end;
+  }
+  
+  /**
+   * @return DateStep
+   */
+  public function getStep(): DateStep {
+    $diff = $this->start->diff($this->end);
+    
+    if($diff->days < 7) {
+      return DateStep::DAY;
+    }
+    
+    if($diff->days < 30) {
+      return DateStep::WEEK;
+    }
+    
+    if($diff->days < 365) {
+      return DateStep::MONTH;
+    }
+    
+    return DateStep::YEAR;
   }
   
   /**

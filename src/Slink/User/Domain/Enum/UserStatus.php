@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Slink\User\Domain\Enum;
 
+use Slink\Shared\Domain\Enum\ValidatorAwareEnumTrait;
+
 enum UserStatus: string {
+  use ValidatorAwareEnumTrait;
+  
   case Active = 'active';
   case Inactive = 'inactive';
   case Suspended = 'suspended';
@@ -37,12 +41,5 @@ enum UserStatus: string {
   
   public function isRestricted(): bool {
     return $this->isSuspended() || $this->isBanned() || $this->isInactive() || $this->isDeleted();
-  }
-  
-  /**
-   * @return array<string>
-   */
-  public static function values(): array {
-    return array_map(static fn (\BackedEnum $item): string => $item->value, self::cases());
   }
 }
