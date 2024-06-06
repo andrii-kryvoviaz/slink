@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace Slink\Shared\Domain\Enum\Date;
 
-enum DateInterval: string{
+use Slink\Shared\Domain\Enum\ValidatorAwareEnumTrait;
+
+enum DateInterval: string {
+  use ValidatorAwareEnumTrait;
+  
+  case TODAY = 'today';
   case CURRENT_WEEK = 'current_week';
   case LAST_WEEK = 'last_week';
-  case LAST_7_DAYS = '7_days';
+  case LAST_7_DAYS = 'last_7_days';
   case CURRENT_MONTH = 'current_month';
   case LAST_MONTH = 'last_month';
   case LAST_30_DAYS = '30_days';
@@ -16,6 +21,7 @@ enum DateInterval: string{
   
   public function toString(): string {
     return match ($this) {
+      self::TODAY => 'Today',
       self::CURRENT_WEEK => 'Current Week',
       self::LAST_WEEK => 'Last Week',
       self::LAST_7_DAYS => 'Last 7 Days',
