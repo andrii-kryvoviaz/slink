@@ -13,20 +13,20 @@ enum DateStep: string {
   
   public function toInterval(): string {
     return match ($this) {
-      self::HOUR => 'PT1H',
-      self::DAY => 'P1D',
-      self::WEEK => 'P1W',
-      self::MONTH => 'P1M',
-      self::YEAR => 'P1Y',
+      self::HOUR => '+1 hour',
+      self::DAY => '+1 day',
+      self::WEEK => '+1 week',
+      self::MONTH => '+1 month',
+      self::YEAR => '+1 year',
     };
   }
   
   public function toFormat(): string {
     return match ($this) {
-      self::HOUR => 'Y-m-d H:00:00',
-      self::DAY => 'Y-m-d',
-      self::WEEK => 'o-W',
-      self::MONTH => 'Y-m',
+      self::HOUR => 'H:i',
+      self::DAY => 'D jS',
+      self::WEEK => 'W',
+      self::MONTH => 'M',
       self::YEAR => 'Y',
     };
   }

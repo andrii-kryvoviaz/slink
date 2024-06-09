@@ -15,7 +15,7 @@ enum DateInterval: string {
   case LAST_7_DAYS = 'last_7_days';
   case CURRENT_MONTH = 'current_month';
   case LAST_MONTH = 'last_month';
-  case LAST_30_DAYS = '30_days';
+  case LAST_30_DAYS = 'last_30_days';
   case CURRENT_YEAR = 'current_year';
   case ALL_TIME = 'all_time';
   
@@ -31,5 +31,22 @@ enum DateInterval: string {
       self::CURRENT_YEAR => 'Current Year',
       self::ALL_TIME => 'All Time',
     };
+  }
+  
+  /**
+   * @return array<string, string>
+   */
+  public static function all(): array {
+    /** @var DateInterval[] $cases */
+    $cases = self::cases(); // @phpstan-ignore-line
+    
+    return array_reduce(
+      $cases,
+      function ($carry, $item) {
+        $carry[$item->value] = $item->toString();
+        return $carry;
+      },
+      []
+    );
   }
 }
