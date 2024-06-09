@@ -42,7 +42,7 @@ final readonly class DateRange extends AbstractValueObject {
    * @throws DateTimeException
    */
   public static function fromDateInterval(DateInterval $dateInterval): self {
-    $start = DateTime::now();
+    $start = DateTime::now()->setTime(0, 0, 0);
     $end = DateTime::now();
     
     switch($dateInterval) {
@@ -100,19 +100,47 @@ final readonly class DateRange extends AbstractValueObject {
   public function getStep(): DateStep {
     $diff = $this->start->diff($this->end);
     
-    if($diff->days < 7) {
+    if($diff->days <= 1) {
+      return DateStep::HOUR;
+    }
+    
+    if($diff->days <= 31) {
       return DateStep::DAY;
     }
     
-    if($diff->days < 30) {
-      return DateStep::WEEK;
-    }
-    
-    if($diff->days < 365) {
+    if($diff->days <= 365) {
       return DateStep::MONTH;
     }
     
     return DateStep::YEAR;
+  }
+  
+  /**
+   * @return array<DateRange>
+   */
+  public function generateIntervals(): array {
+    $step = $this->getStep();
+    $intervals = [];
+    
+    $current = clone $this->start;
+    $end = clone $this->end;
+    
+    while($current->isBefore($end)) {
+      $next = clone $current;
+      
+      $next = match ($step) {
+        DateStep::HOUR => $next->modify('+1 hour'),
+        DateStep::DAY => $next->modify('+1 day'),
+        DateStep::MONTH => $next->modify('+1 month'),
+        DateStep::YEAR => $next->modify('+1 year'),
+        default => throw new DateIntervalException('Invalid date step'),
+      };
+      
+      $intervals[] = self::create($current, $next);
+      $current = $next;
+    }
+    
+    return $intervals;
   }
   
   /**

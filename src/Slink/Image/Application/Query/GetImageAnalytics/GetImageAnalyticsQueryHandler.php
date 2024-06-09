@@ -6,6 +6,7 @@ namespace Slink\Image\Application\Query\GetImageAnalytics;
 
 use Slink\Image\Domain\Repository\ImageAnalyticsRepositoryInterface;
 use Slink\Shared\Application\Query\QueryHandlerInterface;
+use Slink\Shared\Domain\Enum\Date\DateInterval;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
 
 final readonly class GetImageAnalyticsQueryHandler implements QueryHandlerInterface {
@@ -21,6 +22,12 @@ final readonly class GetImageAnalyticsQueryHandler implements QueryHandlerInterf
    * @throws DateTimeException
    */
   public function __invoke(GetImageAnalyticsQuery $query): array {
-    return $this->repository->getAnalytics($query->getDateRange());
+    $data = $this->repository->getAnalytics($query->getDateRange());
+    $availableIntervals = DateInterval::all();
+    
+    return [
+      'data' => $data,
+      'availableIntervals' => $availableIntervals,
+    ];
   }
 }

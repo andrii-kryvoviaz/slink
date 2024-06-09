@@ -9,7 +9,7 @@ use Slink\Shared\Domain\ValueObject\Date\DateRange;
 interface ImageAnalyticsRepositoryInterface {
   /**
    * @param DateRange $dateRange
-   * @return array<string, mixed>
+   * @return array<int, mixed>
    */
   public function getAnalytics(DateRange $dateRange): array;
 }
