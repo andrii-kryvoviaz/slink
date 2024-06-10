@@ -20,6 +20,8 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 
+  scroll-behavior: smooth;
+
   word-break: break-word;
   overflow-anchor: none;
 
