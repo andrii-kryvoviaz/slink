@@ -28,12 +28,11 @@ export const ApiConnector = (options: ApiOptions): Handle => {
       return resolve(event);
     }
 
-    const strippedPath = url.pathname.replace(
-      new RegExp(`^${options.urlPrefix}`),
-      ''
-    );
+    const pathname = url.pathname.startsWith(options.urlPrefix)
+      ? url.pathname
+      : `${options.urlPrefix}${url.pathname}`;
 
-    const proxyUrl = `${options.baseUrl}${strippedPath}${url.search}`;
+    const proxyUrl = `${options.baseUrl}${pathname}${url.search}`;
 
     const { method } = request;
 
