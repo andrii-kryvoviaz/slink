@@ -2,7 +2,7 @@
   import { fade } from 'svelte/transition';
 
   import { Chart, type ChartOptions } from '@slink/components/Analytics';
-  import { Heading } from '@slink/components/Layout';
+  import { Card, Heading } from '@slink/components/Layout';
 
   let options: ChartOptions = {
     series: [
@@ -48,8 +48,10 @@
       </Heading>
     </div>
 
-    <div class="">
-      <Chart {options} />
+    <div class="flex flex-col gap-6 p-6">
+      <Card>
+        <Chart {options} />
+      </Card>
     </div>
   </div>
 </section>
