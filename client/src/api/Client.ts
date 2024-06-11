@@ -6,7 +6,11 @@ import {
   ValidationException,
 } from '@slink/api/Exceptions';
 import { JsonMapper } from '@slink/api/Mapper/JsonMapper';
-import { AuthResource, ImageResource } from '@slink/api/Resources';
+import {
+  AnalyticsResource,
+  AuthResource,
+  ImageResource,
+} from '@slink/api/Resources';
 import { UserResource } from '@slink/api/Resources/UserResource';
 import type { RequestMapper } from '@slink/api/Type/RequestMapper';
 import type { RequestOptions } from '@slink/api/Type/RequestOptions';
@@ -15,6 +19,7 @@ const RESOURCES = {
   image: ImageResource,
   auth: AuthResource,
   user: UserResource,
+  analytics: AnalyticsResource,
 };
 
 type ResourceType = keyof typeof RESOURCES;

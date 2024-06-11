@@ -17,6 +17,10 @@ final readonly class GetUserAnalyticsHandler implements QueryHandlerInterface {
    * @return array<string, mixed>
    */
   public function __invoke(GetUserAnalyticsQuery $query): array {
-    return $this->repository->getAnalytics();
+    $data = $this->repository->getAnalytics();
+    
+    return [
+      'data' => $data
+    ];
   }
 }

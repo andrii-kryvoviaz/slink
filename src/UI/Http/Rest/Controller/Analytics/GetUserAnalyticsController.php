@@ -13,9 +13,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use UI\Http\Rest\Response\ApiResponse;
 
 #[AsController]
-#[Route(path: '/analytics/users', name: 'get_user_analytics', methods: ['GET'])]
+#[Route(path: '/analytics/user', name: 'get_user_analytics', methods: ['GET'])]
 #[IsGranted('ROLE_ADMIN')]
-final class GetUsersAnalyticsController {
+final class GetUserAnalyticsController {
   use QueryTrait;
   
   public function __invoke(
