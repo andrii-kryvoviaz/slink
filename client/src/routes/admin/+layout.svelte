@@ -10,7 +10,7 @@
   const sidebarSettings = settings.get('sidebar', data.settings.sidebar);
   const { expanded } = sidebarSettings;
 
-  const handleSidebarChange = (event) => {
+  const handleSidebarChange = (event: CustomEvent<boolean>) => {
     settings.set('sidebar', { expanded: event.detail });
   };
 </script>
