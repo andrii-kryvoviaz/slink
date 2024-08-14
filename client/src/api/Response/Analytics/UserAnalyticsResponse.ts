@@ -1,4 +1,4 @@
-type UserAnalyticsData = {
+export type UserAnalyticsData = {
   active: number;
   deleted: number;
   suspended: number;

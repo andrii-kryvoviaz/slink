@@ -4,7 +4,12 @@
 
   import { deepMerge } from '@slink/utils/object/deepMerge';
 
-  import type { ChartOptions } from '@slink/components/Analytics';
+  import type {
+    ChartNormalizer,
+    ChartOptions,
+  } from '@slink/components/Analytics';
+  import { AreaChart } from '@slink/components/Analytics/Chart/Area.chart';
+  import { RadialBarChart } from '@slink/components/Analytics/Chart/RadialBar.chart';
 
   export let options: ChartOptions;
 
@@ -25,18 +30,11 @@
         show: false,
       },
     },
-    fill: {
-      type: 'gradient',
-      gradient: {
-        opacityFrom: 0.55,
-        opacityTo: 0,
-      },
-    },
     dataLabels: {
       enabled: false,
     },
     stroke: {
-      width: 4,
+      width: 0,
     },
     grid: {
       show: false,
@@ -45,6 +43,21 @@
         left: 2,
         right: 2,
         top: 0,
+      },
+    },
+    legend: {
+      show: true,
+      position: 'bottom',
+      horizontalAlign: 'center',
+      fontSize: '14px',
+      markers: {
+        width: 12,
+        height: 12,
+        radius: 12,
+      },
+      itemMargin: {
+        horizontal: 10,
+        vertical: 10,
       },
     },
     colors: ['#1A56DB', '#7029FF', '#5AC8FF', '#62CC11', '#FFC107', '#FF5722'],
@@ -70,6 +83,21 @@
     yaxis: {
       show: false,
     },
+  };
+
+  const supportedCharts: { [key: string]: new () => ChartNormalizer } = {
+    area: AreaChart,
+    radialBar: RadialBarChart,
+  };
+
+  const getChartNormalizer = (type: string): ChartNormalizer | null => {
+    const ChartNormalizer = supportedCharts[type];
+
+    if (!ChartNormalizer) {
+      return null;
+    }
+
+    return new ChartNormalizer();
   };
 
   function initChart(node: HTMLElement, options: ApexOptions) {
@@ -104,6 +132,15 @@
   }
   $: if ($isLight) {
     options.theme = { mode: 'light' };
+  }
+
+  $: if (options.chart?.type) {
+    const chartType = options.chart.type;
+    const chartNormalizer = getChartNormalizer(chartType);
+
+    if (chartNormalizer) {
+      options = chartNormalizer.normalize(options);
+    }
   }
 </script>
 

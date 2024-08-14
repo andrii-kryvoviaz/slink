@@ -175,7 +175,7 @@ export class Client {
       return body;
     }
 
-    if (body.data) {
+    if (body.data && !Array.isArray(body.data)) {
       return body.data;
     }
 
