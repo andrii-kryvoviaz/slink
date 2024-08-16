@@ -21,6 +21,8 @@
 
   const dispatch = createEventDispatcher<{ userDeleted: string }>();
 
+  let dropdownRef: Dropdown;
+
   $: isAdmin = user.roles?.includes('ROLE_ADMIN');
   $: isCurrentUser = user.id === loggedInUser?.id;
 
@@ -37,9 +39,16 @@
     { minExecutionTime: 300 }
   );
 
-  let closeDropdown: () => void;
+  // let closeDropdown: () => void;
   let deleteModalVisible = false;
   let statusToChange: UserStatusEnum | null = null;
+  const closeDropdown = () => {
+    if (!dropdownRef) {
+      return;
+    }
+
+    dropdownRef.close();
+  };
 
   const openModal = () => {
     deleteModalVisible = true;
@@ -82,45 +91,46 @@
         <span class="text-lg font-semibold">{user.displayName}</span>
 
         {#if !isCurrentUser}
-          <Dropdown bind:close={closeDropdown}>
-            <div class="flex flex-col gap-2 p-3">
-              {#if user.status === UserStatusEnum.Active}
-                <DropdownItem
-                  on:click={() => changeUserStatus(UserStatusEnum.Suspended)}
-                  loading={isLoading &&
-                    statusToChange === UserStatusEnum.Suspended}
-                >
-                  <Icon
-                    icon="ant-design:stop-twotone"
-                    class="text-red-400"
-                    slot="icon"
-                  />
-                  <span>Suspend</span>
-                </DropdownItem>
-              {:else}
-                <DropdownItem
-                  on:click={() => changeUserStatus(UserStatusEnum.Active)}
-                  loading={isLoading &&
-                    statusToChange === UserStatusEnum.Active}
-                >
-                  <Icon
-                    icon="codicon:run-all"
-                    class="text-green-300"
-                    slot="icon"
-                  />
-                  <span>Activate</span>
-                </DropdownItem>
-              {/if}
-              <hr class="border-gray-500/70" />
+          <Dropdown
+            bind:this={dropdownRef}
+            hideSelected={true}
+            closeOnSelect={false}
+          >
+            {#if user.status === UserStatusEnum.Active}
               <DropdownItem
-                danger={true}
-                on:click={openModal}
-                loading={isLoading && statusToChange === UserStatusEnum.Deleted}
+                on:click={() => changeUserStatus(UserStatusEnum.Suspended)}
+                loading={isLoading &&
+                  statusToChange === UserStatusEnum.Suspended}
               >
-                <Icon icon="ic:round-delete" slot="icon" />
-                <span>Delete</span>
+                <Icon
+                  icon="ant-design:stop-twotone"
+                  class="text-red-400"
+                  slot="icon"
+                />
+                <span>Suspend</span>
               </DropdownItem>
-            </div>
+            {:else}
+              <DropdownItem
+                on:click={() => changeUserStatus(UserStatusEnum.Active)}
+                loading={isLoading && statusToChange === UserStatusEnum.Active}
+              >
+                <Icon
+                  icon="codicon:run-all"
+                  class="text-green-300"
+                  slot="icon"
+                />
+                <span>Activate</span>
+              </DropdownItem>
+            {/if}
+            <hr class="border-gray-500/70" />
+            <DropdownItem
+              danger={true}
+              on:click={openModal}
+              loading={isLoading && statusToChange === UserStatusEnum.Deleted}
+            >
+              <Icon icon="ic:round-delete" slot="icon" />
+              <span>Delete</span>
+            </DropdownItem>
           </Dropdown>
         {/if}
       </div>

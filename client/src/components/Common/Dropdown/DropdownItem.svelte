@@ -1,25 +1,54 @@
 <script lang="ts">
+  import { createEventDispatcher, getContext, onMount } from 'svelte';
+
   import Icon from '@iconify/svelte';
+
+  import type {
+    DropdownContext,
+    DropdownItemData,
+  } from '@slink/components/Common';
 
   export let danger = false;
   export let disabled = false;
   export let loading = false;
+  export let key: string = Math.random().toString(36).substring(7);
+
+  let textItemRef: HTMLSpanElement;
+  let itemData: DropdownItemData | null = null;
+
+  const { onRegister, onSelect } = getContext<DropdownContext>('dropdown');
+  const dispatch = createEventDispatcher<{ click: MouseEvent }>();
+
+  function handleClick(event: MouseEvent) {
+    if (disabled || !itemData) {
+      return;
+    }
+
+    onSelect(itemData);
+    dispatch('click', event);
+  }
+
+  onMount(() => {
+    itemData = { key, name: textItemRef.innerText };
+
+    onRegister(itemData);
+  });
 </script>
 
-<button class="tooltip-item" class:danger on:click {disabled}>
+<button class="tooltip-item" class:danger on:click={handleClick} {disabled}>
   {#if loading}
     <Icon icon="mingcute:loading-line" class="animate-spin" />
   {:else}
     <slot name="icon" />
   {/if}
-  <span>
+  <span bind:this={textItemRef}>
     <slot />
   </span>
 </button>
 
 <style>
   .tooltip-item {
-    @apply flex cursor-pointer items-center gap-2 rounded-md p-1 px-3;
+    @apply flex w-full cursor-pointer items-center gap-2 rounded-md p-1 px-3;
     @apply text-gray-50;
   }
 
