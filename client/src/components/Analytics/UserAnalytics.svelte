@@ -37,7 +37,6 @@
       },
       chart: {
         type: 'radialBar',
-        height: 500,
       },
       series,
       labels,
