@@ -86,7 +86,17 @@ export class Client {
     }
   }
 
-  public async fetch(path: string, options?: RequestOptions | RequestInit) {
+  private generateQueryString(query: Record<string, string> | null = null) {
+    if (!query) {
+      return '';
+    }
+
+    const params = new URLSearchParams(query);
+
+    return `?${params.toString()}`;
+  }
+
+  public async fetch(path: string, options?: RequestOptions) {
     if (!this._fetch) {
       this._fetch = fetch;
       console.warn(
@@ -100,7 +110,8 @@ export class Client {
 
     const url = [this._basePath, path].join('');
 
-    const response = await this._fetch(url, options);
+    const queryString = this.generateQueryString(options?.query);
+    const response = await this._fetch(url + queryString, options);
 
     if (response.status === 204) {
       return;

@@ -9,7 +9,11 @@ export class AnalyticsResource extends AbstractResource {
     return this.get('/analytics/user');
   }
 
-  public async getImageAnalytics(): Promise<ImageAnalyticsResponse> {
-    return this.get('/analytics/image');
+  public async getImageAnalytics({
+    dateInterval,
+  }: { dateInterval?: string } = {}): Promise<ImageAnalyticsResponse> {
+    const query = dateInterval ? { dateInterval } : {};
+
+    return this.get(`/analytics/image`, { query });
   }
 }
