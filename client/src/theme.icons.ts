@@ -55,4 +55,5 @@ export const themeIcons: string[] = [
   'ant-design:stop-twotone',
   'codicon:run-all',
   'mingcute:loading-line',
+  'teenyicons:refresh-solid',
 ];

@@ -6,21 +6,29 @@
   import type { UserAnalyticsData } from '@slink/api/Response';
 
   import { Chart, type ChartOptions } from '@slink/components/Analytics';
+  import { RefreshButton } from '@slink/components/Common';
   import { Card } from '@slink/components/Layout';
 
   const {
     run,
     data: response,
     isLoading,
-    status,
   } = ReactiveState<UserAnalyticsData>(
     () => {
       return ApiClient.analytics.getUserAnalytics();
     },
-    { debounce: 300 }
+    { minExecutionTime: 1000 }
   );
 
-  let options: ChartOptions = {};
+  let options: ChartOptions = {
+    labelFormatter: function (value) {
+      return `${value} Users`;
+    },
+    chart: {
+      type: 'radialBar',
+    },
+    colors: ['#4B8EDD', '#7029FF', '#4B5563'],
+  };
 
   $: if ($response) {
     const labels = Object.keys($response).map((key) => {
@@ -32,15 +40,9 @@
     });
 
     options = {
-      labelFormatter: function (value) {
-        return `${value} Users`;
-      },
-      chart: {
-        type: 'radialBar',
-      },
+      ...options,
       series,
       labels,
-      colors: ['#4B8EDD', '#7029FF', '#4B5563'],
     };
   }
 
@@ -48,12 +50,10 @@
 </script>
 
 <Card>
-  {#if $isLoading}
-    <p>Loading...</p>
-  {:else}
-    <p>User Analytics</p>
-  {/if}
-  {#if $status === 'finished'}
-    <Chart {options} />
-  {/if}
+  <div class="flex items-center justify-between">
+    <p class="text-lg font-light tracking-wider">User Analytics</p>
+    <RefreshButton size="sm" loading={$isLoading} on:click={run} />
+  </div>
+
+  <Chart {options} />
 </Card>
