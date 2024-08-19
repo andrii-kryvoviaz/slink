@@ -6,7 +6,7 @@
 
   const defaultLoadingIcon = {
     icon: 'eos-icons:three-dots-loading',
-    class: 'h-5 w-5',
+    class: 'h-full w-full max-w-5 max-h-5',
   };
 </script>
 

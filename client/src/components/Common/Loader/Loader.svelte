@@ -4,21 +4,28 @@
   import { LoaderTheme } from '@slink/components/Common/Loader/Loader.theme';
   import type { LoaderProps } from '@slink/components/Common/Loader/Loader.types';
 
-  interface $$Props extends LoaderProps {}
+  interface $$Props extends LoaderProps {
+    class?: string;
+  }
 
   export let variant: $$Props['variant'] = 'default';
   export let size: $$Props['size'] = 'sm';
   export let speed: $$Props['speed'] = 'default';
 
-  $: classes = `${LoaderTheme({
+  const defaultOuterClasses =
+    'flex flex-grow items-center justify-center gap-4';
+
+  $: innerClasses = `${LoaderTheme({
     variant,
     size,
     speed,
-  })} ${$$props.class}`;
+  })}`;
+
+  $: outerClasses = className(defaultOuterClasses, $$props.class);
 </script>
 
-<div class="flex flex-grow items-center justify-center gap-4">
-  <div {...$$props} class={className(classes)} />
+<div class={outerClasses}>
+  <div {...$$props} class={className(innerClasses)} />
   {#if $$slots.default}
     <slot />
   {/if}

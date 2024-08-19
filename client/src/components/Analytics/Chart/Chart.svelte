@@ -66,9 +66,6 @@
         trim: true,
         rotateAlways: true,
         hideOverlappingLabels: true,
-        style: {
-          cssClass: 'text-red-200',
-        },
       },
       axisBorder: {
         show: false,
@@ -83,6 +80,12 @@
     yaxis: {
       show: false,
     },
+    noData: {
+      text: 'No data available',
+      align: 'center',
+      verticalAlign: 'middle',
+    },
+    series: [],
   };
 
   const supportedCharts: { [key: string]: new () => ChartNormalizer } = {
