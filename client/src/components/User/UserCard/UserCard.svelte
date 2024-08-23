@@ -88,13 +88,26 @@
     <UserAvatar {user} size="lg" />
     <div class="flex w-full flex-col">
       <div class="flex w-full justify-between">
-        <span class="text-lg font-semibold">{user.displayName}</span>
+        <div class="flex items-center gap-2">
+          <span class="text-lg font-semibold">{user.displayName}</span>
+          <div class="badges space-x-1">
+            {#if isAdmin}
+              <Badge variant="primary" size="sm" outline>Admin</Badge>
+            {/if}
+            {#if isCurrentUser}
+              <Badge variant="warning" size="sm" outline>You</Badge>
+            {:else}
+              <UserStatus status={user.status} />
+            {/if}
+          </div>
+        </div>
 
         {#if !isCurrentUser}
           <Dropdown
             bind:this={dropdownRef}
             hideSelected={true}
             closeOnSelect={false}
+            class="text-sm"
           >
             {#if user.status === UserStatusEnum.Active}
               <DropdownItem
@@ -103,8 +116,8 @@
                   statusToChange === UserStatusEnum.Suspended}
               >
                 <Icon
-                  icon="ant-design:stop-twotone"
-                  class="text-red-400"
+                  icon="material-symbols-light:pause-circle-outline"
+                  class="h-4 w-4 text-red-400"
                   slot="icon"
                 />
                 <span>Suspend</span>
@@ -115,8 +128,8 @@
                 loading={isLoading && statusToChange === UserStatusEnum.Active}
               >
                 <Icon
-                  icon="codicon:run-all"
-                  class="text-green-300"
+                  icon="material-symbols-light:check"
+                  class="h-4 w-4 text-green-300"
                   slot="icon"
                 />
                 <span>Activate</span>
@@ -128,7 +141,7 @@
               on:click={openModal}
               loading={isLoading && statusToChange === UserStatusEnum.Deleted}
             >
-              <Icon icon="ic:round-delete" slot="icon" />
+              <Icon icon="ic:round-delete" slot="icon" class="h-4 w-4" />
               <span>Delete</span>
             </DropdownItem>
           </Dropdown>
@@ -136,16 +149,6 @@
       </div>
 
       <span class="text-sm text-gray-500">{user.email}</span>
-      <div class="badges mt-2 space-x-1">
-        {#if isAdmin}
-          <Badge variant="primary" size="sm" outline>Admin</Badge>
-        {/if}
-        {#if isCurrentUser}
-          <Badge variant="warning" size="sm" outline>You</Badge>
-        {:else}
-          <UserStatus status={user.status} />
-        {/if}
-      </div>
     </div>
   </div>
 </div>

@@ -50,10 +50,10 @@ export const themeIcons: string[] = [
   'fluent:panel-right-expand-20-filled',
   'mynaui:chevron-double-down',
   'akar-icons:chevron-down',
-  'ic:round-delete',
   'akar-icons:chevron-up',
-  'ant-design:stop-twotone',
-  'codicon:run-all',
   'mingcute:loading-line',
   'teenyicons:refresh-solid',
+  'ic:round-delete',
+  'material-symbols-light:pause-circle-outline',
+  'material-symbols-light:check',
 ];

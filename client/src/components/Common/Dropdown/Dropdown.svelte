@@ -122,7 +122,7 @@
 
 <svelte:body on:click={handleClickOutside} />
 
-<div class="relative w-fit" bind:this={container}>
+<div class={`relative w-fit ${$$props.class}`} bind:this={container}>
   <div
     on:click={toggleDropdown}
     on:keydown={(event) => event.key === 'Enter' && toggleDropdown()}
