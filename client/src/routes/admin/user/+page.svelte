@@ -13,7 +13,6 @@
 
   import { Loader } from '@slink/components/Common';
   import { LoadMoreButton } from '@slink/components/Common';
-  import { Heading } from '@slink/components/Layout';
   import { UserCard } from '@slink/components/User';
 
   import type { PageServerData } from './$types';
@@ -76,12 +75,6 @@
   class="relative flex h-full flex-grow flex-col py-4"
 >
   <div class="flex h-full flex-col">
-    <div class="px-6">
-      <Heading alignment="left" size="sm" fontWeight="normal">
-        <span>Users</span>
-      </Heading>
-    </div>
-
     {#if itemsNotFound}
       <div class="flex flex-grow flex-col items-start pt-8 font-extralight">
         <p class="text-[2rem] opacity-70">Oops! Here be nothing yet.</p>
@@ -90,7 +83,7 @@
 
     {#if showPreloader}
       <div
-        class="absolute inset-0 z-10 flex items-center justify-center bg-gray-500/10 backdrop-blur-sm"
+        class="absolute inset-0 z-10 flex items-center justify-center backdrop-blur-sm"
       >
         <Loader>
           <span>Loading users...</span>
@@ -99,7 +92,7 @@
     {/if}
 
     <div class="h-full overflow-y-auto">
-      <div class="mt-8 grid grid-cols-1 gap-4 px-6 md:grid-cols-2">
+      <div class="grid grid-cols-1 gap-4 px-6 md:grid-cols-2">
         {#each items as user (user.id)}
           <UserCard {user} {loggedInUser} on:userDeleted={onDelete} />
         {/each}

@@ -1,23 +1,33 @@
 <script lang="ts">
-  import { settings } from '@slink/lib/settings';
+  import Icon from '@iconify/svelte';
 
-  import { Sidebar } from '@slink/components/Layout';
+  import { TabMenu, TabMenuItem } from '@slink/components/Layout';
 
-  import type { LayoutData } from './$types';
-
-  export let data: LayoutData;
-
-  const sidebarSettings = settings.get('sidebar', data.settings.sidebar);
-  const { expanded } = sidebarSettings;
-
-  const handleSidebarChange = (event: CustomEvent<boolean>) => {
-    settings.set('sidebar', { expanded: event.detail });
-  };
+  const tabs = [
+    {
+      label: 'Overview',
+      href: '/admin/dashboard',
+      icon: 'solar:graph-line-duotone',
+    },
+    { label: 'Users', href: '/admin/user', icon: 'ph:user' },
+    {
+      label: 'Settings',
+      href: '/admin/settings',
+      icon: 'mingcute:settings-7-line',
+    },
+  ];
 </script>
 
-<div class="flex h-full overflow-y-auto">
-  <div>
-    <Sidebar expanded={$expanded} on:change={handleSidebarChange} />
+<div class="flex h-full flex-col overflow-y-auto">
+  <div class="p-6">
+    <TabMenu orientation="horizontal">
+      {#each tabs as tab}
+        <TabMenuItem href={tab.href}>
+          <Icon icon={tab.icon} class="h-4 w-4" />
+          <span>{tab.label}</span>
+        </TabMenuItem>
+      {/each}
+    </TabMenu>
   </div>
 
   <div class="flex max-w-full flex-grow">
