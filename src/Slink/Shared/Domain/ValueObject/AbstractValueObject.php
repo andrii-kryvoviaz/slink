@@ -10,10 +10,14 @@ abstract readonly class AbstractValueObject implements \JsonSerializable, \Strin
   use JsonSerializableBehaviour;
   
   /**
-   * @param AbstractValueObject $other
+   * @param ?AbstractValueObject $other
    * @return bool
    */
-  public function equals(self $other): bool {
+  public function equals(?self $other): bool {
+    if ($other === null) {
+      return false;
+    }
+    
     $properties = method_exists($this, 'getProperties')
       ? $this->getProperties()
       : get_class_vars(static::class);

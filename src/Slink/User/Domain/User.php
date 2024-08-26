@@ -23,6 +23,8 @@ use Slink\User\Domain\Exception\EmailAlreadyExistException;
 use Slink\User\Domain\Exception\InvalidCredentialsException;
 use Slink\User\Domain\Exception\InvalidOldPassword;
 use Slink\User\Domain\Exception\InvalidUserRole;
+use Slink\User\Domain\Exception\SelfUserStatusChangeException;
+use Slink\User\Domain\Specification\CurrentUserSpecificationInterface;
 use Slink\User\Domain\Specification\UserRoleExistSpecificationInterface;
 use Slink\User\Domain\ValueObject\Auth\Credentials;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;
@@ -193,9 +195,17 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   
   /**
    * @param UserStatus $status
+   * @param CurrentUserSpecificationInterface $currentUserSpecification
    * @return void
    */
-  public function changeStatus(UserStatus $status): void {
+  public function changeStatus(
+    UserStatus $status,
+    CurrentUserSpecificationInterface $currentUserSpecification
+  ): void {
+    if($currentUserSpecification->isSatisfiedBy($this->aggregateRootId())) {
+      throw new SelfUserStatusChangeException();
+    }
+    
     $this->recordThat(new UserStatusWasChanged($this->aggregateRootId(), $status));
   }
   
@@ -220,7 +230,10 @@ final class User extends AbstractAggregateRoot implements UserInterface {
    * @param UserRoleExistSpecificationInterface $userRoleExistSpecification
    * @return void
    */
-  public function grantRole(Role $role, UserRoleExistSpecificationInterface $userRoleExistSpecification): void {
+  public function grantRole(
+    Role $role,
+    UserRoleExistSpecificationInterface $userRoleExistSpecification
+  ): void {
     if(!$userRoleExistSpecification->isSatisfiedBy($role)) {
       throw new InvalidUserRole($role);
     }
@@ -241,7 +254,10 @@ final class User extends AbstractAggregateRoot implements UserInterface {
    * @param UserRoleExistSpecificationInterface $userRoleExistSpecification
    * @return void
    */
-  public function revokeRole(Role $role, UserRoleExistSpecificationInterface $userRoleExistSpecification): void {
+  public function revokeRole(
+    Role $role,
+    UserRoleExistSpecificationInterface $userRoleExistSpecification
+  ): void {
     if(!$userRoleExistSpecification->isSatisfiedBy($role)) {
       throw new InvalidUserRole($role);
     }

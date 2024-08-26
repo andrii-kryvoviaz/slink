@@ -8,11 +8,9 @@ use Slink\Shared\Application\Command\CommandTrait;
 use Slink\Shared\Application\Query\QueryTrait;
 use Slink\User\Application\Command\ChangeUserStatus\ChangeUserStatusCommand;
 use Slink\User\Application\Query\User\FindUserById\FindUserByIdQuery;
-use Slink\User\Infrastructure\Auth\JwtUser;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use UI\Http\Rest\Response\ApiResponse;
 
@@ -24,10 +22,9 @@ final readonly class ChangeUserStatusController {
   use QueryTrait;
   
   public function __invoke(
-    #[MapRequestPayload] ChangeUserStatusCommand $command,
-    #[CurrentUser] JwtUser $currentUser
+    #[MapRequestPayload] ChangeUserStatusCommand $command
   ): ApiResponse {
-    $this->handle($command->withContext(['currentUser' => $currentUser]));
+    $this->handle($command);
     
     $query = new FindUserByIdQuery($command->getId());
     $user = $this->ask($query->withContext(['groups' => ['internal', 'public']]));
