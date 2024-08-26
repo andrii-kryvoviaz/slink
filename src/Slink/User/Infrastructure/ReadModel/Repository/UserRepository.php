@@ -134,6 +134,12 @@ final class UserRepository extends AbstractRepository implements
       ->setFirstResult(($page - 1) * $filter->getLimit())
       ->setMaxResults($filter->getLimit());
     
+    if ($filter->getSearch()) {
+      $qb
+        ->andWhere('user.email LIKE :search OR user.displayName LIKE :search')
+        ->setParameter('search', $filter->getSearch() . '%');
+    }
+    
     return new Paginator($qb);
   }
   

@@ -56,4 +56,5 @@ export const themeIcons: string[] = [
   'ic:round-delete',
   'material-symbols-light:pause-circle-outline',
   'material-symbols-light:check',
+  'material-symbols-light:search',
 ];

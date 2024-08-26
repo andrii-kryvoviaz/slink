@@ -11,11 +11,13 @@ final readonly class UserListFilter {
    * @param int $limit
    * @param string $orderBy
    * @param string $order
+   * @param string|null $search
    */
   public function __construct(
     private int $limit = 10,
     private string $orderBy = 'createdAt',
     private string $order = 'desc',
+    private ?string $search = null
   ) {
   }
   
@@ -27,7 +29,8 @@ final readonly class UserListFilter {
     return new self(
       limit: $query->getLimit(),
       orderBy: $query->getOrderBy(),
-      order: $query->getOrder()
+      order: $query->getOrder(),
+      search: $query->getSearch()
     );
   }
   
@@ -50,5 +53,12 @@ final readonly class UserListFilter {
    */
   public function getOrder(): string {
     return $this->order;
+  }
+  
+  /**
+   * @return string|null
+   */
+  public function getSearch(): ?string {
+    return $this->search;
   }
 }
