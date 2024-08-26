@@ -1,17 +1,24 @@
 <script lang="ts">
   import { fade } from 'svelte/transition';
 
-  import { ImageAnalytics, UserAnalytics } from '@slink/components/Analytics';
+  import {
+    ImageAnalytics,
+    LatestUsers,
+    UserAnalytics,
+  } from '@slink/components/Analytics';
 </script>
 
-<section
-  in:fade={{ duration: 300 }}
-  class="relative flex h-full flex-grow flex-col py-4"
->
-  <div class="flex h-full flex-col gap-6 px-6">
-    <div class="flex flex-col gap-6 md:flex-row">
+<section in:fade={{ duration: 300 }} class="relative h-full flex-grow py-4">
+  <div class="grid h-full grid-cols-2 content-start gap-6 px-6">
+    <div class="col-span-2 h-96 md:col-span-1 xl:h-[40rem]">
       <ImageAnalytics />
+    </div>
+    <div class="col-span-2 h-96 md:col-span-1 xl:h-[40rem]">
       <UserAnalytics />
+    </div>
+
+    <div class="col-span-2">
+      <LatestUsers />
     </div>
   </div>
 </section>

@@ -44,14 +44,20 @@
       series,
       labels,
     };
+  } else if (!options.series?.length) {
+    options = {
+      ...options,
+      series: [0],
+      labels: ['No Data'],
+    };
   }
 
   onMount(run);
 </script>
 
-<Card>
+<Card class="h-full">
   <div class="flex items-center justify-between">
-    <p class="text-lg font-light tracking-wider">User Analytics</p>
+    <p class="text-lg font-light tracking-wider">Users</p>
     <RefreshButton size="sm" loading={$isLoading} on:click={run} />
   </div>
 

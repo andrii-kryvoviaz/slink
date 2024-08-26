@@ -20,7 +20,7 @@
 
 <div class="flex h-full flex-col overflow-y-auto">
   <div class="p-6">
-    <TabMenu orientation="horizontal">
+    <TabMenu orientation="horizontal" class="md:inline-flex">
       {#each tabs as tab}
         <TabMenuItem href={tab.href}>
           <Icon icon={tab.icon} class="h-4 w-4" />

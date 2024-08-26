@@ -1,6 +1,7 @@
 <script lang="ts">
   import { settings } from '@slink/lib/settings';
   import type { ApexOptions } from 'apexcharts';
+  import { twMerge } from 'tailwind-merge';
 
   import { deepMerge } from '@slink/utils/object/deepMerge';
 
@@ -15,6 +16,7 @@
 
   let defaultOptions: ChartOptions = {
     chart: {
+      height: '100%',
       width: '100%',
       type: 'area',
       toolbar: {
@@ -38,12 +40,6 @@
     },
     grid: {
       show: false,
-      strokeDashArray: 4,
-      padding: {
-        left: 2,
-        right: 2,
-        top: 0,
-      },
     },
     legend: {
       show: true,
@@ -79,11 +75,6 @@
     },
     yaxis: {
       show: false,
-    },
-    noData: {
-      text: 'No data available',
-      align: 'center',
-      verticalAlign: 'middle',
     },
     series: [],
   };
@@ -124,7 +115,7 @@
     };
   }
 
-  const classes = `${$$props.class} text-black`;
+  const classes = twMerge('w-full', $$props.class ?? '');
 
   const currentTheme = settings.get('theme', 'light');
   const { isDark, isLight } = currentTheme;

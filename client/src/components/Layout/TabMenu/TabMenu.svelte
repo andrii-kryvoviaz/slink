@@ -1,6 +1,8 @@
 <script lang="ts">
   import { setContext } from 'svelte';
 
+  import type { HTMLBaseAttributes } from 'svelte/elements';
+
   import { className } from '@slink/utils/ui/className';
 
   import {
@@ -10,7 +12,7 @@
   } from '@slink/components/Layout';
   import { TabMenuTheme } from '@slink/components/Layout/TabMenu/TabMenu.theme';
 
-  interface $$Props extends TabMenuProps {}
+  interface $$Props extends TabMenuProps, HTMLBaseAttributes {}
 
   export let variant: $$Props['variant'] = 'default';
   export let size: $$Props['size'] = 'sm';

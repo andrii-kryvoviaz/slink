@@ -9,11 +9,11 @@
     Tooltip,
   } from '@slink/components/Common';
 
-  interface $Props extends ButtonAttributes {
-    loading: boolean;
+  interface $$Props extends ButtonAttributes {
+    loading?: boolean;
   }
 
-  export let loading: boolean;
+  export let loading: boolean = false;
 
   const uniqueId = randomId('refreshButton');
 </script>

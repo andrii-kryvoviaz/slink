@@ -31,10 +31,14 @@
   let options: ChartOptions = {
     series: [],
   };
-  let interval: string = 'last_7_days';
+  let interval: string = 'current_year';
 
   const handleIntervalChange = ({ detail }: CustomEvent<DropdownItemData>) => {
     interval = detail.key;
+    handleFetch();
+  };
+
+  const handleFetch = () => {
     run({ dateInterval: interval });
   };
 
@@ -58,33 +62,30 @@
     availableIntervals = $response.availableIntervals;
   }
 
-  onMount(run);
+  onMount(handleFetch);
 </script>
 
-<Card>
+<Card class="h-full">
   <div class="flex items-center justify-between">
-    <p class="text-lg font-light tracking-wider">Image Analytics</p>
-    <RefreshButton size="sm" loading={$isLoading} on:click={run} />
+    <p class="text-lg font-light tracking-wider">Uploads</p>
+    <div class="flex items-center gap-2">
+      <RefreshButton size="sm" loading={$isLoading} on:click={handleFetch} />
+      {#if availableIntervals}
+        <Dropdown
+          variant="invisible"
+          position="bottom-right"
+          selected={interval}
+          on:change={handleIntervalChange}
+        >
+          {#each Object.keys(availableIntervals) as interval}
+            <DropdownItem key={interval}>
+              {availableIntervals[interval]}
+            </DropdownItem>
+          {/each}
+        </Dropdown>
+      {/if}
+    </div>
   </div>
 
   <Chart {options} />
-
-  {#if availableIntervals}
-    <div
-      class="flex flex-row-reverse items-center justify-between border-t border-gray-200 pt-4 dark:border-gray-700"
-    >
-      <Dropdown
-        variant="invisible"
-        position="top-right"
-        selected={interval}
-        on:change={handleIntervalChange}
-      >
-        {#each Object.keys(availableIntervals) as interval}
-          <DropdownItem key={interval}>
-            {availableIntervals[interval]}
-          </DropdownItem>
-        {/each}
-      </Dropdown>
-    </div>
-  {/if}
 </Card>

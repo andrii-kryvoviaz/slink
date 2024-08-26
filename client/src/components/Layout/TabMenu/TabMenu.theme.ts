@@ -1,6 +1,6 @@
 import { cva } from 'class-variance-authority';
 
-export const TabMenuTheme = cva(`relative inline-flex gap-2`, {
+export const TabMenuTheme = cva(`relative flex gap-2`, {
   variants: {
     variant: {
       default: 'dark:bg-gray-800 bg-gray-200',
