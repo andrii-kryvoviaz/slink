@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { User } from '@slink/lib/auth/Type/User';
+  import { type User, UserRole } from '@slink/lib/auth/Type/User';
   import { UserStatus as UserStatusEnum } from '@slink/lib/auth/Type/User';
   import { createEventDispatcher } from 'svelte';
 
@@ -23,11 +23,8 @@
 
   let dropdownRef: Dropdown;
 
-  $: isAdmin = user.roles?.includes('ROLE_ADMIN');
-  $: isCurrentUser = user.id === loggedInUser?.id;
-
   const {
-    isLoading,
+    isLoading: userStatusChanging,
     data: userResponse,
     error: statusError,
     run: changeUserStatus,
@@ -35,6 +32,30 @@
     (status: UserStatusEnum) => {
       statusToChange = status;
       return ApiClient.user.changeUserStatus(user.id, status);
+    },
+    { minExecutionTime: 300 }
+  );
+
+  const {
+    run: grantRole,
+    data: grantRoleResponse,
+    isLoading: grantRoleLoading,
+    error: grantRoleError,
+  } = ReactiveState<SingleUserResponse>(
+    (role: UserRole) => {
+      return ApiClient.user.grantRole(user.id, role);
+    },
+    { minExecutionTime: 300 }
+  );
+
+  const {
+    run: revokeRole,
+    data: revokeRoleResponse,
+    isLoading: revokeRoleLoading,
+    error: revokeRoleError,
+  } = ReactiveState<SingleUserResponse>(
+    (role: UserRole) => {
+      return ApiClient.user.revokeRole(user.id, role);
     },
     { minExecutionTime: 300 }
   );
@@ -60,13 +81,26 @@
     dispatch('userDeleted', user.id);
   };
 
-  const successHandler = async (response: SingleUserResponse) => {
+  const successHandler = async (response: SingleUserResponse | null) => {
+    if (!response) {
+      return;
+    }
+
     user.status = response.status;
+    user.roles = response.roles;
+
+    resetState();
   };
 
-  const errorHandler = (error: Error) => {
+  const errorHandler = (error: Error | null) => {
+    if (!error) {
+      return;
+    }
+
     statusToChange = null;
     printErrorsAsToastMessage(error);
+
+    resetState();
   };
 
   const resetState = () => {
@@ -75,9 +109,16 @@
     closeDropdown();
   };
 
-  $: $userResponse && successHandler($userResponse);
-  $: $statusError && errorHandler($statusError);
-  $: ($statusError || $userResponse) && resetState();
+  $: successHandler($userResponse);
+  $: successHandler($grantRoleResponse);
+  $: successHandler($revokeRoleResponse);
+
+  $: errorHandler($statusError);
+  $: errorHandler($grantRoleError);
+  $: errorHandler($revokeRoleError);
+
+  $: isAdmin = user.roles?.includes(UserRole.Admin);
+  $: isCurrentUser = user.id === loggedInUser?.id;
 </script>
 
 <div
@@ -111,11 +152,11 @@
             {#if user.status === UserStatusEnum.Active}
               <DropdownItem
                 on:click={() => changeUserStatus(UserStatusEnum.Suspended)}
-                loading={isLoading &&
+                loading={userStatusChanging &&
                   statusToChange === UserStatusEnum.Suspended}
               >
                 <Icon
-                  icon="material-symbols-light:pause-circle-outline"
+                  icon="mdi:stop-remove"
                   class="h-4 w-4 text-red-400"
                   slot="icon"
                 />
@@ -124,7 +165,8 @@
             {:else}
               <DropdownItem
                 on:click={() => changeUserStatus(UserStatusEnum.Active)}
-                loading={isLoading && statusToChange === UserStatusEnum.Active}
+                loading={userStatusChanging &&
+                  statusToChange === UserStatusEnum.Active}
               >
                 <Icon
                   icon="material-symbols-light:check"
@@ -134,11 +176,37 @@
                 <span>Activate</span>
               </DropdownItem>
             {/if}
+            {#if !isAdmin}
+              <DropdownItem
+                on:click={() => grantRole(UserRole.Admin)}
+                loading={$grantRoleLoading}
+              >
+                <Icon
+                  icon="material-symbols-light:admin-panel-settings-outline"
+                  class="h-4 w-4"
+                  slot="icon"
+                />
+                <span>Grant Admin</span>
+              </DropdownItem>
+            {:else}
+              <DropdownItem
+                on:click={() => revokeRole(UserRole.Admin)}
+                loading={$revokeRoleLoading}
+              >
+                <Icon
+                  icon="material-symbols-light:admin-panel-settings-outline"
+                  class="h-4 w-4"
+                  slot="icon"
+                />
+                <span>Revoke Admin</span>
+              </DropdownItem>
+            {/if}
             <hr class="border-gray-500/70" />
             <DropdownItem
               danger={true}
               on:click={openModal}
-              loading={isLoading && statusToChange === UserStatusEnum.Deleted}
+              loading={userStatusChanging &&
+                statusToChange === UserStatusEnum.Deleted}
             >
               <Icon icon="ic:round-delete" slot="icon" class="h-4 w-4" />
               <span>Delete</span>
@@ -156,7 +224,7 @@
   variant="danger"
   align="top"
   bind:open={deleteModalVisible}
-  loading={isLoading && statusToChange === UserStatusEnum.Deleted}
+  loading={userStatusChanging && statusToChange === UserStatusEnum.Deleted}
   on:confirm={debounce(handleDelete, 300)}
 >
   <div slot="icon">

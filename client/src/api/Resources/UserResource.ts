@@ -1,4 +1,4 @@
-import type { UserStatus } from '@slink/lib/auth/Type/User';
+import { type UserRole, type UserStatus } from '@slink/lib/auth/Type/User';
 
 import { AbstractResource } from '@slink/api/AbstractResource';
 import type { UserListFilter } from '@slink/api/Request/UserRequest';
@@ -57,5 +57,19 @@ export class UserResource extends AbstractResource {
     status: UserStatus
   ): Promise<SingleUserResponse> {
     return this.patch(`/user/status`, { json: { id, status } });
+  }
+
+  public async grantRole(
+    id: string,
+    role: UserRole
+  ): Promise<SingleUserResponse> {
+    return this.post(`/user/role`, { json: { id, role } });
+  }
+
+  public async revokeRole(
+    id: string,
+    role: UserRole
+  ): Promise<SingleUserResponse> {
+    return this.delete(`/user/role`, { json: { id, role } });
   }
 }

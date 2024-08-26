@@ -6,6 +6,10 @@ export enum UserStatus {
   Deleted = 'deleted',
 }
 
+export enum UserRole {
+  Admin = 'ROLE_ADMIN',
+}
+
 export type User = {
   id: string;
   email: string;

@@ -54,7 +54,8 @@ export const themeIcons: string[] = [
   'mingcute:loading-line',
   'teenyicons:refresh-solid',
   'ic:round-delete',
-  'material-symbols-light:pause-circle-outline',
   'material-symbols-light:check',
   'material-symbols-light:search',
+  'material-symbols-light:admin-panel-settings-outline',
+  'mdi:stop-remove',
 ];
