@@ -8,6 +8,7 @@ use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
+use Slink\User\Domain\Context\ChangeUserRoleContext;
 use Slink\User\Domain\Context\UserCreationContext;
 use Slink\User\Domain\Contracts\UserInterface;
 use Slink\User\Domain\Enum\UserStatus;
@@ -23,6 +24,7 @@ use Slink\User\Domain\Exception\EmailAlreadyExistException;
 use Slink\User\Domain\Exception\InvalidCredentialsException;
 use Slink\User\Domain\Exception\InvalidOldPassword;
 use Slink\User\Domain\Exception\InvalidUserRole;
+use Slink\User\Domain\Exception\SelfUserRoleChangeException;
 use Slink\User\Domain\Exception\SelfUserStatusChangeException;
 use Slink\User\Domain\Specification\CurrentUserSpecificationInterface;
 use Slink\User\Domain\Specification\UserRoleExistSpecificationInterface;
@@ -227,15 +229,23 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   
   /**
    * @param Role $role
-   * @param UserRoleExistSpecificationInterface $userRoleExistSpecification
+   * @param ChangeUserRoleContext $changeUserRoleContext
    * @return void
    */
   public function grantRole(
     Role $role,
-    UserRoleExistSpecificationInterface $userRoleExistSpecification
+    ChangeUserRoleContext $changeUserRoleContext
   ): void {
-    if(!$userRoleExistSpecification->isSatisfiedBy($role)) {
+    if(!$changeUserRoleContext->userRoleExistSpecification->isSatisfiedBy($role)) {
       throw new InvalidUserRole($role);
+    }
+    
+    if($changeUserRoleContext->currentUserSpecification->isSatisfiedBy($this->aggregateRootId())) {
+      throw new SelfUserRoleChangeException();
+    }
+    
+    if ($this->hasRole($role)) {
+      return;
     }
     
     $this->recordThat(new UserGrantedRole($this->aggregateRootId(), $role));
@@ -251,18 +261,22 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   
   /**
    * @param Role $role
-   * @param UserRoleExistSpecificationInterface $userRoleExistSpecification
+   * @param ChangeUserRoleContext $changeUserRoleContext
    * @return void
    */
   public function revokeRole(
     Role $role,
-    UserRoleExistSpecificationInterface $userRoleExistSpecification
+    ChangeUserRoleContext $changeUserRoleContext,
   ): void {
-    if(!$userRoleExistSpecification->isSatisfiedBy($role)) {
+    if(!$changeUserRoleContext->userRoleExistSpecification->isSatisfiedBy($role)) {
       throw new InvalidUserRole($role);
     }
     
-    if(!$this->roles->contains($role)) {
+    if($changeUserRoleContext->currentUserSpecification->isSatisfiedBy($this->aggregateRootId())) {
+      throw new SelfUserRoleChangeException();
+    }
+    
+    if(!$this->hasRole($role)) {
       return;
     }
     

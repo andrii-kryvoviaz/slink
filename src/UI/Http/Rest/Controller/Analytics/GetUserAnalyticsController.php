@@ -6,6 +6,7 @@ namespace UI\Http\Rest\Controller\Analytics;
 
 use Slink\Shared\Application\Query\QueryTrait;
 use Slink\User\Application\Query\User\GetUserAnalytics\GetUserAnalyticsQuery;
+use Slink\User\Domain\Enum\UserRole;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
@@ -14,7 +15,7 @@ use UI\Http\Rest\Response\ApiResponse;
 
 #[AsController]
 #[Route(path: '/analytics/user', name: 'get_user_analytics', methods: ['GET'])]
-#[IsGranted('ROLE_ADMIN')]
+#[IsGranted(UserRole::Admin->value)]
 final class GetUserAnalyticsController {
   use QueryTrait;
   

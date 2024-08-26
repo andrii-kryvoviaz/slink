@@ -6,6 +6,7 @@ namespace UI\Http\Rest\Controller\User;
 
 use Slink\Shared\Application\Query\QueryTrait;
 use Slink\User\Application\Query\User\GetUserList\GetUserListQuery;
+use Slink\User\Domain\Enum\UserRole;
 use Slink\User\Infrastructure\Auth\JwtUser;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
@@ -16,7 +17,7 @@ use UI\Http\Rest\Response\ApiResponse;
 
 #[AsController]
 #[Route('/users/{page}', name: 'get_user_list', requirements: ['page' => '\d+'], methods: ['GET'])]
-#[IsGranted('ROLE_ADMIN')]
+#[IsGranted(UserRole::Admin->value)]
 final class GetUserListController {
   use QueryTrait;
   
