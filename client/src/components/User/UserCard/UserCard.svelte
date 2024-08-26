@@ -39,7 +39,6 @@
     { minExecutionTime: 300 }
   );
 
-  // let closeDropdown: () => void;
   let deleteModalVisible = false;
   let statusToChange: UserStatusEnum | null = null;
   const closeDropdown = () => {
@@ -88,7 +87,7 @@
     <UserAvatar {user} size="lg" />
     <div class="flex w-full flex-col">
       <div class="flex w-full justify-between">
-        <div class="flex items-center gap-2">
+        <div class="flex flex-wrap items-center gap-x-2">
           <span class="text-lg font-semibold">{user.displayName}</span>
           <div class="badges space-x-1">
             {#if isAdmin}
