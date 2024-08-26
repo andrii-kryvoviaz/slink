@@ -62,30 +62,32 @@
           on:click={() => fetchUsers(filterParams)}
         />
       </div>
-      <label for="table-search" class="sr-only">Search</label>
-      <div class="relative">
-        <div
-          class="rtl:inset-r-0 pointer-events-none absolute inset-y-0 left-0 flex items-center ps-3 rtl:right-0"
-        >
-          <Icon
-            icon="material-symbols-light:search"
-            class="h-5 w-5 text-gray-400"
+      <div class="w-full sm:w-auto">
+        <label for="table-search" class="sr-only">Search</label>
+        <div class="relative">
+          <div
+            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+          >
+            <Icon
+              icon="material-symbols-light:search"
+              class="h-5 w-5 text-gray-400"
+            />
+          </div>
+          <input
+            type="text"
+            id="table-search"
+            class="block w-full rounded-lg border border-gray-300 bg-gray-50 py-2 pl-10 pr-3 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+            placeholder="Search for users"
+            on:keyup={handleSearch}
           />
         </div>
-        <input
-          type="text"
-          id="table-search"
-          class="block w-80 rounded-lg border border-gray-300 bg-gray-50 p-2 ps-10 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-          placeholder="Search for users"
-          on:keyup={handleSearch}
-        />
       </div>
     </div>
     <table
       class="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400"
     >
       <thead
-        class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400"
+        class="hidden bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400 md:table-header-group"
       >
         <tr>
           <th scope="col" class="px-6 py-3">Name</th>
@@ -107,18 +109,22 @@
         {#if isLoaded && $response}
           {#each $response.data as user, index}
             <tr
-              class="bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
+              class="grid grid-cols-2 bg-white py-4 dark:border-gray-700 dark:bg-gray-800 sm:table-row sm:py-0 sm:hover:bg-gray-50 sm:dark:hover:bg-gray-600"
               class:border-b={index !== $response.data.length - 1}
             >
               <th
                 scope="row"
-                class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
+                class="order-1 whitespace-nowrap font-medium text-gray-900 dark:text-white sm:px-6 sm:py-4"
               >
                 {user.displayName}
               </th>
-              <td class="px-6 py-4">{user.email}</td>
-              <td class="px-6 py-4"><UserStatus status={user.status} /></td>
-              <td class="px-6 py-4">{user.createdAt.formattedDate}</td>
+              <td class="order-3 sm:px-6 sm:py-4">{user.email}</td>
+              <td class="order-2 row-span-2 place-self-center sm:px-6 sm:py-4"
+                ><UserStatus status={user.status} /></td
+              >
+              <td class="hidden sm:table-cell sm:px-6 sm:py-4"
+                >{user.createdAt.formattedDate}</td
+              >
             </tr>
           {/each}
           <tr>
