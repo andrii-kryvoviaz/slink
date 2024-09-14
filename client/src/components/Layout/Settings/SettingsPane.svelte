@@ -1,11 +1,19 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte';
+
   import { Button } from '@slink/components/Common';
+
+  const dispatch = createEventDispatcher<{
+    save: { [key: string]: FormDataEntryValue };
+  }>();
 
   const handleSubmit = (event: SubmitEvent) => {
     event.preventDefault();
 
-    const data = new FormData(event.target as HTMLFormElement);
-    console.log(data);
+    const formData = new FormData(event.target as HTMLFormElement);
+    const data = Object.fromEntries(formData.entries());
+
+    dispatch('save', data);
   };
 </script>
 

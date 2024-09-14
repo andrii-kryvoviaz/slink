@@ -100,6 +100,8 @@
 <svelte:body on:click={handleClickOutside} />
 
 <div class={className(containerClasses)} bind:this={container}>
+  <input type="hidden" name={$$props.name} {value} />
+
   <div
     class="flex flex-wrap gap-2 rounded-md bg-gray-800 p-2"
     on:click={toggle}

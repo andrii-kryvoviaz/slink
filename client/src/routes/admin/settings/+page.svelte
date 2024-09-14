@@ -47,7 +47,7 @@
         <svelte:fragment slot="hint"
           >Select the required character types for a user's password</svelte:fragment
         >
-        <Multiselect value={15} type="bitmask">
+        <Multiselect value={15} type="bitmask" name="password_complexity">
           <MultiselectItem key="1">
             <Icon icon="ph:number-nine-thin" />
             Numbers

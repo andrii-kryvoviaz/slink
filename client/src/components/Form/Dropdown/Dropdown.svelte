@@ -122,6 +122,8 @@
 <svelte:body on:click={handleClickOutside} />
 
 <div class={`relative w-fit ${$$props.class}`} bind:this={container}>
+  <input type="hidden" name={$$props.name} value={selectedItem?.key} />
+
   <div
     on:click={toggleDropdown}
     on:keydown={(event) => event.key === 'Enter' && toggleDropdown()}

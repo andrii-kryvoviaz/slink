@@ -23,21 +23,20 @@
 
   delete $$props.size;
 
+  let checked = $$props.checked ?? false;
+
   const dispatch = createEventDispatcher<{ change: boolean }>();
   const handleChange = (event: Event) => {
     const target = event.target as HTMLInputElement;
+    checked = target.checked;
 
-    dispatch('change', target.checked);
+    dispatch('change', checked);
   };
 </script>
 
 <label class="flex cursor-pointer items-center gap-2">
   <slot name="pre-icon" />
-  <input
-    {...$$props}
-    type="checkbox"
-    class={classes}
-    on:change={handleChange}
-  />
+  <input type="checkbox" class={classes} on:change={handleChange} />
+  <input {...$$props} type="hidden" value={checked} />
   <slot name="post-icon" />
 </label>
