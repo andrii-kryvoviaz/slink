@@ -3,15 +3,17 @@
 
   import Icon from '@iconify/svelte';
 
+  import { randomId } from '@slink/utils/string/randomId';
+
   import type {
     DropdownContext,
     DropdownItemData,
-  } from '@slink/components/Common';
+  } from '@slink/components/Form';
 
   export let danger = false;
   export let disabled = false;
   export let loading = false;
-  export let key: string = Math.random().toString(36).substring(7);
+  export let key: string = randomId('dropdown-item');
 
   let textItemRef: HTMLSpanElement;
   let itemData: DropdownItemData | null = null;

@@ -5,14 +5,13 @@
 
   import { className } from '@slink/utils/ui/className';
 
-  import {
-    Button,
-    type ButtonAttributes,
-    type DropdownContext,
-    type DropdownItemData,
-    type DropdownValue,
-  } from '@slink/components/Common';
-  import type { DropdownPosition } from '@slink/components/Common/Dropdown/Dropdown.types';
+  import { Button, type ButtonAttributes } from '@slink/components/Common';
+  import type {
+    DropdownContext,
+    DropdownItemData,
+    DropdownPosition,
+    DropdownValue,
+  } from '@slink/components/Form';
 
   interface $$Props extends ButtonAttributes {
     position?: DropdownPosition;
