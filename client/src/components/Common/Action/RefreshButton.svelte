@@ -47,6 +47,7 @@
         triggeredBy={`[id^='${uniqueId}']`}
         class="py-1 text-[0.7rem]"
         placement="left"
+        arrow={false}
       >
         Refresh
       </Tooltip>

@@ -72,7 +72,7 @@
 
 <section
   in:fade={{ duration: 300 }}
-  class="relative flex h-full flex-grow flex-col py-4"
+  class="relative flex h-full max-w-7xl flex-grow flex-col py-4"
 >
   <div class="flex h-full flex-col">
     {#if itemsNotFound}

@@ -12,8 +12,9 @@
   import { debounce } from '@slink/utils/time/debounce';
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
 
-  import { Dropdown, DropdownItem, Modal } from '@slink/components/Common';
+  import { Modal } from '@slink/components/Common';
   import { Badge } from '@slink/components/Content';
+  import { Dropdown, DropdownItem } from '@slink/components/Form';
   import { UserAvatar, UserStatus } from '@slink/components/User';
 
   export let user: User = {} as User;

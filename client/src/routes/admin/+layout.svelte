@@ -18,7 +18,7 @@
   ];
 </script>
 
-<div class="flex h-full flex-col overflow-y-auto">
+<div class="flex h-full w-full flex-col">
   <div class="p-6">
     <TabMenu orientation="horizontal" class="md:inline-flex">
       {#each tabs as tab}

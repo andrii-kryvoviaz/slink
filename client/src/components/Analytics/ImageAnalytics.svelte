@@ -1,20 +1,17 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  import Icon from '@iconify/svelte';
-
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { ImageAnalyticsResponse } from '@slink/api/Response';
 
   import { Chart, type ChartOptions } from '@slink/components/Analytics';
+  import { RefreshButton } from '@slink/components/Common';
   import {
-    Button,
     Dropdown,
     DropdownItem,
     type DropdownItemData,
-    RefreshButton,
-  } from '@slink/components/Common';
+  } from '@slink/components/Form';
   import { Card } from '@slink/components/Layout';
 
   const {
