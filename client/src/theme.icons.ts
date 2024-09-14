@@ -58,4 +58,9 @@ export const themeIcons: string[] = [
   'material-symbols-light:search',
   'material-symbols-light:admin-panel-settings-outline',
   'mdi:stop-remove',
+  'ph:number-nine-thin',
+  'material-symbols-light:lowercase-rounded',
+  'material-symbols-light:uppercase-rounded',
+  'material-symbols-light:asterisk-rounded',
+  'ph:x',
 ];
