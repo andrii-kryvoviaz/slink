@@ -3,7 +3,8 @@
 ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/andrii-kryvoviaz/slink/release.yml?logo=github)
 ![Docker Image Version (latest semver)](https://img.shields.io/docker/v/anirdev/slink?color=blue)
 ![Docker Pulls](https://img.shields.io/docker/pulls/anirdev/slink?logo=docker)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![License](https://img.shields.io/github/license/andrii-kryvoviaz/slink?color=blue
+)](LICENSE)
 
 ![Slink](screens/e98ea79e-01bb-4e23-98ba-b18841d09c9b.png)
 **Slink** is a self-hosted image sharing platform built with [Symfony](https://symfony.com/) and [SvelteKit](https://kit.svelte.dev/)️.
@@ -201,4 +202,4 @@ Any contributions you make are **greatly appreciated**, whether they are new fea
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the AGPLv3 License. See the [LICENSE](LICENSE) file for details.

@@ -1,6 +1,5 @@
 {
     "type": "project",
-    "license": "MIT",
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
