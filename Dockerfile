@@ -7,17 +7,17 @@ ARG UPLOAD_MAX_FILESIZE_IN_BYTES=52428800
 
 ## NodeJS image
 ## Used to build client app and provide NodeJS binaries to PHP image
-FROM node:${NODE_VERSION}-alpine as node
+FROM node:${NODE_VERSION}-alpine AS node
 
 
 # Prevent Docker from invalidating cache when package.json version changes
 # Since it is not used in the build process
-FROM node as plain-package-json
+FROM node AS plain-package-json
 COPY client/package.json client/yarn.lock ./
 RUN yarn version --new-version 0.0.0
 
 
-FROM node as node-dependencies
+FROM node AS node-dependencies
 WORKDIR /
 
 COPY --from=plain-package-json /package.json /yarn.lock ./
@@ -36,7 +36,7 @@ RUN yarn build
 
 
 ## Source backend files
-FROM alpine as source
+FROM alpine AS source
 WORKDIR /source
 
 COPY bin ./bin
@@ -48,7 +48,7 @@ COPY composer.json ./
 
 ## Composer image
 ## Used to install project dependencies
-FROM composer:2 as vendor
+FROM composer:2 AS vendor
 WORKDIR /dependencies
 
 # Copy composer files
@@ -60,7 +60,7 @@ RUN composer install --ignore-platform-reqs --no-interaction --no-scripts --pref
 
 ## Base image
 ## Used to run application and provide base for development and production images
-FROM php:${PHP_VERSION}-alpine as base
+FROM php:${PHP_VERSION}-alpine AS base
 # Install dependencies
 RUN apk update && apk upgrade &&\
     apk add --no-cache \
@@ -129,7 +129,7 @@ CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisord.conf"]
 
 # Test image
 ## A lightweight image used to run unit tests and linting
-FROM php:${PHP_VERSION}-alpine as test
+FROM php:${PHP_VERSION}-alpine AS test
 # Copy composer executable
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
@@ -155,7 +155,7 @@ RUN echo "memory_limit=${PHP_MEMORY_LIMIT}" > /usr/local/etc/php/conf.d/memory-l
 
 ## Development image
 ## Used to run application in development mode
-FROM base as dev
+FROM base AS dev
 # Install Development PHP extensions
 RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS autoconf g++ make linux-headers && \
     pecl install xdebug && \
@@ -202,9 +202,9 @@ EXPOSE 8080
 
 ## Production image
 ## Used to run application in production mode
-FROM base as prod
+FROM base AS prod
 # Install Production PHP extensions
-RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS autoconf g++ make linux-headers && \
+RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS autoconf g++ make linux-headers brotli-dev && \
     pecl install swoole && \
     docker-php-ext-enable swoole opcache && \
     apk del .build-deps
