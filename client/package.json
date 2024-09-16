@@ -16,8 +16,8 @@
     "@floating-ui/dom": "^1.6.3",
     "@iconify/svelte": "^3.1.4",
     "@sveltejs/adapter-auto": "^3.0.0",
-    "@sveltejs/adapter-node": "^2.0.0",
-    "@sveltejs/kit": "^2.5.0",
+    "@sveltejs/adapter-node": "^5.2.2",
+    "@sveltejs/kit": "^2.5.27",
     "@sveltejs/vite-plugin-svelte": "^3.0.0",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/dotenv": "^8.2.0",
@@ -33,15 +33,15 @@
     "prettier-plugin-svelte": "^2.10.1",
     "prettier-plugin-tailwindcss": "^0.2.6",
     "redis": "^4.6.13",
-    "svelte": "^4.2.11",
+    "svelte": "^4.2.19",
     "svelte-check": "^3.4.3",
     "tailwind-merge": "^2.2.1",
-    "tailwindcss": "^3.3.5",
+    "tailwindcss": "^3.4.11",
     "tailwindcss-theme-customizer": "^1.0.4",
     "tslib": "^2.4.1",
     "typescript": "^5.0.0",
     "ua-parser-js": "^1.0.37",
-    "vite": "^5.2.8"
+    "vite": "^5.4.5"
   },
   "type": "module"
 }
