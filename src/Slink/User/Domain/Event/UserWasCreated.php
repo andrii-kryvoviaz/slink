@@ -13,6 +13,7 @@ use Slink\User\Domain\ValueObject\Auth\Credentials;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;
 use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Email;
+use Slink\User\Domain\ValueObject\Username;
 
 final readonly class UserWasCreated implements SerializablePayload {
   
@@ -39,6 +40,7 @@ final readonly class UserWasCreated implements SerializablePayload {
     return [
       'uuid' => $this->id->toString(),
       'email' => $this->credentials->email->toString(),
+      'username' => $this->credentials->username->toString(),
       'password' => $this->credentials->password->toString(),
       'displayName' => $this->displayName->toString(),
       'createdAt' => $this->createdAt->toString(),
@@ -55,6 +57,7 @@ final readonly class UserWasCreated implements SerializablePayload {
       ID::fromString($payload['uuid']),
       Credentials::fromCredentials(
         Email::fromString($payload['email']),
+        Username::fromString($payload['username']),
         HashedPassword::fromHash($payload['password']),
       ),
       DisplayName::fromString($payload['displayName']),

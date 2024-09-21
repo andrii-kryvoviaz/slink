@@ -13,9 +13,9 @@
   import { Button, type ButtonVariant } from '@slink/components/Common';
   import { Input } from '@slink/components/Form';
 
-  import type { PageData } from './$types';
+  import type { ActionData, PageData } from './$types';
 
-  export let form;
+  export let form: ActionData;
   export let data: PageData;
 
   let isLoading = useWritable('loginFormLoadingState', false);
@@ -51,7 +51,7 @@
       <div class="flex flex-col gap-2">
         <div>
           <Input
-            label="Username"
+            label="Username or Email"
             name="username"
             value={form?.username || ''}
             error={form?.errors.username ||

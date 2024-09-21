@@ -54,10 +54,10 @@
       >
         <div class="mt-8 grid grid-cols-1 gap-x-6 gap-y-2 md:grid-cols-2">
           <Input
-            label="Display Name"
-            name="display_name"
-            value={form?.display_name}
-            error={form?.errors.display_name}
+            label="Username"
+            name="username"
+            value={form?.username}
+            error={form?.errors.username}
           >
             <Icon icon="ph:user" slot="leftIcon" />
           </Input>

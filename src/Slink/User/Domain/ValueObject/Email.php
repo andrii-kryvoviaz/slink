@@ -9,12 +9,23 @@ use Slink\User\Domain\Exception\InvalidEmailException;
 
 final readonly class Email extends AbstractValueObject{
   private function __construct(private string $email) {
+    self::validate($email);
   }
 
   public static function fromString(string $email): self {
-    self::validate($email);
-
     return new self($email);
+  }
+  
+  public static function fromStringOrNull(?string $email): ?self {
+    if ($email === null) {
+      return null;
+    }
+    
+    try {
+      return new self($email);
+    } catch (InvalidEmailException) {
+      return null;
+    }
   }
 
   public function toString(): string {

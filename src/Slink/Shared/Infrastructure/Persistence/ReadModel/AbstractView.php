@@ -8,7 +8,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
 use Slink\Shared\Domain\Event\EventWithEntityManager;
-use Slink\Shared\Domain\Exception\DateTimeException;
 use Slink\Shared\Domain\ValueObject\AbstractValueObject;
 use Slink\Shared\Domain\ValueObject\DateTime;
 

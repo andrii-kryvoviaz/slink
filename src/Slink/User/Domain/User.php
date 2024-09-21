@@ -20,15 +20,17 @@ use Slink\User\Domain\Exception\DisplayNameAlreadyExistException;
 use Slink\User\Domain\Exception\InvalidCredentialsException;
 use Slink\User\Domain\Exception\EmailAlreadyExistException;
 use Slink\User\Domain\Exception\InvalidOldPassword;
+use Slink\User\Domain\Exception\UsernameAlreadyExistException;
 use Slink\User\Domain\ValueObject\Auth\Credentials;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;
 use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Email;
+use Slink\User\Domain\ValueObject\Username;
 
 final class User extends AbstractAggregateRoot implements UserInterface {
   private Email $email;
+  private Username $username;
   private HashedPassword $hashedPassword;
-  
   private UserStatus $status;
   
   /**
@@ -47,6 +49,14 @@ final class User extends AbstractAggregateRoot implements UserInterface {
    */
   public function setEmail(Email $email): void {
     $this->email = $email;
+  }
+  
+  /**
+   * @param Username $username
+   * @return void
+   */
+  public function setUsername(Username $username): void {
+    $this->username = $username;
   }
   
   /**
@@ -73,6 +83,13 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   }
   
   /**
+   * @return Username
+   */
+  public function getUsername(): Username {
+    return $this->username;
+  }
+  
+  /**
    * @return array<string>
    */
   public function getRoles(): array {
@@ -93,6 +110,7 @@ final class User extends AbstractAggregateRoot implements UserInterface {
     parent::__construct($id);
     
     $this->refreshToken = RefreshTokenSet::create($id);
+    $this->status = UserStatus::Inactive;
     $this->registerAggregate($this->refreshToken);
   }
 
@@ -108,6 +126,10 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   ): self {
     if(!$userCreationContext->uniqueEmailSpecification->isUnique($credentials->email)) {
       throw new EmailAlreadyExistException();
+    }
+    
+    if(!$userCreationContext->uniqueUsernameSpecification->isUnique($credentials->username)) {
+      throw new UsernameAlreadyExistException();
     }
     
     if(!$userCreationContext->uniqueDisplayNameSpecification->isUnique($displayName)) {
@@ -126,6 +148,7 @@ final class User extends AbstractAggregateRoot implements UserInterface {
    */
   public function applyUserWasCreated(UserWasCreated $event): void {
     $this->setEmail($event->credentials->email);
+    $this->setUsername($event->credentials->username);
     $this->setHashedPassword($event->credentials->password);
     $this->setStatus($event->status);
   }

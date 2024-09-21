@@ -18,4 +18,8 @@ trait CommandTrait {
   protected function handle(CommandInterface|Envelope $command): void {
     $this->commandBus->handle($command);
   }
+  
+  protected function handleSync(CommandInterface|Envelope $command): mixed {
+    return $this->commandBus->handleSync($command);
+  }
 }

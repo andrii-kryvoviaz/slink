@@ -12,15 +12,18 @@ use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractRepository;
 use Slink\User\Domain\Repository\CheckUserByDisplayNameInterface;
 use Slink\User\Domain\Repository\CheckUserByEmailInterface;
 use Slink\User\Domain\Repository\CheckUserByRefreshTokenInterface;
+use Slink\User\Domain\Repository\CheckUserByUsernameInterface;
 use Slink\User\Domain\Repository\UserRepositoryInterface;
 use Slink\User\Domain\ValueObject\Auth\HashedRefreshToken;
 use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Email;
+use Slink\User\Domain\ValueObject\Username;
 use Slink\User\Infrastructure\ReadModel\View\RefreshTokenView;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
 
 final class UserRepository extends AbstractRepository implements
   CheckUserByEmailInterface,
+  CheckUserByUsernameInterface,
   CheckUserByDisplayNameInterface,
   CheckUserByRefreshTokenInterface,
   UserRepositoryInterface
@@ -40,6 +43,23 @@ final class UserRepository extends AbstractRepository implements
       ->select('user.uuid')
       ->where('user.email = :email')
       ->setParameter('email', $email->toString())
+      ->getQuery()
+      ->getOneOrNullResult();
+    
+    return $result['uuid'] ?? null;
+  }
+  
+  /**
+   * @throws NonUniqueResultException
+   */
+  #[\Override]
+  public function existsUsername(Username $username): ?UuidInterface {
+    $result = $this->_em
+      ->createQueryBuilder()
+      ->from(UserView::class, 'user')
+      ->select('user.uuid')
+      ->where('user.username = :username')
+      ->setParameter('username', $username->toString())
       ->getQuery()
       ->getOneOrNullResult();
     

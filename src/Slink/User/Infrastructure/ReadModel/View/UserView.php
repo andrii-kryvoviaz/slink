@@ -11,6 +11,7 @@ use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;
 use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Email;
+use Slink\User\Domain\ValueObject\Username;
 use Slink\User\Infrastructure\ReadModel\Repository\UserRepository;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\SerializedName;
@@ -21,6 +22,7 @@ class UserView extends AbstractView {
   /**
    * @param string $uuid
    * @param Email $email
+   * @param Username $username
    * @param DisplayName $displayName
    * @param HashedPassword $password
    * @param DateTime $createdAt
@@ -37,6 +39,10 @@ class UserView extends AbstractView {
     #[ORM\Column(type: 'email', unique: true)]
     #[Groups(['public', 'internal'])]
     private Email $email,
+    
+    #[ORM\Column(type: 'username', unique: true)]
+    #[Groups(['public', 'internal'])]
+    private Username $username,
     
     #[ORM\Column(type: 'display_name', unique: true, nullable: true)]
     #[Groups(['public', 'internal'])]
@@ -72,6 +78,13 @@ class UserView extends AbstractView {
    */
   public function getEmail(): string {
     return $this->email->toString();
+  }
+  
+  /**
+   * @return string
+   */
+  public function getUsername(): string {
+    return $this->username->toString();
   }
   
   /**

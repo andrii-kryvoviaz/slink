@@ -19,13 +19,13 @@ export const load: PageServerLoad = async ({ request, parent, locals }) => {
 };
 
 const defaultAction: Action = async ({ locals, request, cookies }) => {
-  const { display_name, email, password, confirm } = await formData(request);
+  const { username, email, password, confirm } = await formData(request);
 
   let redirectUrl: string | null = '/profile/login';
 
   try {
     const response = await ApiClient.auth.signup({
-      display_name,
+      username,
       email,
       password,
       confirm,
@@ -42,7 +42,7 @@ const defaultAction: Action = async ({ locals, request, cookies }) => {
   } catch (e) {
     if (e instanceof HttpException) {
       return fail(422, {
-        display_name,
+        username,
         email,
         errors: e.errors,
       });
