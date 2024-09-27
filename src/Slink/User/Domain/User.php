@@ -11,6 +11,7 @@ use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Context\UserCreationContext;
 use Slink\User\Domain\Contracts\UserInterface;
 use Slink\User\Domain\Enum\UserStatus;
+use Slink\User\Domain\Event\UserDisplayNameWasChanged;
 use Slink\User\Domain\Event\UserLoggedOut;
 use Slink\User\Domain\Event\UserPasswordWasChanged;
 use Slink\User\Domain\Event\UserSignedIn;
@@ -21,6 +22,7 @@ use Slink\User\Domain\Exception\InvalidCredentialsException;
 use Slink\User\Domain\Exception\EmailAlreadyExistException;
 use Slink\User\Domain\Exception\InvalidOldPassword;
 use Slink\User\Domain\Exception\UsernameAlreadyExistException;
+use Slink\User\Domain\Specification\UniqueDisplayNameSpecificationInterface;
 use Slink\User\Domain\ValueObject\Auth\Credentials;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;
 use Slink\User\Domain\ValueObject\DisplayName;
@@ -30,6 +32,7 @@ use Slink\User\Domain\ValueObject\Username;
 final class User extends AbstractAggregateRoot implements UserInterface {
   private Email $email;
   private Username $username;
+  private DisplayName $displayName;
   private HashedPassword $hashedPassword;
   private UserStatus $status;
   
@@ -87,6 +90,13 @@ final class User extends AbstractAggregateRoot implements UserInterface {
    */
   public function getUsername(): Username {
     return $this->username;
+  }
+  
+  /**
+   * @return DisplayName
+   */
+  public function getDisplayName(): DisplayName {
+    return $this->displayName;
   }
   
   /**
@@ -223,5 +233,17 @@ final class User extends AbstractAggregateRoot implements UserInterface {
    */
   public function applyUserStatusWasChanged(UserStatusWasChanged $event): void {
     $this->setStatus($event->status);
+  }
+  
+  public function changeDisplayName(DisplayName $displayName, UniqueDisplayNameSpecificationInterface $uniqueDisplayNameSpecification): void {
+    if(!$uniqueDisplayNameSpecification->isUnique($displayName)) {
+      throw new DisplayNameAlreadyExistException();
+    }
+    
+    $this->recordThat(new UserDisplayNameWasChanged($this->aggregateRootId(), $displayName));
+  }
+  
+  public function applyUserDisplayNameWasChanged(UserDisplayNameWasChanged $event): void {
+    $this->displayName = $event->displayName;
   }
 }

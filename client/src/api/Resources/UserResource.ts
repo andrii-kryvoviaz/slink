@@ -31,4 +31,10 @@ export class UserResource extends AbstractResource {
       json: { old_password, password, confirm },
     });
   }
+
+  public async updateProfile({ display_name }: { display_name: string }) {
+    return this.patch('/user/profile', {
+      json: { display_name },
+    });
+  }
 }

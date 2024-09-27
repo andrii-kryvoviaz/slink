@@ -7,6 +7,7 @@ namespace Slink\User\Infrastructure\ReadModel\Projection;
 use Doctrine\ORM\NonUniqueResultException;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractProjection;
+use Slink\User\Domain\Event\UserDisplayNameWasChanged;
 use Slink\User\Domain\Event\UserPasswordWasChanged;
 use Slink\User\Domain\Event\UserStatusWasChanged;
 use Slink\User\Domain\Event\UserWasCreated;
@@ -50,6 +51,17 @@ final class UserProjection extends AbstractProjection {
   public function handleUserStatusWasChanged(UserStatusWasChanged $event): void {
     $user = $this->repository->one($event->id);
     $user->setStatus($event->status);
+
+    $this->repository->save($user);
+  }
+  
+  /**
+   * @throws NonUniqueResultException
+   * @throws NotFoundException
+   */
+  public function handleUserDisplayNameWasChanged(UserDisplayNameWasChanged $event): void {
+    $user = $this->repository->one($event->id);
+    $user->setDisplayName($event->displayName);
 
     $this->repository->save($user);
   }

@@ -137,4 +137,12 @@ class UserView extends AbstractView {
   public function setPassword(HashedPassword $password): void {
     $this->password = $password;
   }
+  
+  /**
+   * @param DisplayName $displayName
+   * @return void
+   */
+  public function setDisplayName(DisplayName $displayName): void {
+    $this->displayName = $displayName;
+  }
 }
