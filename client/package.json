@@ -16,7 +16,7 @@
     "@floating-ui/dom": "^1.6.3",
     "@iconify/svelte": "^3.1.4",
     "@sveltejs/adapter-auto": "^3.0.0",
-    "@sveltejs/adapter-node": "^5.2.2",
+    "@sveltejs/adapter-node": "^5.2.5",
     "@sveltejs/kit": "^2.5.27",
     "@sveltejs/vite-plugin-svelte": "^3.0.0",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
@@ -41,7 +41,8 @@
     "tslib": "^2.4.1",
     "typescript": "^5.0.0",
     "ua-parser-js": "^1.0.37",
-    "vite": "^5.4.5"
+    "vite": "^5.4.8"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {}
 }
