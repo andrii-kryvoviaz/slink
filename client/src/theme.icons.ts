@@ -6,7 +6,6 @@ export const themeIcons: string[] = [
   'system-uicons:external',
   'carbon:link',
   'carbon:unlink',
-  'simple-line-icons:plus',
   'akar-icons:github-fill',
   'clarity:info-standard-line',
   'ic:round-close',
@@ -45,4 +44,5 @@ export const themeIcons: string[] = [
   'lets-icons:copy-light',
   'mdi-light:check',
   'material-symbols-light:menu',
+  'ph:plus-fill',
 ];

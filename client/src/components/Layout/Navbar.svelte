@@ -1,7 +1,6 @@
 <script lang="ts">
   import Icon from '@iconify/svelte';
 
-  import { Tooltip } from '@slink/components/Common';
   import { Button } from '@slink/components/Common';
 </script>
 
@@ -21,45 +20,16 @@
       <div>
         <Button
           href="/upload"
-          variant="link"
+          variant="dark"
           size="sm"
           rounded="full"
           motion="hover:opacity"
           id="uploadImageLink"
           class="flex flex-row gap-2 hover:no-underline"
         >
-          <Icon icon="simple-line-icons:plus" class="h-3 w-3 sm:h-5 sm:w-5" />
-          <span class="inline sm:hidden">Upload</span>
+          <Icon icon="ph:plus-fill" class="h-3 w-3 sm:h-5 sm:w-5" />
+          Upload
         </Button>
-        <Tooltip
-          triggeredBy="[id^='uploadImageLink']"
-          class="max-w-[10rem] p-2 text-center text-xs"
-          color="dark"
-          placement="bottom"
-        >
-          Upload an image
-        </Tooltip>
-      </div>
-
-      <div class="hidden sm:block">
-        <Button
-          href="https://github.com/andrii-kryvoviaz/slink"
-          variant="link"
-          target="_blank"
-          motion="hover:opacity"
-          id="projectLink"
-          class="p-2"
-        >
-          <Icon icon="akar-icons:github-fill" class="h-5 w-5" />
-        </Button>
-        <Tooltip
-          triggeredBy="[id^='projectLink']"
-          class="max-w-[10rem] p-2 text-center text-xs"
-          color="dark"
-          placement="bottom"
-        >
-          Project on GitHub
-        </Tooltip>
       </div>
 
       {#if $$slots.themeSwitch}

@@ -24,6 +24,7 @@
   {:else}
     <a
       href={item.state === 'active' ? item.link : '#'}
+      target={item.target || '_self'}
       class={classes}
       class:inactive={item.state === 'inactive'}
     >

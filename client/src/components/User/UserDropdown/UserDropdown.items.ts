@@ -5,6 +5,7 @@ type UserDropdownGroup = {
   access: UserRole[];
   items: UserDropdownItem[];
   badge?: string;
+  hidden?: boolean;
 };
 
 export type UserDropdownItem = {
@@ -12,6 +13,7 @@ export type UserDropdownItem = {
   access: string[];
   icon: string;
   link: string;
+  target?: string;
   isForm?: boolean;
   state?: 'active' | 'inactive' | 'hidden';
   badge?: string;
@@ -41,21 +43,21 @@ export const UserDropdownItems: UserDropdownGroup[] = [
   {
     title: 'Admin',
     access: ['ADMIN_ROLE'],
-    badge: 'Coming Soon',
+    hidden: true,
     items: [
       {
         title: 'Dashboard',
         access: ['ADMIN_ROLE'],
         icon: 'solar:graph-line-duotone',
         link: '/admin',
-        state: 'inactive',
+        state: 'hidden',
       },
       {
         title: 'Settings',
         access: ['ADMIN_ROLE'],
         icon: 'mingcute:settings-7-line',
         link: '/admin/settings',
-        state: 'inactive',
+        state: 'hidden',
       },
     ],
   },
@@ -71,12 +73,26 @@ export const UserDropdownItems: UserDropdownGroup[] = [
         state: 'hidden',
       },
       {
+        title: 'View on GitHub',
+        access: ['USER_ROLE', 'ADMIN_ROLE'],
+        link: 'https://github.com/andrii-kryvoviaz/slink',
+        icon: 'akar-icons:github-fill',
+        state: 'active',
+        target: '_blank',
+      },
+      {
         title: 'Help',
         access: ['USER_ROLE', 'ADMIN_ROLE'],
         icon: 'fluent:chat-help-20-regular',
         link: '/help/faq',
         state: 'active',
       },
+    ],
+  },
+  {
+    title: 'Auth',
+    access: ['USER_ROLE', 'ADMIN_ROLE'],
+    items: [
       {
         title: 'Logout',
         access: ['USER_ROLE', 'ADMIN_ROLE'],
