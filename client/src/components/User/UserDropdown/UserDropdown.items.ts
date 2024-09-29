@@ -76,7 +76,7 @@ export const UserDropdownItems: UserDropdownGroup[] = [
         title: 'View on GitHub',
         access: ['USER_ROLE', 'ADMIN_ROLE'],
         link: 'https://github.com/andrii-kryvoviaz/slink',
-        icon: 'akar-icons:github-fill',
+        icon: 'mdi:github',
         state: 'active',
         target: '_blank',
       },

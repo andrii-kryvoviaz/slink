@@ -31,7 +31,7 @@
       out:fade={{ duration: 500 }}
       class="image-container w-full max-w-full break-inside-avoid rounded-lg border bg-gray-200/5 p-4 dark:border-gray-800/50 sm:w-[48rem]"
     >
-      <div class="mb-4 flex items-center justify-between">
+      <div class="flex items-center justify-between sm:mb-4">
         <div
           class="flex max-w-full flex-grow flex-col items-center gap-4 sm:flex-row sm:items-start"
         >
@@ -63,7 +63,7 @@
               </Button>
             </div>
 
-            <div class="mb-6">
+            <div class="sm:mb-6">
               <ImageActionBar
                 image={{
                   id: item.id,

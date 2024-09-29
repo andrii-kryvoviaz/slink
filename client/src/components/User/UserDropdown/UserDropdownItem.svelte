@@ -7,7 +7,7 @@
   export let isDark = false;
 
   const classes =
-    'flex transform items-center justify-between p-3 text-sm capitalize text-gray-600 hover:bg-dropdown-accent hover:text-white dark:text-gray-300';
+    'flex transform items-center justify-between sm:p-3 py-3 px-5 text-lg sm:text-sm capitalize text-gray-600 hover:bg-dropdown-accent hover:text-white dark:text-gray-300';
 </script>
 
 <div class:dark={isDark}>

@@ -208,7 +208,7 @@
         id="open-delete-tooltip-{image.id}"
         on:click={() => (deleteModalVisible = true)}
       >
-        <Icon icon="solar:trash-bin-minimalistic-broken" class="h-5 w-5" />
+        <Icon icon="solar:trash-bin-minimalistic-2-linear" class="h-5 w-5" />
       </Button>
       <Tooltip
         triggeredBy="[id^='open-delete-tooltip-{image.id}']"
@@ -229,14 +229,11 @@
   loading={$deleteImageIsLoading}
   on:confirm={handleDeleteImage}
 >
-  <div slot="icon">
-    <Icon
-      icon="clarity:warning-standard-line"
-      class="h-10 w-10 text-red-600/90"
-    />
+  <div slot="icon" class="rounded-full bg-red-500/10 p-4 text-red-500/90">
+    <Icon icon="clarity:warning-standard-line" class="h-8 w-8" />
   </div>
   <p slot="title">Image Deletion</p>
-  <div class="text-sm" slot="content">
+  <div class="mb-4 text-sm" slot="content">
     <p>
       Are you sure you want to delete this image? <br />
       This action cannot be undone.

@@ -6,7 +6,6 @@ export const themeIcons: string[] = [
   'system-uicons:external',
   'carbon:link',
   'carbon:unlink',
-  'akar-icons:github-fill',
   'clarity:info-standard-line',
   'ic:round-close',
   'mdi:information-outline',
@@ -36,7 +35,6 @@ export const themeIcons: string[] = [
   'ep:minus',
   'ep:plus',
   'mdi-light:loading',
-  'solar:trash-bin-minimalistic-broken',
   'mdi-light:share-variant',
   'ph:eye-light',
   'ph:eye-slash-light',
@@ -45,4 +43,6 @@ export const themeIcons: string[] = [
   'mdi-light:check',
   'material-symbols-light:menu',
   'ph:plus-fill',
+  'solar:trash-bin-minimalistic-2-linear',
+  'mdi:github',
 ];

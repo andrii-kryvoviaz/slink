@@ -4,7 +4,7 @@
   import { Button } from '@slink/components/Common';
 </script>
 
-<header class="z-30 w-full border-b-2 border-header/70 backdrop-blur">
+<header class="z-30 w-full border-b-2 border-header/70">
   <nav
     class="mx-auto flex min-h-[5rem] items-center justify-between px-5 py-4 sm:container lg:px-8"
   >
@@ -25,9 +25,9 @@
           rounded="full"
           motion="hover:opacity"
           id="uploadImageLink"
-          class="flex flex-row gap-2 hover:no-underline"
+          class="flex flex-row gap-2 py-3 text-sm hover:no-underline sm:py-2 sm:text-xs"
         >
-          <Icon icon="ph:plus-fill" class="h-3 w-3 sm:h-5 sm:w-5" />
+          <Icon icon="ph:plus-fill" class="h-3 w-3 sm:h-4 sm:w-4" />
           Upload
         </Button>
       </div>
