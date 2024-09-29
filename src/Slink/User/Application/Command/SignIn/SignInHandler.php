@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Slink\User\Application\Command\SignIn;
 
-use Slink\Settings\Domain\Service\ConfigurationProvider;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\Exception\DateTimeException;
 use Slink\User\Domain\Contracts\AuthProviderInterface;
@@ -17,7 +16,6 @@ use Slink\User\Domain\ValueObject\Username;
 
 final readonly class SignInHandler implements CommandHandlerInterface {
   public function __construct(
-    private ConfigurationProvider $configurationProvider,
     private UserStoreRepositoryInterface $userStore,
     private AuthProviderInterface $authenticationProvider,
   ) {
@@ -34,17 +32,14 @@ final readonly class SignInHandler implements CommandHandlerInterface {
       throw new InvalidCredentialsException();
     }
     
-    if(
-      $this->configurationProvider->get('user.approvalRequired') &&
-      $user->getStatus()->isRestricted()
-    ) {
+    if($user->getStatus()->isRestricted()) {
       throw new InvalidCredentialsException();
     }
     
+    $user->signIn($command->getPassword());
+    
     $tokenPair = $this->authenticationProvider->generateTokenPair($user);
     $user->refreshToken->issue(HashedRefreshToken::encode($tokenPair->getRefreshToken()));
-    
-    $user->signIn($command->getPassword());
 
     $this->userStore->store($user);
     

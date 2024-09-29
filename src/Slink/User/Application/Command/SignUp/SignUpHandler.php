@@ -37,7 +37,9 @@ final readonly class SignUpHandler implements CommandHandlerInterface {
       $command->getPassword()
     );
     
-    $status = $this->configurationProvider->get('user.approvalRequired') ? UserStatus::Inactive : UserStatus::Active;
+    $status = $this->configurationProvider->get('user.approvalRequired')
+      ? UserStatus::Inactive
+      : UserStatus::Active;
     
     $user = User::create(
       $command->getId(),
