@@ -18,12 +18,13 @@ framework:
                 default_middleware: allow_no_handlers
 
         transports:
-             async: '%env(MESSENGER_TRANSPORT_DSN)%'
+             # ToDo: add async transport support
+             # async: '%env(MESSENGER_TRANSPORT_DSN)%'
              failed: 'doctrine://event_store?queue_name=failed'
              sync: 'sync://'
 
-        routing:
-            Slink\Shared\Application\Command\CommandInterface: async
+        routing: ~
+            # Slink\Shared\Application\Command\CommandInterface: async
 
 when@test:
     framework:
