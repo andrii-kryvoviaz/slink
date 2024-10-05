@@ -1,7 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  import { browser } from '$app/environment';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
@@ -73,7 +72,7 @@
 </svelte:head>
 
 <section in:fade={{ duration: 300 }}>
-  <div class="container mx-auto flex flex-col px-6 py-10">
+  <div class="container mx-auto flex flex-col px-6 py-6 sm:py-10">
     <div>
       <h1
         class="text-center text-2xl font-semibold capitalize text-gray-800 dark:text-white lg:text-3xl"
@@ -108,14 +107,6 @@
       <div
         class="mt-8 flex flex-grow flex-col items-center justify-center font-extralight"
       >
-        <div class="my-2 flex flex-col justify-center gap-3">
-          {#each Array(4) as _}
-            <span
-              class="block h-3 w-1 rounded-full bg-gray-400/30 dark:bg-gray-200/10"
-            />
-          {/each}
-        </div>
-        <p class="text-[3rem] opacity-70">Oops! Here be nothing yet.</p>
         <p class="text-normal opacity-70">Be the first to upload something.</p>
         <Button class="mt-4" size="md" variant="primary" href="/upload">
           <span>Take me to <b>Upload</b></span>

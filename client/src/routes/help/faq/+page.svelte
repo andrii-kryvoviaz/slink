@@ -42,7 +42,7 @@
 </svelte:head>
 
 <section in:fade={{ duration: 300 }}>
-  <div class="container mx-auto flex flex-col px-6 py-10">
+  <div class="container mx-auto flex flex-col px-6 py-6 sm:py-10">
     <div>
       <h1
         class="text-center text-2xl font-semibold capitalize text-gray-800 dark:text-white lg:text-3xl"

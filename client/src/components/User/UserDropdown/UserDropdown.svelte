@@ -72,7 +72,9 @@
       {#each UserDropdownItems as group, index (group.title)}
         {#if !group?.hidden}
           {#if index > 0}
-            <hr class="border-gray-200 dark:border-gray-700" />
+            <hr
+              class="border-bottom mx-6 my-1 border-gray-200 opacity-70 dark:border-gray-700 sm:mx-0"
+            />
           {/if}
 
           <div class="relative">

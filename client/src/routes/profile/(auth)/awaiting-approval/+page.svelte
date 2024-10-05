@@ -21,8 +21,7 @@
       <h2
         class="mx-auto max-w-lg text-4xl font-light tracking-tight text-gray-800 dark:text-white xl:text-4xl"
       >
-        Your account has been created and is awaiting approval.
-        <span class="text-primary">Hooray 🚀</span>
+        Your account has been created and is awaiting approval 🚀
       </h2>
 
       <div
@@ -34,9 +33,9 @@
       <p
         class="max-w-xl text-left font-extralight text-gray-500 dark:text-gray-300"
       >
-        You can check your account status on this page at any time. While you
-        waiting, you can send your email or user ID to the admin to speed up the
-        process.
+        You may check your account status on this page at any time. To speed up
+        the process while waiting, consider sending your email or user ID to the
+        admin.
       </p>
 
       <div

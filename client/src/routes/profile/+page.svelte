@@ -2,8 +2,8 @@
   import { settings } from '@slink/lib/settings';
 
   import { enhance } from '$app/forms';
-  import { page } from '$app/stores';
   import Icon from '@iconify/svelte';
+  import { fade } from 'svelte/transition';
 
   import { useWritable } from '@slink/store/contextAwareStore';
 
@@ -53,7 +53,7 @@
   <title>{user.displayName} | Slink</title>
 </svelte:head>
 
-<div class="container mx-auto px-6 py-8">
+<div class="container mx-auto px-6 py-6 sm:py-10" in:fade={{ duration: 300 }}>
   <div class="flex flex-col justify-evenly gap-6 md:flex-row">
     <div class="flex">
       <UserAvatar size="lg" {user} />

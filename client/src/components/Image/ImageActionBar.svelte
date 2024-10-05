@@ -229,7 +229,7 @@
   loading={$deleteImageIsLoading}
   on:confirm={handleDeleteImage}
 >
-  <div slot="icon" class="rounded-full bg-red-500/10 p-4 text-red-500/90">
+  <div slot="icon" class="p-4 text-red-500/90">
     <Icon icon="clarity:warning-standard-line" class="h-8 w-8" />
   </div>
   <p slot="title">Image Deletion</p>
@@ -255,7 +255,7 @@
       />
       <Tooltip
         triggeredBy="[id^='preserve-on-disk-tooltip']"
-        class="max-w-[10rem] p-2 text-center text-[0.5em]"
+        class="max-w-[10rem] p-2 text-center text-[0.7em]"
         color="dark"
         placement="top"
       >
