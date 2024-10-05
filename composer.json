@@ -45,6 +45,10 @@
         "symfony/web-profiler-bundle": "^7.1"
     },
     "config": {
+        "platform": {
+            "php": "8.3",
+            "ext-imagick": "3.7.0"
+        },
         "allow-plugins": {
             "php-http/discovery": true,
             "symfony/flex": true,
