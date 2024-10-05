@@ -5,7 +5,7 @@ import type { CheckStatusResponse } from '@slink/api/Response/User/CheckStatusRe
 
 export class UserResource extends AbstractResource {
   public async checkStatus(userId: string): Promise<CheckStatusResponse> {
-    return this.get(`/user/${userId}/status`);
+    return this.get(`/public/user/${userId}/status`);
   }
 
   public async getCurrentUser(
