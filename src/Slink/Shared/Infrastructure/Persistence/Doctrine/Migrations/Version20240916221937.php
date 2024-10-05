@@ -20,8 +20,6 @@ final class Version20240916221937 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP TABLE user_role');
-        $this->addSql('DROP TABLE user_to_role');
         $this->addSql('CREATE TEMPORARY TABLE __temp__image AS SELECT uuid, user_id, file_name, description, is_public, created_at, updated_at, views, size, mime_type, width, height FROM image');
         $this->addSql('DROP TABLE image');
         $this->addSql('CREATE TABLE image (uuid CHAR(36) NOT NULL --(DC2Type:uuid)
@@ -36,13 +34,26 @@ final class Version20240916221937 extends AbstractMigration
         $this->addSql('DROP TABLE user');
         $this->addSql('CREATE TABLE user (uuid CHAR(36) NOT NULL --(DC2Type:uuid)
         , email VARCHAR(255) NOT NULL --(DC2Type:email)
+        , username VARCHAR(255) NOT NULL --(DC2Type:username)
         , password VARCHAR(255) NOT NULL --(DC2Type:hashed_password)
         , created_at DATETIME NOT NULL --(DC2Type:datetime_immutable)
         , updated_at DATETIME DEFAULT NULL --(DC2Type:datetime_immutable)
         , display_name VARCHAR(255) DEFAULT NULL --(DC2Type:display_name)
-        , status VARCHAR(255) DEFAULT \'active\' NOT NULL, username VARCHAR(255) NOT NULL --(DC2Type:username)
+        , status VARCHAR(255) DEFAULT \'active\' NOT NULL
         , PRIMARY KEY(uuid))');
-        $this->addSql('INSERT INTO user (uuid, email, password, created_at, updated_at, display_name, status, username) SELECT uuid, email, password, created_at, updated_at, display_name, status, REPLACE(display_name, \' \', \'.\') FROM __temp__user');
+        $this->addSql('
+            INSERT INTO user (uuid, email, username, password, created_at, updated_at, display_name, status)
+            SELECT
+                uuid,
+                email,
+                LOWER(REPLACE(TRIM(display_name), \' \', \'.\')),
+                password,
+                created_at,
+                updated_at,
+                display_name,
+                status
+            FROM __temp__user
+        ');
         $this->addSql('DROP TABLE __temp__user');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649E7927C74 ON user (email)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649D5499347 ON user (display_name)');
@@ -52,11 +63,6 @@ final class Version20240916221937 extends AbstractMigration
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TABLE user_role (role VARCHAR(255) NOT NULL COLLATE "BINARY", name VARCHAR(255) NOT NULL COLLATE "BINARY", PRIMARY KEY(role))');
-        $this->addSql('CREATE TABLE user_to_role (user_id CHAR(36) NOT NULL COLLATE "BINARY" --(DC2Type:uuid)
-        , role VARCHAR(255) NOT NULL COLLATE "BINARY", PRIMARY KEY(user_id, role), CONSTRAINT FK_E88A85AFA76ED395 FOREIGN KEY (user_id) REFERENCES user (uuid) ON UPDATE NO ACTION ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_E88A85AF57698A6A FOREIGN KEY (role) REFERENCES user_role (role) ON UPDATE NO ACTION ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE)');
-        $this->addSql('CREATE INDEX IDX_E88A85AF57698A6A ON user_to_role (role)');
-        $this->addSql('CREATE INDEX IDX_E88A85AFA76ED395 ON user_to_role (user_id)');
         $this->addSql('CREATE TEMPORARY TABLE __temp__image AS SELECT uuid, user_id, file_name, description, is_public, created_at, updated_at, views, size, mime_type, width, height FROM "image"');
         $this->addSql('DROP TABLE "image"');
         $this->addSql('CREATE TABLE "image" (uuid CHAR(36) NOT NULL --(DC2Type:uuid)

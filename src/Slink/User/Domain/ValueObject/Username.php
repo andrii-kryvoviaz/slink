@@ -30,7 +30,7 @@ final readonly class Username extends AbstractValueObject {
   public static function fromDisplayName(DisplayName $displayName): self {
     $username = str_replace(' ', '.', trim($displayName->toString()));
     
-    return new self($username);
+    return new self(strtolower($username));
   }
   
   /**
