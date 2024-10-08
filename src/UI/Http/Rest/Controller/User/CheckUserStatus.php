@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use UI\Http\Rest\Response\ApiResponse;
 
 #[AsController]
-#[Route(path: '/user/{id}/status', name: 'check_user_status', methods: ['GET'])]
+#[Route(path: '/public/user/{id}/status', name: 'check_user_status', methods: ['GET'])]
 final class CheckUserStatus {
   use QueryTrait;
   

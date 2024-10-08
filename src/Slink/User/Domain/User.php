@@ -14,6 +14,7 @@ use Slink\User\Domain\Contracts\UserInterface;
 use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\Event\Role\UserGrantedRole;
 use Slink\User\Domain\Event\Role\UserRevokedRole;
+use Slink\User\Domain\Event\UserDisplayNameWasChanged;
 use Slink\User\Domain\Event\UserLoggedOut;
 use Slink\User\Domain\Event\UserPasswordWasChanged;
 use Slink\User\Domain\Event\UserSignedIn;
@@ -23,22 +24,25 @@ use Slink\User\Domain\Exception\DisplayNameAlreadyExistException;
 use Slink\User\Domain\Exception\EmailAlreadyExistException;
 use Slink\User\Domain\Exception\InvalidCredentialsException;
 use Slink\User\Domain\Exception\InvalidOldPassword;
+use Slink\User\Domain\Exception\UsernameAlreadyExistException;
+use Slink\User\Domain\Specification\UniqueDisplayNameSpecificationInterface;
 use Slink\User\Domain\Exception\InvalidUserRole;
 use Slink\User\Domain\Exception\SelfUserRoleChangeException;
 use Slink\User\Domain\Exception\SelfUserStatusChangeException;
 use Slink\User\Domain\Specification\CurrentUserSpecificationInterface;
-use Slink\User\Domain\Specification\UserRoleExistSpecificationInterface;
 use Slink\User\Domain\ValueObject\Auth\Credentials;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;
 use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Email;
+use Slink\User\Domain\ValueObject\Username;
 use Slink\User\Domain\ValueObject\Role;
 use Slink\User\Domain\ValueObject\RoleSet;
 
 final class User extends AbstractAggregateRoot implements UserInterface {
   private Email $email;
+  private Username $username;
+  private DisplayName $displayName;
   private HashedPassword $hashedPassword;
-  
   private UserStatus $status;
   
   private RoleSet $roles;
@@ -54,6 +58,14 @@ final class User extends AbstractAggregateRoot implements UserInterface {
    */
   public function setEmail(Email $email): void {
     $this->email = $email;
+  }
+  
+  /**
+   * @param Username $username
+   * @return void
+   */
+  public function setUsername(Username $username): void {
+    $this->username = $username;
   }
   
   /**
@@ -80,6 +92,20 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   }
   
   /**
+   * @return Username
+   */
+  public function getUsername(): Username {
+    return $this->username;
+  }
+  
+  /**
+   * @return DisplayName
+   */
+  public function getDisplayName(): DisplayName {
+    return $this->displayName;
+  }
+  
+  /**
    * @return array<string>
    */
   public function getRoles(): array {
@@ -102,6 +128,7 @@ final class User extends AbstractAggregateRoot implements UserInterface {
     $this->roles = RoleSet::create();
     
     $this->refreshToken = RefreshTokenSet::create($id);
+    $this->status = UserStatus::Inactive;
     $this->registerAggregate($this->refreshToken);
   }
 
@@ -117,6 +144,10 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   ): self {
     if(!$userCreationContext->uniqueEmailSpecification->isUnique($credentials->email)) {
       throw new EmailAlreadyExistException();
+    }
+    
+    if(!$userCreationContext->uniqueUsernameSpecification->isUnique($credentials->username)) {
+      throw new UsernameAlreadyExistException();
     }
     
     if(!$userCreationContext->uniqueDisplayNameSpecification->isUnique($displayName)) {
@@ -135,6 +166,7 @@ final class User extends AbstractAggregateRoot implements UserInterface {
    */
   public function applyUserWasCreated(UserWasCreated $event): void {
     $this->setEmail($event->credentials->email);
+    $this->setUsername($event->credentials->username);
     $this->setHashedPassword($event->credentials->password);
     $this->setStatus($event->status);
   }
@@ -217,6 +249,18 @@ final class User extends AbstractAggregateRoot implements UserInterface {
    */
   public function applyUserStatusWasChanged(UserStatusWasChanged $event): void {
     $this->setStatus($event->status);
+  }
+  
+  public function changeDisplayName(DisplayName $displayName, UniqueDisplayNameSpecificationInterface $uniqueDisplayNameSpecification): void {
+    if(!$uniqueDisplayNameSpecification->isUnique($displayName)) {
+      throw new DisplayNameAlreadyExistException();
+    }
+    
+    $this->recordThat(new UserDisplayNameWasChanged($this->aggregateRootId(), $displayName));
+  }
+  
+  public function applyUserDisplayNameWasChanged(UserDisplayNameWasChanged $event): void {
+    $this->displayName = $event->displayName;
   }
   
   /**

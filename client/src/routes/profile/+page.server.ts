@@ -1,4 +1,6 @@
 import { env } from '$env/dynamic/private';
+import { Session } from '@slink/lib/auth/Session';
+import type { User } from '@slink/lib/auth/Type/User';
 import { fail, redirect } from '@sveltejs/kit';
 
 import { ApiClient } from '@slink/api/Client';
@@ -9,7 +11,9 @@ import { formData } from '@slink/utils/form/formData';
 import type { Actions } from '../../../.svelte-kit/types/src/routes/profile/(auth)/login/$types';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals, parent }) => {
+  await parent();
+
   const { user, settings } = locals;
 
   if (!user) {
@@ -39,8 +43,38 @@ export const actions: Actions = {
         });
       }
 
-      if (env.NODE_ENV === 'development') {
-        console.error(e);
+      return fail(500, {
+        errors: { message: 'Something went wrong. Please try again later.' },
+      });
+    }
+
+    return {
+      passwordWasChanged: true,
+    };
+  },
+  updateProfile: async ({ request, locals, cookies }) => {
+    const { user } = locals;
+    const { display_name } = await formData(request);
+
+    if (user?.displayName === display_name) {
+      return {
+        errors: {
+          display_name: 'Display name is the same as the current one.',
+        },
+        displayName: display_name,
+      };
+    }
+
+    try {
+      await ApiClient.user.updateProfile({
+        display_name,
+      });
+    } catch (e) {
+      if (e instanceof HttpException) {
+        return fail(422, {
+          errors: e.errors,
+          displayName: display_name,
+        });
       }
 
       return fail(500, {
@@ -48,8 +82,16 @@ export const actions: Actions = {
       });
     }
 
+    await Session.set(cookies.get('sessionId'), {
+      user: {
+        ...(user as User),
+        displayName: display_name,
+      },
+    });
+
     return {
-      success: true,
+      profileWasUpdated: true,
+      displayName: display_name,
     };
   },
 } satisfies Actions;

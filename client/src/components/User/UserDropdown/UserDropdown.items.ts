@@ -5,6 +5,7 @@ type UserDropdownGroup = {
   access: UserRole[];
   items: UserDropdownItem[];
   badge?: string;
+  hidden?: boolean;
 };
 
 export type UserDropdownItem = {
@@ -12,6 +13,7 @@ export type UserDropdownItem = {
   access: string[];
   icon: string;
   link: string;
+  target?: string;
   isForm?: boolean;
   state?: 'active' | 'inactive' | 'hidden';
   badge?: string;
@@ -70,12 +72,26 @@ export const UserDropdownItems: UserDropdownGroup[] = [
         state: 'hidden',
       },
       {
+        title: 'View on GitHub',
+        access: ['ROLE_USER'],
+        link: 'https://github.com/andrii-kryvoviaz/slink',
+        icon: 'mdi:github',
+        state: 'active',
+        target: '_blank',
+      },
+      {
         title: 'Help',
         access: ['ROLE_USER'],
         icon: 'fluent:chat-help-20-regular',
         link: '/help/faq',
         state: 'active',
       },
+    ],
+  },
+  {
+    title: 'Auth',
+    access: ['ROLE_USER'],
+    items: [
       {
         title: 'Logout',
         access: ['ROLE_USER'],

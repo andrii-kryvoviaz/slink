@@ -8,19 +8,27 @@ use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Persistence\EventStore\AbstractStoreRepository;
 use Slink\User\Domain\Repository\CheckUserByEmailInterface;
 use Slink\User\Domain\Repository\CheckUserByRefreshTokenInterface;
+use Slink\User\Domain\Repository\CheckUserByUsernameInterface;
 use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
 use Slink\User\Domain\User;
 use Slink\User\Domain\ValueObject\Auth\HashedRefreshToken;
 use Slink\User\Domain\ValueObject\Email;
+use Slink\User\Domain\ValueObject\Username;
 use Symfony\Contracts\Service\Attribute\Required;
 
 final class UserStore extends AbstractStoreRepository implements UserStoreRepositoryInterface {
   private CheckUserByEmailInterface $checkUserByEmail;
+  private CheckUserByUsernameInterface $checkUserByUsername;
   private CheckUserByRefreshTokenInterface $getUserByRefreshToken;
   
   #[Required]
   public function setCheckUserByEmail(CheckUserByEmailInterface $checkUserByEmail): void {
     $this->checkUserByEmail = $checkUserByEmail;
+  }
+  
+  #[Required]
+  public function setCheckUserByUsername(CheckUserByUsernameInterface $checkUserByUsername): void {
+    $this->checkUserByUsername = $checkUserByUsername;
   }
   
   #[Required]
@@ -46,12 +54,15 @@ final class UserStore extends AbstractStoreRepository implements UserStoreReposi
   }
   
   /**
-   * @param Email $username
+   * @param Email|Username $username
    * @return User|null
    */
   #[\Override]
-  public function getByUsername(Email $username): ?User {
-    $id = $this->checkUserByEmail->existsEmail($username);
+  public function getByUsername(Email|Username $username): ?User {
+    $id = $username instanceof Email
+      ? $this->checkUserByEmail->existsEmail($username)
+      : $this->checkUserByUsername->existsUsername($username);
+    
     if ($id === null) {
       return null;
     }

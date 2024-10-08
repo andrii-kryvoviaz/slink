@@ -18,55 +18,18 @@ framework:
                 default_middleware: allow_no_handlers
 
         transports:
-#            events:
-#                dsn: "%env(MESSENGER_TRANSPORT_DSN)%"
-#                retry_strategy:
-#                    delay: 2000
-#                    max_retries: 5
-#                    multiplier: 2
-#                    max_delay: 0
-#                options:
-#                    exchange:
-#                        type: topic
-#                        name: events
-#                    queues:
-#                        events:
-#                            binding_keys: [ '#' ]
-#
-#            users:
-#                dsn: "%env(MESSENGER_TRANSPORT_DSN)%"
-#                retry_strategy:
-#                    delay: 2000
-#                    max_retries: 5
-#                    multiplier: 2
-#                    max_delay: 0
-#                options:
-#                    exchange:
-#                        type: topic
-#                        name: events
-#                    queues:
-#                        users:
-#                            binding_keys: [ '#.User.#' ]
-            failed: 'doctrine://event_store?queue_name=failed'
-#                dsn: "%env(MESSENGER_TRANSPORT_DSN)%"
-#                options:
-#                    queues:
-#                        failed:
-#                            binding_keys: [ '#' ]
+             # ToDo: add async transport support
+             # async: '%env(MESSENGER_TRANSPORT_DSN)%'
+             failed: 'doctrine://event_store?queue_name=failed'
+             sync: 'sync://'
 
-            # https://symfony.com/doc/current/messenger.html#transport-configuration
-            # async: '%env(MESSENGER_TRANSPORT_DSN)%'
-            # failed: 'doctrine://default?queue_name=failed'
-            # sync: 'sync://'
+        routing: ~
+            # Slink\Shared\Application\Command\CommandInterface: async
 
-        routing:
-            # Route your messages to the transports
-            # 'App\Message\YourMessage': async
-
-# when@test:
-#    framework:
-#        messenger:
-#            transports:
-#                # replace with your transport name here (e.g., my_transport: 'in-memory://')
-#                # For more Messenger testing tools, see https://github.com/zenstruck/messenger-test
-#                async: 'in-memory://'
+when@test:
+    framework:
+        messenger:
+            transports:
+                # replace with your transport name here (e.g., my_transport: 'in-memory://')
+                # For more Messenger testing tools, see https://github.com/zenstruck/messenger-test
+                async: 'in-memory://'

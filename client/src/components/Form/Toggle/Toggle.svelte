@@ -36,7 +36,7 @@
 
 <label class="flex cursor-pointer items-center gap-2">
   <slot name="pre-icon" />
-  <input type="checkbox" class={classes} on:change={handleChange} />
+  <input type="checkbox" class={classes} on:change={handleChange} {checked} />
   <input {...$$props} type="hidden" value={checked} />
   <slot name="post-icon" />
 </label>

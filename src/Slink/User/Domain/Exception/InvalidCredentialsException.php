@@ -12,7 +12,7 @@ class InvalidCredentialsException extends SpecificationException {
    */
   public function __construct(mixed ...$args) {
     if (empty($args)) {
-      $args = ['Invalid credentials. Please check your email and password and try again.'];
+      $args = ['Invalid credentials. Please check your username/email and password and try again.'];
     }
     
     parent::__construct(...$args);

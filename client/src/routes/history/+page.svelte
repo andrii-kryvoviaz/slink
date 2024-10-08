@@ -65,6 +65,7 @@
 
   $: showPreloader = !items.length && $status !== 'finished';
 
+  $: itemsFound = items.length && $status === 'finished';
   $: itemsNotFound = !items.length && $status === 'finished';
 
   onMount(() => fetchImages(1, meta.size));
@@ -75,14 +76,17 @@
 </svelte:head>
 
 <section in:fade={{ duration: 300 }}>
-  <div class="container mx-auto flex flex-col px-6 py-10">
-    {#if !itemsNotFound}
+  <div class="container mx-auto flex flex-col px-6 py-6 sm:py-10">
+    {#if itemsFound}
       <Heading>Upload History</Heading>
-    {:else}
+    {/if}
+    {#if itemsNotFound}
       <div
         class="mt-8 flex flex-grow flex-col items-center justify-center font-extralight"
       >
-        <p class="text-[3rem] opacity-70">Oops! Here be nothing yet.</p>
+        <p class="mb-6 text-center text-[3rem] leading-10 opacity-70">
+          There’s nothing here yet
+        </p>
         <p class="text-normal opacity-70">
           Start uploading to see your history.
         </p>

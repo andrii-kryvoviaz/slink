@@ -7,7 +7,9 @@ services:
     tags:
       - { name: 'event_sauce.message_serializer' }
 
-  event_sauce.message_serializer: '@EventSauce\EventSourcing\Serialization\MessageSerializer'
+  event_sauce.message_serializer:
+    class: EventSauce\EventSourcing\Serialization\UpcastingMessageSerializer
+    factory: ['@Slink\Shared\Infrastructure\Persistence\EventStore\UpcastingMessageSerializerFactory', 'createSerializer']
 
   EventSauce\IdEncoding\IdEncoder:
     class: EventSauce\IdEncoding\StringIdEncoder

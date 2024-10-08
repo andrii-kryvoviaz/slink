@@ -12,6 +12,7 @@ use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;
 use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Email;
+use Slink\User\Domain\ValueObject\Username;
 use Slink\User\Infrastructure\ReadModel\Repository\UserRepository;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\SerializedName;
@@ -26,12 +27,13 @@ class UserView extends AbstractView {
   /**
    * @param string $uuid
    * @param Email $email
+   * @param Username $username
    * @param DisplayName $displayName
    * @param HashedPassword $password
    * @param DateTime $createdAt
    * @param DateTime|null $updatedAt
    * @param UserStatus $status
-   * @param Collection $roles
+   * @param Collection|null $roles
    */
   public function __construct(
     #[ORM\Id]
@@ -43,6 +45,10 @@ class UserView extends AbstractView {
     #[ORM\Column(type: 'email', unique: true)]
     #[Groups(['public', 'internal'])]
     private Email $email,
+    
+    #[ORM\Column(type: 'username', unique: true)]
+    #[Groups(['public', 'internal'])]
+    private Username $username,
     
     #[ORM\Column(type: 'display_name', unique: true, nullable: true)]
     #[Groups(['public', 'internal'])]
@@ -68,7 +74,7 @@ class UserView extends AbstractView {
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'uuid')]
     #[ORM\InverseJoinColumn(name: 'role', referencedColumnName: 'role')]
     #[Groups(['internal'])]
-    private readonly Collection $roles,
+    private readonly ?Collection $roles,
   ) {
   }
   
@@ -84,6 +90,13 @@ class UserView extends AbstractView {
    */
   public function getEmail(): string {
     return $this->email->toString();
+  }
+  
+  /**
+   * @return string
+   */
+  public function getUsername(): string {
+    return $this->username->toString();
   }
   
   /**
@@ -134,7 +147,7 @@ class UserView extends AbstractView {
    * @return void
    */
   public function addRole(UserRoleView $role): void {
-    $this->roles->add($role);
+    $this->roles?->add($role);
   }
   
   /**
@@ -142,14 +155,14 @@ class UserView extends AbstractView {
    * @return void
    */
   public function removeRole(UserRoleView $role): void {
-    $this->roles->removeElement($role);
+    $this->roles?->removeElement($role);
   }
   
   /**
    * @return array<string>
    */
   public function getRoles(): array {
-    return $this->roles->map(fn(UserRoleView $role) => $role->getRole())->toArray();
+    return $this->roles?->map(fn(UserRoleView $role) => $role->getRole())->toArray() ?? [];
   }
   
   /**
@@ -158,5 +171,13 @@ class UserView extends AbstractView {
    */
   public function setPassword(HashedPassword $password): void {
     $this->password = $password;
+  }
+  
+  /**
+   * @param DisplayName $displayName
+   * @return void
+   */
+  public function setDisplayName(DisplayName $displayName): void {
+    $this->displayName = $displayName;
   }
 }

@@ -8,7 +8,7 @@ import type { ResponseWithHeaders } from '@slink/api/Response/ResponseWithHeader
 export class AuthResource extends AbstractResource {
   public async signup(data: {
     email: string;
-    display_name: string;
+    username: string;
     password: string;
     confirm: string;
   }): Promise<SignupResponse & ResponseWithHeaders> {

@@ -40,6 +40,7 @@ export class Auth {
       id: response.id,
       email: response.email,
       displayName: response.displayName,
+      username: response.username,
       roles: claims.roles,
     };
 

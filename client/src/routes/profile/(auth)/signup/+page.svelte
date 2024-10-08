@@ -33,7 +33,7 @@
 </svelte:head>
 
 <div
-  class="flex flex-grow items-start justify-center p-4 sm:items-center"
+  class="flex flex-grow items-start justify-center p-4 sm:p-12"
   in:fade={{ duration: 200 }}
 >
   <div class="flex w-full max-w-3xl items-center lg:w-3/5">
@@ -54,10 +54,10 @@
       >
         <div class="mt-8 grid grid-cols-1 gap-x-6 gap-y-2 md:grid-cols-2">
           <Input
-            label="Display Name"
-            name="display_name"
-            value={form?.display_name}
-            error={form?.errors.display_name}
+            label="Username"
+            name="username"
+            value={form?.username}
+            error={form?.errors.username}
           >
             <Icon icon="ph:user" slot="leftIcon" />
           </Input>

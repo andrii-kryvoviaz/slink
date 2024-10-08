@@ -68,12 +68,14 @@
   {#if isOpen}
     <div
       transition:fade={{ duration: 400, easing: quintOut }}
-      class="fixed right-0 top-20 z-50 h-[calc(100vh-80px)] w-full origin-top-right overflow-hidden border bg-gray-50 py-0 shadow-xl dark:border-header/70 dark:bg-gray-800 sm:absolute sm:top-auto sm:mt-2 sm:h-auto sm:w-56 sm:rounded-md"
+      class="fixed right-0 top-20 z-50 h-[calc(100vh-80px)] w-full origin-top-right overflow-hidden bg-gray-50 from-bg-start to-bg-end py-0 shadow-xl dark:bg-gradient-to-b sm:absolute sm:top-auto sm:mt-2 sm:h-auto sm:w-56 sm:rounded-md sm:dark:from-gray-800 sm:dark:to-gray-800"
     >
       {#each UserDropdownItems as group, index (group.title)}
         {#if isAuthorized(group.access)}
           {#if index > 0}
-            <hr class="border-gray-200 dark:border-gray-700" />
+            <hr
+              class="border-bottom mx-6 my-1 border-gray-200 opacity-70 dark:border-gray-700 sm:mx-0"
+            />
           {/if}
 
           <div class="relative">
@@ -88,7 +90,7 @@
             {#each group.items as item (item.title)}
               {#if item.state !== 'hidden' && isAuthorized(item.access)}
                 <UserDropdownItem {item} {isDark}>
-                  <span class="flex gap-1">
+                  <span class="flex items-center gap-1">
                     <Icon icon={item.icon} class="mx-1 h-5 w-5" />
 
                     <span>{item.title}</span>

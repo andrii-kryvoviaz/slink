@@ -2,8 +2,8 @@
   import { settings } from '@slink/lib/settings';
 
   import { enhance } from '$app/forms';
-  import { page } from '$app/stores';
   import Icon from '@iconify/svelte';
+  import { fade } from 'svelte/transition';
 
   import { useWritable } from '@slink/store/contextAwareStore';
 
@@ -21,15 +21,27 @@
 
   const { user } = data;
 
-  let isLoading = useWritable('changePasswordFormLoadingState', false);
+  let isPasswordFormLoading = useWritable(
+    'changePasswordFormLoadingState',
+    false
+  );
+  let isProfileFormLoading = useWritable(
+    'updateProfileFormLoadingState',
+    false
+  );
+
   let buttonVariant: ButtonVariant = 'primary';
 
   const { isLight } = settings.get('theme', data.settings.theme);
 
   $: buttonVariant = $isLight ? 'dark' : 'primary';
 
-  $: if (form?.success) {
+  $: if (form?.passwordWasChanged) {
     toast.success('Password changed successfully');
+  }
+
+  $: if (form?.profileWasUpdated) {
+    toast.success('Profile updated successfully');
   }
 
   $: if (form?.errors?.message) {
@@ -41,20 +53,49 @@
   <title>{user.displayName} | Slink</title>
 </svelte:head>
 
-<div class="container mx-auto px-6 py-8">
+<div class="container mx-auto px-6 py-6 sm:py-10" in:fade={{ duration: 300 }}>
   <div class="flex flex-col justify-evenly gap-6 md:flex-row">
     <div class="flex">
       <UserAvatar size="lg" {user} />
       <div class="ml-4">
-        <h1 class="text-2xl font-bold">{user.displayName}</h1>
+        <h1 class="text-2xl font-bold">{user.username ?? user.displayName}</h1>
         <p class="opacity-60">{user.email}</p>
       </div>
     </div>
     <div class="max-w-md flex-grow">
       <form
+        action="?/updateProfile"
+        method="POST"
+        use:enhance={withLoadingState(isProfileFormLoading)}
+      >
+        <div class="flex flex-col gap-2">
+          <div>
+            <Input
+              label="Display Name"
+              name="display_name"
+              error={form?.errors?.display_name}
+              value={form?.displayName ?? user.displayName}
+            >
+              <Icon icon="ph:user" slot="leftIcon" />
+            </Input>
+
+            <Button
+              variant={buttonVariant}
+              size="md"
+              class="mt-2 w-full"
+              loading={$isProfileFormLoading}
+            >
+              <span>Update Profile</span>
+              <Icon icon="fluent:chevron-right-48-regular" slot="rightIcon" />
+            </Button>
+          </div>
+        </div>
+      </form>
+      <hr class="my-6 opacity-20" />
+      <form
         action="?/changePassword"
         method="POST"
-        use:enhance={withLoadingState(isLoading)}
+        use:enhance={withLoadingState(isPasswordFormLoading)}
       >
         <div class="flex flex-col gap-2">
           <div>
@@ -91,17 +132,15 @@
           </div>
         </div>
 
-        <div class="mt-6">
-          <Button
-            variant={buttonVariant}
-            size="md"
-            class="w-full"
-            loading={$isLoading}
-          >
-            <span>Change Password</span>
-            <Icon icon="fluent:chevron-right-48-regular" slot="rightIcon" />
-          </Button>
-        </div>
+        <Button
+          variant={buttonVariant}
+          size="md"
+          class="mt-2 w-full"
+          loading={$isPasswordFormLoading}
+        >
+          <span>Change Password</span>
+          <Icon icon="fluent:chevron-right-48-regular" slot="rightIcon" />
+        </Button>
       </form>
     </div>
   </div>

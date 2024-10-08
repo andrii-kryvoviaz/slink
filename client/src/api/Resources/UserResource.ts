@@ -9,7 +9,7 @@ import type { SingleUserResponse } from '@slink/api/Response/User/SingleUserResp
 
 export class UserResource extends AbstractResource {
   public async checkStatus(userId: string): Promise<CheckStatusResponse> {
-    return this.get(`/user/${userId}/status`);
+    return this.get(`/public/user/${userId}/status`);
   }
 
   public async getCurrentUser(
@@ -71,5 +71,11 @@ export class UserResource extends AbstractResource {
     role: UserRole
   ): Promise<SingleUserResponse> {
     return this.delete(`/user/role`, { json: { id, role } });
+  }
+
+  public async updateProfile({ display_name }: { display_name: string }) {
+    return this.patch('/user/profile', {
+      json: { display_name },
+    });
   }
 }

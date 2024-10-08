@@ -4,6 +4,8 @@
     "prefer-stable": true,
     "require": {
         "php": ">=8.3",
+        "ext-gd": "*",
+        "ext-imagick": "*",
         "doctrine/doctrine-bundle": "^2.10",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.16",
@@ -42,7 +44,8 @@
     },
     "config": {
         "platform": {
-            "php": "8.3"
+            "php": "8.3",
+            "ext-imagick": "3.7.0"
         },
         "allow-plugins": {
             "php-http/discovery": true,

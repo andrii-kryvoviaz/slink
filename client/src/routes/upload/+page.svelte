@@ -98,7 +98,7 @@
 <svelte:document on:paste={handleChange} />
 
 <div
-  class="content dropzone flex h-full w-full flex-col items-center p-4 sm:justify-center sm:p-12"
+  class="content dropzone flex h-full w-full flex-col items-center p-4 sm:p-12"
 >
   <div
     in:fade={{ duration: 300 }}
