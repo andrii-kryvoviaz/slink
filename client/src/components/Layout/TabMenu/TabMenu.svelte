@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { setContext } from 'svelte';
+  import { onMount, setContext } from 'svelte';
 
   import type { HTMLBaseAttributes } from 'svelte/elements';
 
+  import { throttle } from '@slink/utils/time/throttle';
   import { className } from '@slink/utils/ui/className';
 
   import {
@@ -50,7 +51,7 @@
     onMouseLeave: handleMouseLeave,
   });
 
-  function moveMarker(tab: TabMenuItemData) {
+  function moveMarker(tab: TabMenuItemData, { withTransition = true } = {}) {
     if (!marker || !tab.ref) {
       return;
     }
@@ -63,6 +64,14 @@
 
     marker.style.transform = `translateX(${tab.ref.offsetLeft}px)`;
     marker.style.width = `${tab.ref.offsetWidth}px`;
+
+    if (marker.style.hasOwnProperty('transition')) {
+      marker.style.transition = '';
+    }
+
+    if (!withTransition) {
+      marker.style.transition = 'none';
+    }
   }
 
   function handleMouseEnter(tab: TabMenuItemData) {
@@ -81,6 +90,10 @@
     moveMarker(activeItem);
   }
 
+  const resizeHandler = throttle(() => {
+    activeItem && moveMarker(activeItem, { withTransition: false });
+  }, 50);
+
   $: activeItem && moveMarker(activeItem);
   $: isHorizontal = orientation === 'horizontal';
 
@@ -91,6 +104,8 @@
     rounded,
   })} ${$$props.class}`;
 </script>
+
+<svelte:window on:resize={resizeHandler} />
 
 <div class={className(classes)} role="tablist" tabindex="0">
   <div
