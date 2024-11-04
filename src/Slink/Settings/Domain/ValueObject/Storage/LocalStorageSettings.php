@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Slink\Settings\Domain\ValueObject;
+namespace Slink\Settings\Domain\ValueObject\Storage;
 
 use Slink\Shared\Domain\ValueObject\AbstractCompoundValueObject;
 
-final readonly class UserSettings extends AbstractCompoundValueObject {
-  private function __construct(
-    private bool $approvalRequired,
+final readonly class LocalStorageSettings extends AbstractCompoundValueObject {
+  public function __construct(
+    private string $directory,
   ) {}
   
   /**
@@ -17,7 +17,7 @@ final readonly class UserSettings extends AbstractCompoundValueObject {
   #[\Override]
   public function toPayload(): array {
     return [
-      'approvalRequired' => $this->approvalRequired,
+      'dir' => $this->directory,
     ];
   }
   
@@ -28,7 +28,7 @@ final readonly class UserSettings extends AbstractCompoundValueObject {
   #[\Override]
   public static function fromPayload(array $payload): static {
     return new self(
-      $payload['approvalRequired'],
+      $payload['dir'],
     );
   }
 }

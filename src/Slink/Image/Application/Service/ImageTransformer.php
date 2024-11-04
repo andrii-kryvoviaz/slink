@@ -1,6 +1,6 @@
 <?php
 
-namespace Slink\Image\Infrastructure\Service;
+namespace Slink\Image\Application\Service;
 
 use Gumlet\ImageResize;
 use Gumlet\ImageResizeException;

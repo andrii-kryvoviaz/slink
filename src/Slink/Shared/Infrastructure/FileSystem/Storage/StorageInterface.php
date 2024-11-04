@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Slink\Shared\Infrastructure\FileSystem\Storage;
 
-use Slink\Settings\Domain\Service\ConfigurationProvider;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\ValueObject\ImageOptions;
 use Symfony\Component\HttpFoundation\File\File;
 
 interface StorageInterface {
   /**
-   * @param ConfigurationProvider $configurationProvider
+   * @param ConfigurationProviderInterface $configurationProvider
    * @return static
    */
-  static function create(ConfigurationProvider $configurationProvider): self;
+  static function create(ConfigurationProviderInterface $configurationProvider): self;
   
   /**
    * @param File $file

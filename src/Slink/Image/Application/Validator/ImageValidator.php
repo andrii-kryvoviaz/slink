@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Slink\Image\Infrastructure\Validator;
+namespace Slink\Image\Application\Validator;
 
-use Slink\Settings\Domain\Service\ConfigurationProvider;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Constraints\ImageValidator as BaseImageValidator;
 use Symfony\Component\Validator\Constraints\Image;
+use Symfony\Component\Validator\Constraints\ImageValidator as BaseImageValidator;
 
 #[AutoconfigureTag(name: 'validator.constraint_validator', attributes: ['alias' => BaseImageValidator::class])]
 final class ImageValidator extends BaseImageValidator {
   public function __construct(
-    private readonly ConfigurationProvider $configurationProvider,
-    private readonly ParameterBagInterface $parameterBag
+    private readonly ConfigurationProviderInterface $configurationProvider,
+    private readonly ParameterBagInterface          $parameterBag
   ) {
   }
   

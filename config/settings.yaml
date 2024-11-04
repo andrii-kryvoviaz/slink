@@ -1,7 +1,7 @@
 parameters:
-  storage.provider: '%env(string:STORAGE_PROVIDER)%'
   storage:
-    provider:
+    provider: '%env(string:STORAGE_PROVIDER)%'
+    adapter:
       local:
         dir: '%kernel.project_dir%'
       smb:

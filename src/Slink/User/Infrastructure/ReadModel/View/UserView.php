@@ -19,8 +19,9 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 
 #[ORM\Table(name: '`user`')]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Index(columns: ['uuid'], name: 'idx_user_uuid')]
 #[ORM\Index(columns: ['email'], name: 'idx_user_email')]
+#[ORM\Index(columns: ['username'], name: 'idx_user_username')]
+#[ORM\Index(columns: ['display_name'], name: 'idx_user_display_name')]
 #[ORM\Index(columns: ['status'], name: 'idx_user_status')]
 #[ORM\Index(columns: ['created_at'], name: 'idx_user_created_at')]
 class UserView extends AbstractView {

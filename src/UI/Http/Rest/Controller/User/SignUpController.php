@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace UI\Http\Rest\Controller\User;
 
-use Slink\Settings\Domain\Service\ConfigurationProvider;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Application\Command\CommandTrait;
 use Slink\User\Application\Command\SignUp\SignUpCommand;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -19,7 +19,7 @@ final class SignUpController {
 
   public function __invoke(
     #[MapRequestPayload] SignUpCommand $command,
-    ConfigurationProvider $configurationProvider
+    ConfigurationProviderInterface $configurationProvider
   ): ApiResponse {
     $this->handle($command);
     

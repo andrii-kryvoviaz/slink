@@ -10,7 +10,7 @@ use Slink\Image\Domain\Service\ImageAnalyzerInterface;
 use Slink\Image\Domain\Service\ImageTransformerInterface;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Domain\ValueObject\ImageMetadata;
-use Slink\Settings\Domain\Service\ConfigurationProvider;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\ID;
@@ -19,11 +19,11 @@ use Slink\Shared\Infrastructure\FileSystem\Storage\StorageInterface;
 final readonly class UploadImageHandler implements CommandHandlerInterface {
   
   public function __construct(
-    private ConfigurationProvider $configurationProvider,
-    private ImageStoreRepositoryInterface $imageRepository,
-    private ImageAnalyzerInterface $imageAnalyzer,
-    private ImageTransformerInterface $imageTransformer,
-    private StorageInterface $storage
+    private ConfigurationProviderInterface $configurationProvider,
+    private ImageStoreRepositoryInterface  $imageRepository,
+    private ImageAnalyzerInterface         $imageAnalyzer,
+    private ImageTransformerInterface      $imageTransformer,
+    private StorageInterface               $storage
   ) {
   }
   

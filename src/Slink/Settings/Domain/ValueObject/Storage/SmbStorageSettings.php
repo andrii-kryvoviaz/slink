@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Slink\Settings\Domain\ValueObject;
+namespace Slink\Settings\Domain\ValueObject\Storage;
 
 use Slink\Shared\Domain\ValueObject\AbstractCompoundValueObject;
 

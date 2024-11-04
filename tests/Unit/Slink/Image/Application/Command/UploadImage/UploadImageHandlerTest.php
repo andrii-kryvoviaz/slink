@@ -12,7 +12,7 @@ use Slink\Image\Application\Command\UploadImage\UploadImageHandler;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Image\Domain\Service\ImageAnalyzerInterface;
 use Slink\Image\Domain\Service\ImageTransformerInterface;
-use Slink\Settings\Domain\Service\ConfigurationProvider;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\FileSystem\Storage\StorageInterface;
@@ -26,7 +26,7 @@ class UploadImageHandlerTest extends TestCase {
    */
   #[Test]
   public function itHandlesUploadImageCommand(): void {
-    $configProvider = $this->createMock(ConfigurationProvider::class);
+    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
     $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
     $imageAnalyzer = $this->createMock(ImageAnalyzerInterface::class);
     $imageTransformer = $this->createMock(ImageTransformerInterface::class);

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Slink\Image\Infrastructure\Service;
+namespace Slink\Image\Application\Service;
 
 use Slink\Image\Domain\Service\ImageAnalyzerInterface;
 use Symfony\Component\HttpFoundation\File\File;

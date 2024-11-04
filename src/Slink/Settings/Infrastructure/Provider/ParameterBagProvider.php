@@ -2,14 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Slink\Settings\Infrastructure\Service;
+namespace Slink\Settings\Infrastructure\Provider;
 
-use Slink\Settings\Domain\Service\ConfigurationProvider;
+use Slink\Settings\Domain\Enum\ConfigurationProvider;
+use Slink\Settings\Domain\Enum\SettingCategory;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
+use Slink\Shared\Infrastructure\DependencyInjection\ServiceLocator\Indexable;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-final readonly class ParameterBagProvider implements ConfigurationProvider {
+final readonly class ParameterBagProvider implements ConfigurationProviderInterface, Indexable {
   
-  public function __construct(private ParameterBagInterface $parameterBag) {
+  public function __construct(
+    private ParameterBagInterface $parameterBag
+  ) {
   }
   
   /**
@@ -52,21 +57,19 @@ final readonly class ParameterBagProvider implements ConfigurationProvider {
   }
   
   /**
-   * @param array<string> $keys
-   * @return array<int, mixed>
+   * @return array<string, mixed>
    */
-  #[\Override]
-  public function getBulk(array $keys): array {
-    return array_map(fn($key) => $this->get($key), $keys);
+  public function all(): array {
+    return array_filter($this->parameterBag->all(),
+      fn($key) => in_array($key, SettingCategory::values()),
+      ARRAY_FILTER_USE_KEY
+    );
   }
   
   /**
-   * @param string $key
-   * @param mixed $value
-   * @return void
+   * @return string
    */
-  #[\Override]
-  public function set(string $key, mixed $value): void {
-    $this->parameterBag->set($key, $value);
+  public static function getIndexName(): string {
+    return (ConfigurationProvider::Default)->value;
   }
 }

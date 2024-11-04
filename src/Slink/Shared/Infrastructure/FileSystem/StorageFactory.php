@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Slink\Shared\Infrastructure\FileSystem;
 
 use Slink\Image\Domain\Service\ImageTransformerInterface;
-use Slink\Settings\Domain\Service\ConfigurationProvider;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Infrastructure\FileSystem\Storage\AbstractStorage;
 use Slink\Shared\Infrastructure\FileSystem\Storage\StorageInterface;
 
 final readonly class StorageFactory {
   
   public function __construct(
-    private ConfigurationProvider $configurationProvider,
-    private ImageTransformerInterface $imageTransformer
+    private ConfigurationProviderInterface $configurationProvider,
+    private ImageTransformerInterface      $imageTransformer
   ) {
   }
   

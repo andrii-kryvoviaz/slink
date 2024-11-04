@@ -11,8 +11,7 @@ use Icewind\SMB\Exception\AlreadyExistsException;
 use Icewind\SMB\Exception\NotFoundException;
 use Icewind\SMB\IShare;
 use Icewind\SMB\ServerFactory;
-use Slink\Settings\Domain\Service\ConfigurationProvider;
-use Slink\Shared\Domain\ValueObject\ImageOptions;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Symfony\Component\HttpFoundation\File\File;
 
 final class SmbStorage extends AbstractStorage {
@@ -21,14 +20,21 @@ final class SmbStorage extends AbstractStorage {
   }
   
   /**
-   * @param ConfigurationProvider $configurationProvider
+   * @param ConfigurationProviderInterface $configurationProvider
    * @return self
    * @throws DependencyException
    */
   #[\Override]
-  static function create(ConfigurationProvider $configurationProvider): self {
-    $config = $configurationProvider->get('storage.provider.smb');
-    [$host, $share, $workgroup, $username, $password] = array_values($config);
+  static function create(ConfigurationProviderInterface $configurationProvider): self {
+    $config = $configurationProvider->get('storage.adapter.smb');
+    
+    [
+      'host' => $host,
+      'share' => $share,
+      'workgroup' => $workgroup,
+      'username' => $username,
+      'password' => $password
+    ] = $config;
     
     $basicAuth = new BasicAuth(
       username: $username,

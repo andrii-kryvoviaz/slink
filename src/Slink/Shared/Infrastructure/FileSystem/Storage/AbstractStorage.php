@@ -4,7 +4,7 @@ namespace Slink\Shared\Infrastructure\FileSystem\Storage;
 
 use Icewind\SMB\Exception\NotFoundException;
 use Slink\Image\Domain\Service\ImageTransformerInterface;
-use Slink\Settings\Domain\Service\ConfigurationProvider;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\ValueObject\ImageOptions;
 
 abstract class AbstractStorage implements StorageInterface {
@@ -29,10 +29,10 @@ abstract class AbstractStorage implements StorageInterface {
   private ?string $serverRoot = null;
   
   /**
-   * @param ConfigurationProvider $configurationProvider
+   * @param ConfigurationProviderInterface $configurationProvider
    * @return static
    */
-  abstract static function create(ConfigurationProvider $configurationProvider): self;
+  abstract static function create(ConfigurationProviderInterface $configurationProvider): self;
   
   /**
    * @param ImageTransformerInterface $imageTransformer

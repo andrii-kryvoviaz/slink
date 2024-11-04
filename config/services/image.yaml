@@ -16,6 +16,6 @@ parameters:
 
 services:
   Slink\Image\Domain\Service\ImageAnalyzerInterface:
-    class: Slink\Image\Infrastructure\Service\ImageAnalyzer
+    class: Slink\Image\Application\Service\ImageAnalyzer
     arguments:
       $resizableMimeTypes: '%supports_resize%'

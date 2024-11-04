@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Slink\User\Infrastructure\Validator;
 
-use Slink\Settings\Domain\Service\ConfigurationProvider;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
 class PasswordComplexityValidator extends ConstraintValidator {
-  public function __construct(private readonly ConfigurationProvider $configurationProvider) {
+  public function __construct(private readonly ConfigurationProviderInterface $configurationProvider) {
   }
   
   /**
