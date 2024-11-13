@@ -13,6 +13,7 @@
     error?: string | boolean;
   }
 
+  export let value: $$Props['value'] = '';
   export let label: $$Props['label'] = '';
   export let variant: $$Props['variant'] = 'default';
   export let size: $$Props['size'] = 'md';
@@ -50,6 +51,7 @@
     {/if}
     <input
       {...$$props}
+      bind:value
       class={className(classes)}
       class:pl-10={$$slots.leftIcon}
       class:pr-10={$$slots.rightIcon}
@@ -61,6 +63,8 @@
         <slot name="rightIcon" />
       </div>
     {/if}
+
+    <slot />
   </div>
 
   <div class="mt-1 text-xs text-input-error">
