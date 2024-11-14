@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Slink\Settings\Domain\ValueObject\Storage;
 
+use Slink\Settings\Domain\Enum\SettingCategory;
 use Slink\Settings\Domain\Enum\StorageProvider;
+use Slink\Settings\Domain\ValueObject\AbstractSettingsValueObject;
 use Slink\Shared\Domain\ValueObject\AbstractCompoundValueObject;
 
-final readonly class StorageSettings extends AbstractCompoundValueObject {
+final readonly class StorageSettings extends AbstractSettingsValueObject {
   private function __construct(
     private StorageProvider              $provider,
     private ?LocalStorageSettings        $localStorageSettings = null,
@@ -53,5 +55,12 @@ final readonly class StorageSettings extends AbstractCompoundValueObject {
       $localStorageSettings,
       $smbStorageSettings
     );
+  }
+  
+  /**
+   * @return SettingCategory
+   */
+  function getSettingsCategory(): SettingCategory {
+    return SettingCategory::Storage;
   }
 }

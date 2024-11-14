@@ -10,10 +10,12 @@ use Slink\Settings\Domain\ValueObject\AbstractSettingsValueObject;
 final readonly class UserSettings extends AbstractSettingsValueObject {
   /**
    * @param bool $approvalRequired
+   * @param bool $allowUnauthenticatedAccess
    * @param PasswordSettings $password
    */
   private function __construct(
     private bool $approvalRequired,
+    private bool $allowUnauthenticatedAccess,
     private PasswordSettings $password,
   ) {}
   
@@ -24,6 +26,7 @@ final readonly class UserSettings extends AbstractSettingsValueObject {
   public function toPayload(): array {
     return [
       'approvalRequired' => $this->approvalRequired,
+      'allowUnauthenticatedAccess' => $this->allowUnauthenticatedAccess,
       'password' => $this->password->toPayload(),
     ];
   }
@@ -35,7 +38,8 @@ final readonly class UserSettings extends AbstractSettingsValueObject {
   #[\Override]
   public static function fromPayload(array $payload): static {
     return new self(
-      $payload['approvalRequired'],
+      $payload['approvalRequired'] ?? true,
+      $payload['allowUnauthenticatedAccess'] ?? false,
       PasswordSettings::fromPayload($payload['password'])
     );
   }
@@ -53,6 +57,13 @@ final readonly class UserSettings extends AbstractSettingsValueObject {
    */
   public function isApprovalRequired(): bool {
     return $this->approvalRequired;
+  }
+  
+  /**
+   * @return bool
+   */
+  public function isAllowUnauthenticatedAccess(): bool {
+    return $this->allowUnauthenticatedAccess;
   }
   
   /**
