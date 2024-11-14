@@ -149,6 +149,7 @@
     </div>
   </div>
   <button
+    type="button"
     class="fixed inset-0 z-40 bg-black bg-opacity-50 backdrop-blur-md md:hidden"
     class:hidden={!isOpen}
     on:click={() => (isOpen = false)}

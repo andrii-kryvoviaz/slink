@@ -1,13 +1,11 @@
 <script lang="ts">
   import type { HTMLInputAttributes as BaseHTMLInputAttributes } from 'svelte/elements';
 
-  import { parseFileSize } from '@slink/utils/string/parseFileSize';
-
   import { Input, type InputProps } from '@slink/components/Form';
 
   type HTMLInputAttributes = Pick<
     BaseHTMLInputAttributes,
-    'value' | 'name' | 'step'
+    'value' | 'name' | 'step' | 'min'
   >;
 
   interface $$Props extends HTMLInputAttributes, InputProps {}
@@ -15,16 +13,10 @@
   export let value: $$Props['value'] = '';
   export let name: $$Props['name'] = '';
   export let step: $$Props['step'] = 1;
+  export let min: $$Props['min'] = 0;
 
-  let { size, unit, unitValue } = parseFileSize(value);
-
-  $: value = `${size}${unitValue}`;
+  let innerValue = value;
+  $: value = parseInt(innerValue);
 </script>
 
-<Input type="number" min={0} {step} {name} bind:value={size} class="pr-12">
-  <span
-    class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-sm text-gray-500 dark:text-gray-400"
-  >
-    {unit}
-  </span>
-</Input>
+<Input type="number" {min} {step} {name} bind:value={innerValue} />

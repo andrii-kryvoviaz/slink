@@ -36,6 +36,7 @@
 
 <button
   class="w-full cursor-pointer rounded-md p-2 hover:bg-gray-600"
+  type="button"
   on:click={handleClick}
 >
   <span class="flex items-center gap-2" bind:this={textItemRef}>

@@ -1,11 +1,34 @@
 <script lang="ts">
+  import {
+    parseFileSize,
+    sizeMatchingRegex,
+  } from '@slink/utils/string/parseFileSize';
   import { randomId } from '@slink/utils/string/randomId';
 
   import { Badge } from '@slink/components/Content';
 
-  export let defaultValue: string | null = null;
+  export let defaultValue: any = null;
 
   const uniqueId = randomId('setting-item');
+
+  const formatDefaultValue = () => {
+    if (typeof defaultValue === 'boolean') {
+      return defaultValue ? 'Enabled' : 'Disabled';
+    }
+
+    if (
+      typeof defaultValue === 'string' &&
+      defaultValue.match(sizeMatchingRegex)
+    ) {
+      const { size, unit } = parseFileSize(defaultValue);
+
+      return `${size} ${unit}`;
+    }
+
+    return defaultValue;
+  };
+
+  $: displayValue = formatDefaultValue();
 </script>
 
 <div class="flex flex-wrap items-center justify-between gap-2 sm:flex-nowrap">
@@ -16,12 +39,12 @@
       >
         <slot name="label" />
 
-        {#if defaultValue}
+        {#if defaultValue !== null && defaultValue !== undefined}
           <span
             class="flex cursor-pointer items-center gap-2 rounded-full bg-gray-100 p-1 px-4 text-xs font-extralight text-gray-500 transition-colors duration-200 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
           >
             <span class="font-light">Default</span>
-            <Badge variant="default" size="sm">{defaultValue}</Badge>
+            <Badge variant="default" size="sm">{displayValue}</Badge>
           </span>
         {/if}
       </span>

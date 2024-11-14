@@ -1,53 +1,112 @@
 <script lang="ts">
+  import type {
+    SettingCategory,
+    SettingCategoryData,
+  } from '@slink/lib/settings/Type/GlobalSettings';
+
   import Icon from '@iconify/svelte';
 
-  import { Dropdown, DropdownItem } from '@slink/components/Form';
+  import { ApiClient } from '@slink/api/Client';
+  import { ReactiveState } from '@slink/api/ReactiveState';
+  import type { EmptyResponse } from '@slink/api/Response';
+
+  import {
+    Dropdown,
+    DropdownItem,
+    FileSizeInput,
+  } from '@slink/components/Form';
   import {
     Input,
     Multiselect,
     MultiselectItem,
     Toggle,
   } from '@slink/components/Form';
+  import NumberInput from '@slink/components/Form/NumberInput/NumberInput.svelte';
   import { SettingItem, SettingsPane } from '@slink/components/Layout';
+
+  import type { PageServerData } from './$types';
+
+  export let data: PageServerData;
+
+  const { run: saveSettings, isLoading } = ReactiveState<EmptyResponse>(
+    (category: SettingCategory, data: SettingCategoryData) => {
+      return ApiClient.setting.updateSettings(category, data);
+    },
+    { debounce: 300, minExecutionTime: 1000 }
+  );
+
+  let categoryBeingSaved: SettingCategory | null = null;
+
+  const handleSettingsSectionSave = async ({
+    detail: { category },
+  }: CustomEvent<{ category: SettingCategory }>) => {
+    const { [category]: data } = settings;
+    categoryBeingSaved = category;
+
+    await saveSettings(category, data);
+  };
+
+  $: settings = data?.settings;
+  $: defaultSettings = data?.defaultSettings;
 </script>
 
 <div class="h-full w-full max-w-7xl px-6 py-4">
   <div class="flex flex-col gap-2">
-    <SettingsPane>
+    <SettingsPane
+      category="user"
+      loading={$isLoading && categoryBeingSaved === 'user'}
+      on:save={handleSettingsSectionSave}
+    >
       <svelte:fragment slot="title">User</svelte:fragment>
       <svelte:fragment slot="description"
         >Modify how users interact with the application</svelte:fragment
       >
 
-      <SettingItem defaultValue="Enabled">
+      <SettingItem defaultValue={defaultSettings.user?.approvalRequired}>
         <svelte:fragment slot="label">User Approval</svelte:fragment>
         <svelte:fragment slot="hint"
           >Toggle whether users need to be approved before they can access the
           application</svelte:fragment
         >
-        <Toggle name="user_approval" />
+        <Toggle
+          name="approvalRequired"
+          bind:checked={settings.user.approvalRequired}
+        />
       </SettingItem>
-      <SettingItem defaultValue="Enabled">
+      <SettingItem
+        defaultValue={defaultSettings.user?.allowUnauthenticatedAccess}
+      >
         <svelte:fragment slot="label">Unauthenticated Access</svelte:fragment>
         <svelte:fragment slot="hint"
           >Toggle whether users can access the application without being
           authenticated</svelte:fragment
         >
-        <Toggle name="unauthenticated_access" />
+        <Toggle
+          name="allowUnauthenticatedAccess"
+          bind:checked={settings.user.allowUnauthenticatedAccess}
+        />
       </SettingItem>
-      <SettingItem defaultValue="6">
+      <SettingItem defaultValue={defaultSettings.user?.password.minLength}>
         <svelte:fragment slot="label">Password Length</svelte:fragment>
         <svelte:fragment slot="hint"
           >Set the minimum length of a user's password</svelte:fragment
         >
-        <Input type="number" name="password_length" value="6" />
+        <NumberInput
+          name="passwordLength"
+          min={3}
+          bind:value={settings.user.password.minLength}
+        />
       </SettingItem>
-      <SettingItem defaultValue="15">
+      <SettingItem defaultValue={defaultSettings.user?.password.requirements}>
         <svelte:fragment slot="label">Password Complexity</svelte:fragment>
         <svelte:fragment slot="hint"
           >Select the required character types for a user's password</svelte:fragment
         >
-        <Multiselect value={15} type="bitmask" name="password_complexity">
+        <Multiselect
+          type="bitmask"
+          name="passwordRequirements"
+          bind:value={settings.user.password.requirements}
+        >
           <MultiselectItem key="1">
             <Icon icon="ph:number-nine-thin" />
             Numbers
@@ -67,43 +126,119 @@
         </Multiselect>
       </SettingItem>
     </SettingsPane>
-    <SettingsPane>
+    <SettingsPane
+      category="image"
+      loading={$isLoading && categoryBeingSaved === 'image'}
+      on:save={handleSettingsSectionSave}
+    >
       <svelte:fragment slot="title">Image</svelte:fragment>
       <svelte:fragment slot="description"
         >Adjust image-related preferences</svelte:fragment
       >
 
-      <SettingItem defaultValue="50MB">
-        <svelte:fragment slot="label">Maximum Image Size (MB)</svelte:fragment>
+      <SettingItem defaultValue={defaultSettings.image?.maxSize}>
+        <svelte:fragment slot="label">Maximum Image Size</svelte:fragment>
         <svelte:fragment slot="hint"
           >Set the maximum size of an image that can be uploaded</svelte:fragment
         >
-        <Input type="number" name="max_image_size" value="50" />
+        <FileSizeInput
+          name="imageMaxSize"
+          bind:value={settings.image.maxSize}
+        />
       </SettingItem>
-      <SettingItem defaultValue="Enabled">
+      <SettingItem defaultValue={defaultSettings.image?.stripExifMetadata}>
         <svelte:fragment slot="label">Strip EXIF Data</svelte:fragment>
         <svelte:fragment slot="hint"
           >Toggle whether EXIF data should be stripped from uploaded images</svelte:fragment
         >
-        <Toggle name="strip_exif_data" />
+        <Toggle
+          name="imageStripExifMetadata"
+          bind:checked={settings.image.stripExifMetadata}
+        />
       </SettingItem>
     </SettingsPane>
-    <SettingsPane>
+    <SettingsPane
+      category="storage"
+      loading={$isLoading && categoryBeingSaved === 'storage'}
+      on:save={handleSettingsSectionSave}
+    >
       <svelte:fragment slot="title">Storage</svelte:fragment>
       <svelte:fragment slot="description"
         >Configure your preferred way of storing data</svelte:fragment
       >
 
-      <SettingItem defaultValue="Local">
+      <SettingItem defaultValue={defaultSettings.storage?.provider}>
         <svelte:fragment slot="label">Storage Type</svelte:fragment>
         <svelte:fragment slot="hint"
           >Select where you want to store your data</svelte:fragment
         >
-        <Dropdown name="storage_type">
+        <Dropdown
+          name="storageProvider"
+          bind:selected={settings.storage.provider}
+        >
           <DropdownItem key="local">Local</DropdownItem>
           <DropdownItem key="smb">Samba (SMB)</DropdownItem>
         </Dropdown>
       </SettingItem>
+      {#if settings.storage.provider === 'smb'}
+        <SettingItem defaultValue={defaultSettings.storage?.adapter.smb.host}>
+          <svelte:fragment slot="label">SMB Host</svelte:fragment>
+          <svelte:fragment slot="hint"
+            >Enter the IP address or hostname of your SMB server</svelte:fragment
+          >
+          <Input
+            name="smbHost"
+            bind:value={settings.storage.adapter.smb.host}
+          />
+        </SettingItem>
+        <SettingItem defaultValue={defaultSettings.storage?.adapter.smb.share}>
+          <svelte:fragment slot="label">SMB Share</svelte:fragment>
+          <svelte:fragment slot="hint"
+            >Enter the name of the share on your SMB server</svelte:fragment
+          >
+          <Input
+            name="smbShare"
+            bind:value={settings.storage.adapter.smb.share}
+          />
+        </SettingItem>
+        <SettingItem
+          defaultValue={defaultSettings.storage?.adapter.smb.workgroup}
+        >
+          <svelte:fragment slot="label">SMB Workgroup</svelte:fragment>
+          <svelte:fragment slot="hint"
+            >Enter the workgroup of your SMB server</svelte:fragment
+          >
+          <Input
+            name="smbWorkgroup"
+            bind:value={settings.storage.adapter.smb.workgroup}
+          />
+        </SettingItem>
+        <SettingItem
+          defaultValue={defaultSettings.storage?.adapter.smb.username}
+        >
+          <svelte:fragment slot="label">SMB Username</svelte:fragment>
+          <svelte:fragment slot="hint"
+            >Enter the username to authenticate with your SMB server</svelte:fragment
+          >
+          <Input
+            name="smbUsername"
+            bind:value={settings.storage.adapter.smb.username}
+          />
+        </SettingItem>
+        <SettingItem
+          defaultValue={defaultSettings.storage?.adapter.smb.password}
+        >
+          <svelte:fragment slot="label">SMB Password</svelte:fragment>
+          <svelte:fragment slot="hint"
+            >Enter the password to authenticate with your SMB server</svelte:fragment
+          >
+          <Input
+            type="password"
+            name="smbPassword"
+            bind:value={settings.storage.adapter.smb.password}
+          />
+        </SettingItem>
+      {/if}
     </SettingsPane>
   </div>
 </div>

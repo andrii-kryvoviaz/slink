@@ -77,6 +77,7 @@
     }
 
     selectedItem = item;
+    selected = item.key;
 
     dispatch('change', item);
   };

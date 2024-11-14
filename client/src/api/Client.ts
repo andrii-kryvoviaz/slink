@@ -10,6 +10,7 @@ import {
   AnalyticsResource,
   AuthResource,
   ImageResource,
+  SettingResource,
 } from '@slink/api/Resources';
 import { UserResource } from '@slink/api/Resources/UserResource';
 import type { RequestMapper } from '@slink/api/Type/RequestMapper';
@@ -20,6 +21,7 @@ const RESOURCES = {
   auth: AuthResource,
   user: UserResource,
   analytics: AnalyticsResource,
+  setting: SettingResource,
 };
 
 type ResourceType = keyof typeof RESOURCES;

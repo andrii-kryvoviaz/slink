@@ -1,10 +1,17 @@
 <script lang="ts">
+  import type { SettingCategory } from '@slink/lib/settings/Type/GlobalSettings';
   import { createEventDispatcher } from 'svelte';
 
-  import { Button } from '@slink/components/Common';
+  import { Button, Loader } from '@slink/components/Common';
+
+  export let category: SettingCategory;
+  export let loading: boolean = false;
 
   const dispatch = createEventDispatcher<{
-    save: { [key: string]: FormDataEntryValue };
+    save: {
+      category: SettingCategory;
+      data: Record<string, FormDataEntryValue>;
+    };
   }>();
 
   const handleSubmit = (event: SubmitEvent) => {
@@ -13,7 +20,10 @@
     const formData = new FormData(event.target as HTMLFormElement);
     const data = Object.fromEntries(formData.entries());
 
-    dispatch('save', data);
+    dispatch('save', {
+      category,
+      data,
+    });
   };
 </script>
 
@@ -37,8 +47,13 @@
   <form on:submit={handleSubmit} class="flex flex-col gap-4">
     <slot />
 
-    <div class="mt-8 flex items-center justify-end gap-2">
-      <Button type="submit" variant="primary" size="md">Save</Button>
+    <div class="mt-8 flex items-center justify-end gap-4">
+      {#if loading}
+        <Loader size="xs" />
+      {/if}
+      <Button type="submit" variant="primary" size="md" disabled={loading}>
+        Save
+      </Button>
     </div>
   </form>
 </div>

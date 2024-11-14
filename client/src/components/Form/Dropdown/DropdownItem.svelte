@@ -37,7 +37,13 @@
   });
 </script>
 
-<button class="tooltip-item" class:danger on:click={handleClick} {disabled}>
+<button
+  type="button"
+  class="tooltip-item"
+  class:danger
+  on:click={handleClick}
+  {disabled}
+>
   {#if loading}
     <Icon icon="mingcute:loading-line" class="animate-spin" />
   {:else}

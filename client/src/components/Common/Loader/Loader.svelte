@@ -12,8 +12,7 @@
   export let size: $$Props['size'] = 'sm';
   export let speed: $$Props['speed'] = 'default';
 
-  const defaultOuterClasses =
-    'flex flex-grow items-center justify-center gap-4';
+  const defaultOuterClasses = 'flex items-center justify-center gap-4';
 
   $: innerClasses = `${LoaderTheme({
     variant,

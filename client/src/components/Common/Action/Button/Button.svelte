@@ -1,6 +1,4 @@
 <script lang="ts">
-  import type { HTMLButtonAttributes } from 'svelte/elements';
-
   import { className } from '@slink/utils/ui/className';
 
   import {
@@ -23,7 +21,7 @@
   export let loading: $$Props['loading'] = false;
 
   $: state = disabled ? 'disabled' : 'active';
-  $: disabled = loading ?? disabled;
+  $: disabled = loading || disabled;
 
   $: classes = `${ButtonTheme({
     variant,
@@ -46,7 +44,7 @@
     <slot />
   </a>
 {:else}
-  <button {...$$restProps} class={className(classes)} on:click>
+  <button type="button" {...$$restProps} class={className(classes)} on:click>
     {#if !$$slots.leftIcon && !$$slots.rightIcon}
       <slot />
       <ButtonIcon {...buttonIconProps}>

@@ -23,7 +23,7 @@
 
   delete $$props.size;
 
-  let checked = $$props.checked ?? false;
+  export let checked = $$props.checked ?? false;
 
   const dispatch = createEventDispatcher<{ change: boolean }>();
   const handleChange = (event: Event) => {
