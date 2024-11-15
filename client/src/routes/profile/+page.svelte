@@ -83,6 +83,7 @@
               variant={buttonVariant}
               size="md"
               class="mt-2 w-full"
+              type="submit"
               loading={$isProfileFormLoading}
             >
               <span>Update Profile</span>
@@ -136,6 +137,7 @@
           variant={buttonVariant}
           size="md"
           class="mt-2 w-full"
+          type="submit"
           loading={$isPasswordFormLoading}
         >
           <span>Change Password</span>

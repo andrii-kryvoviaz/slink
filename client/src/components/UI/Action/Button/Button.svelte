@@ -21,7 +21,6 @@
   export let loading: $$Props['loading'] = false;
 
   $: state = disabled ? 'disabled' : 'active';
-  $: disabled = loading || disabled;
 
   $: classes = `${ButtonTheme({
     variant,
@@ -40,11 +39,17 @@
 </script>
 
 {#if href}
-  <a {href} {target} {...$$restProps} class={className(classes)} on:click>
+  <a {href} {target} {...$$props} class={className(classes)} on:click>
     <slot />
   </a>
 {:else}
-  <button type="button" {...$$restProps} class={className(classes)} on:click>
+  <button
+    type="button"
+    {...$$props}
+    disabled={disabled || loading}
+    class={className(classes)}
+    on:click
+  >
     {#if !$$slots.leftIcon && !$$slots.rightIcon}
       <slot />
       <ButtonIcon {...buttonIconProps}>
