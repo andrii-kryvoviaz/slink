@@ -1,7 +1,7 @@
 <script lang="ts">
   import Icon from '@iconify/svelte';
 
-  import { TabMenu, TabMenuItem } from '@slink/components/Layout';
+  import { TabMenu, TabMenuItem } from '@slink/components/UI/Navigation';
 
   const tabs = [
     {

@@ -6,7 +6,10 @@ import svelteImports from './plugins/vite-svelte-imports';
 
 export default defineConfig({
   plugins: [
-    svelteImports({ dirs: ['src/components', 'src/api'], enableLogging: true }),
+    svelteImports({
+      dirs: ['src/components/Feature', 'src/components/UI', 'src/api'],
+      enableLogging: true,
+    }),
     iconifyExport(),
     sveltekit(),
   ],

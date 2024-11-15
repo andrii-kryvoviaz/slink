@@ -1,7 +1,7 @@
 <script lang="ts">
   import { fly } from 'svelte/transition';
 
-  import { Button, CopyContainer } from '@slink/components/Common';
+  import { Button, CopyContainer } from '@slink/components/UI/Action';
 
   import type { PageServerData } from './$types';
 

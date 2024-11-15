@@ -11,9 +11,9 @@
     UserListingResponse,
   } from '@slink/api/Response';
 
-  import { Loader } from '@slink/components/Common';
-  import { LoadMoreButton } from '@slink/components/Common';
-  import { UserCard } from '@slink/components/User';
+  import { UserCard } from '@slink/components/Feature/User';
+  import { LoadMoreButton } from '@slink/components/UI/Action';
+  import { Loader } from '@slink/components/UI/Loader';
 
   import type { PageServerData } from './$types';
 

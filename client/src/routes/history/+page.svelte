@@ -12,8 +12,10 @@
     ListingMetadata,
   } from '@slink/api/Response';
 
-  import { Button, LoadMoreButton, Loader } from '@slink/components/Common';
-  import { Heading, HistoryListView } from '@slink/components/Layout';
+  import { HistoryListView } from '@slink/components/Feature/Image';
+  import { Button, LoadMoreButton } from '@slink/components/UI/Action';
+  import { Loader } from '@slink/components/UI/Loader';
+  import { Heading } from '@slink/components/UI/Text';
 
   let items: ImageListingItem[] = [];
   let meta: ListingMetadata = {

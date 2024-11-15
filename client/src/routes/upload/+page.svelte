@@ -10,8 +10,9 @@
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
   import { toast } from '@slink/utils/ui/toast';
 
-  import { Button, Loader } from '@slink/components/Common';
-  import { Dropzone } from '@slink/components/Form';
+  import { Button } from '@slink/components/UI/Action';
+  import { Dropzone } from '@slink/components/UI/Form';
+  import { Loader } from '@slink/components/UI/Loader';
 
   import type { PageData } from './$types';
 

@@ -5,7 +5,7 @@
     ImageAnalytics,
     LatestUsers,
     UserAnalytics,
-  } from '@slink/components/Analytics';
+  } from '@slink/components/Feature/Analytics';
 </script>
 
 <section in:fade={{ duration: 300 }} class="relative h-full flex-grow py-4">

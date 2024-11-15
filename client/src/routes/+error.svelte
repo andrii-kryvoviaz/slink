@@ -1,6 +1,7 @@
-<script>
+<script lang="ts">
   import { page } from '$app/stores';
-  import { Button } from '@slink/components/Common';
+
+  import { Button } from '@slink/components/UI/Action';
 </script>
 
 <div class="flex h-full w-full flex-col items-center justify-center">

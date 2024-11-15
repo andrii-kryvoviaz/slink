@@ -10,9 +10,9 @@
   import { withLoadingState } from '@slink/utils/form/withLoadingState';
   import { toast } from '@slink/utils/ui/toast';
 
-  import { Button, type ButtonVariant } from '@slink/components/Common';
-  import { Input } from '@slink/components/Form';
-  import { UserAvatar } from '@slink/components/User';
+  import { UserAvatar } from '@slink/components/Feature/User';
+  import { Button, type ButtonVariant } from '@slink/components/UI/Action';
+  import { Input } from '@slink/components/UI/Form';
 
   import type { PageServerData } from './$types';
 

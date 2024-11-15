@@ -5,10 +5,10 @@
 
   import Icon from '@iconify/svelte';
 
-  import { Button, ThemeSwitch } from '@slink/components/Common';
-  import { Navbar } from '@slink/components/Layout';
-  import { ToastManager } from '@slink/components/Toast';
-  import { UserDropdown } from '@slink/components/User';
+  import { UserDropdown } from '@slink/components/Feature/User';
+  import { Button, ThemeSwitch } from '@slink/components/UI/Action';
+  import { Navbar } from '@slink/components/UI/Navigation';
+  import { ToastManager } from '@slink/components/UI/Toast';
 
   import type { LayoutData } from './$types';
 

@@ -11,18 +11,19 @@
   import type { EmptyResponse } from '@slink/api/Response';
 
   import {
+    SettingItem,
+    SettingsPane,
+  } from '@slink/components/Feature/Settings';
+  import {
     Dropdown,
     DropdownItem,
     FileSizeInput,
-  } from '@slink/components/Form';
-  import {
     Input,
     Multiselect,
     MultiselectItem,
+    NumberInput,
     Toggle,
-  } from '@slink/components/Form';
-  import NumberInput from '@slink/components/Form/NumberInput/NumberInput.svelte';
-  import { SettingItem, SettingsPane } from '@slink/components/Layout';
+  } from '@slink/components/UI/Form';
 
   import type { PageServerData } from './$types';
 

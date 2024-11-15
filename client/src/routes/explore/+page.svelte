@@ -12,16 +12,16 @@
     ListingMetadata,
   } from '@slink/api/Response';
 
+  import { ImagePlaceholder } from '@slink/components/Feature/Image';
+  import { UserAvatar } from '@slink/components/Feature/User';
+  import { Button, LoadMoreButton } from '@slink/components/UI/Action';
+  import { Loader } from '@slink/components/UI/Loader';
   import {
-    Button,
     ExpandableText,
-    LoadMoreButton,
+    FormattedDate,
+    Heading,
     TextEllipsis,
-  } from '@slink/components/Common';
-  import { FormattedDate, Loader } from '@slink/components/Common';
-  import { ImagePlaceholder } from '@slink/components/Image';
-  import { Heading } from '@slink/components/Layout';
-  import { UserAvatar } from '@slink/components/User';
+  } from '@slink/components/UI/Text';
 
   import type { PageServerData } from './$types';
 

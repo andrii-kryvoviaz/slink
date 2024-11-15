@@ -8,7 +8,6 @@
 
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
 
-  import { CopyContainer, Tooltip } from '@slink/components/Common';
   import {
     ImageActionBar,
     ImageDescription,
@@ -16,7 +15,9 @@
     ImagePlaceholder,
     type ImageSize,
     ImageSizePicker,
-  } from '@slink/components/Image';
+  } from '@slink/components/Feature/Image';
+  import { CopyContainer } from '@slink/components/UI/Action';
+  import { Tooltip } from '@slink/components/UI/Tooltip';
 
   import type { PageData } from './$types';
 
