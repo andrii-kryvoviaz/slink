@@ -86,6 +86,7 @@
           variant={buttonVariant}
           size="md"
           class="w-full"
+          type="submit"
           loading={$isLoading}
         >
           <span>Sign In</span>
