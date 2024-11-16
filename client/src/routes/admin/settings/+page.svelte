@@ -175,6 +175,9 @@
         >
         <Dropdown
           name="storageProvider"
+          variant="form"
+          rounded="lg"
+          size="md"
           bind:selected={settings.storage.provider}
         >
           <DropdownItem key="local">Local</DropdownItem>

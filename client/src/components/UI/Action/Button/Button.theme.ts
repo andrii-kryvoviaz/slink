@@ -16,6 +16,7 @@ export const ButtonTheme = cva(
           'bg-none text-button-invisible hover:bg-button-hover-invisible/25 hover:text-button-primary',
         outline:
           'border bg-none text-button-default border-button-default hover:bg-button-hover-default hover:text-button-hover-default',
+        form: 'border bg-input-default text-input-default focus:outline-none focus:ring focus:ring-opacity-40 border-input-default hover:bg-input-hover-default focus:border-input-focus-default focus:ring-input-focus-default',
         link: 'bg-transparent dark:bg-transparent underline-offset-4 hover:underline text-button-default hover:bg-transparent',
         success:
           'bg-button-success text-button-accent bg-opacity-80 hover:bg-opacity-100 focus:ring-button-success',
