@@ -8,20 +8,16 @@
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
+  import type { ImageDetailsResponse } from '@slink/api/Response';
 
   import { downloadByLink } from '@slink/utils/http/downloadByLink';
   import { toast } from '@slink/utils/ui/toast';
 
+  import { ImageDeleteConfirmation } from '@slink/components/Feature/Image';
   import { Button } from '@slink/components/UI/Action';
-  import { Toggle } from '@slink/components/UI/Form';
-  import { Modal } from '@slink/components/UI/Modal';
   import { Tooltip } from '@slink/components/UI/Tooltip';
 
-  export let image: {
-    id: string;
-    fileName: string;
-    isPublic: boolean;
-  };
+  export let image: ImageDetailsResponse;
 
   type actionButton = 'download' | 'visibility' | 'share' | 'delete' | 'copy';
   export let buttons: actionButton[] = [
@@ -59,9 +55,6 @@
     image.isPublic = isPublic;
   };
 
-  let deleteModalVisible = false;
-  let preserveOnDiskAfterDeletion = false;
-
   const {
     isLoading: deleteImageIsLoading,
     error: deleteImageError,
@@ -69,19 +62,6 @@
   } = ReactiveState((imageId: string, preserveOnDisk: boolean) => {
     return ApiClient.image.remove(imageId, preserveOnDisk);
   });
-  const handleDeleteImage = async () => {
-    await deleteImage(image.id, preserveOnDiskAfterDeletion);
-
-    if ($deleteImageError) {
-      toast.error('Failed to delete image. Please try again later.');
-      return;
-    }
-
-    await goto('/history');
-
-    deleteModalVisible = false;
-    dispatch('imageDeleted', image.id);
-  };
 
   let isCopiedActive = false;
   const handleCopy = async () => {
@@ -92,6 +72,30 @@
     setTimeout(() => {
       isCopiedActive = false;
     }, 1000);
+  };
+
+  const handleImageDeletion = () => {
+    toast.component(ImageDeleteConfirmation, {
+      id: image.id,
+      props: {
+        image,
+        loading: deleteImageIsLoading,
+        close: () => toast.remove(image.id),
+        confirm: async ({ preserveOnDiskAfterDeletion }) => {
+          await deleteImage(image.id, preserveOnDiskAfterDeletion);
+
+          if ($deleteImageError) {
+            toast.error('Failed to delete image. Please try again later.');
+            return;
+          }
+
+          toast.remove(image.id);
+
+          await goto('/history');
+          dispatch('imageDeleted', image.id);
+        },
+      },
+    });
   };
 
   $: directLink = `${$page.url.origin}/image/${image.fileName}`;
@@ -208,7 +212,7 @@
         size="md"
         class="px-3 transition-colors hover:bg-button-danger hover:text-white"
         id="open-delete-tooltip-{image.id}"
-        on:click={() => (deleteModalVisible = true)}
+        on:click={handleImageDeletion}
       >
         <Icon icon="solar:trash-bin-minimalistic-2-linear" class="h-5 w-5" />
       </Button>
@@ -223,57 +227,3 @@
     </div>
   {/if}
 </div>
-
-<Modal
-  variant="danger"
-  align="top"
-  bind:open={deleteModalVisible}
-  loading={$deleteImageIsLoading}
-  on:confirm={handleDeleteImage}
->
-  <div slot="icon" class="p-4 text-red-500/90">
-    <Icon icon="clarity:warning-standard-line" class="h-8 w-8" />
-  </div>
-  <p slot="title">Image Deletion</p>
-  <div class="mb-4 text-sm" slot="content">
-    <p>
-      Are you sure you want to delete this image? <br />
-      This action cannot be undone.
-    </p>
-  </div>
-  <div
-    slot="extra"
-    class="flex items-center justify-center gap-2 pb-2 sm:flex-col sm:justify-between sm:pb-0"
-  >
-    <div class="flex items-center justify-center gap-2 sm:flex-grow">
-      <Toggle
-        checked={!preserveOnDiskAfterDeletion}
-        on:change={({ detail }) => (preserveOnDiskAfterDeletion = !detail)}
-      />
-      <Icon
-        icon="ep:info-filled"
-        id="preserve-on-disk-tooltip"
-        class="hidden cursor-help xs:block"
-      />
-      <Tooltip
-        triggeredBy="[id^='preserve-on-disk-tooltip']"
-        class="max-w-[10rem] p-2 text-center text-[0.7em]"
-        color="dark"
-        placement="top"
-      >
-        Perform physical deletion of the image file, not just the database entry
-      </Tooltip>
-    </div>
-
-    <span class="text-[0.5em]">
-      {#if preserveOnDiskAfterDeletion}
-        Preserve in Storage
-      {:else}
-        Delete from Storage
-      {/if}
-    </span>
-  </div>
-  <div slot="confirm" class="flex items-center justify-between">
-    <span>Delete</span>
-  </div>
-</Modal>

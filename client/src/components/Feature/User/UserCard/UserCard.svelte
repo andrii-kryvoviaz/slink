@@ -9,12 +9,15 @@
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { SingleUserResponse } from '@slink/api/Response/User/SingleUserResponse';
 
-  import { debounce } from '@slink/utils/time/debounce';
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
+  import { toast } from '@slink/utils/ui/toast';
 
-  import { UserAvatar, UserStatus } from '@slink/components/Feature/User';
+  import {
+    UserAvatar,
+    UserDeleteConfirmation,
+    UserStatus,
+  } from '@slink/components/Feature/User';
   import { Dropdown, DropdownItem } from '@slink/components/UI/Form';
-  import { Modal } from '@slink/components/UI/Modal';
   import { Badge } from '@slink/components/UI/Text';
 
   export let user: User = {} as User;
@@ -33,6 +36,19 @@
     (status: UserStatusEnum) => {
       statusToChange = status;
       return ApiClient.user.changeUserStatus(user.id, status);
+    },
+    { minExecutionTime: 300 }
+  );
+
+  const {
+    isLoading: userDeleteLoading,
+    data: userDeleteResponse,
+    error: userDeleteError,
+    run: deleteUser,
+  } = ReactiveState<SingleUserResponse>(
+    () => {
+      statusToChange = UserStatusEnum.Deleted;
+      return ApiClient.user.changeUserStatus(user.id, statusToChange);
     },
     { minExecutionTime: 300 }
   );
@@ -61,7 +77,6 @@
     { minExecutionTime: 300 }
   );
 
-  let deleteModalVisible = false;
   let statusToChange: UserStatusEnum | null = null;
   const closeDropdown = () => {
     if (!dropdownRef) {
@@ -71,15 +86,23 @@
     dropdownRef.close();
   };
 
-  const openModal = () => {
-    deleteModalVisible = true;
+  const handleUserDeletion = () => {
     closeDropdown();
-  };
 
-  const handleDelete = async () => {
-    await changeUserStatus(UserStatusEnum.Deleted);
-    deleteModalVisible = false;
-    dispatch('userDeleted', user.id);
+    toast.component(UserDeleteConfirmation, {
+      id: user.id,
+      props: {
+        user,
+        loading: userDeleteLoading,
+        close: () => toast.remove(user.id),
+        confirm: async () => {
+          await deleteUser();
+
+          toast.remove(user.id);
+          dispatch('userDeleted', user.id);
+        },
+      },
+    });
   };
 
   const successHandler = async (response: SingleUserResponse | null) => {
@@ -105,16 +128,17 @@
   };
 
   const resetState = () => {
-    deleteModalVisible = false;
     statusToChange = null;
     closeDropdown();
   };
 
   $: successHandler($userResponse);
+  $: successHandler($userDeleteResponse);
   $: successHandler($grantRoleResponse);
   $: successHandler($revokeRoleResponse);
 
   $: errorHandler($statusError);
+  $: errorHandler($userDeleteError);
   $: errorHandler($grantRoleError);
   $: errorHandler($revokeRoleError);
 
@@ -203,12 +227,7 @@
               </DropdownItem>
             {/if}
             <hr class="border-gray-500/70" />
-            <DropdownItem
-              danger={true}
-              on:click={openModal}
-              loading={userStatusChanging &&
-                statusToChange === UserStatusEnum.Deleted}
-            >
+            <DropdownItem danger={true} on:click={handleUserDeletion}>
               <Icon icon="ic:round-delete" slot="icon" class="h-4 w-4" />
               <span>Delete</span>
             </DropdownItem>
@@ -220,28 +239,3 @@
     </div>
   </div>
 </div>
-
-<Modal
-  variant="danger"
-  align="top"
-  bind:open={deleteModalVisible}
-  loading={userStatusChanging && statusToChange === UserStatusEnum.Deleted}
-  on:confirm={debounce(handleDelete, 300)}
->
-  <div slot="icon">
-    <Icon
-      icon="clarity:warning-standard-line"
-      class="h-10 w-10 text-red-600/90"
-    />
-  </div>
-  <p slot="title">User Deletion</p>
-  <div class="text-sm" slot="content">
-    <p>
-      Are you sure you want to delete this user? <br />
-      This action is hard to be undone.
-    </p>
-  </div>
-  <div slot="confirm" class="flex items-center justify-between">
-    <span>Delete</span>
-  </div>
-</Modal>
