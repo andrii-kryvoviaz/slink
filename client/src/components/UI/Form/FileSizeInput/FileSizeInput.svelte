@@ -16,15 +16,36 @@
   export let name: $$Props['name'] = '';
   export let step: $$Props['step'] = 1;
 
-  let { size, unit, unitValue } = parseFileSize(value);
+  $: inner = {
+    get parsed() {
+      return parseFileSize(value);
+    },
 
-  $: value = `${size}${unitValue}`;
+    get size() {
+      return this.parsed.size;
+    },
+
+    get unit() {
+      return this.parsed.unit;
+    },
+
+    set size(newValue) {
+      value = `${newValue}${this.parsed.unitValue}`;
+    },
+  };
 </script>
 
-<Input type="number" min={0} {step} {name} bind:value={size} class="pr-12">
+<Input
+  type="number"
+  min={0}
+  {step}
+  {name}
+  bind:value={inner.size}
+  class="pr-12"
+>
   <span
     class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-sm text-gray-500 dark:text-gray-400"
   >
-    {unit}
+    {inner.unit}
   </span>
 </Input>

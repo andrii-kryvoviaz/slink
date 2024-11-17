@@ -53,6 +53,7 @@
 
   let items: Record<string, DropdownItemData> = {};
   let selectedItem: DropdownItemData | null = null;
+  $: selectedItem = items[selected as string] || null;
 
   const handleDropdownItemRegister = (item: DropdownItemData) => {
     items[item.key] = item;

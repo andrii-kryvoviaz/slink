@@ -15,8 +15,15 @@
   export let step: $$Props['step'] = 1;
   export let min: $$Props['min'] = 0;
 
-  let innerValue = value;
-  $: value = parseInt(innerValue);
+  $: inner = {
+    get value() {
+      return value;
+    },
+
+    set value(newValue) {
+      value = parseInt(newValue, 10);
+    },
+  };
 </script>
 
-<Input type="number" {min} {step} {name} bind:value={innerValue} />
+<Input type="number" {min} {step} {name} bind:value={inner.value} />
