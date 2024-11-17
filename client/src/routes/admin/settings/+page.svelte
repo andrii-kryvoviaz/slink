@@ -33,7 +33,7 @@
     (category: SettingCategory, data: SettingCategoryData) => {
       return ApiClient.setting.updateSettings(category, data);
     },
-    { debounce: 300, minExecutionTime: 1000 }
+    { debounce: 300, minExecutionTime: 500 }
   );
 
   let categoryBeingSaved: SettingCategory | null = null;
@@ -63,7 +63,12 @@
         >Modify how users interact with the application</svelte:fragment
       >
 
-      <SettingItem defaultValue={defaultSettings.user?.approvalRequired}>
+      <SettingItem
+        defaultValue={defaultSettings.user?.approvalRequired}
+        reset={(value) => {
+          settings.user.approvalRequired = value;
+        }}
+      >
         <svelte:fragment slot="label">User Approval</svelte:fragment>
         <svelte:fragment slot="hint"
           >Toggle whether users need to be approved before they can access the
@@ -76,6 +81,9 @@
       </SettingItem>
       <SettingItem
         defaultValue={defaultSettings.user?.allowUnauthenticatedAccess}
+        reset={(value) => {
+          settings.user.allowUnauthenticatedAccess = value;
+        }}
       >
         <svelte:fragment slot="label">Unauthenticated Access</svelte:fragment>
         <svelte:fragment slot="hint"
@@ -87,7 +95,12 @@
           bind:checked={settings.user.allowUnauthenticatedAccess}
         />
       </SettingItem>
-      <SettingItem defaultValue={defaultSettings.user?.password.minLength}>
+      <SettingItem
+        defaultValue={defaultSettings.user?.password.minLength}
+        reset={(value) => {
+          settings.user.password.minLength = value;
+        }}
+      >
         <svelte:fragment slot="label">Password Length</svelte:fragment>
         <svelte:fragment slot="hint"
           >Set the minimum length of a user's password</svelte:fragment
@@ -98,7 +111,12 @@
           bind:value={settings.user.password.minLength}
         />
       </SettingItem>
-      <SettingItem defaultValue={defaultSettings.user?.password.requirements}>
+      <SettingItem
+        defaultValue={defaultSettings.user?.password.requirements}
+        reset={(value) => {
+          settings.user.password.requirements = value;
+        }}
+      >
         <svelte:fragment slot="label">Password Complexity</svelte:fragment>
         <svelte:fragment slot="hint"
           >Select the required character types for a user's password</svelte:fragment
@@ -137,7 +155,12 @@
         >Adjust image-related preferences</svelte:fragment
       >
 
-      <SettingItem defaultValue={defaultSettings.image?.maxSize}>
+      <SettingItem
+        defaultValue={defaultSettings.image?.maxSize}
+        reset={(value) => {
+          settings.image.maxSize = value;
+        }}
+      >
         <svelte:fragment slot="label">Maximum Image Size</svelte:fragment>
         <svelte:fragment slot="hint"
           >Set the maximum size of an image that can be uploaded</svelte:fragment
@@ -147,7 +170,12 @@
           bind:value={settings.image.maxSize}
         />
       </SettingItem>
-      <SettingItem defaultValue={defaultSettings.image?.stripExifMetadata}>
+      <SettingItem
+        defaultValue={defaultSettings.image?.stripExifMetadata}
+        reset={(value) => {
+          settings.image.stripExifMetadata = value;
+        }}
+      >
         <svelte:fragment slot="label">Strip EXIF Data</svelte:fragment>
         <svelte:fragment slot="hint"
           >Toggle whether EXIF data should be stripped from uploaded images</svelte:fragment
@@ -168,7 +196,12 @@
         >Configure your preferred way of storing data</svelte:fragment
       >
 
-      <SettingItem defaultValue={defaultSettings.storage?.provider}>
+      <SettingItem
+        defaultValue={defaultSettings.storage?.provider}
+        reset={(value) => {
+          settings.storage.provider = value;
+        }}
+      >
         <svelte:fragment slot="label">Storage Type</svelte:fragment>
         <svelte:fragment slot="hint"
           >Select where you want to store your data</svelte:fragment
@@ -185,7 +218,12 @@
         </Dropdown>
       </SettingItem>
       {#if settings.storage.provider === 'smb'}
-        <SettingItem defaultValue={defaultSettings.storage?.adapter.smb.host}>
+        <SettingItem
+          defaultValue={defaultSettings.storage?.adapter.smb.host}
+          reset={(value) => {
+            settings.storage.adapter.smb.host = value;
+          }}
+        >
           <svelte:fragment slot="label">SMB Host</svelte:fragment>
           <svelte:fragment slot="hint"
             >Enter the IP address or hostname of your SMB server</svelte:fragment
@@ -195,7 +233,12 @@
             bind:value={settings.storage.adapter.smb.host}
           />
         </SettingItem>
-        <SettingItem defaultValue={defaultSettings.storage?.adapter.smb.share}>
+        <SettingItem
+          defaultValue={defaultSettings.storage?.adapter.smb.share}
+          reset={(value) => {
+            settings.storage.adapter.smb.share = value;
+          }}
+        >
           <svelte:fragment slot="label">SMB Share</svelte:fragment>
           <svelte:fragment slot="hint"
             >Enter the name of the share on your SMB server</svelte:fragment
@@ -207,6 +250,9 @@
         </SettingItem>
         <SettingItem
           defaultValue={defaultSettings.storage?.adapter.smb.workgroup}
+          reset={(value) => {
+            settings.storage.adapter.smb.workgroup = value;
+          }}
         >
           <svelte:fragment slot="label">SMB Workgroup</svelte:fragment>
           <svelte:fragment slot="hint"
@@ -219,6 +265,9 @@
         </SettingItem>
         <SettingItem
           defaultValue={defaultSettings.storage?.adapter.smb.username}
+          reset={(value) => {
+            settings.storage.adapter.smb.username = value;
+          }}
         >
           <svelte:fragment slot="label">SMB Username</svelte:fragment>
           <svelte:fragment slot="hint"
@@ -231,6 +280,9 @@
         </SettingItem>
         <SettingItem
           defaultValue={defaultSettings.storage?.adapter.smb.password}
+          reset={(value) => {
+            settings.storage.adapter.smb.password = value;
+          }}
         >
           <svelte:fragment slot="label">SMB Password</svelte:fragment>
           <svelte:fragment slot="hint"
