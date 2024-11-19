@@ -20,6 +20,15 @@ final readonly class AnalyticsCountable {
     $this->date = DateTime::fromUnknown($date);
   }
   
+  /**
+   * @param array<string, mixed> $payload
+   * @return self
+   * @throws DateTimeException
+   */
+  public static function fromPayload(array $payload): self {
+    return new self($payload['date'], (int) $payload['count']);
+  }
+  
   public function getDate(): DateTime {
     return $this->date;
   }
