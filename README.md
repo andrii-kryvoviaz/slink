@@ -69,6 +69,9 @@ slink:
   image: anirdev/slink:latest
   container_name: slink
   environment:
+    # Your timezone
+    - TZ=UTC
+    
     # Your application hostname
     - ORIGIN=https://your-domain.com
     

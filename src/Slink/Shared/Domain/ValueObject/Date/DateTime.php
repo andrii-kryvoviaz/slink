@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Slink\Shared\Domain\ValueObject\Date;
 
 use DateTimeImmutable;
+use DateTimeZone;
 use Exception;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Infrastructure\Attribute\Groups;
@@ -73,9 +74,9 @@ final class DateTime extends DateTimeImmutable {
   /**
    * @throws DateTimeException
    */
-  private static function create(string $dateTime = ''): self {
+  public static function create(string $dateTime = '', ?DateTimeZone $timeZone = null): self {
     try {
-      return new self($dateTime);
+      return new self($dateTime, $timeZone);
     } catch (Throwable $e) {
       throw new DateTimeException(new Exception($e->getMessage(), (int) $e->getCode(), $e));
     }

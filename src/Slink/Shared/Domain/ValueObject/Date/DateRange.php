@@ -39,7 +39,10 @@ final readonly class DateRange extends AbstractValueObject {
   }
   
   /**
+   * @param DateInterval $dateInterval
+   * @return DateRange
    * @throws DateTimeException
+   * @throws \DateMalformedStringException
    */
   public static function fromDateInterval(DateInterval $dateInterval): self {
     $start = DateTime::now()->setTime(0, 0, 0);
@@ -100,7 +103,7 @@ final readonly class DateRange extends AbstractValueObject {
   public function getStep(): DateStep {
     $diff = $this->start->diff($this->end);
     
-    if($diff->days <= 1) {
+    if($diff->days === 0) {
       return DateStep::HOUR;
     }
     
@@ -117,6 +120,7 @@ final readonly class DateRange extends AbstractValueObject {
   
   /**
    * @return array<DateRange>
+   * @throws \DateMalformedStringException
    */
   public function generateIntervals(): array {
     $step = $this->getStep();

@@ -114,6 +114,10 @@ ARG UPLOAD_MAX_FILESIZE_IN_BYTES
 RUN echo "upload_max_filesize = $((UPLOAD_MAX_FILESIZE_IN_BYTES / 1024 / 1024))M" > /usr/local/etc/php/conf.d/uploads.ini && \
     echo "post_max_size = $((UPLOAD_MAX_FILESIZE_IN_BYTES / 1024 / 1024))M" >> /usr/local/etc/php/conf.d/uploads.ini
 
+# Set current timezone
+RUN apk add --no-cache tzdata
+RUN echo 'date.timezone = ${TZ}' > /usr/local/etc/php/conf.d/timezone.ini
+
 # Set working directory
 WORKDIR /app
 

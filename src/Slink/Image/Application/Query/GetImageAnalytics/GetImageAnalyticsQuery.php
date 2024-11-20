@@ -20,6 +20,7 @@ final readonly class GetImageAnalyticsQuery implements QueryInterface {
   /**
    * @return DateRange
    * @throws DateTimeException
+   * @throws \DateMalformedStringException
    */
   public function getDateRange(): DateRange {
     $dateInterval = DateInterval::from($this->dateInterval);
