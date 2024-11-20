@@ -5,12 +5,9 @@
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { UserAnalyticsData } from '@slink/api/Response';
 
-  import {
-    Chart,
-    type ChartOptions,
-  } from '@slink/components/Feature/Analytics';
   import { RefreshButton } from '@slink/components/UI/Action';
   import { Card } from '@slink/components/UI/Card';
+  import { Chart, type ChartOptions } from '@slink/components/UI/Chart';
 
   const {
     run,

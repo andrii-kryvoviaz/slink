@@ -52,8 +52,8 @@
       {#if loading}
         <Loader size="xs" />
       {/if}
-      <Button type="submit" variant="primary" size="md" disabled={loading}>
-        Save
+      <Button type="submit" variant="secondary" size="sm" disabled={loading}>
+        Save Settings
       </Button>
     </div>
   </form>

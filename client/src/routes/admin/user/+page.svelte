@@ -70,6 +70,10 @@
   onMount(() => fetchUsers(1, meta.size));
 </script>
 
+<svelte:head>
+  <title>Users | Slink</title>
+</svelte:head>
+
 <section
   in:fade={{ duration: 300 }}
   class="relative flex h-full max-w-7xl flex-grow flex-col py-4"

@@ -8,9 +8,9 @@
   import type {
     ChartNormalizer,
     ChartOptions,
-  } from '@slink/components/Feature/Analytics';
-  import { AreaChart } from '@slink/components/Feature/Analytics/Chart/Area.chart';
-  import { RadialBarChart } from '@slink/components/Feature/Analytics/Chart/RadialBar.chart';
+  } from '@slink/components/UI/Chart';
+  import { AreaChart } from '@slink/components/UI/Chart/Area.chart';
+  import { RadialBarChart } from '@slink/components/UI/Chart/RadialBar.chart';
 
   export let options: ChartOptions;
 

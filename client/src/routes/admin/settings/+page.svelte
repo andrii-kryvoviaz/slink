@@ -51,6 +51,10 @@
   $: defaultSettings = data?.defaultSettings;
 </script>
 
+<svelte:head>
+  <title>Settings | Slink</title>
+</svelte:head>
+
 <div class="h-full w-full max-w-7xl px-6 py-4">
   <div class="flex flex-col gap-2">
     <SettingsPane
