@@ -46,17 +46,17 @@ final class ImageAnalyticsRepository extends AbstractRepository implements Image
     $sql = <<<SQL
       WITH RECURSIVE all_intervals AS (
         SELECT
-          DATE(:start_date) AS interval_start,
+          :start_date AS interval_start,
           DATETIME(:start_date, :interval) AS interval_end
-        WHERE DATE(:start_date) <= DATE(:end_date)
-
+        WHERE :start_date <= :end_date
+    
         UNION ALL
-
+    
         SELECT
           interval_end AS interval_start,
           DATETIME(interval_end, :interval) AS interval_end
         FROM all_intervals
-        WHERE interval_end < DATE(:end_date)
+        WHERE interval_end < :end_date
       ),
       analytics_data AS (
         SELECT
@@ -65,13 +65,14 @@ final class ImageAnalyticsRepository extends AbstractRepository implements Image
           COUNT(i.created_at) AS image_count
         FROM all_intervals ai
         LEFT JOIN image i
-          ON i.created_at BETWEEN ai.interval_start AND ai.interval_end
+          ON i.created_at >= ai.interval_start
+          AND i.created_at < ai.interval_end
         GROUP BY ai.interval_start, ai.interval_end
       )
       SELECT
-        interval_start as date,
+        interval_start AS date,
         interval_end,
-        image_count as count
+        image_count AS count
       FROM analytics_data;
     SQL;
     
@@ -82,17 +83,18 @@ final class ImageAnalyticsRepository extends AbstractRepository implements Image
 
     $result = $query->executeQuery()->fetchAllAssociative();
     
-    $data = [];
-    foreach ($result as $row) {
+    if (count($result) === 1) {
+      $result[] = reset($result);
+    }
+    
+    return array_map(function(array $row) use ($format) {
       $analytics = AnalyticsCountable::fromPayload($row);
       
-      $data[] = [
+      return [
         'date' => $analytics->getFormattedDate($format),
         'count' => $analytics->getCount(),
       ];
-    }
-
-    return $data;
+    }, $result);
   }
   
   /**
