@@ -91,7 +91,7 @@
   const mobileContentClasses = 'fixed inset-0 m-auto';
 
   const baseContentClasses =
-    'md:absolute md:inset-auto md:m-1 z-50 mx-auto w-56 origin-top-left max-h-fit divide-y divide-gray-100 rounded-md bg-zinc-800 font-light shadow-lg ring-1 ring-black ring-opacity-5 dark:divide-zinc-700 dark:bg-zinc-900';
+    'md:absolute md:inset-auto md:m-1 z-50 mx-auto w-56 origin-top-left max-h-fit divide-y divide-gray-100 rounded-md bg-zinc-100 font-light shadow-lg ring-1 ring-black ring-opacity-5 dark:divide-zinc-700 dark:bg-zinc-900';
 
   const classMap = {
     'bottom-right': 'md:top-full md:right-0',

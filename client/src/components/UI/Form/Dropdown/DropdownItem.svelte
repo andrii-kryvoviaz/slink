@@ -57,7 +57,7 @@
 <style>
   .tooltip-item {
     @apply flex w-full cursor-pointer items-center gap-2 rounded-md p-1 px-3;
-    @apply text-gray-50;
+    @apply text-input-default;
   }
 
   .tooltip-item[disabled] {
@@ -65,7 +65,7 @@
   }
 
   .tooltip-item:hover {
-    @apply bg-gray-500 text-gray-50;
+    @apply bg-dropdown-accent text-white;
   }
 
   .danger:hover {

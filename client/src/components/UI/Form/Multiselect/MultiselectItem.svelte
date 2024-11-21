@@ -35,7 +35,7 @@
 </script>
 
 <button
-  class="w-full cursor-pointer rounded-md p-2 hover:bg-gray-600"
+  class="w-full cursor-pointer rounded-md p-2 hover:bg-dropdown-accent hover:text-white"
   type="button"
   on:click={handleClick}
 >

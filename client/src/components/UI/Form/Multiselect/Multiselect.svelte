@@ -81,13 +81,13 @@
   });
 
   const baseContainerClasses =
-    'relative w-fit max-w-[350px] cursor-pointer select-none rounded-md border border-gray-700';
+    'relative w-fit max-w-[350px] cursor-pointer select-none rounded-md border border-input-default text-input-default';
   const focusContainerClasses =
-    'border-blue-400 ring-blue-400 bg-gray-800 ring ring-opacity-40';
+    'border-blue-400 ring-blue-400 dark:bg-gray-800 ring ring-opacity-40 bg-gray-50 dark:border-gray-700 dark:text-gray-50';
 
   const mobileContentClasses = 'fixed inset-0 m-auto';
   const baseContentClasses =
-    'md:absolute md:inset-auto md:m-1 min-w-full z-50 mx-auto w-56 origin-top-left max-h-fit divide-y divide-gray-100 rounded-md bg-zinc-800 font-light shadow-lg ring-1 ring-black ring-opacity-5 dark:divide-zinc-700 dark:bg-zinc-900 select-none md:top-full md:right-0';
+    'md:absolute md:inset-auto md:m-1 min-w-full z-50 mx-auto w-56 origin-top-left max-h-fit divide-y divide-gray-100 rounded-md bg-zinc-100 font-light shadow-lg ring-1 ring-black ring-opacity-5 dark:divide-zinc-700 dark:bg-zinc-900 select-none md:top-full md:right-0';
 
   $: containerClasses = isOpen
     ? twMerge(baseContainerClasses, focusContainerClasses)
@@ -103,7 +103,7 @@
   <input type="hidden" name={$$props.name} {value} />
 
   <div
-    class="flex flex-wrap gap-2 rounded-md bg-gray-800 p-2"
+    class="flex flex-wrap gap-2 rounded-md bg-input-default p-2"
     on:click={toggle}
     on:keydown={(event) => event.key === 'Enter' && toggle()}
     role="combobox"
@@ -112,15 +112,15 @@
     tabindex="0"
   >
     {#if selectedItems.length === 0}
-      <div class="p-1.5 text-xs text-gray-50">{placeholder}</div>
+      <div class="p-1.5 text-xs">{placeholder}</div>
     {/if}
     {#each selectedItems as item}
       <div
-        class="flex flex-grow items-center justify-between gap-2 rounded-md bg-gray-700 p-1 text-xs text-gray-50"
+        class="flex flex-grow items-center justify-between gap-2 rounded-md bg-gray-200/70 p-1 text-xs dark:bg-gray-700 dark:text-gray-50"
       >
         {@html item.name}
         <div
-          class="cursor-pointer rounded-md p-1 hover:bg-gray-600"
+          class="cursor-pointer rounded-md p-1 hover:bg-gray-300 dark:hover:bg-gray-600"
           on:click={(event) => {
             event.stopPropagation();
             handleRemove(item.key);

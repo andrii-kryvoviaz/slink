@@ -195,7 +195,7 @@
               >
                 <Icon
                   icon="material-symbols-light:check"
-                  class="h-4 w-4 text-green-300"
+                  class="h-4 w-4 text-green-500 dark:text-green-300"
                   slot="icon"
                 />
                 <span>Activate</span>
@@ -226,7 +226,7 @@
                 <span>Revoke Admin</span>
               </DropdownItem>
             {/if}
-            <hr class="border-gray-500/70" />
+            <hr class="bg-gray-100/70 dark:border-gray-500/70" />
             <DropdownItem danger={true} on:click={handleUserDeletion}>
               <Icon icon="ic:round-delete" slot="icon" class="h-4 w-4" />
               <span>Delete</span>

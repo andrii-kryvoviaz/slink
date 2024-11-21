@@ -72,7 +72,7 @@
 
         {#if defaultValue !== null && defaultValue !== undefined}
           <span
-            class="flex cursor-pointer select-none items-center gap-2 rounded-full bg-gray-100 p-1 px-4 text-xs font-extralight text-gray-500 transition-colors duration-200 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+            class="flex cursor-pointer select-none items-center gap-2 rounded-full bg-gray-200 p-1 px-4 text-xs font-extralight text-gray-600 transition-colors duration-200 hover:bg-gray-300 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
             on:click={handleSettingReset}
             on:keydown={handleSettingReset}
             role="button"
