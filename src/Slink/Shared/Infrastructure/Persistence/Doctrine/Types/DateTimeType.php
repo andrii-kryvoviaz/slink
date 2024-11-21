@@ -37,7 +37,7 @@ class DateTimeType extends DateTimeImmutableType {
             return null;
         }
 
-        if ($value instanceof DateTime) {
+        if ($value instanceof DateTimeImmutable) {
             return $value
               ->setTimezone(new \DateTimeZone('UTC'))
               ->format($platform->getDateTimeFormatString());

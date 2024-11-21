@@ -1,6 +1,6 @@
 import type { NumericRange } from '@sveltejs/kit';
 
-export type ErrorList = { [name: string]: string };
+export type ErrorList = { [name: string]: string | ErrorList };
 export abstract class HttpException extends Error {
   protected constructor(
     message: string,

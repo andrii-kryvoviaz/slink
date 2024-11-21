@@ -22,14 +22,18 @@
     },
 
     get size() {
-      return this.parsed.size;
+      return parseInt(value);
     },
 
     get unit() {
       return this.parsed.unit;
     },
 
-    set size(newValue) {
+    set size(newValue: number | string) {
+      if (typeof newValue === 'string' && newValue) {
+        newValue = parseInt(newValue);
+      }
+
       value = `${newValue}${this.parsed.unitValue}`;
     },
   };
@@ -41,6 +45,7 @@
   {step}
   {name}
   bind:value={inner.size}
+  error={$$props.error}
   class="pr-12"
 >
   <span

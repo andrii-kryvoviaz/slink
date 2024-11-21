@@ -29,7 +29,11 @@
 
   export let data: PageServerData;
 
-  const { run: saveSettings, isLoading } = ReactiveState<EmptyResponse>(
+  const {
+    run: saveSettings,
+    isLoading,
+    error,
+  } = ReactiveState<EmptyResponse>(
     (category: SettingCategory, data: SettingCategoryData) => {
       return ApiClient.setting.updateSettings(category, data);
     },
@@ -110,8 +114,8 @@
           >Set the minimum length of a user's password</svelte:fragment
         >
         <NumberInput
+          error={$error?.errors.password?.minLength}
           name="passwordLength"
-          min={3}
           bind:value={settings.user.password.minLength}
         />
       </SettingItem>
@@ -170,6 +174,7 @@
           >Set the maximum size of an image that can be uploaded</svelte:fragment
         >
         <FileSizeInput
+          error={$error?.errors.image?.maxSize}
           name="imageMaxSize"
           bind:value={settings.image.maxSize}
         />

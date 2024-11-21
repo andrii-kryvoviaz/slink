@@ -17,11 +17,11 @@ const formatSizeUnit = (unit: SizeUnitValue): SizeUnit => {
 export const parseFileSize = (
   fileSize: string
 ): {
-  size: number;
+  size: string;
   unit: SizeUnit;
   unitValue: SizeUnitValue;
 } => {
-  const match = fileSize.match(/(\d+)(\w+)/);
+  const match = fileSize.match(/(\d+)?(\w+)/);
 
   if (!match) {
     throw new Error(`Invalid file size format: ${fileSize}`);
@@ -30,7 +30,7 @@ export const parseFileSize = (
   const [, numberValue, SizeUnit] = match;
 
   return {
-    size: parseInt(numberValue, 10),
+    size: numberValue,
     unit: formatSizeUnit(SizeUnit as SizeUnitValue),
     unitValue: SizeUnit as SizeUnitValue,
   };

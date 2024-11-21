@@ -8,7 +8,9 @@
     'value' | 'name' | 'step' | 'min'
   >;
 
-  interface $$Props extends HTMLInputAttributes, InputProps {}
+  interface $$Props extends HTMLInputAttributes, InputProps {
+    class?: string;
+  }
 
   export let value: $$Props['value'] = '';
   export let name: $$Props['name'] = '';
@@ -26,4 +28,14 @@
   };
 </script>
 
-<Input type="number" {min} {step} {name} bind:value={inner.value} />
+<Input
+  type="number"
+  {min}
+  {step}
+  {name}
+  bind:value={inner.value}
+  class={$$props.class}
+  error={$$props.error}
+>
+  <slot />
+</Input>

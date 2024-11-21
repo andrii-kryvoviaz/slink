@@ -10,7 +10,6 @@
   interface $$Props extends HTMLInputAttributes, InputProps {
     key?: string;
     label?: string;
-    error?: string | boolean;
   }
 
   export let value: $$Props['value'] = '';
