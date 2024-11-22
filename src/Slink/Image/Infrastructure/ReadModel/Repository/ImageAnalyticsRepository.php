@@ -87,10 +87,6 @@ final class ImageAnalyticsRepository extends AbstractRepository implements Image
 
     $result = $query->executeQuery()->fetchAllAssociative();
     
-    if (count($result) === 1) {
-      $result[] = reset($result);
-    }
-    
     return array_map(function(array $row) use ($format) {
       $analytics = AnalyticsCountable::fromPayload($row);
       

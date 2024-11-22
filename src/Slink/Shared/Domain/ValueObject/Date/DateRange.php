@@ -56,6 +56,7 @@ final readonly class DateRange extends AbstractValueObject {
         break;
       case DateInterval::CURRENT_WEEK:
         $start = $start->modify('this week');
+        $end = $end->modify('sunday');
         break;
       case DateInterval::LAST_WEEK:
         $start = $start->modify('last week');
@@ -66,6 +67,7 @@ final readonly class DateRange extends AbstractValueObject {
         break;
       case DateInterval::CURRENT_MONTH:
         $start = $start->modify('first day of this month');
+        $end = $end->modify('last day of this month');
         break;
       case DateInterval::LAST_MONTH:
         $start = $start->modify('first day of last month');
@@ -76,6 +78,7 @@ final readonly class DateRange extends AbstractValueObject {
         break;
       case DateInterval::CURRENT_YEAR:
         $start = $start->modify('first day of january this year');
+        $end = $end->modify('last day of december this year');
         break;
       case DateInterval::ALL_TIME:
         $start = DateTime::fromTimeStamp(0);
