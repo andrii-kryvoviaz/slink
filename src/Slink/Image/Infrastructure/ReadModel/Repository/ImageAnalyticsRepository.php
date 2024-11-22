@@ -43,6 +43,10 @@ final class ImageAnalyticsRepository extends AbstractRepository implements Image
     $interval = $step->toInterval();
     $format = $step->toFormat();
     
+    $timezone = new \DateTimeZone('UTC');
+    $dateStart = $dateRange->getStart()->setTimezone($timezone);
+    $dateEnd = $dateRange->getEnd()->setTimezone($timezone);
+    
     $sql = <<<SQL
       WITH RECURSIVE all_intervals AS (
         SELECT
@@ -77,8 +81,8 @@ final class ImageAnalyticsRepository extends AbstractRepository implements Image
     SQL;
     
     $query = $this->_em->getConnection()->prepare($sql);
-    $query->bindValue('start_date', $dateRange->getStart()->format('Y-m-d H:i:s'));
-    $query->bindValue('end_date', $dateRange->getEnd()->format('Y-m-d H:i:s'));
+    $query->bindValue('start_date', $dateStart->format('Y-m-d H:i:s'));
+    $query->bindValue('end_date', $dateEnd->format('Y-m-d H:i:s'));
     $query->bindValue('interval', $interval);
 
     $result = $query->executeQuery()->fetchAllAssociative();

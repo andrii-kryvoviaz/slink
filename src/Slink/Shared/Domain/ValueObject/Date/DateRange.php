@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Shared\Domain\ValueObject\Date;
 
+use DateMalformedStringException;
 use Slink\Shared\Domain\Enum\Date\DateInterval;
 use Slink\Shared\Domain\Enum\Date\DateStep;
 use Slink\Shared\Domain\Exception\Date\DateIntervalException;
@@ -42,7 +43,7 @@ final readonly class DateRange extends AbstractValueObject {
    * @param DateInterval $dateInterval
    * @return DateRange
    * @throws DateTimeException
-   * @throws \DateMalformedStringException
+   * @throws DateMalformedStringException
    */
   public static function fromDateInterval(DateInterval $dateInterval): self {
     $start = DateTime::now()->setTime(0, 0, 0);
@@ -51,6 +52,7 @@ final readonly class DateRange extends AbstractValueObject {
     switch($dateInterval) {
       case DateInterval::TODAY:
         $start = $start->modify('today');
+        $end = $end->modify('next hour');
         break;
       case DateInterval::CURRENT_WEEK:
         $start = $start->modify('this week');
@@ -116,35 +118,6 @@ final readonly class DateRange extends AbstractValueObject {
     }
     
     return DateStep::YEAR;
-  }
-  
-  /**
-   * @return array<DateRange>
-   * @throws \DateMalformedStringException
-   */
-  public function generateIntervals(): array {
-    $step = $this->getStep();
-    $intervals = [];
-    
-    $current = clone $this->start;
-    $end = clone $this->end;
-    
-    while($current->isBefore($end)) {
-      $next = clone $current;
-      
-      $next = match ($step) {
-        DateStep::HOUR => $next->modify('+1 hour'),
-        DateStep::DAY => $next->modify('+1 day'),
-        DateStep::MONTH => $next->modify('+1 month'),
-        DateStep::YEAR => $next->modify('+1 year'),
-        default => throw new DateIntervalException('Invalid date step'),
-      };
-      
-      $intervals[] = self::create($current, $next);
-      $current = $next;
-    }
-    
-    return $intervals;
   }
   
   /**

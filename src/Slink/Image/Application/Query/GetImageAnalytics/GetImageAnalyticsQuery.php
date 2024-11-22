@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Image\Application\Query\GetImageAnalytics;
 
+use DateMalformedStringException;
 use Slink\Shared\Application\Query\QueryInterface;
 use Slink\Shared\Domain\Enum\Date\DateInterval;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
@@ -19,8 +20,7 @@ final readonly class GetImageAnalyticsQuery implements QueryInterface {
   
   /**
    * @return DateRange
-   * @throws DateTimeException
-   * @throws \DateMalformedStringException
+   * @throws DateTimeException|DateMalformedStringException
    */
   public function getDateRange(): DateRange {
     $dateInterval = DateInterval::from($this->dateInterval);

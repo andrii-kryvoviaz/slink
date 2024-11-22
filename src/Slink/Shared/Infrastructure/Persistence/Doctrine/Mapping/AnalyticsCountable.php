@@ -14,10 +14,15 @@ final readonly class AnalyticsCountable {
    * @throws DateTimeException
    */
   public function __construct(
-    DateTime|string $date,
+    string $date,
     private int $count,
   ) {
-    $this->date = DateTime::fromUnknown($date);
+    try {
+      $this->date = DateTime::create($date, new \DateTimeZone('UTC'))
+        ->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+    } catch (\DateInvalidTimeZoneException $e) {
+      $this->date = DateTime::fromString($date);
+    }
   }
   
   /**
