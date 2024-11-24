@@ -1,6 +1,5 @@
 <script lang="ts">
   import { Button } from '@slink/components/UI/Action';
-  import { Badge } from '@slink/components/UI/Text';
 
   export let close: () => void;
   export let confirm: () => void;
@@ -10,9 +9,8 @@
 </script>
 
 <p class="text-left text-sm">
-  Are you sure you want to set <strong>{name}</strong> to <Badge
-    >{displayValue}</Badge
-  >?
+  Are you sure you want to set <strong>{name}</strong> to
+  <strong>{displayValue}</strong>?
 </p>
 
 <div class="mt-5 flex gap-2">

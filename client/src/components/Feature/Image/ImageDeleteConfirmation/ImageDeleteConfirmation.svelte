@@ -30,15 +30,17 @@
       <Loader size="xs" />
     {/if}
   </h3>
-  <p class="mt-2 text-sm">
-    <span class="block">Are you sure you want to delete:</span>
-    <a href={`/info/${image.id}`}>
-      <span class="underline">{image.id}</span>
-      <Icon icon="system-uicons:external" class="inline h-4 w-4" />
-    </a>
+  <div class="mt-2 text-sm">
+    <span class="block">Are you sure you want to delete this image?</span>
+    <p>
+      <span>ID:</span>
+      <a href={`/info/${image.id}`}>
+        <span class="underline">{image.id}</span>
+      </a>
+    </p>
 
     <span class="mt-2 block text-[0.7em]"> This action cannot be undone. </span>
-  </p>
+  </div>
 </div>
 
 <div class="mt-4 flex items-center gap-2 sm:flex-grow">
@@ -63,11 +65,11 @@
     />
     <Tooltip
       triggeredBy="[id^='preserve-on-disk-tooltip']"
-      class="max-w-[10rem] p-2 text-center text-[0.7em]"
+      class="max-w-[12rem] bg-accent p-2 text-center text-[0.7em]"
       color="dark"
       placement="top-end"
     >
-      Perform physical deletion of the image file, not just the database entry
+      Deletes the file from storage, not just the database
     </Tooltip>
   </div>
 </div>

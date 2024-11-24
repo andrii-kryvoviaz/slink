@@ -108,8 +108,7 @@
       </p>
       <div class="mb-2 mt-8">
         <p class="my-2 text-xs font-extralight">
-          Copy the direct image link to use it on your website or share it with
-          others
+          Copy this link to use on your website or share with others
         </p>
         <CopyContainer value={directLink} />
       </div>
@@ -131,7 +130,7 @@
             color="dark"
             placement="bottom"
           >
-            Set the size before copying the image url
+            Adjust the size before copying the URL
           </Tooltip>
         </div>
       {/if}
