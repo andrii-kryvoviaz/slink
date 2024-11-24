@@ -127,7 +127,6 @@
           <Tooltip
             triggeredBy="[id^='open-resize-info-tooltip']"
             class="max-w-[10rem] p-2 text-center text-xs"
-            color="dark"
             placement="bottom"
           >
             Adjust the size before copying the URL

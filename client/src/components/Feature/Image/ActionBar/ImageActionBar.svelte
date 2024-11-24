@@ -140,7 +140,6 @@
       <Tooltip
         triggeredBy="[id^='open-visibility-tooltip-{image.id}'"
         class="max-w-[10rem] p-2 text-center text-xs shadow-none"
-        color="dark"
         placement="bottom"
       >
         {#if image.isPublic}
@@ -166,7 +165,6 @@
       <Tooltip
         triggeredBy="[id^='open-share-tooltip-{image.id}']"
         class="max-w-[10rem] p-2 text-center text-xs shadow-none"
-        color="dark"
         placement="bottom"
       >
         Share Policy
@@ -197,7 +195,6 @@
       <Tooltip
         triggeredBy="[id^='open-copy-tooltip-{image.id}']"
         class="max-w-[10rem] p-2 text-center text-xs shadow-none"
-        color="dark"
         placement="bottom"
       >
         Copy URL
@@ -219,7 +216,6 @@
       <Tooltip
         triggeredBy="[id^='open-delete-tooltip-{image.id}']"
         class="max-w-[10rem] p-2 text-center text-xs shadow-none"
-        color="dark"
         placement="bottom"
       >
         Delete Image

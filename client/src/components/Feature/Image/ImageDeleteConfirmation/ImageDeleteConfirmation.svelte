@@ -65,8 +65,7 @@
     />
     <Tooltip
       triggeredBy="[id^='preserve-on-disk-tooltip']"
-      class="max-w-[12rem] bg-accent p-2 text-center text-[0.7em]"
-      color="dark"
+      class="max-w-[12rem] p-2 text-center text-[0.7em]"
       placement="top-end"
     >
       Deletes the file from storage, not just the database

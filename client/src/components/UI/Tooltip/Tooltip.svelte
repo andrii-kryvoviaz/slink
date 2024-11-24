@@ -10,13 +10,13 @@
     defaultClass?: string;
   }
 
-  export let type: 'dark' | 'light' | 'auto' | 'custom' = 'dark';
+  export let type: 'dark' | 'light' | 'auto' | 'custom' = 'auto';
   export let defaultClass: string = 'py-2 px-3 text-sm font-medium';
 
   const types = {
-    dark: 'bg-gray-900 text-white dark:bg-gray-700',
-    light: 'border-gray-200 bg-white text-gray-900',
-    auto: ' bg-white text-gray-900 dark:bg-gray-700 dark:text-white border-gray-200 dark:border-gray-700',
+    dark: 'bg-neutral-900 text-white dark:bg-neutral-800',
+    light: 'border-neutral-200 bg-white text-neutral-900',
+    auto: 'bg-white text-neutral-900 dark:bg-neutral-800 dark:text-white border-neutral-200 dark:border-neutral-700',
     custom: '',
   };
 
