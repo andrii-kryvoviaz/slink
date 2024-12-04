@@ -181,11 +181,11 @@
                   statusToChange === UserStatusEnum.Suspended}
               >
                 <Icon
-                  icon="mdi:stop-remove"
-                  class="h-4 w-4 text-red-400"
+                  icon="lets-icons:cancel-duotone"
+                  class="h-4 w-4 text-red-400 group-hover:text-white"
                   slot="icon"
                 />
-                <span>Suspend</span>
+                <span>Suspend account</span>
               </DropdownItem>
             {:else}
               <DropdownItem
@@ -194,11 +194,11 @@
                   statusToChange === UserStatusEnum.Active}
               >
                 <Icon
-                  icon="material-symbols-light:check"
-                  class="h-4 w-4 text-green-500 dark:text-green-300"
+                  icon="lets-icons:add-square-duotone"
+                  class="h-4 w-4 text-green-500 group-hover:text-white dark:text-green-300"
                   slot="icon"
                 />
-                <span>Activate</span>
+                <span>Enable account</span>
               </DropdownItem>
             {/if}
             {#if !isAdmin}
@@ -207,11 +207,11 @@
                 loading={$grantRoleLoading}
               >
                 <Icon
-                  icon="material-symbols-light:admin-panel-settings-outline"
+                  icon="lets-icons:chield-duotone-line"
                   class="h-4 w-4"
                   slot="icon"
                 />
-                <span>Grant Admin</span>
+                <span>Make admin</span>
               </DropdownItem>
             {:else}
               <DropdownItem
@@ -219,17 +219,23 @@
                 loading={$revokeRoleLoading}
               >
                 <Icon
-                  icon="material-symbols-light:admin-panel-settings-outline"
+                  icon="lets-icons:chield-light"
                   class="h-4 w-4"
                   slot="icon"
                 />
-                <span>Revoke Admin</span>
+                <span>Revoke admin</span>
               </DropdownItem>
             {/if}
-            <hr class="bg-gray-100/70 dark:border-gray-500/70" />
+            <hr
+              class="border-t-[1px] border-neutral-500/20 dark:border-neutral-700/70"
+            />
             <DropdownItem danger={true} on:click={handleUserDeletion}>
-              <Icon icon="ic:round-delete" slot="icon" class="h-4 w-4" />
-              <span>Delete</span>
+              <Icon
+                icon="solar:trash-bin-minimalistic-2-linear"
+                slot="icon"
+                class="h-4 w-4"
+              />
+              <span>Delete account</span>
             </DropdownItem>
           </Dropdown>
         {/if}

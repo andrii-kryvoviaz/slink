@@ -62,98 +62,6 @@
 <div class="h-full w-full max-w-7xl px-6 py-4">
   <div class="flex flex-col gap-2">
     <SettingsPane
-      category="user"
-      loading={$isLoading && categoryBeingSaved === 'user'}
-      on:save={handleSettingsSectionSave}
-    >
-      <svelte:fragment slot="title">User</svelte:fragment>
-      <svelte:fragment slot="description"
-        >Modify how users interact with the application</svelte:fragment
-      >
-
-      <SettingItem
-        defaultValue={defaultSettings.user?.approvalRequired}
-        reset={(value) => {
-          settings.user.approvalRequired = value;
-        }}
-      >
-        <svelte:fragment slot="label">User Approval</svelte:fragment>
-        <svelte:fragment slot="hint"
-          >Toggle whether users need to be approved before they can access the
-          application</svelte:fragment
-        >
-        <Toggle
-          name="approvalRequired"
-          bind:checked={settings.user.approvalRequired}
-        />
-      </SettingItem>
-      <SettingItem
-        defaultValue={defaultSettings.user?.allowUnauthenticatedAccess}
-        reset={(value) => {
-          settings.user.allowUnauthenticatedAccess = value;
-        }}
-      >
-        <svelte:fragment slot="label">Unauthenticated Access</svelte:fragment>
-        <svelte:fragment slot="hint"
-          >Toggle whether users can access the application without being
-          authenticated</svelte:fragment
-        >
-        <Toggle
-          name="allowUnauthenticatedAccess"
-          bind:checked={settings.user.allowUnauthenticatedAccess}
-        />
-      </SettingItem>
-      <SettingItem
-        defaultValue={defaultSettings.user?.password.minLength}
-        reset={(value) => {
-          settings.user.password.minLength = value;
-        }}
-      >
-        <svelte:fragment slot="label">Password Length</svelte:fragment>
-        <svelte:fragment slot="hint"
-          >Set the minimum length of a user's password</svelte:fragment
-        >
-        <NumberInput
-          error={$error?.errors.password?.minLength}
-          name="passwordLength"
-          bind:value={settings.user.password.minLength}
-        />
-      </SettingItem>
-      <SettingItem
-        defaultValue={defaultSettings.user?.password.requirements}
-        reset={(value) => {
-          settings.user.password.requirements = value;
-        }}
-      >
-        <svelte:fragment slot="label">Password Complexity</svelte:fragment>
-        <svelte:fragment slot="hint"
-          >Select the required character types for a user's password</svelte:fragment
-        >
-        <Multiselect
-          type="bitmask"
-          name="passwordRequirements"
-          bind:value={settings.user.password.requirements}
-        >
-          <MultiselectItem key="1">
-            <Icon icon="ph:number-nine-thin" />
-            Numbers
-          </MultiselectItem>
-          <MultiselectItem key="2">
-            <Icon icon="material-symbols-light:lowercase-rounded" />
-            Lowercase Letters
-          </MultiselectItem>
-          <MultiselectItem key="4">
-            <Icon icon="material-symbols-light:uppercase-rounded" />
-            Uppercase Letters
-          </MultiselectItem>
-          <MultiselectItem key="8">
-            <Icon icon="material-symbols-light:asterisk-rounded" />
-            Special Characters
-          </MultiselectItem>
-        </Multiselect>
-      </SettingItem>
-    </SettingsPane>
-    <SettingsPane
       category="image"
       loading={$isLoading && categoryBeingSaved === 'image'}
       on:save={handleSettingsSectionSave}
@@ -304,6 +212,98 @@
           />
         </SettingItem>
       {/if}
+    </SettingsPane>
+    <SettingsPane
+      category="user"
+      loading={$isLoading && categoryBeingSaved === 'user'}
+      on:save={handleSettingsSectionSave}
+    >
+      <svelte:fragment slot="title">User</svelte:fragment>
+      <svelte:fragment slot="description"
+        >Modify how users interact with the application</svelte:fragment
+      >
+
+      <SettingItem
+        defaultValue={defaultSettings.user?.approvalRequired}
+        reset={(value) => {
+          settings.user.approvalRequired = value;
+        }}
+      >
+        <svelte:fragment slot="label">User Approval</svelte:fragment>
+        <svelte:fragment slot="hint"
+          >Toggle whether users need to be approved before they can access the
+          application</svelte:fragment
+        >
+        <Toggle
+          name="approvalRequired"
+          bind:checked={settings.user.approvalRequired}
+        />
+      </SettingItem>
+      <SettingItem
+        defaultValue={defaultSettings.user?.allowUnauthenticatedAccess}
+        reset={(value) => {
+          settings.user.allowUnauthenticatedAccess = value;
+        }}
+      >
+        <svelte:fragment slot="label">Unauthenticated Access</svelte:fragment>
+        <svelte:fragment slot="hint"
+          >Toggle whether users can access the application without being
+          authenticated</svelte:fragment
+        >
+        <Toggle
+          name="allowUnauthenticatedAccess"
+          bind:checked={settings.user.allowUnauthenticatedAccess}
+        />
+      </SettingItem>
+      <SettingItem
+        defaultValue={defaultSettings.user?.password.minLength}
+        reset={(value) => {
+          settings.user.password.minLength = value;
+        }}
+      >
+        <svelte:fragment slot="label">Password Length</svelte:fragment>
+        <svelte:fragment slot="hint"
+          >Set the minimum length of a user's password</svelte:fragment
+        >
+        <NumberInput
+          error={$error?.errors.password?.minLength}
+          name="passwordLength"
+          bind:value={settings.user.password.minLength}
+        />
+      </SettingItem>
+      <SettingItem
+        defaultValue={defaultSettings.user?.password.requirements}
+        reset={(value) => {
+          settings.user.password.requirements = value;
+        }}
+      >
+        <svelte:fragment slot="label">Password Complexity</svelte:fragment>
+        <svelte:fragment slot="hint"
+          >Select the required character types for a user's password</svelte:fragment
+        >
+        <Multiselect
+          type="bitmask"
+          name="passwordRequirements"
+          bind:value={settings.user.password.requirements}
+        >
+          <MultiselectItem key="1">
+            <Icon icon="ph:number-nine-thin" />
+            Numbers
+          </MultiselectItem>
+          <MultiselectItem key="2">
+            <Icon icon="material-symbols-light:lowercase-rounded" />
+            Lowercase Letters
+          </MultiselectItem>
+          <MultiselectItem key="4">
+            <Icon icon="material-symbols-light:uppercase-rounded" />
+            Uppercase Letters
+          </MultiselectItem>
+          <MultiselectItem key="8">
+            <Icon icon="material-symbols-light:asterisk-rounded" />
+            Special Characters
+          </MultiselectItem>
+        </Multiselect>
+      </SettingItem>
     </SettingsPane>
   </div>
 </div>

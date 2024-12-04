@@ -39,7 +39,7 @@
 
 <button
   type="button"
-  class="tooltip-item"
+  class="tooltip-item group"
   class:danger
   on:click={handleClick}
   {disabled}
@@ -56,7 +56,7 @@
 
 <style>
   .tooltip-item {
-    @apply flex w-full cursor-pointer items-center gap-2 rounded-md p-1 px-3;
+    @apply flex w-full cursor-pointer items-center gap-3 rounded-md p-1 px-3 text-left;
     @apply text-input-default;
   }
 

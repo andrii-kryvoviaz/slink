@@ -6,7 +6,7 @@ export const BadgeTheme = cva(`badge`, {
       default: 'bg-gray-600 text-gray-50 dark:bg-gray-800 dark:text-gray-100',
       primary: 'badge-primary',
       secondary: 'badge-secondary',
-      neutral: 'badge-neutral opacity-60 dark:opacity-100',
+      neutral: 'dark:bg-gray-800 dark:text-gray-400 bg-gray-50 text-gray-600',
       accent: 'badge-accent',
       ghost: 'badge-ghost',
       info: 'badge-info',
