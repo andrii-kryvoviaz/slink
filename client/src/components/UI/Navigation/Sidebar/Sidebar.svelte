@@ -1,19 +1,26 @@
-<script>
-  import { createEventDispatcher } from 'svelte';
+<script lang="ts">
   import Icon from '@iconify/svelte';
+
   import { SidebarItem } from '@slink/components/UI/Navigation';
 
-  export let expanded = false;
+  interface Props {
+    expanded?: boolean;
+    on: {
+      change: (expanded: boolean) => void;
+    };
+  }
 
-  $: textExpanded = expanded ? 'Collapse' : 'Expand';
-  $: iconExpanded = expanded
-    ? 'fluent:panel-right-expand-20-filled'
-    : 'fluent:panel-left-expand-20-filled';
+  let { expanded = false, on }: Props = $props();
 
-  const dispatch = createEventDispatcher();
+  let textExpanded = $derived(expanded ? 'Collapse' : 'Expand');
+  let iconExpanded = $derived(
+    expanded
+      ? 'fluent:panel-right-expand-20-filled'
+      : 'fluent:panel-left-expand-20-filled',
+  );
 
   const handleExpandClicked = () => {
-    dispatch('change', !expanded);
+    on.change(!expanded);
   };
 </script>
 
@@ -44,7 +51,7 @@
       {expanded}
       action={handleExpandClicked}
     />
-    <!-- Fallback icon ToDo: fix parsing plagin-->
+    <!-- Fallback icon ToDo: fix parsing plugin-->
     <Icon icon="fluent:panel-right-expand-20-filled" class="hidden h-6 w-6" />
   </div>
 </div>

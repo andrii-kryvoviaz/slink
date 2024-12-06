@@ -2,17 +2,28 @@
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   import Icon from '@iconify/svelte';
+  import { run } from 'svelte/legacy';
 
-  import { Button } from '@slink/components/UI/Action';
+  import { Button, type ButtonProps } from '@slink/components/UI/Action';
   import { Tooltip } from '@slink/components/UI/Tooltip';
 
-  export let to = '/';
-  export let icon = 'ooui:folder-placeholder-ltr';
-  export let text = 'Sidebar Item';
-  export let active = false;
-  export let expanded = false;
+  interface Props {
+    to?: string;
+    icon?: string;
+    text?: string;
+    active?: boolean;
+    expanded?: boolean;
+    action?: () => void;
+  }
 
-  export let action: () => void = null;
+  let {
+    to = '/',
+    icon = 'ooui:folder-placeholder-ltr',
+    text = 'Sidebar Item',
+    active = $bindable(false),
+    expanded = false,
+    action = () => {},
+  }: Props = $props();
 
   const id = `sidebarItem-${Math.random().toString(36)}`;
 
@@ -27,16 +38,19 @@
   const baseClass = 'w-full border-none no-underline';
   const expandedClass = 'pr-14';
 
-  $: classes = `${baseClass} ${expanded ? expandedClass : ''}`;
-  $: variant = active ? 'primary' : 'default';
-  $: active = to === $page.route.id;
+  let classes = $derived(`${baseClass} ${expanded ? expandedClass : ''}`);
+  let variant: ButtonProps['variant'] = $derived(
+    active ? 'primary' : 'default',
+  );
 </script>
 
 <div class="w-full">
-  <Button {id} class={classes} {variant} rounded="none" on:click={onClick}>
-    <span slot="leftIcon">
-      <Icon {icon} class="h-5 w-5 opacity-60" />
-    </span>
+  <Button {id} class={classes} {variant} rounded="none" onclick={onClick}>
+    {#snippet leftIcon()}
+      <span>
+        <Icon {icon} class="h-5 w-5 opacity-60" />
+      </span>
+    {/snippet}
     {#if expanded}
       <div class="flex-grow text-left">
         <div class="text-header/100 text-[0.85em]">{text}</div>

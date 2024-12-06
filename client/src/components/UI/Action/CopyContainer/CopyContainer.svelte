@@ -1,14 +1,21 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte';
+
   import Icon from '@iconify/svelte';
   import { fly } from 'svelte/transition';
 
   import { Button, type ButtonVariant } from '@slink/components/UI/Action';
 
-  export let value: string;
-  export let delay: number = 2000;
+  interface Props {
+    value: string;
+    delay?: number;
+    copyButtonContent?: Snippet<[]>;
+  }
 
-  let isCopiedActive: boolean = false;
-  let variant: ButtonVariant = 'primary';
+  let { value, delay = 2000, copyButtonContent }: Props = $props();
+
+  let isCopiedActive: boolean = $state(false);
+  let variant: ButtonVariant = $derived(isCopiedActive ? 'success' : 'primary');
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(value);
@@ -19,8 +26,6 @@
       isCopiedActive = false;
     }, delay);
   };
-
-  $: variant = isCopiedActive ? 'success' : 'primary';
 </script>
 
 <div class="flex w-full max-w-[25rem] items-center text-[0.7rem] xs:text-xs">
@@ -39,16 +44,20 @@
       size="xs"
       rounded="full"
       disabled={isCopiedActive}
-      on:click={handleCopy}
+      onclick={handleCopy}
     >
       {#if isCopiedActive}
         <div in:fly={{ duration: 300 }}>
-          <slot name="copied-text">
+          {#if copyButtonContent}
+            {@render copyButtonContent?.()}
+          {:else}
             <Icon icon="mdi:check" class="h-4 w-4" />
-          </slot>
+          {/if}
         </div>
+      {:else if copyButtonContent}
+        {@render copyButtonContent?.()}
       {:else}
-        <slot name="copy-text">Copy</slot>
+        Copy
       {/if}
     </Button>
   </div>

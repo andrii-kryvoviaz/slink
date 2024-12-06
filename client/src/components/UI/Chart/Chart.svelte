@@ -1,18 +1,24 @@
 <script lang="ts">
-  import { settings } from '@slink/lib/settings';
-  import type { ApexOptions } from 'apexcharts';
-  import { twMerge } from 'tailwind-merge';
-
-  import { deepMerge } from '@slink/utils/object/deepMerge';
-
   import type {
     ChartNormalizer,
     ChartOptions,
   } from '@slink/components/UI/Chart';
+  import type { ApexOptions } from 'apexcharts';
+  import { twMerge } from 'tailwind-merge';
+
+  import { settings } from '@slink/lib/settings';
+
+  import { deepMerge } from '@slink/utils/object/deepMerge';
+
   import { AreaChart } from '@slink/components/UI/Chart/Area.chart';
   import { RadialBarChart } from '@slink/components/UI/Chart/RadialBar.chart';
 
-  export let options: ChartOptions;
+  interface Props {
+    class?: string;
+    options: ChartOptions;
+  }
+
+  let { options, ...props }: Props = $props();
 
   let defaultOptions: ChartOptions = {
     chart: {
@@ -47,9 +53,9 @@
       horizontalAlign: 'center',
       fontSize: '14px',
       markers: {
-        width: 12,
-        height: 12,
-        radius: 12,
+        size: 7,
+        strokeWidth: 0,
+        offsetX: -5,
       },
       itemMargin: {
         horizontal: 10,
@@ -115,27 +121,37 @@
     };
   }
 
-  const classes = twMerge('w-full', $$props.class ?? '');
+  const classes = twMerge('w-full', props.class ?? '');
 
   const currentTheme = settings.get('theme', 'light');
   const { isDark, isLight } = currentTheme;
 
-  $: options = deepMerge<ChartOptions>(defaultOptions, options);
-  $: if ($isDark) {
-    options.theme = { mode: 'dark' };
-  }
-  $: if ($isLight) {
-    options.theme = { mode: 'light' };
-  }
+  const handleOptionsChange = (options: ChartOptions) => {
+    let chartOptions = deepMerge<ChartOptions>(defaultOptions, options);
 
-  $: if (options.chart?.type) {
-    const chartType = options.chart.type;
-    const chartNormalizer = getChartNormalizer(chartType);
+    if (chartOptions.chart?.type) {
+      const chartType = chartOptions.chart.type;
+      const chartNormalizer = getChartNormalizer(chartType);
 
-    if (chartNormalizer) {
-      options = chartNormalizer.normalize(options);
+      if (chartNormalizer) {
+        chartOptions = chartNormalizer.normalize(chartOptions);
+      }
     }
-  }
+
+    return chartOptions;
+  };
+
+  let chartOptions = $derived(handleOptionsChange(options));
+
+  $effect.pre(() => {
+    if ($isDark) {
+      chartOptions.theme = { mode: 'dark' };
+    }
+
+    if ($isLight) {
+      chartOptions.theme = { mode: 'light' };
+    }
+  });
 </script>
 
-<div use:initChart={options} class={classes} />
+<div use:initChart={chartOptions} class={classes}></div>

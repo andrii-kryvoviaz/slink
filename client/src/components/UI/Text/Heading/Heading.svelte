@@ -8,34 +8,47 @@
     HeadingText,
   } from '@slink/components/UI/Text';
 
-  interface $$Props extends HeadingProps {}
+  interface Props extends HeadingProps {
+    children?: import('svelte').Snippet;
+  }
 
-  export let variant: $$Props['variant'] = 'primary';
-  export let size: $$Props['size'] = 'md';
-  export let fontWeight: $$Props['fontWeight'] = 'semibold';
-  export let alignment: $$Props['alignment'] = 'center';
+  let {
+    variant = 'primary',
+    size = 'md',
+    fontWeight = 'semibold',
+    alignment = 'center',
+    children,
+  }: Props = $props();
 
-  $: textClasses = HeadingText({
-    size,
-    fontWeight,
-  });
+  let textClasses = $derived(
+    HeadingText({
+      size,
+      fontWeight,
+    }),
+  );
 
-  $: decorationClasses = HeadingDecoration({
-    variant,
-    size,
-  });
+  let decorationClasses = $derived(
+    HeadingDecoration({
+      variant,
+      size,
+    }),
+  );
 
-  $: containerClasses = HeadingContainer({
-    alignment,
-  });
+  let containerClasses = $derived(
+    HeadingContainer({
+      alignment,
+    }),
+  );
 </script>
 
 <div class={className(containerClasses)}>
-  <h1 class={className(textClasses)}><slot>Heading</slot></h1>
+  <h1 class={className(textClasses)}>
+    {#if children}{@render children()}{:else}Heading{/if}
+  </h1>
 
   <div>
-    <span class={className(`${decorationClasses} w-40 `)} />
-    <span class={className(`${decorationClasses} mx-1 w-3`)} />
-    <span class={className(`${decorationClasses} w-1`)} />
+    <span class={className(`${decorationClasses} w-40 `)}></span>
+    <span class={className(`${decorationClasses} mx-1 w-3`)}></span>
+    <span class={className(`${decorationClasses} w-1`)}></span>
   </div>
 </div>

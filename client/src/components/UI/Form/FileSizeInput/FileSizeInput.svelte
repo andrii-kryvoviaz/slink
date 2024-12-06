@@ -1,22 +1,17 @@
 <script lang="ts">
-  import type { HTMLInputAttributes as BaseHTMLInputAttributes } from 'svelte/elements';
+  import type { HTMLInputAttributes } from 'svelte/elements';
 
   import { parseFileSize } from '@slink/utils/string/parseFileSize';
 
   import { Input, type InputProps } from '@slink/components/UI/Form';
 
-  type HTMLInputAttributes = Pick<
-    BaseHTMLInputAttributes,
-    'value' | 'name' | 'step'
-  >;
+  interface Props
+    extends Pick<HTMLInputAttributes, 'value' | 'name' | 'step'>,
+      InputProps {}
 
-  interface $$Props extends HTMLInputAttributes, InputProps {}
+  let { value = $bindable(), name, step = 1, ...props }: Props = $props();
 
-  export let value: $$Props['value'] = '';
-  export let name: $$Props['name'] = '';
-  export let step: $$Props['step'] = 1;
-
-  $: inner = {
+  let inner = $derived({
     get parsed() {
       return parseFileSize(value);
     },
@@ -34,9 +29,13 @@
         newValue = parseInt(newValue);
       }
 
+      if (newValue === null) {
+        newValue = '';
+      }
+
       value = `${newValue}${this.parsed.unitValue}`;
     },
-  };
+  });
 </script>
 
 <Input
@@ -45,7 +44,7 @@
   {step}
   {name}
   bind:value={inner.size}
-  error={$$props.error}
+  error={props.error}
   class="pr-12"
 >
   <span

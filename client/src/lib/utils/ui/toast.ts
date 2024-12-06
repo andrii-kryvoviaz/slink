@@ -1,16 +1,14 @@
-import type { SvelteComponent } from 'svelte';
+import type { ToastOptions } from '@slink/components/UI/Toast/Toast.types';
+import type { Component } from 'svelte';
+import type { Readable, Writable } from 'svelte/store';
 
 import { browser } from '$app/environment';
-import { type Readable, derived, readable } from 'svelte/store';
-import type { Writable } from 'svelte/store';
-
-import { useWritable } from '@slink/store/contextAwareStore';
-
-import { randomId } from '@slink/utils/string/randomId';
-import { createTimer } from '@slink/utils/time/timer';
+import { derived, readable } from 'svelte/store';
 
 import { commonToastThemeMap } from '@slink/components/UI/Toast/Toast.theme';
-import type { ToastOptions } from '@slink/components/UI/Toast/Toast.types';
+import { useWritable } from '@slink/store/contextAwareStore';
+import { randomId } from '@slink/utils/string/randomId';
+import { createTimer } from '@slink/utils/time/timer';
 
 type Toast = ToastOptions & {
   id: string;
@@ -44,7 +42,7 @@ class ToastManager {
 
     return derived(
       this.toasts || readable({}),
-      ($toasts) => Object.values($toasts) as Toast[]
+      ($toasts) => Object.values($toasts) as Toast[],
     );
   }
 
@@ -111,14 +109,13 @@ class ToastManager {
   component<
     Props extends Record<string, any> = {},
     Events extends Record<string, any> = {},
-    Slots extends Record<string, any> = {}
   >(
-    component: typeof SvelteComponent<Props, Events, Slots>,
+    component: Component<Props, Events>,
     {
       props = {} as Props,
       duration = 0,
       id,
-    }: { id?: string; props?: Props; duration?: number } = {}
+    }: { id?: string; props?: Props; duration?: number } = {},
   ) {
     this.push({ type: 'component', id, component, props, duration });
   }

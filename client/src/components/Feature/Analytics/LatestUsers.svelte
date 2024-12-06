@@ -1,12 +1,12 @@
 <script lang="ts">
+  import type { UserListFilter } from '@slink/api/Request/UserRequest';
+  import type { UserListingResponse } from '@slink/api/Response';
   import { onMount } from 'svelte';
 
   import Icon from '@iconify/svelte';
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
-  import type { UserListFilter } from '@slink/api/Request/UserRequest';
-  import type { UserListingResponse } from '@slink/api/Response';
 
   import { UserStatus } from '@slink/components/Feature/User';
   import { RefreshButton } from '@slink/components/UI/Action';
@@ -21,14 +21,14 @@
     (filter: UserListFilter) => {
       return ApiClient.user.getUsers(1, filter);
     },
-    { debounce: 300 }
+    { debounce: 300 },
   );
 
-  let filterParams: UserListFilter = {
+  let filterParams: UserListFilter = $state({
     orderBy: 'createdAt',
     order: 'desc',
     limit: 5,
-  };
+  });
 
   onMount(() => {
     fetchUsers(filterParams);
@@ -45,8 +45,8 @@
     fetchUsers(filterParams);
   };
 
-  $: isEmpty = !$response?.data.length;
-  $: isLoaded = $status === 'finished' && !isEmpty;
+  let isEmpty = $derived(!$response?.data.length);
+  let isLoaded = $derived($status === 'finished' && !isEmpty);
 </script>
 
 <Card>
@@ -59,7 +59,7 @@
         <RefreshButton
           size="sm"
           loading={$isLoading}
-          on:click={() => fetchUsers(filterParams)}
+          onclick={() => fetchUsers(filterParams)}
         />
       </div>
       <div class="w-full sm:w-auto">
@@ -78,7 +78,7 @@
             id="table-search"
             class="block w-full rounded-lg border border-gray-300 bg-gray-50 py-2 pl-10 pr-3 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
             placeholder="Search for users"
-            on:keyup={handleSearch}
+            onkeyup={handleSearch}
           />
         </div>
       </div>

@@ -55,10 +55,10 @@ export const ButtonTheme = cva(
         'hover:rotate':
           'transition-transform duration-300 ease-in-out transform hover:rotate-180',
       },
-      state: {
+      status: {
         active: 'active',
         disabled: 'cursor-not-allowed pointer-events-none opacity-70',
       },
     },
-  }
+  },
 );

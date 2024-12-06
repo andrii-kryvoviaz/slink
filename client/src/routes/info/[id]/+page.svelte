@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { PageData } from './$types';
+
   import { page } from '$app/stores';
   import Icon from '@iconify/svelte';
   import { fly } from 'svelte/transition';
@@ -19,25 +21,15 @@
   import { CopyContainer } from '@slink/components/UI/Action';
   import { Tooltip } from '@slink/components/UI/Tooltip';
 
-  import type { PageData } from './$types';
+  interface Props {
+    data: PageData;
+  }
 
-  export let data: PageData;
-
-  let params: Partial<ImageParams> = {};
-  let directLink: string;
-
-  const handleImageSizeChange = (value?: Partial<ImageSize>) => {
-    let { width, height, ...rest } = params;
-
-    params = {
-      ...rest,
-      ...value,
-    };
-  };
+  let { data = $bindable() }: Props = $props();
 
   const formatImageUrl = (
     url: string | string[],
-    params: Partial<ImageParams>
+    params: Partial<ImageParams>,
   ) => {
     url = Array.isArray(url) ? url.join('') : url;
 
@@ -51,6 +43,20 @@
       .join('&');
 
     return [url, paramsString].join('?');
+  };
+
+  let params: Partial<ImageParams> = $state({});
+  let directLink: string = $derived(
+    formatImageUrl([$page.url.origin, data.url], params),
+  );
+
+  const handleImageSizeChange = (value?: Partial<ImageSize>) => {
+    let { width, height, ...rest } = params;
+
+    params = {
+      ...rest,
+      ...value,
+    };
   };
 
   const {
@@ -71,10 +77,8 @@
       return;
     }
 
-    data.description = description;
+    data = { ...data, description };
   };
-
-  $: directLink = formatImageUrl([$page.url.origin, data.url], params);
 </script>
 
 <svelte:head>
@@ -87,11 +91,7 @@
 >
   <div class="container flex flex-row flex-wrap justify-center gap-6">
     <div class="flex w-fit max-w-full justify-start">
-      <ImagePlaceholder
-        src={data.url}
-        aspectRatio={data.height / data.width}
-        metadata={data}
-      />
+      <ImagePlaceholder src={data.url} metadata={data} />
     </div>
 
     <div class="min-w-0 px-2">
@@ -103,7 +103,9 @@
         <ImageDescription
           description={data.description}
           isLoading={$descriptionIsLoading}
-          on:descriptionChange={(e) => handleSaveDescription(e.detail)}
+          on={{
+            change: (description: string) => handleSaveDescription(description),
+          }}
         />
       </p>
       <div class="mb-2 mt-8">
@@ -117,18 +119,12 @@
           <ImageSizePicker
             width={data.width}
             height={data.height}
-            on:change={(e) => handleImageSizeChange(e.detail)}
+            on={{ change: (size) => handleImageSizeChange(size) }}
           />
-          <Icon
-            icon="ep:info-filled"
-            id="open-resize-info-tooltip"
-            class="hidden cursor-help xs:block"
-          />
-          <Tooltip
-            triggeredBy="[id^='open-resize-info-tooltip']"
-            class="max-w-[10rem] p-2 text-center text-xs"
-            placement="bottom"
-          >
+          <Tooltip size="xs" side="top" align="end">
+            {#snippet trigger()}
+              <Icon icon="ep:info-filled" class="hidden cursor-help xs:block" />
+            {/snippet}
             Adjust the size before copying the URL
           </Tooltip>
         </div>

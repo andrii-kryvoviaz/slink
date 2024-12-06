@@ -15,7 +15,6 @@ export const themeIcons: string[] = [
   'mingcute:settings-7-line',
   'material-symbols-light:conversion-path',
   'solar:logout-line-duotone',
-  'entypo:chevron-small-up',
   'entypo:chevron-small-down',
   'clarity:success-standard-line',
   'clarity:warning-standard-line',

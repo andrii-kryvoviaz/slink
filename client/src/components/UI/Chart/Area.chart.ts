@@ -1,7 +1,4 @@
-import {
-  type ChartNormalizer,
-  type ChartOptions,
-} from '@slink/components/UI/Chart';
+import type { ChartNormalizer, ChartOptions } from '@slink/components/UI/Chart';
 
 export class AreaChart implements ChartNormalizer {
   normalize(options: ChartOptions): ChartOptions {

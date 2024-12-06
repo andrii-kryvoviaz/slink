@@ -1,9 +1,9 @@
 <script lang="ts">
+  import type { ImageAnalyticsResponse } from '@slink/api/Response';
   import { onMount } from 'svelte';
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
-  import type { ImageAnalyticsResponse } from '@slink/api/Response';
 
   import { RefreshButton } from '@slink/components/UI/Action';
   import { Card } from '@slink/components/UI/Card';
@@ -19,19 +19,24 @@
     data: response,
     isLoading,
   } = ReactiveState<ImageAnalyticsResponse>(
-    ({ dateInterval }: { dateInterval?: string } = {}) => {
+    ({ dateInterval }: { dateInterval?: string }) => {
       return ApiClient.analytics.getImageAnalytics({ dateInterval });
     },
-    { minExecutionTime: 1000 }
+    { minExecutionTime: 1000 },
   );
 
-  let options: ChartOptions = {
+  let options: ChartOptions = $state({
+    chart: {
+      type: 'area',
+      height: '98%',
+    },
     series: [],
-  };
-  let interval: string = 'current_year';
+  });
 
-  const handleIntervalChange = ({ detail }: CustomEvent<DropdownItemData>) => {
-    interval = detail.key;
+  let interval: string = $state('current_year');
+
+  const handleIntervalChange = (item: DropdownItemData) => {
+    interval = item.key;
     handleFetch();
   };
 
@@ -39,41 +44,45 @@
     run({ dateInterval: interval });
   };
 
-  $: if ($response) {
-    options = {
-      series: [
-        {
-          name: 'Uploads',
-          data: $response.data.map((item) => item.count),
+  let availableIntervals: Record<string, string> | null = $state(null);
+
+  onMount(() => {
+    handleFetch();
+
+    return response.subscribe((item) => {
+      if (!item) {
+        return;
+      }
+
+      availableIntervals = item.availableIntervals;
+
+      options = {
+        series: [
+          {
+            name: 'Uploads',
+            data: item.data.map((item) => item.count),
+          },
+        ],
+        xaxis: {
+          categories: item.data.map((item) => item.date),
+          tickAmount: 10,
         },
-      ],
-      xaxis: {
-        categories: $response.data.map((item) => item.date),
-        tickAmount: 10,
-      },
-    };
-  }
-
-  let availableIntervals: Record<string, string> | null = null;
-
-  $: if ($response?.availableIntervals) {
-    availableIntervals = $response.availableIntervals;
-  }
-
-  onMount(handleFetch);
+      };
+    });
+  });
 </script>
 
 <Card class="h-full">
   <div class="flex items-center justify-between">
     <p class="text-lg font-light tracking-wider">Uploads</p>
     <div class="flex items-center gap-2">
-      <RefreshButton size="sm" loading={$isLoading} on:click={handleFetch} />
+      <RefreshButton size="sm" loading={$isLoading} onclick={handleFetch} />
       {#if availableIntervals}
         <Dropdown
           variant="invisible"
           position="bottom-right"
           selected={interval}
-          on:change={handleIntervalChange}
+          on={{ change: handleIntervalChange }}
         >
           {#each Object.keys(availableIntervals) as interval}
             <DropdownItem key={interval}>

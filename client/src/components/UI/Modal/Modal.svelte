@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
+  import type { Snippet } from 'svelte';
   import { twMerge } from 'tailwind-merge';
 
   import Icon from '@iconify/svelte';
@@ -7,26 +7,41 @@
 
   import { Button, type ButtonVariant } from '@slink/components/UI/Action';
 
-  export let open = true;
-  export let loading = false;
-  export let align: 'top' | 'middle' | 'bottom' = 'top';
-  export let variant: ButtonVariant | undefined = undefined;
+  interface Props {
+    open?: boolean;
+    loading?: boolean;
+    align?: 'top' | 'middle' | 'bottom';
+    variant?: ButtonVariant;
+    icon?: Snippet;
+    title?: Snippet;
+    extra?: Snippet;
+    content?: Snippet;
+    confirm?: Snippet;
+    on: {
+      confirm: () => void;
+    };
+  }
 
-  const dispatch = createEventDispatcher<{
-    confirm: undefined;
-  }>();
+  let {
+    open = true,
+    loading = false,
+    align = 'top',
+    variant,
+    icon,
+    title,
+    extra,
+    content,
+    confirm,
+    on,
+  }: Props = $props();
 
-  let innerModal: HTMLElement;
+  let innerModal: HTMLElement | null = $state(null);
 
   const closeModal = (e?: MouseEvent) => {
     // Prevent closing the modal when clicking inside of innerModal
-    if (e && innerModal.contains(e.target as Node)) return;
+    if (e && innerModal?.contains(e.target as Node)) return;
 
     open = false;
-  };
-
-  const handleConfirm = () => {
-    dispatch('confirm');
   };
 
   const confirmButtonDefaultClasses =
@@ -34,10 +49,6 @@
 
   const confirmButtonDefaultAccentClasses =
     'bg-blue-600 text-white hover:bg-blue-500 focus:ring-blue-300';
-
-  $: confirmButtonClasses = !variant
-    ? `${confirmButtonDefaultClasses} ${confirmButtonDefaultAccentClasses}`
-    : confirmButtonDefaultClasses;
 
   const innerModalDefaultClasses =
     'relative inline-block transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all rtl:text-right dark:bg-gray-900 sm:my-8 sm:w-full sm:max-w-sm sm:p-6 align-middle';
@@ -56,9 +67,14 @@
     }
   };
 
-  $: modalContainerClasses = twMerge(
-    modalContainerDefaultClasses,
-    getAlignClasses()
+  let confirmButtonClasses = $derived(
+    !variant
+      ? `${confirmButtonDefaultClasses} ${confirmButtonDefaultAccentClasses}`
+      : confirmButtonDefaultClasses,
+  );
+
+  let modalContainerClasses = $derived(
+    twMerge(modalContainerDefaultClasses, getAlignClasses()),
   );
 </script>
 
@@ -72,7 +88,7 @@
     role="dialog"
     aria-modal="true"
     aria-hidden="true"
-    on:click={closeModal}
+    onclick={closeModal}
   >
     <div class={modalContainerClasses}>
       <span
@@ -83,7 +99,7 @@
       <div bind:this={innerModal} class={innerModalDefaultClasses}>
         <div>
           <div class="flex items-center justify-center">
-            <slot name="icon" />
+            {@render icon?.()}
           </div>
 
           <div class="mt-2 text-center">
@@ -91,21 +107,29 @@
               class="text-lg font-medium capitalize leading-6 text-gray-800 dark:text-white"
               id="modal-title"
             >
-              <slot name="title" />
+              {@render title?.()}
             </h3>
             <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-              <slot name="content">Are you sure?</slot>
+              {#if content}
+                {@render content?.()}
+              {:else}
+                Are you sure?
+              {/if}
             </p>
           </div>
         </div>
 
         <div class="mt-5 sm:flex sm:items-end sm:justify-between">
-          <slot name="extra">&nbsp;</slot>
+          {#if extra}
+            {@render extra?.()}
+          {:else}
+            &nbsp;
+          {/if}
 
           <div class="sm:flex sm:items-center">
             <Button
               class="mt-2 w-full transform rounded-md border border-gray-200 px-4 py-2 text-sm font-medium capitalize tracking-wide text-gray-700 transition-colors duration-300 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-40 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800 sm:mx-2 sm:mt-0 sm:w-auto"
-              on:click={() => closeModal()}
+              onclick={closeModal}
             >
               Cancel
             </Button>
@@ -114,16 +138,22 @@
               {variant}
               class={confirmButtonClasses}
               disabled={loading}
-              on:click={handleConfirm}
+              onclick={on?.confirm}
             >
               {#if loading}
-                <Icon
-                  slot="loadingIcon"
-                  icon="mdi-light:loading"
-                  class="mr-4 h-5 w-5 animate-spin"
-                />
+                {#snippet loadingIcon()}
+                  <Icon
+                    icon="mdi-light:loading"
+                    class="mr-4 h-5 w-5 animate-spin"
+                  />
+                {/snippet}
               {/if}
-              <slot name="confirm">Confirm</slot>
+
+              {#if confirm}
+                {@render confirm?.()}
+              {:else}
+                Confirm
+              {/if}
             </Button>
           </div>
         </div>

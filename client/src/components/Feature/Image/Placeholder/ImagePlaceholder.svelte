@@ -8,55 +8,73 @@
 
   import { Tooltip } from '@slink/components/UI/Tooltip';
 
-  export let src: string;
-  export let alt: string = '';
-
-  export let metadata: {
-    height: number;
-    width: number;
-    mimeType: string | undefined;
-    size: number | undefined;
-  } | null = null;
-
   type Metadata = typeof metadata;
 
-  export let aspectRatio: number = 0;
-  export let height: number | null = null;
-  export let width: number | null = null;
-  export let stretch: boolean = false;
-  export let stretchThreshold: number = 0.4;
-  export let showMetadata = true;
-  export let showOpenInNewTab = true;
-
-  export let uniqueId = Math.random().toString(36).substring(2);
-
-  let originalImage: string | undefined;
-  let isLoaded = false;
-
-  let image: HTMLImageElement;
-  let container: HTMLDivElement;
-
-  $: if (isLoaded && height) {
-    // Reset the height to auto so that the image can resize freely
-    const remImageHeight = Math.floor(image.naturalHeight / 16) - 1;
-    if (remImageHeight > height) {
-      container.style.height = `auto`;
-    }
+  interface Props {
+    src: string;
+    alt?: string;
+    metadata: {
+      height: number;
+      width: number;
+      mimeType: string | undefined;
+      size: number | undefined;
+    };
+    height?: number | null;
+    width?: number | null;
+    stretch?: boolean;
+    stretchThreshold?: number;
+    showMetadata?: boolean;
+    showOpenInNewTab?: boolean;
+    uniqueId?: any;
   }
 
-  const isSquared = (src: string) => {
-    // if only width or height is provided, the image is considered square
-    const urlParams = new URLSearchParams(src.split('?')[1]);
+  let {
+    src,
+    alt = '',
+    metadata,
+    height = null,
+    width = null,
+    stretch = false,
+    stretchThreshold = 0.4,
+    showMetadata = true,
+    showOpenInNewTab = true,
+    uniqueId = Math.random().toString(36).substring(2),
+  }: Props = $props();
 
-    return (
-      urlParams.has('width') !== urlParams.has('height') &&
-      urlParams.has('crop')
-    );
-  };
+  let image: HTMLImageElement | undefined = $state();
+  let container: HTMLDivElement | undefined = $state();
 
-  $: if (metadata) {
-    aspectRatio = !isSquared(src) ? metadata.height / metadata.width : 1;
+  let originalImage = $derived(src.split('?')[0]);
+  let isLoaded = $state(false);
 
+  const urlParams = new URLSearchParams(src.split('?')[1]);
+  let isSquared =
+    urlParams.has('width') !== urlParams.has('height') && urlParams.has('crop');
+
+  let aspectRatio = !isSquared ? metadata.height / metadata.width : 1;
+  let remHeight = Math.floor(metadata.height / 16) - 1;
+
+  $effect(() => {
+    if (!isLoaded || !height) {
+      return;
+    }
+
+    if (!container) {
+      return;
+    }
+
+    // Reset the height to auto so that the image can resize freely
+    if (remHeight > height) {
+      container.style.height = `auto`;
+    }
+  });
+
+  if (!height && !width) {
+    height = Math.min(Math.max(remHeight, 14), 30);
+    width = Math.floor(height / aspectRatio);
+  }
+
+  $effect.pre(() => {
     if (height && !width) {
       width = height / aspectRatio;
     }
@@ -64,44 +82,33 @@
     if (width && !height) {
       height = width * aspectRatio;
     }
-  }
-
-  $: if (metadata && !height && !width) {
-    const remHeight = Math.floor(metadata.height / 16) - 1;
-
-    height = Math.min(Math.max(remHeight, 14), 30);
-    width = Math.floor(height / aspectRatio);
-  }
-
-  $: if (src && src !== originalImage) {
-    originalImage = src.split('?')[0];
-  }
-
-  // fallback for when the image is already loaded and the on:load event is not triggered
-  $: if (image && image.complete) {
-    isLoaded = true;
-  }
+  });
 
   const onResize = () => {
-    if (container && width) {
-      const remContainerWidth = Math.floor(
-        (container.parentElement?.offsetWidth || container.offsetWidth) / 16
-      );
+    if (!container || !image || !width) {
+      return;
+    }
 
-      if (remContainerWidth < width) {
-        height = remContainerWidth * aspectRatio;
-      } else {
-        // if image is loaded recalculate the aspect ratio
-        aspectRatio = image.naturalHeight / image.naturalWidth;
+    const remContainerWidth = Math.floor(
+      (container.parentElement?.offsetWidth || container.offsetWidth) / 16,
+    );
 
-        width = remContainerWidth;
-        height = width * aspectRatio;
-      }
+    if (remContainerWidth < width) {
+      height = remContainerWidth * aspectRatio;
+    } else {
+      // if image is loaded recalculate the aspect ratio
+      aspectRatio = image.naturalHeight / image.naturalWidth;
+
+      width = remContainerWidth;
+      height = width * aspectRatio;
     }
   };
 
   onMount(onResize);
-  $: isLoaded && onResize();
+
+  $effect(() => {
+    isLoaded && onResize();
+  });
 
   const tooSmallToStretch = (metadata: Metadata) => {
     if (!metadata) return true;
@@ -114,11 +121,12 @@
     );
   };
 
-  $: isImageStretched =
-    (stretch && !tooSmallToStretch(metadata)) || src.includes('.svg');
+  let isImageStretched = $derived(
+    (stretch && !tooSmallToStretch(metadata)) || src.includes('.svg'),
+  );
 </script>
 
-<svelte:window on:resize={onResize} />
+<svelte:window onresize={onResize} />
 
 <div
   class="relative flex max-h-full max-w-full items-center justify-center overflow-hidden rounded-md border-slate-500/10 bg-white/0"
@@ -131,7 +139,7 @@
     bind:this={image}
     {src}
     {alt}
-    on:load={() => {
+    onload={() => {
       isLoaded = true;
     }}
     class="transition-opacity"
@@ -145,18 +153,14 @@
         target="_blank"
         rel="noopener noreferrer"
         class="absolute right-0 top-0 p-2 text-slate-200 hover:text-slate-100"
-        id={`open-tooltip-${uniqueId}`}
       >
-        <Icon icon="system-uicons:external" />
+        <Tooltip size="xs" side="left">
+          {#snippet trigger()}
+            <Icon icon="system-uicons:external" />
+          {/snippet}
+          Open in new tab
+        </Tooltip>
       </a>
-
-      <Tooltip
-        triggeredBy={`[id^='open-tooltip-${uniqueId}']`}
-        class="min-w-[7rem] p-2 text-xs"
-        color="dark"
-      >
-        Open in new tab</Tooltip
-      >
     {/if}
 
     {#if metadata && showMetadata}

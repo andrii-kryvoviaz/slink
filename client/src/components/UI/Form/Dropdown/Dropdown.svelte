@@ -1,35 +1,41 @@
 <script lang="ts">
-  import { createEventDispatcher, setContext } from 'svelte';
-
-  import Icon from '@iconify/svelte';
-
-  import { className } from '@slink/utils/ui/className';
-
-  import { Button, type ButtonAttributes } from '@slink/components/UI/Action';
   import type {
     DropdownContext,
     DropdownItemData,
     DropdownPosition,
     DropdownValue,
   } from '@slink/components/UI/Form';
+  import { setContext } from 'svelte';
 
-  interface $$Props extends ButtonAttributes {
+  import Icon from '@iconify/svelte';
+
+  import { className } from '@slink/utils/ui/className';
+
+  import { Button, type ButtonAttributes } from '@slink/components/UI/Action';
+
+  interface Props extends ButtonAttributes {
+    name?: string;
     position?: DropdownPosition;
     selected?: DropdownValue;
     hideSelected?: boolean;
     closeOnSelect?: boolean;
-    close?: () => void;
+    on?: {
+      change: (item: DropdownItemData) => void;
+    };
   }
 
-  export let position: DropdownPosition = 'bottom-right';
-  export let selected: DropdownValue | null = null;
-  export let hideSelected: boolean = false;
-  export let closeOnSelect: boolean = true;
   export const close = () => {
     isOpen = false;
   };
 
-  const dispatch = createEventDispatcher<{ change: DropdownItemData }>();
+  let {
+    position = 'bottom-right',
+    selected = $bindable(),
+    hideSelected = false,
+    closeOnSelect = true,
+    children,
+    ...props
+  }: Props = $props();
 
   const defaultButtonProps: Partial<ButtonAttributes> = {
     variant: 'invisible',
@@ -39,7 +45,7 @@
 
   let container: HTMLElement;
   let menu: HTMLElement;
-  let isOpen = false;
+  let isOpen = $state(false);
 
   const toggleDropdown = () => {
     isOpen = !isOpen;
@@ -51,20 +57,21 @@
     }
   };
 
-  let items: Record<string, DropdownItemData> = {};
-  let selectedItem: DropdownItemData | null = null;
-  $: selectedItem = items[selected as string] || null;
+  let items: Record<string, DropdownItemData> = $state({});
+
+  let selectedItem: DropdownItemData | null = $derived(
+    items[selected as string] || null,
+  );
 
   const handleDropdownItemRegister = (item: DropdownItemData) => {
     items[item.key] = item;
 
     if (selected === item.key) {
-      selectedItem = item;
       return;
     }
 
-    if (!selectedItem) {
-      selectedItem = item;
+    if (!selectedItem && !selected) {
+      selected = item.key;
     }
   };
 
@@ -77,10 +84,9 @@
       return;
     }
 
-    selectedItem = item;
     selected = item.key;
 
-    dispatch('change', item);
+    props.on?.change(item);
   };
 
   setContext<DropdownContext>('dropdown', {
@@ -100,35 +106,41 @@
     'top-left': 'md:bottom-full md:left-0',
   };
 
-  $: contentClasses = `${mobileContentClasses} ${baseContentClasses} ${classMap[position]}`;
+  let contentClasses = $derived(
+    className(
+      `${mobileContentClasses} ${baseContentClasses} ${classMap[position]}`,
+    ),
+  );
 
-  $: buttonProps = {
+  let buttonProps = $derived({
     ...defaultButtonProps,
-    ...$$props,
-  };
+    ...props,
+  });
 
-  $: if (isOpen && menu) {
-    menu.animate(
-      [
-        { opacity: 0, transform: 'translateY(-10px)' },
-        { opacity: 1, transform: 'translateY(0)' },
-      ],
-      {
-        duration: 200,
-        easing: 'ease',
-      }
-    );
-  }
+  $effect(() => {
+    if (isOpen && menu) {
+      menu.animate(
+        [
+          { opacity: 0, transform: 'translateY(-10px)' },
+          { opacity: 1, transform: 'translateY(0)' },
+        ],
+        {
+          duration: 200,
+          easing: 'ease',
+        },
+      );
+    }
+  });
 </script>
 
 <svelte:body on:click={handleClickOutside} />
 
-<div class={`relative w-fit ${$$props.class}`} bind:this={container}>
-  <input type="hidden" name={$$props.name} value={selectedItem?.key} />
+<div class={`relative w-fit ${props.class}`} bind:this={container}>
+  <input type="hidden" name={props.name} value={selectedItem?.key} />
 
   <div
-    on:click={toggleDropdown}
-    on:keydown={(event) => event.key === 'Enter' && toggleDropdown()}
+    onclick={toggleDropdown}
+    onkeydown={(event) => event.key === 'Enter' && toggleDropdown()}
     role="combobox"
     aria-controls="dropdown-menu"
     aria-expanded={isOpen}
@@ -157,18 +169,18 @@
   <div
     role="menu"
     tabindex="-1"
-    on:contextmenu|preventDefault
-    class={className(contentClasses)}
+    oncontextmenu={(event) => event.preventDefault()}
+    class={contentClasses}
     class:hidden={!isOpen}
     bind:this={menu}
   >
     <div class="flex flex-col gap-2 p-3">
-      <slot />
+      {@render children?.()}
     </div>
   </div>
   <button
     class="fixed inset-0 z-40 bg-black bg-opacity-50 backdrop-blur-md md:hidden"
     class:hidden={!isOpen}
-    on:click={() => (isOpen = false)}
+    onclick={() => (isOpen = false)}
   />
 </div>

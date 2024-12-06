@@ -1,10 +1,17 @@
 <script lang="ts">
   import { twMerge } from 'tailwind-merge';
 
-  interface $$Props {
+  interface Props {
+    children?: import('svelte').Snippet;
+    [key: string]: any;
+  }
+
+  interface Props {
     class?: string;
     fadeClass?: string;
   }
+
+  let { ...props }: Props = $props();
 
   const baseClasses =
     'flex max-h-5 max-w-[10rem] overflow-hidden text-ellipsis text-sm font-medium';
@@ -14,9 +21,9 @@
 </script>
 
 <span class="relative flex-grow overflow-hidden text-ellipsis break-all">
-  <span class={twMerge(baseClasses, $$props.class || '')}>
-    <slot />
+  <span class={twMerge(baseClasses, props.class || '')}>
+    {@render props.children?.()}
     &nbsp; &nbsp; &nbsp;
-    <span class={twMerge(fadeClasses, $$props.fadeClass)} />
+    <span class={twMerge(fadeClasses, props.fadeClass)}></span>
   </span>
 </span>

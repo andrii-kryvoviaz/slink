@@ -1,25 +1,40 @@
 <script lang="ts">
-  import { createEventDispatcher, getContext, onMount } from 'svelte';
+  import type {
+    DropdownContext,
+    DropdownItemData,
+  } from '@slink/components/UI/Form';
+  import { type Snippet, getContext, onMount } from 'svelte';
 
   import Icon from '@iconify/svelte';
 
   import { randomId } from '@slink/utils/string/randomId';
 
-  import type {
-    DropdownContext,
-    DropdownItemData,
-  } from '@slink/components/UI/Form';
+  interface Props {
+    danger?: boolean;
+    disabled?: boolean;
+    loading?: boolean;
+    key?: string;
+    icon?: Snippet;
+    children?: Snippet;
+    on?: {
+      click: (event: MouseEvent) => void;
+    };
+  }
 
-  export let danger = false;
-  export let disabled = false;
-  export let loading = false;
-  export let key: string = randomId('dropdown-item');
+  let {
+    danger = false,
+    disabled = false,
+    loading = false,
+    key = randomId('dropdown-item'),
+    icon,
+    children,
+    on,
+  }: Props = $props();
 
-  let textItemRef: HTMLSpanElement;
+  let textItemRef: HTMLSpanElement | undefined = $state();
   let itemData: DropdownItemData | null = null;
 
   const { onRegister, onSelect } = getContext<DropdownContext>('dropdown');
-  const dispatch = createEventDispatcher<{ click: MouseEvent }>();
 
   function handleClick(event: MouseEvent) {
     if (disabled || !itemData) {
@@ -27,11 +42,11 @@
     }
 
     onSelect(itemData);
-    dispatch('click', event);
+    on?.click(event);
   }
 
   onMount(() => {
-    itemData = { key, name: textItemRef.innerText };
+    itemData = { key, name: textItemRef?.innerText ?? '' };
 
     onRegister(itemData);
   });
@@ -41,16 +56,16 @@
   type="button"
   class="tooltip-item group"
   class:danger
-  on:click={handleClick}
+  onclick={handleClick}
   {disabled}
 >
   {#if loading}
     <Icon icon="mingcute:loading-line" class="animate-spin" />
   {:else}
-    <slot name="icon" />
+    {@render icon?.()}
   {/if}
   <span bind:this={textItemRef}>
-    <slot />
+    {@render children?.()}
   </span>
 </button>
 

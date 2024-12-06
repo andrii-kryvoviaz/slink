@@ -1,17 +1,20 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
-
   import { Button } from '@slink/components/UI/Action';
 
-  export let description: string;
-  export let isLoading: boolean = false;
+  interface Props {
+    description: string;
+    isLoading?: boolean;
+    on?: {
+      change: (description: string) => void;
+    };
+  }
 
-  const dispatch = createEventDispatcher();
+  let { description, isLoading = false, on }: Props = $props();
 
-  let textArea: HTMLTextAreaElement;
+  let textArea: HTMLTextAreaElement | undefined = $state();
 
-  let newDescription = description;
-  let editing = false;
+  let newDescription = $state(description);
+  let editing = $state(false);
 
   function startEditing() {
     newDescription = description;
@@ -21,7 +24,7 @@
   function saveDescription() {
     editing = false;
 
-    dispatch('descriptionChange', newDescription.trim());
+    on?.change(newDescription.trim());
   }
 
   function cancelEditing() {
@@ -47,7 +50,9 @@
     }
   };
 
-  $: editing && textArea?.focus();
+  $effect(() => {
+    editing && textArea?.focus();
+  });
 </script>
 
 {#if editing}
@@ -56,21 +61,21 @@
       class="min-h-[100px] w-full resize-none border-none bg-transparent p-2 pb-14 focus:outline-none"
       bind:value={newDescription}
       bind:this={textArea}
-      on:keydown={handleKeyDown}
-    />
+      onkeydown={handleKeyDown}
+    ></textarea>
     <div class="absolute bottom-2 right-2 flex w-full justify-end gap-3">
       <Button
         variant="primary"
         size="xs"
         rounded="full"
-        on:click={saveDescription}>Update</Button
+        onclick={saveDescription}>Update</Button
       >
-      <Button size="xs" rounded="full" on:click={cancelEditing}>Cancel</Button>
+      <Button size="xs" rounded="full" onclick={cancelEditing}>Cancel</Button>
     </div>
   </div>
 {:else}
   <button
-    on:click={startEditing}
+    onclick={startEditing}
     class="word-break-all relative w-full max-w-full cursor-text border-l-4 border-description pl-2 text-left text-lg font-light"
     class:animate-pulse={isLoading}
   >

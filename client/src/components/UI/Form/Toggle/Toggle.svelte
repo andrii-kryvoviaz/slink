@@ -1,42 +1,50 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
+  import type { ToggleProps } from '@slink/components/UI/Form/Toggle/Toggle.types';
+  import { type Snippet } from 'svelte';
+  import type { HTMLInputAttributes } from 'svelte/elements';
   import { twMerge } from 'tailwind-merge';
 
-  import type { HTMLInputAttributes } from 'svelte/elements';
-
   import { ToggleTheme } from '@slink/components/UI/Form/Toggle/Toggle.theme';
-  import type { ToggleProps } from '@slink/components/UI/Form/Toggle/Toggle.types';
 
-  interface $$Props extends Omit<HTMLInputAttributes, 'size'>, ToggleProps {
+  interface Props extends Omit<HTMLInputAttributes, 'size'>, ToggleProps {
     class?: string;
+    preIcon?: Snippet;
+    postIcon?: Snippet;
+    on?: {
+      change: (checked: boolean) => void;
+    };
   }
 
-  export let variant: $$Props['variant'] = 'default';
-  export let size: $$Props['size'] = 'md';
+  let {
+    variant = 'default',
+    size = 'md',
+    checked = $bindable(false),
+    preIcon,
+    postIcon,
+    on,
+    ...props
+  }: Props = $props();
 
-  $: classes = twMerge(
-    `${ToggleTheme({
-      variant,
-      size,
-    })} ${$$props.class}`
+  let classes = $derived(
+    twMerge(
+      `${ToggleTheme({
+        variant,
+        size,
+      })} ${props.class}`,
+    ),
   );
 
-  delete $$props.size;
-
-  export let checked = $$props.checked ?? false;
-
-  const dispatch = createEventDispatcher<{ change: boolean }>();
   const handleChange = (event: Event) => {
     const target = event.target as HTMLInputElement;
     checked = target.checked;
 
-    dispatch('change', checked);
+    on?.change(checked);
   };
 </script>
 
 <label class="flex cursor-pointer items-center gap-2">
-  <slot name="pre-icon" />
-  <input type="checkbox" class={classes} on:change={handleChange} {checked} />
-  <input {...$$props} type="hidden" value={checked} />
-  <slot name="post-icon" />
+  {@render preIcon?.()}
+  <input type="checkbox" class={classes} {checked} onchange={handleChange} />
+  <input {...props} type="hidden" value={checked} />
+  {@render postIcon?.()}
 </label>

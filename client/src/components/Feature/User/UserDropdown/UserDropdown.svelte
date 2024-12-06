@@ -12,10 +12,14 @@
   } from '@slink/components/Feature/User';
   import { TextEllipsis } from '@slink/components/UI/Text';
 
-  export let user: Partial<User> = {};
-  export let isDark = false;
+  interface Props {
+    user?: Partial<User>;
+    isDark?: boolean;
+  }
 
-  let isOpen = false;
+  let { user = {}, isDark = false }: Props = $props();
+
+  let isOpen = $state(false);
 
   const handleOutsideClick = (e: MouseEvent) => {
     if (!(e.target as HTMLElement).closest('.dropdown-caller')) {
@@ -29,24 +33,26 @@
 
   const isAuthorized = (roles: string[]) => {
     if (user) {
-      return roles.some((role) => user.roles.includes(role));
+      return roles.some((role) => user.roles?.includes(role));
     }
 
     return false;
   };
 
-  $: icon = isOpen ? 'entypo:chevron-small-up' : 'entypo:chevron-small-down';
-  $: mobileIcon = isOpen
-    ? 'material-symbols-light:close'
-    : 'material-symbols-light:menu';
+  let icon = $derived(
+    isOpen ? 'entypo:chevron-small-up' : 'entypo:chevron-small-down',
+  );
+  let mobileIcon = $derived(
+    isOpen ? 'material-symbols-light:close' : 'material-symbols-light:menu',
+  );
 </script>
 
-<svelte:body on:click={handleOutsideClick} />
+<svelte:body onclick={handleOutsideClick} />
 
 <div class="dropdown inline-block sm:relative">
   <button
     class="dropdown-caller z-100 relative flex items-center gap-2 rounded-md border border-transparent bg-gray-200/70 p-2 text-sm focus:border-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:bg-slate-800 dark:text-white dark:focus:ring-blue-400 dark:focus:ring-opacity-40"
-    on:click={handleToggle}
+    onclick={handleToggle}
   >
     <UserAvatar
       size="xs"

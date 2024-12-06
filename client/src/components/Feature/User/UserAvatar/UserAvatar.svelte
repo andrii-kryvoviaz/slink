@@ -1,26 +1,22 @@
 <script lang="ts">
+  import type { UserAvatarProps } from '@slink/components/Feature/User';
   import type { User } from '@slink/lib/auth/Type/User';
 
   import { className } from '@slink/utils/ui/className';
 
   import { UserAvatarTheme } from '@slink/components/Feature/User';
-  import type { UserAvatarProps } from '@slink/components/Feature/User';
 
-  interface $$Props extends UserAvatarProps {
+  interface Props extends UserAvatarProps {
     class?: string;
     user?: Partial<User>;
   }
 
-  export let variant: $$Props['variant'] = 'default';
-
-  export let size: $$Props['size'] = 'md';
-
-  export let user: $$Props['user'] = {};
-
-  $: classes = `${UserAvatarTheme({
-    variant,
-    size,
-  })} flex items-center justify-center ${$$props.class}`;
+  let { variant = 'default', size = 'md', user, ...props }: Props = $props();
+  let classes = $derived(
+    className(
+      `${UserAvatarTheme({ variant, size })} flex items-center justify-center ${props.class}`,
+    ),
+  );
 
   const colors = [
     '#C70039',
@@ -51,10 +47,10 @@
     return colors[colorIndex];
   }
 
-  $: backgroundColor = getColorFromId(user?.id || '');
-  $: userShortName = user?.displayName?.at(0)?.toUpperCase();
+  let backgroundColor = $derived(getColorFromId(user?.id || ''));
+  let userShortName = $derived(user?.displayName?.at(0)?.toUpperCase());
 </script>
 
-<div class={className(classes)} style={`background-color: ${backgroundColor}`}>
+<div class={classes} style={`background-color: ${backgroundColor}`}>
   {userShortName}
 </div>

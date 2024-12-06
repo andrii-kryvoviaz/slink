@@ -1,22 +1,26 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
+  import type { ImageSize } from '@slink/components/Feature/Image';
 
   import Icon from '@iconify/svelte';
 
-  import type { ImageSize } from '@slink/components/Feature/Image';
   import { Button } from '@slink/components/UI/Action';
   import { Tooltip } from '@slink/components/UI/Tooltip';
 
-  export let width: number;
-  export let height: number;
+  interface Props {
+    width: number;
+    height: number;
+    on?: {
+      change: (size: Partial<ImageSize>) => void;
+    };
+  }
 
-  const dispatch = createEventDispatcher();
+  let { width, height, on }: Props = $props();
 
-  let calculatedWidth: number = 0;
-  let calculatedHeight: number = 0;
+  let calculatedWidth: number = $state(width);
+  let calculatedHeight: number = $state(height);
 
-  let aspectRatioLinked = true;
-  let aspectRatio = 0;
+  let aspectRatioLinked = $state(true);
+  let aspectRatio = $derived(width && height ? width / height : 0);
 
   const adjustBoundaries = () => {
     if (calculatedWidth < 0) {
@@ -36,13 +40,9 @@
     }
   };
 
-  const initializeValues = () => {
+  const resetValues = () => {
     calculatedWidth = width;
     calculatedHeight = height;
-  };
-
-  const resetValues = () => {
-    initializeValues();
 
     handleSubmit();
   };
@@ -67,13 +67,12 @@
     }
 
     if (Object.keys(sizeChange).length > 0) {
-      dispatch('change', sizeChange);
+      on?.change(sizeChange);
 
       return;
     }
 
-    // fallback to original values
-    dispatch('change');
+    on?.change({ width, height });
   };
 
   const handleChange = (caller: 'width' | 'height') => {
@@ -82,55 +81,46 @@
     if (aspectRatioLinked) {
       if (caller === 'width') {
         calculatedHeight = Math.floor(
-          Math.max(calculatedWidth, 10) / aspectRatio
+          Math.max(calculatedWidth, 10) / aspectRatio,
         );
       }
       if (caller === 'height') {
         calculatedWidth = Math.floor(
-          Math.max(calculatedHeight, 10) * aspectRatio
+          Math.max(calculatedHeight, 10) * aspectRatio,
         );
       }
     }
 
     handleSubmit();
   };
-
-  $: if (width && height) {
-    initializeValues();
-
-    aspectRatio = width / height;
-  }
 </script>
 
 <div class="flex gap-4 text-[0.7rem] xs:text-xs">
   <div class="flex gap-2 rounded-full border border-button-default p-1">
     <input
       type="number"
+      class="w-16 bg-transparent text-center focus:outline-none"
       bind:value={calculatedWidth}
-      on:keyup={() => handleChange('width')}
-      on:change={() => handleChange('width')}
+      onkeyup={() => handleChange('width')}
+      onchange={() => handleChange('width')}
     />
     <div class="flex">
-      <Button
-        size="xs"
-        variant="invisible"
-        rounded="full"
-        class="min-w-[3rem]"
-        on:click={toggleAspectRatioLink}
-        id="open-link-tooltip"
-      >
-        {#if aspectRatioLinked}
-          <Icon icon="carbon:link" />
-        {:else}
-          <Icon icon="carbon:unlink" />
-        {/if}
-      </Button>
-      <Tooltip
-        triggeredBy="[id^='open-link-tooltip']"
-        class="p-2 text-xs"
-        color="dark"
-        placement="bottom"
-      >
+      <Tooltip size="xs" side="bottom">
+        {#snippet trigger()}
+          <Button
+            size="xs"
+            variant="invisible"
+            rounded="full"
+            class="min-w-[3rem]"
+            onclick={toggleAspectRatioLink}
+          >
+            {#if aspectRatioLinked}
+              <Icon icon="carbon:link" />
+            {:else}
+              <Icon icon="carbon:unlink" />
+            {/if}
+          </Button>
+        {/snippet}
         {#if aspectRatioLinked}
           <span>Unlink aspect ratio</span>
         {:else}
@@ -141,26 +131,17 @@
 
     <input
       type="number"
+      class="w-16 bg-transparent text-center focus:outline-none"
       bind:value={calculatedHeight}
-      on:keyup={(e) => handleChange('height')}
-      on:change={() => handleChange('height')}
+      onkeyup={() => handleChange('height')}
+      onchange={() => handleChange('height')}
     />
     <Button
       rounded="full"
       variant="danger"
       size="xs"
       class="px-4 text-[0.7rem] xs:text-xs"
-      on:click={resetValues}>Reset</Button
+      onclick={resetValues}>Reset</Button
     >
   </div>
 </div>
-
-<style>
-  input {
-    @apply w-16 bg-transparent text-center;
-  }
-
-  input:focus {
-    @apply outline-none;
-  }
-</style>

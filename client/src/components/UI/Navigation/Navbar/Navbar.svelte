@@ -2,6 +2,8 @@
   import Icon from '@iconify/svelte';
 
   import { Button } from '@slink/components/UI/Action';
+
+  let { themeSwitch, profile } = $props();
 </script>
 
 <header class="z-30 w-full border-b-2 border-header/70">
@@ -32,19 +34,19 @@
         </Button>
       </div>
 
-      {#if $$slots.themeSwitch}
-        <p class="divider divider-horizontal m-0 hidden py-0 sm:flex" />
+      {#if themeSwitch}
+        <p class="divider divider-horizontal m-0 hidden py-0 sm:flex"></p>
       {/if}
 
       <div class="hidden sm:flex">
-        <slot name="themeSwitch" />
+        {@render themeSwitch?.()}
       </div>
 
-      {#if $$slots.profile}
-        <p class="divider divider-horizontal m-0 hidden py-0 sm:flex" />
+      {#if profile}
+        <p class="divider divider-horizontal m-0 hidden py-0 sm:flex"></p>
       {/if}
 
-      <slot name="profile" />
+      {@render profile?.()}
     </div>
   </nav>
 </header>

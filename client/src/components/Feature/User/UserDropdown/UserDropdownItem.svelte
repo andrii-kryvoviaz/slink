@@ -1,10 +1,15 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
 
-  import { type UserDropdownItem } from '@slink/components/Feature/User';
+  import { type UserDropdownItem } from '@slink/components/Feature/User/UserDropdown/UserDropdown.items';
 
-  export let item: UserDropdownItem;
-  export let isDark = false;
+  interface Props {
+    item: UserDropdownItem;
+    isDark?: boolean;
+    children?: import('svelte').Snippet;
+  }
+
+  let { item, isDark = false, children }: Props = $props();
 
   const classes =
     'flex transform items-center justify-between sm:p-3 py-3 px-5 text-lg sm:text-sm capitalize text-gray-600 hover:bg-dropdown-accent hover:text-white dark:text-gray-300';
@@ -18,7 +23,7 @@
         class={classes + ' w-full'}
         class:inactive={item.state === 'inactive'}
       >
-        <slot />
+        {@render children?.()}
       </button>
     </form>
   {:else}
@@ -28,7 +33,7 @@
       class={classes}
       class:inactive={item.state === 'inactive'}
     >
-      <slot />
+      {@render children?.()}
     </a>
   {/if}
 </div>

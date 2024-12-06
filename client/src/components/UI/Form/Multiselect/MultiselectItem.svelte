@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher, getContext, onMount } from 'svelte';
+  import { type Snippet, getContext, onMount } from 'svelte';
 
   import { randomId } from '@slink/utils/string/randomId';
 
@@ -8,15 +8,26 @@
     type MultiselectItemData,
   } from '@slink/components/UI/Form';
 
-  export let key: string = randomId('multiselect-item');
-  export let disabled = false;
+  interface Props {
+    key?: string;
+    disabled?: boolean;
+    children?: Snippet;
+    on?: {
+      click: (event: MouseEvent) => void;
+    };
+  }
 
-  let textItemRef: HTMLSpanElement;
+  let {
+    key = randomId('multiselect-item'),
+    disabled = false,
+    children,
+    on,
+  }: Props = $props();
+
+  let textItemRef: HTMLSpanElement | undefined = $state();
   let itemData: MultiselectItemData | null = null;
 
   const { onRegister, onSelect } = getContext<MultiselectContext>('dropdown');
-
-  const dispatch = createEventDispatcher<{ click: MouseEvent }>();
 
   function handleClick(event: MouseEvent) {
     if (disabled || !itemData) {
@@ -24,11 +35,11 @@
     }
 
     onSelect(itemData);
-    dispatch('click', event);
+    on?.click?.(event);
   }
 
   onMount(() => {
-    itemData = { key, name: textItemRef.outerHTML };
+    itemData = { key, name: textItemRef?.outerHTML ?? '' };
 
     onRegister(itemData);
   });
@@ -37,9 +48,9 @@
 <button
   class="w-full cursor-pointer rounded-md p-2 hover:bg-dropdown-accent hover:text-white"
   type="button"
-  on:click={handleClick}
+  onclick={handleClick}
 >
   <span class="flex items-center gap-2" bind:this={textItemRef}>
-    <slot />
+    {@render children?.()}
   </span>
 </button>

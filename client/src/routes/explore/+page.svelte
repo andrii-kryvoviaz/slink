@@ -1,16 +1,17 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import type { PageServerData } from './$types';
+  import type {
+    ImageListingItem,
+    ImageListingResponse,
+    ListingMetadata,
+  } from '@slink/api/Response';
+  import { onDestroy, onMount } from 'svelte';
 
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
-  import type {
-    ImageListingItem,
-    ImageListingResponse,
-    ListingMetadata,
-  } from '@slink/api/Response';
 
   import { ImagePlaceholder } from '@slink/components/Feature/Image';
   import { UserAvatar } from '@slink/components/Feature/User';
@@ -23,21 +24,18 @@
     TextEllipsis,
   } from '@slink/components/UI/Text';
 
-  import type { PageServerData } from './$types';
+  interface Props {
+    data: PageServerData;
+  }
 
-  export let data: PageServerData;
+  let { data }: Props = $props();
 
-  let images: ImageListingItem[] = [];
-  let meta: ListingMetadata = {
+  let images: ImageListingItem[] = $state([]);
+  let meta: ListingMetadata = $state({
     page: 1,
     size: 10,
     total: 0,
-  };
-
-  const resetPage = () => {
-    images = [];
-    meta = { page: 1, size: 10, total: 0 };
-  };
+  });
 
   const {
     run: fetchImages,
@@ -48,29 +46,24 @@
     (page: number, limit: number) => {
       return ApiClient.image.getPublicImages(page, limit);
     },
-    { debounce: 300 }
+    { debounce: 300 },
   );
 
-  $: {
-    if ($response) {
-      images = [...images, ...$response.data];
-      meta = $response.meta;
+  let unsibscribeResponse = response.subscribe((value) => {
+    if (value) {
+      images = [...images, ...value.data];
+      meta = value.meta;
     }
-  }
+  });
 
-  $: showLoadMore =
-    meta && meta.page < Math.ceil(meta.total / meta.size) && $status !== 'idle';
-
-  $: showPreloader = !images.length && $status !== 'finished';
-
-  $: itemsNotFound = !images.length && $status === 'finished';
-
-  $: if (!data.user) {
-    resetPage();
-    fetchImages();
-  }
+  let showLoadMore = $derived(
+    meta && meta.page < Math.ceil(meta.total / meta.size) && $status !== 'idle',
+  );
+  let showPreloader = $derived(!images.length && $status !== 'finished');
+  let itemsNotFound = $derived(!images.length && $status === 'finished');
 
   onMount(() => fetchImages(1, meta.size));
+  onDestroy(unsibscribeResponse);
 </script>
 
 <svelte:head>
@@ -152,10 +145,14 @@
       visible={showLoadMore}
       loading={$isLoading}
       class="mt-8"
-      on:click={() => fetchImages(meta.page + 1, meta.size)}
+      onclick={() => fetchImages(meta.page + 1, meta.size)}
     >
-      <span slot="text">View More</span>
-      <Icon icon="mynaui:chevron-double-right" slot="icon" />
+      {#snippet text()}
+        <span>View More</span>
+      {/snippet}
+      {#snippet icon()}
+        <Icon icon="mynaui:chevron-double-right" />
+      {/snippet}
     </LoadMoreButton>
   </div>
 </section>

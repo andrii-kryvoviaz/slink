@@ -1,35 +1,54 @@
 <script lang="ts">
-  // ToDo: Implement better tooltip. For now it is okay.
-  import type { ComponentProps } from 'svelte';
-  import { twMerge } from 'tailwind-merge';
+  import type { TooltipProps } from '@slink/components/UI/Tooltip/Tooltip.types';
+  import { Tooltip } from 'bits-ui';
+  import { type Snippet } from 'svelte';
 
-  import Popper from './Popper.svelte';
+  import { className } from '@slink/utils/ui/className';
 
-  interface $$Props extends ComponentProps<Popper> {
-    type?: 'dark' | 'light' | 'auto' | 'custom';
-    defaultClass?: string;
-  }
+  import {
+    TooltipArrow,
+    TooltipContent,
+  } from '@slink/components/UI/Tooltip/Tooltip.theme';
 
-  export let type: 'dark' | 'light' | 'auto' | 'custom' = 'auto';
-  export let defaultClass: string = 'py-2 px-3 text-sm font-medium';
+  type Props = Tooltip.RootProps &
+    Tooltip.ContentProps &
+    TooltipProps & {
+      trigger: Snippet;
+      triggerProps?: Tooltip.TriggerProps;
+      withArrow?: boolean;
+    };
 
-  const types = {
-    dark: 'bg-neutral-900 text-white dark:bg-neutral-800',
-    light: 'border-neutral-200 bg-white text-neutral-900',
-    auto: 'bg-white text-neutral-900 dark:bg-neutral-800 dark:text-white border-neutral-200 dark:border-neutral-700',
-    custom: '',
-  };
+  let {
+    open = $bindable(false),
+    trigger,
+    children,
+    triggerProps = {},
+    withArrow = false,
+    variant = 'default',
+    size = 'xs',
+    width = 'auto',
+    rounded = 'md',
+    ...props
+  }: Props = $props();
 
-  let toolTipClass: string;
-  $: {
-    if ($$restProps.color) type = 'custom';
-    else $$restProps.color = 'none';
-
-    if (['light', 'auto'].includes(type)) $$restProps.border = true;
-    toolTipClass = twMerge('tooltip', defaultClass, types[type], $$props.class);
-  }
+  let contentClassess = $derived(
+    className(
+      `${TooltipContent({ variant, size, width, rounded })} ${props.class}`,
+    ),
+  );
+  let arrowClassess = $derived(className(TooltipArrow({ variant })));
 </script>
 
-<Popper rounded shadow {...$$restProps} class={toolTipClass} on:show>
-  <slot />
-</Popper>
+<Tooltip.Root bind:open>
+  <Tooltip.Trigger {...triggerProps}>
+    {@render trigger()}
+  </Tooltip.Trigger>
+  <Tooltip.Portal>
+    <Tooltip.Content sideOffset={8} {...props} class={contentClassess}>
+      {#if withArrow}
+        <Tooltip.Arrow class={arrowClassess} />
+      {/if}
+      {@render children?.()}
+    </Tooltip.Content>
+  </Tooltip.Portal>
+</Tooltip.Root>

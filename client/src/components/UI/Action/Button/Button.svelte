@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte';
+
   import { className } from '@slink/utils/ui/className';
 
   import {
@@ -7,67 +9,77 @@
     ButtonTheme,
   } from '@slink/components/UI/Action';
 
-  interface $$Props extends ButtonAttributes {}
+  interface Props extends ButtonAttributes {
+    leftIcon?: Snippet<[]>;
+    rightIcon?: Snippet<[]>;
+    loadingIcon?: Snippet<[]>;
+  }
 
-  export let href: $$Props['href'] = undefined;
-  export let target: $$Props['target'] = undefined;
-  export let variant: $$Props['variant'] = 'default';
-  export let size: $$Props['size'] = 'md';
-  export let rounded: $$Props['rounded'] = 'lg';
-  export let fontWeight: $$Props['fontWeight'] = 'medium';
-  export let motion: $$Props['motion'] = 'none';
-  export let state: $$Props['state'] = 'active';
-  export let disabled: $$Props['disabled'] = false;
-  export let loading: $$Props['loading'] = false;
+  let {
+    href,
+    target,
+    disabled = false,
+    loading = false,
+    variant = 'default',
+    size = 'md',
+    rounded = 'lg',
+    fontWeight = 'medium',
+    motion = 'none',
+    status = 'active',
+    onclick,
+    leftIcon,
+    rightIcon,
+    loadingIcon,
+    children,
+    ...props
+  }: Props = $props();
 
-  $: state = disabled ? 'disabled' : 'active';
+  let currentStatus = $derived(disabled ? 'disabled' : status);
 
-  $: classes = `${ButtonTheme({
-    variant,
-    size,
-    rounded,
-    fontWeight,
-    motion,
-    state,
-  })} ${$$props.class}`;
+  let classes = $derived(
+    className(
+      `${ButtonTheme({
+        variant,
+        size,
+        rounded,
+        fontWeight,
+        motion,
+        status: currentStatus,
+      })} ${props.class}`,
+    ),
+  );
 
-  let buttonIconProps = {};
-  $: buttonIconProps = {
-    loading,
-    customLoadingIcon: $$slots.loadingIcon,
+  let isButtonDisabled = $derived(disabled || loading);
+
+  const handleClick = (e: any) => {
+    if (isButtonDisabled) {
+      return;
+    }
+
+    onclick?.(e);
   };
 </script>
 
 {#if href}
-  <a {href} {target} {...$$props} class={className(classes)} on:click>
-    <slot />
+  <a {href} {target} {...props} class={classes}>
+    {@render children?.()}
   </a>
 {:else}
-  <button
-    type="button"
-    {...$$props}
-    disabled={disabled || loading}
-    class={className(classes)}
-    on:click
-  >
-    {#if !$$slots.leftIcon && !$$slots.rightIcon}
-      <slot />
-      <ButtonIcon {...buttonIconProps}>
-        <slot name="loadingIcon" slot="loading" />
-      </ButtonIcon>
+  <button type="button" {...props} class={classes} onclick={handleClick}>
+    {#if !leftIcon && !rightIcon}
+      {@render children?.()}
+      <ButtonIcon {loading} {loadingIcon} />
     {:else}
       <div class="flex w-full items-center justify-between gap-2">
-        {#if $$slots.leftIcon}
-          <ButtonIcon {...buttonIconProps}>
-            <slot name="loadingIcon" slot="loading" />
-            <slot name="leftIcon" />
+        {#if leftIcon}
+          <ButtonIcon {loading} {loadingIcon}>
+            {@render leftIcon?.()}
           </ButtonIcon>
         {/if}
-        <slot />
-        {#if $$slots.rightIcon}
-          <ButtonIcon {...buttonIconProps}>
-            <slot name="loadingIcon" slot="loading" />
-            <slot name="rightIcon" />
+        {@render children?.()}
+        {#if rightIcon}
+          <ButtonIcon {loading} {loadingIcon}>
+            {@render rightIcon?.()}
           </ButtonIcon>
         {/if}
       </div>

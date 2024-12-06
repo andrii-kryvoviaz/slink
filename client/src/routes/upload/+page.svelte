@@ -1,25 +1,27 @@
 <script lang="ts">
+  import type { PageData } from './$types';
+  import type { UploadedImageResponse } from '@slink/api/Response';
+
   import { goto } from '$app/navigation';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
-  import type { UploadedImageResponse } from '@slink/api/Response';
 
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
   import { toast } from '@slink/utils/ui/toast';
 
+  import UnsupportedFileFormat from '@slink/components/Feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte';
   import { Button } from '@slink/components/UI/Action';
   import { Dropzone } from '@slink/components/UI/Form';
   import { Loader } from '@slink/components/UI/Loader';
 
-  import type { PageData } from './$types';
+  interface Props {
+    data: PageData;
+  }
 
-  export let data: PageData;
-
-  let processing: boolean = false;
-
+  let { data }: Props = $props();
   type FileEvent = DragEvent | ClipboardEvent | Event;
 
   const {
@@ -28,15 +30,15 @@
     error: uploadError,
     run: uploadImage,
   } = ReactiveState<UploadedImageResponse>((file: File) =>
-    ApiClient.image.upload(file)
+    ApiClient.image.upload(file),
   );
 
   const { isLoading: pageIsChanging, run: redirectToInfo } = ReactiveState(
-    (imageId: number) => goto(`/info/${imageId}`)
+    (imageId: number) => goto(`/info/${imageId}`),
   );
 
   const getFilesFromEvent = function (
-    event: FileEvent
+    event: FileEvent,
   ): FileList | undefined | null {
     if (event instanceof DragEvent) {
       return event.dataTransfer?.files;
@@ -67,11 +69,7 @@
     const file = fileList.item(0) as File;
 
     if (!file?.type.startsWith('image/')) {
-      toast.warning(`Unsupported file format.
-        <a href="/help/faq#supported-image-formats"
-            class="text-indigo-500 hover:text-indigo-700 mt-1 block"
-        >See supported formats</a>
-      `);
+      toast.component(UnsupportedFileFormat, { duration: 5000 });
       return;
     }
 
@@ -86,17 +84,23 @@
 
   const errorHandler = printErrorsAsToastMessage;
 
-  $: $uploadedImage && successHandler($uploadedImage);
-  $: $uploadError && errorHandler($uploadError);
-  $: processing = $isLoading || $pageIsChanging;
-  $: disabled = processing || !data.user;
+  $effect(() => {
+    $uploadedImage && successHandler($uploadedImage);
+  });
+
+  $effect(() => {
+    $uploadError && errorHandler($uploadError);
+  });
+
+  let processing = $derived($isLoading || $pageIsChanging);
+  let disabled = $derived(processing || !data.user);
 </script>
 
 <svelte:head>
   <title>Upload | Slink</title>
 </svelte:head>
 
-<svelte:document on:paste={handleChange} />
+<svelte:document onpaste={handleChange} />
 
 <div
   class="content dropzone flex h-full w-full flex-col items-center p-4 sm:p-12"
@@ -132,13 +136,12 @@
         </div>
       {/if}
       <Dropzone
-        on:drop={handleChange}
-        on:dragover={(event) => {
+        ondrop={handleChange}
+        ondragover={(event) => {
           event.preventDefault();
         }}
-        on:change={handleChange}
+        onchange={handleChange}
         {disabled}
-        defaultClass="flex flex-col justify-center items-center w-full h-64 bg-card-primary rounded-lg border-2 border-dropzone-primary border-dashed cursor-pointer hover:border-dropzone-secondary hover:bg-card-secondary max-h-[400px] "
       >
         {#if !processing}
           <div class="flex flex-col p-6 xs:w-[80%]">
@@ -171,7 +174,7 @@
             <a
               href="/help/faq#supported-image-formats"
               class="mt-1 block text-[0.75em] text-gray-600 hover:text-color-primary"
-              on:click={(event) => event.stopPropagation()}
+              onclick={(event) => event.stopPropagation()}
             >
               See all supported formats
             </a>

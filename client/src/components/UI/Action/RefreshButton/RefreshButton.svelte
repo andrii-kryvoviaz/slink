@@ -1,53 +1,45 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte';
+
   import Icon from '@iconify/svelte';
 
   import { randomId } from '@slink/utils/string/randomId';
 
-  import { Button, type ButtonAttributes } from '@slink/components/UI/Action';
+  import { Button } from '@slink/components/UI/Action';
   import { Tooltip } from '@slink/components/UI/Tooltip';
 
-  interface $$Props extends ButtonAttributes {
+  interface Props {
     loading?: boolean;
+    children?: Snippet;
+    [key: string]: any;
   }
 
-  export let loading: boolean = false;
+  let { loading = false, children, ...props }: Props = $props();
 
   const uniqueId = randomId('refreshButton');
 </script>
 
 <div>
-  <Button
-    variant="default"
-    size="md"
-    class="group"
-    id={uniqueId}
-    {loading}
-    on:click
-    {...$$restProps}
-  >
-    <Icon
-      icon="teenyicons:refresh-solid"
-      slot="rightIcon"
-      class="transition-transform duration-500 group-hover:rotate-180"
-    />
+  <Tooltip class="py-1 text-[0.7rem]" side="left" withArrow={false}>
+    {#snippet trigger()}
+      <Button variant="default" size="md" class="group" {loading} {...props}>
+        {#snippet rightIcon()}
+          <Icon
+            icon="teenyicons:refresh-solid"
+            class="transition-transform duration-500 group-hover:rotate-180"
+          />
+        {/snippet}
 
-    <Icon
-      icon="teenyicons:refresh-solid"
-      slot="loadingIcon"
-      class="animate-spin"
-    />
+        {#snippet loadingIcon()}
+          <Icon icon="teenyicons:refresh-solid" class="animate-spin" />
+        {/snippet}
 
-    <slot />
+        {@render children?.()}
+      </Button>
+    {/snippet}
 
     {#if !loading}
-      <Tooltip
-        triggeredBy={`[id^='${uniqueId}']`}
-        class="py-1 text-[0.7rem]"
-        placement="left"
-        arrow={false}
-      >
-        Refresh
-      </Tooltip>
+      Refresh
     {/if}
-  </Button>
+  </Tooltip>
 </div>

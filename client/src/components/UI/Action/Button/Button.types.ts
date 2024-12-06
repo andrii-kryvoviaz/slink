@@ -1,8 +1,6 @@
-import type { VariantProps } from 'class-variance-authority';
-
-import type { HTMLButtonAttributes } from 'svelte/elements';
-
 import type { ButtonTheme } from '@slink/components/UI/Action/Button/Button.theme';
+import type { VariantProps } from 'class-variance-authority';
+import type { HTMLAttributes, HTMLButtonAttributes } from 'svelte/elements';
 
 export type ButtonProps = VariantProps<typeof ButtonTheme>;
 
@@ -15,8 +13,14 @@ type LinkAttributes = {
   target?: target extends LinkAttributes['href'] ? target : never;
 };
 
+type HTMLCutromButtonAttributes = Pick<
+  HTMLButtonAttributes,
+  'disabled' | 'type' | 'title'
+>;
+
 export interface ButtonAttributes
-  extends HTMLButtonAttributes,
+  extends HTMLCutromButtonAttributes,
+    HTMLAttributes<HTMLElement>,
     LinkAttributes,
     ButtonProps {
   key?: string;

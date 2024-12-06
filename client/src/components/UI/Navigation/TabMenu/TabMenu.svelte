@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { onMount, setContext } from 'svelte';
-
+  import { setContext } from 'svelte';
   import type { HTMLBaseAttributes } from 'svelte/elements';
 
   import { throttle } from '@slink/utils/time/throttle';
@@ -13,12 +12,16 @@
   } from '@slink/components/UI/Navigation';
   import { TabMenuTheme } from '@slink/components/UI/Navigation/TabMenu/TabMenu.theme';
 
-  interface $$Props extends TabMenuProps, HTMLBaseAttributes {}
+  interface Props extends TabMenuProps, HTMLBaseAttributes {}
 
-  export let variant: $$Props['variant'] = 'default';
-  export let size: $$Props['size'] = 'sm';
-  export let orientation: $$Props['orientation'] = 'horizontal';
-  export let rounded: $$Props['rounded'] = 'lg';
+  let {
+    variant = 'default',
+    size = 'sm',
+    orientation = 'horizontal',
+    rounded = 'lg',
+    children,
+    ...props
+  }: Props = $props();
 
   let items: Record<string, TabMenuItemData> = {};
   let activeItem: TabMenuItemData;
@@ -32,7 +35,9 @@
     }
   };
 
-  const handleItemSelect = (item: TabMenuItemData) => {
+  const handleItemSelect = (key: string) => {
+    const item = items[key];
+
     if (activeItem === item) {
       return;
     }
@@ -74,7 +79,9 @@
     }
   }
 
-  function handleMouseEnter(tab: TabMenuItemData) {
+  function handleMouseEnter(key: string) {
+    const tab = items[key];
+
     if (tab.active) {
       return;
     }
@@ -94,20 +101,28 @@
     activeItem && moveMarker(activeItem, { withTransition: false });
   }, 50);
 
-  $: activeItem && moveMarker(activeItem);
-  $: isHorizontal = orientation === 'horizontal';
+  $effect(() => {
+    moveMarker(activeItem);
+  });
 
-  $: classes = `${TabMenuTheme({
-    variant,
-    size,
-    orientation,
-    rounded,
-  })} ${$$props.class}`;
+  let isHorizontal: boolean = $derived(orientation === 'horizontal');
+
+  let classes = $derived(
+    className(
+      TabMenuTheme({
+        variant,
+        size,
+        orientation,
+        rounded,
+      }),
+      props.class,
+    ),
+  );
 </script>
 
 <svelte:window on:resize={resizeHandler} />
 
-<div class={className(classes)} role="tablist" tabindex="0">
+<div class={classes} role="tablist" tabindex="0">
   <div
     class="absolute"
     class:inset-y-1={isHorizontal}
@@ -118,8 +133,8 @@
     <div
       bind:this={marker}
       class="absolute h-full w-full rounded-lg bg-white transition-all duration-300 dark:bg-black"
-    />
+    ></div>
   </div>
 
-  <slot />
+  {@render children?.()}
 </div>

@@ -1,52 +1,55 @@
 <script lang="ts">
-  import { createEventDispatcher, getContext, onMount } from 'svelte';
+  import { type Snippet, getContext, onMount } from 'svelte';
+  import type { HTMLAttributes } from 'svelte/elements';
 
   import { page } from '$app/stores';
 
   import { randomId } from '@slink/utils/string/randomId';
   import { className } from '@slink/utils/ui/className';
 
-  import {
-    type TabMenuContext,
-    type TabMenuItemData,
-  } from '@slink/components/UI/Navigation';
+  import { type TabMenuContext } from '@slink/components/UI/Navigation';
 
-  export let key: string = randomId('tab-menu-item');
-  export let href: string | undefined;
+  interface Props {
+    key?: string;
+    href?: string;
+    children?: Snippet;
+    on?: {
+      click: (event: MouseEvent | KeyboardEvent) => void;
+    };
+  }
 
-  let active: boolean = false;
+  let { key = randomId('tab-menu-item'), href, on, children }: Props = $props();
 
-  let ref: HTMLElement;
-  let itemData: TabMenuItemData;
+  let active: boolean = $state(href === $page.route.id);
+  let ref: HTMLElement | undefined = $state();
 
   const defaultClasses =
     'relative z-10 flex cursor-pointer items-center gap-2 px-3 py-1.5 text-center text-sm text-gray-400 transition-colors duration-300 dark:text-gray-400 dark:hover:text-white hover:text-black';
   const activeClasses = 'text-black dark:text-white';
 
+  let classes = $derived(
+    className(defaultClasses, { [activeClasses]: active }),
+  );
+
   const { onRegister, onSelect, onMouseEnter, onMouseLeave } =
     getContext<TabMenuContext>('tab-menu');
 
-  const dispatch = createEventDispatcher<{
-    click: MouseEvent | KeyboardEvent;
-  }>();
-
   const handleClick = (event: MouseEvent | KeyboardEvent) => {
-    handleSelect();
-    dispatch('click', event);
-  };
-
-  const handleSelect = () => {
-    if (active) {
-      return;
-    }
-
     active = true;
-
-    onSelect(itemData);
+    on?.click(event);
   };
 
-  const initData = () => {
-    itemData = {
+  onMount(() => {
+    const item = createItem();
+    if (!item) return;
+
+    onRegister(item);
+  });
+
+  const createItem = () => {
+    if (!ref) return;
+
+    return {
       key,
       href,
       ref,
@@ -59,42 +62,32 @@
     };
   };
 
-  onMount(() => {
-    initData();
-    onRegister(itemData);
+  $effect(() => {
+    if (active) {
+      onSelect(key);
+    }
   });
 
-  $: if (href === $page.route.id) {
-    handleSelect();
-  }
-
-  $: classes = className(defaultClasses, { [activeClasses]: active });
+  let defaultProps: Partial<HTMLAttributes<HTMLElement>> = $derived({
+    class: classes,
+    onclick: handleClick,
+    onmouseenter: () => onMouseEnter(key),
+    onmouseleave: () => onMouseLeave(key),
+    tabindex: 0,
+    role: 'tab',
+  });
 </script>
 
 {#if href}
-  <a
-    bind:this={ref}
-    {href}
-    class={classes}
-    on:click={handleClick}
-    on:mouseenter={() => onMouseEnter(itemData)}
-    on:mouseleave={() => onMouseLeave(itemData)}
-    tabindex="0"
-    role="tab"
-  >
-    <slot />
+  <a bind:this={ref} {href} {...defaultProps}>
+    {@render children?.()}
   </a>
 {:else}
-  <div
+  <button
     bind:this={ref}
-    class={classes}
-    on:click={handleClick}
-    on:mouseenter={() => onMouseEnter(itemData)}
-    on:mouseleave={() => onMouseLeave(itemData)}
-    on:keydown={(event) => event.key === 'Enter' && handleClick(event)}
-    tabindex="0"
-    role="tab"
+    {...defaultProps}
+    onkeydown={(event) => event.key === 'Enter' && handleClick(event)}
   >
-    <slot />
-  </div>
+    {@render children?.()}
+  </button>
 {/if}

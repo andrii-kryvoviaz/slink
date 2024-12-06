@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
-
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   import Icon from '@iconify/svelte';
@@ -8,7 +6,6 @@
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
-  import type { ImageDetailsResponse } from '@slink/api/Response';
 
   import { downloadByLink } from '@slink/utils/http/downloadByLink';
   import { toast } from '@slink/utils/ui/toast';
@@ -17,19 +14,22 @@
   import { Button } from '@slink/components/UI/Action';
   import { Tooltip } from '@slink/components/UI/Tooltip';
 
-  export let image: ImageDetailsResponse;
-
   type actionButton = 'download' | 'visibility' | 'share' | 'delete' | 'copy';
-  export let buttons: actionButton[] = [
-    'download',
-    'visibility',
-    'share',
-    'delete',
-  ];
+  interface Props {
+    image: { id: string; fileName: string; isPublic: boolean };
+    buttons?: actionButton[];
+    on?: {
+      imageDelete: (imageId: string) => void;
+    };
+  }
+
+  let {
+    image = $bindable(),
+    buttons = ['download', 'visibility', 'share', 'delete'],
+    on,
+  }: Props = $props();
 
   const isButtonVisible = (button: actionButton) => buttons.includes(button);
-
-  const dispatch = createEventDispatcher<{ imageDeleted: string }>();
 
   const {
     isLoading: visibilityIsLoading,
@@ -41,7 +41,7 @@
         isPublic,
       });
     },
-    { minExecutionTime: 300 }
+    { minExecutionTime: 300 },
   );
 
   const handleVisibilityChange = async (isPublic: boolean) => {
@@ -52,7 +52,7 @@
       return;
     }
 
-    image.isPublic = isPublic;
+    image = { ...image, isPublic };
   };
 
   const {
@@ -63,7 +63,7 @@
     return ApiClient.image.remove(imageId, preserveOnDisk);
   });
 
-  let isCopiedActive = false;
+  let isCopiedActive = $state(false);
   const handleCopy = async () => {
     await navigator.clipboard.writeText(directLink);
 
@@ -92,13 +92,13 @@
           toast.remove(image.id);
 
           await goto('/history');
-          dispatch('imageDeleted', image.id);
+          on?.imageDelete(image.id);
         },
       },
     });
   };
 
-  $: directLink = `${$page.url.origin}/image/${image.fileName}`;
+  let directLink = $derived(`${$page.url.origin}/image/${image.fileName}`);
 </script>
 
 <div class="flex items-center gap-2">
@@ -107,41 +107,37 @@
       <Button
         variant="primary"
         size="md"
-        on:click={() => downloadByLink(directLink, image.fileName)}
+        onclick={() => downloadByLink(directLink, image.fileName)}
       >
         <span class="mr-2 hidden text-sm font-light xs:block">Download</span>
-        <Icon
-          icon="material-symbols-light:download"
-          slot="rightIcon"
-          class="h-5 w-5"
-        />
+        {#snippet rightIcon()}
+          <Icon icon="material-symbols-light:download" class="h-5 w-5" />
+        {/snippet}
       </Button>
     </div>
   {/if}
 
   {#if isButtonVisible('visibility')}
     <div>
-      <Button
-        variant="invisible"
-        size="md"
-        class="px-3 transition-colors"
-        id="open-visibility-tooltip-{image.id}"
-        on:click={() => handleVisibilityChange(!image.isPublic)}
-        disabled={$visibilityIsLoading}
-      >
-        {#if $visibilityIsLoading}
-          <Icon icon="mdi-light:loading" class="h-5 w-5 animate-spin" />
-        {:else if image.isPublic}
-          <Icon icon="ph:eye-light" class="h-5 w-5" />
-        {:else}
-          <Icon icon="ph:eye-slash-light" class="h-5 w-5" />
-        {/if}
-      </Button>
-      <Tooltip
-        triggeredBy="[id^='open-visibility-tooltip-{image.id}'"
-        class="max-w-[10rem] p-2 text-center text-xs shadow-none"
-        placement="bottom"
-      >
+      <Tooltip size="xs" side="bottom">
+        {#snippet trigger()}
+          <Button
+            variant="invisible"
+            size="md"
+            class="px-3 transition-colors"
+            onclick={() => handleVisibilityChange(!image.isPublic)}
+            disabled={$visibilityIsLoading}
+          >
+            {#if $visibilityIsLoading}
+              <Icon icon="mdi-light:loading" class="h-5 w-5 animate-spin" />
+            {:else if image.isPublic}
+              <Icon icon="ph:eye-light" class="h-5 w-5" />
+            {:else}
+              <Icon icon="ph:eye-slash-light" class="h-5 w-5" />
+            {/if}
+          </Button>
+        {/snippet}
+
         {#if image.isPublic}
           Make Private
         {:else}
@@ -153,50 +149,46 @@
 
   {#if isButtonVisible('share')}
     <div>
-      <Button
-        variant="invisible"
-        size="md"
-        class="px-3 transition-colors"
-        id="open-share-tooltip-{image.id}"
-        href="/help/faq#share-feature"
-      >
-        <Icon icon="mdi-light:share-variant" class="h-5 w-5" />
-      </Button>
-      <Tooltip
-        triggeredBy="[id^='open-share-tooltip-{image.id}']"
-        class="max-w-[10rem] p-2 text-center text-xs shadow-none"
-        placement="bottom"
-      >
-        Share Policy
+      <Tooltip size="xs" side="bottom">
+        {#snippet trigger()}
+          <Button
+            variant="invisible"
+            size="md"
+            class="px-3 transition-colors"
+            href="/help/faq#share-feature"
+          >
+            <Icon icon="mdi-light:share-variant" class="h-5 w-5" />
+          </Button>
+        {/snippet}
+
+        Sharing Policy
       </Tooltip>
     </div>
   {/if}
 
   {#if isButtonVisible('copy')}
     <div>
-      <Button
-        variant="invisible"
-        size="md"
-        class="px-3 transition-colors"
-        id="open-copy-tooltip-{image.id}"
-        on:click={handleCopy}
-        disabled={isCopiedActive}
-      >
-        {#if isCopiedActive}
-          <div in:fly={{ duration: 300 }}>
-            <Icon icon="mdi-light:check" class="h-5 w-5" />
-          </div>
-        {:else}
-          <div in:fly={{ duration: 300 }}>
-            <Icon icon="lets-icons:copy-light" class="h-5 w-5" />
-          </div>
-        {/if}
-      </Button>
-      <Tooltip
-        triggeredBy="[id^='open-copy-tooltip-{image.id}']"
-        class="max-w-[10rem] p-2 text-center text-xs shadow-none"
-        placement="bottom"
-      >
+      <Tooltip size="xs" side="bottom">
+        {#snippet trigger()}
+          <Button
+            variant="invisible"
+            size="md"
+            class="px-3 transition-colors"
+            onclick={handleCopy}
+            disabled={isCopiedActive}
+          >
+            {#if isCopiedActive}
+              <div in:fly={{ duration: 300 }}>
+                <Icon icon="mdi-light:check" class="h-5 w-5" />
+              </div>
+            {:else}
+              <div in:fly={{ duration: 300 }}>
+                <Icon icon="lets-icons:copy-light" class="h-5 w-5" />
+              </div>
+            {/if}
+          </Button>
+        {/snippet}
+
         Copy URL
       </Tooltip>
     </div>
@@ -204,20 +196,21 @@
 
   {#if isButtonVisible('delete')}
     <div>
-      <Button
-        variant="invisible"
-        size="md"
-        class="px-3 transition-colors hover:bg-button-danger hover:text-white"
-        id="open-delete-tooltip-{image.id}"
-        on:click={handleImageDeletion}
-      >
-        <Icon icon="solar:trash-bin-minimalistic-2-linear" class="h-5 w-5" />
-      </Button>
-      <Tooltip
-        triggeredBy="[id^='open-delete-tooltip-{image.id}']"
-        class="max-w-[10rem] p-2 text-center text-xs shadow-none"
-        placement="bottom"
-      >
+      <Tooltip size="xs" side="bottom">
+        {#snippet trigger()}
+          <Button
+            variant="invisible"
+            size="md"
+            class="px-3 transition-colors hover:bg-button-danger hover:text-white"
+            onclick={handleImageDeletion}
+          >
+            <Icon
+              icon="solar:trash-bin-minimalistic-2-linear"
+              class="h-5 w-5"
+            />
+          </Button>
+        {/snippet}
+
         Delete Image
       </Tooltip>
     </div>

@@ -1,4 +1,9 @@
 <script lang="ts">
+  import type {
+    ImageListingItem,
+    ImageListingResponse,
+    ListingMetadata,
+  } from '@slink/api/Response';
   import { onMount } from 'svelte';
 
   import Icon from '@iconify/svelte';
@@ -6,23 +11,18 @@
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
-  import type {
-    ImageListingItem,
-    ImageListingResponse,
-    ListingMetadata,
-  } from '@slink/api/Response';
 
   import { HistoryListView } from '@slink/components/Feature/Image';
   import { Button, LoadMoreButton } from '@slink/components/UI/Action';
   import { Loader } from '@slink/components/UI/Loader';
   import { Heading } from '@slink/components/UI/Text';
 
-  let items: ImageListingItem[] = [];
-  let meta: ListingMetadata = {
+  let items: ImageListingItem[] = $state([]);
+  let meta: ListingMetadata = $state({
     page: 1,
     size: 12, // good both for 2 and 3 columns
     total: 0,
-  };
+  });
 
   const {
     run: fetchImages,
@@ -33,27 +33,12 @@
     (page: number, limit: number) => {
       return ApiClient.image.getHistory(page, limit);
     },
-    { debounce: 300 }
+    { debounce: 300 },
   );
 
-  // this has to be a standalone function
-  // in order not to trigger reactivity on items change
-  const updateListing = (detail: ImageListingItem[]) => {
-    // filter out the items that are already in the list
-    const newItems = detail.filter(
-      (item) => !items.some((i) => i.id === item.id)
-    );
-    items = items.concat(newItems);
-  };
-
-  $: if ($response) {
-    updateListing($response.data);
-    meta = $response.meta;
-  }
-
-  const onUpdate = ({ detail }: { detail: ImageListingItem[] }) => {
+  const onRemove = (id: string) => {
     // reassign the items with the new item list
-    items = detail;
+    items = items.filter((item) => item.id !== id);
 
     // rerun the fetchImages function with the current page and size
     // in order to have fully filled page with items
@@ -62,15 +47,29 @@
     }
   };
 
-  $: showLoadMore =
-    meta && meta.page < Math.ceil(meta.total / meta.size) && $status !== 'idle';
+  let showLoadMore = $derived(
+    meta && meta.page < Math.ceil(meta.total / meta.size) && $status !== 'idle',
+  );
 
-  $: showPreloader = !items.length && $status !== 'finished';
+  let showPreloader = $derived(!items.length && $status !== 'finished');
 
-  $: itemsFound = items.length && $status === 'finished';
-  $: itemsNotFound = !items.length && $status === 'finished';
+  let itemsFound = $derived(items.length);
+  let itemsNotFound = $derived(!items.length && $status === 'finished');
 
-  onMount(() => fetchImages(1, meta.size));
+  onMount(() => {
+    fetchImages(1, meta.size);
+
+    return response.subscribe((value) => {
+      if (!value) return;
+
+      // filter out the items that are already in the list
+      items = items.concat(
+        value.data.filter((item) => !items.some((i) => i.id === item.id)),
+      );
+
+      meta = value.meta;
+    });
+  });
 </script>
 
 <svelte:head>
@@ -107,16 +106,17 @@
       </div>
     {/if}
 
-    <HistoryListView {items} on:updateListing={onUpdate} />
+    <HistoryListView {items} on={{ delete: onRemove }} />
 
     <LoadMoreButton
       visible={showLoadMore}
       loading={$isLoading}
       class="mt-8"
-      on:click={() => fetchImages(meta.page + 1, meta.size)}
+      onclick={() => fetchImages(meta.page + 1, meta.size)}
     >
-      <span slot="text">View More</span>
-      <Icon icon="mynaui:chevron-double-right" slot="icon" />
+      {#snippet text()}
+        <span>View More</span>
+      {/snippet}
     </LoadMoreButton>
   </div>
 </section>

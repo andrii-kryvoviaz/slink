@@ -1,21 +1,23 @@
 <script lang="ts">
+  import type { PageServerData } from './$types';
+  import type { UserListingResponse } from '@slink/api/Response';
+  import { onMount } from 'svelte';
+
   import { fade } from 'svelte/transition';
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
-  import type {
-    UserListingItem,
-    UserListingResponse,
-  } from '@slink/api/Response';
 
   import { UserCard } from '@slink/components/Feature/User';
   import { LoadMoreButton } from '@slink/components/UI/Action';
 
-  import type { PageServerData } from './$types';
+  interface Props {
+    data: PageServerData;
+  }
 
-  export let data: PageServerData;
+  let { data }: Props = $props();
 
-  let { user: loggedInUser, meta, items } = data;
+  let { user: loggedInUser, meta, items } = $state(data);
 
   const {
     run: fetchUsers,
@@ -25,31 +27,34 @@
     (page: number, limit: number) => {
       return ApiClient.user.getUsers(page, { limit });
     },
-    { debounce: 300 }
+    { debounce: 300 },
   );
 
-  const updateListing = (detail: UserListingItem[]) => {
-    const newItems = detail.filter(
-      (item) => !items.some((i) => i.id === item.id)
-    );
-    items = items.concat(newItems);
-  };
-
-  const onDelete = ({ detail }: { detail: string }) => {
-    items = items.filter((item) => item.id !== detail);
+  const onDelete = (id: string) => {
+    items = items.filter((item) => item.id !== id);
 
     if (items.length > 0) {
       fetchUsers(meta.page, meta.size);
     }
   };
 
-  $: if ($response) {
-    updateListing($response.data);
-    meta = $response.meta;
-  }
+  let showLoadMore = $derived(
+    meta && meta.page < Math.ceil(meta.total / meta.size),
+  );
+  let itemsNotFound = $derived(!items.length);
 
-  $: showLoadMore = meta && meta.page < Math.ceil(meta.total / meta.size);
-  $: itemsNotFound = !items.length;
+  onMount(
+    response.subscribe((value) => {
+      if (!value) {
+        return;
+      }
+
+      items = items.concat(
+        value.data.filter((item) => !items.some((i) => i.id === item.id)),
+      );
+      meta = value.meta;
+    }),
+  );
 </script>
 
 <svelte:head>
@@ -70,7 +75,7 @@
     <div class="h-full overflow-y-auto">
       <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         {#each items as user (user.id)}
-          <UserCard {user} {loggedInUser} on:userDeleted={onDelete} />
+          <UserCard {user} {loggedInUser} on={{ userDelete: onDelete }} />
         {/each}
       </div>
 
@@ -78,7 +83,7 @@
         <LoadMoreButton
           visible={showLoadMore}
           loading={$isLoading}
-          on:click={() => fetchUsers(meta.page + 1, meta.size)}
+          onclick={() => fetchUsers(meta.page + 1, meta.size)}
         />
       </div>
     </div>

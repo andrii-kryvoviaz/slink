@@ -2,6 +2,11 @@
   import Icon from '@iconify/svelte';
 
   import { TabMenu, TabMenuItem } from '@slink/components/UI/Navigation';
+  interface Props {
+    children?: import('svelte').Snippet;
+  }
+
+  let { children }: Props = $props();
 
   const tabs = [
     {
@@ -31,6 +36,6 @@
   </div>
 
   <div class="flex max-w-full flex-grow">
-    <slot />
+    {@render children?.()}
   </div>
 </div>

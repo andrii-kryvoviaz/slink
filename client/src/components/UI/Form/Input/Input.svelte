@@ -1,69 +1,82 @@
 <script lang="ts">
-  import type { HTMLInputAttributes as BaseHTMLInputAttributes } from 'svelte/elements';
+  import type { Snippet } from 'svelte';
+  import type { HTMLInputAttributes } from 'svelte/elements';
 
   import { className } from '@slink/utils/ui/className';
 
   import { type InputProps, InputTheme } from '@slink/components/UI/Form';
 
-  type HTMLInputAttributes = Omit<BaseHTMLInputAttributes, 'size'>;
-
-  interface $$Props extends HTMLInputAttributes, InputProps {
+  interface Props extends Omit<HTMLInputAttributes, 'size'>, InputProps {
     key?: string;
     label?: string;
+    leftIcon?: Snippet<[]>;
+    rightIcon?: Snippet<[]>;
+    topRightText?: Snippet<[]>;
   }
 
-  export let value: $$Props['value'] = '';
-  export let label: $$Props['label'] = '';
-  export let variant: $$Props['variant'] = 'default';
-  export let size: $$Props['size'] = 'md';
-  export let rounded: $$Props['rounded'] = 'lg';
-  export let error: $$Props['error'] = false;
+  let {
+    value = $bindable(),
+    label,
+    variant = 'default',
+    size = 'md',
+    rounded = 'lg',
+    error = undefined,
+    leftIcon,
+    rightIcon,
+    topRightText,
+    children,
+    ...props
+  }: Props = $props();
 
   let originalVariant = variant;
-  $: variant = error ? 'error' : originalVariant;
+  let inputVariant = $derived(error ? 'error' : originalVariant);
 
-  $: classes = `${InputTheme({
-    variant,
-    size,
-    rounded,
-  })} ${$$props.class}`;
+  let classes = $derived(
+    className(
+      `${InputTheme({
+        variant: inputVariant,
+        size,
+        rounded,
+      })} ${props.class}`,
+    ),
+  );
 </script>
 
 <div>
   <div class="flex items-center justify-between">
     {#if label}
-      <label for={$$props['id']} class="block text-sm text-label-default">
+      <label for={props.id} class="block text-sm text-label-default">
         {label}
       </label>
     {/if}
 
-    <slot name="topRightText" />
+    {@render topRightText?.()}
   </div>
 
   <div class="relative">
-    {#if $$slots.leftIcon}
+    {#if leftIcon}
       <div
         class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 opacity-60"
       >
-        <slot name="leftIcon" />
+        {@render leftIcon?.()}
       </div>
     {/if}
     <input
-      {...$$props}
+      {...props}
       bind:value
-      class={className(classes)}
-      class:pl-10={$$slots.leftIcon}
-      class:pr-10={$$slots.rightIcon}
+      class={classes}
+      class:pl-10={leftIcon}
+      class:pr-10={rightIcon}
     />
-    {#if $$slots.rightIcon}
+    {#if rightIcon}
       <div
         class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 opacity-60"
       >
-        <slot name="rightIcon" />
+        {@render rightIcon?.()}
       </div>
     {/if}
 
-    <slot />
+    {@render children?.()}
   </div>
 
   <div class="mt-1 text-xs text-input-error">

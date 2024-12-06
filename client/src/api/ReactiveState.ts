@@ -1,8 +1,7 @@
-import { type Readable } from 'svelte/store';
+import type { Readable } from 'svelte/store';
 
 import { ValidationException } from '@slink/api/Exceptions';
 import { inMemoryReadable } from '@slink/store/provider/inMemoryReadable';
-
 import { debounce } from '@slink/utils/time/debounce';
 
 type RequestStatus = 'idle' | 'loading' | 'finished' | 'error';
@@ -28,7 +27,7 @@ function createDelayPromise(delay: number): Promise<void> {
 
 export function ReactiveState<T>(
   func: Function,
-  options?: RequestStateOptions
+  options?: RequestStateOptions,
 ): RequestState<T> {
   const [status, setStatus] = inMemoryReadable<RequestStatus>('idle');
   const [isLoading, setIsLoading] = inMemoryReadable<boolean>(false);

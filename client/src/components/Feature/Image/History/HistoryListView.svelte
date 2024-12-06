@@ -1,10 +1,8 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
+  import type { ImageListingItem } from '@slink/api/Response';
 
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
-
-  import type { ImageListingItem } from '@slink/api/Response';
 
   import { bytesToSize } from '@slink/utils/bytesConverter';
 
@@ -15,22 +13,22 @@
   import { Button } from '@slink/components/UI/Action';
   import { Badge, FormattedDate } from '@slink/components/UI/Text';
 
-  export let items: ImageListingItem[] = [];
+  interface Props {
+    items?: ImageListingItem[];
+    on?: {
+      delete: (id: string) => void;
+    };
+  }
 
-  const dispatch = createEventDispatcher<{
-    updateListing: ImageListingItem[];
-  }>();
+  let { items = [], on }: Props = $props();
 
-  const onImageDelete = ({ detail }: { detail: string }) => {
-    listItems = items.filter((item) => item.id !== detail);
-    dispatch('updateListing', listItems);
+  const onImageDelete = (id: string) => {
+    on?.delete(id);
   };
-
-  $: listItems = items;
 </script>
 
 <div class="mt-8 flex flex-col items-center gap-6">
-  {#each listItems as item (item.id)}
+  {#each items as item (item.id)}
     <div
       out:fade={{ duration: 500 }}
       class="image-container w-full max-w-full break-inside-avoid rounded-lg border bg-gray-200/5 p-4 dark:border-gray-800/50 sm:w-[48rem]"
@@ -75,7 +73,7 @@
                   isPublic: item.attributes.isPublic,
                 }}
                 buttons={['download', 'visibility', 'copy', 'delete']}
-                on:imageDeleted={onImageDelete}
+                on={{ imageDelete: onImageDelete }}
               />
             </div>
 

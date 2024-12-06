@@ -1,21 +1,26 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte';
+
   import Icon from '@iconify/svelte';
 
-  export let loading = false;
-  export let customLoadingIcon: boolean = false;
+  interface Props {
+    loading?: boolean;
+    loadingIcon?: Snippet;
+    children?: Snippet;
+  }
 
-  const defaultLoadingIcon = {
-    icon: 'eos-icons:three-dots-loading',
-    class: 'h-full w-full max-w-5 max-h-5',
-  };
+  let { loading = false, loadingIcon, children }: Props = $props();
 </script>
 
 {#if loading}
-  {#if customLoadingIcon}
-    <slot name="loading" />
+  {#if loadingIcon}
+    {@render loadingIcon?.()}
   {:else}
-    <Icon {...defaultLoadingIcon} />
+    <Icon
+      icon="eos-icons:three-dots-loading"
+      class="h-full w-full max-w-5 max-h-5"
+    />
   {/if}
 {:else}
-  <slot />
+  {@render children?.()}
 {/if}

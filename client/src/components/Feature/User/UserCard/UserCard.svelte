@@ -1,13 +1,13 @@
 <script lang="ts">
-  import { type User, UserRole } from '@slink/lib/auth/Type/User';
-  import { UserStatus as UserStatusEnum } from '@slink/lib/auth/Type/User';
-  import { createEventDispatcher } from 'svelte';
+  import type { SingleUserResponse } from '@slink/api/Response/User/SingleUserResponse';
 
   import Icon from '@iconify/svelte';
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
-  import type { SingleUserResponse } from '@slink/api/Response/User/SingleUserResponse';
+
+  import { type User, UserRole } from '@slink/lib/auth/Type/User';
+  import { UserStatus as UserStatusEnum } from '@slink/lib/auth/Type/User';
 
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
   import { toast } from '@slink/utils/ui/toast';
@@ -20,12 +20,21 @@
   import { Dropdown, DropdownItem } from '@slink/components/UI/Form';
   import { Badge } from '@slink/components/UI/Text';
 
-  export let user: User = {} as User;
-  export let loggedInUser: User | null = null;
+  interface Props {
+    user?: User;
+    loggedInUser?: User | null;
+    on?: {
+      userDelete: (id: string) => void;
+    };
+  }
 
-  const dispatch = createEventDispatcher<{ userDeleted: string }>();
+  let {
+    user = $bindable({} as User),
+    loggedInUser = null,
+    on,
+  }: Props = $props();
 
-  let dropdownRef: Dropdown;
+  let dropdownRef: Dropdown | null = $state(null);
 
   const {
     isLoading: userStatusChanging,
@@ -37,7 +46,7 @@
       statusToChange = status;
       return ApiClient.user.changeUserStatus(user.id, status);
     },
-    { minExecutionTime: 300 }
+    { minExecutionTime: 300 },
   );
 
   const {
@@ -50,9 +59,10 @@
       statusToChange = UserStatusEnum.Deleted;
       return ApiClient.user.changeUserStatus(user.id, statusToChange);
     },
-    { minExecutionTime: 300 }
+    { minExecutionTime: 300 },
   );
 
+  // ToDo: throw exception if user is not active
   const {
     run: grantRole,
     data: grantRoleResponse,
@@ -62,7 +72,7 @@
     (role: UserRole) => {
       return ApiClient.user.grantRole(user.id, role);
     },
-    { minExecutionTime: 300 }
+    { minExecutionTime: 300 },
   );
 
   const {
@@ -74,10 +84,10 @@
     (role: UserRole) => {
       return ApiClient.user.revokeRole(user.id, role);
     },
-    { minExecutionTime: 300 }
+    { minExecutionTime: 300 },
   );
 
-  let statusToChange: UserStatusEnum | null = null;
+  let statusToChange: UserStatusEnum | null = $state(null);
   const closeDropdown = () => {
     if (!dropdownRef) {
       return;
@@ -99,21 +109,21 @@
           await deleteUser();
 
           toast.remove(user.id);
-          dispatch('userDeleted', user.id);
+          on?.userDelete(user.id);
         },
       },
     });
   };
 
-  const successHandler = async (response: SingleUserResponse | null) => {
-    if (!response) {
+  const successHandler = (userResponse: SingleUserResponse | null): void => {
+    if (!userResponse) {
       return;
     }
 
-    user.status = response.status;
-    user.roles = response.roles;
+    user = userResponse;
 
-    resetState();
+    statusToChange = null;
+    closeDropdown();
   };
 
   const errorHandler = (error: Error | null) => {
@@ -123,27 +133,21 @@
 
     statusToChange = null;
     printErrorsAsToastMessage(error);
-
-    resetState();
-  };
-
-  const resetState = () => {
-    statusToChange = null;
     closeDropdown();
   };
 
-  $: successHandler($userResponse);
-  $: successHandler($userDeleteResponse);
-  $: successHandler($grantRoleResponse);
-  $: successHandler($revokeRoleResponse);
+  $effect(() => successHandler($userResponse));
+  $effect(() => successHandler($userDeleteResponse));
+  $effect(() => successHandler($grantRoleResponse));
+  $effect(() => successHandler($revokeRoleResponse));
 
-  $: errorHandler($statusError);
-  $: errorHandler($userDeleteError);
-  $: errorHandler($grantRoleError);
-  $: errorHandler($revokeRoleError);
+  $effect(() => errorHandler($statusError));
+  $effect(() => errorHandler($userDeleteError));
+  $effect(() => errorHandler($grantRoleError));
+  $effect(() => errorHandler($revokeRoleError));
 
-  $: isAdmin = user.roles?.includes(UserRole.Admin);
-  $: isCurrentUser = user.id === loggedInUser?.id;
+  let isAdmin = $derived(user.roles?.includes(UserRole.Admin));
+  let isCurrentUser = $derived(user.id === loggedInUser?.id);
 </script>
 
 <div
@@ -176,65 +180,64 @@
           >
             {#if user.status === UserStatusEnum.Active}
               <DropdownItem
-                on:click={() => changeUserStatus(UserStatusEnum.Suspended)}
+                on={{ click: () => changeUserStatus(UserStatusEnum.Suspended) }}
                 loading={userStatusChanging &&
                   statusToChange === UserStatusEnum.Suspended}
               >
-                <Icon
-                  icon="lets-icons:cancel-duotone"
-                  class="h-4 w-4 text-red-400 group-hover:text-white"
-                  slot="icon"
-                />
+                {#snippet icon()}
+                  <Icon
+                    icon="lets-icons:cancel-duotone"
+                    class="h-4 w-4 text-red-400 group-hover:text-white"
+                  />
+                {/snippet}
                 <span>Suspend account</span>
               </DropdownItem>
             {:else}
               <DropdownItem
-                on:click={() => changeUserStatus(UserStatusEnum.Active)}
+                on={{ click: () => changeUserStatus(UserStatusEnum.Active) }}
                 loading={userStatusChanging &&
                   statusToChange === UserStatusEnum.Active}
               >
-                <Icon
-                  icon="lets-icons:add-square-duotone"
-                  class="h-4 w-4 text-green-500 group-hover:text-white dark:text-green-300"
-                  slot="icon"
-                />
+                {#snippet icon()}
+                  <Icon
+                    icon="lets-icons:add-square-duotone"
+                    class="h-4 w-4 text-green-500 group-hover:text-white dark:text-green-300"
+                  />
+                {/snippet}
                 <span>Enable account</span>
               </DropdownItem>
             {/if}
             {#if !isAdmin}
               <DropdownItem
-                on:click={() => grantRole(UserRole.Admin)}
+                on={{ click: () => grantRole(UserRole.Admin) }}
                 loading={$grantRoleLoading}
               >
-                <Icon
-                  icon="lets-icons:chield-duotone-line"
-                  class="h-4 w-4"
-                  slot="icon"
-                />
+                {#snippet icon()}
+                  <Icon icon="lets-icons:chield-duotone-line" class="h-4 w-4" />
+                {/snippet}
                 <span>Make admin</span>
               </DropdownItem>
             {:else}
               <DropdownItem
-                on:click={() => revokeRole(UserRole.Admin)}
+                on={{ click: () => revokeRole(UserRole.Admin) }}
                 loading={$revokeRoleLoading}
               >
-                <Icon
-                  icon="lets-icons:chield-light"
-                  class="h-4 w-4"
-                  slot="icon"
-                />
+                {#snippet icon()}
+                  <Icon icon="lets-icons:chield-light" class="h-4 w-4" />
+                {/snippet}
                 <span>Revoke admin</span>
               </DropdownItem>
             {/if}
             <hr
               class="border-t-[1px] border-neutral-500/20 dark:border-neutral-700/70"
             />
-            <DropdownItem danger={true} on:click={handleUserDeletion}>
-              <Icon
-                icon="solar:trash-bin-minimalistic-2-linear"
-                slot="icon"
-                class="h-4 w-4"
-              />
+            <DropdownItem danger={true} on={{ click: handleUserDeletion }}>
+              {#snippet icon()}
+                <Icon
+                  icon="solar:trash-bin-minimalistic-2-linear"
+                  class="h-4 w-4"
+                />
+              {/snippet}
               <span>Delete account</span>
             </DropdownItem>
           </Dropdown>

@@ -3,29 +3,29 @@
 
   import { Badge, type BadgeProps } from '@slink/components/UI/Text';
 
-  interface $$Props extends BadgeProps {
+  interface Props extends Omit<BadgeProps, 'variant'> {
     status?: UserStatus;
   }
 
-  export let status: UserStatus = UserStatus.Active;
+  let { status, ...props }: Props = $props();
 
-  $: {
+  let variant: BadgeProps['variant'] = $derived.by(() => {
     if (status === UserStatus.Active) {
-      $$props.variant = 'success';
+      return 'success';
     } else if (status === UserStatus.Inactive) {
-      $$props.variant = 'neutral';
+      return 'neutral';
     } else if (status === UserStatus.Suspended) {
-      $$props.variant = 'error-tinted';
+      return 'error-tinted';
     } else if (status === UserStatus.Banned) {
-      $$props.variant = 'error';
+      return 'error';
     } else {
-      $$props.variant = 'default';
+      return 'default';
     }
-  }
+  });
 </script>
 
 {#if status}
-  <Badge size="sm" outline {...$$props}>
+  <Badge size="sm" outline {variant} {...props}>
     <span class="capitalize">{status}</span>
   </Badge>
 {/if}

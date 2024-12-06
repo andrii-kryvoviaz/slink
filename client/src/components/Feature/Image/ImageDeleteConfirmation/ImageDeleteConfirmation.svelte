@@ -2,8 +2,6 @@
   import Icon from '@iconify/svelte';
   import { type Readable, readable } from 'svelte/store';
 
-  import type { ImageDetailsResponse } from '@slink/api/Response';
-
   import { Button } from '@slink/components/UI/Action';
   import { Toggle } from '@slink/components/UI/Form';
   import { Loader } from '@slink/components/UI/Loader';
@@ -13,12 +11,16 @@
     preserveOnDiskAfterDeletion: boolean;
   };
 
-  export let image: ImageDetailsResponse;
-  export let loading: Readable<boolean> = readable(false);
-  export let close: () => void;
-  export let confirm: ({ preserveOnDiskAfterDeletion }: ConfirmAction) => void;
+  interface Props {
+    image: { id: string };
+    loading?: Readable<boolean>;
+    close: () => void;
+    confirm: ({ preserveOnDiskAfterDeletion }: ConfirmAction) => void;
+  }
 
-  let preserveOnDiskAfterDeletion: boolean = false;
+  let { image, loading = readable(false), close, confirm }: Props = $props();
+
+  let preserveOnDiskAfterDeletion: boolean = $state(false);
 </script>
 
 <div class="text-left">
@@ -47,7 +49,7 @@
   <Toggle
     size="md"
     checked={!preserveOnDiskAfterDeletion}
-    on:change={({ detail }) => (preserveOnDiskAfterDeletion = !detail)}
+    on={{ change: (checked) => (preserveOnDiskAfterDeletion = !checked) }}
   />
 
   <div class="flex flex-grow items-center justify-between">
@@ -58,23 +60,18 @@
         Remove from Storage
       {/if}
     </span>
-    <Icon
-      icon="ep:info-filled"
-      id="preserve-on-disk-tooltip"
-      class="hidden cursor-help xs:block"
-    />
-    <Tooltip
-      triggeredBy="[id^='preserve-on-disk-tooltip']"
-      class="max-w-[12rem] p-2 text-center text-[0.7em]"
-      placement="top-end"
-    >
+    <Tooltip size="xs" side="top" align="end" width="lg">
+      {#snippet trigger()}
+        <Icon icon="ep:info-filled" class="hidden cursor-help xs:block" />
+      {/snippet}
+
       Deletes the file from storage, not just the database
     </Tooltip>
   </div>
 </div>
 
 <div class="mt-5 flex gap-2">
-  <Button variant="outline" size="sm" class="w-1/2" on:click={close}>
+  <Button variant="outline" size="sm" class="w-1/2" onclick={close}>
     Cancel
   </Button>
 
@@ -82,7 +79,7 @@
     variant="danger"
     size="sm"
     class="w-1/2"
-    on:click={() => confirm({ preserveOnDiskAfterDeletion })}
+    onclick={() => confirm({ preserveOnDiskAfterDeletion })}
   >
     Delete
   </Button>

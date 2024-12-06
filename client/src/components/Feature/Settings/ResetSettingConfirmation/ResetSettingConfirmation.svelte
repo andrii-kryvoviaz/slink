@@ -1,11 +1,14 @@
 <script lang="ts">
   import { Button } from '@slink/components/UI/Action';
 
-  export let close: () => void;
-  export let confirm: () => void;
+  interface Props {
+    close: () => void;
+    confirm: () => void;
+    name: string;
+    displayValue: string;
+  }
 
-  export let name: string;
-  export let displayValue: string;
+  let { close, confirm, name, displayValue }: Props = $props();
 </script>
 
 <p class="text-left text-sm">
@@ -14,11 +17,11 @@
 </p>
 
 <div class="mt-5 flex gap-2">
-  <Button variant="outline" size="sm" class="w-1/2" on:click={close}>
+  <Button variant="outline" size="sm" class="w-1/2" onclick={close}>
     Cancel
   </Button>
 
-  <Button variant="danger" size="sm" class="w-1/2" on:click={confirm}
+  <Button variant="danger" size="sm" class="w-1/2" onclick={confirm}
     >Reset & Save</Button
   >
 </div>

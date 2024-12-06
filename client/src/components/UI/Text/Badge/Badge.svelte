@@ -1,24 +1,29 @@
 <script lang="ts">
+  import type { BadgeProps } from '@slink/components/UI/Text/Badge/Badge.types';
+  import type { Snippet } from 'svelte';
+
   import { className } from '@slink/utils/ui/className';
 
   import { BadgeTheme } from '@slink/components/UI/Text/Badge/Badge.theme';
-  import type { BadgeProps } from '@slink/components/UI/Text/Badge/Badge.types';
 
-  interface $$Props extends BadgeProps {
+  interface Props extends BadgeProps {
     class?: string;
+    children?: Snippet;
   }
 
-  export let variant: $$Props['variant'] = 'default';
-  export let size: $$Props['size'] = 'md';
-  export let outline: $$Props['outline'] = false;
+  let {
+    variant = 'default',
+    size = 'md',
+    outline = false,
+    children,
+    ...props
+  }: Props = $props();
 
-  $: classes = `${BadgeTheme({
-    variant,
-    size,
-    outline,
-  })} ${$$props.class}`;
+  let classes = $derived(
+    className(BadgeTheme({ variant, size, outline }), props.class),
+  );
 </script>
 
 <span class={className(classes)}>
-  <slot />
+  {@render children?.()}
 </span>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { setContext } from 'svelte';
+  import { type Snippet, setContext } from 'svelte';
   import { twMerge } from 'tailwind-merge';
 
   import Icon from '@iconify/svelte';
@@ -13,16 +13,27 @@
     type MultiselectValue,
   } from '@slink/components/UI/Form';
 
-  export let type: MultiselectType = 'regular';
-  export let placeholder: string = 'None selected';
-  export let value: MultiselectValue<typeof type> = [];
+  interface Props {
+    type?: MultiselectType;
+    placeholder?: string;
+    value?: MultiselectValue<MultiselectType>;
+    name?: string;
+    children?: Snippet;
+  }
 
-  let isOpen = false;
+  let {
+    type = 'regular',
+    placeholder = 'None selected',
+    value = $bindable(),
+    children,
+    ...props
+  }: Props = $props();
+
+  let isOpen = $state(false);
   let container: HTMLElement;
   let menu: HTMLElement;
 
-  let items: Record<string, MultiselectItemData> = {};
-  let selectedItems: MultiselectItemData[] = [];
+  let items: Record<string, MultiselectItemData> = $state({});
 
   const toggle = () => {
     isOpen = !isOpen;
@@ -49,9 +60,13 @@
   };
 
   const handleUpdate = (
-    value: number | string[],
-    items: Record<string, MultiselectItemData>
+    value: MultiselectValue<MultiselectType> | undefined,
+    items: Record<string, MultiselectItemData>,
   ) => {
+    if (!value) {
+      return [];
+    }
+
     const itemValues = Object.values(items);
 
     if (type === 'bitmask' && typeof value === 'number') {
@@ -89,23 +104,32 @@
   const baseContentClasses =
     'md:absolute md:inset-auto md:m-1 min-w-full z-50 mx-auto w-56 origin-top-left max-h-fit divide-y divide-gray-100 rounded-md bg-white font-light shadow-lg ring-1 ring-black ring-opacity-5 dark:divide-zinc-700 dark:bg-zinc-900 select-none md:top-full md:right-0';
 
-  $: containerClasses = isOpen
-    ? twMerge(baseContainerClasses, focusContainerClasses)
-    : baseContainerClasses;
+  let containerClasses = $derived(
+    className(
+      isOpen
+        ? twMerge(baseContainerClasses, focusContainerClasses)
+        : baseContainerClasses,
+    ),
+  );
 
-  $: contentClasses = `${mobileContentClasses} ${baseContentClasses}`;
-  $: selectedItems = handleUpdate(value, items);
+  let contentClasses = $derived(
+    className(`${mobileContentClasses} ${baseContentClasses}`),
+  );
+
+  let selectedItems: MultiselectItemData[] = $derived(
+    handleUpdate(value, items),
+  );
 </script>
 
 <svelte:body on:click={handleClickOutside} />
 
-<div class={className(containerClasses)} bind:this={container}>
-  <input type="hidden" name={$$props.name} {value} />
+<div class={containerClasses} bind:this={container}>
+  <input type="hidden" name={props.name} {value} />
 
   <div
     class="flex flex-wrap gap-2 rounded-md bg-input-default p-2"
-    on:click={toggle}
-    on:keydown={(event) => event.key === 'Enter' && toggle()}
+    onclick={toggle}
+    onkeydown={(event) => event.key === 'Enter' && toggle()}
     role="combobox"
     aria-controls="dropdown-menu"
     aria-expanded={isOpen}
@@ -121,12 +145,11 @@
         {@html item.name}
         <div
           class="cursor-pointer rounded-md p-1 hover:bg-gray-300 dark:hover:bg-gray-600"
-          on:click={(event) => {
+          onclick={(event) => {
             event.stopPropagation();
             handleRemove(item.key);
           }}
-          on:keydown={(event) =>
-            event.key === 'Enter' && handleRemove(item.key)}
+          onkeydown={(event) => event.key === 'Enter' && handleRemove(item.key)}
           role="button"
           tabindex="0"
         >
@@ -139,19 +162,19 @@
   <div
     role="menu"
     tabindex="-1"
-    on:contextmenu|preventDefault
-    class={className(contentClasses)}
+    oncontextmenu={(event) => event.preventDefault()}
+    class={contentClasses}
     class:hidden={!isOpen}
     bind:this={menu}
   >
     <div class="flex flex-col gap-2 p-3">
-      <slot />
+      {@render children?.()}
     </div>
   </div>
   <button
     type="button"
     class="fixed inset-0 z-40 bg-black bg-opacity-50 backdrop-blur-md md:hidden"
     class:hidden={!isOpen}
-    on:click={() => (isOpen = false)}
+    onclick={() => (isOpen = false)}
   />
 </div>

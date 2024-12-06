@@ -1,13 +1,11 @@
 import { env } from '$env/dynamic/private';
-import { Auth } from '@slink/lib/auth/Auth';
-import { fail, redirect } from '@sveltejs/kit';
 
 import { HttpException } from '@slink/api/Exceptions';
-
+import { Auth } from '@slink/lib/auth/Auth';
 import { formData } from '@slink/utils/form/formData';
+import { fail, redirect } from '@sveltejs/kit';
 
 import type { Actions, PageServerLoad } from './$types';
-
 export const load: PageServerLoad = async ({ parent, locals }) => {
   await parent();
 

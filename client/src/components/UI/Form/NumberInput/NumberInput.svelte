@@ -1,31 +1,39 @@
 <script lang="ts">
-  import type { HTMLInputAttributes as BaseHTMLInputAttributes } from 'svelte/elements';
+  import type { Snippet } from 'svelte';
+  import type { HTMLInputAttributes } from 'svelte/elements';
 
   import { Input, type InputProps } from '@slink/components/UI/Form';
 
-  type HTMLInputAttributes = Pick<
-    BaseHTMLInputAttributes,
-    'value' | 'name' | 'step' | 'min'
-  >;
-
-  interface $$Props extends HTMLInputAttributes, InputProps {
+  interface Props
+    extends Pick<HTMLInputAttributes, 'value' | 'name' | 'step' | 'min'>,
+      InputProps {
     class?: string;
+    children?: Snippet;
   }
 
-  export let value: $$Props['value'] = '';
-  export let name: $$Props['name'] = '';
-  export let step: $$Props['step'] = 1;
-  export let min: $$Props['min'] = 0;
+  let {
+    value = $bindable(),
+    name,
+    step = 1,
+    min = 0,
+    children,
+    ...props
+  }: Props = $props();
 
-  $: inner = {
+  let inner = $derived({
     get value() {
       return value;
     },
 
     set value(newValue) {
+      if (newValue === null) {
+        value = null;
+        return;
+      }
+
       value = parseInt(newValue, 10);
     },
-  };
+  });
 </script>
 
 <Input
@@ -34,8 +42,8 @@
   {step}
   {name}
   bind:value={inner.value}
-  class={$$props.class}
-  error={$$props.error}
+  class={props.class}
+  error={props.error}
 >
-  <slot />
+  {@render children?.()}
 </Input>

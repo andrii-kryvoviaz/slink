@@ -6,10 +6,14 @@
   import { Button } from '@slink/components/UI/Action';
   import { Loader } from '@slink/components/UI/Loader';
 
-  export let user: User;
-  export let loading: Readable<boolean> = readable(false);
-  export let close: () => void;
-  export let confirm: () => void;
+  interface Props {
+    user: User;
+    loading?: Readable<boolean>;
+    close: () => void;
+    confirm: () => void;
+  }
+
+  let { user, loading = readable(false), close, confirm }: Props = $props();
 </script>
 
 <div class="text-left">
@@ -34,11 +38,11 @@
 </div>
 
 <div class="mt-5 flex gap-2">
-  <Button variant="outline" size="sm" class="w-1/2" on:click={close}>
+  <Button variant="outline" size="sm" class="w-1/2" onclick={close}>
     Cancel
   </Button>
 
-  <Button variant="danger" size="sm" class="w-1/2" on:click={confirm}>
+  <Button variant="danger" size="sm" class="w-1/2" onclick={confirm}>
     Delete
   </Button>
 </div>

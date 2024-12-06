@@ -1,22 +1,34 @@
 <script lang="ts">
-  import { Theme } from '@slink/lib/settings';
-  import { createEventDispatcher } from 'svelte';
-
   import Icon from '@iconify/svelte';
+
+  import { Theme } from '@slink/lib/settings';
 
   import { Toggle } from '@slink/components/UI/Form';
 
-  export let disabled = false;
-  export let checked = false;
+  interface Props {
+    disabled?: boolean;
+    checked?: boolean;
+    on: { change: (theme: Theme) => void };
+  }
 
-  const dispatch = createEventDispatcher<{ change: Theme }>();
+  let { disabled = false, checked = false, on }: Props = $props();
 
-  const handleThemeChange = ({ detail }: CustomEvent<boolean>) => {
-    dispatch('change', detail ? Theme.DARK : Theme.LIGHT);
+  const handleThemeChange = (checked: boolean) => {
+    on.change(checked ? Theme.DARK : Theme.LIGHT);
   };
 </script>
 
-<Toggle variant="primary" {checked} {disabled} on:change={handleThemeChange}>
-  <Icon slot="pre-icon" icon="ph:sun-thin" width="20" height="20" />
-  <Icon slot="post-icon" icon="ph:moon-thin" width="20" height="20" />
+<Toggle
+  variant="primary"
+  {checked}
+  {disabled}
+  on={{ change: handleThemeChange }}
+>
+  {#snippet preIcon()}
+    <Icon icon="ph:sun-thin" width="20" height="20" />
+  {/snippet}
+
+  {#snippet postIcon()}
+    <Icon icon="ph:moon-thin" width="20" height="20" />
+  {/snippet}
 </Toggle>

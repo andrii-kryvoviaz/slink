@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { settings } from '@slink/lib/settings';
+  import type { ActionData, PageData } from './$types';
 
   import { enhance } from '$app/forms';
   import Icon from '@iconify/svelte';
@@ -7,26 +7,32 @@
 
   import { useWritable } from '@slink/store/contextAwareStore';
 
+  import { settings } from '@slink/lib/settings';
+
   import { withLoadingState } from '@slink/utils/form/withLoadingState';
   import { toast } from '@slink/utils/ui/toast';
 
   import { Button, type ButtonVariant } from '@slink/components/UI/Action';
   import { Input } from '@slink/components/UI/Form';
 
-  import type { ActionData, PageData } from './$types';
+  interface Props {
+    form: ActionData;
+    data: PageData;
+  }
 
-  export let form: ActionData;
-  export let data: PageData;
+  let { form, data }: Props = $props();
 
   let isLoading = useWritable('loginFormLoadingState', false);
-  let buttonVariant: ButtonVariant = 'primary';
 
   const { isLight } = settings.get('theme', data.settings.theme);
 
-  $: buttonVariant = $isLight ? 'dark' : 'primary';
-  $: if (form?.errors.message) {
-    toast.error(form.errors.message);
-  }
+  let buttonVariant: ButtonVariant = $derived($isLight ? 'dark' : 'primary');
+
+  $effect(() => {
+    if (form?.errors.message) {
+      toast.error(form.errors.message as string);
+    }
+  });
 </script>
 
 <svelte:head>
@@ -58,7 +64,9 @@
               form?.errors.email ||
               !!form?.errors.credentials}
           >
-            <Icon icon="ph:user" slot="leftIcon" />
+            {#snippet leftIcon()}
+              <Icon icon="ph:user" />
+            {/snippet}
           </Input>
         </div>
 
@@ -69,7 +77,9 @@
             type="password"
             error={form?.errors.password || form?.errors.credentials}
           >
-            <Icon icon="ph:password-light" slot="leftIcon" />
+            {#snippet leftIcon()}
+              <Icon icon="ph:password-light" />
+            {/snippet}
           </Input>
           <!-- ToDo: Implement forget password feature
             <a
@@ -90,7 +100,9 @@
           loading={$isLoading}
         >
           <span>Sign In</span>
-          <Icon icon="fluent:chevron-right-48-regular" slot="rightIcon" />
+          {#snippet rightIcon()}
+            <Icon icon="fluent:chevron-right-48-regular" />
+          {/snippet}
         </Button>
       </div>
     </form>

@@ -11,11 +11,11 @@
   const store = toast.list();
   const flyOptions = { x: -200, y: 0 };
 
-  $: componentToasts = derived(store, ($toasts) => {
+  let componentToasts = derived(store, ($toasts) => {
     return $toasts.filter((toast) => toast.type === 'component');
   });
 
-  $: textToasts = derived(store, ($toasts) => {
+  let textToasts = derived(store, ($toasts) => {
     return $toasts.filter((toast) => toast.type !== 'component');
   });
 </script>
@@ -28,18 +28,18 @@
       <div
         in:fly={flyOptions}
         out:fade
-        on:mouseenter={timer?.pause}
-        on:mouseleave={timer?.resume}
+        onmouseenter={timer?.pause}
+        onmouseleave={timer?.resume}
         role="alert"
       >
         <ToastItem>
           <ToastMessage removeToast={() => toast.remove(id)}>
-            <span slot="icon">
+            {#snippet messageIcon()}
               <Icon
                 icon={icon || 'mdi:information-outline'}
                 class="relative top-[-2px] mr-1 inline-block text-2xl {iconColor}"
               />
-            </span>
+            {/snippet}
 
             <span>{@html message}</span>
           </ToastMessage>
@@ -47,16 +47,16 @@
       </div>
     {/each}
 
-    {#each $componentToasts as { id, timer, component, props }}
+    {#each $componentToasts as { id, timer, component: ToastComponent, props }}
       <div
         in:fly={flyOptions}
         out:fade
-        on:mouseenter={timer?.pause}
-        on:mouseleave={timer?.resume}
+        onmouseenter={timer?.pause}
+        onmouseleave={timer?.resume}
         role="alertdialog"
       >
         <ToastItem>
-          <svelte:component this={component} {...props} />
+          <ToastComponent {...props} />
         </ToastItem>
       </div>
     {/each}
