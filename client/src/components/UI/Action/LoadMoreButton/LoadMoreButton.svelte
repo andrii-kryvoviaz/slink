@@ -17,10 +17,13 @@
     <Button size="md" variant="secondary" {...$$props} on:click>
       <slot name="text">Load More</slot>
       <slot name="icon" slot="leftIcon">
-        <Icon icon="teenyicons:refresh-solid" class="h-3 w-3" />
+        <Icon icon="teenyicons:refresh-solid" class="h-2.5 w-2.5" />
       </slot>
       <slot name="loadingIcon" slot="loadingIcon">
-        <Icon icon="teenyicons:refresh-solid" class="h-3 w-3 animate-spin" />
+        <Icon
+          icon="teenyicons:refresh-solid"
+          class="h-2.5 w-2.5 animate-spin"
+        />
       </slot>
     </Button>
   </div>
