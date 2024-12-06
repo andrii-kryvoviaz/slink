@@ -1,6 +1,6 @@
 ARG NODE_VERSION=20.9.0
 
-ARG PHP_VERSION=8.3.11
+ARG PHP_VERSION=8.4.1
 ARG PHP_MEMORY_LIMIT=512M
 
 ARG UPLOAD_MAX_FILESIZE_IN_BYTES=52428800
@@ -81,17 +81,18 @@ RUN apk update && apk upgrade &&\
 RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS git autoconf g++ make linux-headers curl-dev libmcrypt-dev icu-dev imagemagick-dev postgresql-dev libpng-dev libwebp-dev freetype-dev libjpeg-turbo-dev oniguruma-dev samba-dev && \
     docker-php-ext-configure gd --with-jpeg --with-freetype --with-webp && \
     docker-php-ext-install curl intl mysqli pdo_pgsql mbstring gd exif && \
-    pecl install mcrypt smbclient && \
+    pecl install smbclient && \
     # Imagick PHP 8.3 bug (https://github.com/Imagick/imagick/pull/641)
     git clone https://github.com/Imagick/imagick.git --depth 1 /tmp/imagick && \
     cd /tmp/imagick && \
+    sed -i 's/php_strtolower/zend_str_tolower/g' imagick.c && \
     phpize && \
     ./configure && \
     make && \
     make install && \
     rm -rf /tmp/imagick && \
     # End of Imagick fix
-    docker-php-ext-enable mcrypt imagick smbclient && \
+    docker-php-ext-enable imagick smbclient && \
     apk del .build-deps
 
 # Copy supervisor config
