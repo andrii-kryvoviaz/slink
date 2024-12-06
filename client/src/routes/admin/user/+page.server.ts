@@ -7,7 +7,7 @@ export const load: PageServerLoad = async ({ parent, locals }) => {
 
   const { user } = locals;
 
-  let { meta, data: items } = await ApiClient.user.getUsers(1, { limit: 1 });
+  let { meta, data: items } = await ApiClient.user.getUsers(1, { limit: 20 });
 
   return {
     user,
