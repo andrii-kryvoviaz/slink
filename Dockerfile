@@ -210,7 +210,7 @@ EXPOSE 8080
 FROM base AS prod
 # Install Production PHP extensions
 RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS autoconf g++ make linux-headers brotli-dev && \
-    pecl install swoole && \
+    pecl install swoole-6.0.0RC1 && \
     docker-php-ext-enable swoole opcache && \
     apk del .build-deps
 
