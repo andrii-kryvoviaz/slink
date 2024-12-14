@@ -19,6 +19,7 @@
         "ramsey/uuid": "^4.7",
         "ramsey/uuid-doctrine": "^2.0",
         "runtime/swoole": "^0.4.0",
+        "symfony/cache": "^7.2",
         "symfony/console": "^7.2",
         "symfony/doctrine-messenger": "^7.2",
         "symfony/dotenv": "^7.2",

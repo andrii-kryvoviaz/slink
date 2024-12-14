@@ -81,7 +81,7 @@ RUN apk update && apk upgrade &&\
 RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS git autoconf g++ make linux-headers curl-dev libmcrypt-dev icu-dev imagemagick-dev postgresql-dev libpng-dev libwebp-dev freetype-dev libjpeg-turbo-dev oniguruma-dev samba-dev && \
     docker-php-ext-configure gd --with-jpeg --with-freetype --with-webp && \
     docker-php-ext-install curl intl mysqli pdo_pgsql mbstring gd exif && \
-    pecl install smbclient && \
+    pecl install redis smbclient && \
     # Imagick PHP 8.3 bug (https://github.com/Imagick/imagick/pull/641)
     git clone https://github.com/Imagick/imagick.git --depth 1 /tmp/imagick && \
     cd /tmp/imagick && \
@@ -92,7 +92,7 @@ RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS git autoconf g++ make 
     make install && \
     rm -rf /tmp/imagick && \
     # End of Imagick fix
-    docker-php-ext-enable imagick smbclient && \
+    docker-php-ext-enable imagick redis smbclient && \
     apk del .build-deps
 
 # Copy supervisor config

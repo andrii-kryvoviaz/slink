@@ -9,6 +9,7 @@ use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\NonUniqueResultException;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractProjection;
+use Slink\User\Application\Service\UserRoleManagerInterface;
 use Slink\User\Domain\Event\Role\UserGrantedRole;
 use Slink\User\Domain\Event\Role\UserRevokedRole;
 use Slink\User\Domain\Event\UserDisplayNameWasChanged;
@@ -22,10 +23,12 @@ use Slink\User\Infrastructure\ReadModel\View\UserView;
 final class UserProjection extends AbstractProjection {
   /**
    * @param UserRepositoryInterface $repository
+   * @param UserRoleManagerInterface $userRoleManager
    * @param EntityManagerInterface $entityManager
    */
   public function __construct(
     private readonly UserRepositoryInterface $repository,
+    private readonly UserRoleManagerInterface $userRoleManager,
     private readonly EntityManagerInterface $entityManager
   ) {
   }
@@ -93,8 +96,9 @@ final class UserProjection extends AbstractProjection {
     }
     
     $user->addRole($roleReference);
-    
     $this->repository->save($user);
+    
+    $this->userRoleManager->storePermissionsVersion($event->id->toString(), time());
   }
   
   /**
@@ -115,7 +119,8 @@ final class UserProjection extends AbstractProjection {
     }
     
     $user->removeRole($roleReference);
-    
     $this->repository->save($user);
+    
+    $this->userRoleManager->storePermissionsVersion($event->id->toString(), time());
   }
 }

@@ -9,6 +9,14 @@ framework:
     #esi: true
     #fragments: true
 
+    cache:
+        default_redis_provider: 'redis://localhost'
+
+        pools:
+            user_permissions_version:
+                adapter: cache.adapter.redis
+                default_lifetime: 0
+
 when@test:
     framework:
         test: true
