@@ -15,6 +15,9 @@
 
   let { data, children } = $props();
 
+  // ToDo: find a way to make data reactive as it was in Svelte 4
+  let user = $derived(data.user);
+
   const currentTheme = settings.get('theme', data.settings.theme);
   const { isDark } = currentTheme;
 </script>
@@ -31,7 +34,7 @@
 
       {#snippet profile()}
         <div class="max-h-10">
-          {#if !data.user}
+          {#if !user}
             <Button
               href="/profile/login"
               motion="hover:opacity"
@@ -44,7 +47,7 @@
               </span>
             </Button>
           {:else}
-            <UserDropdown user={data.user} isDark={$isDark} />
+            <UserDropdown {user} isDark={$isDark} />
           {/if}
         </div>
       {/snippet}

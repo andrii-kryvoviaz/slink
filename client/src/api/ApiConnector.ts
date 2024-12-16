@@ -1,7 +1,7 @@
+import type { Handle } from '@sveltejs/kit';
+
 import { Auth } from '@slink/lib/auth/Auth';
 import { Session } from '@slink/lib/auth/Session';
-import { type Handle } from '@sveltejs/kit';
-
 import { cloneRequestBody } from '@slink/utils/http/cloneRequestBody';
 import { getResponseWithCookies } from '@slink/utils/http/cookie';
 
@@ -43,7 +43,7 @@ export const ApiConnector = (options: ApiOptions): Handle => {
     if (request.headers.has('Authorization')) {
       headers.set(
         'Authorization',
-        request.headers.get('Authorization') as string
+        request.headers.get('Authorization') as string,
       );
     } else if (session?.accessToken) {
       headers.set('Authorization', `Bearer ${session.accessToken}`);

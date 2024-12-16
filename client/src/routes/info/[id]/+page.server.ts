@@ -1,9 +1,7 @@
-import { error, redirect } from '@sveltejs/kit';
-
+import type { PageServerLoad } from './$types';
 import { ApiClient } from '@slink/api/Client';
 import { ForbiddenException } from '@slink/api/Exceptions';
-
-import type { PageServerLoad } from './$types';
+import { error, redirect } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ params, locals, parent }) => {
   await parent();
@@ -13,7 +11,9 @@ export const load: PageServerLoad = async ({ params, locals, parent }) => {
   }
 
   try {
-    return ApiClient.image.getDetails(params.id);
+    const image = await ApiClient.image.getDetails(params.id);
+
+    return { image };
   } catch (e: unknown) {
     if (e instanceof ForbiddenException) {
       error(e.status, {

@@ -25,7 +25,8 @@
     data: PageData;
   }
 
-  let { data = $bindable() }: Props = $props();
+  let { data }: Props = $props();
+  let image = $state(data.image);
 
   const formatImageUrl = (
     url: string | string[],
@@ -47,7 +48,7 @@
 
   let params: Partial<ImageParams> = $state({});
   let directLink: string = $derived(
-    formatImageUrl([$page.url.origin, data.url], params),
+    formatImageUrl([$page.url.origin, image.url], params),
   );
 
   const handleImageSizeChange = (value?: Partial<ImageSize>) => {
@@ -70,14 +71,14 @@
   });
 
   const handleSaveDescription = async (description: string) => {
-    await updateDescription(data.id, description);
+    await updateDescription(image.id, description);
 
     if ($updateDescriptionError) {
       printErrorsAsToastMessage($updateDescriptionError);
       return;
     }
 
-    data = { ...data, description };
+    image = { ...image, description };
   };
 </script>
 
@@ -91,17 +92,17 @@
 >
   <div class="container flex flex-row flex-wrap justify-center gap-6">
     <div class="flex w-fit max-w-full justify-start">
-      <ImagePlaceholder src={data.url} metadata={data} />
+      <ImagePlaceholder src={image.url} metadata={image} />
     </div>
 
     <div class="min-w-0 px-2">
       <div class="mb-12">
-        <ImageActionBar image={data} />
+        <ImageActionBar {image} />
       </div>
 
       <p class="mb-4 mt-8 w-full">
         <ImageDescription
-          description={data.description}
+          description={image.description}
           isLoading={$descriptionIsLoading}
           on={{
             change: (description: string) => handleSaveDescription(description),
@@ -114,11 +115,11 @@
         </p>
         <CopyContainer value={directLink} />
       </div>
-      {#if data.supportsResize}
+      {#if image.supportsResize}
         <div class="mb-2 flex items-center gap-3">
           <ImageSizePicker
-            width={data.width}
-            height={data.height}
+            width={image.width}
+            height={image.height}
             on={{ change: (size) => handleImageSizeChange(size) }}
           />
           <Tooltip size="xs" side="top" align="end">

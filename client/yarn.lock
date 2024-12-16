@@ -502,10 +502,10 @@
     "@rollup/plugin-node-resolve" "^15.3.0"
     rollup "^4.9.5"
 
-"@sveltejs/kit@^2.9.0":
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-2.9.0.tgz#6c0218f2cd3a4d2294b5e2dbe204fee7540ecea4"
-  integrity sha512-W3E7ed3ChB6kPqRs2H7tcHp+Z7oiTFC6m+lLyAQQuyXeqw6LdNuuwEUla+5VM0OGgqQD+cYD6+7Xq80vVm17Vg==
+"@sveltejs/kit@^2.11.1":
+  version "2.11.1"
+  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-2.11.1.tgz#8be56b680f9e915f2e8bfeddb3f507e5738b1672"
+  integrity sha512-dAiHDEd+AOm20eYdMPV1a2eKBOc0s/7XsSs7PCoNv2kKS7BAoVRC9uzR+FQmxLtp8xuEo9z8CtrMQoszkThltQ==
   dependencies:
     "@types/cookie" "^0.6.0"
     cookie "^0.6.0"
@@ -1601,10 +1601,10 @@ svelte-toolbelt@^0.4.4:
     clsx "^2.1.1"
     style-to-object "^1.0.8"
 
-svelte@^5.7.1:
-  version "5.7.1"
-  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.7.1.tgz#af412a57e6ef4be398a82a9b834f2031fb59f68d"
-  integrity sha512-kUtiiNcN7ssi5X8OQW8IILoI53RUudjn8TD1910i8cg5c5IRZ4IuaDO1vFl+kZcvv1geYBxlFpi/mj09m/CCBg==
+svelte@^5.14.0:
+  version "5.14.0"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.14.0.tgz#5871f95104d799902681422535bd9e18c88f8516"
+  integrity sha512-xHrS9dd2Ci9GJd2sReNFqJztoe515wB4OzsPw4A8L2M6lddLFkREkWDJnM5DAND30Zyvjwc1icQVzH0F+Sdx5A==
   dependencies:
     "@ampproject/remapping" "^2.3.0"
     "@jridgewell/sourcemap-codec" "^1.5.0"
