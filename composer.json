@@ -16,6 +16,7 @@
         "lexik/jwt-authentication-bundle": "3.0.0",
         "nelmio/api-doc-bundle": "^4.12",
         "nelmio/cors-bundle": "^2.3",
+        "predis/predis": "^2.3",
         "ramsey/uuid": "^4.7",
         "ramsey/uuid-doctrine": "^2.0",
         "runtime/swoole": "^0.4.0",
