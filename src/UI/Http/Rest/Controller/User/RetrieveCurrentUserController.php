@@ -8,7 +8,7 @@ use Slink\Shared\Application\Query\QueryTrait;
 use Slink\User\Application\Query\User\FindUserById\FindUserByIdQuery;
 use Slink\User\Infrastructure\Auth\JwtUser;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use UI\Http\Rest\Response\ApiResponse;

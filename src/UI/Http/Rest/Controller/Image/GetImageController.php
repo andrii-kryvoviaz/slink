@@ -10,7 +10,7 @@ use Slink\Shared\Application\Command\CommandTrait;
 use Slink\Shared\Application\Query\QueryTrait;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use UI\Http\Rest\Response\ContentResponse;
 
 #[AsController]
