@@ -17,7 +17,7 @@
     "@iconify/svelte": "^3.1.4",
     "@sveltejs/adapter-auto": "^3.3.1",
     "@sveltejs/adapter-node": "^5.2.9",
-    "@sveltejs/kit": "^2.11.1",
+    "@sveltejs/kit": "^2.12.1",
     "@sveltejs/vite-plugin-svelte": "^5.0.1",
     "@trivago/prettier-plugin-sort-imports": "^5.0.1",
     "@types/dotenv": "^8.2.0",
