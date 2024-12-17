@@ -60,6 +60,7 @@ export const ApiConnector = (options: ApiOptions): Handle => {
     };
 
     let response = await fetch(proxyUrl, requestOptions);
+    let authRefreshed = false;
 
     if (response.status === 401 && cookies.get('sessionId')) {
       const sessionId = cookies.get('sessionId') as string;
@@ -90,9 +91,10 @@ export const ApiConnector = (options: ApiOptions): Handle => {
         }
 
         response = await fetch(proxyUrl, requestOptions);
+        authRefreshed = true;
       }
     }
 
-    return getResponseWithCookies(response, cookies);
+    return getResponseWithCookies({ response, cookies, authRefreshed });
   };
 };

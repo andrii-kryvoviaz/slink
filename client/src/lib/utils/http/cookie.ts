@@ -35,7 +35,7 @@ class Cookie {
 
   private _warningMessage() {
     console.warn(
-      `You are currently running in a server environment. Use SvelteKit's cookies to manage cookies on the server.`
+      `You are currently running in a server environment. Use SvelteKit's cookies to manage cookies on the server.`,
     );
   }
 
@@ -68,10 +68,17 @@ class Cookie {
 
 export const cookie = new Cookie();
 
-export const getResponseWithCookies = (
-  response: Response,
-  cookies: Cookies
-): Response => {
+type ResponseWithCookiesData = {
+  response: Response;
+  cookies: Cookies;
+  authRefreshed?: boolean;
+};
+
+export const getResponseWithCookies = ({
+  response,
+  cookies,
+  authRefreshed,
+}: ResponseWithCookiesData): Response => {
   const { body, status } = response;
   const headers = new Headers(response.headers);
 
@@ -86,6 +93,10 @@ export const getResponseWithCookies = (
       headers.append('Set-Cookie', cookieString);
     }
   });
+
+  if (authRefreshed) {
+    headers.append('x-auth-refreshed', 'true');
+  }
 
   return new Response(body, {
     status,

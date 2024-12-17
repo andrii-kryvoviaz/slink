@@ -14,8 +14,6 @@
   import { ToastManager } from '@slink/components/UI/Toast';
 
   let { data, children } = $props();
-
-  // ToDo: find a way to make data reactive as it was in Svelte 4
   let user = $derived(data.user);
 
   const currentTheme = settings.get('theme', data.settings.theme);
