@@ -16,7 +16,7 @@ export class RegexHelper {
   static extractRegexGroupsToArray(
     regexPattern: RegexPattern,
     content: string,
-    { group = 1, defaultValue = [] }: RegexMatchOptions = {}
+    { group = 1, defaultValue = [] }: RegexMatchOptions = {},
   ): string[] {
     const regex = this.getRegexPattern(regexPattern);
     return (
@@ -28,7 +28,7 @@ export class RegexHelper {
   static matchString(
     regexPattern: RegexPattern,
     content: string,
-    { group = 1, defaultValue = [] }: RegexMatchOptions = {}
+    { group = 1, defaultValue = [] }: RegexMatchOptions = {},
   ): string {
     const regex = this.getRegexPattern(regexPattern);
     return content.match(regex)?.[group] || defaultValue;

@@ -226,7 +226,7 @@ function injectAlphaPlaceholder(object: any): any {
       if (typeof value === 'string') {
         newObj[key] = value.replace(
           /^var\(--(.+?)\)$/,
-          'rgb(var(--$1) / <alpha-value>)'
+          'rgb(var(--$1) / <alpha-value>)',
         );
       } else if (typeof value === 'object' && value !== null) {
         newObj[key] = injectAlphaPlaceholder(value); // Recurse for nested objects
@@ -235,6 +235,6 @@ function injectAlphaPlaceholder(object: any): any {
       }
       return newObj;
     },
-    Array.isArray(object) ? [] : {}
+    Array.isArray(object) ? [] : {},
   );
 }

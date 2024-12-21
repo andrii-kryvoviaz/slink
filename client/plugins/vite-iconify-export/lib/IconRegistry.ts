@@ -19,7 +19,7 @@ export class IconRegistry {
   private addLinkToMap(
     map: Map<string, Set<string>>,
     key: string,
-    value: string
+    value: string,
   ): void {
     if (!map.has(key)) {
       map.set(key, new Set());

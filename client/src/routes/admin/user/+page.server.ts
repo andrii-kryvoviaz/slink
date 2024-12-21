@@ -1,6 +1,6 @@
-import { ApiClient } from '@slink/api/Client';
-
 import type { PageServerLoad } from './$types';
+
+import { ApiClient } from '@slink/api/Client';
 
 export const load: PageServerLoad = async ({ parent, locals }) => {
   await parent();

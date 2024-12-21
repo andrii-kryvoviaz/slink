@@ -21,5 +21,5 @@ export const InputTheme = cva(
         lg: 'rounded-lg',
       },
     },
-  }
+  },
 );

@@ -5,7 +5,7 @@ import { type Readable, type Writable, readable, writable } from 'svelte/store';
 export const useSharedStore = <T, A>(
   name: string,
   fn: (value?: A) => T,
-  defaultValue?: A
+  defaultValue?: A,
 ): T => {
   if (hasContext(name)) {
     return getContext<T>(name);

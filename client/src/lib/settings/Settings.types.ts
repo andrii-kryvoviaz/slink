@@ -1,7 +1,7 @@
-import { Theme } from '@slink/lib/settings/index';
 import type { SidebarSettings } from '@slink/lib/settings/setters/sidebar';
-
 import type { Readable, Writable } from 'svelte/store';
+
+import { Theme } from '@slink/lib/settings/index';
 
 export type Settings = {
   theme: SettingsValue<Theme> & {
@@ -20,7 +20,7 @@ export type SettingsValue<T> = {
 };
 
 export type Setter<K extends SettingsKey, T> = (
-  value: Writable<T>
+  value: Writable<T>,
 ) => Settings[K];
 
 export type SettingsCombinedValue<T extends SettingsKey> = Omit<

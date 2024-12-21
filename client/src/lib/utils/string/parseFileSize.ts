@@ -7,7 +7,7 @@ type SizeUnitValue = keyof typeof SizeUnitType;
 type SizeUnit = (typeof SizeUnitType)[SizeUnitValue];
 
 export const sizeMatchingRegex = new RegExp(
-  `(\\d+)(${Object.keys(SizeUnitType).join('|')})`
+  `(\\d+)(${Object.keys(SizeUnitType).join('|')})`,
 );
 
 const formatSizeUnit = (unit: SizeUnitValue): SizeUnit => {
@@ -15,7 +15,7 @@ const formatSizeUnit = (unit: SizeUnitValue): SizeUnit => {
 };
 
 export const parseFileSize = (
-  fileSize: string
+  fileSize: string,
 ): {
   size: string;
   unit: SizeUnit;

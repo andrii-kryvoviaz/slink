@@ -1,10 +1,11 @@
-import { Theme } from '@slink/lib/settings/Settings.enums';
 import type {
   CookieSettings,
   SettingsKey,
 } from '@slink/lib/settings/Settings.types';
-import { SettingsManager } from '@slink/lib/settings/SettingsManager';
 import type { Handle } from '@sveltejs/kit';
+
+import { Theme } from '@slink/lib/settings/Settings.enums';
+import { SettingsManager } from '@slink/lib/settings/SettingsManager';
 
 import { tryJson } from '@slink/utils/string/json';
 

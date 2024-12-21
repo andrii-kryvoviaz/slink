@@ -1,9 +1,9 @@
 <script lang="ts">
+  import type { PageServerData } from './$types';
+
   import { fly } from 'svelte/transition';
 
   import { Button, CopyContainer } from '@slink/components/UI/Action';
-
-  import type { PageServerData } from './$types';
 
   interface Props {
     data: PageServerData;

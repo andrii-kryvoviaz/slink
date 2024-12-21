@@ -1,8 +1,7 @@
+import type { PageServerLoad } from './$types';
 import { redirect } from '@sveltejs/kit';
 
 import { ApiClient } from '@slink/api/Client';
-
-import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ cookies, locals }) => {
   const userId = cookies.get('createdUserId');

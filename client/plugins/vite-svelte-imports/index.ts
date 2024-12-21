@@ -19,7 +19,7 @@ const name = 'vite-svelte-imports-plugin';
 
 function createRunner(
   modules: string[],
-  { enableLogging = false }: Partial<PluginOptions>
+  { enableLogging = false }: Partial<PluginOptions>,
 ) {
   const isRunning: Map<string, boolean> = new Map();
 

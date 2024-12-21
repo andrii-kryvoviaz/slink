@@ -1,9 +1,10 @@
 import { env } from '$env/dynamic/private';
-import { Theme, setCookieSettingsOnLocals } from '@slink/lib/settings';
 import type { Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
 import { ApiConnector } from '@slink/api/ApiConnector';
+
+import { Theme, setCookieSettingsOnLocals } from '@slink/lib/settings';
 
 const injectApiHandling: Handle = ApiConnector({
   urlPrefix: env.API_PREFIX,
@@ -32,5 +33,5 @@ export const handle = sequence(
   filterResponseHeaders,
   injectApiHandling,
   setCookieSettingsOnLocals,
-  applyClientTheme
+  applyClientTheme,
 );

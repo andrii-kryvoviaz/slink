@@ -16,5 +16,5 @@ export const UserAvatarTheme = cva(
         xl: 'w-24 h-24 text-[1.5rem]',
       },
     },
-  }
+  },
 );

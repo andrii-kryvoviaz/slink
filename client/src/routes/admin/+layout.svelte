@@ -2,6 +2,7 @@
   import Icon from '@iconify/svelte';
 
   import { TabMenu, TabMenuItem } from '@slink/components/UI/Navigation';
+
   interface Props {
     children?: import('svelte').Snippet;
   }

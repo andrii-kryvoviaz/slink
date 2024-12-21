@@ -5,10 +5,12 @@ import type { Readable, Writable } from 'svelte/store';
 import { browser } from '$app/environment';
 import { derived, readable } from 'svelte/store';
 
-import { commonToastThemeMap } from '@slink/components/UI/Toast/Toast.theme';
 import { useWritable } from '@slink/store/contextAwareStore';
+
 import { randomId } from '@slink/utils/string/randomId';
 import { createTimer } from '@slink/utils/time/timer';
+
+import { commonToastThemeMap } from '@slink/components/UI/Toast/Toast.theme';
 
 type Toast = ToastOptions & {
   id: string;

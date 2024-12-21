@@ -1,9 +1,10 @@
-import { RedisSessionProvider } from '@slink/lib/auth/SessionProvider/RedisSessionProvider';
 import type { SessionProviderInterface } from '@slink/lib/auth/SessionProvider/SessionProviderInterface';
 import type { User } from '@slink/lib/auth/Type/User';
 import type { Cookies } from '@sveltejs/kit';
 
 import { browser } from '$app/environment';
+
+import { RedisSessionProvider } from '@slink/lib/auth/SessionProvider/RedisSessionProvider';
 
 type SessionItem = {
   data: SessionData;
@@ -34,7 +35,7 @@ class SessionManager {
 
   public async create(
     cookies: Cookies,
-    ttl: number | null = null
+    ttl: number | null = null,
   ): Promise<string> {
     const existingSessionId = cookies.get('sessionId');
 
@@ -61,7 +62,7 @@ class SessionManager {
   }
 
   public async get(
-    sessionId: string | undefined
+    sessionId: string | undefined,
   ): Promise<SessionData | undefined> {
     if (!sessionId) return;
 
@@ -80,7 +81,7 @@ class SessionManager {
   public async set(
     sessionId: string | undefined,
     data: Partial<SessionData>,
-    ttl: number | null = null
+    ttl: number | null = null,
   ) {
     if (!sessionId) return;
 

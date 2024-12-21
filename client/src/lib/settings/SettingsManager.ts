@@ -4,14 +4,15 @@ import type {
   SettingsCombinedValue,
   SettingsKey,
 } from '@slink/lib/settings/Settings.types';
-import { SettingsMap } from '@slink/lib/settings/SettingsMap';
-import { SidebarSetter } from '@slink/lib/settings/setters/sidebar';
-import { ThemeSetter } from '@slink/lib/settings/setters/theme';
 
 import { browser } from '$app/environment';
 import { type Writable, writable } from 'svelte/store';
 
 import { useWritable } from '@slink/store/contextAwareStore';
+
+import { SettingsMap } from '@slink/lib/settings/SettingsMap';
+import { SidebarSetter } from '@slink/lib/settings/setters/sidebar';
+import { ThemeSetter } from '@slink/lib/settings/setters/theme';
 
 import { cookie } from '@slink/utils/http/cookie';
 import { tryJson } from '@slink/utils/string/json';
@@ -30,7 +31,7 @@ export class SettingsManager {
 
   public get<T extends SettingsKey>(
     key: T,
-    defaultValue?: any | undefined
+    defaultValue?: any | undefined,
   ): SettingsCombinedValue<T> {
     if (!this._settings.has(key)) {
       return this._fallback(key, defaultValue);
@@ -54,7 +55,7 @@ export class SettingsManager {
   }
 
   private _formReturnValue<T extends SettingsKey>(
-    data: Settings[T]
+    data: Settings[T],
   ): SettingsCombinedValue<T> {
     const { value, ...rest }: any = data;
 
@@ -70,7 +71,7 @@ export class SettingsManager {
 
   private _fallback<T extends SettingsKey>(
     key: T,
-    defaultValue: any
+    defaultValue: any,
   ): SettingsCombinedValue<T> {
     if (browser) {
       const cookieValue = cookie.get(`settings.${key}`, defaultValue);
@@ -97,7 +98,7 @@ export class SettingsManager {
 
   private _apply<K extends SettingsKey, T>(
     key: K,
-    store: Writable<T>
+    store: Writable<T>,
   ): Settings[K] {
     if (!this._setters[key]) {
       return store as unknown as Settings[K];

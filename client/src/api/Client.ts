@@ -5,10 +5,19 @@ import { browser } from '$app/environment';
 import { invalidateAll } from '$app/navigation';
 
 import {
-  BadRequestException, ForbiddenException, NotFoundException, UnauthorizedException, ValidationException
+  BadRequestException,
+  ForbiddenException,
+  NotFoundException,
+  UnauthorizedException,
+  ValidationException,
 } from '@slink/api/Exceptions';
 import { JsonMapper } from '@slink/api/Mapper/JsonMapper';
-import { AnalyticsResource, AuthResource, ImageResource, SettingResource } from '@slink/api/Resources';
+import {
+  AnalyticsResource,
+  AuthResource,
+  ImageResource,
+  SettingResource,
+} from '@slink/api/Resources';
 import { UserResource } from '@slink/api/Resources/UserResource';
 
 const RESOURCES = {

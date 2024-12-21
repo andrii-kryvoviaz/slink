@@ -17,5 +17,5 @@ export const ToggleTheme = cva(
         lg: 'toggle-lg',
       },
     },
-  }
+  },
 );

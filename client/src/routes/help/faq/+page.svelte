@@ -52,7 +52,8 @@
 
       <div class="mx-auto mt-6 flex justify-center">
         <span class="inline-block h-1 w-40 rounded-full bg-indigo-500"></span>
-        <span class="mx-1 inline-block h-1 w-3 rounded-full bg-indigo-500"></span>
+        <span class="mx-1 inline-block h-1 w-3 rounded-full bg-indigo-500"
+        ></span>
         <span class="inline-block h-1 w-1 rounded-full bg-indigo-500"></span>
       </div>
     </div>

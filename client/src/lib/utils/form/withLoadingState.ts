@@ -1,11 +1,11 @@
 import type { ActionResult } from '@sveltejs/kit';
+import type { Writable } from 'svelte/store';
 
 import { invalidateAll } from '$app/navigation';
-import type { Writable } from 'svelte/store';
 
 export function withLoadingState(
   loading: Writable<boolean>,
-  invalidate: boolean = false
+  invalidate: boolean = false,
 ) {
   return () => {
     loading.set(true);

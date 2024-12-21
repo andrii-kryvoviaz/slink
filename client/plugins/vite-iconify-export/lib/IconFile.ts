@@ -10,7 +10,7 @@ export class IconFile {
   private constructor(private readonly filePath: string) {
     const content = fs.readFileSync(this.filePath, 'utf-8');
     this.iconRegistry = IconRegistry.create(
-      RegexHelper.extractRegexGroupsToArray('ICON_LINE', content)
+      RegexHelper.extractRegexGroupsToArray('ICON_LINE', content),
     );
     this.variableDeclaration = RegexHelper.matchString(
       'VARIABLE_DECLARATION',
@@ -18,7 +18,7 @@ export class IconFile {
       {
         defaultValue: 'export const icons',
         group: 0,
-      }
+      },
     );
   }
 
@@ -37,7 +37,7 @@ export class IconFile {
       content,
       {
         group: 1,
-      }
+      },
     );
 
     if (!parsedIcons.length) {
@@ -57,7 +57,7 @@ export class IconFile {
   persist() {
     const icons = this.iconRegistry.getPersistentIcons();
     const content = `${this.variableDeclaration} = [\n  '${icons.join(
-      "',\n  '"
+      "',\n  '",
     )}',\n];\n`;
     if (this.iconRegistry.hasChanged()) {
       fs.writeFileSync(this.filePath, content);

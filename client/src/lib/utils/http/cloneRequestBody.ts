@@ -1,5 +1,5 @@
 export const cloneRequestBody = async (
-  request: Request
+  request: Request,
 ): Promise<BodyInit | undefined> => {
   const contentType = request.headers.get('content-type');
 

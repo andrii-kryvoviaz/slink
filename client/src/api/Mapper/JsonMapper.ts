@@ -3,7 +3,7 @@ import type { RequestOptions } from '@slink/api/Type/RequestOptions';
 
 export const JsonMapper: RequestMapper = (
   path,
-  options
+  options,
 ): RequestOptions | RequestInit => {
   const { json, ...rest } = options ?? {};
 

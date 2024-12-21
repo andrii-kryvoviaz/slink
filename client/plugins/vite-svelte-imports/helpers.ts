@@ -48,7 +48,7 @@ export async function createIndexFile(dir: string): Promise<string> {
       .map((file) => {
         let relativePath: string = path.relative(
           dir,
-          path.join(file.path, file.name)
+          path.join(file.path, file.name),
         );
 
         if (relativePath.startsWith('/')) {

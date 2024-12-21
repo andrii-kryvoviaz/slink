@@ -7,7 +7,7 @@ class InMemoryReadableStore<T> implements Readable<T> {
   private constructor(private value: T) {}
 
   public static create<T>(
-    defaultValue: T
+    defaultValue: T,
   ): [InMemoryReadableStore<T>, (value: T) => void] {
     const store = new InMemoryReadableStore(defaultValue);
     return [store, (value: T) => store.set(value)];
@@ -31,7 +31,7 @@ class InMemoryReadableStore<T> implements Readable<T> {
 }
 
 export function inMemoryReadable<T>(
-  defaultValue: T
+  defaultValue: T,
 ): [Readable<T>, (value: T) => void] {
   if (!browser) {
     return [readable(defaultValue), (value: T) => {}];

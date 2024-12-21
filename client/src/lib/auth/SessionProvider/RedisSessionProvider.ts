@@ -38,7 +38,7 @@ export class RedisSessionProvider implements SessionProviderInterface {
 
     await this._redis.set(
       this.prefix + sessionId,
-      JSON.stringify({ data: { user: null } })
+      JSON.stringify({ data: { user: null } }),
     );
     await this._redis.expire(this.prefix + sessionId, ttl ?? this.defaultTtl);
   }
@@ -56,7 +56,7 @@ export class RedisSessionProvider implements SessionProviderInterface {
   async set<T>(
     sessionId: string,
     data: T,
-    ttl: number | null = null
+    ttl: number | null = null,
   ): Promise<void> {
     await this._connectIfNotConnected();
 
