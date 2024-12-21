@@ -20,6 +20,7 @@ Solves the problem of sharing images with friends, family, and colleagues withou
 - **Storage Providers**: Support for _local_ and _SMB_ storage providers.
 - **Explore Images**: Features a listing page of public images uploaded by other users.
 - **Dark Mode**: Includes support for both _Dark_ and _Light_ modes in the application.
+- **Dashboard**: Enhanced statistics and analytics for admin users.
 
 ### Upcoming Features
 > [!IMPORTANT]
@@ -30,7 +31,6 @@ Solves the problem of sharing images with friends, family, and colleagues withou
 - **Storage Providers**: Additional storage providers like _AWS S3_, _Google Cloud Storage_, etc.
 - **Database Support**: Support for additional databases like _MySQL_, _PostgreSQL_, etc.
 - **Admin Panel**: An admin panel to manage users, storage, and other settings.
-- **Dashboard**: Enhanced statistics and analytics for admin users.
 - **Anonymous Upload**: Allow users to upload images without signing up.
 - **Password Recovery**: Password recovery for users who forgot their password.
 - **Email Notifications**: Email notifications for user approval, password reset, etc.
@@ -169,7 +169,25 @@ After the user is approved, they will be able to log in and upload images.
 
 > [!NOTE]
 >
-> In the future versions, an admin panel will be added to manage users and their statuses.
+> Users can be also managed from the admin dashboard.
+
+## User Roles
+The application has two user roles: **User** and **Admin**. By default, all users are assigned the **User** role.
+
+To promote a user to the **Admin** role, you can use the following CLI command:
+```bash
+docker exec -it slink slink user:grant:role --email=<user-email> ROLE_ADMIN
+```
+To demote a user from the **Admin** role, you can use the following CLI command:
+```bash
+docker exec -it slink slink user:revoke:role --email=<user-email> ROLE_ADMIN
+```
+
+Alternatively, you can change the user role directly from the admin dashboard.
+
+> [!NOTE]
+> Admin users have access to the admin dashboard and can manage users and settings. There is no granular permission system in place yet.
+> If it becomes a requested feature, it will be added in the future.
 
 ## Security
 Slink supports user authentication and user approval to prevent unauthorized access to the application. However, it's recommended to use a reverse proxy like [Nginx](https://www.nginx.com/) or [Traefik](https://traefik.io/traefik/) 
