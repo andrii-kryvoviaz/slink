@@ -49,7 +49,10 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
       $command->isPublic(),
     );
     
-    if($this->configurationProvider->get('image.stripExifMetadata')) {
+    if(
+      $metadata->supportsExifProfiles() &&
+      $this->configurationProvider->get('image.stripExifMetadata')
+    ) {
       $this->imageTransformer->stripExifMetadata($file->getPathname());
     }
     

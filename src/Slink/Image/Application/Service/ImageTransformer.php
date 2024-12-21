@@ -95,9 +95,7 @@ class ImageTransformer implements ImageTransformerInterface {
       }
       
       $image->writeImage($path);
-      
       $image->clear();
-      $image->destroy();
     } catch (ImagickException $exception) {
       // do nothing hence the image format is not supported
     } finally {
