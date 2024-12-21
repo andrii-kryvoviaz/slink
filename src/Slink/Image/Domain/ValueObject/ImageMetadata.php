@@ -88,12 +88,4 @@ final readonly class ImageMetadata extends AbstractCompoundValueObject {
       $payload['height'],
     );
   }
-  
-  public function supportsExifProfiles(): bool {
-    return in_array($this->mimeType, [
-      'image/jpeg',
-      'image/jpg',
-      'image/tiff'
-    ]);
-  }
 }

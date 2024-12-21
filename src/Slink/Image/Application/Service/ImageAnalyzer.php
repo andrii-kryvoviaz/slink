@@ -10,8 +10,12 @@ use Symfony\Component\HttpFoundation\File\File;
 final class ImageAnalyzer implements ImageAnalyzerInterface {
   /**
    * @param array<string> $resizableMimeTypes
+   * @param array<string> $stripExifMimeTypes
    */
-  public function __construct(private readonly array $resizableMimeTypes) {
+  public function __construct(
+    private readonly array $resizableMimeTypes,
+    private readonly array $stripExifMimeTypes,
+  ) {
   }
   
   private File $file;
@@ -50,6 +54,14 @@ final class ImageAnalyzer implements ImageAnalyzerInterface {
    */
   public function supportsResize(string $mimeType): bool {
     return \in_array($mimeType, $this->resizableMimeTypes, true);
+  }
+  
+  /**
+   * @param string $mimeType
+   * @return bool
+   */
+  public function supportsExifProfile(string $mimeType): bool {
+    return \in_array($mimeType, $this->stripExifMimeTypes, true);
   }
   
   /**

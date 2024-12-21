@@ -13,9 +13,11 @@ parameters:
     - 'image/x-tga'
 
   supports_resize: ['image/bmp', 'image/png', 'image/jpeg', 'image/jpg', 'image/webp']
+  supports_strip_exif: ['image/jpeg', 'image/jpg']
 
 services:
   Slink\Image\Domain\Service\ImageAnalyzerInterface:
     class: Slink\Image\Application\Service\ImageAnalyzer
     arguments:
       $resizableMimeTypes: '%supports_resize%'
+      $stripExifMimeTypes: '%supports_strip_exif%'

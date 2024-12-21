@@ -50,8 +50,8 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
     );
     
     if(
-      $metadata->supportsExifProfiles() &&
-      $this->configurationProvider->get('image.stripExifMetadata')
+      $this->imageAnalyzer->supportsExifProfile($file->getMimeType())
+      && $this->configurationProvider->get('image.stripExifMetadata')
     ) {
       $this->imageTransformer->stripExifMetadata($file->getPathname());
     }
