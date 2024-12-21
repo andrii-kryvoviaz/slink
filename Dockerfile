@@ -72,13 +72,14 @@ RUN apk update && apk upgrade &&\
     libsmbclient \
     imagemagick \
     libjpeg-turbo \
+    libheif \
     libpng \
     libwebp \
     freetype \
     postgresql-libs
 
 # Install Common PHP extensions
-RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS git autoconf g++ make linux-headers curl-dev libmcrypt-dev icu-dev imagemagick-dev postgresql-dev libpng-dev libwebp-dev freetype-dev libjpeg-turbo-dev oniguruma-dev samba-dev && \
+RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS git autoconf g++ make linux-headers curl-dev libmcrypt-dev icu-dev imagemagick-dev postgresql-dev libpng-dev libwebp-dev freetype-dev libjpeg-turbo-dev libheif-dev oniguruma-dev samba-dev && \
     docker-php-ext-configure gd --with-jpeg --with-freetype --with-webp && \
     docker-php-ext-install curl intl mysqli pdo_pgsql mbstring gd exif && \
     pecl install redis smbclient && \
@@ -87,7 +88,7 @@ RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS git autoconf g++ make 
     cd /tmp/imagick && \
     sed -i 's/php_strtolower/zend_str_tolower/g' imagick.c && \
     phpize && \
-    ./configure && \
+    ./configure --with-heic=yes --with-jpeg=yes --with-png=yes --with-webp=yes --with-tiff=yes && \
     make && \
     make install && \
     rm -rf /tmp/imagick && \
@@ -210,7 +211,7 @@ EXPOSE 8080
 FROM base AS prod
 # Install Production PHP extensions
 RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS autoconf g++ make linux-headers brotli-dev && \
-    pecl install swoole-6.0.0RC1 && \
+    pecl install swoole && \
     docker-php-ext-enable swoole opcache && \
     apk del .build-deps
 
