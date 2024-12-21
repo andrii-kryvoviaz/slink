@@ -5,7 +5,7 @@ import {
 import type { Violation, ViolationResponse } from '@slink/api/Response';
 
 export class ValidationException extends HttpException {
-  private _violations: Violation[];
+  private readonly _violations: Violation[];
 
   constructor(violationResponse: ViolationResponse) {
     super(violationResponse.message, 422);
@@ -18,7 +18,20 @@ export class ValidationException extends HttpException {
 
   get errors(): ErrorList {
     return this._violations.reduce((errors: ErrorList, violation) => {
-      errors[violation.property] = violation.message;
+      if (!violation.property.includes('.')) {
+        errors[violation.property] = violation.message;
+        return errors;
+      }
+
+      const properties = violation.property.split('.');
+      const lastProperty = properties.pop()!;
+      const nestedErrors = properties.reduce(
+        (nestedErrors, property) => (nestedErrors[property] = {}),
+        errors
+      );
+
+      nestedErrors[lastProperty] = violation.message;
+
       return errors;
     }, {});
   }

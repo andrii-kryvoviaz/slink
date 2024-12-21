@@ -6,13 +6,15 @@ namespace Slink\User\Domain;
 
 use Ramsey\Collection\Set;
 use Slink\Shared\Domain\AbstractEventSourcedAggregate;
-use Slink\Shared\Domain\Exception\DateTimeException;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Event\Auth\RefreshTokenIssued;
 use Slink\User\Domain\Event\Auth\RefreshTokenRevoked;
 use Slink\User\Domain\ValueObject\Auth\HashedRefreshToken;
 
 final class RefreshTokenSet extends AbstractEventSourcedAggregate {
+  /**
+   * @var Set<HashedRefreshToken>
+   */
   private Set $hashedRefreshTokenCollection;
   
   /**

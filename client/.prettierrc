@@ -9,8 +9,10 @@
   ],
   "pluginSearchDirs": false,
   "importOrder": [
+    "^@slink/.*css$",
     "^(.app|.lib|svelte|@iconify)/(.*)$",
     "^@slink/(api|store)/(.*)$",
+    "^@slink/lib/(.*)$",
     "^@slink/utils/(.*)$",
     "^@slink/components/(.*)$",
     "^[./]"

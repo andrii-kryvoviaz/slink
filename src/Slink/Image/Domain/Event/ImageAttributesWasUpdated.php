@@ -6,10 +6,10 @@ namespace Slink\Image\Domain\Event;
 
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
-use Slink\Shared\Domain\Exception\DateTimeException;
+use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\ID;
 
-final readonly class ImageAttributesWasUpdated implements SerializablePayload{
+final readonly class ImageAttributesWasUpdated implements SerializablePayload {
   /**
    * @param ID $id
    * @param ImageAttributes $attributes

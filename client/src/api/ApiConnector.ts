@@ -1,7 +1,7 @@
+import type { Handle } from '@sveltejs/kit';
+
 import { Auth } from '@slink/lib/auth/Auth';
 import { Session } from '@slink/lib/auth/Session';
-import { type Handle } from '@sveltejs/kit';
-
 import { cloneRequestBody } from '@slink/utils/http/cloneRequestBody';
 import { getResponseWithCookies } from '@slink/utils/http/cookie';
 
@@ -28,12 +28,11 @@ export const ApiConnector = (options: ApiOptions): Handle => {
       return resolve(event);
     }
 
-    const strippedPath = url.pathname.replace(
-      new RegExp(`^${options.urlPrefix}`),
-      ''
-    );
+    const pathname = url.pathname.startsWith(options.urlPrefix)
+      ? url.pathname
+      : `${options.urlPrefix}${url.pathname}`;
 
-    const proxyUrl = `${options.baseUrl}${strippedPath}${url.search}`;
+    const proxyUrl = `${options.baseUrl}${pathname}${url.search}`;
 
     const { method } = request;
 
@@ -44,7 +43,7 @@ export const ApiConnector = (options: ApiOptions): Handle => {
     if (request.headers.has('Authorization')) {
       headers.set(
         'Authorization',
-        request.headers.get('Authorization') as string
+        request.headers.get('Authorization') as string,
       );
     } else if (session?.accessToken) {
       headers.set('Authorization', `Bearer ${session.accessToken}`);
@@ -61,6 +60,7 @@ export const ApiConnector = (options: ApiOptions): Handle => {
     };
 
     let response = await fetch(proxyUrl, requestOptions);
+    let authRefreshed = false;
 
     if (response.status === 401 && cookies.get('sessionId')) {
       const sessionId = cookies.get('sessionId') as string;
@@ -91,9 +91,10 @@ export const ApiConnector = (options: ApiOptions): Handle => {
         }
 
         response = await fetch(proxyUrl, requestOptions);
+        authRefreshed = true;
       }
     }
 
-    return getResponseWithCookies(response, cookies);
+    return getResponseWithCookies({ response, cookies, authRefreshed });
   };
 };

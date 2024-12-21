@@ -70,7 +70,7 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
   /**
    * @param int $page
    * @param ImageListFilter $imageListFilter
-   * @return Paginator
+   * @return Paginator<ImageView>
    */
   #[\Override]
   public function geImageList(int $page, ImageListFilter $imageListFilter): Paginator {

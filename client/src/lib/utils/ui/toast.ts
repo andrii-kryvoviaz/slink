@@ -1,127 +1,93 @@
+import type { ToastOptions } from '@slink/components/UI/Toast/Toast.types';
+import type { Component } from 'svelte';
+import type { Readable, Writable } from 'svelte/store';
+
 import { browser } from '$app/environment';
-import { readable, readonly } from 'svelte/store';
-import type { Writable } from 'svelte/store';
+import { derived, readable } from 'svelte/store';
 
+import { commonToastThemeMap } from '@slink/components/UI/Toast/Toast.theme';
 import { useWritable } from '@slink/store/contextAwareStore';
-
+import { randomId } from '@slink/utils/string/randomId';
 import { createTimer } from '@slink/utils/time/timer';
 
-type ToastVariant = 'success' | 'warning' | 'error' | 'info';
-
-type ToastIcon = {
-  icon: string;
-  iconColor: string;
-};
-
-type ToastOptions = Partial<
-  ToastIcon & {
-    message: string;
-    type: ToastVariant;
-    duration: number;
-  }
->;
-
 type Toast = ToastOptions & {
-  id: number;
-  timer: ReturnType<typeof createTimer>;
+  id: string;
+  timer: ReturnType<typeof createTimer> | undefined;
 };
 
-const toastMap: Map<string, ToastIcon> = new Map([
-  [
-    'success',
-    {
-      icon: 'clarity:success-standard-line',
-      iconColor: 'text-green-500',
-    },
-  ],
-  [
-    'warning',
-    {
-      icon: 'clarity:warning-standard-line',
-      iconColor: 'text-yellow-400',
-    },
-  ],
-  [
-    'error',
-    {
-      icon: 'clarity:error-standard-line',
-      iconColor: 'text-red-500',
-    },
-  ],
-  [
-    'info',
-    {
-      icon: 'clarity:info-standard-line',
-      iconColor: 'text-blue-500',
-    },
-  ],
-]);
+type ToastCollection = Record<string, Toast>;
 
 class ToastManager {
   private static _instance: ToastManager;
-
-  private idCounter: number = 0;
-  private toasts: Writable<Toast[]> | undefined;
+  private toasts: Writable<ToastCollection> | undefined = undefined;
 
   static get instance() {
     return this._instance || (this._instance = new this());
   }
 
-  public setToasts(toasts: Toast[]) {
-    if (!browser)
-      throw new Error('ToastManager can only be used in the browser');
-
-    this.toasts = useWritable<Toast[]>('toasts', toasts);
-  }
-
   private initialize(toasts: Toast[] = []) {
-    if (browser) {
-      this.setToasts(toasts);
+    if (!browser) {
       return;
     }
 
-    // fallback for server side rendering, an empty store
-    this.toasts = readable([] as Toast[]) as Writable<Toast[]>;
+    const toastCollection = toasts.reduce((acc, toast) => {
+      return { ...acc, [toast.id]: toast };
+    }, {});
+
+    this.toasts = useWritable<ToastCollection>('toasts', toastCollection);
   }
 
-  list() {
+  list(): Readable<Toast[]> {
     if (!this.toasts) this.initialize();
 
-    return readonly(this.toasts as Writable<Toast[]>);
+    return derived(
+      this.toasts || readable({}),
+      ($toasts) => Object.values($toasts) as Toast[],
+    );
   }
 
-  remove(id: number) {
+  remove(id: string) {
     if (!this.toasts) return;
 
-    this.toasts.update((toasts) => toasts.filter((toast) => toast.id !== id));
+    this.toasts.update((toasts) => {
+      const { [id]: removed, ...rest } = toasts;
+
+      if (removed.timer) removed.timer.clear();
+      return rest;
+    });
   }
 
-  push(toastOptions: ToastOptions) {
+  push(toastOptions: ToastOptions): string {
     if (!this.toasts) this.initialize();
 
-    if (!toastOptions.type) {
-      toastOptions.type = 'info';
-    }
-
     if (!toastOptions.icon) {
-      const toastIcon = toastMap.get(toastOptions.type);
+      const toastIcon = commonToastThemeMap.get(toastOptions.type);
 
       if (toastIcon) {
         toastOptions = { ...toastOptions, ...toastIcon };
       }
     }
 
-    toastOptions.duration = toastOptions.duration || 7000;
+    toastOptions.duration ??= 7000;
 
-    let toast: Toast = {
-      id: this.idCounter++,
+    const id = toastOptions.id || randomId('toast');
+    const timer = toastOptions.duration
+      ? createTimer(() => {
+          this.remove(id);
+        }, toastOptions.duration)
+      : undefined;
+
+    const toast: Toast = {
       ...toastOptions,
-      timer: createTimer(() => {
-        this.remove(toast.id);
-      }, toastOptions.duration),
+      id,
+      timer,
     };
 
-    this.toasts?.update((toasts) => [...toasts, toast]);
+    this.toasts?.update((toasts) => {
+      return { ...toasts, [id]: toast };
+    });
+
+    return id;
   }
 
   success(message: string, duration?: number) {
@@ -138,6 +104,20 @@ class ToastManager {
 
   info(message: string, duration?: number) {
     this.push({ type: 'info', message, duration });
+  }
+
+  component<
+    Props extends Record<string, any> = {},
+    Events extends Record<string, any> = {},
+  >(
+    component: Component<Props, Events>,
+    {
+      props = {} as Props,
+      duration = 0,
+      id,
+    }: { id?: string; props?: Props; duration?: number } = {},
+  ) {
+    this.push({ type: 'component', id, component, props, duration });
   }
 }
 

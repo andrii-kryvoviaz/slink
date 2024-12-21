@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { settings } from '@slink/lib/settings';
+  import type { PageData } from './$types';
 
   import { enhance } from '$app/forms';
   import Icon from '@iconify/svelte';
@@ -7,25 +7,32 @@
 
   import { useWritable } from '@slink/store/contextAwareStore';
 
+  import { settings } from '@slink/lib/settings';
+
   import { withLoadingState } from '@slink/utils/form/withLoadingState';
   import { toast } from '@slink/utils/ui/toast';
 
-  import { Button, type ButtonVariant } from '@slink/components/Common';
-  import { Input } from '@slink/components/Form';
+  import { Button, type ButtonVariant } from '@slink/components/UI/Action';
+  import { Input } from '@slink/components/UI/Form';
 
-  import type { PageData } from './$types';
+  interface Props {
+    form: any;
+    data: PageData;
+  }
 
-  export let form;
-  export let data: PageData;
+  let { form, data }: Props = $props();
 
   let isLoading = useWritable('signUpFormLoadingState', false);
-  let buttonVariant: ButtonVariant = 'primary';
 
   const { isLight } = settings.get('theme', data.settings.theme);
-  $: buttonVariant = $isLight ? 'dark' : 'primary';
-  $: if (form?.errors.message) {
-    toast.error(form.errors.message);
-  }
+
+  let buttonVariant: ButtonVariant = $derived($isLight ? 'dark' : 'primary');
+
+  $effect(() => {
+    if (form?.errors.message) {
+      toast.error(form.errors.message);
+    }
+  });
 </script>
 
 <svelte:head>
@@ -59,7 +66,9 @@
             value={form?.username}
             error={form?.errors.username}
           >
-            <Icon icon="ph:user" slot="leftIcon" />
+            {#snippet leftIcon()}
+              <Icon icon="ph:user" />
+            {/snippet}
           </Input>
 
           <Input
@@ -69,7 +78,9 @@
             value={form?.email}
             error={form?.errors.email}
           >
-            <Icon icon="mdi-light:email" slot="leftIcon" />
+            {#snippet leftIcon()}
+              <Icon icon="mdi-light:email" />
+            {/snippet}
           </Input>
 
           <Input
@@ -78,7 +89,9 @@
             type="password"
             error={form?.errors.password}
           >
-            <Icon icon="ph:password-light" slot="leftIcon" />
+            {#snippet leftIcon()}
+              <Icon icon="ph:password-light" />
+            {/snippet}
           </Input>
 
           <Input
@@ -87,7 +100,9 @@
             type="password"
             error={form?.errors.confirm}
           >
-            <Icon icon="ph:password-light" slot="leftIcon" />
+            {#snippet leftIcon()}
+              <Icon icon="ph:password-light" />
+            {/snippet}
           </Input>
         </div>
         <div class="mt-2 grid grid-cols-1 md:grid-cols-2 md:pr-6">
@@ -95,10 +110,13 @@
             variant={buttonVariant}
             size="md"
             class="w-full"
+            type="submit"
             loading={$isLoading}
           >
             <span>Sign up</span>
-            <Icon icon="fa6-solid:chevron-right" slot="rightIcon" />
+            {#snippet rightIcon()}
+              <Icon icon="fa6-solid:chevron-right" />
+            {/snippet}
           </Button>
         </div>
       </form>

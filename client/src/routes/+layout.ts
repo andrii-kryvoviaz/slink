@@ -1,14 +1,12 @@
-import { themeIcons } from '@slink/theme.icons';
-import { redirect } from '@sveltejs/kit';
+import type { LayoutLoad } from './$types';
+import '@slink/utils/string/stringExtensions';
 
 import { browser } from '$app/environment';
 
 import { ApiClient } from '@slink/api/Client';
-
-import '@slink/utils/string/stringExtensions';
+import { themeIcons } from '@slink/theme.icons';
 import { preloadIconSet } from '@slink/utils/ui/preloadIconSet';
-
-import type { LayoutLoad } from './$types';
+import { redirect } from '@sveltejs/kit';
 
 export const load: LayoutLoad = async ({ fetch, data }) => {
   // Set API fetch function to the one provided by SvelteKit

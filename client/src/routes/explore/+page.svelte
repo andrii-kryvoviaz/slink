@@ -1,39 +1,41 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import type { PageServerData } from './$types';
+  import type {
+    ImageListingItem,
+    ImageListingResponse,
+    ListingMetadata,
+  } from '@slink/api/Response';
+  import { onDestroy, onMount } from 'svelte';
 
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
-  import type {
-    ImageListingItem,
-    ImageListingResponse,
-    ListingMetadata,
-  } from '@slink/api/Response';
 
+  import { ImagePlaceholder } from '@slink/components/Feature/Image';
+  import { UserAvatar } from '@slink/components/Feature/User';
+  import { Button, LoadMoreButton } from '@slink/components/UI/Action';
+  import { Loader } from '@slink/components/UI/Loader';
   import {
-    Button,
     ExpandableText,
+    FormattedDate,
+    Heading,
     TextEllipsis,
-  } from '@slink/components/Common';
-  import { FormattedDate, Loader } from '@slink/components/Common';
-  import { ImagePlaceholder } from '@slink/components/Image';
-  import { UserAvatar } from '@slink/components/User';
+  } from '@slink/components/UI/Text';
 
-  import type { PageServerData } from './$types';
+  interface Props {
+    data: PageServerData;
+  }
 
-  export let data: PageServerData;
+  let { data }: Props = $props();
 
-  let images: ImageListingItem[] = [];
-  let meta: ListingMetadata;
-  let page = 1;
-
-  const resetPage = () => {
-    page = 1;
-    images = [];
-    meta = undefined;
-  };
+  let images: ImageListingItem[] = $state([]);
+  let meta: ListingMetadata = $state({
+    page: 1,
+    size: 10,
+    total: 0,
+  });
 
   const {
     run: fetchImages,
@@ -41,30 +43,27 @@
     isLoading,
     status,
   } = ReactiveState<ImageListingResponse>(
-    () => {
-      return ApiClient.image.getPublicImages(page++);
+    (page: number, limit: number) => {
+      return ApiClient.image.getPublicImages(page, limit);
     },
-    { debounce: 300 }
+    { debounce: 300 },
   );
 
-  $: {
-    if ($response) {
-      images = [...images, ...$response.data];
-      meta = $response.meta;
+  let unsibscribeResponse = response.subscribe((value) => {
+    if (value) {
+      images = [...images, ...value.data];
+      meta = value.meta;
     }
-  }
+  });
 
-  $: showLoadMore =
-    meta && page < Math.ceil(meta.total / meta.size) && $status !== 'idle';
-  $: showPreloader = !images.length && $status !== 'finished';
-  $: itemsNotFound = !images.length && $status === 'finished';
+  let showLoadMore = $derived(
+    meta && meta.page < Math.ceil(meta.total / meta.size) && $status !== 'idle',
+  );
+  let showPreloader = $derived(!images.length && $status !== 'finished');
+  let itemsNotFound = $derived(!images.length && $status === 'finished');
 
-  $: if (!data.user) {
-    resetPage();
-    fetchImages();
-  }
-
-  onMount(fetchImages);
+  onMount(() => fetchImages(1, meta.size));
+  onDestroy(unsibscribeResponse);
 </script>
 
 <svelte:head>
@@ -74,17 +73,7 @@
 <section in:fade={{ duration: 300 }}>
   <div class="container mx-auto flex flex-col px-6 py-6 sm:py-10">
     <div>
-      <h1
-        class="text-center text-2xl font-semibold capitalize text-gray-800 dark:text-white lg:text-3xl"
-      >
-        Discover Uploads
-      </h1>
-
-      <div class="mx-auto mt-6 flex justify-center">
-        <span class="inline-block h-1 w-40 rounded-full bg-indigo-500" />
-        <span class="mx-1 inline-block h-1 w-3 rounded-full bg-indigo-500" />
-        <span class="inline-block h-1 w-1 rounded-full bg-indigo-500" />
-      </div>
+      <Heading>Discover Uploads</Heading>
 
       <p
         class="mx-auto mt-6 max-w-2xl text-center text-gray-500 dark:text-gray-300"
@@ -152,19 +141,18 @@
       {/each}
     </div>
 
-    {#if showLoadMore}
-      <div class="mt-8 flex justify-center">
-        <Button
-          class="w-40"
-          size="md"
-          variant="secondary"
-          loading={$isLoading}
-          on:click={fetchImages}
-        >
-          <span>View More</span>
-          <Icon icon="mynaui:chevron-double-right" slot="rightIcon" />
-        </Button>
-      </div>
-    {/if}
+    <LoadMoreButton
+      visible={showLoadMore}
+      loading={$isLoading}
+      class="mt-8"
+      onclick={() => fetchImages(meta.page + 1, meta.size)}
+    >
+      {#snippet text()}
+        <span>View More</span>
+      {/snippet}
+      {#snippet icon()}
+        <Icon icon="mynaui:chevron-double-right" />
+      {/snippet}
+    </LoadMoreButton>
   </div>
 </section>

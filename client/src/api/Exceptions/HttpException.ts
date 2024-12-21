@@ -1,10 +1,10 @@
 import type { NumericRange } from '@sveltejs/kit';
 
-export type ErrorList = { [name: string]: string };
+export type ErrorList = { [name: string]: string | ErrorList };
 export abstract class HttpException extends Error {
   protected constructor(
     message: string,
-    public status: NumericRange<400, 451>
+    public status: NumericRange<400, 451>,
   ) {
     super(message);
   }
@@ -12,6 +12,7 @@ export abstract class HttpException extends Error {
     return this.message;
   }
 
+  // ToDo: generate type safe error list
   get errors(): ErrorList {
     return { error: this.message };
   }

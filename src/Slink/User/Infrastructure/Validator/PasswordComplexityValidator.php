@@ -4,19 +4,25 @@ declare(strict_types=1);
 
 namespace Slink\User\Infrastructure\Validator;
 
-use Slink\Settings\Domain\Service\ConfigurationProvider;
+use Slink\Settings\Application\Service\SettingsService;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
 class PasswordComplexityValidator extends ConstraintValidator {
-  public function __construct(private readonly ConfigurationProvider $configurationProvider) {
+  /**
+   * @param ConfigurationProviderInterface<SettingsService> $configurationProvider
+   */
+  public function __construct(
+    private readonly ConfigurationProviderInterface $configurationProvider
+  ) {
   }
   
   /**
    * @param mixed $value
-   * @param PasswordComplexity $constraint
+   * @param Constraint $constraint
    * @return void
    */
   public function validate(#[\SensitiveParameter] mixed $value, Constraint $constraint): void {

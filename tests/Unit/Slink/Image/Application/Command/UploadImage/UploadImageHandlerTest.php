@@ -12,8 +12,8 @@ use Slink\Image\Application\Command\UploadImage\UploadImageHandler;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Image\Domain\Service\ImageAnalyzerInterface;
 use Slink\Image\Domain\Service\ImageTransformerInterface;
-use Slink\Settings\Domain\Service\ConfigurationProvider;
-use Slink\Shared\Domain\Exception\DateTimeException;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
+use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\FileSystem\Storage\StorageInterface;
 use Symfony\Component\HttpFoundation\File\File;
@@ -26,7 +26,7 @@ class UploadImageHandlerTest extends TestCase {
    */
   #[Test]
   public function itHandlesUploadImageCommand(): void {
-    $configProvider = $this->createMock(ConfigurationProvider::class);
+    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
     $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
     $imageAnalyzer = $this->createMock(ImageAnalyzerInterface::class);
     $imageTransformer = $this->createMock(ImageTransformerInterface::class);
@@ -42,6 +42,8 @@ class UploadImageHandlerTest extends TestCase {
 
     $file = $this->createMock(File::class);
     $file->method('guessExtension')->willReturn('jpg');
+    $file->method('getMimeType')->willReturn('image/jpeg');
+    
     $imageAnalyzer->method('analyze')->willReturn([
       'size' => 100,
       'mimeType' => 'image/jpeg',

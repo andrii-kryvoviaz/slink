@@ -1,11 +1,15 @@
 <script lang="ts">
   import { fly } from 'svelte/transition';
 
-  import { Button, CopyContainer } from '@slink/components/Common';
+  import { Button, CopyContainer } from '@slink/components/UI/Action';
 
   import type { PageServerData } from './$types';
 
-  export let data: PageServerData;
+  interface Props {
+    data: PageServerData;
+  }
+
+  let { data }: Props = $props();
 </script>
 
 <svelte:head>

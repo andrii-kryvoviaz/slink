@@ -1,6 +1,6 @@
 ARG NODE_VERSION=20.9.0
 
-ARG PHP_VERSION=8.3.11
+ARG PHP_VERSION=8.4.1
 ARG PHP_MEMORY_LIMIT=512M
 
 ARG UPLOAD_MAX_FILESIZE_IN_BYTES=52428800
@@ -72,26 +72,28 @@ RUN apk update && apk upgrade &&\
     libsmbclient \
     imagemagick \
     libjpeg-turbo \
+    libheif \
     libpng \
     libwebp \
     freetype \
     postgresql-libs
 
 # Install Common PHP extensions
-RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS git autoconf g++ make linux-headers curl-dev libmcrypt-dev icu-dev imagemagick-dev postgresql-dev libpng-dev libwebp-dev freetype-dev libjpeg-turbo-dev oniguruma-dev samba-dev && \
+RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS git autoconf g++ make linux-headers curl-dev libmcrypt-dev icu-dev imagemagick-dev postgresql-dev libpng-dev libwebp-dev freetype-dev libjpeg-turbo-dev libheif-dev oniguruma-dev samba-dev && \
     docker-php-ext-configure gd --with-jpeg --with-freetype --with-webp && \
     docker-php-ext-install curl intl mysqli pdo_pgsql mbstring gd exif && \
-    pecl install mcrypt smbclient && \
+    pecl install redis smbclient && \
     # Imagick PHP 8.3 bug (https://github.com/Imagick/imagick/pull/641)
     git clone https://github.com/Imagick/imagick.git --depth 1 /tmp/imagick && \
     cd /tmp/imagick && \
+    sed -i 's/php_strtolower/zend_str_tolower/g' imagick.c && \
     phpize && \
-    ./configure && \
+    ./configure --with-heic=yes --with-jpeg=yes --with-png=yes --with-webp=yes --with-tiff=yes && \
     make && \
     make install && \
     rm -rf /tmp/imagick && \
     # End of Imagick fix
-    docker-php-ext-enable mcrypt imagick smbclient && \
+    docker-php-ext-enable imagick redis smbclient && \
     apk del .build-deps
 
 # Copy supervisor config
@@ -113,6 +115,10 @@ RUN echo "memory_limit=${PHP_MEMORY_LIMIT}" > /usr/local/etc/php/conf.d/memory-l
 ARG UPLOAD_MAX_FILESIZE_IN_BYTES
 RUN echo "upload_max_filesize = $((UPLOAD_MAX_FILESIZE_IN_BYTES / 1024 / 1024))M" > /usr/local/etc/php/conf.d/uploads.ini && \
     echo "post_max_size = $((UPLOAD_MAX_FILESIZE_IN_BYTES / 1024 / 1024))M" >> /usr/local/etc/php/conf.d/uploads.ini
+
+# Set current timezone
+RUN apk add --no-cache tzdata
+RUN echo 'date.timezone = ${TZ}' > /usr/local/etc/php/conf.d/timezone.ini
 
 # Set working directory
 WORKDIR /app

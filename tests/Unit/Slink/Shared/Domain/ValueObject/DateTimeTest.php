@@ -4,9 +4,9 @@ namespace Unit\Slink\Shared\Domain\ValueObject;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use Slink\Shared\Domain\Exception\DateTimeException;
-use Slink\Shared\Domain\ValueObject\DateTime;
 use PHPUnit\Framework\TestCase;
+use Slink\Shared\Domain\Exception\Date\DateTimeException;
+use Slink\Shared\Domain\ValueObject\Date\DateTime;
 
 final class DateTimeTest extends TestCase {
   

@@ -1,6 +1,7 @@
 type Timer = {
   pause: () => void;
   resume: () => void;
+  clear: () => void;
 };
 
 export function createTimer(callback: () => void, delay: number): Timer {
@@ -26,7 +27,15 @@ export function createTimer(callback: () => void, delay: number): Timer {
     }, remaining);
   }
 
+  function clear() {
+    if (timerId !== undefined) {
+      window.clearTimeout(timerId);
+    }
+
+    remaining = 0;
+  }
+
   resume();
 
-  return { pause, resume };
+  return { pause, resume, clear };
 }

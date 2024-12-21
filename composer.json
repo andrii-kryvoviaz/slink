@@ -3,7 +3,7 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.3",
+        "php": ">=8.4",
         "ext-gd": "*",
         "ext-imagick": "*",
         "doctrine/doctrine-bundle": "^2.10",
@@ -13,40 +13,40 @@
         "eventsauce/message-repository-for-doctrine": "^1.1",
         "gumlet/php-image-resize": "*",
         "icewind/smb": "^3.6",
-        "lexik/jwt-authentication-bundle": "^2.19",
+        "lexik/jwt-authentication-bundle": "3.0.0",
         "nelmio/api-doc-bundle": "^4.12",
         "nelmio/cors-bundle": "^2.3",
-        "phpdocumentor/reflection-docblock": "^5.3",
-        "phpstan/phpdoc-parser": "^1.24",
+        "predis/predis": "^2.3",
         "ramsey/uuid": "^4.7",
         "ramsey/uuid-doctrine": "^2.0",
         "runtime/swoole": "^0.4.0",
-        "symfony/console": "^7.1",
-        "symfony/doctrine-messenger": "^7.1",
-        "symfony/dotenv": "^7.1",
+        "symfony/cache": "^7.2",
+        "symfony/console": "^7.2",
+        "symfony/doctrine-messenger": "^7.2",
+        "symfony/dotenv": "^7.2",
         "symfony/flex": "^2",
-        "symfony/framework-bundle": "^7.1",
-        "symfony/messenger": "^7.1",
-        "symfony/mime": "^7.1",
+        "symfony/framework-bundle": "^7.2",
+        "symfony/messenger": "^7.2",
+        "symfony/mime": "^7.2",
         "symfony/monolog-bundle": "^3.10",
-        "symfony/property-access": "^7.1",
-        "symfony/property-info": "^7.1",
-        "symfony/runtime": "^7.1",
-        "symfony/serializer": "^7.1",
-        "symfony/validator": "^7.1",
-        "symfony/yaml": "^7.1"
+        "symfony/property-access": "^7.2",
+        "symfony/property-info": "^7.2",
+        "symfony/runtime": "^7.2",
+        "symfony/serializer": "^7.2",
+        "symfony/validator": "^7.2",
+        "symfony/yaml": "^7.2"
     },
     "require-dev": {
         "dg/bypass-finals": "dev-master",
-        "phpstan/phpstan": "^1.10",
+        "phpstan/phpstan": "^2.0",
         "phpunit/phpunit": "^10.4",
-        "symfony/phpunit-bridge": "^7.1",
-        "symfony/stopwatch": "^7.1",
-        "symfony/web-profiler-bundle": "^7.1"
+        "symfony/phpunit-bridge": "^7.2",
+        "symfony/stopwatch": "^7.2",
+        "symfony/web-profiler-bundle": "^7.2"
     },
     "config": {
         "platform": {
-            "php": "8.3",
+            "php": "8.4",
             "ext-imagick": "3.7.0"
         },
         "allow-plugins": {
@@ -97,7 +97,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "7.1.*"
+            "require": "7.2.*"
         }
     }
 }

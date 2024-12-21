@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Slink\User\Infrastructure\ReadModel\View;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Slink\Shared\Domain\ValueObject\DateTime;
+use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
 use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;
@@ -18,6 +19,11 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 
 #[ORM\Table(name: '`user`')]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\Index(columns: ['email'], name: 'idx_user_email')]
+#[ORM\Index(columns: ['username'], name: 'idx_user_username')]
+#[ORM\Index(columns: ['display_name'], name: 'idx_user_display_name')]
+#[ORM\Index(columns: ['status'], name: 'idx_user_status')]
+#[ORM\Index(columns: ['created_at'], name: 'idx_user_created_at')]
 class UserView extends AbstractView {
   /**
    * @param string $uuid
@@ -28,6 +34,7 @@ class UserView extends AbstractView {
    * @param DateTime $createdAt
    * @param DateTime|null $updatedAt
    * @param UserStatus $status
+   * @param Collection<int,UserRoleView>|null $roles
    */
   public function __construct(
     #[ORM\Id]
@@ -49,7 +56,6 @@ class UserView extends AbstractView {
     private DisplayName $displayName,
 
     #[ORM\Column(type: 'hashed_password')]
-    #[Groups(['internal'])]
     private HashedPassword $password,
 
     #[ORM\Column(type: 'datetime_immutable')]
@@ -62,7 +68,14 @@ class UserView extends AbstractView {
     
     #[ORM\Column(enumType: UserStatus::class, options: ['default' => UserStatus::Active])]
     #[Groups(['internal', 'status_check'])]
-    private UserStatus $status,
+    private UserStatus          $status,
+    
+    #[ORM\ManyToMany(targetEntity: UserRoleView::class)]
+    #[ORM\JoinTable(name: 'user_to_role')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'uuid')]
+    #[ORM\InverseJoinColumn(name: 'role', referencedColumnName: 'role')]
+    #[Groups(['internal'])]
+    private readonly ?Collection $roles,
   ) {
   }
   
@@ -128,6 +141,29 @@ class UserView extends AbstractView {
    */
   public function setStatus(UserStatus $status): void {
     $this->status = $status;
+  }
+  
+  /**
+   * @param UserRoleView $role
+   * @return void
+   */
+  public function addRole(UserRoleView $role): void {
+    $this->roles?->add($role);
+  }
+  
+  /**
+   * @param UserRoleView $role
+   * @return void
+   */
+  public function removeRole(UserRoleView $role): void {
+    $this->roles?->removeElement($role);
+  }
+  
+  /**
+   * @return array<string>
+   */
+  public function getRoles(): array {
+    return $this->roles?->map(fn(UserRoleView $role) => $role->getRole())->toArray() ?? [];
   }
   
   /**

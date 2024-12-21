@@ -28,7 +28,7 @@ class PasswordComplexity extends Constraint {
    */
   public function __construct(
     mixed $options = null,
-    array $groups = null,
+    ?array $groups = null,
     mixed $payload = null,
     public int $minLength = 6,
     public int $requirements = 15,

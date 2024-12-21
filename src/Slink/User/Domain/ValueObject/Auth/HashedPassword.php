@@ -49,8 +49,7 @@ final readonly class HashedPassword extends AbstractValueObject {
     if (\mb_strlen($plainPassword) < 6) {
       throw new InvalidPasswordException('Min 6 characters password');
     }
-
-    /** @var string|bool|null $hashedPassword */
+    
     $hashedPassword = \password_hash($plainPassword, PASSWORD_BCRYPT, ['cost' => self::COST]);
 
     if (!$hashedPassword) {

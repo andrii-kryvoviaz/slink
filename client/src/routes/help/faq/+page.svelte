@@ -7,7 +7,7 @@
   import Icon from '@iconify/svelte';
   import { fade, slide } from 'svelte/transition';
 
-  let openedQuestion: string | undefined = faqQuestions.at(0)?.slug;
+  let openedQuestion: string | undefined = $state(faqQuestions.at(0)?.slug);
 
   const openQuestion = (slug: string) => {
     openedQuestion = slug;
@@ -51,9 +51,9 @@
       </h1>
 
       <div class="mx-auto mt-6 flex justify-center">
-        <span class="inline-block h-1 w-40 rounded-full bg-indigo-500" />
-        <span class="mx-1 inline-block h-1 w-3 rounded-full bg-indigo-500" />
-        <span class="inline-block h-1 w-1 rounded-full bg-indigo-500" />
+        <span class="inline-block h-1 w-40 rounded-full bg-indigo-500"></span>
+        <span class="mx-1 inline-block h-1 w-3 rounded-full bg-indigo-500"></span>
+        <span class="inline-block h-1 w-1 rounded-full bg-indigo-500"></span>
       </div>
     </div>
 
@@ -62,7 +62,7 @@
         <div id={slug}>
           <button
             class="flex w-full items-center focus:outline-none"
-            on:click={() => openQuestion(slug)}
+            onclick={() => openQuestion(slug)}
           >
             {#if openedQuestion === slug}
               <Icon

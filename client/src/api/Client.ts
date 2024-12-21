@@ -1,20 +1,22 @@
-import {
-  BadRequestException,
-  ForbiddenException,
-  NotFoundException,
-  UnauthorizedException,
-  ValidationException,
-} from '@slink/api/Exceptions';
-import { JsonMapper } from '@slink/api/Mapper/JsonMapper';
-import { AuthResource, ImageResource } from '@slink/api/Resources';
-import { UserResource } from '@slink/api/Resources/UserResource';
 import type { RequestMapper } from '@slink/api/Type/RequestMapper';
 import type { RequestOptions } from '@slink/api/Type/RequestOptions';
+
+import { browser } from '$app/environment';
+import { invalidateAll } from '$app/navigation';
+
+import {
+  BadRequestException, ForbiddenException, NotFoundException, UnauthorizedException, ValidationException
+} from '@slink/api/Exceptions';
+import { JsonMapper } from '@slink/api/Mapper/JsonMapper';
+import { AnalyticsResource, AuthResource, ImageResource, SettingResource } from '@slink/api/Resources';
+import { UserResource } from '@slink/api/Resources/UserResource';
 
 const RESOURCES = {
   image: ImageResource,
   auth: AuthResource,
   user: UserResource,
+  analytics: AnalyticsResource,
+  setting: SettingResource,
 };
 
 type ResourceType = keyof typeof RESOURCES;
@@ -22,7 +24,7 @@ type ResourceType = keyof typeof RESOURCES;
 type Resource<T extends ResourceType> = InstanceType<(typeof RESOURCES)[T]>;
 
 type ResourceConstructor<T extends ResourceType> = new (
-  client: Client
+  client: Client,
 ) => Resource<T>;
 
 type Resources = {
@@ -37,6 +39,7 @@ type ApiClient = Resources & {
 };
 
 type EventType =
+  | 'auth-refreshed'
   | 'unauthorized'
   | 'forbidden'
   | 'not-found'
@@ -81,11 +84,21 @@ export class Client {
     }
   }
 
-  public async fetch(path: string, options?: RequestOptions | RequestInit) {
+  private generateQueryString(query: Record<string, string> | null = null) {
+    if (!query) {
+      return '';
+    }
+
+    const params = new URLSearchParams(query);
+
+    return `?${params.toString()}`;
+  }
+
+  public async fetch(path: string, options?: RequestOptions) {
     if (!this._fetch) {
       this._fetch = fetch;
       console.warn(
-        'API client is not initialized with fetch function, falling back to global fetch function. To utilize SSR, add `ApiClient.use(fetch)` to your `load` function.'
+        'API client is not initialized with fetch function, falling back to global fetch function. To utilize SSR, add `ApiClient.use(fetch)` to your `load` function.',
       );
     }
 
@@ -95,7 +108,18 @@ export class Client {
 
     const url = [this._basePath, path].join('');
 
-    const response = await this._fetch(url, options);
+    const queryString = this.generateQueryString(options?.query);
+    const response = await this._fetch(url + queryString, options);
+
+    if (browser && response.headers.has('x-auth-refreshed')) {
+      const { handled } = this.emit({
+        event: 'auth-refreshed',
+      });
+
+      if (!handled) {
+        invalidateAll();
+      }
+    }
 
     if (response.status === 204) {
       return;
@@ -170,7 +194,7 @@ export class Client {
       return body;
     }
 
-    if (body.data) {
+    if (body.data && !Array.isArray(body.data)) {
       return body.data;
     }
 

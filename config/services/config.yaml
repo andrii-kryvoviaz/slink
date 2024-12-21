@@ -1,5 +1,5 @@
 services:
-  Slink\Settings\Domain\Service\ConfigurationProvider:
-    class: Slink\Settings\Infrastructure\Service\ParameterBagProvider
+  Slink\Settings\Domain\Provider\ConfigurationProviderInterface:
+    class: Slink\Settings\Application\Service\SettingsService
     arguments:
-      $parameterBag: '@parameter_bag'
+      $configurationLocator: '@Slink\Settings\Infrastructure\Provider\ConfigurationProviderLocator'

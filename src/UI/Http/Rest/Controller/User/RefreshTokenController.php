@@ -9,7 +9,7 @@ use Slink\Shared\Application\Query\QueryTrait;
 use Slink\User\Application\Command\RefreshToken\RefreshTokenCommand;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use UI\Http\Rest\Response\ApiResponse;
 
 #[AsController]

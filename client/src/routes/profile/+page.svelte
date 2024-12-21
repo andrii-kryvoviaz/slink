@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { settings } from '@slink/lib/settings';
+  import type { PageServerData } from './$types';
 
   import { enhance } from '$app/forms';
   import Icon from '@iconify/svelte';
@@ -7,46 +7,54 @@
 
   import { useWritable } from '@slink/store/contextAwareStore';
 
+  import { settings } from '@slink/lib/settings';
+
   import { withLoadingState } from '@slink/utils/form/withLoadingState';
   import { toast } from '@slink/utils/ui/toast';
 
-  import { Button, type ButtonVariant } from '@slink/components/Common';
-  import { Input } from '@slink/components/Form';
-  import { UserAvatar } from '@slink/components/User';
+  import { UserAvatar } from '@slink/components/Feature/User';
+  import { Button, type ButtonVariant } from '@slink/components/UI/Action';
+  import { Input } from '@slink/components/UI/Form';
 
-  import type { PageServerData } from './$types';
+  interface Props {
+    data: PageServerData;
+    form: any;
+  }
 
-  export let data: PageServerData;
-  export let form;
+  let { data, form }: Props = $props();
 
   const { user } = data;
 
   let isPasswordFormLoading = useWritable(
     'changePasswordFormLoadingState',
-    false
+    false,
   );
   let isProfileFormLoading = useWritable(
     'updateProfileFormLoadingState',
-    false
+    false,
   );
-
-  let buttonVariant: ButtonVariant = 'primary';
 
   const { isLight } = settings.get('theme', data.settings.theme);
 
-  $: buttonVariant = $isLight ? 'dark' : 'primary';
+  let buttonVariant: ButtonVariant = $derived($isLight ? 'dark' : 'primary');
 
-  $: if (form?.passwordWasChanged) {
-    toast.success('Password changed successfully');
-  }
+  $effect(() => {
+    if (form?.passwordWasChanged) {
+      toast.success('Password changed successfully');
+    }
+  });
 
-  $: if (form?.profileWasUpdated) {
-    toast.success('Profile updated successfully');
-  }
+  $effect(() => {
+    if (form?.profileWasUpdated) {
+      toast.success('Profile updated successfully');
+    }
+  });
 
-  $: if (form?.errors?.message) {
-    toast.error(form.errors.message);
-  }
+  $effect(() => {
+    if (form?.errors?.message) {
+      toast.error(form.errors.message);
+    }
+  });
 </script>
 
 <svelte:head>
@@ -76,17 +84,22 @@
               error={form?.errors?.display_name}
               value={form?.displayName ?? user.displayName}
             >
-              <Icon icon="ph:user" slot="leftIcon" />
+              {#snippet leftIcon()}
+                <Icon icon="ph:user" />
+              {/snippet}
             </Input>
 
             <Button
               variant={buttonVariant}
               size="md"
               class="mt-2 w-full"
+              type="submit"
               loading={$isProfileFormLoading}
             >
               <span>Update Profile</span>
-              <Icon icon="fluent:chevron-right-48-regular" slot="rightIcon" />
+              {#snippet rightIcon()}
+                <Icon icon="fluent:chevron-right-48-regular" />
+              {/snippet}
             </Button>
           </div>
         </div>
@@ -105,7 +118,9 @@
               type="password"
               error={form?.errors?.old_password}
             >
-              <Icon icon="carbon:password" slot="leftIcon" />
+              {#snippet leftIcon()}
+                <Icon icon="carbon:password" />
+              {/snippet}
             </Input>
           </div>
 
@@ -116,7 +131,9 @@
               type="password"
               error={form?.errors?.password}
             >
-              <Icon icon="ph:password-light" slot="leftIcon" />
+              {#snippet leftIcon()}
+                <Icon icon="ph:password-light" />
+              {/snippet}
             </Input>
           </div>
 
@@ -127,7 +144,9 @@
               type="password"
               error={form?.errors?.confirm}
             >
-              <Icon icon="ph:password-light" slot="leftIcon" />
+              {#snippet leftIcon()}
+                <Icon icon="ph:password-light" />
+              {/snippet}
             </Input>
           </div>
         </div>
@@ -136,10 +155,13 @@
           variant={buttonVariant}
           size="md"
           class="mt-2 w-full"
+          type="submit"
           loading={$isPasswordFormLoading}
         >
           <span>Change Password</span>
-          <Icon icon="fluent:chevron-right-48-regular" slot="rightIcon" />
+          {#snippet rightIcon()}
+            <Icon icon="fluent:chevron-right-48-regular" />
+          {/snippet}
         </Button>
       </form>
     </div>

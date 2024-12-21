@@ -10,20 +10,28 @@ use Slink\Image\Domain\Service\ImageAnalyzerInterface;
 use Slink\Image\Domain\Service\ImageTransformerInterface;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Domain\ValueObject\ImageMetadata;
-use Slink\Settings\Domain\Service\ConfigurationProvider;
+use Slink\Settings\Application\Service\SettingsService;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
-use Slink\Shared\Domain\Exception\DateTimeException;
+use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\FileSystem\Storage\StorageInterface;
 
 final readonly class UploadImageHandler implements CommandHandlerInterface {
   
+  /**
+   * @param ConfigurationProviderInterface<SettingsService> $configurationProvider
+   * @param ImageStoreRepositoryInterface  $imageRepository
+   * @param ImageAnalyzerInterface         $imageAnalyzer
+   * @param ImageTransformerInterface      $imageTransformer
+   * @param StorageInterface               $storage
+   */
   public function __construct(
-    private ConfigurationProvider $configurationProvider,
-    private ImageStoreRepositoryInterface $imageRepository,
-    private ImageAnalyzerInterface $imageAnalyzer,
-    private ImageTransformerInterface $imageTransformer,
-    private StorageInterface $storage
+    private ConfigurationProviderInterface $configurationProvider,
+    private ImageStoreRepositoryInterface  $imageRepository,
+    private ImageAnalyzerInterface         $imageAnalyzer,
+    private ImageTransformerInterface      $imageTransformer,
+    private StorageInterface               $storage
   ) {
   }
   
@@ -49,7 +57,10 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
       $command->isPublic(),
     );
     
-    if($this->configurationProvider->get('image.stripExifMetadata')) {
+    if(
+      $this->imageAnalyzer->supportsExifProfile($file->getMimeType())
+      && $this->configurationProvider->get('image.stripExifMetadata')
+    ) {
       $this->imageTransformer->stripExifMetadata($file->getPathname());
     }
     

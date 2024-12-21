@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Slink\User\Application\Command\SignIn;
 
 use Slink\Shared\Application\Command\CommandHandlerInterface;
-use Slink\Shared\Domain\Exception\DateTimeException;
+use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\User\Domain\Contracts\AuthProviderInterface;
 use Slink\User\Domain\Exception\InvalidCredentialsException;
 use Slink\User\Domain\Repository\UserStoreRepositoryInterface;

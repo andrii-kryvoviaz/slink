@@ -12,10 +12,16 @@ interface ImageAnalyzerInterface {
   public function analyze(File $file): array;
   
   /**
-   * @param string $mimeType
+   * @param ?string $mimeType
    * @return bool
    */
-  public function supportsResize(string $mimeType): bool;
+  public function supportsResize(?string $mimeType): bool;
+  
+  /**
+   * @param ?string $mimeType
+   * @return bool
+   */
+  public function supportsExifProfile(?string $mimeType): bool;
  
   /**
    * @return array<string, mixed>

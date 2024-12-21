@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Slink\User\Application\Command\SignUp;
 
-use Slink\Settings\Domain\Service\ConfigurationProvider;
+use Slink\Settings\Application\Service\SettingsService;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
-use Slink\Shared\Domain\Exception\DateTimeException;
+use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\User\Domain\Context\UserCreationContext;
 use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
@@ -17,10 +18,15 @@ use Slink\User\Domain\ValueObject\Username;
 
 final readonly class SignUpHandler implements CommandHandlerInterface {
 
+  /**
+   * @param ConfigurationProviderInterface<SettingsService> $configurationProvider
+   * @param UserStoreRepositoryInterface  $userRepository
+   * @param UserCreationContext          $userCreationContext
+   */
   public function __construct(
-    private ConfigurationProvider $configurationProvider,
-    private UserStoreRepositoryInterface $userRepository,
-    private UserCreationContext $userCreationContext
+    private ConfigurationProviderInterface $configurationProvider,
+    private UserStoreRepositoryInterface   $userRepository,
+    private UserCreationContext            $userCreationContext
   ) {
   }
 

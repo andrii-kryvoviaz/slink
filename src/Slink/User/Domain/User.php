@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace Slink\User\Domain;
 
 use Slink\Shared\Domain\AbstractAggregateRoot;
-use Slink\Shared\Domain\Exception\DateTimeException;
-use Slink\Shared\Domain\ValueObject\DateTime;
+use Slink\Shared\Domain\Exception\Date\DateTimeException;
+use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
+use Slink\User\Domain\Context\ChangeUserRoleContext;
 use Slink\User\Domain\Context\UserCreationContext;
 use Slink\User\Domain\Contracts\UserInterface;
 use Slink\User\Domain\Enum\UserStatus;
+use Slink\User\Domain\Event\Role\UserGrantedRole;
+use Slink\User\Domain\Event\Role\UserRevokedRole;
 use Slink\User\Domain\Event\UserDisplayNameWasChanged;
 use Slink\User\Domain\Event\UserLoggedOut;
 use Slink\User\Domain\Event\UserPasswordWasChanged;
@@ -18,16 +21,22 @@ use Slink\User\Domain\Event\UserSignedIn;
 use Slink\User\Domain\Event\UserStatusWasChanged;
 use Slink\User\Domain\Event\UserWasCreated;
 use Slink\User\Domain\Exception\DisplayNameAlreadyExistException;
-use Slink\User\Domain\Exception\InvalidCredentialsException;
 use Slink\User\Domain\Exception\EmailAlreadyExistException;
+use Slink\User\Domain\Exception\InvalidCredentialsException;
 use Slink\User\Domain\Exception\InvalidOldPassword;
 use Slink\User\Domain\Exception\UsernameAlreadyExistException;
 use Slink\User\Domain\Specification\UniqueDisplayNameSpecificationInterface;
+use Slink\User\Domain\Exception\InvalidUserRole;
+use Slink\User\Domain\Exception\SelfUserRoleChangeException;
+use Slink\User\Domain\Exception\SelfUserStatusChangeException;
+use Slink\User\Domain\Specification\CurrentUserSpecificationInterface;
 use Slink\User\Domain\ValueObject\Auth\Credentials;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;
 use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Email;
 use Slink\User\Domain\ValueObject\Username;
+use Slink\User\Domain\ValueObject\Role;
+use Slink\User\Domain\ValueObject\RoleSet;
 
 final class User extends AbstractAggregateRoot implements UserInterface {
   private Email $email;
@@ -36,10 +45,7 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   private HashedPassword $hashedPassword;
   private UserStatus $status;
   
-  /**
-   * @var array<string>
-   */
-  private array $roles = ['ROLE_USER'];
+  private RoleSet $roles;
   
   /**
    * @var RefreshTokenSet
@@ -103,7 +109,7 @@ final class User extends AbstractAggregateRoot implements UserInterface {
    * @return array<string>
    */
   public function getRoles(): array {
-    return $this->roles;
+    return $this->roles->toArray();
   }
   
   /**
@@ -118,6 +124,8 @@ final class User extends AbstractAggregateRoot implements UserInterface {
    */
   protected function __construct(ID $id) {
     parent::__construct($id);
+    
+    $this->roles = RoleSet::create();
     
     $this->refreshToken = RefreshTokenSet::create($id);
     $this->status = UserStatus::Inactive;
@@ -221,9 +229,17 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   
   /**
    * @param UserStatus $status
+   * @param CurrentUserSpecificationInterface $currentUserSpecification
    * @return void
    */
-  public function changeStatus(UserStatus $status): void {
+  public function changeStatus(
+    UserStatus $status,
+    CurrentUserSpecificationInterface $currentUserSpecification
+  ): void {
+    if($currentUserSpecification->isSatisfiedBy($this->aggregateRootId())) {
+      throw new SelfUserStatusChangeException();
+    }
+    
     $this->recordThat(new UserStatusWasChanged($this->aggregateRootId(), $status));
   }
   
@@ -245,5 +261,77 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   
   public function applyUserDisplayNameWasChanged(UserDisplayNameWasChanged $event): void {
     $this->displayName = $event->displayName;
+  }
+  
+  /**
+   * @param Role $role
+   * @return bool
+   */
+  public function hasRole(Role $role): bool {
+    return $this->roles->contains($role);
+  }
+  
+  /**
+   * @param Role $role
+   * @param ChangeUserRoleContext $changeUserRoleContext
+   * @return void
+   */
+  public function grantRole(
+    Role $role,
+    ChangeUserRoleContext $changeUserRoleContext
+  ): void {
+    if(!$changeUserRoleContext->userRoleExistSpecification->isSatisfiedBy($role)) {
+      throw new InvalidUserRole($role);
+    }
+    
+    if($changeUserRoleContext->currentUserSpecification->isSatisfiedBy($this->aggregateRootId())) {
+      throw new SelfUserRoleChangeException();
+    }
+    
+    if ($this->hasRole($role)) {
+      return;
+    }
+    
+    $this->recordThat(new UserGrantedRole($this->aggregateRootId(), $role));
+  }
+  
+  /**
+   * @param UserGrantedRole $event
+   * @return void
+   */
+  public function applyUserGrantedRole(UserGrantedRole $event): void {
+    $this->roles->addRole($event->role);
+  }
+  
+  /**
+   * @param Role $role
+   * @param ChangeUserRoleContext $changeUserRoleContext
+   * @return void
+   */
+  public function revokeRole(
+    Role $role,
+    ChangeUserRoleContext $changeUserRoleContext,
+  ): void {
+    if(!$changeUserRoleContext->userRoleExistSpecification->isSatisfiedBy($role)) {
+      throw new InvalidUserRole($role);
+    }
+    
+    if($changeUserRoleContext->currentUserSpecification->isSatisfiedBy($this->aggregateRootId())) {
+      throw new SelfUserRoleChangeException();
+    }
+    
+    if(!$this->hasRole($role)) {
+      return;
+    }
+    
+    $this->recordThat(new UserRevokedRole($this->aggregateRootId(), $role));
+  }
+  
+  /**
+   * @param UserRevokedRole $event
+   * @return void
+   */
+  public function applyUserRevokedRole(UserRevokedRole $event): void {
+    $this->roles->removeRole($event->role);
   }
 }

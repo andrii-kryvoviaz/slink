@@ -1,14 +1,11 @@
 import daisyui from 'daisyui';
-import type { Config } from 'tailwindcss';
 import { ThemeCustomizerPlugin } from 'tailwindcss-theme-customizer';
 
 import { defaultTheme, tailwindcssTheme } from './src/theme.default';
 
+import type { Config } from 'tailwindcss';
 export default {
-  content: [
-    './src/**/*.{html,js,svelte,ts}',
-    './node_modules/flowbite-svelte/**/*.{html,js,svelte,ts}',
-  ],
+  content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
     extend: {
       animation: {

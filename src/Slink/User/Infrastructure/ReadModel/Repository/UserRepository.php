@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Slink\User\Infrastructure\ReadModel\Repository;
 
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Ramsey\Uuid\UuidInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractRepository;
+use Slink\User\Domain\Enum\UserStatus;
+use Slink\User\Domain\Filter\UserListFilter;
 use Slink\User\Domain\Repository\CheckUserByDisplayNameInterface;
 use Slink\User\Domain\Repository\CheckUserByEmailInterface;
 use Slink\User\Domain\Repository\CheckUserByRefreshTokenInterface;
@@ -133,6 +136,31 @@ final class UserRepository extends AbstractRepository implements
       ->setParameter('email', $email->toString());
     
     return $this->oneOrException($qb);
+  }
+  
+  /**
+   * @param int $page
+   * @param UserListFilter $filter
+   * @return Paginator<UserView>
+   */
+  public function getUserList(int $page, UserListFilter $filter): Paginator {
+    $qb = $this->_em
+      ->createQueryBuilder()
+      ->from(UserView::class, 'user')
+      ->select('user')
+      ->where('user.status != :status')
+      ->setParameter('status', UserStatus::Deleted)
+      ->orderBy('user.' . $filter->getOrderBy(), $filter->getOrder())
+      ->setFirstResult(($page - 1) * $filter->getLimit())
+      ->setMaxResults($filter->getLimit());
+    
+    if ($filter->getSearch()) {
+      $qb
+        ->andWhere('user.email LIKE :search OR user.displayName LIKE :search')
+        ->setParameter('search', $filter->getSearch() . '%');
+    }
+    
+    return new Paginator($qb);
   }
   
   /**

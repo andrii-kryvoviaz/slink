@@ -10,7 +10,7 @@ use Slink\Shared\Application\Http\RequestValueResolver\FileRequestValueResolver;
 use Slink\User\Infrastructure\Auth\JwtUser;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use UI\Http\Rest\Response\ApiResponse;

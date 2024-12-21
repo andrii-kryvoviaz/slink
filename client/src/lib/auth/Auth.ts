@@ -1,9 +1,10 @@
-import { Session } from '@slink/lib/auth/Session';
-import { parseJwt } from '@slink/lib/auth/parseJwt';
-import { type Cookies } from '@sveltejs/kit';
+import type { Cookies } from '@sveltejs/kit';
 
 import { ApiClient } from '@slink/api/Client';
 import { ValidationException } from '@slink/api/Exceptions';
+
+import { Session } from '@slink/lib/auth/Session';
+import { parseJwt } from '@slink/lib/auth/parseJwt';
 
 type TokenPair = {
   accessToken: string;
@@ -52,7 +53,7 @@ export class Auth {
 
   public static async login(
     { username, password }: Credentials,
-    { cookies, fetch }: AuthDependencies
+    { cookies, fetch }: AuthDependencies,
   ) {
     if (fetch) ApiClient.use(fetch);
 
@@ -110,7 +111,7 @@ export class Auth {
     }
   }
 
-  public static logout(cookies: Cookies) {
+  public static async logout(cookies: Cookies) {
     const refreshToken = cookies.get('refreshToken');
     const sessionId = cookies.get('sessionId');
 
@@ -125,8 +126,10 @@ export class Auth {
 
     Session.destroy(cookies);
 
-    ApiClient.auth.logout(refreshToken).catch(() => {
-      console.warn('Refresh token has already been invalidated.');
-    });
+    try {
+      await ApiClient.auth.logout(refreshToken);
+    } catch (e) {
+      console.warn('Refresh token has already been invalidated');
+    }
   }
 }

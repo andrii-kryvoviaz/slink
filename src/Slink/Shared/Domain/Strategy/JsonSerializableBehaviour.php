@@ -17,7 +17,7 @@ trait JsonSerializableBehaviour {
   }
   
   /**
-   * @param class-string<StringTransformer> $nameConvertor
+   * @param class-string $nameConvertor
    * @return array<string, mixed>
    */
   private function getProperties(string $nameConvertor = PassthroughTransformer::class): array {

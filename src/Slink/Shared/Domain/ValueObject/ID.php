@@ -24,6 +24,18 @@ final readonly class ID extends AbstractValueObject implements AggregateRootId {
   }
   
   /**
+   * @param mixed $value
+   * @return static|null
+   */
+  public static function fromUnknown(mixed $value): ?static {
+    if (\is_null($value)) {
+      return null;
+    }
+    
+    return self::fromString((string) $value);
+  }
+  
+  /**
    * @return static
    */
   public static function generate(): static {

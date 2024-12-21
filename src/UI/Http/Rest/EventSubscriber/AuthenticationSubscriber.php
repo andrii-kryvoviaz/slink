@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace UI\Http\Rest\EventSubscriber;
 
-use Slink\Settings\Domain\Service\ConfigurationProvider;
+use Slink\Settings\Application\Service\SettingsService;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -13,10 +14,15 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 final readonly class AuthenticationSubscriber implements EventSubscriberInterface {
+  /**
+   * @param ConfigurationProviderInterface<SettingsService> $configurationProvider
+   * @param Security $security
+   * @param TokenStorageInterface $tokenStorage
+   */
   public function __construct(
-    private ConfigurationProvider $configurationProvider,
-    private Security $security,
-    private TokenStorageInterface $tokenStorage,
+    private ConfigurationProviderInterface $configurationProvider,
+    private Security                       $security,
+    private TokenStorageInterface          $tokenStorage,
   ) {
   }
   

@@ -8,7 +8,7 @@ use Slink\Shared\Application\Command\CommandTrait;
 use Slink\User\Application\Command\LogOut\LogOutCommand;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use UI\Http\Rest\Response\ApiResponse;
 
 #[AsController]

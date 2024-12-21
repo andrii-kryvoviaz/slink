@@ -1,4 +1,5 @@
 import { Theme } from '@slink/lib/settings/index';
+import type { SidebarSettings } from '@slink/lib/settings/setters/sidebar';
 
 import type { Readable, Writable } from 'svelte/store';
 
@@ -6,6 +7,9 @@ export type Settings = {
   theme: SettingsValue<Theme> & {
     isDark: Readable<boolean>;
     isLight: Readable<boolean>;
+  };
+  sidebar: SettingsValue<SidebarSettings> & {
+    expanded: Readable<boolean>;
   };
 };
 

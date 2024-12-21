@@ -17,9 +17,6 @@ final readonly class GetImageListHandler implements QueryHandlerInterface {
   ) {
   }
   
-  /**
-   * @throws NotFoundException
-   */
   public function __invoke(GetImageListQuery $query, int $page, ?bool $isPublic = null, ?string $userId = null): Collection {
     $images = $this->repository->geImageList($page, new ImageListFilter(
       limit: $query->getLimit(),
