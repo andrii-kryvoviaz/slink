@@ -10,6 +10,9 @@ use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Infrastructure\DependencyInjection\ServiceLocator\Indexable;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
+/**
+ * @template-implements ConfigurationProviderInterface<ParameterBagProvider>
+ */
 final readonly class ParameterBagProvider implements ConfigurationProviderInterface, Indexable {
   
   public function __construct(

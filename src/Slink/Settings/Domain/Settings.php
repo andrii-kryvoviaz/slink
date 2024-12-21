@@ -38,45 +38,45 @@ final class Settings extends AbstractAggregateRoot {
   private UserSettings $user;
   private ImageSettings $image;
   
-//  /**
-//   * @param array<int, AbstractSettingsValueObject> $data
-//   */
-//  public function initialize(array $data): void {
-//    foreach ($data as $value) {
-//      if (!$value instanceof AbstractSettingsValueObject) {
-//        throw new InvalidSettingsException("Invalid Settings Value Object provided");
-//      }
-//
-//      $category = $value->getSettingsCategory();
-//
-//      $this->{$category} = $value;
-//    }
-//  }
-//
-//  /**
-//   * @param string $key
-//   * @return mixed
-//   */
-//  public function get(string $key): mixed {
-//    $path = explode('.', $key);
-//    $root = array_shift($path);
-//
-//    if(!isset($this->{$root})) {
-//      throw new \RuntimeException('Invalid Settings key');
-//    }
-//
-//    $payload = $this->{$root}->toPayload();
-//
-//    foreach ($path as $segment) {
-//      if(!isset($payload[$segment])) {
-//        throw new \RuntimeException('Invalid Settings key');
-//      }
-//
-//      $payload = $payload[$segment];
-//    }
-//
-//    return $payload;
-//  }
+  /**
+   * @param array<int, ?AbstractSettingsValueObject> $data
+   */
+  public function initialize(array $data): void {
+    foreach ($data as $value) {
+      if (!$value instanceof AbstractSettingsValueObject) {
+        throw new InvalidSettingsException("Invalid Settings Value Object provided");
+      }
+
+      $category = $value->getSettingsCategory();
+
+      $this->{$category} = $value;
+    }
+  }
+
+  /**
+   * @param string $key
+   * @return mixed
+   */
+  public function get(string $key): mixed {
+    $path = explode('.', $key);
+    $root = array_shift($path);
+
+    if(!isset($this->{$root})) {
+      throw new \RuntimeException('Invalid Settings key');
+    }
+
+    $payload = $this->{$root}->toPayload();
+
+    foreach ($path as $segment) {
+      if(!isset($payload[$segment])) {
+        throw new \RuntimeException('Invalid Settings key');
+      }
+
+      $payload = $payload[$segment];
+    }
+
+    return $payload;
+  }
   
   public function setSettings(AbstractSettingsValueObject $settings): void {
     $category = $settings->getSettingsCategory();
@@ -90,9 +90,7 @@ final class Settings extends AbstractAggregateRoot {
   }
   
   public function applySettingsChanged(SettingsChanged $event): void {
-//    $categoryKey = $event->category->getCategoryKey();
-//    $this->{$categoryKey} = $event->settings;
+    $categoryKey = $event->category->getCategoryKey();
+    $this->{$categoryKey} = $event->settings;
   }
-  
-  // ToDo: Implement Events and Projections for Settings
 }

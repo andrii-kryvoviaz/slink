@@ -18,17 +18,7 @@ abstract readonly class AbstractValueObject implements \JsonSerializable, \Strin
       return false;
     }
     
-    $properties = method_exists($this, 'getProperties')
-      ? $this->getProperties()
-      : get_class_vars(static::class);
-    
-    foreach ($properties as $property => $value) {
-      if ($value !== $other->{'get' . \ucfirst($property)}()) {
-        return false;
-      }
-    }
-    
-    return true;
+    return array_all($this->getProperties(), fn($value, $property) => $value === $other->{'get' . \ucfirst($property)}());
   }
   
   /**

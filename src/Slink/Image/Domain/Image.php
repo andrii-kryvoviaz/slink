@@ -91,7 +91,7 @@ final class Image extends AbstractAggregateRoot {
   
   /**
    */
-  public static function create(ID $id, ID $userId, ImageAttributes $attributes, ImageMetadata $metadata = null): self {
+  public static function create(ID $id, ID $userId, ImageAttributes $attributes, ?ImageMetadata $metadata = null): self {
     $image = new self($id);
     
     $image->recordThat(new ImageWasCreated($id, $userId, $attributes, $metadata));

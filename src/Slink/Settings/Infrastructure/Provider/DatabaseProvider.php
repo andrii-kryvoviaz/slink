@@ -10,6 +10,9 @@ use Slink\Settings\Domain\Repository\SettingsRepositoryInterface;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Infrastructure\DependencyInjection\ServiceLocator\Indexable;
 
+/**
+ * @template-implements ConfigurationProviderInterface<DatabaseProvider>
+ */
 final readonly class DatabaseProvider implements ConfigurationProviderInterface, Indexable {
   /**
    * @param SettingsRepositoryInterface $settingsRepository
@@ -88,6 +91,10 @@ final readonly class DatabaseProvider implements ConfigurationProviderInterface,
     return $nestedSettings;
   }
   
+  /**
+   * @param string $key
+   * @return array<string>
+   */
   private function parseKey(string $key): array {
     return explode('.', $key);
   }

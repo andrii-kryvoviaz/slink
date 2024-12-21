@@ -12,6 +12,9 @@ use Slink\User\Domain\Event\Auth\RefreshTokenRevoked;
 use Slink\User\Domain\ValueObject\Auth\HashedRefreshToken;
 
 final class RefreshTokenSet extends AbstractEventSourcedAggregate {
+  /**
+   * @var Set<HashedRefreshToken>
+   */
   private Set $hashedRefreshTokenCollection;
   
   /**

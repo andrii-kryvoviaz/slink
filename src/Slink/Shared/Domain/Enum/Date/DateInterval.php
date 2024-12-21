@@ -37,8 +37,7 @@ enum DateInterval: string {
    * @return array<string, string>
    */
   public static function all(): array {
-    /** @var DateInterval[] $cases */
-    $cases = self::cases(); // @phpstan-ignore-line
+    $cases = self::cases();
     
     return array_reduce(
       $cases,

@@ -9,7 +9,13 @@ use Psr\Container\NotFoundExceptionInterface;
 use Slink\Settings\Domain\Enum\ConfigurationProvider;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Settings\Infrastructure\Provider\ConfigurationProviderLocator;
+use Slink\Settings\Infrastructure\Provider\DatabaseProvider;
+use Slink\Settings\Infrastructure\Provider\ParameterBagProvider;
 
+/**
+ * @template-implements ConfigurationProviderInterface<DatabaseProvider>
+ * @template-implements ConfigurationProviderInterface<ParameterBagProvider>
+ */
 final readonly class SettingsService implements ConfigurationProviderInterface {
   private ConfigurationProviderInterface $configurationProvider;
   private ConfigurationProviderInterface $fallbackProvider;

@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Slink\Shared\Domain\Enum;
 
-/**
- * @method static cases()
- */
 trait ValidatorAwareEnumTrait {
   /**
    * @return array<string>

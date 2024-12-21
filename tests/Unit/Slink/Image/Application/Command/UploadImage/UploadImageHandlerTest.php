@@ -42,6 +42,8 @@ class UploadImageHandlerTest extends TestCase {
 
     $file = $this->createMock(File::class);
     $file->method('guessExtension')->willReturn('jpg');
+    $file->method('getMimeType')->willReturn('image/jpeg');
+    
     $imageAnalyzer->method('analyze')->willReturn([
       'size' => 100,
       'mimeType' => 'image/jpeg',

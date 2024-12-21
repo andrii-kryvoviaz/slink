@@ -8,6 +8,7 @@ namespace Slink\Settings\Infrastructure\Provider;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Slink\Settings\Application\Service\SettingsService;
 use Slink\Settings\Domain\Enum\ConfigurationProvider;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutowireLocator;
@@ -20,6 +21,8 @@ final readonly class ConfigurationProviderLocator {
   ) {}
   
   /**
+   * @param ConfigurationProvider $provider
+   * @return ConfigurationProviderInterface<SettingsService|ParameterBagProvider|DatabaseProvider>
    * @throws ContainerExceptionInterface
    * @throws NotFoundExceptionInterface
    */

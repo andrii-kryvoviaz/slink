@@ -34,7 +34,7 @@ class UserView extends AbstractView {
    * @param DateTime $createdAt
    * @param DateTime|null $updatedAt
    * @param UserStatus $status
-   * @param Collection|null $roles
+   * @param Collection<int,UserRoleView>|null $roles
    */
   public function __construct(
     #[ORM\Id]

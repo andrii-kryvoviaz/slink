@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace UI\Http\Rest\Controller\User;
 
+use Slink\Settings\Application\Service\SettingsService;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Application\Command\CommandTrait;
 use Slink\User\Application\Command\SignUp\SignUpCommand;
@@ -16,7 +17,12 @@ use UI\Http\Rest\Response\ApiResponse;
 #[Route(path: '/auth/signup', name: 'signup_user', methods: ['POST'])]
 final class SignUpController {
   use CommandTrait;
-
+  
+  /**
+   * @param SignUpCommand $command
+   * @param ConfigurationProviderInterface<SettingsService> $configurationProvider
+   * @return ApiResponse
+   */
   public function __invoke(
     #[MapRequestPayload] SignUpCommand $command,
     ConfigurationProviderInterface $configurationProvider

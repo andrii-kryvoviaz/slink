@@ -49,18 +49,18 @@ final class ImageAnalyzer implements ImageAnalyzerInterface {
   }
   
   /**
-   * @param string $mimeType
+   * @param ?string $mimeType
    * @return bool
    */
-  public function supportsResize(string $mimeType): bool {
+  public function supportsResize(?string $mimeType): bool {
     return \in_array($mimeType, $this->resizableMimeTypes, true);
   }
   
   /**
-   * @param string $mimeType
+   * @param ?string $mimeType
    * @return bool
    */
-  public function supportsExifProfile(string $mimeType): bool {
+  public function supportsExifProfile(?string $mimeType): bool {
     return \in_array($mimeType, $this->stripExifMimeTypes, true);
   }
   

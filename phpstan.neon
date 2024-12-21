@@ -3,8 +3,9 @@ parameters:
     paths:
         - src/
         - tests/
-    checkGenericClassInNonGenericObjectType: false
     ignoreErrors:
+        -
+            identifier: missingType.generics
         -
             messages:
                 - '#^Class [a-zA-Z0-9\\_]+ has an uninitialized readonly property [a-zA-Z0-9\$_]+\. Assign it in the constructor\.$#'
