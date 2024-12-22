@@ -54,9 +54,4 @@ when@prod:
             console:
                 type: console
                 process_psr_3_messages: false
-                channels: ["!event", "!doctrine"]
-            deprecation:
-                type: stream
-                channels: [deprecation]
-                path: php://stderr
-                formatter: monolog.formatter.json
+                channels: ["!event", "!doctrine", '!deprecation']

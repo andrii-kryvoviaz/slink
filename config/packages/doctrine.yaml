@@ -28,6 +28,8 @@ doctrine:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true
         default_entity_manager: read_model
+        controller_resolver:
+            auto_mapping: false
         entity_managers:
             event_store:
                 connection: event_store
@@ -36,7 +38,6 @@ doctrine:
                 report_fields_where_declared: true
                 validate_xml_mapping: true
                 naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
-                auto_mapping: true
                 mappings: '%doctrine_mappings%'
 
 when@test:

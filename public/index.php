@@ -15,7 +15,8 @@ if (filter_var($_ENV['SWOOLE_ENABLED'],FILTER_VALIDATE_BOOLEAN)) {
     'settings' => [
       \Swoole\Constant::OPTION_WORKER_NUM => $_ENV['SWOOLE_WORKER_NUM'] ?? 1,
       \Swoole\Constant::OPTION_DOCUMENT_ROOT => dirname(__DIR__).'/public',
-      \Swoole\Constant::OPTION_PACKAGE_MAX_LENGTH => $packageMaxLength
+      \Swoole\Constant::OPTION_PACKAGE_MAX_LENGTH => $packageMaxLength,
+      \Swoole\Constant::OPTION_HTTP_COMPRESSION => false,
     ],
   ];
 }
