@@ -11,6 +11,7 @@ parameters:
         username: '%env(string:default::SMB_USERNAME)%'
         password: '%env(string:default::SMB_PASSWORD)%'
   user:
+    allowRegistration: true
     allowUnauthenticatedAccess: '%env(bool:USER_ALLOW_UNAUTHENTICATED_ACCESS)%'
     approvalRequired: '%env(bool:USER_APPROVAL_REQUIRED)%'
     password:

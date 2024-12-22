@@ -10,6 +10,7 @@ use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\User\Domain\Context\UserCreationContext;
 use Slink\User\Domain\Enum\UserStatus;
+use Slink\User\Domain\Exception\RegistrationIsNotAllowed;
 use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
 use Slink\User\Domain\User;
 use Slink\User\Domain\ValueObject\Auth\Credentials;
@@ -34,6 +35,10 @@ final readonly class SignUpHandler implements CommandHandlerInterface {
    * @throws DateTimeException
    */
   public function __invoke(SignUpCommand $command): void {
+    if (!$this->configurationProvider->get('user.allowRegistration')) {
+      throw new RegistrationIsNotAllowed();
+    }
+    
     $username = Username::fromString($command->getUsername());
     $displayName = DisplayName::fromString($command->getUsername());
     

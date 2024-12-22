@@ -14,6 +14,6 @@ export abstract class HttpException extends Error {
 
   // ToDo: generate type safe error list
   get errors(): ErrorList {
-    return { error: this.message };
+    return { message: this.message };
   }
 }
