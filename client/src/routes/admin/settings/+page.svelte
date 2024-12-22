@@ -79,94 +79,113 @@
       {/snippet}
 
       <SettingItem
-        defaultValue={defaultSettings.user?.approvalRequired}
+        defaultValue={defaultSettings.user?.allowRegistration}
         reset={(value) => {
-          settings.user.approvalRequired = value;
+          settings.user.allowRegistration = value;
         }}
       >
         {#snippet label()}
-          User Approval
+          User Signup Enabled
         {/snippet}
         {#snippet hint()}
-          Toggle whether users need to be approved before they can access the
-          application
+          Toggle whether users are able to create a new account
         {/snippet}
         <Toggle
-          name="approvalRequired"
-          bind:checked={settings.user.approvalRequired}
+          name="allowRegistration"
+          bind:checked={settings.user.allowRegistration}
         />
       </SettingItem>
-      <SettingItem
-        defaultValue={defaultSettings.user?.allowUnauthenticatedAccess}
-        reset={(value) => {
-          settings.user.allowUnauthenticatedAccess = value;
-        }}
-      >
-        {#snippet label()}
-          Unauthenticated Access
-        {/snippet}
-        {#snippet hint()}
-          Toggle whether users can access the application without being
-          authenticated
-        {/snippet}
-        <Toggle
-          name="allowUnauthenticatedAccess"
-          bind:checked={settings.user.allowUnauthenticatedAccess}
-        />
-      </SettingItem>
-      <SettingItem
-        defaultValue={defaultSettings.user?.password.minLength}
-        reset={(value) => {
-          settings.user.password.minLength = value;
-        }}
-      >
-        {#snippet label()}
-          Password Length
-        {/snippet}
-        {#snippet hint()}
-          Set the minimum length of a user's password
-        {/snippet}
-        <NumberInput
-          error={$error?.errors.password?.minLength}
-          name="passwordLength"
-          bind:value={settings.user.password.minLength}
-        />
-      </SettingItem>
-      <SettingItem
-        defaultValue={defaultSettings.user?.password.requirements}
-        reset={(value) => {
-          settings.user.password.requirements = value;
-        }}
-      >
-        {#snippet label()}
-          Password Complexity
-        {/snippet}
-        {#snippet hint()}
-          Select the required character types for a user's password
-        {/snippet}
-        <Multiselect
-          type="bitmask"
-          name="passwordRequirements"
-          bind:value={settings.user.password.requirements}
+      {#if settings.user.allowRegistration}
+        <SettingItem
+          defaultValue={defaultSettings.user?.approvalRequired}
+          reset={(value) => {
+            settings.user.approvalRequired = value;
+          }}
         >
-          <MultiselectItem key="1">
-            <Icon icon="ph:number-nine-thin" />
-            Numbers
-          </MultiselectItem>
-          <MultiselectItem key="2">
-            <Icon icon="material-symbols-light:lowercase-rounded" />
-            Lowercase Letters
-          </MultiselectItem>
-          <MultiselectItem key="4">
-            <Icon icon="material-symbols-light:uppercase-rounded" />
-            Uppercase Letters
-          </MultiselectItem>
-          <MultiselectItem key="8">
-            <Icon icon="material-symbols-light:asterisk-rounded" />
-            Special Characters
-          </MultiselectItem>
-        </Multiselect>
-      </SettingItem>
+          {#snippet label()}
+            User Approval
+          {/snippet}
+          {#snippet hint()}
+            Toggle whether users need to be approved before they can access the
+            application
+          {/snippet}
+          <Toggle
+            name="approvalRequired"
+            bind:checked={settings.user.approvalRequired}
+          />
+        </SettingItem>
+        <SettingItem
+          defaultValue={defaultSettings.user?.allowUnauthenticatedAccess}
+          reset={(value) => {
+            settings.user.allowUnauthenticatedAccess = value;
+          }}
+        >
+          {#snippet label()}
+            Unauthenticated Access
+          {/snippet}
+          {#snippet hint()}
+            Toggle whether users can access the application without being
+            authenticated
+          {/snippet}
+          <Toggle
+            name="allowUnauthenticatedAccess"
+            bind:checked={settings.user.allowUnauthenticatedAccess}
+          />
+        </SettingItem>
+        <SettingItem
+          defaultValue={defaultSettings.user?.password.minLength}
+          reset={(value) => {
+            settings.user.password.minLength = value;
+          }}
+        >
+          {#snippet label()}
+            Password Length
+          {/snippet}
+          {#snippet hint()}
+            Set the minimum length of a user's password
+          {/snippet}
+          <NumberInput
+            error={$error?.errors.password?.minLength}
+            name="passwordLength"
+            bind:value={settings.user.password.minLength}
+          />
+        </SettingItem>
+        <SettingItem
+          defaultValue={defaultSettings.user?.password.requirements}
+          reset={(value) => {
+            settings.user.password.requirements = value;
+          }}
+        >
+          {#snippet label()}
+            Password Complexity
+          {/snippet}
+          {#snippet hint()}
+            Select the required character types for a user's password
+          {/snippet}
+          <Multiselect
+            type="bitmask"
+            name="passwordRequirements"
+            bind:value={settings.user.password.requirements}
+          >
+            <MultiselectItem key="1">
+              <Icon icon="ph:number-nine-thin" />
+              Numbers
+            </MultiselectItem>
+            <MultiselectItem key="2">
+              <Icon icon="material-symbols-light:lowercase-rounded" />
+              Lowercase Letters
+            </MultiselectItem>
+            <MultiselectItem key="4">
+              <Icon icon="material-symbols-light:uppercase-rounded" />
+              Uppercase Letters
+            </MultiselectItem>
+            <MultiselectItem key="8">
+              <Icon icon="material-symbols-light:asterisk-rounded" />
+              Special Characters
+            </MultiselectItem>
+          </Multiselect>
+        </SettingItem>
+      {/if}
     </SettingsPane>
     <SettingsPane
       category="image"
