@@ -11,10 +11,12 @@ final class ImageAnalyzer implements ImageAnalyzerInterface {
   /**
    * @param array<string> $resizableMimeTypes
    * @param array<string> $stripExifMimeTypes
+   * @param array<string> $enforceConversionMimeTypes
    */
   public function __construct(
     private readonly array $resizableMimeTypes,
     private readonly array $stripExifMimeTypes,
+    private readonly array $enforceConversionMimeTypes
   ) {
   }
   
@@ -62,6 +64,14 @@ final class ImageAnalyzer implements ImageAnalyzerInterface {
    */
   public function supportsExifProfile(?string $mimeType): bool {
     return \in_array($mimeType, $this->stripExifMimeTypes, true);
+  }
+  
+  /**
+   * @param ?string $mimeType
+   * @return bool
+   */
+  public function isConversionRequired(?string $mimeType): bool {
+    return \in_array($mimeType, $this->enforceConversionMimeTypes, true);
   }
   
   /**

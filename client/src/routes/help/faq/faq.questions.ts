@@ -15,7 +15,15 @@ export const faqQuestions = [
         <span class="badge badge-primary badge-outline">image/x-icon</span>
         <span class="badge badge-primary badge-outline">image/vnd.microsoft.icon</span>
         <span class="badge badge-primary badge-outline">image/x-tga</span>
-      </div>`,
+        <span class="badge badge-primary badge-outline">image/avif</span>
+        <span class="badge badge-primary badge-outline">image/heic *</span>
+        <span class="badge badge-primary badge-outline">image/tiff *</span>
+        <span class="badge badge-primary badge-outline">image/tif *</span>
+      </div>
+      <p class="mt-4 text-xs">
+        <span class="font-light">* Source images are forced to be converted to JPEG format.</span>
+      </p>
+    `,
   },
   {
     slug: 'image-visability',

@@ -75,11 +75,12 @@ RUN apk update && apk upgrade &&\
     libheif \
     libpng \
     libwebp \
+    tiff \
     freetype \
     postgresql-libs
 
 # Install Common PHP extensions
-RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS git autoconf g++ make linux-headers curl-dev libmcrypt-dev icu-dev imagemagick-dev postgresql-dev libpng-dev libwebp-dev freetype-dev libjpeg-turbo-dev libheif-dev oniguruma-dev samba-dev && \
+RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS git autoconf g++ make linux-headers curl-dev libmcrypt-dev icu-dev imagemagick-dev postgresql-dev libpng-dev libwebp-dev tiff-dev freetype-dev libjpeg-turbo-dev libheif-dev oniguruma-dev samba-dev && \
     docker-php-ext-configure gd --with-jpeg --with-freetype --with-webp && \
     docker-php-ext-install curl intl mysqli pdo_pgsql mbstring gd exif && \
     pecl install redis smbclient && \

@@ -169,7 +169,7 @@
             </p>
 
             <p class="text-xs text-color-secondary">
-              SVG, PNG, JPG, WEBP, BMP, GIF or ICO
+              SVG, PNG, JPG, BMP, GIF or HEIC
             </p>
             <a
               href="/help/faq#supported-image-formats"
