@@ -12,10 +12,12 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
   /**
    * @param string $maxSize
    * @param bool $stripExifMetadata
+   * @param int $compressionQuality
    */
   private function __construct(
     private string $maxSize,
     private bool $stripExifMetadata,
+    private int $compressionQuality = 80
   ) {
     if (!preg_match('/^(\d+)([kM])$/', $maxSize)) {
       throw new InvalidImageMaxSizeException();
@@ -36,7 +38,8 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
   public function toPayload(): array {
     return [
       'maxSize' => $this->maxSize,
-      'stripExifMetadata' => $this->stripExifMetadata
+      'stripExifMetadata' => $this->stripExifMetadata,
+      'compressionQuality' => $this->compressionQuality
     ];
   }
   
@@ -46,7 +49,8 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
   public static function fromPayload(array $payload): static {
     return new self(
       $payload['maxSize'],
-      $payload['stripExifMetadata']
+      $payload['stripExifMetadata'],
+      $payload['compressionQuality'] ?? 80
     );
   }
   
@@ -69,5 +73,12 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
    */
   public function isStripExifMetadata(): bool {
     return $this->stripExifMetadata;
+  }
+  
+  /**
+   * @return int
+   */
+  public function getCompressionQuality(): int {
+    return $this->compressionQuality;
   }
 }

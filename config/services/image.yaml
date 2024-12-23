@@ -11,9 +11,15 @@ parameters:
     - 'image/x-icon'
     - 'image/vnd.microsoft.icon'
     - 'image/x-tga'
+    - 'image/avif'
+    - 'image/heic'
+    - 'image/heif'
+    - 'image/tiff'
+    - 'image/tif'
 
   supports_resize: ['image/bmp', 'image/png', 'image/jpeg', 'image/jpg', 'image/webp']
-  supports_strip_exif: ['image/jpeg', 'image/jpg']
+  supports_strip_exif: ['image/jpeg', 'image/jpg', 'image/heic', 'image/heif', 'image/tiff', 'image/tif']
+  enforce_conversion: ['image/heic', 'image/heif', 'image/tiff', 'image/tif']
 
 services:
   Slink\Image\Domain\Service\ImageAnalyzerInterface:
@@ -21,3 +27,4 @@ services:
     arguments:
       $resizableMimeTypes: '%supports_resize%'
       $stripExifMimeTypes: '%supports_strip_exif%'
+      $enforceConversionMimeTypes: '%enforce_conversion%'

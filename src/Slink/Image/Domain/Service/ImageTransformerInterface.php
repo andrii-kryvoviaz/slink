@@ -3,6 +3,7 @@
 namespace Slink\Image\Domain\Service;
 
 use Slink\Shared\Domain\ValueObject\ImageOptions;
+use SplFileInfo;
 
 interface ImageTransformerInterface {
   /**
@@ -33,4 +34,13 @@ interface ImageTransformerInterface {
    * @return string
    */
   public function stripExifMetadata(string $path): string;
+  
+  /**
+   * @template T of SplFileInfo
+   *
+   * @param T $file
+   * @param int|null $quality
+   * @return T
+   */
+  public function convertToJpeg(SplFileInfo $file, ?int $quality = null): SplFileInfo;
 }

@@ -22,6 +22,12 @@ interface ImageAnalyzerInterface {
    * @return bool
    */
   public function supportsExifProfile(?string $mimeType): bool;
+  
+  /**
+   * @param ?string $mimeType
+   * @return bool
+   */
+  public function isConversionRequired(?string $mimeType): bool;
  
   /**
    * @return array<string, mixed>

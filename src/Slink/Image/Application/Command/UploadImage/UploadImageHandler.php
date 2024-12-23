@@ -41,11 +41,25 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
   public function __invoke(UploadImageCommand $command, ?string $userId = null): void {
     $file = $command->getImageFile();
     $imageId = $command->getId();
-    $fileName = sprintf('%s.%s', $imageId, $file->guessExtension());
     
     $userId = $userId
       ? ID::fromString($userId)
       : ID::generate();
+    
+    if($this->imageAnalyzer->isConversionRequired($file->getMimeType())) {
+      $file = $this->imageTransformer->convertToJpeg($file);
+    }
+    
+    [$mimeType, $pathname, $extension] = [$file->getMimeType(), $file->getPathname(), $file->guessExtension()];
+    
+    if(
+      $this->imageAnalyzer->supportsExifProfile($mimeType)
+      && $this->configurationProvider->get('image.stripExifMetadata')
+    ) {
+      $this->imageTransformer->stripExifMetadata($pathname);
+    }
+    
+    $fileName = sprintf('%s.%s', $imageId, $extension);
     
     $metadata = ImageMetadata::fromPayload(
       $this->imageAnalyzer->analyze($file),
@@ -56,13 +70,6 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
       $command->getDescription(),
       $command->isPublic(),
     );
-    
-    if(
-      $this->imageAnalyzer->supportsExifProfile($file->getMimeType())
-      && $this->configurationProvider->get('image.stripExifMetadata')
-    ) {
-      $this->imageTransformer->stripExifMetadata($file->getPathname());
-    }
     
     $this->storage->upload($file, $fileName);
     

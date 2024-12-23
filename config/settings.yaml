@@ -20,3 +20,4 @@ parameters:
   image:
     maxSize: '%env(string:IMAGE_MAX_SIZE)%'
     stripExifMetadata: '%env(bool:IMAGE_STRIP_EXIF_METADATA)%'
+    compressionQuality: '%env(int:IMAGE_COMPRESSION_QUALITY)%'

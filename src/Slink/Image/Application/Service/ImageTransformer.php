@@ -7,9 +7,17 @@ use Gumlet\ImageResizeException;
 use Imagick;
 use ImagickException;
 use Slink\Image\Domain\Service\ImageTransformerInterface;
+use Slink\Settings\Application\Service\SettingsService;
 use Slink\Shared\Domain\ValueObject\ImageOptions;
+use SplFileInfo;
+use Symfony\Component\HttpFoundation\File\File;
 
-class ImageTransformer implements ImageTransformerInterface {
+final readonly class ImageTransformer implements ImageTransformerInterface {
+  public function __construct(
+    private SettingsService $settingsService
+  ) {
+  }
+  
   /**
    * @param string $content
    * @param int|null $width
@@ -101,5 +109,30 @@ class ImageTransformer implements ImageTransformerInterface {
     } finally {
       return $path;
     }
+  }
+  
+  /**
+   * @param SplFileInfo $file
+   * @param int|null $quality
+   * @return File
+   * @throws ImagickException
+   */
+  public function convertToJpeg(SplFileInfo $file, ?int $quality = null): File {
+    $image = new Imagick($file->getPathname());
+    $image->setImageFormat('jpeg');
+    
+    $quality ??= $this->settingsService->get('image.compressionQuality');
+    
+    if ($quality) {
+      $image->setImageCompressionQuality($quality);
+    }
+    
+    $fileName = $file->getBasename('.' . $file->getExtension());
+    $jpegPath = sprintf('%s/%s.jpg', $file->getPath(), $fileName);
+    
+    $image->writeImage($jpegPath);
+    $image->clear();
+    
+    return new File($jpegPath, true);
   }
 }
