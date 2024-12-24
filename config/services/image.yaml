@@ -17,7 +17,7 @@ parameters:
     - 'image/tiff'
     - 'image/tif'
 
-  supports_resize: ['image/bmp', 'image/png', 'image/jpeg', 'image/jpg', 'image/webp']
+  supports_resize: ['image/bmp', 'image/png', 'image/jpeg', 'image/jpg', 'image/webp', 'image/gif', 'image/avif']
   supports_strip_exif: ['image/jpeg', 'image/jpg', 'image/heic', 'image/heif', 'image/tiff', 'image/tif']
   enforce_conversion: ['image/heic', 'image/heif', 'image/tiff', 'image/tif']
 

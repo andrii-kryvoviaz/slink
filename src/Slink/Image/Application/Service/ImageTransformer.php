@@ -2,8 +2,6 @@
 
 namespace Slink\Image\Application\Service;
 
-use Gumlet\ImageResize;
-use Gumlet\ImageResizeException;
 use Imagick;
 use ImagickException;
 use Slink\Image\Domain\Service\ImageTransformerInterface;
@@ -23,13 +21,28 @@ final readonly class ImageTransformer implements ImageTransformerInterface {
    * @param int|null $width
    * @param int|null $height
    * @return string
-   * @throws ImageResizeException
+   * @throws ImagickException
    */
   public function resize(string $content, ?int $width, ?int $height): string {
-    $image = ImageResize::createFromString($content);
-
-    if ($width === null && $height === null) {
+    $resizedImageContent = $this->resizeToBestFit(
+      ImageResize::createFromString($content),
+      $width,
+      $height
+    );
+    
+    if (!$resizedImageContent) {
       return $content;
+    }
+    
+    return $resizedImageContent;
+  }
+  
+  /**
+   * @throws ImagickException
+   */
+  private function resizeToBestFit(ImageResize $image, ?int $width, ?int $height): ?string {
+    if ($width === null && $height === null) {
+      return null;
     }
     
     if ($width === null) {
@@ -48,7 +61,7 @@ final readonly class ImageTransformer implements ImageTransformerInterface {
    * @param int|null $width
    * @param int|null $height
    * @return string
-   * @throws ImageResizeException
+   * @throws ImagickException
    */
   public function crop(string $content, ?int $width, ?int $height): string {
     $image = ImageResize::createFromString($content);
@@ -65,7 +78,13 @@ final readonly class ImageTransformer implements ImageTransformerInterface {
       return $content;
     }
     
-    return $image->crop($width, $height)->getImageAsString();
+    $croppedImageContent = $image->crop($width, $height)->getImageAsString();
+    
+    if (!$croppedImageContent) {
+      return $content;
+    }
+    
+    return $croppedImageContent;
   }
   
   /**
