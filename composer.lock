@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7a3c449618aa73ed862192085b0acc2d",
+    "content-hash": "3f468c332a302d5f7931f2961bd9dd30",
     "packages": [
         {
             "name": "brick/math",
@@ -1765,65 +1765,6 @@
                 }
             ],
             "time": "2023-05-27T13:57:16+00:00"
-        },
-        {
-            "name": "gumlet/php-image-resize",
-            "version": "2.0.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/gumlet/php-image-resize.git",
-                "reference": "54165d97ebc3d4fc188761166b78e6702f605f59"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/gumlet/php-image-resize/zipball/54165d97ebc3d4fc188761166b78e6702f605f59",
-                "reference": "54165d97ebc3d4fc188761166b78e6702f605f59",
-                "shasum": ""
-            },
-            "require": {
-                "ext-fileinfo": "*",
-                "ext-gd": "*",
-                "php": ">=5.6.0"
-            },
-            "require-dev": {
-                "apigen/apigen": "^4.1",
-                "ext-exif": "*",
-                "ext-gd": "*",
-                "php-coveralls/php-coveralls": "^2.1",
-                "phpunit/phpunit": "^8.5"
-            },
-            "suggest": {
-                "ext-exif": "Auto-rotate jpeg files"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Gumlet\\": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Aditya Patadia",
-                    "homepage": "http://aditya.patadia.org/"
-                }
-            ],
-            "description": "PHP class to re-size and scale images",
-            "homepage": "https://github.com/gumlet/php-image-resize",
-            "keywords": [
-                "image",
-                "php",
-                "resize",
-                "scale"
-            ],
-            "support": {
-                "issues": "https://github.com/gumlet/php-image-resize/issues",
-                "source": "https://github.com/gumlet/php-image-resize/tree/2.0.4"
-            },
-            "time": "2023-10-11T14:16:03+00:00"
         },
         {
             "name": "icewind/smb",
