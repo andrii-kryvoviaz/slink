@@ -1,4 +1,6 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte';
+
   import {
     parseFileSize,
     sizeMatchingRegex,
@@ -8,7 +10,6 @@
 
   import { ResetSettingConfirmation } from '@slink/components/Feature/Settings';
   import { Badge } from '@slink/components/UI/Text';
-  import type { Snippet } from 'svelte';
 
   interface Props {
     defaultValue?: any;
