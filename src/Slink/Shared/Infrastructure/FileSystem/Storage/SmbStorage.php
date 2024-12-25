@@ -31,18 +31,19 @@ final class SmbStorage extends AbstractStorage {
     [
       'host' => $host,
       'share' => $share,
-      'workgroup' => $workgroup,
       'username' => $username,
       'password' => $password
     ] = $config;
     
+    $workgroup = $config['workgroup'] ?? 'workgroup';
+    
     $basicAuth = new BasicAuth(
       username: $username,
-      workgroup: $workgroup ?? 'workgroup',
+      workgroup: $workgroup,
       password: $password,
     );
     
-    $smbClientServer = (new ServerFactory())->createServer($host, $basicAuth);
+    $smbClientServer = new ServerFactory()->createServer($host, $basicAuth);
     return new self($smbClientServer->getShare($share));
   }
   
