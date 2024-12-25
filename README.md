@@ -174,11 +174,10 @@ After the user is approved, they will be able to log in and upload images.
 >
 > Users can be also managed from the admin dashboard.
 
-> [!IMPORTANT]
-> Currently, **User Roles** and **Admin Dashboard** are available only in the main branch and not in the latest release.
-> Manual build from the main branch can be used to access these features early.
-
 ## User Roles
+> [!IMPORTANT]
+> Available from version 1.3.0
+
 The application has two user roles: **User** and **Admin**. By default, all users are assigned the **User** role.
 
 To promote a user to the **Admin** role, you can use the following CLI command:
