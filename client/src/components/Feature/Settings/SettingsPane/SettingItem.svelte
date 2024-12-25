@@ -8,13 +8,14 @@
 
   import { ResetSettingConfirmation } from '@slink/components/Feature/Settings';
   import { Badge } from '@slink/components/UI/Text';
+  import type { Snippet } from 'svelte';
 
   interface Props {
     defaultValue?: any;
     reset?: (value: any) => void;
-    label?: import('svelte').Snippet;
-    hint?: import('svelte').Snippet;
-    children?: import('svelte').Snippet;
+    label?: Snippet;
+    hint?: Snippet;
+    children?: Snippet;
   }
 
   let {
@@ -83,7 +84,7 @@
       >
         <span bind:this={labelRef}>{@render label?.()}</span>
 
-        {#if defaultValue !== null && defaultValue !== undefined}
+        {#if defaultValue}
           <span
             class="flex cursor-pointer select-none items-center gap-2 rounded-full bg-gray-200 p-1 px-4 text-xs font-extralight text-gray-600 transition-colors duration-200 hover:bg-gray-300 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
             onclick={handleSettingReset}
