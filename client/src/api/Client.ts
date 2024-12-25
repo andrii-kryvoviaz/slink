@@ -126,7 +126,7 @@ export class Client {
       });
 
       if (!handled) {
-        invalidateAll();
+        await invalidateAll();
       }
     }
 

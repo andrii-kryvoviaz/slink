@@ -1,6 +1,6 @@
 import type { LayoutLoad } from './$types';
 import { themeIcons } from '@slink/theme.icons';
-import { redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 
 import { browser } from '$app/environment';
 
@@ -23,9 +23,14 @@ export const load: LayoutLoad = async ({ fetch, data }) => {
     }
   });
 
+  ApiClient.on('forbidden', () => {
+    error(403, {
+      message: 'You do not have permission to access this page.',
+    });
+  });
+
   // Preload the theme icons to avoid flickering
   preloadIconSet(themeIcons);
 
-  // pass any data from ssr to the client
   return data;
 };
