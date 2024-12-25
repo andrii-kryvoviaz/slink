@@ -12,15 +12,18 @@
 Solves the problem of sharing images with friends, family, and colleagues without relying on third-party services. It also offers a platform for artists to share their work with the community. Additionally, developers may find it useful for self-hosting screenshots of personal projects, which can then be used on GitHub, portfolios, blogs, etc.
 
 ## Features
+- **Image Upload**: Supports _PNG_, _JPG_, _WEBP_, _SVG_, _BMP_, _ICO_, _GIF_, _AVIF_, _HEIC*_ and _TIFF*_.
 - **Authentication**: Users can sign up and log in to the platform.
 - **User Approval**: Require user approval before they can upload images.
-- **Image Upload**: _SVG_, _PNG_, _JPG_, _WEBP_, _BMP_, _ICO_ or _GIF_ images can be uploaded.
 - **Share Links**: Users can share links to their uploaded images and customize the image size.
 - **Upload History**: Provides an overview of all images uploaded by the user.
 - **Storage Providers**: Support for _local_ and _SMB_ storage providers.
 - **Explore Images**: Features a listing page of public images uploaded by other users.
 - **Dark Mode**: Includes support for both _Dark_ and _Light_ modes in the application.
 - **Dashboard**: Enhanced statistics and analytics for admin users.
+
+> [!NOTE]
+> \* HEIC and TIFF images are converted to JPG format before being saved for better compatibility.
 
 ### Upcoming Features
 > [!IMPORTANT]
