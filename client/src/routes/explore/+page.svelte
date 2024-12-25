@@ -150,9 +150,6 @@
       {#snippet text()}
         <span>View More</span>
       {/snippet}
-      {#snippet icon()}
-        <Icon icon="mynaui:chevron-double-right" />
-      {/snippet}
     </LoadMoreButton>
   </div>
 </section>
