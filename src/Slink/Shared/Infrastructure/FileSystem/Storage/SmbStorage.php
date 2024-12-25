@@ -12,20 +12,19 @@ use Icewind\SMB\Exception\NotFoundException;
 use Icewind\SMB\IShare;
 use Icewind\SMB\ServerFactory;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
+use Slink\Shared\Domain\Enum\StorageProvider;
 use Symfony\Component\HttpFoundation\File\File;
 
 final class SmbStorage extends AbstractStorage {
-  
-  public function __construct(private readonly IShare $share) {
-  }
+  private IShare $share;
   
   /**
    * @param ConfigurationProviderInterface $configurationProvider
-   * @return self
+   * @return void
    * @throws DependencyException
    */
   #[\Override]
-  static function create(ConfigurationProviderInterface $configurationProvider): self {
+  function init(ConfigurationProviderInterface $configurationProvider): void {
     $config = $configurationProvider->get('storage.adapter.smb');
     
     [
@@ -44,7 +43,7 @@ final class SmbStorage extends AbstractStorage {
     );
     
     $smbClientServer = new ServerFactory()->createServer($host, $basicAuth);
-    return new self($smbClientServer->getShare($share));
+    $this->share = $smbClientServer->getShare($share);
   }
   
   /**
@@ -126,5 +125,12 @@ final class SmbStorage extends AbstractStorage {
    */
   public function mkdir(string $path): void {
     $this->share->mkdir($path);
+  }
+  
+  /**
+   * @return string
+   */
+  public static function getAlias(): string {
+    return StorageProvider::SMB->value;
   }
 }

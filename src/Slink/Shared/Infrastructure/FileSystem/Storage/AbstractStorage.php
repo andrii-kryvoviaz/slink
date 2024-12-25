@@ -11,36 +11,41 @@ abstract class AbstractStorage implements StorageInterface {
   /**
    * @var string
    */
-  protected string $imageDir = 'images';
+  protected string $imageDir = 'images' {
+    set {
+      $this->imageDir = $value;
+    }
+  }
   /**
    * @var string
    */
-  protected string $cacheDir = 'cache';
+  protected string $cacheDir = 'cache' {
+    set {
+      $this->cacheDir = $value;
+    }
+  }
   /**
    *
    */
   private const string APP_DIRECTORY = 'slink';
-  
-  private ImageTransformerInterface $imageTransformer;
   
   /**
    * @var string|null
    */
   private ?string $serverRoot = null;
   
-  /**
-   * @param ConfigurationProviderInterface $configurationProvider
-   * @return static
-   */
-  abstract static function create(ConfigurationProviderInterface $configurationProvider): self;
+  public function __construct(
+    private readonly ImageTransformerInterface $imageTransformer,
+    ConfigurationProviderInterface             $configurationProvider
+  ) {
+    $this->init($configurationProvider);
+  }
   
   /**
-   * @param ImageTransformerInterface $imageTransformer
+   * @param ConfigurationProviderInterface $configurationProvider
    * @return void
    */
-  public function setImageTransformer(ImageTransformerInterface $imageTransformer): void {
-    $this->imageTransformer = $imageTransformer;
-  }
+  abstract function init(ConfigurationProviderInterface $configurationProvider): void;
   
   /**
    * @param string $serverRoot
@@ -48,22 +53,6 @@ abstract class AbstractStorage implements StorageInterface {
    */
   protected function setServerRoot(string $serverRoot): void {
     $this->serverRoot = $serverRoot;
-  }
-  
-  /**
-   * @param string $imageDir
-   * @return void
-   */
-  public function setImageDir(string $imageDir): void {
-    $this->imageDir = $imageDir;
-  }
-  
-  /**
-   * @param string $cacheDir
-   * @return void
-   */
-  public function setCacheDir(string $cacheDir): void {
-    $this->cacheDir = $cacheDir;
   }
   
   /**

@@ -5,27 +5,19 @@ declare(strict_types=1);
 namespace Slink\Shared\Infrastructure\FileSystem\Storage;
 
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
-use Slink\Shared\Domain\ValueObject\ImageOptions;
+use Slink\Shared\Domain\Enum\StorageProvider;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Symfony\Component\HttpFoundation\File\File;
 
 final class LocalStorage extends AbstractStorage {
   
   /**
-   * @param string $projectPublicDir
-   */
-  private function __construct(string $projectPublicDir) {
-    $this->setServerRoot($projectPublicDir);
-  }
-  
-  /**
    * @param ConfigurationProviderInterface $configurationProvider
-   * @return static
+   * @return void
    */
   #[\Override]
-  static function create(ConfigurationProviderInterface $configurationProvider): self {
-    $config = $configurationProvider->get('storage.adapter.local');
-    return new self($config['dir']);
+  function init(ConfigurationProviderInterface $configurationProvider): void {
+    $this->setServerRoot($configurationProvider->get('storage.adapter.local.dir'));
   }
   
   /**
@@ -65,5 +57,12 @@ final class LocalStorage extends AbstractStorage {
   
   public function mkdir(string $path): void {
     mkdir($path, 0777, true);
+  }
+  
+  /**
+   * @return string
+   */
+  public static function getAlias(): string {
+    return StorageProvider::Local->value;
   }
 }

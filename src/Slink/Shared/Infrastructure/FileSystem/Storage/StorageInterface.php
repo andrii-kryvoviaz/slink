@@ -4,17 +4,12 @@ declare(strict_types=1);
 
 namespace Slink\Shared\Infrastructure\FileSystem\Storage;
 
-use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\ValueObject\ImageOptions;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\HttpFoundation\File\File;
 
+#[AutoconfigureTag]
 interface StorageInterface {
-  /**
-   * @param ConfigurationProviderInterface $configurationProvider
-   * @return static
-   */
-  static function create(ConfigurationProviderInterface $configurationProvider): self;
-  
   /**
    * @param File $file
    * @param string $fileName
@@ -58,4 +53,9 @@ interface StorageInterface {
    * @return string|null
    */
   public function read(string $path): ?string;
+  
+  /**
+   * @return string
+   */
+  public static function getAlias(): string;
 }
