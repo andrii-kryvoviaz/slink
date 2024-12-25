@@ -3,9 +3,8 @@ security:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
 
     providers:
-        jwt:
-            lexik_jwt:
-                class: Slink\User\Infrastructure\Auth\JwtUser
+        slink.user.auth.jwt_user_provider:
+            id: Slink\User\Infrastructure\Auth\JwtUserProvider
 
     firewalls:
         dev:
@@ -15,7 +14,8 @@ security:
         api:
             pattern: ^/api(?!/auth|/public)
             stateless: true
-            jwt: ~
+            jwt:
+                provider: slink.user.auth.jwt_user_provider
 
     access_control:
         # Allow access to all routes, each controller will have

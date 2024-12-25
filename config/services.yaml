@@ -59,7 +59,6 @@ services:
         arguments:
             - '@messenger.bus.event'
 
-
     UI\Http\Rest\EventSubscriber\ExceptionSubscriber:
         arguments:
             - '@logger'
