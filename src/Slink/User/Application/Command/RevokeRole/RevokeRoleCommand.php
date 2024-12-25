@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Slink\User\Application\Command\RevokeRole;
 
 use Slink\Shared\Application\Command\CommandInterface;
-use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Enum\UserRole;
-use Slink\User\Domain\ValueObject\Role;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final readonly class RevokeRoleCommand implements CommandInterface {
@@ -26,16 +24,16 @@ final readonly class RevokeRoleCommand implements CommandInterface {
   }
   
   /**
-   * @return ID
+   * @return string
    */
-  public function getId(): ID {
-    return ID::fromString($this->id);
+  public function getId(): string {
+    return $this->id;
   }
   
   /**
-   * @return Role
+   * @return string
    */
-  public function getRole(): Role {
-    return Role::fromString($this->role);
+  public function getRole(): string {
+    return $this->role;
   }
 }

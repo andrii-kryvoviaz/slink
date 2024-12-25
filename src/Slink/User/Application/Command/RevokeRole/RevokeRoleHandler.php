@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Slink\User\Application\Command\RevokeRole;
 
 use Slink\Shared\Application\Command\CommandHandlerInterface;
+use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Context\ChangeUserRoleContext;
 use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
+use Slink\User\Domain\ValueObject\Role;
 
 final readonly class RevokeRoleHandler implements CommandHandlerInterface {
   
@@ -21,8 +23,14 @@ final readonly class RevokeRoleHandler implements CommandHandlerInterface {
    * @return void
    */
   public function __invoke(RevokeRoleCommand $command): void {
-    $user = $this->userRepository->get($command->getId());
-    $user->revokeRole($command->getRole(), $this->changeUserRoleContext);
+    $userId = ID::fromString($command->getId());
+    
+    $user = $this->userRepository->get($userId);
+    
+    $user->revokeRole(
+      Role::fromString($command->getRole()),
+      $this->changeUserRoleContext
+    );
     
     $this->userRepository->store($user);
   }

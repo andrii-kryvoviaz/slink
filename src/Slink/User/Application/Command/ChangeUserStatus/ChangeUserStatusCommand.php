@@ -31,9 +31,9 @@ final readonly class ChangeUserStatusCommand implements CommandInterface {
   }
   
   /**
-   * @return UserStatus
+   * @return string
    */
-  public function getStatus(): UserStatus {
-    return UserStatus::from($this->status);
+  public function getStatus(): string {
+    return $this->status;
   }
 }

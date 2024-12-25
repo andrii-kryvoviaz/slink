@@ -6,6 +6,7 @@ namespace Slink\User\Application\Command\ChangeUserStatus;
 
 use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\ValueObject\ID;
+use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
 use Slink\User\Domain\Specification\CurrentUserSpecificationInterface;
 
@@ -27,7 +28,7 @@ final readonly class ChangeUserStatusHandler implements CommandHandlerInterface 
     $user = $this->userRepository->get($id);
     
     $user->changeStatus(
-      $command->getStatus(),
+      UserStatus::from($command->getStatus()),
       $this->sameUserSpecification
     );
     

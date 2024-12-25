@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Slink\User\Application\Command\GrantRole;
 
 use Slink\Shared\Application\Command\CommandHandlerInterface;
+use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Context\ChangeUserRoleContext;
 use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
+use Slink\User\Domain\ValueObject\Role;
 
 final readonly class GrantRoleHandler implements CommandHandlerInterface {
   
@@ -21,8 +23,14 @@ final readonly class GrantRoleHandler implements CommandHandlerInterface {
    * @return void
    */
   public function __invoke(GrantRoleCommand $command): void {
-    $user = $this->userRepository->get($command->getId());
-    $user->grantRole($command->getRole(), $this->changeUserRoleContext);
+    $userId = ID::fromString($command->getId());
+    
+    $user = $this->userRepository->get($userId);
+    
+    $user->grantRole(
+      Role::fromString($command->getRole()),
+      $this->changeUserRoleContext
+    );
     
     $this->userRepository->store($user);
   }
