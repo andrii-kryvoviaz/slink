@@ -13,13 +13,13 @@ type LinkAttributes = {
   target?: target extends LinkAttributes['href'] ? target : never;
 };
 
-type HTMLCutromButtonAttributes = Pick<
+type HTMLCustomButtonAttributes = Pick<
   HTMLButtonAttributes,
   'disabled' | 'type' | 'title'
 >;
 
 export interface ButtonAttributes
-  extends HTMLCutromButtonAttributes,
+  extends HTMLCustomButtonAttributes,
     HTMLAttributes<HTMLElement>,
     LinkAttributes,
     ButtonProps {
