@@ -16,13 +16,12 @@
     SettingsPane,
   } from '@slink/components/Feature/Settings';
   import {
-    Dropdown,
-    DropdownItem,
     FileSizeInput,
     Input,
     Multiselect,
     MultiselectItem,
     NumberInput,
+    Select,
     Toggle,
   } from '@slink/components/UI/Form';
 
@@ -93,7 +92,7 @@
         <Toggle
           name="allowRegistration"
           bind:checked={settings.user.allowRegistration}
-        />
+        ></Toggle>
       </SettingItem>
       {#if settings.user.allowRegistration}
         <SettingItem
@@ -259,16 +258,15 @@
         {#snippet hint()}
           Select where you want to store your data
         {/snippet}
-        <Dropdown
+        <Select
           name="storageProvider"
-          variant="form"
-          rounded="lg"
-          size="md"
-          bind:selected={settings.storage.provider}
-        >
-          <DropdownItem key="local">Local</DropdownItem>
-          <DropdownItem key="smb">Samba (SMB)</DropdownItem>
-        </Dropdown>
+          type="single"
+          items={[
+            { value: 'local', label: 'Local' },
+            { value: 'smb', label: 'Samba (SMB)' },
+          ]}
+          bind:value={settings.storage.provider}
+        ></Select>
       </SettingItem>
       {#if settings.storage.provider === 'smb'}
         <SettingItem
