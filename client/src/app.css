@@ -25,12 +25,16 @@
   word-break: break-word;
   overflow-anchor: none;
 
-  @apply bg-gradient-to-b from-bg-start to-bg-end text-color-primary;
+  @apply overflow-hidden bg-gradient-to-b from-bg-start to-bg-end text-color-primary antialiased;
 }
 
 html,
 body {
-  @apply h-full min-h-full overflow-y-auto;
+  @apply h-full min-h-full;
+}
+
+body {
+  @apply overflow-y-auto;
 }
 
 .dropzone button {
