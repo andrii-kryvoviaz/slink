@@ -61,4 +61,6 @@ export const themeIcons: string[] = [
   'lets-icons:chield-duotone-line',
   'lets-icons:cancel-duotone',
   'lets-icons:add-square-duotone',
+  'bi:chevron-compact-up',
+  'bi:chevron-compact-down',
 ];

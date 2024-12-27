@@ -15,6 +15,7 @@
       placeholder?: string;
       items: { value: string; label: string; disabled?: boolean }[];
       contentProps?: WithoutChildren<Select.ContentProps>;
+      showScrollButtons?: boolean;
     };
 
   let {
@@ -27,6 +28,7 @@
     rounded = 'lg',
     fontWeight = 'medium',
     type = 'single',
+    showScrollButtons = false,
     ...props
   }: Props = $props();
 
@@ -60,7 +62,7 @@
   </Select.Trigger>
   <Select.Portal>
     <Select.Content
-      class="md:m-1 z-50 max-h-96 w-[var(--bits-select-anchor-width)] min-w-[var(--bits-select-anchor-width)] origin-top-left divide-y divide-gray-100 rounded-md bg-white font-light shadow-lg ring-1 ring-black ring-opacity-5 dark:divide-neutral-700 dark:bg-neutral-950 px-1 py-3 border-neutral-100/10 border"
+      class="md:m-1 z-50 max-h-96 w-[var(--bits-select-anchor-width)] min-w-[var(--bits-select-anchor-width)] origin-top-left divide-y divide-gray-100 rounded-md bg-white font-light shadow-lg ring-1 ring-black ring-opacity-5 dark:divide-neutral-700/30 dark:bg-neutral-950 px-1 py-3 border-neutral-100/10 border"
       forceMount={false}
       sideOffset={5}
       {...contentProps}
@@ -68,7 +70,13 @@
       {#snippet child({ props, open })}
         {#if open}
           <div {...props} transition:fly>
-            <Select.ScrollUpButton>up</Select.ScrollUpButton>
+            {#if showScrollButtons}
+              <Select.ScrollUpButton
+                class="flex w-full items-center justify-center pb-3"
+              >
+                <Icon icon="bi:chevron-compact-up" class="w-4 h-4" />
+              </Select.ScrollUpButton>
+            {/if}
             <Select.Viewport>
               {#each items as { value, label, disabled } (value)}
                 <Select.Item
@@ -86,7 +94,13 @@
                 </Select.Item>
               {/each}
             </Select.Viewport>
-            <Select.ScrollDownButton>down</Select.ScrollDownButton>
+            {#if showScrollButtons}
+              <Select.ScrollDownButton
+                class="flex w-full items-center justify-center pt-3"
+              >
+                <Icon icon="bi:chevron-compact-down" class="w-4 h-4" />
+              </Select.ScrollDownButton>
+            {/if}
           </div>
         {/if}
       {/snippet}
