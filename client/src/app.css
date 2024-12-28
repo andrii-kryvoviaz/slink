@@ -34,7 +34,12 @@ body {
 }
 
 body {
-  @apply overflow-y-auto;
+  overflow-y: auto !important;
+}
+
+*:focus-visible {
+  outline: none;
+  box-shadow: none;
 }
 
 .dropzone button {

@@ -17,7 +17,11 @@
     UserDeleteConfirmation,
     UserStatus,
   } from '@slink/components/Feature/User';
-  import { Dropdown, DropdownItem } from '@slink/components/UI/Form';
+  import {
+    Dropdown,
+    DropdownGroup,
+    DropdownItem,
+  } from '@slink/components/UI/Action';
   import { Badge } from '@slink/components/UI/Text';
 
   interface Props {
@@ -172,74 +176,86 @@
         </div>
 
         {#if !isCurrentUser}
-          <Dropdown
-            bind:this={dropdownRef}
-            hideSelected={true}
-            closeOnSelect={false}
-            class="text-sm"
-          >
-            {#if user.status === UserStatusEnum.Active}
-              <DropdownItem
-                on={{ click: () => changeUserStatus(UserStatusEnum.Suspended) }}
-                loading={userStatusChanging &&
-                  statusToChange === UserStatusEnum.Suspended}
-              >
-                {#snippet icon()}
-                  <Icon
-                    icon="lets-icons:cancel-duotone"
-                    class="h-4 w-4 text-red-400 group-hover:text-white"
-                  />
-                {/snippet}
-                <span>Suspend account</span>
-              </DropdownItem>
-            {:else}
-              <DropdownItem
-                on={{ click: () => changeUserStatus(UserStatusEnum.Active) }}
-                loading={userStatusChanging &&
-                  statusToChange === UserStatusEnum.Active}
-              >
-                {#snippet icon()}
-                  <Icon
-                    icon="lets-icons:add-square-duotone"
-                    class="h-4 w-4 text-green-500 group-hover:text-white dark:text-green-300"
-                  />
-                {/snippet}
-                <span>Enable account</span>
-              </DropdownItem>
-            {/if}
-            {#if !isAdmin}
-              <DropdownItem
-                on={{ click: () => grantRole(UserRole.Admin) }}
-                loading={$grantRoleLoading}
-              >
-                {#snippet icon()}
-                  <Icon icon="lets-icons:chield-duotone-line" class="h-4 w-4" />
-                {/snippet}
-                <span>Make admin</span>
-              </DropdownItem>
-            {:else}
-              <DropdownItem
-                on={{ click: () => revokeRole(UserRole.Admin) }}
-                loading={$revokeRoleLoading}
-              >
-                {#snippet icon()}
-                  <Icon icon="lets-icons:chield-light" class="h-4 w-4" />
-                {/snippet}
-                <span>Revoke admin</span>
-              </DropdownItem>
-            {/if}
+          <Dropdown bind:this={dropdownRef}>
+            <DropdownGroup>
+              {#if user.status === UserStatusEnum.Active}
+                <DropdownItem
+                  on={{
+                    click: () => changeUserStatus(UserStatusEnum.Suspended),
+                  }}
+                  closeOnSelect={false}
+                  loading={userStatusChanging &&
+                    statusToChange === UserStatusEnum.Suspended}
+                >
+                  {#snippet icon()}
+                    <Icon
+                      icon="lets-icons:cancel-duotone"
+                      class="h-4 w-4 text-red-400 group-hover:text-white"
+                    />
+                  {/snippet}
+                  <span>Suspend account</span>
+                </DropdownItem>
+              {:else}
+                <DropdownItem
+                  on={{ click: () => changeUserStatus(UserStatusEnum.Active) }}
+                  closeOnSelect={false}
+                  loading={userStatusChanging &&
+                    statusToChange === UserStatusEnum.Active}
+                >
+                  {#snippet icon()}
+                    <Icon
+                      icon="lets-icons:add-square-duotone"
+                      class="h-4 w-4 text-green-500 group-hover:text-white dark:text-green-300"
+                    />
+                  {/snippet}
+                  <span>Enable account</span>
+                </DropdownItem>
+              {/if}
+            </DropdownGroup>
+            <DropdownGroup>
+              {#if !isAdmin}
+                <DropdownItem
+                  on={{ click: () => grantRole(UserRole.Admin) }}
+                  closeOnSelect={false}
+                  loading={$grantRoleLoading}
+                >
+                  {#snippet icon()}
+                    <Icon
+                      icon="lets-icons:chield-duotone-line"
+                      class="h-4 w-4"
+                    />
+                  {/snippet}
+                  <span>Make admin</span>
+                </DropdownItem>
+              {:else}
+                <DropdownItem
+                  on={{ click: () => revokeRole(UserRole.Admin) }}
+                  closeOnSelect={false}
+                  loading={$revokeRoleLoading}
+                >
+                  {#snippet icon()}
+                    <Icon icon="lets-icons:chield-light" class="h-4 w-4" />
+                  {/snippet}
+                  <span>Revoke admin</span>
+                </DropdownItem>
+              {/if}
+            </DropdownGroup>
+
             <hr
               class="border-t-[1px] border-neutral-500/20 dark:border-neutral-700/70"
             />
-            <DropdownItem danger={true} on={{ click: handleUserDeletion }}>
-              {#snippet icon()}
-                <Icon
-                  icon="solar:trash-bin-minimalistic-2-linear"
-                  class="h-4 w-4"
-                />
-              {/snippet}
-              <span>Delete account</span>
-            </DropdownItem>
+
+            <DropdownGroup>
+              <DropdownItem danger={true} on={{ click: handleUserDeletion }}>
+                {#snippet icon()}
+                  <Icon
+                    icon="solar:trash-bin-minimalistic-2-linear"
+                    class="h-4 w-4"
+                  />
+                {/snippet}
+                <span>Delete account</span>
+              </DropdownItem>
+            </DropdownGroup>
           </Dropdown>
         {/if}
       </div>
