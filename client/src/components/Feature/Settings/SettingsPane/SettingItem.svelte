@@ -77,7 +77,7 @@
   aria-label="Reset Setting"
 ></button>
 
-<div class="flex flex-wrap items-center justify-between gap-2 sm:flex-nowrap">
+<div class="flex flex-wrap items-start justify-between gap-2 sm:flex-nowrap">
   {#if label}
     <h2 class="text-md flex flex-col items-start gap-2 font-light">
       <span

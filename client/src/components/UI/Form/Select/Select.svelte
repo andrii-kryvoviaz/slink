@@ -7,16 +7,44 @@
 
   import { className } from '@slink/utils/ui/className';
 
-  import { SelectTheme } from '@slink/components/UI/Form/Select/Select.theme';
+  import {
+    MultiSelectLabel,
+    SelectTheme,
+    SingleSelectLabel,
+  } from '@slink/components/UI/Form';
 
-  type Props = WithoutChildren<Select.RootProps> &
+  type CommonProps = Omit<
+    WithoutChildren<Select.RootProps>,
+    'value' | 'items' | 'type'
+  > &
     SelectProps & {
-      class?: string;
+      items: {
+        value: string;
+        label: string;
+        icon?: string;
+        disabled?: boolean;
+      }[];
       placeholder?: string;
-      items: { value: string; label: string; disabled?: boolean }[];
-      contentProps?: WithoutChildren<Select.ContentProps>;
       showScrollButtons?: boolean;
+      class?: string;
+      contentProps?: WithoutChildren<Select.ContentProps>;
     };
+
+  type Props = CommonProps &
+    (
+      | {
+          type?: 'single';
+          value: string;
+        }
+      | {
+          type?: 'multiple';
+          value: string[];
+        }
+      | {
+          type?: 'bitmask';
+          value: number;
+        }
+    );
 
   let {
     value = $bindable(''),
@@ -32,11 +60,7 @@
     ...props
   }: Props = $props();
 
-  const selectedLabel = $derived(
-    items.find((item) => item.value === value)?.label,
-  );
-
-  let classes = $derived(
+  const classes = $derived(
     className(
       `${SelectTheme({
         variant,
@@ -48,11 +72,43 @@
   );
 
   let isOpen = $state(false);
+
+  const inner = $derived({
+    get value() {
+      if (type === 'bitmask') {
+        return items
+          .filter((item) => (value as number) & parseInt(item.value))
+          .map((item) => item.value);
+      }
+
+      return value as string | string[];
+    },
+
+    set value(v: string | string[]) {
+      if (type === 'bitmask' && Array.isArray(v)) {
+        value = v.reduce((acc: number, item: string) => {
+          return acc | parseInt(item);
+        }, 0);
+      } else {
+        value = v;
+      }
+    },
+  });
 </script>
 
-<Select.Root bind:value bind:open={isOpen} {type} {...props}>
+<Select.Root
+  bind:value={inner.value}
+  bind:open={isOpen}
+  type={type === 'bitmask' ? 'multiple' : type}
+  {...props}
+>
   <Select.Trigger class={classes}>
-    {selectedLabel ? selectedLabel : placeholder}
+    {#if type === 'single'}
+      <SingleSelectLabel value={inner.value} {placeholder} {items} />
+    {:else}
+      <MultiSelectLabel bind:value={inner.value} {placeholder} {items} />
+    {/if}
+
     <div class:hidden={!isOpen}>
       <Icon icon="akar-icons:chevron-up" />
     </div>
@@ -78,7 +134,7 @@
               </Select.ScrollUpButton>
             {/if}
             <Select.Viewport>
-              {#each items as { value, label, disabled } (value)}
+              {#each items as { value, label, icon, disabled } (value)}
                 <Select.Item
                   {value}
                   {label}
@@ -86,6 +142,9 @@
                   class="flex w-full cursor-pointer select-none items-center rounded-button py-3 pl-5 pr-1.5 text-sm capitalize outline-none duration-75 data-[highlighted]:bg-neutral-400/20 data-[disabled]:opacity-50 rounded-md"
                 >
                   {#snippet children({ selected })}
+                    {#if icon}
+                      <Icon {icon} class="w-4 h-4 mr-2" />
+                    {/if}
                     {label}
                     {#if selected}
                       <Icon icon="mdi-light:check" class="w-4 h-4 ml-auto" />

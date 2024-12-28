@@ -6,8 +6,6 @@
     SettingCategoryData,
   } from '@slink/lib/settings/Type/GlobalSettings';
 
-  import Icon from '@iconify/svelte';
-
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
 
@@ -18,8 +16,6 @@
   import {
     FileSizeInput,
     Input,
-    Multiselect,
-    MultiselectItem,
     NumberInput,
     Select,
     Toggle,
@@ -161,28 +157,30 @@
           {#snippet hint()}
             Select the required character types for a user's password
           {/snippet}
-          <Multiselect
-            type="bitmask"
+          <Select
             name="passwordRequirements"
+            type="bitmask"
+            class="w-72"
+            items={[
+              { value: '1', label: 'Numbers', icon: 'ph:number-nine-thin' },
+              {
+                value: '2',
+                label: 'Lowercase Letters',
+                icon: 'material-symbols-light:lowercase-rounded',
+              },
+              {
+                value: '4',
+                label: 'Uppercase Letters',
+                icon: 'material-symbols-light:uppercase-rounded',
+              },
+              {
+                value: '8',
+                label: 'Special Characters',
+                icon: 'material-symbols-light:asterisk-rounded',
+              },
+            ]}
             bind:value={settings.user.password.requirements}
-          >
-            <MultiselectItem key="1">
-              <Icon icon="ph:number-nine-thin" />
-              Numbers
-            </MultiselectItem>
-            <MultiselectItem key="2">
-              <Icon icon="material-symbols-light:lowercase-rounded" />
-              Lowercase Letters
-            </MultiselectItem>
-            <MultiselectItem key="4">
-              <Icon icon="material-symbols-light:uppercase-rounded" />
-              Uppercase Letters
-            </MultiselectItem>
-            <MultiselectItem key="8">
-              <Icon icon="material-symbols-light:asterisk-rounded" />
-              Special Characters
-            </MultiselectItem>
-          </Multiselect>
+          ></Select>
         </SettingItem>
       {/if}
     </SettingsPane>

@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 
 export const SelectTheme = cva(
-  `text-left select-none appearance-none cursor-pointer min-w-64 inline-flex items-center justify-between`,
+  `text-left select-none appearance-none cursor-pointer min-w-64 inline-flex items-center justify-between gap-2`,
   {
     variants: {
       variant: {
