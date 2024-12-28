@@ -126,7 +126,10 @@
   const currentTheme = settings.get('theme', 'light');
   const { isDark, isLight } = currentTheme;
 
-  const handleOptionsChange = (options: ChartOptions) => {
+  const handleOptionsChange = (
+    options: ChartOptions,
+    theme: 'dark' | 'light',
+  ) => {
     let chartOptions = deepMerge<ChartOptions>(defaultOptions, options);
 
     if (chartOptions.chart?.type) {
@@ -138,20 +141,14 @@
       }
     }
 
+    chartOptions.theme = { mode: theme };
+
     return chartOptions;
   };
 
-  let chartOptions = $derived(handleOptionsChange(options));
-
-  $effect.pre(() => {
-    if ($isDark) {
-      chartOptions.theme = { mode: 'dark' };
-    }
-
-    if ($isLight) {
-      chartOptions.theme = { mode: 'light' };
-    }
-  });
+  let chartOptions = $derived(
+    handleOptionsChange(options, $isDark ? 'dark' : 'light'),
+  );
 </script>
 
 <div use:initChart={chartOptions} class={classes}></div>
