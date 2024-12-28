@@ -1,5 +1,5 @@
-import type { SelectTheme } from "@slink/components/UI/Form";
-import type { VariantProps } from "class-variance-authority";
+import type { SelectTheme } from '@slink/components/UI/Form';
+import type { VariantProps } from 'class-variance-authority';
 
 export type SelectProps = VariantProps<typeof SelectTheme>;
 
