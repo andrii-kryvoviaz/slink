@@ -26,6 +26,7 @@
       }[];
       placeholder?: string;
       showScrollButtons?: boolean;
+      animationDuration?: number;
       class?: string;
       contentProps?: WithoutChildren<Select.ContentProps>;
       contentClass?: string;
@@ -57,6 +58,7 @@
     rounded = 'lg',
     fontWeight = 'medium',
     type = 'single',
+    animationDuration = 300,
     showScrollButtons = false,
     ...props
   }: Props = $props();
@@ -136,7 +138,10 @@
     >
       {#snippet child({ props, open })}
         {#if open}
-          <div {...props} transition:fly={{ y: -5, duration: 500 }}>
+          <div
+            {...props}
+            transition:fly={{ y: -5, duration: animationDuration }}
+          >
             {#if showScrollButtons}
               <Select.ScrollUpButton
                 class="flex w-full items-center justify-center pb-3"

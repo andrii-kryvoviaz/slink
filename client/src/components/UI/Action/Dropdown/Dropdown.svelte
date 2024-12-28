@@ -17,6 +17,7 @@
     Partial<ButtonAttributes> & {
       variant?: ButtonVariant;
       contentProps?: WithoutChild<DropdownMenu.ContentProps>;
+      animationDuration?: number;
       child?: Snippet;
       trigger?: Snippet;
       buttonText?: Snippet;
@@ -28,6 +29,7 @@
     variant = 'invisible',
     size = 'xs',
     rounded = 'full',
+    animationDuration = 300,
     child,
     children,
     trigger,
@@ -86,7 +88,10 @@
     >
       {#snippet child({ props, open })}
         {#if open}
-          <div {...props} transition:fly={{ y: -5, duration: 500 }}>
+          <div
+            {...props}
+            transition:fly={{ y: -5, duration: animationDuration }}
+          >
             {@render children?.()}
           </div>
         {/if}
