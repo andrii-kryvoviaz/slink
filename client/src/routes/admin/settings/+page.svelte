@@ -160,7 +160,7 @@
           <Select
             name="passwordRequirements"
             type="bitmask"
-            class="w-72"
+            class="w-72 p-2"
             items={[
               { value: '1', label: 'Numbers', icon: 'ph:number-nine-thin' },
               {

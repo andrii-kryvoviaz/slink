@@ -113,16 +113,18 @@
   <Select.Trigger class={classes}>
     {#if type === 'single'}
       <SingleSelectLabel value={inner.value} {placeholder} {items} />
+
+      <div class="ml-2">
+        <div class:hidden={!isOpen}>
+          <Icon icon="akar-icons:chevron-up" />
+        </div>
+        <div class:hidden={isOpen}>
+          <Icon icon="akar-icons:chevron-down" />
+        </div>
+      </div>
     {:else}
       <MultiSelectLabel bind:value={inner.value} {placeholder} {items} />
     {/if}
-
-    <div class:hidden={!isOpen}>
-      <Icon icon="akar-icons:chevron-up" />
-    </div>
-    <div class:hidden={isOpen}>
-      <Icon icon="akar-icons:chevron-down" />
-    </div>
   </Select.Trigger>
   <Select.Portal>
     <Select.Content
