@@ -8,11 +8,7 @@
   import { RefreshButton } from '@slink/components/UI/Action';
   import { Card } from '@slink/components/UI/Card';
   import { Chart, type ChartOptions } from '@slink/components/UI/Chart';
-  import {
-    Dropdown,
-    DropdownItem,
-    type DropdownItemData,
-  } from '@slink/components/UI/Form';
+  import { Select } from '@slink/components/UI/Form';
 
   const {
     run,
@@ -35,8 +31,8 @@
 
   let interval: string = $state('current_year');
 
-  const handleIntervalChange = (item: DropdownItemData) => {
-    interval = item.key;
+  const handleIntervalChange = (item: string) => {
+    interval = item;
     handleFetch();
   };
 
@@ -78,18 +74,20 @@
     <div class="flex items-center gap-2">
       <RefreshButton size="sm" loading={$isLoading} onclick={handleFetch} />
       {#if availableIntervals}
-        <Dropdown
+        <Select
+          type="single"
+          class="min-w-fit"
+          contentClass="w-48 text-sm"
           variant="invisible"
-          position="bottom-right"
-          selected={interval}
-          on={{ change: handleIntervalChange }}
-        >
-          {#each Object.keys(availableIntervals) as interval}
-            <DropdownItem key={interval}>
-              {availableIntervals[interval]}
-            </DropdownItem>
-          {/each}
-        </Dropdown>
+          rounded="full"
+          size="sm"
+          items={Object.keys(availableIntervals).map((value) => ({
+            value,
+            label: availableIntervals?.[value] ?? 'N/A',
+          }))}
+          value={interval.toString()}
+          onValueChange={handleIntervalChange}
+        />
       {/if}
     </div>
   </div>

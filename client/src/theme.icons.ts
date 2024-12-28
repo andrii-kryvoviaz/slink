@@ -56,9 +56,10 @@ export const themeIcons: string[] = [
   'material-symbols-light:lowercase-rounded',
   'material-symbols-light:uppercase-rounded',
   'material-symbols-light:asterisk-rounded',
-  'ph:x',
   'lets-icons:chield-light',
   'lets-icons:chield-duotone-line',
   'lets-icons:cancel-duotone',
   'lets-icons:add-square-duotone',
+  'bi:chevron-compact-up',
+  'bi:chevron-compact-down',
 ];
