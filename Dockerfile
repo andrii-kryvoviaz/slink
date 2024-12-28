@@ -136,6 +136,7 @@ ENV API_URL=http://localhost:8080
 ENV API_PREFIX=/api
 ENV PROXY_PREFIXES="/api;/image"
 ENV ORIGIN=http://localhost:3000
+ENV TZ=UTC
 
 # Run entrypoint
 CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisord.conf"]
