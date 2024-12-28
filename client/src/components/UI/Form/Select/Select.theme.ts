@@ -7,6 +7,8 @@ export const SelectTheme = cva(
       variant: {
         default:
           'border bg-input-default text-input-default focus:outline-none focus:ring focus:ring-opacity-40 border-input-default hover:bg-input-hover-default focus:border-input-focus-default focus:ring-input-focus-default',
+        invisible:
+          'bg-none text-button-invisible hover:bg-button-hover-invisible/25 hover:text-button-primary',
       },
       size: {
         xs: 'text-xs px-3 py-1.5',
