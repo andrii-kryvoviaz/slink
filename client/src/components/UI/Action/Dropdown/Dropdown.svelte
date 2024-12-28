@@ -80,13 +80,13 @@
     <DropdownMenu.Content
       sideOffset={5}
       align="end"
-      forceMount
+      forceMount={true}
       {...contentProps}
       class={contentClasses}
     >
       {#snippet child({ props, open })}
         {#if open}
-          <div {...props} transition:fly>
+          <div {...props} transition:fly={{ y: -5, duration: 500 }}>
             {@render children?.()}
           </div>
         {/if}

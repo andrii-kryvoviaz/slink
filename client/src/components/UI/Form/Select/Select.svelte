@@ -129,13 +129,14 @@
   <Select.Portal>
     <Select.Content
       class={contentClasses}
-      forceMount={false}
+      forceMount={true}
       sideOffset={5}
+      align="end"
       {...contentProps}
     >
       {#snippet child({ props, open })}
         {#if open}
-          <div {...props} transition:fly>
+          <div {...props} transition:fly={{ y: -5, duration: 500 }}>
             {#if showScrollButtons}
               <Select.ScrollUpButton
                 class="flex w-full items-center justify-center pb-3"
