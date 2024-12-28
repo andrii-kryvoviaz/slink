@@ -21,6 +21,8 @@ Solves the problem of sharing images with friends, family, and colleagues withou
 - **Explore Images**: Features a listing page of public images uploaded by other users.
 - **Dark Mode**: Includes support for both _Dark_ and _Light_ modes in the application.
 - **Dashboard**: Enhanced statistics and analytics for admin users.
+- **Settings Configuration**: Ability to manage users, storage, and other settings.
+- **Public API**: A public API to access the platform programmatically (Still needs to be documented).
 
 > [!NOTE]
 > \* HEIC and TIFF images are converted to JPG format before being saved for better compatibility.
@@ -30,20 +32,26 @@ Solves the problem of sharing images with friends, family, and colleagues withou
 > 
 > Those might be changed or removed in the future according to the community feedback and priorities.
 
+- **Multiple Image Upload**: Allow users to upload multiple images at once.
+- **Tags**: Allow users to tag their images for better organization and search.
+- **Collections**: Users can create collections of images and share them with others.
+- **Password Protection**: Allow users to protect their images with a password.
+- **Image Compression**: Compress images to reduce the file size and improve performance.
 - **CDN Support**: Support for _CDN_ _providers_ to reduce the load on the self-hosted server.
 - **Storage Providers**: Additional storage providers like _AWS S3_, _Google Cloud Storage_, etc.
-- **Database Support**: Support for additional databases like _MySQL_, _PostgreSQL_, etc.
-- **Admin Panel**: An admin panel to manage users, storage, and other settings.
 - **Anonymous Upload**: Allow users to upload images without signing up.
 - **Password Recovery**: Password recovery for users who forgot their password.
 - **Email Notifications**: Email notifications for user approval, password reset, etc.
-- **Public API**: A public API to access the platform programmatically.
-- **Security Improvements**: Additional security features like rate limiting, brute force protection, etc.
+- **ShareX Integration**: Provide a ShareX configuration file for easy integration with the platform.
+- **URL Shortening Integration**: Integration with URL shortening services.
+- **(Optional) Database Support**: Support for additional databases like _MySQL_, _PostgreSQL_, etc.
+- **(Optional) GPU acceleration**: Use GPU acceleration for image processing to improve performance.
+- **(Experimental) Short Video Support**: Allow users to upload short videos and perform basic editing.
 
 #### Non-Functional planned improvements
 - **Testing**: Comprehensive test coverage for the application.
-- **Responsive Design**: A responsive design to support mobile and tablet devices.
-- **Theming**: Add more themes and improve the default Light and Dark themes.
+- **Responsive Design**: Continuously improve the design for better mobile and tablet experience.
+- **Theming**: Introduce more themes rather than just _Dark_ and _Light_ modes.
 
 ## Installation
 To install the application, you need to have [Docker](https://docs.docker.com/get-docker/) installed on your system.
