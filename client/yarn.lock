@@ -692,10 +692,10 @@ binary-extensions@^2.0.0:
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-2.3.0.tgz#f6e14a97858d327252200242d4ccfe522c445522"
   integrity sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==
 
-bits-ui@1.0.0-next.74:
-  version "1.0.0-next.74"
-  resolved "https://registry.yarnpkg.com/bits-ui/-/bits-ui-1.0.0-next.74.tgz#2d6bbec23d95eb169d1b6722ca94176bcd2150bd"
-  integrity sha512-cazru5+NBKBCeK9KCV/OFy5I/B1zxOJGl5WpInzPTEPla5G9qZK9nrnXr6BbExKdhgusTiMm3h4Yvq4E5WHGJA==
+bits-ui@1.0.0-next.69:
+  version "1.0.0-next.69"
+  resolved "https://registry.yarnpkg.com/bits-ui/-/bits-ui-1.0.0-next.69.tgz#c7b004244e2f76140bc61e0474bbd695ad31f78d"
+  integrity sha512-XN7Uso5gmI4GFtb/5zzce9sSzH/39gX3q6pxoSkV9bAa5mN9Lc+R6hZUDgx3cGY/quWBF/wFPqXgk27Nw2VkSw==
   dependencies:
     "@floating-ui/core" "^1.6.4"
     "@floating-ui/dom" "^1.6.7"
