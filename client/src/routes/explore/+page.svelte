@@ -130,7 +130,7 @@
               uniqueId={image.id}
               src={`/image/${image.attributes.fileName}?width=400`}
               metadata={image.metadata}
-              width={28}
+              width={40}
               stretch={true}
               showMetadata={false}
             />
