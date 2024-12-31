@@ -1,6 +1,6 @@
 ARG NODE_VERSION=20.9.0
 
-ARG PHP_VERSION=8.4.1
+ARG PHP_VERSION=8.4.2
 ARG PHP_MEMORY_LIMIT=512M
 
 ARG UPLOAD_MAX_FILESIZE_IN_BYTES=52428800
@@ -206,6 +206,7 @@ COPY --from=vendor /dependencies/vendor ./vendor
 COPY --from=source --chown=slink:slink /source ./
 COPY --from=node-dependencies /build ./svelte-kit
 COPY --from=node-dependencies /package.json ./svelte-kit/package.json
+COPY .env.example .env
 
 # Create non-root user
 RUN addgroup -g 1000 slink && \
@@ -219,8 +220,6 @@ RUN mkdir -p /app/var && \
 RUN chown -R slink:slink /app && \
     chmod -R 750 /app && \
     chmod -R 755 /app/var /app/slink
-
-COPY .env.example .env
 
 ENV API_ENABLED=false
 ENV APP_ENV=prod
