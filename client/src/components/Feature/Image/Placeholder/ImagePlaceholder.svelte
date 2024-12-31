@@ -62,11 +62,6 @@
     if (!container) {
       return;
     }
-
-    // Reset the height to auto so that the image can resize freely
-    if (remHeight > height) {
-      container.style.height = `auto`;
-    }
   });
 
   if (!height && !width) {
