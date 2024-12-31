@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: SettingsRepository::class)]
 #[ORM\Index(columns: ['key'], name: 'idx_key')]
 #[ORM\Index(columns: ['category'], name: 'idx_category')]
-final class SettingsView extends AbstractView {
+class SettingsView extends AbstractView {
   
   public function __construct(
     #[ORM\Id]

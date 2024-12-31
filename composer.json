@@ -36,7 +36,7 @@
     },
     "require-dev": {
         "dg/bypass-finals": "dev-master",
-        "phpstan/phpstan": "^2.0",
+        "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^10.4",
         "symfony/phpunit-bridge": "^7.2",
         "symfony/stopwatch": "^7.2",

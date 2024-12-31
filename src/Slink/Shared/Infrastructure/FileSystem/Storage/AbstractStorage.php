@@ -15,6 +15,9 @@ abstract class AbstractStorage implements StorageInterface {
     set {
       $this->imageDir = $value;
     }
+    get {
+      return $this->imageDir;
+    }
   }
   /**
    * @var string
@@ -22,6 +25,9 @@ abstract class AbstractStorage implements StorageInterface {
   protected string $cacheDir = 'cache' {
     set {
       $this->cacheDir = $value;
+    }
+    get {
+      return $this->cacheDir;
     }
   }
   /**

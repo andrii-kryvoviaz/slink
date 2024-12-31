@@ -13,22 +13,15 @@ use Symfony\Component\HttpFoundation\File\File;
 
 #[AsAlias(StorageInterface::class)]
 final class StorageProxy implements StorageInterface {
-  // @phpstan-ignore property.onlyRead
-  private StorageInterface $storageProvider {
-    get {
-      return $this->storageProviderLocator->get(
-        StorageProvider::from($this->configurationProvider->get('storage.provider'))
-      );
-    }
-    set {
-      $this->storageProvider = $value;
-    }
+  protected StorageInterface $storageProvider {
+    // @phpstan-ignore assign.propertyReadOnly
+    get => $this->storageProviderLocator->get(
+      StorageProvider::from($this->configurationProvider->get('storage.provider'))
+    );
   }
   
   public function __construct(
-    // @phpstan-ignore property.onlyWritten
     private readonly StorageProviderLocator $storageProviderLocator,
-    // @phpstan-ignore property.onlyWritten
     private readonly ConfigurationProviderInterface $configurationProvider
   ) {
   }
