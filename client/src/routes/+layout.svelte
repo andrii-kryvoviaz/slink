@@ -51,7 +51,10 @@
       {/snippet}
     </Navbar>
 
-    {@render children?.()}
+    <div id="main">
+      {@render children?.()}
+    </div>
+
     <ToastManager />
   </div>
 </Tooltip.Provider>
