@@ -109,7 +109,7 @@
     >
       {#each images as image}
         <div
-          class="image-container break-inside-avoid rounded-lg border bg-gray-200/10 p-4 backdrop-blur dark:border-gray-800/50"
+          class="image-container break-inside-avoid rounded-lg border bg-gray-200/10 p-4 dark:border-gray-800/50"
         >
           <div class="mb-4 flex items-center justify-between">
             <div class="flex items-center">
