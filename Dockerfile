@@ -202,11 +202,11 @@ COPY docker/runtime/production.conf /etc/supervisor/conf.d/production.conf
 COPY --from=node /usr/local/bin/node /usr/local/bin/node
 
 # Source code
-COPY --from=vendor /dependencies/vendor ./vendor
+COPY --from=vendor --chown=slink:slink /dependencies/vendor ./vendor
 COPY --from=source --chown=slink:slink /source ./
-COPY --from=node-dependencies /build ./svelte-kit
-COPY --from=node-dependencies /package.json ./svelte-kit/package.json
-COPY .env.example .env
+COPY --from=node-dependencies --chown=slink:slink /build ./svelte-kit
+COPY --from=node-dependencies --chown=slink:slink /package.json ./svelte-kit/package.json
+COPY --chown=slink:slink .env.example .env
 
 # Create non-root user
 RUN addgroup -g 1000 slink && \
@@ -214,12 +214,8 @@ RUN addgroup -g 1000 slink && \
 
 # Create project directories
 RUN mkdir -p /app/var && \
-    mkdir -p /app/slink
-
-# Set permissions
-RUN chown -R slink:slink /app && \
-    chmod -R 750 /app && \
-    chmod -R 755 /app/var /app/slink
+    mkdir -p /app/slink && \
+    chown -R slink:slink /app/var /app/slink
 
 ENV API_ENABLED=false
 ENV APP_ENV=prod
@@ -235,5 +231,5 @@ ENV SUPERVISORD_USER=slink
 
 EXPOSE 3000
 
-HEALTHCHECK --interval=45s --timeout=10s --start-period=5s --retries=3 CMD wget --no-verbose --tries=1 --spider http://127.0.0.1:8080/api/health || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 CMD wget --no-verbose --tries=1 --spider http://127.0.0.1:8080/api/health || exit 1
 ### End of production image ###
