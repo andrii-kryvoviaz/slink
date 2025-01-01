@@ -62,7 +62,13 @@
       {#if loading}
         <Loader size="xs" />
       {/if}
-      <Button type="submit" variant="primary" size="sm" disabled={loading}>
+      <Button
+        type="submit"
+        variant="primary"
+        size="sm"
+        class="py-3"
+        disabled={loading}
+      >
         Save Settings
       </Button>
     </div>
