@@ -201,16 +201,16 @@ COPY docker/runtime/production.conf /etc/supervisor/conf.d/production.conf
 
 COPY --from=node /usr/local/bin/node /usr/local/bin/node
 
+# Create non-root user
+RUN addgroup -g 1000 slink && \
+    adduser -D -u 1000 -G slink slink
+
 # Source code
 COPY --from=vendor --chown=slink:slink /dependencies/vendor ./vendor
 COPY --from=source --chown=slink:slink /source ./
 COPY --from=node-dependencies --chown=slink:slink /build ./svelte-kit
 COPY --from=node-dependencies --chown=slink:slink /package.json ./svelte-kit/package.json
 COPY --chown=slink:slink .env.example .env
-
-# Create non-root user
-RUN addgroup -g 1000 slink && \
-    adduser -D -u 1000 -G slink slink
 
 # Create project directories
 RUN mkdir -p /app/var && \
