@@ -54,19 +54,14 @@
   let aspectRatio = !isSquared ? metadata.height / metadata.width : 1;
   let remHeight = Math.floor(metadata.height / 16) - 1;
 
-  $effect(() => {
-    if (!isLoaded || !height) {
-      return;
-    }
-
-    if (!container) {
-      return;
-    }
-  });
-
   if (!height && !width) {
-    height = Math.min(Math.max(remHeight, 14), 30);
-    width = Math.floor(height / aspectRatio);
+    if (aspectRatio > 1) {
+      height = Math.min(Math.max(remHeight, 14), 40);
+      width = height / aspectRatio;
+    } else {
+      width = Math.min(Math.max(remHeight, 14), 40);
+      height = width * aspectRatio;
+    }
   }
 
   $effect.pre(() => {
