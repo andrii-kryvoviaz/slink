@@ -5,29 +5,10 @@ monolog:
 when@dev:
     monolog:
         handlers:
-            main:
-                type: stream
-                path: "%kernel.logs_dir%/%kernel.environment%.log"
-                level: warning
-                channels: ["!event", "!doctrine", "!console", "!debug", "!info"]
             console:
                 type: console
                 process_psr_3_messages: false
                 channels: ["!event", "!doctrine", "!console", "!debug", "!info"]
-
-when@test:
-    monolog:
-        handlers:
-            main:
-                type: fingers_crossed
-                action_level: error
-                handler: nested
-                excluded_http_codes: [404, 405]
-                channels: ["!event"]
-            nested:
-                type: stream
-                path: "%kernel.logs_dir%/%kernel.environment%.log"
-                level: debug
 
 when@prod:
     monolog:
@@ -37,9 +18,10 @@ when@prod:
                 action_level: error
                 handler: error_log
                 excluded_http_codes: [404, 405]
-                channels: ["!event", "!doctrine", '!deprecation', "!console", "!messenger", "!security"]
+                channels: ["!event"]
+
             error_log:
                 type: stream
                 path: php://stderr
-                level: debug
+                level: error
                 formatter: monolog.formatter.line
