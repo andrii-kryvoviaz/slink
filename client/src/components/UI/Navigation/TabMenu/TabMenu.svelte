@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { setContext } from 'svelte';
+  import { onMount, setContext } from 'svelte';
   import type { HTMLBaseAttributes } from 'svelte/elements';
 
-  import { throttle } from '@slink/utils/time/throttle';
+  import { debounce } from '@slink/utils/time/debounce';
   import { className } from '@slink/utils/ui/className';
 
   import {
@@ -97,9 +97,9 @@
     moveMarker(activeItem);
   }
 
-  const resizeHandler = throttle(() => {
+  const resizeHandler = debounce(() => {
     activeItem && moveMarker(activeItem, { withTransition: false });
-  }, 50);
+  }, 10);
 
   $effect(() => {
     moveMarker(activeItem);
@@ -118,11 +118,24 @@
       props.class,
     ),
   );
+
+  let menuRef: HTMLElement | null = $state(null);
+
+  onMount(() => {
+    if (!menuRef) {
+      return;
+    }
+
+    const resizeObserver: ResizeObserver = new ResizeObserver(resizeHandler);
+    resizeObserver.observe(menuRef);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  });
 </script>
 
-<svelte:window on:resize={resizeHandler} />
-
-<div class={classes} role="tablist" tabindex="0">
+<div bind:this={menuRef} class={classes} role="tablist" tabindex="0">
   <div
     class="absolute"
     class:inset-y-1={isHorizontal}
