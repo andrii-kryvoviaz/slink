@@ -51,6 +51,7 @@ jobs:
 
     outputs:
       prerelease: ${{ steps.semver.outputs.prerelease }}
+      ref: ${{ steps.tag.outputs.ref }}
 
     steps:
       - uses: actions/checkout@v4
@@ -101,12 +102,14 @@ jobs:
           push: false
 
       - name: Tag version
+        id: tag
         run: |
           git tag ${{ env.tag }}
+          ehco "ref=${{ env.tag }}" >> $GITHUB_ENV
 
       - name: Push changes
         run: |
-          git push origin HEAD:main --tags
+          git push --atomic origin HEAD:main ${{ env.tag }}
 
   deploy:
     name: Deploy
@@ -115,6 +118,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.version.outputs.ref }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
