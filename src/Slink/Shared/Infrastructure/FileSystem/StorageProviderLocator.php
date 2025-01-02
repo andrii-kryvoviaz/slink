@@ -8,8 +8,7 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Slink\Shared\Domain\Enum\StorageProvider;
-
-use Slink\Shared\Infrastructure\FileSystem\Storage\StorageInterface;
+use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutowireLocator;
 
 final readonly class StorageProviderLocator {

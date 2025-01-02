@@ -10,6 +10,11 @@ parameters:
         workgroup: '%env(string:default::SMB_WORKGROUP)%'
         username: '%env(string:default::SMB_USERNAME)%'
         password: '%env(string:default::SMB_PASSWORD)%'
+      s3:
+        region: '%env(string:default::AMAZON_S3_REGION)%'
+        bucket: '%env(string:default::AMAZON_S3_BUCKET)%'
+        key: '%env(string:default::AMAZON_S3_ACCESS_KEY_ID)%'
+        secret: '%env(string:default::AMAZON_S3_SECRET_ACCESS_KEY)%'
   user:
     allowRegistration: true
     allowUnauthenticatedAccess: '%env(bool:USER_ALLOW_UNAUTHENTICATED_ACCESS)%'

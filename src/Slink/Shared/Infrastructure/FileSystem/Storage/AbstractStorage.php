@@ -2,10 +2,12 @@
 
 namespace Slink\Shared\Infrastructure\FileSystem\Storage;
 
-use Icewind\SMB\Exception\NotFoundException;
 use Slink\Image\Domain\Service\ImageTransformerInterface;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\ValueObject\ImageOptions;
+use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\DirectoryStorageInterface;
+use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\ObjectStorageInterface;
+use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
 
 abstract class AbstractStorage implements StorageInterface {
   /**
@@ -85,17 +87,22 @@ abstract class AbstractStorage implements StorageInterface {
   /**
    * @param ImageOptions $image
    * @return string|null
-   * @throws NotFoundException
    */
   public function getImage(ImageOptions $image): ?string {
+    $imagePath = $this->getPath($image);
+    
+    if (!$imagePath) {
+      return null;
+    }
+    
     if(!$image->isModified()) {
-      return $this->read($this->getPath($image));
+      return $this->read($imagePath);
     }
     
     $imageContent = $this->tryFromCache($image);
     
     if(!$imageContent) {
-      throw new NotFoundException(sprintf('Image not found: %s', $this->getPath($image)));
+      return null;
     }
     
     return $imageContent;
@@ -104,9 +111,25 @@ abstract class AbstractStorage implements StorageInterface {
   /**
    * @param ?ImageOptions $image
    * @param bool $isCache
-   * @return string
+   * @return string|null
    */
-  protected function getPath(?ImageOptions $image = null, bool $isCache = false): string {
+  protected function getPath(?ImageOptions $image = null, bool $isCache = false): ?string {
+    if ($this instanceof ObjectStorageInterface) {
+      return $image?->getFileName($isCache);
+    }
+    
+    if ($this instanceof DirectoryStorageInterface) {
+      return $this->handleDirectoryStorageProvider($image, $isCache);
+    }
+    
+    return null;
+  }
+  
+  private function handleDirectoryStorageProvider(?ImageOptions $image = null, bool $isCache = false): ?string {
+    if (!$this instanceof DirectoryStorageInterface) {
+      return null;
+    }
+    
     $serverRoot = $this->getServerRoot();
     
     $path = $serverRoot
@@ -127,9 +150,7 @@ abstract class AbstractStorage implements StorageInterface {
       return $absolutePath;
     }
     
-    $filename = $isCache
-      ? $image->getCacheFileName()
-      : $image->getFileName();
+    $filename = $image->getFileName($isCache);
     
     return implode('/', [$absolutePath, $filename]);
   }
@@ -141,6 +162,10 @@ abstract class AbstractStorage implements StorageInterface {
   private function tryFromCache(ImageOptions $image): ?string {
     $originalPath = $this->getPath($image);
     $cachePath = $this->getPath($image, isCache: true);
+    
+    if (!$originalPath || !$cachePath) {
+      return null;
+    }
     
     if($this->exists($cachePath)) {
       return $this->read($cachePath);

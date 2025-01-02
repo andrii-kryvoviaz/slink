@@ -17,7 +17,7 @@ Solves the problem of sharing images with friends, family, and colleagues withou
 - **User Approval**: Require user approval before they can upload images.
 - **Share Links**: Users can share links to their uploaded images and customize the image size.
 - **Upload History**: Provides an overview of all images uploaded by the user.
-- **Storage Providers**: Support for _local_ and _SMB_ storage providers.
+- **Storage Providers**: Support for _local_, _SMB_, _AWS S3_ storage providers.
 - **Explore Images**: Features a listing page of public images uploaded by other users.
 - **Dark Mode**: Includes support for both _Dark_ and _Light_ modes in the application.
 - **Dashboard**: Enhanced statistics and analytics for admin users.
@@ -25,7 +25,7 @@ Solves the problem of sharing images with friends, family, and colleagues withou
 - **Public API**: A public API to access the platform programmatically (Still needs to be documented).
 
 > [!NOTE]
-> \* HEIC and TIFF images are converted to JPG format before being saved for better compatibility.
+> HEIC and TIFF images are converted to JPG format before being saved for better compatibility.
 
 ### Upcoming Features
 > [!IMPORTANT]
@@ -38,7 +38,7 @@ Solves the problem of sharing images with friends, family, and colleagues withou
 - **Password Protection**: Allow users to protect their images with a password.
 - **Image Compression**: Compress images to reduce the file size and improve performance.
 - **CDN Support**: Support for _CDN_ _providers_ to reduce the load on the self-hosted server.
-- **Storage Providers**: Additional storage providers like _AWS S3_, _Google Cloud Storage_, etc.
+- **Storage Providers**: Extend the support for additional storage providers.
 - **Anonymous Upload**: Allow users to upload images without signing up.
 - **Password Recovery**: Password recovery for users who forgot their password.
 - **Email Notifications**: Email notifications for user approval, password reset, etc.
@@ -96,8 +96,7 @@ slink:
     # Maximum image size allowed to be uploaded (no more than 50M)
     - IMAGE_MAX_SIZE=15M
     
-    # Storage provider to use. 
-    # Available options are local and smb
+    # Storage provider to use (may require additional configuration variables for different providers, see below)
     - STORAGE_PROVIDER=local
   volumes:
     # Persist the database
@@ -126,12 +125,16 @@ The following environment variables are available:
 | `USER_PASSWORD_MIN_LENGTH` | Minimum password length required for users.                                                                                                | `6`           |
 | `USER_PASSWORD_REQUIREMENTS` | Bitmask of password requirements. Sum of the following options: `1` (numbers), `2` (lowercase), `4` (uppercase), `8` (special characters). | `15` |
 | `IMAGE_MAX_SIZE` | Maximum image size allowed to be uploaded (no more than 50M).                                                                              | `15M`         |
-| `IMAGE_STRIP_EXIF_METADATA` | Whether to strip EXIF metadata from the uploaded images. Available options are `true` and `false`                                         | `true`        |
-| `STORAGE_PROVIDER` | Storage provider to use. Available options are `local` and `smb`                                                                           | `local`       |
-| `SMB_HOST` | SMB host to connect to. Required if `STORAGE_PROVIDER` is set to `smb`                                                                     | `null`        |
-| `SMB_USERNAME` | SMB username to use. Required if `STORAGE_PROVIDER` is set to `smb`                                                                        | `null`        |
-| `SMB_PASSWORD` | SMB password to use. Required if `STORAGE_PROVIDER` is set to `smb`                                                                        | `null`        |
-| `SMB_SHARE` | SMB share to use. Required if `STORAGE_PROVIDER` is set to `smb`                                                                           | `null`        |
+| `IMAGE_STRIP_EXIF_METADATA` | Whether to strip EXIF metadata from the uploaded images. Available options are `true` and `false`                                          | `true`        |
+| `STORAGE_PROVIDER` | Storage provider to use. Available options are `local`,`smb`,`s3`                                                                          | `local`       |
+| `SMB_HOST` | SMB host to connect to. Required if Samba provider is used.                                                                                | `null`        |
+| `SMB_USERNAME` | SMB username to use. Required if Samba provider is used.                                                                        | `null`        |
+| `SMB_PASSWORD` | SMB password to use. Required if Samba provider is used.                                                                        | `null`        |
+| `SMB_SHARE` | SMB share to use. Required if Samba provider is used.                                                                           | `null`        |
+| `AMAZON_S3_REGION` | AWS region to use for S3 storage. Required if an Amazon S3 provider is used.                                                               | `null`        |
+| `AMAZON_S3_BUCKET` | AWS bucket name to use for S3 storage. Required if an Amazon S3 provider is used.                                                          | `null`        |
+| `AMAZON_S3_ACCESS_KEY_ID` | AWS access key ID to use for S3 storage. Required if an Amazon S3 provider is used.                                                        | `null`        |
+| `AMAZON_S3_SECRET_ACCESS_KEY` | AWS secret access key to use for S3 storage. Required if an Amazon S3 provider is used.                                                    | `null`        |
 
 ## Public Image Listing
 
@@ -146,17 +149,12 @@ The application has an optional image listing page where users can explore image
 > Only images marked as public will be visible here.
 
 ## Storage Providers
-The application supports two storage providers: **local** and **SMB**.
-Local storage provider stores the images on the local filesystem, while the SMB storage provider stores the images on a remote SMB server.
-By default, the application uses the local storage provider.
+The application supports two storage providers: **local**, **SMB**, and **AWS S3**.
+`Local` storage provider stores the images on the local filesystem, and it's selected by default when you spin up the application, unless you specify a different provider.
 
 > [!IMPORTANT]
 >
 > To persist locally saved images, you need to mount the `/app/slink/images` directory to the host filesystem.
-
-> [!WARNING]
->
-> If you are using SMB storage provider, you need to set `SMB_HOST`, `SMB_USERNAME`, `SMB_PASSWORD`, and `SMB_SHARE` environment variables.
 
 ## User Approval
 By default, the application requires user approval before they can upload images. You can disable this feature by setting the `USER_APPROVAL_REQUIRED` environment variable to `false`.

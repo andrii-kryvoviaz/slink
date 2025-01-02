@@ -10,7 +10,7 @@ use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Application\Query\QueryHandlerInterface;
 use Slink\Shared\Domain\ValueObject\ImageOptions;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
-use Slink\Shared\Infrastructure\FileSystem\Storage\StorageInterface;
+use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
 
 final readonly class GetImageContentHandler implements QueryHandlerInterface {
   public function __construct(

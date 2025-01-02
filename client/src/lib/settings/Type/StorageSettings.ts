@@ -1,4 +1,4 @@
-export type StorageProvider = 'local' | 'smb';
+export type StorageProvider = 'local' | 'smb' | 's3';
 
 export type StorageSettings = {
   provider: StorageProvider;
@@ -12,6 +12,12 @@ export type StorageSettings = {
       workgroup: string;
       username: string;
       password: string;
+    };
+    s3: {
+      region: string;
+      bucket: string;
+      key: string;
+      secret: string;
     };
   };
 };

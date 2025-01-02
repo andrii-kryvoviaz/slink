@@ -6,6 +6,7 @@
         "php": ">=8.4",
         "ext-gd": "*",
         "ext-imagick": "*",
+        "aws/aws-sdk-php": "^3.336",
         "doctrine/doctrine-bundle": "^2.13",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.16",

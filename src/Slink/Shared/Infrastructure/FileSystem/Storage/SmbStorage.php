@@ -13,9 +13,10 @@ use Icewind\SMB\IShare;
 use Icewind\SMB\ServerFactory;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\Enum\StorageProvider;
+use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\DirectoryStorageInterface;
 use Symfony\Component\HttpFoundation\File\File;
 
-final class SmbStorage extends AbstractStorage {
+final class SmbStorage extends AbstractStorage implements DirectoryStorageInterface {
   private IShare $share;
   
   /**
@@ -52,7 +53,7 @@ final class SmbStorage extends AbstractStorage {
    * @throws InvalidTypeException
    */
   public function upload(File $file, string $fileName): void {
-    $path = $this->getPath();
+    $path = $this->getPath() ?? '';
     $parts = explode('/', $path);
     
     array_reduce($parts, function ($carry, $item) {
@@ -65,7 +66,7 @@ final class SmbStorage extends AbstractStorage {
       return $carry;
     }, '');
     
-    $fullPath = $path . '/' . $fileName;
+    $fullPath = implode('/', [ $path, $fileName ]);
     
     $this->share->put($file->getPathname(), $fullPath);
   }
@@ -81,13 +82,16 @@ final class SmbStorage extends AbstractStorage {
   }
   
   /**
-   * @throws NotFoundException
    * @throws InvalidTypeException
    */
   public function read(string $path): ?string {
-    $stream = $this->share->read($path);
-    $content = stream_get_contents($stream);
-    return $content === false ? null : $content;
+    try {
+      $stream = $this->share->read($path);
+      $content = stream_get_contents($stream);
+      return $content === false ? null : $content;
+    } catch (NotFoundException) {
+      return null;
+    }
   }
   
   /**
@@ -95,7 +99,7 @@ final class SmbStorage extends AbstractStorage {
    * @throws InvalidTypeException
    */
   public function delete(string $fileName): void {
-    $path = $this->getPath() . '/' . $fileName;
+    $path = implode('/', [ $this->getPath(), $fileName ]);
     $this->share->del($path);
   }
   
@@ -131,6 +135,6 @@ final class SmbStorage extends AbstractStorage {
    * @return string
    */
   public static function getAlias(): string {
-    return StorageProvider::SMB->value;
+    return StorageProvider::SmbShare->value;
   }
 }

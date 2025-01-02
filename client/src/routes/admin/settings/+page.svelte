@@ -20,6 +20,7 @@
     Select,
     Toggle,
   } from '@slink/components/UI/Form';
+  import { Notice } from '@slink/components/UI/Text';
 
   interface Props {
     data: PageServerData;
@@ -59,8 +60,272 @@
   <title>Settings | Slink</title>
 </svelte:head>
 
-<div class="h-full w-full max-w-7xl px-6 py-4">
+<div class="h-full w-full max-w-7xl px-6 py-4 pb-10">
   <div class="flex flex-col gap-2">
+    <SettingsPane
+      category="image"
+      loading={$isLoading && categoryBeingSaved === 'image'}
+      on={{ save: handleSettingsSectionSave }}
+    >
+      {#snippet title()}
+        Image
+      {/snippet}
+      {#snippet description()}
+        Adjust image-related preferences
+      {/snippet}
+
+      <SettingItem
+        defaultValue={defaultSettings.image?.maxSize}
+        reset={(value) => {
+          settings.image.maxSize = value;
+        }}
+      >
+        {#snippet label()}
+          Maximum Image Size
+        {/snippet}
+        {#snippet hint()}
+          Set the maximum size of an image that can be uploaded
+        {/snippet}
+        <FileSizeInput
+          error={$error?.errors.image?.maxSize}
+          name="imageMaxSize"
+          bind:value={settings.image.maxSize}
+        />
+      </SettingItem>
+      <SettingItem
+        defaultValue={defaultSettings.image?.stripExifMetadata}
+        reset={(value) => {
+          settings.image.stripExifMetadata = value;
+        }}
+      >
+        {#snippet label()}
+          Strip EXIF Data
+        {/snippet}
+        {#snippet hint()}
+          Toggle whether EXIF data should be stripped from uploaded images
+        {/snippet}
+        <Toggle
+          name="imageStripExifMetadata"
+          bind:checked={settings.image.stripExifMetadata}
+        />
+      </SettingItem>
+    </SettingsPane>
+    <SettingsPane
+      category="storage"
+      loading={$isLoading && categoryBeingSaved === 'storage'}
+      on={{ save: handleSettingsSectionSave }}
+    >
+      {#snippet title()}
+        Storage
+      {/snippet}
+      {#snippet description()}
+        Configure your preferred way of storing data
+      {/snippet}
+
+      <SettingItem
+        defaultValue={defaultSettings.storage?.provider}
+        reset={(value) => {
+          settings.storage.provider = value;
+        }}
+      >
+        {#snippet label()}
+          Storage Type
+        {/snippet}
+        {#snippet hint()}
+          Select where you want to store your data
+        {/snippet}
+        <Select
+          name="storageProvider"
+          type="single"
+          items={[
+            { value: 'local', label: 'Local' },
+            { value: 'smb', label: 'Samba (SMB)' },
+            { value: 's3', label: 'Amazon S3' },
+          ]}
+          bind:value={settings.storage.provider}
+        ></Select>
+      </SettingItem>
+      {#if settings.storage.provider === 'smb'}
+        <SettingItem
+          defaultValue={defaultSettings.storage?.adapter.smb.host}
+          reset={(value) => {
+            settings.storage.adapter.smb.host = value;
+          }}
+        >
+          {#snippet label()}
+            SMB Host
+          {/snippet}
+          {#snippet hint()}
+            Enter the IP address or hostname of your SMB server
+          {/snippet}
+          <Input
+            name="smbHost"
+            bind:value={settings.storage.adapter.smb.host}
+          />
+        </SettingItem>
+        <SettingItem
+          defaultValue={defaultSettings.storage?.adapter.smb.share}
+          reset={(value) => {
+            settings.storage.adapter.smb.share = value;
+          }}
+        >
+          {#snippet label()}
+            SMB Share
+          {/snippet}
+          {#snippet hint()}
+            Enter the name of the share on your SMB server
+          {/snippet}
+          <Input
+            name="smbShare"
+            bind:value={settings.storage.adapter.smb.share}
+          />
+        </SettingItem>
+        <SettingItem
+          defaultValue={defaultSettings.storage?.adapter.smb.workgroup}
+          reset={(value) => {
+            settings.storage.adapter.smb.workgroup = value;
+          }}
+        >
+          {#snippet label()}
+            SMB Workgroup
+          {/snippet}
+          {#snippet hint()}
+            Enter the workgroup of your SMB server
+          {/snippet}
+          <Input
+            name="smbWorkgroup"
+            bind:value={settings.storage.adapter.smb.workgroup}
+          />
+        </SettingItem>
+        <SettingItem
+          defaultValue={defaultSettings.storage?.adapter.smb.username}
+          reset={(value) => {
+            settings.storage.adapter.smb.username = value;
+          }}
+        >
+          {#snippet label()}
+            SMB Username
+          {/snippet}
+          {#snippet hint()}
+            Enter the username to authenticate with your SMB server
+          {/snippet}
+          <Input
+            name="smbUsername"
+            bind:value={settings.storage.adapter.smb.username}
+          />
+        </SettingItem>
+        <SettingItem
+          defaultValue={defaultSettings.storage?.adapter.smb.password}
+          reset={(value) => {
+            settings.storage.adapter.smb.password = value;
+          }}
+        >
+          {#snippet label()}
+            SMB Password
+          {/snippet}
+          {#snippet hint()}
+            Enter the password to authenticate with your SMB server
+          {/snippet}
+          <Input
+            type="password"
+            name="smbPassword"
+            bind:value={settings.storage.adapter.smb.password}
+          />
+        </SettingItem>
+      {/if}
+      {#if settings.storage.provider === 's3'}
+        <Notice size="sm" variant="warning">
+          <strong>Warning!</strong>
+          Using Amazon S3 may incur additional charges. Please refer to the
+          <a
+            href="https://aws.amazon.com/s3/pricing/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="underline"
+          >
+            Amazon S3 pricing
+          </a>
+          for more information.
+        </Notice>
+        <SettingItem
+          defaultValue={defaultSettings.storage?.adapter.s3.region}
+          reset={(value) => {
+            settings.storage.adapter.s3.region = value;
+          }}
+        >
+          {#snippet label()}
+            AWS Region
+          {/snippet}
+          {#snippet hint()}
+            Region where your S3 bucket is located e.g. <span
+              class="font-semibold">us-east-1</span
+            >
+          {/snippet}
+          <Input bind:value={settings.storage.adapter.s3.region} />
+        </SettingItem>
+        <SettingItem
+          defaultValue={defaultSettings.storage?.adapter.s3.bucket}
+          reset={(value) => {
+            settings.storage.adapter.s3.bucket = value;
+          }}
+        >
+          {#snippet label()}
+            Bucket Name
+          {/snippet}
+          {#snippet hint()}
+            General purpose bucket name <a
+              href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingBucket.html#general-purpose-buckets-overview"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="underline">more info</a
+            >
+          {/snippet}
+          <Input bind:value={settings.storage.adapter.s3.bucket} />
+        </SettingItem>
+
+        <SettingItem
+          defaultValue={defaultSettings.storage?.adapter.s3.key}
+          reset={(value) => {
+            settings.storage.adapter.s3.key = value;
+          }}
+        >
+          {#snippet label()}
+            Access Key ID
+          {/snippet}
+          {#snippet hint()}
+            To use Amazon S3, you need to provide your Access Key ID and Secret
+            Access Key. Please refer to the
+            <a
+              href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access-key-self-managed.html#Using_CreateAccessKey"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="underline"
+            >
+              AWS documentation
+            </a>
+          {/snippet}
+          <Input bind:value={settings.storage.adapter.s3.key} />
+        </SettingItem>
+        <SettingItem
+          defaultValue={defaultSettings.storage?.adapter.s3.secret}
+          reset={(value) => {
+            settings.storage.adapter.s3.secret = value;
+          }}
+        >
+          {#snippet label()}
+            Secret Access Key
+          {/snippet}
+          {#snippet hint()}
+            Provide your Secret Access Key associated with the provided Access
+            Key ID
+          {/snippet}
+          <Input
+            type="password"
+            bind:value={settings.storage.adapter.s3.secret}
+          />
+        </SettingItem>
+      {/if}
+    </SettingsPane>
     <SettingsPane
       category="user"
       loading={$isLoading && categoryBeingSaved === 'user'}
@@ -181,177 +446,6 @@
             ]}
             bind:value={settings.user.password.requirements}
           ></Select>
-        </SettingItem>
-      {/if}
-    </SettingsPane>
-    <SettingsPane
-      category="image"
-      loading={$isLoading && categoryBeingSaved === 'image'}
-      on={{ save: handleSettingsSectionSave }}
-    >
-      {#snippet title()}
-        Image
-      {/snippet}
-      {#snippet description()}
-        Adjust image-related preferences
-      {/snippet}
-
-      <SettingItem
-        defaultValue={defaultSettings.image?.maxSize}
-        reset={(value) => {
-          settings.image.maxSize = value;
-        }}
-      >
-        {#snippet label()}
-          Maximum Image Size
-        {/snippet}
-        {#snippet hint()}
-          Set the maximum size of an image that can be uploaded
-        {/snippet}
-        <FileSizeInput
-          error={$error?.errors.image?.maxSize}
-          name="imageMaxSize"
-          bind:value={settings.image.maxSize}
-        />
-      </SettingItem>
-      <SettingItem
-        defaultValue={defaultSettings.image?.stripExifMetadata}
-        reset={(value) => {
-          settings.image.stripExifMetadata = value;
-        }}
-      >
-        {#snippet label()}
-          Strip EXIF Data
-        {/snippet}
-        {#snippet hint()}
-          Toggle whether EXIF data should be stripped from uploaded images
-        {/snippet}
-        <Toggle
-          name="imageStripExifMetadata"
-          bind:checked={settings.image.stripExifMetadata}
-        />
-      </SettingItem>
-    </SettingsPane>
-    <SettingsPane
-      category="storage"
-      loading={$isLoading && categoryBeingSaved === 'storage'}
-      on={{ save: handleSettingsSectionSave }}
-    >
-      {#snippet title()}
-        Storage
-      {/snippet}
-      {#snippet description()}
-        Configure your preferred way of storing data
-      {/snippet}
-
-      <SettingItem
-        defaultValue={defaultSettings.storage?.provider}
-        reset={(value) => {
-          settings.storage.provider = value;
-        }}
-      >
-        {#snippet label()}
-          Storage Type
-        {/snippet}
-        {#snippet hint()}
-          Select where you want to store your data
-        {/snippet}
-        <Select
-          name="storageProvider"
-          type="single"
-          items={[
-            { value: 'local', label: 'Local' },
-            { value: 'smb', label: 'Samba (SMB)' },
-          ]}
-          bind:value={settings.storage.provider}
-        ></Select>
-      </SettingItem>
-      {#if settings.storage.provider === 'smb'}
-        <SettingItem
-          defaultValue={defaultSettings.storage?.adapter.smb.host}
-          reset={(value) => {
-            settings.storage.adapter.smb.host = value;
-          }}
-        >
-          {#snippet label()}
-            SMB Host
-          {/snippet}
-          {#snippet hint()}
-            Enter the IP address or hostname of your SMB server
-          {/snippet}
-          <Input
-            name="smbHost"
-            bind:value={settings.storage.adapter.smb.host}
-          />
-        </SettingItem>
-        <SettingItem
-          defaultValue={defaultSettings.storage?.adapter.smb.share}
-          reset={(value) => {
-            settings.storage.adapter.smb.share = value;
-          }}
-        >
-          {#snippet label()}
-            SMB Share
-          {/snippet}
-          {#snippet hint()}
-            Enter the name of the share on your SMB server
-          {/snippet}
-          <Input
-            name="smbShare"
-            bind:value={settings.storage.adapter.smb.share}
-          />
-        </SettingItem>
-        <SettingItem
-          defaultValue={defaultSettings.storage?.adapter.smb.workgroup}
-          reset={(value) => {
-            settings.storage.adapter.smb.workgroup = value;
-          }}
-        >
-          {#snippet label()}
-            SMB Workgroup
-          {/snippet}
-          {#snippet hint()}
-            Enter the workgroup of your SMB server
-          {/snippet}
-          <Input
-            name="smbWorkgroup"
-            bind:value={settings.storage.adapter.smb.workgroup}
-          />
-        </SettingItem>
-        <SettingItem
-          defaultValue={defaultSettings.storage?.adapter.smb.username}
-          reset={(value) => {
-            settings.storage.adapter.smb.username = value;
-          }}
-        >
-          {#snippet label()}
-            SMB Username
-          {/snippet}
-          {#snippet hint()}
-            Enter the username to authenticate with your SMB server
-          {/snippet}
-          <Input
-            name="smbUsername"
-            bind:value={settings.storage.adapter.smb.username}
-          />
-        </SettingItem>
-        <SettingItem
-          defaultValue={defaultSettings.storage?.adapter.smb.password}
-          reset={(value) => {
-            settings.storage.adapter.smb.password = value;
-          }}
-        >
-          {#snippet label()}
-            SMB Password
-          {/snippet}
-          {#snippet hint()}
-            Enter the password to authenticate with your SMB server
-          {/snippet}
-          <Input
-            type="password"
-            name="smbPassword"
-            bind:value={settings.storage.adapter.smb.password}
-          />
         </SettingItem>
       {/if}
     </SettingsPane>

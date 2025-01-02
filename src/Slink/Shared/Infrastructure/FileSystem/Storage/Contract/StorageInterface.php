@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Slink\Shared\Infrastructure\FileSystem\Storage;
+namespace Slink\Shared\Infrastructure\FileSystem\Storage\Contract;
 
 use Slink\Shared\Domain\ValueObject\ImageOptions;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
@@ -34,12 +34,6 @@ interface StorageInterface {
    * @return bool
    */
   public function exists(string $path): bool;
-  
-  /**
-   * @param string $path
-   * @return void
-   */
-  public function mkdir(string $path): void;
   
   /**
    * @param string $path

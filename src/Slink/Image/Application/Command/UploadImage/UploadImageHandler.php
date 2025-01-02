@@ -15,7 +15,7 @@ use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\Shared\Infrastructure\FileSystem\Storage\StorageInterface;
+use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
 
 final readonly class UploadImageHandler implements CommandHandlerInterface {
   
