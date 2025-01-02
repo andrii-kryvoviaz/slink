@@ -7,9 +7,10 @@ namespace Slink\Shared\Infrastructure\FileSystem\Storage;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\Enum\StorageProvider;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
+use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\DirectoryStorageInterface;
 use Symfony\Component\HttpFoundation\File\File;
 
-final class LocalStorage extends AbstractStorage {
+final class LocalStorage extends AbstractStorage implements DirectoryStorageInterface {
   
   /**
    * @param ConfigurationProviderInterface $configurationProvider
@@ -24,9 +25,20 @@ final class LocalStorage extends AbstractStorage {
    * @param File $file
    * @param string $fileName
    * @return void
+   * @throws NotFoundException
    */
   public function upload(File $file, string $fileName): void {
-    $file->move($this->getPath(), $fileName);
+    $path = $this->getPath();
+    
+    if (!$path) {
+      throw new NotFoundException();
+    }
+    
+    if (!is_dir($path)) {
+      $this->mkdir($path);
+    }
+    
+    $file->move($path, $fileName);
   }
   
   public function write(string $path, string $content): void {
@@ -56,7 +68,7 @@ final class LocalStorage extends AbstractStorage {
   }
   
   public function mkdir(string $path): void {
-    mkdir($path, 0777, true);
+    mkdir($path, 0755, true);
   }
   
   /**

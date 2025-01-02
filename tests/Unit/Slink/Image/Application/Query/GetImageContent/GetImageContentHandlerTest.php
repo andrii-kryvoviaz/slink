@@ -7,17 +7,16 @@ namespace Unit\Slink\Image\Application\Query\GetImageContent;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
-use Slink\Image\Application\Query\GetImageContent\GetImageContentHandler;
 use PHPUnit\Framework\TestCase;
+use Slink\Image\Application\Query\GetImageContent\GetImageContentHandler;
 use Slink\Image\Application\Query\GetImageContent\GetImageContentQuery;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Image\Domain\Service\ImageAnalyzerInterface;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
-use Slink\Image\Domain\ValueObject\ImageMetadata;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
-use Slink\Shared\Infrastructure\FileSystem\Storage\StorageInterface;
+use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
 
 final class GetImageContentHandlerTest extends TestCase {
   private StorageInterface&MockObject $storage;

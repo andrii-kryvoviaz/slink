@@ -7,7 +7,7 @@ namespace Slink\Shared\Infrastructure\FileSystem;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\Enum\StorageProvider;
 use Slink\Shared\Domain\ValueObject\ImageOptions;
-use Slink\Shared\Infrastructure\FileSystem\Storage\StorageInterface;
+use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
 use Symfony\Component\DependencyInjection\Attribute\AsAlias;
 use Symfony\Component\HttpFoundation\File\File;
 
@@ -57,14 +57,6 @@ final class StorageProxy implements StorageInterface {
    */
   public function exists(string $path): bool {
     return $this->storageProvider->exists($path);
-  }
-  
-  /**
-   * @param string $path
-   * @return void
-   */
-  public function mkdir(string $path): void {
-    $this->storageProvider->mkdir($path);
   }
   
   /**

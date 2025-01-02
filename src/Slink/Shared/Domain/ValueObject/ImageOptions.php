@@ -59,9 +59,14 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
   }
   
   /**
+   * @param bool $isCache
    * @return string
    */
-  public function getFileName(): string {
+  public function getFileName(bool $isCache = false): string {
+    if ($isCache) {
+      return $this->getCacheFileName();
+    }
+    
     return $this->fileName;
   }
   

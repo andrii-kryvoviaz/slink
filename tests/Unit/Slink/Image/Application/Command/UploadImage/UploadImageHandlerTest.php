@@ -15,7 +15,7 @@ use Slink\Image\Domain\Service\ImageTransformerInterface;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\Shared\Infrastructure\FileSystem\Storage\StorageInterface;
+use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
 use Symfony\Component\HttpFoundation\File\File;
 
 class UploadImageHandlerTest extends TestCase {

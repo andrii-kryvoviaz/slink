@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Slink\Settings\Domain\ValueObject\Storage;
 
 use Slink\Settings\Domain\Enum\SettingCategory;
-use Slink\Settings\Domain\Enum\StorageProvider;
 use Slink\Settings\Domain\ValueObject\AbstractSettingsValueObject;
-use Slink\Shared\Domain\ValueObject\AbstractCompoundValueObject;
+use Slink\Shared\Domain\Enum\StorageProvider;
 
 final readonly class StorageSettings extends AbstractSettingsValueObject {
   private function __construct(
-    private StorageProvider              $provider,
-    private ?LocalStorageSettings        $localStorageSettings = null,
-    private ?SmbStorageSettings          $smbStorageSettings = null
+    private StorageProvider          $provider,
+    private ?LocalStorageSettings    $localStorageSettings = null,
+    private ?SmbStorageSettings      $smbStorageSettings = null,
+    private ?AmazonS3StorageSettings $awsS3StorageSettings = null,
   ) {
   }
   
@@ -26,7 +26,8 @@ final readonly class StorageSettings extends AbstractSettingsValueObject {
       'provider' => $this->provider->value,
       'adapter' => [
         StorageProvider::Local->value => $this->localStorageSettings?->toPayload(),
-        StorageProvider::SmbShare->value => $this->smbStorageSettings?->toPayload()
+        StorageProvider::SmbShare->value => $this->smbStorageSettings?->toPayload(),
+        StorageProvider::AmazonS3->value => $this->awsS3StorageSettings?->toPayload(),
       ]
     ];
   }
@@ -41,6 +42,7 @@ final readonly class StorageSettings extends AbstractSettingsValueObject {
     
     $localStorageSettingsPayload = $payload['adapter'][StorageProvider::Local->value] ?? null;
     $smbStorageSettingsPayload = $payload['adapter'][StorageProvider::SmbShare->value] ?? null;
+    $awsS3StorageSettingsPayload = $payload['adapter'][StorageProvider::AmazonS3->value] ?? null;
     
     $localStorageSettings = $localStorageSettingsPayload
       ? LocalStorageSettings::fromPayload($localStorageSettingsPayload)
@@ -50,10 +52,15 @@ final readonly class StorageSettings extends AbstractSettingsValueObject {
       ? SmbStorageSettings::fromPayload($smbStorageSettingsPayload)
       : null;
     
+    $awsS3StorageSettings = $awsS3StorageSettingsPayload
+      ? AmazonS3StorageSettings::fromPayload($awsS3StorageSettingsPayload)
+      : null;
+    
     return new self(
       $storageProvider,
       $localStorageSettings,
-      $smbStorageSettings
+      $smbStorageSettings,
+      $awsS3StorageSettings
     );
   }
   
