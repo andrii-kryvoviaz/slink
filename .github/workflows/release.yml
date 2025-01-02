@@ -141,6 +141,7 @@ jobs:
           context: .
           target: prod
           push: true
+          sbom: true
           tags: ${{ steps.meta.outputs.tags }}
           platforms: linux/amd64,linux/arm64
           cache-from: type=gha,scope=monolithic-multi-arch-build
