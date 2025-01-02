@@ -53,13 +53,14 @@
 
   let aspectRatio = !isSquared ? metadata.height / metadata.width : 1;
   let remHeight = Math.floor(metadata.height / 16) - 1;
+  let remWidth = Math.floor(metadata.width / 16) - 1;
 
   if (!height && !width) {
     if (aspectRatio > 1) {
       height = Math.min(Math.max(remHeight, 14), 40);
       width = height / aspectRatio;
     } else {
-      width = Math.min(Math.max(remHeight, 14), 40);
+      width = Math.min(Math.max(remWidth, 14), 40);
       height = width * aspectRatio;
     }
   }
