@@ -8,17 +8,11 @@ ARG UPLOAD_MAX_FILESIZE_IN_BYTES=52428800
 ## NodeJS base image
 FROM node:${NODE_VERSION}-alpine AS node
 
-# Prevent Docker from invalidating cache when package.json version changes
-# Since it is not used in the build process
-FROM node AS plain-package-json
-COPY client/package.json client/yarn.lock ./
-RUN yarn version --new-version 0.0.0
-
 ### NodeJS build ###
 FROM node AS node-dependencies
 WORKDIR /
 
-COPY --from=plain-package-json /package.json /yarn.lock ./
+COPY client/package.json client/yarn.lock ./
 
 RUN yarn install --frozen-lockfile --non-interactive --production=true && \
     yarn add vite
@@ -70,9 +64,9 @@ RUN apk update && apk upgrade &&\
     freetype \
     postgresql-libs
 
-RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS git autoconf g++ make linux-headers curl-dev libmcrypt-dev icu-dev imagemagick-dev postgresql-dev libpng-dev libwebp-dev tiff-dev freetype-dev libjpeg-turbo-dev libheif-dev oniguruma-dev samba-dev && \
+RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS git autoconf g++ make linux-headers curl-dev libmcrypt-dev icu-dev imagemagick-dev postgresql-dev libpng-dev libwebp-dev tiff-dev freetype-dev libjpeg-turbo-dev libheif-dev oniguruma-dev samba-dev brotli-dev && \
     docker-php-ext-install curl intl mysqli pdo_pgsql mbstring exif && \
-    pecl install redis smbclient && \
+    pecl install redis smbclient swoole && \
     # Imagick PHP 8.3 bug (https://github.com/Imagick/imagick/pull/641)
     git clone https://github.com/Imagick/imagick.git --depth 1 /tmp/imagick && \
     cd /tmp/imagick && \
@@ -192,10 +186,7 @@ ENV SUPERVISORD_USER=root
 
 ### Production image ###
 FROM base AS prod
-RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS autoconf g++ make linux-headers brotli-dev && \
-    pecl install swoole && \
-    docker-php-ext-enable swoole opcache && \
-    apk del .build-deps
+RUN docker-php-ext-enable swoole opcache
 
 COPY docker/runtime/production.conf /etc/supervisor/conf.d/production.conf
 
