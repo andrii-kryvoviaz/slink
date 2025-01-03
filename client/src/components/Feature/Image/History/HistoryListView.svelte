@@ -78,7 +78,7 @@
             </div>
 
             <div
-              class="hidden flex-grow items-center justify-between gap-8 pr-8 sm:flex"
+              class="flex-grow items-center justify-between gap-8 sm:pr-8 flex flex-wrap"
             >
               <div class="flex flex-col gap-1 text-xs">
                 <Badge variant="primary" outline={true}>
@@ -86,19 +86,19 @@
                 </Badge>
               </div>
 
-              <div class="hidden text-center text-xs lg:block">
+              <div class="text-center text-xs flex-grow sm:flex-none">
                 <p class="font-semibold">Dimensions</p>
                 <p>
                   {item.metadata.width}x{item.metadata.height} pixels
                 </p>
               </div>
 
-              <div class="hidden text-center text-xs lg:block">
+              <div class="text-center text-xs flex-grow sm:flex-none">
                 <p class="font-semibold">Size</p>
                 <p>{bytesToSize(item.metadata.size)}</p>
               </div>
 
-              <div class="hidden text-center text-xs lg:block">
+              <div class="text-center text-xs flex-grow sm:flex-none">
                 <p class="font-semibold">Uploaded on</p>
                 <FormattedDate date={item.attributes.createdAt.timestamp} />
               </div>
