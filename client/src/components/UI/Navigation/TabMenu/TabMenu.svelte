@@ -24,7 +24,7 @@
   }: Props = $props();
 
   let items: Record<string, TabMenuItemData> = {};
-  let activeItem: TabMenuItemData;
+  let activeItem: TabMenuItemData | null = $state(null);
   let marker: HTMLElement;
 
   const handleItemRegister = (item: TabMenuItemData) => {
@@ -38,7 +38,7 @@
   const handleItemSelect = (key: string) => {
     const item = items[key];
 
-    if (activeItem === item) {
+    if (activeItem?.key === item.key) {
       return;
     }
 
@@ -102,6 +102,10 @@
   }, 10);
 
   $effect(() => {
+    if (!activeItem) {
+      return;
+    }
+
     moveMarker(activeItem);
   });
 

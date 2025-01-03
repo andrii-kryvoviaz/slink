@@ -2,7 +2,7 @@
   import { type Snippet, getContext, onMount } from 'svelte';
   import type { HTMLAttributes } from 'svelte/elements';
 
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
 
   import { randomId } from '@slink/utils/string/randomId';
   import { className } from '@slink/utils/ui/className';
@@ -20,7 +20,7 @@
 
   let { key = randomId('tab-menu-item'), href, on, children }: Props = $props();
 
-  let active: boolean = $state(href === $page.route.id);
+  let active: boolean = $state(false);
   let ref: HTMLElement | undefined = $state();
 
   const defaultClasses =
@@ -66,6 +66,10 @@
     if (active) {
       onSelect(key);
     }
+  });
+
+  $effect(() => {
+    active = href === page.route.id;
   });
 
   let defaultProps: Partial<HTMLAttributes<HTMLElement>> = $derived({
