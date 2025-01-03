@@ -105,7 +105,7 @@ jobs:
         id: tag
         run: |
           git tag ${{ env.tag }}
-          ehco "ref=${{ env.tag }}" >> $GITHUB_ENV
+          echo "ref=${{ env.tag }}" >> $GITHUB_ENV
 
       - name: Push changes
         run: |
