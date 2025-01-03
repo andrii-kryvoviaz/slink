@@ -27,7 +27,9 @@ final readonly class ProjectMetadataExtractor {
   }
   
   public function version(): string {
-    return $this->clientAppMetadata['version'] ?? 'N/A';
+//    return $this->clientAppMetadata['version'] ?? 'N/A';
+    // ToDo: Investigate why github workflow does not pick up the latest package.json, hide the version for now
+    return '';
   }
   
   /**
