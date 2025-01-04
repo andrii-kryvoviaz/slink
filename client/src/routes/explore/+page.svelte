@@ -16,6 +16,7 @@
   import { ImagePlaceholder } from '@slink/components/Feature/Image';
   import { UserAvatar } from '@slink/components/Feature/User';
   import { Button, LoadMoreButton } from '@slink/components/UI/Action';
+  import { Masonry } from '@slink/components/UI/Layout';
   import { Loader } from '@slink/components/UI/Loader';
   import {
     ExpandableText,
@@ -33,7 +34,7 @@
   let images: ImageListingItem[] = $state([]);
   let meta: ListingMetadata = $state({
     page: 1,
-    size: 10,
+    size: 12,
     total: 0,
   });
 
@@ -104,12 +105,10 @@
       </div>
     {/if}
 
-    <div
-      class="mt-8 columns-1 gap-5 sm:gap-8 md:columns-2 xl:columns-3 [&>.image-container:not(:first-child)]:mt-8"
-    >
-      {#each images as image}
+    <Masonry items={images} class="mt-8">
+      {#snippet itemTemplate(image)}
         <div
-          class="image-container break-inside-avoid rounded-lg border bg-gray-200/10 p-4 dark:border-gray-800/50"
+          class="break-inside-avoid rounded-lg border bg-gray-200/10 p-4 dark:border-gray-800/50 max-w-full"
         >
           <div class="mb-4 flex items-center justify-between">
             <div class="flex items-center">
@@ -128,7 +127,7 @@
           <div class="relative flex justify-center shadow">
             <ImagePlaceholder
               uniqueId={image.id}
-              src={`/image/${image.attributes.fileName}?width=400`}
+              src={`/image/${image.attributes.fileName}`}
               metadata={image.metadata}
               width={40}
               stretch={true}
@@ -138,8 +137,8 @@
 
           <ExpandableText maxLines={1} text={image.attributes.description} />
         </div>
-      {/each}
-    </div>
+      {/snippet}
+    </Masonry>
 
     <LoadMoreButton
       visible={showLoadMore}

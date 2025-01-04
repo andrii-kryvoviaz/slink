@@ -1,9 +1,9 @@
 import daisyui from 'daisyui';
-import type { Config } from 'tailwindcss';
 import { ThemeCustomizerPlugin } from 'tailwindcss-theme-customizer';
 
 import { defaultTheme, tailwindcssTheme } from './src/theme.default';
 
+import type { Config } from 'tailwindcss';
 export default {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
@@ -23,6 +23,16 @@ export default {
       '3xl': '1920px',
     },
   },
+  safelist: [
+    {
+      pattern: /grid-cols-\d+/,
+      variants: ['sm', 'md', 'lg', 'xl', '2xl'],
+    },
+    {
+      pattern: /gap-\d+/,
+      variants: ['sm', 'md', 'lg', 'xl', '2xl'],
+    },
+  ],
   darkMode: 'class',
   daisyui: {
     logs: false,
