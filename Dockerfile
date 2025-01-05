@@ -180,8 +180,6 @@ ENV PHP_IDE_CONFIG="serverName=localhost"
 
 EXPOSE 5173
 EXPOSE 8080
-
-ENV SUPERVISORD_USER=root
 ### End of development image ###
 
 ### Production image ###
@@ -216,9 +214,6 @@ ENV SWOOLE_ENABLED=true
 # Set Node Adapter Size Limit
 ARG UPLOAD_MAX_FILESIZE_IN_BYTES
 ENV BODY_SIZE_LIMIT=${UPLOAD_MAX_FILESIZE_IN_BYTES}
-
-USER slink
-ENV SUPERVISORD_USER=slink
 
 EXPOSE 3000
 
