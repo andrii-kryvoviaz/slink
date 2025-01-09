@@ -79,18 +79,26 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
       ->from(ImageView::class, 'image')
       ->select('
         image'
-      )
-      ->setMaxResults($imageListFilter->getLimit())
-      ->setFirstResult(($page - 1) * $imageListFilter->getLimit());
+      );
     
-    if ($imageListFilter->getIsPublic() !== null) {
-      $qb->andWhere('image.attributes.isPublic = :isPublic')
-        ->setParameter('isPublic', $imageListFilter->getIsPublic());
+    if ($limit = $imageListFilter->getLimit()) {
+      $qb->setMaxResults($limit)
+        ->setFirstResult(($page - 1) * $limit);
     }
     
-    if ($imageListFilter->getUserId() !== null) {
+    if ($isPublic = $imageListFilter->getIsPublic()) {
+      $qb->andWhere('image.attributes.isPublic = :isPublic')
+        ->setParameter('isPublic', $isPublic);
+    }
+    
+    if ($userId = $imageListFilter->getUserId()) {
       $qb->andWhere('image.user = :user')
-        ->setParameter('user', $imageListFilter->getUserId());
+        ->setParameter('user', $userId);
+    }
+    
+    if ($uuids = $imageListFilter->getUuids()) {
+      $qb->andWhere('image.uuid IN (:uuids)')
+        ->setParameter('uuids', $uuids);
     }
     
     $qb->orderBy('image.' . $imageListFilter->getOrderBy(), $imageListFilter->getOrder());

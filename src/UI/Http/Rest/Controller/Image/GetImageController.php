@@ -31,6 +31,12 @@ final readonly class GetImageController {
     
     $this->handle(new AddImageViewCountCommand($id));
     
-    return ContentResponse::file($imageData);
+    return ContentResponse::file($imageData)->setCache(
+      [
+        'public' => true,
+        'immutable' => true,
+        'max_age' => 31536000,
+      ]
+    );
   }
 }

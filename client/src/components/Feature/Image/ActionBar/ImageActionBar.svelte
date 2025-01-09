@@ -1,11 +1,15 @@
 <script lang="ts">
+  import type { ImageListingItem } from '@slink/api/Response';
+
   import { goto } from '$app/navigation';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import Icon from '@iconify/svelte';
   import { fly } from 'svelte/transition';
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
+
+  import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
 
   import { downloadByLink } from '@slink/utils/http/downloadByLink';
   import { toast } from '@slink/utils/ui/toast';
@@ -28,6 +32,8 @@
     buttons = ['download', 'visibility', 'share', 'delete'],
     on,
   }: Props = $props();
+
+  const historyFeedState = useUploadHistoryFeed();
 
   const isButtonVisible = (button: actionButton) => buttons.includes(button);
 
@@ -53,6 +59,10 @@
     }
 
     image = { ...image, isPublic };
+
+    historyFeedState.update(image.id, {
+      attributes: { isPublic },
+    } as ImageListingItem);
   };
 
   const {
@@ -89,6 +99,8 @@
             return;
           }
 
+          historyFeedState.removeItem(image.id);
+
           toast.remove(image.id);
 
           await goto('/history');
@@ -98,7 +110,7 @@
     });
   };
 
-  let directLink = $derived(`${$page.url.origin}/image/${image.fileName}`);
+  let directLink = $derived(`${page.url.origin}/image/${image.fileName}`);
 </script>
 
 <div class="flex items-center gap-2">

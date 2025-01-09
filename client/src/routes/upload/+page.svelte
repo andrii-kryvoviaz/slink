@@ -9,6 +9,8 @@
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
 
+  import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
+
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
   import { toast } from '@slink/utils/ui/toast';
 
@@ -79,7 +81,12 @@
   };
 
   const successHandler = async (response: UploadedImageResponse) => {
+    const historyFeedState = useUploadHistoryFeed();
+
     await redirectToInfo(response.id);
+
+    const images = await ApiClient.image.getImagesByIds([response.id]);
+    images.data.forEach((image) => historyFeedState.add(image));
   };
 
   const errorHandler = printErrorsAsToastMessage;

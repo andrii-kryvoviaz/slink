@@ -1,74 +1,18 @@
 <script lang="ts">
-  import type {
-    ImageListingItem,
-    ImageListingResponse,
-    ListingMetadata,
-  } from '@slink/api/Response';
-  import { onMount } from 'svelte';
-
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
-  import { ApiClient } from '@slink/api/Client';
-  import { ReactiveState } from '@slink/api/ReactiveState';
+  import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
 
   import { HistoryListView } from '@slink/components/Feature/Image';
   import { Button, LoadMoreButton } from '@slink/components/UI/Action';
   import { Loader } from '@slink/components/UI/Loader';
   import { Heading } from '@slink/components/UI/Text';
 
-  let items: ImageListingItem[] = $state([]);
-  let meta: ListingMetadata = $state({
-    page: 1,
-    size: 12, // good both for 2 and 3 columns
-    total: 0,
-  });
+  const historyFeedState = useUploadHistoryFeed();
 
-  const {
-    run: fetchImages,
-    data: response,
-    isLoading,
-    status,
-  } = ReactiveState<ImageListingResponse>(
-    (page: number, limit: number) => {
-      return ApiClient.image.getHistory(page, limit);
-    },
-    { debounce: 300 },
-  );
-
-  const onRemove = (id: string) => {
-    // reassign the items with the new item list
-    items = items.filter((item) => item.id !== id);
-
-    // rerun the fetchImages function with the current page and size
-    // in order to have fully filled page with items
-    if (items.length > 0) {
-      fetchImages(meta.page, meta.size);
-    }
-  };
-
-  let showLoadMore = $derived(
-    meta && meta.page < Math.ceil(meta.total / meta.size) && $status !== 'idle',
-  );
-
-  let showPreloader = $derived(!items.length && $status !== 'finished');
-
-  let itemsFound = $derived(items.length);
-  let itemsNotFound = $derived(!items.length && $status === 'finished');
-
-  onMount(() => {
-    fetchImages(1, meta.size);
-
-    return response.subscribe((value) => {
-      if (!value) return;
-
-      // filter out the items that are already in the list
-      items = items.concat(
-        value.data.filter((item) => !items.some((i) => i.id === item.id)),
-      );
-
-      meta = value.meta;
-    });
+  $effect(() => {
+    if (!historyFeedState.isDirty) historyFeedState.load();
   });
 </script>
 
@@ -78,10 +22,10 @@
 
 <section in:fade={{ duration: 300 }}>
   <div class="container mx-auto flex flex-col px-6 py-6 sm:py-10">
-    {#if itemsFound}
+    {#if historyFeedState.hasItems}
       <Heading>Upload History</Heading>
     {/if}
-    {#if itemsNotFound}
+    {#if historyFeedState.isEmpty}
       <div
         class="mt-8 flex flex-grow flex-col items-center justify-center font-extralight"
       >
@@ -98,7 +42,7 @@
       </div>
     {/if}
 
-    {#if showPreloader}
+    {#if historyFeedState.isLoading}
       <div class="mt-8">
         <Loader>
           <span>Loading history...</span>
@@ -106,13 +50,16 @@
       </div>
     {/if}
 
-    <HistoryListView {items} on={{ delete: onRemove }} />
+    <HistoryListView items={historyFeedState.items} />
 
     <LoadMoreButton
-      visible={showLoadMore}
-      loading={$isLoading}
       class="mt-8"
-      onclick={() => fetchImages(meta.page + 1, meta.size)}
+      visible={historyFeedState.hasMore}
+      loading={historyFeedState.isLoading}
+      onclick={() =>
+        historyFeedState.nextPage({
+          debounce: 300,
+        })}
     >
       {#snippet text()}
         <span>View More</span>

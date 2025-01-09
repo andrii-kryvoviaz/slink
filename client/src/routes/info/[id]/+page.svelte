@@ -100,7 +100,7 @@
         <ImageActionBar {image} />
       </div>
 
-      <p class="mb-4 mt-8 w-full">
+      <div class="mb-4 mt-8 w-full">
         <ImageDescription
           description={image.description}
           isLoading={$descriptionIsLoading}
@@ -108,7 +108,7 @@
             change: (description: string) => handleSaveDescription(description),
           }}
         />
-      </p>
+      </div>
       <div class="mb-2 mt-8">
         <p class="my-2 text-xs font-extralight">
           Copy this link to use on your website or share with others

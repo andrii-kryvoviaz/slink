@@ -65,11 +65,10 @@ class ApiResponse extends JsonResponse {
   }
   
   /**
-   * @param Collection $collection
-   * @param int $status
-   * @return self
+   * @param array<int,mixed> $items
+   * @return mixed
    */
-  public static function collection(Collection $collection, int $status = self::HTTP_OK): self {
+  private static function formatItemsArray(array $items): mixed {
     /**
      * @psalm-suppress MissingClosureParamType
      *
@@ -79,8 +78,29 @@ class ApiResponse extends JsonResponse {
      */
     $transformer = fn(array|Item $data): array|object|string => $data instanceof Item ? self::model($data) : $data;
     
-    $resources = \array_map($transformer, $collection->data);
-    
+    return \array_map($transformer, $items);
+  }
+  
+  /**
+   * @param array<int,mixed> $items
+   * @param int $status
+   * @return self
+   */
+  public static function list(array $items, int $status = self::HTTP_OK): self {
+    return new self(
+      [
+        'data' => self::formatItemsArray($items),
+      ],
+      $status
+    );
+  }
+  
+  /**
+   * @param Collection $collection
+   * @param int $status
+   * @return self
+   */
+  public static function collection(Collection $collection, int $status = self::HTTP_OK): self {
     return new self(
       [
         'meta' => [
@@ -88,7 +108,7 @@ class ApiResponse extends JsonResponse {
           'page' => $collection->page,
           'total' => $collection->total,
         ],
-        'data' => $resources,
+        'data' => self::formatItemsArray($collection->data),
       ],
       $status
     );

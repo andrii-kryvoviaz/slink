@@ -29,3 +29,7 @@ export type ImageListingResponse = {
   meta: ListingMetadata;
   data: ImageListingItem[];
 };
+
+export type ImagePlainListingResponse = {
+  data: ImageListingItem[];
+};

@@ -12,11 +12,11 @@ final readonly class UpdateImageCommand implements CommandInterface {
   use EnvelopedMessage;
   
   public function __construct(
-    #[Assert\Length(min: 3, max: 255)]
+    #[Assert\Length(max: 255)]
     private ?string $description,
     
     #[Assert\Type('bool')]
-    private ?bool   $isPublic,
+    private ?bool $isPublic,
   ) {
   }
   

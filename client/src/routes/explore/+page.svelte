@@ -1,17 +1,8 @@
 <script lang="ts">
-  import type { PageServerData } from './$types';
-  import type {
-    ImageListingItem,
-    ImageListingResponse,
-    ListingMetadata,
-  } from '@slink/api/Response';
-  import { onDestroy, onMount } from 'svelte';
-
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
-  import { ApiClient } from '@slink/api/Client';
-  import { ReactiveState } from '@slink/api/ReactiveState';
+  import { usePublicImagesFeed } from '@slink/lib/state/PublicImagesFeed.svelte';
 
   import { ImagePlaceholder } from '@slink/components/Feature/Image';
   import { UserAvatar } from '@slink/components/Feature/User';
@@ -25,46 +16,12 @@
     TextEllipsis,
   } from '@slink/components/UI/Text';
 
-  interface Props {
-    data: PageServerData;
-  }
+  const publicFeedState = usePublicImagesFeed();
+  publicFeedState.reset();
 
-  let { data }: Props = $props();
-
-  let images: ImageListingItem[] = $state([]);
-  let meta: ListingMetadata = $state({
-    page: 1,
-    size: 12,
-    total: 0,
+  $effect(() => {
+    if (!publicFeedState.isDirty) publicFeedState.load();
   });
-
-  const {
-    run: fetchImages,
-    data: response,
-    isLoading,
-    status,
-  } = ReactiveState<ImageListingResponse>(
-    (page: number, limit: number) => {
-      return ApiClient.image.getPublicImages(page, limit);
-    },
-    { debounce: 300 },
-  );
-
-  let unsibscribeResponse = response.subscribe((value) => {
-    if (value) {
-      images = [...images, ...value.data];
-      meta = value.meta;
-    }
-  });
-
-  let showLoadMore = $derived(
-    meta && meta.page < Math.ceil(meta.total / meta.size) && $status !== 'idle',
-  );
-  let showPreloader = $derived(!images.length && $status !== 'finished');
-  let itemsNotFound = $derived(!images.length && $status === 'finished');
-
-  onMount(() => fetchImages(1, meta.size));
-  onDestroy(unsibscribeResponse);
 </script>
 
 <svelte:head>
@@ -85,7 +42,7 @@
       </p>
     </div>
 
-    {#if showPreloader}
+    {#if publicFeedState.isLoading}
       <div class="mt-8">
         <Loader>
           <span>Loading images...</span>
@@ -93,7 +50,7 @@
       </div>
     {/if}
 
-    {#if itemsNotFound}
+    {#if publicFeedState.isEmpty}
       <div
         class="mt-8 flex flex-grow flex-col items-center justify-center font-extralight"
       >
@@ -105,7 +62,7 @@
       </div>
     {/if}
 
-    <Masonry items={images} class="mt-8">
+    <Masonry items={publicFeedState.items} class="mt-8">
       {#snippet itemTemplate(image)}
         <div
           class="break-inside-avoid rounded-lg border bg-gray-200/10 p-4 dark:border-gray-800/50 max-w-full"
@@ -141,10 +98,10 @@
     </Masonry>
 
     <LoadMoreButton
-      visible={showLoadMore}
-      loading={$isLoading}
       class="mt-8"
-      onclick={() => fetchImages(meta.page + 1, meta.size)}
+      visible={publicFeedState.hasMore}
+      loading={publicFeedState.isLoading}
+      onclick={() => publicFeedState.nextPage({ debounce: 300 })}
     >
       {#snippet text()}
         <span>View More</span>

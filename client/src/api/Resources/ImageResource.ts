@@ -1,6 +1,7 @@
 import type {
   ImageDetailsResponse,
   ImageListingResponse,
+  ImagePlainListingResponse,
   UploadedImageResponse,
 } from '@slink/api/Response';
 
@@ -52,5 +53,13 @@ export class ImageResource extends AbstractResource {
     limit: number = 10,
   ): Promise<ImageListingResponse> {
     return this.get(`/images/history/${page}/?limit=${limit}`);
+  }
+
+  public async getImagesByIds(
+    uuids: string[],
+  ): Promise<ImagePlainListingResponse> {
+    const query = uuids.map((uuid) => `uuid[]=${uuid}`).join('&');
+
+    return this.get(`/images?${query}`);
   }
 }
