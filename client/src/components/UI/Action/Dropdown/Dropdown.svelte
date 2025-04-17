@@ -86,13 +86,15 @@
       {...contentProps}
       class={contentClasses}
     >
-      {#snippet child({ props, open })}
+      {#snippet child({ wrapperProps, props, open })}
         {#if open}
-          <div
-            {...props}
-            transition:fly={{ y: -5, duration: animationDuration }}
-          >
-            {@render children?.()}
+          <div {...wrapperProps}>
+            <div
+              {...props}
+              transition:fly={{ y: -5, duration: animationDuration }}
+            >
+              {@render children?.()}
+            </div>
           </div>
         {/if}
       {/snippet}

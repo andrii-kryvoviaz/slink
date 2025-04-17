@@ -136,46 +136,48 @@
       align="end"
       {...contentProps}
     >
-      {#snippet child({ props, open })}
+      {#snippet child({ wrapperProps, props, open })}
         {#if open}
-          <div
-            {...props}
-            transition:fly={{ y: -5, duration: animationDuration }}
-          >
-            {#if showScrollButtons}
-              <Select.ScrollUpButton
-                class="flex w-full items-center justify-center pb-3"
-              >
-                <Icon icon="bi:chevron-compact-up" class="w-4 h-4" />
-              </Select.ScrollUpButton>
-            {/if}
-            <Select.Viewport>
-              {#each items as { value, label, icon, disabled } (value)}
-                <Select.Item
-                  {value}
-                  {label}
-                  {disabled}
-                  class="flex w-full cursor-pointer select-none items-center rounded-button py-3 pl-5 pr-1.5 text-sm capitalize outline-none duration-75 data-[highlighted]:bg-neutral-400/20 data-[disabled]:opacity-50 rounded-md"
+          <div {...wrapperProps}>
+            <div
+              {...props}
+              transition:fly={{ y: -5, duration: animationDuration }}
+            >
+              {#if showScrollButtons}
+                <Select.ScrollUpButton
+                  class="flex w-full items-center justify-center pb-3"
                 >
-                  {#snippet children({ selected })}
-                    {#if icon}
-                      <Icon {icon} class="w-4 h-4 mr-2" />
-                    {/if}
+                  <Icon icon="bi:chevron-compact-up" class="w-4 h-4" />
+                </Select.ScrollUpButton>
+              {/if}
+              <Select.Viewport>
+                {#each items as { value, label, icon, disabled } (value)}
+                  <Select.Item
+                    {value}
                     {label}
-                    {#if selected}
-                      <Icon icon="mdi-light:check" class="w-4 h-4 ml-auto" />
-                    {/if}
-                  {/snippet}
-                </Select.Item>
-              {/each}
-            </Select.Viewport>
-            {#if showScrollButtons}
-              <Select.ScrollDownButton
-                class="flex w-full items-center justify-center pt-3"
-              >
-                <Icon icon="bi:chevron-compact-down" class="w-4 h-4" />
-              </Select.ScrollDownButton>
-            {/if}
+                    {disabled}
+                    class="flex w-full cursor-pointer select-none items-center rounded-button py-3 pl-5 pr-1.5 text-sm capitalize outline-none duration-75 data-[highlighted]:bg-neutral-400/20 data-[disabled]:opacity-50 rounded-md"
+                  >
+                    {#snippet children({ selected })}
+                      {#if icon}
+                        <Icon {icon} class="w-4 h-4 mr-2" />
+                      {/if}
+                      {label}
+                      {#if selected}
+                        <Icon icon="mdi-light:check" class="w-4 h-4 ml-auto" />
+                      {/if}
+                    {/snippet}
+                  </Select.Item>
+                {/each}
+              </Select.Viewport>
+              {#if showScrollButtons}
+                <Select.ScrollDownButton
+                  class="flex w-full items-center justify-center pt-3"
+                >
+                  <Icon icon="bi:chevron-compact-down" class="w-4 h-4" />
+                </Select.ScrollDownButton>
+              {/if}
+            </div>
           </div>
         {/if}
       {/snippet}
