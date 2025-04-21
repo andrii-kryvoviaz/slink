@@ -11,7 +11,7 @@
 @source inline("{,}gap-{0..12}");
 
 @utility text-* {
-  color: --value(--color-*-text) !important;
+  color: --value(--color- * -text) !important;
 }
 
 :root {
@@ -36,7 +36,7 @@
   word-break: break-word;
   overflow-anchor: none;
 
-  @apply overflow-hidden bg-linear-to-b from-bg-start to-bg-end text-[var(--color-text-primary)] antialiased;
+  @apply from-bg-start to-bg-end overflow-hidden bg-linear-to-b text-[var(--color-text-primary)] antialiased;
 }
 
 @layer base {

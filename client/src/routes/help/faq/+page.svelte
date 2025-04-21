@@ -66,15 +66,9 @@
             onclick={() => openQuestion(slug)}
           >
             {#if openedQuestion === slug}
-              <Icon
-                icon="ep:minus"
-                class="h-6 w-6 shrink-0 text-blue-500"
-              />
+              <Icon icon="ep:minus" class="h-6 w-6 shrink-0 text-blue-500" />
             {:else}
-              <Icon
-                icon="ep:plus"
-                class="h-6 w-6 shrink-0 text-blue-500"
-              />
+              <Icon icon="ep:plus" class="h-6 w-6 shrink-0 text-blue-500" />
             {/if}
 
             <h1 class="mx-4 text-xl text-gray-700 dark:text-white">{title}</h1>
