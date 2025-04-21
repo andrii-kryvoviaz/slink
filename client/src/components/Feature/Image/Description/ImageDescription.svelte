@@ -56,9 +56,9 @@
 </script>
 
 {#if editing}
-  <div class="relative rounded-lg border border-button-default p-2">
+  <div class="relative rounded-lg border border-bc-button-default p-2">
     <textarea
-      class="min-h-[100px] w-full resize-none border-none bg-transparent p-2 pb-14 focus:outline-none"
+      class="min-h-[100px] w-full resize-none border-none bg-transparent p-2 pb-14 focus:outline-hidden"
       bind:value={newDescription}
       bind:this={textArea}
       onkeydown={handleKeyDown}

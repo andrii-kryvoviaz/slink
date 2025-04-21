@@ -51,13 +51,13 @@
 
 <div class="dropdown inline-block sm:relative">
   <button
-    class="dropdown-caller z-100 relative flex items-center gap-2 rounded-md border border-transparent bg-gray-200/70 p-2 text-sm focus:border-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:bg-slate-800 dark:text-white dark:focus:ring-blue-400 dark:focus:ring-opacity-40"
+    class="dropdown-caller z-100 relative flex items-center gap-2 rounded-md border border-transparent bg-gray-200/70 p-2 text-sm focus:border-blue-500 focus:outline-hidden focus:ring-3 focus:ring-blue-300/40 dark:bg-slate-800 dark:text-white dark:focus:ring-blue-400/40 dark:focus:ring-opacity-40"
     onclick={handleToggle}
   >
     <UserAvatar
       size="xs"
       variant="default"
-      class="mx-1 hidden sm:block"
+      class="mx-1 hidden sm:flex"
       {user}
     />
     <span class="hidden sm:block">
@@ -76,7 +76,7 @@
   {#if isOpen}
     <div
       transition:fade={{ duration: 400, easing: quintOut }}
-      class="fixed right-0 top-20 z-50 h-[calc(100vh-80px)] w-full origin-top-right overflow-hidden bg-gray-50 from-bg-start to-bg-end py-0 shadow-xl dark:bg-gradient-to-b sm:absolute sm:top-auto sm:mt-2 sm:h-auto sm:w-56 sm:rounded-md sm:dark:from-gray-800 sm:dark:to-gray-800"
+      class="fixed right-0 top-20 z-50 h-[calc(100vh-80px)] w-full origin-top-right overflow-hidden bg-gray-50 from-bg-start to-bg-end py-0 shadow-xl dark:bg-linear-to-b sm:absolute sm:top-auto sm:mt-2 sm:h-auto sm:w-56 sm:rounded-md sm:dark:from-gray-800 sm:dark:to-gray-800"
     >
       {#each UserDropdownItems as group, index (group.title)}
         {#if isAuthorized(group.access)}

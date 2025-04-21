@@ -62,18 +62,18 @@
       {#each faqQuestions as { title, content, slug }, i}
         <div id={slug}>
           <button
-            class="flex w-full items-center focus:outline-none"
+            class="flex w-full items-center focus:outline-hidden"
             onclick={() => openQuestion(slug)}
           >
             {#if openedQuestion === slug}
               <Icon
                 icon="ep:minus"
-                class="h-6 w-6 flex-shrink-0 text-blue-500"
+                class="h-6 w-6 shrink-0 text-blue-500"
               />
             {:else}
               <Icon
                 icon="ep:plus"
-                class="h-6 w-6 flex-shrink-0 text-blue-500"
+                class="h-6 w-6 shrink-0 text-blue-500"
               />
             {/if}
 

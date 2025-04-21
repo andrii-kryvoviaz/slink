@@ -45,7 +45,7 @@
   };
 
   const confirmButtonDefaultClasses =
-    'mt-2 w-full transform rounded-md px-4 py-2 text-sm font-medium capitalize tracking-wide transition-colors duration-300 focus:outline-none focus:ring focus:ring-opacity-40 sm:mt-0 sm:w-auto';
+    'mt-2 w-full transform rounded-md px-4 py-2 text-sm font-medium capitalize tracking-wide transition-colors duration-300 focus:outline-hidden focus:ring-3 focus:ring-opacity-40 sm:mt-0 sm:w-auto';
 
   const confirmButtonDefaultAccentClasses =
     'bg-blue-600 text-white hover:bg-blue-500 focus:ring-blue-300';
@@ -83,7 +83,7 @@
 {#if open}
   <div
     in:fade
-    class="fixed inset-0 z-40 overflow-y-auto bg-black bg-opacity-50 backdrop-blur-sm"
+    class="fixed inset-0 z-40 overflow-y-auto bg-black bg-opacity-50 backdrop-blur-xs"
     aria-labelledby="modal-title"
     role="dialog"
     aria-modal="true"
@@ -128,7 +128,7 @@
 
           <div class="sm:flex sm:items-center">
             <Button
-              class="mt-2 w-full transform rounded-md border border-gray-200 px-4 py-2 text-sm font-medium capitalize tracking-wide text-gray-700 transition-colors duration-300 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-40 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800 sm:mx-2 sm:mt-0 sm:w-auto"
+              class="mt-2 w-full transform rounded-md border border-gray-200 px-4 py-2 text-sm font-medium capitalize tracking-wide text-gray-700 transition-colors duration-300 hover:bg-gray-100 focus:outline-hidden focus:ring-3 focus:ring-gray-300 focus:ring-opacity-40 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800 sm:mx-2 sm:mt-0 sm:w-auto"
               onclick={closeModal}
             >
               Cancel

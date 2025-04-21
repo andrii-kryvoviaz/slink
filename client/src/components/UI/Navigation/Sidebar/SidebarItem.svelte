@@ -52,7 +52,7 @@
       </span>
     {/snippet}
     {#if expanded}
-      <div class="flex-grow text-left">
+      <div class="grow text-left">
         <div class="text-header/100 text-[0.85em]">{text}</div>
       </div>
     {/if}

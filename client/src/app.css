@@ -1,6 +1,18 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@import './theme/theme.default.css' layer(theme);
+@import './theme/theme.dark.css' layer(theme);
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@plugin 'daisyui';
+
+@source inline("{,}grid-cols-{1..12}");
+@source inline("{,}gap-{0..12}");
+
+@utility text-* {
+  color: --value(--color-*-text) !important;
+}
 
 :root {
   --sat: env(safe-area-inset-top);
@@ -21,11 +33,20 @@
   -webkit-text-size-adjust: 100%;
 
   scroll-behavior: smooth;
-
   word-break: break-word;
   overflow-anchor: none;
 
-  @apply overflow-hidden bg-gradient-to-b from-bg-start to-bg-end text-color-primary antialiased;
+  @apply overflow-hidden bg-linear-to-b from-bg-start to-bg-end text-[var(--color-text-primary)] antialiased;
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
 }
 
 html,
@@ -40,7 +61,6 @@ body {
 
 *:focus-visible {
   outline: none;
-  box-shadow: none;
 }
 
 .dropzone button {

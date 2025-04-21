@@ -17,7 +17,7 @@ export const TabMenuTheme = cva(`relative justify-between flex gap-2`, {
     },
     rounded: {
       xs: 'rounded-xs',
-      sm: 'rounded-sm',
+      sm: 'rounded-xs',
       md: 'rounded-md',
       lg: 'rounded-lg',
     },

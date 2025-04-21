@@ -52,7 +52,7 @@
 
     {#if publicFeedState.isEmpty}
       <div
-        class="mt-8 flex flex-grow flex-col items-center justify-center font-extralight"
+        class="mt-8 flex grow flex-col items-center justify-center font-extralight"
       >
         <p class="text-normal opacity-70">Be the first to upload something.</p>
         <Button class="mt-4" size="md" variant="primary" href="/upload">
@@ -81,7 +81,7 @@
               <FormattedDate date={image.attributes.createdAt.timestamp} />
             </div>
           </div>
-          <div class="relative flex justify-center shadow">
+          <div class="relative flex justify-center shadow-sm">
             <ImagePlaceholder
               uniqueId={image.id}
               src={`/image/${image.attributes.fileName}`}

@@ -35,11 +35,11 @@
     >
       <div class="flex items-center justify-between sm:mb-4">
         <div
-          class="flex max-w-full flex-grow flex-col items-center gap-4 sm:flex-row sm:items-start"
+          class="flex max-w-full grow flex-col items-center gap-4 sm:flex-row sm:items-start"
         >
           <a
             href={`/info/${item.id}`}
-            class="block w-full max-w-full flex-shrink sm:h-40 sm:w-40"
+            class="block w-full max-w-full shrink sm:h-40 sm:w-40"
           >
             <ImagePlaceholder
               src={`/image/${item.attributes.fileName}?width=350&crop=true`}
@@ -53,7 +53,7 @@
             />
           </a>
 
-          <div class="flex flex-grow flex-col gap-4">
+          <div class="flex grow flex-col gap-4">
             <div class="hidden justify-between sm:flex">
               <Button
                 href={`/info/${item.id}`}
@@ -78,7 +78,7 @@
             </div>
 
             <div
-              class="flex-grow items-center justify-between gap-8 sm:pr-8 flex flex-wrap"
+              class="grow items-center justify-between gap-8 sm:pr-8 flex flex-wrap"
             >
               <div class="flex flex-col gap-1 text-xs">
                 <Badge variant="primary" outline={true}>
@@ -86,19 +86,19 @@
                 </Badge>
               </div>
 
-              <div class="text-center text-xs flex-grow sm:flex-none">
+              <div class="text-center text-xs grow sm:flex-none">
                 <p class="font-semibold">Dimensions</p>
                 <p>
                   {item.metadata.width}x{item.metadata.height} pixels
                 </p>
               </div>
 
-              <div class="text-center text-xs flex-grow sm:flex-none">
+              <div class="text-center text-xs grow sm:flex-none">
                 <p class="font-semibold">Size</p>
                 <p>{bytesToSize(item.metadata.size)}</p>
               </div>
 
-              <div class="text-center text-xs flex-grow sm:flex-none">
+              <div class="text-center text-xs grow sm:flex-none">
                 <p class="font-semibold">Uploaded on</p>
                 <FormattedDate date={item.attributes.createdAt.timestamp} />
               </div>

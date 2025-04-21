@@ -6,7 +6,7 @@
   let { themeSwitch, profile } = $props();
 </script>
 
-<header class="z-30 w-full border-b-2 border-header/70">
+<header class="z-30 w-full border-b-2 border-bc-header/70">
   <nav
     class="mx-auto flex min-h-[5rem] items-center justify-between px-5 py-4 lg:px-8"
   >

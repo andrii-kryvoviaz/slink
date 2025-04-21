@@ -1,4 +1,5 @@
 import { sveltekit } from '@sveltejs/kit/vite';
+import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
 
 import iconifyExport from './plugins/vite-iconify-export';
@@ -12,6 +13,7 @@ export default defineConfig({
     }),
     iconifyExport(),
     sveltekit(),
+    tailwindcss(),
   ],
   server: {
     host: '0.0.0.0',

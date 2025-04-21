@@ -12,7 +12,7 @@
   <title>Dashboard | Slink</title>
 </svelte:head>
 
-<section in:fade={{ duration: 300 }} class="relative h-full flex-grow py-4">
+<section in:fade={{ duration: 300 }} class="relative h-full grow py-4">
   <div class="grid h-full grid-cols-2 content-start gap-6 px-6">
     <div class="col-span-2 h-96 md:col-span-1 xl:h-[40rem]">
       <ImageAnalytics />

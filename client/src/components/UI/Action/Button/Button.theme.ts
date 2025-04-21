@@ -1,29 +1,29 @@
 import { cva } from 'class-variance-authority';
 
 export const ButtonTheme = cva(
-  `inline-flex items-center justify-center text-center select-none cursor-pointer focus:outline-none focus-visable:outline-none whitespace-nowrap`,
+  `inline-flex items-center justify-center text-center select-none cursor-pointer focus:outline-hidden focus-visible:outline-none whitespace-nowrap`,
   {
     variants: {
       variant: {
         default:
-          'border bg-none text-button-default border-button-default hover:bg-button-hover-default hover:text-button-hover-default',
+          'border bg-none text-button-default border-bc-button-default hover:bg-button-default-hover hover:text-button-hover-default',
         primary:
-          'bg-button-accent text-button-accent bg-opacity-80 hover:bg-opacity-100',
+          'bg-button-accent/80 text-button-accent hover:bg-button-accent/100',
         secondary:
-          'border bg-none text-button-default border-button-default hover:bg-button-accent hover:text-button-accent hover:border-button-accent',
-        dark: 'bg-button-dark text-button-accent bg-opacity-80 hover:bg-opacity-100',
+          'border bg-none text-button-default border-bc-button-default hover:bg-button-accent hover:text-button-accent hover:border-button-accent',
+        dark: 'bg-button-dark/80 text-button-accent hover:bg-button-dark/100',
         invisible:
-          'bg-none text-button-invisible hover:bg-button-hover-invisible/25 hover:text-button-primary',
+          'bg-none text-button-invisible hover:bg-button-invisible-hover/25 hover:text-button-primary',
         outline:
-          'border bg-none text-button-default border-button-default hover:bg-button-hover-default hover:text-button-hover-default',
-        form: 'border bg-input-default text-input-default focus:outline-none focus:ring focus:ring-opacity-40 border-input-default hover:bg-input-hover-default focus:border-input-focus-default focus:ring-input-focus-default',
+          'border bg-none text-button-default border-bc-button-default hover:bg-button-default-hover hover:text-button-hover-default',
+        form: 'border bg-input-default text-input-default focus:outline-hidden focus:ring-3 border-bc-input-default hover:bg-input-default-hover focus:border-bc-input-default-focus focus:ring-rc-input-default-focus',
         link: 'bg-transparent dark:bg-transparent underline-offset-4 hover:underline text-button-default hover:bg-transparent',
         success:
-          'bg-button-success text-button-accent bg-opacity-80 hover:bg-opacity-100 focus:ring-button-success',
+          'bg-success/80 text-button-accent hover:bg-success focus:ring-3 focus:ring-rc-success/40',
         danger:
-          'bg-button-danger text-button-accent bg-opacity-80 hover:bg-opacity-100 focus:ring-button-danger',
+          'bg-danger/80 text-button-accent hover:bg-danger focus:ring-3 focus:ring-rc-danger/40',
         warning:
-          'bg-button-warning text-button-accent bg-opacity-80 hover:bg-opacity-100 focus:ring-button-warning',
+          'bg-warning/80 text-button-accent hover:bg-warning focus:ring-3 focus:ring-rc-warning/40',
       },
       size: {
         xs: 'text-xs px-3 py-1.5',
@@ -33,7 +33,7 @@ export const ButtonTheme = cva(
       },
       rounded: {
         none: 'rounded-none',
-        sm: 'rounded',
+        sm: 'rounded-sm',
         md: 'rounded-md',
         lg: 'rounded-lg',
         xl: 'rounded-xl',

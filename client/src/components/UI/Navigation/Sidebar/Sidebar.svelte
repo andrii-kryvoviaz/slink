@@ -25,7 +25,7 @@
 </script>
 
 <div
-  class="flex h-full flex-col items-center justify-between border-r border-header/70 bg-gray-300/10 dark:bg-gray-800/20"
+  class="flex h-full flex-col items-center justify-between border-r border-bc-header/70 bg-gray-300/10 dark:bg-gray-800/20"
 >
   <div class="main-area flex flex-col">
     <SidebarItem
@@ -38,7 +38,7 @@
   </div>
 
   <div class="flex w-full flex-col items-center">
-    <hr class="w-[calc(100%-1.5rem)] border-t border-header/70" />
+    <hr class="w-[calc(100%-1.5rem)] border-t border-bc-header/70" />
     <SidebarItem
       to="/admin/settings"
       icon="mingcute:settings-7-line"

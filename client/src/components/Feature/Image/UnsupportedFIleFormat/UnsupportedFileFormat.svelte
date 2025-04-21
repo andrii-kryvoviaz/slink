@@ -19,7 +19,7 @@
   </div>
   <button
     type="button"
-    class="m-0.5 ml-auto cursor-pointer whitespace-normal rounded-lg p-1.5 hover:bg-gray-100 focus:outline-none focus:ring-gray-400 dark:hover:bg-gray-600"
+    class="m-0.5 ml-auto cursor-pointer whitespace-normal rounded-lg p-1.5 hover:bg-gray-100 focus:outline-hidden focus:ring-gray-400 dark:hover:bg-gray-600"
     aria-label="Close"
     onclick={close}
     ><span class="sr-only">Close</span>

@@ -27,7 +27,7 @@
     {/if}
     {#if historyFeedState.isEmpty}
       <div
-        class="mt-8 flex flex-grow flex-col items-center justify-center font-extralight"
+        class="mt-8 flex grow flex-col items-center justify-center font-extralight"
       >
         <p class="mb-6 text-center text-[3rem] leading-10 opacity-70">
           There’s nothing here yet

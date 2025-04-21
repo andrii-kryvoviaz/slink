@@ -155,7 +155,7 @@
 </script>
 
 <div
-  class="flex items-center justify-between rounded-xl border border-header/50 p-4"
+  class="flex items-center justify-between rounded-xl border border-bc-header/50 p-4"
 >
   <div class="flex w-full items-center space-x-4">
     <UserAvatar {user} size="lg" />

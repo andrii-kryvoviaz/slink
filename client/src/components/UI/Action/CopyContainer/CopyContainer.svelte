@@ -30,10 +30,10 @@
 
 <div class="flex w-full max-w-[25rem] items-center text-[0.7rem] xs:text-xs">
   <div
-    class="flex w-full flex-row items-center justify-center rounded-full border border-button-default p-1"
+    class="flex w-full flex-row items-center justify-center rounded-full border border-bc-button-default p-1"
   >
     <input
-      class="flex-grow bg-transparent px-3 focus:outline-none"
+      class="grow bg-transparent px-3 focus:outline-hidden"
       type="text"
       {value}
       readonly

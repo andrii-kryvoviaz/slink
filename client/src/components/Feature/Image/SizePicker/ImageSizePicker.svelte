@@ -96,10 +96,10 @@
 </script>
 
 <div class="flex gap-4 text-[0.7rem] xs:text-xs">
-  <div class="flex gap-2 rounded-full border border-button-default p-1">
+  <div class="flex gap-2 rounded-full border border-bc-button-default p-1">
     <input
       type="number"
-      class="w-16 bg-transparent text-center focus:outline-none"
+      class="w-16 bg-transparent text-center focus:outline-hidden"
       bind:value={calculatedWidth}
       onkeyup={() => handleChange('width')}
       onchange={() => handleChange('width')}
@@ -131,7 +131,7 @@
 
     <input
       type="number"
-      class="w-16 bg-transparent text-center focus:outline-none"
+      class="w-16 bg-transparent text-center focus:outline-hidden"
       bind:value={calculatedHeight}
       onkeyup={() => handleChange('height')}
       onchange={() => handleChange('height')}

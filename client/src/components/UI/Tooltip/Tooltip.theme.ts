@@ -1,13 +1,13 @@
 import { cva } from 'class-variance-authority';
 
-export const TooltipContent = cva(`border z-[9999] text-center`, {
+export const TooltipContent = cva(`border z-9999 text-center`, {
   variants: {
     variant: {
       default:
         'bg-neutral-50 border-neutral-200 shadow-lg dark:bg-neutral-800 dark:text-white dark:border-neutral-600/40',
     },
     rounded: {
-      sm: 'rounded-sm',
+      sm: 'rounded-xs',
       md: 'rounded-md',
       lg: 'rounded-lg',
       xl: 'rounded-xl',
@@ -31,7 +31,7 @@ export const TooltipContent = cva(`border z-[9999] text-center`, {
   },
 });
 
-export const TooltipArrow = cva(`z-[9999]`, {
+export const TooltipArrow = cva(`z-9999`, {
   variants: {
     variant: {
       default: 'text-neutral-50 dark:text-neutral-800',

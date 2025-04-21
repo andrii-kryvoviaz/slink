@@ -45,14 +45,14 @@
   </div>
 </div>
 
-<div class="mt-4 flex items-center gap-2 sm:flex-grow">
+<div class="mt-4 flex items-center gap-2 sm:grow">
   <Toggle
     size="md"
     checked={!preserveOnDiskAfterDeletion}
     on={{ change: (checked) => (preserveOnDiskAfterDeletion = !checked) }}
   />
 
-  <div class="flex flex-grow items-center justify-between">
+  <div class="flex grow items-center justify-between">
     <span class="text-[0.5em]">
       {#if preserveOnDiskAfterDeletion}
         Preserve in Storage

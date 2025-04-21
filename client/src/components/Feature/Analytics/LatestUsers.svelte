@@ -54,7 +54,7 @@
     <div
       class="flex-column flex flex-wrap items-center justify-between gap-2 space-y-4 pb-4 sm:flex-row sm:space-y-0"
     >
-      <div class="flex flex-grow items-center justify-between">
+      <div class="flex grow items-center justify-between">
         <p class="text-lg font-light tracking-wider">Latest Users</p>
         <RefreshButton
           size="sm"
@@ -76,7 +76,7 @@
           <input
             type="text"
             id="table-search"
-            class="block w-full rounded-lg border border-gray-300 bg-gray-50 py-2 pl-10 pr-3 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+            class="block w-full rounded-lg border border-gray-300 bg-gray-50 py-2 pl-10 pr-3 text-sm focus:inset-ring-3 text-gray-900 focus:border-blue-500 focus:inset-ring-blue-500/30 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:inset-ring-blue-500/30"
             placeholder="Search for users"
             onkeyup={handleSearch}
           />

@@ -30,15 +30,15 @@
 {#if selectedItems.length === 0}
   <div>{placeholder}</div>
 {:else}
-  <div class="flex-grow flex-wrap flex gap-2">
+  <div class="grow flex-wrap flex gap-2">
     {#each selectedItems as { value, label, icon } (value)}
       <div
-        class="flex flex-grow max-w-full w-24 items-center gap-1 px-2 rounded-md bg-gray-200/70 p-1 text-xs dark:bg-gray-700 dark:text-gray-50"
+        class="flex grow max-w-full w-24 items-center gap-1 px-2 rounded-md bg-gray-200/70 p-1 text-xs dark:bg-gray-700 dark:text-gray-50"
       >
         {#if icon}
           <Icon {icon} class="w-4 h-4" />
         {/if}
-        <div class="flex-grow truncate" title={label}>{label}</div>
+        <div class="grow truncate" title={label}>{label}</div>
       </div>
     {/each}
   </div>

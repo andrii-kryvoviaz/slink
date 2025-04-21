@@ -36,7 +36,7 @@
     </TabMenu>
   </div>
 
-  <div class="flex max-w-full flex-grow">
+  <div class="flex max-w-full grow">
     {@render children?.()}
   </div>
 </div>

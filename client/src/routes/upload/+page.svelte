@@ -152,7 +152,7 @@
       >
         {#if !processing}
           <div class="flex flex-col p-6 xs:w-[80%]">
-            <div class="text-sm text-color-primary">
+            <div class="text-sm text-text-primary">
               <p class="flex items-center justify-center gap-x-[3px] p-3">
                 <Icon icon="material-symbols-light:upload" class="h-10 w-10" />
                 <span class="hidden font-semibold sm:block">
@@ -163,24 +163,28 @@
               </p>
             </div>
 
-            <p class="divider hidden sm:flex">or</p>
+            <p
+              class="divider hidden sm:flex before:bg-bc-delimiter/40 after:bg-bc-delimiter/40"
+            >
+              or
+            </p>
 
             <p class="mb-4 mt-2 hidden sm:block">
               {#if data.os?.name === 'Mac OS' || data.device?.vendor === 'Apple'}
-                <span class="kbd">⌘ cmd</span>
+                <span class="kbd kbd-lg rounded-lg py-4">⌘ cmd</span>
               {:else}
-                <kbd class="kbd">ctrl</kbd>
+                <kbd class="kbd kbd-lg rounded-lg py-4">ctrl</kbd>
               {/if}
               <span class="m-1">+</span>
-              <kbd class="kbd">v</kbd>
+              <kbd class="kbd kbd-lg rounded-lg py-4 min-w-9">v</kbd>
             </p>
 
-            <p class="text-xs text-color-secondary">
+            <p class="text-xs text-text-secondary">
               SVG, PNG, JPG, BMP, GIF or HEIC
             </p>
             <a
               href="/help/faq#supported-image-formats"
-              class="mt-1 block text-[0.75em] text-gray-600 hover:text-color-primary"
+              class="mt-1 block text-[0.75em] text-gray-600 hover:text-text-primary"
               onclick={(event) => event.stopPropagation()}
             >
               See all supported formats
@@ -190,7 +194,7 @@
           <div class="flex flex-col items-center justify-center">
             <Loader>
               <p
-                class="text-md font-extralight tracking-wide text-color-primary"
+                class="text-md font-extralight tracking-wide text-text-primary"
               >
                 Uploading, please wait...
               </p>

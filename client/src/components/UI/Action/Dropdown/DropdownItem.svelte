@@ -35,7 +35,11 @@
 </script>
 
 <DropdownMenu.Item {...props} onSelect={handleClick}>
-  <span class="tooltip-item" class:danger>
+  <span
+    class="flex w-full cursor-pointer items-center gap-3 rounded-md p-1 px-3 text-left text-sm text-input hover:bg-dropdown-accent hover:text-white disabled:cursor-not-allowed disabled:text-gray-500 disabled:hover:bg-inherit disabled:hover:text-gray-500"
+    class:hover:bg-red-500={danger}
+    class:hover:text-gray-50={danger}
+  >
     {#if loading}
       <Icon icon="mingcute:loading-line" class="animate-spin" />
     {:else}
@@ -44,26 +48,3 @@
     {@render children?.()}
   </span>
 </DropdownMenu.Item>
-
-<style>
-  .tooltip-item {
-    @apply flex w-full cursor-pointer items-center gap-3 rounded-md p-1 px-3 text-left text-sm;
-    @apply text-input-default;
-  }
-
-  .tooltip-item[disabled] {
-    @apply cursor-not-allowed text-gray-500;
-  }
-
-  .tooltip-item:hover {
-    @apply bg-dropdown-accent text-white;
-  }
-
-  .danger:hover {
-    @apply bg-red-500 text-gray-50;
-  }
-
-  .tooltip-item[disabled]:hover {
-    @apply bg-inherit text-gray-500;
-  }
-</style>

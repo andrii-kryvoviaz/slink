@@ -63,11 +63,11 @@
 
 <section
   in:fade={{ duration: 300 }}
-  class="relative flex h-full max-w-7xl flex-grow flex-col py-4"
+  class="relative flex h-full max-w-7xl grow flex-col py-4"
 >
   <div class="flex h-full flex-col px-6">
     {#if itemsNotFound}
-      <div class="flex flex-grow flex-col items-start font-extralight">
+      <div class="flex grow flex-col items-start font-extralight">
         <p class="text-[2rem] opacity-70">There’s nothing here yet</p>
       </div>
     {/if}

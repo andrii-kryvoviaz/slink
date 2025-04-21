@@ -13,9 +13,7 @@
 
   let { variant = 'default', size = 'md', user, ...props }: Props = $props();
   let classes = $derived(
-    className(
-      `${UserAvatarTheme({ variant, size })} flex items-center justify-center ${props.class}`,
-    ),
+    className(`${UserAvatarTheme({ variant, size })} ${props.class}`),
   );
 
   const colors = [

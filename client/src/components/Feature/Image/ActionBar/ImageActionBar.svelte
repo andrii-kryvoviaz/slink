@@ -213,7 +213,7 @@
           <Button
             variant="invisible"
             size="md"
-            class="px-3 transition-colors hover:bg-button-danger hover:text-white"
+            class="px-3 transition-colors hover:bg-danger hover:text-white"
             onclick={handleImageDeletion}
           >
             <Icon

@@ -40,7 +40,7 @@
 </svelte:head>
 
 <div
-  class="flex flex-grow items-start justify-center p-4 sm:p-12"
+  class="flex grow items-start justify-center p-4 sm:p-12"
   in:fade={{ duration: 200 }}
 >
   <div class="flex w-full max-w-3xl items-center lg:w-3/5">

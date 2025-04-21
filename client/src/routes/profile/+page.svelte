@@ -70,7 +70,7 @@
         <p class="opacity-60">{user.email}</p>
       </div>
     </div>
-    <div class="max-w-md flex-grow">
+    <div class="max-w-md grow">
       <form
         action="?/updateProfile"
         method="POST"

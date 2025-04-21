@@ -156,7 +156,7 @@
 
     {#if metadata && showMetadata}
       <div
-        class="absolute bottom-0 left-0 right-0 flex items-center justify-between bg-slate-800 bg-opacity-50 p-2 text-xs text-slate-200 backdrop-blur-sm backdrop-filter"
+        class="absolute bottom-0 left-0 right-0 flex items-center justify-between bg-slate-800 bg-opacity-50 p-2 text-xs text-slate-200 backdrop-blur-xs backdrop-filter"
       >
         <div class="group">
           <p>{metadata.width}x{metadata.height} pixels</p>

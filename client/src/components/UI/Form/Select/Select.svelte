@@ -99,7 +99,7 @@
   });
 
   const baseContentClasses =
-    'z-50 max-h-96 w-[var(--bits-select-anchor-width)] min-w-[var(--bits-select-anchor-width)] origin-top-left divide-y divide-gray-100 rounded-md bg-white font-light shadow-lg ring-1 ring-black ring-opacity-5 dark:divide-neutral-700/30 dark:bg-neutral-950 px-1 py-3 border-neutral-100/10 border';
+    'z-50 max-h-96 w-[var(--bits-select-anchor-width)] min-w-[var(--bits-select-anchor-width)] origin-top-left divide-y divide-gray-100 rounded-md bg-white font-light shadow-lg ring-1 ring-black/5 dark:divide-neutral-700/30 dark:bg-neutral-950 px-1 py-3 border-neutral-100/10 border';
 
   const contentClasses = $derived(
     className(`${baseContentClasses} ${props.contentClass}`),
@@ -156,7 +156,7 @@
                     {value}
                     {label}
                     {disabled}
-                    class="flex w-full cursor-pointer select-none items-center rounded-button py-3 pl-5 pr-1.5 text-sm capitalize outline-none duration-75 data-[highlighted]:bg-neutral-400/20 data-[disabled]:opacity-50 rounded-md"
+                    class="flex w-full cursor-pointer select-none items-center rounded-button py-3 pl-5 pr-1.5 text-sm capitalize outline-hidden duration-75 data-highlighted:bg-neutral-400/20 data-disabled:opacity-50 rounded-md"
                   >
                     {#snippet children({ selected })}
                       {#if icon}

@@ -6,9 +6,9 @@ export const SelectTheme = cva(
     variants: {
       variant: {
         default:
-          'border bg-input-default text-input-default focus:outline-none focus:ring focus:ring-opacity-40 border-input-default hover:bg-input-hover-default focus:border-input-focus-default focus:ring-input-focus-default',
+          'border bg-input text-input focus:outline-hidden focus:ring-3 border-bc-input hover:bg-input-hover focus:border-bc-input-focus focus:ring-rc-input-focus/40',
         invisible:
-          'bg-none text-button-invisible hover:bg-button-hover-invisible/25 hover:text-button-primary',
+          'bg-none text-button-invisible hover:bg-button-invisible-hover/25 hover:text-button-primary',
       },
       size: {
         xs: 'text-xs px-3 py-1.5',
@@ -18,7 +18,7 @@ export const SelectTheme = cva(
       },
       rounded: {
         none: 'rounded-none',
-        sm: 'rounded',
+        sm: 'rounded-sm',
         md: 'rounded-md',
         lg: 'rounded-lg',
         xl: 'rounded-xl',
