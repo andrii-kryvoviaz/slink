@@ -39,7 +39,7 @@
 </div>
 
 <style>
-  @reference "tailwindcss/utilities";
+  @reference "tailwindcss";
 
   .dark .inactive {
     @apply cursor-not-allowed bg-gray-600 text-gray-300 opacity-60;
