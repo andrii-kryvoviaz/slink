@@ -17,7 +17,9 @@ declare global {
       settings: CookieSettings;
       user: User | null;
     }
-    // interface PageData {}
+    interface PageData {
+      userAgent: string;
+    }
     // interface Platform {}
   }
 

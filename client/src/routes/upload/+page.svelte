@@ -16,6 +16,7 @@
 
   import UnsupportedFileFormat from '@slink/components/Feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte';
   import { Button } from '@slink/components/UI/Action';
+  import { Shourtcut } from '@slink/components/UI/Action';
   import { Dropzone } from '@slink/components/UI/Form';
   import { Loader } from '@slink/components/UI/Loader';
 
@@ -169,15 +170,9 @@
               or
             </p>
 
-            <p class="mb-4 mt-2 hidden sm:block">
-              {#if data.os?.name === 'Mac OS' || data.device?.vendor === 'Apple'}
-                <span class="kbd kbd-lg rounded-lg py-4">⌘ cmd</span>
-              {:else}
-                <kbd class="kbd kbd-lg rounded-lg py-4">ctrl</kbd>
-              {/if}
-              <span class="m-1">+</span>
-              <kbd class="kbd kbd-lg rounded-lg py-4 min-w-9">v</kbd>
-            </p>
+            <div class="mb-4 mt-2 hidden sm:block">
+              <Shourtcut control={true} key="v" size="lg" />
+            </div>
 
             <p class="text-xs text-text-secondary">
               SVG, PNG, JPG, BMP, GIF or HEIC
