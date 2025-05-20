@@ -15,4 +15,4 @@ runs:
     - shell: bash
       run: |
         docker run --rm ${{ inputs.image }} \
-          php /app/vendor/bin/phpunit --configuration phpunit.xml
+          php /apps/api/vendor/bin/phpunit --configuration /apps/api/phpunit.xml

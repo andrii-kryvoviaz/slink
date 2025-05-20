@@ -1,11 +1,14 @@
 services:
   slink:
     build:
-      context: .
+      context: ..
+      dockerfile: docker/Dockerfile
       target: dev
     volumes:
-      - ./:/app
-      - node_modules:/app/client/node_modules
+      - ../apps:/apps
+      - ../var:/app/var
+      - ../slink:/app/slink
+      - node_modules:/apps/client/node_modules
     ports:
       - "8080:8080"
       - "5173:5173"

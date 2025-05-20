@@ -3,12 +3,13 @@
 /.env.local
 /.env.local.php
 /.env.*.local
-/config/secrets/prod/prod.decrypt.private.php
-/public/bundles/
-/var/cache
-/var/log
+config/secrets/prod/prod.decrypt.private.php
+public/bundles/
+var/cache
+var/log
 /var/data/*.db
-/vendor/
+vendor/
+apps/*/var
 ###< symfony/framework-bundle ###
 
 .idea/
@@ -17,14 +18,14 @@
 .DS_Store
 .phpactor.json
 
-/public/images
-/public/slink
+public/images
+public/slink
 /slink
 dump.rdb
 docker-compose.prod.yaml
 
 ###> lexik/jwt-authentication-bundle ###
-/config/jwt/*.pem
+config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
 
 ###> symfony/phpunit-bridge ###

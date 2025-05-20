@@ -19,4 +19,4 @@ runs:
     - shell: bash
       run: |
         docker run --rm ${{ inputs.image }} \
-          php /app/vendor/bin/phpstan analyse --configuration phpstan.neon --memory-limit ${{ inputs.memory_limit }}
+          php /apps/api/vendor/bin/phpstan analyse --configuration /apps/api/phpstan.neon --memory-limit ${{ inputs.memory_limit }}

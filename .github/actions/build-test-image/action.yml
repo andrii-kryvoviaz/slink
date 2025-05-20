@@ -15,6 +15,7 @@ runs:
       uses: docker/build-push-action@v5
       with:
         context: .
+        file: docker/Dockerfile
         target: test
         load: true
         tags: ${{ inputs.image }}
