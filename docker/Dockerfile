@@ -10,7 +10,7 @@ FROM node:${NODE_VERSION}-alpine AS node
 
 ### NodeJS build ###
 FROM node AS node-dependencies
-WORKDIR /
+WORKDIR /client
 
 COPY apps/client/package.json apps/client/yarn.lock ./
 
@@ -179,8 +179,8 @@ RUN addgroup -g 1000 slink && \
 # Source code
 COPY --from=vendor --chown=slink:slink /dependencies/vendor ./api/vendor
 COPY --from=source --chown=slink:slink /source ./api
-COPY --from=node-dependencies --chown=slink:slink /build ./client/svelte-kit
-COPY --from=node-dependencies --chown=slink:slink /package.json ./client/svelte-kit/package.json
+COPY --from=node-dependencies --chown=slink:slink /client/build ./client/svelte-kit
+COPY --from=node-dependencies --chown=slink:slink /client/package.json ./client/svelte-kit/package.json
 COPY --chown=slink:slink apps/api/.env.example ./api/.env
 
 # Create project directories
