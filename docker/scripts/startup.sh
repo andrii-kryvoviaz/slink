@@ -25,5 +25,5 @@ else
 fi
 
 # Apply migrations
-slink doctrine:migrations:migrate --no-interaction --configuration=/apps/api/config/migrations/event_store.yaml --em=event_store
+slink doctrine:migrations:migrate --no-interaction --configuration=/services/api/config/migrations/event_store.yaml --em=event_store
 slink doctrine:migrations:migrate --no-interaction --em=read_model

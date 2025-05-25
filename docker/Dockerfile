@@ -184,7 +184,7 @@ COPY --from=node-dependencies --chown=slink:slink /client/package.json ./client/
 COPY --chown=slink:slink services/api/.env.example ./api/.env
 
 # Create project directories
-RUN mkdir -p /app/var && \
+RUN mkdir -p /app/var/data && \
     mkdir -p /app/slink && \
     chown -R slink:slink /app/var /app/slink
 
