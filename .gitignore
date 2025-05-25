@@ -6,7 +6,6 @@ config/secrets/prod/prod.decrypt.private.php
 public/bundles/
 var/cache
 var/log
-/var/data/*.db
 vendor/
 services/*/var
 ###< symfony/framework-bundle ###
@@ -20,11 +19,12 @@ services/*/var
 public/images
 public/slink
 /slink
+/var/data/*.db
 dump.rdb
 docker-compose.prod.yaml
 
 ###> lexik/jwt-authentication-bundle ###
-config/jwt/*.pem
+*.pem
 ###< lexik/jwt-authentication-bundle ###
 
 ###> symfony/phpunit-bridge ###

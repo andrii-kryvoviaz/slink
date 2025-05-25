@@ -5,10 +5,10 @@ services:
       dockerfile: docker/Dockerfile
       target: dev
     volumes:
-      - ../apps:/apps
+      - ../services:/services
       - ../var:/app/var
       - ../slink:/app/slink
-      - node_modules:/apps/client/node_modules
+      - node_modules:/services/client/node_modules
     ports:
       - "8080:8080"
       - "5173:5173"
