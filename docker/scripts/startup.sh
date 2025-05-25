@@ -2,8 +2,11 @@
 
 set -euo pipefail
 
-if [ -f /app/.env ]; then
-  export $(grep -v '^#' /app/.env | xargs)
+# Generate JWT keys
+slink lexik:jwt:generate-keypair --skip-if-exists
+
+if [ -f /services/api/.env ]; then
+  export $(grep -v '^#' /services/api/.env | xargs)
 fi
 
 # Check if DATABASE_URL or ES_DATABASE_URL is set to SQLite
@@ -24,6 +27,3 @@ fi
 # Apply migrations
 slink doctrine:migrations:migrate --no-interaction --configuration=/apps/api/config/migrations/event_store.yaml --em=event_store
 slink doctrine:migrations:migrate --no-interaction --em=read_model
-
-# Generate JWT keys
-slink lexik:jwt:generate-keypair --skip-if-exists

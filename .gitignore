@@ -1,4 +1,3 @@
-
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
@@ -9,7 +8,7 @@ var/cache
 var/log
 /var/data/*.db
 vendor/
-apps/*/var
+services/*/var
 ###< symfony/framework-bundle ###
 
 .idea/

@@ -1,2 +1,2 @@
 #!/bin/sh
-/apps/api/bin/console "$@"
+/services/api/bin/console "$@"

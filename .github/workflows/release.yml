@@ -92,13 +92,13 @@ jobs:
 
       - name: Bump client version
         run: |
-          npm --prefix ./apps/client version ${{ env.tag }}
+          npm --prefix ./services/client version ${{ env.tag }}
 
       - name: Commit version
         uses: ./.github/actions/commit-bot
         with:
           commit-message: "chore: Bump version to ${{ env.tag }}"
-          files: ./apps/client/package.json
+          files: ./services/client/package.json
           push: false
 
       - name: Tag version

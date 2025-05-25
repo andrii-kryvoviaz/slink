@@ -12,15 +12,15 @@ FROM node:${NODE_VERSION}-alpine AS node
 FROM node AS node-dependencies
 WORKDIR /client
 
-COPY apps/client/package.json apps/client/yarn.lock ./
+COPY services/client/package.json services/client/yarn.lock ./
 
 RUN yarn install --frozen-lockfile --non-interactive --production=true && \
     yarn add vite
 
-COPY apps/client/plugins ./plugins
-COPY apps/client/src ./src
-COPY apps/client/static ./static
-COPY apps/client/svelte.config.js apps/client/tsconfig.json apps/client/vite.config.ts ./
+COPY services/client/plugins ./plugins
+COPY services/client/src ./src
+COPY services/client/static ./static
+COPY services/client/svelte.config.js services/client/tsconfig.json services/client/vite.config.ts ./
 
 RUN yarn build
 ### End of NodeJS build ###
@@ -29,18 +29,18 @@ RUN yarn build
 FROM alpine AS source
 WORKDIR /source
 
-COPY apps/api/bin ./bin
-COPY apps/api/config ./config
-COPY apps/api/public ./public
-COPY apps/api/src ./src
-COPY apps/api/composer.json ./
+COPY services/api/bin ./bin
+COPY services/api/config ./config
+COPY services/api/public ./public
+COPY services/api/src ./src
+COPY services/api/composer.json ./
 ### End of PHP source ###
 
 ### PHP vendor ###
 FROM composer:2 AS vendor
 WORKDIR /dependencies
 
-COPY apps/api/composer.json apps/api/composer.lock ./
+COPY services/api/composer.json services/api/composer.lock ./
 
 RUN composer install --ignore-platform-reqs --no-interaction --no-scripts --prefer-dist
 ### End of PHP vendor ###
@@ -93,7 +93,7 @@ RUN echo "upload_max_filesize = $((UPLOAD_MAX_FILESIZE_IN_BYTES / 1024 / 1024))M
 RUN apk add --no-cache tzdata
 RUN echo 'date.timezone = ${TZ}' > /usr/local/etc/php/conf.d/timezone.ini
 
-WORKDIR /apps
+WORKDIR /services
 
 ENV API_URL=http://localhost:8080
 ENV API_PREFIX=/api
@@ -110,13 +110,13 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
-COPY apps/api/composer.json composer.lock ./
+COPY services/api/composer.json composer.lock ./
 
 RUN composer install --ignore-platform-reqs --no-interaction --no-scripts
 
-COPY --chown=www-data:www-data ./apps/api .
+COPY --chown=www-data:www-data ./services/api .
 
-RUN mv apps/api/.env.example .env
+RUN mv services/api/.env.example .env
 ENV APP_ENV=test
 
 ARG PHP_MEMORY_LIMIT
@@ -152,7 +152,7 @@ COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
 # Add Yarn dependencies
 COPY --from=node /opt /opt
 
-COPY apps/api/.env.example ./api/.env
+COPY services/api/.env.example ./api/.env
 
 ENV API_ENABLED=true
 ENV APP_ENV=dev
@@ -181,7 +181,7 @@ COPY --from=vendor --chown=slink:slink /dependencies/vendor ./api/vendor
 COPY --from=source --chown=slink:slink /source ./api
 COPY --from=node-dependencies --chown=slink:slink /client/build ./client/svelte-kit
 COPY --from=node-dependencies --chown=slink:slink /client/package.json ./client/svelte-kit/package.json
-COPY --chown=slink:slink apps/api/.env.example ./api/.env
+COPY --chown=slink:slink services/api/.env.example ./api/.env
 
 # Create project directories
 RUN mkdir -p /app/var && \
