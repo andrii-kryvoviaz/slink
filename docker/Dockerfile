@@ -108,15 +108,15 @@ CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisord.conf"]
 FROM php:${PHP_VERSION}-alpine AS test
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-WORKDIR /app
+WORKDIR /services/api
 
-COPY services/api/composer.json composer.lock ./
+COPY services/api/composer.json services/api/composer.lock ./
 
 RUN composer install --ignore-platform-reqs --no-interaction --no-scripts
 
 COPY --chown=www-data:www-data ./services/api .
 
-RUN mv services/api/.env.example .env
+RUN mv .env.example .env
 ENV APP_ENV=test
 
 ARG PHP_MEMORY_LIMIT
@@ -133,7 +133,7 @@ RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS autoconf g++ make linu
 # Configure Xdebug
 RUN echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
     echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-    echo "xdebug.log=/app/var/log/xdebug.log" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
+    echo "xdebug.log=/dev/null" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
     echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
     echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
