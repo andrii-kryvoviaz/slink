@@ -1,6 +1,7 @@
 .DS_Store
 .env
 .gitkeep
-dump.rdb
-client/node_modules
+*.rdb
+*.db
+node_modules
 vendor

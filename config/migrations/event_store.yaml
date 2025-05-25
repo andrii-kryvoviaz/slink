@@ -1,3 +1,0 @@
-migrations_paths:
-    Slink\Shared\Infrastructure\Persistence\EventStore\Migrations: './src/Slink/Shared/Infrastructure/Persistence/EventStore/Migrations'
-connection: event_store

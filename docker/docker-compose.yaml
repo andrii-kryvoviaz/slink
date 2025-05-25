@@ -1,8 +1,5 @@
 services:
   slink:
-    build:
-        context: .
-        target: prod
     image: anirdev/slink:latest
     container_name: slink
     restart: always
