@@ -7,7 +7,7 @@ on:
   push:
     branches: [main]
     paths:
-      - '../../services/client/**'
+      - 'services/client/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
