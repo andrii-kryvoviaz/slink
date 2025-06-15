@@ -1,0 +1,216 @@
+syntax = "proto3";
+option go_package = "slink.image;imageService";
+option php_namespace = "Slink\\Image\\Grpc";
+option php_metadata_namespace = "Slink\\Image\\Grpc\\GPBMetadata";
+
+service ImageService {
+  rpc ProcessImage (ImageRequest) returns (ImageResponse);
+  rpc GetImageInfo (ImageInfoRequest) returns (ImageInfoResponse);
+  rpc ValidateImage (ImageValidationRequest) returns (ImageValidationResponse);
+}
+
+message ImageRequest {
+  bytes image_data = 1;
+  string input_type = 2;
+  ImageOperation operation = 3;
+  string output_type = 4;
+  optional int32 quality = 5;
+  bool strip_metadata = 6;
+  bool preserve_animation = 7;
+}
+
+message ImageOperation {
+  oneof op {
+    ResizeOptions resize = 1;
+    CropOptions crop = 2;
+    RotateOptions rotate = 3;
+    GammaOptions gamma = 4;
+    BlurOptions blur = 5;
+    SharpenOptions sharpen = 6;
+    BrightnessOptions brightness = 7;
+    ContrastOptions contrast = 8;
+    FlipOptions flip = 9;
+    FlopOptions flop = 10;
+    GrayscaleOptions grayscale = 11;
+    CompositeOptions composite = 12;
+  }
+}
+
+message ResizeOptions {
+  uint32 width = 1;
+  uint32 height = 2;
+  ResizeMode mode = 3;
+  bool allow_enlarge = 4;
+  InterpolationFilter filter = 5;
+}
+
+enum ResizeMode {
+  EXACT = 0;
+  FIT = 1;
+  SHORT_SIDE = 2;
+  LONG_SIDE = 3;
+  FILL = 4;
+  STRETCH = 5;
+}
+
+enum InterpolationFilter {
+  LANCZOS = 0;
+  BILINEAR = 1;
+  BICUBIC = 2;
+  NEAREST = 3;
+}
+
+message CropOptions {
+  uint32 width = 1;
+  uint32 height = 2;
+  CropPosition position = 3;
+  optional uint32 x = 4;
+  optional uint32 y = 5;
+}
+
+enum CropPosition {
+  CENTER = 0;
+  TOP_LEFT = 1;
+  TOP = 2;
+  TOP_RIGHT = 3;
+  LEFT = 4;
+  RIGHT = 5;
+  BOTTOM_LEFT = 6;
+  BOTTOM = 7;
+  BOTTOM_RIGHT = 8;
+}
+
+message RotateOptions {
+  float angle = 1;
+  optional Color background_color = 2;
+}
+
+message GammaOptions {
+  float gamma = 1;
+}
+
+message ImageResponse {
+  oneof result {
+    ProcessedImage success = 1;
+    ProcessingError error = 2;
+  }
+}
+
+message ProcessedImage {
+  bytes image_data = 1;
+  string output_type = 2;
+  uint32 width = 3;
+  uint32 height = 4;
+  uint32 original_width = 5;
+  uint32 original_height = 6;
+  ProcessingMetadata metadata = 7;
+}
+
+message ProcessingError {
+  ErrorCode code = 1;
+  string message = 2;
+  repeated string details = 3;
+}
+
+enum ErrorCode {
+  UNKNOWN_ERROR = 0;
+  INVALID_INPUT_FORMAT = 1;
+  UNSUPPORTED_OUTPUT_FORMAT = 2;
+  INVALID_DIMENSIONS = 3;
+  PROCESSING_FAILED = 4;
+  INSUFFICIENT_MEMORY = 5;
+  INVALID_OPERATION = 6;
+  FILE_TOO_LARGE = 7;
+}
+
+message ProcessingMetadata {
+  int64 processing_time_ms = 1;
+  int64 output_size_bytes = 2;
+  float compression_ratio = 3;
+}
+
+message BlurOptions {
+  float sigma = 1;
+}
+
+message SharpenOptions {
+  float sigma = 1;
+}
+
+message BrightnessOptions {
+  float brightness = 1;
+}
+
+message ContrastOptions {
+  float contrast = 1;
+}
+
+message FlipOptions {
+}
+
+message FlopOptions {
+}
+
+message GrayscaleOptions {
+}
+
+message CompositeOptions {
+  bytes overlay_image = 1;
+  CompositeMode mode = 2;
+  uint32 x = 3;
+  uint32 y = 4;
+  float opacity = 5;
+}
+
+enum CompositeMode {
+  OVER = 0;
+  MULTIPLY = 1;
+  SCREEN = 2;
+  OVERLAY = 3;
+  DARKEN = 4;
+  LIGHTEN = 5;
+}
+
+message Color {
+  uint32 red = 1;
+  uint32 green = 2;
+  uint32 blue = 3;
+  uint32 alpha = 4;
+}
+
+message ImageInfoRequest {
+  bytes image_data = 1;
+}
+
+message ImageInfoResponse {
+  oneof result {
+    ImageInfo info = 1;
+    ProcessingError error = 2;
+  }
+}
+
+message ImageInfo {
+  string format = 1;
+  uint32 width = 2;
+  uint32 height = 3;
+  uint32 channels = 4;
+  bool has_alpha = 5;
+  bool is_animated = 6;
+  int64 size_bytes = 7;
+  string color_space = 8;
+  map<string, string> metadata = 9;
+}
+
+message ImageValidationRequest {
+  bytes image_data = 1;
+  optional uint32 max_width = 2;
+  optional uint32 max_height = 3;
+  optional int64 max_size_bytes = 4;
+  repeated string allowed_formats = 5;
+}
+
+message ImageValidationResponse {
+  bool is_valid = 1;
+  repeated string validation_errors = 2;
+  ImageInfo info = 3;
+}

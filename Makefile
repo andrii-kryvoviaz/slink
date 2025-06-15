@@ -12,3 +12,7 @@ release:
 	@if [ -z $(version) ]; then echo "Version is required. Usage: make release version=x.x.x"; exit 1; fi
 	@echo "Releasing version $(version)"
 	gh workflow run release.yml -f version=$(version)
+
+gen-proto:
+	mkdir -p proto/gen/go proto/gen/php
+	protoc --go_out=proto/gen/go --go-grpc_out=proto/gen/go --php_out=proto/gen/php --proto_path=proto/contract proto/contract/image.proto

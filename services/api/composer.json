@@ -5,7 +5,10 @@
     "require": {
         "php": ">=8.4",
         "ext-gd": "*",
+        "ext-grpc": "*",
         "ext-imagick": "*",
+        "grpc/grpc": "^1.57",
+        "google/protobuf": "^3.25",
         "aws/aws-sdk-php": "^3.336",
         "doctrine/doctrine-bundle": "^2.13",
         "doctrine/doctrine-migrations-bundle": "^3.2",
@@ -57,7 +60,10 @@
     },
     "autoload": {
         "psr-4": {
-            "Slink\\": "src/Slink",
+            "Slink\\": [
+                "src/Slink",
+                "../../proto/gen/php/Slink"
+            ],
             "UI\\": "src/UI"
         }
     },

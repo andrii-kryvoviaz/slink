@@ -22,9 +22,29 @@ parameters:
   enforce_conversion: ['image/heic', 'image/heif', 'image/tiff', 'image/tif']
 
 services:
-  Slink\Image\Domain\Service\ImageAnalyzerInterface:
-    class: Slink\Image\Application\Service\ImageAnalyzer
+  grpc.channel_credentials:
+    class: Grpc\ChannelCredentials
+    factory: [Grpc\ChannelCredentials, createInsecure]
+
+  Slink\Image\Grpc\ImageServiceClient:
     arguments:
-      $resizableMimeTypes: '%supports_resize%'
-      $stripExifMimeTypes: '%supports_strip_exif%'
-      $enforceConversionMimeTypes: '%enforce_conversion%'
+      $hostname: '%env(IMAGE_GRPC_HOST)%'
+      $opts:
+        credentials: '@grpc.channel_credentials'
+
+  Slink\Image\Infrastructure\Service\GrpcImageProcessor:
+    arguments:
+      $grpcClient: '@Slink\Image\Grpc\ImageServiceClient'
+
+  Slink\Image\Domain\Service\ImageProcessorInterface:
+    alias: Slink\Image\Infrastructure\Service\GrpcImageProcessor
+
+  Slink\Image\Application\Service\GrpcImageTransformer:
+    arguments:
+      $imageProcessor: '@Slink\Image\Domain\Service\ImageProcessorInterface'
+
+  Slink\Image\Domain\Service\ImageTransformerInterface:
+    alias: Slink\Image\Application\Service\GrpcImageTransformer
+
+  Slink\Image\Domain\Service\ImageAnalyzerInterface:
+    alias: Slink\Image\Application\Service\ImageAnalyzer

@@ -66,8 +66,8 @@ RUN apk update && apk upgrade &&\
 
 RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS git autoconf g++ make linux-headers curl-dev libmcrypt-dev icu-dev imagemagick-dev postgresql-dev libpng-dev libwebp-dev tiff-dev freetype-dev libjpeg-turbo-dev libheif-dev oniguruma-dev samba-dev brotli-dev && \
     docker-php-ext-install curl intl mysqli pdo_pgsql mbstring exif && \
-    pecl install imagick redis smbclient swoole && \
-    docker-php-ext-enable imagick redis smbclient && \
+    pecl install imagick redis smbclient swoole grpc && \
+    docker-php-ext-enable imagick redis smbclient grpc && \
     apk del .build-deps
 
 COPY ./docker/config/supervisord.conf /etc/supervisord.conf

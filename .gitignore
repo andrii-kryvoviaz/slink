@@ -31,3 +31,4 @@ docker-compose.prod.yaml
 .phpunit.result.cache
 ###< symfony/phpunit-bridge ###
 
+proto/gen/*

@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Slink\Image\Application\Service;
 
 use Slink\Image\Domain\Service\ImageAnalyzerInterface;
+use Slink\Image\Grpc\ImageServiceClient;
+use Slink\Image\Grpc\ImageInfoRequest;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\File\File;
 
 final class ImageAnalyzer implements ImageAnalyzerInterface {
@@ -14,9 +17,13 @@ final class ImageAnalyzer implements ImageAnalyzerInterface {
    * @param array<string> $enforceConversionMimeTypes
    */
   public function __construct(
+    #[Autowire(param: 'supports_resize')]
     private readonly array $resizableMimeTypes,
+    #[Autowire(param: 'supports_strip_exif')]
     private readonly array $stripExifMimeTypes,
-    private readonly array $enforceConversionMimeTypes
+    #[Autowire(param: 'enforce_conversion')]
+    private readonly array $enforceConversionMimeTypes,
+    private readonly ImageServiceClient $grpcImageServiceClient
   ) {
   }
   
@@ -44,7 +51,23 @@ final class ImageAnalyzer implements ImageAnalyzerInterface {
    */
   public function analyze(File $file): array {
     $this->setFile($file);
-    
+
+    $content = file_get_contents($file->getPathname());
+    if ($content !== false) {
+      $request = new ImageInfoRequest();
+      $request->setImageData($content);
+
+      $response = $this->grpcImageServiceClient->GetImageInfo($request)->wait();
+      list($reply, $status) = $response;
+
+      if ($status->code === \Grpc\STATUS_OK && $reply->hasInfo()) {
+        $imageInfo = $reply->getInfo();
+        $this->width = $imageInfo->getWidth();
+        $this->height = $imageInfo->getHeight();
+        return $this->toPayload();
+      }
+    }
+
     [$this->width, $this->height] = getimagesize($file->getPathname()) ?: [1, 1];
     
     return $this->toPayload();
