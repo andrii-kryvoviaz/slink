@@ -22,9 +22,4 @@ parameters:
   enforce_conversion: ['image/heic', 'image/heif', 'image/tiff', 'image/tif']
 
 services:
-  Slink\Image\Domain\Service\ImageAnalyzerInterface:
-    class: Slink\Image\Application\Service\ImageAnalyzer
-    arguments:
-      $resizableMimeTypes: '%supports_resize%'
-      $stripExifMimeTypes: '%supports_strip_exif%'
-      $enforceConversionMimeTypes: '%enforce_conversion%'
+

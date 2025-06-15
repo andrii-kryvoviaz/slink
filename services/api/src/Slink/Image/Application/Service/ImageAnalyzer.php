@@ -8,153 +8,75 @@ use Slink\Image\Domain\Service\ImageAnalyzerInterface;
 use Symfony\Component\HttpFoundation\File\File;
 
 final class ImageAnalyzer implements ImageAnalyzerInterface {
-  /**
-   * @param array<string> $resizableMimeTypes
-   * @param array<string> $stripExifMimeTypes
-   * @param array<string> $enforceConversionMimeTypes
-   */
+  private ?File $file = null;
+  private ?int $height = null;
+  private ?int $width = null;
+
   public function __construct(
-    private readonly array $resizableMimeTypes,
-    private readonly array $stripExifMimeTypes,
-    private readonly array $enforceConversionMimeTypes
+    private readonly ImageCapabilityChecker $capabilityChecker
   ) {
   }
-  
-  private File $file;
-  
-  /**
-   * @var int|null
-   */
-  private ?int $width = null;
-  
-  /**
-   * @var int|null
-   */
-  private ?int $height = null;
-  
-  public function setFile(File $file): self {
-    $this->file = $file;
-    
-    return $this;
-  }
-  
+
   /**
    * @param File $file
    * @return array<string, mixed>
    */
   public function analyze(File $file): array {
-    $this->setFile($file);
-    
-    [$this->width, $this->height] = getimagesize($file->getPathname()) ?: [1, 1];
-    
+    $this->file = $file;
+    [$this->width, $this->height] = getimagesize($file->getPathname()) ?: [null, null];
+
     return $this->toPayload();
   }
-  
-  /**
-   * @param ?string $mimeType
-   * @return bool
-   */
-  public function supportsResize(?string $mimeType): bool {
-    return \in_array($mimeType, $this->resizableMimeTypes, true);
-  }
-  
-  /**
-   * @param ?string $mimeType
-   * @return bool
-   */
-  public function supportsExifProfile(?string $mimeType): bool {
-    return \in_array($mimeType, $this->stripExifMimeTypes, true);
-  }
-  
-  /**
-   * @param ?string $mimeType
-   * @return bool
-   */
+
   public function isConversionRequired(?string $mimeType): bool {
-    return \in_array($mimeType, $this->enforceConversionMimeTypes, true);
+    return $this->capabilityChecker->isConversionRequired($mimeType);
   }
-  
-  /**
-   * @return ?string
-   */
-  public function getMimeType(): ?string {
-    return $this->file->getMimeType();
+
+  public function supportsExifProfile(?string $mimeType): bool {
+    return $this->capabilityChecker->supportsExifProfile($mimeType);
   }
-  
-  /**
-   * @return int
-   */
-  public function getSize(): int {
-    return $this->file->getSize();
+
+  public function supportsResize(?string $mimeType): bool {
+    return $this->capabilityChecker->supportsResize($mimeType);
   }
-  
-  /**
-   * @return int
-   */
-  public function getTimeCreated(): int {
-    return $this->file->getCTime();
-  }
-  
-  /**
-   * @return int
-   */
-  public function getTimeModified(): int {
-    return $this->file->getMTime();
-  }
-  
-  /**
-   * @return int
-   */
-  public function getWidth(): int {
-    return $this->width ?? 0;
-  }
-  
-  /**
-   * @return int
-   */
-  public function getHeight(): int {
-    return $this->height ?? 0;
-  }
-  
-  /**
-   * @return float
-   */
-  public function getAspectRatio(): float {
-    if(!$this->width || !$this->height) {
-      return 0;
-    }
-    
-    return $this->width / $this->height;
-  }
-  
-  /**
-   * @return string
-   */
-  public function getOrientation(): string {
-    if ($this->width === null || $this->height === null) {
-      return 'unknown';
-    }
-    
-    if ($this->width === $this->height) {
-      return 'square';
-    }
-    
-    return $this->width > $this->height ? 'landscape' : 'portrait';
-  }
-  
+
   /**
    * @return array<string, mixed>
    */
   public function toPayload(): array {
+    if ($this->file === null) {
+      return [];
+    }
+
     return [
-      'mimeType' => $this->getMimeType(),
-      'size' => $this->getSize(),
-      'timeCreated' => $this->getTimeCreated(),
-      'timeModified' => $this->getTimeModified(),
-      'width' => $this->getWidth(),
-      'height' => $this->getHeight(),
+      'mimeType' => $this->file->getMimeType(),
+      'size' => $this->file->getSize(),
+      'timeCreated' => $this->file->getCTime(),
+      'timeModified' => $this->file->getMTime(),
+      'width' => $this->width ?? 0,
+      'height' => $this->height ?? 0,
       'aspectRatio' => $this->getAspectRatio(),
       'orientation' => $this->getOrientation(),
     ];
+  }
+
+  private function getAspectRatio(): float {
+    if ($this->width === null || $this->height === null || $this->width === 0 || $this->height === 0) {
+      return 0;
+    }
+
+    return $this->width / $this->height;
+  }
+
+  private function getOrientation(): string {
+    if ($this->width === null || $this->height === null) {
+      return 'unknown';
+    }
+
+    if ($this->width === $this->height) {
+      return 'square';
+    }
+
+    return $this->width > $this->height ? 'landscape' : 'portrait';
   }
 }

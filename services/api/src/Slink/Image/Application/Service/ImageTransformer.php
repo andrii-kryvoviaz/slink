@@ -1,157 +1,127 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Slink\Image\Application\Service;
 
-use Imagick;
-use ImagickException;
+use RuntimeException;
+use Slink\Image\Domain\Service\ImageProcessorInterface;
+use Slink\Image\Domain\Service\ImageTransformationStrategyInterface;
 use Slink\Image\Domain\Service\ImageTransformerInterface;
+use Slink\Image\Domain\ValueObject\ImageDimensions;
+use Slink\Image\Domain\ValueObject\ImageTransformationRequest;
 use Slink\Settings\Application\Service\SettingsService;
 use Slink\Shared\Domain\ValueObject\ImageOptions;
 use SplFileInfo;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\HttpFoundation\File\File;
 
 final readonly class ImageTransformer implements ImageTransformerInterface {
+  /**
+   * @param ImageProcessorInterface $imageProcessor
+   * @param SettingsService $settingsService
+   * @param iterable<ImageTransformationStrategyInterface> $strategies
+   */
   public function __construct(
-    private SettingsService $settingsService
+    private ImageProcessorInterface $imageProcessor,
+    private SettingsService         $settingsService,
+    #[AutowireIterator('image.transformation_strategy')]
+    private iterable                $strategies
   ) {
   }
-  
-  /**
-   * @param string $content
-   * @param int|null $width
-   * @param int|null $height
-   * @return string
-   * @throws ImagickException
-   */
-  public function resize(string $content, ?int $width, ?int $height): string {
-    $resizedImageContent = $this->resizeToBestFit(
-      ImageResize::createFromString($content),
-      $width,
-      $height
-    );
-    
-    if (!$resizedImageContent) {
-      return $content;
-    }
-    
-    return $resizedImageContent;
-  }
-  
-  /**
-   * @throws ImagickException
-   */
-  private function resizeToBestFit(ImageResize $image, ?int $width, ?int $height): ?string {
-    if ($width === null && $height === null) {
-      return null;
-    }
-    
-    if ($width === null) {
-      return $image->resizeToHeight($height)->getImageAsString();
-    }
-    
-    if ($height === null) {
-      return $image->resizeToWidth($width)->getImageAsString();
-    }
-    
-    return $image->resizeToBestFit($width, $height)->getImageAsString();
-  }
-  
-  /**
-   * @param string $content
-   * @param int|null $width
-   * @param int|null $height
-   * @return string
-   * @throws ImagickException
-   */
-  public function crop(string $content, ?int $width, ?int $height): string {
-    $image = ImageResize::createFromString($content);
-    
-    if (!$width) {
-      $width = (int) $height;
-    }
-    
-    if (!$height) {
-      $height = (int) $width;
-    }
-    
-    if(!$width && !$height) {
-      return $content;
-    }
-    
-    $croppedImageContent = $image->crop($width, $height)->getImageAsString();
-    
-    if (!$croppedImageContent) {
-      return $content;
-    }
-    
-    return $croppedImageContent;
-  }
-  
-  /**
-   * @param string $content
-   * @param ImageOptions $imageOptions
-   * @return string
-   */
-  public function transform(string $content, ImageOptions $imageOptions): string {
-    
-    if($imageOptions->getWidth() || $imageOptions->getHeight()) {
-      $methodName = $imageOptions->isCropped()
-        ? 'crop'
-        : 'resize';
-      
-      $content = $this->{$methodName}($content, $imageOptions->getWidth(), $imageOptions->getHeight());
-    }
-    
-    return $content;
-  }
-  
-  /**
-   * @param string $path
-   * @return string
-   */
-  public function stripExifMetadata(string $path): string {
-    try {
-      $image = new Imagick($path);
-      $image->autoOrient();
-      
-      $profiles = $image->getImageProfiles('icc');
-      $image->stripImage();
-      
-      if (!empty($profiles)) {
-        $image->profileImage("icc", $profiles['icc']);
-      }
-      
-      $image->writeImage($path);
-      $image->clear();
-    } catch (ImagickException $exception) {
-      // do nothing hence the image format is not supported
-    } finally {
-      return $path;
-    }
-  }
-  
-  /**
-   * @param SplFileInfo $file
-   * @param int|null $quality
-   * @return File
-   * @throws ImagickException
-   */
+
   public function convertToJpeg(SplFileInfo $file, ?int $quality = null): File {
-    $image = new Imagick($file->getPathname());
-    $image->setImageFormat('jpeg');
-    
-    $quality ??= $this->settingsService->get('image.compressionQuality');
-    
-    if ($quality) {
-      $image->setImageCompressionQuality($quality);
+    $content = file_get_contents($file->getPathname());
+    if ($content === false) {
+      throw new RuntimeException('Failed to read file content');
     }
-    
+
+    $quality ??= $this->settingsService->get('image.compressionQuality');
+
+    $convertedContent = $this->imageProcessor->convertFormat(
+      $content,
+      'jpeg',
+      $quality
+    );
+
     $fileName = $file->getBasename('.' . $file->getExtension());
     $jpegPath = sprintf('%s/%s.jpg', $file->getPath(), $fileName);
-    
-    $image->writeImage($jpegPath);
-    $image->clear();
-    
+
+    file_put_contents($jpegPath, $convertedContent);
+
     return new File($jpegPath, true);
+  }
+
+  public function crop(string $content, ?int $width, ?int $height): string {
+    return $this->performTransformation($content, $width, $height, crop: true);
+  }
+
+  public function executeTransformation(
+    string                     $content,
+    ImageTransformationRequest $request
+  ): string {
+    [$width, $height] = $this->imageProcessor->getImageDimensions($content);
+    $originalDimensions = new ImageDimensions($width, $height);
+
+    foreach ($this->strategies as $strategy) {
+      if ($strategy->supports($request)) {
+        return $strategy->transform(
+          $content,
+          $originalDimensions,
+          $request
+        );
+      }
+    }
+
+    return $content;
+  }
+
+  public function resize(string $content, ?int $width, ?int $height): string {
+    return $this->performTransformation($content, $width, $height, crop: false);
+  }
+
+  public function stripExifMetadata(string $path): string {
+    return $this->imageProcessor->stripMetadata($path);
+  }
+
+  public function transform(string $content, ImageOptions $imageOptions): string {
+    $request = ImageTransformationRequest::fromImageOptions($imageOptions);
+
+    if (!$request->hasTransformations()) {
+      return $content;
+    }
+
+    return $this->executeTransformation($content, $request);
+  }
+
+  private function calculateTargetDimensions(
+    string $content,
+    ?int   $width,
+    ?int   $height
+  ): ImageDimensions {
+    [$originalWidth, $originalHeight] = $this->imageProcessor->getImageDimensions($content);
+    $originalDimensions = new ImageDimensions($originalWidth, $originalHeight);
+
+    return ImageDimensions::createWithAspectRatio($width, $height, $originalDimensions);
+  }
+
+  private function performTransformation(
+    string $content,
+    ?int   $width,
+    ?int   $height,
+    bool   $crop
+  ): string {
+    if ($width === null && $height === null) {
+      return $content;
+    }
+
+    $calculatedDimensions = $this->calculateTargetDimensions($content, $width, $height);
+
+    $request = new ImageTransformationRequest(
+      targetDimensions: $calculatedDimensions,
+      crop: $crop
+    );
+
+    return $this->executeTransformation($content, $request);
   }
 }
