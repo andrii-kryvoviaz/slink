@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7893c11e6bec8fa25d205cef6bcd99c5",
+    "content-hash": "b7886666fa5c51ff4fbb6a377e57e695",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2330,6 +2330,67 @@
                 "source": "https://github.com/icewind1991/Streams/tree/v0.7.7"
             },
             "time": "2023-03-16T14:52:25+00:00"
+        },
+        {
+            "name": "jcupitt/vips",
+            "version": "v2.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/libvips/php-vips.git",
+                "reference": "a54c1cceea581b592a199edd61a7c06f44a24c08"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/libvips/php-vips/zipball/a54c1cceea581b592a199edd61a7c06f44a24c08",
+                "reference": "a54c1cceea581b592a199edd61a7c06f44a24c08",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ffi": "*",
+                "php": ">=7.4",
+                "psr/log": "^1.1.3|^2.0|^3.0"
+            },
+            "require-dev": {
+                "php-parallel-lint/php-parallel-lint": "^1.3",
+                "phpdocumentor/shim": "^3.3",
+                "phpunit/phpunit": "^9.5",
+                "squizlabs/php_codesniffer": "^3.7"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Jcupitt\\Vips\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "John Cupitt",
+                    "email": "jcupitt@gmail.com",
+                    "homepage": "https://github.com/jcupitt",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A high-level interface to the libvips image processing library.",
+            "homepage": "https://github.com/libvips/php-vips",
+            "keywords": [
+                "image",
+                "libvips",
+                "processing"
+            ],
+            "support": {
+                "issues": "https://github.com/libvips/php-vips/issues",
+                "source": "https://github.com/libvips/php-vips/tree/v2.5.0"
+            },
+            "time": "2025-04-04T17:10:13+00:00"
         },
         {
             "name": "lcobucci/clock",
@@ -9783,12 +9844,14 @@
     "platform": {
         "php": ">=8.4",
         "ext-gd": "*",
-        "ext-imagick": "*"
+        "ext-imagick": "*",
+        "ext-vips": "*"
     },
     "platform-dev": {},
     "platform-overrides": {
         "php": "8.4",
-        "ext-imagick": "3.7.0"
+        "ext-imagick": "3.7.0",
+        "ext-vips": "1.0.13"
     },
     "plugin-api-version": "2.6.0"
 }

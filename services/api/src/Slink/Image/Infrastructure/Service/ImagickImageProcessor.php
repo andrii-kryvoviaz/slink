@@ -42,8 +42,7 @@ final class ImagickImageProcessor implements ImageProcessorInterface {
       $imageContent,
       $width,
       $height,
-      fn($imagick) => $imagick->cropImage($width, $height, $x, $y),
-      'Failed to crop image'
+      fn($imagick) => $imagick->cropImage($width, $height, $x, $y)
     );
   }
 
@@ -94,8 +93,7 @@ final class ImagickImageProcessor implements ImageProcessorInterface {
       $imageContent,
       $width,
       $height,
-      fn($imagick) => $imagick->resizeImage($width, $height, Imagick::FILTER_LANCZOS, 1),
-      'Failed to resize image'
+      fn($imagick) => $imagick->resizeImage($width, $height, Imagick::FILTER_LANCZOS, 1)
     );
   }
 
@@ -120,16 +118,11 @@ final class ImagickImageProcessor implements ImageProcessorInterface {
     }
   }
 
-  public function supportsAnimation(): bool {
-    return true;
-  }
-
   private function processImage(
     string   $imageContent,
     int      $width,
     int      $height,
-    callable $operation,
-    string   $errorMessage
+    callable $operation
   ): string {
     try {
       $imagick = new Imagick();
@@ -159,15 +152,15 @@ final class ImagickImageProcessor implements ImageProcessorInterface {
       $imagick->clear();
       return $result;
     } catch (ImagickException $e) {
-      throw new RuntimeException($errorMessage . ': ' . $e->getMessage(), 0, $e);
+      throw new RuntimeException($e->getMessage(), 0, $e);
     }
   }
 
   private function shouldPreserveAnimation(bool $isAnimated, AnimationStrategy $strategy): bool {
     return match ($strategy) {
-      AnimationStrategy::PRESERVE_ANIMATION => $this->supportsAnimation(),
+      AnimationStrategy::PRESERVE_ANIMATION => true,
       AnimationStrategy::FIRST_FRAME_ONLY => false,
-      AnimationStrategy::AUTO => $isAnimated && $this->supportsAnimation(),
+      AnimationStrategy::AUTO => $isAnimated,
     };
   }
 }

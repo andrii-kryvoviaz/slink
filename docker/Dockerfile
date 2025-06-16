@@ -56,6 +56,8 @@ RUN apk update && apk upgrade &&\
     icu-libs \
     libsmbclient \
     imagemagick \
+    vips \
+    vips-tools \
     libjpeg-turbo \
     libheif \
     libpng \
@@ -64,11 +66,13 @@ RUN apk update && apk upgrade &&\
     freetype \
     postgresql-libs
 
-RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS git autoconf g++ make linux-headers curl-dev libmcrypt-dev icu-dev imagemagick-dev postgresql-dev libpng-dev libwebp-dev tiff-dev freetype-dev libjpeg-turbo-dev libheif-dev oniguruma-dev samba-dev brotli-dev && \
-    docker-php-ext-install curl intl mysqli pdo_pgsql mbstring exif && \
-    pecl install imagick redis smbclient swoole && \
-    docker-php-ext-enable imagick redis smbclient && \
+RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS git autoconf g++ make linux-headers curl-dev libmcrypt-dev icu-dev imagemagick-dev vips-dev postgresql-dev libpng-dev libwebp-dev tiff-dev freetype-dev libjpeg-turbo-dev libheif-dev oniguruma-dev samba-dev brotli-dev libffi-dev && \
+    docker-php-ext-install curl intl mysqli pdo_pgsql mbstring exif ffi && \
+    pecl install imagick redis smbclient vips swoole && \
+    docker-php-ext-enable imagick redis smbclient vips swoole && \
     apk del .build-deps
+
+RUN echo "ffi.enable=1" > /usr/local/etc/php/conf.d/zz-ffi-enable.ini
 
 COPY ./docker/config/supervisord.conf /etc/supervisord.conf
 

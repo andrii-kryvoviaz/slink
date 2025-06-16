@@ -4,8 +4,10 @@
     "prefer-stable": true,
     "require": {
         "php": ">=8.4",
+        "ext-ffi": "*",
         "ext-gd": "*",
         "ext-imagick": "*",
+        "ext-vips": "*",
         "aws/aws-sdk-php": "^3.336",
         "doctrine/doctrine-bundle": "^2.13",
         "doctrine/doctrine-migrations-bundle": "^3.2",
@@ -13,6 +15,7 @@
         "eventsauce/eventsauce": "^3.6",
         "eventsauce/message-repository-for-doctrine": "^1.1",
         "icewind/smb": "^3.6",
+        "jcupitt/vips": "^2.5",
         "lexik/jwt-authentication-bundle": "3.1.0",
         "nelmio/cors-bundle": "^2.5",
         "predis/predis": "^2.3",
@@ -46,7 +49,9 @@
     "config": {
         "platform": {
             "php": "8.4",
-            "ext-imagick": "3.7.0"
+            "ext-ffi": "8.4.0",
+            "ext-imagick": "3.7.0",
+            "ext-vips": "1.0.13"
         },
         "allow-plugins": {
             "php-http/discovery": true,

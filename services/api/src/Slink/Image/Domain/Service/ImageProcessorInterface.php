@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Slink\Image\Domain\Service;
 
 use Slink\Image\Domain\ValueObject\AnimatedImageInfo;
-use Slink\Image\Domain\Enum\AnimationStrategy;
 
 interface ImageProcessorInterface
 {
@@ -33,13 +32,5 @@ interface ImageProcessorInterface
      */
     public function getImageDimensions(string $imageContent): array;
 
-    /**
-     * Get animated image information.
-     */
     public function getAnimatedImageInfo(string $imageContent): AnimatedImageInfo;
-
-    /**
-     * Check if the processor supports animated images.
-     */
-    public function supportsAnimation(): bool;
 }
