@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { AspectRatio } from 'bits-ui';
 
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
+  import { className as cn } from '@slink/lib/utils/ui/className';
+
   import { bytesToSize } from '@slink/utils/bytesConverter';
 
   import { Tooltip } from '@slink/components/UI/Tooltip';
-
-  type Metadata = typeof metadata;
 
   interface Props {
     src: string;
@@ -19,167 +19,106 @@
       mimeType: string | undefined;
       size: number | undefined;
     };
-    height?: number | null;
-    width?: number | null;
+    class?: string;
     stretch?: boolean;
     stretchThreshold?: number;
     showMetadata?: boolean;
     showOpenInNewTab?: boolean;
     uniqueId?: any;
+    rounded?: boolean;
+    keepAspectRatio?: boolean;
   }
 
   let {
     src,
     alt = '',
     metadata,
-    height = null,
-    width = null,
+    class: className = '',
     stretch = false,
     stretchThreshold = 0.4,
     showMetadata = true,
     showOpenInNewTab = true,
-    uniqueId = Math.random().toString(36).substring(2),
+    rounded = true,
+    keepAspectRatio = true,
   }: Props = $props();
 
-  let image: HTMLImageElement | undefined = $state();
-  let container: HTMLDivElement | undefined = $state();
-
-  let originalImage = $derived(src.split('?')[0]);
   let isLoaded = $state(false);
+  let originalImage = $derived(src.split('?')[0]);
+  let actualAspectRatio = $state(metadata.width / metadata.height);
 
-  const urlParams = new URLSearchParams(src.split('?')[1]);
-  let isSquared =
-    urlParams.has('width') !== urlParams.has('height') && urlParams.has('crop');
+  let aspectRatio = $derived(actualAspectRatio);
 
-  let aspectRatio = !isSquared ? metadata.height / metadata.width : 1;
-  let remHeight = Math.floor(metadata.height / 16) - 1;
-  let remWidth = Math.floor(metadata.width / 16) - 1;
-
-  if (!height && !width) {
-    if (aspectRatio > 1) {
-      height = Math.min(Math.max(remHeight, 14), 40);
-      width = height / aspectRatio;
-    } else {
-      width = Math.min(Math.max(remWidth, 14), 40);
-      height = width * aspectRatio;
-    }
-  }
-
-  $effect.pre(() => {
-    if (height && !width) {
-      width = height / aspectRatio;
+  const urlHasSizingParams = (url: string): boolean => {
+    const params = new URLSearchParams(url.split('?')[1] || '');
+    if (params.has('width') || params.has('height')) {
+      return true;
     }
 
-    if (width && !height) {
-      height = width * aspectRatio;
-    }
-  });
-
-  const onResize = () => {
-    if (!container || !image || !width) {
-      return;
+    if (url.includes('crop')) {
+      return true;
     }
 
-    const remContainerWidth = Math.floor(
-      (container.parentElement?.offsetWidth || container.offsetWidth) / 16,
-    );
+    return false;
+  };
 
-    if (remContainerWidth < width) {
-      height = remContainerWidth * aspectRatio;
-    } else {
-      // if image is loaded recalculate the aspect ratio
-      aspectRatio = image.naturalHeight / image.naturalWidth;
+  const updateAspectRatioFromImage = (img: HTMLImageElement) => {
+    if (urlHasSizingParams(src)) {
+      const naturalWidth = img.naturalWidth || metadata.width;
+      const naturalHeight = img.naturalHeight || metadata.height;
 
-      width = remContainerWidth;
-      height = width * aspectRatio;
+      if (naturalWidth > 0 && naturalHeight > 0) {
+        actualAspectRatio = naturalWidth / naturalHeight;
+      }
     }
   };
 
-  onMount(onResize);
+  let shouldStretch = $derived(() => {
+    if (src.includes('.svg')) return true;
+    if (!stretch) return false;
 
-  $effect(() => {
-    isLoaded && onResize();
-  });
-
-  const tooSmallToStretch = (metadata: Metadata) => {
-    if (!metadata) return true;
-
-    if (!height || !width) return true;
+    const minRequiredHeight = metadata.height * stretchThreshold;
+    const minRequiredWidth = metadata.width * stretchThreshold;
 
     return (
-      metadata?.height < height * 16 * stretchThreshold ||
-      metadata?.width < width * 16 * stretchThreshold
+      metadata.height >= minRequiredHeight && metadata.width >= minRequiredWidth
     );
-  };
-
-  let isImageStretched = $derived(
-    (stretch && !tooSmallToStretch(metadata)) || src.includes('.svg'),
-  );
+  });
 </script>
 
-<svelte:window onresize={onResize} />
-
-<div
-  class="relative flex max-h-full max-w-full items-center justify-center overflow-hidden rounded-md border-slate-500/10 bg-white/0"
-  class:border={showMetadata || showOpenInNewTab}
-  style:width="{width}rem"
-  style:height="{height}rem"
-  bind:this={container}
+<AspectRatio.Root
+  ratio={keepAspectRatio ? aspectRatio : 1}
+  class={cn(
+    'group relative flex items-center justify-center overflow-hidden border-slate-500/10 bg-white/0 w-full',
+    className,
+    rounded && 'rounded-md',
+    (showMetadata || showOpenInNewTab) && 'border',
+  )}
 >
   <img
-    bind:this={image}
     {src}
     {alt}
-    onload={() => {
+    onload={(event) => {
+      const img = event.target as HTMLImageElement;
+      updateAspectRatioFromImage(img);
       isLoaded = true;
     }}
-    class="transition-opacity"
-    class:w-full={isImageStretched}
-    class:hidden={!isLoaded}
+    class={cn(
+      'transition-opacity border-none',
+      (shouldStretch() || keepAspectRatio) && 'w-full h-full',
+      keepAspectRatio && 'object-contain',
+      !keepAspectRatio && 'object-fill',
+      !isLoaded && 'hidden',
+    )}
   />
-  {#if isLoaded}
-    {#if showOpenInNewTab}
-      <a
-        href={originalImage || src}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="absolute right-0 top-0 p-2 text-slate-200 hover:text-slate-100"
-      >
-        <Tooltip size="xs" side="left">
-          {#snippet trigger()}
-            <Icon icon="system-uicons:external" />
-          {/snippet}
-          Open in new tab
-        </Tooltip>
-      </a>
-    {/if}
 
-    {#if metadata && showMetadata}
-      <div
-        class="absolute bottom-0 left-0 right-0 flex items-center justify-between bg-slate-800 bg-opacity-50 p-2 text-xs text-slate-200 backdrop-blur-xs backdrop-filter"
-      >
-        <div class="group">
-          <p>{metadata.width}x{metadata.height} pixels</p>
-          {#if metadata.mimeType}
-            <p>{metadata.mimeType}</p>
-          {/if}
-        </div>
-
-        {#if metadata.size}
-          <p>{bytesToSize(metadata.size)}</p>
-        {/if}
-      </div>
-    {/if}
-  {/if}
   {#if !isLoaded}
     <div
-      class="absolute inset-0 flex animate-pulse items-center justify-center bg-slate-600/10 duration-1000 dark:bg-slate-800"
-      out:fade
+      class="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-800 animate-pulse"
     >
       <svg
         width="48"
         height="48"
-        class="text-gray-700 dark:text-gray-200"
+        class="text-gray-400"
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
         fill="currentColor"
@@ -191,4 +130,63 @@
       </svg>
     </div>
   {/if}
-</div>
+
+  {#if isLoaded}
+    {#if showOpenInNewTab}
+      <a
+        href={originalImage || src}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="group/link absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-lg bg-black/20 backdrop-blur-sm opacity-0 transition-all duration-200 group-hover:opacity-100 hover:bg-black/40 hover:scale-110"
+      >
+        <Tooltip size="xs" side="left" sideOffset={12}>
+          {#snippet trigger()}
+            <Icon
+              icon="heroicons:arrow-top-right-on-square"
+              class="h-4 w-4 text-white/80 transition-colors duration-200 group-hover/link:text-white"
+            />
+          {/snippet}
+          Open in new tab
+        </Tooltip>
+      </a>
+    {/if}
+
+    {#if metadata && showMetadata}
+      <div
+        class="absolute bottom-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2 bg-black/40 dark:bg-black/60 backdrop-blur-md rounded-lg px-3 py-2 text-xs text-white/90"
+        in:fade={{ duration: 200, delay: 100 }}
+      >
+        <div class="flex flex-wrap items-center gap-2 min-w-0">
+          <div class="flex items-center gap-1 whitespace-nowrap">
+            <Icon
+              icon="heroicons:photo"
+              class="w-3 h-3 text-white/70 flex-shrink-0"
+            />
+            <span class="font-medium">{metadata.width}×{metadata.height}</span>
+          </div>
+          {#if metadata.mimeType}
+            <div class="flex items-center gap-1 whitespace-nowrap">
+              <Icon
+                icon="heroicons:document"
+                class="w-3 h-3 text-white/70 flex-shrink-0"
+              />
+              <span class="uppercase font-medium"
+                >{metadata.mimeType.split('/')[1] || metadata.mimeType}</span
+              >
+            </div>
+          {/if}
+        </div>
+
+        {#if metadata.size}
+          <div class="flex items-center gap-1 whitespace-nowrap">
+            <Icon
+              icon="heroicons:arrow-down-tray"
+              class="w-3 h-3 text-white/70 flex-shrink-0"
+            />
+            <span class="font-medium">{bytesToSize(metadata.size)}</span>
+          </div>
+        {/if}
+      </div>
+    {/if}
+  {/if}
+</AspectRatio.Root>

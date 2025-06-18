@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button } from '@slink/components/UI/Action';
+  import ConfirmationDialog from '@slink/components/UI/Modal/ConfirmationDialog.svelte';
 
   interface Props {
     close: () => void;
@@ -11,17 +11,28 @@
   let { close, confirm, name, displayValue }: Props = $props();
 </script>
 
-<p class="text-left text-sm">
-  Are you sure you want to set <strong>{name}</strong> to
-  <strong>{displayValue}</strong>?
-</p>
-
-<div class="mt-5 flex gap-2">
-  <Button variant="outline" size="sm" class="w-1/2" onclick={close}>
-    Cancel
-  </Button>
-
-  <Button variant="danger" size="sm" class="w-1/2" onclick={confirm}
-    >Reset & Save</Button
-  >
-</div>
+<ConfirmationDialog
+  variant="info"
+  icon="heroicons:arrow-path"
+  title="Reset Setting"
+  confirmText="Reset & Save"
+  {close}
+  {confirm}
+>
+  {#snippet content()}
+    <div class="text-center">
+      <p class="text-sm text-gray-600 dark:text-gray-400">
+        Changing <strong class="text-gray-900 dark:text-white">{name}</strong> to:
+      </p>
+      <div
+        class="mt-3 rounded-lg bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 px-4 py-3"
+      >
+        <span
+          class="font-mono text-sm text-gray-900 dark:text-white font-medium"
+        >
+          {displayValue}
+        </span>
+      </div>
+    </div>
+  {/snippet}
+</ConfirmationDialog>

@@ -3,8 +3,7 @@
 
   import { type Readable, readable } from 'svelte/store';
 
-  import { Button } from '@slink/components/UI/Action';
-  import { Loader } from '@slink/components/UI/Loader';
+  import ConfirmationDialog from '@slink/components/UI/Modal/ConfirmationDialog.svelte';
 
   interface Props {
     user: User;
@@ -16,33 +15,30 @@
   let { user, loading = readable(false), close, confirm }: Props = $props();
 </script>
 
-<div class="text-left">
-  <h3
-    class="flex items-center justify-between text-lg font-medium capitalize leading-6 text-gray-800 dark:text-white"
-  >
-    <span>User Deletion</span>
-    {#if $loading}
-      <Loader size="xs" />
-    {/if}
-  </h3>
-  <div class="mt-2 text-sm">
-    <span class="block">Are you sure you want to delete this user?</span>
-    <span
-      class="my-2 block rounded-md bg-neutral-200 p-2 text-center dark:bg-neutral-800"
+<ConfirmationDialog
+  variant="danger"
+  icon="heroicons:trash"
+  title="User Deletion"
+  message="Are you sure you want to delete this user? This action cannot be undone."
+  confirmText="Delete"
+  {loading}
+  {close}
+  {confirm}
+>
+  {#snippet content()}
+    <div
+      class="rounded-lg bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 p-4"
     >
-      {user.email}
-    </span>
-
-    <span class="mt-2 block text-[0.7em]"> This action cannot be undone. </span>
-  </div>
-</div>
-
-<div class="mt-5 flex gap-2">
-  <Button variant="outline" size="sm" class="w-1/2" onclick={close}>
-    Cancel
-  </Button>
-
-  <Button variant="danger" size="sm" class="w-1/2" onclick={confirm}>
-    Delete
-  </Button>
-</div>
+      <div class="text-center">
+        <span
+          class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide"
+        >
+          User Email
+        </span>
+        <div class="mt-1 font-mono text-sm text-gray-900 dark:text-white">
+          {user.email}
+        </div>
+      </div>
+    </div>
+  {/snippet}
+</ConfirmationDialog>

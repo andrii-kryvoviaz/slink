@@ -60,18 +60,32 @@
   <title>Settings | Slink</title>
 </svelte:head>
 
-<div class="h-full w-full max-w-7xl px-6 py-4 pb-10">
-  <div class="flex flex-col gap-2">
+<div class="flex flex-col w-full max-w-4xl px-8 py-8 space-y-12">
+  <div class="space-y-3">
+    <h1
+      class="text-3xl font-light text-gray-900 dark:text-white tracking-tight"
+    >
+      Settings
+    </h1>
+    <p
+      class="text-gray-600 dark:text-gray-400 text-base leading-relaxed max-w-2xl"
+    >
+      Configure your application preferences and manage system behavior. Changes
+      are saved automatically for each section.
+    </p>
+  </div>
+
+  <div class="space-y-16">
     <SettingsPane
       category="image"
       loading={$isLoading && categoryBeingSaved === 'image'}
       on={{ save: handleSettingsSectionSave }}
     >
       {#snippet title()}
-        Image
+        Image Settings
       {/snippet}
       {#snippet description()}
-        Adjust image-related preferences
+        Configure image upload limits and processing options
       {/snippet}
 
       <SettingItem
@@ -84,14 +98,14 @@
           Maximum Image Size
         {/snippet}
         {#snippet hint()}
-          Set the maximum size of an image that can be uploaded
+          Set the maximum size limit for image uploads
         {/snippet}
         <FileSizeInput
-          error={$error?.errors.image?.maxSize}
           name="imageMaxSize"
           bind:value={settings.image.maxSize}
         />
       </SettingItem>
+
       <SettingItem
         defaultValue={defaultSettings.image?.stripExifMetadata}
         reset={(value) => {
@@ -99,27 +113,30 @@
         }}
       >
         {#snippet label()}
-          Strip EXIF Data
+          Strip EXIF Metadata
         {/snippet}
         {#snippet hint()}
-          Toggle whether EXIF data should be stripped from uploaded images
+          Automatically remove metadata from uploaded images for privacy
         {/snippet}
-        <Toggle
-          name="imageStripExifMetadata"
-          bind:checked={settings.image.stripExifMetadata}
-        />
+        <div class="flex justify-end">
+          <Toggle
+            name="imageStripExifMetadata"
+            bind:checked={settings.image.stripExifMetadata}
+          />
+        </div>
       </SettingItem>
     </SettingsPane>
+
     <SettingsPane
       category="storage"
       loading={$isLoading && categoryBeingSaved === 'storage'}
       on={{ save: handleSettingsSectionSave }}
     >
       {#snippet title()}
-        Storage
+        Storage Configuration
       {/snippet}
       {#snippet description()}
-        Configure your preferred way of storing data
+        Choose how and where your data is stored
       {/snippet}
 
       <SettingItem
@@ -129,213 +146,245 @@
         }}
       >
         {#snippet label()}
-          Storage Type
+          Storage Provider
         {/snippet}
         {#snippet hint()}
-          Select where you want to store your data
+          Select your preferred storage backend
         {/snippet}
         <Select
           name="storageProvider"
           type="single"
           items={[
-            { value: 'local', label: 'Local' },
-            { value: 'smb', label: 'Samba (SMB)' },
+            { value: 'local', label: 'Local Storage' },
+            { value: 'smb', label: 'Network Storage (SMB)' },
             { value: 's3', label: 'Amazon S3' },
           ]}
           bind:value={settings.storage.provider}
-        ></Select>
+        />
       </SettingItem>
-      {#if settings.storage.provider === 'smb'}
-        <SettingItem
-          defaultValue={defaultSettings.storage?.adapter.smb.host}
-          reset={(value) => {
-            settings.storage.adapter.smb.host = value;
-          }}
-        >
-          {#snippet label()}
-            SMB Host
-          {/snippet}
-          {#snippet hint()}
-            Enter the IP address or hostname of your SMB server
-          {/snippet}
-          <Input
-            name="smbHost"
-            bind:value={settings.storage.adapter.smb.host}
-          />
-        </SettingItem>
-        <SettingItem
-          defaultValue={defaultSettings.storage?.adapter.smb.share}
-          reset={(value) => {
-            settings.storage.adapter.smb.share = value;
-          }}
-        >
-          {#snippet label()}
-            SMB Share
-          {/snippet}
-          {#snippet hint()}
-            Enter the name of the share on your SMB server
-          {/snippet}
-          <Input
-            name="smbShare"
-            bind:value={settings.storage.adapter.smb.share}
-          />
-        </SettingItem>
-        <SettingItem
-          defaultValue={defaultSettings.storage?.adapter.smb.workgroup}
-          reset={(value) => {
-            settings.storage.adapter.smb.workgroup = value;
-          }}
-        >
-          {#snippet label()}
-            SMB Workgroup
-          {/snippet}
-          {#snippet hint()}
-            Enter the workgroup of your SMB server
-          {/snippet}
-          <Input
-            name="smbWorkgroup"
-            bind:value={settings.storage.adapter.smb.workgroup}
-          />
-        </SettingItem>
-        <SettingItem
-          defaultValue={defaultSettings.storage?.adapter.smb.username}
-          reset={(value) => {
-            settings.storage.adapter.smb.username = value;
-          }}
-        >
-          {#snippet label()}
-            SMB Username
-          {/snippet}
-          {#snippet hint()}
-            Enter the username to authenticate with your SMB server
-          {/snippet}
-          <Input
-            name="smbUsername"
-            bind:value={settings.storage.adapter.smb.username}
-          />
-        </SettingItem>
-        <SettingItem
-          defaultValue={defaultSettings.storage?.adapter.smb.password}
-          reset={(value) => {
-            settings.storage.adapter.smb.password = value;
-          }}
-        >
-          {#snippet label()}
-            SMB Password
-          {/snippet}
-          {#snippet hint()}
-            Enter the password to authenticate with your SMB server
-          {/snippet}
-          <Input
-            type="password"
-            name="smbPassword"
-            bind:value={settings.storage.adapter.smb.password}
-          />
-        </SettingItem>
-      {/if}
-      {#if settings.storage.provider === 's3'}
-        <Notice size="sm" variant="warning">
-          <strong>Warning!</strong>
-          Using Amazon S3 may incur additional charges. Please refer to the
-          <a
-            href="https://aws.amazon.com/s3/pricing/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="underline"
-          >
-            Amazon S3 pricing
-          </a>
-          for more information.
-        </Notice>
-        <SettingItem
-          defaultValue={defaultSettings.storage?.adapter.s3.region}
-          reset={(value) => {
-            settings.storage.adapter.s3.region = value;
-          }}
-        >
-          {#snippet label()}
-            AWS Region
-          {/snippet}
-          {#snippet hint()}
-            Region where your S3 bucket is located e.g. <span
-              class="font-semibold">us-east-1</span
-            >
-          {/snippet}
-          <Input bind:value={settings.storage.adapter.s3.region} />
-        </SettingItem>
-        <SettingItem
-          defaultValue={defaultSettings.storage?.adapter.s3.bucket}
-          reset={(value) => {
-            settings.storage.adapter.s3.bucket = value;
-          }}
-        >
-          {#snippet label()}
-            Bucket Name
-          {/snippet}
-          {#snippet hint()}
-            General purpose bucket name <a
-              href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingBucket.html#general-purpose-buckets-overview"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="underline">more info</a
-            >
-          {/snippet}
-          <Input bind:value={settings.storage.adapter.s3.bucket} />
-        </SettingItem>
 
-        <SettingItem
-          defaultValue={defaultSettings.storage?.adapter.s3.key}
-          reset={(value) => {
-            settings.storage.adapter.s3.key = value;
-          }}
+      {#if settings.storage.provider === 'smb'}
+        <div
+          class="pl-6 border-l-2 border-gray-200 dark:border-gray-600 space-y-6"
         >
-          {#snippet label()}
-            Access Key ID
-          {/snippet}
-          {#snippet hint()}
-            To use Amazon S3, you need to provide your Access Key ID and Secret
-            Access Key. Please refer to the
+          <SettingItem
+            defaultValue={defaultSettings.storage?.adapter.smb.host}
+            reset={(value) => {
+              settings.storage.adapter.smb.host = value;
+            }}
+          >
+            {#snippet label()}
+              Server Host
+            {/snippet}
+            {#snippet hint()}
+              IP address or hostname of your SMB server
+            {/snippet}
+            <Input
+              name="smbHost"
+              placeholder="192.168.1.100 or server.local"
+              bind:value={settings.storage.adapter.smb.host}
+            />
+          </SettingItem>
+
+          <SettingItem
+            defaultValue={defaultSettings.storage?.adapter.smb.share}
+            reset={(value) => {
+              settings.storage.adapter.smb.share = value;
+            }}
+          >
+            {#snippet label()}
+              Share Name
+            {/snippet}
+            {#snippet hint()}
+              The name of the shared folder on your SMB server
+            {/snippet}
+            <Input
+              name="smbShare"
+              placeholder="uploads"
+              bind:value={settings.storage.adapter.smb.share}
+            />
+          </SettingItem>
+
+          <SettingItem
+            defaultValue={defaultSettings.storage?.adapter.smb.workgroup}
+            reset={(value) => {
+              settings.storage.adapter.smb.workgroup = value;
+            }}
+          >
+            {#snippet label()}
+              Workgroup
+            {/snippet}
+            {#snippet hint()}
+              SMB workgroup name (optional)
+            {/snippet}
+            <Input
+              name="smbWorkgroup"
+              placeholder="WORKGROUP"
+              bind:value={settings.storage.adapter.smb.workgroup}
+            />
+          </SettingItem>
+
+          <SettingItem
+            defaultValue={defaultSettings.storage?.adapter.smb.username}
+            reset={(value) => {
+              settings.storage.adapter.smb.username = value;
+            }}
+          >
+            {#snippet label()}
+              Username
+            {/snippet}
+            {#snippet hint()}
+              Authentication username for SMB server
+            {/snippet}
+            <Input
+              name="smbUsername"
+              bind:value={settings.storage.adapter.smb.username}
+            />
+          </SettingItem>
+
+          <SettingItem
+            defaultValue={defaultSettings.storage?.adapter.smb.password}
+            reset={(value) => {
+              settings.storage.adapter.smb.password = value;
+            }}
+          >
+            {#snippet label()}
+              Password
+            {/snippet}
+            {#snippet hint()}
+              Authentication password for SMB server
+            {/snippet}
+            <Input
+              type="password"
+              name="smbPassword"
+              bind:value={settings.storage.adapter.smb.password}
+            />
+          </SettingItem>
+        </div>
+      {/if}
+
+      {#if settings.storage.provider === 's3'}
+        <div
+          class="pl-6 border-l-2 border-gray-200 dark:border-gray-600 space-y-6"
+        >
+          <Notice size="sm" variant="warning">
+            <strong>Billing Notice:</strong>
+            Amazon S3 usage may incur charges. Review
             <a
-              href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access-key-self-managed.html#Using_CreateAccessKey"
+              href="https://aws.amazon.com/s3/pricing/"
               target="_blank"
               rel="noopener noreferrer"
-              class="underline"
+              class="underline font-medium hover:text-amber-700 dark:hover:text-amber-300"
             >
-              AWS documentation
+              S3 pricing details
             </a>
-          {/snippet}
-          <Input bind:value={settings.storage.adapter.s3.key} />
-        </SettingItem>
-        <SettingItem
-          defaultValue={defaultSettings.storage?.adapter.s3.secret}
-          reset={(value) => {
-            settings.storage.adapter.s3.secret = value;
-          }}
-        >
-          {#snippet label()}
-            Secret Access Key
-          {/snippet}
-          {#snippet hint()}
-            Provide your Secret Access Key associated with the provided Access
-            Key ID
-          {/snippet}
-          <Input
-            type="password"
-            bind:value={settings.storage.adapter.s3.secret}
-          />
-        </SettingItem>
+            before proceeding.
+          </Notice>
+
+          <SettingItem
+            defaultValue={defaultSettings.storage?.adapter.s3.region}
+            reset={(value) => {
+              settings.storage.adapter.s3.region = value;
+            }}
+          >
+            {#snippet label()}
+              AWS Region
+            {/snippet}
+            {#snippet hint()}
+              The AWS region where your S3 bucket is located (e.g., us-east-1)
+            {/snippet}
+            <Input
+              name="s3Region"
+              placeholder="us-east-1"
+              bind:value={settings.storage.adapter.s3.region}
+            />
+          </SettingItem>
+
+          <SettingItem
+            defaultValue={defaultSettings.storage?.adapter.s3.bucket}
+            reset={(value) => {
+              settings.storage.adapter.s3.bucket = value;
+            }}
+          >
+            {#snippet label()}
+              Bucket Name
+            {/snippet}
+            {#snippet hint()}
+              Your S3 bucket name.
+              <a
+                href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingBucket.html#general-purpose-buckets-overview"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-blue-600 dark:text-blue-400 hover:underline"
+              >
+                Learn about bucket naming
+              </a>
+            {/snippet}
+            <Input
+              name="s3Bucket"
+              placeholder="my-slink-bucket"
+              bind:value={settings.storage.adapter.s3.bucket}
+            />
+          </SettingItem>
+
+          <SettingItem
+            defaultValue={defaultSettings.storage?.adapter.s3.key}
+            reset={(value) => {
+              settings.storage.adapter.s3.key = value;
+            }}
+          >
+            {#snippet label()}
+              Access Key ID
+            {/snippet}
+            {#snippet hint()}
+              Your AWS Access Key ID.
+              <a
+                href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access-key-self-managed.html#Using_CreateAccessKey"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-blue-600 dark:text-blue-400 hover:underline"
+              >
+                How to create access keys
+              </a>
+            {/snippet}
+            <Input
+              name="s3AccessKey"
+              bind:value={settings.storage.adapter.s3.key}
+            />
+          </SettingItem>
+
+          <SettingItem
+            defaultValue={defaultSettings.storage?.adapter.s3.secret}
+            reset={(value) => {
+              settings.storage.adapter.s3.secret = value;
+            }}
+          >
+            {#snippet label()}
+              Secret Access Key
+            {/snippet}
+            {#snippet hint()}
+              Your AWS Secret Access Key (kept secure and encrypted)
+            {/snippet}
+            <Input
+              type="password"
+              name="s3SecretKey"
+              bind:value={settings.storage.adapter.s3.secret}
+            />
+          </SettingItem>
+        </div>
       {/if}
     </SettingsPane>
+
     <SettingsPane
       category="user"
       loading={$isLoading && categoryBeingSaved === 'user'}
       on={{ save: handleSettingsSectionSave }}
     >
       {#snippet title()}
-        User
+        User Management
       {/snippet}
       {#snippet description()}
-        Modify how users interact with the application
+        Control user registration, authentication, and security requirements
       {/snippet}
 
       <SettingItem
@@ -345,108 +394,125 @@
         }}
       >
         {#snippet label()}
-          User Signup Enabled
+          User Registration
         {/snippet}
         {#snippet hint()}
-          Toggle whether users are able to create a new account
+          Allow new users to create accounts
         {/snippet}
-        <Toggle
-          name="allowRegistration"
-          bind:checked={settings.user.allowRegistration}
-        ></Toggle>
+        <div class="flex justify-end">
+          <Toggle
+            name="allowRegistration"
+            bind:checked={settings.user.allowRegistration}
+          />
+        </div>
       </SettingItem>
+
       {#if settings.user.allowRegistration}
-        <SettingItem
-          defaultValue={defaultSettings.user?.approvalRequired}
-          reset={(value) => {
-            settings.user.approvalRequired = value;
-          }}
+        <div
+          class="pl-6 border-l-2 border-gray-200 dark:border-gray-600 space-y-6"
         >
-          {#snippet label()}
-            User Approval
-          {/snippet}
-          {#snippet hint()}
-            Toggle whether users need to be approved before they can access the
-            application
-          {/snippet}
-          <Toggle
-            name="approvalRequired"
-            bind:checked={settings.user.approvalRequired}
-          />
-        </SettingItem>
-        <SettingItem
-          defaultValue={defaultSettings.user?.allowUnauthenticatedAccess}
-          reset={(value) => {
-            settings.user.allowUnauthenticatedAccess = value;
-          }}
-        >
-          {#snippet label()}
-            Unauthenticated Access
-          {/snippet}
-          {#snippet hint()}
-            Toggle whether users can access the application without being
-            authenticated
-          {/snippet}
-          <Toggle
-            name="allowUnauthenticatedAccess"
-            bind:checked={settings.user.allowUnauthenticatedAccess}
-          />
-        </SettingItem>
-        <SettingItem
-          defaultValue={defaultSettings.user?.password.minLength}
-          reset={(value) => {
-            settings.user.password.minLength = value;
-          }}
-        >
-          {#snippet label()}
-            Password Length
-          {/snippet}
-          {#snippet hint()}
-            Set the minimum length of a user's password
-          {/snippet}
-          <NumberInput
-            error={$error?.errors.password?.minLength}
-            name="passwordLength"
-            bind:value={settings.user.password.minLength}
-          />
-        </SettingItem>
-        <SettingItem
-          defaultValue={defaultSettings.user?.password.requirements}
-          reset={(value) => {
-            settings.user.password.requirements = value;
-          }}
-        >
-          {#snippet label()}
-            Password Complexity
-          {/snippet}
-          {#snippet hint()}
-            Select the required character types for a user's password
-          {/snippet}
-          <Select
-            name="passwordRequirements"
-            type="bitmask"
-            class="w-72 p-2"
-            items={[
-              { value: '1', label: 'Numbers', icon: 'ph:number-nine-thin' },
-              {
-                value: '2',
-                label: 'Lowercase Letters',
-                icon: 'material-symbols-light:lowercase-rounded',
-              },
-              {
-                value: '4',
-                label: 'Uppercase Letters',
-                icon: 'material-symbols-light:uppercase-rounded',
-              },
-              {
-                value: '8',
-                label: 'Special Characters',
-                icon: 'material-symbols-light:asterisk-rounded',
-              },
-            ]}
-            bind:value={settings.user.password.requirements}
-          ></Select>
-        </SettingItem>
+          <SettingItem
+            defaultValue={defaultSettings.user?.approvalRequired}
+            reset={(value) => {
+              settings.user.approvalRequired = value;
+            }}
+          >
+            {#snippet label()}
+              Require Admin Approval
+            {/snippet}
+            {#snippet hint()}
+              New users must be approved by an administrator before accessing
+              the application
+            {/snippet}
+            <div class="flex justify-end">
+              <Toggle
+                name="approvalRequired"
+                bind:checked={settings.user.approvalRequired}
+              />
+            </div>
+          </SettingItem>
+
+          <SettingItem
+            defaultValue={defaultSettings.user?.allowUnauthenticatedAccess}
+            reset={(value) => {
+              settings.user.allowUnauthenticatedAccess = value;
+            }}
+          >
+            {#snippet label()}
+              Guest Access
+            {/snippet}
+            {#snippet hint()}
+              Allow users to access the application without authentication
+            {/snippet}
+            <div class="flex justify-end">
+              <Toggle
+                name="allowUnauthenticatedAccess"
+                bind:checked={settings.user.allowUnauthenticatedAccess}
+              />
+            </div>
+          </SettingItem>
+
+          <SettingItem
+            defaultValue={defaultSettings.user?.password.minLength}
+            reset={(value) => {
+              settings.user.password.minLength = value;
+            }}
+          >
+            {#snippet label()}
+              Minimum Password Length
+            {/snippet}
+            {#snippet hint()}
+              Required minimum number of characters for user passwords
+            {/snippet}
+            <NumberInput
+              name="passwordLength"
+              min={6}
+              bind:value={settings.user.password.minLength}
+            />
+          </SettingItem>
+
+          <SettingItem
+            defaultValue={defaultSettings.user?.password.requirements}
+            reset={(value) => {
+              settings.user.password.requirements = value;
+            }}
+          >
+            {#snippet label()}
+              Password Requirements
+            {/snippet}
+            {#snippet hint()}
+              Character types required in user passwords for enhanced security
+            {/snippet}
+            <Select
+              name="passwordRequirements"
+              type="bitmask"
+              class="w-full max-w-md"
+              items={[
+                {
+                  value: '1',
+                  label: 'Numbers (0-9)',
+                  icon: 'ph:number-nine-thin',
+                },
+                {
+                  value: '2',
+                  label: 'Lowercase Letters (a-z)',
+                  icon: 'material-symbols-light:lowercase-rounded',
+                },
+                {
+                  value: '4',
+                  label: 'Uppercase Letters (A-Z)',
+                  icon: 'material-symbols-light:uppercase-rounded',
+                },
+                {
+                  value: '8',
+                  label: 'Special Characters (!@#$)',
+                  icon: 'material-symbols-light:asterisk-rounded',
+                },
+              ]}
+              bind:value={settings.user.password.requirements}
+            />
+          </SettingItem>
+        </div>
       {/if}
     </SettingsPane>
   </div>

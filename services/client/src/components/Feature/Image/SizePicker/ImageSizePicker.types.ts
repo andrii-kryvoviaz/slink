@@ -3,4 +3,6 @@ export type ImageSize = {
   height: number;
 };
 
-export type ImageParams = ImageSize & {};
+export type ImageParams = ImageSize & {
+  crop?: boolean;
+};

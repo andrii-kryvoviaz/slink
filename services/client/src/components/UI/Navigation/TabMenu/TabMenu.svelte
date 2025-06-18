@@ -57,26 +57,40 @@
   });
 
   function moveMarker(tab: TabMenuItemData, { withTransition = true } = {}) {
-    if (!marker || !tab.ref) {
+    if (!marker || !tab.ref || !menuRef) {
       return;
     }
 
-    if (orientation === 'vertical') {
-      marker.style.transform = `translateY(${tab.ref.offsetTop}px)`;
-      marker.style.height = `${tab.ref.offsetHeight}px`;
-      return;
-    }
+    requestAnimationFrame(() => {
+      if (!marker || !tab.ref || !menuRef) return;
 
-    marker.style.transform = `translateX(${tab.ref.offsetLeft}px)`;
-    marker.style.width = `${tab.ref.offsetWidth}px`;
+      const containerRect = menuRef.getBoundingClientRect();
+      const tabRect = tab.ref.getBoundingClientRect();
 
-    if (marker.style.hasOwnProperty('transition')) {
-      marker.style.transition = '';
-    }
+      const containerStyles = getComputedStyle(menuRef);
+      const paddingLeft = parseFloat(containerStyles.paddingLeft) || 0;
+      const paddingTop = parseFloat(containerStyles.paddingTop) || 0;
 
-    if (!withTransition) {
-      marker.style.transition = 'none';
-    }
+      const relativeLeft = tabRect.left - containerRect.left - paddingLeft;
+      const relativeTop = tabRect.top - containerRect.top - paddingTop;
+
+      if (orientation === 'vertical') {
+        marker.style.transform = `translateY(${relativeTop}px)`;
+        marker.style.width = `${tabRect.width}px`;
+        marker.style.height = `${tabRect.height}px`;
+      } else {
+        marker.style.transform = `translate(${relativeLeft}px, ${relativeTop}px)`;
+        marker.style.width = `${tabRect.width}px`;
+        marker.style.height = `${tabRect.height}px`;
+      }
+
+      if (!withTransition) {
+        marker.style.transition = 'none';
+        marker.offsetHeight;
+      } else {
+        marker.style.transition = 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
+      }
+    });
   }
 
   function handleMouseEnter(key: string) {
@@ -98,7 +112,13 @@
   }
 
   const resizeHandler = debounce(() => {
-    activeItem && moveMarker(activeItem, { withTransition: false });
+    if (activeItem) {
+      requestAnimationFrame(() => {
+        if (activeItem) {
+          moveMarker(activeItem, { withTransition: false });
+        }
+      });
+    }
   }, 10);
 
   $effect(() => {
@@ -106,7 +126,11 @@
       return;
     }
 
-    moveMarker(activeItem);
+    requestAnimationFrame(() => {
+      if (activeItem) {
+        moveMarker(activeItem);
+      }
+    });
   });
 
   let isHorizontal: boolean = $derived(orientation === 'horizontal');
@@ -140,16 +164,10 @@
 </script>
 
 <div bind:this={menuRef} class={classes} role="tablist" tabindex="0">
-  <div
-    class="absolute"
-    class:inset-y-1={isHorizontal}
-    class:left-0={isHorizontal}
-    class:inset-x-1={!isHorizontal}
-    class:top-0={!isHorizontal}
-  >
+  <div class="absolute inset-1 pointer-events-none overflow-hidden">
     <div
       bind:this={marker}
-      class="absolute h-full w-full rounded-lg bg-white transition-all duration-300 dark:bg-black"
+      class="absolute rounded-lg bg-white dark:bg-gray-700 shadow-sm shadow-black/10 dark:shadow-black/25 border border-gray-200/50 dark:border-gray-600/50 transition-all duration-200 ease-out"
     ></div>
   </div>
 

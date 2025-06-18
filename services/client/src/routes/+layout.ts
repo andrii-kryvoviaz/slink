@@ -10,14 +10,9 @@ import '@slink/utils/string/stringExtensions';
 import { preloadIconSet } from '@slink/utils/ui/preloadIconSet';
 
 export const load: LayoutLoad = async ({ fetch, data }) => {
-  // Set API fetch function to the one provided by SvelteKit
-  // In order to avoid race condition, the child page load function should await for the parent
-  // e.g. await parent();
   ApiClient.use(fetch);
 
-  // Set Unauthorized handler
   ApiClient.on('unauthorized', () => {
-    // Redirect to login page
     if (!browser) {
       throw redirect(302, '/profile/login');
     }
@@ -29,7 +24,6 @@ export const load: LayoutLoad = async ({ fetch, data }) => {
     });
   });
 
-  // Preload the theme icons to avoid flickering
   preloadIconSet(themeIcons);
 
   return data;

@@ -1,25 +1,57 @@
 <script lang="ts">
+  import type { User } from '@slink/lib/auth/Type/User';
+
   import Icon from '@iconify/svelte';
 
   import { Button } from '@slink/components/UI/Action';
 
-  let { themeSwitch, profile } = $props();
+  interface Props {
+    user?: Partial<User>;
+    showLogo?: boolean;
+    showLoginButton?: boolean;
+    sidebarWidth?: number;
+    themeSwitch?: import('svelte').Snippet;
+  }
+
+  let {
+    user,
+    showLogo = true,
+    showLoginButton = false,
+    sidebarWidth = 0,
+    themeSwitch,
+  }: Props = $props();
+
+  let innerWidth = $state(0);
+  let isMobile = $derived(innerWidth < 768);
+  let navLeftPosition = $derived(isMobile ? 0 : sidebarWidth);
 </script>
 
-<header class="z-30 w-full border-b-2 border-bc-header/70">
-  <nav
-    class="mx-auto flex min-h-[5rem] items-center justify-between px-5 py-4 lg:px-8"
-  >
-    <div class="flex flex-wrap lg:flex-1">
-      <a href="/" class="-m-1.5 flex items-center gap-2 p-1.5">
-        <span class="sr-only">Slink</span>
-        <img class="h-8 w-auto" src="/favicon.png" alt="" />
-        <span>Slink</span>
-      </a>
+<svelte:window bind:innerWidth />
+
+<header
+  class="fixed top-0 right-0 z-40 h-14 transition-all duration-300"
+  style:left="{navLeftPosition}px"
+>
+  <nav class="flex h-14 items-center justify-between px-4 sm:px-6">
+    <div class="flex items-center">
+      {#if showLogo}
+        <a
+          href="/"
+          class="flex items-center gap-3 hover:opacity-80 transition-opacity duration-150"
+        >
+          <div
+            class="flex items-center justify-center w-8 h-8 rounded-xl bg-muted/20 border-0 hover:bg-muted/30 hover:scale-105 transition-all duration-200 cursor-pointer"
+          >
+            <img class="h-5 w-5" src="/favicon.png" alt="Slink" />
+          </div>
+          <span class="font-semibold text-foreground tracking-tight">Slink</span
+          >
+        </a>
+      {/if}
     </div>
 
-    <div class="flex items-center justify-end gap-3 lg:flex-1">
-      <div>
+    <div class="flex items-center gap-2 ml-auto">
+      {#if !showLoginButton}
         <Button
           href="/upload"
           variant="dark"
@@ -32,21 +64,26 @@
           <Icon icon="ph:plus-fill" class="h-3 w-3 sm:h-4 sm:w-4" />
           Upload
         </Button>
-      </div>
+      {/if}
+
+      {#if showLoginButton}
+        <Button
+          href="/profile/login"
+          variant="modern"
+          size="sm"
+          rounded="full"
+          class="flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200"
+        >
+          <Icon icon="ph:sign-in-bold" class="h-4 w-4" />
+          <span>Sign In</span>
+        </Button>
+      {/if}
 
       {#if themeSwitch}
-        <p class="divider divider-horizontal m-0 hidden py-0 sm:flex"></p>
+        <div class="flex items-center ml-1">
+          {@render themeSwitch?.()}
+        </div>
       {/if}
-
-      <div class="hidden sm:flex">
-        {@render themeSwitch?.()}
-      </div>
-
-      {#if profile}
-        <p class="divider divider-horizontal m-0 hidden py-0 sm:flex"></p>
-      {/if}
-
-      {@render profile?.()}
     </div>
   </nav>
 </header>

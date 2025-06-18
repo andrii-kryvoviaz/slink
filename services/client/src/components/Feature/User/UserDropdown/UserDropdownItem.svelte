@@ -1,59 +1,42 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
 
-  import { type UserDropdownItem } from '@slink/components/Feature/User/UserDropdown/UserDropdown.items';
-
   interface Props {
-    item: UserDropdownItem;
-    isDark?: boolean;
-    children?: import('svelte').Snippet;
+    icon: string;
+    title: string;
+    href?: string;
+    isForm?: boolean;
+    variant?: 'default' | 'destructive';
+    onClick?: () => void;
   }
 
-  let { item, isDark = false, children }: Props = $props();
+  let { icon, title, href, isForm = false, variant = 'default', onClick }: Props = $props();
 
-  const classes =
-    'flex transform items-center justify-between sm:p-3 py-3 px-5 text-lg sm:text-sm capitalize text-gray-600 hover:bg-dropdown-accent hover:text-white dark:text-gray-300';
+  const baseClasses = 'flex items-center gap-3 w-full px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-150 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900/20 dark:focus-visible:ring-neutral-100/20';
+  
+  const variantClasses = {
+    default: 'text-neutral-700 hover:bg-neutral-100/70 dark:text-neutral-300 dark:hover:bg-neutral-800/70',
+    destructive: 'text-red-600 hover:bg-red-50/70 dark:text-red-400 dark:hover:bg-red-950/30'
+  };
+  
+  const classes = `${baseClasses} ${variantClasses[variant]}`;
 </script>
 
-<div class:dark={isDark}>
-  {#if item.isForm}
-    <form action={item.link} method="POST" use:enhance>
-      <button
-        type="submit"
-        class={classes + ' w-full'}
-        class:inactive={item.state === 'inactive'}
-      >
-        {@render children?.()}
-      </button>
-    </form>
-  {:else}
-    <a
-      href={item.state === 'active' ? item.link : '#'}
-      target={item.target}
-      class={classes}
-      class:inactive={item.state === 'inactive'}
-    >
-      {@render children?.()}
-    </a>
-  {/if}
-</div>
-
-<style>
-  @reference "tailwindcss";
-
-  .dark .inactive {
-    @apply cursor-not-allowed bg-gray-600 text-gray-300 opacity-60;
-  }
-
-  .dark .inactive:hover {
-    @apply bg-gray-600;
-  }
-
-  .inactive {
-    @apply bg-gray-100 text-gray-400;
-  }
-
-  .inactive:hover {
-    @apply bg-gray-100;
-  }
-</style>
+{#if isForm && href}
+  <form action={href} method="POST" use:enhance>
+    <button type="submit" class={classes} onclick={onClick}>
+      <iconify-icon {icon} class="h-4 w-4"></iconify-icon>
+      <span class="flex-1">{title}</span>
+    </button>
+  </form>
+{:else if href}
+  <a {href} class={classes} onclick={onClick}>
+    <iconify-icon {icon} class="h-4 w-4"></iconify-icon>
+    <span class="flex-1">{title}</span>
+  </a>
+{:else}
+  <button type="button" class={classes} onclick={onClick}>
+    <iconify-icon {icon} class="h-4 w-4"></iconify-icon>
+    <span class="flex-1">{title}</span>
+  </button>
+{/if}

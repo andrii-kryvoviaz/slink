@@ -3,8 +3,6 @@
 
   import { Theme } from '@slink/lib/settings';
 
-  import { Toggle } from '@slink/components/UI/Form';
-
   interface Props {
     disabled?: boolean;
     checked?: boolean;
@@ -13,22 +11,28 @@
 
   let { disabled = false, checked = false, on }: Props = $props();
 
-  const handleThemeChange = (checked: boolean) => {
-    on.change(checked ? Theme.DARK : Theme.LIGHT);
+  const handleThemeChange = () => {
+    if (disabled) return;
+    on.change(checked ? Theme.LIGHT : Theme.DARK);
   };
 </script>
 
-<Toggle
-  variant="primary"
-  {checked}
+<button
+  type="button"
+  class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground/70 hover:text-foreground hover:bg-muted/30 transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-indigo-400/30 disabled:opacity-40 disabled:cursor-not-allowed"
+  onclick={handleThemeChange}
   {disabled}
-  on={{ change: handleThemeChange }}
+  aria-label="Toggle theme"
 >
-  {#snippet preIcon()}
-    <Icon icon="ph:sun-thin" width="20" height="20" />
-  {/snippet}
-
-  {#snippet postIcon()}
-    <Icon icon="ph:moon-thin" width="20" height="20" />
-  {/snippet}
-</Toggle>
+  {#if checked}
+    <Icon
+      icon="ph:moon-thin"
+      class="h-4 w-4 transition-transform duration-200 hover:scale-110"
+    />
+  {:else}
+    <Icon
+      icon="ph:sun-thin"
+      class="h-4 w-4 transition-transform duration-200 hover:scale-110"
+    />
+  {/if}
+</button>

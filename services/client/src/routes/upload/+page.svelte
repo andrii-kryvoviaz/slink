@@ -110,93 +110,114 @@
 
 <svelte:document onpaste={handleChange} />
 
-<div
-  class="content dropzone flex h-full w-full flex-col items-center p-4 sm:p-12"
->
-  <div
-    in:fade={{ duration: 300 }}
-    class="flex w-full flex-col items-center justify-center"
-  >
-    <div class="flex w-full max-w-[600px] flex-col gap-6">
+<div class="min-h-full">
+  <div class="container mx-auto p-6 pt-16">
+    <div in:fade={{ duration: 500, delay: 100 }} class="w-full max-w-2xl mx-auto">
+
       {#if !data.user}
-        <div
-          role="alert"
-          class="alert rounded-lg border-gray-400/20 bg-indigo-600/70 text-white dark:text-gray-200"
-        >
-          <Icon
-            icon="material-symbols-light:warning-outline"
-            class="hidden h-6 w-6 text-gray-300 dark:text-gray-400 md:block"
-          />
-          <span class="text-sm">
-            You must be logged in to be able to upload images. Anonymous uploads
-            are not allowed.
-          </span>
-          <div class="w-full sm:w-auto">
-            <Button
-              size="sm"
-              variant="dark"
-              href="/profile/login"
-              class="w-full"
-            >
-              <span>Log in</span>
-            </Button>
+        <div class="mb-8 p-6 rounded-3xl bg-white/70 dark:bg-slate-800/70 backdrop-blur-lg border border-slate-200/50 dark:border-slate-700/50 shadow-xl shadow-blue-500/5">
+          <div class="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+            <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+              <Icon icon="ph:user-circle" class="h-6 w-6 text-blue-600 dark:text-blue-400" />
+            </div>
+            <div class="flex-1">
+              <h3 class="font-medium text-slate-900 dark:text-white mb-1">Authentication Required</h3>
+              <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                Sign in to start uploading and managing your images
+              </p>
+              <Button
+                href="/profile/login"
+                variant="outline"
+                size="sm"
+                class="bg-blue-600 hover:bg-blue-700 text-white border-blue-600 hover:border-blue-700 shadow-lg shadow-blue-500/25 transition-all duration-200"
+              >
+                <Icon icon="ph:sign-in" class="h-4 w-4 mr-2" />
+                Sign In
+              </Button>
+            </div>
           </div>
         </div>
       {/if}
-      <Dropzone
-        ondrop={handleChange}
-        ondragover={(event) => {
-          event.preventDefault();
-        }}
-        onchange={handleChange}
-        {disabled}
-      >
-        {#if !processing}
-          <div class="flex flex-col p-6 xs:w-[80%]">
-            <div class="text-sm text-text-primary">
-              <p class="flex items-center justify-center gap-x-[3px] p-3">
-                <Icon icon="material-symbols-light:upload" class="h-10 w-10" />
-                <span class="hidden font-semibold sm:block">
-                  Drag & Drop
-                  <span class="font-normal">your image here</span>
-                </span>
-                <span class="block font-semibold sm:hidden">Upload Image</span>
+
+      <div class="relative">
+        <Dropzone
+          ondrop={handleChange}
+          ondragover={(event) => event.preventDefault()}
+          onchange={handleChange}
+          {disabled}
+          class="group relative w-full h-96 bg-white/80 dark:bg-slate-800/80 rounded-3xl border-2 border-dashed border-slate-200 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-500 hover:bg-white dark:hover:bg-slate-800/90 transition-all duration-300 cursor-pointer backdrop-blur-xl shadow-2xl shadow-slate-500/10 dark:shadow-black/20"
+        >
+          {#if !processing}
+            <div class="flex flex-col items-center justify-center h-full p-10 text-center">
+              <div class="mb-8 relative">
+                <div class="w-20 h-20 rounded-3xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:shadow-blue-500/40 transition-all duration-300 group-hover:scale-105">
+                  <Icon icon="ph:cloud-arrow-up" class="h-10 w-10 text-white" />
+                </div>
+                <div class="absolute -top-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <Icon icon="ph:plus" class="h-3 w-3 text-white" />
+                </div>
+              </div>
+
+              <div class="mb-8 max-w-sm">
+                <h3 class="text-2xl font-light text-slate-900 dark:text-white mb-3">
+                  Drop your image
+                </h3>
+                <p class="text-slate-500 dark:text-slate-400">
+                  Drag & drop your image here, or click to browse
+                </p>
+              </div>
+
+              <div class="flex items-center gap-3 mb-8 px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-700/50">
+                <span class="text-sm text-slate-600 dark:text-slate-400">Quick paste:</span>
+                <Shourtcut control={true} key="v" size="sm" />
+              </div>
+
+              <div class="text-center">
+                <p class="text-sm text-slate-500 dark:text-slate-400 mb-2">
+                  PNG • JPG • GIF • SVG • WebP • HEIC
+                </p>
+                <a
+                  href="/help/faq#supported-image-formats"
+                  class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors duration-200 underline underline-offset-2"
+                  onclick={(event) => event.stopPropagation()}
+                >
+                  View all supported formats →
+                </a>
+              </div>
+            </div>
+          {:else}
+            <div class="flex flex-col items-center justify-center h-full">
+              <div class="relative mb-6">
+                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center animate-pulse">
+                  <Icon icon="ph:cloud-arrow-up" class="h-8 w-8 text-white" />
+                </div>
+                <div class="absolute inset-0 w-16 h-16 rounded-full border-4 border-transparent border-t-blue-500 animate-spin"></div>
+              </div>
+              <h3 class="text-xl font-light text-slate-700 dark:text-slate-300 mb-2">
+                Uploading...
+              </h3>
+              <p class="text-sm text-slate-500 dark:text-slate-400">
+                Your image is being processed
               </p>
             </div>
+          {/if}
+        </Dropzone>
 
-            <p
-              class="divider hidden sm:flex before:bg-bc-delimiter/40 after:bg-bc-delimiter/40"
-            >
-              or
-            </p>
-
-            <div class="mb-4 mt-2 hidden sm:block">
-              <Shourtcut control={true} key="v" size="lg" />
+        {#if processing}
+          <div class="absolute inset-0 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md rounded-3xl flex items-center justify-center">
+            <div class="text-center">
+              <div class="relative inline-flex items-center justify-center w-16 h-16 mb-4">
+                <div class="absolute inset-0 w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 animate-pulse"></div>
+                <div class="absolute inset-2 w-12 h-12 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center">
+                  <div class="w-6 h-6 border-2 border-transparent border-t-blue-500 rounded-full animate-spin"></div>
+                </div>
+              </div>
+              <p class="text-lg font-light text-slate-700 dark:text-slate-300 mb-1">Processing</p>
+              <p class="text-sm text-slate-500 dark:text-slate-400">Almost done...</p>
             </div>
-
-            <p class="text-xs text-text-secondary">
-              SVG, PNG, JPG, BMP, GIF or HEIC
-            </p>
-            <a
-              href="/help/faq#supported-image-formats"
-              class="mt-1 block text-[0.75em] text-gray-600 hover:text-text-primary"
-              onclick={(event) => event.stopPropagation()}
-            >
-              See all supported formats
-            </a>
-          </div>
-        {:else}
-          <div class="flex flex-col items-center justify-center">
-            <Loader>
-              <p
-                class="text-md font-extralight tracking-wide text-text-primary"
-              >
-                Uploading, please wait...
-              </p>
-            </Loader>
           </div>
         {/if}
-      </Dropzone>
+      </div>
     </div>
   </div>
 </div>

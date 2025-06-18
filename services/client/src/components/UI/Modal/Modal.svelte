@@ -142,10 +142,7 @@
             >
               {#if loading}
                 {#snippet loadingIcon()}
-                  <Icon
-                    icon="mdi-light:loading"
-                    class="mr-4 h-5 w-5 animate-spin"
-                  />
+                  <div class="w-5 h-5 border border-white/50 border-t-white rounded-full animate-spin mr-4"></div>
                 {/snippet}
               {/if}
 

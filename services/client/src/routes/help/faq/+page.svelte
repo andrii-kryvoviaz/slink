@@ -7,86 +7,134 @@
   import Icon from '@iconify/svelte';
   import { fade, slide } from 'svelte/transition';
 
-  let openedQuestion: string | undefined = $state(faqQuestions.at(0)?.slug);
+  let openedQuestion: string | undefined = $state();
 
-  const openQuestion = (slug: string) => {
-    openedQuestion = slug;
-
-    if (browser) window.location.hash = slug;
+  const toggleQuestion = (slug: string) => {
+    openedQuestion = openedQuestion === slug ? undefined : slug;
+    
+    if (browser && openedQuestion) {
+      window.location.hash = openedQuestion;
+    } else if (browser) {
+      history.replaceState(null, '', window.location.pathname);
+    }
   };
 
   const scrollToQuestion = (hash: string) => {
     if (!browser) return;
-
-    document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth' });
+    setTimeout(() => {
+      document.getElementById(hash)?.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }, 100);
   };
 
   onMount(() => {
-    // Open and scroll to the question if the hash is present
     const hash = $page.url.hash;
     const slug = hash?.slice(1);
 
-    if (!slug || openedQuestion == slug) return;
+    if (!slug) return;
 
     const question = faqQuestions.find((q) => q.slug === slug);
 
     if (question) {
-      openQuestion(slug);
-      scrollToQuestion(hash);
+      openedQuestion = slug;
+      scrollToQuestion(slug);
     }
   });
 </script>
 
 <svelte:head>
   <title>FAQ | Slink</title>
+  <meta name="description" content="Frequently asked questions about Slink - image sharing platform" />
 </svelte:head>
 
-<section in:fade={{ duration: 300 }}>
-  <div class="container mx-auto flex flex-col px-6 py-6 sm:py-10">
-    <div>
-      <h1
-        class="text-center text-2xl font-semibold capitalize text-gray-800 dark:text-white lg:text-3xl"
-      >
-        FAQ
+<div class="min-h-full">
+  <div class="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8" in:fade={{ duration: 400 }}>
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
+        Frequently Asked Questions
       </h1>
-
-      <div class="mx-auto mt-6 flex justify-center">
-        <span class="inline-block h-1 w-40 rounded-full bg-indigo-500"></span>
-        <span class="mx-1 inline-block h-1 w-3 rounded-full bg-indigo-500"
-        ></span>
-        <span class="inline-block h-1 w-1 rounded-full bg-indigo-500"></span>
-      </div>
+      <p class="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+        Find answers to common questions about using Slink for image sharing and management
+      </p>
     </div>
 
-    <div class="mt-8">
+    <div class="space-y-4">
       {#each faqQuestions as { title, content, slug }, i}
-        <div id={slug}>
+        <div 
+          id={slug}
+          class="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 shadow-sm overflow-hidden transition-all duration-200 hover:shadow-md"
+        >
           <button
-            class="flex w-full items-center focus:outline-hidden"
-            onclick={() => openQuestion(slug)}
+            class="w-full px-6 py-5 text-left focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset transition-all duration-200 hover:bg-slate-50 dark:hover:bg-slate-700/30"
+            onclick={() => toggleQuestion(slug)}
+            aria-expanded={openedQuestion === slug}
+            aria-controls={`answer-${slug}`}
           >
-            {#if openedQuestion === slug}
-              <Icon icon="ep:minus" class="h-6 w-6 shrink-0 text-blue-500" />
-            {:else}
-              <Icon icon="ep:plus" class="h-6 w-6 shrink-0 text-blue-500" />
-            {/if}
-
-            <h1 class="mx-4 text-xl text-gray-700 dark:text-white">{title}</h1>
+            <div class="flex items-center justify-between">
+              <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 pr-4">
+                {title}
+              </h3>
+              
+              <div class="flex-shrink-0">
+                <div class="transform transition-transform duration-200 {openedQuestion === slug ? 'rotate-45' : ''}">
+                  <Icon 
+                    icon="ph:plus" 
+                    class="h-5 w-5 text-slate-500 dark:text-slate-400" 
+                  />
+                </div>
+              </div>
+            </div>
           </button>
 
           {#if openedQuestion === slug}
-            <div out:slide={{ duration: 200 }} class="mt-8">
-              <div class="max-w-3xl px-4 text-gray-500 dark:text-gray-300">
-                {@html content}
+            <div 
+              id={`answer-${slug}`}
+              class="px-6 pb-6"
+              transition:slide={{ duration: 300 }}
+            >
+              <div class="pt-2 border-t border-slate-100 dark:border-slate-700">
+                <div class="prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-300">
+                  {@html content}
+                </div>
               </div>
             </div>
           {/if}
         </div>
-
-        {#if i !== faqQuestions.length - 1}
-          <hr class="my-8 border-gray-200 dark:border-gray-700" />
-        {/if}
       {/each}
     </div>
+
+    <div class="mt-16 text-center">
+      <div class="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 p-8">
+        <Icon icon="ph:chat-circle-text" class="h-12 w-12 text-slate-400 mx-auto mb-4" />
+        <h3 class="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+          Still have questions?
+        </h3>
+        <p class="text-slate-600 dark:text-slate-400 mb-6">
+          Can't find the answer you're looking for? Please get in touch with our team.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a
+            href="https://github.com/andrii-kryvoviaz/slink/issues"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center px-6 py-3 bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-slate-200 text-white dark:text-slate-900 font-medium rounded-xl transition-colors duration-200"
+          >
+            <Icon icon="ph:github-logo" class="h-5 w-5 mr-2" />
+            Report an Issue
+          </a>
+          <a
+            href="https://docs.slinkapp.io"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center px-6 py-3 bg-white hover:bg-slate-50 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-900 dark:text-slate-100 font-medium rounded-xl border border-slate-200 dark:border-slate-600 transition-colors duration-200"
+          >
+            <Icon icon="ph:book-open" class="h-5 w-5 mr-2" />
+            View Documentation
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
-</section>
+</div>

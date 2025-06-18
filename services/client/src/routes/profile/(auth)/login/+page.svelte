@@ -36,65 +36,84 @@
 </script>
 
 <svelte:head>
-  <title>Login | Slink</title>
+  <title>Sign In | Slink</title>
 </svelte:head>
 
-<div
-  class="flex grow items-start justify-center p-4 sm:p-12"
-  in:fade={{ duration: 200 }}
->
-  <div
-    class="w-full max-w-sm rounded-lg bg-white p-6 shadow-md dark:bg-gray-800"
-  >
-    <h2
-      class="mt-4 flex gap-3 text-2xl font-light text-gray-700 dark:text-gray-200"
-    >
-      <img class="h-7 w-auto sm:h-8" src="/favicon.png" alt="" />
-      Welcome Back
-    </h2>
-
-    <form class="mt-6" method="POST" use:enhance={withLoadingState(isLoading)}>
-      <div class="flex flex-col gap-2">
-        <div>
-          <Input
-            label="Username or Email"
-            name="username"
-            value={form?.username || ''}
-            error={form?.errors.username ||
-              form?.errors.email ||
-              !!form?.errors.credentials}
-          >
-            {#snippet leftIcon()}
-              <Icon icon="ph:user" />
-            {/snippet}
-          </Input>
-        </div>
-
-        <div>
-          <Input
-            label="Password"
-            name="password"
-            type="password"
-            error={form?.errors.password || form?.errors.credentials}
-          >
-            {#snippet leftIcon()}
-              <Icon icon="ph:password-light" />
-            {/snippet}
-          </Input>
-          <!-- ToDo: Implement forget password feature
-            <a
-              slot="topRightText"
-              href="/profile/forget"
-              class="text-xs text-gray-600 hover:underline dark:text-gray-400"
-              >Forget Password?</a
-            >-->
+<div class="min-h-full flex items-start justify-center px-4 py-12">
+  <div class="w-full max-w-md">
+    <div class="text-center mb-8">
+      <div class="flex items-center justify-center mb-6">
+        <div
+          class="flex items-center justify-center w-12 h-12 rounded-2xl bg-white dark:bg-gray-800 shadow-lg shadow-black/5 dark:shadow-black/20"
+        >
+          <img class="h-6 w-6" src="/favicon.png" alt="Slink" />
         </div>
       </div>
+      <h1 class="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
+        Welcome back
+      </h1>
+      <p class="text-gray-600 dark:text-gray-400 text-sm">
+        Sign in to your account to continue
+      </p>
+    </div>
 
-      <div class="mt-6">
+    <div
+      class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl shadow-black/5 dark:shadow-black/20 border border-gray-200/50 dark:border-gray-700/50 p-8"
+      in:fade={{ duration: 300, delay: 100 }}
+    >
+      <form
+        class="space-y-6"
+        method="POST"
+        use:enhance={withLoadingState(isLoading)}
+      >
+        <div class="space-y-4">
+          <div>
+            <Input
+              label="Email or Username"
+              name="username"
+              type="text"
+              autocomplete="username"
+              placeholder="Enter your email or username"
+              value={form?.username || ''}
+              error={typeof form?.errors === 'object' &&
+              'username' in form.errors
+                ? form.errors.username
+                : undefined}
+              size="lg"
+              rounded="lg"
+              class="transition-all duration-200 border-gray-200/50 dark:border-gray-700/50 bg-gray-50/50 dark:bg-gray-900/50 focus:bg-white dark:focus:bg-gray-800 focus:border-blue-500/50 focus:ring-blue-500/20"
+            >
+              {#snippet leftIcon()}
+                <Icon icon="ph:user-duotone" class="text-gray-400" />
+              {/snippet}
+            </Input>
+          </div>
+
+          <div>
+            <Input
+              label="Password"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              placeholder="Enter your password"
+              error={typeof form?.errors === 'object' &&
+              'password' in form.errors
+                ? form.errors.password
+                : undefined}
+              size="lg"
+              rounded="lg"
+              class="transition-all duration-200 border-gray-200/50 dark:border-gray-700/50 bg-gray-50/50 dark:bg-gray-900/50 focus:bg-white dark:focus:bg-gray-800 focus:border-blue-500/50 focus:ring-blue-500/20"
+            >
+              {#snippet leftIcon()}
+                <Icon icon="ph:lock-duotone" class="text-gray-400" />
+              {/snippet}
+            </Input>
+          </div>
+        </div>
+
         <Button
           variant={buttonVariant}
-          size="md"
+          size="lg"
           class="w-full"
           type="submit"
           loading={$isLoading}
@@ -104,15 +123,19 @@
             <Icon icon="fluent:chevron-right-48-regular" />
           {/snippet}
         </Button>
-      </div>
-    </form>
+      </form>
+    </div>
 
-    <p class="mt-8 text-center text-xs font-light text-gray-400">
-      Don't have an account? <a
-        href="/profile/signup"
-        class="font-medium text-gray-700 hover:underline dark:text-gray-200"
-        >Create One</a
-      >
-    </p>
+    <div class="text-center mt-6">
+      <p class="text-gray-600 dark:text-gray-400 text-sm">
+        Don't have an account?
+        <a
+          href="/profile/signup"
+          class="font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 ml-1 hover:underline transition-colors duration-200"
+        >
+          Create one
+        </a>
+      </p>
+    </div>
   </div>
 </div>

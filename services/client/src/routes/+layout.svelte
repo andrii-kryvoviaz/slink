@@ -3,14 +3,11 @@
 
   import '@slink/app.css';
 
-  import Icon from '@iconify/svelte';
-
   import { theme } from '@slink/lib/actions/theme';
   import { settings } from '@slink/lib/settings';
 
-  import { UserDropdown } from '@slink/components/Feature/User';
-  import { Button, ThemeSwitch } from '@slink/components/UI/Action';
-  import { Navbar } from '@slink/components/UI/Navigation';
+  import { ThemeSwitch } from '@slink/components/UI/Action';
+  import { AppSidebar, Navbar } from '@slink/components/UI/Navigation';
   import { ToastManager } from '@slink/components/UI/Toast';
 
   let { data, children } = $props();
@@ -18,41 +15,60 @@
 
   const currentTheme = settings.get('theme', data.settings.theme);
   const { isDark } = currentTheme;
+
+  let sidebarCollapsed = $state(false);
+  let showSidebar = $derived(!!user);
+
+  let innerWidth = $state(0);
+  let isMobile = $derived(innerWidth < 768);
+  let sidebarWidth = $derived(
+    showSidebar ? (isMobile ? 0 : sidebarCollapsed ? 64 : 256) : 0,
+  );
+
+  const handleSidebarItemSelect = (item: any) => {};
+
+  const handleSidebarCollapseToggle = (collapsed: boolean) => {
+    sidebarCollapsed = collapsed;
+  };
 </script>
 
+<svelte:window bind:innerWidth />
+
 <Tooltip.Provider delayDuration={0} disableHoverableContent={true}>
-  <div class="flex h-full flex-col" use:theme={$currentTheme}>
-    <Navbar>
+  <div class="relative flex h-screen" use:theme={$currentTheme}>
+    <div
+      class="fixed top-0 left-0 right-0 z-30 h-14 backdrop-blur-xl bg-background/50 supports-[backdrop-filter]:bg-background/30 transition-all duration-300"
+    ></div>
+
+    <Navbar
+      user={user || undefined}
+      showLogo={!showSidebar}
+      showLoginButton={!user}
+      {sidebarWidth}
+    >
       {#snippet themeSwitch()}
         <ThemeSwitch
           checked={$isDark}
           on={{ change: (theme) => settings.set('theme', theme) }}
         />
       {/snippet}
-
-      {#snippet profile()}
-        <div class="max-h-10">
-          {#if !user}
-            <Button
-              href="/profile/login"
-              motion="hover:opacity"
-              variant="link"
-              class="p-0 hover:no-underline"
-            >
-              <span class="text-sm font-semibold leading-6">
-                <span>Log in</span>
-                <Icon icon="solar:login-broken" class="inline h-6 w-6" />
-              </span>
-            </Button>
-          {:else}
-            <UserDropdown {user} isDark={$isDark} />
-          {/if}
-        </div>
-      {/snippet}
     </Navbar>
 
-    <div id="main">
-      {@render children?.()}
+    <div class="flex w-full h-full">
+      {#if showSidebar && user}
+        <AppSidebar
+          {user}
+          collapsed={sidebarCollapsed}
+          variant="default"
+          width={sidebarWidth}
+          onItemSelect={handleSidebarItemSelect}
+          onCollapseToggle={handleSidebarCollapseToggle}
+        />
+      {/if}
+
+      <main id="main" class="flex-1 overflow-y-auto pt-14">
+        {@render children?.()}
+      </main>
     </div>
 
     <ToastManager />

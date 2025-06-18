@@ -24,6 +24,8 @@ export const ButtonTheme = cva(
           'bg-danger/80 text-button-accent hover:bg-danger focus:ring-3 focus:ring-rc-danger/40',
         warning:
           'bg-warning/80 text-button-accent hover:bg-warning focus:ring-3 focus:ring-rc-warning/40',
+        modern:
+          'bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-full shadow-sm hover:shadow-md transition-all duration-200 font-medium text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white',
       },
       size: {
         xs: 'text-xs px-3 py-1.5',
