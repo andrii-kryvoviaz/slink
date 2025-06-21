@@ -32,7 +32,7 @@
 </script>
 
 <div class={AppSidebarGroupTheme()}>
-  {#if group.title && !collapsed}
+  {#if group.title}
     <h3 class={AppSidebarGroupTitle({ collapsed })}>
       {group.title}
     </h3>

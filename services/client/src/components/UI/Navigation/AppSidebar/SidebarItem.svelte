@@ -52,37 +52,41 @@
     rel={content.isExternal ? 'noopener noreferrer' : undefined}
   >
     <Icon icon={content.icon} class={AppSidebarIcon({ variant })} />
-    <span class={AppSidebarText({ collapsed })}>{content.title}</span>
-    {#if content.showBadge}
-      <span
-        class={AppSidebarBadge({
-          variant: content.badge?.variant || 'primary',
-          collapsed,
-        })}
-      >
-        {content.badge?.text}
-      </span>
-    {/if}
-    {#if content.isExternal && !collapsed}
-      <Icon
-        icon="lucide:external-link"
-        class="h-3 w-3 ml-auto opacity-60 transition-opacity duration-300"
-      />
+    {#if !collapsed}
+      <span class={AppSidebarText({ collapsed })}>{content.title}</span>
+      {#if content.showBadge}
+        <span
+          class={AppSidebarBadge({
+            variant: content.badge?.variant || 'primary',
+            collapsed,
+          })}
+        >
+          {content.badge?.text}
+        </span>
+      {/if}
+      {#if content.isExternal}
+        <Icon
+          icon="lucide:external-link"
+          class="h-3 w-3 ml-auto opacity-60 transition-opacity duration-300 shrink-0"
+        />
+      {/if}
     {/if}
   </a>
 {:else}
   <button class={itemClasses} onclick={handleClick} disabled={item.disabled}>
     <Icon icon={content.icon} class={AppSidebarIcon({ variant })} />
-    <span class={AppSidebarText({ collapsed })}>{content.title}</span>
-    {#if content.showBadge}
-      <span
-        class={AppSidebarBadge({
-          variant: content.badge?.variant || 'primary',
-          collapsed,
-        })}
-      >
-        {content.badge?.text}
-      </span>
+    {#if !collapsed}
+      <span class={AppSidebarText({ collapsed })}>{content.title}</span>
+      {#if content.showBadge}
+        <span
+          class={AppSidebarBadge({
+            variant: content.badge?.variant || 'primary',
+            collapsed,
+          })}
+        >
+          {content.badge?.text}
+        </span>
+      {/if}
     {/if}
   </button>
 {/if}

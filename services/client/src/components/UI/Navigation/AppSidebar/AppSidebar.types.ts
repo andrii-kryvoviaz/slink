@@ -3,6 +3,8 @@ import type { User } from '@slink/lib/auth/Type/User';
 import type { AppSidebarTheme } from './AppSidebar.theme';
 
 export type AppSidebarVariant = VariantProps<typeof AppSidebarTheme>;
+export type AppSidebarThemeProps = VariantProps<typeof AppSidebarTheme>;
+export type AppSidebarSize = AppSidebarThemeProps['size'];
 
 export interface AppSidebarItem {
   id: string;

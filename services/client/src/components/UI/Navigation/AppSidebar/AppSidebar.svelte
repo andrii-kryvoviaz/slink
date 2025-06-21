@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { AppSidebarSize } from './AppSidebar.types';
   import type {
     AppSidebarGroup,
     AppSidebarItem,
@@ -7,8 +8,7 @@
   import type { User } from '@slink/lib/auth/Type/User';
 
   import Icon from '@iconify/svelte';
-  import { cubicOut } from 'svelte/easing';
-  import { fade, fly } from 'svelte/transition';
+  import { fade } from 'svelte/transition';
 
   import { className } from '@slink/utils/ui/className';
 
@@ -48,10 +48,16 @@
   let innerWidth = $state(0);
   let isMobile = $derived(innerWidth < 768);
   let mobileOverlayOpen = $state(false);
-
   let isCollapsedDesktop = $state(collapsed);
+
   let effectiveCollapsed = $derived(isMobile ? false : isCollapsedDesktop);
   let showOverlay = $derived(isMobile && mobileOverlayOpen);
+  let sidebarSize: AppSidebarSize = $derived(
+    effectiveCollapsed ? 'collapsed' : 'expanded',
+  );
+  let triggerPosition = $derived(
+    isMobile ? 16 : effectiveCollapsed ? 64 : width + 16,
+  );
 
   const isAuthorized = (requiredRoles: string[] = ['ROLE_USER']): boolean => {
     if (!user?.roles) return false;
@@ -94,9 +100,8 @@
     if (isMobile) {
       mobileOverlayOpen = !mobileOverlayOpen;
     } else {
-      const newCollapsed = !isCollapsedDesktop;
-      isCollapsedDesktop = newCollapsed;
-      onCollapseToggle?.(newCollapsed);
+      isCollapsedDesktop = !isCollapsedDesktop;
+      onCollapseToggle?.(isCollapsedDesktop);
     }
   };
 
@@ -110,21 +115,14 @@
     }
   };
 
-  const triggerPosition = $derived(
-    isMobile ? 16 : effectiveCollapsed ? 72 : width + 8,
-  );
-
-  const sidebarSize = $derived(effectiveCollapsed ? 'collapsed' : 'expanded');
-
   const sidebarClasses = $derived(
     className(
       AppSidebarTheme({ variant, size: sidebarSize }),
       customClassName,
-      isMobile
-        ? 'fixed inset-y-0 left-0 z-40 transform transition-transform duration-300 ease-in-out'
-        : '',
-      isMobile && !showOverlay ? '-translate-x-full' : '',
-      isMobile && showOverlay ? 'translate-x-0' : '',
+      isMobile &&
+        'fixed inset-y-0 left-0 z-40 transform transition-transform duration-300 ease-in-out',
+      isMobile && !showOverlay && '-translate-x-full',
+      isMobile && showOverlay && 'translate-x-0',
     ),
   );
 
@@ -149,49 +147,42 @@
   ></div>
 {/if}
 
-<button
-  class="fixed top-3 z-50 transition-all duration-300 ease-out {AppSidebarCollapseButton()}"
-  style:left="{triggerPosition}px"
-  onclick={handleCollapseToggle}
-  aria-label={isMobile
-    ? showOverlay
-      ? 'Close menu'
-      : 'Open menu'
-    : effectiveCollapsed
-      ? 'Expand sidebar'
-      : 'Collapse sidebar'}
->
-  <Icon
-    icon={isMobile
-      ? 'ph:list'
+{#if user}
+  <button
+    class={className('fixed top-3 z-50', AppSidebarCollapseButton())}
+    style:left="{triggerPosition}px"
+    onclick={handleCollapseToggle}
+    aria-label={isMobile
+      ? showOverlay
+        ? 'Close menu'
+        : 'Open menu'
       : effectiveCollapsed
-        ? 'ph:sidebar-simple'
-        : 'ph:sidebar-simple-fill'}
-    class="h-4 w-4 transition-all duration-200"
-  />
-</button>
+        ? 'Expand sidebar'
+        : 'Collapse sidebar'}
+  >
+    <Icon
+      icon={isMobile
+        ? 'ph:list'
+        : effectiveCollapsed
+          ? 'ph:sidebar-simple'
+          : 'ph:sidebar-simple-fill'}
+      class="h-4 w-4"
+    />
+  </button>
+{/if}
 
-<aside
-  class={sidebarClasses}
-  transition:fly={{ x: -100, duration: 400, easing: cubicOut }}
->
+<aside class={sidebarClasses}>
   <div class={headerClasses}>
-    {#if !effectiveCollapsed}
-      <div class="flex items-center gap-3 animate-fade-in">
-        <div
-          class="flex items-center justify-center w-8 h-8 rounded-xl bg-muted/20 border-0 hover:bg-muted/30 hover:scale-105 transition-all duration-200 cursor-pointer"
-        >
-          <img src="/favicon.png" alt="Slink" class="h-5 w-5" />
-        </div>
-        <span class="font-semibold text-foreground tracking-tight">Slink</span>
-      </div>
-    {:else}
+    <div class="flex items-center gap-3 animate-fade-in">
       <div
-        class="flex items-center justify-center w-10 h-10 rounded-2xl bg-muted/20 border-0 hover:bg-muted/30 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer hover:shadow-sm"
+        class="flex items-center justify-center w-10 h-10 rounded-xl bg-muted/20 border-0 hover:bg-muted/30 hover:scale-105 transition-all duration-200 cursor-pointer"
       >
         <img src="/favicon.png" alt="Slink" class="h-5 w-5" />
       </div>
-    {/if}
+      {#if !effectiveCollapsed}
+        <span class="font-semibold text-foreground tracking-tight">Slink</span>
+      {/if}
+    </div>
   </div>
 
   <div class={className(contentClasses, 'sidebar-scrollbar')}>

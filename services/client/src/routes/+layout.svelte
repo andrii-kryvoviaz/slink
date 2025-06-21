@@ -37,7 +37,7 @@
 <Tooltip.Provider delayDuration={0} disableHoverableContent={true}>
   <div class="relative flex h-screen" use:theme={$currentTheme}>
     <div
-      class="fixed top-0 left-0 right-0 z-30 h-14 backdrop-blur-xl bg-background/50 supports-[backdrop-filter]:bg-background/30 transition-all duration-300"
+      class="fixed top-0 left-0 right-0 z-30 h-14 backdrop-blur-xl bg-background/50 supports-[backdrop-filter]:bg-background/30"
     ></div>
 
     <Navbar

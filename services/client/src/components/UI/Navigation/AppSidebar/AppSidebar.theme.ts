@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 
 export const AppSidebarTheme = cva(
-  'flex h-full flex-col bg-card/20 border-0 transition-all duration-300 ease-out md:relative',
+  'flex h-full flex-col bg-card/20 border-0 transition-all duration-300 ease-out md:relative overflow-hidden',
   {
     variants: {
       variant: {
@@ -25,12 +25,12 @@ export const AppSidebarTheme = cva(
 );
 
 export const AppSidebarHeader = cva(
-  'flex items-center px-4 py-3 mb-1 relative z-40 bg-transparent',
+  'flex items-center px-4 py-2 mb-1 relative z-50 bg-transparent',
   {
     variants: {
       collapsed: {
-        true: 'justify-center px-4',
-        false: 'justify-between px-4',
+        true: 'justify-center',
+        false: 'justify-start',
       },
     },
   },
@@ -45,12 +45,12 @@ export const AppSidebarFooter = cva('px-3 py-2 mt-auto');
 export const AppSidebarGroup = cva('space-y-1');
 
 export const AppSidebarGroupTitle = cva(
-  'mb-2 px-3 text-xs font-medium text-muted-foreground/70 tracking-wide select-none uppercase',
+  'mb-2 px-3 text-xs font-medium text-muted-foreground/70 tracking-wide select-none uppercase transition-all duration-300 ease-out overflow-hidden',
   {
     variants: {
       collapsed: {
-        true: 'sr-only',
-        false: 'block',
+        true: 'h-0 mb-0 opacity-0 scale-95',
+        false: 'h-auto opacity-100 scale-100',
       },
     },
   },
@@ -69,17 +69,10 @@ export const AppSidebarItem = cva(
           'text-red-600 hover:text-red-700 hover:bg-red-50/70 hover:shadow-sm hover:shadow-red-500/10 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-950/30',
       },
       collapsed: {
-        true: 'justify-center px-2 py-2 w-10 h-10 gap-0',
+        true: 'justify-center px-2 py-2 gap-3 overflow-hidden',
         false: 'justify-start px-3 py-2 gap-3',
       },
     },
-    compoundVariants: [
-      {
-        variant: 'active',
-        collapsed: false,
-        class: 'border-l-2 border-indigo-500 dark:border-indigo-400 pl-2',
-      },
-    ],
     defaultVariants: {
       variant: 'default',
       collapsed: false,
@@ -104,11 +97,11 @@ export const AppSidebarIcon = cva(
 );
 
 export const AppSidebarText = cva(
-  'truncate transition-all duration-300 font-medium',
+  'text-sm font-medium text-foreground/90 min-w-0 flex-1 truncate transition-all duration-300 ease-out overflow-hidden',
   {
     variants: {
       collapsed: {
-        true: 'w-0 opacity-0 translate-x-2',
+        true: 'w-0 opacity-0 translate-x-2 pointer-events-none',
         false: 'opacity-100 translate-x-0',
       },
     },
@@ -116,7 +109,7 @@ export const AppSidebarText = cva(
 );
 
 export const AppSidebarBadge = cva(
-  'ml-auto h-5 px-2 inline-flex items-center justify-center rounded-full text-xs font-medium transition-all duration-300 group-hover:scale-105',
+  'ml-auto h-5 px-2 inline-flex items-center justify-center rounded-full text-xs font-medium transition-all duration-300 group-hover:scale-105 whitespace-nowrap shrink-0 overflow-hidden',
   {
     variants: {
       variant: {
@@ -130,7 +123,7 @@ export const AppSidebarBadge = cva(
           'bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400 group-hover:bg-red-200 dark:group-hover:bg-red-900/30',
       },
       collapsed: {
-        true: 'w-0 opacity-0 scale-0',
+        true: 'w-0 opacity-0 pointer-events-none scale-0',
         false: 'opacity-100 scale-100',
       },
     },
@@ -158,7 +151,7 @@ export const AppSidebarUserAvatar = cva(
 );
 
 export const AppSidebarUserInfo = cva(
-  'min-w-0 flex-1 transition-all duration-300',
+  'min-w-0 flex-1 transition-all duration-300 overflow-hidden',
   {
     variants: {
       collapsed: {

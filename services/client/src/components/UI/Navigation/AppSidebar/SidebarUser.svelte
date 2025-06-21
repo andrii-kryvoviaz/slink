@@ -12,7 +12,6 @@
     DropdownGroup,
     DropdownItem,
   } from '@slink/components/UI/Action';
-  import { Tooltip } from '@slink/components/UI/Tooltip';
 
   import {
     AppSidebarUserAvatar,
@@ -51,10 +50,12 @@
         {/if}
       </div>
 
-      <Icon
-        icon="ph:dots-three-vertical"
-        class="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors duration-200 ml-auto shrink-0"
-      />
+      {#if !collapsed}
+        <Icon
+          icon="ph:dots-three-vertical"
+          class="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors duration-200 ml-auto shrink-0"
+        />
+      {/if}
     </div>
   {/snippet}
 
