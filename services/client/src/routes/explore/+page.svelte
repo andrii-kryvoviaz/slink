@@ -29,18 +29,16 @@
 <main in:fade={{ duration: 500 }} class="min-h-full">
   <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
     {#if publicFeedState.isLoading && publicFeedState.items.length === 0}
-      <div class="flex justify-center items-center py-20">
-        <div class="text-center">
+      <div class="mt-8 flex justify-center">
+        <div
+          class="flex items-center gap-3 px-4 py-3 rounded-full bg-white dark:bg-gray-800/50 border border-gray-200/50 dark:border-gray-700/50 shadow-sm"
+        >
           <div
-            class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-50 dark:bg-gray-800/50 mb-4 border border-gray-200/50 dark:border-gray-700/50"
+            class="w-4 h-4 border-2 border-gray-200 dark:border-gray-700 border-t-indigo-500 dark:border-t-indigo-400 rounded-full animate-spin"
+          ></div>
+          <span class="text-sm font-medium text-gray-600 dark:text-gray-400"
+            >Loading images...</span
           >
-            <div
-              class="w-5 h-5 border-2 border-gray-200 dark:border-gray-700 border-t-indigo-500 dark:border-t-indigo-400 rounded-full animate-spin"
-            ></div>
-          </div>
-          <p class="text-gray-500 dark:text-gray-400 text-sm font-normal">
-            Loading images...
-          </p>
         </div>
       </div>
     {/if}
