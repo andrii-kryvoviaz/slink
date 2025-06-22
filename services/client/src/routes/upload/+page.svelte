@@ -17,6 +17,12 @@
   import UnsupportedFileFormat from '@slink/components/Feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte';
   import { Button } from '@slink/components/UI/Action';
   import { Shourtcut } from '@slink/components/UI/Action';
+  import {
+    Banner,
+    BannerAction,
+    BannerContent,
+    BannerIcon,
+  } from '@slink/components/UI/Banner';
   import { Dropzone } from '@slink/components/UI/Form';
   import { Loader } from '@slink/components/UI/Loader';
 
@@ -117,42 +123,24 @@
       class="w-full max-w-2xl mx-auto"
     >
       {#if !data.user}
-        <div
-          class="mb-6 p-4 rounded-xl bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 border border-slate-200/50 dark:border-slate-700/50 shadow-sm"
-        >
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div
-                class="flex items-center justify-center w-10 h-10 rounded-lg bg-slate-900 dark:bg-white shadow-sm"
-              >
-                <Icon
-                  icon="ph:lock-simple"
-                  class="h-5 w-5 text-white dark:text-slate-900"
-                />
-              </div>
-              <div>
-                <h3
-                  class="text-sm font-semibold text-slate-900 dark:text-white"
-                >
-                  Sign in to continue
-                </h3>
-                <p class="text-xs text-slate-600 dark:text-slate-400">
-                  Upload and manage your images
-                </p>
-              </div>
-            </div>
-            <Button
+        <Banner variant="warning">
+          {#snippet icon()}
+            <BannerIcon variant="warning" icon="ph:lock-simple" />
+          {/snippet}
+          {#snippet content()}
+            <BannerContent
+              title="Sign in to continue"
+              description="Upload and manage your images"
+            />
+          {/snippet}
+          {#snippet action()}
+            <BannerAction
+              variant="warning"
               href="/profile/login"
-              variant="glass"
-              size="sm"
-              rounded="full"
-              motion="subtle"
-            >
-              Get Started
-              <Icon icon="ph:arrow-right" class="h-3 w-3 ml-1" />
-            </Button>
-          </div>
-        </div>
+              text="Get Started"
+            />
+          {/snippet}
+        </Banner>
       {/if}
 
       <div class="relative">
@@ -172,11 +160,6 @@
                   class="w-20 h-20 rounded-3xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:shadow-blue-500/40 transition-all duration-300 group-hover:scale-105"
                 >
                   <Icon icon="ph:cloud-arrow-up" class="h-10 w-10 text-white" />
-                </div>
-                <div
-                  class="absolute -top-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                >
-                  <Icon icon="ph:plus" class="h-3 w-3 text-white" />
                 </div>
               </div>
 

@@ -13,6 +13,12 @@
   import { toast } from '@slink/utils/ui/toast';
 
   import { Button, type ButtonVariant } from '@slink/components/UI/Action';
+  import {
+    Banner,
+    BannerAction,
+    BannerContent,
+    BannerIcon,
+  } from '@slink/components/UI/Banner';
   import { Input } from '@slink/components/UI/Form';
 
   interface Props {
@@ -175,32 +181,18 @@
     </form>
   </div>
 
-  <div
-    class="p-4 rounded-xl bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 border border-slate-200/50 dark:border-slate-700/50 shadow-sm"
-  >
-    <div class="flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div
-          class="flex items-center justify-center w-10 h-10 rounded-lg bg-slate-900 dark:bg-white shadow-sm"
-        >
-          <Icon
-            icon="ph:sign-in"
-            class="h-5 w-5 text-white dark:text-slate-900"
-          />
-        </div>
-        <div>
-          <h3 class="text-sm font-semibold text-slate-900 dark:text-white">
-            Already have an account?
-          </h3>
-          <p class="text-xs text-slate-600 dark:text-slate-400">
-            Sign in to access your images
-          </p>
-        </div>
-      </div>
-      <Button href="/profile/login" variant="glass" size="sm" rounded="full">
-        Sign In
-        <Icon icon="ph:arrow-right" class="h-3 w-3 ml-1" />
-      </Button>
-    </div>
-  </div>
+  <Banner variant="success">
+    {#snippet icon()}
+      <BannerIcon variant="success" icon="ph:sign-in" />
+    {/snippet}
+    {#snippet content()}
+      <BannerContent
+        title="Already have an account?"
+        description="Sign in to access your images"
+      />
+    {/snippet}
+    {#snippet action()}
+      <BannerAction variant="success" href="/profile/login" text="Sign In" />
+    {/snippet}
+  </Banner>
 </div>
