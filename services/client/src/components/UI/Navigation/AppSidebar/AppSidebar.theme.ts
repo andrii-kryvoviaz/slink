@@ -135,7 +135,7 @@ export const AppSidebarBadge = cva(
 );
 
 export const AppSidebarUserSection = cva(
-  'group flex items-center gap-3 rounded-lg transition-all duration-200 hover:bg-muted/50 dark:hover:bg-muted/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20 border-0 hover:scale-[1.01] active:scale-[0.99] hover:shadow-sm min-w-0 max-w-full',
+  'group flex items-center gap-3 py-2 rounded-lg transition-all duration-200 hover:bg-muted/50 dark:hover:bg-muted/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20 border-0 hover:scale-[1.01] active:scale-[0.99] hover:shadow-sm min-w-0 max-w-full',
   {
     variants: {
       collapsed: {
