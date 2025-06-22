@@ -11,7 +11,7 @@
 
   const toggleQuestion = (slug: string) => {
     openedQuestion = openedQuestion === slug ? undefined : slug;
-    
+
     if (browser && openedQuestion) {
       window.location.hash = openedQuestion;
     } else if (browser) {
@@ -22,9 +22,9 @@
   const scrollToQuestion = (hash: string) => {
     if (!browser) return;
     setTimeout(() => {
-      document.getElementById(hash)?.scrollIntoView({ 
+      document.getElementById(hash)?.scrollIntoView({
         behavior: 'smooth',
-        block: 'start'
+        block: 'start',
       });
     }, 100);
   };
@@ -46,23 +46,30 @@
 
 <svelte:head>
   <title>FAQ | Slink</title>
-  <meta name="description" content="Frequently asked questions about Slink - image sharing platform" />
+  <meta
+    name="description"
+    content="Frequently asked questions about Slink - image sharing platform"
+  />
 </svelte:head>
 
 <div class="min-h-full">
-  <div class="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8" in:fade={{ duration: 400 }}>
+  <div
+    class="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8"
+    in:fade={{ duration: 400 }}
+  >
     <div class="text-center mb-12">
       <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
         Frequently Asked Questions
       </h1>
       <p class="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-        Find answers to common questions about using Slink for image sharing and management
+        Find answers to common questions about using Slink for image sharing and
+        management
       </p>
     </div>
 
     <div class="space-y-4">
       {#each faqQuestions as { title, content, slug }, i}
-        <div 
+        <div
           id={slug}
           class="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 shadow-sm overflow-hidden transition-all duration-200 hover:shadow-md"
         >
@@ -73,15 +80,22 @@
             aria-controls={`answer-${slug}`}
           >
             <div class="flex items-center justify-between">
-              <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 pr-4">
+              <h3
+                class="text-lg font-semibold text-slate-900 dark:text-slate-100 pr-4"
+              >
                 {title}
               </h3>
-              
+
               <div class="flex-shrink-0">
-                <div class="transform transition-transform duration-200 {openedQuestion === slug ? 'rotate-45' : ''}">
-                  <Icon 
-                    icon="ph:plus" 
-                    class="h-5 w-5 text-slate-500 dark:text-slate-400" 
+                <div
+                  class="transform transition-transform duration-200 {openedQuestion ===
+                  slug
+                    ? 'rotate-45'
+                    : ''}"
+                >
+                  <Icon
+                    icon="ph:plus"
+                    class="h-5 w-5 text-slate-500 dark:text-slate-400"
                   />
                 </div>
               </div>
@@ -89,13 +103,15 @@
           </button>
 
           {#if openedQuestion === slug}
-            <div 
+            <div
               id={`answer-${slug}`}
               class="px-6 pb-6"
               transition:slide={{ duration: 300 }}
             >
               <div class="pt-2 border-t border-slate-100 dark:border-slate-700">
-                <div class="prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-300">
+                <div
+                  class="prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-300"
+                >
                   {@html content}
                 </div>
               </div>
@@ -106,13 +122,21 @@
     </div>
 
     <div class="mt-16 text-center">
-      <div class="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 p-8">
-        <Icon icon="ph:chat-circle-text" class="h-12 w-12 text-slate-400 mx-auto mb-4" />
-        <h3 class="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+      <div
+        class="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 p-8"
+      >
+        <Icon
+          icon="ph:chat-circle-text"
+          class="h-12 w-12 text-slate-400 mx-auto mb-4"
+        />
+        <h3
+          class="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2"
+        >
           Still have questions?
         </h3>
         <p class="text-slate-600 dark:text-slate-400 mb-6">
-          Can't find the answer you're looking for? Please get in touch with our team.
+          Can't find the answer you're looking for? Please get in touch with us
+          for further assistance.
         </p>
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
           <a
