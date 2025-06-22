@@ -57,7 +57,7 @@ export const AppSidebarGroupTitle = cva(
 );
 
 export const AppSidebarItem = cva(
-  'group relative flex w-full items-center rounded-lg text-sm font-medium transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/20 focus-visible:ring-offset-1 disabled:pointer-events-none disabled:opacity-50 select-none hover:scale-[1.02] active:scale-[0.98] cursor-pointer',
+  'group relative flex w-full items-center rounded-lg text-sm font-medium transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/20 focus-visible:ring-offset-1 disabled:pointer-events-none disabled:opacity-50 select-none hover:scale-[1.02] active:scale-[0.98] cursor-pointer',
   {
     variants: {
       variant: {
@@ -81,7 +81,7 @@ export const AppSidebarItem = cva(
 );
 
 export const AppSidebarIcon = cva(
-  'h-4 w-4 shrink-0 transition-all duration-200 group-hover:scale-110',
+  'h-4 w-4 shrink-0 transition-all duration-300 ease-out group-hover:scale-110',
   {
     variants: {
       variant: {
@@ -97,7 +97,7 @@ export const AppSidebarIcon = cva(
 );
 
 export const AppSidebarText = cva(
-  'text-sm font-medium text-foreground/90 min-w-0 truncate transition-all duration-300 ease-out overflow-hidden',
+  'text-sm font-medium text-foreground/90 min-w-0 truncate transition-all duration-300 ease-in-out overflow-hidden',
   {
     variants: {
       collapsed: {
@@ -109,7 +109,7 @@ export const AppSidebarText = cva(
 );
 
 export const AppSidebarBadge = cva(
-  'h-5 px-2 inline-flex items-center justify-center rounded-full text-xs font-medium transition-all duration-300 group-hover:scale-105 whitespace-nowrap shrink-0 overflow-hidden',
+  'h-5 px-2 inline-flex items-center justify-center rounded-full text-xs font-medium transition-all duration-300 ease-in-out group-hover:scale-105 whitespace-nowrap shrink-0 overflow-hidden',
   {
     variants: {
       variant: {
@@ -135,7 +135,7 @@ export const AppSidebarBadge = cva(
 );
 
 export const AppSidebarUserSection = cva(
-  'group flex items-center gap-3 py-2 rounded-lg transition-all duration-200 hover:bg-muted/50 dark:hover:bg-muted/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20 border-0 hover:scale-[1.01] active:scale-[0.99] hover:shadow-sm min-w-0 max-w-full',
+  'group flex items-center gap-3 py-2 rounded-lg transition-all duration-300 ease-in-out hover:bg-muted/50 dark:hover:bg-muted/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/20 border-0 hover:scale-[1.01] active:scale-[0.99] hover:shadow-sm min-w-0 max-w-full',
   {
     variants: {
       collapsed: {
@@ -151,7 +151,7 @@ export const AppSidebarUserAvatar = cva(
 );
 
 export const AppSidebarUserInfo = cva(
-  'min-w-0 flex-1 transition-all duration-300 overflow-hidden',
+  'min-w-0 flex-1 transition-all duration-300 ease-in-out overflow-hidden',
   {
     variants: {
       collapsed: {

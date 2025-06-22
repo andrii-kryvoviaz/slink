@@ -73,7 +73,7 @@
   </button>
 
   <button
-    class="fixed top-3 z-50 hidden md:flex w-8 h-8 rounded-lg backdrop-blur-sm border border-bc-header cursor-pointer transition-colors items-center justify-center"
+    class="fixed top-3 z-50 hidden md:flex w-8 h-8 rounded-lg backdrop-blur-sm border border-bc-header cursor-pointer transition-all duration-300 ease-in-out items-center justify-center"
     style:left="{sidebarWidth + 16}px"
     onclick={toggleCollapse}
     aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
@@ -101,7 +101,6 @@
       AppSidebarTheme({ variant, size: collapsed ? 'collapsed' : 'expanded' }),
       customClassName,
       'hidden md:flex md:flex-col border-r h-screen overflow-y-auto',
-      collapsed ? 'w-16 min-w-16' : 'w-64 min-w-64',
     )}
   >
     {@render SidebarContent()}
