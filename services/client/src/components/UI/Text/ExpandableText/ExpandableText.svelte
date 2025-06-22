@@ -13,7 +13,7 @@
 </script>
 
 {#if text}
-  <p class="mt-6 text-sm opacity-75">
+  <p class="text-sm opacity-75">
     <span class={`line-clamp-${isExpanded ? 100 : 1}`}>
       {text}
     </span>

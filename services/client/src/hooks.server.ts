@@ -1,10 +1,24 @@
 import { env } from '$env/dynamic/private';
-import type { Handle } from '@sveltejs/kit';
-import { sequence } from '@sveltejs/kit/hooks';
 
 import { ApiConnector } from '@slink/api/ApiConnector';
+import { setCookieSettingsOnLocals, Theme } from '@slink/lib/settings';
+import { json } from '@sveltejs/kit';
+import { sequence } from '@sveltejs/kit/hooks';
 
-import { Theme, setCookieSettingsOnLocals } from '@slink/lib/settings';
+import type { Handle } from '@sveltejs/kit';
+const handleWellKnownRequests: Handle = async ({ event, resolve }) => {
+  const { pathname } = event.url;
+
+  if (pathname.startsWith('/.well-known/')) {
+    if (pathname.endsWith('.json')) {
+      return json({});
+    }
+
+    return new Response('Not Found', { status: 404 });
+  }
+
+  return resolve(event);
+};
 
 const injectApiHandling: Handle = ApiConnector({
   urlPrefix: env.API_PREFIX,
@@ -30,6 +44,7 @@ const applyClientTheme: Handle = async ({ event, resolve }) => {
 };
 
 export const handle = sequence(
+  handleWellKnownRequests,
   filterResponseHeaders,
   injectApiHandling,
   setCookieSettingsOnLocals,
