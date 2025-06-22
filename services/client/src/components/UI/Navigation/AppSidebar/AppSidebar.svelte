@@ -143,7 +143,7 @@
 
   {#if user}
     <div class={footer}>
-      <SidebarUser {user} {collapsed} />
+      <SidebarUser {user} {collapsed} onItemClick={closeMobile} />
     </div>
   {/if}
 {/snippet}
@@ -170,7 +170,7 @@
 
   {#if user}
     <div class={footer}>
-      <SidebarUser {user} collapsed={false} />
+      <SidebarUser {user} collapsed={false} onItemClick={closeMobile} />
     </div>
   {/if}
 {/snippet}

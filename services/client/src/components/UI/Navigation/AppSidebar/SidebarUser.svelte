@@ -22,9 +22,10 @@
   interface Props {
     user: Partial<User>;
     collapsed: boolean;
+    onItemClick?: () => void;
   }
 
-  let { user, collapsed }: Props = $props();
+  let { user, collapsed, onItemClick }: Props = $props();
 </script>
 
 <Dropdown variant="invisible" size="xs" class="w-full">
@@ -82,7 +83,7 @@
       {#snippet icon()}
         <Icon icon="ph:user" class="h-4 w-4" />
       {/snippet}
-      <a href="/profile" class="flex w-full">Profile</a>
+      <a href="/profile" class="flex w-full" onclick={onItemClick}>Profile</a>
     </DropdownItem>
   </DropdownGroup>
 
@@ -97,7 +98,7 @@
         use:enhance
         class="flex w-full"
       >
-        <button type="submit" class="flex w-full text-left"> Sign out </button>
+        <button type="submit" class="flex w-full text-left" onclick={onItemClick}> Sign out </button>
       </form>
     </DropdownItem>
   </DropdownGroup>
