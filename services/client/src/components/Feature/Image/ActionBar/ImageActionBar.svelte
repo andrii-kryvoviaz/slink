@@ -128,118 +128,108 @@
   class="flex items-center sm:justify-between w-full sm:w-fit gap-2 sm:gap-3 rounded-xl sm:rounded-2xl"
 >
   {#if isButtonVisible('download')}
-    <div class="relative">
-      <button
-        class={primaryButtonClass}
-        onclick={() => downloadByLink(directLink, image.fileName)}
-        aria-label="Download image"
-        type="button"
+    <button
+      class={primaryButtonClass}
+      onclick={() => downloadByLink(directLink, image.fileName)}
+      aria-label="Download image"
+      type="button"
+    >
+      <Icon icon="lucide:download" class="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+      <span class="text-xs sm:text-sm sm:inline whitespace-nowrap"
+        >Download</span
       >
-        <Icon icon="lucide:download" class="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-        <span class="text-xs sm:text-sm sm:inline whitespace-nowrap"
-          >Download</span
-        >
-      </button>
-    </div>
+    </button>
   {/if}
 
   <div class="flex items-center gap-1.5 sm:gap-2">
     {#if isButtonVisible('visibility')}
-      <div class="relative">
-        <button
-          class={actionButtonClass}
-          onclick={() => handleVisibilityChange(!image.isPublic)}
-          disabled={$visibilityIsLoading}
-          aria-label={image.isPublic ? 'Make private' : 'Make public'}
-          type="button"
-        >
-          {#if $visibilityIsLoading}
-            <Loader variant="minimal" size="xs" />
-          {:else}
-            <Icon
-              icon={image.isPublic ? 'ph:eye' : 'ph:eye-slash'}
-              class="h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform duration-200"
-            />
-          {/if}
-        </button>
-        <div
-          class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs font-medium text-white bg-gray-900 dark:bg-gray-700 rounded opacity-0 peer-hover:opacity-100 peer-focus-visible:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50"
-        >
-          {image.isPublic ? 'Make private' : 'Make public'}
-        </div>
-      </div>
+      <Tooltip side="bottom" sideOffset={8}>
+        {#snippet trigger()}
+          <button
+            class={actionButtonClass}
+            onclick={() => handleVisibilityChange(!image.isPublic)}
+            disabled={$visibilityIsLoading}
+            aria-label={image.isPublic ? 'Make private' : 'Make public'}
+            type="button"
+          >
+            {#if $visibilityIsLoading}
+              <Loader variant="minimal" size="xs" />
+            {:else}
+              <Icon
+                icon={image.isPublic ? 'ph:eye' : 'ph:eye-slash'}
+                class="h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform duration-200"
+              />
+            {/if}
+          </button>
+        {/snippet}
+        {image.isPublic ? 'Make private' : 'Make public'}
+      </Tooltip>
     {/if}
 
     {#if isButtonVisible('copy')}
-      <div class="relative">
-        <button
-          class={actionButtonClass}
-          onclick={handleCopy}
-          disabled={isCopiedActive}
-          aria-label="Copy image URL"
-          type="button"
-        >
-          {#if isCopiedActive}
-            <div in:scale={{ duration: 300, easing: cubicOut }}>
+      <Tooltip side="bottom" sideOffset={8}>
+        {#snippet trigger()}
+          <button
+            class={actionButtonClass}
+            onclick={handleCopy}
+            disabled={isCopiedActive}
+            aria-label="Copy image URL"
+            type="button"
+          >
+            {#if isCopiedActive}
+              <div in:scale={{ duration: 300, easing: cubicOut }}>
+                <Icon
+                  icon="ph:check"
+                  class="h-3.5 w-3.5 sm:h-4 sm:w-4 text-green-600 dark:text-green-400"
+                />
+              </div>
+            {:else}
               <Icon
-                icon="ph:check"
-                class="h-3.5 w-3.5 sm:h-4 sm:w-4 text-green-600 dark:text-green-400"
+                icon="ph:copy"
+                class="h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform duration-200"
               />
-            </div>
-          {:else}
-            <Icon
-              icon="ph:copy"
-              class="h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform duration-200"
-            />
-          {/if}
-        </button>
-        <div
-          class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs font-medium text-white bg-gray-900 dark:bg-gray-700 rounded opacity-0 peer-hover:opacity-100 peer-focus-visible:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50"
-        >
-          {isCopiedActive ? 'Copied!' : 'Copy URL'}
-        </div>
-      </div>
+            {/if}
+          </button>
+        {/snippet}
+        {isCopiedActive ? 'Copied!' : 'Copy URL'}
+      </Tooltip>
     {/if}
 
     {#if isButtonVisible('share')}
-      <div class="relative">
-        <a
-          href="/help/faq#share-feature"
-          class={actionButtonClass}
-          aria-label="View sharing policy"
-        >
-          <Icon
-            icon="ph:share-network"
-            class="h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform duration-200"
-          />
-        </a>
-        <div
-          class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs font-medium text-white bg-gray-900 dark:bg-gray-700 rounded opacity-0 peer-hover:opacity-100 peer-focus-visible:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50"
-        >
-          Sharing policy
-        </div>
-      </div>
+      <Tooltip side="bottom" sideOffset={8}>
+        {#snippet trigger()}
+          <a
+            href="/help/faq#share-feature"
+            class={actionButtonClass}
+            aria-label="View sharing policy"
+          >
+            <Icon
+              icon="ph:share-network"
+              class="h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform duration-200"
+            />
+          </a>
+        {/snippet}
+        Sharing policy
+      </Tooltip>
     {/if}
   </div>
 
   {#if isButtonVisible('delete')}
-    <div class="relative">
-      <button
-        class={destructiveButtonClass}
-        onclick={handleImageDeletion}
-        aria-label="Delete image"
-        type="button"
-      >
-        <Icon
-          icon="ph:trash"
-          class="h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform duration-200"
-        />
-      </button>
-      <div
-        class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs font-medium text-white bg-red-600 dark:bg-red-500 rounded opacity-0 peer-hover:opacity-100 peer-focus-visible:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50"
-      >
-        Delete image
-      </div>
-    </div>
+    <Tooltip side="bottom" sideOffset={8}>
+      {#snippet trigger()}
+        <button
+          class={destructiveButtonClass}
+          onclick={handleImageDeletion}
+          aria-label="Delete image"
+          type="button"
+        >
+          <Icon
+            icon="ph:trash"
+            class="h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform duration-200"
+          />
+        </button>
+      {/snippet}
+      Delete image
+    </Tooltip>
   {/if}
 </div>
