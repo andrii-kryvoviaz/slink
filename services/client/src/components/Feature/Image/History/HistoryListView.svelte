@@ -27,7 +27,7 @@
   };
 </script>
 
-<div class="mt-8 flex flex-col items-center gap-8 px-4 sm:px-0">
+<div class="flex flex-col items-center gap-8 px-4 sm:px-0">
   {#each items as item (item.id)}
     <div
       out:fade={{ duration: 500 }}

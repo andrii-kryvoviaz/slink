@@ -27,10 +27,13 @@
   let { user, collapsed }: Props = $props();
 </script>
 
-<Dropdown variant="invisible" size="xs">
+<Dropdown variant="invisible" size="xs" class="w-full">
   {#snippet trigger()}
     <div
-      class={className(AppSidebarUserSection({ collapsed }), 'cursor-pointer')}
+      class={className(
+        AppSidebarUserSection({ collapsed }),
+        'cursor-pointer overflow-hidden relative',
+      )}
     >
       <UserAvatar
         size="sm"
@@ -39,23 +42,38 @@
         {user}
       />
 
-      <div class={AppSidebarUserInfo({ collapsed })}>
-        <div class="text-sm font-medium text-foreground truncate text-left">
+      <div
+        class={className(
+          AppSidebarUserInfo({ collapsed }),
+          'absolute left-12 right-8 top-1/2 -translate-y-1/2 min-w-0 text-left',
+        )}
+      >
+        <div class="text-sm font-medium text-foreground truncate w-full">
           {user.displayName || 'User'}
         </div>
         {#if user.email}
-          <div class="text-xs text-muted-foreground truncate">
+          <div
+            class="text-xs text-muted-foreground truncate w-full"
+            title={user.email}
+          >
             {user.email}
           </div>
         {/if}
       </div>
 
-      {#if !collapsed}
+      <div
+        class={className(
+          'absolute right-2 top-1/2 -translate-y-1/2 transition-all duration-300',
+          collapsed
+            ? 'opacity-0 pointer-events-none scale-0'
+            : 'opacity-100 scale-100',
+        )}
+      >
         <Icon
           icon="ph:dots-three-vertical"
-          class="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors duration-200 ml-auto shrink-0"
+          class="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors duration-200"
         />
-      {/if}
+      </div>
     </div>
   {/snippet}
 

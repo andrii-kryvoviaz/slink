@@ -1,20 +1,15 @@
 <script lang="ts">
-  import type { AppSidebarSize } from './AppSidebar.types';
-  import type {
-    AppSidebarGroup,
-    AppSidebarItem,
-    AppSidebarProps,
-  } from './AppSidebar.types';
+  import type { AppSidebarGroup } from './AppSidebar.types';
   import type { User } from '@slink/lib/auth/Type/User';
 
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
+  import { settings } from '@slink/lib/settings';
+
   import { className } from '@slink/utils/ui/className';
 
-  import { createAppSidebarItems } from './AppSidebar.config';
   import {
-    AppSidebarCollapseButton,
     AppSidebarContent,
     AppSidebarFooter,
     AppSidebarHeader,
@@ -26,178 +21,129 @@
   interface Props {
     user?: Partial<User>;
     groups?: AppSidebarGroup[];
-    collapsed?: boolean;
-    variant?: AppSidebarProps['variant'];
+    variant?: 'default' | 'minimal';
     className?: string;
-    width?: number;
-    onItemSelect?: (item: AppSidebarItem) => void;
-    onCollapseToggle?: (collapsed: boolean) => void;
+    defaultExpanded?: boolean;
   }
 
   let {
     user = {},
-    groups,
-    collapsed = false,
+    groups = [],
     variant = 'default',
     className: customClassName = '',
-    width = 256,
-    onItemSelect,
-    onCollapseToggle,
+    defaultExpanded = true,
   }: Props = $props();
 
-  let innerWidth = $state(0);
-  let isMobile = $derived(innerWidth < 768);
-  let mobileOverlayOpen = $state(false);
-  let isCollapsedDesktop = $state(collapsed);
+  let mobileOpen = $state(false);
 
-  let effectiveCollapsed = $derived(isMobile ? false : isCollapsedDesktop);
-  let showOverlay = $derived(isMobile && mobileOverlayOpen);
-  let sidebarSize: AppSidebarSize = $derived(
-    effectiveCollapsed ? 'collapsed' : 'expanded',
-  );
-  let triggerPosition = $derived(
-    isMobile ? 16 : effectiveCollapsed ? 64 : width + 16,
-  );
-
-  const isAuthorized = (requiredRoles: string[] = ['ROLE_USER']): boolean => {
-    if (!user?.roles) return false;
-    return requiredRoles.some((role) => user.roles?.includes(role));
-  };
-
-  const sidebarGroups = $derived(
-    groups ||
-      createAppSidebarItems({
-        showAdmin: isAuthorized(['ROLE_ADMIN']),
-        showSystemItems: true,
-      }),
-  );
-
-  const visibleGroups = $derived(
-    sidebarGroups
-      .map((group) => ({
-        ...group,
-        items: group.items.filter(
-          (item) => !item.hidden && (!item.roles || isAuthorized(item.roles)),
-        ),
-      }))
-      .filter(
-        (group) =>
-          !group.hidden &&
-          group.items.length > 0 &&
-          (!group.roles || isAuthorized(group.roles)),
-      ),
-  );
-
-  const handleItemClick = (item: AppSidebarItem) => {
-    onItemSelect?.(item);
-
-    if (isMobile) {
-      mobileOverlayOpen = false;
-    }
-  };
-
-  const handleCollapseToggle = () => {
-    if (isMobile) {
-      mobileOverlayOpen = !mobileOverlayOpen;
-    } else {
-      isCollapsedDesktop = !isCollapsedDesktop;
-      onCollapseToggle?.(isCollapsedDesktop);
-    }
-  };
-
-  $effect(() => {
-    isCollapsedDesktop = collapsed;
+  const sidebarSettings = settings.get('sidebar', {
+    expanded: defaultExpanded,
   });
+  const { expanded } = sidebarSettings;
 
-  const handleOverlayClick = (event: MouseEvent) => {
-    if (event.target === event.currentTarget) {
-      mobileOverlayOpen = false;
-    }
+  let collapsed = $derived(!$expanded);
+
+  const isVisible = $derived(!!user && groups.length > 0);
+  const sidebarWidth = $derived(collapsed ? 64 : 256);
+
+  const toggleMobile = () => (mobileOpen = !mobileOpen);
+  const closeMobile = () => (mobileOpen = false);
+
+  const toggleCollapse = () => {
+    settings.set('sidebar', { expanded: !$expanded });
   };
 
-  const sidebarClasses = $derived(
-    className(
-      AppSidebarTheme({ variant, size: sidebarSize }),
-      customClassName,
-      isMobile &&
-        'fixed inset-y-0 left-0 z-40 transform transition-transform duration-300 ease-in-out',
-      isMobile && !showOverlay && '-translate-x-full',
-      isMobile && showOverlay && 'translate-x-0',
-    ),
-  );
-
-  const headerClasses = $derived(
-    AppSidebarHeader({ collapsed: effectiveCollapsed }),
-  );
-  const contentClasses = $derived(AppSidebarContent());
-  const footerClasses = $derived(AppSidebarFooter());
+  const getThemeClasses = () => ({
+    header: AppSidebarHeader({ collapsed }),
+    content: AppSidebarContent(),
+    footer: AppSidebarFooter(),
+  });
 </script>
 
-<svelte:window bind:innerWidth />
-
-{#if isMobile && showOverlay}
-  <div
-    class="fixed inset-0 z-30 bg-black bg-opacity-50 transition-opacity duration-300"
-    role="button"
-    tabindex="-1"
-    onclick={handleOverlayClick}
-    onkeydown={(e) => e.key === 'Escape' && (mobileOverlayOpen = false)}
-    transition:fade={{ duration: 300 }}
-    aria-label="Close sidebar"
-  ></div>
-{/if}
-
-{#if user}
+{#if isVisible}
   <button
-    class={className('fixed top-3 z-50', AppSidebarCollapseButton())}
-    style:left="{triggerPosition}px"
-    onclick={handleCollapseToggle}
-    aria-label={isMobile
-      ? showOverlay
-        ? 'Close menu'
-        : 'Open menu'
-      : effectiveCollapsed
-        ? 'Expand sidebar'
-        : 'Collapse sidebar'}
+    class={className(
+      'fixed top-2 z-50 md:hidden w-10 h-10 rounded-lg bg-background/80 backdrop-blur-sm hover:bg-accent/50 transition-all duration-300 flex items-center justify-center',
+      mobileOpen ? 'right-4' : 'left-4',
+    )}
+    onclick={toggleMobile}
+    aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+  >
+    <Icon icon={mobileOpen ? 'ph:x' : 'ph:list'} class="h-5 w-5" />
+  </button>
+
+  <button
+    class="fixed top-3 z-50 hidden md:flex w-8 h-8 rounded-lg backdrop-blur-sm border border-bc-header cursor-pointer transition-colors items-center justify-center"
+    style:left="{sidebarWidth + 16}px"
+    onclick={toggleCollapse}
+    aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
   >
     <Icon
-      icon={isMobile
-        ? 'ph:list'
-        : effectiveCollapsed
-          ? 'ph:sidebar-simple'
-          : 'ph:sidebar-simple-fill'}
+      icon={collapsed ? 'ph:sidebar-simple' : 'ph:sidebar-simple-fill'}
       class="h-4 w-4"
     />
   </button>
+
+  {#if mobileOpen}
+    <div
+      class="fixed inset-0 z-40 bg-black md:hidden"
+      onclick={closeMobile}
+      onkeydown={(e) => e.key === 'Escape' && closeMobile()}
+      transition:fade={{ duration: 200 }}
+      aria-label="Close sidebar"
+      role="button"
+      tabindex="-1"
+    ></div>
+  {/if}
+
+  <aside
+    class={className(
+      AppSidebarTheme({ variant, size: collapsed ? 'collapsed' : 'expanded' }),
+      customClassName,
+      'hidden md:flex md:flex-col border-r h-screen overflow-y-auto',
+      collapsed ? 'w-16 min-w-16' : 'w-64 min-w-64',
+    )}
+  >
+    {@render SidebarContent()}
+  </aside>
+
+  <aside
+    class={className(
+      AppSidebarTheme({ variant, size: 'expanded' }),
+      customClassName,
+      'fixed inset-y-0 left-0 z-50 md:hidden transform transition-transform duration-300 w-64 bg-background border-none',
+      mobileOpen ? 'translate-x-0' : '-translate-x-full',
+    )}
+  >
+    {@render SidebarContent()}
+  </aside>
 {/if}
 
-<aside class={sidebarClasses}>
-  <div class={headerClasses}>
-    <div class="flex items-center gap-3 animate-fade-in">
+{#snippet SidebarContent()}
+  {@const { header, content, footer } = getThemeClasses()}
+
+  <div class={header}>
+    <div class="flex items-center gap-3">
       <div
-        class="flex items-center justify-center w-10 h-10 rounded-xl bg-muted/20 border-0 hover:bg-muted/30 hover:scale-105 transition-all duration-200 cursor-pointer"
+        class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10 hover:border-primary/20 hover:scale-105 transition-all duration-200 cursor-pointer flex items-center justify-center"
       >
         <img src="/favicon.png" alt="Slink" class="h-5 w-5" />
       </div>
-      {#if !effectiveCollapsed}
+      {#if !collapsed}
         <span class="font-semibold text-foreground tracking-tight">Slink</span>
       {/if}
     </div>
   </div>
 
-  <div class={className(contentClasses, 'sidebar-scrollbar')}>
-    {#each visibleGroups as group (group.id)}
-      <SidebarGroup
-        {group}
-        collapsed={effectiveCollapsed}
-        onItemClick={handleItemClick}
-      />
+  <div class={className(content, 'sidebar-scrollbar')}>
+    {#each groups as group (group.id)}
+      <SidebarGroup {group} {collapsed} onItemClick={closeMobile} />
     {/each}
   </div>
 
   {#if user}
-    <div class={footerClasses}>
-      <SidebarUser {user} collapsed={effectiveCollapsed} />
+    <div class={footer}>
+      <SidebarUser {user} {collapsed} />
     </div>
   {/if}
-</aside>
+{/snippet}

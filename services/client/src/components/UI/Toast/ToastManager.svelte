@@ -22,7 +22,7 @@
 
 {#if browser}
   <div
-    class="toast-container bottom-left absolute bottom-0 left-0 z-50 flex select-none flex-col gap-3 px-4 pb-4 sm:w-full sm:max-w-sm"
+    class="toast-container bottom-left fixed bottom-0 left-0 z-50 flex select-none flex-col gap-3 px-4 pb-4 sm:w-full sm:max-w-sm"
   >
     {#each $textToasts as { id, timer, icon, iconColor, message }}
       <div

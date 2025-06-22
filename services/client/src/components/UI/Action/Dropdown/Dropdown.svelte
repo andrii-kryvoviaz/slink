@@ -56,7 +56,7 @@
 </script>
 
 <DropdownMenu.Root bind:open {...props}>
-  <DropdownMenu.Trigger>
+  <DropdownMenu.Trigger class="w-full">
     {#if trigger}
       {@render trigger()}
     {:else}
@@ -91,7 +91,11 @@
           <div {...wrapperProps}>
             <div
               {...props}
-              transition:fly={{ y: -8, duration: animationDuration, opacity: 0 }}
+              transition:fly={{
+                y: -8,
+                duration: animationDuration,
+                opacity: 0,
+              }}
             >
               {@render children?.()}
             </div>

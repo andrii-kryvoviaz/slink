@@ -3,6 +3,8 @@
 
   import Icon from '@iconify/svelte';
 
+  import { Tooltip } from '@slink/components/UI/Tooltip';
+
   import {
     AppSidebarBadge,
     AppSidebarIcon,
@@ -38,55 +40,66 @@
     title: item.title,
     badge: item.badge,
     isExternal: item.href?.startsWith('http'),
-    showText: !collapsed,
-    showBadge: !collapsed && item.badge,
+    isLink: !!item.href,
+  });
+
+  const elementProps = $derived({
+    class: `${itemClasses} relative overflow-hidden`,
+    onclick: handleClick,
+    disabled: item.disabled,
+    ...(content.isLink && {
+      href: item.href,
+      target: content.isExternal ? '_blank' : undefined,
+      rel: content.isExternal ? 'noopener noreferrer' : undefined,
+    }),
   });
 </script>
 
-{#if item.href}
-  <a
-    href={item.href}
-    class={itemClasses}
-    onclick={handleClick}
-    target={content.isExternal ? '_blank' : undefined}
-    rel={content.isExternal ? 'noopener noreferrer' : undefined}
-  >
-    <Icon icon={content.icon} class={AppSidebarIcon({ variant })} />
-    {#if !collapsed}
-      <span class={AppSidebarText({ collapsed })}>{content.title}</span>
-      {#if content.showBadge}
-        <span
-          class={AppSidebarBadge({
-            variant: content.badge?.variant || 'primary',
-            collapsed,
-          })}
-        >
-          {content.badge?.text}
-        </span>
-      {/if}
-      {#if content.isExternal}
-        <Icon
-          icon="lucide:external-link"
-          class="h-3 w-3 ml-auto opacity-60 transition-opacity duration-300 shrink-0"
-        />
-      {/if}
-    {/if}
-  </a>
+{#if collapsed}
+  <Tooltip side="right" variant="default" size="sm">
+    {#snippet trigger()}
+      <svelte:element this={content.isLink ? 'a' : 'button'} {...elementProps}>
+        {@render itemContent()}
+      </svelte:element>
+    {/snippet}
+    {content.title}
+  </Tooltip>
 {:else}
-  <button class={itemClasses} onclick={handleClick} disabled={item.disabled}>
-    <Icon icon={content.icon} class={AppSidebarIcon({ variant })} />
-    {#if !collapsed}
-      <span class={AppSidebarText({ collapsed })}>{content.title}</span>
-      {#if content.showBadge}
-        <span
-          class={AppSidebarBadge({
-            variant: content.badge?.variant || 'primary',
-            collapsed,
-          })}
-        >
-          {content.badge?.text}
-        </span>
-      {/if}
-    {/if}
-  </button>
+  <svelte:element this={content.isLink ? 'a' : 'button'} {...elementProps}>
+    {@render itemContent()}
+  </svelte:element>
 {/if}
+
+{#snippet itemContent()}
+  <Icon icon={content.icon} class={AppSidebarIcon({ variant })} />
+
+  <span
+    class="{AppSidebarText({
+      collapsed,
+    })} absolute left-10 right-8 top-1/2 -translate-y-1/2"
+  >
+    {content.title}
+  </span>
+
+  <span
+    class="{AppSidebarBadge({
+      variant: content.badge?.variant || 'primary',
+      collapsed,
+    })} absolute right-2 top-1/2 -translate-y-1/2"
+  >
+    {content.badge?.text || ''}
+  </span>
+
+  {#if content.isExternal}
+    <div
+      class="absolute right-2 top-1/2 -translate-y-1/2 transition-all duration-300 {collapsed
+        ? 'opacity-0 pointer-events-none scale-0'
+        : 'opacity-60 scale-100'}"
+    >
+      <Icon
+        icon="lucide:external-link"
+        class="h-3 w-3 transition-opacity duration-300 shrink-0"
+      />
+    </div>
+  {/if}
+{/snippet}

@@ -12,61 +12,44 @@
 
   let { data, children } = $props();
   let user = $derived(data.user);
+  let sidebarGroups = $derived((data as any).sidebarGroups || []);
 
   const currentTheme = settings.get('theme', data.settings.theme);
   const { isDark } = currentTheme;
 
-  let sidebarCollapsed = $state(false);
   let showSidebar = $derived(!!user);
-
-  let innerWidth = $state(0);
-  let isMobile = $derived(innerWidth < 768);
-  let sidebarWidth = $derived(
-    showSidebar ? (isMobile ? 0 : sidebarCollapsed ? 64 : 256) : 0,
-  );
-
-  const handleSidebarItemSelect = (item: any) => {};
-
-  const handleSidebarCollapseToggle = (collapsed: boolean) => {
-    sidebarCollapsed = collapsed;
-  };
 </script>
-
-<svelte:window bind:innerWidth />
 
 <Tooltip.Provider delayDuration={0} disableHoverableContent={true}>
   <div class="relative flex h-screen" use:theme={$currentTheme}>
-    <div
-      class="fixed top-0 left-0 right-0 z-30 h-14 backdrop-blur-xl bg-background/50 supports-[backdrop-filter]:bg-background/30"
-    ></div>
-
-    <Navbar
+    <AppSidebar
       user={user || undefined}
-      showLogo={!showSidebar}
-      showLoginButton={!user}
-      {sidebarWidth}
-    >
-      {#snippet themeSwitch()}
-        <ThemeSwitch
-          checked={$isDark}
-          on={{ change: (theme) => settings.set('theme', theme) }}
-        />
-      {/snippet}
-    </Navbar>
+      groups={sidebarGroups}
+      variant="default"
+      defaultExpanded={data.settings.sidebar?.expanded ?? true}
+    />
 
-    <div class="flex w-full h-full">
-      {#if showSidebar && user}
-        <AppSidebar
-          {user}
-          collapsed={sidebarCollapsed}
-          variant="default"
-          width={sidebarWidth}
-          onItemSelect={handleSidebarItemSelect}
-          onCollapseToggle={handleSidebarCollapseToggle}
-        />
-      {/if}
+    <div class="flex flex-col flex-1 min-w-0">
+      <Navbar
+        user={user || undefined}
+        showLogo={!showSidebar}
+        showLoginButton={!user}
+        sidebarWidth={0}
+        useFlexLayout={true}
+      >
+        {#snippet themeSwitch()}
+          <ThemeSwitch
+            checked={$isDark}
+            on={{ change: (theme) => settings.set('theme', theme) }}
+          />
+        {/snippet}
+      </Navbar>
 
-      <main id="main" class="flex-1 overflow-y-auto pt-14">
+      <main
+        id="main"
+        class="flex-1 overflow-y-auto"
+        style:padding-left="max(env(safe-area-inset-left), 0px)"
+      >
         {@render children?.()}
       </main>
     </div>

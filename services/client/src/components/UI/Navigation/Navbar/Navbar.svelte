@@ -11,6 +11,7 @@
     showLoginButton?: boolean;
     sidebarWidth?: number;
     themeSwitch?: import('svelte').Snippet;
+    useFlexLayout?: boolean;
   }
 
   let {
@@ -19,6 +20,7 @@
     showLoginButton = false,
     sidebarWidth = 0,
     themeSwitch,
+    useFlexLayout = false,
   }: Props = $props();
 
   let innerWidth = $state(0);
@@ -29,29 +31,32 @@
 <svelte:window bind:innerWidth />
 
 <header
-  class="fixed top-0 right-0 z-40 h-14 transition-all duration-300"
-  style:left="{navLeftPosition}px"
+  class={useFlexLayout
+    ? 'h-14 backdrop-blur-xl bg-background/95 supports-[backdrop-filter]:bg-background/80 border-b border-bc-header'
+    : 'fixed top-0 right-0 z-50 h-14 backdrop-blur-xl bg-background/95 supports-[backdrop-filter]:bg-background/80 border-b border-bc-header'}
+  style:left={useFlexLayout ? undefined : `${navLeftPosition}px`}
 >
-  <nav class="flex h-14 items-center justify-between px-4 sm:px-6">
+  <nav class="flex h-14 items-center justify-between px-4 sm:px-6 lg:px-8">
     <div class="flex items-center">
       {#if showLogo}
         <a
           href="/"
-          class="flex items-center gap-3 hover:opacity-80 transition-opacity duration-150"
+          class="flex items-center gap-3 hover:opacity-80 transition-opacity duration-200 group"
         >
           <div
-            class="flex items-center justify-center w-8 h-8 rounded-xl bg-muted/20 border-0 hover:bg-muted/30 hover:scale-105 transition-all duration-200 cursor-pointer"
+            class="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10 group-hover:border-primary/20 group-hover:scale-105 transition-all duration-200"
           >
             <img class="h-5 w-5" src="/favicon.png" alt="Slink" />
           </div>
-          <span class="font-semibold text-foreground tracking-tight">Slink</span
+          <span class="font-semibold text-foreground tracking-tight text-lg"
+            >Slink</span
           >
         </a>
       {/if}
     </div>
 
-    <div class="flex items-center gap-2 ml-auto">
-      {#if !showLoginButton}
+    <div class="flex items-center gap-3 ml-auto">
+      {#if !showLoginButton && user}
         <Button
           href="/upload"
           variant="dark"
@@ -72,15 +77,15 @@
           variant="modern"
           size="sm"
           rounded="full"
-          class="flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-200"
+          class="flex items-center gap-2 px-4 py-2 text-sm font-medium shadow-sm hover:shadow-md transition-all duration-200"
         >
-          <Icon icon="ph:sign-in-bold" class="h-4 w-4" />
+          <Icon icon="ph:sign-in" class="h-4 w-4" />
           <span>Sign In</span>
         </Button>
       {/if}
 
       {#if themeSwitch}
-        <div class="flex items-center ml-1">
+        <div class="flex items-center">
           {@render themeSwitch?.()}
         </div>
       {/if}
