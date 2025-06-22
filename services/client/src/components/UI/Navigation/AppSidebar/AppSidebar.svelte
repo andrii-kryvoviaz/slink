@@ -86,7 +86,7 @@
 
   {#if mobileOpen}
     <div
-      class="fixed inset-0 z-40 bg-black md:hidden"
+      class="fixed inset-0 z-40 md:hidden"
       onclick={closeMobile}
       onkeydown={(e) => e.key === 'Escape' && closeMobile()}
       transition:fade={{ duration: 200 }}
@@ -111,7 +111,7 @@
     class={className(
       AppSidebarTheme({ variant, size: 'expanded' }),
       customClassName,
-      'fixed inset-y-0 left-0 z-50 md:hidden transform transition-transform duration-300 w-64 bg-background border-none',
+      'fixed inset-y-0 left-0 z-50 md:hidden transform transition-transform duration-300 w-64 border-none shadow-xl bg-white dark:bg-black',
       mobileOpen ? 'translate-x-0' : '-translate-x-full',
     )}
   >
