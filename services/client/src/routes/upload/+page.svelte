@@ -181,11 +181,6 @@
               </div>
 
               <div class="mb-8 max-w-sm">
-                <h3
-                  class="text-2xl font-light text-slate-900 dark:text-white mb-3"
-                >
-                  Drop your image
-                </h3>
                 <p class="text-slate-500 dark:text-slate-400">
                   Drag & drop your image here, or click to browse
                 </p>
@@ -197,7 +192,7 @@
                 <span class="text-sm text-slate-600 dark:text-slate-400"
                   >Quick paste:</span
                 >
-                <Shourtcut control={true} key="v" size="sm" />
+                <Shourtcut control={true} key="v" size="lg" />
               </div>
 
               <div class="text-center">
@@ -221,9 +216,9 @@
                 >
                   <Icon icon="ph:cloud-arrow-up" class="h-8 w-8 text-white" />
                 </div>
-                <div
-                  class="absolute inset-0 w-16 h-16 rounded-full border-4 border-transparent border-t-blue-500 animate-spin"
-                ></div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <Loader variant="subtle" size="lg" />
+                </div>
               </div>
               <h3
                 class="text-xl font-light text-slate-700 dark:text-slate-300 mb-2"
@@ -242,19 +237,8 @@
             class="absolute inset-0 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md rounded-3xl flex items-center justify-center"
           >
             <div class="text-center">
-              <div
-                class="relative inline-flex items-center justify-center w-16 h-16 mb-4"
-              >
-                <div
-                  class="absolute inset-0 w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 animate-pulse"
-                ></div>
-                <div
-                  class="absolute inset-2 w-12 h-12 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center"
-                >
-                  <div
-                    class="w-6 h-6 border-2 border-transparent border-t-blue-500 rounded-full animate-spin"
-                  ></div>
-                </div>
+              <div class="mb-4">
+                <Loader variant="modern" size="xl" />
               </div>
               <p
                 class="text-lg font-light text-slate-700 dark:text-slate-300 mb-1"

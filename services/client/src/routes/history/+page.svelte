@@ -6,6 +6,7 @@
 
   import { HistoryListView } from '@slink/components/Feature/Image';
   import { Button, LoadMoreButton } from '@slink/components/UI/Action';
+  import { Loader } from '@slink/components/UI/Loader';
 
   const historyFeedState = useUploadHistoryFeed();
 
@@ -49,9 +50,7 @@
         <div
           class="flex items-center gap-3 px-4 py-3 rounded-full bg-white dark:bg-gray-800/50 border border-gray-200/50 dark:border-gray-700/50 shadow-sm"
         >
-          <div
-            class="w-4 h-4 border-2 border-gray-200 dark:border-gray-700 border-t-indigo-500 dark:border-t-indigo-400 rounded-full animate-spin"
-          ></div>
+          <Loader variant="subtle" size="xs" />
           <span class="text-sm font-medium text-gray-600 dark:text-gray-400"
             >Loading history...</span
           >

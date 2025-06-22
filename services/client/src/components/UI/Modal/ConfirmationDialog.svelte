@@ -7,6 +7,7 @@
   import { scale } from 'svelte/transition';
 
   import { Button } from '@slink/components/UI/Action';
+  import { Loader } from '@slink/components/UI/Loader';
 
   export type ConfirmationVariant = 'danger' | 'warning' | 'info' | 'success';
 
@@ -82,10 +83,9 @@
         </h3>
 
         {#if $loading}
-          <div
-            class="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600 dark:border-gray-600 dark:border-t-gray-300"
-            in:scale={{ duration: 200, easing: quartOut }}
-          ></div>
+          <div in:scale={{ duration: 200, easing: quartOut }}>
+            <Loader variant="minimal" size="xs" />
+          </div>
         {/if}
       </div>
 

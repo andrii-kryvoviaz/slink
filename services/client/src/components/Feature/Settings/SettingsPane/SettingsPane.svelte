@@ -75,10 +75,8 @@
         <div
           class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
         >
-          <div
-            class="w-4 h-4 border border-gray-300/50 dark:border-gray-600/50 border-t-gray-600 dark:border-t-gray-300 rounded-full animate-spin"
-          ></div>
-          <span>Saving changes...</span>
+          <Loader variant="minimal" size="xs" />
+          <span>Saving...</span>
         </div>
       {/if}
 
@@ -89,7 +87,7 @@
         class="px-6 py-2.5 font-medium"
         disabled={loading}
       >
-        {loading ? 'Saving...' : 'Save Changes'}
+        Save Changes
       </Button>
     </div>
   </form>

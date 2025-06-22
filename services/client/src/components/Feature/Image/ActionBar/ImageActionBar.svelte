@@ -17,6 +17,7 @@
 
   import { ImageDeleteConfirmation } from '@slink/components/Feature/Image';
   import { Button } from '@slink/components/UI/Action';
+  import { Loader } from '@slink/components/UI/Loader';
   import { Tooltip } from '@slink/components/UI/Tooltip';
 
   type actionButton = 'download' | 'visibility' | 'share' | 'delete' | 'copy';
@@ -153,9 +154,7 @@
           type="button"
         >
           {#if $visibilityIsLoading}
-            <div
-              class="h-3.5 w-3.5 sm:h-4 sm:w-4 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600 dark:border-gray-600 dark:border-t-blue-400"
-            ></div>
+            <Loader variant="minimal" size="xs" />
           {:else}
             <Icon
               icon={image.isPublic ? 'ph:eye' : 'ph:eye-slash'}

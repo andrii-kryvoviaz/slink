@@ -6,6 +6,7 @@
   import { fade } from 'svelte/transition';
 
   import { Button, type ButtonVariant } from '@slink/components/UI/Action';
+  import { Loader } from '@slink/components/UI/Loader';
 
   interface Props {
     open?: boolean;
@@ -142,7 +143,11 @@
             >
               {#if loading}
                 {#snippet loadingIcon()}
-                  <div class="w-5 h-5 border border-white/50 border-t-white rounded-full animate-spin mr-4"></div>
+                  <Loader
+                    variant="simple"
+                    size="sm"
+                    class="mr-4 !border-white/50 !border-t-white"
+                  />
                 {/snippet}
               {/if}
 

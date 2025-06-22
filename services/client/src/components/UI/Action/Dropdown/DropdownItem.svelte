@@ -4,6 +4,8 @@
 
   import Icon from '@iconify/svelte';
 
+  import { Loader } from '@slink/components/UI/Loader';
+
   type Props = DropdownMenu.ItemProps & {
     danger?: boolean;
     disabled?: boolean;
@@ -46,9 +48,7 @@
   >
     <div class="flex-shrink-0 w-4 h-4 flex items-center justify-center">
       {#if loading}
-        <div
-          class="w-4 h-4 border border-gray-300/50 dark:border-gray-600/50 border-t-gray-500 dark:border-t-gray-400 rounded-full animate-spin"
-        ></div>
+        <Loader variant="minimal" size="xs" />
       {:else}
         {@render icon?.()}
       {/if}

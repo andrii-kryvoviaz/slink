@@ -15,6 +15,7 @@
   import { UserAvatar } from '@slink/components/Feature/User';
   import { Button, type ButtonVariant } from '@slink/components/UI/Action';
   import { Input } from '@slink/components/UI/Form';
+  import { Loader } from '@slink/components/UI/Loader';
 
   interface Props {
     data: PageServerData;
@@ -155,9 +156,11 @@
                 class="min-w-[120px] bg-slate-900 hover:bg-slate-800 text-white border-slate-900 hover:border-slate-800 dark:bg-slate-100 dark:hover:bg-slate-200 dark:text-slate-900 dark:border-slate-100 dark:hover:border-slate-200"
               >
                 {#if $isProfileFormLoading}
-                  <div
-                    class="w-4 h-4 border border-white/50 border-t-white rounded-full animate-spin mr-2"
-                  ></div>
+                  <Loader
+                    variant="simple"
+                    size="xs"
+                    class="mr-2 !border-white/50 !border-t-white"
+                  />
                   Updating...
                 {:else}
                   <Icon icon="ph:check" class="h-4 w-4 mr-2" />
@@ -239,9 +242,11 @@
                 class="min-w-[140px] bg-slate-900 hover:bg-slate-800 text-white border-slate-900 hover:border-slate-800 dark:bg-slate-100 dark:hover:bg-slate-200 dark:text-slate-900 dark:border-slate-100 dark:hover:border-slate-200"
               >
                 {#if $isPasswordFormLoading}
-                  <div
-                    class="w-4 h-4 border border-white/50 border-t-white rounded-full animate-spin mr-2"
-                  ></div>
+                  <Loader
+                    variant="simple"
+                    size="xs"
+                    class="mr-2 !border-white/50 !border-t-white"
+                  />
                   Updating...
                 {:else}
                   <Icon icon="ph:shield-check" class="h-4 w-4 mr-2" />
