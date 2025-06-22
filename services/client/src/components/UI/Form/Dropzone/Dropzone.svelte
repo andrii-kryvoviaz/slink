@@ -65,7 +65,7 @@
   }
 
   let defaultClass: string =
-    'flex flex-col justify-center items-center w-full bg-card-primary rounded-lg border-2 border-bc-dropzone-primary border-dashed cursor-pointer hover:border-bc-dropzone-secondary hover:bg-card-secondary';
+    'flex flex-col justify-center items-center w-full bg-card-primary cursor-pointer hover:bg-card-secondary';
 </script>
 
 <button

@@ -110,4 +110,8 @@ export const themeIcons: string[] = [
   'ph:user-plus',
   'ph:user-circle',
   'ph:check-circle',
+  'ph:cloud-arrow-up-bold',
+  'ph:plus-bold',
+  'ph:keyboard',
+  'ph:info-circle',
 ];

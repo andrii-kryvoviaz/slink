@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { PageData } from './$types';
   import type { UploadedImageResponse } from '@slink/api/Response';
+  import { cva } from 'class-variance-authority';
 
   import { goto } from '$app/navigation';
   import Icon from '@iconify/svelte';
@@ -10,12 +11,12 @@
   import { ReactiveState } from '@slink/api/ReactiveState';
 
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
+  import { className as cn } from '@slink/lib/utils/ui/className';
 
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
   import { toast } from '@slink/utils/ui/toast';
 
   import UnsupportedFileFormat from '@slink/components/Feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte';
-  import { Button } from '@slink/components/UI/Action';
   import { Shourtcut } from '@slink/components/UI/Action';
   import {
     Banner,
@@ -108,6 +109,60 @@
 
   let processing = $derived($isLoading || $pageIsChanging);
   let disabled = $derived(processing || !data.user);
+  let isDragOver = $state(false);
+
+  const handleDragEnter = (event: DragEvent) => {
+    event.preventDefault();
+    if (!disabled) {
+      isDragOver = true;
+    }
+  };
+
+  const handleDragLeave = (event: DragEvent) => {
+    event.preventDefault();
+    const target = event.currentTarget as HTMLElement;
+    const relatedTarget = event.relatedTarget as HTMLElement;
+    if (target && relatedTarget && !target.contains(relatedTarget)) {
+      isDragOver = false;
+    }
+  };
+
+  const handleDragOver = (event: DragEvent) => {
+    event.preventDefault();
+  };
+
+  const handleDrop = (event: DragEvent) => {
+    isDragOver = false;
+    handleChange(event);
+  };
+
+  const uploadCardClasses =
+    'relative overflow-hidden rounded-2xl bg-gradient-to-br from-white via-white to-slate-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 border border-slate-200/60 dark:border-slate-700/60 shadow-xl shadow-slate-500/5 dark:shadow-black/20 backdrop-blur-sm';
+
+  const backgroundPatternClasses =
+    'absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(148,163,184,0.15)_1px,transparent_0)] bg-[length:24px_24px] dark:bg-[radial-gradient(circle_at_1px_1px,rgba(71,85,105,0.3)_1px,transparent_0)]';
+
+  const dropzoneClasses =
+    'relative w-full cursor-pointer transition-all duration-500';
+
+  const dragOverlayClasses =
+    'absolute inset-0 bg-gradient-to-br z-10 from-blue-500/20 to-purple-500/20 rounded-2xl transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm pointer-events-none';
+
+  const uploadContainerVariants = cva(
+    'relative group rounded-2xl border-2 transition-colors duration-300',
+    {
+      variants: {
+        state: {
+          dragOver: 'border-dashed border-blue-400 dark:border-blue-300',
+          disabled: 'border-transparent',
+          default: 'border-transparent',
+        },
+      },
+      defaultVariants: {
+        state: 'default',
+      },
+    },
+  );
 </script>
 
 <svelte:head>
@@ -123,114 +178,182 @@
       class="w-full max-w-2xl mx-auto"
     >
       {#if !data.user}
-        <Banner variant="warning">
-          {#snippet icon()}
-            <BannerIcon variant="warning" icon="ph:lock-simple" />
-          {/snippet}
-          {#snippet content()}
-            <BannerContent
-              title="Sign in to continue"
-              description="Upload and manage your images"
-            />
-          {/snippet}
-          {#snippet action()}
-            <BannerAction
-              variant="warning"
-              href="/profile/login"
-              text="Get Started"
-            />
-          {/snippet}
-        </Banner>
+        <div class="mb-8">
+          <Banner variant="warning">
+            {#snippet icon()}
+              <BannerIcon variant="warning" icon="ph:lock-simple" />
+            {/snippet}
+            {#snippet content()}
+              <BannerContent
+                title="Sign in to continue"
+                description="Upload and manage your images securely"
+              />
+            {/snippet}
+            {#snippet action()}
+              <BannerAction
+                variant="warning"
+                href="/profile/login"
+                text="Get Started"
+              />
+            {/snippet}
+          </Banner>
+        </div>
       {/if}
 
-      <div class="relative">
-        <Dropzone
-          ondrop={handleChange}
-          ondragover={(event) => event.preventDefault()}
-          onchange={handleChange}
-          {disabled}
-          class="group relative w-full h-96 bg-white/80 dark:bg-slate-800/80 rounded-3xl border-2 border-dashed border-slate-200 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-500 hover:bg-white dark:hover:bg-slate-800/90 transition-all duration-300 cursor-pointer backdrop-blur-xl shadow-2xl shadow-slate-500/10 dark:shadow-black/20"
-        >
-          {#if !processing}
+      <div
+        class={uploadContainerVariants({
+          state: isDragOver ? 'dragOver' : disabled ? 'disabled' : 'default',
+        })}
+      >
+        <div class={uploadCardClasses}>
+          <div class={backgroundPatternClasses}></div>
+
+          <Dropzone
+            ondrop={handleDrop}
+            ondragover={handleDragOver}
+            ondragenter={handleDragEnter}
+            ondragleave={handleDragLeave}
+            onchange={handleChange}
+            {disabled}
+            class={cn(
+              dropzoneClasses,
+              disabled && 'pointer-events-none opacity-60',
+            )}
+          >
             <div
-              class="flex flex-col items-center justify-center h-full p-10 text-center"
+              class="flex flex-col items-center justify-center p-4 sm:p-8 text-center relative z-10"
+              class:visibility={processing ? 'hidden' : 'visible'}
             >
-              <div class="mb-8 relative">
+              <div class="mb-6 sm:mb-8 relative">
                 <div
-                  class="w-20 h-20 rounded-3xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:shadow-blue-500/40 transition-all duration-300 group-hover:scale-105"
+                  class="absolute inset-0 rounded-3xl bg-gradient-to-r from-blue-500/20 to-purple-500/20 blur-xl scale-110 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+                ></div>
+
+                <div
+                  class="relative w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-gradient-to-br from-blue-500 via-blue-600 to-purple-600 flex items-center justify-center shadow-2xl shadow-blue-500/25 transition-all duration-500 group-hover:shadow-blue-500/40"
                 >
-                  <Icon icon="ph:cloud-arrow-up" class="h-10 w-10 text-white" />
+                  <Icon
+                    icon="ph:cloud-arrow-up-bold"
+                    class="h-10 w-10 sm:h-12 sm:w-12 text-white"
+                  />
+
+                  <div
+                    class="absolute -top-1.5 -right-1.5 sm:-top-2 sm:-right-2 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gradient-to-r from-green-400 to-emerald-500 flex items-center justify-center shadow-lg"
+                  >
+                    <Icon
+                      icon="ph:plus-bold"
+                      class="h-2.5 w-2.5 sm:h-3 sm:w-3 text-white"
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div class="mb-8 max-w-sm">
-                <p class="text-slate-500 dark:text-slate-400">
-                  Drag & drop your image here, or click to browse
+              <div class="mb-4 sm:mb-6 space-y-2">
+                <h2
+                  class="text-xl sm:text-2xl font-semibold bg-gradient-to-r from-slate-700 to-slate-900 dark:from-slate-200 dark:to-slate-400 bg-clip-text text-transparent"
+                >
+                  Drop your image here
+                </h2>
+                <p
+                  class="text-slate-500 dark:text-slate-400 text-base sm:text-lg font-light max-w-xs sm:max-w-md mx-auto"
+                >
+                  or click to browse from your device
                 </p>
               </div>
 
-              <div
-                class="flex items-center gap-3 mb-8 px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-700/50"
-              >
-                <span class="text-sm text-slate-600 dark:text-slate-400"
-                  >Quick paste:</span
+              <div class="mb-6 sm:mb-8 group/shortcut hidden sm:block">
+                <div
+                  class="flex items-center gap-2 sm:gap-3 px-3 sm:px-5 py-2 sm:py-3 rounded-2xl bg-slate-100/80 dark:bg-slate-700/50 border border-slate-200/50 dark:border-slate-600/50 backdrop-blur-sm group-hover/shortcut:bg-slate-200/80 dark:group-hover/shortcut:bg-slate-600/60 transition-all duration-300"
                 >
-                <Shourtcut control={true} key="v" size="lg" />
+                  <Icon
+                    icon="ph:keyboard"
+                    class="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-500 dark:text-slate-400"
+                  />
+                  <span
+                    class="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300"
+                    >Quick paste:</span
+                  >
+                  <Shourtcut control={true} key="v" size="lg" />
+                </div>
               </div>
 
+              <div class="space-y-3 sm:space-y-4">
+                <div
+                  class="flex flex-wrap justify-center gap-1.5 sm:gap-2 mb-3 sm:mb-4"
+                >
+                  {#each ['PNG', 'JPG', 'GIF', 'SVG', 'WebP', 'HEIC'] as format}
+                    <span
+                      class="px-2 sm:px-3 py-1 sm:py-1.5 text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-full border border-slate-200 dark:border-slate-600"
+                    >
+                      {format}
+                    </span>
+                  {/each}
+                </div>
+
+                <div class="text-center">
+                  <a
+                    href="/help/faq#supported-image-formats"
+                    class="inline-flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors duration-200 font-medium group/link"
+                    onclick={(event) => event.stopPropagation()}
+                  >
+                    <Icon
+                      icon="ph:info-circle"
+                      class="h-3.5 w-3.5 sm:h-4 sm:w-4"
+                    />
+                    <span>View all supported formats</span>
+                    <Icon
+                      icon="ph:arrow-right"
+                      class="h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform duration-200 group-hover/link:translate-x-0.5"
+                    />
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class={cn(
+                dragOverlayClasses,
+                isDragOver ? 'opacity-100' : 'opacity-0',
+              )}
+              role="presentation"
+              aria-hidden="true"
+            >
               <div class="text-center">
-                <p class="text-sm text-slate-500 dark:text-slate-400 mb-2">
-                  PNG • JPG • GIF • SVG • WebP • HEIC
+                <Icon
+                  icon="ph:cloud-arrow-up-bold"
+                  class={cn(
+                    'h-16 w-16 text-blue-500 dark:text-blue-400 mb-4 mx-auto',
+                  )}
+                />
+                <p
+                  class="text-xl font-semibold text-blue-600 dark:text-blue-400"
+                >
+                  Drop to upload
                 </p>
-                <a
-                  href="/help/faq#supported-image-formats"
-                  class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors duration-200 underline underline-offset-2"
-                  onclick={(event) => event.stopPropagation()}
-                >
-                  View all supported formats →
-                </a>
               </div>
             </div>
-          {:else}
-            <div class="flex flex-col items-center justify-center h-full">
-              <div class="relative mb-6">
-                <div
-                  class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center animate-pulse"
-                >
-                  <Icon icon="ph:cloud-arrow-up" class="h-8 w-8 text-white" />
-                </div>
-                <div class="absolute inset-0 flex items-center justify-center">
-                  <Loader variant="subtle" size="lg" />
-                </div>
-              </div>
-              <h3
-                class="text-xl font-light text-slate-700 dark:text-slate-300 mb-2"
-              >
-                Uploading...
-              </h3>
-              <p class="text-sm text-slate-500 dark:text-slate-400">
-                Your image is being processed
-              </p>
-            </div>
-          {/if}
-        </Dropzone>
+          </Dropzone>
+        </div>
 
         {#if processing}
           <div
-            class="absolute inset-0 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md rounded-3xl flex items-center justify-center"
+            class="absolute inset-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg rounded-2xl flex items-center justify-center z-20"
           >
-            <div class="text-center">
-              <div class="mb-4">
-                <Loader variant="modern" size="xl" />
+            <div class="text-center space-y-6">
+              <div class="relative">
+                <Loader variant="minimal" size="xl" />
               </div>
-              <p
-                class="text-lg font-light text-slate-700 dark:text-slate-300 mb-1"
-              >
-                Processing
-              </p>
-              <p class="text-sm text-slate-500 dark:text-slate-400">
-                Almost done...
-              </p>
+
+              <div class="space-y-2">
+                <h3
+                  class="text-2xl font-semibold bg-gradient-to-r from-slate-700 to-slate-900 dark:from-slate-200 dark:to-slate-400 bg-clip-text text-transparent"
+                >
+                  Almost there
+                </h3>
+                <p class="text-slate-500 dark:text-slate-400 text-lg">
+                  Uploading your image...
+                </p>
+              </div>
             </div>
           </div>
         {/if}
