@@ -53,8 +53,8 @@
     settings.set('sidebar', { expanded: !$expanded });
   };
 
-  const getThemeClasses = () => ({
-    header: AppSidebarHeader({ collapsed }),
+  const getThemeClasses = (isMobile = false) => ({
+    header: AppSidebarHeader({ collapsed: isMobile ? false : collapsed }),
     content: AppSidebarContent(),
     footer: AppSidebarFooter(),
   });
@@ -115,7 +115,7 @@
       mobileOpen ? 'translate-x-0' : '-translate-x-full',
     )}
   >
-    {@render SidebarContent()}
+    {@render MobileSidebarContent()}
   </aside>
 {/if}
 
@@ -144,6 +144,33 @@
   {#if user}
     <div class={footer}>
       <SidebarUser {user} {collapsed} />
+    </div>
+  {/if}
+{/snippet}
+
+{#snippet MobileSidebarContent()}
+  {@const { header, content, footer } = getThemeClasses(true)}
+
+  <div class={header}>
+    <div class="flex items-center gap-3">
+      <div
+        class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10 hover:border-primary/20 hover:scale-105 transition-all duration-200 cursor-pointer flex items-center justify-center"
+      >
+        <img src="/favicon.png" alt="Slink" class="h-5 w-5" />
+      </div>
+      <span class="font-semibold text-foreground tracking-tight">Slink</span>
+    </div>
+  </div>
+
+  <div class={className(content, 'sidebar-scrollbar')}>
+    {#each groups as group (group.id)}
+      <SidebarGroup {group} collapsed={false} onItemClick={closeMobile} />
+    {/each}
+  </div>
+
+  {#if user}
+    <div class={footer}>
+      <SidebarUser {user} collapsed={false} />
     </div>
   {/if}
 {/snippet}
