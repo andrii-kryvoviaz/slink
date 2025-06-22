@@ -40,6 +40,8 @@
         {#snippet themeSwitch()}
           <ThemeSwitch
             checked={$isDark}
+            variant="default"
+            animation="none"
             on={{ change: (theme) => settings.set('theme', theme) }}
           />
         {/snippet}

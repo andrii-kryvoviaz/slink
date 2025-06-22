@@ -1,15 +1,75 @@
 <script lang="ts">
+  import type { ThemeSwitchProps } from './ThemeSwitch.types';
+  import type { HTMLButtonAttributes } from 'svelte/elements';
+  import { twMerge } from 'tailwind-merge';
+
   import Icon from '@iconify/svelte';
 
   import { Theme } from '@slink/lib/settings';
 
-  interface Props {
+  import {
+    ThemeSwitchContainer,
+    ThemeSwitchIcon,
+    ThemeSwitchTheme,
+    ThemeSwitchTooltip,
+  } from './ThemeSwitch.theme';
+
+  interface Props extends Omit<HTMLButtonAttributes, 'size'>, ThemeSwitchProps {
     disabled?: boolean;
     checked?: boolean;
+    showTooltip?: boolean;
+    tooltipText?: string;
+    customIcons?: {
+      light?: string;
+      dark?: string;
+    };
+    class?: string;
     on: { change: (theme: Theme) => void };
   }
 
-  let { disabled = false, checked = false, on }: Props = $props();
+  let {
+    disabled = false,
+    checked = false,
+    variant = 'default',
+    size = 'md',
+    animation = 'subtle',
+    showTooltip = false,
+    tooltipText,
+    customIcons,
+    class: customClass = '',
+    on,
+    ...buttonProps
+  }: Props = $props();
+
+  const buttonClasses = $derived(
+    twMerge(ThemeSwitchTheme({ variant, size, animation }), customClass),
+  );
+
+  const iconClasses = $derived(
+    ThemeSwitchIcon({
+      variant,
+      size,
+      animation:
+        animation === 'subtle'
+          ? 'scale'
+          : animation === 'bounce'
+            ? 'bounce'
+            : animation === 'smooth'
+              ? 'scale'
+              : 'none',
+    }),
+  );
+
+  const containerClasses = $derived(
+    ThemeSwitchContainer({ tooltip: showTooltip }),
+  );
+
+  const defaultTooltip = $derived(
+    tooltipText || (checked ? 'Switch to light mode' : 'Switch to dark mode'),
+  );
+
+  const lightIcon = $derived(customIcons?.light || 'ph:sun-thin');
+  const darkIcon = $derived(customIcons?.dark || 'ph:moon-thin');
 
   const handleThemeChange = () => {
     if (disabled) return;
@@ -17,22 +77,25 @@
   };
 </script>
 
-<button
-  type="button"
-  class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-background border border-bc-header text-muted-foreground hover:text-foreground hover:bg-background/80 hover:border-border/80 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm hover:shadow-md backdrop-blur-sm"
-  onclick={handleThemeChange}
-  {disabled}
-  aria-label="Toggle theme"
->
-  {#if checked}
-    <Icon
-      icon="ph:moon"
-      class="h-4 w-4 transition-all duration-200 hover:scale-110"
-    />
-  {:else}
-    <Icon
-      icon="ph:sun"
-      class="h-4 w-4 transition-all duration-200 hover:scale-110"
-    />
+<div class={containerClasses}>
+  <button
+    type="button"
+    class={buttonClasses}
+    onclick={handleThemeChange}
+    {disabled}
+    aria-label={defaultTooltip}
+    {...buttonProps}
+  >
+    {#if checked}
+      <Icon icon={darkIcon} class={iconClasses} />
+    {:else}
+      <Icon icon={lightIcon} class={iconClasses} />
+    {/if}
+  </button>
+
+  {#if showTooltip}
+    <div class={ThemeSwitchTooltip()}>
+      {defaultTooltip}
+    </div>
   {/if}
-</button>
+</div>
