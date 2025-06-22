@@ -112,29 +112,45 @@
 
 <div class="min-h-full">
   <div class="container mx-auto p-6 pt-16">
-    <div in:fade={{ duration: 500, delay: 100 }} class="w-full max-w-2xl mx-auto">
-
+    <div
+      in:fade={{ duration: 500, delay: 100 }}
+      class="w-full max-w-2xl mx-auto"
+    >
       {#if !data.user}
-        <div class="mb-8 p-6 rounded-3xl bg-white/70 dark:bg-slate-800/70 backdrop-blur-lg border border-slate-200/50 dark:border-slate-700/50 shadow-xl shadow-blue-500/5">
-          <div class="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
-            <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-              <Icon icon="ph:user-circle" class="h-6 w-6 text-blue-600 dark:text-blue-400" />
-            </div>
-            <div class="flex-1">
-              <h3 class="font-medium text-slate-900 dark:text-white mb-1">Authentication Required</h3>
-              <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">
-                Sign in to start uploading and managing your images
-              </p>
-              <Button
-                href="/profile/login"
-                variant="outline"
-                size="sm"
-                class="bg-blue-600 hover:bg-blue-700 text-white border-blue-600 hover:border-blue-700 shadow-lg shadow-blue-500/25 transition-all duration-200"
+        <div
+          class="mb-6 p-4 rounded-xl bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 border border-slate-200/50 dark:border-slate-700/50 shadow-sm"
+        >
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div
+                class="flex items-center justify-center w-10 h-10 rounded-lg bg-slate-900 dark:bg-white shadow-sm"
               >
-                <Icon icon="ph:sign-in" class="h-4 w-4 mr-2" />
-                Sign In
-              </Button>
+                <Icon
+                  icon="ph:lock-simple"
+                  class="h-5 w-5 text-white dark:text-slate-900"
+                />
+              </div>
+              <div>
+                <h3
+                  class="text-sm font-semibold text-slate-900 dark:text-white"
+                >
+                  Sign in to continue
+                </h3>
+                <p class="text-xs text-slate-600 dark:text-slate-400">
+                  Upload and manage your images
+                </p>
+              </div>
             </div>
+            <Button
+              href="/profile/login"
+              variant="glass"
+              size="sm"
+              rounded="full"
+              motion="subtle"
+            >
+              Get Started
+              <Icon icon="ph:arrow-right" class="h-3 w-3 ml-1" />
+            </Button>
           </div>
         </div>
       {/if}
@@ -148,18 +164,26 @@
           class="group relative w-full h-96 bg-white/80 dark:bg-slate-800/80 rounded-3xl border-2 border-dashed border-slate-200 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-500 hover:bg-white dark:hover:bg-slate-800/90 transition-all duration-300 cursor-pointer backdrop-blur-xl shadow-2xl shadow-slate-500/10 dark:shadow-black/20"
         >
           {#if !processing}
-            <div class="flex flex-col items-center justify-center h-full p-10 text-center">
+            <div
+              class="flex flex-col items-center justify-center h-full p-10 text-center"
+            >
               <div class="mb-8 relative">
-                <div class="w-20 h-20 rounded-3xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:shadow-blue-500/40 transition-all duration-300 group-hover:scale-105">
+                <div
+                  class="w-20 h-20 rounded-3xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:shadow-blue-500/40 transition-all duration-300 group-hover:scale-105"
+                >
                   <Icon icon="ph:cloud-arrow-up" class="h-10 w-10 text-white" />
                 </div>
-                <div class="absolute -top-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div
+                  class="absolute -top-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                >
                   <Icon icon="ph:plus" class="h-3 w-3 text-white" />
                 </div>
               </div>
 
               <div class="mb-8 max-w-sm">
-                <h3 class="text-2xl font-light text-slate-900 dark:text-white mb-3">
+                <h3
+                  class="text-2xl font-light text-slate-900 dark:text-white mb-3"
+                >
                   Drop your image
                 </h3>
                 <p class="text-slate-500 dark:text-slate-400">
@@ -167,8 +191,12 @@
                 </p>
               </div>
 
-              <div class="flex items-center gap-3 mb-8 px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-700/50">
-                <span class="text-sm text-slate-600 dark:text-slate-400">Quick paste:</span>
+              <div
+                class="flex items-center gap-3 mb-8 px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-700/50"
+              >
+                <span class="text-sm text-slate-600 dark:text-slate-400"
+                  >Quick paste:</span
+                >
                 <Shourtcut control={true} key="v" size="sm" />
               </div>
 
@@ -188,12 +216,18 @@
           {:else}
             <div class="flex flex-col items-center justify-center h-full">
               <div class="relative mb-6">
-                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center animate-pulse">
+                <div
+                  class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center animate-pulse"
+                >
                   <Icon icon="ph:cloud-arrow-up" class="h-8 w-8 text-white" />
                 </div>
-                <div class="absolute inset-0 w-16 h-16 rounded-full border-4 border-transparent border-t-blue-500 animate-spin"></div>
+                <div
+                  class="absolute inset-0 w-16 h-16 rounded-full border-4 border-transparent border-t-blue-500 animate-spin"
+                ></div>
               </div>
-              <h3 class="text-xl font-light text-slate-700 dark:text-slate-300 mb-2">
+              <h3
+                class="text-xl font-light text-slate-700 dark:text-slate-300 mb-2"
+              >
                 Uploading...
               </h3>
               <p class="text-sm text-slate-500 dark:text-slate-400">
@@ -204,16 +238,32 @@
         </Dropzone>
 
         {#if processing}
-          <div class="absolute inset-0 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md rounded-3xl flex items-center justify-center">
+          <div
+            class="absolute inset-0 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md rounded-3xl flex items-center justify-center"
+          >
             <div class="text-center">
-              <div class="relative inline-flex items-center justify-center w-16 h-16 mb-4">
-                <div class="absolute inset-0 w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 animate-pulse"></div>
-                <div class="absolute inset-2 w-12 h-12 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center">
-                  <div class="w-6 h-6 border-2 border-transparent border-t-blue-500 rounded-full animate-spin"></div>
+              <div
+                class="relative inline-flex items-center justify-center w-16 h-16 mb-4"
+              >
+                <div
+                  class="absolute inset-0 w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 animate-pulse"
+                ></div>
+                <div
+                  class="absolute inset-2 w-12 h-12 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center"
+                >
+                  <div
+                    class="w-6 h-6 border-2 border-transparent border-t-blue-500 rounded-full animate-spin"
+                  ></div>
                 </div>
               </div>
-              <p class="text-lg font-light text-slate-700 dark:text-slate-300 mb-1">Processing</p>
-              <p class="text-sm text-slate-500 dark:text-slate-400">Almost done...</p>
+              <p
+                class="text-lg font-light text-slate-700 dark:text-slate-300 mb-1"
+              >
+                Processing
+              </p>
+              <p class="text-sm text-slate-500 dark:text-slate-400">
+                Almost done...
+              </p>
             </div>
           </div>
         {/if}

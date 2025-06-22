@@ -26,6 +26,8 @@ export const ButtonTheme = cva(
           'bg-warning/80 text-button-accent hover:bg-warning focus:ring-3 focus:ring-rc-warning/40',
         modern:
           'bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-full shadow-sm hover:shadow-md transition-all duration-200 font-medium text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white',
+        glass:
+          'bg-white/80 dark:bg-gray-900/80 border border-gray-200/60 dark:border-gray-700/60 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-white dark:hover:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-lg hover:shadow-gray-200/40 dark:hover:shadow-gray-900/40 focus-visible:ring-blue-500/20 transition-all duration-200',
       },
       size: {
         xs: 'text-xs px-3 py-1.5',
@@ -48,6 +50,7 @@ export const ButtonTheme = cva(
       },
       motion: {
         none: 'transition-none',
+        subtle: 'hover:scale-105 active:scale-95',
         'hover:opacity':
           'transition-opacity duration-300 ease-in-out opacity-75 hover:opacity-100',
         'hover:scale':

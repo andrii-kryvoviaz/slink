@@ -59,12 +59,11 @@
       {#if !showLoginButton && user}
         <Button
           href="/upload"
-          variant="dark"
+          variant="glass"
           size="sm"
           rounded="full"
-          motion="hover:opacity"
           id="uploadImageLink"
-          class="flex flex-row gap-2 py-3 text-sm hover:no-underline sm:py-2 sm:text-xs"
+          class="flex flex-row gap-2"
         >
           <Icon icon="ph:plus-fill" class="h-3 w-3 sm:h-4 sm:w-4" />
           Upload
@@ -74,10 +73,10 @@
       {#if showLoginButton}
         <Button
           href="/profile/login"
-          variant="modern"
+          variant="glass"
           size="sm"
           rounded="full"
-          class="flex items-center gap-2 px-4 py-2 text-sm font-medium shadow-sm hover:shadow-md transition-all duration-200"
+          class="flex items-center gap-2"
         >
           <Icon icon="ph:sign-in" class="h-4 w-4" />
           <span>Sign In</span>

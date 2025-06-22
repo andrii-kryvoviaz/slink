@@ -98,7 +98,6 @@ export const themeIcons: string[] = [
   'ph:user-duotone',
   'ph:envelope-duotone',
   'ph:sign-in',
-  'ph:user-circle',
   'lucide:clock',
   'lucide:check-circle',
   'lucide:log-in',
@@ -110,4 +109,6 @@ export const themeIcons: string[] = [
   'ph:x',
   'ph:list',
   'ph:sidebar-simple',
+  'ph:lock-simple',
+  'ph:arrow-right',
 ];
