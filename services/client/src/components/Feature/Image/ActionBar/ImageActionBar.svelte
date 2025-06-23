@@ -113,19 +113,19 @@
 
   let directLink = $derived(`${page.url.origin}/image/${image.fileName}`);
 
-  const actionButtonClass =
-    'group relative flex h-12 w-12 sm:h-10 sm:w-10 items-center justify-center rounded-lg sm:rounded-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-white dark:hover:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-200 ease-out hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/20 focus-visible:ring-offset-2';
+  const baseButtonClass =
+    'group relative flex items-center justify-center transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50';
 
-  const primaryButtonClass =
-    'group relative flex h-12 sm:h-10 items-center gap-1.5 sm:gap-2 px-3 sm:px-4 rounded-lg sm:rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-medium transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/20 focus-visible:ring-offset-2 whitespace-nowrap';
+  const actionButtonClass = `${baseButtonClass} h-11 w-11 sm:h-9 sm:w-9 rounded-xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-gray-200/60 dark:border-gray-700/60 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-white dark:hover:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-sm active:scale-95 focus-visible:ring-blue-500/30`;
 
-  const destructiveButtonClass =
-    'group relative flex h-12 w-12 sm:h-10 sm:w-10 items-center justify-center rounded-lg sm:rounded-xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 hover:border-red-200 dark:hover:border-red-800/50 transition-all duration-200 ease-out hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500/20 focus-visible:ring-offset-2';
+  const primaryButtonClass = `${baseButtonClass} h-11 sm:h-9 px-4 sm:px-3 gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-medium shadow-sm hover:shadow-md active:scale-95 focus-visible:ring-blue-500/30 whitespace-nowrap`;
+
+  const secondaryButtonClass = `${baseButtonClass} h-11 sm:h-9 px-3 sm:px-2.5 gap-2 rounded-xl bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600 active:scale-95 focus-visible:ring-gray-500/30 whitespace-nowrap`;
+
+  const destructiveButtonClass = `${baseButtonClass} h-11 w-11 sm:h-9 sm:w-9 rounded-xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-gray-200/60 dark:border-gray-700/60 text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 hover:border-red-200 dark:hover:border-red-800/50 active:scale-95 focus-visible:ring-red-500/30`;
 </script>
 
-<div
-  class="flex items-center sm:justify-between w-full sm:w-fit gap-2 sm:gap-3 rounded-xl sm:rounded-2xl"
->
+<div class="flex flex-wrap items-center gap-2">
   {#if isButtonVisible('download')}
     <button
       class={primaryButtonClass}
@@ -133,85 +133,75 @@
       aria-label="Download image"
       type="button"
     >
-      <Icon icon="lucide:download" class="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-      <span class="text-xs sm:text-sm sm:inline whitespace-nowrap"
-        >Download</span
-      >
+      <Icon icon="lucide:download" class="h-4 w-4 sm:h-3.5 sm:w-3.5" />
+      <span class="text-sm sm:text-xs font-medium">Download</span>
     </button>
   {/if}
 
-  <div class="flex items-center gap-1.5 sm:gap-2">
-    {#if isButtonVisible('visibility')}
-      <Tooltip side="bottom" sideOffset={8}>
-        {#snippet trigger()}
-          <button
-            class={actionButtonClass}
-            onclick={() => handleVisibilityChange(!image.isPublic)}
-            disabled={$visibilityIsLoading}
-            aria-label={image.isPublic ? 'Make private' : 'Make public'}
-            type="button"
-          >
-            {#if $visibilityIsLoading}
-              <Loader variant="minimal" size="xs" />
-            {:else}
+  {#if isButtonVisible('copy')}
+    <Tooltip side="bottom" sideOffset={8}>
+      {#snippet trigger()}
+        <button
+          class={secondaryButtonClass}
+          onclick={handleCopy}
+          disabled={isCopiedActive}
+          aria-label="Copy image URL"
+          type="button"
+        >
+          {#if isCopiedActive}
+            <div in:scale={{ duration: 300, easing: cubicOut }}>
               <Icon
-                icon={image.isPublic ? 'ph:eye' : 'ph:eye-slash'}
-                class="h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform duration-200"
+                icon="ph:check"
+                class="h-4 w-4 sm:h-3.5 sm:w-3.5 text-green-600 dark:text-green-400"
               />
-            {/if}
-          </button>
-        {/snippet}
-        {image.isPublic ? 'Make private' : 'Make public'}
-      </Tooltip>
-    {/if}
+            </div>
+          {:else}
+            <Icon icon="ph:copy" class="h-4 w-4 sm:h-3.5 sm:w-3.5" />
+          {/if}
+        </button>
+      {/snippet}
+      {isCopiedActive ? 'Copied!' : 'Copy URL'}
+    </Tooltip>
+  {/if}
 
-    {#if isButtonVisible('copy')}
-      <Tooltip side="bottom" sideOffset={8}>
-        {#snippet trigger()}
-          <button
-            class={actionButtonClass}
-            onclick={handleCopy}
-            disabled={isCopiedActive}
-            aria-label="Copy image URL"
-            type="button"
-          >
-            {#if isCopiedActive}
-              <div in:scale={{ duration: 300, easing: cubicOut }}>
-                <Icon
-                  icon="ph:check"
-                  class="h-3.5 w-3.5 sm:h-4 sm:w-4 text-green-600 dark:text-green-400"
-                />
-              </div>
-            {:else}
-              <Icon
-                icon="ph:copy"
-                class="h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform duration-200"
-              />
-            {/if}
-          </button>
-        {/snippet}
-        {isCopiedActive ? 'Copied!' : 'Copy URL'}
-      </Tooltip>
-    {/if}
-
-    {#if isButtonVisible('share')}
-      <Tooltip side="bottom" sideOffset={8}>
-        {#snippet trigger()}
-          <a
-            href="/help/faq#share-feature"
-            class={actionButtonClass}
-            aria-label="View sharing policy"
-          >
+  {#if isButtonVisible('visibility')}
+    <Tooltip side="bottom" sideOffset={8}>
+      {#snippet trigger()}
+        <button
+          class={actionButtonClass}
+          onclick={() => handleVisibilityChange(!image.isPublic)}
+          disabled={$visibilityIsLoading}
+          aria-label={image.isPublic ? 'Make private' : 'Make public'}
+          type="button"
+        >
+          {#if $visibilityIsLoading}
+            <Loader variant="minimal" size="xs" />
+          {:else}
             <Icon
-              icon="ph:share-network"
-              class="h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform duration-200"
+              icon={image.isPublic ? 'ph:eye' : 'ph:eye-slash'}
+              class="h-4 w-4 sm:h-3.5 sm:w-3.5"
             />
-          </a>
-        {/snippet}
-        Sharing policy
-      </Tooltip>
-    {/if}
-  </div>
+          {/if}
+        </button>
+      {/snippet}
+      {image.isPublic ? 'Make private' : 'Make public'}
+    </Tooltip>
+  {/if}
+
+  {#if isButtonVisible('share')}
+    <Tooltip side="bottom" sideOffset={8}>
+      {#snippet trigger()}
+        <a
+          href="/help/faq#share-feature"
+          class={actionButtonClass}
+          aria-label="View sharing policy"
+        >
+          <Icon icon="ph:share-network" class="h-4 w-4 sm:h-3.5 sm:w-3.5" />
+        </a>
+      {/snippet}
+      Sharing policy
+    </Tooltip>
+  {/if}
 
   {#if isButtonVisible('delete')}
     <Tooltip side="bottom" sideOffset={8}>
@@ -222,10 +212,7 @@
           aria-label="Delete image"
           type="button"
         >
-          <Icon
-            icon="ph:trash"
-            class="h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform duration-200"
-          />
+          <Icon icon="ph:trash" class="h-4 w-4 sm:h-3.5 sm:w-3.5" />
         </button>
       {/snippet}
       Delete image
