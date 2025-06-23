@@ -23,15 +23,12 @@
         onmouseleave={timer?.resume}
         role="alert"
       >
-        <ToastItem variant={type} rounded="sm">
-          <ToastMessage removeToast={() => toastManager.remove(id)}>
-            {#snippet messageIcon()}
-              <Icon
-                icon={icon || 'mdi:information-outline'}
-                class="relative top-[-2px] mr-1 inline-block text-2xl {iconColor}"
-              />
-            {/snippet}
-
+        <ToastItem variant={type} size="none" rounded="sm">
+          <ToastMessage
+            removeToast={() => toastManager.remove(id)}
+            iconName={icon}
+            {iconColor}
+          >
             <span>{@html message}</span>
           </ToastMessage>
         </ToastItem>

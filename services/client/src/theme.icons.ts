@@ -1,7 +1,6 @@
 export const themeIcons: string[] = [
   'eos-icons:three-dots-loading',
   'clarity:info-standard-line',
-  'ic:round-close',
   'ph:user',
   'material-symbols-light:history',
   'solar:graph-line-duotone',
