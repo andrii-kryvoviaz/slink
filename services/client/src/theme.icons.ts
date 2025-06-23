@@ -101,8 +101,6 @@ export const themeIcons: string[] = [
   'ph:user-plus',
   'ph:user-circle',
   'ph:check-circle',
-  'ph:cloud-arrow-up-bold',
-  'ph:plus-bold',
   'ph:keyboard',
   'ph:info-circle',
   'clarity:success-standard-line',
@@ -111,4 +109,6 @@ export const themeIcons: string[] = [
   'mdi:information-outline',
   'heroicons:x-mark',
   'clarity:block-line',
+  'ph:plus-bold',
+  'ph:upload-simple',
 ];

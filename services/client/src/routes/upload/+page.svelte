@@ -239,19 +239,15 @@
             >
               <div class="mb-6 sm:mb-8 relative">
                 <div
-                  class="absolute inset-0 rounded-3xl bg-gradient-to-r from-blue-500/20 to-purple-500/20 blur-xl scale-110 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-                ></div>
-
-                <div
-                  class="relative w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-gradient-to-br from-blue-500 via-blue-600 to-purple-600 flex items-center justify-center shadow-2xl shadow-blue-500/25 transition-all duration-500 group-hover:shadow-blue-500/40"
+                  class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center border border-slate-200 dark:border-slate-700 transition-colors duration-300 group-hover:bg-slate-50 dark:group-hover:bg-slate-700 relative"
                 >
                   <Icon
-                    icon="ph:cloud-arrow-up-bold"
-                    class="h-10 w-10 sm:h-12 sm:w-12 text-white"
+                    icon="ph:upload-simple"
+                    class="h-8 w-8 sm:h-10 sm:w-10 text-slate-600 dark:text-slate-400"
                   />
 
                   <div
-                    class="absolute -top-1.5 -right-1.5 sm:-top-2 sm:-right-2 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gradient-to-r from-green-400 to-emerald-500 flex items-center justify-center shadow-lg"
+                    class="absolute -top-1 -right-1 sm:-top-1.5 sm:-right-1.5 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-green-500 flex items-center justify-center shadow-lg border-2 border-white dark:border-slate-900"
                   >
                     <Icon
                       icon="ph:plus-bold"
@@ -333,13 +329,11 @@
             >
               <div class="text-center">
                 <Icon
-                  icon="ph:cloud-arrow-up-bold"
-                  class={cn(
-                    'h-16 w-16 text-blue-500 dark:text-blue-400 mb-4 mx-auto',
-                  )}
+                  icon="ph:upload-simple"
+                  class="h-12 w-12 text-slate-600/80 dark:text-slate-300/80 mb-3 mx-auto"
                 />
                 <p
-                  class="text-xl font-semibold text-blue-600 dark:text-blue-400"
+                  class="text-lg font-light text-slate-700/90 dark:text-slate-200/90"
                 >
                   Drop to upload
                 </p>
