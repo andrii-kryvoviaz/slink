@@ -6,7 +6,7 @@
     sizeMatchingRegex,
   } from '@slink/utils/string/parseFileSize';
   import { randomId } from '@slink/utils/string/randomId';
-  import { toast } from '@slink/utils/ui/toast';
+  import { toast } from '@slink/utils/ui/toast.svelte';
 
   import { ResetSettingConfirmation } from '@slink/components/Feature/Settings';
   import { Badge } from '@slink/components/UI/Text';

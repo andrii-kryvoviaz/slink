@@ -14,7 +14,7 @@
   import { className as cn } from '@slink/lib/utils/ui/className';
 
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
-  import { toast } from '@slink/utils/ui/toast';
+  import { toast } from '@slink/utils/ui/toast.svelte';
 
   import UnsupportedFileFormat from '@slink/components/Feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte';
   import { Shourtcut } from '@slink/components/UI/Action';
@@ -39,6 +39,7 @@
     data: uploadedImage,
     error: uploadError,
     run: uploadImage,
+    reset: resetUploadImage,
   } = ReactiveState<UploadedImageResponse>((file: File) =>
     ApiClient.image.upload(file),
   );
@@ -79,7 +80,17 @@
     const file = fileList.item(0) as File;
 
     if (!file?.type.startsWith('image/')) {
-      toast.component(UnsupportedFileFormat, { duration: 5000 });
+      const toastId = crypto.randomUUID();
+
+      toast.component(UnsupportedFileFormat, {
+        id: toastId,
+        duration: 5000,
+        props: {
+          close: () => {
+            toast.remove(toastId);
+          },
+        },
+      });
       return;
     }
 
@@ -104,7 +115,9 @@
   });
 
   $effect(() => {
-    $uploadError && errorHandler($uploadError);
+    if (!$uploadError) return;
+    errorHandler($uploadError);
+    resetUploadImage();
   });
 
   let processing = $derived($isLoading || $pageIsChanging);

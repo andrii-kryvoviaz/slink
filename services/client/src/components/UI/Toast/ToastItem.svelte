@@ -1,15 +1,30 @@
 <script lang="ts">
+  import type { ToastItemProps } from '@slink/components/UI/Toast/ToastItem.types';
   import type { Snippet } from 'svelte';
 
-  interface Props {
+  import { className } from '@slink/utils/ui/className';
+
+  import { ToastItemTheme } from '@slink/components/UI/Toast/ToastItem.theme';
+
+  interface Props extends ToastItemProps {
+    class?: string;
     children?: Snippet;
   }
 
-  let { children }: Props = $props();
+  let {
+    variant = 'default' as const,
+    size = 'lg' as const,
+    rounded = 'lg' as const,
+    class: customClass,
+    children,
+    ...props
+  }: Props = $props();
+
+  let classes = $derived(
+    className(ToastItemTheme({ variant, size, rounded }), customClass),
+  );
 </script>
 
-<div
-  class="w-full rounded-lg bg-neutral-100/95 px-4 py-6 text-zinc-800 shadow-md backdrop-blur-sm dark:bg-zinc-900/95 dark:text-gray-300"
->
+<div class={classes} {...props}>
   {@render children?.()}
 </div>

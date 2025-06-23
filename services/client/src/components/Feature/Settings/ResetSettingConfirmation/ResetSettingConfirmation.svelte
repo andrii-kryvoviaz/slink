@@ -21,14 +21,16 @@
 >
   {#snippet content()}
     <div class="text-center">
-      <p class="text-sm text-gray-600 dark:text-gray-400">
-        Changing <strong class="text-gray-900 dark:text-white">{name}</strong> to:
+      <p class="text-base text-gray-600 dark:text-gray-400 leading-relaxed">
+        Changing <strong class="text-gray-900 dark:text-white font-semibold"
+          >{name}</strong
+        > to:
       </p>
       <div
-        class="mt-3 rounded-lg bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 px-4 py-3"
+        class="mt-4 rounded-2xl bg-gradient-to-br from-gray-50/80 to-white/60 dark:from-gray-800/60 dark:to-gray-900/40 border border-gray-200/60 dark:border-gray-700/50 px-6 py-4 backdrop-blur-sm shadow-sm"
       >
         <span
-          class="font-mono text-sm text-gray-900 dark:text-white font-medium"
+          class="font-mono text-base text-gray-900 dark:text-white font-semibold"
         >
           {displayValue}
         </span>

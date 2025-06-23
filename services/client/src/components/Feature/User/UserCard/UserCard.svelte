@@ -10,7 +10,7 @@
   import { UserStatus as UserStatusEnum } from '@slink/lib/auth/Type/User';
 
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
-  import { toast } from '@slink/utils/ui/toast';
+  import { toast } from '@slink/utils/ui/toast.svelte';
 
   import {
     UserAvatar,

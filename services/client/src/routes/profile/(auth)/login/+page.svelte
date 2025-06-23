@@ -10,7 +10,7 @@
   import { settings } from '@slink/lib/settings';
 
   import { withLoadingState } from '@slink/utils/form/withLoadingState';
-  import { toast } from '@slink/utils/ui/toast';
+  import { toast } from '@slink/utils/ui/toast.svelte';
 
   import { Button, type ButtonVariant } from '@slink/components/UI/Action';
   import {

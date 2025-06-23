@@ -27,15 +27,17 @@
 >
   {#snippet content()}
     <div
-      class="rounded-lg bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 p-4"
+      class="rounded-2xl bg-gradient-to-br from-gray-50/80 to-white/60 dark:from-gray-800/60 dark:to-gray-900/40 border border-gray-200/60 dark:border-gray-700/50 p-6 backdrop-blur-sm shadow-sm"
     >
       <div class="text-center">
         <span
-          class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide"
+          class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider"
         >
           User Email
         </span>
-        <div class="mt-1 font-mono text-sm text-gray-900 dark:text-white">
+        <div
+          class="mt-2 font-mono text-base text-gray-900 dark:text-white font-medium"
+        >
           {user.email}
         </div>
       </div>

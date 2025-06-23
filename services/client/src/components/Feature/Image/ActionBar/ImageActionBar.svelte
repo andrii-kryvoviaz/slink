@@ -5,7 +5,7 @@
   import { page } from '$app/state';
   import Icon from '@iconify/svelte';
   import { cubicOut } from 'svelte/easing';
-  import { fly, scale } from 'svelte/transition';
+  import { scale } from 'svelte/transition';
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
@@ -13,10 +13,9 @@
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
 
   import { downloadByLink } from '@slink/utils/http/downloadByLink';
-  import { toast } from '@slink/utils/ui/toast';
+  import { toast } from '@slink/utils/ui/toast.svelte';
 
   import { ImageDeleteConfirmation } from '@slink/components/Feature/Image';
-  import { Button } from '@slink/components/UI/Action';
   import { Loader } from '@slink/components/UI/Loader';
   import { Tooltip } from '@slink/components/UI/Tooltip';
 
