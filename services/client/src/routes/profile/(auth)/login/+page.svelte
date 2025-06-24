@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { ActionData, PageData } from './$types';
+  import { untrack } from 'svelte';
 
   import { enhance } from '$app/forms';
   import Icon from '@iconify/svelte';
@@ -35,9 +36,19 @@
   let buttonVariant: ButtonVariant = $derived($isLight ? 'dark' : 'primary');
 
   $effect(() => {
-    if (form?.errors.message) {
-      toast.error(form.errors.message as string);
+    if (!form?.errors) {
+      return;
     }
+
+    untrack(() => {
+      const errors = form.errors as Record<string, any>;
+
+      for (const key in errors) {
+        const message =
+          typeof errors[key] === 'string' ? errors[key] : String(errors[key]);
+        toast.error(message);
+      }
+    });
   });
 </script>
 
