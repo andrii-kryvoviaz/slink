@@ -18,27 +18,26 @@
 <ConfirmationDialog
   variant="danger"
   icon="heroicons:trash"
-  title="User Deletion"
-  message="Are you sure you want to delete this user? This action cannot be undone."
+  title="Delete User"
+  message="This action cannot be undone. The user will be permanently removed."
   confirmText="Delete"
   {loading}
   {close}
   {confirm}
 >
   {#snippet content()}
-    <div
-      class="rounded-2xl bg-gradient-to-br from-gray-50/80 to-white/60 dark:from-gray-800/60 dark:to-gray-900/40 border border-gray-200/60 dark:border-gray-700/50 p-6 backdrop-blur-sm shadow-sm"
-    >
-      <div class="text-center">
-        <span
-          class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider"
-        >
-          User Email
-        </span>
+    <div class="space-y-3">
+      <p class="text-sm text-gray-600 dark:text-gray-400">
+        You are about to delete the following user:
+      </p>
+
+      <div class="flex items-center">
         <div
-          class="mt-2 font-mono text-base text-gray-900 dark:text-white font-medium"
+          class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-50/80 dark:bg-red-950/30 border border-red-200/40 dark:border-red-800/40 text-red-700 dark:text-red-300"
         >
-          {user.email}
+          <span class="font-mono text-sm font-medium">
+            {user.email}
+          </span>
         </div>
       </div>
     </div>

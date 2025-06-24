@@ -15,25 +15,26 @@
   variant="info"
   icon="heroicons:arrow-path"
   title="Reset Setting"
-  confirmText="Reset & Save"
+  confirmText="Reset"
   {close}
   {confirm}
 >
   {#snippet content()}
-    <div class="text-center">
-      <p class="text-base text-gray-600 dark:text-gray-400 leading-relaxed">
-        Changing <strong class="text-gray-900 dark:text-white font-semibold"
-          >{name}</strong
-        > to:
+    <div class="space-y-3">
+      <p class="text-sm text-gray-600 dark:text-gray-400">
+        Reset <span class="font-medium text-gray-900 dark:text-white"
+          >{name}</span
+        > to default value?
       </p>
-      <div
-        class="mt-4 rounded-2xl bg-gradient-to-br from-gray-50/80 to-white/60 dark:from-gray-800/60 dark:to-gray-900/40 border border-gray-200/60 dark:border-gray-700/50 px-6 py-4 backdrop-blur-sm shadow-sm"
-      >
-        <span
-          class="font-mono text-base text-gray-900 dark:text-white font-semibold"
+
+      <div class="flex items-center">
+        <div
+          class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-blue-50/80 dark:bg-blue-950/30 border border-blue-200/40 dark:border-blue-800/40 text-blue-700 dark:text-blue-300"
         >
-          {displayValue}
-        </span>
+          <span class="font-mono text-sm font-medium">
+            {displayValue}
+          </span>
+        </div>
       </div>
     </div>
   {/snippet}
