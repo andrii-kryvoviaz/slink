@@ -195,11 +195,6 @@
           >
             <Icon icon={option.icon} class="h-4 w-4 flex-shrink-0 opacity-60" />
             <span class="flex-1 text-left font-normal">{option.label}</span>
-            {#if searchBy === option.value}
-              <div
-                class="w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"
-              ></div>
-            {/if}
           </button>
         {/each}
       </div>
