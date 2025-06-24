@@ -224,10 +224,10 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.25.2.tgz#839f72c2decd378f86b8f525e1979a97b920c67d"
   integrity sha512-kM3HKb16VIXZyIeVrM1ygYmZBKybX8N4p754bw390wGO3Tf2j4L2/WYL+4suWujpgf6GBYs3jv7TyUivdd05JA==
 
-"@floating-ui/core@^1.6.0", "@floating-ui/core@^1.6.4":
-  version "1.6.9"
-  resolved "https://registry.yarnpkg.com/@floating-ui/core/-/core-1.6.9.tgz#64d1da251433019dafa091de9b2886ff35ec14e6"
-  integrity sha512-uMXCuQ3BItDUbAMhIXw7UPXRfAlOAvZzdK9BWpE60MCn+Svt3aLn9jsPTi/WNGlRUu2uI0v5S7JiIUsbsvh3fw==
+"@floating-ui/core@^1.6.0", "@floating-ui/core@^1.6.4", "@floating-ui/core@^1.7.1":
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/@floating-ui/core/-/core-1.7.1.tgz#1abc6b157d4a936174f9dbd078278c3a81c8bc6b"
+  integrity sha512-azI0DrjMMfIug/ExbBaeDVJXcY0a7EPvPjb2xAJPa4HeimBX+Z18HK8QQR3jb6356SnDDdxx+hinMLcJEDdOjw==
   dependencies:
     "@floating-ui/utils" "^0.2.9"
 
@@ -240,11 +240,11 @@
     "@floating-ui/utils" "^0.2.8"
 
 "@floating-ui/dom@^1.6.7":
-  version "1.6.13"
-  resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-1.6.13.tgz#a8a938532aea27a95121ec16e667a7cbe8c59e34"
-  integrity sha512-umqzocjDgNRGTuO7Q8CU32dkHkECqI8ZdMZ5Swb6QAM0t5rnlrN3lGo1hdpscRd3WS8T6DKYK4ephgIH9iRh3w==
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-1.7.1.tgz#76a4e3cbf7a08edf40c34711cf64e0cc8053d912"
+  integrity sha512-cwsmW/zyw5ltYTUeeYJ60CnQuPqmGwuGVhG9w0PRaRKkAyi38BT5CKrpIbb+jtahSwUl04cWzSx9ZOIxeS6RsQ==
   dependencies:
-    "@floating-ui/core" "^1.6.0"
+    "@floating-ui/core" "^1.7.1"
     "@floating-ui/utils" "^0.2.9"
 
 "@floating-ui/utils@^0.2.8", "@floating-ui/utils@^0.2.9":
@@ -265,9 +265,9 @@
   integrity sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==
 
 "@internationalized/date@^3.5.6":
-  version "3.8.0"
-  resolved "https://registry.yarnpkg.com/@internationalized/date/-/date-3.8.0.tgz#24fb301029224351381aa87cba853ca1093af094"
-  integrity sha512-J51AJ0fEL68hE4CwGPa6E0PO6JDaVLd8aln48xFCSy7CZkZc96dGEGmLs2OEEbBxcsVZtfrqkXJwI2/MSG8yKw==
+  version "3.8.2"
+  resolved "https://registry.yarnpkg.com/@internationalized/date/-/date-3.8.2.tgz#977620c1407cc6830fd44cb505679d23c599e119"
+  integrity sha512-/wENk7CbvLbkUvX1tu0mwq49CVkkWpkXubGel6birjRPyo6uQ4nQpnq5xZu823zRCwwn82zgHrvgF1vZyvmVgA==
   dependencies:
     "@swc/helpers" "^0.5.0"
 
@@ -842,13 +842,14 @@ axobject-query@^4.1.0:
   integrity sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==
 
 bits-ui@^1.3.19:
-  version "1.3.19"
-  resolved "https://registry.yarnpkg.com/bits-ui/-/bits-ui-1.3.19.tgz#4ec4b1aaed33b19a659f8f9f2d7ff4a80a73dd69"
-  integrity sha512-2blb6dkgedHUsDXqCjvmtUi4Advgd9MhaJDT8r7bEWDzHI8HGsOoYsLeh8CxpEWWEYPrlGN+7k+kpxRhIDdFrQ==
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/bits-ui/-/bits-ui-1.8.0.tgz#1047eab2e90e901d9a913e6db516e1c9f435fcf6"
+  integrity sha512-CXD6Orp7l8QevNDcRPLXc/b8iMVgxDWT2LyTwsdLzJKh9CxesOmPuNePSPqAxKoT59FIdU4aFPS1k7eBdbaCxg==
   dependencies:
     "@floating-ui/core" "^1.6.4"
     "@floating-ui/dom" "^1.6.7"
     "@internationalized/date" "^3.5.6"
+    css.escape "^1.5.1"
     esm-env "^1.1.2"
     runed "^0.23.2"
     svelte-toolbelt "^0.7.1"
@@ -887,6 +888,11 @@ cookie@^0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.6.0.tgz#2798b04b071b0ecbff0dbb62a505a8efa4e19051"
   integrity sha512-U71cyTamuh1CRNCfpGY6to28lxvNwPG4Guz/EVjgf3Jmzv0vlDp1atT9eS5dDjMYHucpHbWns6Lwf3BKz6svdw==
+
+css.escape@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/css.escape/-/css.escape-1.5.1.tgz#42e27d4fa04ae32f931a4b4d4191fa9cddee97cb"
+  integrity sha512-YUifsXXuknHlUsmlgyY0PKzgPOr7/FjCePfHNt0jxm83wHZi44VDMQ7/fGNkjY3/jV1MC+1CmZbaHzugyeRtpg==
 
 daisyui@^5.0.35:
   version "5.0.35"
@@ -1359,9 +1365,9 @@ source-map-js@^1.2.1:
   integrity sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==
 
 style-to-object@^1.0.8:
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/style-to-object/-/style-to-object-1.0.8.tgz#67a29bca47eaa587db18118d68f9d95955e81292"
-  integrity sha512-xT47I/Eo0rwJmaXC4oilDGDWLohVhR6o/xAQcPQN8q6QBuZVL8qMYL85kLmST5cPjAorwvqIA4qXTRQoYHaL6g==
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/style-to-object/-/style-to-object-1.0.9.tgz#35c65b713f4a6dba22d3d0c61435f965423653f0"
+  integrity sha512-G4qppLgKu/k6FwRpHiGiKPaPTFcG3g4wNVX/Qsfu+RqQM30E7Tyu/TEgxcL9PNLF5pdRLwQdE3YKKf+KF2Dzlw==
   dependencies:
     inline-style-parser "0.2.4"
 
