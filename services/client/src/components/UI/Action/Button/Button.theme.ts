@@ -6,7 +6,7 @@ export const ButtonTheme = cva(
     variants: {
       variant: {
         default:
-          'border bg-none text-button-default border-bc-button-default hover:bg-button-default-hover hover:text-button-hover-default',
+          'border bg-none text-button-default dark:text-gray-200 border-bc-button-default dark:border-gray-700 hover:bg-button-default-hover dark:hover:bg-gray-800 hover:text-button-hover-default dark:hover:text-white',
         primary:
           'bg-button-accent/80 text-button-accent hover:bg-button-accent/100',
         secondary:
