@@ -2,10 +2,11 @@
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
+  import { EmptyState } from '@slink/lib/components/UI/EmptyState';
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
 
   import { HistoryListView } from '@slink/components/Feature/Image';
-  import { Button, LoadMoreButton } from '@slink/components/UI/Action';
+  import { LoadMoreButton } from '@slink/components/UI/Action';
   import { Loader } from '@slink/components/UI/Loader';
 
   const historyFeedState = useUploadHistoryFeed();
@@ -22,27 +23,15 @@
 <section in:fade={{ duration: 300 }}>
   <div class="container mx-auto flex flex-col px-4 py-6 sm:px-6 max-w-6xl">
     {#if historyFeedState.isEmpty}
-      <div
-        class="mt-16 flex grow flex-col items-center justify-center text-center"
-      >
-        <div class="mb-8 p-6 rounded-full bg-gray-100 dark:bg-gray-800/50">
-          <Icon
-            icon="ph:clock-clockwise"
-            class="w-12 h-12 text-gray-400 dark:text-gray-500"
-          />
-        </div>
-        <h2 class="text-xl font-medium text-gray-900 dark:text-white mb-2">
-          No uploads yet
-        </h2>
-        <p class="text-gray-500 dark:text-gray-400 mb-6 max-w-sm">
-          Start uploading images to see your upload history and manage your
-          files.
-        </p>
-        <Button class="px-6 py-3" size="md" variant="primary" href="/upload">
-          <Icon icon="ph:cloud-arrow-up" class="w-4 h-4 mr-2" />
-          <span>Upload Images</span>
-        </Button>
-      </div>
+      <EmptyState
+        icon="ph:clock-clockwise-duotone"
+        title="No history yet"
+        description="Your upload history will appear here. Start uploading images to see your files and manage them easily."
+        actionText="Upload Images"
+        actionHref="/upload"
+        variant="purple"
+        size="lg"
+      />
     {/if}
 
     {#if historyFeedState.isLoading}

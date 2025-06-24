@@ -2,11 +2,12 @@
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
+  import { EmptyState } from '@slink/lib/components/UI/EmptyState';
   import { usePublicImagesFeed } from '@slink/lib/state/PublicImagesFeed.svelte';
 
   import { ImagePlaceholder } from '@slink/components/Feature/Image';
   import { UserAvatar } from '@slink/components/Feature/User';
-  import { Button, LoadMoreButton } from '@slink/components/UI/Action';
+  import { LoadMoreButton } from '@slink/components/UI/Action';
   import { Masonry } from '@slink/components/UI/Layout';
   import { Loader } from '@slink/components/UI/Loader';
   import {
@@ -43,31 +44,15 @@
     {/if}
 
     {#if publicFeedState.isEmpty}
-      <div class="flex flex-col items-center justify-center py-20 text-center">
-        <div
-          class="w-24 h-24 rounded-full bg-gradient-to-r from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 flex items-center justify-center mb-8"
-        >
-          <Icon
-            icon="heroicons:photo"
-            class="w-12 h-12 text-indigo-600 dark:text-indigo-400"
-          />
-        </div>
-        <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
-          No images yet
-        </h2>
-        <p class="text-gray-600 dark:text-gray-400 mb-8 max-w-md">
-          Be the first to share something amazing with the community
-        </p>
-        <Button
-          size="lg"
-          variant="primary"
-          href="/upload"
-          class="px-8 py-3 text-base font-medium"
-        >
-          <Icon icon="heroicons:cloud-arrow-up" class="w-5 h-5 mr-2" />
-          Upload First Image
-        </Button>
-      </div>
+      <EmptyState
+        icon="ph:images-duotone"
+        title="No images yet"
+        description="Be the first to share something amazing with the community. Start by uploading your favorite images."
+        actionText="Upload First Image"
+        actionHref="/upload"
+        variant="blue"
+        size="lg"
+      />
     {/if}
 
     {#if publicFeedState.items.length > 0}
