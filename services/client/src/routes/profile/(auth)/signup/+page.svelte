@@ -86,9 +86,9 @@
             placeholder="Choose a username"
             value={form?.username || ''}
             error={form?.errors?.username}
+            variant="modern"
             size="md"
             rounded="lg"
-            class="bg-gray-50/80 dark:bg-gray-800/50 focus:bg-white dark:focus:bg-gray-800 focus:ring-2 focus:ring-blue-500/20 hover:bg-gray-100/50 dark:hover:bg-gray-800/70 transition-all duration-200"
           >
             {#snippet leftIcon()}
               <Icon
@@ -108,9 +108,9 @@
             placeholder="Enter your email"
             value={form?.email || ''}
             error={form?.errors?.email}
+            variant="modern"
             size="md"
             rounded="lg"
-            class="bg-gray-50/80 dark:bg-gray-800/50 focus:bg-white dark:focus:bg-gray-800 focus:ring-2 focus:ring-blue-500/20 hover:bg-gray-100/50 dark:hover:bg-gray-800/70 transition-all duration-200"
           >
             {#snippet leftIcon()}
               <Icon
@@ -130,9 +130,9 @@
               autocomplete="new-password"
               placeholder="Create password"
               error={form?.errors?.password}
+              variant="modern"
               size="md"
               rounded="lg"
-              class="bg-gray-50/80 dark:bg-gray-800/50 focus:bg-white dark:focus:bg-gray-800 focus:ring-2 focus:ring-blue-500/20 hover:bg-gray-100/50 dark:hover:bg-gray-800/70 transition-all duration-200"
             >
               {#snippet leftIcon()}
                 <Icon
@@ -151,9 +151,9 @@
               autocomplete="new-password"
               placeholder="Confirm password"
               error={form?.errors?.confirm}
+              variant="modern"
               size="md"
               rounded="lg"
-              class="bg-gray-50/80 dark:bg-gray-800/50 focus:bg-white dark:focus:bg-gray-800 focus:ring-2 focus:ring-blue-500/20 hover:bg-gray-100/50 dark:hover:bg-gray-800/70 transition-all duration-200"
             >
               {#snippet leftIcon()}
                 <Icon
