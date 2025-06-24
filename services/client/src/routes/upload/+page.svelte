@@ -239,7 +239,7 @@
             >
               <div class="mb-6 sm:mb-8 relative">
                 <div
-                  class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-indigo-500/10 to-purple-500/10 dark:from-indigo-500/20 dark:to-purple-500/20 flex items-center justify-center border border-indigo-200/50 dark:border-purple-300/30 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-indigo-500/20 dark:group-hover:shadow-purple-500/20 backdrop-blur-sm"
+                  class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-indigo-500/10 to-purple-500/10 dark:from-indigo-500/20 dark:to-purple-500/20 flex items-center justify-center border border-indigo-200/50 dark:border-purple-300/30 transition-all duration-300 shadow-lg shadow-indigo-200/40 dark:shadow-purple-400/30 group-hover:shadow-xl group-hover:shadow-indigo-300/50 dark:group-hover:shadow-purple-400/40 backdrop-blur-sm ring-1 ring-indigo-100/20 dark:ring-purple-300/20"
                 >
                   <Icon
                     icon="ph:upload-simple"
