@@ -75,7 +75,7 @@
 
 <div class="flex w-full items-center {currentSize.container}">
   <div
-    class="group relative flex w-full items-center rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-700 focus-within:border-gray-400 dark:focus-within:border-gray-500"
+    class="group relative flex w-full items-center rounded-lg border border-gray-200/50 dark:border-gray-700/30 bg-gray-50/80 dark:bg-gray-800/50 transition-all duration-200 hover:bg-gray-100/50 dark:hover:bg-gray-800/70 focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-gray-200/50 dark:focus-within:border-gray-700/30"
   >
     <div class="flex-1 min-w-0">
       <input

@@ -137,7 +137,7 @@
           min="1"
           max={width}
           step="1"
-          class="w-full px-3 py-2 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+          class="w-full px-3 py-2 text-sm bg-gray-50/80 dark:bg-gray-800/50 border border-gray-200/50 dark:border-gray-700/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-gray-200/50 dark:focus:border-gray-700/30 hover:bg-gray-100/50 dark:hover:bg-gray-800/70 transition-all duration-200"
           class:border-red-300={calculatedWidth < 1 || calculatedWidth > width}
           class:focus:border-red-500={calculatedWidth < 1 ||
             calculatedWidth > width}
@@ -181,7 +181,7 @@
           min="1"
           max={height}
           step="1"
-          class="w-full px-3 py-2 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+          class="w-full px-3 py-2 text-sm bg-gray-50/80 dark:bg-gray-800/50 border border-gray-200/50 dark:border-gray-700/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-gray-200/50 dark:focus:border-gray-700/30 hover:bg-gray-100/50 dark:hover:bg-gray-800/70 transition-all duration-200"
           class:border-red-300={calculatedHeight < 1 ||
             calculatedHeight > height}
           class:focus:border-red-500={calculatedHeight < 1 ||
