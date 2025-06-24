@@ -239,19 +239,18 @@
             >
               <div class="mb-6 sm:mb-8 relative">
                 <div
-                  class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center border border-slate-200 dark:border-slate-700 transition-colors duration-300 group-hover:bg-slate-50 dark:group-hover:bg-slate-700 relative"
+                  class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-indigo-500/10 to-purple-500/10 dark:from-indigo-500/20 dark:to-purple-500/20 flex items-center justify-center border border-indigo-200/50 dark:border-purple-300/30 transition-all duration-300 group-hover:shadow-lg group-hover:shadow-indigo-500/20 dark:group-hover:shadow-purple-500/20 backdrop-blur-sm"
                 >
                   <Icon
                     icon="ph:upload-simple"
-                    class="h-8 w-8 sm:h-10 sm:w-10 text-slate-600 dark:text-slate-400"
+                    class="h-10 w-10 sm:h-12 sm:w-12 text-indigo-600 dark:text-purple-400 transition-all duration-300"
                   />
-
                   <div
-                    class="absolute -top-1 -right-1 sm:-top-1.5 sm:-right-1.5 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-green-500 flex items-center justify-center shadow-lg border-2 border-white dark:border-slate-900"
+                    class="absolute -top-1 -right-1 sm:-top-1.5 sm:-right-1.5 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gradient-to-br from-emerald-400 to-green-500 dark:from-emerald-500 dark:to-green-600 flex items-center justify-center shadow-lg shadow-green-500/25 dark:shadow-green-600/30 border-2 border-white/90 dark:border-slate-900/90 backdrop-blur-sm"
                   >
                     <Icon
                       icon="ph:plus-bold"
-                      class="h-2.5 w-2.5 sm:h-3 sm:w-3 text-white"
+                      class="h-2.5 w-2.5 sm:h-3 sm:w-3 text-white drop-shadow-sm"
                     />
                   </div>
                 </div>
@@ -288,11 +287,11 @@
 
               <div class="space-y-3 sm:space-y-4">
                 <div
-                  class="flex flex-wrap justify-center gap-1.5 sm:gap-2 mb-3 sm:mb-4"
+                  class="flex flex-wrap justify-center gap-2 sm:gap-2.5 mb-3 sm:mb-4"
                 >
                   {#each ['PNG', 'JPG', 'GIF', 'SVG', 'WebP', 'HEIC'] as format}
                     <span
-                      class="px-2 sm:px-3 py-1 sm:py-1.5 text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-full border border-slate-200 dark:border-slate-600"
+                      class="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium bg-slate-50/80 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 rounded-xl border border-slate-200/60 dark:border-slate-700/60 backdrop-blur-sm"
                     >
                       {format}
                     </span>

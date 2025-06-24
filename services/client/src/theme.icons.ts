@@ -108,6 +108,6 @@ export const themeIcons: string[] = [
   'mdi:information-outline',
   'heroicons:x-mark',
   'clarity:block-line',
-  'ph:plus-bold',
   'ph:upload-simple',
+  'ph:plus-bold',
 ];
