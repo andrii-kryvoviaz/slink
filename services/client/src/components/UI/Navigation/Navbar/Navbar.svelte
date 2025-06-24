@@ -1,9 +1,13 @@
 <script lang="ts">
   import type { User } from '@slink/lib/auth/Type/User';
 
+  import { page } from '$app/stores';
   import Icon from '@iconify/svelte';
 
+  import { usePublicImagesFeed } from '@slink/lib/state/PublicImagesFeed.svelte';
+
   import { Button } from '@slink/components/UI/Action';
+  import SearchBar from '@slink/components/UI/Search/SearchBar.svelte';
 
   interface Props {
     user?: Partial<User>;
@@ -26,14 +30,27 @@
   let innerWidth = $state(0);
   let isMobile = $derived(innerWidth < 768);
   let navLeftPosition = $derived(isMobile ? 0 : sidebarWidth);
+  let isExplorePage = $derived($page.route.id === '/explore');
+
+  const publicImagesFeed = usePublicImagesFeed();
+
+  function handleSearch(event: { searchTerm: string; searchBy: string }) {
+    const { searchTerm, searchBy } = event;
+    publicImagesFeed.search(searchTerm, searchBy);
+  }
+
+  function handleClearSearch() {
+    publicImagesFeed.resetSearch();
+    publicImagesFeed.load();
+  }
 </script>
 
 <svelte:window bind:innerWidth />
 
 <header
   class={useFlexLayout
-    ? 'h-14 backdrop-blur-xl bg-background/95 supports-[backdrop-filter]:bg-background/80 border-b border-bc-header'
-    : 'fixed top-0 right-0 z-50 h-14 backdrop-blur-xl bg-background/95 supports-[backdrop-filter]:bg-background/80 border-b border-bc-header'}
+    ? 'h-14 bg-background border-b border-bc-header'
+    : 'fixed top-0 right-0 z-50 h-14 bg-background border-b border-bc-header'}
   style:left={useFlexLayout ? undefined : `${navLeftPosition}px`}
 >
   <nav class="flex h-14 items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -55,7 +72,18 @@
       {/if}
     </div>
 
-    <div class="flex items-center gap-3 ml-auto">
+    <div class="flex items-center gap-3">
+      <!-- Search Bar - Only on Explore Page -->
+      {#if isExplorePage}
+        <SearchBar
+          searchTerm={publicImagesFeed.searchTerm}
+          searchBy={publicImagesFeed.searchBy as 'user' | 'description'}
+          placeholder="Search images..."
+          disabled={publicImagesFeed.isLoading}
+          onsearch={handleSearch}
+          onclear={handleClearSearch}
+        />
+      {/if}
       {#if !showLoginButton && user}
         <Button
           href="/upload"

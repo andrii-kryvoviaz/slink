@@ -13,6 +13,8 @@ import { useState } from '@slink/lib/state/core/ContextAwareState';
 class PublicImagesFeed extends AbstractHttpState<ImageListingResponse> {
   private _items: ImageListingItem[] = $state([]);
   private _meta: ListingMetadata = $state({} as ListingMetadata);
+  private _searchTerm: string = $state('');
+  private _searchBy: string = $state('user');
 
   public constructor() {
     super();
@@ -27,6 +29,24 @@ class PublicImagesFeed extends AbstractHttpState<ImageListingResponse> {
       size: 12,
       total: 0,
     };
+  }
+
+  public resetSearch() {
+    this._searchTerm = '';
+    this._searchBy = 'user';
+    this.reset();
+  }
+
+  public setSearch(searchTerm: string, searchBy: string = 'user') {
+    const hasChanged =
+      this._searchTerm !== searchTerm || this._searchBy !== searchBy;
+
+    this._searchTerm = searchTerm;
+    this._searchBy = searchBy;
+
+    if (hasChanged) {
+      this.reset();
+    }
   }
 
   public add(item: ImageListingItem) {
@@ -44,8 +64,18 @@ class PublicImagesFeed extends AbstractHttpState<ImageListingResponse> {
       return;
     }
 
+    const searchTerm = this._searchTerm.trim() || undefined;
+    const searchBy = searchTerm ? this._searchBy : undefined;
+
     await this.fetch(
-      () => ApiClient.image.getPublicImages(page, limit),
+      () =>
+        ApiClient.image.getPublicImages(
+          page,
+          limit,
+          'attributes.updatedAt',
+          searchTerm,
+          searchBy,
+        ),
       (response) => {
         this._items = this._items.concat(
           response.data.filter((item) => {
@@ -100,6 +130,27 @@ class PublicImagesFeed extends AbstractHttpState<ImageListingResponse> {
 
   get isEmpty(): boolean {
     return !this.hasItems && this.isDirty;
+  }
+
+  get searchTerm(): string {
+    return this._searchTerm;
+  }
+
+  get searchBy(): string {
+    return this._searchBy;
+  }
+
+  get isSearching(): boolean {
+    return this._searchTerm.trim().length > 0;
+  }
+
+  public async search(
+    searchTerm: string,
+    searchBy: string = 'user',
+    options?: RequestStateOptions,
+  ) {
+    this.setSearch(searchTerm, searchBy);
+    await this.load({ page: 1 }, options);
   }
 }
 

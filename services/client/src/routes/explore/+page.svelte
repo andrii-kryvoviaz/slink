@@ -44,15 +44,27 @@
     {/if}
 
     {#if publicFeedState.isEmpty}
-      <EmptyState
-        icon="ph:images-duotone"
-        title="No images yet"
-        description="Be the first to share something amazing with the community. Start by uploading your favorite images."
-        actionText="Upload First Image"
-        actionHref="/upload"
-        variant="blue"
-        size="lg"
-      />
+      {#if !publicFeedState.isSearching}
+        <EmptyState
+          icon="ph:images-duotone"
+          title="No images yet"
+          description="Be the first to share something amazing with the community. Start by uploading your favorite images."
+          actionText="Upload First Image"
+          actionHref="/upload"
+          variant="blue"
+          size="lg"
+        />
+      {:else}
+        <EmptyState
+          icon="ph:images-duotone"
+          title="No images found"
+          description={`No images match your search for "${publicFeedState.searchTerm}". Try a different search term or browse all images.`}
+          actionText="Clear Search"
+          actionClick={() => publicFeedState.resetSearch()}
+          variant="blue"
+          size="lg"
+        />
+      {/if}
     {/if}
 
     {#if publicFeedState.items.length > 0}

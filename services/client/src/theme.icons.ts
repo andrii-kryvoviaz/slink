@@ -111,4 +111,7 @@ export const themeIcons: string[] = [
   'ph:plus-circle-duotone',
   'ph:images-duotone',
   'ph:clock-clockwise-duotone',
+  'ph:magnifying-glass',
+  'ph:caret-down',
+  'ph:text-align-left',
 ];

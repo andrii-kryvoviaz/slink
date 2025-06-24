@@ -23,7 +23,9 @@ final readonly class GetImageListHandler implements QueryHandlerInterface {
       orderBy: $query->getOrderBy(),
       order: $query->getOrder(),
       isPublic: $isPublic,
-      userId: $userId
+      userId: $userId,
+      searchTerm: $query->getSearchTerm(),
+      searchBy: $query->getSearchBy()
     ));
     
     $items = array_map(fn($image) => Item::fromEntity($image), iterator_to_array($images));
