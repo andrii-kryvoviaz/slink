@@ -43,10 +43,8 @@
     untrack(() => {
       const errors = form.errors as Record<string, any>;
 
-      for (const key in errors) {
-        const message =
-          typeof errors[key] === 'string' ? errors[key] : String(errors[key]);
-        toast.error(message);
+      if (errors.credentials && typeof errors.credentials === 'string') {
+        toast.error(errors.credentials);
       }
     });
   });
