@@ -90,7 +90,7 @@
               : undefined}
             size="md"
             rounded="lg"
-            class="border-0 bg-gray-50/80 dark:bg-gray-800/50 focus:bg-white dark:focus:bg-gray-800 focus:ring-2 focus:ring-blue-500/20 hover:bg-gray-100/50 dark:hover:bg-gray-800/70 transition-all duration-200"
+            class="bg-gray-50/80 dark:bg-gray-800/50 focus:bg-white dark:focus:bg-gray-800 focus:ring-2 focus:ring-blue-500/20 hover:bg-gray-100/50 dark:hover:bg-gray-800/70 transition-all duration-200"
           >
             {#snippet leftIcon()}
               <Icon
@@ -113,7 +113,7 @@
               : undefined}
             size="md"
             rounded="lg"
-            class="border-0 bg-gray-50/80 dark:bg-gray-800/50 focus:bg-white dark:focus:bg-gray-800 focus:ring-2 focus:ring-blue-500/20 hover:bg-gray-100/50 dark:hover:bg-gray-800/70 transition-all duration-200"
+            class="bg-gray-50/80 dark:bg-gray-800/50 focus:bg-white dark:focus:bg-gray-800 focus:ring-2 focus:ring-blue-500/20 hover:bg-gray-100/50 dark:hover:bg-gray-800/70 transition-all duration-200"
           >
             {#snippet leftIcon()}
               <Icon
