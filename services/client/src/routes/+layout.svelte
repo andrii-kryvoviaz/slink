@@ -3,56 +3,57 @@
 
   import '@slink/app.css';
 
-  import Icon from '@iconify/svelte';
-
   import { theme } from '@slink/lib/actions/theme';
   import { settings } from '@slink/lib/settings';
 
-  import { UserDropdown } from '@slink/components/Feature/User';
-  import { Button, ThemeSwitch } from '@slink/components/UI/Action';
-  import { Navbar } from '@slink/components/UI/Navigation';
+  import { ThemeSwitch } from '@slink/components/UI/Action';
+  import { AppSidebar, Navbar } from '@slink/components/UI/Navigation';
   import { ToastManager } from '@slink/components/UI/Toast';
 
   let { data, children } = $props();
   let user = $derived(data.user);
+  let sidebarGroups = $derived((data as any).sidebarGroups || []);
 
   const currentTheme = settings.get('theme', data.settings.theme);
   const { isDark } = currentTheme;
+
+  let showSidebar = $derived(!!user);
 </script>
 
 <Tooltip.Provider delayDuration={0} disableHoverableContent={true}>
-  <div class="flex h-full flex-col" use:theme={$currentTheme}>
-    <Navbar>
-      {#snippet themeSwitch()}
-        <ThemeSwitch
-          checked={$isDark}
-          on={{ change: (theme) => settings.set('theme', theme) }}
-        />
-      {/snippet}
+  <div class="relative flex h-screen" use:theme={$currentTheme}>
+    <AppSidebar
+      user={user || undefined}
+      groups={sidebarGroups}
+      variant="default"
+      defaultExpanded={data.settings.sidebar?.expanded ?? true}
+    />
 
-      {#snippet profile()}
-        <div class="max-h-10">
-          {#if !user}
-            <Button
-              href="/profile/login"
-              motion="hover:opacity"
-              variant="link"
-              class="p-0 hover:no-underline"
-            >
-              <span class="text-sm font-semibold leading-6">
-                <span>Log in</span>
-                <Icon icon="solar:login-broken" class="inline h-6 w-6" />
-              </span>
-            </Button>
-          {:else}
-            <UserDropdown {user} isDark={$isDark} />
-          {/if}
-        </div>
-      {/snippet}
-    </Navbar>
+    <div class="flex flex-col flex-1 min-w-0">
+      <Navbar
+        user={user || undefined}
+        showLogo={!showSidebar}
+        showLoginButton={!user}
+        sidebarWidth={0}
+        useFlexLayout={true}
+      >
+        {#snippet themeSwitch()}
+          <ThemeSwitch
+            checked={$isDark}
+            variant="default"
+            animation="none"
+            on={{ change: (theme) => settings.set('theme', theme) }}
+          />
+        {/snippet}
+      </Navbar>
 
-    <div id="main">
-      {@render children?.()}
+      <main
+        id="main"
+        class="flex-1 overflow-y-auto"
+        style:padding-left="max(env(safe-area-inset-left), 0px)"
+      >
+        {@render children?.()}
+      </main>
     </div>
 
     <ToastManager />

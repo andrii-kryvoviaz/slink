@@ -12,7 +12,8 @@ export type RequestState<T> = {
   isLoading: Readable<boolean>;
   data: Readable<T | null>;
   error: Readable<ValidationException | null>;
-  run: (...args: any[]) => Promise<void>;
+  run: (...args: any[]) => Promise<void> | void;
+  reset: () => void;
 };
 
 type RequestStateOptions = {
@@ -35,14 +36,14 @@ export function ReactiveState<T>(
   const [data, setData] = inMemoryReadable<T | null>(null);
   const [error, setError] = inMemoryReadable<ValidationException | null>(null);
 
-  function resetState() {
+  function reset() {
     setData(null);
     setError(null);
     setStatus('idle');
   }
 
   const mutate = async (...args: any[]) => {
-    resetState();
+    reset();
 
     setStatus('loading');
     setIsLoading(true);
@@ -72,5 +73,6 @@ export function ReactiveState<T>(
     data,
     error,
     run,
+    reset,
   };
 }

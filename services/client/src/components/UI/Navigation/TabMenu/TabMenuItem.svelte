@@ -8,28 +8,30 @@
   import { className } from '@slink/utils/ui/className';
 
   import { type TabMenuContext } from '@slink/components/UI/Navigation';
+  import { TabMenuItemTheme } from '@slink/components/UI/Navigation/TabMenu/TabMenu.theme';
 
   interface Props {
     key?: string;
     href?: string;
+    variant?: 'default' | 'minimal' | 'pills' | 'underline';
     children?: Snippet;
     on?: {
       click: (event: MouseEvent | KeyboardEvent) => void;
     };
   }
 
-  let { key = randomId('tab-menu-item'), href, on, children }: Props = $props();
+  let {
+    key = randomId('tab-menu-item'),
+    href,
+    variant = 'default',
+    on,
+    children,
+  }: Props = $props();
 
   let active: boolean = $state(false);
   let ref: HTMLElement | undefined = $state();
 
-  const defaultClasses =
-    'relative z-10 flex cursor-pointer items-center gap-2 px-3 py-1.5 text-center text-sm text-gray-400 transition-colors duration-300 dark:text-gray-400 dark:hover:text-white hover:text-black';
-  const activeClasses = 'text-black dark:text-white';
-
-  let classes = $derived(
-    className(defaultClasses, { [activeClasses]: active }),
-  );
+  let classes = $derived(TabMenuItemTheme({ variant, active }));
 
   const { onRegister, onSelect, onMouseEnter, onMouseLeave } =
     getContext<TabMenuContext>('tab-menu');
@@ -69,7 +71,12 @@
   });
 
   $effect(() => {
-    active = href === page.route.id;
+    if (href) {
+      const currentPath = page.url.pathname;
+      const isExactMatch = currentPath === href;
+      const isRouteMatch = page.route.id === href;
+      active = isExactMatch || isRouteMatch;
+    }
   });
 
   let defaultProps: Partial<HTMLAttributes<HTMLElement>> = $derived({

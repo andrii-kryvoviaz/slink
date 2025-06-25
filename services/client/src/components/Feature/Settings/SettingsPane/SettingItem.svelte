@@ -6,7 +6,7 @@
     sizeMatchingRegex,
   } from '@slink/utils/string/parseFileSize';
   import { randomId } from '@slink/utils/string/randomId';
-  import { toast } from '@slink/utils/ui/toast';
+  import { toast } from '@slink/utils/ui/toast.svelte';
 
   import { ResetSettingConfirmation } from '@slink/components/Feature/Settings';
   import { Badge } from '@slink/components/UI/Text';
@@ -77,35 +77,57 @@
   aria-label="Reset Setting"
 ></button>
 
-<div class="flex flex-wrap items-start justify-between gap-2 sm:flex-nowrap">
-  {#if label}
-    <h2 class="text-md flex flex-col items-start gap-2 font-light">
-      <span
-        class="flex flex-col flex-wrap items-start gap-2 text-gray-800 dark:text-gray-400 md:flex-row"
-      >
-        <span bind:this={labelRef}>{@render label?.()}</span>
-
-        {#if displayValue}
-          <span
-            class="flex cursor-pointer select-none items-center gap-2 rounded-full bg-gray-200 p-1 px-4 text-xs font-extralight text-gray-600 transition-colors duration-200 hover:bg-gray-300 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-            onclick={handleSettingReset}
-            onkeydown={handleSettingReset}
-            role="button"
-            tabindex="0"
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+  <div class="space-y-3">
+    {#if label}
+      <div class="space-y-2">
+        <div class="flex items-start gap-3 flex-wrap">
+          <h3
+            bind:this={labelRef}
+            class="text-base font-medium text-gray-900 dark:text-white leading-tight"
           >
-            <span class="font-light">Default</span>
-            <Badge variant="default" size="sm">{displayValue}</Badge>
-          </span>
+            {@render label?.()}
+          </h3>
+
+          {#if displayValue}
+            <button
+              type="button"
+              class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-gray-100/60 dark:bg-gray-800/60 border border-gray-200/60 dark:border-gray-700/60 rounded-lg hover:bg-gray-200/60 dark:hover:bg-gray-700/60 hover:border-gray-300/60 dark:hover:border-gray-600/60 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:ring-offset-1"
+              onclick={handleSettingReset}
+              onkeydown={handleSettingReset}
+              tabindex="0"
+            >
+              <span class="text-gray-500 dark:text-gray-400">Default:</span>
+              <Badge
+                variant="default"
+                size="sm"
+                class="bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700"
+                >{displayValue}</Badge
+              >
+            </button>
+          {/if}
+        </div>
+
+        {#if hint}
+          <p
+            class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed max-w-md"
+          >
+            {@render hint?.()}
+          </p>
         {/if}
-      </span>
+      </div>
+    {/if}
+  </div>
 
-      {#if hint}
-        <span class="w-64 text-xs font-extralight text-gray-500">
-          {@render hint?.()}
-        </span>
+  <div class="flex justify-start lg:justify-end">
+    <div class="w-full lg:w-auto lg:min-w-[240px]">
+      {#if children}
+        {@render children()}
+      {:else}
+        <div class="text-sm text-gray-500 dark:text-gray-400 italic">
+          Control not available
+        </div>
       {/if}
-    </h2>
-  {/if}
-
-  {#if children}{@render children()}{:else}Isn't available at the moment{/if}
+    </div>
+  </div>
 </div>

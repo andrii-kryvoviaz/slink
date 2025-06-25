@@ -1,6 +1,5 @@
 import { HttpException } from '@slink/api/Exceptions';
-
-import { toast } from '@slink/utils/ui/toast';
+import { toast } from '@slink/utils/ui/toast.svelte';
 
 export function printErrorsAsToastMessage(error: Error) {
   if (error instanceof HttpException) {
@@ -9,7 +8,7 @@ export function printErrorsAsToastMessage(error: Error) {
         !parseInt(key) && key && Object.keys(error.errors).length > 1
           ? `[${key.capitalizeFirstLetter()}] ${error.errors[key]}`
           : error.errors[key];
-      toast.error(message);
+      toast.error(message as string);
     }
 
     return;

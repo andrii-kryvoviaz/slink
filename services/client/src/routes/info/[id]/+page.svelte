@@ -38,12 +38,16 @@
       return url;
     }
 
-    // go over all params and add them to the url as query params
+    // Filter out false boolean values and create query params
     const paramsString = Object.entries(params)
+      .filter(
+        ([key, value]) =>
+          value !== false && value !== undefined && value !== null,
+      )
       .map(([key, value]) => `${key}=${value}`)
       .join('&');
 
-    return [url, paramsString].join('?');
+    return paramsString ? [url, paramsString].join('?') : url;
   };
 
   let params: Partial<ImageParams> = $state({});
@@ -51,13 +55,24 @@
     formatImageUrl([$page.url.origin, image.url], params),
   );
 
-  const handleImageSizeChange = (value?: Partial<ImageSize>) => {
-    let { width, height, ...rest } = params;
+  const handleImageSizeChange = (
+    value?: Partial<ImageSize & { crop?: boolean }>,
+  ) => {
+    let { width, height, crop, ...rest } = params;
 
-    params = {
-      ...rest,
-      ...value,
-    };
+    // If crop is explicitly false, remove it from params
+    if (value?.crop === false) {
+      params = {
+        ...rest,
+        ...(value.width && { width: value.width }),
+        ...(value.height && { height: value.height }),
+      };
+    } else {
+      params = {
+        ...rest,
+        ...value,
+      };
+    }
   };
 
   const {
@@ -83,24 +98,22 @@
 </script>
 
 <svelte:head>
-  <title>Detailed View | Slink</title>
+  <title>Image Details | Slink</title>
 </svelte:head>
 
-<div
-  in:fly={{ y: 100, duration: 500, delay: 100 }}
-  class="flex justify-center p-2 sm:p-8"
+<main
+  in:fly={{ y: 20, duration: 400, delay: 100 }}
+  class="container mx-auto px-4 sm:px-6 lg:px-8 py-8"
 >
-  <div class="container flex flex-row flex-wrap justify-center gap-6">
-    <div class="flex w-fit max-w-full justify-start">
-      <ImagePlaceholder src={image.url} metadata={image} />
+  <div class="flex flex-col flex-wrap lg:flex-row gap-8">
+    <div class="w-full max-w-2xl">
+      <ImagePlaceholder src={image.url} metadata={image} stretch={false} />
     </div>
 
-    <div class="min-w-0 px-2">
-      <div class="mb-12">
-        <ImageActionBar {image} />
-      </div>
+    <div class="w-full lg:w-80 flex-shrink-0 space-y-8">
+      <ImageActionBar {image} />
 
-      <div class="mb-4 mt-8 w-full">
+      <div>
         <ImageDescription
           description={image.description}
           isLoading={$descriptionIsLoading}
@@ -109,27 +122,35 @@
           }}
         />
       </div>
-      <div class="mb-2 mt-8">
-        <p class="my-2 text-xs font-extralight">
-          Copy this link to use on your website or share with others
-        </p>
-        <CopyContainer value={directLink} />
-      </div>
+
       {#if image.supportsResize}
-        <div class="mb-2 flex items-center gap-3">
+        <div>
+          <div class="flex items-center gap-2 mb-4">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+              Resize
+            </h2>
+          </div>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">
+            Apply resize to coppied image URL. The original image will remain
+            unchanged.
+          </p>
           <ImageSizePicker
             width={image.width}
             height={image.height}
             on={{ change: (size) => handleImageSizeChange(size) }}
           />
-          <Tooltip size="xs" side="top" align="end">
-            {#snippet trigger()}
-              <Icon icon="ep:info-filled" class="hidden cursor-help xs:block" />
-            {/snippet}
-            Adjust the size before copying the URL
-          </Tooltip>
         </div>
       {/if}
+
+      <div>
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+          Share
+        </h2>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">
+          Use the link below to share or embed the image.
+        </p>
+        <CopyContainer value={directLink} />
+      </div>
     </div>
   </div>
-</div>
+</main>

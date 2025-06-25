@@ -3,6 +3,8 @@
   import { Tooltip } from 'bits-ui';
   import { type Snippet } from 'svelte';
 
+  import { browser } from '$app/environment';
+
   import { className } from '@slink/utils/ui/className';
 
   import {
@@ -39,16 +41,20 @@
   let arrowClassess = $derived(className(TooltipArrow({ variant })));
 </script>
 
-<Tooltip.Root bind:open>
-  <Tooltip.Trigger {...triggerProps}>
-    {@render trigger()}
-  </Tooltip.Trigger>
-  <Tooltip.Portal>
-    <Tooltip.Content sideOffset={8} {...props} class={contentClassess}>
-      {#if withArrow}
-        <Tooltip.Arrow class={arrowClassess} />
-      {/if}
-      {@render children?.()}
-    </Tooltip.Content>
-  </Tooltip.Portal>
-</Tooltip.Root>
+{#if !browser}
+  {@render trigger()}
+{:else}
+  <Tooltip.Root bind:open>
+    <Tooltip.Trigger {...triggerProps}>
+      {@render trigger()}
+    </Tooltip.Trigger>
+    <Tooltip.Portal>
+      <Tooltip.Content sideOffset={8} {...props} class={contentClassess}>
+        {#if withArrow}
+          <Tooltip.Arrow class={arrowClassess} />
+        {/if}
+        {@render children?.()}
+      </Tooltip.Content>
+    </Tooltip.Portal>
+  </Tooltip.Root>
+{/if}

@@ -12,6 +12,8 @@ final readonly class ImageListFilter {
    * @param bool|null $isPublic
    * @param string|null $userId
    * @param array<string>|null $uuids
+   * @param string|null $searchTerm
+   * @param string|null $searchBy
    */
   public function __construct(
     private ?int $limit = 10,
@@ -19,7 +21,9 @@ final readonly class ImageListFilter {
     private ?string $order = 'desc',
     private ?bool $isPublic = null,
     private ?string $userId = null,
-    private ?array $uuids = []
+    private ?array $uuids = [],
+    private ?string $searchTerm = null,
+    private ?string $searchBy = null
   ) {
   }
   
@@ -63,5 +67,19 @@ final readonly class ImageListFilter {
    */
   public function getUuids(): ?array {
     return $this->uuids;
+  }
+
+  /**
+   * @return string|null
+   */
+  public function getSearchTerm(): ?string {
+    return $this->searchTerm;
+  }
+
+  /**
+   * @return string|null
+   */
+  public function getSearchBy(): ?string {
+    return $this->searchBy;
   }
 }

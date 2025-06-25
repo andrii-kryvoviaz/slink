@@ -3,8 +3,7 @@
 
   import { type Readable, readable } from 'svelte/store';
 
-  import { Button } from '@slink/components/UI/Action';
-  import { Loader } from '@slink/components/UI/Loader';
+  import ConfirmationDialog from '@slink/components/UI/Modal/ConfirmationDialog.svelte';
 
   interface Props {
     user: User;
@@ -16,33 +15,31 @@
   let { user, loading = readable(false), close, confirm }: Props = $props();
 </script>
 
-<div class="text-left">
-  <h3
-    class="flex items-center justify-between text-lg font-medium capitalize leading-6 text-gray-800 dark:text-white"
-  >
-    <span>User Deletion</span>
-    {#if $loading}
-      <Loader size="xs" />
-    {/if}
-  </h3>
-  <div class="mt-2 text-sm">
-    <span class="block">Are you sure you want to delete this user?</span>
-    <span
-      class="my-2 block rounded-md bg-neutral-200 p-2 text-center dark:bg-neutral-800"
-    >
-      {user.email}
-    </span>
+<ConfirmationDialog
+  variant="danger"
+  icon="heroicons:trash"
+  title="Delete User"
+  message="This action cannot be undone. The user will be permanently removed."
+  confirmText="Delete"
+  {loading}
+  {close}
+  {confirm}
+>
+  {#snippet content()}
+    <div class="space-y-3">
+      <p class="text-sm text-gray-600 dark:text-gray-400">
+        You are about to delete the following user:
+      </p>
 
-    <span class="mt-2 block text-[0.7em]"> This action cannot be undone. </span>
-  </div>
-</div>
-
-<div class="mt-5 flex gap-2">
-  <Button variant="outline" size="sm" class="w-1/2" onclick={close}>
-    Cancel
-  </Button>
-
-  <Button variant="danger" size="sm" class="w-1/2" onclick={confirm}>
-    Delete
-  </Button>
-</div>
+      <div class="flex items-center">
+        <div
+          class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-50/80 dark:bg-red-950/30 border border-red-200/40 dark:border-red-800/40 text-red-700 dark:text-red-300"
+        >
+          <span class="font-mono text-sm font-medium">
+            {user.email}
+          </span>
+        </div>
+      </div>
+    </div>
+  {/snippet}
+</ConfirmationDialog>

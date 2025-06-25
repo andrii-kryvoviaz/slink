@@ -4,11 +4,12 @@
   import { onMount } from 'svelte';
 
   import Icon from '@iconify/svelte';
+  import { fade, fly } from 'svelte/transition';
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
 
-  import { UserStatus } from '@slink/components/Feature/User';
+  import { UserAvatar, UserStatus } from '@slink/components/Feature/User';
   import { RefreshButton } from '@slink/components/UI/Action';
   import { Card } from '@slink/components/UI/Card';
 
@@ -27,7 +28,7 @@
   let filterParams: UserListFilter = $state({
     orderBy: 'createdAt',
     order: 'desc',
-    limit: 5,
+    limit: 6,
   });
 
   onMount(() => {
@@ -47,97 +48,145 @@
 
   let isEmpty = $derived(!$response?.data.length);
   let isLoaded = $derived($status === 'finished' && !isEmpty);
+
+  const formatDate = (timestamp: number) => {
+    const date = new Date(timestamp * 1000);
+    const now = new Date();
+    const diffInDays = Math.floor(
+      (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24),
+    );
+
+    if (diffInDays === 0) return 'Today';
+    if (diffInDays === 1) return 'Yesterday';
+    if (diffInDays < 7) return `${diffInDays} days ago`;
+
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined,
+    });
+  };
 </script>
 
-<Card>
-  <div class="relative overflow-x-auto">
-    <div
-      class="flex-column flex flex-wrap items-center justify-between gap-2 space-y-4 pb-4 sm:flex-row sm:space-y-0"
-    >
-      <div class="flex grow items-center justify-between">
-        <p class="text-lg font-light tracking-wider">Latest Users</p>
+<Card variant="enhanced" rounded="xl" shadow="lg">
+  {#snippet children()}
+    <div class="flex flex-col gap-6 mb-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-xl font-semibold text-slate-900 dark:text-white">
+            Latest Users
+          </h2>
+          <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">
+            Recently joined members
+          </p>
+        </div>
         <RefreshButton
           size="sm"
           loading={$isLoading}
           onclick={() => fetchUsers(filterParams)}
         />
       </div>
-      <div class="w-full sm:w-auto">
-        <label for="table-search" class="sr-only">Search</label>
-        <div class="relative">
-          <div
-            class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
-          >
-            <Icon
-              icon="material-symbols-light:search"
-              class="h-5 w-5 text-gray-400"
-            />
-          </div>
-          <input
-            type="text"
-            id="table-search"
-            class="block w-full rounded-lg border border-gray-300 bg-gray-50 py-2 pl-10 pr-3 text-sm focus:inset-ring-3 text-gray-900 focus:border-blue-500 focus:inset-ring-blue-500/30 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:inset-ring-blue-500/30"
-            placeholder="Search for users"
-            onkeyup={handleSearch}
+
+      <div class="relative max-w-sm">
+        <div
+          class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+        >
+          <Icon
+            icon="heroicons:magnifying-glass"
+            class="w-4 h-4 text-gray-400 dark:text-gray-500"
           />
         </div>
+        <input
+          type="text"
+          placeholder="Search users..."
+          class="w-full pl-10 pr-4 py-2.5 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400 transition-colors duration-200"
+          onkeyup={handleSearch}
+        />
       </div>
     </div>
-    <table
-      class="w-full text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right"
-    >
-      <thead
-        class="hidden bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400 md:table-header-group"
-      >
-        <tr>
-          <th scope="col" class="px-6 py-3">Name</th>
-          <th scope="col" class="px-6 py-3">Email</th>
-          <th scope="col" class="px-6 py-3">Status</th>
-          <th scope="col" class="px-6 py-3">Added</th>
-        </tr>
-      </thead>
-      <tbody>
-        {#if isEmpty}
-          <tr>
-            <td class="px-6 py-4" colspan="4">
-              <p class="text-center text-gray-500 dark:text-gray-400">
-                No users found
-              </p>
-            </td>
-          </tr>
-        {/if}
-        {#if isLoaded && $response}
-          {#each $response.data as user, index}
-            <tr
-              class="grid grid-cols-2 bg-white py-4 dark:border-gray-700 dark:bg-gray-800 sm:table-row sm:py-0 sm:hover:bg-gray-50 sm:dark:hover:bg-gray-600"
-              class:border-b={index !== $response.data.length - 1}
-            >
-              <th
-                scope="row"
-                class="order-1 whitespace-nowrap font-medium text-gray-900 dark:text-white sm:px-6 sm:py-4"
-              >
-                {user.displayName}
-              </th>
-              <td class="order-3 sm:px-6 sm:py-4">{user.email}</td>
-              <td class="order-2 row-span-2 place-self-center sm:px-6 sm:py-4"
-                ><UserStatus status={user.status} /></td
-              >
-              <td class="hidden sm:table-cell sm:px-6 sm:py-4"
-                >{user.createdAt.formattedDate}</td
-              >
-            </tr>
-          {/each}
-          <tr>
-            <td class="px-6 py-4" colspan={4}>
-              <div class="flex items-center justify-between">
-                <p>
-                  Showing {$response.data.length} of {$response.meta.total} users
-                </p>
+
+    <div class="space-y-1">
+      {#if isEmpty}
+        <div
+          class="flex flex-col items-center justify-center py-12 text-center"
+          in:fade={{ duration: 200 }}
+        >
+          <div
+            class="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4"
+          >
+            <Icon
+              icon="heroicons:users"
+              class="w-8 h-8 text-gray-400 dark:text-gray-500"
+            />
+          </div>
+          <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
+            No users found
+          </h3>
+          <p class="text-gray-500 dark:text-gray-400 max-w-sm">
+            {filterParams.searchTerm
+              ? 'Try adjusting your search terms'
+              : 'Users will appear here once they join'}
+          </p>
+        </div>
+      {:else if isLoaded && $response}
+        {#each $response.data as user, index (user.id)}
+          <div
+            class="group flex items-center gap-4 p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all duration-200 cursor-pointer border border-transparent hover:border-gray-200 dark:hover:border-gray-700"
+            in:fly={{ y: 20, duration: 300, delay: index * 50 }}
+          >
+            <div class="flex-shrink-0">
+              <UserAvatar
+                {user}
+                size="md"
+                class="ring-2 ring-gray-100 dark:ring-gray-700 group-hover:ring-gray-200 dark:group-hover:ring-gray-600 transition-all duration-200"
+              />
+            </div>
+
+            <div class="flex-1 min-w-0">
+              <div class="flex items-start justify-between">
+                <div class="min-w-0 flex-1">
+                  <p
+                    class="text-sm font-medium text-gray-900 dark:text-white truncate"
+                  >
+                    {user.displayName}
+                  </p>
+                  <p
+                    class="text-sm text-gray-500 dark:text-gray-400 truncate mt-0.5"
+                  >
+                    {user.email}
+                  </p>
+                </div>
+
+                <div class="flex flex-col items-end gap-2 ml-4">
+                  <UserStatus status={user.status} />
+                  <span
+                    class="text-xs text-gray-400 dark:text-gray-500 whitespace-nowrap"
+                  >
+                    {formatDate(user.createdAt.timestamp)}
+                  </span>
+                </div>
               </div>
-            </td>
-          </tr>
+            </div>
+          </div>
+        {/each}
+
+        {#if $response.meta.total > (filterParams.limit || 6)}
+          <div class="pt-4 mt-6 border-t border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between text-sm">
+              <span class="text-gray-500 dark:text-gray-400">
+                Showing {$response.data.length} of {$response.meta.total} users
+              </span>
+              <a
+                href="/admin/user"
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors duration-200"
+              >
+                <span>View all</span>
+                <Icon icon="heroicons:arrow-right" class="w-4 h-4" />
+              </a>
+            </div>
+          </div>
         {/if}
-      </tbody>
-    </table>
-  </div>
+      {/if}
+    </div>
+  {/snippet}
 </Card>

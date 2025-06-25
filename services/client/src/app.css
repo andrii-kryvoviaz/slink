@@ -2,6 +2,7 @@
 
 @import './theme/theme.default.css' layer(theme);
 @import './theme/theme.dark.css' layer(theme);
+@import './theme/theme.sidebar.css' layer(theme);
 
 @custom-variant dark (&:where(.dark, .dark *));
 

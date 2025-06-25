@@ -4,7 +4,8 @@
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import Icon from '@iconify/svelte';
-  import { fly } from 'svelte/transition';
+  import { cubicOut } from 'svelte/easing';
+  import { scale } from 'svelte/transition';
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
@@ -12,10 +13,10 @@
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
 
   import { downloadByLink } from '@slink/utils/http/downloadByLink';
-  import { toast } from '@slink/utils/ui/toast';
+  import { toast } from '@slink/utils/ui/toast.svelte';
 
   import { ImageDeleteConfirmation } from '@slink/components/Feature/Image';
-  import { Button } from '@slink/components/UI/Action';
+  import { Loader } from '@slink/components/UI/Loader';
   import { Tooltip } from '@slink/components/UI/Tooltip';
 
   type actionButton = 'download' | 'visibility' | 'share' | 'delete' | 'copy';
@@ -111,120 +112,110 @@
   };
 
   let directLink = $derived(`${page.url.origin}/image/${image.fileName}`);
+
+  const baseButtonClass =
+    'group relative flex items-center justify-center transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50';
+
+  const actionButtonClass = `${baseButtonClass} h-11 w-11 sm:h-9 sm:w-9 rounded-xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-gray-200/60 dark:border-gray-700/60 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-white dark:hover:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-sm active:scale-95 focus-visible:ring-blue-500/30`;
+
+  const primaryButtonClass = `${baseButtonClass} h-11 sm:h-9 px-4 sm:px-3 gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-medium shadow-sm hover:shadow-md active:scale-95 focus-visible:ring-blue-500/30 whitespace-nowrap`;
+
+  const secondaryButtonClass = `${baseButtonClass} h-11 sm:h-9 px-3 sm:px-2.5 gap-2 rounded-xl bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600 active:scale-95 focus-visible:ring-gray-500/30 whitespace-nowrap`;
+
+  const destructiveButtonClass = `${baseButtonClass} h-11 w-11 sm:h-9 sm:w-9 rounded-xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-gray-200/60 dark:border-gray-700/60 text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 hover:border-red-200 dark:hover:border-red-800/50 active:scale-95 focus-visible:ring-red-500/30`;
 </script>
 
-<div class="flex items-center gap-2">
+<div class="flex flex-wrap items-center gap-2">
   {#if isButtonVisible('download')}
-    <div>
-      <Button
-        variant="primary"
-        size="md"
-        onclick={() => downloadByLink(directLink, image.fileName)}
-      >
-        <span class="mr-2 hidden text-sm font-light xs:block">Download</span>
-        {#snippet rightIcon()}
-          <Icon icon="material-symbols-light:download" class="h-5 w-5" />
-        {/snippet}
-      </Button>
-    </div>
-  {/if}
-
-  {#if isButtonVisible('visibility')}
-    <div>
-      <Tooltip size="xs" side="bottom">
-        {#snippet trigger()}
-          <Button
-            variant="invisible"
-            size="md"
-            class="px-3 transition-colors"
-            onclick={() => handleVisibilityChange(!image.isPublic)}
-            disabled={$visibilityIsLoading}
-          >
-            {#if $visibilityIsLoading}
-              <Icon icon="mdi-light:loading" class="h-5 w-5 animate-spin" />
-            {:else if image.isPublic}
-              <Icon icon="ph:eye-light" class="h-5 w-5" />
-            {:else}
-              <Icon icon="ph:eye-slash-light" class="h-5 w-5" />
-            {/if}
-          </Button>
-        {/snippet}
-
-        {#if image.isPublic}
-          Make Private
-        {:else}
-          Make Public
-        {/if}
-      </Tooltip>
-    </div>
-  {/if}
-
-  {#if isButtonVisible('share')}
-    <div>
-      <Tooltip size="xs" side="bottom">
-        {#snippet trigger()}
-          <Button
-            variant="invisible"
-            size="md"
-            class="px-3 transition-colors"
-            href="/help/faq#share-feature"
-          >
-            <Icon icon="mdi-light:share-variant" class="h-5 w-5" />
-          </Button>
-        {/snippet}
-
-        Sharing Policy
-      </Tooltip>
-    </div>
+    <button
+      class={primaryButtonClass}
+      onclick={() => downloadByLink(directLink, image.fileName)}
+      aria-label="Download image"
+      type="button"
+    >
+      <Icon icon="lucide:download" class="h-4 w-4 sm:h-3.5 sm:w-3.5" />
+      <span class="text-sm sm:text-xs font-medium">Download</span>
+    </button>
   {/if}
 
   {#if isButtonVisible('copy')}
-    <div>
-      <Tooltip size="xs" side="bottom">
-        {#snippet trigger()}
-          <Button
-            variant="invisible"
-            size="md"
-            class="px-3 transition-colors"
-            onclick={handleCopy}
-            disabled={isCopiedActive}
-          >
-            {#if isCopiedActive}
-              <div in:fly={{ duration: 300 }}>
-                <Icon icon="mdi-light:check" class="h-5 w-5" />
-              </div>
-            {:else}
-              <div in:fly={{ duration: 300 }}>
-                <Icon icon="lets-icons:copy-light" class="h-5 w-5" />
-              </div>
-            {/if}
-          </Button>
-        {/snippet}
+    <Tooltip side="bottom" sideOffset={8}>
+      {#snippet trigger()}
+        <button
+          class={secondaryButtonClass}
+          onclick={handleCopy}
+          disabled={isCopiedActive}
+          aria-label="Copy image URL"
+          type="button"
+        >
+          {#if isCopiedActive}
+            <div in:scale={{ duration: 300, easing: cubicOut }}>
+              <Icon
+                icon="ph:check"
+                class="h-4 w-4 sm:h-3.5 sm:w-3.5 text-green-600 dark:text-green-400"
+              />
+            </div>
+          {:else}
+            <Icon icon="ph:copy" class="h-4 w-4 sm:h-3.5 sm:w-3.5" />
+          {/if}
+        </button>
+      {/snippet}
+      {isCopiedActive ? 'Copied!' : 'Copy URL'}
+    </Tooltip>
+  {/if}
 
-        Copy URL
-      </Tooltip>
-    </div>
+  {#if isButtonVisible('visibility')}
+    <Tooltip side="bottom" sideOffset={8}>
+      {#snippet trigger()}
+        <button
+          class={actionButtonClass}
+          onclick={() => handleVisibilityChange(!image.isPublic)}
+          disabled={$visibilityIsLoading}
+          aria-label={image.isPublic ? 'Make private' : 'Make public'}
+          type="button"
+        >
+          {#if $visibilityIsLoading}
+            <Loader variant="minimal" size="xs" />
+          {:else}
+            <Icon
+              icon={image.isPublic ? 'ph:eye' : 'ph:eye-slash'}
+              class="h-4 w-4 sm:h-3.5 sm:w-3.5"
+            />
+          {/if}
+        </button>
+      {/snippet}
+      {image.isPublic ? 'Make private' : 'Make public'}
+    </Tooltip>
+  {/if}
+
+  {#if isButtonVisible('share')}
+    <Tooltip side="bottom" sideOffset={8}>
+      {#snippet trigger()}
+        <a
+          href="/help/faq#share-feature"
+          class={actionButtonClass}
+          aria-label="View sharing policy"
+        >
+          <Icon icon="ph:share-network" class="h-4 w-4 sm:h-3.5 sm:w-3.5" />
+        </a>
+      {/snippet}
+      Sharing policy
+    </Tooltip>
   {/if}
 
   {#if isButtonVisible('delete')}
-    <div>
-      <Tooltip size="xs" side="bottom">
-        {#snippet trigger()}
-          <Button
-            variant="invisible"
-            size="md"
-            class="px-3 transition-colors hover:bg-danger hover:text-white"
-            onclick={handleImageDeletion}
-          >
-            <Icon
-              icon="solar:trash-bin-minimalistic-2-linear"
-              class="h-5 w-5"
-            />
-          </Button>
-        {/snippet}
-
-        Delete Image
-      </Tooltip>
-    </div>
+    <Tooltip side="bottom" sideOffset={8}>
+      {#snippet trigger()}
+        <button
+          class={destructiveButtonClass}
+          onclick={handleImageDeletion}
+          aria-label="Delete image"
+          type="button"
+        >
+          <Icon icon="ph:trash" class="h-4 w-4 sm:h-3.5 sm:w-3.5" />
+        </button>
+      {/snippet}
+      Delete image
+    </Tooltip>
   {/if}
 </div>

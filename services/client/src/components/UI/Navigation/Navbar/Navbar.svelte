@@ -1,52 +1,121 @@
 <script lang="ts">
+  import type { User } from '@slink/lib/auth/Type/User';
+
+  import { page } from '$app/stores';
   import Icon from '@iconify/svelte';
 
-  import { Button } from '@slink/components/UI/Action';
+  import { usePublicImagesFeed } from '@slink/lib/state/PublicImagesFeed.svelte';
 
-  let { themeSwitch, profile } = $props();
+  import { Button } from '@slink/components/UI/Action';
+  import SearchBar from '@slink/components/UI/Search/SearchBar.svelte';
+
+  interface Props {
+    user?: Partial<User>;
+    showLogo?: boolean;
+    showLoginButton?: boolean;
+    sidebarWidth?: number;
+    themeSwitch?: import('svelte').Snippet;
+    useFlexLayout?: boolean;
+  }
+
+  let {
+    user,
+    showLogo = true,
+    showLoginButton = false,
+    sidebarWidth = 0,
+    themeSwitch,
+    useFlexLayout = false,
+  }: Props = $props();
+
+  let innerWidth = $state(0);
+  let isMobile = $derived(innerWidth < 768);
+  let navLeftPosition = $derived(isMobile ? 0 : sidebarWidth);
+  let isExplorePage = $derived($page.route.id === '/explore');
+
+  const publicImagesFeed = usePublicImagesFeed();
+
+  function handleSearch(event: { searchTerm: string; searchBy: string }) {
+    const { searchTerm, searchBy } = event;
+    publicImagesFeed.search(searchTerm, searchBy);
+  }
+
+  function handleClearSearch() {
+    publicImagesFeed.resetSearch();
+    publicImagesFeed.load();
+  }
 </script>
 
-<header class="z-30 w-full border-b-2 border-bc-header/70">
-  <nav
-    class="mx-auto flex min-h-[5rem] items-center justify-between px-5 py-4 lg:px-8"
-  >
-    <div class="flex flex-wrap lg:flex-1">
-      <a href="/" class="-m-1.5 flex items-center gap-2 p-1.5">
-        <span class="sr-only">Slink</span>
-        <img class="h-8 w-auto" src="/favicon.png" alt="" />
-        <span>Slink</span>
-      </a>
+<svelte:window bind:innerWidth />
+
+<header
+  class={useFlexLayout
+    ? 'h-14 bg-background border-b border-bc-header'
+    : 'fixed top-0 right-0 z-50 h-14 bg-background border-b border-bc-header'}
+  style:left={useFlexLayout ? undefined : `${navLeftPosition}px`}
+>
+  <nav class="flex h-14 items-center justify-between px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center">
+      {#if showLogo}
+        <a
+          href="/"
+          class="flex items-center gap-3 hover:opacity-80 transition-opacity duration-200 group"
+        >
+          <div
+            class="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10 group-hover:border-primary/20 group-hover:scale-105 transition-all duration-200"
+          >
+            <img class="h-5 w-5" src="/favicon.png" alt="Slink" />
+          </div>
+          <span class="font-semibold text-foreground tracking-tight text-lg"
+            >Slink</span
+          >
+        </a>
+      {/if}
     </div>
 
-    <div class="flex items-center justify-end gap-3 lg:flex-1">
-      <div>
+    <div class="flex items-center gap-3">
+      <!-- Search Bar - Only on Explore Page -->
+      {#if isExplorePage}
+        <SearchBar
+          searchTerm={publicImagesFeed.searchTerm}
+          searchBy={publicImagesFeed.searchBy as 'user' | 'description'}
+          placeholder="Search images..."
+          disabled={publicImagesFeed.isLoading}
+          onsearch={handleSearch}
+          onclear={handleClearSearch}
+        />
+      {/if}
+      {#if !showLoginButton && user}
         <Button
           href="/upload"
-          variant="dark"
+          variant="glass"
           size="sm"
           rounded="full"
-          motion="hover:opacity"
           id="uploadImageLink"
-          class="flex flex-row gap-2 py-3 text-sm hover:no-underline sm:py-2 sm:text-xs"
+          class="flex flex-row gap-2"
         >
           <Icon icon="ph:plus-fill" class="h-3 w-3 sm:h-4 sm:w-4" />
           Upload
         </Button>
-      </div>
+      {/if}
+
+      {#if showLoginButton}
+        <Button
+          href="/profile/login"
+          variant="glass"
+          size="sm"
+          rounded="full"
+          class="flex items-center gap-2"
+        >
+          <Icon icon="ph:sign-in" class="h-4 w-4" />
+          <span>Sign In</span>
+        </Button>
+      {/if}
 
       {#if themeSwitch}
-        <p class="divider divider-horizontal m-0 hidden py-0 sm:flex"></p>
+        <div class="flex items-center">
+          {@render themeSwitch?.()}
+        </div>
       {/if}
-
-      <div class="hidden sm:flex">
-        {@render themeSwitch?.()}
-      </div>
-
-      {#if profile}
-        <p class="divider divider-horizontal m-0 hidden py-0 sm:flex"></p>
-      {/if}
-
-      {@render profile?.()}
     </div>
   </nav>
 </header>

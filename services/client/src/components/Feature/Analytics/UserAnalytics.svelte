@@ -58,9 +58,9 @@
   });
 </script>
 
-<Card class="h-full">
+<Card class="h-full" variant="enhanced" rounded="xl" shadow="lg">
   <div class="flex items-center justify-between">
-    <p class="text-lg font-light tracking-wider">Users</p>
+    <p class="text-lg font-semibold text-slate-900 dark:text-white">Users</p>
     <RefreshButton size="sm" loading={$isLoading} onclick={run} />
   </div>
 

@@ -77,6 +77,7 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
     $qb = $this->_em
       ->createQueryBuilder()
       ->from(ImageView::class, 'image')
+      ->leftJoin('image.user', 'user')
       ->select('
         image'
       );
@@ -99,6 +100,22 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
     if ($uuids = $imageListFilter->getUuids()) {
       $qb->andWhere('image.uuid IN (:uuids)')
         ->setParameter('uuids', $uuids);
+    }
+
+    if ($searchTerm = $imageListFilter->getSearchTerm()) {
+      $searchBy = $imageListFilter->getSearchBy();
+      
+      if ($searchBy === 'user') {
+        $qb->andWhere('LOWER(user.username) LIKE LOWER(:searchTerm) OR LOWER(user.displayName) LIKE LOWER(:searchTerm)')
+          ->setParameter('searchTerm', '%' . $searchTerm . '%');
+      } elseif ($searchBy === 'description') {
+        $qb->andWhere('LOWER(image.attributes.description) LIKE LOWER(:searchTerm)')
+          ->setParameter('searchTerm', '%' . $searchTerm . '%');
+      } else {
+        $qb->andWhere(
+          'LOWER(user.username) LIKE LOWER(:searchTerm) OR LOWER(user.displayName) LIKE LOWER(:searchTerm) OR LOWER(image.attributes.description) LIKE LOWER(:searchTerm)'
+        )->setParameter('searchTerm', '%' . $searchTerm . '%');
+      }
     }
     
     $qb->orderBy('image.' . $imageListFilter->getOrderBy(), $imageListFilter->getOrder());

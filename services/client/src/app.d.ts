@@ -1,5 +1,6 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
+import type { AppSidebarGroup } from '@slink/components/UI/Navigation/AppSidebar/AppSidebar.types';
 import type { User } from '@slink/lib/auth/Type/User';
 import type { CookieSettings } from '@slink/lib/settings';
 
@@ -19,6 +20,7 @@ declare global {
     }
     interface PageData {
       userAgent: string;
+      sidebarGroups?: AppSidebarGroup[];
     }
     // interface Platform {}
   }

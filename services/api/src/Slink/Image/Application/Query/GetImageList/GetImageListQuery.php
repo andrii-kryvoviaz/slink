@@ -13,6 +13,8 @@ final readonly class GetImageListQuery implements QueryInterface {
     private int $limit = 10,
     private string $orderBy = 'attributes.createdAt',
     private string $order = 'desc',
+    private ?string $searchTerm = null,
+    private ?string $searchBy = null,
   ) {
   }
   
@@ -26,5 +28,13 @@ final readonly class GetImageListQuery implements QueryInterface {
   
   public function getOrder(): string {
     return $this->order;
+  }
+  
+  public function getSearchTerm(): ?string {
+    return $this->searchTerm;
+  }
+  
+  public function getSearchBy(): ?string {
+    return $this->searchBy;
   }
 }

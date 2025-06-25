@@ -19,7 +19,9 @@ export const CardTheme = cva(`flex flex-col border w-full`, {
         'bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-500 divide-gray-500',
       dark: 'bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-500 divide-gray-500',
       default:
-        'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700 divide-gray-200 dark:divide-gray-700',
+        'bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 divide-slate-200 dark:divide-slate-700',
+      enhanced:
+        'bg-gradient-to-br from-slate-50 to-slate-100/50 dark:from-slate-800/50 dark:to-slate-700/30 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 divide-slate-200 dark:divide-slate-700',
       dropdown:
         'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-100 dark:border-gray-600 divide-gray-100 dark:divide-gray-600',
       navbar:

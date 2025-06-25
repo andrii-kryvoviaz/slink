@@ -50,13 +50,13 @@
   };
 
   const baseContentClasses =
-    'z-50 mx-auto p-3 flex flex-col gap-2 w-fit min-w-56 origin-top-left max-h-fi rounded-md bg-white font-light shadow-lg dark:bg-neutral-950 border-neutral-100/10 border ring-none';
+    'z-50 p-1 flex flex-col w-fit min-w-48 origin-top rounded-xl bg-white dark:bg-gray-900 shadow-xl shadow-black/10 dark:shadow-black/25 border border-gray-200/80 dark:border-gray-700/80 backdrop-blur-sm';
 
   const contentClasses = className(baseContentClasses, contentProps?.class);
 </script>
 
 <DropdownMenu.Root bind:open {...props}>
-  <DropdownMenu.Trigger>
+  <DropdownMenu.Trigger class="w-full">
     {#if trigger}
       {@render trigger()}
     {:else}
@@ -80,7 +80,7 @@
   </DropdownMenu.Trigger>
   <DropdownMenu.Portal>
     <DropdownMenu.Content
-      sideOffset={5}
+      sideOffset={8}
       align="end"
       forceMount={true}
       {...contentProps}
@@ -91,7 +91,11 @@
           <div {...wrapperProps}>
             <div
               {...props}
-              transition:fly={{ y: -5, duration: animationDuration }}
+              transition:fly={{
+                y: -8,
+                duration: animationDuration,
+                opacity: 0,
+              }}
             >
               {@render children?.()}
             </div>

@@ -1,4 +1,4 @@
-import type { TabMenuTheme } from '@slink/components/Layout';
+import type { TabMenuTheme } from './TabMenu.theme';
 import type { VariantProps } from 'class-variance-authority';
 
 export type TabMenuProps = VariantProps<typeof TabMenuTheme>;

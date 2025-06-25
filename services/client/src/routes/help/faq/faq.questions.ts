@@ -3,7 +3,7 @@ export const faqQuestions = [
     slug: 'supported-image-formats',
     title: 'What image formats Slink supports?',
     content: `Slink supports the following mime types:
-      <div class="mt-2 w-full">
+      <div class="mt-2 w-full flex flex-wrap gap-2">
         <span class="badge badge-primary badge-outline">image/bmp</span>
         <span class="badge badge-primary badge-outline">image/png</span>
         <span class="badge badge-primary badge-outline">image/jpeg</span>
