@@ -1,11 +1,12 @@
 import { env } from '$env/dynamic/private';
-
-import { ApiConnector } from '@slink/api/ApiConnector';
-import { setCookieSettingsOnLocals, Theme } from '@slink/lib/settings';
 import { json } from '@sveltejs/kit';
+import type { Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
-import type { Handle } from '@sveltejs/kit';
+import { ApiConnector } from '@slink/api/ApiConnector';
+
+import { Theme, setCookieSettingsOnLocals } from '@slink/lib/settings';
+
 const handleWellKnownRequests: Handle = async ({ event, resolve }) => {
   const { pathname } = event.url;
 

@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
+
   import { className } from '@slink/utils/ui/className';
 
   import { type CardProps, CardTheme } from '@slink/components/UI/Card';

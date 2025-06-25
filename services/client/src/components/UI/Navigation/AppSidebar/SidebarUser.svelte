@@ -98,7 +98,13 @@
         use:enhance
         class="flex w-full"
       >
-        <button type="submit" class="flex w-full text-left" onclick={onItemClick}> Sign out </button>
+        <button
+          type="submit"
+          class="flex w-full text-left"
+          onclick={onItemClick}
+        >
+          Sign out
+        </button>
       </form>
     </DropdownItem>
   </DropdownGroup>

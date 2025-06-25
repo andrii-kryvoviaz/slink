@@ -34,7 +34,7 @@
         Manage your application settings and users
       </p>
     </div>
-    
+
     <TabMenu variant="default" size="sm" orientation="horizontal" class="w-fit">
       {#each tabs as tab}
         <TabMenuItem href={tab.href}>

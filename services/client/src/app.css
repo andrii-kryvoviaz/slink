@@ -12,7 +12,7 @@
 @source inline("{,}gap-{0..12}");
 
 @utility text-* {
-  color: --value(--color-*-text) !important;
+  color: --value(--color- * -text) !important;
 }
 
 :root {

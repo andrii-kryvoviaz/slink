@@ -1,3 +1,1 @@
-export abstract class AbstractState {
-
-}
+export abstract class AbstractState {}
