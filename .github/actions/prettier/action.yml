@@ -8,16 +8,16 @@ runs:
       with:
         node-version: '20'
         cache: 'yarn'
-        cache-dependency-path: './client/yarn.lock'
+        cache-dependency-path: './services/client/yarn.lock'
 
-    - run: yarn --cwd ./client install --frozen-lockfile
+    - run: yarn --cwd ./services/client install --frozen-lockfile
       shell: bash
 
-    - run: yarn --cwd ./client run lint
+    - run: yarn --cwd ./services/client run lint
       shell: bash
       continue-on-error: true
 
-    - run: yarn --cwd ./client run format
+    - run: yarn --cwd ./services/client run format
       shell: bash
 
     - uses: ./.github/actions/commit-bot
