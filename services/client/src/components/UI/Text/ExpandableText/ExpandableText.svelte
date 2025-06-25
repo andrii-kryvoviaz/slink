@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Button } from '@slink/components/UI/Action';
+  import { HashtagText } from '@slink/components/UI/Text';
 
   interface Props {
     text?: string;
@@ -14,9 +15,10 @@
 
 {#if text}
   <p class="text-sm opacity-75">
-    <span class={`line-clamp-${isExpanded ? 100 : 1}`}>
+    <HashtagText
       {text}
-    </span>
+      class={`line-clamp-${isExpanded ? 100 : maxLines}`}
+    />
 
     {#if showButton}
       <Button

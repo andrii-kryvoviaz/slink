@@ -7,7 +7,7 @@
   import { usePublicImagesFeed } from '@slink/lib/state/PublicImagesFeed.svelte';
 
   import { Button } from '@slink/components/UI/Action';
-  import SearchBar from '@slink/components/UI/Search/SearchBar.svelte';
+  import { SearchBar } from '@slink/components/UI/Search';
 
   interface Props {
     user?: Partial<User>;
@@ -73,11 +73,10 @@
     </div>
 
     <div class="flex items-center gap-3">
-      <!-- Search Bar - Only on Explore Page -->
       {#if isExplorePage}
         <SearchBar
           searchTerm={publicImagesFeed.searchTerm}
-          searchBy={publicImagesFeed.searchBy as 'user' | 'description'}
+          searchBy={publicImagesFeed.searchBy as 'user' | 'description' | 'hashtag'}
           placeholder="Search images..."
           disabled={publicImagesFeed.isLoading}
           onsearch={handleSearch}

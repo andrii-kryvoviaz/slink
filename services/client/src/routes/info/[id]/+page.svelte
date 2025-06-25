@@ -1,8 +1,7 @@
 <script lang="ts">
   import type { PageData } from './$types';
 
-  import { page } from '$app/stores';
-  import Icon from '@iconify/svelte';
+  import { page } from '$app/state';
   import { fly } from 'svelte/transition';
 
   import { ApiClient } from '@slink/api/Client';
@@ -19,7 +18,6 @@
     ImageSizePicker,
   } from '@slink/components/Feature/Image';
   import { CopyContainer } from '@slink/components/UI/Action';
-  import { Tooltip } from '@slink/components/UI/Tooltip';
 
   interface Props {
     data: PageData;
@@ -38,7 +36,6 @@
       return url;
     }
 
-    // Filter out false boolean values and create query params
     const paramsString = Object.entries(params)
       .filter(
         ([key, value]) =>
@@ -52,7 +49,7 @@
 
   let params: Partial<ImageParams> = $state({});
   let directLink: string = $derived(
-    formatImageUrl([$page.url.origin, image.url], params),
+    formatImageUrl([page.url.origin, image.url], params),
   );
 
   const handleImageSizeChange = (
@@ -60,7 +57,6 @@
   ) => {
     let { width, height, crop, ...rest } = params;
 
-    // If crop is explicitly false, remove it from params
     if (value?.crop === false) {
       params = {
         ...rest,

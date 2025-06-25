@@ -113,4 +113,5 @@ export const themeIcons: string[] = [
   'ph:magnifying-glass',
   'ph:caret-down',
   'ph:text-align-left',
+  'ph:hash',
 ];

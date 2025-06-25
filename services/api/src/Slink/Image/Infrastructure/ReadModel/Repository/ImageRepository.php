@@ -111,6 +111,10 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
       } elseif ($searchBy === 'description') {
         $qb->andWhere('LOWER(image.attributes.description) LIKE LOWER(:searchTerm)')
           ->setParameter('searchTerm', '%' . $searchTerm . '%');
+      } elseif ($searchBy === 'hashtag') {
+        $hashtagTerm = ltrim($searchTerm, '#');
+        $qb->andWhere('LOWER(image.attributes.description) LIKE LOWER(:hashtagTerm)')
+          ->setParameter('hashtagTerm', '%#' . $hashtagTerm . '%');
       } else {
         $qb->andWhere(
           'LOWER(user.username) LIKE LOWER(:searchTerm) OR LOWER(user.displayName) LIKE LOWER(:searchTerm) OR LOWER(image.attributes.description) LIKE LOWER(:searchTerm)'

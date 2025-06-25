@@ -3,10 +3,11 @@
 
   import { debounce } from '@slink/lib/utils/time/debounce';
   import { className as cn } from '@slink/lib/utils/ui/className';
+  import { hasHashtags } from '@slink/lib/utils/text/hashtag';
 
   interface Props {
     searchTerm?: string;
-    searchBy?: 'user' | 'description';
+    searchBy?: 'user' | 'description' | 'hashtag';
     placeholder?: string;
     disabled?: boolean;
     onsearch?: (event: { searchTerm: string; searchBy: string }) => void;
@@ -29,6 +30,11 @@
       label: 'Search by Description',
       icon: 'ph:text-align-left',
     },
+    {
+      value: 'hashtag',
+      label: 'Search by Hashtag',
+      icon: 'ph:hash',
+    },
   ];
 
   let showOptions = $state(false);
@@ -44,6 +50,11 @@
   $effect(() => {
     if (searchTerm !== previousSearchTerm) {
       previousSearchTerm = searchTerm;
+      
+      if (hasHashtags(searchTerm) && searchBy !== 'hashtag') {
+        searchBy = 'hashtag';
+      }
+      
       if (searchTerm.trim()) {
         debouncedSearch();
       } else if (searchTerm === '') {
@@ -72,7 +83,7 @@
   }
 
   function selectSearchBy(value: string) {
-    searchBy = value as 'user' | 'description';
+    searchBy = value as 'user' | 'description' | 'hashtag';
     showOptions = false;
     if (searchTerm.trim()) {
       debouncedSearch.cancel();
@@ -96,6 +107,16 @@
       .find((opt) => opt.value === searchBy)
       ?.label.replace('Search by ', '') || 'User',
   );
+
+  let dynamicPlaceholder = $derived(
+    searchBy === 'hashtag' 
+      ? 'Search hashtags... (e.g., #nature)'
+      : searchBy === 'description'
+      ? 'Search descriptions...'
+      : searchBy === 'user'
+      ? 'Search users...'
+      : placeholder
+  );
 </script>
 
 <svelte:window onclick={handleClickOutside} />
@@ -114,7 +135,7 @@
     )}
   >
     <Icon
-      icon="ph:magnifying-glass"
+      icon={searchBy === 'hashtag' ? 'ph:hash' : 'ph:magnifying-glass'}
       class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-400 dark:text-gray-500 flex-shrink-0"
     />
 
@@ -122,7 +143,7 @@
       bind:this={searchInput}
       bind:value={searchTerm}
       onkeydown={handleKeydown}
-      {placeholder}
+      placeholder={dynamicPlaceholder}
       {disabled}
       class={cn(
         'flex-1 bg-transparent border-none outline-none text-xs px-1 sm:px-2 py-1 min-w-0',

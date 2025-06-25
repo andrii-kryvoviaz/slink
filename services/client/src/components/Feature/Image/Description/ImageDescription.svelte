@@ -1,9 +1,8 @@
 <script lang="ts">
   import Icon from '@iconify/svelte';
-  import { cubicOut } from 'svelte/easing';
-  import { fly, scale } from 'svelte/transition';
 
   import { Button } from '@slink/components/UI/Action';
+  import { HashtagText } from '@slink/components/UI/Text';
 
   interface Props {
     description: string;
@@ -128,9 +127,13 @@
         <p class="text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
           Description
         </p>
-        <p class="text-sm text-gray-600 dark:text-gray-400 break-words">
-          {description || 'Click to add a description...'}
-        </p>
+        <div class="text-sm text-gray-600 dark:text-gray-400 break-words">
+          {#if description}
+            <HashtagText text={description} />
+          {:else}
+            Click to add a description...
+          {/if}
+        </div>
       </div>
       <Icon
         icon="lucide:edit-2"
