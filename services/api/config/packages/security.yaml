@@ -12,7 +12,7 @@ security:
       security: false
 
     api:
-      pattern: ^/api(?!/auth|/public|/image)
+      pattern: ^/api(?!/(auth|public|image/[^/]+\.[^/]+))
       stateless: true
       jwt:
         provider: slink.user.auth.jwt_user_provider
