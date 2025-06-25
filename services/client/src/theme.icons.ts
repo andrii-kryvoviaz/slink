@@ -102,7 +102,6 @@ export const themeIcons: string[] = [
   'clarity:success-standard-line',
   'clarity:warning-standard-line',
   'clarity:error-standard-line',
-  'mdi:information-outline',
   'heroicons:x-mark',
   'clarity:block-line',
   'ph:upload-simple',
