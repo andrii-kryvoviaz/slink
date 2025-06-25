@@ -1,7 +1,7 @@
 <script lang="ts">
+  import { page } from '$app/state';
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
-  import { page } from '$app/state';
 
   import { EmptyState } from '@slink/lib/components/UI/EmptyState';
   import { usePublicImagesFeed } from '@slink/lib/state/PublicImagesFeed.svelte';
@@ -24,7 +24,7 @@
     const urlParams = new URLSearchParams(page.url.search);
     const search = urlParams.get('search');
     const searchBy = urlParams.get('searchBy');
-    
+
     if (search && searchBy) {
       publicFeedState.search(search, searchBy);
     } else if (!publicFeedState.isDirty) {

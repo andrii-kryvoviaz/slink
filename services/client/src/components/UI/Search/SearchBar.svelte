@@ -1,9 +1,9 @@
 <script lang="ts">
   import Icon from '@iconify/svelte';
 
+  import { hasHashtags } from '@slink/lib/utils/text/hashtag';
   import { debounce } from '@slink/lib/utils/time/debounce';
   import { className as cn } from '@slink/lib/utils/ui/className';
-  import { hasHashtags } from '@slink/lib/utils/text/hashtag';
 
   interface Props {
     searchTerm?: string;
@@ -50,11 +50,11 @@
   $effect(() => {
     if (searchTerm !== previousSearchTerm) {
       previousSearchTerm = searchTerm;
-      
+
       if (hasHashtags(searchTerm) && searchBy !== 'hashtag') {
         searchBy = 'hashtag';
       }
-      
+
       if (searchTerm.trim()) {
         debouncedSearch();
       } else if (searchTerm === '') {
@@ -109,13 +109,13 @@
   );
 
   let dynamicPlaceholder = $derived(
-    searchBy === 'hashtag' 
+    searchBy === 'hashtag'
       ? 'Search hashtags... (e.g., #nature)'
       : searchBy === 'description'
-      ? 'Search descriptions...'
-      : searchBy === 'user'
-      ? 'Search users...'
-      : placeholder
+        ? 'Search descriptions...'
+        : searchBy === 'user'
+          ? 'Search users...'
+          : placeholder,
   );
 </script>
 

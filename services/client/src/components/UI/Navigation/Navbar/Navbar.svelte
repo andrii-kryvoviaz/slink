@@ -76,7 +76,10 @@
       {#if isExplorePage}
         <SearchBar
           searchTerm={publicImagesFeed.searchTerm}
-          searchBy={publicImagesFeed.searchBy as 'user' | 'description' | 'hashtag'}
+          searchBy={publicImagesFeed.searchBy as
+            | 'user'
+            | 'description'
+            | 'hashtag'}
           placeholder="Search images..."
           disabled={publicImagesFeed.isLoading}
           onsearch={handleSearch}

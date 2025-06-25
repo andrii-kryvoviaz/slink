@@ -15,10 +15,7 @@
 
 {#if text}
   <p class="text-sm opacity-75">
-    <HashtagText
-      {text}
-      class={`line-clamp-${isExpanded ? 100 : maxLines}`}
-    />
+    <HashtagText {text} class={`line-clamp-${isExpanded ? 100 : maxLines}`} />
 
     {#if showButton}
       <Button
