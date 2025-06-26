@@ -44,10 +44,7 @@ final readonly class GetImageListHandler implements QueryHandlerInterface {
     $nextCursor = null;
     if ($hasMore && !empty($imageEntities)) {
       $lastImage = end($imageEntities);
-
-      if ($lastImage instanceof ImageView) {
-        $nextCursor = $this->generateNextCursor($lastImage);
-      }
+      $nextCursor = $this->generateNextCursor($lastImage);
     }
 
     $items = array_map(fn($image) => Item::fromEntity($image), $imageEntities);
