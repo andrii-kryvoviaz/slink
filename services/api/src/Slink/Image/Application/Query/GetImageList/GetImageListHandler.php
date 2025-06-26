@@ -6,17 +6,20 @@ namespace Slink\Image\Application\Query\GetImageList;
 
 use Slink\Image\Domain\Filter\ImageListFilter;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
+use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Shared\Application\Http\Collection;
 use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Application\Query\QueryHandlerInterface;
-use Slink\Shared\Infrastructure\Exception\NotFoundException;
+use Slink\Shared\Infrastructure\Pagination\CursorPaginationTrait;
 
 final readonly class GetImageListHandler implements QueryHandlerInterface {
+  use CursorPaginationTrait;
+
   public function __construct(
     private ImageRepositoryInterface $repository
   ) {
   }
-  
+
   public function __invoke(GetImageListQuery $query, int $page, ?bool $isPublic = null, ?string $userId = null): Collection {
     $images = $this->repository->geImageList($page, new ImageListFilter(
       limit: $query->getLimit(),
@@ -25,16 +28,36 @@ final readonly class GetImageListHandler implements QueryHandlerInterface {
       isPublic: $isPublic,
       userId: $userId,
       searchTerm: $query->getSearchTerm(),
-      searchBy: $query->getSearchBy()
+      searchBy: $query->getSearchBy(),
+      cursor: $query->getCursor()
     ));
-    
-    $items = array_map(fn($image) => Item::fromEntity($image), iterator_to_array($images));
-    
+
+    $imageEntities = iterator_to_array($images);
+
+    $limit = $query->getLimit();
+    $hasMore = count($imageEntities) > $limit;
+
+    if ($hasMore) {
+      array_pop($imageEntities);
+    }
+
+    $nextCursor = null;
+    if ($hasMore && !empty($imageEntities)) {
+      $lastImage = end($imageEntities);
+
+      if ($lastImage instanceof ImageView) {
+        $nextCursor = $this->generateNextCursor($lastImage);
+      }
+    }
+
+    $items = array_map(fn($image) => Item::fromEntity($image), $imageEntities);
+
     return new Collection(
       $page,
-      $query->getLimit(),
+      $limit,
       $images->count(),
-      $items
+      $items,
+      $nextCursor
     );
   }
 }

@@ -1,120 +1,58 @@
+import type { ImageListingItem } from '@slink/api/Response';
 import type {
-  ImageListingItem,
-  ImageListingResponse,
-  ListingMetadata,
-} from '@slink/api/Response';
-import type { RequestStateOptions } from '@slink/lib/state/core/AbstractHttpState.svelte';
+  LoadParams,
+  PaginatedResponse,
+  SearchParams,
+} from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
 
 import { ApiClient } from '@slink/api/Client';
 
-import { AbstractHttpState } from '@slink/lib/state/core/AbstractHttpState.svelte';
+import { AbstractPaginatedFeed } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
 import { useState } from '@slink/lib/state/core/ContextAwareState';
 
 import { deepMerge } from '@slink/utils/object/deepMerge';
 
-class UploadHistoryFeed extends AbstractHttpState<ImageListingResponse> {
-  private _items: ImageListingItem[] = $state([]);
-  private _meta: ListingMetadata = $state({} as ListingMetadata);
-
+class UploadHistoryFeed extends AbstractPaginatedFeed<ImageListingItem> {
   public constructor() {
-    super();
-    this.reset();
+    super({
+      defaultPageSize: 12,
+      useCursor: false,
+      appendMode: 'always',
+    });
   }
 
-  public reset() {
-    this._items = [];
-    this._meta = {
-      page: 1,
-      size: 12,
-      total: 0,
-    };
+  protected async fetchData(
+    params: LoadParams & SearchParams,
+  ): Promise<PaginatedResponse<ImageListingItem>> {
+    const { page = 1, limit = 12 } = params;
+    return ApiClient.image.getHistory(page, limit);
   }
 
-  public add(item: ImageListingItem) {
-    this._items = [item].concat(this._items);
+  protected _getItemId(item: ImageListingItem): string {
+    return item.id;
   }
 
-  public replace(item: ImageListingItem) {
-    this._items = this._items.map((existing) =>
-      existing.id === item.id ? item : existing,
-    );
-  }
-
-  public update(id: string, data: ImageListingItem) {
+  public update(id: string, data: Partial<ImageListingItem>): void {
     const index = this._items.findIndex((item) => item.id === id);
-
     if (index !== -1) {
-      this._items[index] = deepMerge(this._items[index], data);
+      this._items[index] = deepMerge(
+        this._items[index],
+        data,
+      ) as ImageListingItem;
     }
   }
 
-  public async load(
-    { page, limit }: { page?: number; limit?: number } = {},
-    options?: RequestStateOptions,
-  ) {
-    page ??= this._meta.page;
-    limit ??= this._meta.size;
+  public override async load(
+    params: LoadParams & SearchParams = {},
+    options?: Parameters<typeof this.fetch>[2],
+  ): Promise<void> {
+    const { page = this._meta.page } = params;
 
     if (this.isDirty && page === this._meta.page) {
       return;
     }
 
-    await this.fetch(
-      () => ApiClient.image.getHistory(page, limit),
-      (response) => {
-        this._items = this._items.concat(
-          response.data.filter((item) => {
-            return !this._items.some((existing) => existing.id === item.id);
-          }),
-        );
-
-        this._meta = response.meta;
-      },
-      options,
-    );
-  }
-
-  public async nextPage(options?: RequestStateOptions) {
-    if (this._items.length >= this._meta.total) {
-      return;
-    }
-
-    await this.load(
-      { page: this._meta.page + 1, limit: this._meta.size },
-      options,
-    );
-  }
-
-  public removeItem(id: string) {
-    this._items = this._items.filter((item) => item.id !== id);
-
-    if (this._items.length === 0) {
-      this.reset();
-    }
-
-    if (this._items.length > 0) {
-      this.load({ page: this._meta.page, limit: this._meta.size });
-    }
-  }
-
-  get items(): ImageListingItem[] {
-    return this._items;
-  }
-
-  get meta(): ListingMetadata {
-    return this._meta;
-  }
-
-  get hasMore(): boolean {
-    return this._meta.page < Math.ceil(this._meta.total / this._meta.size);
-  }
-
-  get hasItems(): boolean {
-    return this._items.length > 0;
-  }
-
-  get isEmpty(): boolean {
-    return !this.hasItems && this.isDirty;
+    await super.load(params, options);
   }
 }
 

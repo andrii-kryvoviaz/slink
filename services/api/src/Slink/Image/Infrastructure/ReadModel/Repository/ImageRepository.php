@@ -6,17 +6,21 @@ namespace Slink\Image\Infrastructure\ReadModel\Repository;
 
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Override;
 use Slink\Image\Domain\Filter\ImageListFilter;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
+use Slink\Shared\Infrastructure\Pagination\CursorPaginationTrait;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractRepository;
 
 final class ImageRepository extends AbstractRepository implements ImageRepositoryInterface {
+  use CursorPaginationTrait;
+
   static protected function entityClass(): string {
     return ImageView::class;
   }
-  
+
   /**
    * @param ImageView $image
    * @return void
@@ -24,55 +28,13 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
   public function add(ImageView $image): void {
     $this->_em->persist($image);
   }
-  
-  /**
-   * @param ImageView $image
-   * @return void
-   */
-  public function remove(ImageView $image): void {
-    $this->_em->remove($image);
-  }
-  
-  /**
-   * @throws NotFoundException
-   * @throws NonUniqueResultException
-   */
-  public function oneById(string $id, ?string $extension = null): ImageView {
-    $qb = $this->_em
-      ->createQueryBuilder()
-      ->from(ImageView::class, 'image')
-      ->select('
-        image'
-      )
-      ->where('image.uuid = :id')
-      ->setParameter('id', $id);
-    
-    return $this->oneOrException($qb);
-  }
-  
-  /**
-   * @throws NonUniqueResultException
-   * @throws NotFoundException
-   */
-  public function oneByFileName(string $fileName): ImageView {
-    $qb = $this->_em
-      ->createQueryBuilder()
-      ->from(ImageView::class, 'image')
-      ->select('
-        image'
-      )
-      ->where('image.attributes.fileName = :fileName')
-      ->setParameter('fileName', $fileName);
-    
-    return $this->oneOrException($qb);
-  }
-  
+
   /**
    * @param int $page
    * @param ImageListFilter $imageListFilter
    * @return Paginator<ImageView>
    */
-  #[\Override]
+  #[Override]
   public function geImageList(int $page, ImageListFilter $imageListFilter): Paginator {
     $qb = $this->_em
       ->createQueryBuilder()
@@ -81,22 +43,34 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
       ->select('
         image'
       );
-    
+
     if ($limit = $imageListFilter->getLimit()) {
-      $qb->setMaxResults($limit)
-        ->setFirstResult(($page - 1) * $limit);
+      $qb->setMaxResults($limit + 1);
+
+      if ($cursor = $imageListFilter->getCursor()) {
+        $this->applyCursorPagination(
+          $qb,
+          $cursor,
+          $imageListFilter->getOrderBy() ?? 'attributes.createdAt',
+          $imageListFilter->getOrder() ?? 'desc',
+          'uuid',
+          'image'
+        );
+      } else {
+        $qb->setFirstResult(($page - 1) * $limit);
+      }
     }
-    
+
     if ($isPublic = $imageListFilter->getIsPublic()) {
       $qb->andWhere('image.attributes.isPublic = :isPublic')
         ->setParameter('isPublic', $isPublic);
     }
-    
+
     if ($userId = $imageListFilter->getUserId()) {
       $qb->andWhere('image.user = :user')
         ->setParameter('user', $userId);
     }
-    
+
     if ($uuids = $imageListFilter->getUuids()) {
       $qb->andWhere('image.uuid IN (:uuids)')
         ->setParameter('uuids', $uuids);
@@ -104,7 +78,7 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
 
     if ($searchTerm = $imageListFilter->getSearchTerm()) {
       $searchBy = $imageListFilter->getSearchBy();
-      
+
       if ($searchBy === 'user') {
         $qb->andWhere('LOWER(user.username) LIKE LOWER(:searchTerm) OR LOWER(user.displayName) LIKE LOWER(:searchTerm)')
           ->setParameter('searchTerm', '%' . $searchTerm . '%');
@@ -121,9 +95,52 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
         )->setParameter('searchTerm', '%' . $searchTerm . '%');
       }
     }
-    
+
     $qb->orderBy('image.' . $imageListFilter->getOrderBy(), $imageListFilter->getOrder());
-    
+    $qb->addOrderBy('image.uuid', $imageListFilter->getOrder());
+
     return new Paginator($qb);
+  }
+
+  /**
+   * @throws NonUniqueResultException
+   * @throws NotFoundException
+   */
+  public function oneByFileName(string $fileName): ImageView {
+    $qb = $this->_em
+      ->createQueryBuilder()
+      ->from(ImageView::class, 'image')
+      ->select('
+        image'
+      )
+      ->where('image.attributes.fileName = :fileName')
+      ->setParameter('fileName', $fileName);
+
+    return $this->oneOrException($qb);
+  }
+
+  /**
+   * @throws NotFoundException
+   * @throws NonUniqueResultException
+   */
+  public function oneById(string $id, ?string $extension = null): ImageView {
+    $qb = $this->_em
+      ->createQueryBuilder()
+      ->from(ImageView::class, 'image')
+      ->select('
+        image'
+      )
+      ->where('image.uuid = :id')
+      ->setParameter('id', $id);
+
+    return $this->oneOrException($qb);
+  }
+
+  /**
+   * @param ImageView $image
+   * @return void
+   */
+  public function remove(ImageView $image): void {
+    $this->_em->remove($image);
   }
 }

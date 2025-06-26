@@ -46,6 +46,7 @@ export class ImageResource extends AbstractResource {
     orderBy: string = 'attributes.updatedAt',
     searchTerm?: string,
     searchBy?: string,
+    cursor?: string,
   ): Promise<ImageListingResponse> {
     const searchParams = new URLSearchParams({
       limit: limit.toString(),
@@ -57,14 +58,27 @@ export class ImageResource extends AbstractResource {
       searchParams.append('searchBy', searchBy);
     }
 
+    if (cursor) {
+      searchParams.append('cursor', cursor);
+    }
+
     return this.get(`/images/${page}/?${searchParams.toString()}`);
   }
 
   public async getHistory(
     page: number = 1,
     limit: number = 10,
+    cursor?: string,
   ): Promise<ImageListingResponse> {
-    return this.get(`/images/history/${page}/?limit=${limit}`);
+    const searchParams = new URLSearchParams({
+      limit: limit.toString(),
+    });
+
+    if (cursor) {
+      searchParams.append('cursor', cursor);
+    }
+
+    return this.get(`/images/history/${page}/?${searchParams.toString()}`);
   }
 
   public async getImagesByIds(
