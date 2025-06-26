@@ -17,10 +17,12 @@
     UserDeleteConfirmation,
     UserStatus,
   } from '@slink/components/Feature/User';
+  import UserDeletePopover from '@slink/components/Feature/User/UserDeleteConfirmation/UserDeletePopover.svelte';
   import {
     Dropdown,
     DropdownGroup,
     DropdownItem,
+    Popover,
   } from '@slink/components/UI/Action';
   import { Badge } from '@slink/components/UI/Text';
 
@@ -39,6 +41,8 @@
   }: Props = $props();
 
   let dropdownRef: Dropdown | null = $state(null);
+  let dropdownTriggerRef: HTMLButtonElement | undefined = $state();
+  let deletePopoverOpen = $state(false);
 
   const {
     isLoading: userStatusChanging,
@@ -101,21 +105,17 @@
 
   const handleUserDeletion = () => {
     closeDropdown();
+    deletePopoverOpen = true;
+  };
 
-    toast.component(UserDeleteConfirmation, {
-      id: user.id,
-      props: {
-        user,
-        loading: userDeleteLoading,
-        close: () => toast.remove(user.id),
-        confirm: async () => {
-          await deleteUser();
+  const confirmUserDeletion = async () => {
+    await deleteUser();
+    deletePopoverOpen = false;
+    on?.userDelete(user.id);
+  };
 
-          toast.remove(user.id);
-          on?.userDelete(user.id);
-        },
-      },
-    });
+  const closeDeletePopover = () => {
+    deletePopoverOpen = false;
   };
 
   const successHandler = (userResponse: SingleUserResponse | null): void => {
@@ -218,10 +218,11 @@
         </div>
 
         {#if !isCurrentUser}
-          <div class="flex-shrink-0 ml-3">
+          <div class="flex-shrink-0 ml-3 relative">
             <Dropdown bind:this={dropdownRef}>
               {#snippet trigger()}
                 <button
+                  bind:this={dropdownTriggerRef}
                   class="p-2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150"
                 >
                   <Icon icon="heroicons:ellipsis-vertical" class="w-5 h-5" />
@@ -295,6 +296,28 @@
                 </DropdownItem>
               </DropdownGroup>
             </Dropdown>
+
+            {#if deletePopoverOpen}
+              <Popover
+                bind:open={deletePopoverOpen}
+                variant="floating"
+                responsive={true}
+                contentProps={{ align: 'end', alignOffset: -8 }}
+              >
+                {#snippet trigger()}
+                  <div
+                    class="absolute top-0 right-0 w-full h-full pointer-events-none"
+                  ></div>
+                {/snippet}
+
+                <UserDeletePopover
+                  {user}
+                  loading={userDeleteLoading}
+                  close={closeDeletePopover}
+                  confirm={confirmUserDeletion}
+                />
+              </Popover>
+            {/if}
           </div>
         {/if}
       </div>

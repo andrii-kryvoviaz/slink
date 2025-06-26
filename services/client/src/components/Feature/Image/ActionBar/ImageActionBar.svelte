@@ -15,7 +15,8 @@
   import { downloadByLink } from '@slink/utils/http/downloadByLink';
   import { toast } from '@slink/utils/ui/toast.svelte';
 
-  import { ImageDeleteConfirmation } from '@slink/components/Feature/Image';
+  import ImageDeletePopover from '@slink/components/Feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte';
+  import { Popover } from '@slink/components/UI/Action';
   import { Loader } from '@slink/components/UI/Loader';
   import { Tooltip } from '@slink/components/UI/Tooltip';
 
@@ -75,6 +76,8 @@
   });
 
   let isCopiedActive = $state(false);
+  let deletePopoverOpen = $state(false);
+
   const handleCopy = async () => {
     await navigator.clipboard.writeText(directLink);
 
@@ -86,29 +89,30 @@
   };
 
   const handleImageDeletion = () => {
-    toast.component(ImageDeleteConfirmation, {
-      id: image.id,
-      props: {
-        image,
-        loading: deleteImageIsLoading,
-        close: () => toast.remove(image.id),
-        confirm: async ({ preserveOnDiskAfterDeletion }) => {
-          await deleteImage(image.id, preserveOnDiskAfterDeletion);
+    deletePopoverOpen = true;
+  };
 
-          if ($deleteImageError) {
-            toast.error('Failed to delete image. Please try again later.');
-            return;
-          }
+  const confirmImageDeletion = async ({
+    preserveOnDiskAfterDeletion,
+  }: {
+    preserveOnDiskAfterDeletion: boolean;
+  }) => {
+    await deleteImage(image.id, preserveOnDiskAfterDeletion);
 
-          historyFeedState.removeItem(image.id);
+    if ($deleteImageError) {
+      toast.error('Failed to delete image. Please try again later.');
+      return;
+    }
 
-          toast.remove(image.id);
+    historyFeedState.removeItem(image.id);
+    deletePopoverOpen = false;
 
-          await goto('/history');
-          on?.imageDelete(image.id);
-        },
-      },
-    });
+    await goto('/history');
+    on?.imageDelete(image.id);
+  };
+
+  const closeDeletePopover = () => {
+    deletePopoverOpen = false;
   };
 
   let directLink = $derived(`${page.url.origin}/image/${image.fileName}`);
@@ -204,18 +208,34 @@
   {/if}
 
   {#if isButtonVisible('delete')}
-    <Tooltip side="bottom" sideOffset={8}>
+    <Popover
+      bind:open={deletePopoverOpen}
+      variant="floating"
+      responsive={true}
+      contentProps={{ align: 'end' }}
+    >
       {#snippet trigger()}
-        <button
-          class={destructiveButtonClass}
-          onclick={handleImageDeletion}
-          aria-label="Delete image"
-          type="button"
-        >
-          <Icon icon="ph:trash" class="h-4 w-4 sm:h-3.5 sm:w-3.5" />
-        </button>
+        <Tooltip side="bottom" sideOffset={8}>
+          {#snippet trigger()}
+            <button
+              class={destructiveButtonClass}
+              aria-label="Delete image"
+              type="button"
+              disabled={$deleteImageIsLoading}
+            >
+              <Icon icon="ph:trash" class="h-4 w-4 sm:h-3.5 sm:w-3.5" />
+            </button>
+          {/snippet}
+          Delete image
+        </Tooltip>
       {/snippet}
-      Delete image
-    </Tooltip>
+
+      <ImageDeletePopover
+        {image}
+        loading={deleteImageIsLoading}
+        close={closeDeletePopover}
+        confirm={confirmImageDeletion}
+      />
+    </Popover>
   {/if}
 </div>

@@ -5,6 +5,7 @@
 
   import { theme } from '@slink/lib/actions/theme';
   import { settings } from '@slink/lib/settings';
+  import { initResponsiveStore } from '@slink/lib/stores/responsive.svelte';
 
   import { ThemeSwitch } from '@slink/components/UI/Action';
   import { AppSidebar, Navbar } from '@slink/components/UI/Navigation';
@@ -18,6 +19,8 @@
   const { isDark } = currentTheme;
 
   let showSidebar = $derived(!!user);
+
+  initResponsiveStore();
 </script>
 
 <Tooltip.Provider delayDuration={0} disableHoverableContent={true}>

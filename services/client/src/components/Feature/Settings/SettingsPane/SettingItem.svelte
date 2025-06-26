@@ -9,6 +9,8 @@
   import { toast } from '@slink/utils/ui/toast.svelte';
 
   import { ResetSettingConfirmation } from '@slink/components/Feature/Settings';
+  import ResetSettingPopover from '@slink/components/Feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte';
+  import { Popover } from '@slink/components/UI/Action';
   import { Badge } from '@slink/components/UI/Text';
 
   interface Props {
@@ -31,6 +33,7 @@
 
   let labelRef: HTMLSpanElement | undefined = $state();
   let triggerRef: HTMLButtonElement | undefined = $state();
+  let resetPopoverOpen = $state(false);
 
   const formatDefaultValue = () => {
     if (typeof defaultValue === 'boolean') {
@@ -50,20 +53,17 @@
   };
 
   const handleSettingReset = () => {
-    toast.component(ResetSettingConfirmation, {
-      id: uniqueId,
-      props: {
-        name: labelRef?.innerText || '',
-        displayValue,
-        close: () => toast.remove(uniqueId),
-        confirm: () => {
-          toast.remove(uniqueId);
-          reset(defaultValue);
+    resetPopoverOpen = true;
+  };
 
-          triggerRef?.click();
-        },
-      },
-    });
+  const confirmSettingReset = () => {
+    resetPopoverOpen = false;
+    reset(defaultValue);
+    triggerRef?.click();
+  };
+
+  const closeResetPopover = () => {
+    resetPopoverOpen = false;
   };
 
   let displayValue = $derived(formatDefaultValue());
@@ -90,21 +90,35 @@
           </h3>
 
           {#if displayValue}
-            <button
-              type="button"
-              class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-gray-100/60 dark:bg-gray-800/60 border border-gray-200/60 dark:border-gray-700/60 rounded-lg hover:bg-gray-200/60 dark:hover:bg-gray-700/60 hover:border-gray-300/60 dark:hover:border-gray-600/60 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:ring-offset-1"
-              onclick={handleSettingReset}
-              onkeydown={handleSettingReset}
-              tabindex="0"
+            <Popover
+              bind:open={resetPopoverOpen}
+              variant="floating"
+              responsive={true}
+              contentProps={{ align: 'end' }}
             >
-              <span class="text-gray-500 dark:text-gray-400">Default:</span>
-              <Badge
-                variant="default"
-                size="sm"
-                class="bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700"
-                >{displayValue}</Badge
-              >
-            </button>
+              {#snippet trigger()}
+                <button
+                  type="button"
+                  class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-gray-100/60 dark:bg-gray-800/60 border border-gray-200/60 dark:border-gray-700/60 rounded-lg hover:bg-gray-200/60 dark:hover:bg-gray-700/60 hover:border-gray-300/60 dark:hover:border-gray-600/60 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:ring-offset-1"
+                  tabindex="0"
+                >
+                  <span class="text-gray-500 dark:text-gray-400">Default:</span>
+                  <Badge
+                    variant="default"
+                    size="sm"
+                    class="bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700"
+                    >{displayValue}</Badge
+                  >
+                </button>
+              {/snippet}
+
+              <ResetSettingPopover
+                name={labelRef?.innerText || ''}
+                {displayValue}
+                close={closeResetPopover}
+                confirm={confirmSettingReset}
+              />
+            </Popover>
           {/if}
         </div>
 
