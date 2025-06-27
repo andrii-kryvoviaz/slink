@@ -106,7 +106,7 @@
       <ImagePlaceholder src={image.url} metadata={image} stretch={false} />
     </div>
 
-    <div class="w-full lg:w-80 flex-shrink-0 space-y-8">
+    <div class="grow max-w-md flex-shrink-0 space-y-8">
       <ImageActionBar {image} />
 
       <div>

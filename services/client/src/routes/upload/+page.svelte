@@ -105,7 +105,7 @@
     await redirectToInfo(response.id);
 
     const images = await ApiClient.image.getImagesByIds([response.id]);
-    images.data.forEach((image) => historyFeedState.add(image));
+    images.data.forEach((image) => historyFeedState.addItem(image));
   };
 
   const errorHandler = printErrorsAsToastMessage;

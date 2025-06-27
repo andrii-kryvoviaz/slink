@@ -40,7 +40,7 @@
 <main in:fade={{ duration: 500 }} class="min-h-full">
   <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
     {#if publicFeedState.isLoading && publicFeedState.items.length === 0}
-      <div class="mt-8 flex justify-center">
+      <div class="my-8 flex justify-center">
         <div
           class="flex items-center gap-3 px-4 py-3 rounded-full bg-white dark:bg-gray-800/50 border border-gray-200/50 dark:border-gray-700/50 shadow-sm"
         >

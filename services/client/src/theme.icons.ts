@@ -114,5 +114,4 @@ export const themeIcons: string[] = [
   'ph:caret-down',
   'ph:text-align-left',
   'ph:hash',
-  'heroicons:cog-6-tooth',
 ];
