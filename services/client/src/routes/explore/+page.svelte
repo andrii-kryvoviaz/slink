@@ -113,8 +113,23 @@
               />
             </div>
 
-            {#if image.attributes.description?.trim()}
-              <div class="px-5 pt-3 pb-2">
+            <div class="flex flex-col justify-between gap-2 py-2 px-5">
+              <div
+                class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400"
+              >
+                <div class="flex items-center space-x-4">
+                  <span class="flex items-center">
+                    <Icon icon="heroicons:eye" class="w-4 h-4 mr-1" />
+                    {image.attributes.views}
+                  </span>
+                  <span class="flex items-center">
+                    <Icon icon="heroicons:photo" class="w-4 h-4 mr-1" />
+                    {image.metadata.width}×{image.metadata.height}
+                  </span>
+                </div>
+              </div>
+
+              {#if image.attributes.description?.trim()}
                 <div
                   class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed"
                 >
@@ -123,23 +138,7 @@
                     text={image.attributes.description}
                   />
                 </div>
-              </div>
-            {/if}
-
-            <div
-              class="px-5 pb-5 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400"
-              class:pt-3={!image.attributes.description?.trim()}
-            >
-              <div class="flex items-center space-x-4">
-                <span class="flex items-center">
-                  <Icon icon="heroicons:eye" class="w-4 h-4 mr-1" />
-                  {image.attributes.views}
-                </span>
-                <span class="flex items-center">
-                  <Icon icon="heroicons:photo" class="w-4 h-4 mr-1" />
-                  {image.metadata.width}×{image.metadata.height}
-                </span>
-              </div>
+              {/if}
             </div>
           </article>
         {/snippet}
