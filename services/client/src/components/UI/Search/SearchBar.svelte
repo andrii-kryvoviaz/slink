@@ -108,20 +108,18 @@
       ?.label.replace('Search by ', '') || 'User',
   );
 
-  let dynamicPlaceholder = $derived(
-    searchBy === 'hashtag'
-      ? 'Search hashtags... (e.g., #nature)'
-      : searchBy === 'description'
-        ? 'Search descriptions...'
-        : searchBy === 'user'
-          ? 'Search users...'
-          : placeholder,
-  );
+  const placeholderMap = {
+    hashtag: 'Search hashtags... (e.g., #nature)',
+    description: 'Search descriptions...',
+    user: 'Search users...',
+  };
+
+  let dynamicPlaceholder = $derived(placeholderMap[searchBy] ?? placeholder);
 </script>
 
 <svelte:window onclick={handleClickOutside} />
 
-<div class="relative" class:opacity-60={disabled} style="z-index: 9999;">
+<div class="relative z-40" class:opacity-60={disabled}>
   <div
     class={cn(
       'search-bar inline-flex items-center h-8 px-2 sm:px-3 text-xs font-medium relative',
@@ -130,8 +128,7 @@
       'transition-all duration-200 rounded-full min-w-[160px] sm:min-w-[200px] max-w-[200px] sm:max-w-[280px]',
       'dark:bg-gray-900/90 dark:border-gray-700/50 dark:text-gray-400 dark:shadow-black/10',
       'dark:hover:text-gray-100 dark:hover:bg-gray-800/95 dark:hover:border-gray-600/60 dark:hover:shadow-black/20',
-      showOptions &&
-        'ring-2 ring-blue-500/20 border-blue-300/60 shadow-md z-[9999]',
+      showOptions && 'ring-2 ring-blue-500/20 border-blue-300/60 shadow-md',
     )}
   >
     <Icon
