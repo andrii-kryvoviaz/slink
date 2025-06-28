@@ -26,3 +26,22 @@ parameters:
     maxSize: '%env(string:IMAGE_MAX_SIZE)%'
     stripExifMetadata: '%env(bool:IMAGE_STRIP_EXIF_METADATA)%'
     compressionQuality: '%env(int:IMAGE_COMPRESSION_QUALITY)%'
+
+when@prod:
+  parameters:
+    storage:
+      provider: '%env(string:STORAGE_PROVIDER)%'
+      adapter:
+        local:
+          dir: '/app'
+        smb:
+          host: '%env(string:default::SMB_HOST)%'
+          share: '%env(string:default::SMB_SHARE)%'
+          workgroup: '%env(string:default::SMB_WORKGROUP)%'
+          username: '%env(string:default::SMB_USERNAME)%'
+          password: '%env(string:default::SMB_PASSWORD)%'
+        s3:
+          region: '%env(string:default::AMAZON_S3_REGION)%'
+          bucket: '%env(string:default::AMAZON_S3_BUCKET)%'
+          key: '%env(string:default::AMAZON_S3_ACCESS_KEY_ID)%'
+          secret: '%env(string:default::AMAZON_S3_SECRET_ACCESS_KEY)%'
