@@ -1,9 +1,5 @@
-/* Modern sidebar theming with enhanced visual effects */
-/* Uses shadcn/ui color system with modern UI/UX practices */
-
 @layer base {
   :root {
-    /* Enhanced visual effects */
     --sidebar-backdrop-blur: blur(16px);
     --sidebar-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1),
       0 2px 4px -2px rgb(0 0 0 / 0.1);
@@ -19,9 +15,7 @@
   }
 }
 
-/* Modern utilities for enhanced sidebar experience */
 @layer utilities {
-  /* Hide scrollbar completely for cleaner look */
   .scrollbar-none {
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -33,7 +27,6 @@
     height: 0;
   }
 
-  /* Subtle scrollbar for when needed */
   .sidebar-scrollbar {
     scrollbar-width: thin;
     scrollbar-color: hsl(var(--muted-foreground) / 0.2) transparent;
@@ -58,12 +51,10 @@
     background-color: hsl(var(--muted-foreground) / 0.3);
   }
 
-  /* Smooth focus rings */
   .focus-ring {
     @apply focus-visible:ring-primary/20 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none;
   }
 
-  /* Modern hover effects */
   .hover-lift {
     @apply transition-all duration-200 hover:scale-[1.02] hover:shadow-sm;
   }
@@ -72,13 +63,11 @@
     @apply hover:shadow-primary/10 transition-all duration-300 hover:shadow-lg;
   }
 
-  /* Backdrop blur utilities */
   .backdrop-blur-sidebar {
     backdrop-filter: var(--sidebar-backdrop-blur);
     -webkit-backdrop-filter: var(--sidebar-backdrop-blur);
   }
 
-  /* Enhanced animations */
   .animate-slide-in {
     animation: slideIn 0.3s ease-out;
   }
@@ -109,7 +98,6 @@
     }
   }
 
-  /* Modern glass effect */
   .glass-effect {
     background: hsl(var(--card) / 0.7);
     backdrop-filter: blur(16px);
@@ -117,7 +105,6 @@
     border: 1px solid hsl(var(--border) / 0.2);
   }
 
-  /* Enhanced user section styling */
   .user-section-modern {
     background: hsl(var(--card) / 0.4);
     backdrop-filter: blur(8px);
@@ -133,7 +120,6 @@
     box-shadow: 0 4px 12px hsl(var(--foreground) / 0.05);
   }
 
-  /* Dropdown menu enhancements */
   .dropdown-modern {
     background: hsl(var(--popover) / 0.95);
     backdrop-filter: blur(20px);
