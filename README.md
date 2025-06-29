@@ -3,10 +3,9 @@
 ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/andrii-kryvoviaz/slink/release.yml?logo=github)
 ![Docker Image Version (latest semver)](https://img.shields.io/docker/v/anirdev/slink?color=blue)
 ![Docker Pulls](https://img.shields.io/docker/pulls/anirdev/slink?logo=docker)
-[![License](https://img.shields.io/github/license/andrii-kryvoviaz/slink?color=blue
-)](LICENSE)
+[![License](https://img.shields.io/github/license/andrii-kryvoviaz/slink?color=blue)](LICENSE)
 
-![Slink](https://docs.slinkapp.io/_astro/7e68ebd6-a826-43ba-aaa7-ddb6b69357c1.CIkeYoem_1WfK3t.webp)
+![Slink](https://docs.slinkapp.io/_astro/accc1795-e5f4-4d95-89e7-7215a1143012.D52jZQZc_dmBGg.webp)
 
 Welcome to **Slink**, a powerful self-hosted image sharing platform designed to give users complete control over their media sharing experience. Built with [Symfony](https://symfony.com/) and [SvelteKit](https://kit.svelte.dev/), Slink enables seamless and secure image sharing without relying on third-party services.
 
@@ -19,7 +18,8 @@ Slink solves the problem of sharing images with friends, family, and colleagues 
 - **Anyone**: Take control of image privacy and hosting.
 
 ## Features
-- **Image Upload**: Supports _PNG_, _JPG_, _WEBP_, _SVG_, _BMP_, _ICO_, _GIF_, _AVIF_, _HEIC*_ and _TIFF*_.
+
+- **Image Upload**: Supports _PNG_, _JPG_, _WEBP_, _SVG_, _BMP_, _ICO_, _GIF_, _AVIF_, _HEIC\*_ and _TIFF\*_.
 - **Authentication**: Users can sign up and log in to the platform.
 - **User Approval**: Require user approval before they can upload images.
 - **Share Links**: Users can share links to their uploaded images and customize the image size.
@@ -44,6 +44,7 @@ You may also want to check the list of [upcoming features](https://docs.slinkapp
 For more information, visit the [official documentation](https://docs.slinkapp.io/).
 
 ## Contributing
+
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 Any contributions you make are **greatly appreciated**, whether they are new features, bug fixes, or code quality improvements.
 
