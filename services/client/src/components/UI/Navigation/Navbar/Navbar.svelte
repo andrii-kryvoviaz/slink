@@ -65,8 +65,10 @@
           >
             <img class="h-5 w-5" src="/favicon.png" alt="Slink" />
           </div>
-          <span class="font-semibold text-foreground tracking-tight text-lg"
-            >Slink</span
+          <span
+            class="font-semibold text-foreground tracking-tight text-lg hidden sm:inline-block"
+          >
+            Slink</span
           >
         </a>
       {/if}
