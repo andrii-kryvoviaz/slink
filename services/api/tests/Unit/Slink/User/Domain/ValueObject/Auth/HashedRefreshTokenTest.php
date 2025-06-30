@@ -7,6 +7,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
+use ReflectionException;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\User\Domain\Exception\InvalidRefreshToken;
@@ -15,7 +16,7 @@ use Tests\Traits\PrivatePropertyTrait;
 
 final class HashedRefreshTokenTest extends TestCase {
   use PrivatePropertyTrait;
-  
+
   /**
    * @throws DateTimeException
    */
@@ -23,11 +24,11 @@ final class HashedRefreshTokenTest extends TestCase {
   public function itCreatesFromHashed(): void {
     $plainRefreshToken = Uuid::uuid4();
     $expiresAt = DateTime::now()->add(new DateInterval('PT1H'));
-    
+
     $hashedRefreshToken = HashedRefreshToken::createFromHashed($plainRefreshToken, $expiresAt->toString());
     $this->assertInstanceOf(HashedRefreshToken::class, $hashedRefreshToken);
   }
-  
+
   /**
    * @throws DateTimeException
    */
@@ -36,7 +37,7 @@ final class HashedRefreshTokenTest extends TestCase {
     $hashedRefreshToken = $this->createValidHashedRefreshToken();
     $this->assertInstanceOf(HashedRefreshToken::class, $hashedRefreshToken);
   }
-  
+
   /**
    * @throws DateTimeException
    */
@@ -44,10 +45,10 @@ final class HashedRefreshTokenTest extends TestCase {
   #[DataProvider('provideInvalidRefreshToken')]
   public function itThrowsExceptionForInvalidRefreshToken(string $invalidRefreshToken): void {
     $this->expectException(InvalidRefreshToken::class);
-    
+
     HashedRefreshToken::encode($invalidRefreshToken);
   }
-  
+
   /**
    * @return array<int, array<int, string>>
    */
@@ -59,21 +60,21 @@ final class HashedRefreshTokenTest extends TestCase {
       [$validUuid . '.invalidExpiresAt'],
     ];
   }
-  
+
   /**
    * @throws DateTimeException
-   * @throws \ReflectionException
+   * @throws ReflectionException
    */
   #[Test]
   public function itChecksIfExpired(): void {
     $hashedRefreshToken = $this->createValidHashedRefreshToken();
     $this->assertFalse($hashedRefreshToken->isExpired());
-    
+
     $expiredRefreshToken = clone $hashedRefreshToken;
     $this->setPrivateProperty($expiredRefreshToken, 'expiresAt', DateTime::fromTimeStamp(time() - 3600));
     $this->assertTrue($expiredRefreshToken->isExpired());
   }
-  
+
   /**
    * @throws DateTimeException
    */

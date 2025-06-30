@@ -18,4 +18,19 @@ trait PrivatePropertyTrait {
     $property = $reflection->getProperty($propertyName);
     $property->setValue($object, $value);
   }
+  
+  /**
+   * Get a private property's value
+   *
+   * @param object $object
+   * @param string $propertyName
+   * @return mixed
+   * @throws \ReflectionException
+   */
+  public function getPrivateProperty(object $object, string $propertyName): mixed {
+    $reflection = new \ReflectionClass($object);
+    $property = $reflection->getProperty($propertyName);
+    $property->setAccessible(true);
+    return $property->getValue($object);
+  }
 }
