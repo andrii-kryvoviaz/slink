@@ -99,7 +99,10 @@
                   in:fly={{
                     y: 20,
                     duration: 300,
-                    delay: Math.min(userFeedState.items.indexOf(user) * 30, 300),
+                    delay: Math.min(
+                      userFeedState.items.indexOf(user) * 30,
+                      300,
+                    ),
                   }}
                 >
                   <UserCard
@@ -117,7 +120,10 @@
                   in:fly={{
                     x: -20,
                     duration: 300,
-                    delay: Math.min(userFeedState.items.indexOf(user) * 20, 200),
+                    delay: Math.min(
+                      userFeedState.items.indexOf(user) * 20,
+                      200,
+                    ),
                   }}
                 >
                   <UserCard

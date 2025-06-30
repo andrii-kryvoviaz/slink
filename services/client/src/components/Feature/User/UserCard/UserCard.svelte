@@ -11,9 +11,7 @@
 
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
 
-  import {
-    UserAvatar,
-  } from '@slink/components/Feature/User';
+  import { UserAvatar } from '@slink/components/Feature/User';
   import UserDeletePopover from '@slink/components/Feature/User/UserDeleteConfirmation/UserDeletePopover.svelte';
   import {
     Dropdown,
