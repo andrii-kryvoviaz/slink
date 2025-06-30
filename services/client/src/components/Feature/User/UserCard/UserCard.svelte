@@ -10,12 +10,9 @@
   import { UserStatus as UserStatusEnum } from '@slink/lib/auth/Type/User';
 
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
-  import { toast } from '@slink/utils/ui/toast.svelte';
 
   import {
     UserAvatar,
-    UserDeleteConfirmation,
-    UserStatus,
   } from '@slink/components/Feature/User';
   import UserDeletePopover from '@slink/components/Feature/User/UserDeleteConfirmation/UserDeletePopover.svelte';
   import {
@@ -24,7 +21,6 @@
     DropdownItem,
     Popover,
   } from '@slink/components/UI/Action';
-  import { Badge } from '@slink/components/UI/Text';
 
   interface Props {
     user?: User;

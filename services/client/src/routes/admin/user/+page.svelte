@@ -1,16 +1,13 @@
 <script lang="ts">
   import type { PageServerData } from './$types';
-  import type { UserListingResponse } from '@slink/api/Response';
-  import { onMount } from 'svelte';
 
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
-  import { ApiClient } from '@slink/api/Client';
-  import { ReactiveState } from '@slink/api/ReactiveState';
+  import { useUserListFeed } from '@slink/lib/state/UserListFeed.svelte';
 
   import { UserCard } from '@slink/components/Feature/User';
-  import { Button, LoadMoreButton } from '@slink/components/UI/Action';
+  import { LoadMoreButton } from '@slink/components/UI/Action';
 
   interface Props {
     data: PageServerData;
@@ -18,45 +15,18 @@
 
   let { data }: Props = $props();
 
-  let { user: loggedInUser, meta, items } = $state(data);
+  let { user: loggedInUser } = data;
   let viewMode = $state<'grid' | 'list'>('grid');
 
-  const {
-    run: fetchUsers,
-    data: response,
-    isLoading,
-  } = ReactiveState<UserListingResponse>(
-    (page: number, limit: number) => {
-      return ApiClient.user.getUsers(page, { limit });
-    },
-    { debounce: 300 },
-  );
+  const userFeedState = useUserListFeed();
+
+  $effect(() => {
+    if (!userFeedState.isDirty) userFeedState.load();
+  });
 
   const onDelete = (id: string) => {
-    items = items.filter((item) => item.id !== id);
-
-    if (items.length > 0) {
-      fetchUsers(meta.page, meta.size);
-    }
+    userFeedState.removeUser(id);
   };
-
-  let showLoadMore = $derived(
-    meta && meta.page < Math.ceil(meta.total / meta.size),
-  );
-  let itemsNotFound = $derived(!items.length);
-
-  onMount(
-    response.subscribe((value) => {
-      if (!value) {
-        return;
-      }
-
-      items = items.concat(
-        value.data.filter((item) => !items.some((i) => i.id === item.id)),
-      );
-      meta = value.meta;
-    }),
-  );
 </script>
 
 <svelte:head>
@@ -106,7 +76,7 @@
     </div>
 
     <div in:fade={{ duration: 400, delay: 200 }}>
-      {#if itemsNotFound}
+      {#if userFeedState.isEmpty}
         <div class="flex flex-col items-center justify-center py-16">
           <div
             class="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4"
@@ -124,12 +94,12 @@
         <div class="min-h-[400px]">
           {#if viewMode === 'grid'}
             <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {#each items as user (user.id)}
+              {#each userFeedState.items as user (user.id)}
                 <div
                   in:fly={{
                     y: 20,
                     duration: 300,
-                    delay: Math.min(items.indexOf(user) * 30, 300),
+                    delay: Math.min(userFeedState.items.indexOf(user) * 30, 300),
                   }}
                 >
                   <UserCard
@@ -142,12 +112,12 @@
             </div>
           {:else}
             <div class="space-y-4">
-              {#each items as user (user.id)}
+              {#each userFeedState.items as user (user.id)}
                 <div
                   in:fly={{
                     x: -20,
                     duration: 300,
-                    delay: Math.min(items.indexOf(user) * 20, 200),
+                    delay: Math.min(userFeedState.items.indexOf(user) * 20, 200),
                   }}
                 >
                   <UserCard
@@ -161,27 +131,27 @@
           {/if}
         </div>
 
-        {#if showLoadMore}
-          <div class="mt-6 flex justify-center">
-            <LoadMoreButton
-              visible={showLoadMore}
-              loading={$isLoading}
-              onclick={() => fetchUsers(meta.page + 1, meta.size)}
-              variant="modern"
-              rounded="full"
-            >
-              {#snippet text()}
-                <span>Load More Users</span>
-              {/snippet}
-              {#snippet rightIcon()}
-                <Icon
-                  icon="heroicons:chevron-down"
-                  class="w-4 h-4 ml-2 transition-transform duration-200"
-                />
-              {/snippet}
-            </LoadMoreButton>
-          </div>
-        {/if}
+        <LoadMoreButton
+          class="mt-6"
+          visible={userFeedState.hasMore}
+          loading={userFeedState.isLoading}
+          onclick={() =>
+            userFeedState.nextPage({
+              debounce: 300,
+            })}
+          variant="modern"
+          rounded="full"
+        >
+          {#snippet text()}
+            <span>Load More Users</span>
+          {/snippet}
+          {#snippet rightIcon()}
+            <Icon
+              icon="heroicons:chevron-down"
+              class="w-4 h-4 ml-2 transition-transform duration-200"
+            />
+          {/snippet}
+        </LoadMoreButton>
       {/if}
     </div>
   </div>
