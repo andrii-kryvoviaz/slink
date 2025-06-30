@@ -48,8 +48,9 @@ final class Settings extends AbstractAggregateRoot {
       }
 
       $category = $value->getSettingsCategory();
+      $categoryKey = $category->getCategoryKey();
 
-      $this->{$category} = $value;
+      $this->{$categoryKey} = $value;
     }
   }
 
