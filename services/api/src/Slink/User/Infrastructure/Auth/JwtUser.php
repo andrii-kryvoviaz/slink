@@ -6,7 +6,9 @@ namespace Slink\User\Infrastructure\Auth;
 
 use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
 use Slink\User\Domain\Contracts\UserInterface as User;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
+#[Autoconfigure(autowire: false)]
 final readonly class JwtUser implements User, JWTUserInterface {
   
   /**

@@ -29,7 +29,7 @@ final readonly class Email extends AbstractValueObject{
   }
 
   public function toString(): string {
-    return $this->email ?? '';
+    return $this->email;
   }
 
   private static function validate(string $email): void {

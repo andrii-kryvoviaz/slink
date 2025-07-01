@@ -22,29 +22,29 @@
         "ramsey/uuid": "^4.7",
         "ramsey/uuid-doctrine": "^2.0",
         "runtime/swoole": "^0.4.0",
-        "symfony/cache": "^7.2",
-        "symfony/console": "^7.2",
-        "symfony/doctrine-messenger": "^7.2",
-        "symfony/dotenv": "^7.2",
+        "symfony/cache": "^7.3",
+        "symfony/console": "^7.3",
+        "symfony/doctrine-messenger": "^7.3",
+        "symfony/dotenv": "^7.3",
         "symfony/flex": "^2",
-        "symfony/framework-bundle": "^7.2",
-        "symfony/messenger": "^7.2",
-        "symfony/mime": "^7.2",
+        "symfony/framework-bundle": "^7.3",
+        "symfony/messenger": "^7.3",
+        "symfony/mime": "^7.3",
         "symfony/monolog-bundle": "^3.10",
-        "symfony/property-access": "^7.2",
-        "symfony/property-info": "^7.2",
-        "symfony/runtime": "^7.2",
-        "symfony/serializer": "^7.2",
-        "symfony/validator": "^7.2",
-        "symfony/yaml": "^7.2"
+        "symfony/property-access": "^7.3",
+        "symfony/property-info": "^7.3",
+        "symfony/runtime": "^7.3",
+        "symfony/serializer": "^7.3",
+        "symfony/validator": "^7.3",
+        "symfony/yaml": "^7.3"
     },
     "require-dev": {
         "dg/bypass-finals": "dev-master",
         "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^12.2.5",
-        "symfony/phpunit-bridge": "^7.2",
-        "symfony/stopwatch": "^7.2",
-        "symfony/web-profiler-bundle": "^7.2"
+        "symfony/phpunit-bridge": "^7.3",
+        "symfony/stopwatch": "^7.3",
+        "symfony/web-profiler-bundle": "^7.3"
     },
     "config": {
         "platform": {
@@ -101,7 +101,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "7.2.*"
+            "require": "7.3.*"
         }
     }
 }

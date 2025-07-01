@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\File\File;
 #[AsAlias(StorageInterface::class)]
 final class StorageProxy implements StorageInterface {
   protected StorageInterface $storageProvider {
-    // @phpstan-ignore assign.propertyReadOnly
     get => $this->storageProviderLocator->get(
       StorageProvider::from($this->configurationProvider->get('storage.provider'))
     );
