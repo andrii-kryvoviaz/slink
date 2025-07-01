@@ -13,7 +13,7 @@
 
   let { data, children } = $props();
   let user = $derived(data.user);
-  let sidebarGroups = $derived((data as any).sidebarGroups || []);
+  let sidebarGroups = $derived(data.sidebarGroups || []);
 
   const currentTheme = settings.get('theme', data.settings.theme);
   const { isDark } = currentTheme;
