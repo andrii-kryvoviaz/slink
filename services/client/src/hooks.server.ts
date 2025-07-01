@@ -4,6 +4,7 @@ import type { Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
 import { ApiConnector } from '@slink/api/ApiConnector';
+import { ApiClient } from '@slink/api/Client';
 
 import { Theme, setCookieSettingsOnLocals } from '@slink/lib/settings';
 
@@ -44,10 +45,21 @@ const applyClientTheme: Handle = async ({ event, resolve }) => {
   });
 };
 
+const setGlobalSettingsOnLocals: Handle = async ({ event, resolve }) => {
+  try {
+    event.locals.globalSettings = await ApiClient.setting.getGlobalSettings();
+  } catch {
+    event.locals.globalSettings = null;
+  }
+
+  return resolve(event);
+};
+
 export const handle = sequence(
   handleWellKnownRequests,
   filterResponseHeaders,
   injectApiHandling,
   setCookieSettingsOnLocals,
+  setGlobalSettingsOnLocals,
   applyClientTheme,
 );

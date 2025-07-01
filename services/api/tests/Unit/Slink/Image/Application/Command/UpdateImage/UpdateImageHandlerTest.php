@@ -12,6 +12,8 @@ use Slink\Image\Application\Command\UpdateImage\UpdateImageHandler;
 use Slink\Image\Domain\Image;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
+use Slink\Settings\Application\Service\SettingsService;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 
 final class UpdateImageHandlerTest extends TestCase {
@@ -33,7 +35,9 @@ final class UpdateImageHandlerTest extends TestCase {
     $imageRepository->method('get')->willReturn($image);
     $imageRepository->expects($this->once())->method('store')->with($image);
     
-    $handler = new UpdateImageHandler($imageRepository);
+    $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
+    
+    $handler = new UpdateImageHandler($configurationProvider, $imageRepository);
     $handler($command, null, '123');
   }
 }

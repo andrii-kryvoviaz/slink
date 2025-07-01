@@ -2,6 +2,7 @@
 // for information about these interfaces
 import type { User } from '@slink/lib/auth/Type/User';
 import type { CookieSettings } from '@slink/lib/settings';
+import type { GlobalSettings } from '@slink/lib/settings/Type/GlobalSettings';
 
 import type { AppSidebarGroup } from '@slink/components/UI/Navigation/AppSidebar/AppSidebar.types';
 
@@ -17,6 +18,7 @@ declare global {
     }
     interface Locals {
       settings: CookieSettings;
+      globalSettings: GlobalSettings | null;
       user: User | null;
     }
     interface PageData {

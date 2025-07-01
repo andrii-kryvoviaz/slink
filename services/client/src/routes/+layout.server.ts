@@ -4,7 +4,7 @@ import type { AppSidebarGroup } from '@slink/components/UI/Navigation/AppSidebar
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async ({ locals, request }) => {
-  const { settings, user } = locals;
+  const { settings, globalSettings, user } = locals;
 
   const userAgent = request.headers.get('user-agent') || '';
 
@@ -34,6 +34,7 @@ export const load: LayoutServerLoad = async ({ locals, request }) => {
 
   return {
     settings,
+    globalSettings,
     user,
     userAgent,
     sidebarGroups,

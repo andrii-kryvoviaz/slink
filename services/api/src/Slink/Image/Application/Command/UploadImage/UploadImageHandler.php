@@ -65,10 +65,15 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
       $this->imageAnalyzer->analyze($file),
     );
     
+    $isPublic = $command->isPublic();
+    if ($this->configurationProvider->get('image.allowOnlyPublicImages')) {
+      $isPublic = true;
+    }
+    
     $attributes = ImageAttributes::create(
       $fileName,
       $command->getDescription(),
-      $command->isPublic(),
+      $isPublic,
     );
     
     $this->storage->upload($file, $fileName);

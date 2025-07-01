@@ -25,6 +25,7 @@ parameters:
   image:
     maxSize: '%env(string:IMAGE_MAX_SIZE)%'
     stripExifMetadata: '%env(bool:IMAGE_STRIP_EXIF_METADATA)%'
+    allowOnlyPublicImages: '%env(bool:IMAGE_ALLOW_ONLY_PUBLIC_IMAGES)%'
     compressionQuality: '%env(int:IMAGE_COMPRESSION_QUALITY)%'
 
 when@prod:

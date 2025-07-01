@@ -61,7 +61,7 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
       }
     }
 
-    if ($isPublic = $imageListFilter->getIsPublic()) {
+    if (($isPublic = $imageListFilter->getIsPublic()) !== null) {
       $qb->andWhere('image.attributes.isPublic = :isPublic')
         ->setParameter('isPublic', $isPublic);
     }

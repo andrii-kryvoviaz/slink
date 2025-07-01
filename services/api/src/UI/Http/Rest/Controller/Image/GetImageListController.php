@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace UI\Http\Rest\Controller\Image;
 
 use Slink\Image\Application\Query\GetImageList\GetImageListQuery;
+use Slink\Settings\Application\Service\SettingsService;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Application\Query\QueryTrait;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
@@ -16,13 +18,23 @@ use UI\Http\Rest\Response\ApiResponse;
 final class GetImageListController {
   use QueryTrait;
   
+  /**
+   * @param ConfigurationProviderInterface<SettingsService> $configurationProvider
+   */
+  public function __construct(
+    private readonly ConfigurationProviderInterface $configurationProvider
+  ) {
+  }
+  
   public function __invoke(
     #[MapQueryString] GetImageListQuery $query,
     int $page = 1
   ): ApiResponse {
+    $isPublicFilter = $this->configurationProvider->get('image.allowOnlyPublicImages') ? null : true;
+    
     $images = $this->ask($query->withContext([
       'page' => $page,
-      'isPublic' => true
+      'isPublic' => $isPublicFilter
     ]));
     
     return ApiResponse::collection($images);

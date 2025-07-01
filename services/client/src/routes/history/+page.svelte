@@ -9,6 +9,14 @@
   import { LoadMoreButton } from '@slink/components/UI/Action';
   import { Loader } from '@slink/components/UI/Loader';
 
+  import type { PageData } from './$types';
+
+  interface Props {
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
+
   const historyFeedState = useUploadHistoryFeed();
 
   $effect(() => {

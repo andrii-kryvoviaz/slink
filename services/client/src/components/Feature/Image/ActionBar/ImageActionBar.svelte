@@ -9,6 +9,7 @@
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { ImageListingItem } from '@slink/api/Response';
 
+  import { useGlobalSettings } from '@slink/lib/state/GlobalSettings.svelte';
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
 
   import { downloadByLink } from '@slink/utils/http/downloadByLink';
@@ -35,8 +36,21 @@
   }: Props = $props();
 
   const historyFeedState = useUploadHistoryFeed();
+  const globalSettingsManager = useGlobalSettings();
 
-  const isButtonVisible = (button: actionButton) => buttons.includes(button);
+  const allowOnlyPublicImages = $derived(
+    globalSettingsManager.settings?.image?.allowOnlyPublicImages || false,
+  );
+
+  const isButtonVisible = (button: actionButton) => {
+    if (!buttons.includes(button)) return false;
+
+    if (button === 'visibility' && allowOnlyPublicImages) {
+      return false;
+    }
+
+    return true;
+  };
 
   const {
     isLoading: visibilityIsLoading,

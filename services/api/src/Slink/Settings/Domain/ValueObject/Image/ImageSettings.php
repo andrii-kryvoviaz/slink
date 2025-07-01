@@ -13,11 +13,13 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
    * @param string $maxSize
    * @param bool $stripExifMetadata
    * @param int $compressionQuality
+   * @param bool $allowOnlyPublicImages
    */
   private function __construct(
     private string $maxSize,
     private bool $stripExifMetadata,
-    private int $compressionQuality = 80
+    private int $compressionQuality = 80,
+    private bool $allowOnlyPublicImages = false
   ) {
     if (!preg_match('/^(\d+)([kM])$/', $maxSize)) {
       throw new InvalidImageMaxSizeException();
@@ -39,7 +41,8 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
     return [
       'maxSize' => $this->maxSize,
       'stripExifMetadata' => $this->stripExifMetadata,
-      'compressionQuality' => $this->compressionQuality
+      'compressionQuality' => $this->compressionQuality,
+      'allowOnlyPublicImages' => $this->allowOnlyPublicImages
     ];
   }
   
@@ -50,7 +53,8 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
     return new self(
       $payload['maxSize'],
       $payload['stripExifMetadata'],
-      $payload['compressionQuality'] ?? 80
+      $payload['compressionQuality'] ?? 80,
+      $payload['allowOnlyPublicImages'] ?? false
     );
   }
   
@@ -80,5 +84,12 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
    */
   public function getCompressionQuality(): int {
     return $this->compressionQuality;
+  }
+  
+  /**
+   * @return bool
+   */
+  public function isAllowOnlyPublicImages(): bool {
+    return $this->allowOnlyPublicImages;
   }
 }

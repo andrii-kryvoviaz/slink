@@ -7,6 +7,7 @@
     SettingCategory,
     SettingCategoryData,
   } from '@slink/lib/settings/Type/GlobalSettings';
+  import { useGlobalSettings } from '@slink/lib/state/GlobalSettings.svelte';
 
   import {
     SettingItem,
@@ -28,6 +29,8 @@
   }
 
   let { data }: Props = $props();
+
+  const globalSettingsManager = useGlobalSettings();
 
   const {
     run: saveSettings,
@@ -51,9 +54,13 @@
     categoryBeingSaved = category;
 
     await saveSettings(category, data);
+
+    if (!$error) {
+      globalSettingsManager.updateCategory(category, data);
+    }
   };
 
-  let settings = $state(data?.settings);
+  let settings = $state(globalSettingsManager.settings);
   let defaultSettings = $state(data?.defaultSettings);
 </script>
 
@@ -90,7 +97,7 @@
       {/snippet}
 
       <SettingItem
-        defaultValue={defaultSettings.image?.maxSize}
+        defaultValue={defaultSettings?.image?.maxSize}
         reset={(value) => {
           settings.image.maxSize = value;
         }}
@@ -108,7 +115,7 @@
       </SettingItem>
 
       <SettingItem
-        defaultValue={defaultSettings.image?.stripExifMetadata}
+        defaultValue={defaultSettings?.image?.stripExifMetadata}
         reset={(value) => {
           settings.image.stripExifMetadata = value;
         }}
@@ -123,6 +130,27 @@
           <Toggle
             name="imageStripExifMetadata"
             bind:checked={settings.image.stripExifMetadata}
+          />
+        </div>
+      </SettingItem>
+
+      <SettingItem
+        defaultValue={defaultSettings?.image?.allowOnlyPublicImages}
+        reset={(value) => {
+          settings.image.allowOnlyPublicImages = value;
+        }}
+      >
+        {#snippet label()}
+          Allow Only Public Images
+        {/snippet}
+        {#snippet hint()}
+          When enabled, all images are automatically set to public and
+          visibility cannot be changed
+        {/snippet}
+        <div class="flex justify-end">
+          <Toggle
+            name="imageAllowOnlyPublicImages"
+            bind:checked={settings.image.allowOnlyPublicImages}
           />
         </div>
       </SettingItem>
