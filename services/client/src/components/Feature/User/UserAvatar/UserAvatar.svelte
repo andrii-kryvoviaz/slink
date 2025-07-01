@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { UserAvatarProps } from '@slink/components/Feature/User';
   import type { User } from '@slink/lib/auth/Type/User';
 
   import { className } from '@slink/utils/ui/className';
 
+  import type { UserAvatarProps } from '@slink/components/Feature/User';
   import { UserAvatarTheme } from '@slink/components/Feature/User';
 
   interface Props extends UserAvatarProps {

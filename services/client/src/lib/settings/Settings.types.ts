@@ -1,7 +1,7 @@
-import type { SidebarSettings } from '@slink/lib/settings/setters/sidebar';
 import type { Readable, Writable } from 'svelte/store';
 
 import { Theme } from '@slink/lib/settings/index';
+import type { SidebarSettings } from '@slink/lib/settings/setters/sidebar';
 
 export type Settings = {
   theme: SettingsValue<Theme> & {

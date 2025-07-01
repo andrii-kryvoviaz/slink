@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { User } from '@slink/lib/auth/Type/User';
-
   import { type Readable, readable } from 'svelte/store';
+
+  import type { User } from '@slink/lib/auth/Type/User';
 
   import ConfirmationDialog from '@slink/components/UI/Modal/ConfirmationDialog.svelte';
 

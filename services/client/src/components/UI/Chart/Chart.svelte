@@ -1,8 +1,4 @@
 <script lang="ts">
-  import type {
-    ChartNormalizer,
-    ChartOptions,
-  } from '@slink/components/UI/Chart';
   import type { ApexOptions } from 'apexcharts';
   import { twMerge } from 'tailwind-merge';
 
@@ -10,6 +6,10 @@
 
   import { deepMerge } from '@slink/utils/object/deepMerge';
 
+  import type {
+    ChartNormalizer,
+    ChartOptions,
+  } from '@slink/components/UI/Chart';
   import { AreaChart } from '@slink/components/UI/Chart/Area.chart';
   import { RadialBarChart } from '@slink/components/UI/Chart/RadialBar.chart';
 

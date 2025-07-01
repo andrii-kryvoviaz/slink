@@ -1,8 +1,8 @@
 <script lang="ts">
   import { type Snippet, getContext, onMount } from 'svelte';
-  import type { HTMLAttributes } from 'svelte/elements';
 
   import { page } from '$app/state';
+  import type { HTMLAttributes } from 'svelte/elements';
 
   import { randomId } from '@slink/utils/string/randomId';
   import { className } from '@slink/utils/ui/className';

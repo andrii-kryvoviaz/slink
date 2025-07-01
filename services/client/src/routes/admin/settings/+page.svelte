@@ -1,13 +1,12 @@
 <script lang="ts">
-  import type { PageServerData } from './$types';
+  import { ApiClient } from '@slink/api/Client';
+  import { ReactiveState } from '@slink/api/ReactiveState';
   import type { EmptyResponse } from '@slink/api/Response';
+
   import type {
     SettingCategory,
     SettingCategoryData,
   } from '@slink/lib/settings/Type/GlobalSettings';
-
-  import { ApiClient } from '@slink/api/Client';
-  import { ReactiveState } from '@slink/api/ReactiveState';
 
   import {
     SettingItem,
@@ -21,6 +20,8 @@
     Toggle,
   } from '@slink/components/UI/Form';
   import { Notice } from '@slink/components/UI/Text';
+
+  import type { PageServerData } from './$types';
 
   interface Props {
     data: PageServerData;

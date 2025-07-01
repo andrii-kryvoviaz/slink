@@ -1,17 +1,17 @@
 @layer base {
   :root {
     --sidebar-backdrop-blur: blur(16px);
-    --sidebar-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1),
-      0 2px 4px -2px rgb(0 0 0 / 0.1);
-    --sidebar-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
-      0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --sidebar-shadow:
+      0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --sidebar-shadow-lg:
+      0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   }
 
   .dark {
-    --sidebar-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3),
-      0 2px 4px -2px rgb(0 0 0 / 0.2);
-    --sidebar-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4),
-      0 4px 6px -4px rgb(0 0 0 / 0.3);
+    --sidebar-shadow:
+      0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.2);
+    --sidebar-shadow-lg:
+      0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
   }
 }
 

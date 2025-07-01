@@ -1,10 +1,10 @@
-import type { SessionProviderInterface } from '@slink/lib/auth/SessionProvider/SessionProviderInterface';
-import type { User } from '@slink/lib/auth/Type/User';
 import type { Cookies } from '@sveltejs/kit';
 
 import { browser } from '$app/environment';
 
 import { RedisSessionProvider } from '@slink/lib/auth/SessionProvider/RedisSessionProvider';
+import type { SessionProviderInterface } from '@slink/lib/auth/SessionProvider/SessionProviderInterface';
+import type { User } from '@slink/lib/auth/Type/User';
 
 type SessionItem = {
   data: SessionData;

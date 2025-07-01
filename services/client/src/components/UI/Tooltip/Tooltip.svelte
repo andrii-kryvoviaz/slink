@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { TooltipProps } from '@slink/components/UI/Tooltip/Tooltip.types';
   import { Tooltip } from 'bits-ui';
   import { type Snippet } from 'svelte';
 
@@ -11,6 +10,7 @@
     TooltipArrow,
     TooltipContent,
   } from '@slink/components/UI/Tooltip/Tooltip.theme';
+  import type { TooltipProps } from '@slink/components/UI/Tooltip/Tooltip.types';
 
   type Props = Tooltip.RootProps &
     Tooltip.ContentProps &

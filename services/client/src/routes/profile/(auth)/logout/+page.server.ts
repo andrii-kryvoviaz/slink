@@ -1,7 +1,8 @@
-import type { Actions, PageServerLoad } from './$types';
 import { redirect } from '@sveltejs/kit';
 
 import { Auth } from '@slink/lib/auth/Auth';
+
+import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({}) => {};
 

@@ -1,6 +1,4 @@
 <script lang="ts">
-  import type { PageData } from './$types';
-  import type { UploadedImageResponse } from '@slink/api/Response';
   import { cva } from 'class-variance-authority';
 
   import { goto } from '$app/navigation';
@@ -9,6 +7,7 @@
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
+  import type { UploadedImageResponse } from '@slink/api/Response';
 
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
   import { className as cn } from '@slink/lib/utils/ui/className';
@@ -26,6 +25,8 @@
   } from '@slink/components/UI/Banner';
   import { Dropzone } from '@slink/components/UI/Form';
   import { Loader } from '@slink/components/UI/Loader';
+
+  import type { PageData } from './$types';
 
   interface Props {
     data: PageData;

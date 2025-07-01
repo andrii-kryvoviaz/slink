@@ -4,7 +4,6 @@ import type {
   PaginationConfig,
   SearchParams,
 } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
-
 import { AbstractPaginatedFeed } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
 
 export interface ExtendedSearchParams extends SearchParams {

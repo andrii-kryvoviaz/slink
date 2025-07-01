@@ -1,6 +1,3 @@
-import type { RequestMapper } from '@slink/api/Type/RequestMapper';
-import type { RequestOptions } from '@slink/api/Type/RequestOptions';
-
 import { browser } from '$app/environment';
 import { invalidateAll } from '$app/navigation';
 
@@ -19,6 +16,8 @@ import {
   SettingResource,
 } from '@slink/api/Resources';
 import { UserResource } from '@slink/api/Resources/UserResource';
+import type { RequestMapper } from '@slink/api/Type/RequestMapper';
+import type { RequestOptions } from '@slink/api/Type/RequestOptions';
 
 const RESOURCES = {
   image: ImageResource,

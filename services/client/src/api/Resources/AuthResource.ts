@@ -1,10 +1,9 @@
+import { AbstractResource } from '@slink/api/AbstractResource';
 import type { EmptyResponse, ViolationResponse } from '@slink/api/Response';
 import type { LoginResponse } from '@slink/api/Response/Auth/LoginResponse';
 import type { SignupResponse } from '@slink/api/Response/Auth/SignupResponse';
 import type { GenericError } from '@slink/api/Response/Error/GenericError';
 import type { ResponseWithHeaders } from '@slink/api/Response/ResponseWithHeaders';
-
-import { AbstractResource } from '@slink/api/AbstractResource';
 
 export class AuthResource extends AbstractResource {
   public async signup(data: {

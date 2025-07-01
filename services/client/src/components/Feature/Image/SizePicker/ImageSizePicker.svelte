@@ -1,10 +1,9 @@
 <script lang="ts">
-  import type { ImageSize } from '@slink/components/Feature/Image';
-
   import Icon from '@iconify/svelte';
   import { cubicOut } from 'svelte/easing';
   import { scale } from 'svelte/transition';
 
+  import type { ImageSize } from '@slink/components/Feature/Image';
   import { Button } from '@slink/components/UI/Action';
 
   interface Props {

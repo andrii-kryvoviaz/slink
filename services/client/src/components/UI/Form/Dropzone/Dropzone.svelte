@@ -1,9 +1,10 @@
 <script lang="ts">
+  import { twMerge } from 'tailwind-merge';
+
   import type {
     HTMLButtonAttributes,
     HTMLInputAttributes,
   } from 'svelte/elements';
-  import { twMerge } from 'tailwind-merge';
 
   type ButtonEvents = Pick<
     HTMLButtonAttributes,

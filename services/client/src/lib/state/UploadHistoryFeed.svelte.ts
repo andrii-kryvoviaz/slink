@@ -1,12 +1,11 @@
+import { ApiClient } from '@slink/api/Client';
 import type { ImageListingItem } from '@slink/api/Response';
+
 import type {
   LoadParams,
   PaginatedResponse,
   SearchParams,
 } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
-
-import { ApiClient } from '@slink/api/Client';
-
 import { AbstractPaginatedFeed } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
 import { useState } from '@slink/lib/state/core/ContextAwareState';
 

@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { KeyboardKeyProps } from '@slink/components/UI/Text';
   import type { Snippet } from 'svelte';
 
   import { className } from '@slink/utils/ui/className';
 
+  import type { KeyboardKeyProps } from '@slink/components/UI/Text';
   import { KeyboardKeyTheme } from '@slink/components/UI/Text';
 
   interface Props extends KeyboardKeyProps {

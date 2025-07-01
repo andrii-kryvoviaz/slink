@@ -1,8 +1,4 @@
 <script lang="ts">
-  import type {
-    ButtonAttributes,
-    ButtonVariant,
-  } from '@slink/components/UI/Action';
   import { DropdownMenu, type WithoutChild } from 'bits-ui';
   import type { Snippet } from 'svelte';
 
@@ -11,6 +7,10 @@
 
   import { className } from '@slink/utils/ui/className';
 
+  import type {
+    ButtonAttributes,
+    ButtonVariant,
+  } from '@slink/components/UI/Action';
   import { Button } from '@slink/components/UI/Action';
 
   type Props = DropdownMenu.RootProps &

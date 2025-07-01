@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { ImageListingItem } from '@slink/api/Response';
-
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
+
+  import type { ImageListingItem } from '@slink/api/Response';
 
   import { bytesToSize } from '@slink/utils/bytesConverter';
 

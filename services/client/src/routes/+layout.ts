@@ -1,4 +1,3 @@
-import type { LayoutLoad } from './$types';
 import { themeIcons } from '@slink/theme.icons';
 import { error, redirect } from '@sveltejs/kit';
 
@@ -8,6 +7,8 @@ import { ApiClient } from '@slink/api/Client';
 
 import '@slink/utils/string/stringExtensions';
 import { preloadIconSet } from '@slink/utils/ui/preloadIconSet';
+
+import type { LayoutLoad } from './$types';
 
 export const load: LayoutLoad = async ({ fetch, data }) => {
   ApiClient.use(fetch);

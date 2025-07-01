@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { BannerProps } from './Banner.types';
   import type { Snippet } from 'svelte';
 
   import { className } from '@slink/utils/ui/className';
 
   import { BannerTheme } from './Banner.theme';
+  import type { BannerProps } from './Banner.types';
 
   interface Props extends BannerProps {
     icon?: Snippet<[]>;

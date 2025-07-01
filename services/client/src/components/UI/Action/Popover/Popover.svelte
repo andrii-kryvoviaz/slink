@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { PopoverProps } from '@slink/components/UI/Action/Popover/Popover.types';
   import { Popover } from 'bits-ui';
   import type { Snippet } from 'svelte';
 
@@ -13,6 +12,7 @@
     PopoverContentTheme,
     PopoverTriggerTheme,
   } from '@slink/components/UI/Action/Popover/Popover.theme';
+  import type { PopoverProps } from '@slink/components/UI/Action/Popover/Popover.types';
 
   type Props = Popover.RootProps &
     Popover.ContentProps &

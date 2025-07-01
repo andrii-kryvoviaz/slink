@@ -1,11 +1,11 @@
 <script lang="ts">
-  import type { User } from '@slink/lib/auth/Type/User';
   import { DropdownMenu } from 'bits-ui';
 
   import { enhance } from '$app/forms';
   import Icon from '@iconify/svelte';
   import { fly } from 'svelte/transition';
 
+  import type { User } from '@slink/lib/auth/Type/User';
   import { className as cn } from '@slink/lib/utils/ui/className';
 
   import { UserAvatar } from '@slink/components/Feature/User';

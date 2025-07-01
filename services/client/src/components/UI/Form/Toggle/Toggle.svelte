@@ -1,10 +1,11 @@
 <script lang="ts">
-  import type { ToggleProps } from '@slink/components/UI/Form/Toggle/Toggle.types';
   import { type Snippet } from 'svelte';
-  import type { HTMLInputAttributes } from 'svelte/elements';
   import { twMerge } from 'tailwind-merge';
 
+  import type { HTMLInputAttributes } from 'svelte/elements';
+
   import { ToggleTheme } from '@slink/components/UI/Form/Toggle/Toggle.theme';
+  import type { ToggleProps } from '@slink/components/UI/Form/Toggle/Toggle.types';
 
   interface Props extends Omit<HTMLInputAttributes, 'size'>, ToggleProps {
     class?: string;

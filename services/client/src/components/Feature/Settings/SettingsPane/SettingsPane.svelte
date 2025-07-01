@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { SettingCategory } from '@slink/lib/settings/Type/GlobalSettings';
   import type { Snippet } from 'svelte';
 
   import { settings } from '@slink/lib/settings';
+  import type { SettingCategory } from '@slink/lib/settings/Type/GlobalSettings';
 
   import { Button, type ButtonVariant } from '@slink/components/UI/Action';
   import { Loader } from '@slink/components/UI/Loader';

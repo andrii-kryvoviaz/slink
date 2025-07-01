@@ -1,5 +1,6 @@
-import type { SessionProviderInterface } from '@slink/lib/auth/SessionProvider/SessionProviderInterface';
 import { type RedisClientType, createClient } from 'redis';
+
+import type { SessionProviderInterface } from '@slink/lib/auth/SessionProvider/SessionProviderInterface';
 
 export class RedisSessionProvider implements SessionProviderInterface {
   private static _instance: RedisSessionProvider;

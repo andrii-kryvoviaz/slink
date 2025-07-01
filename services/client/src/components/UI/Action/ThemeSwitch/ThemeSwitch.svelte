@@ -1,9 +1,8 @@
 <script lang="ts">
-  import type { ThemeSwitchProps } from './ThemeSwitch.types';
-  import type { HTMLButtonAttributes } from 'svelte/elements';
   import { twMerge } from 'tailwind-merge';
 
   import Icon from '@iconify/svelte';
+  import type { HTMLButtonAttributes } from 'svelte/elements';
 
   import { Theme } from '@slink/lib/settings';
 
@@ -13,6 +12,7 @@
     ThemeSwitchTheme,
     ThemeSwitchTooltip,
   } from './ThemeSwitch.theme';
+  import type { ThemeSwitchProps } from './ThemeSwitch.types';
 
   interface Props extends Omit<HTMLButtonAttributes, 'size'>, ThemeSwitchProps {
     disabled?: boolean;

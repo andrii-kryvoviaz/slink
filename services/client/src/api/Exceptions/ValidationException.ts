@@ -1,9 +1,8 @@
-import type { Violation, ViolationResponse } from '@slink/api/Response';
-
 import {
   type ErrorList,
   HttpException,
 } from '@slink/api/Exceptions/HttpException';
+import type { Violation, ViolationResponse } from '@slink/api/Response';
 
 export class ValidationException extends HttpException {
   private readonly _violations: Violation[];

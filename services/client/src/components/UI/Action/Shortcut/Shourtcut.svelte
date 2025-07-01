@@ -1,10 +1,9 @@
 <script lang="ts">
-  import type { RequireAtLeastOne } from '@slink/utils/object/requiredAtLeastOne.type';
-
   import { browser } from '$app/environment';
   import { page } from '$app/state';
 
   import { parseUserAgent } from '@slink/utils/http/userAgentParser';
+  import type { RequireAtLeastOne } from '@slink/utils/object/requiredAtLeastOne.type';
 
   import {
     KeyboardKey,

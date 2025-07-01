@@ -1,10 +1,9 @@
 <script lang="ts">
-  import type { SingleUserResponse } from '@slink/api/Response/User/SingleUserResponse';
-
   import Icon from '@iconify/svelte';
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
+  import type { SingleUserResponse } from '@slink/api/Response/User/SingleUserResponse';
 
   import { type User, UserRole } from '@slink/lib/auth/Type/User';
   import { UserStatus as UserStatusEnum } from '@slink/lib/auth/Type/User';

@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { ActionData, PageData } from './$types';
   import { untrack } from 'svelte';
 
   import { enhance } from '$app/forms';
@@ -21,6 +20,8 @@
     BannerIcon,
   } from '@slink/components/UI/Banner';
   import { Input } from '@slink/components/UI/Form';
+
+  import type { ActionData, PageData } from './$types';
 
   interface Props {
     form: ActionData;

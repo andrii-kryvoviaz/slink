@@ -1,5 +1,6 @@
-import type { TabMenuTheme } from './TabMenu.theme';
 import type { VariantProps } from 'class-variance-authority';
+
+import type { TabMenuTheme } from './TabMenu.theme';
 
 export type TabMenuProps = VariantProps<typeof TabMenuTheme>;
 

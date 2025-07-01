@@ -1,6 +1,8 @@
-import type { AppSidebarTheme } from './AppSidebar.theme';
-import type { User } from '@slink/lib/auth/Type/User';
 import type { VariantProps } from 'class-variance-authority';
+
+import type { User } from '@slink/lib/auth/Type/User';
+
+import type { AppSidebarTheme } from './AppSidebar.theme';
 
 export type AppSidebarVariant = VariantProps<typeof AppSidebarTheme>;
 export type AppSidebarThemeProps = VariantProps<typeof AppSidebarTheme>;

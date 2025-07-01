@@ -1,5 +1,4 @@
 import type { RequestStateOptions } from '@slink/lib/state/core/AbstractHttpState.svelte';
-
 import { AbstractHttpState } from '@slink/lib/state/core/AbstractHttpState.svelte';
 
 export interface PaginationMetadata {

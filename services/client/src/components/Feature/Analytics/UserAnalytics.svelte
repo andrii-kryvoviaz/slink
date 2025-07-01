@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { UserAnalyticsData } from '@slink/api/Response';
   import { onMount } from 'svelte';
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
+  import type { UserAnalyticsData } from '@slink/api/Response';
 
   import { RefreshButton } from '@slink/components/UI/Action';
   import { Card } from '@slink/components/UI/Card';

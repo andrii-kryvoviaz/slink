@@ -1,9 +1,8 @@
+import { AbstractResource } from '@slink/api/AbstractResource';
 import type {
   ImageAnalyticsResponse,
   UserAnalyticsResponse,
 } from '@slink/api/Response';
-
-import { AbstractResource } from '@slink/api/AbstractResource';
 
 export class AnalyticsResource extends AbstractResource {
   public async getUserAnalytics(): Promise<UserAnalyticsResponse> {

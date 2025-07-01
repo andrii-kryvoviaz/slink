@@ -1,14 +1,14 @@
+import { ApiClient } from '@slink/api/Client';
+import type { ImageListingItem } from '@slink/api/Response';
+
+import type { ExtendedSearchParams } from '@slink/lib/state/core/AbstractSearchablePaginatedFeed.svelte';
+import { AbstractSearchablePaginatedFeed } from '@slink/lib/state/core/AbstractSearchablePaginatedFeed.svelte';
+import { useState } from '@slink/lib/state/core/ContextAwareState';
+
 import type {
   LoadParams,
   PaginatedResponse,
 } from './core/AbstractPaginatedFeed.svelte';
-import type { ImageListingItem } from '@slink/api/Response';
-import type { ExtendedSearchParams } from '@slink/lib/state/core/AbstractSearchablePaginatedFeed.svelte';
-
-import { ApiClient } from '@slink/api/Client';
-
-import { AbstractSearchablePaginatedFeed } from '@slink/lib/state/core/AbstractSearchablePaginatedFeed.svelte';
-import { useState } from '@slink/lib/state/core/ContextAwareState';
 
 class PublicImagesFeed extends AbstractSearchablePaginatedFeed<ImageListingItem> {
   public constructor() {

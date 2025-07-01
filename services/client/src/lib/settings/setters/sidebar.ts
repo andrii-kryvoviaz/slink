@@ -1,6 +1,6 @@
-import type { Setter } from '@slink/lib/settings/Settings.types';
-
 import { derived } from 'svelte/store';
+
+import type { Setter } from '@slink/lib/settings/Settings.types';
 
 export type SidebarSettings = {
   expanded: boolean;

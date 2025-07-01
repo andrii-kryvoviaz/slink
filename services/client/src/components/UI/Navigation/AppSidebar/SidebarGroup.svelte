@@ -1,12 +1,11 @@
 <script lang="ts">
-  import type { AppSidebarGroup, AppSidebarItem } from './AppSidebar.types';
-
   import { page } from '$app/stores';
 
   import {
     AppSidebarGroup as AppSidebarGroupTheme,
     AppSidebarGroupTitle,
   } from './AppSidebar.theme';
+  import type { AppSidebarGroup, AppSidebarItem } from './AppSidebar.types';
   import SidebarItem from './SidebarItem.svelte';
 
   interface Props {

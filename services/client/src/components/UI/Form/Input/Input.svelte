@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
+
   import type { HTMLInputAttributes } from 'svelte/elements';
 
   import { className } from '@slink/utils/ui/className';

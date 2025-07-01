@@ -1,6 +1,4 @@
 <script lang="ts">
-  import type { ImageListingItem } from '@slink/api/Response';
-
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import Icon from '@iconify/svelte';
@@ -9,6 +7,7 @@
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
+  import type { ImageListingItem } from '@slink/api/Response';
 
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
 

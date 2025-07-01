@@ -1,15 +1,14 @@
+import { browser } from '$app/environment';
+import { type Writable, writable } from 'svelte/store';
+
+import { useWritable } from '@slink/store/contextAwareStore';
+
 import type {
   Setter,
   Settings,
   SettingsCombinedValue,
   SettingsKey,
 } from '@slink/lib/settings/Settings.types';
-
-import { browser } from '$app/environment';
-import { type Writable, writable } from 'svelte/store';
-
-import { useWritable } from '@slink/store/contextAwareStore';
-
 import { SettingsMap } from '@slink/lib/settings/SettingsMap';
 import { SidebarSetter } from '@slink/lib/settings/setters/sidebar';
 import { ThemeSetter } from '@slink/lib/settings/setters/theme';

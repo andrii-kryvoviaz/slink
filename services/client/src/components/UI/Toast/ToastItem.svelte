@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { ToastItemProps } from '@slink/components/UI/Toast/ToastItem.types';
   import type { Snippet } from 'svelte';
 
   import { className } from '@slink/utils/ui/className';
 
   import { ToastItemTheme } from '@slink/components/UI/Toast/ToastItem.theme';
+  import type { ToastItemProps } from '@slink/components/UI/Toast/ToastItem.types';
 
   interface Props extends ToastItemProps {
     class?: string;

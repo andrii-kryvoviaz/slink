@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
+
   import type { HTMLInputAttributes } from 'svelte/elements';
 
   import { Input, type InputProps } from '@slink/components/UI/Form';

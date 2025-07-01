@@ -1,6 +1,4 @@
 <script lang="ts">
-  import type { AppSidebarItem } from './AppSidebar.types';
-
   import Icon from '@iconify/svelte';
 
   import { Tooltip } from '@slink/components/UI/Tooltip';
@@ -11,6 +9,7 @@
     AppSidebarItem as AppSidebarItemTheme,
     AppSidebarText,
   } from './AppSidebar.theme';
+  import type { AppSidebarItem } from './AppSidebar.types';
 
   interface Props {
     item: AppSidebarItem;

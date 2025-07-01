@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { PageServerData } from './$types';
-
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
   import { Button, CopyContainer } from '@slink/components/UI/Action';
+
+  import type { PageServerData } from './$types';
 
   interface Props {
     data: PageServerData;

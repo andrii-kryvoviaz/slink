@@ -1,6 +1,4 @@
 <script lang="ts">
-  import type { UserListFilter } from '@slink/api/Request/UserRequest';
-  import type { UserListingResponse } from '@slink/api/Response';
   import { onMount } from 'svelte';
 
   import Icon from '@iconify/svelte';
@@ -8,6 +6,8 @@
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
+  import type { UserListFilter } from '@slink/api/Request/UserRequest';
+  import type { UserListingResponse } from '@slink/api/Response';
 
   import { UserAvatar, UserStatus } from '@slink/components/Feature/User';
   import { RefreshButton } from '@slink/components/UI/Action';

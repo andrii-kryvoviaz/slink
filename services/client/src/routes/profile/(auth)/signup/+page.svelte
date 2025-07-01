@@ -1,6 +1,4 @@
 <script lang="ts">
-  import type { PageData } from './$types';
-
   import { enhance } from '$app/forms';
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
@@ -20,6 +18,8 @@
     BannerIcon,
   } from '@slink/components/UI/Banner';
   import { Input } from '@slink/components/UI/Form';
+
+  import type { PageData } from './$types';
 
   interface Props {
     form: any;

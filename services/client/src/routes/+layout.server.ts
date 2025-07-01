@@ -1,7 +1,7 @@
-import type { LayoutServerLoad } from './$types';
+import { createAppSidebarItems } from '@slink/components/UI/Navigation/AppSidebar/AppSidebar.config';
 import type { AppSidebarGroup } from '@slink/components/UI/Navigation/AppSidebar/AppSidebar.types';
 
-import { createAppSidebarItems } from '@slink/components/UI/Navigation/AppSidebar/AppSidebar.config';
+import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async ({ locals, request }) => {
   const { settings, user } = locals;

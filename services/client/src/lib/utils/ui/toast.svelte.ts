@@ -1,4 +1,3 @@
-import type { ToastOptions } from '@slink/components/UI/Toast/Toast.types';
 import type { Component } from 'svelte';
 
 import { AbstractState } from '@slink/lib/state/core/AbstractState.svelte';
@@ -8,6 +7,7 @@ import { randomId } from '@slink/utils/string/randomId';
 import { createTimer } from '@slink/utils/time/timer';
 
 import { commonToastThemeMap } from '@slink/components/UI/Toast/Toast.theme';
+import type { ToastOptions } from '@slink/components/UI/Toast/Toast.types';
 
 type Toast = ToastOptions & {
   id: string;

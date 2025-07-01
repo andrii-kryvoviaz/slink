@@ -1,6 +1,4 @@
 <script lang="ts">
-  import type { PageServerData } from './$types';
-
   import { enhance } from '$app/forms';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
@@ -16,6 +14,8 @@
   import { Button, type ButtonVariant } from '@slink/components/UI/Action';
   import { Input } from '@slink/components/UI/Form';
   import { Loader } from '@slink/components/UI/Loader';
+
+  import type { PageServerData } from './$types';
 
   interface Props {
     data: PageServerData;

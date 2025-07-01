@@ -1,6 +1,4 @@
 <script lang="ts">
-  import type { PageData } from './$types';
-
   import { page } from '$app/state';
   import { fly } from 'svelte/transition';
 
@@ -18,6 +16,8 @@
     ImageSizePicker,
   } from '@slink/components/Feature/Image';
   import { CopyContainer } from '@slink/components/UI/Action';
+
+  import type { PageData } from './$types';
 
   interface Props {
     data: PageData;

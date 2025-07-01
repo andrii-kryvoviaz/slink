@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { User } from '@slink/lib/auth/Type/User';
-
   import Icon from '@iconify/svelte';
   import { type Readable, readable } from 'svelte/store';
+
+  import type { User } from '@slink/lib/auth/Type/User';
 
   import { Button } from '@slink/components/UI/Action';
   import { Loader } from '@slink/components/UI/Loader';

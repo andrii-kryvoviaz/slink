@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { User } from '@slink/lib/auth/Type/User';
-
   import { enhance } from '$app/forms';
   import Icon from '@iconify/svelte';
+
+  import type { User } from '@slink/lib/auth/Type/User';
 
   import { className } from '@slink/utils/ui/className';
 

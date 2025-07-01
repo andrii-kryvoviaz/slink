@@ -1,9 +1,8 @@
 <script lang="ts">
-  import type { User } from '@slink/lib/auth/Type/User';
-
   import { page } from '$app/stores';
   import Icon from '@iconify/svelte';
 
+  import type { User } from '@slink/lib/auth/Type/User';
   import { usePublicImagesFeed } from '@slink/lib/state/PublicImagesFeed.svelte';
 
   import { Button } from '@slink/components/UI/Action';

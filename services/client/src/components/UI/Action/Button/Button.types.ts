@@ -1,6 +1,8 @@
-import type { ButtonTheme } from '@slink/components/UI/Action/Button/Button.theme';
 import type { VariantProps } from 'class-variance-authority';
+
 import type { HTMLAttributes, HTMLButtonAttributes } from 'svelte/elements';
+
+import type { ButtonTheme } from '@slink/components/UI/Action/Button/Button.theme';
 
 export type ButtonProps = VariantProps<typeof ButtonTheme>;
 

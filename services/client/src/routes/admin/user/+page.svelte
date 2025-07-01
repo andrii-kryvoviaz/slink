@@ -1,6 +1,4 @@
 <script lang="ts">
-  import type { PageServerData } from './$types';
-
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
@@ -8,6 +6,8 @@
 
   import { UserCard } from '@slink/components/Feature/User';
   import { LoadMoreButton } from '@slink/components/UI/Action';
+
+  import type { PageServerData } from './$types';
 
   interface Props {
     data: PageServerData;

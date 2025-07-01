@@ -1,10 +1,8 @@
 <script lang="ts">
-  import type { AppSidebarGroup } from './AppSidebar.types';
-  import type { User } from '@slink/lib/auth/Type/User';
-
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
+  import type { User } from '@slink/lib/auth/Type/User';
   import { settings } from '@slink/lib/settings';
 
   import { className } from '@slink/utils/ui/className';
@@ -15,6 +13,7 @@
     AppSidebarHeader,
     AppSidebarTheme,
   } from './AppSidebar.theme';
+  import type { AppSidebarGroup } from './AppSidebar.types';
   import SidebarGroup from './SidebarGroup.svelte';
   import SidebarUser from './SidebarUser.svelte';
 

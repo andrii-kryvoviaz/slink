@@ -1,9 +1,10 @@
+import type { VariantProps } from 'class-variance-authority';
+
 import type {
   PopoverArrowTheme,
   PopoverContentTheme,
   PopoverTriggerTheme,
 } from '@slink/components/UI/Action/Popover/Popover.theme';
-import type { VariantProps } from 'class-variance-authority';
 
 type PopoverContentVariants = VariantProps<typeof PopoverContentTheme>;
 type PopoverArrowVariants = VariantProps<typeof PopoverArrowTheme>;

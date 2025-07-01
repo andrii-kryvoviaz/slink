@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { SelectProps } from '@slink/components/UI/Form/Select/Select.types';
   import { Select, type WithoutChildren } from 'bits-ui';
 
   import Icon from '@iconify/svelte';
@@ -12,6 +11,7 @@
     SelectTheme,
     SingleSelectLabel,
   } from '@slink/components/UI/Form';
+  import type { SelectProps } from '@slink/components/UI/Form/Select/Select.types';
 
   type CommonProps = Omit<
     WithoutChildren<Select.RootProps>,
