@@ -2,12 +2,13 @@
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
+  import { skeleton } from '@slink/lib/actions/skeleton';
   import { EmptyState } from '@slink/lib/components/UI/EmptyState';
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
 
   import { HistoryListView } from '@slink/components/Feature/Image';
   import { LoadMoreButton } from '@slink/components/UI/Action';
-  import { Loader } from '@slink/components/UI/Loader';
+  import { HistorySkeleton } from '@slink/components/UI/Skeleton';
 
   import type { PageData } from './$types';
 
@@ -29,7 +30,13 @@
 </svelte:head>
 
 <section in:fade={{ duration: 300 }}>
-  <div class="container mx-auto flex flex-col px-4 py-6 sm:px-6 max-w-6xl">
+  <div
+    class="container mx-auto flex flex-col px-4 py-6 sm:px-6 max-w-6xl"
+    use:skeleton={{
+      feed: historyFeedState,
+      minDisplayTime: 300,
+    }}
+  >
     {#if historyFeedState.isEmpty}
       <EmptyState
         icon="ph:clock-clockwise-duotone"
@@ -42,17 +49,8 @@
       />
     {/if}
 
-    {#if historyFeedState.isLoading}
-      <div class="my-8 flex justify-center">
-        <div
-          class="flex items-center gap-3 px-4 py-3 rounded-full bg-white dark:bg-gray-800/50 border border-gray-200/50 dark:border-gray-700/50 shadow-sm"
-        >
-          <Loader variant="subtle" size="xs" />
-          <span class="text-sm font-medium text-gray-600 dark:text-gray-400"
-            >Loading history...</span
-          >
-        </div>
-      </div>
+    {#if historyFeedState.showSkeleton}
+      <HistorySkeleton count={6} />
     {/if}
 
     <HistoryListView items={historyFeedState.items} />

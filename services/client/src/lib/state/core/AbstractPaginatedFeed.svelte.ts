@@ -1,5 +1,6 @@
 import type { RequestStateOptions } from '@slink/lib/state/core/AbstractHttpState.svelte';
 import { AbstractHttpState } from '@slink/lib/state/core/AbstractHttpState.svelte';
+import { SkeletonManager } from '@slink/lib/state/core/SkeletonConfig.svelte';
 
 export interface PaginationMetadata {
   page: number;
@@ -38,6 +39,7 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
   protected _meta: PaginationMetadata = $state({} as PaginationMetadata);
   protected _nextCursor: string | null = $state(null);
   protected _config: PaginationConfig;
+  protected _skeletonManager = new SkeletonManager();
 
   protected constructor(config: Partial<PaginationConfig> = {}) {
     super();
@@ -58,6 +60,7 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
     this.markDirty(false);
     this._items = [];
     this._nextCursor = null;
+    this._skeletonManager.reset();
     this._meta = {
       page: 1,
       size: this._config.defaultPageSize,
@@ -81,6 +84,10 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
     const isInitialLoad = page === 1 && !cursor;
     const shouldAppend = this._shouldAppendItems(isInitialLoad);
 
+    if (isInitialLoad && this._items.length === 0) {
+      this._skeletonManager.show();
+    }
+
     await this.fetch(
       () => this.fetchData({ page, limit, cursor, ...searchParams }),
       (response) => {
@@ -91,9 +98,12 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
         } else {
           this._items = response.data;
         }
-
         this._meta = response.meta;
         this._nextCursor = response.meta.nextCursor || null;
+
+        if (isInitialLoad) {
+          this._skeletonManager.hide();
+        }
       },
       options,
     );
@@ -178,6 +188,16 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
 
   get isEmpty(): boolean {
     return !this.hasItems && this.isDirty;
+  }
+
+  get showSkeleton(): boolean {
+    return this._skeletonManager.isVisible;
+  }
+
+  public configureSkeleton(
+    config: Parameters<SkeletonManager['configure']>[0],
+  ) {
+    this._skeletonManager.configure(config);
   }
 
   protected abstract _getItemId(item: T): string;

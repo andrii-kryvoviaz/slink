@@ -79,3 +79,18 @@ body {
 .light .kbd {
   @apply border-gray-200 bg-gray-100 text-gray-900;
 }
+
+@layer theme {
+  @keyframes shimmer {
+    from {
+      background-position: -200% 0;
+    }
+    to {
+      background-position: 200% 0;
+    }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s infinite linear;
+  }
+}

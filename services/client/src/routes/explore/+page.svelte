@@ -3,6 +3,7 @@
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
+  import { skeleton } from '@slink/lib/actions/skeleton';
   import { EmptyState } from '@slink/lib/components/UI/EmptyState';
   import { usePublicImagesFeed } from '@slink/lib/state/PublicImagesFeed.svelte';
 
@@ -10,7 +11,7 @@
   import { UserAvatar } from '@slink/components/Feature/User';
   import { LoadMoreButton } from '@slink/components/UI/Action';
   import { Masonry } from '@slink/components/UI/Layout';
-  import { Loader } from '@slink/components/UI/Loader';
+  import { ExploreSkeleton } from '@slink/components/UI/Skeleton';
   import {
     ExpandableText,
     FormattedDate,
@@ -38,18 +39,12 @@
 </svelte:head>
 
 <main in:fade={{ duration: 500 }} class="min-h-full">
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    {#if publicFeedState.isLoading && publicFeedState.items.length === 0}
-      <div class="my-8 flex justify-center">
-        <div
-          class="flex items-center gap-3 px-4 py-3 rounded-full bg-white dark:bg-gray-800/50 border border-gray-200/50 dark:border-gray-700/50 shadow-sm"
-        >
-          <Loader variant="subtle" size="xs" />
-          <span class="text-sm font-medium text-gray-600 dark:text-gray-400"
-            >Loading images...</span
-          >
-        </div>
-      </div>
+  <div
+    class="container mx-auto px-4 sm:px-6 lg:px-8 py-8"
+    use:skeleton={{ feed: publicFeedState, minDisplayTime: 300 }}
+  >
+    {#if publicFeedState.showSkeleton}
+      <ExploreSkeleton count={8} />
     {/if}
 
     {#if publicFeedState.isEmpty}
