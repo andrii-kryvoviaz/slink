@@ -10,6 +10,7 @@
 
   import { ThemeSwitch } from '@slink/components/UI/Action';
   import { AppSidebar, Navbar } from '@slink/components/UI/Navigation';
+  import { ScrollArea } from '@slink/components/UI/ScrollArea';
   import { ToastManager } from '@slink/components/UI/Toast';
 
   let { data, children } = $props();
@@ -54,13 +55,16 @@
         {/snippet}
       </Navbar>
 
-      <main
-        id="main"
-        class="flex-1 overflow-y-auto"
-        style:padding-left="max(env(safe-area-inset-left), 0px)"
+      <ScrollArea
+        class="flex-1"
+        viewportClass="pl-[max(env(safe-area-inset-left),0px)]"
+        variant="default"
+        type="scroll"
+        hideDelay={1000}
+        scrollbarSize="md"
       >
         {@render children?.()}
-      </main>
+      </ScrollArea>
     </div>
 
     <ToastManager />

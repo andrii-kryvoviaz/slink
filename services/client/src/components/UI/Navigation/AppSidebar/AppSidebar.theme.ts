@@ -25,7 +25,7 @@ export const AppSidebarTheme = cva(
 );
 
 export const AppSidebarHeader = cva(
-  'flex items-center px-4 py-3 h-14 mb-0 relative z-50 bg-transparent',
+  'flex items-center px-4 py-3 h-14 relative z-50 bg-transparent',
   {
     variants: {
       collapsed: {
@@ -36,13 +36,11 @@ export const AppSidebarHeader = cva(
   },
 );
 
-export const AppSidebarContent = cva(
-  'flex-1 overflow-y-auto px-3 py-4 space-y-6 scrollbar-none',
-);
+export const AppSidebarContent = cva('flex-1 space-y-6');
 
-export const AppSidebarFooter = cva('flex justify-center px-3 py-2 mt-auto');
+export const AppSidebarFooter = cva('flex justify-center px-3 py-2');
 
-export const AppSidebarGroup = cva('space-y-1');
+export const AppSidebarGroup = cva('space-y-1 mb-6 last:mb-0');
 
 export const AppSidebarGroupTitle = cva(
   'mb-2 px-3 text-xs font-medium text-muted-foreground/70 tracking-wide select-none uppercase overflow-hidden',

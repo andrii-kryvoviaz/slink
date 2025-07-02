@@ -55,11 +55,6 @@ body {
   @apply h-full min-h-full;
 }
 
-#main {
-  overflow-y: auto !important;
-  scrollbar-gutter: stable;
-}
-
 *:focus-visible {
   outline: none;
 }

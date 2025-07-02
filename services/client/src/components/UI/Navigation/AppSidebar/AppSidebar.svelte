@@ -7,6 +7,8 @@
 
   import { className } from '@slink/utils/ui/className';
 
+  import { ScrollArea } from '@slink/components/UI/ScrollArea';
+
   import {
     AppSidebarContent,
     AppSidebarFooter,
@@ -118,7 +120,7 @@
 {/if}
 
 {#snippet SidebarContent()}
-  {@const { header, content, footer } = getThemeClasses()}
+  {@const { header, footer } = getThemeClasses()}
 
   <div class={header}>
     <div class="flex items-center gap-3">
@@ -133,11 +135,18 @@
     </div>
   </div>
 
-  <div class={className(content, 'sidebar-scrollbar')}>
+  <ScrollArea
+    variant="minimal"
+    class="flex-1"
+    viewportClass="px-3 pt-1 pb-4"
+    type="scroll"
+    hideDelay={300}
+    scrollbarSize="sm"
+  >
     {#each groups as group (group.id)}
       <SidebarGroup {group} {collapsed} onItemClick={closeMobile} />
     {/each}
-  </div>
+  </ScrollArea>
 
   {#if user}
     <div class={footer}>
@@ -147,7 +156,7 @@
 {/snippet}
 
 {#snippet MobileSidebarContent()}
-  {@const { header, content, footer } = getThemeClasses(true)}
+  {@const { header, footer } = getThemeClasses(true)}
 
   <div class={header}>
     <div class="flex items-center gap-3">
@@ -160,11 +169,18 @@
     </div>
   </div>
 
-  <div class={className(content, 'sidebar-scrollbar')}>
+  <ScrollArea
+    variant="minimal"
+    class="flex-1"
+    viewportClass="px-3 pt-1 pb-4"
+    type="scroll"
+    hideDelay={300}
+    scrollbarSize="sm"
+  >
     {#each groups as group (group.id)}
       <SidebarGroup {group} collapsed={false} onItemClick={closeMobile} />
     {/each}
-  </div>
+  </ScrollArea>
 
   {#if user}
     <div class={footer}>
