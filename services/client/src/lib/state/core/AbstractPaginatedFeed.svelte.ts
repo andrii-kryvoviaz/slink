@@ -191,7 +191,7 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
   }
 
   get showSkeleton(): boolean {
-    return this._skeletonManager.isVisible;
+    return this._skeletonManager.isVisible && !this.isEmpty;
   }
 
   public configureSkeleton(
