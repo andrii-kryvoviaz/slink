@@ -1,10 +1,11 @@
 import type { Handle } from '@sveltejs/kit';
 
-import { Auth } from '@slink/lib/auth/Auth';
 import { Session } from '@slink/lib/auth/Session';
 
-import { cloneRequestBody } from '@slink/utils/http/cloneRequestBody';
 import { getResponseWithCookies } from '@slink/utils/http/cookie';
+
+import { ApiRequestBuilder } from './ApiRequestBuilder';
+import { TokenRefreshManager } from './TokenRefreshManager';
 
 type ApiOptions = {
   baseUrl: string;
@@ -12,11 +13,10 @@ type ApiOptions = {
   registeredPaths: string[];
 };
 
-const refreshRequests: Map<string, Promise<any>> = new Map();
-
 export const ApiConnector = (options: ApiOptions): Handle => {
+  const tokenManager = TokenRefreshManager.getInstance();
   return async ({ event, resolve }) => {
-    const { url, fetch, request, cookies, locals } = event;
+    const { url, fetch, cookies, locals } = event;
     const session = await Session.get(cookies.get('sessionId'));
 
     const pathRegex = new RegExp(`^(${options.registeredPaths.join('|')})`);
@@ -25,74 +25,37 @@ export const ApiConnector = (options: ApiOptions): Handle => {
       if (session?.user) {
         locals.user = session.user;
       }
-
       return resolve(event);
     }
 
-    const pathname = url.pathname.startsWith(options.urlPrefix)
-      ? url.pathname
-      : `${options.urlPrefix}${url.pathname}`;
+    const requestBuilder = new ApiRequestBuilder(
+      event,
+      options.baseUrl,
+      options.urlPrefix,
+    );
+    const proxyUrl = requestBuilder.buildProxyUrl();
 
-    const proxyUrl = `${options.baseUrl}${pathname}${url.search}`;
-
-    const { method } = request;
-
-    const headers = new Headers({
-      'Content-Type': request.headers.get('Content-Type') || 'application/json',
-    });
-
-    if (request.headers.has('Authorization')) {
-      headers.set(
-        'Authorization',
-        request.headers.get('Authorization') as string,
-      );
-    } else if (session?.accessToken) {
-      headers.set('Authorization', `Bearer ${session.accessToken}`);
-    }
-
-    const body = await cloneRequestBody(request);
-
-    const requestOptions: any = {
-      method,
-      headers,
-      body,
-      credentials: 'omit',
-      duplex: 'half',
+    const makeRequest = async (accessToken?: string): Promise<Response> => {
+      const requestOptions =
+        await requestBuilder.buildRequestOptions(accessToken);
+      return fetch(proxyUrl, requestOptions);
     };
 
-    let response = await fetch(proxyUrl, requestOptions);
+    let response = await makeRequest(session?.accessToken);
     let authRefreshed = false;
 
     if (response.status === 401 && cookies.get('sessionId')) {
       const sessionId = cookies.get('sessionId') as string;
 
-      if (!refreshRequests.has(sessionId)) {
-        refreshRequests.set(sessionId, Auth.refresh({ cookies, fetch }));
-      }
-
-      const tokens = await refreshRequests.get(sessionId);
-      refreshRequests.delete(sessionId);
-
-      if (tokens) {
-        const { accessToken, refreshToken } = tokens;
-
-        if (accessToken) {
-          requestOptions.headers.set('Authorization', `Bearer ${accessToken}`);
-        }
-
-        if (refreshToken && cookies.get('refreshToken') !== refreshToken) {
-          cookies.set('refreshToken', refreshToken, {
-            sameSite: 'strict',
-            path: '/',
-          });
-        }
-
-        if (requestOptions.body) {
-          requestOptions.body = await cloneRequestBody(request);
-        }
-
-        response = await fetch(proxyUrl, requestOptions);
+      try {
+        response = await tokenManager.handleTokenRefresh(
+          sessionId,
+          { cookies, fetch },
+          makeRequest,
+        );
         authRefreshed = true;
+      } catch (error) {
+        console.warn('Token refresh failed:', error);
       }
     }
 
