@@ -18,7 +18,10 @@
   let sidebarGroups = $derived(data.sidebarGroups || []);
 
   const globalSettingsManager = useGlobalSettings();
-  globalSettingsManager.initialize(data.globalSettings);
+
+  $effect(() => {
+    globalSettingsManager.initialize(data.globalSettings);
+  });
 
   const currentTheme = settings.get('theme', data.settings.theme);
   const { isDark } = currentTheme;

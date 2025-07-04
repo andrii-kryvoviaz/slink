@@ -10,6 +10,10 @@ import { useState } from '@slink/lib/state/core/ContextAwareState';
 class GlobalSettingsManager {
   private _settings = $state<GlobalSettings | null>(null);
 
+  public get isInitialized(): boolean {
+    return this._settings !== null;
+  }
+
   public get settings(): GlobalSettings {
     return this._settings ?? ({} as GlobalSettings);
   }
