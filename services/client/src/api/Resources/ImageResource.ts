@@ -1,5 +1,4 @@
 import { AbstractResource } from '@slink/api/AbstractResource';
-
 import type {
   ImageDetailsResponse,
   ImageListingResponse,
