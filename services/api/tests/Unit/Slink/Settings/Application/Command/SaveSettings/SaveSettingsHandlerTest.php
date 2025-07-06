@@ -30,7 +30,6 @@ final class SaveSettingsHandlerTest extends TestCase {
         $settingsData = [
             'approvalRequired' => false,
             'allowRegistration' => true,
-            'allowUnauthenticatedAccess' => true,
             'password' => [
                 'minLength' => 10,
                 'requirements' => 1
@@ -65,7 +64,8 @@ final class SaveSettingsHandlerTest extends TestCase {
         $settingsData = [
             'maxSize' => '10M',
             'stripExifMetadata' => false,
-            'compressionQuality' => 90
+            'compressionQuality' => 90,
+            'allowGuestUploads' => true
         ];
         
         $command = new SaveSettingsCommand('image', $settingsData);
@@ -135,7 +135,6 @@ final class SaveSettingsHandlerTest extends TestCase {
         $settingsData = [
             'approvalRequired' => true,
             'allowRegistration' => false,
-            'allowUnauthenticatedAccess' => false,
             'password' => [
                 'minLength' => 12,
                 'requirements' => 7
@@ -159,8 +158,7 @@ final class SaveSettingsHandlerTest extends TestCase {
                 
                 $payload = $settings->toPayload();
                 return $payload['approvalRequired'] === $settingsData['approvalRequired']
-                    && $payload['allowRegistration'] === $settingsData['allowRegistration']
-                    && $payload['allowUnauthenticatedAccess'] === $settingsData['allowUnauthenticatedAccess'];
+                    && $payload['allowRegistration'] === $settingsData['allowRegistration'];
             }));
 
         $this->store

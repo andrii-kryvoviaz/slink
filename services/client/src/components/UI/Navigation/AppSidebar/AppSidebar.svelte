@@ -148,7 +148,7 @@
     {/each}
   </ScrollArea>
 
-  {#if user}
+  {#if user && Object.keys(user).length > 0}
     <div class={footer}>
       <SidebarUser {user} {collapsed} onItemClick={closeMobile} />
     </div>
@@ -182,7 +182,7 @@
     {/each}
   </ScrollArea>
 
-  {#if user}
+  {#if user && Object.keys(user).length > 0}
     <div class={footer}>
       <SidebarUser {user} collapsed={false} onItemClick={closeMobile} />
     </div>

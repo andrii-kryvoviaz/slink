@@ -17,7 +17,6 @@ parameters:
         secret: '%env(string:default::AMAZON_S3_SECRET_ACCESS_KEY)%'
   user:
     allowRegistration: true
-    allowUnauthenticatedAccess: '%env(bool:USER_ALLOW_UNAUTHENTICATED_ACCESS)%'
     approvalRequired: '%env(bool:USER_APPROVAL_REQUIRED)%'
     password:
       minLength: '%env(int:USER_PASSWORD_MIN_LENGTH)%'
@@ -27,6 +26,9 @@ parameters:
     stripExifMetadata: '%env(bool:IMAGE_STRIP_EXIF_METADATA)%'
     allowOnlyPublicImages: '%env(bool:IMAGE_ALLOW_ONLY_PUBLIC_IMAGES)%'
     compressionQuality: '%env(int:IMAGE_COMPRESSION_QUALITY)%'
+  access:
+    allowGuestUploads: '%env(bool:IMAGE_ALLOW_GUEST_UPLOADS)%'
+    allowUnauthenticatedAccess: '%env(bool:USER_ALLOW_UNAUTHENTICATED_ACCESS)%'
 
 when@prod:
   parameters:

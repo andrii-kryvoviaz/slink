@@ -42,9 +42,9 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
     $file = $command->getImageFile();
     $imageId = $command->getId();
     
-    $userId = $userId
-      ? ID::fromString($userId)
-      : ID::generate();
+    $userId = $userId 
+      ? ID::fromString($userId) 
+      : null;
     
     if($this->imageAnalyzer->isConversionRequired($file->getMimeType())) {
       $file = $this->imageTransformer->convertToJpeg($file);
@@ -66,7 +66,7 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
     );
     
     $isPublic = $command->isPublic();
-    if ($this->configurationProvider->get('image.allowOnlyPublicImages')) {
+    if ($this->configurationProvider->get('image.allowOnlyPublicImages') || $userId === null) {
       $isPublic = true;
     }
     

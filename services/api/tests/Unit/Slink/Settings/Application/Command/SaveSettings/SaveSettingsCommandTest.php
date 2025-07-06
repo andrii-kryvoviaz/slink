@@ -37,7 +37,6 @@ final class SaveSettingsCommandTest extends TestCase {
         $settings = [
             'approvalRequired' => true,
             'allowRegistration' => false,
-            'allowUnauthenticatedAccess' => true,
             'password' => [
                 'minLength' => 8,
                 'requireSpecialChars' => false

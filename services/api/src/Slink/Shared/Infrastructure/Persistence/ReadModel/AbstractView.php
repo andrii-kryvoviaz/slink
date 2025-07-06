@@ -64,7 +64,7 @@ abstract class AbstractView {
         $value = self::createValueObject($typeName, $value);
       }
       
-      if($entityManager && is_subclass_of($typeName, AbstractView::class)) {
+      if($entityManager && is_subclass_of($typeName, AbstractView::class) && $value !== null) {
         $value = $entityManager->getReference($typeName, $value);
       }
       

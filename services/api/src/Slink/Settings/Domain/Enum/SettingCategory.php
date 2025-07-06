@@ -13,6 +13,7 @@ enum SettingCategory: string {
   case User = 'user';
   case Image = 'image';
   case Storage = 'storage';
+  case Access = 'access';
   
   public function getCategoryKey(): string {
     return $this->value;

@@ -33,19 +33,22 @@
 
 <Tooltip.Provider delayDuration={0} disableHoverableContent={true}>
   <div class="relative flex h-screen" use:theme={$currentTheme}>
-    <AppSidebar
-      user={user || undefined}
-      groups={sidebarGroups}
-      variant="default"
-      defaultExpanded={data.settings.sidebar?.expanded ?? true}
-    />
+    {#if showSidebar}
+      <AppSidebar
+        user={user || undefined}
+        groups={sidebarGroups}
+        variant="default"
+        defaultExpanded={data.settings.sidebar?.expanded ?? true}
+      />
+    {/if}
 
     <div class="flex flex-col flex-1 min-w-0">
       <Navbar
         user={user || undefined}
         showLogo={!showSidebar}
         showLoginButton={!user}
-        sidebarWidth={0}
+        showUploadButton={!!user ||
+          !!data.globalSettings?.access?.allowGuestUploads}
         useFlexLayout={true}
       >
         {#snippet themeSwitch()}

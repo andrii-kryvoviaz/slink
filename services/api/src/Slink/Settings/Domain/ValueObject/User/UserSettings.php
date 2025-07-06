@@ -11,13 +11,11 @@ final readonly class UserSettings extends AbstractSettingsValueObject {
   /**
    * @param bool $approvalRequired
    * @param bool $allowRegistration
-   * @param bool $allowUnauthenticatedAccess
    * @param PasswordSettings $password
    */
   private function __construct(
     private bool $approvalRequired,
     private bool $allowRegistration,
-    private bool $allowUnauthenticatedAccess,
     private PasswordSettings $password,
   ) {}
   
@@ -29,7 +27,6 @@ final readonly class UserSettings extends AbstractSettingsValueObject {
     return [
       'approvalRequired' => $this->approvalRequired,
       'allowRegistration' => $this->allowRegistration,
-      'allowUnauthenticatedAccess' => $this->allowUnauthenticatedAccess,
       'password' => $this->password->toPayload(),
     ];
   }
@@ -43,7 +40,6 @@ final readonly class UserSettings extends AbstractSettingsValueObject {
     return new self(
       $payload['approvalRequired'] ?? true,
       $payload['allowRegistration'] ?? true,
-      $payload['allowUnauthenticatedAccess'] ?? false,
       PasswordSettings::fromPayload($payload['password'])
     );
   }
@@ -63,16 +59,10 @@ final readonly class UserSettings extends AbstractSettingsValueObject {
     return $this->approvalRequired;
   }
   
-  /**
-   * @return bool
-   */
-  public function isAllowUnauthenticatedAccess(): bool {
-    return $this->allowUnauthenticatedAccess;
+  public function isAllowRegistration(): bool {
+    return $this->allowRegistration;
   }
   
-  /**
-   * @return PasswordSettings
-   */
   public function getPassword(): PasswordSettings {
     return $this->password;
   }

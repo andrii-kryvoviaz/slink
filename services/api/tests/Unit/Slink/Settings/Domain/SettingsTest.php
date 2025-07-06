@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Slink\Settings\Domain\Event\SettingsChanged;
 use Slink\Settings\Domain\Exception\InvalidSettingsException;
 use Slink\Settings\Domain\Settings;
+use Slink\Settings\Domain\ValueObject\Access\AccessSettings;
 use Slink\Settings\Domain\ValueObject\User\UserSettings;
 use Slink\Settings\Domain\ValueObject\User\PasswordSettings;
 use Slink\Settings\Domain\ValueObject\Image\ImageSettings;
@@ -35,12 +36,14 @@ final class SettingsTest extends TestCase {
         $userSettings = $this->createUserSettings();
         $imageSettings = $this->createImageSettings();
         $storageSettings = $this->createStorageSettings();
+        $accessSettings = $this->createAccessSettings();
         
-        $settings->initialize([$userSettings, $imageSettings, $storageSettings]);
+        $settings->initialize([$userSettings, $imageSettings, $storageSettings, $accessSettings]);
         
         $this->assertSame($userSettings, $this->getPrivateProperty($settings, 'user'));
         $this->assertSame($imageSettings, $this->getPrivateProperty($settings, 'image'));
         $this->assertSame($storageSettings, $this->getPrivateProperty($settings, 'storage'));
+        $this->assertSame($accessSettings, $this->getPrivateProperty($settings, 'access'));
     }
 
     #[Test]
@@ -148,8 +151,9 @@ final class SettingsTest extends TestCase {
         $userSettings = $this->createUserSettings();
         $imageSettings = $this->createImageSettings();
         $storageSettings = $this->createStorageSettings();
+        $accessSettings = $this->createAccessSettings();
         
-        $settings->initialize([$userSettings, $imageSettings, $storageSettings]);
+        $settings->initialize([$userSettings, $imageSettings, $storageSettings, $accessSettings]);
         
         return $settings;
     }
@@ -174,7 +178,14 @@ final class SettingsTest extends TestCase {
         return ImageSettings::fromPayload([
             'maxSize' => '5M',
             'stripExifMetadata' => true,
-            'compressionQuality' => 85
+            'compressionQuality' => 85,
+        ]);
+    }
+
+    private function createAccessSettings(): AccessSettings {
+        return AccessSettings::fromPayload([
+            'allowGuestUploads' => false,
+            'allowUnauthenticatedAccess' => false,
         ]);
     }
 

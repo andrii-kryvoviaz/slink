@@ -30,10 +30,14 @@ final class DisplayNameTest extends TestCase {
    */
   public static function provideReservedNames(): array {
     return [
-      'Exact match' => ['Anonymous'],
-      'Uppercase' => ['ANONYMOUS'],
-      'Lowercase' => ['anonymous'],
-      'Mixed case' => ['AnOnYmOuS'],
+      'Anonymous exact match' => ['Anonymous'],
+      'Anonymous uppercase' => ['ANONYMOUS'],
+      'Anonymous lowercase' => ['anonymous'],
+      'Anonymous mixed case' => ['AnOnYmOuS'],
+      'Guest exact match' => ['Guest'],
+      'Guest uppercase' => ['GUEST'],
+      'Guest lowercase' => ['guest'],
+      'Guest mixed case' => ['GuEsT'],
     ];
   }
 
@@ -62,7 +66,7 @@ final class DisplayNameTest extends TestCase {
     $displayName = DisplayName::fromNullableString(null);
 
     $this->assertInstanceOf(DisplayName::class, $displayName);
-    $this->assertSame('Anonymous', $displayName->toString());
+    $this->assertSame('Guest', $displayName->toString());
   }
 
   #[Test]
@@ -131,7 +135,9 @@ final class DisplayNameTest extends TestCase {
   #[DataProvider('provideReservedNames')]
   public function itThrowsExceptionForReservedName(string $reservedName): void {
     $this->expectException(InvalidDisplayNameException::class);
-    $this->expectExceptionMessage('`Anonymous` is a reserved display name');
+    
+    $expectedReservedName = strtolower($reservedName) === 'anonymous' || stripos($reservedName, 'anonymous') !== false ? 'Anonymous' : 'Guest';
+    $this->expectExceptionMessage("`{$expectedReservedName}` is a reserved display name");
 
     DisplayName::fromString($reservedName);
   }

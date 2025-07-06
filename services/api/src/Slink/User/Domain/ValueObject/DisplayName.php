@@ -12,7 +12,7 @@ final readonly class DisplayName extends AbstractValueObject {
    * @return string
    */
   private function getReservedName(): string {
-    return 'Anonymous';
+    return 'Guest';
   }
   
   /**
@@ -64,8 +64,12 @@ final readonly class DisplayName extends AbstractValueObject {
       throw new InvalidDisplayNameException('Display name must be at most 30 characters long');
     }
     
-    if(strtolower($displayName) === strtolower($this->getReservedName())) {
-      throw new InvalidDisplayNameException(sprintf('`%s` is a reserved display name', $this->getReservedName()));
+    $reservedNames = ['Anonymous', 'Guest'];
+
+    foreach ($reservedNames as $reservedName) {
+      if (strtolower($displayName) === strtolower($reservedName)) {
+        throw new InvalidDisplayNameException(sprintf('`%s` is a reserved display name', $reservedName));
+      }
     }
   }
 }

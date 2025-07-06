@@ -43,7 +43,7 @@ final readonly class ProjectMetadataExtractor {
       ['Strip Exif', $this->filterBoolean($this->configurationProvider->get('image.stripExifMetadata'))],
       ['Compression', $this->configurationProvider->get('image.compressionQuality') . '%'],
       ['Sign-Up', $this->filterBoolean($this->configurationProvider->get('user.allowRegistration'), 'Enabled', 'Disabled')],
-      ['Unauthenticated Access', $this->filterBoolean($this->configurationProvider->get('user.allowUnauthenticatedAccess'), 'Enabled', 'Disabled')],
+      ['Unauthenticated Access', $this->filterBoolean($this->configurationProvider->get('access.allowGuestUploads') || $this->configurationProvider->get('access.allowUnauthenticatedAccess'), 'Enabled', 'Disabled')],
       ['User Approval', $this->filterBoolean($this->configurationProvider->get('user.approvalRequired'), 'Required', 'Not Required')],
     ];
   }

@@ -13,6 +13,7 @@
     SettingItem,
     SettingsPane,
   } from '@slink/components/Feature/Settings';
+  import { Button } from '@slink/components/UI/Action';
   import {
     FileSizeInput,
     Input,
@@ -152,6 +153,77 @@
               name="imageAllowOnlyPublicImages"
               bind:checked={settings.image.allowOnlyPublicImages}
             />
+          </div>
+        </SettingItem>
+      </SettingsPane>
+
+      <SettingsPane
+        category="access"
+        loading={$isLoading && categoryBeingSaved === 'access'}
+        on={{ save: handleSettingsSectionSave }}
+      >
+        {#snippet title()}
+          Access Control
+        {/snippet}
+        {#snippet description()}
+          Configure guest access and upload permissions
+        {/snippet}
+
+        {#if settings.access.allowGuestUploads}
+          <Notice size="sm" variant="warning">
+            <strong>Access Notice:</strong>
+            Guest Upload and Guest Access (View-Only) cannot be active simultaneously.
+            When Guest Upload is enabled, Guest Access is automatically enabled to
+            prevent conflicts.
+          </Notice>
+        {/if}
+
+        <SettingItem
+          defaultValue={defaultSettings?.access?.allowGuestUploads}
+          reset={(value) => {
+            settings.access.allowGuestUploads = value;
+          }}
+        >
+          {#snippet label()}
+            Guest Upload
+          {/snippet}
+          {#snippet hint()}
+            Allow unauthenticated users to upload and post images without
+            creating an account
+          {/snippet}
+          <div class="flex justify-end">
+            <Toggle
+              name="accessAllowGuestUploads"
+              bind:checked={settings.access.allowGuestUploads}
+            />
+          </div>
+        </SettingItem>
+
+        <SettingItem
+          defaultValue={defaultSettings?.access?.allowUnauthenticatedAccess}
+          reset={(value) => {
+            settings.access.allowUnauthenticatedAccess = value;
+          }}
+        >
+          {#snippet label()}
+            Guest Access (View-Only)
+          {/snippet}
+          {#snippet hint()}
+            Allow unauthenticated users to view and browse images without the
+            ability to upload
+          {/snippet}
+          <div class="flex justify-end">
+            <div
+              class={settings.access.allowGuestUploads
+                ? 'opacity-50 pointer-events-none'
+                : ''}
+            >
+              <Toggle
+                name="accessAllowUnauthenticatedAccess"
+                bind:checked={settings.access.allowUnauthenticatedAccess}
+                disabled={settings.access.allowGuestUploads}
+              />
+            </div>
           </div>
         </SettingItem>
       </SettingsPane>
@@ -457,26 +529,6 @@
                 <Toggle
                   name="approvalRequired"
                   bind:checked={settings.user.approvalRequired}
-                />
-              </div>
-            </SettingItem>
-
-            <SettingItem
-              defaultValue={defaultSettings.user?.allowUnauthenticatedAccess}
-              reset={(value) => {
-                settings.user.allowUnauthenticatedAccess = value;
-              }}
-            >
-              {#snippet label()}
-                Guest Access
-              {/snippet}
-              {#snippet hint()}
-                Allow users to access the application without authentication
-              {/snippet}
-              <div class="flex justify-end">
-                <Toggle
-                  name="allowUnauthenticatedAccess"
-                  bind:checked={settings.user.allowUnauthenticatedAccess}
                 />
               </div>
             </SettingItem>

@@ -94,7 +94,8 @@ final class SettingsChangedTest extends TestCase {
         return \Slink\Settings\Domain\ValueObject\Image\ImageSettings::fromPayload([
             'maxSize' => '5M',
             'stripExifMetadata' => true,
-            'compressionQuality' => 85
+            'compressionQuality' => 85,
+            'allowGuestUploads' => false
         ]);
     }
 }

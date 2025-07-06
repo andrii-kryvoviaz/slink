@@ -34,7 +34,7 @@ final readonly class DeleteImageHandler implements CommandHandlerInterface {
       throw new NotFoundException();
     }
     
-    if($user && !$image->getUserId()->equals($userId)) {
+    if (!$user || !$image->getUserId() || !$image->getUserId()->equals($userId)) {
       throw new AccessDeniedException();
     }
     

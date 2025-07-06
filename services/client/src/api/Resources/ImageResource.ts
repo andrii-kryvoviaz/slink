@@ -1,4 +1,5 @@
 import { AbstractResource } from '@slink/api/AbstractResource';
+
 import type {
   ImageDetailsResponse,
   ImageListingResponse,
@@ -12,6 +13,13 @@ export class ImageResource extends AbstractResource {
     body.append('image', image);
 
     return this.post('/upload', { body });
+  }
+
+  public async guestUpload(image: File): Promise<UploadedImageResponse> {
+    const body = new FormData();
+    body.append('image', image);
+
+    return this.post('/guest/upload', { body });
   }
 
   public async remove(

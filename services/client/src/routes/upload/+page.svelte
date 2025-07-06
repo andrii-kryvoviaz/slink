@@ -41,9 +41,13 @@
     error: uploadError,
     run: uploadImage,
     reset: resetUploadImage,
-  } = ReactiveState<UploadedImageResponse>((file: File) =>
-    ApiClient.image.upload(file),
-  );
+  } = ReactiveState<UploadedImageResponse>((file: File) => {
+    if (data.globalSettings?.access?.allowGuestUploads && !data.user) {
+      return ApiClient.image.guestUpload(file);
+    }
+
+    return ApiClient.image.upload(file);
+  });
 
   const { isLoading: pageIsChanging, run: redirectToInfo } = ReactiveState(
     (imageId: number) => goto(`/info/${imageId}`),
@@ -101,12 +105,16 @@
   };
 
   const successHandler = async (response: UploadedImageResponse) => {
-    const historyFeedState = useUploadHistoryFeed();
+    if (data.user) {
+      const historyFeedState = useUploadHistoryFeed();
 
-    await redirectToInfo(response.id);
+      await redirectToInfo(response.id);
 
-    const images = await ApiClient.image.getImagesByIds([response.id]);
-    images.data.forEach((image) => historyFeedState.addItem(image));
+      const images = await ApiClient.image.getImagesByIds([response.id]);
+      images.data.forEach((image) => historyFeedState.addItem(image));
+    } else {
+      await goto('/explore');
+    }
   };
 
   const errorHandler = printErrorsAsToastMessage;
@@ -122,7 +130,10 @@
   });
 
   let processing = $derived($isLoading || $pageIsChanging);
-  let disabled = $derived(processing || !data.user);
+  let disabled = $derived(
+    processing ||
+      (!data.user && !data.globalSettings?.access?.allowGuestUploads),
+  );
   let isDragOver = $state(false);
 
   const handleDragEnter = (event: DragEvent) => {
@@ -193,24 +204,45 @@
     >
       {#if !data.user}
         <div class="mb-8">
-          <Banner variant="warning">
-            {#snippet icon()}
-              <BannerIcon variant="warning" icon="ph:lock-simple" />
-            {/snippet}
-            {#snippet content()}
-              <BannerContent
-                title="Sign in to continue"
-                description="Upload and manage your images securely"
-              />
-            {/snippet}
-            {#snippet action()}
-              <BannerAction
-                variant="warning"
-                href="/profile/login"
-                text="Get Started"
-              />
-            {/snippet}
-          </Banner>
+          {#if data.globalSettings?.access?.allowGuestUploads}
+            <Banner variant="info">
+              {#snippet icon()}
+                <BannerIcon variant="info" icon="ph:upload-simple" />
+              {/snippet}
+              {#snippet content()}
+                <BannerContent
+                  title="Guest Upload"
+                  description="You can upload images without an account, but consider signing in to manage them"
+                />
+              {/snippet}
+              {#snippet action()}
+                <BannerAction
+                  variant="info"
+                  href="/profile/login"
+                  text="Sign In"
+                />
+              {/snippet}
+            </Banner>
+          {:else}
+            <Banner variant="warning">
+              {#snippet icon()}
+                <BannerIcon variant="warning" icon="ph:lock-simple" />
+              {/snippet}
+              {#snippet content()}
+                <BannerContent
+                  title="Sign in to continue"
+                  description="Upload and manage your images securely"
+                />
+              {/snippet}
+              {#snippet action()}
+                <BannerAction
+                  variant="warning"
+                  href="/profile/login"
+                  text="Get Started"
+                />
+              {/snippet}
+            </Banner>
+          {/if}
         </div>
       {/if}
 

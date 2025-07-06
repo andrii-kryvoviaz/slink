@@ -11,6 +11,7 @@ use Slink\Image\Domain\ValueObject\ImageMetadata;
 use Slink\Image\Infrastructure\ReadModel\Repository\ImageRepository;
 use Slink\Shared\Domain\Contract\CursorAwareInterface;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
+use Slink\User\Domain\ValueObject\GuestUser;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\SerializedName;
@@ -34,8 +35,6 @@ class ImageView extends AbstractView implements CursorAwareInterface {
 
     #[ORM\ManyToOne(targetEntity: UserView::class, fetch: 'EAGER')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'uuid')]
-    #[Groups(['public'])]
-    #[SerializedName('owner')]
     private readonly ?UserView $user,
 
     #[ORM\Embedded(class: ImageAttributes::class, columnPrefix: false)]
@@ -111,13 +110,19 @@ class ImageView extends AbstractView implements CursorAwareInterface {
     return $this->uuid;
   }
 
+  #[Groups(['public'])]
+  #[SerializedName('owner')]
+  public function getOwner(): UserView|GuestUser {
+    return $this->user ?? GuestUser::create();
+  }
+
   /**
    * @return array<string, mixed>
    */
   public function toPayload(): array {
     return [
       'id' => $this->uuid,
-      'user' => $this->user,
+      'user' => $this->getOwner(),
       ...$this->attributes->toPayload(),
       ...$this->metadata ? $this->metadata->toPayload() : []
     ];

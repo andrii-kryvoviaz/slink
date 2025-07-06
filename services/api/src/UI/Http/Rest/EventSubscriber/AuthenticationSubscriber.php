@@ -39,7 +39,7 @@ final readonly class AuthenticationSubscriber implements EventSubscriberInterfac
    * @throws \Exception
    */
   public function onKernelRequest(RequestEvent $event): void {
-    if($this->configurationProvider->get('user.allowUnauthenticatedAccess')) {
+    if($this->configurationProvider->get('access.allowGuestUploads') || $this->configurationProvider->get('access.allowUnauthenticatedAccess')) {
       return;
     }
     

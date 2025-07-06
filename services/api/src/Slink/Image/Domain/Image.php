@@ -13,7 +13,7 @@ use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\ValueObject\ID;
 
 final class Image extends AbstractAggregateRoot {
-  private ID $userId;
+  private ?ID $userId;
   
   private ImageAttributes $attributes;
   
@@ -22,17 +22,17 @@ final class Image extends AbstractAggregateRoot {
   private bool $deleted = false;
   
   /**
-   * @return ID
+   * @return ID|null
    */
-  public function getUserId(): ID {
+  public function getUserId(): ?ID {
     return $this->userId;
   }
   
   /**
-   * @param ID $userId
+   * @param ID|null $userId
    * @return void
    */
-  public function setUserId(ID $userId): void {
+  public function setUserId(?ID $userId): void {
     $this->userId = $userId;
   }
   
@@ -86,12 +86,12 @@ final class Image extends AbstractAggregateRoot {
    * @return bool
    */
   public function isOwedBy(ID $userId): bool {
-    return $this->userId->equals($userId);
+    return $this->userId?->equals($userId) ?? false;
   }
   
   /**
    */
-  public static function create(ID $id, ID $userId, ImageAttributes $attributes, ?ImageMetadata $metadata = null): self {
+  public static function create(ID $id, ?ID $userId, ImageAttributes $attributes, ?ImageMetadata $metadata = null): self {
     $image = new self($id);
     
     $image->recordThat(new ImageWasCreated($id, $userId, $attributes, $metadata));

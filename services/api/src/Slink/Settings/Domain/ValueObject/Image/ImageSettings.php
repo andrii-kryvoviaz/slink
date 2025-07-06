@@ -19,7 +19,7 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
     private string $maxSize,
     private bool $stripExifMetadata,
     private int $compressionQuality = 80,
-    private bool $allowOnlyPublicImages = false
+    private bool $allowOnlyPublicImages = false,
   ) {
     if (!preg_match('/^(\d+)([kM])$/', $maxSize)) {
       throw new InvalidImageMaxSizeException();
@@ -42,7 +42,7 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
       'maxSize' => $this->maxSize,
       'stripExifMetadata' => $this->stripExifMetadata,
       'compressionQuality' => $this->compressionQuality,
-      'allowOnlyPublicImages' => $this->allowOnlyPublicImages
+      'allowOnlyPublicImages' => $this->allowOnlyPublicImages,
     ];
   }
   
@@ -54,7 +54,7 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
       $payload['maxSize'],
       $payload['stripExifMetadata'],
       $payload['compressionQuality'] ?? 80,
-      $payload['allowOnlyPublicImages'] ?? false
+      $payload['allowOnlyPublicImages'] ?? false,
     );
   }
   

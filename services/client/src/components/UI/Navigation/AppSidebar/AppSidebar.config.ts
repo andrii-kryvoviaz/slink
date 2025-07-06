@@ -3,11 +3,13 @@ import type { AppSidebarGroup } from './AppSidebar.types';
 export const createAppSidebarItems = (options?: {
   showAdmin?: boolean;
   showSystemItems?: boolean;
+  showUploadItem?: boolean;
   customGroups?: AppSidebarGroup[];
 }): AppSidebarGroup[] => {
   const {
     showAdmin = false,
     showSystemItems = true,
+    showUploadItem = false,
     customGroups = [],
   } = options || {};
 
@@ -21,6 +23,16 @@ export const createAppSidebarItems = (options?: {
           icon: 'ph:compass',
           href: '/explore',
         },
+        ...(showUploadItem
+          ? [
+              {
+                id: 'upload',
+                title: 'Upload',
+                icon: 'ph:plus',
+                href: '/upload',
+              },
+            ]
+          : []),
         {
           id: 'history',
           title: 'History',

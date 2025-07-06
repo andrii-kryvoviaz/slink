@@ -12,6 +12,7 @@
     user?: Partial<User>;
     showLogo?: boolean;
     showLoginButton?: boolean;
+    showUploadButton?: boolean;
     sidebarWidth?: number;
     themeSwitch?: import('svelte').Snippet;
     useFlexLayout?: boolean;
@@ -21,6 +22,7 @@
     user,
     showLogo = true,
     showLoginButton = false,
+    showUploadButton = true,
     sidebarWidth = 0,
     themeSwitch,
     useFlexLayout = false,
@@ -87,7 +89,7 @@
           onclear={handleClearSearch}
         />
       {/if}
-      {#if !showLoginButton && user}
+      {#if showUploadButton}
         <Button
           href="/upload"
           variant="glass"

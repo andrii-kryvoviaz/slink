@@ -7,6 +7,7 @@ namespace Slink\Settings\Domain;
 use Slink\Settings\Domain\Event\SettingsChanged;
 use Slink\Settings\Domain\Exception\InvalidSettingsException;
 use Slink\Settings\Domain\ValueObject\AbstractSettingsValueObject;
+use Slink\Settings\Domain\ValueObject\Access\AccessSettings;
 use Slink\Settings\Domain\ValueObject\Image\ImageSettings;
 use Slink\Settings\Domain\ValueObject\Storage\StorageSettings;
 use Slink\Settings\Domain\ValueObject\User\UserSettings;
@@ -37,6 +38,7 @@ final class Settings extends AbstractAggregateRoot {
   private StorageSettings $storage;
   private UserSettings $user;
   private ImageSettings $image;
+  private AccessSettings $access;
   
   /**
    * @param array<int, ?AbstractSettingsValueObject> $data
