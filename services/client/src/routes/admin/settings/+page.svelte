@@ -265,9 +265,7 @@
         </SettingItem>
 
         {#if settings.storage.provider === 'smb'}
-          <div
-            class="pl-6 border-l-2 border-gray-200 dark:border-gray-600 space-y-6"
-          >
+          <div class="space-y-6">
             <SettingItem
               defaultValue={defaultSettings.storage?.adapter.smb.host}
               reset={(value) => {
@@ -365,9 +363,7 @@
         {/if}
 
         {#if settings.storage.provider === 's3'}
-          <div
-            class="pl-6 border-l-2 border-gray-200 dark:border-gray-600 space-y-6"
-          >
+          <div class="space-y-6">
             <Notice size="sm" variant="warning">
               <strong>Billing Notice:</strong>
               Amazon S3 usage may incur charges. Review
@@ -509,9 +505,7 @@
         </SettingItem>
 
         {#if settings.user.allowRegistration}
-          <div
-            class="pl-6 border-l-2 border-gray-200 dark:border-gray-600 space-y-6"
-          >
+          <div class="space-y-6">
             <SettingItem
               defaultValue={defaultSettings.user?.approvalRequired}
               reset={(value) => {

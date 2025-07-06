@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
 
-  import { settings } from '@slink/lib/settings';
   import type { SettingCategory } from '@slink/lib/settings/Type/GlobalSettings';
 
   import { Button, type ButtonVariant } from '@slink/components/UI/Action';
@@ -29,10 +28,6 @@
     children,
     on,
   }: Props = $props();
-
-  const currentTheme = settings.get('theme', { isDark: true });
-  const { isLight } = currentTheme;
-  let buttonVariant: ButtonVariant = $derived($isLight ? 'dark' : 'primary');
 
   const handleSubmit = (event: SubmitEvent) => {
     event.preventDefault();
@@ -80,13 +75,7 @@
         </div>
       {/if}
 
-      <Button
-        type="submit"
-        variant={buttonVariant}
-        size="md"
-        class="px-6 py-2.5 font-medium"
-        disabled={loading}
-      >
+      <Button type="submit" variant="outline" size="sm" disabled={loading}>
         Save Changes
       </Button>
     </div>
