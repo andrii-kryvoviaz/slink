@@ -11,12 +11,11 @@
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
 
   import { UserAvatar } from '@slink/components/Feature/User';
-  import UserDeletePopover from '@slink/components/Feature/User/UserDeleteConfirmation/UserDeletePopover.svelte';
+  import { UserDeleteConfirmation } from '@slink/components/Feature/User/UserDeleteConfirmation';
   import {
     Dropdown,
     DropdownGroup,
     DropdownItem,
-    Popover,
   } from '@slink/components/UI/Action';
 
   interface Props {
@@ -34,8 +33,7 @@
   }: Props = $props();
 
   let dropdownRef: Dropdown | null = $state(null);
-  let dropdownTriggerRef: HTMLButtonElement | undefined = $state();
-  let deletePopoverOpen = $state(false);
+  let showDeleteConfirmation = $state(false);
 
   const {
     isLoading: userStatusChanging,
@@ -93,22 +91,22 @@
       return;
     }
 
+    showDeleteConfirmation = false;
     dropdownRef.close();
   };
 
   const handleUserDeletion = () => {
-    closeDropdown();
-    deletePopoverOpen = true;
+    showDeleteConfirmation = true;
   };
 
   const confirmUserDeletion = async () => {
     await deleteUser();
-    deletePopoverOpen = false;
+    showDeleteConfirmation = false;
     on?.userDelete(user.id);
   };
 
-  const closeDeletePopover = () => {
-    deletePopoverOpen = false;
+  const cancelUserDeletion = () => {
+    showDeleteConfirmation = false;
   };
 
   const successHandler = (userResponse: SingleUserResponse | null): void => {
@@ -119,6 +117,7 @@
     user = userResponse;
 
     statusToChange = null;
+    showDeleteConfirmation = false;
     closeDropdown();
   };
 
@@ -128,6 +127,7 @@
     }
 
     statusToChange = null;
+    showDeleteConfirmation = false;
     printErrorsAsToastMessage(error);
     closeDropdown();
   };
@@ -215,102 +215,94 @@
             <Dropdown bind:this={dropdownRef}>
               {#snippet trigger()}
                 <button
-                  bind:this={dropdownTriggerRef}
                   class="p-2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150"
                 >
                   <Icon icon="heroicons:ellipsis-vertical" class="w-5 h-5" />
                 </button>
               {/snippet}
 
-              <DropdownGroup>
-                {#if user.status === UserStatusEnum.Active}
-                  <DropdownItem
-                    on={{
-                      click: () => changeUserStatus(UserStatusEnum.Suspended),
-                    }}
-                    closeOnSelect={false}
-                    loading={userStatusChanging &&
-                      statusToChange === UserStatusEnum.Suspended}
-                  >
-                    {#snippet icon()}
-                      <Icon icon="heroicons:no-symbol" class="h-4 w-4" />
-                    {/snippet}
-                    <span>Suspend</span>
-                  </DropdownItem>
-                {:else}
-                  <DropdownItem
-                    on={{
-                      click: () => changeUserStatus(UserStatusEnum.Active),
-                    }}
-                    closeOnSelect={false}
-                    loading={userStatusChanging &&
-                      statusToChange === UserStatusEnum.Active}
-                  >
-                    {#snippet icon()}
-                      <Icon icon="heroicons:check-circle" class="h-4 w-4" />
-                    {/snippet}
-                    <span>Activate</span>
-                  </DropdownItem>
-                {/if}
-              </DropdownGroup>
+              {#if !showDeleteConfirmation}
+                <DropdownGroup>
+                  {#if user.status === UserStatusEnum.Active}
+                    <DropdownItem
+                      on={{
+                        click: () => changeUserStatus(UserStatusEnum.Suspended),
+                      }}
+                      closeOnSelect={false}
+                      loading={userStatusChanging &&
+                        statusToChange === UserStatusEnum.Suspended}
+                    >
+                      {#snippet icon()}
+                        <Icon icon="heroicons:no-symbol" class="h-4 w-4" />
+                      {/snippet}
+                      <span>Suspend</span>
+                    </DropdownItem>
+                  {:else}
+                    <DropdownItem
+                      on={{
+                        click: () => changeUserStatus(UserStatusEnum.Active),
+                      }}
+                      closeOnSelect={false}
+                      loading={userStatusChanging &&
+                        statusToChange === UserStatusEnum.Active}
+                    >
+                      {#snippet icon()}
+                        <Icon icon="heroicons:check-circle" class="h-4 w-4" />
+                      {/snippet}
+                      <span>Activate</span>
+                    </DropdownItem>
+                  {/if}
+                </DropdownGroup>
+
+                <DropdownGroup>
+                  {#if !isAdmin}
+                    <DropdownItem
+                      on={{ click: () => grantRole(UserRole.Admin) }}
+                      closeOnSelect={false}
+                      loading={$grantRoleLoading}
+                    >
+                      {#snippet icon()}
+                        <Icon icon="heroicons:key" class="h-4 w-4" />
+                      {/snippet}
+                      <span>Make Admin</span>
+                    </DropdownItem>
+                  {:else}
+                    <DropdownItem
+                      on={{ click: () => revokeRole(UserRole.Admin) }}
+                      closeOnSelect={false}
+                      loading={$revokeRoleLoading}
+                    >
+                      {#snippet icon()}
+                        <Icon icon="heroicons:lock-closed" class="h-4 w-4" />
+                      {/snippet}
+                      <span>Remove Admin</span>
+                    </DropdownItem>
+                  {/if}
+                </DropdownGroup>
+              {/if}
 
               <DropdownGroup>
-                {#if !isAdmin}
+                {#if !showDeleteConfirmation}
                   <DropdownItem
-                    on={{ click: () => grantRole(UserRole.Admin) }}
+                    danger={true}
+                    on={{ click: handleUserDeletion }}
                     closeOnSelect={false}
-                    loading={$grantRoleLoading}
                   >
                     {#snippet icon()}
-                      <Icon icon="heroicons:key" class="h-4 w-4" />
+                      <Icon icon="heroicons:trash" class="h-4 w-4" />
                     {/snippet}
-                    <span>Make Admin</span>
+                    <span>Delete</span>
                   </DropdownItem>
                 {:else}
-                  <DropdownItem
-                    on={{ click: () => revokeRole(UserRole.Admin) }}
-                    closeOnSelect={false}
-                    loading={$revokeRoleLoading}
-                  >
-                    {#snippet icon()}
-                      <Icon icon="heroicons:lock-closed" class="h-4 w-4" />
-                    {/snippet}
-                    <span>Remove Admin</span>
-                  </DropdownItem>
+                  <UserDeleteConfirmation
+                    {user}
+                    loading={$userDeleteLoading}
+                    onConfirm={confirmUserDeletion}
+                    onCancel={cancelUserDeletion}
+                  />
                 {/if}
-              </DropdownGroup>
-
-              <DropdownGroup>
-                <DropdownItem danger={true} on={{ click: handleUserDeletion }}>
-                  {#snippet icon()}
-                    <Icon icon="heroicons:trash" class="h-4 w-4" />
-                  {/snippet}
-                  <span>Delete</span>
-                </DropdownItem>
               </DropdownGroup>
             </Dropdown>
-
-            {#if deletePopoverOpen}
-              <Popover
-                bind:open={deletePopoverOpen}
-                variant="floating"
-                responsive={true}
-                contentProps={{ align: 'end', alignOffset: -8 }}
-              >
-                {#snippet trigger()}
-                  <div
-                    class="absolute top-0 right-0 w-full h-full pointer-events-none"
-                  ></div>
-                {/snippet}
-
-                <UserDeletePopover
-                  {user}
-                  loading={userDeleteLoading}
-                  close={closeDeletePopover}
-                  confirm={confirmUserDeletion}
-                />
-              </Popover>
-            {/if}
           </div>
         {/if}
       </div>

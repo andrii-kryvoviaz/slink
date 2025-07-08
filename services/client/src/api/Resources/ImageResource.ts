@@ -94,4 +94,25 @@ export class ImageResource extends AbstractResource {
 
     return this.get(`/images?${query}`);
   }
+
+  public async adminUpdateDetails(
+    id: string,
+    details: {
+      description?: string;
+      isPublic?: boolean;
+    },
+  ): Promise<void> {
+    return this.patch(`/admin/image/${id}`, {
+      json: details,
+    });
+  }
+
+  public async adminRemove(
+    id: string,
+    preserveOnDisk: boolean = false,
+  ): Promise<void> {
+    return this.delete(`/admin/image/${id}`, {
+      json: { preserveOnDisk },
+    });
+  }
 }

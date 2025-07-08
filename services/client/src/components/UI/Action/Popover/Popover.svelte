@@ -17,7 +17,7 @@
   type Props = Popover.RootProps &
     Popover.ContentProps &
     PopoverProps & {
-      trigger: Snippet;
+      trigger?: Snippet;
       triggerProps?: Popover.TriggerProps;
       contentProps?: Popover.ContentProps;
       withArrow?: boolean;
@@ -82,11 +82,11 @@
 </script>
 
 {#if !browser}
-  {@render trigger()}
+  {@render trigger?.()}
 {:else}
   <Popover.Root bind:open {...props}>
     <Popover.Trigger {...triggerProps} class={triggerClasses}>
-      {@render trigger()}
+      {@render trigger?.()}
     </Popover.Trigger>
 
     <Popover.Portal>

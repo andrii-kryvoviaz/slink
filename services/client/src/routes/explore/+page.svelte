@@ -7,7 +7,10 @@
   import { EmptyState } from '@slink/lib/components/UI/EmptyState';
   import { usePublicImagesFeed } from '@slink/lib/state/PublicImagesFeed.svelte';
 
-  import { ImagePlaceholder } from '@slink/components/Feature/Image';
+  import {
+    AdminImageDropdown,
+    ImagePlaceholder,
+  } from '@slink/components/Feature/Image';
   import { UserAvatar } from '@slink/components/Feature/User';
   import { LoadMoreButton } from '@slink/components/UI/Action';
   import { Masonry } from '@slink/components/UI/Layout';
@@ -18,6 +21,15 @@
     TextEllipsis,
   } from '@slink/components/UI/Text';
 
+  import type { PageServerData } from './$types';
+
+  interface Props {
+    data: PageServerData;
+  }
+
+  let { data }: Props = $props();
+
+  const isAdmin = data.user?.roles?.includes('ROLE_ADMIN') ?? false;
   const publicFeedState = usePublicImagesFeed();
   publicFeedState.reset();
 
@@ -32,6 +44,18 @@
       publicFeedState.load();
     }
   });
+
+  const handleImageUpdate = (updatedImage: any) => {
+    if (updatedImage.attributes.isPublic) {
+      publicFeedState.updateItem(updatedImage.id, updatedImage);
+    } else {
+      publicFeedState.removeItem(updatedImage.id);
+    }
+  };
+
+  const handleImageDelete = (imageId: string) => {
+    publicFeedState.removeItem(imageId);
+  };
 </script>
 
 <svelte:head>
@@ -95,6 +119,15 @@
                     </div>
                   </div>
                 </div>
+                {#if isAdmin}
+                  <AdminImageDropdown
+                    {image}
+                    on={{
+                      imageUpdate: handleImageUpdate,
+                      imageDelete: handleImageDelete,
+                    }}
+                  />
+                {/if}
               </div>
             </div>
 

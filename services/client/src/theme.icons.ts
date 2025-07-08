@@ -62,7 +62,6 @@ export const themeIcons: string[] = [
   'lucide:expand',
   'lucide:hard-drive',
   'lucide:calendar',
-  'heroicons:question-mark-circle',
   'heroicons:exclamation-triangle',
   'heroicons:information-circle',
   'heroicons:arrow-path',
@@ -114,4 +113,5 @@ export const themeIcons: string[] = [
   'ph:caret-down',
   'ph:text-align-left',
   'ph:hash',
+  'heroicons:archive-box',
 ];
