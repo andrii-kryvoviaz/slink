@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   import Icon from '@iconify/svelte';
 
@@ -6,7 +7,9 @@
   import { usePublicImagesFeed } from '@slink/lib/state/PublicImagesFeed.svelte';
 
   import { Button } from '@slink/components/UI/Action';
+  import { Shourtcut } from '@slink/components/UI/Action';
   import { SearchBar } from '@slink/components/UI/Search';
+  import { Tooltip } from '@slink/components/UI/Tooltip';
 
   interface Props {
     user?: Partial<User>;
@@ -43,6 +46,10 @@
   function handleClearSearch() {
     publicImagesFeed.resetSearch();
     publicImagesFeed.load();
+  }
+
+  function handleUploadShortcut() {
+    goto('/upload');
   }
 </script>
 
@@ -90,17 +97,31 @@
         />
       {/if}
       {#if showUploadButton}
-        <Button
-          href="/upload"
-          variant="glass"
-          size="sm"
-          rounded="full"
-          id="uploadImageLink"
-          class="flex flex-row gap-2"
-        >
-          <Icon icon="ph:plus-fill" class="h-3 w-3 sm:h-4 sm:w-4" />
-          Upload
-        </Button>
+        <Tooltip side="left" sideOffset={8}>
+          {#snippet trigger()}
+            <Button
+              href="/upload"
+              variant="glass"
+              size="sm"
+              rounded="full"
+              id="uploadImageLink"
+              class="flex flex-row gap-2"
+            >
+              <Icon icon="ph:plus-fill" class="h-3 w-3 sm:h-4 sm:w-4" />
+              Upload
+            </Button>
+          {/snippet}
+          <div class="flex items-center gap-2">
+            <span>Shortcut</span>
+            <Shourtcut
+              control={true}
+              shift={true}
+              key="u"
+              onHit={handleUploadShortcut}
+              size="sm"
+            />
+          </div>
+        </Tooltip>
       {/if}
 
       {#if showLoginButton}
