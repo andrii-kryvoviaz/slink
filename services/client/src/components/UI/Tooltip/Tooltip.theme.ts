@@ -4,7 +4,7 @@ export const TooltipContent = cva(`border z-9999 text-center`, {
   variants: {
     variant: {
       default:
-        'bg-neutral-50 border-neutral-200 shadow-lg dark:bg-neutral-800 dark:text-white dark:border-neutral-600/40',
+        'bg-white border-gray-200 shadow-lg text-gray-900 dark:bg-gray-700 dark:text-white dark:border-gray-600/40',
     },
     rounded: {
       sm: 'rounded-xs',
@@ -34,7 +34,7 @@ export const TooltipContent = cva(`border z-9999 text-center`, {
 export const TooltipArrow = cva(`z-9999`, {
   variants: {
     variant: {
-      default: 'text-neutral-50 dark:text-neutral-800',
+      default: 'text-white dark:text-gray-700',
     },
   },
 });
