@@ -20,6 +20,8 @@ use Slink\User\Domain\Event\UserPasswordWasChanged;
 use Slink\User\Domain\Event\UserSignedIn;
 use Slink\User\Domain\Event\UserStatusWasChanged;
 use Slink\User\Domain\Event\UserWasCreated;
+use Slink\User\Domain\Event\ApiKeyWasCreated;
+use Slink\User\Domain\Event\ApiKeyWasRevoked;
 use Slink\User\Domain\Exception\DisplayNameAlreadyExistException;
 use Slink\User\Domain\Exception\EmailAlreadyExistException;
 use Slink\User\Domain\Exception\InvalidCredentialsException;
@@ -333,5 +335,25 @@ final class User extends AbstractAggregateRoot implements UserInterface {
    */
   public function applyUserRevokedRole(UserRevokedRole $event): void {
     $this->roles->removeRole($event->role);
+  }
+
+  public function createApiKey(string $name, ?DateTime $expiresAt = null): string {
+    $keyId = ID::generate()->toString();
+    $key = 'sk_' . bin2hex(random_bytes(32));
+    
+    $this->recordThat(new ApiKeyWasCreated(
+      $this->aggregateRootId(),
+      $keyId,
+      $key,
+      $name,
+      DateTime::now(),
+      $expiresAt
+    ));
+    
+    return $key;
+  }
+
+  public function revokeApiKey(string $keyId): void {
+    $this->recordThat(new ApiKeyWasRevoked($this->aggregateRootId(), $keyId));
   }
 }

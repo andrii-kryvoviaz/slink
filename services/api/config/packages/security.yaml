@@ -5,11 +5,20 @@ security:
   providers:
     slink.user.auth.jwt_user_provider:
       id: Slink\User\Infrastructure\Auth\JwtUserProvider
+    slink.user.auth.api_key_user_provider:
+      id: Slink\User\Infrastructure\Auth\ApiKeyUserProvider
 
   firewalls:
     dev:
       pattern: ^/(_(profiler|wdt))/
       security: false
+
+    external:
+      pattern: ^/api/external
+      stateless: true
+      provider: slink.user.auth.api_key_user_provider
+      custom_authenticators:
+        - Slink\User\Infrastructure\Auth\ApiKeyAuthenticator
 
     api:
       pattern: ^/api(?!/(auth|public|guest|image/[^/]+\.[^/]+))

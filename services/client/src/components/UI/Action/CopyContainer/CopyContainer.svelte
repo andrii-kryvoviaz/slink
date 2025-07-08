@@ -7,12 +7,23 @@
 
   import { Button } from '@slink/components/UI/Action';
 
+  import {
+    CopyContainerButtonTheme,
+    CopyContainerInputTheme,
+    CopyContainerTheme,
+  } from './CopyContainer.theme';
+  import type {
+    CopyContainerSize,
+    CopyContainerVariant,
+  } from './CopyContainer.types';
+
   interface Props {
     value: string;
     delay?: number;
     placeholder?: string;
     copyButtonContent?: Snippet<[]>;
-    size?: 'sm' | 'md' | 'lg';
+    size?: CopyContainerSize;
+    variant?: CopyContainerVariant;
   }
 
   let {
@@ -21,6 +32,7 @@
     placeholder = 'Copy link...',
     copyButtonContent,
     size = 'md',
+    variant = 'default',
   }: Props = $props();
 
   let isCopiedActive: boolean = $state(false);
@@ -52,35 +64,17 @@
     }
   };
 
-  const sizeClasses = {
-    sm: {
-      container: 'max-w-xs text-xs',
-      input: 'px-3 py-2 text-xs',
-      button: 'text-xs min-w-[4rem]',
-    },
-    md: {
-      container: 'max-w-md text-sm',
-      input: 'px-4 py-2.5 text-sm',
-      button: 'text-sm min-w-[5rem]',
-    },
-    lg: {
-      container: 'max-w-lg text-base',
-      input: 'px-4 py-3 text-base',
-      button: 'text-base min-w-[6rem]',
-    },
-  };
-
-  const currentSize = $derived(sizeClasses[size]);
+  const containerClasses = $derived(CopyContainerTheme({ variant, size }));
+  const inputClasses = $derived(CopyContainerInputTheme({ variant, size }));
+  const buttonClasses = $derived(CopyContainerButtonTheme({ size }));
 </script>
 
-<div class="flex w-full items-center {currentSize.container}">
-  <div
-    class="group relative flex w-full items-center rounded-lg border border-gray-200/50 dark:border-gray-700/30 bg-gray-50/80 dark:bg-gray-800/50 transition-all duration-200 hover:bg-gray-100/50 dark:hover:bg-gray-800/70 focus-within:ring-2 focus-within:ring-blue-500/20 focus-within:border-gray-200/50 dark:focus-within:border-gray-700/30"
-  >
+<div class="flex w-full items-center">
+  <div class={containerClasses}>
     <div class="flex-1 min-w-0">
       <input
         bind:this={inputElement}
-        class="w-full bg-transparent {currentSize.input} border-0 focus:outline-none focus:ring-0 font-mono text-gray-700 dark:text-gray-300 placeholder-gray-400"
+        class={inputClasses}
         type="text"
         {value}
         {placeholder}
@@ -90,7 +84,7 @@
     </div>
     <div class="flex-shrink-0 pr-1">
       <Button
-        class="{currentSize.button} transition-all duration-200"
+        class={buttonClasses}
         variant="primary"
         size="xs"
         disabled={isCopiedActive}

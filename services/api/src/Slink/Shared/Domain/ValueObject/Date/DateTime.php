@@ -89,6 +89,22 @@ final class DateTime extends DateTimeImmutable {
   public function isBefore(DateTime $now): bool {
     return $this < $now;
   }
+
+  /**
+   * @param DateTime $now
+   * @return bool
+   */
+  public function isBeforeEquals(DateTime $now): bool {
+    return $this <= $now;
+  }
+
+  /**
+   * @param DateTime $dateTime
+   * @return bool
+   */
+  public function equals(DateTime $dateTime): bool {
+    return $this === $dateTime;
+  }
   
   /**
    * @param DateTime $now
@@ -96,6 +112,14 @@ final class DateTime extends DateTimeImmutable {
    */
   public function isAfter(DateTime $now): bool {
     return $this > $now;
+  }
+
+  /**
+   * @param DateTime $now
+   * @return bool
+   */
+  public function isAfterEquals(DateTime $now): bool {
+    return $this >= $now;
   }
   
   /**

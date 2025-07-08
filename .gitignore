@@ -19,7 +19,7 @@ services/*/var
 public/images
 public/slink
 /slink
-/var/data/*.db
+*.db
 dump.rdb
 docker-compose.prod.yaml
 

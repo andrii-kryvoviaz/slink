@@ -2,13 +2,11 @@
 
 declare(strict_types=1);
 
-namespace UI\Http\Rest\Controller\Image;
+namespace UI\Http\Rest\Controller\External;
 
 use Slink\Image\Application\Command\UploadImage\UploadImageCommand;
 use Slink\Shared\Application\Command\CommandTrait;
 use Slink\Shared\Application\Http\RequestValueResolver\FileRequestValueResolver;
-use Slink\User\Domain\Contracts\UserInterface;
-use Slink\User\Infrastructure\Auth\JwtUser;
 use Slink\User\Infrastructure\Auth\ApiKeyUser;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -18,19 +16,19 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use UI\Http\Rest\Response\ApiResponse;
 
 #[AsController]
-#[Route(path: '/upload', name: 'upload_image', methods: ['POST', 'PUT'])]
+#[Route(path: 'external/upload', name: 'external_upload', methods: ['POST', 'PUT'])]
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
-final class UploadImageController {
+final class UploadController {
   use CommandTrait;
   
   public function __invoke(
     #[MapRequestPayload(
       resolver: FileRequestValueResolver::class
     )] UploadImageCommand $command,
-    #[CurrentUser] ?UserInterface $user
+    #[CurrentUser] ApiKeyUser $user
   ): ApiResponse {
     $this->handle($command->withContext([
-      'userId' => $user?->getIdentifier()
+      'userId' => $user->getIdentifier()
     ]));
     
     return ApiResponse::created($command->getId()->toString(),"image/{$command->getId()}/detail");

@@ -1,67 +1,68 @@
 imports:
-    - { resource: 'settings.yaml' }
-    - { resource: 'services/*.yaml' }
+  - { resource: 'settings.yaml' }
+  - { resource: 'services/*.yaml' }
 
 parameters:
-    exception_to_status:
-        LogicException: 400
-        InvalidArgumentException: 400
-        Slink\User\Domain\Exception\InvalidCredentialsException: 401
-        Slink\User\Domain\Exception\ForbiddenException: 403
-        Slink\Shared\Infrastructure\Exception\NotFoundException: 404
+  exception_to_status:
+    LogicException: 400
+    InvalidArgumentException: 400
+    Slink\User\Domain\Exception\InvalidCredentialsException: 401
+    Slink\User\Domain\Exception\ForbiddenException: 403
+    Slink\User\Domain\Exception\ApiKeyNotFoundException: 404
+    Slink\Shared\Infrastructure\Exception\NotFoundException: 404
 
-    exception_code_to_message:
-        400: 'Bad Request'
-        401: 'Unauthorized'
-        403: 'Forbidden'
-        404: 'Not Found'
-        500: 'Internal Server Error'
+  exception_code_to_message:
+    400: 'Bad Request'
+    401: 'Unauthorized'
+    403: 'Forbidden'
+    404: 'Not Found'
+    500: 'Internal Server Error'
 
 services:
-    _defaults:
-        autowire: true
-        autoconfigure: true
-        public: false
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
 
-    _instanceof:
-        Slink\Shared\Application\Command\CommandHandlerInterface:
-            public: true
-            tags:
-                - { name: messenger.message_handler, bus: messenger.bus.command }
+  _instanceof:
+    Slink\Shared\Application\Command\CommandHandlerInterface:
+      public: true
+      tags:
+        - { name: messenger.message_handler, bus: messenger.bus.command }
 
-        Slink\Shared\Application\Query\QueryHandlerInterface:
-            public: true
-            tags:
-                - { name: messenger.message_handler, bus: messenger.bus.query }
+    Slink\Shared\Application\Query\QueryHandlerInterface:
+      public: true
+      tags:
+        - { name: messenger.message_handler, bus: messenger.bus.query }
 
-        Slink\Shared\Infrastructure\MessageBus\Event\EventHandlerInterface:
-            public: true
-            tags:
-                - { name: messenger.message_handler, bus: messenger.bus.event.async }
+    Slink\Shared\Infrastructure\MessageBus\Event\EventHandlerInterface:
+      public: true
+      tags:
+        - { name: messenger.message_handler, bus: messenger.bus.event.async }
 
-    Slink\:
-        resource: '../src/Slink/*'
-        exclude: '../src/Slink/**/{Migrations,Kernel.php}'
+  Slink\:
+    resource: '../src/Slink/*'
+    exclude: '../src/Slink/**/{Migrations,Kernel.php}'
 
-    UI\:
-        resource: '../src/UI/*'
-        exclude: '../src/UI/Console/**/Abstract*'
+  UI\:
+    resource: '../src/UI/*'
+    exclude: '../src/UI/Console/**/Abstract*'
 
-    Slink\Shared\Infrastructure\MessageBus\Command\MessengerCommandBus:
-        arguments:
-            - '@messenger.bus.command'
+  Slink\Shared\Infrastructure\MessageBus\Command\MessengerCommandBus:
+    arguments:
+      - '@messenger.bus.command'
 
-    Slink\Shared\Infrastructure\MessageBus\Query\MessengerQueryBus:
-        arguments:
-            - '@messenger.bus.query'
+  Slink\Shared\Infrastructure\MessageBus\Query\MessengerQueryBus:
+    arguments:
+      - '@messenger.bus.query'
 
-    Slink\Shared\Infrastructure\MessageBus\Event\MessengerEventBus:
-        arguments:
-            - '@messenger.bus.event'
+  Slink\Shared\Infrastructure\MessageBus\Event\MessengerEventBus:
+    arguments:
+      - '@messenger.bus.event'
 
-    UI\Http\Rest\EventSubscriber\ExceptionSubscriber:
-        arguments:
-            - '@logger'
-            - "%kernel.environment%"
-            - "%exception_to_status%"
-            - "%exception_code_to_message%"
+  UI\Http\Rest\EventSubscriber\ExceptionSubscriber:
+    arguments:
+      - '@logger'
+      - '%kernel.environment%'
+      - '%exception_to_status%'
+      - '%exception_code_to_message%'
