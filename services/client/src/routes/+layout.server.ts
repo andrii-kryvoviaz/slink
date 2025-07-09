@@ -1,4 +1,5 @@
 import { createAppSidebarItems } from '@slink/components/UI/Navigation/AppSidebar/AppSidebar.config';
+
 import type { AppSidebarGroup } from '@slink/components/UI/Navigation/AppSidebar/AppSidebar.types';
 
 import type { LayoutServerLoad } from './$types';

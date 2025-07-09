@@ -1,4 +1,5 @@
 import { AbstractResource } from '@slink/api/AbstractResource';
+
 import type { SettingRequest } from '@slink/api/Request/SettingRequest';
 import type { EmptyResponse, SettingsResponse } from '@slink/api/Response';
 
@@ -10,6 +11,10 @@ import type {
 export class SettingResource extends AbstractResource {
   public async getGlobalSettings(): Promise<SettingsResponse> {
     return this.get('/settings/global');
+  }
+
+  public async getPublicSettings(): Promise<SettingsResponse> {
+    return this.get('/settings/public');
   }
 
   public async getSettings(

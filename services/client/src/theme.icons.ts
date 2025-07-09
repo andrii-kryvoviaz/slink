@@ -115,7 +115,6 @@ export const themeIcons: string[] = [
   'ph:hash',
   'heroicons:archive-box',
   'ph:key',
-  'ph:spinner',
   'lucide:chevron-left',
   'lucide:chevron-right',
   'lucide:plus',
