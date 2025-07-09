@@ -150,18 +150,20 @@
     </form>
   </div>
 
-  <Banner variant="info">
-    {#snippet icon()}
-      <BannerIcon variant="info" icon="ph:user-plus" />
-    {/snippet}
-    {#snippet content()}
-      <BannerContent
-        title="Need an account?"
-        description="Create one to start sharing images"
-      />
-    {/snippet}
-    {#snippet action()}
-      <BannerAction variant="info" href="/profile/signup" text="Sign Up" />
-    {/snippet}
-  </Banner>
+  {#if data.globalSettings?.user?.allowRegistration}
+    <Banner variant="info">
+      {#snippet icon()}
+        <BannerIcon variant="info" icon="ph:user-plus" />
+      {/snippet}
+      {#snippet content()}
+        <BannerContent
+          title="Need an account?"
+          description="Create one to start sharing images"
+        />
+      {/snippet}
+      {#snippet action()}
+        <BannerAction variant="info" href="/profile/signup" text="Sign Up" />
+      {/snippet}
+    </Banner>
+  {/if}
 </div>

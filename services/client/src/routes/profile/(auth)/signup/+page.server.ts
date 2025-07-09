@@ -1,10 +1,9 @@
 import { env } from '$env/dynamic/private';
-import { fail, redirect } from '@sveltejs/kit';
 
 import { ApiClient } from '@slink/api/Client';
 import { HttpException } from '@slink/api/Exceptions';
-
 import { formData } from '@slink/utils/form/formData';
+import { fail, redirect } from '@sveltejs/kit';
 
 import type { Action, Actions, PageServerLoad } from './$types';
 
@@ -13,6 +12,10 @@ export const load: PageServerLoad = async ({ request, parent, locals }) => {
 
   if (locals.user) {
     throw redirect(302, '/profile');
+  }
+
+  if (locals.globalSettings?.user?.allowRegistration === false) {
+    throw redirect(302, '/profile/login');
   }
 
   return locals;
