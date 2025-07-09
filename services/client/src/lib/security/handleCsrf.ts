@@ -1,5 +1,4 @@
 import { json, text } from '@sveltejs/kit';
-
 import type { Handle } from '@sveltejs/kit';
 
 function csrf(allowedPaths: string[], allowedOrigins: string[] = []): Handle {

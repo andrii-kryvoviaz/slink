@@ -1,5 +1,4 @@
 import { AbstractResource } from '@slink/api/AbstractResource';
-
 import type { EmptyResponse } from '@slink/api/Response';
 
 export type ApiKeyResponse = {

@@ -1,16 +1,17 @@
 import { ApiClient } from '@slink/api/Client';
 import { ValidationException } from '@slink/api/Exceptions';
-import { AbstractHttpState } from '@slink/lib/state/core/AbstractHttpState.svelte';
-import { useState } from '@slink/lib/state/core/ContextAwareState';
-import { toast } from '@slink/utils/ui/toast.svelte';
-
 import type {
   ApiKeyResponse,
   CreateApiKeyRequest,
   CreateApiKeyResponse,
 } from '@slink/api/Resources/ApiKeyResource';
 
+import { AbstractHttpState } from '@slink/lib/state/core/AbstractHttpState.svelte';
 import type { RequestStateOptions } from '@slink/lib/state/core/AbstractHttpState.svelte';
+import { useState } from '@slink/lib/state/core/ContextAwareState';
+
+import { toast } from '@slink/utils/ui/toast.svelte';
+
 class ApiKeyStore extends AbstractHttpState<ApiKeyResponse[]> {
   private _apiKeys: ApiKeyResponse[] = $state([]);
   private _createdKey: CreateApiKeyResponse | null = $state(null);

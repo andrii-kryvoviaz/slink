@@ -4,6 +4,7 @@ import type {
 } from '@slink/api/Resources/ApiKeyResource';
 
 import { useApiKeyStore } from '@slink/lib/state/ApiKeyStore.svelte';
+
 import { toast } from '@slink/utils/ui/toast.svelte';
 
 import type { ApiKeyFormData } from './types';
