@@ -1,11 +1,12 @@
 import { ApiClient } from '@slink/api/Client';
-import { useState } from '@slink/lib/state/core/ContextAwareState';
 
 import type {
   GlobalSettings,
   SettingCategory,
   SettingCategoryData,
 } from '@slink/lib/settings/Type/GlobalSettings';
+import { useState } from '@slink/lib/state/core/ContextAwareState';
+
 class GlobalSettingsManager {
   private _settings = $state<GlobalSettings | null>(null);
 

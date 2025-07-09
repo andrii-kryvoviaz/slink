@@ -1,5 +1,4 @@
 import { AbstractResource } from '@slink/api/AbstractResource';
-
 import type { SettingRequest } from '@slink/api/Request/SettingRequest';
 import type { EmptyResponse, SettingsResponse } from '@slink/api/Response';
 
