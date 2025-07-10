@@ -13,7 +13,6 @@
     DropdownGroup,
     DropdownItem,
   } from '@slink/components/UI/Action';
-  import { Loader } from '@slink/components/UI/Loader';
 
   interface Props {
     image: ImageListingItem;

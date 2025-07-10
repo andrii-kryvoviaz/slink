@@ -1,8 +1,3 @@
-import type {
-  ApiKeyResponse,
-  CreateApiKeyResponse,
-} from '@slink/api/Resources/ApiKeyResource';
-
 import { useApiKeyStore } from '@slink/lib/state/ApiKeyStore.svelte';
 
 import { toast } from '@slink/utils/ui/toast.svelte';

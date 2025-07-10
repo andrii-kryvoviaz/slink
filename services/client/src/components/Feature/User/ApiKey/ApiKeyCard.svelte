@@ -7,9 +7,8 @@
 
   import { formatDate, formatExpiryDate } from '@slink/utils/date';
 
-  import { Button, Popover } from '@slink/components/UI/Action';
-
-  import { ApiKeyDeletePopover } from '.';
+  import { ApiKeyDeletePopover } from '@slink/components/Feature/User';
+  import { Popover } from '@slink/components/UI/Action';
 
   interface Props {
     apiKey: ApiKeyResponse;

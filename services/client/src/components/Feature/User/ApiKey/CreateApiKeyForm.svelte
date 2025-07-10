@@ -1,10 +1,9 @@
 <script lang="ts">
   import Icon from '@iconify/svelte';
 
+  import type { ApiKeyFormData } from '@slink/components/Feature/User';
   import { Button } from '@slink/components/UI/Action';
   import { DatePicker, Input } from '@slink/components/UI/Form';
-
-  import type { ApiKeyFormData } from './types';
 
   interface Props {
     formData: ApiKeyFormData;

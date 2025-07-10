@@ -7,21 +7,20 @@
 
   import { useApiKeyStore } from '@slink/lib/state/ApiKeyStore.svelte';
 
-  import { Dialog } from '@slink/components/UI';
-  import { Button } from '@slink/components/UI/Action';
-
+  import type {
+    ApiKeyFormData,
+    ApiKeyManagerProps,
+    ApiKeyManagerState,
+  } from '@slink/components/Feature/User';
   import {
     ApiKeyCard,
     ApiKeyList,
     ApiKeyService,
     CreateApiKeyForm,
     CreatedKeyDisplay,
-  } from '.';
-  import type {
-    ApiKeyFormData,
-    ApiKeyManagerProps,
-    ApiKeyManagerState,
-  } from './types';
+  } from '@slink/components/Feature/User';
+  import { Button } from '@slink/components/UI/Action';
+  import { Dialog } from '@slink/components/UI/Dialog';
 
   let { user }: ApiKeyManagerProps = $props();
 

@@ -1,5 +1,3 @@
-import type { ApiKeyResponse } from '@slink/api/Resources/ApiKeyResource';
-
 export interface ApiKeyFormData {
   name: string;
   expiresAt?: string;
