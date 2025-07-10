@@ -11,7 +11,7 @@
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
 
   import { UserAvatar } from '@slink/components/Feature/User';
-  import { UserDeleteConfirmation } from '@slink/components/Feature/User/UserDeleteConfirmation';
+  import { UserDeleteConfirmation } from '@slink/components/Feature/User';
   import {
     Dropdown,
     DropdownGroup,

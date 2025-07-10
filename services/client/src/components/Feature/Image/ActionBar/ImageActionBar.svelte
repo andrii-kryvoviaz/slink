@@ -15,7 +15,7 @@
   import { downloadByLink } from '@slink/utils/http/downloadByLink';
   import { toast } from '@slink/utils/ui/toast.svelte';
 
-  import ImageDeletePopover from '@slink/components/Feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte';
+  import { ImageDeletePopover } from '@slink/components/Feature/Image';
   import { Popover } from '@slink/components/UI/Action';
   import { Loader } from '@slink/components/UI/Loader';
   import { Tooltip } from '@slink/components/UI/Tooltip';

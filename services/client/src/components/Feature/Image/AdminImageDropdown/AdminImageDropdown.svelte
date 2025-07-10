@@ -7,7 +7,7 @@
 
   import { toast } from '@slink/utils/ui/toast.svelte';
 
-  import { ImageDeleteConfirmation } from '@slink/components/Feature/Image/ImageDeleteConfirmation';
+  import { ImageDeleteConfirmation } from '@slink/components/Feature/Image';
   import {
     Dropdown,
     DropdownGroup,
