@@ -29,9 +29,8 @@ final readonly class ShareXConfigService {
       ],
       'Body' => 'MultipartFormData',
       'FileFormName' => 'image',
-      'URL' => '$json:url$',
-      'ThumbnailURL' => '$json:url$',
-      'DeletionURL' => '$json:deleteUrl$'
+      'URL' => "{$url}/{json:url}",
+      'ThumbnailURL' => "{$url}/{json:thumbnailUrl}",
     ];
   }
 }
