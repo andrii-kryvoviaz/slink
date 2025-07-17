@@ -80,7 +80,7 @@
           actionText="Upload First Image"
           actionHref="/upload"
           variant="blue"
-          size="lg"
+          size="md"
         />
       {:else}
         <EmptyState
@@ -90,7 +90,7 @@
           actionText="Clear Search"
           actionClick={() => publicFeedState.resetSearch()}
           variant="blue"
-          size="lg"
+          size="md"
         />
       {/if}
     {/if}

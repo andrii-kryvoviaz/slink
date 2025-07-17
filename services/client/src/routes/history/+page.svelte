@@ -45,7 +45,7 @@
         actionText="Upload Images"
         actionHref="/upload"
         variant="purple"
-        size="lg"
+        size="md"
       />
     {/if}
 
