@@ -169,15 +169,6 @@
           Configure guest access and upload permissions
         {/snippet}
 
-        {#if settings.access.allowGuestUploads}
-          <Notice size="sm" variant="warning">
-            <strong>Access Notice:</strong>
-            Guest Upload and Guest Access (View-Only) cannot be active simultaneously.
-            When Guest Upload is enabled, Guest Access is automatically enabled to
-            prevent conflicts.
-          </Notice>
-        {/if}
-
         <SettingItem
           defaultValue={defaultSettings?.access?.allowGuestUploads}
           reset={(value) => {
@@ -188,8 +179,9 @@
             Guest Upload
           {/snippet}
           {#snippet hint()}
-            Allow unauthenticated users to upload and post images without
-            creating an account
+            Allow unauthenticated users to upload images without creating an
+            account. When enabled without Guest Access, users will see a success
+            message but cannot browse uploaded images
           {/snippet}
           <div class="flex justify-end">
             <Toggle
@@ -209,21 +201,13 @@
             Guest Access (View-Only)
           {/snippet}
           {#snippet hint()}
-            Allow unauthenticated users to view and browse images without the
-            ability to upload
+            Allow unauthenticated users to view and browse images
           {/snippet}
           <div class="flex justify-end">
-            <div
-              class={settings.access.allowGuestUploads
-                ? 'opacity-50 pointer-events-none'
-                : ''}
-            >
-              <Toggle
-                name="accessAllowUnauthenticatedAccess"
-                bind:checked={settings.access.allowUnauthenticatedAccess}
-                disabled={settings.access.allowGuestUploads}
-              />
-            </div>
+            <Toggle
+              name="accessAllowUnauthenticatedAccess"
+              bind:checked={settings.access.allowUnauthenticatedAccess}
+            />
           </div>
         </SettingItem>
       </SettingsPane>

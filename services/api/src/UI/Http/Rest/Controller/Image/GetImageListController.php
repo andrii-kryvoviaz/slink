@@ -17,7 +17,7 @@ use UI\Http\Rest\Response\ApiResponse;
 
 #[AsController]
 #[Route('/images/{page}', name: 'get_image_list', requirements: ['page' => '\d+'], methods: ['GET'])]
-#[IsGranted(GuestAccessVoter::GUEST_ACCESS_ALLOWED)]
+#[IsGranted(GuestAccessVoter::GUEST_VIEW_ALLOWED)]
 final class GetImageListController {
   use QueryTrait;
   

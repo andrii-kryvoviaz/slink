@@ -125,4 +125,6 @@ export const themeIcons: string[] = [
   'lucide:shield-check',
   'lucide:alert-triangle',
   'lucide:x',
+  'ph:info',
+  'ph:clock-clockwise',
 ];

@@ -10,7 +10,8 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 final class GuestAccessVoter extends Voter {
-  public const GUEST_ACCESS_ALLOWED = 'GUEST_ACCESS_ALLOWED';
+  public const GUEST_UPLOAD_ALLOWED = 'GUEST_UPLOAD_ALLOWED';
+  public const GUEST_VIEW_ALLOWED = 'GUEST_VIEW_ALLOWED';
   
   /**
    * @param ConfigurationProviderInterface<SettingsService> $configurationProvider
@@ -26,7 +27,10 @@ final class GuestAccessVoter extends Voter {
    * @return bool
    */
   protected function supports(string $attribute, mixed $subject): bool {
-    return $attribute === self::GUEST_ACCESS_ALLOWED;
+    return in_array($attribute, [
+      self::GUEST_UPLOAD_ALLOWED,
+      self::GUEST_VIEW_ALLOWED
+    ]);
   }
   
   /**
@@ -40,7 +44,11 @@ final class GuestAccessVoter extends Voter {
       return true;
     }
     
-    return $this->configurationProvider->get('access.allowGuestUploads') || 
-           $this->configurationProvider->get('access.allowUnauthenticatedAccess');
+    return match ($attribute) {
+      self::GUEST_UPLOAD_ALLOWED => $this->configurationProvider->get('access.allowGuestUploads'),
+      self::GUEST_VIEW_ALLOWED => $this->configurationProvider->get('access.allowUnauthenticatedAccess'),
+
+      default => false
+    };
   }
 }
