@@ -1,6 +1,5 @@
-import { redirect } from '@sveltejs/kit';
-
 import { Auth } from '@slink/lib/auth/Auth';
+import { redirect } from '@sveltejs/kit';
 
 import type { Actions, PageServerLoad } from './$types';
 
@@ -11,6 +10,6 @@ export const actions: Actions = {
     locals.user = null;
     Auth.logout(cookies);
 
-    throw redirect(302, '/profile/login');
+    redirect(302, '/profile/login');
   },
 };

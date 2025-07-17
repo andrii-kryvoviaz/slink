@@ -1,12 +1,11 @@
-import { themeIcons } from '@slink/theme.icons';
-import { error, redirect } from '@sveltejs/kit';
+import '@slink/utils/string/stringExtensions';
 
 import { browser } from '$app/environment';
 
 import { ApiClient } from '@slink/api/Client';
-
-import '@slink/utils/string/stringExtensions';
+import { themeIcons } from '@slink/theme.icons';
 import { preloadIconSet } from '@slink/utils/ui/preloadIconSet';
+import { error, redirect } from '@sveltejs/kit';
 
 import type { LayoutLoad } from './$types';
 
@@ -15,7 +14,7 @@ export const load: LayoutLoad = async ({ fetch, data }) => {
 
   ApiClient.on('unauthorized', () => {
     if (!browser) {
-      throw redirect(302, '/profile/login');
+      redirect(302, '/profile/login');
     }
   });
 

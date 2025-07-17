@@ -1,13 +1,12 @@
-import { env } from '$env/dynamic/private';
-import { fail, redirect } from '@sveltejs/kit';
+
 
 import { ApiClient } from '@slink/api/Client';
 import { HttpException } from '@slink/api/Exceptions';
-
 import { Session } from '@slink/lib/auth/Session';
-import type { User } from '@slink/lib/auth/Type/User';
-
 import { formData } from '@slink/utils/form/formData';
+import { fail, redirect } from '@sveltejs/kit';
+
+import type { User } from '@slink/lib/auth/Type/User';
 
 import type { Actions } from '../../../.svelte-kit/types/src/routes/profile/(auth)/login/$types';
 import type { PageServerLoad } from './$types';
@@ -18,7 +17,7 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
   const { user, settings } = locals;
 
   if (!user) {
-    throw redirect(302, '/profile/login');
+    redirect(302, '/profile/login');
   }
 
   return {

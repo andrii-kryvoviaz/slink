@@ -1,7 +1,6 @@
-import { error, redirect } from '@sveltejs/kit';
-
 import { ApiClient } from '@slink/api/Client';
 import { ForbiddenException } from '@slink/api/Exceptions';
+import { error, redirect } from '@sveltejs/kit';
 
 import type { PageServerLoad } from './$types';
 
@@ -9,7 +8,7 @@ export const load: PageServerLoad = async ({ params, locals, parent }) => {
   await parent();
 
   if (!locals.user) {
-    throw redirect(302, '/profile/login');
+    redirect(302, '/profile/login');
   }
 
   try {

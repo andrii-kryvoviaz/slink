@@ -1,10 +1,7 @@
-import { fail, redirect } from '@sveltejs/kit';
-
 import { HttpException } from '@slink/api/Exceptions';
-
 import { Auth } from '@slink/lib/auth/Auth';
-
 import { formData } from '@slink/utils/form/formData';
+import { fail, redirect } from '@sveltejs/kit';
 
 import type { Actions, PageServerLoad } from './$types';
 
@@ -12,7 +9,7 @@ export const load: PageServerLoad = async ({ parent, locals }) => {
   await parent();
 
   if (locals.user) {
-    throw redirect(302, '/profile');
+    redirect(302, '/profile');
   }
 
   return locals;
@@ -37,6 +34,6 @@ export const actions: Actions = {
       });
     }
 
-    throw redirect(302, '/');
+    redirect(302, '/');
   },
 } satisfies Actions;
