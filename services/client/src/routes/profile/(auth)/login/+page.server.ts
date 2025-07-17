@@ -1,4 +1,3 @@
-import { env } from '$env/dynamic/private';
 import { fail, redirect } from '@sveltejs/kit';
 
 import { HttpException } from '@slink/api/Exceptions';
@@ -31,10 +30,6 @@ export const actions: Actions = {
           username,
           errors: e.errors,
         });
-      }
-
-      if (env.NODE_ENV === 'development') {
-        console.error(e);
       }
 
       return fail(500, {

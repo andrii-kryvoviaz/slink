@@ -1,0 +1,46 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Slink\Shared\Infrastructure\Security\Voter;
+
+use Slink\Settings\Application\Service\SettingsService;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+
+final class GuestAccessVoter extends Voter {
+  public const GUEST_ACCESS_ALLOWED = 'GUEST_ACCESS_ALLOWED';
+  
+  /**
+   * @param ConfigurationProviderInterface<SettingsService> $configurationProvider
+   */
+  public function __construct(
+    private readonly ConfigurationProviderInterface $configurationProvider,
+  ) {
+  }
+  
+  /**
+   * @param string $attribute
+   * @param mixed $subject
+   * @return bool
+   */
+  protected function supports(string $attribute, mixed $subject): bool {
+    return $attribute === self::GUEST_ACCESS_ALLOWED;
+  }
+  
+  /**
+   * @param string $attribute
+   * @param mixed $subject
+   * @param TokenInterface $token
+   * @return bool
+   */
+  protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool {
+    if ($token->getUser() !== null) {
+      return true;
+    }
+    
+    return $this->configurationProvider->get('access.allowGuestUploads') || 
+           $this->configurationProvider->get('access.allowUnauthenticatedAccess');
+  }
+}
