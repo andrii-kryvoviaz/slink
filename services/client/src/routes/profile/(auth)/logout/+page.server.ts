@@ -1,5 +1,6 @@
-import { Auth } from '@slink/lib/auth/Auth';
 import { redirect } from '@sveltejs/kit';
+
+import { Auth } from '@slink/lib/auth/Auth';
 
 import type { Actions, PageServerLoad } from './$types';
 

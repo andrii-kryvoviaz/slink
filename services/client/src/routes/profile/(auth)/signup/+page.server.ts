@@ -1,9 +1,10 @@
 import { env } from '$env/dynamic/private';
+import { fail, redirect } from '@sveltejs/kit';
 
 import { ApiClient } from '@slink/api/Client';
 import { HttpException } from '@slink/api/Exceptions';
+
 import { formData } from '@slink/utils/form/formData';
-import { fail, redirect } from '@sveltejs/kit';
 
 import type { Action, Actions, PageServerLoad } from './$types';
 

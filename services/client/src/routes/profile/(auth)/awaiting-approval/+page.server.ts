@@ -1,5 +1,6 @@
-import { ApiClient } from '@slink/api/Client';
 import { redirect } from '@sveltejs/kit';
+
+import { ApiClient } from '@slink/api/Client';
 
 import type { PageServerLoad } from './$types';
 

@@ -1,11 +1,12 @@
-import '@slink/utils/string/stringExtensions';
+import { themeIcons } from '@slink/theme.icons';
+import { error, redirect } from '@sveltejs/kit';
 
 import { browser } from '$app/environment';
 
 import { ApiClient } from '@slink/api/Client';
-import { themeIcons } from '@slink/theme.icons';
+
+import '@slink/utils/string/stringExtensions';
 import { preloadIconSet } from '@slink/utils/ui/preloadIconSet';
-import { error, redirect } from '@sveltejs/kit';
 
 import type { LayoutLoad } from './$types';
 
