@@ -104,14 +104,16 @@ export class Auth {
       };
     } catch (e) {
       if (e instanceof ValidationException) {
-        Auth.logout(cookies);
+        Auth.logout({ cookies, fetch });
       }
 
       return;
     }
   }
 
-  public static async logout(cookies: Cookies) {
+  public static async logout({ cookies, fetch }: AuthDependencies) {
+    if (fetch) ApiClient.use(fetch);
+
     const refreshToken = cookies.get('refreshToken');
     const sessionId = cookies.get('sessionId');
 
