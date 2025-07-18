@@ -1,24 +1,24 @@
 # see https://symfony.com/doc/current/reference/configuration/framework.html
 framework:
-    secret: '%env(APP_SECRET)%'
-    #csrf_protection: true
+  secret: '%env(APP_SECRET)%'
+  #csrf_protection: true
 
-    # Note that the session will be started ONLY if you read or write from it.
-    session: true
+  # Note that the session will be started ONLY if you read or write from it.
+  session: false
 
-    #esi: true
-    #fragments: true
+  #esi: true
+  #fragments: true
 
-    cache:
-        default_redis_provider: 'redis://localhost'
+  cache:
+    default_redis_provider: 'redis://localhost'
 
-        pools:
-            user_permissions_version:
-                adapter: cache.adapter.redis
-                default_lifetime: 0
+    pools:
+      user_permissions_version:
+        adapter: cache.adapter.redis
+        default_lifetime: 0
 
 when@test:
-    framework:
-        test: true
-        session:
-            storage_factory_id: session.storage.factory.mock_file
+  framework:
+    test: true
+    session:
+      storage_factory_id: session.storage.factory.mock_file

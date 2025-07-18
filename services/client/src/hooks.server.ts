@@ -1,14 +1,13 @@
 import { env } from '$env/dynamic/private';
-import { json } from '@sveltejs/kit';
-import type { Handle } from '@sveltejs/kit';
-import { sequence } from '@sveltejs/kit/hooks';
 
 import { ApiConnector } from '@slink/api/ApiConnector';
 import { ApiClient } from '@slink/api/Client';
-
 import { handleCsrf } from '@slink/lib/security/handleCsrf';
-import { Theme, setCookieSettingsOnLocals } from '@slink/lib/settings';
+import { setCookieSettingsOnLocals, Theme } from '@slink/lib/settings';
+import { json } from '@sveltejs/kit';
+import { sequence } from '@sveltejs/kit/hooks';
 
+import type { Handle } from '@sveltejs/kit';
 const handleWellKnownRequests: Handle = async ({ event, resolve }) => {
   const { pathname } = event.url;
 
@@ -48,7 +47,10 @@ const applyClientTheme: Handle = async ({ event, resolve }) => {
 
 const setGlobalSettingsOnLocals: Handle = async ({ event, resolve }) => {
   try {
-    event.locals.globalSettings = await ApiClient.setting.getPublicSettings();
+    const { fetch } = event;
+
+    event.locals.globalSettings =
+      await ApiClient.use(fetch).setting.getPublicSettings();
   } catch {
     event.locals.globalSettings = null;
   }

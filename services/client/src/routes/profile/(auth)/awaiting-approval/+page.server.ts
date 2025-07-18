@@ -3,7 +3,7 @@ import { redirect } from '@sveltejs/kit';
 
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ cookies, locals }) => {
+export const load: PageServerLoad = async ({ cookies, fetch, locals }) => {
   const userId = cookies.get('createdUserId');
 
   if (!userId) {
@@ -14,7 +14,7 @@ export const load: PageServerLoad = async ({ cookies, locals }) => {
     redirect(302, '/profile');
   }
 
-  const response = await ApiClient.user.checkStatus(userId);
+  const response = await ApiClient.use(fetch).user.checkStatus(userId);
   const { status } = response;
 
   return {

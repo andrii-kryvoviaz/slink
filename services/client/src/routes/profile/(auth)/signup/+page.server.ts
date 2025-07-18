@@ -21,13 +21,13 @@ export const load: PageServerLoad = async ({ request, parent, locals }) => {
   return locals;
 };
 
-const defaultAction: Action = async ({ locals, request, cookies }) => {
+const defaultAction: Action = async ({ fetch, request, cookies }) => {
   const { username, email, password, confirm } = await formData(request);
 
   let redirectUrl: string | null = '/profile/login';
 
   try {
-    const response = await ApiClient.auth.signup({
+    const response = await ApiClient.use(fetch).auth.signup({
       username,
       email,
       password,

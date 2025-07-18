@@ -1,7 +1,6 @@
 import type { Handle } from '@sveltejs/kit';
 
 import { Session } from '@slink/lib/auth/Session';
-
 import { getResponseWithCookies } from '@slink/utils/http/cookie';
 
 import { ApiRequestBuilder } from './ApiRequestBuilder';

@@ -6,9 +6,9 @@ import type { Actions, PageServerLoad } from './$types';
 export const load: PageServerLoad = async ({}) => {};
 
 export const actions: Actions = {
-  default: async ({ cookies, locals }) => {
+  default: async ({ cookies, fetch, locals }) => {
     locals.user = null;
-    Auth.logout(cookies);
+    Auth.arguments(fetch).logout(cookies);
 
     redirect(302, '/profile/login');
   },

@@ -1,5 +1,3 @@
-
-
 import { ApiClient } from '@slink/api/Client';
 import { HttpException } from '@slink/api/Exceptions';
 import { Session } from '@slink/lib/auth/Session';
@@ -27,11 +25,11 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
 };
 
 export const actions: Actions = {
-  changePassword: async ({ request, cookies, fetch }) => {
+  changePassword: async ({ request, fetch }) => {
     const { old_password, password, confirm } = await formData(request);
 
     try {
-      await ApiClient.user.changePassword({
+      await ApiClient.use(fetch).user.changePassword({
         old_password,
         password,
         confirm,
@@ -52,7 +50,7 @@ export const actions: Actions = {
       passwordWasChanged: true,
     };
   },
-  updateProfile: async ({ request, locals, cookies }) => {
+  updateProfile: async ({ request, locals, cookies, fetch }) => {
     const { user } = locals;
     const { display_name } = await formData(request);
 
@@ -66,7 +64,7 @@ export const actions: Actions = {
     }
 
     try {
-      await ApiClient.user.updateProfile({
+      await ApiClient.use(fetch).user.updateProfile({
         display_name,
       });
     } catch (e) {

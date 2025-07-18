@@ -4,7 +4,12 @@ import { error, redirect } from '@sveltejs/kit';
 
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ params, locals, parent }) => {
+export const load: PageServerLoad = async ({
+  params,
+  fetch,
+  locals,
+  parent,
+}) => {
   await parent();
 
   if (!locals.user) {
@@ -12,7 +17,7 @@ export const load: PageServerLoad = async ({ params, locals, parent }) => {
   }
 
   try {
-    const image = await ApiClient.image.getDetails(params.id);
+    const image = await ApiClient.use(fetch).image.getDetails(params.id);
 
     return { image };
   } catch (e: unknown) {
