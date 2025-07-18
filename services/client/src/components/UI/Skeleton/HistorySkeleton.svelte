@@ -14,7 +14,7 @@
 <div class="flex flex-col items-center gap-8 px-4 sm:px-0 {customClass}">
   {#each skeletonItems as _, index}
     <div
-      class="group relative w-full max-w-full overflow-hidden rounded-xl border border-gray-200/50 bg-white/80 backdrop-blur-sm dark:border-gray-700/50 dark:bg-gray-900/80 sm:w-[48rem]"
+      class="group relative w-full max-w-full overflow-hidden rounded-xl border border-gray-200/50 bg-white/80 backdrop-blur-sm dark:border-gray-700/50 dark:bg-gray-900/80 sm:w-4xl"
       style="animation-delay: {index * 150}ms"
     >
       <div class="sm:p-6">
@@ -22,13 +22,13 @@
           class="flex max-w-full grow flex-col items-center gap-0 sm:flex-row sm:items-start sm:gap-8"
         >
           <div
-            class="flex w-full shrink-0 overflow-hidden rounded-t-xl max-w-full sm:rounded-lg sm:w-40 sm:max-w-none"
+            class="flex w-full shrink-0 overflow-hidden rounded-t-xl max-w-full sm:rounded-lg sm:w-60 sm:max-w-none"
           >
             <Skeleton
               width="100%"
-              height="160px"
+              height="240px"
               rounded="none"
-              class="sm:w-40 sm:h-40 rounded-t-xl sm:rounded-lg"
+              class="sm:w-60 sm:h-60 rounded-t-xl sm:rounded-lg"
             />
           </div>
 
@@ -71,10 +71,10 @@
 
             <div class="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
               <div
-                class="flex items-center gap-3 rounded-md bg-gray-50/20 px-3 py-2 dark:bg-gray-800/10"
+                class="flex items-center gap-3 rounded-md bg-gray-50/30 px-3 py-2 dark:bg-gray-800/20"
               >
                 <div
-                  class="flex h-6 w-6 items-center justify-center rounded-full bg-gray-100/30 dark:bg-gray-700/20"
+                  class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100/50 dark:bg-gray-700/30"
                 >
                   <Skeleton width="12px" height="12px" rounded="sm" />
                 </div>
@@ -85,10 +85,10 @@
               </div>
 
               <div
-                class="flex items-center gap-3 rounded-md bg-gray-50/20 px-3 py-2 dark:bg-gray-800/10"
+                class="flex items-center gap-3 rounded-md bg-gray-50/30 px-3 py-2 dark:bg-gray-800/20"
               >
                 <div
-                  class="flex h-6 w-6 items-center justify-center rounded-full bg-gray-100/30 dark:bg-gray-700/20"
+                  class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100/50 dark:bg-gray-700/30"
                 >
                   <Skeleton width="12px" height="12px" rounded="sm" />
                 </div>
@@ -99,10 +99,10 @@
               </div>
 
               <div
-                class="flex items-center gap-3 rounded-md bg-gray-50/20 px-3 py-2 dark:bg-gray-800/10"
+                class="flex items-center gap-3 rounded-md bg-gray-50/30 px-3 py-2 dark:bg-gray-800/20"
               >
                 <div
-                  class="flex h-6 w-6 items-center justify-center rounded-full bg-gray-100/30 dark:bg-gray-700/20"
+                  class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100/50 dark:bg-gray-700/30"
                 >
                   <Skeleton width="12px" height="12px" rounded="sm" />
                 </div>
@@ -113,10 +113,10 @@
               </div>
 
               <div
-                class="flex items-center gap-3 rounded-md bg-gray-50/20 px-3 py-2 dark:bg-gray-800/10"
+                class="flex items-center gap-3 rounded-md bg-gray-50/30 px-3 py-2 dark:bg-gray-800/20"
               >
                 <div
-                  class="flex h-6 w-6 items-center justify-center rounded-full bg-gray-100/30 dark:bg-gray-700/20"
+                  class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100/50 dark:bg-gray-700/30"
                 >
                   <Skeleton width="12px" height="12px" rounded="sm" />
                 </div>

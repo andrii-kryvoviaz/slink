@@ -31,7 +31,7 @@
   {#each items as item (item.id)}
     <div
       out:fade={{ duration: 500 }}
-      class="group relative w-full max-w-full overflow-hidden rounded-xl border border-gray-200/50 bg-white/80 backdrop-blur-sm transition-all duration-300 hover:shadow-lg dark:border-gray-700/50 dark:bg-gray-900/80 sm:w-[48rem]"
+      class="group relative w-full max-w-full overflow-hidden rounded-xl border border-gray-200/50 bg-white/80 backdrop-blur-sm transition-all duration-300 hover:shadow-xl hover:shadow-gray-200/60 hover:border-gray-300/70 hover:bg-white/95 dark:border-gray-700/50 dark:bg-gray-900/80 dark:hover:shadow-gray-900/40 dark:hover:border-gray-600/70 dark:hover:bg-gray-800/95 sm:w-4xl"
     >
       <div class="sm:p-6">
         <div
@@ -39,7 +39,7 @@
         >
           <a
             href={`/info/${item.id}`}
-            class="flex w-full shrink-0 overflow-hidden rounded-t-xl max-w-full sm:rounded-lg sm:w-40 sm:max-w-none"
+            class="flex w-full shrink-0 overflow-hidden rounded-t-xl max-w-full sm:rounded-lg sm:w-60 sm:max-w-none"
           >
             <ImagePlaceholder
               src={`/image/${item.attributes.fileName}?width=350&height=350&crop=true`}
@@ -77,9 +77,11 @@
               />
             </div>
 
-            <div class="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
+            <div
+              class="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2 transition-opacity duration-300 group-hover:opacity-100 opacity-90"
+            >
               <div
-                class="flex items-center gap-3 rounded-md bg-gray-50/30 px-3 py-2 dark:bg-gray-800/20"
+                class="flex items-center gap-3 rounded-md bg-gray-50/30 px-3 py-2 dark:bg-gray-800/20 transition-colors duration-300 group-hover:bg-gray-100/50 dark:group-hover:bg-gray-700/30"
               >
                 <div
                   class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100/50 dark:bg-gray-700/30"
@@ -104,7 +106,7 @@
               </div>
 
               <div
-                class="flex items-center gap-3 rounded-md bg-gray-50/30 px-3 py-2 dark:bg-gray-800/20"
+                class="flex items-center gap-3 rounded-md bg-gray-50/30 px-3 py-2 dark:bg-gray-800/20 transition-colors duration-300 group-hover:bg-gray-100/50 dark:group-hover:bg-gray-700/30"
               >
                 <div
                   class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100/50 dark:bg-gray-700/30"
@@ -129,7 +131,7 @@
               </div>
 
               <div
-                class="flex items-center gap-3 rounded-md bg-gray-50/30 px-3 py-2 dark:bg-gray-800/20"
+                class="flex items-center gap-3 rounded-md bg-gray-50/30 px-3 py-2 dark:bg-gray-800/20 transition-colors duration-300 group-hover:bg-gray-100/50 dark:group-hover:bg-gray-700/30"
               >
                 <div
                   class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100/50 dark:bg-gray-700/30"
@@ -154,7 +156,7 @@
               </div>
 
               <div
-                class="flex items-center gap-3 rounded-md bg-gray-50/30 px-3 py-2 dark:bg-gray-800/20"
+                class="flex items-center gap-3 rounded-md bg-gray-50/30 px-3 py-2 dark:bg-gray-800/20 transition-colors duration-300 group-hover:bg-gray-100/50 dark:group-hover:bg-gray-700/30"
               >
                 <div
                   class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100/50 dark:bg-gray-700/30"
