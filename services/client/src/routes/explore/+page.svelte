@@ -4,7 +4,6 @@
   import { fade, fly } from 'svelte/transition';
 
   import { skeleton } from '@slink/lib/actions/skeleton';
-  import { EmptyState } from '@slink/lib/components/UI/EmptyState';
   import { usePublicImagesFeed } from '@slink/lib/state/PublicImagesFeed.svelte';
 
   import {
@@ -13,6 +12,7 @@
   } from '@slink/components/Feature/Image';
   import { UserAvatar } from '@slink/components/Feature/User';
   import { LoadMoreButton } from '@slink/components/UI/Action';
+  import { EmptyState } from '@slink/components/UI/EmptyState';
   import { Masonry } from '@slink/components/UI/Layout';
   import { ExploreSkeleton } from '@slink/components/UI/Skeleton';
   import {

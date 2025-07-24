@@ -3,11 +3,11 @@
   import { fade } from 'svelte/transition';
 
   import { skeleton } from '@slink/lib/actions/skeleton';
-  import { EmptyState } from '@slink/lib/components/UI/EmptyState';
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
 
   import { HistoryListView } from '@slink/components/Feature/Image';
   import { LoadMoreButton } from '@slink/components/UI/Action';
+  import { EmptyState } from '@slink/components/UI/EmptyState';
   import { HistorySkeleton } from '@slink/components/UI/Skeleton';
 
   import type { PageData } from './$types';
