@@ -3,6 +3,7 @@ import type { Cookies } from '@sveltejs/kit';
 import { ApiClient } from '@slink/api/Client';
 import { ValidationException } from '@slink/api/Exceptions';
 
+import type { CookieManager } from '@slink/lib/auth/CookieManager';
 import { Session } from '@slink/lib/auth/Session';
 import { parseJwt } from '@slink/lib/auth/parseJwt';
 
@@ -18,6 +19,7 @@ type Credentials = {
 
 type AuthDependencies = {
   cookies: Cookies;
+  cookieManager: CookieManager;
   fetch?: typeof fetch;
 };
 
@@ -28,11 +30,9 @@ export class Auth {
     accessToken,
     refreshToken,
     cookies,
+    cookieManager,
   }: TokenPair & AuthDependencies) {
-    cookies.set('refreshToken', refreshToken, {
-      sameSite: 'strict',
-      path: '/',
-    });
+    cookieManager.setCookie(cookies, 'refreshToken', refreshToken);
 
     const response = await ApiClient.user.getCurrentUser(accessToken);
     const claims = parseJwt<{ roles: string[] }>(accessToken);
@@ -45,7 +45,7 @@ export class Auth {
       roles: claims.roles,
     };
 
-    const sessionId = await Session.create(cookies);
+    const sessionId = await Session.create(cookies, cookieManager);
     await Session.set(sessionId, { user, accessToken });
 
     return user;
@@ -53,31 +53,30 @@ export class Auth {
 
   public static async login(
     { username, password }: Credentials,
-    { cookies, fetch }: AuthDependencies,
+    { cookies, cookieManager, fetch }: AuthDependencies,
   ) {
     if (fetch) ApiClient.use(fetch);
 
     const response = await ApiClient.auth.login(username, password);
     const { access_token, refresh_token } = response;
 
-    await Session.destroy(cookies);
+    await Session.destroy(cookies, cookieManager);
 
     const user = await this._authenticateUser({
       accessToken: access_token,
       refreshToken: refresh_token,
       cookies,
+      cookieManager,
     });
 
-    cookies.delete('createdUserId', {
-      sameSite: 'strict',
-      path: '/',
-    });
+    cookieManager.deleteCookie(cookies, 'createdUserId');
 
     return user;
   }
 
   public static async refresh({
     cookies,
+    cookieManager,
     fetch,
   }: AuthDependencies): Promise<TokenPair | undefined> {
     if (fetch) ApiClient.use(fetch);
@@ -96,6 +95,7 @@ export class Auth {
         accessToken: access_token,
         refreshToken: refresh_token,
         cookies,
+        cookieManager,
       });
 
       return {
@@ -104,14 +104,18 @@ export class Auth {
       };
     } catch (e) {
       if (e instanceof ValidationException) {
-        Auth.logout({ cookies, fetch });
+        Auth.logout({ cookies, cookieManager, fetch });
       }
 
       return;
     }
   }
 
-  public static async logout({ cookies, fetch }: AuthDependencies) {
+  public static async logout({
+    cookies,
+    cookieManager,
+    fetch,
+  }: AuthDependencies) {
     if (fetch) ApiClient.use(fetch);
 
     const refreshToken = cookies.get('refreshToken');
@@ -121,12 +125,9 @@ export class Auth {
       return;
     }
 
-    cookies.delete('refreshToken', {
-      sameSite: 'strict',
-      path: '/',
-    });
+    cookieManager.deleteCookie(cookies, 'refreshToken');
 
-    Session.destroy(cookies);
+    Session.destroy(cookies, cookieManager);
 
     try {
       await ApiClient.auth.logout(refreshToken);

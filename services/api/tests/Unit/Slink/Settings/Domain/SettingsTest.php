@@ -186,6 +186,7 @@ final class SettingsTest extends TestCase {
         return AccessSettings::fromPayload([
             'allowGuestUploads' => false,
             'allowUnauthenticatedAccess' => false,
+            'requireSsl' => false,
         ]);
     }
 

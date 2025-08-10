@@ -1,11 +1,13 @@
 import type { Cookies } from '@sveltejs/kit';
 
 import { Auth } from '@slink/lib/auth/Auth';
+import type { CookieManager } from '@slink/lib/auth/CookieManager';
 
 import { TokenRefreshError, handleApiError } from './ApiError';
 
 type RefreshContext = {
   cookies: Cookies;
+  cookieManager: CookieManager;
   fetch: typeof fetch;
 };
 

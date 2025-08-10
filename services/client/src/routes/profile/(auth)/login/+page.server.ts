@@ -15,15 +15,19 @@ export const load: PageServerLoad = async ({ parent, locals }) => {
     redirect(302, '/profile');
   }
 
-  return locals;
+  const { cookieManager, ...serializableLocals } = locals;
+  return serializableLocals;
 };
 
 export const actions: Actions = {
-  default: async ({ request, cookies, fetch }) => {
+  default: async ({ request, cookies, fetch, locals }) => {
     const { username, password } = await formData(request);
 
     try {
-      await Auth.login({ username, password }, { cookies, fetch });
+      await Auth.login(
+        { username, password },
+        { cookies, cookieManager: locals.cookieManager, fetch },
+      );
     } catch (e) {
       if (e instanceof HttpException) {
         return fail(422, {

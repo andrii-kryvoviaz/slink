@@ -17,6 +17,8 @@ export const ApiConnector = (options: ApiOptions): Handle => {
   const tokenManager = TokenRefreshManager.getInstance();
   return async ({ event, resolve }) => {
     const { url, fetch, cookies, locals } = event;
+    const { globalSettings } = locals;
+
     const session = await Session.get(cookies.get('sessionId'));
 
     const pathRegex = new RegExp(`^(${options.registeredPaths.join('|')})`);
@@ -50,7 +52,7 @@ export const ApiConnector = (options: ApiOptions): Handle => {
       try {
         response = await tokenManager.handleTokenRefresh(
           sessionId,
-          { cookies, fetch },
+          { cookies, cookieManager: locals.cookieManager, fetch },
           makeRequest,
         );
         authRefreshed = true;
@@ -59,6 +61,11 @@ export const ApiConnector = (options: ApiOptions): Handle => {
       }
     }
 
-    return getResponseWithCookies({ response, cookies, authRefreshed });
+    return getResponseWithCookies({
+      response,
+      cookies,
+      requireSsl: globalSettings?.access?.requireSsl ?? false,
+      authRefreshed,
+    });
   };
 };

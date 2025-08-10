@@ -29,6 +29,7 @@ parameters:
   access:
     allowGuestUploads: '%env(bool:IMAGE_ALLOW_GUEST_UPLOADS)%'
     allowUnauthenticatedAccess: '%env(bool:USER_ALLOW_UNAUTHENTICATED_ACCESS)%'
+    requireSsl: '%env(bool:REQUIRE_SSL)%'
 
 when@prod:
   parameters:

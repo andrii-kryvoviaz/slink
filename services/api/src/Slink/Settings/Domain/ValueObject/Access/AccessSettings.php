@@ -11,6 +11,7 @@ final readonly class AccessSettings extends AbstractSettingsValueObject {
   private function __construct(
     private bool $allowGuestUploads = false,
     private bool $allowUnauthenticatedAccess = false,
+    private bool $requireSsl = false,
   ) {}
   
   #[\Override]
@@ -18,6 +19,7 @@ final readonly class AccessSettings extends AbstractSettingsValueObject {
     return [
       'allowGuestUploads' => $this->allowGuestUploads,
       'allowUnauthenticatedAccess' => $this->allowUnauthenticatedAccess,
+      'requireSsl' => $this->requireSsl,
     ];
   }
   
@@ -26,6 +28,7 @@ final readonly class AccessSettings extends AbstractSettingsValueObject {
     return new self(
       $payload['allowGuestUploads'] ?? false,
       $payload['allowUnauthenticatedAccess'] ?? false,
+      $payload['requireSsl'] ?? false,
     );
   }
   
@@ -40,5 +43,9 @@ final readonly class AccessSettings extends AbstractSettingsValueObject {
   
   public function isAllowUnauthenticatedAccess(): bool {
     return $this->allowUnauthenticatedAccess;
+  }
+  
+  public function isRequireSsl(): bool {
+    return $this->requireSsl;
   }
 }

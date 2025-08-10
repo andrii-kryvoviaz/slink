@@ -144,6 +144,15 @@ final class SettingCategoryTest extends TestCase {
                 ],
                 StorageSettings::class
             ],
+            [
+                SettingCategory::Access,
+                [
+                    'allowGuestUploads' => false,
+                    'allowUnauthenticatedAccess' => false,
+                    'requireSsl' => false,
+                ],
+                \Slink\Settings\Domain\ValueObject\Access\AccessSettings::class
+            ],
         ];
     }
 }

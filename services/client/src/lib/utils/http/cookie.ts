@@ -4,25 +4,29 @@ import { browser } from '$app/environment';
 
 interface CookieProvider {
   get: (key: string, defaultValue?: string) => string;
-  set: (key: string, value: string, ttl?: number) => void;
+  set: (key: string, value: string, ttl?: number) => void | Promise<void>;
   remove: (key: string) => void;
 }
 
 class BrowserCookieProvider implements CookieProvider {
+  constructor(private requireSsl: boolean = false) {}
+
   get(key: string, defaultValue: string = ''): string {
     const match = document.cookie.match(new RegExp('(^| )' + key + '=([^;]+)'));
     return match ? match[2] : defaultValue;
   }
 
-  set(key: string, value: string, ttl?: number): void {
+  async set(key: string, value: string, ttl?: number): Promise<void> {
+    const secureFlag = this.requireSsl ? ';Secure' : '';
+
     if (!ttl) {
-      document.cookie = `${key}=${value};path=/;Secure;SameSite=Strict`;
+      document.cookie = `${key}=${value};path=/${secureFlag};SameSite=Strict`;
       return;
     }
 
     const date = new Date();
     date.setTime(date.getTime() + ttl * 1000);
-    document.cookie = `${key}=${value};expires=${date.toUTCString()};path=/;Secure;SameSite=Strict`;
+    document.cookie = `${key}=${value};expires=${date.toUTCString()};path=/${secureFlag};SameSite=Strict`;
   }
 
   remove(key: string): void {
@@ -31,7 +35,11 @@ class BrowserCookieProvider implements CookieProvider {
 }
 
 class Cookie {
-  private _provider: CookieProvider = new BrowserCookieProvider();
+  private _provider: CookieProvider;
+
+  constructor(requireSsl: boolean = false) {
+    this._provider = new BrowserCookieProvider(requireSsl);
+  }
 
   private _warningMessage() {
     console.warn(
@@ -47,13 +55,13 @@ class Cookie {
     return this._provider.get(key, defaultValue);
   }
 
-  set(key: string, value: string, ttl?: number): void {
+  async set(key: string, value: string, ttl?: number): Promise<void> {
     if (!browser) {
       this._warningMessage();
       return;
     }
 
-    this._provider.set(key, value, ttl);
+    await this._provider.set(key, value, ttl);
   }
 
   remove(key: string): void {
@@ -71,20 +79,26 @@ export const cookie = new Cookie();
 type ResponseWithCookiesData = {
   response: Response;
   cookies: Cookies;
+  requireSsl?: boolean;
   authRefreshed?: boolean;
 };
 
-export const getResponseWithCookies = ({
+export const getResponseWithCookies = async ({
   response,
   cookies,
+  requireSsl = false,
   authRefreshed,
-}: ResponseWithCookiesData): Response => {
+}: ResponseWithCookiesData): Promise<Response> => {
   const { body, status } = response;
   const headers = new Headers(response.headers);
 
   cookies.getAll().forEach(({ name, value }) => {
     if (!name.startsWith('settings.')) {
-      let cookieString = `${name}=${value}; Path=/; HttpOnly; Secure; SameSite=Strict;`;
+      let cookieString = `${name}=${value}; Path=/; HttpOnly; SameSite=Strict;`;
+
+      if (requireSsl) {
+        cookieString += ' Secure;';
+      }
 
       if (!value) {
         cookieString = `${cookieString} Max-Age=0;`;

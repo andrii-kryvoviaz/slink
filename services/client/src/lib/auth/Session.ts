@@ -2,6 +2,7 @@ import type { Cookies } from '@sveltejs/kit';
 
 import { browser } from '$app/environment';
 
+import type { CookieManager } from '@slink/lib/auth/CookieManager';
 import { RedisSessionProvider } from '@slink/lib/auth/SessionProvider/RedisSessionProvider';
 import type { SessionProviderInterface } from '@slink/lib/auth/SessionProvider/SessionProviderInterface';
 import type { User } from '@slink/lib/auth/Type/User';
@@ -35,6 +36,7 @@ class SessionManager {
 
   public async create(
     cookies: Cookies,
+    cookieManager: CookieManager,
     ttl: number | null = null,
   ): Promise<string> {
     const existingSessionId = cookies.get('sessionId');
@@ -45,7 +47,7 @@ class SessionManager {
       if (session) {
         return existingSessionId;
       } else {
-        await this.destroy(cookies);
+        await this.destroy(cookies, cookieManager);
       }
     }
 
@@ -53,10 +55,7 @@ class SessionManager {
 
     await this._provider.create(sessionId, ttl);
 
-    cookies.set('sessionId', sessionId, {
-      sameSite: 'strict',
-      path: '/',
-    });
+    cookieManager.setCookie(cookies, 'sessionId', sessionId);
 
     return sessionId;
   }
@@ -94,15 +93,12 @@ class SessionManager {
     await this._provider.set(sessionId, session, ttl);
   }
 
-  public async destroy(cookies: Cookies) {
+  public async destroy(cookies: Cookies, cookieManager: CookieManager) {
     const sessionId = cookies.get('sessionId');
 
     if (!sessionId) return;
 
-    cookies.delete('sessionId', {
-      sameSite: 'strict',
-      path: '/',
-    });
+    cookieManager.deleteCookie(cookies, 'sessionId');
 
     await this._provider.destroy(sessionId);
   }

@@ -19,10 +19,11 @@ export const load: PageServerLoad = async ({ request, parent, locals }) => {
     redirect(302, '/profile/login');
   }
 
-  return locals;
+  const { cookieManager, ...serializableLocals } = locals;
+  return serializableLocals;
 };
 
-const defaultAction: Action = async ({ fetch, request, cookies }) => {
+const defaultAction: Action = async ({ fetch, request, cookies, locals }) => {
   const { username, email, password, confirm } = await formData(request);
 
   let redirectUrl: string | null = '/profile/login';
@@ -37,10 +38,7 @@ const defaultAction: Action = async ({ fetch, request, cookies }) => {
 
     const { id, headers } = response;
 
-    cookies.set('createdUserId', id, {
-      sameSite: 'strict',
-      path: '/',
-    });
+    locals.cookieManager.setCookie(cookies, 'createdUserId', id);
 
     redirectUrl = headers.get('location');
   } catch (e) {

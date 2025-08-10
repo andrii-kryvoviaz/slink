@@ -6,6 +6,7 @@ import { sequence } from '@sveltejs/kit/hooks';
 import { ApiConnector } from '@slink/api/ApiConnector';
 import { ApiClient } from '@slink/api/Client';
 
+import { CookieManager } from '@slink/lib/auth/CookieManager';
 import { handleCsrf } from '@slink/lib/security/handleCsrf';
 import { Theme, setCookieSettingsOnLocals } from '@slink/lib/settings';
 
@@ -46,6 +47,12 @@ const applyClientTheme: Handle = async ({ event, resolve }) => {
   });
 };
 
+const initializeCookieManager: Handle = async ({ event, resolve }) => {
+  const requireSsl = env.REQUIRE_SSL?.toLowerCase() === 'true' || false;
+  event.locals.cookieManager = new CookieManager(requireSsl);
+  return resolve(event);
+};
+
 const setGlobalSettingsOnLocals: Handle = async ({ event, resolve }) => {
   try {
     const { fetch } = event;
@@ -63,8 +70,9 @@ export const handle = sequence(
   handleWellKnownRequests,
   handleCsrf,
   filterResponseHeaders,
+  initializeCookieManager,
   injectApiHandling,
-  setCookieSettingsOnLocals,
   setGlobalSettingsOnLocals,
+  setCookieSettingsOnLocals,
   applyClientTheme,
 );

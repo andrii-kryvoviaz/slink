@@ -14,6 +14,9 @@ final readonly class PublicAccessSettings {
     
     #[Groups(['public'])]
     public bool $allowUnauthenticatedAccess,
+
+    #[Groups(['public'])]
+    public bool $requireSsl = false,
   ) {}
   
   /**
@@ -22,7 +25,8 @@ final readonly class PublicAccessSettings {
   public static function fromArray(array $settings): self {
     return new self(
       $settings['allowGuestUploads'] ?? false,
-      $settings['allowUnauthenticatedAccess'] ?? false
+      $settings['allowUnauthenticatedAccess'] ?? false,
+      $settings['requireSsl'] ?? false
     );
   }
 }
