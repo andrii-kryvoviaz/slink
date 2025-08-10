@@ -28,7 +28,7 @@
 </script>
 
 <div class={bannerClasses}>
-  <div class="flex items-center justify-between">
+  <div class="flex items-center justify-between flex-wrap gap-y-3">
     <div class="flex items-center gap-3">
       {#if icon}
         {@render icon()}
