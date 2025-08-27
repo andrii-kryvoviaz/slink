@@ -33,6 +33,7 @@ WORKDIR /source
 COPY services/api/bin ./bin
 COPY services/api/config ./config
 COPY services/api/public ./public
+COPY services/api/shared ./shared
 COPY services/api/src ./src
 COPY services/api/composer.json ./
 ### End of PHP source ###

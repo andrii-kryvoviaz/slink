@@ -64,7 +64,10 @@
         "psr-4": {
             "Slink\\": "src/Slink",
             "UI\\": "src/UI"
-        }
+        },
+        "files": [
+            "shared/utils.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

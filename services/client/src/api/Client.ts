@@ -5,6 +5,7 @@ import {
   BadRequestException,
   ForbiddenException,
   NotFoundException,
+  PayloadTooLargeException,
   UnauthorizedException,
   ValidationException,
 } from '@slink/api/Exceptions';
@@ -53,6 +54,7 @@ type EventType =
   | 'unauthorized'
   | 'forbidden'
   | 'not-found'
+  | 'payload-too-large'
   | 'bad-request'
   | 'validation'
   | 'error';
@@ -162,6 +164,16 @@ export class Client {
 
       if (!handled) {
         throw new NotFoundException();
+      }
+    }
+
+    if (response.status === 413) {
+      const { handled } = this.emit({
+        event: 'payload-too-large',
+      });
+
+      if (!handled) {
+        throw new PayloadTooLargeException();
       }
     }
 

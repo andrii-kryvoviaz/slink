@@ -4,10 +4,14 @@
 use Runtime\Swoole\Runtime;
 use Slink\Shared\Infrastructure\Kernel;
 
+require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
+
+
 if (filter_var($_ENV['SWOOLE_ENABLED'],FILTER_VALIDATE_BOOLEAN)) {
   $_SERVER['APP_RUNTIME'] = Runtime::class;
   
-  $packageMaxLength = (int) ($_ENV['UPLOAD_MAX_FILESIZE_IN_BYTES'] ?? 1024 * 1024 * 20);
+  $packageMaxLength = (int) ($_ENV['UPLOAD_MAX_FILESIZE_IN_BYTES'] ?? 
+    (isset($_ENV['IMAGE_MAX_SIZE']) ? convertSizeToBytes($_ENV['IMAGE_MAX_SIZE']) : 1024 * 1024 * 20));
 
   $_SERVER['APP_RUNTIME_OPTIONS'] = [
     'host' => '0.0.0.0',
@@ -20,8 +24,6 @@ if (filter_var($_ENV['SWOOLE_ENABLED'],FILTER_VALIDATE_BOOLEAN)) {
     ],
   ];
 }
-
-require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
 
 return function (array $context) {
     return new Kernel($context['APP_ENV'], (bool) $context['APP_DEBUG']);
