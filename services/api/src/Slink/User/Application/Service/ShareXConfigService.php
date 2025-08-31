@@ -25,7 +25,8 @@ final readonly class ShareXConfigService {
       'RequestMethod' => 'POST',
       'RequestURL' => "{$url}/api/external/upload",
       'Headers' => [
-        'Authorization' => "Bearer {$apiKey}"
+        'Authorization' => "Bearer {$apiKey}",
+        'Origin' => $url
       ],
       'Body' => 'MultipartFormData',
       'FileFormName' => 'image',
