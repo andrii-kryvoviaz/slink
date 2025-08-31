@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { page } from '$app/state';
+  import { Button } from '@slink/legacy/UI/Action';
 
-  import { Button } from '@slink/components/UI/Action';
+  import { page } from '$app/state';
 </script>
 
 <div class="flex h-full w-full flex-col items-center justify-center">

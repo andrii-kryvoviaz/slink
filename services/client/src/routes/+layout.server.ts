@@ -1,5 +1,5 @@
-import { createAppSidebarItems } from '@slink/components/UI/Navigation/AppSidebar/AppSidebar.config';
-import type { AppSidebarGroup } from '@slink/components/UI/Navigation/AppSidebar/AppSidebar.types';
+import type { AppSidebarGroup } from '@slink/feature/Navigation/AppSidebar/AppSidebar.types';
+import { createAppSidebarItems } from '@slink/feature/Navigation/Sidebar/config';
 
 import type { LayoutServerLoad } from './$types';
 
@@ -13,24 +13,24 @@ export const load: LayoutServerLoad = async ({ locals, request }) => {
     return requiredRoles.some((role) => user.roles?.includes(role));
   };
 
-  const sidebarGroups: AppSidebarGroup[] = user
-    ? createAppSidebarItems({
-        showAdmin: isAuthorized(['ROLE_ADMIN']),
-        showSystemItems: true,
-      })
-        .map((group) => ({
-          ...group,
-          items: group.items.filter(
-            (item) => !item.hidden && (!item.roles || isAuthorized(item.roles)),
-          ),
-        }))
-        .filter(
-          (group) =>
-            !group.hidden &&
-            group.items.length > 0 &&
-            (!group.roles || isAuthorized(group.roles)),
-        )
-    : [];
+  const sidebarGroups: AppSidebarGroup[] = createAppSidebarItems({
+    showAdmin: user ? isAuthorized(['ROLE_ADMIN']) : false,
+    showSystemItems: true,
+    showUploadItem: !user && !!globalSettings?.access?.allowGuestUploads,
+  })
+    .map((group) => ({
+      ...group,
+      items: group.items.filter(
+        (item) =>
+          !item.hidden && (!item.roles || (user && isAuthorized(item.roles))),
+      ),
+    }))
+    .filter(
+      (group) =>
+        !group.hidden &&
+        group.items.length > 0 &&
+        (!group.roles || (user && isAuthorized(group.roles))),
+    );
 
   return {
     settings,

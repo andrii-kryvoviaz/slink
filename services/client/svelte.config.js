@@ -22,7 +22,9 @@ const config = {
       '@slink/utils': './src/lib/utils',
       '@slink/components': './src/components',
       '@slink/store': './src/lib/store',
+      '@slink/ui': './src/ui',
       '@slink': './src',
+      '@slink/*': './src/*',
     },
   },
 };

@@ -1,0 +1,67 @@
+<script lang="ts">
+  import { Card } from '@slink/feature/Layout/Card';
+  import { Chart, type ChartOptions } from '@slink/feature/Layout/Chart';
+  import { RefreshButton } from '@slink/legacy/UI/Action';
+  import { onMount } from 'svelte';
+
+  import { ApiClient } from '@slink/api/Client';
+  import { ReactiveState } from '@slink/api/ReactiveState';
+  import type { UserAnalyticsData } from '@slink/api/Response';
+
+  const {
+    run,
+    data: response,
+    isLoading,
+  } = ReactiveState<UserAnalyticsData>(
+    () => {
+      return ApiClient.analytics.getUserAnalytics();
+    },
+    { minExecutionTime: 1000 },
+  );
+
+  let options: ChartOptions = $state({
+    labelFormatter: function (value) {
+      return `${value} Users`;
+    },
+    chart: {
+      type: 'radialBar',
+      height: '95%',
+    },
+    colors: ['#4B8EDD', '#7029FF', '#4B5563'],
+    series: [0],
+    labels: ['No Data'],
+  });
+
+  onMount(() => {
+    run();
+
+    return response.subscribe((item) => {
+      if (!item) {
+        return;
+      }
+
+      const labels = Object.keys(item).map((key) => {
+        return key.capitalizeFirstLetter();
+      });
+
+      const series = Object.values(item).filter((value) => {
+        return value > 0;
+      });
+
+      options = {
+        ...options,
+        series,
+        labels,
+      };
+    });
+  });
+</script>
+
+<Card class="h-full" variant="enhanced" rounded="xl" shadow="lg">
+  <div class="flex items-center justify-between">
+    <p class="text-lg font-semibold text-slate-900 dark:text-white">Users</p>
+    <RefreshButton size="sm" loading={$isLoading} onclick={run} />
+  </div>
+
+  <Chart {options} />
+</Card>

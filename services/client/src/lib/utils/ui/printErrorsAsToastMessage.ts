@@ -1,6 +1,6 @@
 import { HttpException } from '@slink/api/Exceptions';
 
-import { toast } from '@slink/utils/ui/toast.svelte';
+import { toast } from '@slink/utils/ui/toast-sonner.svelte';
 
 export function printErrorsAsToastMessage(error: Error) {
   if (error instanceof HttpException) {

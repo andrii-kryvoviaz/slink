@@ -1,4 +1,12 @@
 <script lang="ts">
+  import {
+    Banner,
+    BannerAction,
+    BannerContent,
+    BannerIcon,
+  } from '@slink/feature/Layout';
+  import { Button, type ButtonVariant } from '@slink/legacy/UI/Action';
+  import { Input } from '@slink/legacy/UI/Form';
   import { untrack } from 'svelte';
 
   import { enhance } from '$app/forms';
@@ -10,16 +18,7 @@
   import { settings } from '@slink/lib/settings';
 
   import { withLoadingState } from '@slink/utils/form/withLoadingState';
-  import { toast } from '@slink/utils/ui/toast.svelte';
-
-  import { Button, type ButtonVariant } from '@slink/components/UI/Action';
-  import {
-    Banner,
-    BannerAction,
-    BannerContent,
-    BannerIcon,
-  } from '@slink/components/UI/Banner';
-  import { Input } from '@slink/components/UI/Form';
+  import { toast } from '@slink/utils/ui/toast-sonner.svelte';
 
   import type { ActionData, PageData } from './$types';
 

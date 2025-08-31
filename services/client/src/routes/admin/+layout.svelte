@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Icon from '@iconify/svelte';
+  import { TabMenu, TabMenuItem } from '@slink/feature/Navigation';
 
-  import { TabMenu, TabMenuItem } from '@slink/components/UI/Navigation';
+  import Icon from '@iconify/svelte';
 
   interface Props {
     children?: import('svelte').Snippet;

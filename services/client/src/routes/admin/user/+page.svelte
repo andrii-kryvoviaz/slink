@@ -1,11 +1,11 @@
 <script lang="ts">
+  import { UserCard } from '@slink/feature/User';
+  import { LoadMoreButton } from '@slink/legacy/UI/Action';
+
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
   import { useUserListFeed } from '@slink/lib/state/UserListFeed.svelte';
-
-  import { UserCard } from '@slink/components/Feature/User';
-  import { LoadMoreButton } from '@slink/components/UI/Action';
 
   import type { PageServerData } from './$types';
 

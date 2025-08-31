@@ -1,4 +1,11 @@
 <script lang="ts">
+  import { ThemeSwitch } from '@slink/feature/Layout';
+  import { Navbar } from '@slink/feature/Navigation';
+  import AppSidebar from '@slink/feature/Navigation/Sidebar/AppSidebar.svelte';
+  import { ScrollArea } from '@slink/ui/components/scroll-area/index.js';
+  import { Separator } from '@slink/ui/components/separator/index.js';
+  import * as Sidebar from '@slink/ui/components/sidebar/index.js';
+  import { Toaster } from '@slink/ui/components/sonner/index.js';
   import { Tooltip } from 'bits-ui';
 
   import '@slink/app.css';
@@ -6,12 +13,8 @@
   import { theme } from '@slink/lib/actions/theme';
   import { settings } from '@slink/lib/settings';
   import { useGlobalSettings } from '@slink/lib/state/GlobalSettings.svelte';
+  // ToDO: implement sidebar state momorization
   import { initResponsiveStore } from '@slink/lib/stores/responsive.svelte';
-
-  import { ThemeSwitch } from '@slink/components/UI/Action';
-  import { AppSidebar, Navbar } from '@slink/components/UI/Navigation';
-  import { ScrollArea } from '@slink/components/UI/ScrollArea';
-  import { ToastManager } from '@slink/components/UI/Toast';
 
   let { data, children } = $props();
   let user = $derived(data.user);
@@ -20,53 +23,80 @@
   const currentTheme = settings.get('theme', data.settings.theme);
   const { isDark } = currentTheme;
 
-  let showSidebar = $derived(!!user);
+  let showSidebar = $derived(!!user || sidebarGroups.length > 0);
+
+  const sidebarSettings = settings.get('sidebar', data.settings.sidebar || {});
+  const { expanded } = sidebarSettings;
+
+  let sidebarOpen = $state($expanded ?? true);
+
+  $effect(() => {
+    if ($expanded !== sidebarOpen) {
+      settings.set('sidebar', { expanded: sidebarOpen });
+    }
+  });
 
   initResponsiveStore();
 </script>
 
 <Tooltip.Provider delayDuration={0} disableHoverableContent={true}>
   <div class="relative flex h-screen" use:theme={$currentTheme}>
-    {#if showSidebar}
-      <AppSidebar
-        user={user || undefined}
-        groups={sidebarGroups}
-        variant="default"
-        defaultExpanded={data.settings.sidebar?.expanded ?? true}
-      />
-    {/if}
+    <Sidebar.Provider bind:open={sidebarOpen}>
+      {#if showSidebar}
+        <AppSidebar
+          config={{
+            user: user,
+            groups: sidebarGroups,
+            showAdmin: user?.roles?.includes('ROLE_ADMIN') ?? false,
+            showSystemItems: true,
+            showUploadItem:
+              !!user || !!data.globalSettings?.access?.allowGuestUploads,
+          }}
+        />
+      {/if}
+      <Sidebar.Inset>
+        <header
+          class="group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear border-b border-bc-header"
+        >
+          <div class="flex items-center px-4">
+            {#if showSidebar}
+              <Sidebar.Trigger />
+              <Separator
+                orientation="vertical"
+                class="mx-2 data-[orientation=vertical]:h-4"
+              />
+            {/if}
+          </div>
+          <Navbar
+            user={user || undefined}
+            showLogo={!showSidebar}
+            showLoginButton={!user}
+            showUploadButton={!!user ||
+              !!data.globalSettings?.access?.allowGuestUploads}
+          >
+            {#snippet themeSwitch()}
+              <ThemeSwitch
+                checked={$isDark}
+                variant="default"
+                animation="none"
+                on={{ change: (theme) => settings.set('theme', theme) }}
+              />
+            {/snippet}
+          </Navbar>
+        </header>
+        <div class="flex flex-1 flex-col gap-4 pt-0 min-h-0">
+          <ScrollArea
+            class="flex-1 h-full p-4"
+            type="scroll"
+            orientation="vertical"
+            scrollbarYClasses="w-2"
+          >
+            {@render children?.()}
+          </ScrollArea>
+        </div>
+      </Sidebar.Inset>
+    </Sidebar.Provider>
 
-    <div class="flex flex-col flex-1 min-w-0">
-      <Navbar
-        user={user || undefined}
-        showLogo={!showSidebar}
-        showLoginButton={!user}
-        showUploadButton={!!user ||
-          !!data.globalSettings?.access?.allowGuestUploads}
-        useFlexLayout={true}
-      >
-        {#snippet themeSwitch()}
-          <ThemeSwitch
-            checked={$isDark}
-            variant="default"
-            animation="none"
-            on={{ change: (theme) => settings.set('theme', theme) }}
-          />
-        {/snippet}
-      </Navbar>
-
-      <ScrollArea
-        class="flex-1"
-        viewportClass="pl-[max(env(safe-area-inset-left),0px)]"
-        variant="default"
-        type="scroll"
-        hideDelay={1000}
-        scrollbarSize="md"
-      >
-        {@render children?.()}
-      </ScrollArea>
-    </div>
-
-    <ToastManager />
+    <Toaster />
   </div>
 </Tooltip.Provider>

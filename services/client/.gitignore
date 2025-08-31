@@ -13,4 +13,4 @@ vite.config.ts.timestamp-*
 
 #vite-svelte-imports plugin
 src/api/**/index.ts
-src/components/**/index.ts
+src/legacy/**/index.ts

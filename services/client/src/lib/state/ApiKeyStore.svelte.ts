@@ -10,7 +10,7 @@ import { AbstractHttpState } from '@slink/lib/state/core/AbstractHttpState.svelt
 import type { RequestStateOptions } from '@slink/lib/state/core/AbstractHttpState.svelte';
 import { useState } from '@slink/lib/state/core/ContextAwareState';
 
-import { toast } from '@slink/utils/ui/toast.svelte';
+import { toast } from '@slink/utils/ui/toast-sonner.svelte';
 
 class ApiKeyStore extends AbstractHttpState<ApiKeyResponse[]> {
   private _apiKeys: ApiKeyResponse[] = $state([]);

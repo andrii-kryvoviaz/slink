@@ -1,4 +1,10 @@
 <script lang="ts">
+  import { Loader } from '@slink/feature/Layout';
+  import { UserAvatar } from '@slink/feature/User';
+  import { ApiKeyManager } from '@slink/feature/User';
+  import { Button, type ButtonVariant } from '@slink/legacy/UI/Action';
+  import { Input } from '@slink/legacy/UI/Form';
+
   import { enhance } from '$app/forms';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
@@ -8,13 +14,7 @@
   import { settings } from '@slink/lib/settings';
 
   import { withLoadingState } from '@slink/utils/form/withLoadingState';
-  import { toast } from '@slink/utils/ui/toast.svelte';
-
-  import { UserAvatar } from '@slink/components/Feature/User';
-  import { ApiKeyManager } from '@slink/components/Feature/User';
-  import { Button, type ButtonVariant } from '@slink/components/UI/Action';
-  import { Input } from '@slink/components/UI/Form';
-  import { Loader } from '@slink/components/UI/Loader';
+  import { toast } from '@slink/utils/ui/toast-sonner.svelte';
 
   import type { PageServerData } from './$types';
 
@@ -256,12 +256,6 @@
               </Button>
             </div>
           </form>
-        </div>
-
-        <div
-          class="rounded-2xl bg-white p-6 shadow-sm dark:bg-slate-800/50 border border-slate-200/50 dark:border-slate-700/50"
-        >
-          <ApiKeyManager {user} />
         </div>
       </div>
     </div>

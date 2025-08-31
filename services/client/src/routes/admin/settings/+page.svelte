@@ -1,4 +1,15 @@
 <script lang="ts">
+  import { SettingItem, SettingsPane } from '@slink/feature/Settings';
+  import { Notice } from '@slink/feature/Text';
+  import { Button } from '@slink/legacy/UI/Action';
+  import {
+    FileSizeInput,
+    Input,
+    NumberInput,
+    Select,
+  } from '@slink/legacy/UI/Form';
+  import { Switch } from '@slink/ui/components/switch';
+
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { EmptyResponse } from '@slink/api/Response';
@@ -8,20 +19,6 @@
     SettingCategoryData,
   } from '@slink/lib/settings/Type/GlobalSettings';
   import { useGlobalSettings } from '@slink/lib/state/GlobalSettings.svelte';
-
-  import {
-    SettingItem,
-    SettingsPane,
-  } from '@slink/components/Feature/Settings';
-  import { Button } from '@slink/components/UI/Action';
-  import {
-    FileSizeInput,
-    Input,
-    NumberInput,
-    Select,
-    Toggle,
-  } from '@slink/components/UI/Form';
-  import { Notice } from '@slink/components/UI/Text';
 
   import type { PageServerData } from './$types';
 
@@ -128,7 +125,7 @@
             Automatically remove metadata from uploaded images for privacy
           {/snippet}
           <div class="flex justify-end">
-            <Toggle
+            <Switch
               name="imageStripExifMetadata"
               bind:checked={settings.image.stripExifMetadata}
             />
@@ -149,7 +146,7 @@
             visibility cannot be changed
           {/snippet}
           <div class="flex justify-end">
-            <Toggle
+            <Switch
               name="imageAllowOnlyPublicImages"
               bind:checked={settings.image.allowOnlyPublicImages}
             />
@@ -184,7 +181,7 @@
             message but cannot browse uploaded images
           {/snippet}
           <div class="flex justify-end">
-            <Toggle
+            <Switch
               name="accessAllowGuestUploads"
               bind:checked={settings.access.allowGuestUploads}
             />
@@ -204,7 +201,7 @@
             Allow unauthenticated users to view and browse images
           {/snippet}
           <div class="flex justify-end">
-            <Toggle
+            <Switch
               name="accessAllowUnauthenticatedAccess"
               bind:checked={settings.access.allowUnauthenticatedAccess}
             />
@@ -481,7 +478,7 @@
             Allow new users to create accounts
           {/snippet}
           <div class="flex justify-end">
-            <Toggle
+            <Switch
               name="allowRegistration"
               bind:checked={settings.user.allowRegistration}
             />
@@ -504,7 +501,7 @@
                 the application
               {/snippet}
               <div class="flex justify-end">
-                <Toggle
+                <Switch
                   name="approvalRequired"
                   bind:checked={settings.user.approvalRequired}
                 />
