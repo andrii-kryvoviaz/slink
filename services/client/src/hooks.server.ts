@@ -7,7 +7,6 @@ import { ApiConnector } from '@slink/api/ApiConnector';
 import { ApiClient } from '@slink/api/Client';
 
 import { CookieManager } from '@slink/lib/auth/CookieManager';
-import { handleCsrf } from '@slink/lib/security/handleCsrf';
 import { Theme, setCookieSettingsOnLocals } from '@slink/lib/settings';
 
 const handleWellKnownRequests: Handle = async ({ event, resolve }) => {
@@ -27,7 +26,7 @@ const handleWellKnownRequests: Handle = async ({ event, resolve }) => {
 const injectApiHandling: Handle = ApiConnector({
   urlPrefix: env.API_PREFIX,
   baseUrl: env.API_URL,
-  registeredPaths: env.PROXY_PREFIXES.split(';'),
+  registeredPaths: env.PROXY_PREFIXES?.split(';') || [],
 });
 
 const filterResponseHeaders: Handle = async ({ event, resolve }) => {
@@ -68,7 +67,6 @@ const setGlobalSettingsOnLocals: Handle = async ({ event, resolve }) => {
 
 export const handle = sequence(
   handleWellKnownRequests,
-  handleCsrf,
   filterResponseHeaders,
   initializeCookieManager,
   injectApiHandling,

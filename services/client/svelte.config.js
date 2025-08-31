@@ -15,7 +15,7 @@ const config = {
       out: 'build',
     }),
     csrf: {
-      checkOrigin: false,
+      trustedOrigins: [process.env.ORIGIN ?? 'http://localhost:3000'],
     },
     alias: {
       '@slink/api': './src/api',
