@@ -22,7 +22,7 @@
   const createUser = (userConfig?: any) => ({
     displayName: userConfig?.displayName || userConfig?.name || 'User',
     email: userConfig?.email || '',
-    avatar: userConfig?.avatar || '/avatars/default.jpg',
+    avatar: userConfig?.avatar,
   });
 
   const user = $derived(createUser(config.user));
