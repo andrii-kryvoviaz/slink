@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Tooltip } from '@slink/legacy/UI/Tooltip';
+  import { Tooltip, TooltipProvider } from '@slink/ui/components/tooltip';
   import { AspectRatio } from 'bits-ui';
 
   import { bytesToSize } from '$lib/utils/bytesConverter';
@@ -82,108 +82,111 @@
   });
 </script>
 
-<AspectRatio.Root
-  ratio={keepAspectRatio ? aspectRatio : 1}
-  class={cn(
-    'group relative flex items-center justify-center overflow-hidden border-slate-500/10 bg-white/0 w-full',
-    className,
-    rounded && 'rounded-md',
-    (showMetadata || showOpenInNewTab) && 'border',
-  )}
->
-  <img
-    {src}
-    {alt}
-    onload={(event) => {
-      const img = event.target as HTMLImageElement;
-      updateAspectRatioFromImage(img);
-      isLoaded = true;
-    }}
+<TooltipProvider delayDuration={300}>
+  <AspectRatio.Root
+    ratio={keepAspectRatio ? aspectRatio : 1}
     class={cn(
-      'transition-opacity border-none',
-      (shouldStretch() || keepAspectRatio) && 'w-full h-full',
-      keepAspectRatio && 'object-contain',
-      !keepAspectRatio && 'object-fill',
-      !isLoaded && 'hidden',
+      'group relative flex items-center justify-center overflow-hidden border-slate-500/10 bg-white/0 w-full',
+      className,
+      rounded && 'rounded-md',
+      (showMetadata || showOpenInNewTab) && 'border',
     )}
-  />
+  >
+    <img
+      {src}
+      {alt}
+      onload={(event) => {
+        const img = event.target as HTMLImageElement;
+        updateAspectRatioFromImage(img);
+        isLoaded = true;
+      }}
+      class={cn(
+        'transition-opacity border-none',
+        (shouldStretch() || keepAspectRatio) && 'w-full h-full',
+        keepAspectRatio && 'object-contain',
+        !keepAspectRatio && 'object-fill',
+        !isLoaded && 'hidden',
+      )}
+    />
 
-  {#if !isLoaded}
-    <div
-      class="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-800 animate-pulse"
-    >
-      <svg
-        width="48"
-        height="48"
-        class="text-gray-400"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
-        fill="currentColor"
-        viewBox="0 0 640 512"
+    {#if !isLoaded}
+      <div
+        class="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-800 animate-pulse"
       >
-        <path
-          d="M480 80C480 35.82 515.8 0 560 0C604.2 0 640 35.82 640 80C640 124.2 604.2 160 560 160C515.8 160 480 124.2 480 80zM0 456.1C0 445.6 2.964 435.3 8.551 426.4L225.3 81.01C231.9 70.42 243.5 64 256 64C268.5 64 280.1 70.42 286.8 81.01L412.7 281.7L460.9 202.7C464.1 196.1 472.2 192 480 192C487.8 192 495 196.1 499.1 202.7L631.1 419.1C636.9 428.6 640 439.7 640 450.9C640 484.6 612.6 512 578.9 512H55.91C25.03 512 .0006 486.1 .0006 456.1L0 456.1z"
-        />
-      </svg>
-    </div>
-  {/if}
-
-  {#if isLoaded}
-    {#if showOpenInNewTab}
-      <a
-        href={originalImage || src}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="group/link absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-lg bg-black/20 backdrop-blur-sm opacity-0 transition-all duration-200 group-hover:opacity-100 hover:bg-black/40 hover:scale-110"
-      >
-        <Tooltip size="xs" side="left" sideOffset={12}>
-          {#snippet trigger()}
-            <Icon
-              icon="heroicons:arrow-top-right-on-square"
-              class="h-4 w-4 text-white/80 transition-colors duration-200 group-hover/link:text-white"
-            />
-          {/snippet}
-          Open in new tab
-        </Tooltip>
-      </a>
+        <svg
+          width="48"
+          height="48"
+          class="text-gray-400"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+          fill="currentColor"
+          viewBox="0 0 640 512"
+        >
+          <path
+            d="M480 80C480 35.82 515.8 0 560 0C604.2 0 640 35.82 640 80C640 124.2 604.2 160 560 160C515.8 160 480 124.2 480 80zM0 456.1C0 445.6 2.964 435.3 8.551 426.4L225.3 81.01C231.9 70.42 243.5 64 256 64C268.5 64 280.1 70.42 286.8 81.01L412.7 281.7L460.9 202.7C464.1 196.1 472.2 192 480 192C487.8 192 495 196.1 499.1 202.7L631.1 419.1C636.9 428.6 640 439.7 640 450.9C640 484.6 612.6 512 578.9 512H55.91C25.03 512 .0006 486.1 .0006 456.1L0 456.1z"
+          />
+        </svg>
+      </div>
     {/if}
 
-    {#if metadata && showMetadata}
-      <div
-        class="absolute bottom-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2 bg-black/40 dark:bg-black/60 backdrop-blur-md rounded-lg px-3 py-2 text-xs text-white/90"
-        in:fade={{ duration: 200, delay: 100 }}
-      >
-        <div class="flex flex-wrap items-center gap-2 min-w-0">
-          <div class="flex items-center gap-1 whitespace-nowrap">
-            <Icon
-              icon="heroicons:photo"
-              class="w-3 h-3 text-white/70 flex-shrink-0"
-            />
-            <span class="font-medium">{metadata.width}×{metadata.height}</span>
-          </div>
-          {#if metadata.mimeType}
+    {#if isLoaded}
+      {#if showOpenInNewTab}
+        <a
+          href={originalImage || src}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group/link absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-lg bg-black/20 backdrop-blur-sm opacity-0 transition-all duration-200 group-hover:opacity-100 hover:bg-black/40 hover:scale-110"
+        >
+          <Tooltip size="xs" side="left" sideOffset={12}>
+            {#snippet trigger()}
+              <Icon
+                icon="heroicons:arrow-top-right-on-square"
+                class="h-4 w-4 text-white/80 transition-colors duration-200 group-hover/link:text-white"
+              />
+            {/snippet}
+            Open in new tab
+          </Tooltip>
+        </a>
+      {/if}
+
+      {#if metadata && showMetadata}
+        <div
+          class="absolute bottom-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2 bg-black/40 dark:bg-black/60 backdrop-blur-md rounded-lg px-3 py-2 text-xs text-white/90"
+          in:fade={{ duration: 200, delay: 100 }}
+        >
+          <div class="flex flex-wrap items-center gap-2 min-w-0">
             <div class="flex items-center gap-1 whitespace-nowrap">
               <Icon
-                icon="heroicons:document"
+                icon="heroicons:photo"
                 class="w-3 h-3 text-white/70 flex-shrink-0"
               />
-              <span class="uppercase font-medium"
-                >{metadata.mimeType.split('/')[1] || metadata.mimeType}</span
+              <span class="font-medium">{metadata.width}×{metadata.height}</span
               >
+            </div>
+            {#if metadata.mimeType}
+              <div class="flex items-center gap-1 whitespace-nowrap">
+                <Icon
+                  icon="heroicons:document"
+                  class="w-3 h-3 text-white/70 flex-shrink-0"
+                />
+                <span class="uppercase font-medium"
+                  >{metadata.mimeType.split('/')[1] || metadata.mimeType}</span
+                >
+              </div>
+            {/if}
+          </div>
+
+          {#if metadata.size}
+            <div class="flex items-center gap-1 whitespace-nowrap">
+              <Icon
+                icon="heroicons:arrow-down-tray"
+                class="w-3 h-3 text-white/70 flex-shrink-0"
+              />
+              <span class="font-medium">{bytesToSize(metadata.size)}</span>
             </div>
           {/if}
         </div>
-
-        {#if metadata.size}
-          <div class="flex items-center gap-1 whitespace-nowrap">
-            <Icon
-              icon="heroicons:arrow-down-tray"
-              class="w-3 h-3 text-white/70 flex-shrink-0"
-            />
-            <span class="font-medium">{bytesToSize(metadata.size)}</span>
-          </div>
-        {/if}
-      </div>
+      {/if}
     {/if}
-  {/if}
-</AspectRatio.Root>
+  </AspectRatio.Root>
+</TooltipProvider>

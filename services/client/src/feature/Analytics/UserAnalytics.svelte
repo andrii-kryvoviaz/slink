@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { Card } from '@slink/feature/Layout/Card';
-  import { Chart, type ChartOptions } from '@slink/feature/Layout/Chart';
+  import { Card } from '@slink/feature/Layout';
+  import { Chart, type ChartOptions } from '@slink/feature/Layout';
   import { RefreshButton } from '@slink/legacy/UI/Action';
   import { onMount } from 'svelte';
 

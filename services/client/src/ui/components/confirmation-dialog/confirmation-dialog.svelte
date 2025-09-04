@@ -5,7 +5,8 @@
 
   import Icon from '@iconify/svelte';
   import { quartOut } from 'svelte/easing';
-  import { type Readable, readable } from 'svelte/store';
+  import { readable } from 'svelte/store';
+  import type { Readable } from 'svelte/store';
   import { scale } from 'svelte/transition';
 
   export type ConfirmationVariant = 'danger' | 'warning' | 'info' | 'success';

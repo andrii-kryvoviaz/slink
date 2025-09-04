@@ -1,47 +1,65 @@
 <script lang="ts">
-	import { Tooltip as TooltipPrimitive } from "bits-ui";
-	import { cn } from "@slink/utils/ui/index.js";
+  import { Tooltip as TooltipPrimitive } from 'bits-ui';
 
-	let {
-		ref = $bindable(null),
-		class: className,
-		sideOffset = 0,
-		side = "top",
-		children,
-		arrowClasses,
-		...restProps
-	}: TooltipPrimitive.ContentProps & {
-		arrowClasses?: string;
-	} = $props();
+  import { cn } from '@slink/utils/ui/index.js';
+
+  import { tooltipArrowVariants, tooltipVariants } from './tooltip.theme.js';
+  import type {
+    TooltipRounded,
+    TooltipSize,
+    TooltipVariant,
+    TooltipWidth,
+  } from './tooltip.theme.js';
+
+  let {
+    ref = $bindable(null),
+    class: className,
+    sideOffset = 4,
+    side = 'top',
+    children,
+    arrowClasses,
+    variant = 'default',
+    size = 'sm',
+    rounded = 'md',
+    width = 'auto',
+    withArrow = true,
+    ...restProps
+  }: TooltipPrimitive.ContentProps & {
+    arrowClasses?: string;
+    variant?: TooltipVariant;
+    size?: TooltipSize;
+    rounded?: TooltipRounded;
+    width?: TooltipWidth;
+    withArrow?: boolean;
+  } = $props();
 </script>
 
 <TooltipPrimitive.Portal>
-	<TooltipPrimitive.Content
-		bind:ref
-		data-slot="tooltip-content"
-		{sideOffset}
-		{side}
-		class={cn(
-			"bg-primary text-primary-foreground animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 origin-(--bits-tooltip-content-transform-origin) z-50 w-fit text-balance rounded-md px-3 py-1.5 text-xs",
-			className
-		)}
-		{...restProps}
-	>
-		{@render children?.()}
-		<TooltipPrimitive.Arrow>
-			{#snippet child({ props })}
-				<div
-					class={cn(
-						"bg-primary z-50 size-2.5 rotate-45 rounded-[2px]",
-						"data-[side=top]:translate-x-1/2 data-[side=top]:translate-y-[calc(-50%_+_2px)]",
-						"data-[side=bottom]:-translate-x-1/2 data-[side=bottom]:-translate-y-[calc(-50%_+_1px)]",
-						"data-[side=right]:translate-x-[calc(50%_+_2px)] data-[side=right]:translate-y-1/2",
-						"data-[side=left]:-translate-y-[calc(50%_-_3px)]",
-						arrowClasses
-					)}
-					{...props}
-				></div>
-			{/snippet}
-		</TooltipPrimitive.Arrow>
-	</TooltipPrimitive.Content>
+  <TooltipPrimitive.Content
+    bind:ref
+    data-slot="tooltip-content"
+    {sideOffset}
+    {side}
+    class={cn(tooltipVariants({ variant, size, rounded, width }), className)}
+    {...restProps}
+  >
+    {@render children?.()}
+    {#if withArrow}
+      <TooltipPrimitive.Arrow>
+        {#snippet child({ props })}
+          <div
+            class={cn(
+              tooltipArrowVariants({ variant, rounded }),
+              'data-[side=top]:translate-x-1/2 data-[side=top]:translate-y-[calc(-50%_+_2px)]',
+              'data-[side=bottom]:-translate-x-1/2 data-[side=bottom]:-translate-y-[calc(-50%_+_1px)]',
+              'data-[side=right]:translate-x-[calc(50%_+_2px)] data-[side=right]:translate-y-1/2',
+              'data-[side=left]:-translate-y-[calc(50%_-_3px)]',
+              arrowClasses,
+            )}
+            {...props}
+          ></div>
+        {/snippet}
+      </TooltipPrimitive.Arrow>
+    {/if}
+  </TooltipPrimitive.Content>
 </TooltipPrimitive.Portal>

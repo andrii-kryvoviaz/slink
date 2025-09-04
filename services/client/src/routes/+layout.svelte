@@ -6,7 +6,6 @@
   import { Separator } from '@slink/ui/components/separator/index.js';
   import * as Sidebar from '@slink/ui/components/sidebar/index.js';
   import { Toaster } from '@slink/ui/components/sonner/index.js';
-  import { Tooltip } from 'bits-ui';
 
   import '@slink/app.css';
 
@@ -39,64 +38,62 @@
   initResponsiveStore();
 </script>
 
-<Tooltip.Provider delayDuration={0} disableHoverableContent={true}>
-  <div class="relative flex h-screen" use:theme={$currentTheme}>
-    <Sidebar.Provider bind:open={sidebarOpen}>
-      {#if showSidebar}
-        <AppSidebar
-          config={{
-            user: user,
-            groups: sidebarGroups,
-            showAdmin: user?.roles?.includes('ROLE_ADMIN') ?? false,
-            showSystemItems: true,
-            showUploadItem:
-              !!user || !!data.globalSettings?.access?.allowGuestUploads,
-          }}
-        />
-      {/if}
-      <Sidebar.Inset>
-        <header
-          class="group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear border-b border-bc-header"
-        >
-          <div class="flex items-center px-4">
-            {#if showSidebar}
-              <Sidebar.Trigger />
-              <Separator
-                orientation="vertical"
-                class="mx-2 data-[orientation=vertical]:h-4"
-              />
-            {/if}
-          </div>
-          <Navbar
-            user={user || undefined}
-            showLogo={!showSidebar}
-            showLoginButton={!user}
-            showUploadButton={!!user ||
-              !!data.globalSettings?.access?.allowGuestUploads}
-          >
-            {#snippet themeSwitch()}
-              <ThemeSwitch
-                checked={$isDark}
-                variant="default"
-                animation="none"
-                on={{ change: (theme) => settings.set('theme', theme) }}
-              />
-            {/snippet}
-          </Navbar>
-        </header>
-        <div class="flex flex-1 flex-col gap-4 pt-0 min-h-0">
-          <ScrollArea
-            class="flex-1 h-full p-4"
-            type="scroll"
-            orientation="vertical"
-            scrollbarYClasses="w-2"
-          >
-            {@render children?.()}
-          </ScrollArea>
+<div class="relative flex h-screen" use:theme={$currentTheme}>
+  <Sidebar.Provider bind:open={sidebarOpen}>
+    {#if showSidebar}
+      <AppSidebar
+        config={{
+          user: user || undefined,
+          groups: sidebarGroups,
+          showAdmin: user?.roles?.includes('ROLE_ADMIN') ?? false,
+          showSystemItems: true,
+          showUploadItem:
+            !!user || !!data.globalSettings?.access?.allowGuestUploads,
+        }}
+      />
+    {/if}
+    <Sidebar.Inset class="bg-transparent">
+      <header
+        class="group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear border-b border-bc-header"
+      >
+        <div class="flex items-center px-4">
+          {#if showSidebar}
+            <Sidebar.Trigger />
+            <Separator
+              orientation="vertical"
+              class="mx-2 data-[orientation=vertical]:h-4"
+            />
+          {/if}
         </div>
-      </Sidebar.Inset>
-    </Sidebar.Provider>
+        <Navbar
+          user={user || undefined}
+          showLogo={!showSidebar}
+          showLoginButton={!user}
+          showUploadButton={!!user ||
+            !!data.globalSettings?.access?.allowGuestUploads}
+        >
+          {#snippet themeSwitch()}
+            <ThemeSwitch
+              checked={$isDark}
+              variant="default"
+              animation="none"
+              on={{ change: (theme) => settings.set('theme', theme) }}
+            />
+          {/snippet}
+        </Navbar>
+      </header>
+      <div class="flex flex-1 flex-col gap-4 pt-0 min-h-0">
+        <ScrollArea
+          class="flex-1 h-full p-4"
+          type="scroll"
+          orientation="vertical"
+          scrollbarYClasses="w-2"
+        >
+          {@render children?.()}
+        </ScrollArea>
+      </div>
+    </Sidebar.Inset>
+  </Sidebar.Provider>
 
-    <Toaster />
-  </div>
-</Tooltip.Provider>
+  <Toaster />
+</div>

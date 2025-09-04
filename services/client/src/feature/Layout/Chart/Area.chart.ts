@@ -1,7 +1,7 @@
 import type {
   ChartNormalizer,
   ChartOptions,
-} from '@slink/feature/Layout/Chart/index';
+} from '@slink/feature/Layout/index';
 
 export class AreaChart implements ChartNormalizer {
   normalize(options: ChartOptions): ChartOptions {

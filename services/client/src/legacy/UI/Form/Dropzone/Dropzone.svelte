@@ -66,7 +66,7 @@
   }
 
   let defaultClass: string =
-    'flex flex-col justify-center items-center w-full bg-card-primary cursor-pointer hover:bg-card-secondary';
+    'relative overflow-hidden flex flex-col justify-center items-center w-full bg-card-primary cursor-pointer hover:bg-card-secondary';
 </script>
 
 <button
@@ -94,6 +94,7 @@
     bind:this={input}
     {onchange}
     {onclick}
+    class="absolute inset-0 block h-full w-full cursor-pointer opacity-0"
     type="file"
   />
 </label>

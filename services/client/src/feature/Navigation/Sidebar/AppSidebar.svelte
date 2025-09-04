@@ -1,13 +1,43 @@
 <script lang="ts">
   import type { SidebarConfig } from '@slink/feature/Navigation';
   import { NavGroup, NavUser } from '@slink/feature/Navigation';
-  import type { AppSidebarGroup } from '@slink/feature/Navigation/AppSidebar/AppSidebar.types';
   import * as Sidebar from '@slink/ui/components/sidebar/index.js';
   import type { ComponentProps } from 'svelte';
 
+  import type { User } from '@slink/lib/auth/Type/User';
+
+  interface AppSidebarItem {
+    id: string;
+    title: string;
+    icon: string;
+    href?: string;
+    action?: () => void;
+    badge?: {
+      text: string;
+      variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
+    };
+    children?: AppSidebarItem[];
+    roles?: string[];
+    hidden?: boolean;
+    disabled?: boolean;
+  }
+
+  interface AppSidebarGroup {
+    id: string;
+    title?: string;
+    items: AppSidebarItem[];
+    roles?: string[];
+    hidden?: boolean;
+    collapsible?: boolean;
+  }
+
   interface ExtendedSidebarConfig extends SidebarConfig {
-    user?: any;
+    user?: Partial<User>;
     groups?: AppSidebarGroup[];
+  }
+
+  interface Props extends ComponentProps<typeof Sidebar.Root> {
+    config?: ExtendedSidebarConfig;
   }
 
   let {
@@ -15,9 +45,7 @@
     collapsible = 'icon',
     config = {},
     ...restProps
-  }: ComponentProps<typeof Sidebar.Root> & {
-    config?: ExtendedSidebarConfig;
-  } = $props();
+  }: Props = $props();
 
   const createUser = (userConfig?: any) => ({
     displayName: userConfig?.displayName || userConfig?.name || 'User',
@@ -31,7 +59,9 @@
 
 <Sidebar.Root {collapsible} {...restProps}>
   <Sidebar.Header>
-    <div class="flex items-center gap-2 px-2 py-3 relative">
+    <div
+      class="flex items-center gap-2 px-2 py-3 relative group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:py-1"
+    >
       <div
         class="absolute inset-0 bg-gradient-to-r from-transparent via-sidebar-accent/5 to-transparent rounded-lg"
       ></div>
@@ -42,7 +72,7 @@
         <img
           src="/favicon.png"
           alt="Slink"
-          class="h-5 w-5 drop-shadow-sm transition-transform duration-300 group-hover:scale-110"
+          class="size-5 object-contain drop-shadow-sm transition-transform duration-300 group-hover:scale-110"
         />
       </a>
       <a

@@ -82,5 +82,5 @@ export const ThemeSwitchContainer = cva('relative inline-flex items-center', {
 });
 
 export const ThemeSwitchTooltip = cva(
-  'absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs font-medium text-white bg-gray-900 dark:bg-gray-700 rounded-md opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50 shadow-lg',
+  'absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 text-xs font-medium text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-900 rounded-md opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50 shadow-lg',
 );

@@ -12,7 +12,7 @@
     CreatedKeyDisplay,
   } from '@slink/feature/User';
   import { Button } from '@slink/legacy/UI/Action';
-  import { Dialog } from '@slink/legacy/UI/Dialog';
+  import { Dialog } from '@slink/ui/components/dialog';
   import { onMount } from 'svelte';
 
   import { useApiKeyStore } from '$lib/state/ApiKeyStore.svelte.js';

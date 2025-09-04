@@ -1,10 +1,6 @@
 <script lang="ts">
-  import { AreaChart } from '@slink/feature/Layout/Chart/Area.chart';
-  import { RadialBarChart } from '@slink/feature/Layout/Chart/RadialBar.chart';
-  import type {
-    ChartNormalizer,
-    ChartOptions,
-  } from '@slink/feature/Layout/Chart/index';
+  import type { ChartNormalizer, ChartOptions } from '@slink/feature/Layout';
+  import { AreaChart, RadialBarChart } from '@slink/feature/Layout';
   import type { ApexOptions } from 'apexcharts';
   import { twMerge } from 'tailwind-merge';
 
