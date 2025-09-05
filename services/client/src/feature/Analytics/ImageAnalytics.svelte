@@ -2,7 +2,7 @@
   import { Card } from '@slink/feature/Layout';
   import { Chart, type ChartOptions } from '@slink/feature/Layout';
   import { RefreshButton } from '@slink/legacy/UI/Action';
-  import { Select } from '@slink/legacy/UI/Form';
+  import { Select } from '@slink/ui/components';
   import { onMount } from 'svelte';
 
   import { ApiClient } from '@slink/api/Client';
@@ -30,10 +30,11 @@
 
   let interval: string = $state('current_year');
 
-  const handleIntervalChange = (item: string) => {
-    interval = item;
-    handleFetch();
-  };
+  $effect(() => {
+    if (interval) {
+      handleFetch();
+    }
+  });
 
   const handleFetch = () => {
     run({ dateInterval: interval });
@@ -76,16 +77,12 @@
         <Select
           type="single"
           class="min-w-fit"
-          contentClass="w-48 text-sm"
-          variant="invisible"
-          rounded="full"
           size="sm"
           items={Object.keys(availableIntervals).map((value) => ({
             value,
             label: availableIntervals?.[value] ?? 'N/A',
           }))}
-          value={interval.toString()}
-          onValueChange={handleIntervalChange}
+          bind:value={interval}
         />
       {/if}
     </div>

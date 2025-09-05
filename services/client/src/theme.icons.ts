@@ -115,4 +115,5 @@ export const themeIcons: string[] = [
   'lucide:check-circle',
   'lucide:rocket',
   'heroicons:x-circle',
+  'lucide:star',
 ];

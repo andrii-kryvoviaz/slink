@@ -2,12 +2,8 @@
   import { SettingItem, SettingsPane } from '@slink/feature/Settings';
   import { Notice } from '@slink/feature/Text';
   import { Button } from '@slink/legacy/UI/Action';
-  import {
-    FileSizeInput,
-    Input,
-    NumberInput,
-    Select,
-  } from '@slink/legacy/UI/Form';
+  import { FileSizeInput, Input, NumberInput } from '@slink/legacy/UI/Form';
+  import { Select } from '@slink/ui/components';
   import { Switch } from '@slink/ui/components/switch';
 
   import { ApiClient } from '@slink/api/Client';
@@ -234,7 +230,7 @@
             Select your preferred storage backend
           {/snippet}
           <Select
-            name="storageProvider"
+            class="w-full max-w-md"
             type="single"
             items={[
               { value: 'local', label: 'Local Storage' },
@@ -540,7 +536,6 @@
                 Character types required in user passwords for enhanced security
               {/snippet}
               <Select
-                name="passwordRequirements"
                 type="bitmask"
                 class="w-full max-w-md"
                 items={[
