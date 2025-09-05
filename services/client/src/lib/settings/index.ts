@@ -18,6 +18,15 @@ const defaultSettings: { [K in SettingsKey]?: any } = {
   sidebar: {
     expanded: true,
   },
+  userAdmin: {
+    viewMode: 'list',
+    columnVisibility: {
+      displayName: true,
+      username: true,
+      status: true,
+      roles: true,
+    },
+  },
 };
 
 export const setCookieSettingsOnLocals: Handle = async ({ event, resolve }) => {

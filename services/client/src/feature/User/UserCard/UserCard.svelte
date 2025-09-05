@@ -1,20 +1,11 @@
 <script lang="ts">
   import { UserAvatar } from '@slink/feature/User';
-  import { UserDeleteConfirmation } from '@slink/feature/User';
-  import {
-    DropdownSimple,
-    DropdownSimpleGroup,
-    DropdownSimpleItem,
-  } from '@slink/ui/components';
+  import { UserActions } from '@slink/feature/User';
+  import { UserStatusCell } from '@slink/feature/User';
+  import { UserRoleCell } from '@slink/feature/User';
 
-  import { type User, UserRole } from '$lib/auth/Type/User';
-  import { UserStatus as UserStatusEnum } from '$lib/auth/Type/User';
+  import { type User } from '$lib/auth/Type/User';
   import { printErrorsAsToastMessage } from '$lib/utils/ui/printErrorsAsToastMessage';
-  import Icon from '@iconify/svelte';
-
-  import { ApiClient } from '@slink/api/Client';
-  import { ReactiveState } from '@slink/api/ReactiveState';
-  import type { SingleUserResponse } from '@slink/api/Response/User/SingleUserResponse';
 
   interface Props {
     user?: User;
@@ -30,118 +21,11 @@
     on,
   }: Props = $props();
 
-  let dropdownRef: DropdownSimple | null = $state(null);
-  let showDeleteConfirmation = $state(false);
-
-  const {
-    isLoading: userStatusChanging,
-    data: userResponse,
-    error: statusError,
-    run: changeUserStatus,
-  } = ReactiveState<SingleUserResponse>(
-    (status: UserStatusEnum) => {
-      statusToChange = status;
-      return ApiClient.user.changeUserStatus(user.id, status);
-    },
-    { minExecutionTime: 300 },
-  );
-
-  const {
-    isLoading: userDeleteLoading,
-    data: userDeleteResponse,
-    error: userDeleteError,
-    run: deleteUser,
-  } = ReactiveState<SingleUserResponse>(
-    () => {
-      statusToChange = UserStatusEnum.Deleted;
-      return ApiClient.user.changeUserStatus(user.id, statusToChange);
-    },
-    { minExecutionTime: 300 },
-  );
-
-  const {
-    run: grantRole,
-    data: grantRoleResponse,
-    isLoading: grantRoleLoading,
-    error: grantRoleError,
-  } = ReactiveState<SingleUserResponse>(
-    (role: UserRole) => {
-      return ApiClient.user.grantRole(user.id, role);
-    },
-    { minExecutionTime: 300 },
-  );
-
-  const {
-    run: revokeRole,
-    data: revokeRoleResponse,
-    isLoading: revokeRoleLoading,
-    error: revokeRoleError,
-  } = ReactiveState<SingleUserResponse>(
-    (role: UserRole) => {
-      return ApiClient.user.revokeRole(user.id, role);
-    },
-    { minExecutionTime: 300 },
-  );
-
-  let statusToChange: UserStatusEnum | null = $state(null);
-  const closeDropdown = () => {
-    if (!dropdownRef) {
-      return;
-    }
-
-    showDeleteConfirmation = false;
-    dropdownRef.close();
-  };
-
-  const handleUserDeletion = () => {
-    showDeleteConfirmation = true;
-  };
-
-  const confirmUserDeletion = async () => {
-    await deleteUser();
-    showDeleteConfirmation = false;
-    on?.userDelete(user.id);
-  };
-
-  const cancelUserDeletion = () => {
-    showDeleteConfirmation = false;
-  };
-
-  const successHandler = (userResponse: SingleUserResponse | null): void => {
-    if (!userResponse) {
-      return;
-    }
-
-    user = userResponse;
-
-    statusToChange = null;
-    showDeleteConfirmation = false;
-    closeDropdown();
-  };
-
-  const errorHandler = (error: Error | null) => {
-    if (!error) {
-      return;
-    }
-
-    statusToChange = null;
-    showDeleteConfirmation = false;
-    printErrorsAsToastMessage(error);
-    closeDropdown();
-  };
-
-  $effect(() => successHandler($userResponse));
-  $effect(() => successHandler($userDeleteResponse));
-  $effect(() => successHandler($grantRoleResponse));
-  $effect(() => successHandler($revokeRoleResponse));
-
-  $effect(() => errorHandler($statusError));
-  $effect(() => errorHandler($userDeleteError));
-  $effect(() => errorHandler($grantRoleError));
-  $effect(() => errorHandler($revokeRoleError));
-
-  let isAdmin = $derived(user.roles?.includes(UserRole.Admin));
   let isCurrentUser = $derived(user.id === loggedInUser?.id);
+
+  const handleUserUpdate = (updatedUser: User) => {
+    user = updatedUser;
+  };
 </script>
 
 <div
@@ -171,138 +55,19 @@
           </div>
 
           <div class="flex items-center gap-2 flex-wrap">
-            {#if isAdmin}
-              <span
-                class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800"
-              >
-                <Icon icon="heroicons:shield-check" class="w-3 h-3" />
-                Admin
-              </span>
-            {/if}
-            {#if isCurrentUser}
-              <span
-                class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-900/30 dark:text-amber-300 dark:border-amber-800"
-              >
-                <Icon icon="heroicons:user" class="w-3 h-3" />
-                You
-              </span>
-            {:else}
-              <span
-                class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium {user.status ===
-                'active'
-                  ? 'bg-green-50 text-green-700 border border-green-200 dark:bg-green-900/30 dark:text-green-300 dark:border-green-800'
-                  : user.status === 'suspended'
-                    ? 'bg-red-50 text-red-700 border border-red-200 dark:bg-red-900/30 dark:text-red-300 dark:border-red-800'
-                    : 'bg-gray-50 text-gray-700 border border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700'}"
-              >
-                <div
-                  class="w-2 h-2 rounded-full {user.status === 'active'
-                    ? 'bg-green-500'
-                    : user.status === 'suspended'
-                      ? 'bg-red-500'
-                      : 'bg-gray-400'}"
-                ></div>
-                <span class="capitalize">{user.status || 'inactive'}</span>
-              </span>
-            {/if}
+            <UserRoleCell {user} />
+            <UserStatusCell {user} {isCurrentUser} />
           </div>
         </div>
 
-        {#if !isCurrentUser}
-          <div class="flex-shrink-0 ml-3 relative">
-            <DropdownSimple bind:this={dropdownRef}>
-              {#snippet trigger()}
-                <button
-                  class="p-2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150"
-                >
-                  <Icon icon="heroicons:ellipsis-vertical" class="w-5 h-5" />
-                </button>
-              {/snippet}
-
-              {#if !showDeleteConfirmation}
-                <DropdownSimpleGroup>
-                  {#if user.status === UserStatusEnum.Active}
-                    <DropdownSimpleItem
-                      on={{
-                        click: () => changeUserStatus(UserStatusEnum.Suspended),
-                      }}
-                      closeOnSelect={false}
-                      loading={userStatusChanging &&
-                        statusToChange === UserStatusEnum.Suspended}
-                    >
-                      {#snippet icon()}
-                        <Icon icon="heroicons:no-symbol" class="h-4 w-4" />
-                      {/snippet}
-                      <span>Suspend</span>
-                    </DropdownSimpleItem>
-                  {:else}
-                    <DropdownSimpleItem
-                      on={{
-                        click: () => changeUserStatus(UserStatusEnum.Active),
-                      }}
-                      closeOnSelect={false}
-                      loading={userStatusChanging &&
-                        statusToChange === UserStatusEnum.Active}
-                    >
-                      {#snippet icon()}
-                        <Icon icon="heroicons:check-circle" class="h-4 w-4" />
-                      {/snippet}
-                      <span>Activate</span>
-                    </DropdownSimpleItem>
-                  {/if}
-                </DropdownSimpleGroup>
-
-                <DropdownSimpleGroup>
-                  {#if !isAdmin}
-                    <DropdownSimpleItem
-                      on={{ click: () => grantRole(UserRole.Admin) }}
-                      closeOnSelect={false}
-                      loading={$grantRoleLoading}
-                    >
-                      {#snippet icon()}
-                        <Icon icon="heroicons:key" class="h-4 w-4" />
-                      {/snippet}
-                      <span>Make Admin</span>
-                    </DropdownSimpleItem>
-                  {:else}
-                    <DropdownSimpleItem
-                      on={{ click: () => revokeRole(UserRole.Admin) }}
-                      closeOnSelect={false}
-                      loading={$revokeRoleLoading}
-                    >
-                      {#snippet icon()}
-                        <Icon icon="heroicons:lock-closed" class="h-4 w-4" />
-                      {/snippet}
-                      <span>Remove Admin</span>
-                    </DropdownSimpleItem>
-                  {/if}
-                </DropdownSimpleGroup>
-              {/if}
-
-              <DropdownSimpleGroup>
-                {#if !showDeleteConfirmation}
-                  <DropdownSimpleItem
-                    danger={true}
-                    on={{ click: handleUserDeletion }}
-                    closeOnSelect={false}
-                  >
-                    {#snippet icon()}
-                      <Icon icon="heroicons:trash" class="h-4 w-4" />
-                    {/snippet}
-                    <span>Delete</span>
-                  </DropdownSimpleItem>
-                {:else}
-                  <UserDeleteConfirmation
-                    {user}
-                    loading={$userDeleteLoading}
-                    onConfirm={confirmUserDeletion}
-                    onCancel={cancelUserDeletion}
-                  />
-                {/if}
-              </DropdownSimpleGroup>
-            </DropdownSimple>
-          </div>
-        {/if}
+        <div class="flex-shrink-0 ml-3 relative">
+          <UserActions
+            {user}
+            {loggedInUser}
+            onDelete={on?.userDelete}
+            onUserUpdate={handleUserUpdate}
+          />
+        </div>
       </div>
     </div>
   </div>

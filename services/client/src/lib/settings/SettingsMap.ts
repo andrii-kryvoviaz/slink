@@ -4,6 +4,7 @@ export class SettingsMap {
   private _data: { [K in SettingsKey]: Settings[K] | null } = {
     theme: null,
     sidebar: null,
+    userAdmin: null,
   };
 
   public has<T extends SettingsKey>(key: T): boolean {

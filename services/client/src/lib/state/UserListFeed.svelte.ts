@@ -1,12 +1,12 @@
 import { ApiClient } from '@slink/api/Client';
 import type { UserListingItem } from '@slink/api/Response';
 
+import { AbstractPaginatedFeed } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
 import type {
   LoadParams,
   PaginatedResponse,
   SearchParams,
 } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
-import { AbstractPaginatedFeed } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
 import { useState } from '@slink/lib/state/core/ContextAwareState';
 
 class UserListFeed extends AbstractPaginatedFeed<UserListingItem> {
@@ -31,6 +31,27 @@ class UserListFeed extends AbstractPaginatedFeed<UserListingItem> {
 
   public removeUser(id: string): void {
     this._items = this._items.filter((item) => item.id !== id);
+  }
+
+  public setAppendMode(mode: 'auto' | 'always' | 'never'): void {
+    this._config.appendMode = mode;
+  }
+
+  public async loadPage(
+    page: number,
+    shouldAppend: boolean = false,
+  ): Promise<void> {
+    const currentMode = this._config.appendMode;
+
+    if (!shouldAppend) {
+      this._config.appendMode = 'never';
+    }
+
+    try {
+      await this.load({ page, limit: this._meta.size });
+    } finally {
+      this._config.appendMode = currentMode;
+    }
   }
 
   public override async load(

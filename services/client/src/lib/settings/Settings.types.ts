@@ -2,6 +2,10 @@ import type { Readable, Writable } from 'svelte/store';
 
 import { Theme } from '@slink/lib/settings/index';
 import type { SidebarSettings } from '@slink/lib/settings/setters/sidebar';
+import type {
+  UserAdminSettings,
+  ViewMode,
+} from '@slink/lib/settings/setters/userAdmin';
 
 export type Settings = {
   theme: SettingsValue<Theme> & {
@@ -10,6 +14,9 @@ export type Settings = {
   };
   sidebar: SettingsValue<SidebarSettings> & {
     expanded: Readable<boolean>;
+  };
+  userAdmin: SettingsValue<UserAdminSettings> & {
+    viewMode: Readable<ViewMode>;
   };
 };
 

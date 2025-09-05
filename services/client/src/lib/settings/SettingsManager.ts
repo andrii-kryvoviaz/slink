@@ -1,5 +1,6 @@
 import { browser } from '$app/environment';
-import { type Writable, writable } from 'svelte/store';
+import { writable } from 'svelte/store';
+import type { Writable } from 'svelte/store';
 
 import { useWritable } from '@slink/store/contextAwareStore';
 
@@ -12,6 +13,7 @@ import type {
 import { SettingsMap } from '@slink/lib/settings/SettingsMap';
 import { SidebarSetter } from '@slink/lib/settings/setters/sidebar';
 import { ThemeSetter } from '@slink/lib/settings/setters/theme';
+import { UserAdminSetter } from '@slink/lib/settings/setters/userAdmin';
 
 import { cookie } from '@slink/utils/http/cookie';
 import { tryJson } from '@slink/utils/string/json';
@@ -26,6 +28,7 @@ export class SettingsManager {
   private _setters: Record<SettingsKey, Setter<SettingsKey, any>> = {
     theme: ThemeSetter,
     sidebar: SidebarSetter,
+    userAdmin: UserAdminSetter,
   };
 
   public get<T extends SettingsKey>(
@@ -88,7 +91,7 @@ export class SettingsManager {
 
     if (!store) {
       store = useWritable(key, value);
-      const initialStore = this._apply(key, store);
+      const initialStore = this._apply(key, store as any);
       this._settings.set(key, initialStore);
     } else {
       store.set(value);
@@ -103,6 +106,6 @@ export class SettingsManager {
       return store as unknown as Settings[K];
     }
 
-    return this._setters[key](store);
+    return this._setters[key](store as any) as Settings[K];
   }
 }
