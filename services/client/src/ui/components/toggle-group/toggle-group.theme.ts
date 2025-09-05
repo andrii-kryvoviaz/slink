@@ -22,7 +22,7 @@ export const toggleGroupTheme = cva(
 );
 
 export const toggleGroupItemTheme = cva(
-  'flex items-center justify-center text-sm font-medium rounded-lg transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  'flex items-center justify-center text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
@@ -36,10 +36,58 @@ export const toggleGroupItemTheme = cva(
         md: 'px-3 py-1.5 text-sm',
         lg: 'px-4 py-2 text-base',
       },
+      position: {
+        first: '',
+        middle: '',
+        last: '',
+        single: '',
+      },
+      orientation: {
+        horizontal: '',
+        vertical: '',
+      },
     },
+    compoundVariants: [
+      {
+        position: 'single',
+        className: 'rounded-lg',
+      },
+      {
+        position: 'first',
+        orientation: 'horizontal',
+        className: 'rounded-l-lg rounded-r-none',
+      },
+      {
+        position: 'middle',
+        orientation: 'horizontal',
+        className: 'rounded-none',
+      },
+      {
+        position: 'last',
+        orientation: 'horizontal',
+        className: 'rounded-r-lg rounded-l-none',
+      },
+      {
+        position: 'first',
+        orientation: 'vertical',
+        className: 'rounded-t-lg rounded-b-none',
+      },
+      {
+        position: 'middle',
+        orientation: 'vertical',
+        className: 'rounded-none',
+      },
+      {
+        position: 'last',
+        orientation: 'vertical',
+        className: 'rounded-b-lg rounded-t-none',
+      },
+    ],
     defaultVariants: {
       variant: 'inactive',
       size: 'md',
+      position: 'middle',
+      orientation: 'horizontal',
     },
   },
 );
