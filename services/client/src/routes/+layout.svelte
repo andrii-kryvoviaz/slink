@@ -11,8 +11,6 @@
 
   import { theme } from '@slink/lib/actions/theme';
   import { settings } from '@slink/lib/settings';
-  import { useGlobalSettings } from '@slink/lib/state/GlobalSettings.svelte';
-  // ToDO: implement sidebar state momorization
   import { initResponsiveStore } from '@slink/lib/stores/responsive.svelte';
 
   let { data, children } = $props();

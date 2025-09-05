@@ -1,9 +1,13 @@
 <script lang="ts">
   import { SettingItem, SettingsPane } from '@slink/feature/Settings';
   import { Notice } from '@slink/feature/Text';
-  import { Button } from '@slink/legacy/UI/Action';
-  import { FileSizeInput, Input, NumberInput } from '@slink/legacy/UI/Form';
   import { Select } from '@slink/ui/components';
+  import { Button } from '@slink/ui/components/button';
+  import {
+    FileSizeInput,
+    Input,
+    NumberInput,
+  } from '@slink/ui/components/input';
   import { Switch } from '@slink/ui/components/switch';
 
   import { ApiClient } from '@slink/api/Client';
@@ -92,6 +96,7 @@
 
         <SettingItem
           defaultValue={defaultSettings?.image?.maxSize}
+          currentValue={settings.image.maxSize}
           reset={(value) => {
             settings.image.maxSize = value;
           }}
@@ -110,6 +115,7 @@
 
         <SettingItem
           defaultValue={defaultSettings?.image?.stripExifMetadata}
+          currentValue={settings.image.stripExifMetadata}
           reset={(value) => {
             settings.image.stripExifMetadata = value;
           }}
@@ -130,6 +136,7 @@
 
         <SettingItem
           defaultValue={defaultSettings?.image?.allowOnlyPublicImages}
+          currentValue={settings.image.allowOnlyPublicImages}
           reset={(value) => {
             settings.image.allowOnlyPublicImages = value;
           }}
@@ -164,6 +171,7 @@
 
         <SettingItem
           defaultValue={defaultSettings?.access?.allowGuestUploads}
+          currentValue={settings.access.allowGuestUploads}
           reset={(value) => {
             settings.access.allowGuestUploads = value;
           }}
@@ -186,6 +194,7 @@
 
         <SettingItem
           defaultValue={defaultSettings?.access?.allowUnauthenticatedAccess}
+          currentValue={settings.access.allowUnauthenticatedAccess}
           reset={(value) => {
             settings.access.allowUnauthenticatedAccess = value;
           }}
@@ -219,6 +228,7 @@
 
         <SettingItem
           defaultValue={defaultSettings.storage?.provider}
+          currentValue={settings.storage.provider}
           reset={(value) => {
             settings.storage.provider = value;
           }}
@@ -245,6 +255,7 @@
           <div class="space-y-6">
             <SettingItem
               defaultValue={defaultSettings.storage?.adapter.smb.host}
+              currentValue={settings.storage.adapter.smb.host}
               reset={(value) => {
                 settings.storage.adapter.smb.host = value;
               }}
@@ -264,6 +275,7 @@
 
             <SettingItem
               defaultValue={defaultSettings.storage?.adapter.smb.share}
+              currentValue={settings.storage.adapter.smb.share}
               reset={(value) => {
                 settings.storage.adapter.smb.share = value;
               }}
@@ -283,6 +295,7 @@
 
             <SettingItem
               defaultValue={defaultSettings.storage?.adapter.smb.workgroup}
+              currentValue={settings.storage.adapter.smb.workgroup}
               reset={(value) => {
                 settings.storage.adapter.smb.workgroup = value;
               }}
@@ -302,6 +315,7 @@
 
             <SettingItem
               defaultValue={defaultSettings.storage?.adapter.smb.username}
+              currentValue={settings.storage.adapter.smb.username}
               reset={(value) => {
                 settings.storage.adapter.smb.username = value;
               }}
@@ -320,6 +334,7 @@
 
             <SettingItem
               defaultValue={defaultSettings.storage?.adapter.smb.password}
+              currentValue={settings.storage.adapter.smb.password}
               reset={(value) => {
                 settings.storage.adapter.smb.password = value;
               }}
@@ -357,6 +372,7 @@
 
             <SettingItem
               defaultValue={defaultSettings.storage?.adapter.s3.region}
+              currentValue={settings.storage.adapter.s3.region}
               reset={(value) => {
                 settings.storage.adapter.s3.region = value;
               }}
@@ -376,6 +392,7 @@
 
             <SettingItem
               defaultValue={defaultSettings.storage?.adapter.s3.bucket}
+              currentValue={settings.storage.adapter.s3.bucket}
               reset={(value) => {
                 settings.storage.adapter.s3.bucket = value;
               }}
@@ -403,6 +420,7 @@
 
             <SettingItem
               defaultValue={defaultSettings.storage?.adapter.s3.key}
+              currentValue={settings.storage.adapter.s3.key}
               reset={(value) => {
                 settings.storage.adapter.s3.key = value;
               }}
@@ -429,6 +447,7 @@
 
             <SettingItem
               defaultValue={defaultSettings.storage?.adapter.s3.secret}
+              currentValue={settings.storage.adapter.s3.secret}
               reset={(value) => {
                 settings.storage.adapter.s3.secret = value;
               }}
@@ -463,6 +482,7 @@
 
         <SettingItem
           defaultValue={defaultSettings.user?.allowRegistration}
+          currentValue={settings.user.allowRegistration}
           reset={(value) => {
             settings.user.allowRegistration = value;
           }}
@@ -485,6 +505,7 @@
           <div class="space-y-6">
             <SettingItem
               defaultValue={defaultSettings.user?.approvalRequired}
+              currentValue={settings.user.approvalRequired}
               reset={(value) => {
                 settings.user.approvalRequired = value;
               }}
@@ -506,6 +527,7 @@
 
             <SettingItem
               defaultValue={defaultSettings.user?.password.minLength}
+              currentValue={settings.user.password.minLength}
               reset={(value) => {
                 settings.user.password.minLength = value;
               }}
@@ -525,6 +547,7 @@
 
             <SettingItem
               defaultValue={defaultSettings.user?.password.requirements}
+              currentValue={settings.user.password.requirements}
               reset={(value) => {
                 settings.user.password.requirements = value;
               }}

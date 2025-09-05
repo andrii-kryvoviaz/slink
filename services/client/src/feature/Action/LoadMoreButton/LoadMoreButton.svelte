@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button, type ButtonAttributes } from '@slink/legacy/UI/Action';
+  import { Button, type ButtonAttributes } from '@slink/ui/components/button';
   import type { Snippet } from 'svelte';
 
   import Icon from '@iconify/svelte';
@@ -28,7 +28,7 @@
         {#if icon}
           {@render icon?.()}
         {:else}
-          <Icon icon="teenyicons:refresh-solid" class="h-2.5 w-2.5" />
+          <Icon icon="teenyicons:refresh-solid" class="h-2 w-2" />
         {/if}
       {/snippet}
 
@@ -42,10 +42,7 @@
         {#if props.loadingIcon}
           {@render props.loadingIcon?.()}
         {:else}
-          <Icon
-            icon="teenyicons:refresh-solid"
-            class="h-2.5 w-2.5 animate-spin"
-          />
+          <Icon icon="teenyicons:refresh-solid" class="h-2 w-2 animate-spin" />
         {/if}
       {/snippet}
     </Button>

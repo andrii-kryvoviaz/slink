@@ -1,13 +1,20 @@
 <script lang="ts">
-  import { Input, type InputProps } from '@slink/legacy/UI/Form';
+  import { Input } from '@slink/ui/components/input';
 
   import type { HTMLInputAttributes } from 'svelte/elements';
 
+  import type { ErrorList } from '@slink/api/Exceptions';
+
   import { parseFileSize } from '@slink/utils/string/parseFileSize';
 
-  interface Props
-    extends Pick<HTMLInputAttributes, 'value' | 'name' | 'step'>,
-      InputProps {}
+  interface Props extends Pick<HTMLInputAttributes, 'value' | 'name' | 'step'> {
+    label?: string;
+    error?: string | ErrorList;
+    size?: 'sm' | 'md' | 'lg';
+    variant?: 'default' | 'error' | 'modern';
+    rounded?: 'sm' | 'md' | 'lg';
+    class?: string;
+  }
 
   let { value = $bindable(), name, step = 1, ...props }: Props = $props();
 

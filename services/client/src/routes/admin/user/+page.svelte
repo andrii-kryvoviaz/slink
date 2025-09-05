@@ -1,6 +1,6 @@
 <script lang="ts">
+  import { LoadMoreButton } from '@slink/feature/Action';
   import { UserCard } from '@slink/feature/User';
-  import { LoadMoreButton } from '@slink/legacy/UI/Action';
 
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';

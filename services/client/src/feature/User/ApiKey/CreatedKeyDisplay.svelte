@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { Button } from '@slink/legacy/UI/Action';
-  import { CopyContainer } from '@slink/legacy/UI/Action';
+  import { CopyContainer } from '@slink/feature/Text';
+  import { Button } from '@slink/ui/components/button';
 
   import Icon from '@iconify/svelte';
 
@@ -17,12 +17,12 @@
     $props();
 </script>
 
-<div class="space-y-6">
-  <div class="flex items-center gap-4">
+<div class="space-y-5">
+  <div class="flex items-center gap-3">
     <div
-      class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 shadow-lg"
+      class="w-10 h-10 rounded-xl bg-green-500/10 border border-green-500/10 flex items-center justify-center"
     >
-      <Icon icon="lucide:check" class="h-6 w-6 text-white" />
+      <Icon icon="ph:check" class="h-5 w-5 text-green-600" />
     </div>
     <div>
       <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -35,14 +35,14 @@
   </div>
 
   <div
-    class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-800 rounded-2xl p-6"
+    class="bg-green-50/50 dark:bg-green-900/10 border border-green-200/50 dark:border-green-800/30 rounded-lg p-4"
   >
-    <div class="flex items-center gap-3 mb-4">
+    <div class="flex items-center gap-3 mb-3">
       <Icon
-        icon="lucide:shield-check"
-        class="h-5 w-5 text-green-600 dark:text-green-400"
+        icon="ph:shield-check"
+        class="h-4 w-4 text-green-600 dark:text-green-400"
       />
-      <span class="text-sm font-semibold text-green-800 dark:text-green-200">
+      <span class="text-sm font-medium text-green-800 dark:text-green-200">
         Your API Key
       </span>
     </div>
@@ -55,18 +55,15 @@
   </div>
 
   <div
-    class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4"
+    class="bg-amber-50/50 dark:bg-amber-900/10 border border-amber-200/50 dark:border-amber-800/30 rounded-lg p-3"
   >
     <div class="flex items-start gap-3">
       <Icon
-        icon="lucide:alert-triangle"
-        class="h-5 w-5 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0"
+        icon="ph:warning"
+        class="h-4 w-4 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0"
       />
       <div>
-        <h4 class="text-sm font-medium text-amber-900 dark:text-amber-100">
-          Important Security Notice
-        </h4>
-        <p class="text-xs text-amber-700 dark:text-amber-300 mt-1">
+        <p class="text-xs text-amber-700 dark:text-amber-300">
           This key will not be shown again. Store it securely in a password
           manager or download the ShareX config file.
         </p>
@@ -76,9 +73,20 @@
 
   <div class="flex gap-3">
     <Button
-      variant="modern"
+      variant="glass"
+      size="sm"
+      rounded="full"
+      onclick={onClose}
+      class="flex-1"
+    >
+      Close
+    </Button>
+    <Button
+      variant="gradient-green"
+      size="sm"
+      rounded="full"
       onclick={onDownloadConfig}
-      class="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-200"
+      class="flex-1"
       disabled={isDownloadingConfig}
     >
       {#if isDownloadingConfig}

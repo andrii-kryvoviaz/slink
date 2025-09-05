@@ -7,7 +7,7 @@
     type ImageSize,
     ImageSizePicker,
   } from '@slink/feature/Image';
-  import { CopyContainer } from '@slink/legacy/UI/Action';
+  import { CopyContainer } from '@slink/feature/Text';
 
   import { page } from '$app/state';
   import { fly } from 'svelte/transition';

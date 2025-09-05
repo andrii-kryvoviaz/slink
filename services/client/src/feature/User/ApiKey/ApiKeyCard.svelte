@@ -1,6 +1,7 @@
 <script lang="ts">
+  import { Badge } from '@slink/feature/Text';
   import { ApiKeyDeletePopover } from '@slink/feature/User';
-  import { Popover } from '@slink/legacy/UI/Action';
+  import { Overlay } from '@slink/ui/components/popover';
 
   import { formatDate, formatExpiryDate } from '$lib/utils/date';
   import Icon from '@iconify/svelte';
@@ -30,11 +31,11 @@
         {apiKey.name}
       </h5>
       {#if apiKey.isExpired}
-        <span
-          class="px-2 py-1 text-xs bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 rounded-full font-medium"
-        >
-          Expired
-        </span>
+        <Badge variant="destructive" size="xs">Expired</Badge>
+      {:else if apiKey.expiresAt}
+        <Badge variant="amber" size="xs">Active</Badge>
+      {:else}
+        <Badge variant="success" size="xs">Permanent</Badge>
       {/if}
     </div>
     <div
@@ -60,10 +61,9 @@
   </div>
 
   <div class="absolute top-3 right-3">
-    <Popover
+    <Overlay
       bind:open={popoverOpen}
       variant="floating"
-      responsive={true}
       contentProps={{ align: 'end' }}
     >
       {#snippet trigger()}
@@ -83,6 +83,6 @@
         confirm={onDeleteConfirm}
         onCancel={() => (popoverOpen = false)}
       />
-    </Popover>
+    </Overlay>
   </div>
 </div>

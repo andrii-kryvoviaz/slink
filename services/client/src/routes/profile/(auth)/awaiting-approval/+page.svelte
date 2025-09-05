@@ -5,7 +5,7 @@
     BannerContent,
     BannerIcon,
   } from '@slink/feature/Layout';
-  import { CopyableText } from '@slink/legacy/UI/Action';
+  import { CopyableText } from '@slink/feature/Text';
 
   import { page } from '$app/state';
   import Icon from '@iconify/svelte';

@@ -11,7 +11,7 @@
     CreateApiKeyForm,
     CreatedKeyDisplay,
   } from '@slink/feature/User';
-  import { Button } from '@slink/legacy/UI/Action';
+  import { Button } from '@slink/ui/components/button';
   import { Dialog } from '@slink/ui/components/dialog';
   import { onMount } from 'svelte';
 
@@ -83,13 +83,8 @@
       Create API keys for ShareX and other third-party integrations
     </p>
   </div>
-  <Button
-    variant="modern"
-    size="sm"
-    onclick={handleCreateClick}
-    class="shadow-lg hover:shadow-xl transition-all duration-200"
-  >
-    <Icon icon="lucide:plus" class="h-4 w-4 mr-2" />
+  <Button variant="primary" size="sm" onclick={handleCreateClick}>
+    <Icon icon="ph:plus" class="h-4 w-4 mr-2" />
     Create API Key
   </Button>
 </div>

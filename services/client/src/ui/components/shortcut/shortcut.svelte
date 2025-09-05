@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { KeyboardKey, type KeyboardKeyProps } from '@slink/feature/Text';
+  import { KeyboardKey } from '@slink/feature/Text';
+  import type { KeyboardKeyProps } from '@slink/feature/Text';
 
   import { browser } from '$app/environment';
   import { page } from '$app/state';

@@ -1,7 +1,7 @@
 <script lang="ts">
   import ChevronsUpDownIcon from '@lucide/svelte/icons/chevrons-up-down';
+  import LinkIcon from '@lucide/svelte/icons/link';
   import LogOutIcon from '@lucide/svelte/icons/log-out';
-  import PuzzleIcon from '@lucide/svelte/icons/puzzle';
   import UserIcon from '@lucide/svelte/icons/user';
   import { UserAvatar } from '@slink/feature/User';
   import * as DropdownMenu from '@slink/ui/components/dropdown-menu/index.js';
@@ -34,7 +34,9 @@
                 >{user.email}</span
               >
             </div>
-            <ChevronsUpDownIcon class="ml-auto size-4 text-muted-foreground" />
+            <ChevronsUpDownIcon
+              class="ml-auto size-4 text-muted-foreground group-hover:text-sidebar-accent-foreground transition-colors duration-200"
+            />
           </Sidebar.MenuButton>
         {/snippet}
       </DropdownMenu.Trigger>
@@ -64,9 +66,11 @@
               <a
                 href="/profile"
                 {...props}
-                class="flex items-center gap-3 w-full px-2 py-1.5 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground transition-all duration-200"
+                class="flex items-center gap-3 w-full px-2 py-1.5 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground transition-all duration-200 group"
               >
-                <UserIcon class="size-4 text-muted-foreground" />
+                <UserIcon
+                  class="size-4 text-muted-foreground group-hover:text-accent-foreground transition-colors duration-200"
+                />
                 <span>Account Settings</span>
               </a>
             {/snippet}
@@ -76,9 +80,11 @@
               <a
                 href="/integrations"
                 {...props}
-                class="flex items-center gap-3 w-full px-2 py-1.5 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground transition-all duration-200"
+                class="flex items-center gap-3 w-full px-2 py-1.5 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground transition-all duration-200 group"
               >
-                <PuzzleIcon class="size-4 text-muted-foreground" />
+                <LinkIcon
+                  class="size-4 text-muted-foreground group-hover:text-accent-foreground transition-colors duration-200"
+                />
                 <span>Integrations</span>
               </a>
             {/snippet}

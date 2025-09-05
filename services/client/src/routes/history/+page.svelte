@@ -1,8 +1,8 @@
 <script lang="ts">
+  import { LoadMoreButton } from '@slink/feature/Action';
   import { HistoryListView } from '@slink/feature/Image';
   import { EmptyState } from '@slink/feature/Layout';
   import { HistorySkeleton } from '@slink/feature/Layout';
-  import { LoadMoreButton } from '@slink/legacy/UI/Action';
 
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';

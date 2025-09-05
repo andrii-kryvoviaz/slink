@@ -1,7 +1,7 @@
 <script lang="ts">
   import { ImageDeletePopover } from '@slink/feature/Image';
   import { Loader } from '@slink/feature/Layout';
-  import { Popover } from '@slink/legacy/UI/Action';
+  import { Overlay } from '@slink/ui/components/popover';
   import { Tooltip, TooltipProvider } from '@slink/ui/components/tooltip';
 
   import { goto } from '$app/navigation';
@@ -220,10 +220,9 @@
     {/if}
 
     {#if isButtonVisible('delete')}
-      <Popover
+      <Overlay
         bind:open={deletePopoverOpen}
         variant="floating"
-        responsive={true}
         contentProps={{ align: 'end' }}
       >
         {#snippet trigger()}
@@ -248,7 +247,7 @@
           close={closeDeletePopover}
           confirm={confirmImageDeletion}
         />
-      </Popover>
+      </Overlay>
     {/if}
   </div>
 </TooltipProvider>

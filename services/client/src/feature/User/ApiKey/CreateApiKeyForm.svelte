@@ -1,7 +1,8 @@
 <script lang="ts">
   import type { ApiKeyFormData } from '@slink/feature/User';
-  import { Button } from '@slink/legacy/UI/Action';
-  import { DatePicker, Input } from '@slink/legacy/UI/Form';
+  import { DatePickerField } from '@slink/ui/components';
+  import { Button } from '@slink/ui/components/button';
+  import { Input } from '@slink/ui/components/input';
 
   import Icon from '@iconify/svelte';
 
@@ -26,12 +27,12 @@
   }
 </script>
 
-<div class="space-y-6">
-  <div class="flex items-center gap-4">
+<div class="space-y-5">
+  <div class="flex items-center gap-3">
     <div
-      class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 shadow-lg"
+      class="w-10 h-10 rounded-xl bg-primary/10 border border-primary/10 flex items-center justify-center"
     >
-      <Icon icon="ph:key" class="h-6 w-6 text-white" />
+      <Icon icon="ph:key" class="h-5 w-5 text-primary" />
     </div>
     <div>
       <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -43,56 +44,40 @@
     </div>
   </div>
 
-  <form onsubmit={handleSubmit} class="space-y-5">
-    <div class="space-y-4">
-      <div class="space-y-2">
-        <Input
-          label="Key Name"
-          bind:value={formData.name}
-          placeholder="e.g., ShareX Upload Key"
-          error={errors?.name}
-          class="border-gray-200 dark:border-gray-700 focus:border-blue-500 focus:ring-blue-500/20 transition-all duration-200"
-        >
-          {#snippet leftIcon()}
-            <Icon icon="lucide:tag" class="h-4 w-4 text-gray-400" />
-          {/snippet}
-        </Input>
-        <p class="text-xs text-gray-500 dark:text-gray-400">
-          Choose a descriptive name to identify this key
-        </p>
-      </div>
+  <form onsubmit={handleSubmit} class="space-y-4">
+    <div class="space-y-3">
+      <Input
+        label="Key Name"
+        bind:value={formData.name}
+        placeholder="e.g., ShareX Upload Key"
+        error={errors?.name}
+        size="md"
+        rounded="lg"
+      >
+        {#snippet leftIcon()}
+          <Icon icon="ph:tag" class="h-4 w-4 text-gray-400" />
+        {/snippet}
+      </Input>
 
-      <div class="space-y-2">
-        <DatePicker
-          label="Expiry Date (Optional)"
-          bind:value={formData.expiresAt}
-          placeholder="Select expiry date"
-          error={errors?.expiresAt}
-          class="border-gray-200 dark:border-gray-700 focus:border-blue-500 focus:ring-blue-500/20 transition-all duration-200"
-        >
-          {#snippet leftIcon()}
-            <Icon icon="lucide:calendar" class="h-4 w-4 text-gray-400" />
-          {/snippet}
-        </DatePicker>
-        <p class="text-xs text-gray-500 dark:text-gray-400">
-          Leave empty for a key that never expires
-        </p>
-      </div>
+      <DatePickerField
+        label="Expiry Date (Optional)"
+        bind:value={formData.expiresAt}
+        placeholder="Select expiry date"
+        error={errors?.expiresAt}
+        id="expiry-date"
+      />
     </div>
 
     <div
-      class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4"
+      class="bg-blue-50/50 dark:bg-blue-900/10 border border-blue-200/50 dark:border-blue-800/30 rounded-lg p-3"
     >
       <div class="flex items-start gap-3">
         <Icon
-          icon="lucide:info"
-          class="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0"
+          icon="ph:info"
+          class="h-4 w-4 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0"
         />
         <div>
-          <h4 class="text-sm font-medium text-blue-900 dark:text-blue-100">
-            Security Notice
-          </h4>
-          <p class="text-xs text-blue-700 dark:text-blue-300 mt-1">
+          <p class="text-xs text-blue-700 dark:text-blue-300">
             Store your API key securely. It will only be shown once and cannot
             be recovered if lost.
           </p>
@@ -100,9 +85,11 @@
       </div>
     </div>
 
-    <div class="flex gap-3 pt-4">
+    <div class="flex gap-3 pt-2">
       <Button
         variant="glass"
+        size="sm"
+        rounded="full"
         type="button"
         onclick={onCancel}
         disabled={isCreating}
@@ -111,9 +98,11 @@
         Cancel
       </Button>
       <Button
-        variant="modern"
+        variant="gradient-blue"
+        size="sm"
+        rounded="full"
         type="submit"
-        class="flex-1 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-200"
+        class="flex-1"
         disabled={isCreating}
       >
         {#if isCreating}

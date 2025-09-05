@@ -1,7 +1,7 @@
 <script lang="ts">
+  import { RefreshButton } from '@slink/feature/Action';
   import { Card } from '@slink/feature/Layout';
   import { UserAvatar, UserStatus } from '@slink/feature/User';
-  import { RefreshButton } from '@slink/legacy/UI/Action';
   import { onMount } from 'svelte';
 
   import Icon from '@iconify/svelte';

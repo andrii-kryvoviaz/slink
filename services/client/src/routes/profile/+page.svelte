@@ -1,9 +1,8 @@
 <script lang="ts">
   import { Loader } from '@slink/feature/Layout';
   import { UserAvatar } from '@slink/feature/User';
-  import { ApiKeyManager } from '@slink/feature/User';
-  import { Button, type ButtonVariant } from '@slink/legacy/UI/Action';
-  import { Input } from '@slink/legacy/UI/Form';
+  import { Button, type ButtonVariant } from '@slink/ui/components/button';
+  import { Input } from '@slink/ui/components/input';
 
   import { enhance } from '$app/forms';
   import Icon from '@iconify/svelte';

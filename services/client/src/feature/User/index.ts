@@ -8,6 +8,9 @@ export { default as CreatedKeyDisplay } from './ApiKey/CreatedKeyDisplay.svelte'
 export * from './ApiKey/types';
 export { default as UserAvatar } from './UserAvatar/UserAvatar.svelte';
 export * from './UserAvatar/UserAvatar.theme';
+export { default as UserAvatarLegacy } from './UserAvatarLegacy/UserAvatarLegacy.svelte';
+export * from './UserAvatarLegacy/UserAvatarLegacy.theme';
+export * from './UserAvatarLegacy/UserAvatarLegacy.types';
 export { default as UserCard } from './UserCard/UserCard.svelte';
 export { default as UserDeleteConfirmation } from './UserDeleteConfirmation/UserDeleteConfirmation.svelte';
 export { default as UserStatus } from './UserStatus/UserStatus.svelte';

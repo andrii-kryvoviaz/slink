@@ -1,8 +1,8 @@
 <script lang="ts">
   import UnsupportedFileFormat from '@slink/feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte';
   import { Loader } from '@slink/feature/Layout';
-  import { Shourtcut } from '@slink/legacy/UI/Action';
-  import { Dropzone } from '@slink/legacy/UI/Form';
+  import { Dropzone } from '@slink/feature/Upload';
+  import { Shortcut } from '@slink/ui/components';
   import { cva } from 'class-variance-authority';
 
   import { className as cn } from '$lib/utils/ui/className';
@@ -186,7 +186,7 @@
               class="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300"
               >Quick paste:</span
             >
-            <Shourtcut control={true} key="v" size="lg" />
+            <Shortcut control={true} key="v" size="lg" />
           </div>
         </div>
 

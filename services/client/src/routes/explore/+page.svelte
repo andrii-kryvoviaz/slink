@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { LoadMoreButton } from '@slink/feature/Action';
   import { AdminImageDropdown, ImagePlaceholder } from '@slink/feature/Image';
   import { Masonry } from '@slink/feature/Layout';
   import { EmptyState } from '@slink/feature/Layout';
@@ -9,7 +10,6 @@
     TextEllipsis,
   } from '@slink/feature/Text';
   import { UserAvatar } from '@slink/feature/User';
-  import { LoadMoreButton } from '@slink/legacy/UI/Action';
 
   import { page } from '$app/state';
   import Icon from '@iconify/svelte';

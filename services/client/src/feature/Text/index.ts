@@ -1,6 +1,10 @@
 export { default as Badge } from './Badge/Badge.svelte';
 export * from './Badge/Badge.theme';
 export * from './Badge/Badge.types';
+export { default as CopyContainer } from './CopyContainer/CopyContainer.svelte';
+export * from './CopyContainer/CopyContainer.theme';
+export * from './CopyContainer/CopyContainer.types';
+export { default as CopyableText } from './CopyableText/CopyableText.svelte';
 export { default as ExpandableText } from './ExpandableText/ExpandableText.svelte';
 export { default as FormattedDate } from './FormattedDate/FormattedDate.svelte';
 export { default as HashtagText } from './HashtagText/HashtagText.svelte';

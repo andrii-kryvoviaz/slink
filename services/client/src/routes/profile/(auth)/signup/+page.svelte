@@ -5,8 +5,8 @@
     BannerContent,
     BannerIcon,
   } from '@slink/feature/Layout';
-  import { Button, type ButtonVariant } from '@slink/legacy/UI/Action';
-  import { Input } from '@slink/legacy/UI/Form';
+  import { Button, type ButtonVariant } from '@slink/ui/components/button';
+  import { Input } from '@slink/ui/components/input';
 
   import { enhance } from '$app/forms';
   import Icon from '@iconify/svelte';

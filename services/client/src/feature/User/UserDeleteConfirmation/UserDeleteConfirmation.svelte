@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button } from '@slink/legacy/UI/Action';
+  import { Button } from '@slink/ui/components/button';
 
   import type { User } from '$lib/auth/Type/User';
   import Icon from '@iconify/svelte';
@@ -38,14 +38,6 @@
     class="bg-gray-50/80 dark:bg-gray-800/50 rounded-xl p-4 border border-gray-200/50 dark:border-gray-700/30"
   >
     <div class="flex items-center gap-3">
-      <div
-        class="flex h-8 w-8 items-center justify-center rounded-lg bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 shadow-sm"
-      >
-        <Icon
-          icon="heroicons:user"
-          class="h-4 w-4 text-gray-600 dark:text-gray-400"
-        />
-      </div>
       <div class="min-w-0 flex-1">
         <span class="text-sm font-medium text-gray-900 dark:text-white">
           {user.email}
@@ -60,7 +52,8 @@
   <div class="flex gap-3 pt-2">
     <Button
       variant="glass"
-      size="md"
+      rounded="full"
+      size="sm"
       onclick={onCancel}
       class="flex-1"
       disabled={loading}
@@ -69,7 +62,8 @@
     </Button>
     <Button
       variant="danger"
-      size="md"
+      rounded="full"
+      size="sm"
       onclick={onConfirm}
       class="flex-1 font-medium shadow-lg hover:shadow-xl transition-all duration-200"
       disabled={loading}

@@ -1,7 +1,7 @@
 <script lang="ts">
+  import { RefreshButton } from '@slink/feature/Action';
   import { Card } from '@slink/feature/Layout';
   import { Chart, type ChartOptions } from '@slink/feature/Layout';
-  import { RefreshButton } from '@slink/legacy/UI/Action';
   import { onMount } from 'svelte';
 
   import { ApiClient } from '@slink/api/Client';

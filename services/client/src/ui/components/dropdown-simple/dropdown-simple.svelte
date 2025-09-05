@@ -2,9 +2,10 @@
   import type {
     ButtonAttributes,
     ButtonVariant,
-  } from '@slink/legacy/UI/Action';
-  import { Button } from '@slink/legacy/UI/Action';
-  import { DropdownMenu, type WithoutChild } from 'bits-ui';
+  } from '@slink/ui/components/button';
+  import { Button } from '@slink/ui/components/button';
+  import { DropdownMenu } from 'bits-ui';
+  import type { WithoutChild } from 'bits-ui';
   import type { Snippet } from 'svelte';
 
   import Icon from '@iconify/svelte';

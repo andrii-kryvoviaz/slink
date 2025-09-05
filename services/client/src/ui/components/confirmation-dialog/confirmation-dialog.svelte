@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Loader } from '@slink/feature/Layout';
-  import { Button } from '@slink/legacy/UI/Action';
+  import { Button } from '@slink/ui/components/button';
   import type { Snippet } from 'svelte';
 
   import Icon from '@iconify/svelte';

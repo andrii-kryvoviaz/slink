@@ -2,10 +2,10 @@
   import { UserAvatar } from '@slink/feature/User';
   import { UserDeleteConfirmation } from '@slink/feature/User';
   import {
-    Dropdown,
-    DropdownGroup,
-    DropdownItem,
-  } from '@slink/legacy/UI/Action';
+    DropdownSimple,
+    DropdownSimpleGroup,
+    DropdownSimpleItem,
+  } from '@slink/ui/components';
 
   import { type User, UserRole } from '$lib/auth/Type/User';
   import { UserStatus as UserStatusEnum } from '$lib/auth/Type/User';
@@ -30,7 +30,7 @@
     on,
   }: Props = $props();
 
-  let dropdownRef: Dropdown | null = $state(null);
+  let dropdownRef: DropdownSimple | null = $state(null);
   let showDeleteConfirmation = $state(false);
 
   const {
@@ -210,7 +210,7 @@
 
         {#if !isCurrentUser}
           <div class="flex-shrink-0 ml-3 relative">
-            <Dropdown bind:this={dropdownRef}>
+            <DropdownSimple bind:this={dropdownRef}>
               {#snippet trigger()}
                 <button
                   class="p-2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150"
@@ -220,9 +220,9 @@
               {/snippet}
 
               {#if !showDeleteConfirmation}
-                <DropdownGroup>
+                <DropdownSimpleGroup>
                   {#if user.status === UserStatusEnum.Active}
-                    <DropdownItem
+                    <DropdownSimpleItem
                       on={{
                         click: () => changeUserStatus(UserStatusEnum.Suspended),
                       }}
@@ -234,9 +234,9 @@
                         <Icon icon="heroicons:no-symbol" class="h-4 w-4" />
                       {/snippet}
                       <span>Suspend</span>
-                    </DropdownItem>
+                    </DropdownSimpleItem>
                   {:else}
-                    <DropdownItem
+                    <DropdownSimpleItem
                       on={{
                         click: () => changeUserStatus(UserStatusEnum.Active),
                       }}
@@ -248,13 +248,13 @@
                         <Icon icon="heroicons:check-circle" class="h-4 w-4" />
                       {/snippet}
                       <span>Activate</span>
-                    </DropdownItem>
+                    </DropdownSimpleItem>
                   {/if}
-                </DropdownGroup>
+                </DropdownSimpleGroup>
 
-                <DropdownGroup>
+                <DropdownSimpleGroup>
                   {#if !isAdmin}
-                    <DropdownItem
+                    <DropdownSimpleItem
                       on={{ click: () => grantRole(UserRole.Admin) }}
                       closeOnSelect={false}
                       loading={$grantRoleLoading}
@@ -263,9 +263,9 @@
                         <Icon icon="heroicons:key" class="h-4 w-4" />
                       {/snippet}
                       <span>Make Admin</span>
-                    </DropdownItem>
+                    </DropdownSimpleItem>
                   {:else}
-                    <DropdownItem
+                    <DropdownSimpleItem
                       on={{ click: () => revokeRole(UserRole.Admin) }}
                       closeOnSelect={false}
                       loading={$revokeRoleLoading}
@@ -274,14 +274,14 @@
                         <Icon icon="heroicons:lock-closed" class="h-4 w-4" />
                       {/snippet}
                       <span>Remove Admin</span>
-                    </DropdownItem>
+                    </DropdownSimpleItem>
                   {/if}
-                </DropdownGroup>
+                </DropdownSimpleGroup>
               {/if}
 
-              <DropdownGroup>
+              <DropdownSimpleGroup>
                 {#if !showDeleteConfirmation}
-                  <DropdownItem
+                  <DropdownSimpleItem
                     danger={true}
                     on={{ click: handleUserDeletion }}
                     closeOnSelect={false}
@@ -290,7 +290,7 @@
                       <Icon icon="heroicons:trash" class="h-4 w-4" />
                     {/snippet}
                     <span>Delete</span>
-                  </DropdownItem>
+                  </DropdownSimpleItem>
                 {:else}
                   <UserDeleteConfirmation
                     {user}
@@ -299,8 +299,8 @@
                     onCancel={cancelUserDeletion}
                   />
                 {/if}
-              </DropdownGroup>
-            </Dropdown>
+              </DropdownSimpleGroup>
+            </DropdownSimple>
           </div>
         {/if}
       </div>

@@ -1,11 +1,5 @@
 <script lang="ts">
-  import {
-    PopoverArrowTheme,
-    PopoverContentTheme,
-    PopoverTriggerTheme,
-  } from '@slink/legacy/UI/Action/Popover/Popover.theme';
-  import type { PopoverProps } from '@slink/legacy/UI/Action/Popover/Popover.types';
-  import { Popover } from 'bits-ui';
+  import { Popover as PopoverPrimitive } from 'bits-ui';
   import type { Snippet } from 'svelte';
 
   import { browser } from '$app/environment';
@@ -13,18 +7,31 @@
   import { responsive } from '@slink/lib/stores/responsive.svelte';
   import { className } from '@slink/lib/utils/ui/className';
 
-  type Props = Popover.RootProps &
-    Popover.ContentProps &
-    PopoverProps & {
-      trigger?: Snippet;
-      triggerProps?: Popover.TriggerProps;
-      contentProps?: Popover.ContentProps;
-      withArrow?: boolean;
-      responsive?: boolean;
-      class?: string;
-      contentClass?: string;
-      triggerClass?: string;
-    };
+  import PopoverContent from './popover-content.svelte';
+  import PopoverTrigger from './popover-trigger.svelte';
+  import {
+    PopoverArrowTheme,
+    PopoverContentTheme,
+    PopoverTriggerTheme,
+  } from './themes';
+
+  type Props = {
+    open?: boolean;
+    trigger?: Snippet;
+    triggerProps?: Record<string, any>;
+    contentProps?: Record<string, any>;
+    withArrow?: boolean;
+    responsive?: boolean;
+    class?: string;
+    contentClass?: string;
+    triggerClass?: string;
+    children?: Snippet;
+    variant?: 'default' | 'glass' | 'floating' | 'minimal' | 'modern';
+    triggerVariant?: 'default' | 'button' | 'ghost' | 'minimal';
+    size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'auto';
+    rounded?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full';
+  };
+
   let {
     open = $bindable(false),
     trigger,
@@ -83,24 +90,22 @@
 {#if !browser}
   {@render trigger?.()}
 {:else}
-  <Popover.Root bind:open {...props}>
-    <Popover.Trigger {...triggerProps} class={triggerClasses}>
+  <PopoverPrimitive.Root bind:open {...props}>
+    <PopoverTrigger {...triggerProps} class={triggerClasses}>
       {@render trigger?.()}
-    </Popover.Trigger>
+    </PopoverTrigger>
 
-    <Popover.Portal>
-      <Popover.Content
-        side="bottom"
-        align="start"
-        sideOffset={8}
-        {...responsiveContentProps()}
-        class={contentClasses}
-      >
-        {#if withArrow}
-          <Popover.Arrow class={arrowClasses} />
-        {/if}
-        {@render children?.()}
-      </Popover.Content>
-    </Popover.Portal>
-  </Popover.Root>
+    <PopoverContent
+      side="bottom"
+      align="start"
+      sideOffset={8}
+      {...responsiveContentProps()}
+      class={contentClasses}
+    >
+      {#if withArrow}
+        <div class={arrowClasses}></div>
+      {/if}
+      {@render children?.()}
+    </PopoverContent>
+  </PopoverPrimitive.Root>
 {/if}

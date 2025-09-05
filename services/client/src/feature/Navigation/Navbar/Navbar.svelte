@@ -1,7 +1,7 @@
 <script lang="ts">
   import { SearchBar } from '@slink/feature/Search';
-  import { Button } from '@slink/legacy/UI/Action';
-  import { Shourtcut } from '@slink/legacy/UI/Action';
+  import { Shortcut } from '@slink/ui/components';
+  import { Button } from '@slink/ui/components/button';
   import { Tooltip, TooltipProvider } from '@slink/ui/components/tooltip';
   import type { Snippet } from 'svelte';
 
@@ -115,7 +115,7 @@
             {/snippet}
             <div class="flex flex-col items-center gap-2 text-center">
               <span class="text-sm font-medium">Upload shortcut</span>
-              <Shourtcut
+              <Shortcut
                 control={true}
                 shift={true}
                 key="u"

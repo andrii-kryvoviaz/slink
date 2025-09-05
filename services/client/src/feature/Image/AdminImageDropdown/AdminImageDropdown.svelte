@@ -1,10 +1,10 @@
 <script lang="ts">
   import { ImageDeleteConfirmation } from '@slink/feature/Image';
   import {
-    Dropdown,
-    DropdownGroup,
-    DropdownItem,
-  } from '@slink/legacy/UI/Action';
+    DropdownSimple,
+    DropdownSimpleGroup,
+    DropdownSimpleItem,
+  } from '@slink/ui/components';
 
   import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
   import Icon from '@iconify/svelte';
@@ -89,7 +89,7 @@
 </script>
 
 <div class="relative -mr-3">
-  <Dropdown variant="invisible" size="xs">
+  <DropdownSimple variant="invisible" size="xs">
     {#snippet trigger()}
       <button
         class="p-2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150"
@@ -98,9 +98,9 @@
       </button>
     {/snippet}
 
-    <DropdownGroup>
+    <DropdownSimpleGroup>
       {#if !deleteConfirmOpen}
-        <DropdownItem
+        <DropdownSimpleItem
           on={{
             click: () => handleVisibilityChange(!image.attributes.isPublic),
           }}
@@ -117,13 +117,13 @@
           <span class={isGuestImage ? 'text-gray-400' : ''}
             >{image.attributes.isPublic ? 'Make Private' : 'Make Public'}</span
           >
-        </DropdownItem>
+        </DropdownSimpleItem>
       {/if}
-    </DropdownGroup>
+    </DropdownSimpleGroup>
 
-    <DropdownGroup>
+    <DropdownSimpleGroup>
       {#if !deleteConfirmOpen}
-        <DropdownItem
+        <DropdownSimpleItem
           danger={true}
           on={{ click: handleImageDeletion }}
           closeOnSelect={false}
@@ -132,7 +132,7 @@
             <Icon icon="heroicons:trash" class="h-4 w-4" />
           {/snippet}
           <span>Delete</span>
-        </DropdownItem>
+        </DropdownSimpleItem>
       {:else}
         <ImageDeleteConfirmation
           {image}
@@ -144,6 +144,6 @@
             (preserveOnDiskAfterDeletion = checked)}
         />
       {/if}
-    </DropdownGroup>
-  </Dropdown>
+    </DropdownSimpleGroup>
+  </DropdownSimple>
 </div>

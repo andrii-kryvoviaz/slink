@@ -1,6 +1,6 @@
 <script lang="ts">
   import { HashtagText } from '@slink/feature/Text';
-  import { Button } from '@slink/legacy/UI/Action';
+  import { Button } from '@slink/ui/components/button';
 
   import Icon from '@iconify/svelte';
 

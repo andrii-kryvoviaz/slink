@@ -1,7 +1,7 @@
 <script lang="ts">
   import { ImageActionBar, ImagePlaceholder } from '@slink/feature/Image';
   import { Badge, FormattedDate } from '@slink/feature/Text';
-  import { Button } from '@slink/legacy/UI/Action';
+  import { Button } from '@slink/ui/components/button';
 
   import { bytesToSize } from '$lib/utils/bytesConverter';
   import Icon from '@iconify/svelte';

@@ -1,13 +1,19 @@
 <script lang="ts">
-  import { Input, type InputProps } from '@slink/legacy/UI/Form';
+  import { Input } from '@slink/ui/components/input';
   import type { Snippet } from 'svelte';
 
   import type { HTMLInputAttributes } from 'svelte/elements';
 
+  import type { ErrorList } from '@slink/api/Exceptions';
+
   interface Props
-    extends Pick<HTMLInputAttributes, 'value' | 'name' | 'step' | 'min'>,
-      InputProps {
+    extends Pick<HTMLInputAttributes, 'value' | 'name' | 'step' | 'min'> {
     class?: string;
+    label?: string;
+    error?: string | ErrorList;
+    size?: 'sm' | 'md' | 'lg';
+    variant?: 'default' | 'error' | 'modern';
+    rounded?: 'sm' | 'md' | 'lg';
     children?: Snippet;
   }
 

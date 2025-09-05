@@ -15,9 +15,9 @@
     } else if (status === UserStatus.Inactive) {
       return 'neutral';
     } else if (status === UserStatus.Suspended) {
-      return 'error-tinted';
+      return 'warning';
     } else if (status === UserStatus.Banned) {
-      return 'error';
+      return 'destructive';
     } else {
       return 'default';
     }

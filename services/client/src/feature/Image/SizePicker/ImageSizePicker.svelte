@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { ImageSize } from '@slink/feature/Image';
-  import { Button } from '@slink/legacy/UI/Action';
+  import { Button } from '@slink/ui/components/button';
 
   import Icon from '@iconify/svelte';
   import { cubicOut } from 'svelte/easing';

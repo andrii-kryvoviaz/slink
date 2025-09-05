@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Loader } from '@slink/feature/Layout';
-  import { Button } from '@slink/legacy/UI/Action';
+  import { Button } from '@slink/ui/components/button';
 
   import Icon from '@iconify/svelte';
   import { type Readable, readable } from 'svelte/store';
@@ -56,11 +56,6 @@
     class="bg-gray-50/80 dark:bg-gray-800/50 rounded-xl p-4 border border-gray-200/50 dark:border-gray-700/30"
   >
     <div class="flex items-center gap-3">
-      <div
-        class="flex h-8 w-12 items-center justify-center rounded-lg bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 shadow-sm"
-      >
-        <Icon icon="ph:key" class="h-4 w-4 text-gray-600 dark:text-gray-400" />
-      </div>
       <div>
         <span class="text-sm font-medium text-gray-900 dark:text-white">
           {apiKey.name}
@@ -75,7 +70,8 @@
   <div class="flex gap-3 pt-2">
     <Button
       variant="glass"
-      size="md"
+      rounded="full"
+      size="sm"
       class="flex-1"
       disabled={$loading}
       onclick={onCancel}
@@ -84,7 +80,8 @@
     </Button>
     <Button
       variant="danger"
-      size="md"
+      rounded="full"
+      size="sm"
       onclick={handleConfirm}
       class="flex-1 font-medium shadow-lg hover:shadow-xl transition-all duration-200"
       disabled={$loading}

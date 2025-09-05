@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button } from '@slink/legacy/UI/Action';
+  import { Button } from '@slink/ui/components/button';
 
   import { page } from '$app/state';
 </script>
