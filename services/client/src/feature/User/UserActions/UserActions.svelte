@@ -142,7 +142,9 @@
   let handledResponseIds = $state(new Set<string>());
 
   const getResponseId = (response: SingleUserResponse) => {
-    const rolesString = Array.isArray(response.roles) ? response.roles.join(',') : '';
+    const rolesString = Array.isArray(response.roles)
+      ? response.roles.join(',')
+      : '';
     return `${response.id}-${response.status}-${rolesString}-${Date.now()}`;
   };
 
