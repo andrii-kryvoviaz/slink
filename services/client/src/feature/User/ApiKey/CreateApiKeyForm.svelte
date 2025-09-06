@@ -27,25 +27,30 @@
   }
 </script>
 
-<div class="space-y-5">
-  <div class="flex items-center gap-3">
+<div class="space-y-6">
+  <div class="flex items-center gap-4">
     <div
-      class="w-10 h-10 rounded-xl bg-primary/10 border border-primary/10 flex items-center justify-center"
+      class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/10 to-indigo-600/15 dark:from-blue-400/20 dark:to-indigo-500/25 border border-blue-300/40 dark:border-blue-600/50 flex items-center justify-center shadow-md backdrop-blur-sm"
     >
-      <Icon icon="ph:key" class="h-5 w-5 text-primary" />
+      <Icon
+        icon="ph:key"
+        class="h-6 w-6 text-blue-700 dark:text-blue-300 drop-shadow-sm"
+      />
     </div>
     <div>
-      <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+      <h3
+        class="text-xl font-semibold text-slate-900 dark:text-white tracking-tight"
+      >
         Create API Key
       </h3>
-      <p class="text-sm text-gray-500 dark:text-gray-400">
+      <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">
         Generate a secure key for external integrations
       </p>
     </div>
   </div>
 
-  <form onsubmit={handleSubmit} class="space-y-4">
-    <div class="space-y-3">
+  <form onsubmit={handleSubmit} class="space-y-5">
+    <div class="space-y-4">
       <Input
         label="Key Name"
         bind:value={formData.name}
@@ -55,7 +60,7 @@
         rounded="lg"
       >
         {#snippet leftIcon()}
-          <Icon icon="ph:tag" class="h-4 w-4 text-gray-400" />
+          <Icon icon="ph:tag" class="h-4 w-4 text-slate-400" />
         {/snippet}
       </Input>
 
@@ -69,17 +74,34 @@
     </div>
 
     <div
-      class="bg-blue-50/50 dark:bg-blue-900/10 border border-blue-200/50 dark:border-blue-800/30 rounded-lg p-3"
+      class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-50/90 via-white to-indigo-50/80 dark:from-blue-950/20 dark:via-slate-800/50 dark:to-indigo-950/30 border border-blue-200/40 dark:border-blue-800/30 p-5 shadow-lg backdrop-blur-sm"
     >
-      <div class="flex items-start gap-3">
-        <Icon
-          icon="ph:info"
-          class="h-4 w-4 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0"
-        />
-        <div>
-          <p class="text-xs text-blue-700 dark:text-blue-300">
-            Store your API key securely. It will only be shown once and cannot
-            be recovered if lost.
+      <div
+        class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-100/30 via-transparent to-indigo-100/20 dark:from-blue-900/20 dark:via-transparent dark:to-indigo-900/10"
+      ></div>
+      <div class="relative flex items-start gap-4">
+        <div class="flex-shrink-0 mt-0.5">
+          <div
+            class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg"
+          >
+            <Icon
+              icon="ph:shield-check-duotone"
+              class="h-5 w-5 text-white drop-shadow-sm"
+            />
+          </div>
+        </div>
+        <div class="flex-1 min-w-0">
+          <h4
+            class="text-sm font-semibold text-blue-900 dark:text-blue-100 leading-tight mb-2"
+          >
+            Security Notice
+          </h4>
+          <p
+            class="text-sm text-blue-800/90 dark:text-blue-200/90 leading-relaxed"
+          >
+            Your API key will be displayed only once after creation. Store it
+            securely in your password manager or environment variables. If lost,
+            you'll need to generate a new one.
           </p>
         </div>
       </div>
@@ -102,7 +124,7 @@
         size="sm"
         rounded="full"
         type="submit"
-        class="flex-1"
+        class="flex-1 shadow-lg hover:shadow-xl transition-shadow duration-200"
         disabled={isCreating}
       >
         {#if isCreating}

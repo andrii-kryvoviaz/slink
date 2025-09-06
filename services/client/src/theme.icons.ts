@@ -105,9 +105,6 @@ export const themeIcons: string[] = [
   'lucide:check-circle',
   'lucide:rocket',
   'heroicons:x-circle',
-  'ph:tag',
-  'ph:warning',
-  'lucide:plus',
   'lucide:arrow-right',
   'lucide:rotate-cw',
   'heroicons:chevron-up-down',
@@ -117,4 +114,8 @@ export const themeIcons: string[] = [
   'heroicons:chevron-right',
   'heroicons:adjustments-horizontal',
   'heroicons:user',
+  'ph:tag',
+  'lucide:plus',
+  'ph:shield-check-duotone',
+  'ph:warning-duotone',
 ];

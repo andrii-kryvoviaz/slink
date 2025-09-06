@@ -73,7 +73,7 @@
 </script>
 
 <div
-  class="space-y-6 p-6 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/30 rounded-2xl shadow-2xl shadow-black/[0.08] dark:shadow-black/30"
+  class="space-y-6 p-6 bg-gradient-to-br from-slate-50 to-slate-100/50 dark:from-slate-800/50 dark:to-slate-700/30 border border-slate-200/50 dark:border-slate-700/30 rounded-2xl shadow-lg backdrop-blur-sm"
 >
   <div class="flex items-start gap-6">
     <div
@@ -85,7 +85,7 @@
     <div class="flex-1 min-w-0">
       <div class="flex items-center justify-between gap-4">
         <h3
-          class="text-xl font-semibold text-gray-900 dark:text-white tracking-tight"
+          class="text-xl font-semibold text-slate-900 dark:text-white tracking-tight"
         >
           {title}
         </h3>
@@ -99,7 +99,7 @@
 
       {#if message}
         <p
-          class="mt-2 text-base text-gray-600 dark:text-gray-400 leading-relaxed"
+          class="mt-2 text-base text-slate-600 dark:text-slate-400 leading-relaxed"
         >
           {message}
         </p>
