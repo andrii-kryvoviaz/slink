@@ -1,15 +1,15 @@
 <script lang="ts">
-  import { page } from '$app/state';
-  import Icon from '@iconify/svelte';
-  import { fade, fly } from 'svelte/transition';
-
-  import { CopyableText } from '@slink/components/UI/Action';
   import {
     Banner,
     BannerAction,
     BannerContent,
     BannerIcon,
-  } from '@slink/components/UI/Banner';
+  } from '@slink/feature/Layout';
+  import { CopyableText } from '@slink/feature/Text';
+
+  import { page } from '$app/state';
+  import Icon from '@iconify/svelte';
+  import { fade, fly } from 'svelte/transition';
 
   import type { PageServerData } from './$types';
 

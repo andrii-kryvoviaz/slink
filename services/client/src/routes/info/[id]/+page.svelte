@@ -1,12 +1,4 @@
 <script lang="ts">
-  import { page } from '$app/state';
-  import { fly } from 'svelte/transition';
-
-  import { ApiClient } from '@slink/api/Client';
-  import { ReactiveState } from '@slink/api/ReactiveState';
-
-  import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
-
   import {
     ImageActionBar,
     ImageDescription,
@@ -14,8 +6,16 @@
     ImagePlaceholder,
     type ImageSize,
     ImageSizePicker,
-  } from '@slink/components/Feature/Image';
-  import { CopyContainer } from '@slink/components/UI/Action';
+  } from '@slink/feature/Image';
+  import { CopyContainer } from '@slink/feature/Text';
+
+  import { page } from '$app/state';
+  import { fly } from 'svelte/transition';
+
+  import { ApiClient } from '@slink/api/Client';
+  import { ReactiveState } from '@slink/api/ReactiveState';
+
+  import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
 
   import type { PageData } from './$types';
 

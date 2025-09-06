@@ -9,14 +9,7 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "baseUrl": "./src",
-    "paths": {
-      "@slink/utils/*": ["lib/utils/*"],
-      "@slink/components/*": ["components/*"],
-      "@slink/api/*": ["api/*"],
-      "@slink/store/*": ["lib/store/*"],
-      "@slink/*": ["*"]
-    }
+    "baseUrl": "./src"
   }
   // Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
   //

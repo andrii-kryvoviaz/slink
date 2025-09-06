@@ -1,4 +1,12 @@
 <script lang="ts">
+  import {
+    Banner,
+    BannerAction,
+    BannerContent,
+    BannerIcon,
+  } from '@slink/feature/Layout';
+  import { UploadForm, UploadSuccess } from '@slink/feature/Upload';
+
   import { goto } from '$app/navigation';
   import { fade } from 'svelte/transition';
 
@@ -9,14 +17,6 @@
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
 
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
-
-  import { UploadForm, UploadSuccess } from '@slink/components/Feature/Upload';
-  import {
-    Banner,
-    BannerAction,
-    BannerContent,
-    BannerIcon,
-  } from '@slink/components/UI/Banner';
 
   import type { PageData } from './$types';
 

@@ -1,4 +1,15 @@
 <script lang="ts">
+  import { SettingItem, SettingsPane } from '@slink/feature/Settings';
+  import { Notice } from '@slink/feature/Text';
+  import { Select } from '@slink/ui/components';
+  import { Button } from '@slink/ui/components/button';
+  import {
+    FileSizeInput,
+    Input,
+    NumberInput,
+  } from '@slink/ui/components/input';
+  import { Switch } from '@slink/ui/components/switch';
+
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { EmptyResponse } from '@slink/api/Response';
@@ -8,20 +19,6 @@
     SettingCategoryData,
   } from '@slink/lib/settings/Type/GlobalSettings';
   import { useGlobalSettings } from '@slink/lib/state/GlobalSettings.svelte';
-
-  import {
-    SettingItem,
-    SettingsPane,
-  } from '@slink/components/Feature/Settings';
-  import { Button } from '@slink/components/UI/Action';
-  import {
-    FileSizeInput,
-    Input,
-    NumberInput,
-    Select,
-    Toggle,
-  } from '@slink/components/UI/Form';
-  import { Notice } from '@slink/components/UI/Text';
 
   import type { PageServerData } from './$types';
 
@@ -99,6 +96,7 @@
 
         <SettingItem
           defaultValue={defaultSettings?.image?.maxSize}
+          currentValue={settings.image.maxSize}
           reset={(value) => {
             settings.image.maxSize = value;
           }}
@@ -117,6 +115,7 @@
 
         <SettingItem
           defaultValue={defaultSettings?.image?.stripExifMetadata}
+          currentValue={settings.image.stripExifMetadata}
           reset={(value) => {
             settings.image.stripExifMetadata = value;
           }}
@@ -128,7 +127,7 @@
             Automatically remove metadata from uploaded images for privacy
           {/snippet}
           <div class="flex justify-end">
-            <Toggle
+            <Switch
               name="imageStripExifMetadata"
               bind:checked={settings.image.stripExifMetadata}
             />
@@ -137,6 +136,7 @@
 
         <SettingItem
           defaultValue={defaultSettings?.image?.allowOnlyPublicImages}
+          currentValue={settings.image.allowOnlyPublicImages}
           reset={(value) => {
             settings.image.allowOnlyPublicImages = value;
           }}
@@ -149,7 +149,7 @@
             visibility cannot be changed
           {/snippet}
           <div class="flex justify-end">
-            <Toggle
+            <Switch
               name="imageAllowOnlyPublicImages"
               bind:checked={settings.image.allowOnlyPublicImages}
             />
@@ -171,6 +171,7 @@
 
         <SettingItem
           defaultValue={defaultSettings?.access?.allowGuestUploads}
+          currentValue={settings.access.allowGuestUploads}
           reset={(value) => {
             settings.access.allowGuestUploads = value;
           }}
@@ -184,7 +185,7 @@
             message but cannot browse uploaded images
           {/snippet}
           <div class="flex justify-end">
-            <Toggle
+            <Switch
               name="accessAllowGuestUploads"
               bind:checked={settings.access.allowGuestUploads}
             />
@@ -193,6 +194,7 @@
 
         <SettingItem
           defaultValue={defaultSettings?.access?.allowUnauthenticatedAccess}
+          currentValue={settings.access.allowUnauthenticatedAccess}
           reset={(value) => {
             settings.access.allowUnauthenticatedAccess = value;
           }}
@@ -204,7 +206,7 @@
             Allow unauthenticated users to view and browse images
           {/snippet}
           <div class="flex justify-end">
-            <Toggle
+            <Switch
               name="accessAllowUnauthenticatedAccess"
               bind:checked={settings.access.allowUnauthenticatedAccess}
             />
@@ -226,6 +228,7 @@
 
         <SettingItem
           defaultValue={defaultSettings.storage?.provider}
+          currentValue={settings.storage.provider}
           reset={(value) => {
             settings.storage.provider = value;
           }}
@@ -237,7 +240,7 @@
             Select your preferred storage backend
           {/snippet}
           <Select
-            name="storageProvider"
+            class="w-full max-w-md"
             type="single"
             items={[
               { value: 'local', label: 'Local Storage' },
@@ -252,6 +255,7 @@
           <div class="space-y-6">
             <SettingItem
               defaultValue={defaultSettings.storage?.adapter.smb.host}
+              currentValue={settings.storage.adapter.smb.host}
               reset={(value) => {
                 settings.storage.adapter.smb.host = value;
               }}
@@ -271,6 +275,7 @@
 
             <SettingItem
               defaultValue={defaultSettings.storage?.adapter.smb.share}
+              currentValue={settings.storage.adapter.smb.share}
               reset={(value) => {
                 settings.storage.adapter.smb.share = value;
               }}
@@ -290,6 +295,7 @@
 
             <SettingItem
               defaultValue={defaultSettings.storage?.adapter.smb.workgroup}
+              currentValue={settings.storage.adapter.smb.workgroup}
               reset={(value) => {
                 settings.storage.adapter.smb.workgroup = value;
               }}
@@ -309,6 +315,7 @@
 
             <SettingItem
               defaultValue={defaultSettings.storage?.adapter.smb.username}
+              currentValue={settings.storage.adapter.smb.username}
               reset={(value) => {
                 settings.storage.adapter.smb.username = value;
               }}
@@ -327,6 +334,7 @@
 
             <SettingItem
               defaultValue={defaultSettings.storage?.adapter.smb.password}
+              currentValue={settings.storage.adapter.smb.password}
               reset={(value) => {
                 settings.storage.adapter.smb.password = value;
               }}
@@ -364,6 +372,7 @@
 
             <SettingItem
               defaultValue={defaultSettings.storage?.adapter.s3.region}
+              currentValue={settings.storage.adapter.s3.region}
               reset={(value) => {
                 settings.storage.adapter.s3.region = value;
               }}
@@ -383,6 +392,7 @@
 
             <SettingItem
               defaultValue={defaultSettings.storage?.adapter.s3.bucket}
+              currentValue={settings.storage.adapter.s3.bucket}
               reset={(value) => {
                 settings.storage.adapter.s3.bucket = value;
               }}
@@ -410,6 +420,7 @@
 
             <SettingItem
               defaultValue={defaultSettings.storage?.adapter.s3.key}
+              currentValue={settings.storage.adapter.s3.key}
               reset={(value) => {
                 settings.storage.adapter.s3.key = value;
               }}
@@ -436,6 +447,7 @@
 
             <SettingItem
               defaultValue={defaultSettings.storage?.adapter.s3.secret}
+              currentValue={settings.storage.adapter.s3.secret}
               reset={(value) => {
                 settings.storage.adapter.s3.secret = value;
               }}
@@ -470,6 +482,7 @@
 
         <SettingItem
           defaultValue={defaultSettings.user?.allowRegistration}
+          currentValue={settings.user.allowRegistration}
           reset={(value) => {
             settings.user.allowRegistration = value;
           }}
@@ -481,7 +494,7 @@
             Allow new users to create accounts
           {/snippet}
           <div class="flex justify-end">
-            <Toggle
+            <Switch
               name="allowRegistration"
               bind:checked={settings.user.allowRegistration}
             />
@@ -492,6 +505,7 @@
           <div class="space-y-6">
             <SettingItem
               defaultValue={defaultSettings.user?.approvalRequired}
+              currentValue={settings.user.approvalRequired}
               reset={(value) => {
                 settings.user.approvalRequired = value;
               }}
@@ -504,7 +518,7 @@
                 the application
               {/snippet}
               <div class="flex justify-end">
-                <Toggle
+                <Switch
                   name="approvalRequired"
                   bind:checked={settings.user.approvalRequired}
                 />
@@ -513,6 +527,7 @@
 
             <SettingItem
               defaultValue={defaultSettings.user?.password.minLength}
+              currentValue={settings.user.password.minLength}
               reset={(value) => {
                 settings.user.password.minLength = value;
               }}
@@ -532,6 +547,7 @@
 
             <SettingItem
               defaultValue={defaultSettings.user?.password.requirements}
+              currentValue={settings.user.password.requirements}
               reset={(value) => {
                 settings.user.password.requirements = value;
               }}
@@ -543,7 +559,6 @@
                 Character types required in user passwords for enhanced security
               {/snippet}
               <Select
-                name="passwordRequirements"
                 type="bitmask"
                 class="w-full max-w-md"
                 items={[

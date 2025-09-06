@@ -69,12 +69,13 @@
 
     <div class="space-y-4">
       {#each faqQuestions as { title, content, slug }, i}
+        {@const ContentComponent = content}
         <div
           id={slug}
           class="bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 shadow-sm overflow-hidden transition-all duration-200 hover:shadow-md"
         >
           <button
-            class="w-full px-6 py-5 text-left focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset transition-all duration-200 hover:bg-slate-50 dark:hover:bg-slate-700/30"
+            class="w-full px-6 py-5 text-left focus:outline-none transition-all duration-200 hover:bg-slate-50 dark:hover:bg-slate-700/30"
             onclick={() => toggleQuestion(slug)}
             aria-expanded={openedQuestion === slug}
             aria-controls={`answer-${slug}`}
@@ -112,7 +113,7 @@
                 <div
                   class="prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-300"
                 >
-                  {@html content}
+                  <ContentComponent />
                 </div>
               </div>
             </div>

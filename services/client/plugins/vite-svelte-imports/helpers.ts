@@ -4,6 +4,10 @@ import path from 'path';
 
 import { walkSync } from '../dependencies/walkDirectory';
 
+function kebabToCamelCase(str: string): string {
+  return str.replace(/-([a-z])/g, (match, letter) => letter.toUpperCase());
+}
+
 export function flattenDirectories(dirs: string[]): string[] {
   return dirs.reduce((acc: string[], dir: string) => {
     const subDirs = fs
@@ -55,8 +59,10 @@ export async function createIndexFile(dir: string): Promise<string> {
           relativePath = relativePath.slice(1);
         }
 
+        const exportName = kebabToCamelCase(file.name);
+
         return file.extension === '.svelte'
-          ? `export { default as ${file.name} } from './${relativePath}${file.extension}';`
+          ? `export { default as ${exportName} } from './${relativePath}${file.extension}';`
           : `export * from './${relativePath}';`;
       })
       .join('\n') + '\n';

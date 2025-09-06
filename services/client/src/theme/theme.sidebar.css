@@ -1,10 +1,12 @@
 @layer base {
   :root {
-    --sidebar-backdrop-blur: blur(16px);
+    --sidebar-backdrop-blur: blur(20px);
     --sidebar-shadow:
       0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     --sidebar-shadow-lg:
       0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --sidebar-gradient-start: var(--color-bg-start);
+    --sidebar-gradient-end: var(--color-bg-end);
   }
 
   .dark {
@@ -128,5 +130,79 @@
     box-shadow:
       0 10px 25px hsl(var(--foreground) / 0.1),
       0 4px 6px hsl(var(--foreground) / 0.05);
+  }
+
+  .sidebar-integrated {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--sidebar) / 0.8) 0%,
+      hsl(var(--sidebar-accent) / 0.4) 50%,
+      hsl(var(--sidebar) / 0.9) 100%
+    );
+    backdrop-filter: var(--sidebar-backdrop-blur);
+    -webkit-backdrop-filter: var(--sidebar-backdrop-blur);
+    border-right: 1px solid hsl(var(--sidebar-border) / 0.3);
+    position: relative;
+    box-shadow: inset 1px 0 0 hsl(var(--sidebar-accent) / 0.1);
+  }
+
+  .sidebar-integrated::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      var(--sidebar-gradient-start) 0%,
+      transparent 20%,
+      transparent 80%,
+      var(--sidebar-gradient-end) 100%
+    );
+    opacity: 0.8;
+    z-index: -1;
+  }
+
+  .sidebar-menu-item-integrated {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      hsl(var(--sidebar-accent) / 0.05) 50%,
+      transparent 100%
+    );
+    transition: all 0.2s ease-out;
+  }
+
+  .sidebar-menu-item-integrated:hover {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--sidebar-accent) / 0.1) 0%,
+      hsl(var(--sidebar-accent) / 0.15) 50%,
+      hsl(var(--sidebar-accent) / 0.1) 100%
+    );
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .sidebar-section-glass {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--sidebar-accent) / 0.03) 0%,
+      hsl(var(--sidebar) / 0.05) 50%,
+      hsl(var(--sidebar-accent) / 0.03) 100%
+    );
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid hsl(var(--sidebar-border) / 0.2);
+    border-radius: 0.75rem;
+    transition: all 0.2s ease-out;
+  }
+
+  .sidebar-section-glass:hover {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--sidebar-accent) / 0.05) 0%,
+      hsl(var(--sidebar) / 0.08) 50%,
+      hsl(var(--sidebar-accent) / 0.05) 100%
+    );
+    border-color: hsl(var(--sidebar-border) / 0.3);
   }
 }

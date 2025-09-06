@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { fade } from 'svelte/transition';
-
   import {
     ImageAnalytics,
     LatestUsers,
     UserAnalytics,
-  } from '@slink/components/Feature/Analytics';
+  } from '@slink/feature/Analytics';
+
+  import { fade } from 'svelte/transition';
 </script>
 
 <svelte:head>

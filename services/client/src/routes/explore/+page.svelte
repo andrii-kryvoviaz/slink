@@ -1,25 +1,22 @@
 <script lang="ts">
+  import { LoadMoreButton } from '@slink/feature/Action';
+  import { AdminImageDropdown, ImagePlaceholder } from '@slink/feature/Image';
+  import { Masonry } from '@slink/feature/Layout';
+  import { EmptyState } from '@slink/feature/Layout';
+  import { ExploreSkeleton } from '@slink/feature/Layout';
+  import {
+    ExpandableText,
+    FormattedDate,
+    TextEllipsis,
+  } from '@slink/feature/Text';
+  import { UserAvatar } from '@slink/feature/User';
+
   import { page } from '$app/state';
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
   import { skeleton } from '@slink/lib/actions/skeleton';
   import { usePublicImagesFeed } from '@slink/lib/state/PublicImagesFeed.svelte';
-
-  import {
-    AdminImageDropdown,
-    ImagePlaceholder,
-  } from '@slink/components/Feature/Image';
-  import { UserAvatar } from '@slink/components/Feature/User';
-  import { LoadMoreButton } from '@slink/components/UI/Action';
-  import { EmptyState } from '@slink/components/UI/EmptyState';
-  import { Masonry } from '@slink/components/UI/Layout';
-  import { ExploreSkeleton } from '@slink/components/UI/Skeleton';
-  import {
-    ExpandableText,
-    FormattedDate,
-    TextEllipsis,
-  } from '@slink/components/UI/Text';
 
   import type { PageServerData } from './$types';
 
@@ -105,7 +102,7 @@
             <div class="p-5 pb-4">
               <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-3">
-                  <UserAvatar size="sm" user={image.owner} />
+                  <UserAvatar size="md" user={image.owner} />
                   <div class="flex-1 min-w-0">
                     <TextEllipsis
                       class="font-medium text-gray-900 dark:text-white text-sm"
