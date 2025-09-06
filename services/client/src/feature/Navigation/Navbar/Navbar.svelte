@@ -88,7 +88,6 @@
               | 'description'
               | 'hashtag'}
             placeholder="Search images..."
-            disabled={publicImagesFeed.isLoading}
             onsearch={handleSearch}
             onclear={handleClearSearch}
           />
