@@ -1,3 +1,4 @@
+export * from './AppSidebar/AppSidebar.types';
 export { default as Navbar } from './Navbar/Navbar.svelte';
 export { default as AppSidebar } from './Sidebar/AppSidebar.svelte';
 export { default as NavGroup } from './Sidebar/NavGroup.svelte';

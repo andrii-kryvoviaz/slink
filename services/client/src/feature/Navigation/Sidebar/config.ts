@@ -6,7 +6,7 @@ import HelpCircleIcon from '@lucide/svelte/icons/help-circle';
 import PlusIcon from '@lucide/svelte/icons/plus';
 import Settings2Icon from '@lucide/svelte/icons/settings-2';
 import UsersIcon from '@lucide/svelte/icons/users';
-import type { AppSidebarGroup } from '@slink/legacy/UI/Navigation/AppSidebar/AppSidebar.types';
+import type { AppSidebarGroup } from '@slink/feature/Navigation/AppSidebar/AppSidebar.types';
 
 import type { NavMainItem, SidebarConfig, SidebarData } from './types';
 

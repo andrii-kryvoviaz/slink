@@ -1,35 +1,11 @@
 <script lang="ts">
   import type { SidebarConfig } from '@slink/feature/Navigation';
   import { NavGroup, NavUser } from '@slink/feature/Navigation';
+  import type { AppSidebarGroup } from '@slink/feature/Navigation/AppSidebar/AppSidebar.types';
   import * as Sidebar from '@slink/ui/components/sidebar/index.js';
   import type { ComponentProps } from 'svelte';
 
   import type { User } from '@slink/lib/auth/Type/User';
-
-  interface AppSidebarItem {
-    id: string;
-    title: string;
-    icon: string;
-    href?: string;
-    action?: () => void;
-    badge?: {
-      text: string;
-      variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
-    };
-    children?: AppSidebarItem[];
-    roles?: string[];
-    hidden?: boolean;
-    disabled?: boolean;
-  }
-
-  interface AppSidebarGroup {
-    id: string;
-    title?: string;
-    items: AppSidebarItem[];
-    roles?: string[];
-    hidden?: boolean;
-    collapsible?: boolean;
-  }
 
   interface ExtendedSidebarConfig extends SidebarConfig {
     user?: Partial<User>;
