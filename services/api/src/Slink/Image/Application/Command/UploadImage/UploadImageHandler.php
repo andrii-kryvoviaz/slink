@@ -8,6 +8,7 @@ use Slink\Image\Domain\Image;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Image\Domain\Service\ImageAnalyzerInterface;
 use Slink\Image\Domain\Service\ImageTransformerInterface;
+use Slink\Image\Domain\Service\ImageSanitizerInterface;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Domain\ValueObject\ImageMetadata;
 use Slink\Settings\Application\Service\SettingsService;
@@ -24,6 +25,7 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
    * @param ImageStoreRepositoryInterface  $imageRepository
    * @param ImageAnalyzerInterface         $imageAnalyzer
    * @param ImageTransformerInterface      $imageTransformer
+   * @param ImageSanitizerInterface        $sanitizer
    * @param StorageInterface               $storage
    */
   public function __construct(
@@ -31,6 +33,7 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
     private ImageStoreRepositoryInterface  $imageRepository,
     private ImageAnalyzerInterface         $imageAnalyzer,
     private ImageTransformerInterface      $imageTransformer,
+    private ImageSanitizerInterface        $sanitizer,
     private StorageInterface               $storage
   ) {
   }
@@ -48,6 +51,10 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
     
     if($this->imageAnalyzer->isConversionRequired($file->getMimeType())) {
       $file = $this->imageTransformer->convertToJpeg($file);
+    }
+    
+    if($this->imageAnalyzer->requiresSanitization($file->getMimeType())) {
+      $file = $this->sanitizer->sanitizeFile($file);
     }
     
     [$mimeType, $pathname, $extension] = [$file->getMimeType(), $file->getPathname(), $file->guessExtension()];

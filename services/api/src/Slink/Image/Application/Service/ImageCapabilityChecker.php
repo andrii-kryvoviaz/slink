@@ -12,6 +12,7 @@ final readonly class ImageCapabilityChecker {
    * @param array<string> $resizableMimeTypes
    * @param array<string> $stripExifMimeTypes
    * @param array<string> $enforceConversionMimeTypes
+   * @param array<string> $sanitizationRequiredMimeTypes
    */
   public function __construct(
     #[Autowire(param: 'supports_resize')]
@@ -19,7 +20,9 @@ final readonly class ImageCapabilityChecker {
     #[Autowire(param: 'supports_strip_exif')]
     private array $stripExifMimeTypes,
     #[Autowire(param: 'enforce_conversion')]
-    private array $enforceConversionMimeTypes
+    private array $enforceConversionMimeTypes,
+    #[Autowire(param: 'requires_sanitization')]
+    private array $sanitizationRequiredMimeTypes = ['image/svg+xml', 'image/svg']
   ) {
   }
 
@@ -33,5 +36,9 @@ final readonly class ImageCapabilityChecker {
 
   public function supportsResize(?string $mimeType): bool {
     return in_array($mimeType, $this->resizableMimeTypes, true);
+  }
+  
+  public function requiresSanitization(?string $mimeType): bool {
+    return in_array($mimeType, $this->sanitizationRequiredMimeTypes, true);
   }
 }

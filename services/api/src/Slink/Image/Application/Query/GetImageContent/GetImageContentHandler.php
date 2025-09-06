@@ -6,6 +6,7 @@ namespace Slink\Image\Application\Query\GetImageContent;
 
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Image\Domain\Service\ImageAnalyzerInterface;
+use Slink\Image\Domain\Service\ImageSanitizerInterface;
 use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Application\Query\QueryHandlerInterface;
 use Slink\Shared\Domain\ValueObject\ImageOptions;
@@ -17,6 +18,7 @@ final readonly class GetImageContentHandler implements QueryHandlerInterface {
     private ImageAnalyzerInterface $imageAnalyzer,
     private ImageRepositoryInterface $repository,
     private StorageInterface $storage,
+    private ImageSanitizerInterface $sanitizer,
   ) {
   }
   
@@ -40,6 +42,10 @@ final readonly class GetImageContentHandler implements QueryHandlerInterface {
     
     if($imageContent === null) {
       throw new NotFoundException();
+    }
+    
+    if($this->sanitizer->requiresSanitization($imageView->getMimeType())) {
+      $imageContent = $this->sanitizer->sanitize($imageContent);
     }
     
     return Item::fromContent($imageContent, $imageView->getMimeType());

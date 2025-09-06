@@ -12,6 +12,7 @@ use Slink\Image\Application\Command\UploadImage\UploadImageHandler;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Image\Domain\Service\ImageAnalyzerInterface;
 use Slink\Image\Domain\Service\ImageTransformerInterface;
+use Slink\Image\Domain\Service\ImageSanitizerInterface;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\ID;
@@ -30,6 +31,7 @@ class UploadImageHandlerTest extends TestCase {
     $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
     $imageAnalyzer = $this->createMock(ImageAnalyzerInterface::class);
     $imageTransformer = $this->createMock(ImageTransformerInterface::class);
+    $sanitizer = $this->createMock(ImageSanitizerInterface::class);
     $storage = $this->createMock(StorageInterface::class);
     
     $handler = new UploadImageHandler(
@@ -37,6 +39,7 @@ class UploadImageHandlerTest extends TestCase {
       $imageRepository,
       $imageAnalyzer,
       $imageTransformer,
+      $sanitizer,
       $storage
     );
 

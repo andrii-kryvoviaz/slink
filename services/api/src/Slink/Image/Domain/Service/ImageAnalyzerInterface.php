@@ -28,6 +28,12 @@ interface ImageAnalyzerInterface {
    * @return bool
    */
   public function isConversionRequired(?string $mimeType): bool;
+  
+  /**
+   * @param ?string $mimeType
+   * @return bool
+   */
+  public function requiresSanitization(?string $mimeType): bool;
  
   /**
    * @return array<string, mixed>

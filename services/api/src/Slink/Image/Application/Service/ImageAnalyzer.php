@@ -39,6 +39,10 @@ final class ImageAnalyzer implements ImageAnalyzerInterface {
   public function supportsResize(?string $mimeType): bool {
     return $this->capabilityChecker->supportsResize($mimeType);
   }
+  
+  public function requiresSanitization(?string $mimeType): bool {
+    return $this->capabilityChecker->requiresSanitization($mimeType);
+  }
 
   /**
    * @return array<string, mixed>
