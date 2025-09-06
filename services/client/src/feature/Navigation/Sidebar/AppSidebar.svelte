@@ -31,6 +31,14 @@
 
   const user = $derived(createUser(config.user));
   const groups = $derived(config.groups || []);
+
+  const sidebar = Sidebar.useSidebar();
+
+  function handleNavigate() {
+    if (sidebar.isMobile) {
+      sidebar.setOpenMobile(false);
+    }
+  }
 </script>
 
 <Sidebar.Root {collapsible} {...restProps}>
@@ -60,12 +68,12 @@
   </Sidebar.Header>
   <Sidebar.Content>
     {#each groups as group (group.id)}
-      <NavGroup {group} />
+      <NavGroup {group} onNavigate={handleNavigate} />
     {/each}
   </Sidebar.Content>
   {#if config.user}
     <Sidebar.Footer>
-      <NavUser {user} />
+      <NavUser {user} onNavigate={handleNavigate} />
     </Sidebar.Footer>
   {/if}
   <Sidebar.Rail />

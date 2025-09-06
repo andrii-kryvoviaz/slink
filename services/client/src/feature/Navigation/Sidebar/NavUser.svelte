@@ -12,8 +12,11 @@
 
   let {
     user,
-  }: { user: { displayName: string; email: string; avatar: string } } =
-    $props();
+    onNavigate,
+  }: {
+    user: { displayName: string; email: string; avatar: string };
+    onNavigate?: () => void;
+  } = $props();
   const sidebar = useSidebar();
 </script>
 
@@ -67,6 +70,7 @@
                 href="/profile"
                 {...props}
                 class="flex items-center gap-3 w-full px-2 py-1.5 text-sm font-medium rounded-md hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-900 dark:hover:text-blue-200 focus:bg-blue-50 dark:focus:bg-blue-900/20 focus:text-blue-900 dark:focus:text-blue-200 transition-all duration-200 group"
+                onclick={() => onNavigate?.()}
               >
                 <UserIcon
                   class="size-4 text-gray-500 dark:text-gray-400 group-hover:text-blue-900 dark:group-hover:text-blue-200 transition-colors duration-200"
@@ -81,6 +85,7 @@
                 href="/integrations"
                 {...props}
                 class="flex items-center gap-3 w-full px-2 py-1.5 text-sm font-medium rounded-md hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-900 dark:hover:text-blue-200 focus:bg-blue-50 dark:focus:bg-blue-900/20 focus:text-blue-900 dark:focus:text-blue-200 transition-all duration-200 group"
+                onclick={() => onNavigate?.()}
               >
                 <LinkIcon
                   class="size-4 text-gray-500 dark:text-gray-400 group-hover:text-blue-900 dark:group-hover:text-blue-200 transition-colors duration-200"
@@ -103,6 +108,7 @@
                 type="submit"
                 {...props}
                 class="flex cursor-pointer items-center gap-3 w-full px-2 py-1.5 text-sm font-medium text-left rounded-md hover:bg-destructive/10 hover:text-destructive focus:bg-destructive/10 focus:text-destructive transition-all duration-200"
+                onclick={() => onNavigate?.()}
               >
                 <LogOutIcon class="size-4" />
                 <span>Sign Out</span>

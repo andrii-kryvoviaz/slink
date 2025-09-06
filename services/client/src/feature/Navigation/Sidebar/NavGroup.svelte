@@ -22,7 +22,10 @@
     'ph:github-logo': GithubIcon,
   };
 
-  let { group }: { group: AppSidebarGroup } = $props();
+  let {
+    group,
+    onNavigate,
+  }: { group: AppSidebarGroup; onNavigate?: () => void } = $props();
 </script>
 
 <Sidebar.Group>
@@ -40,6 +43,7 @@
               {...props}
               target={isExternalLink ? '_blank' : undefined}
               rel={isExternalLink ? 'noopener noreferrer' : undefined}
+              onclick={() => onNavigate?.()}
             >
               {#if item.icon && iconMap[item.icon]}
                 {@const IconComponent = iconMap[item.icon]}
