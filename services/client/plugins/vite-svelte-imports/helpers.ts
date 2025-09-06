@@ -5,9 +5,10 @@ import path from 'path';
 import { walkSync } from '../dependencies/walkDirectory';
 
 function kebabToCamelCase(str: string): string {
-  return str
-    .replace(/-([a-z])/g, (match, letter) => letter.toUpperCase())
-    .capitalizeFirstLetter();
+  const camelCase = str.replace(/-([a-z])/g, (match, letter) =>
+    letter.toUpperCase(),
+  );
+  return camelCase.charAt(0).toUpperCase() + camelCase.slice(1);
 }
 
 export function flattenDirectories(dirs: string[]): string[] {
