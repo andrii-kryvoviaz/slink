@@ -36,12 +36,9 @@
   aria-label={ariaLabel}
   aria-orientation={orientation}
 >
-  {#each options as option, index (option.value)}
+  {#each options as option (option.value)}
     {@const isActive = value === option.value}
     {@const isDisabled = disabled || option.disabled}
-    {@const isFirst = index === 0}
-    {@const isLast = index === options.length - 1}
-    {@const isSingle = options.length === 1}
 
     <button
       type="button"
@@ -55,7 +52,6 @@
       class={toggleGroupItemTheme({
         variant: isActive ? 'active' : 'inactive',
         size,
-        position: isSingle ? 'single' : isFirst ? 'first' : isLast ? 'last' : 'middle',
         orientation,
       })}
     >
