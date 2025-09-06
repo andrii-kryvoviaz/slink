@@ -22,7 +22,7 @@ export const BannerTheme = cva(
 );
 
 export const BannerIconTheme = cva(
-  'flex items-center justify-center w-10 h-10 rounded-lg shadow-sm',
+  'flex items-center justify-center w-10 h-10 min-w-[2.5rem] min-h-[2.5rem] rounded-lg shadow-sm flex-shrink-0',
   {
     variants: {
       variant: {
