@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { SidebarConfig } from '@slink/feature/Navigation';
   import { NavGroup, NavUser } from '@slink/feature/Navigation';
-  import type { AppSidebarGroup } from '@slink/feature/Navigation/AppSidebar/AppSidebar.types';
+  import type { AppSidebarGroup } from '@slink/feature/Navigation/Sidebar/types';
   import * as Sidebar from '@slink/ui/components/sidebar/index.js';
   import type { ComponentProps } from 'svelte';
 

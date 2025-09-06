@@ -1,28 +1,10 @@
 <script lang="ts">
-  import ChartLineIcon from '@lucide/svelte/icons/chart-line';
-  import ClockIcon from '@lucide/svelte/icons/clock';
-  import CompassIcon from '@lucide/svelte/icons/compass';
-  import ExternalLinkIcon from '@lucide/svelte/icons/external-link';
-  import GithubIcon from '@lucide/svelte/icons/github';
-  import HelpCircleIcon from '@lucide/svelte/icons/help-circle';
-  import PlusIcon from '@lucide/svelte/icons/plus';
-  import Settings2Icon from '@lucide/svelte/icons/settings-2';
-  import UsersIcon from '@lucide/svelte/icons/users';
-  import type { AppSidebarGroup } from '@slink/feature/Navigation/AppSidebar/AppSidebar.types';
   import * as Sidebar from '@slink/ui/components/sidebar/index.js';
 
   import { page } from '$app/stores';
+  import Icon from '@iconify/svelte';
 
-  const iconMap: Record<string, any> = {
-    'ph:compass': CompassIcon,
-    'ph:plus': PlusIcon,
-    'ph:clock-counter-clockwise': ClockIcon,
-    'ph:chart-line': ChartLineIcon,
-    'ph:users': UsersIcon,
-    'ph:gear-fine-light': Settings2Icon,
-    'ph:question': HelpCircleIcon,
-    'ph:github-logo': GithubIcon,
-  };
+  import type { AppSidebarGroup } from './types';
 
   let {
     group,
@@ -52,15 +34,15 @@
               rel={isExternalLink ? 'noopener noreferrer' : undefined}
               onclick={() => onNavigate?.()}
             >
-              {#if item.icon && iconMap[item.icon]}
-                {@const IconComponent = iconMap[item.icon]}
-                <IconComponent class="w-4 h-4" />
+              {#if item.icon}
+                <Icon icon={item.icon} class="w-4 h-4" />
               {/if}
               <span class="group-data-[collapsible=icon]:hidden"
                 >{item.title}</span
               >
               {#if isExternalLink}
-                <ExternalLinkIcon
+                <Icon
+                  icon="ph:arrow-square-out"
                   class="w-3 h-3 ml-auto opacity-60 group-data-[collapsible=icon]:hidden"
                 />
               {/if}

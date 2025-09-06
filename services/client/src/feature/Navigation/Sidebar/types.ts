@@ -2,6 +2,7 @@ export interface NavMainItem {
   title: string;
   url: string;
   icon?: any;
+  iconName?: string;
   isActive?: boolean;
   items: NavSubItem[];
 }
@@ -37,4 +38,22 @@ export interface SidebarConfig {
   showAdmin?: boolean;
   showSystemItems?: boolean;
   showUploadItem?: boolean;
+}
+
+export interface AppSidebarItem {
+  id: string;
+  title: string;
+  icon: string;
+  href?: string;
+  hidden?: boolean;
+  roles?: string[];
+  children?: AppSidebarItem[];
+}
+
+export interface AppSidebarGroup {
+  id: string;
+  title?: string;
+  items: AppSidebarItem[];
+  roles?: string[];
+  hidden?: boolean;
 }

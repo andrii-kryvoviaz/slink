@@ -1,6 +1,6 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
-import type { AppSidebarGroup } from '@slink/feature/Navigation/AppSidebar/AppSidebar.types';
+import type { AppSidebarGroup } from '@slink/feature/Navigation/Sidebar/types';
 
 import type { CookieManager } from '@slink/lib/auth/CookieManager';
 import type { User } from '@slink/lib/auth/Type/User';
