@@ -2,13 +2,11 @@
   import { type VariantProps, tv } from 'tailwind-variants';
 
   export const sidebarMenuButtonVariants = tv({
-    base: 'peer/menu-button outline-hidden ring-sidebar-ring hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-gray-100 active:bg-sidebar-accent active:text-sidebar-accent-foreground group-has-data-[sidebar=menu-action]/menu-item:pr-8 data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-gray-100 data-[state=open]:hover:text-gray-900 dark:data-[state=open]:hover:bg-gray-800 dark:data-[state=open]:hover:text-gray-100 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm transition-[width,height,padding] focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0',
+    base: 'peer/menu-button outline-hidden ring-sidebar-ring hover:pl-4 text-muted-foreground hover:text-foreground group-has-data-[sidebar=menu-action]/menu-item:pr-8 data-[active=true]:text-indigo-700 dark:data-[active=true]:text-indigo-300 data-[active=true]:bg-indigo-50/80 dark:data-[active=true]:bg-indigo-950/30 data-[active=true]:shadow-sm data-[active=true]:pl-4 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:hover:pl-2 group-data-[collapsible=icon]:data-[active=true]:pl-2 flex w-full items-center gap-2 overflow-hidden rounded-md p-2 pl-3 text-left text-sm transition-all duration-300 ease-out focus-visible:ring-2 focus-visible:ring-indigo-500/20 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:font-medium [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0',
     variants: {
       variant: {
-        default:
-          'hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-gray-100',
-        outline:
-          'bg-background hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-gray-100 shadow-[0_0_0_1px_var(--sidebar-border)] hover:shadow-[0_0_0_1px_var(--sidebar-accent)]',
+        default: '',
+        outline: 'bg-background shadow-[0_0_0_1px_var(--sidebar-border)]',
       },
       size: {
         default: 'h-8 text-sm',

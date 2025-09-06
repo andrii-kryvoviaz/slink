@@ -11,6 +11,8 @@
   import type { AppSidebarGroup } from '@slink/feature/Navigation/AppSidebar/AppSidebar.types';
   import * as Sidebar from '@slink/ui/components/sidebar/index.js';
 
+  import { page } from '$app/stores';
+
   const iconMap: Record<string, any> = {
     'ph:compass': CompassIcon,
     'ph:plus': PlusIcon,
@@ -26,6 +28,10 @@
     group,
     onNavigate,
   }: { group: AppSidebarGroup; onNavigate?: () => void } = $props();
+
+  function isActiveRoute(href: string) {
+    return $page.url.pathname === href;
+  }
 </script>
 
 <Sidebar.Group>
@@ -35,8 +41,9 @@
   <Sidebar.Menu>
     {#each group.items as item (item.id)}
       {@const isExternalLink = item.href?.startsWith('http')}
+      {@const isActive = Boolean(item.href && isActiveRoute(item.href))}
       <Sidebar.MenuItem>
-        <Sidebar.MenuButton tooltipContent={item.title}>
+        <Sidebar.MenuButton tooltipContent={item.title} {isActive}>
           {#snippet child({ props })}
             <a
               href={item.href || '#'}
@@ -49,9 +56,13 @@
                 {@const IconComponent = iconMap[item.icon]}
                 <IconComponent class="w-4 h-4" />
               {/if}
-              <span>{item.title}</span>
+              <span class="group-data-[collapsible=icon]:hidden"
+                >{item.title}</span
+              >
               {#if isExternalLink}
-                <ExternalLinkIcon class="w-3 h-3 ml-auto opacity-60" />
+                <ExternalLinkIcon
+                  class="w-3 h-3 ml-auto opacity-60 group-data-[collapsible=icon]:hidden"
+                />
               {/if}
             </a>
           {/snippet}
