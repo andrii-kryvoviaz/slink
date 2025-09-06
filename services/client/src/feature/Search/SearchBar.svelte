@@ -192,9 +192,8 @@
     {#if showOptions}
       <div
         class={cn(
-          'absolute top-full right-0 mt-2 min-w-[160px] overflow-hidden rounded-xl p-2 shadow-2xl border',
-          'z-[9999] bg-white shadow-black/[0.12] border-gray-200/40',
-          'dark:bg-gray-900 dark:shadow-black/60 dark:border-gray-700/40',
+          'absolute top-full right-0 mt-2 min-w-[160px] overflow-hidden rounded-xl p-1 shadow-xl shadow-black/10 dark:shadow-black/25 border',
+          'z-[9999] bg-white dark:bg-gray-900/95 backdrop-blur-sm border-gray-200/80 dark:border-gray-700/80',
           'animate-in fade-in-0 zoom-in-95 duration-150',
         )}
       >
@@ -202,16 +201,19 @@
           <button
             onclick={() => selectSearchBy(option.value)}
             class={cn(
-              'flex items-center gap-2.5 w-full px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-150 cursor-pointer mb-1 last:mb-0',
+              'flex items-center gap-3 w-full px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-150 cursor-pointer',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/20',
               searchBy === option.value
-                ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 shadow-sm'
-                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/60 hover:text-gray-900 dark:hover:text-gray-100',
+                ? 'text-blue-600 dark:text-blue-300 bg-blue-100 dark:bg-blue-800/40 shadow-sm'
+                : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800/60 hover:text-gray-900 dark:hover:text-gray-100',
             )}
             type="button"
           >
-            <Icon icon={option.icon} class="h-4 w-4 flex-shrink-0 opacity-60" />
-            <span class="flex-1 text-left font-normal">{option.label}</span>
+            <Icon
+              icon={option.icon}
+              class="h-4 w-4 flex-shrink-0 text-gray-500 dark:text-gray-400"
+            />
+            <span class="flex-1 text-left">{option.label}</span>
           </button>
         {/each}
       </div>
