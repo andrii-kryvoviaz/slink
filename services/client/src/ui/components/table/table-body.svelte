@@ -1,20 +1,21 @@
 <script lang="ts">
-	import { cn, type WithElementRef } from "@slink/utils/ui/index.js";
-	import type { HTMLAttributes } from "svelte/elements";
+  import type { HTMLAttributes } from 'svelte/elements';
 
-	let {
-		ref = $bindable(null),
-		class: className,
-		children,
-		...restProps
-	}: WithElementRef<HTMLAttributes<HTMLTableSectionElement>> = $props();
+  import { type WithElementRef, cn } from '@slink/utils/ui/index.js';
+
+  let {
+    ref = $bindable(null),
+    class: className,
+    children,
+    ...restProps
+  }: WithElementRef<HTMLAttributes<HTMLTableSectionElement>> = $props();
 </script>
 
 <tbody
-	bind:this={ref}
-	data-slot="table-body"
-	class={cn("[&_tr:last-child]:border-0", className)}
-	{...restProps}
+  bind:this={ref}
+  data-slot="table-body"
+  class={cn('[&_tr:last-child]:border-0', className)}
+  {...restProps}
 >
-	{@render children?.()}
+  {@render children?.()}
 </tbody>

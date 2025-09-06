@@ -1,6 +1,5 @@
 import ButtonIcon from './button-icon.svelte';
 import Root, { buttonVariants } from './button.svelte';
-
 import type {
   ButtonFontWeight,
   ButtonMotion,

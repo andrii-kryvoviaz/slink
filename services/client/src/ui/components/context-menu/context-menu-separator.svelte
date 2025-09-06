@@ -1,17 +1,18 @@
 <script lang="ts">
-	import { ContextMenu as ContextMenuPrimitive } from "bits-ui";
-	import { cn } from "@slink/utils/ui/index.js";
+  import { ContextMenu as ContextMenuPrimitive } from 'bits-ui';
 
-	let {
-		ref = $bindable(null),
-		class: className,
-		...restProps
-	}: ContextMenuPrimitive.SeparatorProps = $props();
+  import { cn } from '@slink/utils/ui/index.js';
+
+  let {
+    ref = $bindable(null),
+    class: className,
+    ...restProps
+  }: ContextMenuPrimitive.SeparatorProps = $props();
 </script>
 
 <ContextMenuPrimitive.Separator
-	bind:ref
-	data-slot="context-menu-separator"
-	class={cn("bg-border -mx-1 my-1 h-px", className)}
-	{...restProps}
+  bind:ref
+  data-slot="context-menu-separator"
+  class={cn('bg-border -mx-1 my-1 h-px', className)}
+  {...restProps}
 />

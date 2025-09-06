@@ -1,19 +1,20 @@
 <script lang="ts">
-	import { Calendar as CalendarPrimitive } from "bits-ui";
-	import { cn } from "@slink/utils/ui/index.js";
+  import { Calendar as CalendarPrimitive } from 'bits-ui';
 
-	let {
-		ref = $bindable(null),
-		class: className,
-		...restProps
-	}: CalendarPrimitive.HeaderProps = $props();
+  import { cn } from '@slink/utils/ui/index.js';
+
+  let {
+    ref = $bindable(null),
+    class: className,
+    ...restProps
+  }: CalendarPrimitive.HeaderProps = $props();
 </script>
 
 <CalendarPrimitive.Header
-	bind:ref
-	class={cn(
-		"h-(--cell-size) flex w-full items-center justify-center gap-1.5 text-sm font-medium",
-		className
-	)}
-	{...restProps}
+  bind:ref
+  class={cn(
+    'h-(--cell-size) flex w-full items-center justify-center gap-1.5 text-sm font-medium',
+    className,
+  )}
+  {...restProps}
 />

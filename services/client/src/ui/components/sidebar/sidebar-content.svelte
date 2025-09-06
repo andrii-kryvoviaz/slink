@@ -1,24 +1,25 @@
 <script lang="ts">
-	import type { HTMLAttributes } from "svelte/elements";
-	import { cn, type WithElementRef } from "@slink/utils/ui/index.js";
+  import type { HTMLAttributes } from 'svelte/elements';
 
-	let {
-		ref = $bindable(null),
-		class: className,
-		children,
-		...restProps
-	}: WithElementRef<HTMLAttributes<HTMLElement>> = $props();
+  import { type WithElementRef, cn } from '@slink/utils/ui/index.js';
+
+  let {
+    ref = $bindable(null),
+    class: className,
+    children,
+    ...restProps
+  }: WithElementRef<HTMLAttributes<HTMLElement>> = $props();
 </script>
 
 <div
-	bind:this={ref}
-	data-slot="sidebar-content"
-	data-sidebar="content"
-	class={cn(
-		"flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden",
-		className
-	)}
-	{...restProps}
+  bind:this={ref}
+  data-slot="sidebar-content"
+  data-sidebar="content"
+  class={cn(
+    'flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden',
+    className,
+  )}
+  {...restProps}
 >
-	{@render children?.()}
+  {@render children?.()}
 </div>

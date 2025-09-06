@@ -1,20 +1,21 @@
 <script lang="ts">
-	import type { HTMLLiAttributes } from "svelte/elements";
-	import { cn, type WithElementRef } from "@slink/utils/ui/index.js";
+  import type { HTMLLiAttributes } from 'svelte/elements';
 
-	let {
-		ref = $bindable(null),
-		class: className,
-		children,
-		...restProps
-	}: WithElementRef<HTMLLiAttributes> = $props();
+  import { type WithElementRef, cn } from '@slink/utils/ui/index.js';
+
+  let {
+    ref = $bindable(null),
+    class: className,
+    children,
+    ...restProps
+  }: WithElementRef<HTMLLiAttributes> = $props();
 </script>
 
 <li
-	bind:this={ref}
-	data-slot="breadcrumb-item"
-	class={cn("inline-flex items-center gap-1.5", className)}
-	{...restProps}
+  bind:this={ref}
+  data-slot="breadcrumb-item"
+  class={cn('inline-flex items-center gap-1.5', className)}
+  {...restProps}
 >
-	{@render children?.()}
+  {@render children?.()}
 </li>

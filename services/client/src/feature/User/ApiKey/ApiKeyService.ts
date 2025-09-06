@@ -1,5 +1,4 @@
 import { useApiKeyStore } from '$lib/state/ApiKeyStore.svelte.js';
-
 import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
 
 import type { ApiKeyFormData } from './types';

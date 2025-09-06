@@ -1,10 +1,9 @@
 <script lang="ts">
   import { twMerge } from 'tailwind-merge';
 
+  import { Theme } from '$lib/settings';
   import Icon from '@iconify/svelte';
   import type { HTMLButtonAttributes } from 'svelte/elements';
-
-  import { Theme } from '$lib/settings';
 
   import {
     ThemeSwitchContainer,
