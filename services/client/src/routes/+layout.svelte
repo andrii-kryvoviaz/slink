@@ -82,7 +82,7 @@
       </header>
       <div class="flex flex-1 flex-col gap-4 pt-0 min-h-0">
         <ScrollArea
-          class="flex-1 h-full p-4"
+          class="flex-1 h-full"
           type="scroll"
           orientation="vertical"
           scrollbarYClasses="w-2"
