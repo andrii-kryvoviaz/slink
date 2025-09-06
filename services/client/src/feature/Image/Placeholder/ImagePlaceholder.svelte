@@ -43,7 +43,28 @@
   let originalImage = $derived(src.split('?')[0]);
   let actualAspectRatio = $state(metadata.width / metadata.height);
 
-  let aspectRatio = $derived(actualAspectRatio);
+  let isSvg = $derived(
+    src.includes('.svg') || metadata.mimeType === 'image/svg+xml',
+  );
+
+  let aspectRatio = $derived(() => {
+    if (
+      isSvg &&
+      (metadata.height === 0 ||
+        metadata.width === 0 ||
+        !isFinite(actualAspectRatio))
+    ) {
+      return 1;
+    }
+    return actualAspectRatio;
+  });
+
+  let shouldUseAspectRatio = $derived(
+    keepAspectRatio &&
+      !(isSvg && (metadata.height === 0 || metadata.width === 0)),
+  );
+
+  let finalRatio = $derived(shouldUseAspectRatio ? aspectRatio() : 1);
 
   const urlHasSizingParams = (url: string): boolean => {
     const params = new URLSearchParams(url.split('?')[1] || '');
@@ -70,7 +91,7 @@
   };
 
   let shouldStretch = $derived(() => {
-    if (src.includes('.svg')) return true;
+    if (isSvg) return true;
     if (!stretch) return false;
 
     const minRequiredHeight = metadata.height * stretchThreshold;
@@ -84,7 +105,7 @@
 
 <TooltipProvider delayDuration={300}>
   <AspectRatio.Root
-    ratio={keepAspectRatio ? aspectRatio : 1}
+    ratio={finalRatio}
     class={cn(
       'group relative flex items-center justify-center overflow-hidden border-slate-500/10 bg-white/0 w-full',
       className,
@@ -100,16 +121,20 @@
         updateAspectRatioFromImage(img);
         isLoaded = true;
       }}
+      onerror={() => {
+        isLoaded = true;
+      }}
       class={cn(
         'transition-opacity border-none',
         (shouldStretch() || keepAspectRatio) && 'w-full h-full',
-        keepAspectRatio && 'object-contain',
-        !keepAspectRatio && 'object-fill',
-        !isLoaded && 'hidden',
+        keepAspectRatio && !isSvg && 'object-contain',
+        !keepAspectRatio && !isSvg && 'object-fill',
+        isSvg && 'w-full h-full object-contain',
+        !isLoaded && !isSvg && 'hidden',
       )}
     />
 
-    {#if !isLoaded}
+    {#if !isLoaded && !isSvg}
       <div
         class="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-800 animate-pulse"
       >
