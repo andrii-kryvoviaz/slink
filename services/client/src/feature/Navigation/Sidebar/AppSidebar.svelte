@@ -43,7 +43,7 @@
       ></div>
       <a
         href="/"
-        class="relative w-8 h-8 rounded-lg bg-gradient-to-br from-sidebar-primary/15 via-sidebar-accent/20 to-sidebar-primary/10 border border-sidebar-border/40 flex items-center justify-center hover:border-sidebar-border/60 transition-all duration-300 hover:scale-105 backdrop-blur-sm group"
+        class="relative w-8 h-8 rounded-lg bg-gradient-to-br from-sidebar-accent/30 via-sidebar-accent/40 to-sidebar-accent/20 border border-sidebar-border/60 flex items-center justify-center hover:border-sidebar-border/80 transition-all duration-300 hover:scale-105 group dark:from-sidebar-primary/15 dark:via-sidebar-accent/20 dark:to-sidebar-primary/10 dark:border-sidebar-border/40 dark:hover:border-sidebar-border/60"
       >
         <img
           src="/favicon.png"
