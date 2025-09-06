@@ -37,7 +37,7 @@
     sideOffset = 4,
     align = 'center',
     alignOffset = 0,
-    withArrow = true,
+    withArrow = false,
     variant = 'subtle',
     size = 'sm',
     rounded = 'md',

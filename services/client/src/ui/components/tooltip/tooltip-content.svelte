@@ -22,7 +22,7 @@
     size = 'sm',
     rounded = 'md',
     width = 'auto',
-    withArrow = true,
+    withArrow = false,
     ...restProps
   }: TooltipPrimitive.ContentProps & {
     arrowClasses?: string;
