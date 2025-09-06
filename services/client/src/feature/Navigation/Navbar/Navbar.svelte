@@ -53,10 +53,12 @@
 <svelte:window bind:innerWidth />
 
 <TooltipProvider delayDuration={1000}>
-  <div class="h-14 w-full">
-    <nav class="flex h-14 items-center justify-between px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center">
-        {#if showLogo}
+  <div class="h-14">
+    <nav
+      class="flex h-14 items-center justify-between px-4 pl-0 sm:px-6 lg:px-8"
+    >
+      {#if showLogo}
+        <div class="flex items-center">
           <a
             href="/services/client/static"
             class="flex items-center gap-3 hover:opacity-80 transition-opacity duration-200 group"
@@ -72,8 +74,8 @@
               Slink</span
             >
           </a>
-        {/if}
-      </div>
+        </div>
+      {/if}
 
       <div class="flex items-center gap-3">
         {@render children?.()}

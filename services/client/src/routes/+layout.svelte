@@ -52,9 +52,9 @@
     {/if}
     <Sidebar.Inset class="bg-transparent">
       <header
-        class="group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear border-b border-bc-header"
+        class="group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 flex h-16 shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear border-b border-bc-header"
       >
-        <div class="flex items-center px-4">
+        <div class="flex items-center px-4 pr-0 sm:px-4">
           {#if showSidebar}
             <Sidebar.Trigger />
             <Separator
