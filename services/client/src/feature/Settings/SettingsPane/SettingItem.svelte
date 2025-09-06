@@ -99,42 +99,45 @@
             {@render label?.()}
           </h3>
 
-          {#if shouldShowResetButton}
-            <div class="flex items-center gap-2">
-              <Tooltip side="top" size="xs">
-                {#snippet trigger()}
-                  <Overlay
-                    bind:open={resetPopoverOpen}
-                    variant="floating"
-                    contentProps={{ align: 'end' }}
-                  >
-                    {#snippet trigger()}
-                      <button
-                        type="button"
-                        class="inline-flex items-center justify-center w-6 h-6 rounded-md text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:ring-offset-1 group"
-                        aria-label="Reset to default value"
-                      >
-                        <Icon
-                          icon="lucide:rotate-cw"
-                          class="w-3.5 h-3.5 transition-transform duration-200 group-hover:rotate-12"
-                        />
-                      </button>
-                    {/snippet}
+          <div
+            class="flex items-center justify-center w-6 h-6"
+            class:opacity-0={!shouldShowResetButton}
+            class:pointer-events-none={!shouldShowResetButton}
+          >
+            <Tooltip side="top" size="xs">
+              {#snippet trigger()}
+                <Overlay
+                  bind:open={resetPopoverOpen}
+                  variant="floating"
+                  contentProps={{ align: 'end' }}
+                >
+                  {#snippet trigger()}
+                    <button
+                      type="button"
+                      class="inline-flex items-center justify-center w-6 h-6 rounded-md text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:ring-offset-1 group"
+                      aria-label="Reset to default value"
+                      disabled={!shouldShowResetButton}
+                    >
+                      <Icon
+                        icon="lucide:rotate-cw"
+                        class="w-3.5 h-3.5 transition-transform duration-200 group-hover:rotate-12"
+                      />
+                    </button>
+                  {/snippet}
 
-                    <ResetSettingPopover
-                      name={labelRef?.innerText || ''}
-                      {displayValue}
-                      currentValue={displayCurrentValue}
-                      close={closeResetPopover}
-                      confirm={confirmSettingReset}
-                    />
-                  </Overlay>
-                {/snippet}
+                  <ResetSettingPopover
+                    name={labelRef?.innerText || ''}
+                    {displayValue}
+                    currentValue={displayCurrentValue}
+                    close={closeResetPopover}
+                    confirm={confirmSettingReset}
+                  />
+                </Overlay>
+              {/snippet}
 
-                Reset to default
-              </Tooltip>
-            </div>
-          {/if}
+              Reset to default
+            </Tooltip>
+          </div>
         </div>
 
         {#if hint}
