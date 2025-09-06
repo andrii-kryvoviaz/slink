@@ -8,7 +8,7 @@ import svelteImports from './plugins/vite-svelte-imports';
 export default defineConfig({
   plugins: [
     svelteImports({
-      dirs: ['src/legacy/Feature', 'src/legacy/UI', 'src/api', 'src/feature'],
+      dirs: ['src/api', 'src/feature'],
       enableLogging: true,
     }),
     iconifyExport(),
