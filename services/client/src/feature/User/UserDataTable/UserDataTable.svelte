@@ -260,14 +260,19 @@
       </DropdownMenu.Content>
     </DropdownMenu.Root>
   </div>
-  <div class="rounded-md border flex-1">
-    <Table.Root>
+  <div
+    class="bg-gradient-to-br from-slate-50 to-slate-100/50 dark:from-slate-800/50 dark:to-slate-700/30 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden flex-1"
+  >
+    <Table.Root class="bg-transparent">
       <Table.Header>
         {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
-          <Table.Row>
+          <Table.Row
+            class="border-slate-200 dark:border-slate-700 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-transparent"
+          >
             {#each headerGroup.headers as header (header.id)}
               <Table.Head
-                class={(header.column.columnDef.meta as any)?.className}
+                class="{(header.column.columnDef.meta as any)
+                  ?.className} bg-slate-100/50 dark:bg-slate-700/30 text-slate-700 dark:text-slate-300 font-semibold"
               >
                 {#if !header.isPlaceholder}
                   <FlexRender
@@ -282,10 +287,13 @@
       </Table.Header>
       <Table.Body>
         {#each table.getRowModel().rows as row (row.id)}
-          <Table.Row>
+          <Table.Row
+            class="border-slate-200 dark:border-slate-700 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-slate-100/70 dark:hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-slate-700/50 transition-all duration-300"
+          >
             {#each row.getVisibleCells() as cell (cell.id)}
               <Table.Cell
-                class={(cell.column.columnDef.meta as any)?.className}
+                class="{(cell.column.columnDef.meta as any)
+                  ?.className} text-slate-700 dark:text-slate-300"
               >
                 <FlexRender
                   content={cell.column.columnDef.cell}
@@ -295,8 +303,11 @@
             {/each}
           </Table.Row>
         {:else}
-          <Table.Row>
-            <Table.Cell colspan={columns.length} class="h-24 text-center">
+          <Table.Row class="border-slate-200 dark:border-slate-700">
+            <Table.Cell
+              colspan={columns.length}
+              class="h-24 text-center text-slate-500 dark:text-slate-400"
+            >
               No results.
             </Table.Cell>
           </Table.Row>
