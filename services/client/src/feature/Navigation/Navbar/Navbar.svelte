@@ -59,7 +59,7 @@
     <div class="flex items-center">
       {#if showLogo}
         <a
-          href="/services/client/static"
+          href="/"
           class="flex items-center gap-3 hover:opacity-80 transition-opacity duration-200 group"
         >
           <div
