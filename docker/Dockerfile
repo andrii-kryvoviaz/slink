@@ -14,8 +14,8 @@ WORKDIR /client
 
 COPY services/client/package.json services/client/yarn.lock ./
 
-RUN yarn install --frozen-lockfile --non-interactive --production=true && \
-    yarn add vite
+RUN yarn config set network-timeout 300000 && \
+    yarn install --frozen-lockfile --non-interactive
 
 COPY services/client/plugins ./plugins
 COPY services/client/src ./src
