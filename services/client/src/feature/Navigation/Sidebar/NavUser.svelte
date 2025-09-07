@@ -27,7 +27,7 @@
         {#snippet child({ props })}
           <Sidebar.MenuButton
             size="lg"
-            class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground hover:bg-sidebar-accent/50 transition-colors duration-200"
+            class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground hover:bg-sidebar-accent/50 transition-colors duration-200 hover:!pl-3"
             {...props}
           >
             <UserAvatar {user} size="md" />
