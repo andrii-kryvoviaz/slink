@@ -101,6 +101,9 @@
     {
       accessorKey: 'roles',
       header: 'Roles',
+      meta: {
+        className: 'min-w-[100px]',
+      },
       cell: ({ row }) => {
         const user = row.original;
         return renderComponent(UserRoleCell, { user });
