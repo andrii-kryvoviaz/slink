@@ -114,7 +114,6 @@
             </Button>
           {/snippet}
           <div class="flex flex-col items-center gap-2 text-center">
-            <span class="text-sm font-medium">Upload shortcut</span>
             <Shortcut
               control={true}
               shift={true}
