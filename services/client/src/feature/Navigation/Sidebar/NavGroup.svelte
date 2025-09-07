@@ -25,7 +25,11 @@
       {@const isExternalLink = item.href?.startsWith('http')}
       {@const isActive = Boolean(item.href && isActiveRoute(item.href))}
       <Sidebar.MenuItem>
-        <Sidebar.MenuButton tooltipContent={item.title} {isActive}>
+        <Sidebar.MenuButton
+          tooltipContent={item.title}
+          {isActive}
+          class="hover:pl-4 data-[active=true]:pl-4 group-data-[collapsible=icon]:hover:pl-2"
+        >
           {#snippet child({ props })}
             <a
               href={item.href || '#'}

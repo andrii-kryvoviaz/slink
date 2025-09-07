@@ -27,18 +27,21 @@
         {#snippet child({ props })}
           <Sidebar.MenuButton
             size="lg"
-            class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground hover:bg-sidebar-accent/50 transition-colors duration-200 hover:!pl-3"
+            class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground hover:bg-sidebar-accent/50 transition-colors duration-200"
+            tooltipContent={user.displayName}
             {...props}
           >
             <UserAvatar {user} size="md" />
-            <div class="grid flex-1 text-left text-sm leading-tight">
+            <div
+              class="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden"
+            >
               <span class="truncate font-semibold">{user.displayName}</span>
               <span class="truncate text-xs text-muted-foreground"
                 >{user.email}</span
               >
             </div>
             <ChevronsUpDownIcon
-              class="ml-auto size-4 text-muted-foreground group-hover:text-sidebar-accent-foreground transition-colors duration-200"
+              class="ml-auto size-4 text-muted-foreground group-hover:text-sidebar-accent-foreground transition-colors duration-200 group-data-[collapsible=icon]:hidden"
             />
           </Sidebar.MenuButton>
         {/snippet}
