@@ -89,6 +89,9 @@
     {
       accessorKey: 'status',
       header: 'Status',
+      meta: {
+        className: 'min-w-[120px]',
+      },
       cell: ({ row }) => {
         const user = row.original;
         const isCurrentUser = user.id === loggedInUser?.id;
@@ -263,7 +266,9 @@
         {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
           <Table.Row>
             {#each headerGroup.headers as header (header.id)}
-              <Table.Head>
+              <Table.Head
+                class={(header.column.columnDef.meta as any)?.className}
+              >
                 {#if !header.isPlaceholder}
                   <FlexRender
                     content={header.column.columnDef.header}
@@ -279,7 +284,9 @@
         {#each table.getRowModel().rows as row (row.id)}
           <Table.Row>
             {#each row.getVisibleCells() as cell (cell.id)}
-              <Table.Cell>
+              <Table.Cell
+                class={(cell.column.columnDef.meta as any)?.className}
+              >
                 <FlexRender
                   content={cell.column.columnDef.cell}
                   context={cell.getContext()}
