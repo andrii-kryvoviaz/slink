@@ -28,29 +28,29 @@
 </script>
 
 <div class={bannerClasses}>
-  <div
-    class="flex items-start sm:items-center justify-between flex-col sm:flex-row gap-3 sm:gap-y-3"
-  >
-    <div class="flex items-center gap-3 min-w-0 flex-1">
-      {#if icon}
-        <div class="flex-shrink-0">
-          {@render icon()}
-        </div>
-      {/if}
+  <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3">
+    {#if icon}
+      <div class="flex-shrink-0">
+        {@render icon()}
+      </div>
+    {:else}
+      <div></div>
+    {/if}
+
+    <div class="min-w-0">
       {#if content}
-        <div class="min-w-0 flex-1">
-          {@render content()}
-        </div>
+        {@render content()}
       {:else if children}
-        <div class="min-w-0 flex-1">
-          {@render children()}
-        </div>
+        {@render children()}
       {/if}
     </div>
+
     {#if action}
-      <div class="flex-shrink-0 w-full sm:w-auto">
+      <div class="flex-shrink-0">
         {@render action()}
       </div>
+    {:else}
+      <div></div>
     {/if}
   </div>
 </div>
