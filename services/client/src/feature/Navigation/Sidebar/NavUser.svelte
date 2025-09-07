@@ -18,7 +18,7 @@
     onNavigate?: () => void;
   } = $props();
   const sidebar = useSidebar();
-  
+
   let isDropdownOpen = $state(false);
 
   function handleNavigateAndClose() {
