@@ -20,7 +20,7 @@
   const currentTheme = settings.get('theme', data.settings.theme);
   const { isDark } = currentTheme;
 
-  let showSidebar = $derived(!!user || sidebarGroups.length > 0);
+  let showSidebar = $derived(!!user);
 
   const sidebarSettings = settings.get('sidebar', data.settings.sidebar || {});
   const { expanded } = sidebarSettings;
@@ -54,15 +54,15 @@
       <header
         class="group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 flex h-16 shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear border-b border-bc-header"
       >
-        <div class="flex items-center px-4 pr-0 sm:px-4">
-          {#if showSidebar}
+        {#if showSidebar}
+          <div class="flex items-center px-4 pr-0 sm:px-4">
             <Sidebar.Trigger />
             <Separator
               orientation="vertical"
               class="mx-2 data-[orientation=vertical]:h-4"
             />
-          {/if}
-        </div>
+          </div>
+        {/if}
         <Navbar
           user={user || undefined}
           showLogo={!showSidebar}
