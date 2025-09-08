@@ -3,13 +3,15 @@ ARG NODE_VERSION=22.19.0
 ARG PHP_VERSION=8.4.12
 ARG PHP_MEMORY_LIMIT=512M
 
+ARG REDIS_VERSION=8.2.1
+
 ARG UPLOAD_MAX_FILESIZE_IN_BYTES=52428800
 
 ## NodeJS base image
 FROM node:${NODE_VERSION}-alpine AS node
 
 ### NodeJS build ###
-FROM node AS node-dependencies
+FROM node:${NODE_VERSION}-alpine AS node-dependencies
 WORKDIR /client
 
 COPY services/client/package.json services/client/yarn.lock ./
@@ -39,17 +41,37 @@ COPY services/api/composer.json ./
 ### End of PHP source ###
 
 ### PHP vendor ###
-FROM composer:2 AS vendor
+FROM php:${PHP_VERSION}-alpine AS vendor
 WORKDIR /dependencies
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 COPY services/api/composer.json services/api/composer.lock ./
 
 RUN composer install --ignore-platform-reqs --no-interaction --no-scripts --prefer-dist
 ### End of PHP vendor ###
 
+### Redis build ###
+FROM alpine AS deps-build
+ARG REDIS_VERSION
+
+RUN apk add --no-cache \
+    make \
+    g++ \
+    curl \
+    tar 
+
+RUN curl -L http://download.redis.io/releases/redis-${REDIS_VERSION}.tar.gz | tar xz && \
+    cd redis-${REDIS_VERSION} && \
+    make && \
+    make install && \
+    cd .. && \
+    rm -rf redis-${REDIS_VERSION}
+## End of Redis build ###
+
 ### PHP extensions build ###
 FROM php:${PHP_VERSION}-alpine AS php-extensions
-RUN apk add --no-cache --virtual .build-deps \
+RUN apk add --no-cache \
     $PHPIZE_DEPS \
     git \
     autoconf \
@@ -73,19 +95,15 @@ RUN apk add --no-cache --virtual .build-deps \
     brotli-dev \
     libffi-dev
 
-RUN docker-php-ext-install curl intl mbstring exif ffi && \
-    pecl install imagick redis smbclient vips swoole && \
-    docker-php-ext-enable imagick redis smbclient vips swoole
-
-RUN apk del .build-deps
+RUN docker-php-ext-install curl intl mbstring exif ffi
+RUN pecl install imagick redis smbclient vips swoole
+RUN docker-php-ext-enable imagick redis smbclient vips swoole
 ### End of PHP extensions build ###
 
 ### Base build stage ###
 FROM php:${PHP_VERSION}-alpine AS base
 RUN apk update && apk upgrade &&\
     apk add --no-cache \
-    supervisor \
-    redis \
     libmcrypt \
     libcurl \
     icu-libs \
@@ -98,7 +116,16 @@ RUN apk update && apk upgrade &&\
     libpng \
     libwebp \
     tiff \
-    freetype
+    freetype \
+    python3
+
+RUN apk add --no-cache --virtual .build-deps python3-dev pipx && \
+    pipx install supervisor && \
+    ln -s /root/.local/bin/supervisord /usr/bin/supervisord && \
+    ln -s /root/.local/bin/supervisorctl /usr/bin/supervisorctl && \
+    apk del .build-deps
+
+COPY --from=deps-build /usr/local/bin/redis-server /usr/bin/redis-server
 
 COPY --from=php-extensions /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
 COPY --from=php-extensions /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
