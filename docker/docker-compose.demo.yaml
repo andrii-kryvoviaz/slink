@@ -1,0 +1,57 @@
+services:
+  slink:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: anirdev/slink:latest
+    container_name: slink-demo
+    restart: unless-stopped
+    environment:
+      - SWOOLE_WORKER_NUM=4
+      - DEMO_MODE_ENABLED=true
+      - DEMO_PASSWORD=demo123
+      - ORIGIN=${ORIGIN:-http://localhost:3000}
+      - USER_APPROVAL_REQUIRED=false
+      - USER_ALLOW_GUEST_UPLOADS=false
+      - USER_ALLOW_UNAUTHENTICATED_ACCESS=false
+      - USER_PASSWORD_REQUIREMENTS=3
+      - IMAGE_MAX_SIZE=2M
+      - STORAGE_PROVIDER=local
+    volumes:
+      - demo_data:/app/var/data
+      - demo_images:/app/slink/images
+      - demo_cache:/app/slink/cache
+    ports:
+      - '3000:3000'
+    networks:
+      - slink-demo
+
+  cleanup-cron:
+    build:
+      context: ..
+      dockerfile: docker/demo/Dockerfile.demo
+    container_name: slink-cleanup-cron
+    restart: unless-stopped
+    environment:
+      - DEMO_RESET_INTERVAL_MINUTES=${DEMO_RESET_INTERVAL_MINUTES:-15}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - demo_data:/cleanup/data
+      - demo_images:/cleanup/images
+      - demo_cache:/cleanup/cache
+    networks:
+      - slink-demo
+    depends_on:
+      - slink
+
+networks:
+  slink-demo:
+    driver: bridge
+
+volumes:
+  demo_data:
+    driver: local
+  demo_images:
+    driver: local
+  demo_cache:
+    driver: local

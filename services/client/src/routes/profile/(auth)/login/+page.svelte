@@ -3,8 +3,10 @@
     Banner,
     BannerAction,
     BannerContent,
+    BannerFooter,
     BannerIcon,
   } from '@slink/feature/Layout';
+  import { CopyableText } from '@slink/feature/Text';
   import { Button, type ButtonVariant } from '@slink/ui/components/button';
   import { Input } from '@slink/ui/components/input';
   import { untrack } from 'svelte';
@@ -30,10 +32,27 @@
   let { form, data }: Props = $props();
 
   let isLoading = useWritable('loginFormLoadingState', false);
+  let usernameValue = $state(form?.username || '');
+  let passwordValue = $state('');
+  let formElement: HTMLFormElement;
 
   const { isLight } = settings.get('theme', data.settings.theme);
 
   let buttonVariant: ButtonVariant = $derived($isLight ? 'dark' : 'primary');
+
+  function fillDemoCredentials() {
+    if (
+      data.globalSettings?.demo?.demoUsername &&
+      data.globalSettings?.demo?.demoPassword
+    ) {
+      usernameValue = data.globalSettings.demo.demoUsername;
+      passwordValue = data.globalSettings.demo.demoPassword;
+
+      setTimeout(() => {
+        formElement?.requestSubmit();
+      }, 100);
+    }
+  }
 
   $effect(() => {
     if (!form?.errors) {
@@ -80,6 +99,7 @@
     class="bg-white/50 dark:bg-gray-900/30 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/30 p-6 mb-6 shadow-sm"
   >
     <form
+      bind:this={formElement}
       class="space-y-4"
       method="POST"
       use:enhance={withLoadingState(isLoading)}
@@ -93,7 +113,7 @@
             type="text"
             autocomplete="username"
             placeholder="Enter email or username"
-            value={form?.username || ''}
+            bind:value={usernameValue}
             error={typeof form?.errors === 'object' && 'username' in form.errors
               ? form.errors.username
               : undefined}
@@ -117,6 +137,7 @@
             type="password"
             autocomplete="current-password"
             placeholder="Enter password"
+            bind:value={passwordValue}
             error={typeof form?.errors === 'object' && 'password' in form.errors
               ? form.errors.password
               : undefined}
@@ -148,6 +169,37 @@
       </Button>
     </form>
   </div>
+
+  {#if data.globalSettings?.demo?.enabled}
+    <div class="mt-4">
+      <Banner variant="violet">
+        {#snippet icon()}
+          <BannerIcon variant="violet" icon="ph:flask" />
+        {/snippet}
+        {#snippet content()}
+          <BannerContent
+            title="Demo Mode"
+            description="Try the application with the test credentials"
+          />
+        {/snippet}
+        {#snippet action()}
+          <BannerAction
+            variant="violet"
+            text="Get In"
+            icon="ph:sign-in"
+            onclick={fillDemoCredentials}
+          />
+        {/snippet}
+        {#snippet footer()}
+          <BannerFooter
+            variant="violet"
+            icon="ph:cursor-click"
+            text="Automatically fills credentials and signs you in"
+          />
+        {/snippet}
+      </Banner>
+    </div>
+  {/if}
 
   {#if data.globalSettings?.user?.allowRegistration}
     <Banner variant="info">

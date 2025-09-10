@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ThemeSwitch } from '@slink/feature/Layout';
+  import { DemoBadge, ThemeSwitch } from '@slink/feature/Layout';
   import { Navbar } from '@slink/feature/Navigation';
   import AppSidebar from '@slink/feature/Navigation/Sidebar/AppSidebar.svelte';
   import { ScrollArea } from '@slink/ui/components/scroll-area/index.js';
@@ -16,6 +16,7 @@
   let { data, children } = $props();
   let user = $derived(data.user);
   let sidebarGroups = $derived(data.sidebarGroups || []);
+  let isDemoMode = $derived(!!data.globalSettings?.demo?.enabled);
 
   const currentTheme = settings.get('theme', data.settings.theme);
   const { isDark } = currentTheme;
@@ -52,7 +53,7 @@
     {/if}
     <Sidebar.Inset class="bg-transparent">
       <header
-        class="group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 flex h-16 shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear border-b border-bc-header"
+        class="group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 flex h-16 shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear border-b border-bc-header relative"
       >
         {#if showSidebar}
           <div class="flex items-center px-4 pr-0 sm:px-4">
@@ -80,7 +81,10 @@
           {/snippet}
         </Navbar>
       </header>
-      <div class="flex flex-1 flex-col gap-4 pt-0 min-h-0">
+      <div class="flex flex-1 flex-col gap-4 pt-0 min-h-0 relative">
+        {#if isDemoMode}
+          <DemoBadge visible={true} variant="default" />
+        {/if}
         <ScrollArea
           class="flex-1 h-full"
           type="scroll"

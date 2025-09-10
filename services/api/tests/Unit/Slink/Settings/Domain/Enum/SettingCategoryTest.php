@@ -8,6 +8,8 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Settings\Domain\Enum\SettingCategory;
+use Slink\Settings\Domain\ValueObject\Access\AccessSettings;
+use Slink\Settings\Domain\ValueObject\Demo\DemoSettings;
 use Slink\Settings\Domain\ValueObject\User\UserSettings;
 use Slink\Settings\Domain\ValueObject\Image\ImageSettings;
 use Slink\Settings\Domain\ValueObject\Storage\StorageSettings;
@@ -87,6 +89,8 @@ final class SettingCategoryTest extends TestCase {
             [SettingCategory::User, 'user'],
             [SettingCategory::Image, 'image'],
             [SettingCategory::Storage, 'storage'],
+            [SettingCategory::Access, 'access'],
+            [SettingCategory::Demo, 'demo'],
         ];
     }
 
@@ -99,6 +103,8 @@ final class SettingCategoryTest extends TestCase {
             [SettingCategory::User, UserSettings::class],
             [SettingCategory::Image, ImageSettings::class],
             [SettingCategory::Storage, StorageSettings::class],
+            [SettingCategory::Access, AccessSettings::class],
+            [SettingCategory::Demo, DemoSettings::class],
         ];
     }
 

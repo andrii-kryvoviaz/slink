@@ -30,6 +30,13 @@ parameters:
     allowGuestUploads: '%env(bool:IMAGE_ALLOW_GUEST_UPLOADS)%'
     allowUnauthenticatedAccess: '%env(bool:USER_ALLOW_UNAUTHENTICATED_ACCESS)%'
     requireSsl: '%env(bool:REQUIRE_SSL)%'
+  demo:
+    enabled: '%env(bool:DEMO_MODE_ENABLED)%'
+    protectDemoUser: '%env(bool:DEMO_PROTECT_USER)%'
+    resetIntervalMinutes: '%env(int:DEMO_RESET_INTERVAL_MINUTES)%'
+    demoUsername: '%env(DEMO_USERNAME)%'
+    demoPassword: '%env(DEMO_PASSWORD)%'
+    demoDisplayName: '%env(DEMO_DISPLAY_NAME)%'
 
 when@prod:
   parameters:
