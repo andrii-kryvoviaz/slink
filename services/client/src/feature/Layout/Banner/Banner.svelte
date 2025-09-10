@@ -10,6 +10,7 @@
     icon?: Snippet<[]>;
     content?: Snippet<[]>;
     action?: Snippet<[]>;
+    footer?: Snippet<[]>;
     children?: Snippet<[]>;
   }
 
@@ -19,6 +20,7 @@
     icon,
     content,
     action,
+    footer,
     children,
   }: Props = $props();
 
@@ -53,4 +55,6 @@
       <div></div>
     {/if}
   </div>
+
+  {@render footer?.()}
 </div>

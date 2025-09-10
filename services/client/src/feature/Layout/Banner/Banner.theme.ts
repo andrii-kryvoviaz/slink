@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 
 export const BannerTheme = cva(
-  'mb-6 p-4 rounded-xl border shadow-sm transition-all duration-200',
+  'flex flex-col gap-4 mb-6 p-4 rounded-xl border shadow-sm transition-all duration-200',
   {
     variants: {
       variant: {
@@ -16,6 +16,10 @@ export const BannerTheme = cva(
           'bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200/50 dark:border-green-700/30 shadow-green-500/10',
         error:
           'bg-gradient-to-r from-red-50 to-rose-50 dark:from-red-900/20 dark:to-rose-900/20 border-red-200/50 dark:border-red-700/30 shadow-red-500/10',
+        purple:
+          'bg-gradient-to-r from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20 border-purple-200/50 dark:border-purple-700/30 shadow-purple-500/10',
+        violet:
+          'bg-gradient-to-r from-violet-50 to-purple-50 dark:from-violet-900/20 dark:to-purple-900/20 border-violet-200/50 dark:border-violet-700/30 shadow-violet-500/10',
       },
     },
   },
@@ -34,6 +38,10 @@ export const BannerIconTheme = cva(
         success:
           'bg-gradient-to-br from-green-500 to-emerald-500 shadow-green-500/30',
         error: 'bg-gradient-to-br from-red-500 to-rose-500 shadow-red-500/30',
+        purple:
+          'bg-gradient-to-br from-purple-500 to-violet-500 shadow-purple-500/30',
+        violet:
+          'bg-gradient-to-br from-violet-500 to-purple-500 shadow-violet-500/30',
       },
     },
   },
@@ -48,6 +56,8 @@ export const BannerIconColorTheme = cva('h-5 w-5', {
       info: 'text-white',
       success: 'text-white',
       error: 'text-white',
+      purple: 'text-white',
+      violet: 'text-white',
     },
   },
 });
@@ -66,6 +76,43 @@ export const BannerActionTheme = cva('border transition-colors duration-200', {
         'bg-green-100/80 hover:bg-green-200/80 dark:bg-green-800/40 dark:hover:bg-green-700/60 border-green-200 hover:border-green-300 dark:border-green-600 dark:hover:border-green-500 text-green-700 hover:text-green-800 dark:text-green-200 dark:hover:text-green-100',
       error:
         'bg-red-100/80 hover:bg-red-200/80 dark:bg-red-800/40 dark:hover:bg-red-700/60 border-red-200 hover:border-red-300 dark:border-red-600 dark:hover:border-red-500 text-red-700 hover:text-red-800 dark:text-red-200 dark:hover:text-red-100',
+      purple:
+        'bg-purple-100/80 hover:bg-purple-200/80 dark:bg-purple-800/40 dark:hover:bg-purple-700/60 border-purple-200 hover:border-purple-300 dark:border-purple-600 dark:hover:border-purple-500 text-purple-700 hover:text-purple-800 dark:text-purple-200 dark:hover:text-purple-100',
+      violet:
+        'bg-violet-100/80 hover:bg-violet-200/80 dark:bg-violet-800/40 dark:hover:bg-violet-700/60 border-violet-200 hover:border-violet-300 dark:border-violet-600 dark:hover:border-violet-500 text-violet-700 hover:text-violet-800 dark:text-violet-200 dark:hover:text-violet-100',
     },
   },
 });
+
+export const BannerFooterTheme = cva('pt-3 border-t', {
+  variants: {
+    variant: {
+      default: 'border-slate-200/20 dark:border-slate-700/20',
+      neutral: 'border-gray-200/20 dark:border-gray-600/20',
+      warning: 'border-amber-200/20 dark:border-amber-700/20',
+      info: 'border-blue-200/20 dark:border-blue-700/20',
+      success: 'border-green-200/20 dark:border-green-700/20',
+      error: 'border-red-200/20 dark:border-red-700/20',
+      purple: 'border-purple-200/20 dark:border-purple-700/20',
+      violet: 'border-violet-200/20 dark:border-violet-700/20',
+    },
+  },
+});
+
+export const BannerFooterTextTheme = cva(
+  'flex items-center justify-center gap-2 text-xs font-medium',
+  {
+    variants: {
+      variant: {
+        default: 'text-slate-600/80 dark:text-slate-400/80',
+        neutral: 'text-gray-600/80 dark:text-gray-400/80',
+        warning: 'text-amber-600/80 dark:text-amber-400/80',
+        info: 'text-blue-600/80 dark:text-blue-400/80',
+        success: 'text-green-600/80 dark:text-green-400/80',
+        error: 'text-red-600/80 dark:text-red-400/80',
+        purple: 'text-purple-600/80 dark:text-purple-400/80',
+        violet: 'text-violet-600/80 dark:text-violet-400/80',
+      },
+    },
+  },
+);

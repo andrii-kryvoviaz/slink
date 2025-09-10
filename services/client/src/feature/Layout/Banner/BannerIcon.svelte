@@ -5,7 +5,15 @@
   import { BannerIconColorTheme, BannerIconTheme } from './Banner.theme';
 
   interface Props {
-    variant?: 'default' | 'neutral' | 'warning' | 'info' | 'success' | 'error';
+    variant?:
+      | 'default'
+      | 'neutral'
+      | 'warning'
+      | 'info'
+      | 'success'
+      | 'error'
+      | 'purple'
+      | 'violet';
     icon: string;
     class?: string;
   }

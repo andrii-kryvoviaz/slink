@@ -3,6 +3,7 @@ export * from './Banner/Banner.theme';
 export * from './Banner/Banner.types';
 export { default as BannerAction } from './Banner/BannerAction.svelte';
 export { default as BannerContent } from './Banner/BannerContent.svelte';
+export { default as BannerFooter } from './Banner/BannerFooter.svelte';
 export { default as BannerIcon } from './Banner/BannerIcon.svelte';
 export { default as Card } from './Card/Card.svelte';
 export * from './Card/Card.theme';
