@@ -36,6 +36,7 @@ parameters:
     resetIntervalMinutes: '%env(int:DEMO_RESET_INTERVAL_MINUTES)%'
     demoUsername: '%env(DEMO_USERNAME)%'
     demoPassword: '%env(DEMO_PASSWORD)%'
+    demoEmail: '%env(DEMO_EMAIL)%'
     demoDisplayName: '%env(DEMO_DISPLAY_NAME)%'
 
 when@prod:

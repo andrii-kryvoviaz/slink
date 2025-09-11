@@ -25,6 +25,6 @@ final readonly class CreateDemoUserCommand implements CommandInterface {
     public string $displayName,
     
     #[Assert\Email]
-    public string $email = 'demo@demo.local'
+    public ?string $email = null
   ) {}
 }

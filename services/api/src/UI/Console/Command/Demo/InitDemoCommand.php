@@ -20,7 +20,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 final class InitDemoCommand extends Command {
 
   public function __construct(
-    private readonly CommandBusInterface $commandBus,
+    private readonly CommandBusInterface            $commandBus,
     private readonly ConfigurationProviderInterface $configurationProvider
   ) {
     parent::__construct();
@@ -45,17 +45,17 @@ final class InitDemoCommand extends Command {
 
       $this->commandBus->handle($command);
       $io->success('Demo user has been created successfully');
-      
+
       $io->table(
         ['Setting', 'Value'],
         [
           ['Username', $this->configurationProvider->get('demo.demoUsername')],
           ['Password', $this->configurationProvider->get('demo.demoPassword')],
           ['Display Name', $this->configurationProvider->get('demo.demoDisplayName')],
-          ['Reset Interval', $this->configurationProvider->get('demo.resetIntervalMinutes') . ' minutes'],
+          ['Email', $this->configurationProvider->get('demo.demoEmail')],
         ]
       );
-      
+
       return Command::SUCCESS;
     } catch (\Exception $e) {
       $io->error('Failed to initialize demo environment: ' . $e->getMessage());
