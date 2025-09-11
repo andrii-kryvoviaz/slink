@@ -107,6 +107,11 @@
   const confirmUserDeletion = async () => {
     await deleteUser();
     showDeleteConfirmation = false;
+
+    if (userDeleteError) {
+      return;
+    }
+
     onDelete?.(user.id);
   };
 
