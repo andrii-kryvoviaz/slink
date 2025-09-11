@@ -46,6 +46,9 @@ final readonly class DemoUserFactory {
     );
   }
 
+  /**
+   * @return array<string, string>
+   */
   public function getDemoUserCredentials(): array {
     return [
       'username' => $this->configurationProvider->get('demo.demoUsername'),

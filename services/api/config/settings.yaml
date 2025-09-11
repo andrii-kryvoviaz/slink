@@ -32,8 +32,6 @@ parameters:
     requireSsl: '%env(bool:REQUIRE_SSL)%'
   demo:
     enabled: '%env(bool:DEMO_MODE_ENABLED)%'
-    protectDemoUser: '%env(bool:DEMO_PROTECT_USER)%'
-    resetIntervalMinutes: '%env(int:DEMO_RESET_INTERVAL_MINUTES)%'
     demoUsername: '%env(DEMO_USERNAME)%'
     demoPassword: '%env(DEMO_PASSWORD)%'
     demoEmail: '%env(DEMO_EMAIL)%'

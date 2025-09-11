@@ -22,7 +22,3 @@ fi
 
 slink doctrine:migrations:migrate --no-interaction --configuration=/services/api/config/migrations/event_store.yaml --em=event_store
 slink doctrine:migrations:migrate --no-interaction --em=read_model
-
-if [ "$DEMO_MODE_ENABLED" = "true" ]; then
-  slink slink:demo:init
-fi

@@ -82,10 +82,7 @@
         </Navbar>
       </header>
       {#if isDemoMode}
-        <DemoNotice
-          visible={true}
-          resetIntervalMinutes={data.globalSettings?.demo?.resetIntervalMinutes || 120}
-        />
+        <DemoNotice visible={true} />
       {/if}
       <div class="flex flex-1 flex-col gap-4 pt-0 min-h-0 relative">
         {#if isDemoMode}

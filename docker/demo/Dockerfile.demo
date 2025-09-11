@@ -3,17 +3,13 @@ FROM alpine:latest
 RUN apk add --no-cache \
     docker-cli \
     curl \
-    dcron \
+    netcat-openbsd \
     tzdata
 
-RUN mkdir -p /cleanup /usr/local/bin
+RUN mkdir -p /usr/local/bin
 
-COPY docker/demo/cleanup.sh /usr/local/bin/cleanup
 COPY docker/demo/startup.sh /usr/local/bin/startup
 
-RUN chmod +x /usr/local/bin/cleanup && \
-    chmod +x /usr/local/bin/startup
-
-ENV DEMO_RESET_INTERVAL_MINUTES=15
+RUN chmod +x /usr/local/bin/startup
 
 CMD ["startup"]

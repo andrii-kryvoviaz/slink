@@ -11,6 +11,7 @@ use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\User\Domain\Filter\UserListFilter;
 use Slink\User\Domain\ValueObject\Email;
+use Slink\User\Domain\ValueObject\Username;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
 
 interface UserRepositoryInterface extends ServiceEntityRepositoryInterface {
@@ -25,6 +26,12 @@ interface UserRepositoryInterface extends ServiceEntityRepositoryInterface {
    * @throws NotFoundException
    */
   public function one(ID $id): UserView;
+  
+  /**
+   * @throws NonUniqueResultException
+   * @throws NotFoundException
+   */
+  public function oneByUsername(Username $username): UserView;
   
   /**
    * @param int $page

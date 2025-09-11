@@ -43,7 +43,7 @@ final class SettingCategoryTest extends TestCase {
 
     #[Test]
     public function itShouldHaveAllExpectedCases(): void {
-        $expectedCases = ['User', 'Image', 'Storage', 'Access'];
+        $expectedCases = ['User', 'Image', 'Storage', 'Access', 'Demo'];
         $actualCases = array_map(fn($case) => $case->name, SettingCategory::cases());
         
         $this->assertSame($expectedCases, $actualCases);

@@ -8,7 +8,6 @@ use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Context\ChangeUserRoleContext;
 use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
-use Slink\User\Domain\Service\DemoUserProtectionService;
 use Slink\User\Domain\ValueObject\Role;
 
 final readonly class RevokeRoleHandler implements CommandHandlerInterface {
@@ -16,7 +15,6 @@ final readonly class RevokeRoleHandler implements CommandHandlerInterface {
   public function __construct(
     private UserStoreRepositoryInterface $userRepository,
     private ChangeUserRoleContext $changeUserRoleContext,
-    private DemoUserProtectionService $demoUserProtectionService,
   ) {
   }
   
@@ -28,8 +26,6 @@ final readonly class RevokeRoleHandler implements CommandHandlerInterface {
     $userId = ID::fromString($command->getId());
     
     $user = $this->userRepository->get($userId);
-    
-    $this->demoUserProtectionService->guardAgainstDemoUserModification($user, 'modified');
     
     $user->revokeRole(
       Role::fromString($command->getRole()),
