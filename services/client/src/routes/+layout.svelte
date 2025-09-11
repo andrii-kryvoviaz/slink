@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { DemoBadge, ThemeSwitch } from '@slink/feature/Layout';
+  import { DemoBadge, DemoNotice, ThemeSwitch } from '@slink/feature/Layout';
   import { Navbar } from '@slink/feature/Navigation';
   import AppSidebar from '@slink/feature/Navigation/Sidebar/AppSidebar.svelte';
   import { ScrollArea } from '@slink/ui/components/scroll-area/index.js';
@@ -81,6 +81,12 @@
           {/snippet}
         </Navbar>
       </header>
+      {#if isDemoMode}
+        <DemoNotice
+          visible={true}
+          resetIntervalMinutes={data.globalSettings?.demo?.resetIntervalMinutes || 120}
+        />
+      {/if}
       <div class="flex flex-1 flex-col gap-4 pt-0 min-h-0 relative">
         {#if isDemoMode}
           <DemoBadge visible={true} variant="default" />

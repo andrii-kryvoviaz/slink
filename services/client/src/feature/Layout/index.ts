@@ -13,6 +13,7 @@ export { default as Chart } from './Chart/Chart.svelte';
 export * from './Chart/Chart.types';
 export * from './Chart/RadialBar.chart';
 export { default as DemoBadge } from './DemoBadge/DemoBadge.svelte';
+export { default as DemoNotice } from './DemoNotice/DemoNotice.svelte';
 export { default as EmptyState } from './EmptyState/EmptyState.svelte';
 export * from './EmptyState/EmptyState.theme';
 export { default as Loader } from './Loader/Loader.svelte';

@@ -17,6 +17,9 @@ final readonly class PublicDemoSettings {
     
     #[Groups(['public'])]
     public string $demoPassword = 'demo',
+    
+    #[Groups(['public'])]
+    public int $resetIntervalMinutes = 120,
   ) {}
   
   /**
@@ -26,7 +29,8 @@ final readonly class PublicDemoSettings {
     return new self(
       enabled: $settings['enabled'] ?? false,
       demoUsername: $settings['demoUsername'] ?? 'demo',
-      demoPassword: $settings['demoPassword'] ?? 'demo'
+      demoPassword: $settings['demoPassword'] ?? 'demo',
+      resetIntervalMinutes: $settings['resetIntervalMinutes'] ?? 120
     );
   }
 }
