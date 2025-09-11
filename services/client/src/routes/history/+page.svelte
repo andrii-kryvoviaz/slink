@@ -35,22 +35,25 @@
     use:skeleton={{
       feed: historyFeedState,
       minDisplayTime: 300,
+      showDelay: 200,
     }}
   >
-    {#if historyFeedState.isEmpty}
-      <EmptyState
-        icon="ph:clock-clockwise-duotone"
-        title="No history yet"
-        description="Your upload history will appear here. Start uploading images to see your files and manage them easily."
-        actionText="Upload Images"
-        actionHref="/upload"
-        variant="purple"
-        size="md"
-      />
-    {/if}
-
     {#if historyFeedState.showSkeleton}
-      <HistorySkeleton count={6} />
+      <div in:fade={{ duration: 200 }}>
+        <HistorySkeleton count={6} />
+      </div>
+    {:else if historyFeedState.isEmpty}
+      <div in:fade={{ duration: 200 }}>
+        <EmptyState
+          icon="ph:clock-clockwise-duotone"
+          title="No history yet"
+          description="Your upload history will appear here. Start uploading images to see your files and manage them easily."
+          actionText="Upload Images"
+          actionHref="/upload"
+          variant="purple"
+          size="md"
+        />
+      </div>
     {/if}
 
     <HistoryListView items={historyFeedState.items} />
