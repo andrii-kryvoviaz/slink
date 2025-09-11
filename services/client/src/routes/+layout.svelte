@@ -85,9 +85,6 @@
         <DemoNotice visible={true} />
       {/if}
       <div class="flex flex-1 flex-col gap-4 pt-0 min-h-0 relative">
-        {#if isDemoMode}
-          <DemoBadge visible={true} variant="default" />
-        {/if}
         <ScrollArea
           class="flex-1 h-full"
           type="scroll"
