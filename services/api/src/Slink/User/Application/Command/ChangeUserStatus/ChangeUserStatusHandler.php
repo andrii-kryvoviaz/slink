@@ -14,7 +14,7 @@ final readonly class ChangeUserStatusHandler implements CommandHandlerInterface 
   
   public function __construct(
     private UserStoreRepositoryInterface $userRepository,
-    private CurrentUserSpecificationInterface $sameUserSpecification
+    private CurrentUserSpecificationInterface $sameUserSpecification,
   ) {
   }
   

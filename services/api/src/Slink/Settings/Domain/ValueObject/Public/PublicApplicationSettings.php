@@ -14,6 +14,9 @@ final readonly class PublicApplicationSettings {
     
     #[Groups(['public'])]
     public ?PublicAccessSettings $access = null,
+    
+    #[Groups(['public'])]
+    public ?PublicDemoSettings $demo = null,
   ) {}
   
   /**
@@ -22,7 +25,8 @@ final readonly class PublicApplicationSettings {
   public static function fromArray(array $settings): self {
     return new self(
       isset($settings['user']) ? PublicUserSettings::fromArray($settings['user']) : null,
-      isset($settings['access']) ? PublicAccessSettings::fromArray($settings['access']) : null
+      isset($settings['access']) ? PublicAccessSettings::fromArray($settings['access']) : null,
+      isset($settings['demo']) ? PublicDemoSettings::fromArray($settings['demo']) : null
     );
   }
 }

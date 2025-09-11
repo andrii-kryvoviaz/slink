@@ -45,6 +45,7 @@ final readonly class ProjectMetadataExtractor {
       ['Sign-Up', $this->filterBoolean($this->configurationProvider->get('user.allowRegistration'), 'Enabled', 'Disabled')],
       ['Unauthenticated Access', $this->filterBoolean($this->configurationProvider->get('access.allowGuestUploads') || $this->configurationProvider->get('access.allowUnauthenticatedAccess'), 'Enabled', 'Disabled')],
       ['User Approval', $this->filterBoolean($this->configurationProvider->get('user.approvalRequired'), 'Required', 'Not Required')],
+      ['Demo Mode', $this->filterBoolean($this->configurationProvider->get('demo.enabled'), 'Enabled', 'Disabled')],
     ];
   }
   

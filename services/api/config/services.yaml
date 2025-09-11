@@ -10,6 +10,7 @@ parameters:
     Slink\User\Domain\Exception\ForbiddenException: 403
     Slink\User\Domain\Exception\ApiKeyNotFoundException: 404
     Slink\Shared\Infrastructure\Exception\NotFoundException: 404
+    Slink\Shared\Domain\Exception\DemoForbiddenException: 403
 
   exception_code_to_message:
     400: 'Bad Request'

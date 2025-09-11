@@ -1,0 +1,15 @@
+FROM alpine:latest
+
+RUN apk add --no-cache \
+    docker-cli \
+    curl \
+    netcat-openbsd \
+    tzdata
+
+RUN mkdir -p /usr/local/bin
+
+COPY docker/demo/startup.sh /usr/local/bin/startup
+
+RUN chmod +x /usr/local/bin/startup
+
+CMD ["startup"]

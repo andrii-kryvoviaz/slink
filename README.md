@@ -9,6 +9,8 @@
 
 Welcome to **Slink**, a powerful self-hosted image sharing platform designed to give users complete control over their media sharing experience. Built with [Symfony](https://symfony.com/) and [SvelteKit](https://kit.svelte.dev/), Slink enables seamless and secure image sharing without relying on third-party services.
 
+**[Live Demo](https://demo.slinkapp.io)** | **[Documentation](https://docs.slinkapp.io/)**
+
 ## Why Slink?
 
 Slink solves the problem of sharing images with friends, family, and colleagues in a private, self-hosted environment. It's also ideal for:

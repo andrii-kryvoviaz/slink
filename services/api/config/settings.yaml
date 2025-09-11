@@ -30,6 +30,12 @@ parameters:
     allowGuestUploads: '%env(bool:IMAGE_ALLOW_GUEST_UPLOADS)%'
     allowUnauthenticatedAccess: '%env(bool:USER_ALLOW_UNAUTHENTICATED_ACCESS)%'
     requireSsl: '%env(bool:REQUIRE_SSL)%'
+  demo:
+    enabled: '%env(bool:DEMO_MODE_ENABLED)%'
+    demoUsername: '%env(DEMO_USERNAME)%'
+    demoPassword: '%env(DEMO_PASSWORD)%'
+    demoEmail: '%env(DEMO_EMAIL)%'
+    demoDisplayName: '%env(DEMO_DISPLAY_NAME)%'
 
 when@prod:
   parameters:

@@ -22,6 +22,7 @@ public/slink
 *.db
 dump.rdb
 docker-compose.prod.yaml
+docker/demo/pictures
 
 ###> lexik/jwt-authentication-bundle ###
 *.pem

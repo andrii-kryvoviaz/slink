@@ -62,37 +62,41 @@
 <main in:fade={{ duration: 500 }} class="min-h-full">
   <div
     class="container mx-auto px-4 sm:px-6 lg:px-8 py-8"
-    use:skeleton={{ feed: publicFeedState, minDisplayTime: 300 }}
+    use:skeleton={{
+      feed: publicFeedState,
+      minDisplayTime: 300,
+      showDelay: 100,
+    }}
   >
     {#if publicFeedState.showSkeleton}
-      <ExploreSkeleton count={8} />
-    {/if}
-
-    {#if publicFeedState.isEmpty}
-      {#if !publicFeedState.isSearching}
-        <EmptyState
-          icon="ph:images-duotone"
-          title="No images yet"
-          description="Be the first to share something amazing with the community. Start by uploading your favorite images."
-          actionText="Upload First Image"
-          actionHref="/upload"
-          variant="blue"
-          size="md"
-        />
-      {:else}
-        <EmptyState
-          icon="ph:images-duotone"
-          title="No images found"
-          description={`No images match your search for "${publicFeedState.searchTerm}". Try a different search term or browse all images.`}
-          actionText="Clear Search"
-          actionClick={() => publicFeedState.resetSearch()}
-          variant="blue"
-          size="md"
-        />
-      {/if}
-    {/if}
-
-    {#if publicFeedState.items.length > 0}
+      <div in:fade={{ duration: 200 }}>
+        <ExploreSkeleton count={8} />
+      </div>
+    {:else if publicFeedState.isEmpty}
+      <div in:fade={{ duration: 200 }}>
+        {#if !publicFeedState.isSearching}
+          <EmptyState
+            icon="ph:images-duotone"
+            title="No images yet"
+            description="Be the first to share something amazing with the community. Start by uploading your favorite images."
+            actionText="Upload First Image"
+            actionHref="/upload"
+            variant="blue"
+            size="md"
+          />
+        {:else}
+          <EmptyState
+            icon="ph:images-duotone"
+            title="No images found"
+            description={`No images match your search for "${publicFeedState.searchTerm}". Try a different search term or browse all images.`}
+            actionText="Clear Search"
+            actionClick={() => publicFeedState.resetSearch()}
+            variant="blue"
+            size="md"
+          />
+        {/if}
+      </div>
+    {:else if publicFeedState.items.length > 0}
       <Masonry items={publicFeedState.items} class="gap-6">
         {#snippet itemTemplate(image)}
           <article

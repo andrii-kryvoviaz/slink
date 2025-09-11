@@ -6,6 +6,7 @@ interface SkeletonConfig {
   feed: AbstractPaginatedFeed<any>;
   enabled?: boolean;
   minDisplayTime?: number;
+  showDelay?: number;
 }
 
 export const skeleton: Action<HTMLElement, SkeletonConfig> = (node, config) => {
@@ -17,6 +18,7 @@ export const skeleton: Action<HTMLElement, SkeletonConfig> = (node, config) => {
   const settings = {
     enabled: true,
     minDisplayTime: 300,
+    showDelay: 150,
     ...config,
   };
 
@@ -24,6 +26,7 @@ export const skeleton: Action<HTMLElement, SkeletonConfig> = (node, config) => {
     settings.feed.configureSkeleton({
       enabled: settings.enabled,
       minDisplayTime: settings.minDisplayTime,
+      showDelay: settings.showDelay,
     });
   }
 

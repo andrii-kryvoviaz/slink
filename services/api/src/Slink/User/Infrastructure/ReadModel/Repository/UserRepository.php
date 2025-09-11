@@ -139,6 +139,23 @@ final class UserRepository extends AbstractRepository implements
   }
   
   /**
+   * @param Username $username
+   * @return UserView
+   * @throws NonUniqueResultException
+   * @throws NotFoundException
+   */
+  public function oneByUsername(Username $username): UserView {
+    $qb = $this->_em
+      ->createQueryBuilder()
+      ->from(UserView::class, 'user')
+      ->select('user')
+      ->where('user.username = :username')
+      ->setParameter('username', $username->toString());
+    
+    return $this->oneOrException($qb);
+  }
+  
+  /**
    * @param int $page
    * @param UserListFilter $filter
    * @return Paginator<UserView>

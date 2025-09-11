@@ -2,7 +2,6 @@
   import { SettingItem, SettingsPane } from '@slink/feature/Settings';
   import { Notice } from '@slink/feature/Text';
   import { Select } from '@slink/ui/components';
-  import { Button } from '@slink/ui/components/button';
   import {
     FileSizeInput,
     Input,
@@ -19,6 +18,8 @@
     SettingCategoryData,
   } from '@slink/lib/settings/Type/GlobalSettings';
   import { useGlobalSettings } from '@slink/lib/state/GlobalSettings.svelte';
+
+  import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
 
   import type { PageServerData } from './$types';
 
@@ -60,6 +61,12 @@
 
   let settings = $derived(globalSettingsManager.settings);
   let defaultSettings = $state(data?.defaultSettings);
+
+  $effect(() => {
+    if ($error) {
+      printErrorsAsToastMessage($error);
+    }
+  });
 </script>
 
 <svelte:head>

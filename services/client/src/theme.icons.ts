@@ -126,7 +126,6 @@ export const themeIcons: string[] = [
   'ph:arrow-square-out',
   'ph:bug',
   'ph:browser',
-  'heroicons:play',
   'ph:flask',
   'ph:cursor-click',
 ];
