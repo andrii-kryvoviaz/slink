@@ -65,6 +65,19 @@ const setGlobalSettingsOnLocals: Handle = async ({ event, resolve }) => {
   return resolve(event);
 };
 
+// ToDo: Remove this workaround when SvelteKit supports fixing link header preloading
+const handleLinkHeaderPreloading: Handle = async ({ event, resolve }) => {
+  const response = await resolve(event);
+
+  if (!response.headers.has('link')) {
+    return response;
+  }
+
+  response.headers.delete('link');
+
+  return response;
+};
+
 export const handle = sequence(
   handleWellKnownRequests,
   filterResponseHeaders,
@@ -73,4 +86,5 @@ export const handle = sequence(
   setGlobalSettingsOnLocals,
   setCookieSettingsOnLocals,
   applyClientTheme,
+  handleLinkHeaderPreloading,
 );
