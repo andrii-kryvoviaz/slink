@@ -1,17 +1,17 @@
-name: "[backend] CI"
+name: '[backend] CI'
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
     paths:
       - 'services/api/**'
 
   pull_request:
-    branches: [main]
+    branches: [main, develop]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
 
 env:
   image: docker.io/${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.APP_NAME }}

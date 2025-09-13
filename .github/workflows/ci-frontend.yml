@@ -1,17 +1,17 @@
-name: "[frontend] CI"
+name: '[frontend] CI'
 
 permissions:
   contents: write
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
     paths:
       - 'services/client/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
 
 jobs:
   format:
