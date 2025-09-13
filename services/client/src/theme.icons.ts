@@ -128,4 +128,5 @@ export const themeIcons: string[] = [
   'ph:browser',
   'ph:flask',
   'ph:cursor-click',
+  'heroicons:server',
 ];

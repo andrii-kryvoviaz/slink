@@ -17,6 +17,7 @@ import {
   SettingResource,
 } from '@slink/api/Resources';
 import { ApiKeyResource } from '@slink/api/Resources/ApiKeyResource';
+import { StorageResource } from '@slink/api/Resources/StorageResource';
 import { UserResource } from '@slink/api/Resources/UserResource';
 import type { RequestMapper } from '@slink/api/Type/RequestMapper';
 import type { RequestOptions } from '@slink/api/Type/RequestOptions';
@@ -28,6 +29,7 @@ const RESOURCES = {
   analytics: AnalyticsResource,
   setting: SettingResource,
   apiKey: ApiKeyResource,
+  storage: StorageResource,
 };
 
 type ResourceType = keyof typeof RESOURCES;

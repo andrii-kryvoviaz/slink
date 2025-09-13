@@ -43,7 +43,7 @@ export const ApiConnector = (options: ApiOptions): Handle => {
       return fetch(proxyUrl, requestOptions);
     };
 
-    let response = await makeRequest(session?.accessToken);
+    let response = await makeRequest(session?.accessToken as string);
     let authRefreshed = false;
 
     if (response.status === 401 && cookies.get('sessionId')) {

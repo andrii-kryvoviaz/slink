@@ -8,7 +8,7 @@ import type { User } from '@slink/lib/auth/Type/User';
 
 import { formData } from '@slink/utils/form/formData';
 
-import type { Actions } from '../../../.svelte-kit/types/src/routes/profile/(auth)/login/$types';
+import type { Actions } from './$types';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals, parent }) => {

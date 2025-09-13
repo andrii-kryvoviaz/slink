@@ -17,6 +17,7 @@
 
   import { skeleton } from '@slink/lib/actions/skeleton';
   import { usePublicImagesFeed } from '@slink/lib/state/PublicImagesFeed.svelte';
+  import { isAdmin } from '@slink/lib/auth/utils';
 
   import type { PageServerData } from './$types';
 
@@ -26,7 +27,7 @@
 
   let { data }: Props = $props();
 
-  const isAdmin = data.user?.roles?.includes('ROLE_ADMIN') ?? false;
+  const userIsAdmin = isAdmin(data.user);
   const publicFeedState = usePublicImagesFeed();
   publicFeedState.reset();
 
@@ -120,7 +121,7 @@
                     </div>
                   </div>
                 </div>
-                {#if isAdmin}
+                {#if userIsAdmin}
                   <AdminImageDropdown
                     {image}
                     on={{

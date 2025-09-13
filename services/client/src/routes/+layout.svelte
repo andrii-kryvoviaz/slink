@@ -12,11 +12,13 @@
   import { theme } from '@slink/lib/actions/theme';
   import { settings } from '@slink/lib/settings';
   import { initResponsiveStore } from '@slink/lib/stores/responsive.svelte';
+  import { isAdmin } from '@slink/lib/auth/utils';
 
   let { data, children } = $props();
   let user = $derived(data.user);
   let sidebarGroups = $derived(data.sidebarGroups || []);
   let isDemoMode = $derived(!!data.globalSettings?.demo?.enabled);
+  let userIsAdmin = $derived(isAdmin(user));
 
   const currentTheme = settings.get('theme', data.settings.theme);
   const { isDark } = currentTheme;
@@ -44,10 +46,10 @@
         config={{
           user: user || undefined,
           groups: sidebarGroups,
-          showAdmin: user?.roles?.includes('ROLE_ADMIN') ?? false,
+          showAdmin: userIsAdmin,
           showSystemItems: true,
           showUploadItem:
-            !!user || !!data.globalSettings?.access?.allowGuestUploads,
+            !!user || !!data.globalSettings?.access?.allowGuestUploads
         }}
       />
     {/if}

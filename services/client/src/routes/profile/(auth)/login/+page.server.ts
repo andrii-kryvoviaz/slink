@@ -11,6 +11,8 @@ import type { Actions, PageServerLoad } from './$types';
 export const load: PageServerLoad = async ({ parent, locals }) => {
   await parent();
 
+  console.log('Login page load - locals:', locals);
+
   if (locals.user) {
     redirect(302, '/profile');
   }

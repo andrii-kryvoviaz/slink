@@ -2,8 +2,13 @@
   import type { SidebarConfig } from '@slink/feature/Navigation';
   import { NavGroup, NavUser } from '@slink/feature/Navigation';
   import type { AppSidebarGroup } from '@slink/feature/Navigation/Sidebar/types';
+  import SidebarStorageUsage from './SidebarStorageUsage.svelte';
   import * as Sidebar from '@slink/ui/components/sidebar/index.js';
+  import * as HoverCard from '@slink/ui/components/hover-card/index.js';
+  import { fade } from 'svelte/transition';
   import type { ComponentProps } from 'svelte';
+
+  import Icon from '@iconify/svelte';
 
   import type { User } from '@slink/lib/auth/Type/User';
 
@@ -71,6 +76,15 @@
       <NavGroup {group} onNavigate={handleNavigate} />
     {/each}
   </Sidebar.Content>
+
+  {#if config.showAdmin}
+    <div
+      class="px-2 pb-2 group-data-[collapsible=icon]:px-1 group-data-[collapsible=icon]:pb-1"
+    >
+      <SidebarStorageUsage />
+    </div>
+  {/if}
+
   {#if config.user}
     <Sidebar.Footer>
       <NavUser {user} onNavigate={handleNavigate} />
