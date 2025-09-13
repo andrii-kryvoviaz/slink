@@ -14,12 +14,25 @@ concurrency:
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
 
 jobs:
-  format:
-    name: Format Codebase
+  lint:
+    name: Lint & Type Check
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Prettier Format Check
-        uses: ./.github/actions/prettier
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+          cache-dependency-path: './services/client/yarn.lock'
+
+      - name: Install dependencies
+        run: yarn --cwd ./services/client install --frozen-lockfile
+
+      - name: Run ESLint
+        run: yarn --cwd ./services/client run lint
+
+      - name: Type check
+        run: yarn --cwd ./services/client run check
