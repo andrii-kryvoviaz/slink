@@ -131,7 +131,7 @@ export class Auth {
 
     try {
       await ApiClient.auth.logout(refreshToken);
-    } catch (e) {
+    } catch {
       console.warn('Refresh token has already been invalidated');
     }
   }

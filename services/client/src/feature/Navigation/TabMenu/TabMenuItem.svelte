@@ -5,7 +5,6 @@
 
   import { page } from '$app/state';
   import { randomId } from '$lib/utils/string/randomId';
-  import { className } from '$lib/utils/ui/className';
   import type { HTMLAttributes } from 'svelte/elements';
 
   interface Props {

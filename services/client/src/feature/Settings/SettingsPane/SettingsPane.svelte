@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Loader } from '@slink/feature/Layout';
-  import { Button, type ButtonVariant } from '@slink/ui/components/button';
+  import { Button } from '@slink/ui/components/button';
   import type { Snippet } from 'svelte';
 
   import type { SettingCategory } from '$lib/settings/Type/GlobalSettings';
@@ -14,7 +14,7 @@
     on?: {
       save: (event: {
         category: SettingCategory;
-        data: Record<string, FormDataEntryValue>;
+        data: Record<string, string | File>;
       }) => void;
     };
   }

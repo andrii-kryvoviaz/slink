@@ -8,7 +8,7 @@ import { formData } from '@slink/utils/form/formData';
 
 import type { Action, Actions, PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ request, parent, locals }) => {
+export const load: PageServerLoad = async ({ parent, locals }) => {
   await parent();
 
   if (locals.user) {

@@ -4,10 +4,7 @@
 
   import Icon from '@iconify/svelte';
 
-  import type { ImageListingItem } from '@slink/api/Response';
-
   interface Props {
-    image: ImageListingItem;
     loading: boolean;
     preserveOnDisk: boolean;
     onConfirm: () => void;
@@ -16,7 +13,6 @@
   }
 
   let {
-    image,
     loading,
     preserveOnDisk,
     onConfirm,

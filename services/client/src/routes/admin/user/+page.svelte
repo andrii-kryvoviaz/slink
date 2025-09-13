@@ -6,7 +6,7 @@
 
   import { page } from '$app/stores';
   import Icon from '@iconify/svelte';
-  import { fade, fly } from 'svelte/transition';
+  import { fade } from 'svelte/transition';
 
   import { settings } from '@slink/lib/settings';
   import { useUserListFeed } from '@slink/lib/state/UserListFeed.svelte';

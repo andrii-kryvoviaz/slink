@@ -11,13 +11,12 @@
   };
 
   interface Props {
-    image: { id: string };
     loading?: Readable<boolean>;
     close: () => void;
     confirm: ({ preserveOnDiskAfterDeletion }: ConfirmAction) => void;
   }
 
-  let { image, loading = readable(false), close, confirm }: Props = $props();
+  let { loading = readable(false), close, confirm }: Props = $props();
 
   let preserveOnDiskAfterDeletion: boolean = $state(false);
 

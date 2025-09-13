@@ -7,7 +7,7 @@
     HTMLButtonAttributes,
   } from 'svelte/elements';
 
-  import { type WithElementRef, cn } from '@slink/utils/ui/index.js';
+  import { type WithElementRef } from '@slink/utils/ui/index.js';
 
   export const buttonVariants = tv({
     base: "inline-flex items-center justify-center text-center select-none cursor-pointer focus:outline-hidden focus-visible:outline-none whitespace-nowrap transition-all disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",

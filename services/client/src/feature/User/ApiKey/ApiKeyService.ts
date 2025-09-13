@@ -7,24 +7,20 @@ export class ApiKeyService {
   private apiKeyStore = useApiKeyStore();
 
   async createApiKey(formData: ApiKeyFormData): Promise<boolean> {
-    try {
-      const data = {
-        name: formData.name.trim(),
-        ...(formData.expiresAt ? { expiresAt: formData.expiresAt } : {}),
-      };
+    const data = {
+      name: formData.name.trim(),
+      ...(formData.expiresAt ? { expiresAt: formData.expiresAt } : {}),
+    };
 
-      await this.apiKeyStore.create(data);
-      return true;
-    } catch (error) {
-      throw error;
-    }
+    await this.apiKeyStore.create(data);
+    return true;
   }
 
   async revokeApiKey(keyId: string): Promise<boolean> {
     try {
       await this.apiKeyStore.revoke(keyId);
       return true;
-    } catch (error) {
+    } catch {
       return false;
     }
   }

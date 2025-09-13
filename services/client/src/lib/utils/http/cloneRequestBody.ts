@@ -1,6 +1,6 @@
 export const cloneRequestBody = async (
   request: Request,
-): Promise<BodyInit | undefined> => {
+): Promise<globalThis.BodyInit | undefined> => {
   const contentType = request.headers.get('content-type');
 
   if (contentType && /^(application\/json.*)/.test(contentType)) {
@@ -8,7 +8,7 @@ export const cloneRequestBody = async (
   }
 
   if (contentType && /^(multipart\/form-data.*)/.test(contentType)) {
-    return request.clone().body as BodyInit;
+    return request.clone().body as globalThis.BodyInit;
   }
 
   return;

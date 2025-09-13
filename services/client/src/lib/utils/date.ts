@@ -18,7 +18,7 @@ function formatTimeUnit(value: number, unit: string): string {
   return `${value} ${unit}${value > 1 ? 's' : ''}`;
 }
 
-function formatRelativeTime(
+export function formatRelativeTime(
   days: number,
   prefix: string = '',
   suffix: string = '',

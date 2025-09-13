@@ -139,7 +139,7 @@
           disabled={item.disabled}
           class="cursor-pointer"
         >
-          {#snippet children({ selected })}
+          {#snippet children()}
             <div class="flex items-center gap-2 w-full">
               {#if item.icon}
                 <Icon icon={item.icon} class="w-4 h-4 shrink-0" />
@@ -188,7 +188,7 @@
             disabled={item.disabled}
             class="cursor-pointer"
           >
-            {#snippet children({ selected })}
+            {#snippet children()}
               <div class="flex items-center gap-2 w-full">
                 {#if item.icon}
                   <Icon icon={item.icon} class="w-4 h-4 shrink-0" />

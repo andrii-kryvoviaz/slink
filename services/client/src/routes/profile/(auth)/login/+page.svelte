@@ -6,7 +6,6 @@
     BannerFooter,
     BannerIcon,
   } from '@slink/feature/Layout';
-  import { CopyableText } from '@slink/feature/Text';
   import { Button, type ButtonVariant } from '@slink/ui/components/button';
   import { Input } from '@slink/ui/components/input';
   import { untrack } from 'svelte';

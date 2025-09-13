@@ -6,8 +6,6 @@
 
   import Icon from '@iconify/svelte';
 
-  import { randomId } from '@slink/utils/string/randomId';
-
   const refreshIconVariants = cva(
     'transition-transform duration-500 group-hover:rotate-180',
     {
@@ -34,8 +32,6 @@
   }
 
   let { loading = false, children, ...props }: Props = $props();
-
-  const uniqueId = randomId('refreshButton');
 </script>
 
 <TooltipProvider delayDuration={300}>

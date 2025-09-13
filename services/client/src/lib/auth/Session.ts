@@ -14,7 +14,7 @@ type SessionItem = {
 
 type SessionData = {
   user: User | null;
-} & Record<string, any>;
+} & Record<string, unknown>;
 
 class SessionManager {
   private static _instance: SessionManager;
@@ -26,7 +26,8 @@ class SessionManager {
     return this._instance ?? (this._instance = new SessionManager());
   }
 
-  private _provider: SessionProviderInterface = null as any;
+  private _provider: SessionProviderInterface =
+    null as unknown as SessionProviderInterface;
 
   public setProvider(provider: SessionProviderInterface) {
     this._provider = provider;

@@ -10,14 +10,6 @@
   import { skeleton } from '@slink/lib/actions/skeleton';
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
 
-  import type { PageData } from './$types';
-
-  interface Props {
-    data: PageData;
-  }
-
-  let { data }: Props = $props();
-
   const historyFeedState = useUploadHistoryFeed();
 
   $effect(() => {

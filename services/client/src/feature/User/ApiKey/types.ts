@@ -1,10 +1,12 @@
+import type { User } from '@slink/lib/auth/Type/User';
+
 export interface ApiKeyFormData {
   name: string;
   expiresAt?: string;
 }
 
 export interface ApiKeyManagerProps {
-  user: any;
+  user: User;
 }
 
 export interface ApiKeyManagerState {

@@ -6,7 +6,7 @@
     oncloseToast?: () => void;
   }
 
-  let { message = '', oncloseToast } = $props();
+  let { message = '', oncloseToast }: Props = $props();
 
   const handleClose = () => {
     oncloseToast?.();

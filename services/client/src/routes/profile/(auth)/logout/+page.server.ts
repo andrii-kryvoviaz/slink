@@ -4,7 +4,7 @@ import { Auth } from '@slink/lib/auth/Auth';
 
 import type { Actions, PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({}) => {};
+export const load: PageServerLoad = async () => {};
 
 export const actions: Actions = {
   default: async ({ cookies, fetch, locals }) => {

@@ -1,4 +1,4 @@
-type IndexableObject = Record<string, any>;
+type IndexableObject = Record<string, unknown>;
 
 export function deepMerge<T extends IndexableObject>(target: T, source: T): T {
   const output: T = { ...target };
@@ -32,6 +32,6 @@ export function deepMerge<T extends IndexableObject>(target: T, source: T): T {
   return output;
 }
 
-export function isObject(item: any): item is IndexableObject {
-  return item && typeof item === 'object' && !Array.isArray(item);
+export function isObject(item: unknown): item is IndexableObject {
+  return !!item && typeof item === 'object' && !Array.isArray(item);
 }

@@ -1,7 +1,7 @@
 export interface NavMainItem {
   title: string;
   url: string;
-  icon?: any;
+  icon?: unknown;
   iconName?: string;
   isActive?: boolean;
   items: NavSubItem[];
@@ -15,12 +15,12 @@ export interface NavSubItem {
 export interface NavProject {
   name: string;
   url: string;
-  icon: any;
+  icon: unknown;
 }
 
 export interface NavTeam {
   name: string;
-  logo: any;
+  logo: unknown;
   plan: string;
 }
 

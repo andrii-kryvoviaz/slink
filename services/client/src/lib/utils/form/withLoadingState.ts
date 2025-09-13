@@ -10,13 +10,7 @@ export function withLoadingState(
   return () => {
     loading.set(true);
 
-    return async ({
-      result,
-      update,
-    }: {
-      update: Function;
-      result: ActionResult;
-    }) => {
+    return async ({ update }: { update: Function; result: ActionResult }) => {
       loading.set(false);
 
       if (invalidate) {

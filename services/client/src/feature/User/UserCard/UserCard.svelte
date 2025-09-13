@@ -5,7 +5,6 @@
   import { UserRoleCell } from '@slink/feature/User';
 
   import { type User } from '$lib/auth/Type/User';
-  import { printErrorsAsToastMessage } from '$lib/utils/ui/printErrorsAsToastMessage';
 
   interface Props {
     user?: User;

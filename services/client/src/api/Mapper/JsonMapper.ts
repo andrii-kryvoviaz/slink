@@ -4,7 +4,7 @@ import type { RequestOptions } from '@slink/api/Type/RequestOptions';
 export const JsonMapper: RequestMapper = (
   path,
   options,
-): RequestOptions | RequestInit => {
+): RequestOptions | globalThis.RequestInit => {
   const { json, ...rest } = options ?? {};
 
   if (!json) {

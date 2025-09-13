@@ -132,8 +132,6 @@
     });
   });
 
-  let isHorizontal: boolean = $derived(orientation === 'horizontal');
-
   let classes = $derived(
     className(
       TabMenuTheme({

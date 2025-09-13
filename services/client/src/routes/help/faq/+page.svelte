@@ -68,7 +68,7 @@
     </div>
 
     <div class="space-y-4">
-      {#each faqQuestions as { title, content, slug }, i}
+      {#each faqQuestions as { title, content, slug }, _}
         {@const ContentComponent = content}
         <div
           id={slug}

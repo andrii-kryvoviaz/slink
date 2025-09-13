@@ -3,8 +3,6 @@
   import { Button } from '@slink/ui/components/button';
 
   import Icon from '@iconify/svelte';
-  import { cubicOut } from 'svelte/easing';
-  import { scale } from 'svelte/transition';
 
   interface Props {
     width: number;

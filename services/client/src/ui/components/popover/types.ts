@@ -15,6 +15,7 @@ export type PopoverProps = PopoverContentVariants & {
 };
 
 export type PopoverVariant = PopoverContentVariants['variant'];
+export type PopoverArrowVariant = PopoverArrowVariants['variant'];
 export type PopoverTriggerVariant = PopoverTriggerVariants['variant'];
 export type PopoverSize = PopoverContentVariants['size'];
 export type PopoverRounded = PopoverContentVariants['rounded'];

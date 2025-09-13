@@ -66,7 +66,6 @@ class ApiKeyStore extends AbstractHttpState<ApiKeyResponse[]> {
 
   public async create(
     data: CreateApiKeyRequest,
-    options: RequestStateOptions = {},
   ): Promise<CreateApiKeyResponse | null> {
     this._isCreating = true;
     this._downloadCompleted = false;
@@ -92,10 +91,7 @@ class ApiKeyStore extends AbstractHttpState<ApiKeyResponse[]> {
     }
   }
 
-  public async revoke(
-    keyId: string,
-    options: RequestStateOptions = {},
-  ): Promise<void> {
+  public async revoke(keyId: string): Promise<void> {
     this._isRevoking = true;
 
     try {
@@ -116,7 +112,6 @@ class ApiKeyStore extends AbstractHttpState<ApiKeyResponse[]> {
   public async downloadShareXConfig(
     baseUrl: string,
     apiKey?: string,
-    options: RequestStateOptions = {},
   ): Promise<void> {
     this._isDownloadingConfig = true;
 

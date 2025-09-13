@@ -1,5 +1,5 @@
-export type RequestOptions = RequestInit & {
-  query?: Record<string, any>;
-  json?: any;
+export type RequestOptions = globalThis.RequestInit & {
+  query?: Record<string, unknown>;
+  json?: unknown;
   includeResponseHeaders?: boolean;
 };

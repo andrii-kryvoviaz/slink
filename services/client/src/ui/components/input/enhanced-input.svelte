@@ -1,6 +1,5 @@
 <script lang="ts">
   import { Label } from '@slink/ui/components/label';
-  import { cva } from 'class-variance-authority';
   import type { Snippet } from 'svelte';
   import { twMerge } from 'tailwind-merge';
 
@@ -10,18 +9,18 @@
 
   import { cn } from '@slink/utils/ui/index.js';
 
+  import { type InputVariants, inputVariants } from './enhanced-input.theme.js';
   import { Root as BaseInput } from './index.js';
 
-  interface Props extends Omit<HTMLInputAttributes, 'size'> {
+  interface Props
+    extends Omit<HTMLInputAttributes, 'size'>,
+      Pick<InputVariants, 'size' | 'variant' | 'rounded'> {
     key?: string;
     label?: string;
     leftIcon?: Snippet<[]>;
     rightIcon?: Snippet<[]>;
     topRightText?: Snippet<[]>;
     error?: string | ErrorList;
-    size?: 'sm' | 'md' | 'lg';
-    variant?: 'default' | 'error' | 'modern';
-    rounded?: 'sm' | 'md' | 'lg';
   }
 
   let {
@@ -39,35 +38,11 @@
     ...props
   }: Props = $props();
 
-  const inputVariants = cva(
-    'aria-invalid:border-purple-300/60 dark:aria-invalid:border-purple-600/40 aria-invalid:focus-visible:border-purple-400/70 dark:aria-invalid:focus-visible:border-purple-500/50 aria-invalid:focus-visible:ring-purple-500/20 dark:aria-invalid:focus-visible:ring-purple-400/20 aria-invalid:bg-purple-25/30 dark:aria-invalid:bg-purple-950/20 aria-invalid:hover:bg-purple-50/40 dark:aria-invalid:hover:bg-purple-950/30 transition-all duration-200',
-    {
-      variants: {
-        size: {
-          sm: 'h-8 px-2 text-sm',
-          md: 'h-9 px-3 text-sm',
-          lg: 'h-10 px-4 text-base',
-        },
-        hasLeftIcon: {
-          true: 'pl-10',
-          false: '',
-        },
-        hasRightIcon: {
-          true: 'pr-10',
-          false: '',
-        },
-      },
-      defaultVariants: {
-        size: 'md',
-        hasLeftIcon: false,
-        hasRightIcon: false,
-      },
-    },
-  );
-
   const combinedClasses = cn(
     inputVariants({
       size,
+      variant,
+      rounded,
       hasLeftIcon: !!leftIcon,
       hasRightIcon: !!rightIcon,
     }),

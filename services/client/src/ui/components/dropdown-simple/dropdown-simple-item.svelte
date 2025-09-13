@@ -3,8 +3,6 @@
   import { DropdownMenu } from 'bits-ui';
   import type { Snippet } from 'svelte';
 
-  import Icon from '@iconify/svelte';
-
   import {
     dropdownSimpleItemIconTheme,
     dropdownSimpleItemTextTheme,

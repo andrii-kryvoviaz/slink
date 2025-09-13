@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Loader } from '@slink/feature/Layout';
   import { UserAvatar } from '@slink/feature/User';
-  import { Button, type ButtonVariant } from '@slink/ui/components/button';
+  import { Button } from '@slink/ui/components/button';
   import { Input } from '@slink/ui/components/input';
 
   import { enhance } from '$app/forms';
@@ -9,8 +9,6 @@
   import { fade } from 'svelte/transition';
 
   import { useWritable } from '@slink/store/contextAwareStore';
-
-  import { settings } from '@slink/lib/settings';
 
   import { withLoadingState } from '@slink/utils/form/withLoadingState';
   import { toast } from '@slink/utils/ui/toast-sonner.svelte';
@@ -34,10 +32,6 @@
     'updateProfileFormLoadingState',
     false,
   );
-
-  const { isLight } = settings.get('theme', data.settings.theme);
-
-  let buttonVariant: ButtonVariant = $derived($isLight ? 'dark' : 'primary');
 
   $effect(() => {
     if (form?.passwordWasChanged) {

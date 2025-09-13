@@ -1,9 +1,5 @@
 <script lang="ts">
-  import type {
-    ApiKeyFormData,
-    ApiKeyManagerProps,
-    ApiKeyManagerState,
-  } from '@slink/feature/User';
+  import type { ApiKeyFormData, ApiKeyManagerState } from '@slink/feature/User';
   import {
     ApiKeyCard,
     ApiKeyList,
@@ -19,8 +15,6 @@
   import Icon from '@iconify/svelte';
 
   import type { ApiKeyResponse } from '@slink/api/Resources/ApiKeyResource';
-
-  let { user }: ApiKeyManagerProps = $props();
 
   const apiKeyStore = useApiKeyStore();
   const apiKeyService = new ApiKeyService();

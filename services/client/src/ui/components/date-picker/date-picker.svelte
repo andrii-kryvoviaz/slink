@@ -25,7 +25,6 @@
     class?: string;
     id?: string;
     name?: string;
-    required?: boolean;
     'aria-describedby'?: string;
     'aria-invalid'?: boolean;
     leftIcon?: Snippet<[]>;
@@ -38,7 +37,6 @@
     class: className,
     id,
     name,
-    required = false,
     'aria-describedby': ariaDescribedby,
     'aria-invalid': ariaInvalid,
     leftIcon,

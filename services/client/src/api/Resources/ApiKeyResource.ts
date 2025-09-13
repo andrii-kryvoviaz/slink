@@ -39,7 +39,7 @@ export class ApiKeyResource extends AbstractResource {
   public async getShareXConfig(
     baseUrl?: string,
     apiKey?: string,
-  ): Promise<any> {
+  ): Promise<unknown> {
     const params = new URLSearchParams();
     if (baseUrl) params.append('baseUrl', baseUrl);
     if (apiKey) params.append('apiKey', apiKey);

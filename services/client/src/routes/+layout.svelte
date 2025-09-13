@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { DemoBadge, DemoNotice, ThemeSwitch } from '@slink/feature/Layout';
+  import { DemoNotice, ThemeSwitch } from '@slink/feature/Layout';
   import { Navbar } from '@slink/feature/Navigation';
   import AppSidebar from '@slink/feature/Navigation/Sidebar/AppSidebar.svelte';
   import { ScrollArea } from '@slink/ui/components/scroll-area/index.js';

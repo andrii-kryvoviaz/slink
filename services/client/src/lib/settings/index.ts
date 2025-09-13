@@ -13,6 +13,7 @@ export * from './Settings.enums';
 
 export const settings = SettingsManager.instance;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const defaultSettings: { [K in SettingsKey]?: any } = {
   theme: Theme.DARK,
   sidebar: {

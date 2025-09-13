@@ -102,7 +102,9 @@ export default function SvelteImportsPlugin({
             console.info(`[${name}][${event}] ${file}`);
           }
         });
-      } catch (error) {}
+      } catch {
+        console.error(`[${name}] Failed to create file watcher`);
+      }
     },
   };
 }

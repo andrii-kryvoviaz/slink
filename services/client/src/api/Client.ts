@@ -44,7 +44,7 @@ type Resources = {
 
 type FetchFunction = typeof fetch;
 
-type ApiClient = Resources & {
+type ApiClientType = Resources & {
   use: (callable: FetchFunction) => Resources;
   on: (event: EventType, listener: EventListener) => void;
 };
@@ -64,7 +64,7 @@ type Event<T> = {
   data?: T;
 };
 
-type EventListener = (event: Event<any>) => void;
+type EventListener = (event: Event<unknown>) => void;
 
 export class Client {
   private static _resources: Resources = {} as Resources;
@@ -76,7 +76,7 @@ export class Client {
 
   private constructor(private readonly _basePath: string) {}
 
-  public static create(basePath: string): ApiClient {
+  public static create(basePath: string): ApiClientType {
     const client = this._instance ?? new Client(basePath);
     this.initializeResources(client);
 
@@ -91,8 +91,10 @@ export class Client {
     let ResourceType: ResourceType;
 
     for (ResourceType in RESOURCES) {
-      const resourceClass: ResourceConstructor<any> = RESOURCES[ResourceType];
-      this._resources[ResourceType] = new resourceClass(client);
+      const resourceClass: ResourceConstructor<ResourceType> =
+        RESOURCES[ResourceType];
+      (this._resources as Record<string, unknown>)[ResourceType] =
+        new resourceClass(client);
     }
   }
 
@@ -106,7 +108,7 @@ export class Client {
     return `?${params.toString()}`;
   }
 
-  public async fetch(path: string, options?: RequestOptions) {
+  public async fetch(path: string, options?: RequestOptions): Promise<unknown> {
     if (!this._fetch) {
       this._fetch = fetch;
       console.warn(
@@ -120,7 +122,9 @@ export class Client {
 
     const url = [this._basePath, path].join('');
 
-    const queryString = this.generateQueryString(options?.query);
+    const queryString = this.generateQueryString(
+      options?.query as Record<string, string> | undefined,
+    );
     const response = await this._fetch(url + queryString, options);
 
     if (browser && response.headers.has('x-auth-refreshed')) {
@@ -202,8 +206,11 @@ export class Client {
     }
 
     if (response.ok && response.status < 400) {
+      const parsedBody = this.parseBody(responseBody);
       return {
-        ...this.parseBody(responseBody),
+        ...(typeof parsedBody === 'object' && parsedBody !== null
+          ? parsedBody
+          : {}),
         ...((options as RequestOptions)?.includeResponseHeaders
           ? { headers: response.headers }
           : {}),
@@ -211,13 +218,17 @@ export class Client {
     }
   }
 
-  private parseBody(body: any) {
-    if (body.meta && body.data) {
-      return body;
-    }
+  private parseBody(body: unknown) {
+    if (typeof body === 'object' && body !== null) {
+      const obj = body as Record<string, unknown>;
 
-    if (body.data && !Array.isArray(body.data)) {
-      return body.data;
+      if (obj.meta && obj.data) {
+        return body;
+      }
+
+      if (obj.data && !Array.isArray(obj.data)) {
+        return obj.data;
+      }
     }
 
     return body;

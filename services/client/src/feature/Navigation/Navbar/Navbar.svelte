@@ -22,7 +22,6 @@
   }
 
   let {
-    user,
     showLogo = true,
     showLoginButton = false,
     showUploadButton = true,

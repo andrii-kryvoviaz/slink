@@ -8,11 +8,10 @@
     visible?: boolean;
     text?: Snippet<[]>;
     icon?: Snippet<[]>;
-    rightIcon?: Snippet<[]>;
     loadingIcon?: Snippet<[]>;
   }
 
-  let { visible = true, text, icon, rightIcon, ...props }: Props = $props();
+  let { visible = true, text, icon, ...props }: Props = $props();
 </script>
 
 {#if visible}
@@ -31,12 +30,6 @@
           <Icon icon="teenyicons:refresh-solid" class="h-2 w-2" />
         {/if}
       {/snippet}
-
-      {#if rightIcon}
-        {#snippet rightIcon()}
-          {@render rightIcon?.()}
-        {/snippet}
-      {/if}
 
       {#snippet loadingIcon()}
         {#if props.loadingIcon}

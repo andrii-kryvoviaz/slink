@@ -38,7 +38,7 @@
 
     const paramsString = Object.entries(params)
       .filter(
-        ([key, value]) =>
+        ([_, value]) =>
           value !== false && value !== undefined && value !== null,
       )
       .map(([key, value]) => `${key}=${value}`)

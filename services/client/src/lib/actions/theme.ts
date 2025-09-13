@@ -2,10 +2,7 @@ import type { Action } from 'svelte/action';
 
 import { Theme } from '@slink/lib/settings';
 
-export const theme: Action<HTMLElement, string> = (
-  node: HTMLElement,
-  themeName: string,
-) => {
+export const theme: Action<HTMLElement, string> = (node: HTMLElement) => {
   if (node !== document.documentElement) {
     node = document.documentElement;
   }

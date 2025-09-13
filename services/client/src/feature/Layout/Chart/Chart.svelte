@@ -2,6 +2,7 @@
   import type { ChartNormalizer, ChartOptions } from '@slink/feature/Layout';
   import { AreaChart, RadialBarChart } from '@slink/feature/Layout';
   import type { ApexOptions } from 'apexcharts';
+  import type ApexCharts from 'apexcharts';
   import { twMerge } from 'tailwind-merge';
 
   import { settings } from '$lib/settings';
@@ -118,13 +119,16 @@
   const classes = twMerge('w-full', props.class ?? '');
 
   const currentTheme = settings.get('theme', 'light');
-  const { isDark, isLight } = currentTheme;
+  const { isDark } = currentTheme;
 
   const handleOptionsChange = (
     options: ChartOptions,
     theme: 'dark' | 'light',
   ) => {
-    let chartOptions = deepMerge<ChartOptions>(defaultOptions, options);
+    let chartOptions = deepMerge(
+      defaultOptions as any,
+      options as any,
+    ) as ChartOptions;
 
     if (chartOptions.chart?.type) {
       const chartType = chartOptions.chart.type;

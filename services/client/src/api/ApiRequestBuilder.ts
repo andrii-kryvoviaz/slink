@@ -3,8 +3,8 @@ import type { RequestEvent } from '@sveltejs/kit';
 type RequestOptions = {
   method: string;
   headers: Headers;
-  body?: BodyInit;
-  credentials: RequestCredentials;
+  body?: globalThis.BodyInit;
+  credentials: globalThis.RequestCredentials;
   duplex?: 'half';
 };
 
@@ -58,7 +58,7 @@ export class ApiRequestBuilder {
     };
   }
 
-  private async cloneRequestBody(): Promise<BodyInit | undefined> {
+  private async cloneRequestBody(): Promise<globalThis.BodyInit | undefined> {
     const { request } = this.requestEvent;
     const contentType = request.headers.get('content-type');
 
@@ -71,7 +71,7 @@ export class ApiRequestBuilder {
     }
 
     if (/^multipart\/form-data/i.test(contentType)) {
-      return request.clone().body as BodyInit;
+      return request.clone().body as globalThis.BodyInit;
     }
 
     if (/^application\/x-www-form-urlencoded/i.test(contentType)) {

@@ -31,7 +31,7 @@
   let pageInput = $state('');
   let isInputFocused = $state(false);
   let hasError = $state(false);
-  let inputRef: HTMLInputElement;
+  let inputRef = $state<HTMLInputElement>();
 
   const currentPage = $derived(currentPageIndex + 1);
 

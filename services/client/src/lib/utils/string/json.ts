@@ -2,15 +2,15 @@ export const isJson = (str: string): boolean => {
   try {
     JSON.parse(str);
     return true;
-  } catch (e) {
+  } catch {
     return false;
   }
 };
 
-export const tryJson = <T>(str: any): T | string => {
+export const tryJson = <T>(str: string): T | string => {
   try {
     return JSON.parse(str);
-  } catch (e) {
+  } catch {
     return str;
   }
 };

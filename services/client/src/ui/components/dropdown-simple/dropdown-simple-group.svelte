@@ -5,7 +5,7 @@
     heading?: string;
   };
 
-  let { heading, children, ...props }: Props = $props();
+  let { heading, children }: Props = $props();
 </script>
 
 <DropdownMenu.Group>

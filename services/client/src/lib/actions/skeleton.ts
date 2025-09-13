@@ -3,7 +3,7 @@ import type { Action } from 'svelte/action';
 import type { AbstractPaginatedFeed } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
 
 interface SkeletonConfig {
-  feed: AbstractPaginatedFeed<any>;
+  feed: AbstractPaginatedFeed<unknown>;
   enabled?: boolean;
   minDisplayTime?: number;
   showDelay?: number;

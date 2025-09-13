@@ -1,6 +1,5 @@
 <script lang="ts">
   import ResetSettingPopover from '@slink/feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte';
-  import { Badge } from '@slink/feature/Text';
   import { Overlay } from '@slink/ui/components/popover';
   import { Tooltip } from '@slink/ui/components/tooltip';
   import type { Snippet } from 'svelte';
@@ -9,7 +8,6 @@
     parseFileSize,
     sizeMatchingRegex,
   } from '$lib/utils/string/parseFileSize';
-  import { randomId } from '$lib/utils/string/randomId';
   import Icon from '@iconify/svelte';
 
   interface Props {
@@ -29,8 +27,6 @@
     hint,
     children,
   }: Props = $props();
-
-  const uniqueId = randomId('setting-item');
 
   let labelRef: HTMLSpanElement | undefined = $state();
   let triggerRef: HTMLButtonElement | undefined = $state();
@@ -56,10 +52,6 @@
 
   const formatCurrentValue = () => {
     return formatValue(currentValue);
-  };
-
-  const handleSettingReset = () => {
-    resetPopoverOpen = true;
   };
 
   const confirmSettingReset = () => {

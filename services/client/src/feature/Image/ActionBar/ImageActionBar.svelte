@@ -99,10 +99,6 @@
     }, 1000);
   };
 
-  const handleImageDeletion = () => {
-    deletePopoverOpen = true;
-  };
-
   const confirmImageDeletion = async ({
     preserveOnDiskAfterDeletion,
   }: {
@@ -242,7 +238,6 @@
         {/snippet}
 
         <ImageDeletePopover
-          {image}
           loading={deleteImageIsLoading}
           close={closeDeletePopover}
           confirm={confirmImageDeletion}

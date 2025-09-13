@@ -1,6 +1,5 @@
 <script lang="ts">
   import * as Select from '@slink/ui/components/select';
-  import { Select as SelectPrimitive } from 'bits-ui';
 
   import Icon from '@iconify/svelte';
 
