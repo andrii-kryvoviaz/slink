@@ -73,7 +73,11 @@ const handleLinkHeaderPreloading: Handle = async ({ event, resolve }) => {
     return response;
   }
 
-  response.headers.delete('link');
+  // strip header if it is larger than 4kB
+  const linkHeader = response.headers.get('link');
+  if (linkHeader && linkHeader.length >= 4096) {
+    response.headers.delete('link');
+  }
 
   return response;
 };

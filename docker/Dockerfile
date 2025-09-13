@@ -12,10 +12,11 @@ FROM node:${NODE_VERSION}-alpine AS node
 FROM node:${NODE_VERSION}-alpine AS node-dependencies
 WORKDIR /client
 
+RUN echo "network-timeout=300000" >> ~/.yarnrc
+
 COPY services/client/package.json services/client/yarn.lock ./
 
-RUN yarn config set network-timeout 300000 && \
-    yarn install --frozen-lockfile --non-interactive
+RUN yarn install --frozen-lockfile --non-interactive
 
 COPY services/client/plugins ./plugins
 COPY services/client/src ./src
@@ -205,6 +206,7 @@ COPY --from=vendor --chown=slink:slink /dependencies/vendor ./api/vendor
 COPY --from=source --chown=slink:slink /source ./api
 COPY --from=node-dependencies --chown=slink:slink /client/build ./client/svelte-kit
 COPY --from=node-dependencies --chown=slink:slink /client/package.json ./client/svelte-kit/package.json
+COPY --from=node-dependencies --chown=slink:slink /client/node_modules ./client/svelte-kit/node_modules
 COPY --chown=slink:slink services/api/.env.example ./api/.env
 
 RUN mkdir -p /app/var/data && \
