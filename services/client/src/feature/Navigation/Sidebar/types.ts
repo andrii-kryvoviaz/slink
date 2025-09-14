@@ -38,7 +38,6 @@ export interface SidebarConfig {
   showAdmin?: boolean;
   showSystemItems?: boolean;
   showUploadItem?: boolean;
-  showStorageWidget?: boolean;
 }
 
 export interface AppSidebarItem {

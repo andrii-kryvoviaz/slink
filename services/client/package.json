@@ -12,7 +12,7 @@
     "lint": "eslint . && prettier --check .",
     "lint:fix": "eslint . --fix && prettier --write .",
     "format": "prettier --write .",
-    "prepare": "husky"
+    "prepare": "cd ../.. && husky ./services/client/.husky"
   },
   "dependencies": {
     "@floating-ui/dom": "^1.7.4",

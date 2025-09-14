@@ -11,14 +11,12 @@ export const createAppSidebarItems = (options?: {
   showAdmin?: boolean;
   showSystemItems?: boolean;
   showUploadItem?: boolean;
-  showStorageWidget?: boolean;
   customGroups?: AppSidebarGroup[];
 }): AppSidebarGroup[] => {
   const {
     showAdmin = false,
     showSystemItems = true,
     showUploadItem = false,
-    showStorageWidget = false,
     customGroups = [],
   } = options || {};
 
@@ -112,7 +110,6 @@ export const createNavMainFromAppSidebar = (
     showAdmin = false,
     showSystemItems = true,
     showUploadItem = false,
-    showStorageWidget = false,
   } = config || {};
 
   return groups
@@ -147,7 +144,6 @@ export const createSidebarData = (config?: SidebarConfig): SidebarData => {
     showAdmin: config?.showAdmin,
     showSystemItems: config?.showSystemItems,
     showUploadItem: config?.showUploadItem,
-    showStorageWidget: config?.showStorageWidget,
   });
 
   return {

@@ -1,1 +1,1 @@
-yarn lint-staged
+cd services/client yarn lint-staged

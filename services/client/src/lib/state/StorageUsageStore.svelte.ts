@@ -1,4 +1,3 @@
-import { browser } from '$app/environment';
 
 import { ApiClient } from '@slink/api/Client';
 import type { StorageUsageResponse } from '@slink/api/Resources/StorageResource';

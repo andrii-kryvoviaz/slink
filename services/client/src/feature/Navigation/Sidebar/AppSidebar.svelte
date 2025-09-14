@@ -4,13 +4,10 @@
   import type { AppSidebarGroup } from '@slink/feature/Navigation/Sidebar/types';
   import SidebarStorageUsage from './SidebarStorageUsage.svelte';
   import * as Sidebar from '@slink/ui/components/sidebar/index.js';
-  import * as HoverCard from '@slink/ui/components/hover-card/index.js';
-  import { fade } from 'svelte/transition';
   import type { ComponentProps } from 'svelte';
 
-  import Icon from '@iconify/svelte';
-
-  import type { User } from '@slink/lib/auth/Type/User';
+  
+import type { User } from '@slink/lib/auth/Type/User';
 
   interface ExtendedSidebarConfig extends SidebarConfig {
     user?: Partial<User>;
