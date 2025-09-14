@@ -1,8 +1,10 @@
 <script lang="ts">
-  import Icon from '@iconify/svelte';
-  import type { StorageUsageResponse } from '@slink/api/Resources/StorageResource';
-  import { bytesToSize } from '$lib/utils/bytesConverter';
   import Badge from '@slink/feature/Text/Badge/Badge.svelte';
+
+  import { bytesToSize } from '$lib/utils/bytesConverter';
+  import Icon from '@iconify/svelte';
+
+  import type { StorageUsageResponse } from '@slink/api/Resources/StorageResource';
 
   interface Props {
     data?: StorageUsageResponse | null;
@@ -12,11 +14,7 @@
     isSSEConnected?: boolean;
   }
 
-  let {
-    data,
-    isLoading = false,
-    error = null,
-  }: Props = $props();
+  let { data, isLoading = false, error = null }: Props = $props();
 
   function getProviderIcon(provider: string) {
     switch (provider) {
@@ -64,7 +62,9 @@
   }
 </script>
 
-<div class="bg-sidebar-card border border-sidebar-border rounded-lg p-4 space-y-3">
+<div
+  class="bg-sidebar-card border border-sidebar-border rounded-lg p-4 space-y-3"
+>
   <div class="flex items-center justify-between">
     <div class="flex items-center gap-2">
       <Icon

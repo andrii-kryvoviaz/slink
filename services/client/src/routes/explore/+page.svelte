@@ -16,8 +16,8 @@
   import { fade, fly } from 'svelte/transition';
 
   import { skeleton } from '@slink/lib/actions/skeleton';
-  import { usePublicImagesFeed } from '@slink/lib/state/PublicImagesFeed.svelte';
   import { isAdmin } from '@slink/lib/auth/utils';
+  import { usePublicImagesFeed } from '@slink/lib/state/PublicImagesFeed.svelte';
 
   import type { PageServerData } from './$types';
 

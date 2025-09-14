@@ -2,12 +2,12 @@
   import type { SidebarConfig } from '@slink/feature/Navigation';
   import { NavGroup, NavUser } from '@slink/feature/Navigation';
   import type { AppSidebarGroup } from '@slink/feature/Navigation/Sidebar/types';
-  import SidebarStorageUsage from './SidebarStorageUsage.svelte';
   import * as Sidebar from '@slink/ui/components/sidebar/index.js';
   import type { ComponentProps } from 'svelte';
 
-  
-import type { User } from '@slink/lib/auth/Type/User';
+  import type { User } from '@slink/lib/auth/Type/User';
+
+  import SidebarStorageUsage from './SidebarStorageUsage.svelte';
 
   interface ExtendedSidebarConfig extends SidebarConfig {
     user?: Partial<User>;

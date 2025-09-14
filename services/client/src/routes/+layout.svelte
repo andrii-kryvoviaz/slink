@@ -10,9 +10,9 @@
   import '@slink/app.css';
 
   import { theme } from '@slink/lib/actions/theme';
+  import { isAdmin } from '@slink/lib/auth/utils';
   import { settings } from '@slink/lib/settings';
   import { initResponsiveStore } from '@slink/lib/stores/responsive.svelte';
-  import { isAdmin } from '@slink/lib/auth/utils';
 
   let { data, children } = $props();
   let user = $derived(data.user);
@@ -49,7 +49,7 @@
           showAdmin: userIsAdmin,
           showSystemItems: true,
           showUploadItem:
-            !!user || !!data.globalSettings?.access?.allowGuestUploads
+            !!user || !!data.globalSettings?.access?.allowGuestUploads,
         }}
       />
     {/if}

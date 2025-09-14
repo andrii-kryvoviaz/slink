@@ -1,4 +1,3 @@
-
 import { ApiClient } from '@slink/api/Client';
 import type { StorageUsageResponse } from '@slink/api/Resources/StorageResource';
 
@@ -31,7 +30,6 @@ class StorageUsageStore extends AbstractHttpState<StorageUsageResponse> {
     return this._isDisabled;
   }
 
-
   public async load(options: RequestStateOptions = {}): Promise<void> {
     if (this._usage && !this.isDirty) {
       return;
@@ -55,7 +53,6 @@ class StorageUsageStore extends AbstractHttpState<StorageUsageResponse> {
     this.markDirty(true);
     await this.load(options);
   }
-
 
   public formatBytes(bytes: number): string {
     if (bytes === 0) return '0 B';
@@ -91,9 +88,7 @@ class StorageUsageStore extends AbstractHttpState<StorageUsageResponse> {
     return 'bg-red-500';
   }
 
-  public destroy(): void {
-    // No live connection to tear down.
-  }
+  public destroy(): void {}
 }
 
 const STORAGE_USAGE_STORE = Symbol('StorageUsageStore');
