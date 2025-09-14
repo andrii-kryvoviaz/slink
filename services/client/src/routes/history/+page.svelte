@@ -23,7 +23,7 @@
 
 <section in:fade={{ duration: 300 }}>
   <div
-    class="container mx-auto flex flex-col px-4 py-6 sm:px-6 max-w-6xl"
+    class="container mx-auto flex flex-col px-4 py-6 sm:px-6 max-w-7xl"
     use:skeleton={{
       feed: historyFeedState,
       minDisplayTime: 300,

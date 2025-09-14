@@ -137,7 +137,7 @@
 </script>
 
 <TooltipProvider delayDuration={300}>
-  <div class="flex flex-wrap items-center gap-2">
+  <div class="flex flex-wrap items-center gap-2 w-full">
     {#if isButtonVisible('download')}
       <button
         class={primaryButtonClass}
