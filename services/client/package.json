@@ -63,6 +63,8 @@
   "lint-staged": {
     "*.{js,ts,svelte}": [
       "eslint --fix",
+      "svelte-kit sync",
+      "svelte-check --tsconfig ./tsconfig.json",
       "prettier --write"
     ],
     "*.{json,md,css,html}": [

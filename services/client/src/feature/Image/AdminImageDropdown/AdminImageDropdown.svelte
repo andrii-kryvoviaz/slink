@@ -135,7 +135,6 @@
         </DropdownSimpleItem>
       {:else}
         <ImageDeleteConfirmation
-          {image}
           loading={$deleteImageIsLoading}
           preserveOnDisk={preserveOnDiskAfterDeletion}
           onConfirm={confirmImageDeletion}

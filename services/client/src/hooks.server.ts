@@ -24,8 +24,8 @@ const handleWellKnownRequests: Handle = async ({ event, resolve }) => {
 };
 
 const injectApiHandling: Handle = ApiConnector({
-  urlPrefix: env.API_PREFIX,
-  baseUrl: env.API_URL,
+  urlPrefix: env.API_PREFIX || '/api',
+  baseUrl: env.API_URL || 'http://localhost:8080',
   registeredPaths: env.PROXY_PREFIXES?.split(';') || [],
 });
 

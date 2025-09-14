@@ -1,6 +1,6 @@
 import { cva } from 'class-variance-authority';
 
-export const UserAvatarTheme = cva(
+export const UserAvatarThemeLegacy = cva(
   `shrink-0 rounded-full object-cover text-white shadow-sm flex items-center justify-center`,
   {
     variants: {

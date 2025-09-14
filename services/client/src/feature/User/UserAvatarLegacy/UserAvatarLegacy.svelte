@@ -1,19 +1,19 @@
 <script lang="ts">
-  import type { UserAvatarProps } from '@slink/feature/User';
-  import { UserAvatarTheme } from '@slink/feature/User';
+  import type { UserAvatarPropsLegacy } from '@slink/feature/User';
+  import { UserAvatarThemeLegacy } from '@slink/feature/User';
 
   import type { User } from '@slink/lib/auth/Type/User';
 
   import { className } from '@slink/utils/ui/className';
 
-  interface Props extends UserAvatarProps {
+  interface Props extends UserAvatarPropsLegacy {
     class?: string;
     user?: Partial<User>;
   }
 
   let { variant = 'default', size = 'md', user, ...props }: Props = $props();
   let classes = $derived(
-    className(`${UserAvatarTheme({ variant, size })} ${props.class}`),
+    className(`${UserAvatarThemeLegacy({ variant, size })} ${props.class}`),
   );
 
   const colors = [

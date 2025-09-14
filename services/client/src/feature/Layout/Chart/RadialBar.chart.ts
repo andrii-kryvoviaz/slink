@@ -1,4 +1,4 @@
-import type { ChartNormalizer, ChartOptions } from '@slink/legacy/Feature';
+import type { ChartNormalizer, ChartOptions } from '@slink/feature/Layout';
 
 export class RadialBarChart implements ChartNormalizer {
   normalize(options: ChartOptions): ChartOptions {

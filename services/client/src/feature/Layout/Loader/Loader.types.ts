@@ -1,4 +1,4 @@
-import type { LoaderTheme } from '@slink/feature/Layout/Loader.theme';
+import type { LoaderTheme } from '@slink/feature/Layout';
 import type { VariantProps } from 'class-variance-authority';
 
 export type LoaderProps = VariantProps<typeof LoaderTheme>;

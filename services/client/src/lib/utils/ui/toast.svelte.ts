@@ -1,5 +1,3 @@
-import { commonToastThemeMap } from '@slink/legacy/UI/Toast/Toast.theme';
-import type { ToastOptions } from '@slink/legacy/UI/Toast/Toast.types';
 import type { Component } from 'svelte';
 
 import { AbstractState } from '@slink/lib/state/core/AbstractState.svelte';
@@ -7,6 +5,29 @@ import { useState } from '@slink/lib/state/core/ContextAwareState';
 
 import { randomId } from '@slink/utils/string/randomId';
 import { createTimer } from '@slink/utils/time/timer';
+
+type ToastType = 'success' | 'warning' | 'error' | 'info' | 'component';
+
+interface ToastOptions {
+  type: ToastType;
+  message?: string;
+  icon?: string;
+  duration?: number;
+  id?: string;
+  component?: Component<any, any>;
+  props?: Record<string, any>;
+}
+
+interface ToastTheme {
+  icon: string;
+}
+
+const commonToastThemeMap = new Map<ToastType, ToastTheme>([
+  ['success', { icon: 'heroicons:check-circle' }],
+  ['warning', { icon: 'heroicons:exclamation-triangle' }],
+  ['error', { icon: 'heroicons:x-circle' }],
+  ['info', { icon: 'heroicons:information-circle' }],
+]);
 
 type Toast = ToastOptions & {
   id: string;

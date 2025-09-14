@@ -2,15 +2,6 @@
   import { ApiKeyManager } from '@slink/feature/User';
 
   import { fade } from 'svelte/transition';
-
-  import type { PageServerData } from './$types';
-
-  interface Props {
-    data: PageServerData;
-  }
-
-  let { data }: Props = $props();
-  const { user } = data;
 </script>
 
 <svelte:head>
@@ -36,7 +27,7 @@
         <div
           class="rounded-2xl bg-white p-6 shadow-sm dark:bg-slate-800/50 border border-slate-200/50 dark:border-slate-700/50"
         >
-          <ApiKeyManager {user} />
+          <ApiKeyManager />
         </div>
       </div>
     </div>

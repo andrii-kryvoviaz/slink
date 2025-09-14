@@ -27,7 +27,7 @@
     value = $bindable(),
     label,
     size = 'md',
-    variant = 'default',
+    variant = 'modern',
     rounded = 'lg',
     error = undefined,
     leftIcon,

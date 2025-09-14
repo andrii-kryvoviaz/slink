@@ -1,15 +1,30 @@
 <script lang="ts">
-  import { Input } from '@slink/ui/components/input/index.js';
-  import type { ComponentProps } from 'svelte';
+  import { Root as Input } from '@slink/ui/components/input/index.js';
 
-  import { cn } from '@slink/utils/ui/index.js';
+  import type {
+    HTMLInputAttributes,
+    HTMLInputTypeAttribute,
+  } from 'svelte/elements';
+
+  import { type WithElementRef, cn } from '@slink/utils/ui/index.js';
+
+  type InputType = Exclude<HTMLInputTypeAttribute, 'file'>;
+
+  type Props = WithElementRef<
+    Omit<HTMLInputAttributes, 'type'> &
+      (
+        | { type: 'file'; files?: FileList }
+        | { type?: InputType; files?: undefined }
+      ),
+    HTMLInputElement
+  >;
 
   let {
     ref = $bindable(null),
     value = $bindable(''),
     class: className,
     ...restProps
-  }: ComponentProps<typeof Input> = $props();
+  }: Props = $props();
 </script>
 
 <Input
