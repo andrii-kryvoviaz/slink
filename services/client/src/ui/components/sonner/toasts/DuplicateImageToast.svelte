@@ -1,7 +1,6 @@
 <script lang="ts">
   import { formatDate } from '$lib/utils/date.js';
   import { navigateToUrl } from '$lib/utils/navigation/navigate.js';
-  import Icon from '@iconify/svelte';
 
   import BaseToast from './BaseToast.svelte';
 
@@ -12,15 +11,17 @@
 
   interface Props {
     message?: string;
-    data?: DuplicateImageData;
+    data?: Record<string, unknown>;
     oncloseToast?: () => void;
   }
 
   let { message = '', data, oncloseToast }: Props = $props();
 
+  let duplicateImageData = $derived(data as DuplicateImageData | undefined);
+
   const viewExistingImage = () => {
-    if (data?.existingImageUrl) {
-      navigateToUrl(data.existingImageUrl);
+    if (duplicateImageData?.existingImageUrl) {
+      navigateToUrl(duplicateImageData.existingImageUrl);
     }
   };
 </script>
@@ -38,7 +39,7 @@
       </span>
     </div>
 
-    {#if data}
+    {#if duplicateImageData}
       <div class="space-y-3">
         <p class="text-sm text-purple-700 dark:text-purple-300/90">
           This <button
@@ -50,7 +51,7 @@
           </button>
           was already uploaded
           <span class="font-medium"
-            >{formatDate(data.uploadedAt).toLowerCase()}</span
+            >{formatDate(duplicateImageData.uploadedAt).toLowerCase()}</span
           >.
         </p>
       </div>
