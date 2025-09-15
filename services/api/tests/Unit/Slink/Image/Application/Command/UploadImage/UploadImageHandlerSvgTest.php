@@ -9,10 +9,14 @@ use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Slink\Image\Application\Command\UploadImage\UploadImageCommand;
 use Slink\Image\Application\Command\UploadImage\UploadImageHandler;
+use Slink\Image\Domain\Context\ImageCreationContext;
+use Slink\Image\Domain\Factory\ImageMetadataFactory;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Image\Domain\Service\ImageAnalyzerInterface;
 use Slink\Image\Domain\Service\ImageTransformerInterface;
 use Slink\Image\Domain\Service\ImageSanitizerInterface;
+use Slink\Image\Domain\Specification\ImageDuplicateSpecificationInterface;
+use Slink\Image\Domain\ValueObject\ImageMetadata;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\ID;
@@ -33,6 +37,9 @@ class UploadImageHandlerSvgTest extends TestCase {
         $imageTransformer = $this->createMock(ImageTransformerInterface::class);
         $sanitizer = $this->createMock(ImageSanitizerInterface::class);
         $storage = $this->createMock(StorageInterface::class);
+        $duplicateSpec = $this->createMock(ImageDuplicateSpecificationInterface::class);
+        $creationContext = new ImageCreationContext($duplicateSpec);
+        $metadataFactory = $this->createMock(ImageMetadataFactory::class);
         
         $handler = new UploadImageHandler(
             $configProvider,
@@ -40,6 +47,8 @@ class UploadImageHandlerSvgTest extends TestCase {
             $imageAnalyzer,
             $imageTransformer,
             $sanitizer,
+            $creationContext,
+            $metadataFactory,
             $storage
         );
 
@@ -47,6 +56,11 @@ class UploadImageHandlerSvgTest extends TestCase {
         $file->method('guessExtension')->willReturn('svg');
         $file->method('getMimeType')->willReturn('image/svg+xml');
         $file->method('getPathname')->willReturn('/tmp/test.svg');
+        $file->method('getSize')->willReturn(1024);
+        
+        $metadataFactory->method('createFromImageFile')->willReturn(
+            new ImageMetadata(1024, 'image/svg+xml', 800, 600, 'test_hash')
+        );
         
         $imageAnalyzer->method('isConversionRequired')->with('image/svg+xml')->willReturn(false);
         $imageAnalyzer->method('requiresSanitization')->with('image/svg+xml')->willReturn(true);
@@ -63,6 +77,14 @@ class UploadImageHandlerSvgTest extends TestCase {
                 ['image.allowOnlyPublicImages', false],
                 ['image.stripExifMetadata', false]
             ]);
+        $imageAnalyzer->method('isConversionRequired')->willReturn(false);
+        $imageAnalyzer->method('requiresSanitization')->willReturn(true);
+        $imageAnalyzer->method('supportsExifProfile')->willReturn(false);
+        
+        $configProvider->method('get')->willReturnMap([
+            ['image.stripExifMetadata', false],
+            ['image.allowOnlyPublicImages', false],
+        ]);
         
         $sanitizer->expects($this->once())
             ->method('sanitizeFile')
@@ -94,6 +116,9 @@ class UploadImageHandlerSvgTest extends TestCase {
         $imageTransformer = $this->createMock(ImageTransformerInterface::class);
         $sanitizer = $this->createMock(ImageSanitizerInterface::class);
         $storage = $this->createMock(StorageInterface::class);
+        $duplicateSpec = $this->createMock(ImageDuplicateSpecificationInterface::class);
+        $creationContext = new ImageCreationContext($duplicateSpec);
+        $metadataFactory = $this->createMock(ImageMetadataFactory::class);
         
         $handler = new UploadImageHandler(
             $configProvider,
@@ -101,6 +126,8 @@ class UploadImageHandlerSvgTest extends TestCase {
             $imageAnalyzer,
             $imageTransformer,
             $sanitizer,
+            $creationContext,
+            $metadataFactory,
             $storage
         );
 
@@ -108,16 +135,15 @@ class UploadImageHandlerSvgTest extends TestCase {
         $file->method('guessExtension')->willReturn('jpg');
         $file->method('getMimeType')->willReturn('image/jpeg');
         $file->method('getPathname')->willReturn('/tmp/test.jpg');
+        $file->method('getSize')->willReturn(1024);
+        
+        $metadataFactory->method('createFromImageFile')->willReturn(
+            new ImageMetadata(1024, 'image/jpeg', 800, 600, 'test_hash')
+        );
         
         $imageAnalyzer->method('isConversionRequired')->with('image/jpeg')->willReturn(false);
         $imageAnalyzer->method('requiresSanitization')->with('image/jpeg')->willReturn(false);
         $imageAnalyzer->method('supportsExifProfile')->with('image/jpeg')->willReturn(true);
-        $imageAnalyzer->method('analyze')->willReturn([
-            'size' => 1000,
-            'mimeType' => 'image/jpeg',
-            'width' => 100,
-            'height' => 100,
-        ]);
         
         $configProvider->method('get')
             ->willReturnMap([

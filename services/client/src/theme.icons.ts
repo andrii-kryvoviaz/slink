@@ -129,4 +129,5 @@ export const themeIcons: string[] = [
   'ph:flask',
   'ph:cursor-click',
   'heroicons:server',
+  'heroicons:document-duplicate',
 ];

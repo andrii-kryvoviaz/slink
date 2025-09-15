@@ -117,6 +117,22 @@ class ImageView extends AbstractView implements CursorAwareInterface {
   }
 
   /**
+   * @param ImageAttributes $attributes
+   * @return void
+   */
+  public function updateAttributes(ImageAttributes $attributes): void {
+    $this->attributes = $attributes;
+  }
+
+  /**
+   * @param ImageMetadata $metadata
+   * @return void
+   */
+  public function updateMetadata(ImageMetadata $metadata): void {
+    $this->metadata = $metadata;
+  }
+
+  /**
    * @return array<string, mixed>
    */
   public function toPayload(): array {

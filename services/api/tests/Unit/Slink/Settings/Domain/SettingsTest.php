@@ -179,6 +179,8 @@ final class SettingsTest extends TestCase {
             'maxSize' => '5M',
             'stripExifMetadata' => true,
             'compressionQuality' => 85,
+            'allowOnlyPublicImages' => false,
+            'enableDeduplication' => true,
         ]);
     }
 

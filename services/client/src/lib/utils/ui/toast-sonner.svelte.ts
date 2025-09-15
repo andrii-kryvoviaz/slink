@@ -59,8 +59,8 @@ export const toast = {
 
     return sonner.custom(component, {
       duration: duration || undefined,
+      componentProps: props,
       ...rest,
-      ...props,
     });
   },
 

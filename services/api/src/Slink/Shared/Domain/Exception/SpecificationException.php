@@ -10,4 +10,13 @@ abstract class SpecificationException extends \LogicException {
   public function __construct(string $message) {
     parent::__construct($message);
   }
+
+  /**
+   * Return custom data for frontend component rendering
+   * Override this method to provide additional data for custom error handling
+   * @return array<string, mixed>
+   */
+  public function toPayload(): array {
+    return [];
+  }
 }

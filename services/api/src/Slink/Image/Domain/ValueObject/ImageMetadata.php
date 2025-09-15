@@ -10,60 +10,85 @@ use Slink\Shared\Infrastructure\Attribute\Groups;
 
 #[ORM\Embeddable]
 final readonly class ImageMetadata extends AbstractCompoundValueObject {
-  
+
   /**
    * @param int $size
    * @param string $mimeType
    * @param int $width
    * @param int $height
+   * @param string|null $sha1Hash
    */
   public function __construct(
     #[ORM\Column(type: 'integer')]
     #[Groups(['public'])]
-    private int    $size,
-    
+    private int     $size,
+
     #[ORM\Column(type: 'string')]
     #[Groups(['public'])]
-    private string $mimeType,
-    
+    private string  $mimeType,
+
     #[ORM\Column(type: 'integer')]
     #[Groups(['public'])]
-    private int    $width,
-    
+    private int     $width,
+
     #[ORM\Column(type: 'integer')]
     #[Groups(['public'])]
-    private int    $height,
+    private int     $height,
+
+    #[ORM\Column(type: 'string', length: 40, nullable: true)]
+    private ?string $sha1Hash = null,
   ) {
   }
-  
+
   /**
    * @return int
    */
   public function getSize(): int {
     return $this->size;
   }
-  
+
   /**
    * @return string
    */
   public function getMimeType(): string {
     return $this->mimeType;
   }
-  
+
   /**
    * @return int
    */
   public function getWidth(): int {
     return $this->width;
   }
-  
+
   /**
    * @return int
    */
   public function getHeight(): int {
     return $this->height;
   }
-  
+
+  /**
+   * @return string|null
+   */
+  public function getSha1Hash(): ?string {
+    return $this->sha1Hash;
+  }
+
+  /**
+   * @param string $sha1Hash
+   * @return self
+   */
+  public function withHash(string $sha1Hash): self {
+    return new self(
+      $this->size,
+      $this->mimeType,
+      $this->width,
+      $this->height,
+      $sha1Hash
+    );
+  }
+
   /**
    * @return array|mixed[]
    */
@@ -73,9 +98,10 @@ final readonly class ImageMetadata extends AbstractCompoundValueObject {
       'mimeType' => $this->mimeType,
       'width' => $this->width,
       'height' => $this->height,
+      'sha1Hash' => $this->sha1Hash,
     ];
   }
-  
+
   /**
    * @param array<string, mixed> $payload
    * @return static
@@ -86,6 +112,7 @@ final readonly class ImageMetadata extends AbstractCompoundValueObject {
       $payload['mimeType'],
       $payload['width'],
       $payload['height'],
+      $payload['sha1Hash'] ?? null,
     );
   }
 }

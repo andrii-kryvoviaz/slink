@@ -162,6 +162,29 @@
             />
           </div>
         </SettingItem>
+
+        <SettingItem
+          defaultValue={defaultSettings?.image?.enableDeduplication}
+          currentValue={settings.image.enableDeduplication}
+          reset={(value) => {
+            settings.image.enableDeduplication = value;
+          }}
+        >
+          {#snippet label()}
+            Enable Image Deduplication
+          {/snippet}
+          {#snippet hint()}
+            When enabled, duplicate images are detected and rejected during
+            upload. Image hashes are always calculated regardless of this
+            setting.
+          {/snippet}
+          <div class="flex justify-end">
+            <Switch
+              name="imageEnableDeduplication"
+              bind:checked={settings.image.enableDeduplication}
+            />
+          </div>
+        </SettingItem>
       </SettingsPane>
 
       <SettingsPane

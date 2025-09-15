@@ -76,12 +76,17 @@ final readonly class ExceptionSubscriber implements EventSubscriberInterface {
     ];
     
     if($exception instanceof SpecificationException) {
-      $violations = [
-        [
-          'property' => $exception->getProperty(),
-          'message' => $exception->getMessage(),
-        ],
+      $violation = [
+        'property' => $exception->getProperty(),
+        'message' => $exception->getMessage(),
       ];
+
+      $data = $exception->toPayload();
+      if (!empty($data)) {
+        $violation['data'] = $data;
+      }
+
+      $violations = [$violation];
       
       $error['violations'] = $violations;
       $error['message'] = 'Specification Error';

@@ -22,3 +22,10 @@ fi
 
 slink doctrine:migrations:migrate --no-interaction --configuration=/services/api/config/migrations/event_store.yaml --em=event_store
 slink doctrine:migrations:migrate --no-interaction --em=read_model
+
+if [ "${SKIP_HASH_CALCULATION:-false}" != "true" ]; then
+  echo "[Startup] Calculating missing SHA-1 hashes for existing images..."
+  timeout 300 slink image:calculate-missing-hashes --no-interaction || echo "[Warning] Hash calculation timed out or failed, but continuing startup..."
+else
+  echo "[Startup] Skipping hash calculation (SKIP_HASH_CALCULATION=true)"
+fi

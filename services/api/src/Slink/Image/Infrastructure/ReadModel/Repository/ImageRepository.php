@@ -10,6 +10,7 @@ use Override;
 use Slink\Image\Domain\Filter\ImageListFilter;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
+use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\Pagination\CursorPaginationTrait;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractRepository;
@@ -115,7 +116,7 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
       )
       ->where('image.attributes.fileName = :fileName')
       ->setParameter('fileName', $fileName);
-
+ 
     return $this->oneOrException($qb);
   }
 
@@ -142,5 +143,43 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
    */
   public function remove(ImageView $image): void {
     $this->_em->remove($image);
+  }
+
+  /**
+   * @param string $sha1Hash
+   * @param ID|null $userId
+   * @return ImageView|null
+   */
+  public function findBySha1Hash(string $sha1Hash, ?ID $userId = null): ?ImageView {
+    $qb = $this->_em
+      ->createQueryBuilder()
+      ->from(ImageView::class, 'image')
+      ->select('image')
+      ->where('image.metadata.sha1Hash = :sha1Hash')
+      ->setParameter('sha1Hash', $sha1Hash);
+
+    if ($userId !== null) {
+      $qb->andWhere('image.user = :userId')
+        ->setParameter('userId', $userId->toString());
+    }
+
+    $qb->setMaxResults(1);
+
+    $result = $qb->getQuery()->getOneOrNullResult();
+    return $result instanceof ImageView ? $result : null;
+  }
+
+  /**
+   * @return ImageView[]
+   */
+  public function findImagesWithoutSha1Hash(): array {
+    $qb = $this->_em
+      ->createQueryBuilder()
+      ->from(ImageView::class, 'image')
+      ->select('image')
+      ->where('image.metadata.sha1Hash IS NULL OR image.metadata.sha1Hash = :empty')
+      ->setParameter('empty', '');
+
+    return $qb->getQuery()->getResult();
   }
 }

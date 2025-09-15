@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace Slink\Image\Application\Command\UploadImage;
 
+use Slink\Image\Domain\Context\ImageCreationContext;
+use Slink\Image\Domain\Exception\DuplicateImageException;
+use Slink\Image\Domain\Factory\ImageMetadataFactory;
 use Slink\Image\Domain\Image;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Image\Domain\Service\ImageAnalyzerInterface;
-use Slink\Image\Domain\Service\ImageTransformerInterface;
 use Slink\Image\Domain\Service\ImageSanitizerInterface;
+use Slink\Image\Domain\Service\ImageTransformerInterface;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
-use Slink\Image\Domain\ValueObject\ImageMetadata;
+use Slink\Image\Domain\ValueObject\ImageFile;
 use Slink\Settings\Application\Service\SettingsService;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
@@ -19,14 +22,16 @@ use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
 
 final readonly class UploadImageHandler implements CommandHandlerInterface {
-  
+
   /**
    * @param ConfigurationProviderInterface<SettingsService> $configurationProvider
-   * @param ImageStoreRepositoryInterface  $imageRepository
-   * @param ImageAnalyzerInterface         $imageAnalyzer
-   * @param ImageTransformerInterface      $imageTransformer
-   * @param ImageSanitizerInterface        $sanitizer
-   * @param StorageInterface               $storage
+   * @param ImageStoreRepositoryInterface $imageRepository
+   * @param ImageAnalyzerInterface $imageAnalyzer
+   * @param ImageTransformerInterface $imageTransformer
+   * @param ImageSanitizerInterface $sanitizer
+   * @param ImageCreationContext $creationContext
+   * @param ImageMetadataFactory $metadataFactory
+   * @param StorageInterface $storage
    */
   public function __construct(
     private ConfigurationProviderInterface $configurationProvider,
@@ -34,64 +39,68 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
     private ImageAnalyzerInterface         $imageAnalyzer,
     private ImageTransformerInterface      $imageTransformer,
     private ImageSanitizerInterface        $sanitizer,
+    private ImageCreationContext           $creationContext,
+    private ImageMetadataFactory           $metadataFactory,
     private StorageInterface               $storage
   ) {
   }
-  
+
   /**
    * @throws DateTimeException
+   * @throws DuplicateImageException
    */
   public function __invoke(UploadImageCommand $command, ?string $userId = null): void {
     $file = $command->getImageFile();
     $imageId = $command->getId();
-    
-    $userId = $userId 
-      ? ID::fromString($userId) 
+
+    $userId = $userId
+      ? ID::fromString($userId)
       : null;
-    
-    if($this->imageAnalyzer->isConversionRequired($file->getMimeType())) {
+
+    if ($this->imageAnalyzer->isConversionRequired($file->getMimeType())) {
       $file = $this->imageTransformer->convertToJpeg($file);
     }
-    
-    if($this->imageAnalyzer->requiresSanitization($file->getMimeType())) {
+
+    if ($this->imageAnalyzer->requiresSanitization($file->getMimeType())) {
       $file = $this->sanitizer->sanitizeFile($file);
     }
-    
+
     [$mimeType, $pathname, $extension] = [$file->getMimeType(), $file->getPathname(), $file->guessExtension()];
-    
-    if(
+
+    if (
       $this->imageAnalyzer->supportsExifProfile($mimeType)
       && $this->configurationProvider->get('image.stripExifMetadata')
     ) {
       $this->imageTransformer->stripExifMetadata($pathname);
     }
-    
+
     $fileName = sprintf('%s.%s', $imageId, $extension);
-    
-    $metadata = ImageMetadata::fromPayload(
-      $this->imageAnalyzer->analyze($file),
-    );
-    
+
+    $imageFile = ImageFile::fromSymfonyFile($file);
+    $metadata = $this->metadataFactory->createFromImageFile($imageFile);
+
     $isPublic = $command->isPublic();
     if ($this->configurationProvider->get('image.allowOnlyPublicImages') || $userId === null) {
       $isPublic = true;
     }
-    
+
     $attributes = ImageAttributes::create(
       $fileName,
       $command->getDescription(),
       $isPublic,
     );
-    
-    $this->storage->upload($file, $fileName);
-    
+
     $image = Image::create(
       $imageId,
       $userId,
       $attributes,
       $metadata,
+      $imageFile,
+      $this->creationContext
     );
-    
+
+    $this->storage->upload($file, $fileName);
+
     $this->imageRepository->store($image);
   }
 }

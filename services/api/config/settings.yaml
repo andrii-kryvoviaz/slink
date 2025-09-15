@@ -26,6 +26,7 @@ parameters:
     stripExifMetadata: '%env(bool:IMAGE_STRIP_EXIF_METADATA)%'
     allowOnlyPublicImages: '%env(bool:IMAGE_ALLOW_ONLY_PUBLIC_IMAGES)%'
     compressionQuality: '%env(int:IMAGE_COMPRESSION_QUALITY)%'
+    enableDeduplication: '%env(bool:IMAGE_ENABLE_DEDUPLICATION)%'
   access:
     allowGuestUploads: '%env(bool:IMAGE_ALLOW_GUEST_UPLOADS)%'
     allowUnauthenticatedAccess: '%env(bool:USER_ALLOW_UNAUTHENTICATED_ACCESS)%'

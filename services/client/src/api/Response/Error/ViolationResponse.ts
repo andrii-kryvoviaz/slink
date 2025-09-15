@@ -7,4 +7,5 @@ export type ViolationResponse = {
 export type Violation = {
   property: string;
   message: string;
+  data?: Record<string, unknown>;
 };

@@ -7,6 +7,7 @@ namespace Slink\Image\Infrastructure\ReadModel\Projection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Slink\Image\Domain\Event\ImageAttributesWasUpdated;
+use Slink\Image\Domain\Event\ImageMetadataWasUpdated;
 use Slink\Image\Domain\Event\ImageWasCreated;
 use Slink\Image\Domain\Event\ImageWasDeleted;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
@@ -22,10 +23,10 @@ final class ImageProjection extends AbstractProjection {
    */
   public function __construct(
     private readonly ImageRepositoryInterface $repository,
-    private readonly EntityManagerInterface $em
+    private readonly EntityManagerInterface   $em
   ) {
   }
-  
+
   /**
    * @param ImageWasCreated $event
    * @return void
@@ -33,29 +34,39 @@ final class ImageProjection extends AbstractProjection {
   public function handleImageWasCreated(ImageWasCreated $event): void {
     $eventWithEntityManager = EventWithEntityManager::decorate($event, $this->em);
     $image = ImageView::fromEvent($eventWithEntityManager);
-    
+
     $this->repository->add($image);
   }
-  
+
   /**
    * @throws NotFoundException
    * @throws NonUniqueResultException
    */
   public function handleImageAttributesWasUpdated(ImageAttributesWasUpdated $event): void {
     $image = $this->repository->oneById($event->id->toString());
-    
-    $image->merge(ImageView::fromEvent($event));
+
+    $image->updateAttributes($event->attributes);
   }
-  
+
   /**
-   * @param ImageWasDeleted $event
    * @throws NotFoundException
    * @throws NonUniqueResultException
+   */
+  public function handleImageMetadataWasUpdated(ImageMetadataWasUpdated $event): void {
+    $image = $this->repository->oneById($event->id->toString());
+
+    $image->updateMetadata($event->metadata);
+  }
+
+  /**
+   * @param ImageWasDeleted $event
    * @return void
+   * @throws NonUniqueResultException
+   * @throws NotFoundException
    */
   public function handleImageWasDeleted(ImageWasDeleted $event): void {
     $image = $this->repository->oneById($event->id->toString());
-    
+
     $this->repository->remove($image);
   }
 }
