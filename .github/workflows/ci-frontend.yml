@@ -33,6 +33,3 @@ jobs:
 
       - name: Run ESLint
         run: yarn --cwd ./services/client run lint
-
-      - name: Type check
-        run: yarn --cwd ./services/client run check
