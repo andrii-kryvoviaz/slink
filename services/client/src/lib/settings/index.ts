@@ -28,6 +28,9 @@ const defaultSettings: { [K in SettingsKey]?: any } = {
       roles: true,
     },
   },
+  history: {
+    viewMode: 'list',
+  },
 };
 
 export const setCookieSettingsOnLocals: Handle = async ({ event, resolve }) => {

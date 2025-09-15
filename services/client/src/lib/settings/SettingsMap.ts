@@ -5,6 +5,7 @@ export class SettingsMap {
     theme: null,
     sidebar: null,
     userAdmin: null,
+    history: null,
   };
 
   public has<T extends SettingsKey>(key: T): boolean {

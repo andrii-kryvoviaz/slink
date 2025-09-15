@@ -12,6 +12,8 @@ import type {
 } from '@slink/lib/settings/Settings.types';
 import { SettingsMap } from '@slink/lib/settings/SettingsMap';
 import { Theme } from '@slink/lib/settings/index';
+import { HistorySetter } from '@slink/lib/settings/setters/history';
+import type { HistorySettings } from '@slink/lib/settings/setters/history';
 import { SidebarSetter } from '@slink/lib/settings/setters/sidebar';
 import type { SidebarSettings } from '@slink/lib/settings/setters/sidebar';
 import { ThemeSetter } from '@slink/lib/settings/setters/theme';
@@ -25,6 +27,7 @@ type SettingsValueTypes = {
   theme: Theme;
   sidebar: SidebarSettings;
   userAdmin: UserAdminSettings;
+  history: HistorySettings;
 };
 
 export class SettingsManager {
@@ -40,6 +43,7 @@ export class SettingsManager {
     theme: ThemeSetter,
     sidebar: SidebarSetter,
     userAdmin: UserAdminSetter,
+    history: HistorySetter,
   };
 
   public get<T extends SettingsKey>(

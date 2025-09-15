@@ -1,6 +1,7 @@
 export { default as ImageActionBar } from './ActionBar/ImageActionBar.svelte';
 export { default as AdminImageDropdown } from './AdminImageDropdown/AdminImageDropdown.svelte';
 export { default as ImageDescription } from './Description/ImageDescription.svelte';
+export { default as HistoryGridView } from './History/HistoryGridView.svelte';
 export { default as HistoryListView } from './History/HistoryListView.svelte';
 export { default as ImageDeleteConfirmation } from './ImageDeleteConfirmation/ImageDeleteConfirmation.svelte';
 export { default as ImageDeletePopover } from './ImageDeleteConfirmation/ImageDeletePopover.svelte';

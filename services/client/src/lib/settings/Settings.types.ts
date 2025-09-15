@@ -1,6 +1,10 @@
 import type { Readable, Writable } from 'svelte/store';
 
 import { Theme } from '@slink/lib/settings/index';
+import type {
+  HistorySettings,
+  HistoryViewMode,
+} from '@slink/lib/settings/setters/history';
 import type { SidebarSettings } from '@slink/lib/settings/setters/sidebar';
 import type {
   UserAdminSettings,
@@ -17,6 +21,9 @@ export type Settings = {
   };
   userAdmin: SettingsValue<UserAdminSettings> & {
     viewMode: Readable<ViewMode>;
+  };
+  history: SettingsValue<HistorySettings> & {
+    viewMode: Readable<HistoryViewMode>;
   };
 };
 

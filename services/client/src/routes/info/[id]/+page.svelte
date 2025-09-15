@@ -107,7 +107,7 @@
     </div>
 
     <div class="grow max-w-md flex-shrink-0 space-y-8">
-      <ImageActionBar {image} />
+      <ImageActionBar {image} buttons={['download', 'visibility', 'delete']} />
 
       <div>
         <ImageDescription
