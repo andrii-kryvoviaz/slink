@@ -23,6 +23,24 @@
         </testsuite>
     </testsuites>
 
+    <source>
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+        <exclude>
+            <directory>src/*/Infrastructure/Migrations</directory>
+            <file>src/Slink/Shared/Infrastructure/Kernel.php</file>
+        </exclude>
+    </source>
+
+    <coverage>
+        <report>
+            <html outputDirectory="var/coverage/html"/>
+            <text outputFile="var/coverage/coverage.txt"/>
+            <clover outputFile="var/coverage/clover.xml"/>
+        </report>
+    </coverage>
+
     <extensions>
         <bootstrap class="DG\BypassFinals\PHPUnitExtension" />
     </extensions>
