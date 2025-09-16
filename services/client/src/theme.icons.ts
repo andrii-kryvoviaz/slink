@@ -130,4 +130,5 @@ export const themeIcons: string[] = [
   'ph:cursor-click',
   'heroicons:server',
   'heroicons:document-duplicate',
+  'ph:arrow-clockwise',
 ];

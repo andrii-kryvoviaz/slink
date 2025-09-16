@@ -13,10 +13,16 @@
     disabled?: boolean;
     processing?: boolean;
     uploadUrls?: string[];
-    onchange?: (event: File) => void;
+    onchange?: (files: File[]) => void;
+    allowMultiple?: boolean;
   }
 
-  let { disabled = false, processing = false, onchange }: Props = $props();
+  let {
+    disabled = false,
+    processing = false,
+    onchange,
+    allowMultiple = false,
+  }: Props = $props();
 
   type FileEvent = DragEvent | ClipboardEvent | Event;
 
@@ -46,21 +52,26 @@
       return;
     }
 
-    if (fileList.length > 1) {
+    if (!allowMultiple && fileList.length > 1) {
       toast.warning('Only one file allowed at a time');
       return;
     }
 
-    const file = fileList.item(0) as File;
+    const files = Array.from(fileList).filter((file) => {
+      if (!file?.type.startsWith('image/')) {
+        toast.component(UnsupportedFileFormat, {
+          duration: 5000,
+        });
+        return false;
+      }
+      return true;
+    });
 
-    if (!file?.type.startsWith('image/')) {
-      toast.component(UnsupportedFileFormat, {
-        duration: 5000,
-      });
+    if (files.length === 0) {
       return;
     }
 
-    onchange?.(file);
+    onchange?.(files);
 
     (event.target as HTMLInputElement).value = '';
   };
@@ -135,6 +146,7 @@
       ondragenter={handleDragEnter}
       ondragleave={handleDragLeave}
       onchange={handleChange}
+      multiple={allowMultiple}
       {disabled}
       class={cn(dropzoneClasses, disabled && 'pointer-events-none opacity-60')}
     >
@@ -165,12 +177,17 @@
           <h2
             class="text-xl sm:text-2xl font-semibold bg-gradient-to-r from-slate-700 to-slate-900 dark:from-slate-200 dark:to-slate-400 bg-clip-text text-transparent"
           >
-            Drop your image here
+            Drop your {allowMultiple ? 'images' : 'image'} here
           </h2>
           <p
             class="text-slate-500 dark:text-slate-400 text-base sm:text-lg font-light max-w-xs sm:max-w-md mx-auto"
           >
             or click to browse from your device
+            {#if allowMultiple}
+              <br /><span class="text-sm"
+                >Select multiple files to upload at once</span
+              >
+            {/if}
           </p>
         </div>
 
@@ -256,7 +273,7 @@
             Almost there
           </h3>
           <p class="text-slate-500 dark:text-slate-400 text-lg">
-            Uploading your image...
+            Uploading your {allowMultiple ? 'images' : 'image'}...
           </p>
         </div>
       </div>

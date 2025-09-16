@@ -6,6 +6,7 @@
     BannerIcon,
   } from '@slink/feature/Layout';
   import { UploadForm, UploadSuccess } from '@slink/feature/Upload';
+  import MultiUploadProgress from '@slink/feature/Upload/MultiUploadProgress.svelte';
 
   import { goto } from '$app/navigation';
   import { fade } from 'svelte/transition';
@@ -14,6 +15,10 @@
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { UploadedImageResponse } from '@slink/api/Response';
 
+  import {
+    MultiUploadService,
+    type UploadItem,
+  } from '@slink/lib/services/MultiUploadService';
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
 
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
@@ -27,6 +32,9 @@
   let { data }: Props = $props();
 
   let showSuccess = $state(false);
+  let isMultiUpload = $state(false);
+  let uploads: UploadItem[] = $state([]);
+  let multiUploadService = new MultiUploadService();
 
   const {
     isLoading,
@@ -43,11 +51,84 @@
   });
 
   const { isLoading: pageIsChanging, run: redirectToInfo } = ReactiveState(
-    (imageId: number) => goto(`/info/${imageId}`),
+    (imageId: string) => goto(`/info/${imageId}`),
   );
 
-  const handleUpload = async (file: File) => {
-    await uploadImage(file);
+  const handleUpload = async (files: File[]) => {
+    if (files.length === 1) {
+      await uploadImage(files[0]);
+    } else {
+      await handleMultiUpload(files);
+    }
+  };
+
+  const handleMultiUpload = async (files: File[]) => {
+    isMultiUpload = true;
+    uploads = multiUploadService.createUploadItems(files);
+
+    const { successful, failed } = await multiUploadService.uploadFiles(
+      uploads,
+      {
+        isGuest: data.globalSettings?.access?.allowGuestUploads && !data.user,
+        onProgress: (_item) => {
+          uploads = [...uploads];
+        },
+        onError: (_item, error) => {
+          console.error('Upload error for file:', _item.file.name, error);
+        },
+      },
+    );
+
+    if (failed.length === 0 && successful.length > 0) {
+      if (data.user) {
+        const historyFeedState = useUploadHistoryFeed();
+
+        const imageIds = successful.map((item) => item.result!.id);
+        const images = await ApiClient.image.getImagesByIds(imageIds);
+        images.data.forEach((image) => historyFeedState.addItem(image));
+
+        await goto('/history');
+      } else {
+        data.globalSettings?.access?.allowUnauthenticatedAccess
+          ? await goto('/explore')
+          : (showSuccess = true);
+      }
+    }
+  };
+
+  const handleCancelMultiUpload = () => {
+    multiUploadService.cancelAllUploads();
+    isMultiUpload = false;
+    uploads = [];
+  };
+
+  const handleGoBackToUploadForm = () => {
+    isMultiUpload = false;
+    uploads = [];
+  };
+
+  const handleRetryFailedUploads = async () => {
+    const failedUploads = uploads.filter((item) => item.status === 'error');
+    if (failedUploads.length === 0) return;
+
+    failedUploads.forEach((item) => {
+      item.status = 'pending';
+      item.progress = 0;
+      item.error = undefined;
+      item.errorDetails = undefined;
+    });
+
+    uploads = [...uploads];
+
+    await multiUploadService.uploadFiles(failedUploads, {
+      isGuest: data.globalSettings?.access?.allowGuestUploads && !data.user,
+      onProgress: (_item) => {
+        uploads = [...uploads];
+      },
+      onError: (_item, error) => {
+        console.error('Retry upload error for file:', _item.file.name, error);
+      },
+    });
   };
 
   const successHandler = async (response: UploadedImageResponse) => {
@@ -77,7 +158,7 @@
     resetUploadImage();
   });
 
-  let processing = $derived($isLoading || $pageIsChanging);
+  let processing = $derived($isLoading || $pageIsChanging || isMultiUpload);
   let disabled = $derived(
     processing ||
       (!data.user && !data.globalSettings?.access?.allowGuestUploads),
@@ -98,6 +179,13 @@
         <UploadSuccess
           onUploadAnother={() => (showSuccess = false)}
           isGuestUser={!data.user}
+        />
+      {:else if isMultiUpload}
+        <MultiUploadProgress
+          {uploads}
+          onCancel={handleCancelMultiUpload}
+          onRetryAll={handleRetryFailedUploads}
+          onGoBack={handleGoBackToUploadForm}
         />
       {:else}
         {#if !data.user}
@@ -144,7 +232,12 @@
           </div>
         {/if}
 
-        <UploadForm {disabled} {processing} onchange={handleUpload} />
+        <UploadForm
+          {disabled}
+          {processing}
+          onchange={handleUpload}
+          allowMultiple={true}
+        />
       {/if}
     </div>
   </div>

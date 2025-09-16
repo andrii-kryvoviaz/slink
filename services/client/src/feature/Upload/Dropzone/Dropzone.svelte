@@ -27,6 +27,7 @@
     class?: string;
     value?: string;
     files?: FileList;
+    multiple?: boolean;
   }
 
   let input: HTMLInputElement | undefined = $state();
@@ -34,6 +35,7 @@
   let {
     value = $bindable(),
     files = $bindable(),
+    multiple = false,
     onchange,
     onclick,
     onfocus,
@@ -94,7 +96,9 @@
     bind:this={input}
     {onchange}
     {onclick}
+    {multiple}
     class="absolute inset-0 block h-full w-full cursor-pointer opacity-0"
     type="file"
+    accept="image/*"
   />
 </label>
