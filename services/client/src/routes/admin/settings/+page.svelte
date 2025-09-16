@@ -185,6 +185,14 @@
             />
           </div>
         </SettingItem>
+
+        {#if settings.image.enableDeduplication}
+          <Notice size="sm" variant="info">
+            <strong>Upload-Only Feature:</strong>
+            Deduplication only applies to new uploads. Existing images in your library
+            will not be affected or removed, even if duplicates are detected.
+          </Notice>
+        {/if}
       </SettingsPane>
 
       <SettingsPane

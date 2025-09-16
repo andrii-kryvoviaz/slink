@@ -18,8 +18,7 @@ final class DuplicateImageException extends SpecificationException {
     $this->uploadedAt = $existingImage->getAttributes()->getCreatedAt()->format('c'); // ISO 8601 format
     
     $message = sprintf(
-      'Image already uploaded on %s. View existing image: /info/%s',
-      $existingImage->getAttributes()->getCreatedAt()->format('M j, Y'),
+      'Image already exists: %s',
       $this->imageId
     );
     
