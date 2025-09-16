@@ -14,36 +14,36 @@ use Slink\User\Infrastructure\Auth\JwtUser;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final readonly class UpdateImageHandler implements CommandHandlerInterface {
-  
+
   /**
    * @param ConfigurationProviderInterface<SettingsService> $configurationProvider
    * @param ImageStoreRepositoryInterface $imageRepository
    */
   public function __construct(
     private ConfigurationProviderInterface $configurationProvider,
-    private ImageStoreRepositoryInterface $imageRepository,
+    private ImageStoreRepositoryInterface  $imageRepository,
   ) {
   }
-  
+
   /**
    * @throws NotFoundException
    */
   public function __invoke(
     UpdateImageCommand $command,
-    ?JwtUser $user,
-    string $id
+    ?JwtUser           $user,
+    string             $id
   ): void {
     $image = $this->imageRepository->get(ID::fromString($id));
     $userId = ID::fromString($user?->getIdentifier() ?? '');
-    
+
     if (!$image->aggregateRootVersion()) {
       throw new NotFoundException();
     }
-    
+
     if (!$user || !$image->getUserId() || !$image->getUserId()->equals($userId)) {
       throw new AccessDeniedException();
     }
-    
+
     $isPublic = $command->getIsPublic();
     if ($this->configurationProvider->get('image.allowOnlyPublicImages')) {
       $isPublic = true;
@@ -52,9 +52,9 @@ final readonly class UpdateImageHandler implements CommandHandlerInterface {
     $attributes = clone $image->getAttributes()
       ->withDescription($command->getDescription())
       ->withIsPublic($isPublic);
-    
+
     $image->updateAttributes($attributes);
-    
+
     $this->imageRepository->store($image);
   }
 }

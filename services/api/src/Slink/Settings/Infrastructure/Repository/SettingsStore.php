@@ -7,21 +7,13 @@ namespace Slink\Settings\Infrastructure\Repository;
 use Slink\Settings\Domain\Repository\SettingStoreRepositoryInterface;
 use Slink\Settings\Domain\Settings;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\Shared\Infrastructure\Persistence\EventStore\AbstractStoreRepository;
+use Slink\Shared\Infrastructure\Persistence\EventStore\AbstractSnapshotStoreRepository;
 
-final class SettingsStore extends AbstractStoreRepository implements SettingStoreRepositoryInterface {
-  /**
-   * @return string
-   */
-  #[\Override]
-  static function getAggregateRootClass(): string {
+final class SettingsStore extends AbstractSnapshotStoreRepository implements SettingStoreRepositoryInterface {
+  protected static function getAggregateRootClass(): string {
     return Settings::class;
   }
   
-  /**
-   * @return Settings
-   */
-  #[\Override]
   public function get(): Settings {
     $id = ID::fromString(Settings::getIdReference());
     
@@ -34,11 +26,6 @@ final class SettingsStore extends AbstractStoreRepository implements SettingStor
     return $settings;
   }
   
-  /**
-   * @param Settings $settings
-   * @return void
-   */
-  #[\Override]
   public function store(Settings $settings): void {
     $this->persist($settings);
   }

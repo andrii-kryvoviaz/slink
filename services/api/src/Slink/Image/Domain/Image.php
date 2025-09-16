@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Slink\Image\Domain;
 
+use EventSauce\EventSourcing\AggregateRootId;
+use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use Slink\Image\Domain\Context\ImageCreationContext;
 use Slink\Image\Domain\Event\ImageAttributesWasUpdated;
 use Slink\Image\Domain\Event\ImageMetadataWasUpdated;
@@ -183,5 +185,31 @@ final class Image extends AbstractAggregateRoot {
    */
   public function applyImageWasDeleted(ImageWasDeleted $event): void {
     $this->deleted = true;
+  }
+
+  /**
+   * @return array<string, mixed>
+   */
+  protected function createSnapshotState(): array {
+    return [
+      'userId' => $this->userId?->toString(),
+      'attributes' => $this->attributes->toPayload(),
+      'metadata' => $this->metadata->toPayload(),
+      'deleted' => $this->deleted,
+    ];
+  }
+
+  /**
+   * @param array<string, mixed> $state
+   */
+  protected static function reconstituteFromSnapshotState(AggregateRootId $id, $state): AggregateRootWithSnapshotting {
+    $image = new static($id);
+
+    $image->userId = $state['userId'] ? ID::fromString($state['userId']) : null;
+    $image->attributes = ImageAttributes::fromPayload($state['attributes']);
+    $image->metadata = ImageMetadata::fromPayload($state['metadata']);
+    $image->deleted = $state['deleted'];
+
+    return $image;
   }
 }

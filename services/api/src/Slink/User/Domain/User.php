@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Slink\User\Domain;
 
+use EventSauce\EventSourcing\AggregateRootId;
+use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
@@ -39,6 +41,7 @@ use Slink\User\Domain\ValueObject\Email;
 use Slink\User\Domain\ValueObject\Username;
 use Slink\User\Domain\ValueObject\Role;
 use Slink\User\Domain\ValueObject\RoleSet;
+use Slink\User\Domain\RefreshTokenSet;
 
 final class User extends AbstractAggregateRoot implements UserInterface {
   private Email $email;
@@ -355,5 +358,37 @@ final class User extends AbstractAggregateRoot implements UserInterface {
 
   public function revokeApiKey(string $keyId): void {
     $this->recordThat(new ApiKeyWasRevoked($this->aggregateRootId(), $keyId));
+  }
+
+  /**
+   * @return array<string, mixed>
+   */
+  protected function createSnapshotState(): array {
+    return [
+      'email' => $this->email->toString(),
+      'username' => $this->username->toString(),
+      'displayName' => $this->displayName->toString(),
+      'hashedPassword' => $this->hashedPassword->toString(),
+      'status' => $this->status->value,
+      'roles' => $this->roles->toArray(),
+    ];
+  }
+
+  /**
+   * @param array<string, mixed> $state
+   */
+  protected static function reconstituteFromSnapshotState(AggregateRootId $id, $state): AggregateRootWithSnapshotting {
+    $user = new static(ID::fromString($id->toString()));
+
+    $user->email = Email::fromString($state['email']);
+    $user->username = Username::fromString($state['username']);
+    $user->displayName = DisplayName::fromString($state['displayName']);
+    $user->hashedPassword = HashedPassword::fromHash($state['hashedPassword']);
+    $user->status = UserStatus::from($state['status']);
+    
+    $roles = array_map(fn(string $roleString) => Role::fromString($roleString), $state['roles']);
+    $user->roles = RoleSet::create($roles);
+
+    return $user;
   }
 }

@@ -12,3 +12,6 @@ parameters:
     Settings:
       dir: '%kernel.project_dir%/src/Slink/Settings/Infrastructure/ReadModel/View'
       prefix: 'Slink\Settings\Infrastructure\ReadModel\View'
+    Shared:
+      dir: '%kernel.project_dir%/src/Slink/Shared/Infrastructure/Persistence/EventStore/Entity'
+      prefix: 'Slink\Shared\Infrastructure\Persistence\EventStore\Entity'

@@ -128,4 +128,12 @@ final class DateTime extends DateTimeImmutable {
   public function toString(): string {
     return $this->format(self::FORMAT);
   }
+  
+  public function toDateTimeImmutable(): DateTimeImmutable {
+    return new DateTimeImmutable($this->format(self::FORMAT));
+  }
+  
+  public static function fromDateTimeImmutable(DateTimeImmutable $dateTime): self {
+    return self::fromString($dateTime->format(self::FORMAT));
+  }
 }

@@ -7,10 +7,10 @@ namespace Slink\Image\Infrastructure\Repository;
 use Slink\Image\Domain\Image;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\Shared\Infrastructure\Persistence\EventStore\AbstractStoreRepository;
+use Slink\Shared\Infrastructure\Persistence\EventStore\AbstractSnapshotStoreRepository;
 
-final class ImageStore extends AbstractStoreRepository implements ImageStoreRepositoryInterface {
-  static function getAggregateRootClass(): string {
+final class ImageStore extends AbstractSnapshotStoreRepository implements ImageStoreRepositoryInterface {
+  protected static function getAggregateRootClass(): string {
     return Image::class;
   }
   

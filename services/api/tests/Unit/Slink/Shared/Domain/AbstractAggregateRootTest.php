@@ -9,6 +9,7 @@ use EventSauce\EventSourcing\AggregateRootId;
 use EventSauce\EventSourcing\AggregateRootWithAggregates;
 use EventSauce\EventSourcing\EventRecorder;
 use EventSauce\EventSourcing\EventSourcedAggregate;
+use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -109,6 +110,20 @@ class ConcreteAggregateRoot extends AbstractAggregateRoot {
 
   public function testRegisterAggregate(?EventSourcedAggregate $aggregate): void {
     $this->registerAggregate($aggregate);
+  }
+
+  /**
+   * @return array<string, mixed>
+   */
+  protected function createSnapshotState(): array {
+    return ['test' => 'data'];
+  }
+
+  /**
+   * @param array<string, mixed> $state
+   */
+  protected static function reconstituteFromSnapshotState(AggregateRootId $id, $state): AggregateRootWithSnapshotting {
+    return new ConcreteAggregateRoot(ID::fromString($id->toString()));
   }
 }
 
