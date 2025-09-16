@@ -15,4 +15,4 @@ runs:
     - shell: bash
       run: |
         docker run --rm ${{ inputs.image }} \
-          php /services/api/vendor/bin/phpunit --configuration /services/api/phpunit.xml
+          php /services/api/vendor/bin/phpunit --configuration /services/api/phpunit.xml --no-coverage
