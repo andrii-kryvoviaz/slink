@@ -20,9 +20,14 @@ final class DuplicateImageExceptionTest extends TestCase {
     $exception = new DuplicateImageException($imageView);
 
     $message = $exception->getMessage();
-    $expectedDate = $imageView->getAttributes()->getCreatedAt()->format('M j, Y');
     
-    $this->assertStringContainsString($expectedDate, $message);
+    $this->assertStringContainsString('test-uuid-123', $message);
+    $this->assertStringContainsString('Image already exists', $message);
+    
+    $uploadedAt = $exception->getUploadedAt();
+    $this->assertNotEmpty($uploadedAt);
+    
+    $this->assertMatchesRegularExpression('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/', $uploadedAt);
   }
 
   #[Test]
