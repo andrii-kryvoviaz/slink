@@ -18,7 +18,7 @@
   import {
     MultiUploadService,
     type UploadItem,
-  } from '@slink/lib/services/MultiUploadService';
+  } from '@slink/lib/services/multi-upload.service';
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
 
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
