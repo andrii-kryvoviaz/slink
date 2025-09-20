@@ -183,11 +183,6 @@
             class="text-slate-500 dark:text-slate-400 text-base sm:text-lg font-light max-w-xs sm:max-w-md mx-auto"
           >
             or click to browse from your device
-            {#if allowMultiple}
-              <br /><span class="text-sm"
-                >Select multiple files to upload at once</span
-              >
-            {/if}
           </p>
         </div>
 
