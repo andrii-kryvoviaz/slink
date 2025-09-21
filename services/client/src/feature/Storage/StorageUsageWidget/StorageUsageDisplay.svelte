@@ -41,25 +41,6 @@
         return provider;
     }
   }
-
-  function getUsagePercentage(): number {
-    if (!data?.totalBytes || !data?.usedBytes) return 0;
-    return (data.usedBytes / data.totalBytes) * 100;
-  }
-
-  function getUsageColor(): string {
-    const percentage = getUsagePercentage();
-    if (percentage >= 90) return 'text-red-500';
-    if (percentage >= 75) return 'text-orange-500';
-    return 'text-sidebar-foreground';
-  }
-
-  function getProgressColor(): string {
-    const percentage = getUsagePercentage();
-    if (percentage >= 90) return 'bg-red-500';
-    if (percentage >= 75) return 'bg-orange-500';
-    return 'bg-blue-500';
-  }
 </script>
 
 <div
@@ -93,27 +74,10 @@
         <div class="space-y-2">
           <div class="flex items-center justify-between text-xs">
             <span class="text-sidebar-foreground/60">Used Storage</span>
-            <span class={getUsageColor()}>
+            <span class="text-sidebar-foreground">
               {bytesToSize(data.usedBytes)}
             </span>
           </div>
-
-          {#if data.totalBytes}
-            <div class="space-y-1">
-              <div class="w-full bg-sidebar-accent/20 rounded-full h-1.5">
-                <div
-                  class="h-1.5 rounded-full transition-all duration-300 {getProgressColor()}"
-                  style="width: {getUsagePercentage()}%"
-                ></div>
-              </div>
-              <div
-                class="flex justify-between text-xs text-sidebar-foreground/60"
-              >
-                <span>{getUsagePercentage().toFixed(1)}% used</span>
-                <span>{bytesToSize(data.totalBytes)} total</span>
-              </div>
-            </div>
-          {/if}
 
           <div class="flex items-center justify-between text-xs">
             <span class="text-sidebar-foreground/60">Files</span>
