@@ -1,5 +1,6 @@
+import ButtonContent from './button-content.svelte';
 import ButtonIcon from './button-icon.svelte';
-import Root, { buttonVariants } from './button.svelte';
+import Root, { buttonInnerVariants, buttonVariants } from './button.svelte';
 import type {
   ButtonFontWeight,
   ButtonMotion,
@@ -13,10 +14,12 @@ import type {
 export {
   Root,
   ButtonIcon,
+  ButtonContent,
   type ButtonProps as Props,
   //
   Root as Button,
   buttonVariants,
+  buttonInnerVariants,
   type ButtonProps,
   type ButtonProps as ButtonAttributes,
   type ButtonSize,

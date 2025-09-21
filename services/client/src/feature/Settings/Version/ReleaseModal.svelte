@@ -6,6 +6,8 @@
   import type { GitHubRelease } from '$lib/utils/version';
   import Icon from '@iconify/svelte';
 
+  import { navigateToUrl } from '@slink/utils/navigation/navigate';
+
   interface Props {
     open: boolean;
     release: GitHubRelease;
@@ -128,21 +130,22 @@
     <Dialog.Footer class="flex gap-3">
       <Button
         variant="glass"
-        size="md"
+        size="sm"
+        rounded="full"
         onclick={onClose}
-        class="flex-1 h-11 rounded-xl shadow-sm hover:shadow-md transition-all duration-200"
+        class="flex-1"
       >
-        <Icon icon="ph:x" class="h-4 w-4 mr-2" />
         {hasUpdate ? 'Maybe Later' : 'Close'}
       </Button>
       <Button
         variant="gradient-blue"
-        size="md"
-        onclick={() => window.open(release.html_url, '_blank')}
-        class="flex-1 h-11 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
+        size="sm"
+        rounded="full"
+        onclick={() => navigateToUrl(release.html_url)}
+        class="flex-1"
       >
         <Icon icon="ph:github-logo" class="h-4 w-4 mr-2" />
-        {hasUpdate ? 'View Release' : 'View on GitHub'}
+        View on GitHub
       </Button>
     </Dialog.Footer>
   </Dialog.Content>
