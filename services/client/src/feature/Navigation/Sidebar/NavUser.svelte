@@ -100,7 +100,7 @@
                 <LinkIcon
                   class="size-4 text-gray-500 dark:text-gray-400 group-hover:text-blue-900 dark:group-hover:text-blue-200 transition-colors duration-200"
                 />
-                <span>Integrations</span>
+                <span>External Integrations</span>
               </a>
             {/snippet}
           </DropdownMenu.Item>
