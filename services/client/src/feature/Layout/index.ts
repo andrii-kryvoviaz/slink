@@ -16,6 +16,7 @@ export { default as DemoBadge } from './DemoBadge/DemoBadge.svelte';
 export { default as DemoNotice } from './DemoNotice/DemoNotice.svelte';
 export { default as EmptyState } from './EmptyState/EmptyState.svelte';
 export * from './EmptyState/EmptyState.theme';
+export { default as AppFooter } from './Footer/AppFooter.svelte';
 export { default as Loader } from './Loader/Loader.svelte';
 export * from './Loader/Loader.theme';
 export * from './Loader/Loader.types';

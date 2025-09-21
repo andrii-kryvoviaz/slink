@@ -1,6 +1,7 @@
 <script lang="ts">
   import { InfoCard } from '@slink/feature/Feedback/InfoCard';
 
+  import { GITHUB } from '$lib/constants/app';
   import Icon from '@iconify/svelte';
 </script>
 
@@ -51,7 +52,7 @@
       requests. Your reports help me prioritize improvements.
     </p>
     <a
-      href="https://github.com/andrii-kryvoviaz/slink/issues/new"
+      href="https://github.com/{GITHUB.REPO_OWNER}/{GITHUB.REPO_NAME}/issues/new"
       target="_blank"
       rel="noopener noreferrer"
       class="inline-flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white text-sm font-medium rounded-lg transition-colors"

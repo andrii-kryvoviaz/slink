@@ -1,31 +1,14 @@
-import { themeIcons } from '@slink/theme.icons';
-import { error, redirect } from '@sveltejs/kit';
-
-import { browser } from '$app/environment';
-
-import { ApiClient } from '@slink/api/Client';
+import { Application } from '$lib/application';
 
 import '@slink/utils/string/stringExtensions';
-import { preloadIconSet } from '@slink/utils/ui/preloadIconSet';
 
 import type { LayoutLoad } from './$types';
 
 export const load: LayoutLoad = async ({ fetch, data }) => {
-  ApiClient.use(fetch);
+  const app = new Application();
 
-  ApiClient.on('unauthorized', () => {
-    if (!browser) {
-      redirect(302, '/profile/login');
-    }
-  });
-
-  ApiClient.on('forbidden', () => {
-    error(403, {
-      message: 'You do not have permission to access this page.',
-    });
-  });
-
-  preloadIconSet(themeIcons);
+  app.initialize();
+  app.setupApiClient(fetch);
 
   return data;
 };

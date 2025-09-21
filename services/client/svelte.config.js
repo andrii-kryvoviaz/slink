@@ -21,7 +21,7 @@ const config = {
       '@slink/api': './src/api',
       '@slink/utils': './src/lib/utils',
       '@slink/components': './src/components',
-      '@slink/store': './src/lib/store',
+      '@slink/store': './src/lib/utils/store',
       '@slink/ui': './src/ui',
       '@slink': './src',
       '@slink/*': './src/*',

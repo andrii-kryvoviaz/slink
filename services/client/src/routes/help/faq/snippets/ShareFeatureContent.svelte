@@ -1,6 +1,7 @@
 <script lang="ts">
   import { InfoCard } from '@slink/feature/Feedback/InfoCard';
 
+  import { GITHUB } from '$lib/constants/app';
   import Icon from '@iconify/svelte';
 </script>
 
@@ -54,7 +55,7 @@
       </li>
     </ul>
     <a
-      href="https://github.com/andrii-kryvoviaz/slink/issues/7"
+      href="https://github.com/{GITHUB.REPO_OWNER}/{GITHUB.REPO_NAME}/issues/7"
       target="_blank"
       rel="noopener noreferrer"
       class="inline-flex items-center gap-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"

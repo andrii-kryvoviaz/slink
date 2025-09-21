@@ -2,8 +2,6 @@ import { browser } from '$app/environment';
 import { writable } from 'svelte/store';
 import type { Writable } from 'svelte/store';
 
-import { useWritable } from '@slink/store/contextAwareStore';
-
 import type {
   Setter,
   Settings,
@@ -21,6 +19,7 @@ import { UserAdminSetter } from '@slink/lib/settings/setters/userAdmin';
 import type { UserAdminSettings } from '@slink/lib/settings/setters/userAdmin';
 
 import { cookie } from '@slink/utils/http/cookie';
+import { useWritable } from '@slink/utils/store/contextAwareStore';
 import { tryJson } from '@slink/utils/string/json';
 
 type SettingsValueTypes = {

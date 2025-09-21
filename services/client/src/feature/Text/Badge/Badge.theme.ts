@@ -31,6 +31,8 @@ export const BadgeTheme = cva(
         pink: 'border-pink-500/20 bg-pink-500/10 text-pink-700 [a&]:hover:bg-pink-500/15 focus-visible:ring-pink-500/20 dark:border-pink-400/30 dark:bg-pink-400/10 dark:text-pink-300 dark:[a&]:hover:bg-pink-400/15',
         neutral:
           'border-gray-500/20 bg-gray-500/10 text-gray-700 [a&]:hover:bg-gray-500/15 focus-visible:ring-gray-500/20 dark:border-gray-400/30 dark:bg-gray-400/10 dark:text-gray-300 dark:[a&]:hover:bg-gray-400/15',
+        gradient:
+          'border-0 bg-gradient-to-br from-blue-500 to-purple-600 text-white font-semibold [a&]:hover:from-blue-600 [a&]:hover:to-purple-700 focus-visible:ring-blue-500/20',
       },
       size: {
         xs: 'px-2 py-0.5 text-xs',

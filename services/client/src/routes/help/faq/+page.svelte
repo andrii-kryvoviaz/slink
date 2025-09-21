@@ -4,6 +4,7 @@
 
   import { browser } from '$app/environment';
   import { page } from '$app/stores';
+  import { GITHUB } from '$lib/constants/app';
   import Icon from '@iconify/svelte';
   import { fade, slide } from 'svelte/transition';
 
@@ -141,7 +142,7 @@
         </p>
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
           <a
-            href="https://github.com/andrii-kryvoviaz/slink/issues"
+            href="https://github.com/{GITHUB.REPO_OWNER}/{GITHUB.REPO_NAME}/issues"
             target="_blank"
             rel="noopener noreferrer"
             class="inline-flex items-center justify-center px-6 py-3 bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-slate-200 text-white dark:text-slate-900 font-medium rounded-xl transition-colors duration-200"

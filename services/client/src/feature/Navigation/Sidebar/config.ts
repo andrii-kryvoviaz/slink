@@ -1,3 +1,4 @@
+import { GITHUB } from '$lib/constants/app';
 import Icon from '@iconify/svelte';
 
 import type {
@@ -93,7 +94,7 @@ export const createAppSidebarItems = (options?: {
           id: 'github',
           title: 'GitHub',
           icon: 'ph:github-logo',
-          href: 'https://github.com/andrii-kryvoviaz/slink',
+          href: `https://github.com/${GITHUB.REPO_OWNER}/${GITHUB.REPO_NAME}`,
         },
       ],
     });

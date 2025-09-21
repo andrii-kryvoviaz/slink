@@ -14,11 +14,10 @@
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
-  import { useWritable } from '@slink/store/contextAwareStore';
-
   import { settings } from '@slink/lib/settings';
 
   import { withLoadingState } from '@slink/utils/form/withLoadingState';
+  import { useWritable } from '@slink/utils/store/contextAwareStore';
   import { toast } from '@slink/utils/ui/toast-sonner.svelte';
 
   import type { ActionData, PageData } from './$types';

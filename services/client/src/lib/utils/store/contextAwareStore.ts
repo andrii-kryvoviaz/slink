@@ -1,6 +1,7 @@
 import { getContext, hasContext, setContext } from 'svelte';
 
-import { type Readable, type Writable, readable, writable } from 'svelte/store';
+import { readable, writable } from 'svelte/store';
+import type { Readable, Writable } from 'svelte/store';
 
 export const useSharedStore = <T, A>(
   name: string,

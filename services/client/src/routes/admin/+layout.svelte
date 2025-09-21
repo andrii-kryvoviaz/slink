@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { AppFooter } from '@slink/feature/Layout/Footer';
   import { TabMenu, TabMenuItem } from '@slink/feature/Navigation';
 
   import Icon from '@iconify/svelte';
@@ -45,7 +46,10 @@
     </TabMenu>
   </div>
 
-  <div class="flex max-w-full grow">
-    {@render children?.()}
+  <div class="flex max-w-full grow flex-col">
+    <div class="flex-1">
+      {@render children?.()}
+    </div>
+    <AppFooter />
   </div>
 </div>

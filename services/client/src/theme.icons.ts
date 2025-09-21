@@ -131,4 +131,5 @@ export const themeIcons: string[] = [
   'heroicons:server',
   'heroicons:document-duplicate',
   'ph:arrow-clockwise',
+  'ph:download',
 ];

@@ -9,16 +9,14 @@
   import MultiUploadProgress from '@slink/feature/Upload/MultiUploadProgress.svelte';
 
   import { goto } from '$app/navigation';
+  import { useMultiUploadService } from '$lib/di';
   import { fade } from 'svelte/transition';
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { UploadedImageResponse } from '@slink/api/Response';
 
-  import {
-    MultiUploadService,
-    type UploadItem,
-  } from '@slink/lib/services/multi-upload.service';
+  import type { UploadItem } from '@slink/lib/services/multi-upload.service';
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
 
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
@@ -34,7 +32,7 @@
   let showSuccess = $state(false);
   let isMultiUpload = $state(false);
   let uploads: UploadItem[] = $state([]);
-  let multiUploadService = new MultiUploadService();
+  let multiUploadService = useMultiUploadService();
 
   const {
     isLoading,
