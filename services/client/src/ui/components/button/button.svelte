@@ -37,15 +37,23 @@
         glass:
           'bg-white/80 dark:bg-gray-900/80 border border-gray-200/60 dark:border-gray-700/60 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-white dark:hover:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-lg hover:shadow-gray-200/40 dark:hover:shadow-gray-900/40 focus-visible:ring-blue-500/20 transition-all duration-200',
         'gradient-blue':
-          'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0',
+          'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 !p-0.5',
         'gradient-green':
-          'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white border-0',
+          'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 !p-0.5',
         destructive:
           'bg-destructive shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60 text-white',
         ghost:
           'hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-gray-100',
       },
       size: {
+        xs: 'text-xs px-3 py-1.5 has-[>svg]:px-2',
+        sm: 'text-xs px-3.5 py-2 has-[>svg]:px-2.5',
+        md: 'text-sm px-5 py-2.5 has-[>svg]:px-3.5',
+        lg: 'text-base px-6 py-3 has-[>svg]:px-4',
+        default: 'text-sm px-5 py-2.5 has-[>svg]:px-3.5',
+        icon: 'size-9',
+      },
+      gradientInnerSize: {
         xs: 'text-xs px-3 py-1.5 has-[>svg]:px-2',
         sm: 'text-xs px-3.5 py-2 has-[>svg]:px-2.5',
         md: 'text-sm px-5 py-2.5 has-[>svg]:px-3.5',
@@ -83,6 +91,12 @@
         disabled: 'cursor-not-allowed pointer-events-none opacity-70',
       },
     },
+    compoundVariants: [
+      {
+        variant: ['gradient-blue', 'gradient-green'],
+        class: 'border-0',
+      },
+    ],
     defaultVariants: {
       variant: 'default',
       size: 'default',
@@ -90,6 +104,38 @@
       fontWeight: 'medium',
       motion: 'none',
       status: 'active',
+    },
+  });
+
+  export const gradientInnerVariants = tv({
+    base: 'w-full h-full flex items-center justify-center transition-all',
+    variants: {
+      variant: {
+        'gradient-blue':
+          'bg-white/80 dark:bg-gray-900/80 text-blue-600 dark:text-blue-400 hover:bg-white dark:hover:bg-gray-800',
+        'gradient-green':
+          'bg-white/80 dark:bg-gray-900/80 text-green-600 dark:text-green-400 hover:bg-white dark:hover:bg-gray-800',
+      },
+      size: {
+        xs: 'text-xs px-3 py-1.5 has-[>svg]:px-2',
+        sm: 'text-xs px-3.5 py-2 has-[>svg]:px-2.5',
+        md: 'text-sm px-5 py-2.5 has-[>svg]:px-3.5',
+        lg: 'text-base px-6 py-3 has-[>svg]:px-4',
+        default: 'text-sm px-5 py-2.5 has-[>svg]:px-3.5',
+        icon: 'size-9',
+      },
+      rounded: {
+        none: 'rounded-none',
+        sm: 'rounded-sm',
+        md: 'rounded-md',
+        lg: 'rounded-lg',
+        xl: 'rounded-xl',
+        full: 'rounded-full',
+      },
+    },
+    defaultVariants: {
+      size: 'default',
+      rounded: 'lg',
     },
   });
 
@@ -146,18 +192,31 @@
 
   let currentStatus = $derived(disabled ? 'disabled' : status);
   let isButtonDisabled = $derived(disabled || loading);
+  let isGradientVariant = $derived(
+    variant === 'gradient-blue' || variant === 'gradient-green',
+  );
 
   let classes = $derived(
     className(
       `${buttonVariants({
         variant,
-        size,
+        size: isGradientVariant ? undefined : size,
         rounded,
         fontWeight,
         motion,
         status: currentStatus,
       })} ${customClass || ''}`,
     ),
+  );
+
+  let innerClasses = $derived(
+    isGradientVariant
+      ? gradientInnerVariants({
+          variant: variant as 'gradient-blue' | 'gradient-green',
+          size,
+          rounded,
+        })
+      : '',
   );
 
   const handleClick = (e: any) => {
@@ -180,7 +239,28 @@
     tabindex={disabled ? -1 : undefined}
     {...restProps}
   >
-    {#if !leftIcon && !rightIcon}
+    {#if isGradientVariant}
+      <div class={innerClasses}>
+        {#if !leftIcon && !rightIcon}
+          {@render children?.()}
+          <ButtonIcon {loading} {loadingIcon} />
+        {:else}
+          <div class="flex w-full items-center justify-between gap-2">
+            {#if leftIcon}
+              <ButtonIcon {loading} {loadingIcon}>
+                {@render leftIcon()}
+              </ButtonIcon>
+            {/if}
+            {@render children?.()}
+            {#if rightIcon}
+              <ButtonIcon {loading} {loadingIcon}>
+                {@render rightIcon()}
+              </ButtonIcon>
+            {/if}
+          </div>
+        {/if}
+      </div>
+    {:else if !leftIcon && !rightIcon}
       {@render children?.()}
       <ButtonIcon {loading} {loadingIcon} />
     {:else}
@@ -209,7 +289,28 @@
     onclick={handleClick}
     {...restProps}
   >
-    {#if !leftIcon && !rightIcon}
+    {#if isGradientVariant}
+      <div class={innerClasses}>
+        {#if !leftIcon && !rightIcon}
+          {@render children?.()}
+          <ButtonIcon {loading} {loadingIcon} />
+        {:else}
+          <div class="flex w-full items-center justify-between gap-2">
+            {#if leftIcon}
+              <ButtonIcon {loading} {loadingIcon}>
+                {@render leftIcon()}
+              </ButtonIcon>
+            {/if}
+            {@render children?.()}
+            {#if rightIcon}
+              <ButtonIcon {loading} {loadingIcon}>
+                {@render rightIcon()}
+              </ButtonIcon>
+            {/if}
+          </div>
+        {/if}
+      </div>
+    {:else if !leftIcon && !rightIcon}
       {@render children?.()}
       <ButtonIcon {loading} {loadingIcon} />
     {:else}
