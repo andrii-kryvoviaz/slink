@@ -66,38 +66,51 @@
 <Dialog.Root {open} onOpenChange={handleOpenChange}>
   <Dialog.Content class="max-w-2xl max-h-[80vh]">
     <Dialog.Header>
-      <Dialog.Title class="flex items-center gap-3">
-        <div class="p-2 bg-primary/10 rounded-lg">
+      <Dialog.Title class="flex items-start gap-4">
+        <div
+          class="size-12 rounded-xl bg-gradient-to-br from-green-500/10 to-emerald-600/15 dark:from-green-400/20 dark:to-emerald-500/25 border border-green-300/40 dark:border-green-600/50 flex items-center justify-center shadow-md backdrop-blur-sm flex-shrink-0"
+        >
           <Icon
             icon={hasUpdate ? 'ph:download' : 'ph:check-circle'}
-            class="h-5 w-5 text-primary"
+            class="size-6 text-green-700 dark:text-green-300 drop-shadow-sm"
           />
         </div>
-        {hasUpdate ? 'Update Available' : 'Latest Version'}
+        <div>
+          <h3
+            class="text-xl font-semibold text-slate-900 dark:text-white tracking-tight"
+          >
+            {hasUpdate ? 'Update Available' : 'Latest Version'}
+          </h3>
+          <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">
+            {#if hasUpdate}
+              A new version of Slink is available. Here's what's new:
+            {:else}
+              You're running the latest version of Slink. Here are the release
+              notes:
+            {/if}
+          </p>
+        </div>
       </Dialog.Title>
-      <Dialog.Description>
-        {#if hasUpdate}
-          A new version of Slink is available. Here's what's new:
-        {:else}
-          You're running the latest version of Slink. Here are the release
-          notes:
-        {/if}
-      </Dialog.Description>
     </Dialog.Header>
 
     <div class="space-y-4">
       <div
-        class="flex items-center justify-between p-4 bg-primary/5 border border-primary/20 rounded-lg"
+        class="flex items-center justify-between p-4 bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 rounded-lg"
       >
         <div>
           <div class="text-sm text-muted-foreground">Current Version</div>
           <div class="font-mono font-medium">v{currentVersion}</div>
         </div>
         {#if hasUpdate}
-          <Icon icon="ph:arrow-right" class="h-4 w-4 text-primary/60" />
+          <Icon
+            icon="ph:arrow-right"
+            class="h-4 w-4 text-slate-400 dark:text-slate-500"
+          />
           <div>
             <div class="text-sm text-muted-foreground">Latest Version</div>
-            <div class="font-mono font-medium text-primary">
+            <div
+              class="font-mono font-medium text-green-600 dark:text-green-400"
+            >
               {release.tag_name}
             </div>
           </div>
