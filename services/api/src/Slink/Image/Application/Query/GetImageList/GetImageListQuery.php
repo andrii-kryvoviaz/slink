@@ -17,6 +17,8 @@ final readonly class GetImageListQuery implements QueryInterface {
     private ?string $searchTerm = null,
     private ?string $searchBy = null,
     private ?string $cursor = null,
+    private ?array  $tagIds = [],
+    private bool    $requireAllTags = false,
   ) {
   }
 
@@ -42,5 +44,13 @@ final readonly class GetImageListQuery implements QueryInterface {
 
   public function getSearchTerm(): ?string {
     return $this->searchTerm;
+  }
+
+  public function getTagIds(): ?array {
+    return $this->tagIds;
+  }
+
+  public function requireAllTags(): bool {
+    return $this->requireAllTags;
   }
 }

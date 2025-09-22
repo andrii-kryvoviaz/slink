@@ -1,0 +1,63 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Slink\Tag\Application\Query\GetTagList;
+
+use Slink\Shared\Application\Query\QueryInterface;
+use Slink\Shared\Infrastructure\MessageBus\EnvelopedMessage;
+use Symfony\Component\Validator\Constraints as Assert;
+
+final readonly class GetTagListQuery implements QueryInterface {
+  use EnvelopedMessage;
+
+  public function __construct(
+    #[Assert\Range(min: 1, max: 100)]
+    private ?int    $limit = 50,
+
+    #[Assert\Choice(['name', 'path', 'created_at'])]
+    private ?string $orderBy = 'name',
+
+    #[Assert\Choice(['asc', 'desc'])]
+    private ?string $order = 'asc',
+
+    #[Assert\Uuid]
+    private ?string $parentId = null,
+
+    #[Assert\Length(max: 255)]
+    private ?string $searchTerm = null,
+
+    private ?bool   $rootOnly = null,
+
+    private ?bool   $includeChildren = false,
+  ) {
+  }
+
+  public function getLimit(): ?int {
+    return $this->limit;
+  }
+
+  public function getOrderBy(): ?string {
+    return $this->orderBy;
+  }
+
+  public function getOrder(): ?string {
+    return $this->order;
+  }
+
+  public function getParentId(): ?string {
+    return $this->parentId;
+  }
+
+  public function getSearchTerm(): ?string {
+    return $this->searchTerm;
+  }
+
+  public function isRootOnly(): ?bool {
+    return $this->rootOnly;
+  }
+
+  public function shouldIncludeChildren(): ?bool {
+    return $this->includeChildren;
+  }
+}

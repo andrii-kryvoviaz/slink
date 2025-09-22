@@ -19,6 +19,7 @@ final readonly class UploadImageCommand implements CommandInterface {
    * @param File $image
    * @param bool $isPublic
    * @param string $description
+   * @param array<string> $tagIds
    */
   public function __construct(
     #[Assert\Image(
@@ -35,6 +36,11 @@ final readonly class UploadImageCommand implements CommandInterface {
     
     #[Assert\Length(max: 255)]
     private string $description = '',
+    
+    #[Assert\All([
+      new Assert\Uuid(message: 'Invalid tag ID format')
+    ])]
+    private array $tagIds = [],
   ) {
     $this->id = ID::generate();
   }
@@ -65,5 +71,12 @@ final readonly class UploadImageCommand implements CommandInterface {
    */
   public function getDescription(): string {
     return $this->description;
+  }
+  
+  /**
+   * @return array<string>
+   */
+  public function getTagIds(): array {
+    return $this->tagIds;
   }
 }

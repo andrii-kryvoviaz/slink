@@ -47,4 +47,10 @@ interface ImageRepositoryInterface extends ServiceEntityRepositoryInterface {
    * @return Paginator<ImageView>
    */
   public function geImageList(int $page, ImageListFilter $imageListFilter): Paginator;
+
+  /**
+   * @param ID $userId
+   * @return ImageView[]
+   */
+  public function findByUserId(ID $userId): array;
 }

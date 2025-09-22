@@ -97,6 +97,24 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
       }
     }
 
+    $tagFilterData = $imageListFilter->getTagFilterData();
+    if (!$tagFilterData || !$tagFilterData->hasTagFilters()) {
+    } elseif ($tagFilterData->requireAllTags()) {
+      $tagGroupMap = $tagFilterData->getTagGroupMap();
+      foreach ($tagFilterData->getOriginalTagIds() as $index => $originalTagId) {
+        $descendantIds = $tagGroupMap[$originalTagId] ?? [$originalTagId];
+        
+        $alias = "tag{$index}";
+        $qb->join('image.tags', $alias)
+          ->andWhere("{$alias}.uuid IN (:descendantTagIds{$index})")
+          ->setParameter("descendantTagIds{$index}", $descendantIds);
+      }
+    } else {
+      $qb->join('image.tags', 'tags')
+        ->andWhere('tags.uuid IN (:expandedTagIds)')
+        ->setParameter('expandedTagIds', $tagFilterData->getExpandedTagIds());
+    }
+
     $qb->orderBy('image.' . $imageListFilter->getOrderBy(), $imageListFilter->getOrder());
     $qb->addOrderBy('image.uuid', $imageListFilter->getOrder());
 
@@ -173,13 +191,18 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
    * @return ImageView[]
    */
   public function findImagesWithoutSha1Hash(): array {
-    $qb = $this->_em
-      ->createQueryBuilder()
-      ->from(ImageView::class, 'image')
-      ->select('image')
-      ->where('image.metadata.sha1Hash IS NULL OR image.metadata.sha1Hash = :empty')
-      ->setParameter('empty', '');
+    return $this->createQueryBuilder('image')
+      ->where('image.metadata.sha1Hash IS NULL')
+      ->getQuery()
+      ->getResult();
+  }
 
-    return $qb->getQuery()->getResult();
+  public function findByUserId(ID $userId): array {
+    return $this->createQueryBuilder('image')
+      ->where('image.user = :userId')
+      ->setParameter('userId', $userId->toString())
+      ->orderBy('image.attributes.createdAt', 'DESC')
+      ->getQuery()
+      ->getResult();
   }
 }
