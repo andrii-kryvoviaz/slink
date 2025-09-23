@@ -7,16 +7,30 @@ import type {
 } from '@slink/api/Response';
 
 export class ImageResource extends AbstractResource {
-  public async upload(image: File): Promise<UploadedImageResponse> {
+  public async upload(
+    image: File,
+    tagIds?: string[],
+  ): Promise<UploadedImageResponse> {
     const body = new FormData();
     body.append('image', image);
+
+    if (tagIds && tagIds.length > 0) {
+      tagIds.forEach((tagId) => body.append('tagIds[]', tagId));
+    }
 
     return this.post('/upload', { body });
   }
 
-  public async guestUpload(image: File): Promise<UploadedImageResponse> {
+  public async guestUpload(
+    image: File,
+    tagIds?: string[],
+  ): Promise<UploadedImageResponse> {
     const body = new FormData();
     body.append('image', image);
+
+    if (tagIds && tagIds.length > 0) {
+      tagIds.forEach((tagId) => body.append('tagIds[]', tagId));
+    }
 
     return this.post('/guest/upload', { body });
   }

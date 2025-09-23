@@ -18,6 +18,7 @@ export interface UploadItem {
 
 export interface UploadOptions {
   isGuest?: boolean;
+  tagIds?: string[];
   onProgress?: (item: UploadItem) => void;
   onComplete?: (item: UploadItem) => void;
   onError?: (item: UploadItem, error: Error) => void;
@@ -41,14 +42,27 @@ export class MultiUploadService {
     uploadItems: UploadItem[],
     options: UploadOptions = {},
   ): Promise<{ successful: UploadItem[]; failed: UploadItem[] }> {
-    const { isGuest = false, onProgress, onComplete, onError } = options;
+    const {
+      isGuest = false,
+      tagIds = [],
+      onProgress,
+      onComplete,
+      onError,
+    } = options;
 
     uploadItems.forEach((item) => {
       this.uploads.set(item.id, item);
     });
 
     const uploadPromises = uploadItems.map((item) =>
-      this.uploadSingleFile(item, isGuest, onProgress, onComplete, onError),
+      this.uploadSingleFile(
+        item,
+        isGuest,
+        tagIds,
+        onProgress,
+        onComplete,
+        onError,
+      ),
     );
 
     await Promise.allSettled(uploadPromises);
@@ -64,6 +78,7 @@ export class MultiUploadService {
   private async uploadSingleFile(
     item: UploadItem,
     isGuest: boolean,
+    tagIds: string[],
     onProgress?: (item: UploadItem) => void,
     onComplete?: (item: UploadItem) => void,
     onError?: (item: UploadItem, error: Error) => void,
@@ -83,7 +98,7 @@ export class MultiUploadService {
         ? ApiClient.image.guestUpload.bind(ApiClient.image)
         : ApiClient.image.upload.bind(ApiClient.image);
 
-      const result = await uploadMethod(item.file);
+      const result = await uploadMethod(item.file, tagIds);
 
       simulateProgress.complete();
 

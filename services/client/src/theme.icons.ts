@@ -132,4 +132,7 @@ export const themeIcons: string[] = [
   'heroicons:document-duplicate',
   'ph:arrow-clockwise',
   'ph:download',
+  'ph:spinner',
+  'ph:plus-circle',
+  'ph:caret-right',
 ];

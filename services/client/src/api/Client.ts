@@ -15,6 +15,7 @@ import {
   AuthResource,
   ImageResource,
   SettingResource,
+  TagResource,
 } from '@slink/api/Resources';
 import { ApiKeyResource } from '@slink/api/Resources/ApiKeyResource';
 import { StorageResource } from '@slink/api/Resources/StorageResource';
@@ -30,6 +31,7 @@ const RESOURCES = {
   setting: SettingResource,
   apiKey: ApiKeyResource,
   storage: StorageResource,
+  tag: TagResource,
 };
 
 type ResourceType = keyof typeof RESOURCES;
