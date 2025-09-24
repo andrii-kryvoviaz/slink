@@ -22,7 +22,6 @@ export const themeIcons: string[] = [
   'ph:shield-check',
   'ph:lock',
   'ph:lock-key',
-  'ph:trash',
   'ph:plus',
   'ph:chat-circle-text',
   'ph:book-open',
@@ -135,4 +134,5 @@ export const themeIcons: string[] = [
   'ph:spinner',
   'ph:plus-circle',
   'ph:caret-right',
+  'ph:trash',
 ];

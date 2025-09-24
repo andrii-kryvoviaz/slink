@@ -1,3 +1,4 @@
+import type { Tag } from '@slink/api/Resources/TagResource';
 import type { ListingMetadata } from '@slink/api/Response/Common/ListingMetadata';
 
 export type ImageListingItem = {
@@ -23,6 +24,7 @@ export type ImageListingItem = {
     width: number;
     height: number;
   };
+  tags?: Tag[];
 };
 
 export type ImageListingResponse = {

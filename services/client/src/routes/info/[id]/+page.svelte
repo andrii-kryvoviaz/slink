@@ -2,11 +2,11 @@
   import {
     ImageActionBar,
     ImageDescription,
-    type ImageParams,
     ImagePlaceholder,
-    type ImageSize,
     ImageSizePicker,
+    ImageTagManager,
   } from '@slink/feature/Image';
+  import type { ImageParams, ImageSize } from '@slink/feature/Image';
   import { CopyContainer } from '@slink/feature/Text';
 
   import { page } from '$app/state';
@@ -125,6 +125,12 @@
 
     <div class="grow max-w-md flex-shrink-0 space-y-8">
       <ImageActionBar {image} buttons={['download', 'visibility', 'delete']} />
+
+      <ImageTagManager
+        imageId={image.id}
+        variant="neon"
+        initialTags={data.imageTags}
+      />
 
       <div>
         <ImageDescription

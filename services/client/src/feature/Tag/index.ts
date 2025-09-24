@@ -1,3 +1,4 @@
+export { default as ImageTagList } from './ImageTagList/ImageTagList.svelte';
 export { default as TagCreationButton } from './TagCreationButton/TagCreationButton.svelte';
 export * from './TagCreationButton/TagCreationButton.theme';
 export { default as TagDropdown } from './TagDropdown/TagDropdown.svelte';

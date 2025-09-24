@@ -24,12 +24,14 @@
   interface Props extends TagPillVariants {
     tag: Tag;
     removable?: boolean;
+    showImageCount?: boolean;
     onRemove?: () => void;
   }
 
   let {
     tag,
     removable = false,
+    showImageCount = true,
     onRemove,
     variant = 'neon',
     size = 'sm',
@@ -62,7 +64,7 @@
     </span>
   {/if}
 
-  {#if tag.imageCount > 0}
+  {#if showImageCount && tag.imageCount > 0}
     <span class={tagPillBadgeVariants({ variant })}>
       {tag.imageCount}
     </span>

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { ImageActionBar, ImagePlaceholder } from '@slink/feature/Image';
   import { Masonry } from '@slink/feature/Layout';
+  import { ImageTagList } from '@slink/feature/Tag';
   import { FormattedDate } from '@slink/feature/Text';
   import { Button } from '@slink/ui/components/button';
 
@@ -80,6 +81,18 @@
             on={{ imageDelete: onImageDelete }}
           />
         </div>
+
+        {#if item.tags && item.tags.length > 0}
+          <div class="mb-3">
+            <ImageTagList
+              imageId={item.id}
+              variant="minimal"
+              showImageCount={false}
+              removable={false}
+              initialTags={item.tags}
+            />
+          </div>
+        {/if}
 
         <div class="grid grid-cols-2 gap-2 text-xs">
           <div

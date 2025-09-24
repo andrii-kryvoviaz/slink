@@ -206,6 +206,7 @@
                 {tag}
                 {variant}
                 removable
+                showImageCount={false}
                 onRemove={() => removeTag(tag.id)}
               />
             {/each}

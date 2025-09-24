@@ -89,6 +89,7 @@ export class ImageResource extends AbstractResource {
     page: number = 1,
     limit: number = 10,
     cursor?: string,
+    includeTags: boolean = false,
   ): Promise<ImageListingResponse> {
     const searchParams = new URLSearchParams({
       limit: limit.toString(),
@@ -98,15 +99,28 @@ export class ImageResource extends AbstractResource {
       searchParams.append('cursor', cursor);
     }
 
+    if (includeTags) {
+      searchParams.append('includeTags', 'true');
+    }
+
     return this.get(`/images/history/${page}/?${searchParams.toString()}`);
   }
 
   public async getImagesByIds(
     uuids: string[],
+    includeTags: boolean = false,
   ): Promise<ImagePlainListingResponse> {
-    const query = uuids.map((uuid) => `uuid[]=${uuid}`).join('&');
+    const searchParams = new URLSearchParams();
 
-    return this.get(`/images?${query}`);
+    uuids.forEach((uuid) => {
+      searchParams.append('uuid[]', uuid);
+    });
+
+    if (includeTags) {
+      searchParams.append('includeTags', 'true');
+    }
+
+    return this.get(`/images?${searchParams.toString()}`);
   }
 
   public async adminUpdateDetails(
