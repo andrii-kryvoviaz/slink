@@ -149,6 +149,18 @@ class ImageView extends AbstractView implements CursorAwareInterface {
     return $this->tags;
   }
 
+  public function addTag(TagView $tag): void {
+    if (!$this->tags->contains($tag)) {
+      $this->tags->add($tag);
+    }
+  }
+
+  public function removeTag(TagView $tag): void {
+    if ($this->tags->contains($tag)) {
+      $this->tags->removeElement($tag);
+    }
+  }
+
   /**
    * @return array<string, mixed>
    */

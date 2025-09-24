@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace UI\Http\Rest\Controller\Tag;
 
+use Slink\Image\Application\Command\TagImage\TagImageCommand;
 use Slink\Shared\Application\Command\CommandTrait;
-use Slink\Tag\Application\Command\TagImage\TagImageCommand;
 use Slink\User\Domain\Contracts\UserInterface;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;

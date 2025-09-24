@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Slink\Tag\Application\Command\UntagImage;
+namespace Slink\Image\Application\Command\UntagImage;
 
 use Slink\Shared\Application\Command\CommandInterface;
 use Slink\Shared\Infrastructure\MessageBus\EnvelopedMessage;
@@ -19,8 +19,7 @@ final readonly class UntagImageCommand implements CommandInterface {
     #[Assert\NotBlank]
     #[Assert\Uuid]
     private string $tagId,
-  ) {
-  }
+  ) {}
 
   public function getImageId(): string {
     return $this->imageId;

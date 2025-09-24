@@ -11,10 +11,13 @@ use Slink\Image\Domain\Event\ImageAttributesWasUpdated;
 use Slink\Image\Domain\Event\ImageMetadataWasUpdated;
 use Slink\Image\Domain\Event\ImageWasCreated;
 use Slink\Image\Domain\Event\ImageWasDeleted;
+use Slink\Image\Domain\Event\ImageWasTagged;
+use Slink\Image\Domain\Event\ImageWasUntagged;
 use Slink\Image\Domain\Exception\DuplicateImageException;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Domain\ValueObject\ImageFile;
 use Slink\Image\Domain\ValueObject\ImageMetadata;
+use Slink\Image\Domain\ValueObject\TagSet;
 use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\ValueObject\ID;
 
@@ -25,7 +28,18 @@ final class Image extends AbstractAggregateRoot {
 
   private ImageMetadata $metadata;
 
+  private TagSet $tags;
+
   private bool $deleted = false;
+
+  /**
+   * @param ID $id
+   */
+  protected function __construct(ID $id) {
+    parent::__construct($id);
+    
+    $this->tags = TagSet::create();
+  }
 
   /**
    * @return ID|null
@@ -93,6 +107,42 @@ final class Image extends AbstractAggregateRoot {
    */
   public function isOwedBy(ID $userId): bool {
     return $this->userId?->equals($userId) ?? false;
+  }
+
+  /**
+   * @param ID $tagId
+   * @return bool
+   */
+  public function hasTag(ID $tagId): bool {
+    return $this->tags->contains($tagId);
+  }
+
+  /**
+   * @return TagSet
+   */
+  public function getTags(): TagSet {
+    return $this->tags;
+  }
+
+  /**
+   * @return int
+   */
+  public function getTagCount(): int {
+    return $this->tags->count();
+  }
+
+  /**
+   * @return bool
+   */
+  public function hasAnyTags(): bool {
+    return !$this->tags->isEmpty();
+  }
+
+  /**
+   * @return array<string>
+   */
+  public function getTagIds(): array {
+    return $this->tags->toArray();
   }
 
   /**
@@ -180,11 +230,53 @@ final class Image extends AbstractAggregateRoot {
   }
 
   /**
+   * @param ID $tagId
+   * @param ID $userId
+   * @return void
+   */
+  public function tagWith(ID $tagId, ID $userId): void {
+    if ($this->hasTag($tagId)) {
+      return;
+    }
+
+    $this->recordThat(new ImageWasTagged($this->aggregateRootId(), $tagId, $userId));
+  }
+
+  /**
+   * @param ID $tagId
+   * @param ID $userId
+   * @return void
+   */
+  public function removeTag(ID $tagId, ID $userId): void {
+    if (!$this->hasTag($tagId)) {
+      return;
+    }
+
+    $this->recordThat(new ImageWasUntagged($this->aggregateRootId(), $tagId, $userId));
+  }
+
+  /**
    * @param ImageWasDeleted $event
    * @return void
    */
   public function applyImageWasDeleted(ImageWasDeleted $event): void {
     $this->deleted = true;
+  }
+
+  /**
+   * @param ImageWasTagged $event
+   * @return void
+   */
+  public function applyImageWasTagged(ImageWasTagged $event): void {
+    $this->tags->addTag($event->tagId);
+  }
+
+  /**
+   * @param ImageWasUntagged $event
+   * @return void
+   */
+  public function applyImageWasUntagged(ImageWasUntagged $event): void {
+    $this->tags->removeTag($event->tagId);
   }
 
   /**
@@ -195,6 +287,7 @@ final class Image extends AbstractAggregateRoot {
       'userId' => $this->userId?->toString(),
       'attributes' => $this->attributes->toPayload(),
       'metadata' => $this->metadata->toPayload(),
+      'tags' => $this->tags->toPayload(),
       'deleted' => $this->deleted,
     ];
   }
@@ -208,6 +301,7 @@ final class Image extends AbstractAggregateRoot {
     $image->userId = $state['userId'] ? ID::fromString($state['userId']) : null;
     $image->attributes = ImageAttributes::fromPayload($state['attributes']);
     $image->metadata = ImageMetadata::fromPayload($state['metadata']);
+    $image->tags = TagSet::fromPayload($state['tags'] ?? ['tags' => []]);
     $image->deleted = $state['deleted'];
 
     return $image;

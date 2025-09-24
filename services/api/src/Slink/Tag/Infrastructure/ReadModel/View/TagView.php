@@ -39,7 +39,7 @@ class TagView extends AbstractView {
     #[ORM\Column(type: 'uuid')]
     #[Groups(['public'])]
     #[SerializedName('id')]
-    private readonly string $uuid,
+    private string $uuid,
 
     #[ORM\Column(type: 'string', length: 50)]
     #[Groups(['public'])]
@@ -117,8 +117,6 @@ class TagView extends AbstractView {
     }
   }
 
-  #[Groups(['public'])]
-  #[SerializedName('images')]
   public function getImages(): Collection {
     return $this->images;
   }

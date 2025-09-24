@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Slink\Tag\Application\Command\TagImage;
+namespace Slink\Image\Application\Command\TagImage;
 
 use Slink\Shared\Application\Command\CommandInterface;
 use Slink\Shared\Infrastructure\MessageBus\EnvelopedMessage;

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace UI\Http\Rest\Controller\Image;
 
+use Slink\Image\Application\Command\TagImage\TagImageCommand;
 use Slink\Image\Application\Command\UploadImage\UploadImageCommand;
 use Slink\Shared\Application\Command\CommandTrait;
 use Slink\Shared\Application\Http\RequestValueResolver\FileRequestValueResolver;
-use Slink\Tag\Application\Command\TagImage\TagImageCommand;
 use Slink\User\Domain\Contracts\UserInterface;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
