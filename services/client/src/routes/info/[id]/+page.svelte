@@ -15,6 +15,7 @@
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
 
+  import { cn } from '@slink/utils/ui';
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
 
   import type { PageData } from './$types';
@@ -51,6 +52,22 @@
   let directLink: string = $derived(
     formatImageUrl([page.url.origin, image.url], params),
   );
+
+  const maxWidthClass = $derived.by(() => {
+    const aspectRatio = image.width / image.height;
+
+    if (aspectRatio > 2) {
+      return 'max-w-4xl';
+    } else if (aspectRatio > 1.5) {
+      return 'max-w-3xl';
+    } else if (aspectRatio > 1) {
+      return 'max-w-2xl';
+    } else if (aspectRatio > 0.7) {
+      return 'max-w-xl';
+    } else {
+      return 'max-w-lg';
+    }
+  });
 
   const handleImageSizeChange = (
     value?: Partial<ImageSize & { crop?: boolean }>,
@@ -102,7 +119,7 @@
   class="container mx-auto px-4 sm:px-6 lg:px-8 py-8"
 >
   <div class="flex flex-col flex-wrap lg:flex-row gap-8">
-    <div class="w-full max-w-2xl">
+    <div class={cn('w-full', maxWidthClass)}>
       <ImagePlaceholder src={image.url} metadata={image} stretch={false} />
     </div>
 
