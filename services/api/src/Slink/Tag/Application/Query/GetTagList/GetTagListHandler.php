@@ -28,13 +28,14 @@ final readonly class GetTagListHandler implements QueryHandlerInterface {
       includeChildren: $query->shouldIncludeChildren(),
     );
 
-    $paginator = $this->tagRepository->getAllByPage(1, $filter);
+    $page = $query->getPage() ?? 1;
+    $paginator = $this->tagRepository->getAllByPage($page, $filter);
     $tagEntities = iterator_to_array($paginator);
 
     $items = array_map(fn($tag) => Item::fromEntity($tag), $tagEntities);
 
     return new Collection(
-      1,
+      $page,
       $query->getLimit(),
       $paginator->count(),
       $items

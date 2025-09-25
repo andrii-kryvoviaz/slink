@@ -21,6 +21,9 @@ final readonly class GetTagListQuery implements QueryInterface {
     #[Assert\Choice(['asc', 'desc'])]
     private ?string $order = 'asc',
 
+    #[Assert\Range(min: 1)]
+    private ?int    $page = 1,
+
     #[Assert\Uuid]
     private ?string $parentId = null,
 
@@ -43,6 +46,10 @@ final readonly class GetTagListQuery implements QueryInterface {
 
   public function getOrder(): ?string {
     return $this->order;
+  }
+
+  public function getPage(): ?int {
+    return $this->page;
   }
 
   public function getParentId(): ?string {
