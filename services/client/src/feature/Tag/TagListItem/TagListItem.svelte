@@ -17,9 +17,16 @@
     tag: Tag;
     onSelect: (tag: Tag) => void;
     onAddChild: (tag: Tag) => void;
+    allowCreate?: boolean;
   }
 
-  let { tag, onSelect, onAddChild, variant = 'default' }: Props = $props();
+  let {
+    tag,
+    onSelect,
+    onAddChild,
+    variant = 'default',
+    allowCreate = true,
+  }: Props = $props();
 
   const handleAddChild = (e: MouseEvent) => {
     e.stopPropagation();
@@ -40,11 +47,13 @@
       </span>
     {/if}
   </button>
-  <button
-    class={tagListActionButtonVariants({ variant })}
-    onclick={handleAddChild}
-    aria-label={`Add child to ${tag.name}`}
-  >
-    <Icon icon="ph:plus" class="h-4 w-4" />
-  </button>
+  {#if allowCreate}
+    <button
+      class={tagListActionButtonVariants({ variant })}
+      onclick={handleAddChild}
+      aria-label={`Add child to ${tag.name}`}
+    >
+      <Icon icon="ph:plus" class="h-4 w-4" />
+    </button>
+  {/if}
 </div>

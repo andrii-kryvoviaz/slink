@@ -5,6 +5,7 @@ export { default as TagDropdown } from './TagDropdown/TagDropdown.svelte';
 export * from './TagDropdown/TagDropdown.theme';
 export { default as TagDropdownContent } from './TagDropdown/TagDropdownContent.svelte';
 export * from './TagDropdown/TagDropdownContent.theme';
+export { default as TagFilter } from './TagFilter/TagFilter.svelte';
 export { default as TagInput } from './TagInput/TagInput.svelte';
 export * from './TagInput/TagInput.theme';
 export { default as TagListItem } from './TagListItem/TagListItem.svelte';

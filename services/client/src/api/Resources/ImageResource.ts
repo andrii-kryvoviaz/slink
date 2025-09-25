@@ -90,6 +90,8 @@ export class ImageResource extends AbstractResource {
     limit: number = 10,
     cursor?: string,
     includeTags: boolean = false,
+    tagIds?: string[],
+    requireAllTags: boolean = false,
   ): Promise<ImageListingResponse> {
     const searchParams = new URLSearchParams({
       limit: limit.toString(),
@@ -101,6 +103,16 @@ export class ImageResource extends AbstractResource {
 
     if (includeTags) {
       searchParams.append('includeTags', 'true');
+    }
+
+    if (tagIds && tagIds.length > 0) {
+      tagIds.forEach((tagId) => {
+        searchParams.append('tagIds[]', tagId);
+      });
+    }
+
+    if (requireAllTags) {
+      searchParams.append('requireAllTags', 'true');
     }
 
     return this.get(`/images/history/${page}/?${searchParams.toString()}`);

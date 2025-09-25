@@ -20,6 +20,7 @@
     disabled?: boolean;
     placeholder?: string;
     variant?: 'default' | 'neon' | 'minimal';
+    allowCreate?: boolean;
   }
 
   let {
@@ -28,6 +29,7 @@
     disabled = false,
     placeholder = 'Search or add tags...',
     variant = 'default',
+    allowCreate = true,
   }: Props = $props();
 
   let isOpen = $state(false);
@@ -63,7 +65,8 @@
 
   const canCreate = $derived(
     Boolean(
-      searchTerm.trim() &&
+      allowCreate &&
+        searchTerm.trim() &&
         !availableTags.find(
           (t: Tag) => t.name.toLowerCase() === searchTerm.toLowerCase(),
         ),

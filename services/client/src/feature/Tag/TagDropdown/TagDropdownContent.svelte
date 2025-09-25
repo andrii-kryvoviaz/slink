@@ -68,7 +68,13 @@
 
       {#if !creatingChildFor}
         {#each tags as tag (tag.id)}
-          <TagListItem {tag} onSelect={onSelectTag} {onAddChild} {variant} />
+          <TagListItem
+            {tag}
+            onSelect={onSelectTag}
+            {onAddChild}
+            {variant}
+            allowCreate={canCreate}
+          />
         {/each}
       {/if}
 

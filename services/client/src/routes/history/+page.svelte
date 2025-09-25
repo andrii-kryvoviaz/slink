@@ -3,11 +3,14 @@
   import { HistoryGridView, HistoryListView } from '@slink/feature/Image';
   import { EmptyState } from '@slink/feature/Layout';
   import { HistorySkeleton } from '@slink/feature/Layout';
+  import { TagFilter } from '@slink/feature/Tag';
   import { ToggleGroup } from '@slink/ui/components';
   import type { ToggleGroupOption } from '@slink/ui/components';
 
   import { page } from '$app/stores';
   import { fade } from 'svelte/transition';
+
+  import type { Tag } from '@slink/api/Resources/TagResource';
 
   import { skeleton } from '@slink/lib/actions/skeleton';
   import { settings } from '@slink/lib/settings';
@@ -54,6 +57,23 @@
   const onImageDelete = (id: string) => {
     historyFeedState.removeItem(id);
   };
+
+  const handleTagFilterChange = async (
+    tags: Tag[],
+    requireAllTags: boolean,
+  ) => {
+    historyFeedState.setTagFilter(tags, requireAllTags);
+    await historyFeedState.load({ page: 1 });
+  };
+
+  const handleClearTagFilter = async () => {
+    historyFeedState.clearTagFilter();
+    await historyFeedState.load({ page: 1 });
+  };
+
+  const filterKey = $derived(
+    `${historyFeedState.tagFilter.selectedTags.map((t) => t.id).join(',')}-${historyFeedState.tagFilter.requireAllTags}`,
+  );
 </script>
 
 <svelte:head>
@@ -69,7 +89,7 @@
       showDelay: 200,
     }}
   >
-    <div class="mb-8" in:fade={{ duration: 400, delay: 100 }}>
+    <div class="mb-8 space-y-6" in:fade={{ duration: 400, delay: 100 }}>
       <div class="flex items-center justify-between w-full">
         <div class="flex-1 min-w-0">
           <h1 class="text-3xl font-semibold text-slate-900 dark:text-white">
@@ -88,6 +108,14 @@
           className="ml-4"
         />
       </div>
+
+      <TagFilter
+        selectedTags={historyFeedState.tagFilter.selectedTags}
+        requireAllTags={historyFeedState.tagFilter.requireAllTags}
+        onFilterChange={handleTagFilterChange}
+        onClearFilter={handleClearTagFilter}
+        disabled={historyFeedState.isLoading}
+      />
     </div>
 
     {#if historyFeedState.showSkeleton}
@@ -108,17 +136,19 @@
       </div>
     {:else}
       <div in:fade={{ duration: 400, delay: 200 }}>
-        {#if viewMode === 'grid'}
-          <HistoryGridView
-            items={historyFeedState.items}
-            on={{ delete: onImageDelete }}
-          />
-        {:else}
-          <HistoryListView
-            items={historyFeedState.items}
-            on={{ delete: onImageDelete }}
-          />
-        {/if}
+        {#key filterKey}
+          {#if viewMode === 'grid'}
+            <HistoryGridView
+              items={historyFeedState.items}
+              on={{ delete: onImageDelete }}
+            />
+          {:else}
+            <HistoryListView
+              items={historyFeedState.items}
+              on={{ delete: onImageDelete }}
+            />
+          {/if}
+        {/key}
       </div>
     {/if}
 
