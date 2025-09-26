@@ -135,7 +135,6 @@ export const themeIcons: string[] = [
   'ph:plus-circle',
   'ph:caret-right',
   'ph:trash',
-  'heroicons:funnel',
   'lucide:search',
   'lucide:tag',
   'lucide:folder',
