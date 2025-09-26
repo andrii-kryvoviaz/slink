@@ -16,6 +16,7 @@ export const load: LayoutServerLoad = async ({ locals, request, fetch }) => {
     showAdmin: isAdmin(user),
     showSystemItems: true,
     showUploadItem: !user && !!globalSettings?.access?.allowGuestUploads,
+    showUserItems: !!user,
   })
     .map((group) => ({
       ...group,

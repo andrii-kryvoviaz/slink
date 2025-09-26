@@ -1,6 +1,10 @@
 export { default as ImageTagList } from './ImageTagList/ImageTagList.svelte';
+export * from './TagCombobox';
 export { default as TagCreationButton } from './TagCreationButton/TagCreationButton.svelte';
 export * from './TagCreationButton/TagCreationButton.theme';
+export * from './TagDataTable';
+export { default as TagDeletePopover } from './TagDeleteConfirmation';
+export { default as TagDepthIndicator } from './TagDepthIndicator/TagDepthIndicator.svelte';
 export { default as TagDropdown } from './TagDropdown/TagDropdown.svelte';
 export * from './TagDropdown/TagDropdown.theme';
 export { default as TagDropdownContent } from './TagDropdown/TagDropdownContent.svelte';

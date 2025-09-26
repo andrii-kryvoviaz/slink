@@ -8,6 +8,8 @@ export interface Tag {
   isRoot: boolean;
   depth: number;
   imageCount: number;
+  createdAt?: string;
+  updatedAt?: string;
   children?: Tag[];
 }
 
@@ -16,10 +18,16 @@ export interface CreateTagRequest {
   parentId?: string;
 }
 
+export interface UpdateTagRequest {
+  name: string;
+  parentId?: string;
+}
+
 export interface TagListRequest {
   limit?: number;
-  orderBy?: 'name' | 'path' | 'created_at';
+  orderBy?: 'name' | 'path' | 'createdAt' | 'updatedAt';
   order?: 'asc' | 'desc';
+  page?: number;
   parentId?: string;
   searchTerm?: string;
   rootOnly?: boolean;
