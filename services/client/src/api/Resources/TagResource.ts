@@ -52,6 +52,20 @@ export class TagResource extends AbstractResource {
     return this.get(`/tags/${id}`);
   }
 
+  async getByIds(ids: string[]): Promise<Tag[]> {
+    if (ids.length === 0) return [];
+
+    const searchParams = new URLSearchParams();
+    ids.forEach((id) => {
+      searchParams.append('ids[]', id);
+    });
+
+    const response: TagListingResponse = await this.get(
+      `/tags?${searchParams.toString()}`,
+    );
+    return response.data;
+  }
+
   async deleteTag(id: string): Promise<void> {
     return this.delete(`/tags/${id}`);
   }

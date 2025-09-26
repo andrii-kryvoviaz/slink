@@ -33,6 +33,12 @@ final readonly class GetTagListQuery implements QueryInterface {
     private ?bool   $rootOnly = null,
 
     private ?bool   $includeChildren = false,
+
+    #[Assert\All([
+      new Assert\Uuid()
+    ])]
+    #[Assert\Count(max: 100)]
+    private ?array  $ids = null,
   ) {
   }
 
@@ -66,5 +72,9 @@ final readonly class GetTagListQuery implements QueryInterface {
 
   public function shouldIncludeChildren(): ?bool {
     return $this->includeChildren;
+  }
+
+  public function getIds(): ?array {
+    return $this->ids;
   }
 }

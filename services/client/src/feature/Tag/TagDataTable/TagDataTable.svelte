@@ -75,6 +75,7 @@
         return renderComponent(TagCountCell, {
           count: tag.imageCount,
           type: 'images',
+          tag,
         });
       },
     },
@@ -90,6 +91,7 @@
         return renderComponent(TagCountCell, {
           count: childrenCount,
           type: 'children',
+          tag,
         });
       },
     },

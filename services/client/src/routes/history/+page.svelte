@@ -13,11 +13,13 @@
   import type { Tag } from '@slink/api/Resources/TagResource';
 
   import { skeleton } from '@slink/lib/actions/skeleton';
+  import { createTagFilterManager } from '@slink/lib/composables/useTagFilterUrl';
   import { settings } from '@slink/lib/settings';
   import type { HistoryViewMode } from '@slink/lib/settings/setters/history';
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
 
   const historyFeedState = useUploadHistoryFeed();
+  const tagFilterManager = createTagFilterManager($page.url);
 
   const serverSettings = $page.data.settings;
 
@@ -43,8 +45,30 @@
   });
 
   $effect(() => {
-    if (!historyFeedState.isDirty) historyFeedState.load();
+    if (tagFilterManager.hasFiltersInUrl()) {
+      loadTagFiltersFromUrl();
+    } else if (!historyFeedState.isDirty) {
+      historyFeedState.load();
+    }
   });
+
+  const loadTagFiltersFromUrl = async () => {
+    try {
+      const { tags, requireAllTags } = await tagFilterManager.loadFromUrl();
+
+      if (tags.length > 0) {
+        historyFeedState.setTagFilter(tags, requireAllTags);
+        await historyFeedState.load();
+      } else if (!historyFeedState.isDirty) {
+        historyFeedState.load();
+      }
+    } catch (error) {
+      console.error('Failed to load tag filters from URL:', error);
+      if (!historyFeedState.isDirty) {
+        historyFeedState.load();
+      }
+    }
+  };
 
   const handleViewModeChange = (newViewMode: HistoryViewMode) => {
     if (newViewMode !== viewMode) {
@@ -63,11 +87,13 @@
     requireAllTags: boolean,
   ) => {
     historyFeedState.setTagFilter(tags, requireAllTags);
+    await tagFilterManager.updateUrl(tags, requireAllTags);
     await historyFeedState.load();
   };
 
   const handleClearTagFilter = async () => {
     historyFeedState.clearTagFilter();
+    await tagFilterManager.clearUrl();
     await historyFeedState.load();
   };
 

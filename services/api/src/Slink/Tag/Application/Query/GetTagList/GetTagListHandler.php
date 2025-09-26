@@ -17,6 +17,20 @@ final readonly class GetTagListHandler implements QueryHandlerInterface {
   ) {}
 
   public function __invoke(GetTagListQuery $query, string $userId): Collection {
+    $userIdObject = ID::fromString($userId);
+
+    if ($query->getIds() !== null) {
+      $tagEntities = $this->tagRepository->findByIds($query->getIds(), $userIdObject);
+      $items = array_map(fn($tag) => Item::fromEntity($tag), $tagEntities);
+
+      return new Collection(
+        1,
+        count($items),
+        count($items),
+        $items
+      );
+    }
+
     $filter = new TagListFilter(
       limit: $query->getLimit(),
       orderBy: $query->getOrderBy(),
