@@ -63,12 +63,12 @@
     requireAllTags: boolean,
   ) => {
     historyFeedState.setTagFilter(tags, requireAllTags);
-    await historyFeedState.load({ page: 1 });
+    await historyFeedState.load();
   };
 
   const handleClearTagFilter = async () => {
     historyFeedState.clearTagFilter();
-    await historyFeedState.load({ page: 1 });
+    await historyFeedState.load();
   };
 
   const filterKey = $derived(

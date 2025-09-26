@@ -22,7 +22,6 @@ class UploadHistoryFeed extends AbstractPaginatedFeed<ImageListingItem> {
     selectedTags: [],
     requireAllTags: false,
   });
-  private _isFilteredLoad: boolean = false;
 
   public constructor() {
     super({
@@ -72,17 +71,7 @@ class UploadHistoryFeed extends AbstractPaginatedFeed<ImageListingItem> {
       return;
     }
 
-    const originalAppendMode = this._config.appendMode;
-    if (this._isFilteredLoad && page === 1) {
-      this._config.appendMode = 'never';
-    }
-
-    try {
-      await super.load(params, options);
-    } finally {
-      this._config.appendMode = originalAppendMode;
-      this._isFilteredLoad = false;
-    }
+    await super.load(params, options);
   }
 
   public setTagFilter(tags: Tag[], requireAllTags: boolean = false): void {
@@ -95,7 +84,6 @@ class UploadHistoryFeed extends AbstractPaginatedFeed<ImageListingItem> {
 
     if (hasChanged) {
       this._tagFilter = { selectedTags: [...tags], requireAllTags };
-      this._isFilteredLoad = true;
       this.reset();
     }
   }
@@ -110,7 +98,6 @@ class UploadHistoryFeed extends AbstractPaginatedFeed<ImageListingItem> {
       this._tagFilter.requireAllTags
     ) {
       this._tagFilter = { selectedTags: [], requireAllTags: false };
-      this._isFilteredLoad = true;
       this.reset();
     }
   }
