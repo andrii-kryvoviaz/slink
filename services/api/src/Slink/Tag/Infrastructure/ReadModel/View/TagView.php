@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
+use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
 use Slink\Tag\Infrastructure\ReadModel\Repository\TagRepository;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
@@ -56,6 +57,14 @@ class TagView extends AbstractView {
     #[ORM\Column(type: 'string', length: 36, nullable: true)]
     #[Groups(['admin'])]
     private ?string         $parentId = null,
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[Groups(['public'])]
+    private ?DateTime       $createdAt = null,
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[Groups(['public'])]
+    private ?DateTime       $updatedAt = null,
   ) {
     $this->children = new ArrayCollection();
     $this->images = new ArrayCollection();
@@ -79,6 +88,14 @@ class TagView extends AbstractView {
 
   public function getUserId(): string {
     return $this->userId;
+  }
+
+  public function getCreatedAt(): ?DateTime {
+    return $this->createdAt;
+  }
+
+  public function getUpdatedAt(): ?DateTime {
+    return $this->updatedAt;
   }
 
   public function getUser(): ?UserView {
@@ -164,6 +181,8 @@ class TagView extends AbstractView {
       'isRoot' => $this->isRoot(),
       'depth' => $this->getDepth(),
       'imageCount' => $this->getImageCount(),
+      'createdAt' => $this->createdAt?->toString(),
+      'updatedAt' => $this->updatedAt?->toString(),
     ];
   }
 }

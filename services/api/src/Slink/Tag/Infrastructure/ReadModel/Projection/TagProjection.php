@@ -17,6 +17,7 @@ use Slink\Tag\Domain\Event\TagWasDeleted;
 use Slink\Tag\Domain\Repository\TagRepositoryInterface;
 use Slink\Tag\Infrastructure\ReadModel\View\TagView;
 use Slink\User\Domain\Repository\UserRepositoryInterface;
+use Slink\Shared\Domain\ValueObject\Date\DateTime;
 
 final class TagProjection extends AbstractProjection {
   public function __construct(
@@ -34,12 +35,16 @@ final class TagProjection extends AbstractProjection {
   public function handleTagWasCreated(TagWasCreated $event): void {
     $user = $this->userRepository->one($event->userId);
 
+    $createdAt = $event->createdAt ?? DateTime::now();
+
     $tagView = new TagView(
       $event->id->toString(),
       $event->name->getValue(),
       $event->path->getValue(),
       $event->userId->toString(),
-      $event->parentId?->toString()
+      $event->parentId?->toString(),
+      $createdAt,
+      $createdAt
     );
 
     $tagView->setUser($user);

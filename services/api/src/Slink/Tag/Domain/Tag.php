@@ -7,6 +7,7 @@ namespace Slink\Tag\Domain;
 use EventSauce\EventSourcing\AggregateRootId;
 use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use Slink\Shared\Domain\AbstractAggregateRoot;
+use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Tag\Domain\Event\TagWasCreated;
 use Slink\Tag\Domain\Event\TagWasDeleted;
@@ -18,6 +19,8 @@ final class Tag extends AbstractAggregateRoot {
   private TagName $name;
   private ?TagPath $path = null;
   private ?ID $parentId;
+  private ?DateTime $createdAt = null;
+  private ?DateTime $updatedAt = null;
   private bool $deleted = false;
 
   public static function create(
@@ -31,8 +34,9 @@ final class Tag extends AbstractAggregateRoot {
       ? TagPath::createChild($parentPath, $name)
       : TagPath::createRoot($name);
 
+    $now = DateTime::now();
     $tag = new self($id);
-    $tag->recordThat(new TagWasCreated($id, $userId, $name, $path, $parentId));
+    $tag->recordThat(new TagWasCreated($id, $userId, $name, $path, $parentId, $now));
 
     return $tag;
   }
@@ -50,6 +54,8 @@ final class Tag extends AbstractAggregateRoot {
     $this->name = $event->name;
     $this->path = $event->path;
     $this->parentId = $event->parentId;
+    $this->createdAt = $event->createdAt ?? DateTime::now();
+    $this->updatedAt = $event->createdAt ?? DateTime::now();
   }
 
   public function applyTagWasDeleted(TagWasDeleted $event): void {
@@ -84,12 +90,22 @@ final class Tag extends AbstractAggregateRoot {
     return $this->parentId === null;
   }
 
+  public function getCreatedAt(): ?DateTime {
+    return $this->createdAt;
+  }
+
+  public function getUpdatedAt(): ?DateTime {
+    return $this->updatedAt;
+  }
+
   protected function createSnapshotState(): array {
     return [
       'userId' => $this->userId->toString(),
       'name' => $this->name->toPayload(),
       'path' => ($this->path?->toPayload()) ?? ['value' => '#'],
       'parentId' => $this->parentId?->toString(),
+      'createdAt' => $this->createdAt?->toString(),
+      'updatedAt' => $this->updatedAt?->toString(),
       'deleted' => $this->deleted,
     ];
   }
@@ -101,6 +117,8 @@ final class Tag extends AbstractAggregateRoot {
     $tag->name = TagName::fromPayload($state['name']);
     $tag->path = TagPath::fromPayload($state['path']);
     $tag->parentId = $state['parentId'] ? ID::fromString($state['parentId']) : null;
+    $tag->createdAt = isset($state['createdAt']) ? DateTime::fromString($state['createdAt']) : null;
+    $tag->updatedAt = isset($state['updatedAt']) ? DateTime::fromString($state['updatedAt']) : null;
     $tag->deleted = $state['deleted'];
 
     return $tag;

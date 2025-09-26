@@ -18,6 +18,7 @@ final readonly class TagWasCreated implements SerializablePayload {
     public TagName $name,
     public TagPath $path,
     public ?ID $parentId = null,
+    public ?DateTime $createdAt = null,
   ) {}
 
   public function toPayload(): array {
@@ -27,7 +28,7 @@ final readonly class TagWasCreated implements SerializablePayload {
       'name' => $this->name->getValue(),
       'path' => $this->path->getValue(),
       'parent_id' => $this->parentId?->toString(),
-      'created_at' => DateTime::now()->toString(),
+      'created_at' => ($this->createdAt ?? DateTime::now())->toString(),
     ];
   }
 
@@ -41,6 +42,7 @@ final readonly class TagWasCreated implements SerializablePayload {
       TagName::fromString($payload['name']),
       TagPath::fromString($payload['path']),
       isset($payload['parent_id']) ? ID::fromString($payload['parent_id']) : null,
+      isset($payload['created_at']) ? DateTime::fromString($payload['created_at']) : null,
     );
   }
 }
