@@ -18,14 +18,23 @@ final readonly class TagFilterData {
     private bool $requireAllTags = false,
   ) {}
 
+  /**
+   * @return array<string>
+   */
   public function getOriginalTagIds(): array {
     return $this->originalTagIds;
   }
 
+  /**
+   * @return array<string>
+   */
   public function getExpandedTagIds(): array {
     return $this->expandedTagIds;
   }
 
+  /**
+   * @return array<string, array<string>>
+   */
   public function getTagGroupMap(): array {
     return $this->tagGroupMap;
   }

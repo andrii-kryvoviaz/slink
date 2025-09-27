@@ -296,7 +296,7 @@ final class Image extends AbstractAggregateRoot {
    * @param array<string, mixed> $state
    */
   protected static function reconstituteFromSnapshotState(AggregateRootId $id, $state): AggregateRootWithSnapshotting {
-    $image = new static($id);
+    $image = new static(ID::fromString($id->toString()));
 
     $image->userId = $state['userId'] ? ID::fromString($state['userId']) : null;
     $image->attributes = ImageAttributes::fromPayload($state['attributes']);

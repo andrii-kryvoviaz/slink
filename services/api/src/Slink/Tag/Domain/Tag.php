@@ -98,6 +98,9 @@ final class Tag extends AbstractAggregateRoot {
     return $this->updatedAt;
   }
 
+  /**
+   * @return array<string, mixed>
+   */
   protected function createSnapshotState(): array {
     return [
       'userId' => $this->userId->toString(),
@@ -110,6 +113,9 @@ final class Tag extends AbstractAggregateRoot {
     ];
   }
 
+  /**
+   * @param array<string, mixed> $state
+   */
   protected static function reconstituteFromSnapshotState(AggregateRootId $id, $state): AggregateRootWithSnapshotting {
     $tag = new static($id);
 

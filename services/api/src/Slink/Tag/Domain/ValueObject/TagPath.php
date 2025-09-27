@@ -27,6 +27,9 @@ final readonly class TagPath extends AbstractValueObject {
     return new self($parentPath->getValue() . self::SEPARATOR . $childName->getValue());
   }
 
+  /**
+   * @param array<string, string> $payload
+   */
   public static function fromPayload(array $payload): self {
     return self::fromString($payload['value'] ?? $payload['path']);
   }
@@ -35,6 +38,9 @@ final readonly class TagPath extends AbstractValueObject {
     return $this->value;
   }
 
+  /**
+   * @return array<string, string>
+   */
   public function toPayload(): array {
     return ['value' => $this->value];
   }
@@ -86,6 +92,9 @@ final readonly class TagPath extends AbstractValueObject {
     return str_starts_with($this->value, $other->getValue() . self::SEPARATOR);
   }
 
+  /**
+   * @return array<TagPath>
+   */
   public function getAncestorPaths(): array {
     $paths = [];
     $parts = explode(self::SEPARATOR, $this->value);

@@ -42,7 +42,7 @@ final class TagRepository extends AbstractRepository implements TagRepositoryInt
     $tag = $qb->getQuery()->getOneOrNullResult();
 
     if (!$tag instanceof TagView) {
-      throw new NotFoundException(sprintf('Tag with ID %s not found', $id));
+      throw new NotFoundException();
     }
 
     return $tag;
@@ -202,9 +202,7 @@ final class TagRepository extends AbstractRepository implements TagRepositoryInt
       $qb->setParameter($paramName, $tagPath . '/%');
     }
 
-    if (!empty($orConditions)) {
-      $qb->andWhere('(' . implode(' OR ', $orConditions) . ')');
-    }
+    $qb->andWhere('(' . implode(' OR ', $orConditions) . ')');
 
     return $qb->orderBy('t.path', 'ASC')
       ->getQuery()

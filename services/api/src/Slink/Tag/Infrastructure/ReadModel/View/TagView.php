@@ -172,6 +172,9 @@ class TagView extends AbstractView {
     return $this->images->count();
   }
 
+  /**
+   * @return array<string, mixed>
+   */
   public function toPayload(): array {
     return [
       'id' => $this->uuid,

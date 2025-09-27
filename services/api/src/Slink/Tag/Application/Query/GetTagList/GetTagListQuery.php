@@ -11,6 +11,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 final readonly class GetTagListQuery implements QueryInterface {
   use EnvelopedMessage;
 
+  /**
+   * @param array<string>|null $ids
+   */
   public function __construct(
     #[Assert\Range(min: 1, max: 100)]
     private ?int    $limit = 50,
@@ -74,6 +77,9 @@ final readonly class GetTagListQuery implements QueryInterface {
     return $this->includeChildren;
   }
 
+  /**
+   * @return array<string>|null
+   */
   public function getIds(): ?array {
     return $this->ids;
   }

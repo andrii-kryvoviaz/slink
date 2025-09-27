@@ -12,12 +12,18 @@ final readonly class TagWasDeleted implements SerializablePayload {
     public ID $id,
   ) {}
 
+  /**
+   * @return array<string, string>
+   */
   public function toPayload(): array {
     return [
       'uuid' => $this->id->toString(),
     ];
   }
 
+  /**
+   * @param array<string, string> $payload
+   */
   public static function fromPayload(array $payload): static {
     return new self(
       ID::fromString($payload['uuid']),

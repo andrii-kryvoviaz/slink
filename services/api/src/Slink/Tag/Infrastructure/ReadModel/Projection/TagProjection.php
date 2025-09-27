@@ -75,8 +75,10 @@ final class TagProjection extends AbstractProjection {
     $imageView = $this->imageRepository->oneById($event->imageId->toString());
     $tagView = $this->entityManager->getReference(TagView::class, $event->tagId->toString());
 
-    $imageView->addTag($tagView);
-    $this->imageRepository->add($imageView);
+    if ($tagView instanceof TagView) {
+      $imageView->addTag($tagView);
+      $this->imageRepository->add($imageView);
+    }
   }
 
   /**
@@ -88,7 +90,9 @@ final class TagProjection extends AbstractProjection {
     $imageView = $this->imageRepository->oneById($event->imageId->toString());
     $tagView = $this->entityManager->getReference(TagView::class, $event->tagId->toString());
 
-    $imageView->removeTag($tagView);
-    $this->imageRepository->add($imageView);
+    if ($tagView instanceof TagView) {
+      $imageView->removeTag($tagView);
+      $this->imageRepository->add($imageView);
+    }
   }
 }

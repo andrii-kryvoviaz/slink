@@ -14,6 +14,9 @@ final readonly class ImageWasTagged implements SerializablePayload {
     public ID $userId,
   ) {}
 
+  /**
+   * @return array<string, string>
+   */
   public function toPayload(): array {
     return [
       'imageId' => $this->imageId->toString(),
@@ -22,6 +25,9 @@ final readonly class ImageWasTagged implements SerializablePayload {
     ];
   }
 
+  /**
+   * @param array<string, string> $payload
+   */
   public static function fromPayload(array $payload): static {
     return new self(
       ID::fromString($payload['imageId']),

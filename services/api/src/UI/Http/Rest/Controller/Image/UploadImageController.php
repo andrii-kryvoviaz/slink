@@ -35,7 +35,7 @@ final class UploadImageController {
     foreach ($command->getTagIds() as $tagId) {
       $tagImageCommand = new TagImageCommand($command->getId()->toString(), $tagId);
       $this->handle($tagImageCommand->withContext([
-        'userId' => $user->getIdentifier()
+        'userId' => $user?->getIdentifier()
       ]));
     }
     

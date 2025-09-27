@@ -50,7 +50,7 @@ final readonly class GetTagListHandler implements QueryHandlerInterface {
 
     return new Collection(
       $page,
-      $query->getLimit(),
+      $query->getLimit() ?? 10,
       $paginator->count(),
       $items
     );

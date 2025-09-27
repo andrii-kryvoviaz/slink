@@ -22,6 +22,9 @@ final readonly class TagName extends AbstractValueObject {
     return new self(trim($value));
   }
 
+  /**
+   * @param array<string, string> $payload
+   */
   public static function fromPayload(array $payload): self {
     return self::fromString($payload['value'] ?? $payload['name']);
   }
@@ -30,6 +33,9 @@ final readonly class TagName extends AbstractValueObject {
     return $this->value;
   }
 
+  /**
+   * @return array<string, string>
+   */
   public function toPayload(): array {
     return ['value' => $this->value];
   }
@@ -39,7 +45,7 @@ final readonly class TagName extends AbstractValueObject {
       throw new InvalidArgumentException('Tag name cannot be empty');
     }
 
-    if (strlen($this->value) < self::MIN_LENGTH || strlen($this->value) > self::MAX_LENGTH) {
+    if (strlen($this->value) > self::MAX_LENGTH) {
       throw new InvalidArgumentException(
         sprintf('Tag name must be between %d and %d characters', self::MIN_LENGTH, self::MAX_LENGTH)
       );
