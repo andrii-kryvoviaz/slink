@@ -73,7 +73,7 @@
         class={cn('mr-2 h-4 w-4', !selected && 'text-transparent')}
       />
       <div class="flex items-center gap-2 min-w-0 flex-1">
-        <TagDepthIndicator {tag} showFullPath />
+        <TagDepthIndicator {tag} />
       </div>
       {#if tag.imageCount > 0}
         <span class="text-xs text-muted-foreground ml-auto">

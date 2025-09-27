@@ -5,22 +5,16 @@
 
   import type { Tag } from '@slink/api/Resources/TagResource';
 
-  import {
-    getTagLastSegment,
-    getTagPathSegments,
-    isTagNested,
-  } from '@slink/lib/utils/tag';
+  import { getTagPathSegments, isTagNested } from '@slink/lib/utils/tag';
 
   interface Props {
     tag: Tag;
-    showFullPath?: boolean;
     maxDotsToShow?: number;
   }
 
-  let { tag, showFullPath = false, maxDotsToShow = 5 }: Props = $props();
+  let { tag, maxDotsToShow = 5 }: Props = $props();
 
   const pathSegments = getTagPathSegments(tag);
-  const tagName = getTagLastSegment(tag);
   const isNested = isTagNested(tag);
   const depth = pathSegments.length - 1;
 </script>
@@ -43,24 +37,5 @@
         {/if}
       </div>
     </Badge>
-  {/if}
-
-  {#if showFullPath && isNested}
-    <div class="flex items-center gap-1 min-w-0">
-      {#each pathSegments as segment, index}
-        {#if index < depth}
-          <span class="text-xs text-muted-foreground opacity-70">{segment}</span
-          >
-          <Icon
-            icon="lucide:chevron-right"
-            class="h-3 w-3 text-muted-foreground shrink-0"
-          />
-        {:else}
-          <span class="text-sm font-medium truncate">{segment}</span>
-        {/if}
-      {/each}
-    </div>
-  {:else}
-    <span class="text-sm font-medium truncate">{tagName}</span>
   {/if}
 </div>
