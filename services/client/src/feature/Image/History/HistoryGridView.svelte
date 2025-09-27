@@ -86,7 +86,7 @@
           <div class="mb-3">
             <ImageTagList
               imageId={item.id}
-              variant="minimal"
+              variant="neon"
               showImageCount={false}
               removable={false}
               initialTags={item.tags}

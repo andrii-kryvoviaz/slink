@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { TagPill } from '@slink/feature/Tag';
+  import { TagBadge } from '@slink/feature/Tag';
 
   import { browser } from '$app/environment';
 
@@ -87,12 +87,12 @@
 {#if tags.length > 0}
   <div class="flex flex-wrap gap-2">
     {#each tags as tag (tag.id)}
-      <TagPill
+      <TagBadge
         {tag}
         {variant}
-        {removable}
-        {showImageCount}
-        onRemove={() => handleRemoveTag(tag.id)}
+        showFullPath={true}
+        showCount={showImageCount}
+        onClose={removable ? () => handleRemoveTag(tag.id) : undefined}
       />
     {/each}
   </div>

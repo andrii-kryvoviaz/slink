@@ -65,7 +65,7 @@
         </HoverCard.Content>
       </HoverCard.Root>
     {:else}
-      <TagBadge {tag} />
+      <TagBadge {tag} showCount={false} />
     {/if}
   </div>
 </div>

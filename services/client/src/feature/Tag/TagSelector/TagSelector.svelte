@@ -1,11 +1,12 @@
 <script lang="ts">
+  import { TagBadge } from '@slink/feature/Tag';
+
   import Icon from '@iconify/svelte';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
 
   import TagDropdownContent from '../TagDropdown/TagDropdownContent.svelte';
   import { TagInput } from '../TagInput';
-  import { TagPill } from '../TagPill';
   import { useTagOperations } from '../useTagOperations.svelte';
   import {
     type TagSelectorContainerVariants,
@@ -205,12 +206,12 @@
 
           <div class="flex flex-wrap items-center gap-1.5 flex-1">
             {#each selectedTags as tag (tag.id)}
-              <TagPill
+              <TagBadge
                 {tag}
                 {variant}
-                removable
-                showImageCount={false}
-                onRemove={() => removeTag(tag.id)}
+                showFullPath={true}
+                showCount={false}
+                onClose={() => removeTag(tag.id)}
               />
             {/each}
 
