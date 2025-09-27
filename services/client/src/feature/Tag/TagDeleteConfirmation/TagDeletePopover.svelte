@@ -109,29 +109,6 @@
         </div>
       </div>
 
-      <div
-        class="bg-gray-50/80 dark:bg-gray-800/50 rounded-xl p-4 border border-gray-200/50 dark:border-gray-700/30"
-      >
-        <div class="flex items-center gap-3">
-          <div class="min-w-0 flex-1">
-            <span class="text-sm font-medium text-gray-900 dark:text-white">
-              {tag.name}
-            </span>
-            <p class="text-xs text-gray-500 dark:text-gray-400">
-              {#if canDelete}
-                Tag will be permanently removed
-              {:else if hasImages && hasChildren}
-                Remove tag from images and handle child tags first
-              {:else if hasImages}
-                Remove tag from all associated images first
-              {:else}
-                Delete or move all child tags first
-              {/if}
-            </p>
-          </div>
-        </div>
-      </div>
-
       {#if !canDelete}
         <div
           class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/50 rounded-lg p-3"
