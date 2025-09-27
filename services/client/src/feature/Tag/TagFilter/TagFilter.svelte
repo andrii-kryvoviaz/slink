@@ -9,12 +9,18 @@
 
   import { useTagFilterState } from '@slink/lib/state/TagFilterState.svelte';
 
-  interface Props {
+  import {
+    type TagFilterContainerVariants,
+    tagFilterContainerVariants,
+  } from './TagFilter.theme';
+
+  interface Props extends TagFilterContainerVariants {
     selectedTags?: Tag[];
     requireAllTags?: boolean;
     onFilterChange?: (tags: Tag[], requireAllTags: boolean) => void;
     onClearFilter?: () => void;
     disabled?: boolean;
+    variant?: 'default' | 'neon' | 'minimal';
   }
 
   let {
@@ -23,6 +29,7 @@
     onFilterChange,
     onClearFilter,
     disabled = false,
+    variant = 'default',
   }: Props = $props();
 
   const tagFilterState = useTagFilterState();
@@ -62,14 +69,14 @@
     selectedTags={tagFilterState.selectedTags}
     onTagsChange={handleTagsChange}
     placeholder="Search and select tags"
-    variant="minimal"
+    {variant}
     allowCreate={false}
     {disabled}
   />
 
   {#if tagFilterState.selectedTags.length > 0}
     <div
-      class="flex items-start gap-3 rounded-md border border-slate-200 dark:border-slate-700 px-3 py-3 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
+      class={tagFilterContainerVariants({ variant, disabled })}
       onclick={() => handleRequireAllChange(!tagFilterState.requireAllTags)}
       role="button"
       tabindex="0"
@@ -80,37 +87,39 @@
         }
       }}
     >
-      <Checkbox
-        id="require-all-tags"
-        checked={tagFilterState.requireAllTags}
-        onCheckedChange={handleRequireAllChange}
-        {disabled}
-        class="mt-0.5"
-      />
-      <div class="flex-1 space-y-1">
-        <label
-          for="require-all-tags"
-          class="text-sm font-medium text-slate-700 dark:text-slate-300 cursor-pointer select-none"
+      <div class="flex items-start gap-3">
+        <Checkbox
+          id="require-all-tags"
+          checked={tagFilterState.requireAllTags}
+          onCheckedChange={handleRequireAllChange}
+          {disabled}
+          class="mt-0.5"
+        />
+        <div class="flex-1 space-y-1">
+          <label
+            for="require-all-tags"
+            class="text-sm font-medium text-foreground cursor-pointer select-none"
+          >
+            Match all selected tags
+          </label>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            {requireAllDescription}
+          </p>
+        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onclick={(e) => {
+            e.stopPropagation();
+            handleClear();
+          }}
+          class="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
+          {disabled}
         >
-          Match all selected tags
-        </label>
-        <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-          {requireAllDescription}
-        </p>
+          <Icon icon="heroicons:x-mark" class="w-4 h-4" />
+          <span class="sr-only">Clear filters</span>
+        </Button>
       </div>
-      <Button
-        variant="ghost"
-        size="sm"
-        onclick={(e) => {
-          e.stopPropagation();
-          handleClear();
-        }}
-        class="h-8 w-8 p-0 text-slate-400 hover:text-red-600 dark:hover:text-red-400"
-        {disabled}
-      >
-        <Icon icon="heroicons:x-mark" class="w-4 h-4" />
-        <span class="sr-only">Clear filters</span>
-      </Button>
     </div>
   {/if}
 </div>

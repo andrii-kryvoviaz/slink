@@ -208,7 +208,7 @@
             {#each selectedTags as tag (tag.id)}
               <TagBadge
                 {tag}
-                {variant}
+                variant="neon"
                 showFullPath={true}
                 showCount={false}
                 onClose={() => removeTag(tag.id)}
