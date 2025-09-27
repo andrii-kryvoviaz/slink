@@ -141,4 +141,5 @@ export const themeIcons: string[] = [
   'lucide:layers',
   'lucide:hash',
   'lucide:info',
+  'heroicons:x-mark-20-solid',
 ];

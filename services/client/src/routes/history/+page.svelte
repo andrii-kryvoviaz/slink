@@ -141,6 +141,7 @@
         onFilterChange={handleTagFilterChange}
         onClearFilter={handleClearTagFilter}
         disabled={historyFeedState.isLoading}
+        variant="neon"
       />
     </div>
 

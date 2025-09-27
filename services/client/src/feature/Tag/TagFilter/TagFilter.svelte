@@ -1,9 +1,9 @@
 <script lang="ts">
   import { TagSelector } from '@slink/feature/Tag';
-  import { Button } from '@slink/ui/components/button';
   import { Checkbox } from '@slink/ui/components/checkbox';
 
   import Icon from '@iconify/svelte';
+  import { slide } from 'svelte/transition';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
 
@@ -11,7 +11,13 @@
 
   import {
     type TagFilterContainerVariants,
+    tagFilterCheckboxVariants,
+    tagFilterClearButtonVariants,
     tagFilterContainerVariants,
+    tagFilterContentVariants,
+    tagFilterDescriptionVariants,
+    tagFilterLabelVariants,
+    tagFilterTextVariants,
   } from './TagFilter.theme';
 
   interface Props extends TagFilterContainerVariants {
@@ -21,6 +27,7 @@
     onClearFilter?: () => void;
     disabled?: boolean;
     variant?: 'default' | 'neon' | 'minimal';
+    compact?: boolean;
   }
 
   let {
@@ -29,7 +36,8 @@
     onFilterChange,
     onClearFilter,
     disabled = false,
-    variant = 'default',
+    variant = 'neon',
+    compact = false,
   }: Props = $props();
 
   const tagFilterState = useTagFilterState();
@@ -57,11 +65,20 @@
     onClearFilter?.();
   };
 
-  const requireAllDescription = $derived.by(() =>
-    tagFilterState.requireAllTags
-      ? 'Show items that include every selected tag'
-      : 'Show items that include at least one of the selected tags',
+  const matchModeLabel = $derived.by(() =>
+    tagFilterState.requireAllTags ? 'Match all tags' : 'Match any tag',
   );
+
+  const matchModeDescription = $derived.by(() =>
+    tagFilterState.requireAllTags
+      ? 'Items must have every selected tag'
+      : 'Items need at least one selected tag',
+  );
+
+  const selectedTagsCount = $derived(tagFilterState.selectedTags.length);
+  const hasSelectedTags = $derived(selectedTagsCount > 0);
+
+  const containerSize = $derived(compact ? 'sm' : 'md');
 </script>
 
 <div class="flex flex-col gap-4">
@@ -74,51 +91,92 @@
     {disabled}
   />
 
-  {#if tagFilterState.selectedTags.length > 0}
+  {#if hasSelectedTags}
     <div
-      class={tagFilterContainerVariants({ variant, disabled })}
-      onclick={() => handleRequireAllChange(!tagFilterState.requireAllTags)}
-      role="button"
-      tabindex="0"
-      onkeydown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          handleRequireAllChange(!tagFilterState.requireAllTags);
-        }
-      }}
+      class="space-y-3"
+      in:slide={{ duration: 300, axis: 'y' }}
+      out:slide={{ duration: 200, axis: 'y' }}
     >
-      <div class="flex items-start gap-3">
-        <Checkbox
-          id="require-all-tags"
-          checked={tagFilterState.requireAllTags}
-          onCheckedChange={handleRequireAllChange}
-          {disabled}
-          class="mt-0.5"
-        />
-        <div class="flex-1 space-y-1">
-          <label
-            for="require-all-tags"
-            class="text-sm font-medium text-foreground cursor-pointer select-none"
-          >
-            Match all selected tags
-          </label>
-          <p class="text-xs text-muted-foreground leading-relaxed">
-            {requireAllDescription}
-          </p>
+      <!-- Filter Mode Toggle -->
+      <div
+        class={tagFilterContainerVariants({ variant, disabled })}
+        onclick={() =>
+          !disabled && handleRequireAllChange(!tagFilterState.requireAllTags)}
+        role="button"
+        tabindex={disabled ? -1 : 0}
+        onkeydown={(e) => {
+          if (!disabled && (e.key === 'Enter' || e.key === ' ')) {
+            e.preventDefault();
+            handleRequireAllChange(!tagFilterState.requireAllTags);
+          }
+        }}
+        aria-label={`Filter mode: ${matchModeLabel}. Click to toggle between match all and match any.`}
+      >
+        <div class={tagFilterContentVariants({ variant })}>
+          <div class={tagFilterCheckboxVariants({ variant })}>
+            <Checkbox
+              id="require-all-tags"
+              checked={tagFilterState.requireAllTags}
+              onCheckedChange={handleRequireAllChange}
+              {disabled}
+              aria-describedby={compact ? undefined : 'filter-mode-description'}
+            />
+          </div>
+
+          <div class={tagFilterTextVariants({ variant })}>
+            <label
+              for="require-all-tags"
+              class={tagFilterLabelVariants({ variant, size: containerSize })}
+            >
+              {matchModeLabel}
+              <span
+                class="inline-flex items-center ml-2 px-1.5 py-0.5 rounded-md text-[10px] font-medium transition-colors duration-200"
+                class:bg-slate-100={variant === 'default'}
+                class:dark:bg-slate-800={variant === 'default'}
+                class:bg-indigo-100={variant === 'neon'}
+                class:dark:bg-indigo-900={variant === 'neon'}
+                class:bg-slate-50={variant === 'minimal'}
+                class:dark:bg-slate-700={variant === 'minimal'}
+                class:text-slate-600={variant === 'default'}
+                class:dark:text-slate-400={variant === 'default'}
+                class:text-indigo-600={variant === 'neon'}
+                class:dark:text-indigo-400={variant === 'neon'}
+                class:text-slate-500={variant === 'minimal'}
+                class:dark:text-slate-500={variant === 'minimal'}
+              >
+                {selectedTagsCount}
+              </span>
+            </label>
+            {#if !compact}
+              <p
+                id="filter-mode-description"
+                class={tagFilterDescriptionVariants({
+                  variant,
+                  size: containerSize,
+                })}
+              >
+                {matchModeDescription}
+              </p>
+            {/if}
+          </div>
         </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          onclick={(e) => {
-            e.stopPropagation();
-            handleClear();
-          }}
-          class="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
+      </div>
+
+      <!-- Clear Filter Action -->
+      <div class="flex justify-end">
+        <button
+          type="button"
+          class={tagFilterClearButtonVariants({ variant, size: containerSize })}
+          onclick={handleClear}
           {disabled}
+          aria-label="Remove all selected tags"
+          title="Remove all tags"
         >
-          <Icon icon="heroicons:x-mark" class="w-4 h-4" />
-          <span class="sr-only">Clear filters</span>
-        </Button>
+          <Icon icon="heroicons:x-mark-20-solid" class="w-3.5 h-3.5" />
+          {#if !compact}
+            <span class="ml-2 text-xs font-medium">Clear</span>
+          {/if}
+        </button>
       </div>
     </div>
   {/if}
