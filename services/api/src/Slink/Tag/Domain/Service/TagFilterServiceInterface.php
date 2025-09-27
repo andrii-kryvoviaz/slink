@@ -8,7 +8,7 @@ use Slink\Image\Domain\Filter\TagFilterData;
 
 interface TagFilterServiceInterface {
   /**
-   * Create optimized TagFilterData with path-based descendant querying
+   * Create optimized TagFilterData using materialized paths for efficient descendant querying
    *
    * @param string[]|null $originalTagIds
    * @param bool $requireAllTags

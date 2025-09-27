@@ -34,10 +34,10 @@ final class TagRepository extends AbstractRepository implements TagRepositoryInt
    * @throws NotFoundException
    * @throws NonUniqueResultException
    */
-  public function oneById(string $id): TagView {
+  public function oneById(ID $id): TagView {
     $qb = $this->createQueryBuilder('t')
       ->where('t.uuid = :id')
-      ->setParameter('id', $id);
+      ->setParameter('id', $id->toString());
 
     $tag = $qb->getQuery()->getOneOrNullResult();
 

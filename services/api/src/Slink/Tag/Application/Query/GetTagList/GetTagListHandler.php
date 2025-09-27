@@ -14,13 +14,14 @@ use Slink\Tag\Domain\Repository\TagRepositoryInterface;
 final readonly class GetTagListHandler implements QueryHandlerInterface {
   public function __construct(
     private TagRepositoryInterface $tagRepository,
-  ) {}
+  ) {
+  }
 
   public function __invoke(GetTagListQuery $query, string $userId): Collection {
-    $userIdObject = ID::fromString($userId);
+    $userId = ID::fromString($userId);
 
     if ($query->getIds() !== null) {
-      $tagEntities = $this->tagRepository->findByIds($query->getIds(), $userIdObject);
+      $tagEntities = $this->tagRepository->findByIds($query->getIds(), $userId);
       $items = array_map(fn($tag) => Item::fromEntity($tag), $tagEntities);
 
       return new Collection(
@@ -35,7 +36,7 @@ final readonly class GetTagListHandler implements QueryHandlerInterface {
       limit: $query->getLimit(),
       orderBy: $query->getOrderBy(),
       order: $query->getOrder(),
-      userId: $userId,
+      userId: $userId->toString(),
       parentId: $query->getParentId(),
       searchTerm: $query->getSearchTerm(),
       rootOnly: $query->isRootOnly(),

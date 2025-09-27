@@ -101,25 +101,29 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
     $tagFilterData = $imageListFilter->getTagFilterData();
     if (!$tagFilterData || !$tagFilterData->hasTagFilters()) {
     } elseif ($tagFilterData->requireAllTags()) {
-      $tagGroupMap = $tagFilterData->getTagGroupMap();
-      foreach ($tagFilterData->getOriginalTagIds() as $index => $originalTagId) {
-        $descendantIds = $tagGroupMap[$originalTagId] ?? [$originalTagId];
-        
+      foreach ($tagFilterData->getTagPaths() as $index => $tagPath) {
         $qb->andWhere(
           $qb->expr()->exists(
             $this->_em->createQueryBuilder()
               ->select('1')
               ->from(TagView::class, "subTag{$index}")
-              ->where("subTag{$index}.uuid IN (:descendantTagIds{$index})")
+              ->where("subTag{$index}.path = :tagPath{$index} OR subTag{$index}.path LIKE :tagPathLike{$index}")
               ->andWhere("subTag{$index} MEMBER OF image.tags")
               ->getDQL()
           )
-        )->setParameter("descendantTagIds{$index}", $descendantIds);
+        )
+        ->setParameter("tagPath{$index}", $tagPath)
+        ->setParameter("tagPathLike{$index}", $tagPath . '/%');
       }
     } else {
-      $qb->join('image.tags', 'tags')
-        ->andWhere('tags.uuid IN (:expandedTagIds)')
-        ->setParameter('expandedTagIds', $tagFilterData->getExpandedTagIds());
+      $qb->join('image.tags', 'tags');
+      $pathConditions = [];
+      foreach ($tagFilterData->getTagPaths() as $index => $tagPath) {
+        $pathConditions[] = "tags.path = :tagPath{$index} OR tags.path LIKE :tagPathLike{$index}";
+        $qb->setParameter("tagPath{$index}", $tagPath)
+           ->setParameter("tagPathLike{$index}", $tagPath . '/%');
+      }
+      $qb->andWhere('(' . implode(' OR ', $pathConditions) . ')');
     }
 
     $qb->orderBy('image.' . $imageListFilter->getOrderBy(), $imageListFilter->getOrder());

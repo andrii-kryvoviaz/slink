@@ -9,8 +9,8 @@ use PHPUnit\Framework\TestCase;
 use Slink\Shared\Application\Http\Collection;
 use Slink\Shared\Application\Query\QueryBusInterface;
 use Slink\Tag\Application\Query\GetImageTags\GetImageTagsQuery;
-use Slink\Tag\Infrastructure\ReadModel\View\TagView;
 use Slink\User\Domain\Contracts\UserInterface;
+use Symfony\Component\Messenger\Envelope;
 use UI\Http\Rest\Controller\Tag\GetImageTagsController;
 use UI\Http\Rest\Response\ApiResponse;
 
@@ -26,7 +26,11 @@ final class GetImageTagsControllerTest extends TestCase {
 
     $queryBus->expects($this->once())
       ->method('ask')
-      ->with($this->isInstanceOf(GetImageTagsQuery::class))
+      ->with($this->callback(function (Envelope $envelope) {
+        $message = $envelope->getMessage();
+        return $message instanceof GetImageTagsQuery &&
+               $message->getImageId() === 'image-123';
+      }))
       ->willReturn($collection);
 
     $controller = new GetImageTagsController();
@@ -48,8 +52,10 @@ final class GetImageTagsControllerTest extends TestCase {
 
     $queryBus->expects($this->once())
       ->method('ask')
-      ->with($this->callback(function (GetImageTagsQuery $query) {
-        return $query->getImageId() === 'image-456';
+      ->with($this->callback(function (Envelope $envelope) {
+        $message = $envelope->getMessage();
+        return $message instanceof GetImageTagsQuery &&
+               $message->getImageId() === 'image-456';
       }))
       ->willReturn($collection);
 

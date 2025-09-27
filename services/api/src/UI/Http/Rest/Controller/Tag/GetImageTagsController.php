@@ -25,7 +25,9 @@ final readonly class GetImageTagsController {
   ): ApiResponse {
     $query = new GetImageTagsQuery($imageId);
     
-    $tags = $this->ask($query);
+    $tags = $this->ask($query->withContext([
+      'userId' => $user->getIdentifier()
+    ]));
 
     return ApiResponse::collection($tags);
   }

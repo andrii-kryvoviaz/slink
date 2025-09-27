@@ -50,7 +50,7 @@ final class TagProjection extends AbstractProjection {
     $tagView->setUser($user);
 
     if ($event->parentId) {
-      $parent = $this->tagRepository->oneById($event->parentId->toString());
+      $parent = $this->tagRepository->oneById($event->parentId);
       $tagView->setParent($parent);
     }
 
@@ -62,7 +62,7 @@ final class TagProjection extends AbstractProjection {
    * @throws NotFoundException
    */
   public function handleTagWasDeleted(TagWasDeleted $event): void {
-    $tagView = $this->tagRepository->oneById($event->id->toString());
+    $tagView = $this->tagRepository->oneById($event->id);
     $this->tagRepository->remove($tagView);
   }
 

@@ -24,18 +24,16 @@ final readonly class CreateTagHandler implements CommandHandlerInterface {
    * @throws DuplicateTagException
    */
   public function __invoke(CreateTagCommand $command, string $userId): ID {
-    $userIdObject = ID::fromString($userId);
+    $userId = ID::fromString($userId);
     $tagName = TagName::fromString($command->getName());
-    $parentId = $command->getParentId()
-      ? ID::fromString($command->getParentId())
-      : null;
+    $parentId = ID::fromUnknown($command->getParentId());
 
-    $this->duplicateSpecification->ensureUnique($tagName, $userIdObject, $parentId);
+    $this->duplicateSpecification->ensureUnique($tagName, $userId, $parentId);
 
     $parentPath = $this->resolveParentPath($parentId);
 
     $tagId = ID::generate();
-    $tag = Tag::create($tagId, $userIdObject, $tagName, $parentId, $parentPath);
+    $tag = Tag::create($tagId, $userId, $tagName, $parentId, $parentPath);
 
     $this->tagStore->store($tag);
 

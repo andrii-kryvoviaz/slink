@@ -57,7 +57,6 @@ abstract class AbstractRepository extends ServiceEntityRepository {
     $qb->setFirstResult($offset)
        ->setMaxResults($limit);
 
-    // When there are fetch-joins, Paginator with fetchJoinCollection=true avoids duplicates handling
     return new Paginator($qb, true);
   }
 }

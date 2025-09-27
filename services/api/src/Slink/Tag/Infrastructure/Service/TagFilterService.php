@@ -22,27 +22,17 @@ final readonly class TagFilterService implements TagFilterServiceInterface {
 
     $userIdObject = ID::fromString($userId);
     $allTags = $this->tagRepository->findByTagIds($originalTagIds, $userIdObject);
-    $expandedTagIds = array_map(fn($tag) => $tag->getUuid(), $allTags);
-
-    $tagGroupMap = [];
-    if ($requireAllTags) {
-      foreach ($originalTagIds as $originalTagId) {
-        try {
-          $tag = $this->tagRepository->oneById($originalTagId);
-          $descendants = $this->tagRepository->findDescendantsByPaths([$tag->getPath()], $userIdObject);
-          $descendantIds = array_map(fn($descendant) => $descendant->getUuid(), $descendants);
-          $tagGroupMap[$originalTagId] = array_merge([$originalTagId], $descendantIds);
-        } catch (\Exception $e) {
-          $tagGroupMap[$originalTagId] = [$originalTagId];
-        }
-      }
+    
+    if (empty($allTags)) {
+      return new TagFilterData();
     }
+    
+    $tagPaths = array_map(fn($tag) => $tag->getPath(), $allTags);
 
     return new TagFilterData(
       originalTagIds: $originalTagIds,
-      expandedTagIds: $expandedTagIds,
-      tagGroupMap: $tagGroupMap,
-      requireAllTags: $requireAllTags
+      requireAllTags: $requireAllTags,
+      tagPaths: $tagPaths
     );
   }
 }
