@@ -7,7 +7,7 @@ namespace Slink\Image\Infrastructure\ReadModel\Repository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Override;
-use Proxies\__CG__\Slink\Tag\Infrastructure\ReadModel\View\TagView;
+use Slink\Tag\Infrastructure\ReadModel\View\TagView;
 use Slink\Image\Domain\Filter\ImageListFilter;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
