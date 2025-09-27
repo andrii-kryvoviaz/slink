@@ -25,7 +25,7 @@
     {#if isNested}
       <HoverCard.Root openDelay={300} closeDelay={100}>
         <HoverCard.Trigger class="flex flex-wrap items-center gap-2 min-w-0">
-          <TagBadge {tag} />
+          <TagBadge {tag} showCount={false} />
         </HoverCard.Trigger>
 
         <HoverCard.Content side="top" align="start" class="w-80">
