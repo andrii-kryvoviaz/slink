@@ -28,8 +28,6 @@
 </script>
 
 <div class="space-y-6">
-  <UploadForm {disabled} {processing} {allowMultiple} {onchange} />
-
   {#if !disabled && isUserAuthenticated}
     <TagSelector
       {selectedTags}
@@ -39,4 +37,6 @@
       variant="neon"
     />
   {/if}
+
+  <UploadForm {disabled} {processing} {allowMultiple} {onchange} />
 </div>
