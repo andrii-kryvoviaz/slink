@@ -1,6 +1,7 @@
 <script lang="ts">
   import { CreateTagForm } from '@slink/feature/Tag/CreateTagForm';
   import { TagDataTable } from '@slink/feature/Tag/TagDataTable';
+  import { Button } from '@slink/ui/components/button';
   import { Dialog } from '@slink/ui/components/dialog';
   import { onMount } from 'svelte';
 
@@ -92,11 +93,16 @@
           Create and organize tags for your images
         </p>
       </div>
-      <!-- ToDO: Implement tags creation -->
-      <!-- <Button onclick={handleCreateTag} class="flex items-center gap-2">
+      <Button
+        variant="primary"
+        size="md"
+        rounded="lg"
+        onclick={() => (createModalOpen = true)}
+        class="flex items-center gap-2"
+      >
         <Icon icon="lucide:plus" class="h-4 w-4" />
         Create Tag
-      </Button> -->
+      </Button>
     </div>
 
     {#if tagFeed.loading && tagFeed.data.length === 0}
