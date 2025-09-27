@@ -95,7 +95,7 @@
       </div>
       <Button
         variant="primary"
-        size="md"
+        size="sm"
         rounded="lg"
         onclick={() => (createModalOpen = true)}
         class="flex items-center gap-2"

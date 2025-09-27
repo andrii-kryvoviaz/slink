@@ -1,11 +1,10 @@
 <script lang="ts">
+  import Badge from '@slink/feature/Text/Badge/Badge.svelte';
   import { Combobox } from '@slink/ui/components/combobox';
 
   import Icon from '@iconify/svelte';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
-
-  import { cn } from '@slink/utils/ui/index.js';
 
   import { TagDepthIndicator } from '../TagDepthIndicator';
 
@@ -14,6 +13,8 @@
     value?: string;
     placeholder?: string;
     onValueChange?: (value: string) => void;
+    onSearch?: (query: string) => void;
+    loading?: boolean;
     class?: string;
     disabled?: boolean;
     error?: string;
@@ -24,6 +25,8 @@
     value = $bindable(),
     placeholder = 'Search tags...',
     onValueChange,
+    onSearch,
+    loading = false,
     class: className,
     disabled = false,
     error,
@@ -42,8 +45,9 @@
   items={comboboxItems}
   bind:value
   {placeholder}
-  searchPlaceholder="Search tags..."
   {onValueChange}
+  {onSearch}
+  {loading}
   class={className}
   {disabled}
   {error}
@@ -53,32 +57,24 @@
 
 {#snippet itemRendererSnippet({
   item,
-  selected,
 }: {
   item: { value: string; label: string };
   selected: boolean;
 })}
   {#if item.value === ''}
-    <Icon
-      icon="lucide:check"
-      class={cn('mr-2 h-4 w-4', !selected && 'text-transparent')}
-    />
     <Icon icon="lucide:folder" class="mr-2 h-4 w-4" />
     <span>Root Level</span>
   {:else}
     {@const tag = tags.find((t) => t.id === item.value)}
     {#if tag}
-      <Icon
-        icon="lucide:check"
-        class={cn('mr-2 h-4 w-4', !selected && 'text-transparent')}
-      />
       <div class="flex items-center gap-2 min-w-0 flex-1">
         <TagDepthIndicator {tag} />
+        <span class="truncate">{item.label}</span>
       </div>
       {#if tag.imageCount > 0}
-        <span class="text-xs text-muted-foreground ml-auto">
-          ({tag.imageCount})
-        </span>
+        <Badge variant="blue" size="sm" class="ml-auto">
+          {tag.imageCount}
+        </Badge>
       {/if}
     {/if}
   {/if}
