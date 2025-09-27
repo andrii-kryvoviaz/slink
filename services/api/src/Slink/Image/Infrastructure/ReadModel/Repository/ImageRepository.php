@@ -7,6 +7,7 @@ namespace Slink\Image\Infrastructure\ReadModel\Repository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Override;
+use Proxies\__CG__\Slink\Tag\Infrastructure\ReadModel\View\TagView;
 use Slink\Image\Domain\Filter\ImageListFilter;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
@@ -104,10 +105,16 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
       foreach ($tagFilterData->getOriginalTagIds() as $index => $originalTagId) {
         $descendantIds = $tagGroupMap[$originalTagId] ?? [$originalTagId];
         
-        $alias = "tag{$index}";
-        $qb->join('image.tags', $alias)
-          ->andWhere("{$alias}.uuid IN (:descendantTagIds{$index})")
-          ->setParameter("descendantTagIds{$index}", $descendantIds);
+        $qb->andWhere(
+          $qb->expr()->exists(
+            $this->_em->createQueryBuilder()
+              ->select('1')
+              ->from(TagView::class, "subTag{$index}")
+              ->where("subTag{$index}.uuid IN (:descendantTagIds{$index})")
+              ->andWhere("subTag{$index} MEMBER OF image.tags")
+              ->getDQL()
+          )
+        )->setParameter("descendantTagIds{$index}", $descendantIds);
       }
     } else {
       $qb->join('image.tags', 'tags')
