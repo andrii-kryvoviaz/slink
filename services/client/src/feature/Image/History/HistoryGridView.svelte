@@ -3,7 +3,6 @@
   import { Masonry } from '@slink/feature/Layout';
   import { ImageTagList } from '@slink/feature/Tag';
   import { FormattedDate } from '@slink/feature/Text';
-  import { Button } from '@slink/ui/components/button';
 
   import { bytesToSize } from '$lib/utils/bytesConverter';
   import Icon from '@iconify/svelte';
@@ -57,17 +56,16 @@
 
       <div class="p-4">
         <div class="flex items-start justify-between gap-2 mb-3">
-          <Button
+          <a
             href={`/info/${item.id}`}
-            variant="link"
-            class="group/link !p-0 text-sm font-medium text-gray-900 transition-colors dark:text-gray-100 flex-1 min-w-0"
+            class="group/link inline-flex flex-1 min-w-0 items-center gap-1.5 text-sm font-semibold text-gray-900 transition-colors duration-200 dark:text-gray-100 hover:text-indigo-600 dark:hover:text-indigo-400"
           >
             <span class="truncate">{item.attributes.fileName}</span>
             <Icon
               icon="mynaui:external-link"
-              class="ml-1 h-3 w-3 opacity-50 transition-opacity group-hover/link:opacity-100 shrink-0"
+              class="h-3 w-3 shrink-0 opacity-60 transition-opacity duration-200 group-hover/link:opacity-100"
             />
-          </Button>
+          </a>
         </div>
 
         <div class="w-full mb-3">
