@@ -90,7 +90,7 @@
       <TagBadge
         {tag}
         {variant}
-        showFullPath={true}
+        showFullPath={false}
         showCount={showImageCount}
         onClose={removable ? () => handleRemoveTag(tag.id) : undefined}
       />

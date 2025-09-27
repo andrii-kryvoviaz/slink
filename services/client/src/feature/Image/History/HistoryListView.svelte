@@ -88,17 +88,6 @@
 
             {#if item.tags && item.tags.length > 0}
               <div class="mt-4">
-                <div class="flex items-center gap-2 mb-2">
-                  <Icon
-                    icon="ph:tag"
-                    class="h-4 w-4 text-gray-500 dark:text-gray-400"
-                  />
-                  <span
-                    class="text-xs font-medium text-gray-500 dark:text-gray-500"
-                  >
-                    Tags
-                  </span>
-                </div>
                 <ImageTagList
                   imageId={item.id}
                   variant="neon"
