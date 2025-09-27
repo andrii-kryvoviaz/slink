@@ -91,7 +91,7 @@
   };
 
   const selectTag = (tag: Tag, keepOpen = false) => {
-    if (selectedTags.find((t) => t.id === tag.id)) return;
+    if (disabled || selectedTags.find((t) => t.id === tag.id)) return;
 
     const newTags = [...selectedTags, tag];
     onTagsChange?.(newTags);
@@ -105,11 +105,13 @@
   };
 
   const removeTag = (tagId: string) => {
+    if (disabled) return;
     const newTags = selectedTags.filter((t) => t.id !== tagId);
     onTagsChange?.(newTags);
   };
 
   const startCreatingChild = (parentTag: Tag) => {
+    if (disabled) return;
     creatingChildFor = parentTag;
     childTagName = '';
     searchTerm = '';
@@ -125,6 +127,7 @@
   };
 
   const handleCreateTag = () => {
+    if (disabled) return;
     if (creatingChildFor && childTagName.trim()) {
       createTag(childTagName.trim(), creatingChildFor.id, availableTags);
     } else if (searchTerm.trim()) {
@@ -194,6 +197,7 @@
   };
 
   const handleContainerKeydown = (e: KeyboardEvent) => {
+    if (disabled) return;
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       inputRef?.focus();
@@ -205,6 +209,14 @@
       loadTags(searchTerm);
     }
     highlightedIndex = -1;
+  });
+
+  $effect(() => {
+    if (disabled) {
+      isOpen = false;
+      highlightedIndex = -1;
+      cancelChildCreation();
+    }
   });
 
   $effect(() => {
@@ -225,97 +237,97 @@
 </script>
 
 <div class="space-y-3">
-  {#if !disabled}
-    <div class="relative">
-      <div
-        class={tagSelectorContainerVariants({ variant, disabled })}
-        role="combobox"
-        aria-expanded={isOpen}
-        aria-controls="tag-dropdown"
-        tabindex="0"
-        onkeydown={handleContainerKeydown}
-        onclick={handleContainerClick}
-      >
-        <div class="flex items-center gap-3 relative z-10">
-          <div class="flex-shrink-0">
-            <div class={tagSelectorIconContainerVariants({ variant })}>
-              {#if shouldShowLoader}
-                <Icon
-                  icon="ph:spinner"
-                  class={`${tagSelectorIconVariants({ variant })} animate-spin`}
-                />
-              {:else}
-                <Icon
-                  icon="ph:tag"
-                  class={tagSelectorIconVariants({ variant })}
-                />
-              {/if}
-            </div>
+  <div class="relative">
+    <div
+      class={tagSelectorContainerVariants({ variant, disabled })}
+      role="combobox"
+      aria-expanded={!disabled && isOpen}
+      aria-controls="tag-dropdown"
+      aria-disabled={disabled}
+      tabindex={disabled ? -1 : 0}
+      onkeydown={handleContainerKeydown}
+      onclick={handleContainerClick}
+    >
+      <div class="flex items-center gap-3 relative z-10">
+        <div class="flex-shrink-0">
+          <div class={tagSelectorIconContainerVariants({ variant })}>
+            {#if shouldShowLoader}
+              <Icon
+                icon="ph:spinner"
+                class={`${tagSelectorIconVariants({ variant })} animate-spin`}
+              />
+            {:else}
+              <Icon
+                icon="ph:tag"
+                class={tagSelectorIconVariants({ variant })}
+              />
+            {/if}
           </div>
+        </div>
 
-          <div class="flex flex-wrap items-center gap-1.5 flex-1">
-            {#each selectedTags as tag (tag.id)}
-              <TagBadge
-                {tag}
-                variant="neon"
-                showFullPath={true}
-                showCount={false}
-                onClose={() => removeTag(tag.id)}
-              />
-            {/each}
+        <div class="flex flex-wrap items-center gap-1.5 flex-1">
+          {#each selectedTags as tag (tag.id)}
+            <TagBadge
+              {tag}
+              variant="neon"
+              showFullPath={true}
+              showCount={false}
+              onClose={() => removeTag(tag.id)}
+            />
+          {/each}
 
-            <div class="flex-1 min-w-[120px]">
-              <TagInput
-                bind:ref={inputRef}
-                bind:childRef={childInputRef}
-                bind:searchTerm
-                bind:childTagName
-                {variant}
-                placeholder={selectedTags.length === 0
-                  ? placeholder
-                  : 'Add more tags...'}
-                {creatingChildFor}
-                onSearchChange={(value) => (searchTerm = value)}
-                onEnter={handleEnter}
-                onEscape={() => {
+          <div class="flex-1 min-w-[120px]">
+            <TagInput
+              bind:ref={inputRef}
+              bind:childRef={childInputRef}
+              bind:searchTerm
+              bind:childTagName
+              {variant}
+              placeholder={selectedTags.length === 0
+                ? placeholder
+                : 'Add more tags...'}
+              {creatingChildFor}
+              onSearchChange={(value) => (searchTerm = value)}
+              onEnter={handleEnter}
+              onEscape={() => {
+                isOpen = false;
+                inputRef?.blur();
+              }}
+              onBackspace={handleBackspace}
+              onArrowDown={handleArrowDown}
+              onArrowUp={handleArrowUp}
+              onfocus={() => {
+                isOpen = true;
+              }}
+              onblur={() => {
+                setTimeout(() => {
                   isOpen = false;
-                  inputRef?.blur();
-                }}
-                onBackspace={handleBackspace}
-                onArrowDown={handleArrowDown}
-                onArrowUp={handleArrowUp}
-                onfocus={() => {
-                  isOpen = true;
-                }}
-                onblur={() => {
-                  setTimeout(() => {
-                    isOpen = false;
-                    highlightedIndex = -1;
-                  }, 150);
-                }}
-                onCancelChild={cancelChildCreation}
-                onCreateChild={handleCreateTag}
-              />
-            </div>
+                  highlightedIndex = -1;
+                }, 150);
+              }}
+              onCancelChild={cancelChildCreation}
+              onCreateChild={handleCreateTag}
+              {disabled}
+            />
           </div>
         </div>
       </div>
-
-      <TagDropdownContent
-        {isOpen}
-        tags={filteredTags}
-        {searchTerm}
-        {creatingChildFor}
-        {childTagName}
-        isCreating={$isCreatingTag}
-        {canCreate}
-        {allowCreate}
-        {variant}
-        {highlightedIndex}
-        onSelectTag={selectTag}
-        onAddChild={startCreatingChild}
-        onCreateTag={handleCreateTag}
-      />
     </div>
-  {/if}
+
+    <TagDropdownContent
+      isOpen={!disabled && isOpen}
+      tags={filteredTags}
+      {searchTerm}
+      {creatingChildFor}
+      {childTagName}
+      isCreating={$isCreatingTag}
+      {canCreate}
+      {allowCreate}
+      {variant}
+      {highlightedIndex}
+      onSelectTag={selectTag}
+      onAddChild={startCreatingChild}
+      onCreateTag={handleCreateTag}
+    />
+  </div>
 </div>

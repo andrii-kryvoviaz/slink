@@ -97,7 +97,6 @@
       in:slide={{ duration: 300, axis: 'y' }}
       out:slide={{ duration: 200, axis: 'y' }}
     >
-      <!-- Filter Mode Toggle -->
       <div
         class={tagFilterContainerVariants({ variant, disabled })}
         onclick={() =>
@@ -162,7 +161,6 @@
         </div>
       </div>
 
-      <!-- Clear Filter Action -->
       <div class="flex justify-end">
         <button
           type="button"
