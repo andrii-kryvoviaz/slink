@@ -33,6 +33,13 @@ export const BadgeTheme = cva(
           'border-gray-500/20 bg-gray-500/10 text-gray-700 [a&]:hover:bg-gray-500/15 focus-visible:ring-gray-500/20 dark:border-gray-400/30 dark:bg-gray-400/10 dark:text-gray-300 dark:[a&]:hover:bg-gray-400/15',
         gradient:
           'border-0 bg-gradient-to-br from-blue-500 to-purple-600 text-white font-semibold [a&]:hover:from-blue-600 [a&]:hover:to-purple-700 focus-visible:ring-blue-500/20',
+        neon: [
+          'bg-gradient-to-r from-blue-500/10 to-purple-500/10 text-blue-600 dark:text-blue-400',
+          'border border-blue-500/20 dark:border-blue-400/30',
+          'hover:from-blue-500/15 hover:to-purple-500/15',
+          'focus-within:ring-2 focus-within:ring-blue-500/30 focus-within:ring-offset-2',
+          'transition-all duration-200 cursor-pointer',
+        ],
       },
       size: {
         xs: 'px-2 py-0.5 text-xs',
@@ -44,6 +51,12 @@ export const BadgeTheme = cva(
         true: 'bg-transparent border-2',
       },
     },
+    compoundVariants: [
+      {
+        variant: 'neon',
+        class: 'rounded-lg',
+      },
+    ],
     defaultVariants: {
       variant: 'default',
       size: 'md',

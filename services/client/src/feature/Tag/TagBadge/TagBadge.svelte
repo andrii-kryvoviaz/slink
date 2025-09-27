@@ -18,7 +18,7 @@
 
   let {
     tag,
-    variant = 'blue',
+    variant = 'neon',
     size = 'sm',
     outline = false,
     class: className = '',
