@@ -27,7 +27,7 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
 
   public constructor() {
     super({
-      defaultPageSize: 20,
+      defaultPageSize: 10,
       useCursor: false,
       appendMode: 'never',
     });

@@ -70,12 +70,10 @@
     debouncedSearch(term);
   }
 
-  const currentPage = $derived(tagFeed.meta?.page || 1);
-  const totalPages = $derived(
-    Math.ceil((tagFeed.meta?.total || 0) / (tagFeed.meta?.size || 20)),
-  );
+  const pageSize = $derived(tagFeed.meta.size);
+  const currentPage = $derived(tagFeed.meta.page);
   const totalItems = $derived(tagFeed.meta?.total || 0);
-  const pageSize = $derived(tagFeed.meta?.size || 20);
+  const totalPages = $derived(Math.ceil(totalItems / pageSize));
 </script>
 
 <svelte:head>
