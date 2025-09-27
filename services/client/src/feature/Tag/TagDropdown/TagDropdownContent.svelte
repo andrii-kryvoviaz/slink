@@ -20,6 +20,8 @@
     childTagName: string;
     isCreating: boolean;
     canCreate: boolean;
+    allowCreate?: boolean;
+    highlightedIndex?: number;
     onSelectTag: (tag: Tag) => void;
     onAddChild: (tag: Tag) => void;
     onCreateTag: () => void;
@@ -34,6 +36,8 @@
     childTagName,
     isCreating,
     canCreate,
+    allowCreate = true,
+    highlightedIndex = -1,
     onSelectTag,
     onAddChild,
     onCreateTag,
@@ -53,27 +57,47 @@
     out:fade={{ duration: 150 }}
   >
     <div class="max-h-60 overflow-y-auto py-1">
-      <TagCreationButton
-        {searchTerm}
-        {creatingChildFor}
-        {childTagName}
-        {isCreating}
-        {onCreateTag}
-        {canCreate}
-      />
+      {#if canCreate && !creatingChildFor}
+        <TagCreationButton
+          {searchTerm}
+          {creatingChildFor}
+          {childTagName}
+          {isCreating}
+          {onCreateTag}
+          {canCreate}
+          {variant}
+          highlighted={highlightedIndex === 0}
+        />
+      {/if}
+
+      {#if creatingChildFor && childTagName.trim()}
+        <TagCreationButton
+          {searchTerm}
+          {creatingChildFor}
+          {childTagName}
+          {isCreating}
+          {onCreateTag}
+          {canCreate}
+          {variant}
+          highlighted={false}
+        />
+      {/if}
 
       {#if ((creatingChildFor && childTagName.trim()) || (canCreate && searchTerm.trim() && !creatingChildFor)) && tags.length > 0}
         <div class={tagDropdownDividerVariants({ variant })}></div>
       {/if}
 
       {#if !creatingChildFor}
-        {#each tags as tag (tag.id)}
+        {#each tags as tag, index (tag.id)}
+          {@const itemIndex =
+            canCreate && searchTerm.trim() ? index + 1 : index}
           <TagListItem
             {tag}
             onSelect={onSelectTag}
             {onAddChild}
             {variant}
-            allowCreate={canCreate}
+            {allowCreate}
+            highlighted={highlightedIndex === itemIndex}
           />
         {/each}
       {/if}

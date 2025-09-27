@@ -34,9 +34,34 @@ export const tagListItemVariants = cva(
           'active:scale-[0.98]',
         ],
       },
+      highlighted: {
+        true: '',
+        false: '',
+      },
     },
+    compoundVariants: [
+      {
+        variant: 'default',
+        highlighted: true,
+        class:
+          'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100',
+      },
+      {
+        variant: 'neon',
+        highlighted: true,
+        class:
+          'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-900 dark:text-indigo-100',
+      },
+      {
+        variant: 'minimal',
+        highlighted: true,
+        class:
+          'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100',
+      },
+    ],
     defaultVariants: {
       variant: 'default',
+      highlighted: false,
     },
   },
 );

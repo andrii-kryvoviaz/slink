@@ -15,6 +15,8 @@
     onEnter?: () => void;
     onEscape?: () => void;
     onBackspace?: () => void;
+    onArrowDown?: () => void;
+    onArrowUp?: () => void;
     creatingChildFor?: Tag | null;
     childTagName?: string;
     onCancelChild?: () => void;
@@ -36,6 +38,8 @@
     onEnter,
     onEscape,
     onBackspace,
+    onArrowDown,
+    onArrowUp,
     creatingChildFor = null,
     childTagName = $bindable(),
     onCancelChild,
@@ -80,6 +84,12 @@
       } else if (onEscape) {
         onEscape();
       }
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      onArrowDown?.();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      onArrowUp?.();
     } else if (
       e.key === 'Backspace' &&
       !inputValue &&

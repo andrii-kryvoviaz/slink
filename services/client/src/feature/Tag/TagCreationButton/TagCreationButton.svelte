@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { Button } from '@slink/ui/components/button';
-
   import Icon from '@iconify/svelte';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
 
   import { getTagDisplayName } from '@slink/utils/tag';
+
+  import { tagCreationButtonVariants } from './TagCreationButton.theme';
 
   interface Props {
     searchTerm?: string;
@@ -14,6 +14,8 @@
     isCreating: boolean;
     onCreateTag: () => void;
     canCreate: boolean;
+    highlighted?: boolean;
+    variant?: 'default' | 'neon' | 'minimal';
   }
 
   let {
@@ -23,6 +25,8 @@
     isCreating,
     onCreateTag,
     canCreate,
+    highlighted = false,
+    variant = 'default',
   }: Props = $props();
 
   let shouldShow = $state(false);
@@ -49,18 +53,26 @@
 </script>
 
 {#if shouldShow}
-  <Button
-    variant="transparent"
-    size="sm"
-    class="w-full justify-start mx-1 my-0.5"
-    onclick={onCreateTag}
-    loading={isCreating}
+  <div
+    class={tagCreationButtonVariants({
+      variant,
+      creating: isCreating,
+      highlighted,
+    })}
   >
-    {#snippet leftIcon()}
-      <Icon icon="ph:plus" class="h-4 w-4" />
-    {/snippet}
-    <span class="truncate">
-      {buttonText}
-    </span>
-  </Button>
+    <button
+      class="w-full flex items-center gap-2"
+      onclick={onCreateTag}
+      disabled={isCreating}
+    >
+      {#if isCreating}
+        <Icon icon="ph:spinner" class="h-4 w-4 animate-spin" />
+      {:else}
+        <Icon icon="ph:plus" class="h-4 w-4" />
+      {/if}
+      <span class="truncate">
+        {buttonText}
+      </span>
+    </button>
+  </div>
 {/if}

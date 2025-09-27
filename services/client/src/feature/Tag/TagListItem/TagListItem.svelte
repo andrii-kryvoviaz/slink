@@ -18,6 +18,7 @@
     onSelect: (tag: Tag) => void;
     onAddChild: (tag: Tag) => void;
     allowCreate?: boolean;
+    highlighted?: boolean;
   }
 
   let {
@@ -26,6 +27,7 @@
     onAddChild,
     variant = 'default',
     allowCreate = true,
+    highlighted = false,
   }: Props = $props();
 
   const handleAddChild = (e: MouseEvent) => {
@@ -36,7 +38,7 @@
 
 <div class="flex items-center mx-1 my-0.5">
   <button
-    class={`group ${tagListItemVariants({ variant })}`}
+    class={`group ${tagListItemVariants({ variant, highlighted })}`}
     onclick={() => onSelect(tag)}
   >
     <Icon icon="ph:hash" class={tagListIconVariants({ variant })} />

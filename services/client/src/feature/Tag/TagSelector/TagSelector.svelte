@@ -39,6 +39,7 @@
   let childTagName = $state('');
   let inputRef = $state<HTMLInputElement>();
   let childInputRef = $state<HTMLInputElement>();
+  let highlightedIndex = $state(-1);
 
   const {
     loadTags,
@@ -74,11 +75,19 @@
     ),
   );
 
+  const visibleItemsCount = $derived(() => {
+    let count = 0;
+    if (canCreate && !creatingChildFor) count++;
+    if (!creatingChildFor) count += filteredTags.length;
+    return count;
+  });
+
   const resetDropdownState = () => {
     searchTerm = '';
     isOpen = false;
     creatingChildFor = null;
     childTagName = '';
+    highlightedIndex = -1;
   };
 
   const selectTag = (tag: Tag, keepOpen = false) => {
@@ -91,6 +100,7 @@
       resetDropdownState();
     } else {
       searchTerm = '';
+      highlightedIndex = -1;
     }
   };
 
@@ -122,15 +132,53 @@
     }
   };
 
-  const handleEnter = () => {
-    if (canCreate) {
+  const isCreateItemHighlighted = () => {
+    return canCreate && !creatingChildFor && highlightedIndex === 0;
+  };
+
+  const getHighlightedTag = () => {
+    const tagIndex =
+      canCreate && !creatingChildFor ? highlightedIndex - 1 : highlightedIndex;
+    return filteredTags[tagIndex];
+  };
+
+  const handleHighlightedSelection = () => {
+    if (isCreateItemHighlighted()) {
       handleCreateTag();
     } else {
-      const existingTag = filteredTags[0];
-      if (existingTag) {
-        selectTag(existingTag);
-      }
+      const tag = getHighlightedTag();
+      if (tag) selectTag(tag);
     }
+  };
+
+  const handleDefaultSelection = () => {
+    if (canCreate) {
+      handleCreateTag();
+    } else if (filteredTags[0]) {
+      selectTag(filteredTags[0]);
+    }
+  };
+
+  const handleEnter = () => {
+    if (highlightedIndex >= 0) {
+      handleHighlightedSelection();
+    } else {
+      handleDefaultSelection();
+    }
+  };
+
+  const handleArrowDown = () => {
+    if (!isOpen) return;
+    const maxIndex = visibleItemsCount() - 1;
+    if (maxIndex < 0) return;
+    highlightedIndex = highlightedIndex < maxIndex ? highlightedIndex + 1 : 0;
+  };
+
+  const handleArrowUp = () => {
+    if (!isOpen) return;
+    const maxIndex = visibleItemsCount() - 1;
+    if (maxIndex < 0) return;
+    highlightedIndex = highlightedIndex > 0 ? highlightedIndex - 1 : maxIndex;
   };
 
   const handleBackspace = () => {
@@ -156,6 +204,7 @@
     if (searchTerm?.trim()) {
       loadTags(searchTerm);
     }
+    highlightedIndex = -1;
   });
 
   $effect(() => {
@@ -233,12 +282,15 @@
                   inputRef?.blur();
                 }}
                 onBackspace={handleBackspace}
+                onArrowDown={handleArrowDown}
+                onArrowUp={handleArrowUp}
                 onfocus={() => {
                   isOpen = true;
                 }}
                 onblur={() => {
                   setTimeout(() => {
                     isOpen = false;
+                    highlightedIndex = -1;
                   }, 150);
                 }}
                 onCancelChild={cancelChildCreation}
@@ -257,7 +309,9 @@
         {childTagName}
         isCreating={$isCreatingTag}
         {canCreate}
+        {allowCreate}
         {variant}
+        {highlightedIndex}
         onSelectTag={selectTag}
         onAddChild={startCreatingChild}
         onCreateTag={handleCreateTag}
