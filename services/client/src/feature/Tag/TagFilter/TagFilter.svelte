@@ -2,10 +2,12 @@
   import { TagSelector } from '@slink/feature/Tag';
   import {
     type TagFilterContainerVariants,
+    tagFilterCheckboxInputVariants,
     tagFilterCheckboxVariants,
     tagFilterClearButtonVariants,
     tagFilterContainerVariants,
     tagFilterContentVariants,
+    tagFilterCountBadgeVariants,
     tagFilterDescriptionVariants,
     tagFilterLabelVariants,
     tagFilterTextVariants,
@@ -118,6 +120,7 @@
               onCheckedChange={handleRequireAllChange}
               {disabled}
               aria-describedby={compact ? undefined : 'filter-mode-description'}
+              class={tagFilterCheckboxInputVariants({ variant })}
             />
           </div>
 
@@ -127,21 +130,7 @@
               class={tagFilterLabelVariants({ variant, size: containerSize })}
             >
               {matchModeLabel}
-              <span
-                class="inline-flex items-center ml-2 px-1.5 py-0.5 rounded-md text-[10px] font-medium transition-colors duration-200"
-                class:bg-slate-100={variant === 'default'}
-                class:dark:bg-slate-800={variant === 'default'}
-                class:bg-indigo-100={variant === 'neon'}
-                class:dark:bg-indigo-900={variant === 'neon'}
-                class:bg-slate-50={variant === 'minimal'}
-                class:dark:bg-slate-700={variant === 'minimal'}
-                class:text-slate-600={variant === 'default'}
-                class:dark:text-slate-400={variant === 'default'}
-                class:text-indigo-600={variant === 'neon'}
-                class:dark:text-indigo-400={variant === 'neon'}
-                class:text-slate-500={variant === 'minimal'}
-                class:dark:text-slate-500={variant === 'minimal'}
-              >
+              <span class={tagFilterCountBadgeVariants({ variant })}>
                 {selectedTagsCount}
               </span>
             </label>
