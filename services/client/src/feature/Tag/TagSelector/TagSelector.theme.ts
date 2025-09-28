@@ -7,27 +7,26 @@ export const tagSelectorContainerVariants = cva(
     variants: {
       variant: {
         default: [
-          'border-border bg-background dark:bg-input/30',
-          'border shadow-xs',
-          'ring-offset-background',
-          'transition-[color,box-shadow]',
-          'focus-within:border-ring',
-          'focus-within:ring-ring/50 focus-within:ring-[3px]',
+          'bg-blue-500/10 dark:bg-blue-400/10 text-blue-600 dark:text-blue-400',
+          'border border-blue-500/20 dark:border-blue-400/30',
+          'shadow-xs',
+          'transition-all duration-200',
+          'hover:bg-blue-500/15 dark:hover:bg-blue-400/15',
+          'hover:border-blue-500/30 dark:hover:border-blue-400/40',
+          'focus-within:bg-blue-500/15 dark:focus-within:bg-blue-400/15',
+          'focus-within:border-blue-500/40 dark:focus-within:border-blue-400/50',
+          'focus-within:ring-2 focus-within:ring-indigo-500/20 dark:focus-within:ring-indigo-400/30',
         ],
         neon: [
-          'relative overflow-hidden',
-          'bg-white dark:bg-slate-900',
-          'border border-slate-200/60 dark:border-slate-700/60',
-          'shadow-[0_0_12px_rgba(99,102,241,0.06)] dark:shadow-[0_0_12px_rgba(99,102,241,0.1)]',
-          'backdrop-blur-sm',
-          'transition-all duration-300',
-          'hover:border-indigo-300/70 dark:hover:border-indigo-600/70',
-          'hover:shadow-[0_0_16px_rgba(99,102,241,0.15)] dark:hover:shadow-[0_0_16px_rgba(99,102,241,0.25)]',
-          'hover:bg-indigo-50/50 dark:hover:bg-indigo-900/20',
-          'focus-within:border-indigo-400/70 dark:focus-within:border-indigo-500/70',
-          'focus-within:bg-indigo-50/30 dark:focus-within:bg-indigo-900/30',
-          'focus-within:shadow-[0_0_20px_rgba(99,102,241,0.2)] dark:focus-within:shadow-[0_0_20px_rgba(99,102,241,0.3)]',
-          'focus-within:ring-1 focus-within:ring-indigo-300/30 dark:focus-within:ring-indigo-600/30',
+          'bg-blue-500/10 dark:bg-blue-400/10 text-blue-600 dark:text-blue-400',
+          'border border-blue-500/20 dark:border-blue-400/30',
+          'shadow-xs',
+          'transition-all duration-200',
+          'hover:bg-blue-500/15 dark:hover:bg-blue-400/15',
+          'hover:border-blue-500/30 dark:hover:border-blue-400/40',
+          'focus-within:bg-blue-500/15 dark:focus-within:bg-blue-400/15',
+          'focus-within:border-blue-500/40 dark:focus-within:border-blue-400/50',
+          'focus-within:ring-2 focus-within:ring-indigo-500/20 dark:focus-within:ring-indigo-400/30',
         ],
         minimal: [
           'bg-gradient-to-br from-white/80 via-white/60 to-slate-50/40 dark:from-slate-900/80 dark:via-slate-800/60 dark:to-slate-900/40',
@@ -52,17 +51,21 @@ export const tagSelectorContainerVariants = cva(
 );
 
 export const tagSelectorIconContainerVariants = cva(
-  'w-8 h-8 rounded-md flex items-center justify-center transition-all duration-200',
+  'w-8 h-8 rounded-md flex items-center justify-center transition-all duration-200 group',
   {
     variants: {
       variant: {
-        default: ['text-muted-foreground'],
+        default: [
+          'text-blue-600 dark:text-blue-400',
+          'hover:bg-blue-500/20 dark:hover:bg-blue-400/20',
+          'hover:text-blue-700 dark:hover:text-blue-300',
+          'rounded-md',
+        ],
         neon: [
-          'bg-indigo-100/50 dark:bg-indigo-900/30',
-          'border border-indigo-200/50 dark:border-purple-300/30',
-          'transition-all duration-300',
-          'hover:bg-indigo-200/60 dark:hover:bg-indigo-800/40',
-          'hover:border-indigo-300/60 dark:hover:border-purple-400/40',
+          'text-blue-600 dark:text-blue-400',
+          'hover:bg-blue-500/20 dark:hover:bg-blue-400/20',
+          'hover:text-blue-700 dark:hover:text-blue-300',
+          'rounded-md',
         ],
         minimal: [
           'bg-slate-50 dark:bg-slate-800',
@@ -84,8 +87,9 @@ export const tagSelectorIconVariants = cva(
   {
     variants: {
       variant: {
-        default: 'text-muted-foreground',
-        neon: 'text-indigo-600 dark:text-purple-400',
+        default:
+          'text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors',
+        neon: 'text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors',
         minimal: 'text-muted-foreground',
       },
     },
