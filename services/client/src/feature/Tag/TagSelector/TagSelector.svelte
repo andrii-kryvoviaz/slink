@@ -41,6 +41,9 @@
   let childInputRef = $state<HTMLInputElement>();
   let highlightedIndex = $state(-1);
 
+  const hasSelectedTags = $derived(selectedTags.length > 0);
+  const selectedTagIds = $derived(new Set(selectedTags.map((tag) => tag.id)));
+
   const {
     loadTags,
     isLoadingTags,
@@ -60,7 +63,7 @@
   const filteredTags = $derived(
     availableTags.filter(
       (tag: Tag) =>
-        !selectedTags.find((t) => t.id === tag.id) &&
+        !selectedTagIds.has(tag.id) &&
         tag.name.toLowerCase().includes(searchTerm.toLowerCase()),
     ),
   );
@@ -91,7 +94,7 @@
   };
 
   const selectTag = (tag: Tag, keepOpen = false) => {
-    if (disabled || selectedTags.find((t) => t.id === tag.id)) return;
+    if (disabled || selectedTagIds.has(tag.id)) return;
 
     const newTags = [...selectedTags, tag];
     onTagsChange?.(newTags);
@@ -227,7 +230,7 @@
   });
 
   $effect(() => {
-    if ($createdTag && !selectedTags.find((t) => t.id === $createdTag.id)) {
+    if ($createdTag && !selectedTagIds.has($createdTag.id)) {
       selectTag($createdTag, true);
 
       cancelChildCreation();
@@ -283,9 +286,7 @@
               bind:searchTerm
               bind:childTagName
               {variant}
-              placeholder={selectedTags.length === 0
-                ? placeholder
-                : 'Add more tags...'}
+              placeholder={hasSelectedTags ? 'Add more tags...' : placeholder}
               {creatingChildFor}
               onSearchChange={(value) => (searchTerm = value)}
               onEnter={handleEnter}

@@ -8,6 +8,8 @@
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { Tag } from '@slink/api/Resources/TagResource';
 
+  import { useImageTagManagerState } from '@slink/lib/state/ImageTagManagerState.svelte';
+
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
 
   interface Props {
@@ -15,6 +17,9 @@
     variant?: 'default' | 'neon' | 'minimal';
     disabled?: boolean;
     initialTags?: Tag[];
+    on?: {
+      tagsUpdate?: (tags: Tag[]) => void;
+    };
   }
 
   let {
@@ -22,10 +27,10 @@
     variant = 'default',
     disabled = false,
     initialTags = [],
+    on,
   }: Props = $props();
 
-  let assignedTags = $state<Tag[]>(initialTags);
-  let isExpanded = $state(false);
+  const tagManagerState = useImageTagManagerState();
 
   const {
     isLoading: isLoadingTags,
@@ -54,41 +59,60 @@
   });
 
   const handleTagsChange = async (newTags: Tag[]) => {
-    const currentTagIds = new Set(assignedTags.map((tag) => tag.id));
-    const newTagIds = new Set(newTags.map((tag) => tag.id));
+    const update = tagManagerState.updateTagsOptimistic(newTags);
 
-    for (const tag of newTags) {
-      if (!currentTagIds.has(tag.id)) {
-        await assignTag(imageId, tag.id);
+    if (!update.hasChanges) {
+      return;
+    }
+
+    try {
+      const addPromises = update.tagsToAdd.map((tag: Tag) =>
+        assignTag(imageId, tag.id),
+      );
+      const removePromises = update.tagsToRemove.map((tag: Tag) =>
+        removeTag(imageId, tag.id),
+      );
+
+      await Promise.all([...addPromises, ...removePromises]);
+
+      if ($assignTagError || $removeTagError) {
+        update.rollback();
 
         if ($assignTagError) {
           printErrorsAsToastMessage($assignTagError);
-          return;
         }
-
-        assignedTags = [...assignedTags, tag];
-      }
-    }
-
-    for (const tag of assignedTags) {
-      if (!newTagIds.has(tag.id)) {
-        await removeTag(imageId, tag.id);
-
         if ($removeTagError) {
           printErrorsAsToastMessage($removeTagError);
-          return;
         }
+      } else {
+        on?.tagsUpdate?.(newTags);
+      }
+    } catch (error) {
+      console.error('Error updating tags:', error);
+      update.rollback();
 
-        assignedTags = assignedTags.filter((t) => t.id !== tag.id);
+      if ($assignTagError) {
+        printErrorsAsToastMessage($assignTagError);
+      }
+      if ($removeTagError) {
+        printErrorsAsToastMessage($removeTagError);
       }
     }
   };
 
   const toggleExpanded = () => {
     if (!disabled) {
-      isExpanded = !isExpanded;
+      tagManagerState.toggleExpanded();
     }
   };
+
+  $effect(() => {
+    if (tagManagerState.imageId === imageId) {
+      return;
+    }
+
+    tagManagerState.initialize(imageId, initialTags);
+  });
 
   $effect(() => {
     if (imageId && initialTags.length === 0) {
@@ -104,7 +128,7 @@
 
   $effect(() => {
     if (!$isLoadingTags && $loadedImageTags) {
-      assignedTags = $loadedImageTags || [];
+      tagManagerState.setAssignedTags($loadedImageTags || []);
     }
   });
 
@@ -129,31 +153,31 @@
         disabled={isLoading}
       >
         <Icon
-          icon={isExpanded ? 'lucide:edit-2' : 'lucide:plus'}
+          icon={tagManagerState.isExpanded ? 'lucide:edit-2' : 'lucide:plus'}
           class="h-4 w-4"
         />
-        {isExpanded ? 'Done' : 'Edit'}
+        {tagManagerState.isExpanded ? 'Done' : 'Edit'}
       </button>
     {/if}
   </div>
 
   <div class="space-y-3">
-    {#if !isExpanded}
+    {#if !tagManagerState.isExpanded}
       <ImageTagList
         {imageId}
         {variant}
         removable={false}
         showImageCount={false}
-        initialTags={assignedTags}
+        initialTags={tagManagerState.assignedTags}
         onTagRemove={(tagId) => {
-          assignedTags = assignedTags.filter((tag) => tag.id !== tagId);
+          tagManagerState.removeTag(tagId);
         }}
       />
     {/if}
 
-    {#if isExpanded && !disabled}
+    {#if tagManagerState.isExpanded && !disabled}
       <TagSelector
-        selectedTags={assignedTags}
+        selectedTags={tagManagerState.assignedTags}
         onTagsChange={handleTagsChange}
         {variant}
         placeholder="Search or add tags..."

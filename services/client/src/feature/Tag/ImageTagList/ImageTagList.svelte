@@ -29,8 +29,6 @@
     disabled = false,
   }: Props = $props();
 
-  let tags = $state<Tag[]>(initialTags);
-
   const {
     isLoading: isLoadingTags,
     error: loadTagsError,
@@ -41,25 +39,15 @@
     return response.data;
   });
 
-  const {
-    isLoading: isRemovingTag,
-    error: removeTagError,
-    run: removeTag,
-  } = ReactiveState(async (imageId: string, tagId: string) => {
-    await ApiClient.tag.untagImage(imageId, tagId);
+  const tags = $derived.by(() => {
+    if ($loadedImageTags && initialTags.length === 0) {
+      return $loadedImageTags;
+    }
+    return initialTags;
   });
 
-  const handleRemoveTag = async (tagId: string) => {
+  const handleRemoveTag = (tagId: string) => {
     if (disabled || !removable) return;
-
-    await removeTag(imageId, tagId);
-
-    if ($removeTagError) {
-      printErrorsAsToastMessage($removeTagError);
-      return;
-    }
-
-    tags = tags.filter((tag) => tag.id !== tagId);
     onTagRemove?.(tagId);
   };
 
@@ -74,14 +62,6 @@
       printErrorsAsToastMessage($loadTagsError);
     }
   });
-
-  $effect(() => {
-    if (!$isLoadingTags && $loadedImageTags) {
-      tags = $loadedImageTags || [];
-    }
-  });
-
-  const isLoading = $derived($isLoadingTags || $isRemovingTag);
 </script>
 
 {#if tags.length > 0}
@@ -96,7 +76,7 @@
       />
     {/each}
   </div>
-{:else if !isLoading}
+{:else if !$isLoadingTags}
   <p class="text-sm text-gray-500 dark:text-gray-400">
     No tags assigned to this image.
   </p>

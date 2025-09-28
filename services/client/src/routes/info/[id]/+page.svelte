@@ -14,6 +14,9 @@
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
+  import type { Tag } from '@slink/api/Resources/TagResource';
+
+  import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
 
   import { cn } from '@slink/utils/ui';
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
@@ -26,6 +29,8 @@
 
   let { data }: Props = $props();
   let image = $state(data.image);
+
+  const historyFeedState = useUploadHistoryFeed();
 
   const formatImageUrl = (
     url: string | string[],
@@ -108,6 +113,12 @@
 
     image = { ...image, description };
   };
+
+  const handleTagsUpdate = (updatedTags: Tag[]) => {
+    historyFeedState.update(image.id, {
+      tags: updatedTags,
+    });
+  };
 </script>
 
 <svelte:head>
@@ -130,6 +141,9 @@
         imageId={image.id}
         variant="neon"
         initialTags={data.imageTags}
+        on={{
+          tagsUpdate: handleTagsUpdate,
+        }}
       />
 
       <div>
