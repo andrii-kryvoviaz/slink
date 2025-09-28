@@ -1,16 +1,16 @@
 <script lang="ts">
-  import { fade } from 'svelte/transition';
-
-  import type { Tag } from '@slink/api/Resources/TagResource';
-
-  import { TagCreationButton } from '../TagCreationButton';
-  import { TagListItem } from '../TagListItem';
   import {
+    TagCreationButton,
     type TagDropdownContentVariants,
+    TagListItem,
     tagDropdownContentVariants,
     tagDropdownDividerVariants,
     tagDropdownEmptyStateVariants,
-  } from './TagDropdownContent.theme';
+  } from '@slink/feature/Tag';
+
+  import { fade } from 'svelte/transition';
+
+  import type { Tag } from '@slink/api/Resources/TagResource';
 
   interface Props extends TagDropdownContentVariants {
     isOpen: boolean;

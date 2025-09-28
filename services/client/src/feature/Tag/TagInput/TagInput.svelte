@@ -1,11 +1,11 @@
 <script lang="ts">
+  import { type TagInputVariants, tagInputVariants } from '@slink/feature/Tag';
+
   import Icon from '@iconify/svelte';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
 
   import { getTagDisplayName } from '@slink/utils/tag';
-
-  import { type TagInputVariants, tagInputVariants } from './TagInput.theme';
 
   interface Props extends TagInputVariants {
     value?: string;

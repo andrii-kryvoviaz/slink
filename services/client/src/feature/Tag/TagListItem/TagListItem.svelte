@@ -1,17 +1,17 @@
 <script lang="ts">
-  import Icon from '@iconify/svelte';
-
-  import type { Tag } from '@slink/api/Resources/TagResource';
-
-  import { getTagDisplayName } from '@slink/utils/tag';
-
   import {
     type TagListItemVariants,
     tagListActionButtonVariants,
     tagListBadgeVariants,
     tagListIconVariants,
     tagListItemVariants,
-  } from './TagListItem.theme';
+  } from '@slink/feature/Tag';
+
+  import Icon from '@iconify/svelte';
+
+  import type { Tag } from '@slink/api/Resources/TagResource';
+
+  import { getTagDisplayName } from '@slink/utils/tag';
 
   interface Props extends TagListItemVariants {
     tag: Tag;

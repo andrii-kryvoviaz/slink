@@ -1,14 +1,5 @@
 <script lang="ts">
   import { TagSelector } from '@slink/feature/Tag';
-  import { Checkbox } from '@slink/ui/components/checkbox';
-
-  import Icon from '@iconify/svelte';
-  import { slide } from 'svelte/transition';
-
-  import type { Tag } from '@slink/api/Resources/TagResource';
-
-  import { useTagFilterState } from '@slink/lib/state/TagFilterState.svelte';
-
   import {
     type TagFilterContainerVariants,
     tagFilterCheckboxVariants,
@@ -18,7 +9,15 @@
     tagFilterDescriptionVariants,
     tagFilterLabelVariants,
     tagFilterTextVariants,
-  } from './TagFilter.theme';
+  } from '@slink/feature/Tag';
+  import { Checkbox } from '@slink/ui/components/checkbox';
+
+  import Icon from '@iconify/svelte';
+  import { slide } from 'svelte/transition';
+
+  import type { Tag } from '@slink/api/Resources/TagResource';
+
+  import { useTagFilterState } from '@slink/lib/state/TagFilterState.svelte';
 
   interface Props extends TagFilterContainerVariants {
     selectedTags?: Tag[];

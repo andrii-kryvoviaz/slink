@@ -1,4 +1,9 @@
 <script lang="ts">
+  import {
+    TagActionsCell,
+    TagCountCell,
+    TagNameCell,
+  } from '@slink/feature/Tag';
   import { Button } from '@slink/ui/components/button';
   import {
     FlexRender,
@@ -21,10 +26,6 @@
   import Icon from '@iconify/svelte';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
-
-  import TagActionsCell from './TagActionsCell.svelte';
-  import TagCountCell from './TagCountCell.svelte';
-  import TagNameCell from './TagNameCell.svelte';
 
   interface Props {
     tags: Tag[];

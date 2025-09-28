@@ -1,12 +1,5 @@
 <script lang="ts">
   import { Loader } from '@slink/feature/Layout';
-
-  import Icon from '@iconify/svelte';
-
-  import type { Tag } from '@slink/api/Resources/TagResource';
-
-  import { cn } from '@slink/utils/ui';
-
   import {
     createActionIconTheme,
     createActionTheme,
@@ -19,7 +12,13 @@
     tagIconTheme,
     tagItemTheme,
     tagTextTheme,
-  } from './TagDropdown.theme';
+  } from '@slink/feature/Tag';
+
+  import Icon from '@iconify/svelte';
+
+  import type { Tag } from '@slink/api/Resources/TagResource';
+
+  import { cn } from '@slink/utils/ui';
 
   interface Props {
     tags: Tag[];

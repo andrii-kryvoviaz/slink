@@ -1,12 +1,11 @@
 <script lang="ts">
+  import { TagDepthIndicator } from '@slink/feature/Tag';
   import Badge from '@slink/feature/Text/Badge/Badge.svelte';
   import { Combobox } from '@slink/ui/components/combobox';
 
   import Icon from '@iconify/svelte';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
-
-  import { TagDepthIndicator } from '../TagDepthIndicator';
 
   interface Props {
     tags: Tag[];

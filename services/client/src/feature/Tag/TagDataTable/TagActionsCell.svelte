@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { Tag } from '@slink/api/Resources/TagResource';
+  import { TagDeletePopover } from '@slink/feature/Tag';
 
-  import TagDeletePopover from '../TagDeleteConfirmation/TagDeletePopover.svelte';
+  import type { Tag } from '@slink/api/Resources/TagResource';
 
   interface Props {
     tag: Tag;

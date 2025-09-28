@@ -1,11 +1,11 @@
 <script lang="ts">
+  import { tagCreationButtonVariants } from '@slink/feature/Tag';
+
   import Icon from '@iconify/svelte';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
 
   import { getTagDisplayName } from '@slink/utils/tag';
-
-  import { tagCreationButtonVariants } from './TagCreationButton.theme';
 
   interface Props {
     searchTerm?: string;
