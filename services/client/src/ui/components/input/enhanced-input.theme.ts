@@ -9,9 +9,9 @@ export const inputVariants = cva(
         modern: '',
       },
       size: {
-        sm: 'h-8 px-2 text-sm',
-        md: 'h-9 px-3 text-sm',
-        lg: 'h-10 px-4 text-base',
+        sm: 'h-9 px-3 text-sm',
+        md: 'h-11 px-4 text-sm',
+        lg: 'h-12 px-5 text-base',
       },
 
       rounded: {
@@ -20,11 +20,11 @@ export const inputVariants = cva(
         lg: 'rounded-lg',
       },
       hasLeftIcon: {
-        true: 'pl-10',
+        true: 'pl-12',
         false: '',
       },
       hasRightIcon: {
-        true: 'pr-10',
+        true: 'pr-12',
         false: '',
       },
     },

@@ -33,9 +33,9 @@
   }: Props = $props();
 </script>
 
-<div class="space-y-2">
+<div class="space-y-3">
   {#if label}
-    <label for={id} class="block text-sm font-medium text-foreground">
+    <label for={id} class="block text-sm font-medium text-foreground mb-3">
       {label}
       {#if required}
         <span class="text-destructive ml-1">*</span>
@@ -46,7 +46,7 @@
   <div class="relative">
     {#if leftIcon}
       <div
-        class="absolute left-3 top-1/2 -translate-y-1/2 z-10 pointer-events-none"
+        class="absolute left-4 top-1/2 -translate-y-1/2 z-10 pointer-events-none"
       >
         {@render leftIcon()}
       </div>
@@ -60,7 +60,7 @@
       {name}
       {leftIcon}
       class={cn(
-        leftIcon && 'pl-10',
+        leftIcon && 'pl-12',
         error && 'border-destructive focus-visible:ring-destructive/20',
         classNameProp,
       )}
@@ -71,7 +71,10 @@
   </div>
 
   {#if error}
-    <p id={error ? `${id}-error` : undefined} class="text-sm text-destructive">
+    <p
+      id={error ? `${id}-error` : undefined}
+      class="text-sm text-destructive mt-2"
+    >
       {error}
     </p>
   {/if}

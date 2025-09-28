@@ -61,8 +61,8 @@
     </div>
   </div>
 
-  <form onsubmit={handleSubmit} class="space-y-5">
-    <div class="space-y-4">
+  <form onsubmit={handleSubmit} class="space-y-6">
+    <div class="space-y-5">
       <Input
         label="Tag Name"
         bind:value={formData.name}
@@ -78,10 +78,10 @@
         {/snippet}
       </Input>
 
-      <div class="space-y-2">
+      <div class="space-y-3">
         <label
           for="parent-tag"
-          class="text-sm font-medium text-slate-700 dark:text-slate-300"
+          class="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3 block"
         >
           Parent Tag (Optional)
         </label>

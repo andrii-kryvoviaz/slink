@@ -49,8 +49,8 @@
     </div>
   </div>
 
-  <form onsubmit={handleSubmit} class="space-y-5">
-    <div class="space-y-4">
+  <form onsubmit={handleSubmit} class="space-y-6">
+    <div class="space-y-5">
       <Input
         label="Key Name"
         bind:value={formData.name}

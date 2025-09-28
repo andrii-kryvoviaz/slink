@@ -107,11 +107,11 @@
         {placeholder}
         data-size={size}
         class={cn(
-          "border-border data-[placeholder]:text-muted-foreground [&_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 shadow-xs flex w-full select-none items-center justify-between gap-2 whitespace-nowrap rounded-md border bg-transparent px-3 py-2 pr-10 text-sm outline-none transition-[color,box-shadow] focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8",
+          "border-border data-[placeholder]:text-muted-foreground [&_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 shadow-xs flex w-full select-none items-center justify-between gap-2 whitespace-nowrap rounded-md border bg-transparent px-4 py-2.5 pr-12 text-sm outline-none transition-[color,box-shadow] focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-11 data-[size=sm]:h-9",
         )}
       />
       <div
-        class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1"
+        class="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1"
       >
         {#if selectedItem && clearable}
           <button

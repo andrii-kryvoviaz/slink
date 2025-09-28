@@ -98,12 +98,12 @@
   >
     <form
       bind:this={formElement}
-      class="space-y-4"
+      class="space-y-6"
       method="POST"
       use:enhance={withLoadingState(isLoading)}
       in:fade={{ duration: 400, delay: 200 }}
     >
-      <div class="space-y-3">
+      <div class="space-y-5">
         <div>
           <Input
             label="Email or Username"
@@ -156,7 +156,7 @@
       <Button
         variant={buttonVariant}
         size="md"
-        class="w-full mt-5"
+        class="w-full mt-6"
         type="submit"
         loading={$isLoading}
       >

@@ -53,7 +53,7 @@
 <div>
   <div class="flex items-center justify-between">
     {#if label}
-      <Label for={props.id} class="mb-2">
+      <Label for={props.id} class="mb-3">
         {label}
       </Label>
     {/if}
@@ -64,7 +64,7 @@
   <div class="relative">
     {#if leftIcon}
       <div
-        class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-muted-foreground"
+        class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-muted-foreground"
       >
         {@render leftIcon()}
       </div>
@@ -92,7 +92,7 @@
 
     {#if rightIcon}
       <div
-        class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground"
+        class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-muted-foreground"
       >
         {@render rightIcon()}
       </div>
@@ -101,7 +101,7 @@
     {@render children?.()}
   </div>
 
-  <div class="mt-1 text-xs text-input-error">
+  <div class="mt-2 text-xs text-input-error">
     {#if error && typeof error === 'string'}
       {error}
     {/if}

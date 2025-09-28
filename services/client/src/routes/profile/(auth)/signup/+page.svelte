@@ -70,12 +70,12 @@
     class="bg-white/50 dark:bg-gray-900/30 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/30 p-6 mb-6 shadow-sm"
   >
     <form
-      class="space-y-4"
+      class="space-y-6"
       method="POST"
       use:enhance={withLoadingState(isLoading)}
       in:fade={{ duration: 400, delay: 200 }}
     >
-      <div class="space-y-3">
+      <div class="space-y-5">
         <div>
           <Input
             label="Username"
@@ -120,7 +120,7 @@
           </Input>
         </div>
 
-        <div class="grid grid-cols-2 gap-3">
+        <div class="grid grid-cols-2 gap-4">
           <div>
             <Input
               label="Password"
@@ -168,7 +168,7 @@
       <Button
         variant={buttonVariant}
         size="md"
-        class="w-full mt-5"
+        class="w-full mt-6"
         type="submit"
         loading={$isLoading}
       >
