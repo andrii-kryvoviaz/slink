@@ -140,12 +140,10 @@
   }}
 />
 
-<div
-  class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 flex-grow"
->
+<div class="flex items-center justify-between gap-2 flex-grow">
   {#if !loading && totalItems && totalItems > 0}
-    <div class="text-xs sm:text-sm text-muted-foreground order-2 sm:order-1">
-      <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
+    <div class="text-xs sm:text-sm text-muted-foreground">
+      <div class="flex items-center gap-1 sm:gap-4">
         <span>
           {startItem}–{endItem} of {totalItems} items
         </span>
@@ -157,12 +155,10 @@
       </div>
     </div>
   {:else if loading || !totalItems || totalItems === 0}
-    <div class="hidden sm:block"></div>
+    <div></div>
   {/if}
 
-  <div
-    class="flex items-center justify-center sm:justify-end gap-1 order-1 sm:order-2"
-  >
+  <div class="flex items-center gap-1">
     <Button
       variant="ghost"
       size="sm"

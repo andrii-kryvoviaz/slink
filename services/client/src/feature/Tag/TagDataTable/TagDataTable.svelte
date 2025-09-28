@@ -11,7 +11,7 @@
     renderComponent,
   } from '@slink/ui/components/data-table';
   import * as DropdownMenu from '@slink/ui/components/dropdown-menu';
-  import { Input } from '@slink/ui/components/input';
+  import { BaseInput as Input } from '@slink/ui/components/input';
   import * as Table from '@slink/ui/components/table';
   import { TablePagination } from '@slink/ui/components/table-pagination';
   import {
@@ -58,7 +58,7 @@
       accessorKey: 'name',
       header: 'Name',
       meta: {
-        className: 'w-[300px]',
+        className: 'sm:w-[300px]',
       },
       cell: ({ row }) => {
         const tag = row.original;
@@ -181,145 +181,159 @@
 </script>
 
 <div class="w-full flex flex-col">
-  <div class="mb-4 flex items-center justify-between gap-4">
-    <div class="flex items-center gap-4">
-      <div class="flex-1 max-w-sm">
-        <Input
-          bind:value={searchTerm}
-          placeholder="Search tags..."
-          oninput={() => onSearchChange(searchTerm)}
-        >
-          {#snippet leftIcon()}
-            <Icon icon="lucide:search" class="h-4 w-4" />
-          {/snippet}
-        </Input>
+  <div
+    class="mb-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
+  >
+    <div class="flex-1 lg:max-w-md relative">
+      <div
+        class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-muted-foreground"
+      >
+        <Icon icon="lucide:search" class="h-4 w-4" />
       </div>
+      <Input
+        bind:value={searchTerm}
+        placeholder="Search tags..."
+        oninput={() => onSearchChange(searchTerm)}
+        class="h-9 pl-10 pr-3 text-sm"
+      />
     </div>
 
-    <div class="flex items-center gap-4">
-      <TablePagination
-        currentPageIndex={currentPage - 1}
-        {totalPages}
-        canPreviousPage={currentPage > 1}
-        canNextPage={currentPage < totalPages}
-        {totalItems}
-        {pageSize}
-        loading={isLoading}
-        {onPageChange}
-      />
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-end">
+      <div class="order-2 sm:order-1">
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            {#snippet child({ props })}
+              <Button
+                {...props}
+                variant="outline"
+                size="sm"
+                class="w-full sm:w-auto"
+              >
+                <Icon
+                  icon="heroicons:adjustments-horizontal"
+                  class="mr-2 size-4"
+                />
+                Columns
+                <Icon icon="heroicons:chevron-down" class="ml-2 size-4" />
+              </Button>
+            {/snippet}
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content align="end">
+            {#each table
+              .getAllColumns()
+              .filter((col) => col.getCanHide()) as column (column)}
+              <DropdownMenu.CheckboxItem
+                class="capitalize"
+                bind:checked={
+                  () => column.getIsVisible(),
+                  (v) => column.toggleVisibility(!!v)
+                }
+              >
+                {column.id}
+              </DropdownMenu.CheckboxItem>
+            {/each}
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
+      </div>
 
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger>
-          {#snippet child({ props })}
-            <Button {...props} variant="outline" size="sm">
-              <Icon
-                icon="heroicons:adjustments-horizontal"
-                class="mr-2 size-4"
-              />
-              Columns
-              <Icon icon="heroicons:chevron-down" class="ml-2 size-4" />
-            </Button>
-          {/snippet}
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Content align="end">
-          {#each table
-            .getAllColumns()
-            .filter((col) => col.getCanHide()) as column (column)}
-            <DropdownMenu.CheckboxItem
-              class="capitalize"
-              bind:checked={
-                () => column.getIsVisible(), (v) => column.toggleVisibility(!!v)
-              }
-            >
-              {column.id}
-            </DropdownMenu.CheckboxItem>
-          {/each}
-        </DropdownMenu.Content>
-      </DropdownMenu.Root>
+      <div class="order-1 sm:order-2">
+        <TablePagination
+          currentPageIndex={currentPage - 1}
+          {totalPages}
+          canPreviousPage={currentPage > 1}
+          canNextPage={currentPage < totalPages}
+          {totalItems}
+          {pageSize}
+          loading={isLoading}
+          {onPageChange}
+        />
+      </div>
     </div>
   </div>
 
-  <div class="flex-1">
-    <Table.Root>
-      <Table.Header>
-        {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
-          <Table.Row
-            class="border-slate-200 dark:border-slate-700 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-transparent"
-          >
-            {#each headerGroup.headers as header (header.id)}
-              <Table.Head
-                class="{(header.column.columnDef.meta as any)
-                  ?.className} bg-slate-100/50 dark:bg-slate-700/30 text-slate-700 dark:text-slate-300 font-semibold"
-              >
-                {#if !header.isPlaceholder}
-                  <FlexRender
-                    content={header.column.columnDef.header}
-                    context={header.getContext()}
-                  />
-                {/if}
-              </Table.Head>
-            {/each}
-          </Table.Row>
-        {/each}
-      </Table.Header>
-      <Table.Body>
-        {#if isLoading}
-          <Table.Row
-            class="border-slate-200 dark:border-slate-700 hover:bg-transparent"
-          >
-            <Table.Cell
-              colspan={columns.length}
-              class="h-24 text-center text-slate-500 dark:text-slate-400"
-            >
-              <div class="flex flex-col items-center gap-2">
-                <Icon
-                  icon="lucide:loader-2"
-                  class="h-8 w-8 text-slate-400 dark:text-slate-500 animate-spin"
-                />
-                <p>Loading tags...</p>
-              </div>
-            </Table.Cell>
-          </Table.Row>
-        {:else if table.getRowModel().rows.length > 0}
-          {#each table.getRowModel().rows as row (row.id)}
+  <div class="flex-1 overflow-hidden">
+    <div class="overflow-x-auto">
+      <Table.Root>
+        <Table.Header>
+          {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
             <Table.Row
-              class="border-slate-200 dark:border-slate-700 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-slate-100/70 dark:hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-slate-700/50 transition-all duration-300"
+              class="border-slate-200 dark:border-slate-700 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-transparent"
             >
-              {#each row.getVisibleCells() as cell (cell.id)}
-                <Table.Cell
-                  class="{(cell.column.columnDef.meta as any)
-                    ?.className} text-slate-700 dark:text-slate-300"
+              {#each headerGroup.headers as header (header.id)}
+                <Table.Head
+                  class="{(header.column.columnDef.meta as any)
+                    ?.className} bg-slate-100/50 dark:bg-slate-700/30 text-slate-700 dark:text-slate-300 font-semibold"
                 >
-                  <FlexRender
-                    content={cell.column.columnDef.cell}
-                    context={cell.getContext()}
-                  />
-                </Table.Cell>
+                  {#if !header.isPlaceholder}
+                    <FlexRender
+                      content={header.column.columnDef.header}
+                      context={header.getContext()}
+                    />
+                  {/if}
+                </Table.Head>
               {/each}
             </Table.Row>
           {/each}
-        {:else}
-          <Table.Row
-            class="border-slate-200 dark:border-slate-700 hover:bg-transparent"
-          >
-            <Table.Cell
-              colspan={columns.length}
-              class="h-24 text-center text-slate-500 dark:text-slate-400"
+        </Table.Header>
+        <Table.Body>
+          {#if isLoading}
+            <Table.Row
+              class="border-slate-200 dark:border-slate-700 hover:bg-transparent"
             >
-              <div class="flex flex-col items-center gap-2">
-                <Icon
-                  icon="lucide:tag"
-                  class="h-8 w-8 text-slate-300 dark:text-slate-600"
-                />
-                <p>No tags found</p>
-                {#if searchTerm}
-                  <p class="text-sm">Try adjusting your search term</p>
-                {/if}
-              </div>
-            </Table.Cell>
-          </Table.Row>
-        {/if}
-      </Table.Body>
-    </Table.Root>
+              <Table.Cell
+                colspan={columns.length}
+                class="h-24 text-center text-slate-500 dark:text-slate-400"
+              >
+                <div class="flex flex-col items-center gap-2">
+                  <Icon
+                    icon="lucide:loader-2"
+                    class="h-8 w-8 text-slate-400 dark:text-slate-500 animate-spin"
+                  />
+                  <p>Loading tags...</p>
+                </div>
+              </Table.Cell>
+            </Table.Row>
+          {:else if table.getRowModel().rows.length > 0}
+            {#each table.getRowModel().rows as row (row.id)}
+              <Table.Row
+                class="border-slate-200 dark:border-slate-700 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-slate-100/70 dark:hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-slate-700/50 transition-all duration-300"
+              >
+                {#each row.getVisibleCells() as cell (cell.id)}
+                  <Table.Cell
+                    class="{(cell.column.columnDef.meta as any)
+                      ?.className} text-slate-700 dark:text-slate-300"
+                  >
+                    <FlexRender
+                      content={cell.column.columnDef.cell}
+                      context={cell.getContext()}
+                    />
+                  </Table.Cell>
+                {/each}
+              </Table.Row>
+            {/each}
+          {:else}
+            <Table.Row
+              class="border-slate-200 dark:border-slate-700 hover:bg-transparent"
+            >
+              <Table.Cell
+                colspan={columns.length}
+                class="h-24 text-center text-slate-500 dark:text-slate-400"
+              >
+                <div class="flex flex-col items-center gap-2">
+                  <Icon
+                    icon="lucide:tag"
+                    class="h-8 w-8 text-slate-300 dark:text-slate-600"
+                  />
+                  <p>No tags found</p>
+                  {#if searchTerm}
+                    <p class="text-sm">Try adjusting your search term</p>
+                  {/if}
+                </div>
+              </Table.Cell>
+            </Table.Row>
+          {/if}
+        </Table.Body>
+      </Table.Root>
+    </div>
   </div>
 </div>

@@ -224,97 +224,113 @@
 </script>
 
 <div class="w-full flex flex-col" bind:this={tableContainer}>
-  <div class="mb-4 flex items-center justify-between gap-1">
-    <TablePagination
-      currentPageIndex={currentPage - 1}
-      {totalPages}
-      canPreviousPage={currentPage > 1}
-      canNextPage={currentPage < totalPages}
-      {totalItems}
-      {pageSize}
-      loading={isLoading}
-      {onPageChange}
-    />
-
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
-        {#snippet child({ props })}
-          <Button {...props} variant="outline" size="sm">
-            <Icon icon="heroicons:adjustments-horizontal" class="mr-2 size-4" />
-            Columns
-            <Icon icon="heroicons:chevron-down" class="ml-2 size-4" />
-          </Button>
-        {/snippet}
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Content align="end">
-        {#each table
-          .getAllColumns()
-          .filter((col) => col.getCanHide()) as column (column)}
-          <DropdownMenu.CheckboxItem
-            class="capitalize"
-            bind:checked={
-              () => column.getIsVisible(), (v) => column.toggleVisibility(!!v)
-            }
-          >
-            {column.id}
-          </DropdownMenu.CheckboxItem>
-        {/each}
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
-  </div>
   <div
-    class="bg-gradient-to-br from-slate-50 to-slate-100/50 dark:from-slate-800/50 dark:to-slate-700/30 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden flex-1"
+    class="mb-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
   >
-    <Table.Root class="bg-transparent">
-      <Table.Header>
-        {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
-          <Table.Row
-            class="border-slate-200 dark:border-slate-700 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-transparent"
-          >
-            {#each headerGroup.headers as header (header.id)}
-              <Table.Head
-                class="{(header.column.columnDef.meta as any)
-                  ?.className} bg-slate-100/50 dark:bg-slate-700/30 text-slate-700 dark:text-slate-300 font-semibold"
-              >
-                {#if !header.isPlaceholder}
-                  <FlexRender
-                    content={header.column.columnDef.header}
-                    context={header.getContext()}
-                  />
-                {/if}
-              </Table.Head>
-            {/each}
-          </Table.Row>
-        {/each}
-      </Table.Header>
-      <Table.Body>
-        {#each table.getRowModel().rows as row (row.id)}
-          <Table.Row
-            class="border-slate-200 dark:border-slate-700 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-slate-100/70 dark:hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-slate-700/50 transition-all duration-300"
-          >
-            {#each row.getVisibleCells() as cell (cell.id)}
-              <Table.Cell
-                class="{(cell.column.columnDef.meta as any)
-                  ?.className} text-slate-700 dark:text-slate-300"
-              >
-                <FlexRender
-                  content={cell.column.columnDef.cell}
-                  context={cell.getContext()}
-                />
-              </Table.Cell>
-            {/each}
-          </Table.Row>
-        {:else}
-          <Table.Row class="border-slate-200 dark:border-slate-700">
-            <Table.Cell
-              colspan={columns.length}
-              class="h-24 text-center text-slate-500 dark:text-slate-400"
+    <div class="order-2 lg:order-1">
+      <TablePagination
+        currentPageIndex={currentPage - 1}
+        {totalPages}
+        canPreviousPage={currentPage > 1}
+        canNextPage={currentPage < totalPages}
+        {totalItems}
+        {pageSize}
+        loading={isLoading}
+        {onPageChange}
+      />
+    </div>
+
+    <div class="order-1 lg:order-2">
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger>
+          {#snippet child({ props })}
+            <Button
+              {...props}
+              variant="outline"
+              size="sm"
+              class="w-full sm:w-auto"
             >
-              No results.
-            </Table.Cell>
-          </Table.Row>
-        {/each}
-      </Table.Body>
-    </Table.Root>
+              <Icon
+                icon="heroicons:adjustments-horizontal"
+                class="mr-2 size-4"
+              />
+              Columns
+              <Icon icon="heroicons:chevron-down" class="ml-2 size-4" />
+            </Button>
+          {/snippet}
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content align="end">
+          {#each table
+            .getAllColumns()
+            .filter((col) => col.getCanHide()) as column (column)}
+            <DropdownMenu.CheckboxItem
+              class="capitalize"
+              bind:checked={
+                () => column.getIsVisible(), (v) => column.toggleVisibility(!!v)
+              }
+            >
+              {column.id}
+            </DropdownMenu.CheckboxItem>
+          {/each}
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
+    </div>
+  </div>
+  <div class="overflow-hidden flex-1">
+    <div
+      class="bg-gradient-to-br from-slate-50 to-slate-100/50 dark:from-slate-800/50 dark:to-slate-700/30 rounded-xl border border-slate-200 dark:border-slate-700 overflow-x-auto"
+    >
+      <Table.Root class="bg-transparent">
+        <Table.Header>
+          {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
+            <Table.Row
+              class="border-slate-200 dark:border-slate-700 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-transparent"
+            >
+              {#each headerGroup.headers as header (header.id)}
+                <Table.Head
+                  class="{(header.column.columnDef.meta as any)
+                    ?.className} bg-slate-100/50 dark:bg-slate-700/30 text-slate-700 dark:text-slate-300 font-semibold"
+                >
+                  {#if !header.isPlaceholder}
+                    <FlexRender
+                      content={header.column.columnDef.header}
+                      context={header.getContext()}
+                    />
+                  {/if}
+                </Table.Head>
+              {/each}
+            </Table.Row>
+          {/each}
+        </Table.Header>
+        <Table.Body>
+          {#each table.getRowModel().rows as row (row.id)}
+            <Table.Row
+              class="border-slate-200 dark:border-slate-700 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-slate-100/70 dark:hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-slate-700/50 transition-all duration-300"
+            >
+              {#each row.getVisibleCells() as cell (cell.id)}
+                <Table.Cell
+                  class="{(cell.column.columnDef.meta as any)
+                    ?.className} text-slate-700 dark:text-slate-300"
+                >
+                  <FlexRender
+                    content={cell.column.columnDef.cell}
+                    context={cell.getContext()}
+                  />
+                </Table.Cell>
+              {/each}
+            </Table.Row>
+          {:else}
+            <Table.Row class="border-slate-200 dark:border-slate-700">
+              <Table.Cell
+                colspan={columns.length}
+                class="h-24 text-center text-slate-500 dark:text-slate-400"
+              >
+                No results.
+              </Table.Cell>
+            </Table.Row>
+          {/each}
+        </Table.Body>
+      </Table.Root>
+    </div>
   </div>
 </div>
