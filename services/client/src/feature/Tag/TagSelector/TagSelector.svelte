@@ -1,19 +1,18 @@
 <script lang="ts">
-  import { TagBadge } from '@slink/feature/Tag';
+  import {
+    TagBadge,
+    TagDropdownContent,
+    TagInput,
+    tagSelectorContainerVariants,
+    tagSelectorIconContainerVariants,
+    tagSelectorIconVariants,
+    useTagOperations,
+  } from '@slink/feature/Tag';
+  import type { TagSelectorContainerVariants } from '@slink/feature/Tag';
 
   import Icon from '@iconify/svelte';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
-
-  import TagDropdownContent from '../TagDropdown/TagDropdownContent.svelte';
-  import { TagInput } from '../TagInput';
-  import { useTagOperations } from '../useTagOperations.svelte';
-  import {
-    type TagSelectorContainerVariants,
-    tagSelectorContainerVariants,
-    tagSelectorIconContainerVariants,
-    tagSelectorIconVariants,
-  } from './TagSelector.theme';
 
   interface Props extends TagSelectorContainerVariants {
     selectedTags?: Tag[];

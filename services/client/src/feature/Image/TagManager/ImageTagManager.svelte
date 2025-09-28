@@ -87,8 +87,7 @@
       } else {
         on?.tagsUpdate?.(newTags);
       }
-    } catch (error) {
-      console.error('Error updating tags:', error);
+    } catch {
       update.rollback();
 
       if ($assignTagError) {
