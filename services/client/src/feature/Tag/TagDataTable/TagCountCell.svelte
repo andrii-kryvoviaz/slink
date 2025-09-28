@@ -16,18 +16,24 @@
 
   let { count, type, tag }: Props = $props();
 
-  const badgeVariant = type === 'images' ? 'blue' : 'emerald';
-  const isClickable = type === 'images' && count > 0 && tag;
+  const badgeVariant = $derived(type === 'images' ? 'blue' : 'emerald');
+  const isClickable = $derived(type === 'images' && count > 0 && tag);
 
   const handleClick = () => {
-    if (isClickable) {
-      const historyUrl = tagFilterUtils.buildHistoryUrl(tag);
-      goto(historyUrl);
+    if (!isClickable || !tag) {
+      return;
     }
+
+    const historyUrl = tagFilterUtils.buildHistoryUrl(tag);
+    goto(historyUrl);
   };
 
   const handleKeydown = (event: KeyboardEvent) => {
-    if ((event.key === 'Enter' || event.key === ' ') && isClickable) {
+    if (!isClickable) {
+      return;
+    }
+
+    if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       handleClick();
     }
@@ -35,24 +41,20 @@
 </script>
 
 {#if count > 0}
-  {#if isClickable}
-    <button
-      onclick={handleClick}
-      onkeydown={handleKeydown}
-      class="cursor-pointer transition-all duration-200 hover:scale-105"
-    >
-      <Badge variant={badgeVariant} size="sm">
-        <span class="flex items-center gap-1">
-          {count}
-          <Icon icon="lucide:arrow-right" class="h-3 w-3" />
-        </span>
-      </Badge>
-    </button>
-  {:else}
+  <button
+    onclick={handleClick}
+    onkeydown={handleKeydown}
+    class="cursor-pointer transition-all duration-200 hover:scale-105"
+  >
     <Badge variant={badgeVariant} size="sm">
-      {count}
+      <span class="flex items-center gap-1">
+        {count}
+        {#if isClickable}
+          <Icon icon="lucide:arrow-right" class="h-3 w-3" />
+        {/if}
+      </span>
     </Badge>
-  {/if}
+  </button>
 {:else}
   <Badge variant="neutral" size="sm">0</Badge>
 {/if}
