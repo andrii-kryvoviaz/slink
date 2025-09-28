@@ -3,7 +3,6 @@
   import { AppFooter } from '@slink/feature/Layout/Footer';
   import { Navbar } from '@slink/feature/Navigation';
   import AppSidebar from '@slink/feature/Navigation/Sidebar/AppSidebar.svelte';
-  import { Version } from '@slink/feature/Settings/Version';
   import { ScrollArea } from '@slink/ui/components/scroll-area/index.js';
   import { Separator } from '@slink/ui/components/separator/index.js';
   import * as Sidebar from '@slink/ui/components/sidebar/index.js';
@@ -99,15 +98,6 @@
         </ScrollArea>
 
         <AppFooter />
-
-        {#if !showSidebar}
-          <div class="absolute bottom-16 right-4 z-10">
-            <Version
-              showUpdateIndicator={true}
-              className="opacity-60 hover:opacity-100 transition-opacity"
-            />
-          </div>
-        {/if}
       </div>
     </Sidebar.Inset>
   </Sidebar.Provider>

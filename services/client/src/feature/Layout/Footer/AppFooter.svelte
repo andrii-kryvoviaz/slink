@@ -11,5 +11,8 @@
 <footer
   class={`flex items-center justify-end px-4 py-3 bg-transparent flex-shrink-0 ${className}`}
 >
-  <Version showUpdateIndicator={true} className="text-muted-foreground/80" />
+  <Version
+    showUpdateIndicator={true}
+    className="text-muted-foreground/80 opacity-60 hover:opacity-100"
+  />
 </footer>
