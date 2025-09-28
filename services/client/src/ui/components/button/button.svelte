@@ -40,6 +40,8 @@
         destructive:
           'bg-destructive shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
         ghost: 'hover:bg-gray-100 dark:hover:bg-gray-800',
+        transparent:
+          'bg-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 focus:text-slate-900 dark:focus:text-slate-100 focus:bg-slate-100/50 dark:focus:bg-slate-800/50 transition-all duration-200',
       },
       rounded: {
         none: 'rounded-none',
@@ -111,6 +113,7 @@
         destructive: 'bg-transparent text-white',
         ghost:
           'bg-transparent text-gray-900 hover:text-gray-900 dark:text-gray-100 dark:hover:text-gray-100',
+        transparent: 'bg-transparent',
       },
       size: {
         xs: 'text-xs px-2.5 py-1 has-[>svg]:px-1.5',

@@ -1,17 +1,28 @@
 import { ApiClient } from '@slink/api/Client';
+import type { Tag } from '@slink/api/Resources/TagResource';
 import type { ImageListingItem } from '@slink/api/Response';
 
+import { AbstractPaginatedFeed } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
 import type {
   LoadParams,
   PaginatedResponse,
   SearchParams,
 } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
-import { AbstractPaginatedFeed } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
 import { useState } from '@slink/lib/state/core/ContextAwareState';
 
 import { deepMerge } from '@slink/utils/object/deepMerge';
 
+interface TagFilter {
+  selectedTags: Tag[];
+  requireAllTags: boolean;
+}
+
 class UploadHistoryFeed extends AbstractPaginatedFeed<ImageListingItem> {
+  private _tagFilter: TagFilter = $state({
+    selectedTags: [],
+    requireAllTags: false,
+  });
+
   public constructor() {
     super({
       defaultPageSize: 12,
@@ -24,7 +35,16 @@ class UploadHistoryFeed extends AbstractPaginatedFeed<ImageListingItem> {
     params: LoadParams & SearchParams,
   ): Promise<PaginatedResponse<ImageListingItem>> {
     const { page = 1, limit = 12 } = params;
-    return ApiClient.image.getHistory(page, limit);
+    const tagIds = this._tagFilter.selectedTags.map((tag) => tag.id);
+
+    return ApiClient.image.getHistory(
+      page,
+      limit,
+      undefined,
+      true,
+      tagIds.length > 0 ? tagIds : undefined,
+      this._tagFilter.requireAllTags,
+    );
   }
 
   protected _getItemId(item: ImageListingItem): string {
@@ -52,6 +72,34 @@ class UploadHistoryFeed extends AbstractPaginatedFeed<ImageListingItem> {
     }
 
     await super.load(params, options);
+  }
+
+  public setTagFilter(tags: Tag[], requireAllTags: boolean = false): void {
+    const hasChanged =
+      this._tagFilter.selectedTags.length !== tags.length ||
+      this._tagFilter.selectedTags.some(
+        (tag, index) => tag.id !== tags[index]?.id,
+      ) ||
+      this._tagFilter.requireAllTags !== requireAllTags;
+
+    if (hasChanged) {
+      this._tagFilter = { selectedTags: [...tags], requireAllTags };
+      this.reset();
+    }
+  }
+
+  public get tagFilter(): TagFilter {
+    return { ...this._tagFilter };
+  }
+
+  public clearTagFilter(): void {
+    if (
+      this._tagFilter.selectedTags.length > 0 ||
+      this._tagFilter.requireAllTags
+    ) {
+      this._tagFilter = { selectedTags: [], requireAllTags: false };
+      this.reset();
+    }
   }
 }
 

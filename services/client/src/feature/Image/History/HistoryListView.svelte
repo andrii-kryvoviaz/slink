@@ -1,7 +1,7 @@
 <script lang="ts">
   import { ImageActionBar, ImagePlaceholder } from '@slink/feature/Image';
+  import { ImageTagList } from '@slink/feature/Tag';
   import { FormattedDate } from '@slink/feature/Text';
-  import { Button } from '@slink/ui/components/button';
 
   import { bytesToSize } from '$lib/utils/bytesConverter';
   import Icon from '@iconify/svelte';
@@ -45,32 +45,17 @@
           </a>
 
           <div class="flex flex-col gap-4 min-w-0 flex-1">
-            <div class="block sm:hidden">
-              <Button
+            <div>
+              <a
                 href={`/info/${item.id}`}
-                variant="link"
-                class="group/link !p-0 text-base font-medium text-gray-900 transition-colors dark:text-gray-100 w-full justify-start min-w-0"
+                class="group/link inline-flex w-full items-center gap-2 text-base font-semibold text-gray-900 transition-colors duration-200 dark:text-gray-100 sm:w-auto hover:text-indigo-600 dark:hover:text-indigo-400"
               >
                 <span class="truncate">{item.attributes.fileName}</span>
                 <Icon
                   icon="mynaui:external-link"
-                  class="ml-2 h-4 w-4 opacity-50 transition-opacity group-hover/link:opacity-100 shrink-0"
+                  class="h-4 w-4 shrink-0 opacity-60 transition-opacity duration-200 group-hover/link:opacity-100"
                 />
-              </Button>
-            </div>
-
-            <div class="hidden sm:block">
-              <Button
-                href={`/info/${item.id}`}
-                variant="link"
-                class="group/link !p-0 text-base font-medium text-gray-900 transition-colors dark:text-gray-100 min-w-0"
-              >
-                <span class="truncate">{item.attributes.fileName}</span>
-                <Icon
-                  icon="mynaui:external-link"
-                  class="ml-2 h-4 w-4 opacity-50 transition-opacity group-hover/link:opacity-100"
-                />
-              </Button>
+              </a>
             </div>
 
             <div class="w-full">
@@ -84,6 +69,18 @@
                 on={{ imageDelete: onImageDelete }}
               />
             </div>
+
+            {#if item.tags && item.tags.length > 0}
+              <div class="mt-4">
+                <ImageTagList
+                  imageId={item.id}
+                  variant="neon"
+                  showImageCount={false}
+                  removable={false}
+                  initialTags={item.tags}
+                />
+              </div>
+            {/if}
 
             <div
               class="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2 transition-opacity duration-300 group-hover:opacity-100 opacity-90"

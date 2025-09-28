@@ -21,7 +21,7 @@
     "@lucide/svelte": "^0.544.0",
     "@tanstack/table-core": "^8.21.3",
     "apexcharts": "5.3.5",
-    "bits-ui": "^2.9.8",
+    "bits-ui": "^2.11.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "17.2.2",

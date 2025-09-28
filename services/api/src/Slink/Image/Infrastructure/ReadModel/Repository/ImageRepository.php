@@ -7,6 +7,7 @@ namespace Slink\Image\Infrastructure\ReadModel\Repository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Override;
+use Slink\Tag\Infrastructure\ReadModel\View\TagView;
 use Slink\Image\Domain\Filter\ImageListFilter;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
@@ -97,6 +98,34 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
       }
     }
 
+    $tagFilterData = $imageListFilter->getTagFilterData();
+    if (!$tagFilterData || !$tagFilterData->hasTagFilters()) {
+    } elseif ($tagFilterData->requireAllTags()) {
+      foreach ($tagFilterData->getTagPaths() as $index => $tagPath) {
+        $qb->andWhere(
+          $qb->expr()->exists(
+            $this->_em->createQueryBuilder()
+              ->select('1')
+              ->from(TagView::class, "subTag{$index}")
+              ->where("subTag{$index}.path = :tagPath{$index} OR subTag{$index}.path LIKE :tagPathLike{$index}")
+              ->andWhere("subTag{$index} MEMBER OF image.tags")
+              ->getDQL()
+          )
+        )
+        ->setParameter("tagPath{$index}", $tagPath)
+        ->setParameter("tagPathLike{$index}", $tagPath . '/%');
+      }
+    } else {
+      $qb->join('image.tags', 'tags');
+      $pathConditions = [];
+      foreach ($tagFilterData->getTagPaths() as $index => $tagPath) {
+        $pathConditions[] = "tags.path = :tagPath{$index} OR tags.path LIKE :tagPathLike{$index}";
+        $qb->setParameter("tagPath{$index}", $tagPath)
+           ->setParameter("tagPathLike{$index}", $tagPath . '/%');
+      }
+      $qb->andWhere('(' . implode(' OR ', $pathConditions) . ')');
+    }
+
     $qb->orderBy('image.' . $imageListFilter->getOrderBy(), $imageListFilter->getOrder());
     $qb->addOrderBy('image.uuid', $imageListFilter->getOrder());
 
@@ -173,13 +202,18 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
    * @return ImageView[]
    */
   public function findImagesWithoutSha1Hash(): array {
-    $qb = $this->_em
-      ->createQueryBuilder()
-      ->from(ImageView::class, 'image')
-      ->select('image')
-      ->where('image.metadata.sha1Hash IS NULL OR image.metadata.sha1Hash = :empty')
-      ->setParameter('empty', '');
+    return $this->createQueryBuilder('image')
+      ->where('image.metadata.sha1Hash IS NULL')
+      ->getQuery()
+      ->getResult();
+  }
 
-    return $qb->getQuery()->getResult();
+  public function findByUserId(ID $userId): array {
+    return $this->createQueryBuilder('image')
+      ->where('image.user = :userId')
+      ->setParameter('userId', $userId->toString())
+      ->orderBy('image.attributes.createdAt', 'DESC')
+      ->getQuery()
+      ->getResult();
   }
 }

@@ -15,6 +15,7 @@ final readonly class ImageListFilter {
    * @param string|null $searchTerm
    * @param string|null $searchBy
    * @param string|null $cursor
+   * @param TagFilterData|null $tagFilterData
    */
   public function __construct(
     private ?int    $limit = 10,
@@ -25,7 +26,8 @@ final readonly class ImageListFilter {
     private ?array  $uuids = [],
     private ?string $searchTerm = null,
     private ?string $searchBy = null,
-    private ?string $cursor = null
+    private ?string $cursor = null,
+    private ?TagFilterData $tagFilterData = null,
   ) {
   }
 
@@ -90,5 +92,12 @@ final readonly class ImageListFilter {
    */
   public function getUuids(): ?array {
     return $this->uuids;
+  }
+
+  /**
+   * @return TagFilterData|null
+   */
+  public function getTagFilterData(): ?TagFilterData {
+    return $this->tagFilterData;
   }
 }

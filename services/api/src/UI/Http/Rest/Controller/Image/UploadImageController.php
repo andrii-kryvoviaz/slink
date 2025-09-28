@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace UI\Http\Rest\Controller\Image;
 
+use Slink\Image\Application\Command\TagImage\TagImageCommand;
 use Slink\Image\Application\Command\UploadImage\UploadImageCommand;
 use Slink\Shared\Application\Command\CommandTrait;
 use Slink\Shared\Application\Http\RequestValueResolver\FileRequestValueResolver;
 use Slink\User\Domain\Contracts\UserInterface;
-use Slink\User\Infrastructure\Auth\JwtUser;
-use Slink\User\Infrastructure\Auth\ApiKeyUser;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
@@ -29,9 +28,16 @@ final class UploadImageController {
     )] UploadImageCommand $command,
     #[CurrentUser] ?UserInterface $user
   ): ApiResponse {
-    $this->handle($command->withContext([
+    $this->handleSync($command->withContext([
       'userId' => $user?->getIdentifier()
     ]));
+    
+    foreach ($command->getTagIds() as $tagId) {
+      $tagImageCommand = new TagImageCommand($command->getId()->toString(), $tagId);
+      $this->handle($tagImageCommand->withContext([
+        'userId' => $user?->getIdentifier()
+      ]));
+    }
     
     return ApiResponse::created($command->getId()->toString(),"image/{$command->getId()}/detail");
   }

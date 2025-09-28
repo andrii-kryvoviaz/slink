@@ -12,12 +12,14 @@ export const createAppSidebarItems = (options?: {
   showAdmin?: boolean;
   showSystemItems?: boolean;
   showUploadItem?: boolean;
+  showUserItems?: boolean;
   customGroups?: AppSidebarGroup[];
 }): AppSidebarGroup[] => {
   const {
     showAdmin = false,
     showSystemItems = true,
     showUploadItem = false,
+    showUserItems = false,
     customGroups = [],
   } = options || {};
 
@@ -41,12 +43,22 @@ export const createAppSidebarItems = (options?: {
               },
             ]
           : []),
-        {
-          id: 'history',
-          title: 'History',
-          icon: 'ph:clock-counter-clockwise',
-          href: '/history',
-        },
+        ...(showUserItems
+          ? [
+              {
+                id: 'history',
+                title: 'History',
+                icon: 'ph:clock-counter-clockwise',
+                href: '/history',
+              },
+              {
+                id: 'tags',
+                title: 'Tags',
+                icon: 'ph:tag',
+                href: '/tags',
+              },
+            ]
+          : []),
       ],
     },
   ];
@@ -111,6 +123,7 @@ export const createNavMainFromAppSidebar = (
     showAdmin = false,
     showSystemItems = true,
     showUploadItem = false,
+    showUserItems = false,
   } = config || {};
 
   return groups
@@ -123,6 +136,7 @@ export const createNavMainFromAppSidebar = (
       group.items
         .filter((item) => {
           if (item.id === 'upload' && !showUploadItem) return false;
+          if (item.id === 'tags' && !showUserItems) return false;
           return !item.hidden;
         })
         .map((item) => ({
@@ -145,6 +159,7 @@ export const createSidebarData = (config?: SidebarConfig): SidebarData => {
     showAdmin: config?.showAdmin,
     showSystemItems: config?.showSystemItems,
     showUploadItem: config?.showUploadItem,
+    showUserItems: config?.showUserItems,
   });
 
   return {

@@ -7,16 +7,30 @@ import type {
 } from '@slink/api/Response';
 
 export class ImageResource extends AbstractResource {
-  public async upload(image: File): Promise<UploadedImageResponse> {
+  public async upload(
+    image: File,
+    tagIds?: string[],
+  ): Promise<UploadedImageResponse> {
     const body = new FormData();
     body.append('image', image);
+
+    if (tagIds && tagIds.length > 0) {
+      tagIds.forEach((tagId) => body.append('tagIds[]', tagId));
+    }
 
     return this.post('/upload', { body });
   }
 
-  public async guestUpload(image: File): Promise<UploadedImageResponse> {
+  public async guestUpload(
+    image: File,
+    tagIds?: string[],
+  ): Promise<UploadedImageResponse> {
     const body = new FormData();
     body.append('image', image);
+
+    if (tagIds && tagIds.length > 0) {
+      tagIds.forEach((tagId) => body.append('tagIds[]', tagId));
+    }
 
     return this.post('/guest/upload', { body });
   }
@@ -75,6 +89,9 @@ export class ImageResource extends AbstractResource {
     page: number = 1,
     limit: number = 10,
     cursor?: string,
+    includeTags: boolean = false,
+    tagIds?: string[],
+    requireAllTags: boolean = false,
   ): Promise<ImageListingResponse> {
     const searchParams = new URLSearchParams({
       limit: limit.toString(),
@@ -84,15 +101,38 @@ export class ImageResource extends AbstractResource {
       searchParams.append('cursor', cursor);
     }
 
+    if (includeTags) {
+      searchParams.append('includeTags', 'true');
+    }
+
+    if (tagIds && tagIds.length > 0) {
+      tagIds.forEach((tagId) => {
+        searchParams.append('tagIds[]', tagId);
+      });
+    }
+
+    if (requireAllTags) {
+      searchParams.append('requireAllTags', 'true');
+    }
+
     return this.get(`/images/history/${page}/?${searchParams.toString()}`);
   }
 
   public async getImagesByIds(
     uuids: string[],
+    includeTags: boolean = false,
   ): Promise<ImagePlainListingResponse> {
-    const query = uuids.map((uuid) => `uuid[]=${uuid}`).join('&');
+    const searchParams = new URLSearchParams();
 
-    return this.get(`/images?${query}`);
+    uuids.forEach((uuid) => {
+      searchParams.append('uuid[]', uuid);
+    });
+
+    if (includeTags) {
+      searchParams.append('includeTags', 'true');
+    }
+
+    return this.get(`/images?${searchParams.toString()}`);
   }
 
   public async adminUpdateDetails(

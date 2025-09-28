@@ -1,6 +1,9 @@
 import { HttpException, ValidationException } from '@slink/api/Exceptions';
 
-export function extractErrorMessage(error: Error): string {
+export function extractErrorMessage(
+  error: Error,
+  fallbackMessage: string = 'An unexpected error occurred',
+): string {
   if (error instanceof ValidationException) {
     if (error.violations.length > 1) {
       return error.violations
@@ -28,7 +31,7 @@ export function extractErrorMessage(error: Error): string {
     return typeof firstError === 'string' ? firstError : String(firstError);
   }
 
-  return error.message || 'An unexpected error occurred';
+  return error.message || fallbackMessage;
 }
 
 export function extractShortErrorMessage(error: Error): string {
@@ -42,5 +45,5 @@ export function extractShortErrorMessage(error: Error): string {
     return typeof firstError === 'string' ? firstError : String(firstError);
   }
 
-  return error.message || 'Upload failed';
+  return error.message || 'An unexpected error occurred';
 }

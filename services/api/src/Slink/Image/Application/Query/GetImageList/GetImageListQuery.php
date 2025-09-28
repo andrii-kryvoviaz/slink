@@ -10,6 +10,9 @@ use Slink\Shared\Infrastructure\MessageBus\EnvelopedMessage;
 final readonly class GetImageListQuery implements QueryInterface {
   use EnvelopedMessage;
 
+  /**
+   * @param array<string>|null $tagIds
+   */
   public function __construct(
     private int     $limit = 10,
     private string  $orderBy = 'attributes.createdAt',
@@ -17,6 +20,8 @@ final readonly class GetImageListQuery implements QueryInterface {
     private ?string $searchTerm = null,
     private ?string $searchBy = null,
     private ?string $cursor = null,
+    private ?array  $tagIds = [],
+    private bool    $requireAllTags = false,
   ) {
   }
 
@@ -42,5 +47,16 @@ final readonly class GetImageListQuery implements QueryInterface {
 
   public function getSearchTerm(): ?string {
     return $this->searchTerm;
+  }
+
+  /**
+   * @return array<string>|null
+   */
+  public function getTagIds(): ?array {
+    return $this->tagIds;
+  }
+
+  public function requireAllTags(): bool {
+    return $this->requireAllTags;
   }
 }

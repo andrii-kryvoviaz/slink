@@ -2,11 +2,11 @@
   import {
     ImageActionBar,
     ImageDescription,
-    type ImageParams,
     ImagePlaceholder,
-    type ImageSize,
     ImageSizePicker,
+    ImageTagManager,
   } from '@slink/feature/Image';
+  import type { ImageParams, ImageSize } from '@slink/feature/Image';
   import { CopyContainer } from '@slink/feature/Text';
 
   import { page } from '$app/state';
@@ -14,7 +14,11 @@
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
+  import type { Tag } from '@slink/api/Resources/TagResource';
 
+  import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
+
+  import { cn } from '@slink/utils/ui';
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
 
   import type { PageData } from './$types';
@@ -25,6 +29,8 @@
 
   let { data }: Props = $props();
   let image = $state(data.image);
+
+  const historyFeedState = useUploadHistoryFeed();
 
   const formatImageUrl = (
     url: string | string[],
@@ -51,6 +57,22 @@
   let directLink: string = $derived(
     formatImageUrl([page.url.origin, image.url], params),
   );
+
+  const maxWidthClass = $derived.by(() => {
+    const aspectRatio = image.width / image.height;
+
+    if (aspectRatio > 2) {
+      return 'max-w-4xl';
+    } else if (aspectRatio > 1.5) {
+      return 'max-w-3xl';
+    } else if (aspectRatio > 1) {
+      return 'max-w-2xl';
+    } else if (aspectRatio > 0.7) {
+      return 'max-w-xl';
+    } else {
+      return 'max-w-lg';
+    }
+  });
 
   const handleImageSizeChange = (
     value?: Partial<ImageSize & { crop?: boolean }>,
@@ -91,6 +113,12 @@
 
     image = { ...image, description };
   };
+
+  const handleTagsUpdate = (updatedTags: Tag[]) => {
+    historyFeedState.update(image.id, {
+      tags: updatedTags,
+    });
+  };
 </script>
 
 <svelte:head>
@@ -102,12 +130,21 @@
   class="container mx-auto px-4 sm:px-6 lg:px-8 py-8"
 >
   <div class="flex flex-col flex-wrap lg:flex-row gap-8">
-    <div class="w-full max-w-2xl">
+    <div class={cn('w-full', maxWidthClass)}>
       <ImagePlaceholder src={image.url} metadata={image} stretch={false} />
     </div>
 
     <div class="grow max-w-md flex-shrink-0 space-y-8">
       <ImageActionBar {image} buttons={['download', 'visibility', 'delete']} />
+
+      <ImageTagManager
+        imageId={image.id}
+        variant="neon"
+        initialTags={data.imageTags}
+        on={{
+          tagsUpdate: handleTagsUpdate,
+        }}
+      />
 
       <div>
         <ImageDescription

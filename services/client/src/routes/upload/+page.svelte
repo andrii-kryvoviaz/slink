@@ -5,7 +5,7 @@
     BannerContent,
     BannerIcon,
   } from '@slink/feature/Layout';
-  import { UploadForm, UploadSuccess } from '@slink/feature/Upload';
+  import { UploadFormWithTags, UploadSuccess } from '@slink/feature/Upload';
   import MultiUploadProgress from '@slink/feature/Upload/MultiUploadProgress.svelte';
 
   import { goto } from '$app/navigation';
@@ -14,6 +14,7 @@
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
+  import type { Tag } from '@slink/api/Resources/TagResource';
   import type { UploadedImageResponse } from '@slink/api/Response';
 
   import type { UploadItem } from '@slink/lib/services/multi-upload.service';
@@ -22,6 +23,8 @@
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
 
   import type { PageData } from './$types';
+
+  let selectedTags: Tag[] = $state([]);
 
   interface Props {
     data: PageData;
@@ -33,6 +36,7 @@
   let isMultiUpload = $state(false);
   let uploads: UploadItem[] = $state([]);
   let multiUploadService = useMultiUploadService();
+  let historyFeedState = useUploadHistoryFeed();
 
   const {
     isLoading,
@@ -41,11 +45,13 @@
     run: uploadImage,
     reset: resetUploadImage,
   } = ReactiveState<UploadedImageResponse>((file: File) => {
+    const tagIds = selectedTags.map((tag) => tag.id);
+
     if (data.globalSettings?.access?.allowGuestUploads && !data.user) {
-      return ApiClient.image.guestUpload(file);
+      return ApiClient.image.guestUpload(file, tagIds);
     }
 
-    return ApiClient.image.upload(file);
+    return ApiClient.image.upload(file, tagIds);
   });
 
   const { isLoading: pageIsChanging, run: redirectToInfo } = ReactiveState(
@@ -60,14 +66,30 @@
     }
   };
 
+  const successHandler = async (response: UploadedImageResponse) => {
+    if (data.user) {
+      await redirectToInfo(response.id);
+
+      const images = await ApiClient.image.getImagesByIds([response.id]);
+      images.data.forEach((image) => historyFeedState.addItem(image));
+    } else {
+      data.globalSettings?.access?.allowUnauthenticatedAccess
+        ? await goto('/explore')
+        : (showSuccess = true);
+    }
+  };
+
   const handleMultiUpload = async (files: File[]) => {
     isMultiUpload = true;
     uploads = multiUploadService.createUploadItems(files);
+
+    const tagIds = selectedTags.map((tag) => tag.id);
 
     const { successful, failed } = await multiUploadService.uploadFiles(
       uploads,
       {
         isGuest: data.globalSettings?.access?.allowGuestUploads && !data.user,
+        tagIds,
         onProgress: (_item) => {
           uploads = [...uploads];
         },
@@ -79,8 +101,6 @@
 
     if (failed.length === 0 && successful.length > 0) {
       if (data.user) {
-        const historyFeedState = useUploadHistoryFeed();
-
         const imageIds = successful.map((item) => item.result!.id);
         const images = await ApiClient.image.getImagesByIds(imageIds);
         images.data.forEach((image) => historyFeedState.addItem(image));
@@ -118,8 +138,11 @@
 
     uploads = [...uploads];
 
+    const tagIds = selectedTags.map((tag) => tag.id);
+
     await multiUploadService.uploadFiles(failedUploads, {
       isGuest: data.globalSettings?.access?.allowGuestUploads && !data.user,
+      tagIds,
       onProgress: (_item) => {
         uploads = [...uploads];
       },
@@ -127,21 +150,6 @@
         console.error('Retry upload error for file:', _item.file.name, error);
       },
     });
-  };
-
-  const successHandler = async (response: UploadedImageResponse) => {
-    if (data.user) {
-      const historyFeedState = useUploadHistoryFeed();
-
-      await redirectToInfo(response.id);
-
-      const images = await ApiClient.image.getImagesByIds([response.id]);
-      images.data.forEach((image) => historyFeedState.addItem(image));
-    } else {
-      data.globalSettings?.access?.allowUnauthenticatedAccess
-        ? await goto('/explore')
-        : (showSuccess = true);
-    }
   };
 
   const errorHandler = printErrorsAsToastMessage;
@@ -230,11 +238,13 @@
           </div>
         {/if}
 
-        <UploadForm
+        <UploadFormWithTags
           {disabled}
           {processing}
-          onchange={handleUpload}
           allowMultiple={true}
+          {selectedTags}
+          onTagsChange={(tags) => (selectedTags = tags)}
+          onchange={handleUpload}
         />
       {/if}
     </div>

@@ -18,9 +18,15 @@ export const load: PageServerLoad = async ({
   }
 
   try {
-    const image = await ApiClient.use(fetch).image.getDetails(params.id);
+    const [image, imageTags] = await Promise.all([
+      ApiClient.use(fetch).image.getDetails(params.id),
+      ApiClient.use(fetch).tag.getImageTags(params.id),
+    ]);
 
-    return { image };
+    return {
+      image,
+      imageTags: imageTags.data,
+    };
   } catch (e: unknown) {
     if (e instanceof ForbiddenException) {
       error(e.status, {

@@ -78,6 +78,13 @@
       disabled={props.disabled}
       readonly={props.readonly}
       required={props.required}
+      oninput={props.oninput}
+      onchange={props.onchange}
+      onblur={props.onblur}
+      onfocus={props.onfocus}
+      onkeydown={props.onkeydown}
+      onkeyup={props.onkeyup}
+      onkeypress={props.onkeypress}
       bind:value
       class={twMerge(combinedClasses)}
       aria-invalid={error ? true : undefined}

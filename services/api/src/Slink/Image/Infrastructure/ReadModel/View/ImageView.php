@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace Slink\Image\Infrastructure\ReadModel\View;
 
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Domain\ValueObject\ImageMetadata;
 use Slink\Image\Infrastructure\ReadModel\Repository\ImageRepository;
 use Slink\Shared\Domain\Contract\CursorAwareInterface;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
+use Slink\Tag\Infrastructure\ReadModel\View\TagView;
 use Slink\User\Domain\ValueObject\GuestUser;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -20,6 +23,12 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 #[ORM\Entity(repositoryClass: ImageRepository::class)]
 #[ORM\Index(columns: ['user_id', 'created_at'], name: 'idx_image_user_created_at')]
 class ImageView extends AbstractView implements CursorAwareInterface {
+  #[ORM\ManyToMany(targetEntity: TagView::class)]
+  #[ORM\JoinTable(name: 'image_to_tag')]
+  #[ORM\JoinColumn(name: 'image_id', referencedColumnName: 'uuid')]
+  #[ORM\InverseJoinColumn(name: 'tag_id', referencedColumnName: 'uuid')]
+  private Collection $tags;
+
   /**
    * @param string $uuid
    * @param ?UserView $user
@@ -44,7 +53,9 @@ class ImageView extends AbstractView implements CursorAwareInterface {
     #[ORM\Embedded(class: ImageMetadata::class, columnPrefix: false)]
     #[Groups(['public'])]
     private ?ImageMetadata     $metadata = null,
+
   ) {
+    $this->tags = new ArrayCollection();
   }
 
   /**
@@ -130,6 +141,24 @@ class ImageView extends AbstractView implements CursorAwareInterface {
    */
   public function updateMetadata(ImageMetadata $metadata): void {
     $this->metadata = $metadata;
+  }
+
+  #[Groups(['public'])]
+  #[SerializedName('tags')]
+  public function getTags(): Collection {
+    return $this->tags;
+  }
+
+  public function addTag(TagView $tag): void {
+    if (!$this->tags->contains($tag)) {
+      $this->tags->add($tag);
+    }
+  }
+
+  public function removeTag(TagView $tag): void {
+    if ($this->tags->contains($tag)) {
+      $this->tags->removeElement($tag);
+    }
   }
 
   /**

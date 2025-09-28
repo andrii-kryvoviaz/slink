@@ -186,12 +186,6 @@
             {#snippet text()}
               <span>Load More Images</span>
             {/snippet}
-            {#snippet rightIcon()}
-              <Icon
-                icon="heroicons:chevron-down"
-                class="w-4 h-4 ml-2 transition-transform duration-200"
-              />
-            {/snippet}
           </LoadMoreButton>
         </div>
       {/if}

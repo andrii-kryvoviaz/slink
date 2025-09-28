@@ -1050,16 +1050,16 @@ balanced-match@^1.0.0:
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.2.tgz#e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
 
-bits-ui@^2.9.8:
-  version "2.9.8"
-  resolved "https://registry.yarnpkg.com/bits-ui/-/bits-ui-2.9.8.tgz#841c62a1d200967221f32ef89a1875677633d0f2"
-  integrity sha512-oVAqdhLSuGIgEiT0yu3ShSI7AxncCxX26Gv6Lul94BuKHV2uzHoKfIodtnMQSq+udJ54svuCIRqA58whsv7vaA==
+bits-ui@^2.11.0:
+  version "2.11.4"
+  resolved "https://registry.yarnpkg.com/bits-ui/-/bits-ui-2.11.4.tgz#88ae37212f4381f36e8ddeef131d72bdc4001bca"
+  integrity sha512-OlVBJhNUMDHbIAf8oDAyPchIrU8b1S5NAMm6enMZSKx5HKcf/QPI485/BL1r4EPlv4O3m45e59hBRCETtYFdxg==
   dependencies:
     "@floating-ui/core" "^1.7.1"
     "@floating-ui/dom" "^1.7.1"
     esm-env "^1.1.2"
-    runed "^0.29.1"
-    svelte-toolbelt "^0.9.3"
+    runed "^0.31.1"
+    svelte-toolbelt "^0.10.4"
     tabbable "^6.2.0"
 
 brace-expansion@^1.1.7:
@@ -2202,10 +2202,17 @@ runed@^0.28.0:
   dependencies:
     esm-env "^1.0.0"
 
-runed@^0.29.0, runed@^0.29.1:
+runed@^0.29.0:
   version "0.29.2"
   resolved "https://registry.yarnpkg.com/runed/-/runed-0.29.2.tgz#708e4ee7df59c4f1b91240a43219c4d3cbe9e7c6"
   integrity sha512-0cq6cA6sYGZwl/FvVqjx9YN+1xEBu9sDDyuWdDW1yWX7JF2wmvmVKfH+hVCZs+csW+P3ARH92MjI3H9QTagOQA==
+  dependencies:
+    esm-env "^1.0.0"
+
+runed@^0.31.1:
+  version "0.31.1"
+  resolved "https://registry.yarnpkg.com/runed/-/runed-0.31.1.tgz#9b92036c89f621b71bf8b258f8d58315b0cc360d"
+  integrity sha512-v3czcTnO+EJjiPvD4dwIqfTdHLZ8oH0zJheKqAHh9QMViY7Qb29UlAMRpX7ZtHh7AFqV60KmfxaJ9QMy+L1igQ==
   dependencies:
     esm-env "^1.0.0"
 
@@ -2348,6 +2355,15 @@ svelte-sonner@^1.0.5:
   dependencies:
     runed "^0.28.0"
 
+svelte-toolbelt@^0.10.4:
+  version "0.10.5"
+  resolved "https://registry.yarnpkg.com/svelte-toolbelt/-/svelte-toolbelt-0.10.5.tgz#f6d499a15d58d6599eb177de595e633cc2c79532"
+  integrity sha512-8e+eWTgxw1aiLxhDE8Rb1X6AoLitqpJz+WhAul2W7W58C8KoLoJQf1TgQdFPBiCPJ0Jg5y0Zi1uyua9em4VS0w==
+  dependencies:
+    clsx "^2.1.1"
+    runed "^0.29.0"
+    style-to-object "^1.0.8"
+
 svelte-toolbelt@^0.7.1:
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/svelte-toolbelt/-/svelte-toolbelt-0.7.1.tgz#63e9c6629456a1a0dd57812f85426e4631fd754e"
@@ -2355,15 +2371,6 @@ svelte-toolbelt@^0.7.1:
   dependencies:
     clsx "^2.1.1"
     runed "^0.23.2"
-    style-to-object "^1.0.8"
-
-svelte-toolbelt@^0.9.3:
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/svelte-toolbelt/-/svelte-toolbelt-0.9.3.tgz#e790e09a55b405445ab855ba2796b16a5cc0c7a8"
-  integrity sha512-HCSWxCtVmv+c6g1ACb8LTwHVbDqLKJvHpo6J8TaqwUme2hj9ATJCpjCPNISR1OCq2Q4U1KT41if9ON0isINQZw==
-  dependencies:
-    clsx "^2.1.1"
-    runed "^0.29.0"
     style-to-object "^1.0.8"
 
 svelte@^5.38.10:
