@@ -8,9 +8,24 @@ export interface VersionInfo {
 }
 
 function getGlobalValue(key: string, fallback?: string): string {
-  return typeof (globalThis as Record<string, unknown>)[key] !== 'undefined'
-    ? ((globalThis as Record<string, unknown>)[key] as string)
-    : fallback || VERSION.UNKNOWN;
+  switch (key) {
+    case BUILD_GLOBALS.APP_VERSION:
+      return typeof __APP_VERSION__ !== 'undefined'
+        ? __APP_VERSION__
+        : fallback || VERSION.UNKNOWN;
+    case BUILD_GLOBALS.BUILD_DATE:
+      return typeof __BUILD_DATE__ !== 'undefined'
+        ? __BUILD_DATE__
+        : fallback || VERSION.UNKNOWN;
+    case BUILD_GLOBALS.COMMIT_HASH:
+      return typeof __COMMIT_HASH__ !== 'undefined'
+        ? __COMMIT_HASH__
+        : fallback || VERSION.UNKNOWN;
+    default:
+      return typeof (globalThis as Record<string, unknown>)[key] !== 'undefined'
+        ? ((globalThis as Record<string, unknown>)[key] as string)
+        : fallback || VERSION.UNKNOWN;
+  }
 }
 
 export function getVersionInfo(serverVersion?: string): VersionInfo {

@@ -13,6 +13,6 @@
 >
   <Version
     showUpdateIndicator={true}
-    className="text-muted-foreground/80 opacity-60 hover:opacity-100"
+    className="text-muted-foreground/80 opacity-80 hover:opacity-100"
   />
 </footer>
