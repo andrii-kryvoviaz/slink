@@ -7,20 +7,20 @@ export const tagDropdownContentVariants = cva(
     variants: {
       variant: {
         default: [
-          'bg-gradient-to-br from-white via-white to-slate-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900',
+          'bg-white dark:bg-slate-900',
           'border border-slate-200/60 dark:border-slate-700/60',
           'rounded-2xl shadow-xl shadow-slate-500/5 dark:shadow-black/20',
           'ring-1 ring-slate-100/20 dark:ring-slate-600/20',
         ],
         neon: [
-          'bg-white/95 dark:bg-slate-900/95',
+          'bg-white dark:bg-slate-900',
           'border border-slate-200/60 dark:border-slate-700/60',
-          'rounded-2xl',
-          'ring-1 ring-indigo-100/20 dark:ring-indigo-600/20',
+          'rounded-2xl shadow-xl shadow-slate-500/5 dark:shadow-black/20',
+          'ring-1 ring-slate-100/20 dark:ring-slate-600/20',
         ],
         minimal: [
-          'bg-gradient-to-br from-white/80 via-white/60 to-slate-50/40 dark:from-slate-900/80 dark:via-slate-800/60 dark:to-slate-900/40',
-          'border border-slate-200/50 dark:border-slate-700/50',
+          'bg-white dark:bg-slate-900',
+          'border border-slate-200/60 dark:border-slate-700/60',
           'rounded-2xl shadow-lg shadow-slate-500/8 dark:shadow-black/18',
           'ring-1 ring-slate-100/15 dark:ring-slate-600/15',
         ],
@@ -35,9 +35,9 @@ export const tagDropdownContentVariants = cva(
 export const tagDropdownDividerVariants = cva('mx-2 my-1', {
   variants: {
     variant: {
-      default: 'border-t border-slate-200/60 dark:border-slate-700/60',
-      neon: 'border-t border-indigo-200/60 dark:border-indigo-700/60',
-      minimal: 'border-t border-slate-200/50 dark:border-slate-700/50',
+      default: 'border-t border-slate-200/30 dark:border-slate-700/30',
+      neon: 'border-t border-slate-200/20 dark:border-slate-700/20',
+      minimal: 'border-t border-slate-200/25 dark:border-slate-700/25',
     },
   },
   defaultVariants: {
@@ -51,7 +51,7 @@ export const tagDropdownEmptyStateVariants = cva(
     variants: {
       variant: {
         default: 'text-slate-500 dark:text-slate-400',
-        neon: 'text-indigo-400 dark:text-indigo-300',
+        neon: 'text-blue-600 dark:text-blue-400',
         minimal: 'text-slate-500 dark:text-slate-400',
       },
     },

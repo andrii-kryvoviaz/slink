@@ -34,9 +34,9 @@ export const BadgeTheme = cva(
         gradient:
           'border-0 bg-gradient-to-br from-blue-500 to-purple-600 text-white font-semibold [a&]:hover:from-blue-600 [a&]:hover:to-purple-700 focus-visible:ring-blue-500/20',
         neon: [
-          'bg-gradient-to-r from-blue-500/10 to-purple-500/10 text-blue-600 dark:text-blue-400',
+          'bg-blue-100 dark:bg-blue-800/40 text-blue-600 dark:text-blue-300',
           'border border-blue-500/20 dark:border-blue-400/30',
-          'hover:from-blue-500/15 hover:to-purple-500/15',
+          'hover:bg-blue-200 dark:hover:bg-blue-800/50',
           'focus-within:ring-2 focus-within:ring-blue-500/30 focus-within:ring-offset-2',
           'transition-all duration-200 cursor-pointer',
         ],

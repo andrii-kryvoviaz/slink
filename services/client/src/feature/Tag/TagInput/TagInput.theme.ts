@@ -2,7 +2,7 @@ import { cva } from 'class-variance-authority';
 import type { VariantProps } from 'class-variance-authority';
 
 export const tagInputVariants = cva(
-  'w-full bg-transparent border-0 outline-none placeholder:text-muted-foreground resize-none transition-all duration-200',
+  'w-full bg-transparent border-0 outline-none placeholder:text-muted-foreground resize-none transition-all duration-300',
   {
     variants: {
       size: {
@@ -11,9 +11,11 @@ export const tagInputVariants = cva(
         lg: 'text-base py-3',
       },
       variant: {
-        default: 'placeholder:text-muted-foreground',
-        neon: 'placeholder:text-blue-400/60',
-        minimal: 'placeholder:text-slate-400',
+        default:
+          'placeholder:text-slate-400 dark:placeholder:text-slate-500 text-slate-700 dark:text-slate-200',
+        neon: 'placeholder:text-slate-400 dark:placeholder:text-slate-500 text-slate-700 dark:text-slate-200',
+        minimal:
+          'placeholder:text-slate-400 dark:placeholder:text-slate-500 text-slate-700 dark:text-slate-200',
       },
       disabled: {
         true: 'opacity-50 cursor-not-allowed',
