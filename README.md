@@ -22,10 +22,14 @@ Slink solves the problem of sharing images with friends, family, and colleagues 
 ## Features
 
 - **Image Upload**: Supports _PNG_, _JPG_, _WEBP_, _SVG_, _BMP_, _ICO_, _GIF_, _AVIF_, _HEIC\*_ and _TIFF\*_.
+- **Multi-File Upload**: Upload multiple files simultaneously with progress tracking and error handling.
+- **Image Deduplication**: Automatic detection and handling of duplicate images with user-friendly notifications.
+- **Nested Tags System**: Organize and filter images with hierarchical tag management, search capabilities, and dedicated management page.
 - **Authentication**: Users can sign up and log in to the platform.
 - **User Approval**: Require user approval before they can upload images.
 - **Share Links**: Users can share links to their uploaded images and customize the image size.
-- **Upload History**: Provides an overview of all images uploaded by the user.
+- **Upload History**: Provides an overview of all images uploaded by the user with both list and grid view options.
+- **Storage Usage Tracking**: Monitor and display storage consumption metrics.
 - **Storage Providers**: Support for _local_, _SMB_, _AWS S3_ storage providers.
 - **Explore Images**: Features a listing page of public images uploaded by other users.
 - **Dark Mode**: Includes support for both _Dark_ and _Light_ modes in the application.
