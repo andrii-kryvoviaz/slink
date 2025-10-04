@@ -13,6 +13,8 @@
     isTagNested,
   } from '@slink/lib/utils/tag';
 
+  import { tagBadgeCloseButtonVariants } from './TagBadge.theme';
+
   type DotsVariant = {
     showFullPath?: false;
     maxDotsToShow?: number;
@@ -88,7 +90,7 @@
     {#if onClose}
       <button
         onclick={onClose}
-        class="h-4 w-4 p-0 rounded-full ml-1 transition-colors hover:bg-slate-500/20 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300 dark:hover:bg-slate-400/20 flex items-center justify-center opacity-60 hover:opacity-100"
+        class={tagBadgeCloseButtonVariants({ variant })}
         aria-label="Remove {tag.name} tag"
       >
         <Icon icon="ph:x" class="h-2.5 w-2.5" />
