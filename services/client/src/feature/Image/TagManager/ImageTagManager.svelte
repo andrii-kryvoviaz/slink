@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Loader } from '@slink/feature/Layout';
   import { ImageTagList, TagSelector } from '@slink/feature/Tag';
+  import { Button } from '@slink/ui/components/button';
 
   import Icon from '@iconify/svelte';
 
@@ -112,17 +113,31 @@
     </div>
 
     {#if !disabled}
-      <button
-        onclick={toggleExpanded}
-        class="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-950/30 rounded-lg transition-colors"
-        disabled={isLoading}
-      >
-        <Icon
-          icon={tagManagerState.isExpanded ? 'lucide:edit-2' : 'lucide:plus'}
-          class="h-4 w-4"
-        />
-        {tagManagerState.isExpanded ? 'Done' : 'Edit'}
-      </button>
+      {#if tagManagerState.isExpanded}
+        <Button
+          onclick={toggleExpanded}
+          variant="ghost"
+          size="sm"
+          disabled={isLoading}
+        >
+          {#snippet leftIcon()}
+            <Icon icon="lucide:edit-2" class="h-4 w-4" />
+          {/snippet}
+          Done
+        </Button>
+      {:else}
+        <Button
+          onclick={toggleExpanded}
+          variant="ghost"
+          size="sm"
+          disabled={isLoading}
+        >
+          {#snippet leftIcon()}
+            <Icon icon="lucide:plus" class="h-4 w-4" />
+          {/snippet}
+          Edit
+        </Button>
+      {/if}
     {/if}
   </div>
 
