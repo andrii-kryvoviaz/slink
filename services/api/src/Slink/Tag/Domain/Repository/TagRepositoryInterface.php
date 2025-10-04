@@ -79,7 +79,7 @@ interface TagRepositoryInterface extends ServiceEntityRepositoryInterface {
    * @param ID $userId
    * @return TagView[]
    */
-  public function findByIds(array $tagIds, ID $userId): array;
+  public function findExactTagsByIds(array $tagIds, ID $userId): array;
 
   /**
    * @param ID[] $parentIds
@@ -99,5 +99,5 @@ interface TagRepositoryInterface extends ServiceEntityRepositoryInterface {
    * @param ID $userId
    * @return TagView[]
    */
-  public function findByTagIds(array $tagIds, ID $userId): array;
+  public function findTagsWithDescendants(array $tagIds, ID $userId): array;
 }

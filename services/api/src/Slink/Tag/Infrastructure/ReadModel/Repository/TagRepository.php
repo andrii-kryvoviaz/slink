@@ -156,7 +156,7 @@ final class TagRepository extends AbstractRepository implements TagRepositoryInt
       ->getResult();
   }
 
-  public function findByIds(array $tagIds, ID $userId): array {
+  public function findExactTagsByIds(array $tagIds, ID $userId): array {
     if (empty($tagIds)) {
       return [];
     }
@@ -209,12 +209,12 @@ final class TagRepository extends AbstractRepository implements TagRepositoryInt
       ->getResult();
   }
 
-  public function findByTagIds(array $tagIds, ID $userId): array {
+  public function findTagsWithDescendants(array $tagIds, ID $userId): array {
     if (empty($tagIds)) {
       return [];
     }
 
-    $tags = $this->findByIds($tagIds, $userId);
+    $tags = $this->findExactTagsByIds($tagIds, $userId);
     $tagPaths = array_map(fn($tag) => $tag->getPath(), $tags);
     
     if (empty($tagPaths)) {

@@ -20,8 +20,11 @@ final readonly class TagFilterService implements TagFilterServiceInterface {
       return new TagFilterData();
     }
 
-    $userIdObject = ID::fromString($userId);
-    $allTags = $this->tagRepository->findByTagIds($originalTagIds, $userIdObject);
+    $userId = ID::fromString($userId);
+    
+    $allTags = $requireAllTags
+      ? $this->tagRepository->findExactTagsByIds($originalTagIds, $userId)
+      : $this->tagRepository->findTagsWithDescendants($originalTagIds, $userId);
     
     if (empty($allTags)) {
       return new TagFilterData();

@@ -21,7 +21,7 @@ final readonly class GetTagListHandler implements QueryHandlerInterface {
     $userId = ID::fromString($userId);
 
     if ($query->getIds() !== null) {
-      $tagEntities = $this->tagRepository->findByIds($query->getIds(), $userId);
+      $tagEntities = $this->tagRepository->findExactTagsByIds($query->getIds(), $userId);
       $items = array_map(fn($tag) => Item::fromEntity($tag), $tagEntities);
 
       return new Collection(

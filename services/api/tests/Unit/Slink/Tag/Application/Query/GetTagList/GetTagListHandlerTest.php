@@ -29,7 +29,7 @@ final class GetTagListHandlerTest extends TestCase {
     $tagIds = ['tag-1', 'tag-2'];
 
     $tagRepository->expects($this->once())
-      ->method('findByIds')
+      ->method('findExactTagsByIds')
       ->with(
         $tagIds,
         $this->callback(fn($userId) => $userId->toString() === $userIdString)
@@ -190,7 +190,7 @@ final class GetTagListHandlerTest extends TestCase {
     $userIdString = 'user-items';
     $tagIds = ['tag-single'];
 
-    $tagRepository->method('findByIds')->willReturn($tagViews);
+    $tagRepository->method('findExactTagsByIds')->willReturn($tagViews);
 
     $handler = new GetTagListHandler($tagRepository);
     $query = new GetTagListQuery(ids: $tagIds);
