@@ -35,28 +35,25 @@
   const {
     isLoading: isLoadingTags,
     error: loadTagsError,
-    data: loadedImageTags,
     run: loadImageTags,
-  } = ReactiveState<Tag[]>(async (id: string) => {
+  } = ReactiveState(async (id: string) => {
     const response = await ApiClient.tag.getImageTags(id);
-    return response.data;
+    if (tagManagerState.imageId === id) {
+      tagManagerState.setAssignedTags(response.data);
+    }
   });
 
-  const {
-    isLoading: isAssigningTag,
-    error: assignTagError,
-    run: assignTag,
-  } = ReactiveState(async (imageId: string, tagId: string) => {
-    await ApiClient.tag.tagImage(imageId, tagId);
-  });
+  const { isLoading: isAssigningTag, run: assignTag } = ReactiveState(
+    async (imageId: string, tagId: string) => {
+      await ApiClient.tag.tagImage(imageId, tagId);
+    },
+  );
 
-  const {
-    isLoading: isRemovingTag,
-    error: removeTagError,
-    run: removeTag,
-  } = ReactiveState(async (imageId: string, tagId: string) => {
-    await ApiClient.tag.untagImage(imageId, tagId);
-  });
+  const { isLoading: isRemovingTag, run: removeTag } = ReactiveState(
+    async (imageId: string, tagId: string) => {
+      await ApiClient.tag.untagImage(imageId, tagId);
+    },
+  );
 
   const handleTagsChange = async (newTags: Tag[]) => {
     const update = tagManagerState.updateTagsOptimistic(newTags);
@@ -75,27 +72,10 @@
 
       await Promise.all([...addPromises, ...removePromises]);
 
-      if ($assignTagError || $removeTagError) {
-        update.rollback();
-
-        if ($assignTagError) {
-          printErrorsAsToastMessage($assignTagError);
-        }
-        if ($removeTagError) {
-          printErrorsAsToastMessage($removeTagError);
-        }
-      } else {
-        on?.tagsUpdate?.(newTags);
-      }
-    } catch {
+      on?.tagsUpdate?.(newTags);
+    } catch (error: unknown) {
       update.rollback();
-
-      if ($assignTagError) {
-        printErrorsAsToastMessage($assignTagError);
-      }
-      if ($removeTagError) {
-        printErrorsAsToastMessage($removeTagError);
-      }
+      printErrorsAsToastMessage(error as Error);
     }
   };
 
@@ -105,31 +85,17 @@
     }
   };
 
-  $effect(() => {
-    if (tagManagerState.imageId === imageId) {
-      return;
-    }
-
+  if (tagManagerState.imageId !== imageId) {
     tagManagerState.initialize(imageId, initialTags);
-  });
 
-  $effect(() => {
-    if (imageId && initialTags.length === 0) {
+    if (initialTags.length === 0) {
       loadImageTags(imageId);
     }
-  });
+  }
 
-  $effect(() => {
-    if ($loadTagsError) {
-      printErrorsAsToastMessage($loadTagsError);
-    }
-  });
-
-  $effect(() => {
-    if (!$isLoadingTags && $loadedImageTags) {
-      tagManagerState.setAssignedTags($loadedImageTags || []);
-    }
-  });
+  if ($loadTagsError) {
+    printErrorsAsToastMessage($loadTagsError);
+  }
 
   const isLoading = $derived(
     $isLoadingTags || $isAssigningTag || $isRemovingTag,

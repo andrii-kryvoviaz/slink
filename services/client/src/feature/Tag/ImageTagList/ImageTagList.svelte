@@ -32,36 +32,32 @@
   const {
     isLoading: isLoadingTags,
     error: loadTagsError,
-    data: loadedImageTags,
-    run: loadImageTags,
+    data: loadedTags,
+    run: loadTags,
   } = ReactiveState<Tag[]>(async (id: string) => {
     const response = await ApiClient.tag.getImageTags(id);
     return response.data;
   });
 
-  const tags = $derived.by(() => {
-    if ($loadedImageTags && initialTags.length === 0) {
-      return $loadedImageTags;
-    }
-    return initialTags;
-  });
+  const tags = $derived(
+    initialTags.length > 0 ? initialTags : $loadedTags || [],
+  );
 
   const handleRemoveTag = (tagId: string) => {
     if (disabled || !removable) return;
     onTagRemove?.(tagId);
   };
 
-  $effect(() => {
-    if (browser && imageId && initialTags.length === 0) {
-      loadImageTags(imageId);
-    }
-  });
+  let hasLoaded = false;
 
-  $effect(() => {
-    if ($loadTagsError) {
-      printErrorsAsToastMessage($loadTagsError);
-    }
-  });
+  if (browser && imageId && initialTags.length === 0 && !hasLoaded) {
+    hasLoaded = true;
+    loadTags(imageId);
+  }
+
+  if ($loadTagsError) {
+    printErrorsAsToastMessage($loadTagsError);
+  }
 </script>
 
 {#if tags.length > 0}
