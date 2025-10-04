@@ -2,27 +2,30 @@ import { cva } from 'class-variance-authority';
 import type { VariantProps } from 'class-variance-authority';
 
 export const tagFilterContainerVariants = cva(
-  'group relative rounded-xl border backdrop-blur-sm transition-all duration-300 ease-out cursor-pointer overflow-hidden active:scale-[0.995]',
+  'group/filter relative rounded-xl border backdrop-blur-sm transition-all duration-300 ease-out cursor-pointer overflow-hidden active:scale-[0.995] shadow-sm',
   {
     variants: {
       variant: {
         default: [
-          'bg-white/80 dark:bg-gray-900/80',
-          'border-gray-200/50 dark:border-gray-700/50',
-          'hover:bg-white/95 dark:hover:bg-gray-800/95',
-          'hover:border-gray-300/70 dark:hover:border-gray-600/70',
+          'bg-white dark:bg-slate-900',
+          'border-slate-200/60 dark:border-slate-700/60',
+          'hover:border-blue-300/70 dark:hover:border-blue-600/50',
+          'hover:shadow-md hover:shadow-blue-200/40 dark:hover:shadow-blue-900/30',
+          'hover:bg-blue-50/30 dark:hover:bg-blue-950/20',
         ],
         neon: [
-          'bg-white/80 dark:bg-gray-900/80',
-          'border-gray-200/50 dark:border-gray-700/50',
-          'hover:bg-white/95 dark:hover:bg-gray-800/95',
-          'hover:border-gray-300/70 dark:hover:border-gray-600/70',
+          'bg-white dark:bg-slate-900',
+          'border-slate-200/60 dark:border-slate-700/60',
+          'hover:border-blue-300/70 dark:hover:border-blue-600/50',
+          'hover:shadow-md hover:shadow-blue-200/40 dark:hover:shadow-blue-900/30',
+          'hover:bg-blue-50/30 dark:hover:bg-blue-950/20',
         ],
         minimal: [
-          'bg-white/80 dark:bg-gray-900/80',
-          'border-gray-200/50 dark:border-gray-700/50',
-          'hover:bg-white/95 dark:hover:bg-gray-800/95',
-          'hover:border-gray-300/70 dark:hover:border-gray-600/70',
+          'bg-white dark:bg-slate-900',
+          'border-slate-200/60 dark:border-slate-700/60',
+          'hover:border-blue-300/70 dark:hover:border-blue-500/50',
+          'hover:shadow-md hover:shadow-blue-100/50 dark:hover:shadow-blue-900/30',
+          'hover:bg-blue-50/30 dark:hover:bg-blue-950/20',
         ],
       },
       disabled: {
@@ -54,15 +57,15 @@ export const tagFilterContentVariants = cva(
 );
 
 export const tagFilterCheckboxVariants = cva(
-  'flex-shrink-0 p-1 rounded-md transition-all duration-200',
+  'flex-shrink-0 p-1 rounded-md transition-all duration-300',
   {
     variants: {
       variant: {
         default:
-          'bg-gray-50/50 dark:bg-gray-800/50 group-hover:bg-gray-100/70 dark:group-hover:bg-gray-700/70',
-        neon: 'bg-gray-50/50 dark:bg-gray-800/50 group-hover:bg-gray-100/70 dark:group-hover:bg-gray-700/70',
+          'bg-gray-50/50 dark:bg-gray-800/50 group-hover/filter:bg-gray-100/70 dark:group-hover/filter:bg-gray-700/70',
+        neon: 'bg-gray-50/50 dark:bg-gray-800/50 group-hover/filter:bg-gray-100/70 dark:group-hover/filter:bg-gray-700/70',
         minimal:
-          'bg-gray-50/50 dark:bg-gray-800/50 group-hover:bg-gray-100/70 dark:group-hover:bg-gray-700/70',
+          'bg-gray-50/50 dark:bg-gray-800/50 group-hover/filter:bg-gray-100/70 dark:group-hover/filter:bg-gray-700/70',
       },
     },
     defaultVariants: {
@@ -72,7 +75,7 @@ export const tagFilterCheckboxVariants = cva(
 );
 
 export const tagFilterCheckboxInputVariants = cva(
-  'border border-gray-400 dark:border-gray-500 data-[state=unchecked]:border-gray-400 dark:data-[state=unchecked]:border-gray-500 group-hover:border-gray-500 dark:group-hover:border-gray-400 focus-visible:ring-0',
+  'border border-gray-400 dark:border-gray-500 data-[state=unchecked]:border-gray-400 dark:data-[state=unchecked]:border-gray-500 group-hover/filter:border-gray-500 dark:group-hover/filter:border-gray-400 focus-visible:ring-0 transition-colors duration-300',
   {
     variants: {
       variant: {
@@ -101,15 +104,15 @@ export const tagFilterTextVariants = cva('flex-1 space-y-1', {
 });
 
 export const tagFilterLabelVariants = cva(
-  'block font-semibold cursor-pointer select-none transition-colors duration-200',
+  'block font-semibold cursor-pointer select-none transition-colors duration-300',
   {
     variants: {
       variant: {
         default:
-          'text-gray-900 dark:text-gray-100 group-hover:text-gray-950 dark:group-hover:text-gray-50',
-        neon: 'text-gray-900 dark:text-gray-100 group-hover:text-gray-950 dark:group-hover:text-gray-50',
+          'text-gray-900 dark:text-gray-100 group-hover/filter:text-gray-950 dark:group-hover/filter:text-gray-50',
+        neon: 'text-gray-900 dark:text-gray-100 group-hover/filter:text-gray-950 dark:group-hover/filter:text-gray-50',
         minimal:
-          'text-gray-900 dark:text-gray-100 group-hover:text-gray-950 dark:group-hover:text-gray-50',
+          'text-gray-900 dark:text-gray-100 group-hover/filter:text-gray-950 dark:group-hover/filter:text-gray-50',
       },
       size: {
         sm: 'text-xs',
@@ -125,15 +128,15 @@ export const tagFilterLabelVariants = cva(
 );
 
 export const tagFilterDescriptionVariants = cva(
-  'transition-colors duration-200 leading-relaxed',
+  'transition-colors duration-300 leading-relaxed',
   {
     variants: {
       variant: {
         default:
-          'text-gray-600 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-300',
-        neon: 'text-gray-600 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-300',
+          'text-gray-600 dark:text-gray-400 group-hover/filter:text-gray-700 dark:group-hover/filter:text-gray-300',
+        neon: 'text-gray-600 dark:text-gray-400 group-hover/filter:text-gray-700 dark:group-hover/filter:text-gray-300',
         minimal:
-          'text-gray-600 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-300',
+          'text-gray-600 dark:text-gray-400 group-hover/filter:text-gray-700 dark:group-hover/filter:text-gray-300',
       },
       size: {
         sm: 'text-[10px]',
