@@ -1,6 +1,7 @@
 export { default as CreateTagForm } from './CreateTagForm/CreateTagForm.svelte';
 export { default as ImageTagList } from './ImageTagList/ImageTagList.svelte';
 export { default as TagBadge } from './TagBadge/TagBadge.svelte';
+export * from './TagBadge/TagBadge.theme';
 export { default as TagCombobox } from './TagCombobox/TagCombobox.svelte';
 export { default as TagCreationButton } from './TagCreationButton/TagCreationButton.svelte';
 export * from './TagCreationButton/TagCreationButton.theme';

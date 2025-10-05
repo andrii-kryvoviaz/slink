@@ -27,13 +27,13 @@
   {#each items as item (item.id)}
     <div
       out:fade={{ duration: 500 }}
-      class="group relative w-full overflow-hidden rounded-xl border border-gray-200/50 bg-white/80 backdrop-blur-sm transition-all duration-300 hover:shadow-xl hover:shadow-gray-200/60 hover:border-gray-300/70 hover:bg-white/95 dark:border-gray-700/50 dark:bg-gray-900/80 dark:hover:shadow-gray-900/40 dark:hover:border-gray-600/70 dark:hover:bg-gray-800/95"
+      class="group relative w-full max-w-[1600px] mx-auto overflow-hidden rounded-xl border border-gray-200/50 bg-white/80 backdrop-blur-sm transition-all duration-300 hover:shadow-xl hover:shadow-gray-200/60 hover:border-gray-300/70 hover:bg-white/95 dark:border-gray-700/50 dark:bg-gray-900/80 dark:hover:shadow-gray-900/40 dark:hover:border-gray-600/70 dark:hover:bg-gray-800/95"
     >
-      <div class="p-4 sm:p-6">
-        <div class="flex flex-col gap-4 sm:flex-row sm:gap-6 lg:gap-8">
+      <div class="p-3 sm:p-4 md:p-6">
+        <div class="flex flex-col gap-4 md:flex-row md:gap-6 lg:gap-8">
           <a
             href={`/info/${item.id}`}
-            class="flex w-full shrink-0 overflow-hidden rounded-t-xl max-w-full sm:rounded-lg sm:w-96 lg:w-80 xl:w-96 sm:max-w-none"
+            class="flex w-full shrink-0 overflow-hidden rounded-lg md:w-64 lg:w-80 xl:w-96"
           >
             <ImagePlaceholder
               src={`/image/${item.attributes.fileName}?width=350&height=350&crop=true`}
@@ -71,7 +71,7 @@
             </div>
 
             {#if item.tags && item.tags.length > 0}
-              <div class="mt-4">
+              <div class="mt-2 sm:mt-4">
                 <ImageTagList
                   imageId={item.id}
                   variant="neon"
@@ -83,7 +83,7 @@
             {/if}
 
             <div
-              class="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2 transition-opacity duration-300 group-hover:opacity-100 opacity-90"
+              class="mt-2 sm:mt-4 grid grid-cols-1 xs:grid-cols-2 gap-2 transition-opacity duration-300 group-hover:opacity-100 opacity-90"
             >
               <div
                 class="flex items-center gap-3 rounded-md bg-gray-50/30 px-3 py-2 dark:bg-gray-800/20 transition-colors duration-300 group-hover:bg-gray-100/50 dark:group-hover:bg-gray-700/30"
