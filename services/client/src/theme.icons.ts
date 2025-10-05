@@ -142,4 +142,6 @@ export const themeIcons: string[] = [
   'lucide:hash',
   'lucide:info',
   'heroicons:x-mark-20-solid',
+  'ph:moon-thin',
+  'ph:sun-thin',
 ];

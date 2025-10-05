@@ -1,27 +1,25 @@
 <script lang="ts">
+  import {
+    ThemeSwitchContainer,
+    ThemeSwitchIcon,
+    ThemeSwitchTheme,
+    ThemeSwitchTooltip,
+  } from '@slink/feature/Layout/ThemeSwitch/ThemeSwitch.theme';
+  import type {
+    ThemeSwitchAnimation,
+    ThemeSwitchProps,
+  } from '@slink/feature/Layout/ThemeSwitch/ThemeSwitch.types';
   import { twMerge } from 'tailwind-merge';
 
   import { Theme } from '$lib/settings';
   import Icon from '@iconify/svelte';
   import type { HTMLButtonAttributes } from 'svelte/elements';
 
-  import {
-    ThemeSwitchContainer,
-    ThemeSwitchIcon,
-    ThemeSwitchTheme,
-    ThemeSwitchTooltip,
-  } from './ThemeSwitch.theme';
-  import type { ThemeSwitchProps } from './ThemeSwitch.types';
-
   interface Props extends Omit<HTMLButtonAttributes, 'size'>, ThemeSwitchProps {
     disabled?: boolean;
     checked?: boolean;
     showTooltip?: boolean;
     tooltipText?: string;
-    customIcons?: {
-      light?: string;
-      dark?: string;
-    };
     class?: string;
     on: { change: (theme: Theme) => void };
   }
@@ -34,7 +32,6 @@
     animation = 'subtle',
     showTooltip = false,
     tooltipText,
-    customIcons,
     class: customClass = '',
     on,
     ...buttonProps
@@ -44,18 +41,21 @@
     twMerge(ThemeSwitchTheme({ variant, size, animation }), customClass),
   );
 
+  const animationMap: Record<
+    NonNullable<ThemeSwitchAnimation>,
+    'scale' | 'bounce' | 'none'
+  > = {
+    subtle: 'scale',
+    bounce: 'bounce',
+    smooth: 'scale',
+    none: 'none',
+  };
+
   const iconClasses = $derived(
     ThemeSwitchIcon({
       variant,
       size,
-      animation:
-        animation === 'subtle'
-          ? 'scale'
-          : animation === 'bounce'
-            ? 'bounce'
-            : animation === 'smooth'
-              ? 'scale'
-              : 'none',
+      animation: animation ? animationMap[animation] : 'none',
     }),
   );
 
@@ -66,9 +66,6 @@
   const defaultTooltip = $derived(
     tooltipText || (checked ? 'Switch to light mode' : 'Switch to dark mode'),
   );
-
-  const lightIcon = $derived(customIcons?.light || 'ph:sun-thin');
-  const darkIcon = $derived(customIcons?.dark || 'ph:moon-thin');
 
   const handleThemeChange = () => {
     if (disabled) return;
@@ -86,9 +83,9 @@
     {...buttonProps}
   >
     {#if checked}
-      <Icon icon={darkIcon} class={iconClasses} />
+      <Icon icon="ph:moon-thin" class={iconClasses} />
     {:else}
-      <Icon icon={lightIcon} class={iconClasses} />
+      <Icon icon="ph:sun-thin" class={iconClasses} />
     {/if}
   </button>
 
