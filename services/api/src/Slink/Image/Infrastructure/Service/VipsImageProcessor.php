@@ -106,14 +106,23 @@ final class VipsImageProcessor implements ImageProcessorInterface {
   public function stripMetadata(string $path): string {
     try {
       $image = VipsImage::newFromFile($path);
-      $stripped = $image->copy(['strip' => false]);
-      
-      if ($image->getType('icc-profile-data') !== 0) {
-        $icc = $image->get('icc-profile-data');
-        $stripped = $stripped->copy(['icc-profile-data' => $icc]);
+      $mimeType = mime_content_type($path);
+
+      if ($mimeType === false) {
+        return $path;
       }
+
+      $imageFormat = ImageFormat::fromMimeType($mimeType);
+
+      if ($imageFormat === null) {
+        return $path;
+      }
+
+      $extension = $imageFormat->getExtension();
+
+      $image->writeToFile("$path.$extension", ['strip' => true]);
+      rename("$path.$extension", $path);
       
-      $stripped->writeToFile($path);
       return $path;
     } catch (Throwable) {
       return $path;

@@ -22,6 +22,17 @@ enum ImageFormat: string {
     };
   }
 
+  public static function fromMimeType(string $mimeType): ?self {
+    return match ($mimeType) {
+      'image/jpeg', 'image/jpg' => self::JPEG,
+      'image/png' => self::PNG,
+      'image/gif' => self::GIF,
+      'image/webp' => self::WEBP,
+      'image/avif' => self::AVIF,
+      default => null
+    };
+  }
+
   public function getExtension(): string {
     return $this->value;
   }
