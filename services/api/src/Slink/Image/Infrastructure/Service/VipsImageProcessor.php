@@ -105,7 +105,7 @@ final class VipsImageProcessor implements ImageProcessorInterface {
    */
   public function stripMetadata(string $path): string {
     try {
-      $image = VipsImage::newFromFile($path);
+      $image = VipsImage::newFromFile($path, ['access' => 'sequential']);
       $mimeType = mime_content_type($path);
 
       if ($mimeType === false) {
@@ -118,6 +118,8 @@ final class VipsImageProcessor implements ImageProcessorInterface {
         return $path;
       }
 
+      $image = $image->autorot();
+      
       $extension = $imageFormat->getExtension();
 
       $image->writeToFile("$path.$extension", ['strip' => true]);
