@@ -12,11 +12,9 @@ FROM node:${NODE_VERSION}-alpine AS node
 FROM node:${NODE_VERSION}-alpine AS node-dependencies
 WORKDIR /client
 
-RUN echo "network-timeout=300000" >> ~/.yarnrc
-
 COPY services/client/package.json services/client/yarn.lock ./
 
-RUN yarn install --frozen-lockfile --non-interactive
+RUN yarn install --frozen-lockfile --non-interactive --network-timeout 900000
 
 COPY services/client/plugins ./plugins
 COPY services/client/src ./src
