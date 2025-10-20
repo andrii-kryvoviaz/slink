@@ -100,7 +100,42 @@ final class SmbStorage extends AbstractStorage implements DirectoryStorageInterf
    */
   public function delete(string $fileName): void {
     $path = implode('/', [ $this->getPath(), $fileName ]);
-    $this->share->del($path);
+    
+    try {
+      $this->share->del($path);
+    } catch (NotFoundException) {
+    }
+    
+    [$name, $_] = explode('.', $fileName);
+    $this->deleteCacheFiles($name);
+  }
+  
+  private function deleteCacheFiles(string $prefix): void {
+    $cachePath = $this->getPath(isCache: true);
+    
+    if (!$cachePath) {
+      return;
+    }
+    
+    try {
+      $contents = $this->share->dir($cachePath);
+      
+      foreach ($contents as $file) {
+        if ($file->isDirectory()) {
+          continue;
+        }
+        
+        $fileName = $file->getName();
+        
+        if (str_starts_with($fileName, $prefix . '-')) {
+          try {
+            $this->share->del($cachePath . '/' . $fileName);
+          } catch (NotFoundException) {
+          }
+        }
+      }
+    } catch (NotFoundException) {
+    }
   }
   
   public function dirExists(string $path): bool {

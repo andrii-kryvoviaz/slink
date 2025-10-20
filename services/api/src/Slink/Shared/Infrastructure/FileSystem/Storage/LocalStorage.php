@@ -58,9 +58,34 @@ final class LocalStorage extends AbstractStorage implements DirectoryStorageInte
   }
   
   public function delete(string $fileName): void {
-    $path = $this->getPath() . '/' . $fileName;
+    $imagePath = $this->getPath() . '/' . $fileName;
     
-    unlink($path);
+    if (file_exists($imagePath)) {
+      unlink($imagePath);
+    }
+    
+    [$name, $_] = explode('.', $fileName);
+    $this->deleteCacheFiles($name);
+  }
+  
+  private function deleteCacheFiles(string $prefix): void {
+    $cachePath = $this->getPath(isCache: true);
+    
+    if (!$cachePath || !is_dir($cachePath)) {
+      return;
+    }
+    
+    $files = glob($cachePath . '/' . $prefix . '-*');
+    
+    if ($files === false) {
+      return;
+    }
+    
+    foreach ($files as $file) {
+      if (is_file($file)) {
+        unlink($file);
+      }
+    }
   }
   
   public function exists(string $path): bool {
