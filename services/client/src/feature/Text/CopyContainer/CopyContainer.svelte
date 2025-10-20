@@ -23,6 +23,8 @@
     copyButtonContent?: Snippet<[]>;
     size?: CopyContainerSize;
     variant?: CopyContainerVariant;
+    isLoading?: boolean;
+    onBeforeCopy?: () => Promise<string | void>;
   }
 
   let {
@@ -32,6 +34,8 @@
     copyButtonContent,
     size = 'md',
     variant = 'default',
+    isLoading = false,
+    onBeforeCopy,
   }: Props = $props();
 
   let isCopiedActive: boolean = $state(false);
@@ -39,7 +43,16 @@
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(value);
+      let textToCopy = value;
+
+      if (onBeforeCopy) {
+        const result = await onBeforeCopy();
+        if (result) {
+          textToCopy = result;
+        }
+      }
+
+      await navigator.clipboard.writeText(textToCopy);
       isCopiedActive = true;
 
       if (inputElement) {
@@ -86,10 +99,18 @@
         class={buttonClasses}
         variant="primary"
         size="xs"
-        disabled={isCopiedActive}
+        disabled={isCopiedActive || isLoading}
         onclick={handleCopy}
       >
-        {#if isCopiedActive}
+        {#if isLoading}
+          <div
+            class="flex items-center gap-1.5"
+            in:scale={{ duration: 150, easing: cubicOut }}
+          >
+            <Icon icon="lucide:loader-2" class="h-3.5 w-3.5 animate-spin" />
+            <span>Signing...</span>
+          </div>
+        {:else if isCopiedActive}
           <div
             class="flex items-center gap-1.5"
             in:scale={{ duration: 150, easing: cubicOut }}

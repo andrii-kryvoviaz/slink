@@ -155,4 +155,37 @@ export class ImageResource extends AbstractResource {
       json: { preserveOnDisk },
     });
   }
+
+  public async signImageParams(
+    id: string,
+    params: {
+      width?: number;
+      height?: number;
+      crop?: boolean;
+    },
+  ): Promise<SignedImageParams> {
+    const searchParams = new URLSearchParams();
+
+    if (params.width !== undefined) {
+      searchParams.append('width', params.width.toString());
+    }
+
+    if (params.height !== undefined) {
+      searchParams.append('height', params.height.toString());
+    }
+
+    if (params.crop !== undefined) {
+      searchParams.append('crop', params.crop.toString());
+    }
+
+    return this.get(`/image/${id}/sign?${searchParams.toString()}`);
+  }
+}
+
+export interface SignedImageParams {
+  imageId: string;
+  width: number | null;
+  height: number | null;
+  crop: boolean;
+  signature: string;
 }

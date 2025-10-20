@@ -5,4 +5,5 @@ export type ImageSize = {
 
 export type ImageParams = ImageSize & {
   crop?: boolean;
+  s?: string;
 };

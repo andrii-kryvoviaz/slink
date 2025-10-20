@@ -60,15 +60,17 @@
   const handleSubmit = () => {
     const sizeChange: Partial<ImageSize & { crop?: boolean }> = {};
 
-    if (calculatedWidth) {
+    if (calculatedWidth && calculatedWidth !== width) {
       sizeChange.width = calculatedWidth;
     }
 
-    if (calculatedHeight) {
+    if (calculatedHeight && calculatedHeight !== height) {
       sizeChange.height = calculatedHeight;
     }
 
-    sizeChange.crop = !aspectRatioLinked;
+    if (!aspectRatioLinked) {
+      sizeChange.crop = true;
+    }
 
     on?.change(sizeChange);
   };

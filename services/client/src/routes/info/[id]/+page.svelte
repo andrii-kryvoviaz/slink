@@ -14,6 +14,7 @@
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
+  import type { SignedImageParams } from '@slink/api/Resources/ImageResource';
   import type { Tag } from '@slink/api/Resources/TagResource';
 
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
@@ -53,9 +54,9 @@
     return paramsString ? [url, paramsString].join('?') : url;
   };
 
-  let params: Partial<ImageParams> = $state({});
+  let unsignedParams: Partial<ImageSize & { crop?: boolean }> = $state({});
   let directLink: string = $derived(
-    formatImageUrl([page.url.origin, image.url], params),
+    formatImageUrl([page.url.origin, image.url], {}),
   );
 
   const maxWidthClass = $derived.by(() => {
@@ -74,22 +75,50 @@
     }
   });
 
+  const {
+    isLoading: isSigningParams,
+    error: signParamsError,
+    data: signedParamsData,
+    run: signImageParams,
+  } = ReactiveState<SignedImageParams>(
+    (
+      imageId: string,
+      params: { width?: number; height?: number; crop?: boolean },
+    ) => {
+      return ApiClient.image.signImageParams(imageId, params);
+    },
+    {
+      minExecutionTime: 200,
+    },
+  );
+
   const handleImageSizeChange = (
     value?: Partial<ImageSize & { crop?: boolean }>,
   ) => {
-    let { width, height, crop, ...rest } = params;
+    unsignedParams = value ?? {};
+  };
 
-    if (value?.crop === false) {
-      params = {
-        ...rest,
-        ...(value.width && { width: value.width }),
-        ...(value.height && { height: value.height }),
+  const handleBeforeCopy = async (): Promise<string | void> => {
+    if (Object.keys(unsignedParams).length === 0) {
+      return;
+    }
+
+    await signImageParams(image.id, unsignedParams);
+
+    if ($signParamsError) {
+      printErrorsAsToastMessage($signParamsError);
+      return;
+    }
+
+    const signedParams = $signedParamsData;
+    if (signedParams) {
+      const params = {
+        width: signedParams.width ?? undefined,
+        height: signedParams.height ?? undefined,
+        crop: signedParams.crop || undefined,
+        s: signedParams.signature,
       };
-    } else {
-      params = {
-        ...rest,
-        ...value,
-      };
+      return formatImageUrl([page.url.origin, image.url], params);
     }
   };
 
@@ -182,7 +211,11 @@
         <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">
           Use the link below to share or embed the image.
         </p>
-        <CopyContainer value={directLink} />
+        <CopyContainer
+          value={directLink}
+          isLoading={$isSigningParams}
+          onBeforeCopy={handleBeforeCopy}
+        />
       </div>
     </div>
   </div>
