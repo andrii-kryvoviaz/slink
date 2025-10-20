@@ -2,6 +2,35 @@
 
 set -euo pipefail
 
+generate_app_secret_if_missing() {
+  local env_file="/services/api/.env"
+  
+  if [ ! -f "$env_file" ]; then
+    echo "[Startup] .env file not found at $env_file"
+    return
+  fi
+  
+  if grep -q "^APP_SECRET=" "$env_file"; then
+    echo "[Startup] APP_SECRET already configured"
+    return
+  fi
+  
+  echo "[Startup] Generating APP_SECRET..."
+  local secret=$(openssl rand -hex 32)
+  
+  if grep -q "^###> App Settings ###$" "$env_file"; then
+    sed -i "/^###> App Settings ###$/a APP_SECRET=$secret" "$env_file"
+    echo "[Startup] APP_SECRET added to App Settings section"
+  else
+    echo "APP_SECRET=$secret" >> "$env_file"
+    echo "[Startup] APP_SECRET appended to .env file"
+  fi
+  
+  echo "[Startup] APP_SECRET successfully configured"
+}
+
+generate_app_secret_if_missing
+
 slink lexik:jwt:generate-keypair --skip-if-exists
 
 if [ -f /services/api/.env ]; then
