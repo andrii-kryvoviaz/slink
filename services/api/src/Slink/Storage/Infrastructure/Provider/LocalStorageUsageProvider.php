@@ -30,19 +30,29 @@ final readonly class LocalStorageUsageProvider implements StorageUsageProviderIn
         provider: StorageProvider::Local->value,
         usedBytes: 0,
         totalBytes: $this->getDiskSpace($storageDir),
-        fileCount: 0
+        fileCount: 0,
+        cacheBytes: 0,
+        cacheFileCount: 0
       );
     }
+    
+    $imagesDir = $slinkDir . '/images';
+    $cacheDir = $slinkDir . '/cache';
     
     $usedBytes = $this->getDirectorySize($slinkDir);
     $fileCount = $this->getFileCount($slinkDir);
     $totalBytes = $this->getDiskSpace($storageDir);
     
+    $cacheBytes = is_dir($cacheDir) ? $this->getDirectorySize($cacheDir) : 0;
+    $cacheFileCount = is_dir($cacheDir) ? $this->getFileCount($cacheDir) : 0;
+    
     return new StorageUsage(
       provider: StorageProvider::Local->value,
       usedBytes: $usedBytes,
       totalBytes: $totalBytes,
-      fileCount: $fileCount
+      fileCount: $fileCount,
+      cacheBytes: $cacheBytes,
+      cacheFileCount: $cacheFileCount
     );
   }
   

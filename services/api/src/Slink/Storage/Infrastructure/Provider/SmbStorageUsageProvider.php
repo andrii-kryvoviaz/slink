@@ -37,17 +37,26 @@ final readonly class SmbStorageUsageProvider implements StorageUsageProviderInte
           provider: StorageProvider::SmbShare->value,
           usedBytes: 0,
           totalBytes: null,
-          fileCount: 0
+          fileCount: 0,
+          cacheBytes: 0,
+          cacheFileCount: 0
         );
       }
       
       [$usedBytes, $fileCount] = $this->calculateDirectoryUsage($share, $slinkPath);
       
+      $cachePath = rtrim($slinkPath, '/') . '/cache';
+      [$cacheBytes, $cacheFileCount] = $this->directoryExists($share, $cachePath)
+        ? $this->calculateDirectoryUsage($share, $cachePath)
+        : [0, 0];
+      
       return new StorageUsage(
         provider: StorageProvider::SmbShare->value,
         usedBytes: $usedBytes,
         totalBytes: null,
-        fileCount: $fileCount
+        fileCount: $fileCount,
+        cacheBytes: $cacheBytes,
+        cacheFileCount: $cacheFileCount
       );
     } catch (DependencyException $e) {
       throw new SmbConfigurationIncompleteException('SMB client dependency error: ' . $e->getMessage());

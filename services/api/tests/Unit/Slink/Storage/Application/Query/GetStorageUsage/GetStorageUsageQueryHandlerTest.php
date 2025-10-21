@@ -24,7 +24,7 @@ final class GetStorageUsageQueryHandlerTest extends TestCase {
     #[Test]
     public function itHandlesGetStorageUsageQuery(): void {
         $query = new GetStorageUsageQuery();
-        $storageUsage = new StorageUsage('local', 1024, 10240, 5);
+        $storageUsage = new StorageUsage('local', 1024, 10240, 5, 0, 0);
         
         $expectedPayload = [
             'provider' => 'local',
@@ -32,6 +32,8 @@ final class GetStorageUsageQueryHandlerTest extends TestCase {
             'totalBytes' => 10240,
             'fileCount' => 5,
             'usagePercentage' => 10.0,
+            'cacheBytes' => 0,
+            'cacheFileCount' => 0,
         ];
 
         $this->storageUsageService
@@ -47,7 +49,7 @@ final class GetStorageUsageQueryHandlerTest extends TestCase {
     #[Test]
     public function itHandlesGetStorageUsageQueryWithNullTotalBytes(): void {
         $query = new GetStorageUsageQuery();
-        $storageUsage = new StorageUsage('s3', 2048, null, 8);
+        $storageUsage = new StorageUsage('s3', 2048, null, 8, 0, 0);
         
         $expectedPayload = [
             'provider' => 's3',
@@ -55,6 +57,8 @@ final class GetStorageUsageQueryHandlerTest extends TestCase {
             'totalBytes' => null,
             'fileCount' => 8,
             'usagePercentage' => null,
+            'cacheBytes' => 0,
+            'cacheFileCount' => 0,
         ];
 
         $this->storageUsageService

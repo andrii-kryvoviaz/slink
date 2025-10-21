@@ -9,7 +9,9 @@ final readonly class StorageUsage {
     private string $provider,
     private int $usedBytes,
     private ?int $totalBytes = null,
-    private int $fileCount = 0
+    private int $fileCount = 0,
+    private int $cacheBytes = 0,
+    private int $cacheFileCount = 0
   ) {
   }
   
@@ -27,6 +29,14 @@ final readonly class StorageUsage {
   
   public function getFileCount(): int {
     return $this->fileCount;
+  }
+  
+  public function getCacheBytes(): int {
+    return $this->cacheBytes;
+  }
+  
+  public function getCacheFileCount(): int {
+    return $this->cacheFileCount;
   }
   
   public function getUsagePercentage(): ?float {
@@ -47,6 +57,8 @@ final readonly class StorageUsage {
       'totalBytes' => $this->totalBytes,
       'fileCount' => $this->fileCount,
       'usagePercentage' => $this->getUsagePercentage(),
+      'cacheBytes' => $this->cacheBytes,
+      'cacheFileCount' => $this->cacheFileCount,
     ];
   }
 }

@@ -6,6 +6,8 @@ export interface StorageUsageResponse {
   totalBytes: number | null;
   fileCount: number;
   usagePercentage: number | null;
+  cacheBytes: number;
+  cacheFileCount: number;
 }
 
 export interface ClearCacheResponse {

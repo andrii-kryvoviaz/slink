@@ -78,7 +78,9 @@ final class StorageUsageTest extends TestCase {
             provider: 'smb',
             usedBytes: 5120,
             totalBytes: 20480,
-            fileCount: 42
+            fileCount: 42,
+            cacheBytes: 0,
+            cacheFileCount: 0
         );
 
         $expectedPayload = [
@@ -87,6 +89,8 @@ final class StorageUsageTest extends TestCase {
             'totalBytes' => 20480,
             'fileCount' => 42,
             'usagePercentage' => 25.0,
+            'cacheBytes' => 0,
+            'cacheFileCount' => 0,
         ];
 
         $this->assertSame($expectedPayload, $storageUsage->toPayload());
@@ -105,6 +109,8 @@ final class StorageUsageTest extends TestCase {
             'totalBytes' => null,
             'fileCount' => 0,
             'usagePercentage' => null,
+            'cacheBytes' => 0,
+            'cacheFileCount' => 0,
         ];
 
         $this->assertSame($expectedPayload, $storageUsage->toPayload());

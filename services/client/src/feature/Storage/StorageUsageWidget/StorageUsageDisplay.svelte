@@ -71,19 +71,70 @@
           </Badge>
         </div>
 
-        <div class="space-y-2">
-          <div class="flex items-center justify-between text-xs">
-            <span class="text-sidebar-foreground/60">Used Storage</span>
-            <span class="text-sidebar-foreground">
-              {bytesToSize(data.usedBytes)}
-            </span>
-          </div>
+        <div class="space-y-3">
+          <div>
+            <div class="flex items-center justify-between text-xs mb-2">
+              <span class="text-sidebar-foreground/60">Total Usage</span>
+              <span class="font-medium text-sidebar-foreground">
+                {bytesToSize(data.usedBytes + data.cacheBytes)}
+              </span>
+            </div>
 
-          <div class="flex items-center justify-between text-xs">
-            <span class="text-sidebar-foreground/60">Files</span>
-            <span class="font-medium text-sidebar-foreground"
-              >{data.fileCount.toLocaleString()}</span
+            <div
+              class="relative h-1 w-full bg-sidebar-accent/20 rounded-full overflow-hidden"
             >
+              {#if data.usedBytes > 0 || data.cacheBytes > 0}
+                {@const totalBytes = data.usedBytes + data.cacheBytes}
+                {@const imagesPercent = (data.usedBytes / totalBytes) * 100}
+                {@const cachePercent = (data.cacheBytes / totalBytes) * 100}
+
+                <div class="absolute inset-0 flex">
+                  <div
+                    class="bg-blue-500 transition-all duration-300"
+                    style="width: {imagesPercent}%"
+                  ></div>
+                  <div
+                    class="bg-purple-500 transition-all duration-300"
+                    style="width: {cachePercent}%"
+                  ></div>
+                </div>
+              {/if}
+            </div>
+
+            <div class="space-y-2 mt-3">
+              <div class="flex items-center justify-between text-xs">
+                <div class="flex items-center gap-1.5">
+                  <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+                  <span class="text-sidebar-foreground/60">Images</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="font-medium text-sidebar-foreground"
+                    >{bytesToSize(data.usedBytes)}</span
+                  >
+                  <span class="text-sidebar-foreground/40">·</span>
+                  <span class="text-sidebar-foreground/60 tabular-nums"
+                    >{data.fileCount.toLocaleString()} files</span
+                  >
+                </div>
+              </div>
+              {#if data.cacheBytes > 0}
+                <div class="flex items-center justify-between text-xs">
+                  <div class="flex items-center gap-1.5">
+                    <div class="w-2 h-2 rounded-full bg-purple-500"></div>
+                    <span class="text-sidebar-foreground/60">Cache</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="font-medium text-sidebar-foreground"
+                      >{bytesToSize(data.cacheBytes)}</span
+                    >
+                    <span class="text-sidebar-foreground/40">·</span>
+                    <span class="text-sidebar-foreground/60 tabular-nums"
+                      >{data.cacheFileCount.toLocaleString()} files</span
+                    >
+                  </div>
+                </div>
+              {/if}
+            </div>
           </div>
         </div>
       </div>
