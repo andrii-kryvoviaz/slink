@@ -11,6 +11,7 @@
     title?: Snippet;
     description?: Snippet;
     children?: Snippet;
+    actions?: Snippet;
     on?: {
       save: (event: {
         category: SettingCategory;
@@ -25,6 +26,7 @@
     title,
     description,
     children,
+    actions,
     on,
   }: Props = $props();
 
@@ -72,6 +74,10 @@
           <Loader variant="minimal" size="xs" />
           <span>Saving...</span>
         </div>
+      {/if}
+
+      {#if actions}
+        {@render actions?.()}
       {/if}
 
       <Button type="submit" variant="outline" size="sm" disabled={loading}>

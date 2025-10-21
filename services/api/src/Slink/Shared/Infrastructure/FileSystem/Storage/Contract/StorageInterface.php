@@ -49,6 +49,11 @@ interface StorageInterface {
   public function read(string $path): ?string;
   
   /**
+   * @return int
+   */
+  public function clearCache(): int;
+  
+  /**
    * @return string
    */
   public static function getAlias(): string;

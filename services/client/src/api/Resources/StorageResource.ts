@@ -8,8 +8,17 @@ export interface StorageUsageResponse {
   usagePercentage: number | null;
 }
 
+export interface ClearCacheResponse {
+  cleared: number;
+  message: string;
+}
+
 export class StorageResource extends AbstractResource {
   public async getUsage(): Promise<StorageUsageResponse> {
     return this.get('/storage/usage');
+  }
+
+  public async clearCache(): Promise<ClearCacheResponse> {
+    return this.delete('/storage/cache');
   }
 }

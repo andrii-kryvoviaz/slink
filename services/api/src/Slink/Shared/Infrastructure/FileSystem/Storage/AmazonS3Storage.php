@@ -141,6 +141,40 @@ final class AmazonS3Storage extends AbstractStorage implements ObjectStorageInte
   }
   
   /**
+   * @return int
+   */
+  public function clearCache(): int {
+    try {
+      $bucket = $this->getBucket();
+      $cachePrefix = $this->cacheDir . '/';
+      
+      $result = $this->client->listObjectsV2([
+        'Bucket' => $bucket,
+        'Prefix' => $cachePrefix,
+      ]);
+      
+      if (empty($result['Contents'])) {
+        return 0;
+      }
+      
+      $objectsToDelete = array_map(fn($object) => ['Key' => $object['Key']], $result['Contents']);
+      $count = count($objectsToDelete);
+      
+      $this->client->deleteObjects([
+        'Bucket' => $bucket,
+        'Delete' => [
+          'Objects' => $objectsToDelete,
+          'Quiet' => true,
+        ],
+      ]);
+      
+      return $count;
+    } catch (\Exception $e) {
+      throw new AmazonS3Exception($e->getMessage());
+    }
+  }
+  
+  /**
    * @return string
    */
   public static function getAlias(): string {

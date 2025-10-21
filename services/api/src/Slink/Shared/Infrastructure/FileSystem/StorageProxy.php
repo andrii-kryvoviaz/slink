@@ -76,6 +76,13 @@ final class StorageProxy implements StorageInterface {
   }
   
   /**
+   * @return int
+   */
+  public function clearCache(): int {
+    return $this->storageProvider->clearCache();
+  }
+  
+  /**
    * @return string
    */
   public static function getAlias(): string {

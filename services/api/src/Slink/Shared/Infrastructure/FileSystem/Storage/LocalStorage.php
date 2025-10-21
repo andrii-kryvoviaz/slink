@@ -97,6 +97,33 @@ final class LocalStorage extends AbstractStorage implements DirectoryStorageInte
   }
   
   /**
+   * @return int
+   */
+  public function clearCache(): int {
+    $cachePath = $this->getPath(isCache: true);
+    
+    if (!$cachePath || !is_dir($cachePath)) {
+      return 0;
+    }
+    
+    $count = 0;
+    $files = glob($cachePath . '/*');
+    
+    if ($files === false) {
+      return 0;
+    }
+    
+    foreach ($files as $file) {
+      if (is_file($file)) {
+        unlink($file);
+        $count++;
+      }
+    }
+    
+    return $count;
+  }
+  
+  /**
    * @return string
    */
   public static function getAlias(): string {

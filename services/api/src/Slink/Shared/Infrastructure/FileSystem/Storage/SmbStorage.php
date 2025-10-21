@@ -167,6 +167,38 @@ final class SmbStorage extends AbstractStorage implements DirectoryStorageInterf
   }
   
   /**
+   * @return int
+   */
+  public function clearCache(): int {
+    $cachePath = $this->getPath(isCache: true);
+    
+    if (!$cachePath) {
+      return 0;
+    }
+    
+    $count = 0;
+    
+    try {
+      $contents = $this->share->dir($cachePath);
+      
+      foreach ($contents as $file) {
+        if ($file->isDirectory()) {
+          continue;
+        }
+        
+        try {
+          $this->share->del($cachePath . '/' . $file->getName());
+          $count++;
+        } catch (NotFoundException) {
+        }
+      }
+    } catch (NotFoundException) {
+    }
+    
+    return $count;
+  }
+  
+  /**
    * @return string
    */
   public static function getAlias(): string {

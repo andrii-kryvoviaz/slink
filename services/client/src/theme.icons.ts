@@ -144,4 +144,11 @@ export const themeIcons: string[] = [
   'heroicons:x-mark-20-solid',
   'ph:moon-thin',
   'ph:sun-thin',
+  'ph:database-duotone',
+  'ph:check-circle-duotone',
+  'ph:trash-duotone',
+  'ph:warning-circle-duotone',
+  'ph:circle-notch-duotone',
+  'ph:check-duotone',
+  'ph:info-duotone',
 ];
