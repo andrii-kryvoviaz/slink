@@ -10,8 +10,8 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-@source inline("{,}grid-cols-{1..12}");
-@source inline("{,}gap-{0..12}");
+@source inline('{,}grid-cols-{1..12}');
+@source inline('{,}gap-{0..12}');
 
 @utility text-* {
   color: --value(--color-* -text) !important;
