@@ -18,8 +18,8 @@ final readonly class ProjectMetadataExtractor {
     protected ConfigurationProviderInterface $configurationProvider
   ) {
     $packageJsonPath = $this->kernel->getEnvironment() === 'dev'
-      ? '/client/package.json'
-      : '/svelte-kit/package.json';
+      ? '/../client/package.json'
+      : '/../client/svelte-kit/package.json';
     
     $jsonContent = file_get_contents($this->kernel->getProjectDir() . $packageJsonPath);
     
@@ -27,9 +27,7 @@ final readonly class ProjectMetadataExtractor {
   }
   
   public function version(): string {
-//    return $this->clientAppMetadata['version'] ?? 'N/A';
-    // ToDo: Investigate why github workflow does not pick up the latest package.json, hide the version for now
-    return '';
+    return $this->clientAppMetadata['version'] ?? 'N/A';
   }
   
   /**

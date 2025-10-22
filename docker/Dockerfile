@@ -112,6 +112,9 @@ RUN echo "ffi.enable=1" > /usr/local/etc/php/conf.d/zz-ffi-enable.ini
 
 COPY ./docker/config/supervisord.conf /etc/supervisord.conf
 
+COPY ./docker/scripts/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
 COPY ./docker/scripts/startup.sh /usr/local/bin/startup.sh
 RUN chmod +x /usr/local/bin/startup.sh
 
@@ -136,7 +139,7 @@ ENV PROXY_PREFIXES="/api;/image"
 ENV ORIGIN=http://localhost:3000
 ENV TZ=UTC
 
-CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisord.conf"]
+CMD ["/usr/local/bin/entrypoint.sh"]
 ### End of base build stage ###
 
 ### Test image ###

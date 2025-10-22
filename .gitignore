@@ -18,6 +18,7 @@ services/*/var
 
 public/images
 public/slink
+var/data/keys
 /slink
 *.db
 dump.rdb
