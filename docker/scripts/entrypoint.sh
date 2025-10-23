@@ -2,10 +2,7 @@
 
 set -euo pipefail
 
-echo "[Entrypoint] Running startup initialization..."
-/usr/local/bin/startup.sh
-
 slink slink:about
 
-echo "[Entrypoint] Starting supervisord..."
+/usr/local/bin/startup.sh
 exec /usr/bin/supervisord -n -c /etc/supervisord.conf
