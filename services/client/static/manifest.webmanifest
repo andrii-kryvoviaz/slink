@@ -57,10 +57,7 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": [
-    "utilities",
-    "productivity"
-  ],
+  "categories": ["utilities", "productivity"],
   "screenshots": [
     {
       "src": "/screenshots/1.png",
