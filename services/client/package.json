@@ -46,6 +46,7 @@
     "@types/node": "24.8.1",
     "@typescript-eslint/eslint-plugin": "^8.46.1",
     "@typescript-eslint/parser": "^8.46.1",
+    "@vite-pwa/sveltekit": "^1.0.1",
     "eslint": "^9.38.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-svelte": "^3.12.5",
@@ -60,7 +61,9 @@
     "svelte-check": "^4.3.3",
     "tailwindcss": "^4.1.15",
     "typescript": "^5.9.3",
-    "vite": "^7.1.11"
+    "vite": "^7.1.11",
+    "vite-plugin-pwa": "^1.1.0",
+    "workbox-window": "^7.3.0"
   },
   "lint-staged": {
     "*.{js,ts,svelte}": [
