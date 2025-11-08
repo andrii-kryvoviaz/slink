@@ -1,18 +1,16 @@
 name: Docker Cache Warmup
 
 on:
-  schedule:
-    - cron: '0 2 * * *'
   workflow_dispatch:
   push:
     branches:
       - main
     paths:
-      - 'docker/Dockerfile'
-      - 'services/api/composer.json'
-      - 'services/api/composer.lock'
-      - 'services/client/package.json'
-      - 'services/client/yarn.lock'
+      - "docker/Dockerfile"
+      - "services/api/composer.json"
+      - "services/api/composer.lock"
+      - "services/client/package.json"
+      - "services/client/yarn.lock"
 
 concurrency:
   group: docker-cache-warmup
