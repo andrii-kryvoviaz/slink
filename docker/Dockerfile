@@ -146,6 +146,9 @@ CMD ["/usr/local/bin/entrypoint.sh"]
 
 ### Test image ###
 FROM php:${PHP_VERSION}-alpine AS test
+
+RUN apk add --no-cache git unzip
+
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /services/api
