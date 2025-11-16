@@ -41,6 +41,8 @@ COPY services/api/composer.json ./
 FROM php:${PHP_VERSION}-alpine AS vendor
 WORKDIR /dependencies
 
+RUN apk add --no-cache git unzip
+
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 COPY services/api/composer.json services/api/composer.lock ./
