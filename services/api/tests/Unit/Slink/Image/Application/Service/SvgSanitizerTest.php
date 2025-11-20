@@ -407,7 +407,10 @@ class SvgSanitizerTest extends TestCase {
         $sanitizer = new SvgSanitizer();
         
         $tempFile = tmpfile();
-        $tempPath = stream_get_meta_data($tempFile)['uri'];
+        $metaData = stream_get_meta_data($tempFile);
+        $tempPath = $metaData['uri'] ?? '';
+        
+        $this->assertNotEmpty($tempPath);
         
         $svgContent = '<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">

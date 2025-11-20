@@ -66,9 +66,6 @@ class AboutCommand extends Command {
     return 0;
   }
   
-  /**
-   * @throws \DateMalformedStringException
-   */
   private static function isExpired(string $date): bool
   {
     $date = \DateTimeImmutable::createFromFormat('d/m/Y', '01/'.$date);
