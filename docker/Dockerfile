@@ -99,12 +99,11 @@ RUN apk update && apk upgrade &&\
     libwebp \
     tiff \
     freetype \
-    python3 
+    python3 \
+    py3-pip
 
-RUN apk add --no-cache --virtual .build-deps python3-dev pipx && \
-    pipx install supervisor && \
-    ln -s /root/.local/bin/supervisord /usr/bin/supervisord && \
-    ln -s /root/.local/bin/supervisorctl /usr/bin/supervisorctl && \
+RUN apk add --no-cache --virtual .build-deps python3-dev && \
+    pip3 install --break-system-packages supervisor && \
     apk del .build-deps
 
 COPY --from=php-extensions /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
