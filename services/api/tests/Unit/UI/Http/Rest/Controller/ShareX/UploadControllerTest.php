@@ -30,11 +30,11 @@ final class UploadControllerTest extends TestCase {
     $reflection = new \ReflectionClass($this->controller);
     
     $commandProperty = $reflection->getProperty('commandBus');
-    $commandProperty->setAccessible(true);
+
     $commandProperty->setValue($this->controller, $this->commandBus);
     
     $queryProperty = $reflection->getProperty('queryBus');
-    $queryProperty->setAccessible(true);
+
     $queryProperty->setValue($this->controller, $this->queryBus);
   }
   

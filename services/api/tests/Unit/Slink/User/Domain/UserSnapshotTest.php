@@ -31,7 +31,7 @@ final class UserSnapshotTest extends TestCase {
 
     $reflection = new \ReflectionClass($user);
     $method = $reflection->getMethod('createSnapshotState');
-    $method->setAccessible(true);
+
     $snapshot = $method->invoke($user);
 
     $this->assertEquals('john@example.com', $snapshot['email']);
@@ -56,7 +56,7 @@ final class UserSnapshotTest extends TestCase {
 
     $reflection = new \ReflectionClass(User::class);
     $method = $reflection->getMethod('reconstituteFromSnapshotState');
-    $method->setAccessible(true);
+
     $user = $method->invoke(null, $userId, $snapshotData);
 
     $this->assertEquals('test-user-id', $user->aggregateRootId()->toString());
@@ -82,11 +82,11 @@ final class UserSnapshotTest extends TestCase {
 
     $reflection = new \ReflectionClass($originalUser);
     $createMethod = $reflection->getMethod('createSnapshotState');
-    $createMethod->setAccessible(true);
+
     $snapshotData = $createMethod->invoke($originalUser);
 
     $restoreMethod = $reflection->getMethod('reconstituteFromSnapshotState');
-    $restoreMethod->setAccessible(true);
+
     $restoredUser = $restoreMethod->invoke(null, $userId, $snapshotData);
 
     $this->assertEquals($originalUser->aggregateRootId()->toString(), $restoredUser->aggregateRootId()->toString());
@@ -113,31 +113,31 @@ final class UserSnapshotTest extends TestCase {
       throw new \RuntimeException('Unable to get parent class');
     }
     $aggregateRootIdProperty = $parentClass->getProperty('aggregateRootId');
-    $aggregateRootIdProperty->setAccessible(true);
+
     $aggregateRootIdProperty->setValue($instance, $userId);
     
     $emailProperty = $user->getProperty('email');
-    $emailProperty->setAccessible(true);
+
     $emailProperty->setValue($instance, $email);
     
     $usernameProperty = $user->getProperty('username');
-    $usernameProperty->setAccessible(true);
+
     $usernameProperty->setValue($instance, $username);
     
     $displayNameProperty = $user->getProperty('displayName');
-    $displayNameProperty->setAccessible(true);
+
     $displayNameProperty->setValue($instance, $displayName);
     
     $hashedPasswordProperty = $user->getProperty('hashedPassword');
-    $hashedPasswordProperty->setAccessible(true);
+
     $hashedPasswordProperty->setValue($instance, $hashedPassword);
     
     $statusProperty = $user->getProperty('status');
-    $statusProperty->setAccessible(true);
+
     $statusProperty->setValue($instance, $status);
     
     $rolesProperty = $user->getProperty('roles');
-    $rolesProperty->setAccessible(true);
+
     $rolesProperty->setValue($instance, $roles);
     
     return $instance;

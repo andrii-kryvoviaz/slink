@@ -140,7 +140,7 @@ final class SettingsTest extends TestCase {
         if ($constructor === null) {
             throw new \RuntimeException('Constructor not found');
         }
-        $constructor->setAccessible(true);
+
         $instance = $reflection->newInstanceWithoutConstructor();
         $constructor->invoke($instance);
         return $instance;

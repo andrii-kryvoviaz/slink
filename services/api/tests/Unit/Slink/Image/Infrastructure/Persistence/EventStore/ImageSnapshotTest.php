@@ -25,7 +25,7 @@ final class ImageSnapshotTest extends TestCase {
 
     $reflection = new \ReflectionClass($image);
     $method = $reflection->getMethod('createSnapshotState');
-    $method->setAccessible(true);
+
     $snapshot = $method->invoke($image);
 
     $this->assertEquals($userId->toString(), $snapshot['userId']);
@@ -62,7 +62,7 @@ final class ImageSnapshotTest extends TestCase {
 
     $reflection = new \ReflectionClass(Image::class);
     $method = $reflection->getMethod('reconstituteFromSnapshotState');
-    $method->setAccessible(true);
+
     $image = $method->invoke(null, $imageId, $snapshotState);
 
     $this->assertEquals($imageId, $image->aggregateRootId());
@@ -88,11 +88,11 @@ final class ImageSnapshotTest extends TestCase {
     
     $reflection = new \ReflectionClass($originalImage);
     $createMethod = $reflection->getMethod('createSnapshotState');
-    $createMethod->setAccessible(true);
+
     $snapshotState = $createMethod->invoke($originalImage);
     
     $restoreMethod = $reflection->getMethod('reconstituteFromSnapshotState');
-    $restoreMethod->setAccessible(true);
+
     $restoredImage = $restoreMethod->invoke(null, $imageId, $snapshotState);
 
     $this->assertEquals($originalImage->aggregateRootId(), $restoredImage->aggregateRootId());
@@ -119,11 +119,11 @@ final class ImageSnapshotTest extends TestCase {
 
     $reflection = new \ReflectionClass($image);
     $createMethod = $reflection->getMethod('createSnapshotState');
-    $createMethod->setAccessible(true);
+
     $snapshotState = $createMethod->invoke($image);
     
     $restoreMethod = $reflection->getMethod('reconstituteFromSnapshotState');
-    $restoreMethod->setAccessible(true);
+
     $restoredImage = $restoreMethod->invoke(null, $imageId, $snapshotState);
 
     $this->assertTrue($restoredImage->isDeleted());
@@ -144,11 +144,11 @@ final class ImageSnapshotTest extends TestCase {
 
     $reflection = new \ReflectionClass($image);
     $createMethod = $reflection->getMethod('createSnapshotState');
-    $createMethod->setAccessible(true);
+
     $snapshotState = $createMethod->invoke($image);
     
     $restoreMethod = $reflection->getMethod('reconstituteFromSnapshotState');
-    $restoreMethod->setAccessible(true);
+
     $restoredImage = $restoreMethod->invoke(null, $imageId, $snapshotState);
 
     $this->assertEquals($image->aggregateRootId(), $restoredImage->aggregateRootId());
@@ -169,11 +169,11 @@ final class ImageSnapshotTest extends TestCase {
 
     $reflection = new \ReflectionClass($image);
     $createMethod = $reflection->getMethod('createSnapshotState');
-    $createMethod->setAccessible(true);
+
     $snapshotState = $createMethod->invoke($image);
     
     $restoreMethod = $reflection->getMethod('reconstituteFromSnapshotState');
-    $restoreMethod->setAccessible(true);
+
     $restoredImage = $restoreMethod->invoke(null, $imageId, $snapshotState);
 
     $this->assertEquals('updated.jpg', $restoredImage->getAttributes()->getFilename());

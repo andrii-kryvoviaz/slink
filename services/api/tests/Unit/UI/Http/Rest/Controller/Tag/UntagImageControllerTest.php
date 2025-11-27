@@ -54,7 +54,7 @@ final class UntagImageControllerTest extends TestCase {
     
     $reflection = new \ReflectionClass($controller);
     $property = $reflection->getProperty('commandBus');
-    $property->setAccessible(true);
+
     $property->setValue($controller, $commandBus);
 
     $response = $controller('image-789', 'tag-abc', $user);
@@ -74,7 +74,7 @@ final class UntagImageControllerTest extends TestCase {
     
     $reflection = new \ReflectionClass($controller);
     $property = $reflection->getProperty('commandBus');
-    $property->setAccessible(true);
+
     $property->setValue($controller, $commandBus);
 
     $response = $controller('image-empty', 'tag-empty', $user);
@@ -99,7 +99,7 @@ final class UntagImageControllerTest extends TestCase {
     
     $reflection = new \ReflectionClass($controller);
     $property = $reflection->getProperty('commandBus');
-    $property->setAccessible(true);
+
     $property->setValue($controller, $commandBus);
 
     $response = $controller('image-test', 'tag-test', $user);

@@ -41,7 +41,7 @@ final class SmbStorageTest extends TestCase {
     $this->storage = $reflection->newInstanceWithoutConstructor();
     
     $shareProperty = $reflection->getProperty('share');
-    $shareProperty->setAccessible(true);
+
     $shareProperty->setValue($this->storage, $this->share);
     
     $parentClass = $reflection->getParentClass();
@@ -50,7 +50,7 @@ final class SmbStorageTest extends TestCase {
     }
     
     $transformerProperty = $parentClass->getProperty('imageTransformer');
-    $transformerProperty->setAccessible(true);
+
     $transformerProperty->setValue($this->storage, $imageTransformer);
   }
 

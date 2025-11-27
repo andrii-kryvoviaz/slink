@@ -27,7 +27,7 @@ final class CreateApiKeyControllerTest extends TestCase {
     
     $reflection = new \ReflectionClass($controller);
     $property = $reflection->getProperty('commandBus');
-    $property->setAccessible(true);
+
     $property->setValue($controller, $commandBus);
     
     $command = new CreateApiKeyCommand($keyName, $expiresAt);
@@ -55,7 +55,7 @@ final class CreateApiKeyControllerTest extends TestCase {
     
     $reflection = new \ReflectionClass($controller);
     $property = $reflection->getProperty('commandBus');
-    $property->setAccessible(true);
+
     $property->setValue($controller, $commandBus);
     
     $command = new CreateApiKeyCommand($keyName);

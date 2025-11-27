@@ -28,7 +28,7 @@ final class GetApiKeysControllerTest extends TestCase {
     
     $reflection = new \ReflectionClass($controller);
     $property = $reflection->getProperty('queryBus');
-    $property->setAccessible(true);
+
     $property->setValue($controller, $queryBus);
     
     $user = $this->createMock(JwtUser::class);
@@ -52,7 +52,7 @@ final class GetApiKeysControllerTest extends TestCase {
     
     $reflection = new \ReflectionClass($controller);
     $property = $reflection->getProperty('queryBus');
-    $property->setAccessible(true);
+
     $property->setValue($controller, $queryBus);
     
     $user = $this->createMock(JwtUser::class);

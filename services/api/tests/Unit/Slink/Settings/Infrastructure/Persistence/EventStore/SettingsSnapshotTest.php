@@ -23,7 +23,7 @@ final class SettingsSnapshotTest extends TestCase {
 
     $reflection = new \ReflectionClass($settings);
     $method = $reflection->getMethod('createSnapshotState');
-    $method->setAccessible(true);
+
     $snapshot = $method->invoke($settings);
 
     $this->assertArrayHasKey('user', $snapshot);
@@ -77,7 +77,7 @@ final class SettingsSnapshotTest extends TestCase {
     $settingsId = ID::fromString(Settings::getIdReference());
     $reflection = new \ReflectionClass(Settings::class);
     $method = $reflection->getMethod('reconstituteFromSnapshotState');
-    $method->setAccessible(true);
+
     $settings = $method->invoke(null, $settingsId, $snapshot);
 
     $this->assertEquals('settings.global', $settings->aggregateRootId()->toString());
@@ -105,12 +105,12 @@ final class SettingsSnapshotTest extends TestCase {
     
     $reflection = new \ReflectionClass($originalSettings);
     $createMethod = $reflection->getMethod('createSnapshotState');
-    $createMethod->setAccessible(true);
+
     $snapshot = $createMethod->invoke($originalSettings);
     
     $settingsId = ID::fromString(Settings::getIdReference());
     $restoreMethod = $reflection->getMethod('reconstituteFromSnapshotState');
-    $restoreMethod->setAccessible(true);
+
     $restoredSettings = $restoreMethod->invoke(null, $settingsId, $snapshot);
 
     $this->assertEquals($originalSettings->aggregateRootId(), $restoredSettings->aggregateRootId());
@@ -170,7 +170,7 @@ final class SettingsSnapshotTest extends TestCase {
     $settingsId = ID::fromString(Settings::getIdReference());
     $reflection = new \ReflectionClass(Settings::class);
     $method = $reflection->getMethod('reconstituteFromSnapshotState');
-    $method->setAccessible(true);
+
     $settings = $method->invoke(null, $settingsId, $snapshot);
 
     $this->assertEquals('settings.global', $settings->aggregateRootId()->toString());
@@ -213,12 +213,12 @@ final class SettingsSnapshotTest extends TestCase {
     
     $reflection = new \ReflectionClass($settings);
     $createMethod = $reflection->getMethod('createSnapshotState');
-    $createMethod->setAccessible(true);
+
     $snapshot = $createMethod->invoke($settings);
     
     $settingsId = ID::fromString(Settings::getIdReference());
     $restoreMethod = $reflection->getMethod('reconstituteFromSnapshotState');
-    $restoreMethod->setAccessible(true);
+
     $restoredSettings = $restoreMethod->invoke(null, $settingsId, $snapshot);
     
     $this->assertEquals('s3', $restoredSettings->get('storage.provider'));
@@ -232,7 +232,7 @@ final class SettingsSnapshotTest extends TestCase {
     if ($constructor === null) {
       throw new \RuntimeException('Constructor not found');
     }
-    $constructor->setAccessible(true);
+
     $instance = $reflection->newInstanceWithoutConstructor();
     $constructor->invoke($instance);
     return $instance;

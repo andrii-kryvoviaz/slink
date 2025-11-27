@@ -33,7 +33,7 @@ final class UserSnapshotTest extends TestCase {
 
     $reflection = new \ReflectionClass($user);
     $method = $reflection->getMethod('createSnapshotState');
-    $method->setAccessible(true);
+
     $snapshot = $method->invoke($user);
 
     $this->assertEquals($email->toString(), $snapshot['email']);
@@ -64,7 +64,7 @@ final class UserSnapshotTest extends TestCase {
 
     $reflection = new \ReflectionClass(User::class);
     $method = $reflection->getMethod('reconstituteFromSnapshotState');
-    $method->setAccessible(true);
+
     $user = $method->invoke(null, $userId, $snapshot);
 
     $this->assertEquals($userId, $user->aggregateRootId());
@@ -88,11 +88,11 @@ final class UserSnapshotTest extends TestCase {
     
     $reflection = new \ReflectionClass($originalUser);
     $createMethod = $reflection->getMethod('createSnapshotState');
-    $createMethod->setAccessible(true);
+
     $snapshot = $createMethod->invoke($originalUser);
     
     $restoreMethod = $reflection->getMethod('reconstituteFromSnapshotState');
-    $restoreMethod->setAccessible(true);
+
     $restoredUser = $restoreMethod->invoke(null, $userId, $snapshot);
 
     $this->assertEquals($originalUser->aggregateRootId(), $restoredUser->aggregateRootId());
@@ -117,10 +117,10 @@ final class UserSnapshotTest extends TestCase {
     $inactiveUser = $this->createUserWithState($userId, $email, $username, $displayName, $hashedPassword, UserStatus::Inactive, $roles);
     $reflection = new \ReflectionClass($inactiveUser);
     $createMethod = $reflection->getMethod('createSnapshotState');
-    $createMethod->setAccessible(true);
+
     $inactiveSnapshot = $createMethod->invoke($inactiveUser);
     $restoreMethod = $reflection->getMethod('reconstituteFromSnapshotState');
-    $restoreMethod->setAccessible(true);
+
     $restoredInactiveUser = $restoreMethod->invoke(null, $userId, $inactiveSnapshot);
     
     $this->assertEquals(UserStatus::Inactive, $restoredInactiveUser->getStatus());
@@ -149,10 +149,10 @@ final class UserSnapshotTest extends TestCase {
     $user = $this->createUserWithState($userId, $email, $username, $displayName, $hashedPassword, $status, $roles);
     $reflection = new \ReflectionClass($user);
     $createMethod = $reflection->getMethod('createSnapshotState');
-    $createMethod->setAccessible(true);
+
     $snapshot = $createMethod->invoke($user);
     $restoreMethod = $reflection->getMethod('reconstituteFromSnapshotState');
-    $restoreMethod->setAccessible(true);
+
     $restoredUser = $restoreMethod->invoke(null, $userId, $snapshot);
 
     $originalRoles = $user->getRoles();
@@ -182,31 +182,31 @@ final class UserSnapshotTest extends TestCase {
       throw new \RuntimeException('Unable to get parent class');
     }
     $aggregateRootIdProperty = $parentClass->getProperty('aggregateRootId');
-    $aggregateRootIdProperty->setAccessible(true);
+
     $aggregateRootIdProperty->setValue($instance, $userId);
     
     $emailProperty = $user->getProperty('email');
-    $emailProperty->setAccessible(true);
+
     $emailProperty->setValue($instance, $email);
     
     $usernameProperty = $user->getProperty('username');
-    $usernameProperty->setAccessible(true);
+
     $usernameProperty->setValue($instance, $username);
     
     $displayNameProperty = $user->getProperty('displayName');
-    $displayNameProperty->setAccessible(true);
+
     $displayNameProperty->setValue($instance, $displayName);
     
     $hashedPasswordProperty = $user->getProperty('hashedPassword');
-    $hashedPasswordProperty->setAccessible(true);
+
     $hashedPasswordProperty->setValue($instance, $hashedPassword);
     
     $statusProperty = $user->getProperty('status');
-    $statusProperty->setAccessible(true);
+
     $statusProperty->setValue($instance, $status);
     
     $rolesProperty = $user->getProperty('roles');
-    $rolesProperty->setAccessible(true);
+
     $rolesProperty->setValue($instance, $roles);
     
     return $instance;

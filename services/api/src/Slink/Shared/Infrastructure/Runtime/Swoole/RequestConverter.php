@@ -17,7 +17,7 @@ final class RequestConverter {
             $swooleRequest->cookie ?? [],
             $swooleRequest->files ?? [],
             array_change_key_case($swooleRequest->server ?? [], CASE_UPPER),
-            $swooleRequest->rawContent()
+            $swooleRequest->rawContent() ?: null
         );
         $request->headers = new HeaderBag($swooleRequest->header ?? []);
 

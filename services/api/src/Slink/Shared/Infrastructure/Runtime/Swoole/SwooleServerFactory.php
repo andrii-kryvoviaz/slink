@@ -16,8 +16,12 @@ final class SwooleServerFactory {
     private int $port;
     private int $mode;
     private int $sockType;
+    /** @var array<string, mixed> */
     private array $settings;
 
+    /**
+     * @param array<string, mixed> $options
+     */
     public function __construct(array $options = []) {
         $this->host = $options['host'] ?? $_SERVER['SWOOLE_HOST'] ?? $_ENV['SWOOLE_HOST'] ?? self::DEFAULT_HOST;
         $this->port = (int) ($options['port'] ?? $_SERVER['SWOOLE_PORT'] ?? $_ENV['SWOOLE_PORT'] ?? self::DEFAULT_PORT);

@@ -56,7 +56,7 @@ final class DeleteTagControllerTest extends TestCase {
     
     $reflection = new \ReflectionClass($controller);
     $property = $reflection->getProperty('commandBus');
-    $property->setAccessible(true);
+
     $property->setValue($controller, $commandBus);
 
     $response = $controller('tag-456', $user);

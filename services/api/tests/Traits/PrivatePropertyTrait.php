@@ -30,7 +30,6 @@ trait PrivatePropertyTrait {
   public function getPrivateProperty(object $object, string $propertyName): mixed {
     $reflection = new \ReflectionClass($object);
     $property = $reflection->getProperty($propertyName);
-    $property->setAccessible(true);
     return $property->getValue($object);
   }
 }

@@ -11,6 +11,9 @@ use Symfony\Component\Runtime\SymfonyRuntime;
 final class SwooleRuntime extends SymfonyRuntime {
     private readonly SwooleServerFactory $serverFactory;
 
+    /**
+     * @param array<string, mixed> $options
+     */
     public function __construct(array $options = []) {
         $this->serverFactory = new SwooleServerFactory($options);
         parent::__construct($options);
