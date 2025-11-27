@@ -31,6 +31,9 @@ const defaultSettings: { [K in SettingsKey]?: any } = {
   history: {
     viewMode: 'list',
   },
+  share: {
+    format: 'direct',
+  },
 };
 
 export const setCookieSettingsOnLocals: Handle = async ({ event, resolve }) => {

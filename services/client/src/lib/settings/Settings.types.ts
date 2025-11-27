@@ -5,6 +5,10 @@ import type {
   HistorySettings,
   HistoryViewMode,
 } from '@slink/lib/settings/setters/history';
+import type {
+  ShareFormat,
+  ShareSettings,
+} from '@slink/lib/settings/setters/share';
 import type { SidebarSettings } from '@slink/lib/settings/setters/sidebar';
 import type {
   UserAdminSettings,
@@ -24,6 +28,9 @@ export type Settings = {
   };
   history: SettingsValue<HistorySettings> & {
     viewMode: Readable<HistoryViewMode>;
+  };
+  share: SettingsValue<ShareSettings> & {
+    format: Readable<ShareFormat>;
   };
 };
 

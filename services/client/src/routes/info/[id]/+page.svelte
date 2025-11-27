@@ -5,9 +5,11 @@
     ImagePlaceholder,
     ImageSizePicker,
     ImageTagManager,
+    ShareLinkCopy,
   } from '@slink/feature/Image';
-  import type { ImageParams, ImageSize } from '@slink/feature/Image';
-  import { CopyContainer } from '@slink/feature/Text';
+  import type { ImageParams } from '@slink/feature/Image';
+  import { Notice } from '@slink/feature/Text';
+  import { Shortcut } from '@slink/ui/components';
 
   import { page } from '$app/state';
   import { fly } from 'svelte/transition';
@@ -54,7 +56,7 @@
     return paramsString ? [url, paramsString].join('?') : url;
   };
 
-  let unsignedParams: Partial<ImageSize & { crop?: boolean }> = $state({});
+  let unsignedParams: Partial<ImageParams> = $state({});
   let directLink: string = $derived(
     formatImageUrl([page.url.origin, image.url], {}),
   );
@@ -92,9 +94,7 @@
     },
   );
 
-  const handleImageSizeChange = (
-    value?: Partial<ImageSize & { crop?: boolean }>,
-  ) => {
+  const handleImageSizeChange = (value?: Partial<ImageParams>) => {
     unsignedParams = value ?? {};
   };
 
@@ -163,7 +163,7 @@
       <ImagePlaceholder src={image.url} metadata={image} stretch={false} />
     </div>
 
-    <div class="grow max-w-md flex-shrink-0 space-y-8">
+    <div class="grow max-w-md shrink-0 space-y-8">
       <ImageActionBar {image} buttons={['download', 'visibility', 'delete']} />
 
       <ImageTagManager
@@ -208,11 +208,16 @@
         <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
           Share
         </h2>
-        <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">
-          Use the link below to share or embed the image.
-        </p>
-        <CopyContainer
+        <Notice variant="info" size="xs" class="mb-4">
+          Copy the direct link or use the dropdown for other formats. Press
+          <span class="inline-flex mx-1"
+            ><Shortcut control key="C" size="xs" /></span
+          >
+          to copy.
+        </Notice>
+        <ShareLinkCopy
           value={directLink}
+          imageAlt={image.fileName}
           isLoading={$isSigningParams}
           onBeforeCopy={handleBeforeCopy}
         />

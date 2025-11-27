@@ -16,6 +16,12 @@
     CopyContainerVariant,
   } from './CopyContainer.types';
 
+  interface CopyState {
+    isCopied: boolean;
+    isLoading: boolean;
+    copy: () => Promise<void>;
+  }
+
   interface Props {
     value: string;
     delay?: number;
@@ -25,6 +31,7 @@
     variant?: CopyContainerVariant;
     isLoading?: boolean;
     onBeforeCopy?: () => Promise<string | void>;
+    actionSlot?: Snippet<[CopyState]>;
   }
 
   let {
@@ -36,22 +43,25 @@
     variant = 'default',
     isLoading = false,
     onBeforeCopy,
+    actionSlot,
   }: Props = $props();
 
   let isCopiedActive: boolean = $state(false);
   let inputElement: HTMLInputElement | undefined = $state();
 
+  const resolveValue = async (): Promise<string> => {
+    if (onBeforeCopy) {
+      const result = await onBeforeCopy();
+      if (result) {
+        return result;
+      }
+    }
+    return value;
+  };
+
   const handleCopy = async () => {
     try {
-      let textToCopy = value;
-
-      if (onBeforeCopy) {
-        const result = await onBeforeCopy();
-        if (result) {
-          textToCopy = result;
-        }
-      }
-
+      const textToCopy = await resolveValue();
       await navigator.clipboard.writeText(textToCopy);
       isCopiedActive = true;
 
@@ -79,6 +89,12 @@
   const containerClasses = $derived(CopyContainerTheme({ variant, size }));
   const inputClasses = $derived(CopyContainerInputTheme({ variant, size }));
   const buttonClasses = $derived(CopyContainerButtonTheme({ size }));
+
+  const copyState: CopyState = $derived({
+    isCopied: isCopiedActive,
+    isLoading,
+    copy: handleCopy,
+  });
 </script>
 
 <div class="flex w-full items-center">
@@ -94,45 +110,49 @@
         onclick={handleInputClick}
       />
     </div>
-    <div class="flex-shrink-0 pr-1">
-      <Button
-        class={buttonClasses}
-        variant="primary"
-        size="xs"
-        disabled={isCopiedActive || isLoading}
-        onclick={handleCopy}
-      >
-        {#if isLoading}
-          <div
-            class="flex items-center gap-1.5"
-            in:scale={{ duration: 150, easing: cubicOut }}
-          >
-            <Icon icon="lucide:loader-2" class="h-3.5 w-3.5 animate-spin" />
-            <span>Signing...</span>
-          </div>
-        {:else if isCopiedActive}
-          <div
-            class="flex items-center gap-1.5"
-            in:scale={{ duration: 150, easing: cubicOut }}
-          >
-            {#if copyButtonContent}
-              {@render copyButtonContent()}
-            {:else}
-              <Icon icon="lucide:check" class="h-3.5 w-3.5" />
-              <span>Copied</span>
-            {/if}
-          </div>
-        {:else}
-          <div class="flex items-center gap-1.5">
-            {#if copyButtonContent}
-              {@render copyButtonContent()}
-            {:else}
-              <Icon icon="lucide:copy" class="h-3.5 w-3.5" />
-              <span>Copy</span>
-            {/if}
-          </div>
-        {/if}
-      </Button>
+    <div class="shrink-0 pr-1">
+      {#if actionSlot}
+        {@render actionSlot(copyState)}
+      {:else}
+        <Button
+          class={buttonClasses}
+          variant="primary"
+          size="xs"
+          disabled={isCopiedActive || isLoading}
+          onclick={handleCopy}
+        >
+          {#if isLoading}
+            <div
+              class="flex items-center gap-1.5"
+              in:scale={{ duration: 150, easing: cubicOut }}
+            >
+              <Icon icon="lucide:loader-2" class="h-3.5 w-3.5 animate-spin" />
+              <span>Signing...</span>
+            </div>
+          {:else if isCopiedActive}
+            <div
+              class="flex items-center gap-1.5"
+              in:scale={{ duration: 150, easing: cubicOut }}
+            >
+              {#if copyButtonContent}
+                {@render copyButtonContent()}
+              {:else}
+                <Icon icon="lucide:check" class="h-3.5 w-3.5" />
+                <span>Copied</span>
+              {/if}
+            </div>
+          {:else}
+            <div class="flex items-center gap-1.5">
+              {#if copyButtonContent}
+                {@render copyButtonContent()}
+              {:else}
+                <Icon icon="lucide:copy" class="h-3.5 w-3.5" />
+                <span>Copy</span>
+              {/if}
+            </div>
+          {/if}
+        </Button>
+      {/if}
     </div>
   </div>
 </div>

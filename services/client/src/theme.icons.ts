@@ -151,4 +151,8 @@ export const themeIcons: string[] = [
   'ph:circle-notch-duotone',
   'ph:check-duotone',
   'ph:info-duotone',
+  'ph:markdown-logo',
+  'ph:brackets-square',
+  'ph:code',
+  'ph:image',
 ];
