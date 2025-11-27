@@ -6,8 +6,10 @@
 
   import type { ErrorList } from '@slink/api/Exceptions';
 
-  interface Props
-    extends Pick<HTMLInputAttributes, 'value' | 'name' | 'step' | 'min'> {
+  interface Props extends Pick<
+    HTMLInputAttributes,
+    'value' | 'name' | 'step' | 'min'
+  > {
     class?: string;
     label?: string;
     error?: string | ErrorList;

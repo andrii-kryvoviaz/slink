@@ -28,7 +28,7 @@
     {#each projects as item (item.name)}
       <Sidebar.MenuItem>
         <Sidebar.MenuButton>
-          {#snippet child({ props })}
+          {#snippet child({ props }: { props: Record })}
             <a href={item.url} {...props}>
               <item.icon />
               <span>{item.name}</span>

@@ -13,7 +13,8 @@
   import { Root as BaseInput } from './index.js';
 
   interface Props
-    extends Omit<HTMLInputAttributes, 'size'>,
+    extends
+      Omit<HTMLInputAttributes, 'size'>,
       Pick<InputVariants, 'size' | 'variant' | 'rounded'> {
     key?: string;
     label?: string;

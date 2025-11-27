@@ -22,8 +22,7 @@
   type ExcludeButtonEvents<T> = Omit<T, keyof ButtonEvents>;
 
   interface Props
-    extends ExcludeButtonEvents<HTMLInputAttributes>,
-      ButtonEvents {
+    extends ExcludeButtonEvents<HTMLInputAttributes>, ButtonEvents {
     class?: string;
     value?: string;
     files?: FileList;

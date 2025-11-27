@@ -70,10 +70,10 @@
   const canCreate = $derived(
     Boolean(
       allowCreate &&
-        searchTerm.trim() &&
-        !availableTags.find(
-          (t: Tag) => t.name.toLowerCase() === searchTerm.toLowerCase(),
-        ),
+      searchTerm.trim() &&
+      !availableTags.find(
+        (t: Tag) => t.name.toLowerCase() === searchTerm.toLowerCase(),
+      ),
     ),
   );
 

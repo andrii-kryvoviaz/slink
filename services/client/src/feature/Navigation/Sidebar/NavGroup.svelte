@@ -30,7 +30,7 @@
           {isActive}
           class="hover:pl-4 data-[active=true]:pl-4 group-data-[collapsible=icon]:hover:pl-2"
         >
-          {#snippet child({ props })}
+          {#snippet child({ props }: { props: Record })}
             <a
               href={item.href || '#'}
               {...props}
