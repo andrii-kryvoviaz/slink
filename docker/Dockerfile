@@ -1,6 +1,6 @@
-ARG NODE_VERSION=22.20.0
+ARG NODE_VERSION=24.11.1
 
-ARG PHP_VERSION=8.4.14
+ARG PHP_VERSION=8.5.0
 ARG PHP_MEMORY_LIMIT=512M
 
 ARG UPLOAD_MAX_FILESIZE_IN_BYTES=52428800
@@ -77,7 +77,13 @@ RUN apk add --no-cache \
     libffi-dev
 
 RUN docker-php-ext-install curl intl mbstring exif ffi
-RUN pecl install imagick redis smbclient vips swoole
+RUN pecl install imagick redis smbclient vips
+RUN git clone https://github.com/swoole/swoole-src.git && \
+    cd swoole-src && \
+    phpize && \
+    ./configure --enable-openssl --enable-http2 --enable-swoole-curl && \
+    make && make install && \
+    cd .. && rm -rf swoole-src
 RUN docker-php-ext-enable imagick redis smbclient vips swoole
 ### End of PHP extensions build ###
 
@@ -199,7 +205,7 @@ EXPOSE 8080
 
 ### Production image ###
 FROM base AS prod
-RUN docker-php-ext-enable swoole opcache
+RUN docker-php-ext-enable swoole
 
 COPY docker/config/runtime/production.conf /etc/supervisor/conf.d/production.conf
 COPY --from=node /usr/local/bin/node /usr/local/bin/node

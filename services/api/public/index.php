@@ -1,14 +1,13 @@
 <?php
 
-
-use Runtime\Swoole\Runtime;
 use Slink\Shared\Infrastructure\Kernel;
+use Slink\Shared\Infrastructure\Runtime\Swoole\SwooleRuntime;
 
 require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
 
 
 if (filter_var($_ENV['SWOOLE_ENABLED'],FILTER_VALIDATE_BOOLEAN)) {
-  $_SERVER['APP_RUNTIME'] = Runtime::class;
+  $_SERVER['APP_RUNTIME'] = SwooleRuntime::class;
   
   $minPackageSize = 1024 * 1024 * 20;
   
