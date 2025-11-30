@@ -1,24 +1,26 @@
 <script lang="ts">
   interface Props {
     date: number;
-    options?: Intl.DateTimeFormatOptions;
+    showTime?: boolean;
   }
 
-  let {
-    date,
-    options = {
+  let { date, showTime = true }: Props = $props();
+
+  let formattedDate: string = $derived.by(() => {
+    const dateObj = new Date(date * 1000);
+    const isSameYear = dateObj.getFullYear() === new Date().getFullYear();
+
+    const options: Intl.DateTimeFormatOptions = {
       month: 'short',
       day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-    },
-  }: Props = $props();
+      ...(!isSameYear && { year: 'numeric' }),
+      ...(showTime && { hour: 'numeric', minute: 'numeric' }),
+    };
 
-  let formattedDate: string = $derived(
-    new Date(date * 1000).toLocaleDateString('en-US', options),
-  );
+    return dateObj.toLocaleDateString('en-US', options);
+  });
 </script>
 
-<div>
+<span>
   {formattedDate}
-</div>
+</span>
