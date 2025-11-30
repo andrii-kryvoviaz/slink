@@ -155,4 +155,6 @@ export const themeIcons: string[] = [
   'ph:brackets-square',
   'ph:code',
   'ph:image',
+  'heroicons:chevron-up',
+  'heroicons:arrows-pointing-out',
 ];

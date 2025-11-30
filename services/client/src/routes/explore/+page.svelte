@@ -1,6 +1,10 @@
 <script lang="ts">
   import { LoadMoreButton } from '@slink/feature/Action';
-  import { AdminImageDropdown, ImagePlaceholder } from '@slink/feature/Image';
+  import {
+    AdminImageDropdown,
+    ImagePlaceholder,
+    PostViewer,
+  } from '@slink/feature/Image';
   import { Masonry } from '@slink/feature/Layout';
   import { EmptyState } from '@slink/feature/Layout';
   import { ExploreSkeleton } from '@slink/feature/Layout';
@@ -17,6 +21,7 @@
 
   import { skeleton } from '@slink/lib/actions/skeleton';
   import { isAdmin } from '@slink/lib/auth/utils';
+  import { usePostViewerState } from '@slink/lib/state/PostViewerState.svelte';
   import { usePublicImagesFeed } from '@slink/lib/state/PublicImagesFeed.svelte';
 
   import type { PageServerData } from './$types';
@@ -29,7 +34,9 @@
 
   const userIsAdmin = isAdmin(data.user);
   const publicFeedState = usePublicImagesFeed();
+  const postViewerState = usePostViewerState();
   publicFeedState.reset();
+  postViewerState.setFeed(publicFeedState);
 
   $effect(() => {
     const urlParams = new URLSearchParams(page.url.search);
@@ -42,6 +49,16 @@
       publicFeedState.load();
     }
   });
+
+  $effect(() => {
+    if (publicFeedState.items.length > 0 && !postViewerState.isOpen) {
+      postViewerState.openFromUrl();
+    }
+  });
+
+  const openPostViewer = (index: number) => {
+    postViewerState.open(index);
+  };
 
   const handleImageUpdate = (updatedImage: any) => {
     if (updatedImage.attributes.isPublic) {
@@ -100,11 +117,18 @@
     {:else if publicFeedState.items.length > 0}
       <Masonry items={publicFeedState.items} class="gap-6">
         {#snippet itemTemplate(image)}
-          <article
+          {@const index = publicFeedState.items.findIndex(
+            (i) => i.id === image.id,
+          )}
+          <div
             in:fly={{ y: 20, duration: 400, delay: Math.random() * 200 }}
-            class="group break-inside-avoid bg-white dark:bg-gray-900 rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden transition-all duration-300"
+            class="group/card break-inside-avoid bg-white dark:bg-gray-900 rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden transition-all duration-300 cursor-pointer"
+            onclick={() => openPostViewer(index)}
+            onkeydown={(e) => e.key === 'Enter' && openPostViewer(index)}
+            role="button"
+            tabindex="0"
           >
-            <div class="p-5 pb-4">
+            <div class="group/header p-5 pb-4">
               <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-3">
                   <UserAvatar size="md" user={image.owner} />
@@ -133,17 +157,32 @@
               </div>
             </div>
 
-            <div class="relative">
+            <div class="group/image relative">
               <ImagePlaceholder
                 uniqueId={image.id}
                 src={`/image/${image.attributes.fileName}`}
                 metadata={image.metadata}
                 showMetadata={false}
+                showOpenInNewTab={false}
                 rounded={false}
               />
+              <div
+                class="absolute inset-0 bg-black/0 group-hover/image:bg-black/30 transition-all duration-300 flex items-center justify-center pointer-events-none"
+              >
+                <div
+                  class="opacity-0 group-hover/image:opacity-100 transform scale-90 group-hover/image:scale-100 transition-all duration-300"
+                >
+                  <Icon
+                    icon="heroicons:arrows-pointing-out"
+                    class="w-8 h-8 text-white drop-shadow-lg"
+                  />
+                </div>
+              </div>
             </div>
 
-            <div class="flex flex-col justify-between gap-2 py-2 px-5">
+            <div
+              class="group/footer flex flex-col justify-between gap-2 py-2 px-5"
+            >
               <div
                 class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400"
               >
@@ -170,7 +209,7 @@
                 </div>
               {/if}
             </div>
-          </article>
+          </div>
         {/snippet}
       </Masonry>
 
@@ -192,3 +231,5 @@
     {/if}
   </div>
 </main>
+
+<PostViewer />

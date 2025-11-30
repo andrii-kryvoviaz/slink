@@ -4,6 +4,7 @@
   import { usePublicImagesFeed } from '$lib/state/PublicImagesFeed.svelte.js';
   import {
     createHashtagSearchQuery,
+    createHashtagSearchUrl,
     splitTextIntoSegments,
   } from '$lib/utils/text/hashtag';
   import { className } from '$lib/utils/ui/className';
@@ -13,6 +14,7 @@
   interface Props extends HashtagVariant {
     text: string;
     class?: string;
+    onBeforeNavigate?: () => void;
   }
 
   let {
@@ -21,6 +23,7 @@
     variant = 'secondary',
     size = 'md',
     rounded = 'md',
+    onBeforeNavigate,
     ...props
   }: Props = $props();
 
@@ -29,14 +32,13 @@
   const publicFeedState = usePublicImagesFeed();
 
   const handleHashtagClick = (hashtag: string): void => {
+    onBeforeNavigate?.();
     const searchQuery = createHashtagSearchQuery(hashtag);
 
     if (page.route.id === '/explore') {
       publicFeedState.search(searchQuery, 'hashtag');
     } else {
-      goto(
-        `/explore?search=${encodeURIComponent(searchQuery)}&searchBy=hashtag`,
-      );
+      goto(createHashtagSearchUrl(hashtag));
     }
   };
 
@@ -57,7 +59,10 @@
         title="Click to search for {segment.text}"
         role="button"
         tabindex="0"
-        onclick={() => handleHashtagClick(segment.hashtag!)}
+        onclick={(e) => {
+          e.stopPropagation();
+          handleHashtagClick(segment.hashtag!);
+        }}
         onkeydown={(event) => handleKeyDown(event, segment.hashtag!)}
         {...props}
       >

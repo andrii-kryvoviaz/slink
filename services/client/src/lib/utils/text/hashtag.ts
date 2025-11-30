@@ -82,3 +82,8 @@ export function createHashtagSearchQuery(hashtag: string): string {
   if (!hashtag) return '';
   return `#${hashtag}`;
 }
+
+export function createHashtagSearchUrl(hashtag: string): string {
+  const searchQuery = createHashtagSearchQuery(hashtag);
+  return `/explore?search=${encodeURIComponent(searchQuery)}&searchBy=hashtag`;
+}

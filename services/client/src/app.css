@@ -12,6 +12,7 @@
 
 @source inline('{,}grid-cols-{1..12}');
 @source inline('{,}gap-{0..12}');
+@source inline('{,}line-clamp-{1..6}');
 
 @utility text-* {
   color: --value(--color-* -text) !important;

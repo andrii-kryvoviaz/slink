@@ -11,3 +11,4 @@ export { default as ImageSizePicker } from './SizePicker/ImageSizePicker.svelte'
 export * from './SizePicker/ImageSizePicker.types';
 export { default as ImageTagManager } from './TagManager/ImageTagManager.svelte';
 export { default as UnsupportedFileFormat } from './UnsupportedFIleFormat/UnsupportedFileFormat.svelte';
+export { PostViewer } from './PostViewer';

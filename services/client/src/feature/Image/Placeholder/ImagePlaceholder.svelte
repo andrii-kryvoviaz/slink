@@ -160,6 +160,7 @@
           href={originalImage || src}
           target="_blank"
           rel="noopener noreferrer"
+          onclick={(e) => e.stopPropagation()}
           class="group/link absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-lg bg-black/20 backdrop-blur-sm opacity-0 transition-all duration-200 group-hover:opacity-100 hover:bg-black/40 hover:scale-110"
         >
           <Tooltip size="xs" side="left" sideOffset={12}>

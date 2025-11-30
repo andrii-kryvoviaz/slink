@@ -74,6 +74,12 @@ export const hashtagVariants = cva(
           'dark:hover:bg-gray-800/50 dark:hover:text-gray-200',
           'dark:active:bg-gray-700/50',
         ],
+        glass: [
+          'border border-transparent bg-white/10 text-blue-400',
+          'hover:bg-white/20',
+          'active:bg-white/30',
+          'focus:ring-white/30',
+        ],
       },
       size: {
         sm: 'px-1 py-0.5 text-xs rounded',
