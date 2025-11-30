@@ -7,13 +7,14 @@
   import { useSidebar } from '@slink/ui/components/sidebar/context.svelte.js';
   import * as Sidebar from '@slink/ui/components/sidebar/index.js';
 
+  type Props = Record<string, unknown>;
+
   let {
     projects,
   }: {
     projects: {
       name: string;
       url: string;
-      // This should be `Component` after @lucide/svelte updates types
 
       icon: any;
     }[];
@@ -28,7 +29,7 @@
     {#each projects as item (item.name)}
       <Sidebar.MenuItem>
         <Sidebar.MenuButton>
-          {#snippet child({ props }: { props: Record })}
+          {#snippet child({ props }: { props: Props })}
             <a href={item.url} {...props}>
               <item.icon />
               <span>{item.name}</span>

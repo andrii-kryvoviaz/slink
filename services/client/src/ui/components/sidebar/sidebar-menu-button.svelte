@@ -62,8 +62,10 @@
     tooltipContentProps?: WithoutChildrenOrChild<
       ComponentProps<typeof Tooltip.Content>
     >;
-    child?: Snippet<[{ props: Record<string, unknown> }]>;
+    child?: Snippet<[{ props: Props }]>;
   } = $props();
+
+  type Props = Record<string, unknown>;
 
   const sidebar = useSidebar();
 
@@ -77,7 +79,7 @@
   });
 </script>
 
-{#snippet Button({ props }: { props?: Record })}
+{#snippet Button({ props }: { props?: Props })}
   {@const mergedProps = mergeProps(buttonProps, props)}
   {#if child}
     {@render child({ props: mergedProps })}

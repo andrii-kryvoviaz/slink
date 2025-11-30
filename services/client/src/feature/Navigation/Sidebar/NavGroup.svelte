@@ -6,6 +6,8 @@
 
   import type { AppSidebarGroup } from './types';
 
+  type Props = Record<string, unknown>;
+
   let {
     group,
     onNavigate,
@@ -30,7 +32,7 @@
           {isActive}
           class="hover:pl-4 data-[active=true]:pl-4 group-data-[collapsible=icon]:hover:pl-2"
         >
-          {#snippet child({ props }: { props: Record })}
+          {#snippet child({ props }: { props: Props })}
             <a
               href={item.href || '#'}
               {...props}
