@@ -69,7 +69,7 @@
         {segment.text}
       </span>
     {:else}
-      {segment.text}
+      {@html segment.text.toFormattedHtml()}
     {/if}
   {/each}
 </span>

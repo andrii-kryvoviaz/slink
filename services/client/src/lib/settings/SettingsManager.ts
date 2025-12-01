@@ -10,6 +10,8 @@ import type {
 } from '@slink/lib/settings/Settings.types';
 import { SettingsMap } from '@slink/lib/settings/SettingsMap';
 import { Theme } from '@slink/lib/settings/index';
+import { CommentSetter } from '@slink/lib/settings/setters/comment';
+import type { CommentSettings } from '@slink/lib/settings/setters/comment';
 import { HistorySetter } from '@slink/lib/settings/setters/history';
 import type { HistorySettings } from '@slink/lib/settings/setters/history';
 import { ShareSetter } from '@slink/lib/settings/setters/share';
@@ -30,6 +32,7 @@ type SettingsValueTypes = {
   userAdmin: UserAdminSettings;
   history: HistorySettings;
   share: ShareSettings;
+  comment: CommentSettings;
 };
 
 export class SettingsManager {
@@ -47,6 +50,7 @@ export class SettingsManager {
     userAdmin: UserAdminSetter,
     history: HistorySetter,
     share: ShareSetter,
+    comment: CommentSetter,
   };
 
   public get<T extends SettingsKey>(

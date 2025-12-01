@@ -7,6 +7,7 @@ export class SettingsMap {
     userAdmin: null,
     history: null,
     share: null,
+    comment: null,
   };
 
   public has<T extends SettingsKey>(key: T): boolean {

@@ -9,6 +9,7 @@
   import { EmptyState } from '@slink/feature/Layout';
   import { ExploreSkeleton } from '@slink/feature/Layout';
   import {
+    Badge,
     ExpandableText,
     FormattedDate,
     TextEllipsis,
@@ -186,15 +187,15 @@
               <div
                 class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400"
               >
-                <div class="flex items-center space-x-4">
-                  <span class="flex items-center">
-                    <Icon icon="heroicons:eye" class="w-4 h-4 mr-1" />
+                <div class="flex items-center gap-2">
+                  <Badge variant="glass" size="xs">
+                    <Icon icon="heroicons:eye" class="w-3 h-3 mr-1" />
                     {image.attributes.views}
-                  </span>
-                  <span class="flex items-center">
-                    <Icon icon="heroicons:photo" class="w-4 h-4 mr-1" />
+                  </Badge>
+                  <Badge variant="glass" size="xs">
+                    <Icon icon="heroicons:photo" class="w-3 h-3 mr-1" />
                     {image.metadata.width}×{image.metadata.height}
-                  </span>
+                  </Badge>
                 </div>
               </div>
 

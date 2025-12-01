@@ -11,7 +11,6 @@
 >
   <div class="flex items-center justify-between mb-4">
     <h3 class="text-sm font-medium text-white/80">Comments</h3>
-    <span class="text-xs text-white/40">Coming soon</span>
   </div>
 
   <div class="flex-1 space-y-4 overflow-hidden">

@@ -1,22 +1,33 @@
 <script lang="ts">
-  import { FormattedDate } from '@slink/feature/Text';
+  import { CommentList } from '@slink/feature/Comment';
+  import { Badge, FormattedDate } from '@slink/feature/Text';
   import { UserAvatar } from '@slink/feature/User';
   import * as Collapsible from '@slink/ui/components/collapsible';
 
   import Icon from '@iconify/svelte';
 
-  import type { ImageListingItem } from '@slink/api/Response';
+  import type {
+    AuthenticatedUser,
+    ImageListingItem,
+  } from '@slink/api/Response';
 
-  import CommentsSkeleton from './CommentsSkeleton.svelte';
   import PostViewerDescription from './PostViewerDescription.svelte';
 
   interface Props {
     image: ImageListingItem;
+    currentUser: AuthenticatedUser | null;
+    isActive?: boolean;
     onClose?: () => void;
     compact?: boolean;
   }
 
-  let { image, onClose, compact = false }: Props = $props();
+  let {
+    image,
+    currentUser,
+    isActive = false,
+    onClose,
+    compact = false,
+  }: Props = $props();
 
   let descriptionOpen = $state(!compact);
   let hasDescription = $derived(!!image.attributes.description?.trim());
@@ -36,36 +47,28 @@
       </div>
       {#if compact}
         <div class="flex items-center gap-2">
-          <div
-            class="flex items-center gap-1 px-2 py-1 rounded-md bg-white/5 text-white/70 text-xs"
-          >
-            <Icon icon="heroicons:eye" class="w-3 h-3" />
-            <span>{image.attributes.views}</span>
-          </div>
-          <div
-            class="flex items-center gap-1 px-2 py-1 rounded-md bg-white/5 text-white/70 text-xs"
-          >
-            <Icon icon="heroicons:photo" class="w-3 h-3" />
-            <span>{image.metadata.width}×{image.metadata.height}</span>
-          </div>
+          <Badge variant="glass" size="xs">
+            <Icon icon="heroicons:eye" class="w-3 h-3 mr-1" />
+            {image.attributes.views}
+          </Badge>
+          <Badge variant="glass" size="xs">
+            <Icon icon="heroicons:photo" class="w-3 h-3 mr-1" />
+            {image.metadata.width}×{image.metadata.height}
+          </Badge>
         </div>
       {/if}
     </div>
 
     {#if !compact}
       <div class="flex items-center gap-2 mt-4">
-        <div
-          class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 text-white/70 text-xs"
-        >
-          <Icon icon="heroicons:eye" class="w-3.5 h-3.5" />
-          <span>{image.attributes.views} views</span>
-        </div>
-        <div
-          class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 text-white/70 text-xs"
-        >
-          <Icon icon="heroicons:photo" class="w-3.5 h-3.5" />
-          <span>{image.metadata.width}×{image.metadata.height}</span>
-        </div>
+        <Badge variant="glass" size="sm">
+          <Icon icon="heroicons:eye" class="w-3.5 h-3.5 mr-1.5" />
+          {image.attributes.views} views
+        </Badge>
+        <Badge variant="glass" size="sm">
+          <Icon icon="heroicons:photo" class="w-3.5 h-3.5 mr-1.5" />
+          {image.metadata.width}×{image.metadata.height}
+        </Badge>
       </div>
     {/if}
 
@@ -99,9 +102,13 @@
     {/if}
   </div>
 
-  {#if !compact}
-    <div class="flex-1 min-h-0">
-      <CommentsSkeleton />
-    </div>
-  {/if}
+  <div class={compact ? 'flex-1 min-h-0 mt-2' : 'flex-1 min-h-0'}>
+    <CommentList
+      imageId={image.id}
+      imageOwnerId={image.owner.id}
+      {currentUser}
+      {isActive}
+      {onClose}
+    />
+  </div>
 </div>

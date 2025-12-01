@@ -34,6 +34,9 @@ const defaultSettings: { [K in SettingsKey]?: any } = {
   share: {
     format: 'direct',
   },
+  comment: {
+    sortOrder: 'asc',
+  },
 };
 
 export const setCookieSettingsOnLocals: Handle = async ({ event, resolve }) => {

@@ -32,6 +32,7 @@ declare global {
 
   interface String {
     capitalizeFirstLetter(): string;
+    toFormattedHtml(): string;
   }
 
   const __APP_VERSION__: string;

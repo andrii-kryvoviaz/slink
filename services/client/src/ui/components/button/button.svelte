@@ -35,6 +35,8 @@
           'bg-white/80 dark:bg-gray-900/80 border border-gray-200/60 dark:border-gray-700/60 hover:bg-white dark:hover:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-lg hover:shadow-gray-200/40 dark:hover:shadow-gray-900/40 focus-visible:ring-blue-500/20 transition-all duration-200',
         'glass-dark':
           'bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-200',
+        'primary-dark':
+          'bg-blue-500 border-transparent hover:bg-blue-600 transition-all duration-200',
         'gradient-blue':
           'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 border-0 p-0.5 transition-all duration-500 ease-in-out focus:ring-3 focus:ring-blue-500/40',
         'gradient-green':
@@ -75,6 +77,13 @@
         disabled: 'cursor-not-allowed pointer-events-none opacity-70',
       },
     },
+    compoundVariants: [
+      {
+        variant: 'primary-dark',
+        status: 'disabled',
+        class: 'bg-transparent opacity-100',
+      },
+    ],
     defaultVariants: {
       variant: 'default',
       size: 'default',
@@ -109,6 +118,7 @@
         glass:
           'bg-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100',
         'glass-dark': 'bg-transparent text-white',
+        'primary-dark': 'bg-transparent text-white',
         'gradient-blue':
           'bg-white/20 dark:bg-gray-900/70 text-white dark:text-blue-200',
         'gradient-green':
@@ -134,11 +144,23 @@
         xl: 'rounded-xl',
         full: 'rounded-full',
       },
+      status: {
+        active: '',
+        disabled: '',
+      },
     },
+    compoundVariants: [
+      {
+        variant: 'primary-dark',
+        status: 'disabled',
+        class: 'text-white/30',
+      },
+    ],
     defaultVariants: {
       variant: 'default',
       size: 'default',
       rounded: 'lg',
+      status: 'active',
     },
   });
 
@@ -213,6 +235,7 @@
       variant,
       size,
       rounded,
+      status: currentStatus,
     }),
   );
 

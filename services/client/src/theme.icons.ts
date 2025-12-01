@@ -157,4 +157,11 @@ export const themeIcons: string[] = [
   'ph:image',
   'heroicons:chevron-up',
   'heroicons:arrows-pointing-out',
+  'heroicons:paper-airplane',
+  'heroicons:pencil',
+  'heroicons:check',
+  'heroicons:arrow-uturn-left',
+  'heroicons:chat-bubble-left-right',
+  'heroicons:bars-arrow-up',
+  'heroicons:bars-arrow-down',
 ];
