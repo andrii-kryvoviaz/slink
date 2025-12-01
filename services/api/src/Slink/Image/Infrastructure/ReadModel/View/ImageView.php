@@ -40,11 +40,11 @@ class ImageView extends AbstractView implements CursorAwareInterface {
     #[ORM\Column(type: 'uuid')]
     #[Groups(['public'])]
     #[SerializedName('id')]
-    private readonly string    $uuid,
+    private string $uuid,
 
     #[ORM\ManyToOne(targetEntity: UserView::class, fetch: 'EAGER')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'uuid')]
-    private readonly ?UserView $user,
+    private ?UserView $user,
 
     #[ORM\Embedded(class: ImageAttributes::class, columnPrefix: false)]
     #[Groups(['public'])]

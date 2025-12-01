@@ -15,3 +15,6 @@ parameters:
     Settings:
       dir: '%kernel.project_dir%/src/Slink/Settings/Infrastructure/ReadModel/View'
       prefix: 'Slink\Settings\Infrastructure\ReadModel\View'
+    Comment:
+      dir: '%kernel.project_dir%/src/Slink/Comment/Infrastructure/ReadModel/View'
+      prefix: 'Slink\Comment\Infrastructure\ReadModel\View'
