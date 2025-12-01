@@ -35,6 +35,30 @@ setup_jwt_keys() {
   fi
 }
 
+setup_mercure_keys() {
+  local persistent_keys_dir="/app/var/data/keys"
+  local api_env_file="/services/api/.env"
+  
+  if [ ! -f "$persistent_keys_dir/mercure_secret" ]; then
+    openssl rand -hex 32 > "$persistent_keys_dir/mercure_secret"
+    chmod 600 "$persistent_keys_dir/mercure_secret"
+    echo "[Startup] Generated Mercure JWT secret"
+  fi
+  
+  local mercure_secret=$(cat "$persistent_keys_dir/mercure_secret")
+  export MERCURE_JWT_SECRET="$mercure_secret"
+  
+  if [ -f "$api_env_file" ]; then
+    if grep -q "^MERCURE_JWT_SECRET=" "$api_env_file"; then
+      sed -i "s|^MERCURE_JWT_SECRET=.*|MERCURE_JWT_SECRET=$mercure_secret|" "$api_env_file"
+    else
+      echo "MERCURE_JWT_SECRET=$mercure_secret" >> "$api_env_file"
+    fi
+  fi
+  
+  echo "[Startup] Mercure configured with JWT secret"
+}
+
 generate_app_secret_from_jwt() {
   local env_file="/services/api/.env"
   local jwt_private_key="/app/var/data/keys/private.pem"
@@ -63,6 +87,7 @@ generate_app_secret_from_jwt() {
 }
 
 setup_jwt_keys
+setup_mercure_keys
 generate_app_secret_from_jwt
 
 if [ -f /services/api/.env ]; then

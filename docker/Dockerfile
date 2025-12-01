@@ -89,6 +89,8 @@ RUN docker-php-ext-enable imagick redis smbclient vips swoole
 
 ### Base build stage ###
 FROM php:${PHP_VERSION}-alpine AS base
+ARG TARGETARCH
+
 RUN apk update && apk upgrade &&\
     apk add --no-cache \
     redis \
@@ -111,6 +113,17 @@ RUN apk update && apk upgrade &&\
 RUN apk add --no-cache --virtual .build-deps python3-dev && \
     pip3 install --break-system-packages supervisor && \
     apk del .build-deps
+
+RUN MERCURE_VERSION="0.21.2" && \
+    case "${TARGETARCH}" in \
+        amd64) MERCURE_ARCH="amd64" ;; \
+        arm64) MERCURE_ARCH="arm64" ;; \
+        *) echo "Unsupported architecture: ${TARGETARCH}" && exit 1 ;; \
+    esac && \
+    wget -q "https://github.com/dunglas/mercure/releases/download/v${MERCURE_VERSION}/mercure_Linux_${MERCURE_ARCH}.tar.gz" -O /tmp/mercure.tar.gz && \
+    tar -xzf /tmp/mercure.tar.gz -C /usr/local/bin mercure && \
+    chmod +x /usr/local/bin/mercure && \
+    rm /tmp/mercure.tar.gz
 
 COPY --from=php-extensions /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
 COPY --from=php-extensions /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/

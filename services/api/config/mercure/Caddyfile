@@ -1,0 +1,27 @@
+{
+	http_port 3333
+	https_port 0
+	auto_https off
+
+	log {
+		output stdout
+		format console
+		level INFO
+	}
+}
+
+:3333 {
+	route {
+		mercure {
+			publisher_jwt {env.MERCURE_JWT_SECRET}
+			subscriber_jwt {env.MERCURE_JWT_SECRET}
+			anonymous {
+				subscribe comments/*
+			}
+			cors_origins *
+			publish_origins *
+			subscriptions
+		}
+		respond "Mercure Hub"
+	}
+}
