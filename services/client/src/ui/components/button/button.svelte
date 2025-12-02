@@ -41,6 +41,16 @@
           'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 border-0 p-0.5 transition-all duration-500 ease-in-out focus:ring-3 focus:ring-blue-500/40',
         'gradient-green':
           'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 border-0 p-0.5 transition-all duration-500 ease-in-out focus:ring-3 focus:ring-green-500/40',
+        'glass-violet':
+          'text-violet-600 dark:text-violet-300 bg-violet-500/10 dark:bg-violet-500/15 hover:bg-violet-500/20 dark:hover:bg-violet-500/25 border-0 transition-all duration-200',
+        'glass-blue':
+          'text-blue-600 dark:text-blue-300 bg-blue-500/10 dark:bg-blue-500/15 hover:bg-blue-500/20 dark:hover:bg-blue-500/25 border-0 transition-all duration-200',
+        'glass-green':
+          'text-green-600 dark:text-green-300 bg-green-500/10 dark:bg-green-500/15 hover:bg-green-500/20 dark:hover:bg-green-500/25 border-0 transition-all duration-200',
+        'glass-red':
+          'text-red-600 dark:text-red-300 bg-red-500/10 dark:bg-red-500/15 hover:bg-red-500/20 dark:hover:bg-red-500/25 border-0 transition-all duration-200',
+        'glass-yellow':
+          'text-yellow-600 dark:text-yellow-300 bg-yellow-500/10 dark:bg-yellow-500/15 hover:bg-yellow-500/20 dark:hover:bg-yellow-500/25 border-0 transition-all duration-200',
         destructive:
           'bg-destructive shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
         ghost: 'hover:bg-gray-100 dark:hover:bg-gray-800',
@@ -123,6 +133,11 @@
           'bg-white/20 dark:bg-gray-900/70 text-white dark:text-blue-200',
         'gradient-green':
           'bg-white/80 dark:bg-gray-900/80 text-green-600 dark:text-green-400',
+        'glass-violet': 'bg-transparent',
+        'glass-blue': 'bg-transparent',
+        'glass-green': 'bg-transparent',
+        'glass-red': 'bg-transparent',
+        'glass-yellow': 'bg-transparent',
         destructive: 'bg-transparent text-white',
         ghost:
           'bg-transparent text-gray-900 hover:text-gray-900 dark:text-gray-100 dark:hover:text-gray-100',
