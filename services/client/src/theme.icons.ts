@@ -162,6 +162,5 @@ export const themeIcons: string[] = [
   'heroicons:check',
   'heroicons:arrow-uturn-left',
   'heroicons:chat-bubble-left-right',
-  'heroicons:bars-arrow-up',
   'heroicons:bars-arrow-down',
 ];

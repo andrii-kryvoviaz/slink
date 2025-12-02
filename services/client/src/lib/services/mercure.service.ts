@@ -3,8 +3,8 @@ type ConnectionHandler = () => void;
 
 export class MercureService {
   private static instance: MercureService | null = null;
-  private connections: Map<string, EventSource> = new Map();
-  private pendingSubscriptions: Map<string, Promise<() => void>> = new Map();
+  private connections = new Map<string, EventSource>();
+  private pendingSubscriptions = new Map<string, Promise<() => void>>();
 
   private constructor() {}
 
@@ -60,20 +60,14 @@ export class MercureService {
 
     eventSource.onmessage = (event) => {
       try {
-        const data = JSON.parse(event.data);
-        onMessage(data);
+        onMessage(JSON.parse(event.data));
       } catch {
         onMessage(event.data);
       }
     };
 
-    eventSource.onopen = () => {
-      onOpen?.();
-    };
-
-    eventSource.onerror = () => {
-      onError?.();
-    };
+    eventSource.onopen = () => onOpen?.();
+    eventSource.onerror = () => onError?.();
 
     this.connections.set(topic, eventSource);
 

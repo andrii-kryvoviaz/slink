@@ -39,11 +39,7 @@
         />
       </div>
 
-      <div class="lg:hidden flex-1 min-h-0 overflow-hidden">
-        <PostViewerSidebar {image} {currentUser} {onClose} {isActive} compact />
-      </div>
-
-      <div class="hidden lg:flex w-96 shrink-0 h-full">
+      <div class="flex-1 lg:w-96 lg:flex-none min-h-0 overflow-hidden">
         <PostViewerSidebar {image} {currentUser} {onClose} {isActive} />
       </div>
     </div>

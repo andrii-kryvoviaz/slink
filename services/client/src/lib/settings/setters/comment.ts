@@ -1,11 +1,10 @@
 import { derived } from 'svelte/store';
 
+import { SortOrder } from '@slink/lib/enum/SortOrder';
 import type { Setter } from '@slink/lib/settings/Settings.types';
 
-export type CommentSortOrder = 'asc' | 'desc';
-
 export type CommentSettings = {
-  sortOrder: CommentSortOrder;
+  sortOrder: SortOrder;
 };
 
 export const CommentSetter: Setter<'comment', CommentSettings> = (value) => {
