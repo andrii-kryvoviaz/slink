@@ -169,7 +169,6 @@ export const themeIcons: string[] = [
   'ph:checks',
   'ph:chat-circle-text-fill',
   'ph:arrow-bend-up-left-fill',
-  'ph:arrow-bend-up-left',
   'ph:heart-fill',
   'ph:arrow-bend-down-right',
   'ph:arrow-bend-up-left',
