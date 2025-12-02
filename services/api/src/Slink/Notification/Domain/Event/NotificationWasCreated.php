@@ -21,6 +21,9 @@ final readonly class NotificationWasCreated implements SerializablePayload {
   ) {
   }
 
+  /**
+   * @return array<string, mixed>
+   */
   public function toPayload(): array {
     return [
       'uuid' => $this->id->toString(),
@@ -33,6 +36,9 @@ final readonly class NotificationWasCreated implements SerializablePayload {
     ];
   }
 
+  /**
+   * @param array<string, mixed> $payload
+   */
   public static function fromPayload(array $payload): static {
     return new self(
       ID::fromString($payload['uuid']),

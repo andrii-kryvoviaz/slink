@@ -13,6 +13,9 @@ final readonly class GetUnreadCountHandler implements QueryHandlerInterface {
   ) {
   }
 
+  /**
+   * @return array{count: int}
+   */
   public function __invoke(GetUnreadCountQuery $query, string $userId): array {
     $count = $this->notificationRepository->countUnreadByUserId($userId);
 

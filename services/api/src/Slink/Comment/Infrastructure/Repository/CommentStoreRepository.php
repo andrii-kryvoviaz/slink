@@ -27,7 +27,11 @@ final class CommentStoreRepository extends AbstractStoreRepository implements Co
     $this->persist($comment);
   }
 
+  /**
+   * @return Comment
+   */
   public function get(ID $id): Comment {
+    /** @var Comment */
     return $this->retrieve($id);
   }
 }

@@ -27,7 +27,11 @@ final class NotificationStoreRepository extends AbstractStoreRepository implemen
     $this->persist($notification);
   }
 
+  /**
+   * @return Notification
+   */
   public function get(ID $id): Notification {
+    /** @var Notification */
     return $this->retrieve($id);
   }
 }

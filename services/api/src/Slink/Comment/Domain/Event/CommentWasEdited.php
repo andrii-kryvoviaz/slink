@@ -17,6 +17,9 @@ final readonly class CommentWasEdited implements SerializablePayload {
   ) {
   }
 
+  /**
+   * @return array<string, mixed>
+   */
   public function toPayload(): array {
     return [
       'id' => $this->id->toString(),
@@ -25,6 +28,9 @@ final readonly class CommentWasEdited implements SerializablePayload {
     ];
   }
 
+  /**
+   * @param array<string, mixed> $payload
+   */
   public static function fromPayload(array $payload): static {
     return new self(
       ID::fromString($payload['id']),

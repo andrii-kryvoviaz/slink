@@ -22,7 +22,9 @@ final class CommentProjection extends AbstractProjection {
   }
 
   public function handleCommentWasCreated(CommentWasCreated $event): void {
+    /** @var ImageView $image */
     $image = $this->em->getReference(ImageView::class, $event->imageId->toString());
+    /** @var UserView $user */
     $user = $this->em->getReference(UserView::class, $event->userId->toString());
 
     $comment = new CommentView(

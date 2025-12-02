@@ -86,6 +86,9 @@ class CommentView extends AbstractView {
     return $this->referencedComment;
   }
 
+  /**
+   * @return array<string, mixed>|null
+   */
   #[Groups(['public'])]
   #[SerializedName('referencedComment')]
   public function getReferencedCommentSummary(): ?array {

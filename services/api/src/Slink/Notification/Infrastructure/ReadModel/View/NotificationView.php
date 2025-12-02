@@ -73,6 +73,9 @@ class NotificationView extends AbstractView {
     return $this->isRead;
   }
 
+  /**
+   * @return array{formattedDate: string, timestamp: int}
+   */
   #[Groups(['public'])]
   #[SerializedName('createdAt')]
   public function getCreatedAtFormatted(): array {
@@ -82,6 +85,9 @@ class NotificationView extends AbstractView {
     ];
   }
 
+  /**
+   * @return array<string, string>|null
+   */
   #[Groups(['public'])]
   #[SerializedName('actor')]
   public function getActorSummary(): ?array {
@@ -119,6 +125,9 @@ class NotificationView extends AbstractView {
     return $this->reference;
   }
 
+  /**
+   * @return array<string, string>
+   */
   #[Groups(['public'])]
   #[SerializedName('reference')]
   public function getReferenceSummary(): array {
@@ -132,6 +141,9 @@ class NotificationView extends AbstractView {
     return $this->relatedComment;
   }
 
+  /**
+   * @return array<string, mixed>|null
+   */
   #[Groups(['public'])]
   #[SerializedName('relatedComment')]
   public function getRelatedCommentSummary(): ?array {

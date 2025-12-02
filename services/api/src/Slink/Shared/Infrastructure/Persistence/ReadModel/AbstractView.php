@@ -67,6 +67,7 @@ abstract class AbstractView {
       }
       
       if (enum_exists($typeName) && is_string($value)) {
+        /** @var class-string<\BackedEnum> $typeName */
         $value = $typeName::from($value);
       }
       

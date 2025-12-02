@@ -102,6 +102,9 @@ final class Notification extends AbstractAggregateRoot {
     return $this->readAt !== null;
   }
 
+  /**
+   * @return array<string, mixed>
+   */
   protected function createSnapshotState(): array {
     return [
       'userId' => $this->userId->toString(),
@@ -114,7 +117,10 @@ final class Notification extends AbstractAggregateRoot {
     ];
   }
 
-  protected static function reconstituteFromSnapshotState(AggregateRootId $id, $state): AggregateRootWithSnapshotting {
+  /**
+   * @param array<string, mixed> $state
+   */
+  protected static function reconstituteFromSnapshotState(AggregateRootId $id, mixed $state): AggregateRootWithSnapshotting {
     $notification = new self(ID::fromString($id->toString()));
     $notification->userId = ID::fromString($state['userId']);
     $notification->type = NotificationType::from($state['type']);

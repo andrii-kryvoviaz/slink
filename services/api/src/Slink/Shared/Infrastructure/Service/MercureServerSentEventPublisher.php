@@ -16,6 +16,9 @@ final readonly class MercureServerSentEventPublisher implements ServerSentEventP
   ) {
   }
 
+  /**
+   * @param array<string, mixed> $data
+   */
   public function publish(string $topic, array $data): void {
     $update = new Update(
       $topic,

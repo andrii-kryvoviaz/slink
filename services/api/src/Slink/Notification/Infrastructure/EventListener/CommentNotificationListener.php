@@ -23,7 +23,7 @@ final class CommentNotificationListener extends AbstractProjection {
 
   public function handleCommentWasCreated(CommentWasCreated $event): void {
     $image = $this->imageRepository->oneById($event->imageId->toString());
-    $imageOwner = $image->getOwner();
+    $imageOwner = $image->getUser();
 
     if ($imageOwner === null) {
       return;
@@ -56,6 +56,10 @@ final class CommentNotificationListener extends AbstractProjection {
   }
 
   private function notifyReferencedCommentAuthor(CommentWasCreated $event, string $commentAuthorId): ?string {
+    if ($event->referencedCommentId === null) {
+      return null;
+    }
+
     try {
       $referencedComment = $this->commentRepository->oneById($event->referencedCommentId->toString());
       $referencedAuthorId = $referencedComment->getUserId();

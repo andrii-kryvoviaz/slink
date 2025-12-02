@@ -127,6 +127,9 @@ final class Comment extends AbstractAggregateRoot {
     return $this->userId->equals($userId);
   }
 
+  /**
+   * @return array<string, mixed>
+   */
   protected function createSnapshotState(): array {
     return [
       'imageId' => $this->imageId->toString(),
@@ -139,7 +142,10 @@ final class Comment extends AbstractAggregateRoot {
     ];
   }
 
-  protected static function reconstituteFromSnapshotState(AggregateRootId $id, $state): AggregateRootWithSnapshotting {
+  /**
+   * @param array<string, mixed> $state
+   */
+  protected static function reconstituteFromSnapshotState(AggregateRootId $id, mixed $state): AggregateRootWithSnapshotting {
     $comment = new self(ID::fromString($id->toString()));
     $comment->imageId = ID::fromString($state['imageId']);
     $comment->userId = ID::fromString($state['userId']);
