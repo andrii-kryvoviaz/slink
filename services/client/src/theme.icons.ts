@@ -163,4 +163,13 @@ export const themeIcons: string[] = [
   'heroicons:arrow-uturn-left',
   'heroicons:chat-bubble-left-right',
   'heroicons:bars-arrow-down',
+  'ph:bell',
+  'ph:chat-circle-dots',
+  'ph:bell-simple-slash-duotone',
+  'ph:bell-fill',
+  'ph:checks',
+  'ph:chat-circle-text-fill',
+  'ph:arrow-bend-up-left-fill',
+  'ph:heart-fill',
+  'ph:arrow-bend-down-right',
 ];

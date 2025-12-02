@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { FormattedDate, HashtagText } from '@slink/feature/Text';
+  import { CommentText, FormattedDate, HashtagText } from '@slink/feature/Text';
   import { UserAvatar } from '@slink/feature/User';
   import {
     DropdownSimple,
@@ -205,11 +205,19 @@
     {/if}
 
     {#if comment.isDeleted}
-      <p class="text-sm text-white/40 italic">This comment has been deleted</p>
+      <p class="text-sm text-white/80">
+        <CommentText
+          content={comment.displayContent}
+          isDeleted={true}
+          variant="glass"
+          size="sm"
+          deletedClass="text-white/40 italic"
+        />
+      </p>
     {:else}
       <p class="text-sm text-white/80 whitespace-pre-wrap wrap-break-word">
-        <HashtagText
-          text={comment.displayContent}
+        <CommentText
+          content={comment.displayContent}
           variant="glass"
           size="sm"
           onBeforeNavigate={onHashtagClick}
