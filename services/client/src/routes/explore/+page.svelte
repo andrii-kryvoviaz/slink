@@ -45,7 +45,12 @@
     const searchBy = urlParams.get('searchBy');
 
     if (search && searchBy) {
-      publicFeedState.search(search, searchBy);
+      if (
+        publicFeedState.searchTerm !== search ||
+        publicFeedState.searchBy !== searchBy
+      ) {
+        publicFeedState.search(search, searchBy);
+      }
     } else if (!publicFeedState.isDirty) {
       publicFeedState.load();
     }
