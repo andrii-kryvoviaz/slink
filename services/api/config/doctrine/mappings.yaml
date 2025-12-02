@@ -18,3 +18,6 @@ parameters:
     Comment:
       dir: '%kernel.project_dir%/src/Slink/Comment/Infrastructure/ReadModel/View'
       prefix: 'Slink\Comment\Infrastructure\ReadModel\View'
+    Notification:
+      dir: '%kernel.project_dir%/src/Slink/Notification/Infrastructure/ReadModel/View'
+      prefix: 'Slink\Notification\Infrastructure\ReadModel\View'

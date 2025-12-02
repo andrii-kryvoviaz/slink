@@ -27,7 +27,7 @@ class CommentView extends AbstractView {
   public function __construct(
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]
-    private readonly string $uuid,
+    private string $uuid,
 
     #[ORM\ManyToOne(targetEntity: ImageView::class)]
     #[ORM\JoinColumn(name: 'image_id', referencedColumnName: 'uuid', nullable: false)]
