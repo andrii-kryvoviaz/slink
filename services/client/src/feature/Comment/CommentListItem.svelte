@@ -123,7 +123,7 @@
                 onclick={onReply}
                 class="p-1 text-white/40 hover:text-white/70 rounded transition-colors"
               >
-                <Icon icon="heroicons:arrow-uturn-left" class="w-4 h-4" />
+                <Icon icon="ph:arrow-bend-up-left" class="w-4 h-4" />
               </button>
             {/snippet}
             Reply
