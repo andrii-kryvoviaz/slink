@@ -28,9 +28,9 @@ final readonly class CommentWasCreated implements SerializablePayload {
       'uuid' => $this->id->toString(),
       'image' => $this->imageId->toString(),
       'user' => $this->userId->toString(),
+      'referencedCommentId' => $this->referencedCommentId?->toString(),
       'content' => $this->content->toString(),
       'createdAt' => $this->createdAt->toString(),
-      'referencedCommentId' => $this->referencedCommentId?->toString(),
     ];
   }
 

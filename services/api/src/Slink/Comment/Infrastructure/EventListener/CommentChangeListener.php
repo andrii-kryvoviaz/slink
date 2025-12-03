@@ -11,13 +11,14 @@ use Doctrine\ORM\Events;
 use Slink\Comment\Domain\Enum\CommentEventType;
 use Slink\Comment\Infrastructure\ReadModel\View\CommentView;
 use Slink\Shared\Domain\Service\ServerSentEventPublisherInterface;
-use Slink\Shared\Infrastructure\Serializer\SerializerFactory;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 #[AsEntityListener(event: Events::postPersist, method: 'postPersist', entity: CommentView::class, entityManager: 'read_model')]
 #[AsEntityListener(event: Events::postUpdate, method: 'postUpdate', entity: CommentView::class, entityManager: 'read_model')]
 final class CommentChangeListener {
   public function __construct(
     private readonly ServerSentEventPublisherInterface $publisher,
+    private readonly NormalizerInterface $serializer,
   ) {
   }
 
@@ -48,9 +49,12 @@ final class CommentChangeListener {
       return;
     }
 
+    /** @var array<string, mixed> $normalized */
+    $normalized = $this->serializer->normalize($comment, context: ['groups' => ['public']]);
+
     $this->publisher->publish($topic, [
       'event' => $eventType->value,
-      'comment' => SerializerFactory::create()->normalize($comment, context: ['groups' => ['public']]),
+      'comment' => $normalized,
     ]);
   }
 }

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace UI\Http\Rest\Controller\Notification;
 
-use Slink\Notification\Domain\Repository\NotificationRepositoryInterface;
+use Slink\Notification\Application\Command\MarkAllNotificationsRead\MarkAllNotificationsReadCommand;
+use Slink\Shared\Application\Command\CommandTrait;
 use Slink\User\Infrastructure\Auth\JwtUser;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
@@ -16,15 +17,16 @@ use UI\Http\Rest\Response\ApiResponse;
 #[Route(path: '/notifications/mark-all-read', name: 'mark_all_notifications_read', methods: ['POST'])]
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 final readonly class MarkAllNotificationsReadController {
-  public function __construct(
-    private NotificationRepositoryInterface $notificationRepository,
-  ) {
-  }
+  use CommandTrait;
 
   public function __invoke(
     #[CurrentUser] JWTUser $user,
   ): ApiResponse {
-    $this->notificationRepository->markAllAsReadByUserId($user->getIdentifier());
+    $command = new MarkAllNotificationsReadCommand();
+    $this->handle($command->withContext([
+      'userId' => $user->getIdentifier(),
+    ]));
+
     return ApiResponse::empty();
   }
 }

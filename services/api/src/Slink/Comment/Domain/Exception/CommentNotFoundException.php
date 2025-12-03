@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Comment\Domain\Exception;
 
-use Slink\Shared\Infrastructure\Exception\NotFoundException;
+use Slink\Shared\Domain\Exception\NotFoundException;
 
 final class CommentNotFoundException extends NotFoundException {
   public function __construct(string $id) {

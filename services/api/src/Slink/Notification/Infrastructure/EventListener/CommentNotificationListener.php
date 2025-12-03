@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Slink\Notification\Infrastructure\EventListener;
 
 use Slink\Comment\Domain\Event\CommentWasCreated;
-use Slink\Comment\Domain\Repository\CommentRepositoryInterface;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Notification\Domain\Enum\NotificationType;
 use Slink\Notification\Domain\Notification;
 use Slink\Notification\Domain\Repository\NotificationStoreRepositoryInterface;
+use Slink\Notification\Domain\Service\CommentReferenceResolverInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractProjection;
 
@@ -17,7 +17,7 @@ final class CommentNotificationListener extends AbstractProjection {
   public function __construct(
     private readonly NotificationStoreRepositoryInterface $notificationStore,
     private readonly ImageRepositoryInterface $imageRepository,
-    private readonly CommentRepositoryInterface $commentRepository,
+    private readonly CommentReferenceResolverInterface $commentReferenceResolver,
   ) {
   }
 
@@ -60,28 +60,25 @@ final class CommentNotificationListener extends AbstractProjection {
       return null;
     }
 
-    try {
-      $referencedComment = $this->commentRepository->oneById($event->referencedCommentId->toString());
-      $referencedAuthorId = $referencedComment->getUserId();
+    $referencedAuthorId = $this->commentReferenceResolver->getCommentAuthorId(
+      $event->referencedCommentId->toString()
+    );
 
-      if ($referencedAuthorId === $commentAuthorId) {
-        return null;
-      }
-
-      $notification = Notification::create(
-        ID::generate(),
-        ID::fromString($referencedAuthorId),
-        NotificationType::COMMENT_REPLY,
-        $event->imageId,
-        $event->id,
-        $event->userId,
-      );
-
-      $this->notificationStore->store($notification);
-
-      return $referencedAuthorId;
-    } catch (\Exception) {
+    if ($referencedAuthorId === null || $referencedAuthorId === $commentAuthorId) {
       return null;
     }
+
+    $notification = Notification::create(
+      ID::generate(),
+      ID::fromString($referencedAuthorId),
+      NotificationType::COMMENT_REPLY,
+      $event->imageId,
+      $event->id,
+      $event->userId,
+    );
+
+    $this->notificationStore->store($notification);
+
+    return $referencedAuthorId;
   }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Slink\Comment\Infrastructure\ReadModel\View;
 
 use Doctrine\ORM\Mapping as ORM;
-use Slink\Comment\Domain\Service\CommentEditPolicy;
 use Slink\Comment\Infrastructure\ReadModel\Repository\CommentRepository;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
@@ -143,15 +142,6 @@ class CommentView extends AbstractView {
   #[SerializedName('isEdited')]
   public function isEdited(): bool {
     return $this->updatedAt !== null && !$this->isDeleted();
-  }
-
-  #[Groups(['public'])]
-  #[SerializedName('canEdit')]
-  public function canEdit(): bool {
-    if ($this->isDeleted()) {
-      return false;
-    }
-    return CommentEditPolicy::canEdit($this->createdAt);
   }
 
   public function updateContent(string $content, DateTime $updatedAt): void {
