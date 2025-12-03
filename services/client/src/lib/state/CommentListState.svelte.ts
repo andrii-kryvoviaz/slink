@@ -2,7 +2,7 @@ import { browser } from '$app/environment';
 import type { Readable } from 'svelte/store';
 
 import { ApiClient } from '@slink/api/Client';
-import type { CommentItem } from '@slink/api/Response';
+import type { AuthenticatedUser, CommentItem } from '@slink/api/Response';
 
 import { CommentEventType } from '@slink/lib/enum/CommentEventType';
 import { SortOrder } from '@slink/lib/enum/SortOrder';
@@ -19,7 +19,7 @@ interface CommentEvent {
 interface CommentListParams {
   imageId: string;
   imageOwnerId: string;
-  currentUserId: string | null;
+  currentUser: AuthenticatedUser | null;
   sortOrder: Readable<SortOrder>;
 }
 
@@ -37,7 +37,7 @@ export class CommentListState extends AbstractHttpState<CommentItem[]> {
   private constructor(
     private readonly imageId: string,
     private readonly imageOwnerId: string,
-    private readonly currentUserId: string | null,
+    private readonly currentUser: AuthenticatedUser | null,
     sortOrder: Readable<SortOrder>,
   ) {
     super();
@@ -51,7 +51,7 @@ export class CommentListState extends AbstractHttpState<CommentItem[]> {
     return new CommentListState(
       params.imageId,
       params.imageOwnerId,
-      params.currentUserId,
+      params.currentUser,
       params.sortOrder,
     );
   }
@@ -104,25 +104,35 @@ export class CommentListState extends AbstractHttpState<CommentItem[]> {
   }
 
   get hasCurrentUser(): boolean {
-    return this.currentUserId !== null;
+    return this.currentUser !== null;
   }
 
   async createComment(content: string): Promise<void> {
-    await ApiClient.comment.createComment(
+    const replyingTo = this._replyingTo;
+
+    const { data: comment } = await ApiClient.comment.createComment(
       this.imageId,
       content,
-      this._replyingTo?.id,
+      replyingTo?.id,
     );
+
+    this._list.insert(comment);
     this.clearInputState();
   }
 
   async updateComment(commentId: string, content: string): Promise<void> {
     await ApiClient.comment.updateComment(commentId, content);
+    this._list.patch(commentId, {
+      content,
+      displayContent: content,
+      isEdited: true,
+    });
     this._editingComment = null;
   }
 
   async deleteComment(commentId: string): Promise<void> {
     await ApiClient.comment.deleteComment(commentId);
+    this._list.patch(commentId, { isDeleted: true });
   }
 
   startReply(comment: CommentItem): void {

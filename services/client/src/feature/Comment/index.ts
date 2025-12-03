@@ -2,3 +2,4 @@ export { default as CommentDeleteConfirmation } from './CommentDeleteConfirmatio
 export { default as CommentInput } from './CommentInput.svelte';
 export { default as CommentList } from './CommentList.svelte';
 export { default as CommentListItem } from './CommentListItem.svelte';
+export * from './CommentListItem.theme';

@@ -1,5 +1,5 @@
 import { AbstractResource } from '@slink/api/AbstractResource';
-import type { CommentListingResponse } from '@slink/api/Response';
+import type { CommentItem, CommentListingResponse } from '@slink/api/Response';
 
 export class CommentResource extends AbstractResource {
   public async getComments(
@@ -19,7 +19,7 @@ export class CommentResource extends AbstractResource {
     imageId: string,
     content: string,
     referencedCommentId?: string,
-  ): Promise<void> {
+  ): Promise<{ data: CommentItem }> {
     return this.post(`/image/${imageId}/comments`, {
       json: {
         content,

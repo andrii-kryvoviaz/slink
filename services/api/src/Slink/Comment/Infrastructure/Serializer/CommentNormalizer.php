@@ -6,15 +6,14 @@ namespace Slink\Comment\Infrastructure\Serializer;
 
 use Slink\Comment\Domain\Service\CommentEditPolicy;
 use Slink\Comment\Infrastructure\ReadModel\View\CommentView;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-final readonly class CommentNormalizer implements NormalizerInterface {
-  public function __construct(
-    #[Autowire(service: 'serializer.normalizer.object')]
-    private NormalizerInterface $normalizer,
-  ) {
-  }
+final class CommentNormalizer implements NormalizerInterface, NormalizerAwareInterface {
+  use NormalizerAwareTrait;
+
+  private const string ALREADY_CALLED_KEY = self::class . '_ALREADY_CALLED';
 
   /**
    * @param CommentView $data
@@ -22,6 +21,9 @@ final readonly class CommentNormalizer implements NormalizerInterface {
    * @return array<string, mixed>
    */
   public function normalize(mixed $data, ?string $format = null, array $context = []): array {
+    $objectHash = spl_object_hash($data);
+    $context[self::ALREADY_CALLED_KEY][$objectHash] = true;
+
     /** @var array<string, mixed> $normalized */
     $normalized = $this->normalizer->normalize($data, $format, $context);
 
@@ -35,7 +37,12 @@ final readonly class CommentNormalizer implements NormalizerInterface {
   }
 
   public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool {
-    return $data instanceof CommentView;
+    if (!$data instanceof CommentView) {
+      return false;
+    }
+
+    $objectHash = spl_object_hash($data);
+    return !isset($context[self::ALREADY_CALLED_KEY][$objectHash]);
   }
 
   /**
@@ -43,7 +50,7 @@ final readonly class CommentNormalizer implements NormalizerInterface {
    */
   public function getSupportedTypes(?string $format): array {
     return [
-      CommentView::class => true,
+      CommentView::class => false,
     ];
   }
 }

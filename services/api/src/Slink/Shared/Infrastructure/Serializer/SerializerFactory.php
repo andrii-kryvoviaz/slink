@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Shared\Infrastructure\Serializer;
 
+use Slink\Comment\Infrastructure\Serializer\CommentNormalizer;
 use Slink\Shared\Infrastructure\Serializer\Enum\Encoder;
 use Slink\Shared\Infrastructure\Serializer\Enum\Normalizer;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
@@ -41,8 +42,11 @@ abstract class SerializerFactory {
     $metadataAwareNameConverter = new MetadataAwareNameConverter($classMetadataFactory);
     $normalizerArgs = is_subclass_of($normalizerClass, AbstractNormalizer::class) ? [$classMetadataFactory, $metadataAwareNameConverter] : [];
     
-    // @phpstan-ignore-next-line
-    $normalizers = [new $normalizerClass(...$normalizerArgs)];
+    $normalizers = [
+      new DateTimeNormalizer(),
+      new CommentNormalizer(),
+      new $normalizerClass(...$normalizerArgs), // @phpstan-ignore-line
+    ];
     $encoders = class_exists($encoderClass) ? [new $encoderClass()] : [];
     
     $serializer = new Serializer(

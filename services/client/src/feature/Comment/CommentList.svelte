@@ -57,7 +57,7 @@
       state = CommentListState.create({
         imageId,
         imageOwnerId,
-        currentUserId: currentUser?.id ?? null,
+        currentUser,
         sortOrder,
       });
       state?.load();

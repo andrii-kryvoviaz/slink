@@ -12,8 +12,31 @@ use Slink\Comment\Application\Query\GetCommentsByImage\GetCommentsByImageQuery;
 use Slink\Comment\Domain\Repository\CommentRepositoryInterface;
 use Slink\Comment\Infrastructure\ReadModel\View\CommentView;
 use Slink\Shared\Application\Http\Collection;
+use Slink\Shared\Domain\ValueObject\Date\DateTime;
+use Slink\User\Infrastructure\ReadModel\View\UserView;
 
 final class GetCommentsByImageHandlerTest extends TestCase {
+  private function createMockCommentView(): CommentView {
+    $userView = $this->createMock(UserView::class);
+    $userView->method('getUuid')->willReturn('user-123');
+    $userView->method('getDisplayName')->willReturn('Test User');
+    
+    $mock = $this->createMock(CommentView::class);
+    $mock->method('getId')->willReturn('comment-123');
+    $mock->method('getContent')->willReturn('Test content');
+    $mock->method('getDisplayContent')->willReturn('Test content');
+    $mock->method('getCreatedAt')->willReturn(DateTime::now());
+    $mock->method('getUpdatedAt')->willReturn(null);
+    $mock->method('getDeletedAt')->willReturn(null);
+    $mock->method('isDeleted')->willReturn(false);
+    $mock->method('isEdited')->willReturn(false);
+    $mock->method('getUser')->willReturn($userView);
+    $mock->method('getReferencedComment')->willReturn(null);
+    $mock->method('getReferencedCommentSummary')->willReturn(null);
+    
+    return $mock;
+  }
+
   #[Test]
   public function itReturnsCommentsCollection(): void {
     $commentRepository = $this->createMock(CommentRepositoryInterface::class);
@@ -86,9 +109,9 @@ final class GetCommentsByImageHandlerTest extends TestCase {
     $commentRepository = $this->createMock(CommentRepositoryInterface::class);
     $imageId = 'image-123';
 
-    $comment1 = $this->createMock(CommentView::class);
-    $comment2 = $this->createMock(CommentView::class);
-    $comment3 = $this->createMock(CommentView::class);
+    $comment1 = $this->createMockCommentView();
+    $comment2 = $this->createMockCommentView();
+    $comment3 = $this->createMockCommentView();
 
     $paginator = $this->createMock(Paginator::class);
     $paginator->method('getIterator')->willReturn(new \ArrayIterator([$comment1, $comment2, $comment3]));

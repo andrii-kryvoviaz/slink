@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace UI\Http\Rest\Controller\Comment;
 
 use Slink\Comment\Application\Command\CreateComment\CreateCommentCommand;
+use Slink\Comment\Domain\Repository\CommentRepositoryInterface;
 use Slink\Shared\Application\Command\CommandTrait;
+use Slink\Shared\Application\Http\Item;
 use Slink\User\Infrastructure\Auth\JwtUser;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -20,16 +22,23 @@ use UI\Http\Rest\Response\ApiResponse;
 final readonly class CreateCommentController {
   use CommandTrait;
 
+  public function __construct(
+    private CommentRepositoryInterface $commentRepository,
+  ) {
+  }
+
   public function __invoke(
     #[MapRequestPayload] CreateCommentCommand $command,
     #[CurrentUser] JWTUser $user,
     string $imageId,
   ): ApiResponse {
-    $this->handle($command->withContext([
+    $commentId = $this->handleSync($command->withContext([
       'imageId' => $imageId,
       'userId' => $user->getIdentifier(),
     ]));
 
-    return ApiResponse::created();
+    $comment = $this->commentRepository->oneById($commentId->toString());
+
+    return ApiResponse::one(Item::fromEntity($comment), ApiResponse::HTTP_CREATED);
   }
 }

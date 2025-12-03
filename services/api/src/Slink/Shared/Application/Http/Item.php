@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Slink\Shared\Application\Http;
 
-use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\Serializer\SerializerFactory;
 
 final readonly class Item {

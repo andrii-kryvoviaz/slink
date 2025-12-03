@@ -14,6 +14,7 @@
   import type { CommentItem } from '@slink/api/Response';
 
   import CommentDeleteConfirmation from './CommentDeleteConfirmation.svelte';
+  import { commentListItemTheme } from './CommentListItem.theme';
 
   interface Props {
     comment: CommentItem;
@@ -69,11 +70,10 @@
 </script>
 
 <div
-  class="group flex gap-3 p-2 transition-colors {comment.isDeleted
-    ? 'opacity-50'
-    : ''} {isEditing
-    ? 'bg-white/5 border-l-2 border-white/40'
-    : 'hover:bg-white/5 rounded-lg'}"
+  class={commentListItemTheme({
+    deleted: comment.isDeleted,
+    editing: isEditing,
+  })}
 >
   <HoverCard.Root openDelay={300} closeDelay={100}>
     <HoverCard.Trigger class="shrink-0 pt-0.5 cursor-pointer">
