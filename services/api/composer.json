@@ -28,6 +28,7 @@
         "symfony/dotenv": "^7.4",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "^7.4",
+        "symfony/mercure-bundle": "^0.4.2",
         "symfony/messenger": "^7.4",
         "symfony/mime": "^7.4",
         "symfony/monolog-bundle": "^3.10",

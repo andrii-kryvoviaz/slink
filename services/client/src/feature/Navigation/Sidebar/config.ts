@@ -52,6 +52,12 @@ export const createAppSidebarItems = (options?: {
                 href: '/history',
               },
               {
+                id: 'notifications',
+                title: 'Notifications',
+                icon: 'ph:bell',
+                href: '/notifications',
+              },
+              {
                 id: 'tags',
                 title: 'Tags',
                 icon: 'ph:tag',

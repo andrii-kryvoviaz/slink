@@ -46,22 +46,29 @@ abstract class AbstractView {
       
       $value = $payload[$name] ?? null;
       
-      if (!$parameter->allowsNull() && $value === null) {
-        throw new \InvalidArgumentException(static::class . "::$name cannot be null.");
-      }
-      
       if ($value === null) {
-        $payload[$name] = $parameter->isDefaultValueAvailable()
-          ? $parameter->getDefaultValue()
-          : null;
+        if ($parameter->isDefaultValueAvailable()) {
+          $payload[$name] = $parameter->getDefaultValue();
+          continue;
+        }
         
-        continue;
+        if ($parameter->allowsNull()) {
+          $payload[$name] = null;
+          continue;
+        }
+        
+        throw new \InvalidArgumentException(static::class . "::$name cannot be null.");
       }
         
       if(is_subclass_of($typeName, AbstractValueObject::class)
         || $typeName === DateTime::class
       ) {
         $value = self::createValueObject($typeName, $value);
+      }
+      
+      if (enum_exists($typeName) && is_string($value)) {
+        /** @var class-string<\BackedEnum> $typeName */
+        $value = $typeName::from($value);
       }
       
       if($entityManager && is_subclass_of($typeName, AbstractView::class) && $value !== null) {

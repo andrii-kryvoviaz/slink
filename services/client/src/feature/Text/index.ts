@@ -1,6 +1,7 @@
 export { default as Badge } from './Badge/Badge.svelte';
 export * from './Badge/Badge.theme';
 export * from './Badge/Badge.types';
+export { default as CommentText } from './CommentText/CommentText.svelte';
 export { default as CopyContainer } from './CopyContainer/CopyContainer.svelte';
 export * from './CopyContainer/CopyContainer.theme';
 export * from './CopyContainer/CopyContainer.types';

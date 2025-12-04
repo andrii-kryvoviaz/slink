@@ -3,6 +3,7 @@
   import { Shortcut } from '@slink/ui/components/shortcut';
 
   import { browser } from '$app/environment';
+  import { page } from '$app/state';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
@@ -12,6 +13,7 @@
   import PostViewerNavigation from './PostViewerNavigation.svelte';
 
   const viewerState = usePostViewerState();
+  const currentUser = $derived(page.data.user ?? null);
 
   let isAnimating = $state(false);
   let lastWheelTime = $state(0);
@@ -129,8 +131,13 @@
       class="h-full w-full transition-transform duration-500 ease-out"
       style="transform: translateY({translateY}%);"
     >
-      {#each viewerState.items as image (image.id)}
-        <PostViewerItem {image} onClose={handleClose} />
+      {#each viewerState.items as image, index (image.id)}
+        <PostViewerItem
+          {image}
+          {currentUser}
+          isActive={index === viewerState.currentIndex}
+          onClose={handleClose}
+        />
       {/each}
     </div>
 

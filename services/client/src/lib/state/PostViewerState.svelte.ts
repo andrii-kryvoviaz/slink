@@ -1,3 +1,5 @@
+import { replaceState } from '$app/navigation';
+
 import type { ImageListingItem } from '@slink/api/Response';
 
 import type { AbstractPaginatedFeed } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
@@ -50,6 +52,7 @@ class PostViewerState {
   open(index: number = 0): void {
     this._currentIndex = Math.max(0, Math.min(index, this.items.length - 1));
     this._isOpen = true;
+    this.updateUrl();
     this.prefetchAdjacent();
     this.checkAndLoadMore();
   }
@@ -89,13 +92,13 @@ class PostViewerState {
 
     const url = new URL(window.location.href);
     url.searchParams.set('post', item.id);
-    history.replaceState(null, '', url.toString());
+    replaceState(url, {});
   }
 
   clearUrlParam(): void {
     const url = new URL(window.location.href);
     url.searchParams.delete('post');
-    history.replaceState(null, '', url.toString());
+    replaceState(url, {});
   }
 
   openFromUrl(): boolean {

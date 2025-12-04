@@ -13,9 +13,15 @@
 
   import { className } from '@slink/utils/ui/className';
 
+  import {
+    type DropdownSimpleContentVariant,
+    dropdownSimpleContentTheme,
+  } from './dropdown-simple-item.theme';
+
   type Props = DropdownMenu.RootProps &
     Partial<ButtonAttributes> & {
       variant?: ButtonVariant;
+      contentVariant?: DropdownSimpleContentVariant;
       contentProps?: WithoutChild<DropdownMenu.ContentProps>;
       animationDuration?: number;
       child?: Snippet;
@@ -27,6 +33,7 @@
   let {
     open = $bindable(false),
     variant = 'invisible',
+    contentVariant = 'default',
     size = 'xs',
     rounded = 'full',
     animationDuration = 300,
@@ -49,10 +56,12 @@
     rounded,
   };
 
-  const baseContentClasses =
-    'z-50 p-1 flex flex-col w-fit min-w-48 origin-top rounded-xl bg-white dark:bg-gray-900 shadow-xl shadow-black/10 dark:shadow-black/25 border border-gray-200/80 dark:border-gray-700/80 backdrop-blur-sm';
-
-  const contentClasses = className(baseContentClasses, contentProps?.class);
+  const contentClasses = $derived(
+    className(
+      dropdownSimpleContentTheme({ variant: contentVariant }),
+      contentProps?.class,
+    ),
+  );
 </script>
 
 <DropdownMenu.Root bind:open {...props}>

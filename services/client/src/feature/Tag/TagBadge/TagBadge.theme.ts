@@ -36,6 +36,7 @@ export const tagBadgeCloseButtonVariants = cva(
         neon: 'text-blue-600 hover:text-blue-800 hover:bg-blue-500/20 dark:text-blue-300 dark:hover:text-blue-100 dark:hover:bg-blue-400/20',
         minimal:
           'text-slate-600 hover:text-slate-900 hover:bg-slate-500/20 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-400/20',
+        glass: 'text-white/70 hover:text-white hover:bg-white/10',
       },
     },
     defaultVariants: {

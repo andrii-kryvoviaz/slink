@@ -42,6 +42,7 @@ export const BadgeTheme = cva(
         ],
         minimal:
           'bg-slate-50 text-slate-600 border border-slate-100 dark:bg-slate-900/50 dark:text-slate-400 dark:border-slate-800',
+        glass: 'border-transparent bg-white/5 text-white/70 backdrop-blur-sm',
       },
       size: {
         xs: 'px-2 py-0.5 text-xs',
@@ -61,6 +62,10 @@ export const BadgeTheme = cva(
       {
         variant: 'minimal',
         class: 'rounded-lg',
+      },
+      {
+        variant: 'glass',
+        class: 'rounded-md',
       },
     ],
     defaultVariants: {

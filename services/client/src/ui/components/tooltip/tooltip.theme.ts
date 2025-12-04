@@ -28,6 +28,7 @@ export const tooltipVariants = cva(
           'bg-violet-600 text-white border-0 shadow-md dark:bg-violet-500',
         secondary:
           'bg-slate-100 text-slate-900 border border-slate-200 shadow-sm dark:bg-slate-800 dark:text-slate-100 dark:border-slate-700',
+        dark: 'bg-neutral-900 text-white/90 border border-white/10 shadow-lg backdrop-blur-sm',
       },
       size: {
         xs: 'text-xs px-2 py-1 max-w-48',
@@ -88,6 +89,7 @@ export const tooltipArrowVariants = cva('z-50 size-2.5', {
       primary: 'bg-violet-600 border-0 dark:bg-violet-500',
       secondary:
         'bg-slate-100 border-l border-t border-slate-200 dark:bg-slate-800 dark:border-slate-700',
+      dark: 'bg-neutral-900 border-l border-t border-white/10',
     },
     rounded: {
       none: 'rounded-none',

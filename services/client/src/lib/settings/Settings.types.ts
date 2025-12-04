@@ -1,6 +1,8 @@
 import type { Readable, Writable } from 'svelte/store';
 
+import { SortOrder } from '@slink/lib/enum/SortOrder';
 import { Theme } from '@slink/lib/settings/index';
+import type { CommentSettings } from '@slink/lib/settings/setters/comment';
 import type {
   HistorySettings,
   HistoryViewMode,
@@ -31,6 +33,9 @@ export type Settings = {
   };
   share: SettingsValue<ShareSettings> & {
     format: Readable<ShareFormat>;
+  };
+  comment: SettingsValue<CommentSettings> & {
+    sortOrder: Readable<SortOrder>;
   };
 };
 
