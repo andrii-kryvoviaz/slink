@@ -38,6 +38,8 @@
         return 'replied';
       case 'added_to_favorite':
         return 'favorited';
+      case 'added_to_bookmarks':
+        return 'bookmarked';
       default:
         return 'interacted';
     }
@@ -75,6 +77,11 @@
       {:else if group.type === 'added_to_favorite'}
         <Icon
           icon="ph:heart-fill"
+          class={notificationIconColorVariants({ type: group.type })}
+        />
+      {:else if group.type === 'added_to_bookmarks'}
+        <Icon
+          icon="ph:bookmark-simple-fill"
           class={notificationIconColorVariants({ type: group.type })}
         />
       {:else}

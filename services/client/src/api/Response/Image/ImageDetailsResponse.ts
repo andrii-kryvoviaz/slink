@@ -12,4 +12,5 @@ export type ImageDetailsResponse = {
   views: number;
   url: string;
   supportsResize: boolean;
+  bookmarkCount: number;
 };

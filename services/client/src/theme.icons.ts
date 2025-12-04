@@ -172,4 +172,9 @@ export const themeIcons: string[] = [
   'ph:heart-fill',
   'ph:arrow-bend-down-right',
   'ph:arrow-bend-up-left',
+  'ph:bookmark-simple-fill',
+  'ph:bookmark-simple',
+  'ph:bookmark-simple-duotone',
+  'ph:image-broken',
+  'svg-spinners:ring-resize',
 ];

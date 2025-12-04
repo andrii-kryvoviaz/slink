@@ -13,6 +13,7 @@ import { JsonMapper } from '@slink/api/Mapper/JsonMapper';
 import {
   AnalyticsResource,
   AuthResource,
+  BookmarkResource,
   CommentResource,
   ImageResource,
   NotificationResource,
@@ -36,6 +37,7 @@ const RESOURCES = {
   tag: TagResource,
   comment: CommentResource,
   notification: NotificationResource,
+  bookmark: BookmarkResource,
 };
 
 type ResourceType = keyof typeof RESOURCES;

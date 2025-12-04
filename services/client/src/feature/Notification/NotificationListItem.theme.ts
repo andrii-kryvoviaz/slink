@@ -25,6 +25,7 @@ export const notificationItemIconWrapperVariants = cva(
         comment: 'bg-blue-100 dark:bg-blue-900/30',
         comment_reply: 'bg-indigo-100 dark:bg-indigo-900/30',
         added_to_favorite: 'bg-pink-100 dark:bg-pink-900/30',
+        added_to_bookmarks: 'bg-indigo-100 dark:bg-indigo-900/30',
       },
     },
     defaultVariants: {
@@ -39,6 +40,7 @@ export const notificationItemIconVariants = cva('w-5 h-5', {
       comment: 'text-blue-500',
       comment_reply: 'text-indigo-500',
       added_to_favorite: 'text-pink-500',
+      added_to_bookmarks: 'text-indigo-500',
     },
   },
   defaultVariants: {

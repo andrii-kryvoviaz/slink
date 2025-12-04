@@ -9,9 +9,11 @@ use Slink\Settings\Application\Service\SettingsService;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Application\Query\QueryTrait;
 use Slink\Shared\Infrastructure\Security\Voter\GuestAccessVoter;
+use Slink\User\Infrastructure\Auth\JwtUser;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use UI\Http\Rest\Response\ApiResponse;
 
@@ -31,13 +33,16 @@ final class GetImageListController {
   
   public function __invoke(
     #[MapQueryString] GetImageListQuery $query,
+    #[CurrentUser] ?JWTUser $user = null,
     int $page = 1
   ): ApiResponse {
     $isPublicFilter = $this->configurationProvider->get('image.allowOnlyPublicImages') ? null : true;
+    $currentUserId = $user?->getIdentifier();
     
     $images = $this->ask($query->withContext([
       'page' => $page,
-      'isPublic' => $isPublicFilter
+      'isPublic' => $isPublicFilter,
+      'currentUserId' => $currentUserId,
     ]));
     
     return ApiResponse::collection($images);

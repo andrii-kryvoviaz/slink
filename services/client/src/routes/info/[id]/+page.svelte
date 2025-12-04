@@ -1,5 +1,6 @@
 <script lang="ts">
   import {
+    BookmarkersPanel,
     ImageActionBar,
     ImageDescription,
     ImagePlaceholder,
@@ -165,6 +166,8 @@
 
     <div class="grow max-w-md shrink-0 space-y-8">
       <ImageActionBar {image} buttons={['download', 'visibility', 'delete']} />
+
+      <BookmarkersPanel imageId={image.id} count={image.bookmarkCount} />
 
       <ImageTagManager
         imageId={image.id}

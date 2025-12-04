@@ -3,7 +3,8 @@ import type { ListingMetadata } from '@slink/api/Response/Common/ListingMetadata
 export type NotificationType =
   | 'comment'
   | 'comment_reply'
-  | 'added_to_favorite';
+  | 'added_to_favorite'
+  | 'added_to_bookmarks';
 
 export interface NotificationActor {
   id: string;
