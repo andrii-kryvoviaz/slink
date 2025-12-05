@@ -4,6 +4,7 @@
   import { twMerge } from 'tailwind-merge';
 
   import type { HTMLInputAttributes } from 'svelte/elements';
+  import { slide } from 'svelte/transition';
 
   import type { ErrorList } from '@slink/api/Exceptions';
 
@@ -102,10 +103,14 @@
     {@render children?.()}
   </div>
 
-  <div class="mt-2 text-xs text-input-error">
-    {#if error && typeof error === 'string'}
-      {error}
-    {/if}
-    &nbsp;
-  </div>
+  {#if error}
+    <div
+      class="mt-1.5 text-xs text-input-error"
+      transition:slide={{ duration: 150 }}
+    >
+      {#if typeof error === 'string'}
+        {error}
+      {/if}
+    </div>
+  {/if}
 </div>

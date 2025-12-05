@@ -98,65 +98,61 @@
   >
     <form
       bind:this={formElement}
-      class="space-y-6"
+      class="space-y-4"
       method="POST"
       use:enhance={withLoadingState(isLoading)}
       in:fade={{ duration: 400, delay: 200 }}
     >
-      <div class="space-y-5">
-        <div>
-          <Input
-            label="Email or Username"
-            name="username"
-            type="text"
-            autocomplete="username"
-            placeholder="Enter email or username"
-            bind:value={usernameValue}
-            error={typeof form?.errors === 'object' && 'username' in form.errors
-              ? form.errors.username
-              : undefined}
-            variant="modern"
-            size="md"
-            rounded="lg"
-          >
-            {#snippet leftIcon()}
-              <Icon
-                icon="ph:envelope-simple"
-                class="text-gray-400 dark:text-gray-500"
-              />
-            {/snippet}
-          </Input>
-        </div>
+      <div class="space-y-3">
+        <Input
+          label="Email or Username"
+          name="username"
+          type="text"
+          autocomplete="username"
+          placeholder="Enter email or username"
+          bind:value={usernameValue}
+          error={typeof form?.errors === 'object' && 'username' in form.errors
+            ? form.errors.username
+            : undefined}
+          variant="modern"
+          size="md"
+          rounded="lg"
+        >
+          {#snippet leftIcon()}
+            <Icon
+              icon="ph:envelope-simple"
+              class="text-gray-400 dark:text-gray-500"
+            />
+          {/snippet}
+        </Input>
 
-        <div>
-          <Input
-            label="Password"
-            name="password"
-            type="password"
-            autocomplete="current-password"
-            placeholder="Enter password"
-            bind:value={passwordValue}
-            error={typeof form?.errors === 'object' && 'password' in form.errors
-              ? form.errors.password
-              : undefined}
-            variant="modern"
-            size="md"
-            rounded="lg"
-          >
-            {#snippet leftIcon()}
-              <Icon
-                icon="ph:lock-simple"
-                class="text-gray-400 dark:text-gray-500"
-              />
-            {/snippet}
-          </Input>
-        </div>
+        <Input
+          label="Password"
+          name="password"
+          type="password"
+          autocomplete="current-password"
+          placeholder="Enter password"
+          bind:value={passwordValue}
+          error={typeof form?.errors === 'object' && 'password' in form.errors
+            ? form.errors.password
+            : undefined}
+          variant="modern"
+          size="md"
+          rounded="lg"
+        >
+          {#snippet leftIcon()}
+            <Icon
+              icon="ph:lock-simple"
+              class="text-gray-400 dark:text-gray-500"
+            />
+          {/snippet}
+        </Input>
       </div>
 
       <Button
         variant={buttonVariant}
         size="md"
-        class="w-full mt-6"
+        class="w-full mt-4"
         type="submit"
         loading={$isLoading}
       >

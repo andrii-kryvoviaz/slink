@@ -70,105 +70,97 @@
     class="bg-white/50 dark:bg-gray-900/30 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/30 p-6 mb-6 shadow-sm"
   >
     <form
-      class="space-y-6"
+      class="space-y-4"
       method="POST"
       use:enhance={withLoadingState(isLoading)}
       in:fade={{ duration: 400, delay: 200 }}
     >
-      <div class="space-y-5">
-        <div>
+      <div class="space-y-3">
+        <Input
+          label="Username"
+          name="username"
+          type="text"
+          autocomplete="username"
+          placeholder="Choose a username"
+          value={form?.username || ''}
+          error={form?.errors?.username}
+          variant="modern"
+          size="md"
+          rounded="lg"
+        >
+          {#snippet leftIcon()}
+            <Icon
+              icon="ph:user-circle"
+              class="text-gray-400 dark:text-gray-500"
+            />
+          {/snippet}
+        </Input>
+
+        <Input
+          label="Email Address"
+          name="email"
+          type="email"
+          autocomplete="email"
+          placeholder="Enter your email"
+          value={form?.email || ''}
+          error={form?.errors?.email}
+          variant="modern"
+          size="md"
+          rounded="lg"
+        >
+          {#snippet leftIcon()}
+            <Icon
+              icon="ph:envelope-simple"
+              class="text-gray-400 dark:text-gray-500"
+            />
+          {/snippet}
+        </Input>
+
+        <div class="grid grid-cols-2 gap-3">
           <Input
-            label="Username"
-            name="username"
-            type="text"
-            autocomplete="username"
-            placeholder="Choose a username"
-            value={form?.username || ''}
-            error={form?.errors?.username}
+            label="Password"
+            name="password"
+            type="password"
+            autocomplete="new-password"
+            placeholder="Create password"
+            error={form?.errors?.password}
             variant="modern"
             size="md"
             rounded="lg"
           >
             {#snippet leftIcon()}
               <Icon
-                icon="ph:user-circle"
+                icon="ph:lock-simple"
                 class="text-gray-400 dark:text-gray-500"
               />
             {/snippet}
           </Input>
-        </div>
 
-        <div>
           <Input
-            label="Email Address"
-            name="email"
-            type="email"
-            autocomplete="email"
-            placeholder="Enter your email"
-            value={form?.email || ''}
-            error={form?.errors?.email}
+            label="Confirm"
+            name="confirm"
+            type="password"
+            autocomplete="new-password"
+            placeholder="Confirm password"
+            error={form?.errors?.confirm}
             variant="modern"
             size="md"
             rounded="lg"
           >
             {#snippet leftIcon()}
               <Icon
-                icon="ph:envelope-simple"
+                icon="ph:check-circle"
                 class="text-gray-400 dark:text-gray-500"
               />
             {/snippet}
           </Input>
-        </div>
-
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <Input
-              label="Password"
-              name="password"
-              type="password"
-              autocomplete="new-password"
-              placeholder="Create password"
-              error={form?.errors?.password}
-              variant="modern"
-              size="md"
-              rounded="lg"
-            >
-              {#snippet leftIcon()}
-                <Icon
-                  icon="ph:lock-simple"
-                  class="text-gray-400 dark:text-gray-500"
-                />
-              {/snippet}
-            </Input>
-          </div>
-
-          <div>
-            <Input
-              label="Confirm"
-              name="confirm"
-              type="password"
-              autocomplete="new-password"
-              placeholder="Confirm password"
-              error={form?.errors?.confirm}
-              variant="modern"
-              size="md"
-              rounded="lg"
-            >
-              {#snippet leftIcon()}
-                <Icon
-                  icon="ph:check-circle"
-                  class="text-gray-400 dark:text-gray-500"
-                />
-              {/snippet}
-            </Input>
-          </div>
         </div>
       </div>
 
       <Button
         variant={buttonVariant}
         size="md"
-        class="w-full mt-6"
+        class="w-full mt-4"
         type="submit"
         loading={$isLoading}
       >
