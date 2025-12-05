@@ -1,29 +1,32 @@
 <script lang="ts">
-  import { twMerge } from 'tailwind-merge';
+  import type { Snippet } from 'svelte';
 
-  interface Props {
-    children?: import('svelte').Snippet;
-    [key: string]: any;
-  }
+  import { cn } from '$lib/utils/ui';
 
-  interface Props {
+  import {
+    type TextEllipsisFadeVariants,
+    type TextEllipsisVariants,
+    textEllipsisFadeTheme,
+    textEllipsisTheme,
+  } from './TextEllipsis.theme';
+
+  interface Props extends TextEllipsisVariants, TextEllipsisFadeVariants {
     class?: string;
-    fadeClass?: string;
+    children?: Snippet;
   }
 
-  let { ...props }: Props = $props();
-
-  const baseClasses =
-    'flex max-h-5 max-w-[10rem] overflow-hidden text-ellipsis text-sm font-medium';
-
-  const fadeClasses =
-    'shadow-blur absolute inset-y-0 right-0 z-0 w-8 bg-linear-to-l from-bg-start';
+  let {
+    maxWidth = 'md',
+    background = 'default',
+    children,
+    ...props
+  }: Props = $props();
 </script>
 
 <span class="relative grow overflow-hidden text-ellipsis break-all">
-  <span class={twMerge(baseClasses, props.class || '')}>
-    {@render props.children?.()}
+  <span class={cn(textEllipsisTheme({ maxWidth }), props.class)}>
+    {@render children?.()}
     &nbsp; &nbsp; &nbsp;
-    <span class={twMerge(fadeClasses, props.fadeClass)}></span>
+    <span class={textEllipsisFadeTheme({ background })}></span>
   </span>
 </span>

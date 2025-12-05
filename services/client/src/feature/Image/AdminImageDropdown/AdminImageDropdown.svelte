@@ -88,13 +88,13 @@
   };
 </script>
 
-<div class="relative -mr-3">
+<div class="relative -mr-1.5">
   <DropdownSimple variant="invisible" size="xs">
     {#snippet trigger()}
       <button
-        class="p-2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150"
+        class="p-1.5 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors duration-150"
       >
-        <Icon icon="heroicons:ellipsis-vertical" class="w-5 h-5" />
+        <Icon icon="heroicons:ellipsis-vertical" class="w-4 h-4" />
       </button>
     {/snippet}
 

@@ -9,12 +9,7 @@
   import { Masonry } from '@slink/feature/Layout';
   import { EmptyState } from '@slink/feature/Layout';
   import { ExploreSkeleton } from '@slink/feature/Layout';
-  import {
-    Badge,
-    ExpandableText,
-    FormattedDate,
-    TextEllipsis,
-  } from '@slink/feature/Text';
+  import { ExpandableText, FormattedDate } from '@slink/feature/Text';
   import { UserAvatar } from '@slink/feature/User';
 
   import { page } from '$app/state';
@@ -122,49 +117,20 @@
         {/if}
       </div>
     {:else if publicFeedState.items.length > 0}
-      <Masonry items={publicFeedState.items} class="gap-6">
+      <Masonry items={publicFeedState.items} class="gap-4">
         {#snippet itemTemplate(image)}
           {@const index = publicFeedState.items.findIndex(
             (i) => i.id === image.id,
           )}
           <div
             in:fly={{ y: 20, duration: 400, delay: Math.random() * 200 }}
-            class="group/card break-inside-avoid bg-white dark:bg-gray-900 rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden transition-all duration-300 cursor-pointer"
+            class="group/card break-inside-avoid rounded-xl overflow-hidden cursor-pointer bg-white dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200/60 dark:border-white/[0.06] hover:border-gray-300 dark:hover:border-white/[0.1] shadow-sm hover:shadow-lg dark:shadow-black/20 dark:hover:shadow-black/40 transition-all duration-300"
             onclick={() => openPostViewer(index)}
             onkeydown={(e) => e.key === 'Enter' && openPostViewer(index)}
             role="button"
             tabindex="0"
           >
-            <div class="group/header p-5 pb-4">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                  <UserAvatar size="md" user={image.owner} />
-                  <div class="flex-1 min-w-0">
-                    <TextEllipsis
-                      class="font-medium text-gray-900 dark:text-white text-sm"
-                    >
-                      {image.owner.displayName}
-                    </TextEllipsis>
-                    <div class="text-xs text-gray-500 dark:text-gray-400">
-                      <FormattedDate
-                        date={image.attributes.createdAt.timestamp}
-                      />
-                    </div>
-                  </div>
-                </div>
-                {#if userIsAdmin}
-                  <AdminImageDropdown
-                    {image}
-                    on={{
-                      imageUpdate: handleImageUpdate,
-                      imageDelete: handleImageDelete,
-                    }}
-                  />
-                {/if}
-              </div>
-            </div>
-
-            <div class="group/image relative">
+            <div class="relative">
               <ImagePlaceholder
                 uniqueId={image.id}
                 src={`/image/${image.attributes.fileName}`}
@@ -173,63 +139,111 @@
                 showOpenInNewTab={false}
                 rounded={false}
               />
+
               <div
-                class="absolute inset-0 bg-black/0 group-hover/image:bg-black/30 transition-all duration-300 flex items-center justify-center pointer-events-none"
+                class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300"
+              ></div>
+
+              <div
+                class="absolute top-3 left-3 flex items-center gap-2 opacity-0 group-hover/card:opacity-100 transition-all duration-300 translate-y-1 group-hover/card:translate-y-0"
               >
                 <div
-                  class="opacity-0 group-hover/image:opacity-100 transform scale-90 group-hover/image:scale-100 transition-all duration-300"
+                  class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-xs"
+                >
+                  <Icon icon="ph:eye" class="w-3.5 h-3.5" />
+                  <span>{image.attributes.views}</span>
+                </div>
+                <div
+                  class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-xs"
+                >
+                  <Icon icon="ph:frame-corners" class="w-3.5 h-3.5" />
+                  <span>{image.metadata.width}×{image.metadata.height}</span>
+                </div>
+              </div>
+
+              <div
+                class="absolute top-3 right-3 opacity-0 group-hover/card:opacity-100 transition-all duration-300 translate-y-1 group-hover/card:translate-y-0"
+              >
+                <span
+                  role="presentation"
+                  onclick={(e) => e.stopPropagation()}
+                  onkeydown={(e) => e.stopPropagation()}
+                >
+                  <BookmarkButton
+                    imageId={image.id}
+                    imageOwnerId={image.owner.id}
+                    isBookmarked={image.isBookmarked}
+                    bookmarkCount={image.bookmarkCount}
+                    size="sm"
+                    variant="overlay"
+                    onBookmarkChange={(
+                      newIsBookmarked: boolean,
+                      count: number,
+                    ) => {
+                      publicFeedState.updateItem(image, {
+                        isBookmarked: newIsBookmarked,
+                        bookmarkCount: count,
+                      });
+                    }}
+                  />
+                </span>
+              </div>
+
+              <div
+                class="absolute inset-0 flex items-center justify-center opacity-0 group-hover/card:opacity-100 transition-all duration-300 pointer-events-none"
+              >
+                <div
+                  class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center transform scale-75 group-hover/card:scale-100 transition-transform duration-300"
                 >
                   <Icon
-                    icon="heroicons:arrows-pointing-out"
-                    class="w-8 h-8 text-white drop-shadow-lg"
+                    icon="ph:arrows-out"
+                    class="w-6 h-6 text-white drop-shadow-lg"
                   />
                 </div>
               </div>
             </div>
 
-            <div
-              class="group/footer flex flex-col justify-between gap-2 py-2 px-5"
-            >
-              <div
-                class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400"
-              >
-                <div class="flex items-center gap-2">
-                  <Badge variant="glass" size="xs">
-                    <Icon icon="heroicons:eye" class="w-3 h-3 mr-1" />
-                    {image.attributes.views}
-                  </Badge>
-                  <Badge variant="glass" size="xs">
-                    <Icon icon="heroicons:photo" class="w-3 h-3 mr-1" />
-                    {image.metadata.width}×{image.metadata.height}
-                  </Badge>
+            <div class="p-3">
+              <div class="flex items-center gap-2.5">
+                <UserAvatar size="sm" user={image.owner} />
+                <div class="flex-1 min-w-0">
+                  <p
+                    class="font-medium text-gray-900 dark:text-gray-100 text-sm leading-tight truncate"
+                  >
+                    {image.owner.displayName}
+                  </p>
+                  <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                    <FormattedDate
+                      date={image.attributes.createdAt.timestamp}
+                    />
+                  </div>
                 </div>
-                <BookmarkButton
-                  imageId={image.id}
-                  imageOwnerId={image.owner.id}
-                  isBookmarked={image.isBookmarked}
-                  bookmarkCount={image.bookmarkCount}
-                  size="sm"
-                  onBookmarkChange={(
-                    newIsBookmarked: boolean,
-                    count: number,
-                  ) => {
-                    publicFeedState.updateItem(image, {
-                      isBookmarked: newIsBookmarked,
-                      bookmarkCount: count,
-                    });
-                  }}
-                />
+                {#if userIsAdmin}
+                  <span
+                    role="presentation"
+                    onclick={(e) => e.stopPropagation()}
+                    onkeydown={(e) => e.stopPropagation()}
+                  >
+                    <AdminImageDropdown
+                      {image}
+                      on={{
+                        imageUpdate: handleImageUpdate,
+                        imageDelete: handleImageDelete,
+                      }}
+                    />
+                  </span>
+                {/if}
               </div>
 
               {#if image.attributes.description?.trim()}
-                <div
-                  class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed"
+                <p
+                  class="mt-4 text-sm text-gray-600 dark:text-gray-400 leading-relaxed"
                 >
                   <ExpandableText
                     maxLines={2}
                     text={image.attributes.description}
                   />
-                </div>
+                </p>
               {/if}
             </div>
           </div>

@@ -21,3 +21,4 @@ export { default as Notice } from './Notice/Notice.svelte';
 export * from './Notice/Notice.theme';
 export * from './Notice/Notice.types';
 export { default as TextEllipsis } from './TextEllipsis/TextEllipsis.svelte';
+export * from './TextEllipsis/TextEllipsis.theme';

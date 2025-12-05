@@ -2,6 +2,7 @@
   import { Tooltip, type TooltipVariant } from '@slink/ui/components/tooltip';
 
   import { page } from '$app/state';
+  import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
   import Icon from '@iconify/svelte';
 
   import { ApiClient } from '@slink/api/Client';
@@ -48,7 +49,17 @@
     e.stopPropagation();
     e.preventDefault();
 
-    if (!isAuthenticated || isOwnImage || isLoading) return;
+    if (isLoading) return;
+
+    if (!isAuthenticated) {
+      toast.info('Sign in to bookmark images');
+      return;
+    }
+
+    if (isOwnImage) {
+      toast.info("You can't bookmark your own images");
+      return;
+    }
 
     const wasBookmarked = isBookmarked;
     const previousCount = bookmarkCount;
@@ -68,69 +79,66 @@
       isBookmarked = response.isBookmarked;
       bookmarkCount = response.bookmarkCount;
       onBookmarkChange?.(isBookmarked, bookmarkCount);
+
+      toast.success(isBookmarked ? 'Image bookmarked' : 'Bookmark removed');
     } catch {
       isBookmarked = wasBookmarked;
       bookmarkCount = previousCount;
+      toast.error('Failed to update bookmark');
     } finally {
       isLoading = false;
     }
   };
 
-  const tooltipText = $derived(isBookmarked ? 'Remove bookmark' : 'Save');
+  const tooltipText = $derived(
+    isOwnImage
+      ? "Can't bookmark own image"
+      : isBookmarked
+        ? 'Remove bookmark'
+        : 'Save',
+  );
 </script>
 
-{#if isAuthenticated && !isOwnImage}
-  <Tooltip side="top" sideOffset={6} variant={tooltipVariant}>
-    {#snippet trigger()}
-      <button
-        class={bookmarkButtonTheme({ size, variant, loading: isLoading })}
-        onclick={handleClick}
-        disabled={isLoading}
-        aria-label={tooltipText}
-        aria-pressed={isBookmarked}
-      >
-        <span class="relative flex items-center justify-center">
-          {#if isBookmarked}
-            <Icon
-              icon="ph:bookmark-simple-fill"
-              class={bookmarkIconTheme({
-                size,
-                variant,
-                active: true,
-                loading: isLoading,
-              })}
-            />
-          {:else}
-            <Icon
-              icon="ph:bookmark-simple"
-              class={bookmarkIconTheme({
-                size,
-                variant,
-                active: false,
-                loading: isLoading,
-              })}
-            />
-          {/if}
-        </span>
-        {#if showCount && bookmarkCount > 0}
-          <span
-            class={bookmarkCountTheme({ size, variant, active: isBookmarked })}
-          >
-            {bookmarkCount}
-          </span>
+<Tooltip side="top" sideOffset={6} variant={tooltipVariant}>
+  {#snippet trigger()}
+    <button
+      class={bookmarkButtonTheme({ size, variant, loading: isLoading })}
+      onclick={handleClick}
+      disabled={isLoading}
+      aria-label={tooltipText}
+      aria-pressed={isBookmarked}
+    >
+      <span class="relative flex items-center justify-center">
+        {#if isBookmarked}
+          <Icon
+            icon="ph:bookmark-simple-fill"
+            class={bookmarkIconTheme({
+              size,
+              variant,
+              active: true,
+              loading: isLoading,
+            })}
+          />
+        {:else}
+          <Icon
+            icon="ph:bookmark-simple"
+            class={bookmarkIconTheme({
+              size,
+              variant,
+              active: false,
+              loading: isLoading,
+            })}
+          />
         {/if}
-      </button>
-    {/snippet}
-    {tooltipText}
-  </Tooltip>
-{:else if showCount && bookmarkCount > 0}
-  <span class={bookmarkButtonTheme({ size, variant })}>
-    <Icon
-      icon="ph:bookmark-simple"
-      class={bookmarkIconTheme({ size, variant, active: false })}
-    />
-    <span class={bookmarkCountTheme({ size, variant, active: false })}>
-      {bookmarkCount}
-    </span>
-  </span>
-{/if}
+      </span>
+      {#if showCount && bookmarkCount > 0}
+        <span
+          class={bookmarkCountTheme({ size, variant, active: isBookmarked })}
+        >
+          {bookmarkCount}
+        </span>
+      {/if}
+    </button>
+  {/snippet}
+  {tooltipText}
+</Tooltip>

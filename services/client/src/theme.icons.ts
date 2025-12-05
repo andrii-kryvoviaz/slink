@@ -177,4 +177,6 @@ export const themeIcons: string[] = [
   'ph:bookmark-simple-duotone',
   'ph:image-broken',
   'svg-spinners:ring-resize',
+  'ph:frame-corners',
+  'ph:arrows-out',
 ];
