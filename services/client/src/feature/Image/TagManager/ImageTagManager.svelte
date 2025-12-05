@@ -113,31 +113,18 @@
     </div>
 
     {#if !disabled}
-      {#if tagManagerState.isExpanded}
-        <Button
-          onclick={toggleExpanded}
-          variant="ghost"
-          size="sm"
-          disabled={isLoading}
-        >
-          {#snippet leftIcon()}
-            <Icon icon="lucide:edit-2" class="h-4 w-4" />
-          {/snippet}
-          Done
-        </Button>
-      {:else}
-        <Button
-          onclick={toggleExpanded}
-          variant="ghost"
-          size="sm"
-          disabled={isLoading}
-        >
-          {#snippet leftIcon()}
-            <Icon icon="lucide:plus" class="h-4 w-4" />
-          {/snippet}
-          Edit
-        </Button>
-      {/if}
+      <Button
+        onclick={toggleExpanded}
+        variant="glass-violet"
+        size="sm"
+        disabled={isLoading}
+      >
+        <Icon
+          icon={tagManagerState.isExpanded ? 'ph:check' : 'ph:pencil-simple'}
+          class="w-4 h-4"
+        />
+        {tagManagerState.isExpanded ? 'Done' : 'Edit'}
+      </Button>
     {/if}
   </div>
 
