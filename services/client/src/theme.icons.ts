@@ -156,7 +156,6 @@ export const themeIcons: string[] = [
   'ph:code',
   'ph:image',
   'heroicons:chevron-up',
-  'heroicons:arrows-pointing-out',
   'heroicons:paper-airplane',
   'heroicons:pencil',
   'heroicons:check',
