@@ -13,6 +13,8 @@
   import { settings } from '@slink/lib/settings';
   import type { ShareFormat } from '@slink/lib/settings/setters/share';
 
+  import { toast } from '@slink/utils/ui/toast-sonner.svelte';
+
   interface Props {
     value: string;
     imageAlt?: string;
@@ -136,7 +138,7 @@
     }
   };
 
-  const handleCopy = async () => {
+  const handleCopy = async (showToast = false) => {
     const format = getSelectedFormat();
     try {
       const url = await resolveUrl();
@@ -152,6 +154,10 @@
 
       isCopied = true;
       setTimeout(() => (isCopied = false), 2000);
+
+      if (showToast) {
+        toast.success('Link copied to clipboard');
+      }
     } catch (error) {
       console.error('Failed to copy:', error);
       isCopyingImage = false;
@@ -171,7 +177,7 @@
         variant="primary"
         size="xs"
         disabled={isCopied || state.isLoading || isCopyingImage}
-        onclick={handleCopy}
+        onclick={() => handleCopy()}
       >
         {#if state.isLoading || isCopyingImage}
           <div
@@ -241,5 +247,5 @@
 </CopyContainer>
 
 <div class="hidden">
-  <Shortcut control key="c" onHit={handleCopy} />
+  <Shortcut control key="c" onHit={() => handleCopy(true)} />
 </div>
