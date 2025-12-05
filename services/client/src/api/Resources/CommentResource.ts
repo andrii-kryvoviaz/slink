@@ -19,7 +19,7 @@ export class CommentResource extends AbstractResource {
     imageId: string,
     content: string,
     referencedCommentId?: string,
-  ): Promise<{ data: CommentItem }> {
+  ): Promise<CommentItem> {
     return this.post(`/image/${imageId}/comments`, {
       json: {
         content,

@@ -110,7 +110,7 @@ export class CommentListState extends AbstractHttpState<CommentItem[]> {
   async createComment(content: string): Promise<void> {
     const replyingTo = this._replyingTo;
 
-    const { data: comment } = await ApiClient.comment.createComment(
+    const comment = await ApiClient.comment.createComment(
       this.imageId,
       content,
       replyingTo?.id,
