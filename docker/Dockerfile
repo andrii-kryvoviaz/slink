@@ -199,8 +199,7 @@ FROM base AS dev
 #     echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
 #     echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
-RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.alpine.sh' | sh
-RUN apk add --no-cache symfony-cli
+COPY --from=ghcr.io/symfony-cli/symfony-cli:latest /usr/local/bin/symfony /usr/local/bin/symfony
 
 COPY docker/config/runtime/develop.conf /etc/supervisor/conf.d/develop.conf
 COPY --from=node /usr/local/bin /usr/local/bin
