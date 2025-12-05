@@ -115,6 +115,10 @@ final class BookmarkRepository extends AbstractRepository implements BookmarkRep
     return (int) $result > 0;
   }
 
+  /**
+   * @param array<string> $imageIds
+   * @return array<string>
+   */
   #[Override]
   public function getBookmarkedImageIds(string $userId, array $imageIds): array {
     if (empty($imageIds)) {

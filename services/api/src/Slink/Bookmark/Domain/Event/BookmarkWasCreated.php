@@ -17,6 +17,9 @@ final readonly class BookmarkWasCreated implements SerializablePayload {
   ) {
   }
 
+  /**
+   * @return array{uuid: string, imageId: string, userId: string, createdAt: string}
+   */
   public function toPayload(): array {
     return [
       'uuid' => $this->id->toString(),
@@ -26,6 +29,9 @@ final readonly class BookmarkWasCreated implements SerializablePayload {
     ];
   }
 
+  /**
+   * @param array{uuid: string, imageId: string, userId: string, createdAt: string} $payload
+   */
   public static function fromPayload(array $payload): static {
     return new self(
       ID::fromString($payload['uuid']),

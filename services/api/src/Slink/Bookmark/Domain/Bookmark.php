@@ -73,6 +73,9 @@ final class Bookmark extends AbstractAggregateRoot {
     return $this->removed;
   }
 
+  /**
+   * @return array{imageId: string, userId: string, createdAt: string, removed: bool}
+   */
   protected function createSnapshotState(): array {
     return [
       'imageId' => $this->imageId->toString(),

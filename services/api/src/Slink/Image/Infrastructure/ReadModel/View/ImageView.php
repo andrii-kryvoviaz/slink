@@ -178,6 +178,9 @@ class ImageView extends AbstractView implements CursorAwareInterface {
     }
   }
 
+  /**
+   * @return array<string, mixed>
+   */
   public function toPayload(): array {
     return [
       'id' => $this->uuid,

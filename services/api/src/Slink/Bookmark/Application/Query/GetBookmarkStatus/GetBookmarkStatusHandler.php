@@ -13,6 +13,9 @@ final readonly class GetBookmarkStatusHandler implements QueryHandlerInterface {
   ) {
   }
 
+  /**
+   * @return array{isBookmarked: bool, bookmarkCount: int}
+   */
   public function __invoke(GetBookmarkStatusQuery $query, string $userId): array {
     $status = $this->bookmarkRepository->getBookmarkStatus($query->imageId, $userId);
 

@@ -63,11 +63,11 @@ final class NotificationTest extends TestCase {
     $notification = Notification::create(
       $id,
       $userId,
-      NotificationType::ADDED_TO_FAVORITE,
+      NotificationType::ADDED_TO_BOOKMARKS,
       $referenceId,
     );
 
-    $this->assertEquals(NotificationType::ADDED_TO_FAVORITE, $notification->getType());
+    $this->assertEquals(NotificationType::ADDED_TO_BOOKMARKS, $notification->getType());
   }
 
   #[Test]

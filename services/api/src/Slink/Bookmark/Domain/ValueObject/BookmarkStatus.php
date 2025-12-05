@@ -11,6 +11,9 @@ final readonly class BookmarkStatus {
   ) {
   }
 
+  /**
+   * @return array{isBookmarked: bool, bookmarkCount: int}
+   */
   public function toPayload(): array {
     return [
       'isBookmarked' => $this->isBookmarked,

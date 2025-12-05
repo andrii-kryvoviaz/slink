@@ -28,6 +28,10 @@ interface BookmarkRepositoryInterface extends ServiceEntityRepositoryInterface {
 
   public function getBookmarkStatus(string $imageId, string $userId): BookmarkStatus;
 
+  /**
+   * @param array<string> $imageIds
+   * @return array<string>
+   */
   public function getBookmarkedImageIds(string $userId, array $imageIds): array;
 
   public function findByImageId(string $imageId, int $page, int $limit, ?string $cursor = null): Paginator;

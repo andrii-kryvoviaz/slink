@@ -24,10 +24,10 @@ final class NotificationTypeTest extends TestCase {
   }
 
   #[Test]
-  public function itHasAddedToFavoriteType(): void {
-    $type = NotificationType::ADDED_TO_FAVORITE;
+  public function itHasAddedToBookmarksType(): void {
+    $type = NotificationType::ADDED_TO_BOOKMARKS;
 
-    $this->assertEquals('added_to_favorite', $type->value);
+    $this->assertEquals('added_to_bookmarks', $type->value);
   }
 
   #[Test]
@@ -41,8 +41,8 @@ final class NotificationTypeTest extends TestCase {
   }
 
   #[Test]
-  public function itReturnsLabelForAddedToFavoriteType(): void {
-    $this->assertEquals('Your image was added to favorites', NotificationType::ADDED_TO_FAVORITE->getLabel());
+  public function itReturnsLabelForAddedToBookmarksType(): void {
+    $this->assertEquals('Your image was bookmarked', NotificationType::ADDED_TO_BOOKMARKS->getLabel());
   }
 
   #[Test]
