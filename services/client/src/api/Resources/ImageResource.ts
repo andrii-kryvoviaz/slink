@@ -156,14 +156,14 @@ export class ImageResource extends AbstractResource {
     });
   }
 
-  public async signImageParams(
+  public async shareImage(
     id: string,
     params: {
       width?: number;
       height?: number;
       crop?: boolean;
     },
-  ): Promise<SignedImageParams> {
+  ): Promise<ShareImageResponse> {
     const searchParams = new URLSearchParams();
 
     if (params.width !== undefined) {
@@ -178,14 +178,10 @@ export class ImageResource extends AbstractResource {
       searchParams.append('crop', params.crop.toString());
     }
 
-    return this.get(`/image/${id}/sign?${searchParams.toString()}`);
+    return this.get(`/image/${id}/share?${searchParams.toString()}`);
   }
 }
 
-export interface SignedImageParams {
-  imageId: string;
-  width: number | null;
-  height: number | null;
-  crop: boolean;
-  signature: string;
-}
+export type ShareImageResponse =
+  | { type: 'shortUrl'; shortCode: string }
+  | { type: 'signed'; targetUrl: string };

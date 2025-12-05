@@ -17,7 +17,7 @@
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
-  import type { SignedImageParams } from '@slink/api/Resources/ImageResource';
+  import type { ShareImageResponse } from '@slink/api/Resources/ImageResource';
   import type { Tag } from '@slink/api/Resources/TagResource';
 
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
@@ -79,16 +79,16 @@
   });
 
   const {
-    isLoading: isSigningParams,
-    error: signParamsError,
-    data: signedParamsData,
-    run: signImageParams,
-  } = ReactiveState<SignedImageParams>(
+    isLoading: isSharingImage,
+    error: shareImageError,
+    data: shareImageData,
+    run: shareImage,
+  } = ReactiveState<ShareImageResponse>(
     (
       imageId: string,
       params: { width?: number; height?: number; crop?: boolean },
     ) => {
-      return ApiClient.image.signImageParams(imageId, params);
+      return ApiClient.image.shareImage(imageId, params);
     },
     {
       minExecutionTime: 200,
@@ -100,27 +100,21 @@
   };
 
   const handleBeforeCopy = async (): Promise<string | void> => {
-    if (Object.keys(unsignedParams).length === 0) {
+    await shareImage(image.id, unsignedParams);
+
+    if ($shareImageError) {
+      printErrorsAsToastMessage($shareImageError);
       return;
     }
 
-    await signImageParams(image.id, unsignedParams);
+    const response = $shareImageData;
+    if (!response) return;
 
-    if ($signParamsError) {
-      printErrorsAsToastMessage($signParamsError);
-      return;
+    if (response.type === 'shortUrl') {
+      return `${page.url.origin}/i/${response.shortCode}`;
     }
 
-    const signedParams = $signedParamsData;
-    if (signedParams) {
-      const params = {
-        width: signedParams.width ?? undefined,
-        height: signedParams.height ?? undefined,
-        crop: signedParams.crop || undefined,
-        s: signedParams.signature,
-      };
-      return formatImageUrl([page.url.origin, image.url], params);
-    }
+    return `${page.url.origin}${response.targetUrl}`;
   };
 
   const {
@@ -221,7 +215,7 @@
         <ShareLinkCopy
           value={directLink}
           imageAlt={image.fileName}
-          isLoading={$isSigningParams}
+          isLoading={$isSharingImage}
           onBeforeCopy={handleBeforeCopy}
         />
       </div>

@@ -1,6 +1,10 @@
 controllers:
-    prefix: /api
-    resource:
-        path: ../src/UI
-        namespace: UI
-    type: attribute
+  prefix: /api
+  resource:
+    path: ../src/UI
+    namespace: UI
+  type: attribute
+
+short_url:
+  resource: '../src/UI/Http/Rest/Controller/ShortUrl/'
+  type: attribute

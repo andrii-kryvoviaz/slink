@@ -5,6 +5,7 @@ export { default as ResetSettingConfirmation } from './ResetSettingConfirmation/
 export { default as ResetSettingPopover } from './ResetSettingConfirmation/ResetSettingPopover.svelte';
 export { default as SettingItem } from './SettingsPane/SettingItem.svelte';
 export { default as SettingsPane } from './SettingsPane/SettingsPane.svelte';
+export { default as ShareSettings } from './ShareSettings/ShareSettings.svelte';
 export { default as StorageSettings } from './StorageSettings/StorageSettings.svelte';
 export { default as UserSettings } from './UserSettings/UserSettings.svelte';
 export { default as ReleaseModal } from './Version/ReleaseModal.svelte';

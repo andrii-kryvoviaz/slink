@@ -24,3 +24,6 @@ parameters:
     Bookmark:
       dir: '%kernel.project_dir%/src/Slink/Bookmark/Infrastructure/ReadModel/View'
       prefix: 'Slink\Bookmark\Infrastructure\ReadModel\View'
+    Share:
+      dir: '%kernel.project_dir%/src/Slink/Share/Infrastructure/ReadModel/View'
+      prefix: 'Slink\Share\Infrastructure\ReadModel\View'
