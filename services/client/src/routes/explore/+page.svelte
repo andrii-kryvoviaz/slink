@@ -36,6 +36,11 @@
   postViewerState.setFeed(publicFeedState);
 
   $effect(() => {
+    publicFeedState.subscribe();
+    return () => publicFeedState.unsubscribe();
+  });
+
+  $effect(() => {
     const urlParams = new URLSearchParams(page.url.search);
     const search = urlParams.get('search');
     const searchBy = urlParams.get('searchBy');
@@ -64,7 +69,7 @@
 
   const handleImageUpdate = (updatedImage: any) => {
     if (updatedImage.attributes.isPublic) {
-      publicFeedState.updateItem(updatedImage.id, updatedImage);
+      publicFeedState.replaceItem(updatedImage);
     } else {
       publicFeedState.removeItem(updatedImage.id);
     }

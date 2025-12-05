@@ -7,6 +7,7 @@ namespace Slink\Image\Domain\ValueObject;
 use Doctrine\ORM\Mapping as ORM;
 use Slink\Shared\Domain\ValueObject\AbstractCompoundValueObject;
 use Slink\Shared\Infrastructure\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\SerializedName;
 
 #[ORM\Embeddable]
 final readonly class ImageMetadata extends AbstractCompoundValueObject {
@@ -25,6 +26,7 @@ final readonly class ImageMetadata extends AbstractCompoundValueObject {
 
     #[ORM\Column(type: 'string')]
     #[Groups(['public'])]
+    #[SerializedName('mimeType')]
     private string  $mimeType,
 
     #[ORM\Column(type: 'integer')]
@@ -36,6 +38,7 @@ final readonly class ImageMetadata extends AbstractCompoundValueObject {
     private int     $height,
 
     #[ORM\Column(type: 'string', length: 40, nullable: true)]
+    #[SerializedName('sha1Hash')]
     private ?string $sha1Hash = null,
   ) {
   }

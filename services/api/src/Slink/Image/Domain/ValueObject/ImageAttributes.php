@@ -10,6 +10,7 @@ use Slink\Shared\Domain\ValueObject\AbstractCompoundValueObject;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\MutableValueObject;
 use Slink\Shared\Infrastructure\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\SerializedName;
 
 #[ORM\Embeddable]
 final readonly class ImageAttributes extends AbstractCompoundValueObject {
@@ -26,6 +27,7 @@ final readonly class ImageAttributes extends AbstractCompoundValueObject {
   private function __construct(
     #[ORM\Column(type: 'string')]
     #[Groups(['public'])]
+    #[SerializedName('fileName')]
     private string $fileName,
     
     #[ORM\Column(type: 'string')]
@@ -34,13 +36,16 @@ final readonly class ImageAttributes extends AbstractCompoundValueObject {
     
     #[ORM\Column(type: 'boolean')]
     #[Groups(['public'])]
+    #[SerializedName('isPublic')]
     private bool $isPublic,
     
     #[ORM\Column(type: 'datetime_immutable')]
     #[Groups(['public'])]
+    #[SerializedName('createdAt')]
     private DateTime $createdAt,
     
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[SerializedName('updatedAt')]
     private ?DateTime $updatedAt,
     
     #[ORM\Column(type: 'integer')]
