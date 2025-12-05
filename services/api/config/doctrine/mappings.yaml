@@ -21,3 +21,6 @@ parameters:
     Notification:
       dir: '%kernel.project_dir%/src/Slink/Notification/Infrastructure/ReadModel/View'
       prefix: 'Slink\Notification\Infrastructure\ReadModel\View'
+    Bookmark:
+      dir: '%kernel.project_dir%/src/Slink/Bookmark/Infrastructure/ReadModel/View'
+      prefix: 'Slink\Bookmark\Infrastructure\ReadModel\View'

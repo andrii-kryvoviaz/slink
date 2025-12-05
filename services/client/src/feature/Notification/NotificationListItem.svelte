@@ -62,6 +62,11 @@
         icon="ph:heart"
         class={notificationItemIconVariants({ type: notification.type })}
       />
+    {:else if notification.type === 'added_to_bookmarks'}
+      <Icon
+        icon="ph:bookmark-simple-fill"
+        class={notificationItemIconVariants({ type: notification.type })}
+      />
     {:else}
       <Icon
         icon="ph:bell"

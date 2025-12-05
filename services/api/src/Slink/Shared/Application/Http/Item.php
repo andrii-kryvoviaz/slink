@@ -47,11 +47,12 @@ final readonly class Item {
   
   /**
    * @param object $entity
+   * @param array<string, mixed> $extra
    * @param array<string, mixed> $relations
    * @param array<string> $groups
    * @return self
    */
-  public static function fromEntity(object $entity, array $relations = [], array $groups = ['public'] ): self {
+  public static function fromEntity(object $entity, array $extra = [], array $relations = [], array $groups = ['public']): self {
     try {
       /** @var array<string, mixed> $payload */
       $payload = SerializerFactory::create()->normalize($entity, context: ['groups' => $groups]);
@@ -59,7 +60,7 @@ final readonly class Item {
       throw new \RuntimeException($e->getMessage());
     }
     
-    return self::fromPayload(self::type($entity), $payload, $relations);
+    return self::fromPayload(self::type($entity), [...$payload, ...$extra], $relations);
   }
   
   /**

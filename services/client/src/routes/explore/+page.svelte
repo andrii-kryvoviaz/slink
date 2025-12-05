@@ -5,6 +5,7 @@
     ImagePlaceholder,
     PostViewer,
   } from '@slink/feature/Image';
+  import BookmarkButton from '@slink/feature/Image/BookmarkButton/BookmarkButton.svelte';
   import { Masonry } from '@slink/feature/Layout';
   import { EmptyState } from '@slink/feature/Layout';
   import { ExploreSkeleton } from '@slink/feature/Layout';
@@ -202,6 +203,22 @@
                     {image.metadata.width}×{image.metadata.height}
                   </Badge>
                 </div>
+                <BookmarkButton
+                  imageId={image.id}
+                  imageOwnerId={image.owner.id}
+                  isBookmarked={image.isBookmarked}
+                  bookmarkCount={image.bookmarkCount}
+                  size="sm"
+                  onBookmarkChange={(
+                    newIsBookmarked: boolean,
+                    count: number,
+                  ) => {
+                    publicFeedState.updateItem(image, {
+                      isBookmarked: newIsBookmarked,
+                      bookmarkCount: count,
+                    });
+                  }}
+                />
               </div>
 
               {#if image.attributes.description?.trim()}

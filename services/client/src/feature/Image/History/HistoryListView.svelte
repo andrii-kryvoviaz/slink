@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { ImageActionBar, ImagePlaceholder } from '@slink/feature/Image';
+  import {
+    BookmarkStat,
+    ImageActionBar,
+    ImagePlaceholder,
+  } from '@slink/feature/Image';
   import { ImageTagList } from '@slink/feature/Tag';
   import { FormattedDate } from '@slink/feature/Text';
 
@@ -184,6 +188,10 @@
                   </div>
                 </div>
               </div>
+
+              {#if item.bookmarkCount > 0}
+                <BookmarkStat count={item.bookmarkCount} variant="card" />
+              {/if}
             </div>
           </div>
         </div>

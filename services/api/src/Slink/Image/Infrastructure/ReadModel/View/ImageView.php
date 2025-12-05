@@ -54,6 +54,9 @@ class ImageView extends AbstractView implements CursorAwareInterface {
     #[Groups(['public'])]
     private ?ImageMetadata     $metadata = null,
 
+    #[ORM\Column(type: 'integer', options: ['default' => 0])]
+    #[Groups(['public'])]
+    private int $bookmarkCount = 0,
   ) {
     $this->tags = new ArrayCollection();
   }
@@ -161,6 +164,20 @@ class ImageView extends AbstractView implements CursorAwareInterface {
     }
   }
 
+  public function getBookmarkCount(): int {
+    return $this->bookmarkCount;
+  }
+
+  public function incrementBookmarkCount(): void {
+    $this->bookmarkCount++;
+  }
+
+  public function decrementBookmarkCount(): void {
+    if ($this->bookmarkCount > 0) {
+      $this->bookmarkCount--;
+    }
+  }
+
   /**
    * @return array<string, mixed>
    */
@@ -168,6 +185,7 @@ class ImageView extends AbstractView implements CursorAwareInterface {
     return [
       'id' => $this->uuid,
       'user' => $this->getOwner(),
+      'bookmarkCount' => $this->bookmarkCount,
       ...$this->attributes->toPayload(),
       ...$this->metadata ? $this->metadata->toPayload() : []
     ];

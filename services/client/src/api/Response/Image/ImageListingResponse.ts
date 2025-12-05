@@ -24,6 +24,8 @@ export type ImageListingItem = {
     width: number;
     height: number;
   };
+  bookmarkCount: number;
+  isBookmarked?: boolean;
   tags?: Tag[];
 };
 

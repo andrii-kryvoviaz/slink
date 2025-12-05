@@ -49,6 +49,11 @@ class PostViewerState {
     this._feed = feed;
   }
 
+  updateCurrentItem(updates: Partial<ImageListingItem>): void {
+    if (!this._feed || !this.currentItem) return;
+    this._feed.updateItem(this.currentItem, updates);
+  }
+
   open(index: number = 0): void {
     this._currentIndex = Math.max(0, Math.min(index, this.items.length - 1));
     this._isOpen = true;

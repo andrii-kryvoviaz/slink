@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { ImageActionBar, ImagePlaceholder } from '@slink/feature/Image';
+  import {
+    BookmarkStat,
+    ImageActionBar,
+    ImagePlaceholder,
+  } from '@slink/feature/Image';
   import { Masonry } from '@slink/feature/Layout';
   import { ImageTagList } from '@slink/feature/Tag';
   import { FormattedDate } from '@slink/feature/Text';
@@ -52,6 +56,11 @@
             rounded={false}
           />
         </a>
+        {#if item.bookmarkCount > 0}
+          <div class="absolute top-2 right-2">
+            <BookmarkStat count={item.bookmarkCount} variant="overlay" />
+          </div>
+        {/if}
       </div>
 
       <div class="p-4">
