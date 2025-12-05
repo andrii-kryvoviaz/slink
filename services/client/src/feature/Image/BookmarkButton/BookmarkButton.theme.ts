@@ -13,17 +13,34 @@ export const bookmarkButtonTheme = cva(
         default: '',
         subtle:
           'rounded-md px-2 py-1 hover:bg-indigo-50/50 dark:hover:bg-indigo-900/20',
-        overlay:
-          'rounded-full px-2.5 py-1 bg-black/50 backdrop-blur-sm hover:bg-black/60',
+        overlay: 'rounded-full px-2.5 py-1 backdrop-blur-sm shadow-lg',
+      },
+      active: {
+        true: '',
+        false: '',
       },
       loading: {
         true: 'pointer-events-none opacity-70',
         false: 'cursor-pointer',
       },
     },
+    compoundVariants: [
+      {
+        variant: 'overlay',
+        active: true,
+        class:
+          'bg-indigo-600/80 hover:bg-indigo-600/90 dark:bg-indigo-500/80 dark:hover:bg-indigo-500/90',
+      },
+      {
+        variant: 'overlay',
+        active: false,
+        class: 'bg-black/60 hover:bg-black/70',
+      },
+    ],
     defaultVariants: {
       size: 'md',
       variant: 'default',
+      active: false,
       loading: false,
     },
   },
@@ -73,11 +90,11 @@ export const bookmarkIconTheme = cva('transition-all duration-200', {
       class:
         'text-gray-400 dark:text-gray-500 group-hover/bookmark:text-indigo-500 dark:group-hover/bookmark:text-indigo-400',
     },
-    { variant: 'overlay', active: true, class: 'text-white' },
+    { variant: 'overlay', active: true, class: 'text-white drop-shadow-sm' },
     {
       variant: 'overlay',
       active: false,
-      class: 'text-white/70 group-hover/bookmark:text-white',
+      class: 'text-white/80 group-hover/bookmark:text-white',
     },
   ],
   defaultVariants: {
@@ -128,8 +145,8 @@ export const bookmarkCountTheme = cva(
         active: false,
         class: 'text-gray-500 dark:text-gray-400',
       },
-      { variant: 'overlay', active: true, class: 'text-white' },
-      { variant: 'overlay', active: false, class: 'text-white/70' },
+      { variant: 'overlay', active: true, class: 'text-white drop-shadow-sm' },
+      { variant: 'overlay', active: false, class: 'text-white/80' },
     ],
     defaultVariants: {
       size: 'md',

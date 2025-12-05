@@ -102,7 +102,12 @@
 <Tooltip side="top" sideOffset={6} variant={tooltipVariant}>
   {#snippet trigger()}
     <button
-      class={bookmarkButtonTheme({ size, variant, loading: isLoading })}
+      class={bookmarkButtonTheme({
+        size,
+        variant,
+        active: isBookmarked,
+        loading: isLoading,
+      })}
       onclick={handleClick}
       disabled={isLoading}
       aria-label={tooltipText}
