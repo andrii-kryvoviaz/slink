@@ -5,17 +5,18 @@
   import { Tooltip, TooltipProvider } from '@slink/ui/components/tooltip';
 
   import { goto } from '$app/navigation';
-  import { page } from '$app/state';
   import { useGlobalSettings } from '$lib/state/GlobalSettings.svelte.js';
   import { useUploadHistoryFeed } from '$lib/state/UploadHistoryFeed.svelte.js';
   import { downloadByLink } from '$lib/utils/http/downloadByLink';
   import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
+  import { routes } from '$lib/utils/url/routes';
   import Icon from '@iconify/svelte';
   import { cubicOut } from 'svelte/easing';
   import { scale } from 'svelte/transition';
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
+  import type { ShareImageResponse } from '@slink/api/Resources/ImageResource';
   import type { ImageListingItem } from '@slink/api/Response';
 
   type actionButton = 'download' | 'visibility' | 'share' | 'delete' | 'copy';
@@ -86,11 +87,29 @@
     return ApiClient.image.remove(imageId, preserveOnDisk);
   });
 
+  const {
+    isLoading: shareIsLoading,
+    error: shareError,
+    data: shareData,
+    run: shareImage,
+  } = ReactiveState<ShareImageResponse>(
+    (imageId: string) => ApiClient.image.shareImage(imageId, {}),
+    { minExecutionTime: 300 },
+  );
+
   let isCopiedActive = $state(false);
   let deletePopoverOpen = $state(false);
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(directLink);
+    await shareImage(image.id);
+
+    if ($shareError || !$shareData) {
+      toast.error('Failed to generate share link. Please try again later.');
+      return;
+    }
+
+    const shareUrl = routes.share.fromResponse($shareData, { absolute: true });
+    await navigator.clipboard.writeText(shareUrl);
 
     isCopiedActive = true;
 
@@ -122,7 +141,9 @@
     deletePopoverOpen = false;
   };
 
-  let directLink = $derived(`${page.url.origin}/image/${image.fileName}`);
+  let directLink = $derived(
+    routes.image.view(image.fileName, undefined, { absolute: true }),
+  );
 
   const baseButtonClass =
     'group relative flex items-center justify-center transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50';
@@ -156,11 +177,13 @@
           <button
             class={secondaryButtonClass}
             onclick={handleCopy}
-            disabled={isCopiedActive}
+            disabled={$shareIsLoading || isCopiedActive}
             aria-label="Copy image URL"
             type="button"
           >
-            {#if isCopiedActive}
+            {#if $shareIsLoading}
+              <Loader variant="minimal" size="xs" />
+            {:else if isCopiedActive}
               <div in:scale={{ duration: 300, easing: cubicOut }}>
                 <Icon
                   icon="ph:check"
@@ -172,7 +195,11 @@
             {/if}
           </button>
         {/snippet}
-        {isCopiedActive ? 'Copied!' : 'Copy URL'}
+        {$shareIsLoading
+          ? 'Generating...'
+          : isCopiedActive
+            ? 'Copied!'
+            : 'Copy URL'}
       </Tooltip>
     {/if}
 

@@ -12,7 +12,7 @@
   import { Notice } from '@slink/feature/Text';
   import { Shortcut } from '@slink/ui/components';
 
-  import { page } from '$app/state';
+  import { routes } from '$lib/utils/url/routes';
   import { fly } from 'svelte/transition';
 
   import { ApiClient } from '@slink/api/Client';
@@ -36,30 +36,9 @@
 
   const historyFeedState = useUploadHistoryFeed();
 
-  const formatImageUrl = (
-    url: string | string[],
-    params: Partial<ImageParams>,
-  ) => {
-    url = Array.isArray(url) ? url.join('') : url;
-
-    if (!params || Object.keys(params).length === 0) {
-      return url;
-    }
-
-    const paramsString = Object.entries(params)
-      .filter(
-        ([_, value]) =>
-          value !== false && value !== undefined && value !== null,
-      )
-      .map(([key, value]) => `${key}=${value}`)
-      .join('&');
-
-    return paramsString ? [url, paramsString].join('?') : url;
-  };
-
   let unsignedParams: Partial<ImageParams> = $state({});
   let directLink: string = $derived(
-    formatImageUrl([page.url.origin, image.url], {}),
+    routes.image.view(image.fileName, {}, { absolute: true }),
   );
 
   const maxWidthClass = $derived.by(() => {
@@ -110,11 +89,7 @@
     const response = $shareImageData;
     if (!response) return;
 
-    if (response.type === 'shortUrl') {
-      return `${page.url.origin}/i/${response.shortCode}`;
-    }
-
-    return `${page.url.origin}${response.targetUrl}`;
+    return routes.share.fromResponse(response, { absolute: true });
   };
 
   const {
