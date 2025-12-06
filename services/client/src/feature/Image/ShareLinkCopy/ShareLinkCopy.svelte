@@ -5,7 +5,6 @@
   import { Button } from '@slink/ui/components/button';
   import * as DropdownMenu from '@slink/ui/components/dropdown-menu/index.js';
 
-  import { page } from '$app/stores';
   import Icon from '@iconify/svelte';
   import { cubicOut } from 'svelte/easing';
   import { scale } from 'svelte/transition';
@@ -79,16 +78,14 @@
     },
   ];
 
-  const serverSettings = $page.data.settings;
-  let selectedFormat = $state<ShareFormat>(
-    serverSettings?.share?.format || 'direct',
-  );
+  const { format: formatStore } = settings.get('share', { format: 'direct' });
+  let selectedFormat = $derived($formatStore);
   let isCopyingImage = $state(false);
   let isCopied = $state(false);
 
-  $effect(() => {
-    settings.set('share', { format: selectedFormat });
-  });
+  const setSelectedFormat = (format: ShareFormat) => {
+    settings.set('share', { format });
+  };
 
   const getSelectedFormat = (): Format =>
     formats.find((f) => f.id === selectedFormat) || formats[0];
@@ -170,7 +167,7 @@
   };
 
   const handleFormatSelect = (format: Format) => {
-    selectedFormat = format.id;
+    setSelectedFormat(format.id);
   };
 </script>
 
