@@ -17,6 +17,7 @@
 
   interface Props {
     value: string;
+    shareUrl?: string;
     imageAlt?: string;
     isLoading?: boolean;
     onBeforeCopy?: () => Promise<string | void>;
@@ -24,10 +25,13 @@
 
   let {
     value,
+    shareUrl,
     imageAlt = 'Image',
     isLoading = false,
     onBeforeCopy,
   }: Props = $props();
+
+  let displayValue = $derived(shareUrl ?? value);
 
   interface Format {
     id: ShareFormat;
@@ -90,6 +94,7 @@
     formats.find((f) => f.id === selectedFormat) || formats[0];
 
   const resolveUrl = async (): Promise<string> => {
+    if (shareUrl) return shareUrl;
     if (onBeforeCopy) {
       const result = await onBeforeCopy();
       if (result) return result;
@@ -169,7 +174,7 @@
   };
 </script>
 
-<CopyContainer {value} {isLoading} {onBeforeCopy}>
+<CopyContainer value={displayValue} {isLoading} {onBeforeCopy}>
   {#snippet actionSlot(state)}
     <div class="inline-flex items-stretch">
       <Button

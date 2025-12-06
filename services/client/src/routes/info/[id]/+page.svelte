@@ -74,22 +74,32 @@
     },
   );
 
-  const handleImageSizeChange = (value?: Partial<ImageParams>) => {
-    unsignedParams = value ?? {};
-  };
+  let shareUrl: string | undefined = $state(undefined);
 
-  const handleBeforeCopy = async (): Promise<string | void> => {
-    await shareImage(image.id, unsignedParams);
+  const fetchShareUrl = async (params: Partial<ImageParams>) => {
+    await shareImage(image.id, params);
 
     if ($shareImageError) {
       printErrorsAsToastMessage($shareImageError);
+      shareUrl = undefined;
       return;
     }
 
     const response = $shareImageData;
-    if (!response) return;
+    if (!response) {
+      shareUrl = undefined;
+      return;
+    }
 
-    return routes.share.fromResponse(response, { absolute: true });
+    shareUrl = routes.share.fromResponse(response, { absolute: true });
+  };
+
+  $effect(() => {
+    fetchShareUrl(unsignedParams);
+  });
+
+  const handleImageSizeChange = (value?: Partial<ImageParams>) => {
+    unsignedParams = value ?? {};
   };
 
   const {
@@ -189,9 +199,9 @@
         </Notice>
         <ShareLinkCopy
           value={directLink}
+          {shareUrl}
           imageAlt={image.fileName}
           isLoading={$isSharingImage}
-          onBeforeCopy={handleBeforeCopy}
         />
       </div>
     </div>
