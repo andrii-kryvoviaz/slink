@@ -48,15 +48,25 @@ setup_mercure_keys() {
   local mercure_secret=$(cat "$persistent_keys_dir/mercure_secret")
   export MERCURE_JWT_SECRET="$mercure_secret"
   
+  local mercure_hub_url="http://localhost:3333/.well-known/mercure"
+  
+  export MERCURE_HUB_URL="$mercure_hub_url"
+  
   if [ -f "$api_env_file" ]; then
     if grep -q "^MERCURE_JWT_SECRET=" "$api_env_file"; then
       sed -i "s|^MERCURE_JWT_SECRET=.*|MERCURE_JWT_SECRET=$mercure_secret|" "$api_env_file"
     else
       echo "MERCURE_JWT_SECRET=$mercure_secret" >> "$api_env_file"
     fi
+    
+    if grep -q "^MERCURE_HUB_URL=" "$api_env_file"; then
+      sed -i "s|^MERCURE_HUB_URL=.*|MERCURE_HUB_URL=$mercure_hub_url|" "$api_env_file"
+    else
+      echo "MERCURE_HUB_URL=$mercure_hub_url" >> "$api_env_file"
+    fi
   fi
   
-  echo "[Startup] Mercure configured with JWT secret"
+  echo "[Startup] Mercure configured with JWT secret and URLs"
 }
 
 generate_app_secret_from_jwt() {
