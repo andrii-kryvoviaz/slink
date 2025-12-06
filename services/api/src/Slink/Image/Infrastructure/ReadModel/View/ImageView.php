@@ -146,7 +146,7 @@ class ImageView extends AbstractView implements CursorAwareInterface {
     $this->metadata = $metadata;
   }
 
-  #[Groups(['public'])]
+  #[Groups(['private'])]
   #[SerializedName('tags')]
   public function getTags(): Collection {
     return $this->tags;

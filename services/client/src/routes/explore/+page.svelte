@@ -58,8 +58,8 @@
   });
 
   $effect(() => {
-    if (publicFeedState.items.length > 0 && !postViewerState.isOpen) {
-      postViewerState.openFromUrl();
+    if (!postViewerState.isOpen && publicFeedState.isDirty) {
+      postViewerState.openFromUrlAsync();
     }
   });
 

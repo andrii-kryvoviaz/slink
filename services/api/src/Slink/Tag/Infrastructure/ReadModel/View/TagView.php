@@ -38,16 +38,16 @@ class TagView extends AbstractView {
   public function __construct(
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]
-    #[Groups(['public'])]
+    #[Groups(['public', 'private'])]
     #[SerializedName('id')]
     private string $uuid,
 
     #[ORM\Column(type: 'string', length: 50)]
-    #[Groups(['public'])]
+    #[Groups(['public', 'private'])]
     private string          $name,
 
     #[ORM\Column(type: 'text')]
-    #[Groups(['public'])]
+    #[Groups(['public', 'private'])]
     private string          $path,
 
     #[ORM\Column(type: 'string', length: 36)]
@@ -59,11 +59,11 @@ class TagView extends AbstractView {
     private ?string         $parentId = null,
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    #[Groups(['public'])]
+    #[Groups(['public', 'private'])]
     private ?DateTime       $createdAt = null,
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    #[Groups(['public'])]
+    #[Groups(['public', 'private'])]
     private ?DateTime       $updatedAt = null,
   ) {
     $this->children = new ArrayCollection();
@@ -114,7 +114,7 @@ class TagView extends AbstractView {
     $this->parent = $parent;
   }
 
-  #[Groups(['public'])]
+  #[Groups(['public', 'private'])]
   #[SerializedName('children')]
   public function getChildren(): Collection {
     return $this->children;
@@ -150,13 +150,13 @@ class TagView extends AbstractView {
     }
   }
 
-  #[Groups(['public'])]
+  #[Groups(['public', 'private'])]
   #[SerializedName('isRoot')]
   public function isRoot(): bool {
     return $this->parentId === null;
   }
 
-  #[Groups(['public'])]
+  #[Groups(['public', 'private'])]
   #[SerializedName('depth')]
   public function getDepth(): int {
     if (empty($this->path) || $this->path === '#') {
@@ -166,7 +166,7 @@ class TagView extends AbstractView {
     return substr_count($this->path, '/') + 1;
   }
 
-  #[Groups(['public'])]
+  #[Groups(['public', 'private'])]
   #[SerializedName('imageCount')]
   public function getImageCount(): int {
     return $this->images->count();

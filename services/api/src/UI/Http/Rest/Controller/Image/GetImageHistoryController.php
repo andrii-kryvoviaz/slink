@@ -28,6 +28,7 @@ final readonly class GetImageHistoryController {
     $images = $this->ask($query->withContext([
       'page' => $page,
       'userId' => $user->getIdentifier(),
+      'groups' => ['public', 'private'],
     ]));
     
     return ApiResponse::collection($images);

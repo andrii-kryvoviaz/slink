@@ -23,12 +23,16 @@ final readonly class GetImageListHandler implements QueryHandlerInterface {
   ) {
   }
 
+  /**
+   * @param array<string> $groups
+   */
   public function __invoke(
     GetImageListQuery $query,
     int $page,
     ?bool $isPublic = null,
     ?string $userId = null,
     ?string $currentUserId = null,
+    array $groups = ['public'],
   ): Collection {
     $tagFilterData = $this->tagFilterService->createTagFilterData(
       $query->getTagIds(),
@@ -70,7 +74,7 @@ final readonly class GetImageListHandler implements QueryHandlerInterface {
     }
 
     $items = array_map(
-      fn($image) => Item::fromEntity($image, ['isBookmarked' => isset($bookmarkedSet[$image->getUuid()])]),
+      fn($image) => Item::fromEntity($image, ['isBookmarked' => isset($bookmarkedSet[$image->getUuid()])], [], $groups),
       $imageEntities
     );
 

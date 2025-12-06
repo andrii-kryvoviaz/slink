@@ -91,7 +91,9 @@
     }
   }
 
-  let translateY = $derived(-viewerState.currentIndex * 100);
+  let translateY = $derived(
+    viewerState.isStandaloneMode ? 0 : -viewerState.currentIndex * 100,
+  );
 </script>
 
 {#if viewerState.isOpen}
@@ -119,26 +121,37 @@
       <Icon icon="heroicons:x-mark" class="w-5 h-5" />
     </Button>
 
-    <PostViewerNavigation
-      onPrev={navigatePrev}
-      onNext={navigateNext}
-      hasPrev={viewerState.hasPrev}
-      hasNext={viewerState.hasNext}
-      class="absolute right-4 top-1/2 -translate-y-1/2 z-10 hidden md:flex"
-    />
+    {#if !viewerState.isStandaloneMode}
+      <PostViewerNavigation
+        onPrev={navigatePrev}
+        onNext={navigateNext}
+        hasPrev={viewerState.hasPrev}
+        hasNext={viewerState.hasNext}
+        class="absolute right-4 top-1/2 -translate-y-1/2 z-10 hidden md:flex"
+      />
+    {/if}
 
     <div
       class="h-full w-full transition-transform duration-500 ease-out"
       style="transform: translateY({translateY}%);"
     >
-      {#each viewerState.items as image, index (image.id)}
+      {#if viewerState.isStandaloneMode && viewerState.currentItem}
         <PostViewerItem
-          {image}
+          image={viewerState.currentItem}
           {currentUser}
-          isActive={index === viewerState.currentIndex}
+          isActive={true}
           onClose={handleClose}
         />
-      {/each}
+      {:else}
+        {#each viewerState.items as image, index (image.id)}
+          <PostViewerItem
+            {image}
+            {currentUser}
+            isActive={index === viewerState.currentIndex}
+            onClose={handleClose}
+          />
+        {/each}
+      {/if}
     </div>
 
     <Shortcut

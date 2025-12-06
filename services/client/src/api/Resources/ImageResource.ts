@@ -1,6 +1,7 @@
 import { AbstractResource } from '@slink/api/AbstractResource';
 import type {
   ImageDetailsResponse,
+  ImageListingItem,
   ImageListingResponse,
   ImagePlainListingResponse,
   UploadedImageResponse,
@@ -58,6 +59,10 @@ export class ImageResource extends AbstractResource {
     return this.patch(`/image/${id}`, {
       json: details,
     });
+  }
+
+  public async getPublicImageById(id: string): Promise<ImageListingItem> {
+    return this.get(`/image/${id}/public`);
   }
 
   public async getPublicImages(

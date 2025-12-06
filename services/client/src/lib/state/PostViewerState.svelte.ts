@@ -1,5 +1,6 @@
 import { replaceState } from '$app/navigation';
 
+import { ApiClient } from '@slink/api/Client';
 import type { ImageListingItem } from '@slink/api/Response';
 
 import type { AbstractPaginatedFeed } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
@@ -11,6 +12,8 @@ class PostViewerState {
   private _isOpen: boolean = $state(false);
   private _currentIndex: number = $state(0);
   private _feed: PaginatedFeed | null = $state(null);
+  private _standaloneItem: ImageListingItem | null = $state(null);
+  private _lastFetchedPostId: string | null = null;
   private _prefetchThreshold: number = 3;
   private _prefetchCount: number = 2;
 
@@ -27,10 +30,16 @@ class PostViewerState {
   }
 
   get currentItem(): ImageListingItem | null {
+    if (this._standaloneItem) return this._standaloneItem;
     return this.items[this._currentIndex] ?? null;
   }
 
+  get isStandaloneMode(): boolean {
+    return this._standaloneItem !== null;
+  }
+
   get hasNext(): boolean {
+    if (this._standaloneItem) return false;
     return (
       this._currentIndex < this.items.length - 1 ||
       (this._feed?.hasMore ?? false)
@@ -38,6 +47,7 @@ class PostViewerState {
   }
 
   get hasPrev(): boolean {
+    if (this._standaloneItem) return false;
     return this._currentIndex > 0;
   }
 
@@ -46,7 +56,10 @@ class PostViewerState {
   }
 
   setFeed(feed: PaginatedFeed): void {
+    if (this._feed === feed) return;
     this._feed = feed;
+    this._lastFetchedPostId = null;
+    this._standaloneItem = null;
   }
 
   updateCurrentItem(updates: Partial<ImageListingItem>): void {
@@ -55,6 +68,8 @@ class PostViewerState {
   }
 
   open(index: number = 0): void {
+    this._standaloneItem = null;
+    this._lastFetchedPostId = null;
     this._currentIndex = Math.max(0, Math.min(index, this.items.length - 1));
     this._isOpen = true;
     this.updateUrl();
@@ -64,6 +79,8 @@ class PostViewerState {
 
   close(): void {
     this._isOpen = false;
+    this._standaloneItem = null;
+    this._lastFetchedPostId = null;
   }
 
   goToIndex(index: number): void {
@@ -116,6 +133,46 @@ class PostViewerState {
       this.open(index);
       return true;
     }
+    return false;
+  }
+
+  async openFromUrlAsync(): Promise<boolean> {
+    const url = new URL(window.location.href);
+    const postId = url.searchParams.get('post');
+    const feedHasLoaded = this._feed?.isDirty ?? false;
+
+    if (!postId) return false;
+
+    const index = this.items.findIndex((item) => item.id === postId);
+
+    if (index !== -1) {
+      if (this._standaloneItem?.id === postId) {
+        this._standaloneItem = null;
+        this._lastFetchedPostId = null;
+      }
+      this.open(index);
+      return true;
+    }
+
+    if (this._standaloneItem?.id === postId) {
+      this._isOpen = true;
+      return true;
+    }
+
+    if (!feedHasLoaded) return false;
+
+    if (this._lastFetchedPostId === postId) return false;
+
+    this._lastFetchedPostId = postId;
+
+    const response = await ApiClient.image.getPublicImageById(postId);
+    if (response && response.id) {
+      this._standaloneItem = response;
+      this._isOpen = true;
+      return true;
+    }
+
+    this.clearUrlParam();
     return false;
   }
 
