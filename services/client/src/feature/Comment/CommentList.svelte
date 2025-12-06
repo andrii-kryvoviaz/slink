@@ -64,6 +64,13 @@
     }
   });
 
+  $effect(() => {
+    if (!isActive && state) {
+      state.destroy();
+      state = null;
+    }
+  });
+
   onDestroy(() => {
     state?.destroy();
   });
