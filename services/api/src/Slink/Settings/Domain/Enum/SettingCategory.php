@@ -14,6 +14,7 @@ enum SettingCategory: string {
   case Image = 'image';
   case Storage = 'storage';
   case Access = 'access';
+  case Share = 'share';
   case Demo = 'demo';
   
   public function getCategoryKey(): string {

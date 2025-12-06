@@ -16,6 +16,9 @@ final readonly class PublicApplicationSettings {
     public ?PublicAccessSettings $access = null,
     
     #[Groups(['public'])]
+    public ?PublicShareSettings $share = null,
+    
+    #[Groups(['public'])]
     public ?PublicDemoSettings $demo = null,
   ) {}
   
@@ -26,6 +29,7 @@ final readonly class PublicApplicationSettings {
     return new self(
       isset($settings['user']) ? PublicUserSettings::fromArray($settings['user']) : null,
       isset($settings['access']) ? PublicAccessSettings::fromArray($settings['access']) : null,
+      isset($settings['share']) ? PublicShareSettings::fromArray($settings['share']) : null,
       isset($settings['demo']) ? PublicDemoSettings::fromArray($settings['demo']) : null
     );
   }

@@ -31,6 +31,8 @@ parameters:
     allowGuestUploads: '%env(bool:IMAGE_ALLOW_GUEST_UPLOADS)%'
     allowUnauthenticatedAccess: '%env(bool:USER_ALLOW_UNAUTHENTICATED_ACCESS)%'
     requireSsl: '%env(bool:REQUIRE_SSL)%'
+  share:
+    enableUrlShortening: '%env(bool:SHARE_ENABLE_URL_SHORTENING)%'
   demo:
     enabled: '%env(bool:DEMO_MODE_ENABLED)%'
     demoUsername: '%env(DEMO_USERNAME)%'

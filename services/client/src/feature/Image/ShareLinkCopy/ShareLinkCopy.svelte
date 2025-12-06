@@ -5,7 +5,6 @@
   import { Button } from '@slink/ui/components/button';
   import * as DropdownMenu from '@slink/ui/components/dropdown-menu/index.js';
 
-  import { page } from '$app/stores';
   import Icon from '@iconify/svelte';
   import { cubicOut } from 'svelte/easing';
   import { scale } from 'svelte/transition';
@@ -17,6 +16,7 @@
 
   interface Props {
     value: string;
+    shareUrl?: string;
     imageAlt?: string;
     isLoading?: boolean;
     onBeforeCopy?: () => Promise<string | void>;
@@ -24,10 +24,13 @@
 
   let {
     value,
+    shareUrl,
     imageAlt = 'Image',
     isLoading = false,
     onBeforeCopy,
   }: Props = $props();
+
+  let displayValue = $derived(shareUrl ?? value);
 
   interface Format {
     id: ShareFormat;
@@ -75,21 +78,20 @@
     },
   ];
 
-  const serverSettings = $page.data.settings;
-  let selectedFormat = $state<ShareFormat>(
-    serverSettings?.share?.format || 'direct',
-  );
+  const { format: formatStore } = settings.get('share', { format: 'direct' });
+  let selectedFormat = $derived($formatStore);
   let isCopyingImage = $state(false);
   let isCopied = $state(false);
 
-  $effect(() => {
-    settings.set('share', { format: selectedFormat });
-  });
+  const setSelectedFormat = (format: ShareFormat) => {
+    settings.set('share', { format });
+  };
 
   const getSelectedFormat = (): Format =>
     formats.find((f) => f.id === selectedFormat) || formats[0];
 
   const resolveUrl = async (): Promise<string> => {
+    if (shareUrl) return shareUrl;
     if (onBeforeCopy) {
       const result = await onBeforeCopy();
       if (result) return result;
@@ -165,11 +167,11 @@
   };
 
   const handleFormatSelect = (format: Format) => {
-    selectedFormat = format.id;
+    setSelectedFormat(format.id);
   };
 </script>
 
-<CopyContainer {value} {isLoading} {onBeforeCopy}>
+<CopyContainer value={displayValue} {isLoading} {onBeforeCopy}>
   {#snippet actionSlot(state)}
     <div class="inline-flex items-stretch">
       <Button

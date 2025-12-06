@@ -12,12 +12,12 @@
   import { Notice } from '@slink/feature/Text';
   import { Shortcut } from '@slink/ui/components';
 
-  import { page } from '$app/state';
+  import { routes } from '$lib/utils/url/routes';
   import { fly } from 'svelte/transition';
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
-  import type { SignedImageParams } from '@slink/api/Resources/ImageResource';
+  import type { ShareImageResponse } from '@slink/api/Resources/ImageResource';
   import type { Tag } from '@slink/api/Resources/TagResource';
 
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
@@ -36,30 +36,9 @@
 
   const historyFeedState = useUploadHistoryFeed();
 
-  const formatImageUrl = (
-    url: string | string[],
-    params: Partial<ImageParams>,
-  ) => {
-    url = Array.isArray(url) ? url.join('') : url;
-
-    if (!params || Object.keys(params).length === 0) {
-      return url;
-    }
-
-    const paramsString = Object.entries(params)
-      .filter(
-        ([_, value]) =>
-          value !== false && value !== undefined && value !== null,
-      )
-      .map(([key, value]) => `${key}=${value}`)
-      .join('&');
-
-    return paramsString ? [url, paramsString].join('?') : url;
-  };
-
   let unsignedParams: Partial<ImageParams> = $state({});
   let directLink: string = $derived(
-    formatImageUrl([page.url.origin, image.url], {}),
+    routes.image.view(image.fileName, {}, { absolute: true }),
   );
 
   const maxWidthClass = $derived.by(() => {
@@ -79,48 +58,48 @@
   });
 
   const {
-    isLoading: isSigningParams,
-    error: signParamsError,
-    data: signedParamsData,
-    run: signImageParams,
-  } = ReactiveState<SignedImageParams>(
+    isLoading: isSharingImage,
+    error: shareImageError,
+    data: shareImageData,
+    run: shareImage,
+  } = ReactiveState<ShareImageResponse>(
     (
       imageId: string,
       params: { width?: number; height?: number; crop?: boolean },
     ) => {
-      return ApiClient.image.signImageParams(imageId, params);
+      return ApiClient.image.shareImage(imageId, params);
     },
     {
       minExecutionTime: 200,
     },
   );
 
-  const handleImageSizeChange = (value?: Partial<ImageParams>) => {
-    unsignedParams = value ?? {};
+  let shareUrl: string | undefined = $state(undefined);
+
+  const fetchShareUrl = async (params: Partial<ImageParams>) => {
+    await shareImage(image.id, params);
+
+    if ($shareImageError) {
+      printErrorsAsToastMessage($shareImageError);
+      shareUrl = undefined;
+      return;
+    }
+
+    const response = $shareImageData;
+    if (!response) {
+      shareUrl = undefined;
+      return;
+    }
+
+    shareUrl = routes.share.fromResponse(response, { absolute: true });
   };
 
-  const handleBeforeCopy = async (): Promise<string | void> => {
-    if (Object.keys(unsignedParams).length === 0) {
-      return;
-    }
+  $effect(() => {
+    fetchShareUrl(unsignedParams);
+  });
 
-    await signImageParams(image.id, unsignedParams);
-
-    if ($signParamsError) {
-      printErrorsAsToastMessage($signParamsError);
-      return;
-    }
-
-    const signedParams = $signedParamsData;
-    if (signedParams) {
-      const params = {
-        width: signedParams.width ?? undefined,
-        height: signedParams.height ?? undefined,
-        crop: signedParams.crop || undefined,
-        s: signedParams.signature,
-      };
-      return formatImageUrl([page.url.origin, image.url], params);
-    }
+  const handleImageSizeChange = (value?: Partial<ImageParams>) => {
+    unsignedParams = value ?? {};
   };
 
   const {
@@ -220,9 +199,9 @@
         </Notice>
         <ShareLinkCopy
           value={directLink}
+          {shareUrl}
           imageAlt={image.fileName}
-          isLoading={$isSigningParams}
-          onBeforeCopy={handleBeforeCopy}
+          isLoading={$isSharingImage}
         />
       </div>
     </div>

@@ -11,6 +11,7 @@ use Slink\Settings\Domain\Exception\InvalidSettingsException;
 use Slink\Settings\Domain\ValueObject\AbstractSettingsValueObject;
 use Slink\Settings\Domain\ValueObject\Access\AccessSettings;
 use Slink\Settings\Domain\ValueObject\Image\ImageSettings;
+use Slink\Settings\Domain\ValueObject\Share\ShareSettings;
 use Slink\Settings\Domain\ValueObject\Storage\StorageSettings;
 use Slink\Settings\Domain\ValueObject\User\UserSettings;
 use Slink\Shared\Domain\AbstractAggregateRoot;
@@ -41,6 +42,7 @@ final class Settings extends AbstractAggregateRoot {
   private UserSettings $user;
   private ImageSettings $image;
   private AccessSettings $access;
+  private ShareSettings $share;
   
   /**
    * @param array<int, ?AbstractSettingsValueObject> $data
@@ -108,6 +110,7 @@ final class Settings extends AbstractAggregateRoot {
       'user' => $this->user->toPayload(),
       'image' => $this->image->toPayload(),
       'access' => $this->access->toPayload(),
+      'share' => $this->share->toPayload(),
     ];
   }
 
@@ -121,6 +124,7 @@ final class Settings extends AbstractAggregateRoot {
     $settings->user = UserSettings::fromPayload($state['user']);
     $settings->image = ImageSettings::fromPayload($state['image']);
     $settings->access = AccessSettings::fromPayload($state['access']);
+    $settings->share = ShareSettings::fromPayload($state['share'] ?? []);
     
     return $settings;
   }

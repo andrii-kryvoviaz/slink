@@ -56,4 +56,8 @@ final readonly class ID extends AbstractValueObject implements AggregateRootId {
   public function toString(): string {
     return $this->getValue();
   }
+
+  public function __toString(): string {
+    return $this->getValue();
+  }
 }

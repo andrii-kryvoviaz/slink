@@ -8,9 +8,10 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Settings\Domain\Settings;
 use Slink\Settings\Domain\ValueObject\Access\AccessSettings;
-use Slink\Settings\Domain\ValueObject\User\UserSettings;
 use Slink\Settings\Domain\ValueObject\Image\ImageSettings;
+use Slink\Settings\Domain\ValueObject\Share\ShareSettings;
 use Slink\Settings\Domain\ValueObject\Storage\StorageSettings;
+use Slink\Settings\Domain\ValueObject\User\UserSettings;
 use Slink\Shared\Domain\ValueObject\ID;
 use Tests\Traits\PrivatePropertyTrait;
 
@@ -30,11 +31,13 @@ final class SettingsSnapshotTest extends TestCase {
     $this->assertArrayHasKey('image', $snapshot);
     $this->assertArrayHasKey('storage', $snapshot);
     $this->assertArrayHasKey('access', $snapshot);
+    $this->assertArrayHasKey('share', $snapshot);
     
     $this->assertIsArray($snapshot['user']);
     $this->assertIsArray($snapshot['image']);
     $this->assertIsArray($snapshot['storage']);
     $this->assertIsArray($snapshot['access']);
+    $this->assertIsArray($snapshot['share']);
   }
 
   #[Test]
@@ -71,6 +74,9 @@ final class SettingsSnapshotTest extends TestCase {
         'allowGuestUploads' => true,
         'allowUnauthenticatedAccess' => true,
         'requireSsl' => true,
+      ],
+      'share' => [
+        'enableUrlShortening' => true,
       ]
     ];
 
@@ -164,6 +170,9 @@ final class SettingsSnapshotTest extends TestCase {
         'allowGuestUploads' => false,
         'allowUnauthenticatedAccess' => true,
         'requireSsl' => false,
+      ],
+      'share' => [
+        'enableUrlShortening' => true,
       ]
     ];
 
@@ -189,6 +198,7 @@ final class SettingsSnapshotTest extends TestCase {
     $userSettings = $this->createUserSettings(false, false);
     $imageSettings = $this->createImageSettings();
     $accessSettings = $this->createAccessSettings(true);
+    $shareSettings = $this->createShareSettings();
     $storageSettings = StorageSettings::fromPayload([
       'provider' => 's3',
       'adapter' => [
@@ -209,7 +219,7 @@ final class SettingsSnapshotTest extends TestCase {
     ]);
     
     $settings = $this->createSettings();
-    $settings->initialize([$userSettings, $imageSettings, $storageSettings, $accessSettings]);
+    $settings->initialize([$userSettings, $imageSettings, $storageSettings, $accessSettings, $shareSettings]);
     
     $reflection = new \ReflectionClass($settings);
     $createMethod = $reflection->getMethod('createSnapshotState');
@@ -244,8 +254,9 @@ final class SettingsSnapshotTest extends TestCase {
     $imageSettings = $this->createImageSettings();
     $storageSettings = $this->createStorageSettings();
     $accessSettings = $this->createAccessSettings();
+    $shareSettings = $this->createShareSettings();
     
-    $settings->initialize([$userSettings, $imageSettings, $storageSettings, $accessSettings]);
+    $settings->initialize([$userSettings, $imageSettings, $storageSettings, $accessSettings, $shareSettings]);
     
     return $settings;
   }
@@ -294,6 +305,12 @@ final class SettingsSnapshotTest extends TestCase {
         'smb_share' => null,
         'amazon_s3' => null
       ]
+    ]);
+  }
+
+  private function createShareSettings(): ShareSettings {
+    return ShareSettings::fromPayload([
+      'enableUrlShortening' => true,
     ]);
   }
 }

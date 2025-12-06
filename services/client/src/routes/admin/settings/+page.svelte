@@ -2,6 +2,7 @@
   import {
     AccessSettings,
     ImageSettings,
+    ShareSettings,
     StorageSettings,
     UserSettings,
   } from '@slink/feature/Settings';
@@ -97,6 +98,13 @@
         bind:settings={settings.access}
         defaultSettings={defaultSettings?.access}
         loading={$isLoading && categoryBeingSaved === 'access'}
+        onSave={handleSettingsSectionSave}
+      />
+
+      <ShareSettings
+        bind:settings={settings.share}
+        defaultSettings={defaultSettings?.share}
+        loading={$isLoading && categoryBeingSaved === 'share'}
         onSave={handleSettingsSectionSave}
       />
 
