@@ -7,7 +7,7 @@ namespace Slink\Share\Domain;
 use EventSauce\EventSourcing\AggregateRootId;
 use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use Slink\Share\Domain\Event\ShareWasCreated;
-use Slink\Share\Domain\Event\ShortUrlWasCreated;
+use Slink\Share\Domain\ValueObject\ShareContext;
 use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
@@ -16,11 +16,11 @@ final class Share extends AbstractAggregateRoot {
   private ID $imageId;
   private string $targetUrl;
   private DateTime $createdAt;
-  private ?ID $shortUrlId = null;
-  private ?string $shortCode = null;
+  private ShareContext $context;
 
   protected function __construct(ID $id) {
     parent::__construct($id);
+    $this->context = ShareContext::empty();
   }
 
   public static function create(
@@ -28,6 +28,7 @@ final class Share extends AbstractAggregateRoot {
     ID $imageId,
     string $targetUrl,
     DateTime $createdAt,
+    ShareContext $context,
   ): self {
     $share = new self($id);
     $share->recordThat(new ShareWasCreated(
@@ -35,28 +36,17 @@ final class Share extends AbstractAggregateRoot {
       $imageId,
       $targetUrl,
       $createdAt,
+      $context,
     ));
 
     return $share;
-  }
-
-  public function createShortUrl(ID $shortUrlId, string $shortCode): void {
-    $this->recordThat(new ShortUrlWasCreated(
-      $this->aggregateRootId(),
-      $shortUrlId,
-      $shortCode,
-    ));
   }
 
   protected function applyShareWasCreated(ShareWasCreated $event): void {
     $this->imageId = $event->imageId;
     $this->targetUrl = $event->targetUrl;
     $this->createdAt = $event->createdAt;
-  }
-
-  protected function applyShortUrlWasCreated(ShortUrlWasCreated $event): void {
-    $this->shortUrlId = $event->shortUrlId;
-    $this->shortCode = $event->shortCode;
+    $this->context = $event->context;
   }
 
   public function getImageId(): ID {
@@ -71,12 +61,12 @@ final class Share extends AbstractAggregateRoot {
     return $this->createdAt;
   }
 
-  public function getShortUrlId(): ?ID {
-    return $this->shortUrlId;
+  public function getContext(): ShareContext {
+    return $this->context;
   }
 
   public function getShortCode(): ?string {
-    return $this->shortCode;
+    return $this->context->getShortCode();
   }
 
   /**
@@ -87,8 +77,7 @@ final class Share extends AbstractAggregateRoot {
       'imageId' => $this->imageId->toString(),
       'targetUrl' => $this->targetUrl,
       'createdAt' => $this->createdAt->toString(),
-      'shortUrlId' => $this->shortUrlId?->toString(),
-      'shortCode' => $this->shortCode,
+      'context' => $this->context->toPayload(),
     ];
   }
 
@@ -100,8 +89,7 @@ final class Share extends AbstractAggregateRoot {
     $share->imageId = ID::fromString($state['imageId']);
     $share->targetUrl = $state['targetUrl'];
     $share->createdAt = DateTime::fromString($state['createdAt']);
-    $share->shortUrlId = $state['shortUrlId'] ? ID::fromString($state['shortUrlId']) : null;
-    $share->shortCode = $state['shortCode'];
+    $share->context = ShareContext::fromPayload($state['context'] ?? []);
 
     return $share;
   }

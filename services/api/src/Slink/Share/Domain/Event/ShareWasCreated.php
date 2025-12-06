@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Slink\Share\Domain\Event;
 
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
+use Slink\Share\Domain\ValueObject\ShareContext;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
 
@@ -14,6 +15,7 @@ final readonly class ShareWasCreated implements SerializablePayload {
     public ID $imageId,
     public string $targetUrl,
     public DateTime $createdAt,
+    public ShareContext $context,
   ) {
   }
 
@@ -26,6 +28,7 @@ final readonly class ShareWasCreated implements SerializablePayload {
       'image' => $this->imageId->toString(),
       'targetUrl' => $this->targetUrl,
       'createdAt' => $this->createdAt->toString(),
+      'context' => $this->context->toPayload(),
     ];
   }
 
@@ -38,6 +41,7 @@ final readonly class ShareWasCreated implements SerializablePayload {
       ID::fromString($payload['image']),
       $payload['targetUrl'],
       DateTime::fromString($payload['createdAt']),
+      ShareContext::fromPayload($payload['context'] ?? []),
     );
   }
 }
