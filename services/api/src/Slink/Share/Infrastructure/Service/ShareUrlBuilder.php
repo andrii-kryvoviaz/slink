@@ -15,7 +15,7 @@ final readonly class ShareUrlBuilder implements ShareUrlBuilderInterface {
 
   public function buildTargetUrl(string $imageId, string $fileName, ?int $width, ?int $height, bool $crop): string {
     $params = $this->buildParams($width, $height, $crop);
-    $url = '/api/image/' . $fileName;
+    $url = '/image/' . $fileName;
 
     if (empty($params)) {
       return $url;

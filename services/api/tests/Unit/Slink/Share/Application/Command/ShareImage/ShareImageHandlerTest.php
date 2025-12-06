@@ -27,7 +27,7 @@ final class ShareImageHandlerTest extends TestCase {
   #[Test]
   public function itCreatesShareWithShortUrl(): void {
     $imageId = '12345678-1234-1234-1234-123456789abc';
-    $targetUrl = '/api/image/test.jpg?width=800&height=600&s=signature';
+    $targetUrl = '/image/test.jpg?width=800&height=600&s=signature';
     $shortCode = 'aBcD1234';
 
     $command = new ShareImageCommand($imageId, $targetUrl, true);
@@ -53,7 +53,7 @@ final class ShareImageHandlerTest extends TestCase {
   #[Test]
   public function itCreatesShareWithoutShortUrlWhenDisabled(): void {
     $imageId = '12345678-1234-1234-1234-123456789abc';
-    $targetUrl = '/api/image/test.jpg';
+    $targetUrl = '/image/test.jpg';
 
     $command = new ShareImageCommand($imageId, $targetUrl, false);
 
@@ -75,7 +75,7 @@ final class ShareImageHandlerTest extends TestCase {
   #[Test]
   public function itDefaultsToCreatingShortUrl(): void {
     $imageId = '12345678-1234-1234-1234-123456789abc';
-    $targetUrl = '/api/image/test.jpg';
+    $targetUrl = '/image/test.jpg';
     $shortCode = 'xYz98765';
 
     $command = new ShareImageCommand($imageId, $targetUrl);

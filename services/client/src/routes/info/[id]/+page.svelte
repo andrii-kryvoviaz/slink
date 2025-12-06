@@ -71,14 +71,17 @@
     },
     {
       minExecutionTime: 200,
+      debounce: 300,
     },
   );
 
   let shareUrl: string | undefined = $state(undefined);
 
-  const fetchShareUrl = async (params: Partial<ImageParams>) => {
-    await shareImage(image.id, params);
+  $effect(() => {
+    shareImage(image.id, unsignedParams);
+  });
 
+  $effect(() => {
     if ($shareImageError) {
       printErrorsAsToastMessage($shareImageError);
       shareUrl = undefined;
@@ -92,10 +95,6 @@
     }
 
     shareUrl = routes.share.fromResponse(response, { absolute: true });
-  };
-
-  $effect(() => {
-    fetchShareUrl(unsignedParams);
   });
 
   const handleImageSizeChange = (value?: Partial<ImageParams>) => {

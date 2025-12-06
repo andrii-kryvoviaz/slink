@@ -36,7 +36,7 @@ final class ShareUrlBuilderTest extends TestCase {
 
     $result = $this->builder->buildTargetUrl($imageId, $fileName, $width, $height, $crop);
 
-    $this->assertStringContainsString('/api/image/test.jpg', $result);
+    $this->assertStringContainsString('/image/test.jpg', $result);
     $this->assertStringContainsString('width=800', $result);
     $this->assertStringContainsString('height=600', $result);
     $this->assertStringContainsString('crop=1', $result);
@@ -91,7 +91,7 @@ final class ShareUrlBuilderTest extends TestCase {
 
     $result = $this->builder->buildTargetUrl($imageId, $fileName, null, null, false);
 
-    $this->assertEquals('/api/image/test.jpg', $result);
+    $this->assertEquals('/image/test.jpg', $result);
   }
 
   #[Test]
@@ -126,10 +126,10 @@ final class ShareUrlBuilderTest extends TestCase {
    */
   public static function fileNameProvider(): array {
     return [
-      'jpg file' => ['image.jpg', '/api/image/image.jpg'],
-      'png file' => ['photo.png', '/api/image/photo.png'],
-      'webp file' => ['picture.webp', '/api/image/picture.webp'],
-      'uuid filename' => ['12345678-1234-1234-1234-123456789abc.avif', '/api/image/12345678-1234-1234-1234-123456789abc.avif'],
+      'jpg file' => ['image.jpg', '/image/image.jpg'],
+      'png file' => ['photo.png', '/image/photo.png'],
+      'webp file' => ['picture.webp', '/image/picture.webp'],
+      'uuid filename' => ['12345678-1234-1234-1234-123456789abc.avif', '/image/12345678-1234-1234-1234-123456789abc.avif'],
     ];
   }
 }
