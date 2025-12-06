@@ -5,6 +5,8 @@ ARG PHP_MEMORY_LIMIT=512M
 
 ARG UPLOAD_MAX_FILESIZE_IN_BYTES=52428800
 
+ARG MERCURE_VERSION=0.21.2
+
 ## NodeJS base image
 FROM node:${NODE_VERSION}-alpine AS node
 
@@ -89,7 +91,7 @@ RUN docker-php-ext-enable imagick redis smbclient vips swoole
 
 ### Base build stage ###
 FROM php:${PHP_VERSION}-alpine AS base
-ARG TARGETARCH
+ARG MERCURE_VERSION
 
 RUN apk update && apk upgrade &&\
     apk add --no-cache \
@@ -114,15 +116,15 @@ RUN apk add --no-cache --virtual .build-deps python3-dev && \
     pip3 install --break-system-packages supervisor && \
     apk del .build-deps
 
-RUN MERCURE_VERSION="0.21.2" && \
-    case "${TARGETARCH}" in \
-        amd64) MERCURE_ARCH="amd64" ;; \
-        arm64) MERCURE_ARCH="arm64" ;; \
-        *) echo "Unsupported architecture: ${TARGETARCH}" && exit 1 ;; \
-    esac && \
-    wget -q "https://github.com/dunglas/mercure/releases/download/v${MERCURE_VERSION}/mercure_Linux_${MERCURE_ARCH}.tar.gz" -O /tmp/mercure.tar.gz && \
-    tar -xzf /tmp/mercure.tar.gz -C /usr/local/bin mercure && \
-    chmod +x /usr/local/bin/mercure && \
+RUN set -eux; \
+    case "$(uname -m)" in \
+        x86_64) MERCURE_ARCH="amd64" ;; \
+        aarch64) MERCURE_ARCH="arm64" ;; \
+        *) echo "Unsupported architecture: $(uname -m)" && exit 1 ;; \
+    esac; \
+    wget -q "https://github.com/dunglas/mercure/releases/download/v${MERCURE_VERSION}/mercure_Linux_${MERCURE_ARCH}.tar.gz" -O /tmp/mercure.tar.gz; \
+    tar -xzf /tmp/mercure.tar.gz -C /usr/local/bin mercure; \
+    chmod +x /usr/local/bin/mercure; \
     rm /tmp/mercure.tar.gz
 
 COPY --from=php-extensions /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
