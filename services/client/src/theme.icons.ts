@@ -48,7 +48,6 @@ export const themeIcons: string[] = [
   'heroicons:information-circle',
   'heroicons:arrow-path',
   'lucide:loader-2',
-  'lucide:edit-2',
   'heroicons:arrow-top-right-on-square',
   'heroicons:document',
   'heroicons:arrow-down-tray',

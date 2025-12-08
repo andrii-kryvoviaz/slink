@@ -187,15 +187,13 @@
         }}
       />
 
-      <div>
-        <ImageDescription
-          description={image.description}
-          isLoading={$descriptionIsLoading}
-          on={{
-            change: (description: string) => handleSaveDescription(description),
-          }}
-        />
-      </div>
+      <ImageDescription
+        description={image.description}
+        isLoading={$descriptionIsLoading}
+        on={{
+          change: (description: string) => handleSaveDescription(description),
+        }}
+      />
 
       {#if image.supportsResize}
         <div>

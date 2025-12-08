@@ -1,6 +1,5 @@
 <script lang="ts">
   import { HashtagText } from '@slink/feature/Text';
-  import { Button } from '@slink/ui/components/button';
 
   import Icon from '@iconify/svelte';
 
@@ -17,28 +16,21 @@
   let textArea: HTMLTextAreaElement | undefined = $state();
   let newDescription = $state(description);
   let editing = $state(false);
-  let isSaving = $state(false);
+
+  const hasChanges = $derived(newDescription.trim() !== description.trim());
 
   function startEditing() {
     newDescription = description;
     editing = true;
   }
 
-  async function saveDescription() {
-    if (newDescription.trim() === description.trim()) {
+  function saveDescription() {
+    if (!hasChanges) {
       editing = false;
       return;
     }
-
-    isSaving = true;
-
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 100));
-      on?.change(newDescription.trim());
-      editing = false;
-    } finally {
-      isSaving = false;
-    }
+    on?.change(newDescription.trim());
+    editing = false;
   }
 
   function cancelEditing() {
@@ -55,20 +47,29 @@
       event.preventDefault();
       saveDescription();
     }
+  };
 
-    if (event.key === 'Tab') {
-      event.preventDefault();
+  const handleBlur = (event: FocusEvent) => {
+    const relatedTarget = event.relatedTarget as HTMLElement | null;
+    if (relatedTarget?.closest('[data-description-actions]')) {
+      return;
+    }
+    if (hasChanges) {
+      saveDescription();
+    } else {
+      cancelEditing();
     }
   };
 
   const autoResize = (textarea: HTMLTextAreaElement) => {
     textarea.style.height = 'auto';
-    textarea.style.height = Math.max(80, textarea.scrollHeight) + 'px';
+    textarea.style.height = Math.max(60, textarea.scrollHeight) + 'px';
   };
 
   $effect(() => {
     if (editing && textArea) {
       textArea.focus();
+      textArea.select();
       autoResize(textArea);
     }
   });
@@ -78,67 +79,72 @@
   });
 </script>
 
-{#if editing}
-  <div
-    class="relative rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 shadow-sm"
-  >
-    <textarea
-      class="min-h-[80px] w-full resize-none border-none bg-transparent p-4 pb-16 text-sm placeholder-gray-400 focus:outline-none focus:ring-0"
-      bind:value={newDescription}
-      bind:this={textArea}
-      onkeydown={handleKeyDown}
-      oninput={(e) => e.target && autoResize(e.target as HTMLTextAreaElement)}
-      placeholder="Enter image description..."
-      rows="3"
-    ></textarea>
-    <div class="absolute bottom-3 right-3 flex items-center gap-2">
-      <Button
-        variant="primary"
-        size="xs"
-        rounded="full"
-        disabled={isSaving}
-        onclick={saveDescription}
-        class="min-w-[70px] {isSaving ? 'opacity-75' : ''}"
-      >
-        {#if isSaving}
-          <Icon icon="lucide:loader-2" class="mr-1 h-3 w-3 animate-spin" />
-        {/if}
-        {isSaving ? 'Saving...' : 'Save'}
-      </Button>
-      <Button
-        size="xs"
-        rounded="full"
-        disabled={isSaving}
-        onclick={cancelEditing}
-        class="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
-      >
-        Cancel
-      </Button>
-    </div>
-  </div>
-{:else}
-  <button
-    onclick={startEditing}
-    class="group relative w-full rounded-lg border-l-4 border-gray-200 dark:border-gray-600 bg-gray-50/50 dark:bg-gray-800/50 p-4 text-left transition-all duration-200 hover:border-gray-300 hover:bg-gray-100/50 dark:hover:border-gray-500 dark:hover:bg-gray-700/50 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
-    class:animate-pulse={isLoading}
-  >
-    <div class="flex items-start justify-between">
-      <div class="flex-1 min-w-0">
-        <p class="text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
-          Description
-        </p>
-        <div class="text-sm text-gray-600 dark:text-gray-400 break-words">
-          {#if description}
-            <HashtagText text={description} />
-          {:else}
-            Click to add a description...
-          {/if}
-        </div>
-      </div>
+<div class="space-y-1.5">
+  <div class="flex items-center gap-2">
+    <span class="text-sm font-medium text-gray-500 dark:text-gray-400">
+      Description
+    </span>
+    {#if isLoading}
       <Icon
-        icon="lucide:edit-2"
-        class="h-4 w-4 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors flex-shrink-0 ml-3 mt-0.5"
+        icon="lucide:loader-2"
+        class="h-3.5 w-3.5 text-gray-400 animate-spin"
       />
+    {/if}
+  </div>
+
+  {#if editing}
+    <div>
+      <textarea
+        class="w-full resize-none rounded-lg bg-gray-50 dark:bg-gray-800/50 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 border border-gray-200 dark:border-gray-700 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-1 focus:ring-blue-500/20 dark:focus:ring-blue-400/20 focus:outline-none transition-all py-2.5 px-3"
+        bind:value={newDescription}
+        bind:this={textArea}
+        onkeydown={handleKeyDown}
+        onblur={handleBlur}
+        oninput={(e) => e.target && autoResize(e.target as HTMLTextAreaElement)}
+        placeholder="Add a description..."
+        rows="2"
+      ></textarea>
+      {#if hasChanges}
+        <div
+          data-description-actions
+          class="flex items-center gap-3 mt-2 text-xs"
+        >
+          <button
+            onclick={saveDescription}
+            class="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 font-medium transition-colors"
+          >
+            Save
+          </button>
+          <button
+            onclick={cancelEditing}
+            class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+          >
+            Cancel
+          </button>
+          <span class="text-gray-400 dark:text-gray-500 ml-auto">
+            ⌘ + Enter
+          </span>
+        </div>
+      {/if}
     </div>
-  </button>
-{/if}
+  {:else}
+    <button
+      onclick={startEditing}
+      class="w-full text-left rounded-lg py-2.5 px-3 -mx-3 transition-all duration-150 hover:bg-gray-50 dark:hover:bg-gray-800/50 group cursor-text"
+    >
+      {#if description}
+        <p
+          class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed group-hover:text-gray-900 dark:group-hover:text-gray-100 transition-colors"
+        >
+          <HashtagText text={description} />
+        </p>
+      {:else}
+        <p
+          class="text-sm text-gray-400 dark:text-gray-500 group-hover:text-gray-500 dark:group-hover:text-gray-400 transition-colors"
+        >
+          Click to add a description...
+        </p>
+      {/if}
+    </button>
+  {/if}
+</div>
