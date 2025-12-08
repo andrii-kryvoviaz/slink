@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Slink\User\Application\Command\SignUp;
+namespace Slink\User\Application\Command\CreateUser;
 
 use SensitiveParameter;
 use Slink\Shared\Application\Command\CommandInterface;
@@ -11,11 +11,10 @@ use Slink\User\Infrastructure\Validator\PasswordComplexity;
 use Slink\User\Infrastructure\Validator\Username;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final readonly class SignUpCommand implements CommandInterface {
+final readonly class CreateUserCommand implements CommandInterface {
   private ID $id;
 
   public function __construct(
-    #[SensitiveParameter]
     #[Assert\NotBlank]
     #[Assert\Email]
     private string $email,
@@ -24,15 +23,16 @@ final readonly class SignUpCommand implements CommandInterface {
     #[PasswordComplexity]
     private string $password,
 
-    #[SensitiveParameter]
-    #[Assert\NotBlank]
-    #[Assert\IdenticalTo(propertyPath: 'password', message: 'Passwords do not match.')]
-    private string $confirm,
-
     #[Assert\NotBlank]
     #[Username]
     #[Assert\NotEqualTo(propertyPath: 'email', message: 'Username cannot be the same as email.')]
-    private string $username
+    private string $username,
+
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 1, max: 100)]
+    private string $displayName,
+
+    private bool   $activate = false
   ) {
     $this->id = ID::generate();
   }
@@ -49,11 +49,15 @@ final readonly class SignUpCommand implements CommandInterface {
     return $this->password;
   }
 
-  public function getConfirm(): string {
-    return $this->confirm;
-  }
-
   public function getUsername(): string {
     return $this->username;
+  }
+
+  public function getDisplayName(): string {
+    return $this->displayName;
+  }
+
+  public function isActivate(): bool {
+    return $this->activate;
   }
 }
