@@ -178,6 +178,7 @@
         class="transition-all duration-200 text-sm rounded-r-none! border-r border-white/20"
         variant="primary"
         size="xs"
+        rounded="sm"
         disabled={isCopied || state.isLoading || isCopyingImage}
         onclick={() => handleCopy()}
       >
@@ -215,6 +216,7 @@
               class="rounded-l-none! px-2!"
               variant="primary"
               size="xs"
+              rounded="sm"
               disabled={state.isLoading || isCopyingImage || isCopied}
             >
               <span class="text-xs">{getSelectedFormat().short}</span>

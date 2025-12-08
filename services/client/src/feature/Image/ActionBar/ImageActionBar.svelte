@@ -1,6 +1,11 @@
 <script lang="ts">
   import { ImageDeletePopover } from '@slink/feature/Image';
   import { Loader } from '@slink/feature/Layout';
+  import {
+    ButtonGroup,
+    ButtonGroupItem,
+    buttonGroupItemVariants,
+  } from '@slink/ui/components';
   import { Overlay } from '@slink/ui/components/popover';
   import { Tooltip, TooltipProvider } from '@slink/ui/components/tooltip';
 
@@ -19,10 +24,13 @@
   import type { ShareImageResponse } from '@slink/api/Resources/ImageResource';
   import type { ImageListingItem } from '@slink/api/Response';
 
+  import { cn } from '@slink/utils/ui';
+
   type actionButton = 'download' | 'visibility' | 'share' | 'delete' | 'copy';
   interface Props {
     image: { id: string; fileName: string; isPublic: boolean };
     buttons?: actionButton[];
+    compact?: boolean;
     on?: {
       imageDelete: (imageId: string) => void;
     };
@@ -31,6 +39,7 @@
   let {
     image = $bindable(),
     buttons = ['download', 'visibility', 'share', 'delete'],
+    compact = false,
     on,
   }: Props = $props();
 
@@ -145,131 +154,142 @@
     routes.image.view(image.fileName, undefined, { absolute: true }),
   );
 
-  const baseButtonClass =
-    'group relative flex items-center justify-center transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50';
+  const visibleButtons = $derived(
+    buttons.filter((button) => isButtonVisible(button)),
+  );
 
-  const actionButtonClass = `${baseButtonClass} h-11 w-11 sm:h-9 sm:w-9 rounded-xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-gray-200/60 dark:border-gray-700/60 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-white dark:hover:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-sm active:scale-95 focus-visible:ring-blue-500/30`;
+  const getPosition = (index: number, total: number) => {
+    if (total === 1) return 'only';
+    if (index === 0) return 'first';
+    if (index === total - 1) return 'last';
+    return 'middle';
+  };
 
-  const primaryButtonClass = `${baseButtonClass} h-11 sm:h-9 px-4 sm:px-3 gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-medium shadow-sm hover:shadow-md active:scale-95 focus-visible:ring-blue-500/30 whitespace-nowrap`;
-
-  const secondaryButtonClass = `${baseButtonClass} h-11 sm:h-9 px-3 sm:px-2.5 gap-2 rounded-xl bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600 active:scale-95 focus-visible:ring-gray-500/30 whitespace-nowrap`;
-
-  const destructiveButtonClass = `${baseButtonClass} h-11 w-11 sm:h-9 sm:w-9 rounded-xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-gray-200/60 dark:border-gray-700/60 text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 hover:border-red-200 dark:hover:border-red-800/50 active:scale-95 focus-visible:ring-red-500/30`;
+  const iconClass = 'h-4 w-4';
 </script>
 
 <TooltipProvider delayDuration={300}>
-  <div class="flex flex-wrap items-center gap-2 w-full">
-    {#if isButtonVisible('download')}
-      <button
-        class={primaryButtonClass}
-        onclick={() => downloadByLink(directLink, image.fileName)}
-        aria-label="Download image"
-        type="button"
-      >
-        <Icon icon="lucide:download" class="h-4 w-4 sm:h-3.5 sm:w-3.5" />
-        <span class="text-sm sm:text-xs font-medium">Download</span>
-      </button>
-    {/if}
+  <ButtonGroup variant="glass" rounded="lg" size="lg" class="w-full shadow-sm">
+    {#each visibleButtons as button, i (button)}
+      {@const position = getPosition(i, visibleButtons.length)}
 
-    {#if isButtonVisible('copy')}
-      <Tooltip side="bottom" sideOffset={8} withArrow={false}>
-        {#snippet trigger()}
-          <button
-            class={secondaryButtonClass}
-            onclick={handleCopy}
-            disabled={$shareIsLoading || isCopiedActive}
-            aria-label="Copy image URL"
-            type="button"
-          >
-            {#if $shareIsLoading}
-              <Loader variant="minimal" size="xs" />
-            {:else if isCopiedActive}
-              <div in:scale={{ duration: 300, easing: cubicOut }}>
-                <Icon
-                  icon="ph:check"
-                  class="h-4 w-4 sm:h-3.5 sm:w-3.5 text-green-600 dark:text-green-400"
-                />
-              </div>
-            {:else}
-              <Icon icon="ph:copy" class="h-4 w-4 sm:h-3.5 sm:w-3.5" />
-            {/if}
-          </button>
-        {/snippet}
-        {$shareIsLoading
-          ? 'Generating...'
-          : isCopiedActive
-            ? 'Copied!'
-            : 'Copy URL'}
-      </Tooltip>
-    {/if}
+      {#if button === 'download'}
+        <ButtonGroupItem
+          variant="primary"
+          size="lg"
+          {position}
+          class="gap-2 px-3 sm:px-4 min-w-fit flex-3"
+          onclick={() => downloadByLink(directLink, image.fileName)}
+          aria-label="Download image"
+        >
+          <Icon icon="lucide:download" class={cn(iconClass, 'shrink-0')} />
+          {#if !compact}
+            <span class="font-medium truncate text-xs sm:text-sm">Download</span
+            >
+          {/if}
+        </ButtonGroupItem>
+      {/if}
 
-    {#if isButtonVisible('visibility')}
-      <Tooltip side="bottom" sideOffset={8} withArrow={false}>
-        {#snippet trigger()}
-          <button
-            class={actionButtonClass}
-            onclick={() => handleVisibilityChange(!image.isPublic)}
-            disabled={$visibilityIsLoading}
-            aria-label={image.isPublic ? 'Make private' : 'Make public'}
-            type="button"
-          >
-            {#if $visibilityIsLoading}
-              <Loader variant="minimal" size="xs" />
-            {:else}
+      {#if button === 'copy'}
+        <ButtonGroupItem
+          variant="secondary"
+          size="lg"
+          {position}
+          class="gap-2 px-3"
+          onclick={handleCopy}
+          disabled={$shareIsLoading || isCopiedActive}
+          aria-label="Copy image URL"
+          tooltip={$shareIsLoading
+            ? 'Generating...'
+            : isCopiedActive
+              ? 'Copied!'
+              : 'Copy URL'}
+        >
+          {#if $shareIsLoading}
+            <Loader variant="minimal" size="xs" />
+          {:else if isCopiedActive}
+            <div in:scale={{ duration: 300, easing: cubicOut }}>
               <Icon
-                icon={image.isPublic ? 'ph:eye' : 'ph:eye-slash'}
-                class="h-4 w-4 sm:h-3.5 sm:w-3.5"
+                icon="ph:check"
+                class={cn(iconClass, 'text-green-600 dark:text-green-400')}
               />
-            {/if}
-          </button>
-        {/snippet}
-        {image.isPublic ? 'Make private' : 'Make public'}
-      </Tooltip>
-    {/if}
+            </div>
+          {:else}
+            <Icon icon="ph:copy" class={iconClass} />
+          {/if}
+        </ButtonGroupItem>
+      {/if}
 
-    {#if isButtonVisible('share')}
-      <Tooltip side="bottom" sideOffset={8} withArrow={false}>
-        {#snippet trigger()}
-          <a
-            href="/help/faq#share-feature"
-            class={actionButtonClass}
-            aria-label="View sharing policy"
-          >
-            <Icon icon="ph:share-network" class="h-4 w-4 sm:h-3.5 sm:w-3.5" />
-          </a>
-        {/snippet}
-        Sharing policy
-      </Tooltip>
-    {/if}
+      {#if button === 'visibility'}
+        <ButtonGroupItem
+          variant="default"
+          size="lg"
+          {position}
+          onclick={() => handleVisibilityChange(!image.isPublic)}
+          disabled={$visibilityIsLoading}
+          aria-label={image.isPublic ? 'Make private' : 'Make public'}
+          tooltip={image.isPublic ? 'Make private' : 'Make public'}
+        >
+          {#if $visibilityIsLoading}
+            <Loader variant="minimal" size="xs" />
+          {:else}
+            <Icon
+              icon={image.isPublic ? 'ph:eye' : 'ph:eye-slash'}
+              class={iconClass}
+            />
+          {/if}
+        </ButtonGroupItem>
+      {/if}
 
-    {#if isButtonVisible('delete')}
-      <Overlay
-        bind:open={deletePopoverOpen}
-        variant="floating"
-        contentProps={{ align: 'end' }}
-      >
-        {#snippet trigger()}
-          <Tooltip side="bottom" sideOffset={8} withArrow={false}>
-            {#snippet trigger()}
-              <button
-                class={destructiveButtonClass}
-                aria-label="Delete image"
-                type="button"
-                disabled={$deleteImageIsLoading}
-              >
-                <Icon icon="ph:trash" class="h-4 w-4 sm:h-3.5 sm:w-3.5" />
-              </button>
-            {/snippet}
-            Delete image
-          </Tooltip>
-        {/snippet}
+      {#if button === 'share'}
+        <Tooltip side="bottom" sideOffset={8} withArrow={false}>
+          {#snippet trigger()}
+            <a
+              href="/help/faq#share-feature"
+              class={cn(
+                'flex-1',
+                buttonGroupItemVariants({
+                  variant: 'default',
+                  size: 'lg',
+                  position,
+                }),
+              )}
+              aria-label="View sharing policy"
+            >
+              <Icon icon="ph:share-network" class={iconClass} />
+            </a>
+          {/snippet}
+          Sharing policy
+        </Tooltip>
+      {/if}
 
-        <ImageDeletePopover
-          loading={deleteImageIsLoading}
-          close={closeDeletePopover}
-          confirm={confirmImageDeletion}
-        />
-      </Overlay>
-    {/if}
-  </div>
+      {#if button === 'delete'}
+        <Overlay
+          bind:open={deletePopoverOpen}
+          variant="floating"
+          contentProps={{ align: 'end' }}
+          triggerClass="flex-1"
+        >
+          {#snippet trigger()}
+            <ButtonGroupItem
+              variant="destructive"
+              size="lg"
+              {position}
+              aria-label="Delete image"
+              disabled={$deleteImageIsLoading}
+              tooltip="Delete image"
+            >
+              <Icon icon="ph:trash" class={iconClass} />
+            </ButtonGroupItem>
+          {/snippet}
+
+          <ImageDeletePopover
+            loading={deleteImageIsLoading}
+            close={closeDeletePopover}
+            confirm={confirmImageDeletion}
+          />
+        </Overlay>
+      {/if}
+    {/each}
+  </ButtonGroup>
 </TooltipProvider>

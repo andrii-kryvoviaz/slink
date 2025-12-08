@@ -118,6 +118,7 @@
           class={buttonClasses}
           variant="primary"
           size="xs"
+          rounded="sm"
           disabled={isCopiedActive || isLoading}
           onclick={handleCopy}
         >
