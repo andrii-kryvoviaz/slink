@@ -4,6 +4,8 @@ services:
       context: ..
       dockerfile: docker/Dockerfile
       target: dev
+    environment:
+      - ORIGIN=http://localhost:5173
     volumes:
       - ../services:/services
       - ../var:/app/var

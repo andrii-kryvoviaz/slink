@@ -10,6 +10,8 @@ enum ImageFormat: string {
   case GIF = 'gif';
   case WEBP = 'webp';
   case AVIF = 'avif';
+  case TIFF = 'tiff';
+  case BMP = 'bmp';
 
   public static function fromString(string $format): self {
     return match (strtolower($format)) {
@@ -18,6 +20,8 @@ enum ImageFormat: string {
       'gif' => self::GIF,
       'webp' => self::WEBP,
       'avif', 'heif' => self::AVIF,
+      'tiff', 'tif' => self::TIFF,
+      'bmp' => self::BMP,
       default => self::JPEG
     };
   }
@@ -29,7 +33,21 @@ enum ImageFormat: string {
       'image/gif' => self::GIF,
       'image/webp' => self::WEBP,
       'image/avif' => self::AVIF,
+      'image/tiff' => self::TIFF,
+      'image/bmp', 'image/x-bmp' => self::BMP,
       default => null
+    };
+  }
+
+  public function getMimeType(): string {
+    return match ($this) {
+      self::JPEG => 'image/jpeg',
+      self::PNG => 'image/png',
+      self::GIF => 'image/gif',
+      self::WEBP => 'image/webp',
+      self::AVIF => 'image/avif',
+      self::TIFF => 'image/tiff',
+      self::BMP => 'image/bmp',
     };
   }
 

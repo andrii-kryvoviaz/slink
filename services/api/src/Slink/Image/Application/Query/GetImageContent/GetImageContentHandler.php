@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Image\Application\Query\GetImageContent;
 
+use Slink\Image\Domain\Enum\ImageFormat;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Image\Domain\Service\ImageAnalyzerInterface;
 use Slink\Image\Domain\Service\ImageSanitizerInterface;
@@ -25,16 +26,25 @@ final readonly class GetImageContentHandler implements QueryHandlerInterface {
   /**
    * @throws NotFoundException
    */
-  public function __invoke(GetImageContentQuery $query, string $fileName): Item {
-    $imageView = $this->repository->oneByFileName($fileName);
+  public function __invoke(GetImageContentQuery $query, string $fileName, ?string $requestedFormat = null): Item {
+    $imageId = $this->extractImageId($fileName);
+    $imageView = $this->repository->oneById($imageId);
     
-    $transformParams = $this->imageAnalyzer->supportsResize($imageView->getMimeType())
+    $originalMimeType = $imageView->getMimeType();
+    $targetFormat = $requestedFormat ? ImageFormat::fromString($requestedFormat) : null;
+    $needsConversion = $this->needsFormatConversion($originalMimeType, $targetFormat);
+    
+    $transformParams = $this->imageAnalyzer->supportsResize($originalMimeType)
       ? $query->getTransformParams()
       : [];
     
+    if ($needsConversion && $targetFormat) {
+      $transformParams['format'] = $targetFormat->getExtension();
+    }
+    
     $imageOptions = ImageOptions::fromPayload([
       'fileName' => $imageView->getFileName(),
-      'mimeType' => $imageView->getMimeType(),
+      'mimeType' => $originalMimeType,
       ...$transformParams
     ]);
     
@@ -44,10 +54,32 @@ final readonly class GetImageContentHandler implements QueryHandlerInterface {
       throw new NotFoundException();
     }
     
-    if($this->sanitizer->requiresSanitization($imageView->getMimeType())) {
+    if($this->sanitizer->requiresSanitization($originalMimeType)) {
       $imageContent = $this->sanitizer->sanitize($imageContent);
     }
     
-    return Item::fromContent($imageContent, $imageView->getMimeType());
+    $responseMimeType = $needsConversion && $targetFormat 
+      ? $targetFormat->getMimeType() 
+      : $originalMimeType;
+    
+    return Item::fromContent($imageContent, $responseMimeType);
+  }
+
+  private function extractImageId(string $fileName): string {
+    $lastDotIndex = strrpos($fileName, '.');
+    return $lastDotIndex !== false ? substr($fileName, 0, $lastDotIndex) : $fileName;
+  }
+
+  private function needsFormatConversion(?string $originalMimeType, ?ImageFormat $targetFormat): bool {
+    if (!$targetFormat || !$originalMimeType) {
+      return false;
+    }
+    
+    $originalFormat = ImageFormat::fromMimeType($originalMimeType);
+    if (!$originalFormat) {
+      return false;
+    }
+    
+    return $originalFormat !== $targetFormat;
   }
 }

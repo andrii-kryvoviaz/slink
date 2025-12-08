@@ -132,4 +132,59 @@ final class ShareUrlBuilderTest extends TestCase {
       'uuid filename' => ['12345678-1234-1234-1234-123456789abc.avif', '/image/12345678-1234-1234-1234-123456789abc.avif'],
     ];
   }
+
+  #[Test]
+  public function itBuildsUrlWithFormatConversion(): void {
+    $imageId = '12345678-1234-1234-1234-123456789abc';
+    $fileName = 'test.png';
+
+    $this->signatureService
+      ->expects($this->never())
+      ->method('sign');
+
+    $result = $this->builder->buildTargetUrl($imageId, $fileName, null, null, false, 'webp');
+
+    $this->assertEquals('/image/test.webp', $result);
+  }
+
+  #[Test]
+  public function itBuildsUrlWithFormatAndResizeParams(): void {
+    $imageId = '12345678-1234-1234-1234-123456789abc';
+    $fileName = 'test.gif';
+    $width = 800;
+    $height = 600;
+
+    $this->signatureService
+      ->expects($this->once())
+      ->method('sign')
+      ->with($imageId, ['width' => $width, 'height' => $height])
+      ->willReturn('test_signature');
+
+    $result = $this->builder->buildTargetUrl($imageId, $fileName, $width, $height, false, 'avif');
+
+    $this->assertStringContainsString('/image/test.avif', $result);
+    $this->assertStringContainsString('width=800', $result);
+    $this->assertStringContainsString('height=600', $result);
+    $this->assertStringContainsString('s=test_signature', $result);
+  }
+
+  #[Test]
+  public function itIgnoresNullFormat(): void {
+    $imageId = '12345678-1234-1234-1234-123456789abc';
+    $fileName = 'test.jpg';
+
+    $result = $this->builder->buildTargetUrl($imageId, $fileName, null, null, false, null);
+
+    $this->assertEquals('/image/test.jpg', $result);
+  }
+
+  #[Test]
+  public function itTreatsOriginalFormatAsNoConversion(): void {
+    $imageId = '12345678-1234-1234-1234-123456789abc';
+    $fileName = 'test.png';
+
+    $result = $this->builder->buildTargetUrl($imageId, $fileName, null, null, false, 'original');
+
+    $this->assertEquals('/image/test.png', $result);
+  }
 }

@@ -1,13 +1,13 @@
 import { cva } from 'class-variance-authority';
 
 export const toggleGroupTheme = cva(
-  'flex items-center bg-gradient-to-br from-slate-50 to-slate-100/50 dark:from-slate-800/50 dark:to-slate-700/30 rounded-xl p-1 shadow-lg border border-slate-200 dark:border-slate-700',
+  'inline-flex items-center bg-gradient-to-br from-slate-50 to-slate-100/50 dark:from-slate-800/50 dark:to-slate-700/30 rounded-xl p-1 shadow-lg border border-slate-200 dark:border-slate-700',
   {
     variants: {
       size: {
-        sm: 'min-w-[120px] p-0.5',
-        md: 'min-w-[140px] p-1',
-        lg: 'min-w-[160px] p-1.5',
+        sm: 'p-0.5',
+        md: 'p-1',
+        lg: 'p-1.5',
       },
       orientation: {
         horizontal: 'flex-row',

@@ -16,12 +16,14 @@ final readonly class GetImageContentQuery implements QueryInterface {
    * @param int|null $height
    * @param int|null $quality
    * @param bool $crop
+   * @param string|null $format
    */
   public function __construct(
     private ?int $width = null,
     private ?int $height = null,
     private ?int $quality = null,
-    private bool $crop = false
+    private bool $crop = false,
+    private ?string $format = null
   ) {
   }
   
@@ -51,6 +53,20 @@ final readonly class GetImageContentQuery implements QueryInterface {
    */
   public function isCropped(): bool {
     return $this->crop;
+  }
+
+  public function getFormat(): ?string {
+    return $this->format;
+  }
+
+  public function withFormat(?string $format): self {
+    return new self(
+      $this->width,
+      $this->height,
+      $this->quality,
+      $this->crop,
+      $format
+    );
   }
   
   /**

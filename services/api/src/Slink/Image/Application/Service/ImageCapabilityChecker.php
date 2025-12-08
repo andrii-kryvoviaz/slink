@@ -41,4 +41,12 @@ final readonly class ImageCapabilityChecker {
   public function requiresSanitization(?string $mimeType): bool {
     return in_array($mimeType, $this->sanitizationRequiredMimeTypes, true);
   }
+
+  public function supportsFormatConversion(?string $mimeType): bool {
+    return !$this->requiresSanitization($mimeType) && $this->supportsResize($mimeType);
+  }
+
+  public function supportsAnimation(?string $mimeType): bool {
+    return in_array($mimeType, ['image/gif', 'image/webp', 'image/avif', 'image/png'], true);
+  }
 }

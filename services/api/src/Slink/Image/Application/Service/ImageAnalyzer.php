@@ -44,6 +44,14 @@ final class ImageAnalyzer implements ImageAnalyzerInterface {
     return $this->capabilityChecker->requiresSanitization($mimeType);
   }
 
+  public function supportsFormatConversion(?string $mimeType): bool {
+    return $this->capabilityChecker->supportsFormatConversion($mimeType);
+  }
+
+  public function supportsAnimation(?string $mimeType): bool {
+    return $this->capabilityChecker->supportsAnimation($mimeType);
+  }
+
   /**
    * @return array<string, mixed>
    */

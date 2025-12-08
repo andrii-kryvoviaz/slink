@@ -12,5 +12,7 @@ export type ImageDetailsResponse = {
   views: number;
   url: string;
   supportsResize: boolean;
+  supportsFormatConversion: boolean;
+  isAnimated: boolean;
   bookmarkCount: number;
 };

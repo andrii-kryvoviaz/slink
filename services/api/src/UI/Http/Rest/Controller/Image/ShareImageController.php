@@ -44,7 +44,8 @@ final readonly class ShareImageController {
       $image->getFileName(),
       $request->width,
       $request->height,
-      $request->crop
+      $request->crop,
+      $request->format
     );
 
     $shorteningEnabled = $this->configurationProvider->get('share.enableUrlShortening') ?? true;

@@ -34,6 +34,10 @@ interface ImageAnalyzerInterface {
    * @return bool
    */
   public function requiresSanitization(?string $mimeType): bool;
+
+  public function supportsFormatConversion(?string $mimeType): bool;
+
+  public function supportsAnimation(?string $mimeType): bool;
  
   /**
    * @return array<string, mixed>

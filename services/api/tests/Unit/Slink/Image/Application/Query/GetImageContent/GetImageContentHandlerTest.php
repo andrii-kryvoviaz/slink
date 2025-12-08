@@ -43,15 +43,18 @@ final class GetImageContentHandlerTest extends TestCase {
    */
   #[Test]
   public function itHandlesGetImageContentQuery(): void {
+    $imageId = 'test-file-name';
     $fileName = 'test-file-name.jpg';
     $imageContent = 'image content';
     $mimeType = 'image/jpeg';
     
     $image = $this->createMock(ImageView::class);
-    $image->method('getAttributes')->willReturn(ImageAttributes::create('test-file-name', 'description', true));
+    $image->method('getAttributes')->willReturn(ImageAttributes::create($imageId, 'description', true));
     $image->method('getMimeType')->willReturn($mimeType);
+    $image->method('getFileName')->willReturn($fileName);
     
-    $this->repository->method('oneByFileName')->willReturn($image);
+    $this->repository->method('oneById')->with($imageId)->willReturn($image);
+    $this->imageAnalyzer->method('supportsResize')->with($mimeType)->willReturn(true);
     $this->storage->method('getImage')->willReturn($imageContent);
     $this->sanitizer->method('requiresSanitization')->with($mimeType)->willReturn(false);
     
@@ -68,14 +71,15 @@ final class GetImageContentHandlerTest extends TestCase {
    */
   #[Test]
   public function itThrowsNotFoundExceptionWhenImageIsNotFound(): void {
+    $imageId = 'test-file-name';
     $fileName = 'test-file-name.jpg';
     
-    $query = $this->createMock(GetImageContentQuery::class);
+    $this->repository->method('oneById')->with($imageId)->willThrowException(new NotFoundException());
     
     $this->expectException(NotFoundException::class);
     
     $handler = new GetImageContentHandler($this->imageAnalyzer, $this->repository, $this->storage, $this->sanitizer);
-    $handler($query, $fileName);
+    $handler(new GetImageContentQuery(), $fileName);
   }
   
   /**
@@ -84,17 +88,19 @@ final class GetImageContentHandlerTest extends TestCase {
    */
   #[Test]
   public function itSanitizesSvgContentWhenServing(): void {
+    $imageId = 'test-file-name';
     $fileName = 'test-file-name.svg';
     $originalSvgContent = '<svg><script>alert("xss")</script><rect/></svg>';
     $sanitizedSvgContent = '<svg><rect/></svg>';
     $mimeType = 'image/svg+xml';
     
     $image = $this->createMock(ImageView::class);
-    $image->method('getAttributes')->willReturn(ImageAttributes::create('test-file-name', 'description', true));
+    $image->method('getAttributes')->willReturn(ImageAttributes::create($imageId, 'description', true));
     $image->method('getMimeType')->willReturn($mimeType);
     $image->method('getFileName')->willReturn($fileName);
     
-    $this->repository->method('oneByFileName')->with($fileName)->willReturn($image);
+    $this->repository->method('oneById')->with($imageId)->willReturn($image);
+    $this->imageAnalyzer->method('supportsResize')->with($mimeType)->willReturn(false);
     $this->storage->method('getImage')->willReturn($originalSvgContent);
     $this->sanitizer->method('requiresSanitization')->with($mimeType)->willReturn(true);
     $this->sanitizer->method('sanitize')->with($originalSvgContent)->willReturn($sanitizedSvgContent);
@@ -104,6 +110,79 @@ final class GetImageContentHandlerTest extends TestCase {
     
     $this->assertInstanceOf(Item::class, $result);
     $this->assertEquals($sanitizedSvgContent, $result->resource);
+    $this->assertEquals($mimeType, $result->type);
+  }
+
+  #[Test]
+  public function itConvertsImageFormatWhenRequested(): void {
+    $imageId = 'test-file-name';
+    $originalFileName = 'test-file-name.png';
+    $imageContent = 'converted image content';
+    $originalMimeType = 'image/png';
+    $targetMimeType = 'image/webp';
+    
+    $image = $this->createMock(ImageView::class);
+    $image->method('getMimeType')->willReturn($originalMimeType);
+    $image->method('getFileName')->willReturn($originalFileName);
+    
+    $this->repository->method('oneById')->with($imageId)->willReturn($image);
+    $this->imageAnalyzer->method('supportsResize')->with($originalMimeType)->willReturn(true);
+    $this->storage->method('getImage')->willReturn($imageContent);
+    $this->sanitizer->method('requiresSanitization')->with($originalMimeType)->willReturn(false);
+    
+    $handler = new GetImageContentHandler($this->imageAnalyzer, $this->repository, $this->storage, $this->sanitizer);
+    $result = ($handler)(new GetImageContentQuery(), 'test-file-name.webp', 'webp');
+    
+    $this->assertInstanceOf(Item::class, $result);
+    $this->assertEquals($imageContent, $result->resource);
+    $this->assertEquals($targetMimeType, $result->type);
+  }
+
+  #[Test]
+  public function itDoesNotConvertWhenRequestedFormatMatchesOriginal(): void {
+    $imageId = 'test-file-name';
+    $fileName = 'test-file-name.gif';
+    $imageContent = 'animated gif content';
+    $mimeType = 'image/gif';
+    
+    $image = $this->createMock(ImageView::class);
+    $image->method('getMimeType')->willReturn($mimeType);
+    $image->method('getFileName')->willReturn($fileName);
+    
+    $this->repository->method('oneById')->with($imageId)->willReturn($image);
+    $this->imageAnalyzer->method('supportsResize')->with($mimeType)->willReturn(true);
+    $this->storage->method('getImage')->willReturn($imageContent);
+    $this->sanitizer->method('requiresSanitization')->with($mimeType)->willReturn(false);
+    
+    $handler = new GetImageContentHandler($this->imageAnalyzer, $this->repository, $this->storage, $this->sanitizer);
+    $result = ($handler)(new GetImageContentQuery(), $fileName, 'gif');
+    
+    $this->assertInstanceOf(Item::class, $result);
+    $this->assertEquals($imageContent, $result->resource);
+    $this->assertEquals($mimeType, $result->type);
+  }
+
+  #[Test]
+  public function itHandlesJpegJpgAliasesWithoutConversion(): void {
+    $imageId = 'test-file-name';
+    $fileName = 'test-file-name.jpeg';
+    $imageContent = 'jpeg image content';
+    $mimeType = 'image/jpeg';
+    
+    $image = $this->createMock(ImageView::class);
+    $image->method('getMimeType')->willReturn($mimeType);
+    $image->method('getFileName')->willReturn($fileName);
+    
+    $this->repository->method('oneById')->with($imageId)->willReturn($image);
+    $this->imageAnalyzer->method('supportsResize')->with($mimeType)->willReturn(true);
+    $this->storage->method('getImage')->willReturn($imageContent);
+    $this->sanitizer->method('requiresSanitization')->with($mimeType)->willReturn(false);
+    
+    $handler = new GetImageContentHandler($this->imageAnalyzer, $this->repository, $this->storage, $this->sanitizer);
+    $result = ($handler)(new GetImageContentQuery(), 'test-file-name.jpg', 'jpg');
+    
+    $this->assertInstanceOf(Item::class, $result);
+    $this->assertEquals($imageContent, $result->resource);
     $this->assertEquals($mimeType, $result->type);
   }
 }

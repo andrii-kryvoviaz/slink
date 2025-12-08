@@ -1,6 +1,7 @@
 <script lang="ts">
   import {
     BookmarkersPanel,
+    FormatPicker,
     ImageActionBar,
     ImageDescription,
     ImagePlaceholder,
@@ -8,7 +9,7 @@
     ImageTagManager,
     ShareLinkCopy,
   } from '@slink/feature/Image';
-  import type { ImageParams } from '@slink/feature/Image';
+  import type { ImageOutputFormat, ImageParams } from '@slink/feature/Image';
   import { Notice } from '@slink/feature/Text';
   import { Shortcut } from '@slink/ui/components';
 
@@ -37,8 +38,29 @@
   const historyFeedState = useUploadHistoryFeed();
 
   let unsignedParams: Partial<ImageParams> = $state({});
+  let selectedFormat: ImageOutputFormat = $state('original');
+
+  const originalFormat = $derived.by(() => {
+    const fileName = image.fileName;
+    const lastDotIndex = fileName.lastIndexOf('.');
+    return lastDotIndex !== -1 ? fileName.substring(lastDotIndex + 1) : '';
+  });
+
+  const applyFormatToFileName = (
+    fileName: string,
+    format: ImageOutputFormat,
+  ): string => {
+    if (format === 'original') return fileName;
+    const lastDotIndex = fileName.lastIndexOf('.');
+    if (lastDotIndex === -1) return `${fileName}.${format}`;
+    return `${fileName.substring(0, lastDotIndex)}.${format}`;
+  };
+
+  let formattedFileName = $derived(
+    applyFormatToFileName(image.fileName, selectedFormat),
+  );
   let directLink: string = $derived(
-    routes.image.view(image.fileName, {}, { absolute: true }),
+    routes.image.view(formattedFileName, {}, { absolute: true }),
   );
 
   const maxWidthClass = $derived.by(() => {
@@ -65,7 +87,12 @@
   } = ReactiveState<ShareImageResponse>(
     (
       imageId: string,
-      params: { width?: number; height?: number; crop?: boolean },
+      params: {
+        width?: number;
+        height?: number;
+        crop?: boolean;
+        format?: string;
+      },
     ) => {
       return ApiClient.image.shareImage(imageId, params);
     },
@@ -78,7 +105,7 @@
   let shareUrl: string | undefined = $state(undefined);
 
   $effect(() => {
-    shareImage(image.id, unsignedParams);
+    shareImage(image.id, { ...unsignedParams, format: selectedFormat });
   });
 
   $effect(() => {
@@ -99,6 +126,10 @@
 
   const handleImageSizeChange = (value?: Partial<ImageParams>) => {
     unsignedParams = value ?? {};
+  };
+
+  const handleFormatChange = (format: ImageOutputFormat) => {
+    selectedFormat = format;
   };
 
   const {
@@ -196,10 +227,27 @@
           >
           to copy.
         </Notice>
+
+        {#if image.supportsFormatConversion}
+          <div class="mb-4">
+            <span
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >
+              Output Format
+            </span>
+            <FormatPicker
+              value={selectedFormat}
+              {originalFormat}
+              isAnimated={image.isAnimated}
+              on={{ change: handleFormatChange }}
+            />
+          </div>
+        {/if}
+
         <ShareLinkCopy
           value={directLink}
           {shareUrl}
-          imageAlt={image.fileName}
+          imageAlt={image.id}
           isLoading={$isSharingImage}
         />
       </div>

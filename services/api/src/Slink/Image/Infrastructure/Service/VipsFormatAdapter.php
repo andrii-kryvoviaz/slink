@@ -25,6 +25,10 @@ final class VipsFormatAdapter {
     'webpload_buffer' => ImageFormat::WEBP,
     'heifload' => ImageFormat::AVIF,
     'heifload_buffer' => ImageFormat::AVIF,
+    'tiffload' => ImageFormat::TIFF,
+    'tiffload_buffer' => ImageFormat::TIFF,
+    'ppmload' => ImageFormat::BMP,
+    'ppmload_buffer' => ImageFormat::BMP,
   ];
 
   /**

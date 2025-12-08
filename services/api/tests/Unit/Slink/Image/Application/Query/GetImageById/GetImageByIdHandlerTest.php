@@ -14,31 +14,29 @@ use Slink\Image\Application\Query\GetImageById\GetImageByIdHandler;
 use Slink\Image\Application\Query\GetImageById\GetImageByIdQuery;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Image\Domain\Service\ImageAnalyzerInterface;
+use Slink\Image\Domain\Service\ImageProcessorInterface;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
+use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
 
 final class GetImageByIdHandlerTest extends TestCase {
 
   private ImageRepositoryInterface&MockObject $repository;
   private ImageAnalyzerInterface&MockObject $analyser;
+  private StorageInterface&MockObject $storage;
+  private ImageProcessorInterface&MockObject $imageProcessor;
   
-  /**
-   * @throws Exception
-   */
   public function setUp(): void {
     parent::setUp();
     
     $this->repository = $this->createMock(ImageRepositoryInterface::class);
     $this->analyser = $this->createMock(ImageAnalyzerInterface::class);
+    $this->storage = $this->createMock(StorageInterface::class);
+    $this->imageProcessor = $this->createMock(ImageProcessorInterface::class);
   }
   
-  /**
-   * @throws NonUniqueResultException
-   * @throws NotFoundException
-   * @throws Exception
-   */
   #[Test]
   public function itHandlesGetImageByIdQuery(): void {
     $id = Uuid::uuid4()->toString();
@@ -49,17 +47,15 @@ final class GetImageByIdHandlerTest extends TestCase {
     
     $imageView->method('getAttributes')->willReturn($imageAttributes);
     $this->repository->expects($this->once())->method('oneById')->with($id)->willReturn($imageView);
+    $this->analyser->method('supportsAnimation')->willReturn(false);
 
-    $handler = new GetImageByIdHandler($this->repository, $this->analyser);
+    $handler = new GetImageByIdHandler($this->repository, $this->analyser, $this->storage, $this->imageProcessor);
 
     $result = $handler($query, null);
 
     $this->assertInstanceOf(Item::class, $result);
   }
   
-  /**
-   * @throws NonUniqueResultException
-   */
   #[Test]
   public function itThrowsNotFoundExceptionWhenIdIsNotUuid(): void {
     $id = 'not-uuid';
@@ -67,7 +63,7 @@ final class GetImageByIdHandlerTest extends TestCase {
 
     $this->repository->expects($this->never())->method('oneById');
 
-    $handler = new GetImageByIdHandler($this->repository, $this->analyser);
+    $handler = new GetImageByIdHandler($this->repository, $this->analyser, $this->storage, $this->imageProcessor);
 
     $this->expectException(NotFoundException::class);
 

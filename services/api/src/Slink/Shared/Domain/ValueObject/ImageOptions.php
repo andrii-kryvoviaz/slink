@@ -9,6 +9,7 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
     'width' => 'w',
     'height' => 'h',
     'quality' => 'q',
+    'format' => 'f',
   ];
   
   /**
@@ -18,6 +19,7 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
    * @param int|null $height
    * @param int|null $quality
    * @param bool|null $crop
+   * @param string|null $format
    */
   private function __construct(
     private string $fileName,
@@ -26,6 +28,7 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
     private ?int $height = null,
     private ?int $quality = null,
     private ?bool $crop = null,
+    private ?string $format = null,
   ) {
   }
   
@@ -40,6 +43,7 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
       'height' => $this->height,
       'quality' => $this->quality,
       'crop' => $this->crop,
+      'format' => $this->format,
     ];
   }
   
@@ -55,6 +59,7 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
       height: $payload['height'] ?? null,
       quality: $payload['quality'] ?? null,
       crop: $payload['crop'] ?? null,
+      format: $payload['format'] ?? null,
     );
   }
   
@@ -140,6 +145,10 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
    */
   public function isCropped(): bool {
     return (bool) $this->crop;
+  }
+
+  public function getFormat(): ?string {
+    return $this->format;
   }
   
   /**

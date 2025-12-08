@@ -9,6 +9,8 @@ export * from './BookmarkersPanel/BookmarkersPanel.theme';
 export { default as ImageDescription } from './Description/ImageDescription.svelte';
 export { default as DownloadButton } from './DownloadButton/DownloadButton.svelte';
 export * from './DownloadButton/DownloadButton.theme';
+export { default as FormatPicker } from './FormatPicker/FormatPicker.svelte';
+export * from './FormatPicker/FormatPicker.types';
 export { default as HistoryGridView } from './History/HistoryGridView.svelte';
 export { default as HistoryListView } from './History/HistoryListView.svelte';
 export { default as ImageDeleteConfirmation } from './ImageDeleteConfirmation/ImageDeleteConfirmation.svelte';

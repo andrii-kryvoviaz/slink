@@ -13,9 +13,12 @@ final readonly class ShareUrlBuilder implements ShareUrlBuilderInterface {
   ) {
   }
 
-  public function buildTargetUrl(string $imageId, string $fileName, ?int $width, ?int $height, bool $crop): string {
+  public function buildTargetUrl(string $imageId, string $fileName, ?int $width, ?int $height, bool $crop, ?string $format = null): string {
+    $targetFileName = $format && $format !== 'original' 
+      ? $this->applyFormat($fileName, $format) 
+      : $fileName;
     $params = $this->buildParams($width, $height, $crop);
-    $url = '/image/' . $fileName;
+    $url = "/image/{$targetFileName}";
 
     if (empty($params)) {
       return $url;
@@ -24,7 +27,13 @@ final readonly class ShareUrlBuilder implements ShareUrlBuilderInterface {
     $signature = $this->signatureService->sign($imageId, $params);
     $queryParams = [...$params, 's' => $signature];
 
-    return $url . '?' . http_build_query($queryParams);
+    return "{$url}?" . http_build_query($queryParams);
+  }
+
+  private function applyFormat(string $fileName, string $format): string {
+    $baseName = pathinfo($fileName, PATHINFO_FILENAME);
+    
+    return "{$baseName}.{$format}";
   }
 
   /**

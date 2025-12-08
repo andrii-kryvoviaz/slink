@@ -33,9 +33,11 @@ final readonly class GetImageController {
     string $ext
   ): ContentResponse {
     $validatedQuery = $this->validateAndSanitizeQuery($request, $query, $id);
+    $queryWithFormat = $validatedQuery->withFormat($ext);
     
-    $imageData = $this->ask($validatedQuery->withContext([
+    $imageData = $this->ask($queryWithFormat->withContext([
       'fileName' => "{$id}.{$ext}",
+      'requestedFormat' => $ext,
     ]));
     
     $this->handle(new AddImageViewCountCommand($id));

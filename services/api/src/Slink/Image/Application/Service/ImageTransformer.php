@@ -87,11 +87,16 @@ final readonly class ImageTransformer implements ImageTransformerInterface {
   public function transform(string $content, ImageOptions $imageOptions): string {
     $request = ImageTransformationRequest::fromImageOptions($imageOptions);
 
-    if (!$request->hasTransformations()) {
-      return $content;
+    if ($request->hasTransformations()) {
+      $content = $this->executeTransformation($content, $request);
     }
 
-    return $this->executeTransformation($content, $request);
+    if ($imageOptions->getFormat()) {
+      $quality = $imageOptions->getQuality() ?? $this->settingsService->get('image.compressionQuality');
+      $content = $this->imageProcessor->convertFormat($content, $imageOptions->getFormat(), $quality);
+    }
+
+    return $content;
   }
 
   private function calculateTargetDimensions(
