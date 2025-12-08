@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { LoadMoreButton } from '@slink/feature/Action';
+  import { LoadMoreButton, StopPropagation } from '@slink/feature/Action';
   import {
     AdminImageDropdown,
+    DownloadButton,
     ImagePlaceholder,
     PostViewer,
   } from '@slink/feature/Image';
@@ -167,13 +168,17 @@
               </div>
 
               <div
-                class="absolute top-3 right-3 opacity-0 group-hover/card:opacity-100 transition-all duration-300 translate-y-1 group-hover/card:translate-y-0"
+                class="absolute top-3 right-3 flex items-center gap-1.5 opacity-0 group-hover/card:opacity-100 transition-all duration-300 translate-y-1 group-hover/card:translate-y-0"
               >
-                <span
-                  role="presentation"
-                  onclick={(e) => e.stopPropagation()}
-                  onkeydown={(e) => e.stopPropagation()}
-                >
+                <StopPropagation>
+                  <DownloadButton
+                    imageUrl={`/image/${image.attributes.fileName}`}
+                    fileName={image.attributes.fileName}
+                    size="sm"
+                    variant="overlay"
+                  />
+                </StopPropagation>
+                <StopPropagation>
                   <BookmarkButton
                     imageId={image.id}
                     imageOwnerId={image.owner.id}
@@ -191,7 +196,7 @@
                       });
                     }}
                   />
-                </span>
+                </StopPropagation>
               </div>
 
               <div
@@ -224,11 +229,7 @@
                   </div>
                 </div>
                 {#if userIsAdmin}
-                  <span
-                    role="presentation"
-                    onclick={(e) => e.stopPropagation()}
-                    onkeydown={(e) => e.stopPropagation()}
-                  >
+                  <StopPropagation>
                     <AdminImageDropdown
                       {image}
                       on={{
@@ -236,7 +237,7 @@
                         imageDelete: handleImageDelete,
                       }}
                     />
-                  </span>
+                  </StopPropagation>
                 {/if}
               </div>
 
