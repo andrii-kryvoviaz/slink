@@ -178,4 +178,5 @@ export const themeIcons: string[] = [
   'svg-spinners:ring-resize',
   'ph:frame-corners',
   'ph:arrows-out',
+  'ph:download-simple',
 ];

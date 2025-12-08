@@ -1,6 +1,7 @@
 <script lang="ts">
   import { CommentList } from '@slink/feature/Comment';
   import BookmarkButton from '@slink/feature/Image/BookmarkButton/BookmarkButton.svelte';
+  import DownloadButton from '@slink/feature/Image/DownloadButton/DownloadButton.svelte';
   import { Badge, FormattedDate } from '@slink/feature/Text';
   import { UserAvatar } from '@slink/feature/User';
   import * as Collapsible from '@slink/ui/components/collapsible';
@@ -76,15 +77,23 @@
           {image.metadata.width}×{image.metadata.height}
         </Badge>
       </div>
-      <BookmarkButton
-        imageId={image.id}
-        imageOwnerId={image.owner.id}
-        isBookmarked={image.isBookmarked}
-        bookmarkCount={image.bookmarkCount}
-        size="md"
-        tooltipVariant="dark"
-        onBookmarkChange={handleBookmarkChange}
-      />
+      <div class="flex items-center gap-2">
+        <DownloadButton
+          imageUrl={`/image/${image.attributes.fileName}`}
+          fileName={image.attributes.fileName}
+          size="md"
+          tooltipVariant="dark"
+        />
+        <BookmarkButton
+          imageId={image.id}
+          imageOwnerId={image.owner.id}
+          isBookmarked={image.isBookmarked}
+          bookmarkCount={image.bookmarkCount}
+          size="md"
+          tooltipVariant="dark"
+          onBookmarkChange={handleBookmarkChange}
+        />
+      </div>
     </div>
 
     {#if hasDescription}
