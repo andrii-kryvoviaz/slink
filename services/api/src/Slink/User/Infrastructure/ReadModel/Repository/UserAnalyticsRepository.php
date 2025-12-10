@@ -20,7 +20,7 @@ final class UserAnalyticsRepository extends AbstractRepository implements UserAn
    * @inheritDoc
    */
   public function getAnalytics(): array {
-    $result = $this->_em
+    $result = $this->getEntityManager()
       ->createQueryBuilder()
       ->from(UserView::class, 'user')
       ->select('user.status, COUNT(user.uuid) as count')

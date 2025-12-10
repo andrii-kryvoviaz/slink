@@ -24,7 +24,7 @@ class UserRoleRepository extends AbstractRepository implements UserRoleRepositor
    * @throws NonUniqueResultException
    */
   public function exists(string $role): bool {
-    $result = $this->_em->createQueryBuilder()
+    $result = $this->getEntityManager()->createQueryBuilder()
       ->from(UserRoleView::class, 'r')
       ->select('r.role')
       ->where('r.role = :role')

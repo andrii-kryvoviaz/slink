@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Shared\Infrastructure\Persistence\Doctrine\Migrations;
 
+use Doctrine\DBAL\Platforms\SQLitePlatform;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
@@ -21,7 +22,7 @@ final class Version20231112181251 extends AbstractMigration
     {
         $platform = $this->connection->getDatabasePlatform();
         
-        if($platform instanceof \Doctrine\DBAL\Platforms\SqlitePlatform) {
+        if($platform instanceof SQLitePlatform) {
             // this up() migration is auto-generated, please modify it to your needs
             $this->addSql('CREATE TABLE "image" (uuid CHAR(36) NOT NULL --(DC2Type:uuid)
             , file_name VARCHAR(255) NOT NULL, description VARCHAR(255) NOT NULL, is_public BOOLEAN NOT NULL, created_at DATETIME NOT NULL --(DC2Type:datetime_immutable)
@@ -41,7 +42,7 @@ final class Version20231112181251 extends AbstractMigration
     {
         $platform = $this->connection->getDatabasePlatform();
         
-        if($platform instanceof \Doctrine\DBAL\Platforms\SqlitePlatform) {
+        if($platform instanceof SQLitePlatform) {
             // this down() migration is auto-generated, please modify it to your needs
             $this->addSql('DROP TABLE "image"');
             $this->addSql('DROP TABLE "user"');

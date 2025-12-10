@@ -17,7 +17,7 @@ final class ShareRepository extends AbstractRepository implements ShareRepositor
 
   #[Override]
   public function add(ShareView $share): void {
-    $this->_em->persist($share);
+    $this->getEntityManager()->persist($share);
   }
 
   #[Override]

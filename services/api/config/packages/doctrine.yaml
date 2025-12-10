@@ -7,11 +7,9 @@ doctrine:
       event_store:
         url: '%env(resolve:ES_DATABASE_URL)%'
         profiling_collect_backtrace: '%kernel.debug%'
-        use_savepoints: true
       read_model:
         url: '%env(resolve:DATABASE_URL)%'
         profiling_collect_backtrace: '%kernel.debug%'
-        use_savepoints: true
     default_connection: read_model
 
     types:
@@ -25,8 +23,7 @@ doctrine:
     # either here or in the DATABASE_URL env var (see .env file)
     #server_version: '15'
   orm:
-    auto_generate_proxy_classes: true
-    enable_lazy_ghost_objects: true
+    enable_native_lazy_objects: true
     default_entity_manager: read_model
     controller_resolver:
       auto_mapping: false
@@ -39,7 +36,6 @@ doctrine:
             prefix: 'Slink\Shared\Infrastructure\Persistence\EventStore\Entity'
       read_model:
         connection: read_model
-        report_fields_where_declared: true
         validate_xml_mapping: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         mappings: '%doctrine_mappings%'
@@ -53,8 +49,6 @@ when@test:
 when@prod:
   doctrine:
     orm:
-      auto_generate_proxy_classes: false
-      proxy_dir: '%kernel.build_dir%/doctrine/orm/Proxies'
       query_cache_driver:
         type: pool
         pool: doctrine.system_cache_pool

@@ -16,6 +16,7 @@ final class JwtUserProvider implements PayloadAwareUserProviderInterface, ResetI
   private array $cache = [];
 
   /**
+   * @param non-empty-string $identifier
    * @param array<string, mixed> $payload
    */
   public function loadUserByIdentifier(string $identifier, array $payload = []): UserInterface
@@ -24,7 +25,7 @@ final class JwtUserProvider implements PayloadAwareUserProviderInterface, ResetI
   }
   
   /**
-   * @param string $identifier
+   * @param non-empty-string $identifier
    * @param array<string, mixed> $payload
    * @return UserInterface
    */

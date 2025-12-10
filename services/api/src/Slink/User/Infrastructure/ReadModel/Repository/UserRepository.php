@@ -40,7 +40,7 @@ final class UserRepository extends AbstractRepository implements
    */
   #[\Override]
   public function existsEmail(Email $email): ?UuidInterface {
-    $result = $this->_em
+    $result = $this->getEntityManager()
       ->createQueryBuilder()
       ->from(UserView::class, 'user')
       ->select('user.uuid')
@@ -57,7 +57,7 @@ final class UserRepository extends AbstractRepository implements
    */
   #[\Override]
   public function existsUsername(Username $username): ?UuidInterface {
-    $result = $this->_em
+    $result = $this->getEntityManager()
       ->createQueryBuilder()
       ->from(UserView::class, 'user')
       ->select('user.uuid')
@@ -74,7 +74,7 @@ final class UserRepository extends AbstractRepository implements
    */
   #[\Override]
   public function existsDisplayName(DisplayName $displayName): ?UuidInterface {
-    $result = $this->_em
+    $result = $this->getEntityManager()
       ->createQueryBuilder()
       ->from(UserView::class, 'user')
       ->select('user.uuid')
@@ -91,7 +91,7 @@ final class UserRepository extends AbstractRepository implements
    */
   #[\Override]
   public function existsByRefreshToken(HashedRefreshToken $hashedRefreshToken): ?UuidInterface {
-    $result = $this->_em
+    $result = $this->getEntityManager()
       ->createQueryBuilder()
       ->from(UserView::class, 'user')
       ->select('user.uuid')
@@ -111,7 +111,7 @@ final class UserRepository extends AbstractRepository implements
    * @throws NotFoundException
    */
   public function one(ID $id): UserView {
-    $qb = $this->_em
+    $qb = $this->getEntityManager()
       ->createQueryBuilder()
       ->from(UserView::class, 'user')
       ->select('user')
@@ -128,7 +128,7 @@ final class UserRepository extends AbstractRepository implements
    * @throws NotFoundException
    */
   public function oneByEmail(Email $email): UserView {
-    $qb = $this->_em
+    $qb = $this->getEntityManager()
       ->createQueryBuilder()
       ->from(UserView::class, 'user')
       ->select('user')
@@ -145,7 +145,7 @@ final class UserRepository extends AbstractRepository implements
    * @throws NotFoundException
    */
   public function oneByUsername(Username $username): UserView {
-    $qb = $this->_em
+    $qb = $this->getEntityManager()
       ->createQueryBuilder()
       ->from(UserView::class, 'user')
       ->select('user')
@@ -161,7 +161,7 @@ final class UserRepository extends AbstractRepository implements
    * @return Paginator<UserView>
    */
   public function getUserList(int $page, UserListFilter $filter): Paginator {
-    $qb = $this->_em
+    $qb = $this->getEntityManager()
       ->createQueryBuilder()
       ->from(UserView::class, 'user')
       ->select('user')
@@ -185,8 +185,8 @@ final class UserRepository extends AbstractRepository implements
    * @return void
    */
   public function save(UserView $userView): void {
-    $this->_em->persist($userView);
-    $this->_em->flush();
+    $this->getEntityManager()->persist($userView);
+    $this->getEntityManager()->flush();
   }
   
   /**
@@ -196,7 +196,7 @@ final class UserRepository extends AbstractRepository implements
    * @throws NotFoundException
    */
   public function getCredentialsByEmail(Email $email): array {
-    $qb = $this->_em
+    $qb = $this->getEntityManager()
       ->createQueryBuilder()
       ->from(UserView::class, 'user')
       ->select('

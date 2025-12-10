@@ -27,7 +27,7 @@ final class HashedPasswordType extends StringType
         }
 
         if (!$value instanceof HashedPassword) {
-            throw ConversionException::conversionFailedInvalidType($value, $this->getName(), ['null', HashedPassword::class]);
+            throw new \InvalidArgumentException(sprintf('Could not convert PHP value of type %s to type hashed_password. Expected one of the following types: null, %s', get_debug_type($value), HashedPassword::class));
         }
 
         return $value->toString();
@@ -48,7 +48,7 @@ final class HashedPasswordType extends StringType
         try {
             $hashedPassword = HashedPassword::fromHash($value);
         } catch (Throwable) {
-            throw ConversionException::conversionFailedFormat($value, $this->getName(), $platform->getDateTimeFormatString());
+            throw new \InvalidArgumentException(sprintf('Could not convert database value "%s" to Doctrine Type hashed_password', $value));
         }
 
         return $hashedPassword;

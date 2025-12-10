@@ -7,6 +7,7 @@ namespace Slink\Shared\Infrastructure\Security\Voter;
 use Slink\Settings\Application\Service\SettingsService;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 final class GuestAccessVoter extends Voter {
@@ -39,7 +40,7 @@ final class GuestAccessVoter extends Voter {
    * @param TokenInterface $token
    * @return bool
    */
-  protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool {
+  protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool {
     if ($token->getUser() !== null) {
       return true;
     }

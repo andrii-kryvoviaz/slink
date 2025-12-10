@@ -43,7 +43,7 @@ class DateTimeType extends DateTimeImmutableType {
               ->format($platform->getDateTimeFormatString());
         }
 
-        throw ConversionException::conversionFailedInvalidType($value, $this->getName(), ['null', DateTime::class]);
+        throw new \InvalidArgumentException(sprintf('Could not convert PHP value of type %s to type %s. Expected one of the following types: null, %s', get_debug_type($value), 'datetime_immutable', DateTime::class));
     }
   
   /**
@@ -65,7 +65,7 @@ class DateTimeType extends DateTimeImmutableType {
         try {
             $dateTime = DateTime::create($value, new \DateTimeZone('UTC'));
         } catch (DateTimeException) {
-            throw ConversionException::conversionFailedFormat($value, $this->getName(), $platform->getDateTimeFormatString());
+            throw new \InvalidArgumentException(sprintf('Could not convert database value "%s" to Doctrine Type datetime_immutable. Expected format: %s', $value, $platform->getDateTimeFormatString()));
         }
         
         return $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));

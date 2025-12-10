@@ -20,12 +20,12 @@ final class NotificationRepository extends AbstractRepository implements Notific
 
   #[Override]
   public function add(NotificationView $notification): void {
-    $this->_em->persist($notification);
+    $this->getEntityManager()->persist($notification);
   }
 
   #[Override]
   public function oneById(string $id): NotificationView {
-    $qb = $this->_em
+    $qb = $this->getEntityManager()
       ->createQueryBuilder()
       ->from(NotificationView::class, 'n')
       ->select('n')

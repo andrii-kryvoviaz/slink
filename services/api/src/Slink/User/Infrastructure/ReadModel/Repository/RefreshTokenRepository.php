@@ -16,15 +16,15 @@ final class RefreshTokenRepository extends AbstractRepository implements Refresh
   
   #[\Override]
   public function add(RefreshTokenView $refreshTokenView): void {
-    $this->_em->persist($refreshTokenView);
+    $this->getEntityManager()->persist($refreshTokenView);
   }
   
   #[\Override]
   public function remove(string $hashedRefreshToken): void {
-    $record = $this->_em->find(RefreshTokenView::class, $hashedRefreshToken);
+    $record = $this->getEntityManager()->find(RefreshTokenView::class, $hashedRefreshToken);
     
     if ($record) {
-      $this->_em->remove($record);
+      $this->getEntityManager()->remove($record);
     }
   }
 }

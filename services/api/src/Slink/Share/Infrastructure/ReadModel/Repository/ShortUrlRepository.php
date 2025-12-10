@@ -17,7 +17,7 @@ final class ShortUrlRepository extends AbstractRepository implements ShortUrlRep
 
   #[Override]
   public function add(ShortUrlView $shortUrl): void {
-    $this->_em->persist($shortUrl);
+    $this->getEntityManager()->persist($shortUrl);
   }
 
   #[Override]

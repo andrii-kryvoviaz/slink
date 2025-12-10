@@ -24,12 +24,12 @@ final class BookmarkRepository extends AbstractRepository implements BookmarkRep
 
   #[Override]
   public function add(BookmarkView $bookmark): void {
-    $this->_em->persist($bookmark);
+    $this->getEntityManager()->persist($bookmark);
   }
 
   #[Override]
   public function remove(BookmarkView $bookmark): void {
-    $this->_em->remove($bookmark);
+    $this->getEntityManager()->remove($bookmark);
   }
 
   /**

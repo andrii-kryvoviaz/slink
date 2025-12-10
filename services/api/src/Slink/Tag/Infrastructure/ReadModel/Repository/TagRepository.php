@@ -23,11 +23,11 @@ final class TagRepository extends AbstractRepository implements TagRepositoryInt
   }
 
   public function add(TagView $tag): void {
-    $this->_em->persist($tag);
+    $this->getEntityManager()->persist($tag);
   }
 
   public function remove(TagView $tag): void {
-    $this->_em->remove($tag);
+    $this->getEntityManager()->remove($tag);
   }
 
   /**

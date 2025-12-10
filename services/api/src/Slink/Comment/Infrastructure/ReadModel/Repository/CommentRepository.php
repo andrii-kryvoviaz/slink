@@ -20,7 +20,7 @@ final class CommentRepository extends AbstractRepository implements CommentRepos
 
   #[Override]
   public function add(CommentView $comment): void {
-    $this->_em->persist($comment);
+    $this->getEntityManager()->persist($comment);
   }
 
   #[Override]

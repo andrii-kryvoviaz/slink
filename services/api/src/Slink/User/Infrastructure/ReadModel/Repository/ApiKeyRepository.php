@@ -16,7 +16,7 @@ class ApiKeyRepository extends ServiceEntityRepository implements ApiKeyReposito
   }
 
   public function save(ApiKeyView $apiKey): void {
-    $this->_em->persist($apiKey);
+    $this->getEntityManager()->persist($apiKey);
   }
 
   public function findByKey(string $key): ?ApiKeyView {
@@ -43,6 +43,6 @@ class ApiKeyRepository extends ServiceEntityRepository implements ApiKeyReposito
   }
 
   public function delete(ApiKeyView $apiKey): void {
-    $this->_em->remove($apiKey);
+    $this->getEntityManager()->remove($apiKey);
   }
 }

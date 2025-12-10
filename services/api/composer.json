@@ -9,43 +9,43 @@
         "ext-imagick": "*",
         "ext-vips": "*",
         "aws/aws-sdk-php": "^3.336",
-        "doctrine/doctrine-bundle": "^2.13",
+        "doctrine/doctrine-bundle": "^3.1",
         "doctrine/doctrine-migrations-bundle": "^3.2",
-        "doctrine/orm": "^2.16",
+        "doctrine/orm": "^3.5",
         "enshrined/svg-sanitize": "^0.22.0",
         "eventsauce/eventsauce": "^3.6",
         "eventsauce/message-repository-for-doctrine": "^1.1",
         "icewind/smb": "^3.6",
         "jcupitt/vips": "^2.5",
-        "lexik/jwt-authentication-bundle": "3.1.0",
+        "lexik/jwt-authentication-bundle": "3.x-dev as 3.2.0",
         "nelmio/cors-bundle": "^2.5",
         "predis/predis": "^2.3",
         "ramsey/uuid": "^4.7",
         "ramsey/uuid-doctrine": "^2.0",
-        "symfony/cache": "^7.4",
-        "symfony/console": "^7.4",
-        "symfony/doctrine-messenger": "^7.4",
-        "symfony/dotenv": "^7.4",
+        "symfony/cache": "^8.0",
+        "symfony/console": "^8.0",
+        "symfony/doctrine-messenger": "^8.0",
+        "symfony/dotenv": "^8.0",
         "symfony/flex": "^2",
-        "symfony/framework-bundle": "^7.4",
+        "symfony/framework-bundle": "^8.0",
         "symfony/mercure-bundle": "^0.4.2",
-        "symfony/messenger": "^7.4",
-        "symfony/mime": "^7.4",
-        "symfony/monolog-bundle": "^3.10",
-        "symfony/property-access": "^7.4",
-        "symfony/property-info": "^7.4",
-        "symfony/runtime": "^7.4",
-        "symfony/serializer": "^7.4",
-        "symfony/validator": "^7.4",
-        "symfony/yaml": "^7.4"
+        "symfony/messenger": "^8.0",
+        "symfony/mime": "^8.0",
+        "symfony/monolog-bundle": "^4.0",
+        "symfony/property-access": "^8.0",
+        "symfony/property-info": "^8.0",
+        "symfony/runtime": "^8.0",
+        "symfony/serializer": "^8.0",
+        "symfony/validator": "^8.0",
+        "symfony/yaml": "^8.0"
     },
     "require-dev": {
         "dg/bypass-finals": "dev-master",
         "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^12.2.5",
-        "symfony/phpunit-bridge": "^7.4",
-        "symfony/stopwatch": "^7.4",
-        "symfony/web-profiler-bundle": "^7.4"
+        "symfony/phpunit-bridge": "^8.0",
+        "symfony/stopwatch": "^8.0",
+        "symfony/web-profiler-bundle": "^8.0"
     },
     "config": {
         "platform": {
@@ -108,7 +108,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "7.4.*"
+            "require": "8.0.*"
         }
     }
 }

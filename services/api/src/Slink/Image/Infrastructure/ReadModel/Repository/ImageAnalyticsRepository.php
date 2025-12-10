@@ -80,7 +80,7 @@ final class ImageAnalyticsRepository extends AbstractRepository implements Image
       FROM analytics_data;
     SQL;
     
-    $query = $this->_em->getConnection()->prepare($sql);
+    $query = $this->getEntityManager()->getConnection()->prepare($sql);
     $query->bindValue('start_date', $dateStart->format('Y-m-d H:i:s'));
     $query->bindValue('end_date', $dateEnd->format('Y-m-d H:i:s'));
     $query->bindValue('interval', $interval);

@@ -50,10 +50,7 @@ final class FileRequestValueResolver implements ValueResolverInterface, EventSub
   ) {
   }
   
-  /**
-   * @return string[]
-   */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     return [
       KernelEvents::CONTROLLER_ARGUMENTS => 'onKernelControllerArguments',
     ];

@@ -26,7 +26,7 @@ final class EmailType extends StringType {
         }
 
         if (!$value instanceof Email) {
-            throw ConversionException::conversionFailedInvalidType($value, $this->getName(), ['null', Email::class]);
+            throw new \InvalidArgumentException(sprintf('Could not convert PHP value of type %s to type email. Expected one of the following types: null, %s', get_debug_type($value), Email::class));
         }
 
         return $value->toString();
@@ -47,7 +47,7 @@ final class EmailType extends StringType {
         try {
             $email = Email::fromString($value);
         } catch (Throwable) {
-            throw ConversionException::conversionFailedFormat($value, $this->getName(), 'string');
+            throw new \InvalidArgumentException(sprintf('Could not convert database value "%s" to Doctrine Type email. Expected format: string', $value));
         }
 
         return $email;

@@ -25,7 +25,7 @@ final class UsernameType extends StringType {
     }
     
     if (!$value instanceof Username) {
-      throw ConversionException::conversionFailedInvalidType($value, $this->getName(), ['null', Username::class]);
+      throw new \InvalidArgumentException(sprintf('Could not convert PHP value of type %s to type username. Expected one of the following types: null, %s', get_debug_type($value), Username::class));
     }
     
     return $value->toString();
@@ -50,7 +50,7 @@ final class UsernameType extends StringType {
     try {
       $username = Username::fromString($value);
     } catch (\Throwable) {
-      throw ConversionException::conversionFailedFormat($value, $this->getName(), 'string');
+      throw new \InvalidArgumentException(sprintf('Could not convert database value "%s" to Doctrine Type username. Expected format: string', $value));
     }
     
     return $username;

@@ -28,7 +28,7 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
    * @return void
    */
   public function add(ImageView $image): void {
-    $this->_em->persist($image);
+    $this->getEntityManager()->persist($image);
   }
 
   /**
@@ -38,7 +38,7 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
    */
   #[Override]
   public function geImageList(int $page, ImageListFilter $imageListFilter): Paginator {
-    $qb = $this->_em
+    $qb = $this->getEntityManager()
       ->createQueryBuilder()
       ->from(ImageView::class, 'image')
       ->leftJoin('image.user', 'user')
@@ -104,7 +104,7 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
       foreach ($tagFilterData->getTagPaths() as $index => $tagPath) {
         $qb->andWhere(
           $qb->expr()->exists(
-            $this->_em->createQueryBuilder()
+            $this->getEntityManager()->createQueryBuilder()
               ->select('1')
               ->from(TagView::class, "subTag{$index}")
               ->where("subTag{$index}.path = :tagPath{$index} OR subTag{$index}.path LIKE :tagPathLike{$index}")
@@ -137,7 +137,7 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
    * @throws NotFoundException
    */
   public function oneByFileName(string $fileName): ImageView {
-    $qb = $this->_em
+    $qb = $this->getEntityManager()
       ->createQueryBuilder()
       ->from(ImageView::class, 'image')
       ->select('
@@ -154,7 +154,7 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
    * @throws NonUniqueResultException
    */
   public function oneById(string $id, ?string $extension = null): ImageView {
-    $qb = $this->_em
+    $qb = $this->getEntityManager()
       ->createQueryBuilder()
       ->from(ImageView::class, 'image')
       ->select('
@@ -171,7 +171,7 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
    * @return void
    */
   public function remove(ImageView $image): void {
-    $this->_em->remove($image);
+    $this->getEntityManager()->remove($image);
   }
 
   /**
@@ -180,7 +180,7 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
    * @return ImageView|null
    */
   public function findBySha1Hash(string $sha1Hash, ?ID $userId = null): ?ImageView {
-    $qb = $this->_em
+    $qb = $this->getEntityManager()
       ->createQueryBuilder()
       ->from(ImageView::class, 'image')
       ->select('image')

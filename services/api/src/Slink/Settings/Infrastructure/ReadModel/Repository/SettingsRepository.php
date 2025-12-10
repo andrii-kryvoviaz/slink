@@ -37,7 +37,7 @@ final class SettingsRepository extends AbstractRepository implements SettingsRep
       $setting->category = $category;
     }
     
-    $this->_em->persist($setting);
+    $this->getEntityManager()->persist($setting);
   }
   
   /**
