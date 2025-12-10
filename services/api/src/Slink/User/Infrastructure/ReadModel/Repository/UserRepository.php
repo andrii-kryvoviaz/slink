@@ -186,6 +186,7 @@ final class UserRepository extends AbstractRepository implements
    */
   public function save(UserView $userView): void {
     $this->_em->persist($userView);
+    $this->_em->flush();
   }
   
   /**

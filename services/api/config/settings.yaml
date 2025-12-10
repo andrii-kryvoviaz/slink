@@ -16,7 +16,7 @@ parameters:
         key: '%env(string:default::AMAZON_S3_ACCESS_KEY_ID)%'
         secret: '%env(string:default::AMAZON_S3_SECRET_ACCESS_KEY)%'
   user:
-    allowRegistration: true
+    allowRegistration: '%env(bool:USER_ALLOW_REGISTRATION)%'
     approvalRequired: '%env(bool:USER_APPROVAL_REQUIRED)%'
     password:
       minLength: '%env(int:USER_PASSWORD_MIN_LENGTH)%'
