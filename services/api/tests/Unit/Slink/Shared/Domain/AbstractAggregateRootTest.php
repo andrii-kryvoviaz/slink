@@ -6,7 +6,6 @@ namespace Unit\Slink\Shared\Domain;
 
 use EventSauce\EventSourcing\AggregateRoot;
 use EventSauce\EventSourcing\AggregateRootId;
-use EventSauce\EventSourcing\AggregateRootWithAggregates;
 use EventSauce\EventSourcing\EventRecorder;
 use EventSauce\EventSourcing\EventSourcedAggregate;
 use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
@@ -16,6 +15,7 @@ use ReflectionClass;
 use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\AbstractEventSourcedAggregate;
 use Slink\Shared\Domain\ValueObject\ID;
+use Slink\Shared\Infrastructure\EventSourcing\AggregateRootWithAggregates;
 
 final class AbstractAggregateRootTest extends TestCase {
 

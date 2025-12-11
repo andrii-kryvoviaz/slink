@@ -8,9 +8,9 @@ use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use EventSauce\EventSourcing\Snapshotting\SnapshottingBehaviour;
 use EventSauce\EventSourcing\AggregateRoot;
 use EventSauce\EventSourcing\AggregateRootId;
-use EventSauce\EventSourcing\AggregateRootWithAggregates;
 use EventSauce\EventSourcing\EventSourcedAggregate;
 use Slink\Shared\Domain\ValueObject\ID;
+use Slink\Shared\Infrastructure\EventSourcing\AggregateRootWithAggregates;
 
 /**
  * @implements AggregateRoot<ID>
