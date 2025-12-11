@@ -14,7 +14,7 @@ FROM node:${NODE_VERSION}-alpine AS node
 FROM dunglas/mercure:v${MERCURE_VERSION} AS mercure
 
 ### NodeJS build ###
-FROM node:${NODE_VERSION}-alpine AS node-dependencies
+FROM node:${NODE_VERSION}-alpine AS build-client
 WORKDIR /client
 
 COPY services/client/package.json services/client/yarn.lock ./
@@ -28,6 +28,9 @@ COPY services/client/svelte.config.js services/client/tsconfig.json services/cli
 
 RUN yarn svelte-kit sync && \
     NODE_OPTIONS="--max-old-space-size=2048 --expose-gc" yarn build
+
+RUN rm -rf node_modules && \
+    yarn install --frozen-lockfile --non-interactive --production --network-timeout 900000
 ### End of NodeJS build ###
 
 ### PHP source ###
@@ -52,7 +55,13 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 COPY services/api/composer.json services/api/composer.lock ./
 
-RUN composer install --ignore-platform-reqs --no-interaction --no-scripts --prefer-dist
+RUN composer install \
+    --ignore-platform-reqs \
+    --no-dev \
+    --no-interaction \
+    --prefer-dist \
+    --optimize-autoloader \
+    --no-scripts
 ### End of PHP vendor ###
 
 ### PHP extensions build ###
@@ -82,14 +91,14 @@ RUN apk add --no-cache \
     libffi-dev
 
 RUN docker-php-ext-install curl intl mbstring exif ffi
-RUN pecl install imagick redis smbclient vips
+RUN pecl install redis smbclient vips
 RUN git clone https://github.com/swoole/swoole-src.git && \
     cd swoole-src && \
     phpize && \
     ./configure --enable-openssl --enable-http2 --enable-swoole-curl && \
     make && make install && \
     cd .. && rm -rf swoole-src
-RUN docker-php-ext-enable imagick redis smbclient vips swoole
+RUN docker-php-ext-enable redis smbclient vips swoole
 ### End of PHP extensions build ###
 
 ### Base build stage ###
@@ -102,22 +111,9 @@ RUN apk update && apk upgrade &&\
     libcurl \
     icu-libs \
     libsmbclient \
-    imagemagick \
     vips \
-    vips-tools \
-    libjpeg-turbo \
     libheif \
-    libpng \
-    libwebp \
-    tiff \
-    freetype \
-    python3 \
-    py3-pip
-
-RUN apk add --no-cache --virtual .build-deps python3-dev && \
-    pip3 install --break-system-packages supervisor && \
-    apk del .build-deps
-
+    supervisor
 
 COPY --from=php-extensions /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
 COPY --from=php-extensions /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
@@ -182,18 +178,16 @@ RUN echo "memory_limit=${PHP_MEMORY_LIMIT}" > /usr/local/etc/php/conf.d/memory-l
 
 ### Development image ###
 FROM base AS dev
-# PHP 8.5 Xdebug is not yet available
-# Uncomment the following lines when it is released
-# RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS autoconf g++ make linux-headers && \
-#     pecl install xdebug && \
-#     docker-php-ext-enable xdebug && \
-#     apk del .build-deps
+RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS autoconf g++ make linux-headers && \
+    pecl install xdebug && \
+    docker-php-ext-enable xdebug && \
+    apk del .build-deps
 
-# RUN echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-#     echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-#     echo "xdebug.log=/dev/null" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-#     echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-#     echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
+    echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
+    echo "xdebug.log=/dev/null" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
+    echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
+    echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 COPY --from=ghcr.io/symfony-cli/symfony-cli:latest /usr/local/bin/symfony /usr/local/bin/symfony
 
@@ -225,9 +219,9 @@ RUN addgroup -g 1000 slink && \
 
 COPY --from=vendor --chown=slink:slink /dependencies/vendor ./api/vendor
 COPY --from=source --chown=slink:slink /source ./api
-COPY --from=node-dependencies --chown=slink:slink /client/build ./client/svelte-kit
-COPY --from=node-dependencies --chown=slink:slink /client/package.json ./client/svelte-kit/package.json
-COPY --from=node-dependencies --chown=slink:slink /client/node_modules ./client/svelte-kit/node_modules
+COPY --from=build-client --chown=slink:slink /client/build ./client/svelte-kit
+COPY --from=build-client --chown=slink:slink /client/package.json ./client/svelte-kit/package.json
+COPY --from=build-client --chown=slink:slink /client/node_modules ./client/svelte-kit/node_modules
 COPY --chown=slink:slink services/api/.env.example ./api/.env
 
 RUN mkdir -p /app/var/data && \
