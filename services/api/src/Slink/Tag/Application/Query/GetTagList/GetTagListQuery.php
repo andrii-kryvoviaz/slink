@@ -18,10 +18,10 @@ final readonly class GetTagListQuery implements QueryInterface {
     #[Assert\Range(min: 1, max: 100)]
     private ?int    $limit = 50,
 
-    #[Assert\Choice(['name', 'path', 'createdAt', 'updatedAt'])]
+    #[Assert\Choice(choices: ['name', 'path', 'createdAt', 'updatedAt'])]
     private ?string $orderBy = 'name',
 
-    #[Assert\Choice(['asc', 'desc'])]
+    #[Assert\Choice(choices: ['asc', 'desc'])]
     private ?string $order = 'asc',
 
     #[Assert\Range(min: 1)]
