@@ -6,7 +6,6 @@
         "php": ">=8.5",
         "ext-ffi": "*",
         "ext-gd": "*",
-        "ext-imagick": "*",
         "ext-vips": "*",
         "aws/aws-sdk-php": "^3.336",
         "doctrine/doctrine-bundle": "^3.1",
@@ -36,6 +35,7 @@
         "symfony/property-info": "^8.0",
         "symfony/runtime": "^8.0",
         "symfony/serializer": "^8.0",
+        "symfony/twig-bundle": "^8.0",
         "symfony/validator": "^8.0",
         "symfony/yaml": "^8.0"
     },
@@ -51,7 +51,6 @@
         "platform": {
             "php": "8.5",
             "ext-ffi": "8.5.0",
-            "ext-imagick": "3.7.0",
             "ext-vips": "1.0.13"
         },
         "allow-plugins": {
