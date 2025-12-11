@@ -103,7 +103,7 @@ final class CreateAdminUserHandlerTest extends TestCase {
     $uniqueDisplayNameSpec->method('isUnique')->willReturn(true);
 
     $userCreationContext = new UserCreationContext($uniqueEmailSpec, $uniqueUsernameSpec, $uniqueDisplayNameSpec);
-    $adminUserFactory = new AdminUserFactory($userCreationContext, $username, $email, $password);
+    $adminUserFactory = new AdminUserFactory($userCreationContext, $userRepository, $username, $email, $password);
 
     $roleExistSpec = $this->createMock(UserRoleExistSpecificationInterface::class);
     $roleExistSpec->method('isSatisfiedBy')->willReturn(true);

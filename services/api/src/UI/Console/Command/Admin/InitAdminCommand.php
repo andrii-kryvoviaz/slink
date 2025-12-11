@@ -37,6 +37,10 @@ final class InitAdminCommand extends Command {
       return Command::SUCCESS;
     }
 
+    if ($this->adminUserFactory->adminAlreadyExists()) {
+      return Command::SUCCESS;
+    }
+
     $io->info('Creating admin user...');
 
     try {

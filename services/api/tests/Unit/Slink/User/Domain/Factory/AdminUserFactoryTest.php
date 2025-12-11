@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Slink\User\Domain\Context\UserCreationContext;
 use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\Factory\AdminUserFactory;
+use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
 use Slink\User\Domain\Specification\UniqueDisplayNameSpecificationInterface;
 use Slink\User\Domain\Specification\UniqueEmailSpecificationInterface;
 use Slink\User\Domain\Specification\UniqueUsernameSpecificationInterface;
@@ -100,6 +101,9 @@ final class AdminUserFactoryTest extends TestCase {
 
     $userCreationContext = new UserCreationContext($uniqueEmailSpec, $uniqueUsernameSpec, $uniqueDisplayNameSpec);
 
-    return new AdminUserFactory($userCreationContext, $username, $email, $password);
+    $userRepository = $this->createMock(UserStoreRepositoryInterface::class);
+    $userRepository->method('getByUsername')->willReturn(null);
+
+    return new AdminUserFactory($userCreationContext, $userRepository, $username, $email, $password);
   }
 }

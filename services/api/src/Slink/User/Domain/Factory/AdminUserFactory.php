@@ -7,6 +7,7 @@ namespace Slink\User\Domain\Factory;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Context\UserCreationContext;
 use Slink\User\Domain\Enum\UserStatus;
+use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
 use Slink\User\Domain\User;
 use Slink\User\Domain\ValueObject\Auth\Credentials;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;
@@ -18,6 +19,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 final readonly class AdminUserFactory {
   public function __construct(
     private UserCreationContext $userCreationContext,
+    private UserStoreRepositoryInterface $userRepository,
 
     #[\SensitiveParameter]
     #[Autowire(env: 'ADMIN_USERNAME')]
@@ -65,5 +67,15 @@ final readonly class AdminUserFactory {
 
   public function isMissingPassword(): bool {
     return !empty($this->adminEmail) && empty($this->adminPassword);
+  }
+
+  public function adminAlreadyExists(): bool {
+    $byUsername = $this->userRepository->getByUsername(Username::fromString($this->adminUsername));
+    if ($byUsername !== null) {
+      return true;
+    }
+
+    $byEmail = $this->userRepository->getByUsername(Email::fromString($this->adminEmail));
+    return $byEmail !== null;
   }
 }
