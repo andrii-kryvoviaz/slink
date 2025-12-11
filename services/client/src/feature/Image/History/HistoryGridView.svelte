@@ -4,6 +4,7 @@
     ImageActionBar,
     ImagePlaceholder,
   } from '@slink/feature/Image';
+  import { calculateHistoryCardWeight } from '@slink/feature/Image/utils/calculateHistoryCardWeight';
   import { Masonry } from '@slink/feature/Layout';
   import { ImageTagList } from '@slink/feature/Tag';
   import { FormattedDate } from '@slink/feature/Text';
@@ -38,6 +39,7 @@
     lg: 3,
     xl: 4,
   }}
+  getItemWeight={calculateHistoryCardWeight}
 >
   {#snippet itemTemplate(item)}
     <article

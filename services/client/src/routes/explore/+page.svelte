@@ -7,6 +7,7 @@
     PostViewer,
   } from '@slink/feature/Image';
   import BookmarkButton from '@slink/feature/Image/BookmarkButton/BookmarkButton.svelte';
+  import { calculateImageCardWeight } from '@slink/feature/Image/utils/calculateImageCardWeight';
   import { Masonry } from '@slink/feature/Layout';
   import { EmptyState } from '@slink/feature/Layout';
   import { ExploreSkeleton } from '@slink/feature/Layout';
@@ -123,7 +124,11 @@
         {/if}
       </div>
     {:else if publicFeedState.items.length > 0}
-      <Masonry items={publicFeedState.items} class="gap-4">
+      <Masonry
+        items={publicFeedState.items}
+        class="gap-4"
+        getItemWeight={calculateImageCardWeight}
+      >
         {#snippet itemTemplate(image)}
           {@const index = publicFeedState.items.findIndex(
             (i) => i.id === image.id,

@@ -16,6 +16,7 @@
     gaps?: BreakpointGap;
     class?: string;
     itemTemplate: Snippet<[MasonryItem]>;
+    getItemWeight?: (item: MasonryItem) => number;
   }
 
   const breakpoints = ['xs', 'sm', 'md', 'lg', 'xl'] as Breakpoint[];
@@ -31,6 +32,7 @@
       xs: 5,
     },
     itemTemplate,
+    getItemWeight = () => 1,
     ...props
   }: Props = $props();
 
@@ -86,16 +88,38 @@
     twMerge('masonry-column h-max columns-1 flex flex-col', gapClasses),
   );
 
-  const distributeItems = (items: MasonryItem[], n: number) => {
-    return items.reduce((acc, item, i) => {
-      const index = i % n;
-      acc[index] = [...(acc[index] || []), item];
-      return acc;
-    }, [] as MasonryItem[][]);
+  const findMinIndex = (weights: number[]): number => {
+    let minIdx = 0;
+    for (let i = 1; i < weights.length; i++) {
+      if (weights[i] < weights[minIdx]) {
+        minIdx = i;
+      }
+    }
+    return minIdx;
+  };
+
+  const distributeItems = (
+    items: MasonryItem[],
+    columnCount: number,
+    weightFn: (item: MasonryItem) => number,
+  ): MasonryItem[][] => {
+    const columns: MasonryItem[][] = Array.from(
+      { length: columnCount },
+      () => [],
+    );
+    const columnWeights = new Array(columnCount).fill(0);
+
+    for (const item of items) {
+      const minIndex = findMinIndex(columnWeights);
+      columns[minIndex].push(item);
+      columnWeights[minIndex] += weightFn(item);
+    }
+
+    return columns;
   };
 
   let sortedItems: MasonryItem[][] = $derived(
-    distributeItems(items, currentColumnCount),
+    distributeItems(items, currentColumnCount, getItemWeight),
   );
 </script>
 
