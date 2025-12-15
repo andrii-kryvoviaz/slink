@@ -1,6 +1,15 @@
 import type { Tag } from '@slink/api/Resources/TagResource';
 import type { ListingMetadata } from '@slink/api/Response/Common/ListingMetadata';
 
+export type LicenseInfo = {
+  id: string;
+  title: string;
+  name: string;
+  description: string;
+  url: string | null;
+  isCreativeCommons: boolean;
+};
+
 export type ImageListingItem = {
   id: string;
   owner: {
@@ -24,6 +33,7 @@ export type ImageListingItem = {
     width: number;
     height: number;
   };
+  license: LicenseInfo;
   bookmarkCount: number;
   isBookmarked?: boolean;
   tags?: Tag[];

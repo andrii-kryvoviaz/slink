@@ -7,7 +7,9 @@ namespace Slink\Image\Domain;
 use EventSauce\EventSourcing\AggregateRootId;
 use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use Slink\Image\Domain\Context\ImageCreationContext;
+use Slink\Image\Domain\Enum\License;
 use Slink\Image\Domain\Event\ImageAttributesWasUpdated;
+use Slink\Image\Domain\Event\ImageLicenseWasUpdated;
 use Slink\Image\Domain\Event\ImageMetadataWasUpdated;
 use Slink\Image\Domain\Event\ImageWasCreated;
 use Slink\Image\Domain\Event\ImageWasDeleted;
@@ -153,8 +155,9 @@ final class Image extends AbstractAggregateRoot {
     ?ID                   $userId,
     ImageAttributes       $attributes,
     ImageMetadata         $metadata,
+    ?ImageCreationContext $context = null,
     ?ImageFile            $imageFile = null,
-    ?ImageCreationContext $context = null
+    ?License              $license = null
   ): self {
     if ($imageFile && $context) {
       $context->duplicateSpecification->ensureNoDuplicate($imageFile, $userId);
@@ -162,7 +165,7 @@ final class Image extends AbstractAggregateRoot {
 
     $image = new self($id);
 
-    $image->recordThat(new ImageWasCreated($id, $userId, $attributes, $metadata));
+    $image->recordThat(new ImageWasCreated($id, $userId, $attributes, $metadata, $license));
 
     return $image;
   }
@@ -195,6 +198,10 @@ final class Image extends AbstractAggregateRoot {
    */
   public function updateAttributes(ImageAttributes $attributes): void {
     $this->recordThat(new ImageAttributesWasUpdated($this->aggregateRootId(), $attributes));
+  }
+
+  public function updateLicense(?License $license): void {
+    $this->recordThat(new ImageLicenseWasUpdated($this->aggregateRootId(), $license));
   }
 
   /**

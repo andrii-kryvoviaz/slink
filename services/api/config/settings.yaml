@@ -27,6 +27,7 @@ parameters:
     allowOnlyPublicImages: '%env(bool:IMAGE_ALLOW_ONLY_PUBLIC_IMAGES)%'
     compressionQuality: '%env(int:IMAGE_COMPRESSION_QUALITY)%'
     enableDeduplication: '%env(bool:IMAGE_ENABLE_DEDUPLICATION)%'
+    enableLicensing: '%env(bool:IMAGE_ENABLE_LICENSING)%'
   access:
     allowGuestUploads: '%env(bool:IMAGE_ALLOW_GUEST_UPLOADS)%'
     allowUnauthenticatedAccess: '%env(bool:USER_ALLOW_UNAUTHENTICATED_ACCESS)%'

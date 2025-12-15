@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Image\Infrastructure\Serializer;
 
+use Slink\Image\Domain\Enum\License;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
@@ -41,6 +42,7 @@ final class ImageNormalizer implements NormalizerInterface, NormalizerAwareInter
         'width' => $metadata->getWidth(),
         'height' => $metadata->getHeight(),
       ] : null,
+      'license' => ($data->getLicense() ?? License::AllRightsReserved)->toArray(),
       'bookmarkCount' => $data->getBookmarkCount(),
       'isBookmarked' => $context['isBookmarked'] ?? false,
       'tags' => $this->normalizer->normalize($data->getTags()->toArray(), $format, $context),

@@ -14,7 +14,7 @@ import type { PageServerLoad } from './$types';
 export const load: PageServerLoad = async ({ locals, parent }) => {
   await parent();
 
-  const { user, settings } = locals;
+  const { user } = locals;
 
   if (!user) {
     redirect(302, '/profile/login');
@@ -22,7 +22,6 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
 
   return {
     user,
-    settings,
   };
 };
 

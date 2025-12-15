@@ -21,7 +21,7 @@
 
   let { data, form }: Props = $props();
 
-  const { user } = data;
+  let user = $derived(data.user);
 
   let isPasswordFormLoading = useWritable(
     'changePasswordFormLoadingState',

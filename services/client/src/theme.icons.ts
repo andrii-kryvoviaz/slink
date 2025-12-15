@@ -178,4 +178,6 @@ export const themeIcons: string[] = [
   'ph:frame-corners',
   'ph:arrows-out',
   'ph:download-simple',
+  'ph:scales',
+  'ph:copyright',
 ];

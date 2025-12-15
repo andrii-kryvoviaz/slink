@@ -11,21 +11,29 @@ export const load: PageServerLoad = async ({
   locals,
   parent,
 }) => {
-  await parent();
+  const parentData = await parent();
 
   if (!locals.user) {
     redirect(302, '/profile/login');
   }
 
+  const licensingEnabled =
+    parentData.globalSettings?.image?.enableLicensing ?? false;
+
   try {
-    const [image, imageTags] = await Promise.all([
+    const [image, imageTags, licenses] = await Promise.all([
       ApiClient.use(fetch).image.getDetails(params.id),
       ApiClient.use(fetch).tag.getImageTags(params.id),
+      licensingEnabled
+        ? ApiClient.use(fetch).image.getLicenses()
+        : Promise.resolve({ licenses: [] }),
     ]);
 
     return {
       image,
       imageTags: imageTags.data,
+      licenses: licenses.licenses,
+      licensingEnabled,
     };
   } catch (e: unknown) {
     if (e instanceof ForbiddenException) {

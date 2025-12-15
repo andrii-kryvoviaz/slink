@@ -15,6 +15,7 @@ export { default as HistoryGridView } from './History/HistoryGridView.svelte';
 export { default as HistoryListView } from './History/HistoryListView.svelte';
 export { default as ImageDeleteConfirmation } from './ImageDeleteConfirmation/ImageDeleteConfirmation.svelte';
 export { default as ImageDeletePopover } from './ImageDeleteConfirmation/ImageDeletePopover.svelte';
+export { default as LicenseInfo } from './License/LicenseInfo.svelte';
 export { default as ImagePlaceholder } from './Placeholder/ImagePlaceholder.svelte';
 export { default as CommentsSkeleton } from './PostViewer/CommentsSkeleton.svelte';
 export { default as PostViewer } from './PostViewer/PostViewer.svelte';
@@ -27,4 +28,6 @@ export { default as ImageSizePicker } from './SizePicker/ImageSizePicker.svelte'
 export * from './SizePicker/ImageSizePicker.types';
 export { default as ImageTagManager } from './TagManager/ImageTagManager.svelte';
 export { default as UnsupportedFileFormat } from './UnsupportedFIleFormat/UnsupportedFileFormat.svelte';
+export * from './utils/calculateHistoryCardWeight';
 export * from './utils/calculateImageCardWeight';
+export * from './utils/weightCalculator';

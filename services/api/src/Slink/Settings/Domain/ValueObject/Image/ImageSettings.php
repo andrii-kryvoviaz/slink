@@ -15,6 +15,7 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
    * @param int $compressionQuality
    * @param bool $allowOnlyPublicImages
    * @param bool $enableDeduplication
+   * @param bool $enableLicensing
    */
   private function __construct(
     private string $maxSize,
@@ -22,6 +23,7 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
     private int $compressionQuality = 80,
     private bool $allowOnlyPublicImages = false,
     private bool $enableDeduplication = true,
+    private bool $enableLicensing = false,
   ) {
     if (!preg_match('/^(\d+)([kM])$/', $maxSize)) {
       throw new InvalidImageMaxSizeException();
@@ -46,6 +48,7 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
       'compressionQuality' => $this->compressionQuality,
       'allowOnlyPublicImages' => $this->allowOnlyPublicImages,
       'enableDeduplication' => $this->enableDeduplication,
+      'enableLicensing' => $this->enableLicensing,
     ];
   }
   
@@ -59,6 +62,7 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
       $payload['compressionQuality'] ?? 80,
       $payload['allowOnlyPublicImages'] ?? false,
       $payload['enableDeduplication'] ?? true,
+      $payload['enableLicensing'] ?? false,
     );
   }
   
@@ -102,5 +106,12 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
    */
   public function isEnableDeduplication(): bool {
     return $this->enableDeduplication;
+  }
+
+  /**
+   * @return bool
+   */
+  public function isEnableLicensing(): bool {
+    return $this->enableLicensing;
   }
 }

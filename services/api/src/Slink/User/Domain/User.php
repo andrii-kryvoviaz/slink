@@ -19,6 +19,7 @@ use Slink\User\Domain\Event\Role\UserRevokedRole;
 use Slink\User\Domain\Event\UserDisplayNameWasChanged;
 use Slink\User\Domain\Event\UserLoggedOut;
 use Slink\User\Domain\Event\UserPasswordWasChanged;
+use Slink\User\Domain\Event\UserPreferencesWasUpdated;
 use Slink\User\Domain\Event\UserSignedIn;
 use Slink\User\Domain\Event\UserStatusWasChanged;
 use Slink\User\Domain\Event\UserWasCreated;
@@ -41,6 +42,7 @@ use Slink\User\Domain\ValueObject\Email;
 use Slink\User\Domain\ValueObject\Username;
 use Slink\User\Domain\ValueObject\Role;
 use Slink\User\Domain\ValueObject\RoleSet;
+use Slink\User\Domain\ValueObject\UserPreferences;
 use Slink\User\Domain\RefreshTokenSet;
 
 final class User extends AbstractAggregateRoot implements UserInterface {
@@ -51,6 +53,8 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   private UserStatus $status;
   
   private RoleSet $roles;
+  
+  private UserPreferences $preferences;
   
   /**
    * @var RefreshTokenSet
@@ -131,6 +135,7 @@ final class User extends AbstractAggregateRoot implements UserInterface {
     parent::__construct($id);
     
     $this->roles = RoleSet::create();
+    $this->preferences = UserPreferences::empty();
     
     $this->refreshToken = RefreshTokenSet::create($id);
     $this->status = UserStatus::Inactive;
@@ -268,6 +273,18 @@ final class User extends AbstractAggregateRoot implements UserInterface {
     $this->displayName = $event->displayName;
   }
   
+  public function getPreferences(): UserPreferences {
+    return $this->preferences;
+  }
+  
+  public function updatePreferences(UserPreferences $preferences): void {
+    $this->recordThat(new UserPreferencesWasUpdated($this->aggregateRootId(), $preferences));
+  }
+  
+  public function applyUserPreferencesWasUpdated(UserPreferencesWasUpdated $event): void {
+    $this->preferences = $event->preferences;
+  }
+  
   /**
    * @param Role $role
    * @return bool
@@ -371,6 +388,7 @@ final class User extends AbstractAggregateRoot implements UserInterface {
       'hashedPassword' => $this->hashedPassword->toString(),
       'status' => $this->status->value,
       'roles' => $this->roles->toArray(),
+      'preferences' => $this->preferences->toPayload(),
     ];
   }
 
@@ -388,6 +406,10 @@ final class User extends AbstractAggregateRoot implements UserInterface {
     
     $roles = array_map(fn(string $roleString) => Role::fromString($roleString), $state['roles']);
     $user->roles = RoleSet::create($roles);
+    
+    $user->preferences = isset($state['preferences']) 
+      ? UserPreferences::fromPayload($state['preferences']) 
+      : UserPreferences::empty();
 
     return $user;
   }

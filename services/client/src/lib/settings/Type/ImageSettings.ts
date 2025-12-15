@@ -3,4 +3,5 @@ export type ImageSettings = {
   stripExifMetadata: boolean;
   allowOnlyPublicImages: boolean;
   enableDeduplication: boolean;
+  enableLicensing: boolean;
 };

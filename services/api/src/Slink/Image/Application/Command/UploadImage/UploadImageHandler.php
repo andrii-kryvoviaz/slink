@@ -20,6 +20,7 @@ use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
+use Slink\User\Infrastructure\ReadModel\Repository\UserPreferencesRepository;
 
 final readonly class UploadImageHandler implements CommandHandlerInterface {
 
@@ -41,7 +42,8 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
     private ImageSanitizerInterface        $sanitizer,
     private ImageCreationContext           $creationContext,
     private ImageMetadataFactory           $metadataFactory,
-    private StorageInterface               $storage
+    private StorageInterface               $storage,
+    private UserPreferencesRepository      $userPreferencesRepository,
   ) {
   }
 
@@ -84,6 +86,12 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
       $isPublic = true;
     }
 
+    $license = null;
+    if ($userId && $this->configurationProvider->get('image.enableLicensing')) {
+      $userPrefs = $this->userPreferencesRepository->findByUserId($userId->toString());
+      $license = $userPrefs?->getPreferences()->getDefaultLicense();
+    }
+
     $attributes = ImageAttributes::create(
       $fileName,
       $command->getDescription(),
@@ -91,12 +99,13 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
     );
 
     $image = Image::create(
-      $imageId,
-      $userId,
-      $attributes,
-      $metadata,
-      $imageFile,
-      $this->creationContext
+      context: $this->creationContext,
+      id: $imageId,
+      userId: $userId,
+      attributes: $attributes,
+      metadata: $metadata,
+      imageFile: $imageFile,
+      license: $license
     );
 
     $this->storage->upload($file, $fileName);

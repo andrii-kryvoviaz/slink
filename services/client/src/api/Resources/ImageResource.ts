@@ -7,6 +7,8 @@ import type {
   UploadedImageResponse,
 } from '@slink/api/Response';
 
+import type { License } from '@slink/lib/enum/License';
+
 export class ImageResource extends AbstractResource {
   public async upload(
     image: File,
@@ -54,6 +56,7 @@ export class ImageResource extends AbstractResource {
     details: {
       description?: string;
       isPublic?: boolean;
+      license?: string;
     },
   ): Promise<ImageDetailsResponse> {
     return this.patch(`/image/${id}`, {
@@ -145,6 +148,7 @@ export class ImageResource extends AbstractResource {
     details: {
       description?: string;
       isPublic?: boolean;
+      license?: string;
     },
   ): Promise<void> {
     return this.patch(`/admin/image/${id}`, {
@@ -189,6 +193,10 @@ export class ImageResource extends AbstractResource {
     }
 
     return this.get(`/image/${id}/share?${searchParams.toString()}`);
+  }
+
+  public async getLicenses(): Promise<{ licenses: License[] }> {
+    return this.get('/licenses');
   }
 }
 

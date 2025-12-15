@@ -2,6 +2,7 @@
   import { CommentList } from '@slink/feature/Comment';
   import BookmarkButton from '@slink/feature/Image/BookmarkButton/BookmarkButton.svelte';
   import DownloadButton from '@slink/feature/Image/DownloadButton/DownloadButton.svelte';
+  import LicenseInfo from '@slink/feature/Image/License/LicenseInfo.svelte';
   import { Badge, FormattedDate } from '@slink/feature/Text';
   import { UserAvatar } from '@slink/feature/User';
   import * as Collapsible from '@slink/ui/components/collapsible';
@@ -95,6 +96,12 @@
         />
       </div>
     </div>
+
+    {#if image.license}
+      <div class="mt-4 text-right">
+        <LicenseInfo license={image.license} size="sm" variant="text" />
+      </div>
+    {/if}
 
     {#if hasDescription}
       <Collapsible.Root bind:open={descriptionOpen} class="mt-2 lg:mt-4">
