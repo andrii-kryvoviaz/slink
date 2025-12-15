@@ -11,6 +11,9 @@ export { default as DownloadButton } from './DownloadButton/DownloadButton.svelt
 export * from './DownloadButton/DownloadButton.theme';
 export { default as FormatPicker } from './FormatPicker/FormatPicker.svelte';
 export * from './FormatPicker/FormatPicker.types';
+export { default as FractionPicker } from './FractionPicker/FractionPicker.svelte';
+export * from './FractionPicker/FractionPicker.theme';
+export * from './FractionPicker/FractionPicker.types';
 export { default as HistoryGridView } from './History/HistoryGridView.svelte';
 export { default as HistoryListView } from './History/HistoryListView.svelte';
 export { default as ImageDeleteConfirmation } from './ImageDeleteConfirmation/ImageDeleteConfirmation.svelte';
@@ -27,4 +30,6 @@ export { default as ImageSizePicker } from './SizePicker/ImageSizePicker.svelte'
 export * from './SizePicker/ImageSizePicker.types';
 export { default as ImageTagManager } from './TagManager/ImageTagManager.svelte';
 export { default as UnsupportedFileFormat } from './UnsupportedFIleFormat/UnsupportedFileFormat.svelte';
+export * from './utils/calculateHistoryCardWeight';
 export * from './utils/calculateImageCardWeight';
+export * from './utils/weightCalculator';

@@ -1,5 +1,7 @@
 <script lang="ts">
   import type { ImageSize } from '@slink/feature/Image';
+  import { FractionPicker } from '@slink/feature/Image/FractionPicker';
+  import { visibilityTheme } from '@slink/feature/Image/SizePicker/ImageSizePicker.theme';
   import { Button } from '@slink/ui/components/button';
 
   import Icon from '@iconify/svelte';
@@ -24,6 +26,12 @@
   let hasChanges = $derived(
     calculatedWidth !== width || calculatedHeight !== height,
   );
+
+  const applyFraction = (fraction: number) => {
+    calculatedWidth = Math.max(1, Math.round(width * fraction));
+    calculatedHeight = Math.max(1, Math.round(height * fraction));
+    handleSubmit();
+  };
 
   const adjustBoundaries = () => {
     if (calculatedWidth < 1) {
@@ -197,62 +205,35 @@
     </div>
   </div>
 
-  <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 text-sm">
-    <div class="flex items-center gap-2 mb-1">
-      {#if aspectRatioLinked}
-        <Icon
-          icon="lucide:link"
-          class="h-4 w-4 text-blue-600 dark:text-blue-400"
-        />
-        <span class="text-blue-600 dark:text-blue-400 font-medium"
-          >Aspect ratio locked</span
-        >
-      {:else}
-        <Icon
-          icon="lucide:unlink"
-          class="h-4 w-4 text-gray-500 dark:text-gray-400"
-        />
-        <span class="text-gray-700 dark:text-gray-300 font-medium"
-          >Aspect ratio unlocked</span
-        >
-      {/if}
-    </div>
-    <p class="text-xs text-gray-600 dark:text-gray-400">
-      {#if aspectRatioLinked}
-        Changing width or height will automatically adjust the other to maintain
-        proportions.
-      {:else}
-        Width and height can be changed independently without maintaining
-        proportions.
-      {/if}
-      {#if hasChanges}
-        Click the reset button to restore original dimensions.
-      {/if}
-    </p>
-  </div>
+  <FractionPicker
+    currentWidth={calculatedWidth}
+    currentHeight={calculatedHeight}
+    originalWidth={width}
+    originalHeight={height}
+    on={{ change: applyFraction }}
+  />
 
   <div
-    class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400"
+    class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 h-6"
   >
     <div class="flex items-center gap-2">
       <span>
         Original: {formatValue(width)} × {formatValue(height)}
       </span>
-      {#if hasChanges}
-        <button
-          onclick={resetValues}
-          class="inline-flex items-center gap-1 px-2 py-1 text-xs text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors duration-200"
-          aria-label="Reset to original dimensions"
-        >
-          <Icon icon="lucide:rotate-ccw" class="h-3 w-3" />
-          Reset
-        </button>
-      {/if}
+      <button
+        onclick={resetValues}
+        class="{visibilityTheme({
+          visible: hasChanges,
+        })} inline-flex items-center gap-1 px-2 py-1 text-xs text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+        aria-label="Reset to original dimensions"
+        tabindex={hasChanges ? 0 : -1}
+      >
+        <Icon icon="lucide:rotate-ccw" class="h-3 w-3" />
+        Reset
+      </button>
     </div>
-    {#if hasChanges}
-      <span>
-        New: {formatValue(calculatedWidth)} × {formatValue(calculatedHeight)}
-      </span>
-    {/if}
+    <span class={visibilityTheme({ visible: hasChanges })}>
+      New: {formatValue(calculatedWidth)} × {formatValue(calculatedHeight)}
+    </span>
   </div>
 </div>
