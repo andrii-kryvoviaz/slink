@@ -2,7 +2,6 @@
   import {
     fractionPickerContainerTheme,
     fractionPickerItemTheme,
-    fractionPickerLabelTheme,
   } from './FractionPicker.theme';
   import {
     DEFAULT_FRACTION_OPTIONS,
@@ -10,16 +9,32 @@
   } from './FractionPicker.types';
 
   let {
-    value,
+    currentWidth,
+    currentHeight,
+    originalWidth,
+    originalHeight,
     options = DEFAULT_FRACTION_OPTIONS,
     size = 'md',
     disabled = false,
     on,
   }: FractionPickerProps = $props();
 
+  const hasChanges = $derived(
+    currentWidth !== originalWidth || currentHeight !== originalHeight,
+  );
+
+  const activeFraction = $derived.by(() => {
+    if (!hasChanges) return 1;
+    const currentFraction = currentWidth / originalWidth;
+    const match = options.find(
+      (opt) => Math.abs(opt.value - currentFraction) < 0.01,
+    );
+    return match?.value ?? null;
+  });
+
   const isActive = (optionValue: number): boolean => {
-    if (value === null) return false;
-    return Math.abs(optionValue - value) < 0.01;
+    if (activeFraction === null) return false;
+    return Math.abs(optionValue - activeFraction) < 0.01;
   };
 
   const handleSelect = (optionValue: number) => {
@@ -29,11 +44,8 @@
   };
 </script>
 
-<div class="flex items-center gap-2">
-  <span
-    class={fractionPickerLabelTheme({ size }) +
-      ' text-gray-500 dark:text-gray-400'}
-  >
+<div class="space-y-1">
+  <span class="block text-xs font-medium text-gray-700 dark:text-gray-300">
     Scale
   </span>
   <div
