@@ -3,6 +3,7 @@
   import { FractionPicker } from '@slink/feature/Image/FractionPicker';
   import { visibilityTheme } from '@slink/feature/Image/SizePicker/ImageSizePicker.theme';
   import { Button } from '@slink/ui/components/button';
+  import { NumberInput } from '@slink/ui/components/input';
 
   import Icon from '@iconify/svelte';
 
@@ -31,24 +32,6 @@
     calculatedWidth = Math.max(1, Math.round(width * fraction));
     calculatedHeight = Math.max(1, Math.round(height * fraction));
     handleSubmit();
-  };
-
-  const adjustBoundaries = () => {
-    if (calculatedWidth < 1) {
-      calculatedWidth = 1;
-    }
-
-    if (calculatedWidth > width) {
-      calculatedWidth = width;
-    }
-
-    if (calculatedHeight < 1) {
-      calculatedHeight = 1;
-    }
-
-    if (calculatedHeight > height) {
-      calculatedHeight = height;
-    }
   };
 
   const resetValues = () => {
@@ -84,8 +67,6 @@
   };
 
   const handleChange = (caller: 'width' | 'height') => {
-    adjustBoundaries();
-
     if (aspectRatioLinked) {
       if (caller === 'width') {
         calculatedHeight = Math.floor(
@@ -118,10 +99,6 @@
     }
   };
 
-  const handleInputFocus = (input: HTMLInputElement) => {
-    input.select();
-  };
-
   const formatValue = (value: number) => {
     return value.toLocaleString();
   };
@@ -136,27 +113,19 @@
       >
         Width
       </label>
-      <div class="relative">
-        <input
-          id="width-input"
-          bind:this={widthInput}
-          type="number"
-          min="1"
-          max={width}
-          step="1"
-          class="w-full px-3 py-2 text-sm bg-gray-50/80 dark:bg-gray-800/50 border border-gray-200/50 dark:border-gray-700/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-gray-200/50 dark:focus:border-gray-700/30 hover:bg-gray-100/50 dark:hover:bg-gray-800/70 transition-all duration-200"
-          class:border-red-300={calculatedWidth < 1 || calculatedWidth > width}
-          class:focus:border-red-500={calculatedWidth < 1 ||
-            calculatedWidth > width}
-          bind:value={calculatedWidth}
-          onfocus={(e) =>
-            e.target && handleInputFocus(e.target as HTMLInputElement)}
-          onkeydown={(e) => handleKeyDown(e, 'width')}
-          onkeyup={() => handleChange('width')}
-          onchange={() => handleChange('width')}
-          placeholder={width.toString()}
-        />
-      </div>
+      <NumberInput
+        id="width-input"
+        bind:inputRef={widthInput}
+        bind:value={calculatedWidth}
+        min={1}
+        max={width}
+        step={1}
+        size="md"
+        hasError={calculatedWidth < 1 || calculatedWidth > width}
+        onchange={() => handleChange('width')}
+        onkeydown={(e) => handleKeyDown(e, 'width')}
+        placeholder={width.toString()}
+      />
     </div>
 
     <div class="flex flex-col items-center self-end-safe">
@@ -180,28 +149,19 @@
       >
         Height
       </label>
-      <div class="relative">
-        <input
-          id="height-input"
-          bind:this={heightInput}
-          type="number"
-          min="1"
-          max={height}
-          step="1"
-          class="w-full px-3 py-2 text-sm bg-gray-50/80 dark:bg-gray-800/50 border border-gray-200/50 dark:border-gray-700/30 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-gray-200/50 dark:focus:border-gray-700/30 hover:bg-gray-100/50 dark:hover:bg-gray-800/70 transition-all duration-200"
-          class:border-red-300={calculatedHeight < 1 ||
-            calculatedHeight > height}
-          class:focus:border-red-500={calculatedHeight < 1 ||
-            calculatedHeight > height}
-          bind:value={calculatedHeight}
-          onfocus={(e) =>
-            e.target && handleInputFocus(e.target as HTMLInputElement)}
-          onkeydown={(e) => handleKeyDown(e, 'height')}
-          onkeyup={() => handleChange('height')}
-          onchange={() => handleChange('height')}
-          placeholder={height.toString()}
-        />
-      </div>
+      <NumberInput
+        id="height-input"
+        bind:inputRef={heightInput}
+        bind:value={calculatedHeight}
+        min={1}
+        max={height}
+        step={1}
+        size="md"
+        hasError={calculatedHeight < 1 || calculatedHeight > height}
+        onchange={() => handleChange('height')}
+        onkeydown={(e) => handleKeyDown(e, 'height')}
+        placeholder={height.toString()}
+      />
     </div>
   </div>
 
