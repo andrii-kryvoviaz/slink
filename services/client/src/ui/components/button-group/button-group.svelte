@@ -11,11 +11,11 @@
     variants: {
       variant: {
         default:
-          'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-1',
+          'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700',
         glass:
-          'bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-gray-200/60 dark:border-gray-700/60 p-1',
-        ghost: 'bg-transparent p-0',
-        solid: 'bg-gray-100 dark:bg-gray-800 p-1',
+          'bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-[inset_0_0_0_1px_rgba(0,0,0,0.1)] dark:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.1)]',
+        ghost: 'bg-transparent',
+        solid: 'bg-gray-100 dark:bg-gray-800',
       },
       rounded: {
         none: 'rounded-none',
@@ -36,12 +36,20 @@
         sm: 'gap-1',
         md: 'gap-1.5',
       },
+      padding: {
+        none: 'p-0',
+        xs: 'p-0.5',
+        sm: 'p-1',
+        md: 'p-1.5',
+        lg: 'p-2',
+      },
     },
     defaultVariants: {
       variant: 'glass',
       rounded: 'lg',
       size: 'md',
       gap: 'none',
+      padding: 'sm',
     },
   });
 
@@ -108,6 +116,9 @@
     typeof buttonGroupVariants
   >['rounded'];
   export type ButtonGroupGap = VariantProps<typeof buttonGroupVariants>['gap'];
+  export type ButtonGroupPadding = VariantProps<
+    typeof buttonGroupVariants
+  >['padding'];
 
   export type ButtonGroupItemVariant = VariantProps<
     typeof buttonGroupItemVariants
@@ -123,6 +134,7 @@
     size?: ButtonGroupSize;
     rounded?: ButtonGroupRounded;
     gap?: ButtonGroupGap;
+    padding?: ButtonGroupPadding;
   };
 </script>
 
@@ -135,6 +147,7 @@
     size = 'md',
     rounded = 'lg',
     gap = 'none',
+    padding = 'sm',
     ref = $bindable(null),
     children,
     ...restProps
@@ -144,7 +157,10 @@
 <div
   bind:this={ref}
   role="group"
-  class={cn(buttonGroupVariants({ variant, size, rounded, gap }), customClass)}
+  class={cn(
+    buttonGroupVariants({ variant, size, rounded, gap, padding }),
+    customClass,
+  )}
   {...restProps}
 >
   {@render children?.()}

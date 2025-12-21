@@ -169,7 +169,14 @@
 </script>
 
 <TooltipProvider delayDuration={300}>
-  <ButtonGroup variant="glass" rounded="lg" size="md" gap="xs" class="w-full">
+  <ButtonGroup
+    variant="glass"
+    rounded="lg"
+    size="md"
+    gap="none"
+    padding="none"
+    class="w-full"
+  >
     {#each visibleButtons as button, i (button)}
       {@const position = getPosition(i, visibleButtons.length)}
 
