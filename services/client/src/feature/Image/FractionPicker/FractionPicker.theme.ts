@@ -21,8 +21,7 @@ export const fractionPickerItemTheme = cva(
   {
     variants: {
       variant: {
-        active:
-          'bg-slate-200 dark:bg-slate-600 text-slate-900 dark:text-white shadow-sm',
+        active: 'bg-slate-200 dark:bg-slate-600 text-slate-900 dark:text-white',
         inactive:
           'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-100/50 dark:hover:bg-slate-700/30',
       },
