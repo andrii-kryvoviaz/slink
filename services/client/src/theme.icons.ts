@@ -70,7 +70,6 @@ export const themeIcons: string[] = [
   'ph:arrow-right',
   'ph:envelope-simple',
   'ph:user-plus',
-  'ph:user-circle',
   'ph:check-circle',
   'ph:keyboard',
   'ph:info-circle',
@@ -180,4 +179,5 @@ export const themeIcons: string[] = [
   'ph:download-simple',
   'lucide:chevron-up',
   'lucide:chevron-down',
+  'ph:at',
 ];

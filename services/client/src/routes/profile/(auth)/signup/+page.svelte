@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { PasswordStrength, PasswordToggle } from '@slink/feature/Auth';
   import {
     Banner,
     BannerAction,
@@ -28,13 +29,16 @@
   let { form, data }: Props = $props();
 
   let isLoading = useWritable('signUpFormLoadingState', false);
+  let passwordValue = $state('');
+  let showPassword = $state(false);
+  let showConfirmPassword = $state(false);
 
   const { isLight } = settings.get('theme', data.settings.theme);
 
   let buttonVariant: ButtonVariant = $derived($isLight ? 'dark' : 'primary');
 
   $effect(() => {
-    if (form?.errors.message) {
+    if (form?.errors?.message) {
       toast.error(form.errors.message);
     }
   });
@@ -48,11 +52,11 @@
   class="w-full max-w-lg mx-auto px-6 py-8"
   in:fly={{ y: 20, duration: 500, delay: 100 }}
 >
-  <div class="flex items-center justify-start gap-4 mb-6">
+  <div class="flex items-center justify-start gap-4 mb-8">
     <div
-      class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10 hover:border-primary/20 hover:scale-105 transition-all duration-200 cursor-pointer flex items-center justify-center shadow-sm"
+      class="w-12 h-12 rounded-xl bg-linear-to-br from-primary/10 to-primary/5 border border-primary/10 flex items-center justify-center shadow-sm"
     >
-      <img class="h-5 w-5" src="/favicon.png" alt="Slink" />
+      <img class="h-6 w-6" src="/favicon.png" alt="Slink" />
     </div>
     <div class="text-left">
       <h1
@@ -60,22 +64,22 @@
       >
         Create Account
       </h1>
-      <p class="text-gray-600 dark:text-gray-400 text-sm">
+      <p class="text-gray-500 dark:text-gray-400 text-sm mt-0.5">
         Join Slink to start sharing your images
       </p>
     </div>
   </div>
 
   <div
-    class="bg-white/50 dark:bg-gray-900/30 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/30 p-6 mb-6 shadow-sm"
+    class="bg-white/60 dark:bg-gray-900/40 backdrop-blur-sm rounded-2xl border border-gray-200/60 dark:border-gray-700/40 p-6 shadow-sm"
   >
     <form
-      class="space-y-4"
+      class="space-y-5"
       method="POST"
       use:enhance={withLoadingState(isLoading)}
       in:fade={{ duration: 400, delay: 200 }}
     >
-      <div class="space-y-3">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Input
           label="Username"
           name="username"
@@ -89,10 +93,7 @@
           rounded="lg"
         >
           {#snippet leftIcon()}
-            <Icon
-              icon="ph:user-circle"
-              class="text-gray-400 dark:text-gray-500"
-            />
+            <Icon icon="ph:at" class="text-gray-400 dark:text-gray-500" />
           {/snippet}
         </Input>
 
@@ -115,75 +116,91 @@
             />
           {/snippet}
         </Input>
-
-        <div class="grid grid-cols-2 gap-3">
-          <Input
-            label="Password"
-            name="password"
-            type="password"
-            autocomplete="new-password"
-            placeholder="Create password"
-            error={form?.errors?.password}
-            variant="modern"
-            size="md"
-            rounded="lg"
-          >
-            {#snippet leftIcon()}
-              <Icon
-                icon="ph:lock-simple"
-                class="text-gray-400 dark:text-gray-500"
-              />
-            {/snippet}
-          </Input>
-
-          <Input
-            label="Confirm"
-            name="confirm"
-            type="password"
-            autocomplete="new-password"
-            placeholder="Confirm password"
-            error={form?.errors?.confirm}
-            variant="modern"
-            size="md"
-            rounded="lg"
-          >
-            {#snippet leftIcon()}
-              <Icon
-                icon="ph:check-circle"
-                class="text-gray-400 dark:text-gray-500"
-              />
-            {/snippet}
-          </Input>
-        </div>
       </div>
+
+      <div class="space-y-2">
+        <Input
+          label="Password"
+          name="password"
+          type={showPassword ? 'text' : 'password'}
+          autocomplete="new-password"
+          placeholder="Create a strong password"
+          bind:value={passwordValue}
+          error={form?.errors?.password}
+          variant="modern"
+          size="md"
+          rounded="lg"
+        >
+          {#snippet leftIcon()}
+            <Icon
+              icon="ph:lock-simple"
+              class="text-gray-400 dark:text-gray-500"
+            />
+          {/snippet}
+          <PasswordToggle
+            visible={showPassword}
+            onclick={() => (showPassword = !showPassword)}
+          />
+        </Input>
+
+        <PasswordStrength password={passwordValue} />
+      </div>
+
+      <Input
+        label="Confirm Password"
+        name="confirm"
+        type={showConfirmPassword ? 'text' : 'password'}
+        autocomplete="new-password"
+        placeholder="Confirm your password"
+        error={form?.errors?.confirm}
+        variant="modern"
+        size="md"
+        rounded="lg"
+      >
+        {#snippet leftIcon()}
+          <Icon
+            icon="ph:lock-simple"
+            class="text-gray-400 dark:text-gray-500"
+          />
+        {/snippet}
+        <PasswordToggle
+          visible={showConfirmPassword}
+          onclick={() => (showConfirmPassword = !showConfirmPassword)}
+        />
+      </Input>
 
       <Button
         variant={buttonVariant}
-        size="md"
-        class="w-full mt-4"
+        size="lg"
+        class="w-full mt-2 group"
         type="submit"
         loading={$isLoading}
       >
         Create Account
         {#snippet rightIcon()}
-          <Icon icon="ph:arrow-right" class="ml-2" />
+          <Icon
+            icon="ph:arrow-right"
+            class="w-5 h-5 ml-1 transition-transform duration-200 group-hover:translate-x-1"
+          />
         {/snippet}
       </Button>
     </form>
   </div>
 
-  <Banner variant="success">
-    {#snippet icon()}
-      <BannerIcon variant="success" icon="ph:sign-in" />
-    {/snippet}
-    {#snippet content()}
-      <BannerContent
-        title="Already have an account?"
-        description="Sign in to access your images"
-      />
-    {/snippet}
-    {#snippet action()}
-      <BannerAction variant="success" href="/profile/login" text="Sign In" />
-    {/snippet}
-  </Banner>
+  <div class="mt-6">
+    <Banner variant="success">
+      {#snippet icon()}
+        <BannerIcon variant="success" icon="ph:sign-in" />
+      {/snippet}
+      {#snippet content()}
+        <BannerContent
+          title="Already have an account?"
+          description="Sign in to access your images"
+        />
+      {/snippet}
+      {#snippet action()}
+        <BannerAction variant="success" href="/profile/login" text="Sign In" />
+      {/snippet}
+    </Banner>
+  </div>
 </div>
