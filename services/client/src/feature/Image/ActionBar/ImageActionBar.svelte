@@ -165,27 +165,26 @@
     return 'middle';
   };
 
-  const iconClass = 'h-4 w-4';
+  const iconClass = 'h-3.5 w-3.5';
 </script>
 
 <TooltipProvider delayDuration={300}>
-  <ButtonGroup variant="glass" rounded="lg" size="lg" class="w-full shadow-sm">
+  <ButtonGroup variant="glass" rounded="lg" size="md" gap="xs" class="w-full">
     {#each visibleButtons as button, i (button)}
       {@const position = getPosition(i, visibleButtons.length)}
 
       {#if button === 'download'}
         <ButtonGroupItem
-          variant="primary"
-          size="lg"
+          variant="primary-outline"
+          size="md"
           {position}
-          class="gap-2 px-3 sm:px-4 min-w-fit flex-3"
+          class="gap-1.5 px-3 min-w-fit flex-3"
           onclick={() => downloadByLink(directLink, image.fileName)}
           aria-label="Download image"
         >
           <Icon icon="lucide:download" class={cn(iconClass, 'shrink-0')} />
           {#if !compact}
-            <span class="font-medium truncate text-xs sm:text-sm">Download</span
-            >
+            <span class="font-medium truncate text-xs">Download</span>
           {/if}
         </ButtonGroupItem>
       {/if}
@@ -193,9 +192,9 @@
       {#if button === 'copy'}
         <ButtonGroupItem
           variant="secondary"
-          size="lg"
+          size="md"
           {position}
-          class="gap-2 px-3"
+          class="gap-1.5 px-2.5"
           onclick={handleCopy}
           disabled={$shareIsLoading || isCopiedActive}
           aria-label="Copy image URL"
@@ -223,7 +222,7 @@
       {#if button === 'visibility'}
         <ButtonGroupItem
           variant="default"
-          size="lg"
+          size="md"
           {position}
           onclick={() => handleVisibilityChange(!image.isPublic)}
           disabled={$visibilityIsLoading}
@@ -250,7 +249,7 @@
                 'flex-1',
                 buttonGroupItemVariants({
                   variant: 'default',
-                  size: 'lg',
+                  size: 'md',
                   position,
                 }),
               )}
@@ -273,7 +272,7 @@
           {#snippet trigger()}
             <ButtonGroupItem
               variant="destructive"
-              size="lg"
+              size="md"
               {position}
               aria-label="Delete image"
               disabled={$deleteImageIsLoading}
