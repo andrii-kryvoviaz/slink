@@ -7,6 +7,8 @@
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
+  import { imagePlaceholderVariants } from './ImagePlaceholder.theme';
+
   interface Props {
     src: string;
     alt?: string;
@@ -91,7 +93,7 @@
     }
   };
 
-  let shouldStretch = $derived(() => {
+  let shouldStretch = $derived.by(() => {
     if (isSvg) return true;
     if (!stretch) return false;
 
@@ -102,6 +104,14 @@
       metadata.height >= minRequiredHeight && metadata.width >= minRequiredWidth
     );
   });
+
+  let imageClasses = $derived(
+    imagePlaceholderVariants({
+      stretch: shouldStretch || keepAspectRatio || isSvg,
+      objectFit: isSvg ? 'contain' : keepAspectRatio ? 'contain' : 'fill',
+      visibility: isSvg || (isLoaded && !hasError) ? 'visible' : 'hidden',
+    }),
+  );
 </script>
 
 <TooltipProvider delayDuration={300}>
@@ -127,14 +137,7 @@
         isLoaded = true;
         hasError = true;
       }}
-      class={cn(
-        'transition-opacity border-none',
-        (shouldStretch() || keepAspectRatio) && 'w-full h-full',
-        keepAspectRatio && !isSvg && 'object-contain',
-        !keepAspectRatio && !isSvg && 'object-fill',
-        isSvg && 'w-full h-full object-contain',
-        (!isLoaded || hasError) && !isSvg && 'hidden',
-      )}
+      class={imageClasses}
     />
 
     {#if !isLoaded && !isSvg}
@@ -159,23 +162,33 @@
 
     {#if hasError}
       <div
-        class="absolute inset-0 flex flex-col items-center justify-center bg-linear-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900"
+        class="absolute inset-0 flex flex-col items-center justify-center bg-slate-100 dark:bg-slate-900"
         in:fade={{ duration: 200 }}
       >
-        <div class="flex flex-col items-center gap-3 px-4 text-center">
+        <div class="flex flex-col items-center gap-4 px-6 text-center">
           <div
-            class="flex h-14 w-14 items-center justify-center rounded-full bg-gray-200/80 dark:bg-gray-700/80"
+            class="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-200 dark:bg-slate-800 shadow-sm"
           >
             <Icon
-              icon="heroicons:photo"
-              class="h-7 w-7 text-gray-400 dark:text-gray-500"
+              icon="ph:image-broken"
+              class="h-8 w-8 text-slate-400 dark:text-slate-500"
             />
+            <div
+              class="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/50 ring-2 ring-white dark:ring-slate-900"
+            >
+              <Icon
+                icon="ph:warning-fill"
+                class="h-3.5 w-3.5 text-amber-500 dark:text-amber-400"
+              />
+            </div>
           </div>
-          <div class="space-y-1">
-            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
+          <div class="space-y-1.5">
+            <p class="text-sm font-medium text-slate-700 dark:text-slate-300">
               Image unavailable
             </p>
-            <p class="text-xs text-gray-400 dark:text-gray-500">
+            <p
+              class="text-xs text-slate-500 dark:text-slate-400 max-w-[200px] leading-relaxed"
+            >
               This image may have been removed or is temporarily inaccessible
             </p>
           </div>

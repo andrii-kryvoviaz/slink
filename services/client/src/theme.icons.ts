@@ -180,4 +180,5 @@ export const themeIcons: string[] = [
   'lucide:chevron-up',
   'lucide:chevron-down',
   'ph:at',
+  'ph:warning-fill',
 ];

@@ -19,6 +19,7 @@ export { default as HistoryListView } from './History/HistoryListView.svelte';
 export { default as ImageDeleteConfirmation } from './ImageDeleteConfirmation/ImageDeleteConfirmation.svelte';
 export { default as ImageDeletePopover } from './ImageDeleteConfirmation/ImageDeletePopover.svelte';
 export { default as ImagePlaceholder } from './Placeholder/ImagePlaceholder.svelte';
+export * from './Placeholder/ImagePlaceholder.theme';
 export { default as CommentsSkeleton } from './PostViewer/CommentsSkeleton.svelte';
 export { default as PostViewer } from './PostViewer/PostViewer.svelte';
 export { default as PostViewerDescription } from './PostViewer/PostViewerDescription.svelte';
