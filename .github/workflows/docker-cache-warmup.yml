@@ -16,47 +16,43 @@ concurrency:
   group: docker-cache-warmup
   cancel-in-progress: true
 
-env:
-  image: docker.io/${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.APP_NAME }}
-
 jobs:
   warmup-cache:
-    name: Warmup Docker Cache
-    runs-on: ubuntu-latest
+    name: Warmup ${{ matrix.target }} (${{ matrix.platform }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: prod
+            platform: linux/amd64
+            runner: ubuntu-24.04
+          - target: prod
+            platform: linux/arm64
+            runner: ubuntu-24.04-arm
+          - target: test
+            platform: linux/amd64
+            runner: ubuntu-24.04
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Log in to DockerHub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+      - name: Extract platform name
+        id: platform
+        run: |
+          platform=${{ matrix.platform }}
+          echo "name=${platform//\//-}" >> $GITHUB_OUTPUT
 
       - name: Build Docker image for cache warmup
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: docker/Dockerfile
-          target: prod
+          target: ${{ matrix.target }}
           push: false
-          platforms: linux/amd64,linux/arm64
-          cache-from: type=gha,scope=monolithic-multi-arch-build
-          cache-to: type=gha,scope=monolithic-multi-arch-build,mode=max
-
-      - name: Build test image for cache warmup
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: docker/Dockerfile
-          target: test
-          push: false
-          platforms: linux/amd64,linux/arm64
-          cache-from: type=gha,scope=monolithic-test-build
-          cache-to: type=gha,scope=monolithic-test-build,mode=max
+          platforms: ${{ matrix.platform }}
+          cache-from: type=gha,scope=${{ matrix.target }}-build-${{ steps.platform.outputs.name }}
+          cache-to: type=gha,scope=${{ matrix.target }}-build-${{ steps.platform.outputs.name }},mode=max

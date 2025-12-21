@@ -111,18 +111,85 @@ jobs:
         run: |
           git push --atomic origin HEAD:main ${{ env.tag }}
 
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
+  build:
+    name: Build (${{ matrix.platform }})
+    runs-on: ${{ matrix.runner }}
     needs: version
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - platform: linux/amd64
+            runner: ubuntu-24.04
+          - platform: linux/arm64
+            runner: ubuntu-24.04-arm
 
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ needs.version.outputs.ref }}
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+
+      - name: Extract platform name
+        id: platform
+        run: |
+          platform=${{ matrix.platform }}
+          echo "name=${platform//\//-}" >> $GITHUB_OUTPUT
+
+      - name: Build and push by digest
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/Dockerfile
+          target: prod
+          platforms: ${{ matrix.platform }}
+          sbom: true
+          provenance: mode=max
+          labels: |
+            org.opencontainers.image.title=${{ vars.APP_NAME }}
+            org.opencontainers.image.version=${{ github.event.inputs.version }}
+            org.opencontainers.image.revision=${{ needs.version.outputs.ref }}
+          outputs: type=image,name=${{ env.image }},push-by-digest=true,name-canonical=true,push=true
+          cache-from: type=gha,scope=prod-build-${{ steps.platform.outputs.name }}
+          cache-to: type=gha,scope=prod-build-${{ steps.platform.outputs.name }},mode=max
+
+      - name: Export digest
+        run: |
+          mkdir -p ${{ runner.temp }}/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "${{ runner.temp }}/digests/${digest#sha256:}"
+
+      - name: Upload digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-${{ steps.platform.outputs.name }}
+          path: ${{ runner.temp }}/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  manifest:
+    name: Create Multi-Arch Manifest
+    runs-on: ubuntu-24.04
+    needs:
+      - version
+      - build
+
+    steps:
+      - name: Download digests
+        uses: actions/download-artifact@v4
+        with:
+          path: ${{ runner.temp }}/digests
+          pattern: digests-*
+          merge-multiple: true
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -137,31 +204,28 @@ jobs:
         uses: docker/metadata-action@v5
         id: meta
         with:
-          images: |
-            ${{ env.image }}
+          images: ${{ env.image }}
           tags: |
-            ${{ env.tag }}
-            latest
+            type=raw,value=${{ env.tag }}
+            type=raw,value=latest,enable=${{ needs.version.outputs.prerelease == '' }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: docker/Dockerfile
-          target: prod
-          push: true
-          sbom: true
-          tags: ${{ steps.meta.outputs.tags }}
-          platforms: linux/amd64,linux/arm64
-          cache-from: type=gha,scope=monolithic-multi-arch-build
-          cache-to: type=gha,scope=monolithic-multi-arch-build
+      - name: Create manifest list and push
+        working-directory: ${{ runner.temp }}/digests
+        run: |
+          docker buildx imagetools create \
+            $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            $(printf '${{ env.image }}@sha256:%s ' *)
+
+      - name: Verify SBOM attestations
+        run: |
+          docker buildx imagetools inspect ${{ env.image }}:${{ env.tag }} --format '{{json .Manifest}}'
 
   release:
     name: Create Release
     runs-on: ubuntu-latest
     needs:
       - version
-      - deploy
+      - manifest
 
     steps:
       - name: Create Release
