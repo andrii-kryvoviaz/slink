@@ -40,6 +40,7 @@
   }: Props = $props();
 
   let isLoaded = $state(false);
+  let hasError = $state(false);
   let originalImage = $derived(src.split('?')[0]);
   let actualAspectRatio = $state(metadata.width / metadata.height);
 
@@ -120,9 +121,11 @@
         const img = event.target as HTMLImageElement;
         updateAspectRatioFromImage(img);
         isLoaded = true;
+        hasError = false;
       }}
       onerror={() => {
         isLoaded = true;
+        hasError = true;
       }}
       class={cn(
         'transition-opacity border-none',
@@ -130,7 +133,7 @@
         keepAspectRatio && !isSvg && 'object-contain',
         !keepAspectRatio && !isSvg && 'object-fill',
         isSvg && 'w-full h-full object-contain',
-        !isLoaded && !isSvg && 'hidden',
+        (!isLoaded || hasError) && !isSvg && 'hidden',
       )}
     />
 
@@ -154,7 +157,33 @@
       </div>
     {/if}
 
-    {#if isLoaded}
+    {#if hasError}
+      <div
+        class="absolute inset-0 flex flex-col items-center justify-center bg-linear-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900"
+        in:fade={{ duration: 200 }}
+      >
+        <div class="flex flex-col items-center gap-3 px-4 text-center">
+          <div
+            class="flex h-14 w-14 items-center justify-center rounded-full bg-gray-200/80 dark:bg-gray-700/80"
+          >
+            <Icon
+              icon="heroicons:photo"
+              class="h-7 w-7 text-gray-400 dark:text-gray-500"
+            />
+          </div>
+          <div class="space-y-1">
+            <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
+              Image unavailable
+            </p>
+            <p class="text-xs text-gray-400 dark:text-gray-500">
+              This image may have been removed or is temporarily inaccessible
+            </p>
+          </div>
+        </div>
+      </div>
+    {/if}
+
+    {#if isLoaded && !hasError}
       {#if showOpenInNewTab}
         <a
           href={originalImage || src}
@@ -184,7 +213,7 @@
             <div class="flex items-center gap-1 whitespace-nowrap">
               <Icon
                 icon="heroicons:photo"
-                class="w-3 h-3 text-white/70 flex-shrink-0"
+                class="w-3 h-3 text-white/70 shrink-0"
               />
               <span class="font-medium">{metadata.width}×{metadata.height}</span
               >
@@ -193,7 +222,7 @@
               <div class="flex items-center gap-1 whitespace-nowrap">
                 <Icon
                   icon="heroicons:document"
-                  class="w-3 h-3 text-white/70 flex-shrink-0"
+                  class="w-3 h-3 text-white/70 shrink-0"
                 />
                 <span class="uppercase font-medium"
                   >{metadata.mimeType.split('/')[1] || metadata.mimeType}</span
@@ -206,7 +235,7 @@
             <div class="flex items-center gap-1 whitespace-nowrap">
               <Icon
                 icon="heroicons:arrow-down-tray"
-                class="w-3 h-3 text-white/70 flex-shrink-0"
+                class="w-3 h-3 text-white/70 shrink-0"
               />
               <span class="font-medium">{bytesToSize(metadata.size)}</span>
             </div>
