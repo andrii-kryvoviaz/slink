@@ -95,6 +95,8 @@
           name="passwordLength"
           min={6}
           bind:value={settings.password.minLength}
+          variant="input"
+          size="xl"
         />
       </SettingItem>
 
