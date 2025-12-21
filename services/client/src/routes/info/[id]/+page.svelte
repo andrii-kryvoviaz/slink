@@ -14,6 +14,7 @@
   import { Shortcut } from '@slink/ui/components';
 
   import { routes } from '$lib/utils/url/routes';
+  import Icon from '@iconify/svelte';
   import { fly } from 'svelte/transition';
 
   import { ApiClient } from '@slink/api/Client';
@@ -219,11 +220,20 @@
           Share
         </h2>
         <Notice variant="info" size="xs" class="mb-4">
-          Copy the direct link or use the dropdown for other formats. Press
-          <span class="inline-flex mx-1"
-            ><Shortcut control key="C" size="xs" /></span
-          >
-          to copy.
+          <span class="flex items-center justify-between">
+            <span class="flex items-center gap-2">
+              <Icon icon="lucide:clipboard-copy" class="h-3.5 w-3.5 shrink-0" />
+              <span>Select option to copy</span>
+            </span>
+            <span
+              class="flex items-center gap-1.5 pl-3 border-l border-violet-300 dark:border-violet-600"
+            >
+              <span class="text-[10px] uppercase tracking-wide opacity-60"
+                >Quick</span
+              >
+              <Shortcut control key="C" size="xs" />
+            </span>
+          </span>
         </Notice>
 
         {#if image.supportsFormatConversion}

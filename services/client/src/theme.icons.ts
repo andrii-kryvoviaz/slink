@@ -181,4 +181,5 @@ export const themeIcons: string[] = [
   'lucide:chevron-down',
   'ph:at',
   'ph:warning-fill',
+  'lucide:clipboard-copy',
 ];
