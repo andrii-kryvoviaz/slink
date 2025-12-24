@@ -14,6 +14,8 @@ import { CommentSetter } from '@slink/lib/settings/setters/comment';
 import type { CommentSettings } from '@slink/lib/settings/setters/comment';
 import { HistorySetter } from '@slink/lib/settings/setters/history';
 import type { HistorySettings } from '@slink/lib/settings/setters/history';
+import { NavigationSetter } from '@slink/lib/settings/setters/navigation';
+import type { NavigationSettings } from '@slink/lib/settings/setters/navigation';
 import { ShareSetter } from '@slink/lib/settings/setters/share';
 import type { ShareSettings } from '@slink/lib/settings/setters/share';
 import { SidebarSetter } from '@slink/lib/settings/setters/sidebar';
@@ -29,6 +31,7 @@ import { tryJson } from '@slink/utils/string/json';
 type SettingsValueTypes = {
   theme: Theme;
   sidebar: SidebarSettings;
+  navigation: NavigationSettings;
   userAdmin: UserAdminSettings;
   history: HistorySettings;
   share: ShareSettings;
@@ -47,6 +50,7 @@ export class SettingsManager {
   } = {
     theme: ThemeSetter,
     sidebar: SidebarSetter,
+    navigation: NavigationSetter,
     userAdmin: UserAdminSetter,
     history: HistorySetter,
     share: ShareSetter,

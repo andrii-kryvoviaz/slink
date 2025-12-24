@@ -1,21 +1,49 @@
 import { cva } from 'class-variance-authority';
 
-export const NoticeTheme = cva(`border-l-4`, {
+export const NoticeTheme = cva(``, {
   variants: {
     variant: {
-      info: 'bg-violet-50 border-violet-400 text-violet-700 dark:bg-violet-900/20 dark:border-violet-500 dark:text-violet-300',
+      info: 'bg-violet-50/50 text-violet-600 dark:bg-violet-900/10 dark:text-violet-400',
       success:
-        'bg-green-50 border-green-400 text-green-700 dark:bg-green-900/20 dark:border-green-500 dark:text-green-300',
+        'bg-green-50/50 text-green-600 dark:bg-green-900/10 dark:text-green-400',
       warning:
-        'bg-yellow-50 border-yellow-400 text-yellow-700 dark:bg-yellow-900/20 dark:border-yellow-500 dark:text-yellow-300',
-      error:
-        'bg-red-50 border-red-400 text-red-700 dark:bg-red-900/20 dark:border-red-500 dark:text-red-300',
+        'bg-amber-50/50 text-amber-600 dark:bg-amber-900/10 dark:text-amber-400',
+      error: 'bg-red-50/50 text-red-600 dark:bg-red-900/10 dark:text-red-400',
+    },
+    appearance: {
+      bordered: 'border-l-2 rounded-r',
+      subtle: '',
     },
     size: {
-      xs: 'text-xs p-2',
-      sm: 'text-sm p-4',
-      md: 'text-base p-6',
-      lg: 'text-lg p-8',
+      xs: 'text-xs px-3 py-2',
+      sm: 'text-xs px-3 py-2',
+      md: 'text-sm px-4 py-3',
+      lg: 'text-base px-5 py-4',
     },
+  },
+  compoundVariants: [
+    {
+      variant: 'info',
+      appearance: 'bordered',
+      class: 'border-violet-400 text-violet-700 dark:border-violet-500',
+    },
+    {
+      variant: 'success',
+      appearance: 'bordered',
+      class: 'border-green-400 text-green-700 dark:border-green-600',
+    },
+    {
+      variant: 'warning',
+      appearance: 'bordered',
+      class: 'border-amber-400 text-amber-700 dark:border-amber-500',
+    },
+    {
+      variant: 'error',
+      appearance: 'bordered',
+      class: 'border-red-400 text-red-700 dark:border-red-500',
+    },
+  ],
+  defaultVariants: {
+    appearance: 'bordered',
   },
 });

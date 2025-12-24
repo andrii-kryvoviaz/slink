@@ -42,14 +42,11 @@
       URL Shortening
     {/snippet}
     {#snippet hint()}
-      Generate short URLs when copying image links. When disabled, full signed
-      URLs will be used instead
+      Generate short URLs when copying image links
     {/snippet}
-    <div class="flex justify-end">
-      <Switch
-        name="shareEnableUrlShortening"
-        bind:checked={settings.enableUrlShortening}
-      />
-    </div>
+    <Switch
+      name="shareEnableUrlShortening"
+      bind:checked={settings.enableUrlShortening}
+    />
   </SettingItem>
 </SettingsPane>

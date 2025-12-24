@@ -62,12 +62,10 @@
     {#snippet hint()}
       Automatically remove metadata from uploaded images for privacy
     {/snippet}
-    <div class="flex justify-end">
-      <Switch
-        name="imageStripExifMetadata"
-        bind:checked={settings.stripExifMetadata}
-      />
-    </div>
+    <Switch
+      name="imageStripExifMetadata"
+      bind:checked={settings.stripExifMetadata}
+    />
   </SettingItem>
 
   <SettingItem
@@ -84,12 +82,10 @@
       When enabled, all images are automatically set to public and visibility
       cannot be changed
     {/snippet}
-    <div class="flex justify-end">
-      <Switch
-        name="imageAllowOnlyPublicImages"
-        bind:checked={settings.allowOnlyPublicImages}
-      />
-    </div>
+    <Switch
+      name="imageAllowOnlyPublicImages"
+      bind:checked={settings.allowOnlyPublicImages}
+    />
   </SettingItem>
 
   <SettingItem
@@ -103,22 +99,17 @@
       Enable Image Deduplication
     {/snippet}
     {#snippet hint()}
-      When enabled, duplicate images are detected and rejected during upload.
-      Image hashes are always calculated regardless of this setting.
+      Detect and reject duplicate images during upload
     {/snippet}
-    <div class="flex justify-end">
-      <Switch
-        name="imageEnableDeduplication"
-        bind:checked={settings.enableDeduplication}
-      />
-    </div>
+    <Switch
+      name="imageEnableDeduplication"
+      bind:checked={settings.enableDeduplication}
+    />
   </SettingItem>
 
   {#if settings.enableDeduplication}
-    <Notice size="sm" variant="info">
-      <strong>Upload-Only Feature:</strong>
-      Deduplication only applies to new uploads. Existing images in your library will
-      not be affected or removed, even if duplicates are detected.
+    <Notice variant="info" appearance="subtle" size="sm" class="px-4">
+      Only applies to new uploads. Existing images are not affected.
     </Notice>
   {/if}
 </SettingsPane>

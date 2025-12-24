@@ -148,7 +148,6 @@ export const themeIcons: string[] = [
   'ph:warning-circle-duotone',
   'ph:circle-notch-duotone',
   'ph:check-duotone',
-  'ph:info-duotone',
   'ph:markdown-logo',
   'ph:brackets-square',
   'ph:code',
@@ -182,4 +181,9 @@ export const themeIcons: string[] = [
   'ph:at',
   'ph:warning-fill',
   'lucide:clipboard-copy',
+  'solar:settings-linear',
+  'solar:shield-keyhole-linear',
+  'solar:database-linear',
+  'solar:gallery-linear',
+  'solar:shield-check-linear',
 ];

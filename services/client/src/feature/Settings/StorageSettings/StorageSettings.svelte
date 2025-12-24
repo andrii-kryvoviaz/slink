@@ -104,223 +104,215 @@
   </SettingItem>
 
   {#if settings.provider === 'smb'}
-    <div class="space-y-6">
-      <SettingItem
-        defaultValue={defaultSettings?.adapter.smb.host}
-        currentValue={settings.adapter.smb.host}
-        reset={(value) => {
-          settings.adapter.smb.host = value;
-        }}
-      >
-        {#snippet label()}
-          Server Host
-        {/snippet}
-        {#snippet hint()}
-          IP address or hostname of your SMB server
-        {/snippet}
-        <Input
-          name="smbHost"
-          placeholder="192.168.1.100 or server.local"
-          bind:value={settings.adapter.smb.host}
-        />
-      </SettingItem>
+    <SettingItem
+      defaultValue={defaultSettings?.adapter.smb.host}
+      currentValue={settings.adapter.smb.host}
+      reset={(value) => {
+        settings.adapter.smb.host = value;
+      }}
+    >
+      {#snippet label()}
+        Server Host
+      {/snippet}
+      {#snippet hint()}
+        IP address or hostname of your SMB server
+      {/snippet}
+      <Input
+        name="smbHost"
+        placeholder="192.168.1.100 or server.local"
+        bind:value={settings.adapter.smb.host}
+      />
+    </SettingItem>
 
-      <SettingItem
-        defaultValue={defaultSettings?.adapter.smb.share}
-        currentValue={settings.adapter.smb.share}
-        reset={(value) => {
-          settings.adapter.smb.share = value;
-        }}
-      >
-        {#snippet label()}
-          Share Name
-        {/snippet}
-        {#snippet hint()}
-          The name of the shared folder on your SMB server
-        {/snippet}
-        <Input
-          name="smbShare"
-          placeholder="uploads"
-          bind:value={settings.adapter.smb.share}
-        />
-      </SettingItem>
+    <SettingItem
+      defaultValue={defaultSettings?.adapter.smb.share}
+      currentValue={settings.adapter.smb.share}
+      reset={(value) => {
+        settings.adapter.smb.share = value;
+      }}
+    >
+      {#snippet label()}
+        Share Name
+      {/snippet}
+      {#snippet hint()}
+        The name of the shared folder
+      {/snippet}
+      <Input
+        name="smbShare"
+        placeholder="uploads"
+        bind:value={settings.adapter.smb.share}
+      />
+    </SettingItem>
 
-      <SettingItem
-        defaultValue={defaultSettings?.adapter.smb.workgroup}
-        currentValue={settings.adapter.smb.workgroup}
-        reset={(value) => {
-          settings.adapter.smb.workgroup = value;
-        }}
-      >
-        {#snippet label()}
-          Workgroup
-        {/snippet}
-        {#snippet hint()}
-          SMB workgroup name (optional)
-        {/snippet}
-        <Input
-          name="smbWorkgroup"
-          placeholder="WORKGROUP"
-          bind:value={settings.adapter.smb.workgroup}
-        />
-      </SettingItem>
+    <SettingItem
+      defaultValue={defaultSettings?.adapter.smb.workgroup}
+      currentValue={settings.adapter.smb.workgroup}
+      reset={(value) => {
+        settings.adapter.smb.workgroup = value;
+      }}
+    >
+      {#snippet label()}
+        Workgroup
+      {/snippet}
+      {#snippet hint()}
+        SMB workgroup name (optional)
+      {/snippet}
+      <Input
+        name="smbWorkgroup"
+        placeholder="WORKGROUP"
+        bind:value={settings.adapter.smb.workgroup}
+      />
+    </SettingItem>
 
-      <SettingItem
-        defaultValue={defaultSettings?.adapter.smb.username}
-        currentValue={settings.adapter.smb.username}
-        reset={(value) => {
-          settings.adapter.smb.username = value;
-        }}
-      >
-        {#snippet label()}
-          Username
-        {/snippet}
-        {#snippet hint()}
-          Authentication username for SMB server
-        {/snippet}
-        <Input name="smbUsername" bind:value={settings.adapter.smb.username} />
-      </SettingItem>
+    <SettingItem
+      defaultValue={defaultSettings?.adapter.smb.username}
+      currentValue={settings.adapter.smb.username}
+      reset={(value) => {
+        settings.adapter.smb.username = value;
+      }}
+    >
+      {#snippet label()}
+        Username
+      {/snippet}
+      {#snippet hint()}
+        Authentication username
+      {/snippet}
+      <Input name="smbUsername" bind:value={settings.adapter.smb.username} />
+    </SettingItem>
 
-      <SettingItem
-        defaultValue={defaultSettings?.adapter.smb.password}
-        currentValue={settings.adapter.smb.password}
-        reset={(value) => {
-          settings.adapter.smb.password = value;
-        }}
-      >
-        {#snippet label()}
-          Password
-        {/snippet}
-        {#snippet hint()}
-          Authentication password for SMB server
-        {/snippet}
-        <Input
-          type="password"
-          name="smbPassword"
-          bind:value={settings.adapter.smb.password}
-        />
-      </SettingItem>
-    </div>
+    <SettingItem
+      defaultValue={defaultSettings?.adapter.smb.password}
+      currentValue={settings.adapter.smb.password}
+      reset={(value) => {
+        settings.adapter.smb.password = value;
+      }}
+    >
+      {#snippet label()}
+        Password
+      {/snippet}
+      {#snippet hint()}
+        Authentication password for SMB server
+      {/snippet}
+      <Input
+        type="password"
+        name="smbPassword"
+        bind:value={settings.adapter.smb.password}
+      />
+    </SettingItem>
   {/if}
 
-  <div class="mt-6">
-    <Notice size="sm" variant="info">
-      <Icon icon="ph:info-duotone" class="w-4 h-4 inline mr-1" />
+  {#if settings.provider === 's3'}
+    <Notice variant="warning" appearance="subtle" size="sm" class="px-4">
+      Amazon S3 usage may incur charges.
+      <a
+        href="https://aws.amazon.com/s3/pricing/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="underline hover:text-amber-700 dark:hover:text-amber-300"
+        >Review pricing</a
+      >
+    </Notice>
+
+    <SettingItem
+      defaultValue={defaultSettings?.adapter.s3.region}
+      currentValue={settings.adapter.s3.region}
+      reset={(value) => {
+        settings.adapter.s3.region = value;
+      }}
+    >
+      {#snippet label()}
+        AWS Region
+      {/snippet}
+      {#snippet hint()}
+        Region where your bucket is located
+      {/snippet}
+      <Input
+        name="s3Region"
+        placeholder="us-east-1"
+        bind:value={settings.adapter.s3.region}
+      />
+    </SettingItem>
+
+    <SettingItem
+      defaultValue={defaultSettings?.adapter.s3.bucket}
+      currentValue={settings.adapter.s3.bucket}
+      reset={(value) => {
+        settings.adapter.s3.bucket = value;
+      }}
+    >
+      {#snippet label()}
+        Bucket Name
+      {/snippet}
+      {#snippet hint()}
+        Your S3 bucket name.
+        <a
+          href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingBucket.html#general-purpose-buckets-overview"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-blue-600 dark:text-blue-400 hover:underline"
+        >
+          Learn about bucket naming
+        </a>
+      {/snippet}
+      <Input
+        name="s3Bucket"
+        placeholder="my-slink-bucket"
+        bind:value={settings.adapter.s3.bucket}
+      />
+    </SettingItem>
+
+    <SettingItem
+      defaultValue={defaultSettings?.adapter.s3.key}
+      currentValue={settings.adapter.s3.key}
+      reset={(value) => {
+        settings.adapter.s3.key = value;
+      }}
+    >
+      {#snippet label()}
+        Access Key ID
+      {/snippet}
+      {#snippet hint()}
+        Your AWS Access Key ID.
+        <a
+          href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access-key-self-managed.html#Using_CreateAccessKey"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-blue-600 dark:text-blue-400 hover:underline"
+        >
+          How to create access keys
+        </a>
+      {/snippet}
+      <Input name="s3AccessKey" bind:value={settings.adapter.s3.key} />
+    </SettingItem>
+
+    <SettingItem
+      defaultValue={defaultSettings?.adapter.s3.secret}
+      currentValue={settings.adapter.s3.secret}
+      reset={(value) => {
+        settings.adapter.s3.secret = value;
+      }}
+    >
+      {#snippet label()}
+        Secret Access Key
+      {/snippet}
+      {#snippet hint()}
+        Your AWS Secret Access Key
+      {/snippet}
+      <Input
+        type="password"
+        name="s3SecretKey"
+        bind:value={settings.adapter.s3.secret}
+      />
+    </SettingItem>
+  {/if}
+
+  <div>
+    <Notice size="sm" appearance="subtle" variant="info">
       <strong>Cache Management:</strong>
       Use the "Clear Cache" button below to remove all cached image transformations.
       Cached files will be regenerated on next request.
     </Notice>
   </div>
-
-  {#if settings.provider === 's3'}
-    <div class="space-y-6">
-      <Notice size="sm" variant="warning">
-        <strong>Billing Notice:</strong>
-        Amazon S3 usage may incur charges. Review
-        <a
-          href="https://aws.amazon.com/s3/pricing/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="underline font-medium hover:text-amber-700 dark:hover:text-amber-300"
-        >
-          S3 pricing details
-        </a>
-        before proceeding.
-      </Notice>
-
-      <SettingItem
-        defaultValue={defaultSettings?.adapter.s3.region}
-        currentValue={settings.adapter.s3.region}
-        reset={(value) => {
-          settings.adapter.s3.region = value;
-        }}
-      >
-        {#snippet label()}
-          AWS Region
-        {/snippet}
-        {#snippet hint()}
-          The AWS region where your S3 bucket is located (e.g., us-east-1)
-        {/snippet}
-        <Input
-          name="s3Region"
-          placeholder="us-east-1"
-          bind:value={settings.adapter.s3.region}
-        />
-      </SettingItem>
-
-      <SettingItem
-        defaultValue={defaultSettings?.adapter.s3.bucket}
-        currentValue={settings.adapter.s3.bucket}
-        reset={(value) => {
-          settings.adapter.s3.bucket = value;
-        }}
-      >
-        {#snippet label()}
-          Bucket Name
-        {/snippet}
-        {#snippet hint()}
-          Your S3 bucket name.
-          <a
-            href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingBucket.html#general-purpose-buckets-overview"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-blue-600 dark:text-blue-400 hover:underline"
-          >
-            Learn about bucket naming
-          </a>
-        {/snippet}
-        <Input
-          name="s3Bucket"
-          placeholder="my-slink-bucket"
-          bind:value={settings.adapter.s3.bucket}
-        />
-      </SettingItem>
-
-      <SettingItem
-        defaultValue={defaultSettings?.adapter.s3.key}
-        currentValue={settings.adapter.s3.key}
-        reset={(value) => {
-          settings.adapter.s3.key = value;
-        }}
-      >
-        {#snippet label()}
-          Access Key ID
-        {/snippet}
-        {#snippet hint()}
-          Your AWS Access Key ID.
-          <a
-            href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access-key-self-managed.html#Using_CreateAccessKey"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-blue-600 dark:text-blue-400 hover:underline"
-          >
-            How to create access keys
-          </a>
-        {/snippet}
-        <Input name="s3AccessKey" bind:value={settings.adapter.s3.key} />
-      </SettingItem>
-
-      <SettingItem
-        defaultValue={defaultSettings?.adapter.s3.secret}
-        currentValue={settings.adapter.s3.secret}
-        reset={(value) => {
-          settings.adapter.s3.secret = value;
-        }}
-      >
-        {#snippet label()}
-          Secret Access Key
-        {/snippet}
-        {#snippet hint()}
-          Your AWS Secret Access Key (kept secure and encrypted)
-        {/snippet}
-        <Input
-          type="password"
-          name="s3SecretKey"
-          bind:value={settings.adapter.s3.secret}
-        />
-      </SettingItem>
-    </div>
-  {/if}
 
   {#snippet actions()}
     {#if showConfirmation}
@@ -330,6 +322,7 @@
       <Button
         variant="ghost"
         size="sm"
+        rounded="full"
         onclick={() => (showConfirmation = false)}
         disabled={$isClearingCache}
       >
@@ -339,6 +332,7 @@
     <Button
       variant="destructive"
       size="sm"
+      rounded="full"
       onclick={showConfirmation
         ? handleClearCache
         : () => (showConfirmation = true)}

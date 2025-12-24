@@ -4,6 +4,7 @@ export class SettingsMap {
   private _data: { [K in SettingsKey]: Settings[K] | null } = {
     theme: null,
     sidebar: null,
+    navigation: null,
     userAdmin: null,
     history: null,
     share: null,

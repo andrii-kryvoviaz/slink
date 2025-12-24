@@ -19,6 +19,9 @@ const defaultSettings: { [K in SettingsKey]?: any } = {
   sidebar: {
     expanded: true,
   },
+  navigation: {
+    expandedGroups: {},
+  },
   userAdmin: {
     viewMode: 'list',
     columnVisibility: {

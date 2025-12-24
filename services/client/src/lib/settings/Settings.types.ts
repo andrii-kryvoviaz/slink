@@ -7,6 +7,7 @@ import type {
   HistorySettings,
   HistoryViewMode,
 } from '@slink/lib/settings/setters/history';
+import type { NavigationSettings } from '@slink/lib/settings/setters/navigation';
 import type {
   ShareFormat,
   ShareSettings,
@@ -24,6 +25,9 @@ export type Settings = {
   };
   sidebar: SettingsValue<SidebarSettings> & {
     expanded: Readable<boolean>;
+  };
+  navigation: SettingsValue<NavigationSettings> & {
+    expandedGroups: Readable<Record<string, boolean>>;
   };
   userAdmin: SettingsValue<UserAdminSettings> & {
     viewMode: Readable<ViewMode>;
