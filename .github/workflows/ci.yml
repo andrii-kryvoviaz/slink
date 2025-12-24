@@ -1,0 +1,101 @@
+name: CI
+
+on:
+  workflow_call:
+
+  push:
+    branches: [main, develop]
+    paths:
+      - "services/**"
+
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - "services/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
+
+env:
+  image: docker.io/${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.APP_NAME }}
+  test_tag: ${{ github.sha }}-test
+
+jobs:
+  changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'services/api/**'
+            frontend:
+              - 'services/client/**'
+
+  backend-lint:
+    name: Backend Lint
+    runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: PHPStan Static Analysis
+        uses: ./.github/actions/phpstan
+        with:
+          image: ${{ env.image }}:${{ env.test_tag }}
+
+  backend-test:
+    name: Backend Test
+    runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: PHPUnit tests
+        uses: ./.github/actions/phpunit
+        with:
+          image: ${{ env.image }}:${{ env.test_tag }}
+
+  frontend-lint:
+    name: Frontend Lint
+    runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.frontend == 'true'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "yarn"
+          cache-dependency-path: "./services/client/yarn.lock"
+
+      - name: Install dependencies
+        run: yarn --cwd ./services/client install --frozen-lockfile
+
+      - name: Run ESLint
+        run: yarn --cwd ./services/client run lint
+
+  ci-status:
+    name: CI Status
+    runs-on: ubuntu-latest
+    if: always()
+    needs: [changes, backend-lint, backend-test, frontend-lint]
+    steps:
+      - name: Check CI status
+        if: contains(needs.*.result, 'failure')
+        run: exit 1

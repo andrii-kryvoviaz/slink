@@ -13,57 +13,32 @@ permissions:
   contents: write
 
 env:
-  image: docker.io/${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.APP_NAME }}
   tag: v${{ github.event.inputs.version }}
-  test_tag: v${{ github.event.inputs.version }}-test
 
 jobs:
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: PHPStan Static Analysis
-        uses: ./.github/actions/phpstan
-        with:
-          image: ${{ env.image }}:${{ env.test_tag }}
-
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: PHPUnit tests
-        uses: ./.github/actions/phpunit
-        with:
-          image: ${{ env.image }}:${{ env.test_tag }}
+  ci:
+    name: CI
+    uses: ./.github/workflows/ci.yml
+    secrets: inherit
 
   version:
     name: Bump Version
     runs-on: ubuntu-latest
-    needs:
-      - lint
-      - test
-
+    needs: ci
     outputs:
       prerelease: ${{ steps.semver.outputs.prerelease }}
       ref: ${{ steps.tag.outputs.ref }}
-
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Add version to output
+      - name: Get versions
         id: version
         run: |
           latest=$(git describe --tags --abbrev=0 2>/dev/null)
           echo "latest=${latest#v}" >> $GITHUB_OUTPUT
-          echo "current=${tag#v}" >> $GITHUB_OUTPUT
+          echo "current=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
 
       - uses: madhead/semver-utils@v4
         id: semver
@@ -78,7 +53,7 @@ jobs:
             exit 1
           fi
 
-      - name: Check if new version is greater than the last version
+      - name: Check version is greater
         run: |
           if [[ "${{ steps.semver.outputs.comparison-result }}" != ">" ]]; then
             printf "Version %s is not greater than the last version %s" ${{ steps.version.outputs.current }} ${{ steps.version.outputs.latest }}
@@ -91,8 +66,7 @@ jobs:
           node-version: "20"
 
       - name: Bump client version
-        run: |
-          npm --prefix ./services/client version ${{ env.tag }}
+        run: npm --prefix ./services/client version ${{ env.tag }}
 
       - name: Commit version
         uses: ./.github/actions/commit-bot
@@ -108,61 +82,24 @@ jobs:
           echo "ref=$(git rev-parse ${{ env.tag }})" >> $GITHUB_OUTPUT
 
       - name: Push changes
-        run: |
-          git push --atomic origin HEAD:main ${{ env.tag }}
+        run: git push --atomic origin HEAD:main ${{ env.tag }}
 
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
+  build:
+    name: Build
     needs: version
-
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ needs.version.outputs.ref }}
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to DockerHub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
-
-      - name: Setup Docker Metadata
-        uses: docker/metadata-action@v5
-        id: meta
-        with:
-          images: |
-            ${{ env.image }}
-          tags: |
-            ${{ env.tag }}
-            latest
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: docker/Dockerfile
-          target: prod
-          push: true
-          sbom: true
-          tags: ${{ steps.meta.outputs.tags }}
-          platforms: linux/amd64,linux/arm64
-          cache-from: type=gha,scope=monolithic-multi-arch-build
-          cache-to: type=gha,scope=monolithic-multi-arch-build
+    uses: ./.github/workflows/docker-build.yml
+    with:
+      tag: v${{ github.event.inputs.version }}
+      latest: ${{ needs.version.outputs.prerelease == '' }}
+      ref: ${{ needs.version.outputs.ref }}
+    secrets: inherit
 
   release:
     name: Create Release
     runs-on: ubuntu-latest
     needs:
       - version
-      - deploy
-
+      - build
     steps:
       - name: Create Release
         env:
