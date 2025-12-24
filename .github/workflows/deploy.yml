@@ -1,0 +1,31 @@
+name: Deploy
+run-name: Deploy ${{ github.ref == 'refs/heads/main' && 'Nightly' || 'Staging' }}
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - "services/**"
+      - "docker/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: CI
+    uses: ./.github/workflows/ci.yml
+    secrets: inherit
+
+  build:
+    name: Build
+    needs: ci
+    uses: ./.github/workflows/docker-build.yml
+    with:
+      tag: ${{ github.ref == 'refs/heads/main' && 'nightly' || 'staging' }}
+      latest: false
+    secrets: inherit

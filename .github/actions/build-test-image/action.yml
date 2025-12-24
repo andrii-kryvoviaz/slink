@@ -19,5 +19,5 @@ runs:
         target: test
         load: true
         tags: ${{ inputs.image }}
-        cache-from: type=gha,scope=test-build-linux-amd64
-        cache-to: type=gha,scope=test-build-linux-amd64
+        cache-from: type=gha,scope=test-build
+        cache-to: type=gha,scope=test-build

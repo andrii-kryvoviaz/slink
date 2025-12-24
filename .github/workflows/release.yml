@@ -13,57 +13,32 @@ permissions:
   contents: write
 
 env:
-  image: docker.io/${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.APP_NAME }}
   tag: v${{ github.event.inputs.version }}
-  test_tag: v${{ github.event.inputs.version }}-test
 
 jobs:
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: PHPStan Static Analysis
-        uses: ./.github/actions/phpstan
-        with:
-          image: ${{ env.image }}:${{ env.test_tag }}
-
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: PHPUnit tests
-        uses: ./.github/actions/phpunit
-        with:
-          image: ${{ env.image }}:${{ env.test_tag }}
+  ci:
+    name: CI
+    uses: ./.github/workflows/ci.yml
+    secrets: inherit
 
   version:
     name: Bump Version
     runs-on: ubuntu-latest
-    needs:
-      - lint
-      - test
-
+    needs: ci
     outputs:
       prerelease: ${{ steps.semver.outputs.prerelease }}
       ref: ${{ steps.tag.outputs.ref }}
-
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Add version to output
+      - name: Get versions
         id: version
         run: |
           latest=$(git describe --tags --abbrev=0 2>/dev/null)
           echo "latest=${latest#v}" >> $GITHUB_OUTPUT
-          echo "current=${tag#v}" >> $GITHUB_OUTPUT
+          echo "current=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
 
       - uses: madhead/semver-utils@v4
         id: semver
@@ -78,7 +53,7 @@ jobs:
             exit 1
           fi
 
-      - name: Check if new version is greater than the last version
+      - name: Check version is greater
         run: |
           if [[ "${{ steps.semver.outputs.comparison-result }}" != ">" ]]; then
             printf "Version %s is not greater than the last version %s" ${{ steps.version.outputs.current }} ${{ steps.version.outputs.latest }}
@@ -91,8 +66,7 @@ jobs:
           node-version: "20"
 
       - name: Bump client version
-        run: |
-          npm --prefix ./services/client version ${{ env.tag }}
+        run: npm --prefix ./services/client version ${{ env.tag }}
 
       - name: Commit version
         uses: ./.github/actions/commit-bot
@@ -108,125 +82,24 @@ jobs:
           echo "ref=$(git rev-parse ${{ env.tag }})" >> $GITHUB_OUTPUT
 
       - name: Push changes
-        run: |
-          git push --atomic origin HEAD:main ${{ env.tag }}
+        run: git push --atomic origin HEAD:main ${{ env.tag }}
 
   build:
-    name: Build (${{ matrix.platform }})
-    runs-on: ${{ matrix.runner }}
+    name: Build
     needs: version
-    strategy:
-      fail-fast: true
-      matrix:
-        include:
-          - platform: linux/amd64
-            runner: ubuntu-24.04
-          - platform: linux/arm64
-            runner: ubuntu-24.04-arm
-
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ needs.version.outputs.ref }}
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to DockerHub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
-
-      - name: Extract platform name
-        id: platform
-        run: |
-          platform=${{ matrix.platform }}
-          echo "name=${platform//\//-}" >> $GITHUB_OUTPUT
-
-      - name: Build and push by digest
-        id: build
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: docker/Dockerfile
-          target: prod
-          platforms: ${{ matrix.platform }}
-          sbom: true
-          provenance: mode=max
-          labels: |
-            org.opencontainers.image.title=${{ vars.APP_NAME }}
-            org.opencontainers.image.version=${{ github.event.inputs.version }}
-            org.opencontainers.image.revision=${{ needs.version.outputs.ref }}
-          outputs: type=image,name=${{ env.image }},push-by-digest=true,name-canonical=true,push=true
-          cache-from: type=gha,scope=prod-build-${{ steps.platform.outputs.name }}
-          cache-to: type=gha,scope=prod-build-${{ steps.platform.outputs.name }},mode=max
-
-      - name: Export digest
-        run: |
-          mkdir -p ${{ runner.temp }}/digests
-          digest="${{ steps.build.outputs.digest }}"
-          touch "${{ runner.temp }}/digests/${digest#sha256:}"
-
-      - name: Upload digest
-        uses: actions/upload-artifact@v4
-        with:
-          name: digests-${{ steps.platform.outputs.name }}
-          path: ${{ runner.temp }}/digests/*
-          if-no-files-found: error
-          retention-days: 1
-
-  manifest:
-    name: Create Multi-Arch Manifest
-    runs-on: ubuntu-24.04
-    needs:
-      - version
-      - build
-
-    steps:
-      - name: Download digests
-        uses: actions/download-artifact@v4
-        with:
-          path: ${{ runner.temp }}/digests
-          pattern: digests-*
-          merge-multiple: true
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to DockerHub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
-
-      - name: Setup Docker Metadata
-        uses: docker/metadata-action@v5
-        id: meta
-        with:
-          images: ${{ env.image }}
-          tags: |
-            type=raw,value=${{ env.tag }}
-            type=raw,value=latest,enable=${{ needs.version.outputs.prerelease == '' }}
-
-      - name: Create manifest list and push
-        working-directory: ${{ runner.temp }}/digests
-        run: |
-          docker buildx imagetools create \
-            $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
-            $(printf '${{ env.image }}@sha256:%s ' *)
-
-      - name: Verify SBOM attestations
-        run: |
-          docker buildx imagetools inspect ${{ env.image }}:${{ env.tag }} --format '{{json .Manifest}}'
+    uses: ./.github/workflows/docker-build.yml
+    with:
+      tag: v${{ github.event.inputs.version }}
+      latest: ${{ needs.version.outputs.prerelease == '' }}
+      ref: ${{ needs.version.outputs.ref }}
+    secrets: inherit
 
   release:
     name: Create Release
     runs-on: ubuntu-latest
     needs:
       - version
-      - manifest
-
+      - build
     steps:
       - name: Create Release
         env:
