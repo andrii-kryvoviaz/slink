@@ -89,7 +89,7 @@
           value={form?.username || ''}
           error={form?.errors?.username}
           variant="modern"
-          size="md"
+          size="lg"
           rounded="lg"
         >
           {#snippet leftIcon()}
@@ -106,7 +106,7 @@
           value={form?.email || ''}
           error={form?.errors?.email}
           variant="modern"
-          size="md"
+          size="lg"
           rounded="lg"
         >
           {#snippet leftIcon()}
@@ -128,7 +128,7 @@
           bind:value={passwordValue}
           error={form?.errors?.password}
           variant="modern"
-          size="md"
+          size="lg"
           rounded="lg"
         >
           {#snippet leftIcon()}
@@ -154,7 +154,7 @@
         placeholder="Confirm your password"
         error={form?.errors?.confirm}
         variant="modern"
-        size="md"
+        size="lg"
         rounded="lg"
       >
         {#snippet leftIcon()}

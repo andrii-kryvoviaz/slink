@@ -121,6 +121,7 @@
         name="smbHost"
         placeholder="192.168.1.100 or server.local"
         bind:value={settings.adapter.smb.host}
+        size="md"
       />
     </SettingItem>
 
@@ -141,6 +142,7 @@
         name="smbShare"
         placeholder="uploads"
         bind:value={settings.adapter.smb.share}
+        size="md"
       />
     </SettingItem>
 
@@ -161,6 +163,7 @@
         name="smbWorkgroup"
         placeholder="WORKGROUP"
         bind:value={settings.adapter.smb.workgroup}
+        size="md"
       />
     </SettingItem>
 
@@ -177,7 +180,11 @@
       {#snippet hint()}
         Authentication username
       {/snippet}
-      <Input name="smbUsername" bind:value={settings.adapter.smb.username} />
+      <Input
+        name="smbUsername"
+        bind:value={settings.adapter.smb.username}
+        size="md"
+      />
     </SettingItem>
 
     <SettingItem
@@ -197,6 +204,7 @@
         type="password"
         name="smbPassword"
         bind:value={settings.adapter.smb.password}
+        size="md"
       />
     </SettingItem>
   {/if}
@@ -230,6 +238,7 @@
         name="s3Region"
         placeholder="us-east-1"
         bind:value={settings.adapter.s3.region}
+        size="md"
       />
     </SettingItem>
 
@@ -258,6 +267,7 @@
         name="s3Bucket"
         placeholder="my-slink-bucket"
         bind:value={settings.adapter.s3.bucket}
+        size="md"
       />
     </SettingItem>
 
@@ -282,7 +292,11 @@
           How to create access keys
         </a>
       {/snippet}
-      <Input name="s3AccessKey" bind:value={settings.adapter.s3.key} />
+      <Input
+        name="s3AccessKey"
+        bind:value={settings.adapter.s3.key}
+        size="md"
+      />
     </SettingItem>
 
     <SettingItem
@@ -302,6 +316,7 @@
         type="password"
         name="s3SecretKey"
         bind:value={settings.adapter.s3.secret}
+        size="md"
       />
     </SettingItem>
   {/if}
