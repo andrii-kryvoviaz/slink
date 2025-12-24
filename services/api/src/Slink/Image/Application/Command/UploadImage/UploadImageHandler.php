@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Slink\Image\Application\Command\UploadImage;
 
+use Slink\Image\Application\Service\ImageConversionResolver;
 use Slink\Image\Domain\Context\ImageCreationContext;
 use Slink\Image\Domain\Exception\DuplicateImageException;
 use Slink\Image\Domain\Factory\ImageMetadataFactory;
 use Slink\Image\Domain\Image;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Image\Domain\Service\ImageAnalyzerInterface;
+use Slink\Image\Domain\Service\ImageConversionResolverInterface;
 use Slink\Image\Domain\Service\ImageSanitizerInterface;
 use Slink\Image\Domain\Service\ImageTransformerInterface;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
@@ -25,13 +27,6 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
 
   /**
    * @param ConfigurationProviderInterface<SettingsService> $configurationProvider
-   * @param ImageStoreRepositoryInterface $imageRepository
-   * @param ImageAnalyzerInterface $imageAnalyzer
-   * @param ImageTransformerInterface $imageTransformer
-   * @param ImageSanitizerInterface $sanitizer
-   * @param ImageCreationContext $creationContext
-   * @param ImageMetadataFactory $metadataFactory
-   * @param StorageInterface $storage
    */
   public function __construct(
     private ConfigurationProviderInterface $configurationProvider,
@@ -39,6 +34,7 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
     private ImageAnalyzerInterface         $imageAnalyzer,
     private ImageTransformerInterface      $imageTransformer,
     private ImageSanitizerInterface        $sanitizer,
+    private ImageConversionResolverInterface $conversionResolver,
     private ImageCreationContext           $creationContext,
     private ImageMetadataFactory           $metadataFactory,
     private StorageInterface               $storage
@@ -57,24 +53,22 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
       ? ID::fromString($userId)
       : null;
 
-    if ($this->imageAnalyzer->isConversionRequired($file->getMimeType())) {
-      $file = $this->imageTransformer->convertToJpeg($file);
-    }
-
     if ($this->imageAnalyzer->requiresSanitization($file->getMimeType())) {
       $file = $this->sanitizer->sanitizeFile($file);
     }
 
-    [$mimeType, $pathname, $extension] = [$file->getMimeType(), $file->getPathname(), $file->guessExtension()];
-
-    if (
-      $this->imageAnalyzer->supportsExifProfile($mimeType)
-      && $this->configurationProvider->get('image.stripExifMetadata')
-    ) {
-      $this->imageTransformer->stripExifMetadata($pathname);
+    if ($targetFormat = $this->conversionResolver->resolve($file)) {
+      $file = $this->imageTransformer->convertToFormat($file, $targetFormat);
     }
 
-    $fileName = sprintf('%s.%s', $imageId, $extension);
+    if (
+      $this->imageAnalyzer->supportsExifProfile($file->getMimeType())
+      && $this->configurationProvider->get('image.stripExifMetadata')
+    ) {
+      $this->imageTransformer->stripExifMetadata($file->getPathname());
+    }
+
+    $fileName = sprintf('%s.%s', $imageId, $file->guessExtension());
 
     $imageFile = ImageFile::fromSymfonyFile($file);
     $metadata = $this->metadataFactory->createFromImageFile($imageFile);

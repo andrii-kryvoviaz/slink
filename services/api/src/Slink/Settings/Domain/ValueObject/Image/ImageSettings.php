@@ -15,6 +15,9 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
    * @param int $compressionQuality
    * @param bool $allowOnlyPublicImages
    * @param bool $enableDeduplication
+   * @param bool $forceFormatConversion
+   * @param string|null $targetFormat
+   * @param bool $convertAnimatedImages
    */
   private function __construct(
     private string $maxSize,
@@ -22,6 +25,9 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
     private int $compressionQuality = 80,
     private bool $allowOnlyPublicImages = false,
     private bool $enableDeduplication = true,
+    private bool $forceFormatConversion = false,
+    private ?string $targetFormat = null,
+    private bool $convertAnimatedImages = false,
   ) {
     if (!preg_match('/^(\d+)([kM])$/', $maxSize)) {
       throw new InvalidImageMaxSizeException();
@@ -46,6 +52,9 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
       'compressionQuality' => $this->compressionQuality,
       'allowOnlyPublicImages' => $this->allowOnlyPublicImages,
       'enableDeduplication' => $this->enableDeduplication,
+      'forceFormatConversion' => $this->forceFormatConversion,
+      'targetFormat' => $this->targetFormat,
+      'convertAnimatedImages' => $this->convertAnimatedImages,
     ];
   }
   
@@ -59,6 +68,9 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
       $payload['compressionQuality'] ?? 80,
       $payload['allowOnlyPublicImages'] ?? false,
       $payload['enableDeduplication'] ?? true,
+      $payload['forceFormatConversion'] ?? false,
+      $payload['targetFormat'] ?? null,
+      $payload['convertAnimatedImages'] ?? false,
     );
   }
   
@@ -102,5 +114,26 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
    */
   public function isEnableDeduplication(): bool {
     return $this->enableDeduplication;
+  }
+
+  /**
+   * @return bool
+   */
+  public function isForceFormatConversion(): bool {
+    return $this->forceFormatConversion;
+  }
+
+  /**
+   * @return string|null
+   */
+  public function getTargetFormat(): ?string {
+    return $this->targetFormat;
+  }
+
+  /**
+   * @return bool
+   */
+  public function isConvertAnimatedImages(): bool {
+    return $this->convertAnimatedImages;
   }
 }

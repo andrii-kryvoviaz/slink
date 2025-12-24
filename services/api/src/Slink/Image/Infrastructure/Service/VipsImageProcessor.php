@@ -31,7 +31,16 @@ final class VipsImageProcessor implements ImageProcessorInterface {
   public function convertFormat(string $imageContent, string $format, ?int $quality = null): string {
     try {
       $imageFormat = ImageFormat::fromString($format);
+      
       $image = VipsImage::newFromBuffer($imageContent);
+      $pages = $this->getImagePages($image);
+      $isAnimated = $pages > 1;
+      
+      if ($isAnimated && $imageFormat->supportsAnimation()) {
+        $image = VipsImage::newFromBuffer($imageContent, '', ['n' => -1]);
+        return $this->convertAnimatedFormat($imageContent, $imageFormat, $pages);
+      }
+      
       return $this->formatAdapter->writeToBuffer(
         $image,
         $imageFormat,
@@ -40,6 +49,14 @@ final class VipsImageProcessor implements ImageProcessorInterface {
     } catch (Throwable $e) {
       throw new RuntimeException('Failed to convert image format: ' . $e->getMessage(), 0, $e);
     }
+  }
+
+  private function convertAnimatedFormat(string $imageContent, ImageFormat $format, int $pages): string {
+    $delays = $this->getImageDelays($imageContent, $pages);
+    $frames = $this->processAnimatedFrames($imageContent, fn(VipsImage $frame) => $frame, $pages);
+    $combined = $this->combineAnimatedFrames($frames, $delays);
+    
+    return $this->formatAdapter->writeAnimatedToBuffer($combined, $format);
   }
 
   /**

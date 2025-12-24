@@ -127,6 +127,7 @@ RUN apk update && apk upgrade &&\
     icu-libs \
     libsmbclient \
     vips \
+    imagemagick \
     libheif \
     supervisor
 

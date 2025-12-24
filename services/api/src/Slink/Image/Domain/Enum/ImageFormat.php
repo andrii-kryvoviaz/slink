@@ -57,7 +57,7 @@ enum ImageFormat: string {
 
   public function supportsAnimation(): bool {
     return match ($this) {
-      self::GIF, self::WEBP, self::AVIF => true,
+      self::GIF, self::WEBP => true,
       default => false
     };
   }
