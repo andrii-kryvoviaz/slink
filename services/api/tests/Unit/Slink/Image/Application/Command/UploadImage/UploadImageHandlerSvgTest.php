@@ -9,10 +9,12 @@ use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Slink\Image\Application\Command\UploadImage\UploadImageCommand;
 use Slink\Image\Application\Command\UploadImage\UploadImageHandler;
+use Slink\Image\Application\Service\ImageConversionResolver;
 use Slink\Image\Domain\Context\ImageCreationContext;
 use Slink\Image\Domain\Factory\ImageMetadataFactory;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Image\Domain\Service\ImageAnalyzerInterface;
+use Slink\Image\Domain\Service\ImageConversionResolverInterface;
 use Slink\Image\Domain\Service\ImageTransformerInterface;
 use Slink\Image\Domain\Service\ImageSanitizerInterface;
 use Slink\Image\Domain\Specification\ImageDuplicateSpecificationInterface;
@@ -36,6 +38,7 @@ class UploadImageHandlerSvgTest extends TestCase {
         $imageAnalyzer = $this->createMock(ImageAnalyzerInterface::class);
         $imageTransformer = $this->createMock(ImageTransformerInterface::class);
         $sanitizer = $this->createMock(ImageSanitizerInterface::class);
+        $conversionResolver = $this->createMock(ImageConversionResolverInterface::class);
         $storage = $this->createMock(StorageInterface::class);
         $duplicateSpec = $this->createMock(ImageDuplicateSpecificationInterface::class);
         $creationContext = new ImageCreationContext($duplicateSpec);
@@ -47,6 +50,7 @@ class UploadImageHandlerSvgTest extends TestCase {
             $imageAnalyzer,
             $imageTransformer,
             $sanitizer,
+            $conversionResolver,
             $creationContext,
             $metadataFactory,
             $storage
@@ -62,24 +66,11 @@ class UploadImageHandlerSvgTest extends TestCase {
             new ImageMetadata(1024, 'image/svg+xml', 800, 600, 'test_hash')
         );
         
-        $imageAnalyzer->method('isConversionRequired')->with('image/svg+xml')->willReturn(false);
-        $imageAnalyzer->method('requiresSanitization')->with('image/svg+xml')->willReturn(true);
-        $imageAnalyzer->method('supportsExifProfile')->with('image/svg+xml')->willReturn(false);
-        $imageAnalyzer->method('analyze')->willReturn([
-            'size' => 1000,
-            'mimeType' => 'image/svg+xml',
-            'width' => 100,
-            'height' => 100,
-        ]);
-        
-        $configProvider->method('get')
-            ->willReturnMap([
-                ['image.allowOnlyPublicImages', false],
-                ['image.stripExifMetadata', false]
-            ]);
         $imageAnalyzer->method('isConversionRequired')->willReturn(false);
         $imageAnalyzer->method('requiresSanitization')->willReturn(true);
         $imageAnalyzer->method('supportsExifProfile')->willReturn(false);
+        
+        $conversionResolver->method('resolve')->willReturn(null);
         
         $configProvider->method('get')->willReturnMap([
             ['image.stripExifMetadata', false],
@@ -115,6 +106,7 @@ class UploadImageHandlerSvgTest extends TestCase {
         $imageAnalyzer = $this->createMock(ImageAnalyzerInterface::class);
         $imageTransformer = $this->createMock(ImageTransformerInterface::class);
         $sanitizer = $this->createMock(ImageSanitizerInterface::class);
+        $conversionResolver = $this->createMock(ImageConversionResolverInterface::class);
         $storage = $this->createMock(StorageInterface::class);
         $duplicateSpec = $this->createMock(ImageDuplicateSpecificationInterface::class);
         $creationContext = new ImageCreationContext($duplicateSpec);
@@ -126,6 +118,7 @@ class UploadImageHandlerSvgTest extends TestCase {
             $imageAnalyzer,
             $imageTransformer,
             $sanitizer,
+            $conversionResolver,
             $creationContext,
             $metadataFactory,
             $storage
@@ -144,6 +137,8 @@ class UploadImageHandlerSvgTest extends TestCase {
         $imageAnalyzer->method('isConversionRequired')->with('image/jpeg')->willReturn(false);
         $imageAnalyzer->method('requiresSanitization')->with('image/jpeg')->willReturn(false);
         $imageAnalyzer->method('supportsExifProfile')->with('image/jpeg')->willReturn(true);
+        
+        $conversionResolver->method('resolve')->willReturn(null);
         
         $configProvider->method('get')
             ->willReturnMap([

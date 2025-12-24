@@ -1,8 +1,6 @@
 export const themeIcons: string[] = [
   'eos-icons:three-dots-loading',
   'ph:user',
-  'solar:graph-line-duotone',
-  'mingcute:settings-7-line',
   'akar-icons:chevron-down',
   'akar-icons:chevron-up',
   'teenyicons:refresh-solid',
@@ -181,8 +179,6 @@ export const themeIcons: string[] = [
   'ph:at',
   'ph:warning-fill',
   'lucide:clipboard-copy',
-  'solar:settings-linear',
-  'solar:shield-keyhole-linear',
   'solar:database-linear',
   'solar:gallery-linear',
   'solar:shield-check-linear',
