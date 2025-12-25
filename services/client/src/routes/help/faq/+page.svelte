@@ -26,8 +26,10 @@
       document.getElementById(hash)?.scrollIntoView({
         behavior: 'smooth',
         block: 'start',
+        // @ts-ignore
+        container: 'nearest',
       });
-    }, 100);
+    }, 30);
   };
 
   onMount(() => {
