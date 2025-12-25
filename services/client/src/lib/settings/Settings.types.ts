@@ -13,6 +13,7 @@ import type {
   ShareSettings,
 } from '@slink/lib/settings/setters/share';
 import type { SidebarSettings } from '@slink/lib/settings/setters/sidebar';
+import type { UploadOptionsSettings } from '@slink/lib/settings/setters/uploadOptions';
 import type {
   UserAdminSettings,
   ViewMode,
@@ -40,6 +41,9 @@ export type Settings = {
   };
   comment: SettingsValue<CommentSettings> & {
     sortOrder: Readable<SortOrder>;
+  };
+  uploadOptions: SettingsValue<UploadOptionsSettings> & {
+    expanded: Readable<boolean>;
   };
 };
 

@@ -40,6 +40,9 @@ const defaultSettings: { [K in SettingsKey]?: any } = {
   comment: {
     sortOrder: 'asc',
   },
+  uploadOptions: {
+    expanded: false,
+  },
 };
 
 export const setCookieSettingsOnLocals: Handle = async ({ event, resolve }) => {

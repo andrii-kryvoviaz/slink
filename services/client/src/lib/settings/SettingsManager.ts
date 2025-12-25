@@ -21,6 +21,8 @@ import type { ShareSettings } from '@slink/lib/settings/setters/share';
 import { SidebarSetter } from '@slink/lib/settings/setters/sidebar';
 import type { SidebarSettings } from '@slink/lib/settings/setters/sidebar';
 import { ThemeSetter } from '@slink/lib/settings/setters/theme';
+import { setUploadOptions } from '@slink/lib/settings/setters/uploadOptions';
+import type { UploadOptionsSettings } from '@slink/lib/settings/setters/uploadOptions';
 import { UserAdminSetter } from '@slink/lib/settings/setters/userAdmin';
 import type { UserAdminSettings } from '@slink/lib/settings/setters/userAdmin';
 
@@ -36,6 +38,7 @@ type SettingsValueTypes = {
   history: HistorySettings;
   share: ShareSettings;
   comment: CommentSettings;
+  uploadOptions: UploadOptionsSettings;
 };
 
 export class SettingsManager {
@@ -55,6 +58,7 @@ export class SettingsManager {
     history: HistorySetter,
     share: ShareSetter,
     comment: CommentSetter,
+    uploadOptions: setUploadOptions,
   };
 
   public get<T extends SettingsKey>(
@@ -74,11 +78,12 @@ export class SettingsManager {
     let cookieValue: string =
       typeof value === 'string' ? value : JSON.stringify(value);
 
-    cookie.set(`settings.${key}`, cookieValue);
+    // Set cookie with 1 year expiration
+    cookie.set(`settings.${key}`, cookieValue, 31536000);
   }
 
   public getSettingKeys(): SettingsKey[] {
-    return this._settings.keys();
+    return Object.keys(this._setters) as SettingsKey[];
   }
 
   private _formReturnValue<T extends SettingsKey>(

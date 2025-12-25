@@ -81,7 +81,7 @@
 
     {#if showCount && tag.imageCount > 0}
       <span
-        class="px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-blue-500/20 text-blue-600 dark:bg-blue-400/20 dark:text-blue-400"
+        class="min-w-5 px-1.5 py-0.5 rounded-md text-[10px] font-bold text-center bg-blue-500 text-white"
       >
         {tag.imageCount}
       </span>

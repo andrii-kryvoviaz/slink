@@ -182,4 +182,6 @@ export const themeIcons: string[] = [
   'solar:database-linear',
   'solar:gallery-linear',
   'solar:shield-check-linear',
+  'ph:sliders-horizontal',
+  'ph:circle',
 ];
