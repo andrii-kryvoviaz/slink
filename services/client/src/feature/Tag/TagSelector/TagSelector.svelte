@@ -3,24 +3,29 @@
     TagBadge,
     TagDropdownContent,
     TagInput,
+    tagDropdownContentVariants,
     tagSelectorContainerVariants,
     tagSelectorIconContainerVariants,
     tagSelectorIconVariants,
     useTagOperations,
   } from '@slink/feature/Tag';
   import type { TagSelectorContainerVariants } from '@slink/feature/Tag';
+  import { Popover } from 'bits-ui';
 
   import Icon from '@iconify/svelte';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
+
+  import { cn } from '@slink/utils/ui/index.js';
 
   interface Props extends TagSelectorContainerVariants {
     selectedTags?: Tag[];
     onTagsChange?: (tags: Tag[]) => void;
     disabled?: boolean;
     placeholder?: string;
-    variant?: 'default' | 'neon' | 'minimal';
+    variant?: 'default' | 'neon' | 'minimal' | 'subtle';
     allowCreate?: boolean;
+    hideIcon?: boolean;
   }
 
   let {
@@ -30,6 +35,7 @@
     placeholder = 'Search or add tags...',
     variant = 'default',
     allowCreate = true,
+    hideIcon = false,
   }: Props = $props();
 
   let isOpen = $state(false);
@@ -39,6 +45,10 @@
   let inputRef = $state<HTMLInputElement>();
   let childInputRef = $state<HTMLInputElement>();
   let highlightedIndex = $state(-1);
+
+  export const focusInput = () => {
+    inputRef?.focus();
+  };
 
   const hasSelectedTags = $derived(selectedTags.length > 0);
   const selectedTagIds = $derived(new Set(selectedTags.map((tag) => tag.id)));
@@ -84,12 +94,24 @@
     return count;
   });
 
+  const hasQuery = $derived(Boolean(searchTerm.trim()));
+
   const resetDropdownState = () => {
     searchTerm = '';
     isOpen = false;
     creatingChildFor = null;
     childTagName = '';
     highlightedIndex = -1;
+  };
+
+  const closePopover = (blur = false) => {
+    isOpen = false;
+    highlightedIndex = -1;
+
+    if (blur && !creatingChildFor) {
+      childInputRef?.blur();
+      inputRef?.blur();
+    }
   };
 
   const selectTag = (tag: Tag, keepOpen = false) => {
@@ -207,7 +229,7 @@
   };
 
   $effect(() => {
-    if (searchTerm?.trim()) {
+    if (hasQuery) {
       loadTags(searchTerm);
     }
     highlightedIndex = -1;
@@ -240,94 +262,130 @@
 
 <div class="space-y-3">
   <div class="relative">
-    <div
-      class={tagSelectorContainerVariants({ variant, disabled })}
-      role="combobox"
-      aria-expanded={!disabled && isOpen}
-      aria-controls="tag-dropdown"
-      aria-disabled={disabled}
-      tabindex={disabled ? -1 : 0}
-      onkeydown={handleContainerKeydown}
-      onclick={handleContainerClick}
-    >
-      <div class="flex items-center gap-3 relative z-10">
-        <div class="flex-shrink-0">
-          <div class={tagSelectorIconContainerVariants({ variant })}>
-            {#if shouldShowLoader}
-              <Icon
-                icon="ph:spinner"
-                class={`${tagSelectorIconVariants({ variant })} animate-spin`}
-              />
-            {:else}
-              <Icon
-                icon="ph:tag"
-                class={tagSelectorIconVariants({ variant })}
-              />
-            {/if}
+    <Popover.Root bind:open={isOpen}>
+      <Popover.Trigger disabled={true}>
+        {#snippet child({ props })}
+          <div
+            {...props}
+            class={cn(
+              tagSelectorContainerVariants({
+                variant,
+                disabled,
+              }),
+            )}
+            role="combobox"
+            aria-expanded={!disabled && isOpen}
+            aria-controls="tag-dropdown"
+            aria-disabled={disabled}
+            tabindex={disabled ? -1 : 0}
+            onkeydown={handleContainerKeydown}
+            onclick={handleContainerClick}
+          >
+            <div class="flex items-center gap-3 relative z-10">
+              {#if !hideIcon}
+                <div class="shrink-0">
+                  <div class={tagSelectorIconContainerVariants({ variant })}>
+                    {#if shouldShowLoader}
+                      <Icon
+                        icon="ph:spinner"
+                        class={`${tagSelectorIconVariants({ variant })} animate-spin`}
+                      />
+                    {:else}
+                      <Icon
+                        icon="ph:tag"
+                        class={tagSelectorIconVariants({ variant })}
+                      />
+                    {/if}
+                  </div>
+                </div>
+              {/if}
+
+              <div class="flex flex-wrap items-center gap-1.5 flex-1">
+                {#each selectedTags as tag (tag.id)}
+                  <TagBadge
+                    {tag}
+                    variant="neon"
+                    showFullPath={true}
+                    showCount={false}
+                    onClose={() => removeTag(tag.id)}
+                  />
+                {/each}
+
+                <div class="flex-1 min-w-30">
+                  <TagInput
+                    bind:ref={inputRef}
+                    bind:childRef={childInputRef}
+                    bind:searchTerm
+                    bind:childTagName
+                    {variant}
+                    placeholder={hasSelectedTags
+                      ? 'Add more tags...'
+                      : placeholder}
+                    {creatingChildFor}
+                    onSearchChange={(value) => {
+                      searchTerm = value;
+                      if (disabled) return;
+                      if (value.trim() || creatingChildFor) {
+                        isOpen = true;
+                      } else {
+                        closePopover();
+                      }
+                    }}
+                    onEnter={handleEnter}
+                    onEscape={() => {
+                      closePopover(true);
+                    }}
+                    onBackspace={handleBackspace}
+                    onArrowDown={handleArrowDown}
+                    onArrowUp={handleArrowUp}
+                    onfocus={() => {
+                      if (disabled) return;
+                      if (creatingChildFor || hasQuery) {
+                        isOpen = true;
+                      }
+                    }}
+                    onCancelChild={cancelChildCreation}
+                    onCreateChild={handleCreateTag}
+                    {disabled}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+        {/snippet}
+      </Popover.Trigger>
 
-        <div class="flex flex-wrap items-center gap-1.5 flex-1">
-          {#each selectedTags as tag (tag.id)}
-            <TagBadge
-              {tag}
-              variant="neon"
-              showFullPath={true}
-              showCount={false}
-              onClose={() => removeTag(tag.id)}
-            />
-          {/each}
-
-          <div class="flex-1 min-w-[120px]">
-            <TagInput
-              bind:ref={inputRef}
-              bind:childRef={childInputRef}
-              bind:searchTerm
-              bind:childTagName
-              {variant}
-              placeholder={hasSelectedTags ? 'Add more tags...' : placeholder}
-              {creatingChildFor}
-              onSearchChange={(value) => (searchTerm = value)}
-              onEnter={handleEnter}
-              onEscape={() => {
-                isOpen = false;
-                inputRef?.blur();
-              }}
-              onBackspace={handleBackspace}
-              onArrowDown={handleArrowDown}
-              onArrowUp={handleArrowUp}
-              onfocus={() => {
-                isOpen = true;
-              }}
-              onblur={() => {
-                setTimeout(() => {
-                  isOpen = false;
-                  highlightedIndex = -1;
-                }, 150);
-              }}
-              onCancelChild={cancelChildCreation}
-              onCreateChild={handleCreateTag}
-              {disabled}
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <TagDropdownContent
-      isOpen={!disabled && isOpen}
-      tags={filteredTags}
-      {searchTerm}
-      {creatingChildFor}
-      {childTagName}
-      isCreating={$isCreatingTag}
-      {canCreate}
-      {allowCreate}
-      {variant}
-      {highlightedIndex}
-      onSelectTag={selectTag}
-      onAddChild={startCreatingChild}
-      onCreateTag={handleCreateTag}
-    />
+      <Popover.Content
+        id="tag-dropdown"
+        class={tagDropdownContentVariants({ variant })}
+        sideOffset={4}
+        avoidCollisions={true}
+        collisionPadding={10}
+        trapFocus={false}
+        interactOutsideBehavior="close"
+        onOpenAutoFocus={(e) => e.preventDefault()}
+        onInteractOutside={() => closePopover(true)}
+        onFocusOutside={() => closePopover(true)}
+        onEscapeKeydown={() => {
+          closePopover(true);
+        }}
+      >
+        <TagDropdownContent
+          isOpen={!disabled && isOpen}
+          tags={filteredTags}
+          {searchTerm}
+          {creatingChildFor}
+          {childTagName}
+          isCreating={$isCreatingTag}
+          {canCreate}
+          {allowCreate}
+          {variant}
+          {highlightedIndex}
+          onSelectTag={selectTag}
+          onAddChild={startCreatingChild}
+          onCreateTag={handleCreateTag}
+        />
+      </Popover.Content>
+    </Popover.Root>
   </div>
 </div>

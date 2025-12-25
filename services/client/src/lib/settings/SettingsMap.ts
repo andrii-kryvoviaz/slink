@@ -4,10 +4,12 @@ export class SettingsMap {
   private _data: { [K in SettingsKey]: Settings[K] | null } = {
     theme: null,
     sidebar: null,
+    navigation: null,
     userAdmin: null,
     history: null,
     share: null,
     comment: null,
+    uploadOptions: null,
   };
 
   public has<T extends SettingsKey>(key: T): boolean {

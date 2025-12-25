@@ -1,13 +1,11 @@
 import { createAppSidebarItems } from '@slink/feature/Navigation/Sidebar/config';
 import type { AppSidebarGroup } from '@slink/feature/Navigation/Sidebar/types';
 
-import { ApiClient } from '@slink/api/Client';
-
 import { isAdmin, isAuthorized } from '@slink/lib/auth/utils';
 
 import type { LayoutServerLoad } from './$types';
 
-export const load: LayoutServerLoad = async ({ locals, request, fetch }) => {
+export const load: LayoutServerLoad = async ({ locals, request }) => {
   const { settings, globalSettings, user } = locals;
 
   const userAgent = request.headers.get('user-agent') || '';
@@ -33,16 +31,11 @@ export const load: LayoutServerLoad = async ({ locals, request, fetch }) => {
         (!group.roles || (user && isAuthorized(user, group.roles))),
     );
 
-  const storageUsage = isAdmin(user)
-    ? await ApiClient.use(fetch).storage.getUsage()
-    : null;
-
   return {
     settings,
     globalSettings,
     user,
     userAgent,
     sidebarGroups,
-    storageUsage,
   };
 };

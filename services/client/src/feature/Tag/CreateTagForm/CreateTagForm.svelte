@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { TagCombobox } from '@slink/feature/Tag';
+  import { TagSelector } from '@slink/feature/Tag';
   import { Button } from '@slink/ui/components/button';
   import { Input } from '@slink/ui/components/input';
 
@@ -21,6 +21,16 @@
     name: '',
     parentId: '',
   });
+
+  const selectedParentTag = $derived(() => {
+    if (!formData.parentId) return [];
+    const tag = tags.find((t) => t.id === formData.parentId);
+    return tag ? [tag] : [];
+  });
+
+  const handleParentTagChange = (selectedTags: Tag[]) => {
+    formData.parentId = selectedTags.length > 0 ? selectedTags[0].id : '';
+  };
 
   function handleSubmit(event: Event) {
     event.preventDefault();
@@ -85,12 +95,12 @@
         >
           Parent Tag (Optional)
         </label>
-        <TagCombobox
-          {tags}
-          bind:value={formData.parentId}
+        <TagSelector
+          selectedTags={selectedParentTag()}
+          onTagsChange={handleParentTagChange}
           placeholder="Search for parent tag..."
-          error={errors?.parentId}
-          class="w-full"
+          variant="minimal"
+          allowCreate={false}
         />
       </div>
     </div>

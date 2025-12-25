@@ -1,6 +1,5 @@
 <script lang="ts">
-  import ResetSettingPopover from '@slink/feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte';
-  import { Overlay } from '@slink/ui/components/popover';
+  import { Button } from '@slink/ui/components/button';
   import { Tooltip } from '@slink/ui/components/tooltip';
   import type { Snippet } from 'svelte';
 
@@ -16,6 +15,8 @@
     reset?: (value: any) => void;
     label?: Snippet;
     hint?: Snippet;
+    header?: Snippet;
+    footer?: Snippet;
     children?: Snippet;
   }
 
@@ -25,12 +26,13 @@
     reset = () => {},
     label,
     hint,
+    header,
+    footer,
     children,
   }: Props = $props();
 
-  let labelRef: HTMLSpanElement | undefined = $state();
   let triggerRef: HTMLButtonElement | undefined = $state();
-  let resetPopoverOpen = $state(false);
+  let showConfirm = $state(false);
 
   const formatValue = (value: any) => {
     if (typeof value === 'boolean') {
@@ -39,33 +41,23 @@
 
     if (typeof value === 'string' && value.match(sizeMatchingRegex)) {
       const { size, unit } = parseFileSize(value);
-
       return `${size} ${unit}`;
     }
 
     return value;
   };
 
-  const formatDefaultValue = () => {
-    return formatValue(defaultValue);
-  };
-
-  const formatCurrentValue = () => {
-    return formatValue(currentValue);
-  };
-
-  const confirmSettingReset = () => {
-    resetPopoverOpen = false;
+  const confirmReset = () => {
+    showConfirm = false;
     reset(defaultValue);
     triggerRef?.click();
   };
 
-  const closeResetPopover = () => {
-    resetPopoverOpen = false;
+  const cancelReset = () => {
+    showConfirm = false;
   };
 
-  let displayValue = $derived(formatDefaultValue());
-  let displayCurrentValue = $derived(formatCurrentValue());
+  let displayValue = $derived(formatValue(defaultValue));
   let shouldShowResetButton = $derived(
     displayValue && currentValue !== null && currentValue !== defaultValue,
   );
@@ -79,79 +71,91 @@
   aria-label="Reset Setting"
 ></button>
 
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-  <div class="space-y-3">
-    {#if label}
-      <div class="space-y-2">
-        <div class="flex items-start gap-3 flex-wrap">
-          <h3
-            bind:this={labelRef}
-            class="text-base font-medium text-gray-900 dark:text-white leading-tight"
-          >
+<div
+  class="relative flex flex-col hover:bg-gray-100/50 dark:hover:bg-gray-800/30 transition-colors duration-150 overflow-hidden"
+>
+  {#if header}
+    {@render header?.()}
+  {/if}
+
+  <div
+    class="flex items-center justify-between gap-4 sm:gap-6 px-4 py-4 flex-1 min-w-0"
+  >
+    <div class="flex-1 min-w-0">
+      {#if label}
+        <div class="flex items-center gap-2">
+          <h3 class="text-sm font-medium text-gray-900 dark:text-white">
             {@render label?.()}
           </h3>
 
           <div
-            class="flex items-center justify-center w-6 h-6"
-            class:opacity-0={!shouldShowResetButton}
-            class:pointer-events-none={!shouldShowResetButton}
+            class="flex items-center w-5 h-5 transition-opacity duration-150"
+            class:opacity-0={!shouldShowResetButton || showConfirm}
+            class:pointer-events-none={!shouldShowResetButton || showConfirm}
           >
             <Tooltip side="top" size="xs">
               {#snippet trigger()}
-                <Overlay
-                  bind:open={resetPopoverOpen}
-                  variant="floating"
-                  contentProps={{ align: 'end' }}
+                <button
+                  type="button"
+                  onclick={() => (showConfirm = true)}
+                  class="inline-flex items-center justify-center w-5 h-5 rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 transition-colors duration-150"
+                  aria-label="Reset to default value"
                 >
-                  {#snippet trigger()}
-                    <button
-                      type="button"
-                      class="inline-flex items-center justify-center w-6 h-6 rounded-md text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:ring-offset-1 group"
-                      aria-label="Reset to default value"
-                      disabled={!shouldShowResetButton}
-                    >
-                      <Icon
-                        icon="lucide:rotate-cw"
-                        class="w-3.5 h-3.5 transition-transform duration-200 group-hover:rotate-12"
-                      />
-                    </button>
-                  {/snippet}
-
-                  <ResetSettingPopover
-                    name={labelRef?.innerText || ''}
-                    {displayValue}
-                    currentValue={displayCurrentValue}
-                    close={closeResetPopover}
-                    confirm={confirmSettingReset}
-                  />
-                </Overlay>
+                  <Icon icon="lucide:rotate-ccw" class="w-3 h-3" />
+                </button>
               {/snippet}
-
-              Reset to default
+              Reset to {displayValue}
             </Tooltip>
           </div>
         </div>
 
         {#if hint}
-          <p
-            class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed max-w-md"
-          >
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
             {@render hint?.()}
           </p>
         {/if}
-      </div>
-    {/if}
-  </div>
+      {/if}
+    </div>
 
-  <div class="flex justify-start lg:justify-end">
-    <div class="w-full lg:w-auto lg:min-w-[240px]">
+    <div class="shrink-0">
       {#if children}
         {@render children()}
-      {:else}
-        <div class="text-sm text-gray-500 dark:text-gray-400 italic">
-          Control not available
-        </div>
       {/if}
     </div>
   </div>
+
+  {#if footer}
+    {@render footer?.()}
+  {/if}
+
+  {#if showConfirm}
+    <div
+      class="absolute inset-0 flex items-center justify-between gap-3 px-4 bg-white dark:bg-gray-900 animate-in fade-in duration-100 z-10"
+    >
+      <div
+        class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400"
+      >
+        <Icon icon="lucide:rotate-ccw" class="w-4 h-4 text-gray-400" />
+        <span>
+          Reset to <span class="font-medium text-gray-900 dark:text-white"
+            >{displayValue}</span
+          >
+        </span>
+      </div>
+      <div class="flex items-center gap-2">
+        <Button variant="ghost" size="xs" rounded="lg" onclick={cancelReset}>
+          Cancel
+        </Button>
+        <Button
+          variant="glass-green"
+          size="xs"
+          rounded="lg"
+          onclick={confirmReset}
+        >
+          <Icon icon="lucide:check" class="w-3.5 h-3.5 mr-1" />
+          Confirm
+        </Button>
+      </div>
+    </div>
+  {/if}
 </div>

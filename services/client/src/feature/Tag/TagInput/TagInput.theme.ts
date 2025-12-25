@@ -2,7 +2,7 @@ import { cva } from 'class-variance-authority';
 import type { VariantProps } from 'class-variance-authority';
 
 export const tagInputVariants = cva(
-  'w-full bg-transparent border-0 outline-none placeholder:text-muted-foreground resize-none transition-all duration-300',
+  'w-full bg-transparent border-0 outline-none placeholder:text-muted-foreground resize-none',
   {
     variants: {
       size: {
@@ -12,10 +12,12 @@ export const tagInputVariants = cva(
       },
       variant: {
         default:
-          'placeholder:text-slate-400 dark:placeholder:text-slate-500 text-slate-700 dark:text-slate-200',
-        neon: 'placeholder:text-slate-400 dark:placeholder:text-slate-500 text-slate-700 dark:text-slate-200',
+          'placeholder:text-gray-400 dark:placeholder:text-white/40 text-gray-700 dark:text-white transition-all duration-300',
+        neon: 'placeholder:text-gray-400 dark:placeholder:text-white/40 text-gray-700 dark:text-white transition-all duration-300',
         minimal:
-          'placeholder:text-slate-400 dark:placeholder:text-slate-500 text-slate-700 dark:text-slate-200',
+          'placeholder:text-gray-500 dark:placeholder:text-white/40 text-gray-700 dark:text-white transition-colors duration-150',
+        subtle:
+          'placeholder:text-gray-400 dark:placeholder:text-white/40 text-gray-700 dark:text-white transition-colors duration-150',
       },
       disabled: {
         true: 'opacity-50 cursor-not-allowed',

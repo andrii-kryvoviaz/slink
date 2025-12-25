@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Slink\Image\Application\Service;
 
 use RuntimeException;
+use Slink\Image\Domain\Enum\ImageFormat;
 use Slink\Image\Domain\Service\ImageProcessorInterface;
 use Slink\Image\Domain\Service\ImageTransformationStrategyInterface;
 use Slink\Image\Domain\Service\ImageTransformerInterface;
@@ -31,6 +32,10 @@ final readonly class ImageTransformer implements ImageTransformerInterface {
   }
 
   public function convertToJpeg(SplFileInfo $file, ?int $quality = null): File {
+    return $this->convertToFormat($file, ImageFormat::JPEG, $quality);
+  }
+
+  public function convertToFormat(SplFileInfo $file, ImageFormat $format, ?int $quality = null): File {
     $content = file_get_contents($file->getPathname());
     if ($content === false) {
       throw new RuntimeException('Failed to read file content');
@@ -40,16 +45,18 @@ final readonly class ImageTransformer implements ImageTransformerInterface {
 
     $convertedContent = $this->imageProcessor->convertFormat(
       $content,
-      'jpeg',
+      $format->value,
       $quality
     );
 
+    $extension = $format->getExtension();
+
     $fileName = $file->getBasename('.' . $file->getExtension());
-    $jpegPath = sprintf('%s/%s.jpg', $file->getPath(), $fileName);
+    $newPath = sprintf('%s/%s.%s', $file->getPath(), $fileName, $extension);
 
-    file_put_contents($jpegPath, $convertedContent);
+    file_put_contents($newPath, $convertedContent);
 
-    return new File($jpegPath, true);
+    return new File($newPath, true);
   }
 
   public function crop(string $content, ?int $width, ?int $height): string {

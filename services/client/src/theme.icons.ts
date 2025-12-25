@@ -1,8 +1,6 @@
 export const themeIcons: string[] = [
   'eos-icons:three-dots-loading',
   'ph:user',
-  'solar:graph-line-duotone',
-  'mingcute:settings-7-line',
   'akar-icons:chevron-down',
   'akar-icons:chevron-up',
   'teenyicons:refresh-solid',
@@ -148,7 +146,6 @@ export const themeIcons: string[] = [
   'ph:warning-circle-duotone',
   'ph:circle-notch-duotone',
   'ph:check-duotone',
-  'ph:info-duotone',
   'ph:markdown-logo',
   'ph:brackets-square',
   'ph:code',
@@ -182,4 +179,9 @@ export const themeIcons: string[] = [
   'ph:at',
   'ph:warning-fill',
   'lucide:clipboard-copy',
+  'solar:database-linear',
+  'solar:gallery-linear',
+  'solar:shield-check-linear',
+  'ph:sliders-horizontal',
+  'ph:circle',
 ];

@@ -14,11 +14,15 @@ import { CommentSetter } from '@slink/lib/settings/setters/comment';
 import type { CommentSettings } from '@slink/lib/settings/setters/comment';
 import { HistorySetter } from '@slink/lib/settings/setters/history';
 import type { HistorySettings } from '@slink/lib/settings/setters/history';
+import { NavigationSetter } from '@slink/lib/settings/setters/navigation';
+import type { NavigationSettings } from '@slink/lib/settings/setters/navigation';
 import { ShareSetter } from '@slink/lib/settings/setters/share';
 import type { ShareSettings } from '@slink/lib/settings/setters/share';
 import { SidebarSetter } from '@slink/lib/settings/setters/sidebar';
 import type { SidebarSettings } from '@slink/lib/settings/setters/sidebar';
 import { ThemeSetter } from '@slink/lib/settings/setters/theme';
+import { setUploadOptions } from '@slink/lib/settings/setters/uploadOptions';
+import type { UploadOptionsSettings } from '@slink/lib/settings/setters/uploadOptions';
 import { UserAdminSetter } from '@slink/lib/settings/setters/userAdmin';
 import type { UserAdminSettings } from '@slink/lib/settings/setters/userAdmin';
 
@@ -29,10 +33,12 @@ import { tryJson } from '@slink/utils/string/json';
 type SettingsValueTypes = {
   theme: Theme;
   sidebar: SidebarSettings;
+  navigation: NavigationSettings;
   userAdmin: UserAdminSettings;
   history: HistorySettings;
   share: ShareSettings;
   comment: CommentSettings;
+  uploadOptions: UploadOptionsSettings;
 };
 
 export class SettingsManager {
@@ -47,10 +53,12 @@ export class SettingsManager {
   } = {
     theme: ThemeSetter,
     sidebar: SidebarSetter,
+    navigation: NavigationSetter,
     userAdmin: UserAdminSetter,
     history: HistorySetter,
     share: ShareSetter,
     comment: CommentSetter,
+    uploadOptions: setUploadOptions,
   };
 
   public get<T extends SettingsKey>(
@@ -70,11 +78,12 @@ export class SettingsManager {
     let cookieValue: string =
       typeof value === 'string' ? value : JSON.stringify(value);
 
-    cookie.set(`settings.${key}`, cookieValue);
+    // Set cookie with 1 year expiration
+    cookie.set(`settings.${key}`, cookieValue, 31536000);
   }
 
   public getSettingKeys(): SettingsKey[] {
-    return this._settings.keys();
+    return Object.keys(this._setters) as SettingsKey[];
   }
 
   private _formReturnValue<T extends SettingsKey>(

@@ -102,24 +102,25 @@
   };
 
   const uploadCardClasses =
-    'relative overflow-hidden rounded-2xl bg-gradient-to-br from-white via-white to-slate-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 border border-slate-200/60 dark:border-slate-700/60 shadow-xl shadow-slate-500/5 dark:shadow-black/20 backdrop-blur-sm';
+    'relative overflow-hidden rounded-xl bg-white/80 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-700/50 shadow-lg shadow-slate-500/5 dark:shadow-black/10 backdrop-blur-sm transition-all duration-300';
 
   const backgroundPatternClasses =
-    'absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(148,163,184,0.15)_1px,transparent_0)] bg-[length:24px_24px] dark:bg-[radial-gradient(circle_at_1px_1px,rgba(71,85,105,0.3)_1px,transparent_0)]';
+    'absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(148,163,184,0.12)_1px,transparent_0)] bg-[length:20px_20px] dark:bg-[radial-gradient(circle_at_1px_1px,rgba(71,85,105,0.25)_1px,transparent_0)]';
 
   const dropzoneClasses =
     'relative w-full cursor-pointer transition-all duration-500';
 
   const dragOverlayClasses =
-    'absolute inset-0 bg-gradient-to-br z-10 from-blue-500/20 to-purple-500/20 rounded-2xl transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm pointer-events-none';
+    'absolute inset-0 bg-gradient-to-br z-10 from-indigo-500/20 to-purple-500/20 rounded-xl transition-opacity duration-200 flex items-center justify-center backdrop-blur-md pointer-events-none';
 
   const uploadContainerVariants = cva(
-    'relative group rounded-2xl border-2 transition-colors duration-300',
+    'relative group rounded-xl border-2 transition-all duration-200',
     {
       variants: {
         state: {
-          dragOver: 'border-dashed border-blue-400 dark:border-blue-300',
-          disabled: 'border-transparent',
+          dragOver:
+            'border-dashed border-indigo-400 dark:border-indigo-400 scale-[1.01]',
+          disabled: 'border-transparent opacity-60',
           default: 'border-transparent',
         },
       },
@@ -156,14 +157,14 @@
       >
         <div class="mb-6 sm:mb-8 relative">
           <div
-            class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-indigo-500/10 to-purple-500/10 dark:from-indigo-500/20 dark:to-purple-500/20 flex items-center justify-center border border-indigo-200/50 dark:border-purple-300/30 transition-all duration-300 backdrop-blur-sm ring-1 ring-indigo-100/20 dark:ring-purple-300/20 [filter:drop-shadow(0_0_4px_rgba(99,102,241,0.2))_drop-shadow(0_0_8px_rgba(99,102,241,0.1))] [box-shadow:0_0_0_1px_rgba(99,102,241,0.1),0_0_20px_rgba(99,102,241,0.15)]"
+            class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-linear-to-br from-indigo-500/10 to-purple-500/10 dark:from-indigo-500/15 dark:to-purple-500/15 flex items-center justify-center border border-indigo-200/40 dark:border-purple-400/20 transition-all duration-300 backdrop-blur-sm"
           >
             <Icon
               icon="ph:upload-simple"
               class="h-10 w-10 sm:h-12 sm:w-12 text-indigo-600 dark:text-purple-400 transition-all duration-300"
             />
             <div
-              class="absolute -top-1 -right-1 sm:-top-1.5 sm:-right-1.5 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gradient-to-br from-emerald-400 to-green-500 dark:from-emerald-500 dark:to-green-600 flex items-center justify-center shadow-lg shadow-green-500/25 dark:shadow-green-600/30 border-2 border-white/90 dark:border-slate-900/90 backdrop-blur-sm"
+              class="absolute -top-1 -right-1 sm:-top-1.5 sm:-right-1.5 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gradient-to-br from-emerald-500 to-green-600 dark:from-emerald-400 dark:to-green-500 flex items-center justify-center shadow-md shadow-green-500/20 dark:shadow-green-600/25 border-2 border-white dark:border-slate-800 backdrop-blur-sm"
             >
               <Icon
                 icon="ph:plus-bold"
@@ -188,7 +189,7 @@
 
         <div class="mb-6 sm:mb-8 group/shortcut hidden sm:block">
           <div
-            class="flex items-center gap-2 sm:gap-3 px-3 sm:px-5 py-2 sm:py-3 rounded-2xl bg-slate-100/80 dark:bg-slate-700/50 border border-slate-200/50 dark:border-slate-600/50 backdrop-blur-sm group-hover/shortcut:bg-slate-200/80 dark:group-hover/shortcut:bg-slate-600/60 transition-all duration-300"
+            class="flex items-center gap-2 sm:gap-3 px-3 sm:px-5 py-2 sm:py-3 rounded-xl bg-slate-100/70 dark:bg-slate-700/40 border border-slate-200/50 dark:border-slate-600/30 backdrop-blur-sm group-hover/shortcut:bg-slate-200/80 dark:group-hover/shortcut:bg-slate-600/50 transition-all duration-200"
           >
             <Icon
               icon="ph:keyboard"
@@ -208,7 +209,7 @@
           >
             {#each ['PNG', 'JPG', 'GIF', 'SVG', 'WebP', 'HEIC'] as format}
               <span
-                class="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium bg-slate-50/80 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 rounded-xl border border-slate-200/60 dark:border-slate-700/60 backdrop-blur-sm"
+                class="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium bg-slate-100/70 dark:bg-slate-700/40 text-slate-600 dark:text-slate-400 rounded-lg border border-slate-200/50 dark:border-slate-600/30 backdrop-blur-sm"
               >
                 {format}
               </span>

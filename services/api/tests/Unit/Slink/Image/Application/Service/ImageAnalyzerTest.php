@@ -10,12 +10,15 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Slink\Image\Application\Service\ImageAnalyzer;
 use Slink\Image\Application\Service\ImageCapabilityChecker;
+use Slink\Image\Domain\Service\ImageProcessorInterface;
+use Slink\Image\Domain\ValueObject\AnimatedImageInfo;
 use Symfony\Component\HttpFoundation\File\File;
 use Tests\Traits\FixturePathTrait;
 
 final class ImageAnalyzerTest extends TestCase {
     use FixturePathTrait;
     private MockObject $capabilityChecker;
+    private MockObject $imageProcessor;
     private ImageAnalyzer $analyzer;
 
     /**
@@ -25,7 +28,8 @@ final class ImageAnalyzerTest extends TestCase {
         parent::setUp();
         
         $this->capabilityChecker = $this->createMock(ImageCapabilityChecker::class);
-        $this->analyzer = new ImageAnalyzer($this->capabilityChecker);
+        $this->imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $this->analyzer = new ImageAnalyzer($this->capabilityChecker, $this->imageProcessor);
     }
 
     #[Test]
@@ -153,5 +157,41 @@ final class ImageAnalyzerTest extends TestCase {
         $result = $this->analyzer->toPayload();
 
         $this->assertContains($result['orientation'], ['unknown', 'square', 'landscape', 'portrait']);
+    }
+
+    #[Test]
+    public function itDetectsAnimatedImage(): void {
+        $testImagePath = $this->getFixturePath('test.jpg');
+        
+        $this->imageProcessor
+            ->expects($this->once())
+            ->method('getAnimatedImageInfo')
+            ->with($this->anything())
+            ->willReturn(AnimatedImageInfo::animated(10));
+
+        $result = $this->analyzer->isAnimated($testImagePath);
+
+        $this->assertTrue($result);
+    }
+
+    #[Test]
+    public function itDetectsNonAnimatedImage(): void {
+        $testImagePath = $this->getFixturePath('test.jpg');
+        
+        $this->imageProcessor
+            ->expects($this->once())
+            ->method('getAnimatedImageInfo')
+            ->willReturn(AnimatedImageInfo::static());
+
+        $result = $this->analyzer->isAnimated($testImagePath);
+
+        $this->assertFalse($result);
+    }
+
+    #[Test]
+    public function itReturnsFalseForInvalidFilePath(): void {
+        $result = $this->analyzer->isAnimated('/nonexistent/path.gif');
+
+        $this->assertFalse($result);
     }
 }

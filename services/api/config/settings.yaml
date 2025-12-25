@@ -27,6 +27,9 @@ parameters:
     allowOnlyPublicImages: '%env(bool:IMAGE_ALLOW_ONLY_PUBLIC_IMAGES)%'
     compressionQuality: '%env(int:IMAGE_COMPRESSION_QUALITY)%'
     enableDeduplication: '%env(bool:IMAGE_ENABLE_DEDUPLICATION)%'
+    forceFormatConversion: '%env(bool:IMAGE_FORCE_FORMAT_CONVERSION)%'
+    targetFormat: '%env(string:IMAGE_TARGET_FORMAT)%'
+    convertAnimatedImages: '%env(bool:IMAGE_CONVERT_ANIMATED_IMAGES)%'
   access:
     allowGuestUploads: '%env(bool:IMAGE_ALLOW_GUEST_UPLOADS)%'
     allowUnauthenticatedAccess: '%env(bool:USER_ALLOW_UNAUTHENTICATED_ACCESS)%'

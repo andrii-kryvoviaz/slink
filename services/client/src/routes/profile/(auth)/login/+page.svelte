@@ -116,7 +116,7 @@
           ? form.errors.username
           : undefined}
         variant="modern"
-        size="md"
+        size="lg"
         rounded="lg"
       >
         {#snippet leftIcon()}
@@ -136,7 +136,7 @@
             ? form.errors.password
             : undefined}
           variant="modern"
-          size="md"
+          size="lg"
           rounded="lg"
         >
           {#snippet leftIcon()}

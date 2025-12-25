@@ -52,6 +52,7 @@
   {name}
   bind:value={inner.size}
   error={props.error}
+  size={props.size || 'md'}
   class="pr-12"
 >
   <span
