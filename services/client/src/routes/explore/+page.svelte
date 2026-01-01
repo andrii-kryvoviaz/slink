@@ -136,8 +136,8 @@
             (i) => i.id === image.id,
           )}
           <div
-            in:fly={{ y: 20, duration: 400, delay: Math.random() * 200 }}
-            class="group/card break-inside-avoid rounded-xl overflow-hidden cursor-pointer bg-white dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200/60 dark:border-white/[0.06] hover:border-gray-300 dark:hover:border-white/[0.1] shadow-sm hover:shadow-lg dark:shadow-black/20 dark:hover:shadow-black/40 transition-all duration-300"
+            in:fly={{ y: 20, duration: 300, delay: Math.random() * 100 }}
+            class="group break-inside-avoid overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/60 transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-700 hover:shadow-md dark:hover:shadow-gray-900/50 cursor-pointer"
             onclick={() => openPostViewer(index)}
             onkeydown={(e) => e.key === 'Enter' && openPostViewer(index)}
             role="button"
@@ -154,12 +154,20 @@
               />
 
               <div
-                class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300"
+                class="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200"
               ></div>
 
               <div
-                class="absolute top-3 left-3 flex items-center gap-2 opacity-0 group-hover/card:opacity-100 transition-all duration-300 translate-y-1 group-hover/card:translate-y-0"
+                class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
               >
+                <div
+                  class="w-14 h-14 rounded-full bg-black/50 flex items-center justify-center"
+                >
+                  <Icon icon="ph:arrows-out" class="w-7 h-7 text-white" />
+                </div>
+              </div>
+
+              <div class="absolute bottom-2 left-2 flex items-center gap-1.5">
                 <ViewCountBadge
                   count={image.attributes.views}
                   variant="overlay"
@@ -172,7 +180,7 @@
               </div>
 
               <div
-                class="absolute top-3 right-3 flex items-center gap-1.5 opacity-0 group-hover/card:opacity-100 transition-all duration-300 translate-y-1 group-hover/card:translate-y-0"
+                class="absolute top-2 right-2 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
               >
                 <StopPropagation>
                   <DownloadButton
@@ -201,19 +209,6 @@
                     }}
                   />
                 </StopPropagation>
-              </div>
-
-              <div
-                class="absolute inset-0 flex items-center justify-center opacity-0 group-hover/card:opacity-100 transition-all duration-300 pointer-events-none"
-              >
-                <div
-                  class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center transform scale-75 group-hover/card:scale-100 transition-transform duration-300"
-                >
-                  <Icon
-                    icon="ph:arrows-out"
-                    class="w-6 h-6 text-white drop-shadow-lg"
-                  />
-                </div>
               </div>
             </div>
 
@@ -247,7 +242,7 @@
 
               {#if image.attributes.description?.trim()}
                 <p
-                  class="mt-4 text-sm text-gray-600 dark:text-gray-400 leading-relaxed"
+                  class="mt-3 text-sm text-gray-600 dark:text-gray-400 leading-relaxed"
                 >
                   <ExpandableText
                     maxLines={2}
