@@ -172,14 +172,16 @@
   class="container mx-auto px-4 sm:px-6 lg:px-8 py-8"
 >
   <div class="flex flex-col flex-wrap lg:flex-row gap-8">
-    <div class={cn('w-full relative', maxWidthClass)}>
+    <div class={cn('w-full relative group', maxWidthClass)}>
       <ImagePlaceholder
         src={image.url}
         metadata={image}
         stretch={false}
         showOpenInNewTab={false}
       />
-      <div class="absolute top-4 left-4 flex items-center gap-2">
+      <div
+        class="absolute top-4 left-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+      >
         <VisibilityBadge isPublic={image.isPublic} variant="overlay" />
         <ViewCountBadge count={image.views} variant="overlay" />
       </div>
