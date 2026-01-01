@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { Tooltip } from '@slink/ui/components/tooltip';
+
   import Icon from '@iconify/svelte';
 
   import {
@@ -11,14 +13,14 @@
   interface Props {
     isPublic: boolean;
     variant?: VisibilityBadgeVariant;
-    showLabel?: boolean;
+    compact?: boolean;
     class?: string;
   }
 
   let {
     isPublic,
     variant = 'default',
-    showLabel = true,
+    compact = false,
     class: className = '',
   }: Props = $props();
 
@@ -30,13 +32,24 @@
   );
 </script>
 
-<span
-  class="{visibilityBadgeContainerTheme({ status, variant })} {className}"
-  {title}
-  role="status"
->
-  <Icon {icon} class={visibilityBadgeIconTheme({ variant })} />
-  {#if showLabel}
+{#if compact}
+  <Tooltip side="top" size="xs" variant="dark">
+    {#snippet trigger()}
+      <span
+        class="{visibilityBadgeContainerTheme({ status, variant })} {className}"
+        role="status"
+      >
+        <Icon {icon} class={visibilityBadgeIconTheme({ variant })} />
+      </span>
+    {/snippet}
+    {title}
+  </Tooltip>
+{:else}
+  <span
+    class="{visibilityBadgeContainerTheme({ status, variant })} {className}"
+    role="status"
+  >
+    <Icon {icon} class={visibilityBadgeIconTheme({ variant })} />
     <span>{label}</span>
-  {/if}
-</span>
+  </span>
+{/if}

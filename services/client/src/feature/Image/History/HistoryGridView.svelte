@@ -70,6 +70,7 @@
           <VisibilityBadge
             isPublic={item.attributes.isPublic}
             variant="overlay"
+            compact
           />
           <ViewCountBadge count={item.attributes.views} variant="overlay" />
         </div>

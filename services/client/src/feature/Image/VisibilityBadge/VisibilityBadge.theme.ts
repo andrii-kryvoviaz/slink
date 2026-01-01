@@ -13,7 +13,7 @@ export const visibilityBadgeContainerTheme = cva(
         compact: 'rounded-md px-2 py-0.5 text-[11px]',
         pill: 'rounded-full px-3 py-1 text-xs',
         overlay:
-          'rounded-full px-2.5 py-1 text-[11px] font-medium backdrop-blur-md shadow-lg border',
+          'rounded-full px-2.5 py-1 h-[26px] text-[11px] font-medium backdrop-blur-md shadow-lg border',
       },
     },
     compoundVariants: [
