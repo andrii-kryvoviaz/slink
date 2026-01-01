@@ -19,9 +19,12 @@ final readonly class GetExternalUploadResponseHandler implements QueryHandlerInt
     $imageId = $query->getImageId();
     $fileName = $query->getFileName();
 
+    $url = ltrim($this->imageUrlService->generateImageUrl($fileName), '/');
+    $thumbnailUrl = ltrim($this->imageUrlService->generateThumbnailUrl($fileName), '/');
+
     return [
-      'url' => $this->imageUrlService->generateImageUrl($fileName),
-      'thumbnailUrl' => $this->imageUrlService->generateThumbnailUrl($fileName),
+      'url' => $url,
+      'thumbnailUrl' => $thumbnailUrl,
       'id' => $imageId
     ];
   }
