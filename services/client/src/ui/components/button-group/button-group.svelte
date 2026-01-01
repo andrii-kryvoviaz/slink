@@ -59,7 +59,8 @@
       variant: {
         default:
           'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700',
-        primary: 'bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800',
+        primary:
+          'bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600 active:bg-blue-800 dark:active:bg-blue-700',
         'primary-outline':
           'border border-blue-600 text-blue-600 dark:border-blue-500 dark:text-blue-500 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 dark:hover:text-white active:bg-blue-700',
         secondary:

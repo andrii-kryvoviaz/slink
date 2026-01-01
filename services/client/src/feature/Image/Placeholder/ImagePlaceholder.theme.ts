@@ -9,6 +9,7 @@ export const imagePlaceholderVariants = cva('border-none', {
     objectFit: {
       contain: 'object-contain',
       fill: 'object-fill',
+      cover: 'object-cover',
       none: '',
     },
     visibility: {

@@ -9,7 +9,7 @@ export const viewCountBadgeContainerTheme = cva(
         compact:
           'gap-2 rounded-md px-2 py-1.5 bg-gray-50/50 dark:bg-gray-800/30 hover:bg-gray-100/50 dark:hover:bg-gray-700/40',
         overlay:
-          'gap-1.5 rounded-full px-2.5 py-1 bg-black/60 backdrop-blur-sm hover:bg-black/70 shadow-lg',
+          'gap-1.5 rounded-full px-2.5 py-1 bg-white/95 border-gray-300/50 dark:bg-black/60 backdrop-blur-md shadow-lg border dark:border-white/10',
         badge:
           'gap-2 rounded-md bg-gray-50 dark:bg-gray-800/40 px-3 py-2 border border-gray-200 dark:border-gray-700',
       },
@@ -37,12 +37,12 @@ export const viewCountBadgeIconWrapperTheme = cva(
   },
 );
 
-export const viewCountBadgeIconTheme = cva('text-gray-600 dark:text-gray-400', {
+export const viewCountBadgeIconTheme = cva('shrink-0', {
   variants: {
     variant: {
-      card: 'h-4 w-4',
+      card: 'h-4 w-4 text-gray-600 dark:text-gray-400',
       compact: 'h-3 w-3 text-gray-500 dark:text-gray-400',
-      overlay: 'h-3.5 w-3.5 text-white',
+      overlay: 'h-3 w-3 text-gray-600 dark:text-gray-300',
       badge: 'h-4 w-4 text-gray-500 dark:text-gray-400',
     },
   },
@@ -73,7 +73,7 @@ export const viewCountBadgeValueTheme = cva('font-medium truncate', {
     variant: {
       card: 'text-sm text-gray-700 dark:text-gray-300',
       compact: 'text-xs text-gray-600 dark:text-gray-300',
-      overlay: 'text-xs text-white',
+      overlay: 'text-[11px] text-gray-700 dark:text-gray-200',
       badge: 'text-sm font-medium text-gray-700 dark:text-gray-300',
     },
   },

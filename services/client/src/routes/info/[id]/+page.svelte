@@ -9,6 +9,7 @@
     ImageTagManager,
     ShareLinkCopy,
     ViewCountBadge,
+    VisibilityBadge,
   } from '@slink/feature/Image';
   import type { ImageOutputFormat, ImageParams } from '@slink/feature/Image';
   import { Notice } from '@slink/feature/Text';
@@ -172,16 +173,24 @@
 >
   <div class="flex flex-col flex-wrap lg:flex-row gap-8">
     <div class={cn('w-full relative', maxWidthClass)}>
-      <ImagePlaceholder src={image.url} metadata={image} stretch={false} />
-      <div class="absolute top-4 left-4">
+      <ImagePlaceholder
+        src={image.url}
+        metadata={image}
+        stretch={false}
+        showOpenInNewTab={false}
+      />
+      <div class="absolute top-4 left-4 flex items-center gap-2">
+        <VisibilityBadge isPublic={image.isPublic} variant="overlay" />
         <ViewCountBadge count={image.views} variant="overlay" />
       </div>
     </div>
 
     <div class="grow max-w-md shrink-0 space-y-8">
-      <ImageActionBar {image} buttons={['download', 'visibility', 'delete']} />
-
-      <BookmarkersPanel imageId={image.id} count={image.bookmarkCount} />
+      <ImageActionBar
+        bind:image
+        buttons={['download', 'visibility', 'copy', 'delete']}
+        layout="hero"
+      />
 
       <ImageTagManager
         imageId={image.id}
@@ -191,6 +200,8 @@
           tagsUpdate: handleTagsUpdate,
         }}
       />
+
+      <BookmarkersPanel imageId={image.id} count={image.bookmarkCount} />
 
       <ImageDescription
         description={image.description}

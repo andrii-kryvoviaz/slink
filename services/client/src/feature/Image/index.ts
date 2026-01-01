@@ -1,4 +1,5 @@
 export { default as ImageActionBar } from './ActionBar/ImageActionBar.svelte';
+export * from './ActionBar/ImageActionBar.theme';
 export { default as AdminImageDropdown } from './AdminImageDropdown/AdminImageDropdown.svelte';
 export { default as BookmarkButton } from './BookmarkButton/BookmarkButton.svelte';
 export * from './BookmarkButton/BookmarkButton.theme';
@@ -32,7 +33,10 @@ export * from './SizePicker/ImageSizePicker.theme';
 export * from './SizePicker/ImageSizePicker.types';
 export { default as ImageTagManager } from './TagManager/ImageTagManager.svelte';
 export { default as UnsupportedFileFormat } from './UnsupportedFIleFormat/UnsupportedFileFormat.svelte';
-export * from './ViewCountBadge';
+export { default as ViewCountBadge } from './ViewCountBadge/ViewCountBadge.svelte';
+export * from './ViewCountBadge/ViewCountBadge.theme';
+export { default as VisibilityBadge } from './VisibilityBadge/VisibilityBadge.svelte';
+export * from './VisibilityBadge/VisibilityBadge.theme';
 export * from './utils/calculateHistoryCardWeight';
 export * from './utils/calculateImageCardWeight';
 export * from './utils/weightCalculator';

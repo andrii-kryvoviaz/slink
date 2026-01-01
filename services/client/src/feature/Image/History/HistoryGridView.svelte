@@ -1,9 +1,9 @@
 <script lang="ts">
   import {
-    BookmarkStat,
     ImageActionBar,
     ImagePlaceholder,
     ViewCountBadge,
+    VisibilityBadge,
   } from '@slink/feature/Image';
   import { calculateHistoryCardWeight } from '@slink/feature/Image/utils/calculateHistoryCardWeight';
   import { Masonry } from '@slink/feature/Layout';
@@ -28,11 +28,17 @@
   const onImageDelete = (id: string) => {
     on?.delete(id);
   };
+
+  const formatMimeType = (mimeType: string): string => {
+    const type = mimeType.split('/')[1];
+    if (!type) return mimeType;
+    return type.toUpperCase();
+  };
 </script>
 
 <Masonry
   {items}
-  class="gap-6"
+  class="gap-4"
   columns={{
     xs: 1,
     sm: 2,
@@ -44,46 +50,33 @@
 >
   {#snippet itemTemplate(item)}
     <article
-      in:fly={{ y: 20, duration: 400, delay: Math.random() * 200 }}
-      out:fade={{ duration: 500 }}
-      class="group break-inside-avoid bg-white dark:bg-gray-900 rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden transition-all duration-300"
+      in:fly={{ y: 20, duration: 300, delay: Math.random() * 100 }}
+      out:fade={{ duration: 200 }}
+      class="group break-inside-avoid overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/60 transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-700 hover:shadow-md dark:hover:shadow-gray-900/50"
     >
       <div class="relative">
         <a href={`/info/${item.id}`} class="block">
           <ImagePlaceholder
             uniqueId={item.id}
-            src={`/image/${item.attributes.fileName}?width=350&height=350&crop=true`}
+            src={`/image/${item.attributes.fileName}?width=400&height=400&crop=true`}
             metadata={item.metadata}
             showMetadata={false}
             showOpenInNewTab={false}
             rounded={false}
           />
         </a>
-        <div class="absolute top-2 left-2">
+
+        <div class="absolute bottom-2 left-2 flex items-center gap-1.5">
+          <VisibilityBadge
+            isPublic={item.attributes.isPublic}
+            variant="overlay"
+          />
           <ViewCountBadge count={item.attributes.views} variant="overlay" />
         </div>
-        {#if item.bookmarkCount > 0}
-          <div class="absolute top-2 right-2">
-            <BookmarkStat count={item.bookmarkCount} variant="overlay" />
-          </div>
-        {/if}
-      </div>
 
-      <div class="p-4">
-        <div class="flex items-start justify-between gap-2 mb-3">
-          <a
-            href={`/info/${item.id}`}
-            class="group/link inline-flex flex-1 min-w-0 items-center gap-1.5 text-sm font-semibold text-gray-900 transition-colors duration-200 dark:text-gray-100 hover:text-indigo-600 dark:hover:text-indigo-400"
-          >
-            <span class="truncate">{item.attributes.fileName}</span>
-            <Icon
-              icon="mynaui:external-link"
-              class="h-3 w-3 shrink-0 opacity-60 transition-opacity duration-200 group-hover/link:opacity-100"
-            />
-          </a>
-        </div>
-
-        <div class="w-full mb-3">
+        <div
+          class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+        >
           <ImageActionBar
             image={{
               id: item.id,
@@ -92,70 +85,62 @@
             }}
             buttons={['download', 'visibility', 'copy', 'delete']}
             on={{ imageDelete: onImageDelete }}
+            compact={true}
           />
+        </div>
+      </div>
+
+      <div class="p-3">
+        <div class="mb-2">
+          <a
+            href={`/info/${item.id}`}
+            class="text-sm font-medium text-gray-900 dark:text-gray-100 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors truncate block"
+            title={item.attributes.fileName}
+          >
+            {item.attributes.fileName}
+          </a>
+        </div>
+
+        <div
+          class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-gray-500 dark:text-gray-400 mb-3"
+        >
+          <span class="inline-flex items-center gap-1" title="File type">
+            <Icon icon="lucide:file" class="w-3 h-3" />
+            {formatMimeType(item.metadata.mimeType)}
+          </span>
+          <span class="text-gray-300 dark:text-gray-700">•</span>
+          <span class="inline-flex items-center gap-1" title="Dimensions">
+            <Icon icon="lucide:maximize-2" class="w-3 h-3" />
+            {item.metadata.width}×{item.metadata.height}
+          </span>
+          <span class="text-gray-300 dark:text-gray-700">•</span>
+          <span class="inline-flex items-center gap-1" title="File size">
+            <Icon icon="lucide:database" class="w-3 h-3" />
+            {bytesToSize(item.metadata.size)}
+          </span>
+          {#if item.bookmarkCount > 0}
+            <span class="text-gray-300 dark:text-gray-700">•</span>
+            <span class="inline-flex items-center gap-1" title="Bookmarks">
+              <Icon icon="lucide:bookmark" class="w-3 h-3" />
+              {item.bookmarkCount.toLocaleString()}
+            </span>
+          {/if}
+          <span class="text-gray-300 dark:text-gray-700">•</span>
+          <span class="inline-flex items-center gap-1" title="Uploaded">
+            <Icon icon="lucide:clock" class="w-3 h-3" />
+            <FormattedDate date={item.attributes.createdAt.timestamp} />
+          </span>
         </div>
 
         {#if item.tags && item.tags.length > 0}
-          <div class="mb-3">
-            <ImageTagList
-              imageId={item.id}
-              variant="neon"
-              showImageCount={false}
-              removable={false}
-              initialTags={item.tags}
-            />
-          </div>
+          <ImageTagList
+            imageId={item.id}
+            variant="neon"
+            showImageCount={false}
+            removable={false}
+            initialTags={item.tags}
+          />
         {/if}
-
-        <div class="grid grid-cols-2 gap-2 text-xs">
-          <div
-            class="flex items-center gap-2 rounded-md bg-gray-50/50 px-2 py-1.5 dark:bg-gray-800/30"
-          >
-            <Icon
-              icon="lucide:expand"
-              class="h-3 w-3 text-gray-500 dark:text-gray-400"
-            />
-            <span class="text-gray-600 dark:text-gray-300 truncate">
-              {item.metadata.width}×{item.metadata.height}
-            </span>
-          </div>
-
-          <div
-            class="flex items-center gap-2 rounded-md bg-gray-50/50 px-2 py-1.5 dark:bg-gray-800/30"
-          >
-            <Icon
-              icon="lucide:hard-drive"
-              class="h-3 w-3 text-gray-500 dark:text-gray-400"
-            />
-            <span class="text-gray-600 dark:text-gray-300 truncate">
-              {bytesToSize(item.metadata.size)}
-            </span>
-          </div>
-
-          <div
-            class="flex items-center gap-2 rounded-md bg-gray-50/50 px-2 py-1.5 dark:bg-gray-800/30"
-          >
-            <Icon
-              icon="lucide:file-type"
-              class="h-3 w-3 text-gray-500 dark:text-gray-400"
-            />
-            <span class="text-gray-600 dark:text-gray-300 truncate">
-              {item.metadata.mimeType}
-            </span>
-          </div>
-
-          <div
-            class="flex items-center gap-2 rounded-md bg-gray-50/50 px-2 py-1.5 dark:bg-gray-800/30"
-          >
-            <Icon
-              icon="lucide:calendar"
-              class="h-3 w-3 text-gray-500 dark:text-gray-400"
-            />
-            <div class="text-gray-600 dark:text-gray-300 truncate">
-              <FormattedDate date={item.attributes.createdAt.timestamp} />
-            </div>
-          </div>
-        </div>
       </div>
     </article>
   {/snippet}
