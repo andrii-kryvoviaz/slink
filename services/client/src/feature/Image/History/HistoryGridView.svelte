@@ -3,6 +3,7 @@
     BookmarkStat,
     ImageActionBar,
     ImagePlaceholder,
+    ViewCountBadge,
   } from '@slink/feature/Image';
   import { calculateHistoryCardWeight } from '@slink/feature/Image/utils/calculateHistoryCardWeight';
   import { Masonry } from '@slink/feature/Layout';
@@ -58,6 +59,9 @@
             rounded={false}
           />
         </a>
+        <div class="absolute top-2 left-2">
+          <ViewCountBadge count={item.attributes.views} variant="overlay" />
+        </div>
         {#if item.bookmarkCount > 0}
           <div class="absolute top-2 right-2">
             <BookmarkStat count={item.bookmarkCount} variant="overlay" />

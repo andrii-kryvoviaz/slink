@@ -3,6 +3,7 @@
     BookmarkStat,
     ImageActionBar,
     ImagePlaceholder,
+    ViewCountBadge,
   } from '@slink/feature/Image';
   import { ImageTagList } from '@slink/feature/Tag';
   import { FormattedDate } from '@slink/feature/Text';
@@ -37,7 +38,7 @@
         <div class="flex flex-col gap-4 md:flex-row md:gap-6 lg:gap-8">
           <a
             href={`/info/${item.id}`}
-            class="flex w-full shrink-0 overflow-hidden rounded-lg md:w-64 lg:w-80 xl:w-96"
+            class="relative flex w-full shrink-0 overflow-hidden rounded-lg md:w-64 lg:w-80 xl:w-96"
           >
             <ImagePlaceholder
               src={`/image/${item.attributes.fileName}?width=350&height=350&crop=true`}
@@ -46,6 +47,14 @@
               showOpenInNewTab={false}
               showMetadata={false}
             />
+            <div class="absolute top-2 left-2">
+              <ViewCountBadge count={item.attributes.views} variant="overlay" />
+            </div>
+            {#if item.bookmarkCount > 0}
+              <div class="absolute top-2 right-2">
+                <BookmarkStat count={item.bookmarkCount} variant="overlay" />
+              </div>
+            {/if}
           </a>
 
           <div class="flex flex-col gap-4 min-w-0 flex-1">
@@ -188,10 +197,6 @@
                   </div>
                 </div>
               </div>
-
-              {#if item.bookmarkCount > 0}
-                <BookmarkStat count={item.bookmarkCount} variant="card" />
-              {/if}
             </div>
           </div>
         </div>

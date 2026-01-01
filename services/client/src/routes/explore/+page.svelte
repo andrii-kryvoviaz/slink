@@ -5,6 +5,7 @@
     DownloadButton,
     ImagePlaceholder,
     PostViewer,
+    ViewCountBadge,
   } from '@slink/feature/Image';
   import BookmarkButton from '@slink/feature/Image/BookmarkButton/BookmarkButton.svelte';
   import { calculateImageCardWeight } from '@slink/feature/Image/utils/calculateImageCardWeight';
@@ -158,12 +159,10 @@
               <div
                 class="absolute top-3 left-3 flex items-center gap-2 opacity-0 group-hover/card:opacity-100 transition-all duration-300 translate-y-1 group-hover/card:translate-y-0"
               >
-                <div
-                  class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-xs"
-                >
-                  <Icon icon="ph:eye" class="w-3.5 h-3.5" />
-                  <span>{image.attributes.views}</span>
-                </div>
+                <ViewCountBadge
+                  count={image.attributes.views}
+                  variant="overlay"
+                />
                 <div
                   class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-xs"
                 >

@@ -8,6 +8,7 @@
     ImageSizePicker,
     ImageTagManager,
     ShareLinkCopy,
+    ViewCountBadge,
   } from '@slink/feature/Image';
   import type { ImageOutputFormat, ImageParams } from '@slink/feature/Image';
   import { Notice } from '@slink/feature/Text';
@@ -170,8 +171,11 @@
   class="container mx-auto px-4 sm:px-6 lg:px-8 py-8"
 >
   <div class="flex flex-col flex-wrap lg:flex-row gap-8">
-    <div class={cn('w-full', maxWidthClass)}>
+    <div class={cn('w-full relative', maxWidthClass)}>
       <ImagePlaceholder src={image.url} metadata={image} stretch={false} />
+      <div class="absolute top-4 left-4">
+        <ViewCountBadge count={image.views} variant="overlay" />
+      </div>
     </div>
 
     <div class="grow max-w-md shrink-0 space-y-8">

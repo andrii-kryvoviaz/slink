@@ -32,6 +32,7 @@ export * from './SizePicker/ImageSizePicker.theme';
 export * from './SizePicker/ImageSizePicker.types';
 export { default as ImageTagManager } from './TagManager/ImageTagManager.svelte';
 export { default as UnsupportedFileFormat } from './UnsupportedFIleFormat/UnsupportedFileFormat.svelte';
+export * from './ViewCountBadge';
 export * from './utils/calculateHistoryCardWeight';
 export * from './utils/calculateImageCardWeight';
 export * from './utils/weightCalculator';

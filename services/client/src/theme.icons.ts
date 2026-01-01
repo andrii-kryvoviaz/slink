@@ -133,7 +133,6 @@ export const themeIcons: string[] = [
   'ph:trash',
   'lucide:search',
   'lucide:tag',
-  'lucide:folder',
   'lucide:layers',
   'lucide:hash',
   'lucide:info',
