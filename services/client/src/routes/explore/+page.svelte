@@ -2,6 +2,7 @@
   import { LoadMoreButton, StopPropagation } from '@slink/feature/Action';
   import {
     AdminImageDropdown,
+    DimensionsBadge,
     DownloadButton,
     ImagePlaceholder,
     PostViewer,
@@ -163,12 +164,11 @@
                   count={image.attributes.views}
                   variant="overlay"
                 />
-                <div
-                  class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-xs"
-                >
-                  <Icon icon="ph:frame-corners" class="w-3.5 h-3.5" />
-                  <span>{image.metadata.width}×{image.metadata.height}</span>
-                </div>
+                <DimensionsBadge
+                  width={image.metadata.width}
+                  height={image.metadata.height}
+                  variant="overlay"
+                />
               </div>
 
               <div

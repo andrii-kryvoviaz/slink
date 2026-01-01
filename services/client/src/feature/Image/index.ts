@@ -8,6 +8,8 @@ export * from './BookmarkStat/BookmarkStat.theme';
 export { default as BookmarkersPanel } from './BookmarkersPanel/BookmarkersPanel.svelte';
 export * from './BookmarkersPanel/BookmarkersPanel.theme';
 export { default as ImageDescription } from './Description/ImageDescription.svelte';
+export { default as DimensionsBadge } from './DimensionsBadge/DimensionsBadge.svelte';
+export * from './DimensionsBadge/DimensionsBadge.theme';
 export { default as DownloadButton } from './DownloadButton/DownloadButton.svelte';
 export * from './DownloadButton/DownloadButton.theme';
 export { default as FormatPicker } from './FormatPicker/FormatPicker.svelte';
