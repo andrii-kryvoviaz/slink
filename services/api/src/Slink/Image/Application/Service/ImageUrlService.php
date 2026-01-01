@@ -4,14 +4,24 @@ declare(strict_types=1);
 
 namespace Slink\Image\Application\Service;
 
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Slink\Share\Domain\Service\ShareServiceInterface;
 
 final readonly class ImageUrlService {
+  public function __construct(
+    private ShareServiceInterface $shareService
+  ) {}
+
   public function generateImageUrl(string $fileName): string {
-    return "image/{$fileName}";
+    $imageId = pathinfo($fileName, PATHINFO_FILENAME);
+    $baseUrl = "/image/{$fileName}";
+
+    return $this->shareService->share($imageId, $baseUrl)->getUrl();
   }
 
   public function generateThumbnailUrl(string $fileName, int $width = 300, int $height = 300): string {
-    return "image/{$fileName}?width={$width}&height={$height}&crop=true";
+    $imageId = pathinfo($fileName, PATHINFO_FILENAME);
+    $baseUrl = "/image/{$fileName}?width={$width}&height={$height}&crop=true";
+
+    return $this->shareService->share($imageId, $baseUrl)->getUrl();
   }
 }

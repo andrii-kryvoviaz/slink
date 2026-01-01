@@ -16,12 +16,13 @@ final readonly class GetExternalUploadResponseHandler implements QueryHandlerInt
    * @return array<string, mixed>
    */
   public function __invoke(GetExternalUploadResponseQuery $query): array {
+    $imageId = $query->getImageId();
     $fileName = $query->getFileName();
 
     return [
       'url' => $this->imageUrlService->generateImageUrl($fileName),
       'thumbnailUrl' => $this->imageUrlService->generateThumbnailUrl($fileName),
-      'id' => $query->getImageId()
+      'id' => $imageId
     ];
   }
 }
