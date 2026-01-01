@@ -25,7 +25,7 @@ final class ApiKeyTest extends TestCase {
 
   public function testItGeneratesApiKeyWithExpirationDate(): void {
     $name = 'Expiring API Key';
-    $expiresAt = DateTime::fromString('2025-12-31 23:59:59');
+    $expiresAt = DateTime::fromString('2045-12-31 23:59:59');
     
     $apiKey = ApiKey::generate($name, $expiresAt);
     
