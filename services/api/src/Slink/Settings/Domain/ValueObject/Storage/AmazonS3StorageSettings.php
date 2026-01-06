@@ -13,6 +13,7 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
    * @param string $bucket
    * @param string $key
    * @param string $secret
+   * @param string|null $endpoint
    */
   private function __construct(
     private string $region,
@@ -22,7 +23,9 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
     private string $key,
     
     #[SensitiveParameter]
-    private string $secret
+    private string $secret,
+    
+    private ?string $endpoint = null
   ) {}
   
   /**
@@ -54,6 +57,13 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
   }
   
   /**
+   * @return string|null
+   */
+  public function getEndpoint(): ?string {
+    return $this->endpoint;
+  }
+  
+  /**
    * @param array<string, string> $payload
    * @return static
    */
@@ -63,7 +73,8 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
       $payload['region'],
       $payload['bucket'],
       $payload['key'],
-      $payload['secret']
+      $payload['secret'],
+      $payload['endpoint'] ?? null
     );
   }
   
@@ -76,7 +87,8 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
       'region' => $this->region,
       'bucket' => $this->bucket,
       'key' => $this->key,
-      'secret' => $this->secret
+      'secret' => $this->secret,
+      'endpoint' => $this->endpoint
     ];
   }
 }

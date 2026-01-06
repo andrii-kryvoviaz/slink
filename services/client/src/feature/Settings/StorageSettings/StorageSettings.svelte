@@ -319,6 +319,27 @@
         size="md"
       />
     </SettingItem>
+
+    <SettingItem
+      defaultValue={defaultSettings?.adapter.s3.endpoint}
+      currentValue={settings.adapter.s3.endpoint}
+      reset={(value) => {
+        settings.adapter.s3.endpoint = value;
+      }}
+    >
+      {#snippet label()}
+        Custom Endpoint
+      {/snippet}
+      {#snippet hint()}
+        Optional: Custom S3 endpoint URL (e.g., for Minio or other S3-compatible services)
+      {/snippet}
+      <Input
+        name="s3Endpoint"
+        placeholder="http://localhost:9000"
+        bind:value={settings.adapter.s3.endpoint}
+        size="md"
+      />
+    </SettingItem>
   {/if}
 
   <div>

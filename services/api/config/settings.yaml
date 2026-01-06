@@ -15,6 +15,7 @@ parameters:
         bucket: '%env(string:default::AMAZON_S3_BUCKET)%'
         key: '%env(string:default::AMAZON_S3_ACCESS_KEY_ID)%'
         secret: '%env(string:default::AMAZON_S3_SECRET_ACCESS_KEY)%'
+        endpoint: '%env(string:default::AMAZON_S3_ENDPOINT)%'
   user:
     allowRegistration: '%env(bool:USER_ALLOW_REGISTRATION)%'
     approvalRequired: '%env(bool:USER_APPROVAL_REQUIRED)%'
@@ -61,3 +62,4 @@ when@prod:
           bucket: '%env(string:default::AMAZON_S3_BUCKET)%'
           key: '%env(string:default::AMAZON_S3_ACCESS_KEY_ID)%'
           secret: '%env(string:default::AMAZON_S3_SECRET_ACCESS_KEY)%'
+          endpoint: '%env(string:default::AMAZON_S3_ENDPOINT)%'

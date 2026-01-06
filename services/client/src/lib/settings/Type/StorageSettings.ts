@@ -18,6 +18,7 @@ export type StorageSettings = {
       bucket: string;
       key: string;
       secret: string;
+      endpoint?: string;
     };
   };
 };
