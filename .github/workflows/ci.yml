@@ -19,10 +19,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
 
-env:
-  image: docker.io/${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.APP_NAME }}
-  test_tag: ${{ github.sha }}-test
-
 jobs:
   changes:
     name: Detect Changes
@@ -52,8 +48,6 @@ jobs:
 
       - name: PHPStan Static Analysis
         uses: ./.github/actions/phpstan
-        with:
-          image: ${{ env.image }}:${{ env.test_tag }}
 
   backend-test:
     name: Backend Test
@@ -65,8 +59,6 @@ jobs:
 
       - name: PHPUnit tests
         uses: ./.github/actions/phpunit
-        with:
-          image: ${{ env.image }}:${{ env.test_tag }}
 
   frontend-lint:
     name: Frontend Lint
