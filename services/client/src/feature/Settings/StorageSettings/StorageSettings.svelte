@@ -331,7 +331,8 @@
         Custom Endpoint
       {/snippet}
       {#snippet hint()}
-        Optional: Custom S3 endpoint URL (e.g., for Minio or other S3-compatible services)
+        Optional: Custom S3 endpoint URL (e.g., for Minio or other S3-compatible
+        services)
       {/snippet}
       <Input
         name="s3Endpoint"

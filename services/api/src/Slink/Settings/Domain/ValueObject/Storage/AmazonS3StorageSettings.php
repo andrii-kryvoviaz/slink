@@ -73,7 +73,14 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
   }
   
   /**
-   * @param array<string, string> $payload
+   * @param array{
+   *   region: string,
+   *   bucket: string,
+   *   key: string,
+   *   secret: string,
+   *   endpoint?: string|null,
+   *   forcePathStyle?: bool|null
+   * } $payload
    * @return static
    */
   #[\Override]
@@ -89,7 +96,14 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
   }
   
   /**
-   * @return array<string, string>
+   * @return array{
+   *   region: string,
+   *   bucket: string,
+   *   key: string,
+   *   secret: string,
+   *   endpoint: string|null,
+   *   forcePathStyle: bool|null
+   * }
    */
   #[\Override]
   public function toPayload(): array {
