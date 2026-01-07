@@ -19,6 +19,7 @@ export type StorageSettings = {
       key: string;
       secret: string;
       endpoint?: string;
+      forcePathStyle?: boolean;
     };
   };
 };

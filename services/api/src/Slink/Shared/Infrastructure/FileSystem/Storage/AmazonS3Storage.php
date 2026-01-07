@@ -33,6 +33,11 @@ final class AmazonS3Storage extends AbstractStorage implements ObjectStorageInte
     if ($endpoint) {
       $config['endpoint'] = $endpoint;
     }
+
+    $forcePathStyle = $configurationProvider->get('storage.adapter.s3.forcePathStyle');
+    if ($forcePathStyle !== null) {
+      $config['use_path_style_endpoint'] = (bool) $forcePathStyle;
+    }
     
     $this->client = new S3Client($config);
     

@@ -16,6 +16,7 @@ parameters:
         key: '%env(string:default::AMAZON_S3_ACCESS_KEY_ID)%'
         secret: '%env(string:default::AMAZON_S3_SECRET_ACCESS_KEY)%'
         endpoint: '%env(string:default::AMAZON_S3_ENDPOINT)%'
+        forcePathStyle: '%env(bool:default::AMAZON_S3_FORCE_PATH_STYLE)%'
   user:
     allowRegistration: '%env(bool:USER_ALLOW_REGISTRATION)%'
     approvalRequired: '%env(bool:USER_APPROVAL_REQUIRED)%'
@@ -63,3 +64,4 @@ when@prod:
           key: '%env(string:default::AMAZON_S3_ACCESS_KEY_ID)%'
           secret: '%env(string:default::AMAZON_S3_SECRET_ACCESS_KEY)%'
           endpoint: '%env(string:default::AMAZON_S3_ENDPOINT)%'
+          forcePathStyle: '%env(bool:default::AMAZON_S3_FORCE_PATH_STYLE)%'
