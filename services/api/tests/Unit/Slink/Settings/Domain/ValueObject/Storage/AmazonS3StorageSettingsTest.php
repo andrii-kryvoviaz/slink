@@ -6,6 +6,7 @@ namespace Unit\Slink\Settings\Domain\ValueObject\Storage;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Slink\Settings\Domain\Exception\InvalidS3RegionException;
 use Slink\Settings\Domain\ValueObject\Storage\AmazonS3StorageSettings;
 
 final class AmazonS3StorageSettingsTest extends TestCase {
@@ -59,5 +60,35 @@ final class AmazonS3StorageSettingsTest extends TestCase {
     $settings = AmazonS3StorageSettings::fromPayload($payload);
 
     $this->assertTrue($settings->usesCustomProvider());
+  }
+
+  #[Test]
+  public function itRequiresRegionWhenCustomProviderIsDisabled(): void {
+    $payload = [
+      'region' => '',
+      'bucket' => 'test-bucket',
+      'key' => 'access-key',
+      'secret' => 'secret-key',
+      'useCustomProvider' => false,
+    ];
+
+    $this->expectException(InvalidS3RegionException::class);
+
+    AmazonS3StorageSettings::fromPayload($payload);
+  }
+
+  #[Test]
+  public function itAllowsEmptyRegionWhenCustomProviderIsEnabled(): void {
+    $payload = [
+      'region' => '',
+      'bucket' => 'test-bucket',
+      'key' => 'access-key',
+      'secret' => 'secret-key',
+      'useCustomProvider' => true,
+    ];
+
+    $settings = AmazonS3StorageSettings::fromPayload($payload);
+
+    $this->assertSame('', $settings->getRegion());
   }
 }

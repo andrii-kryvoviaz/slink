@@ -242,6 +242,50 @@
       />
     </SettingItem>
 
+    {#if settings.adapter.s3.useCustomProvider}
+      <SettingItem
+        defaultValue={defaultSettings?.adapter.s3.endpoint}
+        currentValue={settings.adapter.s3.endpoint}
+        reset={(value) => {
+          settings.adapter.s3.endpoint = value;
+        }}
+      >
+        {#snippet label()}
+          Custom Endpoint
+        {/snippet}
+        {#snippet hint()}
+          Optional: Custom S3 endpoint URL (e.g., for Minio or other
+          S3-compatible services)
+        {/snippet}
+        <Input
+          name="s3Endpoint"
+          placeholder="http://localhost:9000"
+          bind:value={settings.adapter.s3.endpoint}
+          size="md"
+        />
+      </SettingItem>
+
+      <SettingItem
+        defaultValue={defaultSettings?.adapter.s3.forcePathStyle}
+        currentValue={settings.adapter.s3.forcePathStyle}
+        reset={(value) => {
+          settings.adapter.s3.forcePathStyle = value;
+        }}
+      >
+        {#snippet label()}
+          Force Path-Style URLs
+        {/snippet}
+        {#snippet hint()}
+          Enable if your provider requires path-style buckets
+          (http://host/bucket/key).
+        {/snippet}
+        <Switch
+          name="s3ForcePathStyle"
+          bind:checked={settings.adapter.s3.forcePathStyle}
+        />
+      </SettingItem>
+    {/if}
+
     <SettingItem
       defaultValue={defaultSettings?.adapter.s3.region}
       currentValue={settings.adapter.s3.region}
@@ -253,9 +297,9 @@
         Region
       {/snippet}
       {#snippet hint()}
-        Region where your bucket is located. Required for AWS and some
-        S3-compatible providers (for example, Cloudflare R2). Use us-east-1 if
-        you're unsure.
+        Region where your bucket is located. Required for AWS; optional for most
+        custom providers. For providers like Cloudflare R2, keep this set. Use
+        us-east-1 if you're unsure.
       {/snippet}
       <Input
         name="s3Region"
@@ -342,50 +386,6 @@
         size="md"
       />
     </SettingItem>
-
-    {#if settings.adapter.s3.useCustomProvider}
-      <SettingItem
-        defaultValue={defaultSettings?.adapter.s3.endpoint}
-        currentValue={settings.adapter.s3.endpoint}
-        reset={(value) => {
-          settings.adapter.s3.endpoint = value;
-        }}
-      >
-        {#snippet label()}
-          Custom Endpoint
-        {/snippet}
-        {#snippet hint()}
-          Optional: Custom S3 endpoint URL (e.g., for Minio or other
-          S3-compatible services)
-        {/snippet}
-        <Input
-          name="s3Endpoint"
-          placeholder="http://localhost:9000"
-          bind:value={settings.adapter.s3.endpoint}
-          size="md"
-        />
-      </SettingItem>
-
-      <SettingItem
-        defaultValue={defaultSettings?.adapter.s3.forcePathStyle}
-        currentValue={settings.adapter.s3.forcePathStyle}
-        reset={(value) => {
-          settings.adapter.s3.forcePathStyle = value;
-        }}
-      >
-        {#snippet label()}
-          Force Path-Style URLs
-        {/snippet}
-        {#snippet hint()}
-          Enable if your provider requires path-style buckets
-          (http://host/bucket/key).
-        {/snippet}
-        <Switch
-          name="s3ForcePathStyle"
-          bind:checked={settings.adapter.s3.forcePathStyle}
-        />
-      </SettingItem>
-    {/if}
   {/if}
 
   <div>
