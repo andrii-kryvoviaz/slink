@@ -14,7 +14,8 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
    * @param string $key
    * @param string $secret
    * @param string|null $endpoint
-   * @param bool|null $forcePathStyle
+   * @param bool $useCustomProvider
+   * @param bool $forcePathStyle
    */
   private function __construct(
     private string $region,
@@ -27,7 +28,8 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
     private string $secret,
     
     private ?string $endpoint = null,
-    private ?bool $forcePathStyle = null
+    private bool $useCustomProvider = false,
+    private bool $forcePathStyle = false
   ) {}
   
   /**
@@ -66,9 +68,16 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
   }
 
   /**
-   * @return bool|null
+   * @return bool
    */
-  public function isForcePathStyle(): ?bool {
+  public function usesCustomProvider(): bool {
+    return $this->useCustomProvider;
+  }
+
+  /**
+   * @return bool
+   */
+  public function isForcePathStyle(): bool {
     return $this->forcePathStyle;
   }
   
@@ -79,19 +88,24 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
    *   key: string,
    *   secret: string,
    *   endpoint?: string|null,
+   *   useCustomProvider?: bool|null,
    *   forcePathStyle?: bool|null
    * } $payload
    * @return static
    */
   #[\Override]
   public static function fromPayload(array $payload): static {
+    $endpoint = $payload['endpoint'] ?? null;
+    $useCustomProvider = $payload['useCustomProvider'] ?? ($endpoint ? true : false);
+
     return new self(
       $payload['region'],
       $payload['bucket'],
       $payload['key'],
       $payload['secret'],
-      $payload['endpoint'] ?? null,
-      $payload['forcePathStyle'] ?? null
+      $endpoint,
+      $useCustomProvider,
+      $payload['forcePathStyle'] ?? false
     );
   }
   
@@ -102,7 +116,8 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
    *   key: string,
    *   secret: string,
    *   endpoint: string|null,
-   *   forcePathStyle: bool|null
+   *   useCustomProvider: bool,
+   *   forcePathStyle: bool
    * }
    */
   #[\Override]
@@ -113,6 +128,7 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
       'key' => $this->key,
       'secret' => $this->secret,
       'endpoint' => $this->endpoint,
+      'useCustomProvider' => $this->useCustomProvider,
       'forcePathStyle' => $this->forcePathStyle
     ];
   }

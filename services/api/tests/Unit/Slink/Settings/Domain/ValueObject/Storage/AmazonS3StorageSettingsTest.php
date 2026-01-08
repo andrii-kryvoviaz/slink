@@ -10,24 +10,26 @@ use Slink\Settings\Domain\ValueObject\Storage\AmazonS3StorageSettings;
 
 final class AmazonS3StorageSettingsTest extends TestCase {
   #[Test]
-  public function itSerializesForcePathStyleSetting(): void {
+  public function itSerializesCustomProviderSettings(): void {
     $payload = [
       'region' => 'us-east-1',
       'bucket' => 'test-bucket',
       'key' => 'access-key',
       'secret' => 'secret-key',
       'endpoint' => 'http://minio:9000',
+      'useCustomProvider' => true,
       'forcePathStyle' => true,
     ];
 
     $settings = AmazonS3StorageSettings::fromPayload($payload);
 
     $this->assertSame($payload, $settings->toPayload());
+    $this->assertTrue($settings->usesCustomProvider());
     $this->assertTrue($settings->isForcePathStyle());
   }
 
   #[Test]
-  public function itDefaultsForcePathStyleToNull(): void {
+  public function itDefaultsCustomProviderFlagsToFalse(): void {
     $payload = [
       'region' => 'us-east-1',
       'bucket' => 'test-bucket',
@@ -38,7 +40,24 @@ final class AmazonS3StorageSettingsTest extends TestCase {
     $settings = AmazonS3StorageSettings::fromPayload($payload);
     $serialized = $settings->toPayload();
 
+    $this->assertArrayHasKey('useCustomProvider', $serialized);
     $this->assertArrayHasKey('forcePathStyle', $serialized);
-    $this->assertNull($settings->isForcePathStyle());
+    $this->assertFalse($settings->usesCustomProvider());
+    $this->assertFalse($settings->isForcePathStyle());
+  }
+
+  #[Test]
+  public function itUsesCustomProviderWhenEndpointIsSet(): void {
+    $payload = [
+      'region' => 'us-east-1',
+      'bucket' => 'test-bucket',
+      'key' => 'access-key',
+      'secret' => 'secret-key',
+      'endpoint' => 'http://minio:9000',
+    ];
+
+    $settings = AmazonS3StorageSettings::fromPayload($payload);
+
+    $this->assertTrue($settings->usesCustomProvider());
   }
 }
