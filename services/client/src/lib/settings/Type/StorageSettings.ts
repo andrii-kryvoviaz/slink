@@ -18,6 +18,9 @@ export type StorageSettings = {
       bucket: string;
       key: string;
       secret: string;
+      useCustomProvider: boolean;
+      endpoint?: string;
+      forcePathStyle: boolean;
     };
   };
 };

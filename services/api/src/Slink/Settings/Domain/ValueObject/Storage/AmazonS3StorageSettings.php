@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Settings\Domain\ValueObject\Storage;
 
+use Slink\Settings\Domain\Exception\InvalidS3RegionException;
 use SensitiveParameter;
 use Slink\Shared\Domain\ValueObject\AbstractCompoundValueObject;
 
@@ -13,6 +14,9 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
    * @param string $bucket
    * @param string $key
    * @param string $secret
+   * @param string|null $endpoint
+   * @param bool $useCustomProvider
+   * @param bool $forcePathStyle
    */
   private function __construct(
     private string $region,
@@ -22,7 +26,11 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
     private string $key,
     
     #[SensitiveParameter]
-    private string $secret
+    private string $secret,
+    
+    private ?string $endpoint = null,
+    private bool $useCustomProvider = false,
+    private bool $forcePathStyle = false
   ) {}
   
   /**
@@ -54,21 +62,69 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
   }
   
   /**
-   * @param array<string, string> $payload
+   * @return string|null
+   */
+  public function getEndpoint(): ?string {
+    return $this->endpoint;
+  }
+
+  /**
+   * @return bool
+   */
+  public function usesCustomProvider(): bool {
+    return $this->useCustomProvider;
+  }
+
+  /**
+   * @return bool
+   */
+  public function isForcePathStyle(): bool {
+    return $this->forcePathStyle;
+  }
+  
+  /**
+   * @param array{
+   *   region?: string,
+   *   bucket: string,
+   *   key: string,
+   *   secret: string,
+   *   endpoint?: string|null,
+   *   useCustomProvider?: bool|null,
+   *   forcePathStyle?: bool|null
+   * } $payload
    * @return static
    */
   #[\Override]
   public static function fromPayload(array $payload): static {
+    $endpoint = $payload['endpoint'] ?? null;
+    $useCustomProvider = $payload['useCustomProvider'] ?? ($endpoint ? true : false);
+    $region = trim((string) ($payload['region'] ?? ''));
+
+    if (!$useCustomProvider && $region === '') {
+      throw new InvalidS3RegionException('S3 region is required when using AWS.');
+    }
+
     return new self(
-      $payload['region'],
+      $region,
       $payload['bucket'],
       $payload['key'],
-      $payload['secret']
+      $payload['secret'],
+      $endpoint,
+      $useCustomProvider,
+      $payload['forcePathStyle'] ?? false
     );
   }
   
   /**
-   * @return array<string, string>
+   * @return array{
+   *   region: string,
+   *   bucket: string,
+   *   key: string,
+   *   secret: string,
+   *   endpoint: string|null,
+   *   useCustomProvider: bool,
+   *   forcePathStyle: bool
+   * }
    */
   #[\Override]
   public function toPayload(): array {
@@ -76,7 +132,10 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
       'region' => $this->region,
       'bucket' => $this->bucket,
       'key' => $this->key,
-      'secret' => $this->secret
+      'secret' => $this->secret,
+      'endpoint' => $this->endpoint,
+      'useCustomProvider' => $this->useCustomProvider,
+      'forcePathStyle' => $this->forcePathStyle
     ];
   }
 }

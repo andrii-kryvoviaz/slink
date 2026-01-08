@@ -4,6 +4,7 @@
   import { Select } from '@slink/ui/components';
   import { Button } from '@slink/ui/components/button';
   import { Input } from '@slink/ui/components/input';
+  import { Switch } from '@slink/ui/components/switch';
   import { toast } from 'svelte-sonner';
 
   import Icon from '@iconify/svelte';
@@ -222,6 +223,70 @@
     </Notice>
 
     <SettingItem
+      defaultValue={defaultSettings?.adapter.s3.useCustomProvider}
+      currentValue={settings.adapter.s3.useCustomProvider}
+      reset={(value) => {
+        settings.adapter.s3.useCustomProvider = value;
+      }}
+    >
+      {#snippet label()}
+        Custom S3 Provider
+      {/snippet}
+      {#snippet hint()}
+        Enable for S3-compatible services like MinIO, Cloudflare R2, or Wasabi.
+        This unlocks custom endpoint and path-style options.
+      {/snippet}
+      <Switch
+        name="s3UseCustomProvider"
+        bind:checked={settings.adapter.s3.useCustomProvider}
+      />
+    </SettingItem>
+
+    {#if settings.adapter.s3.useCustomProvider}
+      <SettingItem
+        defaultValue={defaultSettings?.adapter.s3.endpoint}
+        currentValue={settings.adapter.s3.endpoint}
+        reset={(value) => {
+          settings.adapter.s3.endpoint = value;
+        }}
+      >
+        {#snippet label()}
+          Custom Endpoint
+        {/snippet}
+        {#snippet hint()}
+          Optional: Custom S3 endpoint URL (e.g., for Minio or other
+          S3-compatible services)
+        {/snippet}
+        <Input
+          name="s3Endpoint"
+          placeholder="http://localhost:9000"
+          bind:value={settings.adapter.s3.endpoint}
+          size="md"
+        />
+      </SettingItem>
+
+      <SettingItem
+        defaultValue={defaultSettings?.adapter.s3.forcePathStyle}
+        currentValue={settings.adapter.s3.forcePathStyle}
+        reset={(value) => {
+          settings.adapter.s3.forcePathStyle = value;
+        }}
+      >
+        {#snippet label()}
+          Force Path-Style URLs
+        {/snippet}
+        {#snippet hint()}
+          Enable if your provider requires path-style buckets
+          (http://host/bucket/key).
+        {/snippet}
+        <Switch
+          name="s3ForcePathStyle"
+          bind:checked={settings.adapter.s3.forcePathStyle}
+        />
+      </SettingItem>
+    {/if}
+
+    <SettingItem
       defaultValue={defaultSettings?.adapter.s3.region}
       currentValue={settings.adapter.s3.region}
       reset={(value) => {
@@ -229,10 +294,12 @@
       }}
     >
       {#snippet label()}
-        AWS Region
+        Region
       {/snippet}
       {#snippet hint()}
-        Region where your bucket is located
+        Region where your bucket is located. Required for AWS; optional for most
+        custom providers. For providers like Cloudflare R2, keep this set. Use
+        us-east-1 if you're unsure.
       {/snippet}
       <Input
         name="s3Region"
