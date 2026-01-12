@@ -223,9 +223,9 @@
   });
 </script>
 
-<div class="w-full flex flex-col" bind:this={tableContainer}>
+<div class="w-full flex flex-col gap-6" bind:this={tableContainer}>
   <div
-    class="mb-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
+    class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
   >
     <div class="order-2 lg:order-1">
       <TablePagination
@@ -246,8 +246,9 @@
           {#snippet child({ props })}
             <Button
               {...props}
-              variant="outline"
+              variant="glass"
               size="sm"
+              rounded="lg"
               class="w-full sm:w-auto"
             >
               <Icon
@@ -276,20 +277,20 @@
       </DropdownMenu.Root>
     </div>
   </div>
-  <div class="overflow-hidden flex-1">
-    <div
-      class="bg-gradient-to-br from-slate-50 to-slate-100/50 dark:from-slate-800/50 dark:to-slate-700/30 rounded-xl border border-slate-200 dark:border-slate-700 overflow-x-auto"
-    >
-      <Table.Root class="bg-transparent">
+  <div
+    class="flex-1 overflow-hidden rounded-xl border border-slate-200/60 dark:border-slate-700/40 bg-white dark:bg-slate-800/30"
+  >
+    <div class="overflow-x-auto">
+      <Table.Root>
         <Table.Header>
           {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
             <Table.Row
-              class="border-slate-200 dark:border-slate-700 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-transparent"
+              class="border-slate-200/60 dark:border-slate-700/40 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-transparent"
             >
               {#each headerGroup.headers as header (header.id)}
                 <Table.Head
                   class="{(header.column.columnDef.meta as any)
-                    ?.className} bg-slate-100/50 dark:bg-slate-700/30 text-slate-700 dark:text-slate-300 font-semibold"
+                    ?.className} bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 text-xs font-medium uppercase tracking-wider"
                 >
                   {#if !header.isPlaceholder}
                     <FlexRender
@@ -305,7 +306,7 @@
         <Table.Body>
           {#each table.getRowModel().rows as row (row.id)}
             <Table.Row
-              class="border-slate-200 dark:border-slate-700 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-slate-100/70 dark:hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-slate-700/50 transition-all duration-300"
+              class="group/row border-slate-200/60 dark:border-slate-700/40 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-slate-50 dark:hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-slate-700/30 transition-colors duration-200"
             >
               {#each row.getVisibleCells() as cell (cell.id)}
                 <Table.Cell
@@ -320,12 +321,30 @@
               {/each}
             </Table.Row>
           {:else}
-            <Table.Row class="border-slate-200 dark:border-slate-700">
-              <Table.Cell
-                colspan={columns.length}
-                class="h-24 text-center text-slate-500 dark:text-slate-400"
-              >
-                No results.
+            <Table.Row
+              class="border-slate-200/60 dark:border-slate-700/40 hover:bg-transparent"
+            >
+              <Table.Cell colspan={columns.length} class="h-32 text-center">
+                <div class="flex flex-col items-center gap-3 py-8">
+                  <div
+                    class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800"
+                  >
+                    <Icon
+                      icon="heroicons:users"
+                      class="h-6 w-6 text-slate-400 dark:text-slate-500"
+                    />
+                  </div>
+                  <div class="space-y-1">
+                    <p
+                      class="text-sm font-medium text-slate-700 dark:text-slate-300"
+                    >
+                      No users found
+                    </p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">
+                      Users will appear here once added
+                    </p>
+                  </div>
+                </div>
               </Table.Cell>
             </Table.Row>
           {/each}
