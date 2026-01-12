@@ -254,13 +254,35 @@
           Custom Endpoint
         {/snippet}
         {#snippet hint()}
-          Optional: Custom S3 endpoint URL (e.g., for Minio or other
-          S3-compatible services)
+          Custom S3 endpoint URL for your provider
         {/snippet}
         <Input
           name="s3Endpoint"
           placeholder="http://localhost:9000"
           bind:value={settings.adapter.s3.endpoint}
+          size="md"
+        />
+      </SettingItem>
+
+      <SettingItem
+        defaultValue={defaultSettings?.adapter.s3.region}
+        currentValue={settings.adapter.s3.region}
+        reset={(value) => {
+          settings.adapter.s3.region = value;
+        }}
+      >
+        {#snippet label()}
+          Region (Optional)
+        {/snippet}
+        {#snippet hint()}
+          Most S3-compatible providers don't require a region. Leave empty for
+          Cloudflare R2 or providers that auto-detect. Use "auto" or a specific
+          region if required by your provider.
+        {/snippet}
+        <Input
+          name="s3Region"
+          placeholder="auto"
+          bind:value={settings.adapter.s3.region}
           size="md"
         />
       </SettingItem>
@@ -277,37 +299,43 @@
         {/snippet}
         {#snippet hint()}
           Enable if your provider requires path-style buckets
-          (http://host/bucket/key).
+          (http://host/bucket/key). Common for MinIO and self-hosted solutions.
         {/snippet}
         <Switch
           name="s3ForcePathStyle"
           bind:checked={settings.adapter.s3.forcePathStyle}
         />
       </SettingItem>
+    {:else}
+      <SettingItem
+        defaultValue={defaultSettings?.adapter.s3.region}
+        currentValue={settings.adapter.s3.region}
+        reset={(value) => {
+          settings.adapter.s3.region = value;
+        }}
+      >
+        {#snippet label()}
+          Region
+        {/snippet}
+        {#snippet hint()}
+          AWS region where your bucket is located (e.g., us-east-1).
+          <a
+            href="https://docs.aws.amazon.com/general/latest/gr/s3.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-blue-600 dark:text-blue-400 hover:underline"
+          >
+            View available regions
+          </a>
+        {/snippet}
+        <Input
+          name="s3Region"
+          placeholder="us-east-1"
+          bind:value={settings.adapter.s3.region}
+          size="md"
+        />
+      </SettingItem>
     {/if}
-
-    <SettingItem
-      defaultValue={defaultSettings?.adapter.s3.region}
-      currentValue={settings.adapter.s3.region}
-      reset={(value) => {
-        settings.adapter.s3.region = value;
-      }}
-    >
-      {#snippet label()}
-        Region
-      {/snippet}
-      {#snippet hint()}
-        Region where your bucket is located. Required for AWS; optional for most
-        custom providers. For providers like Cloudflare R2, keep this set. Use
-        us-east-1 if you're unsure.
-      {/snippet}
-      <Input
-        name="s3Region"
-        placeholder="us-east-1"
-        bind:value={settings.adapter.s3.region}
-        size="md"
-      />
-    </SettingItem>
 
     <SettingItem
       defaultValue={defaultSettings?.adapter.s3.bucket}
