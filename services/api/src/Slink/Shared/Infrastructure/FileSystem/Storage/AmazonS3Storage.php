@@ -15,36 +15,42 @@ final class AmazonS3Storage extends AbstractStorage implements ObjectStorageInte
   private S3Client $client;
   private ConfigurationProviderInterface $configurationProvider;
   
-  /**
-   * @param ConfigurationProviderInterface $configurationProvider
-   * @return void
-   */
   function init(ConfigurationProviderInterface $configurationProvider): void {
+    $this->configurationProvider = $configurationProvider;
+    $this->client = new S3Client($this->buildClientConfig());
+  }
+  
+  /**
+   * @return array<string, mixed>
+   */
+  private function buildClientConfig(): array {
+    $region = $this->configurationProvider->get('storage.adapter.s3.region');
+    $endpoint = $this->configurationProvider->get('storage.adapter.s3.endpoint');
+    $useCustomProvider = $this->configurationProvider->get('storage.adapter.s3.useCustomProvider') ?? (bool) $endpoint;
+    
     $config = [
-      'region' => $configurationProvider->get('storage.adapter.s3.region'),
       'version' => 'latest',
       'credentials' => [
-        'key' => $configurationProvider->get('storage.adapter.s3.key'),
-        'secret' => $configurationProvider->get('storage.adapter.s3.secret')
+        'key' => $this->configurationProvider->get('storage.adapter.s3.key'),
+        'secret' => $this->configurationProvider->get('storage.adapter.s3.secret')
       ]
     ];
     
-    $endpoint = $configurationProvider->get('storage.adapter.s3.endpoint');
-    $useCustomProvider = $configurationProvider->get('storage.adapter.s3.useCustomProvider');
-    $forcePathStyle = $configurationProvider->get('storage.adapter.s3.forcePathStyle');
-
-    $shouldUseCustomProvider = $useCustomProvider ?? (bool) $endpoint;
-
-    if ($shouldUseCustomProvider) {
-      if ($endpoint) {
-        $config['endpoint'] = $endpoint;
-      }
-      $config['use_path_style_endpoint'] = (bool) $forcePathStyle;
+    if ($region) {
+      $config['region'] = $region;
     }
     
-    $this->client = new S3Client($config);
+    if (!$useCustomProvider) {
+      return $config;
+    }
     
-    $this->configurationProvider = $configurationProvider;
+    if ($endpoint) {
+      $config['endpoint'] = $endpoint;
+    }
+    
+    $config['use_path_style_endpoint'] = (bool) $this->configurationProvider->get('storage.adapter.s3.forcePathStyle');
+    
+    return $config;
   }
   
   /**

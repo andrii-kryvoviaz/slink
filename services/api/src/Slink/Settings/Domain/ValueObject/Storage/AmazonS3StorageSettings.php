@@ -97,10 +97,11 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
   #[\Override]
   public static function fromPayload(array $payload): static {
     $endpoint = $payload['endpoint'] ?? null;
-    $useCustomProvider = $payload['useCustomProvider'] ?? ($endpoint ? true : false);
+    $useCustomProvider = $payload['useCustomProvider'] ?? (bool) $endpoint;
     $region = trim((string) ($payload['region'] ?? ''));
+    $forcePathStyle = (bool) ($payload['forcePathStyle'] ?? false);
 
-    if (!$useCustomProvider && $region === '') {
+    if (!$useCustomProvider && empty($region)) {
       throw new InvalidS3RegionException('S3 region is required when using AWS.');
     }
 
@@ -111,7 +112,7 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
       $payload['secret'],
       $endpoint,
       $useCustomProvider,
-      $payload['forcePathStyle'] ?? false
+      $forcePathStyle
     );
   }
   
