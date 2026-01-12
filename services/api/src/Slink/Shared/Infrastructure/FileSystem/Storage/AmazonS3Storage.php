@@ -20,14 +20,29 @@ final class AmazonS3Storage extends AbstractStorage implements ObjectStorageInte
    * @return void
    */
   function init(ConfigurationProviderInterface $configurationProvider): void {
-    $this->client = new S3Client([
+    $config = [
       'region' => $configurationProvider->get('storage.adapter.s3.region'),
       'version' => 'latest',
       'credentials' => [
         'key' => $configurationProvider->get('storage.adapter.s3.key'),
         'secret' => $configurationProvider->get('storage.adapter.s3.secret')
       ]
-    ]);
+    ];
+    
+    $endpoint = $configurationProvider->get('storage.adapter.s3.endpoint');
+    $useCustomProvider = $configurationProvider->get('storage.adapter.s3.useCustomProvider');
+    $forcePathStyle = $configurationProvider->get('storage.adapter.s3.forcePathStyle');
+
+    $shouldUseCustomProvider = $useCustomProvider ?? (bool) $endpoint;
+
+    if ($shouldUseCustomProvider) {
+      if ($endpoint) {
+        $config['endpoint'] = $endpoint;
+      }
+      $config['use_path_style_endpoint'] = (bool) $forcePathStyle;
+    }
+    
+    $this->client = new S3Client($config);
     
     $this->configurationProvider = $configurationProvider;
   }
