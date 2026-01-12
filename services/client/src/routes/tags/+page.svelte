@@ -80,61 +80,62 @@
   <title>My Tags | Slink</title>
 </svelte:head>
 
-<div class="container mx-auto p-6">
-  <section in:fade={{ duration: 300 }} class="space-y-6">
-    <div class="flex items-center justify-between">
-      <div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
-          My Tags
-        </h1>
-        <p class="mt-2 text-gray-600 dark:text-gray-400">
-          Create and organize tags for your images
-        </p>
+<section in:fade={{ duration: 300 }}>
+  <div class="flex flex-col px-4 py-6 sm:px-6 w-full">
+    <div class="mb-8 space-y-6" in:fade={{ duration: 400, delay: 100 }}>
+      <div class="flex items-center justify-between w-full">
+        <div class="flex-1 min-w-0">
+          <h1 class="text-3xl font-semibold text-slate-900 dark:text-white">
+            My Tags
+          </h1>
+          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            Create and organize tags for your images
+          </p>
+        </div>
+        <Button
+          variant="glass"
+          size="sm"
+          rounded="full"
+          onclick={() => (createModalOpen = true)}
+          class="ml-4 gap-2"
+        >
+          <Icon icon="lucide:plus" class="h-4 w-4" />
+          <span class="hidden sm:inline">Create Tag</span>
+        </Button>
       </div>
-      <Button
-        variant="primary"
-        size="sm"
-        rounded="lg"
-        onclick={() => (createModalOpen = true)}
-        class="flex items-center gap-2"
-      >
-        <Icon icon="lucide:plus" class="h-4 w-4" />
-        Create Tag
-      </Button>
     </div>
 
     {#if tagFeed.loading && tagFeed.data.length === 0}
-      <div class="flex items-center justify-center py-16">
-        <div class="flex items-center gap-3">
+      <div
+        class="flex items-center justify-center py-20"
+        in:fade={{ duration: 200 }}
+      >
+        <div class="flex flex-col items-center gap-3">
           <Icon
-            icon="eos-icons:three-dots-loading"
-            class="h-6 w-6 text-blue-600"
+            icon="lucide:loader-2"
+            class="h-8 w-8 text-slate-400 dark:text-slate-500 animate-spin"
           />
-          <span class="text-gray-600 dark:text-gray-400">Loading tags...</span>
+          <span class="text-sm text-slate-500 dark:text-slate-400"
+            >Loading tags...</span
+          >
         </div>
       </div>
     {:else}
-      <div
-        class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-sm"
-      >
-        <div class="p-6">
-          <TagDataTable
-            tags={tagFeed.data}
-            onDelete={handleDeleteTag}
-            bind:searchTerm={searchQuery}
-            onSearchChange={handleSearchChange}
-            isLoading={tagFeed.loading}
-            {currentPage}
-            {totalPages}
-            {totalItems}
-            {pageSize}
-            onPageChange={handlePageChange}
-          />
-        </div>
-      </div>
+      <TagDataTable
+        tags={tagFeed.data}
+        onDelete={handleDeleteTag}
+        bind:searchTerm={searchQuery}
+        onSearchChange={handleSearchChange}
+        isLoading={tagFeed.loading}
+        {currentPage}
+        {totalPages}
+        {totalItems}
+        {pageSize}
+        onPageChange={handlePageChange}
+      />
     {/if}
-  </section>
-</div>
+  </div>
+</section>
 
 <Dialog bind:open={createModalOpen} size="md">
   {#snippet children()}

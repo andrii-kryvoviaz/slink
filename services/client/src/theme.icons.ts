@@ -131,7 +131,6 @@ export const themeIcons: string[] = [
   'lucide:tag',
   'lucide:layers',
   'lucide:hash',
-  'lucide:info',
   'heroicons:x-mark-20-solid',
   'ph:moon-thin',
   'ph:sun-thin',
@@ -185,4 +184,5 @@ export const themeIcons: string[] = [
   'lucide:database',
   'lucide:bookmark',
   'lucide:globe',
+  'lucide:info',
 ];

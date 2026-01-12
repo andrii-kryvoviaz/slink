@@ -180,13 +180,13 @@
   });
 </script>
 
-<div class="w-full flex flex-col">
+<div class="w-full flex flex-col gap-6">
   <div
-    class="mb-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
+    class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
   >
-    <div class="flex-1 lg:max-w-md relative">
+    <div class="flex-1 lg:max-w-sm relative">
       <div
-        class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-muted-foreground"
+        class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 dark:text-slate-500"
       >
         <Icon icon="lucide:search" class="h-4 w-4" />
       </div>
@@ -194,7 +194,7 @@
         bind:value={searchTerm}
         placeholder="Search tags..."
         oninput={() => onSearchChange(searchTerm)}
-        class="h-9 pl-10 pr-3 text-sm"
+        class="h-9 pl-10 pr-3 text-sm bg-white dark:bg-slate-800/50 border-slate-200/60 dark:border-slate-700/50 focus:border-slate-300 dark:focus:border-slate-600"
       />
     </div>
 
@@ -205,8 +205,9 @@
             {#snippet child({ props })}
               <Button
                 {...props}
-                variant="outline"
+                variant="glass"
                 size="sm"
+                rounded="lg"
                 class="w-full sm:w-auto"
               >
                 <Icon
@@ -251,18 +252,20 @@
     </div>
   </div>
 
-  <div class="flex-1 overflow-hidden">
+  <div
+    class="flex-1 overflow-hidden rounded-xl border border-slate-200/60 dark:border-slate-700/40 bg-white dark:bg-slate-800/30"
+  >
     <div class="overflow-x-auto">
       <Table.Root>
         <Table.Header>
           {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
             <Table.Row
-              class="border-slate-200 dark:border-slate-700 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-transparent"
+              class="border-slate-200/60 dark:border-slate-700/40 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-transparent"
             >
               {#each headerGroup.headers as header (header.id)}
                 <Table.Head
                   class="{(header.column.columnDef.meta as any)
-                    ?.className} bg-slate-100/50 dark:bg-slate-700/30 text-slate-700 dark:text-slate-300 font-semibold"
+                    ?.className} bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 text-xs font-medium uppercase tracking-wider"
                 >
                   {#if !header.isPlaceholder}
                     <FlexRender
@@ -278,25 +281,24 @@
         <Table.Body>
           {#if isLoading}
             <Table.Row
-              class="border-slate-200 dark:border-slate-700 hover:bg-transparent"
+              class="border-slate-200/60 dark:border-slate-700/40 hover:bg-transparent"
             >
-              <Table.Cell
-                colspan={columns.length}
-                class="h-24 text-center text-slate-500 dark:text-slate-400"
-              >
-                <div class="flex flex-col items-center gap-2">
+              <Table.Cell colspan={columns.length} class="h-32 text-center">
+                <div class="flex flex-col items-center gap-3">
                   <Icon
                     icon="lucide:loader-2"
-                    class="h-8 w-8 text-slate-400 dark:text-slate-500 animate-spin"
+                    class="h-6 w-6 text-slate-400 dark:text-slate-500 animate-spin"
                   />
-                  <p>Loading tags...</p>
+                  <p class="text-sm text-slate-500 dark:text-slate-400">
+                    Loading tags...
+                  </p>
                 </div>
               </Table.Cell>
             </Table.Row>
           {:else if table.getRowModel().rows.length > 0}
             {#each table.getRowModel().rows as row (row.id)}
               <Table.Row
-                class="border-slate-200 dark:border-slate-700 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-slate-100/70 dark:hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-slate-700/50 transition-all duration-300"
+                class="group/row border-slate-200/60 dark:border-slate-700/40 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-slate-50 dark:hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-slate-700/30 transition-colors duration-200"
               >
                 {#each row.getVisibleCells() as cell (cell.id)}
                   <Table.Cell
@@ -313,21 +315,34 @@
             {/each}
           {:else}
             <Table.Row
-              class="border-slate-200 dark:border-slate-700 hover:bg-transparent"
+              class="border-slate-200/60 dark:border-slate-700/40 hover:bg-transparent"
             >
-              <Table.Cell
-                colspan={columns.length}
-                class="h-24 text-center text-slate-500 dark:text-slate-400"
-              >
-                <div class="flex flex-col items-center gap-2">
-                  <Icon
-                    icon="lucide:tag"
-                    class="h-8 w-8 text-slate-300 dark:text-slate-600"
-                  />
-                  <p>No tags found</p>
-                  {#if searchTerm}
-                    <p class="text-sm">Try adjusting your search term</p>
-                  {/if}
+              <Table.Cell colspan={columns.length} class="h-32 text-center">
+                <div class="flex flex-col items-center gap-3 py-8">
+                  <div
+                    class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800"
+                  >
+                    <Icon
+                      icon="lucide:tag"
+                      class="h-6 w-6 text-slate-400 dark:text-slate-500"
+                    />
+                  </div>
+                  <div class="space-y-1">
+                    <p
+                      class="text-sm font-medium text-slate-700 dark:text-slate-300"
+                    >
+                      No tags found
+                    </p>
+                    {#if searchTerm}
+                      <p class="text-xs text-slate-500 dark:text-slate-400">
+                        Try adjusting your search term
+                      </p>
+                    {:else}
+                      <p class="text-xs text-slate-500 dark:text-slate-400">
+                        Create your first tag to get started
+                      </p>
+                    {/if}
+                  </div>
                 </div>
               </Table.Cell>
             </Table.Row>
