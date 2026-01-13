@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { SettingsPageLayout, StorageSettings } from '@slink/feature/Settings';
+  import {
+    CacheSettings,
+    SettingsPageLayout,
+    StorageSettings,
+  } from '@slink/feature/Settings';
 
   import { useSettingsPage } from '@slink/lib/state/SettingsPage.svelte';
 
@@ -33,4 +37,6 @@
     loading={storageLoading}
     onSave={page.handleSave}
   />
+
+  <CacheSettings />
 </SettingsPageLayout>

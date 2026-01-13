@@ -2,21 +2,11 @@
   import { SettingItem, SettingsPane } from '@slink/feature/Settings';
   import { Notice } from '@slink/feature/Text';
   import { Select } from '@slink/ui/components';
-  import { Button } from '@slink/ui/components/button';
   import { Input } from '@slink/ui/components/input';
   import { Switch } from '@slink/ui/components/switch';
-  import { toast } from 'svelte-sonner';
-
-  import Icon from '@iconify/svelte';
-
-  import { ApiClient } from '@slink/api/Client';
-  import { ReactiveState } from '@slink/api/ReactiveState';
-  import type { ClearCacheResponse } from '@slink/api/Resources/StorageResource';
 
   import type { SettingCategory } from '@slink/lib/settings/Type/GlobalSettings';
   import type { StorageSettings as StorageSettingsType } from '@slink/lib/settings/Type/StorageSettings';
-
-  import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
 
   interface Props {
     settings: StorageSettingsType;
@@ -34,41 +24,6 @@
     loading = false,
     onSave,
   }: Props = $props();
-
-  const {
-    run: clearCache,
-    isLoading: isClearingCache,
-    error: clearCacheError,
-    data: clearCacheData,
-  } = ReactiveState<ClearCacheResponse>(
-    () => {
-      return ApiClient.storage.clearCache();
-    },
-    { minExecutionTime: 500 },
-  );
-
-  let showConfirmation = $state(false);
-
-  const handleClearCache = async () => {
-    await clearCache();
-
-    if (!$clearCacheError) {
-      showConfirmation = false;
-    }
-  };
-
-  $effect(() => {
-    if ($clearCacheData) {
-      toast.success('Cache cleared successfully');
-    }
-  });
-
-  $effect(() => {
-    if ($clearCacheError) {
-      printErrorsAsToastMessage($clearCacheError);
-      showConfirmation = false;
-    }
-  });
 </script>
 
 <SettingsPane category="storage" {loading} on={{ save: onSave }}>
@@ -417,52 +372,4 @@
       />
     </SettingItem>
   {/if}
-
-  <div>
-    <Notice size="sm" appearance="subtle" variant="info">
-      <strong>Cache Management:</strong>
-      Use the "Clear Cache" button below to remove all cached image transformations.
-      Cached files will be regenerated on next request.
-    </Notice>
-  </div>
-
-  {#snippet actions()}
-    {#if showConfirmation}
-      <span class="text-sm text-gray-600 dark:text-gray-400">
-        Clear all cached images?
-      </span>
-      <Button
-        variant="ghost"
-        size="sm"
-        rounded="full"
-        onclick={() => (showConfirmation = false)}
-        disabled={$isClearingCache}
-      >
-        Cancel
-      </Button>
-    {/if}
-    <Button
-      variant="destructive"
-      size="sm"
-      rounded="full"
-      onclick={showConfirmation
-        ? handleClearCache
-        : () => (showConfirmation = true)}
-      disabled={loading || $isClearingCache}
-    >
-      {#if $isClearingCache}
-        <Icon
-          icon="ph:circle-notch-duotone"
-          class="w-4 h-4 mr-2 animate-spin"
-        />
-        Clearing...
-      {:else if showConfirmation}
-        <Icon icon="ph:check-duotone" class="w-4 h-4 mr-2" />
-        Confirm
-      {:else}
-        <Icon icon="ph:trash-duotone" class="w-4 h-4 mr-2" />
-        Clear Cache
-      {/if}
-    </Button>
-  {/snippet}
 </SettingsPane>
