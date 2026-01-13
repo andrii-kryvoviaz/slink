@@ -211,17 +211,6 @@
   {/if}
 
   {#if settings.provider === 's3'}
-    <Notice variant="warning" appearance="subtle" size="sm" class="px-4">
-      Amazon S3 usage may incur charges.
-      <a
-        href="https://aws.amazon.com/s3/pricing/"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="underline hover:text-amber-700 dark:hover:text-amber-300"
-        >Review pricing</a
-      >
-    </Notice>
-
     <SettingItem
       defaultValue={defaultSettings?.adapter.s3.useCustomProvider}
       currentValue={settings.adapter.s3.useCustomProvider}
@@ -241,6 +230,19 @@
         bind:checked={settings.adapter.s3.useCustomProvider}
       />
     </SettingItem>
+
+    {#if !settings.adapter.s3.useCustomProvider}
+      <Notice variant="warning" appearance="subtle" size="sm" class="px-4">
+        Amazon S3 usage may incur charges.
+        <a
+          href="https://aws.amazon.com/s3/pricing/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="underline hover:text-amber-700 dark:hover:text-amber-300"
+          >Review pricing</a
+        >
+      </Notice>
+    {/if}
 
     {#if settings.adapter.s3.useCustomProvider}
       <SettingItem
