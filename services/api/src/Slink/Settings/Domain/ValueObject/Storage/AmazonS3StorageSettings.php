@@ -10,6 +10,7 @@ use Slink\Settings\Domain\Exception\S3RegionNotConfiguredException;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use SensitiveParameter;
 use Slink\Shared\Domain\ValueObject\AbstractCompoundValueObject;
+use Slink\Shared\Infrastructure\Encryption\EncryptionRegistry;
 
 final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject {
   /**
@@ -103,8 +104,8 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
     $useCustomProvider = $payload['useCustomProvider'] ?? (bool) $endpoint;
     $region = trim((string) ($payload['region'] ?? ''));
     $bucket = trim((string) ($payload['bucket'] ?? ''));
-    $key = trim((string) ($payload['key'] ?? ''));
-    $secret = trim((string) ($payload['secret'] ?? ''));
+    $key = trim(EncryptionRegistry::decrypt((string) ($payload['key'] ?? '')));
+    $secret = trim(EncryptionRegistry::decrypt((string) ($payload['secret'] ?? '')));
     $forcePathStyle = (bool) ($payload['forcePathStyle'] ?? false);
 
     if (!$useCustomProvider && empty($region)) {
@@ -162,8 +163,8 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
     return [
       'region' => $this->region,
       'bucket' => $this->bucket,
-      'key' => $this->key,
-      'secret' => $this->secret,
+      'key' => EncryptionRegistry::encrypt($this->key),
+      'secret' => EncryptionRegistry::encrypt($this->secret),
       'endpoint' => $this->endpoint,
       'useCustomProvider' => $this->useCustomProvider,
       'forcePathStyle' => $this->forcePathStyle

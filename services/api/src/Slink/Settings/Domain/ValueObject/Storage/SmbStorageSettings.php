@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Slink\Settings\Domain\ValueObject\Storage;
 
 use Slink\Shared\Domain\ValueObject\AbstractCompoundValueObject;
+use Slink\Shared\Infrastructure\Encryption\EncryptionRegistry;
 
 final readonly class SmbStorageSettings extends AbstractCompoundValueObject {
   
@@ -57,7 +58,7 @@ final readonly class SmbStorageSettings extends AbstractCompoundValueObject {
     return [
       'host' => $this->host,
       'username' => $this->username,
-      'password' => $this->password,
+      'password' => EncryptionRegistry::encrypt($this->password),
       'share' => $this->share,
     ];
   }
@@ -71,7 +72,7 @@ final readonly class SmbStorageSettings extends AbstractCompoundValueObject {
     return new self(
       $payload['host'],
       $payload['username'],
-      $payload['password'],
+      EncryptionRegistry::decrypt($payload['password']),
       $payload['share'],
     );
   }
