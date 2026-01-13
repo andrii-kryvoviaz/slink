@@ -9,6 +9,7 @@ use Slink\Settings\Domain\Enum\SettingType;
 use Slink\Settings\Domain\Repository\SettingsRepositoryInterface;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Infrastructure\DependencyInjection\ServiceLocator\Indexable;
+use Slink\Shared\Infrastructure\Encryption\EncryptionRegistry;
 
 /**
  * @template-implements ConfigurationProviderInterface<DatabaseProvider>
@@ -29,7 +30,7 @@ final readonly class DatabaseProvider implements ConfigurationProviderInterface,
     $type = SettingType::tryFrom($type);
     
     return match ($type) {
-      SettingType::String => (string) $value,
+      SettingType::String => EncryptionRegistry::decrypt((string) $value),
       SettingType::Integer => (int) $value,
       SettingType::Float => (float) $value,
       SettingType::Boolean => filter_var($value, FILTER_VALIDATE_BOOLEAN),
