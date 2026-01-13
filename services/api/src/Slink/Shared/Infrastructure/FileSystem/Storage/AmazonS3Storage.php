@@ -6,6 +6,7 @@ namespace Slink\Shared\Infrastructure\FileSystem\Storage;
 
 use Aws\S3\S3Client;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
+use Slink\Settings\Domain\ValueObject\Storage\AmazonS3StorageSettings;
 use Slink\Shared\Domain\Enum\StorageProvider;
 use Slink\Shared\Infrastructure\Exception\Storage\AmazonS3Exception;
 use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\ObjectStorageInterface;
@@ -13,51 +14,13 @@ use Symfony\Component\HttpFoundation\File\File;
 
 final class AmazonS3Storage extends AbstractStorage implements ObjectStorageInterface {
   private S3Client $client;
-  private ConfigurationProviderInterface $configurationProvider;
+  private AmazonS3StorageSettings $settings;
   
   function init(ConfigurationProviderInterface $configurationProvider): void {
-    $this->configurationProvider = $configurationProvider;
-    $this->client = new S3Client($this->buildClientConfig());
+    $this->settings = AmazonS3StorageSettings::fromConfig($configurationProvider);
+    $this->client = new S3Client($this->settings->toClientConfig());
   }
   
-  /**
-   * @return array<string, mixed>
-   */
-  private function buildClientConfig(): array {
-    $region = $this->configurationProvider->get('storage.adapter.s3.region');
-    $endpoint = $this->configurationProvider->get('storage.adapter.s3.endpoint');
-    $useCustomProvider = $this->configurationProvider->get('storage.adapter.s3.useCustomProvider') ?? (bool) $endpoint;
-    
-    $config = [
-      'version' => 'latest',
-      'credentials' => [
-        'key' => $this->configurationProvider->get('storage.adapter.s3.key'),
-        'secret' => $this->configurationProvider->get('storage.adapter.s3.secret')
-      ]
-    ];
-    
-    if ($region) {
-      $config['region'] = $region;
-    }
-    
-    if (!$useCustomProvider) {
-      return $config;
-    }
-    
-    if ($endpoint) {
-      $config['endpoint'] = $endpoint;
-    }
-    
-    $config['use_path_style_endpoint'] = (bool) $this->configurationProvider->get('storage.adapter.s3.forcePathStyle');
-    
-    return $config;
-  }
-  
-  /**
-   * @param File $file
-   * @param string $fileName
-   * @return void
-   */
   public function upload(File $file, string $fileName): void {
     $filePath = $file->getRealPath();
     if (!$filePath) {
@@ -66,7 +29,7 @@ final class AmazonS3Storage extends AbstractStorage implements ObjectStorageInte
     
     try {
       $this->client->putObject([
-        'Bucket' => $this->getBucket(),
+        'Bucket' => $this->settings->getBucket(),
         'Key' => $fileName,
         'SourceFile' => $filePath
       ]);
@@ -75,10 +38,6 @@ final class AmazonS3Storage extends AbstractStorage implements ObjectStorageInte
     }
   }
   
-  /**
-   * @param string $fileName
-   * @return void
-   */
   public function delete(string $fileName): void {
     [$name, $_] = explode('.', $fileName);
     
@@ -87,7 +46,7 @@ final class AmazonS3Storage extends AbstractStorage implements ObjectStorageInte
   
   public function deleteByPrefix(string $prefix): void {
     try {
-      $bucket = $this->getBucket();
+      $bucket = $this->settings->getBucket();
       
       $result = $this->client->listObjectsV2([
         'Bucket' => $bucket,
@@ -110,14 +69,10 @@ final class AmazonS3Storage extends AbstractStorage implements ObjectStorageInte
     }
   }
   
-  /**
-   * @param string $path
-   * @return bool
-   */
   public function exists(string $path): bool {
     try {
       $this->client->headObject([
-        'Bucket' => $this->getBucket(),
+        'Bucket' => $this->settings->getBucket(),
         'Key' => $path
       ]);
       
@@ -127,15 +82,10 @@ final class AmazonS3Storage extends AbstractStorage implements ObjectStorageInte
     }
   }
   
-  /**
-   * @param string $path
-   * @param string $content
-   * @return void
-   */
   public function write(string $path, string $content): void {
     try {
       $this->client->putObject([
-        'Bucket' => $this->getBucket(),
+        'Bucket' => $this->settings->getBucket(),
         'Key' => $path,
         'Body' => $content
       ]);
@@ -144,14 +94,10 @@ final class AmazonS3Storage extends AbstractStorage implements ObjectStorageInte
     }
   }
   
-  /**
-   * @param string $path
-   * @return string|null
-   */
   public function read(string $path): ?string {
     try {
       $result = $this->client->getObject([
-        'Bucket' => $this->getBucket(),
+        'Bucket' => $this->settings->getBucket(),
         'Key' => $path
       ]);
       
@@ -161,12 +107,9 @@ final class AmazonS3Storage extends AbstractStorage implements ObjectStorageInte
     }
   }
   
-  /**
-   * @return int
-   */
   public function clearCache(): int {
     try {
-      $bucket = $this->getBucket();
+      $bucket = $this->settings->getBucket();
       $cachePrefix = $this->cacheDir . '/';
       
       $result = $this->client->listObjectsV2([
@@ -195,14 +138,7 @@ final class AmazonS3Storage extends AbstractStorage implements ObjectStorageInte
     }
   }
   
-  /**
-   * @return string
-   */
   public static function getAlias(): string {
     return StorageProvider::AmazonS3->value;
-  }
-  
-  private function getBucket(): string {
-    return $this->configurationProvider->get('storage.adapter.s3.bucket');
   }
 }

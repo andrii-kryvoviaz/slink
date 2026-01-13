@@ -6,13 +6,13 @@ namespace Slink\Settings\Domain\Exception;
 
 use Slink\Shared\Domain\Exception\SpecificationException;
 
-class InvalidS3RegionException extends SpecificationException {
-  public function __construct(string $message = 'S3 region is required.') {
+class S3BucketNotConfiguredException extends SpecificationException {
+  public function __construct(string $message = 'S3 bucket is required.') {
     parent::__construct($message);
   }
   
   #[\Override]
   function getProperty(): string {
-    return 'storage.adapter.s3.region';
+    return 'storage.adapter.s3.bucket';
   }
 }
