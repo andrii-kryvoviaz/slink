@@ -31,6 +31,7 @@
     user: User;
     preferences: Preferences;
     licenses: License[];
+    licensingEnabled: boolean;
   }
 
   interface Props {
@@ -78,75 +79,71 @@
   <title>Preferences | Slink</title>
 </svelte:head>
 
-<div class="min-h-full">
-  <div
-    class="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8"
-    in:fade={{ duration: 400 }}
-  >
-    <div class="mb-8">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">
-        Preferences
-      </h1>
-      <p class="mt-2 text-slate-600 dark:text-slate-400">
-        Configure your default settings and preferences
-      </p>
-    </div>
+<div
+  class="flex flex-col w-full max-w-2xl px-6 py-8"
+  in:fade={{ duration: 150 }}
+>
+  <header class="mb-8">
+    <h1 class="text-xl font-semibold text-gray-900 dark:text-white">
+      Preferences
+    </h1>
+    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+      Configure your default settings and preferences
+    </p>
+  </header>
 
-    <div
-      class="rounded-2xl bg-white p-6 shadow-sm dark:bg-slate-800/50 border border-slate-200/50 dark:border-slate-700/50"
-    >
-      <div class="mb-6">
-        <h3
-          class="text-lg font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-2"
+  {#if data.licensingEnabled}
+    <section class="space-y-1">
+      <div class="flex items-center justify-between gap-4 pb-3">
+        <h2
+          class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
         >
-          <Icon
-            icon="ph:scales"
-            class="h-5 w-5 text-slate-500 dark:text-slate-400"
-          />
           Image Licensing
-        </h3>
-        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-          Configure default license settings for your uploaded images
-        </p>
+        </h2>
       </div>
 
       <form
         action="?/updatePreferences"
         method="POST"
         use:enhance={withLoadingState(isPreferencesFormLoading)}
-        class="space-y-4"
       >
-        <div class="space-y-2">
-          <label
-            for="defaultLicense"
-            class="block text-sm font-medium text-slate-700 dark:text-slate-300"
-          >
-            Default License
-          </label>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mb-2">
-            This license will be automatically applied to new uploads
-          </p>
-          <Select
-            class="w-full max-w-md"
-            items={licenseOptions}
-            bind:value={selectedLicense}
-            placeholder="Select a license..."
-          />
-          <input
-            type="hidden"
-            name="defaultLicense"
-            value={selectedLicense ?? ''}
-          />
+        <div
+          class="divide-y divide-gray-100 dark:divide-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 overflow-hidden"
+        >
+          <div class="px-4 py-4">
+            <div class="flex flex-col gap-3">
+              <div>
+                <label
+                  for="defaultLicense"
+                  class="block text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Default License
+                </label>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  This license will be automatically applied to new uploads
+                </p>
+              </div>
+              <Select
+                class="w-full max-w-md"
+                items={licenseOptions}
+                bind:value={selectedLicense}
+                placeholder="Select a license..."
+              />
+              <input
+                type="hidden"
+                name="defaultLicense"
+                value={selectedLicense ?? ''}
+              />
+            </div>
+          </div>
+
           {#if selectedLicenseInfo}
-            <Notice variant="info" size="sm" class="mt-4 rounded-lg">
+            <Notice variant="info" appearance="subtle" size="sm" class="px-4">
               <div class="flex gap-3">
-                <Icon icon="ph:scales" class="w-5 h-5 shrink-0 mt-0.5" />
-                <div class="space-y-2">
-                  <div>
-                    <p class="font-semibold">{selectedLicenseInfo.title}</p>
-                    <p class="text-xs opacity-75">{selectedLicenseInfo.name}</p>
-                  </div>
-                  <p class="leading-relaxed">
+                <Icon icon="ph:scales" class="w-4 h-4 shrink-0 mt-0.5" />
+                <div class="space-y-1">
+                  <p class="font-medium">{selectedLicenseInfo.title}</p>
+                  <p class="text-xs opacity-75">
                     {selectedLicenseInfo.description}
                   </p>
                   {#if selectedLicenseInfo.url}
@@ -154,12 +151,12 @@
                       href={selectedLicenseInfo.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="inline-flex items-center gap-1.5 font-medium hover:underline"
+                      class="inline-flex items-center gap-1 text-xs hover:underline"
                     >
                       <span>Learn more</span>
                       <Icon
                         icon="heroicons:arrow-top-right-on-square"
-                        class="w-3.5 h-3.5"
+                        class="w-3 h-3"
                       />
                     </a>
                   {/if}
@@ -167,44 +164,60 @@
               </div>
             </Notice>
           {/if}
+
+          <div class="px-4 py-4 flex items-center justify-between">
+            <div>
+              <label
+                for="syncLicenseToImages"
+                class="block text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Sync to existing images
+              </label>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                Apply this license to all your existing images
+              </p>
+            </div>
+            <Switch
+              id="syncLicenseToImages"
+              name="syncLicenseToImages"
+              bind:checked={syncToImages}
+            />
+          </div>
         </div>
 
-        <div class="flex items-center justify-between pt-2">
-          <label
-            for="syncLicenseToImages"
-            class="text-sm text-slate-600 dark:text-slate-400"
-          >
-            Apply this license to all my existing images
-          </label>
-          <Switch
-            id="syncLicenseToImages"
-            name="syncLicenseToImages"
-            bind:checked={syncToImages}
-          />
-        </div>
+        <div class="flex items-center justify-end gap-3 pt-4">
+          {#if $isPreferencesFormLoading}
+            <div
+              class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
+            >
+              <Loader variant="minimal" size="xs" />
+              <span>Saving...</span>
+            </div>
+          {/if}
 
-        <div class="flex justify-end pt-4">
           <Button
-            variant="outline"
-            size="sm"
             type="submit"
-            loading={$isPreferencesFormLoading}
-            class="min-w-[140px] bg-slate-900 hover:bg-slate-800 text-white border-slate-900 hover:border-slate-800 dark:bg-slate-100 dark:hover:bg-slate-200 dark:text-slate-900 dark:border-slate-100 dark:hover:border-slate-200"
+            variant="glass-blue"
+            rounded="full"
+            size="sm"
+            disabled={$isPreferencesFormLoading}
           >
-            {#if $isPreferencesFormLoading}
-              <Loader
-                variant="simple"
-                size="xs"
-                class="mr-2 border-white/50! border-t-white!"
-              />
-              Saving...
-            {:else}
-              <Icon icon="ph:check" class="h-4 w-4 mr-2" />
-              Save Preferences
-            {/if}
+            Save Changes
           </Button>
         </div>
       </form>
-    </div>
-  </div>
+    </section>
+  {:else}
+    <Notice variant="info" appearance="subtle" size="md" class="text-center">
+      <div class="py-4">
+        <Icon icon="ph:gear" class="h-10 w-10 opacity-50 mx-auto mb-3" />
+        <p class="font-medium">
+          No preference options are currently available.
+        </p>
+        <p class="text-sm opacity-75 mt-1">
+          Check back later as more settings may be added.
+        </p>
+      </div>
+    </Notice>
+  {/if}
 </div>

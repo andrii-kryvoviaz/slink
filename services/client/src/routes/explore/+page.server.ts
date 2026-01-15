@@ -5,5 +5,6 @@ export const load: PageServerLoad = async ({ parent, locals }) => {
 
   return {
     user: locals.user,
+    globalSettings: locals.globalSettings,
   };
 };

@@ -18,10 +18,6 @@ export const load: PageServerLoad = async ({ locals, parent, fetch }) => {
 
   const licensingEnabled = globalSettings?.image?.enableLicensing ?? false;
 
-  if (!licensingEnabled) {
-    redirect(302, '/profile');
-  }
-
   let preferences = { defaultLicense: null as string | null };
   let licenses: {
     id: string;
@@ -31,21 +27,24 @@ export const load: PageServerLoad = async ({ locals, parent, fetch }) => {
     url: string | null;
   }[] = [];
 
-  try {
-    const [prefsResponse, licensesResponse] = await Promise.all([
-      ApiClient.use(fetch).user.getPreferences(),
-      ApiClient.use(fetch).image.getLicenses(),
-    ]);
-    preferences = prefsResponse;
-    licenses = licensesResponse.licenses ?? [];
-  } catch (e) {
-    console.error('Failed to load preferences data:', e);
+  if (licensingEnabled) {
+    try {
+      const [prefsResponse, licensesResponse] = await Promise.all([
+        ApiClient.use(fetch).user.getPreferences(),
+        ApiClient.use(fetch).image.getLicenses(),
+      ]);
+      preferences = prefsResponse;
+      licenses = licensesResponse.licenses ?? [];
+    } catch (e) {
+      console.error('Failed to load preferences data:', e);
+    }
   }
 
   return {
     user,
     preferences,
     licenses,
+    licensingEnabled,
   };
 };
 

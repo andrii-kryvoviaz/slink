@@ -184,4 +184,5 @@ export const themeIcons: string[] = [
   'ph:sliders-horizontal',
   'lucide:clipboard-copy',
   'ph:at',
+  'ph:gear',
 ];

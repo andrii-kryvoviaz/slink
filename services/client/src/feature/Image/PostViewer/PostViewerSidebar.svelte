@@ -7,6 +7,7 @@
   import { UserAvatar } from '@slink/feature/User';
   import * as Collapsible from '@slink/ui/components/collapsible';
 
+  import { page } from '$app/state';
   import Icon from '@iconify/svelte';
 
   import type {
@@ -33,6 +34,9 @@
   }: Props = $props();
 
   const viewerState = usePostViewerState();
+  const licensingEnabled = $derived(
+    page.data.globalSettings?.image?.enableLicensing ?? false,
+  );
 
   let descriptionOpen = $state(true);
   let hasDescription = $derived(!!image.attributes.description?.trim());
@@ -97,7 +101,7 @@
       </div>
     </div>
 
-    {#if image.license}
+    {#if licensingEnabled && image.license}
       <div class="mt-4 text-right">
         <LicenseInfo license={image.license} size="sm" variant="text" />
       </div>
