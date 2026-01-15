@@ -18,7 +18,10 @@ export const load: PageServerLoad = async ({ locals, parent, fetch }) => {
 
   const licensingEnabled = globalSettings?.image?.enableLicensing ?? false;
 
-  let preferences = { defaultLicense: null as string | null };
+  let preferences = {
+    'license.default': null as string | null,
+    'navigation.landingPage': null as string | null,
+  };
   let licenses: {
     id: string;
     title: string;
@@ -27,17 +30,16 @@ export const load: PageServerLoad = async ({ locals, parent, fetch }) => {
     url: string | null;
   }[] = [];
 
-  if (licensingEnabled) {
-    try {
-      const [prefsResponse, licensesResponse] = await Promise.all([
-        ApiClient.use(fetch).user.getPreferences(),
-        ApiClient.use(fetch).image.getLicenses(),
-      ]);
-      preferences = prefsResponse;
+  try {
+    const prefsResponse = await ApiClient.use(fetch).user.getPreferences();
+    preferences = prefsResponse;
+
+    if (licensingEnabled) {
+      const licensesResponse = await ApiClient.use(fetch).image.getLicenses();
       licenses = licensesResponse.licenses ?? [];
-    } catch (e) {
-      console.error('Failed to load preferences data:', e);
     }
+  } catch (e) {
+    console.error('Failed to load preferences data:', e);
   }
 
   return {
@@ -50,12 +52,14 @@ export const load: PageServerLoad = async ({ locals, parent, fetch }) => {
 
 export const actions: Actions = {
   updatePreferences: async ({ request, fetch }) => {
-    const { defaultLicense, syncLicenseToImages } = await formData(request);
+    const { defaultLicense, syncLicenseToImages, defaultLandingPage } =
+      await formData(request);
 
     try {
       await ApiClient.use(fetch).user.updatePreferences({
         defaultLicense: defaultLicense || null,
         syncLicenseToImages: syncLicenseToImages === 'true',
+        defaultLandingPage: defaultLandingPage || null,
       });
     } catch (e) {
       if (e instanceof HttpException) {

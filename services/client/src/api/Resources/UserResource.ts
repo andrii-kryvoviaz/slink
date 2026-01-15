@@ -87,12 +87,18 @@ export class UserResource extends AbstractResource {
   public async updatePreferences({
     defaultLicense,
     syncLicenseToImages = false,
+    defaultLandingPage,
   }: {
-    defaultLicense: string | null;
+    defaultLicense?: string | null;
     syncLicenseToImages?: boolean;
+    defaultLandingPage?: string | null;
   }): Promise<EmptyResponse> {
     return this.patch('/user/preferences', {
-      json: { defaultLicense, syncLicenseToImages },
+      json: {
+        'license.default': defaultLicense,
+        'license.syncToImages': syncLicenseToImages,
+        'navigation.landingPage': defaultLandingPage,
+      },
     });
   }
 }

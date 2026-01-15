@@ -1,3 +1,6 @@
+import type { LandingPage } from '@slink/lib/enum/LandingPage';
+
 export type UserPreferencesResponse = {
-  defaultLicense: string | null;
+  'license.default': string | null;
+  'navigation.landingPage': LandingPage | null;
 };
