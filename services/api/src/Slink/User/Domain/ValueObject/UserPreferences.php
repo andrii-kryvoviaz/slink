@@ -9,6 +9,9 @@ use Slink\Shared\Domain\ValueObject\AbstractCompoundValueObject;
 use Slink\User\Domain\Enum\LandingPage;
 
 final readonly class UserPreferences extends AbstractCompoundValueObject {
+  /**
+   * @param array<string, string|null> $data
+   */
   private function __construct(
     private array $data = [],
   ) {}
@@ -44,14 +47,23 @@ final readonly class UserPreferences extends AbstractCompoundValueObject {
     return new self([...$this->data, 'navigation.landingPage' => $landingPage?->value]);
   }
 
+  /**
+   * @param array<string, string|null> $payload
+   */
   public function applyChanges(array $payload): self {
     return new self([...$this->data, ...array_filter($payload, fn($v) => $v !== null)]);
   }
 
+  /**
+   * @return array<string, string|null>
+   */
   public function toPayload(): array {
     return $this->data;
   }
 
+  /**
+   * @param array<string, string|null> $payload
+   */
   public static function fromPayload(array $payload): static {
     return new self($payload);
   }

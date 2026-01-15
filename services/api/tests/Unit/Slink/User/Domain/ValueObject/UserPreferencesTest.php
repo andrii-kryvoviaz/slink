@@ -7,6 +7,7 @@ namespace Tests\Unit\Slink\User\Domain\ValueObject;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Image\Domain\Enum\License;
+use Slink\User\Domain\Enum\LandingPage;
 use Slink\User\Domain\ValueObject\UserPreferences;
 
 final class UserPreferencesTest extends TestCase {
@@ -15,6 +16,7 @@ final class UserPreferencesTest extends TestCase {
         $preferences = UserPreferences::empty();
 
         $this->assertNull($preferences->getDefaultLicense());
+        $this->assertNull($preferences->getDefaultLandingPage());
     }
 
     #[Test]
@@ -23,6 +25,14 @@ final class UserPreferencesTest extends TestCase {
         $preferences = UserPreferences::create($license);
 
         $this->assertEquals($license, $preferences->getDefaultLicense());
+    }
+
+    #[Test]
+    public function itCreatesPreferencesWithLandingPage(): void {
+        $landingPage = LandingPage::Upload;
+        $preferences = UserPreferences::create(defaultLandingPage: $landingPage);
+
+        $this->assertEquals($landingPage, $preferences->getDefaultLandingPage());
     }
 
     #[Test]
@@ -44,37 +54,39 @@ final class UserPreferencesTest extends TestCase {
         $preferences = UserPreferences::empty();
         $newLicense = License::CC_BY_SA;
 
-        $updated = $preferences->with('defaultLicense', $newLicense);
+        $updated = $preferences->withDefaultLicense($newLicense);
 
         $this->assertEquals($newLicense, $updated->getDefaultLicense());
     }
 
     #[Test]
-    public function itUpdatesDefaultLicenseWithStringValue(): void {
+    public function itUpdatesDefaultLandingPage(): void {
         $preferences = UserPreferences::empty();
+        $landingPage = LandingPage::Upload;
 
-        $updated = $preferences->with('defaultLicense', 'cc-by-nc');
+        $updated = $preferences->withDefaultLandingPage($landingPage);
 
-        $this->assertEquals(License::CC_BY_NC, $updated->getDefaultLicense());
+        $this->assertEquals($landingPage, $updated->getDefaultLandingPage());
     }
 
     #[Test]
     public function itUpdatesDefaultLicenseToNull(): void {
         $preferences = UserPreferences::create(License::CC_BY);
 
-        $updated = $preferences->with('defaultLicense', null);
+        $updated = $preferences->withDefaultLicense(null);
 
         $this->assertNull($updated->getDefaultLicense());
     }
 
     #[Test]
-    public function itReturnsUnchangedForUnknownKey(): void {
+    public function itAppliesChanges(): void {
         $license = License::CC0;
         $preferences = UserPreferences::create($license);
 
-        $updated = $preferences->with('unknownKey', 'value');
+        $updated = $preferences->applyChanges(['navigation.landingPage' => 'upload']);
 
         $this->assertEquals($license, $updated->getDefaultLicense());
+        $this->assertEquals(LandingPage::Upload, $updated->getDefaultLandingPage());
     }
 
     #[Test]
@@ -84,8 +96,8 @@ final class UserPreferencesTest extends TestCase {
 
         $payload = $preferences->toPayload();
 
-        $this->assertArrayHasKey('defaultLicense', $payload);
-        $this->assertEquals('cc-by-nd', $payload['defaultLicense']);
+        $this->assertArrayHasKey('license.default', $payload);
+        $this->assertEquals('cc-by-nd', $payload['license.default']);
     }
 
     #[Test]
@@ -94,13 +106,12 @@ final class UserPreferencesTest extends TestCase {
 
         $payload = $preferences->toPayload();
 
-        $this->assertArrayHasKey('defaultLicense', $payload);
-        $this->assertNull($payload['defaultLicense']);
+        $this->assertEmpty($payload);
     }
 
     #[Test]
     public function itCreatesFromPayload(): void {
-        $payload = ['defaultLicense' => 'cc-by-sa'];
+        $payload = ['license.default' => 'cc-by-sa'];
 
         $preferences = UserPreferences::fromPayload($payload);
 
@@ -108,8 +119,17 @@ final class UserPreferencesTest extends TestCase {
     }
 
     #[Test]
+    public function itCreatesFromPayloadWithLandingPage(): void {
+        $payload = ['navigation.landingPage' => 'upload'];
+
+        $preferences = UserPreferences::fromPayload($payload);
+
+        $this->assertEquals(LandingPage::Upload, $preferences->getDefaultLandingPage());
+    }
+
+    #[Test]
     public function itCreatesFromPayloadWithNullLicense(): void {
-        $payload = ['defaultLicense' => null];
+        $payload = ['license.default' => null];
 
         $preferences = UserPreferences::fromPayload($payload);
 
@@ -127,7 +147,7 @@ final class UserPreferencesTest extends TestCase {
 
     #[Test]
     public function itCreatesFromPayloadWithInvalidLicense(): void {
-        $payload = ['defaultLicense' => 'invalid-license'];
+        $payload = ['license.default' => 'invalid-license'];
 
         $preferences = UserPreferences::fromPayload($payload);
 
@@ -139,7 +159,7 @@ final class UserPreferencesTest extends TestCase {
         $originalLicense = License::CC_BY;
         $preferences = UserPreferences::create($originalLicense);
 
-        $updated = $preferences->with('defaultLicense', License::CC_BY_NC);
+        $updated = $preferences->withDefaultLicense(License::CC_BY_NC);
 
         $this->assertEquals($originalLicense, $preferences->getDefaultLicense());
         $this->assertEquals(License::CC_BY_NC, $updated->getDefaultLicense());

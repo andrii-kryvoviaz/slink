@@ -34,6 +34,9 @@ final readonly class UpdateUserPreferencesCommand implements CommandInterface {
     );
   }
 
+  /**
+   * @return array<string, string|null>
+   */
   public function toPayload(): array {
     return [
       'license.default' => $this->defaultLicense,
