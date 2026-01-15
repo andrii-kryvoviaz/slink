@@ -9,10 +9,12 @@ use Slink\Image\Application\Query\GetImageContent\GetImageContentQuery;
 use Slink\Image\Domain\Service\ImageUrlSignatureInterface;
 use Slink\Shared\Application\Command\CommandTrait;
 use Slink\Shared\Application\Query\QueryTrait;
+use Slink\User\Infrastructure\Auth\JwtUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use UI\Http\Rest\Response\ContentResponse;
 
 #[AsController]
@@ -30,7 +32,8 @@ final readonly class GetImageController {
     Request $request,
     #[MapQueryString] GetImageContentQuery $query,
     string $id,
-    string $ext
+    string $ext,
+    #[CurrentUser] ?JwtUser $user = null
   ): ContentResponse {
     $validatedQuery = $this->validateAndSanitizeQuery($request, $query, $id);
     $queryWithFormat = $validatedQuery->withFormat($ext);
@@ -40,7 +43,10 @@ final readonly class GetImageController {
       'requestedFormat' => $ext,
     ]));
     
-    $this->handle(new AddImageViewCountCommand($id));
+    $command = new AddImageViewCountCommand($id);
+    $this->handle($command->withContext([
+      'userId' => $user?->getIdentifier(),
+    ]));
     
     return ContentResponse::file($imageData)->setCache(
       [

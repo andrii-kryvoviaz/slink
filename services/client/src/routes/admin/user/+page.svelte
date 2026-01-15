@@ -89,10 +89,10 @@
     <div class="mb-8" in:fade={{ duration: 400, delay: 100 }}>
       <div class="flex items-center justify-between w-full">
         <div class="flex-1 min-w-0">
-          <h1 class="text-3xl font-semibold text-slate-900 dark:text-white">
+          <h1 class="text-3xl font-semibold text-gray-900 dark:text-white">
             Users
           </h1>
-          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+          <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
             Manage user accounts and permissions
           </p>
         </div>

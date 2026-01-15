@@ -7,14 +7,14 @@
   import { type WithElementRef } from '@slink/utils/ui/index.js';
 
   export const buttonGroupVariants = tv({
-    base: 'inline-flex items-center p-0',
+    base: 'inline-flex items-center',
     variants: {
       variant: {
         default:
           'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700',
         glass:
-          'bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-gray-200/60 dark:border-gray-700/60',
-        ghost: 'bg-transparent p-0',
+          'bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-[inset_0_0_0_1px_rgba(0,0,0,0.1)] dark:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.1)]',
+        ghost: 'bg-transparent',
         solid: 'bg-gray-100 dark:bg-gray-800',
       },
       rounded: {
@@ -34,7 +34,14 @@
         none: 'gap-0',
         xs: 'gap-0.5',
         sm: 'gap-1',
-        md: 'gap-2',
+        md: 'gap-1.5',
+      },
+      padding: {
+        none: 'p-0',
+        xs: 'p-0.5',
+        sm: 'p-1',
+        md: 'p-1.5',
+        lg: 'p-2',
       },
     },
     defaultVariants: {
@@ -42,16 +49,20 @@
       rounded: 'lg',
       size: 'md',
       gap: 'none',
+      padding: 'sm',
     },
   });
 
   export const buttonGroupItemVariants = tv({
-    base: 'relative flex flex-1 items-center justify-center transition-all duration-150 focus:outline-none focus-visible:z-10 disabled:pointer-events-none disabled:opacity-50',
+    base: 'relative flex flex-1 items-center justify-center transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-blue-500/50 focus-visible:z-10 disabled:pointer-events-none disabled:opacity-50',
     variants: {
       variant: {
         default:
           'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700',
-        primary: 'bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800',
+        primary:
+          'bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600 active:bg-blue-800 dark:active:bg-blue-700',
+        'primary-outline':
+          'border border-blue-600 text-blue-600 dark:border-blue-500 dark:text-blue-500 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 dark:hover:text-white active:bg-blue-700',
         secondary:
           'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700',
         ghost:
@@ -60,10 +71,10 @@
           'text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30',
       },
       size: {
-        sm: 'h-8 min-w-8 px-2 text-xs',
-        md: 'h-9 min-w-9 px-2.5 text-sm',
-        lg: 'h-10 min-w-10 px-3 text-sm',
-        xl: 'h-11 min-w-11 px-3.5 text-base',
+        sm: 'h-7 min-w-7 px-2 text-xs',
+        md: 'h-8 min-w-8 px-2.5 text-sm',
+        lg: 'h-9 min-w-9 px-3 text-sm',
+        xl: 'h-10 min-w-10 px-3.5 text-base',
       },
       position: {
         first: 'rounded-l-md',
@@ -106,6 +117,9 @@
     typeof buttonGroupVariants
   >['rounded'];
   export type ButtonGroupGap = VariantProps<typeof buttonGroupVariants>['gap'];
+  export type ButtonGroupPadding = VariantProps<
+    typeof buttonGroupVariants
+  >['padding'];
 
   export type ButtonGroupItemVariant = VariantProps<
     typeof buttonGroupItemVariants
@@ -121,6 +135,7 @@
     size?: ButtonGroupSize;
     rounded?: ButtonGroupRounded;
     gap?: ButtonGroupGap;
+    padding?: ButtonGroupPadding;
   };
 </script>
 
@@ -133,6 +148,7 @@
     size = 'md',
     rounded = 'lg',
     gap = 'none',
+    padding = 'sm',
     ref = $bindable(null),
     children,
     ...restProps
@@ -142,7 +158,10 @@
 <div
   bind:this={ref}
   role="group"
-  class={cn(buttonGroupVariants({ variant, size, rounded, gap }), customClass)}
+  class={cn(
+    buttonGroupVariants({ variant, size, rounded, gap, padding }),
+    customClass,
+  )}
   {...restProps}
 >
   {@render children?.()}

@@ -97,6 +97,26 @@ export const createAppSidebarItems = (options?: {
           title: 'Settings',
           icon: 'ph:gear-fine-light',
           href: '/admin/settings',
+          children: [
+            {
+              id: 'settings-image',
+              title: 'Image Settings',
+              icon: 'solar:gallery-linear',
+              href: '/admin/settings/image',
+            },
+            {
+              id: 'settings-storage',
+              title: 'Storage Configuration',
+              icon: 'solar:database-linear',
+              href: '/admin/settings/storage',
+            },
+            {
+              id: 'settings-security',
+              title: 'Security Settings',
+              icon: 'solar:shield-check-linear',
+              href: '/admin/settings/security',
+            },
+          ],
         },
       ],
       roles: ['ROLE_ADMIN'],

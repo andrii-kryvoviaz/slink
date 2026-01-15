@@ -22,16 +22,16 @@
   });
 
   const storageData = $derived(storageStore.usage || page.data?.storageUsage);
-  const isLoading = $derived(storageStore.isLoading);
   const error = $derived(
     storageStore.hasError ? 'Failed to load storage usage' : null,
   );
+  const shouldShow = $derived(storageData || error);
 </script>
 
-{#if !storageStore.isDisabled}
+{#if !storageStore.isDisabled && shouldShow}
   {#if sidebar.state === 'expanded'}
     <div in:fade={{ duration: 300, delay: 200 }}>
-      <StorageUsageDisplay data={storageData} {isLoading} {error} />
+      <StorageUsageDisplay data={storageData} {error} />
     </div>
   {/if}
   <div class="hidden group-data-[collapsible=icon]:block">
@@ -42,7 +42,7 @@
         <Icon icon="heroicons:server" class="size-4 shrink-0" />
       </HoverCard.Trigger>
       <HoverCard.Content side="right" align="end" class="w-80 border-0 p-0">
-        <StorageUsageDisplay data={storageData} {isLoading} {error} />
+        <StorageUsageDisplay data={storageData} {error} />
       </HoverCard.Content>
     </HoverCard.Root>
   </div>

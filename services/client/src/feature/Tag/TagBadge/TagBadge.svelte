@@ -64,12 +64,16 @@
       </div>
     {:else if isNested && !showFullPath}
       <div class="flex items-center gap-1">
-        <div class="flex items-center gap-1 group-hover:hidden">
+        <div
+          class="flex items-center gap-1 group-hover:hidden group-hover/row:hidden"
+        >
           <TagDepthDots {tag} {maxDotsToShow} {showCount} />
           <span class="font-medium">{tagName}</span>
         </div>
 
-        <div class="hidden items-center gap-1 group-hover:flex">
+        <div
+          class="hidden items-center gap-1 group-hover:flex group-hover/row:flex"
+        >
           <span class="opacity-60">{parentPath}</span>
           <Icon icon="ph:caret-right" class="h-2.5 w-2.5" />
           <span class="font-medium">{tagName}</span>
@@ -81,7 +85,7 @@
 
     {#if showCount && tag.imageCount > 0}
       <span
-        class="px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-blue-500/20 text-blue-600 dark:bg-blue-400/20 dark:text-blue-400"
+        class="min-w-5 px-1.5 py-0.5 rounded-md text-[10px] font-bold text-center bg-blue-500 text-white"
       >
         {tag.imageCount}
       </span>

@@ -8,6 +8,8 @@
     ImageSizePicker,
     ImageTagManager,
     ShareLinkCopy,
+    ViewCountBadge,
+    VisibilityBadge,
   } from '@slink/feature/Image';
   import type { ImageOutputFormat, ImageParams } from '@slink/feature/Image';
   import { Notice } from '@slink/feature/Text';
@@ -15,6 +17,7 @@
   import { Select } from '@slink/ui/components';
 
   import { routes } from '$lib/utils/url/routes';
+  import Icon from '@iconify/svelte';
   import { fly } from 'svelte/transition';
 
   import { ApiClient } from '@slink/api/Client';
@@ -208,14 +211,27 @@
   class="container mx-auto px-4 sm:px-6 lg:px-8 py-8"
 >
   <div class="flex flex-col flex-wrap lg:flex-row gap-8">
-    <div class={cn('w-full', maxWidthClass)}>
-      <ImagePlaceholder src={image.url} metadata={image} stretch={false} />
+    <div class={cn('w-full relative group', maxWidthClass)}>
+      <ImagePlaceholder
+        src={image.url}
+        metadata={image}
+        stretch={false}
+        showOpenInNewTab={false}
+      />
+      <div
+        class="absolute top-4 left-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+      >
+        <VisibilityBadge isPublic={image.isPublic} variant="overlay" />
+        <ViewCountBadge count={image.views} variant="overlay" />
+      </div>
     </div>
 
     <div class="grow max-w-md shrink-0 space-y-8">
-      <ImageActionBar {image} buttons={['download', 'visibility', 'delete']} />
-
-      <BookmarkersPanel imageId={image.id} count={image.bookmarkCount} />
+      <ImageActionBar
+        bind:image
+        buttons={['download', 'visibility', 'copy', 'delete']}
+        layout="hero"
+      />
 
       <ImageTagManager
         imageId={image.id}
@@ -225,6 +241,8 @@
           tagsUpdate: handleTagsUpdate,
         }}
       />
+
+      <BookmarkersPanel imageId={image.id} count={image.bookmarkCount} />
 
       <ImageDescription
         description={image.description}
@@ -282,11 +300,20 @@
           Share
         </h2>
         <Notice variant="info" size="xs" class="mb-4">
-          Copy the direct link or use the dropdown for other formats. Press
-          <span class="inline-flex mx-1"
-            ><Shortcut control key="C" size="xs" /></span
-          >
-          to copy.
+          <span class="flex items-center justify-between">
+            <span class="flex items-center gap-2">
+              <Icon icon="lucide:clipboard-copy" class="h-3.5 w-3.5 shrink-0" />
+              <span>Select option to copy</span>
+            </span>
+            <span
+              class="flex items-center gap-1.5 pl-3 border-l border-violet-300 dark:border-violet-600"
+            >
+              <span class="text-[10px] uppercase tracking-wide opacity-60"
+                >Quick</span
+              >
+              <Shortcut control key="C" size="xs" />
+            </span>
+          </span>
         </Notice>
 
         {#if image.supportsFormatConversion}

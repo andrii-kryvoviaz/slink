@@ -85,7 +85,7 @@ final class VipsFormatAdapter {
   private function getAnimatedOptions(ImageFormat $format): array {
     return match ($format) {
       ImageFormat::GIF => ['dither' => 1.0, 'effort' => 5],
-      ImageFormat::WEBP, ImageFormat::AVIF => ['Q' => 75, 'lossless' => false, 'effort' => 4],
+      ImageFormat::WEBP => ['Q' => 75, 'lossless' => false, 'effort' => 4],
       default => []
     };
   }
@@ -94,14 +94,13 @@ final class VipsFormatAdapter {
     return match ($format) {
       ImageFormat::GIF => 'gifsave_buffer',
       ImageFormat::WEBP => 'webpsave_buffer',
-      ImageFormat::AVIF => 'heifsave_buffer',
       default => 'writeToBuffer'
     };
   }
 
   private function hasSpecializedAnimatedWriter(ImageFormat $format): bool {
     return match ($format) {
-      ImageFormat::GIF, ImageFormat::WEBP, ImageFormat::AVIF => true,
+      ImageFormat::GIF, ImageFormat::WEBP => true,
       default => false
     };
   }

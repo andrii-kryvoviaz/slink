@@ -7,11 +7,13 @@ import type {
   HistorySettings,
   HistoryViewMode,
 } from '@slink/lib/settings/setters/history';
+import type { NavigationSettings } from '@slink/lib/settings/setters/navigation';
 import type {
   ShareFormat,
   ShareSettings,
 } from '@slink/lib/settings/setters/share';
 import type { SidebarSettings } from '@slink/lib/settings/setters/sidebar';
+import type { UploadOptionsSettings } from '@slink/lib/settings/setters/uploadOptions';
 import type {
   UserAdminSettings,
   ViewMode,
@@ -25,6 +27,9 @@ export type Settings = {
   sidebar: SettingsValue<SidebarSettings> & {
     expanded: Readable<boolean>;
   };
+  navigation: SettingsValue<NavigationSettings> & {
+    expandedGroups: Readable<Record<string, boolean>>;
+  };
   userAdmin: SettingsValue<UserAdminSettings> & {
     viewMode: Readable<ViewMode>;
   };
@@ -36,6 +41,9 @@ export type Settings = {
   };
   comment: SettingsValue<CommentSettings> & {
     sortOrder: Readable<SortOrder>;
+  };
+  uploadOptions: SettingsValue<UploadOptionsSettings> & {
+    expanded: Readable<boolean>;
   };
 };
 

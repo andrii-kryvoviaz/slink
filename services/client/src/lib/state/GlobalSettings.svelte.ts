@@ -19,11 +19,9 @@ class GlobalSettingsManager {
   }
 
   public initialize(initialSettings: GlobalSettings | null): void {
-    this._settings = initialSettings;
-  }
-
-  constructor() {
-    this.refresh();
+    if (!this._settings) {
+      this._settings = initialSettings;
+    }
   }
 
   public updateCategory(

@@ -140,9 +140,27 @@
       </div>
     {:else if isLoading}
       <div class="space-y-3 animate-pulse">
-        <div class="h-4 bg-sidebar-accent/20 rounded"></div>
-        <div class="h-2 bg-sidebar-accent/20 rounded"></div>
-        <div class="h-4 bg-sidebar-accent/20 rounded w-3/4"></div>
+        <div class="flex items-center justify-between">
+          <div class="h-3 bg-sidebar-accent/20 rounded w-16"></div>
+          <div class="h-5 bg-sidebar-accent/20 rounded w-20"></div>
+        </div>
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="h-3 bg-sidebar-accent/20 rounded w-20"></div>
+            <div class="h-3 bg-sidebar-accent/20 rounded w-16"></div>
+          </div>
+          <div class="h-1 bg-sidebar-accent/20 rounded w-full"></div>
+          <div class="space-y-2 mt-3">
+            <div class="flex items-center justify-between">
+              <div class="h-3 bg-sidebar-accent/20 rounded w-12"></div>
+              <div class="h-3 bg-sidebar-accent/20 rounded w-32"></div>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="h-3 bg-sidebar-accent/20 rounded w-12"></div>
+              <div class="h-3 bg-sidebar-accent/20 rounded w-32"></div>
+            </div>
+          </div>
+        </div>
       </div>
     {:else}
       <div class="text-sm text-sidebar-foreground/60 text-center py-2">

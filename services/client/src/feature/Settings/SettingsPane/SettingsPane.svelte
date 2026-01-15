@@ -24,7 +24,6 @@
     category,
     loading = false,
     title,
-    description,
     children,
     actions,
     on,
@@ -40,33 +39,27 @@
   };
 </script>
 
-<div
-  class="bg-white dark:bg-gray-900/50 border border-gray-200/50 dark:border-gray-700/30 rounded-2xl p-8 backdrop-blur-sm shadow-sm hover:shadow-md transition-all duration-200"
->
-  <div class="mb-8 pb-6 border-b border-gray-200/60 dark:border-gray-700/40">
-    {#if title}
-      <h2
-        class="text-2xl font-light text-gray-900 dark:text-white mb-2 tracking-tight"
-      >
-        {@render title?.()}
-      </h2>
-    {/if}
-
-    {#if description}
-      <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
-        {@render description?.()}
-      </p>
-    {/if}
+<section class="space-y-1">
+  <div class="flex items-center justify-between gap-4 pb-3">
+    <div>
+      {#if title}
+        <h2
+          class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+        >
+          {@render title?.()}
+        </h2>
+      {/if}
+    </div>
   </div>
 
-  <form onsubmit={handleSubmit} class="space-y-8">
-    <div class="space-y-6">
+  <form onsubmit={handleSubmit}>
+    <div
+      class="divide-y divide-gray-100 dark:divide-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 overflow-hidden"
+    >
       {@render children?.()}
     </div>
 
-    <div
-      class="flex items-center justify-end gap-4 pt-6 border-t border-gray-200/60 dark:border-gray-700/40"
-    >
+    <div class="flex items-center justify-end gap-3 pt-4">
       {#if loading}
         <div
           class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
@@ -80,9 +73,15 @@
         {@render actions?.()}
       {/if}
 
-      <Button type="submit" variant="outline" size="sm" disabled={loading}>
+      <Button
+        type="submit"
+        variant="glass-blue"
+        rounded="full"
+        size="sm"
+        disabled={loading}
+      >
         Save Changes
       </Button>
     </div>
   </form>
-</div>
+</section>

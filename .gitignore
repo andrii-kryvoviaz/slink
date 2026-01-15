@@ -1,36 +1,43 @@
-###> symfony/framework-bundle ###
-/.env.local
-/.env.local.php
-/.env.*.local
-config/secrets/prod/prod.decrypt.private.php
-public/bundles/
-var/cache
-var/log
-vendor/
-services/*/var
-###< symfony/framework-bundle ###
+# OS
+.DS_Store
 
+# IDEs
 .idea/
 .vscode/
-.env
-.DS_Store
 .phpactor.json
 
-public/images
-public/slink
-var/data/keys
-/slink
-*.db
-dump.rdb
-docker-compose.prod.yaml
-docker/demo/pictures
-reference.php
+# Dependencies
+node_modules/
+vendor/
 
-###> lexik/jwt-authentication-bundle ###
+# Symfony
+.env
+.env.local
+.env.local.php
+.env.*.local
+services/*/var/
+
+# Secrets
 *.pem
-###< lexik/jwt-authentication-bundle ###
+config/secrets/prod/prod.decrypt.private.php
+var/data/keys/
 
-###> symfony/phpunit-bridge ###
+# Testing
 .phpunit.result.cache
-###< symfony/phpunit-bridge ###
+
+# Build outputs
+public/bundles/
+
+# Project data
+/slink/
+*.db
+*.rdb
+*.log
+
+# Local overrides
+docker-compose.prod.yaml
+docker/demo/pictures/
+services/api/config/reference.php
+public/images/
+public/slink/
 

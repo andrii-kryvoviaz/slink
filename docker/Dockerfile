@@ -1,6 +1,6 @@
 ARG NODE_VERSION=24.11.1
 
-ARG PHP_VERSION=8.5.0
+ARG PHP_VERSION=8.5.1
 ARG PHP_MEMORY_LIMIT=512M
 
 ARG UPLOAD_MAX_FILESIZE_IN_BYTES=52428800
@@ -90,15 +90,30 @@ RUN apk add --no-cache \
     brotli-dev \
     libffi-dev
 
-RUN docker-php-ext-install curl intl mbstring exif ffi
-RUN pecl install redis smbclient vips
-RUN git clone https://github.com/swoole/swoole-src.git && \
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+
+RUN install-php-extensions \
+    curl \
+    intl \
+    mbstring \
+    exif \
+    ffi \
+    redis \
+    smbclient \
+    vips 
+
+## Replace this after proper support for PHP 8.5 is added (only master branch currently)
+RUN git clone --branch master --single-branch https://github.com/swoole/swoole-src.git && \
     cd swoole-src && \
+    git checkout bca833cf2170aced3ee9453313ace9db56cdd1f9 && \
+    sed -i 's/PHP_VERSION_ID > 80500/PHP_VERSION_ID >= 80600/' ext-src/php_swoole_private.h && \
     phpize && \
-    ./configure --enable-openssl --enable-http2 --enable-swoole-curl && \
+    ./configure --enable-openssl --enable-http2 --enable-swoole-curl CXXFLAGS="-fpermissive" && \
     make && make install && \
     cd .. && rm -rf swoole-src
-RUN docker-php-ext-enable redis smbclient vips swoole
+
+RUN docker-php-ext-enable swoole
+
 ### End of PHP extensions build ###
 
 ### Base build stage ###
@@ -112,6 +127,7 @@ RUN apk update && apk upgrade &&\
     icu-libs \
     libsmbclient \
     vips \
+    imagemagick \
     libheif \
     supervisor
 

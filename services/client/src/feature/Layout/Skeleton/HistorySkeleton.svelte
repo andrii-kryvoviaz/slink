@@ -3,132 +3,130 @@
 
   interface Props {
     count?: number;
+    viewMode?: 'list' | 'grid';
     class?: string;
   }
 
-  let { count = 4, class: customClass = '' }: Props = $props();
+  let {
+    count = 4,
+    viewMode = 'list',
+    class: customClass = '',
+  }: Props = $props();
 
   const skeletonItems = Array(count).fill(null);
 </script>
 
-<div class="flex flex-col items-center gap-8 px-4 sm:px-0 {customClass}">
-  {#each skeletonItems as _, index}
-    <div
-      class="group relative w-full max-w-full overflow-hidden rounded-xl border border-gray-200/50 bg-white/80 backdrop-blur-sm dark:border-gray-700/50 dark:bg-gray-900/80 sm:w-4xl"
-      style="animation-delay: {index * 150}ms"
-    >
-      <div class="sm:p-6">
+{#if viewMode === 'list'}
+  <ul class="flex flex-col gap-3 {customClass}">
+    {#each skeletonItems as _, index}
+      <li
+        class="flex flex-col sm:flex-row w-full overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/60"
+        style="animation-delay: {index * 100}ms"
+      >
         <div
-          class="flex max-w-full grow flex-col items-center gap-0 sm:flex-row sm:items-start sm:gap-8"
+          class="relative w-full sm:w-40 md:w-48 lg:w-56 shrink-0 bg-gray-100 dark:bg-gray-800/80"
         >
-          <div
-            class="flex w-full shrink-0 overflow-hidden rounded-t-xl max-w-full sm:rounded-lg sm:w-60 sm:max-w-none"
-          >
+          <div class="aspect-4/3 sm:aspect-square">
+            <Skeleton width="100%" height="100%" rounded="none" />
+          </div>
+          <div class="absolute bottom-2 left-2">
             <Skeleton
-              width="100%"
-              height="240px"
-              rounded="none"
-              class="sm:w-60 sm:h-60 rounded-t-xl sm:rounded-lg"
+              width="70px"
+              height="24px"
+              rounded="full"
+              class="opacity-60"
             />
           </div>
+          <div class="absolute bottom-2 right-2">
+            <Skeleton
+              width="45px"
+              height="24px"
+              rounded="full"
+              class="opacity-60"
+            />
+          </div>
+        </div>
 
-          <div class="flex w-full grow flex-col gap-4 p-6 sm:p-0">
-            <div class="hidden sm:block">
-              <div class="flex items-center gap-2">
-                <Skeleton width="200px" height="20px" />
-                <Skeleton width="16px" height="16px" rounded="sm" />
-              </div>
+        <div class="flex flex-col flex-1 p-3 sm:p-4 min-w-0">
+          <div class="flex items-start justify-between gap-3 mb-2">
+            <Skeleton width="60%" height="20px" />
+            <div class="flex gap-1">
+              <Skeleton width="28px" height="28px" rounded="md" />
+              <Skeleton width="28px" height="28px" rounded="md" />
+              <Skeleton width="28px" height="28px" rounded="md" />
             </div>
+          </div>
 
-            <div class="mb-2">
-              <div class="flex flex-wrap items-center gap-2">
-                <Skeleton
-                  width="100px"
-                  height="36px"
-                  rounded="lg"
-                  class="sm:h-8"
-                />
-                <Skeleton
-                  width="36px"
-                  height="36px"
-                  rounded="lg"
-                  class="sm:h-8 sm:w-8"
-                />
-                <Skeleton
-                  width="36px"
-                  height="36px"
-                  rounded="lg"
-                  class="sm:h-8 sm:w-8"
-                />
-                <Skeleton
-                  width="36px"
-                  height="36px"
-                  rounded="lg"
-                  class="sm:h-8 sm:w-8"
-                />
-              </div>
-            </div>
+          <div class="flex flex-wrap items-center gap-2 mb-3">
+            <Skeleton width="50px" height="14px" />
+            <Skeleton width="70px" height="14px" />
+            <Skeleton width="45px" height="14px" />
+            <Skeleton width="80px" height="14px" />
+          </div>
 
-            <div class="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
-              <div
-                class="flex items-center gap-3 rounded-md bg-gray-50/30 px-3 py-2 dark:bg-gray-800/20"
-              >
-                <div
-                  class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100/50 dark:bg-gray-700/30"
-                >
-                  <Skeleton width="12px" height="12px" rounded="sm" />
-                </div>
-                <div class="flex flex-col min-w-0 gap-1">
-                  <Skeleton width="24px" height="10px" />
-                  <Skeleton width="60px" height="12px" />
-                </div>
-              </div>
+          <div class="mt-auto flex gap-2">
+            <Skeleton width="50px" height="22px" rounded="full" />
+            <Skeleton width="40px" height="22px" rounded="full" />
+          </div>
+        </div>
+      </li>
+    {/each}
+  </ul>
+{:else}
+  <div
+    class="columns-1 sm:columns-2 md:columns-2 lg:columns-3 xl:columns-4 gap-4 {customClass}"
+  >
+    {#each skeletonItems as _, index}
+      {@const randomHeight = 180 + Math.floor(Math.random() * 120)}
+      <div
+        class="break-inside-avoid mb-4 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/60"
+        style="animation-delay: {index * 80}ms"
+      >
+        <div class="relative">
+          <Skeleton width="100%" height="{randomHeight}px" rounded="none" />
+          <div class="absolute top-2 left-2">
+            <Skeleton
+              width="60px"
+              height="22px"
+              rounded="full"
+              class="opacity-60"
+            />
+          </div>
+          <div class="absolute bottom-2 left-2">
+            <Skeleton
+              width="70px"
+              height="24px"
+              rounded="full"
+              class="opacity-60"
+            />
+          </div>
+          <div class="absolute bottom-2 right-2">
+            <Skeleton
+              width="40px"
+              height="24px"
+              rounded="full"
+              class="opacity-60"
+            />
+          </div>
+        </div>
 
-              <div
-                class="flex items-center gap-3 rounded-md bg-gray-50/30 px-3 py-2 dark:bg-gray-800/20"
-              >
-                <div
-                  class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100/50 dark:bg-gray-700/30"
-                >
-                  <Skeleton width="12px" height="12px" rounded="sm" />
-                </div>
-                <div class="flex flex-col min-w-0 gap-1">
-                  <Skeleton width="48px" height="10px" />
-                  <Skeleton width="55px" height="12px" />
-                </div>
-              </div>
+        <div class="p-3">
+          <div class="mb-2">
+            <Skeleton width="80%" height="16px" />
+          </div>
 
-              <div
-                class="flex items-center gap-3 rounded-md bg-gray-50/30 px-3 py-2 dark:bg-gray-800/20"
-              >
-                <div
-                  class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100/50 dark:bg-gray-700/30"
-                >
-                  <Skeleton width="12px" height="12px" rounded="sm" />
-                </div>
-                <div class="flex flex-col min-w-0 gap-1">
-                  <Skeleton width="20px" height="10px" />
-                  <Skeleton width="40px" height="12px" />
-                </div>
-              </div>
+          <div class="flex flex-wrap items-center gap-1.5 mb-3">
+            <Skeleton width="40px" height="12px" />
+            <Skeleton width="55px" height="12px" />
+            <Skeleton width="35px" height="12px" />
+          </div>
 
-              <div
-                class="flex items-center gap-3 rounded-md bg-gray-50/30 px-3 py-2 dark:bg-gray-800/20"
-              >
-                <div
-                  class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100/50 dark:bg-gray-700/30"
-                >
-                  <Skeleton width="12px" height="12px" rounded="sm" />
-                </div>
-                <div class="flex flex-col min-w-0 gap-1">
-                  <Skeleton width="40px" height="10px" />
-                  <Skeleton width="70px" height="12px" />
-                </div>
-              </div>
-            </div>
+          <div class="flex gap-1.5">
+            <Skeleton width="45px" height="20px" rounded="full" />
+            <Skeleton width="35px" height="20px" rounded="full" />
           </div>
         </div>
       </div>
-    </div>
-  {/each}
-</div>
+    {/each}
+  </div>
+{/if}

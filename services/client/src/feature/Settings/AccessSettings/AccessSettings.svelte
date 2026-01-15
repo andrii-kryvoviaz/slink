@@ -46,12 +46,10 @@
       When enabled without Guest Access, users will see a success message but
       cannot browse uploaded images
     {/snippet}
-    <div class="flex justify-end">
-      <Switch
-        name="accessAllowGuestUploads"
-        bind:checked={settings.allowGuestUploads}
-      />
-    </div>
+    <Switch
+      name="accessAllowGuestUploads"
+      bind:checked={settings.allowGuestUploads}
+    />
   </SettingItem>
 
   <SettingItem
@@ -67,11 +65,9 @@
     {#snippet hint()}
       Allow unauthenticated users to view and browse images
     {/snippet}
-    <div class="flex justify-end">
-      <Switch
-        name="accessAllowUnauthenticatedAccess"
-        bind:checked={settings.allowUnauthenticatedAccess}
-      />
-    </div>
+    <Switch
+      name="accessAllowUnauthenticatedAccess"
+      bind:checked={settings.allowUnauthenticatedAccess}
+    />
   </SettingItem>
 </SettingsPane>

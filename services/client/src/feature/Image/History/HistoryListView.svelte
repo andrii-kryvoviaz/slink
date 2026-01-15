@@ -1,15 +1,16 @@
 <script lang="ts">
   import {
-    BookmarkStat,
     ImageActionBar,
     ImagePlaceholder,
+    ViewCountBadge,
+    VisibilityBadge,
   } from '@slink/feature/Image';
   import { ImageTagList } from '@slink/feature/Tag';
   import { FormattedDate } from '@slink/feature/Text';
 
   import { bytesToSize } from '$lib/utils/bytesConverter';
   import Icon from '@iconify/svelte';
-  import { fade } from 'svelte/transition';
+  import { fade, fly } from 'svelte/transition';
 
   import type { ImageListingItem } from '@slink/api/Response';
 
@@ -25,44 +26,64 @@
   const onImageDelete = (id: string) => {
     on?.delete(id);
   };
+
+  const formatMimeType = (mimeType: string): string => {
+    const type = mimeType.split('/')[1];
+    if (!type) return mimeType;
+    return type.toUpperCase();
+  };
 </script>
 
-<div class="flex flex-col gap-6 sm:gap-8">
-  {#each items as item (item.id)}
-    <div
-      out:fade={{ duration: 500 }}
-      class="group relative w-full max-w-[1600px] mx-auto overflow-hidden rounded-xl border border-gray-200/50 bg-white/80 backdrop-blur-sm transition-all duration-300 hover:shadow-xl hover:shadow-gray-200/60 hover:border-gray-300/70 hover:bg-white/95 dark:border-gray-700/50 dark:bg-gray-900/80 dark:hover:shadow-gray-900/40 dark:hover:border-gray-600/70 dark:hover:bg-gray-800/95"
+<ul class="flex flex-col gap-3" role="list">
+  {#each items as item, index (item.id)}
+    <li
+      in:fly={{ y: 20, duration: 300, delay: index * 50 }}
+      out:fade={{ duration: 200 }}
     >
-      <div class="p-3 sm:p-4 md:p-6">
-        <div class="flex flex-col gap-4 md:flex-row md:gap-6 lg:gap-8">
-          <a
-            href={`/info/${item.id}`}
-            class="flex w-full shrink-0 overflow-hidden rounded-lg md:w-64 lg:w-80 xl:w-96"
-          >
+      <article
+        class="group relative flex flex-col sm:flex-row w-full overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/60 transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-700 hover:shadow-md dark:hover:shadow-gray-900/50"
+      >
+        <a
+          href={`/info/${item.id}`}
+          class="relative block w-full sm:w-40 md:w-48 lg:w-56 shrink-0 overflow-hidden bg-gray-100 dark:bg-gray-800/80"
+          aria-label={`View ${item.attributes.fileName}`}
+        >
+          <div class="aspect-4/3 sm:aspect-square w-full h-full">
             <ImagePlaceholder
-              src={`/image/${item.attributes.fileName}?width=350&height=350&crop=true`}
+              src={`/image/${item.attributes.fileName}?width=300&height=300&crop=true`}
               metadata={item.metadata}
               uniqueId={item.id}
               showOpenInNewTab={false}
               showMetadata={false}
+              keepAspectRatio={false}
+              objectFit="cover"
+              rounded={false}
+              class="h-full w-full transition-transform duration-300 group-hover:scale-105"
             />
-          </a>
+          </div>
 
-          <div class="flex flex-col gap-4 min-w-0 flex-1">
-            <div>
-              <a
-                href={`/info/${item.id}`}
-                class="group/link inline-flex w-full items-center gap-2 text-base font-semibold text-gray-900 transition-colors duration-200 dark:text-gray-100 sm:w-auto hover:text-indigo-600 dark:hover:text-indigo-400"
-              >
-                <span class="truncate">{item.attributes.fileName}</span>
-                <Icon
-                  icon="mynaui:external-link"
-                  class="h-4 w-4 shrink-0 opacity-60 transition-opacity duration-200 group-hover/link:opacity-100"
-                />
-              </a>
-            </div>
+          <div class="absolute bottom-2 left-2 flex items-center gap-1.5">
+            <VisibilityBadge
+              isPublic={item.attributes.isPublic}
+              variant="overlay"
+            />
+            <ViewCountBadge count={item.attributes.views} variant="overlay" />
+          </div>
+        </a>
 
-            <div class="w-full">
+        <div class="flex flex-col flex-1 p-3 sm:p-4 min-w-0">
+          <div class="flex items-start justify-between gap-3 mb-2">
+            <a
+              href={`/info/${item.id}`}
+              class="text-base font-medium text-gray-900 dark:text-gray-100 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors truncate"
+              title={item.attributes.fileName}
+            >
+              {item.attributes.fileName}
+            </a>
+
+            <div
+              class="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 sm:opacity-100"
+            >
               <ImageActionBar
                 image={{
                   id: item.id,
@@ -71,131 +92,61 @@
                 }}
                 buttons={['download', 'visibility', 'copy', 'delete']}
                 on={{ imageDelete: onImageDelete }}
+                compact={true}
               />
             </div>
-
-            {#if item.tags && item.tags.length > 0}
-              <div class="mt-2 sm:mt-4">
-                <ImageTagList
-                  imageId={item.id}
-                  variant="neon"
-                  showImageCount={false}
-                  removable={false}
-                  initialTags={item.tags}
-                />
-              </div>
-            {/if}
-
-            <div
-              class="mt-2 sm:mt-4 grid grid-cols-1 xs:grid-cols-2 gap-2 transition-opacity duration-300 group-hover:opacity-100 opacity-90"
-            >
-              <div
-                class="flex items-center gap-3 rounded-md bg-gray-50/30 px-3 py-2 dark:bg-gray-800/20 transition-colors duration-300 group-hover:bg-gray-100/50 dark:group-hover:bg-gray-700/30"
-              >
-                <div
-                  class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100/50 dark:bg-gray-700/30 shrink-0"
-                >
-                  <Icon
-                    icon="lucide:file-type"
-                    class="h-4 w-4 text-gray-600 dark:text-gray-400"
-                  />
-                </div>
-                <div class="flex flex-col min-w-0 flex-1">
-                  <span
-                    class="text-xs font-medium text-gray-500 dark:text-gray-500"
-                  >
-                    Type
-                  </span>
-                  <span
-                    class="text-sm font-medium text-gray-700 dark:text-gray-300 truncate"
-                  >
-                    {item.metadata.mimeType}
-                  </span>
-                </div>
-              </div>
-
-              <div
-                class="flex items-center gap-3 rounded-md bg-gray-50/30 px-3 py-2 dark:bg-gray-800/20 transition-colors duration-300 group-hover:bg-gray-100/50 dark:group-hover:bg-gray-700/30"
-              >
-                <div
-                  class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100/50 dark:bg-gray-700/30 shrink-0"
-                >
-                  <Icon
-                    icon="lucide:expand"
-                    class="h-4 w-4 text-gray-600 dark:text-gray-400"
-                  />
-                </div>
-                <div class="flex flex-col min-w-0 flex-1">
-                  <span
-                    class="text-xs font-medium text-gray-500 dark:text-gray-500"
-                  >
-                    Dimensions
-                  </span>
-                  <span
-                    class="text-sm font-medium text-gray-700 dark:text-gray-300 truncate"
-                  >
-                    {item.metadata.width}×{item.metadata.height}
-                  </span>
-                </div>
-              </div>
-
-              <div
-                class="flex items-center gap-3 rounded-md bg-gray-50/30 px-3 py-2 dark:bg-gray-800/20 transition-colors duration-300 group-hover:bg-gray-100/50 dark:group-hover:bg-gray-700/30"
-              >
-                <div
-                  class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100/50 dark:bg-gray-700/30 shrink-0"
-                >
-                  <Icon
-                    icon="lucide:hard-drive"
-                    class="h-4 w-4 text-gray-600 dark:text-gray-400"
-                  />
-                </div>
-                <div class="flex flex-col min-w-0 flex-1">
-                  <span
-                    class="text-xs font-medium text-gray-500 dark:text-gray-500"
-                  >
-                    Size
-                  </span>
-                  <span
-                    class="text-sm font-medium text-gray-700 dark:text-gray-300 truncate"
-                  >
-                    {bytesToSize(item.metadata.size)}
-                  </span>
-                </div>
-              </div>
-
-              <div
-                class="flex items-center gap-3 rounded-md bg-gray-50/30 px-3 py-2 dark:bg-gray-800/20 transition-colors duration-300 group-hover:bg-gray-100/50 dark:group-hover:bg-gray-700/30"
-              >
-                <div
-                  class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100/50 dark:bg-gray-700/30 shrink-0"
-                >
-                  <Icon
-                    class="h-4 w-4 text-gray-600 dark:text-gray-400"
-                    icon="lucide:calendar"
-                  />
-                </div>
-                <div class="flex flex-col min-w-0 flex-1">
-                  <span
-                    class="text-xs font-medium text-gray-500 dark:text-gray-500"
-                  >
-                    Uploaded
-                  </span>
-                  <div
-                    class="text-sm font-medium text-gray-700 dark:text-gray-300 truncate"
-                  >
-                    <FormattedDate date={item.attributes.createdAt.timestamp} />
-                  </div>
-                </div>
-              </div>
-
-              {#if item.bookmarkCount > 0}
-                <BookmarkStat count={item.bookmarkCount} variant="card" />
-              {/if}
-            </div>
           </div>
+
+          <div
+            class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500 dark:text-gray-400 mb-3"
+          >
+            <span class="inline-flex items-center gap-1" title="File type">
+              <Icon icon="lucide:file" class="w-3 h-3" />
+              {formatMimeType(item.metadata.mimeType)}
+            </span>
+            <span class="text-gray-300 dark:text-gray-700">•</span>
+            <span class="inline-flex items-center gap-1" title="Dimensions">
+              <Icon icon="lucide:maximize-2" class="w-3 h-3" />
+              {item.metadata.width}×{item.metadata.height}
+            </span>
+            <span class="text-gray-300 dark:text-gray-700">•</span>
+            <span class="inline-flex items-center gap-1" title="File size">
+              <Icon icon="lucide:database" class="w-3 h-3" />
+              {bytesToSize(item.metadata.size)}
+            </span>
+            {#if item.bookmarkCount > 0}
+              <span class="text-gray-300 dark:text-gray-700">•</span>
+              <span class="inline-flex items-center gap-1" title="Bookmarks">
+                <Icon icon="lucide:bookmark" class="w-3 h-3" />
+                {item.bookmarkCount.toLocaleString()}
+              </span>
+            {/if}
+            <span class="text-gray-300 dark:text-gray-700">•</span>
+            <span class="inline-flex items-center gap-1" title="Uploaded">
+              <Icon icon="lucide:clock" class="w-3 h-3" />
+              <FormattedDate date={item.attributes.createdAt.timestamp} />
+            </span>
+          </div>
+
+          {#if item.tags && item.tags.length > 0}
+            <div class="mt-auto">
+              <ImageTagList
+                imageId={item.id}
+                variant="neon"
+                showImageCount={false}
+                removable={false}
+                initialTags={item.tags}
+              />
+            </div>
+          {:else}
+            <div
+              class="mt-auto text-xs text-gray-400 dark:text-gray-600 sm:hidden"
+            >
+              <FormattedDate date={item.attributes.createdAt.timestamp} />
+            </div>
+          {/if}
         </div>
-      </div>
-    </div>
+      </article>
+    </li>
   {/each}
-</div>
+</ul>

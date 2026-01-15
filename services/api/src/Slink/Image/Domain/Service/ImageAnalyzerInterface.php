@@ -38,6 +38,8 @@ interface ImageAnalyzerInterface {
   public function supportsFormatConversion(?string $mimeType): bool;
 
   public function supportsAnimation(?string $mimeType): bool;
+
+  public function isAnimated(string $filePath): bool;
  
   /**
    * @return array<string, mixed>

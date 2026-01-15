@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Slink\Storage\Infrastructure\Provider;
 
+use Slink\Settings\Domain\Exception\S3BucketNotConfiguredException;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\Enum\StorageProvider;
-use Slink\Storage\Domain\Exception\S3BucketNotConfiguredException;
 use Slink\Storage\Domain\Exception\StorageUsageMetricsDisabledException;
 use Slink\Storage\Domain\Service\StorageUsageProviderInterface;
 use Slink\Storage\Domain\ValueObject\StorageUsage;

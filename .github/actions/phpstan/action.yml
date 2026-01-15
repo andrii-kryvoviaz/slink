@@ -1,9 +1,6 @@
 name: 'Lint'
 description: 'Run PHPStan static analysis on the test Docker image'
 inputs:
-  image:
-    description: 'The name of the Docker image'
-    required: true
   memory_limit:
     description: 'The memory limit for PHPStan'
     required: false
@@ -13,10 +10,8 @@ runs:
   using: 'composite'
   steps:
     - uses: ./.github/actions/build-test-image
-      with:
-        image: ${{ inputs.image }}
 
     - shell: bash
       run: |
-        docker run --rm ${{ inputs.image }} \
+        docker run --rm slink-test:${{ github.sha }} \
           php /services/api/vendor/bin/phpstan analyse --configuration /services/api/phpstan.neon --memory-limit ${{ inputs.memory_limit }}

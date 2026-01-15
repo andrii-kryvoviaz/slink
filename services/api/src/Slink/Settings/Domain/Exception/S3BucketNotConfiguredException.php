@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Slink\Storage\Domain\Exception;
+namespace Slink\Settings\Domain\Exception;
 
 use Slink\Shared\Domain\Exception\SpecificationException;
 
 class S3BucketNotConfiguredException extends SpecificationException {
-  public function __construct(string $message = 'S3 bucket is not configured.') {
+  public function __construct(string $message = 'S3 bucket is required.') {
     parent::__construct($message);
   }
   

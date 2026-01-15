@@ -16,6 +16,9 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
    * @param bool $allowOnlyPublicImages
    * @param bool $enableDeduplication
    * @param bool $enableLicensing
+   * @param bool $forceFormatConversion
+   * @param string|null $targetFormat
+   * @param bool $convertAnimatedImages
    */
   private function __construct(
     private string $maxSize,
@@ -24,6 +27,9 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
     private bool $allowOnlyPublicImages = false,
     private bool $enableDeduplication = true,
     private bool $enableLicensing = false,
+    private bool $forceFormatConversion = false,
+    private ?string $targetFormat = null,
+    private bool $convertAnimatedImages = false,
   ) {
     if (!preg_match('/^(\d+)([kM])$/', $maxSize)) {
       throw new InvalidImageMaxSizeException();
@@ -49,6 +55,9 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
       'allowOnlyPublicImages' => $this->allowOnlyPublicImages,
       'enableDeduplication' => $this->enableDeduplication,
       'enableLicensing' => $this->enableLicensing,
+      'forceFormatConversion' => $this->forceFormatConversion,
+      'targetFormat' => $this->targetFormat,
+      'convertAnimatedImages' => $this->convertAnimatedImages,
     ];
   }
   
@@ -63,6 +72,9 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
       $payload['allowOnlyPublicImages'] ?? false,
       $payload['enableDeduplication'] ?? true,
       $payload['enableLicensing'] ?? false,
+      $payload['forceFormatConversion'] ?? false,
+      $payload['targetFormat'] ?? null,
+      $payload['convertAnimatedImages'] ?? false,
     );
   }
   
@@ -113,5 +125,26 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
    */
   public function isEnableLicensing(): bool {
     return $this->enableLicensing;
+  }
+
+  /**
+   * @return bool
+   */
+  public function isForceFormatConversion(): bool {
+    return $this->forceFormatConversion;
+  }
+
+  /**
+   * @return string|null
+   */
+  public function getTargetFormat(): ?string {
+    return $this->targetFormat;
+  }
+
+  /**
+   * @return bool
+   */
+  public function isConvertAnimatedImages(): bool {
+    return $this->convertAnimatedImages;
   }
 }

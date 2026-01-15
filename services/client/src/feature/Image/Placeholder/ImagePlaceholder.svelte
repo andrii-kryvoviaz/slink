@@ -7,6 +7,8 @@
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
+  import { imagePlaceholderVariants } from './ImagePlaceholder.theme';
+
   interface Props {
     src: string;
     alt?: string;
@@ -24,6 +26,7 @@
     uniqueId?: any;
     rounded?: boolean;
     keepAspectRatio?: boolean;
+    objectFit?: 'contain' | 'fill' | 'cover' | 'none';
   }
 
   let {
@@ -37,9 +40,11 @@
     showOpenInNewTab = true,
     rounded = true,
     keepAspectRatio = true,
+    objectFit,
   }: Props = $props();
 
   let isLoaded = $state(false);
+  let hasError = $state(false);
   let originalImage = $derived(src.split('?')[0]);
   let actualAspectRatio = $state(metadata.width / metadata.height);
 
@@ -90,8 +95,10 @@
     }
   };
 
-  let shouldStretch = $derived(() => {
+  let shouldStretch = $derived.by(() => {
     if (isSvg) return true;
+    if (objectFit === 'cover') return true;
+    if (!keepAspectRatio) return true;
     if (!stretch) return false;
 
     const minRequiredHeight = metadata.height * stretchThreshold;
@@ -101,118 +108,180 @@
       metadata.height >= minRequiredHeight && metadata.width >= minRequiredWidth
     );
   });
+
+  let resolvedObjectFit = $derived.by(() => {
+    if (objectFit) return objectFit;
+    if (isSvg) return 'contain';
+    if (keepAspectRatio) return 'contain';
+    return 'fill';
+  });
+
+  let imageClasses = $derived(
+    imagePlaceholderVariants({
+      stretch: shouldStretch || keepAspectRatio || isSvg,
+      objectFit: resolvedObjectFit,
+      visibility: isSvg || (isLoaded && !hasError) ? 'visible' : 'hidden',
+    }),
+  );
 </script>
 
-<TooltipProvider delayDuration={300}>
-  <AspectRatio.Root
-    ratio={finalRatio}
-    class={cn(
-      'group relative flex items-center justify-center overflow-hidden border-slate-500/10 bg-white/0 w-full',
-      className,
-      rounded && 'rounded-md',
-      (showMetadata || showOpenInNewTab) && 'border',
-    )}
-  >
-    <img
-      {src}
-      {alt}
-      onload={(event) => {
-        const img = event.target as HTMLImageElement;
-        updateAspectRatioFromImage(img);
-        isLoaded = true;
-      }}
-      onerror={() => {
-        isLoaded = true;
-      }}
-      class={cn(
-        'transition-opacity border-none',
-        (shouldStretch() || keepAspectRatio) && 'w-full h-full',
-        keepAspectRatio && !isSvg && 'object-contain',
-        !keepAspectRatio && !isSvg && 'object-fill',
-        isSvg && 'w-full h-full object-contain',
-        !isLoaded && !isSvg && 'hidden',
-      )}
-    />
+{#snippet content()}
+  <img
+    {src}
+    {alt}
+    onload={(event) => {
+      const img = event.target as HTMLImageElement;
+      updateAspectRatioFromImage(img);
+      isLoaded = true;
+      hasError = false;
+    }}
+    onerror={() => {
+      isLoaded = true;
+      hasError = true;
+    }}
+    class={imageClasses}
+  />
 
-    {#if !isLoaded && !isSvg}
-      <div
-        class="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-800 animate-pulse"
+  {#if !isLoaded && !isSvg}
+    <div
+      class="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-800 animate-pulse"
+    >
+      <svg
+        width="48"
+        height="48"
+        class="text-gray-400"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+        fill="currentColor"
+        viewBox="0 0 640 512"
       >
-        <svg
-          width="48"
-          height="48"
-          class="text-gray-400"
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true"
-          fill="currentColor"
-          viewBox="0 0 640 512"
+        <path
+          d="M480 80C480 35.82 515.8 0 560 0C604.2 0 640 35.82 640 80C640 124.2 604.2 160 560 160C515.8 160 480 124.2 480 80zM0 456.1C0 445.6 2.964 435.3 8.551 426.4L225.3 81.01C231.9 70.42 243.5 64 256 64C268.5 64 280.1 70.42 286.8 81.01L412.7 281.7L460.9 202.7C464.1 196.1 472.2 192 480 192C487.8 192 495 196.1 499.1 202.7L631.1 419.1C636.9 428.6 640 439.7 640 450.9C640 484.6 612.6 512 578.9 512H55.91C25.03 512 .0006 486.1 .0006 456.1L0 456.1z"
+        />
+      </svg>
+    </div>
+  {/if}
+
+  {#if hasError}
+    <div
+      class="absolute inset-0 flex flex-col items-center justify-center bg-slate-100 dark:bg-slate-900"
+      in:fade={{ duration: 200 }}
+    >
+      <div class="flex flex-col items-center gap-4 px-6 text-center">
+        <div
+          class="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-200 dark:bg-slate-800 shadow-sm"
         >
-          <path
-            d="M480 80C480 35.82 515.8 0 560 0C604.2 0 640 35.82 640 80C640 124.2 604.2 160 560 160C515.8 160 480 124.2 480 80zM0 456.1C0 445.6 2.964 435.3 8.551 426.4L225.3 81.01C231.9 70.42 243.5 64 256 64C268.5 64 280.1 70.42 286.8 81.01L412.7 281.7L460.9 202.7C464.1 196.1 472.2 192 480 192C487.8 192 495 196.1 499.1 202.7L631.1 419.1C636.9 428.6 640 439.7 640 450.9C640 484.6 612.6 512 578.9 512H55.91C25.03 512 .0006 486.1 .0006 456.1L0 456.1z"
+          <Icon
+            icon="ph:image-broken"
+            class="h-8 w-8 text-slate-400 dark:text-slate-500"
           />
-        </svg>
+          <div
+            class="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/50 ring-2 ring-white dark:ring-slate-900"
+          >
+            <Icon
+              icon="ph:warning-fill"
+              class="h-3.5 w-3.5 text-amber-500 dark:text-amber-400"
+            />
+          </div>
+        </div>
+        <div class="space-y-1.5">
+          <p class="text-sm font-medium text-slate-700 dark:text-slate-300">
+            Image unavailable
+          </p>
+          <p
+            class="text-xs text-slate-500 dark:text-slate-400 max-w-50 leading-relaxed"
+          >
+            This image may have been removed or is temporarily inaccessible
+          </p>
+        </div>
       </div>
+    </div>
+  {/if}
+
+  {#if isLoaded && !hasError}
+    {#if showOpenInNewTab}
+      <a
+        href={originalImage || src}
+        target="_blank"
+        rel="noopener noreferrer"
+        onclick={(e) => e.stopPropagation()}
+        class="group/link absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-lg bg-black/20 backdrop-blur-sm opacity-0 transition-all duration-200 group-hover:opacity-100 hover:bg-black/40 hover:scale-110"
+      >
+        <Tooltip size="xs" side="left" sideOffset={12}>
+          {#snippet trigger()}
+            <Icon
+              icon="heroicons:arrow-top-right-on-square"
+              class="h-4 w-4 text-white/80 transition-colors duration-200 group-hover/link:text-white"
+            />
+          {/snippet}
+          Open in new tab
+        </Tooltip>
+      </a>
     {/if}
 
-    {#if isLoaded}
-      {#if showOpenInNewTab}
-        <a
-          href={originalImage || src}
-          target="_blank"
-          rel="noopener noreferrer"
-          onclick={(e) => e.stopPropagation()}
-          class="group/link absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-lg bg-black/20 backdrop-blur-sm opacity-0 transition-all duration-200 group-hover:opacity-100 hover:bg-black/40 hover:scale-110"
-        >
-          <Tooltip size="xs" side="left" sideOffset={12}>
-            {#snippet trigger()}
-              <Icon
-                icon="heroicons:arrow-top-right-on-square"
-                class="h-4 w-4 text-white/80 transition-colors duration-200 group-hover/link:text-white"
-              />
-            {/snippet}
-            Open in new tab
-          </Tooltip>
-        </a>
-      {/if}
-
-      {#if metadata && showMetadata}
-        <div
-          class="absolute bottom-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2 bg-black/40 dark:bg-black/60 backdrop-blur-md rounded-lg px-3 py-2 text-xs text-white/90"
-          in:fade={{ duration: 200, delay: 100 }}
-        >
-          <div class="flex flex-wrap items-center gap-2 min-w-0">
-            <div class="flex items-center gap-1 whitespace-nowrap">
-              <Icon
-                icon="heroicons:photo"
-                class="w-3 h-3 text-white/70 flex-shrink-0"
-              />
-              <span class="font-medium">{metadata.width}×{metadata.height}</span
-              >
-            </div>
-            {#if metadata.mimeType}
-              <div class="flex items-center gap-1 whitespace-nowrap">
-                <Icon
-                  icon="heroicons:document"
-                  class="w-3 h-3 text-white/70 flex-shrink-0"
-                />
-                <span class="uppercase font-medium"
-                  >{metadata.mimeType.split('/')[1] || metadata.mimeType}</span
-                >
-              </div>
-            {/if}
+    {#if metadata && showMetadata}
+      <div
+        class="absolute bottom-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2 bg-black/40 dark:bg-black/60 backdrop-blur-md rounded-lg px-3 py-2 text-xs text-white/90"
+        in:fade={{ duration: 200, delay: 100 }}
+      >
+        <div class="flex flex-wrap items-center gap-2 min-w-0">
+          <div class="flex items-center gap-1 whitespace-nowrap">
+            <Icon
+              icon="heroicons:photo"
+              class="w-3 h-3 text-white/70 shrink-0"
+            />
+            <span class="font-medium">{metadata.width}×{metadata.height}</span>
           </div>
-
-          {#if metadata.size}
+          {#if metadata.mimeType}
             <div class="flex items-center gap-1 whitespace-nowrap">
               <Icon
-                icon="heroicons:arrow-down-tray"
-                class="w-3 h-3 text-white/70 flex-shrink-0"
+                icon="heroicons:document"
+                class="w-3 h-3 text-white/70 shrink-0"
               />
-              <span class="font-medium">{bytesToSize(metadata.size)}</span>
+              <span class="uppercase font-medium"
+                >{metadata.mimeType.split('/')[1] || metadata.mimeType}</span
+              >
             </div>
           {/if}
         </div>
-      {/if}
+
+        {#if metadata.size}
+          <div class="flex items-center gap-1 whitespace-nowrap">
+            <Icon
+              icon="heroicons:arrow-down-tray"
+              class="w-3 h-3 text-white/70 shrink-0"
+            />
+            <span class="font-medium">{bytesToSize(metadata.size)}</span>
+          </div>
+        {/if}
+      </div>
     {/if}
-  </AspectRatio.Root>
+  {/if}
+{/snippet}
+
+<TooltipProvider delayDuration={300}>
+  {#if keepAspectRatio}
+    <AspectRatio.Root
+      ratio={finalRatio}
+      class={cn(
+        'group relative flex items-center justify-center overflow-hidden border-slate-500/10 bg-white/0 w-full',
+        className,
+        rounded && 'rounded-md',
+        (showMetadata || showOpenInNewTab) && 'border',
+      )}
+    >
+      {@render content()}
+    </AspectRatio.Root>
+  {:else}
+    <div
+      class={cn(
+        'group relative flex items-center justify-center overflow-hidden border-slate-500/10 bg-white/0 w-full h-full',
+        className,
+        rounded && 'rounded-md',
+        (showMetadata || showOpenInNewTab) && 'border',
+      )}
+    >
+      {@render content()}
+    </div>
+  {/if}
 </TooltipProvider>

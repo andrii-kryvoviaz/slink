@@ -12,13 +12,14 @@
 
   let {
     variant = 'success',
+    appearance = 'bordered',
     size = 'md',
     children,
     ...props
   }: Props = $props();
 
   let classes = $derived(
-    className(NoticeTheme({ variant, size }), props.class),
+    className(NoticeTheme({ variant, appearance, size }), props.class),
   );
 </script>
 

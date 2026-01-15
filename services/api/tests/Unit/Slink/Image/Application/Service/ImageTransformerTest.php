@@ -58,7 +58,7 @@ final class ImageTransformerTest extends TestCase {
         $this->imageProcessor
             ->expects($this->once())
             ->method('convertFormat')
-            ->with('file content', 'jpeg', 85)
+            ->with('file content', 'jpg', 85)
             ->willReturn('converted jpeg content');
 
         file_put_contents('/tmp/test.png', 'file content');
@@ -83,7 +83,7 @@ final class ImageTransformerTest extends TestCase {
         $this->imageProcessor
             ->expects($this->once())
             ->method('convertFormat')
-            ->with('file content', 'jpeg', 95)
+            ->with('file content', 'jpg', 95)
             ->willReturn('converted jpeg content');
 
         file_put_contents('/tmp/test.png', 'file content');

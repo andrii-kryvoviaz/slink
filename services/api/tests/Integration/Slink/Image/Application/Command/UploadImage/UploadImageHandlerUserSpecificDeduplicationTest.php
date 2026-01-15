@@ -15,6 +15,7 @@ use Slink\Image\Domain\Factory\ImageMetadataFactory;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Image\Domain\Service\ImageAnalyzerInterface;
+use Slink\Image\Domain\Service\ImageConversionResolverInterface;
 use Slink\Image\Domain\Service\ImageHashCalculatorInterface;
 use Slink\Image\Domain\Service\ImageSanitizerInterface;
 use Slink\Image\Domain\Service\ImageTransformerInterface;
@@ -46,6 +47,7 @@ final class UploadImageHandlerUserSpecificDeduplicationTest extends TestCase {
     $imageAnalyzer = $this->createMock(ImageAnalyzerInterface::class);
     $imageTransformer = $this->createMock(ImageTransformerInterface::class);
     $sanitizer = $this->createMock(ImageSanitizerInterface::class);
+    $conversionResolver = $this->createMock(ImageConversionResolverInterface::class);
     $storage = $this->createMock(StorageInterface::class);
     $metadataFactory = $this->createMock(ImageMetadataFactory::class);
 
@@ -58,6 +60,8 @@ final class UploadImageHandlerUserSpecificDeduplicationTest extends TestCase {
     $imageAnalyzer->method('isConversionRequired')->willReturn(false);
     $imageAnalyzer->method('requiresSanitization')->willReturn(false);
     $imageAnalyzer->method('supportsExifProfile')->willReturn(false);
+
+    $conversionResolver->method('resolve')->willReturn(null);
 
     $this->configurationProvider->method('get')->willReturnMap([
       ['image.stripExifMetadata', false],
@@ -74,6 +78,7 @@ final class UploadImageHandlerUserSpecificDeduplicationTest extends TestCase {
       $imageAnalyzer,
       $imageTransformer,
       $sanitizer,
+      $conversionResolver,
       $creationContext,
       $metadataFactory,
       $storage

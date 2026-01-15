@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Slink\Image\Application\Service;
 
 use Slink\Image\Domain\Service\ImageAnalyzerInterface;
+use Slink\Image\Domain\Service\ImageProcessorInterface;
 use Symfony\Component\HttpFoundation\File\File;
 
 final class ImageAnalyzer implements ImageAnalyzerInterface {
@@ -13,7 +14,8 @@ final class ImageAnalyzer implements ImageAnalyzerInterface {
   private ?int $width = null;
 
   public function __construct(
-    private readonly ImageCapabilityChecker $capabilityChecker
+    private readonly ImageCapabilityChecker $capabilityChecker,
+    private readonly ImageProcessorInterface $imageProcessor
   ) {
   }
 
@@ -50,6 +52,16 @@ final class ImageAnalyzer implements ImageAnalyzerInterface {
 
   public function supportsAnimation(?string $mimeType): bool {
     return $this->capabilityChecker->supportsAnimation($mimeType);
+  }
+
+  public function isAnimated(string $filePath): bool {
+    $content = @file_get_contents($filePath);
+    if ($content === false) {
+      return false;
+    }
+    
+    $animatedInfo = $this->imageProcessor->getAnimatedImageInfo($content);
+    return $animatedInfo->isAnimated();
   }
 
   /**
