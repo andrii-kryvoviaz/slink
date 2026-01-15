@@ -9,27 +9,19 @@
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
+  import type { UserPreferencesResponse } from '@slink/api/Response';
+
   import type { User } from '@slink/lib/auth/Type/User';
+  import { LandingPage } from '@slink/lib/enum/LandingPage';
+  import type { License } from '@slink/lib/enum/License';
 
   import { withLoadingState } from '@slink/utils/form/withLoadingState';
   import { useWritable } from '@slink/utils/store/contextAwareStore';
   import { toast } from '@slink/utils/ui/toast-sonner.svelte';
 
-  interface License {
-    id: string;
-    title: string;
-    name: string;
-    description: string;
-    url: string | null;
-  }
-
-  interface Preferences {
-    defaultLicense: string | null;
-  }
-
   interface PageData {
     user: User;
-    preferences: Preferences;
+    preferences: UserPreferencesResponse;
     licenses: License[];
     licensingEnabled: boolean;
   }
@@ -42,12 +34,20 @@
   let { data, form }: Props = $props();
 
   let licenses = $derived(data.licenses);
-  let selectedLicense = $state(data.preferences?.defaultLicense ?? '');
+  let selectedLicense = $state(data.preferences?.['license.default'] ?? '');
+  let selectedLandingPage = $state(
+    data.preferences?.['navigation.landingPage'] ?? LandingPage.Explore,
+  );
   let syncToImages = $state(false);
 
   let selectedLicenseInfo = $derived(
     licenses.find((l) => l.id === selectedLicense),
   );
+
+  const landingPageOptions = [
+    { value: LandingPage.Explore, label: 'Explore' },
+    { value: LandingPage.Upload, label: 'Upload' },
+  ];
 
   let isPreferencesFormLoading = useWritable(
     'updatePreferencesFormLoadingState',
@@ -92,21 +92,62 @@
     </p>
   </header>
 
-  {#if data.licensingEnabled}
+  <form
+    action="?/updatePreferences"
+    method="POST"
+    use:enhance={withLoadingState(isPreferencesFormLoading)}
+    class="space-y-8"
+  >
     <section class="space-y-1">
       <div class="flex items-center justify-between gap-4 pb-3">
         <h2
           class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
         >
-          Image Licensing
+          Navigation
         </h2>
       </div>
 
-      <form
-        action="?/updatePreferences"
-        method="POST"
-        use:enhance={withLoadingState(isPreferencesFormLoading)}
+      <div
+        class="divide-y divide-gray-100 dark:divide-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 overflow-hidden"
       >
+        <div class="px-4 py-4">
+          <div class="flex flex-col gap-3">
+            <div>
+              <label
+                for="defaultLandingPage"
+                class="block text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Default Landing Page
+              </label>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                The page to show when you visit the site
+              </p>
+            </div>
+            <Select
+              class="w-full max-w-md"
+              items={landingPageOptions}
+              bind:value={selectedLandingPage}
+              placeholder="Select a landing page..."
+            />
+            <input
+              type="hidden"
+              name="defaultLandingPage"
+              value={selectedLandingPage ?? ''}
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {#if data.licensingEnabled}
+      <section class="space-y-1">
+        <div class="flex items-center justify-between gap-4 pb-3">
+          <h2
+            class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+          >
+            Image Licensing
+          </h2>
+        </div>
         <div
           class="divide-y divide-gray-100 dark:divide-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 overflow-hidden"
         >
@@ -184,40 +225,28 @@
             />
           </div>
         </div>
+      </section>
+    {/if}
 
-        <div class="flex items-center justify-end gap-3 pt-4">
-          {#if $isPreferencesFormLoading}
-            <div
-              class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
-            >
-              <Loader variant="minimal" size="xs" />
-              <span>Saving...</span>
-            </div>
-          {/if}
-
-          <Button
-            type="submit"
-            variant="glass-blue"
-            rounded="full"
-            size="sm"
-            disabled={$isPreferencesFormLoading}
-          >
-            Save Changes
-          </Button>
+    <div class="flex items-center justify-end gap-3 pt-4">
+      {#if $isPreferencesFormLoading}
+        <div
+          class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
+        >
+          <Loader variant="minimal" size="xs" />
+          <span>Saving...</span>
         </div>
-      </form>
-    </section>
-  {:else}
-    <Notice variant="info" appearance="subtle" size="md" class="text-center">
-      <div class="py-4">
-        <Icon icon="ph:gear" class="h-10 w-10 opacity-50 mx-auto mb-3" />
-        <p class="font-medium">
-          No preference options are currently available.
-        </p>
-        <p class="text-sm opacity-75 mt-1">
-          Check back later as more settings may be added.
-        </p>
-      </div>
-    </Notice>
-  {/if}
+      {/if}
+
+      <Button
+        type="submit"
+        variant="glass-blue"
+        rounded="full"
+        size="sm"
+        disabled={$isPreferencesFormLoading}
+      >
+        Save Changes
+      </Button>
+    </div>
+  </form>
 </div>

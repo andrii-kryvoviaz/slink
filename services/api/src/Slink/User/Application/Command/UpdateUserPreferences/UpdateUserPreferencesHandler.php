@@ -23,7 +23,7 @@ final readonly class UpdateUserPreferencesHandler implements CommandHandlerInter
     
     $existingPrefs = $this->preferencesRepository->findByUserId($userId);
     $preferences = $existingPrefs 
-      ? $existingPrefs->getPreferences()->with('defaultLicense', $command->getDefaultLicense())
+      ? $existingPrefs->getPreferences()->applyChanges($command->toPayload())
       : $command->getPreferences();
     
     $user->updatePreferences($preferences);
