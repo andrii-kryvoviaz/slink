@@ -38,6 +38,7 @@ abstract class AbstractView {
   public static function fromPayload(array $payload, ?EntityManagerInterface $entityManager): static {
     $reflection = new \ReflectionClass(static::class);
     $parameters = $reflection->getConstructor()?->getParameters() ?? [];
+    $constructorArgs = [];
     
     foreach ($parameters as $parameter) {
       /** @var \ReflectionNamedType $type */
@@ -48,12 +49,12 @@ abstract class AbstractView {
       
       if ($value === null) {
         if ($parameter->isDefaultValueAvailable()) {
-          $payload[$name] = $parameter->getDefaultValue();
+          $constructorArgs[$name] = $parameter->getDefaultValue();
           continue;
         }
         
         if ($parameter->allowsNull()) {
-          $payload[$name] = null;
+          $constructorArgs[$name] = null;
           continue;
         }
         
@@ -75,11 +76,11 @@ abstract class AbstractView {
         $value = $entityManager->getReference($typeName, $value);
       }
       
-      $payload[$name] = $value;
+      $constructorArgs[$name] = $value;
     }
     
     // @phpstan-ignore-next-line
-    return new static(...$payload);
+    return new static(...$constructorArgs);
   }
   
   private static function createValueObject(string $class, mixed $value): mixed {

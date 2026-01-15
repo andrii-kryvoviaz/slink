@@ -55,7 +55,7 @@ final readonly class UpdateImageHandler implements CommandHandlerInterface {
 
     $image->updateAttributes($attributes);
 
-    if ($this->configurationProvider->get('image.enableLicensing') && $command->getLicense() !== null) {
+    if ($this->configurationProvider->get('image.enableLicensing') && $command->hasLicense()) {
       $image->updateLicense($command->getLicense());
     }
 

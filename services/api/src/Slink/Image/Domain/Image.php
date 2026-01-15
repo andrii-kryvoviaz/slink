@@ -32,6 +32,8 @@ final class Image extends AbstractAggregateRoot {
 
   private TagSet $tags;
 
+  private ?License $license = null;
+
   private bool $deleted = false;
 
   /**
@@ -181,6 +183,16 @@ final class Image extends AbstractAggregateRoot {
     if ($event->metadata) {
       $this->setMetadata($event->metadata);
     }
+
+    $this->license = $event->license;
+  }
+
+  public function applyImageLicenseWasUpdated(ImageLicenseWasUpdated $event): void {
+    $this->license = $event->license;
+  }
+
+  public function getLicense(): ?License {
+    return $this->license;
   }
 
   /**
@@ -295,6 +307,7 @@ final class Image extends AbstractAggregateRoot {
       'attributes' => $this->attributes->toPayload(),
       'metadata' => $this->metadata->toPayload(),
       'tags' => $this->tags->toPayload(),
+      'license' => $this->license?->value,
       'deleted' => $this->deleted,
     ];
   }
@@ -309,6 +322,7 @@ final class Image extends AbstractAggregateRoot {
     $image->attributes = ImageAttributes::fromPayload($state['attributes']);
     $image->metadata = ImageMetadata::fromPayload($state['metadata']);
     $image->tags = TagSet::fromPayload($state['tags'] ?? ['tags' => []]);
+    $image->license = isset($state['license']) ? License::tryFrom($state['license']) : null;
     $image->deleted = $state['deleted'];
 
     return $image;

@@ -7,11 +7,8 @@ namespace Tests\Unit\Slink\User\Application\Command\UpdateUserPreferences;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Slink\Image\Application\Service\LicenseSyncServiceInterface;
 use Slink\Image\Domain\Enum\License;
-use Slink\Image\Domain\Image;
-use Slink\Image\Domain\Repository\ImageRepositoryInterface;
-use Slink\Image\Infrastructure\ReadModel\View\ImageView;
-use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Application\Command\UpdateUserPreferences\UpdateUserPreferencesCommand;
 use Slink\User\Application\Command\UpdateUserPreferences\UpdateUserPreferencesHandler;
@@ -24,21 +21,18 @@ use Slink\User\Infrastructure\ReadModel\View\UserPreferencesView;
 final class UpdateUserPreferencesHandlerTest extends TestCase {
     private UserStoreRepositoryInterface&MockObject $userStore;
     private UserPreferencesRepositoryInterface&MockObject $preferencesRepository;
-    private ImageRepositoryInterface&MockObject $imageRepository;
-    private ImageStoreRepositoryInterface&MockObject $imageStore;
+    private LicenseSyncServiceInterface&MockObject $licenseSyncService;
     private UpdateUserPreferencesHandler $handler;
 
     protected function setUp(): void {
         $this->userStore = $this->createMock(UserStoreRepositoryInterface::class);
         $this->preferencesRepository = $this->createMock(UserPreferencesRepositoryInterface::class);
-        $this->imageRepository = $this->createMock(ImageRepositoryInterface::class);
-        $this->imageStore = $this->createMock(ImageStoreRepositoryInterface::class);
+        $this->licenseSyncService = $this->createMock(LicenseSyncServiceInterface::class);
         
         $this->handler = new UpdateUserPreferencesHandler(
             $this->userStore,
             $this->preferencesRepository,
-            $this->imageRepository,
-            $this->imageStore
+            $this->licenseSyncService
         );
     }
 
@@ -69,8 +63,8 @@ final class UpdateUserPreferencesHandlerTest extends TestCase {
             ->method('store')
             ->with($user);
         
-        $this->imageRepository->expects($this->never())
-            ->method('findByUserId');
+        $this->licenseSyncService->expects($this->never())
+            ->method('syncLicenseForUser');
         
         ($this->handler)($command, $userId);
     }
@@ -133,32 +127,9 @@ final class UpdateUserPreferencesHandlerTest extends TestCase {
             ->method('store')
             ->with($user);
         
-        $imageView1 = $this->createMock(ImageView::class);
-        $imageView1->method('getUuid')->willReturn(ID::generate()->toString());
-        $imageView2 = $this->createMock(ImageView::class);
-        $imageView2->method('getUuid')->willReturn(ID::generate()->toString());
-        
-        $this->imageRepository->expects($this->once())
-            ->method('findByUserId')
-            ->with(ID::fromString($userId))
-            ->willReturn([$imageView1, $imageView2]);
-        
-        $image1 = $this->createMock(Image::class);
-        $image1->expects($this->once())
-            ->method('updateLicense')
-            ->with(License::CC0);
-        
-        $image2 = $this->createMock(Image::class);
-        $image2->expects($this->once())
-            ->method('updateLicense')
-            ->with(License::CC0);
-        
-        $this->imageStore->expects($this->exactly(2))
-            ->method('get')
-            ->willReturnOnConsecutiveCalls($image1, $image2);
-        
-        $this->imageStore->expects($this->exactly(2))
-            ->method('store');
+        $this->licenseSyncService->expects($this->once())
+            ->method('syncLicenseForUser')
+            ->with(ID::fromString($userId), License::CC0);
         
         ($this->handler)($command, $userId);
     }
@@ -185,11 +156,8 @@ final class UpdateUserPreferencesHandlerTest extends TestCase {
             ->method('store')
             ->with($user);
         
-        $this->imageRepository->expects($this->never())
-            ->method('findByUserId');
-        
-        $this->imageStore->expects($this->never())
-            ->method('get');
+        $this->licenseSyncService->expects($this->never())
+            ->method('syncLicenseForUser');
         
         ($this->handler)($command, $userId);
     }
@@ -214,25 +182,9 @@ final class UpdateUserPreferencesHandlerTest extends TestCase {
         $this->userStore->expects($this->once())
             ->method('store');
         
-        $imageView = $this->createMock(ImageView::class);
-        $imageView->method('getUuid')->willReturn(ID::generate()->toString());
-        
-        $this->imageRepository->expects($this->once())
-            ->method('findByUserId')
-            ->willReturn([$imageView]);
-        
-        $image = $this->createMock(Image::class);
-        $image->expects($this->once())
-            ->method('updateLicense')
-            ->with(null);
-        
-        $this->imageStore->expects($this->once())
-            ->method('get')
-            ->willReturn($image);
-        
-        $this->imageStore->expects($this->once())
-            ->method('store')
-            ->with($image);
+        $this->licenseSyncService->expects($this->once())
+            ->method('syncLicenseForUser')
+            ->with(ID::fromString($userId), null);
         
         ($this->handler)($command, $userId);
     }
@@ -257,12 +209,9 @@ final class UpdateUserPreferencesHandlerTest extends TestCase {
         $this->userStore->expects($this->once())
             ->method('store');
         
-        $this->imageRepository->expects($this->once())
-            ->method('findByUserId')
-            ->willReturn([]);
-        
-        $this->imageStore->expects($this->never())
-            ->method('get');
+        $this->licenseSyncService->expects($this->once())
+            ->method('syncLicenseForUser')
+            ->with(ID::fromString($userId), License::CC_BY_ND);
         
         ($this->handler)($command, $userId);
     }

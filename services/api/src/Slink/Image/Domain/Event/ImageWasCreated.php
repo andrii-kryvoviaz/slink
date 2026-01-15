@@ -36,7 +36,8 @@ final readonly class ImageWasCreated implements SerializablePayload {
       'uuid' => $this->id->toString(),
       'user' => $this->userId?->toString(),
       'attributes' => $this->attributes->toPayload(),
-      ...($this->metadata? ['metadata' => $this->metadata->toPayload()] : []),
+      ...($this->metadata ? ['metadata' => $this->metadata->toPayload()] : []),
+      ...($this->license ? ['license' => $this->license->value] : []),
     ];
   }
   
