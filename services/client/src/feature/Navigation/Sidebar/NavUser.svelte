@@ -2,6 +2,7 @@
   import ChevronsUpDownIcon from '@lucide/svelte/icons/chevrons-up-down';
   import LinkIcon from '@lucide/svelte/icons/link';
   import LogOutIcon from '@lucide/svelte/icons/log-out';
+  import SettingsIcon from '@lucide/svelte/icons/settings';
   import UserIcon from '@lucide/svelte/icons/user';
   import { UserAvatar } from '@slink/feature/User';
   import * as DropdownMenu from '@slink/ui/components/dropdown-menu/index.js';
@@ -101,6 +102,21 @@
                   class="size-4 text-gray-500 dark:text-gray-400 group-hover:text-blue-900 dark:group-hover:text-blue-200 transition-colors duration-200"
                 />
                 <span>External Integrations</span>
+              </a>
+            {/snippet}
+          </DropdownMenu.Item>
+          <DropdownMenu.Item>
+            {#snippet child({ props })}
+              <a
+                href="/preferences"
+                {...props}
+                class="flex items-center gap-3 w-full px-2 py-1.5 text-sm font-medium rounded-md hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-900 dark:hover:text-blue-200 focus:bg-blue-50 dark:focus:bg-blue-900/20 focus:text-blue-900 dark:focus:text-blue-200 transition-all duration-200 group"
+                onclick={handleNavigateAndClose}
+              >
+                <SettingsIcon
+                  class="size-4 text-gray-500 dark:text-gray-400 group-hover:text-blue-900 dark:group-hover:text-blue-200 transition-colors duration-200"
+                />
+                <span>Preferences</span>
               </a>
             {/snippet}
           </DropdownMenu.Item>

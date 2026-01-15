@@ -15,6 +15,7 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
    * @param int $compressionQuality
    * @param bool $allowOnlyPublicImages
    * @param bool $enableDeduplication
+   * @param bool $enableLicensing
    * @param bool $forceFormatConversion
    * @param string|null $targetFormat
    * @param bool $convertAnimatedImages
@@ -25,6 +26,7 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
     private int $compressionQuality = 80,
     private bool $allowOnlyPublicImages = false,
     private bool $enableDeduplication = true,
+    private bool $enableLicensing = false,
     private bool $forceFormatConversion = false,
     private ?string $targetFormat = null,
     private bool $convertAnimatedImages = false,
@@ -52,6 +54,7 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
       'compressionQuality' => $this->compressionQuality,
       'allowOnlyPublicImages' => $this->allowOnlyPublicImages,
       'enableDeduplication' => $this->enableDeduplication,
+      'enableLicensing' => $this->enableLicensing,
       'forceFormatConversion' => $this->forceFormatConversion,
       'targetFormat' => $this->targetFormat,
       'convertAnimatedImages' => $this->convertAnimatedImages,
@@ -68,6 +71,7 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
       $payload['compressionQuality'] ?? 80,
       $payload['allowOnlyPublicImages'] ?? false,
       $payload['enableDeduplication'] ?? true,
+      $payload['enableLicensing'] ?? false,
       $payload['forceFormatConversion'] ?? false,
       $payload['targetFormat'] ?? null,
       $payload['convertAnimatedImages'] ?? false,
@@ -114,6 +118,13 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
    */
   public function isEnableDeduplication(): bool {
     return $this->enableDeduplication;
+  }
+
+  /**
+   * @return bool
+   */
+  public function isEnableLicensing(): bool {
+    return $this->enableLicensing;
   }
 
   /**

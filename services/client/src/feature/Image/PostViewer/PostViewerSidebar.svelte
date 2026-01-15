@@ -2,10 +2,12 @@
   import { CommentList } from '@slink/feature/Comment';
   import BookmarkButton from '@slink/feature/Image/BookmarkButton/BookmarkButton.svelte';
   import DownloadButton from '@slink/feature/Image/DownloadButton/DownloadButton.svelte';
+  import LicenseInfo from '@slink/feature/Image/License/LicenseInfo.svelte';
   import { Badge, FormattedDate } from '@slink/feature/Text';
   import { UserAvatar } from '@slink/feature/User';
   import * as Collapsible from '@slink/ui/components/collapsible';
 
+  import { page } from '$app/state';
   import Icon from '@iconify/svelte';
 
   import type {
@@ -32,6 +34,9 @@
   }: Props = $props();
 
   const viewerState = usePostViewerState();
+  const licensingEnabled = $derived(
+    page.data.globalSettings?.image?.enableLicensing ?? false,
+  );
 
   let descriptionOpen = $state(true);
   let hasDescription = $derived(!!image.attributes.description?.trim());
@@ -95,6 +100,12 @@
         />
       </div>
     </div>
+
+    {#if licensingEnabled && image.license}
+      <div class="mt-4 text-right">
+        <LicenseInfo license={image.license} size="sm" variant="text" />
+      </div>
+    {/if}
 
     {#if hasDescription}
       <Collapsible.Root bind:open={descriptionOpen} class="mt-2 lg:mt-4">

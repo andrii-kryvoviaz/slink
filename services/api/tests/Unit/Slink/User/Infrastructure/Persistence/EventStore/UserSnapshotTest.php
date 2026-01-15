@@ -209,6 +209,9 @@ final class UserSnapshotTest extends TestCase {
 
     $rolesProperty->setValue($instance, $roles);
     
+    $preferencesProperty = $user->getProperty('preferences');
+    $preferencesProperty->setValue($instance, \Slink\User\Domain\ValueObject\UserPreferences::empty());
+    
     return $instance;
   }
 }

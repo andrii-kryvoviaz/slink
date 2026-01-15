@@ -7,8 +7,11 @@
     ref = $bindable(null),
     class: className,
     checked = $bindable(false),
+    name,
     ...restProps
-  }: WithoutChildrenOrChild<SwitchPrimitive.RootProps> = $props();
+  }: WithoutChildrenOrChild<SwitchPrimitive.RootProps> & {
+    name?: string;
+  } = $props();
 </script>
 
 <SwitchPrimitive.Root
@@ -28,3 +31,6 @@
     )}
   />
 </SwitchPrimitive.Root>
+{#if name}
+  <input type="hidden" {name} value={checked ? 'true' : 'false'} />
+{/if}

@@ -14,6 +14,7 @@
   import type { ImageOutputFormat, ImageParams } from '@slink/feature/Image';
   import { Notice } from '@slink/feature/Text';
   import { Shortcut } from '@slink/ui/components';
+  import { Select } from '@slink/ui/components';
 
   import { routes } from '$lib/utils/url/routes';
   import Icon from '@iconify/svelte';
@@ -24,6 +25,7 @@
   import type { ShareImageResponse } from '@slink/api/Resources/ImageResource';
   import type { Tag } from '@slink/api/Resources/TagResource';
 
+  import type { License } from '@slink/lib/enum/License';
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
 
   import { cn } from '@slink/utils/ui';
@@ -37,6 +39,11 @@
 
   let { data }: Props = $props();
   let image = $state(data.image);
+  let licenses = $derived((data as { licenses?: License[] }).licenses ?? []);
+  let licensingEnabled = $derived(
+    (data as { licensingEnabled?: boolean }).licensingEnabled ?? false,
+  );
+  let selectedLicense = $state(image.license ?? '');
 
   const historyFeedState = useUploadHistoryFeed();
 
@@ -161,6 +168,38 @@
       tags: updatedTags,
     });
   };
+
+  const licenseOptions = $derived(
+    licenses.map((license: License) => ({
+      value: license.id,
+      label: license.title,
+    })),
+  );
+
+  const {
+    isLoading: licenseIsLoading,
+    error: updateLicenseError,
+    run: updateLicense,
+  } = ReactiveState((imageId: string, license: string) => {
+    return ApiClient.image.updateDetails(imageId, { license });
+  });
+
+  const handleSaveLicense = async (license: string) => {
+    await updateLicense(image.id, license);
+
+    if ($updateLicenseError) {
+      printErrorsAsToastMessage($updateLicenseError);
+      return;
+    }
+
+    image = { ...image, license };
+  };
+
+  $effect(() => {
+    if (selectedLicense !== (image.license ?? '') && selectedLicense) {
+      handleSaveLicense(selectedLicense);
+    }
+  });
 </script>
 
 <svelte:head>
@@ -212,6 +251,30 @@
           change: (description: string) => handleSaveDescription(description),
         }}
       />
+
+      {#if licensingEnabled && licenses.length > 0}
+        <div>
+          <div class="flex items-center gap-2 mb-2">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+              License
+            </h2>
+            {#if $licenseIsLoading}
+              <span class="text-xs text-gray-500 dark:text-gray-400"
+                >Saving...</span
+              >
+            {/if}
+          </div>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">
+            Choose how others can use this image
+          </p>
+          <Select
+            class="w-full"
+            items={licenseOptions}
+            bind:value={selectedLicense}
+            placeholder="Select a license..."
+          />
+        </div>
+      {/if}
 
       {#if image.supportsResize}
         <div>

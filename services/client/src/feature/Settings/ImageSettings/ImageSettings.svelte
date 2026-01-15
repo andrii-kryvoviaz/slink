@@ -228,4 +228,25 @@
       {/snippet}
     </SettingItem>
   {/if}
+
+  <SettingItem
+    defaultValue={defaultSettings?.enableLicensing}
+    currentValue={settings.enableLicensing}
+    reset={(value) => {
+      settings.enableLicensing = value;
+    }}
+  >
+    {#snippet label()}
+      Enable Licensing
+    {/snippet}
+    {#snippet hint()}
+      Allow users to set licenses on their images (Creative Commons, etc.)
+    {/snippet}
+    <div class="flex justify-end">
+      <Switch
+        name="imageEnableLicensing"
+        bind:checked={settings.enableLicensing}
+      />
+    </div>
+  </SettingItem>
 </SettingsPane>

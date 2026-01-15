@@ -70,7 +70,7 @@ final readonly class ImageAttributes extends AbstractCompoundValueObject {
     bool $isPublic,
     ?DateTime $createdAt = null,
     ?DateTime $updatedAt = null,
-    ?int $views = 0
+    ?int $views = 0,
   ): self {
     return new self($fileName, $description, $isPublic, $createdAt ?? DateTime::now(), $updatedAt, $views);
   }

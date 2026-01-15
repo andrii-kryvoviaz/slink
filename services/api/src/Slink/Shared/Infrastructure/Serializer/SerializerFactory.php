@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Slink\Shared\Infrastructure\Serializer;
 
 use Slink\Comment\Infrastructure\Serializer\CommentNormalizer;
+use Slink\Image\Infrastructure\Serializer\ImageNormalizer;
 use Slink\Shared\Infrastructure\Serializer\Enum\Encoder;
 use Slink\Shared\Infrastructure\Serializer\Enum\Normalizer;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
@@ -44,6 +45,7 @@ abstract class SerializerFactory {
     
     $normalizers = [
       new DateTimeNormalizer(),
+      new ImageNormalizer(),
       new CommentNormalizer(),
       new $normalizerClass(...$normalizerArgs), // @phpstan-ignore-line
     ];

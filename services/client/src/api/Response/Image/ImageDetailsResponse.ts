@@ -15,4 +15,5 @@ export type ImageDetailsResponse = {
   supportsFormatConversion: boolean;
   isAnimated: boolean;
   bookmarkCount: number;
+  license: string | null;
 };

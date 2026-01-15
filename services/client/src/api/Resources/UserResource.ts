@@ -4,8 +4,9 @@ import type { EmptyResponse, UserListingResponse } from '@slink/api/Response';
 import type { AuthenticatedUser } from '@slink/api/Response/User/AuthenticatedUser';
 import type { CheckStatusResponse } from '@slink/api/Response/User/CheckStatusResponse';
 import type { SingleUserResponse } from '@slink/api/Response/User/SingleUserResponse';
+import type { UserPreferencesResponse } from '@slink/api/Response/User/UserPreferencesResponse';
 
-import { type UserRole, type UserStatus } from '@slink/lib/auth/Type/User';
+import { UserRole, UserStatus } from '@slink/lib/auth/Type/User';
 
 export class UserResource extends AbstractResource {
   public async checkStatus(userId: string): Promise<CheckStatusResponse> {
@@ -76,6 +77,22 @@ export class UserResource extends AbstractResource {
   public async updateProfile({ display_name }: { display_name: string }) {
     return this.patch('/user/profile', {
       json: { display_name },
+    });
+  }
+
+  public async getPreferences(): Promise<UserPreferencesResponse> {
+    return this.get('/user/preferences');
+  }
+
+  public async updatePreferences({
+    defaultLicense,
+    syncLicenseToImages = false,
+  }: {
+    defaultLicense: string | null;
+    syncLicenseToImages?: boolean;
+  }): Promise<EmptyResponse> {
+    return this.patch('/user/preferences', {
+      json: { defaultLicense, syncLicenseToImages },
     });
   }
 }

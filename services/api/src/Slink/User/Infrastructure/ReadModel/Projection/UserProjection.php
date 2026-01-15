@@ -14,22 +14,21 @@ use Slink\User\Domain\Event\Role\UserGrantedRole;
 use Slink\User\Domain\Event\Role\UserRevokedRole;
 use Slink\User\Domain\Event\UserDisplayNameWasChanged;
 use Slink\User\Domain\Event\UserPasswordWasChanged;
+use Slink\User\Domain\Event\UserPreferencesWasUpdated;
 use Slink\User\Domain\Event\UserStatusWasChanged;
 use Slink\User\Domain\Event\UserWasCreated;
 use Slink\User\Domain\Repository\UserRepositoryInterface;
+use Slink\User\Infrastructure\ReadModel\Repository\UserPreferencesRepository;
+use Slink\User\Infrastructure\ReadModel\View\UserPreferencesView;
 use Slink\User\Infrastructure\ReadModel\View\UserRoleView;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
 
 final class UserProjection extends AbstractProjection {
-  /**
-   * @param UserRepositoryInterface $repository
-   * @param UserRoleManagerInterface $userRoleManager
-   * @param EntityManagerInterface $entityManager
-   */
   public function __construct(
     private readonly UserRepositoryInterface $repository,
     private readonly UserRoleManagerInterface $userRoleManager,
-    private readonly EntityManagerInterface $entityManager
+    private readonly EntityManagerInterface $entityManager,
+    private readonly UserPreferencesRepository $preferencesRepository,
   ) {
   }
   
@@ -122,5 +121,22 @@ final class UserProjection extends AbstractProjection {
     $this->repository->save($user);
     
     $this->userRoleManager->storePermissionsVersion($event->id->toString(), time());
+  }
+  
+  /**
+   * @throws NonUniqueResultException
+   * @throws NotFoundException
+   */
+  public function handleUserPreferencesWasUpdated(UserPreferencesWasUpdated $event): void {
+    $userId = $event->id->toString();
+    $existingPrefs = $this->preferencesRepository->findByUserId($userId);
+    
+    if ($existingPrefs) {
+      $existingPrefs->setPreferences($event->preferences);
+      $this->preferencesRepository->save($existingPrefs);
+    } else {
+      $prefs = UserPreferencesView::create($userId, $event->preferences);
+      $this->preferencesRepository->save($prefs);
+    }
   }
 }

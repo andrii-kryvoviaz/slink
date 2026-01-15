@@ -8,6 +8,7 @@ use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Slink\Image\Domain\Enum\License;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Domain\ValueObject\ImageMetadata;
 use Slink\Image\Infrastructure\ReadModel\Repository\ImageRepository;
@@ -28,6 +29,9 @@ class ImageView extends AbstractView implements CursorAwareInterface {
   #[ORM\JoinColumn(name: 'image_id', referencedColumnName: 'uuid')]
   #[ORM\InverseJoinColumn(name: 'tag_id', referencedColumnName: 'uuid')]
   private Collection $tags;
+
+  #[ORM\OneToOne(mappedBy: 'image', targetEntity: ImageLicenseView::class, cascade: ['persist', 'remove'], fetch: 'EAGER')]
+  private ?ImageLicenseView $license = null;
 
   /**
    * @param string $uuid
@@ -178,6 +182,22 @@ class ImageView extends AbstractView implements CursorAwareInterface {
     }
   }
 
+  public function getLicenseView(): ?ImageLicenseView {
+    return $this->license;
+  }
+
+  public function getLicense(): ?License {
+    return $this->license?->getLicense();
+  }
+
+  public function getEffectiveLicense(): License {
+    return $this->license?->getLicense() ?? License::AllRightsReserved;
+  }
+
+  public function setLicense(?ImageLicenseView $license): void {
+    $this->license = $license;
+  }
+
   /**
    * @return array<string, mixed>
    */
@@ -186,6 +206,7 @@ class ImageView extends AbstractView implements CursorAwareInterface {
       'id' => $this->uuid,
       'user' => $this->getOwner(),
       'bookmarkCount' => $this->bookmarkCount,
+      'license' => $this->getLicense()?->value,
       ...$this->attributes->toPayload(),
       ...$this->metadata ? $this->metadata->toPayload() : []
     ];
