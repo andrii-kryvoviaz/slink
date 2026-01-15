@@ -15,7 +15,6 @@ export const themeIcons: string[] = [
   'ph:question',
   'ph:github-logo',
   'ph:gear-fine-light',
-  'ph:pencil-simple',
   'ph:check',
   'ph:shield-check',
   'ph:lock',

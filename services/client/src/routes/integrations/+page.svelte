@@ -5,31 +5,39 @@
 </script>
 
 <svelte:head>
-  <title>API Keys | Slink</title>
+  <title>Integrations | Slink</title>
 </svelte:head>
 
-<div class="min-h-full">
-  <div
-    class="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8"
-    in:fade={{ duration: 400 }}
-  >
-    <div class="mb-8">
-      <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">
-        API Keys
-      </h1>
-      <p class="mt-2 text-slate-600 dark:text-slate-400">
-        Manage your API keys for ShareX and other third-party integrations
-      </p>
-    </div>
+<div
+  class="flex flex-col w-full max-w-2xl px-6 py-8"
+  in:fade={{ duration: 150 }}
+>
+  <header class="mb-8">
+    <h1 class="text-xl font-semibold text-gray-900 dark:text-white">
+      Integrations
+    </h1>
+    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+      Manage your API keys for ShareX and other third-party integrations
+    </p>
+  </header>
 
-    <div class="grid gap-8">
-      <div class="space-y-6">
-        <div
-          class="rounded-2xl bg-white p-6 shadow-sm dark:bg-slate-800/50 border border-slate-200/50 dark:border-slate-700/50"
+  <div class="space-y-8">
+    <section class="space-y-1">
+      <div class="flex items-center justify-between gap-4 pb-3">
+        <h2
+          class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
         >
+          API Keys
+        </h2>
+      </div>
+
+      <div
+        class="divide-y divide-gray-100 dark:divide-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 overflow-hidden"
+      >
+        <div class="px-4 py-4">
           <ApiKeyManager />
         </div>
       </div>
-    </div>
+    </section>
   </div>
 </div>
