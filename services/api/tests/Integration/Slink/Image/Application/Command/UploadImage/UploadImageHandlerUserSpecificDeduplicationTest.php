@@ -25,6 +25,7 @@ use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
+use Slink\User\Domain\Repository\UserPreferencesRepositoryInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 final class UploadImageHandlerUserSpecificDeduplicationTest extends TestCase {
@@ -72,6 +73,8 @@ final class UploadImageHandlerUserSpecificDeduplicationTest extends TestCase {
       new ImageMetadata(1024, 'image/jpeg', 800, 600, 'test_hash')
     );
 
+    $userPreferencesRepo = $this->createMock(UserPreferencesRepositoryInterface::class);
+
     $this->handler = new UploadImageHandler(
       $this->configurationProvider,
       $this->imageStoreRepository,
@@ -81,7 +84,8 @@ final class UploadImageHandlerUserSpecificDeduplicationTest extends TestCase {
       $conversionResolver,
       $creationContext,
       $metadataFactory,
-      $storage
+      $storage,
+      $userPreferencesRepo
     );
   }
 

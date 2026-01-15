@@ -22,7 +22,7 @@ use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
-use Slink\User\Infrastructure\ReadModel\Repository\UserPreferencesRepository;
+use Slink\User\Domain\Repository\UserPreferencesRepositoryInterface;
 
 final readonly class UploadImageHandler implements CommandHandlerInterface {
 
@@ -39,7 +39,7 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
     private ImageCreationContext           $creationContext,
     private ImageMetadataFactory           $metadataFactory,
     private StorageInterface               $storage,
-    private UserPreferencesRepository      $userPreferencesRepository,
+    private UserPreferencesRepositoryInterface $userPreferencesRepository,
   ) {
   }
 

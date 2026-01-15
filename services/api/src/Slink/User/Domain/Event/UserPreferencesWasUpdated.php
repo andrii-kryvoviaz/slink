@@ -14,6 +14,9 @@ final readonly class UserPreferencesWasUpdated implements SerializablePayload {
     public UserPreferences $preferences
   ) {}
 
+  /**
+   * @return array<string, mixed>
+   */
   public function toPayload(): array {
     return [
       'uuid' => $this->id->toString(),
@@ -21,6 +24,9 @@ final readonly class UserPreferencesWasUpdated implements SerializablePayload {
     ];
   }
 
+  /**
+   * @param array<string, mixed> $payload
+   */
   public static function fromPayload(array $payload): static {
     return new static(
       ID::fromString($payload['uuid']),

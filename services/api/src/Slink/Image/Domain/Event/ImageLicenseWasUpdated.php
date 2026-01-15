@@ -15,6 +15,9 @@ final readonly class ImageLicenseWasUpdated implements SerializablePayload {
   ) {
   }
 
+  /**
+   * @return array<string, mixed>
+   */
   public function toPayload(): array {
     return [
       'uuid' => $this->id->toString(),
@@ -22,6 +25,9 @@ final readonly class ImageLicenseWasUpdated implements SerializablePayload {
     ];
   }
 
+  /**
+   * @param array<string, mixed> $payload
+   */
   public static function fromPayload(array $payload): static {
     $license = isset($payload['license']) && is_string($payload['license'])
       ? License::tryFrom($payload['license'])

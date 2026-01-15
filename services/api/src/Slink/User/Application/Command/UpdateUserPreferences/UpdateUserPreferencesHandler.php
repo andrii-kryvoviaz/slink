@@ -9,13 +9,13 @@ use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\ValueObject\ID;
+use Slink\User\Domain\Repository\UserPreferencesRepositoryInterface;
 use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
-use Slink\User\Infrastructure\ReadModel\Repository\UserPreferencesRepository;
 
 final readonly class UpdateUserPreferencesHandler implements CommandHandlerInterface {
   public function __construct(
     private UserStoreRepositoryInterface $userStore,
-    private UserPreferencesRepository $preferencesRepository,
+    private UserPreferencesRepositoryInterface $preferencesRepository,
     private ImageRepositoryInterface $imageRepository,
     private ImageStoreRepositoryInterface $imageStore,
   ) {

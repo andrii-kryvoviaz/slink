@@ -16,6 +16,9 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 #[ORM\Table(name: 'user_preferences')]
 #[ORM\Entity(repositoryClass: UserPreferencesRepository::class)]
 class UserPreferencesView extends AbstractView {
+  /**
+   * @param array<string, mixed> $preferences
+   */
   public function __construct(
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]
@@ -62,5 +65,13 @@ class UserPreferencesView extends AbstractView {
   public function setPreferences(UserPreferences $preferences): void {
     $this->preferences = $preferences->toPayload();
     $this->updatedAt = DateTime::now();
+  }
+
+  public function getCreatedAt(): DateTime {
+    return $this->createdAt;
+  }
+
+  public function getUpdatedAt(): DateTime {
+    return $this->updatedAt;
   }
 }

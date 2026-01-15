@@ -187,8 +187,8 @@ final class ImageTest extends TestCase {
       $userId,
       ImageAttributes::create('test.jpg', 'Test description', true),
       new ImageMetadata(1024, 'image/jpeg', 800, 600, $sha1Hash),
-      $imageFile,
-      $context
+      $context,
+      $imageFile
     );
   }
 
@@ -222,8 +222,8 @@ final class ImageTest extends TestCase {
       $user2Id,
       ImageAttributes::create('test.jpg', 'Test description', true),
       new ImageMetadata(1024, 'image/jpeg', 800, 600, $sha1Hash),
-      $imageFile,
-      $context
+      $context,
+      $imageFile
     );
 
     $this->assertEquals($user2Id, $image->getUserId());
@@ -258,8 +258,8 @@ final class ImageTest extends TestCase {
       null,
       ImageAttributes::create('test.jpg', 'Test description', true),
       new ImageMetadata(1024, 'image/jpeg', 800, 600, $sha1Hash),
-      $imageFile,
-      $context
+      $context,
+      $imageFile
     );
 
     $this->assertNull($image->getUserId());

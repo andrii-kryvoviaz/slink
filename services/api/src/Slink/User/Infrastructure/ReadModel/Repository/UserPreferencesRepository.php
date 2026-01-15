@@ -6,9 +6,10 @@ namespace Slink\User\Infrastructure\ReadModel\Repository;
 
 use Doctrine\ORM\NonUniqueResultException;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractRepository;
+use Slink\User\Domain\Repository\UserPreferencesRepositoryInterface;
 use Slink\User\Infrastructure\ReadModel\View\UserPreferencesView;
 
-final class UserPreferencesRepository extends AbstractRepository {
+final class UserPreferencesRepository extends AbstractRepository implements UserPreferencesRepositoryInterface {
   protected static function entityClass(): string {
     return UserPreferencesView::class;
   }
