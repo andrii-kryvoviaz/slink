@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace UI\Http\Rest\Controller\Image;
 
+use Slink\Collection\Application\Command\AddItemToCollection\AddItemToCollectionCommand;
 use Slink\Image\Application\Command\TagImage\TagImageCommand;
 use Slink\Image\Application\Command\UploadImage\UploadImageCommand;
 use Slink\Shared\Application\Command\CommandTrait;
@@ -33,8 +34,16 @@ final class UploadImageController {
     ]));
     
     foreach ($command->getTagIds() as $tagId) {
-      $tagImageCommand = new TagImageCommand($command->getId()->toString(), $tagId);
-      $this->handle($tagImageCommand->withContext([
+      $this->handle((new TagImageCommand($command->getId()->toString(), $tagId))->withContext([
+        'userId' => $user?->getIdentifier()
+      ]));
+    }
+    
+    foreach ($command->getCollectionIds() as $collectionId) {
+      $this->handle((new AddItemToCollectionCommand(
+        collectionId: $collectionId,
+        itemId: $command->getId()->toString(),
+      ))->withContext([
         'userId' => $user?->getIdentifier()
       ]));
     }

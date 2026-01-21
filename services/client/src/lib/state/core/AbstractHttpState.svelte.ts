@@ -80,7 +80,7 @@ export abstract class AbstractHttpState<T> {
   }
 
   get hasError(): boolean {
-    return this._status === 'error';
+    return this._error !== null;
   }
 
   get error(): ValidationException | null {

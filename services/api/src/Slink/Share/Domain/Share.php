@@ -7,25 +7,25 @@ namespace Slink\Share\Domain;
 use EventSauce\EventSourcing\AggregateRootId;
 use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use Slink\Share\Domain\Event\ShareWasCreated;
+use Slink\Share\Domain\ValueObject\ShareableReference;
 use Slink\Share\Domain\ValueObject\ShareContext;
 use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
 
 final class Share extends AbstractAggregateRoot {
-  private ID $imageId;
+  private ShareableReference $shareable;
   private string $targetUrl;
   private DateTime $createdAt;
   private ShareContext $context;
 
   protected function __construct(ID $id) {
     parent::__construct($id);
-    $this->context = ShareContext::empty();
   }
 
   public static function create(
     ID $id,
-    ID $imageId,
+    ShareableReference $shareable,
     string $targetUrl,
     DateTime $createdAt,
     ShareContext $context,
@@ -33,7 +33,7 @@ final class Share extends AbstractAggregateRoot {
     $share = new self($id);
     $share->recordThat(new ShareWasCreated(
       $id,
-      $imageId,
+      $shareable,
       $targetUrl,
       $createdAt,
       $context,
@@ -43,14 +43,18 @@ final class Share extends AbstractAggregateRoot {
   }
 
   protected function applyShareWasCreated(ShareWasCreated $event): void {
-    $this->imageId = $event->imageId;
+    $this->shareable = $event->shareable;
     $this->targetUrl = $event->targetUrl;
     $this->createdAt = $event->createdAt;
     $this->context = $event->context;
   }
 
-  public function getImageId(): ID {
-    return $this->imageId;
+  public function getShareable(): ShareableReference {
+    return $this->shareable;
+  }
+
+  public function getShareableId(): string {
+    return $this->shareable->getShareableId();
   }
 
   public function getTargetUrl(): string {
@@ -69,27 +73,27 @@ final class Share extends AbstractAggregateRoot {
     return $this->context->getShortCode();
   }
 
-  /**
-   * @return array<string, mixed>
-   */
   protected function createSnapshotState(): array {
     return [
-      'imageId' => $this->imageId->toString(),
+      'shareable' => $this->shareable->toPayload(),
       'targetUrl' => $this->targetUrl,
       'createdAt' => $this->createdAt->toString(),
       'context' => $this->context->toPayload(),
     ];
   }
 
-  /**
-   * @param array<string, mixed> $state
-   */
   protected static function reconstituteFromSnapshotState(AggregateRootId $id, $state): AggregateRootWithSnapshotting {
     $share = new self(ID::fromString($id->toString()));
-    $share->imageId = ID::fromString($state['imageId']);
+
+    if (isset($state['imageId'])) {
+      $share->shareable = ShareableReference::forImage(ID::fromString($state['imageId']));
+    } else {
+      $share->shareable = ShareableReference::fromPayload($state['shareable']);
+    }
+
     $share->targetUrl = $state['targetUrl'];
     $share->createdAt = DateTime::fromString($state['createdAt']);
-    $share->context = ShareContext::fromPayload($state['context'] ?? []);
+    $share->context = ShareContext::fromPayload($state['context'] ?? [], $share->shareable);
 
     return $share;
   }

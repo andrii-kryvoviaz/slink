@@ -41,6 +41,11 @@ final readonly class UploadImageCommand implements CommandInterface {
       new Assert\Uuid(message: 'Invalid tag ID format')
     ])]
     private array $tagIds = [],
+    
+    #[Assert\All([
+      new Assert\Uuid(message: 'Invalid collection ID format')
+    ])]
+    private array $collectionIds = [],
   ) {
     $this->id = ID::generate();
   }
@@ -78,5 +83,12 @@ final readonly class UploadImageCommand implements CommandInterface {
    */
   public function getTagIds(): array {
     return $this->tagIds;
+  }
+  
+  /**
+   * @return array<string>
+   */
+  public function getCollectionIds(): array {
+    return $this->collectionIds;
   }
 }

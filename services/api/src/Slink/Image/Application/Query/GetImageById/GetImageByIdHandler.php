@@ -6,6 +6,7 @@ namespace Slink\Image\Application\Query\GetImageById;
 
 use Doctrine\ORM\NonUniqueResultException;
 use Ramsey\Uuid\Uuid;
+use Slink\Collection\Domain\Repository\CollectionItemRepositoryInterface;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Image\Domain\Service\ImageAnalyzerInterface;
 use Slink\Image\Domain\Service\ImageProcessorInterface;
@@ -24,7 +25,8 @@ final readonly class GetImageByIdHandler implements QueryHandlerInterface {
     private ImageRepositoryInterface $repository,
     private ImageAnalyzerInterface $imageAnalyzer,
     private StorageInterface $storage,
-    private ImageProcessorInterface $imageProcessor
+    private ImageProcessorInterface $imageProcessor,
+    private CollectionItemRepositoryInterface $collectionItemRepository,
   ) {
   }
   
@@ -46,12 +48,16 @@ final readonly class GetImageByIdHandler implements QueryHandlerInterface {
     $mimeType = $imageView->getMimeType();
     $isAnimated = $this->checkIsAnimated($imageView->getFileName(), $mimeType);
     
+    $imageId = (string) $imageView->getUuid();
+    $collectionIds = $this->collectionItemRepository->getCollectionIdsByImageIds([$imageId]);
+    
     return Item::fromPayload(ImageView::class, [
       ...$imageView->toPayload(),
       'supportsResize' => $this->imageAnalyzer->supportsResize($mimeType),
       'supportsFormatConversion' => $this->imageAnalyzer->supportsFormatConversion($mimeType),
       'isAnimated' => $isAnimated,
       'url' => "/image/{$imageView->getFileName()}",
+      'collectionIds' => $collectionIds[$imageId] ?? [],
     ]);
   }
 

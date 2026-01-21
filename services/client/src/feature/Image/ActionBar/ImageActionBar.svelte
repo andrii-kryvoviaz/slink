@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { CollectionPicker } from '@slink/feature/Collection';
   import { ImageDeletePopover } from '@slink/feature/Image';
   import { Loader } from '@slink/feature/Layout';
   import {
@@ -21,8 +22,11 @@
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
-  import type { ShareImageResponse } from '@slink/api/Resources/ImageResource';
+  import type { ShareResponse } from '@slink/api/Response';
   import type { ImageListingItem } from '@slink/api/Response';
+
+  import { createCollectionPickerState } from '@slink/lib/state/CollectionPickerState.svelte';
+  import { createCreateCollectionModalState } from '@slink/lib/state/CreateCollectionModalState.svelte';
 
   import { cn } from '@slink/utils/ui';
 
@@ -33,12 +37,23 @@
     iconSizeVariants,
   } from './ImageActionBar.theme';
 
-  type ActionButton = 'download' | 'visibility' | 'share' | 'delete' | 'copy';
+  type ActionButton =
+    | 'download'
+    | 'visibility'
+    | 'share'
+    | 'delete'
+    | 'copy'
+    | 'collection';
   type ActionLayout = 'default' | 'hero';
   type ButtonPosition = 'first' | 'middle' | 'last' | 'only';
 
   interface Props {
-    image: { id: string; fileName: string; isPublic: boolean };
+    image: {
+      id: string;
+      fileName: string;
+      isPublic: boolean;
+      collectionIds?: string[];
+    };
     buttons?: ActionButton[];
     compact?: boolean;
     layout?: ActionLayout;
@@ -106,13 +121,27 @@
     error: shareError,
     data: shareData,
     run: shareImage,
-  } = ReactiveState<ShareImageResponse>(
+  } = ReactiveState<ShareResponse>(
     (imageId: string) => ApiClient.image.shareImage(imageId, {}),
     { minExecutionTime: 300 },
   );
 
   let isCopiedActive = $state(false);
   let deletePopoverOpen = $state(false);
+  let collectionPopoverOpen = $state(false);
+
+  const collectionPickerState = createCollectionPickerState();
+  const createCollectionModalState = createCreateCollectionModalState();
+
+  $effect(() => {
+    collectionPickerState.setImage(image.id, image.collectionIds ?? []);
+  });
+
+  $effect(() => {
+    if (collectionPopoverOpen) {
+      collectionPickerState.load();
+    }
+  });
 
   const copyTooltip = $derived.by(() => {
     if ($shareIsLoading) return 'Generating...';
@@ -141,9 +170,7 @@
       toast.error('Failed to generate share link. Please try again later.');
       return;
     }
-    await navigator.clipboard.writeText(
-      routes.share.fromResponse($shareData, { absolute: true }),
-    );
+    await navigator.clipboard.writeText(routes.share.fromResponse($shareData));
     isCopiedActive = true;
     setTimeout(() => (isCopiedActive = false), 1000);
   };
@@ -306,6 +333,43 @@
   </Overlay>
 {/snippet}
 
+{#snippet collectionButton(position: ButtonPosition)}
+  <Overlay
+    bind:open={collectionPopoverOpen}
+    variant="floating"
+    size="none"
+    contentProps={{ align: 'end' }}
+    triggerClass={isHero ? '' : 'flex-1'}
+  >
+    {#snippet trigger()}
+      <ButtonGroupItem
+        variant="default"
+        size="md"
+        position={isHero ? 'only' : position}
+        class={heroClass()}
+        aria-label="Add to collection"
+        tooltip="Add to collection"
+      >
+        <Icon icon="ph:folder-simple-plus" class={iconClass} />
+      </ButtonGroupItem>
+    {/snippet}
+    <CollectionPicker
+      pickerState={collectionPickerState}
+      createModalState={createCollectionModalState}
+      variant="popover"
+      onToggle={({ added, collectionId }) => {
+        const ids = image.collectionIds ?? [];
+        image = {
+          ...image,
+          collectionIds: added
+            ? [...ids, collectionId]
+            : ids.filter((id) => id !== collectionId),
+        };
+      }}
+    />
+  </Overlay>
+{/snippet}
+
 {#snippet renderButton(button: ActionButton, position: ButtonPosition)}
   {#if button === 'download'}
     {@render downloadButton(position)}
@@ -317,6 +381,8 @@
     {@render shareButton(position)}
   {:else if button === 'delete'}
     {@render deleteButton(position)}
+  {:else if button === 'collection'}
+    {@render collectionButton(position)}
   {/if}
 {/snippet}
 

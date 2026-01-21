@@ -10,5 +10,7 @@ use Slink\Shared\Domain\ValueObject\ID;
 interface ShareStoreRepositoryInterface {
   public function get(ID $id): Share;
 
+  public function findByTargetUrl(string $targetUrl): ?Share;
+
   public function store(Share $share): void;
 }

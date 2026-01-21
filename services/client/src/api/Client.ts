@@ -14,6 +14,7 @@ import {
   AnalyticsResource,
   AuthResource,
   BookmarkResource,
+  CollectionResource,
   CommentResource,
   ImageResource,
   NotificationResource,
@@ -38,6 +39,7 @@ const RESOURCES = {
   comment: CommentResource,
   notification: NotificationResource,
   bookmark: BookmarkResource,
+  collection: CollectionResource,
 };
 
 type ResourceType = keyof typeof RESOURCES;

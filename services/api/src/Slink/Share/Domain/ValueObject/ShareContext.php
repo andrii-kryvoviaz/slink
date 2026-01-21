@@ -9,25 +9,24 @@ use Slink\Shared\Domain\ValueObject\ID;
 
 final readonly class ShareContext extends AbstractValueObject {
   public function __construct(
-    private readonly ?string $shortCode = null,
-    private readonly ?ID $shortUrlId = null,
+    private ShareableReference $shareable,
+    private ?string $shortCode = null,
+    private ?ID $shortUrlId = null,
   ) {
   }
 
-  public static function empty(): self {
-    return new self();
+  public static function for(ShareableReference $shareable): self {
+    return new self($shareable);
   }
 
-  public static function withShortUrl(ID $shortUrlId, string $shortCode): self {
-    return new self($shortCode, $shortUrlId);
+  public function withShortUrl(ID $shortUrlId, string $shortCode): self {
+    return new self($this->shareable, $shortCode, $shortUrlId);
   }
 
-  /**
-   * @phpstan-assert-if-true !null $this->shortCode
-   * @phpstan-assert-if-true !null $this->shortUrlId
-   * @phpstan-assert-if-true string $this->getShortCode()
-   * @phpstan-assert-if-true ID $this->getShortUrlId()
-   */
+  public function getShareable(): ShareableReference {
+    return $this->shareable;
+  }
+
   public function hasShortUrl(): bool {
     return $this->shortCode !== null && $this->shortUrlId !== null;
   }
@@ -40,9 +39,6 @@ final readonly class ShareContext extends AbstractValueObject {
     return $this->shortUrlId;
   }
 
-  /**
-   * @return array<string, mixed>
-   */
   public function toPayload(): array {
     return [
       'shortCode' => $this->shortCode,
@@ -50,11 +46,9 @@ final readonly class ShareContext extends AbstractValueObject {
     ];
   }
 
-  /**
-   * @param array<string, mixed> $payload
-   */
-  public static function fromPayload(array $payload): self {
+  public static function fromPayload(array $payload, ?ShareableReference $shareable = null): self {
     return new self(
+      $shareable ?? ShareableReference::fromPayload($payload['shareable'] ?? []),
       $payload['shortCode'] ?? null,
       isset($payload['shortUrlId']) ? ID::fromString($payload['shortUrlId']) : null,
     );

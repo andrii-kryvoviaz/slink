@@ -6,6 +6,7 @@ import type {
   ImagePlainListingResponse,
   UploadedImageResponse,
 } from '@slink/api/Response';
+import type { ShareResponse } from '@slink/api/Response/Share/ShareResponse';
 
 import type { License } from '@slink/lib/enum/License';
 
@@ -173,7 +174,7 @@ export class ImageResource extends AbstractResource {
       crop?: boolean;
       format?: string;
     },
-  ): Promise<ShareImageResponse> {
+  ): Promise<ShareResponse> {
     const searchParams = new URLSearchParams();
 
     if (params.width !== undefined) {
@@ -199,7 +200,3 @@ export class ImageResource extends AbstractResource {
     return this.get('/licenses');
   }
 }
-
-export type ShareImageResponse =
-  | { type: 'shortUrl'; shortCode: string }
-  | { type: 'signed'; targetUrl: string };

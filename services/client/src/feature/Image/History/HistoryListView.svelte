@@ -89,8 +89,15 @@
                   id: item.id,
                   fileName: item.attributes.fileName,
                   isPublic: item.attributes.isPublic,
+                  collectionIds: item.collectionIds,
                 }}
-                buttons={['download', 'visibility', 'copy', 'delete']}
+                buttons={[
+                  'download',
+                  'visibility',
+                  'collection',
+                  'copy',
+                  'delete',
+                ]}
                 on={{ imageDelete: onImageDelete }}
                 compact={true}
               />

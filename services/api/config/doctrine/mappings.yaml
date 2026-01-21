@@ -27,3 +27,9 @@ parameters:
     Share:
       dir: '%kernel.project_dir%/src/Slink/Share/Infrastructure/ReadModel/View'
       prefix: 'Slink\Share\Infrastructure\ReadModel\View'
+    ShareEmbedded:
+      dir: '%kernel.project_dir%/src/Slink/Share/Domain/ValueObject'
+      prefix: 'Slink\Share\Domain\ValueObject'
+    Collection:
+      dir: '%kernel.project_dir%/src/Slink/Collection/Infrastructure/ReadModel/View'
+      prefix: 'Slink\Collection\Infrastructure\ReadModel\View'
