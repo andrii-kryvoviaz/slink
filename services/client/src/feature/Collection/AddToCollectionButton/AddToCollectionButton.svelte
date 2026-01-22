@@ -1,4 +1,12 @@
 <script lang="ts">
+  import {
+    type AddToCollectionButtonSize,
+    type AddToCollectionButtonVariant,
+    addToCollectionButtonTheme,
+    addToCollectionIconTheme,
+    collectionItemTheme,
+    collectionListTheme,
+  } from '@slink/feature/Collection/AddToCollectionButton/AddToCollectionButton.theme';
   import { Loader } from '@slink/feature/Layout';
   import { Tooltip, type TooltipVariant } from '@slink/ui/components/tooltip';
   import { Popover as PopoverPrimitive } from 'bits-ui';
@@ -10,15 +18,6 @@
   import type { CollectionResponse } from '@slink/api/Response';
 
   import { createCollectionPickerState } from '@slink/lib/state/CollectionPickerState.svelte';
-
-  import {
-    type AddToCollectionButtonSize,
-    type AddToCollectionButtonVariant,
-    addToCollectionButtonTheme,
-    addToCollectionIconTheme,
-    collectionItemTheme,
-    collectionListTheme,
-  } from './AddToCollectionButton.theme';
 
   interface Props {
     imageId: string;

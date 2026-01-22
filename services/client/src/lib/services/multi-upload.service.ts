@@ -19,6 +19,7 @@ export interface UploadItem {
 export interface UploadOptions {
   isGuest?: boolean;
   tagIds?: string[];
+  collectionIds?: string[];
   onProgress?: (item: UploadItem) => void;
   onComplete?: (item: UploadItem) => void;
   onError?: (item: UploadItem, error: Error) => void;
@@ -45,6 +46,7 @@ export class MultiUploadService {
     const {
       isGuest = false,
       tagIds = [],
+      collectionIds = [],
       onProgress,
       onComplete,
       onError,
@@ -59,6 +61,7 @@ export class MultiUploadService {
         item,
         isGuest,
         tagIds,
+        collectionIds,
         onProgress,
         onComplete,
         onError,
@@ -79,6 +82,7 @@ export class MultiUploadService {
     item: UploadItem,
     isGuest: boolean,
     tagIds: string[],
+    collectionIds: string[],
     onProgress?: (item: UploadItem) => void,
     onComplete?: (item: UploadItem) => void,
     onError?: (item: UploadItem, error: Error) => void,
@@ -98,7 +102,7 @@ export class MultiUploadService {
         ? ApiClient.image.guestUpload.bind(ApiClient.image)
         : ApiClient.image.upload.bind(ApiClient.image);
 
-      const result = await uploadMethod(item.file, tagIds);
+      const result = await uploadMethod(item.file, tagIds, collectionIds);
 
       simulateProgress.complete();
 

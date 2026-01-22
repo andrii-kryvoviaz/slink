@@ -1,23 +1,24 @@
 <script lang="ts">
   import { UploadForm } from '@slink/feature/Upload';
   import {
+    CollectionsOption,
     TagsOption,
-    UploadOptionsPanel,
   } from '@slink/feature/Upload/UploadOptions';
 
   import { page } from '$app/state';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
-
-  import { settings } from '@slink/lib/settings';
+  import type { CollectionResponse } from '@slink/api/Response';
 
   interface Props {
     disabled?: boolean;
     processing?: boolean;
     allowMultiple?: boolean;
     selectedTags?: Tag[];
+    selectedCollections?: CollectionResponse[];
     onchange?: (files: File[]) => void;
     onTagsChange?: (tags: Tag[]) => void;
+    onCollectionsChange?: (collections: CollectionResponse[]) => void;
   }
 
   let {
@@ -25,34 +26,27 @@
     processing = false,
     allowMultiple = false,
     selectedTags = [],
+    selectedCollections = [],
     onchange,
     onTagsChange,
+    onCollectionsChange,
   }: Props = $props();
 
   const isUserAuthenticated = $derived(page.data.user);
   const showOptions = $derived(!disabled && isUserAuthenticated);
-
-  const uploadOptionsSettings = settings.get(
-    'uploadOptions',
-    page.data.settings.uploadOptions || { expanded: false },
-  );
-  const { expanded } = uploadOptionsSettings;
-
-  let optionsPanelOpen = $state($expanded ?? false);
-
-  $effect(() => {
-    if ($expanded !== optionsPanelOpen) {
-      settings.set('uploadOptions', { expanded: optionsPanelOpen });
-    }
-  });
 </script>
 
-<div class="space-y-3">
+<div class="space-y-4">
   <UploadForm {disabled} {processing} {allowMultiple} {onchange} />
 
   {#if showOptions}
-    <UploadOptionsPanel bind:open={optionsPanelOpen} disabled={processing}>
+    <div class="flex flex-wrap items-center gap-2">
       <TagsOption {selectedTags} {onTagsChange} disabled={processing} />
-    </UploadOptionsPanel>
+      <CollectionsOption
+        {selectedCollections}
+        {onCollectionsChange}
+        disabled={processing}
+      />
+    </div>
   {/if}
 </div>

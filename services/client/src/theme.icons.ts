@@ -200,4 +200,6 @@ export const themeIcons: string[] = [
   'ph:link-simple-fill',
   'ph:share-network-fill',
   'ph:warning-circle-duotone',
+  'ph:folder-simple-fill',
+  'ph:tag-fill',
 ];
