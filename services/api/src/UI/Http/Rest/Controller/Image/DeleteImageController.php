@@ -27,7 +27,7 @@ final class DeleteImageController {
   ): ApiResponse {
     $this->handle($command->withContext([
       'id' => $id,
-      'user' => $user,
+      'userId' => $user->getIdentifier(),
     ]));
     
     return ApiResponse::empty();

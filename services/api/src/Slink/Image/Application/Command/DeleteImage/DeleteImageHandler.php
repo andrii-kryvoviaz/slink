@@ -9,7 +9,6 @@ use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
-use Slink\User\Infrastructure\Auth\JwtUser;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final readonly class DeleteImageHandler implements CommandHandlerInterface {
@@ -19,22 +18,19 @@ final readonly class DeleteImageHandler implements CommandHandlerInterface {
   ) {
   }
   
-  /**
-   * @throws NotFoundException
-   */
   public function __invoke(
     DeleteImageCommand $command,
-    ?JwtUser $user,
+    string $userId,
     string $id
   ): void {
     $image = $this->imageRepository->get(ID::fromString($id));
-    $userId = ID::fromString($user?->getIdentifier() ?? '');
+    $userID = ID::fromString($userId);
     
     if (!$image->aggregateRootVersion() || $image->isDeleted()) {
       throw new NotFoundException();
     }
     
-    if (!$user || !$image->getUserId() || !$image->getUserId()->equals($userId)) {
+    if (!$userId || !$image->getUserId() || !$image->getUserId()->equals($userID)) {
       throw new AccessDeniedException();
     }
     
