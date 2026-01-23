@@ -81,6 +81,22 @@ final class StorageProxy implements StorageInterface {
   public function clearCache(): int {
     return $this->storageProvider->clearCache();
   }
+
+  public function existsInCache(string $fileName): bool {
+    return $this->storageProvider->existsInCache($fileName);
+  }
+
+  public function writeToCache(string $fileName, string $content): void {
+    $this->storageProvider->writeToCache($fileName, $content);
+  }
+
+  public function readFromCache(string $fileName): ?string {
+    return $this->storageProvider->readFromCache($fileName);
+  }
+
+  public function deleteFromCache(string $fileName): void {
+    $this->storageProvider->deleteFromCache($fileName);
+  }
   
   /**
    * @return string

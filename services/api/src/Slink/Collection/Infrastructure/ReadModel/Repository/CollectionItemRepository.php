@@ -145,4 +145,37 @@ final class CollectionItemRepository extends AbstractRepository implements Colle
 
     return $map;
   }
+
+  public function getFirstImageIdsByCollectionIds(array $collectionIds, int $limit = 5): array {
+    if (empty($collectionIds)) {
+      return [];
+    }
+
+    $results = $this->getEntityManager()
+      ->createQueryBuilder()
+      ->from(CollectionItemView::class, 'ci')
+      ->select('c.uuid as collectionId, ci.itemId, ci.position')
+      ->join('ci.collection', 'c')
+      ->where('c.uuid IN (:collectionIds)')
+      ->andWhere('ci.itemType = :imageType')
+      ->setParameter('collectionIds', $collectionIds)
+      ->setParameter('imageType', 'image')
+      ->orderBy('c.uuid', 'ASC')
+      ->addOrderBy('ci.position', 'ASC')
+      ->getQuery()
+      ->getResult();
+
+    $grouped = [];
+    foreach ($results as $row) {
+      $collectionId = (string) $row['collectionId'];
+      if (!isset($grouped[$collectionId])) {
+        $grouped[$collectionId] = [];
+      }
+      if (count($grouped[$collectionId]) < $limit) {
+        $grouped[$collectionId][] = (string) $row['itemId'];
+      }
+    }
+
+    return $grouped;
+  }
 }

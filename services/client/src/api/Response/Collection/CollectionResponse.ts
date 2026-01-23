@@ -24,6 +24,7 @@ export interface CollectionResponse {
   name: string;
   description: string | null;
   itemCount?: number;
+  coverImage?: string | null;
   shareInfo?: ShareResponse;
   createdAt: {
     formattedDate: string;

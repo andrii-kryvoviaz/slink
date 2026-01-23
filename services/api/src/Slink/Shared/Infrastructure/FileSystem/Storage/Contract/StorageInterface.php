@@ -52,6 +52,31 @@ interface StorageInterface {
    * @return int
    */
   public function clearCache(): int;
+
+  /**
+   * @param string $fileName
+   * @return bool
+   */
+  public function existsInCache(string $fileName): bool;
+
+  /**
+   * @param string $fileName
+   * @param string $content
+   * @return void
+   */
+  public function writeToCache(string $fileName, string $content): void;
+
+  /**
+   * @param string $fileName
+   * @return string|null
+   */
+  public function readFromCache(string $fileName): ?string;
+
+  /**
+   * @param string $fileName
+   * @return void
+   */
+  public function deleteFromCache(string $fileName): void;
   
   /**
    * @return string

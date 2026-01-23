@@ -41,4 +41,11 @@ interface CollectionItemRepositoryInterface {
    * @return array<string, string[]> Map of imageId => collectionIds[]
    */
   public function getCollectionIdsByImageIds(array $imageIds): array;
+
+  /**
+   * @param string[] $collectionIds
+   * @param int $limit
+   * @return array<string, string[]> Map of collectionId => imageIds[]
+   */
+  public function getFirstImageIdsByCollectionIds(array $collectionIds, int $limit = 5): array;
 }

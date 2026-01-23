@@ -182,4 +182,55 @@ abstract class AbstractStorage implements StorageInterface {
     
     return $content;
   }
+
+  public function existsInCache(string $fileName): bool {
+    $cachePath = $this->getCacheDirPath() . '/' . $fileName;
+    return $this->exists($cachePath);
+  }
+
+  public function writeToCache(string $fileName, string $content): void {
+    $cachePath = $this->getCacheDirPath() . '/' . $fileName;
+    $this->write($cachePath, $content);
+  }
+
+  public function readFromCache(string $fileName): ?string {
+    $cachePath = $this->getCacheDirPath() . '/' . $fileName;
+
+    if (!$this->exists($cachePath)) {
+      return null;
+    }
+
+    return $this->read($cachePath);
+  }
+
+  public function deleteFromCache(string $fileName): void {
+    $cachePath = $this->getCacheDirPath() . '/' . $fileName;
+    
+    if ($this->exists($cachePath)) {
+      if ($this instanceof DirectoryStorageInterface) {
+        unlink($cachePath);
+      } else {
+        $this->delete($fileName);
+      }
+    }
+  }
+
+  private function getCacheDirPath(): string {
+    if ($this instanceof ObjectStorageInterface) {
+      return $this->getCacheDir();
+    }
+
+    $serverRoot = $this->getServerRoot();
+    $path = $serverRoot
+      ? [$serverRoot, self::APP_DIRECTORY, $this->getCacheDir()]
+      : [self::APP_DIRECTORY, $this->getCacheDir()];
+    
+    $absolutePath = implode('/', $path);
+    
+    if ($this instanceof DirectoryStorageInterface && !$this->exists($absolutePath)) {
+      $this->mkdir($absolutePath);
+    }
+    
+    return $absolutePath;
+  }
 }
