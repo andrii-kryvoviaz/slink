@@ -18,6 +18,7 @@
     items?: ImageListingItem[];
     on?: {
       delete: (id: string) => void;
+      collectionChange: (imageId: string, collectionIds: string[]) => void;
     };
   }
 
@@ -98,7 +99,10 @@
                   'copy',
                   'delete',
                 ]}
-                on={{ imageDelete: onImageDelete }}
+                on={{
+                  imageDelete: onImageDelete,
+                  collectionChange: on?.collectionChange,
+                }}
                 compact={true}
               />
             </div>

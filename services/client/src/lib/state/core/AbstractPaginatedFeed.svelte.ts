@@ -2,6 +2,8 @@ import type { RequestStateOptions } from '@slink/lib/state/core/AbstractHttpStat
 import { AbstractHttpState } from '@slink/lib/state/core/AbstractHttpState.svelte';
 import { SkeletonManager } from '@slink/lib/state/core/SkeletonConfig.svelte';
 
+import { deepMerge } from '@slink/utils/object/deepMerge';
+
 export interface PaginationMetadata {
   page: number;
   size: number;
@@ -32,10 +34,15 @@ export interface PaginationConfig {
   appendMode: 'auto' | 'always' | 'never';
 }
 
+type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
+};
+
 export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
   PaginatedResponse<T>
 > {
-  protected _items: T[] = $state([]);
+  private _itemMap: Map<string, T> = $state(new Map());
+  private _order: string[] = $state([]);
   protected _meta: PaginationMetadata = $state({} as PaginationMetadata);
   protected _nextCursor: string | null = $state(null);
   protected _config: PaginationConfig;
@@ -58,7 +65,8 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
 
   public reset(): void {
     this.markDirty(false);
-    this._items = [];
+    this._itemMap = new Map();
+    this._order = [];
     this._nextCursor = null;
     this._skeletonManager.reset();
     this._meta = {
@@ -84,7 +92,7 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
     const isInitialLoad = page === 1 && !cursor;
     const shouldAppend = this._shouldAppendItems(isInitialLoad);
 
-    if (isInitialLoad && this._items.length === 0) {
+    if (isInitialLoad && this._itemMap.size === 0) {
       this._skeletonManager.show();
     }
 
@@ -92,11 +100,21 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
       () => this.fetchData({ page, limit, cursor, ...searchParams }),
       (response) => {
         if (shouldAppend) {
-          this._items = this._items.concat(
-            response.data.filter((item) => !this._hasItem(item)),
-          );
+          for (const item of response.data) {
+            const id = this._getItemId(item);
+            if (!this._itemMap.has(id)) {
+              this._itemMap.set(id, item);
+              this._order = [...this._order, id];
+            }
+          }
         } else {
-          this._items = response.data;
+          this._itemMap = new Map();
+          this._order = [];
+          for (const item of response.data) {
+            const id = this._getItemId(item);
+            this._itemMap.set(id, item);
+            this._order = [...this._order, id];
+          }
         }
         this._meta = response.meta;
         this._nextCursor = response.meta.nextCursor || null;
@@ -132,36 +150,57 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
   }
 
   public addItem(item: T): void {
-    this._items = [item, ...this._items];
+    const id = this._getItemId(item);
+    this._itemMap.set(id, item);
+    this._order = [id, ...this._order];
   }
 
   public replaceItem(item: T): void {
-    const index = this._findItemIndex(item);
-    if (index !== -1) {
-      this._items[index] = item;
+    const id = this._getItemId(item);
+    if (this._itemMap.has(id)) {
+      this._itemMap.set(id, item);
     }
   }
 
-  public updateItem(item: T, updates: Partial<T>): void {
-    const index = this._findItemIndex(item);
-    if (index !== -1) {
-      this._items[index] = { ...this._items[index], ...updates };
-    }
+  public updateItem(item: T, updates: DeepPartial<T>): void {
+    this.update(this._getItemId(item), updates);
+  }
+
+  public update(id: string, updates: DeepPartial<T>): boolean {
+    const existing = this._itemMap.get(id);
+    if (!existing) return false;
+
+    const needsDeepMerge = Object.values(updates).some(
+      (value) =>
+        value !== null && typeof value === 'object' && !Array.isArray(value),
+    );
+
+    this._itemMap.set(
+      id,
+      needsDeepMerge
+        ? (deepMerge(existing, updates) as T)
+        : { ...existing, ...(updates as Partial<T>) },
+    );
+    return true;
+  }
+
+  public get(id: string): T | undefined {
+    return this._itemMap.get(id);
+  }
+
+  public has(id: string): boolean {
+    return this._itemMap.has(id);
   }
 
   public removeItem(identifier: string | T): void {
-    const itemToRemove =
-      typeof identifier === 'string'
-        ? this._items.find((item) => this._getItemId(item) === identifier)
-        : identifier;
+    const id =
+      typeof identifier === 'string' ? identifier : this._getItemId(identifier);
+    if (!this._itemMap.has(id)) return;
 
-    if (!itemToRemove) return;
+    this._itemMap.delete(id);
+    this._order = this._order.filter((orderId) => orderId !== id);
 
-    this._items = this._items.filter(
-      (item) => this._getItemId(item) !== this._getItemId(itemToRemove),
-    );
-
-    if (this._items.length === 0) {
+    if (this._itemMap.size === 0) {
       this.reset();
     }
   }
@@ -175,7 +214,21 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
   }
 
   get items(): T[] {
-    return this._items;
+    return this._order.map((id) => this._itemMap.get(id)!);
+  }
+
+  protected get _items(): T[] {
+    return this.items;
+  }
+
+  protected set _items(newItems: T[]) {
+    this._itemMap = new Map();
+    this._order = [];
+    for (const item of newItems) {
+      const id = this._getItemId(item);
+      this._itemMap.set(id, item);
+      this._order.push(id);
+    }
   }
 
   get meta(): PaginationMetadata {
@@ -183,7 +236,7 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
   }
 
   get hasItems(): boolean {
-    return this._items.length > 0;
+    return this._itemMap.size > 0;
   }
 
   get isEmpty(): boolean {
@@ -207,15 +260,11 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
   protected abstract _getItemId(item: T): string;
 
   protected _hasItem(item: T): boolean {
-    const itemId = this._getItemId(item);
-    return this._items.some((existing) => this._getItemId(existing) === itemId);
+    return this._itemMap.has(this._getItemId(item));
   }
 
   protected _findItemIndex(item: T): number {
-    const itemId = this._getItemId(item);
-    return this._items.findIndex(
-      (existing) => this._getItemId(existing) === itemId,
-    );
+    return this._order.indexOf(this._getItemId(item));
   }
 
   protected _shouldAppendItems(isInitialLoad: boolean): boolean {

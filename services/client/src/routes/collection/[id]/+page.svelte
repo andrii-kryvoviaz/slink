@@ -96,7 +96,7 @@
   });
 
   const openPostViewer = (imageId: string) => {
-    const index = itemsFeed.getImageIndex(imageId);
+    const index = itemsFeed.getItemIndex(imageId);
     if (index !== -1) {
       postViewerState.open(index);
     }

@@ -10,8 +10,6 @@ import type {
 } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
 import { useState } from '@slink/lib/state/core/ContextAwareState';
 
-import { deepMerge } from '@slink/utils/object/deepMerge';
-
 interface TagFilter {
   selectedTags: Tag[];
   requireAllTags: boolean;
@@ -49,16 +47,6 @@ class UploadHistoryFeed extends AbstractPaginatedFeed<ImageListingItem> {
 
   protected _getItemId(item: ImageListingItem): string {
     return item.id;
-  }
-
-  public update(id: string, data: Partial<ImageListingItem>): void {
-    const index = this._items.findIndex((item) => item.id === id);
-    if (index !== -1) {
-      this._items[index] = deepMerge(
-        this._items[index],
-        data,
-      ) as ImageListingItem;
-    }
   }
 
   public override async load(

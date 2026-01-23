@@ -23,7 +23,6 @@
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { ShareResponse } from '@slink/api/Response';
-  import type { ImageListingItem } from '@slink/api/Response';
 
   import { createCollectionPickerState } from '@slink/lib/state/CollectionPickerState.svelte';
   import { createCreateCollectionModalState } from '@slink/lib/state/CreateCollectionModalState.svelte';
@@ -58,7 +57,8 @@
     compact?: boolean;
     layout?: ActionLayout;
     on?: {
-      imageDelete: (imageId: string) => void;
+      imageDelete?: (imageId: string) => void;
+      collectionChange?: (imageId: string, collectionIds: string[]) => void;
     };
   }
 
@@ -161,7 +161,7 @@
     image = { ...image, isPublic: newValue };
     historyFeedState.update(image.id, {
       attributes: { isPublic: newValue },
-    } as ImageListingItem);
+    });
   };
 
   const handleCopy = async () => {
@@ -184,7 +184,7 @@
     historyFeedState.removeItem(image.id);
     deletePopoverOpen = false;
     await goto('/history');
-    on?.imageDelete(image.id);
+    on?.imageDelete?.(image.id);
   };
 
   const getPosition = (index: number, total: number): ButtonPosition => {
@@ -359,12 +359,11 @@
       variant="popover"
       onToggle={({ added, collectionId }) => {
         const ids = image.collectionIds ?? [];
-        image = {
-          ...image,
-          collectionIds: added
-            ? [...ids, collectionId]
-            : ids.filter((id) => id !== collectionId),
-        };
+        const newIds = added
+          ? [...ids, collectionId]
+          : ids.filter((id) => id !== collectionId);
+        image = { ...image, collectionIds: newIds };
+        on?.collectionChange?.(image.id, newIds);
       }}
     />
   </Overlay>

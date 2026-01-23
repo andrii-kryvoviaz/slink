@@ -14,6 +14,8 @@ import type {
 } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
 import { useState } from '@slink/lib/state/core/ContextAwareState';
 
+export type MediaItem = ImageListingItem;
+
 export class CollectionItemsFeed extends AbstractPaginatedFeed<CollectionItem> {
   private _collectionId: string | null = $state(null);
   private _collection: CollectionResponse | null = $state(null);
@@ -30,24 +32,27 @@ export class CollectionItemsFeed extends AbstractPaginatedFeed<CollectionItem> {
     return this._collection;
   }
 
-  public get images(): ImageListingItem[] {
+  public get media(): MediaItem[] {
     return this._items
       .filter((item) => item.image !== undefined)
       .map((item) => item.image!);
   }
 
-  public getImageIndex(imageId: string): number {
-    return this.images.findIndex((img) => img.id === imageId);
+  public getItemIndex(mediaId: string): number {
+    return this.media.findIndex((m) => m.id === mediaId);
   }
 
-  public updateImage(
-    image: ImageListingItem,
-    updates: Partial<ImageListingItem>,
-  ): void {
-    const item = this._items.find((i) => i.image?.id === image.id);
-    if (item && item.image) {
-      item.image = { ...item.image, ...updates };
+  public updateItemMedia(
+    mediaId: string,
+    updates: Partial<MediaItem>,
+  ): boolean {
+    for (const item of this.items) {
+      if (item.image?.id === mediaId) {
+        this.update(item.itemId, { image: { ...item.image, ...updates } });
+        return true;
+      }
     }
+    return false;
   }
 
   public setCollectionId(collectionId: string): void {
@@ -98,16 +103,8 @@ export class CollectionItemsFeed extends AbstractPaginatedFeed<CollectionItem> {
     if (!this._collectionId) return;
 
     await ApiClient.collection.removeItem(this._collectionId, itemId);
-    const index = this._items.findIndex((i) => i.itemId === itemId);
-    if (index !== -1) {
-      this._items.splice(index, 1);
-      if (this._collection && this._collection.itemCount !== undefined) {
-        this._collection = {
-          ...this._collection,
-          itemCount: this._collection.itemCount - 1,
-        };
-      }
-    }
+    this.reset();
+    await this.load({ page: 1 });
   }
 
   public async reorderItems(orderedItemIds: string[]): Promise<void> {
