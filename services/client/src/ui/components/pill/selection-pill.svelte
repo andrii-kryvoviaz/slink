@@ -49,18 +49,24 @@
   }: Props = $props();
 </script>
 
-<button
-  type="button"
-  onclick={onRemove}
-  {disabled}
+<span
   class={pillVariants({ variant })}
+  class:opacity-50={disabled}
+  class:cursor-not-allowed={disabled}
 >
   {#if icon}
     <Icon {icon} class="w-3.5 h-3.5" />
   {/if}
   <span class="font-medium">{label}</span>
-  <Icon
-    icon="ph:x"
-    class="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity"
-  />
-</button>
+  <button
+    type="button"
+    onclick={onRemove}
+    {disabled}
+    class="p-0.5 -mr-1 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors disabled:pointer-events-none"
+  >
+    <Icon
+      icon="ph:x"
+      class="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity"
+    />
+  </button>
+</span>

@@ -1,10 +1,12 @@
 <script lang="ts">
-  import { TagSelector } from '@slink/feature/Tag';
+  import { CreateTagDialog, TagListView } from '@slink/feature/Tag';
   import { AddButton, SelectionPill } from '@slink/ui/components/pill';
   import * as Popover from '@slink/ui/components/popover';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
 
+  import { createCreateTagModalState } from '@slink/lib/state/CreateTagModalState.svelte';
+  import { createTagSelectionState } from '@slink/lib/state/TagSelectionState.svelte';
   import { getTagLastSegment } from '@slink/lib/utils/tag';
 
   interface Props {
@@ -15,16 +17,38 @@
 
   let { selectedTags = [], onTagsChange, disabled = false }: Props = $props();
   let isOpen = $state(false);
-  let tagSelectorRef = $state<{ focusInput: () => void }>();
 
-  const handleRemoveTag = (tagId: string) => {
+  const selectionState = createTagSelectionState();
+  const createModalState = createCreateTagModalState();
+
+  const selectedIds = $derived(selectedTags.map((t) => t.id));
+
+  const handleToggle = (tag: Tag) => {
+    if (disabled) return;
+
+    const isSelected = selectedIds.includes(tag.id);
+    const newSelections = isSelected
+      ? selectedTags.filter((t) => t.id !== tag.id)
+      : [...selectedTags, tag];
+
+    onTagsChange?.(newSelections);
+  };
+
+  const handleRemove = (tagId: string) => {
     if (disabled) return;
     onTagsChange?.(selectedTags.filter((t) => t.id !== tagId));
   };
 
+  const handleCreateNew = () => {
+    createModalState.open((tag) => {
+      selectionState.addTag(tag);
+      onTagsChange?.([...selectedTags, tag]);
+    });
+  };
+
   $effect(() => {
     if (isOpen) {
-      setTimeout(() => tagSelectorRef?.focusInput(), 50);
+      selectionState.load();
     }
   });
 </script>
@@ -42,22 +66,19 @@
     {/snippet}
   </Popover.Trigger>
   <Popover.Content
-    class="w-72 p-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg"
+    class="p-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg overflow-hidden"
     sideOffset={8}
     align="start"
   >
-    <div class="p-3">
-      <TagSelector
-        bind:this={tagSelectorRef}
-        {selectedTags}
-        {onTagsChange}
-        {disabled}
-        placeholder="Search or create tags..."
-        variant="minimal"
-        allowCreate={true}
-        hideIcon={true}
-      />
-    </div>
+    <TagListView
+      tags={selectionState.tags}
+      {selectedIds}
+      isLoading={selectionState.isLoading}
+      {disabled}
+      variant="popover"
+      onToggle={handleToggle}
+      onCreateNew={handleCreateNew}
+    />
   </Popover.Content>
 </Popover.Root>
 
@@ -67,6 +88,8 @@
     icon="ph:tag-fill"
     variant="blue"
     {disabled}
-    onRemove={() => handleRemoveTag(tag.id)}
+    onRemove={() => handleRemove(tag.id)}
   />
 {/each}
+
+<CreateTagDialog modalState={createModalState} />

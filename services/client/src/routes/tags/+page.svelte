@@ -1,25 +1,22 @@
 <script lang="ts">
-  import { CreateTagForm } from '@slink/feature/Tag/CreateTagForm';
+  import { CreateTagDialog } from '@slink/feature/Tag';
   import { TagDataTable } from '@slink/feature/Tag/TagDataTable';
   import { Button } from '@slink/ui/components/button';
-  import { Dialog } from '@slink/ui/components/dialog';
   import { onMount } from 'svelte';
 
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
-  import { ValidationException } from '@slink/api/Exceptions';
-  import type { CreateTagRequest, Tag } from '@slink/api/Resources/TagResource';
+  import type { Tag } from '@slink/api/Resources/TagResource';
 
+  import { createCreateTagModalState } from '@slink/lib/state/CreateTagModalState.svelte';
   import { useTagListFeed } from '@slink/lib/state/TagListFeed.svelte';
   import { debounce } from '@slink/lib/utils/time/debounce';
 
   const tagFeed = useTagListFeed();
+  const createModalState = createCreateTagModalState();
 
   let searchQuery = $state('');
-  let createModalOpen = $state(false);
-  let createFormErrors = $state<Record<string, string>>({});
-  let isCreating = $state(false);
 
   onMount(() => {
     tagFeed.includeChildren = true;
@@ -34,31 +31,10 @@
     await tagFeed.deleteTag(tag.id);
   }
 
-  async function handleCreateTagSubmit(data: CreateTagRequest) {
-    try {
-      isCreating = true;
-      createFormErrors = {};
-
-      await tagFeed.createTag(data);
-      createModalOpen = false;
-    } catch (error) {
-      if (error instanceof ValidationException && error.violations) {
-        createFormErrors = error.violations.reduce<Record<string, string>>(
-          (acc, violation) => {
-            acc[violation.property] = violation.message;
-            return acc;
-          },
-          {},
-        );
-      }
-    } finally {
-      isCreating = false;
-    }
-  }
-
-  function handleCloseCreateModal() {
-    createModalOpen = false;
-    createFormErrors = {};
+  function handleCreateTag() {
+    createModalState.open(() => {
+      tagFeed.refetch();
+    });
   }
 
   const debouncedSearch = debounce((term: string) => {
@@ -96,7 +72,7 @@
           variant="glass"
           size="sm"
           rounded="full"
-          onclick={() => (createModalOpen = true)}
+          onclick={handleCreateTag}
           class="ml-4 gap-2"
         >
           <Icon icon="lucide:plus" class="h-4 w-4" />
@@ -137,14 +113,4 @@
   </div>
 </section>
 
-<Dialog bind:open={createModalOpen} size="md">
-  {#snippet children()}
-    <CreateTagForm
-      tags={tagFeed.data}
-      {isCreating}
-      errors={createFormErrors}
-      onSubmit={handleCreateTagSubmit}
-      onCancel={handleCloseCreateModal}
-    />
-  {/snippet}
-</Dialog>
+<CreateTagDialog modalState={createModalState} />
