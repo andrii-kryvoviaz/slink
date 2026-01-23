@@ -51,6 +51,7 @@
 
   const itemsFeed = useCollectionItemsFeed();
   const postViewerState = usePostViewerState();
+  itemsFeed.reset();
 
   const isOwner = $derived(
     data.user !== null &&

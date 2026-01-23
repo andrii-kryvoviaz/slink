@@ -17,6 +17,7 @@
   import { useCollectionListFeed } from '@slink/lib/state/CollectionListFeed.svelte';
 
   const collectionsFeed = useCollectionListFeed();
+  collectionsFeed.reset();
 
   let createModalOpen = $state(false);
   let createFormErrors = $state<Record<string, string>>({});
