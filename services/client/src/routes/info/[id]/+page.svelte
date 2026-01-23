@@ -127,7 +127,6 @@
 
     const response = $shareImageData;
     if (!response) {
-      shareUrl = undefined;
       return;
     }
 
