@@ -22,8 +22,8 @@
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
-  import type { ShareImageResponse } from '@slink/api/Resources/ImageResource';
   import type { Tag } from '@slink/api/Resources/TagResource';
+  import type { ShareResponse } from '@slink/api/Response';
 
   import type { License } from '@slink/lib/enum/License';
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
@@ -94,7 +94,7 @@
     error: shareImageError,
     data: shareImageData,
     run: shareImage,
-  } = ReactiveState<ShareImageResponse>(
+  } = ReactiveState<ShareResponse>(
     (
       imageId: string,
       params: {
@@ -131,7 +131,7 @@
       return;
     }
 
-    shareUrl = routes.share.fromResponse(response, { absolute: true });
+    shareUrl = routes.share.fromResponse(response);
   });
 
   const handleImageSizeChange = (value?: Partial<ImageParams>) => {
@@ -229,7 +229,7 @@
     <div class="grow max-w-md shrink-0 space-y-8">
       <ImageActionBar
         bind:image
-        buttons={['download', 'visibility', 'copy', 'delete']}
+        buttons={['download', 'visibility', 'collection', 'copy', 'delete']}
         layout="hero"
       />
 
@@ -245,11 +245,9 @@
       <BookmarkersPanel imageId={image.id} count={image.bookmarkCount} />
 
       <ImageDescription
-        description={image.description}
+        description={image.description ?? ''}
         isLoading={$descriptionIsLoading}
-        on={{
-          change: (description: string) => handleSaveDescription(description),
-        }}
+        on={{ change: handleSaveDescription }}
       />
 
       {#if licensingEnabled && licenses.length > 0}

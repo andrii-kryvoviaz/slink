@@ -4,46 +4,56 @@ declare(strict_types=1);
 
 namespace Slink\Share\Application\Service;
 
-use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
-use Slink\Share\Application\Command\ShareImage\ShareImageCommand;
-use Slink\Share\Application\Query\FindShareByTargetUrl\FindShareByTargetUrlQuery;
+use Slink\Share\Domain\Service\ShareFeatureHandlerInterface;
 use Slink\Share\Domain\Service\ShareServiceInterface;
 use Slink\Share\Domain\Share;
+use Slink\Share\Domain\ValueObject\ShareableReference;
+use Slink\Share\Domain\ValueObject\ShareContext;
 use Slink\Share\Domain\ValueObject\ShareResult;
 use Slink\Share\Infrastructure\ReadModel\View\ShareView;
-use Slink\Shared\Application\Command\CommandBusInterface;
-use Slink\Shared\Application\Query\QueryBusInterface;
 use Symfony\Component\DependencyInjection\Attribute\AsAlias;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 #[AsAlias(ShareServiceInterface::class)]
 final readonly class ShareService implements ShareServiceInterface {
+  /**
+   * @param iterable<ShareFeatureHandlerInterface> $featureHandlers
+   */
   public function __construct(
-    private CommandBusInterface $commandBus,
-    private QueryBusInterface $queryBus,
-    private ConfigurationProviderInterface $configurationProvider,
+    #[Autowire('%env(ORIGIN)%')]
+    private string $origin,
+    #[AutowireIterator('share.feature_handler')]
+    private iterable $featureHandlers,
   ) {}
 
-  public function isShorteningEnabled(): bool {
-    return $this->configurationProvider->get('share.enableUrlShortening') ?? true;
+  public function buildContext(ShareableReference $shareable): ShareContext {
+    $context = ShareContext::for($shareable);
+
+    foreach ($this->featureHandlers as $handler) {
+      if ($handler->supports($context)) {
+        $context = $handler->enhance($context);
+      }
+    }
+
+    return $context;
   }
 
-  public function share(string $imageId, string $targetUrl): ShareResult {
-    if (!$this->isShorteningEnabled()) {
-      return ShareResult::signed($targetUrl);
+  public function resolveUrl(ShareView|Share $share): string {
+    $shortCode = $share instanceof ShareView
+      ? $share->getShortUrl()?->getShortCode()
+      : $share->getShortCode();
+    $type = $share->getShareable()->getShareableType();
+    $prefix = $type->urlPrefix();
+
+    if ($shortCode === null) {
+      return rtrim($this->origin, '/') . $share->getTargetUrl();
     }
 
-    /** @var ShareView|null $existingShare */
-    $existingShare = $this->queryBus->ask(new FindShareByTargetUrlQuery($targetUrl));
+    return rtrim($this->origin, '/') . '/' . $prefix . '/' . $shortCode;
+  }
 
-    if ($existingShare?->getShortUrl() !== null) {
-      return ShareResult::shortUrl($existingShare->getShortUrl()->getShortCode());
-    }
-
-    /** @var Share $share */
-    $share = $this->commandBus->handleSync(
-      new ShareImageCommand($imageId, $targetUrl, true)
-    );
-
-    return ShareResult::shortUrl($share->getShortCode());
+  public function share(string $shareableId, string $targetUrl): ShareResult {
+    return ShareResult::signed($targetUrl);
   }
 }

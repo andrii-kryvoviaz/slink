@@ -1,12 +1,5 @@
-import type { ShareImageResponse } from '@slink/api/Resources/ImageResource';
-
-import { imageRoutes } from '@slink/utils/url/routes/image';
-import { createRoute } from '@slink/utils/url/routing';
+import type { ShareResponse } from '@slink/api/Response/Share/ShareResponse';
 
 export const shareRoutes = {
-  fromResponse: createRoute((response: ShareImageResponse) =>
-    response.type === 'shortUrl'
-      ? imageRoutes.short.path(response.shortCode)
-      : response.targetUrl,
-  ),
+  fromResponse: (response: ShareResponse) => response.shareUrl,
 };

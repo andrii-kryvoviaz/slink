@@ -23,7 +23,7 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
   private _orderBy = $state<'name' | 'path' | 'createdAt' | 'updatedAt'>(
     'updatedAt',
   );
-  private _order = $state<'asc' | 'desc'>('desc');
+  private _sortOrder = $state<'asc' | 'desc'>('desc');
 
   public constructor() {
     super({
@@ -44,7 +44,7 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
       includeChildren: this._includeChildren,
       searchTerm: searchTerm || this._searchTerm,
       orderBy: this._orderBy,
-      order: this._order,
+      order: this._sortOrder,
     };
 
     const response: TagListingResponse = await ApiClient.tag.getList(apiParams);
@@ -105,11 +105,11 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
   }
 
   get order() {
-    return this._order;
+    return this._sortOrder;
   }
 
   set order(value: 'asc' | 'desc') {
-    this._order = value;
+    this._sortOrder = value;
     this.load({ page: 1 });
   }
 
@@ -118,7 +118,7 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
     order: 'asc' | 'desc',
   ) {
     this._orderBy = orderBy;
-    this._order = order;
+    this._sortOrder = order;
     this.load({ page: 1 });
   }
 

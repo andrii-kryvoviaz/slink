@@ -18,6 +18,7 @@
     items?: ImageListingItem[];
     on?: {
       delete: (id: string) => void;
+      collectionChange: (imageId: string, collectionIds: string[]) => void;
     };
   }
 
@@ -89,9 +90,19 @@
                   id: item.id,
                   fileName: item.attributes.fileName,
                   isPublic: item.attributes.isPublic,
+                  collectionIds: item.collectionIds,
                 }}
-                buttons={['download', 'visibility', 'copy', 'delete']}
-                on={{ imageDelete: onImageDelete }}
+                buttons={[
+                  'download',
+                  'visibility',
+                  'collection',
+                  'copy',
+                  'delete',
+                ]}
+                on={{
+                  imageDelete: onImageDelete,
+                  collectionChange: on?.collectionChange,
+                }}
                 compact={true}
               />
             </div>

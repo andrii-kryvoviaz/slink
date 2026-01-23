@@ -1,10 +1,11 @@
 <script lang="ts">
   import { TagSelector } from '@slink/feature/Tag';
-  import { Button } from '@slink/ui/components/button';
-
-  import Icon from '@iconify/svelte';
+  import { AddButton, SelectionPill } from '@slink/ui/components/pill';
+  import * as Popover from '@slink/ui/components/popover';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
+
+  import { getTagLastSegment } from '@slink/lib/utils/tag';
 
   interface Props {
     selectedTags?: Tag[];
@@ -16,43 +17,56 @@
   let isOpen = $state(false);
   let tagSelectorRef = $state<{ focusInput: () => void }>();
 
-  const shouldShowSelector = $derived(isOpen || selectedTags.length > 0);
-
-  const handleOpenSelector = () => {
-    if (!disabled) {
-      isOpen = true;
-      setTimeout(() => tagSelectorRef?.focusInput(), 0);
-    }
+  const handleRemoveTag = (tagId: string) => {
+    if (disabled) return;
+    onTagsChange?.(selectedTags.filter((t) => t.id !== tagId));
   };
 
   $effect(() => {
-    if (selectedTags.length === 0) {
-      isOpen = false;
+    if (isOpen) {
+      setTimeout(() => tagSelectorRef?.focusInput(), 50);
     }
   });
 </script>
 
-{#if !shouldShowSelector}
-  <Button
-    type="button"
-    onclick={handleOpenSelector}
-    {disabled}
-    variant="ghost"
-    size="md"
-    rounded="lg"
+<Popover.Root bind:open={isOpen}>
+  <Popover.Trigger {disabled}>
+    {#snippet child({ props })}
+      <AddButton
+        {...props}
+        label={selectedTags.length > 0 ? 'Add more' : 'Add tags'}
+        icon="ph:tag"
+        variant="blue"
+        {disabled}
+      />
+    {/snippet}
+  </Popover.Trigger>
+  <Popover.Content
+    class="w-72 p-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg"
+    sideOffset={8}
+    align="start"
   >
-    <Icon icon="ph:plus" class="h-4 w-4" />
-    <span>Add tags</span>
-  </Button>
-{:else}
-  <TagSelector
-    bind:this={tagSelectorRef}
-    {selectedTags}
-    {onTagsChange}
+    <div class="p-3">
+      <TagSelector
+        bind:this={tagSelectorRef}
+        {selectedTags}
+        {onTagsChange}
+        {disabled}
+        placeholder="Search or create tags..."
+        variant="minimal"
+        allowCreate={true}
+        hideIcon={true}
+      />
+    </div>
+  </Popover.Content>
+</Popover.Root>
+
+{#each selectedTags as tag (tag.id)}
+  <SelectionPill
+    label={getTagLastSegment(tag)}
+    icon="ph:tag-fill"
+    variant="blue"
     {disabled}
-    placeholder="Search or add tags..."
-    variant="neon"
-    allowCreate={true}
-    hideIcon={false}
+    onRemove={() => handleRemoveTag(tag.id)}
   />
-{/if}
+{/each}

@@ -36,6 +36,7 @@ export type ImageListingItem = {
   license: LicenseInfo;
   bookmarkCount: number;
   isBookmarked?: boolean;
+  collectionIds?: string[];
   tags?: Tag[];
 };
 

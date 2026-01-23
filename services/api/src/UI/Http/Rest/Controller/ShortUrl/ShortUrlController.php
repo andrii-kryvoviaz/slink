@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace UI\Http\Rest\Controller\ShortUrl;
 
 use Slink\Share\Application\Query\FindShortUrlByCode\FindShortUrlByCodeQuery;
-use Slink\Share\Infrastructure\ReadModel\View\ShortUrlView;
 use Slink\Shared\Application\Query\QueryTrait;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -15,6 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 #[AsController]
 #[Route(path: '/i/{code}', name: 'short_url_redirect', methods: ['GET'])]
+#[Route(path: '/c/{code}', name: 'short_url_collection_redirect', methods: ['GET'])]
 final readonly class ShortUrlController {
   use QueryTrait;
 
@@ -31,7 +31,13 @@ final readonly class ShortUrlController {
       return new Response('Not Found', Response::HTTP_NOT_FOUND);
     }
 
-    $targetUrl = $shortUrl->getTargetUrl();
+    $share = $shortUrl->getShare();
+    $shareable = $share->getShareable();
+
+    $targetUrl = $shareable->getShareableType()->targetPath(
+      $shareable->getShareableId(),
+      $share->getTargetUrl(),
+    );
 
     if (str_starts_with($targetUrl, '/')) {
       $targetUrl = $this->origin . $targetUrl;

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Button } from '@slink/ui/components/button';
   import * as Dialog from '@slink/ui/components/dialog';
+  import { Modal } from '@slink/ui/components/dialog';
   import { ScrollArea } from '@slink/ui/components/scroll-area';
 
   import type { GitHubRelease } from '$lib/utils/version';
@@ -65,33 +66,30 @@
 
 <Dialog.Root {open} onOpenChange={handleOpenChange}>
   <Dialog.Content class="max-w-2xl max-h-[80vh]">
-    <Dialog.Header>
-      <Dialog.Title class="flex items-start gap-4">
-        <div
-          class="size-12 rounded-xl bg-gradient-to-br from-green-500/10 to-emerald-600/15 dark:from-green-400/20 dark:to-emerald-500/25 border border-green-300/40 dark:border-green-600/50 flex items-center justify-center shadow-md backdrop-blur-sm flex-shrink-0"
-        >
-          <Icon
-            icon={hasUpdate ? 'ph:download' : 'ph:check-circle'}
-            class="size-6 text-green-700 dark:text-green-300 drop-shadow-sm"
-          />
-        </div>
-        <div>
-          <h3
-            class="text-xl font-semibold text-slate-900 dark:text-white tracking-tight"
-          >
-            {hasUpdate ? 'Update Available' : 'Latest Version'}
-          </h3>
-          <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">
-            {#if hasUpdate}
-              A new version of Slink is available. Here's what's new:
-            {:else}
-              You're running the latest version of Slink. Here are the release
-              notes:
-            {/if}
-          </p>
-        </div>
-      </Dialog.Title>
-    </Dialog.Header>
+    <Modal.Header variant="green">
+      {#snippet icon()}
+        {#if hasUpdate}
+          <Icon icon="ph:download" />
+        {:else}
+          <Icon icon="ph:check-circle" />
+        {/if}
+      {/snippet}
+      {#snippet title()}
+        {#if hasUpdate}
+          Update Available
+        {:else}
+          Latest Version
+        {/if}
+      {/snippet}
+      {#snippet description()}
+        {#if hasUpdate}
+          A new version of Slink is available. Here's what's new:
+        {:else}
+          You're running the latest version of Slink. Here are the release
+          notes:
+        {/if}
+      {/snippet}
+    </Modal.Header>
 
     <div class="space-y-4">
       <div
@@ -140,26 +138,28 @@
       </div>
     </div>
 
-    <Dialog.Footer class="flex gap-3">
-      <Button
-        variant="glass"
-        size="sm"
-        rounded="full"
-        onclick={onClose}
-        class="flex-1"
-      >
-        {hasUpdate ? 'Maybe Later' : 'Close'}
-      </Button>
-      <Button
-        variant="gradient-blue"
-        size="sm"
-        rounded="full"
-        onclick={() => navigateToUrl(release.html_url)}
-        class="flex-1"
-      >
-        <Icon icon="ph:github-logo" class="h-4 w-4 mr-2" />
-        View on GitHub
-      </Button>
-    </Dialog.Footer>
+    <Modal.Footer variant="green">
+      {#snippet actions()}
+        <Button
+          variant="glass"
+          size="sm"
+          rounded="full"
+          onclick={onClose}
+          class="flex-1"
+        >
+          {hasUpdate ? 'Maybe Later' : 'Close'}
+        </Button>
+        <Button
+          variant="gradient-blue"
+          size="sm"
+          rounded="full"
+          onclick={() => navigateToUrl(release.html_url)}
+          class="flex-1"
+        >
+          <Icon icon="ph:github-logo" class="h-4 w-4 mr-2" />
+          View on GitHub
+        </Button>
+      {/snippet}
+    </Modal.Footer>
   </Dialog.Content>
 </Dialog.Root>

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Slink\Share\Domain\Event;
 
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
+use Slink\Share\Domain\ValueObject\ShareableReference;
 use Slink\Share\Domain\ValueObject\ShareContext;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
@@ -12,7 +13,7 @@ use Slink\Shared\Domain\ValueObject\ID;
 final readonly class ShareWasCreated implements SerializablePayload {
   public function __construct(
     public ID $id,
-    public ID $imageId,
+    public ShareableReference $shareable,
     public string $targetUrl,
     public DateTime $createdAt,
     public ShareContext $context,
@@ -25,7 +26,7 @@ final readonly class ShareWasCreated implements SerializablePayload {
   public function toPayload(): array {
     return [
       'uuid' => $this->id->toString(),
-      'image' => $this->imageId->toString(),
+      'shareable' => $this->shareable->toPayload(),
       'targetUrl' => $this->targetUrl,
       'createdAt' => $this->createdAt->toString(),
       'context' => $this->context->toPayload(),
@@ -36,12 +37,18 @@ final readonly class ShareWasCreated implements SerializablePayload {
    * @param array<string, mixed> $payload
    */
   public static function fromPayload(array $payload): static {
+    if (isset($payload['image'])) {
+      $shareable = ShareableReference::forImage(ID::fromString($payload['image']));
+    } else {
+      $shareable = ShareableReference::fromPayload($payload['shareable']);
+    }
+
     return new self(
       ID::fromString($payload['uuid']),
-      ID::fromString($payload['image']),
+      $shareable,
       $payload['targetUrl'],
       DateTime::fromString($payload['createdAt']),
-      ShareContext::fromPayload($payload['context'] ?? []),
+      ShareContext::fromPayload($payload['context'] ?? [], $shareable),
     );
   }
 }

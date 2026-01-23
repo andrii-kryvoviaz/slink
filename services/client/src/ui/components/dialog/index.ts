@@ -9,9 +9,18 @@ import Overlay from './dialog-overlay.svelte';
 import Title from './dialog-title.svelte';
 import Trigger from './dialog-trigger.svelte';
 import Dialog from './dialog.svelte';
+import ModalFooter from './modal-footer.svelte';
+import ModalHeader from './modal-header.svelte';
+import ModalNotice from './modal-notice.svelte';
 
 const Root = DialogPrimitive.Root;
 const Portal = DialogPrimitive.Portal;
+
+export const Modal = {
+  Header: ModalHeader,
+  Footer: ModalFooter,
+  Notice: ModalNotice,
+};
 
 export {
   Root,

@@ -6,6 +6,7 @@ import type {
   ImagePlainListingResponse,
   UploadedImageResponse,
 } from '@slink/api/Response';
+import type { ShareResponse } from '@slink/api/Response/Share/ShareResponse';
 
 import type { License } from '@slink/lib/enum/License';
 
@@ -13,6 +14,7 @@ export class ImageResource extends AbstractResource {
   public async upload(
     image: File,
     tagIds?: string[],
+    collectionIds?: string[],
   ): Promise<UploadedImageResponse> {
     const body = new FormData();
     body.append('image', image);
@@ -21,18 +23,31 @@ export class ImageResource extends AbstractResource {
       tagIds.forEach((tagId) => body.append('tagIds[]', tagId));
     }
 
+    if (collectionIds && collectionIds.length > 0) {
+      collectionIds.forEach((collectionId) =>
+        body.append('collectionIds[]', collectionId),
+      );
+    }
+
     return this.post('/upload', { body });
   }
 
   public async guestUpload(
     image: File,
     tagIds?: string[],
+    collectionIds?: string[],
   ): Promise<UploadedImageResponse> {
     const body = new FormData();
     body.append('image', image);
 
     if (tagIds && tagIds.length > 0) {
       tagIds.forEach((tagId) => body.append('tagIds[]', tagId));
+    }
+
+    if (collectionIds && collectionIds.length > 0) {
+      collectionIds.forEach((collectionId) =>
+        body.append('collectionIds[]', collectionId),
+      );
     }
 
     return this.post('/guest/upload', { body });
@@ -173,7 +188,7 @@ export class ImageResource extends AbstractResource {
       crop?: boolean;
       format?: string;
     },
-  ): Promise<ShareImageResponse> {
+  ): Promise<ShareResponse> {
     const searchParams = new URLSearchParams();
 
     if (params.width !== undefined) {
@@ -199,7 +214,3 @@ export class ImageResource extends AbstractResource {
     return this.get('/licenses');
   }
 }
-
-export type ShareImageResponse =
-  | { type: 'shortUrl'; shortCode: string }
-  | { type: 'signed'; targetUrl: string };

@@ -17,6 +17,7 @@ export const PopoverContentTheme = cva(
           'bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 shadow-xl shadow-gray-900/5 dark:shadow-gray-900/20 text-gray-900 dark:text-gray-100',
       },
       size: {
+        none: '',
         xs: 'p-2 max-w-xs',
         sm: 'p-3 max-w-sm',
         md: 'p-4 max-w-md',

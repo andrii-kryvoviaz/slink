@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Slink\Image\Application\Query\GetImageList;
 
 use Slink\Bookmark\Domain\Repository\BookmarkRepositoryInterface;
+use Slink\Collection\Domain\Repository\CollectionItemRepositoryInterface;
 use Slink\Image\Domain\Filter\ImageListFilter;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Shared\Application\Http\Collection;
@@ -17,9 +18,10 @@ final readonly class GetImageListHandler implements QueryHandlerInterface {
   use CursorPaginationTrait;
 
   public function __construct(
-    private ImageRepositoryInterface $repository,
-    private TagFilterServiceInterface $tagFilterService,
-    private BookmarkRepositoryInterface $bookmarkRepository,
+    private ImageRepositoryInterface          $repository,
+    private TagFilterServiceInterface         $tagFilterService,
+    private BookmarkRepositoryInterface       $bookmarkRepository,
+    private CollectionItemRepositoryInterface $collectionItemRepository,
   ) {
   }
 
@@ -28,11 +30,10 @@ final readonly class GetImageListHandler implements QueryHandlerInterface {
    */
   public function __invoke(
     GetImageListQuery $query,
-    int $page,
-    ?bool $isPublic = null,
-    ?string $userId = null,
-    ?string $currentUserId = null,
-    array $groups = ['public'],
+    int               $page,
+    ?bool             $isPublic = null,
+    ?string           $userId = null,
+    array             $groups = ['public'],
   ): Collection {
     $tagFilterData = $this->tagFilterService->createTagFilterData(
       $query->getTagIds(),
@@ -68,13 +69,19 @@ final readonly class GetImageListHandler implements QueryHandlerInterface {
     }
 
     $bookmarkedSet = [];
-    if ($currentUserId !== null && !empty($imageEntities)) {
-      $imageIds = array_map(fn($image) => $image->getUuid(), $imageEntities);
-      $bookmarkedSet = array_flip($this->bookmarkRepository->getBookmarkedImageIds($currentUserId, $imageIds));
+    $collectionIdsMap = [];
+
+    if ($userId !== null && !empty($imageEntities)) {
+      $imageIds = array_map(fn($image) => (string)$image->getUuid(), $imageEntities);
+      $bookmarkedSet = array_flip($this->bookmarkRepository->getBookmarkedImageIds($userId, $imageIds));
+      $collectionIdsMap = $this->collectionItemRepository->getCollectionIdsByImageIds($imageIds);
     }
 
     $items = array_map(
-      fn($image) => Item::fromEntity($image, ['isBookmarked' => isset($bookmarkedSet[$image->getUuid()])], [], $groups),
+      fn($image) => Item::fromEntity($image, [
+        'isBookmarked' => isset($bookmarkedSet[$image->getUuid()]),
+        'collectionIds' => $collectionIdsMap[(string)$image->getUuid()] ?? [],
+      ], [], $groups),
       $imageEntities
     );
 

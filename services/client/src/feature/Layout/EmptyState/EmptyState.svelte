@@ -21,7 +21,7 @@
     actionText?: string;
     actionHref?: string;
     actionClick?: () => void;
-    variant?: 'default' | 'blue' | 'purple' | 'pink';
+    variant?: 'default' | 'blue' | 'purple' | 'pink' | 'red';
     size?: 'sm' | 'md' | 'lg';
     class?: string;
   }

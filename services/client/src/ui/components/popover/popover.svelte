@@ -28,7 +28,7 @@
     children?: Snippet;
     variant?: 'default' | 'glass' | 'floating' | 'minimal' | 'modern';
     triggerVariant?: 'default' | 'button' | 'ghost' | 'minimal';
-    size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'auto';
+    size?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'auto';
     rounded?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full';
   };
 

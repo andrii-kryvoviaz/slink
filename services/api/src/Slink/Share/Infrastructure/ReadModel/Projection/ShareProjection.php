@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Slink\Share\Infrastructure\ReadModel\Projection;
 
-use Doctrine\ORM\EntityManagerInterface;
-use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Share\Domain\Event\ShareWasCreated;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
 use Slink\Share\Domain\Repository\ShortUrlRepositoryInterface;
@@ -17,20 +15,13 @@ final class ShareProjection extends AbstractProjection {
   public function __construct(
     private readonly ShareRepositoryInterface $shareRepository,
     private readonly ShortUrlRepositoryInterface $shortUrlRepository,
-    private readonly EntityManagerInterface $em,
   ) {
   }
 
   public function handleShareWasCreated(ShareWasCreated $event): void {
-    /** @var ImageView $image */
-    $image = $this->em->getReference(
-      ImageView::class,
-      $event->imageId->toString()
-    );
-
     $share = new ShareView(
       $event->id->toString(),
-      $image,
+      $event->shareable,
       $event->targetUrl,
       $event->createdAt,
     );
@@ -38,13 +29,18 @@ final class ShareProjection extends AbstractProjection {
     $this->shareRepository->add($share);
 
     if ($event->context->hasShortUrl()) {
-      $shortUrl = new ShortUrlView(
-        (string) $event->context->getShortUrlId(),
-        $share,
-        $event->context->getShortCode(),
-      );
+      $shortUrlId = $event->context->getShortUrlId();
+      $shortCode = $event->context->getShortCode();
+      
+      if ($shortUrlId !== null && $shortCode !== null) {
+        $shortUrl = new ShortUrlView(
+          $shortUrlId->toString(),
+          $share,
+          $shortCode,
+        );
 
-      $this->shortUrlRepository->add($shortUrl);
+        $this->shortUrlRepository->add($shortUrl);
+      }
     }
   }
 }

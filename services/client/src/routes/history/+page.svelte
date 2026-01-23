@@ -82,6 +82,10 @@
     historyFeedState.removeItem(id);
   };
 
+  const onCollectionChange = (imageId: string, collectionIds: string[]) => {
+    historyFeedState.update(imageId, { collectionIds });
+  };
+
   const handleTagFilterChange = async (
     tags: Tag[],
     requireAllTags: boolean,
@@ -167,12 +171,18 @@
           {#if viewMode === 'grid'}
             <HistoryGridView
               items={historyFeedState.items}
-              on={{ delete: onImageDelete }}
+              on={{
+                delete: onImageDelete,
+                collectionChange: onCollectionChange,
+              }}
             />
           {:else}
             <HistoryListView
               items={historyFeedState.items}
-              on={{ delete: onImageDelete }}
+              on={{
+                delete: onImageDelete,
+                collectionChange: onCollectionChange,
+              }}
             />
           {/if}
         {/key}

@@ -8,23 +8,26 @@
   import { UploadFormWithTags, UploadSuccess } from '@slink/feature/Upload';
   import MultiUploadProgress from '@slink/feature/Upload/MultiUploadProgress.svelte';
 
-  import { goto } from '$app/navigation';
   import { useMultiUploadService } from '$lib/di';
   import { fade } from 'svelte/transition';
 
   import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { Tag } from '@slink/api/Resources/TagResource';
+  import type { CollectionResponse } from '@slink/api/Response';
   import type { UploadedImageResponse } from '@slink/api/Response';
 
   import type { UploadItem } from '@slink/lib/services/multi-upload.service';
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
 
+  import { navigateToUrl } from '@slink/utils/navigation';
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
+  import { routes } from '@slink/utils/url';
 
   import type { PageData } from './$types';
 
   let selectedTags: Tag[] = $state([]);
+  let selectedCollections: CollectionResponse[] = $state([]);
 
   interface Props {
     data: PageData;
@@ -46,16 +49,19 @@
     reset: resetUploadImage,
   } = ReactiveState<UploadedImageResponse>((file: File) => {
     const tagIds = selectedTags.map((tag) => tag.id);
+    const collectionIds = selectedCollections.map(
+      (collection) => collection.id,
+    );
 
     if (data.globalSettings?.access?.allowGuestUploads && !data.user) {
-      return ApiClient.image.guestUpload(file, tagIds);
+      return ApiClient.image.guestUpload(file, tagIds, collectionIds);
     }
 
-    return ApiClient.image.upload(file, tagIds);
+    return ApiClient.image.upload(file, tagIds, collectionIds);
   });
 
   const { isLoading: pageIsChanging, run: redirectToInfo } = ReactiveState(
-    (imageId: string) => goto(`/info/${imageId}`),
+    (imageId: string) => navigateToUrl(routes.image.info(imageId)),
   );
 
   const handleUpload = async (files: File[]) => {
@@ -74,7 +80,7 @@
       images.data.forEach((image) => historyFeedState.addItem(image));
     } else {
       data.globalSettings?.access?.allowUnauthenticatedAccess
-        ? await goto('/explore')
+        ? await navigateToUrl(routes.general.explore)
         : (showSuccess = true);
     }
   };
@@ -83,13 +89,32 @@
     isMultiUpload = true;
     uploads = multiUploadService.createUploadItems(files);
 
+    let targetCollection: CollectionResponse | undefined = undefined;
+
+    if (selectedCollections.length === 0 && data.user) {
+      try {
+        targetCollection = await ApiClient.collection.create({
+          name: 'Unnamed',
+        });
+        selectedCollections = [targetCollection];
+      } catch (error) {
+        console.error('Failed to create unnamed collection:', error);
+      }
+    } else if (selectedCollections.length > 0) {
+      targetCollection = selectedCollections[0];
+    }
+
     const tagIds = selectedTags.map((tag) => tag.id);
+    const collectionIds = selectedCollections.map(
+      (collection) => collection.id,
+    );
 
     const { successful, failed } = await multiUploadService.uploadFiles(
       uploads,
       {
         isGuest: data.globalSettings?.access?.allowGuestUploads && !data.user,
         tagIds,
+        collectionIds,
         onProgress: (_item) => {
           uploads = [...uploads];
         },
@@ -105,10 +130,14 @@
         const images = await ApiClient.image.getImagesByIds(imageIds);
         images.data.forEach((image) => historyFeedState.addItem(image));
 
-        await goto('/history');
+        if (targetCollection) {
+          await navigateToUrl(routes.collection.detail(targetCollection.id));
+        } else {
+          await navigateToUrl(routes.general.history);
+        }
       } else {
         data.globalSettings?.access?.allowUnauthenticatedAccess
-          ? await goto('/explore')
+          ? await navigateToUrl(routes.general.explore)
           : (showSuccess = true);
       }
     }
@@ -243,7 +272,10 @@
           {processing}
           allowMultiple={true}
           {selectedTags}
+          {selectedCollections}
           onTagsChange={(tags) => (selectedTags = tags)}
+          onCollectionsChange={(collections) =>
+            (selectedCollections = collections)}
           onchange={handleUpload}
         />
       {/if}

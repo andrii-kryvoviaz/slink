@@ -22,7 +22,7 @@ use UI\Http\Rest\Response\ApiResponse;
 #[IsGranted(GuestAccessVoter::GUEST_VIEW_ALLOWED)]
 final class GetImageListController {
   use QueryTrait;
-  
+
   /**
    * @param ConfigurationProviderInterface<SettingsService> $configurationProvider
    */
@@ -30,21 +30,20 @@ final class GetImageListController {
     private readonly ConfigurationProviderInterface $configurationProvider
   ) {
   }
-  
+
   public function __invoke(
     #[MapQueryString] GetImageListQuery $query,
-    #[CurrentUser] ?JWTUser $user = null,
-    int $page = 1
+    #[CurrentUser] ?JWTUser             $user = null,
+    int                                 $page = 1
   ): ApiResponse {
     $isPublicFilter = $this->configurationProvider->get('image.allowOnlyPublicImages') ? null : true;
-    $currentUserId = $user?->getIdentifier();
-    
+
     $images = $this->ask($query->withContext([
       'page' => $page,
       'isPublic' => $isPublicFilter,
-      'currentUserId' => $currentUserId,
+      'userId' => $user?->getIdentifier(),
     ]));
-    
+
     return ApiResponse::collection($images);
   }
 }

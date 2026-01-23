@@ -32,6 +32,7 @@ export const iconContainerVariants = cva(
         purple:
           'bg-gradient-to-br from-purple-100/80 to-violet-100/60 dark:from-purple-900/30 dark:to-violet-900/20 border-purple-200/50 dark:border-violet-700/30 shadow-purple-200/20 dark:shadow-violet-900/40',
         pink: 'bg-gradient-to-br from-pink-100/80 to-rose-100/60 dark:from-pink-900/30 dark:to-rose-900/20 border-pink-200/50 dark:border-rose-700/30 shadow-pink-200/20 dark:shadow-rose-900/40',
+        red: 'bg-gradient-to-br from-red-100/80 to-rose-100/60 dark:from-red-900/30 dark:to-rose-900/20 border-red-200/50 dark:border-rose-700/30 shadow-red-200/20 dark:shadow-rose-900/40',
       },
     },
     defaultVariants: {
@@ -53,6 +54,7 @@ export const iconVariants = cva('relative z-10', {
       blue: 'text-blue-600 dark:text-blue-400',
       purple: 'text-purple-600 dark:text-purple-400',
       pink: 'text-pink-600 dark:text-pink-400',
+      red: 'text-red-600 dark:text-red-400',
     },
   },
   defaultVariants: {
@@ -77,6 +79,7 @@ export const titleVariants = cva(
         purple:
           'from-purple-800 to-violet-600 dark:from-purple-200 dark:to-violet-400',
         pink: 'from-pink-800 to-rose-600 dark:from-pink-200 dark:to-rose-400',
+        red: 'from-red-800 to-rose-600 dark:from-red-200 dark:to-rose-400',
       },
     },
     defaultVariants: {
@@ -118,6 +121,7 @@ export const actionButtonVariants = cva(
         purple:
           'bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 dark:from-purple-500 dark:to-violet-500 dark:hover:from-purple-600 dark:hover:to-violet-600 text-white',
         pink: 'bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-700 hover:to-rose-700 dark:from-pink-500 dark:to-rose-500 dark:hover:from-pink-600 dark:hover:to-rose-600 text-white',
+        red: 'bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 dark:from-red-500 dark:to-rose-500 dark:hover:from-red-600 dark:hover:to-rose-600 text-white',
       },
     },
     defaultVariants: {
