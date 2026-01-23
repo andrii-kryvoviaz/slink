@@ -8,6 +8,7 @@
     DimensionsBadge,
     DownloadButton,
     ImagePlaceholder,
+    LicenseInfo,
     PostViewer,
     ViewCountBadge,
   } from '@slink/feature/Image';
@@ -47,11 +48,19 @@
     data: {
       collectionId: string;
       user: AuthenticatedUser | null;
+      globalSettings?: {
+        image?: {
+          enableLicensing?: boolean;
+        };
+      };
     };
   }
 
   let { data }: Props = $props();
 
+  const licensingEnabled = $derived(
+    data.globalSettings?.image?.enableLicensing ?? false,
+  );
   const itemsFeed = useCollectionItemsFeed();
   const postViewerState = usePostViewerState();
   itemsFeed.reset();
@@ -352,6 +361,16 @@
                     variant="overlay"
                   />
                 </div>
+
+                {#if !isOwner && licensingEnabled && image.license}
+                  <div class="absolute bottom-2 right-2">
+                    <LicenseInfo
+                      license={image.license}
+                      variant="overlay"
+                      size="sm"
+                    />
+                  </div>
+                {/if}
 
                 <div
                   class="absolute top-2 right-2 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
