@@ -24,6 +24,7 @@ final readonly class CreateShareHandler implements CommandHandlerInterface {
 
     $existingShare = $this->shareStore->findByTargetUrl($params->getTargetPath());
     if ($existingShare !== null) {
+      $this->enhanceIfNeeded($existingShare);
       return CreateShareResult::existing($existingShare);
     }
 
@@ -46,5 +47,18 @@ final readonly class CreateShareHandler implements CommandHandlerInterface {
     $this->shareStore->store($share);
 
     return $share;
+  }
+
+  private function enhanceIfNeeded(Share $share): void {
+    $context = $this->shareService->buildContext($share->getShareable());
+    $shortUrlId = $context->getShortUrlId();
+    $shortCode = $context->getShortCode();
+
+    if ($shortUrlId === null || $shortCode === null || $share->getShortCode() !== null) {
+      return;
+    }
+
+    $share->addShortUrl($shortUrlId, $shortCode);
+    $this->shareStore->store($share);
   }
 }

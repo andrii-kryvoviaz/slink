@@ -7,6 +7,7 @@ namespace Slink\Share\Domain;
 use EventSauce\EventSourcing\AggregateRootId;
 use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use Slink\Share\Domain\Event\ShareWasCreated;
+use Slink\Share\Domain\Event\ShortUrlWasAdded;
 use Slink\Share\Domain\ValueObject\ShareableReference;
 use Slink\Share\Domain\ValueObject\ShareContext;
 use Slink\Shared\Domain\AbstractAggregateRoot;
@@ -42,11 +43,27 @@ final class Share extends AbstractAggregateRoot {
     return $share;
   }
 
+  public function addShortUrl(ID $shortUrlId, string $shortCode): void {
+    if ($this->context->hasShortUrl()) {
+      return;
+    }
+
+    $this->recordThat(new ShortUrlWasAdded(
+      $this->aggregateRootId(),
+      $shortUrlId,
+      $shortCode,
+    ));
+  }
+
   protected function applyShareWasCreated(ShareWasCreated $event): void {
     $this->shareable = $event->shareable;
     $this->targetUrl = $event->targetUrl;
     $this->createdAt = $event->createdAt;
     $this->context = $event->context;
+  }
+
+  protected function applyShortUrlWasAdded(ShortUrlWasAdded $event): void {
+    $this->context = $this->context->withShortUrl($event->shortUrlId, $event->shortCode);
   }
 
   public function getShareable(): ShareableReference {

@@ -9,7 +9,6 @@ use Slink\Share\Domain\Service\ShareServiceInterface;
 use Slink\Share\Domain\Share;
 use Slink\Share\Domain\ValueObject\ShareableReference;
 use Slink\Share\Domain\ValueObject\ShareContext;
-use Slink\Share\Domain\ValueObject\ShareResult;
 use Slink\Share\Infrastructure\ReadModel\View\ShareView;
 use Symfony\Component\DependencyInjection\Attribute\AsAlias;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -39,21 +38,36 @@ final readonly class ShareService implements ShareServiceInterface {
     return $context;
   }
 
-  public function resolveUrl(ShareView|Share $share): string {
-    $shortCode = $share instanceof ShareView
-      ? $share->getShortUrl()?->getShortCode()
-      : $share->getShortCode();
+  public function resolveUrl(ShareView|Share $share, bool $isAbsolute = true): string {
+    $context = ShareContext::for($share->getShareable());
+    $shortCode = $this->resolveShortCode($share, $context);
     $type = $share->getShareable()->getShareableType();
     $prefix = $type->urlPrefix();
+    $origin = $isAbsolute ? rtrim($this->origin, '/') : '';
+    $targetUrl = ltrim($share->getTargetUrl(), '/');
 
     if ($shortCode === null) {
-      return rtrim($this->origin, '/') . $share->getTargetUrl();
+      return $isAbsolute
+        ? "{$origin}/{$targetUrl}"
+        : $targetUrl;
     }
 
-    return rtrim($this->origin, '/') . '/' . $prefix . '/' . $shortCode;
+    return $isAbsolute
+      ? "{$origin}/{$prefix}/{$shortCode}"
+      : "{$prefix}/{$shortCode}";
   }
 
-  public function share(string $shareableId, string $targetUrl): ShareResult {
-    return ShareResult::signed($targetUrl);
+  private function resolveShortCode(ShareView|Share $share, ShareContext $context): ?string {
+    foreach ($this->featureHandlers as $handler) {
+      if (!$handler->supports($context)) {
+        continue;
+      }
+
+      return $share instanceof ShareView
+        ? $share->getShortUrl()?->getShortCode()
+        : $share->getShortCode();
+    }
+
+    return null;
   }
 }

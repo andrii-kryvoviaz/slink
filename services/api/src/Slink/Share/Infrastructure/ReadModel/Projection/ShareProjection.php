@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Slink\Share\Infrastructure\ReadModel\Projection;
 
 use Slink\Share\Domain\Event\ShareWasCreated;
+use Slink\Share\Domain\Event\ShortUrlWasAdded;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
 use Slink\Share\Domain\Repository\ShortUrlRepositoryInterface;
 use Slink\Share\Infrastructure\ReadModel\View\ShareView;
@@ -29,18 +30,26 @@ final class ShareProjection extends AbstractProjection {
     $this->shareRepository->add($share);
 
     if ($event->context->hasShortUrl()) {
-      $shortUrlId = $event->context->getShortUrlId();
-      $shortCode = $event->context->getShortCode();
-      
-      if ($shortUrlId !== null && $shortCode !== null) {
-        $shortUrl = new ShortUrlView(
-          $shortUrlId->toString(),
-          $share,
-          $shortCode,
-        );
-
-        $this->shortUrlRepository->add($shortUrl);
-      }
+      $this->createShortUrl($share, $event->context->getShortUrlId()?->toString(), $event->context->getShortCode());
     }
+  }
+
+  public function handleShortUrlWasAdded(ShortUrlWasAdded $event): void {
+    $share = $this->shareRepository->findById($event->shareId->toString());
+
+    if ($share === null) {
+      return;
+    }
+
+    $this->createShortUrl($share, $event->shortUrlId->toString(), $event->shortCode);
+  }
+
+  private function createShortUrl(ShareView $share, ?string $shortUrlId, ?string $shortCode): void {
+    if ($shortUrlId === null || $shortCode === null) {
+      return;
+    }
+
+    $shortUrl = new ShortUrlView($shortUrlId, $share, $shortCode);
+    $this->shortUrlRepository->add($shortUrl);
   }
 }

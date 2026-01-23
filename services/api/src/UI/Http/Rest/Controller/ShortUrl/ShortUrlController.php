@@ -32,12 +32,7 @@ final readonly class ShortUrlController {
     }
 
     $share = $shortUrl->getShare();
-    $shareable = $share->getShareable();
-
-    $targetUrl = $shareable->getShareableType()->targetPath(
-      $shareable->getShareableId(),
-      $share->getTargetUrl(),
-    );
+    $targetUrl = $share->getTargetUrl();
 
     if (str_starts_with($targetUrl, '/')) {
       $targetUrl = $this->origin . $targetUrl;

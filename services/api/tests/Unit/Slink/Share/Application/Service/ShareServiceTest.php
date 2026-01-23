@@ -13,13 +13,20 @@ use Slink\Share\Domain\Service\ShareFeatureHandlerInterface;
 use Slink\Share\Domain\Share;
 use Slink\Share\Domain\ValueObject\ShareableReference;
 use Slink\Share\Domain\ValueObject\ShareContext;
-use Slink\Share\Domain\ValueObject\ShareResult;
 use Slink\Share\Infrastructure\ReadModel\View\ShareView;
 use Slink\Share\Infrastructure\ReadModel\View\ShortUrlView;
 use Slink\Shared\Domain\ValueObject\ID;
 
 final class ShareServiceTest extends TestCase {
   private const string ORIGIN = 'https://example.com';
+
+  private function createSupportingHandler(): ShareFeatureHandlerInterface {
+    $handler = $this->createMock(ShareFeatureHandlerInterface::class);
+    $handler->method('supports')->willReturn(true);
+    $handler->method('enhance')->willReturnArgument(0);
+
+    return $handler;
+  }
 
   #[Test]
   public function itBuildsContextWithFeatureHandlers(): void {
@@ -66,7 +73,7 @@ final class ShareServiceTest extends TestCase {
     $shareView->method('getShareable')->willReturn($shareable);
     $shareView->method('getTargetUrl')->willReturn('/image/test.jpg');
 
-    $service = new ShareService(self::ORIGIN, []);
+    $service = new ShareService(self::ORIGIN, [$this->createSupportingHandler()]);
 
     $url = $service->resolveUrl($shareView);
 
@@ -82,7 +89,7 @@ final class ShareServiceTest extends TestCase {
     $share->method('getShareable')->willReturn($shareable);
     $share->method('getTargetUrl')->willReturn('/collection/test');
 
-    $service = new ShareService(self::ORIGIN, []);
+    $service = new ShareService(self::ORIGIN, [$this->createSupportingHandler()]);
 
     $url = $service->resolveUrl($share);
 
@@ -107,7 +114,7 @@ final class ShareServiceTest extends TestCase {
 
   #[Test]
   public function itUsesCorrectPrefixForDifferentShareableTypes(): void {
-    $service = new ShareService(self::ORIGIN, []);
+    $service = new ShareService(self::ORIGIN, [$this->createSupportingHandler()]);
 
     $imageShareable = ShareableReference::forImage(ID::generate());
     $collectionShareable = ShareableReference::forCollection(ID::generate());
@@ -122,17 +129,5 @@ final class ShareServiceTest extends TestCase {
 
     $this->assertStringContainsString('/i/', $service->resolveUrl($imageShare));
     $this->assertStringContainsString('/c/', $service->resolveUrl($collectionShare));
-  }
-
-  #[Test]
-  public function itReturnsSignedResultForShare(): void {
-    $service = new ShareService(self::ORIGIN, []);
-    $shareableId = '12345678-1234-1234-1234-123456789abc';
-    $targetUrl = '/image/test.jpg';
-
-    $result = $service->share($shareableId, $targetUrl);
-
-    $this->assertInstanceOf(ShareResult::class, $result);
-    $this->assertEquals($targetUrl, $result->getUrl());
   }
 }
