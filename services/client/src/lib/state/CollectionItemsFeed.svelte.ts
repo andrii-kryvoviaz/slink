@@ -101,6 +101,12 @@ export class CollectionItemsFeed extends AbstractPaginatedFeed<CollectionItem> {
     const index = this._items.findIndex((i) => i.itemId === itemId);
     if (index !== -1) {
       this._items.splice(index, 1);
+      if (this._collection && this._collection.itemCount !== undefined) {
+        this._collection = {
+          ...this._collection,
+          itemCount: this._collection.itemCount - 1,
+        };
+      }
     }
   }
 
