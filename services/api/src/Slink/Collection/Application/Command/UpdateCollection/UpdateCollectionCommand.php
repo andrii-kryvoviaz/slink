@@ -16,12 +16,11 @@ final readonly class UpdateCollectionCommand implements CommandInterface {
     #[Assert\Uuid]
     private string $id,
 
-    #[Assert\NotBlank]
     #[Assert\Length(max: 100)]
-    private string $name,
+    private ?string $name = null,
 
     #[Assert\Length(max: 500)]
-    private string $description = '',
+    private ?string $description = null,
   ) {
   }
 
@@ -29,11 +28,11 @@ final readonly class UpdateCollectionCommand implements CommandInterface {
     return $this->id;
   }
 
-  public function getName(): string {
+  public function getName(): ?string {
     return $this->name;
   }
 
-  public function getDescription(): string {
+  public function getDescription(): ?string {
     return $this->description;
   }
 }

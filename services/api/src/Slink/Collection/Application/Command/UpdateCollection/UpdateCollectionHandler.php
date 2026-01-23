@@ -24,10 +24,15 @@ final readonly class UpdateCollectionHandler implements CommandHandlerInterface 
       throw new CollectionAccessDeniedException();
     }
 
-    $collection->update(
-      CollectionName::fromString($command->getName()),
-      CollectionDescription::fromString($command->getDescription()),
-    );
+    $name = $command->getName() !== null
+      ? CollectionName::fromString($command->getName())
+      : $collection->getName();
+
+    $description = $command->getDescription() !== null
+      ? CollectionDescription::fromString($command->getDescription())
+      : $collection->getDescription();
+
+    $collection->update($name, $description);
 
     $this->collectionStore->store($collection);
   }

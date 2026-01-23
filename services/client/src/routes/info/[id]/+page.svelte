@@ -245,11 +245,9 @@
       <BookmarkersPanel imageId={image.id} count={image.bookmarkCount} />
 
       <ImageDescription
-        description={image.description}
+        description={image.description ?? ''}
         isLoading={$descriptionIsLoading}
-        on={{
-          change: (description: string) => handleSaveDescription(description),
-        }}
+        on={{ change: handleSaveDescription }}
       />
 
       {#if licensingEnabled && licenses.length > 0}

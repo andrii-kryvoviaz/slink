@@ -16,6 +16,7 @@
   import { ExploreSkeleton } from '@slink/feature/Layout';
   import {
     CopyContainer,
+    EditableText,
     ExpandableText,
     FormattedDate,
   } from '@slink/feature/Text';
@@ -39,6 +40,8 @@
   import { CollectionImagesFeedAdapter } from '@slink/lib/state/CollectionImagesFeedAdapter';
   import { useCollectionItemsFeed } from '@slink/lib/state/CollectionItemsFeed.svelte';
   import { usePostViewerState } from '@slink/lib/state/PostViewerState.svelte';
+
+  import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
 
   interface Props {
     data: {
@@ -83,6 +86,8 @@
   let sharePopoverOpen = $state(false);
   let removingItems: Set<string> = $state(new Set());
   let isSharing = $state(false);
+  let isSavingName = $state(false);
+  let isSavingDescription = $state(false);
 
   $effect(() => {
     if (itemsFeed.collection?.shareInfo) {
@@ -110,6 +115,28 @@
     await itemsFeed.removeItemFromCollection(item.itemId);
     removingItems.delete(item.itemId);
     removingItems = new Set(removingItems);
+  };
+
+  const handleUpdateName = async (name: string) => {
+    isSavingName = true;
+    try {
+      await itemsFeed.updateDetails({ name });
+    } catch (error: unknown) {
+      printErrorsAsToastMessage(error as Error);
+    } finally {
+      isSavingName = false;
+    }
+  };
+
+  const handleUpdateDescription = async (description: string) => {
+    isSavingDescription = true;
+    try {
+      await itemsFeed.updateDetails({ description });
+    } catch (error: unknown) {
+      printErrorsAsToastMessage(error as Error);
+    } finally {
+      isSavingDescription = false;
+    }
   };
 </script>
 
@@ -154,12 +181,25 @@
                   class="h-5 w-5 text-gray-600 dark:text-gray-400"
                 />
               </div>
-              <div class="min-w-0">
-                <h1
-                  class="text-lg font-semibold text-gray-900 dark:text-white truncate"
-                >
-                  {itemsFeed.collection.name}
-                </h1>
+              <div class="min-w-0 flex-1">
+                {#if isOwner}
+                  <EditableText
+                    value={itemsFeed.collection.name}
+                    type="input"
+                    placeholder="Collection name..."
+                    emptyText="Add a name..."
+                    isLoading={isSavingName}
+                    showActions={false}
+                    class="[&_button]:py-1 [&_button]:px-2 [&_button]:-mx-2 [&_input]:py-1 [&_input]:px-2 [&_input]:text-lg [&_input]:font-semibold [&_span]:text-lg [&_span]:font-semibold [&_span]:text-gray-900 [&_span]:dark:text-white"
+                    on={{ change: handleUpdateName }}
+                  />
+                {:else}
+                  <h1
+                    class="text-lg font-semibold text-gray-900 dark:text-white truncate"
+                  >
+                    {itemsFeed.collection.name}
+                  </h1>
+                {/if}
                 <div
                   class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
                 >
@@ -173,7 +213,17 @@
                 </div>
               </div>
             </div>
-            {#if itemsFeed.collection.description}
+            {#if isOwner}
+              <EditableText
+                value={itemsFeed.collection.description ?? ''}
+                type="textarea"
+                placeholder="Add a description..."
+                emptyText="Click to add a description..."
+                isLoading={isSavingDescription}
+                class="mt-3 ml-13"
+                on={{ change: handleUpdateDescription }}
+              />
+            {:else if itemsFeed.collection.description}
               <p class="text-sm text-gray-500 dark:text-gray-400 mt-3 ml-13">
                 {itemsFeed.collection.description}
               </p>

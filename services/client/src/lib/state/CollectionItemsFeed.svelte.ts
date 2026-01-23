@@ -115,6 +115,16 @@ export class CollectionItemsFeed extends AbstractPaginatedFeed<CollectionItem> {
 
     return ApiClient.collection.share(this._collectionId);
   }
+
+  public async updateDetails(data: {
+    name?: string;
+    description?: string;
+  }): Promise<void> {
+    if (!this._collectionId || !this._collection) return;
+
+    const updated = await ApiClient.collection.update(this._collectionId, data);
+    this._collection = { ...this._collection, ...updated };
+  }
 }
 
 const COLLECTION_ITEMS_FEED = Symbol('CollectionItemsFeed');
