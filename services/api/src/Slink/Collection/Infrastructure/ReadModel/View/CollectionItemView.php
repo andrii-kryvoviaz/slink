@@ -24,7 +24,7 @@ class CollectionItemView extends AbstractView {
     #[SerializedName('id')]
     private string $uuid,
 
-    #[ORM\ManyToOne(targetEntity: CollectionView::class)]
+    #[ORM\ManyToOne(targetEntity: CollectionView::class, inversedBy: 'items')]
     #[ORM\JoinColumn(name: 'collection_id', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
     private CollectionView $collection,
 

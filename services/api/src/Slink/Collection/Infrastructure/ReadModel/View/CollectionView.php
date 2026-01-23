@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Slink\Collection\Infrastructure\ReadModel\View;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Slink\Collection\Infrastructure\ReadModel\Repository\CollectionRepository;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
@@ -16,6 +18,9 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 #[ORM\Entity(repositoryClass: CollectionRepository::class)]
 #[ORM\Index(columns: ['user_id', 'created_at'], name: 'idx_collection_user_created_at')]
 class CollectionView extends AbstractView {
+  #[ORM\OneToMany(targetEntity: CollectionItemView::class, mappedBy: 'collection', cascade: ['remove'], orphanRemoval: true)]
+  private Collection $items;
+
   public function __construct(
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]
@@ -43,6 +48,7 @@ class CollectionView extends AbstractView {
     #[Groups(['public'])]
     private ?DateTime $updatedAt = null,
   ) {
+    $this->items = new ArrayCollection();
   }
 
   public function getId(): string {
@@ -59,6 +65,10 @@ class CollectionView extends AbstractView {
 
   public function getUserId(): string {
     return $this->user->getUuid();
+  }
+
+  public function getItems(): Collection {
+    return $this->items;
   }
 
   public function getName(): string {
