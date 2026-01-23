@@ -11,6 +11,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 final readonly class ReorderCollectionItemsCommand implements CommandInterface {
   use EnvelopedMessage;
 
+  /**
+   * @param array<string> $orderedItemIds
+   */
   public function __construct(
     #[Assert\NotBlank]
     #[Assert\Uuid]
@@ -28,6 +31,9 @@ final readonly class ReorderCollectionItemsCommand implements CommandInterface {
     return $this->collectionId;
   }
 
+  /**
+   * @return array<string>
+   */
   public function getOrderedItemIds(): array {
     return $this->orderedItemIds;
   }

@@ -18,7 +18,14 @@ final class CollectionStore extends AbstractSnapshotStoreRepository implements C
     $this->persist($collection);
   }
 
+  /**
+   * @return Collection
+   */
   public function get(ID $id): Collection {
-    return $this->retrieve($id);
+    $collection = $this->retrieve($id);
+    if (!$collection instanceof Collection) {
+      throw new \RuntimeException('Expected instance of Collection, got ' . get_class($collection));
+    }
+    return $collection;
   }
 }

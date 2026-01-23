@@ -51,6 +51,9 @@ final readonly class CollectionItem extends AbstractValueObject {
     return new self($this->itemId, $this->itemType, $position, $this->addedAt);
   }
 
+  /**
+   * @return array<string, mixed>
+   */
   public function toPayload(): array {
     return [
       'itemId' => $this->itemId->toString(),
@@ -60,6 +63,9 @@ final readonly class CollectionItem extends AbstractValueObject {
     ];
   }
 
+  /**
+   * @param array<string, mixed> $payload
+   */
   public static function fromPayload(array $payload): self {
     return new self(
       ID::fromString($payload['itemId']),

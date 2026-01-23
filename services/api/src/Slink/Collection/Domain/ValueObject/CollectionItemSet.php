@@ -12,6 +12,9 @@ use Slink\Shared\Domain\ValueObject\ID;
 final readonly class CollectionItemSet extends AbstractValueObject {
   private HashMap $items;
 
+  /**
+   * @param array<CollectionItem> $items
+   */
   private function __construct(array $items = []) {
     $this->items = new HashMap();
 
@@ -20,6 +23,9 @@ final readonly class CollectionItemSet extends AbstractValueObject {
     }
   }
 
+  /**
+   * @param array<CollectionItem> $items
+   */
   public static function create(array $items = []): self {
     return new self($items);
   }
@@ -54,10 +60,16 @@ final readonly class CollectionItemSet extends AbstractValueObject {
     return $this->items->get($itemId->toString());
   }
 
+  /**
+   * @return array<CollectionItem>
+   */
   public function getItems(): array {
     return array_values($this->items->toArray());
   }
 
+  /**
+   * @return array<CollectionItem>
+   */
   public function getSortedItems(): array {
     $items = $this->getItems();
     usort($items, fn(CollectionItem $a, CollectionItem $b) => $a->getPosition() <=> $b->getPosition());
@@ -87,12 +99,15 @@ final readonly class CollectionItemSet extends AbstractValueObject {
     return $maxPosition + 1.0;
   }
 
+  /**
+   * @param array<string> $orderedItemIds
+   */
   public function reorder(array $orderedItemIds): self {
     $items = [];
     $position = 1.0;
 
     foreach ($orderedItemIds as $itemId) {
-      $id = $itemId instanceof ID ? $itemId : ID::fromString($itemId);
+      $id = ID::fromString($itemId);
       $existingItem = $this->get($id);
 
       if ($existingItem !== null) {
@@ -104,6 +119,9 @@ final readonly class CollectionItemSet extends AbstractValueObject {
     return new self($items);
   }
 
+  /**
+   * @return array<array<string, mixed>>
+   */
   public function toPayload(): array {
     return array_map(
       fn(CollectionItem $item) => $item->toPayload(),
@@ -111,6 +129,9 @@ final readonly class CollectionItemSet extends AbstractValueObject {
     );
   }
 
+  /**
+   * @param array<array<string, mixed>> $payload
+   */
   public static function fromPayload(array $payload): self {
     $items = array_map(
       fn(array $item) => CollectionItem::fromPayload($item),

@@ -20,6 +20,7 @@ final readonly class UploadImageCommand implements CommandInterface {
    * @param bool $isPublic
    * @param string $description
    * @param array<string> $tagIds
+   * @param array<string> $collectionIds
    */
   public function __construct(
     #[Assert\Image(

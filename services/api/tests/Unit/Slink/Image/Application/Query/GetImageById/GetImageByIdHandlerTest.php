@@ -10,6 +10,7 @@ use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
+use Slink\Collection\Domain\Repository\CollectionItemRepositoryInterface;
 use Slink\Image\Application\Query\GetImageById\GetImageByIdHandler;
 use Slink\Image\Application\Query\GetImageById\GetImageByIdQuery;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
@@ -27,6 +28,7 @@ final class GetImageByIdHandlerTest extends TestCase {
   private ImageAnalyzerInterface&MockObject $analyser;
   private StorageInterface&MockObject $storage;
   private ImageProcessorInterface&MockObject $imageProcessor;
+  private CollectionItemRepositoryInterface&MockObject $collectionItemRepository;
   
   public function setUp(): void {
     parent::setUp();
@@ -35,6 +37,7 @@ final class GetImageByIdHandlerTest extends TestCase {
     $this->analyser = $this->createMock(ImageAnalyzerInterface::class);
     $this->storage = $this->createMock(StorageInterface::class);
     $this->imageProcessor = $this->createMock(ImageProcessorInterface::class);
+    $this->collectionItemRepository = $this->createMock(CollectionItemRepositoryInterface::class);
   }
   
   #[Test]
@@ -49,7 +52,7 @@ final class GetImageByIdHandlerTest extends TestCase {
     $this->repository->expects($this->once())->method('oneById')->with($id)->willReturn($imageView);
     $this->analyser->method('supportsAnimation')->willReturn(false);
 
-    $handler = new GetImageByIdHandler($this->repository, $this->analyser, $this->storage, $this->imageProcessor);
+    $handler = new GetImageByIdHandler($this->repository, $this->analyser, $this->storage, $this->imageProcessor, $this->collectionItemRepository);
 
     $result = $handler($query, null);
 
@@ -63,7 +66,7 @@ final class GetImageByIdHandlerTest extends TestCase {
 
     $this->repository->expects($this->never())->method('oneById');
 
-    $handler = new GetImageByIdHandler($this->repository, $this->analyser, $this->storage, $this->imageProcessor);
+    $handler = new GetImageByIdHandler($this->repository, $this->analyser, $this->storage, $this->imageProcessor, $this->collectionItemRepository);
 
     $this->expectException(NotFoundException::class);
 

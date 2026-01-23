@@ -39,6 +39,9 @@ final readonly class ShareContext extends AbstractValueObject {
     return $this->shortUrlId;
   }
 
+  /**
+   * @return array<string, mixed>
+   */
   public function toPayload(): array {
     return [
       'shortCode' => $this->shortCode,
@@ -46,6 +49,9 @@ final readonly class ShareContext extends AbstractValueObject {
     ];
   }
 
+  /**
+   * @param array<string, mixed> $payload
+   */
   public static function fromPayload(array $payload, ?ShareableReference $shareable = null): self {
     return new self(
       $shareable ?? ShareableReference::fromPayload($payload['shareable'] ?? []),

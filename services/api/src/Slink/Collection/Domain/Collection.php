@@ -96,6 +96,9 @@ final class Collection extends AbstractAggregateRoot {
     ));
   }
 
+  /**
+   * @param array<string> $orderedItemIds
+   */
   public function reorderItems(array $orderedItemIds): void {
     $this->recordThat(new CollectionItemsWereReordered(
       $this->aggregateRootId(),
@@ -168,6 +171,9 @@ final class Collection extends AbstractAggregateRoot {
     return $this->userId->equals($userId);
   }
 
+  /**
+   * @return array<string, mixed>
+   */
   protected function createSnapshotState(): array {
     return [
       'userId' => $this->userId->toString(),

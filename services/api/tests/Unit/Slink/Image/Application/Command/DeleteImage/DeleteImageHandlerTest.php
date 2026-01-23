@@ -144,7 +144,7 @@ final class DeleteImageHandlerTest extends TestCase {
     $storage = $this->createMock(StorageInterface::class);
     
     $handler = new DeleteImageHandler($imageRepository, $storage);
-    $handler($command, null, '123');
+    $handler($command, '', '123');
   }
 
   #[Test]

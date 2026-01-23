@@ -41,6 +41,9 @@ final readonly class ShareResponse extends AbstractValueObject {
     return $this->created;
   }
 
+  /**
+   * @return array<string, mixed>
+   */
   public function toPayload(): array {
     return [
       'shareId' => $this->shareId,

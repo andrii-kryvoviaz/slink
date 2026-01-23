@@ -9,6 +9,7 @@ use Slink\Share\Domain\Service\ShareServiceInterface;
 use Slink\Share\Domain\Share;
 use Slink\Share\Domain\ValueObject\ShareableReference;
 use Slink\Share\Domain\ValueObject\ShareContext;
+use Slink\Share\Domain\ValueObject\ShareResult;
 use Slink\Share\Infrastructure\ReadModel\View\ShareView;
 use Symfony\Component\DependencyInjection\Attribute\AsAlias;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -16,6 +17,9 @@ use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 #[AsAlias(ShareServiceInterface::class)]
 final readonly class ShareService implements ShareServiceInterface {
+  /**
+   * @param iterable<ShareFeatureHandlerInterface> $featureHandlers
+   */
   public function __construct(
     #[Autowire('%env(ORIGIN)%')]
     private string $origin,
@@ -27,7 +31,7 @@ final readonly class ShareService implements ShareServiceInterface {
     $context = ShareContext::for($shareable);
 
     foreach ($this->featureHandlers as $handler) {
-      if ($handler instanceof ShareFeatureHandlerInterface && $handler->supports($context)) {
+      if ($handler->supports($context)) {
         $context = $handler->enhance($context);
       }
     }
@@ -47,5 +51,9 @@ final readonly class ShareService implements ShareServiceInterface {
     }
 
     return rtrim($this->origin, '/') . '/' . $prefix . '/' . $shortCode;
+  }
+
+  public function share(string $shareableId, string $targetUrl): ShareResult {
+    return ShareResult::signed($targetUrl);
   }
 }

@@ -15,6 +15,9 @@ final readonly class ItemWasAddedToCollection implements SerializablePayload {
   ) {
   }
 
+  /**
+   * @return array<string, mixed>
+   */
   public function toPayload(): array {
     return [
       'collectionId' => $this->collectionId->toString(),
@@ -22,6 +25,9 @@ final readonly class ItemWasAddedToCollection implements SerializablePayload {
     ];
   }
 
+  /**
+   * @param array<string, mixed> $payload
+   */
   public static function fromPayload(array $payload): static {
     return new self(
       ID::fromString($payload['collectionId']),

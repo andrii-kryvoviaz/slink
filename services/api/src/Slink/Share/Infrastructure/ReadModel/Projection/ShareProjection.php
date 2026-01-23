@@ -29,13 +29,18 @@ final class ShareProjection extends AbstractProjection {
     $this->shareRepository->add($share);
 
     if ($event->context->hasShortUrl()) {
-      $shortUrl = new ShortUrlView(
-        (string) $event->context->getShortUrlId(),
-        $share,
-        $event->context->getShortCode(),
-      );
+      $shortUrlId = $event->context->getShortUrlId();
+      $shortCode = $event->context->getShortCode();
+      
+      if ($shortUrlId !== null && $shortCode !== null) {
+        $shortUrl = new ShortUrlView(
+          $shortUrlId->toString(),
+          $share,
+          $shortCode,
+        );
 
-      $this->shortUrlRepository->add($shortUrl);
+        $this->shortUrlRepository->add($shortUrl);
+      }
     }
   }
 }

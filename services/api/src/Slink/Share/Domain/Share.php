@@ -73,6 +73,9 @@ final class Share extends AbstractAggregateRoot {
     return $this->context->getShortCode();
   }
 
+  /**
+   * @return array<string, mixed>
+   */
   protected function createSnapshotState(): array {
     return [
       'shareable' => $this->shareable->toPayload(),
@@ -82,6 +85,9 @@ final class Share extends AbstractAggregateRoot {
     ];
   }
 
+  /**
+   * @param mixed $state
+   */
   protected static function reconstituteFromSnapshotState(AggregateRootId $id, $state): AggregateRootWithSnapshotting {
     $share = new self(ID::fromString($id->toString()));
 

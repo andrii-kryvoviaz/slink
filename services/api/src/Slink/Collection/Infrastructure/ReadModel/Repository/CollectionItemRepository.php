@@ -35,6 +35,9 @@ final class CollectionItemRepository extends AbstractRepository implements Colle
       ->getOneOrNullResult();
   }
 
+  /**
+   * @return array<CollectionItemView>
+   */
   public function getByCollectionId(string $collectionId): array {
     return $this->getEntityManager()
       ->createQueryBuilder()
@@ -47,6 +50,9 @@ final class CollectionItemRepository extends AbstractRepository implements Colle
       ->getResult();
   }
 
+  /**
+   * @return array<CollectionItemView>
+   */
   public function getByCollectionIdSorted(string $collectionId): array {
     return $this->getEntityManager()
       ->createQueryBuilder()
@@ -60,6 +66,9 @@ final class CollectionItemRepository extends AbstractRepository implements Colle
       ->getResult();
   }
 
+  /**
+   * @return array<CollectionItemView>
+   */
   public function getByCollectionIdPaginated(string $collectionId, int $page, int $limit): array {
     $offset = ($page - 1) * $limit;
 

@@ -41,7 +41,7 @@ final class GetImageListController {
     $images = $this->ask($query->withContext([
       'page' => $page,
       'isPublic' => $isPublicFilter,
-      'userId' => $user->getIdentifier(),
+      'userId' => $user?->getIdentifier(),
     ]));
 
     return ApiResponse::collection($images);

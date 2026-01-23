@@ -44,6 +44,9 @@ final readonly class ShareableReference extends AbstractValueObject {
     return $this->shareableType === ShareableType::Collection;
   }
 
+  /**
+   * @return array<string, mixed>
+   */
   public function toPayload(): array {
     return [
       'shareableId' => $this->shareableId,
@@ -51,6 +54,9 @@ final readonly class ShareableReference extends AbstractValueObject {
     ];
   }
 
+  /**
+   * @param array<string, mixed> $payload
+   */
   public static function fromPayload(array $payload): self {
     return new self(
       $payload['shareableId'],

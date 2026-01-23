@@ -13,10 +13,19 @@ interface CollectionItemRepositoryInterface {
 
   public function findByCollectionAndItemId(string $collectionId, string $itemId): ?CollectionItemView;
 
+  /**
+   * @return array<CollectionItemView>
+   */
   public function getByCollectionId(string $collectionId): array;
 
+  /**
+   * @return array<CollectionItemView>
+   */
   public function getByCollectionIdSorted(string $collectionId): array;
 
+  /**
+   * @return array<CollectionItemView>
+   */
   public function getByCollectionIdPaginated(string $collectionId, int $page, int $limit): array;
 
   public function countByCollectionId(string $collectionId): int;
