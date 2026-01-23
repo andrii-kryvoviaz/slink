@@ -33,7 +33,7 @@
       class="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 border border-red-200/40 dark:border-red-800/30 shadow-sm shrink-0"
     >
       <Icon
-        icon="heroicons:trash"
+        icon="ph:folder-simple"
         class="h-5 w-5 text-red-600 dark:text-red-400"
       />
     </div>
