@@ -1,4 +1,5 @@
 export { default as ApiKeyCard } from './ApiKey/ApiKeyCard.svelte';
+export * from './ApiKey/ApiKeyCard.theme';
 export { default as ApiKeyDeletePopover } from './ApiKey/ApiKeyDeletePopover.svelte';
 export { default as ApiKeyList } from './ApiKey/ApiKeyList.svelte';
 export { default as ApiKeyManager } from './ApiKey/ApiKeyManager.svelte';

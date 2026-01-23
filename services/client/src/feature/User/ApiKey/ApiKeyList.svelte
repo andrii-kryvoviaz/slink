@@ -33,35 +33,39 @@
   }: Props = $props();
 </script>
 
-<div class="space-y-4">
+<div class="space-y-3">
   {#if isLoading}
-    <div class="flex items-center justify-center py-8">
-      <Icon
-        icon="lucide:loader-2"
-        class="h-6 w-6 animate-spin text-slate-400"
-      />
+    <div class="flex items-center justify-center py-16">
+      <div class="flex flex-col items-center gap-3">
+        <Icon
+          icon="lucide:loader-2"
+          class="h-8 w-8 text-gray-400 dark:text-gray-500 animate-spin"
+        />
+        <span class="text-sm text-gray-500 dark:text-gray-400"
+          >Loading API keys...</span
+        >
+      </div>
     </div>
   {:else if apiKeys.length === 0}
-    <div class="text-center py-8">
-      <Icon
-        icon="ph:key"
-        class="h-12 w-12 text-slate-300 dark:text-slate-600 mx-auto mb-3"
-      />
-      <p class="text-slate-500 dark:text-slate-400">No API keys created yet</p>
-      <p class="text-sm text-slate-400 dark:text-slate-500">
+    <div class="flex flex-col items-center justify-center py-16 text-center">
+      <div
+        class="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-gray-800/80 flex items-center justify-center mb-4"
+      >
+        <Icon icon="ph:key" class="h-8 w-8 text-gray-400 dark:text-gray-500" />
+      </div>
+      <p class="text-gray-900 dark:text-white font-medium">No API keys yet</p>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 max-w-xs">
         Create an API key to integrate with ShareX and other tools
       </p>
     </div>
   {:else}
-    <div class="space-y-3">
-      {#each apiKeys as apiKey (apiKey.id)}
-        {@render apiKeyCard({
-          apiKey,
-          onShareXClick,
-          onDeleteConfirm,
-          isRevoking,
-        })}
-      {/each}
-    </div>
+    {#each apiKeys as apiKey (apiKey.id)}
+      {@render apiKeyCard({
+        apiKey,
+        onShareXClick,
+        onDeleteConfirm,
+        isRevoking,
+      })}
+    {/each}
   {/if}
 </div>
