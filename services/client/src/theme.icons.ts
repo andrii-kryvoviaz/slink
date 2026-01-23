@@ -202,4 +202,6 @@ export const themeIcons: string[] = [
   'ph:warning-circle-duotone',
   'ph:folder-simple-fill',
   'ph:tag-fill',
+  'lucide:pencil',
+  'ph:note-pencil',
 ];

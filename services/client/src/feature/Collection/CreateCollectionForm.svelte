@@ -6,6 +6,8 @@
   import Icon from '@iconify/svelte';
 
   interface Props {
+    mode?: 'create' | 'edit';
+    initialData?: { name: string; description?: string };
     isSubmitting?: boolean;
     errors?: Record<string, string>;
     onSubmit: (data: { name: string; description?: string }) => void;
@@ -13,6 +15,8 @@
   }
 
   let {
+    mode = 'create',
+    initialData,
     isSubmitting = false,
     errors = {},
     onSubmit,
@@ -20,8 +24,15 @@
   }: Props = $props();
 
   let formData = $state({
-    name: '',
-    description: '',
+    name: initialData?.name ?? '',
+    description: initialData?.description ?? '',
+  });
+
+  $effect(() => {
+    if (initialData) {
+      formData.name = initialData.name;
+      formData.description = initialData.description ?? '';
+    }
   });
 
   function handleSubmit(event: Event) {
@@ -43,10 +54,14 @@
 <div class="space-y-6">
   <Modal.Header variant="blue">
     {#snippet icon()}
-      <Icon icon="lucide:folder-plus" />
+      <Icon icon={mode === 'edit' ? 'lucide:pencil' : 'lucide:folder-plus'} />
     {/snippet}
-    {#snippet title()}Create Collection{/snippet}
-    {#snippet description()}Organize your images into a shareable collection{/snippet}
+    {#snippet title()}{mode === 'edit' ? 'Edit' : 'Create'} Collection{/snippet}
+    {#snippet description()}
+      {mode === 'edit'
+        ? 'Update your collection details'
+        : 'Organize your images into a shareable collection'}
+    {/snippet}
   </Modal.Header>
 
   <form onsubmit={handleSubmit} class="space-y-6">
@@ -86,7 +101,7 @@
     <Modal.Footer
       variant="blue"
       {isSubmitting}
-      submitText="Create Collection"
+      submitText={mode === 'edit' ? 'Save Changes' : 'Create Collection'}
       submitDisabled={!formData.name.trim()}
       {onCancel}
     />
