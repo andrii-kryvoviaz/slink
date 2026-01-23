@@ -350,7 +350,7 @@
         aria-label="Add to collection"
         tooltip="Add to collection"
       >
-        <Icon icon="ph:folder-simple-plus" class={iconClass} />
+        <Icon icon="ph:folder-simple" class={iconClass} />
       </ButtonGroupItem>
     {/snippet}
     <CollectionPicker
