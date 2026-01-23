@@ -4,14 +4,18 @@ declare(strict_types=1);
 
 namespace Slink\Tag\Domain\Exception;
 
-use InvalidArgumentException;
+use Slink\Shared\Domain\Exception\SpecificationException;
 
-final class DuplicateTagException extends InvalidArgumentException {
+final class DuplicateTagException extends SpecificationException {
   public function __construct(string $tagName, ?string $parentId = null) {
     $message = $parentId
-      ? sprintf('Tag "%s" already exists under parent "%s"', $tagName, $parentId)
-      : sprintf('Root tag "%s" already exists', $tagName);
+      ? sprintf('Tag "%s" already exists under this parent', $tagName)
+      : sprintf('Tag "%s" already exists', $tagName);
 
     parent::__construct($message);
+  }
+
+  public function getProperty(): string {
+    return 'name';
   }
 }

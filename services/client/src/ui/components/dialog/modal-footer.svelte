@@ -5,10 +5,8 @@
 
   import Icon from '@iconify/svelte';
 
-  import {
-    type ModalVariant,
-    buttonVariantMap,
-  } from './modal-content.theme.js';
+  import { getModalVariant } from './modal-context.js';
+  import { type ModalVariant, buttonVariantMap } from './modal.theme.js';
 
   type Props = {
     variant?: ModalVariant;
@@ -22,7 +20,7 @@
   };
 
   let {
-    variant = 'blue',
+    variant: variantProp,
     isSubmitting = false,
     submitText = 'Submit',
     cancelText = 'Cancel',
@@ -32,6 +30,7 @@
     actions,
   }: Props = $props();
 
+  const variant = $derived(variantProp ?? getModalVariant());
   const submitVariant = $derived(buttonVariantMap[variant] as any);
 </script>
 

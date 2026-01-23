@@ -6,6 +6,7 @@ namespace Tests\Unit\Slink\Tag\Domain\Exception;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Slink\Shared\Domain\Exception\SpecificationException;
 use Slink\Tag\Domain\Exception\DuplicateTagException;
 
 final class DuplicateTagExceptionTest extends TestCase {
@@ -15,7 +16,7 @@ final class DuplicateTagExceptionTest extends TestCase {
     $tagName = 'duplicate-root-tag';
     $exception = new DuplicateTagException($tagName);
     
-    $expectedMessage = 'Root tag "duplicate-root-tag" already exists';
+    $expectedMessage = 'Tag "duplicate-root-tag" already exists';
     $this->assertEquals($expectedMessage, $exception->getMessage());
   }
 
@@ -25,7 +26,7 @@ final class DuplicateTagExceptionTest extends TestCase {
     $parentId = 'parent-123';
     $exception = new DuplicateTagException($tagName, $parentId);
     
-    $expectedMessage = 'Tag "duplicate-child-tag" already exists under parent "parent-123"';
+    $expectedMessage = 'Tag "duplicate-child-tag" already exists under this parent';
     $this->assertEquals($expectedMessage, $exception->getMessage());
   }
 
@@ -34,15 +35,22 @@ final class DuplicateTagExceptionTest extends TestCase {
     $tagName = 'another-tag';
     $exception = new DuplicateTagException($tagName, null);
     
-    $expectedMessage = 'Root tag "another-tag" already exists';
+    $expectedMessage = 'Tag "another-tag" already exists';
     $this->assertEquals($expectedMessage, $exception->getMessage());
   }
 
   #[Test]
-  public function itExtendsInvalidArgumentException(): void {
+  public function itExtendsSpecificationException(): void {
     $exception = new DuplicateTagException('test-tag');
     
-    $this->assertInstanceOf(\InvalidArgumentException::class, $exception);
+    $this->assertInstanceOf(SpecificationException::class, $exception);
+  }
+
+  #[Test]
+  public function itReturnsNameAsProperty(): void {
+    $exception = new DuplicateTagException('test-tag');
+    
+    $this->assertEquals('name', $exception->getProperty());
   }
 
   #[Test]
@@ -51,7 +59,7 @@ final class DuplicateTagExceptionTest extends TestCase {
     $parentId = 'parent_456-abc';
     $exception = new DuplicateTagException($tagName, $parentId);
     
-    $expectedMessage = 'Tag "special_tag-123" already exists under parent "parent_456-abc"';
+    $expectedMessage = 'Tag "special_tag-123" already exists under this parent';
     $this->assertEquals($expectedMessage, $exception->getMessage());
   }
 }

@@ -43,6 +43,8 @@
           'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 border-0 p-0.5 transition-all duration-500 ease-in-out focus:ring-3 focus:ring-green-500/40',
         'gradient-purple':
           'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 border-0 p-0.5 transition-all duration-500 ease-in-out focus:ring-3 focus:ring-purple-500/40',
+        'gradient-amber':
+          'bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 border-0 p-0.5 transition-all duration-500 ease-in-out focus:ring-3 focus:ring-amber-500/40',
         'glass-violet':
           'text-violet-600 dark:text-violet-300 bg-violet-500/10 dark:bg-violet-500/15 hover:bg-violet-500/20 dark:hover:bg-violet-500/25 border-0 transition-all duration-200',
         'glass-blue':
@@ -137,6 +139,8 @@
           'bg-white/80 dark:bg-gray-900/80 text-green-600 dark:text-green-400',
         'gradient-purple':
           'bg-white/20 dark:bg-gray-900/70 text-white dark:text-purple-200',
+        'gradient-amber':
+          'bg-white/20 dark:bg-gray-900/70 text-white dark:text-amber-200',
         'glass-violet': 'bg-transparent',
         'glass-blue': 'bg-transparent',
         'glass-green': 'bg-transparent',

@@ -2,11 +2,12 @@
   import * as Dialog from '@slink/ui/components/dialog';
   import type { Snippet } from 'svelte';
 
+  import { getModalVariant } from './modal-context.js';
   import {
     type ModalVariant,
-    modalIcon,
-    modalIconContainer,
-  } from './modal-content.theme.js';
+    modalHeaderIconContainerVariants,
+    modalHeaderIconVariants,
+  } from './modal.theme.js';
 
   type Props = {
     variant?: ModalVariant;
@@ -15,12 +16,14 @@
     description?: Snippet;
   };
 
-  let { variant = 'blue', icon, title, description }: Props = $props();
+  let { variant: variantProp, icon, title, description }: Props = $props();
+
+  const variant = $derived(variantProp ?? getModalVariant());
 </script>
 
 <Dialog.Header class="flex flex-row items-start gap-4 pb-2">
-  <div class={modalIconContainer({ variant })}>
-    <span class={modalIcon({ variant })}>
+  <div class={modalHeaderIconContainerVariants({ variant })}>
+    <span class={modalHeaderIconVariants({ variant })}>
       {@render icon()}
     </span>
   </div>

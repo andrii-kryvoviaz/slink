@@ -52,7 +52,7 @@
 </script>
 
 <div class="space-y-6">
-  <Modal.Header variant="blue">
+  <Modal.Header>
     {#snippet icon()}
       <Icon icon={mode === 'edit' ? 'lucide:pencil' : 'lucide:folder-plus'} />
     {/snippet}
@@ -98,8 +98,21 @@
       </div>
     </div>
 
+    {#if mode === 'create'}
+      <Modal.Notice variant="info">
+        {#snippet icon()}
+          <Icon icon="lucide:info" />
+        {/snippet}
+        {#snippet title()}Collection Sharing{/snippet}
+        {#snippet message()}
+          Collections let you group images together and share them with a single
+          link. You can add or remove images at any time after creating the
+          collection.
+        {/snippet}
+      </Modal.Notice>
+    {/if}
+
     <Modal.Footer
-      variant="blue"
       {isSubmitting}
       submitText={mode === 'edit' ? 'Save Changes' : 'Create Collection'}
       submitDisabled={!formData.name.trim()}

@@ -34,7 +34,6 @@ export {
   Description,
   Close,
   Dialog,
-  //
   Root as DialogRoot,
   Title as DialogTitle,
   Portal as DialogPortal,
@@ -46,3 +45,12 @@ export {
   Description as DialogDescription,
   Close as DialogClose,
 };
+
+export type {
+  ModalVariant,
+  ModalBackdrop,
+  ModalAnimation,
+  ModalSize,
+} from './modal.theme.js';
+
+export { getModalContext, getModalVariant } from './modal-context.js';

@@ -4,13 +4,22 @@
   import { cn } from '@slink/utils/ui/index.js';
 
   import * as Dialog from './index.js';
+  import type {
+    ModalAnimation,
+    ModalBackdrop,
+    ModalSize,
+    ModalVariant,
+  } from './modal.theme.js';
 
   type Props = {
     open?: boolean;
     onOpenChange?: (open: boolean) => void;
     title?: string;
     description?: string;
-    size?: 'sm' | 'md' | 'lg' | 'xl';
+    size?: ModalSize;
+    variant?: ModalVariant;
+    backdrop?: ModalBackdrop;
+    animation?: ModalAnimation;
     children?: Snippet;
     class?: string;
   };
@@ -21,16 +30,12 @@
     title,
     description,
     size = 'md',
+    variant = 'blue',
+    backdrop = 'enabled',
+    animation = 'fade',
     children,
     class: className,
   }: Props = $props();
-
-  const sizeClasses = {
-    sm: 'sm:max-w-sm',
-    md: 'sm:max-w-lg',
-    lg: 'sm:max-w-2xl',
-    xl: 'sm:max-w-4xl',
-  };
 
   function handleOpenChange(newOpen: boolean) {
     open = newOpen;
@@ -39,7 +44,7 @@
 </script>
 
 <Dialog.Root bind:open onOpenChange={handleOpenChange}>
-  <Dialog.Content class={cn(sizeClasses[size], className)}>
+  <Dialog.Content {size} {variant} {backdrop} {animation} class={cn(className)}>
     {#if title || description}
       <Dialog.Header>
         {#if title}

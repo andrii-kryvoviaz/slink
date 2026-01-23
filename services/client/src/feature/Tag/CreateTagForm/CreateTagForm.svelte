@@ -8,35 +8,26 @@
   import type { Tag } from '@slink/api/Resources/TagResource';
 
   interface Props {
-    tags: Tag[];
     isCreating: boolean;
     onSubmit: (data: { name: string; parentId?: string }) => void;
     onCancel: () => void;
     errors?: Record<string, string>;
   }
 
-  let { tags, isCreating, onSubmit, onCancel, errors = {} }: Props = $props();
+  let { isCreating, onSubmit, onCancel, errors = {} }: Props = $props();
 
-  let formData = $state({
-    name: '',
-    parentId: '',
-  });
+  let name = $state('');
+  let selectedParentTag = $state<Tag[]>([]);
 
-  const selectedParentTag = $derived(() => {
-    if (!formData.parentId) return [];
-    const tag = tags.find((t) => t.id === formData.parentId);
-    return tag ? [tag] : [];
-  });
-
-  const handleParentTagChange = (selectedTags: Tag[]) => {
-    formData.parentId = selectedTags.length > 0 ? selectedTags[0].id : '';
+  const handleParentTagChange = (tags: Tag[]) => {
+    selectedParentTag = tags;
   };
 
   function handleSubmit(event: Event) {
     event.preventDefault();
     const data = {
-      name: formData.name.trim(),
-      parentId: formData.parentId || undefined,
+      name: name.trim(),
+      parentId: selectedParentTag[0]?.id,
     };
     onSubmit(data);
   }
@@ -50,7 +41,7 @@
 </script>
 
 <div class="space-y-6">
-  <Modal.Header variant="green">
+  <Modal.Header>
     {#snippet icon()}
       <Icon icon="lucide:tag" />
     {/snippet}
@@ -62,7 +53,7 @@
     <div class="space-y-5">
       <Input
         label="Tag Name"
-        bind:value={formData.name}
+        bind:value={name}
         placeholder="e.g., Nature, Photography, Art"
         error={errors?.name}
         size="md"
@@ -83,16 +74,17 @@
           Parent Tag (Optional)
         </label>
         <TagSelector
-          selectedTags={selectedParentTag()}
+          selectedTags={selectedParentTag}
           onTagsChange={handleParentTagChange}
           placeholder="Search for parent tag..."
           variant="minimal"
           allowCreate={false}
+          singleSelect={true}
         />
       </div>
     </div>
 
-    <Modal.Notice variant="success">
+    <Modal.Notice variant="info">
       {#snippet icon()}
         <Icon icon="lucide:info" />
       {/snippet}
@@ -105,10 +97,9 @@
     </Modal.Notice>
 
     <Modal.Footer
-      variant="green"
       isSubmitting={isCreating}
       submitText={isCreating ? 'Creating...' : 'Create Tag'}
-      submitDisabled={!formData.name.trim()}
+      submitDisabled={!name.trim()}
       {onCancel}
     />
   </form>

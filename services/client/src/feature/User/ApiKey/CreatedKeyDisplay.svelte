@@ -19,7 +19,7 @@
 </script>
 
 <div class="space-y-6">
-  <Modal.Header variant="green">
+  <Modal.Header>
     {#snippet icon()}
       <Icon icon="ph:check" />
     {/snippet}
@@ -31,10 +31,6 @@
     class="bg-green-50/50 dark:bg-green-900/10 border border-green-200/50 dark:border-green-800/30 rounded-xl p-4"
   >
     <div class="flex items-center gap-3 mb-3">
-      <Icon
-        icon="ph:shield-check"
-        class="h-4 w-4 text-green-600 dark:text-green-400"
-      />
       <span class="text-sm font-medium text-green-800 dark:text-green-200">
         Your API Key
       </span>
@@ -47,7 +43,7 @@
     />
   </div>
 
-  <Modal.Notice variant="warning">
+  <Modal.Notice variant="info">
     {#snippet icon()}
       <Icon icon="ph:warning-duotone" />
     {/snippet}
@@ -58,7 +54,7 @@
     {/snippet}
   </Modal.Notice>
 
-  <Modal.Footer variant="green">
+  <Modal.Footer>
     {#snippet actions()}
       <Button
         variant="glass"

@@ -12,7 +12,7 @@
 </script>
 
 <ConfirmationDialog
-  variant="warning"
+  variant="amber"
   icon="heroicons:arrow-path"
   title="Reset Setting"
   confirmText="Reset to Default"

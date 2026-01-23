@@ -26,6 +26,7 @@
     variant?: 'default' | 'neon' | 'minimal' | 'subtle';
     allowCreate?: boolean;
     hideIcon?: boolean;
+    singleSelect?: boolean;
   }
 
   let {
@@ -36,6 +37,7 @@
     variant = 'default',
     allowCreate = true,
     hideIcon = false,
+    singleSelect = false,
   }: Props = $props();
 
   let isOpen = $state(false);
@@ -117,10 +119,10 @@
   const selectTag = (tag: Tag, keepOpen = false) => {
     if (disabled || selectedTagIds.has(tag.id)) return;
 
-    const newTags = [...selectedTags, tag];
+    const newTags = singleSelect ? [tag] : [...selectedTags, tag];
     onTagsChange?.(newTags);
 
-    if (!keepOpen) {
+    if (!keepOpen || singleSelect) {
       resetDropdownState();
     } else {
       searchTerm = '';
@@ -318,7 +320,7 @@
                     bind:searchTerm
                     bind:childTagName
                     {variant}
-                    placeholder={hasSelectedTags
+                    placeholder={hasSelectedTags && !singleSelect
                       ? 'Add more tags...'
                       : placeholder}
                     {creatingChildFor}

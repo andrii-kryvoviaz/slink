@@ -95,7 +95,7 @@
   {/snippet}
 </ApiKeyList>
 
-<Dialog bind:open={state.createModalOpen} size="md">
+<Dialog bind:open={state.createModalOpen} size="md" variant="purple">
   {#snippet children()}
     <CreateApiKeyForm
       bind:formData={state.formData}
@@ -110,7 +110,7 @@
   {/snippet}
 </Dialog>
 
-<Dialog bind:open={state.createdKeyModalOpen} size="md">
+<Dialog bind:open={state.createdKeyModalOpen} size="md" variant="green">
   {#snippet children()}
     {#if apiKeyStore.createdKey}
       <CreatedKeyDisplay

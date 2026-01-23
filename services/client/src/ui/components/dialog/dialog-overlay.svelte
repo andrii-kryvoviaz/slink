@@ -3,19 +3,31 @@
 
   import { cn } from '@slink/utils/ui/index.js';
 
+  import { getModalAnimation, getModalBackdrop } from './modal-context.js';
+  import {
+    type ModalAnimation,
+    type ModalBackdrop,
+    modalOverlayVariants,
+  } from './modal.theme.js';
+
   let {
     ref = $bindable(null),
     class: className,
+    backdrop: backdropProp,
+    animation: animationProp,
     ...restProps
-  }: DialogPrimitive.OverlayProps = $props();
+  }: DialogPrimitive.OverlayProps & {
+    backdrop?: ModalBackdrop;
+    animation?: ModalAnimation;
+  } = $props();
+
+  const backdrop = $derived(backdropProp ?? getModalBackdrop());
+  const animation = $derived(animationProp ?? getModalAnimation());
 </script>
 
 <DialogPrimitive.Overlay
   bind:ref
   data-slot="dialog-overlay"
-  class={cn(
-    'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50',
-    className,
-  )}
+  class={cn(modalOverlayVariants({ backdrop, animation }), className)}
   {...restProps}
 />

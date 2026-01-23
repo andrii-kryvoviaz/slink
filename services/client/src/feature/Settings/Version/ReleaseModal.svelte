@@ -138,7 +138,7 @@
       </div>
     </div>
 
-    <Modal.Footer variant="green">
+    <Modal.Footer variant="blue">
       {#snippet actions()}
         <Button
           variant="glass"

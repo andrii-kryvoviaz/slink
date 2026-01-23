@@ -6,6 +6,15 @@
   import { type WithoutChildrenOrChild, cn } from '@slink/utils/ui/index.js';
 
   import * as Dialog from './index.js';
+  import { setModalContext } from './modal-context.js';
+  import {
+    type ModalAnimation,
+    type ModalBackdrop,
+    type ModalBackground,
+    type ModalSize,
+    type ModalVariant,
+    modalContentVariants,
+  } from './modal.theme.js';
 
   let {
     ref = $bindable(null),
@@ -13,23 +22,32 @@
     portalProps,
     children,
     showCloseButton = true,
+    variant = 'blue',
+    backdrop = 'enabled',
+    animation = 'fade',
+    size = 'md',
+    background = 'glass',
     ...restProps
   }: WithoutChildrenOrChild<DialogPrimitive.ContentProps> & {
     portalProps?: DialogPrimitive.PortalProps;
     children: Snippet;
     showCloseButton?: boolean;
+    variant?: ModalVariant;
+    backdrop?: ModalBackdrop;
+    animation?: ModalAnimation;
+    size?: ModalSize;
+    background?: ModalBackground;
   } = $props();
+
+  setModalContext({ variant, backdrop, animation });
 </script>
 
 <Dialog.Portal {...portalProps}>
-  <Dialog.Overlay />
+  <Dialog.Overlay {backdrop} {animation} />
   <DialogPrimitive.Content
     bind:ref
     data-slot="dialog-content"
-    class={cn(
-      'group bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800/80 dark:to-slate-700/60 border border-slate-200/50 dark:border-slate-700/30 rounded-2xl shadow-lg backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed left-[50%] top-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 p-6 duration-200 sm:max-w-lg',
-      className,
-    )}
+    class={cn(modalContentVariants({ size, animation, background }), className)}
     {...restProps}
   >
     {@render children?.()}

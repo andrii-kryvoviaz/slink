@@ -73,7 +73,6 @@
     </Modal.Notice>
 
     <Modal.Footer
-      variant="blue"
       isSubmitting={isCreating}
       submitText={isCreating ? 'Creating...' : 'Create API Key'}
       {onCancel}

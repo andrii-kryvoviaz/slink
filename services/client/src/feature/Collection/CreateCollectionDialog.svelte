@@ -17,7 +17,12 @@
   };
 </script>
 
-<Dialog open={modalState.isOpen} onOpenChange={handleOpenChange} size="md">
+<Dialog
+  open={modalState.isOpen}
+  onOpenChange={handleOpenChange}
+  size="md"
+  variant="blue"
+>
   {#snippet children()}
     <CreateCollectionForm
       isSubmitting={modalState.isSubmitting}
