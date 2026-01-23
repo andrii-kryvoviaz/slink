@@ -50,7 +50,7 @@ final class DeleteImageHandlerTest extends TestCase {
     $storage->expects($this->once())->method('delete')->with('test-image.jpg');
     
     $handler = new DeleteImageHandler($imageRepository, $storage);
-    $handler($command, $user, '123');
+    $handler($command, $userId, '123');
   }
 
   #[Test]
@@ -79,7 +79,7 @@ final class DeleteImageHandlerTest extends TestCase {
     $storage->expects($this->never())->method('delete');
     
     $handler = new DeleteImageHandler($imageRepository, $storage);
-    $handler($command, $user, '123');
+    $handler($command, $userId, '123');
   }
 
   #[Test]
@@ -102,7 +102,7 @@ final class DeleteImageHandlerTest extends TestCase {
     $storage = $this->createMock(StorageInterface::class);
     
     $handler = new DeleteImageHandler($imageRepository, $storage);
-    $handler($command, $user, '123');
+    $handler($command, $userId, '123');
   }
 
   #[Test]
@@ -125,7 +125,7 @@ final class DeleteImageHandlerTest extends TestCase {
     $storage = $this->createMock(StorageInterface::class);
     
     $handler = new DeleteImageHandler($imageRepository, $storage);
-    $handler($command, $user, '123');
+    $handler($command, $userId, '123');
   }
 
   #[Test]
@@ -170,7 +170,7 @@ final class DeleteImageHandlerTest extends TestCase {
     $storage = $this->createMock(StorageInterface::class);
     
     $handler = new DeleteImageHandler($imageRepository, $storage);
-    $handler($command, $user, '123');
+    $handler($command, $userId, '123');
   }
 
   #[Test]
@@ -194,6 +194,6 @@ final class DeleteImageHandlerTest extends TestCase {
     $storage = $this->createMock(StorageInterface::class);
     
     $handler = new DeleteImageHandler($imageRepository, $storage);
-    $handler($command, $user, '123');
+    $handler($command, $userId, '123');
   }
 }

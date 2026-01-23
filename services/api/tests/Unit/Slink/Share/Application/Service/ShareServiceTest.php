@@ -13,6 +13,7 @@ use Slink\Share\Domain\Service\ShareFeatureHandlerInterface;
 use Slink\Share\Domain\Share;
 use Slink\Share\Domain\ValueObject\ShareableReference;
 use Slink\Share\Domain\ValueObject\ShareContext;
+use Slink\Share\Domain\ValueObject\ShareResult;
 use Slink\Share\Infrastructure\ReadModel\View\ShareView;
 use Slink\Share\Infrastructure\ReadModel\View\ShortUrlView;
 use Slink\Shared\Domain\ValueObject\ID;
@@ -121,5 +122,17 @@ final class ShareServiceTest extends TestCase {
 
     $this->assertStringContainsString('/i/', $service->resolveUrl($imageShare));
     $this->assertStringContainsString('/c/', $service->resolveUrl($collectionShare));
+  }
+
+  #[Test]
+  public function itReturnsSignedResultForShare(): void {
+    $service = new ShareService(self::ORIGIN, []);
+    $shareableId = '12345678-1234-1234-1234-123456789abc';
+    $targetUrl = '/image/test.jpg';
+
+    $result = $service->share($shareableId, $targetUrl);
+
+    $this->assertInstanceOf(ShareResult::class, $result);
+    $this->assertEquals($targetUrl, $result->getUrl());
   }
 }

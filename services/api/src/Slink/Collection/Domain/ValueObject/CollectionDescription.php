@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Collection\Domain\ValueObject;
 
+use Slink\Shared\Domain\Exception\InvalidArgumentException;
 use Slink\Shared\Domain\ValueObject\AbstractValueObject;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -20,7 +21,7 @@ final readonly class CollectionDescription extends AbstractValueObject {
     $trimmed = trim($description);
 
     if (mb_strlen($trimmed) > self::MAX_LENGTH) {
-      throw new \InvalidArgumentException(sprintf('Collection description cannot exceed %d characters', self::MAX_LENGTH));
+      throw new InvalidArgumentException(sprintf('Collection description cannot exceed %d characters', self::MAX_LENGTH), 'description');
     }
 
     return new self($trimmed);

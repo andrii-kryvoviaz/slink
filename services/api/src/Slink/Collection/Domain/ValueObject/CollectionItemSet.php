@@ -57,7 +57,11 @@ final readonly class CollectionItemSet extends AbstractValueObject {
   }
 
   public function get(ID $itemId): ?CollectionItem {
-    return $this->items->get($itemId->toString());
+    $key = $itemId->toString();
+    if (!$this->items->has($key)) {
+      return null;
+    }
+    return $this->items->get($key);
   }
 
   /**
