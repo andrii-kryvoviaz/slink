@@ -7,6 +7,7 @@
   import { FormattedDate } from '@slink/feature/Text';
   import { Button } from '@slink/ui/components/button';
   import { Dialog } from '@slink/ui/components/dialog';
+  import { LazyImage } from '@slink/ui/components/lazy-image';
 
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
@@ -121,18 +122,19 @@
               <div
                 class="aspect-4/3 bg-gray-100 dark:bg-gray-800/50 flex items-center justify-center relative overflow-hidden"
               >
-                {#if collection.coverImage}
-                  <img
-                    src={collection.coverImage}
-                    alt={collection.name}
-                    class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
-                {:else}
-                  <Icon
-                    icon="ph:folder-simple-duotone"
-                    class="w-12 h-12 text-gray-400 dark:text-gray-600 group-hover:text-gray-500 dark:group-hover:text-gray-500 transition-colors"
-                  />
-                {/if}
+                <LazyImage
+                  src={collection.coverImage}
+                  alt={collection.name}
+                  class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  containerClass="w-full h-full"
+                >
+                  {#snippet placeholder()}
+                    <Icon
+                      icon="ph:folder-simple-duotone"
+                      class="w-12 h-12 text-gray-400 dark:text-gray-600 group-hover:text-gray-500 dark:group-hover:text-gray-500 transition-colors"
+                    />
+                  {/snippet}
+                </LazyImage>
                 <div class="absolute bottom-2 left-2">
                   <span
                     class="flex items-center gap-1 px-2 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-xs"

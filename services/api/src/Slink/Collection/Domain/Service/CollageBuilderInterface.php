@@ -10,5 +10,5 @@ interface CollageBuilderInterface {
   /**
    * @param VipsImage[] $images
    */
-  public function build(array $images, int $width = 600, int $height = 400): string;
+  public function build(array $images, int $width = 600, int $height = 400): ?string;
 }

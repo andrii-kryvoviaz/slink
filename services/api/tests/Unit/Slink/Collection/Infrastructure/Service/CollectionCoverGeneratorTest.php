@@ -131,13 +131,15 @@ final class CollectionCoverGeneratorTest extends TestCase {
       ->expects($this->once())
       ->method('build')
       ->with([])
-      ->willReturn('placeholder-content');
+      ->willReturn(null);
 
     $this->storage
-      ->expects($this->once())
+      ->expects($this->never())
       ->method('writeToCache');
 
-    $this->generator->getCoverContent($collectionId, $imageIds);
+    $result = $this->generator->getCoverContent($collectionId, $imageIds);
+
+    $this->assertNull($result);
   }
 
   #[Test]
@@ -176,12 +178,14 @@ final class CollectionCoverGeneratorTest extends TestCase {
     $this->collageBuilder
       ->expects($this->once())
       ->method('build')
-      ->willReturn('placeholder-content');
+      ->willReturn(null);
 
     $this->storage
-      ->expects($this->once())
+      ->expects($this->never())
       ->method('writeToCache');
 
-    $this->generator->getCoverContent($collectionId, $imageIds);
+    $result = $this->generator->getCoverContent($collectionId, $imageIds);
+
+    $this->assertNull($result);
   }
 }

@@ -38,9 +38,9 @@ final class CollageBuilder implements CollageBuilderInterface {
     ],
   ];
 
-  public function build(array $images, int $width = 600, int $height = 400): string {
+  public function build(array $images, int $width = 600, int $height = 400): ?string {
     if (empty($images)) {
-      return $this->createPlaceholder($width, $height);
+      return null;
     }
 
     $normalized = array_map(fn(VipsImage $img) => $this->normalize($img), $images);
@@ -128,11 +128,5 @@ final class CollageBuilder implements CollageBuilderInterface {
       $width,
       $height
     );
-  }
-
-  private function createPlaceholder(int $width, int $height): string {
-    return VipsImage::black($width, $height)
-      ->copy(['interpretation' => 'srgb'])
-      ->writeToBuffer('.avif', ['Q' => self::QUALITY]);
   }
 }

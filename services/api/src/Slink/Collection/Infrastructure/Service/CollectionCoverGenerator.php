@@ -57,9 +57,14 @@ final class CollectionCoverGenerator implements CollectionCoverGeneratorInterfac
   /**
    * @param string[] $imageIds
    */
-  private function generateAndCache(string $fileName, array $imageIds): string {
+  private function generateAndCache(string $fileName, array $imageIds): ?string {
     $images = $this->loadImages($imageIds);
     $content = $this->collageBuilder->build($images);
+
+    if ($content === null) {
+      return null;
+    }
+
     $this->storage->writeToCache($fileName, $content);
 
     return $content;
