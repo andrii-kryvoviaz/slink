@@ -16,6 +16,11 @@ interface CollectionItemRepositoryInterface {
   /**
    * @return array<CollectionItemView>
    */
+  public function findAllByItemId(string $itemId): array;
+
+  /**
+   * @return array<CollectionItemView>
+   */
   public function getByCollectionId(string $collectionId): array;
 
   /**

@@ -35,6 +35,17 @@ final class CollectionItemRepository extends AbstractRepository implements Colle
       ->getOneOrNullResult();
   }
 
+  public function findAllByItemId(string $itemId): array {
+    return $this->getEntityManager()
+      ->createQueryBuilder()
+      ->from(CollectionItemView::class, 'ci')
+      ->select('ci')
+      ->where('ci.itemId = :itemId')
+      ->setParameter('itemId', $itemId)
+      ->getQuery()
+      ->getResult();
+  }
+
   /**
    * @return array<CollectionItemView>
    */

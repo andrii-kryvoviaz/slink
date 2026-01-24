@@ -22,6 +22,11 @@ final class ShareRepository extends AbstractRepository implements ShareRepositor
   }
 
   #[Override]
+  public function remove(ShareView $share): void {
+    $this->getEntityManager()->remove($share);
+  }
+
+  #[Override]
   public function findById(string $id): ?ShareView {
     return $this->createQueryBuilder('s')
       ->where('s.uuid = :id')

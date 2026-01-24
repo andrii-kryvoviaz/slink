@@ -6,6 +6,7 @@ namespace Slink\Image\Infrastructure\ReadModel\Projection;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
+use Slink\Collection\Domain\Repository\CollectionItemRepositoryInterface;
 use Slink\Image\Domain\Event\ImageAttributesWasUpdated;
 use Slink\Image\Domain\Event\ImageLicenseWasUpdated;
 use Slink\Image\Domain\Event\ImageMetadataWasUpdated;
@@ -15,6 +16,8 @@ use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Image\Infrastructure\ReadModel\Repository\ImageLicenseRepository;
 use Slink\Image\Infrastructure\ReadModel\View\ImageLicenseView;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
+use Slink\Share\Domain\Enum\ShareableType;
+use Slink\Share\Domain\Repository\ShareRepositoryInterface;
 use Slink\Shared\Domain\Event\EventWithEntityManager;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractProjection;
@@ -24,6 +27,8 @@ final class ImageProjection extends AbstractProjection {
   public function __construct(
     private readonly ImageRepositoryInterface $repository,
     private readonly ImageLicenseRepository $licenseRepository,
+    private readonly ShareRepositoryInterface $shareRepository,
+    private readonly CollectionItemRepositoryInterface $collectionItemRepository,
     private readonly EntityManagerInterface $em
   ) {
   }
@@ -68,16 +73,24 @@ final class ImageProjection extends AbstractProjection {
     $image->updateMetadata($event->metadata);
   }
 
-  /**
-   * @param ImageWasDeleted $event
-   * @return void
-   * @throws NonUniqueResultException
-   * @throws NotFoundException
-   */
   public function handleImageWasDeleted(ImageWasDeleted $event): void {
-    $image = $this->repository->oneById($event->id->toString());
+    $imageId = $event->id->toString();
 
-    $this->repository->remove($image);
+    $share = $this->shareRepository->findByShareable($imageId, ShareableType::Image);
+    if ($share !== null) {
+      $this->shareRepository->remove($share);
+    }
+
+    $collectionItems = $this->collectionItemRepository->findAllByItemId($imageId);
+    foreach ($collectionItems as $item) {
+      $this->collectionItemRepository->remove($item);
+    }
+
+    try {
+      $image = $this->repository->oneById($imageId);
+      $this->repository->remove($image);
+    } catch (NotFoundException) {
+    }
   }
 
   public function handleImageLicenseWasUpdated(ImageLicenseWasUpdated $event): void {
