@@ -1178,10 +1178,10 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@lucide/svelte@^0.562.0":
-  version "0.562.0"
-  resolved "https://registry.yarnpkg.com/@lucide/svelte/-/svelte-0.562.0.tgz#c478bd2198bab23b0143a96bcd0c52d47deb2341"
-  integrity sha512-wDMULwtTFN2Sc/TFBm6gfuVCNb4Y5P9LDrwxNnUbV52+IEU7NXZmvxwXoz+vrrpad6Xupq+Hw5eUlqIHEGhouw==
+"@lucide/svelte@^0.563.1":
+  version "0.563.1"
+  resolved "https://registry.yarnpkg.com/@lucide/svelte/-/svelte-0.563.1.tgz#f25cd9ac57a8d58735ba4a2ab0d96860e5b9ebe5"
+  integrity sha512-Kt+MbnE5D9RsuI/csmf7M+HWxALe57x3A0DhQ8pPnnUpneh7zuldrYjlT+veWtk+tVnp5doQtaAAxLujzIlhBw==
 
 "@napi-rs/wasm-runtime@^1.1.0":
   version "1.1.0"
@@ -4401,7 +4401,7 @@ svelte-toolbelt@^0.7.1:
     runed "^0.23.2"
     style-to-object "^1.0.8"
 
-svelte@^5.47.1:
+svelte@^5.48.1:
   version "5.48.1"
   resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.48.1.tgz#aab1096d710317c838fe2ae9b4e09f6da2668b65"
   integrity sha512-gHdOWQILqvQgqvILjEd87yKy6OKHWlWu7hILXoxvEUo9+iPQ1snPHiR7IGiwRdaC1a9GWC8oWN6QSpQEIb28VQ==
