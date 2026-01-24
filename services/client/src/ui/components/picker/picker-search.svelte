@@ -3,23 +3,12 @@
 
   interface Props {
     value?: string;
-    onInput?: (value: string) => void;
     placeholder?: string;
   }
 
-  let {
-    value = $bindable(''),
-    onInput,
-    placeholder = 'Search collections',
-  }: Props = $props();
+  let { value = $bindable(''), placeholder = 'Search...' }: Props = $props();
 
   let inputFocused = $state(false);
-
-  const handleInput = (event: Event) => {
-    const target = event.target as HTMLInputElement;
-    value = target.value;
-    onInput?.(target.value);
-  };
 </script>
 
 <div class="px-2 pt-2 pb-1 shrink-0">
@@ -31,8 +20,7 @@
         : 'text-gray-400 dark:text-gray-500'}"
     />
     <input
-      {value}
-      oninput={handleInput}
+      bind:value
       onfocus={() => (inputFocused = true)}
       onblur={() => (inputFocused = false)}
       {placeholder}

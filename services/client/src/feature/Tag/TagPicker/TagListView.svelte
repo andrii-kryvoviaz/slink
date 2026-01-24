@@ -1,18 +1,15 @@
 <script lang="ts">
-  import { Loader } from '@slink/feature/Layout';
-  import TagCreateFooter from '@slink/feature/Tag/TagPicker/TagCreateFooter.svelte';
-  import TagEmptyState from '@slink/feature/Tag/TagPicker/TagEmptyState.svelte';
   import {
-    type TagPickerVariant,
-    tagPickerContainerTheme,
-    tagPickerListTheme,
-  } from '@slink/feature/Tag/TagPicker/TagPicker.theme';
-  import TagPickerItem from '@slink/feature/Tag/TagPicker/TagPickerItem.svelte';
-  import TagSearchInput from '@slink/feature/Tag/TagPicker/TagSearchInput.svelte';
+    PickerItem,
+    PickerList,
+    type PickerVariant,
+  } from '@slink/ui/components/picker';
 
   import Icon from '@iconify/svelte';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
+
+  import { getTagLastSegment, getTagParentPath } from '@slink/lib/utils/tag';
 
   interface Props {
     tags: Tag[];
@@ -20,7 +17,7 @@
     isLoading?: boolean;
     togglingId?: string | null;
     disabled?: boolean;
-    variant?: TagPickerVariant;
+    variant?: PickerVariant;
     showSearch?: boolean;
     onToggle?: (tag: Tag) => void;
     onCreateNew?: () => void;
@@ -33,71 +30,52 @@
     togglingId = null,
     disabled = false,
     variant = 'popover',
-    showSearch: showSearchProp,
+    showSearch,
     onToggle,
     onCreateNew,
   }: Props = $props();
 
-  let searchTerm = $state('');
-
-  const showSearch = $derived(
-    showSearchProp !== undefined ? showSearchProp : tags.length > 5,
-  );
-
-  const filteredTags = $derived(
-    searchTerm
-      ? tags.filter((t) =>
-          t.path.toLowerCase().includes(searchTerm.toLowerCase()),
-        )
-      : tags,
-  );
-
   const isSelected = (tagId: string) => selectedIds.includes(tagId);
-
   const isToggling = (tagId: string) => togglingId === tagId;
+
+  const filterTag = (tag: Tag, searchTerm: string) =>
+    tag.path.toLowerCase().includes(searchTerm.toLowerCase());
 </script>
 
-<div class={tagPickerContainerTheme({ variant })}>
-  {#if (variant === 'popover' || variant === 'glass') && showSearch}
-    <TagSearchInput bind:value={searchTerm} />
-  {/if}
-
-  {#if isLoading}
-    <div class="flex items-center justify-center py-10">
-      <Loader variant="minimal" size="sm" />
-    </div>
-  {:else if tags.length === 0}
-    <TagEmptyState {onCreateNew} />
-  {:else}
-    <div class="max-h-60 overflow-y-auto">
-      <div class={tagPickerListTheme({ variant })}>
-        {#if filteredTags.length === 0}
-          <div class="flex flex-col items-center gap-2 py-6">
-            <Icon
-              icon="ph:magnifying-glass"
-              class="w-5 h-5 text-gray-400 dark:text-gray-500"
-            />
-            <p class="text-sm text-gray-500 dark:text-gray-400">
-              No matches found
-            </p>
-          </div>
-        {:else}
-          {#each filteredTags as tag (tag.id)}
-            <TagPickerItem
-              {tag}
-              selected={isSelected(tag.id)}
-              isToggling={isToggling(tag.id)}
-              {disabled}
-              {variant}
-              {onToggle}
-            />
-          {/each}
-        {/if}
-      </div>
-    </div>
-
-    {#if onCreateNew}
-      <TagCreateFooter {onCreateNew} />
-    {/if}
-  {/if}
-</div>
+<PickerList
+  items={tags}
+  {variant}
+  color="blue"
+  {isLoading}
+  {showSearch}
+  searchPlaceholder="Search tags"
+  filterFn={filterTag}
+  {onCreateNew}
+>
+  {#snippet emptyIcon()}
+    <Icon icon="ph:tag" class="w-8 h-8" />
+  {/snippet}
+  {#snippet emptyMessage()}No tags yet{/snippet}
+  {#snippet emptyAction()}
+    {#if onCreateNew}Create your first tag{/if}
+  {/snippet}
+  {#snippet createFooter()}
+    {#if onCreateNew}New tag{/if}
+  {/snippet}
+  {#snippet children({ item })}
+    {@const tag = item as Tag}
+    <PickerItem
+      selected={isSelected(tag.id)}
+      isToggling={isToggling(tag.id)}
+      {disabled}
+      {variant}
+      color="blue"
+      onclick={() => onToggle?.(tag)}
+    >
+      {#snippet children()}{getTagLastSegment(tag)}{/snippet}
+      {#snippet subtext()}
+        {#if getTagParentPath(tag)}{getTagParentPath(tag)}{/if}
+      {/snippet}
+    </PickerItem>
+  {/snippet}
+</PickerList>

@@ -1,0 +1,120 @@
+<script lang="ts" generics="T">
+  import { Loader } from '@slink/feature/Layout';
+  import type { Snippet } from 'svelte';
+
+  import Icon from '@iconify/svelte';
+
+  import PickerCreateFooter from './picker-create-footer.svelte';
+  import PickerEmptyState from './picker-empty-state.svelte';
+  import PickerSearch from './picker-search.svelte';
+  import {
+    type PickerColor,
+    type PickerVariant,
+    pickerContainerTheme,
+    pickerListTheme,
+  } from './picker.theme';
+
+  interface Props {
+    items: T[];
+    variant?: PickerVariant;
+    color?: PickerColor;
+    isLoading?: boolean;
+    searchPlaceholder?: string;
+    showSearch?: boolean;
+    children: Snippet<[{ item: T; index: number }]>;
+    emptyIcon?: Snippet;
+    emptyMessage?: Snippet;
+    emptyAction?: Snippet;
+    createFooter?: Snippet;
+    filterFn?: (item: T, searchTerm: string) => boolean;
+    onCreateNew?: () => void;
+  }
+
+  let {
+    items,
+    variant = 'popover',
+    color = 'blue',
+    isLoading = false,
+    searchPlaceholder = 'Search...',
+    showSearch: showSearchProp,
+    children,
+    emptyIcon,
+    emptyMessage,
+    emptyAction,
+    createFooter,
+    filterFn,
+    onCreateNew,
+  }: Props = $props();
+
+  let searchTerm = $state('');
+
+  const showSearch = $derived(
+    showSearchProp !== undefined ? showSearchProp : items.length > 5,
+  );
+
+  const filteredItems = $derived(
+    searchTerm && filterFn
+      ? items.filter((item) => filterFn(item, searchTerm))
+      : items,
+  );
+</script>
+
+<div class={pickerContainerTheme({ variant })}>
+  {#if (variant === 'popover' || variant === 'glass') && showSearch}
+    <PickerSearch bind:value={searchTerm} placeholder={searchPlaceholder} />
+  {/if}
+
+  {#if isLoading}
+    <div class="flex items-center justify-center py-10">
+      <Loader variant="minimal" size="sm" />
+    </div>
+  {:else if items.length === 0}
+    <PickerEmptyState {color} onAction={onCreateNew}>
+      {#snippet icon()}
+        {#if emptyIcon}
+          {@render emptyIcon()}
+        {:else}
+          <Icon icon="ph:list-dashes" class="w-8 h-8" />
+        {/if}
+      {/snippet}
+      {#snippet message()}
+        {#if emptyMessage}
+          {@render emptyMessage()}
+        {:else}
+          No items yet
+        {/if}
+      {/snippet}
+      {#snippet action()}
+        {#if emptyAction}
+          {@render emptyAction()}
+        {/if}
+      {/snippet}
+    </PickerEmptyState>
+  {:else}
+    <div class="max-h-60 overflow-y-auto">
+      <div class={pickerListTheme({ variant })}>
+        {#if filteredItems.length === 0}
+          <div class="flex flex-col items-center gap-2 py-6">
+            <Icon
+              icon="ph:magnifying-glass"
+              class="w-5 h-5 text-gray-400 dark:text-gray-500"
+            />
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+              No matches found
+            </p>
+          </div>
+        {:else}
+          {#each filteredItems as item, index (index)}
+            {@render children({ item, index })}
+          {/each}
+        {/if}
+      </div>
+    </div>
+
+    {#if onCreateNew && createFooter}
+      <PickerCreateFooter onclick={onCreateNew}>
+        {@render createFooter()}
+      </PickerCreateFooter>
+    {/if}
+  {/if}
+</div>

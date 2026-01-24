@@ -7,3 +7,4 @@ export * from './dropdown-simple';
 export * from './toggle-group';
 export * from './progress';
 export * from './button-group';
+export * as Picker from './picker';

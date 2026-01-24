@@ -203,4 +203,5 @@ export const themeIcons: string[] = [
   'ph:tag-fill',
   'lucide:pencil',
   'ph:note-pencil',
+  'ph:list-dashes',
 ];
