@@ -94,9 +94,9 @@
                 }}
                 buttons={[
                   'download',
-                  'visibility',
                   'collection',
                   'copy',
+                  'visibility',
                   'delete',
                 ]}
                 on={{

@@ -86,7 +86,7 @@
               isPublic: item.attributes.isPublic,
               collectionIds: item.collectionIds,
             }}
-            buttons={['download', 'visibility', 'collection', 'copy', 'delete']}
+            buttons={['download', 'collection', 'copy', 'visibility', 'delete']}
             on={{
               imageDelete: onImageDelete,
               collectionChange: on?.collectionChange,

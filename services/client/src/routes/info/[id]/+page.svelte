@@ -228,7 +228,7 @@
     <div class="grow max-w-md shrink-0 space-y-8">
       <ImageActionBar
         bind:image
-        buttons={['download', 'visibility', 'collection', 'copy', 'delete']}
+        buttons={['download', 'collection', 'copy', 'visibility', 'delete']}
         layout="hero"
       />
 

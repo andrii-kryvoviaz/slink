@@ -46,8 +46,6 @@ export const themeIcons: string[] = [
   'lucide:download',
   'ph:eye',
   'ph:eye-slash',
-  'ph:copy',
-  'ph:share-network',
   'lucide:link',
   'lucide:unlink',
   'lucide:check',
@@ -204,4 +202,5 @@ export const themeIcons: string[] = [
   'lucide:pencil',
   'ph:note-pencil',
   'ph:list-dashes',
+  'solar:link-linear',
 ];

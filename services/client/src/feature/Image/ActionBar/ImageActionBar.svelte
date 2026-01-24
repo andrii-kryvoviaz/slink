@@ -2,13 +2,9 @@
   import { CollectionPicker } from '@slink/feature/Collection';
   import { ImageDeletePopover } from '@slink/feature/Image';
   import { Loader } from '@slink/feature/Layout';
-  import {
-    ButtonGroup,
-    ButtonGroupItem,
-    buttonGroupItemVariants,
-  } from '@slink/ui/components';
+  import { ButtonGroup, ButtonGroupItem } from '@slink/ui/components';
   import { Overlay } from '@slink/ui/components/popover';
-  import { Tooltip, TooltipProvider } from '@slink/ui/components/tooltip';
+  import { TooltipProvider } from '@slink/ui/components/tooltip';
 
   import { goto } from '$app/navigation';
   import { useGlobalSettings } from '$lib/state/GlobalSettings.svelte.js';
@@ -39,7 +35,6 @@
   type ActionButton =
     | 'download'
     | 'visibility'
-    | 'share'
     | 'delete'
     | 'copy'
     | 'collection';
@@ -64,7 +59,7 @@
 
   let {
     image = $bindable(),
-    buttons = ['download', 'visibility', 'share', 'delete'],
+    buttons = ['download', 'collection', 'copy', 'visibility', 'delete'],
     compact = false,
     layout = 'default',
     on,
@@ -197,7 +192,9 @@
 
 {#snippet loaderOrIcon(icon: string, isLoading: boolean, extraClass?: string)}
   {#if isLoading}
-    <Loader variant="minimal" size="xs" />
+    <div class={cn(iconClass, 'flex items-center justify-center')}>
+      <Loader variant="minimal" size="xs" />
+    </div>
   {:else}
     <Icon {icon} class={cn(iconClass, extraClass)} />
   {/if}
@@ -205,7 +202,9 @@
 
 {#snippet copyIconContent()}
   {#if $shareIsLoading}
-    <Loader variant="minimal" size="xs" />
+    <div class={cn(iconClass, 'flex items-center justify-center')}>
+      <Loader variant="minimal" size="xs" />
+    </div>
   {:else if isCopiedActive}
     <div in:scale={{ duration: 300, easing: cubicOut }}>
       <Icon
@@ -214,7 +213,7 @@
       />
     </div>
   {:else}
-    <Icon icon="ph:copy" class={iconClass} />
+    <Icon icon="solar:link-linear" class={iconClass} />
   {/if}
 {/snippet}
 
@@ -286,29 +285,6 @@
   </ButtonGroupItem>
 {/snippet}
 
-{#snippet shareButton(position: ButtonPosition)}
-  <Tooltip
-    side="bottom"
-    sideOffset={8}
-    withArrow={false}
-    triggerProps={{ class: 'flex flex-1' }}
-  >
-    {#snippet trigger()}
-      <a
-        href="/help/faq#share-feature"
-        class={cn(
-          'flex-1',
-          buttonGroupItemVariants({ variant: 'default', size: 'md', position }),
-        )}
-        aria-label="View sharing policy"
-      >
-        <Icon icon="ph:share-network" class={iconClass} />
-      </a>
-    {/snippet}
-    Sharing policy
-  </Tooltip>
-{/snippet}
-
 {#snippet deleteButton(position: ButtonPosition)}
   <Overlay
     bind:open={deletePopoverOpen}
@@ -376,8 +352,6 @@
     {@render visibilityButton(position)}
   {:else if button === 'copy'}
     {@render copyButton(position)}
-  {:else if button === 'share' && !isHero}
-    {@render shareButton(position)}
   {:else if button === 'delete'}
     {@render deleteButton(position)}
   {:else if button === 'collection'}
