@@ -16,7 +16,7 @@
 
 {#if visible}
   <div class="flex justify-center">
-    <Button size="md" variant="secondary" {...props}>
+    <Button size="sm" variant="secondary" {...props}>
       {#if text}
         {@render text?.()}
       {:else}
