@@ -58,7 +58,7 @@
 </script>
 
 <div class={tagPickerContainerTheme({ variant })}>
-  {#if variant === 'popover' && showSearch}
+  {#if (variant === 'popover' || variant === 'glass') && showSearch}
     <TagSearchInput bind:value={searchTerm} />
   {/if}
 

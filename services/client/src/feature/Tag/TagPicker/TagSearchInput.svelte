@@ -36,7 +36,7 @@
       onfocus={() => (inputFocused = true)}
       onblur={() => (inputFocused = false)}
       {placeholder}
-      class="w-full pl-9 pr-3 py-2 text-sm bg-transparent border-0 border-b border-gray-200 dark:border-gray-700 focus:border-gray-300 dark:focus:border-gray-600 outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 text-gray-900 dark:text-gray-100 transition-colors"
+      class="w-full pl-9 pr-3 py-2 text-sm bg-transparent border-0 border-b border-slate-200/70 dark:border-slate-700/50 focus:border-slate-300/80 dark:focus:border-slate-600/60 outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 text-gray-900 dark:text-gray-100 transition-colors"
     />
   </div>
 </div>

@@ -66,7 +66,7 @@
     {/snippet}
   </Popover.Trigger>
   <Popover.Content
-    class="p-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg overflow-hidden"
+    class="p-0 bg-white/95 dark:bg-slate-900/95 border border-slate-200/70 dark:border-slate-700/50 rounded-xl shadow-xl shadow-black/10 dark:shadow-black/30 overflow-hidden backdrop-blur-sm"
     sideOffset={8}
     align="start"
   >
@@ -75,7 +75,7 @@
       {selectedIds}
       isLoading={selectionState.isLoading}
       {disabled}
-      variant="popover"
+      variant="glass"
       onToggle={handleToggle}
       onCreateNew={handleCreateNew}
     />

@@ -59,7 +59,7 @@
 </script>
 
 <div class={collectionPickerContainerTheme({ variant })}>
-  {#if variant === 'popover' && showSearch}
+  {#if (variant === 'popover' || variant === 'glass') && showSearch}
     <CollectionSearchInput bind:value={searchTerm} />
   {/if}
 
