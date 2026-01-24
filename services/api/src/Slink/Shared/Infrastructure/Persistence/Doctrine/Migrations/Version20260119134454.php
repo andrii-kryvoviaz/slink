@@ -16,7 +16,7 @@ final class Version20260119134454 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('CREATE TABLE "collection" (uuid CHAR(36) NOT NULL, name VARCHAR(100) NOT NULL, description VARCHAR(500) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME DEFAULT NULL, user_id CHAR(36) NOT NULL, PRIMARY KEY (uuid), CONSTRAINT FK_FC4D6532A76ED395 FOREIGN KEY (user_id) REFERENCES "user" (uuid) NOT DEFERRABLE INITIALLY IMMEDIATE)');
+        $this->addSql('CREATE TABLE "collection" (uuid CHAR(36) NOT NULL, name VARCHAR(105) NOT NULL, description VARCHAR(500) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME DEFAULT NULL, user_id CHAR(36) NOT NULL, PRIMARY KEY (uuid), CONSTRAINT FK_FC4D6532A76ED395 FOREIGN KEY (user_id) REFERENCES "user" (uuid) NOT DEFERRABLE INITIALLY IMMEDIATE)');
         $this->addSql('CREATE INDEX IDX_FC4D6532A76ED395 ON "collection" (user_id)');
         $this->addSql('CREATE INDEX idx_collection_user_created_at ON "collection" (user_id, created_at)');
 

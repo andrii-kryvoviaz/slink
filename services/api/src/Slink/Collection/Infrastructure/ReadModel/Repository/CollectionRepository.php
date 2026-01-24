@@ -62,4 +62,18 @@ final class CollectionRepository extends AbstractRepository implements Collectio
 
     return new Paginator($qb->getQuery());
   }
+
+  public function findNamesByPatternAndUser(string $baseName, string $userId): array {
+    $qb = $this->getEntityManager()
+      ->createQueryBuilder()
+      ->from(CollectionView::class, 'c')
+      ->select('c.name')
+      ->where('c.user = :userId')
+      ->andWhere('c.name = :exactName OR c.name LIKE :pattern')
+      ->setParameter('userId', $userId)
+      ->setParameter('exactName', $baseName)
+      ->setParameter('pattern', $baseName . ' (%)');
+
+    return array_column($qb->getQuery()->getArrayResult(), 'name');
+  }
 }

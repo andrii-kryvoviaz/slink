@@ -32,7 +32,7 @@ class CollectionView extends AbstractView {
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'uuid', nullable: false)]
     private UserView $user,
 
-    #[ORM\Column(type: 'string', length: 100)]
+    #[ORM\Column(type: 'string', length: 105)]
     #[Groups(['public'])]
     private string $name,
 
