@@ -1,5 +1,7 @@
-import type { RequestStateOptions } from '@slink/lib/state/core/AbstractHttpState.svelte';
+import { SvelteMap } from 'svelte/reactivity';
+
 import { AbstractHttpState } from '@slink/lib/state/core/AbstractHttpState.svelte';
+import type { RequestStateOptions } from '@slink/lib/state/core/AbstractHttpState.svelte';
 import { SkeletonManager } from '@slink/lib/state/core/SkeletonConfig.svelte';
 
 import { deepMerge } from '@slink/utils/object/deepMerge';
@@ -41,7 +43,7 @@ type DeepPartial<T> = {
 export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
   PaginatedResponse<T>
 > {
-  private _itemMap: Map<string, T> = $state(new Map());
+  private _itemMap: SvelteMap<string, T> = new SvelteMap();
   private _order: string[] = $state([]);
   protected _meta: PaginationMetadata = $state({} as PaginationMetadata);
   protected _nextCursor: string | null = $state(null);
@@ -65,7 +67,7 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
 
   public reset(): void {
     this.markDirty(false);
-    this._itemMap = new Map();
+    this._itemMap.clear();
     this._order = [];
     this._nextCursor = null;
     this._skeletonManager.reset();
@@ -108,7 +110,7 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
             }
           }
         } else {
-          this._itemMap = new Map();
+          this._itemMap.clear();
           this._order = [];
           for (const item of response.data) {
             const id = this._getItemId(item);
@@ -222,7 +224,7 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
   }
 
   protected set _items(newItems: T[]) {
-    this._itemMap = new Map();
+    this._itemMap.clear();
     this._order = [];
     for (const item of newItems) {
       const id = this._getItemId(item);
