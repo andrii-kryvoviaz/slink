@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Slink\Image\Application\Query\GetImageList;
 
-use Slink\Bookmark\Domain\Repository\BookmarkRepositoryInterface;
-use Slink\Collection\Domain\Repository\CollectionItemRepositoryInterface;
 use Slink\Image\Domain\Filter\ImageListFilter;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
+use Slink\Image\Infrastructure\ReadModel\View\ImageView;
+use Slink\Image\Infrastructure\Resource\ImageResourceContext;
+use Slink\Image\Infrastructure\Resource\ImageResourceProcessor;
 use Slink\Shared\Application\Http\Collection;
-use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Application\Query\QueryHandlerInterface;
 use Slink\Shared\Infrastructure\Pagination\CursorPaginationTrait;
 use Slink\Tag\Domain\Service\TagFilterServiceInterface;
@@ -18,10 +18,9 @@ final readonly class GetImageListHandler implements QueryHandlerInterface {
   use CursorPaginationTrait;
 
   public function __construct(
-    private ImageRepositoryInterface          $repository,
-    private TagFilterServiceInterface         $tagFilterService,
-    private BookmarkRepositoryInterface       $bookmarkRepository,
-    private CollectionItemRepositoryInterface $collectionItemRepository,
+    private ImageRepositoryInterface  $repository,
+    private TagFilterServiceInterface $tagFilterService,
+    private ImageResourceProcessor    $resourceProcessor,
   ) {
   }
 
@@ -30,23 +29,23 @@ final readonly class GetImageListHandler implements QueryHandlerInterface {
    * @param int $page
    * @param bool|null $isPublic
    * @param string|null $userId
-   * @param string|null $viewerUserId
-   * @param array<string> $groups
+   * @param ImageResourceContext|null $resourceContext
    * @return Collection
    * @throws \JsonException
    */
   public function __invoke(
-    GetImageListQuery $query,
-    int               $page,
-    ?bool             $isPublic = null,
-    ?string           $userId = null,
-    ?string           $viewerUserId = null,
-    array             $groups = ['public'],
+    GetImageListQuery     $query,
+    int                   $page,
+    ?bool                 $isPublic = null,
+    ?string               $userId = null,
+    ?ImageResourceContext $resourceContext = null,
   ): Collection {
+    $resourceContext ??= new ImageResourceContext();
+
     $tagFilterData = $this->tagFilterService->createTagFilterData(
       $query->getTagIds(),
       $query->requireAllTags(),
-      $userId
+      $userId,
     );
 
     $images = $this->repository->geImageList($page, new ImageListFilter(
@@ -70,32 +69,14 @@ final readonly class GetImageListHandler implements QueryHandlerInterface {
       array_pop($imageEntities);
     }
 
-    $bookmarkedSet = [];
-    $collectionIdsMap = [];
-
-    $imageIds = array_map(fn($image) => (string)$image->getUuid(), $imageEntities);
-
-    if ($viewerUserId) {
-      $bookmarkedSet = array_flip($this->bookmarkRepository->getBookmarkedImageIds($viewerUserId, $imageIds));
-    }
-
-    if ($userId) {
-      $collectionIdsMap = $this->collectionItemRepository->getCollectionIdsByImageIds($imageIds);
-    }
-
     $nextCursor = null;
     if ($hasMore && !empty($imageEntities)) {
       $lastImage = end($imageEntities);
       $nextCursor = $this->generateNextCursor($lastImage);
     }
 
-    $items = array_map(
-      fn($image) => Item::fromEntity($image, [
-        'isBookmarked' => isset($bookmarkedSet[$image->getUuid()]),
-        'collectionIds' => $collectionIdsMap[(string)$image->getUuid()] ?? [],
-      ], [], $groups),
-      $imageEntities
-    );
+    $imageIds = array_map(fn(ImageView $img) => (string)$img->getUuid(), $imageEntities);
+    $items = $this->resourceProcessor->many($imageEntities, $resourceContext->withImageIds($imageIds));
 
     return new Collection(
       $page,

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace UI\Http\Rest\Controller\Image;
 
 use Slink\Image\Application\Query\GetImageList\GetImageListQuery;
+use Slink\Image\Infrastructure\Resource\ImageResourceContext;
 use Slink\Settings\Application\Service\SettingsService;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Application\Query\QueryTrait;
@@ -38,11 +39,15 @@ final class GetImageListController {
   ): ApiResponse {
     $isPublicFilter = $this->configurationProvider->get('image.allowOnlyPublicImages') ? null : true;
 
+    $resourceContext = new ImageResourceContext(
+      groups: ['public', 'bookmark', 'license'],
+      viewerUserId: $user?->getIdentifier(),
+    );
+
     $collection = $this->ask($query->withContext([
       'page' => $page,
       'isPublic' => $isPublicFilter,
-      'viewerUserId' => $user?->getIdentifier(),
-      'groups' => ['public', 'bookmark'],
+      'resourceContext' => $resourceContext,
     ]));
 
     return ApiResponse::collection($collection);

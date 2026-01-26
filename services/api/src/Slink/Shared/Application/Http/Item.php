@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Slink\Shared\Application\Http;
 
+use Slink\Shared\Infrastructure\Resource\ResourceContextInterface;
+use Slink\Shared\Infrastructure\Resource\ResourceInterface;
 use Slink\Shared\Infrastructure\Serializer\SerializerFactory;
 
 final readonly class Item {
@@ -18,7 +20,7 @@ final readonly class Item {
     public array               $relationships = []
   ) {
   }
-  
+
   /**
    * @param string $type
    * @param array<string, mixed> $payload
@@ -32,7 +34,7 @@ final readonly class Item {
       $relations
     );
   }
-  
+
   /**
    * @param string $content
    * @param string $mimeType
@@ -44,7 +46,7 @@ final readonly class Item {
       $content
     );
   }
-  
+
   /**
    * @param object $entity
    * @param array<string, mixed> $extra
@@ -56,13 +58,27 @@ final readonly class Item {
     try {
       /** @var array<string, mixed> $payload */
       $payload = SerializerFactory::create()->normalize($entity, context: ['groups' => $groups]);
-    } catch(\Throwable $e) {
+    } catch (\Throwable $e) {
       throw new \RuntimeException($e->getMessage());
     }
-    
+
     return self::fromPayload(self::type($entity), [...$payload, ...$extra], $relations);
   }
-  
+
+  /**
+   * @param array<string, mixed> $relations
+   */
+  public static function fromResource(ResourceInterface $resource, ResourceContextInterface $context, array $relations = []): self {
+    try {
+      /** @var array<string, mixed> $payload */
+      $payload = SerializerFactory::create()->normalize($resource, context: ['groups' => $context->getGroups()]);
+    } catch (\Throwable $e) {
+      throw new \RuntimeException($e->getMessage());
+    }
+
+    return self::fromPayload(self::type($resource), $payload, $relations);
+  }
+
   /**
    * @param object $model
    * @return string
@@ -70,14 +86,14 @@ final readonly class Item {
   private static function type(object $model): string {
     return self::typeFromString($model::class);
   }
-  
+
   /**
    * @param string $type
    * @return string
    */
   private static function typeFromString(string $type): string {
     $path = \explode('\\', $type);
-    
+
     return \array_pop($path);
   }
 }

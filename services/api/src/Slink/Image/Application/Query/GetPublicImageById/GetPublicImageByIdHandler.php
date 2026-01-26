@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Slink\Image\Application\Query\GetPublicImageById;
 
-use Slink\Bookmark\Domain\Repository\BookmarkRepositoryInterface;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
+use Slink\Image\Infrastructure\Resource\ImageResourceContext;
+use Slink\Image\Infrastructure\Resource\ImageResourceProcessor;
 use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Application\Query\QueryHandlerInterface;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
@@ -13,23 +14,25 @@ use Slink\Shared\Infrastructure\Exception\NotFoundException;
 final readonly class GetPublicImageByIdHandler implements QueryHandlerInterface {
   public function __construct(
     private ImageRepositoryInterface $repository,
-    private BookmarkRepositoryInterface $bookmarkRepository,
+    private ImageResourceProcessor   $resourceProcessor,
   ) {
   }
 
-  public function __invoke(GetPublicImageByIdQuery $query, ?string $currentUserId = null): Item {
+  /**
+   * @throws NotFoundException
+   */
+  public function __invoke(
+    GetPublicImageByIdQuery $query,
+    ?ImageResourceContext   $resourceContext = null,
+  ): Item {
     $imageView = $this->repository->oneById($query->getId());
 
     if (!$imageView->getAttributes()->isPublic()) {
       throw new NotFoundException();
     }
 
-    $isBookmarked = false;
-    if ($currentUserId !== null) {
-      $bookmarkedIds = $this->bookmarkRepository->getBookmarkedImageIds($currentUserId, [$imageView->getUuid()]);
-      $isBookmarked = in_array($imageView->getUuid(), $bookmarkedIds, true);
-    }
+    $resourceContext ??= new ImageResourceContext();
 
-    return Item::fromEntity($imageView, ['isBookmarked' => $isBookmarked]);
+    return $this->resourceProcessor->one($imageView, $resourceContext);
   }
 }

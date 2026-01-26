@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace UI\Http\Rest\Controller\Image;
 
 use Slink\Image\Application\Query\GetPublicImageById\GetPublicImageByIdQuery;
+use Slink\Image\Infrastructure\Resource\ImageResourceContext;
 use Slink\Shared\Application\Query\QueryTrait;
 use Slink\Shared\Infrastructure\Security\Voter\GuestAccessVoter;
 use Slink\User\Infrastructure\Auth\JwtUser;
@@ -22,8 +23,14 @@ final class GetPublicImageByIdController {
 
   public function __invoke(string $id, #[CurrentUser] ?JwtUser $user = null): ApiResponse {
     $query = new GetPublicImageByIdQuery($id);
+
+    $resourceContext = new ImageResourceContext(
+      viewerUserId: $user?->getIdentifier(),
+      groups: ['public', 'bookmark', 'tag'],
+    );
+
     $image = $this->ask($query->withContext([
-      'currentUserId' => $user?->getIdentifier(),
+      'resourceContext' => $resourceContext,
     ]));
 
     return ApiResponse::one($image);

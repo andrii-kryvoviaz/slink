@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace UI\Http\Rest\Controller\Image;
 
 use Slink\Image\Application\Query\GetImageList\GetImageListQuery;
+use Slink\Image\Infrastructure\Resource\ImageResourceContext;
 use Slink\Shared\Application\Query\QueryTrait;
 use Slink\User\Infrastructure\Auth\JwtUser;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -25,10 +26,15 @@ final readonly class GetImageHistoryController {
     #[CurrentUser] JwtUser              $user,
     int                                 $page = 1
   ): ApiResponse {
+    $resourceContext = new ImageResourceContext(
+      groups: ['public', 'private', 'tag', 'collection'],
+      viewerUserId: $user->getIdentifier(),
+    );
+
     $collection = $this->ask($query->withContext([
       'page' => $page,
       'userId' => $user->getIdentifier(),
-      'groups' => ['public', 'private', 'collection'],
+      'resourceContext' => $resourceContext,
     ]));
 
     return ApiResponse::collection($collection);

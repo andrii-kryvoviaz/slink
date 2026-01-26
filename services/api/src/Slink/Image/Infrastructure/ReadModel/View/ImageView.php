@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 
 #[ORM\Table(name: '`image`')]
 #[ORM\Entity(repositoryClass: ImageRepository::class)]
-#[ORM\Index(columns: ['user_id', 'created_at'], name: 'idx_image_user_created_at')]
+#[ORM\Index(name: 'idx_image_user_created_at', columns: ['user_id', 'created_at'])]
 class ImageView extends AbstractView implements CursorAwareInterface {
   #[ORM\ManyToMany(targetEntity: TagView::class)]
   #[ORM\JoinTable(name: 'image_to_tag')]
@@ -31,7 +31,7 @@ class ImageView extends AbstractView implements CursorAwareInterface {
   #[ORM\InverseJoinColumn(name: 'tag_id', referencedColumnName: 'uuid')]
   private Collection $tags;
 
-  #[ORM\OneToOne(mappedBy: 'image', targetEntity: ImageLicenseView::class, cascade: ['persist', 'remove'], fetch: 'EAGER')]
+  #[ORM\OneToOne(targetEntity: ImageLicenseView::class, mappedBy: 'image', cascade: ['persist', 'remove'], fetch: 'EAGER')]
   private ?ImageLicenseView $license = null;
 
   /**
@@ -39,30 +39,31 @@ class ImageView extends AbstractView implements CursorAwareInterface {
    * @param ?UserView $user
    * @param ImageAttributes $attributes
    * @param ImageMetadata|null $metadata
+   * @param int $bookmarkCount
    */
   public function __construct(
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]
     #[Groups(['public'])]
     #[SerializedName('id')]
-    private string $uuid,
+    private string          $uuid,
 
     #[ORM\ManyToOne(targetEntity: UserView::class, fetch: 'EAGER')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'uuid')]
-    private ?UserView $user,
+    private ?UserView       $user,
 
     #[ORM\Embedded(class: ImageAttributes::class, columnPrefix: false)]
     #[Groups(['public'])]
     #[Sanitize]
-    private ImageAttributes    $attributes,
+    private ImageAttributes $attributes,
 
     #[ORM\Embedded(class: ImageMetadata::class, columnPrefix: false)]
     #[Groups(['public'])]
-    private ?ImageMetadata     $metadata = null,
+    private ?ImageMetadata  $metadata = null,
 
     #[ORM\Column(type: 'integer', options: ['default' => 0])]
     #[Groups(['public'])]
-    private int $bookmarkCount = 0,
+    private int             $bookmarkCount = 0,
   ) {
     $this->tags = new ArrayCollection();
   }
