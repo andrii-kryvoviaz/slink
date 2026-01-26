@@ -8,12 +8,15 @@ use Doctrine\ORM\Mapping as ORM;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\AbstractCompoundValueObject;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
+use Slink\Shared\Domain\ValueObject\EscapedString;
 use Slink\Shared\Domain\ValueObject\MutableValueObject;
+use Slink\Shared\Domain\ValueObject\SanitizableValueObject;
 use Slink\Shared\Infrastructure\Attribute\Groups;
+use Slink\Shared\Infrastructure\Attribute\Sanitize;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 
 #[ORM\Embeddable]
-final readonly class ImageAttributes extends AbstractCompoundValueObject {
+final readonly class ImageAttributes extends AbstractCompoundValueObject implements SanitizableValueObject {
   use MutableValueObject;
   
   /**
@@ -32,6 +35,7 @@ final readonly class ImageAttributes extends AbstractCompoundValueObject {
     
     #[ORM\Column(type: 'string')]
     #[Groups(['public'])]
+    #[Sanitize]
     private string $description,
     
     #[ORM\Column(type: 'boolean')]
@@ -125,7 +129,18 @@ final readonly class ImageAttributes extends AbstractCompoundValueObject {
       $this->views + 1,
     );
   }
-  
+
+  public function sanitize(): static {
+    return new self(
+      $this->fileName,
+      EscapedString::fromString($this->description)->getValue(),
+      $this->isPublic,
+      $this->createdAt,
+      $this->updatedAt,
+      $this->views,
+    );
+  }
+
   public function toPayload(): array {
     return [
       'fileName' => $this->fileName,

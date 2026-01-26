@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Slink\User\Domain\ValueObject;
 
 use Slink\Shared\Domain\ValueObject\AbstractValueObject;
+use Slink\Shared\Domain\ValueObject\EscapedString;
+use Slink\Shared\Domain\ValueObject\SanitizableValueObject;
 use Slink\User\Domain\Exception\InvalidDisplayNameException;
 
-final readonly class DisplayName extends AbstractValueObject {
+final readonly class DisplayName extends AbstractValueObject implements SanitizableValueObject {
   /**
    * @return string
    */
@@ -49,6 +51,14 @@ final readonly class DisplayName extends AbstractValueObject {
    */
   public function toString(): string {
     return $this->displayName ?? $this->getReservedName();
+  }
+
+  public function sanitize(): static {
+    if ($this->displayName === null) {
+      return $this;
+    }
+
+    return new self(EscapedString::fromString($this->displayName)->getValue());
   }
   
   /**

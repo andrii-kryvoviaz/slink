@@ -24,14 +24,15 @@
   }: Props = $props();
 
   let formData = $state({
-    name: initialData?.name ?? '',
-    description: initialData?.description ?? '',
+    name: initialData?.name?.decodeHtmlEntities() ?? '',
+    description: initialData?.description?.decodeHtmlEntities() ?? '',
   });
 
   $effect(() => {
     if (initialData) {
-      formData.name = initialData.name;
-      formData.description = initialData.description ?? '';
+      formData.name = initialData.name.decodeHtmlEntities();
+      formData.description =
+        initialData.description?.decodeHtmlEntities() ?? '';
     }
   });
 

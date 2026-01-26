@@ -13,6 +13,7 @@ use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Domain\ValueObject\ImageMetadata;
 use Slink\Image\Infrastructure\ReadModel\Repository\ImageRepository;
 use Slink\Shared\Domain\Contract\CursorAwareInterface;
+use Slink\Shared\Infrastructure\Attribute\Sanitize;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
 use Slink\Tag\Infrastructure\ReadModel\View\TagView;
 use Slink\User\Domain\ValueObject\GuestUser;
@@ -52,6 +53,7 @@ class ImageView extends AbstractView implements CursorAwareInterface {
 
     #[ORM\Embedded(class: ImageAttributes::class, columnPrefix: false)]
     #[Groups(['public'])]
+    #[Sanitize]
     private ImageAttributes    $attributes,
 
     #[ORM\Embedded(class: ImageMetadata::class, columnPrefix: false)]

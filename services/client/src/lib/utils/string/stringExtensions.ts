@@ -8,3 +8,12 @@ String.prototype.toFormattedHtml = function () {
     '<em>$1</em>',
   );
 };
+
+String.prototype.decodeHtmlEntities = function () {
+  return this.replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&#039;/g, "'")
+    .replace(/&amp;/g, '&');
+};

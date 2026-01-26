@@ -72,9 +72,9 @@
       color="blue"
       onclick={() => onToggle?.(tag)}
     >
-      {#snippet children()}{getTagLastSegment(tag)}{/snippet}
+      {#snippet children()}{@html getTagLastSegment(tag)}{/snippet}
       {#snippet subtext()}
-        {#if getTagParentPath(tag)}{getTagParentPath(tag)}{/if}
+        {#if getTagParentPath(tag)}{@html getTagParentPath(tag)}{/if}
       {/snippet}
     </PickerItem>
   {/snippet}

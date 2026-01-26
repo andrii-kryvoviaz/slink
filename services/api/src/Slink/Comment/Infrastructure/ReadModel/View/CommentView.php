@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Slink\Comment\Infrastructure\ReadModel\Repository\CommentRepository;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
+use Slink\Shared\Infrastructure\Attribute\Sanitize;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -40,6 +41,7 @@ class CommentView extends AbstractView {
 
     #[ORM\Column(type: 'text')]
     #[Groups(['public'])]
+    #[Sanitize]
     private string $content,
 
     #[ORM\Column(type: 'datetime_immutable')]

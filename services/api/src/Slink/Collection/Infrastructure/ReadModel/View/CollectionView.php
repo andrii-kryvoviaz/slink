@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Slink\Collection\Infrastructure\ReadModel\Repository\CollectionRepository;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
+use Slink\Shared\Infrastructure\Attribute\Sanitize;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -34,10 +35,12 @@ class CollectionView extends AbstractView {
 
     #[ORM\Column(type: 'string', length: 105)]
     #[Groups(['public'])]
+    #[Sanitize]
     private string $name,
 
     #[ORM\Column(type: 'string', length: 500)]
     #[Groups(['public'])]
+    #[Sanitize]
     private string $description,
 
     #[ORM\Column(type: 'datetime_immutable')]

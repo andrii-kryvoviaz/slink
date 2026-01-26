@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Slink\User\Domain\ValueObject;
 
 use Slink\Shared\Domain\ValueObject\AbstractValueObject;
+use Slink\Shared\Domain\ValueObject\EscapedString;
+use Slink\Shared\Domain\ValueObject\SanitizableValueObject;
 use Slink\User\Domain\Exception\InvalidUsernameException;
 
-final readonly class Username extends AbstractValueObject {
+final readonly class Username extends AbstractValueObject implements SanitizableValueObject {
   /**
    * @param string $username
    */
@@ -38,6 +40,10 @@ final readonly class Username extends AbstractValueObject {
    */
   public function toString(): string {
     return $this->username;
+  }
+
+  public function sanitize(): static {
+    return new self(EscapedString::fromString($this->username)->getValue());
   }
   
   /**

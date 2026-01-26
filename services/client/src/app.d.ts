@@ -33,6 +33,7 @@ declare global {
   interface String {
     capitalizeFirstLetter(): string;
     toFormattedHtml(): string;
+    decodeHtmlEntities(): string;
   }
 
   const __APP_VERSION__: string;

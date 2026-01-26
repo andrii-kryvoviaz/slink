@@ -37,10 +37,11 @@
   let editing = $state(false);
   let saving = $state(false);
 
-  const hasChanges = $derived(newValue.trim() !== value.trim());
+  const decodedValue = $derived(value.decodeHtmlEntities());
+  const hasChanges = $derived(newValue.trim() !== decodedValue.trim());
 
   function startEditing() {
-    newValue = value;
+    newValue = decodedValue;
     editing = true;
     saving = false;
   }
@@ -56,7 +57,7 @@
   }
 
   function cancel() {
-    newValue = value;
+    newValue = decodedValue;
     editing = false;
   }
 
@@ -106,7 +107,9 @@
   });
 
   $effect(() => {
-    newValue = value;
+    if (!editing) {
+      newValue = decodedValue;
+    }
   });
 
   const inputClasses =
@@ -173,7 +176,7 @@
           {#if type === 'textarea'}
             <HashtagText text={value} />
           {:else}
-            {value}
+            {@html value}
           {/if}
         </span>
       {:else}

@@ -150,13 +150,13 @@
                 <h3
                   class="font-medium text-gray-900 dark:text-white truncate text-sm"
                 >
-                  {collection.name}
+                  {@html collection.name}
                 </h3>
                 {#if collection.description}
                   <p
                     class="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2"
                   >
-                    {collection.description}
+                    {@html collection.description}
                   </p>
                 {/if}
                 <div class="mt-2 text-xs text-gray-400 dark:text-gray-500">

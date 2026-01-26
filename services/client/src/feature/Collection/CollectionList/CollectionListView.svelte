@@ -73,7 +73,7 @@
       color="indigo"
       onclick={() => onToggle?.(collection)}
     >
-      {#snippet children()}{collection.name}{/snippet}
+      {#snippet children()}{@html collection.name}{/snippet}
     </PickerItem>
   {/snippet}
 </PickerList>

@@ -7,6 +7,7 @@ namespace Slink\User\Infrastructure\ReadModel\View;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
+use Slink\Shared\Infrastructure\Attribute\Sanitize;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
 use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;
@@ -49,10 +50,12 @@ class UserView extends AbstractView {
     
     #[ORM\Column(type: 'username', unique: true)]
     #[Groups(['public', 'internal'])]
+    #[Sanitize]
     private Username $username,
     
     #[ORM\Column(type: 'display_name', unique: true, nullable: true)]
     #[Groups(['public', 'internal'])]
+    #[Sanitize]
     private DisplayName $displayName,
 
     #[ORM\Column(type: 'hashed_password')]

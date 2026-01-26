@@ -69,7 +69,7 @@
 
   $effect(() => {
     if (editingComment) {
-      content = editingComment.content;
+      content = editingComment.content.decodeHtmlEntities();
       textArea?.focus();
     }
   });
