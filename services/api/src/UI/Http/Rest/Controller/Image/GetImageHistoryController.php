@@ -19,18 +19,18 @@ use UI\Http\Rest\Response\ApiResponse;
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 final readonly class GetImageHistoryController {
   use QueryTrait;
-  
+
   public function __invoke(
     #[MapQueryString] GetImageListQuery $query,
-    #[CurrentUser] JwtUser $user,
-    int $page = 1
+    #[CurrentUser] JwtUser              $user,
+    int                                 $page = 1
   ): ApiResponse {
-    $images = $this->ask($query->withContext([
+    $collection = $this->ask($query->withContext([
       'page' => $page,
       'userId' => $user->getIdentifier(),
-      'groups' => ['public', 'private'],
+      'groups' => ['public', 'private', 'collection'],
     ]));
-    
-    return ApiResponse::collection($images);
+
+    return ApiResponse::collection($collection);
   }
 }

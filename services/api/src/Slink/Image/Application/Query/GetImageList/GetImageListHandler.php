@@ -26,13 +26,21 @@ final readonly class GetImageListHandler implements QueryHandlerInterface {
   }
 
   /**
+   * @param GetImageListQuery $query
+   * @param int $page
+   * @param bool|null $isPublic
+   * @param string|null $userId
+   * @param string|null $viewerUserId
    * @param array<string> $groups
+   * @return Collection
+   * @throws \JsonException
    */
   public function __invoke(
     GetImageListQuery $query,
     int               $page,
     ?bool             $isPublic = null,
     ?string           $userId = null,
+    ?string           $viewerUserId = null,
     array             $groups = ['public'],
   ): Collection {
     $tagFilterData = $this->tagFilterService->createTagFilterData(
@@ -62,19 +70,23 @@ final readonly class GetImageListHandler implements QueryHandlerInterface {
       array_pop($imageEntities);
     }
 
+    $bookmarkedSet = [];
+    $collectionIdsMap = [];
+
+    $imageIds = array_map(fn($image) => (string)$image->getUuid(), $imageEntities);
+
+    if ($viewerUserId) {
+      $bookmarkedSet = array_flip($this->bookmarkRepository->getBookmarkedImageIds($viewerUserId, $imageIds));
+    }
+
+    if ($userId) {
+      $collectionIdsMap = $this->collectionItemRepository->getCollectionIdsByImageIds($imageIds);
+    }
+
     $nextCursor = null;
     if ($hasMore && !empty($imageEntities)) {
       $lastImage = end($imageEntities);
       $nextCursor = $this->generateNextCursor($lastImage);
-    }
-
-    $bookmarkedSet = [];
-    $collectionIdsMap = [];
-
-    if ($userId !== null && !empty($imageEntities)) {
-      $imageIds = array_map(fn($image) => (string)$image->getUuid(), $imageEntities);
-      $bookmarkedSet = array_flip($this->bookmarkRepository->getBookmarkedImageIds($userId, $imageIds));
-      $collectionIdsMap = $this->collectionItemRepository->getCollectionIdsByImageIds($imageIds);
     }
 
     $items = array_map(

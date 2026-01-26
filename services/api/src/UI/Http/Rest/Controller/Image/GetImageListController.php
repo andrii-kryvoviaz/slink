@@ -38,12 +38,13 @@ final class GetImageListController {
   ): ApiResponse {
     $isPublicFilter = $this->configurationProvider->get('image.allowOnlyPublicImages') ? null : true;
 
-    $images = $this->ask($query->withContext([
+    $collection = $this->ask($query->withContext([
       'page' => $page,
       'isPublic' => $isPublicFilter,
-      'userId' => $user?->getIdentifier(),
+      'viewerUserId' => $user?->getIdentifier(),
+      'groups' => ['public', 'bookmark'],
     ]));
 
-    return ApiResponse::collection($images);
+    return ApiResponse::collection($collection);
   }
 }
