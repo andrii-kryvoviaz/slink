@@ -4401,10 +4401,10 @@ svelte-toolbelt@^0.7.1:
     runed "^0.23.2"
     style-to-object "^1.0.8"
 
-svelte@^5.48.1:
-  version "5.48.1"
-  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.48.1.tgz#aab1096d710317c838fe2ae9b4e09f6da2668b65"
-  integrity sha512-gHdOWQILqvQgqvILjEd87yKy6OKHWlWu7hILXoxvEUo9+iPQ1snPHiR7IGiwRdaC1a9GWC8oWN6QSpQEIb28VQ==
+svelte@^5.48.2:
+  version "5.48.2"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.48.2.tgz#18bb2513db79425acb2aa16043eec0e9cd3619ce"
+  integrity sha512-VPWD+UyoSFZ7Nxix5K/F8yWiKWOiROkLlWYXOZReE0TUycw+58YWB3D6lAKT+57xmN99wRX4H3oZmw0NPy7y3Q==
   dependencies:
     "@jridgewell/remapping" "^2.3.4"
     "@jridgewell/sourcemap-codec" "^1.5.0"
