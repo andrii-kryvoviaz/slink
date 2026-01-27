@@ -14,13 +14,13 @@ use Throwable;
 
 final class DateTime extends DateTimeImmutable {
   public const string FORMAT = 'Y-m-d\TH:i:s.uP';
-  
+
   #[Groups(['public'])]
   #[SerializedName('formattedDate')]
   public function getDateString(): string {
     return $this->format('Y-m-d H:i:s');
   }
-  
+
   #[Groups(['public'])]
   #[SerializedName('timestamp')]
   public function getUnixTimeStamp(): int {
@@ -40,14 +40,14 @@ final class DateTime extends DateTimeImmutable {
   public static function fromString(string $dateTime): self {
     return self::create($dateTime);
   }
-  
+
   /**
    * @throws DateTimeException
    */
   public static function fromTimeStamp(int $timestamp): self {
     return self::create('@' . $timestamp);
   }
-  
+
   /**
    * @throws DateTimeException
    */
@@ -55,19 +55,23 @@ final class DateTime extends DateTimeImmutable {
     if ($dateTime instanceof DateTime) {
       return $dateTime;
     }
-    
+
     if ($dateTime instanceof DateTimeImmutable) {
       return self::fromString($dateTime->format(self::FORMAT));
     }
-    
+
     if (is_string($dateTime)) {
       return self::fromString($dateTime);
     }
-    
+
     if (is_int($dateTime)) {
       return self::fromTimeStamp($dateTime);
     }
-    
+
+    if (is_array($dateTime) && array_key_exists('timestamp', $dateTime)) {
+      return self::fromTimeStamp($dateTime['timestamp']);
+    }
+
     throw new DateTimeException(new Exception('Invalid date time format'));
   }
 
@@ -78,10 +82,10 @@ final class DateTime extends DateTimeImmutable {
     try {
       return new self($dateTime, $timeZone);
     } catch (Throwable $e) {
-      throw new DateTimeException(new Exception($e->getMessage(), (int) $e->getCode(), $e));
+      throw new DateTimeException(new Exception($e->getMessage(), (int)$e->getCode(), $e));
     }
   }
-  
+
   /**
    * @param DateTime $now
    * @return bool
@@ -105,7 +109,7 @@ final class DateTime extends DateTimeImmutable {
   public function equals(DateTime $dateTime): bool {
     return $this === $dateTime;
   }
-  
+
   /**
    * @param DateTime $now
    * @return bool
@@ -121,18 +125,18 @@ final class DateTime extends DateTimeImmutable {
   public function isAfterEquals(DateTime $now): bool {
     return $this >= $now;
   }
-  
+
   /**
    * @return string
    */
   public function toString(): string {
     return $this->format(self::FORMAT);
   }
-  
+
   public function toDateTimeImmutable(): DateTimeImmutable {
     return new DateTimeImmutable($this->format(self::FORMAT));
   }
-  
+
   public static function fromDateTimeImmutable(DateTimeImmutable $dateTime): self {
     return self::fromString($dateTime->format(self::FORMAT));
   }

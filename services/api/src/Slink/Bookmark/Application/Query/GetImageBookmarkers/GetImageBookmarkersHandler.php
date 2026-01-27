@@ -10,7 +10,9 @@ use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Shared\Application\Http\Collection;
 use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Application\Query\QueryHandlerInterface;
+use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\Pagination\CursorPaginationTrait;
+use Slink\Shared\Infrastructure\Pagination\CursorPaginator;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final readonly class GetImageBookmarkersHandler implements QueryHandlerInterface {
@@ -18,10 +20,14 @@ final readonly class GetImageBookmarkersHandler implements QueryHandlerInterface
 
   public function __construct(
     private BookmarkRepositoryInterface $bookmarkRepository,
-    private ImageRepositoryInterface $imageRepository,
+    private ImageRepositoryInterface    $imageRepository,
+    private CursorPaginator             $cursorPaginator,
   ) {
   }
 
+  /**
+   * @throws NotFoundException
+   */
   public function __invoke(GetImageBookmarkersQuery $query, string $userId): Collection {
     $image = $this->imageRepository->oneById($query->imageId);
 
@@ -36,32 +42,18 @@ final readonly class GetImageBookmarkersHandler implements QueryHandlerInterface
       $query->getCursor(),
     );
 
-    $bookmarkEntities = iterator_to_array($bookmarks);
-
-    $limit = $query->getLimit();
-    $hasMore = count($bookmarkEntities) > $limit;
-
-    if ($hasMore) {
-      array_pop($bookmarkEntities);
-    }
-
-    $nextCursor = null;
-    if ($hasMore && !empty($bookmarkEntities)) {
-      $lastBookmark = end($bookmarkEntities);
-      $nextCursor = $this->generateNextCursor($lastBookmark);
-    }
-
-    $items = array_map(
-      fn(BookmarkView $bookmark) => Item::fromEntity($bookmark, groups: ['bookmarkers']),
-      $bookmarkEntities
+    $items = iterator_map(
+      $bookmarks,
+      fn(BookmarkView $bookmark) => Item::fromEntity($bookmark, groups: ['bookmarkers'])
     );
 
-    return new Collection(
-      $query->page,
-      $limit,
-      $bookmarks->count(),
-      $items,
-      $nextCursor?->encode()
+    $paginator = $this->cursorPaginator->paginate($items, $query->getLimit());
+
+    return Collection::fromCursorPaginator(
+      $paginator,
+      page: $query->page,
+      limit: $query->getLimit(),
+      total: $bookmarks->count()
     );
   }
 }

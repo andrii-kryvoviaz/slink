@@ -9,15 +9,20 @@ use Slink\Shared\Application\Http\Collection;
 use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Application\Query\QueryHandlerInterface;
 use Slink\Shared\Infrastructure\Pagination\CursorPaginationTrait;
+use Slink\Shared\Infrastructure\Pagination\CursorPaginator;
 
 final readonly class GetUserBookmarksHandler implements QueryHandlerInterface {
   use CursorPaginationTrait;
 
   public function __construct(
     private BookmarkRepositoryInterface $repository,
+    private CursorPaginator             $cursorPaginator,
   ) {
   }
 
+  /**
+   * @throws \Exception
+   */
   public function __invoke(GetUserBookmarksQuery $query, string $userId): Collection {
     $bookmarks = $this->repository->findByUserId(
       $userId,
@@ -26,29 +31,14 @@ final readonly class GetUserBookmarksHandler implements QueryHandlerInterface {
       $query->getCursor(),
     );
 
-    $bookmarkEntities = iterator_to_array($bookmarks);
+    $items = iterator_map($bookmarks, fn($bookmark) => Item::fromEntity($bookmark));
+    $paginator = $this->cursorPaginator->paginate($items, $query->getLimit());
 
-    $limit = $query->getLimit();
-    $hasMore = count($bookmarkEntities) > $limit;
-
-    if ($hasMore) {
-      array_pop($bookmarkEntities);
-    }
-
-    $nextCursor = null;
-    if ($hasMore && !empty($bookmarkEntities)) {
-      $lastBookmark = end($bookmarkEntities);
-      $nextCursor = $this->generateNextCursor($lastBookmark);
-    }
-
-    $items = array_map(fn($bookmark) => Item::fromEntity($bookmark), $bookmarkEntities);
-
-    return new Collection(
-      $query->page,
-      $limit,
-      $bookmarks->count(),
-      $items,
-      $nextCursor?->encode()
+    return Collection::fromCursorPaginator(
+      $paginator,
+      page: $query->page,
+      limit: $query->getLimit(),
+      total: $bookmarks->count()
     );
   }
 }

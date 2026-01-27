@@ -9,6 +9,8 @@ use Random\RandomException;
 use Slink\Shared\Application\Resource\ResourceContextInterface;
 use Slink\Shared\Application\Resource\ResourceInterface;
 use Slink\Shared\Domain\Contract\CursorAwareInterface;
+use Slink\Shared\Domain\Exception\Date\DateTimeException;
+use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Infrastructure\Serializer\SerializerFactory;
 
 final readonly class Item implements CursorAwareInterface {
@@ -113,11 +115,19 @@ final readonly class Item implements CursorAwareInterface {
 
   /**
    * @return DateTimeInterface
+   * @throws DateTimeException
    */
   public function getCursorTimestamp(): DateTimeInterface {
-    if (is_array($this->resource) && isset($this->resource['createdAt'])) {
-      return $this->resource['createdAt'];
+    if (!is_array($this->resource) || !isset($this->resource['createdAt'])) {
+      return new DateTime();
     }
-    return new \DateTimeImmutable();
+
+    ['createdAt' => $createdAt] = $this->resource;
+
+    if (is_array($createdAt)) {
+      $createdAt = DateTime::fromUnknown($createdAt);
+    }
+
+    return $createdAt;
   }
 }
