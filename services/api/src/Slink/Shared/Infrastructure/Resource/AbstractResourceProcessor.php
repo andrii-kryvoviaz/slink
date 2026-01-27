@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace Slink\Shared\Infrastructure\Resource;
 
 use Slink\Shared\Application\Http\Item;
+use Slink\Shared\Application\Resource\ResourceContextInterface;
 use Slink\Shared\Application\Resource\ResourceDataProviderInterface;
+use Slink\Shared\Application\Resource\ResourceInterface;
 use Slink\Shared\Application\Resource\ResourceProcessorInterface;
+use Slink\Shared\Domain\ValueObject\ResourceData;
 
 abstract readonly class AbstractResourceProcessor implements ResourceProcessorInterface {
   /**
@@ -44,9 +47,9 @@ abstract readonly class AbstractResourceProcessor implements ResourceProcessorIn
     $className = $this->resourceName();
 
     return array_map(
-      function(object $entity) use ($className, $data, $context): Item {
+      function (object $entity) use ($className, $data, $context): Item {
+        /** @var ResourceInterface $resource */
         $resource = new $className($entity, $data);
-        assert($resource instanceof ResourceInterface);
         return Item::fromResource($resource, $context);
       },
       $entities

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Slink\Image\Infrastructure\Resource;
 
 use Slink\Shared\Application\Resource\ResourceDataProviderInterface;
+use Slink\Shared\Domain\Enum\ResourceProviderTag;
 use Slink\Shared\Infrastructure\Resource\AbstractResourceProcessor;
-use Slink\Shared\Infrastructure\Resource\ResourceProviderTag;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 final readonly class ImageResourceProcessor extends AbstractResourceProcessor {

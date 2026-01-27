@@ -6,9 +6,9 @@ namespace Slink\Image\Infrastructure\Resource;
 
 use Slink\Image\Domain\Enum\License;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
+use Slink\Shared\Application\Resource\ResourceInterface;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
-use Slink\Shared\Infrastructure\Resource\ResourceData;
-use Slink\Shared\Infrastructure\Resource\ResourceInterface;
+use Slink\Shared\Domain\ValueObject\ResourceData;
 use Slink\User\Domain\ValueObject\GuestUser;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
 use Symfony\Component\Serializer\Attribute\Groups;

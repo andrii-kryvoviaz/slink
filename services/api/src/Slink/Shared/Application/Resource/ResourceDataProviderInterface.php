@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Slink\Shared\Application\Resource;
 
-use Slink\Shared\Infrastructure\Resource\ResourceContextInterface;
-
 interface ResourceDataProviderInterface {
   public function getProviderKey(): string;
 

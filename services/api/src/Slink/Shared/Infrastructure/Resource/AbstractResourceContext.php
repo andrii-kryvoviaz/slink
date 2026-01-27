@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Slink\Shared\Infrastructure\Resource;
 
+use Slink\Shared\Application\Resource\ResourceContextInterface;
+
 readonly abstract class AbstractResourceContext implements ResourceContextInterface {
   /**
    * @param array<string> $groups

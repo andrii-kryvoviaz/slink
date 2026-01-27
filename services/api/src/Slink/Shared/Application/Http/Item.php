@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Slink\Shared\Application\Http;
 
-use Slink\Shared\Infrastructure\Resource\ResourceContextInterface;
-use Slink\Shared\Infrastructure\Resource\ResourceInterface;
+use Slink\Shared\Application\Resource\ResourceContextInterface;
+use Slink\Shared\Application\Resource\ResourceInterface;
 use Slink\Shared\Infrastructure\Serializer\SerializerFactory;
 
 final readonly class Item {

@@ -7,8 +7,8 @@ namespace Slink\Image\Infrastructure\Resource\Provider;
 use Slink\Bookmark\Domain\Repository\BookmarkRepositoryInterface;
 use Slink\Image\Application\Resource\ImageDataProviderInterface;
 use Slink\Image\Infrastructure\Resource\ImageResourceContext;
-use Slink\Shared\Infrastructure\Resource\ResourceContextInterface;
-use Slink\Shared\Infrastructure\Resource\ResourceProviderTag;
+use Slink\Shared\Application\Resource\ResourceContextInterface;
+use Slink\Shared\Domain\Enum\ResourceProviderTag;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag(ResourceProviderTag::Image->value)]

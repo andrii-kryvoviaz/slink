@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Slink\Shared\Application\Resource;
 
 use Slink\Shared\Application\Http\Item;
-use Slink\Shared\Infrastructure\Resource\ResourceContextInterface;
 
 interface ResourceProcessorInterface {
   /**
