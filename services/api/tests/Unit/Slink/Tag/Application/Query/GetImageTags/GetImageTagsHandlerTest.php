@@ -57,8 +57,9 @@ final class GetImageTagsHandlerTest extends TestCase {
     $this->assertEquals(2, $result->total);
     $this->assertEquals(2, $result->limit);
     $this->assertCount(2, $result->data);
-    $this->assertInstanceOf(Item::class, $result->data[0]);
-    $this->assertInstanceOf(Item::class, $result->data[1]);
+    $dataArray = is_array($result->data) ? $result->data : iterator_to_array($result->data);
+    $this->assertInstanceOf(Item::class, $dataArray[0]);
+    $this->assertInstanceOf(Item::class, $dataArray[1]);
   }
 
   #[Test]
@@ -228,7 +229,8 @@ final class GetImageTagsHandlerTest extends TestCase {
     $result = $handler($query, $userId);
 
     $this->assertCount(1, $result->data);
-    $this->assertInstanceOf(Item::class, $result->data[0]);
+    $dataArray = is_array($result->data) ? $result->data : iterator_to_array($result->data);
+    $this->assertInstanceOf(Item::class, $dataArray[0]);
   }
 
   #[Test]

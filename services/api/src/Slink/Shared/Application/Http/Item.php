@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Slink\Shared\Application\Http;
 
+use DateTimeInterface;
+use Random\RandomException;
 use Slink\Shared\Application\Resource\ResourceContextInterface;
 use Slink\Shared\Application\Resource\ResourceInterface;
+use Slink\Shared\Domain\Contract\CursorAwareInterface;
 use Slink\Shared\Infrastructure\Serializer\SerializerFactory;
 
-final readonly class Item {
+final readonly class Item implements CursorAwareInterface {
   /**
    * @param string $type
    * @param array<string, mixed>|object|string $resource
@@ -95,5 +98,26 @@ final readonly class Item {
     $path = \explode('\\', $type);
 
     return \array_pop($path);
+  }
+
+  /**
+   * @return string
+   * @throws RandomException
+   */
+  public function getCursorId(): string {
+    if (is_array($this->resource)) {
+      return $this->resource['id'] ?? random_bytes(16);
+    }
+    return random_bytes(16);
+  }
+
+  /**
+   * @return DateTimeInterface
+   */
+  public function getCursorTimestamp(): DateTimeInterface {
+    if (is_array($this->resource) && isset($this->resource['createdAt'])) {
+      return $this->resource['createdAt'];
+    }
+    return new \DateTimeImmutable();
   }
 }

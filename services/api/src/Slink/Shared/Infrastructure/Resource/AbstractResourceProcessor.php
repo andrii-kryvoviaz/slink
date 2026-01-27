@@ -38,22 +38,19 @@ abstract readonly class AbstractResourceProcessor implements ResourceProcessorIn
   }
 
   /**
-   * @param array<object> $entities
+   * @param iterable<object> $entities
    * @param ResourceContextInterface $context
-   * @return array<Item>
+   * @return \Iterator<Item>
    */
-  public function many(array $entities, ResourceContextInterface $context): array {
+  public function many(iterable $entities, ResourceContextInterface $context): iterable {
     $data = $this->aggregate($context);
     $className = $this->resourceName();
 
-    return array_map(
-      function (object $entity) use ($className, $data, $context): Item {
-        /** @var ResourceInterface $resource */
-        $resource = new $className($entity, $data);
-        return Item::fromResource($resource, $context);
-      },
-      $entities
-    );
+    foreach ($entities as $entity) {
+      /** @var ResourceInterface $resource */
+      $resource = new $className($entity, $data);
+      yield Item::fromResource($resource, $context);
+    }
   }
 
   /**
@@ -62,6 +59,7 @@ abstract readonly class AbstractResourceProcessor implements ResourceProcessorIn
    * @return Item
    */
   public function one(object $entity, ResourceContextInterface $context): Item {
-    return $this->many([$entity], $context)[0];
+    $iterator = $this->many([$entity], $context);
+    return $iterator->current();
   }
 }

@@ -20,12 +20,12 @@ final readonly class ImageResourceContext extends AbstractResourceContext {
   }
 
   /**
-   * @param array<string> $imageIds
+   * @param iterable<string> $imageIds
    */
-  public function withImageIds(array $imageIds): ImageResourceContext {
+  public function withImageIds(iterable $imageIds): ImageResourceContext {
     return new ImageResourceContext(
       $this->getGroups(),
-      $imageIds,
+      iterator_to_array($imageIds),
       $this->viewerUserId,
     );
   }

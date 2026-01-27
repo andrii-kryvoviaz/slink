@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Slink\Shared\Infrastructure\Pagination;
 
 use Doctrine\ORM\QueryBuilder;
+use InvalidArgumentException;
 use Slink\Shared\Domain\Contract\CursorAwareInterface;
 use Slink\Shared\Domain\ValueObject\Cursor;
-use InvalidArgumentException;
 
 trait CursorPaginationTrait {
   /**
@@ -64,20 +64,16 @@ trait CursorPaginationTrait {
 
   /**
    * @param CursorAwareInterface $lastEntity
-   * @param bool $useEncoding
-   * @return string|null
-   * @throws \JsonException
+   * @return Cursor|null
    */
   protected function generateNextCursor(
     CursorAwareInterface $lastEntity,
-    bool                 $useEncoding = true
-  ): ?string {
+  ): ?Cursor {
     try {
-      $cursor = Cursor::fromEntityData(
+      return Cursor::fromEntityData(
         $lastEntity->getCursorTimestamp(),
         $lastEntity->getCursorId()
       );
-      return $useEncoding ? $cursor->encode() : $cursor->toJson();
     } catch (InvalidArgumentException) {
       return null;
     }

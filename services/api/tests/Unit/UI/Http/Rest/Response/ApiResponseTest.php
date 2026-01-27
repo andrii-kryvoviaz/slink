@@ -126,7 +126,7 @@ final class ApiResponseTest extends TestCase {
           'page' => 1,
           'total' => 1,
         ],
-        'data' => [$data->data[0]->resource],
+        'data' => [iterator_to_array($data->data)[0]->resource],
       ]
       : ['data' => $data->resource];
   }

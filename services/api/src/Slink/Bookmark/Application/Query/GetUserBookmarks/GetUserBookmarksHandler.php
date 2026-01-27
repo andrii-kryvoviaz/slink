@@ -48,7 +48,7 @@ final readonly class GetUserBookmarksHandler implements QueryHandlerInterface {
       $limit,
       $bookmarks->count(),
       $items,
-      $nextCursor
+      $nextCursor?->encode()
     );
   }
 }

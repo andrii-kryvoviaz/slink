@@ -199,6 +199,7 @@ final class GetTagListHandlerTest extends TestCase {
 
     $items = $result->data;
     $this->assertCount(1, $items);
-    $this->assertInstanceOf(Item::class, $items[0]);
+    $itemsArray = is_array($items) ? $items : iterator_to_array($items);
+    $this->assertInstanceOf(Item::class, $itemsArray[0]);
   }
 }

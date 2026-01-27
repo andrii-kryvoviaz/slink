@@ -12,6 +12,7 @@ use Slink\Image\Infrastructure\Resource\ImageResourceProcessor;
 use Slink\Shared\Application\Http\Collection;
 use Slink\Shared\Application\Query\QueryHandlerInterface;
 use Slink\Shared\Infrastructure\Pagination\CursorPaginationTrait;
+use Slink\Shared\Infrastructure\Pagination\CursorPaginator;
 use Slink\Tag\Domain\Service\TagFilterServiceInterface;
 
 final readonly class GetImageListHandler implements QueryHandlerInterface {
@@ -21,6 +22,7 @@ final readonly class GetImageListHandler implements QueryHandlerInterface {
     private ImageRepositoryInterface  $repository,
     private TagFilterServiceInterface $tagFilterService,
     private ImageResourceProcessor    $resourceProcessor,
+    private CursorPaginator           $cursorPaginator
   ) {
   }
 
@@ -32,6 +34,7 @@ final readonly class GetImageListHandler implements QueryHandlerInterface {
    * @param ImageResourceContext|null $resourceContext
    * @return Collection
    * @throws \JsonException
+   * @throws \Exception
    */
   public function __invoke(
     GetImageListQuery     $query,
@@ -40,8 +43,6 @@ final readonly class GetImageListHandler implements QueryHandlerInterface {
     ?string               $userId = null,
     ?ImageResourceContext $resourceContext = null,
   ): Collection {
-    $resourceContext ??= new ImageResourceContext();
-
     $tagFilterData = $this->tagFilterService->createTagFilterData(
       $query->getTagIds(),
       $query->requireAllTags(),
@@ -60,30 +61,17 @@ final readonly class GetImageListHandler implements QueryHandlerInterface {
       tagFilterData: $tagFilterData,
     ));
 
-    $imageEntities = iterator_to_array($images);
+    $imageIds = iterator_map($images, fn(ImageView $image) => (string)$image->getUuid());
 
-    $limit = $query->getLimit();
-    $hasMore = count($imageEntities) > $limit;
+    $resourceContext ??= new ImageResourceContext();
+    $items = $this->resourceProcessor->many($images, $resourceContext->withImageIds($imageIds));
+    $paginator = $this->cursorPaginator->paginate($items, $query->getLimit());
 
-    if ($hasMore) {
-      array_pop($imageEntities);
-    }
-
-    $nextCursor = null;
-    if ($hasMore && !empty($imageEntities)) {
-      $lastImage = end($imageEntities);
-      $nextCursor = $this->generateNextCursor($lastImage);
-    }
-
-    $imageIds = array_map(fn(ImageView $img) => (string)$img->getUuid(), $imageEntities);
-    $items = $this->resourceProcessor->many($imageEntities, $resourceContext->withImageIds($imageIds));
-
-    return new Collection(
-      $page,
-      $limit,
-      $images->count(),
-      $items,
-      $nextCursor
+    return Collection::fromCursorPaginator(
+      $paginator,
+      page: $page,
+      limit: $query->getLimit(),
+      total: $images->count()
     );
   }
 }

@@ -75,13 +75,7 @@ final readonly class Cursor {
 
   /**
    * @return string
-   */
-  public function __toString(): string {
-    return sprintf('Cursor(timestamp=%s, id=%s)', $this->timestamp, $this->id);
-  }
-
-  /**
-   * @return string
+   * @throws JsonException
    */
   public function encode(): string {
     return base64_encode(json_encode([
@@ -147,5 +141,12 @@ final readonly class Cursor {
         'Cursor timestamp must be in Y-m-d H:i:s.u format, got: ' . $timestamp
       );
     }
+  }
+
+  /**
+   * @throws JsonException
+   */
+  public function __toString(): string {
+    return $this->encode();
   }
 }

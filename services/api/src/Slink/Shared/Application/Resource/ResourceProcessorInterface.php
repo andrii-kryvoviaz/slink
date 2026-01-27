@@ -9,9 +9,9 @@ use Slink\Shared\Application\Http\Item;
 interface ResourceProcessorInterface {
   /**
    * @param array<object> $entities
-   * @return array<Item>
+   * @return iterable<Item>
    */
-  public function many(array $entities, ResourceContextInterface $context): array;
+  public function many(array $entities, ResourceContextInterface $context): iterable;
 
   public function one(object $entity, ResourceContextInterface $context): Item;
 }

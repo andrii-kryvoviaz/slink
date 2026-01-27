@@ -61,7 +61,7 @@ final readonly class GetImageBookmarkersHandler implements QueryHandlerInterface
       $limit,
       $bookmarks->count(),
       $items,
-      $nextCursor
+      $nextCursor?->encode()
     );
   }
 }
