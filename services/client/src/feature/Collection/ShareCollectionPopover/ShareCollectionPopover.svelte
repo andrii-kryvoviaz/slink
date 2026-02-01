@@ -58,11 +58,6 @@
       class="flex-1 font-medium shadow-lg hover:shadow-xl transition-all duration-200"
       disabled={loading}
     >
-      {#if loading}
-        <Icon icon="eos-icons:three-dots-loading" class="h-4 w-4 mr-2" />
-      {:else}
-        <Icon icon="ph:check-circle-fill" class="h-4 w-4 mr-2" />
-      {/if}
       Confirm
     </Button>
   </div>
