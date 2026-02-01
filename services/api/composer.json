@@ -42,7 +42,7 @@
     "require-dev": {
         "dg/bypass-finals": "dev-master",
         "phpstan/phpstan": "^2.1",
-        "phpunit/phpunit": "^12.2.5",
+        "phpunit/phpunit": "^12.5.8",
         "symfony/phpunit-bridge": "^8.0",
         "symfony/stopwatch": "^8.0",
         "symfony/web-profiler-bundle": "^8.0"
