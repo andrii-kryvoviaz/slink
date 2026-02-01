@@ -196,11 +196,11 @@ export const themeIcons: string[] = [
   'ph:folder-open',
   'ph:link-simple-fill',
   'ph:share-network-fill',
-  'ph:warning-circle-duotone',
   'ph:folder-simple-fill',
   'ph:tag-fill',
   'lucide:pencil',
   'ph:note-pencil',
   'ph:list-dashes',
   'solar:link-linear',
+  'ph:folder-notch-open-duotone',
 ];

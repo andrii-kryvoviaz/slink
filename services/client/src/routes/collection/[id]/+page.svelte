@@ -296,10 +296,9 @@
     {:else if itemsFeed.hasError}
       <div in:fade={{ duration: 200 }}>
         <EmptyState
-          icon="ph:warning-circle-duotone"
+          icon="ph:folder-notch-open-duotone"
           title="Collection not found"
           description="This collection doesn't exist or you don't have permission to view it."
-          variant="red"
           size="md"
         />
       </div>
