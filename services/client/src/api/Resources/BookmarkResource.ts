@@ -28,7 +28,6 @@ export class BookmarkResource extends AbstractResource {
   }
 
   public async getUserBookmarks(
-    page: number = 1,
     limit: number = 10,
     cursor?: string,
   ): Promise<BookmarkListingResponse> {
@@ -40,12 +39,11 @@ export class BookmarkResource extends AbstractResource {
       searchParams.append('cursor', cursor);
     }
 
-    return this.get(`/bookmarks/${page}?${searchParams.toString()}`);
+    return this.get(`/bookmarks?${searchParams.toString()}`);
   }
 
   public async getImageBookmarkers(
     imageId: string,
-    page: number = 1,
     limit: number = 10,
     cursor?: string,
   ): Promise<BookmarkersResponse> {
@@ -57,8 +55,6 @@ export class BookmarkResource extends AbstractResource {
       searchParams.append('cursor', cursor);
     }
 
-    return this.get(
-      `/image/${imageId}/bookmarkers/${page}?${searchParams.toString()}`,
-    );
+    return this.get(`/image/${imageId}/bookmarkers?${searchParams.toString()}`);
   }
 }

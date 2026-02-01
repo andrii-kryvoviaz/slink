@@ -19,7 +19,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use UI\Http\Rest\Response\ApiResponse;
 
 #[AsController]
-#[Route('/images/{page}', name: 'get_image_list', requirements: ['page' => '\d+'], methods: ['GET'])]
+#[Route('/images', name: 'get_image_list', methods: ['GET'])]
 #[IsGranted(GuestAccessVoter::GUEST_VIEW_ALLOWED)]
 final class GetImageListController {
   use QueryTrait;
@@ -35,7 +35,6 @@ final class GetImageListController {
   public function __invoke(
     #[MapQueryString] GetImageListQuery $query,
     #[CurrentUser] ?JWTUser             $user = null,
-    int                                 $page = 1
   ): ApiResponse {
     $isPublicFilter = $this->configurationProvider->get('image.allowOnlyPublicImages') ? null : true;
 
@@ -45,7 +44,6 @@ final class GetImageListController {
     );
 
     $collection = $this->ask($query->withContext([
-      'page' => $page,
       'isPublic' => $isPublicFilter,
       'resourceContext' => $resourceContext,
     ]));

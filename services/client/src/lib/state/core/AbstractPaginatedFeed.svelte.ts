@@ -7,7 +7,7 @@ import { SkeletonManager } from '@slink/lib/state/core/SkeletonConfig.svelte';
 import { deepMerge } from '@slink/utils/object/deepMerge';
 
 export interface PaginationMetadata {
-  page: number;
+  page?: number;
   size: number;
   total: number;
   nextCursor?: string | null;
@@ -72,7 +72,7 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
     this._nextCursor = null;
     this._skeletonManager.reset();
     this._meta = {
-      page: 1,
+      page: this._config.useCursor ? undefined : 1,
       size: this._config.defaultPageSize,
       total: 0,
     };
@@ -91,7 +91,7 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
       ...searchParams
     } = params;
 
-    const isInitialLoad = page === 1 && !cursor;
+    const isInitialLoad = this._config.useCursor ? !cursor : page === 1;
     const shouldAppend = this._shouldAppendItems(isInitialLoad);
 
     if (isInitialLoad && this._itemMap.size === 0) {
@@ -137,7 +137,6 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
     if (this._config.useCursor && this._nextCursor) {
       await this.load(
         {
-          page: this._meta.page,
           limit: this._meta.size,
           cursor: this._nextCursor,
         },
@@ -145,7 +144,7 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
       );
     } else {
       await this.load(
-        { page: this._meta.page + 1, limit: this._meta.size },
+        { page: (this._meta.page ?? 0) + 1, limit: this._meta.size },
         options,
       );
     }
@@ -208,11 +207,13 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
   }
 
   get hasMore(): boolean {
-    if (this._config.useCursor && this._meta.nextCursor !== undefined) {
-      return this._meta.nextCursor !== null;
+    if (this._config.useCursor) {
+      return !!this._nextCursor;
     }
 
-    return this._meta.page < Math.ceil(this._meta.total / this._meta.size);
+    return (
+      (this._meta.page ?? 0) < Math.ceil(this._meta.total / this._meta.size)
+    );
   }
 
   get items(): T[] {

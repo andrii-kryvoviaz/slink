@@ -51,9 +51,14 @@ export class CollectionResource extends AbstractResource {
 
   public async getItems(
     collectionId: string,
-    page: number = 1,
+    cursor?: string,
   ): Promise<CollectionItemsResponse> {
-    return this.get(`/collection/${collectionId}/items/${page}`);
+    const params = new URLSearchParams();
+    if (cursor) params.set('cursor', cursor);
+    const query = params.toString();
+    return this.get(
+      `/collection/${collectionId}/items${query ? `?${query}` : ''}`,
+    );
   }
 
   public async addItem(collectionId: string, itemId: string): Promise<void> {

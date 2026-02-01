@@ -11,21 +11,25 @@ final readonly class GetCollectionItemsQuery implements QueryInterface {
   use EnvelopedMessage;
 
   public function __construct(
-    private string $collectionId,
-    private int $page = 1,
-    private int $limit = 20,
+    private string $collectionId = '',
+    private int $limit = 12,
+    private ?string $cursor = null,
   ) {
+  }
+
+  public function withCollectionId(string $collectionId): self {
+    return new self($collectionId, $this->limit, $this->cursor);
   }
 
   public function getCollectionId(): string {
     return $this->collectionId;
   }
 
-  public function getPage(): int {
-    return $this->page;
-  }
-
   public function getLimit(): int {
     return $this->limit;
+  }
+
+  public function getCursor(): ?string {
+    return $this->cursor;
   }
 }

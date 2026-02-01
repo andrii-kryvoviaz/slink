@@ -42,11 +42,12 @@ interface ImageRepositoryInterface extends ServiceEntityRepositoryInterface {
   public function findImagesWithoutSha1Hash(): array;
 
   /**
-   * @param int $page
    * @param ImageListFilter $imageListFilter
    * @return Paginator<ImageView>
    */
-  public function geImageList(int $page, ImageListFilter $imageListFilter): Paginator;
+  public function geImageList(ImageListFilter $imageListFilter): Paginator;
+
+  public function countImageList(ImageListFilter $imageListFilter): int;
 
   /**
    * @param ID $userId

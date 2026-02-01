@@ -38,10 +38,9 @@ class PublicImagesFeed extends AbstractSearchablePaginatedFeed<ImageListingItem>
   protected async fetchData(
     params: LoadParams & ExtendedSearchParams,
   ): Promise<PaginatedResponse<ImageListingItem>> {
-    const { page = 1, limit = 12, cursor, searchTerm, searchBy } = params;
+    const { limit = 12, cursor, searchTerm, searchBy } = params;
 
     return ApiClient.image.getPublicImages(
-      page,
       limit,
       'attributes.createdAt',
       searchTerm,

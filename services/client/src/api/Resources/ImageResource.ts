@@ -84,7 +84,6 @@ export class ImageResource extends AbstractResource {
   }
 
   public async getPublicImages(
-    page: number = 1,
     limit: number = 10,
     orderBy: string = 'attributes.updatedAt',
     searchTerm?: string,
@@ -105,11 +104,10 @@ export class ImageResource extends AbstractResource {
       searchParams.append('cursor', cursor);
     }
 
-    return this.get(`/images/${page}/?${searchParams.toString()}`);
+    return this.get(`/images?${searchParams.toString()}`);
   }
 
   public async getHistory(
-    page: number = 1,
     limit: number = 10,
     cursor?: string,
     includeTags: boolean = false,
@@ -138,7 +136,7 @@ export class ImageResource extends AbstractResource {
       searchParams.append('requireAllTags', 'true');
     }
 
-    return this.get(`/images/history/${page}/?${searchParams.toString()}`);
+    return this.get(`/images/history?${searchParams.toString()}`);
   }
 
   public async getImagesByIds(
@@ -155,7 +153,7 @@ export class ImageResource extends AbstractResource {
       searchParams.append('includeTags', 'true');
     }
 
-    return this.get(`/images?${searchParams.toString()}`);
+    return this.get(`/images/by-id?${searchParams.toString()}`);
   }
 
   public async adminUpdateDetails(

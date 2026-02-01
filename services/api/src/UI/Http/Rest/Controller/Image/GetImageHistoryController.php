@@ -16,7 +16,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use UI\Http\Rest\Response\ApiResponse;
 
 #[AsController]
-#[Route('/images/history/{page}', name: 'get_image_history', methods: ['GET'])]
+#[Route('/images/history', name: 'get_image_history', methods: ['GET'])]
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 final readonly class GetImageHistoryController {
   use QueryTrait;
@@ -24,7 +24,6 @@ final readonly class GetImageHistoryController {
   public function __invoke(
     #[MapQueryString] GetImageListQuery $query,
     #[CurrentUser] JwtUser              $user,
-    int                                 $page = 1
   ): ApiResponse {
     $resourceContext = new ImageResourceContext(
       groups: ['public', 'private', 'tag', 'collection'],
@@ -32,7 +31,6 @@ final readonly class GetImageHistoryController {
     );
 
     $collection = $this->ask($query->withContext([
-      'page' => $page,
       'userId' => $user->getIdentifier(),
       'resourceContext' => $resourceContext,
     ]));

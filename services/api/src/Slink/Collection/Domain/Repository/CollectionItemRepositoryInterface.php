@@ -4,10 +4,22 @@ declare(strict_types=1);
 
 namespace Slink\Collection\Domain\Repository;
 
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Slink\Collection\Infrastructure\ReadModel\View\CollectionItemView;
 
 interface CollectionItemRepositoryInterface {
   public function add(CollectionItemView $item): void;
+
+  /**
+   * @return Paginator<CollectionItemView>
+   */
+  public function getCollectionItemsByCursor(
+    string $collectionId,
+    int $limit,
+    ?string $cursor = null
+  ): Paginator;
+
+  public function countCollectionItems(string $collectionId): int;
 
   public function remove(CollectionItemView $item): void;
 

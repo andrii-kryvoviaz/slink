@@ -24,7 +24,7 @@ class UploadHistoryFeed extends AbstractPaginatedFeed<ImageListingItem> {
   public constructor() {
     super({
       defaultPageSize: 12,
-      useCursor: false,
+      useCursor: true,
       appendMode: 'always',
     });
   }
@@ -32,13 +32,12 @@ class UploadHistoryFeed extends AbstractPaginatedFeed<ImageListingItem> {
   protected async fetchData(
     params: LoadParams & SearchParams,
   ): Promise<PaginatedResponse<ImageListingItem>> {
-    const { page = 1, limit = 12 } = params;
+    const { cursor, limit = 12 } = params;
     const tagIds = this._tagFilter.selectedTags.map((tag) => tag.id);
 
     return ApiClient.image.getHistory(
-      page,
       limit,
-      undefined,
+      cursor,
       true,
       tagIds.length > 0 ? tagIds : undefined,
       this._tagFilter.requireAllTags,
@@ -47,19 +46,6 @@ class UploadHistoryFeed extends AbstractPaginatedFeed<ImageListingItem> {
 
   protected _getItemId(item: ImageListingItem): string {
     return item.id;
-  }
-
-  public override async load(
-    params: LoadParams & SearchParams = {},
-    options?: Parameters<typeof this.fetch>[2],
-  ): Promise<void> {
-    const { page = this._meta.page } = params;
-
-    if (this.isDirty && page === this._meta.page) {
-      return;
-    }
-
-    await super.load(params, options);
   }
 
   public setTagFilter(tags: Tag[], requireAllTags: boolean = false): void {

@@ -37,10 +37,11 @@ final readonly class GetImageBookmarkersHandler implements QueryHandlerInterface
 
     $bookmarks = $this->bookmarkRepository->findByImageId(
       $query->imageId,
-      $query->page,
       $query->getLimit(),
       $query->getCursor(),
     );
+
+    $total = $this->bookmarkRepository->countByImageId($query->imageId);
 
     $items = iterator_map(
       $bookmarks,
@@ -51,9 +52,8 @@ final readonly class GetImageBookmarkersHandler implements QueryHandlerInterface
 
     return Collection::fromCursorPaginator(
       $paginator,
-      page: $query->page,
       limit: $query->getLimit(),
-      total: $bookmarks->count()
+      total: $total
     );
   }
 }

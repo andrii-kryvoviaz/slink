@@ -21,9 +21,9 @@ class UserBookmarksFeed extends AbstractPaginatedFeed<BookmarkItem> {
   protected async fetchData(
     params: LoadParams & SearchParams,
   ): Promise<PaginatedResponse<BookmarkItem>> {
-    const { page = 1, limit = 12, cursor } = params;
+    const { limit = 12, cursor } = params;
 
-    return ApiClient.bookmark.getUserBookmarks(page, limit, cursor);
+    return ApiClient.bookmark.getUserBookmarks(limit, cursor);
   }
 
   protected _getItemId(item: BookmarkItem): string {

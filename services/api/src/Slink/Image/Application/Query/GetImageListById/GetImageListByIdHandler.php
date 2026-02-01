@@ -19,7 +19,7 @@ final readonly class GetImageListByIdHandler implements QueryHandlerInterface {
    * @return array<int,mixed>
    */
   public function __invoke(GetImageListByIdQuery $query, string $userId): array {
-    $images = $this->repository->geImageList(1, new ImageListFilter(
+    $images = $this->repository->geImageList(new ImageListFilter(
       userId: $userId,
       uuids: $query->getUuid()
     ));

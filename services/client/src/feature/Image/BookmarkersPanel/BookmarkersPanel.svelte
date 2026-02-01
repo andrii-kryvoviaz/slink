@@ -33,7 +33,7 @@
     count: number;
   }
 
-  const ITEMS_PER_PAGE = 3;
+  const ITEMS_PER_PAGE = 12;
 
   let { imageId, count }: Props = $props();
 
@@ -54,10 +54,9 @@
     data: response,
     run: fetchBookmarkers,
   } = ReactiveState<BookmarkersResponse>(
-    (page: number, cursorValue?: string) => {
+    (cursorValue?: string) => {
       return ApiClient.bookmark.getImageBookmarkers(
         imageId,
-        page,
         ITEMS_PER_PAGE,
         cursorValue,
       );
@@ -76,7 +75,7 @@
   const loadPage = async (page: number) => {
     if (pages.has(page)) return;
 
-    await fetchBookmarkers(page, cursor);
+    await fetchBookmarkers(page === 1 ? undefined : cursor);
 
     if ($response) {
       pages.set(page, $response.data);

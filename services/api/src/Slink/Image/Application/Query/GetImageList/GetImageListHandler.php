@@ -28,7 +28,6 @@ final readonly class GetImageListHandler implements QueryHandlerInterface {
 
   /**
    * @param GetImageListQuery $query
-   * @param int $page
    * @param bool|null $isPublic
    * @param string|null $userId
    * @param ImageResourceContext|null $resourceContext
@@ -38,7 +37,6 @@ final readonly class GetImageListHandler implements QueryHandlerInterface {
    */
   public function __invoke(
     GetImageListQuery     $query,
-    int                   $page,
     ?bool                 $isPublic = null,
     ?string               $userId = null,
     ?ImageResourceContext $resourceContext = null,
@@ -49,7 +47,7 @@ final readonly class GetImageListHandler implements QueryHandlerInterface {
       $userId,
     );
 
-    $images = $this->repository->geImageList($page, new ImageListFilter(
+    $filter = new ImageListFilter(
       limit: $query->getLimit(),
       orderBy: $query->getOrderBy(),
       order: $query->getOrder(),
@@ -59,7 +57,10 @@ final readonly class GetImageListHandler implements QueryHandlerInterface {
       searchBy: $query->getSearchBy(),
       cursor: $query->getCursor(),
       tagFilterData: $tagFilterData,
-    ));
+    );
+
+    $images = $this->repository->geImageList($filter);
+    $total = $this->repository->countImageList($filter);
 
     $imageIds = iterator_map($images, fn(ImageView $image) => (string)$image->getUuid());
 
@@ -67,11 +68,6 @@ final readonly class GetImageListHandler implements QueryHandlerInterface {
     $items = $this->resourceProcessor->many($images, $resourceContext->withImageIds($imageIds));
     $paginator = $this->cursorPaginator->paginate($items, $query->getLimit());
 
-    return Collection::fromCursorPaginator(
-      $paginator,
-      page: $page,
-      limit: $query->getLimit(),
-      total: $images->count()
-    );
+    return Collection::fromCursorPaginator($paginator, limit: $query->getLimit(), total: $total);
   }
 }

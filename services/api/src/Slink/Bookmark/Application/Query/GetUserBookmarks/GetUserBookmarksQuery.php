@@ -11,7 +11,6 @@ final readonly class GetUserBookmarksQuery implements QueryInterface {
   use EnvelopedMessage;
 
   public function __construct(
-    public int $page = 1,
     private int $limit = 10,
     private ?string $cursor = null,
   ) {

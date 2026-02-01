@@ -6,7 +6,6 @@ export type ItemType = 'image' | 'video';
 
 export interface CollectionItem {
   id: string;
-  uuid: string;
   itemId: string;
   itemType: ItemType;
   position: number;
@@ -14,7 +13,7 @@ export interface CollectionItem {
     formattedDate: string;
     timestamp: number;
   };
-  image?: ImageListingItem;
+  item?: ImageListingItem;
 }
 
 export interface CollectionResponse {

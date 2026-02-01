@@ -108,13 +108,26 @@ class ApiResponse extends JsonResponse {
    * @return self
    */
   public static function collection(Collection $collection, int $status = self::HTTP_OK): self {
+    $meta = [
+      'size' => $collection->limit,
+      'total' => $collection->total,
+    ];
+
+    if ($collection->page !== null) {
+      $meta['page'] = $collection->page;
+    }
+
+    if ($collection->nextCursor) {
+      $meta['nextCursor'] = $collection->nextCursor;
+    }
+
+    if ($collection->prevCursor) {
+      $meta['prevCursor'] = $collection->prevCursor;
+    }
+
     return new self(
       [
-        'meta' => [
-          'size' => $collection->limit,
-          'page' => $collection->page,
-          'total' => $collection->total,
-        ],
+        'meta' => $meta,
         'data' => self::formatItemsArray($collection->data),
       ],
       $status

@@ -15,7 +15,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use UI\Http\Rest\Response\ApiResponse;
 
 #[AsController]
-#[Route(path: '/bookmarks/{page}', name: 'get_user_bookmarks', requirements: ['page' => '\d+'], methods: ['GET'])]
+#[Route(path: '/bookmarks', name: 'get_user_bookmarks', methods: ['GET'])]
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 final readonly class GetUserBookmarksController {
   use QueryTrait;
@@ -23,11 +23,9 @@ final readonly class GetUserBookmarksController {
   public function __invoke(
     #[MapQueryString] GetUserBookmarksQuery $query,
     #[CurrentUser] JWTUser $user,
-    int $page = 1,
   ): ApiResponse {
     $bookmarks = $this->ask(
-      (new GetUserBookmarksQuery($page, $query->getLimit(), $query->getCursor()))
-        ->withContext(['userId' => $user->getIdentifier()])
+      $query->withContext(['userId' => $user->getIdentifier()])
     );
 
     return ApiResponse::collection($bookmarks);

@@ -4,13 +4,51 @@ declare(strict_types=1);
 
 namespace Slink\Collection\Infrastructure\ReadModel\Repository;
 
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Slink\Collection\Domain\Repository\CollectionItemRepositoryInterface;
 use Slink\Collection\Infrastructure\ReadModel\View\CollectionItemView;
+use Slink\Shared\Infrastructure\Pagination\CursorPaginationTrait;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractRepository;
 
 final class CollectionItemRepository extends AbstractRepository implements CollectionItemRepositoryInterface {
+  use CursorPaginationTrait;
   static protected function entityClass(): string {
     return CollectionItemView::class;
+  }
+
+  public function getCollectionItemsByCursor(
+    string $collectionId,
+    int $limit,
+    ?string $cursor = null
+  ): Paginator {
+    $qb = $this->getEntityManager()
+      ->createQueryBuilder()
+      ->from(CollectionItemView::class, 'ci')
+      ->select('ci')
+      ->join('ci.collection', 'c')
+      ->where('c.uuid = :collectionId')
+      ->setParameter('collectionId', $collectionId)
+      ->orderBy('ci.addedAt', 'DESC')
+      ->addOrderBy('ci.uuid', 'DESC')
+      ->setMaxResults($limit + 1);
+
+    if ($cursor) {
+      $this->applyCursorPagination($qb, $cursor, 'addedAt', 'desc', 'uuid', 'ci');
+    }
+
+    return new Paginator($qb->getQuery(), false);
+  }
+
+  public function countCollectionItems(string $collectionId): int {
+    return (int) $this->getEntityManager()
+      ->createQueryBuilder()
+      ->from(CollectionItemView::class, 'ci')
+      ->select('COUNT(ci.uuid)')
+      ->join('ci.collection', 'c')
+      ->where('c.uuid = :collectionId')
+      ->setParameter('collectionId', $collectionId)
+      ->getQuery()
+      ->getSingleScalarResult();
   }
 
   public function add(CollectionItemView $item): void {

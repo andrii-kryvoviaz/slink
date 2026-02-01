@@ -15,7 +15,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use UI\Http\Rest\Response\ApiResponse;
 
 #[AsController]
-#[Route('/images', name: 'get_image_list_by_id', methods: ['GET'])]
+#[Route('/images/by-id', name: 'get_image_list_by_id', methods: ['GET'])]
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 final readonly class GetImageListByIdController {
   use QueryTrait;

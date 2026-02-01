@@ -316,8 +316,8 @@
     {:else if itemsFeed.items.length > 0}
       <Masonry items={itemsFeed.items} class="gap-4">
         {#snippet itemTemplate(item)}
-          {#if item.image}
-            {@const image = item.image}
+          {#if item.item}
+            {@const image = item.item}
             <div
               in:fly={{ y: 20, duration: 300, delay: Math.random() * 100 }}
               class="group break-inside-avoid overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/60 transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-700/80 hover:shadow-md dark:hover:shadow-gray-900/50 cursor-pointer"

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Slink\Image\Infrastructure\ReadModel\Repository;
 
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Override;
 use Slink\Tag\Infrastructure\ReadModel\View\TagView;
@@ -32,19 +33,12 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
   }
 
   /**
-   * @param int $page
    * @param ImageListFilter $imageListFilter
    * @return Paginator<ImageView>
    */
   #[Override]
-  public function geImageList(int $page, ImageListFilter $imageListFilter): Paginator {
-    $qb = $this->getEntityManager()
-      ->createQueryBuilder()
-      ->from(ImageView::class, 'image')
-      ->leftJoin('image.user', 'user')
-      ->select('
-        image'
-      );
+  public function geImageList(ImageListFilter $imageListFilter): Paginator {
+    $qb = $this->buildImageListQuery($imageListFilter);
 
     if ($limit = $imageListFilter->getLimit()) {
       $qb->setMaxResults($limit + 1);
@@ -58,10 +52,26 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
           'uuid',
           'image'
         );
-      } else {
-        $qb->setFirstResult(($page - 1) * $limit);
       }
     }
+
+    return new Paginator($qb);
+  }
+
+  #[Override]
+  public function countImageList(ImageListFilter $imageListFilter): int {
+    $qb = $this->buildImageListQuery($imageListFilter);
+    $qb->select('COUNT(DISTINCT image.uuid)');
+
+    return (int) $qb->getQuery()->getSingleScalarResult();
+  }
+
+  private function buildImageListQuery(ImageListFilter $imageListFilter): QueryBuilder {
+    $qb = $this->getEntityManager()
+      ->createQueryBuilder()
+      ->from(ImageView::class, 'image')
+      ->leftJoin('image.user', 'user')
+      ->select('image');
 
     if (($isPublic = $imageListFilter->getIsPublic()) !== null) {
       $qb->andWhere('image.attributes.isPublic = :isPublic')
@@ -129,7 +139,7 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
     $qb->orderBy('image.' . $imageListFilter->getOrderBy(), $imageListFilter->getOrder());
     $qb->addOrderBy('image.uuid', $imageListFilter->getOrder());
 
-    return new Paginator($qb);
+    return $qb;
   }
 
   /**

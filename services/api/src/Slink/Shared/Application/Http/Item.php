@@ -118,16 +118,23 @@ final readonly class Item implements CursorAwareInterface {
    * @throws DateTimeException
    */
   public function getCursorTimestamp(): DateTimeInterface {
-    if (!is_array($this->resource) || !isset($this->resource['createdAt'])) {
+    if (!is_array($this->resource)) {
       return new DateTime();
     }
 
-    ['createdAt' => $createdAt] = $this->resource;
+    $timestampField = $this->resource['addedAt']
+      ?? $this->resource['createdAt']
+      ?? $this->resource['attributes']['createdAt']
+      ?? null;
 
-    if (is_array($createdAt)) {
-      $createdAt = DateTime::fromUnknown($createdAt);
+    if ($timestampField === null) {
+      return new DateTime();
     }
 
-    return $createdAt;
+    if (is_array($timestampField)) {
+      return DateTime::fromUnknown($timestampField);
+    }
+
+    return $timestampField;
   }
 }

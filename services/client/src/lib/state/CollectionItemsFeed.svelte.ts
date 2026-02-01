@@ -22,8 +22,8 @@ export class CollectionItemsFeed extends AbstractPaginatedFeed<CollectionItem> {
 
   public constructor() {
     super({
-      defaultPageSize: 24,
-      useCursor: false,
+      defaultPageSize: 12,
+      useCursor: true,
       appendMode: 'always',
     });
   }
@@ -34,8 +34,8 @@ export class CollectionItemsFeed extends AbstractPaginatedFeed<CollectionItem> {
 
   public get media(): MediaItem[] {
     return this._items
-      .filter((item) => item.image !== undefined)
-      .map((item) => item.image!);
+      .filter((item) => item.item !== undefined)
+      .map((item) => item.item!);
   }
 
   public getItemIndex(mediaId: string): number {
@@ -47,8 +47,8 @@ export class CollectionItemsFeed extends AbstractPaginatedFeed<CollectionItem> {
     updates: Partial<MediaItem>,
   ): boolean {
     for (const item of this.items) {
-      if (item.image?.id === mediaId) {
-        this.update(item.itemId, { image: { ...item.image, ...updates } });
+      if (item.item?.id === mediaId) {
+        this.update(item.itemId, { item: { ...item.item, ...updates } });
         return true;
       }
     }
@@ -67,10 +67,10 @@ export class CollectionItemsFeed extends AbstractPaginatedFeed<CollectionItem> {
     params: LoadParams & SearchParams,
   ): Promise<PaginatedResponse<CollectionItem>> {
     if (!this._collectionId) {
-      return { data: [], meta: { size: 0, page: 1, total: 0 } };
+      return { data: [], meta: { size: 0, total: 0 } };
     }
 
-    const { page = 1 } = params;
+    const { cursor } = params;
 
     if (!this._collection) {
       this._collection = await ApiClient.collection.getById(this._collectionId);
@@ -78,8 +78,15 @@ export class CollectionItemsFeed extends AbstractPaginatedFeed<CollectionItem> {
 
     const response = await ApiClient.collection.getItems(
       this._collectionId,
-      page,
+      cursor,
     );
+
+    if (this._collection) {
+      this._collection = {
+        ...this._collection,
+        itemCount: response.meta.total,
+      };
+    }
 
     return {
       ...response,

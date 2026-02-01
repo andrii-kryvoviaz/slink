@@ -15,7 +15,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use UI\Http\Rest\Response\ApiResponse;
 
 #[AsController]
-#[Route(path: '/image/{imageId}/bookmarkers/{page}', name: 'get_image_bookmarkers', requirements: ['page' => '\d+'], methods: ['GET'])]
+#[Route(path: '/image/{imageId}/bookmarkers', name: 'get_image_bookmarkers', methods: ['GET'])]
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 final readonly class GetImageBookmarkersController {
   use QueryTrait;
@@ -24,11 +24,13 @@ final readonly class GetImageBookmarkersController {
     #[MapQueryString] GetImageBookmarkersQuery $query,
     #[CurrentUser] JWTUser $user,
     string $imageId,
-    int $page = 1,
   ): ApiResponse {
     $bookmarkers = $this->ask(
-      (new GetImageBookmarkersQuery($page, $imageId, $query->getLimit(), $query->getCursor()))
-        ->withContext(['userId' => $user->getIdentifier()])
+      (new GetImageBookmarkersQuery(
+        imageId: $imageId,
+        limit: $query->getLimit(),
+        cursor: $query->getCursor()
+      ))->withContext(['userId' => $user->getIdentifier()])
     );
 
     return ApiResponse::collection($bookmarkers);

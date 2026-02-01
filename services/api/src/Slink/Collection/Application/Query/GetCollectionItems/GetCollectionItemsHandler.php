@@ -4,74 +4,39 @@ declare(strict_types=1);
 
 namespace Slink\Collection\Application\Query\GetCollectionItems;
 
-use Slink\Collection\Domain\Enum\ItemType;
 use Slink\Collection\Domain\Repository\CollectionItemRepositoryInterface;
-use Slink\Collection\Infrastructure\ReadModel\View\CollectionItemView;
-use Slink\Image\Domain\Filter\ImageListFilter;
-use Slink\Image\Domain\Repository\ImageRepositoryInterface;
+use Slink\Collection\Infrastructure\Resource\CollectionItemResourceContext;
+use Slink\Collection\Infrastructure\Resource\CollectionItemResourceProcessor;
 use Slink\Shared\Application\Http\Collection;
-use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Application\Query\QueryHandlerInterface;
+use Slink\Shared\Infrastructure\Pagination\CursorPaginator;
 
 final readonly class GetCollectionItemsHandler implements QueryHandlerInterface {
   public function __construct(
     private CollectionItemRepositoryInterface $collectionItemRepository,
-    private ImageRepositoryInterface $imageRepository,
+    private CollectionItemResourceProcessor $resourceProcessor,
+    private CursorPaginator $cursorPaginator,
   ) {
   }
 
   public function __invoke(GetCollectionItemsQuery $query): Collection {
-    $items = $this->collectionItemRepository->getByCollectionIdPaginated(
+    $paginator = $this->collectionItemRepository->getCollectionItemsByCursor(
       $query->getCollectionId(),
-      $query->getPage(),
-      $query->getLimit()
-    );
-
-    $total = $this->collectionItemRepository->countByCollectionId($query->getCollectionId());
-    $images = $this->fetchImagesForItems($items);
-
-    return new Collection(
-      $query->getPage(),
       $query->getLimit(),
-      $total,
-      array_map(fn(CollectionItemView $item) => $this->mapItemToResponse($item, $images), $items)
-    );
-  }
-
-  /**
-   * @param CollectionItemView[] $items
-   * @return array<string, Item>
-   */
-  private function fetchImagesForItems(array $items): array {
-    $imageIds = array_map(
-      fn(CollectionItemView $item) => $item->getItemId(),
-      array_filter($items, fn(CollectionItemView $item) => $item->getItemType() === ItemType::Image)
+      $query->getCursor()
     );
 
-    if (empty($imageIds)) {
-      return [];
-    }
+    $items = iterator_to_array($paginator);
+    $total = $this->collectionItemRepository->countCollectionItems($query->getCollectionId());
 
-    $images = [];
-    $imageList = $this->imageRepository->geImageList(1, new ImageListFilter(uuids: $imageIds));
+    $context = (new CollectionItemResourceContext())->withItems($items);
+    $processedItems = $this->resourceProcessor->many($items, $context);
+    $cursorResult = $this->cursorPaginator->paginate($processedItems, $query->getLimit());
 
-    foreach ($imageList as $image) {
-      $images[$image->getUuid()] = Item::fromEntity($image);
-    }
-
-    return $images;
-  }
-
-  /**
-   * @param array<string, Item> $images
-   */
-  private function mapItemToResponse(CollectionItemView $item, array $images): Item {
-    $extra = [];
-
-    if ($item->getItemType() === ItemType::Image && isset($images[$item->getItemId()])) {
-      $extra['image'] = $images[$item->getItemId()]->resource;
-    }
-
-    return Item::fromEntity($item, $extra, groups: ['public']);
+    return Collection::fromCursorPaginator(
+      $cursorResult,
+      limit: $query->getLimit(),
+      total: $total
+    );
   }
 }

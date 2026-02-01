@@ -26,19 +26,19 @@ final readonly class GetUserBookmarksHandler implements QueryHandlerInterface {
   public function __invoke(GetUserBookmarksQuery $query, string $userId): Collection {
     $bookmarks = $this->repository->findByUserId(
       $userId,
-      $query->page,
       $query->getLimit(),
       $query->getCursor(),
     );
+
+    $total = $this->repository->countByUserId($userId);
 
     $items = iterator_map($bookmarks, fn($bookmark) => Item::fromEntity($bookmark));
     $paginator = $this->cursorPaginator->paginate($items, $query->getLimit());
 
     return Collection::fromCursorPaginator(
       $paginator,
-      page: $query->page,
       limit: $query->getLimit(),
-      total: $bookmarks->count()
+      total: $total
     );
   }
 }

@@ -70,7 +70,7 @@ final class BookmarkRepository extends AbstractRepository implements BookmarkRep
   }
 
   #[Override]
-  public function findByUserId(string $userId, int $page, int $limit, ?string $cursor = null): Paginator {
+  public function findByUserId(string $userId, int $limit, ?string $cursor = null): Paginator {
     $qb = $this->createQueryBuilder('b')
       ->join('b.user', 'u')
       ->leftJoin('b.image', 'i')
@@ -81,11 +81,20 @@ final class BookmarkRepository extends AbstractRepository implements BookmarkRep
 
     if ($cursor !== null) {
       $this->applyCursorPagination($qb, $cursor, 'createdAt', 'desc', 'uuid', 'b');
-    } else {
-      $qb->setFirstResult(($page - 1) * $limit);
     }
 
     return new Paginator($qb->getQuery());
+  }
+
+  #[Override]
+  public function countByUserId(string $userId): int {
+    return (int) $this->createQueryBuilder('b')
+      ->select('COUNT(b.uuid)')
+      ->join('b.user', 'u')
+      ->where('u.uuid = :userId')
+      ->setParameter('userId', $userId)
+      ->getQuery()
+      ->getSingleScalarResult();
   }
 
   #[Override]
@@ -140,7 +149,7 @@ final class BookmarkRepository extends AbstractRepository implements BookmarkRep
   }
 
   #[Override]
-  public function findByImageId(string $imageId, int $page, int $limit, ?string $cursor = null): Paginator {
+  public function findByImageId(string $imageId, int $limit, ?string $cursor = null): Paginator {
     $qb = $this->createQueryBuilder('b')
       ->join('b.image', 'i')
       ->leftJoin('b.user', 'u')
@@ -151,8 +160,6 @@ final class BookmarkRepository extends AbstractRepository implements BookmarkRep
 
     if ($cursor !== null) {
       $this->applyCursorPagination($qb, $cursor, 'createdAt', 'desc', 'uuid', 'b');
-    } else {
-      $qb->setFirstResult(($page - 1) * $limit);
     }
 
     return new Paginator($qb->getQuery());
