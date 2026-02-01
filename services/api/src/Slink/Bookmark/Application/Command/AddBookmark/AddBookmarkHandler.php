@@ -7,6 +7,7 @@ namespace Slink\Bookmark\Application\Command\AddBookmark;
 use Slink\Bookmark\Domain\Bookmark;
 use Slink\Bookmark\Domain\Context\BookmarkCreationContext;
 use Slink\Bookmark\Domain\Repository\BookmarkStoreRepositoryInterface;
+use Slink\Bookmark\Domain\Specification\PublicImageBookmarkSpecification;
 use Slink\Bookmark\Domain\Specification\SelfBookmarkSpecification;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
@@ -26,6 +27,7 @@ final readonly class AddBookmarkHandler implements CommandHandlerInterface {
 
     $context = new BookmarkCreationContext(
       new SelfBookmarkSpecification($this->imageRepository),
+      new PublicImageBookmarkSpecification($this->imageRepository),
     );
     
     $bookmark = Bookmark::create(

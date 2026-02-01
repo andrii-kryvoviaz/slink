@@ -8,7 +8,9 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Bookmark\Domain\Bookmark;
 use Slink\Bookmark\Domain\Context\BookmarkCreationContext;
+use Slink\Bookmark\Domain\Exception\PrivateImageBookmarkException;
 use Slink\Bookmark\Domain\Exception\SelfBookmarkException;
+use Slink\Bookmark\Domain\Specification\PublicImageBookmarkSpecificationInterface;
 use Slink\Bookmark\Domain\Specification\SelfBookmarkSpecificationInterface;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
@@ -55,7 +57,9 @@ final class BookmarkTest extends TestCase {
       ->with($imageId, $userId)
       ->willThrowException(new SelfBookmarkException());
 
-    $context = new BookmarkCreationContext($specification);
+    $publicSpecification = $this->createMock(PublicImageBookmarkSpecificationInterface::class);
+
+    $context = new BookmarkCreationContext($specification, $publicSpecification);
 
     Bookmark::create($id, $imageId, $userId, $context);
   }
@@ -80,7 +84,31 @@ final class BookmarkTest extends TestCase {
       ->method('ensureNotSelfBookmark')
       ->with($imageId, $userId);
 
-    $context = new BookmarkCreationContext($specification);
+    $publicSpecification = $this->createMock(PublicImageBookmarkSpecificationInterface::class);
+
+    $context = new BookmarkCreationContext($specification, $publicSpecification);
+
+    Bookmark::create($id, $imageId, $userId, $context);
+  }
+
+  #[Test]
+  public function itThrowsExceptionWhenBookmarkingPrivateImage(): void {
+    $this->expectException(PrivateImageBookmarkException::class);
+    $this->expectExceptionMessage('Cannot bookmark a private image');
+
+    $id = ID::generate();
+    $imageId = ID::generate();
+    $userId = ID::generate();
+
+    $selfBookmarkSpecification = $this->createMock(SelfBookmarkSpecificationInterface::class);
+    $publicSpecification = $this->createMock(PublicImageBookmarkSpecificationInterface::class);
+    $publicSpecification
+      ->expects($this->once())
+      ->method('ensureImageIsPublic')
+      ->with($imageId)
+      ->willThrowException(new PrivateImageBookmarkException());
+
+    $context = new BookmarkCreationContext($selfBookmarkSpecification, $publicSpecification);
 
     Bookmark::create($id, $imageId, $userId, $context);
   }
@@ -123,7 +151,8 @@ final class BookmarkTest extends TestCase {
 
   private function createContext(): BookmarkCreationContext {
     $specification = $this->createMock(SelfBookmarkSpecificationInterface::class);
+    $publicSpecification = $this->createMock(PublicImageBookmarkSpecificationInterface::class);
 
-    return new BookmarkCreationContext($specification);
+    return new BookmarkCreationContext($specification, $publicSpecification);
   }
 }

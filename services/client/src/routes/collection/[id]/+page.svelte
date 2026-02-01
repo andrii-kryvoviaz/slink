@@ -12,7 +12,6 @@
     PostViewer,
     ViewCountBadge,
   } from '@slink/feature/Image';
-  import BookmarkButton from '@slink/feature/Image/BookmarkButton/BookmarkButton.svelte';
   import { EmptyState, Masonry } from '@slink/feature/Layout';
   import { ExploreSkeleton } from '@slink/feature/Layout';
   import {
@@ -83,7 +82,7 @@
   });
 
   const feedAdapter = new CollectionImagesFeedAdapter(itemsFeed);
-  postViewerState.setFeed(feedAdapter as any);
+  postViewerState.setFeed(feedAdapter as any, 'collection');
 
   $effect(() => {
     if (!postViewerState.isOpen && itemsFeed.isDirty) {
@@ -378,16 +377,6 @@
                     <DownloadButton
                       imageUrl={`/image/${image.attributes.fileName}`}
                       fileName={image.attributes.fileName}
-                      size="sm"
-                      variant="overlay"
-                    />
-                  </StopPropagation>
-                  <StopPropagation>
-                    <BookmarkButton
-                      imageId={image.id}
-                      imageOwnerId={image.owner.id}
-                      isBookmarked={image.isBookmarked}
-                      bookmarkCount={image.bookmarkCount}
                       size="sm"
                       variant="overlay"
                     />

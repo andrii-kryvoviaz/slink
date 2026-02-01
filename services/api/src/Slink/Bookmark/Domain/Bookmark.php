@@ -26,6 +26,7 @@ final class Bookmark extends AbstractAggregateRoot {
     BookmarkCreationContext $context,
   ): self {
     $context->selfBookmarkSpecification->ensureNotSelfBookmark($imageId, $userId);
+    $context->publicImageBookmarkSpecification->ensureImageIsPublic($imageId);
 
     $bookmark = new self($id);
     $now = DateTime::now();

@@ -7,6 +7,7 @@ import type { AbstractPaginatedFeed } from '@slink/lib/state/core/AbstractPagina
 import { useState } from '@slink/lib/state/core/ContextAwareState';
 
 type PaginatedFeed = AbstractPaginatedFeed<ImageListingItem>;
+export type PostViewerSource = 'public' | 'collection';
 
 class PostViewerState {
   private _isOpen: boolean = $state(false);
@@ -16,6 +17,7 @@ class PostViewerState {
   private _lastFetchedPostId: string | null = null;
   private _prefetchThreshold: number = 3;
   private _prefetchCount: number = 2;
+  private _source: PostViewerSource = $state('public');
 
   get isOpen(): boolean {
     return this._isOpen;
@@ -38,6 +40,14 @@ class PostViewerState {
     return this._standaloneItem !== null;
   }
 
+  get source(): PostViewerSource {
+    return this._source;
+  }
+
+  get isCollectionContext(): boolean {
+    return this._source === 'collection';
+  }
+
   get hasNext(): boolean {
     if (this._standaloneItem) return false;
     return (
@@ -55,11 +65,12 @@ class PostViewerState {
     return this.items.length;
   }
 
-  setFeed(feed: PaginatedFeed): void {
+  setFeed(feed: PaginatedFeed, source: PostViewerSource = 'public'): void {
     if (this._feed === feed) return;
     this._feed = feed;
     this._lastFetchedPostId = null;
     this._standaloneItem = null;
+    this._source = source;
   }
 
   updateCurrentItem(updates: Partial<ImageListingItem>): void {

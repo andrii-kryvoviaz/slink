@@ -89,15 +89,17 @@
           size="md"
           tooltipVariant="dark"
         />
-        <BookmarkButton
-          imageId={image.id}
-          imageOwnerId={image.owner.id}
-          isBookmarked={image.isBookmarked}
-          bookmarkCount={image.bookmarkCount}
-          size="md"
-          tooltipVariant="dark"
-          onBookmarkChange={handleBookmarkChange}
-        />
+        {#if image.attributes.isPublic}
+          <BookmarkButton
+            imageId={image.id}
+            imageOwnerId={image.owner.id}
+            isBookmarked={image.isBookmarked}
+            bookmarkCount={image.bookmarkCount}
+            size="md"
+            tooltipVariant="dark"
+            onBookmarkChange={handleBookmarkChange}
+          />
+        {/if}
       </div>
     </div>
 
