@@ -110,7 +110,7 @@
   <title>Upload History | Slink</title>
 </svelte:head>
 
-<section in:fade={{ duration: 300 }}>
+<section>
   <div
     class="flex flex-col px-4 py-6 sm:px-6 w-full"
     use:skeleton={{
@@ -119,7 +119,7 @@
       showDelay: 200,
     }}
   >
-    <div class="mb-8 space-y-6" in:fade={{ duration: 400, delay: 100 }}>
+    <div class="mb-8 space-y-6" in:fade={{ duration: 300 }}>
       <div class="flex items-center justify-between w-full">
         <div class="flex-1 min-w-0">
           <h1 class="text-3xl font-semibold text-slate-900 dark:text-white">
