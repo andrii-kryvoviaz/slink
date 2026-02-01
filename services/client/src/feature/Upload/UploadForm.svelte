@@ -58,7 +58,7 @@
     }
 
     const files = Array.from(fileList).filter((file) => {
-      if (!file?.type.startsWith('image/')) {
+      if (file?.type && !file?.type.startsWith('image/')) {
         toast.component(UnsupportedFileFormat, {
           duration: 5000,
         });
