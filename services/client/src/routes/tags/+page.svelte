@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { CreateTagDialog } from '@slink/feature/Tag';
+  import { CreateTagDialog, TagsSkeleton } from '@slink/feature/Tag';
   import { TagDataTable } from '@slink/feature/Tag/TagDataTable';
   import { Button } from '@slink/ui/components/button';
   import { onMount } from 'svelte';
@@ -82,20 +82,7 @@
     </div>
 
     {#if tagFeed.loading && tagFeed.data.length === 0}
-      <div
-        class="flex items-center justify-center py-20"
-        in:fade={{ duration: 200 }}
-      >
-        <div class="flex flex-col items-center gap-3">
-          <Icon
-            icon="lucide:loader-2"
-            class="h-8 w-8 text-slate-400 dark:text-slate-500 animate-spin"
-          />
-          <span class="text-sm text-slate-500 dark:text-slate-400"
-            >Loading tags...</span
-          >
-        </div>
-      </div>
+      <TagsSkeleton />
     {:else}
       <TagDataTable
         tags={tagFeed.data}

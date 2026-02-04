@@ -27,4 +27,5 @@ export { default as TagListView } from './TagPicker/TagListView.svelte';
 export * from './TagPicker/TagPicker.theme';
 export { default as TagSelector } from './TagSelector/TagSelector.svelte';
 export * from './TagSelector/TagSelector.theme';
+export { default as TagsSkeleton } from './TagsSkeleton/TagsSkeleton.svelte';
 export * from './useTagOperations.svelte';
