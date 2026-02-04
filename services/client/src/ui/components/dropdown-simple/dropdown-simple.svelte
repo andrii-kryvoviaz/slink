@@ -23,6 +23,7 @@
       variant?: ButtonVariant;
       contentVariant?: DropdownSimpleContentVariant;
       contentProps?: WithoutChild<DropdownMenu.ContentProps>;
+      triggerClass?: string;
       animationDuration?: number;
       child?: Snippet;
       trigger?: Snippet;
@@ -36,6 +37,7 @@
     contentVariant = 'default',
     size = 'xs',
     rounded = 'full',
+    triggerClass = 'w-full',
     animationDuration = 300,
     child,
     children,
@@ -65,7 +67,7 @@
 </script>
 
 <DropdownMenu.Root bind:open {...props}>
-  <DropdownMenu.Trigger class="w-full">
+  <DropdownMenu.Trigger class={triggerClass}>
     {#if trigger}
       {@render trigger()}
     {:else}
