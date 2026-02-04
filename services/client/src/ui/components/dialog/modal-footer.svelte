@@ -40,7 +40,7 @@
   {:else}
     <Button
       type="button"
-      variant="glass"
+      variant="outline"
       size="sm"
       rounded="full"
       class="flex-1"
@@ -54,7 +54,7 @@
       variant={submitVariant}
       size="sm"
       rounded="full"
-      class="flex-1 shadow-lg hover:shadow-xl transition-shadow duration-200"
+      class="flex-1"
       disabled={submitDisabled || isSubmitting}
       onclick={onSubmit}
     >

@@ -5,32 +5,27 @@ export type NoticeVariant = 'info' | 'warning' | 'success';
 
 export const modalIconContainer = cva(
   [
-    'w-12 h-12 rounded-xl flex items-center justify-center',
-    'shadow-md backdrop-blur-sm border flex-shrink-0',
-    'bg-gradient-to-br',
+    'w-10 h-10 rounded-lg flex items-center justify-center',
+    'border flex-shrink-0',
   ],
   {
     variants: {
       variant: {
         blue: [
-          'from-blue-500/10 to-indigo-600/15',
-          'dark:from-blue-400/20 dark:to-indigo-500/25',
-          'border-blue-300/40 dark:border-blue-600/50',
+          'bg-blue-50/80 dark:bg-blue-950/80',
+          'border-blue-200/60 dark:border-blue-800/60',
         ],
         green: [
-          'from-green-500/10 to-emerald-600/15',
-          'dark:from-green-400/20 dark:to-emerald-500/25',
-          'border-green-300/40 dark:border-green-600/50',
+          'bg-green-50/80 dark:bg-green-950/80',
+          'border-green-200/60 dark:border-green-800/60',
         ],
         purple: [
-          'from-indigo-500/10 to-purple-600/15',
-          'dark:from-indigo-400/20 dark:to-purple-500/25',
-          'border-indigo-300/40 dark:border-indigo-600/50',
+          'bg-indigo-50/80 dark:bg-indigo-950/80',
+          'border-indigo-200/60 dark:border-indigo-800/60',
         ],
         amber: [
-          'from-amber-500/10 to-orange-600/15',
-          'dark:from-amber-400/20 dark:to-orange-500/25',
-          'border-amber-300/40 dark:border-amber-600/50',
+          'bg-amber-50/80 dark:bg-amber-950/80',
+          'border-amber-200/60 dark:border-amber-800/60',
         ],
       },
     },
@@ -40,13 +35,13 @@ export const modalIconContainer = cva(
   },
 );
 
-export const modalIcon = cva(['drop-shadow-sm [&>svg]:h-6 [&>svg]:w-6'], {
+export const modalIcon = cva(['[&>svg]:h-5 [&>svg]:w-5'], {
   variants: {
     variant: {
-      blue: 'text-blue-700 dark:text-blue-300',
-      green: 'text-green-700 dark:text-green-300',
-      purple: 'text-indigo-700 dark:text-indigo-300',
-      amber: 'text-amber-700 dark:text-amber-300',
+      blue: 'text-blue-600 dark:text-blue-400',
+      green: 'text-green-600 dark:text-green-400',
+      purple: 'text-indigo-600 dark:text-indigo-400',
+      amber: 'text-amber-600 dark:text-amber-400',
     },
   },
   defaultVariants: {
@@ -55,28 +50,21 @@ export const modalIcon = cva(['drop-shadow-sm [&>svg]:h-6 [&>svg]:w-6'], {
 });
 
 export const noticeContainer = cva(
-  [
-    'relative overflow-hidden rounded-2xl p-5',
-    'shadow-lg backdrop-blur-sm border',
-    'bg-gradient-to-br',
-  ],
+  ['relative overflow-hidden rounded-xl p-4', 'border'],
   {
     variants: {
       variant: {
         info: [
-          'from-blue-50/90 via-white to-indigo-50/80',
-          'dark:from-blue-950/20 dark:via-slate-800/50 dark:to-indigo-950/30',
-          'border-blue-200/40 dark:border-blue-800/30',
+          'bg-blue-50 dark:bg-blue-950',
+          'border-blue-200 dark:border-blue-800',
         ],
         warning: [
-          'from-amber-50/90 via-white to-orange-50/80',
-          'dark:from-amber-950/20 dark:via-slate-800/50 dark:to-orange-950/30',
-          'border-amber-200/40 dark:border-amber-800/30',
+          'bg-amber-50 dark:bg-amber-950',
+          'border-amber-200 dark:border-amber-800',
         ],
         success: [
-          'from-green-50/90 via-white to-emerald-50/80',
-          'dark:from-green-950/20 dark:via-slate-800/50 dark:to-emerald-950/30',
-          'border-green-200/40 dark:border-green-800/30',
+          'bg-green-50 dark:bg-green-950',
+          'border-green-200 dark:border-green-800',
         ],
       },
     },
@@ -86,44 +74,27 @@ export const noticeContainer = cva(
   },
 );
 
-export const noticeOverlay = cva(
-  [
-    'absolute inset-0',
-    'bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))]',
-  ],
-  {
-    variants: {
-      variant: {
-        info: [
-          'from-blue-100/30 via-transparent to-indigo-100/20',
-          'dark:from-blue-900/20 dark:via-transparent dark:to-indigo-900/10',
-        ],
-        warning: [
-          'from-amber-100/30 via-transparent to-orange-100/20',
-          'dark:from-amber-900/20 dark:via-transparent dark:to-orange-900/10',
-        ],
-        success: [
-          'from-green-100/30 via-transparent to-emerald-100/20',
-          'dark:from-green-900/20 dark:via-transparent dark:to-emerald-900/10',
-        ],
-      },
-    },
-    defaultVariants: {
-      variant: 'info',
+export const noticeOverlay = cva(['hidden'], {
+  variants: {
+    variant: {
+      info: '',
+      warning: '',
+      success: '',
     },
   },
-);
+  defaultVariants: {
+    variant: 'info',
+  },
+});
 
 export const noticeIconContainer = cva(
-  [
-    'w-10 h-10 rounded-xl flex items-center justify-center shadow-lg bg-gradient-to-br',
-  ],
+  ['w-8 h-8 rounded-lg flex items-center justify-center'],
   {
     variants: {
       variant: {
-        info: 'from-blue-500 to-indigo-600',
-        warning: 'from-amber-500 to-orange-600',
-        success: 'from-green-500 to-emerald-600',
+        info: 'bg-blue-100 dark:bg-blue-900',
+        warning: 'bg-amber-100 dark:bg-amber-900',
+        success: 'bg-green-100 dark:bg-green-900',
       },
     },
     defaultVariants: {
@@ -132,7 +103,20 @@ export const noticeIconContainer = cva(
   },
 );
 
-export const noticeTitle = cva(['text-sm font-semibold leading-tight mb-2'], {
+export const noticeIcon = cva(['[&>svg]:h-4 [&>svg]:w-4'], {
+  variants: {
+    variant: {
+      info: 'text-blue-600 dark:text-blue-400',
+      warning: 'text-amber-600 dark:text-amber-400',
+      success: 'text-green-600 dark:text-green-400',
+    },
+  },
+  defaultVariants: {
+    variant: 'info',
+  },
+});
+
+export const noticeTitle = cva(['text-sm font-semibold leading-tight mb-1'], {
   variants: {
     variant: {
       info: 'text-blue-900 dark:text-blue-100',
@@ -148,9 +132,9 @@ export const noticeTitle = cva(['text-sm font-semibold leading-tight mb-2'], {
 export const noticeText = cva(['text-sm leading-relaxed'], {
   variants: {
     variant: {
-      info: 'text-blue-800/90 dark:text-blue-200/90',
-      warning: 'text-amber-800/90 dark:text-amber-200/90',
-      success: 'text-green-800/90 dark:text-green-200/90',
+      info: 'text-blue-700 dark:text-blue-300',
+      warning: 'text-amber-700 dark:text-amber-300',
+      success: 'text-green-700 dark:text-green-300',
     },
   },
   defaultVariants: {
@@ -159,8 +143,8 @@ export const noticeText = cva(['text-sm leading-relaxed'], {
 });
 
 export const buttonVariantMap: Record<ModalVariant, string> = {
-  blue: 'gradient-blue',
-  green: 'gradient-green',
-  purple: 'gradient-purple',
-  amber: 'gradient-amber',
+  blue: 'outline-blue',
+  green: 'outline-green',
+  purple: 'outline-purple',
+  amber: 'outline-amber',
 };

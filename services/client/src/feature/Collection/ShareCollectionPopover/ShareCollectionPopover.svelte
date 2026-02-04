@@ -41,7 +41,7 @@
 
   <div class="flex gap-3 pt-2">
     <Button
-      variant="glass"
+      variant="outline"
       rounded="full"
       size="sm"
       onclick={close}
@@ -51,11 +51,11 @@
       Cancel
     </Button>
     <Button
-      variant="gradient-blue"
+      variant="outline-blue"
       rounded="full"
       size="sm"
       onclick={confirm}
-      class="flex-1 font-medium shadow-lg hover:shadow-xl transition-all duration-200"
+      class="flex-1 font-medium"
       disabled={loading}
     >
       Confirm

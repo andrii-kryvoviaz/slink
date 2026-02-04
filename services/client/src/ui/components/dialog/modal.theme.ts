@@ -13,11 +13,11 @@ export type ModalAnimation = 'fade' | 'slide' | 'none';
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 export type ModalBackground = 'glass' | 'solid';
 
-export const modalOverlayVariants = cva(['fixed inset-0 z-50'], {
+export const modalOverlayVariants = cva(['fixed inset-0 z-30'], {
   variants: {
     backdrop: {
-      enabled: 'bg-black/50',
-      subtle: 'bg-black/30',
+      enabled: 'bg-black/30',
+      subtle: 'bg-black/10',
       disabled: 'bg-transparent',
     },
     animation: {
@@ -36,7 +36,7 @@ export const modalOverlayVariants = cva(['fixed inset-0 z-50'], {
 export const modalContentVariants = cva(
   [
     'group fixed left-[50%] top-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 p-6 duration-200',
-    'border rounded-2xl shadow-lg',
+    'border rounded-2xl shadow-sm',
   ],
   {
     variants: {
@@ -55,14 +55,10 @@ export const modalContentVariants = cva(
       },
       background: {
         glass: [
-          'bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800/80 dark:to-slate-700/60',
-          'border-slate-200/50 dark:border-slate-700/30',
-          'backdrop-blur-sm',
+          'dark:bg-black/30 bg-white/80 backdrop-blur-xl',
+          'border-white/10',
         ],
-        solid: [
-          'bg-slate-50 dark:bg-slate-800',
-          'border-slate-200 dark:border-slate-700',
-        ],
+        solid: ['bg-black/90 backdrop-blur-xl', 'border-white/10'],
       },
     },
     defaultVariants: {
@@ -75,42 +71,35 @@ export const modalContentVariants = cva(
 
 export const modalHeaderIconContainerVariants = cva(
   [
-    'w-12 h-12 rounded-xl flex items-center justify-center',
-    'shadow-md backdrop-blur-sm border flex-shrink-0',
-    'bg-gradient-to-br',
+    'w-10 h-10 rounded-lg flex items-center justify-center',
+    'border flex-shrink-0',
   ],
   {
     variants: {
       variant: {
         blue: [
-          'from-blue-500/10 to-indigo-600/15',
-          'dark:from-blue-400/20 dark:to-indigo-500/25',
-          'border-blue-300/40 dark:border-blue-600/50',
+          'bg-blue-50/80 dark:bg-blue-950/80',
+          'border-blue-200/60 dark:border-blue-800/60',
         ],
         green: [
-          'from-green-500/10 to-emerald-600/15',
-          'dark:from-green-400/20 dark:to-emerald-500/25',
-          'border-green-300/40 dark:border-green-600/50',
+          'bg-green-50/80 dark:bg-green-950/80',
+          'border-green-200/60 dark:border-green-800/60',
         ],
         purple: [
-          'from-indigo-500/10 to-purple-600/15',
-          'dark:from-indigo-400/20 dark:to-purple-500/25',
-          'border-indigo-300/40 dark:border-indigo-600/50',
+          'bg-indigo-50/80 dark:bg-indigo-950/80',
+          'border-indigo-200/60 dark:border-indigo-800/60',
         ],
         amber: [
-          'from-amber-500/10 to-orange-600/15',
-          'dark:from-amber-400/20 dark:to-orange-500/25',
-          'border-amber-300/40 dark:border-amber-600/50',
+          'bg-amber-50/80 dark:bg-amber-950/80',
+          'border-amber-200/60 dark:border-amber-800/60',
         ],
         neutral: [
-          'from-slate-500/10 to-gray-600/15',
-          'dark:from-slate-400/20 dark:to-gray-500/25',
-          'border-slate-300/40 dark:border-slate-600/50',
+          'bg-slate-50/80 dark:bg-slate-800/80',
+          'border-slate-200/60 dark:border-slate-700/60',
         ],
         danger: [
-          'from-red-500/10 to-rose-600/15',
-          'dark:from-red-400/20 dark:to-rose-500/25',
-          'border-red-300/40 dark:border-red-600/50',
+          'bg-red-50/80 dark:bg-red-950/80',
+          'border-red-200/60 dark:border-red-800/60',
         ],
       },
     },
@@ -120,47 +109,41 @@ export const modalHeaderIconContainerVariants = cva(
   },
 );
 
-export const modalHeaderIconVariants = cva(
-  ['drop-shadow-sm [&>svg]:h-6 [&>svg]:w-6'],
-  {
-    variants: {
-      variant: {
-        blue: 'text-blue-700 dark:text-blue-300',
-        green: 'text-green-700 dark:text-green-300',
-        purple: 'text-indigo-700 dark:text-indigo-300',
-        amber: 'text-amber-700 dark:text-amber-300',
-        neutral: 'text-slate-700 dark:text-slate-300',
-        danger: 'text-red-700 dark:text-red-300',
-      },
-    },
-    defaultVariants: {
-      variant: 'blue',
+export const modalHeaderIconVariants = cva(['[&>svg]:h-5 [&>svg]:w-5'], {
+  variants: {
+    variant: {
+      blue: 'text-blue-600 dark:text-blue-400',
+      green: 'text-green-600 dark:text-green-400',
+      purple: 'text-indigo-600 dark:text-indigo-400',
+      amber: 'text-amber-600 dark:text-amber-400',
+      neutral: 'text-slate-600 dark:text-slate-400',
+      danger: 'text-red-600 dark:text-red-400',
     },
   },
-);
+  defaultVariants: {
+    variant: 'blue',
+  },
+});
 
-export const modalFooterSubmitVariants = cva(
-  ['flex-1 shadow-lg hover:shadow-xl transition-shadow duration-200'],
-  {
-    variants: {
-      variant: {
-        default: '',
-        success: '',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
+export const modalFooterSubmitVariants = cva(['flex-1'], {
+  variants: {
+    variant: {
+      default: '',
+      success: '',
     },
   },
-);
+  defaultVariants: {
+    variant: 'default',
+  },
+});
 
 export const buttonVariantMap: Record<ModalVariant, string> = {
-  blue: 'gradient-purple',
-  green: 'gradient-green',
-  purple: 'gradient-purple',
-  amber: 'gradient-purple',
-  neutral: 'gradient-purple',
-  danger: 'gradient-purple',
+  blue: 'outline-blue',
+  green: 'outline-green',
+  purple: 'outline-purple',
+  amber: 'outline-amber',
+  neutral: 'outline-blue',
+  danger: 'outline-danger',
 };
 
 export type ModalOverlayVariants = VariantProps<typeof modalOverlayVariants>;

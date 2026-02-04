@@ -28,7 +28,7 @@
   </Modal.Header>
 
   <div
-    class="bg-green-50/50 dark:bg-green-900/10 border border-green-200/50 dark:border-green-800/30 rounded-xl p-4"
+    class="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-xl p-4"
   >
     <div class="flex items-center gap-3 mb-3">
       <span class="text-sm font-medium text-green-800 dark:text-green-200">
@@ -57,7 +57,7 @@
   <Modal.Footer>
     {#snippet actions()}
       <Button
-        variant="glass"
+        variant="outline"
         size="sm"
         rounded="full"
         onclick={onClose}
@@ -66,11 +66,11 @@
         Close
       </Button>
       <Button
-        variant="gradient-green"
+        variant="outline-green"
         size="sm"
         rounded="full"
         onclick={onDownloadConfig}
-        class="flex-1 shadow-lg hover:shadow-xl transition-shadow duration-200"
+        class="flex-1"
         disabled={isDownloadingConfig}
       >
         {#if isDownloadingConfig}

@@ -93,7 +93,7 @@
 
     <div class="space-y-4">
       <div
-        class="flex items-center justify-between p-4 bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 rounded-lg"
+        class="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-lg"
       >
         <div>
           <div class="text-sm text-muted-foreground">Current Version</div>
@@ -141,7 +141,7 @@
     <Modal.Footer variant="blue">
       {#snippet actions()}
         <Button
-          variant="glass"
+          variant="outline"
           size="sm"
           rounded="full"
           onclick={onClose}
@@ -150,7 +150,7 @@
           {hasUpdate ? 'Maybe Later' : 'Close'}
         </Button>
         <Button
-          variant="gradient-blue"
+          variant="outline-blue"
           size="sm"
           rounded="full"
           onclick={() => navigateToUrl(release.html_url)}

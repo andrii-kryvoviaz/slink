@@ -4,8 +4,8 @@
   import {
     type NoticeVariant,
     noticeContainer,
+    noticeIcon,
     noticeIconContainer,
-    noticeOverlay,
     noticeText,
     noticeTitle,
   } from './modal-content.theme.js';
@@ -22,10 +22,9 @@
 </script>
 
 <div class={noticeContainer({ variant })}>
-  <div class={noticeOverlay({ variant })}></div>
-  <div class="relative flex gap-4">
+  <div class="flex gap-3">
     <div class={noticeIconContainer({ variant })}>
-      <span class="text-white [&>svg]:h-5 [&>svg]:w-5">
+      <span class={noticeIcon({ variant })}>
         {@render icon()}
       </span>
     </div>

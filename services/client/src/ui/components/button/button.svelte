@@ -55,6 +55,16 @@
           'text-red-600 dark:text-red-300 bg-red-500/10 dark:bg-red-500/15 hover:bg-red-500/20 dark:hover:bg-red-500/25 border-0 transition-all duration-200',
         'glass-yellow':
           'text-yellow-600 dark:text-yellow-300 bg-yellow-500/10 dark:bg-yellow-500/15 hover:bg-yellow-500/20 dark:hover:bg-yellow-500/25 border-0 transition-all duration-200',
+        'outline-blue':
+          'bg-transparent border border-blue-500 dark:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950 transition-all duration-200',
+        'outline-green':
+          'bg-transparent border border-green-500 dark:border-green-400 hover:bg-green-50 dark:hover:bg-green-950 transition-all duration-200',
+        'outline-purple':
+          'bg-transparent border border-indigo-500 dark:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950 transition-all duration-200',
+        'outline-amber':
+          'bg-transparent border border-amber-500 dark:border-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950 transition-all duration-200',
+        'outline-danger':
+          'bg-transparent border border-red-500 dark:border-red-400 hover:bg-red-50 dark:hover:bg-red-950 transition-all duration-200',
         destructive:
           'bg-destructive shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
         ghost: 'hover:bg-gray-100 dark:hover:bg-gray-800',
@@ -146,6 +156,11 @@
         'glass-green': 'bg-transparent',
         'glass-red': 'bg-transparent',
         'glass-yellow': 'bg-transparent',
+        'outline-blue': 'bg-transparent text-blue-600 dark:text-blue-400',
+        'outline-green': 'bg-transparent text-green-600 dark:text-green-400',
+        'outline-purple': 'bg-transparent text-indigo-600 dark:text-indigo-400',
+        'outline-amber': 'bg-transparent text-amber-600 dark:text-amber-400',
+        'outline-danger': 'bg-transparent text-red-600 dark:text-red-400',
         destructive: 'bg-transparent text-white',
         ghost:
           'bg-transparent text-gray-900 hover:text-gray-900 dark:text-gray-100 dark:hover:text-gray-100',
