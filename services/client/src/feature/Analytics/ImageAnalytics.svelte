@@ -70,7 +70,7 @@
 
 <Card class="h-full" variant="enhanced" rounded="xl" shadow="lg">
   <div class="flex items-center justify-between">
-    <p class="text-lg font-semibold text-slate-900 dark:text-white">Uploads</p>
+    <p class="text-lg font-semibold text-gray-900 dark:text-white">Uploads</p>
     <div class="flex items-center gap-2">
       <RefreshButton size="sm" loading={$isLoading} onclick={handleFetch} />
       {#if availableIntervals}

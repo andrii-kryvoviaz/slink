@@ -23,7 +23,7 @@
       </p>
     </div>
 
-    <div class="grid h-full grid-cols-1 md:grid-cols-5 content-start gap-6">
+    <div class="grid h-full grid-cols-1 md:grid-cols-5 content-start gap-4">
       <div class="col-span-1 md:col-span-3 h-96 xl:h-[40rem]">
         <ImageAnalytics />
       </div>

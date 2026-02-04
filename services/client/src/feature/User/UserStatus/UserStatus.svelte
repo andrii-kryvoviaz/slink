@@ -25,7 +25,7 @@
 </script>
 
 {#if status}
-  <Badge size="sm" outline {variant} {...props}>
+  <Badge outline {variant} {...props}>
     <span class="capitalize">{status}</span>
   </Badge>
 {/if}

@@ -204,4 +204,6 @@ export const themeIcons: string[] = [
   'solar:link-linear',
   'ph:folder-notch-open-duotone',
   'heroicons:minus',
+  'heroicons:shield-check-solid',
+  'heroicons:user-solid',
 ];

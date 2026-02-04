@@ -45,13 +45,13 @@ export const BadgeTheme = cva(
         glass: 'border-transparent bg-white/5 text-white/70 backdrop-blur-sm',
       },
       size: {
-        xs: 'px-2 py-0.5 text-xs',
-        sm: 'px-2.5 py-1 text-xs',
+        xs: 'px-1.5 py-0.5 text-[10px]',
+        sm: 'px-2 py-0.5 text-xs',
         md: 'px-3 py-1 text-sm',
         lg: 'px-3.5 py-1.5 text-sm',
       },
       outline: {
-        true: 'bg-transparent border-2',
+        true: 'bg-transparent',
       },
     },
     compoundVariants: [

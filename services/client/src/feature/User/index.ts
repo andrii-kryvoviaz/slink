@@ -19,6 +19,7 @@ export { default as UserDataTable } from './UserDataTable/UserDataTable.svelte';
 export { default as DataTableEmailButton } from './UserDataTable/data-table-email-button.svelte';
 export { default as UserDeleteConfirmation } from './UserDeleteConfirmation/UserDeleteConfirmation.svelte';
 export { default as UserGridView } from './UserGridView/UserGridView.svelte';
+export { default as UserRoleBadge } from './UserRoleBadge/UserRoleBadge.svelte';
 export { default as UserRoleCell } from './UserRoleCell/UserRoleCell.svelte';
 export { default as UserStatus } from './UserStatus/UserStatus.svelte';
 export { default as UserStatusCell } from './UserStatusCell/UserStatusCell.svelte';
