@@ -92,7 +92,7 @@ export const listActionBarVisibilityVariants = cva('shrink-0', {
 export const linkVariants = cva('block', {
   variants: {
     selectionMode: {
-      true: 'cursor-pointer',
+      true: 'pointer-events-none',
       false: '',
     },
   },

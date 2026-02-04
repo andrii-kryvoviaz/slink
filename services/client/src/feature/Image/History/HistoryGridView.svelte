@@ -12,6 +12,8 @@
 
   import { fade, fly } from 'svelte/transition';
 
+  import { cn } from '@slink/utils/ui';
+
   import {
     actionBarVisibilityVariants,
     createActionBarImage,
@@ -24,6 +26,8 @@
   import { useHistoryItemActions } from './useHistoryItemActions.svelte';
 
   let { items = [], selectionState, on }: HistoryViewProps = $props();
+
+  const isSelectionMode = $derived(selectionState?.isSelectionMode ?? false);
 
   const { handleItemClick, handleDelete, getItemState } = useHistoryItemActions(
     {
@@ -49,12 +53,23 @@
   getItemWeight={calculateHistoryCardWeight}
 >
   {#snippet itemTemplate(item)}
-    {@const { isSelected, isSelectionMode, selectionAriaLabel, itemHref } =
-      getItemState(item)}
+    <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
     <article
       in:fly={{ y: 20, duration: 300, delay: Math.random() * 100 }}
       out:fade={{ duration: 200 }}
-      class={historyCardVariants({ selected: isSelected })}
+      class={cn(
+        historyCardVariants({ selected: getItemState(item).isSelected }),
+        isSelectionMode && 'cursor-pointer',
+      )}
+      onclick={(e) => isSelectionMode && handleItemClick(e, item)}
+      onkeydown={(e) => {
+        if (isSelectionMode && e.key === 'Enter') {
+          e.preventDefault();
+          selectionState?.toggle(item.id);
+        }
+      }}
+      role={isSelectionMode ? 'button' : undefined}
+      tabindex={isSelectionMode ? 0 : undefined}
     >
       <div class="relative">
         {#if isSelectionMode}
@@ -62,15 +77,14 @@
             type="button"
             onclick={(e) => handleItemClick(e, item)}
             class="absolute top-2 left-2 z-20"
-            aria-label={selectionAriaLabel}
+            aria-label={getItemState(item).selectionAriaLabel}
           >
-            <OverlayCheckbox selected={isSelected} />
+            <OverlayCheckbox selected={getItemState(item).isSelected} />
           </button>
         {/if}
         <a
-          href={itemHref || undefined}
+          href={getItemState(item).itemHref || undefined}
           class={linkVariants({ selectionMode: isSelectionMode })}
-          onclick={(e) => handleItemClick(e, item)}
         >
           <ImagePlaceholder
             uniqueId={item.id}
@@ -93,7 +107,7 @@
 
         <div
           class={actionBarVisibilityVariants({
-            selectionMode: isSelectionMode,
+            selectionMode: isSelectionMode ?? false,
           })}
         >
           <ImageActionBar

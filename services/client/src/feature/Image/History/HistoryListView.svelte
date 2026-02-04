@@ -25,6 +25,8 @@
 
   let { items = [], selectionState, on }: HistoryViewProps = $props();
 
+  const isSelectionMode = $derived(selectionState?.isSelectionMode ?? false);
+
   const { handleItemClick, handleDelete, getItemState } = useHistoryItemActions(
     {
       getSelectionState: () => selectionState,
@@ -38,20 +40,31 @@
 
 <ul class="flex flex-col gap-3" role="list">
   {#each items as item, index (item.id)}
-    {@const { isSelected, isSelectionMode, selectionAriaLabel, itemHref } =
-      getItemState(item)}
     <li
       in:fly={{ y: 20, duration: 300, delay: index * 50 }}
       out:fade={{ duration: 200 }}
     >
+      <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
       <article
-        class={historyListRowVariants({
-          selected: isSelected,
-          selectionMode: isSelectionMode,
-        })}
+        class={cn(
+          historyListRowVariants({
+            selected: getItemState(item).isSelected,
+            selectionMode: isSelectionMode ?? false,
+          }),
+          isSelectionMode && 'cursor-pointer',
+        )}
+        onclick={(e) => isSelectionMode && handleItemClick(e, item)}
+        onkeydown={(e) => {
+          if (isSelectionMode && e.key === 'Enter') {
+            e.preventDefault();
+            selectionState?.toggle(item.id);
+          }
+        }}
+        role={isSelectionMode ? 'button' : undefined}
+        tabindex={isSelectionMode ? 0 : undefined}
       >
         <a
-          href={itemHref || undefined}
+          href={getItemState(item).itemHref || undefined}
           class={cn(
             'relative block w-full sm:w-40 md:w-48 lg:w-56 shrink-0 overflow-hidden bg-gray-100 dark:bg-gray-800/80',
             isSelectionMode && 'pointer-events-none',
@@ -64,9 +77,9 @@
               type="button"
               onclick={(e) => handleItemClick(e, item)}
               class="absolute top-2 left-2 z-20 pointer-events-auto"
-              aria-label={selectionAriaLabel}
+              aria-label={getItemState(item).selectionAriaLabel}
             >
-              <OverlayCheckbox selected={isSelected} />
+              <OverlayCheckbox selected={getItemState(item).isSelected} />
             </button>
           {/if}
           <div class="aspect-4/3 sm:aspect-square w-full h-full">
@@ -104,7 +117,7 @@
 
             <div
               class={listActionBarVisibilityVariants({
-                selectionMode: isSelectionMode,
+                selectionMode: isSelectionMode ?? false,
               })}
             >
               <ImageActionBar
