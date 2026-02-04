@@ -247,10 +247,11 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
   }
 
   get showSkeleton(): boolean {
+    const isInitialState = !this.isDirty && !this.hasItems;
     return (
-      this._skeletonManager.isVisible &&
+      (this._skeletonManager.isVisible || isInitialState) &&
       !this.isEmpty &&
-      (this.isLoading || !this.isDirty)
+      !this.hasError
     );
   }
 

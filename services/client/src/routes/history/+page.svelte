@@ -166,7 +166,7 @@
         />
       </div>
     {:else}
-      <div in:fade={{ duration: 400, delay: 200 }}>
+      <div in:fade={{ duration: 400 }}>
         {#key filterKey}
           {#if viewMode === 'grid'}
             <HistoryGridView
