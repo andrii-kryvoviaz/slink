@@ -5,6 +5,7 @@
 
   import {
     toggleGroupIconTheme,
+    toggleGroupInnerTheme,
     toggleGroupItemTheme,
     toggleGroupTheme,
   } from './toggle-group.theme';
@@ -36,37 +37,39 @@
   aria-label={ariaLabel}
   aria-orientation={orientation}
 >
-  {#each options as option (option.value)}
-    {@const isActive = value === option.value}
-    {@const isDisabled = disabled || option.disabled}
+  <div class={toggleGroupInnerTheme({ orientation })}>
+    {#each options as option (option.value)}
+      {@const isActive = value === option.value}
+      {@const isDisabled = disabled || option.disabled}
 
-    <button
-      type="button"
-      role="radio"
-      aria-checked={isActive}
-      aria-label={option.label
-        ? `Select ${option.label}`
-        : `Select ${option.value}`}
-      disabled={isDisabled}
-      onclick={() => handleValueChange(option.value)}
-      class={toggleGroupItemTheme({
-        variant: isActive ? 'active' : 'inactive',
-        size,
-        orientation,
-      })}
-    >
-      {#if option.icon}
-        <Icon
-          icon={option.icon}
-          class={toggleGroupIconTheme({
-            size,
-            hasLabel: !!option.label,
-          })}
-        />
-      {/if}
-      {#if option.label}
-        <span>{option.label}</span>
-      {/if}
-    </button>
-  {/each}
+      <button
+        type="button"
+        role="radio"
+        aria-checked={isActive}
+        aria-label={option.label
+          ? `Select ${option.label}`
+          : `Select ${option.value}`}
+        disabled={isDisabled}
+        onclick={() => handleValueChange(option.value)}
+        class={toggleGroupItemTheme({
+          variant: isActive ? 'active' : 'inactive',
+          size,
+          orientation,
+        })}
+      >
+        {#if option.icon}
+          <Icon
+            icon={option.icon}
+            class={toggleGroupIconTheme({
+              size,
+              hasLabel: !!option.label,
+            })}
+          />
+        {/if}
+        {#if option.label}
+          <span>{option.label}</span>
+        {/if}
+      </button>
+    {/each}
+  </div>
 </div>
