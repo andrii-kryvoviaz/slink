@@ -5,6 +5,8 @@
 
   import type { ApiKeyResponse } from '@slink/api/Resources/ApiKeyResource';
 
+  import ApiKeyListSkeleton from './ApiKeyListSkeleton.svelte';
+
   interface Props {
     apiKeys: ApiKeyResponse[];
     isLoading: boolean;
@@ -34,19 +36,9 @@
 </script>
 
 <div class="space-y-3">
-  {#if isLoading}
-    <div class="flex items-center justify-center py-16">
-      <div class="flex flex-col items-center gap-3">
-        <Icon
-          icon="lucide:loader-2"
-          class="h-8 w-8 text-gray-400 dark:text-gray-500 animate-spin"
-        />
-        <span class="text-sm text-gray-500 dark:text-gray-400"
-          >Loading API keys...</span
-        >
-      </div>
-    </div>
-  {:else if apiKeys.length === 0}
+  {#if isLoading && apiKeys.length === 0}
+    <ApiKeyListSkeleton />
+  {:else if !isLoading && apiKeys.length === 0}
     <div class="flex flex-col items-center justify-center py-16 text-center">
       <div
         class="w-16 h-16 rounded-2xl bg-gray-100 dark:bg-gray-800/80 flex items-center justify-center mb-4"
