@@ -10,10 +10,23 @@
 
   import '@slink/app.css';
 
+  import { afterNavigate } from '$app/navigation';
+
   import { theme } from '@slink/lib/actions/theme';
   import { isAdmin } from '@slink/lib/auth/utils';
   import { settings } from '@slink/lib/settings';
   import { initResponsiveStore } from '@slink/lib/stores/responsive.svelte';
+
+  let scrollAreaRef = $state<HTMLElement | null>(null);
+
+  afterNavigate(() => {
+    const viewport = scrollAreaRef?.querySelector(
+      '[data-slot="scroll-area-viewport"]',
+    );
+    if (viewport) {
+      viewport.scrollTop = 0;
+    }
+  });
 
   let { data, children } = $props();
   let user = $derived(data.user);
@@ -89,6 +102,7 @@
       {/if}
       <div class="flex flex-1 flex-col min-h-0 relative">
         <ScrollArea
+          bind:ref={scrollAreaRef}
           class="flex-1 h-full"
           type="scroll"
           orientation="vertical"
