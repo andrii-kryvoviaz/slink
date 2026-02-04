@@ -1,0 +1,24 @@
+{
+	admin off
+	auto_https off
+	persist_config off
+	log {
+		level ERROR
+	}
+}
+
+:3333 {
+	route {
+		mercure {
+			publisher_jwt {env.MERCURE_JWT_SECRET}
+			subscriber_jwt {env.MERCURE_JWT_SECRET}
+			anonymous {
+				subscribe comments/*
+			}
+			cors_origins *
+			publish_origins *
+			subscriptions
+		}
+		respond "Mercure Hub"
+	}
+}

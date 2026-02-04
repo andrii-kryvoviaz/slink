@@ -14,6 +14,17 @@
 }
 
 :8080 {
+	mercure {
+		publisher_jwt {env.MERCURE_JWT_SECRET}
+		subscriber_jwt {env.MERCURE_JWT_SECRET}
+		anonymous {
+			subscribe comments/*
+		}
+		cors_origins *
+		publish_origins *
+		subscriptions
+	}
+
 	root * /services/api/public
 	php_server
 }

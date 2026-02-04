@@ -48,8 +48,12 @@ setup_mercure_keys() {
   local mercure_secret=$(cat "$persistent_keys_dir/mercure_secret")
   export MERCURE_JWT_SECRET="$mercure_secret"
   
-  local mercure_hub_url="http://localhost:3333/.well-known/mercure"
-  
+  local mercure_port="8080"
+  if [ "${APP_ENV:-prod}" = "dev" ]; then
+    mercure_port="3333"
+  fi
+  local mercure_hub_url="http://localhost:${mercure_port}/.well-known/mercure"
+
   export MERCURE_HUB_URL="$mercure_hub_url"
   
   if [ -f "$api_env_file" ]; then

@@ -1,25 +1,14 @@
 ARG NODE_VERSION=24.13.0
-
 ARG PHP_VERSION=8.5.2
-ARG PHP_MEMORY_LIMIT=512M
 
-ARG UPLOAD_MAX_FILESIZE_IN_BYTES=52428800
-
-ARG MERCURE_VERSION=0.21.2
-
-## NodeJS base image
 FROM node:${NODE_VERSION}-alpine AS node
-
-## Mercure base image
-FROM dunglas/mercure:v${MERCURE_VERSION} AS mercure
 
 ### NodeJS build ###
 FROM node:${NODE_VERSION}-alpine AS build-client
 WORKDIR /client
 
 COPY services/client/package.json services/client/yarn.lock ./
-
-RUN yarn install --frozen-lockfile --non-interactive --network-timeout 900000
+RUN yarn install --frozen-lockfile --non-interactive --network-timeout 300000
 
 COPY services/client/plugins ./plugins
 COPY services/client/src ./src
@@ -27,68 +16,37 @@ COPY services/client/static ./static
 COPY services/client/svelte.config.js services/client/tsconfig.json services/client/vite.config.ts ./
 
 RUN yarn svelte-kit sync && \
-    NODE_OPTIONS="--max-old-space-size=2048 --expose-gc" yarn build
-
-RUN rm -rf node_modules && \
-    yarn install --frozen-lockfile --non-interactive --production --network-timeout 900000
-### End of NodeJS build ###
+    NODE_OPTIONS="--max-old-space-size=2048 --expose-gc" yarn build && \
+    rm -rf node_modules && \
+    yarn install --frozen-lockfile --non-interactive --production --network-timeout 300000 && \
+    yarn cache clean && \
+    find node_modules -name "*.md" -o -name "*.ts" -o -name "*.map" | xargs rm -f 2>/dev/null || true
 
 ### PHP source ###
-FROM alpine AS source
+FROM alpine:3.21 AS source
 WORKDIR /source
-
 COPY services/api/bin ./bin
 COPY services/api/config ./config
 COPY services/api/public ./public
 COPY services/api/shared ./shared
 COPY services/api/src ./src
 COPY services/api/composer.json ./
-### End of PHP source ###
 
 ### PHP vendor ###
-FROM php:${PHP_VERSION}-alpine AS vendor
+FROM composer:2 AS vendor
 WORKDIR /dependencies
-
-RUN apk add --no-cache git unzip
-
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
 COPY services/api/composer.json services/api/composer.lock ./
-
 RUN composer install \
     --ignore-platform-reqs \
     --no-dev \
     --no-interaction \
     --prefer-dist \
     --optimize-autoloader \
-    --no-scripts
-### End of PHP vendor ###
+    --no-scripts && \
+    composer clear-cache
 
 ### PHP extensions build ###
 FROM dunglas/frankenphp:php${PHP_VERSION}-alpine AS php-extensions
-RUN apk add --no-cache \
-    $PHPIZE_DEPS \
-    git \
-    autoconf \
-    g++ \
-    make \
-    linux-headers \
-    curl-dev \
-    libmcrypt-dev \
-    icu-dev \
-    imagemagick-dev \
-    vips-dev \
-    postgresql-dev \
-    libpng-dev \
-    libwebp-dev \
-    tiff-dev \
-    freetype-dev \
-    libjpeg-turbo-dev \
-    libheif-dev \
-    oniguruma-dev \
-    samba-dev \
-    brotli-dev \
-    libffi-dev
 
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
@@ -100,126 +58,123 @@ RUN install-php-extensions \
     ffi \
     redis \
     smbclient \
-    vips
-
-### End of PHP extensions build ###
+    vips && \
+    rm -rf /tmp/* /var/cache/apk/*
 
 ### Base build stage ###
-# FROM php:${PHP_VERSION}-alpine AS base
 FROM dunglas/frankenphp:php${PHP_VERSION}-alpine AS base
 
-RUN apk update && apk upgrade &&\
+ARG PHP_MEMORY_LIMIT=512M
+ARG UPLOAD_MAX_FILESIZE_IN_BYTES=52428800
+
+RUN --mount=type=cache,target=/var/cache/apk \
     apk add --no-cache \
-    redis \
-    libmcrypt \
-    libcurl \
-    icu-libs \
-    libsmbclient \
-    vips \
-    imagemagick \
-    libheif \
-    supervisor
+        redis \
+        libmcrypt \
+        libcurl \
+        icu-libs \
+        libsmbclient \
+        imagemagick \
+        vips \
+        libheif \
+        supervisor \
+        tzdata && \
+    rm -rf /tmp/* /var/cache/apk/*
 
-COPY --from=php-extensions /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
-COPY --from=php-extensions /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
+COPY --link --from=php-extensions /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
+COPY --link --from=php-extensions /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
 
-COPY --from=mercure /usr/bin/caddy /usr/local/bin/mercure
+RUN <<EOF
+echo "ffi.enable=1" > /usr/local/etc/php/conf.d/zz-ffi-enable.ini
+echo "memory_limit=${PHP_MEMORY_LIMIT}" > /usr/local/etc/php/conf.d/memory-limit.ini
+cat > /usr/local/etc/php/conf.d/uploads.ini <<UPLOADS
+upload_max_filesize = $((UPLOAD_MAX_FILESIZE_IN_BYTES / 1024 / 1024))M
+post_max_size = $((UPLOAD_MAX_FILESIZE_IN_BYTES / 1024 / 1024))M
+UPLOADS
+echo 'date.timezone = ${TZ}' > /usr/local/etc/php/conf.d/timezone.ini
+EOF
 
-RUN echo "ffi.enable=1" > /usr/local/etc/php/conf.d/zz-ffi-enable.ini
-
-COPY ./docker/config/supervisord.conf /etc/supervisord.conf
-COPY ./docker/config/caddy/Caddyfile /etc/caddy/Caddyfile
-
-COPY ./docker/scripts/entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
-
-COPY ./docker/scripts/startup.sh /usr/local/bin/startup.sh
-RUN chmod +x /usr/local/bin/startup.sh
-
-COPY ./docker/scripts/slink /usr/local/bin/slink
-RUN chmod +x /usr/local/bin/slink
-
-ARG PHP_MEMORY_LIMIT
-RUN echo "memory_limit=${PHP_MEMORY_LIMIT}" > /usr/local/etc/php/conf.d/memory-limit.ini
-
-ARG UPLOAD_MAX_FILESIZE_IN_BYTES
-RUN echo "upload_max_filesize = $((UPLOAD_MAX_FILESIZE_IN_BYTES / 1024 / 1024))M" > /usr/local/etc/php/conf.d/uploads.ini && \
-    echo "post_max_size = $((UPLOAD_MAX_FILESIZE_IN_BYTES / 1024 / 1024))M" >> /usr/local/etc/php/conf.d/uploads.ini
-
-RUN apk add --no-cache tzdata
-RUN echo 'date.timezone = ${TZ}' > /usr/local/etc/php/conf.d/timezone.ini
+COPY --link ./docker/config/supervisord.conf /etc/supervisord.conf
+COPY --link ./docker/config/caddy/Caddyfile /etc/caddy/Caddyfile
+COPY --link ./docker/config/caddy/Caddyfile.mercure /etc/caddy/Caddyfile.mercure
+COPY --link --chmod=755 ./docker/scripts/entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY --link --chmod=755 ./docker/scripts/startup.sh /usr/local/bin/startup.sh
+COPY --link --chmod=755 ./docker/scripts/slink /usr/local/bin/slink
 
 WORKDIR /services
 
-ENV API_URL=http://localhost:8080
-ENV API_PREFIX=/api
-ENV PROXY_PREFIXES="/api;/image"
-ENV ORIGIN=http://localhost:3000
-ENV TZ=UTC
+ENV API_URL=http://localhost:8080 \
+    API_PREFIX=/api \
+    PROXY_PREFIXES="/api;/image" \
+    ORIGIN=http://localhost:3000 \
+    TZ=UTC
 
 CMD ["/usr/local/bin/entrypoint.sh"]
-### End of base build stage ###
 
 ### Test image ###
 FROM php:${PHP_VERSION}-alpine AS test
 
-RUN apk add --no-cache git unzip
+ARG PHP_MEMORY_LIMIT=512M
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /services/api
 
-COPY services/api/composer.json services/api/composer.lock ./
+RUN apk add --no-cache git unzip && \
+    echo "memory_limit=${PHP_MEMORY_LIMIT}" > /usr/local/etc/php/conf.d/memory-limit.ini
 
+COPY services/api/composer.json services/api/composer.lock ./
 RUN composer install --ignore-platform-reqs --no-interaction --no-scripts
 
 COPY --chown=www-data:www-data ./services/api .
-
 RUN mv .env.example .env
-ENV APP_ENV=test
 
-ARG PHP_MEMORY_LIMIT
-RUN echo "memory_limit=${PHP_MEMORY_LIMIT}" > /usr/local/etc/php/conf.d/memory-limit.ini
-### End of test image ###
+ENV APP_ENV=test
 
 ### Development image ###
 FROM base AS dev
-RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS autoconf g++ make linux-headers && \
+
+RUN --mount=type=cache,target=/var/cache/apk \
+    apk add --no-cache --virtual .build-deps $PHPIZE_DEPS autoconf g++ make linux-headers && \
     pecl install xdebug && \
     docker-php-ext-enable xdebug && \
-    apk del .build-deps
+    apk del .build-deps && \
+    rm -rf /tmp/* /var/cache/apk/*
 
-RUN echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-    echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-    echo "xdebug.log=/dev/null" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-    echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-    echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN cat >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini <<EOF
+xdebug.mode=debug
+xdebug.client_host=host.docker.internal
+xdebug.log=/dev/null
+xdebug.idekey=PHPSTORM
+xdebug.start_with_request=yes
+EOF
 
-COPY --from=ghcr.io/symfony-cli/symfony-cli:latest /usr/local/bin/symfony /usr/local/bin/symfony
-
-COPY docker/config/runtime/develop.conf /etc/supervisor/conf.d/develop.conf
-COPY --from=node /usr/local/bin /usr/local/bin
-COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
-COPY --from=node /opt /opt
+COPY --link --from=ghcr.io/symfony-cli/symfony-cli:latest /usr/local/bin/symfony /usr/local/bin/symfony
+COPY --link docker/config/runtime/develop.conf /etc/supervisor/conf.d/develop.conf
+COPY --link --from=node /usr/local/bin /usr/local/bin
+COPY --link --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
+COPY --link --from=node /opt /opt
 COPY services/api/.env.example ./api/.env
 
-ENV API_ENABLED=true
-ENV APP_ENV=dev
-ENV NODE_ENV=development
-ENV PHP_IDE_CONFIG="serverName=localhost"
+ENV API_ENABLED=true \
+    APP_ENV=dev \
+    NODE_ENV=development \
+    PHP_IDE_CONFIG="serverName=localhost"
 
-EXPOSE 5173
-EXPOSE 8080
-### End of development image ###
+EXPOSE 5173 8080
 
 ### Production image ###
 FROM base AS prod
 
-COPY docker/config/runtime/production.conf /etc/supervisor/conf.d/production.conf
-COPY --from=node /usr/local/bin/node /usr/local/bin/node
+ARG UPLOAD_MAX_FILESIZE_IN_BYTES=52428800
+
+COPY --link docker/config/runtime/production.conf /etc/supervisor/conf.d/production.conf
+COPY --link --from=node /usr/local/bin/node /usr/local/bin/node
 
 RUN addgroup -g 1000 slink && \
-    adduser -D -u 1000 -G slink slink
+    adduser -D -u 1000 -G slink slink && \
+    mkdir -p /app/var/data /app/slink && \
+    chown -R slink:slink /app/var /app/slink
 
 COPY --from=vendor --chown=slink:slink /dependencies/vendor ./api/vendor
 COPY --from=source --chown=slink:slink /source ./api
@@ -228,18 +183,12 @@ COPY --from=build-client --chown=slink:slink /client/package.json ./client/svelt
 COPY --from=build-client --chown=slink:slink /client/node_modules ./client/svelte-kit/node_modules
 COPY --chown=slink:slink services/api/.env.example ./api/.env
 
-RUN mkdir -p /app/var/data && \
-    mkdir -p /app/slink && \
-    chown -R slink:slink /app/var /app/slink
-
-ENV API_ENABLED=false
-ENV APP_ENV=prod
-ENV NODE_ENV=production
-
-ARG UPLOAD_MAX_FILESIZE_IN_BYTES
-ENV BODY_SIZE_LIMIT=${UPLOAD_MAX_FILESIZE_IN_BYTES}
+ENV API_ENABLED=false \
+    APP_ENV=prod \
+    NODE_ENV=production \
+    BODY_SIZE_LIMIT=${UPLOAD_MAX_FILESIZE_IN_BYTES}
 
 EXPOSE 3000
 
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 CMD wget --no-verbose --tries=1 --spider http://127.0.0.1:8080/api/health || exit 1
-### End of production image ###
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://127.0.0.1:8080/api/health || exit 1
