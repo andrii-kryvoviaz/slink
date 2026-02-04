@@ -250,7 +250,7 @@
 
     {#if historyFeedState.showSkeleton}
       <div in:fade={{ duration: 200 }}>
-        <HistorySkeleton count={6} {viewMode} />
+        <HistorySkeleton count={12} {viewMode} />
       </div>
     {:else if historyFeedState.isEmpty}
       <div in:fade={{ duration: 200 }}>

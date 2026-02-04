@@ -57,7 +57,7 @@
   >
     {#if notificationFeed.showSkeleton}
       <div class="max-w-xl" in:fade={{ duration: 200 }}>
-        <NotificationSkeleton count={5} />
+        <NotificationSkeleton count={12} />
       </div>
     {:else if notificationFeed.isEmpty}
       <div in:fade={{ duration: 200 }} class="py-12 flex justify-center">

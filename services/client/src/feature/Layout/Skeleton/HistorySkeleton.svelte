@@ -1,6 +1,8 @@
 <script lang="ts">
   import { Skeleton } from '@slink/feature/Layout';
 
+  import { getSkeletonHeight } from '@slink/lib/utils/ui/skeletonHeight';
+
   interface Props {
     count?: number;
     viewMode?: 'list' | 'grid';
@@ -12,13 +14,11 @@
     viewMode = 'list',
     class: customClass = '',
   }: Props = $props();
-
-  const skeletonItems = $derived(Array(count).fill(null));
 </script>
 
 {#if viewMode === 'list'}
   <ul class="flex flex-col gap-3 {customClass}">
-    {#each skeletonItems as _, index}
+    {#each Array(count) as _, index}
       <li
         class="flex flex-col sm:flex-row w-full overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/60"
         style="animation-delay: {index * 100}ms"
@@ -76,14 +76,17 @@
   <div
     class="columns-1 sm:columns-2 md:columns-2 lg:columns-3 xl:columns-4 gap-4 {customClass}"
   >
-    {#each skeletonItems as _, index}
-      {@const randomHeight = 180 + Math.floor(Math.random() * 120)}
+    {#each Array(count) as _, index}
       <div
         class="break-inside-avoid mb-4 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/60"
         style="animation-delay: {index * 80}ms"
       >
         <div class="relative">
-          <Skeleton width="100%" height="{randomHeight}px" rounded="none" />
+          <Skeleton
+            width="100%"
+            height="{getSkeletonHeight(index)}px"
+            rounded="none"
+          />
           <div class="absolute top-2 left-2">
             <Skeleton
               width="60px"

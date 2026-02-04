@@ -103,7 +103,7 @@
   >
     {#if publicFeedState.showSkeleton}
       <div in:fade={{ duration: 200 }}>
-        <ExploreSkeleton count={8} />
+        <ExploreSkeleton count={12} />
       </div>
     {:else if publicFeedState.isEmpty}
       <div in:fade={{ duration: 200 }}>

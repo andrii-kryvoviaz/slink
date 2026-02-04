@@ -7,12 +7,10 @@
   }
 
   let { count = 6, class: customClass = '' }: Props = $props();
-
-  const skeletonItems = $derived(Array(count).fill(null));
 </script>
 
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 {customClass}">
-  {#each skeletonItems as _, index}
+  {#each Array(count) as _, index}
     <div
       class="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/60"
       style="animation-delay: {index * 100}ms"

@@ -97,7 +97,7 @@
 
     {#if collectionsFeed.showSkeleton}
       <div in:fade={{ duration: 200 }}>
-        <CollectionSkeleton count={6} />
+        <CollectionSkeleton count={12} />
       </div>
     {:else if collectionsFeed.isEmpty}
       <div in:fade={{ duration: 200 }}>

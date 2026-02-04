@@ -114,7 +114,7 @@
     <div in:fade={{ duration: 400, delay: 200 }}>
       {#if userFeedState.showSkeleton}
         <div in:fade={{ duration: 200 }}>
-          <UsersSkeleton {viewMode} count={6} />
+          <UsersSkeleton {viewMode} count={12} />
         </div>
       {:else if userFeedState.isEmpty || (!userFeedState.hasItems && userFeedState.isDirty)}
         <div in:fade={{ duration: 200 }}>

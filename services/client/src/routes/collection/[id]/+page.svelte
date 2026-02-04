@@ -290,7 +290,7 @@
 
     {#if itemsFeed.showSkeleton}
       <div in:fade={{ duration: 200 }}>
-        <ExploreSkeleton count={8} />
+        <ExploreSkeleton count={12} />
       </div>
     {:else if itemsFeed.hasError}
       <div in:fade={{ duration: 200 }}>

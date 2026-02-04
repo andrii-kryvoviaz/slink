@@ -1,28 +1,36 @@
 <script lang="ts">
   import { Skeleton } from '@slink/feature/Layout';
 
+  import { getSkeletonHeight } from '@slink/lib/utils/ui/skeletonHeight';
+
   interface Props {
     count?: number;
     class?: string;
   }
 
   let { count = 6, class: customClass = '' }: Props = $props();
-
-  const skeletonItems = $derived(Array(count).fill(null));
 </script>
 
 <div class="columns-1 md:columns-2 xl:columns-3 gap-4 {customClass}">
-  {#each skeletonItems as _, index}
+  {#each Array(count) as _, index}
     <div
       class="break-inside-avoid rounded-xl overflow-hidden mb-4 bg-white dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50"
-      style="animation-delay: {index * 100}ms"
+      style="animation-delay: {index * 80}ms"
     >
       <div class="relative">
         <Skeleton
           width="100%"
-          height="{200 + (index % 3) * 100}px"
+          height="{getSkeletonHeight(index)}px"
           rounded="none"
         />
+        <div class="absolute bottom-2 left-2">
+          <Skeleton
+            width="70px"
+            height="24px"
+            rounded="full"
+            class="opacity-60"
+          />
+        </div>
       </div>
 
       <div class="p-3">

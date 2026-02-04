@@ -24,3 +24,4 @@ export type {
   ToastComponentConfig,
 } from './ToastComponentService.js';
 export { printErrorsAsToastMessage } from './printErrorsAsToastMessage.js';
+export { getSkeletonHeight } from './skeletonHeight.js';
