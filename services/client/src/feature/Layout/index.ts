@@ -21,6 +21,7 @@ export { default as Loader } from './Loader/Loader.svelte';
 export * from './Loader/Loader.theme';
 export * from './Loader/Loader.types';
 export { default as Masonry } from './Masonry/Masonry.svelte';
+export { default as CollectionSkeleton } from './Skeleton/CollectionSkeleton.svelte';
 export { default as ExploreSkeleton } from './Skeleton/ExploreSkeleton.svelte';
 export { default as HistorySkeleton } from './Skeleton/HistorySkeleton.svelte';
 export { default as Skeleton } from './Skeleton/Skeleton.svelte';

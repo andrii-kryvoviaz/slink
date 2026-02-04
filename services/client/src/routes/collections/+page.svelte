@@ -3,7 +3,7 @@
   import { CollectionActionsDropdown } from '@slink/feature/Collection';
   import { CreateCollectionForm } from '@slink/feature/Collection';
   import { EmptyState } from '@slink/feature/Layout';
-  import { ExploreSkeleton } from '@slink/feature/Layout';
+  import { CollectionSkeleton } from '@slink/feature/Layout';
   import { FormattedDate } from '@slink/feature/Text';
   import { Button } from '@slink/ui/components/button';
   import { Dialog } from '@slink/ui/components/dialog';
@@ -97,7 +97,7 @@
 
     {#if collectionsFeed.showSkeleton}
       <div in:fade={{ duration: 200 }}>
-        <ExploreSkeleton count={6} />
+        <CollectionSkeleton count={6} />
       </div>
     {:else if collectionsFeed.isEmpty}
       <div in:fade={{ duration: 200 }}>
