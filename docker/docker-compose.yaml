@@ -5,5 +5,4 @@ services:
     restart: always
     environment:
       - TZ=Europe/Kyiv
-      - SWOOLE_WORKER_NUM=4
       - API_ENABLED=true

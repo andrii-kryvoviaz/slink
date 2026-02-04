@@ -6,7 +6,6 @@ services:
     env_file:
       - ./demo/.env
     environment:
-      - SWOOLE_WORKER_NUM=4
       - DEMO_MODE_ENABLED=true
       - USER_APPROVAL_REQUIRED=false
       - USER_ALLOW_GUEST_UPLOADS=false

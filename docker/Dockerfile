@@ -65,7 +65,7 @@ RUN composer install \
 ### End of PHP vendor ###
 
 ### PHP extensions build ###
-FROM php:${PHP_VERSION}-alpine AS php-extensions
+FROM dunglas/frankenphp:php${PHP_VERSION}-alpine AS php-extensions
 RUN apk add --no-cache \
     $PHPIZE_DEPS \
     git \
@@ -100,24 +100,13 @@ RUN install-php-extensions \
     ffi \
     redis \
     smbclient \
-    vips 
-
-## Replace this after proper support for PHP 8.5 is added (only master branch currently)
-RUN git clone --branch master --single-branch https://github.com/swoole/swoole-src.git && \
-    cd swoole-src && \
-    git checkout bca833cf2170aced3ee9453313ace9db56cdd1f9 && \
-    sed -i 's/PHP_VERSION_ID > 80500/PHP_VERSION_ID >= 80600/' ext-src/php_swoole_private.h && \
-    phpize && \
-    ./configure --enable-openssl --enable-http2 --enable-swoole-curl CXXFLAGS="-fpermissive" && \
-    make && make install && \
-    cd .. && rm -rf swoole-src
-
-RUN docker-php-ext-enable swoole
+    vips
 
 ### End of PHP extensions build ###
 
 ### Base build stage ###
-FROM php:${PHP_VERSION}-alpine AS base
+# FROM php:${PHP_VERSION}-alpine AS base
+FROM dunglas/frankenphp:php${PHP_VERSION}-alpine AS base
 
 RUN apk update && apk upgrade &&\
     apk add --no-cache \
@@ -139,6 +128,7 @@ COPY --from=mercure /usr/bin/caddy /usr/local/bin/mercure
 RUN echo "ffi.enable=1" > /usr/local/etc/php/conf.d/zz-ffi-enable.ini
 
 COPY ./docker/config/supervisord.conf /etc/supervisord.conf
+COPY ./docker/config/caddy/Caddyfile /etc/caddy/Caddyfile
 
 COPY ./docker/scripts/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
@@ -216,7 +206,6 @@ COPY services/api/.env.example ./api/.env
 ENV API_ENABLED=true
 ENV APP_ENV=dev
 ENV NODE_ENV=development
-ENV SWOOLE_ENABLED=false
 ENV PHP_IDE_CONFIG="serverName=localhost"
 
 EXPOSE 5173
@@ -225,7 +214,6 @@ EXPOSE 8080
 
 ### Production image ###
 FROM base AS prod
-RUN docker-php-ext-enable swoole
 
 COPY docker/config/runtime/production.conf /etc/supervisor/conf.d/production.conf
 COPY --from=node /usr/local/bin/node /usr/local/bin/node
@@ -247,7 +235,6 @@ RUN mkdir -p /app/var/data && \
 ENV API_ENABLED=false
 ENV APP_ENV=prod
 ENV NODE_ENV=production
-ENV SWOOLE_ENABLED=true
 
 ARG UPLOAD_MAX_FILESIZE_IN_BYTES
 ENV BODY_SIZE_LIMIT=${UPLOAD_MAX_FILESIZE_IN_BYTES}

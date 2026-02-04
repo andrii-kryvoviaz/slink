@@ -1,0 +1,19 @@
+{
+	admin off
+	auto_https off
+	persist_config off
+	log {
+		level ERROR
+	}
+	servers {
+		protocols h1 h2c
+	}
+	frankenphp {
+		worker /services/api/public/index.php
+	}
+}
+
+:8080 {
+	root * /services/api/public
+	php_server
+}
