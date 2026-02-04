@@ -10,18 +10,27 @@ import '@slink/utils/string/stringExtensions';
 import { preloadIconSet } from '@slink/utils/ui/preloadIconSet';
 
 export class Application {
-  private isInitialized = false;
+  private static isInitialized = false;
+  private static initPromise: Promise<void> | null = null;
 
-  initialize(): void {
-    if (this.isInitialized) {
+  async initialize(): Promise<void> {
+    if (Application.isInitialized) {
       return;
     }
 
+    if (Application.initPromise) {
+      return Application.initPromise;
+    }
+
+    Application.initPromise = this.doInitialize();
+    await Application.initPromise;
+    Application.isInitialized = true;
+  }
+
+  private async doInitialize(): Promise<void> {
     this.setupDependencyInjection();
     this.setupApiClientEventHandlers();
-    this.preloadAssets();
-
-    this.isInitialized = true;
+    await this.preloadAssets();
   }
 
   setupApiClient(fetch: typeof globalThis.fetch): void {
@@ -46,7 +55,7 @@ export class Application {
     });
   }
 
-  private preloadAssets(): void {
-    preloadIconSet(themeIcons);
+  private async preloadAssets(): Promise<void> {
+    await preloadIconSet(themeIcons);
   }
 }
