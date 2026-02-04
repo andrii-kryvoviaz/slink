@@ -19,7 +19,7 @@ final class ApiKeyAuthenticatorTest extends TestCase {
   private ApiKeyAuthenticator $authenticator;
 
   protected function setUp(): void {
-    $this->userProvider = $this->createMock(ApiKeyUserProvider::class);
+    $this->userProvider = $this->createStub(ApiKeyUserProvider::class);
     $this->authenticator = new ApiKeyAuthenticator($this->userProvider);
   }
 
@@ -73,7 +73,7 @@ final class ApiKeyAuthenticatorTest extends TestCase {
 
   public function testItReturnsNullOnAuthenticationSuccess(): void {
     $request = new Request();
-    $token = $this->createMock(TokenInterface::class);
+    $token = $this->createStub(TokenInterface::class);
     
     $result = $this->authenticator->onAuthenticationSuccess($request, $token, 'api');
     

@@ -6,18 +6,17 @@ namespace Unit\Slink\Storage\Infrastructure\Provider;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\Enum\StorageProvider;
 use Slink\Storage\Domain\Exception\SmbConfigurationIncompleteException;
 use Slink\Storage\Infrastructure\Provider\SmbStorageUsageProvider;
 
 final class SmbStorageUsageProviderTest extends TestCase {
-    private ConfigurationProviderInterface&MockObject $configurationProvider;
+    private ConfigurationProviderInterface $configurationProvider;
     private SmbStorageUsageProvider $provider;
 
     protected function setUp(): void {
-        $this->configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
+        $this->configurationProvider = $this->createStub(ConfigurationProviderInterface::class);
         $this->provider = new SmbStorageUsageProvider($this->configurationProvider);
     }
 
@@ -35,15 +34,18 @@ final class SmbStorageUsageProviderTest extends TestCase {
 
     #[Test]
     public function itThrowsExceptionWhenConfigurationIsNull(): void {
-        $this->configurationProvider
+        $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
+        $configurationProvider
             ->expects($this->once())
             ->method('get')
             ->with('storage.adapter.smb')
             ->willReturn(null);
 
+        $provider = new SmbStorageUsageProvider($configurationProvider);
+
         $this->expectException(SmbConfigurationIncompleteException::class);
 
-        $this->provider->getUsage();
+        $provider->getUsage();
     }
 
     #[Test]
@@ -53,15 +55,18 @@ final class SmbStorageUsageProviderTest extends TestCase {
             'username' => 'user'
         ];
 
-        $this->configurationProvider
+        $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
+        $configurationProvider
             ->expects($this->once())
             ->method('get')
             ->with('storage.adapter.smb')
             ->willReturn($config);
 
+        $provider = new SmbStorageUsageProvider($configurationProvider);
+
         $this->expectException(SmbConfigurationIncompleteException::class);
 
-        $this->provider->getUsage();
+        $provider->getUsage();
     }
 
     #[Test]
@@ -71,15 +76,18 @@ final class SmbStorageUsageProviderTest extends TestCase {
             'username' => 'user'
         ];
 
-        $this->configurationProvider
+        $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
+        $configurationProvider
             ->expects($this->once())
             ->method('get')
             ->with('storage.adapter.smb')
             ->willReturn($config);
 
+        $provider = new SmbStorageUsageProvider($configurationProvider);
+
         $this->expectException(SmbConfigurationIncompleteException::class);
 
-        $this->provider->getUsage();
+        $provider->getUsage();
     }
 
     #[Test]
@@ -89,14 +97,17 @@ final class SmbStorageUsageProviderTest extends TestCase {
             'share' => 'myshare'
         ];
 
-        $this->configurationProvider
+        $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
+        $configurationProvider
             ->expects($this->once())
             ->method('get')
             ->with('storage.adapter.smb')
             ->willReturn($config);
 
+        $provider = new SmbStorageUsageProvider($configurationProvider);
+
         $this->expectException(SmbConfigurationIncompleteException::class);
 
-        $this->provider->getUsage();
+        $provider->getUsage();
     }
 }

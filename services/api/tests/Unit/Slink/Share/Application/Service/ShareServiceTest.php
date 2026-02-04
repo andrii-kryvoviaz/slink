@@ -21,7 +21,7 @@ final class ShareServiceTest extends TestCase {
   private const string ORIGIN = 'https://example.com';
 
   private function createSupportingHandler(): ShareFeatureHandlerInterface {
-    $handler = $this->createMock(ShareFeatureHandlerInterface::class);
+    $handler = $this->createStub(ShareFeatureHandlerInterface::class);
     $handler->method('supports')->willReturn(true);
     $handler->method('enhance')->willReturnArgument(0);
 
@@ -32,7 +32,7 @@ final class ShareServiceTest extends TestCase {
   public function itBuildsContextWithFeatureHandlers(): void {
     $shareable = ShareableReference::forImage(ID::generate());
 
-    $handler1 = $this->createMock(ShareFeatureHandlerInterface::class);
+    $handler1 = $this->createStub(ShareFeatureHandlerInterface::class);
     $handler1->method('supports')->willReturn(true);
     $handler1->method('enhance')->willReturnCallback(
       fn(ShareContext $ctx) => $ctx->withShortUrl(ID::generate(), 'abc123')
@@ -63,12 +63,12 @@ final class ShareServiceTest extends TestCase {
 
   #[Test]
   public function itResolvesUrlWithShortCodeForShareView(): void {
-    $shortUrlView = $this->createMock(ShortUrlView::class);
+    $shortUrlView = $this->createStub(ShortUrlView::class);
     $shortUrlView->method('getShortCode')->willReturn('xyz789');
 
     $shareable = ShareableReference::forImage(ID::fromString('12345678-1234-1234-1234-123456789abc'));
 
-    $shareView = $this->createMock(ShareView::class);
+    $shareView = $this->createStub(ShareView::class);
     $shareView->method('getShortUrl')->willReturn($shortUrlView);
     $shareView->method('getShareable')->willReturn($shareable);
     $shareView->method('getTargetUrl')->willReturn('/image/test.jpg');
@@ -84,7 +84,7 @@ final class ShareServiceTest extends TestCase {
   public function itResolvesUrlWithShortCodeForShare(): void {
     $shareable = ShareableReference::forCollection(ID::fromString('12345678-1234-1234-1234-123456789abc'));
 
-    $share = $this->createMock(Share::class);
+    $share = $this->createStub(Share::class);
     $share->method('getShortCode')->willReturn('col123');
     $share->method('getShareable')->willReturn($shareable);
     $share->method('getTargetUrl')->willReturn('/collection/test');
@@ -100,7 +100,7 @@ final class ShareServiceTest extends TestCase {
   public function itResolvesUrlWithTargetUrlWhenNoShortCode(): void {
     $shareable = ShareableReference::forImage(ID::fromString('12345678-1234-1234-1234-123456789abc'));
 
-    $shareView = $this->createMock(ShareView::class);
+    $shareView = $this->createStub(ShareView::class);
     $shareView->method('getShortUrl')->willReturn(null);
     $shareView->method('getShareable')->willReturn($shareable);
     $shareView->method('getTargetUrl')->willReturn('/image/test.jpg');
@@ -119,11 +119,11 @@ final class ShareServiceTest extends TestCase {
     $imageShareable = ShareableReference::forImage(ID::generate());
     $collectionShareable = ShareableReference::forCollection(ID::generate());
 
-    $imageShare = $this->createMock(Share::class);
+    $imageShare = $this->createStub(Share::class);
     $imageShare->method('getShortCode')->willReturn('img123');
     $imageShare->method('getShareable')->willReturn($imageShareable);
 
-    $collectionShare = $this->createMock(Share::class);
+    $collectionShare = $this->createStub(Share::class);
     $collectionShare->method('getShortCode')->willReturn('col456');
     $collectionShare->method('getShareable')->willReturn($collectionShareable);
 

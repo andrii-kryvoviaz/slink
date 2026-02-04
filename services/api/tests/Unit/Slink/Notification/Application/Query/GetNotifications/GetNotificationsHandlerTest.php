@@ -19,7 +19,7 @@ final class GetNotificationsHandlerTest extends TestCase {
     $notificationRepository = $this->createMock(NotificationRepositoryInterface::class);
     $userId = 'user-123';
 
-    $paginator = $this->createMock(Paginator::class);
+    $paginator = $this->createStub(Paginator::class);
     $paginator->method('getIterator')->willReturn(new \ArrayIterator([]));
     $paginator->method('count')->willReturn(0);
 
@@ -44,7 +44,7 @@ final class GetNotificationsHandlerTest extends TestCase {
     $page = 3;
     $limit = 50;
 
-    $paginator = $this->createMock(Paginator::class);
+    $paginator = $this->createStub(Paginator::class);
     $paginator->method('getIterator')->willReturn(new \ArrayIterator([]));
     $paginator->method('count')->willReturn(0);
 
@@ -62,11 +62,11 @@ final class GetNotificationsHandlerTest extends TestCase {
 
   #[Test]
   public function itReturnsCorrectTotalCount(): void {
-    $notificationRepository = $this->createMock(NotificationRepositoryInterface::class);
+    $notificationRepository = $this->createStub(NotificationRepositoryInterface::class);
     $userId = 'user-123';
     $totalCount = 42;
 
-    $paginator = $this->createMock(Paginator::class);
+    $paginator = $this->createStub(Paginator::class);
     $paginator->method('getIterator')->willReturn(new \ArrayIterator([]));
     $paginator->method('count')->willReturn($totalCount);
 
@@ -83,13 +83,13 @@ final class GetNotificationsHandlerTest extends TestCase {
 
   #[Test]
   public function itTransformsNotificationsToItems(): void {
-    $notificationRepository = $this->createMock(NotificationRepositoryInterface::class);
+    $notificationRepository = $this->createStub(NotificationRepositoryInterface::class);
     $userId = 'user-123';
 
-    $notification1 = $this->createMock(NotificationView::class);
-    $notification2 = $this->createMock(NotificationView::class);
+    $notification1 = $this->createStub(NotificationView::class);
+    $notification2 = $this->createStub(NotificationView::class);
 
-    $paginator = $this->createMock(Paginator::class);
+    $paginator = $this->createStub(Paginator::class);
     $paginator->method('getIterator')->willReturn(new \ArrayIterator([$notification1, $notification2]));
     $paginator->method('count')->willReturn(2);
 
@@ -106,10 +106,10 @@ final class GetNotificationsHandlerTest extends TestCase {
 
   #[Test]
   public function itReturnsEmptyCollectionWhenNoNotifications(): void {
-    $notificationRepository = $this->createMock(NotificationRepositoryInterface::class);
+    $notificationRepository = $this->createStub(NotificationRepositoryInterface::class);
     $userId = 'user-123';
 
-    $paginator = $this->createMock(Paginator::class);
+    $paginator = $this->createStub(Paginator::class);
     $paginator->method('getIterator')->willReturn(new \ArrayIterator([]));
     $paginator->method('count')->willReturn(0);
 

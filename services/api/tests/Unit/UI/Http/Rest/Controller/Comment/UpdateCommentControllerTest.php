@@ -46,7 +46,7 @@ final class UpdateCommentControllerTest extends TestCase {
   #[Test]
   public function itPassesCommentIdToCommand(): void {
     $commandBus = $this->createMock(CommandBusInterface::class);
-    $user = $this->createMock(JwtUser::class);
+    $user = $this->createStub(JwtUser::class);
     $commentId = 'specific-comment-id';
 
     $user->method('getIdentifier')->willReturn('user-123');
@@ -110,8 +110,8 @@ final class UpdateCommentControllerTest extends TestCase {
 
   #[Test]
   public function itReturnsEmptyResponse(): void {
-    $commandBus = $this->createMock(CommandBusInterface::class);
-    $user = $this->createMock(JwtUser::class);
+    $commandBus = $this->createStub(CommandBusInterface::class);
+    $user = $this->createStub(JwtUser::class);
 
     $user->method('getIdentifier')->willReturn('user-123');
     $commandBus->method('handle');

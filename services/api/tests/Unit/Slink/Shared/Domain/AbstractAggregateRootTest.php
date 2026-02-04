@@ -41,9 +41,9 @@ final class AbstractAggregateRootTest extends TestCase {
   #[Test]
   public function itCanRegisterRegularEventSourcedAggregate(): void {
     $aggregateRoot = new ConcreteAggregateRoot(ID::fromString('test-id'));
-    $mockAggregate = $this->createMock(EventSourcedAggregate::class);
+    $stubAggregate = $this->createStub(EventSourcedAggregate::class);
 
-    $aggregateRoot->testRegisterAggregate($mockAggregate);
+    $aggregateRoot->testRegisterAggregate($stubAggregate);
 
     $this->assertInstanceOf(ConcreteAggregateRoot::class, $aggregateRoot);
   }

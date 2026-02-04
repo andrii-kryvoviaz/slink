@@ -45,14 +45,14 @@ final class UploadImageHandlerUserSpecificDeduplicationTest extends TestCase {
     $this->hashCalculator = $this->createMock(ImageHashCalculatorInterface::class);
     $this->configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
 
-    $imageAnalyzer = $this->createMock(ImageAnalyzerInterface::class);
-    $imageTransformer = $this->createMock(ImageTransformerInterface::class);
-    $sanitizer = $this->createMock(ImageSanitizerInterface::class);
-    $conversionResolver = $this->createMock(ImageConversionResolverInterface::class);
-    $storage = $this->createMock(StorageInterface::class);
-    $metadataFactory = $this->createMock(ImageMetadataFactory::class);
+    $imageAnalyzer = $this->createStub(ImageAnalyzerInterface::class);
+    $imageTransformer = $this->createStub(ImageTransformerInterface::class);
+    $sanitizer = $this->createStub(ImageSanitizerInterface::class);
+    $conversionResolver = $this->createStub(ImageConversionResolverInterface::class);
+    $storage = $this->createStub(StorageInterface::class);
+    $metadataFactory = $this->createStub(ImageMetadataFactory::class);
 
-    $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $configurationProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configurationProvider->method('get')->with('image.enableDeduplication')->willReturn(true);
 
     $duplicateSpecification = new ImageDuplicateSpecification($this->imageRepository, $this->hashCalculator, $configurationProvider);
@@ -73,7 +73,7 @@ final class UploadImageHandlerUserSpecificDeduplicationTest extends TestCase {
       new ImageMetadata(1024, 'image/jpeg', 800, 600, 'test_hash')
     );
 
-    $userPreferencesRepo = $this->createMock(UserPreferencesRepositoryInterface::class);
+    $userPreferencesRepo = $this->createStub(UserPreferencesRepositoryInterface::class);
 
     $this->handler = new UploadImageHandler(
       $this->configurationProvider,

@@ -23,7 +23,7 @@ final class StorageUsageProviderLocatorTest extends TestCase {
 
     #[Test]
     public function itGetsLocalProvider(): void {
-        $provider = $this->createMock(StorageUsageProviderInterface::class);
+        $provider = $this->createStub(StorageUsageProviderInterface::class);
 
         $this->locator
             ->expects($this->once())
@@ -38,7 +38,7 @@ final class StorageUsageProviderLocatorTest extends TestCase {
 
     #[Test]
     public function itGetsS3Provider(): void {
-        $provider = $this->createMock(StorageUsageProviderInterface::class);
+        $provider = $this->createStub(StorageUsageProviderInterface::class);
 
         $this->locator
             ->expects($this->once())
@@ -53,7 +53,7 @@ final class StorageUsageProviderLocatorTest extends TestCase {
 
     #[Test]
     public function itGetsSmbProvider(): void {
-        $provider = $this->createMock(StorageUsageProviderInterface::class);
+        $provider = $this->createStub(StorageUsageProviderInterface::class);
 
         $this->locator
             ->expects($this->once())

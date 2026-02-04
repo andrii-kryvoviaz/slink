@@ -6,7 +6,6 @@ namespace Unit\Slink\Storage\Application\Service;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\Enum\StorageProvider;
 use Slink\Storage\Application\Service\StorageUsageService;
@@ -16,16 +15,10 @@ use Slink\Storage\Domain\ValueObject\StorageUsage;
 use Slink\Storage\Domain\Service\StorageUsageProviderLocatorInterface;
 
 final class StorageUsageServiceTest extends TestCase {
-    /** @var MockObject&StorageUsageProviderLocatorInterface */
     private StorageUsageProviderLocatorInterface $providerLocator;
-    /** @var MockObject&ConfigurationProviderInterface */
-    private ConfigurationProviderInterface $configurationProvider;
-    private StorageUsageService $service;
 
     protected function setUp(): void {
-        $this->providerLocator = $this->createMock(StorageUsageProviderLocatorInterface::class);
-        $this->configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
-        $this->service = new StorageUsageService($this->providerLocator, $this->configurationProvider);
+        $this->providerLocator = $this->createStub(StorageUsageProviderLocatorInterface::class);
     }
 
     #[Test]
@@ -33,13 +26,16 @@ final class StorageUsageServiceTest extends TestCase {
         $expectedUsage = new StorageUsage('local', 1024, 10240, 5);
         $provider = $this->createMock(StorageUsageProviderInterface::class);
 
-        $this->configurationProvider
+        $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
+        $providerLocator = $this->createMock(StorageUsageProviderLocatorInterface::class);
+
+        $configurationProvider
             ->expects($this->once())
             ->method('get')
             ->with('storage.provider')
             ->willReturn('local');
 
-        $this->providerLocator
+        $providerLocator
             ->expects($this->once())
             ->method('getProvider')
             ->with(StorageProvider::Local)
@@ -50,7 +46,8 @@ final class StorageUsageServiceTest extends TestCase {
             ->method('getUsage')
             ->willReturn($expectedUsage);
 
-        $result = $this->service->getCurrentUsage();
+        $service = new StorageUsageService($providerLocator, $configurationProvider);
+        $result = $service->getCurrentUsage();
 
         $this->assertSame($expectedUsage, $result);
     }
@@ -60,13 +57,16 @@ final class StorageUsageServiceTest extends TestCase {
         $expectedUsage = new StorageUsage('s3', 2048, null, 0);
         $provider = $this->createMock(StorageUsageProviderInterface::class);
 
-        $this->configurationProvider
+        $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
+        $providerLocator = $this->createMock(StorageUsageProviderLocatorInterface::class);
+
+        $configurationProvider
             ->expects($this->once())
             ->method('get')
             ->with('storage.provider')
             ->willReturn('s3');
 
-        $this->providerLocator
+        $providerLocator
             ->expects($this->once())
             ->method('getProvider')
             ->with(StorageProvider::AmazonS3)
@@ -77,7 +77,8 @@ final class StorageUsageServiceTest extends TestCase {
             ->method('getUsage')
             ->willReturn($expectedUsage);
 
-        $result = $this->service->getCurrentUsage();
+        $service = new StorageUsageService($providerLocator, $configurationProvider);
+        $result = $service->getCurrentUsage();
 
         $this->assertSame($expectedUsage, $result);
     }
@@ -87,13 +88,16 @@ final class StorageUsageServiceTest extends TestCase {
         $expectedUsage = new StorageUsage('smb', 4096, null, 12);
         $provider = $this->createMock(StorageUsageProviderInterface::class);
 
-        $this->configurationProvider
+        $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
+        $providerLocator = $this->createMock(StorageUsageProviderLocatorInterface::class);
+
+        $configurationProvider
             ->expects($this->once())
             ->method('get')
             ->with('storage.provider')
             ->willReturn('smb');
 
-        $this->providerLocator
+        $providerLocator
             ->expects($this->once())
             ->method('getProvider')
             ->with(StorageProvider::SmbShare)
@@ -104,34 +108,41 @@ final class StorageUsageServiceTest extends TestCase {
             ->method('getUsage')
             ->willReturn($expectedUsage);
 
-        $result = $this->service->getCurrentUsage();
+        $service = new StorageUsageService($providerLocator, $configurationProvider);
+        $result = $service->getCurrentUsage();
 
         $this->assertSame($expectedUsage, $result);
     }
 
     #[Test]
     public function itThrowsExceptionWhenProviderIsNotConfigured(): void {
-        $this->configurationProvider
+        $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
+        $configurationProvider
             ->expects($this->once())
             ->method('get')
             ->with('storage.provider')
             ->willReturn(null);
 
+        $service = new StorageUsageService($this->providerLocator, $configurationProvider);
+
         $this->expectException(StorageProviderNotConfiguredException::class);
 
-        $this->service->getCurrentUsage();
+        $service->getCurrentUsage();
     }
 
     #[Test]
     public function itThrowsExceptionWhenProviderIsEmpty(): void {
-        $this->configurationProvider
+        $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
+        $configurationProvider
             ->expects($this->once())
             ->method('get')
             ->with('storage.provider')
             ->willReturn('');
 
+        $service = new StorageUsageService($this->providerLocator, $configurationProvider);
+
         $this->expectException(StorageProviderNotConfiguredException::class);
 
-        $this->service->getCurrentUsage();
+        $service->getCurrentUsage();
     }
 }

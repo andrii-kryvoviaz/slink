@@ -25,8 +25,8 @@ final class GetApiKeysHandlerTest extends TestCase {
     $userId = ID::generate();
     $query = new GetApiKeysQuery($userId);
     
-    $apiKey1 = $this->createMock(ApiKeyView::class);
-    $apiKey2 = $this->createMock(ApiKeyView::class);
+    $apiKey1 = $this->createStub(ApiKeyView::class);
+    $apiKey2 = $this->createStub(ApiKeyView::class);
     
     $apiKey1Payload = ['id' => 'key-1', 'name' => 'Key 1'];
     $apiKey2Payload = ['id' => 'key-2', 'name' => 'Key 2'];

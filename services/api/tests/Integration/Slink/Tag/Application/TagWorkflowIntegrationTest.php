@@ -26,12 +26,12 @@ final class TagWorkflowIntegrationTest extends TestCase {
 
   #[Test]
   public function itCompletesFullTagWorkflow(): void {
-    $tagStore = $this->createMock(TagStoreRepositoryInterface::class);
+    $tagStore = $this->createStub(TagStoreRepositoryInterface::class);
     $tagRepository = $this->createMock(TagRepositoryInterface::class);
-    $duplicateSpec = $this->createMock(TagDuplicateSpecificationInterface::class);
+    $duplicateSpec = $this->createStub(TagDuplicateSpecificationInterface::class);
 
     $userId = 'user-123';
-    $tagView = $this->createMock(TagView::class);
+    $tagView = $this->createStub(TagView::class);
     
     $duplicateSpec->method('ensureUnique');
     $tagStore->method('store');
@@ -65,8 +65,8 @@ final class TagWorkflowIntegrationTest extends TestCase {
 
   #[Test]
   public function itHandlesDuplicateTagCreation(): void {
-    $tagStore = $this->createMock(TagStoreRepositoryInterface::class);
-    $duplicateSpec = $this->createMock(TagDuplicateSpecificationInterface::class);
+    $tagStore = $this->createStub(TagStoreRepositoryInterface::class);
+    $duplicateSpec = $this->createStub(TagDuplicateSpecificationInterface::class);
 
     $duplicateSpec->method('ensureUnique')
       ->willThrowException(new DuplicateTagException('duplicate-tag'));
@@ -80,10 +80,10 @@ final class TagWorkflowIntegrationTest extends TestCase {
 
   #[Test]
   public function itCreatesNestedTagHierarchy(): void {
-    $tagStore = $this->createMock(TagStoreRepositoryInterface::class);
-    $duplicateSpec = $this->createMock(TagDuplicateSpecificationInterface::class);
+    $tagStore = $this->createStub(TagStoreRepositoryInterface::class);
+    $duplicateSpec = $this->createStub(TagDuplicateSpecificationInterface::class);
 
-    $parentTag = $this->createMock(Tag::class);
+    $parentTag = $this->createStub(Tag::class);
     $parentTag->method('getPath')->willReturn(\Slink\Tag\Domain\ValueObject\TagPath::fromString('#parent'));
 
     $duplicateSpec->method('ensureUnique');
@@ -108,7 +108,7 @@ final class TagWorkflowIntegrationTest extends TestCase {
   #[Test]
   public function itFiltersTagsByParent(): void {
     $tagRepository = $this->createMock(TagRepositoryInterface::class);
-    $tagView = $this->createMock(TagView::class);
+    $tagView = $this->createStub(TagView::class);
 
     $parentId = 'parent-123';
     $userId = 'user-filter';
@@ -136,7 +136,7 @@ final class TagWorkflowIntegrationTest extends TestCase {
   #[Test]
   public function itSearchesTagsByName(): void {
     $tagRepository = $this->createMock(TagRepositoryInterface::class);
-    $tagView = $this->createMock(TagView::class);
+    $tagView = $this->createStub(TagView::class);
 
     $searchTerm = 'search-term';
     $userId = 'user-search';

@@ -109,7 +109,7 @@ final class UpdateCommentHandlerTest extends TestCase {
   public function itSetsUpdatedAtTimestamp(): void {
     $commentId = ID::generate();
     $userId = ID::generate();
-    $commentStore = $this->createMock(CommentStoreRepositoryInterface::class);
+    $commentStore = $this->createStub(CommentStoreRepositoryInterface::class);
 
     $comment = Comment::create(
       $commentId,

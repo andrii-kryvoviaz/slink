@@ -30,11 +30,11 @@ final class CreateCommentControllerTest extends TestCase {
   }
 
   private function createMockCommentView(): CommentView {
-    $userView = $this->createMock(UserView::class);
+    $userView = $this->createStub(UserView::class);
     $userView->method('getUuid')->willReturn('user-123');
     $userView->method('getDisplayName')->willReturn('Test User');
     
-    $mock = $this->createMock(CommentView::class);
+    $mock = $this->createStub(CommentView::class);
     $mock->method('getId')->willReturn('comment-123');
     $mock->method('getContent')->willReturn('Test content');
     $mock->method('getDisplayContent')->willReturn('Test content');
@@ -120,8 +120,8 @@ final class CreateCommentControllerTest extends TestCase {
   #[Test]
   public function itPassesImageIdToCommand(): void {
     $commandBus = $this->createMock(CommandBusInterface::class);
-    $commentRepository = $this->createMock(CommentRepositoryInterface::class);
-    $user = $this->createMock(JwtUser::class);
+    $commentRepository = $this->createStub(CommentRepositoryInterface::class);
+    $user = $this->createStub(JwtUser::class);
     $imageId = 'specific-image-id';
     $commentId = ID::generate();
     $commentView = $this->createMockCommentView();
@@ -147,7 +147,7 @@ final class CreateCommentControllerTest extends TestCase {
   #[Test]
   public function itPassesUserIdToCommand(): void {
     $commandBus = $this->createMock(CommandBusInterface::class);
-    $commentRepository = $this->createMock(CommentRepositoryInterface::class);
+    $commentRepository = $this->createStub(CommentRepositoryInterface::class);
     $user = $this->createMock(JwtUser::class);
     $userId = 'specific-user-id';
     $imageId = 'image-123';

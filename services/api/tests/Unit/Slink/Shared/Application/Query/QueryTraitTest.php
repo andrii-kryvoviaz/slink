@@ -18,7 +18,7 @@ final class QueryTraitTest extends TestCase {
   #[Test]
   public function itAsksQueryWithEnvelope(): void {
     $queryBus = $this->createMock(QueryBusInterface::class);
-    $query = $this->createMock(QueryInterface::class);
+    $query = $this->createStub(QueryInterface::class);
     $envelope = new Envelope($query);
     $expectedResult = 'envelope result';
 
@@ -66,7 +66,7 @@ final class QueryTraitTest extends TestCase {
   #[Test]
   public function itCanSetAndUseQueryBus(): void {
     $queryBus = $this->createMock(QueryBusInterface::class);
-    $query = $this->createMock(QueryInterface::class);
+    $query = $this->createStub(QueryInterface::class);
     $expectedResult = 'query result';
 
     $queryBus->expects($this->once())
@@ -98,7 +98,7 @@ final class QueryTraitTest extends TestCase {
     foreach ($testCases as $expectedResult) {
       $traitUser = new ClassUsingQueryTrait();
       $queryBus = $this->createMock(QueryBusInterface::class);
-      $query = $this->createMock(QueryInterface::class);
+      $query = $this->createStub(QueryInterface::class);
 
       $queryBus->expects($this->once())
         ->method('ask')

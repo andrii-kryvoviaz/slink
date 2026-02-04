@@ -127,7 +127,7 @@ final class CreateCommentHandlerTest extends TestCase {
 
   #[Test]
   public function itReturnsGeneratedCommentId(): void {
-    $commentStore = $this->createMock(CommentStoreRepositoryInterface::class);
+    $commentStore = $this->createStub(CommentStoreRepositoryInterface::class);
 
     $handler = new CreateCommentHandler($commentStore);
 

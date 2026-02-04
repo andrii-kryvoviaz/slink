@@ -6,7 +6,6 @@ namespace Unit\Slink\Settings\Application\Command\SaveSettings;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 use Slink\Settings\Application\Command\SaveSettings\SaveSettingsCommand;
 use Slink\Settings\Application\Command\SaveSettings\SaveSettingsHandler;
 use Slink\Settings\Domain\Enum\SettingCategory;
@@ -15,15 +14,6 @@ use Slink\Settings\Domain\Settings;
 use Slink\Settings\Domain\ValueObject\User\UserSettings;
 
 final class SaveSettingsHandlerTest extends TestCase {
-    private MockObject $store;
-    private MockObject $settings;
-    private SaveSettingsHandler $handler;
-
-    protected function setUp(): void {
-        $this->store = $this->createMock(SettingStoreRepositoryInterface::class);
-        $this->settings = $this->createMock(Settings::class);
-        $this->handler = new SaveSettingsHandler($this->store);
-    }
 
     #[Test]
     public function itShouldSaveUserSettings(): void {
@@ -35,28 +25,32 @@ final class SaveSettingsHandlerTest extends TestCase {
                 'requirements' => 1
             ]
         ];
-        
+
         $command = new SaveSettingsCommand('user', $settingsData);
 
-        $this->store
+        $settings = $this->createMock(Settings::class);
+        $store = $this->createMock(SettingStoreRepositoryInterface::class);
+
+        $store
             ->expects($this->once())
             ->method('get')
-            ->willReturn($this->settings);
+            ->willReturn($settings);
 
-        $this->settings
+        $settings
             ->expects($this->once())
             ->method('setSettings')
-            ->with($this->callback(function ($settings) {
-                return $settings instanceof UserSettings 
-                    && $settings->getSettingsCategory() === SettingCategory::User;
+            ->with($this->callback(function ($s) {
+                return $s instanceof UserSettings
+                    && $s->getSettingsCategory() === SettingCategory::User;
             }));
 
-        $this->store
+        $store
             ->expects($this->once())
             ->method('store')
-            ->with($this->settings);
+            ->with($settings);
 
-        $this->handler->__invoke($command);
+        $handler = new SaveSettingsHandler($store);
+        $handler->__invoke($command);
     }
 
     #[Test]
@@ -67,28 +61,32 @@ final class SaveSettingsHandlerTest extends TestCase {
             'compressionQuality' => 90,
             'allowGuestUploads' => true
         ];
-        
+
         $command = new SaveSettingsCommand('image', $settingsData);
 
-        $this->store
+        $settings = $this->createMock(Settings::class);
+        $store = $this->createMock(SettingStoreRepositoryInterface::class);
+
+        $store
             ->expects($this->once())
             ->method('get')
-            ->willReturn($this->settings);
+            ->willReturn($settings);
 
-        $this->settings
+        $settings
             ->expects($this->once())
             ->method('setSettings')
-            ->with($this->callback(function ($settings) {
-                return $settings instanceof \Slink\Settings\Domain\ValueObject\Image\ImageSettings
-                    && $settings->getSettingsCategory() === SettingCategory::Image;
+            ->with($this->callback(function ($s) {
+                return $s instanceof \Slink\Settings\Domain\ValueObject\Image\ImageSettings
+                    && $s->getSettingsCategory() === SettingCategory::Image;
             }));
 
-        $this->store
+        $store
             ->expects($this->once())
             ->method('store')
-            ->with($this->settings);
+            ->with($settings);
 
-        $this->handler->__invoke($command);
+        $handler = new SaveSettingsHandler($store);
+        $handler->__invoke($command);
     }
 
     #[Test]
@@ -106,28 +104,32 @@ final class SaveSettingsHandlerTest extends TestCase {
                 ]
             ]
         ];
-        
+
         $command = new SaveSettingsCommand('storage', $settingsData);
 
-        $this->store
+        $settings = $this->createMock(Settings::class);
+        $store = $this->createMock(SettingStoreRepositoryInterface::class);
+
+        $store
             ->expects($this->once())
             ->method('get')
-            ->willReturn($this->settings);
+            ->willReturn($settings);
 
-        $this->settings
+        $settings
             ->expects($this->once())
             ->method('setSettings')
-            ->with($this->callback(function ($settings) {
-                return $settings instanceof \Slink\Settings\Domain\ValueObject\Storage\StorageSettings
-                    && $settings->getSettingsCategory() === SettingCategory::Storage;
+            ->with($this->callback(function ($s) {
+                return $s instanceof \Slink\Settings\Domain\ValueObject\Storage\StorageSettings
+                    && $s->getSettingsCategory() === SettingCategory::Storage;
             }));
 
-        $this->store
+        $store
             ->expects($this->once())
             ->method('store')
-            ->with($this->settings);
+            ->with($settings);
 
-        $this->handler->__invoke($command);
+        $handler = new SaveSettingsHandler($store);
+        $handler->__invoke($command);
     }
 
     #[Test]
@@ -140,40 +142,45 @@ final class SaveSettingsHandlerTest extends TestCase {
                 'requirements' => 7
             ]
         ];
-        
+
         $command = new SaveSettingsCommand('user', $settingsData);
 
-        $this->store
+        $settings = $this->createMock(Settings::class);
+        $store = $this->createMock(SettingStoreRepositoryInterface::class);
+
+        $store
             ->expects($this->once())
             ->method('get')
-            ->willReturn($this->settings);
+            ->willReturn($settings);
 
-        $this->settings
+        $settings
             ->expects($this->once())
             ->method('setSettings')
-            ->with($this->callback(function ($settings) use ($settingsData) {
-                if (!$settings instanceof UserSettings) {
+            ->with($this->callback(function ($s) use ($settingsData) {
+                if (!$s instanceof UserSettings) {
                     return false;
                 }
-                
-                $payload = $settings->toPayload();
+
+                $payload = $s->toPayload();
                 return $payload['approvalRequired'] === $settingsData['approvalRequired']
                     && $payload['allowRegistration'] === $settingsData['allowRegistration'];
             }));
 
-        $this->store
+        $store
             ->expects($this->once())
             ->method('store')
-            ->with($this->settings);
+            ->with($settings);
 
-        $this->handler->__invoke($command);
+        $handler = new SaveSettingsHandler($store);
+        $handler->__invoke($command);
     }
 
     #[Test]
     public function itShouldPropagateStoreExceptions(): void {
         $command = new SaveSettingsCommand('user', ['approvalRequired' => true]);
-        
-        $this->store
+
+        $store = $this->createMock(SettingStoreRepositoryInterface::class);
+        $store
             ->expects($this->once())
             ->method('get')
             ->willThrowException(new \RuntimeException('Store error'));
@@ -181,7 +188,8 @@ final class SaveSettingsHandlerTest extends TestCase {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Store error');
 
-        $this->handler->__invoke($command);
+        $handler = new SaveSettingsHandler($store);
+        $handler->__invoke($command);
     }
 
     #[Test]
@@ -193,13 +201,16 @@ final class SaveSettingsHandlerTest extends TestCase {
                 'requirements' => 0
             ]
         ]);
-        
-        $this->store
+
+        $settings = $this->createMock(Settings::class);
+        $store = $this->createMock(SettingStoreRepositoryInterface::class);
+
+        $store
             ->expects($this->once())
             ->method('get')
-            ->willReturn($this->settings);
+            ->willReturn($settings);
 
-        $this->settings
+        $settings
             ->expects($this->once())
             ->method('setSettings')
             ->willThrowException(new \RuntimeException('Settings error'));
@@ -207,7 +218,8 @@ final class SaveSettingsHandlerTest extends TestCase {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Settings error');
 
-        $this->handler->__invoke($command);
+        $handler = new SaveSettingsHandler($store);
+        $handler->__invoke($command);
     }
 
     #[Test]
@@ -219,32 +231,36 @@ final class SaveSettingsHandlerTest extends TestCase {
                 'requirements' => 0
             ]
         ]);
-        
+
         $callOrder = [];
-        
-        $this->store
+
+        $settings = $this->createMock(Settings::class);
+        $store = $this->createMock(SettingStoreRepositoryInterface::class);
+
+        $store
             ->expects($this->once())
             ->method('get')
-            ->willReturnCallback(function () use (&$callOrder) {
+            ->willReturnCallback(function () use (&$callOrder, $settings) {
                 $callOrder[] = 'get';
-                return $this->settings;
+                return $settings;
             });
 
-        $this->settings
+        $settings
             ->expects($this->once())
             ->method('setSettings')
             ->willReturnCallback(function () use (&$callOrder) {
                 $callOrder[] = 'setSettings';
             });
 
-        $this->store
+        $store
             ->expects($this->once())
             ->method('store')
             ->willReturnCallback(function () use (&$callOrder) {
                 $callOrder[] = 'store';
             });
 
-        $this->handler->__invoke($command);
+        $handler = new SaveSettingsHandler($store);
+        $handler->__invoke($command);
 
         $this->assertSame(['get', 'setSettings', 'store'], $callOrder);
     }

@@ -14,7 +14,7 @@ use Slink\User\Domain\ValueObject\Role;
 final class SystemChangeUserRoleContextTest extends TestCase {
   #[Test]
   public function itBypassesCurrentUserCheck(): void {
-    $roleExistSpec = $this->createMock(UserRoleExistSpecificationInterface::class);
+    $roleExistSpec = $this->createStub(UserRoleExistSpecificationInterface::class);
     $context = new SystemChangeUserRoleContext($roleExistSpec);
 
     $this->assertFalse($context->currentUserSpecification->isSatisfiedBy(ID::generate()));
@@ -22,7 +22,7 @@ final class SystemChangeUserRoleContextTest extends TestCase {
 
   #[Test]
   public function itBypassesIsSameUserCheck(): void {
-    $roleExistSpec = $this->createMock(UserRoleExistSpecificationInterface::class);
+    $roleExistSpec = $this->createStub(UserRoleExistSpecificationInterface::class);
     $context = new SystemChangeUserRoleContext($roleExistSpec);
 
     $this->assertFalse($context->currentUserSpecification->isSameUser(ID::generate()));

@@ -390,24 +390,24 @@ final class UserTest extends TestCase {
     bool $roleExists = true,
     bool $isSelf = false
   ): ChangeUserRoleContext {
-    $roleExistSpec = $this->createMock(UserRoleExistSpecificationInterface::class);
+    $roleExistSpec = $this->createStub(UserRoleExistSpecificationInterface::class);
     $roleExistSpec->method('isSatisfiedBy')->willReturn($roleExists);
 
-    $currentUserSpec = $this->createMock(CurrentUserSpecificationInterface::class);
+    $currentUserSpec = $this->createStub(CurrentUserSpecificationInterface::class);
     $currentUserSpec->method('isSatisfiedBy')->willReturn($isSelf);
 
     return new ChangeUserRoleContext($roleExistSpec, $currentUserSpec);
   }
 
   private function createCurrentUserSpecification(bool $isSelf = false): CurrentUserSpecificationInterface {
-    $currentUserSpec = $this->createMock(CurrentUserSpecificationInterface::class);
+    $currentUserSpec = $this->createStub(CurrentUserSpecificationInterface::class);
     $currentUserSpec->method('isSatisfiedBy')->willReturn($isSelf);
 
     return $currentUserSpec;
   }
 
   private function createUniqueDisplayNameSpecification(bool $isUnique = true): UniqueDisplayNameSpecificationInterface {
-    $spec = $this->createMock(UniqueDisplayNameSpecificationInterface::class);
+    $spec = $this->createStub(UniqueDisplayNameSpecificationInterface::class);
     $spec->method('isUnique')->willReturn($isUnique);
 
     return $spec;
@@ -431,13 +431,13 @@ final class UserTest extends TestCase {
     bool $usernameUnique = true,
     bool $displayNameUnique = true
   ): UserCreationContext {
-    $uniqueEmailSpec = $this->createMock(UniqueEmailSpecificationInterface::class);
+    $uniqueEmailSpec = $this->createStub(UniqueEmailSpecificationInterface::class);
     $uniqueEmailSpec->method('isUnique')->willReturn($emailUnique);
 
-    $uniqueUsernameSpec = $this->createMock(UniqueUsernameSpecificationInterface::class);
+    $uniqueUsernameSpec = $this->createStub(UniqueUsernameSpecificationInterface::class);
     $uniqueUsernameSpec->method('isUnique')->willReturn($usernameUnique);
 
-    $uniqueDisplayNameSpec = $this->createMock(UniqueDisplayNameSpecificationInterface::class);
+    $uniqueDisplayNameSpec = $this->createStub(UniqueDisplayNameSpecificationInterface::class);
     $uniqueDisplayNameSpec->method('isUnique')->willReturn($displayNameUnique);
 
     return new UserCreationContext($uniqueEmailSpec, $uniqueUsernameSpec, $uniqueDisplayNameSpec);

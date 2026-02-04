@@ -36,7 +36,7 @@ final class CreateAdminUserHandlerTest extends TestCase {
 
   #[Test]
   public function itSkipsCreationWhenUserExistsByUsername(): void {
-    $existingUser = $this->createMock(User::class);
+    $existingUser = $this->createStub(User::class);
 
     $userRepository = $this->createMock(UserStoreRepositoryInterface::class);
     $userRepository->method('getByUsername')
@@ -55,7 +55,7 @@ final class CreateAdminUserHandlerTest extends TestCase {
 
   #[Test]
   public function itSkipsCreationWhenUserExistsByEmail(): void {
-    $existingUser = $this->createMock(User::class);
+    $existingUser = $this->createStub(User::class);
 
     $userRepository = $this->createMock(UserStoreRepositoryInterface::class);
     $userRepository->method('getByUsername')
@@ -93,19 +93,19 @@ final class CreateAdminUserHandlerTest extends TestCase {
     string $email,
     string $password
   ): CreateAdminUserHandler {
-    $uniqueEmailSpec = $this->createMock(UniqueEmailSpecificationInterface::class);
+    $uniqueEmailSpec = $this->createStub(UniqueEmailSpecificationInterface::class);
     $uniqueEmailSpec->method('isUnique')->willReturn(true);
 
-    $uniqueUsernameSpec = $this->createMock(UniqueUsernameSpecificationInterface::class);
+    $uniqueUsernameSpec = $this->createStub(UniqueUsernameSpecificationInterface::class);
     $uniqueUsernameSpec->method('isUnique')->willReturn(true);
 
-    $uniqueDisplayNameSpec = $this->createMock(UniqueDisplayNameSpecificationInterface::class);
+    $uniqueDisplayNameSpec = $this->createStub(UniqueDisplayNameSpecificationInterface::class);
     $uniqueDisplayNameSpec->method('isUnique')->willReturn(true);
 
     $userCreationContext = new UserCreationContext($uniqueEmailSpec, $uniqueUsernameSpec, $uniqueDisplayNameSpec);
     $adminUserFactory = new AdminUserFactory($userCreationContext, $userRepository, $username, $email, $password);
 
-    $roleExistSpec = $this->createMock(UserRoleExistSpecificationInterface::class);
+    $roleExistSpec = $this->createStub(UserRoleExistSpecificationInterface::class);
     $roleExistSpec->method('isSatisfiedBy')->willReturn(true);
 
     $systemChangeUserRoleContext = new SystemChangeUserRoleContext($roleExistSpec);

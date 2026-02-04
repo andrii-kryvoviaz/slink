@@ -26,7 +26,7 @@ final class RevokeApiKeyControllerTest extends TestCase {
 
     $property->setValue($controller, $commandBus);
     
-    $user = $this->createMock(JwtUser::class);
+    $user = $this->createStub(JwtUser::class);
     $user->method('getIdentifier')->willReturn($userId);
     
     $response = $controller->__invoke($keyId, $user);

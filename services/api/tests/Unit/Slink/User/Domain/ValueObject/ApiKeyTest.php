@@ -78,7 +78,7 @@ final class ApiKeyTest extends TestCase {
 
   public function testItHandlesDateTimeExceptionInIsExpired(): void {
     $name = 'Test Key';
-    $invalidExpiresAt = $this->createMock(DateTime::class);
+    $invalidExpiresAt = $this->createStub(DateTime::class);
     $invalidExpiresAt->method('isBefore')->willThrowException(new DateTimeException(new \Exception('Invalid date')));
     
     $apiKey = ApiKey::fromExisting('sk_test', $name, DateTime::now(), $invalidExpiresAt);

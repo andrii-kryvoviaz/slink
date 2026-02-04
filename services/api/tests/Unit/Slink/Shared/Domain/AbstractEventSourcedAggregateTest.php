@@ -66,8 +66,8 @@ final class AbstractEventSourcedAggregateTest extends TestCase {
   #[Test]
   public function itPreventsDuplicateEventRecorderSetting(): void {
     $aggregate = new ConcreteEventSourcedAggregateForEventTest();
-    $eventRecorder1 = $this->createMock(EventRecorder::class);
-    $eventRecorder2 = $this->createMock(EventRecorder::class);
+    $eventRecorder1 = $this->createStub(EventRecorder::class);
+    $eventRecorder2 = $this->createStub(EventRecorder::class);
 
     $aggregate->setEventRecorder($eventRecorder1);
 
@@ -94,7 +94,7 @@ final class AbstractEventSourcedAggregateTest extends TestCase {
   #[Test]
   public function itSetsEventRecorder(): void {
     $aggregate = new ConcreteEventSourcedAggregateForEventTest();
-    $eventRecorder = $this->createMock(EventRecorder::class);
+    $eventRecorder = $this->createStub(EventRecorder::class);
 
     $aggregate->setEventRecorder($eventRecorder);
 
@@ -104,7 +104,7 @@ final class AbstractEventSourcedAggregateTest extends TestCase {
   #[Test]
   public function itThrowsExceptionWhenEventRecorderAlreadySet(): void {
     $aggregate = new ConcreteEventSourcedAggregateForEventTest();
-    $eventRecorder = $this->createMock(EventRecorder::class);
+    $eventRecorder = $this->createStub(EventRecorder::class);
 
     $aggregate->setEventRecorder($eventRecorder);
 

@@ -174,7 +174,7 @@ final class ImageTest extends TestCase {
       ->with($imageFile)
       ->willReturn($sha1Hash);
 
-    $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $configurationProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configurationProvider->method('get')->with('image.enableDeduplication')->willReturn(true);
 
     $duplicateSpecification = new ImageDuplicateSpecification($repository, $hashCalculator, $configurationProvider);
@@ -211,7 +211,7 @@ final class ImageTest extends TestCase {
       ->with($imageFile)
       ->willReturn($sha1Hash);
 
-    $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $configurationProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configurationProvider->method('get')->with('image.enableDeduplication')->willReturn(true);
 
     $duplicateSpecification = new ImageDuplicateSpecification($repository, $hashCalculator, $configurationProvider);
@@ -247,7 +247,7 @@ final class ImageTest extends TestCase {
       ->with($imageFile)
       ->willReturn($sha1Hash);
 
-    $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $configurationProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configurationProvider->method('get')->with('image.enableDeduplication')->willReturn(true);
 
     $duplicateSpecification = new ImageDuplicateSpecification($repository, $hashCalculator, $configurationProvider);

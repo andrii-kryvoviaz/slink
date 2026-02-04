@@ -32,7 +32,7 @@ final class MarkNotificationReadHandlerTest extends TestCase {
       ID::generate(),
     );
 
-    $notificationView = $this->createMock(NotificationView::class);
+    $notificationView = $this->createStub(NotificationView::class);
     $notificationView->method('getUserId')->willReturn($userId->toString());
 
     $notificationRepository->expects($this->once())
@@ -64,10 +64,10 @@ final class MarkNotificationReadHandlerTest extends TestCase {
     $ownerId = ID::generate();
     $differentUserId = ID::generate();
 
-    $notificationStore = $this->createMock(NotificationStoreRepositoryInterface::class);
-    $notificationRepository = $this->createMock(NotificationRepositoryInterface::class);
+    $notificationStore = $this->createStub(NotificationStoreRepositoryInterface::class);
+    $notificationRepository = $this->createStub(NotificationRepositoryInterface::class);
 
-    $notificationView = $this->createMock(NotificationView::class);
+    $notificationView = $this->createStub(NotificationView::class);
     $notificationView->method('getUserId')->willReturn($ownerId->toString());
 
     $notificationRepository->method('oneById')->willReturn($notificationView);
@@ -86,9 +86,9 @@ final class MarkNotificationReadHandlerTest extends TestCase {
     $differentUserId = ID::generate();
 
     $notificationStore = $this->createMock(NotificationStoreRepositoryInterface::class);
-    $notificationRepository = $this->createMock(NotificationRepositoryInterface::class);
+    $notificationRepository = $this->createStub(NotificationRepositoryInterface::class);
 
-    $notificationView = $this->createMock(NotificationView::class);
+    $notificationView = $this->createStub(NotificationView::class);
     $notificationView->method('getUserId')->willReturn($ownerId->toString());
 
     $notificationRepository->method('oneById')->willReturn($notificationView);
@@ -121,7 +121,7 @@ final class MarkNotificationReadHandlerTest extends TestCase {
       ID::generate(),
     );
 
-    $notificationView = $this->createMock(NotificationView::class);
+    $notificationView = $this->createStub(NotificationView::class);
     $notificationView->method('getUserId')->willReturn($userId->toString());
 
     $notificationRepository->expects($this->once())

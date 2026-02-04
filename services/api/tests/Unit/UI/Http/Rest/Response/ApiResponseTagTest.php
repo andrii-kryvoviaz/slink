@@ -33,7 +33,7 @@ final class ApiResponseTagTest extends TestCase {
 
   #[Test]
   public function itCreatesOneResponseForSingleTag(): void {
-    $tagView = $this->createMock(TagView::class);
+    $tagView = $this->createStub(TagView::class);
     $item = Item::fromEntity($tagView);
     $response = ApiResponse::one($item);
     
@@ -42,8 +42,8 @@ final class ApiResponseTagTest extends TestCase {
 
   #[Test]
   public function itCreatesCollectionResponseForTagList(): void {
-    $tagView1 = $this->createMock(TagView::class);
-    $tagView2 = $this->createMock(TagView::class);
+    $tagView1 = $this->createStub(TagView::class);
+    $tagView2 = $this->createStub(TagView::class);
     $items = [Item::fromEntity($tagView1), Item::fromEntity($tagView2)];
     $collection = new Collection(1, 10, 2, $items);
     
@@ -54,7 +54,7 @@ final class ApiResponseTagTest extends TestCase {
 
   #[Test]
   public function itCreatesListResponseForArrayOfItems(): void {
-    $tagView = $this->createMock(TagView::class);
+    $tagView = $this->createStub(TagView::class);
     $items = [Item::fromEntity($tagView)];
     
     $response = ApiResponse::list($items);
@@ -95,7 +95,7 @@ final class ApiResponseTagTest extends TestCase {
 
   #[Test]
   public function itSetsCorrectContentTypeHeader(): void {
-    $tagView = $this->createMock(TagView::class);
+    $tagView = $this->createStub(TagView::class);
     $item = Item::fromEntity($tagView);
     $response = ApiResponse::one($item);
     
@@ -105,7 +105,7 @@ final class ApiResponseTagTest extends TestCase {
   #[Test]
   public function itCreatesResponsesWithDifferentStatusCodes(): void {
     $tagId = 'new-tag';
-    $tagView = $this->createMock(TagView::class);
+    $tagView = $this->createStub(TagView::class);
     $item = Item::fromEntity($tagView);
     $collection = new Collection(1, 10, 1, [$item]);
     
@@ -122,7 +122,7 @@ final class ApiResponseTagTest extends TestCase {
 
   #[Test]
   public function itCreatesValidJsonResponseStructure(): void {
-    $tagView = $this->createMock(TagView::class);
+    $tagView = $this->createStub(TagView::class);
     $item = Item::fromEntity($tagView);
     $response = ApiResponse::one($item);
     
@@ -132,7 +132,7 @@ final class ApiResponseTagTest extends TestCase {
 
   #[Test]
   public function itCreatesCollectionWithMetadata(): void {
-    $tagView = $this->createMock(TagView::class);
+    $tagView = $this->createStub(TagView::class);
     $item = Item::fromEntity($tagView);
     $collection = new Collection(2, 5, 15, [$item]);
     

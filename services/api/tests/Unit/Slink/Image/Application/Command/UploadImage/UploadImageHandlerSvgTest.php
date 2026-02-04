@@ -34,17 +34,17 @@ class UploadImageHandlerSvgTest extends TestCase {
      */
     #[Test]
     public function itSanitizesSvgFileDuringUpload(): void {
-        $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+        $configProvider = $this->createStub(ConfigurationProviderInterface::class);
         $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
-        $imageAnalyzer = $this->createMock(ImageAnalyzerInterface::class);
-        $imageTransformer = $this->createMock(ImageTransformerInterface::class);
+        $imageAnalyzer = $this->createStub(ImageAnalyzerInterface::class);
+        $imageTransformer = $this->createStub(ImageTransformerInterface::class);
         $sanitizer = $this->createMock(ImageSanitizerInterface::class);
-        $conversionResolver = $this->createMock(ImageConversionResolverInterface::class);
+        $conversionResolver = $this->createStub(ImageConversionResolverInterface::class);
         $storage = $this->createMock(StorageInterface::class);
-        $duplicateSpec = $this->createMock(ImageDuplicateSpecificationInterface::class);
+        $duplicateSpec = $this->createStub(ImageDuplicateSpecificationInterface::class);
         $creationContext = new ImageCreationContext($duplicateSpec);
-        $metadataFactory = $this->createMock(ImageMetadataFactory::class);
-        $userPreferencesRepo = $this->createMock(UserPreferencesRepositoryInterface::class);
+        $metadataFactory = $this->createStub(ImageMetadataFactory::class);
+        $userPreferencesRepo = $this->createStub(UserPreferencesRepositoryInterface::class);
         
         $handler = new UploadImageHandler(
             $configProvider,
@@ -59,7 +59,7 @@ class UploadImageHandlerSvgTest extends TestCase {
             $userPreferencesRepo
         );
 
-        $file = $this->createMock(File::class);
+        $file = $this->createStub(File::class);
         $file->method('guessExtension')->willReturn('svg');
         $file->method('getMimeType')->willReturn('image/svg+xml');
         $file->method('getPathname')->willReturn('/tmp/test.svg');
@@ -85,7 +85,7 @@ class UploadImageHandlerSvgTest extends TestCase {
             ->with($file)
             ->willReturn($file);
         
-        $command = $this->createMock(UploadImageCommand::class);
+        $command = $this->createStub(UploadImageCommand::class);
         $command->method('getImageFile')->willReturn($file);
         $command->method('getId')->willReturn(ID::fromString('123'));
         $command->method('isPublic')->willReturn(true);
@@ -104,17 +104,17 @@ class UploadImageHandlerSvgTest extends TestCase {
      */
     #[Test]
     public function itDoesNotSanitizeNonSvgFiles(): void {
-        $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+        $configProvider = $this->createStub(ConfigurationProviderInterface::class);
         $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
-        $imageAnalyzer = $this->createMock(ImageAnalyzerInterface::class);
-        $imageTransformer = $this->createMock(ImageTransformerInterface::class);
+        $imageAnalyzer = $this->createStub(ImageAnalyzerInterface::class);
+        $imageTransformer = $this->createStub(ImageTransformerInterface::class);
         $sanitizer = $this->createMock(ImageSanitizerInterface::class);
-        $conversionResolver = $this->createMock(ImageConversionResolverInterface::class);
+        $conversionResolver = $this->createStub(ImageConversionResolverInterface::class);
         $storage = $this->createMock(StorageInterface::class);
-        $duplicateSpec = $this->createMock(ImageDuplicateSpecificationInterface::class);
+        $duplicateSpec = $this->createStub(ImageDuplicateSpecificationInterface::class);
         $creationContext = new ImageCreationContext($duplicateSpec);
-        $metadataFactory = $this->createMock(ImageMetadataFactory::class);
-        $userPreferencesRepo = $this->createMock(UserPreferencesRepositoryInterface::class);
+        $metadataFactory = $this->createStub(ImageMetadataFactory::class);
+        $userPreferencesRepo = $this->createStub(UserPreferencesRepositoryInterface::class);
         
         $handler = new UploadImageHandler(
             $configProvider,
@@ -129,7 +129,7 @@ class UploadImageHandlerSvgTest extends TestCase {
             $userPreferencesRepo
         );
 
-        $file = $this->createMock(File::class);
+        $file = $this->createStub(File::class);
         $file->method('guessExtension')->willReturn('jpg');
         $file->method('getMimeType')->willReturn('image/jpeg');
         $file->method('getPathname')->willReturn('/tmp/test.jpg');
@@ -153,7 +153,7 @@ class UploadImageHandlerSvgTest extends TestCase {
         
         $sanitizer->expects($this->never())->method('sanitizeFile');
         
-        $command = $this->createMock(UploadImageCommand::class);
+        $command = $this->createStub(UploadImageCommand::class);
         $command->method('getImageFile')->willReturn($file);
         $command->method('getId')->willReturn(ID::fromString('123'));
         $command->method('isPublic')->willReturn(true);

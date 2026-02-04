@@ -25,10 +25,10 @@ final class GetImageTagsHandlerTest extends TestCase {
   public function itReturnsTagsForOwnedImage(): void {
     $tagRepository = $this->createMock(TagRepositoryInterface::class);
     $imageRepository = $this->createMock(ImageRepositoryInterface::class);
-    $imageView = $this->createMock(ImageView::class);
-    $userView = $this->createMock(UserView::class);
-    $tagView1 = $this->createMock(TagView::class);
-    $tagView2 = $this->createMock(TagView::class);
+    $imageView = $this->createStub(ImageView::class);
+    $userView = $this->createStub(UserView::class);
+    $tagView1 = $this->createStub(TagView::class);
+    $tagView2 = $this->createStub(TagView::class);
     
     $imageId = 'image-123';
     $userId = 'user-456';
@@ -66,8 +66,8 @@ final class GetImageTagsHandlerTest extends TestCase {
   public function itThrowsAccessDeniedWhenUserDoesNotOwnImage(): void {
     $tagRepository = $this->createMock(TagRepositoryInterface::class);
     $imageRepository = $this->createMock(ImageRepositoryInterface::class);
-    $imageView = $this->createMock(ImageView::class);
-    $userView = $this->createMock(UserView::class);
+    $imageView = $this->createStub(ImageView::class);
+    $userView = $this->createStub(UserView::class);
     
     $imageId = 'image-123';
     $userId = 'user-456';
@@ -97,7 +97,7 @@ final class GetImageTagsHandlerTest extends TestCase {
   public function itThrowsAccessDeniedWhenImageHasNoOwner(): void {
     $tagRepository = $this->createMock(TagRepositoryInterface::class);
     $imageRepository = $this->createMock(ImageRepositoryInterface::class);
-    $imageView = $this->createMock(ImageView::class);
+    $imageView = $this->createStub(ImageView::class);
     
     $imageId = 'image-123';
     $userId = 'user-456';
@@ -125,8 +125,8 @@ final class GetImageTagsHandlerTest extends TestCase {
   public function itReturnsEmptyCollectionWhenImageHasNoTags(): void {
     $tagRepository = $this->createMock(TagRepositoryInterface::class);
     $imageRepository = $this->createMock(ImageRepositoryInterface::class);
-    $imageView = $this->createMock(ImageView::class);
-    $userView = $this->createMock(UserView::class);
+    $imageView = $this->createStub(ImageView::class);
+    $userView = $this->createStub(UserView::class);
     
     $imageId = 'image-empty';
     $userId = 'user-owner';
@@ -207,19 +207,19 @@ final class GetImageTagsHandlerTest extends TestCase {
 
   #[Test]
   public function itConvertsTagsToItemsCorrectly(): void {
-    $tagRepository = $this->createMock(TagRepositoryInterface::class);
-    $imageRepository = $this->createMock(ImageRepositoryInterface::class);
-    $imageView = $this->createMock(ImageView::class);
-    $userView = $this->createMock(UserView::class);
-    $tagView = $this->createMock(TagView::class);
-    
+    $tagRepository = $this->createStub(TagRepositoryInterface::class);
+    $imageRepository = $this->createStub(ImageRepositoryInterface::class);
+    $imageView = $this->createStub(ImageView::class);
+    $userView = $this->createStub(UserView::class);
+    $tagView = $this->createStub(TagView::class);
+
     $imageId = 'image-items';
     $userId = 'user-items';
     $userUuid = 'user-items';
-    
+
     $userView->method('getUuid')->willReturn($userUuid);
     $imageView->method('getUser')->willReturn($userView);
-    
+
     $imageRepository->method('oneById')->willReturn($imageView);
     $tagRepository->method('findByImageId')->willReturn([$tagView]);
 
@@ -237,8 +237,8 @@ final class GetImageTagsHandlerTest extends TestCase {
   public function itValidatesImageIdIsConvertedToIdObject(): void {
     $tagRepository = $this->createMock(TagRepositoryInterface::class);
     $imageRepository = $this->createMock(ImageRepositoryInterface::class);
-    $imageView = $this->createMock(ImageView::class);
-    $userView = $this->createMock(UserView::class);
+    $imageView = $this->createStub(ImageView::class);
+    $userView = $this->createStub(UserView::class);
     
     $imageId = '550e8400-e29b-41d4-a716-446655440000';
     $userId = '660e8400-e29b-41d4-a716-446655440000';
@@ -269,23 +269,23 @@ final class GetImageTagsHandlerTest extends TestCase {
 
   #[Test]
   public function itHandlesLargeNumberOfTags(): void {
-    $tagRepository = $this->createMock(TagRepositoryInterface::class);
-    $imageRepository = $this->createMock(ImageRepositoryInterface::class);
-    $imageView = $this->createMock(ImageView::class);
-    $userView = $this->createMock(UserView::class);
-    
+    $tagRepository = $this->createStub(TagRepositoryInterface::class);
+    $imageRepository = $this->createStub(ImageRepositoryInterface::class);
+    $imageView = $this->createStub(ImageView::class);
+    $userView = $this->createStub(UserView::class);
+
     $imageId = 'image-many-tags';
     $userId = 'user-many';
     $userUuid = 'user-many';
-    
+
     $tags = [];
     for ($i = 0; $i < 100; $i++) {
-      $tags[] = $this->createMock(TagView::class);
+      $tags[] = $this->createStub(TagView::class);
     }
-    
+
     $userView->method('getUuid')->willReturn($userUuid);
     $imageView->method('getUser')->willReturn($userView);
-    
+
     $imageRepository->method('oneById')->willReturn($imageView);
     $tagRepository->method('findByImageId')->willReturn($tags);
 

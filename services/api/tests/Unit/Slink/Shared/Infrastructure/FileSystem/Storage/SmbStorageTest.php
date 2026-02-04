@@ -10,6 +10,7 @@ use Icewind\SMB\IShare;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Slink\Image\Domain\Service\ImageTransformerInterface;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
@@ -20,8 +21,8 @@ final class SmbStorageTest extends TestCase {
   private SmbStorage $storage;
 
   protected function setUp(): void {
-    $imageTransformer = $this->createMock(ImageTransformerInterface::class);
-    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $imageTransformer = $this->createStub(ImageTransformerInterface::class);
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     
     $config = [
       'host' => 'test-host',
@@ -221,8 +222,8 @@ final class SmbStorageTest extends TestCase {
     $this->storage->delete($fileName);
   }
 
-  private function createFileInfo(string $name, bool $isDirectory): IFileInfo&MockObject {
-    $fileInfo = $this->createMock(IFileInfo::class);
+  private function createFileInfo(string $name, bool $isDirectory): IFileInfo&Stub {
+    $fileInfo = $this->createStub(IFileInfo::class);
     $fileInfo->method('getName')->willReturn($name);
     $fileInfo->method('isDirectory')->willReturn($isDirectory);
     return $fileInfo;

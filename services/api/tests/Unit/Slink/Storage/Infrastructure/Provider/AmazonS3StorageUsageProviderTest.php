@@ -6,7 +6,6 @@ namespace Unit\Slink\Storage\Infrastructure\Provider;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 use Slink\Settings\Domain\Exception\S3BucketNotConfiguredException;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\Enum\StorageProvider;
@@ -14,11 +13,11 @@ use Slink\Storage\Domain\Exception\StorageUsageMetricsDisabledException;
 use Slink\Storage\Infrastructure\Provider\AmazonS3StorageUsageProvider;
 
 final class AmazonS3StorageUsageProviderTest extends TestCase {
-    private ConfigurationProviderInterface&MockObject $configurationProvider;
+    private ConfigurationProviderInterface $configurationProvider;
     private AmazonS3StorageUsageProvider $provider;
 
     protected function setUp(): void {
-        $this->configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
+        $this->configurationProvider = $this->createStub(ConfigurationProviderInterface::class);
         $this->provider = new AmazonS3StorageUsageProvider($this->configurationProvider);
     }
 
@@ -36,41 +35,50 @@ final class AmazonS3StorageUsageProviderTest extends TestCase {
 
     #[Test]
     public function itThrowsExceptionWhenBucketIsNotConfigured(): void {
-        $this->configurationProvider
+        $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
+        $configurationProvider
             ->expects($this->once())
             ->method('get')
             ->with('storage.adapter.s3.bucket')
             ->willReturn(null);
 
+        $provider = new AmazonS3StorageUsageProvider($configurationProvider);
+
         $this->expectException(S3BucketNotConfiguredException::class);
 
-        $this->provider->getUsage();
+        $provider->getUsage();
     }
 
     #[Test]
     public function itThrowsExceptionWhenBucketIsEmpty(): void {
-        $this->configurationProvider
+        $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
+        $configurationProvider
             ->expects($this->once())
             ->method('get')
             ->with('storage.adapter.s3.bucket')
             ->willReturn('');
 
+        $provider = new AmazonS3StorageUsageProvider($configurationProvider);
+
         $this->expectException(S3BucketNotConfiguredException::class);
 
-        $this->provider->getUsage();
+        $provider->getUsage();
     }
 
     #[Test]
     public function itThrowsMetricsDisabledExceptionWhenBucketIsConfigured(): void {
-        $this->configurationProvider
+        $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
+        $configurationProvider
             ->expects($this->once())
             ->method('get')
             ->with('storage.adapter.s3.bucket')
             ->willReturn('my-bucket');
 
+        $provider = new AmazonS3StorageUsageProvider($configurationProvider);
+
         $this->expectException(StorageUsageMetricsDisabledException::class);
         $this->expectExceptionMessage('S3 usage calculation disabled to avoid high API costs. Consider using CloudWatch metrics for accurate usage data.');
 
-        $this->provider->getUsage();
+        $provider->getUsage();
     }
 }

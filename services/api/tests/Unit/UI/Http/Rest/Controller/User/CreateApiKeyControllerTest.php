@@ -32,7 +32,7 @@ final class CreateApiKeyControllerTest extends TestCase {
     
     $command = new CreateApiKeyCommand($keyName, $expiresAt);
     
-    $user = $this->createMock(JwtUser::class);
+    $user = $this->createStub(JwtUser::class);
     $user->method('getIdentifier')->willReturn($userId);
     
     $response = $controller->__invoke($command, $user);
@@ -60,7 +60,7 @@ final class CreateApiKeyControllerTest extends TestCase {
     
     $command = new CreateApiKeyCommand($keyName);
     
-    $user = $this->createMock(JwtUser::class);
+    $user = $this->createStub(JwtUser::class);
     $user->method('getIdentifier')->willReturn($userId);
     
     $response = $controller->__invoke($command, $user);

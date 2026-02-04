@@ -15,7 +15,7 @@ use Slink\Image\Domain\ValueObject\ImageTransformationRequest;
 use Slink\Image\Domain\ValueObject\PartialImageDimensions;
 
 final class CropStrategyTest extends TestCase {
-    private ImageProcessorInterface&MockObject $imageProcessor;
+    private ImageProcessorInterface $imageProcessor;
     private CropStrategy $strategy;
 
     /**
@@ -23,8 +23,8 @@ final class CropStrategyTest extends TestCase {
      */
     protected function setUp(): void {
         parent::setUp();
-        
-        $this->imageProcessor = $this->createMock(ImageProcessorInterface::class);
+
+        $this->imageProcessor = $this->createStub(ImageProcessorInterface::class);
         $this->strategy = new CropStrategy($this->imageProcessor);
     }
 
@@ -75,18 +75,20 @@ final class CropStrategyTest extends TestCase {
         );
         $imageContent = 'image content';
 
-        $this->imageProcessor
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor
             ->expects($this->once())
             ->method('resize')
             ->willReturn('resized content');
 
-        $this->imageProcessor
+        $imageProcessor
             ->expects($this->once())
             ->method('crop')
             ->with('resized content', 400, 400, $this->anything(), $this->anything())
             ->willReturn('cropped content');
 
-        $result = $this->strategy->transform($imageContent, $originalDimensions, $request);
+        $strategy = new CropStrategy($imageProcessor);
+        $result = $strategy->transform($imageContent, $originalDimensions, $request);
 
         $this->assertEquals('cropped content', $result);
     }
@@ -101,17 +103,19 @@ final class CropStrategyTest extends TestCase {
         );
         $imageContent = 'image content';
 
-        $this->imageProcessor
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor
             ->expects($this->once())
             ->method('resize')
             ->willReturn('resized content');
 
-        $this->imageProcessor
+        $imageProcessor
             ->expects($this->once())
             ->method('crop')
             ->willReturn('cropped content');
 
-        $result = $this->strategy->transform($imageContent, $originalDimensions, $request);
+        $strategy = new CropStrategy($imageProcessor);
+        $result = $strategy->transform($imageContent, $originalDimensions, $request);
 
         $this->assertEquals('cropped content', $result);
     }
@@ -127,18 +131,20 @@ final class CropStrategyTest extends TestCase {
         );
         $imageContent = 'image content';
 
-        $this->imageProcessor
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor
             ->expects($this->once())
             ->method('resize')
             ->willReturn('resized content');
 
-        $this->imageProcessor
+        $imageProcessor
             ->expects($this->once())
             ->method('crop')
             ->with('resized content', 400, 300, $this->anything(), $this->anything())
             ->willReturn('cropped content');
 
-        $result = $this->strategy->transform($imageContent, $originalDimensions, $request);
+        $strategy = new CropStrategy($imageProcessor);
+        $result = $strategy->transform($imageContent, $originalDimensions, $request);
 
         $this->assertEquals('cropped content', $result);
     }
@@ -154,18 +160,20 @@ final class CropStrategyTest extends TestCase {
         );
         $imageContent = 'image content';
 
-        $this->imageProcessor
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor
             ->expects($this->once())
             ->method('resize')
             ->willReturn('resized content');
 
-        $this->imageProcessor
+        $imageProcessor
             ->expects($this->once())
             ->method('crop')
             ->with('resized content', 200, 150, $this->anything(), $this->anything())
             ->willReturn('cropped content');
 
-        $result = $this->strategy->transform($imageContent, $originalDimensions, $request);
+        $strategy = new CropStrategy($imageProcessor);
+        $result = $strategy->transform($imageContent, $originalDimensions, $request);
 
         $this->assertEquals('cropped content', $result);
     }
@@ -180,11 +188,12 @@ final class CropStrategyTest extends TestCase {
         );
         $imageContent = 'image content';
 
-        $this->imageProcessor
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor
             ->method('resize')
             ->willReturn('resized content');
 
-        $this->imageProcessor
+        $imageProcessor
             ->expects($this->once())
             ->method('crop')
             ->with(
@@ -196,7 +205,8 @@ final class CropStrategyTest extends TestCase {
             )
             ->willReturn('cropped content');
 
-        $result = $this->strategy->transform($imageContent, $originalDimensions, $request);
+        $strategy = new CropStrategy($imageProcessor);
+        $result = $strategy->transform($imageContent, $originalDimensions, $request);
 
         $this->assertEquals('cropped content', $result);
     }
@@ -207,10 +217,12 @@ final class CropStrategyTest extends TestCase {
         $request = new ImageTransformationRequest(crop: true, quality: 85);
         $imageContent = 'image content';
 
-        $this->imageProcessor->expects($this->never())->method('resize');
-        $this->imageProcessor->expects($this->never())->method('crop');
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor->expects($this->never())->method('resize');
+        $imageProcessor->expects($this->never())->method('crop');
 
-        $result = $this->strategy->transform($imageContent, $originalDimensions, $request);
+        $strategy = new CropStrategy($imageProcessor);
+        $result = $strategy->transform($imageContent, $originalDimensions, $request);
 
         $this->assertEquals('image content', $result);
     }

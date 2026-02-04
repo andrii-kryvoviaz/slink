@@ -90,18 +90,18 @@ final class AdminUserFactoryTest extends TestCase {
   }
 
   private function createFactory(string $username, string $email, string $password): AdminUserFactory {
-    $uniqueEmailSpec = $this->createMock(UniqueEmailSpecificationInterface::class);
+    $uniqueEmailSpec = $this->createStub(UniqueEmailSpecificationInterface::class);
     $uniqueEmailSpec->method('isUnique')->willReturn(true);
 
-    $uniqueUsernameSpec = $this->createMock(UniqueUsernameSpecificationInterface::class);
+    $uniqueUsernameSpec = $this->createStub(UniqueUsernameSpecificationInterface::class);
     $uniqueUsernameSpec->method('isUnique')->willReturn(true);
 
-    $uniqueDisplayNameSpec = $this->createMock(UniqueDisplayNameSpecificationInterface::class);
+    $uniqueDisplayNameSpec = $this->createStub(UniqueDisplayNameSpecificationInterface::class);
     $uniqueDisplayNameSpec->method('isUnique')->willReturn(true);
 
     $userCreationContext = new UserCreationContext($uniqueEmailSpec, $uniqueUsernameSpec, $uniqueDisplayNameSpec);
 
-    $userRepository = $this->createMock(UserStoreRepositoryInterface::class);
+    $userRepository = $this->createStub(UserStoreRepositoryInterface::class);
     $userRepository->method('getByUsername')->willReturn(null);
 
     return new AdminUserFactory($userCreationContext, $userRepository, $username, $email, $password);

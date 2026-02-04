@@ -16,7 +16,7 @@ final class EventWithEntityManagerTest extends TestCase {
   #[Test]
   public function itDecoratesEventWithEntityManager(): void {
     $originalEvent = $this->createMockEvent(['key' => 'value']);
-    $entityManager = $this->createMock(EntityManagerInterface::class);
+    $entityManager = $this->createStub(EntityManagerInterface::class);
 
     $decoratedEvent = EventWithEntityManager::decorate($originalEvent, $entityManager);
 
@@ -29,7 +29,7 @@ final class EventWithEntityManagerTest extends TestCase {
   public function itReturnsOriginalEventPayload(): void {
     $payload = ['key' => 'value', 'data' => 123];
     $originalEvent = $this->createMockEvent($payload);
-    $entityManager = $this->createMock(EntityManagerInterface::class);
+    $entityManager = $this->createStub(EntityManagerInterface::class);
 
     $decoratedEvent = EventWithEntityManager::decorate($originalEvent, $entityManager);
 
@@ -39,7 +39,7 @@ final class EventWithEntityManagerTest extends TestCase {
   #[Test]
   public function itImplementsSerializablePayload(): void {
     $originalEvent = $this->createMockEvent([]);
-    $entityManager = $this->createMock(EntityManagerInterface::class);
+    $entityManager = $this->createStub(EntityManagerInterface::class);
 
     $decoratedEvent = EventWithEntityManager::decorate($originalEvent, $entityManager);
 
@@ -49,7 +49,7 @@ final class EventWithEntityManagerTest extends TestCase {
   #[Test]
   public function itCreatesFromPayload(): void {
     $mockEvent = $this->createMockEvent(['test' => 'data']);
-    $mockEntityManager = $this->createMock(EntityManagerInterface::class);
+    $mockEntityManager = $this->createStub(EntityManagerInterface::class);
 
     $payload = [
       'event' => $mockEvent,
@@ -93,7 +93,7 @@ final class EventWithEntityManagerTest extends TestCase {
     ];
 
     $originalEvent = $this->createMockEvent($complexPayload);
-    $entityManager = $this->createMock(EntityManagerInterface::class);
+    $entityManager = $this->createStub(EntityManagerInterface::class);
 
     $decoratedEvent = EventWithEntityManager::decorate($originalEvent, $entityManager);
 
@@ -103,7 +103,7 @@ final class EventWithEntityManagerTest extends TestCase {
   #[Test]
   public function itHandlesEmptyPayload(): void {
     $originalEvent = $this->createMockEvent([]);
-    $entityManager = $this->createMock(EntityManagerInterface::class);
+    $entityManager = $this->createStub(EntityManagerInterface::class);
 
     $decoratedEvent = EventWithEntityManager::decorate($originalEvent, $entityManager);
 
@@ -113,7 +113,7 @@ final class EventWithEntityManagerTest extends TestCase {
   #[Test]
   public function itMaintainsEventIdentity(): void {
     $originalEvent = $this->createMockEvent(['id' => 'event-123']);
-    $entityManager = $this->createMock(EntityManagerInterface::class);
+    $entityManager = $this->createStub(EntityManagerInterface::class);
 
     $decoratedEvent = EventWithEntityManager::decorate($originalEvent, $entityManager);
 
@@ -124,7 +124,7 @@ final class EventWithEntityManagerTest extends TestCase {
   #[Test]
   public function itMaintainsEntityManagerIdentity(): void {
     $originalEvent = $this->createMockEvent([]);
-    $entityManager = $this->createMock(EntityManagerInterface::class);
+    $entityManager = $this->createStub(EntityManagerInterface::class);
 
     $decoratedEvent = EventWithEntityManager::decorate($originalEvent, $entityManager);
 
@@ -135,7 +135,7 @@ final class EventWithEntityManagerTest extends TestCase {
    * @param array<string, mixed> $payload
    */
   private function createMockEvent(array $payload): SerializablePayload {
-    $event = $this->createMock(SerializablePayload::class);
+    $event = $this->createStub(SerializablePayload::class);
     $event->method('toPayload')->willReturn($payload);
 
     return $event;

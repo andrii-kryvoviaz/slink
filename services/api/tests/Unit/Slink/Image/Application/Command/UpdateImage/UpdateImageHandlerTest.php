@@ -28,12 +28,12 @@ final class UpdateImageHandlerTest extends TestCase {
     $userId = '123e4567-e89b-12d3-a456-426614174000';
     $command = new UpdateImageCommand( 'New Description', true);
     
-    $user = $this->createMock(JwtUser::class);
+    $user = $this->createStub(JwtUser::class);
     $user->method('getIdentifier')->willReturn($userId);
     
     $imageUserId = ID::fromString($userId);
     $image = $this->createMock(Image::class);
-    $attributes = $this->createMock(ImageAttributes::class);
+    $attributes = $this->createStub(ImageAttributes::class);
     $image->method('getAttributes')->willReturn($attributes);
     $image->method('aggregateRootVersion')->willReturn(1);
     $image->method('getUserId')->willReturn($imageUserId);
@@ -43,7 +43,7 @@ final class UpdateImageHandlerTest extends TestCase {
     $imageRepository->method('get')->willReturn($image);
     $imageRepository->expects($this->once())->method('store')->with($image);
     
-    $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $configurationProvider = $this->createStub(ConfigurationProviderInterface::class);
     
     $handler = new UpdateImageHandler($configurationProvider, $imageRepository);
     $handler($command, $user, '123');
@@ -55,14 +55,14 @@ final class UpdateImageHandlerTest extends TestCase {
     
     $command = new UpdateImageCommand('New Description', true);
     
-    $image = $this->createMock(Image::class);
+    $image = $this->createStub(Image::class);
     $image->method('aggregateRootVersion')->willReturn(1);
-    
-    $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
+
+    $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);
-    
-    $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
-    
+
+    $configurationProvider = $this->createStub(ConfigurationProviderInterface::class);
+
     $handler = new UpdateImageHandler($configurationProvider, $imageRepository);
     $handler($command, null, '123');
   }
@@ -75,19 +75,19 @@ final class UpdateImageHandlerTest extends TestCase {
     $differentUserId = '987e6543-e21b-34c5-b654-321098765432';
     $command = new UpdateImageCommand('New Description', true);
     
-    $user = $this->createMock(JwtUser::class);
+    $user = $this->createStub(JwtUser::class);
     $user->method('getIdentifier')->willReturn($userId);
     
     $imageUserId = ID::fromString($differentUserId);
-    $image = $this->createMock(Image::class);
+    $image = $this->createStub(Image::class);
     $image->method('aggregateRootVersion')->willReturn(1);
     $image->method('getUserId')->willReturn($imageUserId);
-    
-    $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
+
+    $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);
-    
-    $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
-    
+
+    $configurationProvider = $this->createStub(ConfigurationProviderInterface::class);
+
     $handler = new UpdateImageHandler($configurationProvider, $imageRepository);
     $handler($command, $user, '123');
   }
@@ -99,18 +99,18 @@ final class UpdateImageHandlerTest extends TestCase {
     $userId = '123e4567-e89b-12d3-a456-426614174000';
     $command = new UpdateImageCommand('New Description', true);
     
-    $user = $this->createMock(JwtUser::class);
+    $user = $this->createStub(JwtUser::class);
     $user->method('getIdentifier')->willReturn($userId);
     
-    $image = $this->createMock(Image::class);
+    $image = $this->createStub(Image::class);
     $image->method('aggregateRootVersion')->willReturn(1);
     $image->method('getUserId')->willReturn(null);
-    
-    $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
+
+    $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);
-    
-    $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
-    
+
+    $configurationProvider = $this->createStub(ConfigurationProviderInterface::class);
+
     $handler = new UpdateImageHandler($configurationProvider, $imageRepository);
     $handler($command, $user, '123');
   }

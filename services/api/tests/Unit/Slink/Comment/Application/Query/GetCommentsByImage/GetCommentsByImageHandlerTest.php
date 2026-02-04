@@ -17,11 +17,11 @@ use Slink\User\Infrastructure\ReadModel\View\UserView;
 
 final class GetCommentsByImageHandlerTest extends TestCase {
   private function createMockCommentView(): CommentView {
-    $userView = $this->createMock(UserView::class);
+    $userView = $this->createStub(UserView::class);
     $userView->method('getUuid')->willReturn('user-123');
     $userView->method('getDisplayName')->willReturn('Test User');
     
-    $mock = $this->createMock(CommentView::class);
+    $mock = $this->createStub(CommentView::class);
     $mock->method('getId')->willReturn('comment-123');
     $mock->method('getContent')->willReturn('Test content');
     $mock->method('getDisplayContent')->willReturn('Test content');
@@ -42,7 +42,7 @@ final class GetCommentsByImageHandlerTest extends TestCase {
     $commentRepository = $this->createMock(CommentRepositoryInterface::class);
     $imageId = 'image-123';
 
-    $paginator = $this->createMock(Paginator::class);
+    $paginator = $this->createStub(Paginator::class);
     $paginator->method('getIterator')->willReturn(new \ArrayIterator([]));
     $paginator->method('count')->willReturn(0);
 
@@ -67,7 +67,7 @@ final class GetCommentsByImageHandlerTest extends TestCase {
     $page = 2;
     $limit = 30;
 
-    $paginator = $this->createMock(Paginator::class);
+    $paginator = $this->createStub(Paginator::class);
     $paginator->method('getIterator')->willReturn(new \ArrayIterator([]));
     $paginator->method('count')->willReturn(0);
 
@@ -85,11 +85,11 @@ final class GetCommentsByImageHandlerTest extends TestCase {
 
   #[Test]
   public function itReturnsCorrectTotalCount(): void {
-    $commentRepository = $this->createMock(CommentRepositoryInterface::class);
+    $commentRepository = $this->createStub(CommentRepositoryInterface::class);
     $imageId = 'image-123';
     $totalCount = 15;
 
-    $paginator = $this->createMock(Paginator::class);
+    $paginator = $this->createStub(Paginator::class);
     $paginator->method('getIterator')->willReturn(new \ArrayIterator([]));
     $paginator->method('count')->willReturn($totalCount);
 
@@ -106,14 +106,14 @@ final class GetCommentsByImageHandlerTest extends TestCase {
 
   #[Test]
   public function itTransformsCommentsToItems(): void {
-    $commentRepository = $this->createMock(CommentRepositoryInterface::class);
+    $commentRepository = $this->createStub(CommentRepositoryInterface::class);
     $imageId = 'image-123';
 
     $comment1 = $this->createMockCommentView();
     $comment2 = $this->createMockCommentView();
     $comment3 = $this->createMockCommentView();
 
-    $paginator = $this->createMock(Paginator::class);
+    $paginator = $this->createStub(Paginator::class);
     $paginator->method('getIterator')->willReturn(new \ArrayIterator([$comment1, $comment2, $comment3]));
     $paginator->method('count')->willReturn(3);
 
@@ -130,10 +130,10 @@ final class GetCommentsByImageHandlerTest extends TestCase {
 
   #[Test]
   public function itReturnsEmptyCollectionWhenNoComments(): void {
-    $commentRepository = $this->createMock(CommentRepositoryInterface::class);
+    $commentRepository = $this->createStub(CommentRepositoryInterface::class);
     $imageId = 'image-with-no-comments';
 
-    $paginator = $this->createMock(Paginator::class);
+    $paginator = $this->createStub(Paginator::class);
     $paginator->method('getIterator')->willReturn(new \ArrayIterator([]));
     $paginator->method('count')->willReturn(0);
 
@@ -154,7 +154,7 @@ final class GetCommentsByImageHandlerTest extends TestCase {
     $commentRepository = $this->createMock(CommentRepositoryInterface::class);
     $imageId = 'specific-image-id-12345';
 
-    $paginator = $this->createMock(Paginator::class);
+    $paginator = $this->createStub(Paginator::class);
     $paginator->method('getIterator')->willReturn(new \ArrayIterator([]));
     $paginator->method('count')->willReturn(0);
 

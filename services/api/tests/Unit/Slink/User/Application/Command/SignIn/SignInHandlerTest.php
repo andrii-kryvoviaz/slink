@@ -28,18 +28,22 @@ final class SignInHandlerTest extends TestCase {
    */
   #[Test]
   public function itCallsUserSignInMethod(): void {
-    $user = $this->createMockUser();
+    $user = $this->createMock(User::class);
+    $user->method('getStatus')->willReturn(UserStatus::Active);
     $user->expects($this->once())
       ->method('signIn')
       ->with('password123');
 
+    $refreshTokenSet = $this->createStub(RefreshTokenSet::class);
+    $this->setPrivateProperty($user, 'refreshToken', $refreshTokenSet);
+
     $tokenPair = $this->createMockTokenPair();
 
-    $userStore = $this->createMock(UserStoreRepositoryInterface::class);
+    $userStore = $this->createStub(UserStoreRepositoryInterface::class);
     $userStore->method('getByUsername')->willReturn($user);
     $userStore->method('store');
 
-    $authProvider = $this->createMock(AuthProviderInterface::class);
+    $authProvider = $this->createStub(AuthProviderInterface::class);
     $authProvider->method('generateTokenPair')->willReturn($tokenPair);
 
     $handler = new SignInHandler($userStore, $authProvider);
@@ -119,10 +123,10 @@ final class SignInHandlerTest extends TestCase {
 
     $user = $this->createMockUser(UserStatus::Banned);
 
-    $userStore = $this->createMock(UserStoreRepositoryInterface::class);
+    $userStore = $this->createStub(UserStoreRepositoryInterface::class);
     $userStore->method('getByUsername')->willReturn($user);
 
-    $authProvider = $this->createMock(AuthProviderInterface::class);
+    $authProvider = $this->createStub(AuthProviderInterface::class);
 
     $handler = new SignInHandler($userStore, $authProvider);
 
@@ -139,10 +143,10 @@ final class SignInHandlerTest extends TestCase {
 
     $user = $this->createMockUser(UserStatus::Deleted);
 
-    $userStore = $this->createMock(UserStoreRepositoryInterface::class);
+    $userStore = $this->createStub(UserStoreRepositoryInterface::class);
     $userStore->method('getByUsername')->willReturn($user);
 
-    $authProvider = $this->createMock(AuthProviderInterface::class);
+    $authProvider = $this->createStub(AuthProviderInterface::class);
 
     $handler = new SignInHandler($userStore, $authProvider);
 
@@ -159,10 +163,10 @@ final class SignInHandlerTest extends TestCase {
 
     $user = $this->createMockUser(UserStatus::Inactive);
 
-    $userStore = $this->createMock(UserStoreRepositoryInterface::class);
+    $userStore = $this->createStub(UserStoreRepositoryInterface::class);
     $userStore->method('getByUsername')->willReturn($user);
 
-    $authProvider = $this->createMock(AuthProviderInterface::class);
+    $authProvider = $this->createStub(AuthProviderInterface::class);
 
     $handler = new SignInHandler($userStore, $authProvider);
 
@@ -179,10 +183,10 @@ final class SignInHandlerTest extends TestCase {
 
     $user = $this->createMockUser(UserStatus::Suspended);
 
-    $userStore = $this->createMock(UserStoreRepositoryInterface::class);
+    $userStore = $this->createStub(UserStoreRepositoryInterface::class);
     $userStore->method('getByUsername')->willReturn($user);
 
-    $authProvider = $this->createMock(AuthProviderInterface::class);
+    $authProvider = $this->createStub(AuthProviderInterface::class);
 
     $handler = new SignInHandler($userStore, $authProvider);
 
@@ -194,10 +198,10 @@ final class SignInHandlerTest extends TestCase {
   public function itThrowsExceptionWhenUserNotFound(): void {
     $this->expectException(InvalidCredentialsException::class);
 
-    $userStore = $this->createMock(UserStoreRepositoryInterface::class);
+    $userStore = $this->createStub(UserStoreRepositoryInterface::class);
     $userStore->method('getByUsername')->willReturn(null);
 
-    $authProvider = $this->createMock(AuthProviderInterface::class);
+    $authProvider = $this->createStub(AuthProviderInterface::class);
 
     $handler = new SignInHandler($userStore, $authProvider);
 
@@ -206,7 +210,7 @@ final class SignInHandlerTest extends TestCase {
   }
 
   private function createMockTokenPair(): TokenPair {
-    $tokenPair = $this->createMock(TokenPair::class);
+    $tokenPair = $this->createStub(TokenPair::class);
     $futureTimestamp = time() + 3600;
     $tokenPair->method('getRefreshToken')->willReturn('550e8400-e29b-41d4-a716-446655440000.' . $futureTimestamp);
     $tokenPair->method('getAccessToken')->willReturn('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9');
@@ -214,10 +218,10 @@ final class SignInHandlerTest extends TestCase {
   }
 
   private function createMockUser(UserStatus $status = UserStatus::Active): mixed {
-    $user = $this->createMock(User::class);
+    $user = $this->createStub(User::class);
     $user->method('getStatus')->willReturn($status);
 
-    $refreshTokenSet = $this->createMock(RefreshTokenSet::class);
+    $refreshTokenSet = $this->createStub(RefreshTokenSet::class);
     $this->setPrivateProperty($user, 'refreshToken', $refreshTokenSet);
 
     return $user;

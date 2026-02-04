@@ -106,7 +106,7 @@ final class GetCommentsControllerTest extends TestCase {
 
   #[Test]
   public function itReturnsCollectionResponse(): void {
-    $queryBus = $this->createMock(QueryBusInterface::class);
+    $queryBus = $this->createStub(QueryBusInterface::class);
     $imageId = 'image-123';
     $collection = new Collection(5, 50, 0, [
       Item::fromPayload('comment', ['id' => 'comment-1', 'content' => 'First comment']),

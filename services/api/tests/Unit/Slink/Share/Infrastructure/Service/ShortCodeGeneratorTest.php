@@ -5,17 +5,16 @@ declare(strict_types=1);
 namespace Tests\Unit\Slink\Share\Infrastructure\Service;
 
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Slink\Share\Domain\Repository\ShortUrlRepositoryInterface;
 use Slink\Share\Infrastructure\Service\ShortCodeGenerator;
 
 final class ShortCodeGeneratorTest extends TestCase {
-  private MockObject&ShortUrlRepositoryInterface $shortUrlRepository;
+  private ShortUrlRepositoryInterface $shortUrlRepository;
   private ShortCodeGenerator $generator;
 
   protected function setUp(): void {
-    $this->shortUrlRepository = $this->createMock(ShortUrlRepositoryInterface::class);
+    $this->shortUrlRepository = $this->createStub(ShortUrlRepositoryInterface::class);
     $this->generator = new ShortCodeGenerator($this->shortUrlRepository);
   }
 
@@ -43,12 +42,14 @@ final class ShortCodeGeneratorTest extends TestCase {
 
   #[Test]
   public function itRetriesOnCollision(): void {
-    $this->shortUrlRepository
+    $shortUrlRepository = $this->createMock(ShortUrlRepositoryInterface::class);
+    $shortUrlRepository
       ->expects($this->exactly(3))
       ->method('existsByShortCode')
       ->willReturnOnConsecutiveCalls(true, true, false);
 
-    $code = $this->generator->generate();
+    $generator = new ShortCodeGenerator($shortUrlRepository);
+    $code = $generator->generate();
 
     $this->assertEquals(8, strlen($code));
   }

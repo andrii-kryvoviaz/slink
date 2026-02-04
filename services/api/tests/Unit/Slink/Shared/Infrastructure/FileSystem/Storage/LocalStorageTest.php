@@ -20,8 +20,8 @@ final class LocalStorageTest extends TestCase {
     $this->testDir = sys_get_temp_dir() . '/slink_test_' . uniqid();
     mkdir($this->testDir, 0755, true);
 
-    $imageTransformer = $this->createMock(ImageTransformerInterface::class);
-    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $imageTransformer = $this->createStub(ImageTransformerInterface::class);
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')
       ->with('storage.adapter.local.dir')
       ->willReturn($this->testDir);

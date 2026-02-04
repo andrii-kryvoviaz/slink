@@ -44,9 +44,9 @@ final class LicenseSyncServiceTest extends TestCase {
             ->with('image.enableLicensing')
             ->willReturn(true);
         
-        $imageView1 = $this->createMock(ImageView::class);
+        $imageView1 = $this->createStub(ImageView::class);
         $imageView1->method('getUuid')->willReturn(ID::generate()->toString());
-        $imageView2 = $this->createMock(ImageView::class);
+        $imageView2 = $this->createStub(ImageView::class);
         $imageView2->method('getUuid')->willReturn(ID::generate()->toString());
         
         $this->imageRepository->expects($this->once())
@@ -123,7 +123,7 @@ final class LicenseSyncServiceTest extends TestCase {
             ->with('image.enableLicensing')
             ->willReturn(true);
         
-        $imageView = $this->createMock(ImageView::class);
+        $imageView = $this->createStub(ImageView::class);
         $imageView->method('getUuid')->willReturn(ID::generate()->toString());
         
         $this->imageRepository->expects($this->once())

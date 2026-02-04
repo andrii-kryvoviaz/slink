@@ -47,7 +47,7 @@ final class MarkNotificationReadControllerTest extends TestCase {
   #[Test]
   public function itPassesNotificationIdToCommand(): void {
     $commandBus = $this->createMock(CommandBusInterface::class);
-    $user = $this->createMock(JwtUser::class);
+    $user = $this->createStub(JwtUser::class);
     $notificationId = 'specific-notification-id';
 
     $user->method('getIdentifier')->willReturn('user-123');
@@ -113,8 +113,8 @@ final class MarkNotificationReadControllerTest extends TestCase {
 
   #[Test]
   public function itReturnsEmptyResponse(): void {
-    $commandBus = $this->createMock(CommandBusInterface::class);
-    $user = $this->createMock(JwtUser::class);
+    $commandBus = $this->createStub(CommandBusInterface::class);
+    $user = $this->createStub(JwtUser::class);
 
     $user->method('getIdentifier')->willReturn('user-123');
     $commandBus->method('handle');

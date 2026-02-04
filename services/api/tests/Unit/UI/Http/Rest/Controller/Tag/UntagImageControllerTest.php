@@ -17,8 +17,8 @@ final class UntagImageControllerTest extends TestCase {
   #[Test]
   public function itUntagsImageSuccessfully(): void {
     $commandBus = $this->createMock(CommandBusInterface::class);
-    $user = $this->createMock(UserInterface::class);
-    
+    $user = $this->createStub(UserInterface::class);
+
     $user->method('getIdentifier')->willReturn('user-789');
     $commandBus->expects($this->once())->method('handle');
 
@@ -64,9 +64,9 @@ final class UntagImageControllerTest extends TestCase {
 
   #[Test]
   public function itReturnsEmptyResponse(): void {
-    $commandBus = $this->createMock(CommandBusInterface::class);
-    $user = $this->createMock(UserInterface::class);
-    
+    $commandBus = $this->createStub(CommandBusInterface::class);
+    $user = $this->createStub(UserInterface::class);
+
     $user->method('getIdentifier')->willReturn('user-empty');
     $commandBus->method('handle');
 

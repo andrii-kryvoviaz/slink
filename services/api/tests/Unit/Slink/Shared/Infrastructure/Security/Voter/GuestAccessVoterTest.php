@@ -18,8 +18,8 @@ final class GuestAccessVoterTest extends TestCase {
     $configProvider = $this->createMock(ConfigurationProviderInterface::class);
     $configProvider->expects($this->never())->method('get');
     
-    $user = $this->createMock(UserInterface::class);
-    $token = $this->createMock(TokenInterface::class);
+    $user = $this->createStub(UserInterface::class);
+    $token = $this->createStub(TokenInterface::class);
     $token->method('getUser')->willReturn($user);
     
     $voter = new GuestAccessVoter($configProvider);
@@ -34,8 +34,8 @@ final class GuestAccessVoterTest extends TestCase {
     $configProvider = $this->createMock(ConfigurationProviderInterface::class);
     $configProvider->expects($this->never())->method('get');
     
-    $user = $this->createMock(UserInterface::class);
-    $token = $this->createMock(TokenInterface::class);
+    $user = $this->createStub(UserInterface::class);
+    $token = $this->createStub(TokenInterface::class);
     $token->method('getUser')->willReturn($user);
     
     $voter = new GuestAccessVoter($configProvider);
@@ -47,12 +47,12 @@ final class GuestAccessVoterTest extends TestCase {
   
   #[Test]
   public function itGrantsUploadAccessForGuestUploadsWhenEnabled(): void {
-    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')
       ->with('access.allowGuestUploads')
       ->willReturn(true);
-    
-    $token = $this->createMock(TokenInterface::class);
+
+    $token = $this->createStub(TokenInterface::class);
     $token->method('getUser')->willReturn(null);
     
     $voter = new GuestAccessVoter($configProvider);
@@ -64,12 +64,12 @@ final class GuestAccessVoterTest extends TestCase {
   
   #[Test]
   public function itDeniesUploadAccessForGuestUploadsWhenDisabled(): void {
-    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')
       ->with('access.allowGuestUploads')
       ->willReturn(false);
-    
-    $token = $this->createMock(TokenInterface::class);
+
+    $token = $this->createStub(TokenInterface::class);
     $token->method('getUser')->willReturn(null);
     
     $voter = new GuestAccessVoter($configProvider);
@@ -81,12 +81,12 @@ final class GuestAccessVoterTest extends TestCase {
   
   #[Test]
   public function itGrantsViewAccessForGuestViewingWhenEnabled(): void {
-    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')
       ->with('access.allowUnauthenticatedAccess')
       ->willReturn(true);
-    
-    $token = $this->createMock(TokenInterface::class);
+
+    $token = $this->createStub(TokenInterface::class);
     $token->method('getUser')->willReturn(null);
     
     $voter = new GuestAccessVoter($configProvider);
@@ -98,12 +98,12 @@ final class GuestAccessVoterTest extends TestCase {
   
   #[Test]
   public function itDeniesViewAccessForGuestViewingWhenDisabled(): void {
-    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')
       ->with('access.allowUnauthenticatedAccess')
       ->willReturn(false);
-    
-    $token = $this->createMock(TokenInterface::class);
+
+    $token = $this->createStub(TokenInterface::class);
     $token->method('getUser')->willReturn(null);
     
     $voter = new GuestAccessVoter($configProvider);
@@ -115,14 +115,14 @@ final class GuestAccessVoterTest extends TestCase {
   
   #[Test]
   public function itHandlesBothAttributesIndependently(): void {
-    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')
       ->willReturnMap([
         ['access.allowGuestUploads', true],
         ['access.allowUnauthenticatedAccess', true],
       ]);
-    
-    $token = $this->createMock(TokenInterface::class);
+
+    $token = $this->createStub(TokenInterface::class);
     $token->method('getUser')->willReturn(null);
     
     $voter = new GuestAccessVoter($configProvider);
@@ -136,12 +136,12 @@ final class GuestAccessVoterTest extends TestCase {
   
   #[Test]
   public function itDeniesViewAccessWhenOnlyGuestUploadsIsEnabled(): void {
-    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')
       ->with('access.allowUnauthenticatedAccess')
       ->willReturn(false);
-    
-    $token = $this->createMock(TokenInterface::class);
+
+    $token = $this->createStub(TokenInterface::class);
     $token->method('getUser')->willReturn(null);
     
     $voter = new GuestAccessVoter($configProvider);
@@ -153,12 +153,12 @@ final class GuestAccessVoterTest extends TestCase {
   
   #[Test]
   public function itDeniesUploadAccessWhenOnlyGuestViewingIsEnabled(): void {
-    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')
       ->with('access.allowGuestUploads')
       ->willReturn(false);
-    
-    $token = $this->createMock(TokenInterface::class);
+
+    $token = $this->createStub(TokenInterface::class);
     $token->method('getUser')->willReturn(null);
     
     $voter = new GuestAccessVoter($configProvider);
@@ -170,10 +170,10 @@ final class GuestAccessVoterTest extends TestCase {
 
   #[Test]
   public function itAbstainsForUnsupportedAttribute(): void {
-    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
-    
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
+
     $voter = new GuestAccessVoter($configProvider);
-    $token = $this->createMock(TokenInterface::class);
+    $token = $this->createStub(TokenInterface::class);
     
     $result = $voter->vote($token, null, ['UNSUPPORTED_ATTRIBUTE']);
     
@@ -182,13 +182,13 @@ final class GuestAccessVoterTest extends TestCase {
   
   #[Test]
   public function itSupportsGuestUploadAllowedAttribute(): void {
-    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')
       ->with('access.allowGuestUploads')
       ->willReturn(false);
-      
+
     $voter = new GuestAccessVoter($configProvider);
-    $token = $this->createMock(TokenInterface::class);
+    $token = $this->createStub(TokenInterface::class);
     $token->method('getUser')->willReturn(null);
     
     $result = $voter->vote($token, null, [GuestAccessVoter::GUEST_UPLOAD_ALLOWED]);
@@ -198,13 +198,13 @@ final class GuestAccessVoterTest extends TestCase {
   
   #[Test]
   public function itSupportsGuestViewAllowedAttribute(): void {
-    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')
       ->with('access.allowUnauthenticatedAccess')
       ->willReturn(false);
-      
+
     $voter = new GuestAccessVoter($configProvider);
-    $token = $this->createMock(TokenInterface::class);
+    $token = $this->createStub(TokenInterface::class);
     $token->method('getUser')->willReturn(null);
     
     $result = $voter->vote($token, null, [GuestAccessVoter::GUEST_VIEW_ALLOWED]);

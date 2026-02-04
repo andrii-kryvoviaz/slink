@@ -34,7 +34,7 @@ final class GetUnreadCountHandlerTest extends TestCase {
 
   #[Test]
   public function itReturnsZeroWhenNoUnreadNotifications(): void {
-    $notificationRepository = $this->createMock(NotificationRepositoryInterface::class);
+    $notificationRepository = $this->createStub(NotificationRepositoryInterface::class);
     $userId = 'user-123';
 
     $notificationRepository->method('countUnreadByUserId')->willReturn(0);
@@ -67,7 +67,7 @@ final class GetUnreadCountHandlerTest extends TestCase {
 
   #[Test]
   public function itReturnsHighUnreadCount(): void {
-    $notificationRepository = $this->createMock(NotificationRepositoryInterface::class);
+    $notificationRepository = $this->createStub(NotificationRepositoryInterface::class);
     $userId = 'user-123';
     $highCount = 999;
 

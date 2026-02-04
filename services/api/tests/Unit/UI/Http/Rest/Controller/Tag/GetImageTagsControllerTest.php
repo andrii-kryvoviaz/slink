@@ -19,7 +19,7 @@ final class GetImageTagsControllerTest extends TestCase {
   #[Test]
   public function itReturnsImageTags(): void {
     $queryBus = $this->createMock(QueryBusInterface::class);
-    $user = $this->createMock(UserInterface::class);
+    $user = $this->createStub(UserInterface::class);
     $collection = new Collection(1, 2, 2, []);
     
     $user->method('getIdentifier')->willReturn('user-123');
@@ -45,7 +45,7 @@ final class GetImageTagsControllerTest extends TestCase {
   #[Test]
   public function itCreatesQueryWithCorrectImageId(): void {
     $queryBus = $this->createMock(QueryBusInterface::class);
-    $user = $this->createMock(UserInterface::class);
+    $user = $this->createStub(UserInterface::class);
     $collection = new Collection(1, 0, 0, []);
     
     $user->method('getIdentifier')->willReturn('user-456');
@@ -69,10 +69,10 @@ final class GetImageTagsControllerTest extends TestCase {
 
   #[Test]
   public function itReturnsCollectionResponse(): void {
-    $queryBus = $this->createMock(QueryBusInterface::class);
-    $user = $this->createMock(UserInterface::class);
+    $queryBus = $this->createStub(QueryBusInterface::class);
+    $user = $this->createStub(UserInterface::class);
     $collection = new Collection(1, 3, 3, []);
-    
+
     $user->method('getIdentifier')->willReturn('user-789');
     $queryBus->method('ask')->willReturn($collection);
 
@@ -87,10 +87,10 @@ final class GetImageTagsControllerTest extends TestCase {
 
   #[Test]
   public function itHandlesEmptyTagList(): void {
-    $queryBus = $this->createMock(QueryBusInterface::class);
-    $user = $this->createMock(UserInterface::class);
+    $queryBus = $this->createStub(QueryBusInterface::class);
+    $user = $this->createStub(UserInterface::class);
     $collection = new Collection(1, 0, 0, []);
-    
+
     $user->method('getIdentifier')->willReturn('user-empty');
     $queryBus->method('ask')->willReturn($collection);
 

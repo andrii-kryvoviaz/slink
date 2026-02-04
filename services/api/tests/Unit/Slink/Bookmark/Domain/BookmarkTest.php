@@ -57,7 +57,7 @@ final class BookmarkTest extends TestCase {
       ->with($imageId, $userId)
       ->willThrowException(new SelfBookmarkException());
 
-    $publicSpecification = $this->createMock(PublicImageBookmarkSpecificationInterface::class);
+    $publicSpecification = $this->createStub(PublicImageBookmarkSpecificationInterface::class);
 
     $context = new BookmarkCreationContext($specification, $publicSpecification);
 
@@ -84,7 +84,7 @@ final class BookmarkTest extends TestCase {
       ->method('ensureNotSelfBookmark')
       ->with($imageId, $userId);
 
-    $publicSpecification = $this->createMock(PublicImageBookmarkSpecificationInterface::class);
+    $publicSpecification = $this->createStub(PublicImageBookmarkSpecificationInterface::class);
 
     $context = new BookmarkCreationContext($specification, $publicSpecification);
 
@@ -100,7 +100,7 @@ final class BookmarkTest extends TestCase {
     $imageId = ID::generate();
     $userId = ID::generate();
 
-    $selfBookmarkSpecification = $this->createMock(SelfBookmarkSpecificationInterface::class);
+    $selfBookmarkSpecification = $this->createStub(SelfBookmarkSpecificationInterface::class);
     $publicSpecification = $this->createMock(PublicImageBookmarkSpecificationInterface::class);
     $publicSpecification
       ->expects($this->once())
@@ -150,8 +150,8 @@ final class BookmarkTest extends TestCase {
   }
 
   private function createContext(): BookmarkCreationContext {
-    $specification = $this->createMock(SelfBookmarkSpecificationInterface::class);
-    $publicSpecification = $this->createMock(PublicImageBookmarkSpecificationInterface::class);
+    $specification = $this->createStub(SelfBookmarkSpecificationInterface::class);
+    $publicSpecification = $this->createStub(PublicImageBookmarkSpecificationInterface::class);
 
     return new BookmarkCreationContext($specification, $publicSpecification);
   }

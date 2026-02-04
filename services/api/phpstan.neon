@@ -18,3 +18,11 @@ parameters:
             message: '#^Return type of call to method PHPUnit\\Framework\\TestCase\:\:createMock\(\) contains unresolvable type\.$#'
             paths:
                 - tests/*
+        -
+            message: '#^Return type of call to method PHPUnit\\Framework\\TestCase\:\:createStub\(\) contains unresolvable type\.$#'
+            paths:
+                - tests/*
+        -
+            message: '#^Call to an undefined method .+\:\:method\(\)\.$#'
+            paths:
+                - tests/*

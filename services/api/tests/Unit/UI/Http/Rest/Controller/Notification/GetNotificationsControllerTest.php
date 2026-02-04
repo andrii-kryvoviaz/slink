@@ -80,7 +80,7 @@ final class GetNotificationsControllerTest extends TestCase {
   #[Test]
   public function itHandlesPaginationParameters(): void {
     $queryBus = $this->createMock(QueryBusInterface::class);
-    $user = $this->createMock(JwtUser::class);
+    $user = $this->createStub(JwtUser::class);
     $page = 3;
     $limit = 10;
     $collection = new Collection(50, $limit, ($page - 1) * $limit, []);
@@ -107,7 +107,7 @@ final class GetNotificationsControllerTest extends TestCase {
   #[Test]
   public function itUsesDefaultPaginationValues(): void {
     $queryBus = $this->createMock(QueryBusInterface::class);
-    $user = $this->createMock(JwtUser::class);
+    $user = $this->createStub(JwtUser::class);
     $collection = new Collection(0, 20, 0, []);
 
     $user->method('getIdentifier')->willReturn('user-123');
@@ -131,8 +131,8 @@ final class GetNotificationsControllerTest extends TestCase {
 
   #[Test]
   public function itReturnsCollectionResponse(): void {
-    $queryBus = $this->createMock(QueryBusInterface::class);
-    $user = $this->createMock(JwtUser::class);
+    $queryBus = $this->createStub(QueryBusInterface::class);
+    $user = $this->createStub(JwtUser::class);
     $collection = new Collection(2, 20, 0, [
       Item::fromPayload('notification', ['id' => 'notif-1', 'type' => 'comment']),
       Item::fromPayload('notification', ['id' => 'notif-2', 'type' => 'comment_reply']),

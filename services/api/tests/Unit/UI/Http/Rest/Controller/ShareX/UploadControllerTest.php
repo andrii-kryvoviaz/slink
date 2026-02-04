@@ -47,11 +47,11 @@ final class UploadControllerTest extends TestCase {
       'id' => $imageId
     ];
     
-    $mockFile = $this->createMock(File::class);
+    $mockFile = $this->createStub(File::class);
     $mockFile->method('guessExtension')->willReturn('jpg');
     
     $command = $this->createMock(UploadImageCommand::class);
-    $envelope = $this->createMock(\Symfony\Component\Messenger\Envelope::class);
+    $envelope = $this->createStub(\Symfony\Component\Messenger\Envelope::class);
     
     $command->expects($this->once())
       ->method('withContext')
@@ -75,7 +75,7 @@ final class UploadControllerTest extends TestCase {
       ->with($this->isInstanceOf(GetExternalUploadResponseQuery::class))
       ->willReturn($expectedResponse);
     
-    $apiKeyView = $this->createMock(ApiKeyView::class);
+    $apiKeyView = $this->createStub(ApiKeyView::class);
     $apiKeyView->method('getUserId')->willReturn('user-123');
     $apiKeyView->method('getKeyId')->willReturn('key-123');
     

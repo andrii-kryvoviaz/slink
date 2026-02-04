@@ -70,10 +70,10 @@ final class GetTagByIdControllerTest extends TestCase {
 
   #[Test]
   public function itReturnsOneResponse(): void {
-    $queryBus = $this->createMock(QueryBusInterface::class);
-    $user = $this->createMock(UserInterface::class);
+    $queryBus = $this->createStub(QueryBusInterface::class);
+    $user = $this->createStub(UserInterface::class);
     $item = Item::fromPayload('tag', ['id' => 'tag-789', 'name' => 'test-tag']);
-    
+
     $user->method('getIdentifier')->willReturn('user-789');
     $queryBus->method('ask')->willReturn($item);
 

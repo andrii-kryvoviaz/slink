@@ -92,13 +92,13 @@ final class CreateApiKeyHandlerTest extends TestCase {
   }
 
   private function createUserCreationContext(): UserCreationContext {
-    $uniqueEmailSpec = $this->createMock(UniqueEmailSpecificationInterface::class);
+    $uniqueEmailSpec = $this->createStub(UniqueEmailSpecificationInterface::class);
     $uniqueEmailSpec->method('isUnique')->willReturn(true);
 
-    $uniqueUsernameSpec = $this->createMock(UniqueUsernameSpecificationInterface::class);
+    $uniqueUsernameSpec = $this->createStub(UniqueUsernameSpecificationInterface::class);
     $uniqueUsernameSpec->method('isUnique')->willReturn(true);
 
-    $uniqueDisplayNameSpec = $this->createMock(UniqueDisplayNameSpecificationInterface::class);
+    $uniqueDisplayNameSpec = $this->createStub(UniqueDisplayNameSpecificationInterface::class);
     $uniqueDisplayNameSpec->method('isUnique')->willReturn(true);
 
     return new UserCreationContext($uniqueEmailSpec, $uniqueUsernameSpec, $uniqueDisplayNameSpec);

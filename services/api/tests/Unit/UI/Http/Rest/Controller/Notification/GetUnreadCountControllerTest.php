@@ -76,8 +76,8 @@ final class GetUnreadCountControllerTest extends TestCase {
 
   #[Test]
   public function itReturnsZeroUnreadCount(): void {
-    $queryBus = $this->createMock(QueryBusInterface::class);
-    $user = $this->createMock(JwtUser::class);
+    $queryBus = $this->createStub(QueryBusInterface::class);
+    $user = $this->createStub(JwtUser::class);
 
     $user->method('getIdentifier')->willReturn('user-123');
     $queryBus->method('ask')->willReturn(['count' => 0]);
@@ -93,8 +93,8 @@ final class GetUnreadCountControllerTest extends TestCase {
 
   #[Test]
   public function itReturnsHighUnreadCount(): void {
-    $queryBus = $this->createMock(QueryBusInterface::class);
-    $user = $this->createMock(JwtUser::class);
+    $queryBus = $this->createStub(QueryBusInterface::class);
+    $user = $this->createStub(JwtUser::class);
 
     $user->method('getIdentifier')->willReturn('user-123');
     $queryBus->method('ask')->willReturn(['count' => 999]);

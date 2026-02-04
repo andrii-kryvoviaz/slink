@@ -21,8 +21,8 @@ final class GetTagListHandlerTest extends TestCase {
   #[Test]
   public function itReturnsTagListByIds(): void {
     $tagRepository = $this->createMock(TagRepositoryInterface::class);
-    $tagView1 = $this->createMock(TagView::class);
-    $tagView2 = $this->createMock(TagView::class);
+    $tagView1 = $this->createStub(TagView::class);
+    $tagView2 = $this->createStub(TagView::class);
     $tagViews = [$tagView1, $tagView2];
     
     $userIdString = 'user-123';
@@ -51,14 +51,14 @@ final class GetTagListHandlerTest extends TestCase {
   #[Test]
   public function itReturnsTagListWithPagination(): void {
     $tagRepository = $this->createMock(TagRepositoryInterface::class);
-    $tagView = $this->createMock(TagView::class);
+    $tagView = $this->createStub(TagView::class);
     $tagViews = [$tagView];
     
     $userIdString = 'user-456';
     $page = 2;
     $limit = 10;
 
-    $paginator = $this->createMock(\Doctrine\ORM\Tools\Pagination\Paginator::class);
+    $paginator = $this->createStub(\Doctrine\ORM\Tools\Pagination\Paginator::class);
     $paginator->method('getIterator')->willReturn(new \ArrayIterator($tagViews));
     $paginator->method('count')->willReturn(25);
     
@@ -94,7 +94,7 @@ final class GetTagListHandlerTest extends TestCase {
     $parentId = 'parent-123';
     $searchTerm = 'search-term';
 
-    $paginator = $this->createMock(Paginator::class);
+    $paginator = $this->createStub(Paginator::class);
     $paginator->method('getIterator')->willReturn(new \ArrayIterator($tagViews));
     $paginator->method('count')->willReturn(0);
     
@@ -134,7 +134,7 @@ final class GetTagListHandlerTest extends TestCase {
     $orderBy = 'createdAt';
     $order = 'desc';
 
-    $paginator = $this->createMock(Paginator::class);
+    $paginator = $this->createStub(Paginator::class);
     $paginator->method('getIterator')->willReturn(new \ArrayIterator($tagViews));
     $paginator->method('count')->willReturn(0);
     
@@ -160,15 +160,15 @@ final class GetTagListHandlerTest extends TestCase {
 
   #[Test]
   public function itHandlesEmptyResults(): void {
-    $tagRepository = $this->createMock(TagRepositoryInterface::class);
+    $tagRepository = $this->createStub(TagRepositoryInterface::class);
     $tagViews = [];
-    
+
     $userIdString = 'user-empty';
 
-    $paginator = $this->createMock(Paginator::class);
+    $paginator = $this->createStub(Paginator::class);
     $paginator->method('getIterator')->willReturn(new \ArrayIterator($tagViews));
     $paginator->method('count')->willReturn(0);
-    
+
     $tagRepository->method('getAllByPage')->willReturn($paginator);
 
     $handler = new GetTagListHandler($tagRepository);
@@ -183,10 +183,10 @@ final class GetTagListHandlerTest extends TestCase {
 
   #[Test]
   public function itConvertsTagViewsToItems(): void {
-    $tagRepository = $this->createMock(TagRepositoryInterface::class);
-    $tagView = $this->createMock(TagView::class);
+    $tagRepository = $this->createStub(TagRepositoryInterface::class);
+    $tagView = $this->createStub(TagView::class);
     $tagViews = [$tagView];
-    
+
     $userIdString = 'user-items';
     $tagIds = ['tag-single'];
 

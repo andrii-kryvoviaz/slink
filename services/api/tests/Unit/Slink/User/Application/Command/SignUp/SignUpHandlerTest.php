@@ -26,7 +26,7 @@ final class SignUpHandlerTest extends TestCase {
    */
   #[Test]
   public function itCreatesActiveUserWhenApprovalNotRequired(): void {
-    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')
       ->willReturnMap([
         ['user.allowRegistration', true],
@@ -59,7 +59,7 @@ final class SignUpHandlerTest extends TestCase {
    */
   #[Test]
   public function itCreatesInactiveUserWhenApprovalRequired(): void {
-    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')
       ->willReturnMap([
         ['user.allowRegistration', true],
@@ -92,7 +92,7 @@ final class SignUpHandlerTest extends TestCase {
    */
   #[Test]
   public function itHandlesSignUpSuccessfullyWhenRegistrationAllowed(): void {
-    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')
       ->willReturnMap([
         ['user.allowRegistration', true],
@@ -123,7 +123,7 @@ final class SignUpHandlerTest extends TestCase {
    */
   #[Test]
   public function itStoresUserWithCorrectCredentials(): void {
-    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')
       ->willReturnMap([
         ['user.allowRegistration', true],
@@ -155,7 +155,7 @@ final class SignUpHandlerTest extends TestCase {
   public function itThrowsExceptionWhenRegistrationNotAllowed(): void {
     $this->expectException(RegistrationIsNotAllowed::class);
 
-    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')
       ->with('user.allowRegistration')
       ->willReturn(false);
@@ -178,13 +178,13 @@ final class SignUpHandlerTest extends TestCase {
   }
 
   private function createUserCreationContext(): UserCreationContext {
-    $uniqueEmailSpec = $this->createMock(UniqueEmailSpecificationInterface::class);
+    $uniqueEmailSpec = $this->createStub(UniqueEmailSpecificationInterface::class);
     $uniqueEmailSpec->method('isUnique')->willReturn(true);
 
-    $uniqueUsernameSpec = $this->createMock(UniqueUsernameSpecificationInterface::class);
+    $uniqueUsernameSpec = $this->createStub(UniqueUsernameSpecificationInterface::class);
     $uniqueUsernameSpec->method('isUnique')->willReturn(true);
 
-    $uniqueDisplayNameSpec = $this->createMock(UniqueDisplayNameSpecificationInterface::class);
+    $uniqueDisplayNameSpec = $this->createStub(UniqueDisplayNameSpecificationInterface::class);
     $uniqueDisplayNameSpec->method('isUnique')->willReturn(true);
 
     return new UserCreationContext($uniqueEmailSpec, $uniqueUsernameSpec, $uniqueDisplayNameSpec);

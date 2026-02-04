@@ -19,12 +19,12 @@ class ImageConversionResolverTest extends TestCase {
    */
   #[Test]
   public function itReturnsNullWhenNoConversionNeeded(): void {
-    $imageAnalyzer = $this->createMock(ImageAnalyzerInterface::class);
-    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $imageAnalyzer = $this->createStub(ImageAnalyzerInterface::class);
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
 
     $resolver = new ImageConversionResolver($imageAnalyzer, $configProvider);
 
-    $file = $this->createMock(File::class);
+    $file = $this->createStub(File::class);
     $file->method('getMimeType')->willReturn('image/jpeg');
     $file->method('getPathname')->willReturn('/tmp/test.jpg');
 
@@ -45,12 +45,12 @@ class ImageConversionResolverTest extends TestCase {
    */
   #[Test]
   public function itReturnsJpegWhenConversionRequired(): void {
-    $imageAnalyzer = $this->createMock(ImageAnalyzerInterface::class);
-    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $imageAnalyzer = $this->createStub(ImageAnalyzerInterface::class);
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
 
     $resolver = new ImageConversionResolver($imageAnalyzer, $configProvider);
 
-    $file = $this->createMock(File::class);
+    $file = $this->createStub(File::class);
     $file->method('getMimeType')->willReturn('image/heic');
     $file->method('getPathname')->willReturn('/tmp/test.heic');
 
@@ -70,12 +70,12 @@ class ImageConversionResolverTest extends TestCase {
    */
   #[Test]
   public function itReturnsTargetFormatWhenForceConversionEnabled(): void {
-    $imageAnalyzer = $this->createMock(ImageAnalyzerInterface::class);
-    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $imageAnalyzer = $this->createStub(ImageAnalyzerInterface::class);
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
 
     $resolver = new ImageConversionResolver($imageAnalyzer, $configProvider);
 
-    $file = $this->createMock(File::class);
+    $file = $this->createStub(File::class);
     $file->method('getMimeType')->willReturn('image/jpeg');
     $file->method('getPathname')->willReturn('/tmp/test.jpg');
 
@@ -98,12 +98,12 @@ class ImageConversionResolverTest extends TestCase {
    */
   #[Test]
   public function itSkipsAnimatedImagesWhenConvertAnimatedImagesDisabled(): void {
-    $imageAnalyzer = $this->createMock(ImageAnalyzerInterface::class);
-    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $imageAnalyzer = $this->createStub(ImageAnalyzerInterface::class);
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
 
     $resolver = new ImageConversionResolver($imageAnalyzer, $configProvider);
 
-    $file = $this->createMock(File::class);
+    $file = $this->createStub(File::class);
     $file->method('getMimeType')->willReturn('image/gif');
     $file->method('getPathname')->willReturn('/tmp/test.gif');
 
@@ -127,12 +127,12 @@ class ImageConversionResolverTest extends TestCase {
    */
   #[Test]
   public function itConvertsAnimatedImagesWhenConvertAnimatedImagesEnabled(): void {
-    $imageAnalyzer = $this->createMock(ImageAnalyzerInterface::class);
-    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $imageAnalyzer = $this->createStub(ImageAnalyzerInterface::class);
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
 
     $resolver = new ImageConversionResolver($imageAnalyzer, $configProvider);
 
-    $file = $this->createMock(File::class);
+    $file = $this->createStub(File::class);
     $file->method('getMimeType')->willReturn('image/gif');
     $file->method('getPathname')->willReturn('/tmp/test.gif');
 
@@ -157,12 +157,12 @@ class ImageConversionResolverTest extends TestCase {
    */
   #[Test]
   public function itSkipsNonConvertibleFormatsLikeSvg(): void {
-    $imageAnalyzer = $this->createMock(ImageAnalyzerInterface::class);
-    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $imageAnalyzer = $this->createStub(ImageAnalyzerInterface::class);
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
 
     $resolver = new ImageConversionResolver($imageAnalyzer, $configProvider);
 
-    $file = $this->createMock(File::class);
+    $file = $this->createStub(File::class);
     $file->method('getMimeType')->willReturn('image/svg+xml');
     $file->method('getPathname')->willReturn('/tmp/test.svg');
 
@@ -184,12 +184,12 @@ class ImageConversionResolverTest extends TestCase {
    */
   #[Test]
   public function itDefaultsToJpegWhenNoTargetFormatConfigured(): void {
-    $imageAnalyzer = $this->createMock(ImageAnalyzerInterface::class);
-    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $imageAnalyzer = $this->createStub(ImageAnalyzerInterface::class);
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
 
     $resolver = new ImageConversionResolver($imageAnalyzer, $configProvider);
 
-    $file = $this->createMock(File::class);
+    $file = $this->createStub(File::class);
     $file->method('getMimeType')->willReturn('image/png');
     $file->method('getPathname')->willReturn('/tmp/test.png');
 

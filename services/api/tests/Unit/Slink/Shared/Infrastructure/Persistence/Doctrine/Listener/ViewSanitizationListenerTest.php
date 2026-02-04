@@ -22,7 +22,7 @@ final class ViewSanitizationListenerTest extends TestCase {
 
   protected function setUp(): void {
     $this->listener = new ViewSanitizationListener();
-    $this->entityManager = $this->createMock(EntityManagerInterface::class);
+    $this->entityManager = $this->createStub(EntityManagerInterface::class);
   }
 
   #[Test]

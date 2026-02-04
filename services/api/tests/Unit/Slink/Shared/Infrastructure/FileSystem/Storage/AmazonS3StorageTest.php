@@ -155,7 +155,7 @@ final class AmazonS3StorageTest extends TestCase {
    * @param array<string, mixed> $config
    */
   private function createConfigProvider(array $config): ConfigurationProviderInterface {
-    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')
       ->willReturnCallback(fn(string $key) => $config[$key] ?? null);
 

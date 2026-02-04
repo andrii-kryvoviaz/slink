@@ -13,7 +13,7 @@ final class ApiKeyUserTest extends TestCase {
     $userId = 'user-123';
     $keyId = 'key-456';
     
-    $apiKeyView = $this->createMock(ApiKeyView::class);
+    $apiKeyView = $this->createStub(ApiKeyView::class);
     $apiKeyView->method('getUserId')->willReturn($userId);
     $apiKeyView->method('getKeyId')->willReturn($keyId);
     
@@ -26,7 +26,7 @@ final class ApiKeyUserTest extends TestCase {
   }
 
   public function testItErasesCredentials(): void {
-    $apiKeyView = $this->createMock(ApiKeyView::class);
+    $apiKeyView = $this->createStub(ApiKeyView::class);
     $apiKeyView->method('getUserId')->willReturn('user-123');
     $apiKeyView->method('getKeyId')->willReturn('key-456');
     

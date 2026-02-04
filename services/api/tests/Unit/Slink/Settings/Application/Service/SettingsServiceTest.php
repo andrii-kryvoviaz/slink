@@ -6,7 +6,6 @@ namespace Unit\Slink\Settings\Application\Service;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Slink\Settings\Application\Service\SettingsService;
@@ -15,24 +14,24 @@ use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Settings\Infrastructure\Provider\ConfigurationProviderLocator;
 
 final class SettingsServiceTest extends TestCase {
-    private MockObject $configurationLocator;
-    private MockObject $storeProvider;
-    private MockObject $defaultProvider;
-    private SettingsService $settingsService;
+    /**
+     * @return array{SettingsService, ConfigurationProviderInterface&\PHPUnit\Framework\MockObject\MockObject, ConfigurationProviderInterface&\PHPUnit\Framework\MockObject\MockObject}
+     */
+    private function createSettingsServiceWithMocks(): array {
+        $configurationLocator = $this->createStub(ConfigurationProviderLocator::class);
+        $storeProvider = $this->createMock(ConfigurationProviderInterface::class);
+        $defaultProvider = $this->createMock(ConfigurationProviderInterface::class);
 
-    protected function setUp(): void {
-        $this->configurationLocator = $this->createMock(ConfigurationProviderLocator::class);
-        $this->storeProvider = $this->createMock(ConfigurationProviderInterface::class);
-        $this->defaultProvider = $this->createMock(ConfigurationProviderInterface::class);
-
-        $this->configurationLocator
+        $configurationLocator
             ->method('get')
             ->willReturnMap([
-                [ConfigurationProvider::Store, $this->storeProvider],
-                [ConfigurationProvider::Default, $this->defaultProvider],
+                [ConfigurationProvider::Store, $storeProvider],
+                [ConfigurationProvider::Default, $defaultProvider],
             ]);
 
-        $this->settingsService = new SettingsService($this->configurationLocator);
+        $settingsService = new SettingsService($configurationLocator);
+
+        return [$settingsService, $storeProvider, $defaultProvider];
     }
 
     #[Test]
@@ -40,17 +39,19 @@ final class SettingsServiceTest extends TestCase {
         $key = 'user.approvalRequired';
         $expectedValue = true;
 
-        $this->storeProvider
+        [$settingsService, $storeProvider, $defaultProvider] = $this->createSettingsServiceWithMocks();
+
+        $storeProvider
             ->expects($this->once())
             ->method('get')
             ->with($key)
             ->willReturn($expectedValue);
 
-        $this->defaultProvider
+        $defaultProvider
             ->expects($this->never())
             ->method('get');
 
-        $result = $this->settingsService->get($key);
+        $result = $settingsService->get($key);
 
         $this->assertSame($expectedValue, $result);
     }
@@ -60,19 +61,21 @@ final class SettingsServiceTest extends TestCase {
         $key = 'user.approvalRequired';
         $expectedValue = false;
 
-        $this->storeProvider
+        [$settingsService, $storeProvider, $defaultProvider] = $this->createSettingsServiceWithMocks();
+
+        $storeProvider
             ->expects($this->once())
             ->method('get')
             ->with($key)
             ->willReturn(null);
 
-        $this->defaultProvider
+        $defaultProvider
             ->expects($this->once())
             ->method('get')
             ->with($key)
             ->willReturn($expectedValue);
 
-        $result = $this->settingsService->get($key);
+        $result = $settingsService->get($key);
 
         $this->assertSame($expectedValue, $result);
     }
@@ -81,19 +84,21 @@ final class SettingsServiceTest extends TestCase {
     public function itShouldReturnNullWhenBothProvidersReturnNull(): void {
         $key = 'non.existent.key';
 
-        $this->storeProvider
+        [$settingsService, $storeProvider, $defaultProvider] = $this->createSettingsServiceWithMocks();
+
+        $storeProvider
             ->expects($this->once())
             ->method('get')
             ->with($key)
             ->willReturn(null);
 
-        $this->defaultProvider
+        $defaultProvider
             ->expects($this->once())
             ->method('get')
             ->with($key)
             ->willReturn(null);
 
-        $result = $this->settingsService->get($key);
+        $result = $settingsService->get($key);
 
         $this->assertNull($result);
     }
@@ -102,17 +107,19 @@ final class SettingsServiceTest extends TestCase {
     public function itShouldCheckHasInStoreProviderFirst(): void {
         $key = 'user.approvalRequired';
 
-        $this->storeProvider
+        [$settingsService, $storeProvider, $defaultProvider] = $this->createSettingsServiceWithMocks();
+
+        $storeProvider
             ->expects($this->once())
             ->method('has')
             ->with($key)
             ->willReturn(true);
 
-        $this->defaultProvider
+        $defaultProvider
             ->expects($this->never())
             ->method('has');
 
-        $result = $this->settingsService->has($key);
+        $result = $settingsService->has($key);
 
         $this->assertTrue($result);
     }
@@ -121,19 +128,21 @@ final class SettingsServiceTest extends TestCase {
     public function itShouldCheckHasInDefaultProviderWhenStoreReturnsFalse(): void {
         $key = 'user.approvalRequired';
 
-        $this->storeProvider
+        [$settingsService, $storeProvider, $defaultProvider] = $this->createSettingsServiceWithMocks();
+
+        $storeProvider
             ->expects($this->once())
             ->method('has')
             ->with($key)
             ->willReturn(false);
 
-        $this->defaultProvider
+        $defaultProvider
             ->expects($this->once())
             ->method('has')
             ->with($key)
             ->willReturn(true);
 
-        $result = $this->settingsService->has($key);
+        $result = $settingsService->has($key);
 
         $this->assertTrue($result);
     }
@@ -142,19 +151,21 @@ final class SettingsServiceTest extends TestCase {
     public function itShouldReturnFalseWhenBothProvidersReturnFalse(): void {
         $key = 'non.existent.key';
 
-        $this->storeProvider
+        [$settingsService, $storeProvider, $defaultProvider] = $this->createSettingsServiceWithMocks();
+
+        $storeProvider
             ->expects($this->once())
             ->method('has')
             ->with($key)
             ->willReturn(false);
 
-        $this->defaultProvider
+        $defaultProvider
             ->expects($this->once())
             ->method('has')
             ->with($key)
             ->willReturn(false);
 
-        $result = $this->settingsService->has($key);
+        $result = $settingsService->has($key);
 
         $this->assertFalse($result);
     }
@@ -193,17 +204,19 @@ final class SettingsServiceTest extends TestCase {
             ],
         ];
 
-        $this->defaultProvider
+        [$settingsService, $storeProvider, $defaultProvider] = $this->createSettingsServiceWithMocks();
+
+        $defaultProvider
             ->expects($this->once())
             ->method('all')
             ->willReturn($defaultSettings);
 
-        $this->storeProvider
+        $storeProvider
             ->expects($this->once())
             ->method('all')
             ->willReturn($storeSettings);
 
-        $result = $this->settingsService->all();
+        $result = $settingsService->all();
 
         $this->assertSame($expectedMerged, $result);
     }
@@ -216,17 +229,19 @@ final class SettingsServiceTest extends TestCase {
             ],
         ];
 
-        $this->defaultProvider
+        [$settingsService, $storeProvider, $defaultProvider] = $this->createSettingsServiceWithMocks();
+
+        $defaultProvider
             ->expects($this->once())
             ->method('all')
             ->willReturn($defaultSettings);
 
-        $this->storeProvider
+        $storeProvider
             ->expects($this->once())
             ->method('all')
             ->willReturn([]);
 
-        $result = $this->settingsService->all();
+        $result = $settingsService->all();
 
         $this->assertSame($defaultSettings, $result);
     }
@@ -239,24 +254,26 @@ final class SettingsServiceTest extends TestCase {
             ],
         ];
 
-        $this->defaultProvider
+        [$settingsService, $storeProvider, $defaultProvider] = $this->createSettingsServiceWithMocks();
+
+        $defaultProvider
             ->expects($this->once())
             ->method('all')
             ->willReturn([]);
 
-        $this->storeProvider
+        $storeProvider
             ->expects($this->once())
             ->method('all')
             ->willReturn($storeSettings);
 
-        $result = $this->settingsService->all();
+        $result = $settingsService->all();
 
         $this->assertSame($storeSettings, $result);
     }
 
     #[Test]
     public function itShouldHandleContainerExceptionsDuringConstruction(): void {
-        $locator = $this->createMock(ConfigurationProviderLocator::class);
+        $locator = $this->createStub(ConfigurationProviderLocator::class);
         $locator->method('get')
             ->willThrowException(new class extends \Exception implements ContainerExceptionInterface {});
 
@@ -267,7 +284,7 @@ final class SettingsServiceTest extends TestCase {
 
     #[Test]
     public function itShouldHandleNotFoundExceptionsDuringConstruction(): void {
-        $locator = $this->createMock(ConfigurationProviderLocator::class);
+        $locator = $this->createStub(ConfigurationProviderLocator::class);
         $locator->method('get')
             ->willThrowException(new class extends \Exception implements NotFoundExceptionInterface {});
 

@@ -31,7 +31,7 @@ final class GetApiKeysControllerTest extends TestCase {
 
     $property->setValue($controller, $queryBus);
     
-    $user = $this->createMock(JwtUser::class);
+    $user = $this->createStub(JwtUser::class);
     $user->method('getIdentifier')->willReturn($userId);
     
     $response = $controller->__invoke($user);
@@ -55,7 +55,7 @@ final class GetApiKeysControllerTest extends TestCase {
 
     $property->setValue($controller, $queryBus);
     
-    $user = $this->createMock(JwtUser::class);
+    $user = $this->createStub(JwtUser::class);
     $user->method('getIdentifier')->willReturn($userId);
     
     $response = $controller->__invoke($user);

@@ -25,15 +25,15 @@ final class GuestUploadImageControllerTest extends TestCase {
 
     $property->setValue($controller, $commandBus);
 
-    $command = $this->createMock(UploadImageCommand::class);
+    $command = $this->createStub(UploadImageCommand::class);
     $command->method('getId')
-      ->willReturn($this->createMock(\Slink\Shared\Domain\ValueObject\ID::class));
+      ->willReturn($this->createStub(\Slink\Shared\Domain\ValueObject\ID::class));
 
     $response = $controller($command);
 
     $this->assertEquals(201, $response->getStatusCode());
   }
-  
+
   #[Test]
   public function itCreatesSuccessfulResponse(): void {
     $commandBus = $this->createMock(CommandBusInterface::class);
@@ -47,9 +47,9 @@ final class GuestUploadImageControllerTest extends TestCase {
 
     $property->setValue($controller, $commandBus);
 
-    $command = $this->createMock(UploadImageCommand::class);
+    $command = $this->createStub(UploadImageCommand::class);
     $command->method('getId')
-      ->willReturn($this->createMock(\Slink\Shared\Domain\ValueObject\ID::class));
+      ->willReturn($this->createStub(\Slink\Shared\Domain\ValueObject\ID::class));
 
     $response = $controller($command);
 

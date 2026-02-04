@@ -17,15 +17,15 @@ use Slink\Shared\Domain\Exception\ForbiddenException;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 
 final class GetCollectionCoverHandlerTest extends TestCase {
-  private MockObject&CollectionRepositoryInterface $collectionRepository;
-  private MockObject&CollectionItemRepositoryInterface $collectionItemRepository;
-  private MockObject&CollectionCoverGeneratorInterface $coverGenerator;
+  private CollectionRepositoryInterface $collectionRepository;
+  private CollectionItemRepositoryInterface $collectionItemRepository;
+  private CollectionCoverGeneratorInterface $coverGenerator;
   private GetCollectionCoverHandler $handler;
 
   protected function setUp(): void {
-    $this->collectionRepository = $this->createMock(CollectionRepositoryInterface::class);
-    $this->collectionItemRepository = $this->createMock(CollectionItemRepositoryInterface::class);
-    $this->coverGenerator = $this->createMock(CollectionCoverGeneratorInterface::class);
+    $this->collectionRepository = $this->createStub(CollectionRepositoryInterface::class);
+    $this->collectionItemRepository = $this->createStub(CollectionItemRepositoryInterface::class);
+    $this->coverGenerator = $this->createStub(CollectionCoverGeneratorInterface::class);
 
     $this->handler = new GetCollectionCoverHandler(
       $this->collectionRepository,
@@ -57,7 +57,7 @@ final class GetCollectionCoverHandlerTest extends TestCase {
     $ownerId = 'owner-id';
     $userId = 'other-user-id';
 
-    $collection = $this->createMock(CollectionView::class);
+    $collection = $this->createStub(CollectionView::class);
     $collection->method('getUserId')->willReturn($ownerId);
 
     $this->collectionRepository
@@ -77,7 +77,7 @@ final class GetCollectionCoverHandlerTest extends TestCase {
     $collectionId = 'collection-id';
     $userId = 'user-id';
 
-    $collection = $this->createMock(CollectionView::class);
+    $collection = $this->createStub(CollectionView::class);
     $collection->method('getUserId')->willReturn($userId);
 
     $this->collectionRepository
@@ -104,28 +104,32 @@ final class GetCollectionCoverHandlerTest extends TestCase {
     $imageIds = ['image-1', 'image-2'];
     $coverContent = 'binary-image-content';
 
-    $collection = $this->createMock(CollectionView::class);
+    $collection = $this->createStub(CollectionView::class);
     $collection->method('getUserId')->willReturn($userId);
 
-    $this->collectionRepository
+    $collectionRepository = $this->createStub(CollectionRepositoryInterface::class);
+    $collectionRepository
       ->method('findById')
       ->with($collectionId)
       ->willReturn($collection);
 
-    $this->collectionItemRepository
+    $collectionItemRepository = $this->createStub(CollectionItemRepositoryInterface::class);
+    $collectionItemRepository
       ->method('getFirstImageIdsByCollectionIds')
       ->with([$collectionId], 5)
       ->willReturn([$collectionId => $imageIds]);
 
-    $this->coverGenerator
+    $coverGenerator = $this->createMock(CollectionCoverGeneratorInterface::class);
+    $coverGenerator
       ->expects($this->once())
       ->method('getCoverContent')
       ->with($collectionId, $imageIds)
       ->willReturn($coverContent);
 
+    $handler = new GetCollectionCoverHandler($collectionRepository, $collectionItemRepository, $coverGenerator);
     $query = new GetCollectionCoverQuery($collectionId);
 
-    $result = ($this->handler)($query, $userId);
+    $result = ($handler)($query, $userId);
 
     $this->assertEquals($coverContent, $result);
   }

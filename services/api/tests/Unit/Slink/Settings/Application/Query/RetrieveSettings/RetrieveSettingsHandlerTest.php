@@ -6,7 +6,6 @@ namespace Unit\Slink\Settings\Application\Query\RetrieveSettings;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Slink\Settings\Application\Query\RetrieveSettings\RetrieveSettingsHandler;
@@ -16,15 +15,6 @@ use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Settings\Infrastructure\Provider\ConfigurationProviderLocator;
 
 final class RetrieveSettingsHandlerTest extends TestCase {
-    private MockObject $configurationLocator;
-    private MockObject $configurationProvider;
-    private RetrieveSettingsHandler $handler;
-
-    protected function setUp(): void {
-        $this->configurationLocator = $this->createMock(ConfigurationProviderLocator::class);
-        $this->configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
-        $this->handler = new RetrieveSettingsHandler($this->configurationLocator);
-    }
 
     #[Test]
     public function itShouldRetrieveSettingsWithDefaultProvider(): void {
@@ -40,18 +30,22 @@ final class RetrieveSettingsHandlerTest extends TestCase {
 
         $query = new RetrieveSettingsQuery();
 
-        $this->configurationLocator
+        $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
+        $configurationLocator = $this->createMock(ConfigurationProviderLocator::class);
+
+        $configurationLocator
             ->expects($this->once())
             ->method('get')
             ->with(ConfigurationProvider::Default)
-            ->willReturn($this->configurationProvider);
+            ->willReturn($configurationProvider);
 
-        $this->configurationProvider
+        $configurationProvider
             ->expects($this->once())
             ->method('all')
             ->willReturn($expectedSettings);
 
-        $result = $this->handler->__invoke($query);
+        $handler = new RetrieveSettingsHandler($configurationLocator);
+        $result = $handler->__invoke($query);
 
         $this->assertSame($expectedSettings, $result);
     }
@@ -67,18 +61,22 @@ final class RetrieveSettingsHandlerTest extends TestCase {
 
         $query = new RetrieveSettingsQuery('store');
 
-        $this->configurationLocator
+        $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
+        $configurationLocator = $this->createMock(ConfigurationProviderLocator::class);
+
+        $configurationLocator
             ->expects($this->once())
             ->method('get')
             ->with(ConfigurationProvider::Store)
-            ->willReturn($this->configurationProvider);
+            ->willReturn($configurationProvider);
 
-        $this->configurationProvider
+        $configurationProvider
             ->expects($this->once())
             ->method('all')
             ->willReturn($expectedSettings);
 
-        $result = $this->handler->__invoke($query);
+        $handler = new RetrieveSettingsHandler($configurationLocator);
+        $result = $handler->__invoke($query);
 
         $this->assertSame($expectedSettings, $result);
     }
@@ -87,58 +85,69 @@ final class RetrieveSettingsHandlerTest extends TestCase {
     public function itShouldHandleEmptySettings(): void {
         $query = new RetrieveSettingsQuery();
 
-        $this->configurationLocator
+        $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
+        $configurationLocator = $this->createMock(ConfigurationProviderLocator::class);
+
+        $configurationLocator
             ->expects($this->once())
             ->method('get')
             ->with(ConfigurationProvider::Default)
-            ->willReturn($this->configurationProvider);
+            ->willReturn($configurationProvider);
 
-        $this->configurationProvider
+        $configurationProvider
             ->expects($this->once())
             ->method('all')
             ->willReturn([]);
 
-        $result = $this->handler->__invoke($query);
+        $handler = new RetrieveSettingsHandler($configurationLocator);
+        $result = $handler->__invoke($query);
 
         $this->assertSame([], $result);
     }
 
     #[Test]
     public function itShouldThrowExceptionForInvalidProvider(): void {
+        $configurationLocator = $this->createStub(ConfigurationProviderLocator::class);
+        $handler = new RetrieveSettingsHandler($configurationLocator);
+
         $query = new RetrieveSettingsQuery('invalid');
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid configuration provider');
 
-        $this->handler->__invoke($query);
+        $handler->__invoke($query);
     }
 
     #[Test]
     public function itShouldPropagateContainerException(): void {
         $query = new RetrieveSettingsQuery();
 
-        $this->configurationLocator
+        $configurationLocator = $this->createMock(ConfigurationProviderLocator::class);
+        $configurationLocator
             ->expects($this->once())
             ->method('get')
             ->willThrowException(new class extends \Exception implements ContainerExceptionInterface {});
 
         $this->expectException(ContainerExceptionInterface::class);
 
-        $this->handler->__invoke($query);
+        $handler = new RetrieveSettingsHandler($configurationLocator);
+        $handler->__invoke($query);
     }
 
     #[Test]
     public function itShouldPropagateNotFoundException(): void {
         $query = new RetrieveSettingsQuery();
 
-        $this->configurationLocator
+        $configurationLocator = $this->createMock(ConfigurationProviderLocator::class);
+        $configurationLocator
             ->expects($this->once())
             ->method('get')
             ->willThrowException(new class extends \Exception implements NotFoundExceptionInterface {});
 
         $this->expectException(NotFoundExceptionInterface::class);
 
-        $this->handler->__invoke($query);
+        $handler = new RetrieveSettingsHandler($configurationLocator);
+        $handler->__invoke($query);
     }
 
     #[Test]
@@ -164,18 +173,22 @@ final class RetrieveSettingsHandlerTest extends TestCase {
 
         $query = new RetrieveSettingsQuery();
 
-        $this->configurationLocator
+        $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
+        $configurationLocator = $this->createMock(ConfigurationProviderLocator::class);
+
+        $configurationLocator
             ->expects($this->once())
             ->method('get')
             ->with(ConfigurationProvider::Default)
-            ->willReturn($this->configurationProvider);
+            ->willReturn($configurationProvider);
 
-        $this->configurationProvider
+        $configurationProvider
             ->expects($this->once())
             ->method('all')
             ->willReturn($expectedSettings);
 
-        $result = $this->handler->__invoke($query);
+        $handler = new RetrieveSettingsHandler($configurationLocator);
+        $result = $handler->__invoke($query);
 
         $this->assertSame($expectedSettings, $result);
     }
@@ -191,18 +204,22 @@ final class RetrieveSettingsHandlerTest extends TestCase {
 
         $query = new RetrieveSettingsQuery();
 
-        $this->configurationLocator
+        $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
+        $configurationLocator = $this->createMock(ConfigurationProviderLocator::class);
+
+        $configurationLocator
             ->expects($this->once())
             ->method('get')
             ->with(ConfigurationProvider::Default)
-            ->willReturn($this->configurationProvider);
+            ->willReturn($configurationProvider);
 
-        $this->configurationProvider
+        $configurationProvider
             ->expects($this->once())
             ->method('all')
             ->willReturn($expectedSettings);
 
-        $result = $this->handler->__invoke($query);
+        $handler = new RetrieveSettingsHandler($configurationLocator);
+        $result = $handler->__invoke($query);
 
         $this->assertSame($expectedSettings, $result);
     }
@@ -211,18 +228,22 @@ final class RetrieveSettingsHandlerTest extends TestCase {
     public function itShouldValidateProviderEnumConversion(): void {
         $query = new RetrieveSettingsQuery('default');
 
-        $this->configurationLocator
+        $configurationProvider = $this->createMock(ConfigurationProviderInterface::class);
+        $configurationLocator = $this->createMock(ConfigurationProviderLocator::class);
+
+        $configurationLocator
             ->expects($this->once())
             ->method('get')
             ->with(ConfigurationProvider::Default)
-            ->willReturn($this->configurationProvider);
+            ->willReturn($configurationProvider);
 
-        $this->configurationProvider
+        $configurationProvider
             ->expects($this->once())
             ->method('all')
             ->willReturn([]);
 
-        $result = $this->handler->__invoke($query);
+        $handler = new RetrieveSettingsHandler($configurationLocator);
+        $result = $handler->__invoke($query);
 
         $this->assertSame([], $result);
     }

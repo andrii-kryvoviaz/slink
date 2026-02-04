@@ -38,13 +38,13 @@ final class DeleteCommentHandlerTest extends TestCase {
       CommentContent::fromString('Test comment'),
     );
 
-    $commentView = $this->createMock(CommentView::class);
+    $commentView = $this->createStub(CommentView::class);
     $commentView->method('getImageId')->willReturn($imageId->toString());
 
-    $differentUser = $this->createMock(UserView::class);
+    $differentUser = $this->createStub(UserView::class);
     $differentUser->method('getUuid')->willReturn(ID::generate()->toString());
 
-    $imageView = $this->createMock(ImageView::class);
+    $imageView = $this->createStub(ImageView::class);
     $imageView->method('getUser')->willReturn($differentUser);
 
     $commentStore->expects($this->once())
@@ -80,8 +80,8 @@ final class DeleteCommentHandlerTest extends TestCase {
     $imageId = ID::generate();
 
     $commentStore = $this->createMock(CommentStoreRepositoryInterface::class);
-    $commentRepository = $this->createMock(CommentRepositoryInterface::class);
-    $imageRepository = $this->createMock(ImageRepositoryInterface::class);
+    $commentRepository = $this->createStub(CommentRepositoryInterface::class);
+    $imageRepository = $this->createStub(ImageRepositoryInterface::class);
 
     $comment = Comment::create(
       $commentId,
@@ -91,13 +91,13 @@ final class DeleteCommentHandlerTest extends TestCase {
       CommentContent::fromString('Test comment'),
     );
 
-    $commentView = $this->createMock(CommentView::class);
+    $commentView = $this->createStub(CommentView::class);
     $commentView->method('getImageId')->willReturn($imageId->toString());
 
-    $imageOwner = $this->createMock(UserView::class);
+    $imageOwner = $this->createStub(UserView::class);
     $imageOwner->method('getUuid')->willReturn($imageOwnerId->toString());
 
-    $imageView = $this->createMock(ImageView::class);
+    $imageView = $this->createStub(ImageView::class);
     $imageView->method('getUser')->willReturn($imageOwner);
 
     $commentStore->method('get')->willReturn($comment);
@@ -128,9 +128,9 @@ final class DeleteCommentHandlerTest extends TestCase {
     $randomUserId = ID::generate();
     $imageId = ID::generate();
 
-    $commentStore = $this->createMock(CommentStoreRepositoryInterface::class);
-    $commentRepository = $this->createMock(CommentRepositoryInterface::class);
-    $imageRepository = $this->createMock(ImageRepositoryInterface::class);
+    $commentStore = $this->createStub(CommentStoreRepositoryInterface::class);
+    $commentRepository = $this->createStub(CommentRepositoryInterface::class);
+    $imageRepository = $this->createStub(ImageRepositoryInterface::class);
 
     $comment = Comment::create(
       $commentId,
@@ -140,13 +140,13 @@ final class DeleteCommentHandlerTest extends TestCase {
       CommentContent::fromString('Test comment'),
     );
 
-    $commentView = $this->createMock(CommentView::class);
+    $commentView = $this->createStub(CommentView::class);
     $commentView->method('getImageId')->willReturn($imageId->toString());
 
-    $imageOwner = $this->createMock(UserView::class);
+    $imageOwner = $this->createStub(UserView::class);
     $imageOwner->method('getUuid')->willReturn($imageOwnerId->toString());
 
-    $imageView = $this->createMock(ImageView::class);
+    $imageView = $this->createStub(ImageView::class);
     $imageView->method('getUser')->willReturn($imageOwner);
 
     $commentStore->method('get')->willReturn($comment);
@@ -167,8 +167,8 @@ final class DeleteCommentHandlerTest extends TestCase {
     $imageId = ID::generate();
 
     $commentStore = $this->createMock(CommentStoreRepositoryInterface::class);
-    $commentRepository = $this->createMock(CommentRepositoryInterface::class);
-    $imageRepository = $this->createMock(ImageRepositoryInterface::class);
+    $commentRepository = $this->createStub(CommentRepositoryInterface::class);
+    $imageRepository = $this->createStub(ImageRepositoryInterface::class);
 
     $comment = Comment::create(
       $commentId,
@@ -179,13 +179,13 @@ final class DeleteCommentHandlerTest extends TestCase {
     );
     $comment->delete();
 
-    $commentView = $this->createMock(CommentView::class);
+    $commentView = $this->createStub(CommentView::class);
     $commentView->method('getImageId')->willReturn($imageId->toString());
 
-    $imageOwner = $this->createMock(UserView::class);
+    $imageOwner = $this->createStub(UserView::class);
     $imageOwner->method('getUuid')->willReturn(ID::generate()->toString());
 
-    $imageView = $this->createMock(ImageView::class);
+    $imageView = $this->createStub(ImageView::class);
     $imageView->method('getUser')->willReturn($imageOwner);
 
     $commentStore->method('get')->willReturn($comment);
@@ -208,8 +208,8 @@ final class DeleteCommentHandlerTest extends TestCase {
     $imageId = ID::generate();
 
     $commentStore = $this->createMock(CommentStoreRepositoryInterface::class);
-    $commentRepository = $this->createMock(CommentRepositoryInterface::class);
-    $imageRepository = $this->createMock(ImageRepositoryInterface::class);
+    $commentRepository = $this->createStub(CommentRepositoryInterface::class);
+    $imageRepository = $this->createStub(ImageRepositoryInterface::class);
 
     $comment = Comment::create(
       $commentId,
@@ -219,10 +219,10 @@ final class DeleteCommentHandlerTest extends TestCase {
       CommentContent::fromString('Test comment'),
     );
 
-    $commentView = $this->createMock(CommentView::class);
+    $commentView = $this->createStub(CommentView::class);
     $commentView->method('getImageId')->willReturn($imageId->toString());
 
-    $imageView = $this->createMock(ImageView::class);
+    $imageView = $this->createStub(ImageView::class);
     $imageView->method('getUser')->willReturn(null);
 
     $commentStore->method('get')->willReturn($comment);

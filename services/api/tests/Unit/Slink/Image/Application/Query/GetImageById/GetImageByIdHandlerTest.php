@@ -25,19 +25,19 @@ use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
 final class GetImageByIdHandlerTest extends TestCase {
 
   private ImageRepositoryInterface&MockObject $repository;
-  private ImageAnalyzerInterface&MockObject $analyser;
-  private StorageInterface&MockObject $storage;
-  private ImageProcessorInterface&MockObject $imageProcessor;
-  private CollectionItemRepositoryInterface&MockObject $collectionItemRepository;
-  
+  private ImageAnalyzerInterface $analyser;
+  private StorageInterface $storage;
+  private ImageProcessorInterface $imageProcessor;
+  private CollectionItemRepositoryInterface $collectionItemRepository;
+
   public function setUp(): void {
     parent::setUp();
-    
+
     $this->repository = $this->createMock(ImageRepositoryInterface::class);
-    $this->analyser = $this->createMock(ImageAnalyzerInterface::class);
-    $this->storage = $this->createMock(StorageInterface::class);
-    $this->imageProcessor = $this->createMock(ImageProcessorInterface::class);
-    $this->collectionItemRepository = $this->createMock(CollectionItemRepositoryInterface::class);
+    $this->analyser = $this->createStub(ImageAnalyzerInterface::class);
+    $this->storage = $this->createStub(StorageInterface::class);
+    $this->imageProcessor = $this->createStub(ImageProcessorInterface::class);
+    $this->collectionItemRepository = $this->createStub(CollectionItemRepositoryInterface::class);
   }
   
   #[Test]
@@ -45,8 +45,8 @@ final class GetImageByIdHandlerTest extends TestCase {
     $id = Uuid::uuid4()->toString();
     $query = new GetImageByIdQuery($id);
 
-    $imageView = $this->createMock(ImageView::class);
-    $imageAttributes = $this->createMock(ImageAttributes::class);
+    $imageView = $this->createStub(ImageView::class);
+    $imageAttributes = $this->createStub(ImageAttributes::class);
     
     $imageView->method('getAttributes')->willReturn($imageAttributes);
     $this->repository->expects($this->once())->method('oneById')->with($id)->willReturn($imageView);

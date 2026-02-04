@@ -88,7 +88,7 @@ final class DuplicateImageExceptionTest extends TestCase {
   }
 
   private function createMockUser(string $username): UserView {
-    $user = $this->createMock(UserView::class);
+    $user = $this->createStub(UserView::class);
     $user->method('getUsername')->willReturn($username);
     return $user;
   }

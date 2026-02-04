@@ -15,7 +15,7 @@ use Slink\Image\Domain\ValueObject\ImageTransformationRequest;
 use Slink\Image\Domain\ValueObject\PartialImageDimensions;
 
 final class ResizeStrategyTest extends TestCase {
-    private ImageProcessorInterface&MockObject $imageProcessor;
+    private ImageProcessorInterface $imageProcessor;
     private ResizeStrategy $strategy;
 
     /**
@@ -23,8 +23,8 @@ final class ResizeStrategyTest extends TestCase {
      */
     protected function setUp(): void {
         parent::setUp();
-        
-        $this->imageProcessor = $this->createMock(ImageProcessorInterface::class);
+
+        $this->imageProcessor = $this->createStub(ImageProcessorInterface::class);
         $this->strategy = new ResizeStrategy($this->imageProcessor);
     }
 
@@ -70,13 +70,15 @@ final class ResizeStrategyTest extends TestCase {
         $request = new ImageTransformationRequest(targetDimensions: $targetDimensions);
         $imageContent = 'image content';
 
-        $this->imageProcessor
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor
             ->expects($this->once())
             ->method('resize')
             ->with($imageContent, 400, 300)
             ->willReturn('resized content');
 
-        $result = $this->strategy->transform($imageContent, $originalDimensions, $request);
+        $strategy = new ResizeStrategy($imageProcessor);
+        $result = $strategy->transform($imageContent, $originalDimensions, $request);
 
         $this->assertEquals('resized content', $result);
     }
@@ -88,13 +90,15 @@ final class ResizeStrategyTest extends TestCase {
         $request = new ImageTransformationRequest(partialDimensions: $partialDimensions);
         $imageContent = 'image content';
 
-        $this->imageProcessor
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor
             ->expects($this->once())
             ->method('resize')
             ->with($imageContent, 400, 300)
             ->willReturn('resized content');
 
-        $result = $this->strategy->transform($imageContent, $originalDimensions, $request);
+        $strategy = new ResizeStrategy($imageProcessor);
+        $result = $strategy->transform($imageContent, $originalDimensions, $request);
 
         $this->assertEquals('resized content', $result);
     }
@@ -106,13 +110,15 @@ final class ResizeStrategyTest extends TestCase {
         $request = new ImageTransformationRequest(targetDimensions: $targetDimensions);
         $imageContent = 'image content';
 
-        $this->imageProcessor
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor
             ->expects($this->once())
             ->method('resize')
             ->with($imageContent, 400, 300)
             ->willReturn('resized content');
 
-        $result = $this->strategy->transform($imageContent, $originalDimensions, $request);
+        $strategy = new ResizeStrategy($imageProcessor);
+        $result = $strategy->transform($imageContent, $originalDimensions, $request);
 
         $this->assertEquals('resized content', $result);
     }
@@ -127,13 +133,15 @@ final class ResizeStrategyTest extends TestCase {
         );
         $imageContent = 'image content';
 
-        $this->imageProcessor
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor
             ->expects($this->once())
             ->method('resize')
             ->with($imageContent, 400, 300)
             ->willReturn('enlarged content');
 
-        $result = $this->strategy->transform($imageContent, $originalDimensions, $request);
+        $strategy = new ResizeStrategy($imageProcessor);
+        $result = $strategy->transform($imageContent, $originalDimensions, $request);
 
         $this->assertEquals('enlarged content', $result);
     }
@@ -144,9 +152,11 @@ final class ResizeStrategyTest extends TestCase {
         $request = new ImageTransformationRequest(quality: 85);
         $imageContent = 'image content';
 
-        $this->imageProcessor->expects($this->never())->method('resize');
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor->expects($this->never())->method('resize');
 
-        $result = $this->strategy->transform($imageContent, $originalDimensions, $request);
+        $strategy = new ResizeStrategy($imageProcessor);
+        $result = $strategy->transform($imageContent, $originalDimensions, $request);
 
         $this->assertEquals('image content', $result);
     }

@@ -15,15 +15,15 @@ use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
 
 final class CollectionCoverGeneratorTest extends TestCase {
-  private MockObject&StorageInterface $storage;
-  private MockObject&ImageRepositoryInterface $imageRepository;
-  private MockObject&CollageBuilderInterface $collageBuilder;
+  private StorageInterface $storage;
+  private ImageRepositoryInterface $imageRepository;
+  private CollageBuilderInterface $collageBuilder;
   private CollectionCoverGenerator $generator;
 
   protected function setUp(): void {
-    $this->storage = $this->createMock(StorageInterface::class);
-    $this->imageRepository = $this->createMock(ImageRepositoryInterface::class);
-    $this->collageBuilder = $this->createMock(CollageBuilderInterface::class);
+    $this->storage = $this->createStub(StorageInterface::class);
+    $this->imageRepository = $this->createStub(ImageRepositoryInterface::class);
+    $this->collageBuilder = $this->createStub(CollageBuilderInterface::class);
 
     $this->generator = new CollectionCoverGenerator(
       $this->storage,
@@ -79,34 +79,39 @@ final class CollectionCoverGeneratorTest extends TestCase {
     $imageContent = 'raw-image-bytes';
     $generatedContent = 'generated-binary-content';
 
-    $this->storage
+    $storage = $this->createMock(StorageInterface::class);
+    $imageRepository = $this->createStub(ImageRepositoryInterface::class);
+    $collageBuilder = $this->createMock(CollageBuilderInterface::class);
+
+    $storage
       ->method('readFromCache')
       ->willReturn(null);
 
-    $imageView = $this->createMock(ImageView::class);
+    $imageView = $this->createStub(ImageView::class);
     $imageView->method('getFileName')->willReturn('image-1.jpg');
     $imageView->method('getMimeType')->willReturn('image/jpeg');
 
-    $this->imageRepository
+    $imageRepository
       ->method('oneById')
       ->with('image-1')
       ->willReturn($imageView);
 
-    $this->storage
+    $storage
       ->method('getImage')
       ->willReturn($imageContent);
 
-    $this->collageBuilder
+    $collageBuilder
       ->expects($this->once())
       ->method('build')
       ->willReturn($generatedContent);
 
-    $this->storage
+    $storage
       ->expects($this->once())
       ->method('writeToCache')
       ->with('collection-id.avif', $generatedContent);
 
-    $result = $this->generator->getCoverContent($collectionId, $imageIds);
+    $generator = new CollectionCoverGenerator($storage, $imageRepository, $collageBuilder);
+    $result = $generator->getCoverContent($collectionId, $imageIds);
 
     $this->assertEquals($generatedContent, $result);
   }
@@ -116,28 +121,33 @@ final class CollectionCoverGeneratorTest extends TestCase {
     $collectionId = 'collection-id';
     $imageIds = ['svg-image'];
 
-    $this->storage
+    $storage = $this->createMock(StorageInterface::class);
+    $imageRepository = $this->createStub(ImageRepositoryInterface::class);
+    $collageBuilder = $this->createMock(CollageBuilderInterface::class);
+
+    $storage
       ->method('readFromCache')
       ->willReturn(null);
 
-    $svgView = $this->createMock(ImageView::class);
+    $svgView = $this->createStub(ImageView::class);
     $svgView->method('getMimeType')->willReturn('image/svg+xml');
 
-    $this->imageRepository
+    $imageRepository
       ->method('oneById')
       ->willReturn($svgView);
 
-    $this->collageBuilder
+    $collageBuilder
       ->expects($this->once())
       ->method('build')
       ->with([])
       ->willReturn(null);
 
-    $this->storage
+    $storage
       ->expects($this->never())
       ->method('writeToCache');
 
-    $result = $this->generator->getCoverContent($collectionId, $imageIds);
+    $generator = new CollectionCoverGenerator($storage, $imageRepository, $collageBuilder);
+    $result = $generator->getCoverContent($collectionId, $imageIds);
 
     $this->assertNull($result);
   }
@@ -146,12 +156,17 @@ final class CollectionCoverGeneratorTest extends TestCase {
   public function itDeletesCacheOnInvalidate(): void {
     $collectionId = 'collection-id';
 
-    $this->storage
+    $storage = $this->createMock(StorageInterface::class);
+    $imageRepository = $this->createStub(ImageRepositoryInterface::class);
+    $collageBuilder = $this->createStub(CollageBuilderInterface::class);
+
+    $storage
       ->expects($this->once())
       ->method('deleteFromCache')
       ->with('collection-id.avif');
 
-    $this->generator->invalidateCover($collectionId);
+    $generator = new CollectionCoverGenerator($storage, $imageRepository, $collageBuilder);
+    $generator->invalidateCover($collectionId);
   }
 
   #[Test]
@@ -159,32 +174,37 @@ final class CollectionCoverGeneratorTest extends TestCase {
     $collectionId = 'collection-id';
     $imageIds = ['img-1', 'img-2', 'img-3', 'img-4', 'img-5', 'img-6', 'img-7'];
 
-    $this->storage
+    $storage = $this->createMock(StorageInterface::class);
+    $imageRepository = $this->createMock(ImageRepositoryInterface::class);
+    $collageBuilder = $this->createMock(CollageBuilderInterface::class);
+
+    $storage
       ->method('readFromCache')
       ->willReturn(null);
 
-    $imageView = $this->createMock(ImageView::class);
+    $imageView = $this->createStub(ImageView::class);
     $imageView->method('getMimeType')->willReturn('image/jpeg');
 
-    $this->imageRepository
+    $imageRepository
       ->expects($this->exactly(5))
       ->method('oneById')
       ->willReturn($imageView);
 
-    $this->storage
+    $storage
       ->method('getImage')
       ->willReturn(null);
 
-    $this->collageBuilder
+    $collageBuilder
       ->expects($this->once())
       ->method('build')
       ->willReturn(null);
 
-    $this->storage
+    $storage
       ->expects($this->never())
       ->method('writeToCache');
 
-    $result = $this->generator->getCoverContent($collectionId, $imageIds);
+    $generator = new CollectionCoverGenerator($storage, $imageRepository, $collageBuilder);
+    $result = $generator->getCoverContent($collectionId, $imageIds);
 
     $this->assertNull($result);
   }

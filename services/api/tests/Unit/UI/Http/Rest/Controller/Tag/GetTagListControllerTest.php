@@ -78,9 +78,9 @@ final class GetTagListControllerTest extends TestCase {
   #[Test]
   public function itHandlesParentIdFilter(): void {
     $queryBus = $this->createMock(QueryBusInterface::class);
-    $user = $this->createMock(UserInterface::class);
+    $user = $this->createStub(UserInterface::class);
     $collection = new Collection(1, 50, 0, []);
-    
+
     $user->method('getIdentifier')->willReturn('user-789');
 
     $queryBus->expects($this->once())
@@ -100,10 +100,10 @@ final class GetTagListControllerTest extends TestCase {
 
   #[Test]
   public function itHandlesRootOnlyFilter(): void {
-    $queryBus = $this->createMock(QueryBusInterface::class);
-    $user = $this->createMock(UserInterface::class);
+    $queryBus = $this->createStub(QueryBusInterface::class);
+    $user = $this->createStub(UserInterface::class);
     $collection = new Collection(1, 50, 1, []);
-    
+
     $user->method('getIdentifier')->willReturn('user-abc');
     $queryBus->method('ask')->willReturn($collection);
 
@@ -119,10 +119,10 @@ final class GetTagListControllerTest extends TestCase {
 
   #[Test]
   public function itReturnsCollectionResponse(): void {
-    $queryBus = $this->createMock(QueryBusInterface::class);
-    $user = $this->createMock(UserInterface::class);
+    $queryBus = $this->createStub(QueryBusInterface::class);
+    $user = $this->createStub(UserInterface::class);
     $collection = new Collection(1, 50, 0, []);
-    
+
     $user->method('getIdentifier')->willReturn('user-def');
     $queryBus->method('ask')->willReturn($collection);
 

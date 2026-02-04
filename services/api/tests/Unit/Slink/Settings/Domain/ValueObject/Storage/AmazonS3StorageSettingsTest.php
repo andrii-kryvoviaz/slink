@@ -139,7 +139,7 @@ final class AmazonS3StorageSettingsTest extends TestCase {
 
   #[Test]
   public function itCreatesSettingsFromConfigurationProvider(): void {
-    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')
       ->willReturnMap([
         ['storage.adapter.s3.region', 'us-west-2'],
@@ -164,7 +164,7 @@ final class AmazonS3StorageSettingsTest extends TestCase {
 
   #[Test]
   public function itValidatesConfigurationProviderValues(): void {
-    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')
       ->willReturnMap([
         ['storage.adapter.s3.region', ''],

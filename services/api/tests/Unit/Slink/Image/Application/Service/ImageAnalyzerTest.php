@@ -17,8 +17,8 @@ use Tests\Traits\FixturePathTrait;
 
 final class ImageAnalyzerTest extends TestCase {
     use FixturePathTrait;
-    private MockObject $capabilityChecker;
-    private MockObject $imageProcessor;
+    private ImageCapabilityChecker $capabilityChecker;
+    private ImageProcessorInterface $imageProcessor;
     private ImageAnalyzer $analyzer;
 
     /**
@@ -26,16 +26,16 @@ final class ImageAnalyzerTest extends TestCase {
      */
     protected function setUp(): void {
         parent::setUp();
-        
-        $this->capabilityChecker = $this->createMock(ImageCapabilityChecker::class);
-        $this->imageProcessor = $this->createMock(ImageProcessorInterface::class);
+
+        $this->capabilityChecker = $this->createStub(ImageCapabilityChecker::class);
+        $this->imageProcessor = $this->createStub(ImageProcessorInterface::class);
         $this->analyzer = new ImageAnalyzer($this->capabilityChecker, $this->imageProcessor);
     }
 
     #[Test]
     public function itAnalyzesImageFile(): void {
         $testImagePath = $this->getFixturePath('test.jpg');
-        $file = $this->createMock(File::class);
+        $file = $this->createStub(File::class);
         $file->method('getPathname')->willReturn($testImagePath);
         $file->method('getMimeType')->willReturn('image/jpeg');
         $file->method('getSize')->willReturn(1024);
@@ -57,14 +57,16 @@ final class ImageAnalyzerTest extends TestCase {
     #[Test]
     public function itChecksConversionRequirement(): void {
         $mimeType = 'image/webp';
-        
-        $this->capabilityChecker
+
+        $capabilityChecker = $this->createMock(ImageCapabilityChecker::class);
+        $capabilityChecker
             ->expects($this->once())
             ->method('isConversionRequired')
             ->with($mimeType)
             ->willReturn(true);
 
-        $result = $this->analyzer->isConversionRequired($mimeType);
+        $analyzer = new ImageAnalyzer($capabilityChecker, $this->imageProcessor);
+        $result = $analyzer->isConversionRequired($mimeType);
 
         $this->assertTrue($result);
     }
@@ -72,14 +74,16 @@ final class ImageAnalyzerTest extends TestCase {
     #[Test]
     public function itChecksExifProfileSupport(): void {
         $mimeType = 'image/jpeg';
-        
-        $this->capabilityChecker
+
+        $capabilityChecker = $this->createMock(ImageCapabilityChecker::class);
+        $capabilityChecker
             ->expects($this->once())
             ->method('supportsExifProfile')
             ->with($mimeType)
             ->willReturn(true);
 
-        $result = $this->analyzer->supportsExifProfile($mimeType);
+        $analyzer = new ImageAnalyzer($capabilityChecker, $this->imageProcessor);
+        $result = $analyzer->supportsExifProfile($mimeType);
 
         $this->assertTrue($result);
     }
@@ -87,21 +91,23 @@ final class ImageAnalyzerTest extends TestCase {
     #[Test]
     public function itChecksResizeSupport(): void {
         $mimeType = 'image/png';
-        
-        $this->capabilityChecker
+
+        $capabilityChecker = $this->createMock(ImageCapabilityChecker::class);
+        $capabilityChecker
             ->expects($this->once())
             ->method('supportsResize')
             ->with($mimeType)
             ->willReturn(true);
 
-        $result = $this->analyzer->supportsResize($mimeType);
+        $analyzer = new ImageAnalyzer($capabilityChecker, $this->imageProcessor);
+        $result = $analyzer->supportsResize($mimeType);
 
         $this->assertTrue($result);
     }
 
     #[Test]
     public function itReturnsPayloadWithZeroDimensionsWhenGetImageSizeFails(): void {
-        $file = $this->createMock(File::class);
+        $file = $this->createStub(File::class);
         $file->method('getPathname')->willReturn('/tmp/invalid.jpg');
         $file->method('getMimeType')->willReturn('image/jpeg');
         $file->method('getSize')->willReturn(1024);
@@ -120,7 +126,7 @@ final class ImageAnalyzerTest extends TestCase {
 
     #[Test]
     public function itCalculatesAspectRatioCorrectly(): void {
-        $file = $this->createMock(File::class);
+        $file = $this->createStub(File::class);
         $file->method('getPathname')->willReturn('/tmp/nonexistent.jpg');
         $file->method('getMimeType')->willReturn('image/jpeg');
         $file->method('getSize')->willReturn(1024);
@@ -144,7 +150,7 @@ final class ImageAnalyzerTest extends TestCase {
 
     #[Test]
     public function itDeterminesOrientationAsSquare(): void {
-        $file = $this->createMock(File::class);
+        $file = $this->createStub(File::class);
         $file->method('getPathname')->willReturn('/tmp/square.jpg');
         $file->method('getMimeType')->willReturn('image/jpeg');
         $file->method('getSize')->willReturn(1024);
@@ -162,14 +168,16 @@ final class ImageAnalyzerTest extends TestCase {
     #[Test]
     public function itDetectsAnimatedImage(): void {
         $testImagePath = $this->getFixturePath('test.jpg');
-        
-        $this->imageProcessor
+
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor
             ->expects($this->once())
             ->method('getAnimatedImageInfo')
             ->with($this->anything())
             ->willReturn(AnimatedImageInfo::animated(10));
 
-        $result = $this->analyzer->isAnimated($testImagePath);
+        $analyzer = new ImageAnalyzer($this->capabilityChecker, $imageProcessor);
+        $result = $analyzer->isAnimated($testImagePath);
 
         $this->assertTrue($result);
     }
@@ -177,13 +185,15 @@ final class ImageAnalyzerTest extends TestCase {
     #[Test]
     public function itDetectsNonAnimatedImage(): void {
         $testImagePath = $this->getFixturePath('test.jpg');
-        
-        $this->imageProcessor
+
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor
             ->expects($this->once())
             ->method('getAnimatedImageInfo')
             ->willReturn(AnimatedImageInfo::static());
 
-        $result = $this->analyzer->isAnimated($testImagePath);
+        $analyzer = new ImageAnalyzer($this->capabilityChecker, $imageProcessor);
+        $result = $analyzer->isAnimated($testImagePath);
 
         $this->assertFalse($result);
     }

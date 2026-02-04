@@ -28,11 +28,11 @@ final class DeleteImageHandlerTest extends TestCase {
     $userId = '123e4567-e89b-12d3-a456-426614174000';
     $command = new DeleteImageCommand(false);
     
-    $user = $this->createMock(JwtUser::class);
+    $user = $this->createStub(JwtUser::class);
     $user->method('getIdentifier')->willReturn($userId);
     
     $imageUserId = ID::fromString($userId);
-    $attributes = $this->createMock(ImageAttributes::class);
+    $attributes = $this->createStub(ImageAttributes::class);
     $attributes->method('getFileName')->willReturn('test-image.jpg');
     
     $image = $this->createMock(Image::class);
@@ -58,11 +58,11 @@ final class DeleteImageHandlerTest extends TestCase {
     $userId = '123e4567-e89b-12d3-a456-426614174000';
     $command = new DeleteImageCommand(true);
     
-    $user = $this->createMock(JwtUser::class);
+    $user = $this->createStub(JwtUser::class);
     $user->method('getIdentifier')->willReturn($userId);
     
     $imageUserId = ID::fromString($userId);
-    $attributes = $this->createMock(ImageAttributes::class);
+    $attributes = $this->createStub(ImageAttributes::class);
     
     $image = $this->createMock(Image::class);
     $image->method('getAttributes')->willReturn($attributes);
@@ -89,18 +89,18 @@ final class DeleteImageHandlerTest extends TestCase {
     $userId = '123e4567-e89b-12d3-a456-426614174000';
     $command = new DeleteImageCommand(false);
     
-    $user = $this->createMock(JwtUser::class);
+    $user = $this->createStub(JwtUser::class);
     $user->method('getIdentifier')->willReturn($userId);
     
-    $image = $this->createMock(Image::class);
+    $image = $this->createStub(Image::class);
     $image->method('aggregateRootVersion')->willReturn(0);
     $image->method('isDeleted')->willReturn(false);
-    
-    $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
+
+    $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);
-    
-    $storage = $this->createMock(StorageInterface::class);
-    
+
+    $storage = $this->createStub(StorageInterface::class);
+
     $handler = new DeleteImageHandler($imageRepository, $storage);
     $handler($command, $userId, '123');
   }
@@ -112,18 +112,18 @@ final class DeleteImageHandlerTest extends TestCase {
     $userId = '123e4567-e89b-12d3-a456-426614174000';
     $command = new DeleteImageCommand(false);
     
-    $user = $this->createMock(JwtUser::class);
+    $user = $this->createStub(JwtUser::class);
     $user->method('getIdentifier')->willReturn($userId);
     
-    $image = $this->createMock(Image::class);
+    $image = $this->createStub(Image::class);
     $image->method('aggregateRootVersion')->willReturn(1);
     $image->method('isDeleted')->willReturn(true);
-    
-    $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
+
+    $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);
-    
-    $storage = $this->createMock(StorageInterface::class);
-    
+
+    $storage = $this->createStub(StorageInterface::class);
+
     $handler = new DeleteImageHandler($imageRepository, $storage);
     $handler($command, $userId, '123');
   }
@@ -134,15 +134,15 @@ final class DeleteImageHandlerTest extends TestCase {
     
     $command = new DeleteImageCommand(false);
     
-    $image = $this->createMock(Image::class);
+    $image = $this->createStub(Image::class);
     $image->method('aggregateRootVersion')->willReturn(1);
     $image->method('isDeleted')->willReturn(false);
-    
-    $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
+
+    $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);
-    
-    $storage = $this->createMock(StorageInterface::class);
-    
+
+    $storage = $this->createStub(StorageInterface::class);
+
     $handler = new DeleteImageHandler($imageRepository, $storage);
     $handler($command, '', '123');
   }
@@ -155,20 +155,20 @@ final class DeleteImageHandlerTest extends TestCase {
     $differentUserId = '987e6543-e21b-34c5-b654-321098765432';
     $command = new DeleteImageCommand(false);
     
-    $user = $this->createMock(JwtUser::class);
+    $user = $this->createStub(JwtUser::class);
     $user->method('getIdentifier')->willReturn($userId);
     
     $imageUserId = ID::fromString($differentUserId);
-    $image = $this->createMock(Image::class);
+    $image = $this->createStub(Image::class);
     $image->method('aggregateRootVersion')->willReturn(1);
     $image->method('isDeleted')->willReturn(false);
     $image->method('getUserId')->willReturn($imageUserId);
-    
-    $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
+
+    $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);
-    
-    $storage = $this->createMock(StorageInterface::class);
-    
+
+    $storage = $this->createStub(StorageInterface::class);
+
     $handler = new DeleteImageHandler($imageRepository, $storage);
     $handler($command, $userId, '123');
   }
@@ -180,19 +180,19 @@ final class DeleteImageHandlerTest extends TestCase {
     $userId = '123e4567-e89b-12d3-a456-426614174000';
     $command = new DeleteImageCommand(false);
     
-    $user = $this->createMock(JwtUser::class);
+    $user = $this->createStub(JwtUser::class);
     $user->method('getIdentifier')->willReturn($userId);
     
-    $image = $this->createMock(Image::class);
+    $image = $this->createStub(Image::class);
     $image->method('aggregateRootVersion')->willReturn(1);
     $image->method('isDeleted')->willReturn(false);
     $image->method('getUserId')->willReturn(null);
-    
-    $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
+
+    $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);
-    
-    $storage = $this->createMock(StorageInterface::class);
-    
+
+    $storage = $this->createStub(StorageInterface::class);
+
     $handler = new DeleteImageHandler($imageRepository, $storage);
     $handler($command, $userId, '123');
   }

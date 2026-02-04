@@ -15,11 +15,11 @@ use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 final class ApiKeyUserProviderTest extends TestCase {
-  private ApiKeyRepositoryInterface&MockObject $apiKeyRepository;
+  private ApiKeyRepositoryInterface $apiKeyRepository;
   private ApiKeyUserProvider $userProvider;
 
   protected function setUp(): void {
-    $this->apiKeyRepository = $this->createMock(ApiKeyRepositoryInterface::class);
+    $this->apiKeyRepository = $this->createStub(ApiKeyRepositoryInterface::class);
     $this->userProvider = new ApiKeyUserProvider($this->apiKeyRepository);
   }
 
@@ -27,29 +27,31 @@ final class ApiKeyUserProviderTest extends TestCase {
     $apiKey = 'sk_test_key_12345';
     $userId = 'user-123';
     $keyId = 'key-456';
-    
+
     $apiKeyView = $this->createMock(ApiKeyView::class);
     $apiKeyView->method('getUserId')->willReturn($userId);
     $apiKeyView->method('getKeyId')->willReturn($keyId);
     $apiKeyView->method('isExpired')->willReturn(false);
-    
-    $this->apiKeyRepository
+
+    $apiKeyRepository = $this->createMock(ApiKeyRepositoryInterface::class);
+    $apiKeyRepository
       ->expects($this->once())
       ->method('findByKey')
       ->with($apiKey)
       ->willReturn($apiKeyView);
-    
+
     $apiKeyView
       ->expects($this->once())
       ->method('updateLastUsed');
-    
-    $this->apiKeyRepository
+
+    $apiKeyRepository
       ->expects($this->once())
       ->method('save')
       ->with($apiKeyView);
-    
-    $user = $this->userProvider->loadUserByIdentifier($apiKey);
-    
+
+    $userProvider = new ApiKeyUserProvider($apiKeyRepository);
+    $user = $userProvider->loadUserByIdentifier($apiKey);
+
     $this->assertInstanceOf(ApiKeyUser::class, $user);
     $this->assertEquals($userId, $user->getIdentifier());
     $this->assertEquals($keyId, $user->getKeyId());
@@ -58,48 +60,52 @@ final class ApiKeyUserProviderTest extends TestCase {
   public function testItThrowsExceptionWhenApiKeyNotFound(): void {
     $this->expectException(UserNotFoundException::class);
     $this->expectExceptionMessage('API key not found or expired');
-    
+
     $apiKey = 'sk_nonexistent_key';
-    
-    $this->apiKeyRepository
+
+    $apiKeyRepository = $this->createMock(ApiKeyRepositoryInterface::class);
+    $apiKeyRepository
       ->expects($this->once())
       ->method('findByKey')
       ->with($apiKey)
       ->willReturn(null);
-    
-    $this->userProvider->loadUserByIdentifier($apiKey);
+
+    $userProvider = new ApiKeyUserProvider($apiKeyRepository);
+    $userProvider->loadUserByIdentifier($apiKey);
   }
 
   public function testItThrowsExceptionWhenApiKeyExpired(): void {
     $this->expectException(UserNotFoundException::class);
     $this->expectExceptionMessage('API key not found or expired');
-    
+
     $apiKey = 'sk_expired_key';
-    
-    $apiKeyView = $this->createMock(ApiKeyView::class);
+
+    $apiKeyView = $this->createStub(ApiKeyView::class);
     $apiKeyView->method('isExpired')->willReturn(true);
-    
-    $this->apiKeyRepository
+
+    $apiKeyRepository = $this->createMock(ApiKeyRepositoryInterface::class);
+    $apiKeyRepository
       ->expects($this->once())
       ->method('findByKey')
       ->with($apiKey)
       ->willReturn($apiKeyView);
-    
-    $this->userProvider->loadUserByIdentifier($apiKey);
+
+    $userProvider = new ApiKeyUserProvider($apiKeyRepository);
+    $userProvider->loadUserByIdentifier($apiKey);
   }
 
   public function testItRefreshesApiKeyUser(): void {
     $userId = 'user-123';
     $keyId = 'key-456';
-    
-    $apiKeyUser = $this->createMock(ApiKeyUser::class);
+
+    $apiKeyUser = $this->createStub(ApiKeyUser::class);
     $apiKeyUser->method('getIdentifier')->willReturn($userId);
-    
-    $apiKeyView = $this->createMock(ApiKeyView::class);
+
+    $apiKeyView = $this->createStub(ApiKeyView::class);
     $apiKeyView->method('getUserId')->willReturn($userId);
     $apiKeyView->method('getKeyId')->willReturn($keyId);
     $apiKeyView->method('isExpired')->willReturn(false);
-    
+
     $this->apiKeyRepository
       ->method('findByKey')
       ->with($userId)
@@ -113,7 +119,7 @@ final class ApiKeyUserProviderTest extends TestCase {
   public function testItThrowsExceptionWhenRefreshingUnsupportedUser(): void {
     $this->expectException(UnsupportedUserException::class);
     
-    $user = $this->createMock(UserInterface::class);
+    $user = $this->createStub(UserInterface::class);
     
     $this->userProvider->refreshUser($user);
   }

@@ -47,7 +47,7 @@ final class CreateTagHandlerTest extends TestCase {
   public function itCreatesChildTagSuccessfully(): void {
     $tagStore = $this->createMock(TagStoreRepositoryInterface::class);
     $duplicateSpec = $this->createMock(TagDuplicateSpecificationInterface::class);
-    $parentTag = $this->createMock(Tag::class);
+    $parentTag = $this->createStub(Tag::class);
     $parentPath = TagPath::fromString('#parent');
     
     $parentId = ID::generate();
@@ -82,9 +82,9 @@ final class CreateTagHandlerTest extends TestCase {
 
   #[Test]
   public function itThrowsExceptionWhenTagIsDuplicate(): void {
-    $tagStore = $this->createMock(TagStoreRepositoryInterface::class);
+    $tagStore = $this->createStub(TagStoreRepositoryInterface::class);
     $duplicateSpec = $this->createMock(TagDuplicateSpecificationInterface::class);
-    
+
     $duplicateSpec->expects($this->once())
       ->method('ensureUnique')
       ->willThrowException(new DuplicateTagException('Tag already exists'));
@@ -100,9 +100,9 @@ final class CreateTagHandlerTest extends TestCase {
 
   #[Test]
   public function itHandlesTagNameCorrectly(): void {
-    $tagStore = $this->createMock(TagStoreRepositoryInterface::class);
+    $tagStore = $this->createStub(TagStoreRepositoryInterface::class);
     $duplicateSpec = $this->createMock(TagDuplicateSpecificationInterface::class);
-    
+
     $duplicateSpec->expects($this->once())
       ->method('ensureUnique')
       ->with(
@@ -125,11 +125,11 @@ final class CreateTagHandlerTest extends TestCase {
 
   #[Test]
   public function itHandlesUserIdCorrectly(): void {
-    $tagStore = $this->createMock(TagStoreRepositoryInterface::class);
+    $tagStore = $this->createStub(TagStoreRepositoryInterface::class);
     $duplicateSpec = $this->createMock(TagDuplicateSpecificationInterface::class);
-    
+
     $userIdString = 'specific-user-id-123';
-    
+
     $duplicateSpec->expects($this->once())
       ->method('ensureUnique')
       ->with(
@@ -152,9 +152,9 @@ final class CreateTagHandlerTest extends TestCase {
 
   #[Test]
   public function itReturnsGeneratedTagId(): void {
-    $tagStore = $this->createMock(TagStoreRepositoryInterface::class);
-    $duplicateSpec = $this->createMock(TagDuplicateSpecificationInterface::class);
-    
+    $tagStore = $this->createStub(TagStoreRepositoryInterface::class);
+    $duplicateSpec = $this->createStub(TagDuplicateSpecificationInterface::class);
+
     $duplicateSpec->method('ensureUnique');
     $tagStore->method('store');
 

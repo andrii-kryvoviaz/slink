@@ -11,20 +11,20 @@ use EventSauce\EventSourcing\MessageRepository;
 use EventSauce\EventSourcing\Snapshotting\ConstructingAggregateRootRepositoryWithSnapshotting;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use Slink\Shared\Infrastructure\Persistence\EventStore\SnapshotRepositoryFactory;
 
 final class SnapshotRepositoryFactoryTest extends TestCase {
 
-  private MessageRepository&MockObject $messageRepository;
-  private MessageDispatcher&MockObject $messageDispatcher;
-  private EntityManagerInterface&MockObject $entityManager;
+  private MessageRepository&Stub $messageRepository;
+  private MessageDispatcher&Stub $messageDispatcher;
+  private EntityManagerInterface&Stub $entityManager;
   private SnapshotRepositoryFactory $factory;
 
   protected function setUp(): void {
-    $this->messageRepository = $this->createMock(MessageRepository::class);
-    $this->messageDispatcher = $this->createMock(MessageDispatcher::class);
-    $this->entityManager = $this->createMock(EntityManagerInterface::class);
+    $this->messageRepository = $this->createStub(MessageRepository::class);
+    $this->messageDispatcher = $this->createStub(MessageDispatcher::class);
+    $this->entityManager = $this->createStub(EntityManagerInterface::class);
     
     $this->factory = new SnapshotRepositoryFactory(
       $this->messageRepository,

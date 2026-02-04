@@ -14,12 +14,12 @@ use Slink\Collection\Infrastructure\Service\UniqueCollectionNameGenerator;
 use Slink\Shared\Domain\ValueObject\ID;
 
 final class UniqueCollectionNameGeneratorTest extends TestCase {
-  private CollectionRepositoryInterface&MockObject $repository;
+  private CollectionRepositoryInterface $repository;
   private UniqueCollectionNameGenerator $generator;
   private ID $userId;
 
   protected function setUp(): void {
-    $this->repository = $this->createMock(CollectionRepositoryInterface::class);
+    $this->repository = $this->createStub(CollectionRepositoryInterface::class);
     $this->generator = new UniqueCollectionNameGenerator($this->repository);
     $this->userId = ID::generate();
   }
@@ -140,13 +140,15 @@ final class UniqueCollectionNameGeneratorTest extends TestCase {
   public function itPassesCorrectParametersToRepository(): void {
     $baseName = 'My Collection';
 
-    $this->repository
+    $repository = $this->createMock(CollectionRepositoryInterface::class);
+    $repository
       ->expects($this->once())
       ->method('findNamesByPatternAndUser')
       ->with($baseName, $this->userId->toString())
       ->willReturn([]);
 
-    $this->generator->generate(
+    $generator = new UniqueCollectionNameGenerator($repository);
+    $generator->generate(
       CollectionName::fromString($baseName),
       $this->userId
     );

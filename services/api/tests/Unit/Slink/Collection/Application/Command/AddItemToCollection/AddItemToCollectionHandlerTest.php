@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\Unit\Slink\Collection\Application\Command\AddItemToCollection;
 
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Slink\Collection\Application\Command\AddItemToCollection\AddItemToCollectionCommand;
 use Slink\Collection\Application\Command\AddItemToCollection\AddItemToCollectionHandler;
@@ -18,13 +17,6 @@ use Slink\Collection\Domain\ValueObject\CollectionName;
 use Slink\Shared\Domain\ValueObject\ID;
 
 final class AddItemToCollectionHandlerTest extends TestCase {
-  private CollectionStoreRepositoryInterface&MockObject $collectionStore;
-  private AddItemToCollectionHandler $handler;
-
-  protected function setUp(): void {
-    $this->collectionStore = $this->createMock(CollectionStoreRepositoryInterface::class);
-    $this->handler = new AddItemToCollectionHandler($this->collectionStore);
-  }
 
   #[Test]
   public function itAddsItemToCollection(): void {
@@ -40,16 +32,19 @@ final class AddItemToCollectionHandlerTest extends TestCase {
     );
     $collection->releaseEvents();
 
-    $this->collectionStore
+    $collectionStore = $this->createMock(CollectionStoreRepositoryInterface::class);
+    $collectionStore
       ->expects($this->once())
       ->method('get')
       ->with($this->callback(fn($id) => $id->equals($collectionId)))
       ->willReturn($collection);
 
-    $this->collectionStore
+    $collectionStore
       ->expects($this->once())
       ->method('store')
       ->with($collection);
+
+    $handler = new AddItemToCollectionHandler($collectionStore);
 
     $command = new AddItemToCollectionCommand(
       $collectionId->toString(),
@@ -57,7 +52,7 @@ final class AddItemToCollectionHandlerTest extends TestCase {
       ItemType::Image
     );
 
-    ($this->handler)($command, $userId->toString());
+    $handler($command, $userId->toString());
   }
 
   #[Test]
@@ -76,9 +71,12 @@ final class AddItemToCollectionHandlerTest extends TestCase {
       CollectionDescription::fromString('Test')
     );
 
-    $this->collectionStore
+    $collectionStore = $this->createStub(CollectionStoreRepositoryInterface::class);
+    $collectionStore
       ->method('get')
       ->willReturn($collection);
+
+    $handler = new AddItemToCollectionHandler($collectionStore);
 
     $command = new AddItemToCollectionCommand(
       $collectionId->toString(),
@@ -86,6 +84,6 @@ final class AddItemToCollectionHandlerTest extends TestCase {
       ItemType::Image
     );
 
-    ($this->handler)($command, $differentUserId->toString());
+    $handler($command, $differentUserId->toString());
   }
 }

@@ -17,21 +17,40 @@ use Slink\Shared\Infrastructure\Persistence\EventStore\SnapshotRepositoryFactory
 
 final class AbstractSnapshotStoreRepositoryTest extends TestCase {
 
-  /** @var MockObject&SnapshotRepositoryFactory */
-  private MockObject $factory; //@phpstan-ignore-line
-  /** @var MockObject&SnapshotRepository */
-  private MockObject $snapshotRepository;
-  /** @var MockObject&ConstructingAggregateRootRepositoryWithSnapshotting */
-  private MockObject $constructingRepository; //@phpstan-ignore-line
+  private SnapshotRepositoryFactory $factory;
+  /** @var SnapshotRepository */
+  private SnapshotRepository $snapshotRepository;
+  /** @var ConstructingAggregateRootRepositoryWithSnapshotting */
+  private ConstructingAggregateRootRepositoryWithSnapshotting $constructingRepository; //@phpstan-ignore-line
   private TestSnapshotStoreRepository $repository;
 
-  protected function setUp(): void {
-    $this->factory = $this->createMock(SnapshotRepositoryFactory::class);
-    $this->snapshotRepository = $this->createMock(SnapshotRepository::class);
-    $this->constructingRepository = $this->createMock(ConstructingAggregateRootRepositoryWithSnapshotting::class);
-    
-    $this->factory
+  private function createRepository(
+    ?SnapshotRepository $snapshotRepository = null,
+    ?ConstructingAggregateRootRepositoryWithSnapshotting $constructingRepository = null
+  ): TestSnapshotStoreRepository {
+    $factory = $this->createMock(SnapshotRepositoryFactory::class);
+    $snapshotRepository = $snapshotRepository ?? $this->createStub(SnapshotRepository::class);
+    $constructingRepository = $constructingRepository ?? $this->createStub(ConstructingAggregateRootRepositoryWithSnapshotting::class);
+
+    $factory
       ->expects($this->once())
+      ->method('createForAggregate')
+      ->with('Slink\\Image\\Domain\\Image')
+      ->willReturn($constructingRepository);
+
+    return new TestSnapshotStoreRepository(
+      $factory,
+      $snapshotRepository,
+      50
+    );
+  }
+
+  protected function setUp(): void {
+    $this->factory = $this->createStub(SnapshotRepositoryFactory::class);
+    $this->snapshotRepository = $this->createStub(SnapshotRepository::class);
+    $this->constructingRepository = $this->createStub(ConstructingAggregateRootRepositoryWithSnapshotting::class);
+
+    $this->factory
       ->method('createForAggregate')
       ->with('Slink\\Image\\Domain\\Image')
       ->willReturn($this->constructingRepository);
@@ -46,87 +65,98 @@ final class AbstractSnapshotStoreRepositoryTest extends TestCase {
   #[Test]
   public function itRetrievesAggregateFromSnapshot(): void {
     $aggregateId = ID::generate();
-    $expectedAggregate = $this->createMock(AggregateRootWithSnapshotting::class);
-    
-    $this->constructingRepository
+    $expectedAggregate = $this->createStub(AggregateRootWithSnapshotting::class);
+
+    $constructingRepository = $this->createMock(ConstructingAggregateRootRepositoryWithSnapshotting::class);
+    $constructingRepository
       ->expects($this->once())
       ->method('retrieveFromSnapshot')
       ->with($aggregateId)
       ->willReturn($expectedAggregate);
-    
-    $result = $this->repository->retrieve($aggregateId);
-    
+
+    $repository = $this->createRepository(constructingRepository: $constructingRepository);
+
+    $result = $repository->retrieve($aggregateId);
+
     $this->assertSame($expectedAggregate, $result);
   }
 
   #[Test]
   public function itPersistsAggregateWithoutSnapshot(): void {
-    $aggregateRoot = $this->createMock(AggregateRootWithSnapshotting::class);
+    $aggregateRoot = $this->createStub(AggregateRootWithSnapshotting::class);
     $aggregateRoot->method('aggregateRootVersion')->willReturn(10);
-    
-    $this->constructingRepository
+
+    $constructingRepository = $this->createMock(ConstructingAggregateRootRepositoryWithSnapshotting::class);
+    $constructingRepository
       ->expects($this->once())
       ->method('persist')
       ->with($aggregateRoot);
-    
-    $this->constructingRepository
+
+    $constructingRepository
       ->expects($this->never())
       ->method('storeSnapshot');
-    
-    $this->repository->persist($aggregateRoot);
+
+    $repository = $this->createRepository(constructingRepository: $constructingRepository);
+    $repository->persist($aggregateRoot);
   }
 
   #[Test]
   public function itCreatesSnapshotWhenVersionReachesFrequency(): void {
     $aggregateId = ID::generate();
-    $aggregateRoot = $this->createMock(AggregateRootWithSnapshotting::class);
+    $aggregateRoot = $this->createStub(AggregateRootWithSnapshotting::class);
     $aggregateRoot->method('aggregateRootVersion')->willReturn(50);
     $aggregateRoot->method('aggregateRootId')->willReturn($aggregateId);
-    
-    $this->snapshotRepository
+
+    $snapshotRepository = $this->createMock(SnapshotRepository::class);
+    $snapshotRepository
       ->expects($this->once())
       ->method('retrieve')
       ->with($aggregateId)
       ->willReturn(null);
-    
-    $this->constructingRepository
+
+    $constructingRepository = $this->createMock(ConstructingAggregateRootRepositoryWithSnapshotting::class);
+    $constructingRepository
       ->expects($this->once())
       ->method('persist')
       ->with($aggregateRoot);
-    
-    $this->constructingRepository
+
+    $constructingRepository
       ->expects($this->once())
       ->method('storeSnapshot')
       ->with($aggregateRoot);
-    
-    $this->repository->persist($aggregateRoot);
+
+    $repository = $this->createRepository(snapshotRepository: $snapshotRepository, constructingRepository: $constructingRepository);
+    $repository->persist($aggregateRoot);
   }
 
   #[Test]
   public function itCreatesSnapshotOnMultipleOfFrequency(): void {
     $aggregateId = ID::generate();
-    $aggregateRoot = $this->createMock(AggregateRootWithSnapshotting::class);
+    $aggregateRoot = $this->createStub(AggregateRootWithSnapshotting::class);
     $aggregateRoot->method('aggregateRootVersion')->willReturn(100);
     $aggregateRoot->method('aggregateRootId')->willReturn($aggregateId);
-    
+
     $existingSnapshot = new Snapshot($aggregateId, 50, []);
-    $this->snapshotRepository
+    $snapshotRepository = $this->createMock(SnapshotRepository::class);
+    $snapshotRepository
       ->expects($this->once())
       ->method('retrieve')
       ->with($aggregateId)
       ->willReturn($existingSnapshot);
-    
-    $this->constructingRepository
+
+    $constructingRepository = $this->createMock(ConstructingAggregateRootRepositoryWithSnapshotting::class);
+    $constructingRepository
       ->expects($this->once())
       ->method('persist')
       ->with($aggregateRoot);
-    
-    $this->constructingRepository
+
+    $constructingRepository
       ->expects($this->once())
       ->method('storeSnapshot')
       ->with($aggregateRoot);
-    
-    $this->repository->persist($aggregateRoot);
+
+    $repository = $this->createRepository(snapshotRepository: $snapshotRepository, constructingRepository: $constructingRepository);
+    $repository->persist($aggregateRoot);
   }
 
   #[Test]
