@@ -8,52 +8,32 @@
   import { calculateHistoryCardWeight } from '@slink/feature/Image/utils/calculateHistoryCardWeight';
   import { Masonry } from '@slink/feature/Layout';
   import { ImageTagList } from '@slink/feature/Tag';
-  import { FormattedDate } from '@slink/feature/Text';
+  import { OverlayCheckbox } from '@slink/ui/components/checkbox';
 
-  import { bytesToSize } from '$lib/utils/bytesConverter';
-  import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
-
-  import type { ImageListingItem } from '@slink/api/Response';
-
-  import type { ImageSelectionState } from '@slink/lib/state/ImageSelectionState.svelte';
 
   import {
     actionBarVisibilityVariants,
+    createActionBarImage,
+    historyActionBarButtons,
     historyCardVariants,
     linkVariants,
-    selectionCheckboxVariants,
   } from './HistoryView.theme';
+  import type { HistoryViewProps } from './HistoryView.types';
+  import ImageMetadata from './ImageMetadata.svelte';
+  import { useHistoryItemActions } from './useHistoryItemActions.svelte';
 
-  interface Props {
-    items?: ImageListingItem[];
-    selectionState?: ImageSelectionState;
-    on?: {
-      delete: (id: string) => void;
-      collectionChange: (imageId: string, collectionIds: string[]) => void;
-      selectionChange?: (id: string) => void;
-    };
-  }
+  let { items = [], selectionState, on }: HistoryViewProps = $props();
 
-  let { items = [], selectionState, on }: Props = $props();
-
-  const onImageDelete = (id: string) => {
-    on?.delete(id);
-  };
-
-  const formatMimeType = (mimeType: string): string => {
-    const type = mimeType.split('/')[1];
-    if (!type) return mimeType;
-    return type.toUpperCase();
-  };
-
-  const handleItemClick = (e: MouseEvent, item: ImageListingItem) => {
-    if (selectionState?.isSelectionMode) {
-      e.preventDefault();
-      selectionState.toggle(item.id);
-      on?.selectionChange?.(item.id);
-    }
-  };
+  const { handleItemClick, handleDelete, getItemState } = useHistoryItemActions(
+    {
+      getSelectionState: () => selectionState,
+      onDelete: (id) => on?.delete(id),
+      onCollectionChange: (imageId, collectionIds) =>
+        on?.collectionChange(imageId, collectionIds),
+      onSelectionChange: (id) => on?.selectionChange?.(id),
+    },
+  );
 </script>
 
 <Masonry
@@ -69,8 +49,8 @@
   getItemWeight={calculateHistoryCardWeight}
 >
   {#snippet itemTemplate(item)}
-    {@const isSelected = selectionState?.isSelected(item.id) ?? false}
-    {@const isSelectionMode = selectionState?.isSelectionMode ?? false}
+    {@const { isSelected, isSelectionMode, selectionAriaLabel, itemHref } =
+      getItemState(item)}
     <article
       in:fly={{ y: 20, duration: 300, delay: Math.random() * 100 }}
       out:fade={{ duration: 200 }}
@@ -82,17 +62,13 @@
             type="button"
             onclick={(e) => handleItemClick(e, item)}
             class="absolute top-2 left-2 z-20"
-            aria-label={isSelected ? 'Deselect image' : 'Select image'}
+            aria-label={selectionAriaLabel}
           >
-            <div class={selectionCheckboxVariants({ selected: isSelected })}>
-              {#if isSelected}
-                <Icon icon="heroicons:check" class="w-4 h-4 text-white" />
-              {/if}
-            </div>
+            <OverlayCheckbox selected={isSelected} />
           </button>
         {/if}
         <a
-          href={isSelectionMode ? undefined : `/info/${item.id}`}
+          href={itemHref || undefined}
           class={linkVariants({ selectionMode: isSelectionMode })}
           onclick={(e) => handleItemClick(e, item)}
         >
@@ -121,18 +97,14 @@
           })}
         >
           <ImageActionBar
-            image={{
-              id: item.id,
-              fileName: item.attributes.fileName,
-              isPublic: item.attributes.isPublic,
-              collectionIds: item.collectionIds,
-            }}
-            buttons={['download', 'collection', 'copy', 'visibility', 'delete']}
+            image={createActionBarImage(item)}
+            buttons={historyActionBarButtons}
             on={{
-              imageDelete: onImageDelete,
-              collectionChange: on?.collectionChange,
+              imageDelete: handleDelete,
+              collectionChange: (imageId, collectionIds) =>
+                on?.collectionChange(imageId, collectionIds),
             }}
-            compact={true}
+            compact
           />
         </div>
       </div>
@@ -148,35 +120,8 @@
           </a>
         </div>
 
-        <div
-          class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-gray-500 dark:text-gray-400 mb-3"
-        >
-          <span class="inline-flex items-center gap-1" title="File type">
-            <Icon icon="lucide:file" class="w-3 h-3" />
-            {formatMimeType(item.metadata.mimeType)}
-          </span>
-          <span class="text-gray-300 dark:text-gray-700">•</span>
-          <span class="inline-flex items-center gap-1" title="Dimensions">
-            <Icon icon="lucide:maximize-2" class="w-3 h-3" />
-            {item.metadata.width}×{item.metadata.height}
-          </span>
-          <span class="text-gray-300 dark:text-gray-700">•</span>
-          <span class="inline-flex items-center gap-1" title="File size">
-            <Icon icon="lucide:database" class="w-3 h-3" />
-            {bytesToSize(item.metadata.size)}
-          </span>
-          {#if item.bookmarkCount > 0}
-            <span class="text-gray-300 dark:text-gray-700">•</span>
-            <span class="inline-flex items-center gap-1" title="Bookmarks">
-              <Icon icon="lucide:bookmark" class="w-3 h-3" />
-              {item.bookmarkCount.toLocaleString()}
-            </span>
-          {/if}
-          <span class="text-gray-300 dark:text-gray-700">•</span>
-          <span class="inline-flex items-center gap-1" title="Uploaded">
-            <Icon icon="lucide:clock" class="w-3 h-3" />
-            <FormattedDate date={item.attributes.createdAt.timestamp} />
-          </span>
+        <div class="mb-3">
+          <ImageMetadata {item} gap="sm" />
         </div>
 
         {#if item.tags && item.tags.length > 0}

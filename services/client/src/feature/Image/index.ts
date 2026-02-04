@@ -21,7 +21,10 @@ export { default as BulkDeleteConfirmation } from './History/BulkDeleteConfirmat
 export { default as HistoryGridView } from './History/HistoryGridView.svelte';
 export { default as HistoryListView } from './History/HistoryListView.svelte';
 export * from './History/HistoryView.theme';
+export * from './History/HistoryView.types';
+export { default as ImageMetadata } from './History/ImageMetadata.svelte';
 export { default as SelectionActionBar } from './History/SelectionActionBar.svelte';
+export * from './History/useHistoryItemActions.svelte';
 export { default as ImageDeleteConfirmation } from './ImageDeleteConfirmation/ImageDeleteConfirmation.svelte';
 export { default as ImageDeletePopover } from './ImageDeleteConfirmation/ImageDeletePopover.svelte';
 export { default as LicenseInfo } from './License/LicenseInfo.svelte';
@@ -46,4 +49,5 @@ export { default as VisibilityBadge } from './VisibilityBadge/VisibilityBadge.sv
 export * from './VisibilityBadge/VisibilityBadge.theme';
 export * from './utils/calculateHistoryCardWeight';
 export * from './utils/calculateImageCardWeight';
+export * from './utils/formatMimeType';
 export * from './utils/weightCalculator';

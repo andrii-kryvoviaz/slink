@@ -1,5 +1,31 @@
 import { cva } from 'class-variance-authority';
 
+import type { ImageListingItem } from '@slink/api/Response';
+
+type ActionButton =
+  | 'download'
+  | 'visibility'
+  | 'delete'
+  | 'copy'
+  | 'collection';
+
+export const historyActionBarButtons: ActionButton[] = [
+  'download',
+  'collection',
+  'copy',
+  'visibility',
+  'delete',
+];
+
+export function createActionBarImage(item: ImageListingItem) {
+  return {
+    id: item.id,
+    fileName: item.attributes.fileName,
+    isPublic: item.attributes.isPublic,
+    collectionIds: item.collectionIds,
+  };
+}
+
 export const historyCardVariants = cva(
   'group break-inside-avoid overflow-hidden rounded-lg border bg-white dark:bg-gray-900/60 transition-all duration-200 hover:shadow-md dark:hover:shadow-gray-900/50',
   {
@@ -33,22 +59,6 @@ export const historyListRowVariants = cva(
     defaultVariants: {
       selected: false,
       selectionMode: false,
-    },
-  },
-);
-
-export const selectionCheckboxVariants = cva(
-  'flex items-center justify-center w-6 h-6 rounded-full border-2 shadow-md transition-all duration-150',
-  {
-    variants: {
-      selected: {
-        true: 'bg-blue-500 border-blue-500',
-        false:
-          'bg-white/90 dark:bg-gray-900/90 border-white dark:border-gray-700',
-      },
-    },
-    defaultVariants: {
-      selected: false,
     },
   },
 );
