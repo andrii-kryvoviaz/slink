@@ -4,11 +4,19 @@ ARG PHP_VERSION=8.5.2
 FROM node:${NODE_VERSION}-alpine AS node
 
 ### NodeJS build ###
+FROM node:${NODE_VERSION}-alpine AS deps-client-prod
+WORKDIR /client
+
+COPY services/client/package.json services/client/yarn.lock ./
+RUN yarn install --frozen-lockfile --non-interactive --production && \
+    yarn cache clean && \
+    find node_modules -name "*.md" -o -name "*.ts" -o -name "*.map" | xargs rm -f 2>/dev/null || true
+
 FROM node:${NODE_VERSION}-alpine AS build-client
 WORKDIR /client
 
 COPY services/client/package.json services/client/yarn.lock ./
-RUN yarn install --frozen-lockfile --non-interactive --network-timeout 300000
+RUN yarn install --frozen-lockfile --non-interactive
 
 COPY services/client/plugins ./plugins
 COPY services/client/src ./src
@@ -16,11 +24,7 @@ COPY services/client/static ./static
 COPY services/client/svelte.config.js services/client/tsconfig.json services/client/vite.config.ts ./
 
 RUN yarn svelte-kit sync && \
-    NODE_OPTIONS="--max-old-space-size=2048 --expose-gc" yarn build && \
-    rm -rf node_modules && \
-    yarn install --frozen-lockfile --non-interactive --production --network-timeout 300000 && \
-    yarn cache clean && \
-    find node_modules -name "*.md" -o -name "*.ts" -o -name "*.map" | xargs rm -f 2>/dev/null || true
+    NODE_OPTIONS="--max-old-space-size=2048 --expose-gc" yarn build
 
 ### PHP source ###
 FROM alpine:3.21 AS source
@@ -180,7 +184,7 @@ COPY --from=vendor --chown=slink:slink /dependencies/vendor ./api/vendor
 COPY --from=source --chown=slink:slink /source ./api
 COPY --from=build-client --chown=slink:slink /client/build ./client/svelte-kit
 COPY --from=build-client --chown=slink:slink /client/package.json ./client/svelte-kit/package.json
-COPY --from=build-client --chown=slink:slink /client/node_modules ./client/svelte-kit/node_modules
+COPY --from=deps-client-prod --chown=slink:slink /client/node_modules ./client/svelte-kit/node_modules
 COPY --chown=slink:slink services/api/.env.example ./api/.env
 
 ENV API_ENABLED=false \
