@@ -1,11 +1,15 @@
 <script lang="ts">
   import { LoadMoreButton } from '@slink/feature/Action';
-  import { UserDataTable, UserGridView } from '@slink/feature/User';
+  import { EmptyState } from '@slink/feature/Layout';
+  import {
+    UserDataTable,
+    UserGridView,
+    UsersSkeleton,
+  } from '@slink/feature/User';
   import { ToggleGroup } from '@slink/ui/components';
   import type { ToggleGroupOption } from '@slink/ui/components';
 
   import { page } from '$app/stores';
-  import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
   import { settings } from '@slink/lib/settings';
@@ -108,22 +112,22 @@
     </div>
 
     <div in:fade={{ duration: 400, delay: 200 }}>
-      {#if userFeedState.isEmpty || (!userFeedState.hasItems && userFeedState.isDirty)}
-        <div class="flex flex-col items-center justify-center py-16">
-          <div
-            class="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4"
-          >
-            <Icon icon="heroicons:users" class="w-8 h-8 text-slate-400" />
-          </div>
-          <h3 class="text-lg font-medium text-slate-900 dark:text-white mb-2">
-            No users found
-          </h3>
-          <p class="text-slate-500 dark:text-slate-400 text-center max-w-sm">
-            There are no users in the system yet.
-          </p>
+      {#if userFeedState.showSkeleton}
+        <div in:fade={{ duration: 200 }}>
+          <UsersSkeleton {viewMode} count={6} />
+        </div>
+      {:else if userFeedState.isEmpty || (!userFeedState.hasItems && userFeedState.isDirty)}
+        <div in:fade={{ duration: 200 }}>
+          <EmptyState
+            icon="heroicons:users"
+            title="No users found"
+            description="There are no users in the system yet."
+            variant="default"
+            size="md"
+          />
         </div>
       {:else if userFeedState.hasItems}
-        <div class="min-h-[400px] w-full">
+        <div class="min-h-100 w-full">
           {#if viewMode === 'grid'}
             <UserGridView
               users={userFeedState.items}
@@ -160,32 +164,8 @@
               })}
             variant="modern"
             rounded="full"
-          >
-            {#snippet text()}
-              <span>Load More Users</span>
-            {/snippet}
-            {#snippet rightIcon()}
-              <Icon
-                icon="heroicons:chevron-down"
-                class="w-4 h-4 ml-2 transition-transform duration-200"
-              />
-            {/snippet}
-          </LoadMoreButton>
+          />
         {/if}
-      {:else}
-        <div class="flex flex-col items-center justify-center py-16">
-          <div
-            class="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4"
-          >
-            <Icon
-              icon="heroicons:arrow-path"
-              class="w-8 h-8 text-slate-400 animate-spin"
-            />
-          </div>
-          <h3 class="text-lg font-medium text-slate-900 dark:text-white mb-2">
-            Loading users...
-          </h3>
-        </div>
       {/if}
     </div>
   </div>

@@ -28,7 +28,7 @@
 </script>
 
 <div
-  class="group relative bg-gradient-to-br from-slate-50 to-slate-100/50 dark:from-slate-800/50 dark:to-slate-700/30 rounded-xl border border-slate-200 dark:border-slate-700 p-5 hover:shadow-lg hover:shadow-slate-200/50 dark:hover:shadow-slate-900/50 transition-all duration-300 hover:border-slate-300 dark:hover:border-slate-600"
+  class="group relative bg-white dark:bg-gray-900/60 rounded-xl border border-gray-200 dark:border-gray-800 p-5 hover:shadow-lg hover:shadow-gray-200/50 dark:hover:shadow-gray-900/50 transition-all duration-300 hover:border-gray-300 dark:hover:border-gray-700/80"
 >
   <div class="flex items-start space-x-4">
     <div class="relative">

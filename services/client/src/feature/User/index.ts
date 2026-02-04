@@ -23,3 +23,4 @@ export { default as UserRoleCell } from './UserRoleCell/UserRoleCell.svelte';
 export { default as UserStatus } from './UserStatus/UserStatus.svelte';
 export { default as UserStatusCell } from './UserStatusCell/UserStatusCell.svelte';
 export { default as UserUsernameCell } from './UserUsernameCell/UserUsernameCell.svelte';
+export { default as UsersSkeleton } from './UsersSkeleton/UsersSkeleton.svelte';

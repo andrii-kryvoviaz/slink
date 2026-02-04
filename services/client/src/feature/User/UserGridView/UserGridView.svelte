@@ -13,7 +13,7 @@
   let { users, loggedInUser, onDelete }: Props = $props();
 </script>
 
-<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 auto-rows-fr">
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 auto-rows-fr">
   {#each users as user (user.id)}
     <div
       class="h-full"
