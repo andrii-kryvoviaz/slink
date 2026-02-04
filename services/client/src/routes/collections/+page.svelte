@@ -67,7 +67,7 @@
 
 <main in:fade={{ duration: 500 }} class="min-h-full">
   <div
-    class="container mx-auto px-4 sm:px-6 lg:px-8 py-8"
+    class="flex flex-col px-4 py-6 sm:px-6 w-full"
     use:skeleton={{
       feed: collectionsFeed,
       minDisplayTime: 300,
@@ -76,10 +76,10 @@
   >
     <div class="mb-8 flex items-center justify-between">
       <div>
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+        <h1 class="text-3xl font-semibold text-slate-900 dark:text-white">
           Collections
         </h1>
-        <p class="text-gray-500 dark:text-gray-400 mt-1">
+        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
           Organize your images into albums
         </p>
       </div>

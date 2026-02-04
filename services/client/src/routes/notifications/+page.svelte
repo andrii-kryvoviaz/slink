@@ -48,7 +48,7 @@
 
 <section in:fade={{ duration: 300 }}>
   <div
-    class="flex flex-col px-4 py-8 sm:px-6 lg:px-8 w-full"
+    class="flex flex-col px-4 py-6 sm:px-6 w-full"
     use:skeleton={{
       feed: notificationFeed,
       minDisplayTime: 300,
@@ -74,13 +74,11 @@
         <header class="mb-6" in:fade={{ duration: 400, delay: 100 }}>
           <div class="flex items-start justify-between gap-4">
             <div>
-              <h1
-                class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
-              >
+              <h1 class="text-3xl font-semibold text-slate-900 dark:text-white">
                 Notifications
               </h1>
               {#if notificationFeed.unreadCount > 0}
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
                   {notificationFeed.unreadCount} unread
                 </p>
               {/if}
