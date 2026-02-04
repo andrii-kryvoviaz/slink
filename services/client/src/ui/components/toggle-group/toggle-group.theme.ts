@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 
 export const toggleGroupTheme = cva(
-  'inline-flex items-center bg-gradient-to-br from-slate-50 to-slate-100/50 dark:from-slate-800/50 dark:to-slate-700/30 rounded-xl p-1 border border-slate-200 dark:border-slate-700',
+  'inline-flex items-center bg-gradient-to-br from-slate-50 to-slate-100/50 dark:from-slate-800/50 dark:to-slate-700/30 rounded-lg p-1 border border-slate-200 dark:border-slate-700',
   {
     variants: {
       size: {
