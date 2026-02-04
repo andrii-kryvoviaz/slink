@@ -55,7 +55,7 @@ export const modalContentVariants = cva(
       },
       background: {
         glass: [
-          'dark:bg-black/30 bg-white/80 backdrop-blur-xl',
+          'dark:bg-black/80 bg-white/80 backdrop-blur-xl',
           'border-white/10',
         ],
         solid: ['bg-black/90 backdrop-blur-xl', 'border-white/10'],
