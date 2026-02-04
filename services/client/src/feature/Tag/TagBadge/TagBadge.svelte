@@ -46,10 +46,12 @@
     onClose,
   }: Props = $props();
 
-  const tagName = getTagLastSegment(tag);
-  const isNested = isTagNested(tag);
-  const parentPath = getTagParentPath(tag);
-  const fullPathLabel = isNested ? `${parentPath} / ${tagName}` : tag.name;
+  const tagName = $derived(getTagLastSegment(tag));
+  const isNested = $derived(isTagNested(tag));
+  const parentPath = $derived(getTagParentPath(tag));
+  const fullPathLabel = $derived(
+    isNested ? `${parentPath} / ${tagName}` : tag.name,
+  );
 </script>
 
 <Badge {variant} {size} {outline} class="shrink-0 {className}">

@@ -8,7 +8,7 @@
 
   let { count = 6, class: customClass = '' }: Props = $props();
 
-  const skeletonItems = Array(count).fill(null);
+  const skeletonItems = $derived(Array(count).fill(null));
 </script>
 
 <div class="flex flex-col gap-3 {customClass}">

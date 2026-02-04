@@ -38,12 +38,21 @@
   }
 
   let { data }: Props = $props();
+  let prevImageId = data.image.id;
   let image = $state(data.image);
   let licenses = $derived((data as { licenses?: License[] }).licenses ?? []);
   let licensingEnabled = $derived(
     (data as { licensingEnabled?: boolean }).licensingEnabled ?? false,
   );
-  let selectedLicense = $state(image.license ?? '');
+  let selectedLicense = $state(data.image.license ?? '');
+
+  $effect(() => {
+    if (data.image.id !== prevImageId) {
+      prevImageId = data.image.id;
+      image = data.image;
+      selectedLicense = data.image.license ?? '';
+    }
+  });
 
   const historyFeedState = useUploadHistoryFeed();
 

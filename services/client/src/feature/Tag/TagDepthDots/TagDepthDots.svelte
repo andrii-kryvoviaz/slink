@@ -11,8 +11,8 @@
 
   let { tag, maxDotsToShow = 5, showCount = true }: Props = $props();
 
-  const pathSegments = getTagPathSegments(tag);
-  const depth = pathSegments.length - 1;
+  const pathSegments = $derived(getTagPathSegments(tag));
+  const depth = $derived(pathSegments.length - 1);
 </script>
 
 {#if depth > 0}

@@ -19,7 +19,7 @@
 
   let { data }: Props = $props();
 
-  let { user: loggedInUser } = data;
+  let loggedInUser = $derived(data.user);
 
   const serverSettings = $page.data.settings;
 

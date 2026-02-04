@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   import { type VariantProps, cva } from 'class-variance-authority';
 
   const pillVariants = cva(

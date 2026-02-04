@@ -50,11 +50,11 @@
     open = false;
   };
 
-  const buttonProps: Partial<ButtonAttributes> = {
+  const buttonProps = $derived<Partial<ButtonAttributes>>({
     variant,
     size,
     rounded,
-  };
+  });
 
   const contentClasses = $derived(
     className(

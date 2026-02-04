@@ -16,7 +16,7 @@
 
   let { tag, maxDotsToShow = 5, showCount = true }: Props = $props();
 
-  const isNested = isTagNested(tag);
+  const isNested = $derived(isTagNested(tag));
 </script>
 
 <div class="flex items-center gap-2 min-w-0">

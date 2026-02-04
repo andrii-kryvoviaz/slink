@@ -33,7 +33,7 @@
   }: Props = $props();
 
   let inputRef: HTMLInputElement | HTMLTextAreaElement | undefined = $state();
-  let newValue = $state(value);
+  let newValue = $state('');
   let editing = $state(false);
   let saving = $state(false);
 

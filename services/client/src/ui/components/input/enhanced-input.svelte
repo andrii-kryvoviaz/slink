@@ -40,15 +40,17 @@
     ...props
   }: Props = $props();
 
-  const combinedClasses = cn(
-    inputVariants({
-      size,
-      variant,
-      rounded,
-      hasLeftIcon: !!leftIcon,
-      hasRightIcon: !!rightIcon,
-    }),
-    className,
+  const combinedClasses = $derived(
+    cn(
+      inputVariants({
+        size,
+        variant,
+        rounded,
+        hasLeftIcon: !!leftIcon,
+        hasRightIcon: !!rightIcon,
+      }),
+      className,
+    ),
   );
 </script>
 

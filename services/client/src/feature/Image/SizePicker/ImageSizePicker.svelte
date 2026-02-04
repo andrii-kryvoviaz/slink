@@ -17,8 +17,13 @@
 
   let { width, height, on }: Props = $props();
 
-  let calculatedWidth: number = $state(width);
-  let calculatedHeight: number = $state(height);
+  let calculatedWidth: number = $state(0);
+  let calculatedHeight: number = $state(0);
+
+  $effect(() => {
+    calculatedWidth = width;
+    calculatedHeight = height;
+  });
   let widthInput: HTMLInputElement | undefined = $state();
   let heightInput: HTMLInputElement | undefined = $state();
 

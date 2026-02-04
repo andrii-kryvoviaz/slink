@@ -24,16 +24,13 @@
   }: Props = $props();
 
   let formData = $state({
-    name: initialData?.name?.decodeHtmlEntities() ?? '',
-    description: initialData?.description?.decodeHtmlEntities() ?? '',
+    name: '',
+    description: '',
   });
 
   $effect(() => {
-    if (initialData) {
-      formData.name = initialData.name.decodeHtmlEntities();
-      formData.description =
-        initialData.description?.decodeHtmlEntities() ?? '';
-    }
+    formData.name = initialData?.name?.decodeHtmlEntities() ?? '';
+    formData.description = initialData?.description?.decodeHtmlEntities() ?? '';
   });
 
   function handleSubmit(event: Event) {

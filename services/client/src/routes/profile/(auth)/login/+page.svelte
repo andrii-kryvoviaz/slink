@@ -31,8 +31,14 @@
   let { form, data }: Props = $props();
 
   let isLoading = useWritable('loginFormLoadingState', false);
-  let usernameValue = $state(form?.username || '');
+  let usernameValue = $state('');
   let passwordValue = $state('');
+
+  $effect(() => {
+    if (form?.username) {
+      usernameValue = form.username;
+    }
+  });
   let showPassword = $state(false);
   let formElement: HTMLFormElement;
 

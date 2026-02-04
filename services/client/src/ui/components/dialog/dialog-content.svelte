@@ -39,7 +39,9 @@
     background?: ModalBackground;
   } = $props();
 
-  setModalContext({ variant, backdrop, animation });
+  $effect(() => {
+    setModalContext({ variant, backdrop, animation });
+  });
 </script>
 
 <Dialog.Portal {...portalProps}>

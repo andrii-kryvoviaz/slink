@@ -127,18 +127,16 @@
   ];
 
   let pagination = $state<PaginationState>({
-    pageIndex: currentPage - 1,
-    pageSize,
+    pageIndex: 0,
+    pageSize: 10,
   });
   let sorting = $state<SortingState>([]);
-  let columnVisibility = $state<VisibilityState>(
-    initialColumnVisibility || {
-      displayName: true,
-      username: true,
-      status: true,
-      roles: true,
-    },
-  );
+  let columnVisibility = $state<VisibilityState>({
+    displayName: true,
+    username: true,
+    status: true,
+    roles: true,
+  });
 
   const table = createSvelteTable({
     get data() {
@@ -159,7 +157,9 @@
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     manualPagination: true,
-    pageCount: totalPages,
+    get pageCount() {
+      return totalPages;
+    },
     onPaginationChange: (updater) => {
       if (typeof updater === 'function') {
         const newPagination = updater(pagination);
@@ -194,13 +194,13 @@
   let tableContainer: HTMLElement;
 
   $effect(() => {
-    if (initialColumnVisibility) {
-      columnVisibility = initialColumnVisibility;
-    }
+    pagination = { pageIndex: currentPage - 1, pageSize };
   });
 
   $effect(() => {
-    pagination = { pageIndex: currentPage - 1, pageSize };
+    if (initialColumnVisibility) {
+      columnVisibility = initialColumnVisibility;
+    }
   });
 
   $effect(() => {

@@ -48,16 +48,20 @@
     onTagRemove?.(tagId);
   };
 
-  let hasLoaded = false;
+  let hasLoaded = $state(false);
 
-  if (browser && imageId && initialTags.length === 0 && !hasLoaded) {
-    hasLoaded = true;
-    loadTags(imageId);
-  }
+  $effect(() => {
+    if (browser && imageId && initialTags.length === 0 && !hasLoaded) {
+      hasLoaded = true;
+      loadTags(imageId);
+    }
+  });
 
-  if ($loadTagsError) {
-    printErrorsAsToastMessage($loadTagsError);
-  }
+  $effect(() => {
+    if ($loadTagsError) {
+      printErrorsAsToastMessage($loadTagsError);
+    }
+  });
 </script>
 
 {#if tags.length > 0}

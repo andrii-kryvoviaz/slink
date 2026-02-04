@@ -114,8 +114,8 @@
   ];
 
   let pagination = $state<PaginationState>({
-    pageIndex: currentPage - 1,
-    pageSize,
+    pageIndex: 0,
+    pageSize: 20,
   });
   let sorting = $state<SortingState>([]);
   let columnVisibility = $state<VisibilityState>({
@@ -144,7 +144,9 @@
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     manualPagination: true,
-    pageCount: totalPages,
+    get pageCount() {
+      return totalPages;
+    },
     onPaginationChange: (updater) => {
       if (typeof updater === 'function') {
         const newPagination = updater(pagination);

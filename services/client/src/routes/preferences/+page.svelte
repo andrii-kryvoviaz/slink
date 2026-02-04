@@ -34,11 +34,15 @@
   let { data, form }: Props = $props();
 
   let licenses = $derived(data.licenses);
-  let selectedLicense = $state(data.preferences?.['license.default'] ?? '');
-  let selectedLandingPage = $state(
-    data.preferences?.['navigation.landingPage'] ?? LandingPage.Explore,
-  );
+  let selectedLicense = $state('');
+  let selectedLandingPage = $state(LandingPage.Explore);
   let syncToImages = $state(false);
+
+  $effect(() => {
+    selectedLicense = data.preferences?.['license.default'] ?? '';
+    selectedLandingPage =
+      data.preferences?.['navigation.landingPage'] ?? LandingPage.Explore;
+  });
 
   let selectedLicenseInfo = $derived(
     licenses.find((l) => l.id === selectedLicense),

@@ -13,7 +13,7 @@
     class: customClass = '',
   }: Props = $props();
 
-  const skeletonItems = Array(count).fill(null);
+  const skeletonItems = $derived(Array(count).fill(null));
 </script>
 
 {#if viewMode === 'list'}

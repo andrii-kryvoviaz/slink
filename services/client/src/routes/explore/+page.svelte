@@ -34,7 +34,7 @@
 
   let { data }: Props = $props();
 
-  const userIsAdmin = isAdmin(data.user);
+  const userIsAdmin = $derived(isAdmin(data.user));
   const licensingEnabled = $derived(
     data.globalSettings?.image?.enableLicensing ?? false,
   );
