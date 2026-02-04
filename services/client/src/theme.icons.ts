@@ -203,4 +203,5 @@ export const themeIcons: string[] = [
   'ph:list-dashes',
   'solar:link-linear',
   'ph:folder-notch-open-duotone',
+  'heroicons:minus',
 ];

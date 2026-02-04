@@ -5,7 +5,7 @@
   import Icon from '@iconify/svelte';
 
   const toastVariants = cva(
-    'flex items-start gap-3 p-4 border shadow-md backdrop-blur-xl rounded-xl min-w-[350px]',
+    'flex items-start gap-3 p-4 border shadow-md backdrop-blur-xl rounded-xl w-full sm:min-w-[380px] sm:w-auto',
     {
       variants: {
         variant: {

@@ -16,15 +16,26 @@
 
   import type { ImageListingItem } from '@slink/api/Response';
 
+  import type { ImageSelectionState } from '@slink/lib/state/ImageSelectionState.svelte';
+
+  import {
+    actionBarVisibilityVariants,
+    historyCardVariants,
+    linkVariants,
+    selectionCheckboxVariants,
+  } from './HistoryView.theme';
+
   interface Props {
     items?: ImageListingItem[];
+    selectionState?: ImageSelectionState;
     on?: {
       delete: (id: string) => void;
       collectionChange: (imageId: string, collectionIds: string[]) => void;
+      selectionChange?: (id: string) => void;
     };
   }
 
-  let { items = [], on }: Props = $props();
+  let { items = [], selectionState, on }: Props = $props();
 
   const onImageDelete = (id: string) => {
     on?.delete(id);
@@ -34,6 +45,14 @@
     const type = mimeType.split('/')[1];
     if (!type) return mimeType;
     return type.toUpperCase();
+  };
+
+  const handleItemClick = (e: MouseEvent, item: ImageListingItem) => {
+    if (selectionState?.isSelectionMode) {
+      e.preventDefault();
+      selectionState.toggle(item.id);
+      on?.selectionChange?.(item.id);
+    }
   };
 </script>
 
@@ -50,13 +69,33 @@
   getItemWeight={calculateHistoryCardWeight}
 >
   {#snippet itemTemplate(item)}
+    {@const isSelected = selectionState?.isSelected(item.id) ?? false}
+    {@const isSelectionMode = selectionState?.isSelectionMode ?? false}
     <article
       in:fly={{ y: 20, duration: 300, delay: Math.random() * 100 }}
       out:fade={{ duration: 200 }}
-      class="group break-inside-avoid overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/60 transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-700/80 hover:shadow-md dark:hover:shadow-gray-900/50"
+      class={historyCardVariants({ selected: isSelected })}
     >
       <div class="relative">
-        <a href={`/info/${item.id}`} class="block">
+        {#if isSelectionMode}
+          <button
+            type="button"
+            onclick={(e) => handleItemClick(e, item)}
+            class="absolute top-2 left-2 z-20"
+            aria-label={isSelected ? 'Deselect image' : 'Select image'}
+          >
+            <div class={selectionCheckboxVariants({ selected: isSelected })}>
+              {#if isSelected}
+                <Icon icon="heroicons:check" class="w-4 h-4 text-white" />
+              {/if}
+            </div>
+          </button>
+        {/if}
+        <a
+          href={isSelectionMode ? undefined : `/info/${item.id}`}
+          class={linkVariants({ selectionMode: isSelectionMode })}
+          onclick={(e) => handleItemClick(e, item)}
+        >
           <ImagePlaceholder
             uniqueId={item.id}
             src={`/image/${item.attributes.fileName}?width=400&height=400&crop=true`}
@@ -77,7 +116,9 @@
         </div>
 
         <div
-          class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+          class={actionBarVisibilityVariants({
+            selectionMode: isSelectionMode,
+          })}
         >
           <ImageActionBar
             image={{

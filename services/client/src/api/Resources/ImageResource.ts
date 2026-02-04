@@ -62,6 +62,18 @@ export class ImageResource extends AbstractResource {
     });
   }
 
+  public async batchRemove(
+    imageIds: string[],
+    preserveOnDisk: boolean = false,
+  ): Promise<{
+    deleted: string[];
+    failed: Array<{ id: string; reason: string }>;
+  }> {
+    return this.delete('/images/batch-delete', {
+      json: { imageIds, preserveOnDisk },
+    });
+  }
+
   public async getDetails(id: string): Promise<ImageDetailsResponse> {
     return this.get(`/image/${id}/detail`);
   }

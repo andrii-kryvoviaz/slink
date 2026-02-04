@@ -14,15 +14,27 @@
 
   import type { ImageListingItem } from '@slink/api/Response';
 
+  import type { ImageSelectionState } from '@slink/lib/state/ImageSelectionState.svelte';
+
+  import { cn } from '@slink/utils/ui';
+
+  import {
+    historyListRowVariants,
+    listActionBarVisibilityVariants,
+    selectionCheckboxVariants,
+  } from './HistoryView.theme';
+
   interface Props {
     items?: ImageListingItem[];
+    selectionState?: ImageSelectionState;
     on?: {
       delete: (id: string) => void;
       collectionChange: (imageId: string, collectionIds: string[]) => void;
+      selectionChange?: (id: string) => void;
     };
   }
 
-  let { items = [], on }: Props = $props();
+  let { items = [], selectionState, on }: Props = $props();
 
   const onImageDelete = (id: string) => {
     on?.delete(id);
@@ -33,22 +45,50 @@
     if (!type) return mimeType;
     return type.toUpperCase();
   };
+
+  const handleRowClick = (e: MouseEvent, item: ImageListingItem) => {
+    if (selectionState?.isSelectionMode) {
+      e.preventDefault();
+      selectionState.toggle(item.id);
+      on?.selectionChange?.(item.id);
+    }
+  };
 </script>
 
 <ul class="flex flex-col gap-3" role="list">
   {#each items as item, index (item.id)}
+    {@const isSelected = selectionState?.isSelected(item.id) ?? false}
+    {@const isSelectionMode = selectionState?.isSelectionMode ?? false}
     <li
       in:fly={{ y: 20, duration: 300, delay: index * 50 }}
       out:fade={{ duration: 200 }}
     >
       <article
-        class="group relative flex flex-col sm:flex-row w-full overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/60 transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-700 hover:shadow-md dark:hover:shadow-gray-900/50"
+        class={historyListRowVariants({
+          selected: isSelected,
+          selectionMode: isSelectionMode,
+        })}
+        onclick={(e) => handleRowClick(e, item)}
+        role={isSelectionMode ? 'button' : undefined}
+        tabindex={isSelectionMode ? 0 : undefined}
       >
         <a
-          href={`/info/${item.id}`}
-          class="relative block w-full sm:w-40 md:w-48 lg:w-56 shrink-0 overflow-hidden bg-gray-100 dark:bg-gray-800/80"
+          href={isSelectionMode ? undefined : `/info/${item.id}`}
+          class={cn(
+            'relative block w-full sm:w-40 md:w-48 lg:w-56 shrink-0 overflow-hidden bg-gray-100 dark:bg-gray-800/80',
+            isSelectionMode && 'pointer-events-none',
+          )}
           aria-label={`View ${item.attributes.fileName}`}
         >
+          {#if isSelectionMode}
+            <div class="absolute top-2 left-2 z-20">
+              <div class={selectionCheckboxVariants({ selected: isSelected })}>
+                {#if isSelected}
+                  <Icon icon="heroicons:check" class="w-4 h-4 text-white" />
+                {/if}
+              </div>
+            </div>
+          {/if}
           <div class="aspect-4/3 sm:aspect-square w-full h-full">
             <ImagePlaceholder
               src={`/image/${item.attributes.fileName}?width=300&height=300&crop=true`}
@@ -83,7 +123,9 @@
             </a>
 
             <div
-              class="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 sm:opacity-100"
+              class={listActionBarVisibilityVariants({
+                selectionMode: isSelectionMode,
+              })}
             >
               <ImageActionBar
                 image={{
