@@ -203,43 +203,38 @@
           </p>
         </div>
 
-        <div
-          class="flex items-center bg-gradient-to-br from-slate-50 to-slate-100/50 dark:from-slate-800/50 dark:to-slate-700/30 rounded-lg p-1 border border-slate-200 dark:border-slate-700"
-        >
-          <div class="flex items-center overflow-hidden rounded-md">
-            {#if !historyFeedState.isEmpty}
-              {#if selectionState.isSelectionMode}
-                <button
-                  type="button"
-                  onclick={handleExitSelectionMode}
-                  class="flex items-center justify-center gap-1.5 px-3 py-1.5 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-600/40 transition-colors duration-200"
-                >
-                  <Icon icon="heroicons:x-mark" class="w-4 h-4" />
-                  <span>Cancel</span>
-                </button>
-              {:else}
-                <button
-                  type="button"
-                  onclick={handleEnterSelectionMode}
-                  class="flex items-center justify-center gap-1.5 px-3 py-1.5 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-600/40 transition-colors duration-200"
-                >
-                  <Icon icon="heroicons:check-circle" class="w-4 h-4" />
-                  <span>Select</span>
-                </button>
-              {/if}
-              <div
-                class="w-px self-stretch bg-slate-300/60 dark:bg-slate-600/60 mx-1"
-              ></div>
+        <div class="flex items-center gap-3">
+          {#if !historyFeedState.isEmpty}
+            {#if selectionState.isSelectionMode}
+              <button
+                type="button"
+                onclick={handleExitSelectionMode}
+                class="flex items-center justify-center gap-1.5 px-3 py-1.5 text-sm font-medium text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 transition-colors duration-200"
+              >
+                <Icon icon="lucide:x" class="w-4 h-4" />
+                <span>Cancel</span>
+              </button>
+            {:else}
+              <button
+                type="button"
+                onclick={handleEnterSelectionMode}
+                class="flex items-center justify-center gap-1.5 px-3 py-1.5 text-sm font-medium text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors duration-200"
+              >
+                <Icon
+                  icon="lucide:square-dashed-mouse-pointer"
+                  class="w-4 h-4"
+                />
+                <span>Select</span>
+              </button>
             {/if}
+          {/if}
 
-            <ToggleGroup
-              value={viewMode}
-              options={viewModeOptions}
-              onValueChange={handleViewModeChange}
-              aria-label="View mode selection"
-              className="!p-0 !border-0 !bg-transparent !rounded-none [&>div]:!rounded-none"
-            />
-          </div>
+          <ToggleGroup
+            value={viewMode}
+            options={viewModeOptions}
+            onValueChange={handleViewModeChange}
+            aria-label="View mode selection"
+          />
         </div>
       </div>
 
