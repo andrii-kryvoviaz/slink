@@ -228,7 +228,7 @@
                 </button>
               {/if}
               <div
-                class="w-px self-stretch bg-slate-300/60 dark:bg-slate-600/60"
+                class="w-px self-stretch bg-slate-300/60 dark:bg-slate-600/60 mx-1"
               ></div>
             {/if}
 
