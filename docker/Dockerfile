@@ -68,7 +68,7 @@ RUN install-php-extensions \
 ### Base build stage ###
 FROM dunglas/frankenphp:php${PHP_VERSION}-alpine AS base
 
-ARG PHP_MEMORY_LIMIT=512M
+ARG MEMORY_LIMIT=512
 ARG UPLOAD_MAX_FILESIZE_IN_BYTES=52428800
 
 RUN --mount=type=cache,target=/var/cache/apk \
@@ -90,7 +90,7 @@ COPY --link --from=php-extensions /usr/local/etc/php/conf.d/ /usr/local/etc/php/
 
 RUN <<EOF
 echo "ffi.enable=1" > /usr/local/etc/php/conf.d/zz-ffi-enable.ini
-echo "memory_limit=${PHP_MEMORY_LIMIT}" > /usr/local/etc/php/conf.d/memory-limit.ini
+echo "memory_limit=${MEMORY_LIMIT}M" > /usr/local/etc/php/conf.d/memory-limit.ini
 cat > /usr/local/etc/php/conf.d/uploads.ini <<UPLOADS
 upload_max_filesize = $((UPLOAD_MAX_FILESIZE_IN_BYTES / 1024 / 1024))M
 post_max_size = $((UPLOAD_MAX_FILESIZE_IN_BYTES / 1024 / 1024))M
@@ -111,21 +111,26 @@ ENV API_URL=http://localhost:8080 \
     API_PREFIX=/api \
     PROXY_PREFIXES="/api;/image" \
     ORIGIN=http://localhost:3000 \
-    TZ=UTC
+    TZ=UTC \
+    # FrankenPHP recource limits
+    GOMEMLIMIT=${MEMORY_LIMIT}MiB \
+    GOMAXPROCS=8 \
+    # VIPS settings
+    VIPS_CONCURRENCY=4 
 
 CMD ["/usr/local/bin/entrypoint.sh"]
 
 ### Test image ###
 FROM php:${PHP_VERSION}-alpine AS test
 
-ARG PHP_MEMORY_LIMIT=512M
+ARG MEMORY_LIMIT=512
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /services/api
 
 RUN apk add --no-cache git unzip && \
-    echo "memory_limit=${PHP_MEMORY_LIMIT}" > /usr/local/etc/php/conf.d/memory-limit.ini
+    echo "memory_limit=${MEMORY_LIMIT}M" > /usr/local/etc/php/conf.d/memory-limit.ini
 
 COPY services/api/composer.json services/api/composer.lock ./
 RUN composer install --ignore-platform-reqs --no-interaction --no-scripts

@@ -9,7 +9,9 @@
 		protocols h1 h2c
 	}
 	frankenphp {
-		worker /services/api/public/index.php
+		worker {
+			file /services/api/public/index.php
+		}
 	}
 }
 
