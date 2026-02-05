@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "66ed09aa2e45b5c47d4dc2dd8865533c",
+    "content-hash": "4ddbcde8687ddb8ffee97e91a1468cd4",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2144,16 +2144,16 @@
         },
         {
             "name": "jcupitt/vips",
-            "version": "v2.5.0",
+            "version": "v2.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/libvips/php-vips.git",
-                "reference": "a54c1cceea581b592a199edd61a7c06f44a24c08"
+                "reference": "6dbba1bb3a4ba1e39edb71016a2aa6da5bff32ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/libvips/php-vips/zipball/a54c1cceea581b592a199edd61a7c06f44a24c08",
-                "reference": "a54c1cceea581b592a199edd61a7c06f44a24c08",
+                "url": "https://api.github.com/repos/libvips/php-vips/zipball/6dbba1bb3a4ba1e39edb71016a2aa6da5bff32ee",
+                "reference": "6dbba1bb3a4ba1e39edb71016a2aa6da5bff32ee",
                 "shasum": ""
             },
             "require": {
@@ -2199,9 +2199,9 @@
             ],
             "support": {
                 "issues": "https://github.com/libvips/php-vips/issues",
-                "source": "https://github.com/libvips/php-vips/tree/v2.5.0"
+                "source": "https://github.com/libvips/php-vips/tree/v2.6.1"
             },
-            "time": "2025-04-04T17:10:13+00:00"
+            "time": "2025-12-10T14:03:20+00:00"
         },
         {
             "name": "lcobucci/jwt",
