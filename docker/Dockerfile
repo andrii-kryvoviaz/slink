@@ -177,8 +177,8 @@ COPY --link --from=node /usr/local/bin/node /usr/local/bin/node
 
 RUN addgroup -g 1000 slink && \
     adduser -D -u 1000 -G slink slink && \
-    mkdir -p /app/var/data /app/slink && \
-    chown -R slink:slink /app/var /app/slink
+    mkdir -p /app/var/data /app/slink /data/caddy && \
+    chown -R slink:slink /app/var /app/slink /data/caddy
 
 COPY --from=vendor --chown=slink:slink /dependencies/vendor ./api/vendor
 COPY --from=source --chown=slink:slink /source ./api
