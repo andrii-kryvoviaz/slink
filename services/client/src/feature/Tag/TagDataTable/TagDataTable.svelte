@@ -12,6 +12,7 @@
   } from '@slink/ui/components/data-table';
   import * as DropdownMenu from '@slink/ui/components/dropdown-menu';
   import { BaseInput as Input } from '@slink/ui/components/input';
+  import { Select } from '@slink/ui/components/select';
   import * as Table from '@slink/ui/components/table';
   import { TablePagination } from '@slink/ui/components/table-pagination';
   import {
@@ -37,6 +38,8 @@
     totalPages?: number;
     totalItems?: number;
     pageSize?: number;
+    pageSizeOptions?: number[];
+    onPageSizeChange?: (pageSize: number) => void;
     onPageChange?: (page: number) => void;
   }
 
@@ -50,6 +53,8 @@
     totalPages = 1,
     totalItems = 0,
     pageSize = 20,
+    pageSizeOptions = [10, 20, 50, 100],
+    onPageSizeChange,
     onPageChange,
   }: Props = $props();
 
@@ -180,6 +185,19 @@
   $effect(() => {
     pagination = { pageIndex: currentPage - 1, pageSize };
   });
+
+  const pageSizeItems = $derived(
+    pageSizeOptions.map((size) => ({
+      value: size.toString(),
+      label: size.toString(),
+    })),
+  );
+
+  const handlePageSizeChange = (value: string) => {
+    const nextSize = Number.parseInt(value, 10);
+    if (Number.isNaN(nextSize) || nextSize === pageSize) return;
+    onPageSizeChange?.(nextSize);
+  };
 </script>
 
 <div class="w-full flex flex-col gap-6">
@@ -239,7 +257,23 @@
         </DropdownMenu.Root>
       </div>
 
-      <div class="order-1 sm:order-2">
+      <div class="order-1 sm:order-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
+        {#if onPageSizeChange}
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-muted-foreground whitespace-nowrap"
+              >Rows</span
+            >
+            <Select
+              items={pageSizeItems}
+              value={pageSize.toString()}
+              size="sm"
+              class="w-20"
+              placeholder="Rows"
+              disabled={isLoading}
+              onValueChange={handlePageSizeChange}
+            />
+          </div>
+        {/if}
         <TablePagination
           currentPageIndex={currentPage - 1}
           {totalPages}

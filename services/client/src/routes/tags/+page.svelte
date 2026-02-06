@@ -27,6 +27,11 @@
     tagFeed.loadPage(page);
   }
 
+  function handlePageSizeChange(size: number) {
+    if (size === tagFeed.meta.size) return;
+    tagFeed.load({ page: 1, limit: size });
+  }
+
   async function handleDeleteTag(tag: Tag) {
     await tagFeed.deleteTag(tag.id);
   }
@@ -95,6 +100,7 @@
         {totalItems}
         {pageSize}
         onPageChange={handlePageChange}
+        onPageSizeChange={handlePageSizeChange}
       />
     {/if}
   </div>
