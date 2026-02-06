@@ -28,6 +28,17 @@
 
   let isDragOver = $state(false);
 
+  const isEditableTarget = (target: EventTarget | null): boolean => {
+    if (!(target instanceof Element)) {
+      return false;
+    }
+
+    const editableSelector =
+      'input, textarea, [contenteditable="true"], [contenteditable=""], [contenteditable="plaintext-only"]';
+
+    return target.matches(editableSelector) || !!target.closest(editableSelector);
+  };
+
   const getFilesFromEvent = function (
     event: FileEvent,
   ): FileList | undefined | null {
@@ -43,12 +54,18 @@
   const handleChange = async (event: FileEvent) => {
     if (disabled) return;
 
+    if (event instanceof ClipboardEvent && isEditableTarget(event.target)) {
+      return;
+    }
+
     event.preventDefault();
 
     const fileList = getFilesFromEvent(event);
 
     if (!fileList) {
-      toast.warning('No files selected');
+      if (!(event instanceof ClipboardEvent)) {
+        toast.warning('No files selected');
+      }
       return;
     }
 
