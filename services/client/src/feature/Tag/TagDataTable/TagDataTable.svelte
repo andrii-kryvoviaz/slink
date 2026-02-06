@@ -3,15 +3,19 @@
     TagActionsCell,
     TagCountCell,
     TagNameCell,
+    TagTreeView,
   } from '@slink/feature/Tag';
   import {
     ColumnToggle,
     DataTable,
+    FlexRender,
     PageSizeSelect,
     renderComponent,
     useDataTable,
   } from '@slink/ui/components/data-table';
   import { BaseInput as Input } from '@slink/ui/components/input';
+  import { ToggleGroup } from '@slink/ui/components/toggle-group';
+  import * as Table from '@slink/ui/components/table';
   import { TablePagination } from '@slink/ui/components/table-pagination';
   import type { ColumnDef } from '@tanstack/table-core';
 
@@ -20,6 +24,8 @@
   import type { Tag } from '@slink/api/Resources/TagResource';
 
   import type { TableSettingsState } from '@slink/lib/settings/composables/useTableSettings.svelte';
+
+  type ViewMode = 'table' | 'tree';
 
   interface Props {
     tags: Tag[];
@@ -34,6 +40,7 @@
     pageSizeOptions?: number[];
     onPageSizeChange?: (pageSize: number) => void;
     onPageChange?: (page: number) => void;
+    viewMode?: ViewMode;
   }
 
   let {
@@ -49,10 +56,16 @@
     pageSizeOptions = [10, 20, 50, 100],
     onPageSizeChange,
     onPageChange,
+    viewMode = $bindable<ViewMode>('table'),
   }: Props = $props();
 
   const pageSize = $derived(tableSettings.pageSize);
   const columnVisibility = $derived(tableSettings.columnVisibility);
+
+  const viewOptions = [
+    { value: 'table', label: 'Table', icon: 'lucide:table' },
+    { value: 'tree', label: 'Tree', icon: 'lucide:list-tree' },
+  ];
 
   const columns: ColumnDef<Tag>[] = [
     {
@@ -135,6 +148,27 @@
   $effect(() => {
     setColumnVisibility(columnVisibility);
   });
+
+  const treeColumnVisibility = $derived({
+    name: table.getColumn('name')?.getIsVisible() ?? true,
+    imageCount: table.getColumn('imageCount')?.getIsVisible() ?? true,
+    children: table.getColumn('children')?.getIsVisible() ?? true,
+    actions: table.getColumn('actions')?.getIsVisible() ?? true,
+  });
+
+  const treeColumnClassNames = $derived({
+    name: (table.getColumn('name')?.columnDef.meta as any)?.className ?? '',
+    imageCount:
+      (table.getColumn('imageCount')?.columnDef.meta as any)?.className ?? '',
+    children:
+      (table.getColumn('children')?.columnDef.meta as any)?.className ?? '',
+    actions:
+      (table.getColumn('actions')?.columnDef.meta as any)?.className ?? '',
+  });
+
+  const treeColumnCount = $derived(
+    Object.values(treeColumnVisibility).filter(Boolean).length || 1,
+  );
 </script>
 
 <div class="w-full flex flex-col gap-6">
@@ -159,67 +193,121 @@
       class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
     >
       <div class="order-2 sm:order-1">
-        <TablePagination
-          currentPageIndex={currentPage - 1}
-          {totalPages}
-          canPreviousPage={currentPage > 1}
-          canNextPage={currentPage < totalPages}
-          {totalItems}
-          {pageSize}
-          loading={isLoading}
-          {onPageChange}
-        />
+        {#if viewMode === 'table'}
+          <TablePagination
+            currentPageIndex={currentPage - 1}
+            {totalPages}
+            canPreviousPage={currentPage > 1}
+            canNextPage={currentPage < totalPages}
+            {totalItems}
+            {pageSize}
+            loading={isLoading}
+            {onPageChange}
+          />
+        {/if}
       </div>
       <div
         class="order-1 sm:order-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end"
       >
-        <PageSizeSelect
-          {pageSize}
-          options={pageSizeOptions}
-          {onPageSizeChange}
+        <ToggleGroup
+          value={viewMode}
+          options={viewOptions}
+          size="sm"
+          aria-label="Tag view mode"
+          onValueChange={(value) => {
+            viewMode = value as ViewMode;
+          }}
         />
+        {#if viewMode === 'table'}
+          <PageSizeSelect
+            {pageSize}
+            options={pageSizeOptions}
+            {onPageSizeChange}
+          />
+        {/if}
         <ColumnToggle {table} />
       </div>
     </div>
   </div>
 
-  <DataTable {table} {columns} {isLoading}>
-    {#snippet loadingState()}
-      <div class="flex flex-col items-center gap-3">
-        <Icon
-          icon="lucide:loader-2"
-          class="h-6 w-6 text-slate-400 dark:text-slate-500 animate-spin"
-        />
-        <p class="text-sm text-slate-500 dark:text-slate-400">
-          Loading tags...
-        </p>
-      </div>
-    {/snippet}
-    {#snippet emptyState()}
-      <div class="flex flex-col items-center gap-3 py-8">
-        <div
-          class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800"
-        >
+  {#if viewMode === 'table'}
+    <DataTable {table} {columns} {isLoading}>
+      {#snippet loadingState()}
+        <div class="flex flex-col items-center gap-3">
           <Icon
-            icon="lucide:tag"
-            class="h-6 w-6 text-slate-400 dark:text-slate-500"
+            icon="lucide:loader-2"
+            class="h-6 w-6 text-slate-400 dark:text-slate-500 animate-spin"
           />
-        </div>
-        <div class="space-y-1">
-          <p class="text-sm font-medium text-slate-700 dark:text-slate-300">
-            No tags found
+          <p class="text-sm text-slate-500 dark:text-slate-400">
+            Loading tags...
           </p>
-          {#if searchTerm}
-            <p class="text-xs text-slate-500 dark:text-slate-400">
-              Try adjusting your search term
-            </p>
-          {:else}
-            <p class="text-xs text-slate-500 dark:text-slate-400">
-              Create your first tag to get started
-            </p>
-          {/if}
         </div>
+      {/snippet}
+      {#snippet emptyState()}
+        <div class="flex flex-col items-center gap-3 py-8">
+          <div
+            class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800"
+          >
+            <Icon
+              icon="lucide:tag"
+              class="h-6 w-6 text-slate-400 dark:text-slate-500"
+            />
+          </div>
+          <div class="space-y-1">
+            <p class="text-sm font-medium text-slate-700 dark:text-slate-300">
+              No tags found
+            </p>
+            {#if searchTerm}
+              <p class="text-xs text-slate-500 dark:text-slate-400">
+                Try adjusting your search term
+              </p>
+            {:else}
+              <p class="text-xs text-slate-500 dark:text-slate-400">
+                Create your first tag to get started
+              </p>
+            {/if}
+          </div>
+        </div>
+      {/snippet}
+    </DataTable>
+  {:else}
+    <div
+      class="flex-1 overflow-hidden rounded-xl border border-slate-200/60 dark:border-slate-700/40 bg-white dark:bg-slate-800/30"
+    >
+      <div class="overflow-x-auto">
+        <Table.Root>
+          <Table.Header>
+            {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
+              <Table.Row
+                class="border-slate-200/60 dark:border-slate-700/40 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-transparent"
+              >
+                {#each headerGroup.headers as header (header.id)}
+                  <Table.Head
+                    class="{(header.column.columnDef.meta as any)
+                      ?.className} bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 text-xs font-medium uppercase tracking-wider"
+                  >
+                    {#if !header.isPlaceholder}
+                      <FlexRender
+                        content={header.column.columnDef.header}
+                        context={header.getContext()}
+                      />
+                    {/if}
+                  </Table.Head>
+                {/each}
+              </Table.Row>
+            {/each}
+          </Table.Header>
+          <Table.Body>
+            <TagTreeView
+              {onDelete}
+              columnVisibility={treeColumnVisibility}
+              columnClassNames={treeColumnClassNames}
+              columnCount={treeColumnCount}
+              refreshKey={totalItems}
+            />
+          </Table.Body>
+        </Table.Root>
       </div>
-    {/snippet}
-  </DataTable>
+    </div>
+  {/if}
 </div>
