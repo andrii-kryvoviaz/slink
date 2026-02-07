@@ -26,15 +26,9 @@
 
   let isDragOver = $state(false);
 
-  const processFiles = (
-    fileList: FileList | null | undefined,
-    source: 'paste' | 'drop' | 'input',
-    resetInput?: () => void,
-  ) => {
+  const processFiles = (fileList: FileList | null | undefined) => {
     if (!fileList) {
-      if (source !== 'paste') {
-        toast.warning('No files selected');
-      }
+      toast.warning('No files selected');
       return;
     }
 
@@ -58,7 +52,6 @@
     }
 
     onchange?.(files);
-    resetInput?.();
   };
 
   const handlePaste = (event: ClipboardEvent) => {
@@ -66,23 +59,22 @@
     if (!event.clipboardData?.files?.length) return;
 
     event.preventDefault();
-    processFiles(event.clipboardData.files, 'paste');
+    processFiles(event.clipboardData.files);
   };
 
   const handleDrop = (event: DragEvent) => {
     if (disabled) return;
     event.preventDefault();
     isDragOver = false;
-    processFiles(event.dataTransfer?.files, 'drop');
+    processFiles(event.dataTransfer?.files);
   };
 
   const handleFileInput = (event: Event) => {
     if (disabled) return;
     event.preventDefault();
     const input = event.target as HTMLInputElement;
-    processFiles(input.files, 'input', () => {
-      input.value = '';
-    });
+    processFiles(input.files);
+    input.value = '';
   };
 
   const handleDragEnter = (event: DragEvent) => {
