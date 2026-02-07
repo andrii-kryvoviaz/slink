@@ -4,28 +4,22 @@
     TagCountCell,
     TagNameCell,
   } from '@slink/feature/Tag';
-  import { Button } from '@slink/ui/components/button';
   import {
-    FlexRender,
-    createSvelteTable,
+    ColumnToggle,
+    DataTable,
+    PageSizeSelect,
     renderComponent,
+    useDataTable,
   } from '@slink/ui/components/data-table';
-  import * as DropdownMenu from '@slink/ui/components/dropdown-menu';
   import { BaseInput as Input } from '@slink/ui/components/input';
-  import * as Table from '@slink/ui/components/table';
   import { TablePagination } from '@slink/ui/components/table-pagination';
-  import {
-    type ColumnDef,
-    type PaginationState,
-    type SortingState,
-    type VisibilityState,
-    getCoreRowModel,
-    getSortedRowModel,
-  } from '@tanstack/table-core';
+  import type { ColumnDef } from '@tanstack/table-core';
 
   import Icon from '@iconify/svelte';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
+
+  import type { TableSettingsState } from '@slink/lib/settings/composables/useTableSettings.svelte';
 
   interface Props {
     tags: Tag[];
@@ -36,7 +30,9 @@
     currentPage?: number;
     totalPages?: number;
     totalItems?: number;
-    pageSize?: number;
+    tableSettings: TableSettingsState;
+    pageSizeOptions?: number[];
+    onPageSizeChange?: (pageSize: number) => void;
     onPageChange?: (page: number) => void;
   }
 
@@ -49,9 +45,14 @@
     currentPage = 1,
     totalPages = 1,
     totalItems = 0,
-    pageSize = 20,
+    tableSettings,
+    pageSizeOptions = [10, 20, 50, 100],
+    onPageSizeChange,
     onPageChange,
   }: Props = $props();
+
+  const pageSize = $derived(tableSettings.pageSize);
+  const columnVisibility = $derived(tableSettings.columnVisibility);
 
   const columns: ColumnDef<Tag>[] = [
     {
@@ -113,72 +114,26 @@
     },
   ];
 
-  let pagination = $state<PaginationState>({
-    pageIndex: 0,
-    pageSize: 20,
-  });
-  let sorting = $state<SortingState>([]);
-  let columnVisibility = $state<VisibilityState>({
-    name: true,
-    path: true,
-    imageCount: true,
-    children: true,
-  });
-
-  const table = createSvelteTable({
-    get data() {
-      return tags;
-    },
+  const { table, setColumnVisibility } = useDataTable({
+    data: () => tags,
     columns,
-    state: {
-      get pagination() {
-        return pagination;
-      },
-      get sorting() {
-        return sorting;
-      },
-      get columnVisibility() {
-        return columnVisibility;
-      },
+    initialVisibility: {
+      name: true,
+      path: true,
+      imageCount: true,
+      children: true,
     },
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    manualPagination: true,
-    get pageCount() {
-      return totalPages;
-    },
-    onPaginationChange: (updater) => {
-      if (typeof updater === 'function') {
-        const newPagination = updater(pagination);
-        if (newPagination.pageIndex !== pagination.pageIndex && onPageChange) {
-          onPageChange(newPagination.pageIndex + 1);
-        }
-        pagination = newPagination;
-      } else {
-        if (updater.pageIndex !== pagination.pageIndex && onPageChange) {
-          onPageChange(updater.pageIndex + 1);
-        }
-        pagination = updater;
-      }
-    },
-    onSortingChange: (updater) => {
-      if (typeof updater === 'function') {
-        sorting = updater(sorting);
-      } else {
-        sorting = updater;
-      }
-    },
-    onColumnVisibilityChange: (updater) => {
-      if (typeof updater === 'function') {
-        columnVisibility = updater(columnVisibility);
-      } else {
-        columnVisibility = updater;
-      }
+    currentPage: () => currentPage,
+    pageSize: () => pageSize,
+    totalPages: () => totalPages,
+    onPageChange,
+    onColumnVisibilityChange: (visibility) => {
+      tableSettings.columnVisibility = visibility;
     },
   });
 
   $effect(() => {
-    pagination = { pageIndex: currentPage - 1, pageSize };
+    setColumnVisibility(columnVisibility);
   });
 </script>
 
@@ -200,46 +155,10 @@
       />
     </div>
 
-    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-end">
+    <div
+      class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+    >
       <div class="order-2 sm:order-1">
-        <DropdownMenu.Root>
-          <DropdownMenu.Trigger>
-            {#snippet child({ props })}
-              <Button
-                {...props}
-                variant="glass"
-                size="sm"
-                rounded="lg"
-                class="w-full sm:w-auto"
-              >
-                <Icon
-                  icon="heroicons:adjustments-horizontal"
-                  class="mr-2 size-4"
-                />
-                Columns
-                <Icon icon="heroicons:chevron-down" class="ml-2 size-4" />
-              </Button>
-            {/snippet}
-          </DropdownMenu.Trigger>
-          <DropdownMenu.Content align="end">
-            {#each table
-              .getAllColumns()
-              .filter((col) => col.getCanHide()) as column (column)}
-              <DropdownMenu.CheckboxItem
-                class="capitalize"
-                bind:checked={
-                  () => column.getIsVisible(),
-                  (v) => column.toggleVisibility(!!v)
-                }
-              >
-                {column.id}
-              </DropdownMenu.CheckboxItem>
-            {/each}
-          </DropdownMenu.Content>
-        </DropdownMenu.Root>
-      </div>
-
-      <div class="order-1 sm:order-2">
         <TablePagination
           currentPageIndex={currentPage - 1}
           {totalPages}
@@ -251,106 +170,56 @@
           {onPageChange}
         />
       </div>
+      <div
+        class="order-1 sm:order-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end"
+      >
+        <PageSizeSelect
+          {pageSize}
+          options={pageSizeOptions}
+          {onPageSizeChange}
+        />
+        <ColumnToggle {table} />
+      </div>
     </div>
   </div>
 
-  <div
-    class="flex-1 overflow-hidden rounded-xl border border-slate-200/60 dark:border-slate-700/40 bg-white dark:bg-slate-800/30"
-  >
-    <div class="overflow-x-auto">
-      <Table.Root>
-        <Table.Header>
-          {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
-            <Table.Row
-              class="border-slate-200/60 dark:border-slate-700/40 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-transparent"
-            >
-              {#each headerGroup.headers as header (header.id)}
-                <Table.Head
-                  class="{(header.column.columnDef.meta as any)
-                    ?.className} bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 text-xs font-medium uppercase tracking-wider"
-                >
-                  {#if !header.isPlaceholder}
-                    <FlexRender
-                      content={header.column.columnDef.header}
-                      context={header.getContext()}
-                    />
-                  {/if}
-                </Table.Head>
-              {/each}
-            </Table.Row>
-          {/each}
-        </Table.Header>
-        <Table.Body>
-          {#if isLoading}
-            <Table.Row
-              class="border-slate-200/60 dark:border-slate-700/40 hover:bg-transparent"
-            >
-              <Table.Cell colspan={columns.length} class="h-32 text-center">
-                <div class="flex flex-col items-center gap-3">
-                  <Icon
-                    icon="lucide:loader-2"
-                    class="h-6 w-6 text-slate-400 dark:text-slate-500 animate-spin"
-                  />
-                  <p class="text-sm text-slate-500 dark:text-slate-400">
-                    Loading tags...
-                  </p>
-                </div>
-              </Table.Cell>
-            </Table.Row>
-          {:else if table.getRowModel().rows.length > 0}
-            {#each table.getRowModel().rows as row (row.id)}
-              <Table.Row
-                class="group/row border-slate-200/60 dark:border-slate-700/40 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-slate-50 dark:hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-slate-700/30 transition-colors duration-200"
-              >
-                {#each row.getVisibleCells() as cell (cell.id)}
-                  <Table.Cell
-                    class="{(cell.column.columnDef.meta as any)
-                      ?.className} text-slate-700 dark:text-slate-300"
-                  >
-                    <FlexRender
-                      content={cell.column.columnDef.cell}
-                      context={cell.getContext()}
-                    />
-                  </Table.Cell>
-                {/each}
-              </Table.Row>
-            {/each}
+  <DataTable {table} {columns} {isLoading}>
+    {#snippet loadingState()}
+      <div class="flex flex-col items-center gap-3">
+        <Icon
+          icon="lucide:loader-2"
+          class="h-6 w-6 text-slate-400 dark:text-slate-500 animate-spin"
+        />
+        <p class="text-sm text-slate-500 dark:text-slate-400">
+          Loading tags...
+        </p>
+      </div>
+    {/snippet}
+    {#snippet emptyState()}
+      <div class="flex flex-col items-center gap-3 py-8">
+        <div
+          class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800"
+        >
+          <Icon
+            icon="lucide:tag"
+            class="h-6 w-6 text-slate-400 dark:text-slate-500"
+          />
+        </div>
+        <div class="space-y-1">
+          <p class="text-sm font-medium text-slate-700 dark:text-slate-300">
+            No tags found
+          </p>
+          {#if searchTerm}
+            <p class="text-xs text-slate-500 dark:text-slate-400">
+              Try adjusting your search term
+            </p>
           {:else}
-            <Table.Row
-              class="border-slate-200/60 dark:border-slate-700/40 hover:bg-transparent"
-            >
-              <Table.Cell colspan={columns.length} class="h-32 text-center">
-                <div class="flex flex-col items-center gap-3 py-8">
-                  <div
-                    class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800"
-                  >
-                    <Icon
-                      icon="lucide:tag"
-                      class="h-6 w-6 text-slate-400 dark:text-slate-500"
-                    />
-                  </div>
-                  <div class="space-y-1">
-                    <p
-                      class="text-sm font-medium text-slate-700 dark:text-slate-300"
-                    >
-                      No tags found
-                    </p>
-                    {#if searchTerm}
-                      <p class="text-xs text-slate-500 dark:text-slate-400">
-                        Try adjusting your search term
-                      </p>
-                    {:else}
-                      <p class="text-xs text-slate-500 dark:text-slate-400">
-                        Create your first tag to get started
-                      </p>
-                    {/if}
-                  </div>
-                </div>
-              </Table.Cell>
-            </Table.Row>
+            <p class="text-xs text-slate-500 dark:text-slate-400">
+              Create your first tag to get started
+            </p>
           {/if}
-        </Table.Body>
-      </Table.Root>
-    </div>
-  </div>
+        </div>
+      </div>
+    {/snippet}
+  </DataTable>
 </div>

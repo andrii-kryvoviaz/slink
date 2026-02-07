@@ -1,6 +1,6 @@
 import { browser } from '$app/environment';
-import { writable } from 'svelte/store';
-import type { Writable } from 'svelte/store';
+import { get, writable } from 'svelte/store';
+import type { Readable, Writable } from 'svelte/store';
 
 import type {
   Setter,
@@ -20,6 +20,8 @@ import { ShareSetter } from '@slink/lib/settings/setters/share';
 import type { ShareSettings } from '@slink/lib/settings/setters/share';
 import { SidebarSetter } from '@slink/lib/settings/setters/sidebar';
 import type { SidebarSettings } from '@slink/lib/settings/setters/sidebar';
+import { TableSetter } from '@slink/lib/settings/setters/table';
+import type { TableSettings } from '@slink/lib/settings/setters/table';
 import { ThemeSetter } from '@slink/lib/settings/setters/theme';
 import { setUploadOptions } from '@slink/lib/settings/setters/uploadOptions';
 import type { UploadOptionsSettings } from '@slink/lib/settings/setters/uploadOptions';
@@ -35,6 +37,7 @@ type SettingsValueTypes = {
   sidebar: SidebarSettings;
   navigation: NavigationSettings;
   userAdmin: UserAdminSettings;
+  table: TableSettings;
   history: HistorySettings;
   share: ShareSettings;
   comment: CommentSettings;
@@ -55,6 +58,7 @@ export class SettingsManager {
     sidebar: SidebarSetter,
     navigation: NavigationSetter,
     userAdmin: UserAdminSetter,
+    table: TableSetter,
     history: HistorySetter,
     share: ShareSetter,
     comment: CommentSetter,
@@ -80,6 +84,31 @@ export class SettingsManager {
 
     // Set cookie with 1 year expiration
     cookie.set(`settings.${key}`, cookieValue, 31536000);
+  }
+
+  public update<T extends SettingsKey>(
+    key: T,
+    partialValue: Partial<SettingsValueTypes[T]>,
+  ): void {
+    let currentValue: SettingsValueTypes[T] | undefined;
+
+    const existingSetting = this._settings.get(key);
+    if (existingSetting?.value) {
+      currentValue = get(
+        existingSetting.value as unknown as Readable<SettingsValueTypes[T]>,
+      );
+    } else if (browser) {
+      const cookieValue = cookie.get(`settings.${key}`);
+      if (cookieValue) {
+        currentValue = tryJson(cookieValue) as SettingsValueTypes[T];
+      }
+    }
+
+    const mergedValue = currentValue
+      ? { ...(currentValue as object), ...(partialValue as object) }
+      : partialValue;
+
+    this.set(key, mergedValue);
   }
 
   public getSettingKeys(): SettingsKey[] {

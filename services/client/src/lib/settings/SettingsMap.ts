@@ -6,6 +6,7 @@ export class SettingsMap {
     sidebar: null,
     navigation: null,
     userAdmin: null,
+    table: null,
     history: null,
     share: null,
     comment: null,

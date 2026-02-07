@@ -13,6 +13,7 @@ import type {
   ShareSettings,
 } from '@slink/lib/settings/setters/share';
 import type { SidebarSettings } from '@slink/lib/settings/setters/sidebar';
+import type { TableSettings } from '@slink/lib/settings/setters/table';
 import type { UploadOptionsSettings } from '@slink/lib/settings/setters/uploadOptions';
 import type {
   UserAdminSettings,
@@ -32,6 +33,16 @@ export type Settings = {
   };
   userAdmin: SettingsValue<UserAdminSettings> & {
     viewMode: Readable<ViewMode>;
+  };
+  table: SettingsValue<TableSettings> & {
+    users: {
+      pageSize: Readable<number>;
+      columnVisibility: Readable<Record<string, boolean>>;
+    };
+    tags: {
+      pageSize: Readable<number>;
+      columnVisibility: Readable<Record<string, boolean>>;
+    };
   };
   history: SettingsValue<HistorySettings> & {
     viewMode: Readable<HistoryViewMode>;

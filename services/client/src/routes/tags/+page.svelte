@@ -4,11 +4,13 @@
   import { Button } from '@slink/ui/components/button';
   import { onMount } from 'svelte';
 
+  import { page } from '$app/state';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
 
+  import { useTableSettings } from '@slink/lib/settings/composables/useTableSettings.svelte';
   import { createCreateTagModalState } from '@slink/lib/state/CreateTagModalState.svelte';
   import { useTagListFeed } from '@slink/lib/state/TagListFeed.svelte';
   import { debounce } from '@slink/lib/utils/time/debounce';
@@ -16,15 +18,32 @@
   const tagFeed = useTagListFeed();
   const createModalState = createCreateTagModalState();
 
+  const serverSettings = page.data.settings;
+
+  const tableSettings = useTableSettings('tags', {
+    pageSize: serverSettings?.table?.tags?.pageSize || 10,
+    columnVisibility: serverSettings?.table?.tags?.columnVisibility || {
+      name: true,
+      imageCount: true,
+      children: true,
+    },
+  });
+
   let searchQuery = $state('');
 
   onMount(() => {
     tagFeed.includeChildren = true;
-    tagFeed.load();
+    tagFeed.load({ limit: tableSettings.pageSize });
   });
 
   function handlePageChange(page: number) {
     tagFeed.loadPage(page);
+  }
+
+  function handlePageSizeChange(size: number) {
+    if (size === tagFeed.meta.size) return;
+    tableSettings.pageSize = size;
+    tagFeed.load({ page: 1, limit: size });
   }
 
   async function handleDeleteTag(tag: Tag) {
@@ -46,10 +65,9 @@
     debouncedSearch(term);
   }
 
-  const pageSize = $derived(tagFeed.meta.size);
   const currentPage = $derived(tagFeed.meta.page);
   const totalItems = $derived(tagFeed.meta?.total || 0);
-  const totalPages = $derived(Math.ceil(totalItems / pageSize));
+  const totalPages = $derived(Math.ceil(totalItems / tableSettings.pageSize));
 </script>
 
 <svelte:head>
@@ -93,8 +111,9 @@
         {currentPage}
         {totalPages}
         {totalItems}
-        {pageSize}
+        {tableSettings}
         onPageChange={handlePageChange}
+        onPageSizeChange={handlePageSizeChange}
       />
     {/if}
   </div>

@@ -97,7 +97,6 @@ export const themeIcons: string[] = [
   'heroicons:ellipsis-horizontal',
   'heroicons:chevron-left',
   'heroicons:chevron-right',
-  'heroicons:adjustments-horizontal',
   'heroicons:user',
   'ph:tag',
   'lucide:plus',
@@ -207,4 +206,6 @@ export const themeIcons: string[] = [
   'heroicons:shield-check-solid',
   'heroicons:user-solid',
   'lucide:square-dashed-mouse-pointer',
+  'heroicons:adjustments-horizontal',
+  'heroicons:arrows-up-down',
 ];

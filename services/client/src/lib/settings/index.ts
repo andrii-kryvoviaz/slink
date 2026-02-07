@@ -24,11 +24,24 @@ const defaultSettings: { [K in SettingsKey]?: any } = {
   },
   userAdmin: {
     viewMode: 'list',
-    columnVisibility: {
-      displayName: true,
-      username: true,
-      status: true,
-      roles: true,
+  },
+  table: {
+    users: {
+      pageSize: 12,
+      columnVisibility: {
+        displayName: true,
+        username: true,
+        status: true,
+        roles: true,
+      },
+    },
+    tags: {
+      pageSize: 10,
+      columnVisibility: {
+        name: true,
+        imageCount: true,
+        children: true,
+      },
     },
   },
   history: {
