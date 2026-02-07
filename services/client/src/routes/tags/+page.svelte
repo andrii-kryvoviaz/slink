@@ -14,6 +14,7 @@
   import { createCreateTagModalState } from '@slink/lib/state/CreateTagModalState.svelte';
   import { useTagListFeed } from '@slink/lib/state/TagListFeed.svelte';
   import { debounce } from '@slink/lib/utils/time/debounce';
+  import type { TagSortKey, TagSortOrder } from '@slink/feature/Tag/TagDataTable/types';
 
   const tagFeed = useTagListFeed();
   const createModalState = createCreateTagModalState();
@@ -65,9 +66,25 @@
     debouncedSearch(term);
   }
 
+  function handleSortChange(sortBy: TagSortKey, sortOrder: TagSortOrder) {
+    tagFeed.setSorting(sortBy, sortOrder);
+  }
+
+  const sortableKeys = new Set<TagSortKey>([
+    'name',
+    'imageCount',
+    'childrenCount',
+  ]);
+
   const currentPage = $derived(tagFeed.meta.page);
   const totalItems = $derived(tagFeed.meta?.total || 0);
   const totalPages = $derived(Math.ceil(totalItems / tableSettings.pageSize));
+  const sortBy = $derived(
+    sortableKeys.has(tagFeed.orderBy as TagSortKey)
+      ? (tagFeed.orderBy as TagSortKey)
+      : null,
+  );
+  const sortOrder = $derived(tagFeed.order);
 </script>
 
 <svelte:head>
@@ -114,6 +131,9 @@
         {tableSettings}
         onPageChange={handlePageChange}
         onPageSizeChange={handlePageSizeChange}
+        {sortBy}
+        {sortOrder}
+        onSortChange={handleSortChange}
       />
     {/if}
   </div>

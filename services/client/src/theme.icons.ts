@@ -206,6 +206,5 @@ export const themeIcons: string[] = [
   'heroicons:shield-check-solid',
   'heroicons:user-solid',
   'lucide:square-dashed-mouse-pointer',
-  'heroicons:adjustments-horizontal',
-  'heroicons:arrows-up-down',
+  'lucide:alert-circle',
 ];

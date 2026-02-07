@@ -13,3 +13,6 @@ export interface TagCreateFormData {
   name: string;
   parentId?: string;
 }
+
+export type TagSortKey = 'name' | 'imageCount' | 'childrenCount';
+export type TagSortOrder = 'asc' | 'desc';

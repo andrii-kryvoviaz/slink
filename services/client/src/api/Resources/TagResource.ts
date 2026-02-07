@@ -25,7 +25,7 @@ export interface UpdateTagRequest {
 
 export interface TagListRequest {
   limit?: number;
-  orderBy?: 'name' | 'path' | 'createdAt' | 'updatedAt';
+  orderBy?: 'name' | 'path' | 'createdAt' | 'updatedAt' | 'imageCount' | 'childrenCount';
   order?: 'asc' | 'desc';
   page?: number;
   parentId?: string;
