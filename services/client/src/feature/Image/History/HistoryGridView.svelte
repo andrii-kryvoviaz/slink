@@ -8,6 +8,7 @@
   import { calculateHistoryCardWeight } from '@slink/feature/Image/utils/calculateHistoryCardWeight';
   import { Masonry } from '@slink/feature/Layout';
   import { ImageTagList } from '@slink/feature/Tag';
+  import { ImageCollectionList } from '@slink/feature/Collection';
   import { OverlayCheckbox } from '@slink/ui/components/checkbox';
 
   import { fade, fly } from 'svelte/transition';
@@ -138,14 +139,22 @@
           <ImageMetadata {item} gap="sm" />
         </div>
 
-        {#if item.tags && item.tags.length > 0}
-          <ImageTagList
-            imageId={item.id}
-            variant="neon"
-            showImageCount={false}
-            removable={false}
-            initialTags={item.tags}
-          />
+        {#if (item.collections && item.collections.length > 0) || (item.tags && item.tags.length > 0)}
+          <div class="space-y-2">
+            {#if item.collections && item.collections.length > 0}
+              <ImageCollectionList collections={item.collections} />
+            {/if}
+
+            {#if item.tags && item.tags.length > 0}
+              <ImageTagList
+                imageId={item.id}
+                variant="neon"
+                showImageCount={false}
+                removable={false}
+                initialTags={item.tags}
+              />
+            {/if}
+          </div>
         {/if}
       </div>
     </article>

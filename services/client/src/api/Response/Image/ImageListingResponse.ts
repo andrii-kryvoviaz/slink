@@ -37,6 +37,7 @@ export type ImageListingItem = {
   bookmarkCount: number;
   isBookmarked?: boolean;
   collectionIds?: string[];
+  collections?: Array<{ id: string; name: string }>;
   tags?: Tag[];
 };
 

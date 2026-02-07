@@ -101,6 +101,14 @@ final class ImageResource implements ResourceInterface {
     get => $this->data->get('collections', $this->image->getUuid(), []);
   }
 
+  /**
+   * @var array<int, array{id: string, name: string}>
+   */
+  #[Groups(['collection'])]
+  public array $collections {
+    get => $this->data->get('collectionSummaries', $this->image->getUuid(), []);
+  }
+
   /** @var array<string> */
   #[Groups(['tag'])]
   public array $tags {

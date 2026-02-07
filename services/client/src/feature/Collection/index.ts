@@ -9,6 +9,7 @@ export * from './CollectionPicker/CollectionPicker.theme';
 export { default as CreateCollectionDialog } from './CreateCollectionDialog.svelte';
 export { default as CreateCollectionForm } from './CreateCollectionForm.svelte';
 export { default as CreateCollectionModal } from './CreateCollectionModal.svelte';
+export { default as ImageCollectionList } from './ImageCollectionList/ImageCollectionList.svelte';
 export { default as ImageCollectionManager } from './ImageCollectionManager/ImageCollectionManager.svelte';
 export { default as RemoveFromCollectionPopover } from './RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte';
 export { default as ShareCollectionPopover } from './ShareCollectionPopover/ShareCollectionPopover.svelte';

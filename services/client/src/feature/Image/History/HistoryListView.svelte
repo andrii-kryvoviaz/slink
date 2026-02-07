@@ -5,6 +5,7 @@
     ViewCountBadge,
     VisibilityBadge,
   } from '@slink/feature/Image';
+  import { ImageCollectionList } from '@slink/feature/Collection';
   import { ImageTagList } from '@slink/feature/Tag';
   import { FormattedDate } from '@slink/feature/Text';
   import { OverlayCheckbox } from '@slink/ui/components/checkbox';
@@ -137,15 +138,21 @@
             <ImageMetadata {item} gap="md" />
           </div>
 
-          {#if item.tags && item.tags.length > 0}
-            <div class="mt-auto">
-              <ImageTagList
-                imageId={item.id}
-                variant="neon"
-                showImageCount={false}
-                removable={false}
-                initialTags={item.tags}
-              />
+          {#if (item.collections && item.collections.length > 0) || (item.tags && item.tags.length > 0)}
+            <div class="mt-auto space-y-2">
+              {#if item.collections && item.collections.length > 0}
+                <ImageCollectionList collections={item.collections} />
+              {/if}
+
+              {#if item.tags && item.tags.length > 0}
+                <ImageTagList
+                  imageId={item.id}
+                  variant="neon"
+                  showImageCount={false}
+                  removable={false}
+                  initialTags={item.tags}
+                />
+              {/if}
             </div>
           {:else}
             <div
