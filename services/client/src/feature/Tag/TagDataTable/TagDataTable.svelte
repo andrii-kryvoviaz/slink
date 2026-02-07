@@ -14,7 +14,6 @@
     useDataTable,
   } from '@slink/ui/components/data-table';
   import { BaseInput as Input } from '@slink/ui/components/input';
-  import { ToggleGroup } from '@slink/ui/components/toggle-group';
   import * as Table from '@slink/ui/components/table';
   import { TablePagination } from '@slink/ui/components/table-pagination';
   import type { ColumnDef } from '@tanstack/table-core';
@@ -61,11 +60,6 @@
 
   const pageSize = $derived(tableSettings.pageSize);
   const columnVisibility = $derived(tableSettings.columnVisibility);
-
-  const viewOptions = [
-    { value: 'table', label: 'Table', icon: 'lucide:table' },
-    { value: 'tree', label: 'Tree', icon: 'lucide:list-tree' },
-  ];
 
   const columns: ColumnDef<Tag>[] = [
     {
@@ -209,15 +203,6 @@
       <div
         class="order-1 sm:order-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end"
       >
-        <ToggleGroup
-          value={viewMode}
-          options={viewOptions}
-          size="sm"
-          aria-label="Tag view mode"
-          onValueChange={(value) => {
-            viewMode = value as ViewMode;
-          }}
-        />
         {#if viewMode === 'table'}
           <PageSizeSelect
             {pageSize}
