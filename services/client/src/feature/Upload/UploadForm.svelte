@@ -24,46 +24,15 @@
     allowMultiple = false,
   }: Props = $props();
 
-  type FileEvent = DragEvent | ClipboardEvent | Event;
-
   let isDragOver = $state(false);
 
-  const isEditableTarget = (target: EventTarget | null): boolean => {
-    if (!(target instanceof Element)) {
-      return false;
-    }
-
-    const editableSelector =
-      'input, textarea, [contenteditable="true"], [contenteditable=""], [contenteditable="plaintext-only"]';
-
-    return target.matches(editableSelector) || !!target.closest(editableSelector);
-  };
-
-  const getFilesFromEvent = function (
-    event: FileEvent,
-  ): FileList | undefined | null {
-    if (event instanceof DragEvent) {
-      return event.dataTransfer?.files;
-    } else if (event instanceof ClipboardEvent) {
-      return event.clipboardData?.files;
-    }
-
-    return (event.target as HTMLInputElement).files;
-  };
-
-  const handleChange = async (event: FileEvent) => {
-    if (disabled) return;
-
-    if (event instanceof ClipboardEvent && isEditableTarget(event.target)) {
-      return;
-    }
-
-    event.preventDefault();
-
-    const fileList = getFilesFromEvent(event);
-
+  const processFiles = (
+    fileList: FileList | null | undefined,
+    source: 'paste' | 'drop' | 'input',
+    resetInput?: () => void,
+  ) => {
     if (!fileList) {
-      if (!(event instanceof ClipboardEvent)) {
+      if (source !== 'paste') {
         toast.warning('No files selected');
       }
       return;
@@ -89,8 +58,31 @@
     }
 
     onchange?.(files);
+    resetInput?.();
+  };
 
-    (event.target as HTMLInputElement).value = '';
+  const handlePaste = (event: ClipboardEvent) => {
+    if (disabled) return;
+    if (!event.clipboardData?.files?.length) return;
+
+    event.preventDefault();
+    processFiles(event.clipboardData.files, 'paste');
+  };
+
+  const handleDrop = (event: DragEvent) => {
+    if (disabled) return;
+    event.preventDefault();
+    isDragOver = false;
+    processFiles(event.dataTransfer?.files, 'drop');
+  };
+
+  const handleFileInput = (event: Event) => {
+    if (disabled) return;
+    event.preventDefault();
+    const input = event.target as HTMLInputElement;
+    processFiles(input.files, 'input', () => {
+      input.value = '';
+    });
   };
 
   const handleDragEnter = (event: DragEvent) => {
@@ -111,11 +103,6 @@
 
   const handleDragOver = (event: DragEvent) => {
     event.preventDefault();
-  };
-
-  const handleDrop = (event: DragEvent) => {
-    isDragOver = false;
-    handleChange(event);
   };
 
   const uploadCardClasses =
@@ -148,7 +135,7 @@
   );
 </script>
 
-<svelte:document onpaste={handleChange} />
+<svelte:document onpaste={handlePaste} />
 
 <div
   class={uploadContainerVariants({
@@ -163,7 +150,7 @@
       ondragover={handleDragOver}
       ondragenter={handleDragEnter}
       ondragleave={handleDragLeave}
-      onchange={handleChange}
+      onchange={handleFileInput}
       multiple={allowMultiple}
       {disabled}
       class={cn(dropzoneClasses, disabled && 'pointer-events-none opacity-60')}
