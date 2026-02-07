@@ -40,6 +40,7 @@ class UserListFeed extends AbstractPaginatedFeed<UserListingItem> {
   public async loadPage(
     page: number,
     shouldAppend: boolean = false,
+    limit?: number,
   ): Promise<void> {
     const currentMode = this._config.appendMode;
 
@@ -48,7 +49,7 @@ class UserListFeed extends AbstractPaginatedFeed<UserListingItem> {
     }
 
     try {
-      await this.load({ page, limit: this._meta.size });
+      await this.load({ page, limit: limit ?? this._meta.size });
     } finally {
       this._config.appendMode = currentMode;
     }
@@ -58,9 +59,9 @@ class UserListFeed extends AbstractPaginatedFeed<UserListingItem> {
     params: LoadParams & SearchParams = {},
     options?: Parameters<typeof this.fetch>[2],
   ): Promise<void> {
-    const { page = this._meta.page } = params;
+    const { page = this._meta.page, limit = this._meta.size } = params;
 
-    if (this.isDirty && page === this._meta.page) {
+    if (this.isDirty && page === this._meta.page && limit === this._meta.size) {
       return;
     }
 

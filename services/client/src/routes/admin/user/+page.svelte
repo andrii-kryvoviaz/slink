@@ -81,6 +81,11 @@
   ) => {
     columnVisibility = newColumnVisibility;
   };
+
+  const handlePageSizeChange = (size: number) => {
+    if (size === userFeedState.meta.size) return;
+    userFeedState.loadPage(1, false, size);
+  };
 </script>
 
 <svelte:head>
@@ -148,6 +153,7 @@
               )}
               totalItems={userFeedState.meta.total}
               pageSize={userFeedState.meta.size}
+              onPageSizeChange={handlePageSizeChange}
               onPageChange={(page) => userFeedState.loadPage(page, false)}
             />
           {/if}
