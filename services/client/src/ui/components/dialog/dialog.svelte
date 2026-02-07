@@ -44,7 +44,14 @@
 </script>
 
 <Dialog.Root bind:open onOpenChange={handleOpenChange}>
-  <Dialog.Content {size} {variant} {backdrop} {animation} class={cn(className)}>
+  <Dialog.Content
+    {size}
+    {variant}
+    {backdrop}
+    {animation}
+    onpaste={(e: ClipboardEvent) => e.stopPropagation()}
+    class={cn(className)}
+  >
     {#if title || description}
       <Dialog.Header>
         {#if title}

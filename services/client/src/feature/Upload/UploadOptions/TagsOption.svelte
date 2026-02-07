@@ -69,6 +69,7 @@
     class="p-0 bg-white/95 dark:bg-slate-900/95 border border-slate-200/70 dark:border-slate-700/50 rounded-xl shadow-xl shadow-black/10 dark:shadow-black/30 overflow-hidden backdrop-blur-sm"
     sideOffset={8}
     align="start"
+    onpaste={(e: ClipboardEvent) => e.stopPropagation()}
   >
     <TagListView
       tags={selectionState.tags}
