@@ -4,6 +4,7 @@
     TagCountCell,
     TagNameCell,
   } from '@slink/feature/Tag';
+  import TagSortHeader from '@slink/feature/Tag/TagDataTable/TagSortHeader.svelte';
   import {
     ColumnToggle,
     DataTable,
@@ -18,6 +19,10 @@
   import Icon from '@iconify/svelte';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
+  import type {
+    TagSortKey,
+    TagSortOrder,
+  } from '@slink/feature/Tag/TagDataTable/types';
 
   import type { TableSettingsState } from '@slink/lib/settings/composables/useTableSettings.svelte';
 
@@ -34,6 +39,9 @@
     pageSizeOptions?: number[];
     onPageSizeChange?: (pageSize: number) => void;
     onPageChange?: (page: number) => void;
+    sortBy?: TagSortKey | null;
+    sortOrder?: TagSortOrder;
+    onSortChange?: (sortBy: TagSortKey, sortOrder: TagSortOrder) => void;
   }
 
   let {
@@ -49,15 +57,36 @@
     pageSizeOptions = [10, 20, 50, 100],
     onPageSizeChange,
     onPageChange,
+    sortBy = null,
+    sortOrder = 'asc',
+    onSortChange,
   }: Props = $props();
 
   const pageSize = $derived(tableSettings.pageSize);
   const columnVisibility = $derived(tableSettings.columnVisibility);
 
+  const handleSortToggle = (key: TagSortKey) => {
+    if (!onSortChange) return;
+    const nextOrder: TagSortOrder =
+      sortBy !== key ? 'asc' : sortOrder === 'asc' ? 'desc' : 'asc';
+    onSortChange(key, nextOrder);
+  };
+
+  const sortableHeader = (label: string, sortKey: TagSortKey) => {
+    return () =>
+      renderComponent(TagSortHeader, {
+        label,
+        sortKey,
+        activeSortKey: sortBy,
+        sortOrder,
+        onToggle: onSortChange ? handleSortToggle : undefined,
+      });
+  };
+
   const columns: ColumnDef<Tag>[] = [
     {
       accessorKey: 'name',
-      header: 'Name',
+      header: sortableHeader('Name', 'name'),
       meta: {
         className: 'sm:w-[300px]',
       },
@@ -68,7 +97,7 @@
     },
     {
       accessorKey: 'imageCount',
-      header: 'Images',
+      header: sortableHeader('Images', 'imageCount'),
       meta: {
         className: 'text-center',
       },
@@ -83,7 +112,7 @@
     },
     {
       accessorKey: 'children',
-      header: 'Children',
+      header: sortableHeader('Children', 'childrenCount'),
       meta: {
         className: 'text-center',
       },

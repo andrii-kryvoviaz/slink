@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Slink\Tag\Infrastructure\ReadModel\Repository;
 
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Override;
 use Slink\Shared\Domain\ValueObject\ID;
@@ -109,11 +110,28 @@ final class TagRepository extends AbstractRepository implements TagRepositoryInt
         ->setParameter('searchUserId', $filter->getUserId());
     }
 
-    $orderBy = $filter->getOrderBy() ?: 'name';
-    $order = $filter->getOrder() ?: 'asc';
-    $qb->orderBy("t.$orderBy", $order);
+    $this->applySorting($qb, $filter);
 
     return $this->paginate($qb, $page, $filter->getLimit() ?: 50);
+  }
+
+  private function applySorting(QueryBuilder $qb, TagListFilter $filter): void {
+    $orderBy = $filter->getOrderBy() ?: 'name';
+    $order = $filter->getOrder() ?: 'asc';
+
+    if ($orderBy === 'imageCount') {
+      $qb->addSelect('SIZE(t.images) AS HIDDEN imageCount')
+        ->orderBy('imageCount', $order);
+      return;
+    }
+
+    if ($orderBy === 'childrenCount') {
+      $qb->addSelect('SIZE(t.children) AS HIDDEN childrenCount')
+        ->orderBy('childrenCount', $order);
+      return;
+    }
+
+    $qb->orderBy("t.$orderBy", $order);
   }
 
   public function findByUserId(ID $userId): array {
