@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Select as SelectPrimitive } from 'bits-ui';
+  import type { Snippet } from 'svelte';
 
   import Icon from '@iconify/svelte';
 
@@ -22,6 +23,9 @@
     class?: string;
     size?: 'sm' | 'default';
     disabled?: boolean;
+    trigger?: Snippet<[Record<string, unknown>]>;
+    itemClass?: string;
+    align?: 'start' | 'center' | 'end';
   };
 
   type SingleSelectProps = BaseProps & {
@@ -53,6 +57,9 @@
     disabled = false,
     type = 'single',
     onValueChange,
+    trigger,
+    itemClass,
+    align,
     ...props
   }: Props = $props();
 
@@ -124,20 +131,28 @@
     {disabled}
     {...props}
   >
-    <Trigger class={cn('justify-between', className)} {size}>
-      <div class="flex items-center gap-2 flex-1 min-w-0">
-        <span class={cn('truncate', !value ? 'text-muted-foreground' : '')}>
-          {getDisplayValue()}
-        </span>
-      </div>
-    </Trigger>
+    {#if trigger}
+      <SelectPrimitive.Trigger>
+        {#snippet child({ props })}
+          {@render trigger(props)}
+        {/snippet}
+      </SelectPrimitive.Trigger>
+    {:else}
+      <Trigger class={cn('justify-between', className)} {size}>
+        <div class="flex items-center gap-2 flex-1 min-w-0">
+          <span class={cn('truncate', !value ? 'text-muted-foreground' : '')}>
+            {getDisplayValue()}
+          </span>
+        </div>
+      </Trigger>
+    {/if}
 
-    <Content>
+    <Content {align}>
       {#each items as item (item.value)}
         <Item
           value={item.value}
           disabled={item.disabled}
-          class="cursor-pointer"
+          class={cn('cursor-pointer', itemClass)}
         >
           {#snippet children()}
             <div class="flex items-center gap-2 w-full">
@@ -159,34 +174,42 @@
     {disabled}
     {...props}
   >
-    <Trigger class={cn('justify-between', className)} {size}>
-      <div class="flex items-center gap-2 flex-1 min-w-0">
-        {#if Array.isArray(inner.value) && inner.value.length > 0}
-          <span class="text-sm truncate">
-            {#if inner.value.length === 1}
-              {@const selectedItem = items.find(
-                (item) => item.value === inner.value[0],
-              )}
-              {selectedItem?.label || inner.value[0]}
-            {:else}
-              {inner.value.length} items selected
-            {/if}
-          </span>
-        {:else}
-          <span class="text-muted-foreground text-sm truncate">
-            {placeholder}
-          </span>
-        {/if}
-      </div>
-    </Trigger>
+    {#if trigger}
+      <SelectPrimitive.Trigger>
+        {#snippet child({ props })}
+          {@render trigger(props)}
+        {/snippet}
+      </SelectPrimitive.Trigger>
+    {:else}
+      <Trigger class={cn('justify-between', className)} {size}>
+        <div class="flex items-center gap-2 flex-1 min-w-0">
+          {#if Array.isArray(inner.value) && inner.value.length > 0}
+            <span class="text-sm truncate">
+              {#if inner.value.length === 1}
+                {@const selectedItem = items.find(
+                  (item) => item.value === inner.value[0],
+                )}
+                {selectedItem?.label || inner.value[0]}
+              {:else}
+                {inner.value.length} items selected
+              {/if}
+            </span>
+          {:else}
+            <span class="text-muted-foreground text-sm truncate">
+              {placeholder}
+            </span>
+          {/if}
+        </div>
+      </Trigger>
+    {/if}
 
-    <Content class="w-[var(--bits-select-trigger-width)]">
+    <Content class="w-[var(--bits-select-trigger-width)]" {align}>
       <div class="max-h-60 overflow-y-auto">
         {#each items as item (item.value)}
           <Item
             value={item.value}
             disabled={item.disabled}
-            class="cursor-pointer"
+            class={cn('cursor-pointer', itemClass)}
           >
             {#snippet children()}
               <div class="flex items-center gap-2 w-full">
