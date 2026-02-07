@@ -24,29 +24,9 @@
     allowMultiple = false,
   }: Props = $props();
 
-  type FileEvent = DragEvent | ClipboardEvent | Event;
-
   let isDragOver = $state(false);
 
-  const getFilesFromEvent = function (
-    event: FileEvent,
-  ): FileList | undefined | null {
-    if (event instanceof DragEvent) {
-      return event.dataTransfer?.files;
-    } else if (event instanceof ClipboardEvent) {
-      return event.clipboardData?.files;
-    }
-
-    return (event.target as HTMLInputElement).files;
-  };
-
-  const handleChange = async (event: FileEvent) => {
-    if (disabled) return;
-
-    event.preventDefault();
-
-    const fileList = getFilesFromEvent(event);
-
+  const processFiles = (fileList: FileList | null | undefined) => {
     if (!fileList) {
       toast.warning('No files selected');
       return;
@@ -72,8 +52,29 @@
     }
 
     onchange?.(files);
+  };
 
-    (event.target as HTMLInputElement).value = '';
+  const handlePaste = (event: ClipboardEvent) => {
+    if (disabled) return;
+    if (!event.clipboardData?.files?.length) return;
+
+    event.preventDefault();
+    processFiles(event.clipboardData.files);
+  };
+
+  const handleDrop = (event: DragEvent) => {
+    if (disabled) return;
+    event.preventDefault();
+    isDragOver = false;
+    processFiles(event.dataTransfer?.files);
+  };
+
+  const handleFileInput = (event: Event) => {
+    if (disabled) return;
+    event.preventDefault();
+    const input = event.target as HTMLInputElement;
+    processFiles(input.files);
+    input.value = '';
   };
 
   const handleDragEnter = (event: DragEvent) => {
@@ -94,11 +95,6 @@
 
   const handleDragOver = (event: DragEvent) => {
     event.preventDefault();
-  };
-
-  const handleDrop = (event: DragEvent) => {
-    isDragOver = false;
-    handleChange(event);
   };
 
   const uploadCardClasses =
@@ -131,7 +127,7 @@
   );
 </script>
 
-<svelte:document onpaste={handleChange} />
+<svelte:document onpaste={handlePaste} />
 
 <div
   class={uploadContainerVariants({
@@ -146,7 +142,7 @@
       ondragover={handleDragOver}
       ondragenter={handleDragEnter}
       ondragleave={handleDragLeave}
-      onchange={handleChange}
+      onchange={handleFileInput}
       multiple={allowMultiple}
       {disabled}
       class={cn(dropzoneClasses, disabled && 'pointer-events-none opacity-60')}
