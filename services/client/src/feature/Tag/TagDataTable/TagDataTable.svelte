@@ -189,7 +189,7 @@
   const pageSizeItems = $derived(
     pageSizeOptions.map((size) => ({
       value: size.toString(),
-      label: size.toString(),
+      label: `Limit ${size}`,
     })),
   );
 
@@ -218,8 +218,29 @@
       />
     </div>
 
-    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-end">
-      <div class="order-2 sm:order-1">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
+      <TablePagination
+        currentPageIndex={currentPage - 1}
+        {totalPages}
+        canPreviousPage={currentPage > 1}
+        canNextPage={currentPage < totalPages}
+        {totalItems}
+        {pageSize}
+        loading={isLoading}
+        {onPageChange}
+      />
+      <div class="flex items-center gap-2">
+        {#if onPageSizeChange}
+          <Select
+            items={pageSizeItems}
+            value={pageSize.toString()}
+            size="sm"
+            class="min-w-[110px]"
+            placeholder="Limit"
+            disabled={isLoading}
+            onValueChange={handlePageSizeChange}
+          />
+        {/if}
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
             {#snippet child({ props })}
@@ -255,35 +276,6 @@
             {/each}
           </DropdownMenu.Content>
         </DropdownMenu.Root>
-      </div>
-
-      <div class="order-1 sm:order-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
-        {#if onPageSizeChange}
-          <div class="flex items-center gap-2">
-            <span class="text-xs text-muted-foreground whitespace-nowrap"
-              >Rows</span
-            >
-            <Select
-              items={pageSizeItems}
-              value={pageSize.toString()}
-              size="sm"
-              class="w-20"
-              placeholder="Rows"
-              disabled={isLoading}
-              onValueChange={handlePageSizeChange}
-            />
-          </div>
-        {/if}
-        <TablePagination
-          currentPageIndex={currentPage - 1}
-          {totalPages}
-          canPreviousPage={currentPage > 1}
-          canNextPage={currentPage < totalPages}
-          {totalItems}
-          {pageSize}
-          loading={isLoading}
-          {onPageChange}
-        />
       </div>
     </div>
   </div>
