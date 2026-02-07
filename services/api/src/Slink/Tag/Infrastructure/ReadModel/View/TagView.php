@@ -176,6 +176,8 @@ class TagView extends AbstractView {
    * @return array<string, mixed>
    */
   public function toPayload(): array {
+    $childrenCount = $this->children->count();
+
     return [
       'id' => $this->uuid,
       'name' => $this->name,
@@ -184,6 +186,8 @@ class TagView extends AbstractView {
       'isRoot' => $this->isRoot(),
       'depth' => $this->getDepth(),
       'imageCount' => $this->getImageCount(),
+      'childrenCount' => $childrenCount,
+      'hasChildren' => $childrenCount > 0,
       'createdAt' => $this->createdAt?->toString(),
       'updatedAt' => $this->updatedAt?->toString(),
     ];

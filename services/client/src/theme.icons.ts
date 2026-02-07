@@ -210,4 +210,5 @@ export const themeIcons: string[] = [
   'lucide:list-tree',
   'heroicons:adjustments-horizontal',
   'heroicons:arrows-up-down',
+  'lucide:alert-circle',
 ];
