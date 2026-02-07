@@ -9,10 +9,11 @@
   import { ToggleGroup } from '@slink/ui/components';
   import type { ToggleGroupOption } from '@slink/ui/components';
 
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { fade } from 'svelte/transition';
 
   import { settings } from '@slink/lib/settings';
+  import { useTableSettings } from '@slink/lib/settings/composables/useTableSettings.svelte';
   import { useUserListFeed } from '@slink/lib/state/UserListFeed.svelte';
 
   import type { PageServerData } from './$types';
@@ -25,21 +26,22 @@
 
   let loggedInUser = $derived(data.user);
 
-  const serverSettings = $page.data.settings;
+  const serverSettings = page.data.settings;
 
   type ViewMode = 'grid' | 'list';
   let viewMode = $state<ViewMode>(
     serverSettings?.userAdmin?.viewMode || 'list',
   );
 
-  let columnVisibility = $state(
-    serverSettings?.userAdmin?.columnVisibility || {
+  const tableSettings = useTableSettings('users', {
+    pageSize: serverSettings?.table?.users?.pageSize || 12,
+    columnVisibility: serverSettings?.table?.users?.columnVisibility || {
       displayName: true,
       username: true,
       status: true,
       roles: true,
     },
-  );
+  });
 
   const viewModeOptions: ToggleGroupOption<ViewMode>[] = [
     {
@@ -55,13 +57,14 @@
   ];
 
   $effect(() => {
-    settings.set('userAdmin', { viewMode, columnVisibility });
+    settings.set('userAdmin', { viewMode });
   });
 
   const userFeedState = useUserListFeed();
 
   $effect(() => {
-    if (!userFeedState.isDirty) userFeedState.load();
+    if (!userFeedState.isDirty)
+      userFeedState.load({ limit: tableSettings.pageSize });
   });
 
   const onDelete = (id: string) => {
@@ -76,14 +79,9 @@
     viewMode = newViewMode;
   };
 
-  const handleColumnVisibilityChange = (
-    newColumnVisibility: Record<string, boolean>,
-  ) => {
-    columnVisibility = newColumnVisibility;
-  };
-
   const handlePageSizeChange = (size: number) => {
     if (size === userFeedState.meta.size) return;
+    tableSettings.pageSize = size;
     userFeedState.loadPage(1, false, size);
   };
 </script>
@@ -144,15 +142,13 @@
               users={userFeedState.items}
               {loggedInUser}
               {onDelete}
-              {columnVisibility}
-              onColumnVisibilityChange={handleColumnVisibilityChange}
+              {tableSettings}
               isLoading={userFeedState.isLoading}
               currentPage={userFeedState.meta.page}
               totalPages={Math.ceil(
                 userFeedState.meta.total / userFeedState.meta.size,
               )}
               totalItems={userFeedState.meta.total}
-              pageSize={userFeedState.meta.size}
               onPageSizeChange={handlePageSizeChange}
               onPageChange={(page) => userFeedState.loadPage(page, false)}
             />

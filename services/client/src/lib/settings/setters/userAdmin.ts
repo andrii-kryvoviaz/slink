@@ -6,7 +6,6 @@ export type ViewMode = 'grid' | 'list';
 
 export type UserAdminSettings = {
   viewMode: ViewMode;
-  columnVisibility: Record<string, boolean>;
 };
 
 export const UserAdminSetter: Setter<'userAdmin', UserAdminSettings> = (
@@ -15,6 +14,5 @@ export const UserAdminSetter: Setter<'userAdmin', UserAdminSettings> = (
   return {
     value,
     viewMode: derived(value, ($value) => $value.viewMode),
-    columnVisibility: derived(value, ($value) => $value.columnVisibility),
   };
 };

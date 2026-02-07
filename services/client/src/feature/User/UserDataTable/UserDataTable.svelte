@@ -19,19 +19,17 @@
   import type { User } from '$lib/auth/Type/User';
   import Icon from '@iconify/svelte';
 
+  import type { TableSettingsState } from '@slink/lib/settings/composables/useTableSettings.svelte';
+
   interface Props {
     users: User[];
     loggedInUser?: User | null;
     onDelete?: (id: string) => void;
-    columnVisibility?: Record<string, boolean>;
-    onColumnVisibilityChange?: (
-      columnVisibility: Record<string, boolean>,
-    ) => void;
+    tableSettings: TableSettingsState;
     isLoading?: boolean;
     currentPage?: number;
     totalPages?: number;
     totalItems?: number;
-    pageSize?: number;
     pageSizeOptions?: number[];
     onPageSizeChange?: (pageSize: number) => void;
     onPageChange?: (page: number) => void;
@@ -41,17 +39,18 @@
     users,
     loggedInUser,
     onDelete,
-    columnVisibility: initialColumnVisibility,
-    onColumnVisibilityChange,
+    tableSettings,
     isLoading = false,
     currentPage = 1,
     totalPages = 1,
     totalItems = 0,
-    pageSize = 10,
     pageSizeOptions = [12, 24, 48, 96],
     onPageSizeChange,
     onPageChange,
   }: Props = $props();
+
+  const pageSize = $derived(tableSettings.pageSize);
+  const columnVisibility = $derived(tableSettings.columnVisibility);
 
   let userUpdates = $state<Record<string, User>>({});
 
@@ -135,15 +134,15 @@
     pageSize: () => pageSize,
     totalPages: () => totalPages,
     onPageChange,
-    onColumnVisibilityChange,
+    onColumnVisibilityChange: (visibility) => {
+      tableSettings.columnVisibility = visibility;
+    },
   });
 
   let tableContainer: HTMLElement;
 
   $effect(() => {
-    if (initialColumnVisibility) {
-      setColumnVisibility(initialColumnVisibility);
-    }
+    setColumnVisibility(columnVisibility);
   });
 
   $effect(() => {

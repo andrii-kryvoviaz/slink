@@ -19,6 +19,8 @@
 
   import type { Tag } from '@slink/api/Resources/TagResource';
 
+  import type { TableSettingsState } from '@slink/lib/settings/composables/useTableSettings.svelte';
+
   interface Props {
     tags: Tag[];
     onDelete: (tag: Tag) => Promise<void>;
@@ -28,7 +30,7 @@
     currentPage?: number;
     totalPages?: number;
     totalItems?: number;
-    pageSize?: number;
+    tableSettings: TableSettingsState;
     pageSizeOptions?: number[];
     onPageSizeChange?: (pageSize: number) => void;
     onPageChange?: (page: number) => void;
@@ -43,11 +45,14 @@
     currentPage = 1,
     totalPages = 1,
     totalItems = 0,
-    pageSize = 20,
+    tableSettings,
     pageSizeOptions = [10, 20, 50, 100],
     onPageSizeChange,
     onPageChange,
   }: Props = $props();
+
+  const pageSize = $derived(tableSettings.pageSize);
+  const columnVisibility = $derived(tableSettings.columnVisibility);
 
   const columns: ColumnDef<Tag>[] = [
     {
@@ -109,7 +114,7 @@
     },
   ];
 
-  const { table } = useDataTable({
+  const { table, setColumnVisibility } = useDataTable({
     data: () => tags,
     columns,
     initialVisibility: {
@@ -122,6 +127,13 @@
     pageSize: () => pageSize,
     totalPages: () => totalPages,
     onPageChange,
+    onColumnVisibilityChange: (visibility) => {
+      tableSettings.columnVisibility = visibility;
+    },
+  });
+
+  $effect(() => {
+    setColumnVisibility(columnVisibility);
   });
 </script>
 
