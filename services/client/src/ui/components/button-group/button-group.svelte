@@ -13,7 +13,7 @@
         default:
           'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700',
         glass:
-          'bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-[inset_0_0_0_1px_rgba(0,0,0,0.1)] dark:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.1)]',
+          'bg-white/90 dark:bg-gray-800/90 backdrop-blur shadow-[inset_0_0_0_1px_rgba(0,0,0,0.1)] dark:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.1)]',
         ghost: 'bg-transparent',
         solid: 'bg-gray-100 dark:bg-gray-800',
       },

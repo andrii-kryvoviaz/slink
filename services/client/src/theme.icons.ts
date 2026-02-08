@@ -200,7 +200,6 @@ export const themeIcons: string[] = [
   'lucide:pencil',
   'ph:note-pencil',
   'ph:list-dashes',
-  'solar:link-linear',
   'ph:folder-notch-open-duotone',
   'heroicons:minus',
   'heroicons:shield-check-solid',
@@ -208,4 +207,5 @@ export const themeIcons: string[] = [
   'lucide:square-dashed-mouse-pointer',
   'heroicons:adjustments-horizontal',
   'heroicons:arrows-up-down',
+  'lucide:eye-off',
 ];

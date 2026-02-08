@@ -1,5 +1,6 @@
 export { default as ImageActionBar } from './ActionBar/ImageActionBar.svelte';
 export * from './ActionBar/ImageActionBar.theme';
+export * from './ActionBar/useImageActions.svelte';
 export { default as AdminImageDropdown } from './AdminImageDropdown/AdminImageDropdown.svelte';
 export { default as BookmarkButton } from './BookmarkButton/BookmarkButton.svelte';
 export * from './BookmarkButton/BookmarkButton.theme';

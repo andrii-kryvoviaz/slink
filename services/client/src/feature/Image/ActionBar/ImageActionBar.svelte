@@ -6,40 +6,23 @@
   import { Overlay } from '@slink/ui/components/popover';
   import { TooltipProvider } from '@slink/ui/components/tooltip';
 
-  import { goto } from '$app/navigation';
-  import { useGlobalSettings } from '$lib/state/GlobalSettings.svelte.js';
-  import { useUploadHistoryFeed } from '$lib/state/UploadHistoryFeed.svelte.js';
-  import { downloadByLink } from '$lib/utils/http/downloadByLink';
-  import { useAutoReset } from '$lib/utils/time/useAutoReset.svelte';
-  import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
-  import { routes } from '$lib/utils/url/routes';
   import Icon from '@iconify/svelte';
   import { cubicOut } from 'svelte/easing';
   import { scale } from 'svelte/transition';
 
-  import { ApiClient } from '@slink/api/Client';
-  import { ReactiveState } from '@slink/api/ReactiveState';
-  import type { ShareResponse } from '@slink/api/Response';
-
-  import { createCollectionPickerState } from '@slink/lib/state/CollectionPickerState.svelte';
-  import { createCreateCollectionModalState } from '@slink/lib/state/CreateCollectionModalState.svelte';
-
   import { cn } from '@slink/utils/ui';
 
+  import type { ActionButton, ActionLayout } from './ImageActionBar.theme';
   import {
     actionBarContainerVariants,
     actionBarSecondaryGroupVariants,
-    heroButtonOverrides,
+    actionButtonVariants,
+    downloadIconVariants,
+    downloadLabelVariants,
     iconSizeVariants,
   } from './ImageActionBar.theme';
+  import { useImageActions } from './useImageActions.svelte';
 
-  type ActionButton =
-    | 'download'
-    | 'visibility'
-    | 'delete'
-    | 'copy'
-    | 'collection';
-  type ActionLayout = 'default' | 'hero';
   type ButtonPosition = 'first' | 'middle' | 'last' | 'only';
 
   interface Props {
@@ -67,120 +50,16 @@
   }: Props = $props();
 
   const isHero = $derived(layout === 'hero');
-  const historyFeedState = useUploadHistoryFeed();
-  const globalSettingsManager = useGlobalSettings();
-
-  const allowOnlyPublicImages = $derived(
-    globalSettingsManager.settings?.image?.allowOnlyPublicImages || false,
-  );
-
-  const visibleButtons = $derived(
-    buttons.filter((button) => {
-      if (button === 'visibility' && allowOnlyPublicImages) return false;
-      return true;
-    }),
-  );
-
-  const directLink = $derived(
-    routes.image.view(image.fileName, undefined, { absolute: true }),
-  );
   const iconClass = $derived(iconSizeVariants({ layout }));
-  const visibilityTooltip = $derived(
-    image.isPublic ? 'Make private' : 'Make public',
-  );
-  const visibilityIcon = $derived(image.isPublic ? 'ph:eye' : 'ph:eye-slash');
 
-  const heroClass = (
-    intent: 'default' | 'primary' | 'destructive' = 'default',
-  ) => (isHero ? heroButtonOverrides({ intent }) : undefined);
-
-  const {
-    isLoading: visibilityIsLoading,
-    error: updateVisibilityError,
-    run: updateVisibility,
-  } = ReactiveState(
-    (imageId: string, isPublic: boolean) =>
-      ApiClient.image.updateDetails(imageId, { isPublic }),
-    { minExecutionTime: 300 },
-  );
-
-  const {
-    isLoading: deleteImageIsLoading,
-    error: deleteImageError,
-    run: deleteImage,
-  } = ReactiveState((imageId: string, preserveOnDisk: boolean) =>
-    ApiClient.image.remove(imageId, preserveOnDisk),
-  );
-
-  const {
-    isLoading: shareIsLoading,
-    error: shareError,
-    data: shareData,
-    run: shareImage,
-  } = ReactiveState<ShareResponse>(
-    (imageId: string) => ApiClient.image.shareImage(imageId, {}),
-    { minExecutionTime: 300 },
-  );
-
-  const isCopiedState = useAutoReset(1000);
-  let deletePopoverOpen = $state(false);
-  let collectionPopoverOpen = $state(false);
-
-  const collectionPickerState = createCollectionPickerState();
-  const createCollectionModalState = createCreateCollectionModalState();
-
-  $effect(() => {
-    collectionPickerState.setImage(image.id, image.collectionIds ?? []);
+  const actions = useImageActions({
+    getImage: () => image,
+    onImageUpdate: (updated) => (image = updated),
+    onImageDelete: (id) => on?.imageDelete?.(id),
+    onCollectionChange: (id, ids) => on?.collectionChange?.(id, ids),
   });
 
-  $effect(() => {
-    if (collectionPopoverOpen) {
-      collectionPickerState.load();
-    }
-  });
-
-  const copyTooltip = $derived.by(() => {
-    if ($shareIsLoading) return 'Generating...';
-    if (isCopiedState.active) return 'Copied!';
-    return 'Copy URL';
-  });
-
-  const handleDownload = () => downloadByLink(directLink, image.fileName);
-
-  const handleVisibilityChange = async () => {
-    const newValue = !image.isPublic;
-    await updateVisibility(image.id, newValue);
-    if ($updateVisibilityError) {
-      toast.error('Failed to update visibility. Please try again later.');
-      return;
-    }
-    image = { ...image, isPublic: newValue };
-    historyFeedState.update(image.id, {
-      attributes: { isPublic: newValue },
-    });
-  };
-
-  const handleCopy = async () => {
-    await shareImage(image.id);
-    if ($shareError || !$shareData) {
-      toast.error('Failed to generate share link. Please try again later.');
-      return;
-    }
-    await navigator.clipboard.writeText(routes.share.fromResponse($shareData));
-    isCopiedState.trigger();
-  };
-
-  const handleDelete = async (preserveOnDiskAfterDeletion: boolean) => {
-    await deleteImage(image.id, preserveOnDiskAfterDeletion);
-    if ($deleteImageError) {
-      toast.error('Failed to delete image. Please try again later.');
-      return;
-    }
-    historyFeedState.removeItem(image.id);
-    deletePopoverOpen = false;
-    await goto('/history');
-    on?.imageDelete?.(image.id);
-  };
+  const visibleButtons = $derived(actions.filterVisibleButtons(buttons));
 
   const getPosition = (index: number, total: number): ButtonPosition => {
     if (total === 1) return 'only';
@@ -201,28 +80,28 @@
 {/snippet}
 
 {#snippet copyIconContent()}
-  {#if $shareIsLoading}
+  {#if actions.shareIsLoading}
     <div class={cn(iconClass, 'flex items-center justify-center')}>
       <Loader variant="minimal" size="xs" />
     </div>
-  {:else if isCopiedState.active}
+  {:else if actions.isCopied.active}
     <div in:scale={{ duration: 300, easing: cubicOut }}>
       <Icon
-        icon="ph:check"
+        icon="lucide:check"
         class={cn(iconClass, 'text-green-600 dark:text-green-400')}
       />
     </div>
   {:else}
-    <Icon icon="solar:link-linear" class={iconClass} />
+    <Icon icon="lucide:link" class={iconClass} />
   {/if}
 {/snippet}
 
 {#snippet deletePopoverContent()}
   <ImageDeletePopover
-    loading={deleteImageIsLoading}
-    close={() => (deletePopoverOpen = false)}
+    loading={actions.deleteIsLoading}
+    close={() => (actions.deletePopoverOpen = false)}
     confirm={({ preserveOnDiskAfterDeletion }) =>
-      handleDelete(preserveOnDiskAfterDeletion)}
+      actions.handleDelete(preserveOnDiskAfterDeletion)}
   />
 {/snippet}
 
@@ -231,26 +110,22 @@
     variant="primary"
     size="md"
     position={isHero ? 'only' : position}
-    class={cn(
-      isHero
-        ? heroButtonOverrides({ intent: 'primary' })
-        : 'gap-1.5 px-3 min-w-fit flex-3',
-    )}
-    onclick={handleDownload}
+    class={actionButtonVariants({
+      layout,
+      variant: compact ? 'default' : 'primary',
+    })}
+    onclick={actions.handleDownload}
+    disabled={actions.downloadIsLoading}
     aria-label="Download image"
     tooltip={compact && !isHero ? 'Download' : undefined}
   >
-    <Icon
-      icon="lucide:download"
-      class={cn(
-        isHero ? iconSizeVariants({ size: 'lg' }) : iconClass,
-        'shrink-0',
-      )}
-    />
+    {@render loaderOrIcon(
+      'lucide:download',
+      actions.downloadIsLoading,
+      downloadIconVariants({ layout }),
+    )}
     {#if isHero || !compact}
-      <span class={cn('font-medium truncate', isHero ? '' : 'text-xs')}
-        >Download</span
-      >
+      <span class={downloadLabelVariants({ layout })}>Download</span>
     {/if}
   </ButtonGroupItem>
 {/snippet}
@@ -260,13 +135,14 @@
     variant="default"
     size="md"
     position={isHero ? 'only' : position}
-    class={heroClass()}
-    onclick={handleVisibilityChange}
-    disabled={$visibilityIsLoading}
-    aria-label={visibilityTooltip}
-    tooltip={visibilityTooltip}
+    class={actionButtonVariants({ layout })}
+    onclick={actions.handleVisibilityChange}
+    disabled={actions.visibilityIsLoading}
+    aria-label={actions.visibilityTooltip}
+    aria-pressed={image.isPublic}
+    tooltip={actions.visibilityTooltip}
   >
-    {@render loaderOrIcon(visibilityIcon, $visibilityIsLoading)}
+    {@render loaderOrIcon(actions.visibilityIcon, actions.visibilityIsLoading)}
   </ButtonGroupItem>
 {/snippet}
 
@@ -275,11 +151,11 @@
     variant={isHero ? 'default' : 'secondary'}
     size="md"
     position={isHero ? 'only' : position}
-    class={cn(heroClass(), !isHero && 'gap-1.5 px-2.5')}
-    onclick={handleCopy}
-    disabled={$shareIsLoading || isCopiedState.active}
+    class={actionButtonVariants({ layout, variant: 'secondary' })}
+    onclick={actions.handleCopy}
+    disabled={actions.shareIsLoading || actions.isCopied.active}
     aria-label="Copy image URL"
-    tooltip={copyTooltip}
+    tooltip={actions.copyTooltip}
   >
     {@render copyIconContent()}
   </ButtonGroupItem>
@@ -287,7 +163,7 @@
 
 {#snippet deleteButton(position: ButtonPosition)}
   <Overlay
-    bind:open={deletePopoverOpen}
+    bind:open={actions.deletePopoverOpen}
     variant="floating"
     contentProps={{ align: 'end' }}
     triggerClass={isHero ? '' : 'flex-1'}
@@ -297,12 +173,12 @@
         variant="destructive"
         size="md"
         position={isHero ? 'only' : position}
-        class={heroClass('destructive')}
+        class={actionButtonVariants({ layout, variant: 'destructive' })}
         aria-label="Delete image"
-        disabled={$deleteImageIsLoading}
+        disabled={actions.deleteIsLoading}
         tooltip="Delete image"
       >
-        <Icon icon="ph:trash" class={iconClass} />
+        <Icon icon="lucide:trash-2" class={iconClass} />
       </ButtonGroupItem>
     {/snippet}
     {@render deletePopoverContent()}
@@ -311,7 +187,7 @@
 
 {#snippet collectionButton(position: ButtonPosition)}
   <Overlay
-    bind:open={collectionPopoverOpen}
+    bind:open={actions.collectionPopoverOpen}
     variant="floating"
     size="none"
     contentProps={{ align: 'end' }}
@@ -322,16 +198,16 @@
         variant="default"
         size="md"
         position={isHero ? 'only' : position}
-        class={heroClass()}
+        class={actionButtonVariants({ layout })}
         aria-label="Add to collection"
         tooltip="Add to collection"
       >
-        <Icon icon="ph:folder-simple" class={iconClass} />
+        <Icon icon="lucide:folder" class={iconClass} />
       </ButtonGroupItem>
     {/snippet}
     <CollectionPicker
-      pickerState={collectionPickerState}
-      createModalState={createCollectionModalState}
+      pickerState={actions.collectionPickerState}
+      createModalState={actions.createCollectionModalState}
       variant="popover"
       onToggle={({ added, collectionId }) => {
         const ids = image.collectionIds ?? [];
@@ -361,7 +237,11 @@
 
 <TooltipProvider delayDuration={300}>
   {#if isHero}
-    <div class={actionBarContainerVariants({ layout })}>
+    <div
+      class={actionBarContainerVariants({ layout })}
+      role="toolbar"
+      aria-label="Image actions"
+    >
       {#each visibleButtons as button, i (button)}
         {@const position = getPosition(i, visibleButtons.length)}
         {#if button === 'download'}
@@ -369,12 +249,15 @@
         {/if}
       {/each}
       <div class={actionBarSecondaryGroupVariants({ layout })}>
-        {#each visibleButtons as button, i (button)}
-          {@const position = getPosition(i, visibleButtons.length)}
-          {#if button !== 'download'}
-            {@render renderButton(button, position)}
+        {#each visibleButtons as button}
+          {#if button !== 'download' && button !== 'delete'}
+            {@render renderButton(button, 'only')}
           {/if}
         {/each}
+        <div class="w-px h-5 bg-gray-200 dark:bg-gray-700 mx-1"></div>
+        {#if visibleButtons.includes('delete')}
+          {@render renderButton('delete', 'only')}
+        {/if}
       </div>
     </div>
   {:else}
@@ -384,6 +267,8 @@
       size="md"
       gap="none"
       padding="none"
+      role="toolbar"
+      aria-label="Image actions"
     >
       {#each visibleButtons as button, i (button)}
         {@const position = getPosition(i, visibleButtons.length)}

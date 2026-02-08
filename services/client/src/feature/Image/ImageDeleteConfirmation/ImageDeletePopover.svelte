@@ -4,19 +4,18 @@
   import { Switch } from '@slink/ui/components/switch';
 
   import Icon from '@iconify/svelte';
-  import { type Readable, readable } from 'svelte/store';
 
   type ConfirmAction = {
     preserveOnDiskAfterDeletion: boolean;
   };
 
   interface Props {
-    loading?: Readable<boolean>;
+    loading?: boolean;
     close: () => void;
     confirm: ({ preserveOnDiskAfterDeletion }: ConfirmAction) => void;
   }
 
-  let { loading = readable(false), close, confirm }: Props = $props();
+  let { loading = false, close, confirm }: Props = $props();
 
   let preserveOnDiskAfterDeletion: boolean = $state(false);
 
@@ -30,7 +29,7 @@
 </script>
 
 <div class="w-xs max-w-screen space-y-4 relative">
-  {#if $loading}
+  {#if loading}
     <div class="absolute top-2 right-2 z-10">
       <Loader variant="minimal" size="xs" />
     </div>
@@ -41,7 +40,7 @@
       class="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 border border-red-200/40 dark:border-red-800/30 shadow-sm flex-shrink-0"
     >
       <Icon
-        icon="heroicons:trash"
+        icon="lucide:trash-2"
         class="h-5 w-5 text-red-600 dark:text-red-400"
       />
     </div>
@@ -72,7 +71,7 @@
       <Switch
         checked={!preserveOnDiskAfterDeletion}
         onCheckedChange={(checked) => (preserveOnDiskAfterDeletion = !checked)}
-        disabled={$loading}
+        disabled={loading}
       />
     </label>
   </div>
@@ -84,7 +83,7 @@
       size="sm"
       onclick={handleCancel}
       class="flex-1"
-      disabled={$loading}
+      disabled={loading}
     >
       Cancel
     </Button>
@@ -94,12 +93,12 @@
       size="sm"
       onclick={handleConfirm}
       class="flex-1 font-medium shadow-lg hover:shadow-xl transition-all duration-200"
-      disabled={$loading}
+      disabled={loading}
     >
-      {#if $loading}
+      {#if loading}
         <Icon icon="eos-icons:three-dots-loading" class="h-4 w-4 mr-2" />
       {:else}
-        <Icon icon="heroicons:trash" class="h-4 w-4 mr-2" />
+        <Icon icon="lucide:trash-2" class="h-4 w-4 mr-2" />
       {/if}
       Delete Image
     </Button>
