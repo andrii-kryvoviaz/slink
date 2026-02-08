@@ -1,7 +1,6 @@
 import type { Cookies } from '@sveltejs/kit';
 
 import { ApiClient } from '@slink/api/Client';
-import { ValidationException } from '@slink/api/Exceptions';
 
 import type { CookieManager } from '@slink/lib/auth/CookieManager';
 import { Session } from '@slink/lib/auth/Session';
@@ -102,11 +101,8 @@ export class Auth {
         accessToken: access_token,
         refreshToken: refresh_token,
       };
-    } catch (e) {
-      if (e instanceof ValidationException) {
-        Auth.logout({ cookies, cookieManager, fetch });
-      }
-
+    } catch {
+      await Auth.logout({ cookies, cookieManager, fetch });
       return;
     }
   }
