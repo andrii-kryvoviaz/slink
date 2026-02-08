@@ -20,7 +20,7 @@ final  class ApiKeyProjection extends AbstractProjection {
     $apiKey = ApiKeyView::create(
       $event->keyId,
       $event->userId->toString(),
-      $event->key,
+      $event->keyHash,
       $event->name,
       $event->createdAt,
       $event->expiresAt

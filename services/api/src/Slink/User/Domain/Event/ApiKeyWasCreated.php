@@ -12,7 +12,7 @@ final readonly class ApiKeyWasCreated implements SerializablePayload {
   public function __construct(
     public ID $userId,
     public string $keyId,
-    public string $key,
+    public string $keyHash,
     public string $name,
     public DateTime $createdAt,
     public ?DateTime $expiresAt = null
@@ -25,7 +25,7 @@ final readonly class ApiKeyWasCreated implements SerializablePayload {
     return [
       'userId' => $this->userId->toString(),
       'keyId' => $this->keyId,
-      'key' => $this->key,
+      'keyHash' => $this->keyHash,
       'name' => $this->name,
       'createdAt' => $this->createdAt->toString(),
       'expiresAt' => $this->expiresAt?->toString()
@@ -39,7 +39,7 @@ final readonly class ApiKeyWasCreated implements SerializablePayload {
     return new self(
       ID::fromString($payload['userId']),
       $payload['keyId'],
-      $payload['key'],
+      $payload['keyHash'],
       $payload['name'],
       DateTime::fromString($payload['createdAt']),
       $payload['expiresAt'] ? DateTime::fromString($payload['expiresAt']) : null

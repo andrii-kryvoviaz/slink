@@ -52,7 +52,7 @@ class ApiKeyView extends AbstractView {
   public static function create(
     string $keyId,
     string $userId,
-    string $key,
+    string $keyHash,
     string $name,
     DateTime $createdAt,
     ?DateTime $expiresAt = null
@@ -60,7 +60,7 @@ class ApiKeyView extends AbstractView {
     return new self(
       $keyId,
       $userId,
-      self::hashKey($key),
+      $keyHash,
       $name,
       $createdAt,
       $expiresAt

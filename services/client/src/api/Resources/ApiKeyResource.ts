@@ -40,10 +40,6 @@ export class ApiKeyResource extends AbstractResource {
     baseUrl?: string,
     apiKey?: string,
   ): Promise<unknown> {
-    const params = new URLSearchParams();
-    if (baseUrl) params.append('baseUrl', baseUrl);
-    if (apiKey) params.append('apiKey', apiKey);
-
-    return this.get(`/user/sharex-config?${params.toString()}`);
+    return this.post('/user/sharex-config', { json: { baseUrl, apiKey } });
   }
 }

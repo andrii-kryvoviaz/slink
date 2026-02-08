@@ -36,6 +36,7 @@ use Slink\User\Domain\Exception\SelfUserRoleChangeException;
 use Slink\User\Domain\Exception\SelfUserStatusChangeException;
 use Slink\User\Domain\Specification\CurrentUserSpecificationInterface;
 use Slink\User\Domain\ValueObject\Auth\Credentials;
+use Slink\User\Domain\ValueObject\Auth\HashedApiKey;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;
 use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Email;
@@ -360,16 +361,17 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   public function createApiKey(string $name, ?DateTime $expiresAt = null): string {
     $keyId = ID::generate()->toString();
     $key = 'sk_' . bin2hex(random_bytes(32));
-    
+    $hashedApiKey = HashedApiKey::encode($key);
+
     $this->recordThat(new ApiKeyWasCreated(
       $this->aggregateRootId(),
       $keyId,
-      $key,
+      $hashedApiKey->toString(),
       $name,
       DateTime::now(),
       $expiresAt
     ));
-    
+
     return $key;
   }
 
