@@ -7,8 +7,9 @@
     tagDropdownEmptyStateVariants,
   } from '@slink/feature/Tag';
 
-  import type { Tag } from '@slink/api/Resources/TagResource';
   import Icon from '@iconify/svelte';
+
+  import type { Tag } from '@slink/api/Resources/TagResource';
 
   interface Props extends TagDropdownContentVariants {
     isOpen: boolean;
@@ -107,9 +108,7 @@
       </div>
     {:else if !creatingChildFor && tags.length === 0 && !canCreate && !searchTerm.trim()}
       <div class={tagDropdownEmptyStateVariants({ variant })}>
-        <div class="text-sm text-muted-foreground">
-          No tags yet
-        </div>
+        <div class="text-sm text-muted-foreground">No tags yet</div>
       </div>
     {/if}
   </div>

@@ -1,11 +1,11 @@
 <script lang="ts">
+  import { CollectionPicker } from '@slink/feature/Collection';
   import {
     type AddToCollectionButtonSize,
     type AddToCollectionButtonVariant,
     addToCollectionButtonTheme,
     addToCollectionIconTheme,
   } from '@slink/feature/Collection/AddToCollectionButton/AddToCollectionButton.theme';
-  import { CollectionPicker } from '@slink/feature/Collection';
   import { Tooltip, type TooltipVariant } from '@slink/ui/components/tooltip';
   import { Popover as PopoverPrimitive } from 'bits-ui';
 
