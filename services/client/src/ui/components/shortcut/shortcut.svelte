@@ -5,7 +5,7 @@
   import { browser } from '$app/environment';
   import { page } from '$app/state';
 
-  import { parseUserAgent } from '@slink/utils/http/userAgentParser';
+  import { useUserAgent } from '@slink/utils/http/useUserAgent.svelte';
 
   interface Props extends KeyboardKeyProps {
     class?: string;
@@ -29,7 +29,7 @@
     ...props
   }: Props = $props();
 
-  let userAgentInfo = parseUserAgent(page.data.userAgent);
+  let userAgent = useUserAgent(page.data.userAgent);
 
   $effect(() => {
     if (!onHit || typeof onHit !== 'function' || !browser) return;
@@ -42,7 +42,7 @@
         event.code.toLowerCase() === key.toLowerCase();
 
       const controlMatches = control
-        ? userAgentInfo.isMacOS || userAgentInfo.isIOS
+        ? userAgent.isApple
           ? event.metaKey
           : event.ctrlKey
         : !(event.metaKey || event.ctrlKey);
@@ -64,7 +64,7 @@
   <div class="flex items-center gap-2 justify-center">
     {#if control}
       <KeyboardKey {...props}>
-        {#if userAgentInfo.isMacOS || userAgentInfo.isIOS}
+        {#if userAgent.isApple}
           ⌘ cmd
         {:else}
           Ctrl

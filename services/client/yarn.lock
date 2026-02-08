@@ -2177,6 +2177,11 @@ core-js-compat@^3.43.0:
   dependencies:
     browserslist "^4.26.3"
 
+crawler-user-agents@^1.27.0:
+  version "1.27.0"
+  resolved "https://registry.yarnpkg.com/crawler-user-agents/-/crawler-user-agents-1.27.0.tgz#6884ce64e357b31124fcb61308ef9dd88b96f23b"
+  integrity sha512-PNvzLBEEDVuOk9xpBt3FzDhy6TZT59quplFYZsvtrmZoRH5z+AdMoxhBIIN3f/sSXgEJ9JcWeMTNgbqV0/dvXw==
+
 cross-spawn@^7.0.6:
   version "7.0.6"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-7.0.6.tgz#8a58fe78f00dcd70c370451759dfbfaf03e8ee9f"
