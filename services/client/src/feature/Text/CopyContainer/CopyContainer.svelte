@@ -2,6 +2,7 @@
   import { Button } from '@slink/ui/components/button';
   import type { Snippet } from 'svelte';
 
+  import { useAutoReset } from '$lib/utils/time/useAutoReset.svelte';
   import Icon from '@iconify/svelte';
   import { cubicOut } from 'svelte/easing';
   import { scale } from 'svelte/transition';
@@ -46,7 +47,7 @@
     actionSlot,
   }: Props = $props();
 
-  let isCopiedActive: boolean = $state(false);
+  const isCopiedState = useAutoReset(delay);
   let inputElement: HTMLInputElement | undefined = $state();
 
   const resolveValue = async (): Promise<string> => {
@@ -63,22 +64,20 @@
     try {
       const textToCopy = await resolveValue();
       await navigator.clipboard.writeText(textToCopy);
-      isCopiedActive = true;
-
-      if (inputElement) {
-        inputElement.select();
-      }
-
-      setTimeout(() => {
-        isCopiedActive = false;
-        if (inputElement) {
-          inputElement.blur();
-        }
-      }, delay);
+      isCopiedState.trigger();
+      inputElement?.select();
     } catch (error) {
       console.error('Failed to copy text:', error);
     }
   };
+
+  let prevActive = false;
+  $effect(() => {
+    if (prevActive && !isCopiedState.active) {
+      inputElement?.blur();
+    }
+    prevActive = isCopiedState.active;
+  });
 
   const handleInputClick = () => {
     if (inputElement) {
@@ -91,7 +90,7 @@
   const buttonClasses = $derived(CopyContainerButtonTheme({ size }));
 
   const copyState: CopyState = $derived({
-    isCopied: isCopiedActive,
+    isCopied: isCopiedState.active,
     isLoading,
     copy: handleCopy,
   });
@@ -119,7 +118,7 @@
           variant="primary"
           size="xs"
           rounded="sm"
-          disabled={isCopiedActive || isLoading}
+          disabled={isCopiedState.active || isLoading}
           onclick={handleCopy}
         >
           {#if isLoading}
@@ -130,7 +129,7 @@
               <Icon icon="lucide:loader-2" class="h-3.5 w-3.5 animate-spin" />
               <span>Signing...</span>
             </div>
-          {:else if isCopiedActive}
+          {:else if isCopiedState.active}
             <div
               class="flex items-center gap-1.5"
               in:scale={{ duration: 150, easing: cubicOut }}

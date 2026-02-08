@@ -10,6 +10,7 @@
   import { useGlobalSettings } from '$lib/state/GlobalSettings.svelte.js';
   import { useUploadHistoryFeed } from '$lib/state/UploadHistoryFeed.svelte.js';
   import { downloadByLink } from '$lib/utils/http/downloadByLink';
+  import { useAutoReset } from '$lib/utils/time/useAutoReset.svelte';
   import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
   import { routes } from '$lib/utils/url/routes';
   import Icon from '@iconify/svelte';
@@ -121,7 +122,7 @@
     { minExecutionTime: 300 },
   );
 
-  let isCopiedActive = $state(false);
+  const isCopiedState = useAutoReset(1000);
   let deletePopoverOpen = $state(false);
   let collectionPopoverOpen = $state(false);
 
@@ -140,7 +141,7 @@
 
   const copyTooltip = $derived.by(() => {
     if ($shareIsLoading) return 'Generating...';
-    if (isCopiedActive) return 'Copied!';
+    if (isCopiedState.active) return 'Copied!';
     return 'Copy URL';
   });
 
@@ -166,8 +167,7 @@
       return;
     }
     await navigator.clipboard.writeText(routes.share.fromResponse($shareData));
-    isCopiedActive = true;
-    setTimeout(() => (isCopiedActive = false), 1000);
+    isCopiedState.trigger();
   };
 
   const handleDelete = async (preserveOnDiskAfterDeletion: boolean) => {
@@ -205,7 +205,7 @@
     <div class={cn(iconClass, 'flex items-center justify-center')}>
       <Loader variant="minimal" size="xs" />
     </div>
-  {:else if isCopiedActive}
+  {:else if isCopiedState.active}
     <div in:scale={{ duration: 300, easing: cubicOut }}>
       <Icon
         icon="ph:check"
@@ -277,7 +277,7 @@
     position={isHero ? 'only' : position}
     class={cn(heroClass(), !isHero && 'gap-1.5 px-2.5')}
     onclick={handleCopy}
-    disabled={$shareIsLoading || isCopiedActive}
+    disabled={$shareIsLoading || isCopiedState.active}
     aria-label="Copy image URL"
     tooltip={copyTooltip}
   >

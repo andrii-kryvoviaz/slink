@@ -2,6 +2,7 @@
   import { Tooltip, type TooltipVariant } from '@slink/ui/components/tooltip';
 
   import { downloadByLink } from '$lib/utils/http/downloadByLink';
+  import { useAutoReset } from '$lib/utils/time/useAutoReset.svelte';
   import Icon from '@iconify/svelte';
 
   import {
@@ -27,23 +28,17 @@
     tooltipVariant = 'subtle',
   }: Props = $props();
 
-  let isLoading = $state(false);
+  const loadingState = useAutoReset(500);
 
   const handleClick = async (e: MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
 
-    if (isLoading) return;
+    if (loadingState.active) return;
 
-    isLoading = true;
+    loadingState.trigger();
 
-    try {
-      downloadByLink(imageUrl, fileName);
-    } finally {
-      setTimeout(() => {
-        isLoading = false;
-      }, 500);
-    }
+    downloadByLink(imageUrl, fileName);
   };
 </script>
 
@@ -53,10 +48,10 @@
       class={downloadButtonTheme({
         size,
         variant,
-        loading: isLoading,
+        loading: loadingState.active,
       })}
       onclick={handleClick}
-      disabled={isLoading}
+      disabled={loadingState.active}
       aria-label="Download image"
     >
       <span class="relative flex items-center justify-center">
@@ -65,7 +60,7 @@
           class={downloadIconTheme({
             size,
             variant,
-            loading: isLoading,
+            loading: loadingState.active,
           })}
         />
       </span>

@@ -21,6 +21,8 @@
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
+  import type { ImageListingItem } from '@slink/api/Response';
+
   import { skeleton } from '@slink/lib/actions/skeleton';
   import { isAdmin } from '@slink/lib/auth/utils';
   import { usePostViewerState } from '@slink/lib/state/PostViewerState.svelte';
@@ -75,7 +77,7 @@
     postViewerState.open(index);
   };
 
-  const handleImageUpdate = (updatedImage: any) => {
+  const handleImageUpdate = (updatedImage: ImageListingItem) => {
     if (updatedImage.attributes.isPublic) {
       publicFeedState.replaceItem(updatedImage);
     } else {

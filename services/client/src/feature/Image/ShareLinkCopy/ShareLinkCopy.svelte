@@ -5,6 +5,7 @@
   import { Button } from '@slink/ui/components/button';
   import * as DropdownMenu from '@slink/ui/components/dropdown-menu/index.js';
 
+  import { useAutoReset } from '$lib/utils/time/useAutoReset.svelte';
   import Icon from '@iconify/svelte';
   import { cubicOut } from 'svelte/easing';
   import { scale } from 'svelte/transition';
@@ -81,7 +82,7 @@
   const { format: formatStore } = settings.get('share', { format: 'direct' });
   let selectedFormat = $derived($formatStore);
   let isCopyingImage = $state(false);
-  let isCopied = $state(false);
+  const isCopiedState = useAutoReset(2000);
 
   const setSelectedFormat = (format: ShareFormat) => {
     settings.set('share', { format });
@@ -154,8 +155,7 @@
         await navigator.clipboard.writeText(format.generate(url, imageAlt));
       }
 
-      isCopied = true;
-      setTimeout(() => (isCopied = false), 2000);
+      isCopiedState.trigger();
 
       if (showToast) {
         toast.success('Link copied to clipboard');
@@ -179,7 +179,7 @@
         variant="primary"
         size="xs"
         rounded="sm"
-        disabled={isCopied || state.isLoading || isCopyingImage}
+        disabled={isCopiedState.active || state.isLoading || isCopyingImage}
         onclick={() => handleCopy()}
       >
         {#if state.isLoading || isCopyingImage}
@@ -190,7 +190,7 @@
             <Icon icon="lucide:loader-2" class="h-3.5 w-3.5 animate-spin" />
             <span>{isCopyingImage ? 'Copying...' : 'Signing...'}</span>
           </div>
-        {:else if isCopied}
+        {:else if isCopiedState.active}
           <div
             class="flex items-center gap-1.5"
             in:scale={{ duration: 150, easing: cubicOut }}
@@ -208,7 +208,7 @@
 
       <DropdownMenu.Root>
         <DropdownMenu.Trigger
-          disabled={state.isLoading || isCopyingImage || isCopied}
+          disabled={state.isLoading || isCopyingImage || isCopiedState.active}
         >
           {#snippet child({ props })}
             <Button
@@ -217,7 +217,9 @@
               variant="primary"
               size="xs"
               rounded="sm"
-              disabled={state.isLoading || isCopyingImage || isCopied}
+              disabled={state.isLoading ||
+                isCopyingImage ||
+                isCopiedState.active}
             >
               <span class="text-xs">{getSelectedFormat().short}</span>
               <Icon icon="ph:caret-down" class="h-3 w-3" />

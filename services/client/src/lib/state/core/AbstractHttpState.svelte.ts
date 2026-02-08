@@ -1,5 +1,3 @@
-import type { ValidationException } from '@slink/api/Exceptions';
-
 import { debounce } from '@slink/utils/time/debounce';
 
 type RequestStatus = 'idle' | 'loading' | 'finished' | 'error';
@@ -18,7 +16,7 @@ function createDelayPromise(delay: number): Promise<void> {
 export abstract class AbstractHttpState<T> {
   private _status: RequestStatus = $state('idle');
   private _isDirty = $state(false);
-  private _error: ValidationException | null = $state(null);
+  private _error: Error | null = $state(null);
 
   protected async fetch(
     fetcher: () => Promise<T>,
@@ -39,8 +37,8 @@ export abstract class AbstractHttpState<T> {
 
         setter(result);
         this._status = 'finished';
-      } catch (error: any) {
-        this._error = error;
+      } catch (error: unknown) {
+        this._error = error instanceof Error ? error : new Error(String(error));
         this._status = 'error';
       } finally {
         this._status = 'idle';
@@ -83,7 +81,7 @@ export abstract class AbstractHttpState<T> {
     return this._error !== null;
   }
 
-  get error(): ValidationException | null {
+  get error(): Error | null {
     return this._error;
   }
 }

@@ -1,7 +1,5 @@
 import type { Readable } from 'svelte/store';
 
-import { ValidationException } from '@slink/api/Exceptions';
-
 import { inMemoryReadable } from '@slink/utils/store/provider/inMemoryReadable';
 import { debounce } from '@slink/utils/time/debounce';
 
@@ -11,7 +9,7 @@ export type RequestState<T> = {
   status: Readable<RequestStatus>;
   isLoading: Readable<boolean>;
   data: Readable<T | null>;
-  error: Readable<ValidationException | null>;
+  error: Readable<Error | null>;
   run: (...args: unknown[]) => Promise<void> | void;
   reset: () => void;
 };
@@ -34,7 +32,7 @@ export function ReactiveState<T>(
   const [status, setStatus] = inMemoryReadable<RequestStatus>('idle');
   const [isLoading, setIsLoading] = inMemoryReadable<boolean>(false);
   const [data, setData] = inMemoryReadable<T | null>(null);
-  const [error, setError] = inMemoryReadable<ValidationException | null>(null);
+  const [error, setError] = inMemoryReadable<Error | null>(null);
 
   function reset() {
     setData(null);
@@ -57,7 +55,7 @@ export function ReactiveState<T>(
       setData(result);
       setStatus('finished');
     } catch (err: unknown) {
-      setError(err as ValidationException);
+      setError(err instanceof Error ? err : new Error(String(err)));
       setStatus('error');
     } finally {
       setIsLoading(false);

@@ -3,16 +3,22 @@ import { replaceState } from '$app/navigation';
 import { ApiClient } from '@slink/api/Client';
 import type { ImageListingItem } from '@slink/api/Response';
 
-import type { AbstractPaginatedFeed } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
 import { useState } from '@slink/lib/state/core/ContextAwareState';
 
-type PaginatedFeed = AbstractPaginatedFeed<ImageListingItem>;
+export interface PostViewerFeed {
+  items: ImageListingItem[];
+  hasMore: boolean;
+  isDirty: boolean;
+  isLoading: boolean;
+  updateItem(item: ImageListingItem, updates: Partial<ImageListingItem>): void;
+  nextPage(): Promise<void>;
+}
 export type PostViewerSource = 'public' | 'collection';
 
 class PostViewerState {
   private _isOpen: boolean = $state(false);
   private _currentIndex: number = $state(0);
-  private _feed: PaginatedFeed | null = $state(null);
+  private _feed: PostViewerFeed | null = $state(null);
   private _standaloneItem: ImageListingItem | null = $state(null);
   private _lastFetchedPostId: string | null = null;
   private _prefetchThreshold: number = 3;
@@ -65,7 +71,7 @@ class PostViewerState {
     return this.items.length;
   }
 
-  setFeed(feed: PaginatedFeed, source: PostViewerSource = 'public'): void {
+  setFeed(feed: PostViewerFeed, source: PostViewerSource = 'public'): void {
     if (this._feed === feed) return;
     this._feed = feed;
     this._lastFetchedPostId = null;

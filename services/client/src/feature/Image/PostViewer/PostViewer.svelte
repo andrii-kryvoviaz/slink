@@ -4,6 +4,7 @@
 
   import { browser } from '$app/environment';
   import { page } from '$app/state';
+  import { useAutoReset } from '$lib/utils/time/useAutoReset.svelte';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
@@ -15,7 +16,7 @@
   const viewerState = usePostViewerState();
   const currentUser = $derived(page.data.user ?? null);
 
-  let isAnimating = $state(false);
+  const animatingState = useAutoReset(500);
   let lastWheelTime = $state(0);
   const WHEEL_THRESHOLD = 50;
   const WHEEL_COOLDOWN = 600;
@@ -34,18 +35,16 @@
   }
 
   function navigateNext() {
-    if (viewerState.hasNext && !isAnimating) {
-      isAnimating = true;
+    if (viewerState.hasNext && !animatingState.active) {
+      animatingState.trigger();
       viewerState.next();
-      setTimeout(() => (isAnimating = false), 500);
     }
   }
 
   function navigatePrev() {
-    if (viewerState.hasPrev && !isAnimating) {
-      isAnimating = true;
+    if (viewerState.hasPrev && !animatingState.active) {
+      animatingState.trigger();
       viewerState.prev();
-      setTimeout(() => (isAnimating = false), 500);
     }
   }
 
@@ -53,7 +52,7 @@
     e.preventDefault();
 
     const now = Date.now();
-    if (isAnimating || now - lastWheelTime < WHEEL_COOLDOWN) return;
+    if (animatingState.active || now - lastWheelTime < WHEEL_COOLDOWN) return;
 
     if (Math.abs(e.deltaY) > WHEEL_THRESHOLD) {
       lastWheelTime = now;
@@ -73,7 +72,7 @@
   }
 
   function handleTouchEnd(e: TouchEvent) {
-    if (isAnimating) return;
+    if (animatingState.active) return;
 
     const touchEndY = e.changedTouches[0].clientY;
     const deltaY = touchStartY - touchEndY;

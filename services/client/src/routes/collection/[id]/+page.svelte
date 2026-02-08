@@ -82,7 +82,7 @@
   });
 
   const feedAdapter = new CollectionImagesFeedAdapter(itemsFeed);
-  postViewerState.setFeed(feedAdapter as any, 'collection');
+  postViewerState.setFeed(feedAdapter, 'collection');
 
   $effect(() => {
     if (!postViewerState.isOpen && itemsFeed.isDirty) {

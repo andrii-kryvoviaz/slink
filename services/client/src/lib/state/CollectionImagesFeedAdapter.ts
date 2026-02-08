@@ -18,6 +18,10 @@ export class CollectionImagesFeedAdapter {
     return this._collectionFeed.isDirty;
   }
 
+  get isLoading(): boolean {
+    return this._collectionFeed.isLoading;
+  }
+
   updateItem(item: MediaItem, updates: Partial<MediaItem>): void {
     this._collectionFeed.updateItemMedia(item.id, updates);
   }
