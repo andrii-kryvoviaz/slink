@@ -6,6 +6,8 @@ export { default as CollectionItemDropdown } from './CollectionItemDropdown/Coll
 export { default as CollectionListView } from './CollectionList/CollectionListView.svelte';
 export { default as CollectionPicker } from './CollectionPicker/CollectionPicker.svelte';
 export * from './CollectionPicker/CollectionPicker.theme';
+export { default as CollectionSelector } from './CollectionSelector/CollectionSelector.svelte';
+export * from './CollectionSelector/CollectionSelector.theme';
 export { default as CreateCollectionDialog } from './CreateCollectionDialog.svelte';
 export { default as CreateCollectionForm } from './CreateCollectionForm.svelte';
 export { default as CreateCollectionModal } from './CreateCollectionModal.svelte';
