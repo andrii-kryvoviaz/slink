@@ -27,6 +27,8 @@
     allowCreate?: boolean;
     hideIcon?: boolean;
     singleSelect?: boolean;
+    excludeTagIds?: string[];
+    excludePathPrefix?: string;
   }
 
   let {
@@ -38,6 +40,8 @@
     allowCreate = true,
     hideIcon = false,
     singleSelect = false,
+    excludeTagIds = [],
+    excludePathPrefix,
   }: Props = $props();
 
   let isOpen = $state(false);
@@ -54,6 +58,7 @@
 
   const hasSelectedTags = $derived(selectedTags.length > 0);
   const selectedTagIds = $derived(new Set(selectedTags.map((tag) => tag.id)));
+  const excludedTagIds = $derived(new Set(excludeTagIds));
 
   const {
     loadTags,
@@ -72,11 +77,19 @@
   const shouldShowLoader = $derived($isLoadingTags && !!searchTerm?.trim());
 
   const filteredTags = $derived(
-    availableTags.filter(
-      (tag: Tag) =>
-        !selectedTagIds.has(tag.id) &&
-        tag.name.toLowerCase().includes(searchTerm.toLowerCase()),
-    ),
+    availableTags.filter((tag: Tag) => {
+      if (selectedTagIds.has(tag.id)) return false;
+      if (excludedTagIds.has(tag.id)) return false;
+      if (
+        excludePathPrefix &&
+        (tag.path === excludePathPrefix ||
+          tag.path.startsWith(`${excludePathPrefix}/`))
+      ) {
+        return false;
+      }
+
+      return tag.name.toLowerCase().includes(searchTerm.toLowerCase());
+    }),
   );
 
   const canCreate = $derived(

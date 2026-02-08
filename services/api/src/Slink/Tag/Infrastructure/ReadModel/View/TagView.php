@@ -114,6 +114,23 @@ class TagView extends AbstractView {
     $this->parent = $parent;
   }
 
+  public function updateHierarchy(
+    string $path,
+    ?string $parentId,
+    ?TagView $parent,
+    DateTime $updatedAt,
+  ): void {
+    $this->path = $path;
+    $this->parentId = $parentId;
+    $this->parent = $parent;
+    $this->updatedAt = $updatedAt;
+  }
+
+  public function updatePath(string $path, DateTime $updatedAt): void {
+    $this->path = $path;
+    $this->updatedAt = $updatedAt;
+  }
+
   #[Groups(['public', 'private'])]
   #[SerializedName('children')]
   public function getChildren(): Collection {

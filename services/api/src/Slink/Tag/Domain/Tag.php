@@ -11,6 +11,8 @@ use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Tag\Domain\Event\TagWasCreated;
 use Slink\Tag\Domain\Event\TagWasDeleted;
+use Slink\Tag\Domain\Event\TagWasMoved;
+use Slink\Tag\Domain\Event\TagPathWasUpdated;
 use Slink\Tag\Domain\ValueObject\TagName;
 use Slink\Tag\Domain\ValueObject\TagPath;
 
@@ -49,6 +51,33 @@ final class Tag extends AbstractAggregateRoot {
     $this->recordThat(new TagWasDeleted($this->aggregateRootId()));
   }
 
+  public function move(?ID $parentId, TagPath $path, DateTime $updatedAt): void {
+    if ($this->deleted) {
+      return;
+    }
+
+    $currentParentId = $this->parentId;
+    $isSameParent = $currentParentId?->equals($parentId) ?? ($parentId === null);
+
+    if ($isSameParent && $this->path?->getValue() === $path->getValue()) {
+      return;
+    }
+
+    $this->recordThat(new TagWasMoved($this->aggregateRootId(), $parentId, $path, $updatedAt));
+  }
+
+  public function updatePath(TagPath $path, DateTime $updatedAt): void {
+    if ($this->deleted) {
+      return;
+    }
+
+    if ($this->path?->getValue() === $path->getValue()) {
+      return;
+    }
+
+    $this->recordThat(new TagPathWasUpdated($this->aggregateRootId(), $path, $updatedAt));
+  }
+
   public function applyTagWasCreated(TagWasCreated $event): void {
     $this->userId = $event->userId;
     $this->name = $event->name;
@@ -60,6 +89,17 @@ final class Tag extends AbstractAggregateRoot {
 
   public function applyTagWasDeleted(TagWasDeleted $event): void {
     $this->deleted = true;
+  }
+
+  public function applyTagWasMoved(TagWasMoved $event): void {
+    $this->parentId = $event->parentId;
+    $this->path = $event->path;
+    $this->updatedAt = $event->updatedAt;
+  }
+
+  public function applyTagPathWasUpdated(TagPathWasUpdated $event): void {
+    $this->path = $event->path;
+    $this->updatedAt = $event->updatedAt;
   }
 
   public function getUserId(): ID {

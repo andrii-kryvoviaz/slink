@@ -5,6 +5,7 @@ export interface Tag {
   id: string;
   name: string;
   path: string;
+  parentId?: string | null;
   isRoot: boolean;
   depth: number;
   imageCount: number;
@@ -19,8 +20,8 @@ export interface CreateTagRequest {
 }
 
 export interface UpdateTagRequest {
-  name: string;
-  parentId?: string;
+  name?: string;
+  parentId?: string | null;
 }
 
 export interface TagListRequest {
@@ -68,6 +69,10 @@ export class TagResource extends AbstractResource {
 
   async deleteTag(id: string): Promise<void> {
     return this.delete(`/tags/${id}`);
+  }
+
+  async updateTag(id: string, data: UpdateTagRequest): Promise<void> {
+    return this.patch(`/tags/${id}`, { json: data });
   }
 
   async tagImage(imageId: string, tagId: string): Promise<void> {

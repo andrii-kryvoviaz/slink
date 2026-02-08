@@ -14,6 +14,8 @@ use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractProjection;
 use Slink\Tag\Domain\Event\TagWasCreated;
 use Slink\Tag\Domain\Event\TagWasDeleted;
+use Slink\Tag\Domain\Event\TagWasMoved;
+use Slink\Tag\Domain\Event\TagPathWasUpdated;
 use Slink\Tag\Domain\Repository\TagRepositoryInterface;
 use Slink\Tag\Infrastructure\ReadModel\View\TagView;
 use Slink\User\Domain\Repository\UserRepositoryInterface;
@@ -63,7 +65,56 @@ final class TagProjection extends AbstractProjection {
    */
   public function handleTagWasDeleted(TagWasDeleted $event): void {
     $tagView = $this->tagRepository->oneById($event->id);
+
+    $parent = $tagView->getParent();
+    if ($parent) {
+      $parent->removeChild($tagView);
+    }
+
+    foreach ($tagView->getImages() as $image) {
+      $image->removeTag($tagView);
+      $this->imageRepository->add($image);
+    }
+
     $this->tagRepository->remove($tagView);
+  }
+
+  /**
+   * @throws NonUniqueResultException
+   * @throws NotFoundException
+   */
+  public function handleTagWasMoved(TagWasMoved $event): void {
+    $tagView = $this->tagRepository->oneById($event->id);
+    $newParent = null;
+
+    if ($event->parentId) {
+      $newParent = $this->tagRepository->oneById($event->parentId);
+    }
+
+    $currentParent = $tagView->getParent();
+    if ($currentParent && (!$newParent || $currentParent->getUuid() !== $newParent->getUuid())) {
+      $currentParent->removeChild($tagView);
+    }
+
+    if ($newParent) {
+      $newParent->addChild($tagView);
+    }
+
+    $tagView->updateHierarchy(
+      $event->path->getValue(),
+      $event->parentId?->toString(),
+      $newParent,
+      $event->updatedAt,
+    );
+  }
+
+  /**
+   * @throws NonUniqueResultException
+   * @throws NotFoundException
+   */
+  public function handleTagPathWasUpdated(TagPathWasUpdated $event): void {
+    $tagView = $this->tagRepository->oneById($event->id);
+    $tagView->updatePath($event->path->getValue(), $event->updatedAt);
   }
 
   /**

@@ -18,56 +18,43 @@
 
   const hasImages = $derived(tag.imageCount > 0);
   const hasChildren = $derived(tag.children && tag.children.length > 0);
-  const canDelete = $derived(!hasImages && !hasChildren);
   const childrenCount = $derived(tag.children?.length || 0);
 
-  const title = $derived(canDelete ? 'Delete Tag' : 'Cannot Delete Tag');
+  const title = $derived('Delete Tag');
 
   const description = $derived.by(() => {
-    if (canDelete) {
-      return 'This action cannot be undone';
-    }
-
     if (hasImages && hasChildren) {
-      return `Tag has ${tag.imageCount} images and ${childrenCount} child tags`;
+      return `This will remove the tag from ${tag.imageCount} images and delete ${childrenCount} child tags.`;
     }
 
     if (hasImages) {
-      return `Tag has ${tag.imageCount} associated images`;
+      return `This will remove the tag from ${tag.imageCount} images.`;
     }
 
-    return `Tag has ${childrenCount} child tags`;
+    if (hasChildren) {
+      return `This will delete ${childrenCount} child tags.`;
+    }
+
+    return 'This action cannot be undone.';
   });
 
-  const confirmText = $derived(canDelete ? 'Delete Tag' : 'Understood');
-  const variant = $derived(canDelete ? 'danger' : 'warning');
-  const iconName = $derived(
-    canDelete ? 'heroicons:trash' : 'heroicons:exclamation-triangle',
-  );
+  const confirmText = $derived('Delete Tag');
+  const variant = $derived('danger');
+  const iconName = $derived('heroicons:trash');
   const iconBgColor = $derived(
-    canDelete
-      ? 'bg-red-100 dark:bg-red-900/30 border-red-200/40 dark:border-red-800/30'
-      : 'bg-amber-100 dark:bg-amber-900/30 border-amber-200/40 dark:border-amber-800/30',
+    'bg-red-100 dark:bg-red-900/30 border-red-200/40 dark:border-red-800/30',
   );
-  const iconColor = $derived(
-    canDelete
-      ? 'text-red-600 dark:text-red-400'
-      : 'text-amber-600 dark:text-amber-400',
-  );
+  const iconColor = $derived('text-red-600 dark:text-red-400');
 
   async function handleConfirm() {
-    if (canDelete) {
-      try {
-        isDeleting = true;
-        await onDelete(tag);
-        open = false;
-      } catch (error) {
-        console.error('Failed to delete tag:', error);
-      } finally {
-        isDeleting = false;
-      }
-    } else {
+    try {
+      isDeleting = true;
+      await onDelete(tag);
       open = false;
+    } catch (error) {
+      console.error('Failed to delete tag:', error);
+    } finally {
+      isDeleting = false;
     }
   }
 
@@ -109,21 +96,21 @@
         </div>
       </div>
 
-      {#if !canDelete}
+      {#if hasImages || hasChildren}
         <div
           class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/50 rounded-lg p-3"
         >
           <h4
             class="text-xs font-medium text-amber-800 dark:text-amber-200 mb-1"
           >
-            Before deleting this tag:
+            Deleting this tag will also:
           </h4>
           <ul class="text-xs text-amber-700 dark:text-amber-300 space-y-0.5">
             {#if hasImages}
-              <li>• Remove tag from all {tag.imageCount} images</li>
+              <li>• Remove tag from {tag.imageCount} images</li>
             {/if}
             {#if hasChildren}
-              <li>• Delete or move all {childrenCount} child tags</li>
+              <li>• Delete {childrenCount} child tags</li>
             {/if}
           </ul>
         </div>

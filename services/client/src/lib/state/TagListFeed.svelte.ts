@@ -4,6 +4,7 @@ import type {
   Tag,
   TagListRequest,
   TagListingResponse,
+  UpdateTagRequest,
 } from '@slink/api/Resources/TagResource';
 
 import { AbstractPaginatedFeed } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
@@ -177,6 +178,28 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
       const message = extractErrorMessage(
         error,
         'Failed to delete tag. Please try again.',
+      );
+      toast.error(message);
+      throw error;
+    }
+  }
+
+  async moveTag(id: string, parentId?: string | null): Promise<void> {
+    try {
+      const tag = this._items.find((item) => item.id === id);
+      const tagName = tag?.name || 'tag';
+
+      const payload: UpdateTagRequest = {
+        parentId: parentId ?? null,
+      };
+
+      await ApiClient.tag.updateTag(id, payload);
+      toast.success(`Tag "${tagName}" moved successfully`);
+      await this.refetch();
+    } catch (error: any) {
+      const message = extractErrorMessage(
+        error,
+        'Failed to move tag. Please try again.',
       );
       toast.error(message);
       throw error;

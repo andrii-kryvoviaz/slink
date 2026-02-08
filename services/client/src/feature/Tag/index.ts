@@ -11,6 +11,7 @@ export { default as TagDataTable } from './TagDataTable/TagDataTable.svelte';
 export { default as TagNameCell } from './TagDataTable/TagNameCell.svelte';
 export * from './TagDataTable/types';
 export { default as TagDeletePopover } from './TagDeleteConfirmation/TagDeletePopover.svelte';
+export { default as TagMoveDialog } from './TagMoveDialog/TagMoveDialog.svelte';
 export { default as TagDepthDots } from './TagDepthDots/TagDepthDots.svelte';
 export { default as TagDepthIndicator } from './TagDepthIndicator/TagDepthIndicator.svelte';
 export { default as TagDropdown } from './TagDropdown/TagDropdown.svelte';

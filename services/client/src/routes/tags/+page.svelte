@@ -50,6 +50,10 @@
     await tagFeed.deleteTag(tag.id);
   }
 
+  async function handleMoveTag(tag: Tag, parentId?: string | null) {
+    await tagFeed.moveTag(tag.id, parentId);
+  }
+
   function handleCreateTag() {
     createModalState.open(() => {
       tagFeed.refetch();
@@ -105,6 +109,7 @@
       <TagDataTable
         tags={tagFeed.data}
         onDelete={handleDeleteTag}
+        onMove={handleMoveTag}
         bind:searchTerm={searchQuery}
         onSearchChange={handleSearchChange}
         isLoading={tagFeed.loading}

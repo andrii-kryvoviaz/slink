@@ -24,6 +24,7 @@
   interface Props {
     tags: Tag[];
     onDelete: (tag: Tag) => Promise<void>;
+    onMove: (tag: Tag, parentId?: string | null) => Promise<void>;
     searchTerm: string;
     onSearchChange: (term: string) => void;
     isLoading?: boolean;
@@ -39,6 +40,7 @@
   let {
     tags,
     onDelete,
+    onMove,
     searchTerm = $bindable(),
     onSearchChange,
     isLoading = false,
@@ -109,6 +111,7 @@
         return renderComponent(TagActionsCell, {
           tag,
           onDelete,
+          onMove,
         });
       },
     },
