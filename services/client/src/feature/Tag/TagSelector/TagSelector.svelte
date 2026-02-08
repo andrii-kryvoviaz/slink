@@ -69,7 +69,7 @@
   } = useTagOperations();
 
   const availableTags = $derived($tagsResponse?.data || []);
-  const shouldShowLoader = $derived($isLoadingTags && !!searchTerm?.trim());
+  const shouldShowLoader = $derived($isLoadingTags && isOpen);
 
   const filteredTags = $derived(
     availableTags.filter(
@@ -197,7 +197,11 @@
   };
 
   const handleArrowDown = () => {
-    if (!isOpen) return;
+    if (!isOpen) {
+      isOpen = true;
+      loadTags(searchTerm);
+      return;
+    }
     const maxIndex = visibleItemsCount() - 1;
     if (maxIndex < 0) return;
     highlightedIndex = highlightedIndex < maxIndex ? highlightedIndex + 1 : 0;
@@ -231,7 +235,7 @@
   };
 
   $effect(() => {
-    if (hasQuery) {
+    if (isOpen) {
       loadTags(searchTerm);
     }
     highlightedIndex = -1;
@@ -327,11 +331,7 @@
                     onSearchChange={(value) => {
                       searchTerm = value;
                       if (disabled) return;
-                      if (value.trim() || creatingChildFor) {
-                        isOpen = true;
-                      } else {
-                        closePopover();
-                      }
+                      isOpen = true;
                     }}
                     onEnter={handleEnter}
                     onEscape={() => {
@@ -342,8 +342,9 @@
                     onArrowUp={handleArrowUp}
                     onfocus={() => {
                       if (disabled) return;
-                      if (creatingChildFor || hasQuery) {
-                        isOpen = true;
+                      isOpen = true;
+                      if (!hasQuery) {
+                        loadTags('');
                       }
                     }}
                     onCancelChild={cancelChildCreation}

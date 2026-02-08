@@ -17,8 +17,8 @@
 
   const actionColorClasses = $derived(
     color === 'blue'
-      ? 'text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300'
-      : 'text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300',
+      ? 'bg-blue-50 text-blue-600 hover:bg-blue-100 dark:bg-blue-500/10 dark:text-blue-400 dark:hover:bg-blue-500/20'
+      : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-400 dark:hover:bg-indigo-500/20',
   );
 </script>
 
@@ -46,8 +46,9 @@
     <button
       type="button"
       onclick={onAction}
-      class="text-sm font-medium transition-colors {actionColorClasses}"
+      class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors {actionColorClasses}"
     >
+      <Icon icon="ph:plus" class="w-3 h-3" />
       {@render action()}
     </button>
   {/if}

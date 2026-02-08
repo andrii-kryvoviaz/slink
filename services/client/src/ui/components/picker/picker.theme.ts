@@ -46,6 +46,10 @@ export const pickerItemTheme = cva(
         true: '',
         false: 'hover:bg-gray-50 dark:hover:bg-white/5',
       },
+      highlighted: {
+        true: 'bg-gray-50 dark:bg-white/5',
+        false: '',
+      },
     },
     compoundVariants: [
       {
@@ -83,6 +87,7 @@ export const pickerItemTheme = cva(
       variant: 'popover',
       color: 'blue',
       selected: false,
+      highlighted: false,
     },
   },
 );

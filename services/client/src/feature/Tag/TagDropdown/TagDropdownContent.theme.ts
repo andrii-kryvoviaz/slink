@@ -2,7 +2,7 @@ import { cva } from 'class-variance-authority';
 import type { VariantProps } from 'class-variance-authority';
 
 export const tagDropdownContentVariants = cva(
-  'z-50 w-[var(--bits-popover-anchor-width)]',
+  'z-50 w-[var(--bits-popover-anchor-width)] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2',
   {
     variants: {
       variant: {

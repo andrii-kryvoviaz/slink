@@ -11,7 +11,7 @@
 
   import type { Tag } from '@slink/api/Resources/TagResource';
 
-  import { getTagDisplayName } from '@slink/utils/tag';
+  import { getTagDisplayName, getTagLastSegment, getTagParentPath, isTagNested } from '@slink/utils/tag';
 
   interface Props extends TagListItemVariants {
     tag: Tag;
@@ -34,15 +34,25 @@
     e.stopPropagation();
     onAddChild(tag);
   };
+
+  const nested = $derived(isTagNested(tag));
+  const depth = $derived(tag.depth ?? 0);
+  const parentPath = $derived(nested ? getTagParentPath(tag) : '');
+  const displayName = $derived(nested ? getTagLastSegment(tag) : getTagDisplayName(tag));
 </script>
 
-<div class="flex items-center mx-1 my-0.5">
+<div class="flex items-center mx-1 my-0.5" style:padding-left="{depth > 1 ? (depth - 1) * 12 : 0}px">
   <button
     class={`group ${tagListItemVariants({ variant, highlighted })}`}
     onclick={() => onSelect(tag)}
   >
     <Icon icon="ph:hash" class={tagListIconVariants({ variant })} />
-    <span class="flex-1 truncate">{getTagDisplayName(tag)}</span>
+    <span class="flex-1 min-w-0 flex flex-col">
+      <span class="truncate">{displayName}</span>
+      {#if nested && parentPath}
+        <span class="text-[10px] text-gray-400 dark:text-gray-500 truncate leading-tight">{parentPath}</span>
+      {/if}
+    </span>
     {#if tag.imageCount > 0}
       <span class={tagListBadgeVariants({ variant })}>
         {tag.imageCount}

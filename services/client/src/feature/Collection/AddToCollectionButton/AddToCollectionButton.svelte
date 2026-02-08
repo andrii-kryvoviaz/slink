@@ -4,10 +4,8 @@
     type AddToCollectionButtonVariant,
     addToCollectionButtonTheme,
     addToCollectionIconTheme,
-    collectionItemTheme,
-    collectionListTheme,
   } from '@slink/feature/Collection/AddToCollectionButton/AddToCollectionButton.theme';
-  import { Loader } from '@slink/feature/Layout';
+  import { CollectionPicker } from '@slink/feature/Collection';
   import { Tooltip, type TooltipVariant } from '@slink/ui/components/tooltip';
   import { Popover as PopoverPrimitive } from 'bits-ui';
 
@@ -15,9 +13,8 @@
   import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
   import Icon from '@iconify/svelte';
 
-  import type { CollectionResponse } from '@slink/api/Response';
-
   import { createCollectionPickerState } from '@slink/lib/state/CollectionPickerState.svelte';
+  import { createCreateCollectionModalState } from '@slink/lib/state/CreateCollectionModalState.svelte';
 
   interface Props {
     imageId: string;
@@ -44,19 +41,13 @@
   const isAuthenticated = $derived(!!currentUser);
 
   const picker = createCollectionPickerState();
+  const createModalState = createCreateCollectionModalState();
 
   $effect(() => {
     picker.setImage(imageId, collectionIds);
   });
 
   let isOpen = $state(false);
-
-  async function handleToggle(collection: CollectionResponse) {
-    const result = await picker.toggle(collection);
-    if (result) {
-      onCollectionChange?.(result.collectionId, result.added);
-    }
-  }
 
   function handleOpenChange(open: boolean) {
     isOpen = open;
@@ -144,80 +135,18 @@
     <PopoverPrimitive.Content
       sideOffset={8}
       align="end"
-      class="z-50 w-64 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-lg animate-in fade-in-0 zoom-in-95"
+      class="z-50 rounded-xl border border-gray-200/70 dark:border-gray-700/50 bg-white/95 dark:bg-gray-900/95 shadow-xl shadow-black/10 dark:shadow-black/30 overflow-hidden backdrop-blur-sm animate-in fade-in-0 zoom-in-95"
     >
-      <div class="px-3 py-2 border-b border-gray-100 dark:border-gray-800">
-        <h4 class="text-sm font-medium text-gray-900 dark:text-white">
-          Add to Collection
-        </h4>
-      </div>
-
-      {#if picker.isLoading}
-        <div class="flex items-center justify-center py-8">
-          <Loader variant="minimal" size="sm" />
-        </div>
-      {:else if picker.isEmpty}
-        <div class="px-3 py-6 text-center">
-          <Icon
-            icon="ph:folder-simple-dashed"
-            class="w-8 h-8 mx-auto text-gray-400 dark:text-gray-500 mb-2"
-          />
-          <p class="text-sm text-gray-500 dark:text-gray-400">
-            No collections yet
-          </p>
-          <a
-            href="/collections"
-            class="mt-2 inline-block text-sm text-purple-600 dark:text-purple-400 hover:underline"
-            onclick={() => (isOpen = false)}
-          >
-            Create one
-          </a>
-        </div>
-      {:else}
-        <div class={collectionListTheme()}>
-          {#each picker.collections as collection (collection.id)}
-            {@const isInCollection = picker.isInCollection(collection.id)}
-            {@const isToggling = picker.isToggling(collection.id)}
-            <button
-              type="button"
-              class={collectionItemTheme({ selected: isInCollection })}
-              onclick={() => handleToggle(collection)}
-              disabled={!!picker.actionLoadingId}
-            >
-              {#if isToggling}
-                <Loader variant="minimal" size="xs" />
-              {:else if isInCollection}
-                <Icon
-                  icon="ph:check-circle-fill"
-                  class="w-4 h-4 text-purple-500 shrink-0"
-                />
-              {:else}
-                <Icon
-                  icon="ph:folder-simple"
-                  class="w-4 h-4 text-gray-400 shrink-0"
-                />
-              {/if}
-              <span class="truncate flex-1">{collection.name}</span>
-              {#if collection.itemCount !== undefined}
-                <span class="text-xs text-gray-400 dark:text-gray-500 shrink-0">
-                  {collection.itemCount}
-                </span>
-              {/if}
-            </button>
-          {/each}
-        </div>
-      {/if}
-
-      <div class="px-3 py-2 border-t border-gray-100 dark:border-gray-800">
-        <a
-          href="/collections"
-          class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-          onclick={() => (isOpen = false)}
-        >
-          <Icon icon="ph:plus" class="w-4 h-4" />
-          <span>Manage collections</span>
-        </a>
-      </div>
+      <CollectionPicker
+        pickerState={picker}
+        {createModalState}
+        variant="popover"
+        onToggle={(result) => {
+          if (result) {
+            onCollectionChange?.(result.collectionId, result.added);
+          }
+        }}
+      />
     </PopoverPrimitive.Content>
   </PopoverPrimitive.Portal>
 </PopoverPrimitive.Root>

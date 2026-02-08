@@ -21,7 +21,7 @@
     isLoading?: boolean;
     searchPlaceholder?: string;
     showSearch?: boolean;
-    children: Snippet<[{ item: T; index: number }]>;
+    children: Snippet<[{ item: T; index: number; highlighted: boolean }]>;
     emptyIcon?: Snippet;
     emptyMessage?: Snippet;
     emptyAction?: Snippet;
@@ -57,9 +57,32 @@
       ? items.filter((item) => filterFn(item, searchTerm))
       : items,
   );
+
+  let highlightedIndex = $state(-1);
+
+  $effect(() => {
+    searchTerm;
+    highlightedIndex = -1;
+  });
+
+  const handleKeydown = (e: KeyboardEvent) => {
+    if (filteredItems.length === 0) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      highlightedIndex =
+        highlightedIndex < filteredItems.length - 1 ? highlightedIndex + 1 : 0;
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      highlightedIndex =
+        highlightedIndex > 0 ? highlightedIndex - 1 : filteredItems.length - 1;
+    } else if (e.key === 'Enter' && highlightedIndex >= 0) {
+      e.preventDefault();
+    }
+  };
 </script>
 
-<div class={pickerContainerTheme({ variant })}>
+<div class={pickerContainerTheme({ variant })} onkeydown={handleKeydown}>
   {#if (variant === 'popover' || variant === 'glass') && showSearch}
     <PickerSearch bind:value={searchTerm} placeholder={searchPlaceholder} />
   {/if}
@@ -105,7 +128,11 @@
           </div>
         {:else}
           {#each filteredItems as item, index (index)}
-            {@render children({ item, index })}
+            {@render children({
+              item,
+              index,
+              highlighted: index === highlightedIndex,
+            })}
           {/each}
         {/if}
       </div>

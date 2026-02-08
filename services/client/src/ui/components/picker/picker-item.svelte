@@ -18,6 +18,7 @@
     children: Snippet;
     subtext?: Snippet;
     selected?: boolean;
+    highlighted?: boolean;
     isToggling?: boolean;
     disabled?: boolean;
     variant?: PickerVariant;
@@ -29,6 +30,7 @@
     children,
     subtext,
     selected = false,
+    highlighted = false,
     isToggling = false,
     disabled = false,
     variant = 'popover',
@@ -45,8 +47,9 @@
 
 <button
   type="button"
-  class={pickerItemTheme({ variant, color, selected })}
+  class={pickerItemTheme({ variant, color, selected, highlighted })}
   onclick={handleClick}
+  data-highlighted={highlighted || undefined}
   {disabled}
 >
   <span class={pickerCheckboxTheme({ variant, color, selected })}>

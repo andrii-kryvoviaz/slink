@@ -62,7 +62,7 @@
   {#snippet createFooter()}
     {#if onCreateNew}New tag{/if}
   {/snippet}
-  {#snippet children({ item })}
+  {#snippet children({ item, highlighted })}
     {@const tag = item as Tag}
     <PickerItem
       selected={isSelected(tag.id)}
@@ -70,6 +70,7 @@
       {disabled}
       {variant}
       color="blue"
+      {highlighted}
       onclick={() => onToggle?.(tag)}
     >
       {#snippet children()}{@html getTagLastSegment(tag)}{/snippet}

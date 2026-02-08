@@ -111,23 +111,3 @@ export const addToCollectionIconTheme = cva('transition-all duration-200', {
     loading: false,
   },
 });
-
-export const collectionListTheme = cva(
-  'max-h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600',
-);
-
-export const collectionItemTheme = cva(
-  'flex items-center gap-2 w-full px-3 py-2 text-sm text-left transition-colors',
-  {
-    variants: {
-      selected: {
-        true: 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300',
-        false:
-          'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800/50',
-      },
-    },
-    defaultVariants: {
-      selected: false,
-    },
-  },
-);

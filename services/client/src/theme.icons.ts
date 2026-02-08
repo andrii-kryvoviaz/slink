@@ -187,7 +187,6 @@ export const themeIcons: string[] = [
   'ph:folder-simple-plus-fill',
   'ph:folder-simple-plus',
   'ph:folder-simple-dashed',
-  'ph:check-circle-fill',
   'ph:folder-simple',
   'ph:check-bold',
   'ph:shield-check-duotone',

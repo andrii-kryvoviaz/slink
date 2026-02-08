@@ -63,7 +63,7 @@
   {#snippet createFooter()}
     {#if onCreateNew}New collection{/if}
   {/snippet}
-  {#snippet children({ item })}
+  {#snippet children({ item, highlighted })}
     {@const collection = item as CollectionResponse}
     <PickerItem
       selected={isSelected(collection.id)}
@@ -71,6 +71,7 @@
       {disabled}
       {variant}
       color="indigo"
+      {highlighted}
       onclick={() => onToggle?.(collection)}
     >
       {#snippet children()}{@html collection.name}{/snippet}
