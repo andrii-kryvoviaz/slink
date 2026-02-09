@@ -17,8 +17,8 @@
 
   let { width, height, on }: Props = $props();
 
-  let calculatedWidth: number = $state(0);
-  let calculatedHeight: number = $state(0);
+  let calculatedWidth: number = $state(width);
+  let calculatedHeight: number = $state(height);
 
   $effect(() => {
     calculatedWidth = width;
