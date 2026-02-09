@@ -18,10 +18,15 @@ type QueuedRequest = {
   makeRequest: (accessToken?: string) => Promise<Response>;
 };
 
+export type TokenRefreshResult = {
+  response: Response;
+  tokensRefreshed: boolean;
+};
+
 export class TokenRefreshManager {
   private static instance: TokenRefreshManager;
 
-  private refreshPromises = new Map<string, Promise<TokenPair | undefined>>();
+  private refreshPromises = new Map<string, Promise<TokenPair>>();
   private requestQueues = new Map<string, QueuedRequest[]>();
 
   private constructor() {}
@@ -37,44 +42,40 @@ export class TokenRefreshManager {
     sessionId: string,
     context: RefreshContext,
     makeRequest: (accessToken?: string) => Promise<Response>,
-  ): Promise<Response> {
-    if (this.refreshPromises.has(sessionId)) {
-      return this.queueRequest(sessionId, makeRequest);
+  ): Promise<TokenRefreshResult> {
+    const isInitiatorRequest = !this.refreshPromises.has(sessionId);
+
+    if (isInitiatorRequest) {
+      this.startRefresh(sessionId, context);
     }
 
-    try {
-      const tokens = await this.refreshTokens(sessionId, context);
+    const response = await this.enqueue(sessionId, makeRequest);
 
+    return { response, tokensRefreshed: isInitiatorRequest };
+  }
+
+  private startRefresh(sessionId: string, context: RefreshContext): void {
+    const refreshPromise = Auth.refresh(context).then((tokens) => {
       if (!tokens) {
         throw new TokenRefreshError('Failed to refresh access token');
       }
+      return tokens;
+    });
 
-      const response = await makeRequest(tokens.accessToken);
-
-      await this.processQueue(sessionId, true, tokens.accessToken);
-
-      return response;
-    } catch (error) {
-      const apiError = handleApiError(error);
-      this.processQueue(sessionId, false, undefined, apiError);
-      throw apiError;
-    } finally {
-      this.refreshPromises.delete(sessionId);
-      this.requestQueues.delete(sessionId);
-    }
-  }
-
-  private async refreshTokens(
-    sessionId: string,
-    context: RefreshContext,
-  ): Promise<TokenPair | undefined> {
-    const refreshPromise = Auth.refresh(context);
     this.refreshPromises.set(sessionId, refreshPromise);
 
-    return refreshPromise;
+    refreshPromise
+      .then((tokens) => this.processQueue(sessionId, true, tokens.accessToken))
+      .catch((error) => {
+        this.processQueue(sessionId, false, undefined, handleApiError(error));
+      })
+      .finally(() => {
+        this.refreshPromises.delete(sessionId);
+        this.requestQueues.delete(sessionId);
+      });
   }
 
-  private queueRequest(
+  private enqueue(
     sessionId: string,
     makeRequest: (accessToken?: string) => Promise<Response>,
   ): Promise<Response> {
@@ -82,12 +83,7 @@ export class TokenRefreshManager {
       if (!this.requestQueues.has(sessionId)) {
         this.requestQueues.set(sessionId, []);
       }
-
-      this.requestQueues.get(sessionId)!.push({
-        resolve,
-        reject,
-        makeRequest,
-      });
+      this.requestQueues.get(sessionId)!.push({ resolve, reject, makeRequest });
     });
   }
 

@@ -92,20 +92,23 @@ export const getResponseWithCookies = async ({
   const { body, status } = response;
   const headers = new Headers(response.headers);
 
+  const AUTH_COOKIE_NAMES = new Set(['refreshToken', 'sessionId']);
+
   cookies.getAll().forEach(({ name, value }) => {
-    if (!name.startsWith('settings.')) {
-      let cookieString = `${name}=${value}; Path=/; HttpOnly; SameSite=Strict;`;
+    if (name.startsWith('settings.')) return;
+    if (!authRefreshed && AUTH_COOKIE_NAMES.has(name)) return;
 
-      if (requireSsl) {
-        cookieString += ' Secure;';
-      }
+    let cookieString = `${name}=${value}; Path=/; HttpOnly; SameSite=Strict;`;
 
-      if (!value) {
-        cookieString = `${cookieString} Max-Age=0;`;
-      }
-
-      headers.append('Set-Cookie', cookieString);
+    if (requireSsl) {
+      cookieString += ' Secure;';
     }
+
+    if (!value) {
+      cookieString = `${cookieString} Max-Age=0;`;
+    }
+
+    headers.append('Set-Cookie', cookieString);
   });
 
   if (authRefreshed) {

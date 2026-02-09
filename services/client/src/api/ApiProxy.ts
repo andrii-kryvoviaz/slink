@@ -50,17 +50,27 @@ export const ApiProxy = (options: ApiOptions): Handle => {
       const sessionId = cookies.get('sessionId') as string;
 
       try {
-        response = await tokenManager.handleTokenRefresh(
+        const result = await tokenManager.handleTokenRefresh(
           sessionId,
           { cookies, cookieManager: locals.cookieManager, fetch },
           makeRequest,
         );
-        authRefreshed = true;
+        response = result.response;
+        authRefreshed = result.tokensRefreshed;
       } catch (error) {
         console.warn('Token refresh failed:', error);
-        return new Response(null, {
-          status: 302,
-          headers: { Location: '/profile/login' },
+
+        locals.cookieManager.deleteCookie(cookies, 'refreshToken');
+        locals.cookieManager.deleteCookie(cookies, 'sessionId');
+
+        return getResponseWithCookies({
+          response: new Response(null, {
+            status: 302,
+            headers: { Location: '/profile/login' },
+          }),
+          cookies,
+          requireSsl: globalSettings?.access?.requireSsl ?? false,
+          authRefreshed: true,
         });
       }
     }

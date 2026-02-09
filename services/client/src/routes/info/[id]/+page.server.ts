@@ -1,6 +1,6 @@
 import { error, redirect } from '@sveltejs/kit';
 
-import { ForbiddenException } from '@slink/api/Exceptions';
+import { ForbiddenException, NotFoundException } from '@slink/api/Exceptions';
 
 import type { PageServerLoad } from './$types';
 
@@ -30,6 +30,10 @@ export const load: PageServerLoad = async ({ params, locals, parent }) => {
       licensingEnabled,
     };
   } catch (e: unknown) {
+    if (e instanceof NotFoundException) {
+      redirect(302, '/history');
+    }
+
     if (e instanceof ForbiddenException) {
       error(e.status, {
         message: e.message,
