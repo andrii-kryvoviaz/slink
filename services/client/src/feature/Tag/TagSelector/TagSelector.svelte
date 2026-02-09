@@ -96,8 +96,6 @@
     return count;
   });
 
-  const hasQuery = $derived(Boolean(searchTerm.trim()));
-
   const resetDropdownState = () => {
     searchTerm = '';
     isOpen = false;
@@ -223,6 +221,7 @@
   const handleContainerClick = () => {
     if (!disabled) {
       inputRef?.focus();
+      isOpen = true;
     }
   };
 
@@ -340,13 +339,7 @@
                     onBackspace={handleBackspace}
                     onArrowDown={handleArrowDown}
                     onArrowUp={handleArrowUp}
-                    onfocus={() => {
-                      if (disabled) return;
-                      isOpen = true;
-                      if (!hasQuery) {
-                        loadTags('');
-                      }
-                    }}
+                    onfocus={() => {}}
                     onCancelChild={cancelChildCreation}
                     onCreateChild={handleCreateTag}
                     {disabled}
@@ -380,6 +373,7 @@
           {creatingChildFor}
           {childTagName}
           isCreating={$isCreatingTag}
+          isLoading={$isLoadingTags}
           {canCreate}
           {allowCreate}
           {variant}

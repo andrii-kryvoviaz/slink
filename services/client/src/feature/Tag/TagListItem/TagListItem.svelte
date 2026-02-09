@@ -41,17 +41,14 @@
   };
 
   const nested = $derived(isTagNested(tag));
-  const depth = $derived(tag.depth ?? 0);
+
   const parentPath = $derived(nested ? getTagParentPath(tag) : '');
   const displayName = $derived(
     nested ? getTagLastSegment(tag) : getTagDisplayName(tag),
   );
 </script>
 
-<div
-  class="flex items-center mx-1 my-0.5"
-  style:padding-left="{depth > 1 ? (depth - 1) * 12 : 0}px"
->
+<div class="flex items-center mx-1 my-0.5">
   <button
     class={`group ${tagListItemVariants({ variant, highlighted })}`}
     onclick={() => onSelect(tag)}
@@ -61,7 +58,7 @@
       <span class="truncate">{displayName}</span>
       {#if nested && parentPath}
         <span
-          class="text-[10px] text-gray-400 dark:text-gray-500 truncate leading-tight"
+          class="text-[10px] text-gray-400 dark:text-white/40 truncate leading-tight"
           >{parentPath}</span
         >
       {/if}

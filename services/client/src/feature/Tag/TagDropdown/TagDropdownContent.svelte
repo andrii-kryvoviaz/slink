@@ -18,6 +18,7 @@
     creatingChildFor: Tag | null;
     childTagName: string;
     isCreating: boolean;
+    isLoading?: boolean;
     canCreate: boolean;
     allowCreate?: boolean;
     highlightedIndex?: number;
@@ -34,6 +35,7 @@
     creatingChildFor,
     childTagName,
     isCreating,
+    isLoading = false,
     canCreate,
     allowCreate = true,
     highlightedIndex = -1,
@@ -91,25 +93,43 @@
     {/if}
 
     {#if !creatingChildFor && tags.length === 0 && searchTerm.trim()}
-      <div class={tagDropdownEmptyStateVariants({ variant })}>
-        <div class="text-sm text-muted-foreground">
-          No tags found for "{searchTerm}"
+      {#if isLoading}
+        <div class={tagDropdownEmptyStateVariants({ variant })}>
+          <Icon
+            icon="ph:spinner"
+            class="w-4 h-4 animate-spin text-muted-foreground"
+          />
         </div>
-        {#if allowCreate && canCreate}
-          <button
-            type="button"
-            class="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-blue-50 text-blue-600 hover:bg-blue-100 dark:bg-blue-500/10 dark:text-blue-400 dark:hover:bg-blue-500/20 transition-colors"
-            onclick={onCreateTag}
-          >
-            <Icon icon="ph:plus" class="w-3 h-3" />
-            Create "{searchTerm}"
-          </button>
-        {/if}
-      </div>
+      {:else}
+        <div class={tagDropdownEmptyStateVariants({ variant })}>
+          <div class="text-sm text-muted-foreground">
+            No tags found for "{searchTerm}"
+          </div>
+          {#if allowCreate && canCreate}
+            <button
+              type="button"
+              class="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-blue-50 text-blue-600 hover:bg-blue-100 dark:bg-blue-500/10 dark:text-blue-400 dark:hover:bg-blue-500/20 transition-colors"
+              onclick={onCreateTag}
+            >
+              <Icon icon="ph:plus" class="w-3 h-3" />
+              Create "{searchTerm}"
+            </button>
+          {/if}
+        </div>
+      {/if}
     {:else if !creatingChildFor && tags.length === 0 && !canCreate && !searchTerm.trim()}
-      <div class={tagDropdownEmptyStateVariants({ variant })}>
-        <div class="text-sm text-muted-foreground">No tags yet</div>
-      </div>
+      {#if isLoading}
+        <div class={tagDropdownEmptyStateVariants({ variant })}>
+          <Icon
+            icon="ph:spinner"
+            class="w-4 h-4 animate-spin text-muted-foreground"
+          />
+        </div>
+      {:else}
+        <div class={tagDropdownEmptyStateVariants({ variant })}>
+          <div class="text-sm text-muted-foreground">No tags yet</div>
+        </div>
+      {/if}
     {/if}
   </div>
 {/if}

@@ -16,7 +16,7 @@ export function useTagOperations() {
   const tagOperations = ReactiveState<TagListingResponse>(
     (searchTerm?: string) =>
       ApiClient.tag.getList({
-        searchTerm: searchTerm || undefined,
+        ...(searchTerm ? { searchTerm } : {}),
         limit: TAG_SEARCH_LIMIT,
         orderBy: 'path',
         order: 'asc',
