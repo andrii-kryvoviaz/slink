@@ -9,7 +9,7 @@ export const load: PageServerLoad = async () => {};
 export const actions: Actions = {
   default: async ({ cookies, fetch, locals }) => {
     locals.user = null;
-    Auth.logout({ cookies, cookieManager: locals.cookieManager, fetch });
+    await Auth.logout({ cookies, cookieManager: locals.cookieManager, fetch });
 
     redirect(302, '/profile/login');
   },
