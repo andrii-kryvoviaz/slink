@@ -20,7 +20,9 @@ import { toast } from '@slink/utils/ui/toast-sonner.svelte';
 class TagListFeed extends AbstractPaginatedFeed<Tag> {
   private _includeChildren = $state(true);
   private _searchTerm = $state('');
-  private _orderBy = $state<'name' | 'path' | 'createdAt' | 'updatedAt'>(
+  private _orderBy = $state<
+    'name' | 'path' | 'createdAt' | 'updatedAt' | 'imageCount' | 'childrenCount'
+  >(
     'updatedAt',
   );
   private _sortOrder = $state<'asc' | 'desc'>('desc');
@@ -99,7 +101,9 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
     return this._orderBy;
   }
 
-  set orderBy(value: 'name' | 'path' | 'createdAt' | 'updatedAt') {
+  set orderBy(
+    value: 'name' | 'path' | 'createdAt' | 'updatedAt' | 'imageCount' | 'childrenCount',
+  ) {
     this._orderBy = value;
     this.load({ page: 1 });
   }
@@ -114,7 +118,13 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
   }
 
   setSorting(
-    orderBy: 'name' | 'path' | 'createdAt' | 'updatedAt',
+    orderBy:
+      | 'name'
+      | 'path'
+      | 'createdAt'
+      | 'updatedAt'
+      | 'imageCount'
+      | 'childrenCount',
     order: 'asc' | 'desc',
   ) {
     this._orderBy = orderBy;
