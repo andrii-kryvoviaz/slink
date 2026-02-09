@@ -63,6 +63,25 @@ final class CollectionRepository extends AbstractRepository implements Collectio
     return new Paginator($qb->getQuery());
   }
 
+  /**
+   * @param string[] $ids
+   * @return CollectionView[]
+   */
+  public function findByIds(array $ids): array {
+    if ($ids === []) {
+      return [];
+    }
+
+    return $this->getEntityManager()
+      ->createQueryBuilder()
+      ->from(CollectionView::class, 'c')
+      ->select('c')
+      ->where('c.uuid IN (:ids)')
+      ->setParameter('ids', $ids)
+      ->getQuery()
+      ->getResult();
+  }
+
   public function findNamesByPatternAndUser(string $baseName, string $userId): array {
     $qb = $this->getEntityManager()
       ->createQueryBuilder()

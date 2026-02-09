@@ -19,6 +19,12 @@ interface CollectionRepositoryInterface {
   public function getByUserId(string $userId, int $page, int $limit): Paginator;
 
   /**
+   * @param string[] $ids
+   * @return CollectionView[]
+   */
+  public function findByIds(array $ids): array;
+
+  /**
    * @return string[]
    */
   public function findNamesByPatternAndUser(string $baseName, string $userId): array;
