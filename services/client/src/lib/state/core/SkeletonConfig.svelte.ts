@@ -1,77 +1,105 @@
-interface SkeletonConfig {
+export interface SkeletonConfig {
   enabled: boolean;
   minDisplayTime: number;
   showDelay: number;
-  component?: any;
-  props?: Record<string, any>;
 }
 
 export class SkeletonManager {
   private _config: SkeletonConfig = $state({
     enabled: true,
-    minDisplayTime: 300,
-    showDelay: 20,
+    minDisplayTime: 400,
+    showDelay: 100,
   });
-  private _loadingStartTime: number | null = $state(null);
   private _isVisible = $state(false);
-  private _timeoutId: ReturnType<typeof setTimeout> | null = null;
+  private _activeLoads = 0;
+  private _visibleStartTime: number | null = null;
   private _showTimeoutId: ReturnType<typeof setTimeout> | null = null;
+  private _hideTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
   public configure(config: Partial<SkeletonConfig>) {
     this._config = { ...this._config, ...config };
+
+    if (!this._config.enabled) {
+      this.reset();
+    }
   }
 
-  public show() {
+  public startLoading() {
     if (!this._config.enabled) return;
 
-    this._loadingStartTime = Date.now();
+    this._activeLoads += 1;
+    this._clearHideTimer();
 
-    if (this._showTimeoutId) {
-      clearTimeout(this._showTimeoutId);
-    }
-
-    this._showTimeoutId = setTimeout(() => {
-      this._isVisible = true;
-      this._showTimeoutId = null;
-    }, this._config.showDelay);
-  }
-
-  public hide() {
-    if (this._showTimeoutId) {
-      clearTimeout(this._showTimeoutId);
-      this._showTimeoutId = null;
-    }
-
-    if (!this._config.enabled || this._loadingStartTime === null) {
-      this._isVisible = false;
-      this._loadingStartTime = null;
+    if (this._isVisible || this._showTimeoutId) {
       return;
     }
 
-    const elapsed = Date.now() - this._loadingStartTime;
-    const remaining = Math.max(0, this._config.minDisplayTime - elapsed);
+    this._showTimeoutId = setTimeout(
+      () => {
+        this._showTimeoutId = null;
 
-    if (this._timeoutId) {
-      clearTimeout(this._timeoutId);
+        if (
+          !this._config.enabled ||
+          this._activeLoads === 0 ||
+          this._isVisible
+        ) {
+          return;
+        }
+
+        this._isVisible = true;
+        this._visibleStartTime = Date.now();
+      },
+      Math.max(0, this._config.showDelay),
+    );
+  }
+
+  public finishLoading() {
+    if (this._activeLoads === 0) return;
+
+    this._activeLoads -= 1;
+
+    if (this._activeLoads > 0) {
+      return;
     }
 
-    this._timeoutId = setTimeout(() => {
-      this._isVisible = false;
-      this._loadingStartTime = null;
+    this._clearShowTimer();
+
+    if (!this._isVisible) {
+      return;
+    }
+
+    const elapsed = Date.now() - (this._visibleStartTime ?? Date.now());
+    const remaining = Math.max(0, this._config.minDisplayTime - elapsed);
+
+    if (remaining === 0) {
+      this._hideNow();
+      return;
+    }
+
+    this._hideTimeoutId = setTimeout(() => {
+      this._hideTimeoutId = null;
+
+      if (this._activeLoads > 0) {
+        return;
+      }
+
+      this._hideNow();
     }, remaining);
   }
 
+  public show() {
+    this.startLoading();
+  }
+
+  public hide() {
+    this.finishLoading();
+  }
+
   public reset() {
-    if (this._timeoutId) {
-      clearTimeout(this._timeoutId);
-      this._timeoutId = null;
-    }
-    if (this._showTimeoutId) {
-      clearTimeout(this._showTimeoutId);
-      this._showTimeoutId = null;
-    }
-    this._isVisible = false;
-    this._loadingStartTime = null;
+    this._clearShowTimer();
+    this._clearHideTimer();
+    this._activeLoads = 0;
+    this._hideNow();
   }
 
   get isVisible(): boolean {
@@ -80,5 +108,24 @@ export class SkeletonManager {
 
   get config(): SkeletonConfig {
     return this._config;
+  }
+
+  private _hideNow() {
+    this._isVisible = false;
+    this._visibleStartTime = null;
+  }
+
+  private _clearShowTimer() {
+    if (this._showTimeoutId) {
+      clearTimeout(this._showTimeoutId);
+      this._showTimeoutId = null;
+    }
+  }
+
+  private _clearHideTimer() {
+    if (this._hideTimeoutId) {
+      clearTimeout(this._hideTimeoutId);
+      this._hideTimeoutId = null;
+    }
   }
 }

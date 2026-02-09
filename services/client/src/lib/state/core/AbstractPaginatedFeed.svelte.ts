@@ -94,39 +94,43 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
     const isInitialLoad = this._config.useCursor ? !cursor : page === 1;
     const shouldAppend = this._shouldAppendItems(isInitialLoad);
 
-    if (isInitialLoad && this._itemMap.size === 0) {
-      this._skeletonManager.show();
+    const shouldTrackSkeleton = isInitialLoad && this._itemMap.size === 0;
+
+    if (shouldTrackSkeleton) {
+      this._skeletonManager.startLoading();
     }
 
-    await this.fetch(
-      () => this.fetchData({ page, limit, cursor, ...searchParams }),
-      (response) => {
-        if (shouldAppend) {
-          for (const item of response.data) {
-            const id = this._getItemId(item);
-            if (!this._itemMap.has(id)) {
+    try {
+      await this.fetch(
+        () => this.fetchData({ page, limit, cursor, ...searchParams }),
+        (response) => {
+          if (shouldAppend) {
+            for (const item of response.data) {
+              const id = this._getItemId(item);
+              if (!this._itemMap.has(id)) {
+                this._itemMap.set(id, item);
+                this._order = [...this._order, id];
+              }
+            }
+          } else {
+            this._itemMap.clear();
+            this._order = [];
+            for (const item of response.data) {
+              const id = this._getItemId(item);
               this._itemMap.set(id, item);
               this._order = [...this._order, id];
             }
           }
-        } else {
-          this._itemMap.clear();
-          this._order = [];
-          for (const item of response.data) {
-            const id = this._getItemId(item);
-            this._itemMap.set(id, item);
-            this._order = [...this._order, id];
-          }
-        }
-        this._meta = response.meta;
-        this._nextCursor = response.meta.nextCursor || null;
-
-        if (isInitialLoad) {
-          this._skeletonManager.hide();
-        }
-      },
-      options,
-    );
+          this._meta = response.meta;
+          this._nextCursor = response.meta.nextCursor || null;
+        },
+        options,
+      );
+    } finally {
+      if (shouldTrackSkeleton) {
+        this._skeletonManager.finishLoading();
+      }
+    }
   }
 
   public async nextPage(options?: RequestStateOptions): Promise<void> {
@@ -247,7 +251,7 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
   }
 
   get showSkeleton(): boolean {
-    return this._skeletonManager.isVisible && !this.isEmpty && !this.hasError;
+    return this._skeletonManager.isVisible;
   }
 
   public configureSkeleton(

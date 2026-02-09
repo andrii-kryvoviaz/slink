@@ -1,15 +1,16 @@
 import type { Action } from 'svelte/action';
 
 import type { AbstractPaginatedFeed } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
+import type { SkeletonConfig as SkeletonTimingConfig } from '@slink/lib/state/core/SkeletonConfig.svelte';
 
-interface SkeletonConfig {
+interface SkeletonConfig extends Partial<SkeletonTimingConfig> {
   feed: AbstractPaginatedFeed<unknown>;
-  enabled?: boolean;
-  minDisplayTime?: number;
-  showDelay?: number;
 }
 
-export const skeleton: Action<HTMLElement, SkeletonConfig> = (node, config) => {
+export const skeleton: Action<HTMLElement, SkeletonConfig> = (
+  _node,
+  config,
+) => {
   if (!config?.feed) {
     console.warn('skeleton action requires feed parameter');
     return;
