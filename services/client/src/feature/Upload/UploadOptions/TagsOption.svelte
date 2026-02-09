@@ -1,7 +1,10 @@
 <script lang="ts">
   import { CreateTagDialog, TagListView } from '@slink/feature/Tag';
-  import { AddButton, SelectionPill } from '@slink/ui/components/pill';
+  import { Button } from '@slink/ui/components/button';
+  import { SelectionPill } from '@slink/ui/components/pill';
   import * as Popover from '@slink/ui/components/popover';
+
+  import Icon from '@iconify/svelte';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
 
@@ -22,6 +25,9 @@
   const createModalState = createCreateTagModalState();
 
   const selectedIds = $derived(selectedTags.map((t) => t.id));
+  const buttonLabel = $derived(
+    selectedTags.length > 0 ? 'Add more' : 'Add tags',
+  );
 
   const handleToggle = (tag: Tag) => {
     if (disabled) return;
@@ -56,17 +62,21 @@
 <Popover.Root bind:open={isOpen}>
   <Popover.Trigger {disabled}>
     {#snippet child({ props })}
-      <AddButton
+      <Button
         {...props}
-        label={selectedTags.length > 0 ? 'Add more' : 'Add tags'}
-        icon="ph:tag"
-        variant="blue"
+        variant="glass-blue"
+        rounded="full"
+        size="sm"
         {disabled}
-      />
+      >
+        <Icon icon="ph:tag" class="w-3.5 h-3.5" />
+        {buttonLabel}
+        <Icon icon="ph:plus" class="w-3 h-3 opacity-60" />
+      </Button>
     {/snippet}
   </Popover.Trigger>
   <Popover.Content
-    class="p-0 bg-white/95 dark:bg-slate-900/95 border border-slate-200/70 dark:border-slate-700/50 rounded-xl shadow-xl shadow-black/10 dark:shadow-black/30 overflow-hidden backdrop-blur-sm"
+    class="p-0 bg-white/95 dark:bg-slate-900/95 border border-slate-200/50 dark:border-slate-700/40 rounded-xl shadow-lg shadow-black/8 dark:shadow-black/25 overflow-hidden backdrop-blur-sm"
     sideOffset={8}
     align="start"
     onpaste={(e: ClipboardEvent) => e.stopPropagation()}

@@ -11,11 +11,11 @@
   let inputFocused = $state(false);
 </script>
 
-<div class="px-2 pt-2 pb-1 shrink-0">
+<div class="px-2.5 pt-2.5 pb-1 shrink-0">
   <div class="relative">
     <Icon
       icon="ph:magnifying-glass"
-      class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors {inputFocused
+      class="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 transition-colors {inputFocused
         ? 'text-gray-500 dark:text-gray-400'
         : 'text-gray-400 dark:text-gray-500'}"
     />
@@ -24,7 +24,7 @@
       onfocus={() => (inputFocused = true)}
       onblur={() => (inputFocused = false)}
       {placeholder}
-      class="w-full pl-9 pr-3 py-2 text-sm bg-transparent border-0 border-b border-slate-200/70 dark:border-slate-700/50 focus:border-slate-300/80 dark:focus:border-slate-600/60 outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500 text-gray-900 dark:text-gray-100 transition-colors"
+      class="w-full pl-8 pr-3 py-1.5 text-[13px] bg-gray-50/80 dark:bg-white/5 focus:bg-gray-100/80 dark:focus:bg-white/[0.08] rounded-lg border-0 outline-none focus:ring-1 focus:ring-gray-200/80 dark:focus:ring-white/10 placeholder:text-gray-400 dark:placeholder:text-gray-500 text-gray-900 dark:text-gray-100 transition-colors"
     />
   </div>
 </div>

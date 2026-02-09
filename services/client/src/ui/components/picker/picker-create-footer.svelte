@@ -16,7 +16,7 @@
 {/snippet}
 
 <div
-  class="px-2 py-1.5 border-t border-gray-100 dark:border-gray-800/50 shrink-0"
+  class="px-2 py-1.5 border-t border-gray-100/60 dark:border-gray-800/30 shrink-0"
 >
   <button
     type="button"

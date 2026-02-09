@@ -3,8 +3,11 @@
     CollectionListView,
     CreateCollectionDialog,
   } from '@slink/feature/Collection';
-  import { AddButton, SelectionPill } from '@slink/ui/components/pill';
+  import { Button } from '@slink/ui/components/button';
+  import { SelectionPill } from '@slink/ui/components/pill';
   import * as Popover from '@slink/ui/components/popover';
+
+  import Icon from '@iconify/svelte';
 
   import type { CollectionResponse } from '@slink/api/Response';
 
@@ -29,6 +32,9 @@
   const createModalState = createCreateCollectionModalState();
 
   const selectedIds = $derived(selectedCollections.map((c) => c.id));
+  const buttonLabel = $derived(
+    selectedCollections.length > 0 ? 'Add more' : 'Collection',
+  );
 
   const handleToggle = (collection: CollectionResponse) => {
     if (disabled) return;
@@ -65,17 +71,21 @@
 <Popover.Root bind:open={isOpen}>
   <Popover.Trigger {disabled}>
     {#snippet child({ props })}
-      <AddButton
+      <Button
         {...props}
-        label={selectedCollections.length > 0 ? 'Add more' : 'Collection'}
-        icon="ph:folder-simple"
-        variant="indigo"
+        variant="glass-indigo"
+        rounded="full"
+        size="sm"
         {disabled}
-      />
+      >
+        <Icon icon="ph:folder-simple" class="w-3.5 h-3.5" />
+        {buttonLabel}
+        <Icon icon="ph:plus" class="w-3 h-3 opacity-60" />
+      </Button>
     {/snippet}
   </Popover.Trigger>
   <Popover.Content
-    class="p-0 bg-white/95 dark:bg-slate-900/95 border border-slate-200/70 dark:border-slate-700/50 rounded-xl shadow-xl shadow-black/10 dark:shadow-black/30 overflow-hidden backdrop-blur-sm"
+    class="p-0 bg-white/95 dark:bg-slate-900/95 border border-slate-200/50 dark:border-slate-700/40 rounded-xl shadow-lg shadow-black/8 dark:shadow-black/25 overflow-hidden backdrop-blur-sm"
     sideOffset={8}
     align="start"
     onpaste={(e: ClipboardEvent) => e.stopPropagation()}
