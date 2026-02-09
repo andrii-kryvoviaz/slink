@@ -116,9 +116,24 @@
     </div>
 
     <div in:fade={{ duration: 400, delay: 200 }}>
-      {#if userFeedState.showSkeleton}
+      {#if viewMode === 'list'}
+        <UserDataTable
+          users={userFeedState.items}
+          {loggedInUser}
+          {onDelete}
+          {tableSettings}
+          isLoading={userFeedState.isLoading || userFeedState.showSkeleton}
+          currentPage={userFeedState.meta.page}
+          totalPages={Math.ceil(
+            userFeedState.meta.total / userFeedState.meta.size,
+          )}
+          totalItems={userFeedState.meta.total}
+          onPageSizeChange={handlePageSizeChange}
+          onPageChange={(page) => userFeedState.loadPage(page, false)}
+        />
+      {:else if userFeedState.showSkeleton}
         <div in:fade={{ duration: 200 }}>
-          <UsersSkeleton {viewMode} count={12} />
+          <UsersSkeleton viewMode="grid" count={12} />
         </div>
       {:else if userFeedState.isEmpty || (!userFeedState.hasItems && userFeedState.isDirty)}
         <div in:fade={{ duration: 200 }}>
@@ -132,43 +147,20 @@
         </div>
       {:else if userFeedState.hasItems}
         <div class="min-h-100 w-full">
-          {#if viewMode === 'grid'}
-            <UserGridView
-              users={userFeedState.items}
-              {loggedInUser}
-              {onDelete}
-            />
-          {:else}
-            <UserDataTable
-              users={userFeedState.items}
-              {loggedInUser}
-              {onDelete}
-              {tableSettings}
-              isLoading={userFeedState.isLoading}
-              currentPage={userFeedState.meta.page}
-              totalPages={Math.ceil(
-                userFeedState.meta.total / userFeedState.meta.size,
-              )}
-              totalItems={userFeedState.meta.total}
-              onPageSizeChange={handlePageSizeChange}
-              onPageChange={(page) => userFeedState.loadPage(page, false)}
-            />
-          {/if}
+          <UserGridView users={userFeedState.items} {loggedInUser} {onDelete} />
         </div>
 
-        {#if viewMode === 'grid'}
-          <LoadMoreButton
-            class="mt-6"
-            visible={userFeedState.hasMore}
-            loading={userFeedState.isLoading}
-            onclick={() =>
-              userFeedState.nextPage({
-                debounce: 300,
-              })}
-            variant="modern"
-            rounded="full"
-          />
-        {/if}
+        <LoadMoreButton
+          class="mt-6"
+          visible={userFeedState.hasMore}
+          loading={userFeedState.isLoading}
+          onclick={() =>
+            userFeedState.nextPage({
+              debounce: 300,
+            })}
+          variant="modern"
+          rounded="full"
+        />
       {/if}
     </div>
   </div>

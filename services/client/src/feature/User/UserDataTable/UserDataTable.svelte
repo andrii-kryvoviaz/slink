@@ -139,33 +139,12 @@
     },
   });
 
-  let tableContainer: HTMLElement;
-
   $effect(() => {
     setColumnVisibility(columnVisibility);
   });
-
-  $effect(() => {
-    if (tableContainer) {
-      const avatarPlaceholders = tableContainer.querySelectorAll(
-        '.avatar-placeholder',
-      );
-      avatarPlaceholders.forEach((placeholder, index) => {
-        const rowIndex = Math.floor(index / 1);
-        const userData = table.getRowModel().rows[rowIndex]?.original;
-        if (userData) {
-          placeholder.className =
-            'w-8 h-8 rounded-full flex-shrink-0 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-sm font-medium';
-          placeholder.textContent = userData.displayName
-            .charAt(0)
-            .toUpperCase();
-        }
-      });
-    }
-  });
 </script>
 
-<div class="w-full flex flex-col gap-6" bind:this={tableContainer}>
+<div class="w-full flex flex-col gap-6">
   <div
     class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
   >

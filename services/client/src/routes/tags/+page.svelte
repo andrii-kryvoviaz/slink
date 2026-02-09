@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { CreateTagDialog, TagsSkeleton } from '@slink/feature/Tag';
+  import { CreateTagDialog } from '@slink/feature/Tag';
   import { TagDataTable } from '@slink/feature/Tag/TagDataTable';
   import { Button } from '@slink/ui/components/button';
   import { onMount } from 'svelte';
@@ -103,23 +103,19 @@
       </div>
     </div>
 
-    {#if tagFeed.showSkeleton}
-      <TagsSkeleton />
-    {:else}
-      <TagDataTable
-        tags={tagFeed.data}
-        onDelete={handleDeleteTag}
-        bind:searchTerm={searchQuery}
-        onSearchChange={handleSearchChange}
-        isLoading={tagFeed.loading}
-        {currentPage}
-        {totalPages}
-        {totalItems}
-        {tableSettings}
-        onPageChange={handlePageChange}
-        onPageSizeChange={handlePageSizeChange}
-      />
-    {/if}
+    <TagDataTable
+      tags={tagFeed.data}
+      onDelete={handleDeleteTag}
+      bind:searchTerm={searchQuery}
+      onSearchChange={handleSearchChange}
+      isLoading={tagFeed.loading || tagFeed.showSkeleton}
+      {currentPage}
+      {totalPages}
+      {totalItems}
+      {tableSettings}
+      onPageChange={handlePageChange}
+      onPageSizeChange={handlePageSizeChange}
+    />
   </div>
 </section>
 

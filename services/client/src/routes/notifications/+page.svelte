@@ -50,13 +50,9 @@
 <section in:fade={{ duration: 300 }}>
   <div
     class="flex flex-col px-4 py-6 sm:px-6 w-full"
-    use:skeleton={{ feed: notificationFeed }}
+    use:skeleton={{ feed: notificationFeed, showDelay: 30 }}
   >
-    {#if notificationFeed.showSkeleton}
-      <div class="max-w-xl" in:fade={{ duration: 200 }}>
-        <NotificationSkeleton count={12} />
-      </div>
-    {:else if notificationFeed.isEmpty}
+    {#if notificationFeed.isEmpty && !notificationFeed.showSkeleton}
       <div in:fade={{ duration: 200 }} class="py-12 flex justify-center">
         <EmptyState
           icon="ph:bell-simple-slash-duotone"
@@ -94,32 +90,38 @@
           </div>
         </header>
 
-        <div
-          class="flex flex-col gap-2"
-          in:fade={{ duration: 400, delay: 200 }}
-        >
-          {#each notificationFeed.groupedItems as group (group.key)}
-            <NotificationGroupItem {group} onItemClick={handleItemClick} />
-          {/each}
-        </div>
-
-        {#if notificationFeed.hasMore}
-          <div class="mt-6 flex justify-center">
-            <LoadMoreButton
-              visible={true}
-              loading={notificationFeed.isLoading}
-              onclick={() =>
-                notificationFeed.nextPage({
-                  debounce: 300,
-                })}
-              variant="modern"
-              rounded="full"
-            >
-              {#snippet text()}
-                <span>Load more</span>
-              {/snippet}
-            </LoadMoreButton>
+        {#if notificationFeed.showSkeleton}
+          <div in:fade={{ duration: 200 }}>
+            <NotificationSkeleton count={12} />
           </div>
+        {:else}
+          <div
+            class="flex flex-col gap-2"
+            in:fade={{ duration: 400, delay: 200 }}
+          >
+            {#each notificationFeed.groupedItems as group (group.key)}
+              <NotificationGroupItem {group} onItemClick={handleItemClick} />
+            {/each}
+          </div>
+
+          {#if notificationFeed.hasMore}
+            <div class="mt-6 flex justify-center">
+              <LoadMoreButton
+                visible={true}
+                loading={notificationFeed.isLoading}
+                onclick={() =>
+                  notificationFeed.nextPage({
+                    debounce: 300,
+                  })}
+                variant="modern"
+                rounded="full"
+              >
+                {#snippet text()}
+                  <span>Load more</span>
+                {/snippet}
+              </LoadMoreButton>
+            </div>
+          {/if}
         {/if}
       </div>
     {/if}
