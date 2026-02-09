@@ -155,11 +155,7 @@
 <main in:fade={{ duration: 500 }} class="min-h-full">
   <div
     class="container mx-auto px-4 sm:px-6 lg:px-8 py-8"
-    use:skeleton={{
-      feed: itemsFeed,
-      minDisplayTime: 300,
-      showDelay: 100,
-    }}
+    use:skeleton={{ feed: itemsFeed }}
   >
     <div class="mb-8">
       {#if isOwner}

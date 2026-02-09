@@ -10,6 +10,7 @@
 
   import type { Tag } from '@slink/api/Resources/TagResource';
 
+  import { skeleton } from '@slink/lib/actions/skeleton';
   import { useTableSettings } from '@slink/lib/settings/composables/useTableSettings.svelte';
   import { createCreateTagModalState } from '@slink/lib/state/CreateTagModalState.svelte';
   import { useTagListFeed } from '@slink/lib/state/TagListFeed.svelte';
@@ -75,7 +76,10 @@
 </svelte:head>
 
 <section in:fade={{ duration: 300 }}>
-  <div class="flex flex-col px-4 py-6 sm:px-6 w-full">
+  <div
+    class="flex flex-col px-4 py-6 sm:px-6 w-full"
+    use:skeleton={{ feed: tagFeed }}
+  >
     <div class="mb-8 space-y-6" in:fade={{ duration: 400, delay: 100 }}>
       <div class="flex items-center justify-between w-full">
         <div class="flex-1 min-w-0">
@@ -99,7 +103,7 @@
       </div>
     </div>
 
-    {#if tagFeed.loading && tagFeed.data.length === 0}
+    {#if tagFeed.showSkeleton}
       <TagsSkeleton />
     {:else}
       <TagDataTable

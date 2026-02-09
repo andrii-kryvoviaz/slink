@@ -186,11 +186,7 @@
 <section>
   <div
     class="flex flex-col px-4 py-6 sm:px-6 w-full"
-    use:skeleton={{
-      feed: historyFeedState,
-      minDisplayTime: 300,
-      showDelay: 200,
-    }}
+    use:skeleton={{ feed: historyFeedState }}
   >
     <div class="mb-8 space-y-6" in:fade={{ duration: 300 }}>
       <div class="flex items-center justify-between w-full">

@@ -15,22 +15,8 @@ export const skeleton: Action<HTMLElement, SkeletonConfig> = (node, config) => {
     return;
   }
 
-  const settings = {
-    enabled: true,
-    minDisplayTime: 300,
-    showDelay: 150,
-    ...config,
-  };
-
-  function updateFeedSkeleton() {
-    settings.feed.configureSkeleton({
-      enabled: settings.enabled,
-      minDisplayTime: settings.minDisplayTime,
-      showDelay: settings.showDelay,
-    });
-  }
-
-  updateFeedSkeleton();
+  const { feed, ...overrides } = config;
+  feed.configureSkeleton(overrides);
 
   return {
     update(newConfig: SkeletonConfig) {
@@ -38,8 +24,8 @@ export const skeleton: Action<HTMLElement, SkeletonConfig> = (node, config) => {
         console.warn('skeleton action requires feed parameter');
         return;
       }
-      Object.assign(settings, newConfig);
-      updateFeedSkeleton();
+      const { feed, ...overrides } = newConfig;
+      feed.configureSkeleton(overrides);
     },
   };
 };

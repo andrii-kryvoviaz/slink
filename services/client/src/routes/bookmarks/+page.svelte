@@ -37,11 +37,7 @@
 <main in:fade={{ duration: 500 }} class="min-h-full">
   <div
     class="flex flex-col px-4 py-6 sm:px-6 w-full"
-    use:skeleton={{
-      feed: bookmarksFeed,
-      minDisplayTime: 300,
-      showDelay: 100,
-    }}
+    use:skeleton={{ feed: bookmarksFeed }}
   >
     <div class="mb-8">
       <h1 class="text-3xl font-semibold text-slate-900 dark:text-white">

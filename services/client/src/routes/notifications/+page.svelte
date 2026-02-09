@@ -49,11 +49,7 @@
 <section in:fade={{ duration: 300 }}>
   <div
     class="flex flex-col px-4 py-6 sm:px-6 w-full"
-    use:skeleton={{
-      feed: notificationFeed,
-      minDisplayTime: 300,
-      showDelay: 200,
-    }}
+    use:skeleton={{ feed: notificationFeed }}
   >
     {#if notificationFeed.showSkeleton}
       <div class="max-w-xl" in:fade={{ duration: 200 }}>
