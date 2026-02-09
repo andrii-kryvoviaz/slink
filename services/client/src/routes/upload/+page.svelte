@@ -6,7 +6,7 @@
     BannerContent,
     BannerIcon,
   } from '@slink/feature/Layout';
-  import { UploadFormWithTags, UploadSuccess } from '@slink/feature/Upload';
+  import { UploadFormWithOptions, UploadSuccess } from '@slink/feature/Upload';
   import MultiUploadProgress from '@slink/feature/Upload/MultiUploadProgress.svelte';
 
   import { useMultiUploadService } from '$lib/di';
@@ -267,7 +267,7 @@
           </div>
         {/if}
 
-        <UploadFormWithTags
+        <UploadFormWithOptions
           {disabled}
           {processing}
           allowMultiple={true}
