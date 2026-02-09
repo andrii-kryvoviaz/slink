@@ -75,7 +75,7 @@
     >
       {#snippet children()}{@html getTagLastSegment(tag)}{/snippet}
       {#snippet subtext()}
-        {#if getTagParentPath(tag)}{@html getTagParentPath(tag)}{/if}
+        {@html getTagParentPath(tag) || 'Root'}
       {/snippet}
     </PickerItem>
   {/snippet}
