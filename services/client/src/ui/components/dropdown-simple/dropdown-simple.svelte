@@ -26,7 +26,7 @@
       triggerClass?: string;
       animationDuration?: number;
       child?: Snippet;
-      trigger?: Snippet;
+      trigger?: Snippet<[triggerProps: Record<string, any>]>;
       buttonText?: Snippet;
       buttonIcon?: Snippet<[open: boolean]>;
     };
@@ -67,27 +67,29 @@
 </script>
 
 <DropdownMenu.Root bind:open {...props}>
-  <DropdownMenu.Trigger class={triggerClass}>
-    {#if trigger}
-      {@render trigger()}
-    {:else}
-      <Button {...buttonProps}>
-        <div class="flex items-center justify-between gap-2">
-          {@render buttonText?.()}
+  <DropdownMenu.Trigger>
+    {#snippet child({ props })}
+      {#if trigger}
+        {@render trigger(props)}
+      {:else}
+        <Button {...buttonProps} {...props} class={triggerClass}>
+          <div class="flex items-center justify-between gap-2">
+            {@render buttonText?.()}
 
-          {#if buttonIcon}
-            {@render buttonIcon(open)}
-          {:else}
-            <div class:hidden={!open}>
-              <Icon icon="akar-icons:chevron-up" />
-            </div>
-            <div class:hidden={open}>
-              <Icon icon="akar-icons:chevron-down" />
-            </div>
-          {/if}
-        </div>
-      </Button>
-    {/if}
+            {#if buttonIcon}
+              {@render buttonIcon(open)}
+            {:else}
+              <div class:hidden={!open}>
+                <Icon icon="akar-icons:chevron-up" />
+              </div>
+              <div class:hidden={open}>
+                <Icon icon="akar-icons:chevron-down" />
+              </div>
+            {/if}
+          </div>
+        </Button>
+      {/if}
+    {/snippet}
   </DropdownMenu.Trigger>
   <DropdownMenu.Portal>
     <DropdownMenu.Content

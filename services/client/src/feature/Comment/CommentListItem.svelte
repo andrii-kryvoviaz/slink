@@ -132,8 +132,9 @@
 
         {#if showDropdown}
           <DropdownSimple variant="invisible" size="xs" contentVariant="dark">
-            {#snippet trigger()}
+            {#snippet trigger(triggerProps)}
               <button
+                {...triggerProps}
                 class="p-1 text-white/40 hover:text-white/70 rounded transition-colors"
               >
                 <Icon icon="heroicons:ellipsis-vertical" class="w-4 h-4" />

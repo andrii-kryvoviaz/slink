@@ -36,8 +36,9 @@
 
 <div class="relative -mr-1.5">
   <DropdownSimple variant="invisible" size="xs">
-    {#snippet trigger()}
+    {#snippet trigger(triggerProps)}
       <button
+        {...triggerProps}
         class="p-1.5 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors duration-150"
       >
         <Icon icon="heroicons:ellipsis-vertical" class="w-4 h-4" />

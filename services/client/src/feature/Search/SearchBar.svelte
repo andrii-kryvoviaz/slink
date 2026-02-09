@@ -164,8 +164,9 @@
       triggerClass="w-fit"
       contentProps={{ align: 'end', sideOffset: 12 }}
     >
-      {#snippet trigger()}
+      {#snippet trigger(triggerProps)}
         <button
+          {...triggerProps}
           class={cn(
             'flex items-center gap-1 px-1.5 sm:px-2 py-0.5 text-xs font-medium',
             'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100',

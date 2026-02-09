@@ -201,14 +201,15 @@
 
 {#if !isCurrentUser}
   <DropdownSimple bind:this={dropdownRef}>
-    {#snippet trigger()}
+    {#snippet trigger(triggerProps)}
       {#if variant === 'button'}
-        <button class={triggerClass}>
+        <button {...triggerProps} class={triggerClass}>
           <Icon icon="heroicons:ellipsis-horizontal" class="w-4 h-4" />
           Actions
         </button>
       {:else}
         <button
+          {...triggerProps}
           class={triggerClass ||
             'p-2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-150'}
         >
