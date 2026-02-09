@@ -1,11 +1,9 @@
-import { ApiClient } from '@slink/api/Client';
-
 import type { LayoutServerLoad } from './$types';
 
-export const load: LayoutServerLoad = async ({ parent, fetch }) => {
+export const load: LayoutServerLoad = async ({ parent, locals }) => {
   await parent();
 
-  const api = ApiClient.use(fetch);
+  const api = locals.api;
 
   const [settings, defaultSettings] = await Promise.all([
     api.setting.getGlobalSettings(),

@@ -1,4 +1,5 @@
-import { ApiClient } from '@slink/api/Client';
+import { ApiClient } from '@slink/api';
+
 import type { Tag } from '@slink/api/Resources/TagResource';
 
 import { UrlParamManager } from '../url/urlParams';

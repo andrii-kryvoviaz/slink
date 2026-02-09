@@ -2,6 +2,8 @@
 // for information about these interfaces
 import type { AppSidebarGroup } from '@slink/feature/Navigation/Sidebar/types';
 
+import type { ApiClientType } from '@slink/api/Client';
+
 import type { CookieManager } from '@slink/lib/auth/CookieManager';
 import type { User } from '@slink/lib/auth/Type/User';
 import type { CookieSettings } from '@slink/lib/settings';
@@ -18,6 +20,7 @@ declare global {
       };
     }
     interface Locals {
+      api: ApiClientType;
       settings: CookieSettings;
       globalSettings: GlobalSettings | null;
       user: User | null;

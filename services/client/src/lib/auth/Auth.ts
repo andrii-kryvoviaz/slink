@@ -1,15 +1,11 @@
 import type { Cookies } from '@sveltejs/kit';
 
-import { ApiClient } from '@slink/api/Client';
+import { type ApiClientType, createApiClient } from '@slink/api/Client';
 
 import type { CookieManager } from '@slink/lib/auth/CookieManager';
 import { Session } from '@slink/lib/auth/Session';
+import type { TokenPair } from '@slink/lib/auth/Type/TokenPair';
 import { parseJwt } from '@slink/lib/auth/parseJwt';
-
-type TokenPair = {
-  accessToken: string;
-  refreshToken: string;
-};
 
 type Credentials = {
   username: string;
@@ -19,21 +15,24 @@ type Credentials = {
 type AuthDependencies = {
   cookies: Cookies;
   cookieManager: CookieManager;
-  fetch?: typeof fetch;
+  fetch: typeof fetch;
 };
 
 export class Auth {
   private constructor() {}
 
-  private static async _authenticateUser({
-    accessToken,
-    refreshToken,
-    cookies,
-    cookieManager,
-  }: TokenPair & AuthDependencies) {
+  private static async _createSession(
+    {
+      accessToken,
+      refreshToken,
+      cookies,
+      cookieManager,
+    }: TokenPair & Omit<AuthDependencies, 'fetch'>,
+    api: Pick<ApiClientType, 'user'>,
+  ) {
     cookieManager.setCookie(cookies, 'refreshToken', refreshToken);
 
-    const response = await ApiClient.user.getCurrentUser(accessToken);
+    const response = await api.user.getCurrentUser(accessToken);
     const claims = parseJwt<{ roles: string[] }>(accessToken);
 
     const user = {
@@ -50,23 +49,38 @@ export class Auth {
     return user;
   }
 
+  private static async _refreshSession({
+    accessToken,
+    refreshToken,
+    cookies,
+    cookieManager,
+  }: TokenPair & Omit<AuthDependencies, 'fetch'>) {
+    cookieManager.setCookie(cookies, 'refreshToken', refreshToken);
+
+    const sessionId = await Session.create(cookies, cookieManager);
+    await Session.set(sessionId, { accessToken });
+  }
+
   public static async login(
     { username, password }: Credentials,
     { cookies, cookieManager, fetch }: AuthDependencies,
   ) {
-    if (fetch) ApiClient.use(fetch);
+    const api = createApiClient(fetch);
 
-    const response = await ApiClient.auth.login(username, password);
+    const response = await api.auth.login(username, password);
     const { access_token, refresh_token } = response;
 
     await Session.destroy(cookies, cookieManager);
 
-    const user = await this._authenticateUser({
-      accessToken: access_token,
-      refreshToken: refresh_token,
-      cookies,
-      cookieManager,
-    });
+    const user = await this._createSession(
+      {
+        accessToken: access_token,
+        refreshToken: refresh_token,
+        cookies,
+        cookieManager,
+      },
+      api,
+    );
 
     cookieManager.deleteCookie(cookies, 'createdUserId');
 
@@ -78,7 +92,7 @@ export class Auth {
     cookieManager,
     fetch,
   }: AuthDependencies): Promise<TokenPair | undefined> {
-    if (fetch) ApiClient.use(fetch);
+    const api = createApiClient(fetch);
 
     const refreshToken = cookies.get('refreshToken');
 
@@ -87,10 +101,10 @@ export class Auth {
     }
 
     try {
-      const response = await ApiClient.auth.refresh(refreshToken);
+      const response = await api.auth.refresh(refreshToken);
       const { access_token, refresh_token } = response;
 
-      await this._authenticateUser({
+      await this._refreshSession({
         accessToken: access_token,
         refreshToken: refresh_token,
         cookies,
@@ -112,7 +126,7 @@ export class Auth {
     cookieManager,
     fetch,
   }: AuthDependencies) {
-    if (fetch) ApiClient.use(fetch);
+    const api = createApiClient(fetch);
 
     const refreshToken = cookies.get('refreshToken');
     const sessionId = cookies.get('sessionId');
@@ -123,10 +137,10 @@ export class Auth {
 
     cookieManager.deleteCookie(cookies, 'refreshToken');
 
-    Session.destroy(cookies, cookieManager);
+    await Session.destroy(cookies, cookieManager);
 
     try {
-      await ApiClient.auth.logout(refreshToken);
+      await api.auth.logout(refreshToken);
     } catch {
       console.warn('Refresh token has already been invalidated');
     }

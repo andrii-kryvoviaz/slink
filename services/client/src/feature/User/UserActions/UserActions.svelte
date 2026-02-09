@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { ApiClient } from '@slink/api';
   import { UserDeleteConfirmation } from '@slink/feature/User';
   import {
     DropdownSimple,
@@ -12,7 +13,6 @@
   import { printErrorsAsToastMessage } from '$lib/utils/ui/printErrorsAsToastMessage';
   import Icon from '@iconify/svelte';
 
-  import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { SingleUserResponse } from '@slink/api/Response/User/SingleUserResponse';
 

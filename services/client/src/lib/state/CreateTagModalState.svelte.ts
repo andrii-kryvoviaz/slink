@@ -1,6 +1,7 @@
+import { ApiClient } from '@slink/api';
+
 import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
 
-import { ApiClient } from '@slink/api/Client';
 import { ValidationException } from '@slink/api/Exceptions';
 import type { Tag } from '@slink/api/Resources/TagResource';
 

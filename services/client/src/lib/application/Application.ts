@@ -2,9 +2,10 @@ import { themeIcons } from '@slink/theme.icons';
 import { error, redirect } from '@sveltejs/kit';
 
 import { browser } from '$app/environment';
+import { goto } from '$app/navigation';
 import { initializeDI } from '$lib/di/container';
 
-import { ApiClient } from '@slink/api/Client';
+import { type ApiClientType, createApiClient } from '@slink/api/Client';
 
 import '@slink/utils/string/stringExtensions';
 import { preloadIconSet } from '@slink/utils/ui/preloadIconSet';
@@ -12,6 +13,11 @@ import { preloadIconSet } from '@slink/utils/ui/preloadIconSet';
 export class Application {
   private static isInitialized = false;
   private static initPromise: Promise<void> | null = null;
+  private static _api: ApiClientType;
+
+  public static get api(): ApiClientType {
+    return Application._api;
+  }
 
   async initialize(): Promise<void> {
     if (Application.isInitialized) {
@@ -34,7 +40,7 @@ export class Application {
   }
 
   setupApiClient(fetch: typeof globalThis.fetch): void {
-    ApiClient.use(fetch);
+    Application._api = createApiClient(fetch);
   }
 
   private setupDependencyInjection(): void {
@@ -42,13 +48,15 @@ export class Application {
   }
 
   private setupApiClientEventHandlers(): void {
-    ApiClient.on('unauthorized', () => {
+    Application.api.on('unauthorized', () => {
       if (!browser) {
         redirect(302, '/profile/login');
       }
+
+      goto('/profile/login');
     });
 
-    ApiClient.on('forbidden', () => {
+    Application.api.on('forbidden', () => {
       error(403, {
         message: 'You do not have permission to access this page.',
       });

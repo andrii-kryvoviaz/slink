@@ -4,53 +4,49 @@ import type { RequestOptions } from '@slink/api/Type/RequestOptions';
 export abstract class AbstractResource {
   constructor(private readonly _client: Client) {}
 
-  protected get<T = unknown>(
+  private request<T>(
+    method: string,
     path: string,
     options?: RequestOptions,
   ): Promise<T> {
     return this._client.fetch(path, {
       ...options,
-      method: 'GET',
+      method,
     }) as Promise<T>;
+  }
+
+  protected get<T = unknown>(
+    path: string,
+    options?: RequestOptions,
+  ): Promise<T> {
+    return this.request('GET', path, options);
   }
 
   protected post<T = unknown>(
     path: string,
     options?: RequestOptions,
   ): Promise<T> {
-    return this._client.fetch(path, {
-      ...options,
-      method: 'POST',
-    }) as Promise<T>;
+    return this.request('POST', path, options);
   }
 
   protected put<T = unknown>(
     path: string,
     options?: RequestOptions,
   ): Promise<T> {
-    return this._client.fetch(path, {
-      ...options,
-      method: 'PUT',
-    }) as Promise<T>;
+    return this.request('PUT', path, options);
   }
 
   protected delete<T = unknown>(
     path: string,
     options?: RequestOptions,
   ): Promise<T> {
-    return this._client.fetch(path, {
-      ...options,
-      method: 'DELETE',
-    }) as Promise<T>;
+    return this.request('DELETE', path, options);
   }
 
   protected patch<T = unknown>(
     path: string,
     options?: RequestOptions,
   ): Promise<T> {
-    return this._client.fetch(path, {
-      ...options,
-      method: 'PATCH',
-    }) as Promise<T>;
+    return this.request('PATCH', path, options);
   }
 }

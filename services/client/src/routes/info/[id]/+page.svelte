@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { ApiClient } from '@slink/api';
   import {
     BookmarkersPanel,
     FormatPicker,
@@ -20,7 +21,6 @@
   import Icon from '@iconify/svelte';
   import { fly } from 'svelte/transition';
 
-  import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { Tag } from '@slink/api/Resources/TagResource';
   import type { ShareResponse } from '@slink/api/Response';

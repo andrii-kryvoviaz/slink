@@ -56,8 +56,7 @@ type Resources = {
 
 type FetchFunction = typeof fetch;
 
-type ApiClientType = Resources & {
-  use: (callable: FetchFunction) => Resources;
+export type ApiClientType = Resources & {
   on: (event: EventType, listener: EventListener) => void;
 };
 
@@ -79,35 +78,32 @@ type Event<T> = {
 type EventListener = (event: Event<unknown>) => void;
 
 export class Client {
-  private static _resources: Resources = {} as Resources;
-  private static _instance: Client;
-
-  private _fetch: FetchFunction | null = null;
+  private _resources: Resources = {} as Resources;
+  private _fetch: FetchFunction;
   private _mappers: Set<RequestMapper> = new Set([JsonMapper]);
   private _eventListeners: Map<EventType, EventListener[]> = new Map();
 
-  private constructor(private readonly _basePath: string) {}
-
-  public static create(basePath: string): ApiClientType {
-    const client = this._instance ?? new Client(basePath);
-    this.initializeResources(client);
-
-    return {
-      ...this._resources,
-      use: client.use.bind(client),
-      on: client.on.bind(client),
-    };
+  constructor(
+    private readonly _basePath: string,
+    fetchFn: FetchFunction,
+  ) {
+    this._fetch = fetchFn;
+    this.initializeResources();
   }
 
-  private static initializeResources(client: Client) {
-    let ResourceType: ResourceType;
+  private initializeResources() {
+    let resourceType: ResourceType;
 
-    for (ResourceType in RESOURCES) {
+    for (resourceType in RESOURCES) {
       const resourceClass: ResourceConstructor<ResourceType> =
-        RESOURCES[ResourceType];
-      (this._resources as Record<string, unknown>)[ResourceType] =
-        new resourceClass(client);
+        RESOURCES[resourceType];
+      (this._resources as Record<string, unknown>)[resourceType] =
+        new resourceClass(this);
     }
+  }
+
+  public getResources(): Resources {
+    return this._resources;
   }
 
   private generateQueryString(query: Record<string, string> | null = null) {
@@ -121,12 +117,7 @@ export class Client {
   }
 
   public async fetch(path: string, options?: RequestOptions): Promise<unknown> {
-    if (!this._fetch) {
-      this._fetch = fetch;
-      console.warn(
-        'API client is not initialized with fetch function, falling back to global fetch function. To utilize SSR, add `ApiClient.use(fetch)` to your `load` function.',
-      );
-    }
+    const fetchFn = this._fetch;
 
     for (const mapper of this._mappers) {
       options = mapper(path, options);
@@ -137,7 +128,7 @@ export class Client {
     const queryString = this.generateQueryString(
       options?.query as Record<string, string> | undefined,
     );
-    const response = await this._fetch(url + queryString, options);
+    const response = await fetchFn(url + queryString, options);
 
     if (browser && response.headers.has('x-auth-refreshed')) {
       const { handled } = this.emit({
@@ -246,11 +237,6 @@ export class Client {
     return body;
   }
 
-  public use(callable: FetchFunction): Resources {
-    this._fetch = callable;
-    return Client._resources;
-  }
-
   private emit<T>({ event, data }: { event: EventType; data?: T }): {
     handled: boolean;
   } {
@@ -282,4 +268,19 @@ export class Client {
   }
 }
 
-export const ApiClient = Client.create('/api');
+export const API_CLIENT_BRAND = Symbol.for('slink:api-client');
+
+function buildApiClientProxy(client: Client): ApiClientType {
+  const resources = client.getResources();
+  const proxy = {
+    ...resources,
+    on: client.on.bind(client),
+  };
+  Object.defineProperty(proxy, API_CLIENT_BRAND, { value: true });
+  return proxy as ApiClientType;
+}
+
+export function createApiClient(fetchFn: FetchFunction): ApiClientType {
+  const client = new Client('/api', fetchFn);
+  return buildApiClientProxy(client);
+}

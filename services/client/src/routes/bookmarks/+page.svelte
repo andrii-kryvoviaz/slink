@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { ApiClient } from '@slink/api';
   import { LoadMoreButton } from '@slink/feature/Action';
   import { BookmarkButton, ImagePlaceholder } from '@slink/feature/Image';
   import { EmptyState, Masonry } from '@slink/feature/Layout';
@@ -9,7 +10,6 @@
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
-  import { ApiClient } from '@slink/api/Client';
   import type { BookmarkItem } from '@slink/api/Response/Bookmark/BookmarkResponse';
 
   import { skeleton } from '@slink/lib/actions/skeleton';

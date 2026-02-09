@@ -1,11 +1,10 @@
 <script lang="ts">
+  import { ApiClient } from '@slink/api';
   import { Tooltip, type TooltipVariant } from '@slink/ui/components/tooltip';
 
   import { page } from '$app/state';
   import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
   import Icon from '@iconify/svelte';
-
-  import { ApiClient } from '@slink/api/Client';
 
   import {
     type BookmarkButtonSize,

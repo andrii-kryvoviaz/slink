@@ -1,7 +1,8 @@
+import { ApiClient } from '@slink/api';
+
 import { browser } from '$app/environment';
 import type { Readable } from 'svelte/store';
 
-import { ApiClient } from '@slink/api/Client';
 import type { AuthenticatedUser, CommentItem } from '@slink/api/Response';
 
 import { CommentEventType } from '@slink/lib/enum/CommentEventType';

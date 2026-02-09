@@ -1,9 +1,9 @@
 <script lang="ts">
+  import { ApiClient } from '@slink/api';
   import { TagBadge } from '@slink/feature/Tag';
 
   import { browser } from '$app/environment';
 
-  import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { Tag } from '@slink/api/Resources/TagResource';
 

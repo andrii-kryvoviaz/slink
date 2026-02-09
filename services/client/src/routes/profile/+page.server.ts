@@ -1,6 +1,5 @@
 import { fail, redirect } from '@sveltejs/kit';
 
-import { ApiClient } from '@slink/api/Client';
 import { HttpException } from '@slink/api/Exceptions';
 
 import { Session } from '@slink/lib/auth/Session';
@@ -26,11 +25,11 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
 };
 
 export const actions: Actions = {
-  changePassword: async ({ request, fetch }) => {
+  changePassword: async ({ request, locals }) => {
     const { old_password, password, confirm } = await formData(request);
 
     try {
-      await ApiClient.use(fetch).user.changePassword({
+      await locals.api.user.changePassword({
         old_password,
         password,
         confirm,
@@ -51,7 +50,7 @@ export const actions: Actions = {
       passwordWasChanged: true,
     };
   },
-  updateProfile: async ({ request, locals, cookies, fetch }) => {
+  updateProfile: async ({ request, locals, cookies }) => {
     const { user } = locals;
     const { display_name } = await formData(request);
 
@@ -65,7 +64,7 @@ export const actions: Actions = {
     }
 
     try {
-      await ApiClient.use(fetch).user.updateProfile({
+      await locals.api.user.updateProfile({
         display_name,
       });
     } catch (e) {

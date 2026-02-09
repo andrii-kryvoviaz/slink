@@ -1,6 +1,7 @@
+import { ApiClient } from '@slink/api';
+
 import { replaceState } from '$app/navigation';
 
-import { ApiClient } from '@slink/api/Client';
 import type { ImageListingItem } from '@slink/api/Response';
 
 import { useState } from '@slink/lib/state/core/ContextAwareState';

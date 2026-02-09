@@ -1,10 +1,10 @@
 <script lang="ts">
+  import { ApiClient } from '@slink/api';
   import { Loader } from '@slink/feature/Layout';
   import { TagBadge, TagSelector } from '@slink/feature/Tag';
 
   import Icon from '@iconify/svelte';
 
-  import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { Tag } from '@slink/api/Resources/TagResource';
 

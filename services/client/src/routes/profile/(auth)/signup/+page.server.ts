@@ -1,7 +1,6 @@
 import { env } from '$env/dynamic/private';
 import { fail, redirect } from '@sveltejs/kit';
 
-import { ApiClient } from '@slink/api/Client';
 import { HttpException } from '@slink/api/Exceptions';
 
 import { formData } from '@slink/utils/form/formData';
@@ -19,17 +18,17 @@ export const load: PageServerLoad = async ({ parent, locals }) => {
     redirect(302, '/profile/login');
   }
 
-  const { cookieManager, ...serializableLocals } = locals;
+  const { cookieManager, api, ...serializableLocals } = locals;
   return serializableLocals;
 };
 
-const defaultAction: Action = async ({ fetch, request, cookies, locals }) => {
+const defaultAction: Action = async ({ request, cookies, locals }) => {
   const { username, email, password, confirm } = await formData(request);
 
   let redirectUrl: string | null = '/profile/login';
 
   try {
-    const response = await ApiClient.use(fetch).auth.signup({
+    const response = await locals.api.auth.signup({
       username,
       email,
       password,

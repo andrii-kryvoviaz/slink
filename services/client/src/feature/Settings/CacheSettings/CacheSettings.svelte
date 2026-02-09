@@ -1,11 +1,11 @@
 <script lang="ts">
+  import { ApiClient } from '@slink/api';
   import { Loader } from '@slink/feature/Layout';
   import { SettingItem } from '@slink/feature/Settings';
   import { Button } from '@slink/ui/components/button';
 
   import Icon from '@iconify/svelte';
 
-  import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { ClearCacheResponse } from '@slink/api/Resources/StorageResource';
 

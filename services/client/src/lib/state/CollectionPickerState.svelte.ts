@@ -1,6 +1,7 @@
+import { ApiClient } from '@slink/api';
+
 import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
 
-import { ApiClient } from '@slink/api/Client';
 import type { CollectionResponse } from '@slink/api/Response';
 
 export class CollectionPickerState {

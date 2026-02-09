@@ -1,6 +1,7 @@
+import { ApiClient } from '@slink/api';
+
 import { browser } from '$app/environment';
 
-import { ApiClient } from '@slink/api/Client';
 import type { ImageListingItem } from '@slink/api/Response';
 
 import { ImageFeedEventType } from '@slink/lib/enum/ImageFeedEventType';

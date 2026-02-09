@@ -7,8 +7,8 @@ import type { LayoutLoad } from './$types';
 export const load: LayoutLoad = async ({ fetch, data }) => {
   const app = new Application();
 
-  await app.initialize();
   app.setupApiClient(fetch);
+  await app.initialize();
 
   return data;
 };

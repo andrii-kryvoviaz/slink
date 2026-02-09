@@ -80,11 +80,4 @@ export class ApiRequestBuilder {
 
     return undefined;
   }
-
-  public updateAuthorizationHeader(
-    options: RequestOptions,
-    accessToken: string,
-  ): void {
-    options.headers.set('Authorization', `Bearer ${accessToken}`);
-  }
 }

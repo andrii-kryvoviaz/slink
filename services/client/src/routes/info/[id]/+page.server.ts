@@ -1,16 +1,10 @@
 import { error, redirect } from '@sveltejs/kit';
 
-import { ApiClient } from '@slink/api/Client';
 import { ForbiddenException } from '@slink/api/Exceptions';
 
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({
-  params,
-  fetch,
-  locals,
-  parent,
-}) => {
+export const load: PageServerLoad = async ({ params, locals, parent }) => {
   const parentData = await parent();
 
   if (!locals.user) {
@@ -22,10 +16,10 @@ export const load: PageServerLoad = async ({
 
   try {
     const [image, imageTags, licenses] = await Promise.all([
-      ApiClient.use(fetch).image.getDetails(params.id),
-      ApiClient.use(fetch).tag.getImageTags(params.id),
+      locals.api.image.getDetails(params.id),
+      locals.api.tag.getImageTags(params.id),
       licensingEnabled
-        ? ApiClient.use(fetch).image.getLicenses()
+        ? locals.api.image.getLicenses()
         : Promise.resolve({ licenses: [] }),
     ]);
 

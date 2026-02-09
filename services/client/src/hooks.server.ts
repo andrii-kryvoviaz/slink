@@ -3,8 +3,8 @@ import { json } from '@sveltejs/kit';
 import type { Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
-import { ApiConnector } from '@slink/api/ApiConnector';
-import { ApiClient } from '@slink/api/Client';
+import { ApiProxy } from '@slink/api/ApiProxy';
+import { createApiClient } from '@slink/api/Client';
 
 import { CookieManager } from '@slink/lib/auth/CookieManager';
 import { Theme, setCookieSettingsOnLocals } from '@slink/lib/settings';
@@ -23,7 +23,7 @@ const handleWellKnownRequests: Handle = async ({ event, resolve }) => {
   return resolve(event);
 };
 
-const injectApiHandling: Handle = ApiConnector({
+const injectApiHandling: Handle = ApiProxy({
   urlPrefix: env.API_PREFIX || '/api',
   baseUrl: env.API_URL || 'http://localhost:8080',
   registeredPaths: env.PROXY_PREFIXES?.split(';') || [],
@@ -52,12 +52,15 @@ const initializeCookieManager: Handle = async ({ event, resolve }) => {
   return resolve(event);
 };
 
+const initializeApiClient: Handle = async ({ event, resolve }) => {
+  event.locals.api = createApiClient(event.fetch);
+  return resolve(event);
+};
+
 const setGlobalSettingsOnLocals: Handle = async ({ event, resolve }) => {
   try {
-    const { fetch } = event;
-
     event.locals.globalSettings =
-      await ApiClient.use(fetch).setting.getPublicSettings();
+      await event.locals.api.setting.getPublicSettings();
   } catch {
     event.locals.globalSettings = null;
   }
@@ -65,7 +68,6 @@ const setGlobalSettingsOnLocals: Handle = async ({ event, resolve }) => {
   return resolve(event);
 };
 
-// ToDo: Remove this workaround when SvelteKit supports fixing link header preloading
 const handleLinkHeaderPreloading: Handle = async ({ event, resolve }) => {
   const response = await resolve(event);
 
@@ -73,7 +75,6 @@ const handleLinkHeaderPreloading: Handle = async ({ event, resolve }) => {
     return response;
   }
 
-  // strip header if it is larger than 4kB
   const linkHeader = response.headers.get('link');
   if (linkHeader && linkHeader.length >= 4096) {
     response.headers.delete('link');
@@ -86,6 +87,7 @@ export const handle = sequence(
   handleWellKnownRequests,
   filterResponseHeaders,
   initializeCookieManager,
+  initializeApiClient,
   injectApiHandling,
   setGlobalSettingsOnLocals,
   setCookieSettingsOnLocals,

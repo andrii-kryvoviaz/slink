@@ -13,7 +13,7 @@ type ApiOptions = {
   registeredPaths: string[];
 };
 
-export const ApiConnector = (options: ApiOptions): Handle => {
+export const ApiProxy = (options: ApiOptions): Handle => {
   const tokenManager = TokenRefreshManager.getInstance();
   return async ({ event, resolve }) => {
     const { url, fetch, cookies, locals } = event;
@@ -58,6 +58,10 @@ export const ApiConnector = (options: ApiOptions): Handle => {
         authRefreshed = true;
       } catch (error) {
         console.warn('Token refresh failed:', error);
+        return new Response(null, {
+          status: 302,
+          headers: { Location: '/profile/login' },
+        });
       }
     }
 

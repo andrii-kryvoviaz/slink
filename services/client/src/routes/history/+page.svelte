@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { ApiClient } from '@slink/api';
   import { LoadMoreButton } from '@slink/feature/Action';
   import {
     HistoryGridView,
@@ -16,7 +17,6 @@
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
-  import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { Tag } from '@slink/api/Resources/TagResource';
 

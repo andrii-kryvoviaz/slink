@@ -1,4 +1,5 @@
-import { ApiClient } from '@slink/api/Client';
+import { ApiClient } from '@slink/api';
+
 import type { BookmarkItem } from '@slink/api/Response';
 
 import { AbstractPaginatedFeed } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';

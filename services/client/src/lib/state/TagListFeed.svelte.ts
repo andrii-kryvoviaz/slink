@@ -1,4 +1,5 @@
-import { ApiClient } from '@slink/api/Client';
+import { ApiClient } from '@slink/api';
+
 import type {
   CreateTagRequest,
   Tag,

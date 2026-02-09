@@ -1,3 +1,5 @@
+import { ApiClient } from '@slink/api';
+
 import { goto } from '$app/navigation';
 import { useGlobalSettings } from '$lib/state/GlobalSettings.svelte.js';
 import { useUploadHistoryFeed } from '$lib/state/UploadHistoryFeed.svelte.js';
@@ -7,7 +9,6 @@ import { useAutoReset } from '$lib/utils/time/useAutoReset.svelte';
 import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
 import { routes } from '$lib/utils/url/routes';
 
-import { ApiClient } from '@slink/api/Client';
 import { ReactiveState } from '@slink/api/ReactiveState';
 import type { ShareResponse } from '@slink/api/Response';
 

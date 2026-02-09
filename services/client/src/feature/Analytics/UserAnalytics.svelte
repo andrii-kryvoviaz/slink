@@ -1,10 +1,10 @@
 <script lang="ts">
+  import { ApiClient } from '@slink/api';
   import { RefreshButton } from '@slink/feature/Action';
   import { Card } from '@slink/feature/Layout';
   import { Chart, type ChartOptions } from '@slink/feature/Layout';
   import { onMount } from 'svelte';
 
-  import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { UserAnalyticsData } from '@slink/api/Response';
 

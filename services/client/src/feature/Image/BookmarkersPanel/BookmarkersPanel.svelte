@@ -1,10 +1,10 @@
 <script lang="ts">
+  import { ApiClient } from '@slink/api';
   import { UserAvatar } from '@slink/feature/User';
 
   import Icon from '@iconify/svelte';
   import { slide } from 'svelte/transition';
 
-  import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type {
     BookmarkerItem,

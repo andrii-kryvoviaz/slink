@@ -2,6 +2,7 @@ import type { Cookies } from '@sveltejs/kit';
 
 import { Auth } from '@slink/lib/auth/Auth';
 import type { CookieManager } from '@slink/lib/auth/CookieManager';
+import type { TokenPair } from '@slink/lib/auth/Type/TokenPair';
 
 import { TokenRefreshError, handleApiError } from './ApiError';
 
@@ -17,17 +18,11 @@ type QueuedRequest = {
   makeRequest: (accessToken?: string) => Promise<Response>;
 };
 
-type TokenPair = {
-  accessToken: string;
-  refreshToken: string;
-};
-
 export class TokenRefreshManager {
   private static instance: TokenRefreshManager;
 
   private refreshPromises = new Map<string, Promise<TokenPair | undefined>>();
   private requestQueues = new Map<string, QueuedRequest[]>();
-  private isRefreshing = new Set<string>();
 
   private constructor() {}
 
@@ -43,11 +38,9 @@ export class TokenRefreshManager {
     context: RefreshContext,
     makeRequest: (accessToken?: string) => Promise<Response>,
   ): Promise<Response> {
-    if (this.isRefreshing.has(sessionId)) {
+    if (this.refreshPromises.has(sessionId)) {
       return this.queueRequest(sessionId, makeRequest);
     }
-
-    this.isRefreshing.add(sessionId);
 
     try {
       const tokens = await this.refreshTokens(sessionId, context);
@@ -66,7 +59,6 @@ export class TokenRefreshManager {
       this.processQueue(sessionId, false, undefined, apiError);
       throw apiError;
     } finally {
-      this.isRefreshing.delete(sessionId);
       this.refreshPromises.delete(sessionId);
       this.requestQueues.delete(sessionId);
     }
@@ -76,10 +68,6 @@ export class TokenRefreshManager {
     sessionId: string,
     context: RefreshContext,
   ): Promise<TokenPair | undefined> {
-    if (this.refreshPromises.has(sessionId)) {
-      return this.refreshPromises.get(sessionId)!;
-    }
-
     const refreshPromise = Auth.refresh(context);
     this.refreshPromises.set(sessionId, refreshPromise);
 
@@ -111,25 +99,30 @@ export class TokenRefreshManager {
   ): Promise<void> {
     const queue = this.requestQueues.get(sessionId) || [];
 
-    for (const queuedRequest of queue) {
-      if (success && accessToken) {
-        try {
-          const response = await queuedRequest.makeRequest(accessToken);
-          queuedRequest.resolve(response);
-        } catch (err) {
-          queuedRequest.reject(err as Error);
-        }
-      } else {
+    if (!success || !accessToken) {
+      for (const queuedRequest of queue) {
         queuedRequest.reject(
           error || new TokenRefreshError('Token refresh failed'),
         );
       }
+      return;
     }
+
+    const results = await Promise.allSettled(
+      queue.map((queuedRequest) => queuedRequest.makeRequest(accessToken)),
+    );
+
+    results.forEach((result, index) => {
+      if (result.status === 'fulfilled') {
+        queue[index].resolve(result.value);
+      } else {
+        queue[index].reject(result.reason as Error);
+      }
+    });
   }
 
   public cleanup(): void {
     this.refreshPromises.clear();
     this.requestQueues.clear();
-    this.isRefreshing.clear();
   }
 }

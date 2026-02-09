@@ -1,6 +1,6 @@
+import { ApiClient } from '@slink/api';
 import { injectable } from 'tsyringe';
 
-import { ApiClient } from '@slink/api/Client';
 import { HttpException, ValidationException } from '@slink/api/Exceptions';
 import type { UploadedImageResponse } from '@slink/api/Response';
 

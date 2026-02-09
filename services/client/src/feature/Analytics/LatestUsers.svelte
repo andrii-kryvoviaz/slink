@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { ApiClient } from '@slink/api';
   import { RefreshButton } from '@slink/feature/Action';
   import { Card } from '@slink/feature/Layout';
   import {
@@ -13,7 +14,6 @@
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
-  import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { UserListFilter } from '@slink/api/Request/UserRequest';
   import type { UserListingResponse } from '@slink/api/Response';

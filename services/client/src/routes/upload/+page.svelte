@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { ApiClient } from '@slink/api';
   import {
     Banner,
     BannerAction,
@@ -11,7 +12,6 @@
   import { useMultiUploadService } from '$lib/di';
   import { fade } from 'svelte/transition';
 
-  import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { Tag } from '@slink/api/Resources/TagResource';
   import type { CollectionResponse } from '@slink/api/Response';

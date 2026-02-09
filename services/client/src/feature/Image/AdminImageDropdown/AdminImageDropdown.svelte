@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { ApiClient } from '@slink/api';
   import { ImageDeleteConfirmation } from '@slink/feature/Image';
   import {
     DropdownSimple,
@@ -9,7 +10,6 @@
   import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
   import Icon from '@iconify/svelte';
 
-  import { ApiClient } from '@slink/api/Client';
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { ImageListingItem } from '@slink/api/Response';
 

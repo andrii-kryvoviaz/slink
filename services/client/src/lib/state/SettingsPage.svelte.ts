@@ -1,4 +1,5 @@
-import { ApiClient } from '@slink/api/Client';
+import { ApiClient } from '@slink/api';
+
 import { ReactiveState } from '@slink/api/ReactiveState';
 import type { EmptyResponse } from '@slink/api/Response';
 

@@ -1,7 +1,8 @@
+import { ApiClient } from '@slink/api';
+
 import { normalizeTagName, tagExists, validateTagName } from '$lib/utils/tag';
 import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
 
-import { ApiClient } from '@slink/api/Client';
 import { ReactiveState } from '@slink/api/ReactiveState';
 import type {
   CreateTagRequest,

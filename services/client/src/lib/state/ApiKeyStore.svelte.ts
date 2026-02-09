@@ -1,4 +1,5 @@
-import { ApiClient } from '@slink/api/Client';
+import { ApiClient } from '@slink/api';
+
 import { ValidationException } from '@slink/api/Exceptions';
 import type {
   ApiKeyResponse,

@@ -1,13 +1,12 @@
 import { fail, redirect } from '@sveltejs/kit';
 
-import { ApiClient } from '@slink/api/Client';
 import { HttpException } from '@slink/api/Exceptions';
 
 import { formData } from '@slink/utils/form/formData';
 
 import type { Actions, PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals, parent, fetch }) => {
+export const load: PageServerLoad = async ({ locals, parent }) => {
   await parent();
 
   const { user, globalSettings } = locals;
@@ -31,11 +30,11 @@ export const load: PageServerLoad = async ({ locals, parent, fetch }) => {
   }[] = [];
 
   try {
-    const prefsResponse = await ApiClient.use(fetch).user.getPreferences();
+    const prefsResponse = await locals.api.user.getPreferences();
     preferences = prefsResponse;
 
     if (licensingEnabled) {
-      const licensesResponse = await ApiClient.use(fetch).image.getLicenses();
+      const licensesResponse = await locals.api.image.getLicenses();
       licenses = licensesResponse.licenses ?? [];
     }
   } catch (e) {
@@ -51,12 +50,12 @@ export const load: PageServerLoad = async ({ locals, parent, fetch }) => {
 };
 
 export const actions: Actions = {
-  updatePreferences: async ({ request, fetch }) => {
+  updatePreferences: async ({ request, locals }) => {
     const { defaultLicense, syncLicenseToImages, defaultLandingPage } =
       await formData(request);
 
     try {
-      await ApiClient.use(fetch).user.updatePreferences({
+      await locals.api.user.updatePreferences({
         defaultLicense: defaultLicense || null,
         syncLicenseToImages: syncLicenseToImages === 'true',
         defaultLandingPage: defaultLandingPage || null,

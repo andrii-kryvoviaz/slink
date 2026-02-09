@@ -1,4 +1,5 @@
-import { ApiClient } from '@slink/api/Client';
+import { ApiClient } from '@slink/api';
+
 import type { StorageUsageResponse } from '@slink/api/Resources/StorageResource';
 
 import { AbstractHttpState } from '@slink/lib/state/core/AbstractHttpState.svelte';
