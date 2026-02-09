@@ -8,6 +8,7 @@
   import { Button } from '@slink/ui/components/button';
   import { Dialog } from '@slink/ui/components/dialog';
   import { LazyImage } from '@slink/ui/components/lazy-image';
+  import { untrack } from 'svelte';
 
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
@@ -25,7 +26,7 @@
   let isCreating = $state(false);
 
   $effect(() => {
-    if (!collectionsFeed.isDirty) {
+    if (untrack(() => collectionsFeed.needsLoad)) {
       collectionsFeed.load();
     }
   });

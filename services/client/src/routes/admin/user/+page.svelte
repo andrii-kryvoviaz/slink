@@ -8,6 +8,7 @@
   } from '@slink/feature/User';
   import { ToggleGroup } from '@slink/ui/components';
   import type { ToggleGroupOption } from '@slink/ui/components';
+  import { untrack } from 'svelte';
 
   import { page } from '$app/state';
   import { fade } from 'svelte/transition';
@@ -63,7 +64,7 @@
   const userFeedState = useUserListFeed();
 
   $effect(() => {
-    if (!userFeedState.isDirty)
+    if (untrack(() => userFeedState.needsLoad))
       userFeedState.load({ limit: tableSettings.pageSize });
   });
 

@@ -6,6 +6,7 @@
   import { ExploreSkeleton } from '@slink/feature/Layout';
   import { FormattedDate } from '@slink/feature/Text';
   import { UserAvatar } from '@slink/feature/User';
+  import { untrack } from 'svelte';
 
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
@@ -19,7 +20,7 @@
   bookmarksFeed.reset();
 
   $effect(() => {
-    if (!bookmarksFeed.isDirty) {
+    if (untrack(() => bookmarksFeed.needsLoad)) {
       bookmarksFeed.load();
     }
   });

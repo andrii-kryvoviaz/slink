@@ -75,7 +75,7 @@
 
     untrack(() => {
       itemsFeed.setCollectionId(collectionId);
-      if (!itemsFeed.isDirty) {
+      if (itemsFeed.needsLoad) {
         itemsFeed.load();
       }
     });

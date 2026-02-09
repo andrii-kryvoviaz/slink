@@ -11,6 +11,7 @@
   import { TagFilter } from '@slink/feature/Tag';
   import { ToggleGroup } from '@slink/ui/components';
   import type { ToggleGroupOption } from '@slink/ui/components';
+  import { untrack } from 'svelte';
 
   import { page } from '$app/stores';
   import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
@@ -71,7 +72,7 @@
   $effect(() => {
     if (tagFilterManager.hasFiltersInUrl()) {
       loadTagFiltersFromUrl();
-    } else if (!historyFeedState.isDirty) {
+    } else if (untrack(() => historyFeedState.needsLoad)) {
       historyFeedState.load();
     }
   });
@@ -83,12 +84,12 @@
       if (tags.length > 0) {
         historyFeedState.setTagFilter(tags, requireAllTags);
         await historyFeedState.load();
-      } else if (!historyFeedState.isDirty) {
+      } else if (historyFeedState.needsLoad) {
         historyFeedState.load();
       }
     } catch (error) {
       console.error('Failed to load tag filters from URL:', error);
-      if (!historyFeedState.isDirty) {
+      if (historyFeedState.needsLoad) {
         historyFeedState.load();
       }
     }

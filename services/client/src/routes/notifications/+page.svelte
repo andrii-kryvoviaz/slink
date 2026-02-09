@@ -6,6 +6,7 @@
     NotificationSkeleton,
   } from '@slink/feature/Notification';
   import { Button } from '@slink/ui/components/button';
+  import { untrack } from 'svelte';
 
   import { goto } from '$app/navigation';
   import Icon from '@iconify/svelte';
@@ -19,7 +20,7 @@
   const notificationFeed = useNotificationFeed();
 
   $effect(() => {
-    if (!notificationFeed.isDirty) {
+    if (untrack(() => notificationFeed.needsLoad)) {
       notificationFeed.load();
     }
   });

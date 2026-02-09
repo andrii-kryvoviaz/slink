@@ -16,6 +16,7 @@
   import { ExploreSkeleton } from '@slink/feature/Layout';
   import { ExpandableText, FormattedDate } from '@slink/feature/Text';
   import { UserAvatar } from '@slink/feature/User';
+  import { untrack } from 'svelte';
 
   import { page } from '$app/state';
   import Icon from '@iconify/svelte';
@@ -62,7 +63,7 @@
       ) {
         publicFeedState.search(search, searchBy);
       }
-    } else if (!publicFeedState.isDirty) {
+    } else if (untrack(() => publicFeedState.needsLoad)) {
       publicFeedState.load();
     }
   });

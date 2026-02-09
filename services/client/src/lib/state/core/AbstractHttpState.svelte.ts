@@ -61,6 +61,10 @@ export abstract class AbstractHttpState<T> {
     return this._isDirty;
   }
 
+  get needsLoad(): boolean {
+    return !this._isDirty && this._status !== 'loading';
+  }
+
   get status(): RequestStatus {
     return this._status;
   }
