@@ -1,16 +1,17 @@
 <script lang="ts">
   import CheckIcon from '@lucide/svelte/icons/check';
   import ChevronDownIcon from '@lucide/svelte/icons/chevron-down';
-  import LoaderIcon from '@lucide/svelte/icons/loader';
+  import LoaderCircleIcon from '@lucide/svelte/icons/loader-circle';
   import XIcon from '@lucide/svelte/icons/x';
   import { Combobox } from 'bits-ui';
   import type { Snippet } from 'svelte';
 
   import { cn } from '@slink/utils/ui/index.js';
 
-  type ComboboxItem = {
+  export type ComboboxItem = {
     value: string;
     label: string;
+    description?: string;
     disabled?: boolean;
   };
 
@@ -27,7 +28,7 @@
     emptyMessage?: string;
     clearable?: boolean;
     itemRenderer?: Snippet<[{ item: ComboboxItem; selected: boolean }]>;
-    size?: 'sm' | 'default';
+    size?: 'sm' | 'md' | 'lg';
   }
 
   let {
@@ -43,20 +44,21 @@
     emptyMessage = 'No items found.',
     clearable = true,
     itemRenderer,
-    size = 'default',
+    size = 'md',
   }: Props = $props();
 
   let searchValue = $state('');
 
-  const filteredItems = $derived(
-    onSearch
-      ? items
-      : searchValue === ''
-        ? items
-        : items.filter((item) =>
-            item.label.toLowerCase().includes(searchValue.toLowerCase()),
-          ),
-  );
+  const filteredItems = $derived.by(() => {
+    if (onSearch || !searchValue) return items;
+
+    const query = searchValue.toLowerCase();
+    return items.filter(
+      (item) =>
+        item.label.toLowerCase().includes(query) ||
+        item.description?.toLowerCase().includes(query),
+    );
+  });
 
   const handleSearchInput = (query: string) => {
     searchValue = query;
@@ -83,7 +85,11 @@
   };
 
   const handleOpenChange = (open: boolean) => {
-    if (!open) {
+    if (open) {
+      if (onSearch && items.length === 0) {
+        onSearch(searchValue);
+      }
+    } else {
       searchValue = selectedItem?.label || '';
     }
   };
@@ -93,12 +99,13 @@
   <Combobox.Root
     type="single"
     {value}
+    inputValue={searchValue}
     onValueChange={(newValue: string | undefined) => {
       if (newValue) {
         handleSelect(newValue);
       }
     }}
-    onOpenChangeComplete={handleOpenChange}
+    onOpenChange={handleOpenChange}
     {disabled}
   >
     <div class="relative">
@@ -107,7 +114,7 @@
         {placeholder}
         data-size={size}
         class={cn(
-          "border-border data-[placeholder]:text-muted-foreground [&_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 shadow-xs flex w-full select-none items-center justify-between gap-2 whitespace-nowrap rounded-md border bg-transparent px-4 py-2.5 pr-12 text-sm outline-none transition-[color,box-shadow] focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-11 data-[size=sm]:h-9",
+          "border-border data-[placeholder]:text-muted-foreground [&_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 shadow-xs flex w-full select-none items-center justify-between gap-2 whitespace-nowrap rounded-lg border bg-transparent pr-12 text-sm outline-none transition-[color,box-shadow] focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=sm]:h-8 data-[size=sm]:px-3 data-[size=md]:h-9 data-[size=md]:px-3 data-[size=lg]:h-11 data-[size=lg]:px-4",
         )}
       />
       <div
@@ -125,7 +132,7 @@
         {/if}
         <Combobox.Trigger class="flex items-center">
           {#if loading}
-            <LoaderIcon class="size-4 opacity-50 animate-spin" />
+            <LoaderCircleIcon class="size-4 opacity-50 animate-spin" />
           {:else}
             <ChevronDownIcon class="size-4 opacity-50" />
           {/if}
@@ -146,20 +153,30 @@
               label={item.label}
               disabled={item.disabled}
               class={cn(
-                'data-highlighted:bg-blue-100 dark:data-highlighted:bg-blue-800/40 data-highlighted:text-blue-600 dark:data-highlighted:text-blue-300 outline-hidden relative flex w-full cursor-default select-none items-center gap-2 rounded-lg py-2.5 pl-3 pr-3 text-sm font-medium text-gray-700 dark:text-gray-200 transition-all duration-150 hover:bg-blue-100 dark:hover:bg-blue-800/40 hover:text-blue-600 dark:hover:text-blue-300 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+                'data-highlighted:bg-blue-100 dark:data-highlighted:bg-blue-800/40 data-highlighted:text-blue-600 dark:data-highlighted:text-blue-300 outline-hidden relative flex w-full cursor-default select-none items-center gap-2 rounded-lg py-2.5 pl-3 pr-8 text-sm font-medium text-gray-700 dark:text-gray-200 transition-all duration-150 hover:bg-blue-100 dark:hover:bg-blue-800/40 hover:text-blue-600 dark:hover:text-blue-300 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
               )}
             >
               {#snippet children({ selected })}
-                <CheckIcon
-                  class={cn(
-                    'mr-2 size-4 text-blue-600 dark:text-blue-400',
-                    !selected && 'opacity-0',
-                  )}
-                />
+                <span
+                  class="absolute right-2 flex size-3.5 items-center justify-center"
+                >
+                  {#if selected}
+                    <CheckIcon
+                      class="size-4 text-blue-600 dark:text-blue-400"
+                    />
+                  {/if}
+                </span>
                 {#if itemRenderer}
                   {@render itemRenderer({ item, selected })}
                 {:else}
-                  {item.label}
+                  <span class="truncate">{item.label}</span>
+                  {#if item.description}
+                    <span
+                      class="text-xs text-gray-400 dark:text-gray-500 truncate ml-1"
+                    >
+                      ({item.description})
+                    </span>
+                  {/if}
                 {/if}
               {/snippet}
             </Combobox.Item>

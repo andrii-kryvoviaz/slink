@@ -1,1 +1,1 @@
-export { default as Combobox } from './combobox.svelte';
+export { default as Combobox, type ComboboxItem } from './combobox.svelte';
