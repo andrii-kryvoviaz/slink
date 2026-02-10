@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { TagSelector } from '@slink/feature/Tag';
+  import { useTagOperations } from '@slink/feature/Tag';
+  import { Combobox } from '@slink/ui/components/combobox';
+  import type { ComboboxItem } from '@slink/ui/components/combobox';
   import { Modal } from '@slink/ui/components/dialog';
   import { Input } from '@slink/ui/components/input';
 
   import Icon from '@iconify/svelte';
-
-  import type { Tag } from '@slink/api/Resources/TagResource';
 
   interface Props {
     isCreating: boolean;
@@ -17,17 +17,27 @@
   let { isCreating, onSubmit, onCancel, errors = {} }: Props = $props();
 
   let name = $state('');
-  let selectedParentTag = $state<Tag[]>([]);
+  let selectedParentTagId = $state('');
 
-  const handleParentTagChange = (tags: Tag[]) => {
-    selectedParentTag = tags;
+  const { loadTags, isLoadingTags, tagsResponse } = useTagOperations();
+
+  const tagItems = $derived<ComboboxItem[]>(
+    ($tagsResponse?.data || []).map((tag) => ({
+      value: tag.id,
+      label: tag.name,
+      description: tag.path,
+    })),
+  );
+
+  const handleTagSearch = (query: string) => {
+    loadTags(query);
   };
 
   function handleSubmit(event: Event) {
     event.preventDefault();
     const data = {
       name: name.trim(),
-      parentId: selectedParentTag[0]?.id,
+      parentId: selectedParentTagId || undefined,
     };
     onSubmit(data);
   }
@@ -73,13 +83,14 @@
         >
           Parent Tag (Optional)
         </label>
-        <TagSelector
-          selectedTags={selectedParentTag}
-          onTagsChange={handleParentTagChange}
+        <Combobox
+          items={tagItems}
+          bind:value={selectedParentTagId}
           placeholder="Search for parent tag..."
-          variant="minimal"
-          allowCreate={false}
-          singleSelect={true}
+          onSearch={handleTagSearch}
+          loading={$isLoadingTags}
+          clearable={true}
+          emptyMessage="No matching tags found."
         />
       </div>
     </div>
