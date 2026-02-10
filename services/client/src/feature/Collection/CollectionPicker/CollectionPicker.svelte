@@ -13,6 +13,7 @@
     createModalState: CreateCollectionModalState;
     variant?: CollectionPickerVariant;
     onToggle?: (result: { added: boolean; collectionId: string }) => void;
+    onBeforeCreate?: () => void;
   }
 
   let {
@@ -20,6 +21,7 @@
     createModalState,
     variant = 'popover',
     onToggle,
+    onBeforeCreate,
   }: Props = $props();
 
   const selectedIds = $derived(
@@ -36,6 +38,7 @@
   };
 
   const handleCreateNew = () => {
+    onBeforeCreate?.();
     createModalState.open((collection) => {
       pickerState.addCollection(collection);
     });

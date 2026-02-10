@@ -141,6 +141,7 @@
         pickerState={picker}
         {createModalState}
         variant="popover"
+        onBeforeCreate={() => (isOpen = false)}
         onToggle={(result) => {
           if (result) {
             onCollectionChange?.(result.collectionId, result.added);

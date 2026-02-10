@@ -46,6 +46,7 @@
   };
 
   const handleCreateNew = () => {
+    isOpen = false;
     createModalState.open((tag) => {
       selectionState.addTag(tag);
       onTagsChange?.([...selectedTags, tag]);

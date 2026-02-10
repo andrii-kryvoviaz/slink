@@ -55,6 +55,7 @@
   };
 
   const handleCreateNew = () => {
+    isOpen = false;
     createModalState.open((collection) => {
       selectionState.addCollection(collection);
       onCollectionsChange?.([...selectedCollections, collection]);
