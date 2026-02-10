@@ -8,6 +8,8 @@ export interface Tag {
   isRoot: boolean;
   depth: number;
   imageCount: number;
+  childrenCount?: number;
+  hasChildren?: boolean;
   createdAt?: string;
   updatedAt?: string;
   children?: Tag[];
@@ -50,6 +52,14 @@ export class TagResource extends AbstractResource {
 
   async getById(id: string): Promise<Tag> {
     return this.get(`/tags/${id}`);
+  }
+
+  async getRootTags(): Promise<TagListingResponse> {
+    return this.get('/tags/root');
+  }
+
+  async getChildren(id: string): Promise<TagListingResponse> {
+    return this.get(`/tags/${id}/children`);
   }
 
   async getByIds(ids: string[]): Promise<Tag[]> {

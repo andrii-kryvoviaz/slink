@@ -2,6 +2,8 @@
   import { CreateTagDialog, TagsSkeleton } from '@slink/feature/Tag';
   import { TagDataTable } from '@slink/feature/Tag/TagDataTable';
   import { Button } from '@slink/ui/components/button';
+  import { ToggleGroup } from '@slink/ui/components';
+  import type { ToggleGroupOption } from '@slink/ui/components';
   import { onMount } from 'svelte';
 
   import { page } from '$app/state';
@@ -30,6 +32,20 @@
   });
 
   let searchQuery = $state('');
+  let viewMode = $state<'table' | 'tree'>('table');
+
+  const viewModeOptions: ToggleGroupOption<'table' | 'tree'>[] = [
+    {
+      value: 'table',
+      label: 'Table',
+      icon: 'lucide:table',
+    },
+    {
+      value: 'tree',
+      label: 'Tree',
+      icon: 'lucide:list-tree',
+    },
+  ];
 
   onMount(() => {
     tagFeed.includeChildren = true;
@@ -86,16 +102,26 @@
             Create and organize tags for your images
           </p>
         </div>
-        <Button
-          variant="glass"
-          size="sm"
-          rounded="full"
-          onclick={handleCreateTag}
-          class="ml-4 gap-2"
-        >
-          <Icon icon="lucide:plus" class="h-4 w-4" />
-          <span class="hidden sm:inline">Create Tag</span>
-        </Button>
+        <div class="flex items-center gap-3">
+          <ToggleGroup
+            value={viewMode}
+            options={viewModeOptions}
+            onValueChange={(value) => {
+              viewMode = value as 'table' | 'tree';
+            }}
+            aria-label="Tag view mode"
+          />
+          <Button
+            variant="glass"
+            size="sm"
+            rounded="full"
+            onclick={handleCreateTag}
+            class="gap-2"
+          >
+            <Icon icon="lucide:plus" class="h-4 w-4" />
+            <span class="hidden sm:inline">Create Tag</span>
+          </Button>
+        </div>
       </div>
     </div>
 
@@ -114,6 +140,7 @@
         {tableSettings}
         onPageChange={handlePageChange}
         onPageSizeChange={handlePageSizeChange}
+        {viewMode}
       />
     {/if}
   </div>
