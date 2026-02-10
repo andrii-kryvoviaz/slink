@@ -27,23 +27,17 @@
     {#snippet description()}Your API key has been created{/snippet}
   </Modal.Header>
 
-  <div
-    class="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-xl p-4"
-  >
-    <div class="flex items-center gap-3 mb-3">
-      <span class="text-sm font-medium text-green-800 dark:text-green-200">
-        Your API Key
-      </span>
-    </div>
+  <div class="space-y-2">
+    <span class="text-sm font-medium text-foreground/60">Your API Key</span>
     <CopyContainer
       value={createdKey.key}
       placeholder="Your API key will appear here..."
       size="md"
-      variant="success"
+      variant="default"
     />
   </div>
 
-  <Modal.Notice variant="info">
+  <Modal.Notice variant="warning">
     {#snippet icon()}
       <Icon icon="ph:warning-duotone" />
     {/snippet}
@@ -57,7 +51,7 @@
   <Modal.Footer>
     {#snippet actions()}
       <Button
-        variant="outline"
+        variant="glass"
         size="sm"
         rounded="full"
         onclick={onClose}
@@ -66,7 +60,7 @@
         Close
       </Button>
       <Button
-        variant="outline-green"
+        variant="primary"
         size="sm"
         rounded="full"
         onclick={onDownloadConfig}
