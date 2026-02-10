@@ -13,6 +13,7 @@
     type ModalBackground,
     type ModalSize,
     type ModalVariant,
+    modalAccentVariants,
     modalContentVariants,
   } from './modal.theme.js';
 
@@ -26,7 +27,7 @@
     backdrop = 'enabled',
     animation = 'fade',
     size = 'md',
-    background = 'glass',
+    background = 'frosted',
     ...restProps
   }: WithoutChildrenOrChild<DialogPrimitive.ContentProps> & {
     portalProps?: DialogPrimitive.PortalProps;
@@ -49,13 +50,17 @@
   <DialogPrimitive.Content
     bind:ref
     data-slot="dialog-content"
-    class={cn(modalContentVariants({ size, animation, background }), className)}
+    class={cn(
+      modalContentVariants({ size, animation, background }),
+      modalAccentVariants({ variant }),
+      className,
+    )}
     {...restProps}
   >
     {@render children?.()}
     {#if showCloseButton}
       <DialogPrimitive.Close
-        class="opacity-0 group-hover:opacity-100 w-8 h-8 flex items-center justify-center rounded-lg bg-white/80 dark:bg-slate-700/80 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-red-500/20 shadow-sm absolute end-4 top-4"
+        class="opacity-0 group-hover:opacity-100 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 dark:bg-white/5 backdrop-blur-sm border border-white/[0.08] dark:border-white/[0.04] hover:border-red-500/20 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-red-500/20 absolute end-4 top-4"
       >
         <XIcon class="h-4 w-4" />
         <span class="sr-only">Close</span>

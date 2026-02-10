@@ -1,0 +1,36 @@
+@layer base {
+  :root {
+    --modal-overlay-tint: oklch(0.3 0.01 270 / 0.35);
+  }
+
+  .dark {
+    --modal-overlay-tint: oklch(0.08 0.01 270 / 0.6);
+  }
+}
+
+@layer utilities {
+  .modal-glass-highlight {
+    position: relative;
+  }
+
+  .modal-glass-highlight::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      135deg,
+      hsl(0 0% 100% / 0.15) 0%,
+      transparent 40%,
+      transparent 60%,
+      hsl(0 0% 100% / 0.05) 100%
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}

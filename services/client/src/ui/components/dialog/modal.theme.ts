@@ -11,32 +11,33 @@ export type ModalVariant =
 export type ModalBackdrop = 'enabled' | 'subtle' | 'disabled';
 export type ModalAnimation = 'fade' | 'slide' | 'none';
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl';
-export type ModalBackground = 'glass' | 'solid';
+export type ModalBackground = 'glass' | 'frosted' | 'solid';
 
-export const modalOverlayVariants = cva(['fixed inset-0 z-30'], {
-  variants: {
-    backdrop: {
-      enabled: 'bg-black/30',
-      subtle: 'bg-black/10',
-      disabled: 'bg-transparent',
+export const modalOverlayVariants = cva(
+  ['fixed inset-0 z-30 backdrop-blur-sm'],
+  {
+    variants: {
+      backdrop: {
+        enabled: 'bg-[var(--modal-overlay-tint)]',
+        subtle: 'bg-black/10 backdrop-blur-[2px]',
+        disabled: 'bg-transparent backdrop-blur-none',
+      },
+      animation: {
+        fade: 'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 duration-300',
+        slide:
+          'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 duration-300',
+        none: '',
+      },
     },
-    animation: {
-      fade: 'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
-      slide:
-        'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
-      none: '',
-    },
+    defaultVariants: { backdrop: 'enabled', animation: 'fade' },
   },
-  defaultVariants: {
-    backdrop: 'enabled',
-    animation: 'fade',
-  },
-});
+);
 
 export const modalContentVariants = cva(
   [
-    'group fixed left-[50%] top-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 p-6 duration-200',
-    'border rounded-2xl shadow-sm',
+    'group fixed left-[50%] top-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 p-6',
+    'rounded-3xl',
+    'modal-glass-highlight',
   ],
   {
     variants: {
@@ -48,64 +49,75 @@ export const modalContentVariants = cva(
         '2xl': 'sm:max-w-6xl',
       },
       animation: {
-        fade: 'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
-        slide:
-          'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:slide-out-to-bottom-4 data-[state=open]:slide-in-from-bottom-4',
+        fade: [
+          'data-[state=open]:animate-in data-[state=closed]:animate-out',
+          'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
+          'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
+          'data-[state=closed]:duration-200 data-[state=open]:duration-300',
+        ],
+        slide: [
+          'data-[state=open]:animate-in data-[state=closed]:animate-out',
+          'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
+          'data-[state=closed]:slide-out-to-bottom-4 data-[state=open]:slide-in-from-bottom-4',
+          'data-[state=closed]:duration-200 data-[state=open]:duration-300',
+        ],
         none: '',
       },
       background: {
         glass: [
-          'dark:bg-black/80 bg-white/80 backdrop-blur-xl',
-          'border-white/10',
+          'backdrop-blur-[28px] backdrop-saturate-[1.6]',
+          'bg-card/65',
+          'shadow-2xl',
+          'border border-border/15 ring-1 ring-white/[0.05]',
         ],
-        solid: ['bg-black/90 backdrop-blur-xl', 'border-white/10'],
+        frosted: [
+          'backdrop-blur-[28px] backdrop-saturate-[1.6]',
+          'bg-background/70',
+          'shadow-2xl',
+          'border border-border/15 ring-1 ring-white/[0.05]',
+        ],
+        solid: ['bg-black/90 backdrop-blur-xl', 'border border-white/10'],
       },
     },
-    defaultVariants: {
-      size: 'md',
-      animation: 'fade',
-      background: 'glass',
+    defaultVariants: { size: 'md', animation: 'fade', background: 'frosted' },
+  },
+);
+
+export const modalAccentVariants = cva(
+  'shadow-[0_0_0_1px_rgb(100_116_139/0.06)]',
+  {
+    variants: {
+      variant: {
+        blue: '',
+        green: '',
+        purple: '',
+        amber: '',
+        neutral: '',
+        danger: '',
+      },
     },
+    defaultVariants: { variant: 'blue' },
   },
 );
 
 export const modalHeaderIconContainerVariants = cva(
   [
-    'w-10 h-10 rounded-lg flex items-center justify-center',
-    'border flex-shrink-0',
+    'w-10 h-10 rounded-xl flex items-center justify-center',
+    'flex-shrink-0',
+    'backdrop-blur-sm ring-1 ring-white/[0.08]',
   ],
   {
     variants: {
       variant: {
-        blue: [
-          'bg-blue-50/80 dark:bg-blue-950/80',
-          'border-blue-200/60 dark:border-blue-800/60',
-        ],
-        green: [
-          'bg-green-50/80 dark:bg-green-950/80',
-          'border-green-200/60 dark:border-green-800/60',
-        ],
-        purple: [
-          'bg-indigo-50/80 dark:bg-indigo-950/80',
-          'border-indigo-200/60 dark:border-indigo-800/60',
-        ],
-        amber: [
-          'bg-amber-50/80 dark:bg-amber-950/80',
-          'border-amber-200/60 dark:border-amber-800/60',
-        ],
-        neutral: [
-          'bg-slate-50/80 dark:bg-slate-800/80',
-          'border-slate-200/60 dark:border-slate-700/60',
-        ],
-        danger: [
-          'bg-red-50/80 dark:bg-red-950/80',
-          'border-red-200/60 dark:border-red-800/60',
-        ],
+        blue: 'bg-blue-500/10 dark:bg-blue-400/10',
+        green: 'bg-green-500/10 dark:bg-green-400/10',
+        purple: 'bg-indigo-500/10 dark:bg-indigo-400/10',
+        amber: 'bg-amber-500/10 dark:bg-amber-400/10',
+        neutral: 'bg-slate-500/10 dark:bg-slate-400/10',
+        danger: 'bg-red-500/10 dark:bg-red-400/10',
       },
     },
-    defaultVariants: {
-      variant: 'blue',
-    },
+    defaultVariants: { variant: 'blue' },
   },
 );
 
@@ -148,6 +160,7 @@ export const buttonVariantMap: Record<ModalVariant, string> = {
 
 export type ModalOverlayVariants = VariantProps<typeof modalOverlayVariants>;
 export type ModalContentVariants = VariantProps<typeof modalContentVariants>;
+export type ModalAccentVariants = VariantProps<typeof modalAccentVariants>;
 export type ModalHeaderIconContainerVariants = VariantProps<
   typeof modalHeaderIconContainerVariants
 >;

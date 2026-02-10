@@ -50,22 +50,13 @@ export const modalIcon = cva(['[&>svg]:h-5 [&>svg]:w-5'], {
 });
 
 export const noticeContainer = cva(
-  ['relative overflow-hidden rounded-xl p-4', 'border'],
+  ['relative rounded-xl p-4', 'backdrop-blur-sm ring-1 ring-white/[0.08]'],
   {
     variants: {
       variant: {
-        info: [
-          'bg-blue-50 dark:bg-blue-950',
-          'border-blue-200 dark:border-blue-800',
-        ],
-        warning: [
-          'bg-amber-50 dark:bg-amber-950',
-          'border-amber-200 dark:border-amber-800',
-        ],
-        success: [
-          'bg-green-50 dark:bg-green-950',
-          'border-green-200 dark:border-green-800',
-        ],
+        info: 'bg-blue-500/[0.06] dark:bg-blue-400/[0.06]',
+        warning: 'bg-amber-500/[0.06] dark:bg-amber-400/[0.06]',
+        success: 'bg-green-500/[0.06] dark:bg-green-400/[0.06]',
       },
     },
     defaultVariants: {
@@ -88,13 +79,16 @@ export const noticeOverlay = cva(['hidden'], {
 });
 
 export const noticeIconContainer = cva(
-  ['w-8 h-8 rounded-lg flex items-center justify-center'],
+  [
+    'w-8 h-8 rounded-lg flex items-center justify-center',
+    'backdrop-blur-sm ring-1 ring-white/[0.08]',
+  ],
   {
     variants: {
       variant: {
-        info: 'bg-blue-100 dark:bg-blue-900',
-        warning: 'bg-amber-100 dark:bg-amber-900',
-        success: 'bg-green-100 dark:bg-green-900',
+        info: 'bg-blue-500/10 dark:bg-blue-400/10',
+        warning: 'bg-amber-500/10 dark:bg-amber-400/10',
+        success: 'bg-green-500/10 dark:bg-green-400/10',
       },
     },
     defaultVariants: {
@@ -119,9 +113,9 @@ export const noticeIcon = cva(['[&>svg]:h-4 [&>svg]:w-4'], {
 export const noticeTitle = cva(['text-sm font-semibold leading-tight mb-1'], {
   variants: {
     variant: {
-      info: 'text-blue-900 dark:text-blue-100',
-      warning: 'text-amber-900 dark:text-amber-100',
-      success: 'text-green-900 dark:text-green-100',
+      info: 'text-blue-700 dark:text-blue-300',
+      warning: 'text-amber-700 dark:text-amber-300',
+      success: 'text-green-700 dark:text-green-300',
     },
   },
   defaultVariants: {
@@ -132,9 +126,9 @@ export const noticeTitle = cva(['text-sm font-semibold leading-tight mb-1'], {
 export const noticeText = cva(['text-sm leading-relaxed'], {
   variants: {
     variant: {
-      info: 'text-blue-700 dark:text-blue-300',
-      warning: 'text-amber-700 dark:text-amber-300',
-      success: 'text-green-700 dark:text-green-300',
+      info: 'text-blue-600/80 dark:text-blue-300/70',
+      warning: 'text-amber-600/80 dark:text-amber-300/70',
+      success: 'text-green-600/80 dark:text-green-300/70',
     },
   },
   defaultVariants: {

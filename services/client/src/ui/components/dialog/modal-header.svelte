@@ -21,7 +21,9 @@
   const variant = $derived(variantProp ?? getModalVariant());
 </script>
 
-<Dialog.Header class="flex flex-row items-start gap-4 pb-2">
+<Dialog.Header
+  class="flex flex-row items-start gap-4 pb-4 border-b border-foreground/[0.04] dark:border-foreground/[0.06]"
+>
   <div class={modalHeaderIconContainerVariants({ variant })}>
     <span class={modalHeaderIconVariants({ variant })}>
       {@render icon()}
@@ -29,13 +31,13 @@
   </div>
   <div class="flex-1 min-w-0">
     <Dialog.Title
-      class="text-xl font-semibold text-slate-900 dark:text-white tracking-tight"
+      class="text-lg font-semibold text-slate-900 dark:text-white/95 tracking-tight"
     >
       {@render title()}
     </Dialog.Title>
     {#if description}
       <Dialog.Description
-        class="text-sm text-slate-600 dark:text-slate-400 mt-1"
+        class="text-sm text-slate-600 dark:text-slate-400/80 mt-1"
       >
         {@render description()}
       </Dialog.Description>

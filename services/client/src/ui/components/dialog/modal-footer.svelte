@@ -34,13 +34,15 @@
   const submitVariant = $derived(buttonVariantMap[variant] as any);
 </script>
 
-<Dialog.Footer class="flex gap-3 pt-2">
+<Dialog.Footer
+  class="flex gap-3 pt-4 border-t border-foreground/[0.04] dark:border-foreground/[0.06]"
+>
   {#if actions}
     {@render actions()}
   {:else}
     <Button
       type="button"
-      variant="outline"
+      variant="glass"
       size="sm"
       rounded="full"
       class="flex-1"
