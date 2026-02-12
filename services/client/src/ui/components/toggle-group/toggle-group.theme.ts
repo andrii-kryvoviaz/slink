@@ -6,8 +6,8 @@ export const toggleGroupTheme = cva(
     variants: {
       size: {
         sm: 'p-0.5',
-        md: 'p-1',
-        lg: 'p-1.5',
+        md: 'p-0.5',
+        lg: 'p-1',
       },
       orientation: {
         horizontal: 'flex-row',
@@ -43,9 +43,9 @@ export const toggleGroupItemTheme = cva(
           'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-600/40',
       },
       size: {
-        sm: 'px-2 py-1 text-xs',
-        md: 'px-3 py-1.5 text-sm',
-        lg: 'px-4 py-2 text-base',
+        sm: 'px-2 py-0.5 text-xs',
+        md: 'px-2.5 py-1 text-xs',
+        lg: 'px-3 py-1.5 text-sm',
       },
       orientation: {
         horizontal: '',
@@ -64,8 +64,8 @@ export const toggleGroupIconTheme = cva('shrink-0', {
   variants: {
     size: {
       sm: 'w-3 h-3',
-      md: 'w-4 h-4',
-      lg: 'w-5 h-5',
+      md: 'w-3.5 h-3.5',
+      lg: 'w-4 h-4',
     },
     hasLabel: {
       true: '',
@@ -81,12 +81,12 @@ export const toggleGroupIconTheme = cva('shrink-0', {
     {
       size: 'md',
       hasLabel: true,
-      className: 'mr-1.5',
+      className: 'mr-1',
     },
     {
       size: 'lg',
       hasLabel: true,
-      className: 'mr-2',
+      className: 'mr-1.5',
     },
   ],
   defaultVariants: {
