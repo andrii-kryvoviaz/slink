@@ -162,9 +162,6 @@ export const themeIcons: string[] = [
   'lucide:info',
   'ph:copyright',
   'ph:scales',
-  'lucide:file',
-  'lucide:maximize-2',
-  'lucide:database',
   'lucide:bookmark',
   'ph:warning-fill',
   'solar:gallery-linear',
@@ -207,4 +204,6 @@ export const themeIcons: string[] = [
   'heroicons:adjustments-horizontal',
   'heroicons:arrows-up-down',
   'lucide:eye-off',
+  'lucide:image',
+  'lucide:hard-drive',
 ];

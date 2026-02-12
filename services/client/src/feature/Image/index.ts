@@ -24,6 +24,7 @@ export { default as HistoryListView } from './History/HistoryListView.svelte';
 export * from './History/HistoryView.theme';
 export * from './History/HistoryView.types';
 export { default as ImageMetadata } from './History/ImageMetadata.svelte';
+export * from './History/ImageMetadata.theme';
 export { default as SelectionActionBar } from './History/SelectionActionBar.svelte';
 export * from './History/useHistoryItemActions.svelte';
 export { default as ImageDeleteConfirmation } from './ImageDeleteConfirmation/ImageDeleteConfirmation.svelte';

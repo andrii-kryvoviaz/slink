@@ -7,6 +7,13 @@
 
   import type { ImageListingItem } from '@slink/api/Response';
 
+  import {
+    metadataContainerTheme,
+    metadataDividerTheme,
+    metadataIconTheme,
+    metadataItemTheme,
+  } from './ImageMetadata.theme';
+
   type Gap = 'sm' | 'md';
 
   interface Props {
@@ -15,42 +22,36 @@
   }
 
   let { item, gap = 'sm' }: Props = $props();
-
-  const gapClasses: Record<Gap, string> = {
-    sm: 'gap-x-2',
-    md: 'gap-x-3',
-  };
 </script>
 
-<div
-  class="flex flex-wrap items-center gap-y-1 text-xs text-gray-500 dark:text-gray-400 {gapClasses[
-    gap
-  ]}"
->
-  <span class="inline-flex items-center gap-1" title="File type">
-    <Icon icon="lucide:file" class="w-3 h-3" />
-    {formatMimeType(item.metadata.mimeType)}
-  </span>
-  <span class="text-gray-300 dark:text-gray-700">•</span>
-  <span class="inline-flex items-center gap-1" title="Dimensions">
-    <Icon icon="lucide:maximize-2" class="w-3 h-3" />
-    {item.metadata.width}×{item.metadata.height}
-  </span>
-  <span class="text-gray-300 dark:text-gray-700">•</span>
-  <span class="inline-flex items-center gap-1" title="File size">
-    <Icon icon="lucide:database" class="w-3 h-3" />
-    {bytesToSize(item.metadata.size)}
-  </span>
-  {#if item.bookmarkCount > 0}
-    <span class="text-gray-300 dark:text-gray-700">•</span>
-    <span class="inline-flex items-center gap-1" title="Bookmarks">
-      <Icon icon="lucide:bookmark" class="w-3 h-3" />
-      {item.bookmarkCount.toLocaleString()}
+<div class="overflow-hidden">
+  <div class={metadataContainerTheme({ gap })}>
+    <span class={metadataItemTheme({ gap })} title="File type & dimensions">
+      <Icon icon="lucide:image" class={metadataIconTheme({ gap })} />
+      <span class="font-medium text-gray-600 dark:text-gray-300">
+        {formatMimeType(item.metadata.mimeType)}
+      </span>
+      {item.metadata.width}×{item.metadata.height}
     </span>
-  {/if}
-  <span class="text-gray-300 dark:text-gray-700">•</span>
-  <span class="inline-flex items-center gap-1" title="Uploaded">
-    <Icon icon="lucide:clock" class="w-3 h-3" />
-    <FormattedDate date={item.attributes.createdAt.timestamp} />
-  </span>
+
+    <span class="relative {metadataItemTheme({ gap })}" title="File size">
+      <span class={metadataDividerTheme({ gap })}></span>
+      <Icon icon="lucide:hard-drive" class={metadataIconTheme({ gap })} />
+      {bytesToSize(item.metadata.size)}
+    </span>
+
+    {#if item.bookmarkCount > 0}
+      <span class="relative {metadataItemTheme({ gap })}" title="Bookmarks">
+        <span class={metadataDividerTheme({ gap })}></span>
+        <Icon icon="lucide:bookmark" class={metadataIconTheme({ gap })} />
+        {item.bookmarkCount.toLocaleString()}
+      </span>
+    {/if}
+
+    <span class="relative {metadataItemTheme({ gap })}" title="Uploaded">
+      <span class={metadataDividerTheme({ gap })}></span>
+      <Icon icon="lucide:clock" class={metadataIconTheme({ gap })} />
+      <FormattedDate date={item.attributes.createdAt.timestamp} />
+    </span>
+  </div>
 </div>
