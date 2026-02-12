@@ -2,7 +2,7 @@ import { themeIcons } from '@slink/theme.icons';
 import { error, redirect } from '@sveltejs/kit';
 
 import { browser } from '$app/environment';
-import { goto } from '$app/navigation';
+import { goto, invalidateAll } from '$app/navigation';
 import { initializeDI } from '$lib/di/container';
 
 import { type ApiClientType, createApiClient } from '@slink/api/Client';
@@ -11,59 +11,40 @@ import '@slink/utils/string/stringExtensions';
 import { preloadIconSet } from '@slink/utils/ui/preloadIconSet';
 
 export class Application {
-  private static isInitialized = false;
-  private static initPromise: Promise<void> | null = null;
   private static _api: ApiClientType;
+  private static _bootstrapped: Promise<void> | null = null;
 
-  public static get api(): ApiClientType {
-    return Application._api;
+  static get api(): ApiClientType {
+    return this._api;
   }
 
-  async initialize(): Promise<void> {
-    if (Application.isInitialized) {
-      return;
-    }
+  static async initialize(fetch: typeof globalThis.fetch): Promise<void> {
+    this._api = createApiClient(fetch);
+    this.registerApiEventHandlers();
 
-    if (Application.initPromise) {
-      return Application.initPromise;
-    }
-
-    Application.initPromise = this.doInitialize();
-    await Application.initPromise;
-    Application.isInitialized = true;
+    this._bootstrapped ??= this.bootstrap();
+    return this._bootstrapped;
   }
 
-  private async doInitialize(): Promise<void> {
-    this.setupDependencyInjection();
-    this.setupApiClientEventHandlers();
-    await this.preloadAssets();
-  }
-
-  setupApiClient(fetch: typeof globalThis.fetch): void {
-    Application._api = createApiClient(fetch);
-  }
-
-  private setupDependencyInjection(): void {
+  private static async bootstrap(): Promise<void> {
     initializeDI();
+    await preloadIconSet(themeIcons);
   }
 
-  private setupApiClientEventHandlers(): void {
-    Application.api.on('unauthorized', () => {
+  private static registerApiEventHandlers(): void {
+    this.api.on('unauthorized', async () => {
       if (!browser) {
         redirect(302, '/profile/login');
       }
 
+      await invalidateAll();
       goto('/profile/login');
     });
 
-    Application.api.on('forbidden', () => {
+    this.api.on('forbidden', () => {
       error(403, {
         message: 'You do not have permission to access this page.',
       });
     });
-  }
-
-  private async preloadAssets(): Promise<void> {
-    await preloadIconSet(themeIcons);
   }
 }

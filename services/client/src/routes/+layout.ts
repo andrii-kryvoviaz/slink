@@ -5,10 +5,6 @@ import '@slink/utils/string/stringExtensions';
 import type { LayoutLoad } from './$types';
 
 export const load: LayoutLoad = async ({ fetch, data }) => {
-  const app = new Application();
-
-  app.setupApiClient(fetch);
-  await app.initialize();
-
+  await Application.initialize(fetch);
   return data;
 };
