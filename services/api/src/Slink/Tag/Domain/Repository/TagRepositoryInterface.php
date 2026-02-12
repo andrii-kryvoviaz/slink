@@ -7,6 +7,7 @@ namespace Slink\Tag\Domain\Repository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Tag\Domain\Filter\TagListFilter;
@@ -61,6 +62,15 @@ interface TagRepositoryInterface extends ServiceEntityRepositoryInterface {
    * @return TagView[]
    */
   public function findChildren(ID $parentId, ID $userId): array;
+
+  /**
+   * @param ID $parentId
+   * @param ID $userId
+   * @return array<string>
+   */
+  public function findChildIds(ID $parentId, ID $userId): array;
+
+  public function updateDescendantPaths(string $oldPath, string $newPath, DateTime $updatedAt): void;
 
   /**
    * @param ID $userId

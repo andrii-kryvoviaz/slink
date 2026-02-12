@@ -7,11 +7,13 @@ namespace Slink\Tag\Application\Command\DeleteTag;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Tag\Domain\Exception\TagAccessDeniedException;
+use Slink\Tag\Domain\Repository\TagRepositoryInterface;
 use Slink\Tag\Domain\Repository\TagStoreRepositoryInterface;
 
 final readonly class DeleteTagHandler implements CommandHandlerInterface {
   public function __construct(
     private TagStoreRepositoryInterface $tagStore,
+    private TagRepositoryInterface $tagRepository,
   ) {
   }
 
@@ -25,7 +27,9 @@ final readonly class DeleteTagHandler implements CommandHandlerInterface {
       throw new TagAccessDeniedException();
     }
 
-    $tag->delete();
+    $childIds = $this->tagRepository->findChildIds($tagId, $tag->getUserId());
+
+    $tag->delete($childIds);
     $this->tagStore->store($tag);
   }
 }

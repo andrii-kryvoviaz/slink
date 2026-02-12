@@ -23,6 +23,7 @@ export { default as TagInput } from './TagInput/TagInput.svelte';
 export * from './TagInput/TagInput.theme';
 export { default as TagListItem } from './TagListItem/TagListItem.svelte';
 export * from './TagListItem/TagListItem.theme';
+export { default as TagMoveDialog } from './TagMoveDialog/TagMoveDialog.svelte';
 export { default as TagListView } from './TagPicker/TagListView.svelte';
 export * from './TagPicker/TagPicker.theme';
 export { default as TagSelector } from './TagSelector/TagSelector.svelte';

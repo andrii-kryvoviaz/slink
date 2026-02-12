@@ -28,7 +28,7 @@ class ImageView extends AbstractView implements CursorAwareInterface {
   #[ORM\ManyToMany(targetEntity: TagView::class)]
   #[ORM\JoinTable(name: 'image_to_tag')]
   #[ORM\JoinColumn(name: 'image_id', referencedColumnName: 'uuid')]
-  #[ORM\InverseJoinColumn(name: 'tag_id', referencedColumnName: 'uuid')]
+  #[ORM\InverseJoinColumn(name: 'tag_id', referencedColumnName: 'uuid', onDelete: 'CASCADE')]
   private Collection $tags;
 
   #[ORM\OneToOne(targetEntity: ImageLicenseView::class, mappedBy: 'image', cascade: ['persist', 'remove'], fetch: 'EAGER')]

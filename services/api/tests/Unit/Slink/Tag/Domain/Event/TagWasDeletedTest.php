@@ -12,59 +12,93 @@ use Slink\Tag\Domain\Event\TagWasDeleted;
 final class TagWasDeletedTest extends TestCase {
 
   #[Test]
-  public function itCreatesEventWithId(): void {
+  public function itCreatesEventWithIdAndUserId(): void {
     $id = ID::generate();
-    $event = new TagWasDeleted($id);
+    $event = new TagWasDeleted($id, 'user-123');
 
     $this->assertEquals($id, $event->id);
+    $this->assertEquals('user-123', $event->userId);
+  }
+
+  #[Test]
+  public function itCreatesEventWithDirectChildIds(): void {
+    $id = ID::generate();
+    $event = new TagWasDeleted($id, 'user-123', ['child-1', 'child-2']);
+
+    $this->assertEquals(['child-1', 'child-2'], $event->directChildIds);
+  }
+
+  #[Test]
+  public function itDefaultsToEmptyChildIds(): void {
+    $id = ID::generate();
+    $event = new TagWasDeleted($id, 'user-123');
+
+    $this->assertEquals([], $event->directChildIds);
   }
 
   #[Test]
   public function itSerializesToPayload(): void {
     $id = ID::generate();
-    $event = new TagWasDeleted($id);
+    $event = new TagWasDeleted($id, 'user-123', ['child-1', 'child-2']);
     $payload = $event->toPayload();
 
     $this->assertArrayHasKey('uuid', $payload);
+    $this->assertArrayHasKey('userId', $payload);
+    $this->assertArrayHasKey('directChildIds', $payload);
     $this->assertEquals($id->toString(), $payload['uuid']);
+    $this->assertEquals('user-123', $payload['userId']);
+    $this->assertEquals(['child-1', 'child-2'], $payload['directChildIds']);
   }
 
   #[Test]
   public function itDeserializesFromPayload(): void {
     $id = ID::generate();
-    $payload = ['uuid' => $id->toString()];
+    $payload = [
+      'uuid' => $id->toString(),
+      'userId' => 'user-456',
+      'directChildIds' => ['child-1', 'child-2'],
+    ];
 
     $event = TagWasDeleted::fromPayload($payload);
 
     $this->assertEquals($id->toString(), $event->id->toString());
+    $this->assertEquals('user-456', $event->userId);
+    $this->assertEquals(['child-1', 'child-2'], $event->directChildIds);
   }
 
   #[Test]
-  public function itHasCorrectPayloadStructure(): void {
+  public function itDeserializesFromPayloadWithoutUserId(): void {
     $id = ID::generate();
-    $event = new TagWasDeleted($id);
-    $payload = $event->toPayload();
+    $payload = ['uuid' => $id->toString()];
 
-    $this->assertCount(1, $payload);
-    $this->assertArrayHasKey('uuid', $payload);
+    $event = TagWasDeleted::fromPayload($payload);
+
+    $this->assertEquals('', $event->userId);
+  }
+
+  #[Test]
+  public function itDeserializesFromPayloadWithoutDirectChildIds(): void {
+    $id = ID::generate();
+    $payload = [
+      'uuid' => $id->toString(),
+      'userId' => 'user-789',
+    ];
+
+    $event = TagWasDeleted::fromPayload($payload);
+
+    $this->assertEquals([], $event->directChildIds);
   }
 
   #[Test]
   public function itRoundTripsCorrectly(): void {
-    $originalId = ID::generate();
-    $originalEvent = new TagWasDeleted($originalId);
-    
+    $id = ID::generate();
+    $originalEvent = new TagWasDeleted($id, 'user-123', ['child-1', 'child-2']);
+
     $payload = $originalEvent->toPayload();
     $recreatedEvent = TagWasDeleted::fromPayload($payload);
 
     $this->assertEquals($originalEvent->id->toString(), $recreatedEvent->id->toString());
-  }
-
-  #[Test]
-  public function itHasPublicIdProperty(): void {
-    $id = ID::generate();
-    $event = new TagWasDeleted($id);
-
-    $this->assertEquals($id, $event->id);
+    $this->assertEquals($originalEvent->userId, $recreatedEvent->userId);
+    $this->assertEquals($originalEvent->directChildIds, $recreatedEvent->directChildIds);
   }
 }

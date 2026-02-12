@@ -11,6 +11,7 @@ use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Tag\Domain\Event\TagWasCreated;
 use Slink\Tag\Domain\Event\TagWasDeleted;
+use Slink\Tag\Domain\Event\TagWasMoved;
 use Slink\Tag\Domain\ValueObject\TagName;
 use Slink\Tag\Domain\ValueObject\TagPath;
 
@@ -41,12 +42,27 @@ final class Tag extends AbstractAggregateRoot {
     return $tag;
   }
 
-  public function delete(): void {
+  public function move(?ID $newParentId, TagPath $newPath): void {
+    $now = DateTime::now();
+    $this->recordThat(new TagWasMoved(
+      $this->aggregateRootId(),
+      $this->path ?? TagPath::fromString('#'),
+      $newPath,
+      $this->parentId,
+      $newParentId,
+      $now,
+    ));
+  }
+
+  /**
+   * @param array<string> $directChildIds
+   */
+  public function delete(array $directChildIds = []): void {
     if ($this->deleted) {
       return;
     }
 
-    $this->recordThat(new TagWasDeleted($this->aggregateRootId()));
+    $this->recordThat(new TagWasDeleted($this->aggregateRootId(), $this->userId->toString(), $directChildIds));
   }
 
   public function applyTagWasCreated(TagWasCreated $event): void {
@@ -56,6 +72,12 @@ final class Tag extends AbstractAggregateRoot {
     $this->parentId = $event->parentId;
     $this->createdAt = $event->createdAt ?? DateTime::now();
     $this->updatedAt = $event->createdAt ?? DateTime::now();
+  }
+
+  public function applyTagWasMoved(TagWasMoved $event): void {
+    $this->path = $event->newPath;
+    $this->parentId = $event->newParentId;
+    $this->updatedAt = $event->updatedAt ?? DateTime::now();
   }
 
   public function applyTagWasDeleted(TagWasDeleted $event): void {

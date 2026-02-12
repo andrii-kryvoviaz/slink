@@ -15,7 +15,7 @@ final class TagPathTest extends TestCase {
   public function itCreatesRootPath(): void {
     $tagName = TagName::fromString('root-tag');
     $tagPath = TagPath::createRoot($tagName);
-    
+
     $this->assertEquals('#root-tag', $tagPath->getValue());
     $this->assertEquals(1, $tagPath->getDepth());
     $this->assertFalse($tagPath->isChild());
@@ -28,7 +28,7 @@ final class TagPathTest extends TestCase {
     $parentPath = TagPath::fromString('#parent');
     $childName = TagName::fromString('child');
     $childPath = TagPath::createChild($parentPath, $childName);
-    
+
     $this->assertEquals('#parent/child', $childPath->getValue());
     $this->assertEquals(2, $childPath->getDepth());
     $this->assertTrue($childPath->isChild());
@@ -40,7 +40,7 @@ final class TagPathTest extends TestCase {
     $parentPath = TagPath::fromString('#parent/middle');
     $childName = TagName::fromString('child');
     $childPath = TagPath::createChild($parentPath, $childName);
-    
+
     $this->assertEquals('#parent/middle/child', $childPath->getValue());
     $this->assertEquals(3, $childPath->getDepth());
     $this->assertTrue($childPath->isChild());
@@ -50,7 +50,7 @@ final class TagPathTest extends TestCase {
   public function itGetsParentPathCorrectly(): void {
     $childPath = TagPath::fromString('#parent/child');
     $parentPath = $childPath->getParentPath();
-    
+
     $this->assertNotNull($parentPath);
     $this->assertEquals('#parent', $parentPath->getValue());
   }
@@ -59,7 +59,7 @@ final class TagPathTest extends TestCase {
   public function itGetsParentPathForDeepNesting(): void {
     $deepPath = TagPath::fromString('#grandparent/parent/child');
     $parentPath = $deepPath->getParentPath();
-    
+
     $this->assertNotNull($parentPath);
     $this->assertEquals('#grandparent/parent', $parentPath->getValue());
   }
@@ -68,7 +68,7 @@ final class TagPathTest extends TestCase {
   public function itReturnsNullParentForRootPath(): void {
     $rootPath = TagPath::fromString('#root');
     $parentPath = $rootPath->getParentPath();
-    
+
     $this->assertNull($parentPath);
   }
 
@@ -76,7 +76,7 @@ final class TagPathTest extends TestCase {
   public function itExtractsTagNameFromPath(): void {
     $simplePath = TagPath::fromString('#simple-tag');
     $this->assertEquals('simple-tag', $simplePath->getTagName());
-    
+
     $nestedPath = TagPath::fromString('#parent/child/grandchild');
     $this->assertEquals('grandchild', $nestedPath->getTagName());
   }
@@ -99,7 +99,7 @@ final class TagPathTest extends TestCase {
   #[Test]
   public function itCreatesFromString(): void {
     $path = TagPath::fromString('#custom/path');
-    
+
     $this->assertEquals('#custom/path', $path->getValue());
   }
 
@@ -107,7 +107,7 @@ final class TagPathTest extends TestCase {
   public function itCreatesFromPayloadWithValue(): void {
     $payload = ['value' => '#payload/path'];
     $path = TagPath::fromPayload($payload);
-    
+
     $this->assertEquals('#payload/path', $path->getValue());
   }
 
@@ -115,7 +115,7 @@ final class TagPathTest extends TestCase {
   public function itCreatesFromPayloadWithPath(): void {
     $payload = ['path' => '#payload/path/alt'];
     $path = TagPath::fromPayload($payload);
-    
+
     $this->assertEquals('#payload/path/alt', $path->getValue());
   }
 
@@ -123,14 +123,84 @@ final class TagPathTest extends TestCase {
   public function itConvertsToPayload(): void {
     $path = TagPath::fromString('#test/path');
     $payload = $path->toPayload();
-    
+
     $this->assertEquals(['value' => '#test/path'], $payload);
   }
 
   #[Test]
   public function itImplementsToString(): void {
     $path = TagPath::fromString('#string/path');
-    
+
     $this->assertEquals('{"value":"#string\\/path"}', $path->toString());
+  }
+
+  #[Test]
+  public function itReplacesPrefix(): void {
+    $path = TagPath::fromString('#old/child');
+    $result = $path->replacePrefix(TagPath::fromString('#old'), TagPath::fromString('#new'));
+
+    $this->assertEquals('#new/child', $result->getValue());
+  }
+
+  #[Test]
+  public function itReplacesPrefixForDeepPaths(): void {
+    $path = TagPath::fromString('#a/b/c');
+    $result = $path->replacePrefix(TagPath::fromString('#a/b'), TagPath::fromString('#x/y'));
+
+    $this->assertEquals('#x/y/c', $result->getValue());
+  }
+
+  #[Test]
+  public function itReturnsUnchangedPathWhenPrefixDoesNotMatch(): void {
+    $path = TagPath::fromString('#other/path');
+    $result = $path->replacePrefix(TagPath::fromString('#old'), TagPath::fromString('#new'));
+
+    $this->assertEquals('#other/path', $result->getValue());
+  }
+
+  #[Test]
+  public function itReplacesFullPath(): void {
+    $path = TagPath::fromString('#exact');
+    $result = $path->replacePrefix(TagPath::fromString('#exact'), TagPath::fromString('#new'));
+
+    $this->assertEquals('#new', $result->getValue());
+  }
+
+  #[Test]
+  public function itIdentifiesParentRelationship(): void {
+    $parent = TagPath::fromString('#parent');
+    $child = TagPath::fromString('#parent/child');
+
+    $this->assertTrue($parent->isParentOf($child));
+  }
+
+  #[Test]
+  public function itIdentifiesNonParentRelationship(): void {
+    $parent = TagPath::fromString('#parent');
+    $other = TagPath::fromString('#other/child');
+
+    $this->assertFalse($parent->isParentOf($other));
+  }
+
+  #[Test]
+  public function itIdentifiesDescendantRelationship(): void {
+    $child = TagPath::fromString('#parent/child');
+    $parent = TagPath::fromString('#parent');
+
+    $this->assertTrue($child->isDescendantOf($parent));
+  }
+
+  #[Test]
+  public function itIdentifiesNonDescendantRelationship(): void {
+    $child = TagPath::fromString('#parent/child');
+    $other = TagPath::fromString('#other');
+
+    $this->assertFalse($child->isDescendantOf($other));
+  }
+
+  #[Test]
+  public function itIdentifiesRootPaths(): void {
+    $this->assertTrue(TagPath::fromString('#root')->isRoot());
+    $this->assertFalse(TagPath::fromString('#parent/child')->isRoot());
   }
 }

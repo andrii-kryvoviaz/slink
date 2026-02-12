@@ -166,6 +166,24 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
     }
   }
 
+  async moveTag(id: string, newParentId: string | null): Promise<void> {
+    try {
+      const tag = this._items.find((item) => item.id === id);
+      const tagName = tag?.name || 'tag';
+
+      await ApiClient.tag.moveTag({ id, newParentId });
+      toast.success(`Tag "${tagName}" moved successfully`);
+      await this.refetch();
+    } catch (error: any) {
+      const message = extractErrorMessage(
+        error,
+        'Failed to move tag. Please try again.',
+      );
+      toast.error(message);
+      throw error;
+    }
+  }
+
   async deleteTag(id: string): Promise<void> {
     try {
       const tag = this._items.find((item) => item.id === id);

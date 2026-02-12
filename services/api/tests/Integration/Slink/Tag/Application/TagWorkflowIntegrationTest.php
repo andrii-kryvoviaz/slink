@@ -43,7 +43,7 @@ final class TagWorkflowIntegrationTest extends TestCase {
     $createHandler = new CreateTagHandler($tagStore, $duplicateSpec);
     $getByIdHandler = new GetTagByIdHandler($tagRepository);
     $getListHandler = new GetTagListHandler($tagRepository);
-    $deleteHandler = new DeleteTagHandler($tagStore);
+    $deleteHandler = new DeleteTagHandler($tagStore, $tagRepository);
 
     $createCommand = new CreateTagCommand('integration-test-tag');
     $createdTagId = $createHandler($createCommand, $userId);

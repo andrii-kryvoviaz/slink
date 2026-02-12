@@ -116,4 +116,15 @@ final readonly class TagPath extends AbstractValueObject {
   public function isRoot(): bool {
     return !str_contains($this->value, self::SEPARATOR);
   }
+
+  public function replacePrefix(TagPath $old, TagPath $new): self {
+    $oldValue = $old->getValue();
+    $newValue = $new->getValue();
+
+    if (!str_starts_with($this->value, $oldValue)) {
+      return $this;
+    }
+
+    return new self($newValue . substr($this->value, strlen($oldValue)));
+  }
 }

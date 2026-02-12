@@ -23,6 +23,11 @@ export interface UpdateTagRequest {
   parentId?: string;
 }
 
+export interface MoveTagRequest {
+  id: string;
+  newParentId: string | null;
+}
+
 export interface TagListRequest {
   limit?: number;
   orderBy?: 'name' | 'path' | 'createdAt' | 'updatedAt';
@@ -64,6 +69,10 @@ export class TagResource extends AbstractResource {
       `/tags?${searchParams.toString()}`,
     );
     return response.data;
+  }
+
+  async moveTag(data: MoveTagRequest): Promise<void> {
+    return this.patch('/tags/move', { json: data });
   }
 
   async deleteTag(id: string): Promise<void> {

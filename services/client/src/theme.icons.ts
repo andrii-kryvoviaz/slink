@@ -206,4 +206,6 @@ export const themeIcons: string[] = [
   'lucide:eye-off',
   'lucide:image',
   'lucide:hard-drive',
+  'lucide:ellipsis',
+  'lucide:git-branch',
 ];

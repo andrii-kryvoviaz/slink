@@ -14,6 +14,7 @@ use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractProjection;
 use Slink\Tag\Domain\Event\TagWasCreated;
 use Slink\Tag\Domain\Event\TagWasDeleted;
+use Slink\Tag\Domain\Event\TagWasMoved;
 use Slink\Tag\Domain\Repository\TagRepositoryInterface;
 use Slink\Tag\Infrastructure\ReadModel\View\TagView;
 use Slink\User\Domain\Repository\UserRepositoryInterface;
@@ -61,9 +62,34 @@ final class TagProjection extends AbstractProjection {
    * @throws NonUniqueResultException
    * @throws NotFoundException
    */
-  public function handleTagWasDeleted(TagWasDeleted $event): void {
+  public function handleTagWasMoved(TagWasMoved $event): void {
     $tagView = $this->tagRepository->oneById($event->id);
-    $this->tagRepository->remove($tagView);
+    $oldPath = $event->oldPath->getValue();
+    $newPath = $event->newPath->getValue();
+    $updatedAt = $event->updatedAt ?? DateTime::now();
+
+    $tagView->setPath($newPath);
+    $tagView->setParentId($event->newParentId?->toString());
+    $tagView->setUpdatedAt($updatedAt);
+
+    if ($event->newParentId) {
+      $newParent = $this->tagRepository->oneById($event->newParentId);
+      $tagView->setParent($newParent);
+    } else {
+      $tagView->setParent(null);
+    }
+
+    $this->tagRepository->add($tagView);
+
+    $this->tagRepository->updateDescendantPaths($oldPath, $newPath, $updatedAt);
+  }
+
+  public function handleTagWasDeleted(TagWasDeleted $event): void {
+    try {
+      $tagView = $this->tagRepository->oneById($event->id);
+      $this->tagRepository->remove($tagView);
+    } catch (NotFoundException) {
+    }
   }
 
   /**

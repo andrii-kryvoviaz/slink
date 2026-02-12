@@ -51,6 +51,10 @@
     await tagFeed.deleteTag(tag.id);
   }
 
+  async function handleMoveTag(tagId: string, newParentId: string | null) {
+    await tagFeed.moveTag(tagId, newParentId);
+  }
+
   function handleCreateTag() {
     createModalState.open(() => {
       tagFeed.refetch();
@@ -107,6 +111,7 @@
       <TagDataTable
         tags={tagFeed.data}
         onDelete={handleDeleteTag}
+        onMove={handleMoveTag}
         bind:searchTerm={searchQuery}
         onSearchChange={handleSearchChange}
         showSkeleton={tagFeed.showSkeleton || !tagFeed.isDirty}

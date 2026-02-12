@@ -26,7 +26,7 @@ class TagView extends AbstractView {
   private ?UserView $user = null;
 
   #[ORM\ManyToOne(targetEntity: TagView::class)]
-  #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'uuid')]
+  #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'uuid', onDelete: 'SET NULL')]
   private ?TagView $parent = null;
 
   #[ORM\OneToMany(mappedBy: 'parent', targetEntity: TagView::class)]
@@ -112,6 +112,18 @@ class TagView extends AbstractView {
 
   public function setParent(?TagView $parent): void {
     $this->parent = $parent;
+  }
+
+  public function setPath(string $path): void {
+    $this->path = $path;
+  }
+
+  public function setParentId(?string $parentId): void {
+    $this->parentId = $parentId;
+  }
+
+  public function setUpdatedAt(?DateTime $updatedAt): void {
+    $this->updatedAt = $updatedAt;
   }
 
   #[Groups(['public', 'private'])]

@@ -7,6 +7,7 @@ namespace Slink\Tag\Infrastructure\ReadModel\Repository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Override;
+use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\Pagination\CursorPaginationTrait;
@@ -134,6 +135,25 @@ final class TagRepository extends AbstractRepository implements TagRepositoryInt
       ->orderBy('t.name', 'ASC')
       ->getQuery()
       ->getResult();
+  }
+
+  public function findChildIds(ID $parentId, ID $userId): array {
+    $children = $this->findChildren($parentId, $userId);
+    return array_map(fn(TagView $child) => $child->getUuid(), $children);
+  }
+
+  public function updateDescendantPaths(string $oldPath, string $newPath, DateTime $updatedAt): void {
+    $this->createQueryBuilder('t')
+      ->update()
+      ->set('t.path', 'CONCAT(:newPrefix, SUBSTRING(t.path, :oldPrefixLen + 1))')
+      ->set('t.updatedAt', ':updatedAt')
+      ->where('t.path LIKE :pattern')
+      ->setParameter('newPrefix', $newPath)
+      ->setParameter('oldPrefixLen', strlen($oldPath))
+      ->setParameter('updatedAt', $updatedAt)
+      ->setParameter('pattern', $oldPath . '/%')
+      ->getQuery()
+      ->execute();
   }
 
   public function findRootTags(ID $userId): array {
