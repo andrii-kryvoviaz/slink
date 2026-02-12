@@ -42,7 +42,7 @@
   }
 
   function handlePageSizeChange(size: number) {
-    if (size === tagFeed.meta.size) return;
+    if (size === tableSettings.pageSize) return;
     tableSettings.pageSize = size;
     tagFeed.load({ page: 1, limit: size });
   }
