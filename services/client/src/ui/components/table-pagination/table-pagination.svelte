@@ -1,8 +1,41 @@
 <script lang="ts">
   import { Button } from '@slink/ui/components/button';
+  import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+  } from '@slink/ui/components/hover-card';
+  import { tv } from 'tailwind-variants';
 
-  import { className as cn } from '$lib/utils/ui/className';
   import Icon from '@iconify/svelte';
+
+  const pageInputTheme = tv({
+    base: 'h-7 w-8 text-xs font-medium text-center bg-gray-100/80 dark:bg-gray-800/80 rounded-md border outline-none transition-all duration-200 focus:outline-none hover:border-gray-300 dark:hover:border-gray-600',
+    variants: {
+      status: {
+        default:
+          'border-gray-200/60 dark:border-gray-700/60 text-foreground placeholder:text-gray-400 dark:placeholder:text-gray-500',
+        error: 'border-red-500 text-red-600 placeholder:text-red-400',
+      },
+    },
+    defaultVariants: {
+      status: 'default',
+    },
+  });
+
+  const pageButtonTheme = tv({
+    base: 'text-xs sm:text-sm font-medium transition-all duration-200 w-8 h-7 flex items-center justify-center rounded-md tabular-nums',
+    variants: {
+      status: {
+        interactive:
+          'cursor-pointer hover:bg-gray-100/80 dark:hover:bg-gray-700/60 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 active:scale-95 transform',
+        static: 'cursor-default text-gray-400 dark:text-gray-500',
+      },
+    },
+    defaultVariants: {
+      status: 'static',
+    },
+  });
 
   interface Props {
     currentPageIndex: number;
@@ -32,8 +65,54 @@
   let isInputFocused = $state(false);
   let hasError = $state(false);
   let inputRef = $state<HTMLInputElement>();
+  let triggerWidth = $state(0);
 
   const currentPage = $derived(currentPageIndex + 1);
+  const effectivePageSize = $derived(pageSize ?? 10);
+  const isPageEditable = $derived(
+    !!(onPageChange && totalPages > 1 && !loading),
+  );
+  const hasItems = $derived(!loading && !!totalItems && totalItems > 0);
+
+  const startItem = $derived.by(() => {
+    if (!totalItems) return 0;
+    return (currentPage - 1) * effectivePageSize + 1;
+  });
+
+  const endItem = $derived.by(() => {
+    if (!totalItems) return 0;
+    return Math.min(currentPage * effectivePageSize, totalItems);
+  });
+
+  const progress = $derived.by(() => {
+    if (!totalItems || totalItems <= 0) return 0;
+    return Math.round((endItem / totalItems) * 100);
+  });
+
+  const inputStatus = $derived.by<'default' | 'error'>(() => {
+    if (hasError) return 'error';
+    return 'default';
+  });
+
+  const pageButtonStatus = $derived.by<'interactive' | 'static'>(() => {
+    if (isPageEditable) return 'interactive';
+    return 'static';
+  });
+
+  const inputClass = $derived(pageInputTheme({ status: inputStatus }));
+  const pageButtonClass = $derived(
+    pageButtonTheme({ status: pageButtonStatus }),
+  );
+
+  const pageButtonTitle = $derived.by(() => {
+    if (!isPageEditable) return undefined;
+    return 'Click to enter page number';
+  });
+
+  const pageButtonAriaLabel = $derived.by(() => {
+    if (!isPageEditable) return `Current page ${currentPage}`;
+    return `Current page ${currentPage}. Click to enter page number`;
+  });
 
   const handlePreviousPage = () => {
     if (canPreviousPage && !loading && onPageChange) {
@@ -53,13 +132,6 @@
     }
   };
 
-  $effect(() => {
-    if (isInputFocused && inputRef) {
-      inputRef.focus();
-      inputRef.select();
-    }
-  });
-
   const validatePageNumber = (value: string): boolean => {
     if (value === '') return true;
     const num = parseInt(value, 10);
@@ -68,9 +140,8 @@
 
   const handlePageInputChange = (e: Event) => {
     const target = e.target as HTMLInputElement;
-    const value = target.value;
-    pageInput = value;
-    hasError = !validatePageNumber(value);
+    pageInput = target.value;
+    hasError = !validatePageNumber(target.value);
   };
 
   const handlePageInputSubmit = (e: Event) => {
@@ -113,17 +184,17 @@
   };
 
   const handlePageClick = () => {
-    if (!onPageChange || loading || totalPages <= 1) return;
+    if (!isPageEditable) return;
     pageInput = currentPage.toString();
     isInputFocused = true;
   };
 
-  const startItem = $derived(
-    totalItems ? (currentPage - 1) * (pageSize || 10) + 1 : 0,
-  );
-  const endItem = $derived(
-    totalItems ? Math.min(currentPage * (pageSize || 10), totalItems) : 0,
-  );
+  $effect(() => {
+    if (isInputFocused && inputRef) {
+      inputRef.focus();
+      inputRef.select();
+    }
+  });
 </script>
 
 <svelte:window
@@ -140,127 +211,139 @@
   }}
 />
 
-<div class="flex items-center justify-between gap-2 flex-grow">
-  {#if !loading && totalItems && totalItems > 0}
-    <div class="text-xs sm:text-sm text-muted-foreground">
-      <div class="flex items-center gap-1 sm:gap-4">
-        <span>
-          {startItem}–{endItem} of {totalItems} items
-        </span>
-        {#if additionalInfo}
-          <span class="text-muted-foreground/80">
-            {additionalInfo}
-          </span>
-        {/if}
-      </div>
-    </div>
-  {:else if loading || !totalItems || totalItems === 0}
-    <div></div>
-  {/if}
+<div class="flex items-center gap-3 flex-grow">
+  <HoverCard>
+    <HoverCardTrigger>
+      {#snippet child({ props })}
+        <div
+          {...props}
+          bind:clientWidth={triggerWidth}
+          class="flex items-center gap-1 rounded-lg bg-white/80 dark:bg-gray-900/80 border border-gray-200/60 dark:border-gray-700/60"
+        >
+          <Button
+            variant="transparent"
+            size="sm"
+            onclick={handlePreviousPage}
+            disabled={!canPreviousPage || loading}
+            class="h-8 px-2 text-xs rounded-l-lg rounded-r-none border-0"
+            title="Previous page"
+          >
+            <Icon icon="heroicons:chevron-left" class="h-4 w-4" />
+          </Button>
 
-  <div class="flex items-center gap-1">
-    <Button
-      variant="ghost"
-      size="sm"
-      onclick={handlePreviousPage}
-      disabled={!canPreviousPage || loading}
-      class="h-8 px-2 text-xs"
-      title="Previous page"
-    >
-      <Icon icon="heroicons:chevron-left" class="h-4 w-4" />
-    </Button>
-
-    <div class="flex items-center gap-1 px-2 pl-0">
-      {#if isInputFocused && onPageChange}
-        <form onsubmit={handlePageInputSubmit} class="flex items-center gap-1">
-          <div class="relative">
-            <input
-              bind:this={inputRef}
-              type="text"
-              inputmode="numeric"
-              pattern="[0-9]*"
-              bind:value={pageInput}
-              oninput={handlePageInputChange}
-              onblur={handleInputBlur}
-              onkeydown={handleInputKeyDown}
-              class={cn(
-                'h-7 w-12 text-xs font-medium text-center',
-                'bg-transparent border-0 border-b-2 rounded-none',
-                'outline-none transition-all duration-200',
-                'focus:border-b-2 focus:outline-none',
-                hasError
-                  ? 'border-b-red-500 text-red-600 placeholder:text-red-400'
-                  : 'border-b-primary text-foreground placeholder:text-muted-foreground',
-                'hover:border-b-primary/70',
-              )}
-              placeholder={currentPage.toString()}
-              aria-label="Go to page"
-              style="background: transparent; box-shadow: none;"
-            />
-            {#if hasError}
-              <div
-                class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-red-500 whitespace-nowrap animate-in fade-in-0 slide-in-from-top-1 duration-200"
+          <div class="flex items-center gap-1 px-2">
+            {#if isInputFocused && onPageChange}
+              <form
+                onsubmit={handlePageInputSubmit}
+                class="flex items-center gap-1"
               >
-                1-{totalPages}
-              </div>
+                <div class="relative">
+                  <input
+                    bind:this={inputRef}
+                    type="text"
+                    inputmode="numeric"
+                    pattern="[0-9]*"
+                    bind:value={pageInput}
+                    oninput={handlePageInputChange}
+                    onblur={handleInputBlur}
+                    onkeydown={handleInputKeyDown}
+                    class={inputClass}
+                    placeholder={currentPage.toString()}
+                    aria-label="Go to page"
+                  />
+                  {#if hasError}
+                    <div
+                      class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-red-500 whitespace-nowrap animate-in fade-in-0 slide-in-from-top-1 duration-200"
+                    >
+                      1-{totalPages}
+                    </div>
+                  {/if}
+                </div>
+                {#if totalPages > 1}
+                  <span
+                    class="text-xs sm:text-sm text-gray-300 dark:text-gray-600"
+                    >/</span
+                  >
+                  <span
+                    class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 tabular-nums w-8 text-center"
+                    >{totalPages}</span
+                  >
+                {/if}
+              </form>
+            {:else}
+              <button
+                type="button"
+                onclick={handlePageClick}
+                disabled={!isPageEditable}
+                class={pageButtonClass}
+                title={pageButtonTitle}
+                aria-label={pageButtonAriaLabel}
+              >
+                {currentPage}
+              </button>
+              {#if totalPages > 1}
+                <span
+                  class="text-xs sm:text-sm text-gray-300 dark:text-gray-600"
+                  >/</span
+                >
+                <span
+                  class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 tabular-nums w-8 text-center"
+                  >{totalPages}</span
+                >
+              {/if}
             {/if}
           </div>
-          {#if totalPages > 1}
-            <span class="text-xs sm:text-sm text-muted-foreground">of</span>
-            <span class="text-xs sm:text-sm text-muted-foreground"
-              >{totalPages}</span
+
+          <Button
+            variant="transparent"
+            size="sm"
+            onclick={handleNextPage}
+            disabled={!canNextPage || loading}
+            class="h-8 px-2 text-xs rounded-r-lg rounded-l-none border-0"
+            title="Next page"
+          >
+            <Icon icon="heroicons:chevron-right" class="h-4 w-4" />
+          </Button>
+        </div>
+      {/snippet}
+    </HoverCardTrigger>
+    {#if hasItems}
+      <HoverCardContent
+        variant="glass"
+        size="sm"
+        rounded="lg"
+        width="auto"
+        side="bottom"
+        sideOffset={8}
+        align="start"
+        style="width: {triggerWidth}px"
+      >
+        <div class="flex flex-col gap-2">
+          <div class="flex items-center justify-between tabular-nums">
+            <span class="text-xs text-gray-600 dark:text-gray-300">
+              {startItem}–{endItem}
+              <span class="text-gray-400 dark:text-gray-500">of</span>
+              {totalItems} items
+            </span>
+            <span class="text-xs text-gray-400 dark:text-gray-500"
+              >{progress}%</span
+            >
+          </div>
+          <div
+            class="h-1 rounded-full bg-gray-200/60 dark:bg-gray-700/40 overflow-hidden"
+          >
+            <div
+              class="h-full rounded-full bg-gray-400 dark:bg-gray-500 transition-all duration-300 ease-out"
+              style="width: {progress}%"
+            ></div>
+          </div>
+          {#if additionalInfo}
+            <span class="text-xs text-gray-400 dark:text-gray-500"
+              >{additionalInfo}</span
             >
           {/if}
-        </form>
-      {:else}
-        <button
-          type="button"
-          onclick={handlePageClick}
-          disabled={loading || !onPageChange || totalPages <= 1}
-          class={cn(
-            'text-xs sm:text-sm font-medium transition-all duration-200',
-            'min-w-[2rem] h-7 flex items-center justify-center',
-            'rounded-md relative group',
-            onPageChange && totalPages > 1 && !loading
-              ? [
-                  'cursor-pointer',
-                  'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
-                  'active:scale-95 transform',
-                ]
-              : 'cursor-default text-muted-foreground',
-          )}
-          title={onPageChange && totalPages > 1 && !loading
-            ? 'Click to enter page number'
-            : undefined}
-          aria-label={onPageChange && totalPages > 1 && !loading
-            ? `Current page ${currentPage}. Click to enter page number`
-            : `Current page ${currentPage}`}
-        >
-          {currentPage}
-          {#if onPageChange && totalPages > 1 && !loading}
-            <div
-              class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-primary transition-all duration-200 group-hover:w-full"
-            ></div>
-          {/if}
-        </button>
-        {#if totalPages > 1}
-          <span class="text-xs sm:text-sm text-muted-foreground">of</span>
-          <span class="text-xs sm:text-sm text-muted-foreground"
-            >{totalPages}</span
-          >
-        {/if}
-      {/if}
-    </div>
-
-    <Button
-      variant="ghost"
-      size="sm"
-      onclick={handleNextPage}
-      disabled={!canNextPage || loading}
-      class="h-8 px-2 text-xs"
-      title="Next page"
-    >
-      <Icon icon="heroicons:chevron-right" class="h-4 w-4" />
-    </Button>
-  </div>
+        </div>
+      </HoverCardContent>
+    {/if}
+  </HoverCard>
 </div>

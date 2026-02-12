@@ -161,7 +161,7 @@
     <div
       class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
     >
-      <div class="order-2 sm:order-1">
+      <div class="order-2 sm:order-1 flex items-center">
         <TablePagination
           currentPageIndex={currentPage - 1}
           {totalPages}
