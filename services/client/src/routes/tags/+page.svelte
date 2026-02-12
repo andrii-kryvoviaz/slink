@@ -103,19 +103,22 @@
       </div>
     </div>
 
-    <TagDataTable
-      tags={tagFeed.data}
-      onDelete={handleDeleteTag}
-      bind:searchTerm={searchQuery}
-      onSearchChange={handleSearchChange}
-      isLoading={tagFeed.loading || tagFeed.showSkeleton}
-      {currentPage}
-      {totalPages}
-      {totalItems}
-      {tableSettings}
-      onPageChange={handlePageChange}
-      onPageSizeChange={handlePageSizeChange}
-    />
+    <div in:fade={{ duration: 200 }}>
+      <TagDataTable
+        tags={tagFeed.data}
+        onDelete={handleDeleteTag}
+        bind:searchTerm={searchQuery}
+        onSearchChange={handleSearchChange}
+        showSkeleton={tagFeed.showSkeleton || !tagFeed.isDirty}
+        isLoading={tagFeed.loading}
+        {currentPage}
+        {totalPages}
+        {totalItems}
+        {tableSettings}
+        onPageChange={handlePageChange}
+        onPageSizeChange={handlePageSizeChange}
+      />
+    </div>
   </div>
 </section>
 

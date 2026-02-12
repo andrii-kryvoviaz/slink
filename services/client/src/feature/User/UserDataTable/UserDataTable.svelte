@@ -5,6 +5,7 @@
     UserRoleCell,
     UserStatusCell,
     UserUsernameCell,
+    UsersSkeleton,
   } from '@slink/feature/User';
   import {
     ColumnToggle,
@@ -27,6 +28,7 @@
     onDelete?: (id: string) => void;
     tableSettings: TableSettingsState;
     isLoading?: boolean;
+    showSkeleton?: boolean;
     currentPage?: number;
     totalPages?: number;
     totalItems?: number;
@@ -41,6 +43,7 @@
     onDelete,
     tableSettings,
     isLoading = false,
+    showSkeleton = false,
     currentPage = 1,
     totalPages = 1,
     totalItems = 0,
@@ -169,26 +172,30 @@
     </div>
   </div>
 
-  <DataTable {table} {columns} {isLoading}>
-    {#snippet emptyState()}
-      <div class="flex flex-col items-center gap-3 py-8">
-        <div
-          class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800"
-        >
-          <Icon
-            icon="heroicons:users"
-            class="h-6 w-6 text-slate-400 dark:text-slate-500"
-          />
+  {#if showSkeleton}
+    <UsersSkeleton viewMode="list" />
+  {:else}
+    <DataTable {table} {columns} {isLoading}>
+      {#snippet emptyState()}
+        <div class="flex flex-col items-center gap-3 py-8">
+          <div
+            class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800"
+          >
+            <Icon
+              icon="heroicons:users"
+              class="h-6 w-6 text-slate-400 dark:text-slate-500"
+            />
+          </div>
+          <div class="space-y-1">
+            <p class="text-sm font-medium text-slate-700 dark:text-slate-300">
+              No users found
+            </p>
+            <p class="text-xs text-slate-500 dark:text-slate-400">
+              Users will appear here once added
+            </p>
+          </div>
         </div>
-        <div class="space-y-1">
-          <p class="text-sm font-medium text-slate-700 dark:text-slate-300">
-            No users found
-          </p>
-          <p class="text-xs text-slate-500 dark:text-slate-400">
-            Users will appear here once added
-          </p>
-        </div>
-      </div>
-    {/snippet}
-  </DataTable>
+      {/snippet}
+    </DataTable>
+  {/if}
 </div>

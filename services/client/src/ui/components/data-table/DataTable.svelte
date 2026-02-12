@@ -12,7 +12,6 @@
     columns: ColumnDef<TData>[];
     isLoading?: boolean;
     emptyState?: Snippet;
-    loadingState?: Snippet;
   }
 
   let {
@@ -20,7 +19,6 @@
     columns,
     isLoading = false,
     emptyState,
-    loadingState,
   }: Props = $props();
 </script>
 
@@ -50,16 +48,12 @@
           </Table.Row>
         {/each}
       </Table.Header>
-      <Table.Body>
-        {#if isLoading && loadingState}
-          <Table.Row
-            class="border-slate-200/60 dark:border-slate-700/40 hover:bg-transparent"
-          >
-            <Table.Cell colspan={columns.length} class="h-32 text-center">
-              {@render loadingState()}
-            </Table.Cell>
-          </Table.Row>
-        {:else if dataTable.getRowModel().rows.length > 0}
+      <Table.Body
+        class={isLoading && dataTable.getRowModel().rows.length > 0
+          ? 'opacity-40 pointer-events-none transition-opacity duration-200'
+          : 'transition-opacity duration-200'}
+      >
+        {#if dataTable.getRowModel().rows.length > 0}
           {#each dataTable.getRowModel().rows as row (row.id)}
             <Table.Row
               class="group/row border-slate-200/60 dark:border-slate-700/40 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-slate-50 dark:hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-slate-700/30 transition-colors duration-200"
@@ -77,20 +71,12 @@
               {/each}
             </Table.Row>
           {/each}
-        {:else if emptyState}
+        {:else if !isLoading && emptyState}
           <Table.Row
             class="border-slate-200/60 dark:border-slate-700/40 hover:bg-transparent"
           >
             <Table.Cell colspan={columns.length} class="h-32 text-center">
               {@render emptyState()}
-            </Table.Cell>
-          </Table.Row>
-        {:else}
-          <Table.Row
-            class="border-slate-200/60 dark:border-slate-700/40 hover:bg-transparent"
-          >
-            <Table.Cell colspan={columns.length} class="h-32 text-center">
-              <p class="text-sm text-slate-500 dark:text-slate-400">No data</p>
             </Table.Cell>
           </Table.Row>
         {/if}

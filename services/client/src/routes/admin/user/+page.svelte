@@ -13,6 +13,7 @@
   import { page } from '$app/state';
   import { fade } from 'svelte/transition';
 
+  import { skeleton } from '@slink/lib/actions/skeleton';
   import { settings } from '@slink/lib/settings';
   import { useTableSettings } from '@slink/lib/settings/composables/useTableSettings.svelte';
   import { useUserListFeed } from '@slink/lib/state/UserListFeed.svelte';
@@ -92,7 +93,7 @@
   <meta name="description" content="Manage user accounts and permissions" />
 </svelte:head>
 
-<div class="min-h-full p-6 w-full">
+<div class="min-h-full p-6 w-full" use:skeleton={{ feed: userFeedState }}>
   <div class="mx-auto w-full">
     <div class="mb-8" in:fade={{ duration: 400, delay: 100 }}>
       <div class="flex items-center justify-between w-full">
@@ -117,25 +118,28 @@
 
     <div in:fade={{ duration: 400, delay: 200 }}>
       {#if viewMode === 'list'}
-        <UserDataTable
-          users={userFeedState.items}
-          {loggedInUser}
-          {onDelete}
-          {tableSettings}
-          isLoading={userFeedState.isLoading || userFeedState.showSkeleton}
-          currentPage={userFeedState.meta.page}
-          totalPages={Math.ceil(
-            userFeedState.meta.total / userFeedState.meta.size,
-          )}
-          totalItems={userFeedState.meta.total}
-          onPageSizeChange={handlePageSizeChange}
-          onPageChange={(page) => userFeedState.loadPage(page, false)}
-        />
-      {:else if userFeedState.showSkeleton}
+        <div in:fade={{ duration: 200 }}>
+          <UserDataTable
+            users={userFeedState.items}
+            {loggedInUser}
+            {onDelete}
+            {tableSettings}
+            showSkeleton={userFeedState.showSkeleton || !userFeedState.isDirty}
+            isLoading={userFeedState.isLoading}
+            currentPage={userFeedState.meta.page}
+            totalPages={Math.ceil(
+              userFeedState.meta.total / userFeedState.meta.size,
+            )}
+            totalItems={userFeedState.meta.total}
+            onPageSizeChange={handlePageSizeChange}
+            onPageChange={(page) => userFeedState.loadPage(page, false)}
+          />
+        </div>
+      {:else if userFeedState.showSkeleton || !userFeedState.isDirty}
         <div in:fade={{ duration: 200 }}>
           <UsersSkeleton viewMode="grid" count={12} />
         </div>
-      {:else if userFeedState.isEmpty || (!userFeedState.hasItems && userFeedState.isDirty)}
+      {:else if userFeedState.isEmpty}
         <div in:fade={{ duration: 200 }}>
           <EmptyState
             icon="heroicons:users"
@@ -145,22 +149,28 @@
             size="md"
           />
         </div>
-      {:else if userFeedState.hasItems}
-        <div class="min-h-100 w-full">
-          <UserGridView users={userFeedState.items} {loggedInUser} {onDelete} />
-        </div>
+      {:else}
+        <div in:fade={{ duration: 200 }}>
+          <div class="min-h-100 w-full">
+            <UserGridView
+              users={userFeedState.items}
+              {loggedInUser}
+              {onDelete}
+            />
+          </div>
 
-        <LoadMoreButton
-          class="mt-6"
-          visible={userFeedState.hasMore}
-          loading={userFeedState.isLoading}
-          onclick={() =>
-            userFeedState.nextPage({
-              debounce: 300,
-            })}
-          variant="modern"
-          rounded="full"
-        />
+          <LoadMoreButton
+            class="mt-6"
+            visible={userFeedState.hasMore}
+            loading={userFeedState.isLoading}
+            onclick={() =>
+              userFeedState.nextPage({
+                debounce: 300,
+              })}
+            variant="modern"
+            rounded="full"
+          />
+        </div>
       {/if}
     </div>
   </div>

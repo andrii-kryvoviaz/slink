@@ -3,6 +3,7 @@
     TagActionsCell,
     TagCountCell,
     TagNameCell,
+    TagsSkeleton,
   } from '@slink/feature/Tag';
   import {
     ColumnToggle,
@@ -27,6 +28,7 @@
     searchTerm: string;
     onSearchChange: (term: string) => void;
     isLoading?: boolean;
+    showSkeleton?: boolean;
     currentPage?: number;
     totalPages?: number;
     totalItems?: number;
@@ -42,6 +44,7 @@
     searchTerm = $bindable(),
     onSearchChange,
     isLoading = false,
+    showSkeleton = false,
     currentPage = 1,
     totalPages = 1,
     totalItems = 0,
@@ -183,43 +186,36 @@
     </div>
   </div>
 
-  <DataTable {table} {columns} {isLoading}>
-    {#snippet loadingState()}
-      <div class="flex flex-col items-center gap-3">
-        <Icon
-          icon="lucide:loader-2"
-          class="h-6 w-6 text-slate-400 dark:text-slate-500 animate-spin"
-        />
-        <p class="text-sm text-slate-500 dark:text-slate-400">
-          Loading tags...
-        </p>
-      </div>
-    {/snippet}
-    {#snippet emptyState()}
-      <div class="flex flex-col items-center gap-3 py-8">
-        <div
-          class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800"
-        >
-          <Icon
-            icon="lucide:tag"
-            class="h-6 w-6 text-slate-400 dark:text-slate-500"
-          />
-        </div>
-        <div class="space-y-1">
-          <p class="text-sm font-medium text-slate-700 dark:text-slate-300">
-            No tags found
-          </p>
-          {#if searchTerm}
-            <p class="text-xs text-slate-500 dark:text-slate-400">
-              Try adjusting your search term
+  {#if showSkeleton}
+    <TagsSkeleton count={10} />
+  {:else}
+    <DataTable {table} {columns} {isLoading}>
+      {#snippet emptyState()}
+        <div class="flex flex-col items-center gap-3 py-8">
+          <div
+            class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800"
+          >
+            <Icon
+              icon="lucide:tag"
+              class="h-6 w-6 text-slate-400 dark:text-slate-500"
+            />
+          </div>
+          <div class="space-y-1">
+            <p class="text-sm font-medium text-slate-700 dark:text-slate-300">
+              No tags found
             </p>
-          {:else}
-            <p class="text-xs text-slate-500 dark:text-slate-400">
-              Create your first tag to get started
-            </p>
-          {/if}
+            {#if searchTerm}
+              <p class="text-xs text-slate-500 dark:text-slate-400">
+                Try adjusting your search term
+              </p>
+            {:else}
+              <p class="text-xs text-slate-500 dark:text-slate-400">
+                Create your first tag to get started
+              </p>
+            {/if}
+          </div>
         </div>
-      </div>
-    {/snippet}
-  </DataTable>
+      {/snippet}
+    </DataTable>
+  {/if}
 </div>
