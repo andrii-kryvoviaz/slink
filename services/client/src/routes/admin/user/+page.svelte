@@ -8,6 +8,7 @@
   } from '@slink/feature/User';
   import { ToggleGroup } from '@slink/ui/components';
   import type { ToggleGroupOption } from '@slink/ui/components';
+  import { PageSizeSelect } from '@slink/ui/components/data-table';
   import { untrack } from 'svelte';
 
   import { page } from '$app/state';
@@ -76,13 +77,13 @@
   const handleViewModeChange = (newViewMode: ViewMode) => {
     if (newViewMode !== viewMode) {
       userFeedState.reset();
-      userFeedState.load();
+      userFeedState.load({ limit: tableSettings.pageSize });
     }
     viewMode = newViewMode;
   };
 
   const handlePageSizeChange = (size: number) => {
-    if (size === userFeedState.meta.size) return;
+    if (size === tableSettings.pageSize) return;
     tableSettings.pageSize = size;
     userFeedState.loadPage(1, false, size);
   };
@@ -135,41 +136,46 @@
             onPageChange={(page) => userFeedState.loadPage(page, false)}
           />
         </div>
-      {:else if userFeedState.showSkeleton || !userFeedState.isDirty}
-        <div in:fade={{ duration: 200 }}>
-          <UsersSkeleton viewMode="grid" count={12} />
-        </div>
-      {:else if userFeedState.isEmpty}
-        <div in:fade={{ duration: 200 }}>
-          <EmptyState
-            icon="heroicons:users"
-            title="No users found"
-            description="There are no users in the system yet."
-            variant="default"
-            size="md"
-          />
-        </div>
       {:else}
         <div in:fade={{ duration: 200 }}>
-          <div class="min-h-100 w-full">
-            <UserGridView
-              users={userFeedState.items}
-              {loggedInUser}
-              {onDelete}
+          <div class="flex justify-end mb-4">
+            <PageSizeSelect
+              pageSize={tableSettings.pageSize}
+              options={[12, 24, 48, 96]}
+              onPageSizeChange={handlePageSizeChange}
             />
           </div>
+          {#if userFeedState.showSkeleton || !userFeedState.isDirty}
+            <UsersSkeleton viewMode="grid" count={12} />
+          {:else if userFeedState.isEmpty}
+            <EmptyState
+              icon="heroicons:users"
+              title="No users found"
+              description="There are no users in the system yet."
+              variant="default"
+              size="md"
+            />
+          {:else}
+            <div class="min-h-100 w-full">
+              <UserGridView
+                users={userFeedState.items}
+                {loggedInUser}
+                {onDelete}
+              />
+            </div>
 
-          <LoadMoreButton
-            class="mt-6"
-            visible={userFeedState.hasMore}
-            loading={userFeedState.isLoading}
-            onclick={() =>
-              userFeedState.nextPage({
-                debounce: 300,
-              })}
-            variant="modern"
-            rounded="full"
-          />
+            <LoadMoreButton
+              class="mt-6"
+              visible={userFeedState.hasMore}
+              loading={userFeedState.isLoading}
+              onclick={() =>
+                userFeedState.nextPage({
+                  debounce: 300,
+                })}
+              variant="modern"
+              rounded="full"
+            />
+          {/if}
         </div>
       {/if}
     </div>
