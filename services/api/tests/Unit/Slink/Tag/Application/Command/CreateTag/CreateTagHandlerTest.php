@@ -48,12 +48,11 @@ final class CreateTagHandlerTest extends TestCase {
     $tagStore = $this->createMock(TagStoreRepositoryInterface::class);
     $duplicateSpec = $this->createMock(TagDuplicateSpecificationInterface::class);
     $parentTag = $this->createStub(Tag::class);
-    $parentPath = TagPath::fromString('#parent');
-    
+
     $parentId = ID::generate();
-    
+
     $parentTag->method('getPath')
-      ->willReturn($parentPath);
+      ->willReturn(TagPath::fromString('#1/2'));
 
     $duplicateSpec->expects($this->once())
       ->method('ensureUnique')
@@ -70,7 +69,9 @@ final class CreateTagHandlerTest extends TestCase {
 
     $tagStore->expects($this->once())
       ->method('store')
-      ->with($this->isInstanceOf(Tag::class));
+      ->with($this->callback(function (Tag $tag) {
+        return $tag->getPath()->getValue() === '#1/2/child-tag';
+      }));
 
     $handler = new CreateTagHandler($tagStore, $duplicateSpec);
     $command = new CreateTagCommand('child-tag', $parentId->toString());

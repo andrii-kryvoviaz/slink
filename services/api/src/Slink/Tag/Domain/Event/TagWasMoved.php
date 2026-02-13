@@ -8,11 +8,13 @@ use EventSauce\EventSourcing\Serialization\SerializablePayload;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
+use Slink\Tag\Domain\ValueObject\TagPath;
 
 final readonly class TagWasMoved implements SerializablePayload {
   public function __construct(
     public ID $id,
     public ?ID $newParentId = null,
+    public ?TagPath $newPath = null,
     public ?DateTime $updatedAt = null,
   ) {}
 
@@ -23,6 +25,7 @@ final readonly class TagWasMoved implements SerializablePayload {
     return [
       'uuid' => $this->id->toString(),
       'new_parent_id' => $this->newParentId?->toString(),
+      'new_path' => $this->newPath?->getValue(),
       'updated_at' => ($this->updatedAt ?? DateTime::now())->toString(),
     ];
   }
@@ -35,6 +38,7 @@ final readonly class TagWasMoved implements SerializablePayload {
     return new self(
       ID::fromString($payload['uuid'] ?? ''),
       !empty($payload['new_parent_id']) ? ID::fromString($payload['new_parent_id']) : null,
+      !empty($payload['new_path']) ? TagPath::fromString($payload['new_path']) : null,
       !empty($payload['updated_at']) ? DateTime::fromString($payload['updated_at']) : null,
     );
   }

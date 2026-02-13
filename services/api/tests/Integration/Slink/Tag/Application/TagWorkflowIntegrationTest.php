@@ -20,6 +20,7 @@ use Slink\Tag\Domain\Repository\TagRepositoryInterface;
 use Slink\Tag\Domain\Repository\TagStoreRepositoryInterface;
 use Slink\Tag\Domain\Specification\TagDuplicateSpecificationInterface;
 use Slink\Tag\Domain\Tag;
+use Slink\Tag\Domain\ValueObject\TagPath;
 use Slink\Tag\Infrastructure\ReadModel\View\TagView;
 
 final class TagWorkflowIntegrationTest extends TestCase {
@@ -84,7 +85,7 @@ final class TagWorkflowIntegrationTest extends TestCase {
     $duplicateSpec = $this->createStub(TagDuplicateSpecificationInterface::class);
 
     $parentTag = $this->createStub(Tag::class);
-    $parentTag->method('getPath')->willReturn(\Slink\Tag\Domain\ValueObject\TagPath::fromString('#parent'));
+    $parentTag->method('getPath')->willReturn(TagPath::fromString('#parent'));
 
     $duplicateSpec->method('ensureUnique');
     $tagStore->method('store');
@@ -92,11 +93,9 @@ final class TagWorkflowIntegrationTest extends TestCase {
 
     $createHandler = new CreateTagHandler($tagStore, $duplicateSpec);
 
-    // Create parent tag
     $parentCommand = new CreateTagCommand('parent-tag');
     $parentId = $createHandler($parentCommand, 'user-789');
 
-    // Create child tag
     $childCommand = new CreateTagCommand('child-tag', $parentId->toString());
     $childId = $createHandler($childCommand, 'user-789');
 

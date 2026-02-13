@@ -8,15 +8,18 @@ use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Tag\Domain\Exception\InvalidTagMoveException;
 use Slink\Tag\Domain\Exception\TagAccessDeniedException;
+use Slink\Tag\Domain\Repository\TagRepositoryInterface;
 use Slink\Tag\Domain\Repository\TagStoreRepositoryInterface;
 use Slink\Tag\Domain\Specification\TagCircularMoveSpecificationInterface;
 use Slink\Tag\Domain\Specification\TagDuplicateSpecificationInterface;
+use Slink\Tag\Domain\ValueObject\TagPath;
 
 final readonly class MoveTagHandler implements CommandHandlerInterface {
   public function __construct(
     private TagStoreRepositoryInterface              $tagStore,
     private TagDuplicateSpecificationInterface        $duplicateSpecification,
     private TagCircularMoveSpecificationInterface     $circularMoveSpecification,
+    private TagRepositoryInterface                    $tagRepository,
   ) {
   }
 
@@ -40,8 +43,11 @@ final readonly class MoveTagHandler implements CommandHandlerInterface {
     }
 
     $this->duplicateSpecification->ensureUnique($tag->getName(), $userId, $newParentId);
+    $newPath = $newParentId
+      ? TagPath::createChild(TagPath::fromString($this->tagRepository->oneById($newParentId)->getPath()), $tag->getName())
+      : TagPath::createRoot($tag->getName());
 
-    $tag->move($newParentId);
+    $tag->move($newParentId, $newPath);
     $this->tagStore->store($tag);
   }
 }

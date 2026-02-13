@@ -16,8 +16,6 @@ use Slink\Tag\Domain\Event\TagWasCreated;
 use Slink\Tag\Domain\Event\TagWasDeleted;
 use Slink\Tag\Domain\Event\TagWasMoved;
 use Slink\Tag\Domain\Repository\TagRepositoryInterface;
-use Slink\Tag\Domain\ValueObject\TagName;
-use Slink\Tag\Domain\ValueObject\TagPath;
 use Slink\Tag\Infrastructure\ReadModel\View\TagView;
 use Slink\User\Domain\Repository\UserRepositoryInterface;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
@@ -73,10 +71,12 @@ final class TagProjection extends AbstractProjection {
       $newParent = $this->tagRepository->oneById($event->newParentId);
     }
 
-    $newPath = $newParent
-      ? TagPath::createChild(TagPath::fromString($newParent->getPath()), TagName::fromString($tagView->getName()))
-      : TagPath::createRoot(TagName::fromString($tagView->getName()));
+    if ($event->newPath === null) {
+      throw new \LogicException('Missing new_path in TagWasMoved event payload.');
+    }
 
+    $newPath = $event->newPath->getValue();
+    
     $currentParent = $tagView->getParent();
     if ($currentParent && (!$newParent || $currentParent->getUuid() !== $newParent->getUuid())) {
       $currentParent->removeChild($tagView);
@@ -87,14 +87,14 @@ final class TagProjection extends AbstractProjection {
     }
 
     $tagView->updateHierarchy(
-      $newPath->getValue(),
+      $newPath,
       $event->newParentId?->toString(),
       $newParent,
       $event->updatedAt,
     );
 
     $this->tagRepository->add($tagView);
-    $this->tagRepository->updateDescendantPaths($oldPath, $newPath->getValue(), $event->updatedAt ?? DateTime::now());
+    $this->tagRepository->updateDescendantPaths($oldPath, $newPath, $event->updatedAt ?? DateTime::now());
   }
 
   public function handleTagWasDeleted(TagWasDeleted $event): void {
