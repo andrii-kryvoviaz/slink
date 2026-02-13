@@ -1,11 +1,11 @@
 <script lang="ts">
   import { Loader } from '@slink/feature/Layout';
+  import { SettingItem } from '@slink/feature/Settings';
   import { UserAvatar } from '@slink/feature/User';
   import { Button } from '@slink/ui/components/button';
   import { Input } from '@slink/ui/components/input';
 
   import { enhance } from '$app/forms';
-  import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
   import { withLoadingState } from '@slink/utils/form/withLoadingState';
@@ -81,50 +81,40 @@
       <div
         class="divide-y divide-gray-100 dark:divide-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 overflow-hidden"
       >
+        <div class="flex items-center gap-4 px-4 py-4">
+          <UserAvatar size="lg" {user} />
+          <div class="flex-1 min-w-0">
+            <p
+              class="text-sm font-medium text-gray-900 dark:text-white truncate"
+            >
+              {user.username ?? user.displayName}
+            </p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 truncate">
+              {user.email}
+            </p>
+          </div>
+        </div>
+
         <form
           id="profile-form"
           action="?/updateProfile"
           method="POST"
           use:enhance={withLoadingState(isProfileFormLoading)}
         >
-          <div class="px-4 py-4">
-            <div class="flex flex-col gap-3">
-              <div class="flex items-center gap-4 mb-2">
-                <UserAvatar size="lg" {user} />
-                <div class="flex-1 min-w-0">
-                  <p
-                    class="text-sm font-medium text-gray-900 dark:text-white truncate"
-                  >
-                    {user.username ?? user.displayName}
-                  </p>
-                  <p class="text-xs text-gray-500 dark:text-gray-400 truncate">
-                    {user.email}
-                  </p>
-                </div>
-              </div>
-              <div>
-                <label
-                  for="display_name"
-                  class="block text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Display Name
-                </label>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  This is how your name will appear across the platform
-                </p>
-              </div>
-              <Input
-                name="display_name"
-                error={form?.errors?.display_name}
-                value={form?.displayName ?? user.displayName}
-                class="w-full max-w-md"
-              >
-                {#snippet leftIcon()}
-                  <Icon icon="ph:user" class="h-4 w-4" />
-                {/snippet}
-              </Input>
-            </div>
-          </div>
+          <SettingItem>
+            {#snippet label()}
+              Display Name
+            {/snippet}
+            {#snippet hint()}
+              This is how your name will appear across the platform
+            {/snippet}
+            <Input
+              name="display_name"
+              error={form?.errors?.display_name}
+              value={form?.displayName ?? user.displayName}
+              class="w-full max-w-md"
+            />
+          </SettingItem>
         </form>
       </div>
 
@@ -169,59 +159,53 @@
           method="POST"
           use:enhance={withLoadingState(isPasswordFormLoading)}
         >
-          <div class="px-4 py-4">
-            <div class="flex flex-col gap-3">
-              <div>
-                <label
-                  for="old_password"
-                  class="block text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Change Password
-                </label>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  Update your password to keep your account secure
-                </p>
-              </div>
+          <SettingItem>
+            {#snippet label()}
+              Current Password
+            {/snippet}
+            {#snippet hint()}
+              Enter your current password to verify your identity
+            {/snippet}
+            <Input
+              name="old_password"
+              type="password"
+              placeholder="Current password"
+              error={form?.errors?.old_password}
+              class="w-full max-w-md"
+            />
+          </SettingItem>
 
-              <Input
-                name="old_password"
-                type="password"
-                placeholder="Current password"
-                error={form?.errors?.old_password}
-                class="w-full max-w-md"
-              >
-                {#snippet leftIcon()}
-                  <Icon icon="ph:lock" class="h-4 w-4" />
-                {/snippet}
-              </Input>
+          <SettingItem>
+            {#snippet label()}
+              New Password
+            {/snippet}
+            {#snippet hint()}
+              Choose a new password
+            {/snippet}
+            <Input
+              name="password"
+              type="password"
+              placeholder="New password"
+              error={form?.errors?.password}
+              class="w-full max-w-md"
+            />
+          </SettingItem>
 
-              <div class="grid gap-3 sm:grid-cols-2 max-w-md">
-                <Input
-                  name="password"
-                  type="password"
-                  placeholder="New password"
-                  error={form?.errors?.password}
-                  class="w-full"
-                >
-                  {#snippet leftIcon()}
-                    <Icon icon="ph:lock-key" class="h-4 w-4" />
-                  {/snippet}
-                </Input>
-
-                <Input
-                  name="confirm"
-                  type="password"
-                  placeholder="Confirm password"
-                  error={form?.errors?.confirm}
-                  class="w-full"
-                >
-                  {#snippet leftIcon()}
-                    <Icon icon="ph:lock-key" class="h-4 w-4" />
-                  {/snippet}
-                </Input>
-              </div>
-            </div>
-          </div>
+          <SettingItem>
+            {#snippet label()}
+              Confirm Password
+            {/snippet}
+            {#snippet hint()}
+              Re-enter your new password
+            {/snippet}
+            <Input
+              name="confirm"
+              type="password"
+              placeholder="Confirm password"
+              error={form?.errors?.confirm}
+              class="w-full max-w-md"
+            />
+          </SettingItem>
         </form>
       </div>
 
