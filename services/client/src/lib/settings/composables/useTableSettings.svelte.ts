@@ -22,7 +22,7 @@ export function useTableSettings(key: TableKey, initial: TableSettingsInit) {
 
   return {
     get pageSize() {
-      return pageSize.current;
+      return pageSize.current ?? initial.pageSize;
     },
     set pageSize(v: number) {
       settings.update('table', {
@@ -30,7 +30,7 @@ export function useTableSettings(key: TableKey, initial: TableSettingsInit) {
       } as Partial<TableSettings>);
     },
     get columnVisibility() {
-      return columnVisibility.current;
+      return columnVisibility.current ?? initial.columnVisibility;
     },
     set columnVisibility(v: Record<string, boolean>) {
       settings.update('table', {

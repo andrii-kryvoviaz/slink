@@ -29,6 +29,7 @@ import { UserAdminSetter } from '@slink/lib/settings/setters/userAdmin';
 import type { UserAdminSettings } from '@slink/lib/settings/setters/userAdmin';
 
 import { cookie } from '@slink/utils/http/cookie';
+import { deepMerge } from '@slink/utils/object/deepMerge';
 import { useWritable } from '@slink/utils/store/contextAwareStore';
 import { tryJson } from '@slink/utils/string/json';
 
@@ -105,7 +106,10 @@ export class SettingsManager {
     }
 
     const mergedValue = currentValue
-      ? { ...(currentValue as object), ...(partialValue as object) }
+      ? deepMerge(
+          currentValue as Record<string, unknown>,
+          partialValue as Record<string, unknown>,
+        )
       : partialValue;
 
     this.set(key, mergedValue);
