@@ -10,14 +10,14 @@ export const tagDropdownContentVariants = cva(
           'bg-white dark:bg-gray-900/95',
           'backdrop-blur-md',
           'border border-gray-200/80 dark:border-white/10',
-          'rounded-lg',
+          'rounded-xl',
           'shadow-xl shadow-gray-200/50 dark:shadow-black/60',
         ],
         neon: [
           'bg-white dark:bg-gray-900/95',
           'backdrop-blur-md',
           'border border-gray-200/60 dark:border-white/10',
-          'rounded-lg',
+          'rounded-xl',
           'shadow-2xl shadow-gray-500/5 dark:shadow-black/50',
           'ring-1 ring-gray-100/20 dark:ring-white/5',
         ],
@@ -25,14 +25,14 @@ export const tagDropdownContentVariants = cva(
           'bg-white dark:bg-gray-900/95',
           'backdrop-blur-md',
           'border border-gray-200/60 dark:border-white/10',
-          'rounded-lg',
+          'rounded-xl',
           'shadow-lg shadow-gray-200/40 dark:shadow-black/50',
         ],
         subtle: [
           'bg-white dark:bg-gray-900/95',
           'backdrop-blur-md',
           'border border-gray-200/60 dark:border-white/10',
-          'rounded-lg',
+          'rounded-xl',
           'shadow-xl shadow-gray-200/50 dark:shadow-black/60',
         ],
       },
@@ -43,7 +43,7 @@ export const tagDropdownContentVariants = cva(
   },
 );
 
-export const tagDropdownDividerVariants = cva('mx-2 my-1', {
+export const tagDropdownDividerVariants = cva('mx-3 my-1.5', {
   variants: {
     variant: {
       default: 'border-t border-gray-200/30 dark:border-white/10',
@@ -57,28 +57,9 @@ export const tagDropdownDividerVariants = cva('mx-2 my-1', {
   },
 });
 
-export const tagDropdownEmptyStateVariants = cva('px-4 py-6 text-center', {
-  variants: {
-    variant: {
-      default:
-        'text-gray-500 dark:text-white/50 transition-colors duration-200',
-      neon: 'text-blue-600 dark:text-blue-400 transition-colors duration-200',
-      minimal:
-        'text-gray-500 dark:text-white/50 transition-colors duration-200',
-      subtle: 'text-gray-500 dark:text-white/50',
-    },
-  },
-  defaultVariants: {
-    variant: 'default',
-  },
-});
-
 export type TagDropdownContentVariants = VariantProps<
   typeof tagDropdownContentVariants
 >;
 export type TagDropdownDividerVariants = VariantProps<
   typeof tagDropdownDividerVariants
->;
-export type TagDropdownEmptyStateVariants = VariantProps<
-  typeof tagDropdownEmptyStateVariants
 >;

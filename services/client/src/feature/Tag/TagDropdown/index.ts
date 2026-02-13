@@ -1,2 +1,2 @@
-export { default as TagDropdown } from './TagDropdown.svelte';
-export * from './TagDropdown.theme';
+export { default as TagDropdownContent } from './TagDropdownContent.svelte';
+export * from './TagDropdownContent.theme';

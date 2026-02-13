@@ -48,7 +48,7 @@
   );
 </script>
 
-<div class="flex items-center mx-1 my-0.5">
+<div class="flex items-center gap-0.5 px-1.5">
   <button
     class={`group ${tagListItemVariants({ variant, highlighted })}`}
     onclick={() => onSelect(tag)}

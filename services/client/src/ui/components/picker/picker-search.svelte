@@ -11,7 +11,7 @@
   let inputFocused = $state(false);
 </script>
 
-<div class="px-2.5 pt-2.5 pb-1 shrink-0">
+<div class="px-2.5 pt-2.5 pb-1.5 shrink-0">
   <div class="relative">
     <Icon
       icon="ph:magnifying-glass"

@@ -28,13 +28,13 @@
   No items yet
 {/snippet}
 
-<div class="flex flex-col items-center gap-3 py-6 px-4">
+<div class="flex flex-col items-center gap-2 py-4 px-4">
   <div
     class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center"
   >
     {@render (icon ?? defaultIcon)()}
   </div>
-  <p class="text-sm text-gray-500 dark:text-gray-400">
+  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
     {@render (message ?? defaultMessage)()}
   </p>
   {#if onAction && action}

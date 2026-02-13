@@ -2,7 +2,7 @@ import { cva } from 'class-variance-authority';
 import type { VariantProps } from 'class-variance-authority';
 
 export const tagListItemVariants = cva(
-  'flex-1 flex items-center gap-3 px-4 py-3 text-sm font-medium text-left rounded-lg',
+  'flex-1 flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-left rounded-lg',
   {
     variants: {
       variant: {
@@ -136,7 +136,7 @@ export const tagListBadgeVariants = cva(
 );
 
 export const tagListActionButtonVariants = cva(
-  'flex items-center justify-center w-9 h-9 mx-1 rounded-lg flex-shrink-0',
+  'flex items-center justify-center w-8 h-8 rounded-lg flex-shrink-0',
   {
     variants: {
       variant: {

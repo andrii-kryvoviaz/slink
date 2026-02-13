@@ -53,7 +53,7 @@
   {onCreateNew}
 >
   {#snippet emptyIcon()}
-    <Icon icon="ph:tag" class="w-8 h-8" />
+    <Icon icon="ph:tag" class="w-5 h-5 text-gray-400 dark:text-gray-500" />
   {/snippet}
   {#snippet emptyMessage()}No tags yet{/snippet}
   {#snippet emptyAction()}

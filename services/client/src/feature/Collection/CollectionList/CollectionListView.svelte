@@ -54,7 +54,10 @@
   {onCreateNew}
 >
   {#snippet emptyIcon()}
-    <Icon icon="ph:folder-simple-dashed" class="w-8 h-8" />
+    <Icon
+      icon="ph:folder-simple-duotone"
+      class="w-5 h-5 text-gray-400 dark:text-gray-500"
+    />
   {/snippet}
   {#snippet emptyMessage()}No collections yet{/snippet}
   {#snippet emptyAction()}

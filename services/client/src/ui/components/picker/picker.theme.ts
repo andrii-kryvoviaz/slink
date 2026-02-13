@@ -19,7 +19,7 @@ export const pickerContainerTheme = cva('', {
 export const pickerListTheme = cva('', {
   variants: {
     variant: {
-      popover: 'px-1.5 py-1.5 space-y-1',
+      popover: 'px-1.5 py-2 space-y-0.5',
       panel: 'space-y-1',
       glass: 'px-1.5 py-1.5 space-y-0.5',
     },
@@ -34,7 +34,7 @@ export const pickerItemTheme = cva(
   {
     variants: {
       variant: {
-        popover: 'gap-2.5 px-2 py-2 rounded-md',
+        popover: 'gap-2.5 px-2.5 py-2 rounded-lg',
         panel: 'gap-3 px-3 py-2.5 rounded-lg',
         glass: 'gap-2.5 px-2.5 py-2 rounded-lg',
       },
@@ -147,7 +147,7 @@ export const pickerCheckIconTheme = cva('text-white', {
 export const pickerNameTheme = cva('truncate transition-colors duration-150', {
   variants: {
     variant: {
-      popover: 'text-[13px] font-medium',
+      popover: 'text-sm font-medium',
       panel: 'text-sm font-medium',
       glass: 'text-[13px] font-medium',
     },
@@ -184,7 +184,7 @@ export const pickerSubtextTheme = cva(
   {
     variants: {
       variant: {
-        popover: 'text-[11px]',
+        popover: 'text-xs',
         panel: 'text-xs',
         glass: 'text-[11px]',
       },

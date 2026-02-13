@@ -5,7 +5,6 @@ export { default as CollectionDeletePopover } from './CollectionDeletePopover/Co
 export { default as CollectionItemDropdown } from './CollectionItemDropdown/CollectionItemDropdown.svelte';
 export { default as CollectionListView } from './CollectionList/CollectionListView.svelte';
 export { default as CollectionPicker } from './CollectionPicker/CollectionPicker.svelte';
-export * from './CollectionPicker/CollectionPicker.theme';
 export { default as CreateCollectionDialog } from './CreateCollectionDialog.svelte';
 export { default as CreateCollectionForm } from './CreateCollectionForm.svelte';
 export { default as CreateCollectionModal } from './CreateCollectionModal.svelte';

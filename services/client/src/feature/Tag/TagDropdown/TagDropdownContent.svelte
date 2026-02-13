@@ -1,16 +1,17 @@
 <script lang="ts">
   import {
-    TagCreationButton,
     type TagDropdownContentVariants,
     TagListItem,
     tagDropdownDividerVariants,
-    tagDropdownEmptyStateVariants,
   } from '@slink/feature/Tag';
   import { Button } from '@slink/ui/components/button';
+  import { PickerEmptyState } from '@slink/ui/components/picker';
 
   import Icon from '@iconify/svelte';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
+
+  import { getTagDisplayName } from '@slink/utils/tag';
 
   interface Props extends TagDropdownContentVariants {
     isOpen: boolean;
@@ -48,31 +49,43 @@
 </script>
 
 {#if isOpen}
-  <div class="max-h-60 overflow-y-auto py-1">
-    {#if canCreate && !creatingChildFor}
-      <TagCreationButton
-        {searchTerm}
-        {creatingChildFor}
-        {childTagName}
-        {isCreating}
-        {onCreateTag}
-        {canCreate}
-        {variant}
-        highlighted={highlightedIndex === 0}
-      />
+  <div class="max-h-60 overflow-y-auto py-1.5">
+    {#if canCreate && searchTerm.trim() && !creatingChildFor}
+      <div class="flex px-1.5">
+        <Button
+          variant="ghost"
+          size="sm"
+          rounded="lg"
+          class="flex-1 justify-start {highlightedIndex === 0
+            ? 'bg-blue-50 dark:bg-blue-500/20 text-blue-600 dark:text-blue-300'
+            : ''}"
+          loading={isCreating}
+          disabled={isCreating}
+          onclick={onCreateTag}
+        >
+          <Icon icon="ph:plus" class="w-4 h-4" />
+          <span class="truncate">Create "{searchTerm}"</span>
+        </Button>
+      </div>
     {/if}
 
     {#if creatingChildFor && childTagName.trim()}
-      <TagCreationButton
-        {searchTerm}
-        {creatingChildFor}
-        {childTagName}
-        {isCreating}
-        {onCreateTag}
-        {canCreate}
-        {variant}
-        highlighted={false}
-      />
+      <div class="flex px-1.5">
+        <Button
+          variant="ghost"
+          size="sm"
+          rounded="lg"
+          class="flex-1 justify-start"
+          loading={isCreating}
+          disabled={isCreating}
+          onclick={onCreateTag}
+        >
+          <Icon icon="ph:plus" class="w-4 h-4" />
+          <span class="truncate"
+            >Create "{getTagDisplayName(creatingChildFor)} › {childTagName}"</span
+          >
+        </Button>
+      </div>
     {/if}
 
     {#if ((creatingChildFor && childTagName.trim()) || (canCreate && searchTerm.trim() && !creatingChildFor)) && tags.length > 0}
@@ -95,43 +108,50 @@
 
     {#if !creatingChildFor && tags.length === 0 && searchTerm.trim()}
       {#if isLoading}
-        <div class={tagDropdownEmptyStateVariants({ variant })}>
+        <div class="flex items-center justify-center py-4">
           <Icon
             icon="ph:spinner"
             class="w-4 h-4 animate-spin text-muted-foreground"
           />
         </div>
       {:else}
-        <div class={tagDropdownEmptyStateVariants({ variant })}>
-          <div class="text-sm text-muted-foreground">
-            No tags found for "{searchTerm}"
-          </div>
-          {#if allowCreate && canCreate}
-            <Button
-              variant="soft-blue"
-              size="xs"
-              rounded="full"
-              class="mt-2"
-              onclick={onCreateTag}
-            >
-              <Icon icon="ph:plus" class="w-3 h-3" />
-              Create "{searchTerm}"
-            </Button>
-          {/if}
-        </div>
+        <PickerEmptyState
+          onAction={allowCreate && canCreate ? onCreateTag : undefined}
+        >
+          {#snippet icon()}
+            <Icon
+              icon="ph:magnifying-glass"
+              class="w-5 h-5 text-gray-400 dark:text-gray-500"
+            />
+          {/snippet}
+          {#snippet message()}
+            No tags matching "{searchTerm}"
+          {/snippet}
+          {#snippet action()}
+            Create "{searchTerm}"
+          {/snippet}
+        </PickerEmptyState>
       {/if}
     {:else if !creatingChildFor && tags.length === 0 && !canCreate && !searchTerm.trim()}
       {#if isLoading}
-        <div class={tagDropdownEmptyStateVariants({ variant })}>
+        <div class="flex items-center justify-center py-4">
           <Icon
             icon="ph:spinner"
             class="w-4 h-4 animate-spin text-muted-foreground"
           />
         </div>
       {:else}
-        <div class={tagDropdownEmptyStateVariants({ variant })}>
-          <div class="text-sm text-muted-foreground">No tags yet</div>
-        </div>
+        <PickerEmptyState>
+          {#snippet icon()}
+            <Icon
+              icon="ph:tag"
+              class="w-5 h-5 text-gray-400 dark:text-gray-500"
+            />
+          {/snippet}
+          {#snippet message()}
+            No tags yet
+          {/snippet}
+        </PickerEmptyState>
       {/if}
     {/if}
   </div>

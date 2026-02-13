@@ -1,7 +1,7 @@
 <script lang="ts">
   import { CollectionListView } from '@slink/feature/Collection';
   import { CreateCollectionDialog } from '@slink/feature/Collection';
-  import type { CollectionPickerVariant } from '@slink/feature/Collection/CollectionPicker/CollectionPicker.theme';
+  import type { PickerVariant } from '@slink/ui/components/picker';
 
   import type { CollectionResponse } from '@slink/api/Response';
 
@@ -11,7 +11,7 @@
   interface Props {
     pickerState: CollectionPickerState;
     createModalState: CreateCollectionModalState;
-    variant?: CollectionPickerVariant;
+    variant?: PickerVariant;
     onToggle?: (result: { added: boolean; collectionId: string }) => void;
     onBeforeCreate?: () => void;
   }
