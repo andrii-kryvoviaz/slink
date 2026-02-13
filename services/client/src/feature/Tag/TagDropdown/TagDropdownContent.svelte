@@ -50,25 +50,6 @@
 
 {#if isOpen}
   <div class="max-h-60 overflow-y-auto py-1.5">
-    {#if canCreate && searchTerm.trim() && !creatingChildFor}
-      <div class="flex px-1.5">
-        <Button
-          variant="ghost"
-          size="sm"
-          rounded="lg"
-          class="flex-1 justify-start {highlightedIndex === 0
-            ? 'bg-blue-50 dark:bg-blue-500/20 text-blue-600 dark:text-blue-300'
-            : ''}"
-          loading={isCreating}
-          disabled={isCreating}
-          onclick={onCreateTag}
-        >
-          <Icon icon="ph:plus" class="w-4 h-4" />
-          <span class="truncate">Create "{searchTerm}"</span>
-        </Button>
-      </div>
-    {/if}
-
     {#if creatingChildFor && childTagName.trim()}
       <div class="flex px-1.5">
         <Button
