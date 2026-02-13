@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Button } from '@slink/ui/components/button';
   import type { Snippet } from 'svelte';
 
   import Icon from '@iconify/svelte';
@@ -14,12 +15,6 @@
   }
 
   let { icon, message, action, color = 'blue', onAction }: Props = $props();
-
-  const actionColorClasses = $derived(
-    color === 'blue'
-      ? 'bg-blue-50 text-blue-600 hover:bg-blue-100 dark:bg-blue-500/10 dark:text-blue-400 dark:hover:bg-blue-500/20'
-      : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-400 dark:hover:bg-indigo-500/20',
-  );
 </script>
 
 {#snippet defaultIcon()}
@@ -43,13 +38,14 @@
     {@render (message ?? defaultMessage)()}
   </p>
   {#if onAction && action}
-    <button
-      type="button"
+    <Button
+      variant={color === 'blue' ? 'soft-blue' : 'soft-indigo'}
+      size="xs"
+      rounded="full"
       onclick={onAction}
-      class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors {actionColorClasses}"
     >
       <Icon icon="ph:plus" class="w-3 h-3" />
       {@render action()}
-    </button>
+    </Button>
   {/if}
 </div>

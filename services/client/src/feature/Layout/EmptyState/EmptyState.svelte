@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Button } from '@slink/ui/components/button';
   import type { Snippet } from 'svelte';
 
   import { className as cn } from '$lib/utils/ui/className';
@@ -6,9 +7,9 @@
   import { fade, fly } from 'svelte/transition';
 
   import {
-    actionButtonVariants,
     containerVariants,
     descriptionVariants,
+    emptyStateButtonVariantMap,
     iconContainerVariants,
     iconVariants,
     titleVariants,
@@ -76,20 +77,16 @@
 
   {#if actionText && (actionHref || actionClick)}
     <div in:fly={{ y: 20, duration: 500, delay: 500 }}>
-      {#if actionHref}
-        <a href={actionHref} class={actionButtonVariants({ size, variant })}>
-          <Icon icon="ph:plus-circle-duotone" class="w-5 h-5 mr-2" />
-          {actionText}
-        </a>
-      {:else if actionClick}
-        <button
-          onclick={actionClick}
-          class={actionButtonVariants({ size, variant })}
-        >
-          <Icon icon="ph:plus-circle-duotone" class="w-5 h-5 mr-2" />
-          {actionText}
-        </button>
-      {/if}
+      <Button
+        variant={emptyStateButtonVariantMap[variant]}
+        size="lg"
+        rounded="full"
+        href={actionHref}
+        onclick={actionClick}
+      >
+        <Icon icon="lucide:plus" class="h-4 w-4" />
+        {actionText}
+      </Button>
     </div>
   {/if}
 </div>

@@ -1,3 +1,4 @@
+import type { ButtonVariant } from '@slink/ui/components/button';
 import { cva } from 'class-variance-authority';
 
 export const containerVariants = cva(
@@ -105,28 +106,10 @@ export const descriptionVariants = cva(
   },
 );
 
-export const actionButtonVariants = cva(
-  'inline-flex items-center font-medium rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 backdrop-blur-sm border border-white/10',
-  {
-    variants: {
-      size: {
-        sm: 'px-6 py-2.5 text-sm',
-        md: 'px-8 py-3 text-base',
-        lg: 'px-10 py-4 text-lg',
-      },
-      variant: {
-        default:
-          'bg-gradient-to-r from-slate-900 to-slate-800 hover:from-slate-800 hover:to-slate-700 dark:from-slate-100 dark:to-slate-200 dark:hover:from-slate-200 dark:hover:to-slate-300 text-white dark:text-slate-900',
-        blue: 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 dark:from-blue-500 dark:to-indigo-500 dark:hover:from-blue-600 dark:hover:to-indigo-600 text-white',
-        purple:
-          'bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 dark:from-purple-500 dark:to-violet-500 dark:hover:from-purple-600 dark:hover:to-violet-600 text-white',
-        pink: 'bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-700 hover:to-rose-700 dark:from-pink-500 dark:to-rose-500 dark:hover:from-pink-600 dark:hover:to-rose-600 text-white',
-        red: 'bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 dark:from-red-500 dark:to-rose-500 dark:hover:from-red-600 dark:hover:to-rose-600 text-white',
-      },
-    },
-    defaultVariants: {
-      size: 'md',
-      variant: 'default',
-    },
-  },
-);
+export const emptyStateButtonVariantMap: Record<string, ButtonVariant> = {
+  default: 'soft-blue',
+  blue: 'soft-blue',
+  purple: 'soft-violet',
+  pink: 'soft-red',
+  red: 'soft-red',
+};

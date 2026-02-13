@@ -6,6 +6,7 @@
     tagDropdownDividerVariants,
     tagDropdownEmptyStateVariants,
   } from '@slink/feature/Tag';
+  import { Button } from '@slink/ui/components/button';
 
   import Icon from '@iconify/svelte';
 
@@ -106,14 +107,16 @@
             No tags found for "{searchTerm}"
           </div>
           {#if allowCreate && canCreate}
-            <button
-              type="button"
-              class="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-blue-50 text-blue-600 hover:bg-blue-100 dark:bg-blue-500/10 dark:text-blue-400 dark:hover:bg-blue-500/20 transition-colors"
+            <Button
+              variant="soft-blue"
+              size="xs"
+              rounded="full"
+              class="mt-2"
               onclick={onCreateTag}
             >
               <Icon icon="ph:plus" class="w-3 h-3" />
               Create "{searchTerm}"
-            </button>
+            </Button>
           {/if}
         </div>
       {/if}
