@@ -15,10 +15,8 @@ import type {
 import type { SidebarSettings } from '@slink/lib/settings/setters/sidebar';
 import type { TableSettings } from '@slink/lib/settings/setters/table';
 import type { UploadOptionsSettings } from '@slink/lib/settings/setters/uploadOptions';
-import type {
-  UserAdminSettings,
-  ViewMode,
-} from '@slink/lib/settings/setters/userAdmin';
+import type { UserAdminSettings } from '@slink/lib/settings/setters/userAdmin';
+import type { ViewMode } from '@slink/lib/settings/setters/viewMode';
 
 export type Settings = {
   theme: SettingsValue<Theme> & {

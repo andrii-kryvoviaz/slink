@@ -1,13 +1,11 @@
 <script lang="ts">
   import { LoadMoreButton } from '@slink/feature/Action';
-  import { EmptyState } from '@slink/feature/Layout';
+  import { EmptyState, ViewModeToggle } from '@slink/feature/Layout';
   import {
     UserDataTable,
     UserGridView,
     UsersSkeleton,
   } from '@slink/feature/User';
-  import { ToggleGroup } from '@slink/ui/components';
-  import type { ToggleGroupOption } from '@slink/ui/components';
   import { PageSizeSelect } from '@slink/ui/components/data-table';
   import { untrack } from 'svelte';
 
@@ -17,6 +15,7 @@
   import { skeleton } from '@slink/lib/actions/skeleton';
   import { settings } from '@slink/lib/settings';
   import { useTableSettings } from '@slink/lib/settings/composables/useTableSettings.svelte';
+  import type { ViewMode } from '@slink/lib/settings/setters/viewMode';
   import { useUserListFeed } from '@slink/lib/state/UserListFeed.svelte';
 
   import type { PageServerData } from './$types';
@@ -29,35 +28,19 @@
 
   let loggedInUser = $derived(data.user);
 
-  const serverSettings = page.data.settings;
-
-  type ViewMode = 'grid' | 'list';
-  let viewMode = $state<ViewMode>(
-    serverSettings?.userAdmin?.viewMode || 'list',
+  let viewMode = $derived<ViewMode>(
+    page.data.settings?.userAdmin?.viewMode || 'list',
   );
 
   const tableSettings = useTableSettings('users', {
-    pageSize: serverSettings?.table?.users?.pageSize || 12,
-    columnVisibility: serverSettings?.table?.users?.columnVisibility || {
+    pageSize: page.data.settings?.table?.users?.pageSize || 12,
+    columnVisibility: page.data.settings?.table?.users?.columnVisibility || {
       displayName: true,
       username: true,
       status: true,
       roles: true,
     },
   });
-
-  const viewModeOptions: ToggleGroupOption<ViewMode>[] = [
-    {
-      value: 'grid',
-      label: 'Grid',
-      icon: 'heroicons:squares-2x2',
-    },
-    {
-      value: 'list',
-      label: 'List',
-      icon: 'heroicons:bars-3',
-    },
-  ];
 
   $effect(() => {
     settings.set('userAdmin', { viewMode });
@@ -75,10 +58,6 @@
   };
 
   const handleViewModeChange = (newViewMode: ViewMode) => {
-    if (newViewMode !== viewMode) {
-      userFeedState.reset();
-      userFeedState.load({ limit: tableSettings.pageSize });
-    }
     viewMode = newViewMode;
   };
 
@@ -107,11 +86,10 @@
           </p>
         </div>
 
-        <ToggleGroup
+        <ViewModeToggle
           value={viewMode}
-          options={viewModeOptions}
-          onValueChange={handleViewModeChange}
-          aria-label="View mode selection"
+          modes={['grid', 'list']}
+          on={{ change: handleViewModeChange }}
           className="ml-4"
         />
       </div>

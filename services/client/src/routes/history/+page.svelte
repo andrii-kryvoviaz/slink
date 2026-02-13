@@ -6,11 +6,12 @@
     HistoryListView,
     SelectionActionBar,
   } from '@slink/feature/Image';
-  import { EmptyState } from '@slink/feature/Layout';
-  import { HistorySkeleton } from '@slink/feature/Layout';
+  import {
+    EmptyState,
+    HistorySkeleton,
+    ViewModeToggle,
+  } from '@slink/feature/Layout';
   import { ActiveFilterBar, TagFilter } from '@slink/feature/Tag';
-  import { ToggleGroup } from '@slink/ui/components';
-  import type { ToggleGroupOption } from '@slink/ui/components';
   import { untrack } from 'svelte';
 
   import { page } from '$app/state';
@@ -24,7 +25,7 @@
   import { skeleton } from '@slink/lib/actions/skeleton';
   import { createTagFilterManager } from '@slink/lib/composables/useTagFilterUrl';
   import { settings } from '@slink/lib/settings';
-  import type { HistoryViewMode } from '@slink/lib/settings/setters/history';
+  import type { ViewMode } from '@slink/lib/settings/setters/viewMode';
   import { createImageSelectionState } from '@slink/lib/state/ImageSelectionState.svelte';
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
 
@@ -32,24 +33,9 @@
   const tagFilterManager = createTagFilterManager(page.url);
   const selectionState = createImageSelectionState();
 
-  const serverSettings = page.data.settings;
-
-  let viewMode = $state<HistoryViewMode>(
-    serverSettings?.history?.viewMode || 'list',
+  let viewMode = $derived<ViewMode>(
+    page.data.settings?.history?.viewMode || 'list',
   );
-
-  const viewModeOptions: ToggleGroupOption<HistoryViewMode>[] = [
-    {
-      value: 'grid',
-      label: 'Grid',
-      icon: 'heroicons:squares-2x2',
-    },
-    {
-      value: 'list',
-      label: 'List',
-      icon: 'heroicons:bars-3',
-    },
-  ];
 
   const {
     isLoading: batchDeleteIsLoading,
@@ -95,11 +81,7 @@
     }
   };
 
-  const handleViewModeChange = (newViewMode: HistoryViewMode) => {
-    if (newViewMode !== viewMode) {
-      historyFeedState.reset();
-      historyFeedState.load();
-    }
+  const handleViewModeChange = (newViewMode: ViewMode) => {
     viewMode = newViewMode;
   };
 
@@ -237,11 +219,10 @@
             {/if}
           {/if}
 
-          <ToggleGroup
+          <ViewModeToggle
             value={viewMode}
-            options={viewModeOptions}
-            onValueChange={handleViewModeChange}
-            aria-label="View mode selection"
+            modes={['grid', 'list']}
+            on={{ change: handleViewModeChange }}
           />
         </div>
       </div>

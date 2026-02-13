@@ -1,8 +1,7 @@
 import { derived } from 'svelte/store';
 
 import type { Setter } from '@slink/lib/settings/Settings.types';
-
-export type ViewMode = 'grid' | 'list';
+import type { ViewMode } from '@slink/lib/settings/setters/viewMode';
 
 export type UserAdminSettings = {
   viewMode: ViewMode;

@@ -1,8 +1,9 @@
 import { derived } from 'svelte/store';
 
 import type { Setter } from '@slink/lib/settings/Settings.types';
+import type { ViewMode } from '@slink/lib/settings/setters/viewMode';
 
-export type HistoryViewMode = 'grid' | 'list';
+export type HistoryViewMode = ViewMode;
 
 export type HistorySettings = {
   viewMode: HistoryViewMode;

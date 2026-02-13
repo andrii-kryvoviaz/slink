@@ -28,3 +28,5 @@ export { default as Skeleton } from './Skeleton/Skeleton.svelte';
 export { default as ThemeSwitch } from './ThemeSwitch/ThemeSwitch.svelte';
 export * from './ThemeSwitch/ThemeSwitch.theme';
 export * from './ThemeSwitch/ThemeSwitch.types';
+export { default as ViewModeToggle } from './ViewModeToggle/ViewModeToggle.svelte';
+export * from './ViewModeToggle/ViewModeToggle.types';
