@@ -83,8 +83,15 @@ class BookmarkView extends AbstractView implements CursorAwareInterface {
   #[Groups(['public'])]
   #[SerializedName('image')]
   public function getImageData(): array {
-    $image = $this->image;
-    $isAvailable = $image->getAttributes()->isPublic();
+    try {
+      $image = $this->image;
+      $isAvailable = $image->getAttributes()->isPublic();
+    } catch (\Throwable) {
+      return [
+        'id' => $this->image->getUuid(),
+        'available' => false,
+      ];
+    }
 
     if (!$isAvailable) {
       return [
