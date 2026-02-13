@@ -22,46 +22,43 @@ interface ComponentToastOptions {
   onAutoClose?: () => void;
 }
 
+function showToast(
+  component: Component<any>,
+  props: Record<string, any>,
+  options?: Omit<ComponentToastOptions, 'id'>,
+) {
+  let toastId: string | number;
+  const { duration, ...rest } = options ?? {};
+  toastId = sonner.custom(component, {
+    duration: duration || undefined,
+    componentProps: {
+      ...props,
+      oncloseToast: () => sonner.dismiss(toastId),
+    },
+    ...rest,
+  });
+  return toastId;
+}
+
 export const toast = {
-  success: (message: string, duration?: number) => {
-    return sonner.custom(SuccessToast, {
-      duration,
-      componentProps: { message },
-    } as any);
-  },
+  success: (message: string, duration?: number) =>
+    showToast(SuccessToast, { message }, { duration }),
 
-  error: (message: string, duration?: number) => {
-    return sonner.custom(ErrorToast, {
-      duration,
-      componentProps: { message },
-    } as any);
-  },
+  error: (message: string, duration?: number) =>
+    showToast(ErrorToast, { message }, { duration }),
 
-  warning: (message: string, duration?: number) => {
-    return sonner.custom(WarningToast, {
-      duration,
-      componentProps: { message },
-    } as any);
-  },
+  warning: (message: string, duration?: number) =>
+    showToast(WarningToast, { message }, { duration }),
 
-  info: (message: string, duration?: number) => {
-    return sonner.custom(InfoToast, {
-      duration,
-      componentProps: { message },
-    } as any);
-  },
+  info: (message: string, duration?: number) =>
+    showToast(InfoToast, { message }, { duration }),
 
   component: <Props extends Record<string, any> = {}>(
     component: Component<Props>,
     options: ComponentToastOptions & { props?: Props } = {},
   ) => {
-    const { props, duration = 0, ...rest } = options;
-
-    return sonner.custom(component, {
-      duration: duration || undefined,
-      componentProps: props,
-      ...rest,
-    });
+    const { props, ...rest } = options;
+    return showToast(component, props ?? {}, rest);
   },
 
   loading: (message: string, duration?: number) => {
