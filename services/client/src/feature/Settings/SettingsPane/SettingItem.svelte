@@ -147,7 +147,7 @@
           Cancel
         </Button>
         <Button
-          variant="glass-green"
+          variant="soft-green"
           size="xs"
           rounded="lg"
           onclick={confirmReset}

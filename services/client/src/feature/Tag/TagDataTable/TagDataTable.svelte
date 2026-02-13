@@ -222,7 +222,7 @@
           </div>
           {#if !searchTerm && onCreate}
             <Button
-              variant="glass"
+              variant="soft-blue"
               size="sm"
               rounded="full"
               onclick={onCreate}

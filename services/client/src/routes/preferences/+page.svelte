@@ -231,7 +231,7 @@
 
       <Button
         type="submit"
-        variant="glass-blue"
+        variant="soft-blue"
         rounded="full"
         size="sm"
         disabled={$isPreferencesFormLoading}

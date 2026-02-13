@@ -21,14 +21,9 @@
         invisible: 'bg-none hover:bg-button-invisible-hover/25',
         outline:
           'border border-bc-button-default hover:bg-button-default-hover',
-        form: 'border bg-input-default border-bc-input-default hover:bg-input-default-hover focus:border-bc-input-default-focus focus:ring-3 focus:ring-rc-input-default-focus',
         link: 'bg-transparent dark:bg-transparent hover:bg-transparent',
-        success:
-          'bg-success/80 hover:bg-success focus:ring-3 focus:ring-rc-success/40',
         danger:
           'bg-danger/80 hover:bg-danger focus:ring-3 focus:ring-rc-danger/40',
-        warning:
-          'bg-warning/80 hover:bg-warning focus:ring-3 focus:ring-rc-warning/40',
         modern:
           'bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-full shadow-sm hover:shadow-md transition-all duration-200',
         glass:
@@ -37,26 +32,16 @@
           'bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-200',
         'primary-dark':
           'bg-blue-500 border-transparent hover:bg-blue-600 transition-all duration-200',
-        'gradient-blue':
-          'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 border-0 p-0.5 transition-all duration-500 ease-in-out focus:ring-3 focus:ring-blue-500/40',
-        'gradient-green':
-          'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 border-0 p-0.5 transition-all duration-500 ease-in-out focus:ring-3 focus:ring-green-500/40',
-        'gradient-purple':
-          'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 border-0 p-0.5 transition-all duration-500 ease-in-out focus:ring-3 focus:ring-purple-500/40',
-        'gradient-amber':
-          'bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 border-0 p-0.5 transition-all duration-500 ease-in-out focus:ring-3 focus:ring-amber-500/40',
-        'glass-violet':
+        'soft-violet':
           'text-violet-600 dark:text-violet-300 bg-violet-500/10 dark:bg-violet-500/15 hover:bg-violet-500/20 dark:hover:bg-violet-500/25 border-0 transition-all duration-200',
-        'glass-indigo':
+        'soft-indigo':
           'text-indigo-600 dark:text-indigo-300 bg-indigo-500/10 dark:bg-indigo-500/15 hover:bg-indigo-500/20 dark:hover:bg-indigo-500/25 border-0 transition-all duration-200',
-        'glass-blue':
+        'soft-blue':
           'text-blue-600 dark:text-blue-300 bg-blue-500/10 dark:bg-blue-500/15 hover:bg-blue-500/20 dark:hover:bg-blue-500/25 border-0 transition-all duration-200',
-        'glass-green':
+        'soft-green':
           'text-green-600 dark:text-green-300 bg-green-500/10 dark:bg-green-500/15 hover:bg-green-500/20 dark:hover:bg-green-500/25 border-0 transition-all duration-200',
-        'glass-red':
+        'soft-red':
           'text-red-600 dark:text-red-300 bg-red-500/10 dark:bg-red-500/15 hover:bg-red-500/20 dark:hover:bg-red-500/25 border-0 transition-all duration-200',
-        'glass-yellow':
-          'text-yellow-600 dark:text-yellow-300 bg-yellow-500/10 dark:bg-yellow-500/15 hover:bg-yellow-500/20 dark:hover:bg-yellow-500/25 border-0 transition-all duration-200',
         'outline-blue':
           'bg-transparent border border-blue-500 dark:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950 transition-all duration-200',
         'outline-green':
@@ -134,31 +119,19 @@
           'bg-transparent text-button-invisible hover:text-button-primary',
         outline:
           'bg-transparent text-button-default hover:text-button-hover-default',
-        form: 'bg-transparent text-input-default focus:outline-hidden',
         link: 'bg-transparent text-button-default underline-offset-4 hover:underline',
-        success: 'bg-transparent text-button-accent',
         danger: 'bg-transparent text-button-accent',
-        warning: 'bg-transparent text-button-accent',
         modern:
           'bg-transparent font-medium text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white',
         glass:
           'bg-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100',
         'glass-dark': 'bg-transparent text-white',
         'primary-dark': 'bg-transparent text-white',
-        'gradient-blue':
-          'bg-white/20 dark:bg-gray-900/70 text-white dark:text-blue-200',
-        'gradient-green':
-          'bg-white/80 dark:bg-gray-900/80 text-green-600 dark:text-green-400',
-        'gradient-purple':
-          'bg-white/20 dark:bg-gray-900/70 text-white dark:text-purple-200',
-        'gradient-amber':
-          'bg-white/20 dark:bg-gray-900/70 text-white dark:text-amber-200',
-        'glass-violet': 'bg-transparent',
-        'glass-indigo': 'bg-transparent',
-        'glass-blue': 'bg-transparent',
-        'glass-green': 'bg-transparent',
-        'glass-red': 'bg-transparent',
-        'glass-yellow': 'bg-transparent',
+        'soft-violet': 'bg-transparent',
+        'soft-indigo': 'bg-transparent',
+        'soft-blue': 'bg-transparent',
+        'soft-green': 'bg-transparent',
+        'soft-red': 'bg-transparent',
         'outline-blue': 'bg-transparent text-blue-600 dark:text-blue-400',
         'outline-green': 'bg-transparent text-green-600 dark:text-green-400',
         'outline-purple': 'bg-transparent text-indigo-600 dark:text-indigo-400',

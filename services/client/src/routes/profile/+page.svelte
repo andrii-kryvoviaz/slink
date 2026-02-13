@@ -141,7 +141,7 @@
         <Button
           type="submit"
           form="profile-form"
-          variant="glass-blue"
+          variant="soft-blue"
           rounded="full"
           size="sm"
           disabled={$isProfileFormLoading}
@@ -238,7 +238,7 @@
         <Button
           type="submit"
           form="password-form"
-          variant="glass-blue"
+          variant="soft-blue"
           rounded="full"
           size="sm"
           disabled={$isPasswordFormLoading}

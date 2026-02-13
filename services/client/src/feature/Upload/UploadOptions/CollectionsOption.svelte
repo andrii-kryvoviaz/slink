@@ -74,7 +74,7 @@
     {#snippet child({ props })}
       <Button
         {...props}
-        variant="glass-indigo"
+        variant="soft-indigo"
         rounded="full"
         size="sm"
         {disabled}

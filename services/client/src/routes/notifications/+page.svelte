@@ -79,7 +79,7 @@
 
             {#if notificationFeed.unreadCount > 0}
               <Button
-                variant="glass-violet"
+                variant="soft-violet"
                 size="sm"
                 onclick={handleMarkAllAsRead}
               >

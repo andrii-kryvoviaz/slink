@@ -77,7 +77,7 @@
       Create API keys for ShareX and other third-party integrations
     </p>
   </div>
-  <Button variant="primary" size="sm" onclick={handleCreateClick}>
+  <Button variant="soft-blue" size="sm" onclick={handleCreateClick}>
     <Icon icon="ph:plus" class="h-4 w-4 mr-2" />
     Create API Key
   </Button>

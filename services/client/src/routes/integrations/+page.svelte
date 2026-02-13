@@ -83,7 +83,7 @@
           </p>
         </div>
         <Button
-          variant="glass"
+          variant="soft-blue"
           size="sm"
           rounded="full"
           onclick={handleCreateClick}

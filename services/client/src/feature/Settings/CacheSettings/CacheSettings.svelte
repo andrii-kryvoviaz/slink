@@ -83,7 +83,7 @@
             Cancel
           </Button>
           <Button
-            variant="glass-red"
+            variant="soft-red"
             size="sm"
             rounded="full"
             onclick={handleClearCache}
@@ -102,7 +102,7 @@
           </Button>
         {:else}
           <Button
-            variant="glass-red"
+            variant="soft-red"
             size="sm"
             rounded="full"
             onclick={() => (showConfirmation = true)}
