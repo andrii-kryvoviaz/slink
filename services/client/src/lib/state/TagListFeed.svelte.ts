@@ -83,6 +83,7 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
   }
 
   set search(value: string) {
+    if (this._searchTerm === value) return;
     this._searchTerm = value;
     this.load({ searchTerm: value, page: 1 });
   }
@@ -92,6 +93,7 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
   }
 
   set includeChildren(value: boolean) {
+    if (this._includeChildren === value) return;
     this._includeChildren = value;
     this.load({ page: 1 });
   }
@@ -101,6 +103,7 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
   }
 
   set orderBy(value: 'name' | 'path' | 'createdAt' | 'updatedAt') {
+    if (this._orderBy === value) return;
     this._orderBy = value;
     this.load({ page: 1 });
   }
@@ -110,6 +113,7 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
   }
 
   set order(value: 'asc' | 'desc') {
+    if (this._sortOrder === value) return;
     this._sortOrder = value;
     this.load({ page: 1 });
   }
