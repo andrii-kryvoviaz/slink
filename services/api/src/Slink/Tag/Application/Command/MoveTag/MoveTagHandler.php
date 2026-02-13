@@ -9,13 +9,14 @@ use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Tag\Domain\Exception\InvalidTagMoveException;
 use Slink\Tag\Domain\Exception\TagAccessDeniedException;
 use Slink\Tag\Domain\Repository\TagStoreRepositoryInterface;
+use Slink\Tag\Domain\Specification\TagCircularMoveSpecificationInterface;
 use Slink\Tag\Domain\Specification\TagDuplicateSpecificationInterface;
-use Slink\Tag\Domain\ValueObject\TagPath;
 
 final readonly class MoveTagHandler implements CommandHandlerInterface {
   public function __construct(
-    private TagStoreRepositoryInterface       $tagStore,
-    private TagDuplicateSpecificationInterface $duplicateSpecification,
+    private TagStoreRepositoryInterface              $tagStore,
+    private TagDuplicateSpecificationInterface        $duplicateSpecification,
+    private TagCircularMoveSpecificationInterface     $circularMoveSpecification,
   ) {
   }
 
@@ -35,20 +36,12 @@ final readonly class MoveTagHandler implements CommandHandlerInterface {
     }
 
     if ($newParentId !== null) {
-      $newParent = $this->tagStore->get($newParentId);
-
-      if ($tag->getPath()->isParentOf($newParent->getPath())) {
-        throw new InvalidTagMoveException('Cannot move a tag to one of its descendants');
-      }
-
-      $newPath = TagPath::createChild($newParent->getPath(), $tag->getName());
-    } else {
-      $newPath = TagPath::createRoot($tag->getName());
+      $this->circularMoveSpecification->validate($tagId, $newParentId);
     }
 
     $this->duplicateSpecification->ensureUnique($tag->getName(), $userId, $newParentId);
 
-    $tag->move($newParentId, $newPath);
+    $tag->move($newParentId);
     $this->tagStore->store($tag);
   }
 }

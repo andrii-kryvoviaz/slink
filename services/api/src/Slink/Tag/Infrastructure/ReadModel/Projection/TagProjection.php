@@ -16,6 +16,8 @@ use Slink\Tag\Domain\Event\TagWasCreated;
 use Slink\Tag\Domain\Event\TagWasDeleted;
 use Slink\Tag\Domain\Event\TagWasMoved;
 use Slink\Tag\Domain\Repository\TagRepositoryInterface;
+use Slink\Tag\Domain\ValueObject\TagName;
+use Slink\Tag\Domain\ValueObject\TagPath;
 use Slink\Tag\Infrastructure\ReadModel\View\TagView;
 use Slink\User\Domain\Repository\UserRepositoryInterface;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
@@ -64,24 +66,35 @@ final class TagProjection extends AbstractProjection {
    */
   public function handleTagWasMoved(TagWasMoved $event): void {
     $tagView = $this->tagRepository->oneById($event->id);
-    $oldPath = $event->oldPath->getValue();
-    $newPath = $event->newPath->getValue();
-    $updatedAt = $event->updatedAt ?? DateTime::now();
-
-    $tagView->setPath($newPath);
-    $tagView->setParentId($event->newParentId?->toString());
-    $tagView->setUpdatedAt($updatedAt);
+    $oldPath = $tagView->getPath();
+    $newParent = null;
 
     if ($event->newParentId) {
       $newParent = $this->tagRepository->oneById($event->newParentId);
-      $tagView->setParent($newParent);
-    } else {
-      $tagView->setParent(null);
     }
 
-    $this->tagRepository->add($tagView);
+    $newPath = $newParent
+      ? TagPath::createChild(TagPath::fromString($newParent->getPath()), TagName::fromString($tagView->getName()))
+      : TagPath::createRoot(TagName::fromString($tagView->getName()));
 
-    $this->tagRepository->updateDescendantPaths($oldPath, $newPath, $updatedAt);
+    $currentParent = $tagView->getParent();
+    if ($currentParent && (!$newParent || $currentParent->getUuid() !== $newParent->getUuid())) {
+      $currentParent->removeChild($tagView);
+    }
+
+    if ($newParent) {
+      $newParent->addChild($tagView);
+    }
+
+    $tagView->updateHierarchy(
+      $newPath->getValue(),
+      $event->newParentId?->toString(),
+      $newParent,
+      $event->updatedAt,
+    );
+
+    $this->tagRepository->add($tagView);
+    $this->tagRepository->updateDescendantPaths($oldPath, $newPath->getValue(), $event->updatedAt ?? DateTime::now());
   }
 
   public function handleTagWasDeleted(TagWasDeleted $event): void {

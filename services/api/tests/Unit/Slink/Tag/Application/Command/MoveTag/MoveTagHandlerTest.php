@@ -12,10 +12,10 @@ use Slink\Tag\Application\Command\MoveTag\MoveTagHandler;
 use Slink\Tag\Domain\Exception\InvalidTagMoveException;
 use Slink\Tag\Domain\Exception\TagAccessDeniedException;
 use Slink\Tag\Domain\Repository\TagStoreRepositoryInterface;
+use Slink\Tag\Domain\Specification\TagCircularMoveSpecificationInterface;
 use Slink\Tag\Domain\Specification\TagDuplicateSpecificationInterface;
 use Slink\Tag\Domain\Tag;
 use Slink\Tag\Domain\ValueObject\TagName;
-use Slink\Tag\Domain\ValueObject\TagPath;
 
 final class MoveTagHandlerTest extends TestCase {
 
@@ -23,30 +23,21 @@ final class MoveTagHandlerTest extends TestCase {
   public function itMovesTagToNewParent(): void {
     $tagStore = $this->createMock(TagStoreRepositoryInterface::class);
     $duplicateSpec = $this->createStub(TagDuplicateSpecificationInterface::class);
+    $circularMoveSpec = $this->createStub(TagCircularMoveSpecificationInterface::class);
     $tag = $this->createMock(Tag::class);
     $userId = ID::generate();
     $tagId = ID::generate();
     $newParentId = ID::generate();
 
     $tag->method('getUserId')->willReturn($userId);
-    $tag->method('getPath')->willReturn(TagPath::fromString('#tag'));
     $tag->method('getName')->willReturn(TagName::fromString('tag'));
 
-    $newParent = $this->createStub(Tag::class);
-    $newParent->method('getPath')->willReturn(TagPath::fromString('#newparent'));
-
-    $tagStore->method('get')->willReturnCallback(
-      fn(ID $id) => match (true) {
-        $id->equals($tagId) => $tag,
-        $id->equals($newParentId) => $newParent,
-        default => throw new \RuntimeException('Unexpected ID'),
-      }
-    );
+    $tagStore->method('get')->willReturn($tag);
 
     $tag->expects($this->once())->method('move');
     $tagStore->expects($this->once())->method('store')->with($tag);
 
-    $handler = new MoveTagHandler($tagStore, $duplicateSpec);
+    $handler = new MoveTagHandler($tagStore, $duplicateSpec, $circularMoveSpec);
     $command = new MoveTagCommand($tagId->toString(), $newParentId->toString());
     $handler($command, $userId->toString());
   }
@@ -55,30 +46,22 @@ final class MoveTagHandlerTest extends TestCase {
   public function itMovesTagToRoot(): void {
     $tagStore = $this->createMock(TagStoreRepositoryInterface::class);
     $duplicateSpec = $this->createStub(TagDuplicateSpecificationInterface::class);
+    $circularMoveSpec = $this->createStub(TagCircularMoveSpecificationInterface::class);
     $tag = $this->createMock(Tag::class);
     $userId = ID::generate();
     $tagId = ID::generate();
 
     $tag->method('getUserId')->willReturn($userId);
-    $tag->method('getPath')->willReturn(TagPath::fromString('#parent/tag'));
     $tag->method('getName')->willReturn(TagName::fromString('tag'));
 
-    $tagStore->method('get')->willReturnCallback(
-      fn(ID $id) => match (true) {
-        $id->equals($tagId) => $tag,
-        default => throw new \RuntimeException('Unexpected ID'),
-      }
-    );
+    $tagStore->method('get')->willReturn($tag);
 
     $tag->expects($this->once())
       ->method('move')
-      ->with(
-        $this->isNull(),
-        $this->callback(fn(TagPath $path) => $path->getValue() === '#tag')
-      );
+      ->with($this->isNull());
     $tagStore->expects($this->once())->method('store')->with($tag);
 
-    $handler = new MoveTagHandler($tagStore, $duplicateSpec);
+    $handler = new MoveTagHandler($tagStore, $duplicateSpec, $circularMoveSpec);
     $command = new MoveTagCommand($tagId->toString(), null);
     $handler($command, $userId->toString());
   }
@@ -87,6 +70,7 @@ final class MoveTagHandlerTest extends TestCase {
   public function itThrowsWhenUserDoesNotOwnTag(): void {
     $tagStore = $this->createStub(TagStoreRepositoryInterface::class);
     $duplicateSpec = $this->createStub(TagDuplicateSpecificationInterface::class);
+    $circularMoveSpec = $this->createStub(TagCircularMoveSpecificationInterface::class);
     $tag = $this->createStub(Tag::class);
     $tagOwnerId = ID::generate();
     $differentUserId = ID::generate();
@@ -98,7 +82,7 @@ final class MoveTagHandlerTest extends TestCase {
 
     $this->expectException(TagAccessDeniedException::class);
 
-    $handler = new MoveTagHandler($tagStore, $duplicateSpec);
+    $handler = new MoveTagHandler($tagStore, $duplicateSpec, $circularMoveSpec);
     $command = new MoveTagCommand($tagId->toString(), $newParentId->toString());
     $handler($command, $differentUserId->toString());
   }
@@ -107,6 +91,7 @@ final class MoveTagHandlerTest extends TestCase {
   public function itThrowsWhenMovingTagToItself(): void {
     $tagStore = $this->createStub(TagStoreRepositoryInterface::class);
     $duplicateSpec = $this->createStub(TagDuplicateSpecificationInterface::class);
+    $circularMoveSpec = $this->createStub(TagCircularMoveSpecificationInterface::class);
     $tag = $this->createStub(Tag::class);
     $userId = ID::generate();
     $tagId = ID::generate();
@@ -117,7 +102,7 @@ final class MoveTagHandlerTest extends TestCase {
     $this->expectException(InvalidTagMoveException::class);
     $this->expectExceptionMessage('Cannot move a tag to itself');
 
-    $handler = new MoveTagHandler($tagStore, $duplicateSpec);
+    $handler = new MoveTagHandler($tagStore, $duplicateSpec, $circularMoveSpec);
     $command = new MoveTagCommand($tagId->toString(), $tagId->toString());
     $handler($command, $userId->toString());
   }
@@ -126,29 +111,23 @@ final class MoveTagHandlerTest extends TestCase {
   public function itThrowsWhenMovingToDescendant(): void {
     $tagStore = $this->createStub(TagStoreRepositoryInterface::class);
     $duplicateSpec = $this->createStub(TagDuplicateSpecificationInterface::class);
+    $circularMoveSpec = $this->createMock(TagCircularMoveSpecificationInterface::class);
     $tag = $this->createStub(Tag::class);
     $userId = ID::generate();
     $tagId = ID::generate();
     $newParentId = ID::generate();
 
     $tag->method('getUserId')->willReturn($userId);
-    $tag->method('getPath')->willReturn(TagPath::fromString('#parent'));
+    $tagStore->method('get')->willReturn($tag);
 
-    $newParent = $this->createStub(Tag::class);
-    $newParent->method('getPath')->willReturn(TagPath::fromString('#parent/child'));
-
-    $tagStore->method('get')->willReturnCallback(
-      fn(ID $id) => match (true) {
-        $id->equals($tagId) => $tag,
-        $id->equals($newParentId) => $newParent,
-        default => throw new \RuntimeException('Unexpected ID'),
-      }
-    );
+    $circularMoveSpec->expects($this->once())
+      ->method('validate')
+      ->willThrowException(new InvalidTagMoveException('Cannot move a tag to one of its descendants'));
 
     $this->expectException(InvalidTagMoveException::class);
     $this->expectExceptionMessage('Cannot move a tag to one of its descendants');
 
-    $handler = new MoveTagHandler($tagStore, $duplicateSpec);
+    $handler = new MoveTagHandler($tagStore, $duplicateSpec, $circularMoveSpec);
     $command = new MoveTagCommand($tagId->toString(), $newParentId->toString());
     $handler($command, $userId->toString());
   }

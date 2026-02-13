@@ -42,13 +42,10 @@ final class Tag extends AbstractAggregateRoot {
     return $tag;
   }
 
-  public function move(?ID $newParentId, TagPath $newPath): void {
+  public function move(?ID $newParentId): void {
     $now = DateTime::now();
     $this->recordThat(new TagWasMoved(
       $this->aggregateRootId(),
-      $this->path ?? TagPath::fromString('#'),
-      $newPath,
-      $this->parentId,
       $newParentId,
       $now,
     ));
@@ -75,7 +72,6 @@ final class Tag extends AbstractAggregateRoot {
   }
 
   public function applyTagWasMoved(TagWasMoved $event): void {
-    $this->path = $event->newPath;
     $this->parentId = $event->newParentId;
     $this->updatedAt = $event->updatedAt ?? DateTime::now();
   }

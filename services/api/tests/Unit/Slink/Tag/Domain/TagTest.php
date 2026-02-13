@@ -15,6 +15,8 @@ use Slink\Tag\Domain\Tag;
 use Slink\Tag\Domain\ValueObject\TagName;
 use Slink\Tag\Domain\ValueObject\TagPath;
 
+
+
 final class TagTest extends TestCase {
 
   #[Test]
@@ -159,10 +161,9 @@ final class TagTest extends TestCase {
     $userId = ID::generate();
     $tagName = TagName::fromString('movable-tag');
     $newParentId = ID::generate();
-    $newPath = TagPath::fromString('#newparent/movable-tag');
 
     $tag = Tag::create($tagId, $userId, $tagName);
-    $tag->move($newParentId, $newPath);
+    $tag->move($newParentId);
 
     $events = $tag->releaseEvents();
     $this->assertCount(2, $events);
@@ -171,9 +172,6 @@ final class TagTest extends TestCase {
 
     $moveEvent = $events[1];
     $this->assertInstanceOf(TagWasMoved::class, $moveEvent);
-    $this->assertEquals('#movable-tag', $moveEvent->oldPath->getValue());
-    $this->assertEquals('#newparent/movable-tag', $moveEvent->newPath->getValue());
-    $this->assertNull($moveEvent->oldParentId);
     $this->assertEquals($newParentId, $moveEvent->newParentId);
   }
 
@@ -184,19 +182,15 @@ final class TagTest extends TestCase {
     $parentId = ID::generate();
     $tagName = TagName::fromString('child-tag');
     $parentPath = TagPath::fromString('#parent');
-    $rootPath = TagPath::fromString('#child-tag');
 
     $tag = Tag::create($tagId, $userId, $tagName, $parentId, $parentPath);
-    $tag->move(null, $rootPath);
+    $tag->move(null);
 
     $events = $tag->releaseEvents();
     $this->assertCount(2, $events);
 
     $moveEvent = $events[1];
     $this->assertInstanceOf(TagWasMoved::class, $moveEvent);
-    $this->assertEquals('#parent/child-tag', $moveEvent->oldPath->getValue());
-    $this->assertEquals('#child-tag', $moveEvent->newPath->getValue());
-    $this->assertEquals($parentId, $moveEvent->oldParentId);
     $this->assertNull($moveEvent->newParentId);
   }
 }
