@@ -2,7 +2,7 @@
   import { ToggleGroup } from '@slink/ui/components';
   import type { ToggleGroupOption } from '@slink/ui/components';
 
-  import type { ViewMode } from '@slink/lib/settings/setters/viewMode';
+  import type { ViewMode } from '@slink/lib/settings';
 
   import type { ViewModeToggleProps } from './ViewModeToggle.types';
   import { viewModeRegistry } from './ViewModeToggle.types';

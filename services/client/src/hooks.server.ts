@@ -7,7 +7,7 @@ import { ApiProxy } from '@slink/api/ApiProxy';
 import { createApiClient } from '@slink/api/Client';
 
 import { CookieManager } from '@slink/lib/auth/CookieManager';
-import { Theme, setCookieSettingsOnLocals } from '@slink/lib/settings';
+import { Theme, setCookieSettingsOnLocals } from '@slink/lib/settings/server';
 
 const handleWellKnownRequests: Handle = async ({ event, resolve }) => {
   const { pathname } = event.url;

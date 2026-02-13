@@ -4,7 +4,6 @@
   import { Button } from '@slink/ui/components/button';
   import { onMount } from 'svelte';
 
-  import { page } from '$app/state';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
@@ -19,11 +18,9 @@
   const tagFeed = useTagListFeed();
   const createModalState = createCreateTagModalState();
 
-  const serverSettings = page.data.settings;
-
   const tableSettings = useTableSettings('tags', {
-    pageSize: serverSettings?.table?.tags?.pageSize || 10,
-    columnVisibility: serverSettings?.table?.tags?.columnVisibility || {
+    pageSize: 10,
+    columnVisibility: {
       name: true,
       imageCount: true,
       children: true,

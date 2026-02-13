@@ -12,10 +12,9 @@
   import { untrack } from 'svelte';
 
   import { enhance } from '$app/forms';
+  import { page } from '$app/state';
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
-
-  import { settings } from '@slink/lib/settings';
 
   import { withLoadingState } from '@slink/utils/form/withLoadingState';
   import { useWritable } from '@slink/utils/store/contextAwareStore';
@@ -30,6 +29,7 @@
 
   let { form, data }: Props = $props();
 
+  const { settings } = page.data;
   let isLoading = useWritable('loginFormLoadingState', false);
   let usernameValue = $state('');
   let passwordValue = $state('');
@@ -42,9 +42,9 @@
   let showPassword = $state(false);
   let formElement: HTMLFormElement;
 
-  const { isLight } = settings.get('theme', data.settings.theme);
-
-  let buttonVariant: ButtonVariant = $derived($isLight ? 'dark' : 'primary');
+  let buttonVariant: ButtonVariant = $derived(
+    settings.theme.isLight ? 'dark' : 'primary',
+  );
 
   function fillDemoCredentials() {
     if (

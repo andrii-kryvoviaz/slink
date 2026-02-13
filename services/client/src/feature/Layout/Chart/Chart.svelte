@@ -5,7 +5,7 @@
   import type ApexCharts from 'apexcharts';
   import { twMerge } from 'tailwind-merge';
 
-  import { settings } from '$lib/settings';
+  import { page } from '$app/state';
   import { deepMerge } from '$lib/utils/object/deepMerge';
 
   interface Props {
@@ -14,6 +14,8 @@
   }
 
   let { options, ...props }: Props = $props();
+
+  const { settings } = page.data;
 
   let defaultOptions: ChartOptions = {
     chart: {
@@ -118,9 +120,6 @@
 
   const classes = twMerge('w-full', props.class ?? '');
 
-  const currentTheme = settings.get('theme', 'light');
-  const { isDark } = currentTheme;
-
   const handleOptionsChange = (
     options: ChartOptions,
     theme: 'dark' | 'light',
@@ -145,7 +144,7 @@
   };
 
   let chartOptions = $derived(
-    handleOptionsChange(options, $isDark ? 'dark' : 'light'),
+    handleOptionsChange(options, settings.theme.isDark ? 'dark' : 'light'),
   );
 </script>
 

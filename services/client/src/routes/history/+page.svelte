@@ -24,18 +24,17 @@
 
   import { skeleton } from '@slink/lib/actions/skeleton';
   import { createTagFilterManager } from '@slink/lib/composables/useTagFilterUrl';
-  import { settings } from '@slink/lib/settings';
-  import type { ViewMode } from '@slink/lib/settings/setters/viewMode';
+  import { type ViewMode } from '@slink/lib/settings';
   import { createImageSelectionState } from '@slink/lib/state/ImageSelectionState.svelte';
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
+
+  const { settings } = page.data;
 
   const historyFeedState = useUploadHistoryFeed();
   const tagFilterManager = createTagFilterManager(page.url);
   const selectionState = createImageSelectionState();
 
-  let viewMode = $derived<ViewMode>(
-    page.data.settings?.history?.viewMode || 'list',
-  );
+  let viewMode = $derived(settings.history.viewMode);
 
   const {
     isLoading: batchDeleteIsLoading,
@@ -50,10 +49,6 @@
       ApiClient.image.batchRemove(imageIds, preserveOnDisk),
     { minExecutionTime: 300 },
   );
-
-  $effect(() => {
-    settings.set('history', { viewMode });
-  });
 
   $effect(() => {
     if (tagFilterManager.hasFiltersInUrl()) {
@@ -82,7 +77,7 @@
   };
 
   const handleViewModeChange = (newViewMode: ViewMode) => {
-    viewMode = newViewMode;
+    settings.history = { viewMode: newViewMode };
   };
 
   const onImageDelete = (id: string) => {

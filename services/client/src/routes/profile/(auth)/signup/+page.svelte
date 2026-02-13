@@ -10,32 +10,29 @@
   import { Input } from '@slink/ui/components/input';
 
   import { enhance } from '$app/forms';
+  import { page } from '$app/state';
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
-
-  import { settings } from '@slink/lib/settings';
 
   import { withLoadingState } from '@slink/utils/form/withLoadingState';
   import { useWritable } from '@slink/utils/store/contextAwareStore';
   import { toast } from '@slink/utils/ui/toast-sonner.svelte';
 
-  import type { PageData } from './$types';
-
   interface Props {
     form: any;
-    data: PageData;
   }
 
-  let { form, data }: Props = $props();
+  let { form }: Props = $props();
 
+  const { settings } = page.data;
   let isLoading = useWritable('signUpFormLoadingState', false);
   let passwordValue = $state('');
   let showPassword = $state(false);
   let showConfirmPassword = $state(false);
 
-  const { isLight } = settings.get('theme', data.settings.theme);
-
-  let buttonVariant: ButtonVariant = $derived($isLight ? 'dark' : 'primary');
+  let buttonVariant: ButtonVariant = $derived(
+    settings.theme.isLight ? 'dark' : 'primary',
+  );
 
   $effect(() => {
     if (form?.errors?.message) {

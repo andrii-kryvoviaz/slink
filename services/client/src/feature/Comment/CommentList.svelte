@@ -3,12 +3,12 @@
   import { Tooltip } from '@slink/ui/components/tooltip';
   import { onDestroy } from 'svelte';
 
+  import { page } from '$app/state';
   import Icon from '@iconify/svelte';
 
   import type { AuthenticatedUser } from '@slink/api/Response';
 
-  import { SortOrder } from '@slink/lib/enum/SortOrder';
-  import { settings } from '@slink/lib/settings';
+  import { SortOrder, toggleSortOrder } from '@slink/lib/enum/SortOrder';
   import { CommentListState } from '@slink/lib/state/CommentListState.svelte';
 
   import CommentInput from './CommentInput.svelte';
@@ -30,7 +30,7 @@
     onClose,
   }: Props = $props();
 
-  const { sortOrder } = settings.get('comment', { sortOrder: SortOrder.Asc });
+  const { settings } = page.data;
 
   let state = $state<CommentListState | null>(null);
 
@@ -58,7 +58,7 @@
         imageId,
         imageOwnerId,
         currentUser,
-        sortOrder,
+        getSortOrder: () => settings.comment.sortOrder,
       });
       state?.load();
     }
@@ -75,10 +75,10 @@
     state?.destroy();
   });
 
-  function toggleSortOrder() {
-    settings.set('comment', {
-      sortOrder: $sortOrder === SortOrder.Asc ? SortOrder.Desc : SortOrder.Asc,
-    });
+  function handleToggleSortOrder() {
+    settings.comment = {
+      sortOrder: toggleSortOrder(settings.comment.sortOrder),
+    };
   }
 </script>
 
@@ -95,18 +95,20 @@
           <Tooltip side="bottom" size="xs" variant="dark">
             {#snippet trigger()}
               <button
-                onclick={toggleSortOrder}
+                onclick={handleToggleSortOrder}
                 class="flex items-center justify-center w-6 h-6 rounded hover:bg-white/10 transition-colors"
               >
                 <Icon
-                  icon={$sortOrder === SortOrder.Asc
+                  icon={settings.comment.sortOrder === SortOrder.Asc
                     ? 'heroicons:bars-arrow-up'
                     : 'heroicons:bars-arrow-down'}
                   class="w-4 h-4 text-white/40 hover:text-white/60"
                 />
               </button>
             {/snippet}
-            {$sortOrder === SortOrder.Asc ? 'Oldest first' : 'Newest first'}
+            {settings.comment.sortOrder === SortOrder.Asc
+              ? 'Oldest first'
+              : 'Newest first'}
           </Tooltip>
           <span class="text-xs text-white/40 leading-6">{count}</span>
         {/if}

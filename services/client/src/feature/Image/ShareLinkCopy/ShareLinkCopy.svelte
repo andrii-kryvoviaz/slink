@@ -5,13 +5,13 @@
   import { Button } from '@slink/ui/components/button';
   import * as DropdownMenu from '@slink/ui/components/dropdown-menu/index.js';
 
+  import { page } from '$app/state';
   import { useAutoReset } from '$lib/utils/time/useAutoReset.svelte';
   import Icon from '@iconify/svelte';
   import { cubicOut } from 'svelte/easing';
   import { scale } from 'svelte/transition';
 
-  import { settings } from '@slink/lib/settings';
-  import type { ShareFormat } from '@slink/lib/settings/setters/share';
+  import type { ShareFormat } from '@slink/lib/settings';
 
   import { toast } from '@slink/utils/ui/toast-sonner.svelte';
 
@@ -31,6 +31,7 @@
     onBeforeCopy,
   }: Props = $props();
 
+  const { settings } = page.data;
   let displayValue = $derived(shareUrl ?? value);
 
   interface Format {
@@ -79,13 +80,12 @@
     },
   ];
 
-  const { format: formatStore } = settings.get('share', { format: 'direct' });
-  let selectedFormat = $derived($formatStore);
+  let selectedFormat = $derived(settings.share.format);
   let isCopyingImage = $state(false);
   const isCopiedState = useAutoReset(2000);
 
   const setSelectedFormat = (format: ShareFormat) => {
-    settings.set('share', { format });
+    settings.share = { format };
   };
 
   const getSelectedFormat = (): Format =>

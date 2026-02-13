@@ -1,7 +1,6 @@
 import { ApiClient } from '@slink/api';
 
 import { browser } from '$app/environment';
-import type { Readable } from 'svelte/store';
 
 import type { AuthenticatedUser, CommentItem } from '@slink/api/Response';
 
@@ -21,7 +20,7 @@ interface CommentListParams {
   imageId: string;
   imageOwnerId: string;
   currentUser: AuthenticatedUser | null;
-  sortOrder: Readable<SortOrder>;
+  getSortOrder: () => SortOrder;
 }
 
 export class CommentListState extends AbstractHttpState<CommentItem[]> {
@@ -31,20 +30,17 @@ export class CommentListState extends AbstractHttpState<CommentItem[]> {
   private _replyingTo: CommentItem | null = $state(null);
   private _editingComment: CommentItem | null = $state(null);
   private _hasLoaded = $state(false);
-  private _sortOrder: SortOrder = $state(SortOrder.Asc);
+  private readonly _getSortOrder: () => SortOrder;
   private _unsubscribe: (() => void) | null = null;
-  private _unsubscribeSortOrder: (() => void) | null = null;
 
   private constructor(
     private readonly imageId: string,
     private readonly imageOwnerId: string,
     private readonly currentUser: AuthenticatedUser | null,
-    sortOrder: Readable<SortOrder>,
+    getSortOrder: () => SortOrder,
   ) {
     super();
-    this._unsubscribeSortOrder = sortOrder.subscribe((value) => {
-      this._sortOrder = value;
-    });
+    this._getSortOrder = getSortOrder;
   }
 
   static create(params: CommentListParams): CommentListState | null {
@@ -53,7 +49,7 @@ export class CommentListState extends AbstractHttpState<CommentItem[]> {
       params.imageId,
       params.imageOwnerId,
       params.currentUser,
-      params.sortOrder,
+      params.getSortOrder,
     );
   }
 
@@ -74,12 +70,10 @@ export class CommentListState extends AbstractHttpState<CommentItem[]> {
   destroy(): void {
     this._unsubscribe?.();
     this._unsubscribe = null;
-    this._unsubscribeSortOrder?.();
-    this._unsubscribeSortOrder = null;
   }
 
   get comments(): CommentItem[] {
-    return this._sortOrder === SortOrder.Asc
+    return this._getSortOrder() === SortOrder.Asc
       ? this._list.items
       : [...this._list.items].reverse();
   }

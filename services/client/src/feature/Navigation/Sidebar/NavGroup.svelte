@@ -7,8 +7,6 @@
   import { page } from '$app/state';
   import Icon from '@iconify/svelte';
 
-  import { settings } from '@slink/lib/settings';
-
   import type { AppSidebarGroup, AppSidebarItem } from './types';
 
   type Props = Record<string, unknown>;
@@ -17,6 +15,8 @@
     group,
     onNavigate,
   }: { group: AppSidebarGroup; onNavigate?: () => void } = $props();
+
+  const { settings } = page.data;
 
   const sidebar = useSidebar();
 
@@ -31,7 +31,7 @@
     );
   }
 
-  const savedGroups = page.data.settings?.navigation?.expandedGroups || {};
+  const savedGroups = settings.navigation.expandedGroups;
 
   function buildInitialExpandedState(): Record<string, boolean> {
     const items = group.items;
@@ -46,11 +46,9 @@
     buildInitialExpandedState(),
   );
 
-  settings.get('navigation', { expandedGroups: expandedItems });
-
   function setExpandedState(itemId: string, value: boolean) {
     expandedItems[itemId] = value;
-    settings.set('navigation', { expandedGroups: { ...expandedItems } });
+    settings.navigation = { expandedGroups: { ...expandedItems } };
   }
 
   function toggleExpanded(itemId: string) {

@@ -1,4 +1,4 @@
-import type { ViewMode } from '@slink/lib/settings/setters/viewMode';
+import type { ViewMode } from '@slink/lib/settings';
 
 export type ViewModeConfig = {
   label: string;

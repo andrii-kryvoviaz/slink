@@ -6,8 +6,8 @@ import type { ApiClientType } from '@slink/api/Client';
 
 import type { CookieManager } from '@slink/lib/auth/CookieManager';
 import type { User } from '@slink/lib/auth/Type/User';
-import type { CookieSettings } from '@slink/lib/settings';
 import type { GlobalSettings } from '@slink/lib/settings/Type/GlobalSettings';
+import type { UserSettings } from '@slink/lib/settings/UserSettings.svelte';
 
 declare global {
   namespace App {
@@ -21,12 +21,13 @@ declare global {
     }
     interface Locals {
       api: ApiClientType;
-      settings: CookieSettings;
+      settings: UserSettings;
       globalSettings: GlobalSettings | null;
       user: User | null;
       cookieManager: CookieManager;
     }
     interface PageData {
+      settings: UserSettings;
       userAgent: string;
       sidebarGroups?: AppSidebarGroup[];
     }

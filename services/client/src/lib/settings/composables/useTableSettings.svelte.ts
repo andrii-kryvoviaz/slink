@@ -1,7 +1,9 @@
-import { fromStore } from 'svelte/store';
+import { page } from '$app/state';
 
-import { settings } from '@slink/lib/settings';
-import type { TableSettings } from '@slink/lib/settings/setters/table';
+import type {
+  TableKeySettings,
+  TableState,
+} from '@slink/lib/settings/UserSettings.svelte';
 
 type TableKey = 'users' | 'tags';
 
@@ -13,29 +15,24 @@ interface TableSettingsInit {
 export type TableSettingsState = ReturnType<typeof useTableSettings>;
 
 export function useTableSettings(key: TableKey, initial: TableSettingsInit) {
-  const tableSettings = settings.get('table', {
-    [key]: initial,
-  });
-
-  const pageSize = fromStore(tableSettings[key].pageSize);
-  const columnVisibility = fromStore(tableSettings[key].columnVisibility);
+  const { settings } = page.data;
 
   return {
     get pageSize() {
-      return pageSize.current ?? initial.pageSize;
+      return settings.table[key]?.pageSize ?? initial.pageSize;
     },
     set pageSize(v: number) {
-      settings.update('table', {
+      settings.updateTable({
         [key]: { pageSize: v },
-      } as Partial<TableSettings>);
+      } as Partial<Record<keyof TableState, Partial<TableKeySettings>>>);
     },
     get columnVisibility() {
-      return columnVisibility.current ?? initial.columnVisibility;
+      return settings.table[key]?.columnVisibility ?? initial.columnVisibility;
     },
     set columnVisibility(v: Record<string, boolean>) {
-      settings.update('table', {
+      settings.updateTable({
         [key]: { columnVisibility: v },
-      } as Partial<TableSettings>);
+      } as Partial<Record<keyof TableState, Partial<TableKeySettings>>>);
     },
   };
 }

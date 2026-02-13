@@ -13,9 +13,8 @@
   import { fade } from 'svelte/transition';
 
   import { skeleton } from '@slink/lib/actions/skeleton';
-  import { settings } from '@slink/lib/settings';
+  import { type ViewMode } from '@slink/lib/settings';
   import { useTableSettings } from '@slink/lib/settings/composables/useTableSettings.svelte';
-  import type { ViewMode } from '@slink/lib/settings/setters/viewMode';
   import { useUserListFeed } from '@slink/lib/state/UserListFeed.svelte';
 
   import type { PageServerData } from './$types';
@@ -26,24 +25,19 @@
 
   let { data }: Props = $props();
 
+  const { settings } = page.data;
   let loggedInUser = $derived(data.user);
 
-  let viewMode = $derived<ViewMode>(
-    page.data.settings?.userAdmin?.viewMode || 'list',
-  );
+  let viewMode = $derived(settings.userAdmin.viewMode);
 
   const tableSettings = useTableSettings('users', {
-    pageSize: page.data.settings?.table?.users?.pageSize || 12,
-    columnVisibility: page.data.settings?.table?.users?.columnVisibility || {
+    pageSize: 12,
+    columnVisibility: {
       displayName: true,
       username: true,
       status: true,
       roles: true,
     },
-  });
-
-  $effect(() => {
-    settings.set('userAdmin', { viewMode });
   });
 
   const userFeedState = useUserListFeed();
@@ -58,7 +52,7 @@
   };
 
   const handleViewModeChange = (newViewMode: ViewMode) => {
-    viewMode = newViewMode;
+    settings.userAdmin = { viewMode: newViewMode };
   };
 
   const handlePageSizeChange = (size: number) => {

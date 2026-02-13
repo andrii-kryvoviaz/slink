@@ -11,11 +11,13 @@
   import '@slink/app.css';
 
   import { afterNavigate } from '$app/navigation';
+  import { page } from '$app/state';
 
   import { theme } from '@slink/lib/actions/theme';
   import { isAdmin } from '@slink/lib/auth/utils';
-  import { settings } from '@slink/lib/settings';
   import { initResponsiveStore } from '@slink/lib/stores/responsive.svelte';
+
+  const { settings } = page.data;
 
   let scrollAreaRef = $state<HTMLElement | null>(null);
 
@@ -34,26 +36,18 @@
   let isDemoMode = $derived(!!data.globalSettings?.demo?.enabled);
   let userIsAdmin = $derived(isAdmin(user));
 
-  const currentTheme = settings.get('theme', data.settings.theme);
-  const { isDark } = currentTheme;
-
   let showSidebar = $derived(!!user);
 
-  const sidebarSettings = settings.get('sidebar', data.settings.sidebar || {});
-  const { expanded } = sidebarSettings;
-
-  let sidebarOpen = $state($expanded ?? true);
+  let sidebarOpen = $state(settings.sidebar.expanded);
 
   $effect(() => {
-    if ($expanded !== sidebarOpen) {
-      settings.set('sidebar', { expanded: sidebarOpen });
-    }
+    settings.sidebar = { expanded: sidebarOpen };
   });
 
   initResponsiveStore();
 </script>
 
-<div class="relative flex h-screen" use:theme={$currentTheme}>
+<div class="relative flex h-screen" use:theme={settings.theme.current}>
   <Sidebar.Provider bind:open={sidebarOpen}>
     {#if showSidebar}
       <AppSidebar
@@ -89,10 +83,10 @@
         >
           {#snippet themeSwitch()}
             <ThemeSwitch
-              checked={$isDark}
+              checked={settings.theme.isDark}
               variant="default"
               animation="none"
-              on={{ change: (theme) => settings.set('theme', theme) }}
+              on={{ change: (theme) => (settings.theme.current = theme) }}
             />
           {/snippet}
         </Navbar>
