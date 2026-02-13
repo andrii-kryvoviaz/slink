@@ -4,7 +4,7 @@
   import { useSidebar } from '@slink/ui/components/sidebar/context.svelte.js';
   import * as Sidebar from '@slink/ui/components/sidebar/index.js';
 
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import Icon from '@iconify/svelte';
 
   import { settings } from '@slink/lib/settings';
@@ -21,7 +21,7 @@
   const sidebar = useSidebar();
 
   function isActiveRoute(href: string) {
-    return $page.url.pathname === href;
+    return page.url.pathname === href;
   }
 
   function isChildActive(item: AppSidebarItem): boolean {
@@ -31,7 +31,7 @@
     );
   }
 
-  const savedGroups = $page.data.settings?.navigation?.expandedGroups || {};
+  const savedGroups = page.data.settings?.navigation?.expandedGroups || {};
 
   function buildInitialExpandedState(): Record<string, boolean> {
     const items = group.items;

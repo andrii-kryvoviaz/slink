@@ -13,7 +13,7 @@
   import type { ToggleGroupOption } from '@slink/ui/components';
   import { untrack } from 'svelte';
 
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
@@ -29,10 +29,10 @@
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
 
   const historyFeedState = useUploadHistoryFeed();
-  const tagFilterManager = createTagFilterManager($page.url);
+  const tagFilterManager = createTagFilterManager(page.url);
   const selectionState = createImageSelectionState();
 
-  const serverSettings = $page.data.settings;
+  const serverSettings = page.data.settings;
 
   let viewMode = $state<HistoryViewMode>(
     serverSettings?.history?.viewMode || 'list',

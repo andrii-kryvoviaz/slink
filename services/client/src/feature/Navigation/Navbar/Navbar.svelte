@@ -6,7 +6,7 @@
   import type { Snippet } from 'svelte';
 
   import { goto } from '$app/navigation';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import type { User } from '$lib/auth/Type/User';
   import { usePublicImagesFeed } from '$lib/state/PublicImagesFeed.svelte.js';
   import Icon from '@iconify/svelte';
@@ -30,7 +30,7 @@
   }: Props = $props();
 
   let innerWidth = $state(0);
-  let isExplorePage = $derived($page.route.id === '/explore');
+  let isExplorePage = $derived(page.route.id === '/explore');
 
   const publicImagesFeed = usePublicImagesFeed();
 

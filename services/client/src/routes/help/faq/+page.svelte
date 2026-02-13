@@ -3,7 +3,7 @@
   import { onMount } from 'svelte';
 
   import { browser } from '$app/environment';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { GITHUB } from '$lib/constants/app';
   import Icon from '@iconify/svelte';
   import { fade, slide } from 'svelte/transition';
@@ -33,7 +33,7 @@
   };
 
   onMount(() => {
-    const hash = $page.url.hash;
+    const hash = page.url.hash;
     const slug = hash?.slice(1);
 
     if (!slug) return;
