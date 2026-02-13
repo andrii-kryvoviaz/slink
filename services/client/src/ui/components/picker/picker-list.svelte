@@ -82,7 +82,12 @@
   };
 </script>
 
-<div class={pickerContainerTheme({ variant })} onkeydown={handleKeydown}>
+<div
+  class={pickerContainerTheme({ variant })}
+  onkeydown={handleKeydown}
+  role="listbox"
+  tabindex="0"
+>
   {#if (variant === 'popover' || variant === 'glass') && showSearch}
     <PickerSearch bind:value={searchTerm} placeholder={searchPlaceholder} />
   {/if}
