@@ -68,7 +68,9 @@
             <th class="h-12 px-4 text-left min-w-25">
               <Skeleton width="45px" height="12px" />
             </th>
-            <th class="h-12 px-4 text-right w-12.5"></th>
+            <th class="h-12 px-4 text-right w-12.5">
+              <Skeleton width="55px" height="12px" class="ml-auto" />
+            </th>
           </tr>
         </thead>
         <tbody>

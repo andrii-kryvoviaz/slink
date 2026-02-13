@@ -110,6 +110,7 @@
     <div in:fade={{ duration: 200 }}>
       <TagDataTable
         tags={tagFeed.data}
+        onCreate={handleCreateTag}
         onDelete={handleDeleteTag}
         onMove={handleMoveTag}
         bind:searchTerm={searchQuery}

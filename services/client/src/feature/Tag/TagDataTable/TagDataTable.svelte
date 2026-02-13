@@ -5,6 +5,7 @@
     TagNameCell,
     TagsSkeleton,
   } from '@slink/feature/Tag';
+  import { Button } from '@slink/ui/components/button';
   import {
     ColumnToggle,
     DataTable,
@@ -24,6 +25,7 @@
 
   interface Props {
     tags: Tag[];
+    onCreate?: () => void;
     onDelete: (tag: Tag) => Promise<void>;
     onMove: (tagId: string, newParentId: string | null) => Promise<void>;
     searchTerm: string;
@@ -41,6 +43,7 @@
 
   let {
     tags,
+    onCreate,
     onDelete,
     onMove,
     searchTerm = $bindable(),
@@ -192,31 +195,43 @@
   {#if showSkeleton}
     <TagsSkeleton count={10} />
   {:else}
-    <DataTable {table} {columns} {isLoading}>
+    <DataTable {table} {isLoading}>
       {#snippet emptyState()}
-        <div class="flex flex-col items-center gap-3 py-8">
+        <div class="flex flex-col items-center">
           <div
-            class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800"
+            class="flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800/60"
           >
             <Icon
               icon="lucide:tag"
-              class="h-6 w-6 text-slate-400 dark:text-slate-500"
+              class="h-8 w-8 text-slate-400 dark:text-slate-500"
             />
           </div>
-          <div class="space-y-1">
-            <p class="text-sm font-medium text-slate-700 dark:text-slate-300">
+          <div class="mt-5 space-y-1.5 text-center">
+            <p class="text-lg font-semibold text-slate-700 dark:text-slate-300">
               No tags found
             </p>
             {#if searchTerm}
-              <p class="text-xs text-slate-500 dark:text-slate-400">
+              <p class="text-sm text-slate-500 dark:text-slate-400">
                 Try adjusting your search term
               </p>
             {:else}
-              <p class="text-xs text-slate-500 dark:text-slate-400">
+              <p class="text-sm text-slate-500 dark:text-slate-400">
                 Create your first tag to get started
               </p>
             {/if}
           </div>
+          {#if !searchTerm && onCreate}
+            <Button
+              variant="glass"
+              size="sm"
+              rounded="full"
+              onclick={onCreate}
+              class="mt-4"
+            >
+              <Icon icon="lucide:plus" class="h-4 w-4" />
+              Create Tag
+            </Button>
+          {/if}
         </div>
       {/snippet}
     </DataTable>

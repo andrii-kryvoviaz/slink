@@ -4,22 +4,38 @@
 >
   import { FlexRender } from '@slink/ui/components/data-table';
   import * as Table from '@slink/ui/components/table';
-  import type { ColumnDef, Table as TanstackTable } from '@tanstack/table-core';
+  import type { Table as TanstackTable } from '@tanstack/table-core';
   import type { Snippet } from 'svelte';
+  import { tv } from 'tailwind-variants';
+
+  const tableBodyVariants = tv({
+    base: 'transition-opacity duration-200',
+    variants: {
+      loading: {
+        true: 'opacity-40 pointer-events-none',
+        false: '',
+      },
+    },
+    defaultVariants: {
+      loading: false,
+    },
+  });
+
+  const tableHeadVariants = tv({
+    base: 'first:pl-4 first:text-left last:pr-4 last:text-right bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 text-xs font-medium uppercase tracking-wider',
+  });
+
+  const tableCellVariants = tv({
+    base: 'first:pl-4 first:text-left last:pr-4 last:text-right text-slate-700 dark:text-slate-300',
+  });
 
   interface Props {
     table: TanstackTable<TData>;
-    columns: ColumnDef<TData>[];
     isLoading?: boolean;
     emptyState?: Snippet;
   }
 
-  let {
-    table: dataTable,
-    columns,
-    isLoading = false,
-    emptyState,
-  }: Props = $props();
+  let { table: dataTable, isLoading = false, emptyState }: Props = $props();
 </script>
 
 <div
@@ -34,8 +50,9 @@
           >
             {#each headerGroup.headers as header (header.id)}
               <Table.Head
-                class="{(header.column.columnDef.meta as any)
-                  ?.className} bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 text-xs font-medium uppercase tracking-wider"
+                class={tableHeadVariants({
+                  class: (header.column.columnDef.meta as any)?.className,
+                })}
               >
                 {#if !header.isPlaceholder}
                   <FlexRender
@@ -49,9 +66,9 @@
         {/each}
       </Table.Header>
       <Table.Body
-        class={isLoading && dataTable.getRowModel().rows.length > 0
-          ? 'opacity-40 pointer-events-none transition-opacity duration-200'
-          : 'transition-opacity duration-200'}
+        class={tableBodyVariants({
+          loading: isLoading && dataTable.getRowModel().rows.length > 0,
+        })}
       >
         {#if dataTable.getRowModel().rows.length > 0}
           {#each dataTable.getRowModel().rows as row (row.id)}
@@ -60,8 +77,9 @@
             >
               {#each row.getVisibleCells() as cell (cell.id)}
                 <Table.Cell
-                  class="{(cell.column.columnDef.meta as any)
-                    ?.className} text-slate-700 dark:text-slate-300"
+                  class={tableCellVariants({
+                    class: (cell.column.columnDef.meta as any)?.className,
+                  })}
                 >
                   <FlexRender
                     content={cell.column.columnDef.cell}
@@ -71,16 +89,13 @@
               {/each}
             </Table.Row>
           {/each}
-        {:else if !isLoading && emptyState}
-          <Table.Row
-            class="border-slate-200/60 dark:border-slate-700/40 hover:bg-transparent"
-          >
-            <Table.Cell colspan={columns.length} class="h-32 text-center">
-              {@render emptyState()}
-            </Table.Cell>
-          </Table.Row>
         {/if}
       </Table.Body>
     </Table.Root>
+    {#if !dataTable.getRowModel().rows.length && !isLoading && emptyState}
+      <div class="flex items-center justify-center py-16">
+        {@render emptyState()}
+      </div>
+    {/if}
   </div>
 </div>

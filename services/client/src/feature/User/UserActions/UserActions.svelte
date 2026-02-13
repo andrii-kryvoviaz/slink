@@ -200,104 +200,107 @@
 </script>
 
 {#if !isCurrentUser}
-  <DropdownSimple bind:this={dropdownRef}>
-    {#snippet trigger(triggerProps)}
-      {#if variant === 'button'}
-        <button {...triggerProps} class={triggerClass}>
-          <Icon icon="heroicons:ellipsis-horizontal" class="w-4 h-4" />
-          Actions
-        </button>
-      {:else}
-        <button
-          {...triggerProps}
-          class={triggerClass ||
-            'p-2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-150'}
-        >
-          <Icon icon="heroicons:ellipsis-horizontal" class="w-5 h-5" />
-        </button>
-      {/if}
-    {/snippet}
-
-    {#if !showDeleteConfirmation}
-      <DropdownSimpleGroup>
-        {#if user.status === UserStatusEnum.Active}
-          <DropdownSimpleItem
-            on={{
-              click: () => changeUserStatus(UserStatusEnum.Suspended),
-            }}
-            closeOnSelect={false}
-            loading={userStatusChanging &&
-              statusToChange === UserStatusEnum.Suspended}
-          >
-            {#snippet icon()}
-              <Icon icon="heroicons:no-symbol" class="h-4 w-4" />
-            {/snippet}
-            <span>Suspend</span>
-          </DropdownSimpleItem>
+  <div class="flex items-center justify-end">
+    <DropdownSimple bind:this={dropdownRef}>
+      {#snippet trigger(triggerProps)}
+        {#if variant === 'button'}
+          <button {...triggerProps} class={triggerClass}>
+            <Icon icon="heroicons:ellipsis-horizontal" class="w-4 h-4" />
+            Actions
+          </button>
         {:else}
-          <DropdownSimpleItem
-            on={{
-              click: () => changeUserStatus(UserStatusEnum.Active),
-            }}
-            closeOnSelect={false}
-            loading={userStatusChanging &&
-              statusToChange === UserStatusEnum.Active}
+          <button
+            {...triggerProps}
+            class={triggerClass ||
+              'group relative flex items-center justify-center h-8 w-8 rounded-md bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-gray-200/60 dark:border-gray-700/60 text-gray-500 dark:text-gray-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:border-slate-300 dark:hover:border-slate-600 active:scale-95 focus-visible:ring-slate-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-all duration-200 ease-out'}
+            aria-label="Actions"
           >
-            {#snippet icon()}
-              <Icon icon="heroicons:check-circle" class="h-4 w-4" />
-            {/snippet}
-            <span>Activate</span>
-          </DropdownSimpleItem>
+            <Icon icon="lucide:ellipsis" class="h-4 w-4" />
+          </button>
         {/if}
-      </DropdownSimpleGroup>
+      {/snippet}
 
-      <DropdownSimpleGroup>
-        {#if !isAdmin}
-          <DropdownSimpleItem
-            on={{ click: () => grantRole(UserRole.Admin) }}
-            closeOnSelect={false}
-            loading={$grantRoleLoading}
-          >
-            {#snippet icon()}
-              <Icon icon="heroicons:key" class="h-4 w-4" />
-            {/snippet}
-            <span>Make Admin</span>
-          </DropdownSimpleItem>
-        {:else}
-          <DropdownSimpleItem
-            on={{ click: () => revokeRole(UserRole.Admin) }}
-            closeOnSelect={false}
-            loading={$revokeRoleLoading}
-          >
-            {#snippet icon()}
-              <Icon icon="heroicons:lock-closed" class="h-4 w-4" />
-            {/snippet}
-            <span>Remove Admin</span>
-          </DropdownSimpleItem>
-        {/if}
-      </DropdownSimpleGroup>
-    {/if}
-
-    <DropdownSimpleGroup>
       {#if !showDeleteConfirmation}
-        <DropdownSimpleItem
-          danger={true}
-          on={{ click: handleUserDeletion }}
-          closeOnSelect={false}
-        >
-          {#snippet icon()}
-            <Icon icon="heroicons:trash" class="h-4 w-4" />
-          {/snippet}
-          <span>Delete</span>
-        </DropdownSimpleItem>
-      {:else}
-        <UserDeleteConfirmation
-          {user}
-          loading={$userDeleteLoading}
-          onConfirm={confirmUserDeletion}
-          onCancel={cancelUserDeletion}
-        />
+        <DropdownSimpleGroup>
+          {#if user.status === UserStatusEnum.Active}
+            <DropdownSimpleItem
+              on={{
+                click: () => changeUserStatus(UserStatusEnum.Suspended),
+              }}
+              closeOnSelect={false}
+              loading={userStatusChanging &&
+                statusToChange === UserStatusEnum.Suspended}
+            >
+              {#snippet icon()}
+                <Icon icon="heroicons:no-symbol" class="h-4 w-4" />
+              {/snippet}
+              <span>Suspend</span>
+            </DropdownSimpleItem>
+          {:else}
+            <DropdownSimpleItem
+              on={{
+                click: () => changeUserStatus(UserStatusEnum.Active),
+              }}
+              closeOnSelect={false}
+              loading={userStatusChanging &&
+                statusToChange === UserStatusEnum.Active}
+            >
+              {#snippet icon()}
+                <Icon icon="heroicons:check-circle" class="h-4 w-4" />
+              {/snippet}
+              <span>Activate</span>
+            </DropdownSimpleItem>
+          {/if}
+        </DropdownSimpleGroup>
+
+        <DropdownSimpleGroup>
+          {#if !isAdmin}
+            <DropdownSimpleItem
+              on={{ click: () => grantRole(UserRole.Admin) }}
+              closeOnSelect={false}
+              loading={$grantRoleLoading}
+            >
+              {#snippet icon()}
+                <Icon icon="heroicons:key" class="h-4 w-4" />
+              {/snippet}
+              <span>Make Admin</span>
+            </DropdownSimpleItem>
+          {:else}
+            <DropdownSimpleItem
+              on={{ click: () => revokeRole(UserRole.Admin) }}
+              closeOnSelect={false}
+              loading={$revokeRoleLoading}
+            >
+              {#snippet icon()}
+                <Icon icon="heroicons:lock-closed" class="h-4 w-4" />
+              {/snippet}
+              <span>Remove Admin</span>
+            </DropdownSimpleItem>
+          {/if}
+        </DropdownSimpleGroup>
       {/if}
-    </DropdownSimpleGroup>
-  </DropdownSimple>
+
+      <DropdownSimpleGroup>
+        {#if !showDeleteConfirmation}
+          <DropdownSimpleItem
+            danger={true}
+            on={{ click: handleUserDeletion }}
+            closeOnSelect={false}
+          >
+            {#snippet icon()}
+              <Icon icon="heroicons:trash" class="h-4 w-4" />
+            {/snippet}
+            <span>Delete</span>
+          </DropdownSimpleItem>
+        {:else}
+          <UserDeleteConfirmation
+            {user}
+            loading={$userDeleteLoading}
+            onConfirm={confirmUserDeletion}
+            onCancel={cancelUserDeletion}
+          />
+        {/if}
+      </DropdownSimpleGroup>
+    </DropdownSimple>
+  </div>
 {/if}

@@ -54,7 +54,7 @@
   };
 </script>
 
-<div class="flex items-center justify-end gap-2 pr-2">
+<div class="flex items-center justify-end">
   <DropdownSimple bind:open={dropdownOpen} variant="invisible" size="xs">
     {#snippet trigger(triggerProps)}
       <button

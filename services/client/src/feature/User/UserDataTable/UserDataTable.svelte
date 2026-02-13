@@ -108,6 +108,10 @@
     },
     {
       id: 'actions',
+      header: 'Actions',
+      meta: {
+        className: 'text-right',
+      },
       enableHiding: false,
       cell: ({ row }) => {
         const user = row.original;
@@ -116,9 +120,6 @@
           loggedInUser,
           onDelete,
           onUserUpdate: handleUserUpdate,
-          variant: 'icon',
-          triggerClass:
-            'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 h-8 w-8 p-0',
         });
       },
     },
@@ -175,22 +176,22 @@
   {#if showSkeleton}
     <UsersSkeleton viewMode="list" />
   {:else}
-    <DataTable {table} {columns} {isLoading}>
+    <DataTable {table} {isLoading}>
       {#snippet emptyState()}
-        <div class="flex flex-col items-center gap-3 py-8">
+        <div class="flex flex-col items-center">
           <div
-            class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800"
+            class="flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800/60"
           >
             <Icon
               icon="heroicons:users"
-              class="h-6 w-6 text-slate-400 dark:text-slate-500"
+              class="h-8 w-8 text-slate-400 dark:text-slate-500"
             />
           </div>
-          <div class="space-y-1">
-            <p class="text-sm font-medium text-slate-700 dark:text-slate-300">
+          <div class="mt-5 space-y-1.5 text-center">
+            <p class="text-lg font-semibold text-slate-700 dark:text-slate-300">
               No users found
             </p>
-            <p class="text-xs text-slate-500 dark:text-slate-400">
+            <p class="text-sm text-slate-500 dark:text-slate-400">
               Users will appear here once added
             </p>
           </div>
