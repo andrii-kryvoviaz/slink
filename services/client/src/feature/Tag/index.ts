@@ -1,3 +1,5 @@
+export { default as ActiveFilterBar } from './ActiveFilterBar/ActiveFilterBar.svelte';
+export * from './ActiveFilterBar/ActiveFilterBar.theme';
 export { default as CreateTagDialog } from './CreateTagDialog/CreateTagDialog.svelte';
 export { default as CreateTagForm } from './CreateTagForm/CreateTagForm.svelte';
 export { default as ImageTagList } from './ImageTagList/ImageTagList.svelte';

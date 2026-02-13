@@ -69,7 +69,9 @@
   } = useTagOperations();
 
   const availableTags = $derived($tagsResponse?.data || []);
-  const shouldShowLoader = $derived($isLoadingTags && isOpen);
+  const shouldShowLoader = $derived(
+    $isLoadingTags && isOpen && !availableTags.length,
+  );
 
   const filteredTags = $derived(
     availableTags.filter(
@@ -237,6 +239,10 @@
     if (isOpen) {
       loadTags(searchTerm);
     }
+  });
+
+  $effect(() => {
+    searchTerm;
     highlightedIndex = -1;
   });
 

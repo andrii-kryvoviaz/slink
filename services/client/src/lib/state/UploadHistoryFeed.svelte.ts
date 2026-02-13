@@ -67,6 +67,10 @@ class UploadHistoryFeed extends AbstractPaginatedFeed<ImageListingItem> {
     return { ...this._tagFilter };
   }
 
+  public get hasActiveFilter(): boolean {
+    return this._tagFilter.selectedTags.length > 0;
+  }
+
   public clearTagFilter(): void {
     if (
       this._tagFilter.selectedTags.length > 0 ||

@@ -204,4 +204,8 @@ export const themeIcons: string[] = [
   'lucide:hard-drive',
   'lucide:ellipsis',
   'lucide:git-branch',
+  'heroicons:funnel-solid',
+  'heroicons:funnel',
+  'heroicons:check-circle-solid',
+  'heroicons:minus-circle-solid',
 ];

@@ -17,6 +17,7 @@ export type RequestState<T> = {
 type RequestStateOptions = {
   minExecutionTime?: number;
   debounce?: number;
+  keepPreviousData?: boolean;
 };
 
 function createDelayPromise(delay: number): Promise<void> {
@@ -41,7 +42,11 @@ export function ReactiveState<T>(
   }
 
   const mutate = async (...args: unknown[]) => {
-    reset();
+    if (options?.keepPreviousData) {
+      setError(null);
+    } else {
+      reset();
+    }
 
     setStatus('loading');
     setIsLoading(true);

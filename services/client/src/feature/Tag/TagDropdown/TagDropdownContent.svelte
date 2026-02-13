@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Loader } from '@slink/feature/Layout';
   import {
     type TagDropdownContentVariants,
     TagListItem,
@@ -89,11 +90,8 @@
 
     {#if !creatingChildFor && tags.length === 0 && searchTerm.trim()}
       {#if isLoading}
-        <div class="flex items-center justify-center py-4">
-          <Icon
-            icon="ph:spinner"
-            class="w-4 h-4 animate-spin text-muted-foreground"
-          />
+        <div class="flex items-center justify-center py-10">
+          <Loader variant="minimal" size="sm" />
         </div>
       {:else}
         <PickerEmptyState
@@ -115,11 +113,8 @@
       {/if}
     {:else if !creatingChildFor && tags.length === 0 && !canCreate && !searchTerm.trim()}
       {#if isLoading}
-        <div class="flex items-center justify-center py-4">
-          <Icon
-            icon="ph:spinner"
-            class="w-4 h-4 animate-spin text-muted-foreground"
-          />
+        <div class="flex items-center justify-center py-10">
+          <Loader variant="minimal" size="sm" />
         </div>
       {:else}
         <PickerEmptyState>

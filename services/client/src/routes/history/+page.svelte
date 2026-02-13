@@ -8,7 +8,7 @@
   } from '@slink/feature/Image';
   import { EmptyState } from '@slink/feature/Layout';
   import { HistorySkeleton } from '@slink/feature/Layout';
-  import { TagFilter } from '@slink/feature/Tag';
+  import { ActiveFilterBar, TagFilter } from '@slink/feature/Tag';
   import { ToggleGroup } from '@slink/ui/components';
   import type { ToggleGroupOption } from '@slink/ui/components';
   import { untrack } from 'svelte';
@@ -126,6 +126,13 @@
     await historyFeedState.load();
   };
 
+  const handleMatchModeChange = async (requireAllTags: boolean) => {
+    const tags = historyFeedState.tagFilter.selectedTags;
+    historyFeedState.setTagFilter(tags, requireAllTags);
+    await tagFilterManager.updateUrl(tags, requireAllTags);
+    await historyFeedState.load();
+  };
+
   const handleEnterSelectionMode = () => {
     selectionState.enterSelectionMode();
   };
@@ -190,9 +197,13 @@
     use:skeleton={{ feed: historyFeedState }}
   >
     <div class="mb-8 space-y-6" in:fade={{ duration: 300 }}>
-      <div class="flex items-center justify-between w-full">
-        <div class="flex-1 min-w-0">
-          <h1 class="text-3xl font-semibold text-slate-900 dark:text-white">
+      <div
+        class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between w-full"
+      >
+        <div class="min-w-0">
+          <h1
+            class="text-2xl sm:text-3xl font-semibold text-slate-900 dark:text-white"
+          >
             Upload History
           </h1>
           <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
@@ -200,7 +211,7 @@
           </p>
         </div>
 
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3 shrink-0">
           {#if !historyFeedState.isEmpty}
             {#if selectionState.isSelectionMode}
               <button
@@ -235,19 +246,40 @@
         </div>
       </div>
 
-      <TagFilter
-        selectedTags={historyFeedState.tagFilter.selectedTags}
-        requireAllTags={historyFeedState.tagFilter.requireAllTags}
-        onFilterChange={handleTagFilterChange}
-        onClearFilter={handleClearTagFilter}
-        disabled={historyFeedState.isLoading}
-        variant="neon"
-      />
+      <div>
+        <TagFilter
+          selectedTags={historyFeedState.tagFilter.selectedTags}
+          requireAllTags={historyFeedState.tagFilter.requireAllTags}
+          onFilterChange={handleTagFilterChange}
+          disabled={historyFeedState.isLoading}
+          variant="neon"
+        />
+
+        {#if historyFeedState.hasActiveFilter}
+          <ActiveFilterBar
+            selectedTags={historyFeedState.tagFilter.selectedTags}
+            requireAllTags={historyFeedState.tagFilter.requireAllTags}
+            onClear={handleClearTagFilter}
+            onMatchModeChange={handleMatchModeChange}
+            disabled={historyFeedState.isLoading}
+          />
+        {/if}
+      </div>
     </div>
 
     {#if historyFeedState.showSkeleton}
       <div in:fade={{ duration: 200 }}>
         <HistorySkeleton count={12} {viewMode} />
+      </div>
+    {:else if historyFeedState.isEmpty && historyFeedState.hasActiveFilter}
+      <div in:fade={{ duration: 200 }}>
+        <EmptyState
+          icon="heroicons:funnel"
+          title="No matching images"
+          description="No images match your current tag filters. Try removing some tags or clearing all filters."
+          variant="blue"
+          size="md"
+        />
       </div>
     {:else if historyFeedState.isEmpty}
       <div in:fade={{ duration: 200 }}>

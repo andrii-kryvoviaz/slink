@@ -22,7 +22,7 @@ export function useTagOperations() {
         order: 'asc',
         includeChildren: true,
       }),
-    { debounce: 300 },
+    { debounce: 300, keepPreviousData: true },
   );
 
   const tagCreation = ReactiveState<{ id: string }>((data: CreateTagRequest) =>
