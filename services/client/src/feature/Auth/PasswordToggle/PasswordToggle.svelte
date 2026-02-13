@@ -21,34 +21,36 @@
   let { visible, onclick, size = 'md', class: className }: Props = $props();
 </script>
 
-<Tooltip
-  variant="subtle"
-  size="xs"
-  side="top"
-  sideOffset={8}
-  withArrow={false}
-  triggerProps={{ class: 'absolute inset-y-0 right-0 flex items-center' }}
->
-  {#snippet trigger()}
-    <button
-      type="button"
-      {onclick}
-      class="{passwordToggleVariants()} {className}"
-    >
-      {#if visible}
-        <Icon
-          icon="ph:eye-slash"
-          class={passwordToggleIconVariants({ size })}
-        />
-      {:else}
-        <Icon icon="ph:eye" class={passwordToggleIconVariants({ size })} />
-      {/if}
-    </button>
-  {/snippet}
+<div class="absolute inset-y-0 right-0 flex items-center">
+  <Tooltip
+    variant="subtle"
+    size="xs"
+    side="top"
+    sideOffset={8}
+    withArrow={false}
+    triggerProps={{}}
+  >
+    {#snippet trigger()}
+      <button
+        type="button"
+        {onclick}
+        class="{passwordToggleVariants()} {className}"
+      >
+        {#if visible}
+          <Icon
+            icon="ph:eye-slash"
+            class={passwordToggleIconVariants({ size })}
+          />
+        {:else}
+          <Icon icon="ph:eye" class={passwordToggleIconVariants({ size })} />
+        {/if}
+      </button>
+    {/snippet}
 
-  {#if visible}
-    Hide password
-  {:else}
-    Show password
-  {/if}
-</Tooltip>
+    {#if visible}
+      Hide password
+    {:else}
+      Show password
+    {/if}
+  </Tooltip>
+</div>
