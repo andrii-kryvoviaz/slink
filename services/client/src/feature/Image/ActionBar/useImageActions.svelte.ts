@@ -1,7 +1,7 @@
 import { ApiClient } from '@slink/api';
 
 import { goto } from '$app/navigation';
-import { useGlobalSettings } from '$lib/state/GlobalSettings.svelte.js';
+import { page } from '$app/state';
 import { useUploadHistoryFeed } from '$lib/state/UploadHistoryFeed.svelte.js';
 import { downloadByLink } from '$lib/utils/http/downloadByLink';
 import { bindRequestState } from '$lib/utils/store/bindRequestState.svelte';
@@ -36,10 +36,9 @@ interface UseImageActionsConfig {
 
 export function useImageActions(config: UseImageActionsConfig) {
   const historyFeedState = useUploadHistoryFeed();
-  const globalSettingsManager = useGlobalSettings();
 
   const allowOnlyPublicImages = $derived(
-    globalSettingsManager.settings?.image?.allowOnlyPublicImages || false,
+    page.data.globalSettings?.image?.allowOnlyPublicImages || false,
   );
 
   const visibility = bindRequestState(

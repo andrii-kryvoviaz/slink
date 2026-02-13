@@ -5,13 +5,13 @@ export const load: LayoutServerLoad = async ({ parent, locals }) => {
 
   const api = locals.api;
 
-  const [settings, defaultSettings] = await Promise.all([
+  const [adminSettings, defaultSettings] = await Promise.all([
     api.setting.getGlobalSettings(),
     api.setting.getSettings({ provider: 'default' }),
   ]);
 
   return {
-    settings,
+    adminSettings,
     defaultSettings,
   };
 };
