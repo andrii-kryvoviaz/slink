@@ -204,10 +204,6 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
 
     this._itemMap.delete(id);
     this._order = this._order.filter((orderId) => orderId !== id);
-
-    if (this._itemMap.size === 0) {
-      this.reset();
-    }
   }
 
   get hasMore(): boolean {
