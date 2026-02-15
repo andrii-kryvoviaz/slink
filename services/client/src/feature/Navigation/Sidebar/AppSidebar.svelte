@@ -43,7 +43,7 @@
   }
 </script>
 
-<Sidebar.Root {collapsible} {...restProps}>
+<Sidebar.Root bind:ref {collapsible} {...restProps}>
   <Sidebar.Header>
     <div
       class="flex items-center gap-2 px-2 py-3 relative group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:py-1"

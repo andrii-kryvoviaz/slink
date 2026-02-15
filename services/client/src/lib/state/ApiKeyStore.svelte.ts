@@ -71,7 +71,7 @@ class ApiKeyStore extends AbstractHttpState<ApiKeyResponse[]> {
     this._isCreating = true;
     this._downloadCompleted = false;
 
-    let createdKey: CreateApiKeyResponse | null = null;
+    let createdKey: CreateApiKeyResponse | null;
 
     try {
       createdKey = await ApiClient.apiKey.createApiKey(data);

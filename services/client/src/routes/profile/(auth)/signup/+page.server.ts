@@ -25,7 +25,7 @@ export const load: PageServerLoad = async ({ parent, locals }) => {
 const defaultAction: Action = async ({ request, cookies, locals }) => {
   const { username, email, password, confirm } = await formData(request);
 
-  let redirectUrl: string | null = '/profile/login';
+  let redirectUrl: string | null;
 
   try {
     const response = await locals.api.auth.signup({

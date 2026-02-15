@@ -20,6 +20,7 @@
 </script>
 
 <Button
+  bind:ref
   data-sidebar="trigger"
   data-slot="sidebar-trigger"
   variant="ghost"
