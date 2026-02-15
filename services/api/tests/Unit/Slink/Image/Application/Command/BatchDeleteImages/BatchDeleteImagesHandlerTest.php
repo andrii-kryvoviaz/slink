@@ -105,7 +105,7 @@ final class BatchDeleteImagesHandlerTest extends TestCase {
     $this->assertContains(self::IMAGE_ID_1, $result->deleted());
     $this->assertCount(1, $result->failed());
     $this->assertEquals(self::IMAGE_ID_2, $result->failed()[0]['id']);
-    $this->assertEquals('Image not found', $result->failed()[0]['reason']);
+    $this->assertEquals('Resource not found', $result->failed()[0]['reason']);
   }
 
   /**
@@ -138,7 +138,7 @@ final class BatchDeleteImagesHandlerTest extends TestCase {
     $this->assertContains(self::IMAGE_ID_1, $result->deleted());
     $this->assertCount(1, $result->failed());
     $this->assertEquals(self::IMAGE_ID_2, $result->failed()[0]['id']);
-    $this->assertEquals('Access denied', $result->failed()[0]['reason']);
+    $this->assertEquals('Access Denied.', $result->failed()[0]['reason']);
   }
 
   /**
@@ -160,7 +160,7 @@ final class BatchDeleteImagesHandlerTest extends TestCase {
     $this->assertEmpty($result->deleted());
     $this->assertCount(1, $result->failed());
     $this->assertEquals(self::IMAGE_ID_1, $result->failed()[0]['id']);
-    $this->assertEquals('Image not found', $result->failed()[0]['reason']);
+    $this->assertEquals('Resource not found', $result->failed()[0]['reason']);
   }
 
   /**
@@ -217,7 +217,7 @@ final class BatchDeleteImagesHandlerTest extends TestCase {
     $this->assertEmpty($result->deleted());
     $this->assertCount(1, $result->failed());
     $this->assertEquals(self::IMAGE_ID_1, $result->failed()[0]['id']);
-    $this->assertEquals('Access denied', $result->failed()[0]['reason']);
+    $this->assertEquals('Access Denied.', $result->failed()[0]['reason']);
   }
 
   #[Test]
