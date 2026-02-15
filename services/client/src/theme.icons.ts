@@ -173,7 +173,6 @@ export const themeIcons: string[] = [
   'lucide:clipboard-copy',
   'ph:at',
   'ph:folder-simple-duotone',
-  'ph:images',
   'ph:arrow-left',
   'ph:folder',
   'lucide:folder-plus',
@@ -208,4 +207,7 @@ export const themeIcons: string[] = [
   'heroicons:funnel',
   'heroicons:check-circle-solid',
   'heroicons:minus-circle-solid',
+  'ph:images',
+  'ph:check-circle-fill',
+  'ph:x-circle-fill',
 ];

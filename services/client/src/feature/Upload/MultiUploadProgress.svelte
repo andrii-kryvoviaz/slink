@@ -1,12 +1,23 @@
 <script lang="ts">
+  import { Loader } from '@slink/feature/Layout';
   import { Button } from '@slink/ui/components/button';
   import { Progress } from '@slink/ui/components/progress';
-  import { ScrollArea } from '@slink/ui/components/scroll-area';
+  import { cva } from 'class-variance-authority';
 
   import { bytesToSize } from '$lib/utils/bytesConverter';
   import { className as cn } from '$lib/utils/ui/className';
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
+
+  const statusIconVariants = cva('w-5 h-5', {
+    variants: {
+      status: {
+        completed: 'text-slate-600 dark:text-slate-300',
+        error: 'text-red-500 dark:text-red-400',
+        pending: 'text-slate-300 dark:text-slate-600',
+      },
+    },
+  });
 
   interface UploadItem {
     file: File;
@@ -46,135 +57,110 @@
   );
   let isCompleted = $derived(completedUploads + failedUploads === totalUploads);
   let hasErrors = $derived(failedUploads > 0);
-
-  const getStatusIcon = (status: UploadItem['status']) => {
-    switch (status) {
-      case 'completed':
-        return 'ph:check-circle-fill';
-      case 'error':
-        return 'ph:x-circle-fill';
-      case 'uploading':
-        return 'ph:spinner';
-      default:
-        return 'ph:clock';
-    }
-  };
-
-  const getStatusColor = (status: UploadItem['status']) => {
-    switch (status) {
-      case 'completed':
-        return 'text-green-500';
-      case 'error':
-        return 'text-red-500';
-      case 'uploading':
-        return 'text-blue-500';
-      default:
-        return 'text-gray-400';
-    }
-  };
 </script>
 
 <div
   class={cn(
-    'space-y-6 p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700',
+    'space-y-6 p-6 bg-white/80 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-700/50 shadow-lg shadow-slate-500/5 dark:shadow-black/10 backdrop-blur-sm rounded-xl',
     className,
   )}
   in:fade={{ duration: 300 }}
 >
-  <div class="flex items-center justify-between">
-    <div class="space-y-1">
-      <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">
-        {#if isCompleted}
-          Upload Complete
-        {:else}
-          Uploading Files
-        {/if}
-      </h3>
-      <p class="text-sm text-slate-500 dark:text-slate-400">
-        {completedUploads} of {totalUploads} files uploaded
-        {#if hasErrors}
-          • {failedUploads} failed
-        {/if}
-      </p>
-    </div>
+  <div in:fade={{ duration: 400, delay: 50 }}>
+    <div class="flex items-center justify-between">
+      <div class="space-y-1">
+        <h3
+          class="text-xl sm:text-2xl font-semibold bg-gradient-to-r from-slate-700 to-slate-900 dark:from-slate-200 dark:to-slate-400 bg-clip-text text-transparent"
+        >
+          {#if isCompleted}
+            Complete
+          {:else}
+            Uploading
+          {/if}
+        </h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400">
+          {completedUploads} of {totalUploads} files uploaded
+          {#if hasErrors}
+            • {failedUploads} failed
+          {/if}
+        </p>
+      </div>
 
-    <div class="flex items-center gap-3">
-      {#if isCompleted && hasErrors && onRetryAll}
-        <Button
-          variant="glass"
-          size="sm"
-          rounded="full"
-          class="bg-red-100/80 hover:bg-red-200/80 dark:bg-red-800/40 dark:hover:bg-red-700/60 border-red-200 hover:border-red-300 dark:border-red-600 dark:hover:border-red-500 text-red-700 hover:text-red-800 dark:text-red-200 dark:hover:text-red-100"
-          onclick={onRetryAll}
-        >
-          <Icon icon="ph:arrow-clockwise" class="w-4 h-4 mr-2" />
-          Retry Failed Uploads
-        </Button>
-      {/if}
+      <div class="flex items-center gap-3">
+        {#if isCompleted && hasErrors && onRetryAll}
+          <Button
+            variant="soft-red"
+            size="sm"
+            rounded="full"
+            onclick={onRetryAll}
+          >
+            <Icon icon="ph:arrow-clockwise" class="w-4 h-4 mr-2" />
+            Retry Failed
+          </Button>
+        {/if}
 
-      {#if onCancel && !isCompleted}
-        <Button
-          variant="glass"
-          size="sm"
-          rounded="full"
-          class="bg-gray-100/80 hover:bg-gray-200/80 dark:bg-gray-700/80 dark:hover:bg-gray-600/80 border-gray-200 hover:border-gray-300 dark:border-gray-600 dark:hover:border-gray-500 text-gray-700 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-200 transition-all duration-200"
-          onclick={onCancel}
-        >
-          <Icon icon="ph:x" class="w-4 h-4 mr-2" />
-          Cancel
-        </Button>
-      {:else if isCompleted && onGoBack}
-        <Button
-          variant="glass"
-          size="sm"
-          rounded="full"
-          class="bg-gray-100/80 hover:bg-gray-200/80 dark:bg-gray-700/80 dark:hover:bg-gray-600/80 border-gray-200 hover:border-gray-300 dark:border-gray-600 dark:hover:border-gray-500 text-gray-700 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-200 transition-all duration-200"
-          onclick={onGoBack}
-        >
-          <Icon icon="ph:check" class="w-4 h-4 mr-2" />
-          Done
-        </Button>
-      {/if}
+        {#if onCancel && !isCompleted}
+          <Button variant="glass" size="sm" rounded="full" onclick={onCancel}>
+            <Icon icon="ph:x" class="w-4 h-4 mr-2" />
+            Cancel
+          </Button>
+        {:else if isCompleted && onGoBack}
+          <Button variant="glass" size="sm" rounded="full" onclick={onGoBack}>
+            <Icon icon="ph:check" class="w-4 h-4 mr-2" />
+            Done
+          </Button>
+        {/if}
+      </div>
     </div>
   </div>
 
-  <div class="space-y-2">
-    <div class="flex items-center justify-between text-sm">
-      <span class="text-slate-600 dark:text-slate-300">Overall Progress</span>
-      <span class="font-medium text-slate-900 dark:text-slate-100">
+  <div class="space-y-3" in:fade={{ duration: 400, delay: 100 }}>
+    <div class="flex flex-col items-center gap-1">
+      <span
+        class="text-3xl font-light tracking-tight text-slate-900 dark:text-white"
+      >
         {overallProgress.toFixed(0)}%
+      </span>
+      <span
+        class="text-[10px] uppercase tracking-widest text-slate-400 dark:text-slate-500"
+      >
+        Overall Progress
       </span>
     </div>
 
-    <Progress
-      value={overallProgress}
-      variant={hasErrors && isCompleted
-        ? 'error'
-        : isCompleted
-          ? 'success'
-          : 'default'}
-      size="md"
-    />
+    <Progress value={overallProgress} variant="subtle" size="md" />
   </div>
 
-  <ScrollArea class="max-h-64 overflow-y-auto" orientation="vertical">
-    <div class="space-y-3">
+  <div class="relative">
+    <div class="max-h-64 overflow-y-auto space-y-2 pr-1">
       {#each uploads as item, index (item.id)}
         <div
-          class="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200/50 dark:border-slate-700/50"
-          in:fly={{ duration: 200, delay: index * 50, y: 10 }}
+          class="flex items-center gap-3 p-3 rounded-lg bg-slate-50/80 dark:bg-slate-700/30 border border-slate-200/50 dark:border-slate-600/30 backdrop-blur-sm"
+          in:fly={{ duration: 250, delay: 150 + index * 40, y: 8 }}
         >
           <div class="flex-shrink-0">
-            <Icon
-              icon={getStatusIcon(item.status)}
-              class={cn('w-5 h-5', getStatusColor(item.status), {
-                'animate-spin': item.status === 'uploading',
-              })}
-            />
+            {#if item.status === 'uploading'}
+              <Loader variant="minimal" size="xs" />
+            {:else if item.status === 'completed'}
+              <Icon
+                icon="ph:check-circle-fill"
+                class={statusIconVariants({ status: 'completed' })}
+              />
+            {:else if item.status === 'error'}
+              <Icon
+                icon="ph:x-circle-fill"
+                class={statusIconVariants({ status: 'error' })}
+              />
+            {:else}
+              <Icon
+                icon="ph:clock"
+                class={statusIconVariants({ status: 'pending' })}
+              />
+            {/if}
           </div>
 
           <div class="flex-1 min-w-0">
-            <div class="flex items-center justify-between mb-1">
+            <div class="flex items-center justify-between">
               <p
                 class="text-sm font-medium text-slate-900 dark:text-slate-100 truncate"
               >
@@ -186,21 +172,19 @@
             </div>
 
             {#if item.status === 'uploading'}
-              <Progress value={item.progress} size="sm" variant="default" />
+              <div class="mt-1">
+                <Progress value={item.progress} size="sm" variant="subtle" />
+              </div>
             {:else if item.status === 'error'}
               <p
-                class="text-xs text-red-500 dark:text-red-400 mt-1 break-words"
+                class="text-xs text-red-500/80 dark:text-red-400/80 mt-1 break-words"
               >
                 {item.error || 'Upload failed'}
-              </p>
-            {:else if item.status === 'completed'}
-              <p class="text-xs text-green-600 dark:text-green-400 mt-1">
-                Upload successful
               </p>
             {/if}
           </div>
         </div>
       {/each}
     </div>
-  </ScrollArea>
+  </div>
 </div>

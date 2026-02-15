@@ -7,7 +7,7 @@
     value: number;
     max?: number;
     size?: 'sm' | 'md' | 'lg';
-    variant?: 'default' | 'success' | 'error' | 'warning';
+    variant?: 'default' | 'success' | 'error' | 'warning' | 'subtle';
     class?: string;
     showPercentage?: boolean;
   }
@@ -21,21 +21,26 @@
     showPercentage = false,
   }: Props = $props();
 
-  const progressVariants = cva(
-    'w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden',
-    {
-      variants: {
-        size: {
-          sm: 'h-1',
-          md: 'h-2',
-          lg: 'h-3',
-        },
+  const progressVariants = cva('w-full rounded-full overflow-hidden', {
+    variants: {
+      size: {
+        sm: 'h-1',
+        md: 'h-2',
+        lg: 'h-3',
       },
-      defaultVariants: {
-        size: 'md',
+      variant: {
+        default: 'bg-gray-200 dark:bg-gray-700',
+        success: 'bg-gray-200 dark:bg-gray-700',
+        error: 'bg-gray-200 dark:bg-gray-700',
+        warning: 'bg-gray-200 dark:bg-gray-700',
+        subtle: 'bg-slate-200/60 dark:bg-slate-700/40',
       },
     },
-  );
+    defaultVariants: {
+      size: 'md',
+      variant: 'default',
+    },
+  });
 
   const progressBarVariants = cva(
     'h-full transition-all duration-300 ease-out rounded-full',
@@ -46,6 +51,7 @@
           success: 'bg-green-500',
           error: 'bg-red-500',
           warning: 'bg-yellow-500',
+          subtle: 'bg-slate-600 dark:bg-slate-300',
         },
       },
       defaultVariants: {
@@ -57,7 +63,7 @@
   let percentage = $derived(Math.min(Math.max((value / max) * 100, 0), 100));
 </script>
 
-<div class={cn(progressVariants({ size }), className)}>
+<div class={cn(progressVariants({ size, variant }), className)}>
   <div
     class={progressBarVariants({ variant })}
     style="width: {percentage}%"

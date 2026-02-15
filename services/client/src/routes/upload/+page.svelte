@@ -164,10 +164,14 @@
     uploads = [...uploads];
 
     const tagIds = selectedTags.map((tag) => tag.id);
+    const collectionIds = selectedCollections.map(
+      (collection) => collection.id,
+    );
 
     await multiUploadService.uploadFiles(failedUploads, {
       isGuest: data.globalSettings?.access?.allowGuestUploads && !data.user,
       tagIds,
+      collectionIds,
       onProgress: (_item) => {
         uploads = [...uploads];
       },
