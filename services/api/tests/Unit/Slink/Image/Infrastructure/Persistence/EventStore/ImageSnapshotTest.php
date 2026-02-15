@@ -115,7 +115,7 @@ final class ImageSnapshotTest extends TestCase {
     $metadata = new ImageMetadata(512, 'image/jpeg', 640, 480);
 
     $image = Image::create($imageId, $userId, $attributes, $metadata);
-    $image->delete();
+    $image->delete($userId);
 
     $reflection = new \ReflectionClass($image);
     $createMethod = $reflection->getMethod('createSnapshotState');

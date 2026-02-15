@@ -7,12 +7,10 @@ namespace Slink\Image\Application\Command\BatchDeleteImages;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
 
 final readonly class BatchDeleteImagesHandler implements CommandHandlerInterface {
   public function __construct(
     private ImageStoreRepositoryInterface $imageRepository,
-    private StorageInterface $storage,
   ) {}
 
   public function __invoke(
@@ -28,21 +26,7 @@ final readonly class BatchDeleteImagesHandler implements CommandHandlerInterface
         $id = ID::fromString($imageId);
         $image = $this->imageRepository->get($id);
 
-        if (!$image->aggregateRootVersion() || $image->isDeleted()) {
-          $failed[] = ['id' => $imageId, 'reason' => 'Image not found'];
-          continue;
-        }
-
-        if (!$image->getUserId() || !$image->getUserId()->equals($userID)) {
-          $failed[] = ['id' => $imageId, 'reason' => 'Access denied'];
-          continue;
-        }
-
-        if (!$command->preserveOnDisk()) {
-          $this->storage->delete($image->getAttributes()->getFileName());
-        }
-
-        $image->delete($command->preserveOnDisk());
+        $image->delete($userID, $command->preserveOnDisk());
         $this->imageRepository->store($image);
 
         $deleted[] = $imageId;

@@ -12,9 +12,9 @@ use Slink\Image\Application\Command\BatchDeleteImages\BatchDeleteImagesHandler;
 use Slink\Image\Application\Command\BatchDeleteImages\BatchDeleteImagesResult;
 use Slink\Image\Domain\Image;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
-use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
+use Slink\Shared\Infrastructure\Exception\NotFoundException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final class BatchDeleteImagesHandlerTest extends TestCase {
   private const USER_ID = '123e4567-e89b-12d3-a456-426614174000';
@@ -27,27 +27,12 @@ final class BatchDeleteImagesHandlerTest extends TestCase {
   #[Test]
   public function itDeletesMultipleImagesSuccessfully(): void {
     $command = new BatchDeleteImagesCommand([self::IMAGE_ID_1, self::IMAGE_ID_2], false);
-    $userID = ID::fromString(self::USER_ID);
-
-    $attributes1 = $this->createStub(ImageAttributes::class);
-    $attributes1->method('getFileName')->willReturn('image1.jpg');
-
-    $attributes2 = $this->createStub(ImageAttributes::class);
-    $attributes2->method('getFileName')->willReturn('image2.jpg');
 
     $image1 = $this->createMock(Image::class);
-    $image1->method('getAttributes')->willReturn($attributes1);
-    $image1->method('aggregateRootVersion')->willReturn(1);
-    $image1->method('isDeleted')->willReturn(false);
-    $image1->method('getUserId')->willReturn($userID);
-    $image1->expects($this->once())->method('delete')->with(false);
+    $image1->expects($this->once())->method('delete')->with($this->anything(), false);
 
     $image2 = $this->createMock(Image::class);
-    $image2->method('getAttributes')->willReturn($attributes2);
-    $image2->method('aggregateRootVersion')->willReturn(1);
-    $image2->method('isDeleted')->willReturn(false);
-    $image2->method('getUserId')->willReturn($userID);
-    $image2->expects($this->once())->method('delete')->with(false);
+    $image2->expects($this->once())->method('delete')->with($this->anything(), false);
 
     $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturnCallback(
@@ -59,10 +44,7 @@ final class BatchDeleteImagesHandlerTest extends TestCase {
     );
     $imageRepository->expects($this->exactly(2))->method('store');
 
-    $storage = $this->createMock(StorageInterface::class);
-    $storage->expects($this->exactly(2))->method('delete');
-
-    $handler = new BatchDeleteImagesHandler($imageRepository, $storage);
+    $handler = new BatchDeleteImagesHandler($imageRepository);
     $result = $handler($command, self::USER_ID);
 
     $this->assertInstanceOf(BatchDeleteImagesResult::class, $result);
@@ -78,25 +60,15 @@ final class BatchDeleteImagesHandlerTest extends TestCase {
   #[Test]
   public function itDeletesImagesWithPreserveOnDisk(): void {
     $command = new BatchDeleteImagesCommand([self::IMAGE_ID_1], true);
-    $userID = ID::fromString(self::USER_ID);
-
-    $attributes = $this->createStub(ImageAttributes::class);
 
     $image = $this->createMock(Image::class);
-    $image->method('getAttributes')->willReturn($attributes);
-    $image->method('aggregateRootVersion')->willReturn(1);
-    $image->method('isDeleted')->willReturn(false);
-    $image->method('getUserId')->willReturn($userID);
-    $image->expects($this->once())->method('delete')->with(true);
+    $image->expects($this->once())->method('delete')->with($this->anything(), true);
 
     $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);
     $imageRepository->expects($this->once())->method('store')->with($image);
 
-    $storage = $this->createMock(StorageInterface::class);
-    $storage->expects($this->never())->method('delete');
-
-    $handler = new BatchDeleteImagesHandler($imageRepository, $storage);
+    $handler = new BatchDeleteImagesHandler($imageRepository);
     $result = $handler($command, self::USER_ID);
 
     $this->assertCount(1, $result->deleted());
@@ -109,21 +81,12 @@ final class BatchDeleteImagesHandlerTest extends TestCase {
   #[Test]
   public function itHandlesMixedResultsWithNotFoundImages(): void {
     $command = new BatchDeleteImagesCommand([self::IMAGE_ID_1, self::IMAGE_ID_2], false);
-    $userID = ID::fromString(self::USER_ID);
-
-    $attributes1 = $this->createStub(ImageAttributes::class);
-    $attributes1->method('getFileName')->willReturn('image1.jpg');
 
     $image1 = $this->createMock(Image::class);
-    $image1->method('getAttributes')->willReturn($attributes1);
-    $image1->method('aggregateRootVersion')->willReturn(1);
-    $image1->method('isDeleted')->willReturn(false);
-    $image1->method('getUserId')->willReturn($userID);
-    $image1->expects($this->once())->method('delete')->with(false);
+    $image1->expects($this->once())->method('delete')->with($this->anything(), false);
 
     $image2 = $this->createStub(Image::class);
-    $image2->method('aggregateRootVersion')->willReturn(0);
-    $image2->method('isDeleted')->willReturn(false);
+    $image2->method('delete')->willThrowException(new NotFoundException());
 
     $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturnCallback(
@@ -135,10 +98,7 @@ final class BatchDeleteImagesHandlerTest extends TestCase {
     );
     $imageRepository->expects($this->once())->method('store')->with($image1);
 
-    $storage = $this->createMock(StorageInterface::class);
-    $storage->expects($this->once())->method('delete')->with('image1.jpg');
-
-    $handler = new BatchDeleteImagesHandler($imageRepository, $storage);
+    $handler = new BatchDeleteImagesHandler($imageRepository);
     $result = $handler($command, self::USER_ID);
 
     $this->assertCount(1, $result->deleted());
@@ -153,25 +113,13 @@ final class BatchDeleteImagesHandlerTest extends TestCase {
    */
   #[Test]
   public function itHandlesAccessDeniedForDifferentUser(): void {
-    $differentUserId = '987e6543-e21b-34c5-b654-321098765432';
     $command = new BatchDeleteImagesCommand([self::IMAGE_ID_1, self::IMAGE_ID_2], false);
-    $userID = ID::fromString(self::USER_ID);
-    $differentUserID = ID::fromString($differentUserId);
-
-    $attributes1 = $this->createStub(ImageAttributes::class);
-    $attributes1->method('getFileName')->willReturn('image1.jpg');
 
     $image1 = $this->createMock(Image::class);
-    $image1->method('getAttributes')->willReturn($attributes1);
-    $image1->method('aggregateRootVersion')->willReturn(1);
-    $image1->method('isDeleted')->willReturn(false);
-    $image1->method('getUserId')->willReturn($userID);
-    $image1->expects($this->once())->method('delete')->with(false);
+    $image1->expects($this->once())->method('delete')->with($this->anything(), false);
 
     $image2 = $this->createStub(Image::class);
-    $image2->method('aggregateRootVersion')->willReturn(1);
-    $image2->method('isDeleted')->willReturn(false);
-    $image2->method('getUserId')->willReturn($differentUserID);
+    $image2->method('delete')->willThrowException(new AccessDeniedException());
 
     $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturnCallback(
@@ -183,10 +131,7 @@ final class BatchDeleteImagesHandlerTest extends TestCase {
     );
     $imageRepository->expects($this->once())->method('store')->with($image1);
 
-    $storage = $this->createMock(StorageInterface::class);
-    $storage->expects($this->once())->method('delete')->with('image1.jpg');
-
-    $handler = new BatchDeleteImagesHandler($imageRepository, $storage);
+    $handler = new BatchDeleteImagesHandler($imageRepository);
     $result = $handler($command, self::USER_ID);
 
     $this->assertCount(1, $result->deleted());
@@ -204,15 +149,12 @@ final class BatchDeleteImagesHandlerTest extends TestCase {
     $command = new BatchDeleteImagesCommand([self::IMAGE_ID_1], false);
 
     $image = $this->createStub(Image::class);
-    $image->method('aggregateRootVersion')->willReturn(1);
-    $image->method('isDeleted')->willReturn(true);
+    $image->method('delete')->willThrowException(new NotFoundException());
 
     $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);
 
-    $storage = $this->createStub(StorageInterface::class);
-
-    $handler = new BatchDeleteImagesHandler($imageRepository, $storage);
+    $handler = new BatchDeleteImagesHandler($imageRepository);
     $result = $handler($command, self::USER_ID);
 
     $this->assertEmpty($result->deleted());
@@ -229,9 +171,8 @@ final class BatchDeleteImagesHandlerTest extends TestCase {
     $command = new BatchDeleteImagesCommand([], false);
 
     $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
-    $storage = $this->createStub(StorageInterface::class);
 
-    $handler = new BatchDeleteImagesHandler($imageRepository, $storage);
+    $handler = new BatchDeleteImagesHandler($imageRepository);
     $result = $handler($command, self::USER_ID);
 
     $this->assertEmpty($result->deleted());
@@ -248,9 +189,7 @@ final class BatchDeleteImagesHandlerTest extends TestCase {
     $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willThrowException(new \RuntimeException('Database error'));
 
-    $storage = $this->createStub(StorageInterface::class);
-
-    $handler = new BatchDeleteImagesHandler($imageRepository, $storage);
+    $handler = new BatchDeleteImagesHandler($imageRepository);
     $result = $handler($command, self::USER_ID);
 
     $this->assertEmpty($result->deleted());
@@ -267,16 +206,12 @@ final class BatchDeleteImagesHandlerTest extends TestCase {
     $command = new BatchDeleteImagesCommand([self::IMAGE_ID_1], false);
 
     $image = $this->createStub(Image::class);
-    $image->method('aggregateRootVersion')->willReturn(1);
-    $image->method('isDeleted')->willReturn(false);
-    $image->method('getUserId')->willReturn(null);
+    $image->method('delete')->willThrowException(new AccessDeniedException());
 
     $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);
 
-    $storage = $this->createStub(StorageInterface::class);
-
-    $handler = new BatchDeleteImagesHandler($imageRepository, $storage);
+    $handler = new BatchDeleteImagesHandler($imageRepository);
     $result = $handler($command, self::USER_ID);
 
     $this->assertEmpty($result->deleted());
@@ -290,9 +225,8 @@ final class BatchDeleteImagesHandlerTest extends TestCase {
     $command = new BatchDeleteImagesCommand([], false);
 
     $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
-    $storage = $this->createStub(StorageInterface::class);
 
-    $handler = new BatchDeleteImagesHandler($imageRepository, $storage);
+    $handler = new BatchDeleteImagesHandler($imageRepository);
     $result = $handler($command, self::USER_ID);
 
     $array = $result->toArray();

@@ -7,20 +7,20 @@ namespace Slink\Shared\Infrastructure\MessageBus\Event;
 use EventSauce\EventSourcing\Message;
 use EventSauce\EventSourcing\MessageConsumer;
 use EventSauce\EventSourcing\MessageDispatcher;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 final class EventDispatcher implements MessageDispatcher {
   /**
-   * @var MessageConsumer[]
+   * @param iterable<MessageConsumer> $consumers
    */
-  private array $consumers = [];
-
-  public function addConsumer(MessageConsumer $consumer): void {
-    $this->consumers[] = $consumer;
-  }
+  public function __construct(
+    #[AutowireIterator('event_sauce.event_consumer')]
+    private readonly iterable $consumers
+  ) {}
 
   public function dispatch(Message ...$messages): void {
-    foreach ($messages as $message) {
-      foreach ($this->consumers as $consumer) {
+    foreach ($this->consumers as $consumer) {
+      foreach ($messages as $message) {
         $consumer->handle($message);
       }
     }

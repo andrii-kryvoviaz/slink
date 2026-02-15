@@ -22,6 +22,8 @@ use Slink\Image\Domain\ValueObject\ImageMetadata;
 use Slink\Image\Domain\ValueObject\TagSet;
 use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\ValueObject\ID;
+use Slink\Shared\Infrastructure\Exception\NotFoundException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final class Image extends AbstractAggregateRoot {
   private ?ID $userId;
@@ -241,10 +243,35 @@ final class Image extends AbstractAggregateRoot {
   }
 
   /**
+   * @param ID $requestedBy
    * @param bool $preserveOnDisk
    * @return void
    */
-  public function delete(bool $preserveOnDisk = false): void {
+  public function delete(ID $requestedBy, bool $preserveOnDisk = false): void {
+    if (!$this->aggregateRootVersion()) {
+      throw new NotFoundException();
+    }
+
+    if ($this->deleted) {
+      throw new NotFoundException();
+    }
+
+    if (!$this->isOwedBy($requestedBy)) {
+      throw new AccessDeniedException();
+    }
+
+    $this->recordThat(new ImageWasDeleted($this->aggregateRootId(), $preserveOnDisk));
+  }
+
+  public function forceDelete(bool $preserveOnDisk = false): void {
+    if (!$this->aggregateRootVersion()) {
+      throw new NotFoundException();
+    }
+
+    if ($this->deleted) {
+      throw new NotFoundException();
+    }
+
     $this->recordThat(new ImageWasDeleted($this->aggregateRootId(), $preserveOnDisk));
   }
 

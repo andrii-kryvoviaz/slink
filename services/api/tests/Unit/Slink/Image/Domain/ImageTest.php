@@ -58,18 +58,20 @@ final class ImageTest extends TestCase {
 
   #[Test]
   public function itDeletesImage(): void {
-    $image = $this->createTestImage();
+    $userId = ID::generate();
+    $image = $this->createTestImage($userId);
 
-    $image->delete();
+    $image->delete($userId);
 
     $this->assertTrue($image->isDeleted());
   }
 
   #[Test]
   public function itDeletesImageWithPreserveFlag(): void {
-    $image = $this->createTestImage();
+    $userId = ID::generate();
+    $image = $this->createTestImage($userId);
 
-    $image->delete(true);
+    $image->delete($userId, true);
 
     $this->assertTrue($image->isDeleted());
   }

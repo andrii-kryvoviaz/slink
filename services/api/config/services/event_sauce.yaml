@@ -34,7 +34,7 @@ services:
       - { name: 'event_sauce.message_repository' }
 
   EventSauce\EventSourcing\MessageDispatcher:
-    class: Slink\Shared\Infrastructure\MessageBus\Event\EventDispatcher
+    alias: Slink\Shared\Infrastructure\MessageBus\Event\EventDispatcher
 
   event_sauce.snapshot_repository:
     class: Slink\Shared\Infrastructure\Persistence\EventStore\Repository\DoctrineSnapshotRepository
