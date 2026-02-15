@@ -74,10 +74,8 @@
 
   const successHandler = async (response: UploadedImageResponse) => {
     if (data.user) {
+      historyFeedState.invalidate();
       await redirectToInfo(response.id);
-
-      const images = await ApiClient.image.getImagesByIds([response.id]);
-      images.data.forEach((image) => historyFeedState.addItem(image));
     } else {
       data.globalSettings?.access?.allowUnauthenticatedAccess
         ? await navigateToUrl(routes.general.explore)
@@ -126,9 +124,7 @@
 
     if (failed.length === 0 && successful.length > 0) {
       if (data.user) {
-        const imageIds = successful.map((item) => item.result!.id);
-        const images = await ApiClient.image.getImagesByIds(imageIds);
-        images.data.forEach((image) => historyFeedState.addItem(image));
+        historyFeedState.invalidate();
 
         if (targetCollection) {
           await navigateToUrl(routes.collection.detail(targetCollection.id));

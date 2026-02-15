@@ -78,6 +78,10 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
     };
   }
 
+  public invalidate(): void {
+    this.markDirty(false);
+  }
+
   public async load(
     params: LoadParams & SearchParams = {},
     options?: RequestStateOptions,
@@ -93,6 +97,11 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
 
     const isInitialLoad = this._config.useCursor ? !cursor : page === 1;
     const shouldAppend = this._shouldAppendItems(isInitialLoad);
+
+    if (isInitialLoad && this._itemMap.size > 0) {
+      this._itemMap.clear();
+      this._order = [];
+    }
 
     const shouldTrackSkeleton = isInitialLoad && this._itemMap.size === 0;
 
