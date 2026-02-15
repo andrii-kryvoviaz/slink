@@ -27,6 +27,9 @@
   import { type ViewMode } from '@slink/lib/settings';
   import { createImageSelectionState } from '@slink/lib/state/ImageSelectionState.svelte';
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
+  import { pluralize } from '@slink/lib/utils/string/pluralize';
+
+  import { cn } from '@slink/utils/ui';
 
   const { settings } = page.data;
 
@@ -146,13 +149,18 @@
       result.deleted.forEach((id) => historyFeedState.removeItem(id));
       selectionState.removeIds(result.deleted);
       toast.success(
-        `Successfully deleted ${result.deleted.length} ${result.deleted.length > 1 ? 'images' : 'image'} from history`,
+        `Successfully deleted ${pluralize(result.deleted.length, 'image')} from history`,
       );
+
+      if (!historyFeedState.hasItems && historyFeedState.hasMore) {
+        historyFeedState.reset();
+        await historyFeedState.load();
+      }
     }
 
     if (result.failed.length > 0) {
       toast.error(
-        `Failed to delete ${result.failed.length} ${result.failed.length > 1 ? 'images' : 'image'}`,
+        `Failed to delete ${pluralize(result.failed.length, 'image')}`,
       );
     }
 
@@ -170,7 +178,10 @@
 
 <section>
   <div
-    class="flex flex-col px-4 py-6 sm:px-6 w-full"
+    class={cn(
+      'flex flex-col px-4 py-6 sm:px-6 w-full',
+      selectionState.hasSelection && 'pb-24',
+    )}
     use:skeleton={{ feed: historyFeedState }}
   >
     <div class="mb-8 space-y-6" in:fade={{ duration: 300 }}>
