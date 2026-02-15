@@ -39,6 +39,8 @@ final class NotificationRepository extends AbstractRepository implements Notific
   public function findByUserId(string $userId, int $page = 1, int $limit = 20): Paginator {
     $qb = $this->createQueryBuilder('n')
       ->join('n.user', 'u')
+      ->join('n.reference', 'r')
+      ->addSelect('r')
       ->leftJoin('n.relatedComment', 'c')
       ->addSelect('c')
       ->where('u.uuid = :userId')
@@ -53,6 +55,7 @@ final class NotificationRepository extends AbstractRepository implements Notific
     return (int) $this->createQueryBuilder('n')
       ->select('COUNT(n.uuid)')
       ->join('n.user', 'u')
+      ->join('n.reference', 'r')
       ->where('u.uuid = :userId')
       ->andWhere('n.isRead = :isRead')
       ->setParameter('userId', $userId)
