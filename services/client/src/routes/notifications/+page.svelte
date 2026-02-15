@@ -117,10 +117,6 @@
         })}
       variant="modern"
       rounded="full"
-    >
-      {#snippet text()}
-        <span>Load more</span>
-      {/snippet}
-    </LoadMoreButton>
+    />
   </div>
 </section>

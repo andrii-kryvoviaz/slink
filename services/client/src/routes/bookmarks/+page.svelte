@@ -223,11 +223,7 @@
             onclick={() => bookmarksFeed.nextPage({ debounce: 300 })}
             variant="modern"
             rounded="full"
-          >
-            {#snippet text()}
-              <span>Load More Bookmarks</span>
-            {/snippet}
-          </LoadMoreButton>
+          />
         </div>
       {/if}
     {/if}

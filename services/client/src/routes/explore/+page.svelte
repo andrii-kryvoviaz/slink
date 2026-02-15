@@ -276,11 +276,7 @@
             onclick={() => publicFeedState.nextPage({ debounce: 300 })}
             variant="modern"
             rounded="full"
-          >
-            {#snippet text()}
-              <span>Load More Images</span>
-            {/snippet}
-          </LoadMoreButton>
+          />
         </div>
       {/if}
     {/if}
