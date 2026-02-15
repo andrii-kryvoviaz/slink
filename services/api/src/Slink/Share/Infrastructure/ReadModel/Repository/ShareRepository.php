@@ -51,7 +51,20 @@ final class ShareRepository extends AbstractRepository implements ShareRepositor
       ->andWhere('s.shareable.shareableType = :shareableType')
       ->setParameter('shareableId', $shareableId)
       ->setParameter('shareableType', $shareableType)
+      ->setMaxResults(1)
       ->getQuery()
       ->getOneOrNullResult();
+  }
+
+  #[Override]
+  public function removeByShareable(string $shareableId, ShareableType $shareableType): void {
+    $this->createQueryBuilder('s')
+      ->delete()
+      ->where('s.shareable.shareableId = :shareableId')
+      ->andWhere('s.shareable.shareableType = :shareableType')
+      ->setParameter('shareableId', $shareableId)
+      ->setParameter('shareableType', $shareableType)
+      ->getQuery()
+      ->execute();
   }
 }

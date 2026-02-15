@@ -252,10 +252,6 @@ final class Image extends AbstractAggregateRoot {
       throw new NotFoundException();
     }
 
-    if ($this->deleted) {
-      throw new NotFoundException();
-    }
-
     if (!$this->isOwedBy($requestedBy)) {
       throw new AccessDeniedException();
     }
@@ -265,10 +261,6 @@ final class Image extends AbstractAggregateRoot {
 
   public function forceDelete(bool $preserveOnDisk = false): void {
     if (!$this->aggregateRootVersion()) {
-      throw new NotFoundException();
-    }
-
-    if ($this->deleted) {
       throw new NotFoundException();
     }
 

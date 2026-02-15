@@ -25,10 +25,7 @@ interface CollectionItemRepositoryInterface {
 
   public function findByCollectionAndItemId(string $collectionId, string $itemId): ?CollectionItemView;
 
-  /**
-   * @return array<CollectionItemView>
-   */
-  public function findAllByItemId(string $itemId): array;
+  public function removeByItemId(string $itemId): void;
 
   /**
    * @return array<CollectionItemView>

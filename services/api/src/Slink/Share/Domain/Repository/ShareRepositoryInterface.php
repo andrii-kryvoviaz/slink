@@ -17,4 +17,6 @@ interface ShareRepositoryInterface {
   public function findByTargetUrl(string $targetUrl): ?ShareView;
 
   public function findByShareable(string $shareableId, ShareableType $shareableType): ?ShareView;
+
+  public function removeByShareable(string $shareableId, ShareableType $shareableType): void;
 }

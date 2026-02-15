@@ -21,10 +21,7 @@ final class CollectionItemRepository extends AbstractRepository implements Colle
     int $limit,
     ?string $cursor = null
   ): Paginator {
-    $qb = $this->getEntityManager()
-      ->createQueryBuilder()
-      ->from(CollectionItemView::class, 'ci')
-      ->select('ci')
+    $qb = $this->createQueryBuilder('ci')
       ->join('ci.collection', 'c')
       ->where('c.uuid = :collectionId')
       ->setParameter('collectionId', $collectionId)
@@ -40,9 +37,7 @@ final class CollectionItemRepository extends AbstractRepository implements Colle
   }
 
   public function countCollectionItems(string $collectionId): int {
-    return (int) $this->getEntityManager()
-      ->createQueryBuilder()
-      ->from(CollectionItemView::class, 'ci')
+    return (int) $this->createQueryBuilder('ci')
       ->select('COUNT(ci.uuid)')
       ->join('ci.collection', 'c')
       ->where('c.uuid = :collectionId')
@@ -60,10 +55,7 @@ final class CollectionItemRepository extends AbstractRepository implements Colle
   }
 
   public function findByCollectionAndItemId(string $collectionId, string $itemId): ?CollectionItemView {
-    return $this->getEntityManager()
-      ->createQueryBuilder()
-      ->from(CollectionItemView::class, 'ci')
-      ->select('ci')
+    return $this->createQueryBuilder('ci')
       ->join('ci.collection', 'c')
       ->where('c.uuid = :collectionId')
       ->andWhere('ci.itemId = :itemId')
@@ -73,25 +65,20 @@ final class CollectionItemRepository extends AbstractRepository implements Colle
       ->getOneOrNullResult();
   }
 
-  public function findAllByItemId(string $itemId): array {
-    return $this->getEntityManager()
-      ->createQueryBuilder()
-      ->from(CollectionItemView::class, 'ci')
-      ->select('ci')
+  public function removeByItemId(string $itemId): void {
+    $this->createQueryBuilder('ci')
+      ->delete()
       ->where('ci.itemId = :itemId')
       ->setParameter('itemId', $itemId)
       ->getQuery()
-      ->getResult();
+      ->execute();
   }
 
   /**
    * @return array<CollectionItemView>
    */
   public function getByCollectionId(string $collectionId): array {
-    return $this->getEntityManager()
-      ->createQueryBuilder()
-      ->from(CollectionItemView::class, 'ci')
-      ->select('ci')
+    return $this->createQueryBuilder('ci')
       ->join('ci.collection', 'c')
       ->where('c.uuid = :collectionId')
       ->setParameter('collectionId', $collectionId)
@@ -103,10 +90,7 @@ final class CollectionItemRepository extends AbstractRepository implements Colle
    * @return array<CollectionItemView>
    */
   public function getByCollectionIdSorted(string $collectionId): array {
-    return $this->getEntityManager()
-      ->createQueryBuilder()
-      ->from(CollectionItemView::class, 'ci')
-      ->select('ci')
+    return $this->createQueryBuilder('ci')
       ->join('ci.collection', 'c')
       ->where('c.uuid = :collectionId')
       ->setParameter('collectionId', $collectionId)
@@ -121,10 +105,7 @@ final class CollectionItemRepository extends AbstractRepository implements Colle
   public function getByCollectionIdPaginated(string $collectionId, int $page, int $limit): array {
     $offset = ($page - 1) * $limit;
 
-    return $this->getEntityManager()
-      ->createQueryBuilder()
-      ->from(CollectionItemView::class, 'ci')
-      ->select('ci')
+    return $this->createQueryBuilder('ci')
       ->join('ci.collection', 'c')
       ->where('c.uuid = :collectionId')
       ->setParameter('collectionId', $collectionId)
@@ -136,9 +117,7 @@ final class CollectionItemRepository extends AbstractRepository implements Colle
   }
 
   public function countByCollectionId(string $collectionId): int {
-    return (int) $this->getEntityManager()
-      ->createQueryBuilder()
-      ->from(CollectionItemView::class, 'ci')
+    return (int) $this->createQueryBuilder('ci')
       ->select('COUNT(ci.uuid)')
       ->join('ci.collection', 'c')
       ->where('c.uuid = :collectionId')
@@ -152,9 +131,7 @@ final class CollectionItemRepository extends AbstractRepository implements Colle
       return [];
     }
 
-    $results = $this->getEntityManager()
-      ->createQueryBuilder()
-      ->from(CollectionItemView::class, 'ci')
+    $results = $this->createQueryBuilder('ci')
       ->select('c.uuid as collectionId, COUNT(ci.uuid) as itemCount')
       ->join('ci.collection', 'c')
       ->where('c.uuid IN (:collectionIds)')
@@ -176,9 +153,7 @@ final class CollectionItemRepository extends AbstractRepository implements Colle
       return [];
     }
 
-    $results = $this->getEntityManager()
-      ->createQueryBuilder()
-      ->from(CollectionItemView::class, 'ci')
+    $results = $this->createQueryBuilder('ci')
       ->select('ci.itemId, c.uuid as collectionId')
       ->join('ci.collection', 'c')
       ->where('ci.itemId IN (:imageIds)')
@@ -200,9 +175,7 @@ final class CollectionItemRepository extends AbstractRepository implements Colle
       return [];
     }
 
-    $results = $this->getEntityManager()
-      ->createQueryBuilder()
-      ->from(CollectionItemView::class, 'ci')
+    $results = $this->createQueryBuilder('ci')
       ->select('c.uuid as collectionId, ci.itemId, ci.position')
       ->join('ci.collection', 'c')
       ->where('c.uuid IN (:collectionIds)')

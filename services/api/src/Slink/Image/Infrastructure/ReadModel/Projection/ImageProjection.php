@@ -6,6 +6,7 @@ namespace Slink\Image\Infrastructure\ReadModel\Projection;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
+use Psr\Log\LoggerInterface;
 use Slink\Collection\Domain\Repository\CollectionItemRepositoryInterface;
 use Slink\Image\Domain\Event\ImageAttributesWasUpdated;
 use Slink\Image\Domain\Event\ImageLicenseWasUpdated;
@@ -29,7 +30,8 @@ final class ImageProjection extends AbstractProjection {
     private readonly ImageLicenseRepository $licenseRepository,
     private readonly ShareRepositoryInterface $shareRepository,
     private readonly CollectionItemRepositoryInterface $collectionItemRepository,
-    private readonly EntityManagerInterface $em
+    private readonly EntityManagerInterface $em,
+    private readonly LoggerInterface $logger,
   ) {
   }
 
@@ -76,14 +78,16 @@ final class ImageProjection extends AbstractProjection {
   public function handleImageWasDeleted(ImageWasDeleted $event): void {
     $imageId = $event->id->toString();
 
-    $share = $this->shareRepository->findByShareable($imageId, ShareableType::Image);
-    if ($share !== null) {
-      $this->shareRepository->remove($share);
+    try {
+      $this->shareRepository->removeByShareable($imageId, ShareableType::Image);
+    } catch (\Throwable $e) {
+      $this->logger->error(sprintf('Failed to remove shares for image %s: %s in %s:%s', $imageId, $e->getMessage(), $e->getFile(), $e->getLine()));
     }
 
-    $collectionItems = $this->collectionItemRepository->findAllByItemId($imageId);
-    foreach ($collectionItems as $item) {
-      $this->collectionItemRepository->remove($item);
+    try {
+      $this->collectionItemRepository->removeByItemId($imageId);
+    } catch (\Throwable $e) {
+      $this->logger->error(sprintf('Failed to remove collection items for image %s: %s in %s:%s', $imageId, $e->getMessage(), $e->getFile(), $e->getLine()));
     }
 
     try {
