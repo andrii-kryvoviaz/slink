@@ -36,7 +36,9 @@ use Slink\User\Domain\User;
 use Slink\User\Domain\ValueObject\Auth\Credentials;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;
 use Slink\User\Domain\ValueObject\DisplayName;
+use Slink\User\Domain\ValueObject\Email;
 use Slink\User\Domain\ValueObject\Role;
+use Slink\User\Domain\ValueObject\Username;
 use Tests\Traits\PrivatePropertyTrait;
 
 final class UserTest extends TestCase {
@@ -113,7 +115,7 @@ final class UserTest extends TestCase {
   #[Test]
   public function itCreatesUserSuccessfully(): void {
     $id = ID::generate();
-    $credentials = Credentials::fromPlainCredentials(self::VALID_EMAIL, self::VALID_USERNAME, self::VALID_PASSWORD);
+    $credentials = Credentials::create(Email::fromString(self::VALID_EMAIL), Username::fromString(self::VALID_USERNAME), HashedPassword::encode(self::VALID_PASSWORD));
     $displayName = DisplayName::fromString(self::VALID_DISPLAY_NAME);
     $status = UserStatus::Active;
     $context = $this->createUserCreationContext();
@@ -135,7 +137,7 @@ final class UserTest extends TestCase {
   #[DataProvider('provideUserStatusData')]
   public function itCreatesUserWithDifferentStatuses(UserStatus $status): void {
     $id = ID::generate();
-    $credentials = Credentials::fromPlainCredentials(self::VALID_EMAIL, self::VALID_USERNAME, self::VALID_PASSWORD);
+    $credentials = Credentials::create(Email::fromString(self::VALID_EMAIL), Username::fromString(self::VALID_USERNAME), HashedPassword::encode(self::VALID_PASSWORD));
     $displayName = DisplayName::fromString(self::VALID_DISPLAY_NAME);
     $context = $this->createUserCreationContext();
 
@@ -269,7 +271,7 @@ final class UserTest extends TestCase {
     $this->expectExceptionMessage('Display name already exist.');
 
     $id = ID::generate();
-    $credentials = Credentials::fromPlainCredentials(self::VALID_EMAIL, self::VALID_USERNAME, self::VALID_PASSWORD);
+    $credentials = Credentials::create(Email::fromString(self::VALID_EMAIL), Username::fromString(self::VALID_USERNAME), HashedPassword::encode(self::VALID_PASSWORD));
     $displayName = DisplayName::fromString(self::VALID_DISPLAY_NAME);
     $status = UserStatus::Active;
     $context = $this->createUserCreationContext(displayNameUnique: false);
@@ -295,7 +297,7 @@ final class UserTest extends TestCase {
     $this->expectExceptionMessage('Email already registered.');
 
     $id = ID::generate();
-    $credentials = Credentials::fromPlainCredentials(self::VALID_EMAIL, self::VALID_USERNAME, self::VALID_PASSWORD);
+    $credentials = Credentials::create(Email::fromString(self::VALID_EMAIL), Username::fromString(self::VALID_USERNAME), HashedPassword::encode(self::VALID_PASSWORD));
     $displayName = DisplayName::fromString(self::VALID_DISPLAY_NAME);
     $status = UserStatus::Active;
     $context = $this->createUserCreationContext(emailUnique: false);
@@ -333,7 +335,7 @@ final class UserTest extends TestCase {
     $this->expectExceptionMessage('Username already exist.');
 
     $id = ID::generate();
-    $credentials = Credentials::fromPlainCredentials(self::VALID_EMAIL, self::VALID_USERNAME, self::VALID_PASSWORD);
+    $credentials = Credentials::create(Email::fromString(self::VALID_EMAIL), Username::fromString(self::VALID_USERNAME), HashedPassword::encode(self::VALID_PASSWORD));
     $displayName = DisplayName::fromString(self::VALID_DISPLAY_NAME);
     $status = UserStatus::Active;
     $context = $this->createUserCreationContext(usernameUnique: false);
@@ -415,7 +417,7 @@ final class UserTest extends TestCase {
 
   private function createUser(): User {
     $id = ID::generate();
-    $credentials = Credentials::fromPlainCredentials(self::VALID_EMAIL, self::VALID_USERNAME, self::VALID_PASSWORD);
+    $credentials = Credentials::create(Email::fromString(self::VALID_EMAIL), Username::fromString(self::VALID_USERNAME), HashedPassword::encode(self::VALID_PASSWORD));
     $displayName = DisplayName::fromString(self::VALID_DISPLAY_NAME);
     $status = UserStatus::Active;
     $context = $this->createUserCreationContext();

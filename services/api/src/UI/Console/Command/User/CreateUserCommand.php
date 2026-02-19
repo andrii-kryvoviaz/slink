@@ -6,6 +6,7 @@ namespace UI\Console\Command\User;
 
 use Slink\Shared\Application\Command\CommandTrait;
 use Slink\User\Application\Command\CreateUser\CreateUserCommand as CreateUser;
+use Slink\User\Domain\Enum\UserStatus;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -54,7 +55,7 @@ final class CreateUserCommand extends Command {
         password: $password,
         username: $username,
         displayName: $displayName,
-        activate: $activate
+        status: $activate ? UserStatus::Active : null
       );
 
       $this->handle($command);

@@ -6,9 +6,11 @@ namespace Unit\Slink\User\Domain\Factory;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\User\Domain\Context\UserCreationContext;
 use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\Factory\AdminUserFactory;
+use Slink\User\Domain\Factory\UserFactory;
 use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
 use Slink\User\Domain\Specification\UniqueDisplayNameSpecificationInterface;
 use Slink\User\Domain\Specification\UniqueEmailSpecificationInterface;
@@ -99,11 +101,15 @@ final class AdminUserFactoryTest extends TestCase {
     $uniqueDisplayNameSpec = $this->createStub(UniqueDisplayNameSpecificationInterface::class);
     $uniqueDisplayNameSpec->method('isUnique')->willReturn(true);
 
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
+    $configProvider->method('get')->willReturn(false);
+
     $userCreationContext = new UserCreationContext($uniqueEmailSpec, $uniqueUsernameSpec, $uniqueDisplayNameSpec);
+    $userFactory = new UserFactory($configProvider, $userCreationContext);
 
     $userRepository = $this->createStub(UserStoreRepositoryInterface::class);
     $userRepository->method('getByUsername')->willReturn(null);
 
-    return new AdminUserFactory($userCreationContext, $userRepository, $username, $email, $password);
+    return new AdminUserFactory($userFactory, $userRepository, $username, $email, $password);
   }
 }
