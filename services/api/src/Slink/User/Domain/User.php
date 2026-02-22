@@ -13,6 +13,7 @@ use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Context\ChangeUserRoleContext;
 use Slink\User\Domain\Context\UserCreationContext;
 use Slink\User\Domain\Contracts\UserInterface;
+use Slink\User\Domain\Enum\OAuthProvider;
 use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\Event\Role\UserGrantedRole;
 use Slink\User\Domain\Event\Role\UserRevokedRole;
@@ -25,6 +26,8 @@ use Slink\User\Domain\Event\UserStatusWasChanged;
 use Slink\User\Domain\Event\UserWasCreated;
 use Slink\User\Domain\Event\ApiKeyWasCreated;
 use Slink\User\Domain\Event\ApiKeyWasRevoked;
+use Slink\User\Domain\Event\OAuth\OAuthAccountWasLinked;
+use Slink\User\Domain\Event\OAuth\OAuthAccountWasUnlinked;
 use Slink\User\Domain\Exception\DisplayNameAlreadyExistException;
 use Slink\User\Domain\Exception\EmailAlreadyExistException;
 use Slink\User\Domain\Exception\InvalidCredentialsException;
@@ -40,6 +43,10 @@ use Slink\User\Domain\ValueObject\Auth\HashedApiKey;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;
 use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Email;
+use Slink\User\Domain\ValueObject\OAuth\OAuthClaims;
+use Slink\User\Domain\ValueObject\OAuth\OAuthSubject;
+use Slink\User\Domain\ValueObject\OAuth\OAuthSubjectSet;
+use Slink\User\Domain\ValueObject\OAuth\SubjectId;
 use Slink\User\Domain\ValueObject\Username;
 use Slink\User\Domain\ValueObject\Role;
 use Slink\User\Domain\ValueObject\RoleSet;
@@ -54,7 +61,8 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   private UserStatus $status;
   
   private RoleSet $roles;
-  
+  private OAuthSubjectSet $linkedOAuthSubjects;
+
   private UserPreferences $preferences;
   
   /**
@@ -136,6 +144,7 @@ final class User extends AbstractAggregateRoot implements UserInterface {
     parent::__construct($id);
     
     $this->roles = RoleSet::create();
+    $this->linkedOAuthSubjects = OAuthSubjectSet::create();
     $this->preferences = UserPreferences::empty();
     
     $this->refreshToken = RefreshTokenSet::create($id);
@@ -211,8 +220,8 @@ final class User extends AbstractAggregateRoot implements UserInterface {
     if (!$this->hashedPassword->match($password)) {
       throw new InvalidCredentialsException();
     }
-    
-    $this->recordThat(new UserSignedIn($this->aggregateRootId(), $this->email));
+
+    $this->authenticate();
   }
   
   /**
@@ -379,6 +388,39 @@ final class User extends AbstractAggregateRoot implements UserInterface {
     $this->recordThat(new ApiKeyWasRevoked($this->aggregateRootId(), $keyId));
   }
 
+  public function authenticate(): void {
+    $this->recordThat(new UserSignedIn($this->aggregateRootId(), $this->email));
+  }
+
+  public function link(OAuthClaims $claims): void {
+    if ($this->linkedOAuthSubjects->has($claims->getSubject())) {
+      return;
+    }
+
+    $this->recordThat(new OAuthAccountWasLinked(
+      $this->aggregateRootId(),
+      ID::generate(),
+      $claims->getSubject()->getProvider(),
+      $claims->getSubject()->getSub(),
+      $claims->getEmail(),
+      DateTime::now(),
+    ));
+  }
+
+  public function applyOAuthAccountWasLinked(OAuthAccountWasLinked $event): void {
+    $this->linkedOAuthSubjects->add(OAuthSubject::create($event->provider, $event->sub));
+  }
+
+  public function applyOAuthAccountWasUnlinked(OAuthAccountWasUnlinked $event): void {
+    $this->linkedOAuthSubjects->remove(OAuthSubject::create($event->provider, $event->sub));
+  }
+
+  public function unlink(ID $linkId, OAuthProvider $provider, SubjectId $sub): void {
+    $this->recordThat(new OAuthAccountWasUnlinked(
+      $this->aggregateRootId(), $linkId, $provider, $sub,
+    ));
+  }
+
   /**
    * @return array<string, mixed>
    */
@@ -390,6 +432,7 @@ final class User extends AbstractAggregateRoot implements UserInterface {
       'hashedPassword' => $this->hashedPassword->toString(),
       'status' => $this->status->value,
       'roles' => $this->roles->toArray(),
+      'linkedOAuthSubjects' => $this->linkedOAuthSubjects->toArray(),
       'preferences' => $this->preferences->toPayload(),
     ];
   }
@@ -409,8 +452,10 @@ final class User extends AbstractAggregateRoot implements UserInterface {
     $roles = array_map(fn(string $roleString) => Role::fromString($roleString), $state['roles']);
     $user->roles = RoleSet::create($roles);
     
-    $user->preferences = isset($state['preferences']) 
-      ? UserPreferences::fromPayload($state['preferences']) 
+    $user->linkedOAuthSubjects = OAuthSubjectSet::fromArray($state['linkedOAuthSubjects'] ?? []);
+
+    $user->preferences = isset($state['preferences'])
+      ? UserPreferences::fromPayload($state['preferences'])
       : UserPreferences::empty();
 
     return $user;
