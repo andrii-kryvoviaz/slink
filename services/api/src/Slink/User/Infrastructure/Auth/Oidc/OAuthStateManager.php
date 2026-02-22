@@ -31,6 +31,7 @@ final readonly class OAuthStateManager implements OAuthStateManagerInterface {
   public function consume(OAuthState $state): OAuthContext {
     $cacheKey = 'oauth_state_' . hash('sha256', $state->toString());
 
+    /** @var array{provider: string, redirectUri: string, pkceVerifier: string|null}|null $data */
     $data = $this->cache->get($cacheKey, fn (): null => null);
 
     if ($data === null) {

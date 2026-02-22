@@ -25,15 +25,17 @@ final readonly class UserFactory {
     DisplayName $displayName,
     ?UserStatus $status = null,
   ): User {
+    if ($status !== null) {
+      return User::create($id, $credentials, $displayName, $status, $this->userCreationContext);
+    }
+
     if (!$this->configurationProvider->get('user.allowRegistration')) {
       throw new RegistrationIsNotAllowed();
     }
 
-    if ($status === null) {
-      $status = $this->configurationProvider->get('user.approvalRequired')
-        ? UserStatus::Inactive
-        : UserStatus::Active;
-    }
+    $status = $this->configurationProvider->get('user.approvalRequired')
+      ? UserStatus::Inactive
+      : UserStatus::Active;
 
     return User::create($id, $credentials, $displayName, $status, $this->userCreationContext);
   }

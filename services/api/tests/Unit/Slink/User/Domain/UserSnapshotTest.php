@@ -10,6 +10,7 @@ use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\User;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;
+use Slink\User\Domain\ValueObject\OAuth\OAuthSubjectSet;
 use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Email;
 use Slink\User\Domain\ValueObject\Role;
@@ -96,6 +97,66 @@ final class UserSnapshotTest extends TestCase {
     $this->assertEquals($originalUser->getRoles(), $restoredUser->getRoles());
   }
 
+  #[Test]
+  public function itHandlesDifferentUserStatuses(): void {
+    $userId = ID::generate();
+    $email = Email::fromString('user@example.com');
+    $username = Username::fromString('testuser');
+    $displayName = DisplayName::fromString('Test User');
+    $hashedPassword = HashedPassword::encode('password123');
+    $roles = RoleSet::create([Role::fromString('ROLE_USER')]);
+
+    $inactiveUser = $this->createUserWithState($userId, $email, $username, $displayName, $hashedPassword, UserStatus::Inactive, $roles);
+    $reflection = new \ReflectionClass($inactiveUser);
+    $createMethod = $reflection->getMethod('createSnapshotState');
+
+    $inactiveSnapshot = $createMethod->invoke($inactiveUser);
+    $restoreMethod = $reflection->getMethod('reconstituteFromSnapshotState');
+
+    $restoredInactiveUser = $restoreMethod->invoke(null, $userId, $inactiveSnapshot);
+
+    $this->assertEquals(UserStatus::Inactive, $restoredInactiveUser->getStatus());
+
+    $activeUser = $this->createUserWithState($userId, $email, $username, $displayName, $hashedPassword, UserStatus::Active, $roles);
+    $activeSnapshot = $createMethod->invoke($activeUser);
+    $restoredActiveUser = $restoreMethod->invoke(null, $userId, $activeSnapshot);
+
+    $this->assertEquals(UserStatus::Active, $restoredActiveUser->getStatus());
+  }
+
+  #[Test]
+  public function itHandlesMultipleRoles(): void {
+    $userId = ID::generate();
+    $email = Email::fromString('admin@example.com');
+    $username = Username::fromString('adminuser');
+    $displayName = DisplayName::fromString('Admin User');
+    $hashedPassword = HashedPassword::encode('password123');
+    $roles = RoleSet::create([
+      Role::fromString('ROLE_USER'),
+      Role::fromString('ROLE_ADMIN'),
+      Role::fromString('ROLE_MODERATOR')
+    ]);
+    $status = UserStatus::Active;
+
+    $user = $this->createUserWithState($userId, $email, $username, $displayName, $hashedPassword, $status, $roles);
+    $reflection = new \ReflectionClass($user);
+    $createMethod = $reflection->getMethod('createSnapshotState');
+
+    $snapshot = $createMethod->invoke($user);
+    $restoreMethod = $reflection->getMethod('reconstituteFromSnapshotState');
+
+    $restoredUser = $restoreMethod->invoke(null, $userId, $snapshot);
+
+    $originalRoles = $user->getRoles();
+    $restoredRoles = $restoredUser->getRoles();
+
+    $this->assertCount(3, $restoredRoles);
+    $this->assertContains('ROLE_USER', $restoredRoles);
+    $this->assertContains('ROLE_ADMIN', $restoredRoles);
+    $this->assertContains('ROLE_MODERATOR', $restoredRoles);
+    $this->assertEqualsCanonicalizing($originalRoles, $restoredRoles);
+  }
+
   private function createUserWithState(
     ID $userId,
     Email $email,
@@ -142,7 +203,10 @@ final class UserSnapshotTest extends TestCase {
     
     $preferencesProperty = $user->getProperty('preferences');
     $preferencesProperty->setValue($instance, \Slink\User\Domain\ValueObject\UserPreferences::empty());
-    
+
+    $linkedOAuthSubjectsProperty = $user->getProperty('linkedOAuthSubjects');
+    $linkedOAuthSubjectsProperty->setValue($instance, OAuthSubjectSet::create());
+
     return $instance;
   }
 }

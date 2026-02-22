@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\User\Infrastructure\Auth\Oidc;
 
+use League\OAuth2\Client\Token\AccessToken;
 use Slink\User\Domain\Contracts\OAuthAdapterInterface;
 use Slink\User\Domain\Contracts\OAuthClientFactoryInterface;
 use Slink\User\Domain\Contracts\OAuthStateManagerInterface;
@@ -68,6 +69,10 @@ final readonly class OAuthAdapter implements OAuthAdapterInterface {
     $accessToken = $oauthClient->getAccessToken('authorization_code', [
       'code' => $code->toString(),
     ]);
+
+    if (!$accessToken instanceof AccessToken) {
+      throw new InvalidCredentialsException();
+    }
 
     return $this->claimsExtractor->extract(
       $accessToken->getValues(),

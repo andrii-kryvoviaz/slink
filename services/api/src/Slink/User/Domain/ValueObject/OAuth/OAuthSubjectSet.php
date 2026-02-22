@@ -10,6 +10,7 @@ use Slink\Shared\Domain\ValueObject\AbstractValueObject;
 final readonly class OAuthSubjectSet extends AbstractValueObject {
   private HashMap $subjects;
 
+  /** @param array<OAuthSubject> $subjects */
   private function __construct(array $subjects) {
     $this->subjects = new HashMap();
     foreach ($subjects as $subject) {
@@ -17,6 +18,7 @@ final readonly class OAuthSubjectSet extends AbstractValueObject {
     }
   }
 
+  /** @param array<OAuthSubject> $subjects */
   public static function create(array $subjects = []): self {
     return new self($subjects);
   }
@@ -41,6 +43,7 @@ final readonly class OAuthSubjectSet extends AbstractValueObject {
     return $this->subjects->keys();
   }
 
+  /** @param array<string> $keys */
   public static function fromArray(array $keys): self {
     $subjects = array_map(
       fn(string $key) => OAuthSubject::fromKey($key),

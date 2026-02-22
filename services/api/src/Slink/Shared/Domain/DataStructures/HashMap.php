@@ -6,13 +6,13 @@ namespace Slink\Shared\Domain\DataStructures;
 
 class HashMap {
   /**
-   * @param array<string|int, mixed> $_values
+   * @param array<string, mixed> $_values
    */
   public function __construct(private array $_values = []) {
   }
   
   /**
-   * @param array<string|int, mixed> $array
+   * @param array<string, mixed> $array
    * @return self
    */
   static public function fromArray(array $array): self {
@@ -60,7 +60,7 @@ class HashMap {
   }
   
   /**
-   * @return array<int|string, mixed>
+   * @return array<string, mixed>
    */
   public function toArray(): array {
     return $this->_values;
@@ -74,7 +74,7 @@ class HashMap {
   }
   
   /**
-   * @return array<int, int|string>
+   * @return array<int, string>
    */
   public function keys(): array {
     return array_keys($this->_values);
