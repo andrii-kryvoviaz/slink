@@ -16,6 +16,7 @@
         "eventsauce/message-repository-for-doctrine": "^1.1",
         "icewind/smb": "^3.6",
         "jcupitt/vips": "^2.6",
+        "league/oauth2-client": "^2.9",
         "lexik/jwt-authentication-bundle": "^3.2.0",
         "nelmio/cors-bundle": "^2.5",
         "predis/predis": "^2.3",
