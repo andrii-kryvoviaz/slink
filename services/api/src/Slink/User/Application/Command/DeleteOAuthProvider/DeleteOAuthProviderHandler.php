@@ -13,8 +13,8 @@ final readonly class DeleteOAuthProviderHandler implements CommandHandlerInterfa
     private OAuthProviderStoreRepositoryInterface $providerStore,
   ) {}
 
-  public function __invoke(DeleteOAuthProviderCommand $command, string $id): void {
-    $provider = $this->providerStore->get(ID::fromString($id));
+  public function __invoke(DeleteOAuthProviderCommand $command): void {
+    $provider = $this->providerStore->get(ID::fromString($command->getId()));
 
     $provider->remove();
 
