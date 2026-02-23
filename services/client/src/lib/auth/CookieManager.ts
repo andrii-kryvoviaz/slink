@@ -18,7 +18,7 @@ export class CookieManager {
     options: CookieOptions = {},
   ): void {
     const cookieOptions: Parameters<Cookies['set']>[2] = {
-      sameSite: options.sameSite ?? 'strict',
+      sameSite: options.sameSite ?? 'lax',
       path: options.path ?? '/',
       secure: this.requireSsl ? true : options.secure,
       httpOnly: options.httpOnly,
