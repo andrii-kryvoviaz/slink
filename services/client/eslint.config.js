@@ -35,6 +35,7 @@ export default [
     },
     rules: {
       'no-unused-vars': 'off',
+      'no-redeclare': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
@@ -43,6 +44,7 @@ export default [
           ignoreRestSiblings: true,
         },
       ],
+      '@typescript-eslint/no-redeclare': 'error',
       '@typescript-eslint/no-explicit-any': 'warn',
       'unused-imports/no-unused-imports': 'error',
     },
