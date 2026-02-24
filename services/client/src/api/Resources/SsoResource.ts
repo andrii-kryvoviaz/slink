@@ -1,10 +1,12 @@
 import { AbstractResource } from '@slink/api/AbstractResource';
 import type { LoginResponse } from '@slink/api/Response/Auth/LoginResponse';
 
+import type { OAuthProvider } from '@slink/lib/enum/OAuthProvider';
+
 export type SsoProvider = {
   id: string;
   name: string;
-  slug: string;
+  slug: OAuthProvider;
 };
 
 export type SsoAuthorizeResponse = {
