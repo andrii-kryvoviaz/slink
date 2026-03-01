@@ -31,13 +31,16 @@ final class InitDatabaseCommand extends Command {
   }
 
   protected function execute(InputInterface $input, OutputInterface $output): int {
-    $io = new SymfonyStyle($input, $output);
+    $application = $this->getApplication();
 
+    if ($application === null) {
+      throw new \LogicException('Application instance is not available.');
+    }
+
+    /** @var Connection $connection */
     $connection = $this->registry->getConnection($input->getOption('connection'));
-    assert($connection instanceof Connection);
 
     if ($connection->getDatabasePlatform() instanceof SQLitePlatform) {
-      $io->info('SQLite platform detected. Skipping database creation.');
       return Command::SUCCESS;
     }
 
@@ -49,7 +52,6 @@ final class InitDatabaseCommand extends Command {
 
     $createDatabaseInput->setInteractive($input->isInteractive());
 
-    assert($this->getApplication() !== null);
-    return $this->getApplication()->doRun($createDatabaseInput, $output);
+    return $application->doRun($createDatabaseInput, $output);
   }
 }
