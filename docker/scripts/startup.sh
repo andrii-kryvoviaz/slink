@@ -105,7 +105,16 @@ setup_mercure_keys
 generate_app_secret_from_jwt
 
 if [ -f /services/api/.env ]; then
-  export $(grep -v '^#' /services/api/.env | xargs)
+  # Save the current environment variables to restore them later
+  export > /tmp/original_env.sh
+
+  # Export all variables from the .env file as default values
+  set -a
+  . /services/api/.env
+  set +a
+
+  # Restore the original environment variables and override default values
+  . /tmp/original_env.sh
 fi
 
 if [[ "$DATABASE_URL" != sqlite:* ]]; then
