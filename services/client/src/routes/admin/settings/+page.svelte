@@ -30,6 +30,15 @@
       iconBg: 'bg-emerald-100 dark:bg-emerald-900/30',
       iconColor: 'text-emerald-600 dark:text-emerald-400',
     },
+    {
+      title: 'Single Sign-On',
+      description:
+        'Manage SSO/OIDC identity providers for external authentication',
+      href: '/admin/settings/sso',
+      icon: 'solar:key-linear',
+      iconBg: 'bg-amber-100 dark:bg-amber-900/30',
+      iconColor: 'text-amber-600 dark:text-amber-400',
+    },
   ];
 </script>
 

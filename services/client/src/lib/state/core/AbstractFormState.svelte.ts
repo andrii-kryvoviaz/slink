@@ -1,4 +1,7 @@
+import { get } from 'svelte/store';
+
 import { ValidationException } from '@slink/api/Exceptions';
+import type { RequestState } from '@slink/api/ReactiveState';
 
 import { printErrorsAsToastMessage } from '@slink/lib/utils/ui/printErrorsAsToastMessage';
 
@@ -32,28 +35,32 @@ export abstract class AbstractFormState<TResult = void> {
     this._onSuccess = null;
   }
 
-  protected async handleSubmit(
-    action: () => Promise<TResult>,
+  protected async runSubmit(
+    action: RequestState<TResult>,
+    ...args: unknown[]
   ): Promise<boolean> {
     this._isSubmitting = true;
     this._errors = {};
 
-    try {
-      const result = await action();
-      const onSuccess = this._onSuccess;
-      this.close();
-      onSuccess?.(result);
-      return true;
-    } catch (error) {
+    await action.run(...args);
+
+    this._isSubmitting = false;
+
+    const error = get(action.error);
+
+    if (error) {
       if (error instanceof ValidationException) {
         this.handleValidationError(error);
       } else {
-        printErrorsAsToastMessage(error as Error);
+        printErrorsAsToastMessage(error);
       }
       return false;
-    } finally {
-      this._isSubmitting = false;
     }
+
+    const onSuccess = this._onSuccess;
+    this.close();
+    onSuccess?.(get(action.data) as TResult);
+    return true;
   }
 
   protected handleValidationError(error: ValidationException) {

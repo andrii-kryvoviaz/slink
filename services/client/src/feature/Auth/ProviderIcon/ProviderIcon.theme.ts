@@ -1,7 +1,5 @@
 import { cva } from 'class-variance-authority';
 
-export { OAuthProvider } from '@slink/lib/enum/OAuthProvider';
-
 export const providerIconVariants = cva('', {
   variants: {
     provider: {

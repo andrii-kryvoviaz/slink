@@ -1,6 +1,11 @@
 export { default as AccessSettings } from './AccessSettings/AccessSettings.svelte';
 export { default as CacheSettings } from './CacheSettings/CacheSettings.svelte';
 export { default as ImageSettings } from './ImageSettings/ImageSettings.svelte';
+export { default as OAuthProviderDeleteConfirmation } from './OAuthSettings/OAuthProviderDeleteConfirmation.svelte';
+export { default as OAuthProviderForm } from './OAuthSettings/OAuthProviderForm.svelte';
+export * from './OAuthSettings/OAuthProviderFormState.svelte';
+export { default as OAuthProviderList } from './OAuthSettings/OAuthProviderList.svelte';
+export * from './OAuthSettings/OAuthProviderListState.svelte';
 export { default as ResetSettingConfirmation } from './ResetSettingConfirmation/ResetSettingConfirmation.svelte';
 export { default as ResetSettingPopover } from './ResetSettingConfirmation/ResetSettingPopover.svelte';
 export { default as SettingsPageLayout } from './SettingsPageLayout.svelte';

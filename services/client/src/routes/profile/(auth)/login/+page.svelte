@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { PasswordToggle } from '@slink/feature/Auth';
+  import { PasswordToggle, SsoProviderButton } from '@slink/feature/Auth';
   import {
     Banner,
     BannerAction,
@@ -9,7 +9,6 @@
   } from '@slink/feature/Layout';
   import { Button, type ButtonVariant } from '@slink/ui/components/button';
   import { Input } from '@slink/ui/components/input';
-  import { untrack } from 'svelte';
 
   import { enhance } from '$app/forms';
   import { page } from '$app/state';
@@ -46,6 +45,8 @@
     settings.theme.isLight ? 'dark' : 'primary',
   );
 
+  let ssoProviders = $derived(data.ssoProviders ?? []);
+
   function fillDemoCredentials() {
     if (
       data.globalSettings?.demo?.demoUsername &&
@@ -60,19 +61,17 @@
     }
   }
 
-  $effect(() => {
-    if (!form?.errors) {
-      return;
+  if (form?.errors) {
+    const errors = form.errors as Record<string, any>;
+
+    if (errors.credentials && typeof errors.credentials === 'string') {
+      toast.error(errors.credentials);
     }
+  }
 
-    untrack(() => {
-      const errors = form.errors as Record<string, any>;
-
-      if (errors.credentials && typeof errors.credentials === 'string') {
-        toast.error(errors.credentials);
-      }
-    });
-  });
+  if (data.error?.sso) {
+    toast.error(decodeURIComponent(data.error.sso));
+  }
 </script>
 
 <svelte:head>
@@ -175,6 +174,29 @@
       </Button>
     </form>
   </div>
+
+  {#if ssoProviders.length > 0}
+    <div class="my-6">
+      <div class="relative flex items-center">
+        <div
+          class="flex-grow border-t border-gray-200 dark:border-gray-700"
+        ></div>
+        <span
+          class="mx-4 shrink-0 text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide"
+          >or continue with</span
+        >
+        <div
+          class="flex-grow border-t border-gray-200 dark:border-gray-700"
+        ></div>
+      </div>
+
+      <div class="mt-4 space-y-3">
+        {#each ssoProviders as provider (provider.id)}
+          <SsoProviderButton {provider} />
+        {/each}
+      </div>
+    </div>
+  {/if}
 
   <div class="mt-6 space-y-4">
     {#if data.globalSettings?.demo?.enabled}
