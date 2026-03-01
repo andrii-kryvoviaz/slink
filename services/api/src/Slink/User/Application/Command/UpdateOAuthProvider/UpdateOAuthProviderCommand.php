@@ -33,6 +33,8 @@ final readonly class UpdateOAuthProviderCommand implements CommandInterface {
     private ?string $scopes = null,
 
     private ?bool $enabled = null,
+
+    private ?float $sortOrder = null,
   ) {}
 
   public function getName(): ?string {
@@ -65,5 +67,9 @@ final readonly class UpdateOAuthProviderCommand implements CommandInterface {
 
   public function isEnabled(): ?bool {
     return $this->enabled;
+  }
+
+  public function getSortOrder(): ?float {
+    return $this->sortOrder;
   }
 }

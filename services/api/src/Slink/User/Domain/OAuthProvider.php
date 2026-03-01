@@ -21,6 +21,7 @@ final class OAuthProvider extends AbstractAggregateRoot {
   private string $discoveryUrl;
   private string $scopes;
   private bool $enabled;
+  private float $sortOrder;
 
   protected function __construct(ID $id) {
     parent::__construct($id);
@@ -36,6 +37,7 @@ final class OAuthProvider extends AbstractAggregateRoot {
     string $discoveryUrl,
     string $scopes,
     bool $enabled,
+    float $sortOrder = 0,
   ): self {
     $provider = new self($id);
     $provider->recordThat(new OAuthProviderWasCreated(
@@ -48,6 +50,7 @@ final class OAuthProvider extends AbstractAggregateRoot {
       $discoveryUrl,
       $scopes,
       $enabled,
+      $sortOrder,
     ));
 
     return $provider;
@@ -62,6 +65,7 @@ final class OAuthProvider extends AbstractAggregateRoot {
     ?string $discoveryUrl = null,
     ?string $scopes = null,
     ?bool $enabled = null,
+    ?float $sortOrder = null,
   ): void {
     $this->recordThat(new OAuthProviderWasUpdated(
       $this->aggregateRootId()->toString(),
@@ -73,6 +77,7 @@ final class OAuthProvider extends AbstractAggregateRoot {
       $discoveryUrl,
       $scopes,
       $enabled,
+      $sortOrder,
     ));
   }
 
@@ -91,6 +96,7 @@ final class OAuthProvider extends AbstractAggregateRoot {
     $this->discoveryUrl = $event->discoveryUrl;
     $this->scopes = $event->scopes;
     $this->enabled = $event->enabled;
+    $this->sortOrder = $event->sortOrder;
   }
 
   public function applyOAuthProviderWasUpdated(OAuthProviderWasUpdated $event): void {
@@ -102,6 +108,7 @@ final class OAuthProvider extends AbstractAggregateRoot {
     if ($event->discoveryUrl !== null) $this->discoveryUrl = $event->discoveryUrl;
     if ($event->scopes !== null) $this->scopes = $event->scopes;
     if ($event->enabled !== null) $this->enabled = $event->enabled;
+    if ($event->sortOrder !== null) $this->sortOrder = $event->sortOrder;
   }
 
   public function applyOAuthProviderWasRemoved(OAuthProviderWasRemoved $event): void {
@@ -120,6 +127,7 @@ final class OAuthProvider extends AbstractAggregateRoot {
       'discoveryUrl' => $this->discoveryUrl,
       'scopes' => $this->scopes,
       'enabled' => $this->enabled,
+      'sortOrder' => $this->sortOrder,
     ];
   }
 
@@ -137,6 +145,7 @@ final class OAuthProvider extends AbstractAggregateRoot {
     $provider->discoveryUrl = $state['discoveryUrl'];
     $provider->scopes = $state['scopes'];
     $provider->enabled = $state['enabled'];
+    $provider->sortOrder = $state['sortOrder'] ?? 0.0;
 
     return $provider;
   }

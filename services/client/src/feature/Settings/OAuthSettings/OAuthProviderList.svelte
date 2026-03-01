@@ -89,6 +89,28 @@
 
             <DropdownSimpleGroup>
               {#if state.deleteConfirmId !== provider.id}
+                <DropdownSimpleItem
+                  on={{ click: () => state.moveUp(provider) }}
+                  closeOnSelect={false}
+                  loading={state.isMoving(provider.id, 'up')}
+                  disabled={!state.canMoveUp(provider)}
+                >
+                  {#snippet icon()}
+                    <Icon icon="ph:arrow-up" class="h-4 w-4" />
+                  {/snippet}
+                  <span>Move Up</span>
+                </DropdownSimpleItem>
+                <DropdownSimpleItem
+                  on={{ click: () => state.moveDown(provider) }}
+                  closeOnSelect={false}
+                  loading={state.isMoving(provider.id, 'down')}
+                  disabled={!state.canMoveDown(provider)}
+                >
+                  {#snippet icon()}
+                    <Icon icon="ph:arrow-down" class="h-4 w-4" />
+                  {/snippet}
+                  <span>Move Down</span>
+                </DropdownSimpleItem>
                 <DropdownSimpleItem on={{ click: () => onEdit(provider) }}>
                   {#snippet icon()}
                     <Icon icon="ph:note-pencil" class="h-4 w-4" />

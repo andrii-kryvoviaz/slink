@@ -25,6 +25,7 @@ final readonly class UpdateOAuthProviderHandler implements CommandHandlerInterfa
       discoveryUrl: $command->getDiscoveryUrl(),
       scopes: $command->getScopes(),
       enabled: $command->isEnabled(),
+      sortOrder: $command->getSortOrder(),
     );
 
     $this->providerStore->store($provider);

@@ -18,6 +18,7 @@ final readonly class OAuthProviderWasCreated implements SerializablePayload {
     public string $discoveryUrl,
     public string $scopes,
     public bool $enabled,
+    public float $sortOrder = 0,
   ) {}
 
   /**
@@ -34,6 +35,7 @@ final readonly class OAuthProviderWasCreated implements SerializablePayload {
       'discoveryUrl' => $this->discoveryUrl,
       'scopes' => $this->scopes,
       'enabled' => $this->enabled,
+      'sortOrder' => $this->sortOrder,
     ];
   }
 
@@ -51,6 +53,7 @@ final readonly class OAuthProviderWasCreated implements SerializablePayload {
       $payload['discoveryUrl'],
       $payload['scopes'],
       $payload['enabled'],
+      (float)($payload['sortOrder'] ?? 0),
     );
   }
 }

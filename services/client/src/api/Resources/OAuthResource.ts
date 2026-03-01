@@ -2,6 +2,7 @@ import { AbstractResource } from '@slink/api/AbstractResource';
 import type { EmptyResponse } from '@slink/api/Response';
 
 import type { OAuthProvider } from '@slink/lib/enum/OAuthProvider';
+import type { SortDirection } from '@slink/lib/enum/SortDirection';
 
 export type OAuthProviderDetails = {
   id: string;
@@ -12,6 +13,7 @@ export type OAuthProviderDetails = {
   discoveryUrl: string;
   scopes: string;
   enabled: boolean;
+  sortOrder: number;
 };
 
 export type OAuthProviderFormData = {
@@ -48,5 +50,14 @@ export class OAuthResource extends AbstractResource {
 
   public async remove(id: string): Promise<EmptyResponse> {
     return this.delete(`/admin/oauth/providers/${id}`);
+  }
+
+  public async move(
+    id: string,
+    direction: SortDirection,
+  ): Promise<EmptyResponse> {
+    return this.patch(`/admin/oauth/providers/sort-order`, {
+      json: { id, direction },
+    });
   }
 }

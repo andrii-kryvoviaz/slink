@@ -28,6 +28,7 @@ final class OAuthProviderProjection extends AbstractProjection {
       discoveryUrl: $event->discoveryUrl,
       scopes: $event->scopes,
       enabled: $event->enabled,
+      sortOrder: $event->sortOrder,
     );
 
     $this->repository->save($provider);
@@ -48,6 +49,7 @@ final class OAuthProviderProjection extends AbstractProjection {
     if ($event->discoveryUrl !== null) $provider->setDiscoveryUrl($event->discoveryUrl);
     if ($event->scopes !== null) $provider->setScopes($event->scopes);
     if ($event->enabled !== null) $provider->setEnabled($event->enabled);
+    if ($event->sortOrder !== null) $provider->setSortOrder($event->sortOrder);
 
     $this->repository->save($provider);
   }

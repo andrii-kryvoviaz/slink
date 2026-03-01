@@ -18,6 +18,7 @@ final readonly class OAuthProviderWasUpdated implements SerializablePayload {
     public ?string $discoveryUrl = null,
     public ?string $scopes = null,
     public ?bool $enabled = null,
+    public ?float $sortOrder = null,
   ) {}
 
   /**
@@ -34,6 +35,7 @@ final readonly class OAuthProviderWasUpdated implements SerializablePayload {
     if ($this->discoveryUrl !== null) $payload['discoveryUrl'] = $this->discoveryUrl;
     if ($this->scopes !== null) $payload['scopes'] = $this->scopes;
     if ($this->enabled !== null) $payload['enabled'] = $this->enabled;
+    if ($this->sortOrder !== null) $payload['sortOrder'] = $this->sortOrder;
 
     return $payload;
   }
@@ -52,6 +54,7 @@ final readonly class OAuthProviderWasUpdated implements SerializablePayload {
       $payload['discoveryUrl'] ?? null,
       $payload['scopes'] ?? null,
       $payload['enabled'] ?? null,
+      isset($payload['sortOrder']) ? (float)$payload['sortOrder'] : null,
     );
   }
 }

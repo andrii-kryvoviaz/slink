@@ -8,6 +8,7 @@ use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Enum\OAuthProvider as OAuthProviderEnum;
 use Slink\User\Domain\OAuthProvider;
+use Slink\User\Domain\Repository\OAuthProviderRepositoryInterface;
 use Slink\User\Domain\Repository\OAuthProviderStoreRepositoryInterface;
 use Slink\User\Domain\Specification\UniqueOAuthProviderSpecificationInterface;
 
@@ -15,12 +16,14 @@ final readonly class CreateOAuthProviderHandler implements CommandHandlerInterfa
   public function __construct(
     private OAuthProviderStoreRepositoryInterface $providerStore,
     private UniqueOAuthProviderSpecificationInterface $uniqueOAuthProviderSpecification,
+    private OAuthProviderRepositoryInterface $repository,
   ) {}
 
   public function __invoke(CreateOAuthProviderCommand $command): string {
     $this->uniqueOAuthProviderSpecification->ensureUnique(OAuthProviderEnum::from($command->getSlug()));
 
     $id = ID::generate();
+    $sortOrder = $this->repository->getMaxSortOrder() + 1.0;
 
     $provider = OAuthProvider::create(
       id: $id,
@@ -32,6 +35,7 @@ final readonly class CreateOAuthProviderHandler implements CommandHandlerInterfa
       discoveryUrl: $command->getDiscoveryUrl(),
       scopes: $command->getScopes(),
       enabled: $command->isEnabled(),
+      sortOrder: $sortOrder,
     );
 
     $this->providerStore->store($provider);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\User\Domain\Repository;
 
+use Slink\Shared\Domain\Enum\SortDirection;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Enum\OAuthProvider;
 use Slink\User\Domain\Filter\OAuthProviderFilter;
@@ -22,4 +23,8 @@ interface OAuthProviderRepositoryInterface {
   public function save(OAuthProviderView $provider): void;
 
   public function delete(OAuthProviderView $provider): void;
+
+  public function findNeighbor(float $sortOrder, SortDirection $direction): ?OAuthProviderView;
+
+  public function getMaxSortOrder(): float;
 }

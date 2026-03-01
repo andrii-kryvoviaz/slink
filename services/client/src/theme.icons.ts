@@ -215,4 +215,6 @@ export const themeIcons: string[] = [
   'simple-icons:keycloak',
   'simple-icons:authelia',
   'solar:key-linear',
+  'ph:arrow-up',
+  'ph:arrow-down',
 ];

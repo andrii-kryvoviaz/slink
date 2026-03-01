@@ -50,6 +50,10 @@ class OAuthProviderView extends AbstractView {
     #[ORM\Column(type: 'boolean')]
     #[Groups(['admin'])]
     private bool $enabled,
+
+    #[ORM\Column(type: 'float')]
+    #[Groups(['admin'])]
+    private float $sortOrder = 0,
   ) {
     $this->clientId = EncryptionRegistry::encrypt($clientId);
     $this->clientSecret = EncryptionRegistry::encrypt($clientSecret);
@@ -121,5 +125,13 @@ class OAuthProviderView extends AbstractView {
 
   public function setEnabled(bool $enabled): void {
     $this->enabled = $enabled;
+  }
+
+  public function getSortOrder(): float {
+    return $this->sortOrder;
+  }
+
+  public function setSortOrder(float $sortOrder): void {
+    $this->sortOrder = $sortOrder;
   }
 }
