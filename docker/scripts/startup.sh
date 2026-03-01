@@ -104,26 +104,8 @@ setup_jwt_keys
 setup_mercure_keys
 generate_app_secret_from_jwt
 
-if [ -f /services/api/.env ]; then
-  # Save the current environment variables to restore them later
-  export > /tmp/original_env.sh
-
-  # Export all variables from the .env file as default values
-  set -a
-  . /services/api/.env
-  set +a
-
-  # Restore the original environment variables and override default values
-  . /tmp/original_env.sh
-fi
-
-if [[ "$DATABASE_URL" != sqlite:* ]]; then
-  slink doctrine:database:create --if-not-exists --no-interaction --env=prod --connection=read_model
-fi
-
-if [[ "$ES_DATABASE_URL" != sqlite:* ]]; then
-  slink doctrine:database:create --if-not-exists --no-interaction --env=prod --connection=event_store
-fi
+slink slink:database:init --no-interaction --connection=event_store
+slink slink:database:init --no-interaction --connection=read_model
 
 slink doctrine:migrations:migrate --no-interaction --configuration=/services/api/config/migrations/event_store.yaml --em=event_store
 slink doctrine:migrations:migrate --no-interaction --em=read_model
