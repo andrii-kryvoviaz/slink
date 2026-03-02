@@ -48,8 +48,8 @@ final class OAuthAccountWasLinkedTest extends TestCase {
     $payload = [
       'userId' => $userId->toString(),
       'linkId' => $linkId->toString(),
-      'providerSlug' => 'github',
-      'providerUserId' => 'gh-sub-456',
+      'providerSlug' => 'keycloak',
+      'providerUserId' => 'kc-sub-456',
       'providerEmail' => 'dev@example.com',
       'linkedAt' => $linkedAt->toString(),
     ];
@@ -58,8 +58,8 @@ final class OAuthAccountWasLinkedTest extends TestCase {
 
     $this->assertTrue($event->userId->equals($userId));
     $this->assertTrue($event->linkId->equals($linkId));
-    $this->assertSame(OAuthProvider::Github, $event->provider);
-    $this->assertSame('gh-sub-456', $event->sub->toString());
+    $this->assertSame(OAuthProvider::Keycloak, $event->provider);
+    $this->assertSame('kc-sub-456', $event->sub->toString());
     $this->assertSame('dev@example.com', $event->email?->toString());
     $this->assertSame($linkedAt->toString(), $event->linkedAt->toString());
   }

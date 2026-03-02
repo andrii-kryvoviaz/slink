@@ -24,10 +24,10 @@ final class OAuthSubjectTest extends TestCase {
 
   #[Test]
   public function itCreatesFromPrimitives(): void {
-    $subject = OAuthSubject::fromPrimitives('github', 'user-42');
+    $subject = OAuthSubject::fromPrimitives('authelia', 'user-42');
 
     $this->assertInstanceOf(OAuthSubject::class, $subject);
-    $this->assertSame(OAuthProvider::Github, $subject->getProvider());
+    $this->assertSame(OAuthProvider::Authelia, $subject->getProvider());
     $this->assertSame('user-42', $subject->getSub()->toString());
   }
 

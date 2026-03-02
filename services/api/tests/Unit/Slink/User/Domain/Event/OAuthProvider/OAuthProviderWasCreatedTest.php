@@ -82,13 +82,13 @@ final class OAuthProviderWasCreatedTest extends TestCase {
   public function itRoundtripsThroughPayload(): void {
     $event = new OAuthProviderWasCreated(
       'provider-id-1',
-      'Github',
-      'github',
+      'Authentik',
+      'authentik',
       'oauth2',
-      'gh-client-id',
-      'gh-client-secret',
-      'https://github.com/.well-known/openid-configuration',
-      'read:user user:email',
+      'auth-client-id',
+      'auth-client-secret',
+      'https://authentik.example.com/.well-known/openid-configuration',
+      'openid profile email',
       false,
       3.0,
     );

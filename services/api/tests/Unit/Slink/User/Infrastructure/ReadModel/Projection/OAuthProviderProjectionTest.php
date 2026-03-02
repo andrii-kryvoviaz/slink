@@ -7,9 +7,11 @@ namespace Unit\Slink\User\Infrastructure\ReadModel\Projection;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Shared\Domain\ValueObject\ID;
+use Slink\User\Domain\Enum\OAuthProvider;
 use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasCreated;
 use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasRemoved;
 use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasUpdated;
+use Slink\User\Domain\Repository\OAuthLinkRepositoryInterface;
 use Slink\User\Domain\Repository\OAuthProviderRepositoryInterface;
 use Slink\User\Infrastructure\ReadModel\Projection\OAuthProviderProjection;
 use Slink\User\Infrastructure\ReadModel\View\OAuthProviderView;
@@ -23,7 +25,9 @@ final class OAuthProviderProjectionTest extends TestCase {
       ->method('save')
       ->with($this->isInstanceOf(OAuthProviderView::class));
 
-    $projection = new OAuthProviderProjection($repository);
+    $linkRepository = $this->createStub(OAuthLinkRepositoryInterface::class);
+
+    $projection = new OAuthProviderProjection($repository, $linkRepository);
 
     $event = new OAuthProviderWasCreated(
       id: ID::generate()->toString(),
@@ -58,7 +62,9 @@ final class OAuthProviderProjectionTest extends TestCase {
       ->method('save')
       ->with($providerView);
 
-    $projection = new OAuthProviderProjection($repository);
+    $linkRepository = $this->createStub(OAuthLinkRepositoryInterface::class);
+
+    $projection = new OAuthProviderProjection($repository, $linkRepository);
 
     $event = new OAuthProviderWasUpdated(
       id: $id->toString(),
@@ -80,7 +86,9 @@ final class OAuthProviderProjectionTest extends TestCase {
     $repository->expects($this->never())
       ->method('save');
 
-    $projection = new OAuthProviderProjection($repository);
+    $linkRepository = $this->createStub(OAuthLinkRepositoryInterface::class);
+
+    $projection = new OAuthProviderProjection($repository, $linkRepository);
 
     $event = new OAuthProviderWasUpdated(
       id: $id->toString(),
@@ -94,6 +102,7 @@ final class OAuthProviderProjectionTest extends TestCase {
   public function itDeletesViewOnProviderRemoved(): void {
     $id = ID::generate();
     $providerView = $this->createStub(OAuthProviderView::class);
+    $providerView->method('getSlug')->willReturn('google');
 
     $repository = $this->createMock(OAuthProviderRepositoryInterface::class);
     $repository->expects($this->once())
@@ -104,7 +113,12 @@ final class OAuthProviderProjectionTest extends TestCase {
       ->method('delete')
       ->with($providerView);
 
-    $projection = new OAuthProviderProjection($repository);
+    $linkRepository = $this->createMock(OAuthLinkRepositoryInterface::class);
+    $linkRepository->expects($this->once())
+      ->method('deleteByProviderSlug')
+      ->with(OAuthProvider::Google);
+
+    $projection = new OAuthProviderProjection($repository, $linkRepository);
 
     $event = new OAuthProviderWasRemoved(id: $id->toString());
 
@@ -122,7 +136,11 @@ final class OAuthProviderProjectionTest extends TestCase {
     $repository->expects($this->never())
       ->method('delete');
 
-    $projection = new OAuthProviderProjection($repository);
+    $linkRepository = $this->createMock(OAuthLinkRepositoryInterface::class);
+    $linkRepository->expects($this->never())
+      ->method('deleteByProviderSlug');
+
+    $projection = new OAuthProviderProjection($repository, $linkRepository);
 
     $event = new OAuthProviderWasRemoved(id: $id->toString());
 

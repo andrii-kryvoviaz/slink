@@ -10,7 +10,6 @@ enum OAuthProvider: string {
   use ValidatorAwareEnumTrait;
 
   case Google = 'google';
-  case Github = 'github';
   case Authentik = 'authentik';
   case Keycloak = 'keycloak';
   case Authelia = 'authelia';

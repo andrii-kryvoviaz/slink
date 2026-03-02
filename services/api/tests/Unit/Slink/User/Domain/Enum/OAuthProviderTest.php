@@ -17,11 +17,10 @@ final class OAuthProviderTest extends TestCase {
     $values = array_map(fn(OAuthProvider $p) => $p->value, $cases);
 
     $this->assertContains('google', $values);
-    $this->assertContains('github', $values);
     $this->assertContains('authentik', $values);
     $this->assertContains('keycloak', $values);
     $this->assertContains('authelia', $values);
-    $this->assertCount(5, $cases);
+    $this->assertCount(4, $cases);
   }
 
   #[Test]

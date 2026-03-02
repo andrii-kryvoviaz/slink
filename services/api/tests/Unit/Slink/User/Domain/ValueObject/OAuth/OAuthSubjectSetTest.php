@@ -30,7 +30,7 @@ final class OAuthSubjectSetTest extends TestCase {
 
   #[Test]
   public function itRemovesSubject(): void {
-    $subject = OAuthSubject::fromPrimitives('github', 'sub-2');
+    $subject = OAuthSubject::fromPrimitives('authentik', 'sub-2');
     $set = OAuthSubjectSet::create([$subject]);
 
     $this->assertTrue($set->has($subject));
@@ -54,7 +54,7 @@ final class OAuthSubjectSetTest extends TestCase {
   #[Test]
   public function itRoundtripsViaToArrayFromArray(): void {
     $subjectA = OAuthSubject::fromPrimitives('google', 'id-a');
-    $subjectB = OAuthSubject::fromPrimitives('github', 'id-b');
+    $subjectB = OAuthSubject::fromPrimitives('authentik', 'id-b');
     $original = OAuthSubjectSet::create([$subjectA, $subjectB]);
 
     $restored = OAuthSubjectSet::fromArray($original->toArray());

@@ -6,6 +6,7 @@ namespace Slink\User\Infrastructure\ReadModel\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Slink\User\Domain\Enum\OAuthProvider;
 use Slink\User\Domain\Repository\OAuthLinkRepositoryInterface;
 use Slink\User\Domain\ValueObject\OAuth\OAuthSubject;
 use Slink\User\Infrastructure\ReadModel\View\OAuthLinkView;
@@ -45,5 +46,15 @@ class OAuthLinkRepository extends ServiceEntityRepository implements OAuthLinkRe
 
   public function delete(OAuthLinkView $link): void {
     $this->getEntityManager()->remove($link);
+  }
+
+  public function deleteByProviderSlug(OAuthProvider $provider): void {
+    $this->getEntityManager()
+      ->createQueryBuilder()
+      ->delete(OAuthLinkView::class, 'l')
+      ->where('l.providerSlug = :slug')
+      ->setParameter('slug', $provider->value)
+      ->getQuery()
+      ->execute();
   }
 }

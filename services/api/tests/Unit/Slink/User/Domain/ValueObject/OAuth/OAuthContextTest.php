@@ -46,7 +46,7 @@ final class OAuthContextTest extends TestCase {
   #[Test]
   public function itHandlesNullablePkceVerifier(): void {
     $context = OAuthContext::create(
-      OAuthProvider::Github,
+      OAuthProvider::Authelia,
       RedirectUri::fromString('https://example.com/cb'),
       null,
     );
