@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Application\Service\OAuthUserResolver;
+use Slink\User\Domain\Exception\OAuthEmailNotVerifiedException;
 use Slink\User\Domain\Exception\OAuthEmailRequiredException;
 use Slink\User\Domain\Factory\OAuthUserFactory;
 use Slink\User\Domain\Repository\CheckUserByEmailInterface;
@@ -63,6 +64,7 @@ final class OAuthUserResolverTest extends TestCase {
     $claims = $this->createStub(OAuthClaims::class);
     $claims->method('getSubject')->willReturn($subject);
     $claims->method('getEmail')->willReturn($email);
+    $claims->method('isEmailVerified')->willReturn(true);
 
     $linkRepository = $this->createMock(OAuthLinkRepositoryInterface::class);
     $linkRepository->expects($this->once())
@@ -87,6 +89,36 @@ final class OAuthUserResolverTest extends TestCase {
     $result = $resolver->resolve($claims);
 
     $this->assertInstanceOf(User::class, $result);
+  }
+
+  #[Test]
+  public function itThrowsWhenEmailNotVerifiedAndExistingUserFound(): void {
+    $existingUserId = Uuid::uuid4();
+    $email = Email::fromString('existing@example.com');
+    $subject = $this->createStub(OAuthSubject::class);
+
+    $claims = $this->createStub(OAuthClaims::class);
+    $claims->method('getSubject')->willReturn($subject);
+    $claims->method('getEmail')->willReturn($email);
+    $claims->method('isEmailVerified')->willReturn(false);
+
+    $linkRepository = $this->createStub(OAuthLinkRepositoryInterface::class);
+    $linkRepository->method('findBySubject')->willReturn(null);
+
+    $checkUserByEmail = $this->createMock(CheckUserByEmailInterface::class);
+    $checkUserByEmail->expects($this->once())
+      ->method('existsEmail')
+      ->with($email)
+      ->willReturn($existingUserId);
+
+    $userStore = $this->createStub(UserStoreRepositoryInterface::class);
+    $oauthUserFactory = $this->createStub(OAuthUserFactory::class);
+
+    $resolver = new OAuthUserResolver($linkRepository, $userStore, $checkUserByEmail, $oauthUserFactory);
+
+    $this->expectException(OAuthEmailNotVerifiedException::class);
+
+    $resolver->resolve($claims);
   }
 
   #[Test]

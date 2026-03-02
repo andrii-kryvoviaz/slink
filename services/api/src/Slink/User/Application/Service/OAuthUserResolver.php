@@ -9,6 +9,7 @@ use Slink\User\Domain\Factory\OAuthUserFactory;
 use Slink\User\Domain\Repository\CheckUserByEmailInterface;
 use Slink\User\Domain\Repository\OAuthLinkRepositoryInterface;
 use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
+use Slink\User\Domain\Exception\OAuthEmailNotVerifiedException;
 use Slink\User\Domain\Exception\OAuthEmailRequiredException;
 use Slink\User\Domain\User;
 use Slink\User\Domain\ValueObject\OAuth\OAuthClaims;
@@ -37,6 +38,10 @@ final readonly class OAuthUserResolver implements OAuthUserResolverInterface {
 
     if (!$existingUserId) {
       return $this->oauthUserFactory->create($claims);
+    }
+
+    if (!$claims->isEmailVerified()) {
+      throw new OAuthEmailNotVerifiedException();
     }
 
     return $this->userStore->get(ID::fromString((string) $existingUserId));
