@@ -122,6 +122,12 @@ export const createAppSidebarItems = (options?: {
               icon: 'solar:shield-check-linear',
               href: '/admin/settings/security',
             },
+            {
+              id: 'settings-sso',
+              title: 'Single Sign-On',
+              icon: 'solar:key-linear',
+              href: '/admin/settings/sso',
+            },
           ],
         },
       ],
