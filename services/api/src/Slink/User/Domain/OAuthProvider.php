@@ -11,6 +11,7 @@ use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasCreated;
 use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasUpdated;
 use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasRemoved;
+use Slink\Shared\Infrastructure\Encryption\EncryptionRegistry;
 
 final class OAuthProvider extends AbstractAggregateRoot {
   private string $name;
@@ -122,8 +123,8 @@ final class OAuthProvider extends AbstractAggregateRoot {
       'name' => $this->name,
       'slug' => $this->slug,
       'type' => $this->type,
-      'clientId' => $this->clientId,
-      'clientSecret' => $this->clientSecret,
+      'clientId' => EncryptionRegistry::encrypt($this->clientId),
+      'clientSecret' => EncryptionRegistry::encrypt($this->clientSecret),
       'discoveryUrl' => $this->discoveryUrl,
       'scopes' => $this->scopes,
       'enabled' => $this->enabled,
@@ -140,8 +141,8 @@ final class OAuthProvider extends AbstractAggregateRoot {
     $provider->name = $state['name'];
     $provider->slug = $state['slug'];
     $provider->type = $state['type'];
-    $provider->clientId = $state['clientId'];
-    $provider->clientSecret = $state['clientSecret'];
+    $provider->clientId = EncryptionRegistry::decrypt($state['clientId']);
+    $provider->clientSecret = EncryptionRegistry::decrypt($state['clientSecret']);
     $provider->discoveryUrl = $state['discoveryUrl'];
     $provider->scopes = $state['scopes'];
     $provider->enabled = $state['enabled'];
