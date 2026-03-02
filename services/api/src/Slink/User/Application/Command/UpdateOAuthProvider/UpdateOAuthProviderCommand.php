@@ -28,6 +28,7 @@ final readonly class UpdateOAuthProviderCommand implements CommandInterface {
     #[SensitiveParameter]
     private ?string $clientSecret = null,
 
+    #[Assert\Url(requireTld: false)]
     private ?string $discoveryUrl = null,
 
     private ?string $scopes = null,

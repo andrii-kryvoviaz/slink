@@ -30,6 +30,7 @@ final readonly class CreateOAuthProviderCommand implements CommandInterface {
     private string $clientSecret,
 
     #[Assert\NotBlank]
+    #[Assert\Url(requireTld: false)]
     private string $discoveryUrl,
 
     private string $type = 'oidc',
