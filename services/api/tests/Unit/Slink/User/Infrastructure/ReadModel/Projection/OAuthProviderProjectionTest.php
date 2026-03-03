@@ -7,6 +7,8 @@ namespace Unit\Slink\User\Infrastructure\ReadModel\Projection;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Shared\Domain\ValueObject\ID;
+use Slink\Shared\Infrastructure\Encryption\EncryptionRegistry;
+use Slink\Shared\Infrastructure\Encryption\EncryptionService;
 use Slink\User\Domain\Enum\OAuthProvider;
 use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasCreated;
 use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasRemoved;
@@ -17,6 +19,9 @@ use Slink\User\Infrastructure\ReadModel\Projection\OAuthProviderProjection;
 use Slink\User\Infrastructure\ReadModel\View\OAuthProviderView;
 
 final class OAuthProviderProjectionTest extends TestCase {
+  protected function setUp(): void {
+    EncryptionRegistry::setService(new EncryptionService('test-secret'));
+  }
 
   #[Test]
   public function itCreatesViewOnProviderCreated(): void {

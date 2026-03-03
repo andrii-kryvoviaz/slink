@@ -11,16 +11,31 @@ use Slink\Shared\Infrastructure\Encryption\EncryptionService;
 
 final class EncryptionRegistryTest extends TestCase {
   #[Test]
-  public function itReturnsPlaintextWhenServiceNotSet(): void {
+  public function itThrowsWhenEncryptingWithoutService(): void {
     $reflection = new \ReflectionClass(EncryptionRegistry::class);
     $property = $reflection->getProperty('service');
     $property->setValue(null, null);
-    
-    $plaintext = 'test-value';
-    
-    $this->assertSame($plaintext, EncryptionRegistry::encrypt($plaintext));
-    $this->assertSame($plaintext, EncryptionRegistry::decrypt($plaintext));
+
     $this->assertFalse(EncryptionRegistry::isAvailable());
+
+    $this->expectException(\RuntimeException::class);
+    $this->expectExceptionMessage('EncryptionService not initialized');
+
+    EncryptionRegistry::encrypt('test-value');
+  }
+
+  #[Test]
+  public function itThrowsWhenDecryptingWithoutService(): void {
+    $reflection = new \ReflectionClass(EncryptionRegistry::class);
+    $property = $reflection->getProperty('service');
+    $property->setValue(null, null);
+
+    $this->assertFalse(EncryptionRegistry::isAvailable());
+
+    $this->expectException(\RuntimeException::class);
+    $this->expectExceptionMessage('EncryptionService not initialized');
+
+    EncryptionRegistry::decrypt('test-value');
   }
   
   #[Test]
