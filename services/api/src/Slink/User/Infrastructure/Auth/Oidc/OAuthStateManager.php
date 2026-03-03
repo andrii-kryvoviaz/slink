@@ -18,7 +18,7 @@ final readonly class OAuthStateManager implements OAuthStateManagerInterface {
 
   #[\Override]
   public function storeState(OAuthState $state, OAuthContext $context): void {
-    $cacheKey = 'oauth_state_' . hash('sha256', $state->toString());
+    $cacheKey = 'oauth_state_' . hash('sha256', (string) $state);
 
     $this->cache->get($cacheKey, function (ItemInterface $item) use ($context): array {
       $item->expiresAfter(300);
@@ -29,7 +29,7 @@ final readonly class OAuthStateManager implements OAuthStateManagerInterface {
 
   #[\Override]
   public function consume(OAuthState $state): OAuthContext {
-    $cacheKey = 'oauth_state_' . hash('sha256', $state->toString());
+    $cacheKey = 'oauth_state_' . hash('sha256', (string) $state);
 
     /** @var array{provider: string, redirectUri: string, pkceVerifier: string|null}|null $data */
     $data = $this->cache->get($cacheKey, fn (): null => null);

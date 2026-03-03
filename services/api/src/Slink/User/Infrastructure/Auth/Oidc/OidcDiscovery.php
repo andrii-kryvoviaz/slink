@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Slink\User\Infrastructure\Auth\Oidc;
 
 use Slink\User\Domain\Exception\OidcDiscoveryException;
+use Slink\User\Domain\ValueObject\OAuth\DiscoveryDocument;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -25,16 +26,12 @@ final readonly class OidcDiscovery implements OidcDiscoveryInterface {
     return $url;
   }
 
-  /**
-   * @param string $discoveryUrl
-   * @return array{authorizationEndpoint: string, tokenEndpoint: string, userinfoEndpoint: string, jwksUri: string}
-   */
   #[\Override]
-  public function discover(string $discoveryUrl): array {
+  public function discover(string $discoveryUrl): DiscoveryDocument {
     $discoveryUrl = self::normalizeDiscoveryUrl($discoveryUrl);
     $cacheKey = 'oidc_discovery_' . hash('sha256', $discoveryUrl);
 
-    return $this->cache->get($cacheKey, function (ItemInterface $item) use ($discoveryUrl): array {
+    $payload = $this->cache->get($cacheKey, function (ItemInterface $item) use ($discoveryUrl): array {
       $item->expiresAfter(86400);
 
       try {
@@ -44,7 +41,7 @@ final readonly class OidcDiscovery implements OidcDiscoveryInterface {
         throw OidcDiscoveryException::httpError($discoveryUrl, $e);
       }
 
-      $requiredKeys = ['authorization_endpoint', 'token_endpoint', 'userinfo_endpoint', 'jwks_uri'];
+      $requiredKeys = ['authorization_endpoint', 'token_endpoint', 'userinfo_endpoint', 'jwks_uri', 'issuer'];
       $missingKeys = array_filter($requiredKeys, fn (string $key): bool => !isset($data[$key]));
 
       if (!empty($missingKeys)) {
@@ -56,7 +53,10 @@ final readonly class OidcDiscovery implements OidcDiscoveryInterface {
         'tokenEndpoint' => $data['token_endpoint'],
         'userinfoEndpoint' => $data['userinfo_endpoint'],
         'jwksUri' => $data['jwks_uri'],
+        'issuer' => $data['issuer'],
       ];
     });
+
+    return DiscoveryDocument::fromPayload($payload);
   }
 }

@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Slink\User\Infrastructure\Auth\Oidc;
 
+use Slink\User\Domain\ValueObject\OAuth\DiscoveryDocument;
+
 interface OidcDiscoveryInterface {
-  /**
-   * @param string $discoveryUrl
-   * @return array{authorizationEndpoint: string, tokenEndpoint: string, userinfoEndpoint: string, jwksUri: string}
-   */
-  public function discover(string $discoveryUrl): array;
+  public function discover(string $discoveryUrl): DiscoveryDocument;
 }
