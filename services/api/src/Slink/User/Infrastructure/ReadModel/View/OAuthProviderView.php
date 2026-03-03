@@ -9,6 +9,7 @@ use Slink\Shared\Infrastructure\Encryption\EncryptionRegistry;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
 use Slink\User\Infrastructure\ReadModel\Repository\OAuthProviderRepository;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\Ignore;
 
 #[ORM\Table(name: '`oauth_provider`')]
 #[ORM\Entity(repositoryClass: OAuthProviderRepository::class)]
@@ -37,6 +38,7 @@ class OAuthProviderView extends AbstractView {
     private string $clientId,
 
     #[ORM\Column(type: 'text')]
+    #[Ignore]
     private string $clientSecret,
 
     #[ORM\Column(type: 'string', length: 500)]
@@ -79,6 +81,7 @@ class OAuthProviderView extends AbstractView {
     return EncryptionRegistry::decrypt($this->clientId);
   }
 
+  #[Ignore]
   public function getClientSecret(): string {
     return EncryptionRegistry::decrypt($this->clientSecret);
   }
