@@ -20,17 +20,22 @@ final readonly class UpdateOAuthProviderCommand implements CommandInterface {
     #[Assert\Choice(callback: [OAuthProvider::class, 'values'])]
     private ?string $slug = null,
 
+    #[Assert\Choice(choices: ['oidc'])]
     private ?string $type = null,
 
     #[SensitiveParameter]
+    #[Assert\NotBlank(allowNull: true)]
     private ?string $clientId = null,
 
     #[SensitiveParameter]
+    #[Assert\NotBlank(allowNull: true)]
     private ?string $clientSecret = null,
 
     #[Assert\Url(requireTld: false)]
     private ?string $discoveryUrl = null,
 
+    #[Assert\Length(max: 255)]
+    #[Assert\Regex(pattern: '/^[a-zA-Z0-9_\-\.\s]+$/')]
     private ?string $scopes = null,
 
     private ?bool $enabled = null,

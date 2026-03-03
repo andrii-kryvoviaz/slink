@@ -15,6 +15,7 @@ final readonly class CreateOAuthProviderCommand implements CommandInterface {
 
   public function __construct(
     #[Assert\NotBlank]
+    #[Assert\Length(max: 100)]
     private string $name,
 
     #[Assert\NotBlank]
@@ -33,8 +34,11 @@ final readonly class CreateOAuthProviderCommand implements CommandInterface {
     #[Assert\Url(requireTld: false)]
     private string $discoveryUrl,
 
+    #[Assert\Choice(choices: ['oidc'])]
     private string $type = 'oidc',
 
+    #[Assert\Length(max: 255)]
+    #[Assert\Regex(pattern: '/^[a-zA-Z0-9_\-\.\s]+$/')]
     private string $scopes = 'openid email profile',
 
     private bool $enabled = false,
