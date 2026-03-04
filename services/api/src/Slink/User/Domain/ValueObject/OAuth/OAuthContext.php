@@ -29,7 +29,7 @@ final readonly class OAuthContext extends AbstractValueObject {
     return new self(
       OAuthProvider::from($payload['provider']),
       RedirectUri::fromString($payload['redirectUri']),
-      PkceVerifier::fromNullableString($payload['pkceVerifier']),
+      PkceVerifier::fromString($payload['pkceVerifier']),
     );
   }
 

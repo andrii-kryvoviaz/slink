@@ -6,7 +6,7 @@ namespace Unit\Slink\User\Domain\ValueObject\OAuth;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Slink\User\Domain\Exception\InvalidOAuthValueException;
+use Slink\Shared\Domain\Exception\InvalidValueObjectException;
 use Slink\User\Domain\ValueObject\OAuth\PkceVerifier;
 
 final class PkceVerifierTest extends TestCase {
@@ -21,7 +21,7 @@ final class PkceVerifierTest extends TestCase {
 
   #[Test]
   public function itThrowsOnEmptyString(): void {
-    $this->expectException(InvalidOAuthValueException::class);
+    $this->expectException(InvalidValueObjectException::class);
     $this->expectExceptionMessage('Invalid PkceVerifier: cannot be empty');
 
     PkceVerifier::fromString('');
@@ -29,14 +29,14 @@ final class PkceVerifierTest extends TestCase {
 
   #[Test]
   public function itReturnsNullFromNullableStringWithNull(): void {
-    $result = PkceVerifier::fromNullableString(null);
+    $result = PkceVerifier::fromString(null);
 
     $this->assertNull($result);
   }
 
   #[Test]
   public function itReturnsInstanceFromNullableStringWithValue(): void {
-    $result = PkceVerifier::fromNullableString('some-verifier');
+    $result = PkceVerifier::fromString('some-verifier');
 
     $this->assertInstanceOf(PkceVerifier::class, $result);
     $this->assertSame('some-verifier', $result->toString());

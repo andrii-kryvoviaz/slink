@@ -9,7 +9,7 @@ use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\User;
 use Slink\User\Domain\ValueObject\Auth\Credentials;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;
-use Slink\User\Domain\ValueObject\OAuth\OAuthClaims;
+use Slink\User\Domain\ValueObject\OAuth\OAuthIdentity;
 use Slink\User\Domain\Exception\OAuthEmailRequiredException;
 use Slink\User\Domain\ValueObject\Username;
 use Slink\User\Domain\Specification\UniqueUsernameSpecificationInterface;
@@ -21,15 +21,15 @@ final readonly class OAuthUserFactory {
     private UniqueUsernameSpecificationInterface $uniqueUsernameSpecification,
   ) {}
 
-  public function create(#[SensitiveParameter] OAuthClaims $claims): User {
-    $username = $this->resolveUniqueUsername($claims->getDisplayName());
+  public function create(#[SensitiveParameter] OAuthIdentity $identity): User {
+    $username = $this->resolveUniqueUsername($identity->getDisplayName());
     $credentials = Credentials::create(
-      $claims->getEmail() ?? throw new OAuthEmailRequiredException(),
+      $identity->getEmail() ?? throw new OAuthEmailRequiredException(),
       $username,
       HashedPassword::encode(bin2hex(random_bytes(32))),
     );
 
-    return $this->userFactory->create(ID::generate(), $credentials, $claims->getDisplayName());
+    return $this->userFactory->create(ID::generate(), $credentials, $identity->getDisplayName());
   }
 
   private function resolveUniqueUsername(DisplayName $displayName): Username {

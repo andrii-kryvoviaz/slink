@@ -12,7 +12,7 @@ use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
 use Slink\User\Domain\Exception\OAuthEmailNotVerifiedException;
 use Slink\User\Domain\Exception\OAuthEmailRequiredException;
 use Slink\User\Domain\User;
-use Slink\User\Domain\ValueObject\OAuth\OAuthClaims;
+use Slink\User\Domain\ValueObject\OAuth\OAuthIdentity;
 
 final readonly class OAuthUserResolver implements OAuthUserResolverInterface {
   public function __construct(
@@ -23,24 +23,24 @@ final readonly class OAuthUserResolver implements OAuthUserResolverInterface {
   ) {}
 
   #[\Override]
-  public function resolve(OAuthClaims $claims): User {
-    $existingLink = $this->oauthLinkRepository->findBySubject($claims->getSubject());
+  public function resolve(OAuthIdentity $identity): User {
+    $existingLink = $this->oauthLinkRepository->findBySubject($identity->getSubject());
 
     if ($existingLink) {
       return $this->userStore->get(ID::fromString($existingLink->getUserId()));
     }
 
-    if (!$claims->getEmail()) {
+    if (!$identity->getEmail()) {
       throw new OAuthEmailRequiredException();
     }
 
-    $existingUserId = $this->checkUserByEmail->existsEmail($claims->getEmail());
+    $existingUserId = $this->checkUserByEmail->existsEmail($identity->getEmail());
 
     if (!$existingUserId) {
-      return $this->oauthUserFactory->create($claims);
+      return $this->oauthUserFactory->create($identity);
     }
 
-    if (!$claims->isEmailVerified()) {
+    if (!$identity->isEmailVerified()) {
       throw new OAuthEmailNotVerifiedException();
     }
 

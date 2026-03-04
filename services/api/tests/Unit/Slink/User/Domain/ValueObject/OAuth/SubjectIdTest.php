@@ -6,7 +6,7 @@ namespace Unit\Slink\User\Domain\ValueObject\OAuth;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Slink\User\Domain\Exception\InvalidOAuthValueException;
+use Slink\Shared\Domain\Exception\InvalidValueObjectException;
 use Slink\User\Domain\ValueObject\OAuth\SubjectId;
 
 final class SubjectIdTest extends TestCase {
@@ -21,7 +21,7 @@ final class SubjectIdTest extends TestCase {
 
   #[Test]
   public function itThrowsOnEmptyString(): void {
-    $this->expectException(InvalidOAuthValueException::class);
+    $this->expectException(InvalidValueObjectException::class);
     $this->expectExceptionMessage('Invalid SubjectId: cannot be empty');
 
     SubjectId::fromString('');

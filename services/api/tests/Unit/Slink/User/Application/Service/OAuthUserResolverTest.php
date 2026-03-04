@@ -18,7 +18,7 @@ use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
 use Slink\User\Domain\User;
 use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Email;
-use Slink\User\Domain\ValueObject\OAuth\OAuthClaims;
+use Slink\User\Domain\ValueObject\OAuth\OAuthIdentity;
 use Slink\User\Domain\ValueObject\OAuth\OAuthSubject;
 use Slink\User\Infrastructure\ReadModel\View\OAuthLinkView;
 
@@ -28,8 +28,8 @@ final class OAuthUserResolverTest extends TestCase {
   public function itReturnsUserWhenOauthLinkExists(): void {
     $userId = ID::generate();
     $subject = $this->createStub(OAuthSubject::class);
-    $claims = $this->createStub(OAuthClaims::class);
-    $claims->method('getSubject')->willReturn($subject);
+    $identity = $this->createStub(OAuthIdentity::class);
+    $identity->method('getSubject')->willReturn($subject);
 
     $existingLink = $this->createStub(OAuthLinkView::class);
     $existingLink->method('getUserId')->willReturn($userId->toString());
@@ -50,7 +50,7 @@ final class OAuthUserResolverTest extends TestCase {
 
     $resolver = new OAuthUserResolver($linkRepository, $userStore, $checkUserByEmail, $oauthUserFactory);
 
-    $result = $resolver->resolve($claims);
+    $result = $resolver->resolve($identity);
 
     $this->assertInstanceOf(User::class, $result);
   }
@@ -61,10 +61,10 @@ final class OAuthUserResolverTest extends TestCase {
     $email = Email::fromString('existing@example.com');
     $subject = $this->createStub(OAuthSubject::class);
 
-    $claims = $this->createStub(OAuthClaims::class);
-    $claims->method('getSubject')->willReturn($subject);
-    $claims->method('getEmail')->willReturn($email);
-    $claims->method('isEmailVerified')->willReturn(true);
+    $identity = $this->createStub(OAuthIdentity::class);
+    $identity->method('getSubject')->willReturn($subject);
+    $identity->method('getEmail')->willReturn($email);
+    $identity->method('isEmailVerified')->willReturn(true);
 
     $linkRepository = $this->createMock(OAuthLinkRepositoryInterface::class);
     $linkRepository->expects($this->once())
@@ -86,7 +86,7 @@ final class OAuthUserResolverTest extends TestCase {
 
     $resolver = new OAuthUserResolver($linkRepository, $userStore, $checkUserByEmail, $oauthUserFactory);
 
-    $result = $resolver->resolve($claims);
+    $result = $resolver->resolve($identity);
 
     $this->assertInstanceOf(User::class, $result);
   }
@@ -97,10 +97,10 @@ final class OAuthUserResolverTest extends TestCase {
     $email = Email::fromString('existing@example.com');
     $subject = $this->createStub(OAuthSubject::class);
 
-    $claims = $this->createStub(OAuthClaims::class);
-    $claims->method('getSubject')->willReturn($subject);
-    $claims->method('getEmail')->willReturn($email);
-    $claims->method('isEmailVerified')->willReturn(false);
+    $identity = $this->createStub(OAuthIdentity::class);
+    $identity->method('getSubject')->willReturn($subject);
+    $identity->method('getEmail')->willReturn($email);
+    $identity->method('isEmailVerified')->willReturn(false);
 
     $linkRepository = $this->createStub(OAuthLinkRepositoryInterface::class);
     $linkRepository->method('findBySubject')->willReturn(null);
@@ -118,16 +118,16 @@ final class OAuthUserResolverTest extends TestCase {
 
     $this->expectException(OAuthEmailNotVerifiedException::class);
 
-    $resolver->resolve($claims);
+    $resolver->resolve($identity);
   }
 
   #[Test]
   public function itThrowsWhenNoLinkAndNoEmail(): void {
     $subject = $this->createStub(OAuthSubject::class);
 
-    $claims = $this->createStub(OAuthClaims::class);
-    $claims->method('getSubject')->willReturn($subject);
-    $claims->method('getEmail')->willReturn(null);
+    $identity = $this->createStub(OAuthIdentity::class);
+    $identity->method('getSubject')->willReturn($subject);
+    $identity->method('getEmail')->willReturn(null);
 
     $linkRepository = $this->createStub(OAuthLinkRepositoryInterface::class);
     $linkRepository->method('findBySubject')->willReturn(null);
@@ -140,7 +140,7 @@ final class OAuthUserResolverTest extends TestCase {
 
     $this->expectException(OAuthEmailRequiredException::class);
 
-    $resolver->resolve($claims);
+    $resolver->resolve($identity);
   }
 
   #[Test]
@@ -148,10 +148,10 @@ final class OAuthUserResolverTest extends TestCase {
     $email = Email::fromString('newuser@example.com');
     $subject = $this->createStub(OAuthSubject::class);
 
-    $claims = $this->createStub(OAuthClaims::class);
-    $claims->method('getSubject')->willReturn($subject);
-    $claims->method('getEmail')->willReturn($email);
-    $claims->method('getDisplayName')->willReturn(DisplayName::fromString('New User'));
+    $identity = $this->createStub(OAuthIdentity::class);
+    $identity->method('getSubject')->willReturn($subject);
+    $identity->method('getEmail')->willReturn($email);
+    $identity->method('getDisplayName')->willReturn(DisplayName::fromString('New User'));
 
     $linkRepository = $this->createStub(OAuthLinkRepositoryInterface::class);
     $linkRepository->method('findBySubject')->willReturn(null);
@@ -168,11 +168,11 @@ final class OAuthUserResolverTest extends TestCase {
     $oauthUserFactory = $this->createMock(OAuthUserFactory::class);
     $oauthUserFactory->expects($this->once())
       ->method('create')
-      ->with($claims);
+      ->with($identity);
 
     $resolver = new OAuthUserResolver($linkRepository, $userStore, $checkUserByEmail, $oauthUserFactory);
 
-    $result = $resolver->resolve($claims);
+    $result = $resolver->resolve($identity);
 
     $this->assertInstanceOf(User::class, $result);
   }

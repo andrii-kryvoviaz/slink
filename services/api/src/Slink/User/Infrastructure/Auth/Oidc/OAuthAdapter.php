@@ -8,12 +8,11 @@ use League\OAuth2\Client\Token\AccessToken;
 use Slink\User\Domain\Contracts\OAuthAdapterInterface;
 use Slink\User\Domain\Contracts\OAuthClientFactoryInterface;
 use Slink\User\Domain\Contracts\OAuthStateManagerInterface;
-use Slink\User\Domain\Contracts\OidcClaimsExtractorInterface;
 use Slink\User\Domain\Enum\OAuthProvider;
 use Slink\User\Domain\Exception\InvalidCredentialsException;
 use Slink\User\Domain\Repository\OAuthProviderRepositoryInterface;
 use Slink\User\Domain\ValueObject\OAuth\AuthorizationCode;
-use Slink\User\Domain\ValueObject\OAuth\OAuthClaims;
+use Slink\User\Domain\ValueObject\OAuth\OAuthIdentity;
 use Slink\User\Domain\ValueObject\OAuth\OAuthContext;
 use Slink\User\Domain\ValueObject\OAuth\OAuthState;
 use Slink\User\Domain\ValueObject\OAuth\PkceVerifier;
@@ -24,7 +23,7 @@ final readonly class OAuthAdapter implements OAuthAdapterInterface {
   public function __construct(
     private OAuthClientFactoryInterface $clientFactory,
     private OAuthStateManagerInterface $stateManager,
-    private OidcClaimsExtractorInterface $claimsExtractor,
+    private OAuthClaimsResolver $claimsResolver,
     private OAuthProviderRepositoryInterface $providerRepository,
   ) {}
 
@@ -39,7 +38,7 @@ final readonly class OAuthAdapter implements OAuthAdapterInterface {
     $context = OAuthContext::create(
       OAuthProvider::from($provider->getSlug()),
       $redirectUri,
-      PkceVerifier::fromNullableString($oauthClient->getPkceCode()),
+      PkceVerifier::fromString($oauthClient->getPkceCode()),
     );
 
     $this->stateManager->storeState(
@@ -51,7 +50,7 @@ final readonly class OAuthAdapter implements OAuthAdapterInterface {
   }
 
   #[\Override]
-  public function exchangeCode(AuthorizationCode $code, OAuthState $state): OAuthClaims {
+  public function exchangeCode(AuthorizationCode $code, OAuthState $state): OAuthIdentity {
     $context = $this->stateManager->consume($state);
     $provider = $this->providerRepository->findByProvider($context->getProvider());
 
@@ -67,18 +66,13 @@ final readonly class OAuthAdapter implements OAuthAdapterInterface {
     }
 
     $accessToken = $oauthClient->getAccessToken('authorization_code', [
-      'code' => $code->toString(),
+      'code' => (string) $code,
     ]);
 
     if (!$accessToken instanceof AccessToken) {
       throw new InvalidCredentialsException();
     }
 
-    return $this->claimsExtractor->extract(
-      $accessToken->getValues(),
-      $oauthClient,
-      $accessToken,
-      $provider,
-    );
+    return $this->claimsResolver->resolve($oauthClient, $accessToken, $provider);
   }
 }

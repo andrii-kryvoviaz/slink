@@ -4,21 +4,18 @@ declare(strict_types=1);
 
 namespace Slink\User\Domain\ValueObject\OAuth;
 
-use Slink\Shared\Domain\ValueObject\AbstractValueObject;
-use Slink\User\Domain\Exception\InvalidOAuthValueException;
+use Slink\Shared\Domain\ValueObject\AbstractStringValueObject;
 
-final readonly class SubjectId extends AbstractValueObject {
-  private function __construct(private string $value) {
-    if ($value === '') {
-      throw new InvalidOAuthValueException('SubjectId', 'cannot be empty');
-    }
-  }
-
+final readonly class SubjectId extends AbstractStringValueObject {
   public static function fromString(string $value): self {
     return new self($value);
   }
 
-  public function toString(): string {
-    return $this->value;
+  public static function fromStringOrNull(?string $value): ?self {
+    if ($value === null) {
+      return null;
+    }
+
+    return new self($value);
   }
 }

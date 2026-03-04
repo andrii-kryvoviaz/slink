@@ -38,7 +38,8 @@
         "symfony/serializer": "^8.0",
         "symfony/twig-bundle": "^8.0",
         "symfony/validator": "^8.0",
-        "symfony/yaml": "^8.0"
+        "symfony/yaml": "^8.0",
+        "web-token/jwt-framework": "^4.1"
     },
     "require-dev": {
         "dg/bypass-finals": "dev-master",

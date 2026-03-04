@@ -43,7 +43,7 @@ use Slink\User\Domain\ValueObject\Auth\HashedApiKey;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;
 use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Email;
-use Slink\User\Domain\ValueObject\OAuth\OAuthClaims;
+use Slink\User\Domain\ValueObject\OAuth\OAuthIdentity;
 use Slink\User\Domain\ValueObject\OAuth\OAuthSubject;
 use Slink\User\Domain\ValueObject\OAuth\OAuthSubjectSet;
 use Slink\User\Domain\ValueObject\OAuth\SubjectId;
@@ -392,17 +392,17 @@ final class User extends AbstractAggregateRoot implements UserInterface {
     $this->recordThat(new UserSignedIn($this->aggregateRootId(), $this->email));
   }
 
-  public function link(OAuthClaims $claims): void {
-    if ($this->linkedOAuthSubjects->has($claims->getSubject())) {
+  public function link(OAuthIdentity $identity): void {
+    if ($this->linkedOAuthSubjects->has($identity->getSubject())) {
       return;
     }
 
     $this->recordThat(new OAuthAccountWasLinked(
       $this->aggregateRootId(),
       ID::generate(),
-      $claims->getSubject()->getProvider(),
-      $claims->getSubject()->getSub(),
-      $claims->getEmail(),
+      $identity->getSubject()->getProvider(),
+      $identity->getSubject()->getSub(),
+      $identity->getEmail(),
       DateTime::now(),
     ));
   }

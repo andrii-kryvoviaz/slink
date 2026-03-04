@@ -6,7 +6,7 @@ namespace Unit\Slink\User\Domain\ValueObject\OAuth;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Slink\User\Domain\Exception\InvalidOAuthValueException;
+use Slink\Shared\Domain\Exception\InvalidValueObjectException;
 use Slink\User\Domain\ValueObject\OAuth\RedirectUri;
 
 final class RedirectUriTest extends TestCase {
@@ -21,7 +21,7 @@ final class RedirectUriTest extends TestCase {
 
   #[Test]
   public function itThrowsOnEmptyString(): void {
-    $this->expectException(InvalidOAuthValueException::class);
+    $this->expectException(InvalidValueObjectException::class);
     $this->expectExceptionMessage('Invalid RedirectUri: invalid URI format');
 
     RedirectUri::fromString('');
@@ -29,7 +29,7 @@ final class RedirectUriTest extends TestCase {
 
   #[Test]
   public function itThrowsOnInvalidUri(): void {
-    $this->expectException(InvalidOAuthValueException::class);
+    $this->expectException(InvalidValueObjectException::class);
     $this->expectExceptionMessage('Invalid RedirectUri: invalid URI format');
 
     RedirectUri::fromString('not-a-valid-url');

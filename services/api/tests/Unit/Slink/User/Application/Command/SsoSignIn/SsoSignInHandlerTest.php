@@ -18,7 +18,7 @@ use Slink\User\Domain\RefreshTokenSet;
 use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
 use Slink\User\Domain\User;
 use Slink\User\Domain\ValueObject\Auth\TokenPair;
-use Slink\User\Domain\ValueObject\OAuth\OAuthClaims;
+use Slink\User\Domain\ValueObject\OAuth\OAuthIdentity;
 use Tests\Traits\PrivatePropertyTrait;
 
 final class SsoSignInHandlerTest extends TestCase {
@@ -26,13 +26,13 @@ final class SsoSignInHandlerTest extends TestCase {
 
   #[Test]
   public function itAuthenticatesOnHappyPath(): void {
-    $claims = $this->createStub(OAuthClaims::class);
+    $identity = $this->createStub(OAuthIdentity::class);
     $tokenPair = $this->createMockTokenPair();
 
     $user = $this->createMock(User::class);
     $user->method('getStatus')->willReturn(UserStatus::Active);
     $user->method('getIdentifier')->willReturn('user-id-123');
-    $user->expects($this->once())->method('link')->with($claims);
+    $user->expects($this->once())->method('link')->with($identity);
     $user->expects($this->once())->method('authenticate');
 
     $refreshTokenSet = $this->createStub(RefreshTokenSet::class);
@@ -41,12 +41,12 @@ final class SsoSignInHandlerTest extends TestCase {
     $oauthAdapter = $this->createMock(OAuthAdapterInterface::class);
     $oauthAdapter->expects($this->once())
       ->method('exchangeCode')
-      ->willReturn($claims);
+      ->willReturn($identity);
 
     $userResolver = $this->createMock(OAuthUserResolverInterface::class);
     $userResolver->expects($this->once())
       ->method('resolve')
-      ->with($claims)
+      ->with($identity)
       ->willReturn($user);
 
     $userStore = $this->createMock(UserStoreRepositoryInterface::class);
@@ -71,14 +71,14 @@ final class SsoSignInHandlerTest extends TestCase {
 
   #[Test]
   public function itThrowsWhenUserPendingApproval(): void {
-    $claims = $this->createStub(OAuthClaims::class);
+    $identity = $this->createStub(OAuthIdentity::class);
 
     $user = $this->createStub(User::class);
     $user->method('getStatus')->willReturn(UserStatus::Inactive);
     $user->method('getIdentifier')->willReturn('user-id-456');
 
     $oauthAdapter = $this->createStub(OAuthAdapterInterface::class);
-    $oauthAdapter->method('exchangeCode')->willReturn($claims);
+    $oauthAdapter->method('exchangeCode')->willReturn($identity);
 
     $userResolver = $this->createStub(OAuthUserResolverInterface::class);
     $userResolver->method('resolve')->willReturn($user);
@@ -100,14 +100,14 @@ final class SsoSignInHandlerTest extends TestCase {
 
   #[Test]
   public function itThrowsWhenUserRestricted(): void {
-    $claims = $this->createStub(OAuthClaims::class);
+    $identity = $this->createStub(OAuthIdentity::class);
 
     $user = $this->createStub(User::class);
     $user->method('getStatus')->willReturn(UserStatus::Banned);
     $user->method('getIdentifier')->willReturn('user-id-789');
 
     $oauthAdapter = $this->createStub(OAuthAdapterInterface::class);
-    $oauthAdapter->method('exchangeCode')->willReturn($claims);
+    $oauthAdapter->method('exchangeCode')->willReturn($identity);
 
     $userResolver = $this->createStub(OAuthUserResolverInterface::class);
     $userResolver->method('resolve')->willReturn($user);

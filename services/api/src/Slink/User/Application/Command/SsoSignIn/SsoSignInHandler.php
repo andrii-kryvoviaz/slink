@@ -25,13 +25,13 @@ final readonly class SsoSignInHandler implements CommandHandlerInterface {
   ) {}
 
   public function __invoke(SsoSignInCommand $command): TokenPair {
-    $claims = $this->oauthAdapter->exchangeCode(
+    $identity = $this->oauthAdapter->exchangeCode(
       AuthorizationCode::fromString($command->getCode()),
       OAuthState::fromString($command->getState())
     );
 
-    $user = $this->userResolver->resolve($claims);
-    $user->link($claims);
+    $user = $this->userResolver->resolve($identity);
+    $user->link($identity);
 
     $this->userStore->store($user);
 

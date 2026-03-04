@@ -16,7 +16,7 @@ use Slink\User\Domain\Specification\UniqueUsernameSpecificationInterface;
 use Slink\User\Domain\User;
 use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Email;
-use Slink\User\Domain\ValueObject\OAuth\OAuthClaims;
+use Slink\User\Domain\ValueObject\OAuth\OAuthIdentity;
 use Slink\User\Domain\ValueObject\OAuth\OAuthSubject;
 use Slink\User\Domain\ValueObject\Username;
 
@@ -28,10 +28,10 @@ final class OAuthUserFactoryTest extends TestCase {
     $displayName = DisplayName::fromString('Test User');
     $subject = $this->createStub(OAuthSubject::class);
 
-    $claims = $this->createStub(OAuthClaims::class);
-    $claims->method('getEmail')->willReturn($email);
-    $claims->method('getDisplayName')->willReturn($displayName);
-    $claims->method('getSubject')->willReturn($subject);
+    $identity = $this->createStub(OAuthIdentity::class);
+    $identity->method('getEmail')->willReturn($email);
+    $identity->method('getDisplayName')->willReturn($displayName);
+    $identity->method('getSubject')->willReturn($subject);
 
     $uniqueUsernameSpec = $this->createStub(UniqueUsernameSpecificationInterface::class);
     $uniqueUsernameSpec->method('isUnique')->willReturn(true);
@@ -40,7 +40,7 @@ final class OAuthUserFactoryTest extends TestCase {
 
     $factory = new OAuthUserFactory($userFactory, $uniqueUsernameSpec);
 
-    $result = $factory->create($claims);
+    $result = $factory->create($identity);
 
     $this->assertInstanceOf(User::class, $result);
   }
@@ -51,10 +51,10 @@ final class OAuthUserFactoryTest extends TestCase {
     $displayName = DisplayName::fromString('Test User');
     $subject = $this->createStub(OAuthSubject::class);
 
-    $claims = $this->createStub(OAuthClaims::class);
-    $claims->method('getEmail')->willReturn($email);
-    $claims->method('getDisplayName')->willReturn($displayName);
-    $claims->method('getSubject')->willReturn($subject);
+    $identity = $this->createStub(OAuthIdentity::class);
+    $identity->method('getEmail')->willReturn($email);
+    $identity->method('getDisplayName')->willReturn($displayName);
+    $identity->method('getSubject')->willReturn($subject);
 
     $callCount = 0;
     $uniqueUsernameSpec = $this->createStub(UniqueUsernameSpecificationInterface::class);
@@ -71,7 +71,7 @@ final class OAuthUserFactoryTest extends TestCase {
 
     $factory = new OAuthUserFactory($userFactory, $uniqueUsernameSpec);
 
-    $result = $factory->create($claims);
+    $result = $factory->create($identity);
 
     $this->assertInstanceOf(User::class, $result);
     $this->assertGreaterThan(1, $callCount);
