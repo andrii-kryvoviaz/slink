@@ -4,59 +4,67 @@ declare(strict_types=1);
 
 namespace Slink\User\Infrastructure\Auth\Oidc;
 
+use Jose\Component\Checker\ClaimCheckerManager;
+use Jose\Component\Signature\JWSVerifier;
 use League\OAuth2\Client\Provider\GenericProvider;
 use League\OAuth2\Client\Token\AccessToken;
-use Psr\Log\LoggerInterface;
 use Slink\User\Domain\Enum\OAuthProvider;
-use Slink\User\Domain\ValueObject\OAuth\ClientId;
+use Slink\User\Domain\Exception\IdTokenClaimValidationException;
+use Slink\User\Domain\Exception\InvalidJwsSignatureException;
 use Slink\User\Domain\ValueObject\OAuth\IdToken;
+use Slink\User\Domain\ValueObject\OAuth\JwtHeader;
 use Slink\User\Domain\ValueObject\OAuth\OAuthIdentity;
 use Slink\User\Domain\ValueObject\OAuth\TokenClaims;
 use Slink\User\Infrastructure\ReadModel\View\OAuthProviderView;
 
 final readonly class OAuthClaimsResolver {
   public function __construct(
-    private IdTokenVerifier $idTokenVerifier,
+    private JwsParser $jwsParser,
+    private JwksProvider $jwksProvider,
+    private JWSVerifier $jwsVerifier,
+    private ClaimCheckerManager $claimCheckerManager,
     private OidcDiscoveryInterface $oidcDiscovery,
-    private LoggerInterface $logger,
   ) {}
 
   public function resolve(GenericProvider $client, AccessToken $accessToken, OAuthProviderView $provider): OAuthIdentity {
-    $tokenClaims = $this->extractTokenClaims($client, $accessToken, $provider);
-
-    return OAuthIdentity::fromTokenClaims($tokenClaims, OAuthProvider::from($provider->getSlug()));
-  }
-
-  private function extractTokenClaims(GenericProvider $client, AccessToken $accessToken, OAuthProviderView $provider): TokenClaims {
-    $idToken = $this->extractIdToken($accessToken);
+    $idToken = IdToken::fromPayload($accessToken->getValues());
 
     if ($idToken === null) {
-      return TokenClaims::fromPayload($client->getResourceOwner($accessToken)->toArray());
+      $tokenClaims = TokenClaims::fromPayload($client->getResourceOwner($accessToken)->toArray());
+
+      return OAuthIdentity::fromTokenClaims($tokenClaims, OAuthProvider::from($provider->getSlug()));
     }
+
+    $discovery = $this->oidcDiscovery->discover($provider->getDiscoveryUrl());
+
+    $jws = $this->jwsParser->parse($idToken);
+
+    $header = JwtHeader::fromPayload($jws->getSignature(0)->getProtectedHeader());
+
+    $jwkSet = $this->jwksProvider->getKeySet((string) $discovery->getJwksUri(), $header->getKeyId());
+    if (!$this->jwsVerifier->verifyWithKeySet($jws, $jwkSet, 0)) {
+      throw new InvalidJwsSignatureException(
+        new \RuntimeException('JWS signature verification failed'),
+      );
+    }
+
+    $claims = $this->jwsParser->extractClaims($jws);
 
     try {
-      $discovery = $this->oidcDiscovery->discover($provider->getDiscoveryUrl());
-
-      return $this->idTokenVerifier->verify(
-        $idToken,
-        $discovery->getJwksUri(),
-        $discovery->getIssuer(),
-        ClientId::fromString($provider->getClientId()),
-      );
+      $this->claimCheckerManager->check($claims->toPayload());
     } catch (\Throwable $e) {
-      $this->logger->warning('ID token verification failed, falling back to userinfo endpoint', [
-        'provider' => $provider->getSlug(),
-        'error' => $e->getMessage(),
-      ]);
-
-      return TokenClaims::fromPayload($client->getResourceOwner($accessToken)->toArray());
+      throw IdTokenClaimValidationException::fromThrowable($e);
     }
+
+    if (!$claims->isIssuedBy($discovery->getIssuer())) {
+      throw new IdTokenClaimValidationException('Invalid issuer.');
+    }
+
+    if (!$claims->hasAudience($provider->getClientId())) {
+      throw new IdTokenClaimValidationException('Invalid audience.');
+    }
+
+    return OAuthIdentity::fromTokenClaims($claims, OAuthProvider::from($provider->getSlug()));
   }
 
-  private function extractIdToken(AccessToken $accessToken): ?IdToken {
-    $values = $accessToken->getValues();
-    $raw = $values['id_token'] ?? null;
-
-    return is_string($raw) && $raw !== '' ? IdToken::fromString($raw) : null;
-  }
 }

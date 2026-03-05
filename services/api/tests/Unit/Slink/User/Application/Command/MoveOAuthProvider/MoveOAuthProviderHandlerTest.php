@@ -29,13 +29,8 @@ final class MoveOAuthProviderHandlerTest extends TestCase {
     $targetId = ID::generate();
     $neighborId = ID::generate();
 
-    $targetView = $this->createStub(OAuthProviderView::class);
-    $targetView->method('getId')->willReturn($targetId->toString());
-    $targetView->method('getSortOrder')->willReturn(2.0);
-
-    $neighborView = $this->createStub(OAuthProviderView::class);
-    $neighborView->method('getId')->willReturn($neighborId->toString());
-    $neighborView->method('getSortOrder')->willReturn(1.0);
+    $targetView = $this->createProviderWithSortOrder(2.0, $targetId);
+    $neighborView = $this->createProviderWithSortOrder(1.0, $neighborId);
 
     $targetAggregate = $this->createMock(OAuthProvider::class);
     $this->expectSortOrderUpdate($targetAggregate, 1.0);
@@ -76,13 +71,8 @@ final class MoveOAuthProviderHandlerTest extends TestCase {
     $targetId = ID::generate();
     $neighborId = ID::generate();
 
-    $targetView = $this->createStub(OAuthProviderView::class);
-    $targetView->method('getId')->willReturn($targetId->toString());
-    $targetView->method('getSortOrder')->willReturn(1.0);
-
-    $neighborView = $this->createStub(OAuthProviderView::class);
-    $neighborView->method('getId')->willReturn($neighborId->toString());
-    $neighborView->method('getSortOrder')->willReturn(2.0);
+    $targetView = $this->createProviderWithSortOrder(1.0, $targetId);
+    $neighborView = $this->createProviderWithSortOrder(2.0, $neighborId);
 
     $targetAggregate = $this->createMock(OAuthProvider::class);
     $this->expectSortOrderUpdate($targetAggregate, 2.0);
@@ -163,5 +153,14 @@ final class MoveOAuthProviderHandlerTest extends TestCase {
     $command = new MoveOAuthProviderCommand($targetId->toString(), 'up');
 
     $handler($command);
+  }
+
+  private function createProviderWithSortOrder(float $sortOrder, ?ID $id = null): OAuthProviderView {
+    $id ??= ID::generate();
+    $view = $this->createStub(OAuthProviderView::class);
+    $view->method('getId')->willReturn($id->toString());
+    $view->method('getSortOrder')->willReturn($sortOrder);
+
+    return $view;
   }
 }

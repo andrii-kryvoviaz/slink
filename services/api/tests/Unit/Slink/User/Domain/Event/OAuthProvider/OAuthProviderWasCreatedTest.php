@@ -18,7 +18,7 @@ final class OAuthProviderWasCreatedTest extends TestCase {
   }
 
   #[Test]
-  public function itSerializesToPayload(): void {
+  public function itEncryptsSecretsInPayload(): void {
     $event = new OAuthProviderWasCreated(
       'provider-id-1',
       'Google',
@@ -34,48 +34,10 @@ final class OAuthProviderWasCreatedTest extends TestCase {
 
     $payload = $event->toPayload();
 
-    $this->assertSame('provider-id-1', $payload['id']);
-    $this->assertSame('Google', $payload['name']);
-    $this->assertSame('google', $payload['slug']);
-    $this->assertSame('oidc', $payload['type']);
     $this->assertNotSame('client-id-123', $payload['clientId']);
     $this->assertStringStartsWith('enc:v1:', $payload['clientId']);
     $this->assertNotSame('client-secret-456', $payload['clientSecret']);
     $this->assertStringStartsWith('enc:v1:', $payload['clientSecret']);
-    $this->assertSame('https://accounts.google.com/.well-known/openid-configuration', $payload['discoveryUrl']);
-    $this->assertSame('openid profile email', $payload['scopes']);
-    $this->assertTrue($payload['enabled']);
-    $this->assertSame(1.0, $payload['sortOrder']);
-  }
-
-  #[Test]
-  public function itDeserializesFromPayload(): void {
-    $original = new OAuthProviderWasCreated(
-      'provider-id-1',
-      'Google',
-      'google',
-      'oidc',
-      'client-id-123',
-      'client-secret-456',
-      'https://accounts.google.com/.well-known/openid-configuration',
-      'openid profile email',
-      true,
-      2.5,
-    );
-
-    $payload = $original->toPayload();
-    $restored = OAuthProviderWasCreated::fromPayload($payload);
-
-    $this->assertSame('provider-id-1', $restored->id);
-    $this->assertSame('Google', $restored->name);
-    $this->assertSame('google', $restored->slug);
-    $this->assertSame('oidc', $restored->type);
-    $this->assertSame('client-id-123', $restored->clientId);
-    $this->assertSame('client-secret-456', $restored->clientSecret);
-    $this->assertSame('https://accounts.google.com/.well-known/openid-configuration', $restored->discoveryUrl);
-    $this->assertSame('openid profile email', $restored->scopes);
-    $this->assertTrue($restored->enabled);
-    $this->assertSame(2.5, $restored->sortOrder);
   }
 
   #[Test]

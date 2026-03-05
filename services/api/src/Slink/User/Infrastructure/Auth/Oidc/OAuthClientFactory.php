@@ -19,7 +19,7 @@ final readonly class OAuthClientFactory implements OAuthClientFactoryInterface {
     $discovery = $this->oidcDiscovery->discover($provider->getDiscoveryUrl());
 
     return new GenericProvider([
-      'clientId' => $provider->getClientId(),
+      'clientId' => (string) $provider->getClientId(),
       'clientSecret' => $provider->getClientSecret(),
       'redirectUri' => (string) $redirectUri,
       'urlAuthorize' => $discovery->getAuthorizationEndpoint(),

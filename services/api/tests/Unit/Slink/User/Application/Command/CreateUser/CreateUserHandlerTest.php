@@ -71,12 +71,7 @@ final class CreateUserHandlerTest extends TestCase {
 
   #[Test]
   public function itDerivesActiveStatusWhenApprovalNotRequired(): void {
-    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
-    $configProvider->method('get')
-      ->willReturnMap([
-        ['user.allowRegistration', true],
-        ['user.approvalRequired', false]
-      ]);
+    $configProvider = $this->createConfigProvider(allowReg: true, requireApproval: false);
 
     $userRepository = $this->createMock(UserStoreRepositoryInterface::class);
     $userRepository->expects($this->once())
@@ -101,12 +96,7 @@ final class CreateUserHandlerTest extends TestCase {
 
   #[Test]
   public function itDerivesInactiveStatusWhenApprovalRequired(): void {
-    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
-    $configProvider->method('get')
-      ->willReturnMap([
-        ['user.allowRegistration', true],
-        ['user.approvalRequired', true]
-      ]);
+    $configProvider = $this->createConfigProvider(allowReg: true, requireApproval: true);
 
     $userRepository = $this->createMock(UserStoreRepositoryInterface::class);
     $userRepository->expects($this->once())
@@ -155,11 +145,7 @@ final class CreateUserHandlerTest extends TestCase {
 
   #[Test]
   public function itThrowsWhenRegistrationNotAllowedAndStatusIsNull(): void {
-    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
-    $configProvider->method('get')
-      ->willReturnMap([
-        ['user.allowRegistration', false],
-      ]);
+    $configProvider = $this->createConfigProvider(allowReg: false);
 
     $userRepository = $this->createMock(UserStoreRepositoryInterface::class);
     $userRepository->expects($this->never())->method('store');
@@ -182,11 +168,7 @@ final class CreateUserHandlerTest extends TestCase {
 
   #[Test]
   public function itBypassesRegistrationCheckWithExplicitStatus(): void {
-    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
-    $configProvider->method('get')
-      ->willReturnMap([
-        ['user.allowRegistration', false],
-      ]);
+    $configProvider = $this->createConfigProvider(allowReg: false);
 
     $userRepository = $this->createMock(UserStoreRepositoryInterface::class);
     $userRepository->expects($this->once())
@@ -208,6 +190,17 @@ final class CreateUserHandlerTest extends TestCase {
     );
 
     $handler($command);
+  }
+
+  private function createConfigProvider(bool $allowReg = true, bool $requireApproval = false): ConfigurationProviderInterface {
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
+    $configProvider->method('get')
+      ->willReturnMap([
+        ['user.allowRegistration', $allowReg],
+        ['user.approvalRequired', $requireApproval],
+      ]);
+
+    return $configProvider;
   }
 
   private function createUserFactory(?ConfigurationProviderInterface $configProvider = null): UserFactory {

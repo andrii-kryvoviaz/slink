@@ -18,28 +18,6 @@ final class OAuthProviderWasUpdatedTest extends TestCase {
   }
 
   #[Test]
-  public function itSerializesOnlyNonNullFields(): void {
-    $event = new OAuthProviderWasUpdated(
-      'provider-id-1',
-      name: 'Updated Google',
-      enabled: false,
-    );
-
-    $payload = $event->toPayload();
-
-    $this->assertSame('provider-id-1', $payload['id']);
-    $this->assertSame('Updated Google', $payload['name']);
-    $this->assertFalse($payload['enabled']);
-    $this->assertArrayNotHasKey('slug', $payload);
-    $this->assertArrayNotHasKey('type', $payload);
-    $this->assertArrayNotHasKey('clientId', $payload);
-    $this->assertArrayNotHasKey('clientSecret', $payload);
-    $this->assertArrayNotHasKey('discoveryUrl', $payload);
-    $this->assertArrayNotHasKey('scopes', $payload);
-    $this->assertArrayNotHasKey('sortOrder', $payload);
-  }
-
-  #[Test]
   public function itEncryptsSecretsInPayload(): void {
     $event = new OAuthProviderWasUpdated(
       'provider-id-1',
@@ -58,23 +36,34 @@ final class OAuthProviderWasUpdatedTest extends TestCase {
   }
 
   #[Test]
-  public function itDeserializesWithMissingKeysAsNull(): void {
-    $payload = [
-      'id' => 'provider-id-1',
-      'name' => 'Only Name',
-    ];
+  public function itRoundtripsThroughPayloadWithPartialFields(): void {
+    $event = new OAuthProviderWasUpdated(
+      'provider-id-1',
+      name: 'Updated Google',
+      enabled: false,
+    );
 
-    $event = OAuthProviderWasUpdated::fromPayload($payload);
+    $payload = $event->toPayload();
 
-    $this->assertSame('provider-id-1', $event->id);
-    $this->assertSame('Only Name', $event->name);
-    $this->assertNull($event->slug);
-    $this->assertNull($event->type);
-    $this->assertNull($event->clientId);
-    $this->assertNull($event->clientSecret);
-    $this->assertNull($event->discoveryUrl);
-    $this->assertNull($event->scopes);
-    $this->assertNull($event->enabled);
-    $this->assertNull($event->sortOrder);
+    $this->assertArrayNotHasKey('slug', $payload);
+    $this->assertArrayNotHasKey('type', $payload);
+    $this->assertArrayNotHasKey('clientId', $payload);
+    $this->assertArrayNotHasKey('clientSecret', $payload);
+    $this->assertArrayNotHasKey('discoveryUrl', $payload);
+    $this->assertArrayNotHasKey('scopes', $payload);
+    $this->assertArrayNotHasKey('sortOrder', $payload);
+
+    $restored = OAuthProviderWasUpdated::fromPayload($payload);
+
+    $this->assertSame('provider-id-1', $restored->id);
+    $this->assertSame('Updated Google', $restored->name);
+    $this->assertFalse($restored->enabled);
+    $this->assertNull($restored->slug);
+    $this->assertNull($restored->type);
+    $this->assertNull($restored->clientId);
+    $this->assertNull($restored->clientSecret);
+    $this->assertNull($restored->discoveryUrl);
+    $this->assertNull($restored->scopes);
+    $this->assertNull($restored->sortOrder);
   }
 }

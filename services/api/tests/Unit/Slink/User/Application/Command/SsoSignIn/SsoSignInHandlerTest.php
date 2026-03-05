@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Unit\Slink\User\Application\Command\SsoSignIn;
 
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Slink\User\Application\Command\SsoSignIn\SsoSignInCommand;
 use Slink\User\Application\Command\SsoSignIn\SsoSignInHandler;
@@ -26,7 +27,7 @@ final class SsoSignInHandlerTest extends TestCase {
 
   #[Test]
   public function itAuthenticatesOnHappyPath(): void {
-    $identity = $this->createStub(OAuthIdentity::class);
+    $identity = $this->createMockIdentity();
     $tokenPair = $this->createMockTokenPair();
 
     $user = $this->createMock(User::class);
@@ -38,23 +39,12 @@ final class SsoSignInHandlerTest extends TestCase {
     $refreshTokenSet = $this->createStub(RefreshTokenSet::class);
     $this->setPrivateProperty($user, 'refreshToken', $refreshTokenSet);
 
-    $oauthAdapter = $this->createMock(OAuthAdapterInterface::class);
-    $oauthAdapter->expects($this->once())
-      ->method('exchangeCode')
-      ->willReturn($identity);
+    [$oauthAdapter, $userResolver, $userStore, $authProvider] = $this->createMockDependencies($identity, $user);
 
-    $userResolver = $this->createMock(OAuthUserResolverInterface::class);
-    $userResolver->expects($this->once())
-      ->method('resolve')
-      ->with($identity)
-      ->willReturn($user);
-
-    $userStore = $this->createMock(UserStoreRepositoryInterface::class);
     $userStore->expects($this->exactly(2))
       ->method('store')
       ->with($user);
 
-    $authProvider = $this->createMock(AuthProviderInterface::class);
     $authProvider->expects($this->once())
       ->method('generateTokenPair')
       ->with($user)
@@ -71,22 +61,16 @@ final class SsoSignInHandlerTest extends TestCase {
 
   #[Test]
   public function itThrowsWhenUserPendingApproval(): void {
-    $identity = $this->createStub(OAuthIdentity::class);
+    $identity = $this->createMockIdentity();
 
     $user = $this->createStub(User::class);
     $user->method('getStatus')->willReturn(UserStatus::Inactive);
     $user->method('getIdentifier')->willReturn('user-id-456');
 
-    $oauthAdapter = $this->createStub(OAuthAdapterInterface::class);
-    $oauthAdapter->method('exchangeCode')->willReturn($identity);
+    [$oauthAdapter, $userResolver, $userStore, $authProvider] = $this->createMockDependencies($identity, $user);
 
-    $userResolver = $this->createStub(OAuthUserResolverInterface::class);
-    $userResolver->method('resolve')->willReturn($user);
-
-    $userStore = $this->createMock(UserStoreRepositoryInterface::class);
     $userStore->expects($this->once())->method('store')->with($user);
 
-    $authProvider = $this->createMock(AuthProviderInterface::class);
     $authProvider->expects($this->never())->method('generateTokenPair');
 
     $handler = new SsoSignInHandler($oauthAdapter, $userResolver, $userStore, $authProvider);
@@ -100,22 +84,16 @@ final class SsoSignInHandlerTest extends TestCase {
 
   #[Test]
   public function itThrowsWhenUserRestricted(): void {
-    $identity = $this->createStub(OAuthIdentity::class);
+    $identity = $this->createMockIdentity();
 
     $user = $this->createStub(User::class);
     $user->method('getStatus')->willReturn(UserStatus::Banned);
     $user->method('getIdentifier')->willReturn('user-id-789');
 
-    $oauthAdapter = $this->createStub(OAuthAdapterInterface::class);
-    $oauthAdapter->method('exchangeCode')->willReturn($identity);
+    [$oauthAdapter, $userResolver, $userStore, $authProvider] = $this->createMockDependencies($identity, $user);
 
-    $userResolver = $this->createStub(OAuthUserResolverInterface::class);
-    $userResolver->method('resolve')->willReturn($user);
-
-    $userStore = $this->createMock(UserStoreRepositoryInterface::class);
     $userStore->expects($this->once())->method('store')->with($user);
 
-    $authProvider = $this->createMock(AuthProviderInterface::class);
     $authProvider->expects($this->never())->method('generateTokenPair');
 
     $handler = new SsoSignInHandler($oauthAdapter, $userResolver, $userStore, $authProvider);
@@ -125,6 +103,27 @@ final class SsoSignInHandlerTest extends TestCase {
     $this->expectException(InvalidCredentialsException::class);
 
     $handler($command);
+  }
+
+  private function createMockIdentity(): OAuthIdentity {
+    return $this->createStub(OAuthIdentity::class);
+  }
+
+  /**
+   * @return array{OAuthAdapterInterface, OAuthUserResolverInterface, MockObject&UserStoreRepositoryInterface, MockObject&AuthProviderInterface}
+   */
+  private function createMockDependencies(OAuthIdentity $identity, User $user): array {
+    $oauthAdapter = $this->createStub(OAuthAdapterInterface::class);
+    $oauthAdapter->method('exchangeCode')->willReturn($identity);
+
+    $userResolver = $this->createStub(OAuthUserResolverInterface::class);
+    $userResolver->method('resolve')->willReturn($user);
+
+    $userStore = $this->createMock(UserStoreRepositoryInterface::class);
+
+    $authProvider = $this->createMock(AuthProviderInterface::class);
+
+    return [$oauthAdapter, $userResolver, $userStore, $authProvider];
   }
 
   private function createMockTokenPair(): TokenPair {

@@ -6,35 +6,43 @@ namespace Slink\User\Domain\ValueObject\OAuth;
 
 use Slink\Shared\Domain\Exception\InvalidValueObjectException;
 use Slink\Shared\Domain\ValueObject\AbstractValueObject;
+use Slink\User\Domain\Exception\MissingKeyIdException;
+use Slink\User\Domain\Exception\UnsupportedJwtAlgorithmException;
 
 final readonly class JwtHeader extends AbstractValueObject {
   private function __construct(
     private string $algorithm,
-    private ?string $keyId,
+    private string $keyId,
   ) {
-    if ($algorithm === '') {
-      throw new InvalidValueObjectException('JwtHeader', 'algorithm cannot be empty');
+    if (JwsAlgorithm::tryFrom($algorithm) === null) {
+      throw new UnsupportedJwtAlgorithmException($algorithm);
     }
   }
 
   /**
    * @param array<string, mixed> $header
    */
-  public static function fromProtectedHeader(array $header): self {
+  public static function fromPayload(array $header): self {
     $alg = $header['alg'] ?? null;
 
-    if (!is_string($alg) || $alg === '') {
+    if (!is_string($alg)) {
       throw new InvalidValueObjectException('JwtHeader', 'algorithm must be a non-empty string');
     }
 
-    return new self($alg, $header['kid'] ?? null);
+    $kid = $header['kid'] ?? null;
+
+    if (!is_string($kid)) {
+      throw new MissingKeyIdException();
+    }
+
+    return new self($alg, $kid);
   }
 
   public function getAlgorithm(): string {
     return $this->algorithm;
   }
 
-  public function getKeyId(): ?string {
+  public function getKeyId(): string {
     return $this->keyId;
   }
 

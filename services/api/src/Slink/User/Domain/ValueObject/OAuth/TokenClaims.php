@@ -44,6 +44,14 @@ final readonly class TokenClaims extends AbstractCompoundValueObject {
     return DisplayName::fromStringOrNull($this->claims['name'] ?? $this->claims['preferred_username'] ?? null);
   }
 
+  public function hasAudience(ClientId $clientId): bool {
+    return in_array((string) $clientId, (array) ($this->claims['aud'] ?? []), true);
+  }
+
+  public function isIssuedBy(Issuer $issuer): bool {
+    return $this->getIssuer()?->equals($issuer) ?? false;
+  }
+
   public function isEmailVerified(): bool {
     return (bool) ($this->claims['email_verified'] ?? false);
   }

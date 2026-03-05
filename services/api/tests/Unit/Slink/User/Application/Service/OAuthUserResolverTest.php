@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Unit\Slink\User\Application\Service;
 
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 use Slink\Shared\Domain\ValueObject\ID;
@@ -34,21 +35,19 @@ final class OAuthUserResolverTest extends TestCase {
     $existingLink = $this->createStub(OAuthLinkView::class);
     $existingLink->method('getUserId')->willReturn($userId->toString());
 
-    $linkRepository = $this->createMock(OAuthLinkRepositoryInterface::class);
-    $linkRepository->expects($this->once())
-      ->method('findBySubject')
-      ->with($subject)
-      ->willReturn($existingLink);
-
-    $userStore = $this->createMock(UserStoreRepositoryInterface::class);
-    $userStore->expects($this->once())
-      ->method('get')
-      ->with($this->callback(fn(ID $id) => $id->toString() === $userId->toString()));
-
-    $checkUserByEmail = $this->createStub(CheckUserByEmailInterface::class);
-    $oauthUserFactory = $this->createStub(OAuthUserFactory::class);
-
-    $resolver = new OAuthUserResolver($linkRepository, $userStore, $checkUserByEmail, $oauthUserFactory);
+    $resolver = $this->createResolver(
+      linkConfig: function (OAuthLinkRepositoryInterface&MockObject $repo) use ($subject, $existingLink) {
+        $repo->expects($this->once())
+          ->method('findBySubject')
+          ->with($subject)
+          ->willReturn($existingLink);
+      },
+      storeConfig: function (UserStoreRepositoryInterface&MockObject $store) use ($userId) {
+        $store->expects($this->once())
+          ->method('get')
+          ->with($this->callback(fn(ID $id) => $id->toString() === $userId->toString()));
+      },
+    );
 
     $result = $resolver->resolve($identity);
 
@@ -66,25 +65,24 @@ final class OAuthUserResolverTest extends TestCase {
     $identity->method('getEmail')->willReturn($email);
     $identity->method('isEmailVerified')->willReturn(true);
 
-    $linkRepository = $this->createMock(OAuthLinkRepositoryInterface::class);
-    $linkRepository->expects($this->once())
-      ->method('findBySubject')
-      ->willReturn(null);
-
-    $checkUserByEmail = $this->createMock(CheckUserByEmailInterface::class);
-    $checkUserByEmail->expects($this->once())
-      ->method('existsEmail')
-      ->with($email)
-      ->willReturn($existingUserId);
-
-    $userStore = $this->createMock(UserStoreRepositoryInterface::class);
-    $userStore->expects($this->once())
-      ->method('get')
-      ->with($this->callback(fn(ID $id) => $id->toString() === $existingUserId->toString()));
-
-    $oauthUserFactory = $this->createStub(OAuthUserFactory::class);
-
-    $resolver = new OAuthUserResolver($linkRepository, $userStore, $checkUserByEmail, $oauthUserFactory);
+    $resolver = $this->createResolver(
+      linkConfig: function (OAuthLinkRepositoryInterface&MockObject $repo) {
+        $repo->expects($this->once())
+          ->method('findBySubject')
+          ->willReturn(null);
+      },
+      storeConfig: function (UserStoreRepositoryInterface&MockObject $store) use ($existingUserId) {
+        $store->expects($this->once())
+          ->method('get')
+          ->with($this->callback(fn(ID $id) => $id->toString() === $existingUserId->toString()));
+      },
+      emailCheckConfig: function (CheckUserByEmailInterface&MockObject $check) use ($email, $existingUserId) {
+        $check->expects($this->once())
+          ->method('existsEmail')
+          ->with($email)
+          ->willReturn($existingUserId);
+      },
+    );
 
     $result = $resolver->resolve($identity);
 
@@ -102,19 +100,14 @@ final class OAuthUserResolverTest extends TestCase {
     $identity->method('getEmail')->willReturn($email);
     $identity->method('isEmailVerified')->willReturn(false);
 
-    $linkRepository = $this->createStub(OAuthLinkRepositoryInterface::class);
-    $linkRepository->method('findBySubject')->willReturn(null);
-
-    $checkUserByEmail = $this->createMock(CheckUserByEmailInterface::class);
-    $checkUserByEmail->expects($this->once())
-      ->method('existsEmail')
-      ->with($email)
-      ->willReturn($existingUserId);
-
-    $userStore = $this->createStub(UserStoreRepositoryInterface::class);
-    $oauthUserFactory = $this->createStub(OAuthUserFactory::class);
-
-    $resolver = new OAuthUserResolver($linkRepository, $userStore, $checkUserByEmail, $oauthUserFactory);
+    $resolver = $this->createResolver(
+      emailCheckConfig: function (CheckUserByEmailInterface&MockObject $check) use ($email, $existingUserId) {
+        $check->expects($this->once())
+          ->method('existsEmail')
+          ->with($email)
+          ->willReturn($existingUserId);
+      },
+    );
 
     $this->expectException(OAuthEmailNotVerifiedException::class);
 
@@ -129,14 +122,7 @@ final class OAuthUserResolverTest extends TestCase {
     $identity->method('getSubject')->willReturn($subject);
     $identity->method('getEmail')->willReturn(null);
 
-    $linkRepository = $this->createStub(OAuthLinkRepositoryInterface::class);
-    $linkRepository->method('findBySubject')->willReturn(null);
-
-    $userStore = $this->createStub(UserStoreRepositoryInterface::class);
-    $checkUserByEmail = $this->createStub(CheckUserByEmailInterface::class);
-    $oauthUserFactory = $this->createStub(OAuthUserFactory::class);
-
-    $resolver = new OAuthUserResolver($linkRepository, $userStore, $checkUserByEmail, $oauthUserFactory);
+    $resolver = $this->createResolver();
 
     $this->expectException(OAuthEmailRequiredException::class);
 
@@ -153,27 +139,62 @@ final class OAuthUserResolverTest extends TestCase {
     $identity->method('getEmail')->willReturn($email);
     $identity->method('getDisplayName')->willReturn(DisplayName::fromString('New User'));
 
-    $linkRepository = $this->createStub(OAuthLinkRepositoryInterface::class);
-    $linkRepository->method('findBySubject')->willReturn(null);
-
-    $checkUserByEmail = $this->createMock(CheckUserByEmailInterface::class);
-    $checkUserByEmail->expects($this->once())
-      ->method('existsEmail')
-      ->with($email)
-      ->willReturn(null);
-
-    $userStore = $this->createMock(UserStoreRepositoryInterface::class);
-    $userStore->expects($this->never())->method('get');
-
-    $oauthUserFactory = $this->createMock(OAuthUserFactory::class);
-    $oauthUserFactory->expects($this->once())
-      ->method('create')
-      ->with($identity);
-
-    $resolver = new OAuthUserResolver($linkRepository, $userStore, $checkUserByEmail, $oauthUserFactory);
+    $resolver = $this->createResolver(
+      storeConfig: function (UserStoreRepositoryInterface&MockObject $store) {
+        $store->expects($this->never())->method('get');
+      },
+      emailCheckConfig: function (CheckUserByEmailInterface&MockObject $check) use ($email) {
+        $check->expects($this->once())
+          ->method('existsEmail')
+          ->with($email)
+          ->willReturn(null);
+      },
+      factoryConfig: function (MockObject $factory) use ($identity) {
+        $factory->expects($this->once())
+          ->method('create')
+          ->with($identity);
+      },
+    );
 
     $result = $resolver->resolve($identity);
 
     $this->assertInstanceOf(User::class, $result);
+  }
+
+  private function createResolver(
+    ?callable $linkConfig = null,
+    ?callable $storeConfig = null,
+    ?callable $emailCheckConfig = null,
+    ?callable $factoryConfig = null,
+  ): OAuthUserResolver {
+    if ($linkConfig) {
+      $linkRepository = $this->createMock(OAuthLinkRepositoryInterface::class);
+      $linkConfig($linkRepository);
+    } else {
+      $linkRepository = $this->createStub(OAuthLinkRepositoryInterface::class);
+    }
+
+    if ($storeConfig) {
+      $userStore = $this->createMock(UserStoreRepositoryInterface::class);
+      $storeConfig($userStore);
+    } else {
+      $userStore = $this->createStub(UserStoreRepositoryInterface::class);
+    }
+
+    if ($emailCheckConfig) {
+      $checkUserByEmail = $this->createMock(CheckUserByEmailInterface::class);
+      $emailCheckConfig($checkUserByEmail);
+    } else {
+      $checkUserByEmail = $this->createStub(CheckUserByEmailInterface::class);
+    }
+
+    if ($factoryConfig) {
+      $oauthUserFactory = $this->createMock(OAuthUserFactory::class);
+      $factoryConfig($oauthUserFactory);
+    } else {
+      $oauthUserFactory = $this->createStub(OAuthUserFactory::class);
+    }
+
+    return new OAuthUserResolver($linkRepository, $userStore, $checkUserByEmail, $oauthUserFactory);
   }
 }

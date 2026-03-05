@@ -7,6 +7,7 @@ namespace Slink\User\Infrastructure\ReadModel\View;
 use Doctrine\ORM\Mapping as ORM;
 use Slink\Shared\Infrastructure\Encryption\EncryptionRegistry;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
+use Slink\User\Domain\ValueObject\OAuth\ClientId;
 use Slink\User\Infrastructure\ReadModel\Repository\OAuthProviderRepository;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\Ignore;
@@ -77,8 +78,8 @@ class OAuthProviderView extends AbstractView {
     return $this->type;
   }
 
-  public function getClientId(): string {
-    return EncryptionRegistry::decrypt($this->clientId);
+  public function getClientId(): ClientId {
+    return ClientId::fromString(EncryptionRegistry::decrypt($this->clientId));
   }
 
   #[Ignore]

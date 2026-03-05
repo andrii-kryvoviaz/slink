@@ -1,0 +1,48 @@
+parameters:
+  app.oidc.allowed_time_drift: 30
+
+services:
+  Jose\Component\Signature\Algorithm\RS256:
+    tags: ['app.jws_algorithm']
+  Jose\Component\Signature\Algorithm\RS384:
+    tags: ['app.jws_algorithm']
+  Jose\Component\Signature\Algorithm\RS512:
+    tags: ['app.jws_algorithm']
+  Jose\Component\Signature\Algorithm\ES256:
+    tags: ['app.jws_algorithm']
+  Jose\Component\Signature\Algorithm\ES384:
+    tags: ['app.jws_algorithm']
+  Jose\Component\Signature\Algorithm\ES512:
+    tags: ['app.jws_algorithm']
+
+  Jose\Component\Core\AlgorithmManager:
+    arguments:
+      - !tagged_iterator 'app.jws_algorithm'
+
+  Jose\Component\Signature\JWSVerifier:
+    arguments:
+      - '@Jose\Component\Core\AlgorithmManager'
+
+  Jose\Component\Signature\Serializer\CompactSerializer: ~
+
+  Jose\Component\Checker\ExpirationTimeChecker:
+    arguments:
+      $clock: '@Psr\Clock\ClockInterface'
+      $allowedTimeDrift: '%app.oidc.allowed_time_drift%'
+    tags: ['app.claim_checker']
+
+  Jose\Component\Checker\IssuedAtChecker:
+    arguments:
+      $clock: '@Psr\Clock\ClockInterface'
+      $allowedTimeDrift: '%app.oidc.allowed_time_drift%'
+    tags: ['app.claim_checker']
+
+  Jose\Component\Checker\NotBeforeChecker:
+    arguments:
+      $clock: '@Psr\Clock\ClockInterface'
+      $allowedTimeDrift: '%app.oidc.allowed_time_drift%'
+    tags: ['app.claim_checker']
+
+  Jose\Component\Checker\ClaimCheckerManager:
+    arguments:
+      - !tagged_iterator 'app.claim_checker'

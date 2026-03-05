@@ -14,4 +14,11 @@ final readonly class IdToken extends AbstractStringValueObject {
   public static function fromString(#[\SensitiveParameter] string $value): self {
     return new self($value);
   }
+
+  /**
+   * @param array<string, mixed> $values
+   */
+  public static function fromPayload(array $values): ?self {
+    return !empty($values['id_token']) ? self::fromString($values['id_token']) : null;
+  }
 }
