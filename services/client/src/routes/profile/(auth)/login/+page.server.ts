@@ -5,6 +5,7 @@ import type { SsoProvider } from '@slink/api/Resources/SsoResource';
 
 import { Auth } from '@slink/lib/auth/Auth';
 
+import { graceful } from '@slink/utils/async/graceful';
 import { formData } from '@slink/utils/form/formData';
 
 import type { Actions, PageServerLoad } from './$types';
@@ -16,7 +17,10 @@ export const load: PageServerLoad = async ({ parent, locals }) => {
     redirect(302, '/profile');
   }
 
-  const ssoProviders: SsoProvider[] = await locals.api.sso.getProviders();
+  const ssoProviders = await graceful(
+    () => locals.api.sso.getProviders(),
+    [] as SsoProvider[],
+  );
 
   const { cookieManager, flash, ...serializableLocals } = locals;
   return { ...serializableLocals, ssoProviders };

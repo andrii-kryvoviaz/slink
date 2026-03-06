@@ -85,10 +85,12 @@
       {/key}
     {/if}
 
-    <OAuthProviderList
-      {providers}
-      onEdit={(provider) => formState.openEdit(provider)}
-    />
+    {#key providers}
+      <OAuthProviderList
+        {providers}
+        onEdit={(provider) => formState.openEdit(provider)}
+      />
+    {/key}
   {:catch}
     <Notice variant="error">Failed to load SSO providers.</Notice>
   {/await}
