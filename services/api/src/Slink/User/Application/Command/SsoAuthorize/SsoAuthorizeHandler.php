@@ -11,6 +11,7 @@ use Slink\User\Domain\Enum\OAuthProvider;
 use Slink\User\Domain\Exception\InvalidCredentialsException;
 use Slink\User\Domain\Repository\OAuthProviderRepositoryInterface;
 use Slink\User\Domain\ValueObject\OAuth\RedirectUri;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Throwable;
 
 final readonly class SsoAuthorizeHandler implements CommandHandlerInterface {
@@ -18,6 +19,8 @@ final readonly class SsoAuthorizeHandler implements CommandHandlerInterface {
     private OAuthProviderRepositoryInterface $providerRepository,
     private OAuthAdapterInterface $oauthAdapter,
     private LoggerInterface $logger,
+    #[Autowire('%env(ORIGIN)%')]
+    private string $origin,
   ) {}
 
   public function __invoke(SsoAuthorizeCommand $command): string {
@@ -27,15 +30,17 @@ final readonly class SsoAuthorizeHandler implements CommandHandlerInterface {
       throw new InvalidCredentialsException('SSO provider is currently unavailable. Please try again later.');
     }
 
+    $redirectUri = RedirectUri::fromString(rtrim($this->origin, '/') . '/profile/sso/callback');
+
     try {
       return $this->oauthAdapter->getAuthorizationUrl(
         $provider,
-        RedirectUri::fromString($command->getRedirectUri())
+        $redirectUri
       );
     } catch (Throwable $e) {
       $this->logger->error('Failed to build SSO authorization URL', [
         'provider' => $command->getProvider(),
-        'redirectUri' => $command->getRedirectUri(),
+        'redirectUri' => (string) $redirectUri,
         'exception' => $e,
       ]);
 

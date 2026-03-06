@@ -30,7 +30,6 @@ export class SsoResource extends AbstractResource {
 
   public async authorize(data: {
     provider: string;
-    redirectUri: string;
   }): Promise<SsoAuthorizeResponse> {
     return this.post('/auth/sso/authorize', { json: data });
   }

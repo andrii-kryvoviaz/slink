@@ -16,17 +16,9 @@ final readonly class SsoAuthorizeCommand implements CommandInterface {
     #[Assert\NotBlank]
     #[Assert\Choice(callback: [OAuthProvider::class, 'values'])]
     private string $provider,
-
-    #[Assert\NotBlank]
-    #[Assert\Url(requireTld: false)]
-    private string $redirectUri,
   ) {}
 
   public function getProvider(): string {
     return $this->provider;
-  }
-
-  public function getRedirectUri(): string {
-    return $this->redirectUri;
   }
 }

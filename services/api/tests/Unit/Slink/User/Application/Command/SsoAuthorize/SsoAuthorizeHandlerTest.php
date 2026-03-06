@@ -40,9 +40,9 @@ final class SsoAuthorizeHandlerTest extends TestCase {
       )
       ->willReturn($expectedUrl);
 
-    $handler = new SsoAuthorizeHandler($repository, $oauthAdapter, $this->createStub(LoggerInterface::class));
+    $handler = new SsoAuthorizeHandler($repository, $oauthAdapter, $this->createStub(LoggerInterface::class), 'http://localhost:3000');
 
-    $command = new SsoAuthorizeCommand('google', 'http://localhost:3000/callback');
+    $command = new SsoAuthorizeCommand('google');
 
     $result = $handler($command);
 
@@ -57,9 +57,9 @@ final class SsoAuthorizeHandlerTest extends TestCase {
     $oauthAdapter = $this->createMock(OAuthAdapterInterface::class);
     $oauthAdapter->expects($this->never())->method('getAuthorizationUrl');
 
-    $handler = new SsoAuthorizeHandler($repository, $oauthAdapter, $this->createStub(LoggerInterface::class));
+    $handler = new SsoAuthorizeHandler($repository, $oauthAdapter, $this->createStub(LoggerInterface::class), 'http://localhost:3000');
 
-    $command = new SsoAuthorizeCommand('google', 'http://localhost:3000/callback');
+    $command = new SsoAuthorizeCommand('google');
 
     $this->expectException(InvalidCredentialsException::class);
 
@@ -77,9 +77,9 @@ final class SsoAuthorizeHandlerTest extends TestCase {
     $oauthAdapter = $this->createMock(OAuthAdapterInterface::class);
     $oauthAdapter->expects($this->never())->method('getAuthorizationUrl');
 
-    $handler = new SsoAuthorizeHandler($repository, $oauthAdapter, $this->createStub(LoggerInterface::class));
+    $handler = new SsoAuthorizeHandler($repository, $oauthAdapter, $this->createStub(LoggerInterface::class), 'http://localhost:3000');
 
-    $command = new SsoAuthorizeCommand('google', 'http://localhost:3000/callback');
+    $command = new SsoAuthorizeCommand('google');
 
     $this->expectException(InvalidCredentialsException::class);
 

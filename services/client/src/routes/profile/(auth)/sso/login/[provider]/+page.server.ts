@@ -4,14 +4,12 @@ import { extractShortErrorMessage } from '@slink/lib/utils/error/extractErrorMes
 
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ params, url, locals }) => {
+export const load: PageServerLoad = async ({ params, locals }) => {
   const { provider } = params;
-  const redirectUri = `${url.origin}/profile/sso/callback`;
 
   try {
     const { authorizationUrl } = await locals.api.sso.authorize({
       provider,
-      redirectUri,
     });
 
     redirect(302, authorizationUrl);
