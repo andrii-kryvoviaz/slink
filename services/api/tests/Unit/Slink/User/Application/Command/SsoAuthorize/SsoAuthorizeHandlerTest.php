@@ -6,6 +6,7 @@ namespace Unit\Slink\User\Application\Command\SsoAuthorize;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Slink\User\Application\Command\SsoAuthorize\SsoAuthorizeCommand;
 use Slink\User\Application\Command\SsoAuthorize\SsoAuthorizeHandler;
 use Slink\User\Domain\Contracts\OAuthAdapterInterface;
@@ -39,7 +40,7 @@ final class SsoAuthorizeHandlerTest extends TestCase {
       )
       ->willReturn($expectedUrl);
 
-    $handler = new SsoAuthorizeHandler($repository, $oauthAdapter);
+    $handler = new SsoAuthorizeHandler($repository, $oauthAdapter, $this->createStub(LoggerInterface::class));
 
     $command = new SsoAuthorizeCommand('google', 'http://localhost:3000/callback');
 
@@ -56,7 +57,7 @@ final class SsoAuthorizeHandlerTest extends TestCase {
     $oauthAdapter = $this->createMock(OAuthAdapterInterface::class);
     $oauthAdapter->expects($this->never())->method('getAuthorizationUrl');
 
-    $handler = new SsoAuthorizeHandler($repository, $oauthAdapter);
+    $handler = new SsoAuthorizeHandler($repository, $oauthAdapter, $this->createStub(LoggerInterface::class));
 
     $command = new SsoAuthorizeCommand('google', 'http://localhost:3000/callback');
 
@@ -76,7 +77,7 @@ final class SsoAuthorizeHandlerTest extends TestCase {
     $oauthAdapter = $this->createMock(OAuthAdapterInterface::class);
     $oauthAdapter->expects($this->never())->method('getAuthorizationUrl');
 
-    $handler = new SsoAuthorizeHandler($repository, $oauthAdapter);
+    $handler = new SsoAuthorizeHandler($repository, $oauthAdapter, $this->createStub(LoggerInterface::class));
 
     $command = new SsoAuthorizeCommand('google', 'http://localhost:3000/callback');
 
