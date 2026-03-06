@@ -68,10 +68,6 @@
       toast.error(errors.credentials);
     }
   }
-
-  if (data.error?.sso) {
-    toast.error(decodeURIComponent(data.error.sso));
-  }
 </script>
 
 <svelte:head>

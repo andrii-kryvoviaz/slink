@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { DemoNotice, ThemeSwitch } from '@slink/feature/Layout';
+  import { DemoNotice, FlashToast, ThemeSwitch } from '@slink/feature/Layout';
   import { AppFooter } from '@slink/feature/Layout/Footer';
   import { Navbar } from '@slink/feature/Navigation';
   import AppSidebar from '@slink/feature/Navigation/Sidebar/AppSidebar.svelte';
@@ -111,4 +111,5 @@
   </Sidebar.Provider>
 
   <Toaster />
+  <FlashToast />
 </div>

@@ -54,7 +54,12 @@
   );
 </script>
 
-<a href="/profile/sso/login/{provider.slug}" class={outerClasses} {onclick}>
+<a
+  href="/profile/sso/login/{provider.slug}"
+  class={outerClasses}
+  data-sveltekit-reload
+  {onclick}
+>
   <div class={innerClasses}>
     <span class="absolute left-4 flex items-center">
       {#if icon}

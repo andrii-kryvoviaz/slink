@@ -1,5 +1,7 @@
 import { isRedirect, redirect } from '@sveltejs/kit';
 
+import { extractShortErrorMessage } from '@slink/lib/utils/error/extractErrorMessage';
+
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params, url, locals }) => {
@@ -15,9 +17,9 @@ export const load: PageServerLoad = async ({ params, url, locals }) => {
     redirect(302, authorizationUrl);
   } catch (e) {
     if (isRedirect(e)) throw e;
-    redirect(
-      302,
-      '/profile/login?sso_error=SSO+provider+is+currently+unavailable.+Please+try+again+later.',
-    );
+    const err =
+      e instanceof Error ? e : new Error('An unexpected error occurred');
+    locals.flash.error(extractShortErrorMessage(err));
+    redirect(302, '/profile/login');
   }
 };

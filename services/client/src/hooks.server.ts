@@ -7,6 +7,7 @@ import { ApiProxy } from '@slink/api/ApiProxy';
 import { createApiClient } from '@slink/api/Client';
 
 import { CookieManager } from '@slink/lib/auth/CookieManager';
+import { createFlash } from '@slink/lib/flash/flash';
 import { Theme, setCookieSettingsOnLocals } from '@slink/lib/settings/server';
 
 const handleWellKnownRequests: Handle = async ({ event, resolve }) => {
@@ -52,6 +53,11 @@ const initializeCookieManager: Handle = async ({ event, resolve }) => {
   return resolve(event);
 };
 
+const initializeFlash: Handle = async ({ event, resolve }) => {
+  event.locals.flash = createFlash(event.locals.cookieManager, event.cookies);
+  return resolve(event);
+};
+
 const initializeApiClient: Handle = async ({ event, resolve }) => {
   event.locals.api = createApiClient(event.fetch);
   return resolve(event);
@@ -87,6 +93,7 @@ export const handle = sequence(
   handleWellKnownRequests,
   filterResponseHeaders,
   initializeCookieManager,
+  initializeFlash,
   initializeApiClient,
   injectApiHandling,
   setGlobalSettingsOnLocals,

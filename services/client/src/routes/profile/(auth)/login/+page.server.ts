@@ -9,7 +9,7 @@ import { formData } from '@slink/utils/form/formData';
 
 import type { Actions, PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ parent, locals, url }) => {
+export const load: PageServerLoad = async ({ parent, locals }) => {
   await parent();
 
   if (locals.user) {
@@ -17,14 +17,9 @@ export const load: PageServerLoad = async ({ parent, locals, url }) => {
   }
 
   const ssoProviders: SsoProvider[] = await locals.api.sso.getProviders();
-  const sso = url.searchParams.get('sso_error');
 
-  if (sso) {
-    console.error(`[SSO] Login error: ${sso}`);
-  }
-
-  const { cookieManager, ...serializableLocals } = locals;
-  return { ...serializableLocals, ssoProviders, error: { sso } };
+  const { cookieManager, flash, ...serializableLocals } = locals;
+  return { ...serializableLocals, ssoProviders };
 };
 
 export const actions: Actions = {

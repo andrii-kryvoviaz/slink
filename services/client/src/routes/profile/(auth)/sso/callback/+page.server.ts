@@ -1,6 +1,7 @@
 import { isRedirect, redirect } from '@sveltejs/kit';
 
 import { Auth } from '@slink/lib/auth/Auth';
+import { extractShortErrorMessage } from '@slink/lib/utils/error/extractErrorMessage';
 
 import type { PageServerLoad } from './$types';
 
@@ -12,11 +13,13 @@ export const load: PageServerLoad = async ({ url, locals, cookies, fetch }) => {
 
   if (error) {
     const message = errorDescription || error;
-    redirect(302, `/profile/login?sso_error=${encodeURIComponent(message)}`);
+    locals.flash.error(message);
+    redirect(302, '/profile/login');
   }
 
   if (!code || !state) {
-    redirect(302, '/profile/login?sso_error=Missing+authorization+parameters');
+    locals.flash.error('Missing authorization parameters');
+    redirect(302, '/profile/login');
   }
 
   try {
@@ -38,10 +41,10 @@ export const load: PageServerLoad = async ({ url, locals, cookies, fetch }) => {
     );
   } catch (e) {
     if (isRedirect(e)) throw e;
-    redirect(
-      302,
-      '/profile/login?sso_error=Authentication+failed.+Please+try+again.',
-    );
+    const err =
+      e instanceof Error ? e : new Error('An unexpected error occurred');
+    locals.flash.error(extractShortErrorMessage(err));
+    redirect(302, '/profile/login');
   }
 
   redirect(302, '/');
