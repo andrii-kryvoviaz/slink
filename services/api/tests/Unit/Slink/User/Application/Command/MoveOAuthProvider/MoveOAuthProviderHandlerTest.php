@@ -10,6 +10,7 @@ use Slink\Shared\Domain\Enum\SortDirection;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Application\Command\MoveOAuthProvider\MoveOAuthProviderCommand;
 use Slink\User\Application\Command\MoveOAuthProvider\MoveOAuthProviderHandler;
+use Slink\User\Domain\Exception\OAuthProviderNotFoundException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Slink\User\Domain\OAuthProvider;
 use Slink\User\Domain\Repository\OAuthProviderRepositoryInterface;
@@ -108,7 +109,7 @@ final class MoveOAuthProviderHandlerTest extends TestCase {
   }
 
   #[Test]
-  public function itReturnsEarlyWhenNoTargetFound(): void {
+  public function itThrowsWhenNoTargetFound(): void {
     $targetId = ID::generate();
 
     $repository = $this->createMock(OAuthProviderRepositoryInterface::class);
@@ -125,6 +126,8 @@ final class MoveOAuthProviderHandlerTest extends TestCase {
     $handler = new MoveOAuthProviderHandler($providerStore, $repository);
 
     $command = new MoveOAuthProviderCommand($targetId->toString(), 'up');
+
+    $this->expectException(OAuthProviderNotFoundException::class);
 
     $handler($command);
   }
