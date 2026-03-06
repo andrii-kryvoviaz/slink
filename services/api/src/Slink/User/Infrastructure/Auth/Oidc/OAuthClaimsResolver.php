@@ -10,7 +10,9 @@ use League\OAuth2\Client\Provider\GenericProvider;
 use League\OAuth2\Client\Token\AccessToken;
 use Slink\User\Domain\Enum\OAuthProvider;
 use Slink\User\Domain\Exception\IdTokenClaimValidationException;
+use Psr\Log\LoggerInterface;
 use Slink\User\Domain\Exception\InvalidJwsSignatureException;
+use Slink\User\Domain\Exception\MissingIdTokenException;
 use Slink\User\Domain\ValueObject\OAuth\IdToken;
 use Slink\User\Domain\ValueObject\OAuth\JwtHeader;
 use Slink\User\Domain\ValueObject\OAuth\OAuthIdentity;
@@ -24,15 +26,18 @@ final readonly class OAuthClaimsResolver {
     private JWSVerifier $jwsVerifier,
     private ClaimCheckerManager $claimCheckerManager,
     private OidcDiscoveryInterface $oidcDiscovery,
+    private LoggerInterface $logger,
   ) {}
 
   public function resolve(GenericProvider $client, AccessToken $accessToken, OAuthProviderView $provider): OAuthIdentity {
     $idToken = IdToken::fromPayload($accessToken->getValues());
 
     if ($idToken === null) {
-      $tokenClaims = TokenClaims::fromPayload($client->getResourceOwner($accessToken)->toArray());
+      $this->logger->warning('OIDC provider did not return an id_token, denying authentication', [
+        'provider' => $provider->getSlug(),
+      ]);
 
-      return OAuthIdentity::fromTokenClaims($tokenClaims, OAuthProvider::from($provider->getSlug()));
+      throw new MissingIdTokenException($provider->getSlug());
     }
 
     $discovery = $this->oidcDiscovery->discover($provider->getDiscoveryUrl());
