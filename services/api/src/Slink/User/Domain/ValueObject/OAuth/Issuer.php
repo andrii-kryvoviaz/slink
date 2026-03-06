@@ -7,7 +7,11 @@ namespace Slink\User\Domain\ValueObject\OAuth;
 use Slink\Shared\Domain\ValueObject\AbstractUriValueObject;
 
 final readonly class Issuer extends AbstractUriValueObject {
-  public static function fromString(?string $value): ?self {
+  public static function fromString(string $value): self {
+    return new self($value);
+  }
+
+  public static function fromStringOrNull(?string $value): ?self {
     if ($value === null) {
       return null;
     }

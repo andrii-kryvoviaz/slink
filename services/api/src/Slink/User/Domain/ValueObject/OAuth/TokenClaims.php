@@ -29,7 +29,7 @@ final readonly class TokenClaims extends AbstractCompoundValueObject {
   }
 
   public function getIssuer(): ?Issuer {
-    return Issuer::fromString($this->claims['iss'] ?? null);
+    return Issuer::fromStringOrNull($this->claims['iss'] ?? null);
   }
 
   public function getSubject(): ?SubjectId {

@@ -7,6 +7,7 @@ namespace Slink\User\Application\Command\MoveOAuthProvider;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\Enum\SortDirection;
 use Slink\Shared\Domain\ValueObject\ID;
+use Slink\User\Domain\Exception\OAuthProviderNotFoundException;
 use Slink\User\Domain\Repository\OAuthProviderRepositoryInterface;
 use Slink\User\Domain\Repository\OAuthProviderStoreRepositoryInterface;
 
@@ -22,7 +23,7 @@ final readonly class MoveOAuthProviderHandler implements CommandHandlerInterface
     $target = $this->repository->findById(ID::fromString($command->getId()));
 
     if ($target === null) {
-      return;
+      throw new OAuthProviderNotFoundException($command->getId());
     }
 
     $neighbor = $this->repository->findNeighbor($target->getSortOrder(), $direction);

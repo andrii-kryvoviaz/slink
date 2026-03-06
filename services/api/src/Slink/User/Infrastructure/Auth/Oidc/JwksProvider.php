@@ -7,6 +7,7 @@ namespace Slink\User\Infrastructure\Auth\Oidc;
 use Jose\Component\Core\JWKSet;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
+use Slink\User\Domain\Exception\JwksKeyNotFoundException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final readonly class JwksProvider {
@@ -23,7 +24,7 @@ final readonly class JwksProvider {
     }
 
     if (!$jwkSet->has($kid)) {
-      throw new \RuntimeException(sprintf('Key with kid "%s" not found in JWKS', $kid));
+      throw new JwksKeyNotFoundException($kid);
     }
 
     return $jwkSet;

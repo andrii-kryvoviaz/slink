@@ -58,9 +58,6 @@ final readonly class DiscoveryDocument extends AbstractCompoundValueObject {
   }
 
   public function getIssuer(): Issuer {
-    $issuer = Issuer::fromString($this->issuer);
-    assert($issuer !== null);
-
-    return $issuer;
+    return Issuer::fromString($this->issuer);
   }
 }
