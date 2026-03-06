@@ -17,7 +17,7 @@ export const dropdownSimpleContentTheme = cva(
 );
 
 export const dropdownSimpleItemTheme = cva(
-  'flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent',
+  'flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-all duration-150',
   {
     variants: {
       variant: {
@@ -26,6 +26,10 @@ export const dropdownSimpleItemTheme = cva(
       },
       danger: {
         true: '',
+        false: '',
+      },
+      disabled: {
+        true: 'opacity-50 cursor-not-allowed pointer-events-none',
         false: '',
       },
       state: {
@@ -60,6 +64,7 @@ export const dropdownSimpleItemTheme = cva(
     defaultVariants: {
       variant: 'default',
       danger: false,
+      disabled: false,
       state: 'normal',
     },
   },

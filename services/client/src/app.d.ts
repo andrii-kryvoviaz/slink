@@ -6,6 +6,7 @@ import type { ApiClientType } from '@slink/api/Client';
 
 import type { CookieManager } from '@slink/lib/auth/CookieManager';
 import type { User } from '@slink/lib/auth/Type/User';
+import type { Flash, FlashMessage } from '@slink/lib/flash/flash';
 import type { GlobalSettings } from '@slink/lib/settings/Type/GlobalSettings';
 import type { UserSettings } from '@slink/lib/settings/UserSettings.svelte';
 
@@ -25,11 +26,13 @@ declare global {
       globalSettings: GlobalSettings | null;
       user: User | null;
       cookieManager: CookieManager;
+      flash: Flash;
     }
     interface PageData {
       settings: UserSettings;
       userAgent: string;
       sidebarGroups?: AppSidebarGroup[];
+      flash?: FlashMessage[];
     }
     // interface Platform {}
   }

@@ -31,11 +31,14 @@ export const load: LayoutServerLoad = async ({ locals, request }) => {
         (!group.roles || (user && isAuthorized(user, group.roles))),
     );
 
+  const flash = locals.flash.consume();
+
   return {
     settings,
     globalSettings,
     user,
     userAgent,
     sidebarGroups,
+    flash,
   };
 };

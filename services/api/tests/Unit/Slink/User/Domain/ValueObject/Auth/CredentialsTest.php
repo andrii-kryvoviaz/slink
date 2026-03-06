@@ -20,7 +20,7 @@ final class CredentialsTest extends TestCase {
     $username = Username::fromString('testuser');
     $password = HashedPassword::encode('password123');
 
-    $credentials = Credentials::fromCredentials($email, $username, $password);
+    $credentials = Credentials::create($email, $username, $password);
 
     $this->assertInstanceOf(Credentials::class, $credentials);
     $this->assertSame($email, $credentials->email);
@@ -46,11 +46,11 @@ final class CredentialsTest extends TestCase {
   }
 
   #[Test]
-  public function itCreatesFromPlainCredentials(): void {
-    $credentials = Credentials::fromPlainCredentials(
-      'test@example.com',
-      'testuser',
-      'password123'
+  public function itCreatesFromValueObjects(): void {
+    $credentials = Credentials::create(
+      Email::fromString('test@example.com'),
+      Username::fromString('testuser'),
+      HashedPassword::encode('password123'),
     );
 
     $this->assertInstanceOf(Credentials::class, $credentials);
@@ -61,16 +61,16 @@ final class CredentialsTest extends TestCase {
 
   #[Test]
   public function itCreatesWithDifferentCredentials(): void {
-    $credentials1 = Credentials::fromPlainCredentials(
-      'user1@example.com',
-      'user1',
-      'password1'
+    $credentials1 = Credentials::create(
+      Email::fromString('user1@example.com'),
+      Username::fromString('user1'),
+      HashedPassword::encode('password1'),
     );
 
-    $credentials2 = Credentials::fromPlainCredentials(
-      'user2@example.com',
-      'user2',
-      'password2'
+    $credentials2 = Credentials::create(
+      Email::fromString('user2@example.com'),
+      Username::fromString('user2'),
+      HashedPassword::encode('password2'),
     );
 
     $this->assertNotEquals($credentials1->email->toString(), $credentials2->email->toString());
@@ -81,10 +81,10 @@ final class CredentialsTest extends TestCase {
 
   #[Test]
   public function itHandlesComplexCredentials(): void {
-    $credentials = Credentials::fromPlainCredentials(
-      'complex.email+tag@sub.domain.com',
-      'complex_user-name.123',
-      'C0mpl3x.P@ssw0rd!'
+    $credentials = Credentials::create(
+      Email::fromString('complex.email+tag@sub.domain.com'),
+      Username::fromString('complex_user-name.123'),
+      HashedPassword::encode('C0mpl3x.P@ssw0rd!'),
     );
 
     $this->assertInstanceOf(Credentials::class, $credentials);

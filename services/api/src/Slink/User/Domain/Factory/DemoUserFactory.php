@@ -6,17 +6,19 @@ namespace Slink\User\Domain\Factory;
 
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\User\Domain\Context\UserCreationContext;
 use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\User;
 use Slink\User\Domain\ValueObject\Auth\Credentials;
+use Slink\User\Domain\ValueObject\Auth\HashedPassword;
 use Slink\User\Domain\ValueObject\DisplayName;
+use Slink\User\Domain\ValueObject\Email;
+use Slink\User\Domain\ValueObject\Username;
 
 final readonly class DemoUserFactory {
 
   public function __construct(
     private ConfigurationProviderInterface $configurationProvider,
-    private UserCreationContext            $userCreationContext,
+    private UserFactory $userFactory,
   ) {
   }
 
@@ -31,18 +33,17 @@ final readonly class DemoUserFactory {
     $finalDisplayName = $displayName ?? $this->configurationProvider->get('demo.demoDisplayName');
     $finalEmail = $email ?? $this->configurationProvider->get('demo.demoEmail');
 
-    $credentials = Credentials::fromPlainCredentials(
-      $finalEmail,
-      $finalUsername,
-      $finalPassword
+    $credentials = Credentials::create(
+      Email::fromString($finalEmail),
+      Username::fromString($finalUsername),
+      HashedPassword::encode($finalPassword),
     );
 
-    return User::create(
+    return $this->userFactory->create(
       ID::generate(),
       $credentials,
       DisplayName::fromString($finalDisplayName),
       UserStatus::Active,
-      $this->userCreationContext
     );
   }
 

@@ -18,7 +18,10 @@ use Slink\User\Domain\Specification\UniqueEmailSpecificationInterface;
 use Slink\User\Domain\Specification\UniqueUsernameSpecificationInterface;
 use Slink\User\Domain\User;
 use Slink\User\Domain\ValueObject\Auth\Credentials;
+use Slink\User\Domain\ValueObject\Auth\HashedPassword;
 use Slink\User\Domain\ValueObject\DisplayName;
+use Slink\User\Domain\ValueObject\Email;
+use Slink\User\Domain\ValueObject\Username;
 
 final class CreateApiKeyHandlerTest extends TestCase {
   private UserStoreRepositoryInterface&MockObject $userRepository;
@@ -80,7 +83,7 @@ final class CreateApiKeyHandlerTest extends TestCase {
 
   private function createUser(): User {
     $id = ID::generate();
-    $credentials = Credentials::fromPlainCredentials('test@example.com', 'testuser', 'password123');
+    $credentials = Credentials::create(Email::fromString('test@example.com'), Username::fromString('testuser'), HashedPassword::encode('password123'));
     $displayName = DisplayName::fromString('Test User');
     $status = UserStatus::Active;
     $context = $this->createUserCreationContext();

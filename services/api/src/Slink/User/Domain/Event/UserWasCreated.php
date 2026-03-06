@@ -55,7 +55,7 @@ final readonly class UserWasCreated implements SerializablePayload {
   public static function fromPayload(array $payload): static {
     return new self(
       ID::fromString($payload['uuid']),
-      Credentials::fromCredentials(
+      Credentials::create(
         Email::fromString($payload['email']),
         Username::fromString($payload['username']),
         HashedPassword::fromHash($payload['password']),

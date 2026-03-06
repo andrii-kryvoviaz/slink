@@ -14,11 +14,19 @@ final class EncryptionRegistry {
   }
   
   public static function encrypt(#[SensitiveParameter] string $plaintext): string {
-    return self::$service?->encrypt($plaintext) ?? $plaintext;
+    if (self::$service === null) {
+      throw new \RuntimeException('EncryptionService not initialized');
+    }
+
+    return self::$service->encrypt($plaintext);
   }
   
   public static function decrypt(#[SensitiveParameter] string $value): string {
-    return self::$service?->decrypt($value) ?? $value;
+    if (self::$service === null) {
+      throw new \RuntimeException('EncryptionService not initialized');
+    }
+
+    return self::$service->decrypt($value);
   }
   
   public static function isAvailable(): bool {

@@ -11,8 +11,13 @@ use Slink\Settings\Domain\Exception\S3CredentialsNotConfiguredException;
 use Slink\Settings\Domain\Exception\S3RegionNotConfiguredException;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Settings\Domain\ValueObject\Storage\AmazonS3StorageSettings;
+use Slink\Shared\Infrastructure\Encryption\EncryptionRegistry;
+use Slink\Shared\Infrastructure\Encryption\EncryptionService;
 
 final class AmazonS3StorageSettingsTest extends TestCase {
+  protected function setUp(): void {
+    EncryptionRegistry::setService(new EncryptionService('test-secret-key'));
+  }
   #[Test]
   public function itSerializesCustomProviderSettings(): void {
     $payload = [
@@ -26,8 +31,15 @@ final class AmazonS3StorageSettingsTest extends TestCase {
     ];
 
     $settings = AmazonS3StorageSettings::fromPayload($payload);
+    $serialized = $settings->toPayload();
 
-    $this->assertSame($payload, $settings->toPayload());
+    $this->assertSame('us-east-1', $serialized['region']);
+    $this->assertSame('test-bucket', $serialized['bucket']);
+    $this->assertSame('http://minio:9000', $serialized['endpoint']);
+    $this->assertTrue($serialized['useCustomProvider']);
+    $this->assertTrue($serialized['forcePathStyle']);
+    $this->assertSame('access-key', $settings->getKey());
+    $this->assertSame('secret-key', $settings->getSecret());
     $this->assertTrue($settings->usesCustomProvider());
     $this->assertTrue($settings->isForcePathStyle());
   }

@@ -16,6 +16,7 @@
         "eventsauce/message-repository-for-doctrine": "^1.1",
         "icewind/smb": "^3.6",
         "jcupitt/vips": "^2.6",
+        "league/oauth2-client": "^2.9",
         "lexik/jwt-authentication-bundle": "^3.2.0",
         "nelmio/cors-bundle": "^2.5",
         "predis/predis": "^2.3",
@@ -27,6 +28,7 @@
         "symfony/dotenv": "^8.0",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "^8.0",
+        "symfony/lock": "8.0.*",
         "symfony/mercure-bundle": "^0.4.2",
         "symfony/messenger": "^8.0",
         "symfony/mime": "^8.0",
@@ -37,7 +39,8 @@
         "symfony/serializer": "^8.0",
         "symfony/twig-bundle": "^8.0",
         "symfony/validator": "^8.0",
-        "symfony/yaml": "^8.0"
+        "symfony/yaml": "^8.0",
+        "web-token/jwt-framework": "^4.1"
     },
     "require-dev": {
         "dg/bypass-finals": "dev-master",

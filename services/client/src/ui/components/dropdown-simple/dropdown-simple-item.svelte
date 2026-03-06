@@ -47,6 +47,7 @@
     class={dropdownSimpleItemTheme({
       variant,
       danger,
+      disabled,
       state: loading ? 'loading' : 'normal',
     })}
   >

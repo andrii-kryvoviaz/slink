@@ -38,6 +38,14 @@ final readonly class DisplayName extends AbstractValueObject implements Sanitiza
     return self::fromString($displayName);
   }
   
+  public static function fromStringOrNull(?string $displayName): ?self {
+    if ($displayName === null || $displayName === '') {
+      return null;
+    }
+
+    return self::fromString($displayName);
+  }
+
   /**
    * @param string $displayName
    * @return self

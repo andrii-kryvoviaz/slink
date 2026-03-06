@@ -210,4 +210,11 @@ export const themeIcons: string[] = [
   'ph:images',
   'ph:check-circle-fill',
   'ph:x-circle-fill',
+  'logos:google-icon',
+  'simple-icons:authentik',
+  'simple-icons:keycloak',
+  'simple-icons:authelia',
+  'solar:key-linear',
+  'ph:arrow-up',
+  'ph:arrow-down',
 ];

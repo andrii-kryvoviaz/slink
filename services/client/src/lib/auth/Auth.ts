@@ -61,30 +61,38 @@ export class Auth {
     await Session.set(sessionId, { accessToken });
   }
 
-  public static async login(
-    { username, password }: Credentials,
+  public static async loginWithTokens(
+    { accessToken, refreshToken }: TokenPair,
     { cookies, cookieManager, fetch }: AuthDependencies,
   ) {
     const api = createApiClient(fetch);
 
-    const response = await api.auth.login(username, password);
-    const { access_token, refresh_token } = response;
-
     await Session.destroy(cookies, cookieManager);
 
     const user = await this._createSession(
-      {
-        accessToken: access_token,
-        refreshToken: refresh_token,
-        cookies,
-        cookieManager,
-      },
+      { accessToken, refreshToken, cookies, cookieManager },
       api,
     );
 
     cookieManager.deleteCookie(cookies, 'createdUserId');
 
     return user;
+  }
+
+  public static async login(
+    { username, password }: Credentials,
+    { cookies, cookieManager, fetch }: AuthDependencies,
+  ) {
+    const api = createApiClient(fetch);
+    const { access_token, refresh_token } = await api.auth.login(
+      username,
+      password,
+    );
+
+    return this.loginWithTokens(
+      { accessToken: access_token, refreshToken: refresh_token },
+      { cookies, cookieManager, fetch },
+    );
   }
 
   public static async refresh({

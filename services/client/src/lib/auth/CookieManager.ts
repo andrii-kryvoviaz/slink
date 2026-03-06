@@ -18,7 +18,7 @@ export class CookieManager {
     options: CookieOptions = {},
   ): void {
     const cookieOptions: Parameters<Cookies['set']>[2] = {
-      sameSite: options.sameSite ?? 'strict',
+      sameSite: options.sameSite ?? 'lax',
       path: options.path ?? '/',
       secure: this.requireSsl ? true : options.secure,
       httpOnly: options.httpOnly,
@@ -31,10 +31,10 @@ export class CookieManager {
   public deleteCookie(
     cookies: Cookies,
     name: string,
-    options: Pick<CookieOptions, 'path'> = {},
+    options: Pick<CookieOptions, 'path' | 'sameSite'> = {},
   ): void {
     const cookieOptions: Parameters<Cookies['delete']>[1] = {
-      sameSite: 'strict',
+      sameSite: options.sameSite ?? 'lax',
       path: options.path ?? '/',
       secure: this.requireSsl,
     };

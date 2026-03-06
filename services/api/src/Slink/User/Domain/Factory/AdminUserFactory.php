@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Slink\User\Domain\Factory;
 
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\User\Domain\Context\UserCreationContext;
 use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
 use Slink\User\Domain\User;
@@ -18,7 +17,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 final readonly class AdminUserFactory {
   public function __construct(
-    private UserCreationContext $userCreationContext,
+    private UserFactory $userFactory,
     private UserStoreRepositoryInterface $userRepository,
 
     #[\SensitiveParameter]
@@ -38,18 +37,17 @@ final readonly class AdminUserFactory {
   public function createAdminUser(): User {
     $displayName = ucfirst($this->adminUsername);
 
-    $credentials = Credentials::fromCredentials(
+    $credentials = Credentials::create(
       Email::fromString($this->adminEmail),
       Username::fromString($this->adminUsername),
       HashedPassword::encode($this->adminPassword)
     );
 
-    return User::create(
+    return $this->userFactory->create(
       ID::generate(),
       $credentials,
       DisplayName::fromString($displayName),
       UserStatus::Active,
-      $this->userCreationContext
     );
   }
 

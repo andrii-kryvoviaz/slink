@@ -7,8 +7,14 @@ namespace Slink\User\Application\Command\CreateUser;
 use SensitiveParameter;
 use Slink\Shared\Application\Command\CommandInterface;
 use Slink\Shared\Domain\ValueObject\ID;
+use Slink\User\Domain\Enum\UserStatus;
+use Slink\User\Domain\ValueObject\Auth\Credentials;
+use Slink\User\Domain\ValueObject\Auth\HashedPassword;
+use Slink\User\Domain\ValueObject\DisplayName;
+use Slink\User\Domain\ValueObject\Email;
+use Slink\User\Domain\ValueObject\Username;
 use Slink\User\Infrastructure\Validator\PasswordComplexity;
-use Slink\User\Infrastructure\Validator\Username;
+use Slink\User\Infrastructure\Validator\Username as UsernameConstraint;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final readonly class CreateUserCommand implements CommandInterface {
@@ -24,7 +30,7 @@ final readonly class CreateUserCommand implements CommandInterface {
     private string $password,
 
     #[Assert\NotBlank]
-    #[Username]
+    #[UsernameConstraint]
     #[Assert\NotEqualTo(propertyPath: 'email', message: 'Username cannot be the same as email.')]
     private string $username,
 
@@ -32,7 +38,7 @@ final readonly class CreateUserCommand implements CommandInterface {
     #[Assert\Length(min: 1, max: 100)]
     private string $displayName,
 
-    private bool   $activate = false
+    private ?UserStatus $status = null
   ) {
     $this->id = ID::generate();
   }
@@ -41,23 +47,19 @@ final readonly class CreateUserCommand implements CommandInterface {
     return $this->id;
   }
 
-  public function getEmail(): string {
-    return $this->email;
+  public function getCredentials(): Credentials {
+    return Credentials::create(
+      Email::fromString($this->email),
+      Username::fromString($this->username),
+      HashedPassword::encode($this->password),
+    );
   }
 
-  public function getPassword(): string {
-    return $this->password;
+  public function getDisplayName(): DisplayName {
+    return DisplayName::fromString($this->displayName);
   }
 
-  public function getUsername(): string {
-    return $this->username;
-  }
-
-  public function getDisplayName(): string {
-    return $this->displayName;
-  }
-
-  public function isActivate(): bool {
-    return $this->activate;
+  public function getStatus(): ?UserStatus {
+    return $this->status;
   }
 }

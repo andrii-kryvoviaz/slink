@@ -1,9 +1,11 @@
 import { fail, redirect } from '@sveltejs/kit';
 
 import { HttpException } from '@slink/api/Exceptions';
+import type { SsoProvider } from '@slink/api/Resources/SsoResource';
 
 import { Auth } from '@slink/lib/auth/Auth';
 
+import { graceful } from '@slink/utils/async/graceful';
 import { formData } from '@slink/utils/form/formData';
 
 import type { Actions, PageServerLoad } from './$types';
@@ -15,8 +17,13 @@ export const load: PageServerLoad = async ({ parent, locals }) => {
     redirect(302, '/profile');
   }
 
-  const { cookieManager, ...serializableLocals } = locals;
-  return serializableLocals;
+  const ssoProviders = await graceful(
+    () => locals.api.sso.getProviders(),
+    [] as SsoProvider[],
+  );
+
+  const { cookieManager, flash, ...serializableLocals } = locals;
+  return { ...serializableLocals, ssoProviders };
 };
 
 export const actions: Actions = {

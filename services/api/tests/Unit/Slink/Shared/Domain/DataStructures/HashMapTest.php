@@ -56,15 +56,15 @@ final class HashMapTest extends TestCase {
   }
 
   #[Test]
-  public function itHandlesIntegerKeys(): void {
-    $hashMap = new HashMap([0 => 'zero', 1 => 'one']);
+  public function itHandlesInitialValues(): void {
+    $hashMap = new HashMap(['a' => 'zero', 'b' => 'one']);
 
-    $hashMap->set('2', 'two');
+    $hashMap->set('c', 'two');
 
-    $this->assertTrue($hashMap->has('0'));
-    $this->assertTrue($hashMap->has('2'));
-    $this->assertEquals('zero', $hashMap->get('0'));
-    $this->assertEquals('two', $hashMap->get('2'));
+    $this->assertTrue($hashMap->has('a'));
+    $this->assertTrue($hashMap->has('c'));
+    $this->assertEquals('zero', $hashMap->get('a'));
+    $this->assertEquals('two', $hashMap->get('c'));
   }
 
   #[Test]

@@ -9,8 +9,10 @@ use PHPUnit\Framework\TestCase;
 use Slink\User\Application\Command\CreateAdminUser\CreateAdminUserCommand;
 use Slink\User\Application\Command\CreateAdminUser\CreateAdminUserHandler;
 use Slink\User\Domain\Context\SystemChangeUserRoleContext;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\User\Domain\Context\UserCreationContext;
 use Slink\User\Domain\Factory\AdminUserFactory;
+use Slink\User\Domain\Factory\UserFactory;
 use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
 use Slink\User\Domain\Specification\UniqueDisplayNameSpecificationInterface;
 use Slink\User\Domain\Specification\UniqueEmailSpecificationInterface;
@@ -102,8 +104,13 @@ final class CreateAdminUserHandlerTest extends TestCase {
     $uniqueDisplayNameSpec = $this->createStub(UniqueDisplayNameSpecificationInterface::class);
     $uniqueDisplayNameSpec->method('isUnique')->willReturn(true);
 
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
+    $configProvider->method('get')->willReturn(false);
+
     $userCreationContext = new UserCreationContext($uniqueEmailSpec, $uniqueUsernameSpec, $uniqueDisplayNameSpec);
-    $adminUserFactory = new AdminUserFactory($userCreationContext, $userRepository, $username, $email, $password);
+    $userFactory = new UserFactory($configProvider, $userCreationContext);
+
+    $adminUserFactory = new AdminUserFactory($userFactory, $userRepository, $username, $email, $password);
 
     $roleExistSpec = $this->createStub(UserRoleExistSpecificationInterface::class);
     $roleExistSpec->method('isSatisfiedBy')->willReturn(true);

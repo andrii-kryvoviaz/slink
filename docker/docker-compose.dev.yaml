@@ -17,6 +17,9 @@ services:
       - "6379:6379"
     extra_hosts:
       - "host.docker.internal:host-gateway"
+      - "authentik.loc:host-gateway"
+      - "authelia.loc:host-gateway"
+      - "keycloak.loc:host-gateway"
 
 volumes:
   node_modules:

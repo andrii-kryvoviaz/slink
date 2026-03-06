@@ -33,15 +33,15 @@
         'primary-dark':
           'bg-blue-500 border-transparent hover:bg-blue-600 transition-all duration-200',
         'soft-violet':
-          'text-violet-600 dark:text-violet-300 bg-violet-500/10 dark:bg-violet-500/15 hover:bg-violet-500/20 dark:hover:bg-violet-500/25 border-0 transition-all duration-200',
+          'text-violet-600 dark:text-violet-300 bg-violet-500/10 dark:bg-violet-500/15 hover:bg-violet-500/20 dark:hover:bg-violet-500/25 border border-violet-500/20 dark:border-violet-400/20 hover:border-violet-500/30 dark:hover:border-violet-400/30 transition-all duration-200',
         'soft-indigo':
-          'text-indigo-600 dark:text-indigo-300 bg-indigo-500/10 dark:bg-indigo-500/15 hover:bg-indigo-500/20 dark:hover:bg-indigo-500/25 border-0 transition-all duration-200',
+          'text-indigo-600 dark:text-indigo-300 bg-indigo-500/10 dark:bg-indigo-500/15 hover:bg-indigo-500/20 dark:hover:bg-indigo-500/25 border border-indigo-500/20 dark:border-indigo-400/20 hover:border-indigo-500/30 dark:hover:border-indigo-400/30 transition-all duration-200',
         'soft-blue':
-          'text-blue-600 dark:text-blue-300 bg-blue-500/10 dark:bg-blue-500/15 hover:bg-blue-500/20 dark:hover:bg-blue-500/25 border-0 transition-all duration-200',
+          'text-blue-600 dark:text-blue-300 bg-blue-500/10 dark:bg-blue-500/15 hover:bg-blue-500/20 dark:hover:bg-blue-500/25 border border-blue-500/20 dark:border-blue-400/20 hover:border-blue-500/30 dark:hover:border-blue-400/30 transition-all duration-200',
         'soft-green':
-          'text-green-600 dark:text-green-300 bg-green-500/10 dark:bg-green-500/15 hover:bg-green-500/20 dark:hover:bg-green-500/25 border-0 transition-all duration-200',
+          'text-green-600 dark:text-green-300 bg-green-500/10 dark:bg-green-500/15 hover:bg-green-500/20 dark:hover:bg-green-500/25 border border-green-500/20 dark:border-green-400/20 hover:border-green-500/30 dark:hover:border-green-400/30 transition-all duration-200',
         'soft-red':
-          'text-red-600 dark:text-red-300 bg-red-500/10 dark:bg-red-500/15 hover:bg-red-500/20 dark:hover:bg-red-500/25 border-0 transition-all duration-200',
+          'text-red-600 dark:text-red-300 bg-red-500/10 dark:bg-red-500/15 hover:bg-red-500/20 dark:hover:bg-red-500/25 border border-red-500/20 dark:border-red-400/20 hover:border-red-500/30 dark:hover:border-red-400/30 transition-all duration-200',
         'outline-blue':
           'bg-transparent border border-blue-500 dark:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950 transition-all duration-200',
         'outline-green':
