@@ -9,8 +9,15 @@ use PHPUnit\Framework\TestCase;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Application\Command\UpdateOAuthProvider\UpdateOAuthProviderCommand;
 use Slink\User\Application\Command\UpdateOAuthProvider\UpdateOAuthProviderHandler;
+use Slink\User\Domain\Enum\OAuthProvider as OAuthProviderEnum;
 use Slink\User\Domain\OAuthProvider;
 use Slink\User\Domain\Repository\OAuthProviderStoreRepositoryInterface;
+use Slink\User\Domain\ValueObject\OAuth\ClientId;
+use Slink\User\Domain\ValueObject\OAuth\ClientSecret;
+use Slink\User\Domain\ValueObject\OAuth\DiscoveryUrl;
+use Slink\User\Domain\ValueObject\OAuth\OAuthScopes;
+use Slink\User\Domain\ValueObject\OAuth\OAuthType;
+use Slink\User\Domain\ValueObject\OAuth\ProviderName;
 
 final class UpdateOAuthProviderHandlerTest extends TestCase {
 
@@ -22,15 +29,15 @@ final class UpdateOAuthProviderHandlerTest extends TestCase {
     $provider->expects($this->once())
       ->method('update')
       ->with(
-        name: 'Updated Google',
-        slug: 'google',
-        type: 'oidc',
-        clientId: 'new-client-id',
-        clientSecret: 'new-client-secret',
-        discoveryUrl: 'https://accounts.google.com/.well-known/openid-configuration',
-        scopes: 'openid email',
-        enabled: true,
-        sortOrder: 2.0,
+        $this->equalTo(ProviderName::fromString('Updated Google')),
+        $this->equalTo(OAuthProviderEnum::Google),
+        $this->equalTo(OAuthType::fromString('oidc')),
+        $this->equalTo(ClientId::fromString('new-client-id')),
+        $this->equalTo(ClientSecret::fromString('new-client-secret')),
+        $this->equalTo(DiscoveryUrl::fromString('https://accounts.google.com/.well-known/openid-configuration')),
+        $this->equalTo(OAuthScopes::fromString('openid email')),
+        true,
+        2.0,
       );
 
     $providerStore = $this->createMock(OAuthProviderStoreRepositoryInterface::class);

@@ -8,7 +8,6 @@ use League\OAuth2\Client\Token\AccessToken;
 use Slink\User\Domain\Contracts\OAuthAdapterInterface;
 use Slink\User\Domain\Contracts\OAuthProviderProfile;
 use Slink\User\Domain\Contracts\OAuthStateManagerInterface;
-use Slink\User\Domain\Enum\OAuthProvider;
 use Slink\User\Domain\Exception\InvalidCredentialsException;
 use Slink\User\Domain\Repository\OAuthProviderRepositoryInterface;
 use Slink\User\Domain\ValueObject\OAuth\AuthorizationCode;
@@ -31,11 +30,11 @@ final readonly class OAuthAdapter implements OAuthAdapterInterface {
     $oauthClient = $this->clientFactory->create($provider, $redirectUri);
 
     $authorizationUrl = $oauthClient->getAuthorizationUrl([
-      'scope' => $provider->getScopes(),
+      'scope' => (string) $provider->getScopes(),
     ]);
 
     $context = OAuthContext::create(
-      OAuthProvider::from($provider->getSlug()),
+      $provider->getSlug(),
       $redirectUri,
       PkceVerifier::fromString($oauthClient->getPkceCode()),
     );

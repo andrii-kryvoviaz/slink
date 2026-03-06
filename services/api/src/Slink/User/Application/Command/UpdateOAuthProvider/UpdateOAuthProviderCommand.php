@@ -8,6 +8,13 @@ use SensitiveParameter;
 use Slink\Shared\Application\Command\CommandInterface;
 use Slink\Shared\Infrastructure\MessageBus\EnvelopedMessage;
 use Slink\User\Domain\Enum\OAuthProvider;
+use Slink\User\Domain\Enum\OAuthProvider as OAuthProviderEnum;
+use Slink\User\Domain\ValueObject\OAuth\ClientId;
+use Slink\User\Domain\ValueObject\OAuth\ClientSecret;
+use Slink\User\Domain\ValueObject\OAuth\DiscoveryUrl;
+use Slink\User\Domain\ValueObject\OAuth\OAuthScopes;
+use Slink\User\Domain\ValueObject\OAuth\OAuthType;
+use Slink\User\Domain\ValueObject\OAuth\ProviderName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final readonly class UpdateOAuthProviderCommand implements CommandInterface {
@@ -43,32 +50,32 @@ final readonly class UpdateOAuthProviderCommand implements CommandInterface {
     private ?float $sortOrder = null,
   ) {}
 
-  public function getName(): ?string {
-    return $this->name;
+  public function getName(): ?ProviderName {
+    return $this->name !== null ? ProviderName::fromString($this->name) : null;
   }
 
-  public function getSlug(): ?string {
-    return $this->slug;
+  public function getSlug(): ?OAuthProviderEnum {
+    return $this->slug !== null ? OAuthProviderEnum::from($this->slug) : null;
   }
 
-  public function getType(): ?string {
-    return $this->type;
+  public function getType(): ?OAuthType {
+    return $this->type !== null ? OAuthType::fromString($this->type) : null;
   }
 
-  public function getClientId(): ?string {
-    return $this->clientId;
+  public function getClientId(): ?ClientId {
+    return $this->clientId !== null ? ClientId::fromString($this->clientId) : null;
   }
 
-  public function getClientSecret(): ?string {
-    return $this->clientSecret;
+  public function getClientSecret(): ?ClientSecret {
+    return $this->clientSecret !== null ? ClientSecret::fromString($this->clientSecret) : null;
   }
 
-  public function getDiscoveryUrl(): ?string {
-    return $this->discoveryUrl;
+  public function getDiscoveryUrl(): ?DiscoveryUrl {
+    return $this->discoveryUrl !== null ? DiscoveryUrl::fromString($this->discoveryUrl) : null;
   }
 
-  public function getScopes(): ?string {
-    return $this->scopes;
+  public function getScopes(): ?OAuthScopes {
+    return $this->scopes !== null ? OAuthScopes::fromString($this->scopes) : null;
   }
 
   public function isEnabled(): ?bool {

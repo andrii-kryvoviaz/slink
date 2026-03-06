@@ -16,6 +16,7 @@ use Slink\User\Infrastructure\Auth\Oidc\JwksProvider;
 use Slink\User\Infrastructure\Auth\Oidc\JwsParser;
 use Slink\User\Infrastructure\Auth\Oidc\OAuthClaimsResolver;
 use Slink\User\Infrastructure\Auth\Oidc\OidcDiscoveryInterface;
+use Slink\User\Domain\Enum\OAuthProvider;
 use Slink\User\Infrastructure\ReadModel\View\OAuthProviderView;
 
 final class OAuthClaimsResolverTest extends TestCase {
@@ -35,7 +36,7 @@ final class OAuthClaimsResolverTest extends TestCase {
     $logger->expects($this->once())->method('warning');
 
     $provider = $this->createStub(OAuthProviderView::class);
-    $provider->method('getSlug')->willReturn('google');
+    $provider->method('getSlug')->willReturn(OAuthProvider::Google);
 
     $client = $this->createStub(GenericProvider::class);
 

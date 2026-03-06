@@ -15,6 +15,12 @@ use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasRemoved;
 use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasUpdated;
 use Slink\User\Domain\Repository\OAuthLinkRepositoryInterface;
 use Slink\User\Domain\Repository\OAuthProviderRepositoryInterface;
+use Slink\User\Domain\ValueObject\OAuth\ClientId;
+use Slink\User\Domain\ValueObject\OAuth\ClientSecret;
+use Slink\User\Domain\ValueObject\OAuth\DiscoveryUrl;
+use Slink\User\Domain\ValueObject\OAuth\OAuthScopes;
+use Slink\User\Domain\ValueObject\OAuth\OAuthType;
+use Slink\User\Domain\ValueObject\OAuth\ProviderName;
 use Slink\User\Infrastructure\ReadModel\Projection\OAuthProviderProjection;
 use Slink\User\Infrastructure\ReadModel\View\OAuthProviderView;
 
@@ -35,14 +41,14 @@ final class OAuthProviderProjectionTest extends TestCase {
     $projection = new OAuthProviderProjection($repository, $linkRepository);
 
     $event = new OAuthProviderWasCreated(
-      id: ID::generate()->toString(),
-      name: 'Google',
-      slug: 'google',
-      type: 'oidc',
-      clientId: 'client-id-123',
-      clientSecret: 'client-secret-456',
-      discoveryUrl: 'https://accounts.google.com/.well-known/openid-configuration',
-      scopes: 'openid email profile',
+      id: ID::generate(),
+      name: ProviderName::fromString('Google'),
+      slug: OAuthProvider::Google,
+      type: OAuthType::fromString('oidc'),
+      clientId: ClientId::fromString('client-id-123'),
+      clientSecret: ClientSecret::fromString('client-secret-456'),
+      discoveryUrl: DiscoveryUrl::fromString('https://accounts.google.com/.well-known/openid-configuration'),
+      scopes: OAuthScopes::fromString('openid email profile'),
       enabled: true,
       sortOrder: 1.0,
     );
@@ -72,8 +78,8 @@ final class OAuthProviderProjectionTest extends TestCase {
     $projection = new OAuthProviderProjection($repository, $linkRepository);
 
     $event = new OAuthProviderWasUpdated(
-      id: $id->toString(),
-      name: 'Updated Google',
+      id: $id,
+      name: ProviderName::fromString('Updated Google'),
       enabled: false,
     );
 
@@ -96,8 +102,8 @@ final class OAuthProviderProjectionTest extends TestCase {
     $projection = new OAuthProviderProjection($repository, $linkRepository);
 
     $event = new OAuthProviderWasUpdated(
-      id: $id->toString(),
-      name: 'Updated Google',
+      id: $id,
+      name: ProviderName::fromString('Updated Google'),
     );
 
     $projection->handleOAuthProviderWasUpdated($event);
@@ -107,7 +113,7 @@ final class OAuthProviderProjectionTest extends TestCase {
   public function itDeletesViewOnProviderRemoved(): void {
     $id = ID::generate();
     $providerView = $this->createStub(OAuthProviderView::class);
-    $providerView->method('getSlug')->willReturn('google');
+    $providerView->method('getSlug')->willReturn(OAuthProvider::Google);
 
     $repository = $this->createMock(OAuthProviderRepositoryInterface::class);
     $repository->expects($this->once())

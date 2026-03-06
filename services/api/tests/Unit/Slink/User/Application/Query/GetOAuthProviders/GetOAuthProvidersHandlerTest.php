@@ -9,6 +9,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Slink\User\Application\Query\GetOAuthProviders\GetOAuthProvidersHandler;
 use Slink\User\Application\Query\GetOAuthProviders\GetOAuthProvidersQuery;
+use Slink\User\Domain\Enum\OAuthProvider;
 use Slink\User\Domain\Filter\OAuthProviderFilter;
 use Slink\User\Domain\Repository\OAuthProviderRepositoryInterface;
 use Slink\User\Infrastructure\ReadModel\View\OAuthProviderView;
@@ -27,7 +28,9 @@ final class GetOAuthProvidersHandlerTest extends TestCase {
     $query = new GetOAuthProvidersQuery();
 
     $provider1 = $this->createStub(OAuthProviderView::class);
+    $provider1->method('getSlug')->willReturn(OAuthProvider::Google);
     $provider2 = $this->createStub(OAuthProviderView::class);
+    $provider2->method('getSlug')->willReturn(OAuthProvider::Authentik);
 
     $this->providerRepository
       ->expects($this->once())

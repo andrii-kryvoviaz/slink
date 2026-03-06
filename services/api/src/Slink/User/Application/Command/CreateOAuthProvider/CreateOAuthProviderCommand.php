@@ -8,6 +8,13 @@ use SensitiveParameter;
 use Slink\Shared\Application\Command\CommandInterface;
 use Slink\Shared\Infrastructure\MessageBus\EnvelopedMessage;
 use Slink\User\Domain\Enum\OAuthProvider;
+use Slink\User\Domain\Enum\OAuthProvider as OAuthProviderEnum;
+use Slink\User\Domain\ValueObject\OAuth\ClientId;
+use Slink\User\Domain\ValueObject\OAuth\ClientSecret;
+use Slink\User\Domain\ValueObject\OAuth\DiscoveryUrl;
+use Slink\User\Domain\ValueObject\OAuth\OAuthScopes;
+use Slink\User\Domain\ValueObject\OAuth\OAuthType;
+use Slink\User\Domain\ValueObject\OAuth\ProviderName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final readonly class CreateOAuthProviderCommand implements CommandInterface {
@@ -44,32 +51,32 @@ final readonly class CreateOAuthProviderCommand implements CommandInterface {
     private bool $enabled = false,
   ) {}
 
-  public function getName(): string {
-    return $this->name;
+  public function getName(): ProviderName {
+    return ProviderName::fromString($this->name);
   }
 
-  public function getSlug(): string {
-    return $this->slug;
+  public function getSlug(): OAuthProviderEnum {
+    return OAuthProviderEnum::from($this->slug);
   }
 
-  public function getClientId(): string {
-    return $this->clientId;
+  public function getType(): OAuthType {
+    return OAuthType::fromString($this->type);
   }
 
-  public function getClientSecret(): string {
-    return $this->clientSecret;
+  public function getClientId(): ClientId {
+    return ClientId::fromString($this->clientId);
   }
 
-  public function getDiscoveryUrl(): string {
-    return $this->discoveryUrl;
+  public function getClientSecret(): ClientSecret {
+    return ClientSecret::fromString($this->clientSecret);
   }
 
-  public function getType(): string {
-    return $this->type;
+  public function getDiscoveryUrl(): DiscoveryUrl {
+    return DiscoveryUrl::fromString($this->discoveryUrl);
   }
 
-  public function getScopes(): string {
-    return $this->scopes;
+  public function getScopes(): OAuthScopes {
+    return OAuthScopes::fromString($this->scopes);
   }
 
   public function isEnabled(): bool {

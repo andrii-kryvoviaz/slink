@@ -12,15 +12,22 @@ use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasCreated;
 use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasUpdated;
 use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasRemoved;
 use Slink\Shared\Infrastructure\Encryption\EncryptionRegistry;
+use Slink\User\Domain\Enum\OAuthProvider as OAuthProviderEnum;
+use Slink\User\Domain\ValueObject\OAuth\ClientId;
+use Slink\User\Domain\ValueObject\OAuth\ClientSecret;
+use Slink\User\Domain\ValueObject\OAuth\DiscoveryUrl;
+use Slink\User\Domain\ValueObject\OAuth\OAuthScopes;
+use Slink\User\Domain\ValueObject\OAuth\OAuthType;
+use Slink\User\Domain\ValueObject\OAuth\ProviderName;
 
 final class OAuthProvider extends AbstractAggregateRoot {
-  private string $name;
-  private string $slug;
-  private string $type;
-  private string $clientId;
-  private string $clientSecret;
-  private string $discoveryUrl;
-  private string $scopes;
+  private ProviderName $name;
+  private OAuthProviderEnum $slug;
+  private OAuthType $type;
+  private ClientId $clientId;
+  private ClientSecret $clientSecret;
+  private DiscoveryUrl $discoveryUrl;
+  private OAuthScopes $scopes;
   private bool $enabled;
   private float $sortOrder;
 
@@ -30,19 +37,19 @@ final class OAuthProvider extends AbstractAggregateRoot {
 
   public static function create(
     ID $id,
-    string $name,
-    string $slug,
-    string $type,
-    string $clientId,
-    string $clientSecret,
-    string $discoveryUrl,
-    string $scopes,
+    ProviderName $name,
+    OAuthProviderEnum $slug,
+    OAuthType $type,
+    ClientId $clientId,
+    ClientSecret $clientSecret,
+    DiscoveryUrl $discoveryUrl,
+    OAuthScopes $scopes,
     bool $enabled,
     float $sortOrder = 0,
   ): self {
     $provider = new self($id);
     $provider->recordThat(new OAuthProviderWasCreated(
-      $id->toString(),
+      $id,
       $name,
       $slug,
       $type,
@@ -58,18 +65,18 @@ final class OAuthProvider extends AbstractAggregateRoot {
   }
 
   public function update(
-    ?string $name = null,
-    ?string $slug = null,
-    ?string $type = null,
-    ?string $clientId = null,
-    ?string $clientSecret = null,
-    ?string $discoveryUrl = null,
-    ?string $scopes = null,
+    ?ProviderName $name = null,
+    ?OAuthProviderEnum $slug = null,
+    ?OAuthType $type = null,
+    ?ClientId $clientId = null,
+    ?ClientSecret $clientSecret = null,
+    ?DiscoveryUrl $discoveryUrl = null,
+    ?OAuthScopes $scopes = null,
     ?bool $enabled = null,
     ?float $sortOrder = null,
   ): void {
     $this->recordThat(new OAuthProviderWasUpdated(
-      $this->aggregateRootId()->toString(),
+      $this->aggregateRootId(),
       $name,
       $slug,
       $type,
@@ -120,13 +127,13 @@ final class OAuthProvider extends AbstractAggregateRoot {
    */
   protected function createSnapshotState(): array {
     return [
-      'name' => $this->name,
-      'slug' => $this->slug,
-      'type' => $this->type,
-      'clientId' => EncryptionRegistry::encrypt($this->clientId),
-      'clientSecret' => EncryptionRegistry::encrypt($this->clientSecret),
-      'discoveryUrl' => $this->discoveryUrl,
-      'scopes' => $this->scopes,
+      'name' => $this->name->toString(),
+      'slug' => $this->slug->value,
+      'type' => $this->type->toString(),
+      'clientId' => EncryptionRegistry::encrypt($this->clientId->toString()),
+      'clientSecret' => EncryptionRegistry::encrypt($this->clientSecret->toString()),
+      'discoveryUrl' => $this->discoveryUrl->toString(),
+      'scopes' => $this->scopes->toString(),
       'enabled' => $this->enabled,
       'sortOrder' => $this->sortOrder,
     ];
@@ -138,13 +145,13 @@ final class OAuthProvider extends AbstractAggregateRoot {
   protected static function reconstituteFromSnapshotState(AggregateRootId $id, $state): AggregateRootWithSnapshotting {
     $provider = new static(ID::fromString($id->toString()));
 
-    $provider->name = $state['name'];
-    $provider->slug = $state['slug'];
-    $provider->type = $state['type'];
-    $provider->clientId = EncryptionRegistry::decrypt($state['clientId']);
-    $provider->clientSecret = EncryptionRegistry::decrypt($state['clientSecret']);
-    $provider->discoveryUrl = $state['discoveryUrl'];
-    $provider->scopes = $state['scopes'];
+    $provider->name = ProviderName::fromString($state['name']);
+    $provider->slug = OAuthProviderEnum::from($state['slug']);
+    $provider->type = OAuthType::fromString($state['type']);
+    $provider->clientId = ClientId::fromString(EncryptionRegistry::decrypt($state['clientId']));
+    $provider->clientSecret = ClientSecret::fromString(EncryptionRegistry::decrypt($state['clientSecret']));
+    $provider->discoveryUrl = DiscoveryUrl::fromString($state['discoveryUrl']);
+    $provider->scopes = OAuthScopes::fromString($state['scopes']);
     $provider->enabled = $state['enabled'];
     $provider->sortOrder = $state['sortOrder'] ?? 0.0;
 

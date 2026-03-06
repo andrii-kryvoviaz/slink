@@ -6,7 +6,6 @@ namespace Slink\User\Infrastructure\ReadModel\Projection;
 
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractProjection;
-use Slink\User\Domain\Enum\OAuthProvider;
 use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasCreated;
 use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasUpdated;
 use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasRemoved;
@@ -22,14 +21,14 @@ final class OAuthProviderProjection extends AbstractProjection {
 
   public function handleOAuthProviderWasCreated(OAuthProviderWasCreated $event): void {
     $provider = new OAuthProviderView(
-      id: $event->id,
-      name: $event->name,
-      slug: $event->slug,
-      type: $event->type,
-      clientId: $event->clientId,
-      clientSecret: $event->clientSecret,
-      discoveryUrl: $event->discoveryUrl,
-      scopes: $event->scopes,
+      id: (string) $event->id,
+      name: (string) $event->name,
+      slug: $event->slug->value,
+      type: (string) $event->type,
+      clientId: (string) $event->clientId,
+      clientSecret: (string) $event->clientSecret,
+      discoveryUrl: (string) $event->discoveryUrl,
+      scopes: (string) $event->scopes,
       enabled: $event->enabled,
       sortOrder: $event->sortOrder,
     );
@@ -38,19 +37,19 @@ final class OAuthProviderProjection extends AbstractProjection {
   }
 
   public function handleOAuthProviderWasUpdated(OAuthProviderWasUpdated $event): void {
-    $provider = $this->repository->findById(ID::fromString($event->id));
+    $provider = $this->repository->findById($event->id);
 
     if ($provider === null) {
       return;
     }
 
-    if ($event->name !== null) $provider->setName($event->name);
-    if ($event->slug !== null) $provider->setSlug($event->slug);
-    if ($event->type !== null) $provider->setType($event->type);
-    if ($event->clientId !== null) $provider->setClientId($event->clientId);
-    if ($event->clientSecret !== null) $provider->setClientSecret($event->clientSecret);
-    if ($event->discoveryUrl !== null) $provider->setDiscoveryUrl($event->discoveryUrl);
-    if ($event->scopes !== null) $provider->setScopes($event->scopes);
+    if ($event->name !== null) $provider->setName((string) $event->name);
+    if ($event->slug !== null) $provider->setSlug($event->slug->value);
+    if ($event->type !== null) $provider->setType((string) $event->type);
+    if ($event->clientId !== null) $provider->setClientId((string) $event->clientId);
+    if ($event->clientSecret !== null) $provider->setClientSecret((string) $event->clientSecret);
+    if ($event->discoveryUrl !== null) $provider->setDiscoveryUrl((string) $event->discoveryUrl);
+    if ($event->scopes !== null) $provider->setScopes((string) $event->scopes);
     if ($event->enabled !== null) $provider->setEnabled($event->enabled);
     if ($event->sortOrder !== null) $provider->setSortOrder($event->sortOrder);
 
@@ -64,7 +63,7 @@ final class OAuthProviderProjection extends AbstractProjection {
       return;
     }
 
-    $this->linkRepository->deleteByProviderSlug(OAuthProvider::from($provider->getSlug()));
+    $this->linkRepository->deleteByProviderSlug($provider->getSlug());
     $this->repository->delete($provider);
   }
 }

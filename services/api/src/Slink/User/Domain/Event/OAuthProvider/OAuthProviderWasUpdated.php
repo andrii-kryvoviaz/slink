@@ -5,18 +5,26 @@ declare(strict_types=1);
 namespace Slink\User\Domain\Event\OAuthProvider;
 
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
+use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Encryption\EncryptionRegistry;
+use Slink\User\Domain\Enum\OAuthProvider as OAuthProviderEnum;
+use Slink\User\Domain\ValueObject\OAuth\ClientId;
+use Slink\User\Domain\ValueObject\OAuth\ClientSecret;
+use Slink\User\Domain\ValueObject\OAuth\DiscoveryUrl;
+use Slink\User\Domain\ValueObject\OAuth\OAuthScopes;
+use Slink\User\Domain\ValueObject\OAuth\OAuthType;
+use Slink\User\Domain\ValueObject\OAuth\ProviderName;
 
 final readonly class OAuthProviderWasUpdated implements SerializablePayload {
   public function __construct(
-    public string $id,
-    public ?string $name = null,
-    public ?string $slug = null,
-    public ?string $type = null,
-    public ?string $clientId = null,
-    public ?string $clientSecret = null,
-    public ?string $discoveryUrl = null,
-    public ?string $scopes = null,
+    public ID $id,
+    public ?ProviderName $name = null,
+    public ?OAuthProviderEnum $slug = null,
+    public ?OAuthType $type = null,
+    public ?ClientId $clientId = null,
+    public ?ClientSecret $clientSecret = null,
+    public ?DiscoveryUrl $discoveryUrl = null,
+    public ?OAuthScopes $scopes = null,
     public ?bool $enabled = null,
     public ?float $sortOrder = null,
   ) {}
@@ -25,15 +33,15 @@ final readonly class OAuthProviderWasUpdated implements SerializablePayload {
    * @return array<string, mixed>
    */
   public function toPayload(): array {
-    $payload = ['id' => $this->id];
+    $payload = ['id' => $this->id->toString()];
 
-    if ($this->name !== null) $payload['name'] = $this->name;
-    if ($this->slug !== null) $payload['slug'] = $this->slug;
-    if ($this->type !== null) $payload['type'] = $this->type;
-    if ($this->clientId !== null) $payload['clientId'] = EncryptionRegistry::encrypt($this->clientId);
-    if ($this->clientSecret !== null) $payload['clientSecret'] = EncryptionRegistry::encrypt($this->clientSecret);
-    if ($this->discoveryUrl !== null) $payload['discoveryUrl'] = $this->discoveryUrl;
-    if ($this->scopes !== null) $payload['scopes'] = $this->scopes;
+    if ($this->name !== null) $payload['name'] = $this->name->toString();
+    if ($this->slug !== null) $payload['slug'] = $this->slug->value;
+    if ($this->type !== null) $payload['type'] = $this->type->toString();
+    if ($this->clientId !== null) $payload['clientId'] = EncryptionRegistry::encrypt($this->clientId->toString());
+    if ($this->clientSecret !== null) $payload['clientSecret'] = EncryptionRegistry::encrypt($this->clientSecret->toString());
+    if ($this->discoveryUrl !== null) $payload['discoveryUrl'] = $this->discoveryUrl->toString();
+    if ($this->scopes !== null) $payload['scopes'] = $this->scopes->toString();
     if ($this->enabled !== null) $payload['enabled'] = $this->enabled;
     if ($this->sortOrder !== null) $payload['sortOrder'] = $this->sortOrder;
 
@@ -45,14 +53,14 @@ final readonly class OAuthProviderWasUpdated implements SerializablePayload {
    */
   public static function fromPayload(array $payload): static {
     return new self(
-      $payload['id'],
-      $payload['name'] ?? null,
-      $payload['slug'] ?? null,
-      $payload['type'] ?? null,
-      isset($payload['clientId']) ? EncryptionRegistry::decrypt($payload['clientId']) : null,
-      isset($payload['clientSecret']) ? EncryptionRegistry::decrypt($payload['clientSecret']) : null,
-      $payload['discoveryUrl'] ?? null,
-      $payload['scopes'] ?? null,
+      ID::fromString($payload['id']),
+      isset($payload['name']) ? ProviderName::fromString($payload['name']) : null,
+      isset($payload['slug']) ? OAuthProviderEnum::from($payload['slug']) : null,
+      isset($payload['type']) ? OAuthType::fromString($payload['type']) : null,
+      isset($payload['clientId']) ? ClientId::fromString(EncryptionRegistry::decrypt($payload['clientId'])) : null,
+      isset($payload['clientSecret']) ? ClientSecret::fromString(EncryptionRegistry::decrypt($payload['clientSecret'])) : null,
+      isset($payload['discoveryUrl']) ? DiscoveryUrl::fromString($payload['discoveryUrl']) : null,
+      isset($payload['scopes']) ? OAuthScopes::fromString($payload['scopes']) : null,
       $payload['enabled'] ?? null,
       isset($payload['sortOrder']) ? (float)$payload['sortOrder'] : null,
     );

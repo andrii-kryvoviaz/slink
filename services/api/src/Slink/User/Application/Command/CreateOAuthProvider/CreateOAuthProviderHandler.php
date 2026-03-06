@@ -6,7 +6,6 @@ namespace Slink\User\Application\Command\CreateOAuthProvider;
 
 use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\User\Domain\Enum\OAuthProvider as OAuthProviderEnum;
 use Slink\User\Domain\OAuthProvider;
 use Slink\User\Domain\Repository\OAuthProviderRepositoryInterface;
 use Slink\User\Domain\Repository\OAuthProviderStoreRepositoryInterface;
@@ -20,7 +19,7 @@ final readonly class CreateOAuthProviderHandler implements CommandHandlerInterfa
   ) {}
 
   public function __invoke(CreateOAuthProviderCommand $command): string {
-    $this->uniqueOAuthProviderSpecification->ensureUnique(OAuthProviderEnum::from($command->getSlug()));
+    $this->uniqueOAuthProviderSpecification->ensureUnique($command->getSlug());
 
     $id = ID::generate();
     $sortOrder = $this->repository->getMaxSortOrder() + 1.0;

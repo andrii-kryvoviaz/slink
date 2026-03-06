@@ -6,6 +6,7 @@ namespace Slink\User\Infrastructure\Auth\Oidc;
 
 use Slink\User\Domain\Exception\OidcDiscoveryException;
 use Slink\User\Domain\ValueObject\OAuth\DiscoveryDocument;
+use Slink\User\Domain\ValueObject\OAuth\DiscoveryUrl;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -27,8 +28,8 @@ final readonly class OidcDiscovery implements OidcDiscoveryInterface {
   }
 
   #[\Override]
-  public function discover(string $discoveryUrl): DiscoveryDocument {
-    $discoveryUrl = self::normalizeDiscoveryUrl($discoveryUrl);
+  public function discover(DiscoveryUrl $discoveryUrl): DiscoveryDocument {
+    $discoveryUrl = self::normalizeDiscoveryUrl($discoveryUrl->toString());
     $cacheKey = 'oidc_discovery_' . hash('sha256', $discoveryUrl);
 
     $payload = $this->cache->get($cacheKey, function (ItemInterface $item) use ($discoveryUrl): array {

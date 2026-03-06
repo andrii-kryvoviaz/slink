@@ -6,9 +6,13 @@ namespace Unit\Slink\User\Domain\Event\OAuthProvider;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Encryption\EncryptionRegistry;
 use Slink\Shared\Infrastructure\Encryption\EncryptionService;
 use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasUpdated;
+use Slink\User\Domain\ValueObject\OAuth\ClientId;
+use Slink\User\Domain\ValueObject\OAuth\ClientSecret;
+use Slink\User\Domain\ValueObject\OAuth\ProviderName;
 
 final class OAuthProviderWasUpdatedTest extends TestCase {
   private const string ENCRYPTION_SECRET = 'test-encryption-secret';
@@ -20,9 +24,9 @@ final class OAuthProviderWasUpdatedTest extends TestCase {
   #[Test]
   public function itEncryptsSecretsInPayload(): void {
     $event = new OAuthProviderWasUpdated(
-      'provider-id-1',
-      clientId: 'new-client-id',
-      clientSecret: 'new-client-secret',
+      ID::fromString('provider-id-1'),
+      clientId: ClientId::fromString('new-client-id'),
+      clientSecret: ClientSecret::fromString('new-client-secret'),
     );
 
     $payload = $event->toPayload();
@@ -38,8 +42,8 @@ final class OAuthProviderWasUpdatedTest extends TestCase {
   #[Test]
   public function itRoundtripsThroughPayloadWithPartialFields(): void {
     $event = new OAuthProviderWasUpdated(
-      'provider-id-1',
-      name: 'Updated Google',
+      ID::fromString('provider-id-1'),
+      name: ProviderName::fromString('Updated Google'),
       enabled: false,
     );
 
@@ -55,8 +59,8 @@ final class OAuthProviderWasUpdatedTest extends TestCase {
 
     $restored = OAuthProviderWasUpdated::fromPayload($payload);
 
-    $this->assertSame('provider-id-1', $restored->id);
-    $this->assertSame('Updated Google', $restored->name);
+    $this->assertEquals(ID::fromString('provider-id-1'), $restored->id);
+    $this->assertEquals(ProviderName::fromString('Updated Google'), $restored->name);
     $this->assertFalse($restored->enabled);
     $this->assertNull($restored->slug);
     $this->assertNull($restored->type);

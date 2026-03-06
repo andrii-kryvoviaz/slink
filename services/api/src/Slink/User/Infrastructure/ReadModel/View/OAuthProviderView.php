@@ -8,7 +8,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Slink\Shared\Infrastructure\Encryption\EncryptionRegistry;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
 use Slink\User\Domain\Contracts\OAuthProviderProfile;
+use Slink\User\Domain\Enum\OAuthProvider as OAuthProviderEnum;
 use Slink\User\Domain\ValueObject\OAuth\ClientId;
+use Slink\User\Domain\ValueObject\OAuth\ClientSecret;
+use Slink\User\Domain\ValueObject\OAuth\DiscoveryUrl;
+use Slink\User\Domain\ValueObject\OAuth\OAuthScopes;
 use Slink\User\Infrastructure\ReadModel\Repository\OAuthProviderRepository;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\Ignore;
@@ -71,8 +75,8 @@ class OAuthProviderView extends AbstractView implements OAuthProviderProfile {
     return $this->name;
   }
 
-  public function getSlug(): string {
-    return $this->slug;
+  public function getSlug(): OAuthProviderEnum {
+    return OAuthProviderEnum::from($this->slug);
   }
 
   public function getType(): string {
@@ -84,16 +88,16 @@ class OAuthProviderView extends AbstractView implements OAuthProviderProfile {
   }
 
   #[Ignore]
-  public function getClientSecret(): string {
-    return EncryptionRegistry::decrypt($this->clientSecret);
+  public function getClientSecret(): ClientSecret {
+    return ClientSecret::fromString(EncryptionRegistry::decrypt($this->clientSecret));
   }
 
-  public function getDiscoveryUrl(): string {
-    return $this->discoveryUrl;
+  public function getDiscoveryUrl(): DiscoveryUrl {
+    return DiscoveryUrl::fromString($this->discoveryUrl);
   }
 
-  public function getScopes(): string {
-    return $this->scopes;
+  public function getScopes(): OAuthScopes {
+    return OAuthScopes::fromString($this->scopes);
   }
 
   public function isEnabled(): bool {

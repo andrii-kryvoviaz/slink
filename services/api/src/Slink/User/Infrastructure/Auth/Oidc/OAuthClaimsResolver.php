@@ -8,7 +8,6 @@ use Jose\Component\Checker\ClaimCheckerManager;
 use Jose\Component\Signature\JWSVerifier;
 use League\OAuth2\Client\Provider\GenericProvider;
 use League\OAuth2\Client\Token\AccessToken;
-use Slink\User\Domain\Enum\OAuthProvider;
 use Slink\User\Domain\Exception\IdTokenClaimValidationException;
 use Psr\Log\LoggerInterface;
 use Slink\User\Domain\Exception\InvalidJwsSignatureException;
@@ -34,10 +33,10 @@ final readonly class OAuthClaimsResolver {
 
     if ($idToken === null) {
       $this->logger->warning('OIDC provider did not return an id_token, denying authentication', [
-        'provider' => $provider->getSlug(),
+        'provider' => $provider->getSlug()->value,
       ]);
 
-      throw new MissingIdTokenException($provider->getSlug());
+      throw new MissingIdTokenException($provider->getSlug()->value);
     }
 
     $discovery = $this->oidcDiscovery->discover($provider->getDiscoveryUrl());
@@ -69,7 +68,7 @@ final readonly class OAuthClaimsResolver {
       throw new IdTokenClaimValidationException('Invalid audience.');
     }
 
-    return OAuthIdentity::fromTokenClaims($claims, OAuthProvider::from($provider->getSlug()));
+    return OAuthIdentity::fromTokenClaims($claims, $provider->getSlug());
   }
 
 }

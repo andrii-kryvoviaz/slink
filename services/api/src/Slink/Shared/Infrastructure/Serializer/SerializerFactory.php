@@ -11,6 +11,7 @@ use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AttributeLoader;
 use Symfony\Component\Serializer\NameConverter\MetadataAwareNameConverter;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 abstract class SerializerFactory {
@@ -45,6 +46,7 @@ abstract class SerializerFactory {
     $normalizers = [
       new DateTimeNormalizer(),
       new CommentNormalizer(),
+      new BackedEnumNormalizer(),
       new $normalizerClass(...$normalizerArgs), // @phpstan-ignore-line
     ];
     $encoders = class_exists($encoderClass) ? [new $encoderClass()] : [];

@@ -6,9 +6,17 @@ namespace Unit\Slink\User\Domain\Event\OAuthProvider;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Encryption\EncryptionRegistry;
 use Slink\Shared\Infrastructure\Encryption\EncryptionService;
+use Slink\User\Domain\Enum\OAuthProvider;
 use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasCreated;
+use Slink\User\Domain\ValueObject\OAuth\ClientId;
+use Slink\User\Domain\ValueObject\OAuth\ClientSecret;
+use Slink\User\Domain\ValueObject\OAuth\DiscoveryUrl;
+use Slink\User\Domain\ValueObject\OAuth\OAuthScopes;
+use Slink\User\Domain\ValueObject\OAuth\OAuthType;
+use Slink\User\Domain\ValueObject\OAuth\ProviderName;
 
 final class OAuthProviderWasCreatedTest extends TestCase {
   private const string ENCRYPTION_SECRET = 'test-encryption-secret';
@@ -20,14 +28,14 @@ final class OAuthProviderWasCreatedTest extends TestCase {
   #[Test]
   public function itEncryptsSecretsInPayload(): void {
     $event = new OAuthProviderWasCreated(
-      'provider-id-1',
-      'Google',
-      'google',
-      'oidc',
-      'client-id-123',
-      'client-secret-456',
-      'https://accounts.google.com/.well-known/openid-configuration',
-      'openid profile email',
+      ID::fromString('provider-id-1'),
+      ProviderName::fromString('Google'),
+      OAuthProvider::Google,
+      OAuthType::fromString('oidc'),
+      ClientId::fromString('client-id-123'),
+      ClientSecret::fromString('client-secret-456'),
+      DiscoveryUrl::fromString('https://accounts.google.com/.well-known/openid-configuration'),
+      OAuthScopes::fromString('openid profile email'),
       true,
       1.0,
     );
@@ -43,28 +51,28 @@ final class OAuthProviderWasCreatedTest extends TestCase {
   #[Test]
   public function itRoundtripsThroughPayload(): void {
     $event = new OAuthProviderWasCreated(
-      'provider-id-1',
-      'Authentik',
-      'authentik',
-      'oauth2',
-      'auth-client-id',
-      'auth-client-secret',
-      'https://authentik.example.com/.well-known/openid-configuration',
-      'openid profile email',
+      ID::fromString('provider-id-1'),
+      ProviderName::fromString('Authentik'),
+      OAuthProvider::Authentik,
+      OAuthType::fromString('oidc'),
+      ClientId::fromString('auth-client-id'),
+      ClientSecret::fromString('auth-client-secret'),
+      DiscoveryUrl::fromString('https://authentik.example.com/.well-known/openid-configuration'),
+      OAuthScopes::fromString('openid profile email'),
       false,
       3.0,
     );
 
     $restored = OAuthProviderWasCreated::fromPayload($event->toPayload());
 
-    $this->assertSame($event->id, $restored->id);
-    $this->assertSame($event->name, $restored->name);
+    $this->assertEquals($event->id, $restored->id);
+    $this->assertEquals($event->name, $restored->name);
     $this->assertSame($event->slug, $restored->slug);
-    $this->assertSame($event->type, $restored->type);
-    $this->assertSame($event->clientId, $restored->clientId);
-    $this->assertSame($event->clientSecret, $restored->clientSecret);
-    $this->assertSame($event->discoveryUrl, $restored->discoveryUrl);
-    $this->assertSame($event->scopes, $restored->scopes);
+    $this->assertEquals($event->type, $restored->type);
+    $this->assertEquals($event->clientId, $restored->clientId);
+    $this->assertEquals($event->clientSecret, $restored->clientSecret);
+    $this->assertEquals($event->discoveryUrl, $restored->discoveryUrl);
+    $this->assertEquals($event->scopes, $restored->scopes);
     $this->assertSame($event->enabled, $restored->enabled);
     $this->assertSame($event->sortOrder, $restored->sortOrder);
   }

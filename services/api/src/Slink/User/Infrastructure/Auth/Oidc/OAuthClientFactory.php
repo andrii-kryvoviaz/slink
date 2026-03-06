@@ -19,13 +19,13 @@ final readonly class OAuthClientFactory implements OAuthClientFactoryInterface {
 
     return new GenericProvider([
       'clientId' => (string) $provider->getClientId(),
-      'clientSecret' => $provider->getClientSecret(),
+      'clientSecret' => (string) $provider->getClientSecret(),
       'redirectUri' => (string) $redirectUri,
       'urlAuthorize' => $discovery->getAuthorizationEndpoint(),
       'urlAccessToken' => $discovery->getTokenEndpoint(),
       'urlResourceOwnerDetails' => $discovery->getUserinfoEndpoint(),
       'pkceMethod' => GenericProvider::PKCE_METHOD_S256,
-      'scopes' => $provider->getScopes(),
+      'scopes' => (string) $provider->getScopes(),
       'scopeSeparator' => ' ',
     ]);
   }
