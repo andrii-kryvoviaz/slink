@@ -7,6 +7,7 @@ namespace Slink\User\Infrastructure\ReadModel\View;
 use Doctrine\ORM\Mapping as ORM;
 use Slink\Shared\Infrastructure\Encryption\EncryptionRegistry;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
+use Slink\User\Domain\Contracts\OAuthProviderProfile;
 use Slink\User\Domain\ValueObject\OAuth\ClientId;
 use Slink\User\Infrastructure\ReadModel\Repository\OAuthProviderRepository;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -15,7 +16,7 @@ use Symfony\Component\Serializer\Attribute\Ignore;
 #[ORM\Table(name: '`oauth_provider`')]
 #[ORM\Entity(repositoryClass: OAuthProviderRepository::class)]
 #[ORM\UniqueConstraint(name: 'uniq_oauth_provider_slug', columns: ['slug'])]
-class OAuthProviderView extends AbstractView {
+class OAuthProviderView extends AbstractView implements OAuthProviderProfile {
   public function __construct(
     #[ORM\Id]
     #[ORM\Column(type: 'string', length: 36)]

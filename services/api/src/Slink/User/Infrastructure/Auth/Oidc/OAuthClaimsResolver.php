@@ -17,7 +17,7 @@ use Slink\User\Domain\ValueObject\OAuth\IdToken;
 use Slink\User\Domain\ValueObject\OAuth\JwtHeader;
 use Slink\User\Domain\ValueObject\OAuth\OAuthIdentity;
 use Slink\User\Domain\ValueObject\OAuth\TokenClaims;
-use Slink\User\Infrastructure\ReadModel\View\OAuthProviderView;
+use Slink\User\Domain\Contracts\OAuthProviderProfile;
 
 final readonly class OAuthClaimsResolver {
   public function __construct(
@@ -29,7 +29,7 @@ final readonly class OAuthClaimsResolver {
     private LoggerInterface $logger,
   ) {}
 
-  public function resolve(GenericProvider $client, AccessToken $accessToken, OAuthProviderView $provider): OAuthIdentity {
+  public function resolve(GenericProvider $client, AccessToken $accessToken, OAuthProviderProfile $provider): OAuthIdentity {
     $idToken = IdToken::fromPayload($accessToken->getValues());
 
     if ($idToken === null) {

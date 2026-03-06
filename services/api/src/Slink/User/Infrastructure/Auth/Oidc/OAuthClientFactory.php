@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Slink\User\Infrastructure\Auth\Oidc;
 
 use League\OAuth2\Client\Provider\GenericProvider;
-use Slink\User\Domain\Contracts\OAuthClientFactoryInterface;
+use Slink\User\Domain\Contracts\OAuthProviderProfile;
 use Slink\User\Domain\ValueObject\OAuth\RedirectUri;
-use Slink\User\Infrastructure\ReadModel\View\OAuthProviderView;
 
 final readonly class OAuthClientFactory implements OAuthClientFactoryInterface {
   public function __construct(
@@ -15,7 +14,7 @@ final readonly class OAuthClientFactory implements OAuthClientFactoryInterface {
   ) {}
 
   #[\Override]
-  public function create(OAuthProviderView $provider, RedirectUri $redirectUri): GenericProvider {
+  public function create(OAuthProviderProfile $provider, RedirectUri $redirectUri): GenericProvider {
     $discovery = $this->oidcDiscovery->discover($provider->getDiscoveryUrl());
 
     return new GenericProvider([

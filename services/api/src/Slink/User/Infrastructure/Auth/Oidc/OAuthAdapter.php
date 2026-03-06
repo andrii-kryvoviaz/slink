@@ -6,7 +6,7 @@ namespace Slink\User\Infrastructure\Auth\Oidc;
 
 use League\OAuth2\Client\Token\AccessToken;
 use Slink\User\Domain\Contracts\OAuthAdapterInterface;
-use Slink\User\Domain\Contracts\OAuthClientFactoryInterface;
+use Slink\User\Domain\Contracts\OAuthProviderProfile;
 use Slink\User\Domain\Contracts\OAuthStateManagerInterface;
 use Slink\User\Domain\Enum\OAuthProvider;
 use Slink\User\Domain\Exception\InvalidCredentialsException;
@@ -17,7 +17,6 @@ use Slink\User\Domain\ValueObject\OAuth\OAuthContext;
 use Slink\User\Domain\ValueObject\OAuth\OAuthState;
 use Slink\User\Domain\ValueObject\OAuth\PkceVerifier;
 use Slink\User\Domain\ValueObject\OAuth\RedirectUri;
-use Slink\User\Infrastructure\ReadModel\View\OAuthProviderView;
 
 final readonly class OAuthAdapter implements OAuthAdapterInterface {
   public function __construct(
@@ -28,7 +27,7 @@ final readonly class OAuthAdapter implements OAuthAdapterInterface {
   ) {}
 
   #[\Override]
-  public function getAuthorizationUrl(OAuthProviderView $provider, RedirectUri $redirectUri): string {
+  public function getAuthorizationUrl(OAuthProviderProfile $provider, RedirectUri $redirectUri): string {
     $oauthClient = $this->clientFactory->create($provider, $redirectUri);
 
     $authorizationUrl = $oauthClient->getAuthorizationUrl([
