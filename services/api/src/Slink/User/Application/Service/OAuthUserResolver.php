@@ -36,12 +36,12 @@ final readonly class OAuthUserResolver implements OAuthUserResolverInterface {
 
     $existingUserId = $this->checkUserByEmail->existsEmail($identity->getEmail());
 
-    if (!$existingUserId) {
-      return $this->oauthUserFactory->create($identity);
-    }
-
     if (!$identity->isEmailVerified()) {
       throw new OAuthEmailNotVerifiedException();
+    }
+
+    if (!$existingUserId) {
+      return $this->oauthUserFactory->create($identity);
     }
 
     return $this->userStore->get(ID::fromString((string) $existingUserId));

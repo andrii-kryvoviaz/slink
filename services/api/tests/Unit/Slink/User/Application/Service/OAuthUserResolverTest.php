@@ -138,6 +138,7 @@ final class OAuthUserResolverTest extends TestCase {
     $identity->method('getSubject')->willReturn($subject);
     $identity->method('getEmail')->willReturn($email);
     $identity->method('getDisplayName')->willReturn(DisplayName::fromString('New User'));
+    $identity->method('isEmailVerified')->willReturn(true);
 
     $resolver = $this->createResolver(
       storeConfig: function (UserStoreRepositoryInterface&MockObject $store) {
@@ -159,6 +160,30 @@ final class OAuthUserResolverTest extends TestCase {
     $result = $resolver->resolve($identity);
 
     $this->assertInstanceOf(User::class, $result);
+  }
+
+  #[Test]
+  public function itThrowsWhenEmailNotVerifiedForNewUser(): void {
+    $email = Email::fromString('newuser@example.com');
+    $subject = $this->createStub(OAuthSubject::class);
+
+    $identity = $this->createStub(OAuthIdentity::class);
+    $identity->method('getSubject')->willReturn($subject);
+    $identity->method('getEmail')->willReturn($email);
+    $identity->method('isEmailVerified')->willReturn(false);
+
+    $resolver = $this->createResolver(
+      emailCheckConfig: function (CheckUserByEmailInterface&MockObject $check) use ($email) {
+        $check->expects($this->once())
+          ->method('existsEmail')
+          ->with($email)
+          ->willReturn(null);
+      },
+    );
+
+    $this->expectException(OAuthEmailNotVerifiedException::class);
+
+    $resolver->resolve($identity);
   }
 
   private function createResolver(

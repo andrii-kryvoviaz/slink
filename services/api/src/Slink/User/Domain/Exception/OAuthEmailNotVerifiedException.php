@@ -8,7 +8,7 @@ use Slink\Shared\Domain\Exception\SpecificationException;
 
 class OAuthEmailNotVerifiedException extends SpecificationException {
   public function __construct() {
-    parent::__construct('Email must be verified by the SSO provider to link to an existing account.');
+    parent::__construct('Email must be verified by the SSO provider before signing in.');
   }
 
   #[\Override]
