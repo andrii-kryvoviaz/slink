@@ -8,12 +8,14 @@ use Slink\User\Domain\Contracts\OAuthStateManagerInterface;
 use Slink\User\Domain\Exception\OAuthStateExpiredException;
 use Slink\User\Domain\ValueObject\OAuth\OAuthContext;
 use Slink\User\Domain\ValueObject\OAuth\OAuthState;
+use Symfony\Component\Lock\LockFactory;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 
 final readonly class OAuthStateManager implements OAuthStateManagerInterface {
   public function __construct(
     private CacheInterface $cache,
+    private LockFactory $lockFactory,
   ) {}
 
   #[\Override]
@@ -30,16 +32,25 @@ final readonly class OAuthStateManager implements OAuthStateManagerInterface {
   #[\Override]
   public function consume(OAuthState $state): OAuthContext {
     $cacheKey = 'oauth_state_' . hash('sha256', (string) $state);
+    $lock = $this->lockFactory->createLock('lock_' . $cacheKey, ttl: 10);
 
-    /** @var array{provider: string, redirectUri: string, pkceVerifier: string|null}|null $data */
-    $data = $this->cache->get($cacheKey, fn (): null => null);
-
-    if ($data === null) {
+    if (!$lock->acquire()) {
       throw new OAuthStateExpiredException();
     }
 
-    $this->cache->delete($cacheKey);
+    try {
+      /** @var array{provider: string, redirectUri: string, pkceVerifier: string|null}|null $data */
+      $data = $this->cache->get($cacheKey, fn (): null => null);
 
-    return OAuthContext::fromPayload($data);
+      if ($data === null) {
+        throw new OAuthStateExpiredException();
+      }
+
+      $this->cache->delete($cacheKey);
+
+      return OAuthContext::fromPayload($data);
+    } finally {
+      $lock->release();
+    }
   }
 }
