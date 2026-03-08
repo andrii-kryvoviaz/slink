@@ -17,6 +17,7 @@
     ViewModeToggle,
   } from '@slink/feature/Layout';
   import { ActiveFilterBar, TagFilter, TagListView } from '@slink/feature/Tag';
+  import { Button } from '@slink/ui/components/button';
   import { untrack } from 'svelte';
 
   import { page } from '$app/state';
@@ -188,26 +189,30 @@
         <div class="flex items-center gap-3 shrink-0">
           {#if !historyFeedState.isEmpty}
             {#if selectionState.isSelectionMode}
-              <button
-                type="button"
+              <Button
+                variant="toggle"
+                size="xs"
+                rounded="lg"
+                class="w-22"
                 onclick={handleExitSelectionMode}
-                class="flex items-center justify-center gap-1.5 px-3 py-1.5 text-sm font-medium text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 transition-colors duration-200"
               >
-                <Icon icon="lucide:x" class="w-4 h-4" />
+                <Icon icon="lucide:x" class="w-3.5 h-3.5" />
                 <span>Cancel</span>
-              </button>
+              </Button>
             {:else}
-              <button
-                type="button"
+              <Button
+                variant="toggle"
+                size="xs"
+                rounded="lg"
+                class="w-22"
                 onclick={handleEnterSelectionMode}
-                class="flex items-center justify-center gap-1.5 px-3 py-1.5 text-sm font-medium text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors duration-200"
               >
                 <Icon
                   icon="lucide:square-dashed-mouse-pointer"
-                  class="w-4 h-4"
+                  class="w-3.5 h-3.5"
                 />
                 <span>Select</span>
-              </button>
+              </Button>
             {/if}
           {/if}
 
