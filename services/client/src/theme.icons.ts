@@ -217,4 +217,6 @@ export const themeIcons: string[] = [
   'solar:key-linear',
   'ph:arrow-up',
   'ph:arrow-down',
+  'lucide:eye',
+  'ph:minus-bold',
 ];
