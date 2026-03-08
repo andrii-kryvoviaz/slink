@@ -10,13 +10,15 @@ use Slink\Shared\Domain\ValueObject\ID;
 
 final readonly class TagSet extends AbstractValueObject {
   private HashMap $tags;
-  
+  private \stdClass $state;
+
   /**
    * @param array<ID> $tags
    */
   private function __construct(array $tags) {
     $this->tags = new HashMap();
-    
+    $this->state = (object)['hash' => 0];
+
     foreach($tags as $tag) {
       $this->addTag($tag);
     }
@@ -62,15 +64,21 @@ final readonly class TagSet extends AbstractValueObject {
     if($this->contains($tag)) {
       return;
     }
-    
+
     $this->tags->set($tag->toString(), $tag);
+    $this->state->hash ^= crc32($tag->toString());
   }
   
   /**
    * @param ID $tag
    */
   public function removeTag(ID $tag): void {
+    if(!$this->contains($tag)) {
+      return;
+    }
+
     $this->tags->remove($tag->toString());
+    $this->state->hash ^= crc32($tag->toString());
   }
   
   /**
@@ -85,6 +93,14 @@ final readonly class TagSet extends AbstractValueObject {
    */
   public function isEmpty(): bool {
     return $this->tags->count() === 0;
+  }
+
+  public function equals(?AbstractValueObject $other): bool {
+    if (!$other instanceof self) {
+      return false;
+    }
+
+    return $this->count() === $other->count() && $this->state->hash === $other->state->hash;
   }
   
   /**

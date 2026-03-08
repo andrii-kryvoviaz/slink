@@ -13,17 +13,12 @@ final readonly class BatchImagesCommand implements CommandInterface {
 
   /**
    * @param array<string> $imageIds
-   * @param array<string>|null $tagIds
    */
   public function __construct(
     #[Assert\NotBlank]
     #[Assert\All([new Assert\Uuid()])]
     private array $imageIds,
     private ?bool $isPublic = null,
-    #[Assert\All([new Assert\Uuid()])]
-    private ?array $tagIds = null,
-    #[Assert\Uuid]
-    private ?string $collectionId = null,
   ) {}
 
   /**
@@ -35,16 +30,5 @@ final readonly class BatchImagesCommand implements CommandInterface {
 
   public function isPublic(): ?bool {
     return $this->isPublic;
-  }
-
-  /**
-   * @return array<string>|null
-   */
-  public function tagIds(): ?array {
-    return $this->tagIds;
-  }
-
-  public function collectionId(): ?string {
-    return $this->collectionId;
   }
 }

@@ -12,6 +12,7 @@ use Slink\Image\Domain\Event\ImageAttributesWasUpdated;
 use Slink\Image\Domain\Event\ImageLicenseWasUpdated;
 use Slink\Image\Domain\Event\ImageMetadataWasUpdated;
 use Slink\Image\Domain\Event\ImageWasCreated;
+use Slink\Image\Domain\Event\ImageTagsWereReassigned;
 use Slink\Image\Domain\Event\ImageWasDeleted;
 use Slink\Image\Domain\Event\ImageWasTagged;
 use Slink\Image\Domain\Event\ImageWasUntagged;
@@ -280,11 +281,14 @@ final class Image extends AbstractAggregateRoot {
     $this->recordThat(new ImageWasTagged($this->aggregateRootId(), $tagId, $userId));
   }
 
-  /**
-   * @param ID $tagId
-   * @param ID $userId
-   * @return void
-   */
+  public function reassignTags(TagSet $newTags, ID $userId): void {
+    if ($this->tags->equals($newTags)) {
+      return;
+    }
+
+    $this->recordThat(new ImageTagsWereReassigned($this->aggregateRootId(), $newTags, $userId));
+  }
+
   public function removeTag(ID $tagId, ID $userId): void {
     if (!$this->hasTag($tagId)) {
       return;
@@ -315,6 +319,10 @@ final class Image extends AbstractAggregateRoot {
    */
   public function applyImageWasUntagged(ImageWasUntagged $event): void {
     $this->tags->removeTag($event->tagId);
+  }
+
+  public function applyImageTagsWereReassigned(ImageTagsWereReassigned $event): void {
+    $this->tags = $event->tags;
   }
 
   /**

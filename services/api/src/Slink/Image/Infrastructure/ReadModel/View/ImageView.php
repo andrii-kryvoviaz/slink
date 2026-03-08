@@ -171,6 +171,10 @@ class ImageView extends AbstractView implements CursorAwareInterface {
     }
   }
 
+  public function clearTags(): void {
+    $this->tags->clear();
+  }
+
   public function getBookmarkCount(): int {
     return $this->bookmarkCount;
   }
