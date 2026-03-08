@@ -1,33 +1,39 @@
 <script lang="ts">
-  import { ApiClient } from '@slink/api';
   import { LoadMoreButton } from '@slink/feature/Action';
+  import { CollectionListView } from '@slink/feature/Collection';
   import {
+    BatchPickerAction,
+    DeleteAction,
+    DownloadAction,
     HistoryGridView,
     HistoryListView,
     SelectionActionBar,
+    VisibilityAction,
+    createBatchActionsState,
   } from '@slink/feature/Image';
   import {
     EmptyState,
     HistorySkeleton,
     ViewModeToggle,
   } from '@slink/feature/Layout';
-  import { ActiveFilterBar, TagFilter } from '@slink/feature/Tag';
+  import { ActiveFilterBar, TagFilter, TagListView } from '@slink/feature/Tag';
   import { untrack } from 'svelte';
 
   import { page } from '$app/state';
-  import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
-  import { ReactiveState } from '@slink/api/ReactiveState';
-  import type { Tag } from '@slink/api/Resources/TagResource';
+  import type { Tag as TagType } from '@slink/api/Resources/TagResource';
 
   import { skeleton } from '@slink/lib/actions/skeleton';
   import { createTagFilterManager } from '@slink/lib/composables/useTagFilterUrl';
   import { type ViewMode } from '@slink/lib/settings';
+  import { createCollectionPickerState } from '@slink/lib/state/CollectionPickerState.svelte';
+  import { createCreateCollectionModalState } from '@slink/lib/state/CreateCollectionModalState.svelte';
   import { createImageSelectionState } from '@slink/lib/state/ImageSelectionState.svelte';
+  import { createPendingMultiSelection } from '@slink/lib/state/PendingSelectionState.svelte';
+  import { createTagPickerState } from '@slink/lib/state/TagPickerState.svelte';
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
-  import { pluralize } from '@slink/lib/utils/string/pluralize';
 
   import { cn } from '@slink/utils/ui';
 
@@ -37,21 +43,38 @@
   const tagFilterManager = createTagFilterManager(page.url);
   const selectionState = createImageSelectionState();
 
-  let viewMode = $derived(settings.history.viewMode);
+  const batchCollectionPickerState = createCollectionPickerState();
+  const batchCreateCollectionModalState = createCreateCollectionModalState();
+  const batchTagPickerState = createTagPickerState();
 
-  const {
-    isLoading: batchDeleteIsLoading,
-    error: batchDeleteError,
-    data: batchDeleteData,
-    run: batchDelete,
-  } = ReactiveState<{
-    deleted: string[];
-    failed: Array<{ id: string; reason: string }>;
-  }>(
-    (imageIds: string[], preserveOnDisk: boolean) =>
-      ApiClient.image.batchRemove(imageIds, preserveOnDisk),
-    { minExecutionTime: 300 },
+  const batchActions = createBatchActionsState(
+    selectionState,
+    () => historyFeedState.items,
   );
+
+  const tagSelection = createPendingMultiSelection(() => ({
+    counts: batchActions.tagAssignmentCounts,
+    total: batchActions.selectedItemCount,
+  }));
+
+  const collectionSelection = createPendingMultiSelection(() => ({
+    counts: batchActions.collectionAssignmentCounts,
+    total: batchActions.selectedItemCount,
+  }));
+
+  const applyPendingTags = async () => {
+    if (!tagSelection.hasChanges) return;
+    await batchActions.reassignTags(tagSelection);
+    tagSelection.reset();
+  };
+
+  const applyPendingCollection = async () => {
+    if (!collectionSelection.hasChanges) return;
+    await batchActions.reassignCollections(collectionSelection);
+    collectionSelection.reset();
+  };
+
+  let viewMode = $derived(settings.history.viewMode);
 
   $effect(() => {
     if (tagFilterManager.hasFiltersInUrl()) {
@@ -92,7 +115,7 @@
   };
 
   const handleTagFilterChange = async (
-    tags: Tag[],
+    tags: TagType[],
     requireAllTags: boolean,
   ) => {
     historyFeedState.setTagFilter(tags, requireAllTags);
@@ -128,43 +151,6 @@
 
   const handleDeselectAll = () => {
     selectionState.deselectAll();
-  };
-
-  const handleBulkDelete = async (preserveOnDisk: boolean) => {
-    const idsToDelete = selectionState.selectedIds;
-    await batchDelete(idsToDelete, preserveOnDisk);
-
-    if ($batchDeleteError) {
-      toast.error('Failed to delete images. Please try again later.');
-      return;
-    }
-
-    const result = $batchDeleteData;
-    if (!result) {
-      toast.error('Failed to delete images. Please try again later.');
-      return;
-    }
-
-    if (result.deleted.length > 0) {
-      result.deleted.forEach((id) => historyFeedState.removeItem(id));
-      selectionState.removeIds(result.deleted);
-      toast.success(
-        `Successfully deleted ${pluralize(result.deleted.length, 'image')} from history`,
-      );
-
-      if (!historyFeedState.hasItems && historyFeedState.hasMore) {
-        historyFeedState.reset();
-        await historyFeedState.load();
-      }
-    }
-
-    if (result.failed.length > 0) {
-      toast.error(
-        `Failed to delete ${pluralize(result.failed.length, 'image')}`,
-      );
-    }
-
-    selectionState.exitSelectionMode();
   };
 
   const filterKey = $derived(
@@ -328,10 +314,74 @@
   <SelectionActionBar
     selectedCount={selectionState.selectedCount}
     totalCount={historyFeedState.items.length}
-    loading={batchDeleteIsLoading}
     onSelectAll={handleSelectAll}
     onDeselectAll={handleDeselectAll}
-    onDelete={handleBulkDelete}
     onCancel={handleExitSelectionMode}
-  />
+  >
+    {#snippet actions()}
+      <VisibilityAction
+        selectedCount={selectionState.selectedCount}
+        loading={batchActions.isLoading}
+        onAction={batchActions.updateVisibility}
+      />
+      <BatchPickerAction
+        icon="lucide:folder"
+        label="Collection"
+        confirmLabel="Add to Collection"
+        selectedCount={selectionState.selectedCount}
+        pendingCount={collectionSelection.changeCount}
+        loading={batchActions.isLoading}
+        onOpen={() => {
+          batchCollectionPickerState.load();
+          collectionSelection.reset();
+        }}
+        onApply={applyPendingCollection}
+      >
+        <CollectionListView
+          collections={batchCollectionPickerState.collections}
+          isLoading={batchCollectionPickerState.isLoading}
+          variant="popover"
+          showSearch
+          getItemState={(id) => collectionSelection.getState(id)}
+          onToggle={(collection) => collectionSelection.toggle(collection.id)}
+          onCreateNew={() =>
+            batchCreateCollectionModalState.open((collection) => {
+              batchCollectionPickerState.addCollection(collection);
+            })}
+        />
+      </BatchPickerAction>
+      <BatchPickerAction
+        icon="lucide:tag"
+        label="Tag"
+        confirmLabel="Assign Tags"
+        selectedCount={selectionState.selectedCount}
+        pendingCount={tagSelection.changeCount}
+        loading={batchActions.isLoading}
+        onOpen={() => {
+          batchTagPickerState.load();
+          tagSelection.reset();
+        }}
+        onApply={applyPendingTags}
+      >
+        <TagListView
+          tags={batchTagPickerState.tags}
+          isLoading={batchTagPickerState.isLoading}
+          variant="popover"
+          showSearch
+          getItemState={(id) => tagSelection.getState(id)}
+          onToggle={(tag) => tagSelection.toggle(tag.id)}
+        />
+      </BatchPickerAction>
+      <DownloadAction
+        loading={batchActions.isLoading}
+        onAction={batchActions.download}
+      />
+      <div class="h-6 w-px bg-gray-200 dark:bg-gray-700"></div>
+      <DeleteAction
+        selectedCount={selectionState.selectedCount}
+        loading={batchActions.isLoading}
+        onAction={batchActions.delete}
+      />
+    {/snippet}
+  </SelectionActionBar>
 {/if}
