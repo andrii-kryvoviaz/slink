@@ -74,6 +74,34 @@ export class ImageResource extends AbstractResource {
     });
   }
 
+  public async batchReassign(
+    assignments: Record<
+      string,
+      { tagIds?: string[]; collectionIds?: string[] }
+    >,
+  ): Promise<{
+    processed: string[];
+    failed: Array<{ id: string; reason: string }>;
+  }> {
+    return this.put('/images/batch', {
+      json: { assignments },
+    });
+  }
+
+  public async batch(
+    imageIds: string[],
+    data: {
+      isPublic?: boolean;
+    },
+  ): Promise<{
+    processed: string[];
+    failed: Array<{ id: string; reason: string }>;
+  }> {
+    return this.patch('/images/batch', {
+      json: { imageIds, ...data },
+    });
+  }
+
   public async getDetails(id: string): Promise<ImageDetailsResponse> {
     return this.get(`/image/${id}/detail`);
   }
