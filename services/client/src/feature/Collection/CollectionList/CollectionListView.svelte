@@ -3,6 +3,8 @@
     PickerItem,
     PickerList,
     type PickerVariant,
+    type SelectionState,
+    createSelectionResolver,
   } from '@slink/ui/components/picker';
 
   import Icon from '@iconify/svelte';
@@ -17,6 +19,7 @@
     disabled?: boolean;
     variant?: PickerVariant;
     showSearch?: boolean;
+    getItemState?: (id: string) => SelectionState;
     onToggle?: (collection: CollectionResponse) => void;
     onCreateNew?: () => void;
   }
@@ -28,13 +31,15 @@
     togglingId = null,
     disabled = false,
     variant = 'popover',
+    getItemState,
     showSearch,
     onToggle,
     onCreateNew,
   }: Props = $props();
 
-  const isSelected = (collectionId: string) =>
-    selectedIds.includes(collectionId);
+  const resolveSelected = $derived(
+    createSelectionResolver(selectedIds, getItemState),
+  );
   const isToggling = (collectionId: string) => togglingId === collectionId;
 
   const filterCollection = (
@@ -69,7 +74,7 @@
   {#snippet children({ item, highlighted })}
     {@const collection = item as CollectionResponse}
     <PickerItem
-      selected={isSelected(collection.id)}
+      selected={resolveSelected(collection.id)}
       isToggling={isToggling(collection.id)}
       {disabled}
       {variant}

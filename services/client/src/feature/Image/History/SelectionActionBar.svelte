@@ -1,11 +1,9 @@
 <script lang="ts">
-  import { BulkDeleteConfirmation } from '@slink/feature/Image';
   import { Button } from '@slink/ui/components/button';
-  import { Overlay } from '@slink/ui/components/popover';
   import { cva } from 'class-variance-authority';
+  import type { Snippet } from 'svelte';
 
   import Icon from '@iconify/svelte';
-  import { type Readable, readable } from 'svelte/store';
   import { fly } from 'svelte/transition';
 
   const selectAllCheckboxVariants = cva(
@@ -27,24 +25,20 @@
   interface Props {
     selectedCount: number;
     totalCount: number;
-    loading?: Readable<boolean>;
     onSelectAll: () => void;
     onDeselectAll: () => void;
-    onDelete: (preserveOnDisk: boolean) => void;
     onCancel: () => void;
+    actions?: Snippet;
   }
 
   let {
     selectedCount,
     totalCount,
-    loading = readable(false),
     onSelectAll,
     onDeselectAll,
-    onDelete,
     onCancel,
+    actions,
   }: Props = $props();
-
-  let deletePopoverOpen = $state(false);
 
   const isAllSelected = $derived(
     selectedCount > 0 && selectedCount === totalCount,
@@ -66,25 +60,20 @@
       onSelectAll();
     }
   };
-
-  const handleDeleteConfirm = (preserveOnDisk: boolean) => {
-    onDelete(preserveOnDisk);
-    deletePopoverOpen = false;
-  };
 </script>
 
 <div
   in:fly={{ y: 20, duration: 200 }}
   out:fly={{ y: 20, duration: 150 }}
-  class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50"
+  class="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 w-[calc(100vw-2rem)] sm:w-auto"
 >
   <div
-    class="flex items-center gap-4 px-4 py-3 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-2xl shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50"
+    class="flex items-center gap-1.5 sm:gap-4 px-2.5 sm:px-4 py-2.5 sm:py-3 max-w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-2xl shadow-lg shadow-gray-200/50 dark:shadow-gray-900/50"
   >
     <button
       type="button"
       onclick={handleCheckboxChange}
-      class="flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg px-2 py-1 transition-colors"
+      class="flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg px-1 sm:px-2 py-1 transition-colors"
       aria-label={isAllSelected ? 'Deselect all' : 'Select all'}
     >
       <div class={selectAllCheckboxVariants({ state: checkboxState })}>
@@ -96,36 +85,17 @@
       </div>
     </button>
 
-    <span class="text-sm font-medium text-gray-700 dark:text-gray-300 min-w-20">
+    <span
+      class="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap"
+    >
       {selectedCount} selected
     </span>
 
     <div class="h-6 w-px bg-gray-200 dark:bg-gray-700"></div>
 
-    <Overlay
-      bind:open={deletePopoverOpen}
-      variant="floating"
-      contentProps={{ align: 'center', side: 'top', sideOffset: 8 }}
-    >
-      {#snippet trigger()}
-        <Button
-          variant="danger"
-          size="sm"
-          rounded="full"
-          class="gap-1.5"
-          disabled={$loading}
-        >
-          <Icon icon="heroicons:trash" class="w-4 h-4" />
-          <span>Delete</span>
-        </Button>
-      {/snippet}
-      <BulkDeleteConfirmation
-        count={selectedCount}
-        {loading}
-        onConfirm={handleDeleteConfirm}
-        onCancel={() => (deletePopoverOpen = false)}
-      />
-    </Overlay>
+    {#if actions}
+      {@render actions()}
+    {/if}
 
     <Button
       variant="ghost"
@@ -134,7 +104,8 @@
       onclick={onCancel}
       class="text-gray-600 dark:text-gray-400"
     >
-      Cancel
+      <Icon icon="lucide:x" class="w-4 h-4 sm:hidden" />
+      <span class="hidden sm:inline">Cancel</span>
     </Button>
   </div>
 </div>

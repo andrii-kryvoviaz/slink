@@ -13,3 +13,10 @@ export {
 };
 
 export * from './picker.theme';
+
+export type { SelectionState } from '@slink/lib/state/PendingSelectionState.svelte';
+
+export {
+  createSelectionResolver,
+  type SelectionResolver,
+} from './selection-resolver';

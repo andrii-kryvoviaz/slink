@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\NonUniqueResultException;
 use Slink\Image\Domain\Event\ImageWasTagged;
+use Slink\Image\Domain\Event\ImageTagsWereReassigned;
 use Slink\Image\Domain\Event\ImageWasUntagged;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
@@ -133,5 +134,19 @@ final class TagProjection extends AbstractProjection {
       $imageView->removeTag($tagView);
       $this->imageRepository->add($imageView);
     }
+  }
+
+  public function handleImageTagsWereReassigned(ImageTagsWereReassigned $event): void {
+    $imageView = $this->imageRepository->oneById($event->imageId->toString());
+    $imageView->clearTags();
+
+    foreach ($event->tags->getTags() as $tagId) {
+      $tagView = $this->entityManager->getReference(TagView::class, $tagId->toString());
+      if ($tagView instanceof TagView) {
+        $imageView->addTag($tagView);
+      }
+    }
+
+    $this->imageRepository->add($imageView);
   }
 }

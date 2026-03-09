@@ -142,6 +142,29 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
     }
   }
 
+  public async reload(
+    params: LoadParams & SearchParams = {},
+    options?: RequestStateOptions,
+  ): Promise<void> {
+    this._nextCursor = null;
+
+    await this.fetch(
+      () => this.fetchData({ limit: this._meta.size, ...params }),
+      (response) => {
+        this._itemMap.clear();
+        this._order = [];
+        for (const item of response.data) {
+          const id = this._getItemId(item);
+          this._itemMap.set(id, item);
+          this._order = [...this._order, id];
+        }
+        this._meta = response.meta;
+        this._nextCursor = response.meta.nextCursor || null;
+      },
+      options,
+    );
+  }
+
   public async nextPage(options?: RequestStateOptions): Promise<void> {
     if (!this.hasMore) {
       return;

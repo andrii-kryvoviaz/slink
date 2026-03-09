@@ -6,6 +6,7 @@ namespace Slink\Collection\Infrastructure\Repository;
 
 use Slink\Collection\Domain\Collection;
 use Slink\Collection\Domain\Repository\CollectionStoreRepositoryInterface;
+use Slink\Shared\Domain\DataStructures\HashMap;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Persistence\EventStore\AbstractSnapshotStoreRepository;
 
@@ -27,5 +28,16 @@ final class CollectionStore extends AbstractSnapshotStoreRepository implements C
       throw new \RuntimeException('Expected instance of Collection, got ' . get_class($collection));
     }
     return $collection;
+  }
+
+  public function getByIds(array $ids): HashMap {
+    $map = new HashMap();
+    foreach ($ids as $id) {
+      try {
+        $map->set($id, $this->get(ID::fromString($id)));
+      } catch (\Throwable) {
+      }
+    }
+    return $map;
   }
 }
