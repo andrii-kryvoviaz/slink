@@ -7,3 +7,4 @@ export { default as TagsOption } from './UploadOptions/TagsOption.svelte';
 export { default as UploadOptionItem } from './UploadOptions/UploadOptionItem.svelte';
 export { default as UploadOptionsPanel } from './UploadOptions/UploadOptionsPanel.svelte';
 export { default as UploadSuccess } from './UploadSuccess.svelte';
+export { default as VisibilityOption } from './UploadOptions/VisibilityOption.svelte';

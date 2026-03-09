@@ -3,6 +3,7 @@
 import type { AppSidebarGroup } from '@slink/feature/Navigation/Sidebar/types';
 
 import type { ApiClientType } from '@slink/api/Client';
+import type { UserPreferencesResponse } from '@slink/api/Response/User/UserPreferencesResponse';
 
 import type { CookieManager } from '@slink/lib/auth/CookieManager';
 import type { User } from '@slink/lib/auth/Type/User';
@@ -25,6 +26,7 @@ declare global {
       settings: UserSettings;
       globalSettings: GlobalSettings | null;
       user: User | null;
+      userPreferences: UserPreferencesResponse | null;
       cookieManager: CookieManager;
       flash: Flash;
     }
