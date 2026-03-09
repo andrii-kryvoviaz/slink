@@ -35,6 +35,7 @@
   import { fade } from 'svelte/transition';
 
   import type { Tag as TagType } from '@slink/api/Resources/TagResource';
+  import type { CollectionReference } from '@slink/api/Response/Collection/CollectionResponse';
 
   import { skeleton } from '@slink/lib/actions/skeleton';
   import { createTagFilterManager } from '@slink/lib/composables/useTagFilterUrl';
@@ -94,8 +95,11 @@
     historyFeedState.removeItem(id);
   };
 
-  const onCollectionChange = (imageId: string, collectionIds: string[]) => {
-    historyFeedState.update(imageId, { collectionIds });
+  const onCollectionChange = (
+    imageId: string,
+    collections: CollectionReference[],
+  ) => {
+    historyFeedState.update(imageId, { collections });
   };
 
   const handleTagFilterChange = async (

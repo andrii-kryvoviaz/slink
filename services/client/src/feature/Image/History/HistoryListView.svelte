@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { ImageCollectionList } from '@slink/feature/Collection';
   import {
     ImageActionBar,
     ImagePlaceholder,
@@ -31,8 +32,8 @@
     {
       getSelectionState: () => selectionState,
       onDelete: (id) => on?.delete(id),
-      onCollectionChange: (imageId, collectionIds) =>
-        on?.collectionChange(imageId, collectionIds),
+      onCollectionChange: (imageId, collections) =>
+        on?.collectionChange(imageId, collections),
       onSelectionChange: (id) => on?.selectionChange?.(id),
     },
   );
@@ -125,8 +126,8 @@
                 buttons={historyActionBarButtons}
                 on={{
                   imageDelete: handleDelete,
-                  collectionChange: (imageId, collectionIds) =>
-                    on?.collectionChange(imageId, collectionIds),
+                  collectionChange: (imageId, collections) =>
+                    on?.collectionChange(imageId, collections),
                 }}
                 compact
               />
@@ -137,23 +138,29 @@
             <ImageMetadata {item} gap="md" />
           </div>
 
-          {#if item.tags && item.tags.length > 0}
-            <div class="mt-auto">
+          <div class="mt-auto flex flex-col gap-2">
+            {#if item.collections && item.collections.length > 0}
+              <ImageCollectionList
+                collections={item.collections}
+                maxVisible={5}
+              />
+            {/if}
+
+            {#if item.tags && item.tags.length > 0}
               <ImageTagList
                 imageId={item.id}
                 variant="neon"
                 showImageCount={false}
                 removable={false}
                 initialTags={item.tags}
+                maxVisible={5}
               />
-            </div>
-          {:else}
-            <div
-              class="mt-auto text-xs text-gray-400 dark:text-gray-600 sm:hidden"
-            >
-              <FormattedDate date={item.attributes.createdAt.timestamp} />
-            </div>
-          {/if}
+            {:else}
+              <div class="text-xs text-gray-400 dark:text-gray-600 sm:hidden">
+                <FormattedDate date={item.attributes.createdAt.timestamp} />
+              </div>
+            {/if}
+          </div>
         </div>
       </article>
     </li>

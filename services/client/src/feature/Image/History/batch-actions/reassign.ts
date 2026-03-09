@@ -68,13 +68,11 @@ const tagDescriptor: ReassignmentDescriptor = {
 };
 
 const collectionDescriptor: ReassignmentDescriptor = {
-  getExisting: (item) => item.collectionIds ?? [],
+  getExisting: (item) => item.collections?.map((c) => c.id) ?? [],
   buildEntry: (ids) => ({ collectionIds: ids }),
   errorMessage: 'Failed to reassign collections. Please try again later.',
-  onSuccess: (ctx, perImageIds) => {
-    for (const [imageId, collectionIds] of Object.entries(perImageIds)) {
-      ctx.historyFeed.update(imageId, { collectionIds });
-    }
+  onSuccess: async (ctx) => {
+    await ctx.historyFeed.reload();
   },
 };
 

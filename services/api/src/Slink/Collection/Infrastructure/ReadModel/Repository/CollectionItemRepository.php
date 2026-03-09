@@ -170,6 +170,27 @@ final class CollectionItemRepository extends AbstractRepository implements Colle
     return $map;
   }
 
+  public function getCollectionsByImageIds(array $imageIds): array {
+    if (empty($imageIds)) {
+      return [];
+    }
+
+    $results = $this->createQueryBuilder('ci')
+      ->addSelect('c')
+      ->join('ci.collection', 'c')
+      ->where('ci.itemId IN (:imageIds)')
+      ->setParameter('imageIds', $imageIds)
+      ->getQuery()
+      ->getResult();
+
+    $map = [];
+    foreach ($results as $item) {
+      $map[$item->getItemId()][] = $item->getCollection();
+    }
+
+    return $map;
+  }
+
   public function getFirstImageIdsByCollectionIds(array $collectionIds, int $limit = 5): array {
     if (empty($collectionIds)) {
       return [];

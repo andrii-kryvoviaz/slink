@@ -11,6 +11,7 @@ import { routes } from '$lib/utils/url/routes';
 
 import { ReactiveState } from '@slink/api/ReactiveState';
 import type { ShareResponse } from '@slink/api/Response';
+import type { CollectionReference } from '@slink/api/Response/Collection/CollectionResponse';
 
 import { createCollectionPickerState } from '@slink/lib/state/CollectionPickerState.svelte';
 import { createCreateCollectionModalState } from '@slink/lib/state/CreateCollectionModalState.svelte';
@@ -31,7 +32,10 @@ interface UseImageActionsConfig {
     collectionIds?: string[];
   }) => void;
   onImageDelete?: (imageId: string) => void;
-  onCollectionChange?: (imageId: string, collectionIds: string[]) => void;
+  onCollectionChange?: (
+    imageId: string,
+    collections: CollectionReference[],
+  ) => void;
 }
 
 export function useImageActions(config: UseImageActionsConfig) {
@@ -148,6 +152,25 @@ export function useImageActions(config: UseImageActionsConfig) {
     isCopiedState.trigger();
   };
 
+  const handleCollectionToggle = ({
+    added,
+    collectionId,
+  }: {
+    added: boolean;
+    collectionId: string;
+  }) => {
+    const image = config.getImage();
+    const ids = image.collectionIds ?? [];
+    const newIds = added
+      ? [...ids, collectionId]
+      : ids.filter((id) => id !== collectionId);
+    config.onImageUpdate({ ...image, collectionIds: newIds });
+    const references: CollectionReference[] = collectionPickerState.collections
+      .filter((c) => newIds.includes(c.id))
+      .map(({ id, name }) => ({ id, name }));
+    config.onCollectionChange?.(image.id, references);
+  };
+
   const handleDelete = async (preserveOnDiskAfterDeletion: boolean) => {
     const image = config.getImage();
     await deletion.run(image.id, preserveOnDiskAfterDeletion);
@@ -165,6 +188,7 @@ export function useImageActions(config: UseImageActionsConfig) {
     handleDownload,
     handleVisibilityChange,
     handleCopy,
+    handleCollectionToggle,
     handleDelete,
     filterVisibleButtons,
     get downloadIsLoading() {

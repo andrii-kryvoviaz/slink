@@ -44,3 +44,8 @@ export interface CollectionItemsResponse {
   data: CollectionItem[];
   meta: ListingMetadata;
 }
+
+export type CollectionReference = {
+  id: string;
+  name: string;
+};

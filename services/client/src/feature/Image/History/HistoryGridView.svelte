@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { ImageCollectionList } from '@slink/feature/Collection';
   import {
     ImageActionBar,
     ImagePlaceholder,
@@ -33,8 +34,8 @@
     {
       getSelectionState: () => selectionState,
       onDelete: (id) => on?.delete(id),
-      onCollectionChange: (imageId, collectionIds) =>
-        on?.collectionChange(imageId, collectionIds),
+      onCollectionChange: (imageId, collections) =>
+        on?.collectionChange(imageId, collections),
       onSelectionChange: (id) => on?.selectionChange?.(id),
     },
   );
@@ -115,8 +116,8 @@
             buttons={historyActionBarButtons}
             on={{
               imageDelete: handleDelete,
-              collectionChange: (imageId, collectionIds) =>
-                on?.collectionChange(imageId, collectionIds),
+              collectionChange: (imageId, collections) =>
+                on?.collectionChange(imageId, collections),
             }}
             compact
           />
@@ -138,6 +139,15 @@
           <ImageMetadata {item} gap="sm" />
         </div>
 
+        {#if item.collections && item.collections.length > 0}
+          <div class="mb-2">
+            <ImageCollectionList
+              collections={item.collections}
+              maxVisible={3}
+            />
+          </div>
+        {/if}
+
         {#if item.tags && item.tags.length > 0}
           <ImageTagList
             imageId={item.id}
@@ -145,6 +155,7 @@
             showImageCount={false}
             removable={false}
             initialTags={item.tags}
+            maxVisible={3}
           />
         {/if}
       </div>

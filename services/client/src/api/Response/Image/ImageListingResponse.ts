@@ -1,4 +1,5 @@
 import type { Tag } from '@slink/api/Resources/TagResource';
+import type { CollectionReference } from '@slink/api/Response/Collection/CollectionResponse';
 import type { ListingMetadata } from '@slink/api/Response/Common/ListingMetadata';
 
 export type LicenseInfo = {
@@ -36,7 +37,7 @@ export type ImageListingItem = {
   license: LicenseInfo;
   bookmarkCount: number;
   isBookmarked?: boolean;
-  collectionIds?: string[];
+  collections?: CollectionReference[];
   tags?: Tag[];
 };
 

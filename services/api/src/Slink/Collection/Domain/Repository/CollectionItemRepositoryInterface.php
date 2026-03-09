@@ -6,6 +6,7 @@ namespace Slink\Collection\Domain\Repository;
 
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Slink\Collection\Infrastructure\ReadModel\View\CollectionItemView;
+use Slink\Collection\Infrastructure\ReadModel\View\CollectionView;
 
 interface CollectionItemRepositoryInterface {
   public function add(CollectionItemView $item): void;
@@ -55,6 +56,12 @@ interface CollectionItemRepositoryInterface {
    * @return array<string, string[]> Map of imageId => collectionIds[]
    */
   public function getCollectionIdsByImageIds(array $imageIds): array;
+
+  /**
+   * @param string[] $imageIds
+   * @return array<string, CollectionView[]> Map of imageId => CollectionView[]
+   */
+  public function getCollectionsByImageIds(array $imageIds): array;
 
   /**
    * @param string[] $collectionIds
