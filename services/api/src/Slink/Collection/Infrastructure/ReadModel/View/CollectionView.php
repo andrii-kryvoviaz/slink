@@ -25,7 +25,7 @@ class CollectionView extends AbstractView {
   public function __construct(
     #[ORM\Id]
     #[ORM\Column(type: 'uuid')]
-    #[Groups(['public'])]
+    #[Groups(['public', 'reference'])]
     #[SerializedName('id')]
     private string $uuid,
 
@@ -34,7 +34,7 @@ class CollectionView extends AbstractView {
     private UserView $user,
 
     #[ORM\Column(type: 'string', length: 105)]
-    #[Groups(['public'])]
+    #[Groups(['public', 'reference'])]
     #[Sanitize]
     private string $name,
 

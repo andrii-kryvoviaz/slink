@@ -43,7 +43,10 @@ export class BatchContext {
   );
 
   readonly collectionAssignmentCounts = $derived.by(() =>
-    countAssignments(this._selectedItems, (item) => item.collectionIds ?? []),
+    countAssignments(
+      this._selectedItems,
+      (item) => item.collections?.map((c) => c.id) ?? [],
+    ),
   );
 
   readonly selectedItemCount = $derived(this._selectedItems.length);

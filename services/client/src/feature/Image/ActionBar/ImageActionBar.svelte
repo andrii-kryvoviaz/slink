@@ -10,6 +10,8 @@
   import { cubicOut } from 'svelte/easing';
   import { scale } from 'svelte/transition';
 
+  import type { CollectionReference } from '@slink/api/Response/Collection/CollectionResponse';
+
   import { cn } from '@slink/utils/ui';
 
   import type { ActionButton, ActionLayout } from './ImageActionBar.theme';
@@ -37,7 +39,10 @@
     layout?: ActionLayout;
     on?: {
       imageDelete?: (imageId: string) => void;
-      collectionChange?: (imageId: string, collectionIds: string[]) => void;
+      collectionChange?: (
+        imageId: string,
+        collections: CollectionReference[],
+      ) => void;
     };
   }
 
@@ -209,14 +214,7 @@
       pickerState={actions.collectionPickerState}
       createModalState={actions.createCollectionModalState}
       variant="popover"
-      onToggle={({ added, collectionId }) => {
-        const ids = image.collectionIds ?? [];
-        const newIds = added
-          ? [...ids, collectionId]
-          : ids.filter((id) => id !== collectionId);
-        image = { ...image, collectionIds: newIds };
-        on?.collectionChange?.(image.id, newIds);
-      }}
+      onToggle={actions.handleCollectionToggle}
     />
   </Overlay>
 {/snippet}

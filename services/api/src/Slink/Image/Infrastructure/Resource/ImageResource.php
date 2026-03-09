@@ -95,9 +95,9 @@ final class ImageResource implements ResourceInterface {
     get => $this->data->has('bookmarks', $this->image->getUuid());
   }
 
-  /** @var array<string> */
+  /** @var array<array{id: string, name: string}> */
   #[Groups(['collection'])]
-  public array $collectionIds {
+  public array $collections {
     get => $this->data->get('collections', $this->image->getUuid(), []);
   }
 

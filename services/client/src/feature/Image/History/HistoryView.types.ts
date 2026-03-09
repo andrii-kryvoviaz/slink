@@ -1,4 +1,5 @@
 import type { ImageListingItem } from '@slink/api/Response';
+import type { CollectionReference } from '@slink/api/Response/Collection/CollectionResponse';
 
 import type { ImageSelectionState } from '@slink/lib/state/ImageSelectionState.svelte';
 
@@ -7,7 +8,10 @@ export interface HistoryViewProps {
   selectionState?: ImageSelectionState;
   on?: {
     delete: (id: string) => void;
-    collectionChange: (imageId: string, collectionIds: string[]) => void;
+    collectionChange: (
+      imageId: string,
+      collections: CollectionReference[],
+    ) => void;
     selectionChange?: (id: string) => void;
   };
 }
