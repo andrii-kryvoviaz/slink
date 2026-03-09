@@ -41,7 +41,7 @@ export const BadgeTheme = cva(
           'transition-all duration-200 cursor-pointer',
         ],
         minimal:
-          'bg-slate-50 text-slate-600 border border-slate-100 dark:bg-slate-900/50 dark:text-slate-400 dark:border-slate-800',
+          'bg-slate-50 text-slate-600 border border-slate-100 dark:bg-slate-800/60 dark:text-slate-300 dark:border-slate-700',
         glass: 'border-transparent bg-white/5 text-white/70 backdrop-blur-sm',
       },
       size: {

@@ -138,29 +138,29 @@
             <ImageMetadata {item} gap="md" />
           </div>
 
-          {#if item.collections && item.collections.length > 0}
-            <div class="mb-2">
-              <ImageCollectionList collections={item.collections} />
-            </div>
-          {/if}
+          <div class="mt-auto flex flex-col gap-2">
+            {#if item.collections && item.collections.length > 0}
+              <ImageCollectionList
+                collections={item.collections}
+                maxVisible={5}
+              />
+            {/if}
 
-          {#if item.tags && item.tags.length > 0}
-            <div class="mt-auto">
+            {#if item.tags && item.tags.length > 0}
               <ImageTagList
                 imageId={item.id}
                 variant="neon"
                 showImageCount={false}
                 removable={false}
                 initialTags={item.tags}
+                maxVisible={5}
               />
-            </div>
-          {:else}
-            <div
-              class="mt-auto text-xs text-gray-400 dark:text-gray-600 sm:hidden"
-            >
-              <FormattedDate date={item.attributes.createdAt.timestamp} />
-            </div>
-          {/if}
+            {:else}
+              <div class="text-xs text-gray-400 dark:text-gray-600 sm:hidden">
+                <FormattedDate date={item.attributes.createdAt.timestamp} />
+              </div>
+            {/if}
+          </div>
         </div>
       </article>
     </li>

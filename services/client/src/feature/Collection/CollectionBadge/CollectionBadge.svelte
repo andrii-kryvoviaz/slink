@@ -12,11 +12,11 @@
   let { collection }: Props = $props();
 </script>
 
-<a href="/collection/{collection.id}" class="shrink-0">
+<a href="/collection/{collection.id}" class="min-w-0">
   <Badge variant="minimal" size="sm">
     <div class="flex items-center gap-1.5">
       <Icon icon="ph:folder-simple" class="h-3 w-3" />
-      <span class="font-medium">{collection.name}</span>
+      <span class="max-w-[120px] truncate font-medium">{collection.name}</span>
     </div>
   </Badge>
 </a>

@@ -2,12 +2,18 @@ import type { ImageListingItem } from '@slink/api/Response/Image/ImageListingRes
 
 import { createWeightCalculator } from './weightCalculator';
 
-const TAGS_PER_ROW = 3;
 const TAG_ROW_WEIGHT = 0.1;
+const COLLECTION_ROW_WEIGHT = 0.1;
 
 function tagWeight(item: ImageListingItem): number {
-  const tagCount = item.tags?.length ?? 0;
-  return Math.ceil(tagCount / TAGS_PER_ROW) * TAG_ROW_WEIGHT;
+  return (item.tags?.length ?? 0) > 0 ? TAG_ROW_WEIGHT : 0;
 }
 
-export const calculateHistoryCardWeight = createWeightCalculator(tagWeight);
+function collectionWeight(item: ImageListingItem): number {
+  return (item.collections?.length ?? 0) > 0 ? COLLECTION_ROW_WEIGHT : 0;
+}
+
+export const calculateHistoryCardWeight = createWeightCalculator(
+  tagWeight,
+  collectionWeight,
+);

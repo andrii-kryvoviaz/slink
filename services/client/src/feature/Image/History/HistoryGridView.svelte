@@ -141,7 +141,10 @@
 
         {#if item.collections && item.collections.length > 0}
           <div class="mb-2">
-            <ImageCollectionList collections={item.collections} />
+            <ImageCollectionList
+              collections={item.collections}
+              maxVisible={3}
+            />
           </div>
         {/if}
 
@@ -152,6 +155,7 @@
             showImageCount={false}
             removable={false}
             initialTags={item.tags}
+            maxVisible={3}
           />
         {/if}
       </div>

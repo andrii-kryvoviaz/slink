@@ -1,5 +1,6 @@
 <script lang="ts">
   import { ApiClient } from '@slink/api';
+  import { OverflowBadgeList } from '@slink/feature/Layout/OverflowBadgeList';
   import { TagBadge } from '@slink/feature/Tag';
 
   import { browser } from '$app/environment';
@@ -17,6 +18,7 @@
     initialTags?: Tag[];
     onTagRemove?: (tagId: string) => void;
     disabled?: boolean;
+    maxVisible?: number;
   }
 
   let {
@@ -27,6 +29,7 @@
     initialTags = [],
     onTagRemove,
     disabled = false,
+    maxVisible,
   }: Props = $props();
 
   const {
@@ -65,8 +68,8 @@
 </script>
 
 {#if tags.length > 0}
-  <div class="flex flex-wrap gap-2">
-    {#each tags as tag (tag.id)}
+  <OverflowBadgeList items={tags} {maxVisible} itemLabel="more tag">
+    {#snippet badge(tag)}
       <TagBadge
         {tag}
         {variant}
@@ -74,8 +77,11 @@
         showCount={showImageCount}
         onClose={removable ? () => handleRemoveTag(tag.id) : undefined}
       />
-    {/each}
-  </div>
+    {/snippet}
+    {#snippet overflowBadge(tag)}
+      <TagBadge {tag} {variant} showFullPath={false} showCount={false} />
+    {/snippet}
+  </OverflowBadgeList>
 {:else if !$isLoadingTags}
   <p class="text-sm text-gray-500 dark:text-gray-400">
     No tags assigned to this image.

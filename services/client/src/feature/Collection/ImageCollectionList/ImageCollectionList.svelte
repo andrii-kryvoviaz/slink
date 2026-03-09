@@ -1,19 +1,26 @@
 <script lang="ts">
+  import { OverflowBadgeList } from '@slink/feature/Layout/OverflowBadgeList';
+
   import type { CollectionReference } from '@slink/api/Response/Collection/CollectionResponse';
 
   import { CollectionBadge } from '../CollectionBadge';
 
   interface Props {
     collections: CollectionReference[];
+    maxVisible?: number;
   }
 
-  let { collections }: Props = $props();
+  let { collections, maxVisible }: Props = $props();
 </script>
 
 {#if collections.length > 0}
-  <div class="flex flex-wrap gap-2">
-    {#each collections as collection (collection.id)}
+  <OverflowBadgeList
+    items={collections}
+    {maxVisible}
+    itemLabel="more collection"
+  >
+    {#snippet badge(collection)}
       <CollectionBadge {collection} />
-    {/each}
-  </div>
+    {/snippet}
+  </OverflowBadgeList>
 {/if}
