@@ -10,6 +10,7 @@ export abstract class AbstractFormState<TResult = void> {
   private _isSubmitting: boolean = $state(false);
   private _errors: Record<string, string> = $state({});
   private _onSuccess: ((result: TResult) => void) | null = null;
+  private _onClose: (() => void) | null = null;
 
   get isOpen() {
     return this._isOpen;
@@ -23,16 +24,25 @@ export abstract class AbstractFormState<TResult = void> {
     return this._errors;
   }
 
-  protected open(onSuccess?: (result: TResult) => void) {
+  protected open(onSuccess?: (result: TResult) => void, onClose?: () => void) {
     this._isOpen = true;
     this._errors = {};
     this._onSuccess = onSuccess ?? null;
+    this._onClose = onClose ?? null;
+  }
+
+  private _reset() {
+    this._isOpen = false;
+    this._isSubmitting = false;
+    this._errors = {};
+    this._onSuccess = null;
+    this._onClose = null;
   }
 
   close() {
-    this._isOpen = false;
-    this._errors = {};
-    this._onSuccess = null;
+    const onClose = this._onClose;
+    this._reset();
+    onClose?.();
   }
 
   protected async runSubmit(
@@ -58,8 +68,10 @@ export abstract class AbstractFormState<TResult = void> {
     }
 
     const onSuccess = this._onSuccess;
-    this.close();
+    const onClose = this._onClose;
+    this._reset();
     onSuccess?.(get(action.data) as TResult);
+    onClose?.();
     return true;
   }
 

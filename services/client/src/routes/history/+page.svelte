@@ -1,6 +1,9 @@
 <script lang="ts">
   import { LoadMoreButton } from '@slink/feature/Action';
-  import { CollectionListView } from '@slink/feature/Collection';
+  import {
+    CollectionListView,
+    CreateCollectionDialog,
+  } from '@slink/feature/Collection';
   import {
     BatchPickerAction,
     DeleteAction,
@@ -10,13 +13,20 @@
     SelectionActionBar,
     VisibilityAction,
     createBatchActionsState,
+    createBatchCollectionPickerState,
+    createBatchTagPickerState,
   } from '@slink/feature/Image';
   import {
     EmptyState,
     HistorySkeleton,
     ViewModeToggle,
   } from '@slink/feature/Layout';
-  import { ActiveFilterBar, TagFilter, TagListView } from '@slink/feature/Tag';
+  import {
+    ActiveFilterBar,
+    CreateTagDialog,
+    TagFilter,
+    TagListView,
+  } from '@slink/feature/Tag';
   import { Button } from '@slink/ui/components/button';
   import { untrack } from 'svelte';
 
@@ -29,11 +39,7 @@
   import { skeleton } from '@slink/lib/actions/skeleton';
   import { createTagFilterManager } from '@slink/lib/composables/useTagFilterUrl';
   import { type ViewMode } from '@slink/lib/settings';
-  import { createCollectionPickerState } from '@slink/lib/state/CollectionPickerState.svelte';
-  import { createCreateCollectionModalState } from '@slink/lib/state/CreateCollectionModalState.svelte';
   import { createImageSelectionState } from '@slink/lib/state/ImageSelectionState.svelte';
-  import { createPendingMultiSelection } from '@slink/lib/state/PendingSelectionState.svelte';
-  import { createTagPickerState } from '@slink/lib/state/TagPickerState.svelte';
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
 
   import { cn } from '@slink/utils/ui';
@@ -44,36 +50,13 @@
   const tagFilterManager = createTagFilterManager(page.url);
   const selectionState = createImageSelectionState();
 
-  const batchCollectionPickerState = createCollectionPickerState();
-  const batchCreateCollectionModalState = createCreateCollectionModalState();
-  const batchTagPickerState = createTagPickerState();
-
   const batchActions = createBatchActionsState(
     selectionState,
     () => historyFeedState.items,
   );
 
-  const tagSelection = createPendingMultiSelection(() => ({
-    counts: batchActions.tagAssignmentCounts,
-    total: batchActions.selectedItemCount,
-  }));
-
-  const collectionSelection = createPendingMultiSelection(() => ({
-    counts: batchActions.collectionAssignmentCounts,
-    total: batchActions.selectedItemCount,
-  }));
-
-  const applyPendingTags = async () => {
-    if (!tagSelection.hasChanges) return;
-    await batchActions.reassignTags(tagSelection);
-    tagSelection.reset();
-  };
-
-  const applyPendingCollection = async () => {
-    if (!collectionSelection.hasChanges) return;
-    await batchActions.reassignCollections(collectionSelection);
-    collectionSelection.reset();
-  };
+  const batchCollectionPicker = createBatchCollectionPickerState(batchActions);
+  const batchTagPicker = createBatchTagPickerState(batchActions);
 
   let viewMode = $derived(settings.history.viewMode);
 
@@ -334,25 +317,21 @@
         label="Collection"
         confirmLabel="Add to Collection"
         selectedCount={selectionState.selectedCount}
-        pendingCount={collectionSelection.changeCount}
+        pendingCount={batchCollectionPicker.selection.changeCount}
         loading={batchActions.isLoading}
-        onOpen={() => {
-          batchCollectionPickerState.load();
-          collectionSelection.reset();
-        }}
-        onApply={applyPendingCollection}
+        bind:open={batchCollectionPicker.open}
+        onOpen={batchCollectionPicker.handleOpen}
+        onApply={batchCollectionPicker.apply}
       >
         <CollectionListView
-          collections={batchCollectionPickerState.collections}
-          isLoading={batchCollectionPickerState.isLoading}
+          collections={batchCollectionPicker.picker.collections}
+          isLoading={batchCollectionPicker.picker.isLoading}
           variant="popover"
           showSearch
-          getItemState={(id) => collectionSelection.getState(id)}
-          onToggle={(collection) => collectionSelection.toggle(collection.id)}
-          onCreateNew={() =>
-            batchCreateCollectionModalState.open((collection) => {
-              batchCollectionPickerState.addCollection(collection);
-            })}
+          getItemState={(id) => batchCollectionPicker.selection.getState(id)}
+          onToggle={(collection) =>
+            batchCollectionPicker.selection.toggle(collection.id)}
+          onCreateNew={batchCollectionPicker.handleCreateNew}
         />
       </BatchPickerAction>
       <BatchPickerAction
@@ -360,21 +339,20 @@
         label="Tag"
         confirmLabel="Assign Tags"
         selectedCount={selectionState.selectedCount}
-        pendingCount={tagSelection.changeCount}
+        pendingCount={batchTagPicker.selection.changeCount}
         loading={batchActions.isLoading}
-        onOpen={() => {
-          batchTagPickerState.load();
-          tagSelection.reset();
-        }}
-        onApply={applyPendingTags}
+        bind:open={batchTagPicker.open}
+        onOpen={batchTagPicker.handleOpen}
+        onApply={batchTagPicker.apply}
       >
         <TagListView
-          tags={batchTagPickerState.tags}
-          isLoading={batchTagPickerState.isLoading}
+          tags={batchTagPicker.picker.tags}
+          isLoading={batchTagPicker.picker.isLoading}
           variant="popover"
           showSearch
-          getItemState={(id) => tagSelection.getState(id)}
-          onToggle={(tag) => tagSelection.toggle(tag.id)}
+          getItemState={(id) => batchTagPicker.selection.getState(id)}
+          onToggle={(tag) => batchTagPicker.selection.toggle(tag.id)}
+          onCreateNew={batchTagPicker.handleCreateNew}
         />
       </BatchPickerAction>
       <DownloadAction
@@ -390,3 +368,6 @@
     {/snippet}
   </SelectionActionBar>
 {/if}
+
+<CreateCollectionDialog modalState={batchCollectionPicker.modal} />
+<CreateTagDialog modalState={batchTagPicker.modal} />

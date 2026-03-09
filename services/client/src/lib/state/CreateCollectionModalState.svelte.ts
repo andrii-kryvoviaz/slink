@@ -11,8 +11,11 @@ export class CreateCollectionModalState extends AbstractFormState<CollectionResp
       ApiClient.collection.create(data),
   );
 
-  open(onCreated?: (collection: CollectionResponse) => void) {
-    super.open(onCreated);
+  open(
+    onCreated?: (collection: CollectionResponse) => void,
+    onClose?: () => void,
+  ) {
+    super.open(onCreated, onClose);
   }
 
   async submit(data: { name: string; description?: string }): Promise<boolean> {

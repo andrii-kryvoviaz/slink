@@ -21,6 +21,10 @@ export class TagPickerState {
     return this._isLoaded;
   }
 
+  addTag(tag: Tag) {
+    this._tags = [tag, ...this._tags];
+  }
+
   async load() {
     if (this._isLoaded) return;
 

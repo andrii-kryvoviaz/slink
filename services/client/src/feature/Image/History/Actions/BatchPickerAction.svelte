@@ -13,6 +13,7 @@
     selectedCount: number;
     pendingCount: number;
     loading?: boolean;
+    open?: boolean;
     onOpen?: () => void;
     onApply: () => void;
     children?: Snippet;
@@ -25,12 +26,11 @@
     selectedCount,
     pendingCount,
     loading = false,
+    open = $bindable(false),
     onOpen,
     onApply,
     children,
   }: Props = $props();
-
-  let open = $state(false);
 
   $effect(() => {
     if (open) onOpen?.();

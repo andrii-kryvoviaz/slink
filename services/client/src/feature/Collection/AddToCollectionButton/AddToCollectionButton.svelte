@@ -142,6 +142,7 @@
         {createModalState}
         variant="popover"
         onBeforeCreate={() => (isOpen = false)}
+        onAfterClose={() => (isOpen = true)}
         onToggle={(result) => {
           if (result) {
             onCollectionChange?.(result.collectionId, result.added);

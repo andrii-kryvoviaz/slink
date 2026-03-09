@@ -25,6 +25,7 @@ export { default as VisibilityAction } from './History/Actions/VisibilityAction.
 export { default as BatchActionConfirmation } from './History/BatchActionConfirmation.svelte';
 export * from './History/BatchActionsState.svelte';
 export * from './History/BatchContext.svelte';
+export * from './History/BatchPickerState.svelte';
 export { default as BulkDeleteConfirmation } from './History/BulkDeleteConfirmation.svelte';
 export { default as HistoryGridView } from './History/HistoryGridView.svelte';
 export { default as HistoryListView } from './History/HistoryListView.svelte';

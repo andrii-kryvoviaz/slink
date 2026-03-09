@@ -11,8 +11,8 @@ export class CreateTagModalState extends AbstractFormState<Tag> {
       ApiClient.tag.create(data).then(({ id }) => ApiClient.tag.getById(id)),
   );
 
-  open(onCreated?: (tag: Tag) => void) {
-    super.open(onCreated);
+  open(onCreated?: (tag: Tag) => void, onClose?: () => void) {
+    super.open(onCreated, onClose);
   }
 
   async submit(data: { name: string; parentId?: string }): Promise<boolean> {
