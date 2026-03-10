@@ -25,6 +25,7 @@
     preferences: UserPreferencesResponse;
     licenses: License[];
     licensingEnabled: boolean;
+    allowOnlyPublicImages: boolean;
   }
 
   interface Props {
@@ -37,17 +38,25 @@
   let licenses = $derived(data.licenses);
   let selectedLicense = $state('');
   let selectedLandingPage = $state(LandingPage.Explore);
+  let selectedVisibility = $state('private');
   let syncToImages = $state(false);
 
   $effect(() => {
     selectedLicense = data.preferences?.['license.default'] ?? '';
     selectedLandingPage =
       data.preferences?.['navigation.landingPage'] ?? LandingPage.Explore;
+    selectedVisibility =
+      data.preferences?.['image.defaultVisibility'] ?? 'private';
   });
 
   let selectedLicenseInfo = $derived(
     licenses.find((l) => l.id === selectedLicense),
   );
+
+  const visibilityOptions = [
+    { value: 'public', label: 'Public' },
+    { value: 'private', label: 'Private' },
+  ];
 
   const landingPageOptions = [
     { value: LandingPage.Explore, label: 'Explore' },
@@ -135,6 +144,40 @@
           </SettingItem>
         </div>
       </section>
+
+      {#if !data.allowOnlyPublicImages}
+        <section class="space-y-1">
+          <div class="flex items-center justify-between gap-4 pb-3">
+            <h2
+              class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+            >
+              Image Uploads
+            </h2>
+          </div>
+          <div
+            class="divide-y divide-gray-100 dark:divide-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 overflow-hidden"
+          >
+            <SettingItem>
+              {#snippet label()}
+                Default Visibility
+              {/snippet}
+              {#snippet hint()}
+                New uploads will be set to public or private by default
+              {/snippet}
+              <Select
+                items={visibilityOptions}
+                bind:value={selectedVisibility}
+                placeholder="Select visibility..."
+              />
+              <input
+                type="hidden"
+                name="defaultVisibility"
+                value={selectedVisibility ?? ''}
+              />
+            </SettingItem>
+          </div>
+        </section>
+      {/if}
 
       {#if data.licensingEnabled}
         <section class="space-y-1">

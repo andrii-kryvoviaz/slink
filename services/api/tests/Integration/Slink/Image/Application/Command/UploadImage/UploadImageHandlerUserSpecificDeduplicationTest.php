@@ -25,6 +25,7 @@ use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
+use Slink\User\Application\Service\UserPreferencesService;
 use Slink\User\Domain\Repository\UserPreferencesRepositoryInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -74,6 +75,7 @@ final class UploadImageHandlerUserSpecificDeduplicationTest extends TestCase {
     );
 
     $userPreferencesRepo = $this->createStub(UserPreferencesRepositoryInterface::class);
+    $preferencesService = new UserPreferencesService($userPreferencesRepo);
 
     $this->handler = new UploadImageHandler(
       $this->configurationProvider,
@@ -85,7 +87,7 @@ final class UploadImageHandlerUserSpecificDeduplicationTest extends TestCase {
       $creationContext,
       $metadataFactory,
       $storage,
-      $userPreferencesRepo
+      $preferencesService
     );
   }
 

@@ -3,7 +3,9 @@
   import {
     CollectionsOption,
     TagsOption,
+    VisibilityOption,
   } from '@slink/feature/Upload/UploadOptions';
+  import type { Visibility } from '@slink/feature/Upload/UploadOptions/VisibilityPreferenceState.svelte';
 
   import { page } from '$app/state';
 
@@ -16,6 +18,8 @@
     allowMultiple?: boolean;
     selectedTags?: Tag[];
     selectedCollections?: CollectionResponse[];
+    visibility?: Visibility;
+    allowOnlyPublicImages?: boolean;
     onchange?: (files: File[]) => void;
     onTagsChange?: (tags: Tag[]) => void;
     onCollectionsChange?: (collections: CollectionResponse[]) => void;
@@ -27,6 +31,8 @@
     allowMultiple = false,
     selectedTags = [],
     selectedCollections = [],
+    visibility = 'private',
+    allowOnlyPublicImages = false,
     onchange,
     onTagsChange,
     onCollectionsChange,
@@ -41,6 +47,9 @@
 
   {#if showOptions}
     <div class="flex flex-wrap items-center gap-2">
+      {#if !allowOnlyPublicImages}
+        <VisibilityOption {visibility} disabled={processing} />
+      {/if}
       <TagsOption {selectedTags} {onTagsChange} disabled={processing} />
       <CollectionsOption
         {selectedCollections}

@@ -6,6 +6,7 @@ namespace Slink\User\Domain\ValueObject;
 
 use Slink\Image\Domain\Enum\License;
 use Slink\Shared\Domain\ValueObject\AbstractCompoundValueObject;
+use Slink\User\Domain\Enum\DefaultVisibility;
 use Slink\User\Domain\Enum\LandingPage;
 
 final readonly class UserPreferences extends AbstractCompoundValueObject {
@@ -16,10 +17,11 @@ final readonly class UserPreferences extends AbstractCompoundValueObject {
     private array $data = [],
   ) {}
 
-  public static function create(?License $defaultLicense = null, ?LandingPage $defaultLandingPage = null): self {
+  public static function create(?License $defaultLicense = null, ?LandingPage $defaultLandingPage = null, ?DefaultVisibility $defaultVisibility = null): self {
     return new self([
       'license.default' => $defaultLicense?->value,
       'navigation.landingPage' => $defaultLandingPage?->value,
+      'image.defaultVisibility' => $defaultVisibility?->value,
     ]);
   }
 
@@ -45,6 +47,16 @@ final readonly class UserPreferences extends AbstractCompoundValueObject {
 
   public function withDefaultLandingPage(?LandingPage $landingPage): self {
     return new self([...$this->data, 'navigation.landingPage' => $landingPage?->value]);
+  }
+
+  public function getDefaultVisibility(): ?DefaultVisibility {
+    return isset($this->data['image.defaultVisibility'])
+      ? DefaultVisibility::tryFrom($this->data['image.defaultVisibility'])
+      : null;
+  }
+
+  public function withDefaultVisibility(?DefaultVisibility $visibility): self {
+    return new self([...$this->data, 'image.defaultVisibility' => $visibility?->value]);
   }
 
   /**

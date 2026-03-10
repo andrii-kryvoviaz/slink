@@ -22,7 +22,7 @@ use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
-use Slink\User\Domain\Repository\UserPreferencesRepositoryInterface;
+use Slink\User\Application\Service\UserPreferencesService;
 
 final readonly class UploadImageHandler implements CommandHandlerInterface {
 
@@ -39,7 +39,7 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
     private ImageCreationContext           $creationContext,
     private ImageMetadataFactory           $metadataFactory,
     private StorageInterface               $storage,
-    private UserPreferencesRepositoryInterface $userPreferencesRepository,
+    private UserPreferencesService         $preferencesService,
   ) {
   }
 
@@ -75,16 +75,17 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
     $imageFile = ImageFile::fromSymfonyFile($file);
     $metadata = $this->metadataFactory->createFromImageFile($imageFile);
 
-    $isPublic = $command->isPublic();
+    $preferences = $this->preferencesService->getForUser($userId);
+
+    $isPublic = $preferences->getDefaultVisibility()?->isPublic() ?? $command->isPublic();
+
     if ($this->configurationProvider->get('image.allowOnlyPublicImages') || $userId === null) {
       $isPublic = true;
     }
 
-    $license = null;
-    if ($userId && $this->configurationProvider->get('image.enableLicensing')) {
-      $userPrefs = $this->userPreferencesRepository->findByUserId($userId->toString());
-      $license = $userPrefs?->getPreferences()->getDefaultLicense();
-    }
+    $license = $this->configurationProvider->get('image.enableLicensing')
+      ? $preferences->getDefaultLicense()
+      : null;
 
     $attributes = ImageAttributes::create(
       $fileName,

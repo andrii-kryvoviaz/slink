@@ -74,6 +74,24 @@ const setGlobalSettingsOnLocals: Handle = async ({ event, resolve }) => {
   return resolve(event);
 };
 
+const setUserPreferencesOnLocals: Handle = async ({ event, resolve }) => {
+  event.locals.userPreferences = null;
+
+  if (!event.locals.user) {
+    return resolve(event);
+  }
+
+  try {
+    event.locals.userPreferences = await event.locals.api.user.getPreferences();
+  } catch {
+    console.warn(
+      `Failed to fetch user preferences for user ${event.locals.user.id}`,
+    );
+  }
+
+  return resolve(event);
+};
+
 const handleLinkHeaderPreloading: Handle = async ({ event, resolve }) => {
   const response = await resolve(event);
 
@@ -97,6 +115,7 @@ export const handle = sequence(
   initializeApiClient,
   injectApiHandling,
   setGlobalSettingsOnLocals,
+  setUserPreferencesOnLocals,
   setCookieSettingsOnLocals,
   applyClientTheme,
   handleLinkHeaderPreloading,

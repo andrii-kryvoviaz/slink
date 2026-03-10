@@ -17,10 +17,15 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
 
   const licensingEnabled = globalSettings?.image?.enableLicensing ?? false;
 
-  let preferences = {
-    'license.default': null as string | null,
-    'navigation.landingPage': null as string | null,
+  const allowOnlyPublicImages =
+    globalSettings?.image?.allowOnlyPublicImages ?? false;
+
+  const preferences = locals.userPreferences ?? {
+    'license.default': null,
+    'navigation.landingPage': null,
+    'image.defaultVisibility': null,
   };
+
   let licenses: {
     id: string;
     title: string;
@@ -29,16 +34,13 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
     url: string | null;
   }[] = [];
 
-  try {
-    const prefsResponse = await locals.api.user.getPreferences();
-    preferences = prefsResponse;
-
-    if (licensingEnabled) {
+  if (licensingEnabled) {
+    try {
       const licensesResponse = await locals.api.image.getLicenses();
       licenses = licensesResponse.licenses ?? [];
+    } catch (e) {
+      console.error('Failed to load licenses:', e);
     }
-  } catch (e) {
-    console.error('Failed to load preferences data:', e);
   }
 
   return {
@@ -46,19 +48,25 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
     preferences,
     licenses,
     licensingEnabled,
+    allowOnlyPublicImages,
   };
 };
 
 export const actions: Actions = {
   updatePreferences: async ({ request, locals }) => {
-    const { defaultLicense, syncLicenseToImages, defaultLandingPage } =
-      await formData(request);
+    const {
+      defaultLicense,
+      syncLicenseToImages,
+      defaultLandingPage,
+      defaultVisibility,
+    } = await formData(request);
 
     try {
       await locals.api.user.updatePreferences({
         defaultLicense: defaultLicense || null,
         syncLicenseToImages: syncLicenseToImages === 'true',
         defaultLandingPage: defaultLandingPage || null,
+        defaultVisibility: defaultVisibility || null,
       });
     } catch (e) {
       if (e instanceof HttpException) {

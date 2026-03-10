@@ -42,6 +42,8 @@
           'text-green-600 dark:text-green-300 bg-green-500/10 dark:bg-green-500/15 hover:bg-green-500/20 dark:hover:bg-green-500/25 border border-green-500/20 dark:border-green-400/20 hover:border-green-500/30 dark:hover:border-green-400/30 transition-all duration-200',
         'soft-red':
           'text-red-600 dark:text-red-300 bg-red-500/10 dark:bg-red-500/15 hover:bg-red-500/20 dark:hover:bg-red-500/25 border border-red-500/20 dark:border-red-400/20 hover:border-red-500/30 dark:hover:border-red-400/30 transition-all duration-200',
+        'soft-amber':
+          'text-amber-600 dark:text-amber-300 bg-amber-500/10 dark:bg-amber-500/15 hover:bg-amber-500/20 dark:hover:bg-amber-500/25 border border-amber-500/20 dark:border-amber-400/20 hover:border-amber-500/30 dark:hover:border-amber-400/30 transition-all duration-200',
         'outline-blue':
           'bg-transparent border border-blue-500 dark:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950 transition-all duration-200',
         'outline-green':
@@ -134,6 +136,7 @@
         'soft-blue': 'bg-transparent',
         'soft-green': 'bg-transparent',
         'soft-red': 'bg-transparent',
+        'soft-amber': 'bg-transparent',
         'outline-blue': 'bg-transparent text-blue-600 dark:text-blue-400',
         'outline-green': 'bg-transparent text-green-600 dark:text-green-400',
         'outline-purple': 'bg-transparent text-indigo-600 dark:text-indigo-400',

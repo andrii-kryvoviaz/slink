@@ -23,6 +23,7 @@ use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
+use Slink\User\Application\Service\UserPreferencesService;
 use Slink\User\Domain\Repository\UserPreferencesRepositoryInterface;
 use Symfony\Component\HttpFoundation\File\File;
 
@@ -45,7 +46,8 @@ class UploadImageHandlerSvgTest extends TestCase {
         $creationContext = new ImageCreationContext($duplicateSpec);
         $metadataFactory = $this->createStub(ImageMetadataFactory::class);
         $userPreferencesRepo = $this->createStub(UserPreferencesRepositoryInterface::class);
-        
+        $preferencesService = new UserPreferencesService($userPreferencesRepo);
+
         $handler = new UploadImageHandler(
             $configProvider,
             $imageRepository,
@@ -56,7 +58,7 @@ class UploadImageHandlerSvgTest extends TestCase {
             $creationContext,
             $metadataFactory,
             $storage,
-            $userPreferencesRepo
+            $preferencesService
         );
 
         $file = $this->createStub(File::class);
@@ -115,7 +117,8 @@ class UploadImageHandlerSvgTest extends TestCase {
         $creationContext = new ImageCreationContext($duplicateSpec);
         $metadataFactory = $this->createStub(ImageMetadataFactory::class);
         $userPreferencesRepo = $this->createStub(UserPreferencesRepositoryInterface::class);
-        
+        $preferencesService = new UserPreferencesService($userPreferencesRepo);
+
         $handler = new UploadImageHandler(
             $configProvider,
             $imageRepository,
@@ -126,7 +129,7 @@ class UploadImageHandlerSvgTest extends TestCase {
             $creationContext,
             $metadataFactory,
             $storage,
-            $userPreferencesRepo
+            $preferencesService
         );
 
         $file = $this->createStub(File::class);

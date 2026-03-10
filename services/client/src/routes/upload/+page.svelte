@@ -8,6 +8,7 @@
   } from '@slink/feature/Layout';
   import { UploadFormWithOptions, UploadSuccess } from '@slink/feature/Upload';
   import MultiUploadProgress from '@slink/feature/Upload/MultiUploadProgress.svelte';
+  import type { Visibility } from '@slink/feature/Upload/UploadOptions';
 
   import { useMultiUploadService } from '$lib/di';
   import { fade } from 'svelte/transition';
@@ -273,6 +274,8 @@
           allowMultiple={true}
           {selectedTags}
           {selectedCollections}
+          visibility={(data.defaultVisibility as Visibility) ?? 'private'}
+          allowOnlyPublicImages={data.allowOnlyPublicImages}
           onTagsChange={(tags) => (selectedTags = tags)}
           onCollectionsChange={(collections) =>
             (selectedCollections = collections)}
