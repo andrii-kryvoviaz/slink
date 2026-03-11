@@ -19,6 +19,7 @@
     position?: ButtonGroupItemPosition;
     active?: boolean;
     tooltip?: string;
+    disableTooltip?: boolean;
     children?: Snippet;
   };
 
@@ -29,13 +30,14 @@
     position = 'middle',
     active = false,
     tooltip,
+    disableTooltip,
     ref = $bindable(null),
     children,
     ...restProps
   }: Props = $props();
 </script>
 
-{#if tooltip}
+{#if tooltip && !disableTooltip}
   <Tooltip
     side="bottom"
     sideOffset={8}

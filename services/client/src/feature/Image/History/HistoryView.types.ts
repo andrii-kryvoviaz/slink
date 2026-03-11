@@ -1,3 +1,4 @@
+import type { Tag } from '@slink/api/Resources/TagResource';
 import type { ImageListingItem } from '@slink/api/Response';
 import type { CollectionReference } from '@slink/api/Response/Collection/CollectionResponse';
 
@@ -12,6 +13,7 @@ export interface HistoryViewProps {
       imageId: string,
       collections: CollectionReference[],
     ) => void;
+    tagChange?: (imageId: string, tags: Tag[]) => void;
     selectionChange?: (id: string) => void;
   };
 }

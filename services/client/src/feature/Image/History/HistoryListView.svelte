@@ -128,6 +128,7 @@
                   imageDelete: handleDelete,
                   collectionChange: (imageId, collections) =>
                     on?.collectionChange(imageId, collections),
+                  tagChange: (imageId, tags) => on?.tagChange?.(imageId, tags),
                 }}
                 compact
               />

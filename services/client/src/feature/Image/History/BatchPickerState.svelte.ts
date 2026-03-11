@@ -2,10 +2,6 @@ import type { Tag } from '@slink/api/Resources/TagResource';
 import type { CollectionResponse } from '@slink/api/Response';
 
 import {
-  type CollectionPickerState,
-  createCollectionPickerState,
-} from '@slink/lib/state/CollectionPickerState.svelte';
-import {
   type CreateCollectionModalState,
   createCreateCollectionModalState,
 } from '@slink/lib/state/CreateCollectionModalState.svelte';
@@ -14,13 +10,15 @@ import {
   createCreateTagModalState,
 } from '@slink/lib/state/CreateTagModalState.svelte';
 import {
+  type CollectionImagePickerState,
+  type TagImagePickerState,
+  createCollectionPickerState,
+  createImageTagPickerState,
+} from '@slink/lib/state/ImagePickerState.svelte';
+import {
   type PendingMultiSelection,
   createPendingMultiSelection,
 } from '@slink/lib/state/PendingSelectionState.svelte';
-import {
-  type TagPickerState,
-  createTagPickerState,
-} from '@slink/lib/state/TagPickerState.svelte';
 
 import type { BatchActionsState } from './BatchActionsState.svelte';
 
@@ -89,10 +87,10 @@ export const createBatchCollectionPickerState = (
   const modal = createCreateCollectionModalState();
   return new BatchPickerState<
     CollectionResponse,
-    CollectionPickerState,
+    CollectionImagePickerState,
     CreateCollectionModalState
   >(picker, modal, {
-    addItem: (collection) => picker.addCollection(collection),
+    addItem: (collection) => picker.addItem(collection),
     getCounts: () => batchActions.collectionAssignmentCounts,
     getTotal: () => batchActions.selectedItemCount,
     applyChanges: (s) => batchActions.reassignCollections(s),
@@ -100,13 +98,13 @@ export const createBatchCollectionPickerState = (
 };
 
 export const createBatchTagPickerState = (batchActions: BatchActionsState) => {
-  const picker = createTagPickerState();
+  const picker = createImageTagPickerState();
   const modal = createCreateTagModalState();
-  return new BatchPickerState<Tag, TagPickerState, CreateTagModalState>(
+  return new BatchPickerState<Tag, TagImagePickerState, CreateTagModalState>(
     picker,
     modal,
     {
-      addItem: (tag) => picker.addTag(tag),
+      addItem: (tag) => picker.addItem(tag),
       getCounts: () => batchActions.tagAssignmentCounts,
       getTotal: () => batchActions.selectedItemCount,
       applyChanges: (s) => batchActions.reassignTags(s),

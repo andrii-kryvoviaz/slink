@@ -1,8 +1,11 @@
 <script lang="ts">
-  import { CollectionPicker } from '@slink/feature/Collection';
+  import {
+    CollectionPicker,
+    CreateCollectionDialog,
+  } from '@slink/feature/Collection';
 
-  import { createCollectionPickerState } from '@slink/lib/state/CollectionPickerState.svelte';
   import { createCreateCollectionModalState } from '@slink/lib/state/CreateCollectionModalState.svelte';
+  import { createCollectionPickerState } from '@slink/lib/state/ImagePickerState.svelte';
 
   interface Props {
     imageId: string;
@@ -20,3 +23,4 @@
 </script>
 
 <CollectionPicker {pickerState} {createModalState} variant="panel" />
+<CreateCollectionDialog modalState={createModalState} />

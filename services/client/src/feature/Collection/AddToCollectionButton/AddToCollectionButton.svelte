@@ -1,5 +1,8 @@
 <script lang="ts">
-  import { CollectionPicker } from '@slink/feature/Collection';
+  import {
+    CollectionPicker,
+    CreateCollectionDialog,
+  } from '@slink/feature/Collection';
   import {
     type AddToCollectionButtonSize,
     type AddToCollectionButtonVariant,
@@ -13,8 +16,8 @@
   import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
   import Icon from '@iconify/svelte';
 
-  import { createCollectionPickerState } from '@slink/lib/state/CollectionPickerState.svelte';
   import { createCreateCollectionModalState } from '@slink/lib/state/CreateCollectionModalState.svelte';
+  import { createCollectionPickerState } from '@slink/lib/state/ImagePickerState.svelte';
 
   interface Props {
     imageId: string;
@@ -72,15 +75,13 @@
   }
 
   const hasCollections = $derived(
-    picker.collections.some((c) => picker.isInCollection(c.id)),
+    picker.items.some((c) => picker.isAssigned(c.id)),
   );
-  const tooltipText = $derived(
-    !isAuthenticated
-      ? 'Sign in to add to collection'
-      : !isOwnImage
-        ? 'Only own images can be added'
-        : 'Add to collection',
-  );
+  const tooltipText = $derived.by(() => {
+    if (!isAuthenticated) return 'Sign in to add to collection';
+    if (!isOwnImage) return 'Only own images can be added';
+    return 'Add to collection';
+  });
 </script>
 
 <PopoverPrimitive.Root bind:open={isOpen} onOpenChange={handleOpenChange}>
@@ -145,10 +146,12 @@
         onAfterClose={() => (isOpen = true)}
         onToggle={(result) => {
           if (result) {
-            onCollectionChange?.(result.collectionId, result.added);
+            onCollectionChange?.(result.itemId, result.added);
           }
         }}
       />
     </PopoverPrimitive.Content>
   </PopoverPrimitive.Portal>
 </PopoverPrimitive.Root>
+
+<CreateCollectionDialog modalState={createModalState} />

@@ -102,6 +102,10 @@
     historyFeedState.update(imageId, { collections });
   };
 
+  const onTagChange = (imageId: string, tags: TagType[]) => {
+    historyFeedState.update(imageId, { tags });
+  };
+
   const handleTagFilterChange = async (
     tags: TagType[],
     requireAllTags: boolean,
@@ -268,6 +272,7 @@
               on={{
                 delete: onImageDelete,
                 collectionChange: onCollectionChange,
+                tagChange: onTagChange,
               }}
             />
           {:else}
@@ -277,6 +282,7 @@
               on={{
                 delete: onImageDelete,
                 collectionChange: onCollectionChange,
+                tagChange: onTagChange,
               }}
             />
           {/if}
@@ -328,7 +334,7 @@
         onApply={batchCollectionPicker.apply}
       >
         <CollectionListView
-          collections={batchCollectionPicker.picker.collections}
+          collections={batchCollectionPicker.picker.items}
           isLoading={batchCollectionPicker.picker.isLoading}
           variant="popover"
           showSearch
@@ -350,7 +356,7 @@
         onApply={batchTagPicker.apply}
       >
         <TagListView
-          tags={batchTagPicker.picker.tags}
+          tags={batchTagPicker.picker.items}
           isLoading={batchTagPicker.picker.isLoading}
           variant="popover"
           showSearch

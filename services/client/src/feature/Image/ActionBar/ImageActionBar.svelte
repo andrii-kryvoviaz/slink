@@ -1,7 +1,11 @@
 <script lang="ts">
-  import { CollectionPicker } from '@slink/feature/Collection';
+  import {
+    CollectionPicker,
+    CreateCollectionDialog,
+  } from '@slink/feature/Collection';
   import { ImageDeletePopover } from '@slink/feature/Image';
   import { Loader } from '@slink/feature/Layout';
+  import { CreateTagDialog, TagPicker } from '@slink/feature/Tag';
   import { ButtonGroup, ButtonGroupItem } from '@slink/ui/components';
   import { Overlay } from '@slink/ui/components/popover';
   import { TooltipProvider } from '@slink/ui/components/tooltip';
@@ -10,6 +14,7 @@
   import { cubicOut } from 'svelte/easing';
   import { scale } from 'svelte/transition';
 
+  import type { Tag } from '@slink/api/Resources/TagResource';
   import type { CollectionReference } from '@slink/api/Response/Collection/CollectionResponse';
 
   import { cn } from '@slink/utils/ui';
@@ -33,6 +38,7 @@
       fileName: string;
       isPublic: boolean;
       collectionIds?: string[];
+      tagIds?: string[];
     };
     buttons?: ActionButton[];
     compact?: boolean;
@@ -43,6 +49,7 @@
         imageId: string,
         collections: CollectionReference[],
       ) => void;
+      tagChange?: (imageId: string, tags: Tag[]) => void;
     };
   }
 
@@ -62,6 +69,7 @@
     onImageUpdate: (updated) => (image = updated),
     onImageDelete: (id) => on?.imageDelete?.(id),
     onCollectionChange: (id, ids) => on?.collectionChange?.(id, ids),
+    onTagChange: (id, tags) => on?.tagChange?.(id, tags),
   });
 
   const visibleButtons = $derived(actions.filterVisibleButtons(buttons));
@@ -104,7 +112,7 @@
 {#snippet deletePopoverContent()}
   <ImageDeletePopover
     loading={actions.deleteIsLoading}
-    close={() => (actions.deletePopoverOpen = false)}
+    close={() => (actions.popover.delete = false)}
     confirm={({ preserveOnDiskAfterDeletion }) =>
       actions.handleDelete(preserveOnDiskAfterDeletion)}
   />
@@ -168,7 +176,7 @@
 
 {#snippet deleteButton(position: ButtonPosition)}
   <Overlay
-    bind:open={actions.deletePopoverOpen}
+    bind:open={actions.popover.delete}
     variant="floating"
     contentProps={{ align: 'end' }}
     triggerClass={isHero ? '' : 'flex-1'}
@@ -182,6 +190,7 @@
         aria-label="Delete image"
         disabled={actions.deleteIsLoading}
         tooltip="Delete image"
+        disableTooltip={actions.popover.delete}
       >
         <Icon icon="lucide:trash-2" class={iconClass} />
       </ButtonGroupItem>
@@ -192,7 +201,7 @@
 
 {#snippet collectionButton(position: ButtonPosition)}
   <Overlay
-    bind:open={actions.collectionPopoverOpen}
+    bind:open={actions.popover.collection}
     variant="floating"
     size="none"
     contentProps={{ align: 'end' }}
@@ -206,6 +215,7 @@
         class={actionButtonVariants({ layout })}
         aria-label="Add to collection"
         tooltip="Add to collection"
+        disableTooltip={actions.popover.collection}
       >
         <Icon icon="lucide:folder" class={iconClass} />
       </ButtonGroupItem>
@@ -215,6 +225,40 @@
       createModalState={actions.createCollectionModalState}
       variant="popover"
       onToggle={actions.handleCollectionToggle}
+      onBeforeCreate={actions.popover.suspend}
+      onAfterClose={actions.popover.restore}
+    />
+  </Overlay>
+{/snippet}
+
+{#snippet tagButton(position: ButtonPosition)}
+  <Overlay
+    bind:open={actions.popover.tag}
+    variant="floating"
+    size="none"
+    contentProps={{ align: 'end' }}
+    triggerClass={isHero ? '' : 'flex-1'}
+  >
+    {#snippet trigger()}
+      <ButtonGroupItem
+        variant="default"
+        size="md"
+        position={isHero ? 'only' : position}
+        class={actionButtonVariants({ layout })}
+        aria-label="Manage tags"
+        tooltip="Manage tags"
+        disableTooltip={actions.popover.tag}
+      >
+        <Icon icon="lucide:tag" class={iconClass} />
+      </ButtonGroupItem>
+    {/snippet}
+    <TagPicker
+      pickerState={actions.tagPickerState}
+      createModalState={actions.createTagModalState}
+      variant="popover"
+      onToggle={actions.handleTagToggle}
+      onBeforeCreate={actions.popover.suspend}
+      onAfterClose={actions.popover.restore}
     />
   </Overlay>
 {/snippet}
@@ -230,6 +274,8 @@
     {@render deleteButton(position)}
   {:else if button === 'collection'}
     {@render collectionButton(position)}
+  {:else if button === 'tag'}
+    {@render tagButton(position)}
   {/if}
 {/snippet}
 
@@ -275,3 +321,6 @@
     </ButtonGroup>
   {/if}
 </TooltipProvider>
+
+<CreateCollectionDialog modalState={actions.createCollectionModalState} />
+<CreateTagDialog modalState={actions.createTagModalState} />

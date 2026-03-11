@@ -119,5 +119,6 @@ export type ActionButton =
   | 'visibility'
   | 'delete'
   | 'copy'
-  | 'collection';
+  | 'collection'
+  | 'tag';
 export type ActionLayout = 'default' | 'hero';

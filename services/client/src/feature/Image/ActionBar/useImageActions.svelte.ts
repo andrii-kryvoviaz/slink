@@ -4,17 +4,23 @@ import { goto } from '$app/navigation';
 import { page } from '$app/state';
 import { useUploadHistoryFeed } from '$lib/state/UploadHistoryFeed.svelte.js';
 import { downloadByLink } from '$lib/utils/http/downloadByLink';
+import { createExclusiveToggle } from '$lib/utils/state/createExclusiveToggle.svelte';
 import { bindRequestState } from '$lib/utils/store/bindRequestState.svelte';
 import { useAutoReset } from '$lib/utils/time/useAutoReset.svelte';
 import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
 import { routes } from '$lib/utils/url/routes';
 
 import { ReactiveState } from '@slink/api/ReactiveState';
+import type { Tag } from '@slink/api/Resources/TagResource';
 import type { ShareResponse } from '@slink/api/Response';
 import type { CollectionReference } from '@slink/api/Response/Collection/CollectionResponse';
 
-import { createCollectionPickerState } from '@slink/lib/state/CollectionPickerState.svelte';
 import { createCreateCollectionModalState } from '@slink/lib/state/CreateCollectionModalState.svelte';
+import { createCreateTagModalState } from '@slink/lib/state/CreateTagModalState.svelte';
+import {
+  createCollectionPickerState,
+  createImageTagPickerState,
+} from '@slink/lib/state/ImagePickerState.svelte';
 
 import type { ActionButton } from './ImageActionBar.theme';
 
@@ -24,18 +30,21 @@ interface UseImageActionsConfig {
     fileName: string;
     isPublic: boolean;
     collectionIds?: string[];
+    tagIds?: string[];
   };
   onImageUpdate: (image: {
     id: string;
     fileName: string;
     isPublic: boolean;
     collectionIds?: string[];
+    tagIds?: string[];
   }) => void;
   onImageDelete?: (imageId: string) => void;
   onCollectionChange?: (
     imageId: string,
     collections: CollectionReference[],
   ) => void;
+  onTagChange?: (imageId: string, tags: Tag[]) => void;
 }
 
 export function useImageActions(config: UseImageActionsConfig) {
@@ -76,11 +85,13 @@ export function useImageActions(config: UseImageActionsConfig) {
 
   const downloadLoadingState = useAutoReset(500);
   const isCopiedState = useAutoReset(1000);
-  let deletePopoverOpen = $state(false);
-  let collectionPopoverOpen = $state(false);
+  const popover = createExclusiveToggle('collection', 'tag', 'delete');
 
   const collectionPickerState = createCollectionPickerState();
   const createCollectionModalState = createCreateCollectionModalState();
+
+  const tagPickerState = createImageTagPickerState();
+  const createTagModalState = createCreateTagModalState();
 
   $effect(() => {
     const image = config.getImage();
@@ -88,8 +99,19 @@ export function useImageActions(config: UseImageActionsConfig) {
   });
 
   $effect(() => {
-    if (collectionPopoverOpen) {
+    if (popover.collection) {
       collectionPickerState.load();
+    }
+  });
+
+  $effect(() => {
+    const image = config.getImage();
+    tagPickerState.setImage(image.id, image.tagIds ?? []);
+  });
+
+  $effect(() => {
+    if (popover.tag) {
+      tagPickerState.load();
     }
   });
 
@@ -154,21 +176,36 @@ export function useImageActions(config: UseImageActionsConfig) {
 
   const handleCollectionToggle = ({
     added,
-    collectionId,
+    itemId,
   }: {
     added: boolean;
-    collectionId: string;
+    itemId: string;
   }) => {
     const image = config.getImage();
     const ids = image.collectionIds ?? [];
-    const newIds = added
-      ? [...ids, collectionId]
-      : ids.filter((id) => id !== collectionId);
+    const newIds = added ? [...ids, itemId] : ids.filter((id) => id !== itemId);
     config.onImageUpdate({ ...image, collectionIds: newIds });
-    const references: CollectionReference[] = collectionPickerState.collections
+    const references: CollectionReference[] = collectionPickerState.items
       .filter((c) => newIds.includes(c.id))
       .map(({ id, name }) => ({ id, name }));
     config.onCollectionChange?.(image.id, references);
+  };
+
+  const handleTagToggle = ({
+    added,
+    itemId,
+  }: {
+    added: boolean;
+    itemId: string;
+  }) => {
+    const image = config.getImage();
+    const ids = image.tagIds ?? [];
+    const newIds = added ? [...ids, itemId] : ids.filter((id) => id !== itemId);
+    config.onImageUpdate({ ...image, tagIds: newIds });
+    const tags: Tag[] = tagPickerState.items.filter((t) =>
+      newIds.includes(t.id),
+    );
+    config.onTagChange?.(image.id, tags);
   };
 
   const handleDelete = async (preserveOnDiskAfterDeletion: boolean) => {
@@ -179,7 +216,7 @@ export function useImageActions(config: UseImageActionsConfig) {
       return;
     }
     historyFeedState.removeItem(image.id);
-    deletePopoverOpen = false;
+    popover.delete = false;
     await goto('/history');
     config.onImageDelete?.(image.id);
   };
@@ -215,17 +252,9 @@ export function useImageActions(config: UseImageActionsConfig) {
     },
     collectionPickerState,
     createCollectionModalState,
-    get collectionPopoverOpen() {
-      return collectionPopoverOpen;
-    },
-    set collectionPopoverOpen(value: boolean) {
-      collectionPopoverOpen = value;
-    },
-    get deletePopoverOpen() {
-      return deletePopoverOpen;
-    },
-    set deletePopoverOpen(value: boolean) {
-      deletePopoverOpen = value;
-    },
+    tagPickerState,
+    createTagModalState,
+    handleTagToggle,
+    popover,
   };
 }

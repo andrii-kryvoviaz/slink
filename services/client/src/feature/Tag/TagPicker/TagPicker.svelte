@@ -1,16 +1,16 @@
 <script lang="ts">
-  import { CollectionListView } from '@slink/feature/Collection';
+  import { TagListView } from '@slink/feature/Tag';
   import {
     ImageItemPicker,
     type PickerVariant,
   } from '@slink/ui/components/picker';
 
-  import type { CreateCollectionModalState } from '@slink/lib/state/CreateCollectionModalState.svelte';
-  import type { CollectionImagePickerState } from '@slink/lib/state/ImagePickerState.svelte';
+  import type { CreateTagModalState } from '@slink/lib/state/CreateTagModalState.svelte';
+  import type { TagImagePickerState } from '@slink/lib/state/ImagePickerState.svelte';
 
   interface Props {
-    pickerState: CollectionImagePickerState;
-    createModalState: CreateCollectionModalState;
+    pickerState: TagImagePickerState;
+    createModalState: CreateTagModalState;
     variant?: PickerVariant;
     onToggle?: (result: { added: boolean; itemId: string }) => void;
     onBeforeCreate?: () => void;
@@ -44,8 +44,8 @@
     onToggle: toggle,
     onCreateNew,
   })}
-    <CollectionListView
-      collections={items}
+    <TagListView
+      tags={items}
       {selectedIds}
       {isLoading}
       {togglingId}

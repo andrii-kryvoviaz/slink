@@ -7,6 +7,7 @@ import type { ActionButton } from '../ActionBar/ImageActionBar.theme';
 export const historyActionBarButtons: ActionButton[] = [
   'download',
   'collection',
+  'tag',
   'copy',
   'visibility',
   'delete',
@@ -18,6 +19,7 @@ export function createActionBarImage(item: ImageListingItem) {
     fileName: item.attributes.fileName,
     isPublic: item.attributes.isPublic,
     collectionIds: item.collections?.map((c) => c.id),
+    tagIds: item.tags?.map((t) => t.id),
   };
 }
 
@@ -63,7 +65,7 @@ export const actionBarVisibilityVariants = cva('absolute top-2 right-2', {
     selectionMode: {
       true: 'opacity-0 pointer-events-none',
       false:
-        '[@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:none)]:opacity-100 transition-opacity duration-200',
+        '[@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:none)]:opacity-100 [&:has([data-state=open])]:opacity-100 transition-opacity duration-200',
     },
   },
   defaultVariants: {
@@ -76,7 +78,7 @@ export const listActionBarVisibilityVariants = cva('shrink-0', {
     selectionMode: {
       true: 'opacity-0 pointer-events-none',
       false:
-        'opacity-0 group-hover:opacity-100 sm:opacity-100 transition-opacity duration-200',
+        'opacity-0 group-hover:opacity-100 sm:opacity-100 [&:has([data-state=open])]:opacity-100 transition-opacity duration-200',
     },
   },
   defaultVariants: {
