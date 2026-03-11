@@ -80,6 +80,7 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
 
   public invalidate(): void {
     this.markDirty(false);
+    this._nextCursor = null;
   }
 
   public async load(
