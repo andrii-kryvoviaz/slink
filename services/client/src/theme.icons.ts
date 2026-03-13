@@ -220,4 +220,5 @@ export const themeIcons: string[] = [
   'simple-icons:keycloak',
   'simple-icons:authelia',
   'simple-icons:pocket',
+  'heroicons:table-cells',
 ];

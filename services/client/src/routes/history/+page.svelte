@@ -8,6 +8,7 @@
     BatchPickerAction,
     DeleteAction,
     DownloadAction,
+    HistoryDataTable,
     HistoryGridView,
     HistoryListView,
     SelectionActionBar,
@@ -40,6 +41,7 @@
   import { skeleton } from '@slink/lib/actions/skeleton';
   import { createTagFilterManager } from '@slink/lib/composables/useTagFilterUrl';
   import { type ViewMode } from '@slink/lib/settings';
+  import { useTableSettings } from '@slink/lib/settings/composables/useTableSettings.svelte';
   import { createImageSelectionState } from '@slink/lib/state/ImageSelectionState.svelte';
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
 
@@ -50,6 +52,7 @@
   const historyFeedState = useUploadHistoryFeed();
   const tagFilterManager = createTagFilterManager(page.url);
   const selectionState = createImageSelectionState();
+  const tableSettings = useTableSettings('history');
 
   const batchActions = createBatchActionsState(
     selectionState,
@@ -62,6 +65,9 @@
   let viewMode = $derived(settings.history.viewMode);
 
   $effect(() => {
+    historyFeedState.setMode(viewMode === 'table' ? 'never' : 'always');
+    untrack(() => historyFeedState.setPageSize(tableSettings.pageSize));
+
     if (tagFilterManager.hasFiltersInUrl()) {
       loadTagFiltersFromUrl();
     } else if (untrack(() => historyFeedState.needsLoad)) {
@@ -145,8 +151,18 @@
     selectionState.deselectAll();
   };
 
+  const handleTablePageSizeChange = async (size: number) => {
+    tableSettings.pageSize = size;
+    historyFeedState.setPageSize(size);
+    await historyFeedState.reload();
+  };
+
   const filterKey = $derived(
     `${historyFeedState.tagFilter.selectedTags.map((t) => t.id).join(',')}-${historyFeedState.tagFilter.requireAllTags}`,
+  );
+
+  const showSelectionTrigger = $derived(
+    !historyFeedState.isEmpty && viewMode !== 'table',
   );
 </script>
 
@@ -178,7 +194,7 @@
         </div>
 
         <div class="flex items-center gap-3 shrink-0">
-          {#if !historyFeedState.isEmpty}
+          {#if showSelectionTrigger}
             {#if selectionState.isSelectionMode}
               <Button
                 variant="toggle"
@@ -209,7 +225,7 @@
 
           <ViewModeToggle
             value={viewMode}
-            modes={['grid', 'list']}
+            modes={['grid', 'list', 'table']}
             on={{ change: handleViewModeChange }}
           />
         </div>
@@ -265,6 +281,24 @@
     {:else}
       <div in:fade={{ duration: 400 }}>
         {#key filterKey}
+          {#if viewMode === 'table'}
+            <HistoryDataTable
+              items={historyFeedState.items}
+              {selectionState}
+              on={{
+                delete: onImageDelete,
+                collectionChange: onCollectionChange,
+                tagChange: onTagChange,
+                nextPage: () => historyFeedState.nextPage(),
+                prevPage: () => historyFeedState.prevPage(),
+                pageSizeChange: handleTablePageSizeChange,
+              }}
+              {tableSettings}
+              isLoading={historyFeedState.isLoading}
+              pagination={historyFeedState.pagination}
+            />
+          {/if}
+
           {#if viewMode === 'grid'}
             <HistoryGridView
               items={historyFeedState.items}
@@ -275,7 +309,9 @@
                 tagChange: onTagChange,
               }}
             />
-          {:else}
+          {/if}
+
+          {#if viewMode === 'list'}
             <HistoryListView
               items={historyFeedState.items}
               {selectionState}
@@ -290,21 +326,23 @@
       </div>
     {/if}
 
-    <LoadMoreButton
-      class="mt-8"
-      visible={historyFeedState.hasMore}
-      loading={historyFeedState.isLoading}
-      onclick={() =>
-        historyFeedState.nextPage({
-          debounce: 300,
-        })}
-      variant="modern"
-      rounded="full"
-    >
-      {#snippet text()}
-        <span>View More</span>
-      {/snippet}
-    </LoadMoreButton>
+    {#if viewMode !== 'table'}
+      <LoadMoreButton
+        class="mt-8"
+        visible={historyFeedState.hasMore}
+        loading={historyFeedState.isLoading}
+        onclick={() =>
+          historyFeedState.nextPage({
+            debounce: 300,
+          })}
+        variant="modern"
+        rounded="full"
+      >
+        {#snippet text()}
+          <span>View More</span>
+        {/snippet}
+      </LoadMoreButton>
+    {/if}
   </div>
 </section>
 

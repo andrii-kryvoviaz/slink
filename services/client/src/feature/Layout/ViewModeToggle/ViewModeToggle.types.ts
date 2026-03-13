@@ -8,6 +8,7 @@ export type ViewModeConfig = {
 export const viewModeRegistry: Record<ViewMode, ViewModeConfig> = {
   grid: { label: 'Grid', icon: 'heroicons:squares-2x2' },
   list: { label: 'List', icon: 'heroicons:bars-3' },
+  table: { label: 'Table', icon: 'heroicons:table-cells' },
 };
 
 export interface ViewModeToggleProps {
