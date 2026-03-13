@@ -7,7 +7,10 @@
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
-  import { imagePlaceholderVariants } from './ImagePlaceholder.theme';
+  import {
+    imagePlaceholderVariants,
+    imagePlaceholderWrapperVariants,
+  } from './ImagePlaceholder.theme';
 
   interface Props {
     src: string;
@@ -19,8 +22,6 @@
       size: number | undefined;
     };
     class?: string;
-    stretch?: boolean;
-    stretchThreshold?: number;
     showMetadata?: boolean;
     showOpenInNewTab?: boolean;
     uniqueId?: any;
@@ -34,8 +35,6 @@
     alt = '',
     metadata,
     class: className = '',
-    stretch = false,
-    stretchThreshold = 0.4,
     showMetadata = true,
     showOpenInNewTab = true,
     rounded = true,
@@ -52,7 +51,7 @@
     src.includes('.svg') || metadata.mimeType === 'image/svg+xml',
   );
 
-  let aspectRatio = $derived(() => {
+  let aspectRatio = $derived.by(() => {
     if (
       isSvg &&
       (metadata.height === 0 ||
@@ -69,7 +68,7 @@
       !(isSvg && (metadata.height === 0 || metadata.width === 0)),
   );
 
-  let finalRatio = $derived(shouldUseAspectRatio ? aspectRatio() : 1);
+  let finalRatio = $derived(shouldUseAspectRatio ? aspectRatio : 1);
 
   const urlHasSizingParams = (url: string): boolean => {
     const params = new URLSearchParams(url.split('?')[1] || '');
@@ -95,20 +94,6 @@
     }
   };
 
-  let shouldStretch = $derived.by(() => {
-    if (isSvg) return true;
-    if (objectFit === 'cover') return true;
-    if (!keepAspectRatio) return true;
-    if (!stretch) return false;
-
-    const minRequiredHeight = metadata.height * stretchThreshold;
-    const minRequiredWidth = metadata.width * stretchThreshold;
-
-    return (
-      metadata.height >= minRequiredHeight && metadata.width >= minRequiredWidth
-    );
-  });
-
   let resolvedObjectFit = $derived.by(() => {
     if (objectFit) return objectFit;
     if (isSvg) return 'contain';
@@ -118,8 +103,8 @@
 
   let imageClasses = $derived(
     imagePlaceholderVariants({
-      stretch: shouldStretch || keepAspectRatio || isSvg,
       objectFit: resolvedObjectFit,
+      keepAspectRatio,
       visibility: isSvg || (isLoaded && !hasError) ? 'visible' : 'hidden',
     }),
   );
@@ -264,10 +249,12 @@
     <AspectRatio.Root
       ratio={finalRatio}
       class={cn(
-        'group relative flex items-center justify-center overflow-hidden border-slate-500/10 bg-white/0 w-full',
+        imagePlaceholderWrapperVariants({
+          keepAspectRatio: true,
+          rounded,
+          bordered: showMetadata || showOpenInNewTab,
+        }),
         className,
-        rounded && 'rounded-md',
-        (showMetadata || showOpenInNewTab) && 'border',
       )}
     >
       {@render content()}
@@ -275,13 +262,27 @@
   {:else}
     <div
       class={cn(
-        'group relative flex items-center justify-center overflow-hidden border-slate-500/10 bg-white/0 w-full h-full',
+        imagePlaceholderWrapperVariants({
+          keepAspectRatio: false,
+          objectFit: resolvedObjectFit,
+          rounded,
+          bordered: showMetadata || showOpenInNewTab,
+        }),
         className,
-        rounded && 'rounded-md',
-        (showMetadata || showOpenInNewTab) && 'border',
       )}
+      class:contain-fit={resolvedObjectFit === 'contain'}
+      style:--aspect={aspectRatio}
     >
       {@render content()}
     </div>
   {/if}
 </TooltipProvider>
+
+<style>
+  @media (min-width: 1024px) {
+    .contain-fit {
+      width: min(100cqw, calc(100cqh * var(--aspect)));
+      height: min(100cqh, calc(100cqw / var(--aspect)));
+    }
+  }
+</style>

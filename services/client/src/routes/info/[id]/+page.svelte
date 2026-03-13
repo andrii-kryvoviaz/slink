@@ -223,7 +223,6 @@
       <ImagePlaceholder
         src={image.url}
         metadata={image}
-        stretch={false}
         showOpenInNewTab={false}
       />
       <div

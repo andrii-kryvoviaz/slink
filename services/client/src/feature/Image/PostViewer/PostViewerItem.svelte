@@ -27,7 +27,7 @@
       class="h-full w-full max-w-7xl flex flex-col lg:flex-row gap-4 lg:gap-8"
     >
       <div
-        class="shrink-0 lg:flex-1 flex items-start lg:items-center justify-center min-w-0 overflow-hidden max-h-[35%] lg:max-h-none lg:min-h-0"
+        class="shrink-0 lg:flex-1 lg:h-full flex items-start lg:items-center justify-center min-w-0 overflow-hidden max-h-[35%] lg:max-h-none lg:min-h-0 lg:[container-type:size]"
       >
         <ImagePlaceholder
           src={`/image/${image.attributes.fileName}`}
@@ -35,7 +35,9 @@
           showMetadata={false}
           showOpenInNewTab={true}
           rounded={true}
-          class="shadow-2xl max-h-full max-w-full object-contain"
+          keepAspectRatio={false}
+          objectFit="contain"
+          class="shadow-2xl max-h-full max-w-full"
         />
       </div>
 
