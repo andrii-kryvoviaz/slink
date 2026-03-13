@@ -13,7 +13,10 @@
     isTagNested,
   } from '@slink/lib/utils/tag';
 
-  import { tagBadgeCloseButtonVariants } from './TagBadge.theme';
+  import {
+    tagBadgeCloseButtonVariants,
+    tagBadgeCollapsedVariants,
+  } from './TagBadge.theme';
 
   type DotsVariant = {
     showFullPath?: false;
@@ -29,6 +32,7 @@
     tag: Tag;
     class?: string;
     showCount?: boolean;
+    disableHover?: boolean;
     onClose?: () => void;
   }
 
@@ -42,6 +46,7 @@
     class: className = '',
     maxDotsToShow = 5,
     showCount = true,
+    disableHover = false,
     showFullPath,
     onClose,
   }: Props = $props();
@@ -66,20 +71,18 @@
       </div>
     {:else if isNested && !showFullPath}
       <div class="flex items-center gap-1">
-        <div
-          class="flex items-center gap-1 group-hover:hidden group-hover/row:hidden"
-        >
+        <div class={tagBadgeCollapsedVariants({ disableHover })}>
           <TagDepthDots {tag} {maxDotsToShow} {showCount} />
           <span class="font-medium">{tagName}</span>
         </div>
 
-        <div
-          class="hidden items-center gap-1 group-hover:flex group-hover/row:flex"
-        >
-          <span class="opacity-60">{parentPath}</span>
-          <Icon icon="ph:caret-right" class="h-2.5 w-2.5" />
-          <span class="font-medium">{tagName}</span>
-        </div>
+        {#if !disableHover}
+          <div class="hidden items-center gap-1 group-hover:flex">
+            <span class="opacity-60">{parentPath}</span>
+            <Icon icon="ph:caret-right" class="h-2.5 w-2.5" />
+            <span class="font-medium">{tagName}</span>
+          </div>
+        {/if}
       </div>
     {:else}
       <span class="font-medium">{tag.name}</span>

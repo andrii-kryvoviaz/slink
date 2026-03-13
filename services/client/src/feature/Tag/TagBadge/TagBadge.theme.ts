@@ -48,3 +48,15 @@ export const tagBadgeCloseButtonVariants = cva(
 export type TagBadgeCloseButtonVariants = VariantProps<
   typeof tagBadgeCloseButtonVariants
 >;
+
+export const tagBadgeCollapsedVariants = cva('flex items-center gap-1', {
+  variants: {
+    disableHover: {
+      true: '',
+      false: 'group-hover:hidden',
+    },
+  },
+  defaultVariants: {
+    disableHover: false,
+  },
+});
