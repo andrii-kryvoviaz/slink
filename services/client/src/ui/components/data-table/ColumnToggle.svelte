@@ -16,7 +16,10 @@
   );
 
   const columnItems = $derived(
-    hidableColumns.map((col) => ({ value: col.id, label: col.id })),
+    hidableColumns.map((col) => ({
+      value: col.id,
+      label: col.columnDef.header?.toString() ?? col.id,
+    })),
   );
 
   const visibleColumnIds = $derived(
