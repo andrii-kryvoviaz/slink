@@ -23,7 +23,7 @@ final class OAuthProviderProjection extends AbstractProjection {
     $provider = new OAuthProviderView(
       id: (string) $event->id,
       name: (string) $event->name,
-      slug: $event->slug->value,
+      slug: (string) $event->slug,
       type: (string) $event->type,
       clientId: (string) $event->clientId,
       clientSecret: (string) $event->clientSecret,
@@ -44,7 +44,7 @@ final class OAuthProviderProjection extends AbstractProjection {
     }
 
     if ($event->name !== null) $provider->setName((string) $event->name);
-    if ($event->slug !== null) $provider->setSlug($event->slug->value);
+    if ($event->slug !== null) $provider->setSlug((string) $event->slug);
     if ($event->type !== null) $provider->setType((string) $event->type);
     if ($event->clientId !== null) $provider->setClientId((string) $event->clientId);
     if ($event->clientSecret !== null) $provider->setClientSecret((string) $event->clientSecret);

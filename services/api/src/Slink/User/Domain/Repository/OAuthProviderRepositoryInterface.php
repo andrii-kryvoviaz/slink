@@ -6,12 +6,12 @@ namespace Slink\User\Domain\Repository;
 
 use Slink\Shared\Domain\Enum\SortDirection;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\User\Domain\Enum\OAuthProvider;
 use Slink\User\Domain\Filter\OAuthProviderFilter;
+use Slink\User\Domain\ValueObject\OAuth\ProviderSlug;
 use Slink\User\Infrastructure\ReadModel\View\OAuthProviderView;
 
 interface OAuthProviderRepositoryInterface {
-  public function findByProvider(OAuthProvider $provider): ?OAuthProviderView;
+  public function findByProvider(ProviderSlug $slug): ?OAuthProviderView;
 
   /**
    * @return array<int, OAuthProviderView>

@@ -1,15 +1,15 @@
 <script lang="ts">
+  import { SettingsPageLayout } from '@slink/feature/Settings';
   import {
-    OAuthProviderForm,
     OAuthProviderList,
     OAuthProviderListSkeleton,
-    createOAuthProviderFormState,
   } from '@slink/feature/Settings/OAuthSettings';
   import { CopyableText, Notice } from '@slink/feature/Text';
+  import { BackLink } from '@slink/ui/components/back-link';
   import { Button } from '@slink/ui/components/button';
 
+  import { goto } from '$app/navigation';
   import Icon from '@iconify/svelte';
-  import { fade } from 'svelte/transition';
 
   import type { PageData } from './$types';
 
@@ -20,46 +20,34 @@
   let { data }: Props = $props();
 
   let callbackUrl = $derived(data.callbackUrl);
-
-  const formState = createOAuthProviderFormState();
 </script>
 
 <svelte:head>
   <title>SSO Settings | Slink</title>
 </svelte:head>
 
-<div
-  class="flex flex-col w-full max-w-2xl px-6 py-8"
-  in:fade={{ duration: 150 }}
+<SettingsPageLayout
+  title="Single Sign-On"
+  description="Manage SSO/OIDC identity providers"
+  isInitialized={true}
 >
-  <header class="mb-8">
-    <div class="flex items-center justify-between">
-      <div>
-        <h1 class="text-xl font-semibold text-gray-900 dark:text-white">
-          Single Sign-On
-        </h1>
-        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-          Manage SSO/OIDC identity providers
-        </p>
-      </div>
+  {#snippet navigation()}
+    <BackLink href="/admin/settings" class="mb-4">Back to Settings</BackLink>
+  {/snippet}
 
-      {#if !formState.isOpen}
-        <Button
-          variant="soft-blue"
-          rounded="full"
-          size="sm"
-          onclick={() => formState.openCreate()}
-        >
-          {#snippet leftIcon()}
-            <Icon icon="ph:plus" class="w-4 h-4" />
-          {/snippet}
-          Add Provider
-        </Button>
-      {/if}
-    </div>
-  </header>
+  {#snippet actions()}
+    <Button
+      variant="soft-blue"
+      rounded="full"
+      size="sm"
+      onclick={() => goto('/admin/settings/sso/new')}
+    >
+      {#snippet leftIcon()}<Icon icon="ph:plus" class="w-4 h-4" />{/snippet}
+      Add Provider
+    </Button>
+  {/snippet}
 
-  <Notice variant="info" size="sm" class="mb-6">
+  <Notice variant="info" size="sm">
     <p>
       Add this callback URL to your identity provider's allowed redirect URIs:
     </p>
@@ -69,29 +57,13 @@
   {#await data.providers}
     <OAuthProviderListSkeleton />
   {:then providers}
-    {#if formState.isOpen}
-      {#key formState.editingProvider?.id}
-        <div
-          class="mb-8 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 p-5"
-          in:fade={{ duration: 150 }}
-        >
-          <h2
-            class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-4"
-          >
-            {formState.isEditMode ? 'Edit Provider' : 'New Provider'}
-          </h2>
-          <OAuthProviderForm state={formState} />
-        </div>
-      {/key}
-    {/if}
-
     {#key providers}
       <OAuthProviderList
         {providers}
-        onEdit={(provider) => formState.openEdit(provider)}
+        onEdit={(provider) => goto(`/admin/settings/sso/${provider.id}/edit`)}
       />
     {/key}
   {:catch}
     <Notice variant="error">Failed to load SSO providers.</Notice>
   {/await}
-</div>
+</SettingsPageLayout>

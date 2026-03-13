@@ -6,9 +6,9 @@ namespace Slink\User\Infrastructure\ReadModel\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Slink\User\Domain\Enum\OAuthProvider;
 use Slink\User\Domain\Repository\OAuthLinkRepositoryInterface;
 use Slink\User\Domain\ValueObject\OAuth\OAuthSubject;
+use Slink\User\Domain\ValueObject\OAuth\ProviderSlug;
 use Slink\User\Infrastructure\ReadModel\View\OAuthLinkView;
 
 class OAuthLinkRepository extends ServiceEntityRepository implements OAuthLinkRepositoryInterface {
@@ -25,7 +25,7 @@ class OAuthLinkRepository extends ServiceEntityRepository implements OAuthLinkRe
   public function findBySubject(OAuthSubject $subject): ?OAuthLinkView {
     /** @var OAuthLinkView|null $result */
     $result = $this->findOneBy([
-      'providerSlug' => $subject->getProvider()->value,
+      'providerSlug' => $subject->getProvider()->toString(),
       'providerUserId' => $subject->getSub()->toString(),
     ]);
     return $result;
@@ -48,12 +48,12 @@ class OAuthLinkRepository extends ServiceEntityRepository implements OAuthLinkRe
     $this->getEntityManager()->remove($link);
   }
 
-  public function deleteByProviderSlug(OAuthProvider $provider): void {
+  public function deleteByProviderSlug(ProviderSlug $slug): void {
     $this->getEntityManager()
       ->createQueryBuilder()
       ->delete(OAuthLinkView::class, 'l')
       ->where('l.providerSlug = :slug')
-      ->setParameter('slug', $provider->value)
+      ->setParameter('slug', $slug->toString())
       ->getQuery()
       ->execute();
   }

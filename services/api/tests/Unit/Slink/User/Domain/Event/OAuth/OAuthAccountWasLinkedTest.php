@@ -8,9 +8,9 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\User\Domain\Enum\OAuthProvider;
 use Slink\User\Domain\Event\OAuth\OAuthAccountWasLinked;
 use Slink\User\Domain\ValueObject\Email;
+use Slink\User\Domain\ValueObject\OAuth\ProviderSlug;
 use Slink\User\Domain\ValueObject\OAuth\SubjectId;
 
 final class OAuthAccountWasLinkedTest extends TestCase {
@@ -23,7 +23,7 @@ final class OAuthAccountWasLinkedTest extends TestCase {
     $event = new OAuthAccountWasLinked(
       $userId,
       $linkId,
-      OAuthProvider::Google,
+      ProviderSlug::fromString('google'),
       SubjectId::fromString('google-sub-123'),
       Email::fromString('user@example.com'),
       $linkedAt,
@@ -33,7 +33,7 @@ final class OAuthAccountWasLinkedTest extends TestCase {
 
     $this->assertTrue($restored->userId->equals($userId));
     $this->assertTrue($restored->linkId->equals($linkId));
-    $this->assertSame(OAuthProvider::Google, $restored->provider);
+    $this->assertEquals(ProviderSlug::fromString('google'), $restored->provider);
     $this->assertSame('google-sub-123', $restored->sub->toString());
     $this->assertSame('user@example.com', $restored->email?->toString());
     $this->assertSame($linkedAt->toString(), $restored->linkedAt->toString());
@@ -48,7 +48,7 @@ final class OAuthAccountWasLinkedTest extends TestCase {
     $event = new OAuthAccountWasLinked(
       $userId,
       $linkId,
-      OAuthProvider::Authentik,
+      ProviderSlug::fromString('authentik'),
       SubjectId::fromString('auth-sub-789'),
       null,
       $linkedAt,

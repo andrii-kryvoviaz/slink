@@ -2,6 +2,13 @@ parameters:
   app.oidc.allowed_time_drift: 30
 
 services:
+  oidc.http_client:
+    class: Symfony\Contracts\HttpClient\HttpClientInterface
+    factory: ['Symfony\Component\HttpClient\HttpClient', 'create']
+    arguments:
+      - verify_peer: '%env(bool:OAUTH_VERIFY_SSL)%'
+        verify_host: '%env(bool:OAUTH_VERIFY_SSL)%'
+
   Jose\Component\Signature\Algorithm\RS256:
     tags: ['app.jws_algorithm']
   Jose\Component\Signature\Algorithm\RS384:

@@ -7,14 +7,13 @@ namespace Slink\User\Application\Command\CreateOAuthProvider;
 use SensitiveParameter;
 use Slink\Shared\Application\Command\CommandInterface;
 use Slink\Shared\Infrastructure\MessageBus\EnvelopedMessage;
-use Slink\User\Domain\Enum\OAuthProvider;
-use Slink\User\Domain\Enum\OAuthProvider as OAuthProviderEnum;
 use Slink\User\Domain\ValueObject\OAuth\ClientId;
 use Slink\User\Domain\ValueObject\OAuth\ClientSecret;
 use Slink\User\Domain\ValueObject\OAuth\DiscoveryUrl;
 use Slink\User\Domain\ValueObject\OAuth\OAuthScopes;
 use Slink\User\Domain\ValueObject\OAuth\OAuthType;
 use Slink\User\Domain\ValueObject\OAuth\ProviderName;
+use Slink\User\Domain\ValueObject\OAuth\ProviderSlug;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final readonly class CreateOAuthProviderCommand implements CommandInterface {
@@ -25,21 +24,19 @@ final readonly class CreateOAuthProviderCommand implements CommandInterface {
     #[Assert\Length(max: 100)]
     private string $name,
 
-    #[Assert\NotBlank]
-    #[Assert\Choice(callback: [OAuthProvider::class, 'values'])]
     private string $slug,
 
     #[SensitiveParameter]
     #[Assert\NotBlank]
     private string $clientId,
 
-    #[SensitiveParameter]
-    #[Assert\NotBlank]
-    private string $clientSecret,
-
     #[Assert\NotBlank]
     #[Assert\Url(requireTld: false)]
     private string $discoveryUrl,
+
+    #[SensitiveParameter]
+    #[Assert\NotBlank]
+    private string $clientSecret = '',
 
     #[Assert\Choice(choices: ['oidc'])]
     private string $type = 'oidc',
@@ -55,8 +52,8 @@ final readonly class CreateOAuthProviderCommand implements CommandInterface {
     return ProviderName::fromString($this->name);
   }
 
-  public function getSlug(): OAuthProviderEnum {
-    return OAuthProviderEnum::from($this->slug);
+  public function getSlug(): ProviderSlug {
+    return ProviderSlug::fromString($this->slug);
   }
 
   public function getType(): OAuthType {

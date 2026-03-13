@@ -7,13 +7,14 @@
     BannerFooter,
     BannerIcon,
   } from '@slink/feature/Layout';
-  import { Button, type ButtonVariant } from '@slink/ui/components/button';
+  import { Button } from '@slink/ui/components/button';
   import { Input } from '@slink/ui/components/input';
 
   import { enhance } from '$app/forms';
-  import { page } from '$app/state';
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
+
+  import { OAuthProviderConfig } from '@slink/lib/auth/oauth';
 
   import { withLoadingState } from '@slink/utils/form/withLoadingState';
   import { useWritable } from '@slink/utils/store/contextAwareStore';
@@ -28,7 +29,6 @@
 
   let { form, data }: Props = $props();
 
-  const { settings } = page.data;
   let isLoading = useWritable('loginFormLoadingState', false);
   let usernameValue = $state('');
   let passwordValue = $state('');
@@ -41,11 +41,12 @@
   let showPassword = $state(false);
   let formElement: HTMLFormElement;
 
-  let buttonVariant: ButtonVariant = $derived(
-    settings.theme.isLight ? 'dark' : 'primary',
+  let providers = $derived(
+    (data.ssoProviders ?? []).map((p) => ({
+      ...OAuthProviderConfig.resolve(p.slug),
+      name: p.name,
+    })),
   );
-
-  let ssoProviders = $derived(data.ssoProviders ?? []);
 
   function fillDemoCredentials() {
     if (
@@ -154,7 +155,7 @@
       </div>
 
       <Button
-        variant={buttonVariant}
+        variant="accent"
         size="lg"
         class="w-full mt-2 group"
         type="submit"
@@ -170,7 +171,7 @@
       </Button>
     </form>
 
-    {#if ssoProviders.length > 0}
+    {#if providers.length > 0}
       <div class="mt-5">
         <div class="relative flex items-center">
           <div
@@ -186,7 +187,7 @@
         </div>
 
         <div class="mt-4 space-y-3">
-          {#each ssoProviders as provider (provider.id)}
+          {#each providers as provider (provider.slug)}
             <SsoProviderButton {provider} />
           {/each}
         </div>

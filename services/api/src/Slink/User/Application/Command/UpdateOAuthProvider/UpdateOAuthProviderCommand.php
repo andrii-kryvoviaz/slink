@@ -7,14 +7,13 @@ namespace Slink\User\Application\Command\UpdateOAuthProvider;
 use SensitiveParameter;
 use Slink\Shared\Application\Command\CommandInterface;
 use Slink\Shared\Infrastructure\MessageBus\EnvelopedMessage;
-use Slink\User\Domain\Enum\OAuthProvider;
-use Slink\User\Domain\Enum\OAuthProvider as OAuthProviderEnum;
 use Slink\User\Domain\ValueObject\OAuth\ClientId;
 use Slink\User\Domain\ValueObject\OAuth\ClientSecret;
 use Slink\User\Domain\ValueObject\OAuth\DiscoveryUrl;
 use Slink\User\Domain\ValueObject\OAuth\OAuthScopes;
 use Slink\User\Domain\ValueObject\OAuth\OAuthType;
 use Slink\User\Domain\ValueObject\OAuth\ProviderName;
+use Slink\User\Domain\ValueObject\OAuth\ProviderSlug;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final readonly class UpdateOAuthProviderCommand implements CommandInterface {
@@ -24,7 +23,6 @@ final readonly class UpdateOAuthProviderCommand implements CommandInterface {
     #[Assert\Length(max: 100)]
     private ?string $name = null,
 
-    #[Assert\Choice(callback: [OAuthProvider::class, 'values'])]
     private ?string $slug = null,
 
     #[Assert\Choice(choices: ['oidc'])]
@@ -54,8 +52,8 @@ final readonly class UpdateOAuthProviderCommand implements CommandInterface {
     return $this->name !== null ? ProviderName::fromString($this->name) : null;
   }
 
-  public function getSlug(): ?OAuthProviderEnum {
-    return $this->slug !== null ? OAuthProviderEnum::from($this->slug) : null;
+  public function getSlug(): ?ProviderSlug {
+    return $this->slug !== null ? ProviderSlug::fromString($this->slug) : null;
   }
 
   public function getType(): ?OAuthType {

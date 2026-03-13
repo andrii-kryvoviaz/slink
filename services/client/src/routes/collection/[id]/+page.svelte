@@ -21,6 +21,7 @@
     FormattedDate,
   } from '@slink/feature/Text';
   import { UserAvatar } from '@slink/feature/User';
+  import { BackLink } from '@slink/ui/components/back-link';
   import { Button } from '@slink/ui/components/button';
   import {
     Popover,
@@ -159,16 +160,8 @@
   >
     <div class="mb-8">
       {#if isOwner}
-        <a
-          href="/collections"
-          class="group inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors duration-200 mb-4"
+        <BackLink href="/collections" class="mb-4">Back to Collections</BackLink
         >
-          <Icon
-            icon="ph:arrow-left"
-            class="w-4 h-4 transition-transform duration-200 group-hover:-translate-x-0.5"
-          />
-          Back to Collections
-        </a>
       {/if}
 
       {#if itemsFeed.collection}

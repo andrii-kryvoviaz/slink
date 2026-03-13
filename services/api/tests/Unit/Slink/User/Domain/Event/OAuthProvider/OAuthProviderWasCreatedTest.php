@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Encryption\EncryptionRegistry;
 use Slink\Shared\Infrastructure\Encryption\EncryptionService;
-use Slink\User\Domain\Enum\OAuthProvider;
 use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasCreated;
 use Slink\User\Domain\ValueObject\OAuth\ClientId;
 use Slink\User\Domain\ValueObject\OAuth\ClientSecret;
@@ -17,6 +16,7 @@ use Slink\User\Domain\ValueObject\OAuth\DiscoveryUrl;
 use Slink\User\Domain\ValueObject\OAuth\OAuthScopes;
 use Slink\User\Domain\ValueObject\OAuth\OAuthType;
 use Slink\User\Domain\ValueObject\OAuth\ProviderName;
+use Slink\User\Domain\ValueObject\OAuth\ProviderSlug;
 
 final class OAuthProviderWasCreatedTest extends TestCase {
   private const string ENCRYPTION_SECRET = 'test-encryption-secret';
@@ -30,7 +30,7 @@ final class OAuthProviderWasCreatedTest extends TestCase {
     $event = new OAuthProviderWasCreated(
       ID::fromString('provider-id-1'),
       ProviderName::fromString('Google'),
-      OAuthProvider::Google,
+      ProviderSlug::fromString('google'),
       OAuthType::fromString('oidc'),
       ClientId::fromString('client-id-123'),
       ClientSecret::fromString('client-secret-456'),
@@ -53,7 +53,7 @@ final class OAuthProviderWasCreatedTest extends TestCase {
     $event = new OAuthProviderWasCreated(
       ID::fromString('provider-id-1'),
       ProviderName::fromString('Authentik'),
-      OAuthProvider::Authentik,
+      ProviderSlug::fromString('authentik'),
       OAuthType::fromString('oidc'),
       ClientId::fromString('auth-client-id'),
       ClientSecret::fromString('auth-client-secret'),
@@ -67,7 +67,7 @@ final class OAuthProviderWasCreatedTest extends TestCase {
 
     $this->assertEquals($event->id, $restored->id);
     $this->assertEquals($event->name, $restored->name);
-    $this->assertSame($event->slug, $restored->slug);
+    $this->assertEquals($event->slug, $restored->slug);
     $this->assertEquals($event->type, $restored->type);
     $this->assertEquals($event->clientId, $restored->clientId);
     $this->assertEquals($event->clientSecret, $restored->clientSecret);

@@ -7,19 +7,19 @@ namespace Slink\User\Domain\Event\OAuthProvider;
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Encryption\EncryptionRegistry;
-use Slink\User\Domain\Enum\OAuthProvider as OAuthProviderEnum;
 use Slink\User\Domain\ValueObject\OAuth\ClientId;
 use Slink\User\Domain\ValueObject\OAuth\ClientSecret;
 use Slink\User\Domain\ValueObject\OAuth\DiscoveryUrl;
 use Slink\User\Domain\ValueObject\OAuth\OAuthScopes;
 use Slink\User\Domain\ValueObject\OAuth\OAuthType;
 use Slink\User\Domain\ValueObject\OAuth\ProviderName;
+use Slink\User\Domain\ValueObject\OAuth\ProviderSlug;
 
 final readonly class OAuthProviderWasCreated implements SerializablePayload {
   public function __construct(
     public ID $id,
     public ProviderName $name,
-    public OAuthProviderEnum $slug,
+    public ProviderSlug $slug,
     public OAuthType $type,
     public ClientId $clientId,
     public ClientSecret $clientSecret,
@@ -36,7 +36,7 @@ final readonly class OAuthProviderWasCreated implements SerializablePayload {
     return [
       'id' => $this->id->toString(),
       'name' => $this->name->toString(),
-      'slug' => $this->slug->value,
+      'slug' => $this->slug->toString(),
       'type' => $this->type->toString(),
       'clientId' => EncryptionRegistry::encrypt($this->clientId->toString()),
       'clientSecret' => EncryptionRegistry::encrypt($this->clientSecret->toString()),
@@ -54,7 +54,7 @@ final readonly class OAuthProviderWasCreated implements SerializablePayload {
     return new self(
       ID::fromString($payload['id']),
       ProviderName::fromString($payload['name']),
-      OAuthProviderEnum::from($payload['slug']),
+      ProviderSlug::fromString($payload['slug']),
       OAuthType::fromString($payload['type']),
       ClientId::fromString(EncryptionRegistry::decrypt($payload['clientId'])),
       ClientSecret::fromString(EncryptionRegistry::decrypt($payload['clientSecret'])),

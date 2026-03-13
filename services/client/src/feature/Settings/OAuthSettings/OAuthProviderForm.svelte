@@ -1,146 +1,162 @@
 <script lang="ts">
   import { ProviderIcon } from '@slink/feature/Auth';
+  import { Loader } from '@slink/feature/Layout';
+  import { SettingItem } from '@slink/feature/Settings';
   import { Button } from '@slink/ui/components/button';
   import { Input } from '@slink/ui/components/input';
   import { Switch } from '@slink/ui/components/switch';
 
-  import Icon from '@iconify/svelte';
-
-  import { oauthProviders } from '@slink/lib/enum/OAuthProvider';
-
   import { type OAuthProviderFormState } from './OAuthProviderFormState.svelte';
 
   interface Props {
-    state: OAuthProviderFormState;
+    formState: OAuthProviderFormState;
+    onChangeProvider?: () => void;
+    onCancel: () => void;
+    onSuccess?: () => void;
   }
 
-  let { state }: Props = $props();
+  let { formState, onChangeProvider, onCancel, onSuccess }: Props = $props();
 </script>
 
-{#if !state.selectedPreset && !state.isEditMode}
-  <div class="grid grid-cols-2 gap-3">
-    {#each oauthProviders as provider (provider.slug)}
-      <button
-        type="button"
-        class="flex flex-col items-center gap-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50 px-4 py-5 transition-colors duration-150 hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800"
-        onclick={() => state.selectPreset(provider.slug)}
-      >
-        <ProviderIcon slug={provider.slug} class="w-6 h-6" />
-        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
-          {provider.name}
-        </span>
-      </button>
-    {/each}
-  </div>
-
-  <div class="flex items-center justify-end pt-3">
-    <Button
-      type="button"
-      variant="glass"
-      rounded="full"
-      size="sm"
-      onclick={() => state.close()}
+<section class="space-y-1">
+  <div class="flex items-center justify-between gap-4 pb-3">
+    <h2
+      class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
     >
-      Cancel
-    </Button>
+      Configuration
+    </h2>
   </div>
-{:else if state.preset}
+
   <form
-    onsubmit={(e) => {
+    onsubmit={async (e) => {
       e.preventDefault();
-      state.submit();
+      const ok = await formState.submit();
+      if (ok) onSuccess?.();
     }}
-    class="space-y-5"
   >
-    <div class="flex items-center justify-between">
-      <div
-        class="flex items-center gap-2 rounded-full bg-gray-100 dark:bg-gray-800 px-3 py-1.5"
-      >
-        <ProviderIcon slug={state.selectedPreset!} class="w-4 h-4" />
-        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
-          {state.preset.name}
-        </span>
-      </div>
+    <div
+      class="divide-y divide-gray-100 dark:divide-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 overflow-hidden"
+    >
+      {#if formState.provider.slug}
+        <SettingItem>
+          {#snippet label()}Provider{/snippet}
+          {#snippet hint()}Selected authentication provider{/snippet}
+          <div class="flex items-center gap-2 text-sm">
+            <ProviderIcon provider={formState.provider} class="w-4 h-4" />
+            <span class="text-gray-700 dark:text-gray-300"
+              >{formState.provider.name}</span
+            >
+            {#if onChangeProvider}
+              <button
+                type="button"
+                class="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300"
+                onclick={onChangeProvider}
+              >
+                Change
+              </button>
+            {/if}
+          </div>
+        </SettingItem>
+      {/if}
 
-      <div class="flex items-center gap-2.5">
-        <span class="text-xs text-gray-500 dark:text-gray-400">Enabled</span>
-        <Switch bind:checked={state.enabled} />
-      </div>
+      {#if formState.provider.isCustom}
+        <SettingItem>
+          {#snippet label()}Provider Name{/snippet}
+          {#snippet hint()}Display name for the provider{/snippet}
+          <div class="w-48 sm:w-64">
+            <Input
+              placeholder="e.g. My SSO Provider"
+              bind:value={formState.fields.name}
+              error={formState.errors.name}
+            />
+          </div>
+        </SettingItem>
+
+        <SettingItem>
+          {#snippet label()}Slug{/snippet}
+          {#snippet hint()}Unique identifier for the provider{/snippet}
+          <div class="w-48 sm:w-64">
+            <Input
+              placeholder="e.g. my-provider"
+              bind:value={formState.fields.slug}
+              error={formState.errors.slug}
+            />
+          </div>
+        </SettingItem>
+      {/if}
+
+      {#if formState.showDiscoveryUrl}
+        <SettingItem>
+          {#snippet label()}Issuer URL{/snippet}
+          {#snippet hint()}OpenID Connect discovery endpoint{/snippet}
+          <div class="w-48 sm:w-64">
+            <Input
+              placeholder={formState.provider.discoveryPlaceholder}
+              bind:value={formState.fields.discoveryUrl}
+              error={formState.errors.discoveryUrl}
+            />
+          </div>
+        </SettingItem>
+      {/if}
+
+      <SettingItem>
+        {#snippet label()}Client ID{/snippet}
+        {#snippet hint()}OAuth application client identifier{/snippet}
+        <div class="w-48 sm:w-64">
+          <Input
+            placeholder="OAuth Client ID"
+            bind:value={formState.fields.clientId}
+            error={formState.errors.clientId}
+          />
+        </div>
+      </SettingItem>
+
+      <SettingItem>
+        {#snippet label()}Client Secret{/snippet}
+        {#snippet hint()}OAuth application client secret{/snippet}
+        <div class="w-48 sm:w-64">
+          <Input
+            type="password"
+            placeholder="OAuth Client Secret"
+            bind:value={formState.fields.clientSecret}
+            error={formState.errors.clientSecret}
+          />
+        </div>
+      </SettingItem>
+
+      <SettingItem>
+        {#snippet label()}Enabled{/snippet}
+        {#snippet hint()}Allow users to authenticate with this provider{/snippet}
+        <Switch bind:checked={formState.fields.enabled} />
+      </SettingItem>
     </div>
 
-    {#if state.preset.fields.includes('name')}
-      <Input
-        label="Provider Name"
-        placeholder="e.g. My SSO Provider"
-        bind:value={state.name}
-        variant="modern"
-        size="lg"
-        rounded="lg"
-      />
-    {/if}
+    <div class="flex items-center justify-end gap-3 pt-4">
+      {#if formState.isSubmitting}
+        <div
+          class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
+        >
+          <Loader variant="minimal" size="xs" />
+          <span>Saving...</span>
+        </div>
+      {/if}
 
-    {#if state.preset.fields.includes('discoveryUrl')}
-      <Input
-        label="Issuer URL"
-        placeholder={state.discoveryPlaceholder}
-        bind:value={state.discoveryUrl}
-        error={state.errors.discoveryUrl}
-        variant="modern"
-        size="lg"
-        rounded="lg"
-      />
-    {/if}
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <Input
-        label="Client ID"
-        placeholder="OAuth Client ID"
-        bind:value={state.clientId}
-        error={state.errors.clientId}
-        variant="modern"
-        size="lg"
-        rounded="lg"
-      />
-
-      <Input
-        label="Client Secret"
-        type="password"
-        placeholder="OAuth Client Secret"
-        bind:value={state.clientSecret}
-        error={state.errors.clientSecret}
-        variant="modern"
-        size="lg"
-        rounded="lg"
-      />
-    </div>
-
-    <div class="flex items-center justify-end gap-3 pt-2">
-      <Button
-        type="button"
-        variant="glass"
-        rounded="full"
-        size="sm"
-        onclick={() => (state.isEditMode ? state.close() : state.goBack())}
+      <Button variant="glass" rounded="full" size="sm" onclick={onCancel}
+        >Cancel</Button
       >
-        {#if state.isEditMode}
-          Cancel
-        {:else}
-          <Icon icon="ph:arrow-left" class="w-4 h-4" />
-          Back
-        {/if}
-      </Button>
       <Button
         type="submit"
         variant="soft-blue"
         rounded="full"
         size="sm"
-        loading={state.isSubmitting}
+        disabled={formState.isSubmitting}
       >
-        {#snippet leftIcon()}
-          <Icon icon="ph:check" class="w-4 h-4" />
-        {/snippet}
-        {state.isEditMode ? 'Update Provider' : 'Add Provider'}
+        {#if formState.isEditMode}
+          Update Provider
+        {:else}
+          Add Provider
+        {/if}
       </Button>
     </div>
   </form>
-{/if}
+</section>

@@ -1,7 +1,5 @@
 import { ApiClient } from '@slink/api';
 
-import { invalidate } from '$app/navigation';
-
 import { ValidationException } from '@slink/api/Exceptions';
 import { ReactiveState } from '@slink/api/ReactiveState';
 import type {
@@ -9,43 +7,28 @@ import type {
   OAuthProviderFormData,
 } from '@slink/api/Resources/OAuthResource';
 
-import {
-  OAuthProvider,
-  type OAuthProviderConfig,
-  getProviderConfig,
-  oauthProviders,
-} from '@slink/lib/enum/OAuthProvider';
+import { type OAuthProvider, OAuthProviderConfig } from '@slink/lib/auth/oauth';
 import { AbstractFormState } from '@slink/lib/state/core/AbstractFormState.svelte';
 
 import { toast } from '@slink/utils/ui/toast-sonner.svelte';
 
-function detectPreset(slug?: string): OAuthProvider | null {
-  if (!slug) return null;
-  if (oauthProviders.some((p) => p.slug === slug)) return slug as OAuthProvider;
-  return null;
-}
-
-type FormFields = {
-  selectedPreset: OAuthProvider | null;
-  name: string;
-  discoveryUrl: string;
-  clientId: string;
-  clientSecret: string;
-  enabled: boolean;
-};
-
 export class OAuthProviderFormState extends AbstractFormState<void> {
-  private static readonly DEFAULTS: FormFields = {
-    selectedPreset: null,
+  private static readonly DEFAULTS: OAuthProviderFormData = {
     name: '',
-    discoveryUrl: '',
+    slug: '',
+    type: 'oidc',
     clientId: '',
     clientSecret: '',
+    discoveryUrl: '',
+    scopes: '',
     enabled: true,
   };
 
   private _editingProvider: OAuthProviderDetails | null = $state(null);
-  private _provider: FormFields = $state({
+  private _preset: OAuthProvider = $state(
+    OAuthProviderConfig.resolve('custom'),
+  );
+  fields: OAuthProviderFormData = $state({
     ...OAuthProviderFormState.DEFAULTS,
   });
 
@@ -53,129 +36,86 @@ export class OAuthProviderFormState extends AbstractFormState<void> {
     ApiClient.oauth.create(data),
   );
   private _update = ReactiveState<void>(
-    (id: string, data: OAuthProviderFormData) =>
+    (id: string, data: Partial<OAuthProviderFormData>) =>
       ApiClient.oauth.update(id, data),
   );
 
   readonly isEditMode: boolean = $derived(this._editingProvider !== null);
+  readonly showDiscoveryUrl: boolean = $derived(
+    this._preset.fields.includes('discoveryUrl'),
+  );
 
-  readonly preset: OAuthProviderConfig | null = $derived.by(() => {
-    if (!this._provider.selectedPreset) return null;
-    return getProviderConfig(this._provider.selectedPreset);
-  });
-
-  readonly discoveryPlaceholder: string = $derived.by(() => {
-    if (!this._provider.selectedPreset) return '';
-    return (
-      getProviderConfig(this._provider.selectedPreset).discoveryPlaceholder ??
-      'https://idp.example.com'
-    );
-  });
-
-  get selectedPreset() {
-    return this._provider.selectedPreset;
+  get provider(): OAuthProvider {
+    return this._preset;
   }
 
   get editingProvider() {
     return this._editingProvider;
   }
 
-  get name() {
-    return this._provider.name;
+  initialize(provider?: OAuthProviderDetails) {
+    if (provider) {
+      const presetSlug = OAuthProviderConfig.hasPreset(provider.slug)
+        ? provider.slug
+        : 'custom';
+      this._editingProvider = provider;
+      this._preset = OAuthProviderConfig.resolve(presetSlug);
+      this.fields = {
+        ...OAuthProviderFormState.DEFAULTS,
+        name: provider.name,
+        slug: provider.slug ?? '',
+        discoveryUrl: provider.discoveryUrl ?? '',
+        clientId: provider.clientId ?? '',
+        enabled: provider.enabled,
+      };
+    } else {
+      this._editingProvider = null;
+      this._preset = OAuthProviderConfig.resolve('custom');
+      this.fields = { ...OAuthProviderFormState.DEFAULTS };
+    }
+    this.setErrors({});
   }
 
-  set name(v: string) {
-    this._provider.name = v;
-  }
-
-  get clientId() {
-    return this._provider.clientId;
-  }
-
-  set clientId(v: string) {
-    this._provider.clientId = v;
-  }
-
-  get clientSecret() {
-    return this._provider.clientSecret;
-  }
-
-  set clientSecret(v: string) {
-    this._provider.clientSecret = v;
-  }
-
-  get discoveryUrl() {
-    return this._provider.discoveryUrl;
-  }
-
-  set discoveryUrl(v: string) {
-    this._provider.discoveryUrl = v;
-  }
-
-  get enabled() {
-    return this._provider.enabled;
-  }
-
-  set enabled(v: boolean) {
-    this._provider.enabled = v;
-  }
-
-  openCreate() {
-    this._editingProvider = null;
-    this._provider = { ...OAuthProviderFormState.DEFAULTS };
-    super.open(() => invalidate('app:sso-providers'));
-  }
-
-  openEdit(provider: OAuthProviderDetails) {
-    this._editingProvider = provider;
-    this._provider = {
+  selectProvider(slug: string) {
+    this._preset = OAuthProviderConfig.resolve(slug);
+    this.fields = {
       ...OAuthProviderFormState.DEFAULTS,
-      selectedPreset: detectPreset(provider.slug),
-      name: provider.name,
-      discoveryUrl: provider.discoveryUrl ?? '',
-      clientId: provider.clientId ?? '',
-      enabled: provider.enabled,
-    };
-    super.open(() => invalidate('app:sso-providers'));
-  }
-
-  close() {
-    super.close();
-    this._editingProvider = null;
-    this._provider = { ...OAuthProviderFormState.DEFAULTS };
-  }
-
-  selectPreset(key: OAuthProvider) {
-    const p = getProviderConfig(key);
-    this._provider = {
-      ...OAuthProviderFormState.DEFAULTS,
-      selectedPreset: key,
-      name: p.name,
-      discoveryUrl: p.discoveryUrl ?? '',
+      ...(this._preset.isCustom
+        ? {}
+        : {
+            name: this._preset.name,
+            discoveryUrl: this._preset.discoveryUrl,
+          }),
     };
   }
 
-  goBack() {
-    this._provider = { ...OAuthProviderFormState.DEFAULTS };
+  protected override handleValidationError(error: ValidationException) {
+    super.handleValidationError(error);
+    const hasInlineErrors = error.violations.some((v) =>
+      this._preset.fields.includes(v.property as keyof OAuthProviderFormData),
+    );
+    if (!hasInlineErrors) {
+      error.violations.forEach((v) => toast.error(v.message));
+    }
   }
 
   async submit(): Promise<boolean> {
-    const preset = this.preset;
-    const selectedPreset = this._provider.selectedPreset;
-    if (!preset || !selectedPreset) return false;
+    if (!this._preset.slug) return false;
+
+    const slug = this._preset.isCustom ? this.fields.slug : this._preset.slug;
+    const name = this._preset.isCustom ? this.fields.name : this._preset.name;
 
     const data: OAuthProviderFormData = {
-      name: preset.name,
-      slug: selectedPreset,
+      name,
+      slug,
       type: 'oidc',
-      clientId: this._provider.clientId,
-      discoveryUrl: this._provider.discoveryUrl || preset.discoveryUrl || '',
-      scopes: preset.scopes,
-      enabled: this._provider.enabled,
+      clientId: this.fields.clientId,
+      discoveryUrl: this.fields.discoveryUrl || this._preset.discoveryUrl || '',
+      scopes: this._preset.scopes,
+      enabled: this.fields.enabled,
     };
 
-    if (this._provider.clientSecret)
-      data.clientSecret = this._provider.clientSecret;
+    if (this.fields.clientSecret) data.clientSecret = this.fields.clientSecret;
 
     const isEditing = !!this._editingProvider;
 
@@ -189,18 +129,4 @@ export class OAuthProviderFormState extends AbstractFormState<void> {
 
     return result;
   }
-
-  protected handleValidationError(error: ValidationException) {
-    this.setErrors(error.errors as Record<string, string>);
-    const hasInlineErrors = error.violations.some((v) =>
-      this.preset?.fields.includes(v.property as keyof OAuthProviderFormData),
-    );
-    if (!hasInlineErrors) {
-      error.violations.forEach((v) => toast.error(v.message));
-    }
-  }
-}
-
-export function createOAuthProviderFormState(): OAuthProviderFormState {
-  return new OAuthProviderFormState();
 }

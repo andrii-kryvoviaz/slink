@@ -13,7 +13,6 @@ use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Context\ChangeUserRoleContext;
 use Slink\User\Domain\Context\UserCreationContext;
 use Slink\User\Domain\Contracts\UserInterface;
-use Slink\User\Domain\Enum\OAuthProvider;
 use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\Event\Role\UserGrantedRole;
 use Slink\User\Domain\Event\Role\UserRevokedRole;
@@ -46,6 +45,7 @@ use Slink\User\Domain\ValueObject\Email;
 use Slink\User\Domain\ValueObject\OAuth\OAuthIdentity;
 use Slink\User\Domain\ValueObject\OAuth\OAuthSubject;
 use Slink\User\Domain\ValueObject\OAuth\OAuthSubjectSet;
+use Slink\User\Domain\ValueObject\OAuth\ProviderSlug;
 use Slink\User\Domain\ValueObject\OAuth\SubjectId;
 use Slink\User\Domain\ValueObject\Username;
 use Slink\User\Domain\ValueObject\Role;
@@ -415,7 +415,7 @@ final class User extends AbstractAggregateRoot implements UserInterface {
     $this->linkedOAuthSubjects->remove(OAuthSubject::create($event->provider, $event->sub));
   }
 
-  public function unlink(ID $linkId, OAuthProvider $provider, SubjectId $sub): void {
+  public function unlink(ID $linkId, ProviderSlug $provider, SubjectId $sub): void {
     $this->recordThat(new OAuthAccountWasUnlinked(
       $this->aggregateRootId(), $linkId, $provider, $sub,
     ));

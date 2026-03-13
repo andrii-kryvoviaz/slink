@@ -8,8 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
-use Slink\User\Domain\Enum\OAuthProvider;
 use Slink\User\Domain\ValueObject\Email;
+use Slink\User\Domain\ValueObject\OAuth\ProviderSlug;
 use Slink\User\Domain\ValueObject\OAuth\SubjectId;
 use Slink\User\Infrastructure\ReadModel\Repository\OAuthLinkRepository;
 
@@ -42,7 +42,7 @@ class OAuthLinkView extends AbstractView {
   public static function create(
     ID $id,
     ID $userId,
-    OAuthProvider $provider,
+    ProviderSlug $provider,
     SubjectId $sub,
     ?Email $email,
     DateTime $linkedAt,
@@ -50,7 +50,7 @@ class OAuthLinkView extends AbstractView {
     return new self(
       $id->toString(),
       $userId->toString(),
-      $provider->value,
+      $provider->toString(),
       $sub->toString(),
       $email?->toString(),
       $linkedAt,

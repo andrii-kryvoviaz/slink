@@ -6,14 +6,14 @@ namespace Slink\User\Domain\Event\OAuth;
 
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\User\Domain\Enum\OAuthProvider;
+use Slink\User\Domain\ValueObject\OAuth\ProviderSlug;
 use Slink\User\Domain\ValueObject\OAuth\SubjectId;
 
 final readonly class OAuthAccountWasUnlinked implements SerializablePayload {
   public function __construct(
     public ID $userId,
     public ID $linkId,
-    public OAuthProvider $provider,
+    public ProviderSlug $provider,
     public SubjectId $sub,
   ) {}
 
@@ -24,7 +24,7 @@ final readonly class OAuthAccountWasUnlinked implements SerializablePayload {
     return [
       'userId' => $this->userId->toString(),
       'linkId' => $this->linkId->toString(),
-      'providerSlug' => $this->provider->value,
+      'providerSlug' => $this->provider->toString(),
       'providerUserId' => $this->sub->toString(),
     ];
   }
@@ -36,7 +36,7 @@ final readonly class OAuthAccountWasUnlinked implements SerializablePayload {
     return new self(
       ID::fromString($payload['userId']),
       ID::fromString($payload['linkId']),
-      OAuthProvider::from($payload['providerSlug']),
+      ProviderSlug::fromString($payload['providerSlug']),
       SubjectId::fromString($payload['providerUserId']),
     );
   }

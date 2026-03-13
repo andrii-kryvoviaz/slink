@@ -1,13 +1,12 @@
 import { AbstractResource } from '@slink/api/AbstractResource';
 import type { EmptyResponse } from '@slink/api/Response';
 
-import type { OAuthProvider } from '@slink/lib/enum/OAuthProvider';
 import type { SortDirection } from '@slink/lib/enum/SortDirection';
 
 export type OAuthProviderDetails = {
   id: string;
   name: string;
-  slug: OAuthProvider;
+  slug: string;
   type: string;
   clientId: string;
   discoveryUrl: string;
@@ -18,7 +17,7 @@ export type OAuthProviderDetails = {
 
 export type OAuthProviderFormData = {
   name: string;
-  slug: OAuthProvider;
+  slug: string;
   type: string;
   clientId: string;
   clientSecret?: string;

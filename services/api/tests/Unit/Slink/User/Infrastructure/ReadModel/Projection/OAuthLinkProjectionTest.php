@@ -8,11 +8,11 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\User\Domain\Enum\OAuthProvider;
 use Slink\User\Domain\Event\OAuth\OAuthAccountWasLinked;
 use Slink\User\Domain\Event\OAuth\OAuthAccountWasUnlinked;
 use Slink\User\Domain\Repository\OAuthLinkRepositoryInterface;
 use Slink\User\Domain\ValueObject\Email;
+use Slink\User\Domain\ValueObject\OAuth\ProviderSlug;
 use Slink\User\Domain\ValueObject\OAuth\SubjectId;
 use Slink\User\Infrastructure\ReadModel\Projection\OAuthLinkProjection;
 use Slink\User\Infrastructure\ReadModel\View\OAuthLinkView;
@@ -31,7 +31,7 @@ final class OAuthLinkProjectionTest extends TestCase {
     $event = new OAuthAccountWasLinked(
       userId: ID::generate(),
       linkId: ID::generate(),
-      provider: OAuthProvider::Google,
+      provider: ProviderSlug::fromString('google'),
       sub: SubjectId::fromString('google-sub-123'),
       email: Email::fromString('user@example.com'),
       linkedAt: DateTime::now(),
@@ -59,7 +59,7 @@ final class OAuthLinkProjectionTest extends TestCase {
     $event = new OAuthAccountWasUnlinked(
       userId: ID::generate(),
       linkId: $linkId,
-      provider: OAuthProvider::Google,
+      provider: ProviderSlug::fromString('google'),
       sub: SubjectId::fromString('google-sub-123'),
     );
 
@@ -83,7 +83,7 @@ final class OAuthLinkProjectionTest extends TestCase {
     $event = new OAuthAccountWasUnlinked(
       userId: ID::generate(),
       linkId: $linkId,
-      provider: OAuthProvider::Google,
+      provider: ProviderSlug::fromString('google'),
       sub: SubjectId::fromString('google-sub-123'),
     );
 

@@ -1,31 +1,26 @@
 <script lang="ts">
   import Icon from '@iconify/svelte';
 
-  import {
-    type OAuthProvider,
-    getProviderConfig,
-  } from '@slink/lib/enum/OAuthProvider';
+  import { type OAuthProvider } from '@slink/lib/auth/oauth';
 
   import { className } from '@slink/utils/ui/className';
 
   import { providerIconVariants } from './ProviderIcon.theme';
 
   interface Props {
-    slug: OAuthProvider;
+    provider: OAuthProvider;
     class?: string;
     branded?: boolean;
   }
 
-  let { slug, class: customClass, branded = true }: Props = $props();
-
-  let config = $derived(getProviderConfig(slug));
+  let { provider, class: customClass, branded = true }: Props = $props();
 
   let colorClass = $derived.by(() => {
     if (!branded) return '';
-    return providerIconVariants({ provider: slug });
+    return providerIconVariants({ provider: provider.slug as any });
   });
 
   let classes = $derived(className(colorClass, customClass));
 </script>
 
-<Icon icon={config.icon} class={classes} />
+<Icon icon={provider.icon} class={classes} />

@@ -8,10 +8,12 @@ use Jose\Component\Core\JWKSet;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Slink\User\Domain\Exception\JwksKeyNotFoundException;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final readonly class JwksProvider {
   public function __construct(
+    #[Autowire(service: 'oidc.http_client')]
     private HttpClientInterface $httpClient,
     private CacheInterface $cache,
   ) {}

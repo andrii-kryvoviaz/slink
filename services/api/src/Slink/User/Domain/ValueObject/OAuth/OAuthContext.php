@@ -5,17 +5,16 @@ declare(strict_types=1);
 namespace Slink\User\Domain\ValueObject\OAuth;
 
 use Slink\Shared\Domain\ValueObject\AbstractValueObject;
-use Slink\User\Domain\Enum\OAuthProvider;
 
 final readonly class OAuthContext extends AbstractValueObject {
   private function __construct(
-    private OAuthProvider $provider,
+    private ProviderSlug $provider,
     private RedirectUri $redirectUri,
     private ?PkceVerifier $pkceVerifier,
   ) {}
 
   public static function create(
-    OAuthProvider $provider,
+    ProviderSlug $provider,
     RedirectUri $redirectUri,
     ?PkceVerifier $pkceVerifier,
   ): self {
@@ -27,7 +26,7 @@ final readonly class OAuthContext extends AbstractValueObject {
    */
   public static function fromPayload(array $payload): self {
     return new self(
-      OAuthProvider::from($payload['provider']),
+      ProviderSlug::fromString($payload['provider']),
       RedirectUri::fromString($payload['redirectUri']),
       PkceVerifier::fromString($payload['pkceVerifier']),
     );
@@ -38,13 +37,13 @@ final readonly class OAuthContext extends AbstractValueObject {
    */
   public function toPayload(): array {
     return [
-      'provider' => $this->provider->value,
+      'provider' => $this->provider->toString(),
       'redirectUri' => $this->redirectUri->toString(),
       'pkceVerifier' => $this->pkceVerifier?->toString(),
     ];
   }
 
-  public function getProvider(): OAuthProvider {
+  public function getProvider(): ProviderSlug {
     return $this->provider;
   }
 

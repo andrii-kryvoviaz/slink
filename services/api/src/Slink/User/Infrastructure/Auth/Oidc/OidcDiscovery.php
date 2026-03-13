@@ -7,12 +7,14 @@ namespace Slink\User\Infrastructure\Auth\Oidc;
 use Slink\User\Domain\Exception\OidcDiscoveryException;
 use Slink\User\Domain\ValueObject\OAuth\DiscoveryDocument;
 use Slink\User\Domain\ValueObject\OAuth\DiscoveryUrl;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final readonly class OidcDiscovery implements OidcDiscoveryInterface {
   public function __construct(
+    #[Autowire(service: 'oidc.http_client')]
     private HttpClientInterface $httpClient,
     private CacheInterface $cache,
   ) {}

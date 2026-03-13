@@ -10,9 +10,9 @@ use Psr\Log\LoggerInterface;
 use Slink\User\Application\Command\SsoAuthorize\SsoAuthorizeCommand;
 use Slink\User\Application\Command\SsoAuthorize\SsoAuthorizeHandler;
 use Slink\User\Domain\Contracts\OAuthAdapterInterface;
-use Slink\User\Domain\Enum\OAuthProvider;
 use Slink\User\Domain\Exception\InvalidCredentialsException;
 use Slink\User\Domain\Repository\OAuthProviderRepositoryInterface;
+use Slink\User\Domain\ValueObject\OAuth\ProviderSlug;
 use Slink\User\Domain\ValueObject\OAuth\RedirectUri;
 use Slink\User\Infrastructure\ReadModel\View\OAuthProviderView;
 
@@ -26,7 +26,7 @@ final class SsoAuthorizeHandlerTest extends TestCase {
     $repository = $this->createMock(OAuthProviderRepositoryInterface::class);
     $repository->expects($this->once())
       ->method('findByProvider')
-      ->with(OAuthProvider::Google)
+      ->with($this->equalTo(ProviderSlug::fromString('google')))
       ->willReturn($providerView);
 
     $expectedUrl = 'https://accounts.google.com/o/oauth2/v2/auth?client_id=xxx';

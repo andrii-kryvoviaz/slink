@@ -8,9 +8,9 @@ use Doctrine\ORM\NonUniqueResultException;
 use Slink\Shared\Domain\Enum\SortDirection;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractRepository;
-use Slink\User\Domain\Enum\OAuthProvider;
 use Slink\User\Domain\Filter\OAuthProviderFilter;
 use Slink\User\Domain\Repository\OAuthProviderRepositoryInterface;
+use Slink\User\Domain\ValueObject\OAuth\ProviderSlug;
 use Slink\User\Infrastructure\ReadModel\View\OAuthProviderView;
 
 class OAuthProviderRepository extends AbstractRepository implements OAuthProviderRepositoryInterface {
@@ -21,13 +21,13 @@ class OAuthProviderRepository extends AbstractRepository implements OAuthProvide
   /**
    * @throws NonUniqueResultException
    */
-  public function findByProvider(OAuthProvider $provider): ?OAuthProviderView {
+  public function findByProvider(ProviderSlug $slug): ?OAuthProviderView {
     return $this->getEntityManager()
       ->createQueryBuilder()
       ->from(OAuthProviderView::class, 'p')
       ->select('p')
       ->where('p.slug = :slug')
-      ->setParameter('slug', $provider->value)
+      ->setParameter('slug', $slug->toString())
       ->getQuery()
       ->getOneOrNullResult();
   }

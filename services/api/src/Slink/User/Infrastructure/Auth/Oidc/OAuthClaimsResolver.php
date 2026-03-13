@@ -33,10 +33,10 @@ final readonly class OAuthClaimsResolver {
 
     if ($idToken === null) {
       $this->logger->warning('OIDC provider did not return an id_token, denying authentication', [
-        'provider' => $provider->getSlug()->value,
+        'provider' => $provider->getSlug()->toString(),
       ]);
 
-      throw new MissingIdTokenException($provider->getSlug()->value);
+      throw new MissingIdTokenException($provider->getSlug()->toString());
     }
 
     $discovery = $this->oidcDiscovery->discover($provider->getDiscoveryUrl());

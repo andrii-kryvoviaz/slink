@@ -7,6 +7,7 @@ export const providerIconVariants = cva('', {
       authentik: 'text-orange-600',
       keycloak: 'text-gray-600 dark:text-gray-300',
       authelia: 'text-blue-600',
+      pocketid: 'text-rose-500',
     },
   },
 });

@@ -21,6 +21,10 @@
   const sidebar = useSidebar();
 
   function isActiveRoute(href: string) {
+    if (page.url.pathname.startsWith(href) && href !== '/') {
+      return true;
+    }
+
     return page.url.pathname === href;
   }
 

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Slink\User\Domain\Repository;
 
-use Slink\User\Domain\Enum\OAuthProvider;
 use Slink\User\Domain\ValueObject\OAuth\OAuthSubject;
+use Slink\User\Domain\ValueObject\OAuth\ProviderSlug;
 use Slink\User\Infrastructure\ReadModel\View\OAuthLinkView;
 
 interface OAuthLinkRepositoryInterface {
@@ -22,5 +22,5 @@ interface OAuthLinkRepositoryInterface {
 
   public function delete(OAuthLinkView $link): void;
 
-  public function deleteByProviderSlug(OAuthProvider $provider): void;
+  public function deleteByProviderSlug(ProviderSlug $slug): void;
 }

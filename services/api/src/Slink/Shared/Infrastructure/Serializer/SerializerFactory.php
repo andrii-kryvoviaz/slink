@@ -45,6 +45,7 @@ abstract class SerializerFactory {
 
     $normalizers = [
       new DateTimeNormalizer(),
+      new StringValueObjectNormalizer(),
       new CommentNormalizer(),
       new BackedEnumNormalizer(),
       new $normalizerClass(...$normalizerArgs), // @phpstan-ignore-line

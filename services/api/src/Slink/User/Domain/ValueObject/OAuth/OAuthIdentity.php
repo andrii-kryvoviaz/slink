@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Slink\User\Domain\ValueObject\OAuth;
 
 use Slink\Shared\Domain\ValueObject\AbstractValueObject;
-use Slink\User\Domain\Enum\OAuthProvider;
 use Slink\User\Domain\Exception\InvalidCredentialsException;
 use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Email;
+use Slink\User\Domain\ValueObject\OAuth\ProviderSlug;
 
 final readonly class OAuthIdentity extends AbstractValueObject {
   public function __construct(
@@ -18,7 +18,7 @@ final readonly class OAuthIdentity extends AbstractValueObject {
     private bool $emailVerified,
   ) {}
 
-  public static function fromTokenClaims(TokenClaims $claims, OAuthProvider $provider): self {
+  public static function fromTokenClaims(TokenClaims $claims, ProviderSlug $provider): self {
     $sub = $claims->getSubject();
     $email = $claims->getEmail();
 

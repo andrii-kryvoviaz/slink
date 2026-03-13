@@ -6,6 +6,7 @@ services:
       target: dev
     environment:
       - ORIGIN=http://localhost:5173
+      - OAUTH_VERIFY_SSL=false
     volumes:
       - ../services:/services
       - ../var:/app/var
@@ -20,6 +21,8 @@ services:
       - "authentik.loc:host-gateway"
       - "authelia.loc:host-gateway"
       - "keycloak.loc:host-gateway"
+      - "pocket-id.loc:host-gateway"
+      - "zitadel.loc:host-gateway"
 
 volumes:
   node_modules:

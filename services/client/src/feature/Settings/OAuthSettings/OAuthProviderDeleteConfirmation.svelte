@@ -6,14 +6,17 @@
 
   import type { OAuthProviderDetails } from '@slink/api/Resources/OAuthResource';
 
+  import type { OAuthProvider } from '@slink/lib/auth/oauth';
+
   interface Props {
     provider: OAuthProviderDetails;
+    preset: OAuthProvider;
     loading: boolean;
     onConfirm: () => void;
     onCancel: () => void;
   }
 
-  let { provider, loading, onConfirm, onCancel }: Props = $props();
+  let { provider, preset, loading, onConfirm, onCancel }: Props = $props();
 </script>
 
 <div class="w-full max-w-sm p-2 space-y-4">
@@ -40,7 +43,7 @@
     class="bg-gray-50/80 dark:bg-gray-800/50 rounded-xl p-4 border border-gray-200/50 dark:border-gray-700/30"
   >
     <div class="flex items-center gap-3">
-      <ProviderIcon slug={provider.slug} class="h-5 w-5 flex-shrink-0" />
+      <ProviderIcon provider={preset} class="h-5 w-5 flex-shrink-0" />
       <div class="min-w-0 flex-1">
         <span class="text-sm font-medium text-gray-900 dark:text-white">
           {provider.name}

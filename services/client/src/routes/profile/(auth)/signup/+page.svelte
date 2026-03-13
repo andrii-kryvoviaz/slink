@@ -6,11 +6,10 @@
     BannerContent,
     BannerIcon,
   } from '@slink/feature/Layout';
-  import { Button, type ButtonVariant } from '@slink/ui/components/button';
+  import { Button } from '@slink/ui/components/button';
   import { Input } from '@slink/ui/components/input';
 
   import { enhance } from '$app/forms';
-  import { page } from '$app/state';
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
@@ -24,15 +23,10 @@
 
   let { form }: Props = $props();
 
-  const { settings } = page.data;
   let isLoading = useWritable('signUpFormLoadingState', false);
   let passwordValue = $state('');
   let showPassword = $state(false);
   let showConfirmPassword = $state(false);
-
-  let buttonVariant: ButtonVariant = $derived(
-    settings.theme.isLight ? 'dark' : 'primary',
-  );
 
   $effect(() => {
     if (form?.errors?.message) {
@@ -167,7 +161,7 @@
       </Input>
 
       <Button
-        variant={buttonVariant}
+        variant="accent"
         size="lg"
         class="w-full mt-2 group"
         type="submit"

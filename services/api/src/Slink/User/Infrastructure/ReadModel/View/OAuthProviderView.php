@@ -8,11 +8,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Slink\Shared\Infrastructure\Encryption\EncryptionRegistry;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
 use Slink\User\Domain\Contracts\OAuthProviderProfile;
-use Slink\User\Domain\Enum\OAuthProvider as OAuthProviderEnum;
 use Slink\User\Domain\ValueObject\OAuth\ClientId;
 use Slink\User\Domain\ValueObject\OAuth\ClientSecret;
 use Slink\User\Domain\ValueObject\OAuth\DiscoveryUrl;
 use Slink\User\Domain\ValueObject\OAuth\OAuthScopes;
+use Slink\User\Domain\ValueObject\OAuth\ProviderSlug;
 use Slink\User\Infrastructure\ReadModel\Repository\OAuthProviderRepository;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\Ignore;
@@ -75,8 +75,8 @@ class OAuthProviderView extends AbstractView implements OAuthProviderProfile {
     return $this->name;
   }
 
-  public function getSlug(): OAuthProviderEnum {
-    return OAuthProviderEnum::from($this->slug);
+  public function getSlug(): ProviderSlug {
+    return ProviderSlug::fromString($this->slug);
   }
 
   public function getType(): string {

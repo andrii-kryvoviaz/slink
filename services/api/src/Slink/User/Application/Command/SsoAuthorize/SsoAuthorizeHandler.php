@@ -7,9 +7,9 @@ namespace Slink\User\Application\Command\SsoAuthorize;
 use Psr\Log\LoggerInterface;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\User\Domain\Contracts\OAuthAdapterInterface;
-use Slink\User\Domain\Enum\OAuthProvider;
 use Slink\User\Domain\Exception\InvalidCredentialsException;
 use Slink\User\Domain\Repository\OAuthProviderRepositoryInterface;
+use Slink\User\Domain\ValueObject\OAuth\ProviderSlug;
 use Slink\User\Domain\ValueObject\OAuth\RedirectUri;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Throwable;
@@ -24,7 +24,7 @@ final readonly class SsoAuthorizeHandler implements CommandHandlerInterface {
   ) {}
 
   public function __invoke(SsoAuthorizeCommand $command): string {
-    $provider = $this->providerRepository->findByProvider(OAuthProvider::from($command->getProvider()));
+    $provider = $this->providerRepository->findByProvider(ProviderSlug::fromString($command->getProvider()));
 
     if (!$provider?->isEnabled()) {
       throw new InvalidCredentialsException('SSO provider is currently unavailable. Please try again later.');

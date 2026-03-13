@@ -9,8 +9,8 @@ use PHPUnit\Framework\TestCase;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Encryption\EncryptionRegistry;
 use Slink\Shared\Infrastructure\Encryption\EncryptionService;
-use Slink\User\Domain\Enum\OAuthProvider;
 use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasCreated;
+use Slink\User\Domain\ValueObject\OAuth\ProviderSlug;
 use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasRemoved;
 use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasUpdated;
 use Slink\User\Domain\Repository\OAuthLinkRepositoryInterface;
@@ -43,7 +43,7 @@ final class OAuthProviderProjectionTest extends TestCase {
     $event = new OAuthProviderWasCreated(
       id: ID::generate(),
       name: ProviderName::fromString('Google'),
-      slug: OAuthProvider::Google,
+      slug: ProviderSlug::fromString('google'),
       type: OAuthType::fromString('oidc'),
       clientId: ClientId::fromString('client-id-123'),
       clientSecret: ClientSecret::fromString('client-secret-456'),
@@ -113,7 +113,7 @@ final class OAuthProviderProjectionTest extends TestCase {
   public function itDeletesViewOnProviderRemoved(): void {
     $id = ID::generate();
     $providerView = $this->createStub(OAuthProviderView::class);
-    $providerView->method('getSlug')->willReturn(OAuthProvider::Google);
+    $providerView->method('getSlug')->willReturn(ProviderSlug::fromString('google'));
 
     $repository = $this->createMock(OAuthProviderRepositoryInterface::class);
     $repository->expects($this->once())
@@ -127,7 +127,7 @@ final class OAuthProviderProjectionTest extends TestCase {
     $linkRepository = $this->createMock(OAuthLinkRepositoryInterface::class);
     $linkRepository->expects($this->once())
       ->method('deleteByProviderSlug')
-      ->with(OAuthProvider::Google);
+      ->with(ProviderSlug::fromString('google'));
 
     $projection = new OAuthProviderProjection($repository, $linkRepository);
 

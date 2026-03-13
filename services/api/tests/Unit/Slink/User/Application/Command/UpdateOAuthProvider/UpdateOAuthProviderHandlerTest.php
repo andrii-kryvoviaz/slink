@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Application\Command\UpdateOAuthProvider\UpdateOAuthProviderCommand;
 use Slink\User\Application\Command\UpdateOAuthProvider\UpdateOAuthProviderHandler;
-use Slink\User\Domain\Enum\OAuthProvider as OAuthProviderEnum;
+use Slink\User\Domain\ValueObject\OAuth\ProviderSlug;
 use Slink\User\Domain\OAuthProvider;
 use Slink\User\Domain\Repository\OAuthProviderStoreRepositoryInterface;
 use Slink\User\Domain\ValueObject\OAuth\ClientId;
@@ -30,7 +30,7 @@ final class UpdateOAuthProviderHandlerTest extends TestCase {
       ->method('update')
       ->with(
         $this->equalTo(ProviderName::fromString('Updated Google')),
-        $this->equalTo(OAuthProviderEnum::Google),
+        $this->equalTo(ProviderSlug::fromString('google')),
         $this->equalTo(OAuthType::fromString('oidc')),
         $this->equalTo(ClientId::fromString('new-client-id')),
         $this->equalTo(ClientSecret::fromString('new-client-secret')),

@@ -11,6 +11,8 @@
 
   import type { OAuthProviderDetails } from '@slink/api/Resources/OAuthResource';
 
+  import { OAuthProviderConfig } from '@slink/lib/auth/oauth';
+
   import OAuthProviderDeleteConfirmation from './OAuthProviderDeleteConfirmation.svelte';
   import { OAuthProviderListState } from './OAuthProviderListState.svelte';
 
@@ -42,6 +44,7 @@
     class="divide-y divide-gray-100 dark:divide-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 overflow-hidden"
   >
     {#each state.providers as provider (provider.id)}
+      {@const preset = OAuthProviderConfig.resolve(provider.slug)}
       <div
         class="flex items-center justify-between gap-4 px-4 py-3.5 hover:bg-gray-100/50 dark:hover:bg-gray-800/30 transition-colors duration-150"
       >
@@ -49,7 +52,7 @@
           <div
             class="w-9 h-9 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center shrink-0"
           >
-            <ProviderIcon slug={provider.slug} class="w-5 h-5" />
+            <ProviderIcon provider={preset} class="w-5 h-5" />
           </div>
 
           <div class="min-w-0">
@@ -130,6 +133,7 @@
               {:else}
                 <OAuthProviderDeleteConfirmation
                   {provider}
+                  {preset}
                   loading={state.isDeleting(provider.id)}
                   onConfirm={() => state.confirmDelete(provider)}
                   onCancel={() => state.cancelDelete()}

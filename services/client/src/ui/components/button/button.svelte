@@ -18,6 +18,8 @@
         secondary:
           'border border-bc-button-default hover:bg-button-accent hover:border-button-accent',
         dark: 'bg-button-dark/80 hover:bg-button-dark/100',
+        accent:
+          'bg-button-dark/80 hover:bg-button-dark/100 dark:bg-button-accent/80 dark:hover:bg-button-accent/100',
         invisible: 'bg-none hover:bg-button-invisible-hover/25',
         outline:
           'border border-bc-button-default hover:bg-button-default-hover',
@@ -119,6 +121,7 @@
         secondary:
           'bg-transparent text-button-default hover:text-button-accent',
         dark: 'bg-transparent text-button-accent',
+        accent: 'bg-transparent text-button-accent',
         invisible:
           'bg-transparent text-button-invisible hover:text-button-primary',
         outline:
