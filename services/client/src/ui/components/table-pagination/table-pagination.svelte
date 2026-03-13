@@ -45,6 +45,7 @@
     totalItems?: number;
     pageSize?: number;
     loading?: boolean;
+    disablePageSelection?: boolean;
     onPageChange?: (page: number) => void;
     additionalInfo?: string;
   }
@@ -57,6 +58,7 @@
     totalItems,
     pageSize,
     loading = false,
+    disablePageSelection = false,
     onPageChange,
     additionalInfo,
   }: Props = $props();
@@ -70,7 +72,7 @@
   const currentPage = $derived(currentPageIndex + 1);
   const effectivePageSize = $derived(pageSize ?? 10);
   const isPageEditable = $derived(
-    !!(onPageChange && totalPages > 1 && !loading),
+    !disablePageSelection && !!(onPageChange && totalPages > 1 && !loading),
   );
   const hasItems = $derived(!loading && !!totalItems && totalItems > 0);
 
