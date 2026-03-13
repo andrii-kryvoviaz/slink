@@ -132,9 +132,7 @@
       class="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-800 animate-pulse"
     >
       <svg
-        width="48"
-        height="48"
-        class="text-gray-400"
+        class="h-6 w-6 @[6rem]:h-8 @[6rem]:w-8 @[12rem]:h-12 @[12rem]:w-12 text-gray-400"
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
         fill="currentColor"
@@ -152,24 +150,26 @@
       class="absolute inset-0 flex flex-col items-center justify-center bg-slate-100 dark:bg-slate-900"
       in:fade={{ duration: 200 }}
     >
-      <div class="flex flex-col items-center gap-4 px-6 text-center">
+      <div
+        class="flex flex-col items-center gap-1 @[12rem]:gap-4 px-2 @[12rem]:px-6 text-center"
+      >
         <div
-          class="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-200 dark:bg-slate-800 shadow-sm"
+          class="relative flex h-8 w-8 @[6rem]:h-12 @[6rem]:w-12 @[12rem]:h-16 @[12rem]:w-16 items-center justify-center rounded-xl @[12rem]:rounded-2xl bg-slate-200 dark:bg-slate-800 shadow-sm"
         >
           <Icon
             icon="ph:image-broken"
-            class="h-8 w-8 text-slate-400 dark:text-slate-500"
+            class="h-4 w-4 @[6rem]:h-6 @[6rem]:w-6 @[12rem]:h-8 @[12rem]:w-8 text-slate-400 dark:text-slate-500"
           />
           <div
-            class="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/50 ring-2 ring-white dark:ring-slate-900"
+            class="absolute -bottom-1 -right-1 flex h-4 w-4 @[6rem]:h-5 @[6rem]:w-5 @[12rem]:h-6 @[12rem]:w-6 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/50 ring-1 @[6rem]:ring-2 ring-white dark:ring-slate-900"
           >
             <Icon
               icon="ph:warning-fill"
-              class="h-3.5 w-3.5 text-amber-500 dark:text-amber-400"
+              class="h-2.5 w-2.5 @[6rem]:h-3 @[6rem]:w-3 @[12rem]:h-3.5 @[12rem]:w-3.5 text-amber-500 dark:text-amber-400"
             />
           </div>
         </div>
-        <div class="space-y-1.5">
+        <div class="hidden @[12rem]:block space-y-1.5">
           <p class="text-sm font-medium text-slate-700 dark:text-slate-300">
             Image unavailable
           </p>
