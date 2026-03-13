@@ -19,6 +19,7 @@
     onTagRemove?: (tagId: string) => void;
     disabled?: boolean;
     maxVisible?: number;
+    disableHover?: boolean;
   }
 
   let {
@@ -30,6 +31,7 @@
     onTagRemove,
     disabled = false,
     maxVisible,
+    disableHover = false,
   }: Props = $props();
 
   const {
@@ -73,13 +75,20 @@
       <TagBadge
         {tag}
         {variant}
+        {disableHover}
         showFullPath={false}
         showCount={showImageCount}
         onClose={removable ? () => handleRemoveTag(tag.id) : undefined}
       />
     {/snippet}
     {#snippet overflowBadge(tag)}
-      <TagBadge {tag} {variant} showFullPath={false} showCount={false} />
+      <TagBadge
+        {tag}
+        {variant}
+        {disableHover}
+        showFullPath={false}
+        showCount={false}
+      />
     {/snippet}
   </OverflowBadgeList>
 {:else if !$isLoadingTags}

@@ -1,11 +1,12 @@
 <script lang="ts">
+  import HistoryDataTableSkeleton from '@slink/feature/Image/History/HistoryDataTable/HistoryDataTableSkeleton.svelte';
   import { Skeleton } from '@slink/feature/Layout';
 
   import { getSkeletonHeight } from '@slink/lib/utils/ui/skeletonHeight';
 
   interface Props {
     count?: number;
-    viewMode?: 'list' | 'grid';
+    viewMode?: 'list' | 'grid' | 'table';
     class?: string;
   }
 
@@ -16,7 +17,9 @@
   }: Props = $props();
 </script>
 
-{#if viewMode === 'list'}
+{#if viewMode === 'table'}
+  <HistoryDataTableSkeleton {count} />
+{:else if viewMode === 'list'}
   <ul class="flex flex-col gap-3 {customClass}">
     {#each Array(count) as _, index}
       <li

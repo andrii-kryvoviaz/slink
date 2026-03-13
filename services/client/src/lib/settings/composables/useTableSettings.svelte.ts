@@ -4,22 +4,19 @@ import type {
   TableKeySettings,
   TableState,
 } from '@slink/lib/settings/UserSettings.svelte';
+import { defaultSettings } from '@slink/lib/settings/UserSettings.svelte';
 
-type TableKey = 'users' | 'tags';
-
-interface TableSettingsInit {
-  pageSize: number;
-  columnVisibility: Record<string, boolean>;
-}
+type TableKey = 'users' | 'tags' | 'history';
 
 export type TableSettingsState = ReturnType<typeof useTableSettings>;
 
-export function useTableSettings(key: TableKey, initial: TableSettingsInit) {
+export function useTableSettings(key: TableKey) {
   const { settings } = page.data;
+  const defaults = (defaultSettings.table as TableState)[key];
 
   return {
     get pageSize() {
-      return settings.table[key]?.pageSize ?? initial.pageSize;
+      return settings.table[key]?.pageSize ?? defaults.pageSize;
     },
     set pageSize(v: number) {
       settings.updateTable({
@@ -27,7 +24,7 @@ export function useTableSettings(key: TableKey, initial: TableSettingsInit) {
       } as Partial<Record<keyof TableState, Partial<TableKeySettings>>>);
     },
     get columnVisibility() {
-      return settings.table[key]?.columnVisibility ?? initial.columnVisibility;
+      return settings.table[key]?.columnVisibility ?? defaults.columnVisibility;
     },
     set columnVisibility(v: Record<string, boolean>) {
       settings.updateTable({

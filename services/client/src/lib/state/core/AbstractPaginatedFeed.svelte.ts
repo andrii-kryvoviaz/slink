@@ -14,6 +14,13 @@ export interface PaginationMetadata {
   prevCursor?: string | null;
 }
 
+export interface PaginationContext extends PaginationMetadata {
+  currentPage: number;
+  totalPages: number;
+  canPrevPage: boolean;
+  canNextPage: boolean;
+}
+
 export interface PaginatedResponse<T> {
   data: T[];
   meta: PaginationMetadata;
@@ -30,10 +37,12 @@ export interface SearchParams {
   searchBy?: string;
 }
 
+export type AppendMode = 'auto' | 'always' | 'never';
+
 export interface PaginationConfig {
   defaultPageSize: number;
   useCursor: boolean;
-  appendMode: 'auto' | 'always' | 'never';
+  appendMode: AppendMode;
 }
 
 type DeepPartial<T> = {
@@ -47,6 +56,8 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
   private _order: string[] = $state([]);
   protected _meta: PaginationMetadata = $state({} as PaginationMetadata);
   protected _nextCursor: string | null = $state(null);
+  protected _cursorHistory: string[] = $state([]);
+  protected _currentLoadCursor: string | null = $state(null);
   protected _config: PaginationConfig;
   protected _skeletonManager = new SkeletonManager();
 
@@ -70,6 +81,8 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
     this._itemMap.clear();
     this._order = [];
     this._nextCursor = null;
+    this._cursorHistory = [];
+    this._currentLoadCursor = null;
     this._skeletonManager.reset();
     this._meta = {
       page: this._config.useCursor ? undefined : 1,
@@ -87,6 +100,12 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
     params: LoadParams & SearchParams = {},
     options?: RequestStateOptions,
   ): Promise<void> {
+    if (this._config.useCursor && !params.cursor) {
+      this._cursorHistory = [];
+      this._currentLoadCursor = null;
+      this._nextCursor = null;
+    }
+
     const {
       page = this._meta.page,
       limit = this._meta.size,
@@ -147,6 +166,8 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
     params: LoadParams & SearchParams = {},
     options?: RequestStateOptions,
   ): Promise<void> {
+    this._cursorHistory = [];
+    this._currentLoadCursor = null;
     this._nextCursor = null;
 
     await this.fetch(
@@ -167,16 +188,13 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
   }
 
   public async nextPage(options?: RequestStateOptions): Promise<void> {
-    if (!this.hasMore) {
-      return;
-    }
+    if (!this.hasMore) return;
 
     if (this._config.useCursor && this._nextCursor) {
+      this._cursorHistory.push(this._currentLoadCursor ?? '');
+      this._currentLoadCursor = this._nextCursor;
       await this.load(
-        {
-          limit: this._meta.size,
-          cursor: this._nextCursor,
-        },
+        { limit: this._meta.size, cursor: this._nextCursor },
         options,
       );
     } else {
@@ -185,6 +203,47 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
         options,
       );
     }
+  }
+
+  public async prevPage(): Promise<void> {
+    if (this._cursorHistory.length === 0) return;
+
+    const prevCursor = this._cursorHistory.pop()!;
+    this._currentLoadCursor = prevCursor || null;
+
+    if (!prevCursor) {
+      await this.reload();
+    } else {
+      await this.load({ cursor: prevCursor, limit: this._meta.size });
+    }
+  }
+
+  get currentPage(): number {
+    return this._cursorHistory.length + 1;
+  }
+
+  get totalPages(): number {
+    if (!this._meta.total || !this._meta.size) return 1;
+    return Math.ceil(this._meta.total / this._meta.size);
+  }
+
+  get canNextPage(): boolean {
+    return this.hasMore;
+  }
+
+  get canPrevPage(): boolean {
+    return this._cursorHistory.length > 0;
+  }
+
+  public setMode(mode: AppendMode): void {
+    if (this._config.appendMode === mode) return;
+    this._config.appendMode = mode;
+    this.reset();
+  }
+
+  public setPageSize(pageSize: number): void {
+    this._config.defaultPageSize = pageSize;
+    this._meta.size = pageSize;
   }
 
   public addItem(item: T): void {
@@ -269,6 +328,16 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
 
   get meta(): PaginationMetadata {
     return this._meta;
+  }
+
+  get pagination(): PaginationContext {
+    return {
+      ...this._meta,
+      currentPage: this.currentPage,
+      totalPages: this.totalPages,
+      canPrevPage: this.canPrevPage,
+      canNextPage: this.canNextPage,
+    };
   }
 
   get hasItems(): boolean {

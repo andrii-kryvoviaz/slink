@@ -18,14 +18,7 @@
   const tagFeed = useTagListFeed();
   const createModalState = createCreateTagModalState();
 
-  const tableSettings = useTableSettings('tags', {
-    pageSize: 10,
-    columnVisibility: {
-      name: true,
-      imageCount: true,
-      children: true,
-    },
-  });
+  const tableSettings = useTableSettings('tags');
 
   let searchQuery = $state('');
 

@@ -140,13 +140,6 @@
           </div>
 
           <div class="mt-auto flex flex-col gap-2">
-            {#if item.collections && item.collections.length > 0}
-              <ImageCollectionList
-                collections={item.collections}
-                maxVisible={5}
-              />
-            {/if}
-
             {#if item.tags && item.tags.length > 0}
               <ImageTagList
                 imageId={item.id}
@@ -160,6 +153,13 @@
               <div class="text-xs text-gray-400 dark:text-gray-600 sm:hidden">
                 <FormattedDate date={item.attributes.createdAt.timestamp} />
               </div>
+            {/if}
+
+            {#if item.collections && item.collections.length > 0}
+              <ImageCollectionList
+                collections={item.collections}
+                maxVisible={5}
+              />
             {/if}
           </div>
         </div>

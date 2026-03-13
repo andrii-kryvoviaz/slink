@@ -7,7 +7,7 @@ import { cookie } from '@slink/utils/http/cookie';
 import { deepMerge } from '@slink/utils/object/deepMerge';
 import { tryJson } from '@slink/utils/string/json';
 
-export type ViewMode = 'grid' | 'list';
+export type ViewMode = 'grid' | 'list' | 'table';
 export type ShareFormat = 'direct' | 'markdown' | 'bbcode' | 'html' | 'image';
 
 export type SidebarState = { expanded: boolean };
@@ -17,7 +17,11 @@ export type TableKeySettings = {
   pageSize: number;
   columnVisibility: Record<string, boolean>;
 };
-export type TableState = { users: TableKeySettings; tags: TableKeySettings };
+export type TableState = {
+  users: TableKeySettings;
+  tags: TableKeySettings;
+  history: TableKeySettings;
+};
 export type HistoryState = { viewMode: ViewMode };
 export type ShareState = { format: ShareFormat };
 export type CommentState = { sortOrder: SortOrder };
@@ -71,8 +75,21 @@ export const defaultSettings: Record<SettingsKey, unknown> = {
         children: true,
       },
     },
+    history: {
+      pageSize: 12,
+      columnVisibility: {
+        fileName: true,
+        mimeType: true,
+        dimensions: true,
+        size: true,
+        isPublic: true,
+        views: true,
+        createdAt: true,
+        tagsCollections: true,
+      },
+    },
   },
-  history: { viewMode: 'list' },
+  history: { viewMode: 'table' },
   share: { format: 'direct' },
   comment: { sortOrder: SortOrder.Asc },
   uploadOptions: { expanded: false },

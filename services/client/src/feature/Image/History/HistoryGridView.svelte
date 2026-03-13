@@ -140,15 +140,6 @@
           <ImageMetadata {item} gap="sm" />
         </div>
 
-        {#if item.collections && item.collections.length > 0}
-          <div class="mb-2">
-            <ImageCollectionList
-              collections={item.collections}
-              maxVisible={3}
-            />
-          </div>
-        {/if}
-
         {#if item.tags && item.tags.length > 0}
           <ImageTagList
             imageId={item.id}
@@ -158,6 +149,15 @@
             initialTags={item.tags}
             maxVisible={3}
           />
+        {/if}
+
+        {#if item.collections && item.collections.length > 0}
+          <div class="mb-2">
+            <ImageCollectionList
+              collections={item.collections}
+              maxVisible={3}
+            />
+          </div>
         {/if}
       </div>
     </article>
