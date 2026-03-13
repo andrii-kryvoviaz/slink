@@ -17,6 +17,7 @@ interface UseDataTableOptions<TData extends RowData> {
   currentPage: () => number;
   pageSize: () => number;
   totalPages: () => number;
+  getRowId?: (row: TData) => string;
   onPageChange?: (page: number) => void;
   onColumnVisibilityChange?: (visibility: VisibilityState) => void;
 }
@@ -38,6 +39,7 @@ export function useDataTable<TData extends RowData>(
       return options.data();
     },
     columns: options.columns,
+    ...(options.getRowId && { getRowId: options.getRowId }),
     state: {
       get pagination() {
         return pagination;

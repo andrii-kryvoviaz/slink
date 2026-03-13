@@ -30,15 +30,7 @@
 
   let viewMode = $derived(settings.userAdmin.viewMode);
 
-  const tableSettings = useTableSettings('users', {
-    pageSize: 12,
-    columnVisibility: {
-      displayName: true,
-      username: true,
-      status: true,
-      roles: true,
-    },
-  });
+  const tableSettings = useTableSettings('users');
 
   const userFeedState = useUserListFeed();
 
