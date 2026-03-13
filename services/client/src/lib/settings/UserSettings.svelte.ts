@@ -89,7 +89,7 @@ export const defaultSettings: Record<SettingsKey, unknown> = {
       },
     },
   },
-  history: { viewMode: 'list' },
+  history: { viewMode: 'table' },
   share: { format: 'direct' },
   comment: { sortOrder: SortOrder.Asc },
   uploadOptions: { expanded: false },
