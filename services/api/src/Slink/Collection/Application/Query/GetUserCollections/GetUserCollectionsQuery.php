@@ -11,21 +11,16 @@ final readonly class GetUserCollectionsQuery implements QueryInterface {
   use EnvelopedMessage;
 
   public function __construct(
-    private string $userId,
-    private int $page = 1,
-    private int $limit = 12,
+    private int     $limit = 12,
+    private ?string $cursor = null,
   ) {
-  }
-
-  public function getUserId(): string {
-    return $this->userId;
-  }
-
-  public function getPage(): int {
-    return $this->page;
   }
 
   public function getLimit(): int {
     return $this->limit;
+  }
+
+  public function getCursor(): ?string {
+    return $this->cursor;
   }
 }

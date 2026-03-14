@@ -23,8 +23,13 @@ export class CollectionResource extends AbstractResource {
     return this.post('/collection', { json: request });
   }
 
-  public async getList(page: number = 1): Promise<CollectionListingResponse> {
-    return this.get(`/collections/${page}`);
+  public async getList(
+    limit: number = 12,
+    cursor?: string,
+  ): Promise<CollectionListingResponse> {
+    const query: Record<string, unknown> = { limit };
+    if (cursor) query.cursor = cursor;
+    return this.get('/collections', { query });
   }
 
   public async getById(collectionId: string): Promise<CollectionResponse> {

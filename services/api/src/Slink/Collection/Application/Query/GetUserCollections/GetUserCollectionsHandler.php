@@ -10,27 +10,29 @@ use Slink\Collection\Domain\Service\CollectionCoverGeneratorInterface;
 use Slink\Shared\Application\Http\Collection;
 use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Application\Query\QueryHandlerInterface;
+use Slink\Shared\Infrastructure\Pagination\CursorPaginator;
 
 final readonly class GetUserCollectionsHandler implements QueryHandlerInterface {
   public function __construct(
-    private CollectionRepositoryInterface $collectionRepository,
-    private CollectionItemRepositoryInterface $collectionItemRepository,
-    private CollectionCoverGeneratorInterface $coverGenerator,
+    private CollectionRepositoryInterface     $collectionRepository,
+    private CollectionItemRepositoryInterface  $collectionItemRepository,
+    private CollectionCoverGeneratorInterface  $coverGenerator,
+    private CursorPaginator                    $cursorPaginator,
   ) {
   }
 
-  public function __invoke(GetUserCollectionsQuery $query): Collection {
+  public function __invoke(GetUserCollectionsQuery $query, string $userId): Collection {
     $paginator = $this->collectionRepository->getByUserId(
-      $query->getUserId(),
-      $query->getPage(),
+      $userId,
       $query->getLimit(),
+      $query->getCursor(),
     );
-    
+
     $collections = iterator_to_array($paginator);
     $collectionIds = array_map(fn($c) => $c->getId(), $collections);
     $itemCounts = $this->collectionItemRepository->countByCollectionIds($collectionIds);
     $coverImageIds = $this->collectionItemRepository->getFirstImageIdsByCollectionIds($collectionIds, 5);
-    
+
     $items = array_map(
       fn($c) => Item::fromEntity($c, [
         'itemCount' => $itemCounts[$c->getId()] ?? 0,
@@ -39,11 +41,9 @@ final readonly class GetUserCollectionsHandler implements QueryHandlerInterface 
       $collections
     );
 
-    return new Collection(
-      page: $query->getPage(),
-      limit: $query->getLimit(),
-      total: $paginator->count(),
-      data: $items
-    );
+    $cursorResult = $this->cursorPaginator->paginate($items, $query->getLimit());
+    $total = $this->collectionRepository->countByUserId($userId);
+
+    return Collection::fromCursorPaginator($cursorResult, limit: $query->getLimit(), total: $total);
   }
 }
