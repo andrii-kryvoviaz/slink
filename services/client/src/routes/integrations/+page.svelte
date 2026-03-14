@@ -8,8 +8,8 @@
     CreateApiKeyForm,
     CreatedKeyDisplay,
   } from '@slink/feature/User';
-  import { Button } from '@slink/ui/components/button';
   import { Dialog } from '@slink/ui/components/dialog';
+  import { SplitButton } from '@slink/ui/components/split-button';
   import { onMount } from 'svelte';
 
   import { useApiKeyStore } from '$lib/state/ApiKeyStore.svelte.js';
@@ -81,16 +81,12 @@
             >Connect Slink with ShareX and other tools via API keys</Subtitle
           >
         </div>
-        <Button
-          variant="soft-blue"
-          size="sm"
-          rounded="full"
-          onclick={handleCreateClick}
-          class="ml-4 gap-2"
-        >
-          <Icon icon="lucide:plus" class="h-4 w-4" />
-          <span class="hidden sm:inline">New API Key</span>
-        </Button>
+        <SplitButton onclick={handleCreateClick}>
+          Create
+          {#snippet aside()}
+            <Icon icon="lucide:plus" class="w-3.5 h-3.5" />
+          {/snippet}
+        </SplitButton>
       </div>
     </div>
 

@@ -6,7 +6,7 @@
   } from '@slink/feature/Settings/OAuthSettings';
   import { CopyableText, Notice } from '@slink/feature/Text';
   import { BackLink } from '@slink/ui/components/back-link';
-  import { Button } from '@slink/ui/components/button';
+  import { SplitButton } from '@slink/ui/components/split-button';
 
   import { goto } from '$app/navigation';
   import Icon from '@iconify/svelte';
@@ -36,15 +36,12 @@
   {/snippet}
 
   {#snippet actions()}
-    <Button
-      variant="soft-blue"
-      rounded="full"
-      size="sm"
-      onclick={() => goto('/admin/settings/sso/new')}
-    >
-      {#snippet leftIcon()}<Icon icon="ph:plus" class="w-4 h-4" />{/snippet}
-      Add Provider
-    </Button>
+    <SplitButton onclick={() => goto('/admin/settings/sso/new')}>
+      Create
+      {#snippet aside()}
+        <Icon icon="lucide:plus" class="w-3.5 h-3.5" />
+      {/snippet}
+    </SplitButton>
   {/snippet}
 
   <Notice variant="info" size="sm">
