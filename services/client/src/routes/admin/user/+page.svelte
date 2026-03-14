@@ -1,6 +1,7 @@
 <script lang="ts">
   import { LoadMoreButton } from '@slink/feature/Action';
   import { EmptyState, ViewModeToggle } from '@slink/feature/Layout';
+  import { Subtitle, Title } from '@slink/feature/Text';
   import {
     UserDataTable,
     UserGridView,
@@ -64,12 +65,8 @@
     <div class="mb-8" in:fade={{ duration: 400, delay: 100 }}>
       <div class="flex items-center justify-between w-full">
         <div class="flex-1 min-w-0">
-          <h1 class="text-3xl font-semibold text-gray-900 dark:text-white">
-            Users
-          </h1>
-          <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-            Manage user accounts and permissions
-          </p>
+          <Title>Users</Title>
+          <Subtitle>Manage user accounts and permissions</Subtitle>
         </div>
 
         <ViewModeToggle

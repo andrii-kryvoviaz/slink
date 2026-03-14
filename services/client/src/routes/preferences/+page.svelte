@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Loader } from '@slink/feature/Layout';
   import { SettingItem } from '@slink/feature/Settings';
-  import { Notice } from '@slink/feature/Text';
+  import { Notice, Subtitle, Title } from '@slink/feature/Text';
   import { Select } from '@slink/ui/components';
   import { Button } from '@slink/ui/components/button';
   import { Switch } from '@slink/ui/components/switch';
@@ -98,12 +98,8 @@
   in:fade={{ duration: 150 }}
 >
   <header class="mb-8">
-    <h1 class="text-xl font-semibold text-gray-900 dark:text-white">
-      Preferences
-    </h1>
-    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-      Configure your default settings and preferences
-    </p>
+    <Title size="sm">Preferences</Title>
+    <Subtitle>Configure your default settings and preferences</Subtitle>
   </header>
 
   <form

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Subtitle, Title } from '@slink/feature/Text';
   import type { ApiKeyFormData, ApiKeyManagerState } from '@slink/feature/User';
   import {
     ApiKeyCard,
@@ -75,12 +76,10 @@
     <div class="mb-8 space-y-6" in:fade={{ duration: 400, delay: 100 }}>
       <div class="flex items-center justify-between w-full">
         <div class="flex-1 min-w-0">
-          <h1 class="text-3xl font-semibold text-slate-900 dark:text-white">
-            Integrations
-          </h1>
-          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            Connect Slink with ShareX and other tools via API keys
-          </p>
+          <Title>Integrations</Title>
+          <Subtitle
+            >Connect Slink with ShareX and other tools via API keys</Subtitle
+          >
         </div>
         <Button
           variant="soft-blue"

@@ -4,7 +4,7 @@
   import { BookmarkButton, ImagePlaceholder } from '@slink/feature/Image';
   import { EmptyState, Masonry } from '@slink/feature/Layout';
   import { ExploreSkeleton } from '@slink/feature/Layout';
-  import { FormattedDate } from '@slink/feature/Text';
+  import { FormattedDate, Subtitle, Title } from '@slink/feature/Text';
   import { UserAvatar } from '@slink/feature/User';
   import { untrack } from 'svelte';
 
@@ -41,12 +41,8 @@
     use:skeleton={{ feed: bookmarksFeed }}
   >
     <div class="mb-8">
-      <h1 class="text-3xl font-semibold text-slate-900 dark:text-white">
-        Bookmarks
-      </h1>
-      <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-        Your saved images from the community
-      </p>
+      <Title>Bookmarks</Title>
+      <Subtitle>Your saved images from the community</Subtitle>
     </div>
 
     {#if bookmarksFeed.showSkeleton}

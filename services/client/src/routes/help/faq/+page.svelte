@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Subtitle, Title } from '@slink/feature/Text';
   import { faqQuestions } from '@slink/routes/help/faq/faq.questions';
   import { onMount } from 'svelte';
 
@@ -61,13 +62,13 @@
     in:fade={{ duration: 400 }}
   >
     <div class="text-center mb-12">
-      <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
-        Frequently Asked Questions
-      </h1>
-      <p class="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+      <Title size="xl" weight="bold" class="mb-4"
+        >Frequently Asked Questions</Title
+      >
+      <Subtitle size="lg" class="max-w-2xl mx-auto">
         Find answers to common questions about using Slink for image sharing and
         management
-      </p>
+      </Subtitle>
     </div>
 
     <div class="space-y-4">

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Loader } from '@slink/feature/Layout';
   import { SettingItem } from '@slink/feature/Settings';
+  import { Subtitle, Title } from '@slink/feature/Text';
   import { UserAvatar } from '@slink/feature/User';
   import { Button } from '@slink/ui/components/button';
   import { Input } from '@slink/ui/components/input';
@@ -60,12 +61,8 @@
   in:fade={{ duration: 150 }}
 >
   <header class="mb-8">
-    <h1 class="text-xl font-semibold text-gray-900 dark:text-white">
-      Profile Settings
-    </h1>
-    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-      Manage your account information and security settings
-    </p>
+    <Title size="sm">Profile Settings</Title>
+    <Subtitle>Manage your account information and security settings</Subtitle>
   </header>
 
   <div class="space-y-8">

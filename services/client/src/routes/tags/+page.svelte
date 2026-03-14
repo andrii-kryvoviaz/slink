@@ -1,7 +1,8 @@
 <script lang="ts">
   import { CreateTagDialog } from '@slink/feature/Tag';
   import { TagDataTable } from '@slink/feature/Tag/TagDataTable';
-  import { Button } from '@slink/ui/components/button';
+  import { Subtitle, Title } from '@slink/feature/Text';
+  import { SplitButton } from '@slink/ui/components/split-button';
   import { onMount } from 'svelte';
 
   import Icon from '@iconify/svelte';
@@ -77,23 +78,17 @@
     <div class="mb-8 space-y-6" in:fade={{ duration: 400, delay: 100 }}>
       <div class="flex items-center justify-between w-full">
         <div class="flex-1 min-w-0">
-          <h1 class="text-3xl font-semibold text-slate-900 dark:text-white">
-            My Tags
-          </h1>
-          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            Create and organize tags for your images
-          </p>
+          <Title>My Tags</Title>
+          <Subtitle>Create and organize tags for your images</Subtitle>
         </div>
-        <Button
-          variant="soft-blue"
-          size="sm"
-          rounded="full"
-          onclick={handleCreateTag}
-          class="ml-4 gap-2"
-        >
-          <Icon icon="lucide:plus" class="h-4 w-4" />
-          <span class="hidden sm:inline">Create Tag</span>
-        </Button>
+        <div class="shrink-0">
+          <SplitButton onclick={handleCreateTag}>
+            Create Tag
+            {#snippet aside()}
+              <Icon icon="lucide:plus" class="w-3.5 h-3.5" />
+            {/snippet}
+          </SplitButton>
+        </div>
       </div>
     </div>
 

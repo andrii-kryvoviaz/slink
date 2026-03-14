@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Subtitle, Title } from '@slink/feature/Text';
   import type { Snippet } from 'svelte';
 
   import { fade } from 'svelte/transition';
@@ -35,12 +36,8 @@
   <header class="mb-8">
     <div class="flex items-center justify-between">
       <div>
-        <h1 class="text-xl font-semibold text-gray-900 dark:text-white">
-          {title}
-        </h1>
-        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-          {description}
-        </p>
+        <Title size="sm">{title}</Title>
+        <Subtitle>{description}</Subtitle>
       </div>
       {#if actions}
         {@render actions()}

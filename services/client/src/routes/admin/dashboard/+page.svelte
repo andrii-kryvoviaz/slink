@@ -4,6 +4,7 @@
     LatestUsers,
     UserAnalytics,
   } from '@slink/feature/Analytics';
+  import { Subtitle, Title } from '@slink/feature/Text';
 
   import { fade } from 'svelte/transition';
 </script>
@@ -15,12 +16,10 @@
 <section in:fade={{ duration: 300 }} class="relative h-full grow">
   <div class="px-6 py-6">
     <div class="mb-8">
-      <h1 class="text-3xl font-semibold text-gray-900 dark:text-white">
-        Dashboard
-      </h1>
-      <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-        Overview of your application's key metrics and activity
-      </p>
+      <Title>Dashboard</Title>
+      <Subtitle
+        >Overview of your application's key metrics and activity</Subtitle
+      >
     </div>
 
     <div class="grid h-full grid-cols-1 md:grid-cols-5 content-start gap-4">

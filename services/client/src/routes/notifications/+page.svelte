@@ -4,6 +4,7 @@
     NotificationGroupItem,
     NotificationSkeleton,
   } from '@slink/feature/Notification';
+  import { Title } from '@slink/feature/Text';
   import { Button } from '@slink/ui/components/button';
   import { untrack } from 'svelte';
 
@@ -54,11 +55,7 @@
     <div class="mb-8" in:fade={{ duration: 300 }}>
       <div class="flex items-start justify-between gap-4">
         <div>
-          <h1
-            class="text-2xl sm:text-3xl font-semibold text-slate-900 dark:text-white"
-          >
-            Notifications
-          </h1>
+          <Title size="md">Notifications</Title>
           {#if notificationFeed.unreadCount > 0}
             <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
               {notificationFeed.unreadCount} unread

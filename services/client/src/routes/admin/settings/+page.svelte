@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { Subtitle, Title } from '@slink/feature/Text';
+
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
@@ -51,12 +53,10 @@
   in:fade={{ duration: 300 }}
 >
   <div class="mb-8">
-    <h1 class="text-3xl font-semibold text-gray-900 dark:text-white">
-      Settings
-    </h1>
-    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-      Configure your application preferences and manage system behavior
-    </p>
+    <Title>Settings</Title>
+    <Subtitle
+      >Configure your application preferences and manage system behavior</Subtitle
+    >
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
