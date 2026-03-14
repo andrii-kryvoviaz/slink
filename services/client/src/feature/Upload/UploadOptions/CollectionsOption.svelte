@@ -1,6 +1,6 @@
 <script lang="ts">
   import {
-    CollectionListView,
+    CollectionPickerList,
     CreateCollectionDialog,
   } from '@slink/feature/Collection';
   import { Button } from '@slink/ui/components/button';
@@ -96,7 +96,7 @@
     align="start"
     onpaste={(e: ClipboardEvent) => e.stopPropagation()}
   >
-    <CollectionListView
+    <CollectionPickerList
       collections={selectionState.collections}
       {selectedIds}
       isLoading={selectionState.isLoading}

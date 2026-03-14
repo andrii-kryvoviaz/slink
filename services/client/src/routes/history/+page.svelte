@@ -1,7 +1,7 @@
 <script lang="ts">
   import { LoadMoreButton } from '@slink/feature/Action';
   import {
-    CollectionListView,
+    CollectionPickerList,
     CreateCollectionDialog,
   } from '@slink/feature/Collection';
   import {
@@ -26,8 +26,9 @@
     ActiveFilterBar,
     CreateTagDialog,
     TagFilter,
-    TagListView,
+    TagPickerList,
   } from '@slink/feature/Tag';
+  import { Subtitle, Title } from '@slink/feature/Text';
   import { Button } from '@slink/ui/components/button';
   import { untrack } from 'svelte';
 
@@ -183,14 +184,8 @@
         class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between w-full"
       >
         <div class="min-w-0">
-          <h1
-            class="text-2xl sm:text-3xl font-semibold text-slate-900 dark:text-white"
-          >
-            Upload History
-          </h1>
-          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            View and manage your uploaded images
-          </p>
+          <Title size="md">Upload History</Title>
+          <Subtitle>View and manage your uploaded images</Subtitle>
         </div>
 
         <div class="flex items-center gap-3 shrink-0">
@@ -371,7 +366,7 @@
         onOpen={batchCollectionPicker.handleOpen}
         onApply={batchCollectionPicker.apply}
       >
-        <CollectionListView
+        <CollectionPickerList
           collections={batchCollectionPicker.picker.items}
           isLoading={batchCollectionPicker.picker.isLoading}
           variant="popover"
@@ -393,7 +388,7 @@
         onOpen={batchTagPicker.handleOpen}
         onApply={batchTagPicker.apply}
       >
-        <TagListView
+        <TagPickerList
           tags={batchTagPicker.picker.items}
           isLoading={batchTagPicker.picker.isLoading}
           variant="popover"

@@ -1,1 +1,1 @@
-export { default as CollectionListView } from './CollectionListView.svelte';
+export { default as CollectionPickerList } from './CollectionPickerList.svelte';

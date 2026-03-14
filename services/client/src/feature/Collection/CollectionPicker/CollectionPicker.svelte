@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { CollectionListView } from '@slink/feature/Collection';
+  import { CollectionPickerList } from '@slink/feature/Collection';
   import {
     ImageItemPicker,
     type PickerVariant,
@@ -44,7 +44,7 @@
     onToggle: toggle,
     onCreateNew,
   })}
-    <CollectionListView
+    <CollectionPickerList
       collections={items}
       {selectedIds}
       {isLoading}

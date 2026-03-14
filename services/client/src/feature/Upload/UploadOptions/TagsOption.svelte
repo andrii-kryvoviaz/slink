@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { CreateTagDialog, TagListView } from '@slink/feature/Tag';
+  import { CreateTagDialog, TagPickerList } from '@slink/feature/Tag';
   import { Button } from '@slink/ui/components/button';
   import { SelectionPill } from '@slink/ui/components/pill';
   import * as Popover from '@slink/ui/components/popover';
@@ -87,7 +87,7 @@
     align="start"
     onpaste={(e: ClipboardEvent) => e.stopPropagation()}
   >
-    <TagListView
+    <TagPickerList
       tags={selectionState.tags}
       {selectedIds}
       isLoading={selectionState.isLoading}

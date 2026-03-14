@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { TagListView } from '@slink/feature/Tag';
+  import { TagPickerList } from '@slink/feature/Tag';
   import {
     ImageItemPicker,
     type PickerVariant,
@@ -44,7 +44,7 @@
     onToggle: toggle,
     onCreateNew,
   })}
-    <TagListView
+    <TagPickerList
       tags={items}
       {selectedIds}
       {isLoading}

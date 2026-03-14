@@ -1,2 +1,2 @@
-export { default as TagListView } from './TagListView.svelte';
+export { default as TagPickerList } from './TagPickerList.svelte';
 export { default as TagPicker } from './TagPicker.svelte';
