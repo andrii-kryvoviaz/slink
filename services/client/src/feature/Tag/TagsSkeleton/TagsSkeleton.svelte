@@ -75,8 +75,8 @@
             </td>
             <td class="h-14 px-4 text-right">
               <Skeleton
-                width="32px"
-                height="32px"
+                width="36px"
+                height="36px"
                 rounded="md"
                 class="ml-auto"
               />

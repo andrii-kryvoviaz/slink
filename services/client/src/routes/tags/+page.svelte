@@ -83,7 +83,7 @@
         </div>
         <div class="shrink-0">
           <SplitButton onclick={handleCreateTag}>
-            Create Tag
+            Create
             {#snippet aside()}
               <Icon icon="lucide:plus" class="w-3.5 h-3.5" />
             {/snippet}

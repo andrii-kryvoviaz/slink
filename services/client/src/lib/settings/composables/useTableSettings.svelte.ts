@@ -6,7 +6,7 @@ import type {
 } from '@slink/lib/settings/UserSettings.svelte';
 import { defaultSettings } from '@slink/lib/settings/UserSettings.svelte';
 
-type TableKey = 'users' | 'tags' | 'history';
+type TableKey = 'users' | 'tags' | 'history' | 'collections';
 
 export type TableSettingsState = ReturnType<typeof useTableSettings>;
 
