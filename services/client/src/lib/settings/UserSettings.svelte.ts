@@ -21,8 +21,10 @@ export type TableState = {
   users: TableKeySettings;
   tags: TableKeySettings;
   history: TableKeySettings;
+  collections: TableKeySettings;
 };
 export type HistoryState = { viewMode: ViewMode };
+export type CollectionsState = { viewMode: ViewMode };
 export type ShareState = { format: ShareFormat };
 export type CommentState = { sortOrder: SortOrder };
 export type UploadOptionsState = { expanded: boolean };
@@ -36,7 +38,8 @@ export type SettingsKey =
   | 'history'
   | 'share'
   | 'comment'
-  | 'uploadOptions';
+  | 'uploadOptions'
+  | 'collections';
 
 export type CookieSettings = { [K in SettingsKey]?: unknown };
 
@@ -50,6 +53,7 @@ export const settingsKeys: SettingsKey[] = [
   'share',
   'comment',
   'uploadOptions',
+  'collections',
 ];
 
 export const defaultSettings: Record<SettingsKey, unknown> = {
@@ -88,11 +92,21 @@ export const defaultSettings: Record<SettingsKey, unknown> = {
         tagsCollections: true,
       },
     },
+    collections: {
+      pageSize: 12,
+      columnVisibility: {
+        name: true,
+        itemCount: true,
+        description: true,
+        createdAt: true,
+      },
+    },
   },
   history: { viewMode: 'table' },
   share: { format: 'direct' },
   comment: { sortOrder: SortOrder.Asc },
   uploadOptions: { expanded: false },
+  collections: { viewMode: 'grid' },
 };
 
 export const USER_SETTINGS_BRAND = Symbol.for('slink:user-settings');
@@ -144,6 +158,9 @@ export class UserSettings {
   _history = $state<HistoryState>(defaultSettings.history as HistoryState);
   _share = $state<ShareState>(defaultSettings.share as ShareState);
   _comment = $state<CommentState>(defaultSettings.comment as CommentState);
+  _collections = $state<CollectionsState>(
+    defaultSettings.collections as CollectionsState,
+  );
   _uploadOptions = $state<UploadOptionsState>(
     defaultSettings.uploadOptions as UploadOptionsState,
   );
@@ -238,6 +255,15 @@ export class UserSettings {
   set comment(v: CommentState) {
     this._comment = v;
     persist('comment', v);
+  }
+
+  get collections(): CollectionsState {
+    return this._collections;
+  }
+
+  set collections(v: CollectionsState) {
+    this._collections = v;
+    persist('collections', v);
   }
 
   get uploadOptions(): UploadOptionsState {

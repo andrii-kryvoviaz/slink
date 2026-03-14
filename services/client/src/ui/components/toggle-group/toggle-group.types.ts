@@ -10,6 +10,7 @@ export interface ToggleGroupProps<T = string> {
   options: ToggleGroupOption<T>[];
   onValueChange: (value: T) => void;
   size?: 'sm' | 'md' | 'lg';
+  rounded?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
   orientation?: 'horizontal' | 'vertical';
   className?: string;
   'aria-label'?: string;

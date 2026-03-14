@@ -9,9 +9,12 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use Slink\Collection\Domain\Repository\CollectionRepositoryInterface;
 use Slink\Collection\Infrastructure\ReadModel\View\CollectionView;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
+use Slink\Shared\Infrastructure\Pagination\CursorPaginationTrait;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractRepository;
 
 final class CollectionRepository extends AbstractRepository implements CollectionRepositoryInterface {
+  use CursorPaginationTrait;
+
   static protected function entityClass(): string {
     return CollectionView::class;
   }
@@ -49,7 +52,7 @@ final class CollectionRepository extends AbstractRepository implements Collectio
     }
   }
 
-  public function getByUserId(string $userId, int $page, int $limit): Paginator {
+  public function getByUserId(string $userId, int $limit, ?string $cursor = null): Paginator {
     $qb = $this->getEntityManager()
       ->createQueryBuilder()
       ->from(CollectionView::class, 'c')
@@ -57,10 +60,25 @@ final class CollectionRepository extends AbstractRepository implements Collectio
       ->where('c.user = :userId')
       ->setParameter('userId', $userId)
       ->orderBy('c.createdAt', 'DESC')
-      ->setFirstResult(($page - 1) * $limit)
-      ->setMaxResults($limit);
+      ->addOrderBy('c.uuid', 'DESC')
+      ->setMaxResults($limit + 1);
+
+    if ($cursor) {
+      $this->applyCursorPagination($qb, $cursor, 'createdAt', 'desc', 'uuid', 'c');
+    }
 
     return new Paginator($qb->getQuery());
+  }
+
+  public function countByUserId(string $userId): int {
+    $qb = $this->getEntityManager()
+      ->createQueryBuilder()
+      ->from(CollectionView::class, 'c')
+      ->select('COUNT(c.uuid)')
+      ->where('c.user = :userId')
+      ->setParameter('userId', $userId);
+
+    return (int) $qb->getQuery()->getSingleScalarResult();
   }
 
   public function findNamesByPatternAndUser(string $baseName, string $userId): array {

@@ -14,7 +14,7 @@ class CollectionListFeed extends AbstractPaginatedFeed<CollectionResponse> {
   public constructor() {
     super({
       defaultPageSize: 12,
-      useCursor: false,
+      useCursor: true,
       appendMode: 'always',
     });
   }
@@ -22,9 +22,9 @@ class CollectionListFeed extends AbstractPaginatedFeed<CollectionResponse> {
   protected async fetchData(
     params: LoadParams & SearchParams,
   ): Promise<PaginatedResponse<CollectionResponse>> {
-    const { page = 1 } = params;
+    const { cursor, limit = this._config.defaultPageSize } = params;
 
-    return ApiClient.collection.getList(page);
+    return ApiClient.collection.getList(limit, cursor);
   }
 
   protected _getItemId(item: CollectionResponse): string {

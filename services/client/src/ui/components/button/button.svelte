@@ -10,7 +10,7 @@
   import { type WithElementRef } from '@slink/utils/ui/index.js';
 
   export const buttonVariants = tv({
-    base: 'px-0.5 py-0.5 inline-flex items-center justify-center select-none cursor-pointer focus:outline-hidden focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50',
+    base: 'inline-flex items-center justify-center select-none cursor-pointer focus:outline-hidden focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50',
     variants: {
       variant: {
         default: 'border border-bc-button-default dark:border-gray-700',
@@ -89,6 +89,13 @@
         'hover:rotate':
           'transition-transform duration-300 ease-in-out transform hover:rotate-180',
       },
+      padding: {
+        none: 'p-0',
+        xs: 'px-0.5 py-0.5',
+        sm: 'p-1',
+        md: 'p-1.5',
+        lg: 'p-2',
+      },
       status: {
         active: 'active',
         disabled: 'cursor-not-allowed pointer-events-none opacity-70',
@@ -107,6 +114,7 @@
       rounded: 'lg',
       fontWeight: 'medium',
       motion: 'none',
+      padding: 'xs',
       status: 'active',
     },
   });
@@ -200,6 +208,7 @@
     typeof buttonVariants
   >['fontWeight'];
   export type ButtonMotion = VariantProps<typeof buttonVariants>['motion'];
+  export type ButtonPadding = VariantProps<typeof buttonVariants>['padding'];
   export type ButtonStatus = VariantProps<typeof buttonVariants>['status'];
 
   export type ButtonProps = WithElementRef<HTMLButtonAttributes> &
@@ -209,6 +218,7 @@
       rounded?: ButtonRounded;
       fontWeight?: ButtonFontWeight;
       motion?: ButtonMotion;
+      padding?: ButtonPadding;
       status?: ButtonStatus;
       loading?: boolean;
       leftIcon?: Snippet<[]>;
@@ -229,6 +239,7 @@
     rounded = 'lg',
     fontWeight = 'medium',
     motion = 'none',
+    padding = 'xs',
     status = 'active',
     loading = false,
     leftIcon,
@@ -254,6 +265,7 @@
         rounded,
         fontWeight,
         motion,
+        padding,
         status: currentStatus,
       })} ${customClass || ''}`,
     ),

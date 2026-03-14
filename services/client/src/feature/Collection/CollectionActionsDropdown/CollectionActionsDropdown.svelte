@@ -8,6 +8,7 @@
     DropdownSimpleGroup,
     DropdownSimpleItem,
   } from '@slink/ui/components';
+  import { Button } from '@slink/ui/components/button';
   import { Dialog } from '@slink/ui/components/dialog';
 
   import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
@@ -107,12 +108,16 @@
 <div class="relative">
   <DropdownSimple variant="invisible" size="xs">
     {#snippet trigger(triggerProps)}
-      <button
+      <Button
+        variant="glass"
+        size="icon"
+        padding="none"
+        rounded="md"
         {...triggerProps}
-        class="p-1.5 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors duration-150"
+        aria-label="Collection actions"
       >
-        <Icon icon="heroicons:ellipsis-vertical" class="w-4 h-4" />
-      </button>
+        <Icon icon="lucide:ellipsis" class="h-4 w-4" />
+      </Button>
     {/snippet}
 
     <DropdownSimpleGroup>

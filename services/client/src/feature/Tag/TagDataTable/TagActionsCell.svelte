@@ -5,6 +5,7 @@
     DropdownSimpleGroup,
     DropdownSimpleItem,
   } from '@slink/ui/components';
+  import { Button } from '@slink/ui/components/button';
 
   import Icon from '@iconify/svelte';
 
@@ -57,13 +58,16 @@
 <div class="flex items-center justify-end">
   <DropdownSimple bind:open={dropdownOpen} variant="invisible" size="xs">
     {#snippet trigger(triggerProps)}
-      <button
+      <Button
+        variant="glass"
+        size="icon"
+        padding="none"
+        rounded="md"
         {...triggerProps}
-        class="group relative flex items-center justify-center h-8 w-8 rounded-md bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-gray-200/60 dark:border-gray-700/60 text-gray-500 dark:text-gray-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:border-slate-300 dark:hover:border-slate-600 active:scale-95 focus-visible:ring-slate-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-all duration-200 ease-out"
         aria-label="Tag actions"
       >
         <Icon icon="lucide:ellipsis" class="h-4 w-4" />
-      </button>
+      </Button>
     {/snippet}
 
     <DropdownSimpleGroup>

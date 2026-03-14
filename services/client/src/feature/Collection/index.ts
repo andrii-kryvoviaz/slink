@@ -4,8 +4,12 @@ export { default as CollectionActionsDropdown } from './CollectionActionsDropdow
 export { default as CollectionBadge } from './CollectionBadge/CollectionBadge.svelte';
 export { default as CollectionDeletePopover } from './CollectionDeletePopover/CollectionDeletePopover.svelte';
 export { default as CollectionItemDropdown } from './CollectionItemDropdown/CollectionItemDropdown.svelte';
-export { default as CollectionListView } from './CollectionList/CollectionListView.svelte';
+export { default as CollectionPickerList } from './CollectionList/CollectionPickerList.svelte';
 export { default as CollectionPicker } from './CollectionPicker/CollectionPicker.svelte';
+export { default as CollectionDataTable } from './CollectionViews/CollectionDataTable/CollectionDataTable.svelte';
+export { default as CollectionActionsCell } from './CollectionViews/CollectionDataTable/cells/CollectionActionsCell.svelte';
+export { default as CollectionNameCell } from './CollectionViews/CollectionDataTable/cells/CollectionNameCell.svelte';
+export { default as CollectionGridView } from './CollectionViews/CollectionGridView.svelte';
 export { default as CreateCollectionDialog } from './CreateCollectionDialog.svelte';
 export { default as CreateCollectionForm } from './CreateCollectionForm.svelte';
 export { default as CreateCollectionModal } from './CreateCollectionModal.svelte';

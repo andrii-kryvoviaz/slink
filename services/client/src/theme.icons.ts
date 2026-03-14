@@ -207,7 +207,6 @@ export const themeIcons: string[] = [
   'heroicons:funnel',
   'heroicons:check-circle-solid',
   'heroicons:minus-circle-solid',
-  'ph:images',
   'ph:check-circle-fill',
   'ph:x-circle-fill',
   'solar:key-linear',
@@ -221,4 +220,5 @@ export const themeIcons: string[] = [
   'simple-icons:authelia',
   'simple-icons:pocket',
   'heroicons:table-cells',
+  'ph:images',
 ];
