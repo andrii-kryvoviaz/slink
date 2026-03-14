@@ -1,1 +1,1 @@
-export { default as SplitButton } from './SplitButton.svelte';
+export { default as SplitButton } from './split-button.svelte';

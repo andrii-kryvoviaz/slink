@@ -33,17 +33,17 @@ export const splitButtonVariants = tv({
     },
     rounded: {
       none: { wrapper: 'rounded-none', aside: 'rounded-none' },
-      sm: { wrapper: 'rounded-sm', aside: 'rounded-sm' },
-      md: { wrapper: 'rounded-md', aside: 'rounded-md' },
-      lg: { wrapper: 'rounded-lg', aside: 'rounded-lg' },
-      xl: { wrapper: 'rounded-xl', aside: 'rounded-xl' },
+      sm: { wrapper: 'rounded-none', aside: 'rounded-none' },
+      md: { wrapper: 'rounded-sm', aside: 'rounded-none' },
+      lg: { wrapper: 'rounded-md', aside: 'rounded-sm' },
+      xl: { wrapper: 'rounded-lg', aside: 'rounded-md' },
       full: { wrapper: 'rounded-full', aside: 'rounded-full' },
     },
   },
   defaultVariants: {
     asidePosition: 'end',
     size: 'xs',
-    rounded: 'md',
+    rounded: 'lg',
   },
 });
 

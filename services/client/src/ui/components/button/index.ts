@@ -4,6 +4,7 @@ import Root, { buttonInnerVariants, buttonVariants } from './button.svelte';
 import type {
   ButtonFontWeight,
   ButtonMotion,
+  ButtonPadding,
   ButtonProps,
   ButtonRounded,
   ButtonSize,
@@ -27,5 +28,6 @@ export {
   type ButtonRounded,
   type ButtonFontWeight,
   type ButtonMotion,
+  type ButtonPadding,
   type ButtonStatus,
 };

@@ -14,7 +14,7 @@
     aside: asideSnippet,
     asidePosition = 'end',
     size = 'xs',
-    rounded = 'md',
+    rounded = 'lg',
   }: {
     onclick: () => void;
     class?: string;

@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 
 export const toggleGroupTheme = cva(
-  'inline-flex items-center bg-gradient-to-br from-slate-50 to-slate-100/50 dark:from-slate-800/50 dark:to-slate-700/30 rounded-lg border border-slate-200 dark:border-slate-700',
+  'inline-flex items-center bg-gradient-to-br from-slate-50 to-slate-100/50 dark:from-slate-800/50 dark:to-slate-700/30 border border-slate-200 dark:border-slate-700',
   {
     variants: {
       size: {
@@ -13,23 +13,41 @@ export const toggleGroupTheme = cva(
         horizontal: 'flex-row',
         vertical: 'flex-col',
       },
+      rounded: {
+        none: 'rounded-none',
+        sm: 'rounded-sm',
+        md: 'rounded-md',
+        lg: 'rounded-lg',
+        xl: 'rounded-xl',
+        full: 'rounded-full',
+      },
     },
     defaultVariants: {
       size: 'md',
       orientation: 'horizontal',
+      rounded: 'lg',
     },
   },
 );
 
-export const toggleGroupInnerTheme = cva('flex overflow-hidden rounded-md', {
+export const toggleGroupInnerTheme = cva('flex overflow-hidden', {
   variants: {
     orientation: {
       horizontal: 'flex-row',
       vertical: 'flex-col',
     },
+    rounded: {
+      none: 'rounded-none',
+      sm: 'rounded-sm',
+      md: 'rounded-md',
+      lg: 'rounded-lg',
+      xl: 'rounded-xl',
+      full: 'rounded-full',
+    },
   },
   defaultVariants: {
     orientation: 'horizontal',
+    rounded: 'md',
   },
 });
 
