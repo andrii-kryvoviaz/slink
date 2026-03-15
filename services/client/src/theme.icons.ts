@@ -221,4 +221,5 @@ export const themeIcons: string[] = [
   'heroicons:table-cells',
   'ph:images',
   'lucide:arrow-right-left',
+  'ph:tag-duotone',
 ];

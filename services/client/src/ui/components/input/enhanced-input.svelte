@@ -8,6 +8,8 @@
 
   import type { ErrorList } from '@slink/api/Exceptions';
 
+  import { debounce } from '@slink/lib/utils/time/debounce';
+
   import { cn } from '@slink/utils/ui/index.js';
 
   import { type InputVariants, inputVariants } from './enhanced-input.theme.js';
@@ -19,6 +21,7 @@
       Pick<InputVariants, 'size' | 'variant' | 'rounded'> {
     key?: string;
     label?: string;
+    debounce?: number;
     leftIcon?: Snippet<[]>;
     rightIcon?: Snippet<[]>;
     topRightText?: Snippet<[]>;
@@ -31,6 +34,7 @@
     size = 'md',
     variant = 'modern',
     rounded = 'lg',
+    debounce: debounceMs,
     error = undefined,
     leftIcon,
     rightIcon,
@@ -39,6 +43,23 @@
     class: className,
     ...props
   }: Props = $props();
+
+  const inputHandler = $derived.by(() => {
+    const { oninput } = props;
+    if (!debounceMs || !oninput) return oninput;
+
+    const debouncedCallback = debounce(
+      (value: string) =>
+        oninput({ currentTarget: { value } } as Event & {
+          currentTarget: HTMLInputElement;
+        }),
+      debounceMs,
+    );
+
+    return ((e: Event & { currentTarget: HTMLInputElement }) => {
+      debouncedCallback(e.currentTarget.value);
+    }) as typeof oninput;
+  });
 
   const combinedClasses = $derived(
     cn(
@@ -82,7 +103,7 @@
       disabled={props.disabled}
       readonly={props.readonly}
       required={props.required}
-      oninput={props.oninput}
+      oninput={inputHandler}
       onchange={props.onchange}
       onblur={props.onblur}
       onfocus={props.onfocus}
