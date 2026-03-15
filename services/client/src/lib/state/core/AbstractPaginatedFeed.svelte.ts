@@ -219,7 +219,10 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
   }
 
   get currentPage(): number {
-    return this._cursorHistory.length + 1;
+    if (this._config.useCursor) {
+      return this._cursorHistory.length + 1;
+    }
+    return this._meta.page ?? 1;
   }
 
   get totalPages(): number {
@@ -232,7 +235,10 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
   }
 
   get canPrevPage(): boolean {
-    return this._cursorHistory.length > 0;
+    if (this._config.useCursor) {
+      return this._cursorHistory.length > 0;
+    }
+    return (this._meta.page ?? 1) > 1;
   }
 
   public setMode(mode: AppendMode): void {
@@ -350,6 +356,14 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
 
   get showSkeleton(): boolean {
     return this._skeletonManager.isVisible;
+  }
+
+  get isCursorBased(): boolean {
+    return this._config.useCursor;
+  }
+
+  get key(): 'users' | 'tags' | 'history' | 'collections' | null {
+    return null;
   }
 
   public configureSkeleton(

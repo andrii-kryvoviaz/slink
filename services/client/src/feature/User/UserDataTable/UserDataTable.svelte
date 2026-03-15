@@ -8,13 +8,10 @@
     UsersSkeleton,
   } from '@slink/feature/User';
   import {
-    ColumnToggle,
-    DataTable,
-    PageSizeSelect,
+    DataTableLayout,
     renderComponent,
     useDataTable,
   } from '@slink/ui/components/data-table';
-  import { TablePagination } from '@slink/ui/components/table-pagination';
   import type { ColumnDef } from '@tanstack/table-core';
 
   import type { User } from '$lib/auth/Type/User';
@@ -51,9 +48,6 @@
     onPageSizeChange,
     onPageChange,
   }: Props = $props();
-
-  const pageSize = $derived(tableSettings.pageSize);
-  const columnVisibility = $derived(tableSettings.columnVisibility);
 
   let userUpdates = $state<Record<string, User>>({});
 
@@ -125,7 +119,7 @@
     },
   ];
 
-  const { table, setColumnVisibility } = useDataTable({
+  const { table, pageSize } = useDataTable({
     data: () => displayUsers,
     columns,
     initialVisibility: {
@@ -135,68 +129,45 @@
       roles: true,
     },
     currentPage: () => currentPage,
-    pageSize: () => pageSize,
     totalPages: () => totalPages,
     onPageChange,
-    onColumnVisibilityChange: (visibility) => {
-      tableSettings.columnVisibility = visibility;
-    },
-  });
-
-  $effect(() => {
-    setColumnVisibility(columnVisibility);
+    tableSettings,
   });
 </script>
 
-<div class="w-full flex flex-col gap-6">
-  <div
-    class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
-  >
-    <div class="order-2 lg:order-1 flex items-center">
-      <TablePagination
-        currentPageIndex={currentPage - 1}
-        {totalPages}
-        canPreviousPage={currentPage > 1}
-        canNextPage={currentPage < totalPages}
-        {totalItems}
-        {pageSize}
-        loading={isLoading}
-        {onPageChange}
-      />
-    </div>
-
-    <div
-      class="order-1 lg:order-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end"
-    >
-      <PageSizeSelect {pageSize} options={pageSizeOptions} {onPageSizeChange} />
-      <ColumnToggle {table} />
-    </div>
-  </div>
-
-  {#if showSkeleton}
+<DataTableLayout
+  {table}
+  {pageSize}
+  {isLoading}
+  {showSkeleton}
+  {pageSizeOptions}
+  {onPageSizeChange}
+  {currentPage}
+  {totalPages}
+  {totalItems}
+  {onPageChange}
+>
+  {#snippet skeleton()}
     <UsersSkeleton viewMode="list" />
-  {:else}
-    <DataTable {table} {isLoading}>
-      {#snippet emptyState()}
-        <div class="flex flex-col items-center">
-          <div
-            class="flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800/60"
-          >
-            <Icon
-              icon="heroicons:users"
-              class="h-8 w-8 text-slate-400 dark:text-slate-500"
-            />
-          </div>
-          <div class="mt-5 space-y-1.5 text-center">
-            <p class="text-lg font-semibold text-slate-700 dark:text-slate-300">
-              No users found
-            </p>
-            <p class="text-sm text-slate-500 dark:text-slate-400">
-              Users will appear here once added
-            </p>
-          </div>
-        </div>
-      {/snippet}
-    </DataTable>
-  {/if}
-</div>
+  {/snippet}
+  {#snippet empty()}
+    <div class="flex flex-col items-center">
+      <div
+        class="flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800/60"
+      >
+        <Icon
+          icon="heroicons:users"
+          class="h-8 w-8 text-slate-400 dark:text-slate-500"
+        />
+      </div>
+      <div class="mt-5 space-y-1.5 text-center">
+        <p class="text-lg font-semibold text-slate-700 dark:text-slate-300">
+          No users found
+        </p>
+        <p class="text-sm text-slate-500 dark:text-slate-400">
+          Users will appear here once added
+        </p>
+      </div>
+    </div>
+  {/snippet}
+</DataTableLayout>

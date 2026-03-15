@@ -1,19 +1,20 @@
 <script lang="ts">
   import { LoadMoreButton } from '@slink/feature/Action';
   import {
-    CollectionDataTable,
     CollectionGridView,
     CreateCollectionForm,
   } from '@slink/feature/Collection';
+  import { collectionColumns } from '@slink/feature/Collection/CollectionViews/CollectionDataTable/columns';
   import {
     CollectionSkeleton,
     EmptyState,
     ViewModeToggle,
   } from '@slink/feature/Layout';
   import { Subtitle, Title } from '@slink/feature/Text';
+  import { DataTable, DataTableToolbar } from '@slink/ui/components/data-table';
   import { Dialog } from '@slink/ui/components/dialog';
   import { SplitButton } from '@slink/ui/components/split-button';
-  import { untrack } from 'svelte';
+  import { ViewModeLayout } from '@slink/ui/components/view-mode-layout';
 
   import { page } from '$app/state';
   import Icon from '@iconify/svelte';
@@ -22,8 +23,6 @@
   import { ValidationException } from '@slink/api/Exceptions';
 
   import { skeleton } from '@slink/lib/actions/skeleton';
-  import { type ViewMode } from '@slink/lib/settings';
-  import { useTableSettings } from '@slink/lib/settings/composables/useTableSettings.svelte';
   import { useCollectionListFeed } from '@slink/lib/state/CollectionListFeed.svelte';
 
   const { settings } = page.data;
@@ -31,35 +30,9 @@
   const collectionsFeed = useCollectionListFeed();
   collectionsFeed.reset();
 
-  const tableSettings = useTableSettings('collections');
-
   let createModalOpen = $state(false);
   let createFormErrors = $state<Record<string, string>>({});
   let isCreating = $state(false);
-
-  let viewMode = $derived(settings.collections.viewMode);
-  let showSkeleton = $derived(
-    collectionsFeed.showSkeleton || !collectionsFeed.isDirty,
-  );
-
-  $effect(() => {
-    collectionsFeed.setMode(viewMode === 'table' ? 'never' : 'always');
-    untrack(() => collectionsFeed.setPageSize(tableSettings.pageSize));
-
-    if (untrack(() => collectionsFeed.needsLoad)) {
-      collectionsFeed.load();
-    }
-  });
-
-  const handleViewModeChange = (newViewMode: ViewMode) => {
-    settings.collections = { viewMode: newViewMode };
-  };
-
-  const handleTablePageSizeChange = async (size: number) => {
-    tableSettings.pageSize = size;
-    collectionsFeed.setPageSize(size);
-    await collectionsFeed.reload();
-  };
 
   async function handleCreateSubmit(data: {
     name: string;
@@ -110,9 +83,13 @@
 
         <div class="flex items-center gap-3 shrink-0">
           <ViewModeToggle
-            value={viewMode}
+            value={settings.collections.viewMode}
             modes={['grid', 'table']}
-            on={{ change: handleViewModeChange }}
+            on={{
+              change: (mode) => {
+                settings.collections = { viewMode: mode };
+              },
+            }}
           />
           <SplitButton onclick={() => (createModalOpen = true)}>
             Create
@@ -124,53 +101,63 @@
       </div>
     </div>
 
-    {#if viewMode === 'grid'}
-      {#if showSkeleton}
-        <div in:fade={{ duration: 200 }}>
-          <CollectionSkeleton count={12} viewMode="grid" />
-        </div>
-      {:else if collectionsFeed.isEmpty}
-        <div in:fade={{ duration: 200 }}>
-          <EmptyState
-            icon="ph:folder-simple-duotone"
-            title="No collections yet"
-            description="Create your first collection to organize and share your images."
-            actionText="Create Collection"
-            variant="purple"
-            size="md"
-            actionClick={() => (createModalOpen = true)}
-          />
-        </div>
-      {:else}
-        <div in:fade={{ duration: 400 }}>
-          <CollectionGridView items={collectionsFeed.items} />
-
-          <LoadMoreButton
-            class="mt-8"
-            visible={collectionsFeed.hasMore}
-            loading={collectionsFeed.isLoading}
-            onclick={() => collectionsFeed.nextPage({ debounce: 300 })}
-            variant="modern"
-            rounded="full"
-          />
-        </div>
-      {/if}
-    {:else}
-      <div in:fade={{ duration: 200 }}>
-        <CollectionDataTable
-          items={collectionsFeed.items}
-          {tableSettings}
-          isLoading={collectionsFeed.isLoading}
-          {showSkeleton}
-          pagination={collectionsFeed.pagination}
-          on={{
-            nextPage: () => collectionsFeed.nextPage(),
-            prevPage: () => collectionsFeed.prevPage(),
-            pageSizeChange: handleTablePageSizeChange,
-          }}
+    <ViewModeLayout
+      feed={collectionsFeed}
+      mode={settings.collections.viewMode}
+      config={{
+        table: {
+          columns: collectionColumns,
+        },
+      }}
+    >
+      {#snippet toolbar({
+        table,
+        pageSize,
+        pagination,
+        feed,
+        handlePageSizeChange,
+      })}
+        <DataTableToolbar
+          {table}
+          {pageSize}
+          {pagination}
+          onPageSizeChange={handlePageSizeChange}
+          onNextPage={() => feed.nextPage()}
+          onPrevPage={() => feed.prevPage()}
+          isLoading={feed.isLoading}
         />
-      </div>
-    {/if}
+      {/snippet}
+      {#snippet loading(mode)}
+        <CollectionSkeleton count={12} viewMode={mode} />
+      {/snippet}
+      {#snippet grid()}
+        <CollectionGridView items={collectionsFeed.items} />
+      {/snippet}
+      {#snippet table({ table: collectionsTable, feed })}
+        <DataTable table={collectionsTable!} isLoading={feed.isLoading} />
+      {/snippet}
+      {#snippet empty()}
+        <EmptyState
+          icon="ph:folder-simple-duotone"
+          title="No collections yet"
+          description="Create your first collection to organize and share your images."
+          actionText="Create Collection"
+          variant="purple"
+          size="md"
+          actionClick={() => (createModalOpen = true)}
+        />
+      {/snippet}
+      {#snippet more()}
+        <LoadMoreButton
+          class="mt-8"
+          visible={collectionsFeed.hasMore}
+          loading={collectionsFeed.isLoading}
+          onclick={() => collectionsFeed.nextPage({ debounce: 300 })}
+          variant="modern"
+          rounded="full"
+        />
+      {/snippet}
+    </ViewModeLayout>
   </div>
 </main>
 

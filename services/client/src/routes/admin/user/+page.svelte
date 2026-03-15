@@ -2,20 +2,20 @@
   import { LoadMoreButton } from '@slink/feature/Action';
   import { EmptyState, ViewModeToggle } from '@slink/feature/Layout';
   import { Subtitle, Title } from '@slink/feature/Text';
+  import { UserGridView, UsersSkeleton } from '@slink/feature/User';
+  import { createUserColumns } from '@slink/feature/User/UserDataTable/columns';
   import {
-    UserDataTable,
-    UserGridView,
-    UsersSkeleton,
-  } from '@slink/feature/User';
-  import { PageSizeSelect } from '@slink/ui/components/data-table';
-  import { untrack } from 'svelte';
+    DataTable,
+    DataTableToolbar,
+    PageSizeSelect,
+  } from '@slink/ui/components/data-table';
+  import { ViewModeLayout } from '@slink/ui/components/view-mode-layout';
 
   import { page } from '$app/state';
+  import type { User } from '$lib/auth/Type/User';
   import { fade } from 'svelte/transition';
 
   import { skeleton } from '@slink/lib/actions/skeleton';
-  import { type ViewMode } from '@slink/lib/settings';
-  import { useTableSettings } from '@slink/lib/settings/composables/useTableSettings.svelte';
   import { useUserListFeed } from '@slink/lib/state/UserListFeed.svelte';
 
   import type { PageServerData } from './$types';
@@ -29,30 +29,28 @@
   const { settings } = page.data;
   let loggedInUser = $derived(data.user);
 
-  let viewMode = $derived(settings.userAdmin.viewMode);
-
-  const tableSettings = useTableSettings('users');
-
   const userFeedState = useUserListFeed();
-
-  $effect(() => {
-    if (untrack(() => userFeedState.needsLoad))
-      userFeedState.load({ limit: tableSettings.pageSize });
-  });
 
   const onDelete = (id: string) => {
     userFeedState.removeUser(id);
   };
 
-  const handleViewModeChange = (newViewMode: ViewMode) => {
-    settings.userAdmin = { viewMode: newViewMode };
+  let userUpdates = $state<Record<string, User>>({});
+
+  const handleUserUpdate = (updatedUser: User) => {
+    userUpdates[updatedUser.id] = updatedUser;
+    userUpdates = { ...userUpdates };
   };
 
-  const handlePageSizeChange = (size: number) => {
-    if (size === tableSettings.pageSize) return;
-    tableSettings.pageSize = size;
-    userFeedState.loadPage(1, false, size);
-  };
+  const displayUsers = $derived(
+    userFeedState.items.map((user) => userUpdates[user.id] || user),
+  );
+
+  const userColumns = createUserColumns({
+    getLoggedInUser: () => loggedInUser,
+    onDelete,
+    onUserUpdate: handleUserUpdate,
+  });
 </script>
 
 <svelte:head>
@@ -70,35 +68,56 @@
         </div>
 
         <ViewModeToggle
-          value={viewMode}
+          value={settings.userAdmin.viewMode}
           modes={['grid', 'list']}
-          on={{ change: handleViewModeChange }}
+          on={{
+            change: (mode) => {
+              settings.userAdmin = { viewMode: mode };
+            },
+          }}
           className="ml-4"
         />
       </div>
     </div>
 
     <div in:fade={{ duration: 400, delay: 200 }}>
-      {#if viewMode === 'list'}
-        <div in:fade={{ duration: 200 }}>
-          <UserDataTable
-            users={userFeedState.items}
-            {loggedInUser}
-            {onDelete}
-            {tableSettings}
-            showSkeleton={userFeedState.showSkeleton || !userFeedState.isDirty}
-            isLoading={userFeedState.isLoading}
-            currentPage={userFeedState.meta.page}
-            totalPages={Math.ceil(
-              userFeedState.meta.total / userFeedState.meta.size,
-            )}
-            totalItems={userFeedState.meta.total}
+      <ViewModeLayout
+        feed={userFeedState}
+        mode={settings.userAdmin.viewMode}
+        onPageSizeChange={(size) => {
+          userFeedState.loadPage(1, false, size);
+        }}
+        config={{
+          list: {
+            columns: userColumns,
+            data: displayUsers,
+            onPageChange: (page) => userFeedState.loadPage(page, false),
+          },
+        }}
+      >
+        {#snippet toolbar({
+          table,
+          pageSize,
+          pagination,
+          feed,
+          handlePageSizeChange,
+        })}
+          <DataTableToolbar
+            {table}
+            {pageSize}
+            {pagination}
+            isLoading={feed.isLoading}
             onPageSizeChange={handlePageSizeChange}
             onPageChange={(page) => userFeedState.loadPage(page, false)}
           />
-        </div>
-      {:else}
-        <div in:fade={{ duration: 200 }}>
+        {/snippet}
+        {#snippet loading(mode)}
+          <UsersSkeleton
+            viewMode={mode === 'list' ? 'list' : 'grid'}
+            count={12}
+          />
+        {/snippet}
+        {#snippet grid({ tableSettings, handlePageSizeChange })}
           <div class="flex justify-end mb-4">
             <PageSizeSelect
               pageSize={tableSettings.pageSize}
@@ -106,39 +125,40 @@
               onPageSizeChange={handlePageSizeChange}
             />
           </div>
-          {#if userFeedState.showSkeleton || !userFeedState.isDirty}
-            <UsersSkeleton viewMode="grid" count={12} />
-          {:else if userFeedState.isEmpty}
-            <EmptyState
-              icon="heroicons:users"
-              title="No users found"
-              description="There are no users in the system yet."
-              variant="default"
-              size="md"
+          <div class="min-h-100 w-full">
+            <UserGridView
+              users={userFeedState.items}
+              {loggedInUser}
+              {onDelete}
             />
-          {:else}
-            <div class="min-h-100 w-full">
-              <UserGridView
-                users={userFeedState.items}
-                {loggedInUser}
-                {onDelete}
-              />
-            </div>
-
-            <LoadMoreButton
-              class="mt-6"
-              visible={userFeedState.hasMore}
-              loading={userFeedState.isLoading}
-              onclick={() =>
-                userFeedState.nextPage({
-                  debounce: 300,
-                })}
-              variant="modern"
-              rounded="full"
-            />
-          {/if}
-        </div>
-      {/if}
+          </div>
+        {/snippet}
+        {#snippet list({ table: usersTable, feed })}
+          <DataTable table={usersTable!} isLoading={feed.isLoading} />
+        {/snippet}
+        {#snippet empty()}
+          <EmptyState
+            icon="heroicons:users"
+            title="No users found"
+            description="There are no users in the system yet."
+            variant="default"
+            size="md"
+          />
+        {/snippet}
+        {#snippet more()}
+          <LoadMoreButton
+            class="mt-6"
+            visible={userFeedState.hasMore}
+            loading={userFeedState.isLoading}
+            onclick={() =>
+              userFeedState.nextPage({
+                debounce: 300,
+              })}
+            variant="modern"
+            rounded="full"
+          />
+        {/snippet}
+      </ViewModeLayout>
     </div>
   </div>
 </div>

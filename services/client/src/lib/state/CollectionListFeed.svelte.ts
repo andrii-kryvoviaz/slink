@@ -19,6 +19,10 @@ class CollectionListFeed extends AbstractPaginatedFeed<CollectionResponse> {
     });
   }
 
+  override get key() {
+    return 'collections' as const;
+  }
+
   protected async fetchData(
     params: LoadParams & SearchParams,
   ): Promise<PaginatedResponse<CollectionResponse>> {

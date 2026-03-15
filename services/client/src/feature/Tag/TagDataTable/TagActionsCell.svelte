@@ -74,7 +74,7 @@
       {#if !deleteConfirmOpen}
         <DropdownSimpleItem on={{ click: handleMoveClick }}>
           {#snippet icon()}
-            <Icon icon="lucide:git-branch" class="h-4 w-4" />
+            <Icon icon="lucide:arrow-right-left" class="h-4 w-4" />
           {/snippet}
           <span>Move</span>
         </DropdownSimpleItem>

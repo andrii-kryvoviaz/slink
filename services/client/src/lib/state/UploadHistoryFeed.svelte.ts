@@ -30,6 +30,10 @@ class UploadHistoryFeed extends AbstractPaginatedFeed<ImageListingItem> {
     });
   }
 
+  override get key() {
+    return 'history' as const;
+  }
+
   protected async fetchData(
     params: LoadParams & SearchParams,
   ): Promise<PaginatedResponse<ImageListingItem>> {

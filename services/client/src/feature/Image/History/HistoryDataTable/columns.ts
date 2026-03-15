@@ -1,85 +1,57 @@
-<script lang="ts">
-  import { ImageCollectionList } from '@slink/feature/Collection';
-  import { ViewCountBadge, VisibilityBadge } from '@slink/feature/Image';
-  import { formatMimeType } from '@slink/feature/Image/utils/formatMimeType';
-  import { HistorySkeleton } from '@slink/feature/Layout';
-  import { ImageTagList } from '@slink/feature/Tag';
-  import { FormattedDate } from '@slink/feature/Text';
-  import {
-    DataTableLayout,
-    renderComponent,
-    useDataTable,
-  } from '@slink/ui/components/data-table';
-  import type { ColumnDef } from '@tanstack/table-core';
+import { ImageCollectionList } from '@slink/feature/Collection';
+import { ViewCountBadge, VisibilityBadge } from '@slink/feature/Image';
+import { formatMimeType } from '@slink/feature/Image/utils/formatMimeType';
+import { ImageTagList } from '@slink/feature/Tag';
+import { FormattedDate } from '@slink/feature/Text';
+import { renderComponent } from '@slink/ui/components/data-table';
+import type { ColumnDef } from '@tanstack/table-core';
 
-  import { bytesToSize } from '$lib/utils/bytesConverter';
+import { bytesToSize } from '$lib/utils/bytesConverter';
 
-  import type { Tag } from '@slink/api/Resources/TagResource';
-  import type { ImageListingItem } from '@slink/api/Response';
-  import type { CollectionReference } from '@slink/api/Response/Collection/CollectionResponse';
+import type { Tag } from '@slink/api/Resources/TagResource';
+import type { ImageListingItem } from '@slink/api/Response';
+import type { CollectionReference } from '@slink/api/Response/Collection/CollectionResponse';
 
-  import type { TableSettingsState } from '@slink/lib/settings/composables/useTableSettings.svelte';
-  import type { ImageSelectionState } from '@slink/lib/state/ImageSelectionState.svelte';
-  import type { PaginationContext } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
+import type { ImageSelectionState } from '@slink/lib/state/ImageSelectionState.svelte';
 
-  import HistoryActionsCell from './cells/HistoryActionsCell.svelte';
-  import HistoryFileNameCell from './cells/HistoryFileNameCell.svelte';
-  import HistorySelectCell from './cells/HistorySelectCell.svelte';
-  import HistorySelectHeader from './cells/HistorySelectHeader.svelte';
-  import HistoryThumbnailCell from './cells/HistoryThumbnailCell.svelte';
-  import TagsCollectionsCell from './cells/TagsCollectionsCell.svelte';
+import HistoryActionsCell from './cells/HistoryActionsCell.svelte';
+import HistoryFileNameCell from './cells/HistoryFileNameCell.svelte';
+import HistorySelectCell from './cells/HistorySelectCell.svelte';
+import HistorySelectHeader from './cells/HistorySelectHeader.svelte';
+import HistoryThumbnailCell from './cells/HistoryThumbnailCell.svelte';
+import TagsCollectionsCell from './cells/TagsCollectionsCell.svelte';
 
-  interface Props {
-    items: ImageListingItem[];
-    selectionState?: ImageSelectionState;
-    showSkeleton?: boolean;
-    on?: {
-      delete: (id: string) => void;
-      collectionChange: (
-        imageId: string,
-        collections: CollectionReference[],
-      ) => void;
-      tagChange?: (imageId: string, tags: Tag[]) => void;
-      nextPage?: () => void;
-      prevPage?: () => void;
-      pageSizeChange?: (pageSize: number) => void;
-    };
-    tableSettings: TableSettingsState;
-    isLoading?: boolean;
-    pagination: PaginationContext;
-    pageSizeOptions?: number[];
-  }
+interface HistoryColumnCallbacks {
+  onDelete: (id: string) => void;
+  onCollectionChange: (
+    imageId: string,
+    collections: CollectionReference[],
+  ) => void;
+  onTagChange?: (imageId: string, tags: Tag[]) => void;
+}
 
-  let {
-    items,
-    selectionState,
-    showSkeleton = false,
-    on,
-    tableSettings,
-    isLoading = false,
-    pagination,
-    pageSizeOptions = [12, 24, 36, 48],
-  }: Props = $props();
-
-  const allItemIds = $derived(items.map((item) => item.id));
-
-  const columns: ColumnDef<ImageListingItem>[] = [
+export function createHistoryColumns(
+  getSelectionState: () => ImageSelectionState | undefined,
+  getAllItemIds: () => string[],
+  callbacks: HistoryColumnCallbacks,
+): ColumnDef<ImageListingItem>[] {
+  return [
     {
       id: 'select',
       header: () => {
         return renderComponent(HistorySelectHeader, {
           get selectionState() {
-            return selectionState;
+            return getSelectionState();
           },
           get allIds() {
-            return allItemIds;
+            return getAllItemIds();
           },
         });
       },
       cell: ({ row }) => {
         return renderComponent(HistorySelectCell, {
           itemId: row.original.id,
-          selectionState,
+          selectionState: getSelectionState(),
         });
       },
       enableHiding: false,
@@ -233,39 +205,15 @@
       cell: ({ row }) => {
         return renderComponent(HistoryActionsCell, {
           item: row.original,
-          onDelete: (id: string) => on?.delete(id),
+          onDelete: (id: string) => callbacks.onDelete(id),
           onCollectionChange: (
             imageId: string,
             collections: CollectionReference[],
-          ) => on?.collectionChange(imageId, collections),
+          ) => callbacks.onCollectionChange(imageId, collections),
           onTagChange: (imageId: string, tags: Tag[]) =>
-            on?.tagChange?.(imageId, tags),
+            callbacks.onTagChange?.(imageId, tags),
         });
       },
     },
   ];
-
-  const { table, pageSize } = useDataTable({
-    data: () => items,
-    columns,
-    currentPage: () => pagination.currentPage,
-    totalPages: () => pagination.totalPages,
-    tableSettings,
-  });
-</script>
-
-<DataTableLayout
-  {table}
-  {pageSize}
-  {isLoading}
-  {showSkeleton}
-  {pageSizeOptions}
-  onPageSizeChange={on?.pageSizeChange}
-  {pagination}
-  onNextPage={on?.nextPage}
-  onPrevPage={on?.prevPage}
->
-  {#snippet skeleton()}
-    <HistorySkeleton count={12} viewMode="table" />
-  {/snippet}
-</DataTableLayout>
+}

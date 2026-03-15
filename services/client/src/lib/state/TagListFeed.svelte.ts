@@ -34,6 +34,10 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
     });
   }
 
+  override get key() {
+    return 'tags' as const;
+  }
+
   protected async fetchData(
     params: LoadParams & SearchParams,
   ): Promise<PaginatedResponse<Tag>> {

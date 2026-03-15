@@ -1,2 +1,2 @@
-export { default as TagDataTable } from './TagDataTable.svelte';
+export { createTagColumns } from './columns';
 export * from './types';

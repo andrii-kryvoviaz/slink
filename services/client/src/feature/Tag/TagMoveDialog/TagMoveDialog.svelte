@@ -83,7 +83,7 @@
     <div class="space-y-6">
       <Modal.Header>
         {#snippet icon()}
-          <Icon icon="lucide:git-branch" />
+          <Icon icon="lucide:arrow-right-left" />
         {/snippet}
         {#snippet title()}Move Tag{/snippet}
         {#snippet description()}

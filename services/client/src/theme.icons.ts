@@ -202,7 +202,6 @@ export const themeIcons: string[] = [
   'lucide:image',
   'lucide:hard-drive',
   'lucide:ellipsis',
-  'lucide:git-branch',
   'heroicons:funnel-solid',
   'heroicons:funnel',
   'heroicons:check-circle-solid',
@@ -221,4 +220,5 @@ export const themeIcons: string[] = [
   'simple-icons:pocket',
   'heroicons:table-cells',
   'ph:images',
+  'lucide:arrow-right-left',
 ];

@@ -19,6 +19,10 @@ class UserListFeed extends AbstractPaginatedFeed<UserListingItem> {
     });
   }
 
+  override get key() {
+    return 'users' as const;
+  }
+
   protected async fetchData(
     params: LoadParams & SearchParams,
   ): Promise<PaginatedResponse<UserListingItem>> {
