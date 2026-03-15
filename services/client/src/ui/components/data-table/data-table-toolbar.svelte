@@ -10,11 +10,14 @@
   import type { PaginationContext } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
 
   interface Props {
-    table: TanstackTable<any>;
-    pageSize: number;
+    table?: TanstackTable<any>;
+    pageSize?: number;
     isLoading?: boolean;
     pageSizeOptions?: number[];
     onPageSizeChange?: (size: number) => void;
+
+    showPagination?: boolean;
+    showColumnToggle?: boolean;
 
     currentPage?: number;
     totalPages?: number;
@@ -34,6 +37,9 @@
     isLoading = false,
     pageSizeOptions = [12, 24, 48, 96],
     onPageSizeChange,
+
+    showPagination = true,
+    showColumnToggle = true,
 
     currentPage,
     totalPages,
@@ -69,37 +75,43 @@
     </div>
   {/if}
 
-  <div class="order-2 lg:order-1 flex items-center gap-4">
-    {#if pagination}
-      <TablePagination
-        currentPageIndex={pagination.currentPage - 1}
-        totalPages={pagination.totalPages}
-        canPreviousPage={pagination.canPrevPage}
-        canNextPage={pagination.canNextPage}
-        totalItems={pagination.total}
-        pageSize={pagination.size}
-        loading={isLoading}
-        disablePageSelection={true}
-        onPageChange={handleCursorPageChange}
-      />
-    {:else}
-      <TablePagination
-        currentPageIndex={(currentPage ?? 1) - 1}
-        totalPages={totalPages ?? 1}
-        canPreviousPage={(currentPage ?? 1) > 1}
-        canNextPage={(currentPage ?? 1) < (totalPages ?? 1)}
-        {totalItems}
-        {pageSize}
-        loading={isLoading}
-        {onPageChange}
-      />
-    {/if}
-  </div>
+  {#if showPagination}
+    <div class="order-2 lg:order-1 flex items-center gap-4">
+      {#if pagination}
+        <TablePagination
+          currentPageIndex={pagination.currentPage - 1}
+          totalPages={pagination.totalPages}
+          canPreviousPage={pagination.canPrevPage}
+          canNextPage={pagination.canNextPage}
+          totalItems={pagination.total}
+          pageSize={pagination.size}
+          loading={isLoading}
+          disablePageSelection={true}
+          onPageChange={handleCursorPageChange}
+        />
+      {:else}
+        <TablePagination
+          currentPageIndex={(currentPage ?? 1) - 1}
+          totalPages={totalPages ?? 1}
+          canPreviousPage={(currentPage ?? 1) > 1}
+          canNextPage={(currentPage ?? 1) < (totalPages ?? 1)}
+          {totalItems}
+          {pageSize}
+          loading={isLoading}
+          {onPageChange}
+        />
+      {/if}
+    </div>
+  {/if}
 
   <div
     class="order-1 lg:order-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end"
   >
-    <PageSizeSelect {pageSize} options={pageSizeOptions} {onPageSizeChange} />
-    <ColumnToggle table={dataTable} />
+    {#if showPagination && pageSize}
+      <PageSizeSelect {pageSize} options={pageSizeOptions} {onPageSizeChange} />
+    {/if}
+    {#if showColumnToggle && dataTable}
+      <ColumnToggle table={dataTable} />
+    {/if}
   </div>
 </div>

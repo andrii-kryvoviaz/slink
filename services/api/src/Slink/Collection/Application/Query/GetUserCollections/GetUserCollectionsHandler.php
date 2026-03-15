@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Collection\Application\Query\GetUserCollections;
 
+use Slink\Collection\Domain\Filter\CollectionListFilter;
 use Slink\Collection\Domain\Repository\CollectionItemRepositoryInterface;
 use Slink\Collection\Domain\Repository\CollectionRepositoryInterface;
 use Slink\Collection\Domain\Service\CollectionCoverGeneratorInterface;
@@ -22,11 +23,14 @@ final readonly class GetUserCollectionsHandler implements QueryHandlerInterface 
   }
 
   public function __invoke(GetUserCollectionsQuery $query, string $userId): Collection {
-    $paginator = $this->collectionRepository->getByUserId(
-      $userId,
-      $query->getLimit(),
-      $query->getCursor(),
+    $filter = new CollectionListFilter(
+      limit: $query->getLimit(),
+      userId: $userId,
+      searchTerm: $query->getSearchTerm(),
+      cursor: $query->getCursor(),
     );
+
+    $paginator = $this->collectionRepository->getByUserId($filter);
 
     $collections = iterator_to_array($paginator);
     $collectionIds = array_map(fn($c) => $c->getId(), $collections);
@@ -42,7 +46,7 @@ final readonly class GetUserCollectionsHandler implements QueryHandlerInterface 
     );
 
     $cursorResult = $this->cursorPaginator->paginate($items, $query->getLimit());
-    $total = $this->collectionRepository->countByUserId($userId);
+    $total = $this->collectionRepository->countByUserId($filter);
 
     return Collection::fromCursorPaginator($cursorResult, limit: $query->getLimit(), total: $total);
   }

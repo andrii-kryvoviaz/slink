@@ -147,27 +147,21 @@
   });
   const active = $derived(modes[mode]);
 
-  const toolbarContext = $derived<ToolbarContext | null>(
-    activeTableResult
-      ? {
-          feed,
-          handlePageSizeChange,
-          tableSettings,
-          table: activeTableResult.table,
-          pageSize: activeTableResult.pageSize,
-          pagination: feed.pagination,
-        }
-      : null,
-  );
+  const toolbarContext = $derived<ToolbarContext>({
+    feed,
+    handlePageSizeChange,
+    tableSettings,
+    table: activeTableResult?.table,
+    pageSize: activeTableResult?.pageSize,
+    pagination: feed.pagination,
+  });
 
-  const showToolbar = $derived(
-    toolbar && resolvedConfig.toolbar && toolbarContext,
-  );
+  const showToolbar = $derived(toolbar && resolvedConfig.toolbar);
   const showMore = $derived(more && resolvedConfig.more);
 </script>
 
 <div class={viewModeLayoutVariants({ spacing })}>
-  {#if showToolbar && toolbar && toolbarContext}
+  {#if showToolbar && toolbar}
     {@render toolbar(toolbarContext)}
   {/if}
 

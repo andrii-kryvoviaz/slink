@@ -6,6 +6,7 @@ namespace Slink\Collection\Infrastructure\ReadModel\Repository;
 
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Slink\Collection\Domain\Filter\CollectionListFilter;
 use Slink\Collection\Domain\Repository\CollectionRepositoryInterface;
 use Slink\Collection\Infrastructure\ReadModel\View\CollectionView;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
@@ -52,7 +53,10 @@ final class CollectionRepository extends AbstractRepository implements Collectio
     }
   }
 
-  public function getByUserId(string $userId, int $limit, ?string $cursor = null): Paginator {
+  public function getByUserId(CollectionListFilter $filter): Paginator {
+    $userId = $filter->getUserId();
+    $limit = $filter->getLimit();
+
     $qb = $this->getEntityManager()
       ->createQueryBuilder()
       ->from(CollectionView::class, 'c')
@@ -63,20 +67,32 @@ final class CollectionRepository extends AbstractRepository implements Collectio
       ->addOrderBy('c.uuid', 'DESC')
       ->setMaxResults($limit + 1);
 
-    if ($cursor) {
+    if ($searchTerm = $filter->getSearchTerm()) {
+      $qb->andWhere('c.name LIKE :searchTerm OR c.description LIKE :searchTerm')
+        ->setParameter('searchTerm', "%{$searchTerm}%");
+    }
+
+    if ($cursor = $filter->getCursor()) {
       $this->applyCursorPagination($qb, $cursor, 'createdAt', 'desc', 'uuid', 'c');
     }
 
     return new Paginator($qb->getQuery());
   }
 
-  public function countByUserId(string $userId): int {
+  public function countByUserId(CollectionListFilter $filter): int {
+    $userId = $filter->getUserId();
+
     $qb = $this->getEntityManager()
       ->createQueryBuilder()
       ->from(CollectionView::class, 'c')
       ->select('COUNT(c.uuid)')
       ->where('c.user = :userId')
       ->setParameter('userId', $userId);
+
+    if ($searchTerm = $filter->getSearchTerm()) {
+      $qb->andWhere('c.name LIKE :searchTerm OR c.description LIKE :searchTerm')
+        ->setParameter('searchTerm', "%{$searchTerm}%");
+    }
 
     return (int) $qb->getQuery()->getSingleScalarResult();
   }

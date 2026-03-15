@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Slink\Collection\Domain\Repository;
 
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Slink\Collection\Domain\Filter\CollectionListFilter;
 use Slink\Collection\Infrastructure\ReadModel\View\CollectionView;
 
 interface CollectionRepositoryInterface {
@@ -16,9 +17,9 @@ interface CollectionRepositoryInterface {
 
   public function findById(string $id): ?CollectionView;
 
-  public function getByUserId(string $userId, int $limit, ?string $cursor = null): Paginator;
+  public function getByUserId(CollectionListFilter $filter): Paginator;
 
-  public function countByUserId(string $userId): int;
+  public function countByUserId(CollectionListFilter $filter): int;
 
   /**
    * @return string[]

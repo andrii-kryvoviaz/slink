@@ -44,7 +44,7 @@ export interface ListingContext {
 }
 
 export interface ToolbarContext extends ListingContext {
-  table: TanstackTable<any>;
-  pageSize: number;
+  table?: TanstackTable<any>;
+  pageSize?: number;
   pagination: PaginationContext;
 }

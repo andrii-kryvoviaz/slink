@@ -11,6 +11,8 @@ import type {
 import { useState } from '@slink/lib/state/core/ContextAwareState';
 
 class CollectionListFeed extends AbstractPaginatedFeed<CollectionResponse> {
+  private _searchTerm = $state('');
+
   public constructor() {
     super({
       defaultPageSize: 12,
@@ -26,9 +28,23 @@ class CollectionListFeed extends AbstractPaginatedFeed<CollectionResponse> {
   protected async fetchData(
     params: LoadParams & SearchParams,
   ): Promise<PaginatedResponse<CollectionResponse>> {
-    const { cursor, limit = this._config.defaultPageSize } = params;
+    const { cursor, limit = this._config.defaultPageSize, searchTerm } = params;
 
-    return ApiClient.collection.getList(limit, cursor);
+    return ApiClient.collection.getList(
+      limit,
+      cursor,
+      searchTerm || this._searchTerm,
+    );
+  }
+
+  get search() {
+    return this._searchTerm;
+  }
+
+  set search(value: string) {
+    if (this._searchTerm === value) return;
+    this._searchTerm = value;
+    this.load({ searchTerm: value });
   }
 
   protected _getItemId(item: CollectionResponse): string {

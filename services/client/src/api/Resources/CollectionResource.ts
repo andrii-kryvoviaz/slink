@@ -26,9 +26,11 @@ export class CollectionResource extends AbstractResource {
   public async getList(
     limit: number = 12,
     cursor?: string,
+    searchTerm?: string,
   ): Promise<CollectionListingResponse> {
     const query: Record<string, unknown> = { limit };
     if (cursor) query.cursor = cursor;
+    if (searchTerm) query.searchTerm = searchTerm;
     return this.get('/collections', { query });
   }
 
