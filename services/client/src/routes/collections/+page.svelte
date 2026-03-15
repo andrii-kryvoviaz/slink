@@ -2,7 +2,7 @@
   import { LoadMoreButton } from '@slink/feature/Action';
   import {
     CollectionGridView,
-    CreateCollectionForm,
+    CreateCollectionDialog,
   } from '@slink/feature/Collection';
   import { collectionColumns } from '@slink/feature/Collection/CollectionViews/CollectionDataTable/columns';
   import {
@@ -12,7 +12,6 @@
   } from '@slink/feature/Layout';
   import { Subtitle, Title } from '@slink/feature/Text';
   import { DataTable, DataTableToolbar } from '@slink/ui/components/data-table';
-  import { Dialog } from '@slink/ui/components/dialog';
   import { SplitButton } from '@slink/ui/components/split-button';
   import { ViewModeLayout } from '@slink/ui/components/view-mode-layout';
 
@@ -20,48 +19,21 @@
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
-  import { ValidationException } from '@slink/api/Exceptions';
-
   import { skeleton } from '@slink/lib/actions/skeleton';
   import { useCollectionListFeed } from '@slink/lib/state/CollectionListFeed.svelte';
+  import { createCreateCollectionModalState } from '@slink/lib/state/CreateCollectionModalState.svelte';
 
   const { settings } = page.data;
 
   const collectionsFeed = useCollectionListFeed();
   collectionsFeed.reset();
 
-  let createModalOpen = $state(false);
-  let createFormErrors = $state<Record<string, string>>({});
-  let isCreating = $state(false);
+  const createModalState = createCreateCollectionModalState();
 
-  async function handleCreateSubmit(data: {
-    name: string;
-    description?: string;
-  }) {
-    try {
-      isCreating = true;
-      createFormErrors = {};
-
-      await collectionsFeed.createCollection(data.name, data.description);
-      createModalOpen = false;
-    } catch (error) {
-      if (error instanceof ValidationException && error.violations) {
-        createFormErrors = error.violations.reduce<Record<string, string>>(
-          (acc, violation) => {
-            acc[violation.property] = violation.message;
-            return acc;
-          },
-          {},
-        );
-      }
-    } finally {
-      isCreating = false;
-    }
-  }
-
-  function handleCloseCreateModal() {
-    createModalOpen = false;
-    createFormErrors = {};
+  function handleCreateCollection() {
+    createModalState.open(() => {
+      collectionsFeed.reload();
+    });
   }
 </script>
 
@@ -91,7 +63,7 @@
               },
             }}
           />
-          <SplitButton onclick={() => (createModalOpen = true)}>
+          <SplitButton onclick={handleCreateCollection}>
             Create
             {#snippet aside()}
               <Icon icon="lucide:plus" class="w-3.5 h-3.5" />
@@ -144,7 +116,7 @@
           actionText="Create Collection"
           variant="purple"
           size="md"
-          actionClick={() => (createModalOpen = true)}
+          actionClick={handleCreateCollection}
         />
       {/snippet}
       {#snippet more()}
@@ -161,13 +133,4 @@
   </div>
 </main>
 
-<Dialog bind:open={createModalOpen} size="md">
-  {#snippet children()}
-    <CreateCollectionForm
-      isSubmitting={isCreating}
-      errors={createFormErrors}
-      onSubmit={handleCreateSubmit}
-      onCancel={handleCloseCreateModal}
-    />
-  {/snippet}
-</Dialog>
+<CreateCollectionDialog modalState={createModalState} />
