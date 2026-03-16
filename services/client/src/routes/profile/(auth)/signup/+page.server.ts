@@ -18,8 +18,8 @@ export const load: PageServerLoad = async ({ parent, locals }) => {
     redirect(302, '/profile/login');
   }
 
-  const { cookieManager, api, ...serializableLocals } = locals;
-  return serializableLocals;
+  const { settings, globalSettings, user, userPreferences } = locals;
+  return { settings, globalSettings, user, userPreferences };
 };
 
 const defaultAction: Action = async ({ request, cookies, locals }) => {

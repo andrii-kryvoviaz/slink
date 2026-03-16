@@ -22,8 +22,8 @@ export const load: PageServerLoad = async ({ parent, locals }) => {
     [] as SsoProvider[],
   );
 
-  const { cookieManager, flash, ...serializableLocals } = locals;
-  return { ...serializableLocals, ssoProviders };
+  const { settings, globalSettings, user, userPreferences } = locals;
+  return { settings, globalSettings, user, userPreferences, ssoProviders };
 };
 
 export const actions: Actions = {
