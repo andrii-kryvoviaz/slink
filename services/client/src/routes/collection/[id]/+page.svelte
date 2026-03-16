@@ -43,6 +43,7 @@
   import { usePostViewerState } from '@slink/lib/state/PostViewerState.svelte';
 
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
+  import { routes } from '@slink/utils/url';
 
   interface Props {
     data: {
@@ -227,7 +228,17 @@
             {/if}
           </div>
           {#if isOwner}
-            <div class="shrink-0 h-10 flex items-center">
+            <div class="shrink-0 h-10 flex items-center gap-2">
+              <Button
+                variant="glass"
+                size="sm"
+                rounded="full"
+                href={routes.general.uploadToCollection(data.collectionId)}
+                class="flex flex-row gap-2"
+              >
+                <Icon icon="ph:plus" class="h-4 w-4" />
+                Add images
+              </Button>
               {#if shareInfo}
                 <div class="relative flex items-center">
                   <span
@@ -295,7 +306,9 @@
         <EmptyState
           icon="ph:images-duotone"
           title="No items yet"
-          description="Add images to this collection from the image viewer."
+          description={isOwner
+            ? 'Upload images directly to this collection.'
+            : 'No items in this collection yet.'}
           variant="purple"
           size="md"
         />

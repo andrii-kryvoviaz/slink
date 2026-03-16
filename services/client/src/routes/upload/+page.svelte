@@ -10,6 +10,7 @@
   import MultiUploadProgress from '@slink/feature/Upload/MultiUploadProgress.svelte';
   import type { Visibility } from '@slink/feature/Upload/UploadOptions';
 
+  import { page } from '$app/state';
   import { useMultiUploadService } from '$lib/di';
   import { fade } from 'svelte/transition';
 
@@ -20,6 +21,7 @@
 
   import type { UploadItem } from '@slink/lib/services/multi-upload.service';
   import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
+  import { createUploadTargetState } from '@slink/lib/state/UploadTargetState.svelte';
 
   import { navigateToUrl } from '@slink/utils/navigation';
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
@@ -42,6 +44,14 @@
   let multiUploadService = useMultiUploadService();
   let historyFeedState = useUploadHistoryFeed();
 
+  const uploadTarget = createUploadTargetState(page.url);
+
+  $effect(() => {
+    if (uploadTarget.collection) {
+      selectedCollections = [uploadTarget.collection];
+    }
+  });
+
   const {
     isLoading,
     data: uploadedImage,
@@ -61,8 +71,8 @@
     return ApiClient.image.upload(file, tagIds, collectionIds);
   });
 
-  const { isLoading: pageIsChanging, run: redirectToInfo } = ReactiveState(
-    (imageId: string) => navigateToUrl(routes.image.info(imageId)),
+  const { isLoading: pageIsChanging, run: redirectToPage } = ReactiveState(
+    (url: string) => navigateToUrl(url),
   );
 
   const handleUpload = async (files: File[]) => {
@@ -74,14 +84,21 @@
   };
 
   const successHandler = async (response: UploadedImageResponse) => {
-    if (data.user) {
-      historyFeedState.invalidate();
-      await redirectToInfo(response.id);
-    } else {
+    if (!data.user) {
       data.globalSettings?.access?.allowUnauthenticatedAccess
         ? await navigateToUrl(routes.general.explore)
         : (showSuccess = true);
+      return;
     }
+
+    historyFeedState.invalidate();
+
+    if (uploadTarget.redirectUrl) {
+      await redirectToPage(uploadTarget.redirectUrl);
+      return;
+    }
+
+    await redirectToPage(routes.image.info(response.id));
   };
 
   const handleMultiUpload = async (files: File[]) => {
