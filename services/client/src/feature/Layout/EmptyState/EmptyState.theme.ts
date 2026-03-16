@@ -1,4 +1,3 @@
-import type { ButtonVariant } from '@slink/ui/components/button';
 import { cva } from 'class-variance-authority';
 
 export const containerVariants = cva(
@@ -105,11 +104,3 @@ export const descriptionVariants = cva(
     },
   },
 );
-
-export const emptyStateButtonVariantMap: Record<string, ButtonVariant> = {
-  default: 'soft-blue',
-  blue: 'soft-blue',
-  purple: 'soft-violet',
-  pink: 'soft-red',
-  red: 'soft-red',
-};

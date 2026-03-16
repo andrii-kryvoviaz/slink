@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { Button } from '@slink/ui/components/button';
   import type { Snippet } from 'svelte';
 
   import { className as cn } from '$lib/utils/ui/className';
@@ -9,7 +8,6 @@
   import {
     containerVariants,
     descriptionVariants,
-    emptyStateButtonVariantMap,
     iconContainerVariants,
     iconVariants,
     titleVariants,
@@ -19,26 +17,23 @@
     icon?: string;
     title: string;
     description: string;
-    actionText?: string;
-    actionHref?: string;
-    actionClick?: () => void;
+    action?: Snippet;
     variant?: 'default' | 'blue' | 'purple' | 'pink' | 'red';
     size?: 'sm' | 'md' | 'lg';
     class?: string;
+    children?: Snippet;
   }
 
   let {
     icon = 'ph:image-duotone',
     title,
     description,
-    actionText,
-    actionHref,
-    actionClick,
+    action,
     variant = 'default',
     size = 'md',
     class: className,
     children,
-  }: Props & { children?: Snippet } = $props();
+  }: Props = $props();
 </script>
 
 <div
@@ -75,18 +70,9 @@
     </div>
   {/if}
 
-  {#if actionText && (actionHref || actionClick)}
+  {#if action}
     <div in:fly={{ y: 20, duration: 500, delay: 500 }}>
-      <Button
-        variant={emptyStateButtonVariantMap[variant]}
-        size="lg"
-        rounded="full"
-        href={actionHref}
-        onclick={actionClick}
-      >
-        <Icon icon="lucide:plus" class="h-4 w-4" />
-        {actionText}
-      </Button>
+      {@render action()}
     </div>
   {/if}
 </div>

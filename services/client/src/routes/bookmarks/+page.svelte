@@ -6,6 +6,7 @@
   import { ExploreSkeleton } from '@slink/feature/Layout';
   import { FormattedDate, Subtitle, Title } from '@slink/feature/Text';
   import { UserAvatar } from '@slink/feature/User';
+  import { Button } from '@slink/ui/components/button';
   import { untrack } from 'svelte';
 
   import Icon from '@iconify/svelte';
@@ -55,11 +56,21 @@
           icon="ph:bookmark-simple-duotone"
           title="No bookmarks yet"
           description="Start exploring and bookmark images you love to find them here later."
-          actionText="Explore Images"
-          actionHref="/explore"
           variant="blue"
           size="md"
-        />
+        >
+          {#snippet action()}
+            <Button
+              variant="soft-blue"
+              size="lg"
+              rounded="full"
+              href="/explore"
+            >
+              <Icon icon="lucide:plus" class="h-4 w-4" />
+              Explore Images
+            </Button>
+          {/snippet}
+        </EmptyState>
       </div>
     {:else if bookmarksFeed.items.length > 0}
       <Masonry items={bookmarksFeed.items} class="gap-4">

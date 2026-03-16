@@ -16,6 +16,7 @@
   import { ExploreSkeleton } from '@slink/feature/Layout';
   import { ExpandableText, FormattedDate } from '@slink/feature/Text';
   import { UserAvatar } from '@slink/feature/User';
+  import { Button } from '@slink/ui/components/button';
   import { untrack } from 'svelte';
 
   import { page } from '$app/state';
@@ -111,21 +112,41 @@
             icon="ph:images-duotone"
             title="No images yet"
             description="Be the first to share something amazing with the community. Start by uploading your favorite images."
-            actionText="Upload First Image"
-            actionHref="/upload"
             variant="blue"
             size="md"
-          />
+          >
+            {#snippet action()}
+              <Button
+                variant="soft-blue"
+                size="lg"
+                rounded="full"
+                href="/upload"
+              >
+                <Icon icon="lucide:plus" class="h-4 w-4" />
+                Upload First Image
+              </Button>
+            {/snippet}
+          </EmptyState>
         {:else}
           <EmptyState
             icon="ph:images-duotone"
             title="No images found"
             description={`No images match your search for "${publicFeedState.searchTerm}". Try a different search term or browse all images.`}
-            actionText="Clear Search"
-            actionClick={() => publicFeedState.resetSearch()}
             variant="blue"
             size="md"
-          />
+          >
+            {#snippet action()}
+              <Button
+                variant="soft-blue"
+                size="lg"
+                rounded="full"
+                onclick={() => publicFeedState.resetSearch()}
+              >
+                <Icon icon="lucide:plus" class="h-4 w-4" />
+                Clear Search
+              </Button>
+            {/snippet}
+          </EmptyState>
         {/if}
       </div>
     {:else if publicFeedState.items.length > 0}

@@ -311,11 +311,21 @@
               icon="ph:clock-clockwise-duotone"
               title="No history yet"
               description="Your upload history will appear here. Start uploading images to see your files and manage them easily."
-              actionText="Upload Images"
-              actionHref="/upload"
               variant="purple"
               size="md"
-            />
+            >
+              {#snippet action()}
+                <Button
+                  variant="soft-violet"
+                  size="lg"
+                  rounded="full"
+                  href="/upload"
+                >
+                  <Icon icon="lucide:plus" class="h-4 w-4" />
+                  Upload Images
+                </Button>
+              {/snippet}
+            </EmptyState>
           {/if}
         {/snippet}
         {#snippet more()}

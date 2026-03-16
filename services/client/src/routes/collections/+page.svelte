@@ -11,6 +11,7 @@
     ViewModeToggle,
   } from '@slink/feature/Layout';
   import { Subtitle, Title } from '@slink/feature/Text';
+  import { Button } from '@slink/ui/components/button';
   import { DataTable, DataTableToolbar } from '@slink/ui/components/data-table';
   import { EnhancedInput } from '@slink/ui/components/input';
   import { SplitButton } from '@slink/ui/components/split-button';
@@ -137,13 +138,23 @@
           description={collectionsFeed.search
             ? 'Try adjusting your search term'
             : 'Create your first collection to organize and share your images.'}
-          actionText={collectionsFeed.search ? undefined : 'Create Collection'}
-          actionClick={collectionsFeed.search
-            ? undefined
-            : handleCreateCollection}
           variant="purple"
           size="md"
-        />
+        >
+          {#snippet action()}
+            {#if !collectionsFeed.search}
+              <Button
+                variant="soft-violet"
+                size="lg"
+                rounded="full"
+                onclick={handleCreateCollection}
+              >
+                <Icon icon="lucide:plus" class="h-4 w-4" />
+                Create Collection
+              </Button>
+            {/if}
+          {/snippet}
+        </EmptyState>
       {/snippet}
       {#snippet more()}
         <LoadMoreButton

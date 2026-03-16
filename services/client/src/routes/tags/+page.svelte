@@ -4,6 +4,7 @@
   import { TagsSkeleton } from '@slink/feature/Tag';
   import { createTagColumns } from '@slink/feature/Tag/TagDataTable/columns';
   import { Subtitle, Title } from '@slink/feature/Text';
+  import { Button } from '@slink/ui/components/button';
   import { DataTable, DataTableToolbar } from '@slink/ui/components/data-table';
   import { EnhancedInput } from '@slink/ui/components/input';
   import { SplitButton } from '@slink/ui/components/split-button';
@@ -113,11 +114,23 @@
           description={tagFeed.search
             ? 'Try adjusting your search term'
             : 'Create your first tag to get started'}
-          actionText={tagFeed.search ? undefined : 'Create Tag'}
-          actionClick={tagFeed.search ? undefined : handleCreateTag}
           variant="blue"
           size="md"
-        />
+        >
+          {#snippet action()}
+            {#if !tagFeed.search}
+              <Button
+                variant="soft-blue"
+                size="lg"
+                rounded="full"
+                onclick={handleCreateTag}
+              >
+                <Icon icon="lucide:plus" class="h-4 w-4" />
+                Create Tag
+              </Button>
+            {/if}
+          {/snippet}
+        </EmptyState>
       {/snippet}
     </ViewModeLayout>
   </div>
