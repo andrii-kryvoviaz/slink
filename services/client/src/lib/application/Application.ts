@@ -3,7 +3,6 @@ import { error, redirect } from '@sveltejs/kit';
 
 import { browser } from '$app/environment';
 import { goto, invalidateAll } from '$app/navigation';
-import { initializeDI } from '$lib/di/container';
 
 import { type ApiClientType, createApiClient } from '@slink/api/Client';
 
@@ -27,7 +26,6 @@ export class Application {
   }
 
   private static async bootstrap(): Promise<void> {
-    initializeDI();
     await preloadIconSet(themeIcons);
   }
 

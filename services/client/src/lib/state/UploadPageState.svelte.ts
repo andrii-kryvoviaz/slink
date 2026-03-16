@@ -4,8 +4,7 @@ import type { Tag } from '@slink/api/Resources/TagResource';
 import type { CollectionResponse } from '@slink/api/Response';
 
 import type { User } from '@slink/lib/auth/Type/User';
-import { useUploadService } from '@slink/lib/di';
-import type { UploadService } from '@slink/lib/services/upload.service';
+import { uploadService } from '@slink/lib/services/upload.service';
 import type { UploadItem } from '@slink/lib/services/upload.service';
 import type { GlobalSettings } from '@slink/lib/settings/Type/GlobalSettings';
 import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
@@ -36,7 +35,6 @@ class UploadPageState {
   private _isUploading: boolean = $state(false);
 
   private _pageData!: UploadPageData;
-  private _uploadService!: UploadService;
   private _uploadTarget!: UploadTargetState;
   private _historyFeedState!: UploadHistoryFeed;
 
@@ -48,7 +46,6 @@ class UploadPageState {
     this._isUploading = false;
 
     this._pageData = pageData;
-    this._uploadService = useUploadService();
     this._uploadTarget = createUploadTargetState(url);
     this._historyFeedState = useUploadHistoryFeed();
 
@@ -116,7 +113,7 @@ class UploadPageState {
       this._isMultiUpload = true;
     }
 
-    this._uploads = this._uploadService.createUploadItems(files);
+    this._uploads = uploadService.createUploadItems(files);
 
     if (isBatch) {
       await this._ensureTargetCollection();
@@ -124,7 +121,7 @@ class UploadPageState {
 
     const { tagIds, collectionIds } = this._getUploadOptions();
 
-    const { successful, failed } = await this._uploadService.uploadFiles(
+    const { successful, failed } = await uploadService.uploadFiles(
       this._uploads,
       {
         isGuest: this.isGuestUpload,
@@ -153,7 +150,7 @@ class UploadPageState {
   }
 
   handleCancelMultiUpload() {
-    this._uploadService.cancelAllUploads();
+    uploadService.cancelAllUploads();
     this._isMultiUpload = false;
     this._uploads = [];
   }
@@ -180,7 +177,7 @@ class UploadPageState {
 
     const { tagIds, collectionIds } = this._getUploadOptions();
 
-    await this._uploadService.uploadFiles(failedUploads, {
+    await uploadService.uploadFiles(failedUploads, {
       isGuest: this.isGuestUpload,
       tagIds,
       collectionIds,

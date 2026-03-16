@@ -1,5 +1,3 @@
-import { injectable } from 'tsyringe';
-
 import { CACHE } from '$lib/constants/app';
 
 export interface CacheEntry<T> {
@@ -7,7 +5,6 @@ export interface CacheEntry<T> {
   cachedAt: number;
 }
 
-@injectable()
 export class CacheService<T> {
   constructor(
     private readonly cacheKey: string,

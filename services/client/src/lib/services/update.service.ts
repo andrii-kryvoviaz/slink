@@ -1,10 +1,8 @@
-import { inject, injectable } from 'tsyringe';
-
 import { CACHE } from '$lib/constants/app';
 import { cleanVersion, compareVersions } from '$lib/utils/version/helpers';
 
 import { CacheService } from './cache.service';
-import { GitHubService } from './github.service';
+import { gitHubService } from './github.service';
 import type { GitHubRelease } from './github.service';
 
 export interface UpdateCheckResult {
@@ -15,15 +13,10 @@ export interface UpdateCheckResult {
   error?: string;
 }
 
-@injectable()
-export class UpdateService {
-  private readonly cache: CacheService<GitHubRelease>;
-
-  constructor(
-    @inject('GitHubService') private readonly githubService: GitHubService,
-  ) {
-    this.cache = new CacheService(CACHE.VERSION_CHECK_KEY);
-  }
+class UpdateService {
+  private readonly cache = new CacheService<GitHubRelease>(
+    CACHE.VERSION_CHECK_KEY,
+  );
 
   async checkForUpdates(currentVersion: string): Promise<UpdateCheckResult> {
     if (!currentVersion || typeof currentVersion !== 'string') {
@@ -36,7 +29,7 @@ export class UpdateService {
 
     if (!release) {
       try {
-        release = await this.githubService.getLatestRelease();
+        release = await gitHubService.getLatestRelease();
 
         if (release.draft || release.prerelease) {
           return this.createResult(currentVersion, {
@@ -93,3 +86,10 @@ export class UpdateService {
     };
   }
 }
+
+export type { UpdateService };
+
+let _instance: UpdateService;
+export const updateService = new Proxy({} as UpdateService, {
+  get: (_, prop) => Reflect.get((_instance ??= new UpdateService()), prop),
+});

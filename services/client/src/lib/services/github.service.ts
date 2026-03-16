@@ -1,5 +1,3 @@
-import { injectable } from 'tsyringe';
-
 import { GITHUB } from '$lib/constants/app';
 
 export interface GitHubRelease {
@@ -12,7 +10,6 @@ export interface GitHubRelease {
   draft: boolean;
 }
 
-@injectable()
 export class GitHubService {
   private readonly apiUrl: string;
 
@@ -32,3 +29,8 @@ export class GitHubService {
     return response.json();
   }
 }
+
+let _instance: GitHubService;
+export const gitHubService = new Proxy({} as GitHubService, {
+  get: (_, prop) => Reflect.get((_instance ??= new GitHubService()), prop),
+});

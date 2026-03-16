@@ -17,8 +17,6 @@ export default [
       parserOptions: {
         ecmaVersion: 2022,
         sourceType: 'module',
-        experimentalDecorators: true,
-        emitDecoratorMetadata: true,
       },
       globals: {
         ...globals.browser,
@@ -55,8 +53,6 @@ export default [
       parser: svelteParser,
       parserOptions: {
         parser: tsParser,
-        experimentalDecorators: true,
-        emitDecoratorMetadata: true,
       },
       globals: {
         ...globals.browser,

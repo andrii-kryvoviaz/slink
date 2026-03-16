@@ -1,5 +1,4 @@
 import { ApiClient } from '@slink/api';
-import { injectable } from 'tsyringe';
 
 import { HttpException, ValidationException } from '@slink/api/Exceptions';
 import type { UploadedImageResponse } from '@slink/api/Response';
@@ -25,8 +24,7 @@ export interface UploadOptions {
   onError?: (item: UploadItem, error: Error) => void;
 }
 
-@injectable()
-export class UploadService {
+class UploadService {
   private _abortControllers: Map<string, AbortController> = new Map();
 
   public createUploadItems(files: File[]): UploadItem[] {
@@ -179,3 +177,10 @@ export class UploadService {
     };
   }
 }
+
+export type { UploadService };
+
+let _instance: UploadService;
+export const uploadService = new Proxy({} as UploadService, {
+  get: (_, prop) => Reflect.get((_instance ??= new UploadService()), prop),
+});
