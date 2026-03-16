@@ -62,13 +62,14 @@
     }
   }
 
-  if (form?.errors) {
-    const errors = form.errors as Record<string, any>;
+  $effect(() => {
+    if (!form?.errors) return;
 
+    const errors = form.errors as Record<string, any>;
     if (errors.credentials && typeof errors.credentials === 'string') {
       toast.error(errors.credentials);
     }
-  }
+  });
 </script>
 
 <svelte:head>
