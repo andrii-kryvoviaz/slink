@@ -1,5 +1,3 @@
-import { crawlerDetect } from './CrawlerDetect';
-
 type OS = 'macOS' | 'Windows' | 'Linux' | 'Android' | 'iOS' | 'Unknown';
 type Browser = 'Chrome' | 'Firefox' | 'Safari' | 'Edge' | 'Opera' | 'Unknown';
 
@@ -45,7 +43,6 @@ class UserAgent {
   readonly isApple: boolean = $derived(
     this.os === 'macOS' || this.os === 'iOS',
   );
-  readonly isBot: boolean = $derived(crawlerDetect.isCrawler(this._ua));
 }
 
 export function useUserAgent(ua: string | null | undefined): UserAgent {
