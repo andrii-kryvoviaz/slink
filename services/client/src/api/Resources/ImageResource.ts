@@ -13,44 +13,18 @@ import type { License } from '@slink/lib/enum/License';
 export class ImageResource extends AbstractResource {
   public async upload(
     image: File,
-    tagIds?: string[],
-    collectionIds?: string[],
+    options: {
+      tagIds?: string[];
+      collectionIds?: string[];
+      asGuest?: boolean;
+    } = {},
   ): Promise<UploadedImageResponse> {
+    const { tagIds = [], collectionIds = [], asGuest = false } = options;
     const body = new FormData();
     body.append('image', image);
-
-    if (tagIds && tagIds.length > 0) {
-      tagIds.forEach((tagId) => body.append('tagIds[]', tagId));
-    }
-
-    if (collectionIds && collectionIds.length > 0) {
-      collectionIds.forEach((collectionId) =>
-        body.append('collectionIds[]', collectionId),
-      );
-    }
-
-    return this.post('/upload', { body });
-  }
-
-  public async guestUpload(
-    image: File,
-    tagIds?: string[],
-    collectionIds?: string[],
-  ): Promise<UploadedImageResponse> {
-    const body = new FormData();
-    body.append('image', image);
-
-    if (tagIds && tagIds.length > 0) {
-      tagIds.forEach((tagId) => body.append('tagIds[]', tagId));
-    }
-
-    if (collectionIds && collectionIds.length > 0) {
-      collectionIds.forEach((collectionId) =>
-        body.append('collectionIds[]', collectionId),
-      );
-    }
-
-    return this.post('/guest/upload', { body });
+    tagIds.forEach((id) => body.append('tagIds[]', id));
+    collectionIds.forEach((id) => body.append('collectionIds[]', id));
+    return this.post(asGuest ? '/guest/upload' : '/upload', { body });
   }
 
   public async remove(

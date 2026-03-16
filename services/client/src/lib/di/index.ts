@@ -2,6 +2,6 @@ export { container, DI_TOKENS, initializeDI } from './container';
 export {
   useServices,
   useGitHubService,
-  useMultiUploadService,
+  useUploadService,
   useUpdateService,
 } from './useServices';

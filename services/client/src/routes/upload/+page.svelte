@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { ApiClient } from '@slink/api';
   import {
     Banner,
     BannerAction,
@@ -11,26 +10,11 @@
   import type { Visibility } from '@slink/feature/Upload/UploadOptions';
 
   import { page } from '$app/state';
-  import { useMultiUploadService } from '$lib/di';
   import { fade } from 'svelte/transition';
 
-  import { ReactiveState } from '@slink/api/ReactiveState';
-  import type { Tag } from '@slink/api/Resources/TagResource';
-  import type { CollectionResponse } from '@slink/api/Response';
-  import type { UploadedImageResponse } from '@slink/api/Response';
-
-  import type { UploadItem } from '@slink/lib/services/multi-upload.service';
-  import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
-  import { createUploadTargetState } from '@slink/lib/state/UploadTargetState.svelte';
-
-  import { navigateToUrl } from '@slink/utils/navigation';
-  import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
-  import { routes } from '@slink/utils/url';
+  import { useUploadPageState } from '@slink/lib/state/UploadPageState.svelte';
 
   import type { PageData } from './$types';
-
-  let selectedTags: Tag[] = $state([]);
-  let selectedCollections: CollectionResponse[] = $state([]);
 
   interface Props {
     data: PageData;
@@ -38,184 +22,7 @@
 
   let { data }: Props = $props();
 
-  let showSuccess = $state(false);
-  let isMultiUpload = $state(false);
-  let uploads: UploadItem[] = $state([]);
-  let multiUploadService = useMultiUploadService();
-  let historyFeedState = useUploadHistoryFeed();
-
-  const uploadTarget = createUploadTargetState(page.url);
-
-  $effect(() => {
-    if (uploadTarget.collection) {
-      selectedCollections = [uploadTarget.collection];
-    }
-  });
-
-  const {
-    isLoading,
-    data: uploadedImage,
-    error: uploadError,
-    run: uploadImage,
-    reset: resetUploadImage,
-  } = ReactiveState<UploadedImageResponse>((file: File) => {
-    const tagIds = selectedTags.map((tag) => tag.id);
-    const collectionIds = selectedCollections.map(
-      (collection) => collection.id,
-    );
-
-    if (data.globalSettings?.access?.allowGuestUploads && !data.user) {
-      return ApiClient.image.guestUpload(file, tagIds, collectionIds);
-    }
-
-    return ApiClient.image.upload(file, tagIds, collectionIds);
-  });
-
-  const { isLoading: pageIsChanging, run: redirectToPage } = ReactiveState(
-    (url: string) => navigateToUrl(url),
-  );
-
-  const handleUpload = async (files: File[]) => {
-    if (files.length === 1) {
-      await uploadImage(files[0]);
-    } else {
-      await handleMultiUpload(files);
-    }
-  };
-
-  const successHandler = async (response: UploadedImageResponse) => {
-    if (!data.user) {
-      data.globalSettings?.access?.allowUnauthenticatedAccess
-        ? await navigateToUrl(routes.general.explore)
-        : (showSuccess = true);
-      return;
-    }
-
-    historyFeedState.invalidate();
-
-    if (uploadTarget.redirectUrl) {
-      await redirectToPage(uploadTarget.redirectUrl);
-      return;
-    }
-
-    await redirectToPage(routes.image.info(response.id));
-  };
-
-  const handleMultiUpload = async (files: File[]) => {
-    isMultiUpload = true;
-    uploads = multiUploadService.createUploadItems(files);
-
-    let targetCollection: CollectionResponse | undefined = undefined;
-
-    if (selectedCollections.length === 0 && data.user) {
-      try {
-        targetCollection = await ApiClient.collection.create({
-          name: 'Unnamed',
-        });
-        selectedCollections = [targetCollection];
-      } catch (error) {
-        console.error('Failed to create unnamed collection:', error);
-      }
-    } else if (selectedCollections.length > 0) {
-      targetCollection = selectedCollections[0];
-    }
-
-    const tagIds = selectedTags.map((tag) => tag.id);
-    const collectionIds = selectedCollections.map(
-      (collection) => collection.id,
-    );
-
-    const { successful, failed } = await multiUploadService.uploadFiles(
-      uploads,
-      {
-        isGuest: data.globalSettings?.access?.allowGuestUploads && !data.user,
-        tagIds,
-        collectionIds,
-        onProgress: (_item) => {
-          uploads = [...uploads];
-        },
-        onError: (_item, error) => {
-          console.error('Upload error for file:', _item.file.name, error);
-        },
-      },
-    );
-
-    if (failed.length === 0 && successful.length > 0) {
-      if (data.user) {
-        historyFeedState.invalidate();
-
-        if (targetCollection) {
-          await navigateToUrl(routes.collection.detail(targetCollection.id));
-        } else {
-          await navigateToUrl(routes.general.history);
-        }
-      } else {
-        data.globalSettings?.access?.allowUnauthenticatedAccess
-          ? await navigateToUrl(routes.general.explore)
-          : (showSuccess = true);
-      }
-    }
-  };
-
-  const handleCancelMultiUpload = () => {
-    multiUploadService.cancelAllUploads();
-    isMultiUpload = false;
-    uploads = [];
-  };
-
-  const handleGoBackToUploadForm = () => {
-    isMultiUpload = false;
-    uploads = [];
-  };
-
-  const handleRetryFailedUploads = async () => {
-    const failedUploads = uploads.filter((item) => item.status === 'error');
-    if (failedUploads.length === 0) return;
-
-    failedUploads.forEach((item) => {
-      item.status = 'pending';
-      item.progress = 0;
-      item.error = undefined;
-      item.errorDetails = undefined;
-    });
-
-    uploads = [...uploads];
-
-    const tagIds = selectedTags.map((tag) => tag.id);
-    const collectionIds = selectedCollections.map(
-      (collection) => collection.id,
-    );
-
-    await multiUploadService.uploadFiles(failedUploads, {
-      isGuest: data.globalSettings?.access?.allowGuestUploads && !data.user,
-      tagIds,
-      collectionIds,
-      onProgress: (_item) => {
-        uploads = [...uploads];
-      },
-      onError: (_item, error) => {
-        console.error('Retry upload error for file:', _item.file.name, error);
-      },
-    });
-  };
-
-  const errorHandler = printErrorsAsToastMessage;
-
-  $effect(() => {
-    $uploadedImage && successHandler($uploadedImage);
-  });
-
-  $effect(() => {
-    if (!$uploadError) return;
-    errorHandler($uploadError);
-    resetUploadImage();
-  });
-
-  let processing = $derived($isLoading || $pageIsChanging || isMultiUpload);
-  let disabled = $derived(
-    processing ||
-      (!data.user && !data.globalSettings?.access?.allowGuestUploads),
-  );
+  const state = useUploadPageState(data, page.url);
 </script>
 
 <svelte:head>
@@ -228,17 +35,17 @@
       in:fade={{ duration: 500, delay: 100 }}
       class="w-full max-w-2xl mx-auto"
     >
-      {#if showSuccess}
+      {#if state.showSuccess}
         <UploadSuccess
-          onUploadAnother={() => (showSuccess = false)}
+          onUploadAnother={() => state.dismissSuccess()}
           isGuestUser={!data.user}
         />
-      {:else if isMultiUpload}
+      {:else if state.isMultiUpload}
         <MultiUploadProgress
-          {uploads}
-          onCancel={handleCancelMultiUpload}
-          onRetryAll={handleRetryFailedUploads}
-          onGoBack={handleGoBackToUploadForm}
+          uploads={state.uploads}
+          onCancel={() => state.handleCancelMultiUpload()}
+          onRetryAll={() => state.handleRetryFailedUploads()}
+          onGoBack={() => state.handleGoBackToUploadForm()}
         />
       {:else}
         {#if !data.user}
@@ -286,17 +93,17 @@
         {/if}
 
         <UploadFormWithOptions
-          {disabled}
-          {processing}
+          disabled={state.disabled}
+          processing={state.processing}
           allowMultiple={true}
-          {selectedTags}
-          {selectedCollections}
+          selectedTags={state.selectedTags}
+          selectedCollections={state.selectedCollections}
           visibility={(data.defaultVisibility as Visibility) ?? 'private'}
           allowOnlyPublicImages={data.allowOnlyPublicImages}
-          onTagsChange={(tags) => (selectedTags = tags)}
+          onTagsChange={(tags) => state.setSelectedTags(tags)}
           onCollectionsChange={(collections) =>
-            (selectedCollections = collections)}
-          onchange={handleUpload}
+            state.setSelectedCollections(collections)}
+          onchange={(files) => state.handleUpload(files)}
         />
       {/if}
     </div>

@@ -26,9 +26,8 @@ export interface UploadOptions {
 }
 
 @injectable()
-export class MultiUploadService {
-  private uploads: Map<string, UploadItem> = new Map();
-  private abortControllers: Map<string, AbortController> = new Map();
+export class UploadService {
+  private _abortControllers: Map<string, AbortController> = new Map();
 
   public createUploadItems(files: File[]): UploadItem[] {
     return files.map((file) => ({
@@ -52,12 +51,8 @@ export class MultiUploadService {
       onError,
     } = options;
 
-    uploadItems.forEach((item) => {
-      this.uploads.set(item.id, item);
-    });
-
     const uploadPromises = uploadItems.map((item) =>
-      this.uploadSingleFile(
+      this._uploadSingleFile(
         item,
         isGuest,
         tagIds,
@@ -78,7 +73,12 @@ export class MultiUploadService {
     return { successful, failed };
   }
 
-  private async uploadSingleFile(
+  public cancelAllUploads(): void {
+    this._abortControllers.forEach((controller) => controller.abort());
+    this._abortControllers.clear();
+  }
+
+  private async _uploadSingleFile(
     item: UploadItem,
     isGuest: boolean,
     tagIds: string[],
@@ -88,21 +88,21 @@ export class MultiUploadService {
     onError?: (item: UploadItem, error: Error) => void,
   ): Promise<void> {
     const abortController = new AbortController();
-    this.abortControllers.set(item.id, abortController);
+    this._abortControllers.set(item.id, abortController);
 
     try {
       item.status = 'uploading';
       item.progress = 0;
       onProgress?.(item);
 
-      const simulateProgress = this.createProgressSimulator(item, onProgress);
+      const simulateProgress = this._createProgressSimulator(item, onProgress);
       simulateProgress.start();
 
-      const uploadMethod = isGuest
-        ? ApiClient.image.guestUpload.bind(ApiClient.image)
-        : ApiClient.image.upload.bind(ApiClient.image);
-
-      const result = await uploadMethod(item.file, tagIds, collectionIds);
+      const result = await ApiClient.image.upload(item.file, {
+        tagIds,
+        collectionIds,
+        asGuest: isGuest,
+      });
 
       simulateProgress.complete();
 
@@ -140,11 +140,11 @@ export class MultiUploadService {
       onProgress?.(item);
       onError?.(item, errorInstance);
     } finally {
-      this.abortControllers.delete(item.id);
+      this._abortControllers.delete(item.id);
     }
   }
 
-  private createProgressSimulator(
+  private _createProgressSimulator(
     item: UploadItem,
     onProgress?: (item: UploadItem) => void,
   ) {
@@ -177,44 +177,5 @@ export class MultiUploadService {
         item.progress = 100;
       },
     };
-  }
-
-  public cancelUpload(itemId: string): void {
-    const abortController = this.abortControllers.get(itemId);
-    if (abortController) {
-      abortController.abort();
-      this.abortControllers.delete(itemId);
-    }
-
-    const item = this.uploads.get(itemId);
-    if (item && item.status === 'uploading') {
-      item.status = 'error';
-      item.error = 'Upload cancelled';
-    }
-  }
-
-  public cancelAllUploads(): void {
-    this.abortControllers.forEach((controller) => controller.abort());
-    this.abortControllers.clear();
-
-    this.uploads.forEach((item) => {
-      if (item.status === 'uploading' || item.status === 'pending') {
-        item.status = 'error';
-        item.error = 'Upload cancelled';
-      }
-    });
-  }
-
-  public getUploadItem(itemId: string): UploadItem | undefined {
-    return this.uploads.get(itemId);
-  }
-
-  public getAllUploads(): UploadItem[] {
-    return Array.from(this.uploads.values());
-  }
-
-  public clearUploads(): void {
-    this.uploads.clear();
-    this.abortControllers.clear();
   }
 }
