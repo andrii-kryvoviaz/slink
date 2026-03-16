@@ -15,21 +15,21 @@ final readonly class SignUpRequest {
     #[SensitiveParameter]
     #[Assert\NotBlank]
     #[Assert\Email]
-    private string $email,
+    public string $email,
 
     #[SensitiveParameter]
     #[PasswordComplexity]
-    private string $password,
+    public string $password,
 
-    #[SensitiveParameter] // @phpstan-ignore property.onlyWritten
+    #[SensitiveParameter]
     #[Assert\NotBlank]
     #[Assert\IdenticalTo(propertyPath: 'password', message: 'Passwords do not match.')]
-    private string $confirm,
+    public string $confirm,
 
     #[Assert\NotBlank]
     #[UsernameConstraint]
     #[Assert\NotEqualTo(propertyPath: 'email', message: 'Username cannot be the same as email.')]
-    private string $username
+    public string $username
   ) {}
 
   public function toCommand(): CreateUserCommand {
