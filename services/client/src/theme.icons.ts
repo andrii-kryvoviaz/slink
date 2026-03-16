@@ -222,4 +222,6 @@ export const themeIcons: string[] = [
   'lucide:pencil',
   'lucide:folder-plus',
   'ph:download',
+  'ph:cloud-arrow-up',
+  'ph:palette',
 ];
