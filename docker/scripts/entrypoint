@@ -1,0 +1,23 @@
+#!/bin/sh
+
+set -euo pipefail
+
+# Legacy files cleanup
+if [ -f /app/var/data/dump.rdb ]; then
+  rm -f /app/var/data/dump.rdb
+fi
+
+if [ -f /app/var/data/keys ]; then
+  rm -rf /app/var/data/keys
+fi
+
+# Application Bootstrap (runs as slink)
+su-exec slink startup
+
+if [ -n "${ADMIN_EMAIL:-}" ]; then
+  slink slink:admin:init --no-interaction
+fi
+
+slink slink:about
+
+exec /usr/bin/supervisord -n -c /etc/supervisord.conf

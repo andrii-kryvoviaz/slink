@@ -3,7 +3,7 @@
 set -euo pipefail
 
 setup_jwt_keys() {
-  local persistent_keys_dir="/app/var/data/keys"
+  local persistent_keys_dir="/data/keys"
   local config_jwt_dir="/services/api/config/jwt"
   local env_file="/services/api/.env"
   
@@ -15,12 +15,12 @@ setup_jwt_keys() {
     
     local passphrase=$(openssl rand -hex 32)
     echo "$passphrase" > "$persistent_keys_dir/passphrase"
-    chmod 600 "$persistent_keys_dir/passphrase"
+    chmod 640 "$persistent_keys_dir/passphrase"
     
     openssl genpkey -algorithm RSA -out "$persistent_keys_dir/private.pem" -pkeyopt rsa_keygen_bits:4096 -aes256 -pass pass:"$passphrase" 2>/dev/null
     openssl rsa -pubout -in "$persistent_keys_dir/private.pem" -out "$persistent_keys_dir/public.pem" -passin pass:"$passphrase" 2>/dev/null
     
-    chmod 600 "$persistent_keys_dir/private.pem"
+    chmod 640 "$persistent_keys_dir/private.pem"
     chmod 644 "$persistent_keys_dir/public.pem"
     
     echo "[Startup] JWT keypair generated"
@@ -36,12 +36,12 @@ setup_jwt_keys() {
 }
 
 setup_mercure_keys() {
-  local persistent_keys_dir="/app/var/data/keys"
+  local persistent_keys_dir="/data/keys"
   local api_env_file="/services/api/.env"
   
   if [ ! -f "$persistent_keys_dir/mercure_secret" ]; then
     openssl rand -hex 32 > "$persistent_keys_dir/mercure_secret"
-    chmod 600 "$persistent_keys_dir/mercure_secret"
+    chmod 640 "$persistent_keys_dir/mercure_secret"
     echo "[Startup] Generated Mercure JWT secret"
   fi
   

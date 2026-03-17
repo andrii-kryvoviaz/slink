@@ -73,6 +73,7 @@ ARG UPLOAD_MAX_FILESIZE_IN_BYTES=52428800
 
 RUN --mount=type=cache,target=/var/cache/apk \
     apk add --no-cache \
+        su-exec \
         redis \
         libmcrypt \
         libcurl \
@@ -101,8 +102,8 @@ EOF
 COPY --link ./docker/config/supervisord.conf /etc/supervisord.conf
 COPY --link ./docker/config/caddy/Caddyfile /etc/caddy/Caddyfile
 COPY --link ./docker/config/caddy/Caddyfile.mercure /etc/caddy/Caddyfile.mercure
-COPY --link --chmod=755 ./docker/scripts/entrypoint.sh /usr/local/bin/entrypoint.sh
-COPY --link --chmod=755 ./docker/scripts/startup.sh /usr/local/bin/startup.sh
+COPY --link --chmod=755 ./docker/scripts/entrypoint /usr/local/bin/entrypoint
+COPY --link --chmod=755 ./docker/scripts/startup /usr/local/bin/startup
 COPY --link --chmod=755 ./docker/scripts/slink /usr/local/bin/slink
 
 WORKDIR /services
@@ -118,7 +119,7 @@ ENV API_URL=http://localhost:8080 \
     # VIPS settings
     VIPS_CONCURRENCY=4 
 
-CMD ["/usr/local/bin/entrypoint.sh"]
+CMD ["/usr/local/bin/entrypoint"]
 
 ### Test image ###
 FROM php:${PHP_VERSION}-alpine AS test
@@ -180,10 +181,25 @@ ARG UPLOAD_MAX_FILESIZE_IN_BYTES=52428800
 COPY --link docker/config/runtime/production.conf /etc/supervisor/conf.d/production.conf
 COPY --link --from=node /usr/local/bin/node /usr/local/bin/node
 
-RUN addgroup -g 1000 slink && \
-    adduser -D -u 1000 -G slink slink && \
-    mkdir -p /app/var/data /app/slink /data/caddy && \
-    chown -R slink:slink /app/var /app/slink /data/caddy
+ARG USER_ID=1000
+ARG GROUP_ID=1000
+
+ENV USER_ID=${USER_ID} \
+    GROUP_ID=${GROUP_ID} \
+    API_ENABLED=false \
+    APP_ENV=prod \
+    NODE_ENV=production \
+    BODY_SIZE_LIMIT=${UPLOAD_MAX_FILESIZE_IN_BYTES}
+
+RUN addgroup -g ${GROUP_ID} slink && \
+    adduser -D -u ${USER_ID} -G slink slink && \
+    addgroup www-data slink && \
+    mkdir -p /data/redis /data/caddy /data/keys && \
+    chown -R slink:slink /services /app /data && \
+    chown -R www-data:www-data /data/caddy && \
+    chown -R redis:redis /data/redis && \
+    chmod g+s /app /services /data && \
+    chmod 750 /data/keys
 
 COPY --from=vendor --chown=slink:slink /dependencies/vendor ./api/vendor
 COPY --from=source --chown=slink:slink /source ./api
@@ -192,10 +208,11 @@ COPY --from=build-client --chown=slink:slink /client/package.json ./client/svelt
 COPY --from=deps-client-prod --chown=slink:slink /client/node_modules ./client/svelte-kit/node_modules
 COPY --chown=slink:slink services/api/.env.example ./api/.env
 
-ENV API_ENABLED=false \
-    APP_ENV=prod \
-    NODE_ENV=production \
-    BODY_SIZE_LIMIT=${UPLOAD_MAX_FILESIZE_IN_BYTES}
+RUN find /services -type d -exec chmod 2755 {} \; && \
+    find /services -type f -exec chmod 644 {} \; && \
+    chmod 755 /services/api/bin/console && \
+    slink cache:warm --no-optional-warmers --quiet && \
+    slink cache:clear --quiet
 
 EXPOSE 3000
 
