@@ -49,9 +49,18 @@ final readonly class ExceptionSubscriber implements EventSubscriberInterface {
     try {
       $response = new JsonResponse();
       $response->headers->set('Content-Type', 'application/vnd.api+json');
-      $response->setStatusCode($this->determineStatusCode($exception));
+
+      $statusCode = $this->determineStatusCode($exception);
+
+      if ($statusCode >= 500) {
+        $this->logger->error($exception->getMessage(), [
+          'exception' => $exception,
+        ]);
+      }
+
+      $response->setStatusCode($statusCode);
       $response->setData($this->getErrorMessage($exception));
-      
+
       $event->setResponse($response);
     } catch (\Throwable $exception) {
       $this->logger->error(sprintf('An error occurred: %s in %s:%s', $exception->getMessage(), $exception->getFile(), $exception->getLine()));
