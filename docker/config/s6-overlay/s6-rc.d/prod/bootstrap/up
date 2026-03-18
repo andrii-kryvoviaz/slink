@@ -1,0 +1,1 @@
+delegate slink /etc/s6-overlay/scripts/bootstrap

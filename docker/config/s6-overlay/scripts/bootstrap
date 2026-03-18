@@ -1,0 +1,29 @@
+#!/command/with-contenv sh
+
+if [ "$(id -u)" = "0" ]; then
+  chown -R slink:slink /app
+fi
+
+if [ -f /app/var/data/dump.rdb ]; then
+  rm -f /app/var/data/dump.rdb
+fi
+
+if [ -f /app/var/data/keys ]; then
+  rm -rf /app/var/data/keys
+fi
+
+slink slink:database:init --no-interaction --connection=event_store
+slink slink:database:init --no-interaction --connection=read_model
+
+slink doctrine:migrations:migrate --no-interaction --configuration=/services/api/config/migrations/event_store.yaml --em=event_store
+slink doctrine:migrations:migrate --no-interaction --em=read_model
+
+if [ "${SKIP_HASH_CALCULATION:-false}" != "true" ]; then
+  timeout 300 slink image:calculate-missing-hashes --no-interaction || echo "[system:init] Hash calculation timed out or failed"
+fi
+
+if [ -n "${ADMIN_EMAIL:-}" ]; then
+  slink slink:admin:init --no-interaction
+fi
+
+slink slink:about

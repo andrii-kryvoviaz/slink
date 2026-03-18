@@ -1,23 +1,19 @@
 #!/bin/sh
 
-set -euo pipefail
+delegate slink /usr/local/bin/init-secrets
 
-# Legacy files cleanup
-if [ -f /app/var/data/dump.rdb ]; then
-  rm -f /app/var/data/dump.rdb
+if [ -f /data/keys/passphrase ]; then
+  export JWT_PASSPHRASE=$(cat /data/keys/passphrase)
 fi
 
-if [ -f /app/var/data/keys ]; then
-  rm -rf /app/var/data/keys
+if [ -f /data/keys/mercure_secret ]; then
+  export MERCURE_JWT_SECRET=$(cat /data/keys/mercure_secret)
 fi
 
-# Application Bootstrap (runs as slink)
-su-exec slink startup
-
-if [ -n "${ADMIN_EMAIL:-}" ]; then
-  slink slink:admin:init --no-interaction
+if [ -f /data/keys/app_secret ]; then
+  export APP_SECRET=$(cat /data/keys/app_secret)
 fi
 
-slink slink:about
+log-filter
 
-exec /usr/bin/supervisord -n -c /etc/supervisord.conf
+exec /init "$@" > "$S6_LOG_PIPE" 2>&1

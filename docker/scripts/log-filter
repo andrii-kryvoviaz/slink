@@ -1,0 +1,18 @@
+#!/bin/sh
+
+mkfifo "$S6_LOG_PIPE"
+
+awk '
+  /s6-rc: info: service .* starting$/ { next }
+  /s6-rc: info: service s6rc-oneshot-runner/ { next }
+  /s6-rc: info: service fix-attrs/ { next }
+  /s6-rc: info: service legacy-cont-init/ { next }
+  /s6-rc: info: service legacy-services/ { next }
+  /s6-rc: info: service base/ { next }
+  /s6-rc: info: service .* successfully started$/ {
+    sub(/s6-rc: info: service /, "[system] ")
+    sub(/ successfully started$/, " started")
+    print; fflush(); next
+  }
+  { gsub(/s6-rc:/, "[system]"); print; fflush() }
+' < "$S6_LOG_PIPE" &

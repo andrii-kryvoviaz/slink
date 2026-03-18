@@ -73,7 +73,7 @@ ARG UPLOAD_MAX_FILESIZE_IN_BYTES=52428800
 
 RUN --mount=type=cache,target=/var/cache/apk \
     apk add --no-cache \
-        su-exec \
+        s6-overlay \
         redis \
         libmcrypt \
         libcurl \
@@ -82,7 +82,6 @@ RUN --mount=type=cache,target=/var/cache/apk \
         imagemagick \
         vips \
         libheif \
-        supervisor \
         tzdata && \
     rm -rf /tmp/* /var/cache/apk/*
 
@@ -99,14 +98,20 @@ UPLOADS
 echo 'date.timezone = ${TZ}' > /usr/local/etc/php/conf.d/timezone.ini
 EOF
 
-COPY --link ./docker/config/supervisord.conf /etc/supervisord.conf
+COPY --link --chmod=755 ./docker/config/s6-overlay/scripts/bootstrap /etc/s6-overlay/scripts/bootstrap
+COPY --link ./docker/config/s6-overlay/s6-rc.d/shared/ /etc/s6-overlay/s6-rc.d/
 COPY --link ./docker/config/caddy/Caddyfile /etc/caddy/Caddyfile
 COPY --link ./docker/config/caddy/Caddyfile.mercure /etc/caddy/Caddyfile.mercure
-COPY --link --chmod=755 ./docker/scripts/entrypoint /usr/local/bin/entrypoint
-COPY --link --chmod=755 ./docker/scripts/startup /usr/local/bin/startup
 COPY --link --chmod=755 ./docker/scripts/slink /usr/local/bin/slink
+COPY --link --chmod=755 ./docker/scripts/init-secrets /usr/local/bin/init-secrets
+COPY --link --chmod=755 ./docker/scripts/log-filter /usr/local/bin/log-filter
+COPY --link --chmod=755 ./docker/scripts/delegate /usr/local/bin/delegate
+COPY --link --chmod=755 ./docker/scripts/entrypoint /usr/local/bin/entrypoint
 
 WORKDIR /services
+
+ARG USER_ID=1000
+ARG GROUP_ID=1000
 
 ENV API_URL=http://localhost:8080 \
     API_PREFIX=/api \
@@ -117,9 +122,19 @@ ENV API_URL=http://localhost:8080 \
     GOMEMLIMIT=${MEMORY_LIMIT}MiB \
     GOMAXPROCS=8 \
     # VIPS settings
-    VIPS_CONCURRENCY=4 
+    VIPS_CONCURRENCY=4 \
+    S6_LOG_PIPE=/tmp/logpipe \
+    # Slink User
+    USER_ID=${USER_ID} \
+    GROUP_ID=${GROUP_ID}
 
-CMD ["/usr/local/bin/entrypoint"]
+RUN addgroup -g ${GROUP_ID} slink && \
+    adduser -D -u ${USER_ID} -G slink slink && \
+    addgroup www-data slink
+
+VOLUME [ "/data" ]
+
+ENTRYPOINT ["/usr/local/bin/entrypoint"]
 
 ### Test image ###
 FROM php:${PHP_VERSION}-alpine AS test
@@ -160,16 +175,16 @@ xdebug.start_with_request=yes
 EOF
 
 COPY --link --from=ghcr.io/symfony-cli/symfony-cli:latest /usr/local/bin/symfony /usr/local/bin/symfony
-COPY --link docker/config/runtime/develop.conf /etc/supervisor/conf.d/develop.conf
+COPY --link --chmod=755 ./docker/config/s6-overlay/s6-rc.d/dev/ /etc/s6-overlay/s6-rc.d/
 COPY --link --from=node /usr/local/bin /usr/local/bin
 COPY --link --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
 COPY --link --from=node /opt /opt
 COPY services/api/.env.example ./api/.env
 
-ENV API_ENABLED=true \
-    APP_ENV=dev \
+ENV APP_ENV=dev \
     NODE_ENV=development \
-    PHP_IDE_CONFIG="serverName=localhost"
+    PHP_IDE_CONFIG="serverName=localhost" \
+    MERCURE_HUB_URL=http://localhost:3333/.well-known/mercure
 
 EXPOSE 5173 8080
 
@@ -178,26 +193,20 @@ FROM base AS prod
 
 ARG UPLOAD_MAX_FILESIZE_IN_BYTES=52428800
 
-COPY --link docker/config/runtime/production.conf /etc/supervisor/conf.d/production.conf
+COPY --link --chmod=755 ./docker/config/s6-overlay/s6-rc.d/prod/ /etc/s6-overlay/s6-rc.d/
 COPY --link --from=node /usr/local/bin/node /usr/local/bin/node
 
-ARG USER_ID=1000
-ARG GROUP_ID=1000
-
-ENV USER_ID=${USER_ID} \
-    GROUP_ID=${GROUP_ID} \
-    API_ENABLED=false \
-    APP_ENV=prod \
+ENV APP_ENV=prod \
     NODE_ENV=production \
-    BODY_SIZE_LIMIT=${UPLOAD_MAX_FILESIZE_IN_BYTES}
+    BODY_SIZE_LIMIT=${UPLOAD_MAX_FILESIZE_IN_BYTES} \
+    MERCURE_HUB_URL=http://localhost:8080/.well-known/mercure
 
-RUN addgroup -g ${GROUP_ID} slink && \
-    adduser -D -u ${USER_ID} -G slink slink && \
-    addgroup www-data slink && \
-    mkdir -p /data/redis /data/caddy /data/keys && \
+RUN mkdir -p /data/redis /data/caddy /data/keys /app/slink/images /app/var && \
     chown -R slink:slink /services /app /data && \
-    chown -R www-data:www-data /data/caddy && \
-    chown -R redis:redis /data/redis && \
+    chown slink:slink /run && \
+    chown -R www-data:slink /data/caddy && chmod 770 /data/caddy && \
+    chown -R redis:slink /data/redis && chmod 770 /data/redis && \
+    chmod -R g+w /app && \
     chmod g+s /app /services /data && \
     chmod 750 /data/keys
 

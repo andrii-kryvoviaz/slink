@@ -1,0 +1,2 @@
+#!/command/with-contenv sh
+exec delegate www-data frankenphp run --config /etc/caddy/Caddyfile
