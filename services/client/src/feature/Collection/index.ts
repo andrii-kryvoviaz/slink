@@ -9,6 +9,7 @@ export { default as CollectionPicker } from './CollectionPicker/CollectionPicker
 export { default as CollectionDataTable } from './CollectionViews/CollectionDataTable/CollectionDataTable.svelte';
 export { default as CollectionActionsCell } from './CollectionViews/CollectionDataTable/cells/CollectionActionsCell.svelte';
 export { default as CollectionNameCell } from './CollectionViews/CollectionDataTable/cells/CollectionNameCell.svelte';
+export * from './CollectionViews/CollectionDataTable/columns';
 export { default as CollectionGridView } from './CollectionViews/CollectionGridView.svelte';
 export { default as CreateCollectionDialog } from './CreateCollectionDialog.svelte';
 export { default as CreateCollectionForm } from './CreateCollectionForm.svelte';
