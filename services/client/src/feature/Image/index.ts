@@ -35,6 +35,7 @@ export { default as HistorySelectCell } from './History/HistoryDataTable/cells/H
 export { default as HistorySelectHeader } from './History/HistoryDataTable/cells/HistorySelectHeader.svelte';
 export { default as HistoryThumbnailCell } from './History/HistoryDataTable/cells/HistoryThumbnailCell.svelte';
 export { default as TagsCollectionsCell } from './History/HistoryDataTable/cells/TagsCollectionsCell.svelte';
+export * from './History/HistoryDataTable/columns';
 export { default as HistoryGridView } from './History/HistoryGridView.svelte';
 export { default as HistoryListView } from './History/HistoryListView.svelte';
 export * from './History/HistoryView.theme';
