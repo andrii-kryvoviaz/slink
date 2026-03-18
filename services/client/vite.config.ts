@@ -3,6 +3,7 @@ import tailwindcss from '@tailwindcss/vite';
 import { SvelteKitPWA } from '@vite-pwa/sveltekit';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
 
 import iconifyExport from './plugins/vite-iconify-export';
@@ -19,6 +20,16 @@ const getPackageVersion = (): string => {
 };
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      'crawler-user-agents': fileURLToPath(
+        new URL(
+          './node_modules/crawler-user-agents/crawler-user-agents.json',
+          import.meta.url,
+        ),
+      ),
+    },
+  },
   plugins: [
     svelteImports({
       dirs: ['src/api', 'src/feature'],
