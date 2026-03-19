@@ -6,11 +6,15 @@ on:
   push:
     paths:
       - "services/**"
+      - "docker/**"
+      - "docker-bake.hcl"
 
   pull_request:
     branches: [main, develop]
     paths:
       - "services/**"
+      - "docker/**"
+      - "docker-bake.hcl"
 
 permissions:
   contents: read

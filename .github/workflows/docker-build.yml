@@ -59,26 +59,24 @@ jobs:
 
       - name: Build and push by digest
         id: build
-        uses: docker/build-push-action@v6
+        uses: docker/bake-action@v6
         with:
-          context: .
-          file: docker/Dockerfile
-          target: prod
-          platforms: ${{ matrix.platform }}
+          source: .
+          targets: ${{ matrix.scope }}
           sbom: true
           provenance: mode=max
-          labels: |
-            org.opencontainers.image.title=${{ vars.APP_NAME }}
-            org.opencontainers.image.version=${{ inputs.tag }}
-            org.opencontainers.image.revision=${{ inputs.ref || github.sha }}
-          outputs: type=image,name=${{ env.image }},push-by-digest=true,name-canonical=true,push=true
-          cache-from: type=gha,scope=${{ matrix.scope }}
-          cache-to: type=gha,scope=${{ matrix.scope }},mode=max
+          set: |
+            *.cache-from=type=gha,scope=${{ matrix.scope }}
+            *.cache-to=type=gha,scope=${{ matrix.scope }},mode=max
+            *.output=type=image,name=${{ env.image }},push-by-digest=true,name-canonical=true,push=true
+            *.labels.org.opencontainers.image.title=${{ vars.APP_NAME }}
+            *.labels.org.opencontainers.image.version=${{ inputs.tag }}
+            *.labels.org.opencontainers.image.revision=${{ inputs.ref || github.sha }}
 
       - name: Export digest
         run: |
           mkdir -p ${{ runner.temp }}/digests
-          digest="${{ steps.build.outputs.digest }}"
+          digest=$(echo '${{ steps.build.outputs.metadata }}' | jq -r '.["${{ matrix.scope }}"]["containerimage.digest"]')
           touch "${{ runner.temp }}/digests/${digest#sha256:}"
 
       - name: Upload digest

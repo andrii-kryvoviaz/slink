@@ -7,6 +7,7 @@ on:
     paths:
       - "services/**"
       - "docker/**"
+      - "docker-bake.hcl"
 
 permissions:
   contents: read

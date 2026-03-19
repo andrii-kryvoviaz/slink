@@ -1,6 +1,6 @@
 #!/bin/sh
 
-mkfifo "$S6_LOG_PIPE"
+[ -p "$S6_LOG_PIPE" ] || mkfifo "$S6_LOG_PIPE"
 
 awk '
   /s6-rc: info: service .* starting$/ { next }

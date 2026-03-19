@@ -1,0 +1,83 @@
+# check=skip=InvalidDefaultArgInFrom
+ARG ALPINE_VERSION
+ARG COMPOSER_VERSION
+
+FROM node AS deps-client-prod
+WORKDIR /client
+COPY services/client/package.json services/client/yarn.lock ./
+RUN yarn install --frozen-lockfile --non-interactive --production && \
+    yarn cache clean && \
+    find node_modules -name "*.md" -o -name "*.ts" -o -name "*.map" | xargs rm -f 2>/dev/null || true
+
+FROM node AS build-client
+WORKDIR /client
+COPY services/client/package.json services/client/yarn.lock ./
+RUN yarn install --frozen-lockfile --non-interactive
+COPY services/client/plugins ./plugins
+COPY services/client/src ./src
+COPY services/client/static ./static
+COPY services/client/svelte.config.js services/client/tsconfig.json services/client/vite.config.ts ./
+RUN yarn svelte-kit sync && \
+    NODE_OPTIONS="--max-old-space-size=2048 --expose-gc" yarn build
+
+FROM dhi.io/alpine-base:${ALPINE_VERSION}-dev AS source
+WORKDIR /source
+COPY --parents \
+    services/api/bin \
+    services/api/config \
+    services/api/public \
+    services/api/shared \
+    services/api/src \
+    services/api/composer.json \
+    ./
+
+FROM composer:${COMPOSER_VERSION} AS vendor
+WORKDIR /dependencies
+COPY services/api/composer.json services/api/composer.lock ./
+RUN composer install \
+    --ignore-platform-reqs \
+    --no-dev \
+    --no-interaction \
+    --prefer-dist \
+    --optimize-autoloader \
+    --no-scripts && \
+    composer clear-cache
+
+FROM common AS prod
+
+RUN rm -rf /sbin/apk /etc/apk /lib/apk /usr/share/apk /var/cache/apk
+
+ARG UPLOAD_MAX_FILESIZE_IN_BYTES
+
+COPY --link --from=frankenphp /usr/local/bin/frankenphp /usr/local/bin/php /usr/local/bin/
+COPY --link --from=frankenphp /usr/local/lib/lib*.so* /usr/local/lib/
+COPY --link --chmod=755 ./docker/config/s6-overlay/s6-rc.d/prod/ /etc/s6-overlay/s6-rc.d/
+COPY --link --from=node /usr/local/bin/node /usr/local/bin/node
+
+ENV APP_ENV=prod \
+    NODE_ENV=production \
+    MERCURE_HUB_URL=http://localhost:8080/.well-known/mercure
+
+RUN mkdir -p /data/redis /data/caddy /data/keys /app/slink/images /app/var && \
+    chown -R slink:slink /services /app /data && \
+    chown slink:slink /run && \
+    chown -R www-data:slink /data/caddy && chmod 770 /data/caddy && \
+    chown -R redis:slink /data/redis && chmod 770 /data/redis && \
+    chmod -R g+w /app && \
+    chmod g+s /app /services /data && \
+    chmod 750 /data/keys
+
+COPY --from=vendor --chown=slink:slink /dependencies/vendor ./api/vendor
+COPY --from=source --chown=slink:slink /source/services/api ./api
+COPY --from=build-client --chown=slink:slink /client/build ./client/svelte-kit
+COPY --from=build-client --chown=slink:slink /client/package.json ./client/svelte-kit/package.json
+COPY --from=deps-client-prod --chown=slink:slink /client/node_modules ./client/svelte-kit/node_modules
+COPY --chown=slink:slink services/api/.env.example ./api/.env
+
+RUN slink cache:warm --no-optional-warmers --quiet && \
+    slink cache:clear --quiet
+
+EXPOSE 3000
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://127.0.0.1:8080/api/health || exit 1

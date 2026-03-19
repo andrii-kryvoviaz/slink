@@ -2,6 +2,7 @@
 	admin off
 	auto_https off
 	persist_config off
+	storage file_system /data/caddy
 	log {
 		level ERROR
 	}
@@ -10,6 +11,9 @@
 :3333 {
 	route {
 		mercure {
+			transport bolt {
+				path /data/caddy/mercure.db
+			}
 			publisher_jwt {env.MERCURE_JWT_SECRET}
 			subscriber_jwt {env.MERCURE_JWT_SECRET}
 			anonymous {

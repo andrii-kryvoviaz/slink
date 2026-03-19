@@ -1,9 +1,6 @@
 services:
   slink:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile
-      target: dev
+    image: slink:dev
     environment:
       - ORIGIN=http://localhost:5173
       - OAUTH_VERIFY_SSL=false

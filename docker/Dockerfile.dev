@@ -1,0 +1,16 @@
+FROM common AS dev
+
+COPY --link --from=frankenphp /usr/local/bin/frankenphp /usr/local/bin/php /usr/local/bin/
+COPY --link --from=frankenphp /usr/local/lib/ /usr/local/lib/
+COPY --link --from=ghcr.io/symfony-cli/symfony-cli:latest /usr/local/bin/symfony /usr/local/bin/symfony
+COPY --link --chmod=755 ./docker/config/s6-overlay/s6-rc.d/dev/ /etc/s6-overlay/s6-rc.d/
+COPY --link --from=node /usr/local/bin /usr/local/bin
+COPY --link --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
+COPY --link --from=node /opt /opt
+COPY services/api/.env.example ./api/.env
+
+ENV APP_ENV=dev \
+    NODE_ENV=development \
+    MERCURE_HUB_URL=http://localhost:3333/.well-known/mercure
+
+EXPOSE 5173 8080
