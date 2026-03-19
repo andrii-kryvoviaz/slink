@@ -82,7 +82,7 @@ EOF
 COPY --chmod=755 ./docker/config/s6-overlay/scripts/bootstrap /etc/s6-overlay/scripts/bootstrap
 COPY ./docker/config/s6-overlay/s6-rc.d/shared/ /etc/s6-overlay/s6-rc.d/
 COPY ./docker/config/caddy/Caddyfile ./docker/config/caddy/Caddyfile.mercure /etc/caddy/
-COPY --chmod=755 ./docker/scripts/slink ./docker/scripts/init-secrets ./docker/scripts/log-filter ./docker/scripts/delegate ./docker/scripts/entrypoint /usr/local/bin/
+COPY --chmod=755 ./docker/scripts/slink ./docker/scripts/init-secrets ./docker/scripts/delegate ./docker/scripts/entrypoint /usr/local/bin/
 
 WORKDIR /services
 
@@ -91,14 +91,12 @@ ARG USER_ID
 ARG GROUP_ID
 
 ENV API_URL=http://localhost:8080 \
-    API_PREFIX=/api \
-    PROXY_PREFIXES="/api;/image" \
     ORIGIN=http://localhost:3000 \
     TZ=UTC \
     GOMEMLIMIT=${MEMORY_LIMIT}MiB \
     GOMAXPROCS=8 \
     VIPS_CONCURRENCY=4 \
-    S6_LOG_PIPE=/tmp/logpipe \
+    S6_VERBOSITY=1 \
     USER_ID=${USER_ID} \
     GROUP_ID=${GROUP_ID}
 

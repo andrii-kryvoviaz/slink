@@ -14,6 +14,4 @@ if [ -f /data/keys/app_secret ]; then
   export APP_SECRET=$(cat /data/keys/app_secret)
 fi
 
-log-filter
-
-exec /init "$@" > "$S6_LOG_PIPE" 2>&1
+exec /init "$@"
