@@ -1,5 +1,9 @@
 #!/bin/sh
 
+if [ "$(id -u)" = "0" ]; then
+  chown -R slink:slink /app /data
+fi
+
 delegate slink /usr/local/bin/init-secrets
 
 if [ -f /data/keys/passphrase ]; then

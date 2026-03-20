@@ -50,7 +50,7 @@ RUN rm -rf /sbin/apk /etc/apk /lib/apk /usr/share/apk /var/cache/apk
 ARG UPLOAD_MAX_FILESIZE_IN_BYTES
 
 COPY --link --from=frankenphp /usr/local/bin/frankenphp /usr/local/bin/php /usr/local/bin/
-COPY --link --from=frankenphp /usr/local/lib/lib*.so* /usr/local/lib/
+COPY --link --from=frankenphp /usr/local/lib/ /usr/local/lib/
 COPY --link --chmod=755 ./docker/config/s6-overlay/s6-rc.d/prod/ /etc/s6-overlay/s6-rc.d/
 COPY --link --from=node /usr/local/bin/node /usr/local/bin/node
 
@@ -58,13 +58,11 @@ ENV APP_ENV=prod \
     NODE_ENV=production \
     MERCURE_HUB_URL=http://localhost:8080/.well-known/mercure
 
-RUN mkdir -p /data/redis /data/caddy /data/keys /app/slink/images /app/var && \
+RUN mkdir -p /data/redis /data/caddy /data/keys /app/slink/images /app/var/data && \
     chown -R slink:slink /services /app /data && \
     chown slink:slink /run && \
-    chown -R www-data:slink /data/caddy && chmod 770 /data/caddy && \
-    chown -R redis:slink /data/redis && chmod 770 /data/redis && \
-    chmod -R g+w /app && \
-    chmod g+s /app /services /data && \
+    chmod -R 770 /app /data && \
+    chmod -R g+s /app /services /data && \
     chmod 750 /data/keys
 
 COPY --from=vendor --chown=slink:slink /dependencies/vendor ./api/vendor
