@@ -1,0 +1,2 @@
+#!/command/with-contenv sh
+exec delegate redis redis-server --dir /data/redis --save 120 1 --loglevel warning --daemonize no

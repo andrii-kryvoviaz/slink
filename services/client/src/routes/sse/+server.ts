@@ -39,7 +39,7 @@ async function getSubscriberJwt(secret: string): Promise<string> {
 
 export const GET: RequestHandler = async ({ url }) => {
   const mercureUrl =
-    env.MERCURE_URL || 'http://localhost:3333/.well-known/mercure';
+    env.MERCURE_HUB_URL || 'http://localhost:3333/.well-known/mercure';
   const mercureSecret = env.MERCURE_JWT_SECRET;
 
   if (!mercureSecret) {

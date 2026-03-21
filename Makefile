@@ -1,8 +1,10 @@
 run:
-	docker compose -p slink -f docker/docker-compose.yaml -f docker/docker-compose.prod.yaml up -d --build
+	docker buildx bake -f docker-bake.hcl prod --load
+	docker compose -p slink -f docker/docker-compose.yaml -f docker/docker-compose.prod.yaml up -d
 
 run-dev:
-	docker compose -p slink -f docker/docker-compose.yaml -f docker/docker-compose.dev.yaml up -d --build;
+	docker buildx bake -f docker-bake.hcl dev --load
+	docker compose -p slink -f docker/docker-compose.yaml -f docker/docker-compose.dev.yaml up -d
 	docker attach slink
 
 purge:

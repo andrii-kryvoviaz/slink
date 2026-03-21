@@ -1,0 +1,3 @@
+#!/command/with-contenv sh
+export FORCE_COLOR=true
+exec yarn --cwd /services/client run dev:with-deps --host

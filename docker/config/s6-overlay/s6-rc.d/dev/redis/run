@@ -1,0 +1,2 @@
+#!/command/with-contenv sh
+exec s6-setuidgid redis redis-server --protected-mode no --dir /app/var/data --daemonize no

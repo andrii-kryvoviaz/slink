@@ -1,0 +1,20 @@
+ARG PHP_VERSION
+
+FROM php:${PHP_VERSION}-alpine AS test
+
+ARG MEMORY_LIMIT
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+WORKDIR /services/api
+
+RUN apk add --no-cache git unzip && \
+    echo "memory_limit=${MEMORY_LIMIT}M" > /usr/local/etc/php/conf.d/memory-limit.ini
+
+COPY services/api/composer.json services/api/composer.lock ./
+RUN composer install --ignore-platform-reqs --no-interaction --no-scripts
+
+COPY --chown=www-data:www-data ./services/api .
+RUN mv .env.example .env
+
+ENV APP_ENV=test

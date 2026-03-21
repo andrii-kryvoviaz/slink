@@ -1,0 +1,8 @@
+#!/bin/sh
+TARGET_USER="$1"
+shift
+if [ "$(id -u)" = "0" ] && id "$TARGET_USER" >/dev/null 2>&1; then
+  umask 0007
+  exec s6-setuidgid "$TARGET_USER" "$@"
+fi
+exec "$@"

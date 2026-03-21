@@ -1,0 +1,2 @@
+#!/command/with-contenv sh
+exec symfony server:start --port=8080 --dir=/services/api --no-tls --allow-all-ip

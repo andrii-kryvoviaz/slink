@@ -1,0 +1,104 @@
+# check=skip=InvalidDefaultArgInFrom
+ARG NODE_VERSION
+ARG PHP_VERSION
+ARG ALPINE_VERSION
+ARG MEMORY_LIMIT
+ARG UPLOAD_MAX_FILESIZE_IN_BYTES
+ARG USER_ID
+ARG GROUP_ID
+
+FROM node:${NODE_VERSION}-alpine AS node
+
+FROM dunglas/frankenphp:php${PHP_VERSION}-alpine AS frankenphp-upstream
+
+FROM frankenphp-upstream AS frankenphp
+RUN rm -rf /usr/src/php* \
+        /usr/local/include \
+        /usr/local/share/doc \
+        /usr/local/share/man \
+        /usr/local/lib/php/build \
+        /usr/local/bin/phpdbg \
+        /usr/local/bin/php-cgi \
+        /tmp/* /var/cache/apk/*
+
+FROM frankenphp-upstream AS php-extensions
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+RUN install-php-extensions \
+        curl intl mbstring exif ffi redis smbclient vips && \
+    rm -rf /tmp/* /var/cache/apk/*
+
+# ToDo: migrate to dhi.io/alpine-base:${ALPINE_VERSION} (requires manual dependencies installation)    
+FROM dhi.io/alpine-base:${ALPINE_VERSION}-dev AS common
+
+ARG USER_ID
+ARG GROUP_ID
+
+RUN --mount=type=cache,target=/var/cache/apk \
+    apk add \
+        s6-overlay \
+        redis \
+        libmcrypt \
+        libcurl \
+        icu-libs \
+        libsmbclient \
+        imagemagick \
+        vips \
+        libheif \
+        tzdata \
+        libffi \
+        libexif \
+        openssl \
+        readline \
+        gnu-libiconv-libs \
+        sqlite-libs \
+        oniguruma \
+        argon2-libs \
+        libsodium
+
+RUN addgroup -g 33 www-data && \
+    adduser -D -u 33 -G www-data -H -s /sbin/nologin www-data && \
+    addgroup -g ${GROUP_ID} slink && \
+    adduser -D -u ${USER_ID} -G slink slink && \
+    addgroup www-data slink && \
+    addgroup redis slink
+
+USER root
+
+COPY --from=php-extensions /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
+COPY --from=php-extensions /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
+
+ARG MEMORY_LIMIT
+ARG UPLOAD_MAX_FILESIZE_IN_BYTES
+RUN <<EOF
+echo "ffi.enable=1" > /usr/local/etc/php/conf.d/zz-ffi-enable.ini
+echo "memory_limit=${MEMORY_LIMIT}M" > /usr/local/etc/php/conf.d/memory-limit.ini
+cat > /usr/local/etc/php/conf.d/uploads.ini <<UPLOADS
+upload_max_filesize = $((UPLOAD_MAX_FILESIZE_IN_BYTES / 1024 / 1024))M
+post_max_size = $((UPLOAD_MAX_FILESIZE_IN_BYTES / 1024 / 1024))M
+UPLOADS
+echo 'date.timezone = ${TZ}' > /usr/local/etc/php/conf.d/timezone.ini
+EOF
+
+COPY --chmod=755 ./docker/config/s6-overlay/scripts/bootstrap /etc/s6-overlay/scripts/bootstrap
+COPY ./docker/config/s6-overlay/s6-rc.d/shared/ /etc/s6-overlay/s6-rc.d/
+COPY ./docker/config/caddy/Caddyfile ./docker/config/caddy/Caddyfile.mercure /etc/caddy/
+COPY --chmod=755 ./docker/scripts/slink ./docker/scripts/init-secrets ./docker/scripts/delegate ./docker/scripts/entrypoint /usr/local/bin/
+
+WORKDIR /services
+
+ARG MEMORY_LIMIT
+ARG USER_ID
+ARG GROUP_ID
+
+ENV API_URL=http://localhost:8080 \
+    ORIGIN=http://localhost:3000 \
+    TZ=UTC \
+    GOMEMLIMIT=${MEMORY_LIMIT}MiB \
+    GOMAXPROCS=8 \
+    VIPS_CONCURRENCY=4 \
+    S6_VERBOSITY=1 \
+    USER_ID=${USER_ID} \
+    GROUP_ID=${GROUP_ID}
+
+VOLUME [ "/data" ]
+ENTRYPOINT ["/usr/local/bin/entrypoint"]

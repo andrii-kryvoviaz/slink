@@ -25,9 +25,9 @@ const handleWellKnownRequests: Handle = async ({ event, resolve }) => {
 };
 
 const injectApiHandling: Handle = ApiProxy({
-  urlPrefix: env.API_PREFIX || '/api',
+  urlPrefix: '/api',
   baseUrl: env.API_URL || 'http://localhost:8080',
-  registeredPaths: env.PROXY_PREFIXES?.split(';') || [],
+  registeredPaths: ['/api', '/image'],
 });
 
 const filterResponseHeaders: Handle = async ({ event, resolve }) => {
