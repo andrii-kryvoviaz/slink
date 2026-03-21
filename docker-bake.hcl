@@ -77,9 +77,11 @@ target "test" {
 target "prod-amd64" {
   inherits  = ["prod"]
   platforms = ["linux/amd64"]
+  tags      = []
 }
 
 target "prod-arm64" {
   inherits  = ["prod"]
   platforms = ["linux/arm64"]
+  tags      = []
 }
