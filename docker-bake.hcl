@@ -51,6 +51,10 @@ target "prod" {
   dockerfile = "docker/Dockerfile.prod"
   target     = "prod"
   tags       = ["anirdev/slink:${TAG}"]
+  attest     = [
+    "type=provenance,mode=max",
+    "type=sbom"
+  ]
   args = {
     ALPINE_VERSION               = ALPINE_VERSION
     COMPOSER_VERSION             = COMPOSER_VERSION
