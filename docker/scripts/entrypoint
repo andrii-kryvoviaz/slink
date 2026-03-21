@@ -1,7 +1,9 @@
 #!/bin/sh
 
 if [ "$(id -u)" = "0" ]; then
-  chown -R slink:slink /app /data
+  chown -R slink:slink /app
+  chown -R www-data:slink /data/caddy
+  chown -R redis:slink /data/redis
 fi
 
 delegate slink /usr/local/bin/init-secrets
