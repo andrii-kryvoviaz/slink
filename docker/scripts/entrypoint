@@ -6,16 +6,16 @@ fi
 
 delegate slink /usr/local/bin/init-secrets
 
-if [ -f /data/keys/passphrase ]; then
-  export JWT_PASSPHRASE=$(cat /data/keys/passphrase)
+if [ -f /app/var/data/keys/passphrase ]; then
+  export JWT_PASSPHRASE=$(cat /app/var/data/keys/passphrase)
 fi
 
-if [ -f /data/keys/mercure_secret ]; then
-  export MERCURE_JWT_SECRET=$(cat /data/keys/mercure_secret)
+if [ -f /app/var/data/keys/mercure_secret ]; then
+  export MERCURE_JWT_SECRET=$(cat /app/var/data/keys/mercure_secret)
 fi
 
-if [ -f /data/keys/app_secret ]; then
-  export APP_SECRET=$(cat /data/keys/app_secret)
+if [ -f /app/var/data/keys/app_secret ]; then
+  export APP_SECRET=$(cat /app/var/data/keys/app_secret)
 fi
 
 exec /init "$@"

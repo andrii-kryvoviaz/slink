@@ -58,12 +58,12 @@ ENV APP_ENV=prod \
     NODE_ENV=production \
     MERCURE_HUB_URL=http://localhost:8080/.well-known/mercure
 
-RUN mkdir -p /data/redis /data/caddy /data/keys /app/slink/images /app/var/data && \
+RUN mkdir -p /data/redis /data/caddy /app/var/data/keys /app/slink/images && \
     chown -R slink:slink /services /app /data && \
     chown slink:slink /run && \
     chmod -R 770 /app /data && \
     chmod -R g+s /app /services /data && \
-    chmod 750 /data/keys
+    chmod 750 /app/var/data/keys
 
 COPY --from=vendor --chown=slink:slink /dependencies/vendor ./api/vendor
 COPY --from=source --chown=slink:slink /source/services/api ./api

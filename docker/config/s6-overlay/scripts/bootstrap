@@ -8,10 +8,6 @@ if [ -f /app/var/data/dump.rdb ]; then
   rm -f /app/var/data/dump.rdb
 fi
 
-if [ -f /app/var/data/keys ]; then
-  rm -rf /app/var/data/keys
-fi
-
 slink slink:database:init --no-interaction --connection=event_store
 slink slink:database:init --no-interaction --connection=read_model
 
