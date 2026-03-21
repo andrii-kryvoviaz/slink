@@ -56,6 +56,7 @@ COPY --link --from=node /usr/local/bin/node /usr/local/bin/node
 
 ENV APP_ENV=prod \
     NODE_ENV=production \
+    BODY_SIZE_LIMIT=Infinity \
     MERCURE_HUB_URL=http://localhost:8080/.well-known/mercure
 
 RUN mkdir -p /data/redis /data/caddy /app/var/data/keys /app/slink/images && \
