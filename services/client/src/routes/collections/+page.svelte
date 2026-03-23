@@ -145,7 +145,7 @@
             {#if !collectionsFeed.search}
               <Button
                 variant="soft-violet"
-                size="lg"
+                size="md"
                 rounded="full"
                 onclick={handleCreateCollection}
               >

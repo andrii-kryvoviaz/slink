@@ -118,11 +118,11 @@
             {#snippet action()}
               <Button
                 variant="soft-blue"
-                size="lg"
+                size="md"
                 rounded="full"
                 href="/upload"
               >
-                <Icon icon="lucide:plus" class="h-4 w-4" />
+                <Icon icon="ph:upload-simple" class="h-4 w-4" />
                 Upload First Image
               </Button>
             {/snippet}
@@ -138,11 +138,11 @@
             {#snippet action()}
               <Button
                 variant="soft-blue"
-                size="lg"
+                size="md"
                 rounded="full"
                 onclick={() => publicFeedState.resetSearch()}
               >
-                <Icon icon="lucide:plus" class="h-4 w-4" />
+                <Icon icon="lucide:x" class="h-4 w-4" />
                 Clear Search
               </Button>
             {/snippet}

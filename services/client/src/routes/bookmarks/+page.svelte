@@ -62,11 +62,11 @@
           {#snippet action()}
             <Button
               variant="soft-blue"
-              size="lg"
+              size="md"
               rounded="full"
               href="/explore"
             >
-              <Icon icon="lucide:plus" class="h-4 w-4" />
+              <Icon icon="lucide:search" class="h-4 w-4" />
               Explore Images
             </Button>
           {/snippet}

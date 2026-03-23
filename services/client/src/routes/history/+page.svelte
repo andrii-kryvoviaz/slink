@@ -317,11 +317,11 @@
               {#snippet action()}
                 <Button
                   variant="soft-violet"
-                  size="lg"
+                  size="md"
                   rounded="full"
                   href="/upload"
                 >
-                  <Icon icon="lucide:plus" class="h-4 w-4" />
+                  <Icon icon="ph:upload-simple" class="h-4 w-4" />
                   Upload Images
                 </Button>
               {/snippet}

@@ -121,7 +121,7 @@
             {#if !tagFeed.search}
               <Button
                 variant="soft-blue"
-                size="lg"
+                size="md"
                 rounded="full"
                 onclick={handleCreateTag}
               >
