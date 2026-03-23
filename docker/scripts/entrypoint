@@ -4,6 +4,11 @@ if [ "$(id -u)" = "0" ]; then
   chown -R slink:slink /app
   chown -R www-data:slink /data/caddy
   chown -R redis:slink /data/redis
+
+  chmod 770 /app/var/data
+  chmod -R g+rw /app/var/data/*.db 2>/dev/null || true
+  chmod 750 /app/var/data/keys
+  chmod 640 /app/var/data/keys/private.pem /app/var/data/keys/passphrase 2>/dev/null || true
 fi
 
 delegate slink /usr/local/bin/init-secrets
