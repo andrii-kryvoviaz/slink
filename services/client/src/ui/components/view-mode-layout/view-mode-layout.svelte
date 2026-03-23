@@ -137,7 +137,7 @@
     pageSize: activeTableResult?.pageSize,
   });
 
-  const processing = $derived(feed.showSkeleton || !feed.isDirty);
+  const processing = $derived(feed.showSkeleton);
   const isEmpty = $derived(feed.isEmpty);
 
   const modes = $derived<Partial<Record<ViewMode, Snippet<[ListingContext]>>>>({

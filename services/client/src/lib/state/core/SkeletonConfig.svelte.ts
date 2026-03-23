@@ -2,6 +2,7 @@ export interface SkeletonConfig {
   enabled: boolean;
   minDisplayTime: number;
   showDelay: number;
+  initiallyVisible: boolean;
 }
 
 export class SkeletonManager {
@@ -9,10 +10,11 @@ export class SkeletonManager {
     enabled: true,
     minDisplayTime: 400,
     showDelay: 100,
+    initiallyVisible: true,
   });
-  private _isVisible = $state(false);
+  private _isVisible = $state(true);
   private _activeLoads = 0;
-  private _visibleStartTime: number | null = null;
+  private _visibleStartTime: number | null = Date.now();
   private _showTimeoutId: ReturnType<typeof setTimeout> | null = null;
   private _hideTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
@@ -99,7 +101,13 @@ export class SkeletonManager {
     this._clearShowTimer();
     this._clearHideTimer();
     this._activeLoads = 0;
-    this._hideNow();
+
+    if (this._config.initiallyVisible) {
+      this._isVisible = true;
+      this._visibleStartTime = Date.now();
+    } else {
+      this._hideNow();
+    }
   }
 
   get isVisible(): boolean {
