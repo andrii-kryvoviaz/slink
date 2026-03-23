@@ -17,4 +17,6 @@
   };
 </script>
 
-<Checkbox {checked} onCheckedChange={handleChange} />
+<span role="presentation" onclick={(e) => e.stopPropagation()}>
+  <Checkbox {checked} onCheckedChange={handleChange} />
+</span>

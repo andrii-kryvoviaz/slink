@@ -1,5 +1,6 @@
 <script lang="ts">
   import { ImagePlaceholder } from '@slink/feature/Image';
+  import { Link } from '@slink/ui/components/link';
 
   import type { ImageListingItem } from '@slink/api/Response';
 
@@ -10,7 +11,7 @@
   let { item }: Props = $props();
 </script>
 
-<a
+<Link
   href="/info/{item.id}"
   class="block w-12 h-12 rounded-md overflow-hidden shrink-0"
 >
@@ -25,4 +26,4 @@
     rounded={false}
     class="h-full w-full"
   />
-</a>
+</Link>

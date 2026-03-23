@@ -16,13 +16,21 @@ interface HistoryItemActionsConfig {
 }
 
 export function useHistoryItemActions(config: HistoryItemActionsConfig) {
-  const handleItemClick = (e: MouseEvent, item: ImageListingItem) => {
+  const handleSelect = (e: MouseEvent, item: ImageListingItem) => {
+    e.preventDefault();
     const selectionState = config.getSelectionState();
-    if (selectionState?.isSelectionMode) {
-      e.preventDefault();
-      selectionState.toggle(item.id);
-      config.onSelectionChange?.(item.id);
-    }
+    if (!selectionState) return;
+
+    selectionState.select(item.id);
+    config.onSelectionChange?.(item.id);
+  };
+
+  const handleKeydown = (e: KeyboardEvent, item: ImageListingItem) => {
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    const selectionState = config.getSelectionState();
+    if (!selectionState) return;
+    selectionState.select(item.id);
   };
 
   const handleDelete = (id: string) => {
@@ -42,5 +50,5 @@ export function useHistoryItemActions(config: HistoryItemActionsConfig) {
     };
   };
 
-  return { handleItemClick, handleDelete, getItemState };
+  return { handleSelect, handleKeydown, handleDelete, getItemState };
 }

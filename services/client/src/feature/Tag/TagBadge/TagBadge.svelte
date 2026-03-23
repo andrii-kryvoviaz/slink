@@ -2,6 +2,7 @@
   import { TagDepthDots } from '@slink/feature/Tag';
   import Badge from '@slink/feature/Text/Badge/Badge.svelte';
   import type { BadgeProps } from '@slink/feature/Text/Badge/Badge.types';
+  import { Link } from '@slink/ui/components/link';
 
   import Icon from '@iconify/svelte';
 
@@ -57,53 +58,56 @@
   const fullPathLabel = $derived(
     isNested ? `${parentPath} / ${tagName}` : tag.name,
   );
+  const filterUrl = $derived(`/history?tagIds=${encodeURIComponent(tag.id)}`);
 </script>
 
-<Badge {variant} {size} {outline} class="shrink-0 {className}">
-  <div class="group flex items-center gap-1.5" title={fullPathLabel}>
-    <Icon icon="ph:tag" class="h-3 w-3" />
+<Link href={filterUrl} class="shrink-0">
+  <Badge {variant} {size} {outline} class={className}>
+    <div class="group flex items-center gap-1.5" title={fullPathLabel}>
+      <Icon icon="ph:tag" class="h-3 w-3" />
 
-    {#if isNested && showFullPath}
-      <div class="flex items-center gap-1">
-        <span class="opacity-60">{parentPath}</span>
-        <Icon icon="ph:caret-right" class="h-2.5 w-2.5" />
-        <span class="font-medium">{tagName}</span>
-      </div>
-    {:else if isNested && !showFullPath}
-      <div class="flex items-center gap-1">
-        <div class={tagBadgeCollapsedVariants({ disableHover })}>
-          <TagDepthDots {tag} {maxDotsToShow} {showCount} />
+      {#if isNested && showFullPath}
+        <div class="flex items-center gap-1">
+          <span class="opacity-60">{parentPath}</span>
+          <Icon icon="ph:caret-right" class="h-2.5 w-2.5" />
           <span class="font-medium">{tagName}</span>
         </div>
-
-        {#if !disableHover}
-          <div class="hidden items-center gap-1 group-hover:flex">
-            <span class="opacity-60">{parentPath}</span>
-            <Icon icon="ph:caret-right" class="h-2.5 w-2.5" />
+      {:else if isNested && !showFullPath}
+        <div class="flex items-center gap-1">
+          <div class={tagBadgeCollapsedVariants({ disableHover })}>
+            <TagDepthDots {tag} {maxDotsToShow} {showCount} />
             <span class="font-medium">{tagName}</span>
           </div>
-        {/if}
-      </div>
-    {:else}
-      <span class="font-medium">{tag.name}</span>
-    {/if}
 
-    {#if showCount && tag.imageCount > 0}
-      <span
-        class="min-w-5 px-1.5 py-0.5 rounded-md text-[10px] font-bold text-center bg-blue-500 text-white"
-      >
-        {tag.imageCount}
-      </span>
-    {/if}
+          {#if !disableHover}
+            <div class="hidden items-center gap-1 group-hover:flex">
+              <span class="opacity-60">{parentPath}</span>
+              <Icon icon="ph:caret-right" class="h-2.5 w-2.5" />
+              <span class="font-medium">{tagName}</span>
+            </div>
+          {/if}
+        </div>
+      {:else}
+        <span class="font-medium">{tag.name}</span>
+      {/if}
 
-    {#if onClose}
-      <button
-        onclick={onClose}
-        class={tagBadgeCloseButtonVariants({ variant })}
-        aria-label="Remove {tag.name} tag"
-      >
-        <Icon icon="ph:x" class="h-2.5 w-2.5" />
-      </button>
-    {/if}
-  </div>
-</Badge>
+      {#if showCount && tag.imageCount > 0}
+        <span
+          class="min-w-5 px-1.5 py-0.5 rounded-md text-[10px] font-bold text-center bg-blue-500 text-white"
+        >
+          {tag.imageCount}
+        </span>
+      {/if}
+
+      {#if onClose}
+        <button
+          onclick={onClose}
+          class={tagBadgeCloseButtonVariants({ variant })}
+          aria-label="Remove {tag.name} tag"
+        >
+          <Icon icon="ph:x" class="h-2.5 w-2.5" />
+        </button>
+      {/if}
+    </div>
+  </Badge>
+</Link>

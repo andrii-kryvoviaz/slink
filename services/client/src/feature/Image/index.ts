@@ -27,7 +27,6 @@ export * from './History/BatchActionsState.svelte';
 export * from './History/BatchContext.svelte';
 export * from './History/BatchPickerState.svelte';
 export { default as BulkDeleteConfirmation } from './History/BulkDeleteConfirmation.svelte';
-export { default as HistoryDataTable } from './History/HistoryDataTable/HistoryDataTable.svelte';
 export { default as HistoryDataTableSkeleton } from './History/HistoryDataTable/HistoryDataTableSkeleton.svelte';
 export { default as HistoryActionsCell } from './History/HistoryDataTable/cells/HistoryActionsCell.svelte';
 export { default as HistoryFileNameCell } from './History/HistoryDataTable/cells/HistoryFileNameCell.svelte';

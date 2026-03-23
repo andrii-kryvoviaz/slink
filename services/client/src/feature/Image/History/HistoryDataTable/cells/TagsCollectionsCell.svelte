@@ -11,7 +11,7 @@
   let { item }: Props = $props();
 </script>
 
-<div class="flex flex-col gap-1.5">
+<div class="flex flex-col gap-1">
   {#if item.tags && item.tags.length > 0}
     <ImageTagList
       imageId={item.id}

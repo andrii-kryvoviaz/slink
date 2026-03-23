@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { StopPropagation } from '@slink/feature/Action';
   import {
     ImageActionBar,
     createActionBarImage,
@@ -22,16 +23,18 @@
   let { item, onDelete, onCollectionChange, onTagChange }: Props = $props();
 </script>
 
-<div class="flex items-center justify-end">
-  <ImageActionBar
-    image={createActionBarImage(item)}
-    buttons={historyActionBarButtons}
-    on={{
-      imageDelete: onDelete,
-      collectionChange: (imageId, collections) =>
-        onCollectionChange(imageId, collections),
-      tagChange: (imageId, tags) => onTagChange?.(imageId, tags),
-    }}
-    compact
-  />
-</div>
+<StopPropagation>
+  <div class="flex items-center justify-end">
+    <ImageActionBar
+      image={createActionBarImage(item)}
+      buttons={historyActionBarButtons}
+      on={{
+        imageDelete: onDelete,
+        collectionChange: (imageId, collections) =>
+          onCollectionChange(imageId, collections),
+        tagChange: (imageId, tags) => onTagChange?.(imageId, tags),
+      }}
+      compact
+    />
+  </div>
+</StopPropagation>

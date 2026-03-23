@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { StopPropagation } from '@slink/feature/Action';
   import { ImageCollectionList } from '@slink/feature/Collection';
   import {
     ImageActionBar,
@@ -10,6 +11,7 @@
   import { Masonry } from '@slink/feature/Layout';
   import { ImageTagList } from '@slink/feature/Tag';
   import { OverlayCheckbox } from '@slink/ui/components/checkbox';
+  import { Link } from '@slink/ui/components/link';
 
   import { fade, fly } from 'svelte/transition';
 
@@ -17,10 +19,10 @@
 
   import {
     actionBarVisibilityVariants,
+    checkboxVariants,
     createActionBarImage,
     historyActionBarButtons,
     historyCardVariants,
-    linkVariants,
   } from './HistoryView.theme';
   import type { HistoryViewProps } from './HistoryView.types';
   import ImageMetadata from './ImageMetadata.svelte';
@@ -30,15 +32,14 @@
 
   const isSelectionMode = $derived(selectionState?.isSelectionMode ?? false);
 
-  const { handleItemClick, handleDelete, getItemState } = useHistoryItemActions(
-    {
+  const { handleSelect, handleKeydown, handleDelete, getItemState } =
+    useHistoryItemActions({
       getSelectionState: () => selectionState,
       onDelete: (id) => on?.delete(id),
       onCollectionChange: (imageId, collections) =>
         on?.collectionChange(imageId, collections),
       onSelectionChange: (id) => on?.selectionChange?.(id),
-    },
-  );
+    });
 </script>
 
 <Masonry
@@ -54,39 +55,32 @@
   getItemWeight={calculateHistoryCardWeight}
 >
   {#snippet itemTemplate(item)}
-    <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+    <!-- svelte-ignore a11y_no_noninteractive_element_to_interactive_role -->
     <article
       in:fly={{ y: 20, duration: 300, delay: Math.random() * 100 }}
       out:fade={{ duration: 200 }}
       class={cn(
         historyCardVariants({ selected: getItemState(item).isSelected }),
-        isSelectionMode && 'cursor-pointer',
+        'cursor-pointer',
       )}
-      onclick={(e) => isSelectionMode && handleItemClick(e, item)}
-      onkeydown={(e) => {
-        if (isSelectionMode && e.key === 'Enter') {
-          e.preventDefault();
-          selectionState?.toggle(item.id);
-        }
-      }}
-      role={isSelectionMode ? 'button' : undefined}
-      tabindex={isSelectionMode ? 0 : undefined}
+      onclick={(e) => handleSelect(e, item)}
+      onkeydown={(e) => handleKeydown(e, item)}
+      role="button"
+      tabindex={0}
     >
       <div class="relative">
-        {#if isSelectionMode}
-          <button
-            type="button"
-            onclick={(e) => handleItemClick(e, item)}
-            class="absolute top-2 left-2 z-20"
-            aria-label={getItemState(item).selectionAriaLabel}
-          >
-            <OverlayCheckbox selected={getItemState(item).isSelected} />
-          </button>
-        {/if}
-        <a
-          href={getItemState(item).itemHref || undefined}
-          class={linkVariants({ selectionMode: isSelectionMode })}
+        <button
+          type="button"
+          onclick={(e) => {
+            e.stopPropagation();
+            handleSelect(e, item);
+          }}
+          class={checkboxVariants({ selectionMode: isSelectionMode })}
+          aria-label={getItemState(item).selectionAriaLabel}
         >
+          <OverlayCheckbox selected={getItemState(item).isSelected} />
+        </button>
+        <div>
           <ImagePlaceholder
             uniqueId={item.id}
             src={`/image/${item.attributes.fileName}?width=400&height=400&crop=true`}
@@ -95,7 +89,7 @@
             showOpenInNewTab={false}
             rounded={false}
           />
-        </a>
+        </div>
 
         <div class="absolute bottom-2 left-2 flex items-center gap-1.5">
           <VisibilityBadge
@@ -106,59 +100,60 @@
           <ViewCountBadge count={item.attributes.views} variant="overlay" />
         </div>
 
-        <div
-          class={actionBarVisibilityVariants({
-            selectionMode: isSelectionMode ?? false,
-          })}
-        >
-          <ImageActionBar
-            image={createActionBarImage(item)}
-            buttons={historyActionBarButtons}
-            on={{
-              imageDelete: handleDelete,
-              collectionChange: (imageId, collections) =>
-                on?.collectionChange(imageId, collections),
-              tagChange: (imageId, tags) => on?.tagChange?.(imageId, tags),
-            }}
-            compact
-          />
-        </div>
+        <StopPropagation>
+          <div
+            class={actionBarVisibilityVariants({
+              selectionMode: isSelectionMode ?? false,
+            })}
+          >
+            <ImageActionBar
+              image={createActionBarImage(item)}
+              buttons={historyActionBarButtons}
+              on={{
+                imageDelete: handleDelete,
+                collectionChange: (imageId, collections) =>
+                  on?.collectionChange(imageId, collections),
+                tagChange: (imageId, tags) => on?.tagChange?.(imageId, tags),
+              }}
+              compact
+            />
+          </div>
+        </StopPropagation>
       </div>
 
       <div class="p-3">
         <div class="mb-2">
-          <a
+          <Link
             href={`/info/${item.id}`}
             class="text-sm font-medium text-gray-900 dark:text-gray-100 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors truncate block"
             title={item.attributes.fileName}
           >
             {item.attributes.fileName}
-          </a>
+          </Link>
         </div>
 
         <div class="mb-3">
           <ImageMetadata {item} gap="sm" />
         </div>
 
-        {#if item.tags && item.tags.length > 0}
-          <ImageTagList
-            imageId={item.id}
-            variant="neon"
-            showImageCount={false}
-            removable={false}
-            initialTags={item.tags}
-            maxVisible={3}
-          />
-        {/if}
-
-        {#if item.collections && item.collections.length > 0}
-          <div class="mb-2">
+        <div class="flex flex-col gap-1">
+          {#if item.tags && item.tags.length > 0}
+            <ImageTagList
+              imageId={item.id}
+              variant="neon"
+              showImageCount={false}
+              removable={false}
+              initialTags={item.tags}
+              maxVisible={3}
+            />
+          {/if}
+          {#if item.collections && item.collections.length > 0}
             <ImageCollectionList
               collections={item.collections}
               maxVisible={3}
             />
-          </div>
-        {/if}
+          {/if}
+        </div>
       </div>
     </article>
   {/snippet}

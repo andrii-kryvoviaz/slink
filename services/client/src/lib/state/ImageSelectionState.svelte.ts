@@ -27,6 +27,13 @@ export class ImageSelectionState {
     this._isSelectionMode = false;
   }
 
+  select(id: string): void {
+    if (!this._isSelectionMode) {
+      this._isSelectionMode = true;
+    }
+    this.toggle(id);
+  }
+
   toggle(id: string): void {
     const newSet = new Set(this._selectedIds);
     if (newSet.has(id)) {
@@ -35,6 +42,10 @@ export class ImageSelectionState {
       newSet.add(id);
     }
     this._selectedIds = newSet;
+
+    if (newSet.size === 0) {
+      this._isSelectionMode = false;
+    }
   }
 
   isSelected(id: string): boolean {

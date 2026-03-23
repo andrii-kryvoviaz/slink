@@ -8,6 +8,8 @@
   import type { Snippet } from 'svelte';
   import { tv } from 'tailwind-variants';
 
+  import { cn } from '@slink/utils/ui';
+
   const tableBodyVariants = tv({
     base: 'transition-opacity duration-200',
     variants: {
@@ -33,9 +35,15 @@
     table: TanstackTable<TData>;
     isLoading?: boolean;
     emptyState?: Snippet;
+    onRowClick?: (row: any) => void;
   }
 
-  let { table: dataTable, isLoading = false, emptyState }: Props = $props();
+  let {
+    table: dataTable,
+    isLoading = false,
+    emptyState,
+    onRowClick,
+  }: Props = $props();
 </script>
 
 <div
@@ -73,7 +81,11 @@
         {#if dataTable.getRowModel().rows.length > 0}
           {#each dataTable.getRowModel().rows as row (row.id)}
             <Table.Row
-              class="group/row border-slate-200/60 dark:border-slate-700/40 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-slate-50 dark:hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-slate-700/30 transition-colors duration-200"
+              class={cn(
+                'group/row border-slate-200/60 dark:border-slate-700/40 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-slate-50 dark:hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-slate-700/30 transition-colors duration-200',
+                onRowClick && 'cursor-pointer',
+              )}
+              onclick={onRowClick ? () => onRowClick(row.original) : undefined}
             >
               {#each row.getVisibleCells() as cell (cell.id)}
                 <Table.Cell

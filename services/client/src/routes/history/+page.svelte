@@ -32,6 +32,7 @@
   import { Button } from '@slink/ui/components/button';
   import { DataTable, DataTableToolbar } from '@slink/ui/components/data-table';
   import { ViewModeLayout } from '@slink/ui/components/view-mode-layout';
+  import { untrack } from 'svelte';
 
   import { page } from '$app/state';
   import Icon from '@iconify/svelte';
@@ -50,8 +51,27 @@
   const { settings } = page.data;
 
   const historyFeedState = useUploadHistoryFeed();
-  const tagFilterManager = createTagFilterManager(page.url);
+  const tagFilterManager = $derived(createTagFilterManager(page.url));
   const selectionState = createImageSelectionState();
+
+  $effect(() => {
+    const search = page.url.search;
+
+    untrack(() => {
+      const currentIds = historyFeedState.tagFilter.selectedTags
+        .map((t: TagType) => t.id)
+        .sort()
+        .join(',');
+      const urlTagParam = new URLSearchParams(search).get('tagIds');
+      const urlIds = urlTagParam
+        ? urlTagParam.split(',').filter(Boolean).sort().join(',')
+        : '';
+
+      if (currentIds === urlIds) return;
+
+      loadTagFiltersFromUrl();
+    });
+  });
 
   const batchActions = createBatchActionsState(
     selectionState,
@@ -126,14 +146,6 @@
     await historyFeedState.load();
   };
 
-  const handleEnterSelectionMode = () => {
-    selectionState.enterSelectionMode();
-  };
-
-  const handleExitSelectionMode = () => {
-    selectionState.exitSelectionMode();
-  };
-
   const handleSelectAll = () => {
     const allIds = historyFeedState.items.map((item) => item.id);
     selectionState.selectAll(allIds);
@@ -145,10 +157,6 @@
 
   const filterKey = $derived(
     `${historyFeedState.tagFilter.selectedTags.map((t) => t.id).join(',')}-${historyFeedState.tagFilter.requireAllTags}`,
-  );
-
-  const showSelectionTrigger = $derived(
-    !historyFeedState.isEmpty && settings.history.viewMode !== 'table',
   );
 </script>
 
@@ -174,35 +182,6 @@
         </div>
 
         <div class="flex items-center gap-3 shrink-0">
-          {#if showSelectionTrigger}
-            {#if selectionState.isSelectionMode}
-              <Button
-                variant="toggle"
-                size="xs"
-                rounded="lg"
-                class="w-22"
-                onclick={handleExitSelectionMode}
-              >
-                <Icon icon="lucide:x" class="w-3.5 h-3.5" />
-                <span>Cancel</span>
-              </Button>
-            {:else}
-              <Button
-                variant="toggle"
-                size="xs"
-                rounded="lg"
-                class="w-22"
-                onclick={handleEnterSelectionMode}
-              >
-                <Icon
-                  icon="lucide:square-dashed-mouse-pointer"
-                  class="w-3.5 h-3.5"
-                />
-                <span>Select</span>
-              </Button>
-            {/if}
-          {/if}
-
           <ViewModeToggle
             value={settings.history.viewMode}
             modes={['grid', 'list', 'table']}
@@ -295,7 +274,11 @@
           />
         {/snippet}
         {#snippet table({ table: historyTable, feed })}
-          <DataTable table={historyTable!} isLoading={feed.isLoading} />
+          <DataTable
+            table={historyTable!}
+            isLoading={feed.isLoading}
+            onRowClick={(item) => selectionState.select(item.id)}
+          />
         {/snippet}
         {#snippet empty()}
           {#if historyFeedState.hasActiveFilter}
@@ -356,7 +339,7 @@
     totalCount={historyFeedState.items.length}
     onSelectAll={handleSelectAll}
     onDeselectAll={handleDeselectAll}
-    onCancel={handleExitSelectionMode}
+    onCancel={() => selectionState.exitSelectionMode()}
   >
     {#snippet actions()}
       <VisibilityAction

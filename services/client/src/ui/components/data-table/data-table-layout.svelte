@@ -22,6 +22,8 @@
     onNextPage?: () => void;
     onPrevPage?: () => void;
 
+    onRowClick?: (row: any) => void;
+
     skeleton?: Snippet;
     empty?: Snippet;
     leading?: Snippet;
@@ -43,6 +45,8 @@
     pagination,
     onNextPage,
     onPrevPage,
+
+    onRowClick,
 
     skeleton,
     empty,
@@ -70,7 +74,7 @@
   {#if showSkeleton && skeleton}
     {@render skeleton()}
   {:else}
-    <DataTable table={dataTable} {isLoading}>
+    <DataTable table={dataTable} {isLoading} {onRowClick}>
       {#snippet emptyState()}
         {#if empty}{@render empty()}{/if}
       {/snippet}
