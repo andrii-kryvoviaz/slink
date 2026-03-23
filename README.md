@@ -35,6 +35,7 @@ Slink solves the problem of sharing images with friends, family, and colleagues 
 - **Bookmarking**: Bookmark public images for easy access later.
 - **Notifications**: Receive notifications for user interactions with your images.
 - **Authentication**: Users can sign up and log in to the platform.
+- **SSO/OIDC**: Single Sign-On with support for Google, Authentik, Keycloak, Authelia, Pocket ID, and custom OIDC providers.
 - **User Approval**: Require user approval before they can upload images.
 - **Guest Upload**: Allow unauthenticated users to upload images without creating accounts.
 - **API Key Management**: Generate and manage personal API keys for external integrations.
