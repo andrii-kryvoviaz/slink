@@ -51,6 +51,14 @@ target "prod" {
   dockerfile = "docker/Dockerfile.prod"
   target     = "prod"
   tags       = ["anirdev/slink:${TAG}"]
+  labels = {
+    "org.opencontainers.image.title"       = "Slink"
+    "org.opencontainers.image.description" = "Self-hosted image sharing platform"
+    "org.opencontainers.image.authors"     = "Andrii Klyvoviaz"
+    "org.opencontainers.image.url"         = "https://docs.slinkapp.io"
+    "org.opencontainers.image.source"      = "https://github.com/andrii-kryvoviaz/slink"
+    "org.opencontainers.image.licenses"    = "AGPL-3.0"
+  }
   attest     = [
     "type=provenance,mode=max",
     "type=sbom"
