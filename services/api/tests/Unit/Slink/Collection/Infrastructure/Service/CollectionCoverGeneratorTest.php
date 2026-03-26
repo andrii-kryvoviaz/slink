@@ -12,21 +12,25 @@ use Slink\Collection\Domain\Service\CollageBuilderInterface;
 use Slink\Collection\Infrastructure\Service\CollectionCoverGenerator;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
+use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageCacheInterface;
 use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
 
 final class CollectionCoverGeneratorTest extends TestCase {
   private StorageInterface $storage;
+  private StorageCacheInterface $cache;
   private ImageRepositoryInterface $imageRepository;
   private CollageBuilderInterface $collageBuilder;
   private CollectionCoverGenerator $generator;
 
   protected function setUp(): void {
     $this->storage = $this->createStub(StorageInterface::class);
+    $this->cache = $this->createStub(StorageCacheInterface::class);
     $this->imageRepository = $this->createStub(ImageRepositoryInterface::class);
     $this->collageBuilder = $this->createStub(CollageBuilderInterface::class);
 
     $this->generator = new CollectionCoverGenerator(
       $this->storage,
+      $this->cache,
       $this->imageRepository,
       $this->collageBuilder,
     );
@@ -62,7 +66,7 @@ final class CollectionCoverGeneratorTest extends TestCase {
     $imageIds = ['image-1'];
     $cachedContent = 'cached-binary-content';
 
-    $this->storage
+    $this->cache
       ->method('readFromCache')
       ->with('collection-id.avif')
       ->willReturn($cachedContent);
@@ -79,11 +83,12 @@ final class CollectionCoverGeneratorTest extends TestCase {
     $imageContent = 'raw-image-bytes';
     $generatedContent = 'generated-binary-content';
 
-    $storage = $this->createMock(StorageInterface::class);
+    $storage = $this->createStub(StorageInterface::class);
+    $cache = $this->createMock(StorageCacheInterface::class);
     $imageRepository = $this->createStub(ImageRepositoryInterface::class);
     $collageBuilder = $this->createMock(CollageBuilderInterface::class);
 
-    $storage
+    $cache
       ->method('readFromCache')
       ->willReturn(null);
 
@@ -97,7 +102,7 @@ final class CollectionCoverGeneratorTest extends TestCase {
       ->willReturn($imageView);
 
     $storage
-      ->method('getImage')
+      ->method('readImage')
       ->willReturn($imageContent);
 
     $collageBuilder
@@ -105,12 +110,12 @@ final class CollectionCoverGeneratorTest extends TestCase {
       ->method('build')
       ->willReturn($generatedContent);
 
-    $storage
+    $cache
       ->expects($this->once())
       ->method('writeToCache')
       ->with('collection-id.avif', $generatedContent);
 
-    $generator = new CollectionCoverGenerator($storage, $imageRepository, $collageBuilder);
+    $generator = new CollectionCoverGenerator($storage, $cache, $imageRepository, $collageBuilder);
     $result = $generator->getCoverContent($collectionId, $imageIds);
 
     $this->assertEquals($generatedContent, $result);
@@ -121,11 +126,12 @@ final class CollectionCoverGeneratorTest extends TestCase {
     $collectionId = 'collection-id';
     $imageIds = ['svg-image'];
 
-    $storage = $this->createMock(StorageInterface::class);
+    $storage = $this->createStub(StorageInterface::class);
+    $cache = $this->createMock(StorageCacheInterface::class);
     $imageRepository = $this->createStub(ImageRepositoryInterface::class);
     $collageBuilder = $this->createMock(CollageBuilderInterface::class);
 
-    $storage
+    $cache
       ->method('readFromCache')
       ->willReturn(null);
 
@@ -142,11 +148,11 @@ final class CollectionCoverGeneratorTest extends TestCase {
       ->with([])
       ->willReturn(null);
 
-    $storage
+    $cache
       ->expects($this->never())
       ->method('writeToCache');
 
-    $generator = new CollectionCoverGenerator($storage, $imageRepository, $collageBuilder);
+    $generator = new CollectionCoverGenerator($storage, $cache, $imageRepository, $collageBuilder);
     $result = $generator->getCoverContent($collectionId, $imageIds);
 
     $this->assertNull($result);
@@ -156,16 +162,17 @@ final class CollectionCoverGeneratorTest extends TestCase {
   public function itDeletesCacheOnInvalidate(): void {
     $collectionId = 'collection-id';
 
-    $storage = $this->createMock(StorageInterface::class);
+    $storage = $this->createStub(StorageInterface::class);
+    $cache = $this->createMock(StorageCacheInterface::class);
     $imageRepository = $this->createStub(ImageRepositoryInterface::class);
     $collageBuilder = $this->createStub(CollageBuilderInterface::class);
 
-    $storage
+    $cache
       ->expects($this->once())
       ->method('deleteFromCache')
       ->with('collection-id.avif');
 
-    $generator = new CollectionCoverGenerator($storage, $imageRepository, $collageBuilder);
+    $generator = new CollectionCoverGenerator($storage, $cache, $imageRepository, $collageBuilder);
     $generator->invalidateCover($collectionId);
   }
 
@@ -174,11 +181,12 @@ final class CollectionCoverGeneratorTest extends TestCase {
     $collectionId = 'collection-id';
     $imageIds = ['img-1', 'img-2', 'img-3', 'img-4', 'img-5', 'img-6', 'img-7'];
 
-    $storage = $this->createMock(StorageInterface::class);
+    $storage = $this->createStub(StorageInterface::class);
+    $cache = $this->createMock(StorageCacheInterface::class);
     $imageRepository = $this->createMock(ImageRepositoryInterface::class);
     $collageBuilder = $this->createMock(CollageBuilderInterface::class);
 
-    $storage
+    $cache
       ->method('readFromCache')
       ->willReturn(null);
 
@@ -191,7 +199,7 @@ final class CollectionCoverGeneratorTest extends TestCase {
       ->willReturn($imageView);
 
     $storage
-      ->method('getImage')
+      ->method('readImage')
       ->willReturn(null);
 
     $collageBuilder
@@ -199,11 +207,11 @@ final class CollectionCoverGeneratorTest extends TestCase {
       ->method('build')
       ->willReturn(null);
 
-    $storage
+    $cache
       ->expects($this->never())
       ->method('writeToCache');
 
-    $generator = new CollectionCoverGenerator($storage, $imageRepository, $collageBuilder);
+    $generator = new CollectionCoverGenerator($storage, $cache, $imageRepository, $collageBuilder);
     $result = $generator->getCoverContent($collectionId, $imageIds);
 
     $this->assertNull($result);

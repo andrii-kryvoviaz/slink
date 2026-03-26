@@ -8,7 +8,6 @@ use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Image\Domain\Service\ImageHashCalculatorInterface;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
-use Slink\Shared\Domain\ValueObject\ImageOptions;
 use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
 
 final readonly class CalculateImageHashHandler implements CommandHandlerInterface {
@@ -24,12 +23,8 @@ final readonly class CalculateImageHashHandler implements CommandHandlerInterfac
     $imageView = $this->imageRepository->oneById($command->getImageId()->toString());
 
     $fileName = $imageView->getFileName();
-    $imageOptions = ImageOptions::fromPayload([
-      'fileName' => $fileName,
-      'mimeType' => $imageView->getMimeType()
-    ]);
 
-    $imageContent = $this->storage->getImage($imageOptions);
+    $imageContent = $this->storage->readImage($fileName);
 
     if ($imageContent === null) {
       throw new \RuntimeException(sprintf('Could not read image content for %s', $fileName));

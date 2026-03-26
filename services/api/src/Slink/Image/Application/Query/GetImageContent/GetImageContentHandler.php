@@ -12,13 +12,13 @@ use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Application\Query\QueryHandlerInterface;
 use Slink\Shared\Domain\ValueObject\ImageOptions;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
-use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
+use Slink\Image\Domain\Service\ImageRetrievalInterface;
 
 final readonly class GetImageContentHandler implements QueryHandlerInterface {
   public function __construct(
     private ImageAnalyzerInterface $imageAnalyzer,
     private ImageRepositoryInterface $repository,
-    private StorageInterface $storage,
+    private ImageRetrievalInterface $imageRetrievalService,
     private ImageSanitizerInterface $sanitizer,
   ) {
   }
@@ -48,7 +48,7 @@ final readonly class GetImageContentHandler implements QueryHandlerInterface {
       ...$transformParams
     ]);
     
-    $imageContent = $this->storage->getImage($imageOptions);
+    $imageContent = $this->imageRetrievalService->getImage($imageOptions);
     
     if($imageContent === null) {
       throw new NotFoundException();

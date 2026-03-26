@@ -8,7 +8,7 @@ use Jcupitt\Vips\Image as VipsImage;
 use Slink\Collection\Domain\Service\CollageBuilderInterface;
 use Slink\Collection\Domain\Service\CollectionCoverGeneratorInterface;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
-use Slink\Shared\Domain\ValueObject\ImageOptions;
+use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageCacheInterface;
 use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
 use Symfony\Component\DependencyInjection\Attribute\AsAlias;
 use Throwable;
@@ -20,6 +20,7 @@ final class CollectionCoverGenerator implements CollectionCoverGeneratorInterfac
 
   public function __construct(
     private readonly StorageInterface $storage,
+    private readonly StorageCacheInterface $cache,
     private readonly ImageRepositoryInterface $imageRepository,
     private readonly CollageBuilderInterface $collageBuilder,
   ) {
@@ -46,12 +47,12 @@ final class CollectionCoverGenerator implements CollectionCoverGeneratorInterfac
 
     $fileName = $this->getCoverFileName($collectionId);
 
-    return $this->storage->readFromCache($fileName)
+    return $this->cache->readFromCache($fileName)
       ?? $this->generateAndCache($fileName, $imageIds);
   }
 
   public function invalidateCover(string $collectionId): void {
-    $this->storage->deleteFromCache($this->getCoverFileName($collectionId));
+    $this->cache->deleteFromCache($this->getCoverFileName($collectionId));
   }
 
   /**
@@ -65,7 +66,7 @@ final class CollectionCoverGenerator implements CollectionCoverGeneratorInterfac
       return null;
     }
 
-    $this->storage->writeToCache($fileName, $content);
+    $this->cache->writeToCache($fileName, $content);
 
     return $content;
   }
@@ -96,10 +97,7 @@ final class CollectionCoverGenerator implements CollectionCoverGeneratorInterfac
         return null;
       }
 
-      $content = $this->storage->getImage(ImageOptions::fromPayload([
-        'fileName' => $imageView->getFileName(),
-        'mimeType' => $imageView->getMimeType(),
-      ]));
+      $content = $this->storage->readImage($imageView->getFileName());
 
       return $content ? VipsImage::newFromBuffer($content) : null;
     } catch (Throwable) {

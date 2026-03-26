@@ -12,15 +12,15 @@ use Slink\Image\Application\Query\GetImageContent\GetImageContentHandler;
 use Slink\Image\Application\Query\GetImageContent\GetImageContentQuery;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Image\Domain\Service\ImageAnalyzerInterface;
+use Slink\Image\Domain\Service\ImageRetrievalInterface;
 use Slink\Image\Domain\Service\ImageSanitizerInterface;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
-use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
 
 final class GetImageContentHandlerTest extends TestCase {
-  private StorageInterface&Stub $storage;
+  private ImageRetrievalInterface&Stub $imageRetrieval;
   private ImageRepositoryInterface&Stub $repository;
   private ImageAnalyzerInterface&Stub $imageAnalyzer;
   private ImageSanitizerInterface&Stub $sanitizer;
@@ -28,7 +28,7 @@ final class GetImageContentHandlerTest extends TestCase {
   public function setUp(): void {
     parent::setUp();
 
-    $this->storage = $this->createStub(StorageInterface::class);
+    $this->imageRetrieval = $this->createStub(ImageRetrievalInterface::class);
     $this->repository = $this->createStub(ImageRepositoryInterface::class);
     $this->imageAnalyzer = $this->createStub(ImageAnalyzerInterface::class);
     $this->sanitizer = $this->createStub(ImageSanitizerInterface::class);
@@ -48,10 +48,10 @@ final class GetImageContentHandlerTest extends TestCase {
 
     $this->repository->method('oneById')->with($imageId)->willReturn($image);
     $this->imageAnalyzer->method('supportsResize')->with($mimeType)->willReturn(true);
-    $this->storage->method('getImage')->willReturn($imageContent);
+    $this->imageRetrieval->method('getImage')->willReturn($imageContent);
     $this->sanitizer->method('requiresSanitization')->with($mimeType)->willReturn(false);
 
-    $handler = new GetImageContentHandler($this->imageAnalyzer, $this->repository, $this->storage, $this->sanitizer);
+    $handler = new GetImageContentHandler($this->imageAnalyzer, $this->repository, $this->imageRetrieval, $this->sanitizer);
     $result = ($handler)(new GetImageContentQuery(), $fileName);
 
     $this->assertInstanceOf(Item::class, $result);
@@ -68,7 +68,7 @@ final class GetImageContentHandlerTest extends TestCase {
 
     $this->expectException(NotFoundException::class);
 
-    $handler = new GetImageContentHandler($this->imageAnalyzer, $this->repository, $this->storage, $this->sanitizer);
+    $handler = new GetImageContentHandler($this->imageAnalyzer, $this->repository, $this->imageRetrieval, $this->sanitizer);
     $handler(new GetImageContentQuery(), $fileName);
   }
 
@@ -87,11 +87,11 @@ final class GetImageContentHandlerTest extends TestCase {
 
     $this->repository->method('oneById')->with($imageId)->willReturn($image);
     $this->imageAnalyzer->method('supportsResize')->with($mimeType)->willReturn(false);
-    $this->storage->method('getImage')->willReturn($originalSvgContent);
+    $this->imageRetrieval->method('getImage')->willReturn($originalSvgContent);
     $this->sanitizer->method('requiresSanitization')->with($mimeType)->willReturn(true);
     $this->sanitizer->method('sanitize')->with($originalSvgContent)->willReturn($sanitizedSvgContent);
 
-    $handler = new GetImageContentHandler($this->imageAnalyzer, $this->repository, $this->storage, $this->sanitizer);
+    $handler = new GetImageContentHandler($this->imageAnalyzer, $this->repository, $this->imageRetrieval, $this->sanitizer);
     $result = ($handler)(new GetImageContentQuery(), $fileName);
 
     $this->assertInstanceOf(Item::class, $result);
@@ -113,10 +113,10 @@ final class GetImageContentHandlerTest extends TestCase {
 
     $this->repository->method('oneById')->with($imageId)->willReturn($image);
     $this->imageAnalyzer->method('supportsResize')->with($originalMimeType)->willReturn(true);
-    $this->storage->method('getImage')->willReturn($imageContent);
+    $this->imageRetrieval->method('getImage')->willReturn($imageContent);
     $this->sanitizer->method('requiresSanitization')->with($originalMimeType)->willReturn(false);
 
-    $handler = new GetImageContentHandler($this->imageAnalyzer, $this->repository, $this->storage, $this->sanitizer);
+    $handler = new GetImageContentHandler($this->imageAnalyzer, $this->repository, $this->imageRetrieval, $this->sanitizer);
     $result = ($handler)(new GetImageContentQuery(), 'test-file-name.webp', 'webp');
 
     $this->assertInstanceOf(Item::class, $result);
@@ -137,10 +137,10 @@ final class GetImageContentHandlerTest extends TestCase {
 
     $this->repository->method('oneById')->with($imageId)->willReturn($image);
     $this->imageAnalyzer->method('supportsResize')->with($mimeType)->willReturn(true);
-    $this->storage->method('getImage')->willReturn($imageContent);
+    $this->imageRetrieval->method('getImage')->willReturn($imageContent);
     $this->sanitizer->method('requiresSanitization')->with($mimeType)->willReturn(false);
 
-    $handler = new GetImageContentHandler($this->imageAnalyzer, $this->repository, $this->storage, $this->sanitizer);
+    $handler = new GetImageContentHandler($this->imageAnalyzer, $this->repository, $this->imageRetrieval, $this->sanitizer);
     $result = ($handler)(new GetImageContentQuery(), $fileName, 'gif');
 
     $this->assertInstanceOf(Item::class, $result);
@@ -161,10 +161,10 @@ final class GetImageContentHandlerTest extends TestCase {
 
     $this->repository->method('oneById')->with($imageId)->willReturn($image);
     $this->imageAnalyzer->method('supportsResize')->with($mimeType)->willReturn(true);
-    $this->storage->method('getImage')->willReturn($imageContent);
+    $this->imageRetrieval->method('getImage')->willReturn($imageContent);
     $this->sanitizer->method('requiresSanitization')->with($mimeType)->willReturn(false);
 
-    $handler = new GetImageContentHandler($this->imageAnalyzer, $this->repository, $this->storage, $this->sanitizer);
+    $handler = new GetImageContentHandler($this->imageAnalyzer, $this->repository, $this->imageRetrieval, $this->sanitizer);
     $result = ($handler)(new GetImageContentQuery(), 'test-file-name.jpg', 'jpg');
 
     $this->assertInstanceOf(Item::class, $result);

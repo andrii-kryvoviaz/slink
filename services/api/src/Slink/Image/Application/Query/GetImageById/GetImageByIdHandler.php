@@ -13,7 +13,6 @@ use Slink\Image\Domain\Service\ImageProcessorInterface;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Application\Query\QueryHandlerInterface;
-use Slink\Shared\Domain\ValueObject\ImageOptions;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
 use Slink\User\Infrastructure\Auth\JwtUser;
@@ -66,12 +65,7 @@ final readonly class GetImageByIdHandler implements QueryHandlerInterface {
       return false;
     }
 
-    $imageOptions = ImageOptions::fromPayload([
-      'fileName' => $fileName,
-      'mimeType' => $mimeType,
-    ]);
-
-    $content = $this->storage->getImage($imageOptions);
+    $content = $this->storage->readImage($fileName);
     if (!$content) {
       return false;
     }

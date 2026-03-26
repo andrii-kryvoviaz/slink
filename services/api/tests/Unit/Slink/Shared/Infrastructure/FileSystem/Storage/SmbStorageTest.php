@@ -12,7 +12,6 @@ use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Slink\Image\Domain\Service\ImageTransformerInterface;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Infrastructure\FileSystem\Storage\SmbStorage;
 
@@ -21,38 +20,13 @@ final class SmbStorageTest extends TestCase {
   private SmbStorage $storage;
 
   protected function setUp(): void {
-    $imageTransformer = $this->createStub(ImageTransformerInterface::class);
-    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
-    
-    $config = [
-      'host' => 'test-host',
-      'share' => 'test-share',
-      'username' => 'test-user',
-      'password' => 'test-pass',
-      'workgroup' => 'WORKGROUP',
-    ];
-    
-    $configProvider->method('get')
-      ->with('storage.adapter.smb')
-      ->willReturn($config);
-
     $this->share = $this->createMock(IShare::class);
-    
+
     $reflection = new \ReflectionClass(SmbStorage::class);
     $this->storage = $reflection->newInstanceWithoutConstructor();
-    
+
     $shareProperty = $reflection->getProperty('share');
-
     $shareProperty->setValue($this->storage, $this->share);
-    
-    $parentClass = $reflection->getParentClass();
-    if ($parentClass === false) {
-      $this->fail('SmbStorage must extend a parent class');
-    }
-    
-    $transformerProperty = $parentClass->getProperty('imageTransformer');
-
-    $transformerProperty->setValue($this->storage, $imageTransformer);
   }
 
   #[Test]

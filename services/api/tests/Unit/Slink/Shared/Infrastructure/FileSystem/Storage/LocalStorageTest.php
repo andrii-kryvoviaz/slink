@@ -7,7 +7,6 @@ namespace Tests\Unit\Slink\Shared\Infrastructure\FileSystem\Storage;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use Slink\Image\Domain\Service\ImageTransformerInterface;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Infrastructure\FileSystem\Storage\LocalStorage;
 use Symfony\Component\HttpFoundation\File\File;
@@ -20,13 +19,12 @@ final class LocalStorageTest extends TestCase {
     $this->testDir = sys_get_temp_dir() . '/slink_test_' . uniqid();
     mkdir($this->testDir, 0755, true);
 
-    $imageTransformer = $this->createStub(ImageTransformerInterface::class);
     $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')
       ->with('storage.adapter.local.dir')
       ->willReturn($this->testDir);
 
-    $this->storage = new LocalStorage($imageTransformer, $configProvider);
+    $this->storage = new LocalStorage($configProvider);
   }
 
   protected function tearDown(): void {
