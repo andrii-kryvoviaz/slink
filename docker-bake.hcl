@@ -1,4 +1,4 @@
-variable "NODE_VERSION"                  { default = "24.14.0" }
+variable "NODE_VERSION"                  { default = "24.14.1" }
 variable "PHP_VERSION"                   { default = "8.5.4" }
 variable "ALPINE_VERSION"                { default = "3.23" }
 variable "COMPOSER_VERSION"              { default = "2" }
