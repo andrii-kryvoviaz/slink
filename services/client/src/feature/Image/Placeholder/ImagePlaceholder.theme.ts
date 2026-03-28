@@ -57,7 +57,7 @@ export const imagePlaceholderWrapperVariants = cva(
       {
         keepAspectRatio: false,
         objectFit: 'contain',
-        class: '',
+        class: 'w-full h-full',
       },
       {
         keepAspectRatio: false,
