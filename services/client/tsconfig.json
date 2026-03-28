@@ -3,11 +3,11 @@
   "compilerOptions": {
     "allowJs": true,
     "checkJs": true,
-    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
+    "types": ["node"],
     "strict": true,
     "target": "ES2022",
     "module": "ESNext"
