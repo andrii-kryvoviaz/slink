@@ -175,6 +175,7 @@
     currentHeight={calculatedHeight}
     originalWidth={width}
     originalHeight={height}
+    size="sm"
     on={{ change: applyFraction }}
   />
 

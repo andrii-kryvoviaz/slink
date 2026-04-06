@@ -1,6 +1,7 @@
 <script lang="ts">
   import {
     fractionPickerContainerTheme,
+    fractionPickerInnerTheme,
     fractionPickerItemTheme,
   } from './FractionPicker.theme';
   import {
@@ -53,22 +54,24 @@
     role="radiogroup"
     aria-label="Scale selection"
   >
-    {#each options as option (option.value)}
-      {@const active = isActive(option.value)}
-      <button
-        type="button"
-        role="radio"
-        aria-checked={active}
-        aria-label={`Scale to ${option.label}`}
-        {disabled}
-        onclick={() => handleSelect(option.value)}
-        class={fractionPickerItemTheme({
-          variant: active ? 'active' : 'inactive',
-          size,
-        })}
-      >
-        {option.label}
-      </button>
-    {/each}
+    <div class={fractionPickerInnerTheme({ size })}>
+      {#each options as option (option.value)}
+        {@const active = isActive(option.value)}
+        <button
+          type="button"
+          role="radio"
+          aria-checked={active}
+          aria-label={`Scale to ${option.label}`}
+          {disabled}
+          onclick={() => handleSelect(option.value)}
+          class={fractionPickerItemTheme({
+            variant: active ? 'active' : 'inactive',
+            size,
+          })}
+        >
+          {option.label}
+        </button>
+      {/each}
+    </div>
   </div>
 </div>
