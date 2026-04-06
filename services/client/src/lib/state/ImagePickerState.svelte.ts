@@ -118,7 +118,7 @@ export class ImagePickerState<TItem extends { id: string }> {
 
 export function createCollectionPickerState(): ImagePickerState<CollectionResponse> {
   return new ImagePickerState<CollectionResponse>({
-    load: () => ApiClient.collection.getList(1).then((r) => r.data),
+    load: () => ApiClient.collection.getList(50).then((r) => r.data),
     assign: (imageId, itemId) => ApiClient.collection.addItem(itemId, imageId),
     unassign: (imageId, itemId) =>
       ApiClient.collection.removeItem(itemId, imageId),

@@ -1,3 +1,5 @@
+import type { CollectionReference } from '@slink/api/Response/Collection/CollectionResponse';
+
 export type ImageDetailsResponse = {
   id: string;
   fileName: string;
@@ -16,4 +18,5 @@ export type ImageDetailsResponse = {
   isAnimated: boolean;
   bookmarkCount: number;
   license: string | null;
+  collections?: CollectionReference[];
 };

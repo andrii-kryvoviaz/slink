@@ -1,5 +1,6 @@
 <script lang="ts">
   import { ApiClient } from '@slink/api';
+  import { ImageCollectionList } from '@slink/feature/Collection';
   import {
     BookmarkersPanel,
     FilterPicker,
@@ -8,13 +9,13 @@
     ImageDescription,
     ImagePlaceholder,
     ImageSizePicker,
-    ImageTagManager,
     ShareLinkCopy,
     ViewCountBadge,
     VisibilityBadge,
   } from '@slink/feature/Image';
   import type { ImageOutputFormat, ImageParams } from '@slink/feature/Image';
   import { type ImageFilter, getCssFilter } from '@slink/feature/Image';
+  import { ImageTagList } from '@slink/feature/Tag';
   import { Notice } from '@slink/feature/Text';
   import { Shortcut } from '@slink/ui/components';
   import { Select } from '@slink/ui/components';
@@ -26,9 +27,9 @@
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { Tag } from '@slink/api/Resources/TagResource';
   import type { ShareResponse } from '@slink/api/Response';
+  import type { CollectionReference } from '@slink/api/Response/Collection/CollectionResponse';
 
   import type { License } from '@slink/lib/enum/License';
-  import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
 
   import { cn } from '@slink/utils/ui';
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
@@ -48,15 +49,55 @@
   );
   let selectedLicense = $state(data.image.license ?? '');
 
+  let imageTags: Tag[] = $state(data.imageTags ?? []);
+  let imageCollections: CollectionReference[] = $state(
+    data.image.collections ?? [],
+  );
+
   $effect(() => {
     if (data.image.id !== prevImageId) {
       prevImageId = data.image.id;
       image = data.image;
+      imageTags = data.imageTags ?? [];
+      imageCollections = data.image.collections ?? [];
       selectedLicense = data.image.license ?? '';
     }
   });
 
-  const historyFeedState = useUploadHistoryFeed();
+  let actionBarImage = $state({
+    id: image.id,
+    fileName: image.fileName,
+    isPublic: image.isPublic,
+    collectionIds: imageCollections.map((c) => c.id),
+    tagIds: imageTags.map((t) => t.id),
+  });
+
+  $effect(() => {
+    actionBarImage = {
+      id: image.id,
+      fileName: image.fileName,
+      isPublic: image.isPublic,
+      collectionIds: imageCollections.map((c) => c.id),
+      tagIds: imageTags.map((t) => t.id),
+    };
+  });
+
+  $effect(() => {
+    if (actionBarImage.isPublic !== image.isPublic) {
+      image = { ...image, isPublic: actionBarImage.isPublic };
+    }
+  });
+
+  const handleTagChange = (_imageId: string, tags: Tag[]) => {
+    imageTags = tags;
+  };
+
+  const handleCollectionChange = (
+    _imageId: string,
+    collections: CollectionReference[],
+  ) => {
+    imageCollections = collections;
+  };
 
   let unsignedParams: Partial<ImageParams> = $state({});
   let selectedFormat: ImageOutputFormat = $state('original');
@@ -183,12 +224,6 @@
     image = { ...image, description };
   };
 
-  const handleTagsUpdate = (updatedTags: Tag[]) => {
-    historyFeedState.update(image.id, {
-      tags: updatedTags,
-    });
-  };
-
   const licenseOptions = $derived(
     licenses.map((license: License) => ({
       value: license.id,
@@ -230,10 +265,11 @@
   in:fly={{ y: 20, duration: 400, delay: 100 }}
   class="container mx-auto px-4 sm:px-6 lg:px-8 py-8"
 >
-  <div class="flex flex-col flex-wrap lg:flex-row gap-8">
+  <div class="flex flex-col lg:flex-row gap-8">
     <div
       class={cn(
         'w-full relative group transition-[filter] duration-300',
+        'lg:sticky lg:top-8 lg:self-start',
         maxWidthClass,
       )}
       style:filter={getCssFilter(selectedFilter)}
@@ -249,24 +285,41 @@
         <VisibilityBadge isPublic={image.isPublic} variant="overlay" />
         <ViewCountBadge count={image.views} variant="overlay" />
       </div>
+      <div class="mt-4">
+        <ImageActionBar
+          bind:image={actionBarImage}
+          buttons={['download', 'collection', 'tag', 'visibility', 'delete']}
+          layout="hero"
+          on={{
+            tagChange: handleTagChange,
+            collectionChange: handleCollectionChange,
+          }}
+        />
+      </div>
+      {#if imageTags.length > 0 || imageCollections.length > 0}
+        <div class="mt-4 flex flex-col gap-2">
+          {#if imageTags.length > 0}
+            <ImageTagList
+              imageId={image.id}
+              variant="neon"
+              showImageCount={false}
+              removable={false}
+              initialTags={imageTags}
+              maxVisible={4}
+              disableHover={true}
+            />
+          {/if}
+          {#if imageCollections.length > 0}
+            <ImageCollectionList
+              collections={imageCollections}
+              maxVisible={4}
+            />
+          {/if}
+        </div>
+      {/if}
     </div>
 
-    <div class="grow max-w-md shrink-0 space-y-8">
-      <ImageActionBar
-        bind:image
-        buttons={['download', 'collection', 'copy', 'visibility', 'delete']}
-        layout="hero"
-      />
-
-      <ImageTagManager
-        imageId={image.id}
-        variant="neon"
-        initialTags={data.imageTags}
-        on={{
-          tagsUpdate: handleTagsUpdate,
-        }}
-      />
-
+    <div class="grow max-w-md min-w-0 space-y-8">
       <BookmarkersPanel imageId={image.id} count={image.bookmarkCount} />
 
       <ImageDescription

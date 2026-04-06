@@ -23,7 +23,7 @@
 >
   {#snippet header({ isLoading })}
     <div class="flex items-center gap-2 mb-1.5">
-      <span class="text-sm font-medium text-gray-500 dark:text-gray-400"
+      <span class="text-lg font-semibold text-gray-900 dark:text-white"
         >Description</span
       >
       {#if isLoading}
