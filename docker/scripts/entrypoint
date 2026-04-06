@@ -2,6 +2,8 @@
 
 if [ "$(id -u)" = "0" ]; then
   chown -R slink:slink /app
+  chown www-data:slink /app/var/data
+  chown www-data:slink /app/var/data/*.db 2>/dev/null || true
   chown -R www-data:slink /data/caddy
   chown -R redis:slink /data/redis
 
