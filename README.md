@@ -5,7 +5,7 @@
 ![Docker Pulls](https://img.shields.io/docker/pulls/anirdev/slink?logo=docker)
 [![License](https://img.shields.io/github/license/andrii-kryvoviaz/slink?color=blue)](LICENSE)
 
-![Slink](https://docs.slinkapp.io/_astro/d427de16-7a01-4ec7-aef9-913c0940a525.C8Cj-T6z_Z1EHyTU.webp)
+![Slink](https://docs.slinkapp.io/_astro/9e8b1f68-43f1-4488-99d1-7fdcd8642a65.BdT3PWp__20eaaR.webp)
 
 Welcome to **Slink**, a powerful self-hosted image sharing platform designed to give users complete control over their media sharing experience. Built with [Symfony](https://symfony.com/) and [SvelteKit](https://kit.svelte.dev/), Slink enables seamless and secure image sharing without relying on third-party services.
 
