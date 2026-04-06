@@ -65,9 +65,10 @@ final readonly class GetImageController {
     $width = $query->getWidth();
     $height = $query->getHeight();
     $crop = $query->isCropped();
+    $filter = $query->getFilter();
     $signature = $request->query->get('s');
 
-    if ($width === null && $height === null && !$crop) {
+    if ($width === null && $height === null && !$crop && $filter === null) {
       return $query;
     }
 
@@ -75,6 +76,7 @@ final readonly class GetImageController {
       'width' => $width,
       'height' => $height,
       'crop' => $crop,
+      'filter' => $filter,
     ], fn($value) => $value !== null && $value !== false);
 
     if (!is_string($signature) || !$this->signatureService->verify(

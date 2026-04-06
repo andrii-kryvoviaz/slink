@@ -10,6 +10,7 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
     'height' => 'h',
     'quality' => 'q',
     'format' => 'f',
+    'filter' => 'filter',
   ];
   
   /**
@@ -29,6 +30,7 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
     private ?int $quality = null,
     private ?bool $crop = null,
     private ?string $format = null,
+    private ?string $filter = null,
   ) {
   }
   
@@ -44,6 +46,7 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
       'quality' => $this->quality,
       'crop' => $this->crop,
       'format' => $this->format,
+      'filter' => $this->filter,
     ];
   }
   
@@ -60,6 +63,7 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
       quality: $payload['quality'] ?? null,
       crop: $payload['crop'] ?? null,
       format: $payload['format'] ?? null,
+      filter: $payload['filter'] ?? null,
     );
   }
   
@@ -149,6 +153,10 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
 
   public function getFormat(): ?string {
     return $this->format;
+  }
+
+  public function getFilter(): ?string {
+    return $this->filter;
   }
   
   /**

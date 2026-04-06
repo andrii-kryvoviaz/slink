@@ -215,4 +215,60 @@ final class ImageTransformationRequestTest extends TestCase {
             'allowEnlarge' => false
         ], $payload);
     }
+
+    #[Test]
+    public function itCreatesFromImageOptionsWithFilter(): void {
+        $imageOptions = ImageOptions::fromPayload([
+            'fileName' => 'test.jpg',
+            'mimeType' => 'image/jpeg',
+            'filter' => 'sepia'
+        ]);
+
+        $this->assertEquals('sepia', $imageOptions->getFilter());
+        $this->assertTrue($imageOptions->isModified());
+        $this->assertFalse($imageOptions->isEmpty());
+    }
+
+    #[Test]
+    public function itIncludesFilterInCacheFileName(): void {
+        $imageOptions = ImageOptions::fromPayload([
+            'fileName' => 'test.jpg',
+            'mimeType' => 'image/jpeg',
+            'filter' => 'dramatic'
+        ]);
+
+        $cacheFileName = $imageOptions->getCacheFileName();
+
+        $this->assertStringContainsString('filterdramatic', $cacheFileName);
+    }
+
+    #[Test]
+    public function itIncludesFilterWithOtherParamsInCacheFileName(): void {
+        $imageOptions = ImageOptions::fromPayload([
+            'fileName' => 'test.jpg',
+            'mimeType' => 'image/jpeg',
+            'width' => 800,
+            'height' => 600,
+            'filter' => 'noir'
+        ]);
+
+        $cacheFileName = $imageOptions->getCacheFileName();
+
+        $this->assertStringContainsString('w800', $cacheFileName);
+        $this->assertStringContainsString('h600', $cacheFileName);
+        $this->assertStringContainsString('filternoir', $cacheFileName);
+    }
+
+    #[Test]
+    public function itExcludesFilterFromCacheFileNameWhenNull(): void {
+        $imageOptions = ImageOptions::fromPayload([
+            'fileName' => 'test.jpg',
+            'mimeType' => 'image/jpeg',
+            'width' => 800,
+        ]);
+
+        $cacheFileName = $imageOptions->getCacheFileName();
+
+        $this->assertStringNotContainsString('filter', $cacheFileName);
+    }
 }

@@ -201,4 +201,54 @@ final class ShareUrlBuilderTest extends TestCase {
 
     $this->assertEquals('/image/test.png', $result);
   }
+
+  #[Test]
+  public function itBuildsUrlWithFilterParam(): void {
+    $imageId = '12345678-1234-1234-1234-123456789abc';
+    $fileName = 'test.jpg';
+
+    $signatureService = $this->createMock(ImageUrlSignatureInterface::class);
+    $signatureService
+      ->expects($this->once())
+      ->method('sign')
+      ->with($imageId, ['filter' => 'sepia'])
+      ->willReturn('test_signature');
+
+    $builder = new ShareUrlBuilder($signatureService);
+    $result = $builder->buildTargetUrl($imageId, $fileName, null, null, false, null, 'sepia');
+
+    $this->assertStringContainsString('filter=sepia', $result);
+    $this->assertStringContainsString('s=test_signature', $result);
+  }
+
+  #[Test]
+  public function itBuildsUrlWithFilterAndResizeParams(): void {
+    $imageId = '12345678-1234-1234-1234-123456789abc';
+    $fileName = 'test.jpg';
+    $width = 800;
+
+    $signatureService = $this->createMock(ImageUrlSignatureInterface::class);
+    $signatureService
+      ->expects($this->once())
+      ->method('sign')
+      ->with($imageId, ['width' => $width, 'filter' => 'noir'])
+      ->willReturn('test_signature');
+
+    $builder = new ShareUrlBuilder($signatureService);
+    $result = $builder->buildTargetUrl($imageId, $fileName, $width, null, false, null, 'noir');
+
+    $this->assertStringContainsString('width=800', $result);
+    $this->assertStringContainsString('filter=noir', $result);
+    $this->assertStringContainsString('s=test_signature', $result);
+  }
+
+  #[Test]
+  public function itExcludesFilterWhenNull(): void {
+    $imageId = '12345678-1234-1234-1234-123456789abc';
+    $fileName = 'test.jpg';
+
+    $result = $this->builder->buildTargetUrl($imageId, $fileName, null, null, false, null, null);
+
+    $this->assertStringNotContainsString('filter=', $result);
+  }
 }

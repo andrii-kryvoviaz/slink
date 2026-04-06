@@ -44,7 +44,8 @@ final readonly class ShareImageController {
       $request->width,
       $request->height,
       $request->crop,
-      $request->format
+      $request->format,
+      $request->filter
     );
 
     $shareable = ShareableReference::forImage(ID::fromString($id));

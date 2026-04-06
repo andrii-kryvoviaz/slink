@@ -33,4 +33,6 @@ interface ImageProcessorInterface
     public function getImageDimensions(string $imageContent): array;
 
     public function getAnimatedImageInfo(string $imageContent): AnimatedImageInfo;
+
+    public function applyFilter(string $imageContent, string $filter): string;
 }

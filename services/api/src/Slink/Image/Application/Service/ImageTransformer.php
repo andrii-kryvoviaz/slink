@@ -98,6 +98,10 @@ final readonly class ImageTransformer implements ImageTransformerInterface {
       $content = $this->executeTransformation($content, $request);
     }
 
+    if ($imageOptions->getFilter()) {
+      $content = $this->imageProcessor->applyFilter($content, $imageOptions->getFilter());
+    }
+
     if ($imageOptions->getFormat()) {
       $quality = $imageOptions->getQuality() ?? $this->settingsService->get('image.compressionQuality');
       $content = $this->imageProcessor->convertFormat($content, $imageOptions->getFormat(), $quality);

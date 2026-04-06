@@ -2,6 +2,7 @@
   import { ApiClient } from '@slink/api';
   import {
     BookmarkersPanel,
+    FilterPicker,
     FormatPicker,
     ImageActionBar,
     ImageDescription,
@@ -13,6 +14,7 @@
     VisibilityBadge,
   } from '@slink/feature/Image';
   import type { ImageOutputFormat, ImageParams } from '@slink/feature/Image';
+  import { type ImageFilter, getCssFilter } from '@slink/feature/Image';
   import { Notice } from '@slink/feature/Text';
   import { Shortcut } from '@slink/ui/components';
   import { Select } from '@slink/ui/components';
@@ -58,6 +60,7 @@
 
   let unsignedParams: Partial<ImageParams> = $state({});
   let selectedFormat: ImageOutputFormat = $state('original');
+  let selectedFilter: ImageFilter = $state('none');
 
   const originalFormat = $derived.by(() => {
     const fileName = image.fileName;
@@ -111,6 +114,7 @@
         height?: number;
         crop?: boolean;
         format?: string;
+        filter?: string;
       },
     ) => {
       return ApiClient.image.shareImage(imageId, params);
@@ -124,7 +128,11 @@
   let shareUrl: string | undefined = $state(undefined);
 
   $effect(() => {
-    shareImage(image.id, { ...unsignedParams, format: selectedFormat });
+    shareImage(image.id, {
+      ...unsignedParams,
+      format: selectedFormat,
+      filter: selectedFilter === 'none' ? undefined : selectedFilter,
+    });
   });
 
   $effect(() => {
@@ -148,6 +156,10 @@
 
   const handleFormatChange = (format: ImageOutputFormat) => {
     selectedFormat = format;
+  };
+
+  const handleFilterChange = (filter: ImageFilter) => {
+    selectedFilter = filter;
   };
 
   const {
@@ -219,7 +231,13 @@
   class="container mx-auto px-4 sm:px-6 lg:px-8 py-8"
 >
   <div class="flex flex-col flex-wrap lg:flex-row gap-8">
-    <div class={cn('w-full relative group', maxWidthClass)}>
+    <div
+      class={cn(
+        'w-full relative group transition-[filter] duration-300',
+        maxWidthClass,
+      )}
+      style:filter={getCssFilter(selectedFilter)}
+    >
       <ImagePlaceholder
         src={image.url}
         metadata={image}
@@ -289,8 +307,7 @@
             </h2>
           </div>
           <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">
-            Apply resize to coppied image URL. The original image will remain
-            unchanged.
+            Adjust dimensions for the shared link
           </p>
           <ImageSizePicker
             width={image.width}
@@ -300,10 +317,30 @@
         </div>
       {/if}
 
+      {#if image.supportsResize}
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+            Filter
+          </h2>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">
+            Apply a color filter to the shared link
+          </p>
+          <FilterPicker
+            imageUrl={image.url}
+            value={selectedFilter}
+            on={{ change: handleFilterChange }}
+          />
+        </div>
+      {/if}
+
       <div>
         <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
           Share
         </h2>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">
+          Resize, filter, and format changes apply only to the shared link. The
+          original image remains unchanged.
+        </p>
         <Notice variant="info" size="xs" class="mb-4">
           <span class="flex items-center justify-between">
             <span class="flex items-center gap-2">

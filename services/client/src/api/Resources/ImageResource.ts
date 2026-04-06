@@ -199,6 +199,7 @@ export class ImageResource extends AbstractResource {
       height?: number;
       crop?: boolean;
       format?: string;
+      filter?: string;
     },
   ): Promise<ShareResponse> {
     const searchParams = new URLSearchParams();
@@ -217,6 +218,10 @@ export class ImageResource extends AbstractResource {
 
     if (params.format !== undefined) {
       searchParams.append('format', params.format);
+    }
+
+    if (params.filter !== undefined) {
+      searchParams.append('filter', params.filter);
     }
 
     return this.get(`/image/${id}/share?${searchParams.toString()}`);

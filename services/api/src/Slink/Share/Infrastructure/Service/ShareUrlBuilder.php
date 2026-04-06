@@ -13,11 +13,11 @@ final readonly class ShareUrlBuilder implements ShareUrlBuilderInterface {
   ) {
   }
 
-  public function buildTargetUrl(string $imageId, string $fileName, ?int $width, ?int $height, bool $crop, ?string $format = null): string {
+  public function buildTargetUrl(string $imageId, string $fileName, ?int $width, ?int $height, bool $crop, ?string $format = null, ?string $filter = null): string {
     $targetFileName = $format && $format !== 'original' 
       ? $this->applyFormat($fileName, $format) 
       : $fileName;
-    $params = $this->buildParams($width, $height, $crop);
+    $params = $this->buildParams($width, $height, $crop, $filter);
     $url = "/image/{$targetFileName}";
 
     if (empty($params)) {
@@ -37,13 +37,14 @@ final readonly class ShareUrlBuilder implements ShareUrlBuilderInterface {
   }
 
   /**
-   * @return array<string, int|bool>
+   * @return array<string, int|bool|string>
    */
-  private function buildParams(?int $width, ?int $height, bool $crop): array {
+  private function buildParams(?int $width, ?int $height, bool $crop, ?string $filter = null): array {
     return array_filter([
       'width' => $width,
       'height' => $height,
       'crop' => $crop,
+      'filter' => $filter,
     ], fn($value) => $value !== null && $value !== false);
   }
 }

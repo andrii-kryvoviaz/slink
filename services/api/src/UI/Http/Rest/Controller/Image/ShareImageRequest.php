@@ -9,7 +9,8 @@ final readonly class ShareImageRequest {
     public ?int $width = null,
     public ?int $height = null,
     public bool $crop = false,
-    public ?string $format = null
+    public ?string $format = null,
+    public ?string $filter = null
   ) {
   }
 }

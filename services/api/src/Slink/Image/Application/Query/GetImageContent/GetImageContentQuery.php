@@ -23,7 +23,8 @@ final readonly class GetImageContentQuery implements QueryInterface {
     private ?int $height = null,
     private ?int $quality = null,
     private bool $crop = false,
-    private ?string $format = null
+    private ?string $format = null,
+    private ?string $filter = null
   ) {
   }
   
@@ -59,13 +60,18 @@ final readonly class GetImageContentQuery implements QueryInterface {
     return $this->format;
   }
 
+  public function getFilter(): ?string {
+    return $this->filter;
+  }
+
   public function withFormat(?string $format): self {
     return new self(
       $this->width,
       $this->height,
       $this->quality,
       $this->crop,
-      $format
+      $format,
+      $this->filter
     );
   }
   
@@ -78,6 +84,7 @@ final readonly class GetImageContentQuery implements QueryInterface {
       'height' => $this->height,
       'quality' => $this->quality,
       'crop' => $this->crop,
+      'filter' => $this->filter,
     ];
   }
 }

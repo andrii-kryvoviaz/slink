@@ -294,4 +294,105 @@ final class ImageTransformerTest extends TestCase {
 
         $this->assertEquals('transformed content', $result);
     }
+
+    #[Test]
+    public function itAppliesFilterDuringTransform(): void {
+        $content = 'image content';
+        $imageOptions = ImageOptions::fromPayload([
+            'fileName' => 'test.jpg',
+            'mimeType' => 'image/jpeg',
+            'filter' => 'sepia'
+        ]);
+
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor
+            ->expects($this->once())
+            ->method('applyFilter')
+            ->with($content, 'sepia')
+            ->willReturn('filtered content');
+
+        $transformer = new ImageTransformer($imageProcessor, $this->settingsService, []);
+
+        $result = $transformer->transform($content, $imageOptions);
+
+        $this->assertEquals('filtered content', $result);
+    }
+
+    #[Test]
+    public function itDoesNotApplyFilterWhenNotSet(): void {
+        $content = 'image content';
+        $imageOptions = ImageOptions::fromPayload([
+            'fileName' => 'test.jpg',
+            'mimeType' => 'image/jpeg'
+        ]);
+
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor
+            ->expects($this->never())
+            ->method('applyFilter');
+
+        $transformer = new ImageTransformer($imageProcessor, $this->settingsService, []);
+
+        $result = $transformer->transform($content, $imageOptions);
+
+        $this->assertEquals($content, $result);
+    }
+
+    #[Test]
+    public function itAppliesFilterAfterStrategyAndBeforeFormat(): void {
+        $content = 'image content';
+        $imageOptions = ImageOptions::fromPayload([
+            'fileName' => 'test.jpg',
+            'mimeType' => 'image/jpeg',
+            'width' => 400,
+            'height' => 300,
+            'filter' => 'vivid',
+            'format' => 'webp'
+        ]);
+
+        $callOrder = [];
+
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor
+            ->method('getImageDimensions')
+            ->willReturn([800, 600]);
+
+        $imageProcessor
+            ->expects($this->once())
+            ->method('applyFilter')
+            ->with('strategy result', 'vivid')
+            ->willReturnCallback(function () use (&$callOrder) {
+                $callOrder[] = 'filter';
+                return 'filtered content';
+            });
+
+        $imageProcessor
+            ->expects($this->once())
+            ->method('convertFormat')
+            ->with('filtered content', 'webp', $this->anything())
+            ->willReturnCallback(function () use (&$callOrder) {
+                $callOrder[] = 'format';
+                return 'final content';
+            });
+
+        $strategy = $this->createMock(ImageTransformationStrategyInterface::class);
+        $strategy->method('supports')->willReturn(true);
+        $strategy
+            ->expects($this->once())
+            ->method('transform')
+            ->willReturnCallback(function () use (&$callOrder) {
+                $callOrder[] = 'strategy';
+                return 'strategy result';
+            });
+
+        $settingsService = $this->createStub(SettingsService::class);
+        $settingsService->method('get')->willReturn(85);
+
+        $transformer = new ImageTransformer($imageProcessor, $settingsService, [$strategy]);
+
+        $result = $transformer->transform($content, $imageOptions);
+
+        $this->assertEquals('final content', $result);
+        $this->assertEquals(['strategy', 'filter', 'format'], $callOrder);
+    }
 }

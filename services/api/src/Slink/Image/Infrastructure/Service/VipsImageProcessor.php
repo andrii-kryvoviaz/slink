@@ -6,6 +6,7 @@ namespace Slink\Image\Infrastructure\Service;
 use Jcupitt\Vips\Exception as VipsException;
 use Jcupitt\Vips\Image as VipsImage;
 use RuntimeException;
+use Slink\Image\Domain\Enum\ImageFilter;
 use Slink\Image\Domain\Enum\ImageFormat;
 use Slink\Image\Domain\Service\ImageProcessorInterface;
 use Slink\Image\Domain\ValueObject\AnimatedImageInfo;
@@ -146,6 +147,99 @@ final class VipsImageProcessor implements ImageProcessorInterface {
     } catch (Throwable) {
       return $path;
     }
+  }
+
+  public function applyFilter(string $imageContent, string $filter): string {
+    $imageFilter = ImageFilter::tryFromString($filter);
+
+    if ($imageFilter === null) {
+      return $imageContent;
+    }
+
+    return $this->processImage($imageContent, fn(VipsImage $image) => $this->applyFilterOperation($image, $imageFilter));
+  }
+
+  private function applyFilterOperation(VipsImage $image, ImageFilter $filter): VipsImage {
+    return match ($filter) {
+      ImageFilter::Dramatic => $this->applyDramaticFilter($image),
+      ImageFilter::Noir => $this->applyNoirFilter($image),
+      ImageFilter::Sepia => $this->applyRecombFilter($image, [
+        [0.393, 0.769, 0.189],
+        [0.349, 0.686, 0.168],
+        [0.272, 0.534, 0.131],
+      ]),
+      ImageFilter::Warm => $this->applyRecombFilter($image, [
+        [1.06, 0.1, 0.0],
+        [0.0, 1.0, 0.0],
+        [0.0, 0.0, 0.92],
+      ]),
+      ImageFilter::Cool => $this->applyRecombFilter($image, [
+        [0.92, 0.0, 0.0],
+        [0.0, 1.0, 0.05],
+        [0.0, 0.05, 1.08],
+      ]),
+      ImageFilter::Vivid => $this->applyRecombFilter($image, $this->buildSaturationMatrix(1.3)),
+      ImageFilter::Fade => $image->linear([0.85], [20]),
+    };
+  }
+
+  /**
+   * @param VipsImage $image
+   * @param array<int, array<int, float>> $matrix
+   * @return VipsImage
+   */
+  private function applyRecombFilter(VipsImage $image, array $matrix): VipsImage {
+    $image = $this->ensureSrgb($image);
+    $alpha = null;
+
+    if ($image->hasAlpha()) {
+      $alpha = $image->extract_band($image->bands - 1);
+      $image = $image->extract_band(0, ['n' => $image->bands - 1]);
+    }
+
+    $image = $image->recomb(VipsImage::newFromArray($matrix));
+
+    if ($alpha !== null) {
+      $image = $image->bandjoin($alpha);
+    }
+
+    return $image;
+  }
+
+  private function applyDramaticFilter(VipsImage $image): VipsImage {
+    $image = $this->applyRecombFilter($image, $this->buildSaturationMatrix(0.7));
+    return $image->linear([1.4], [-30]);
+  }
+
+  private function applyNoirFilter(VipsImage $image): VipsImage {
+    $image = $image->colourspace('b-w');
+    return $image->linear([1.3], [-20]);
+  }
+
+  private function ensureSrgb(VipsImage $image): VipsImage {
+    $interpretation = $image->interpretation;
+
+    if ($interpretation !== 'srgb' && $interpretation !== 'rgb') {
+      return $image->colourspace('srgb');
+    }
+
+    return $image;
+  }
+
+  /**
+   * @param float $amount
+   * @return array<int, array<int, float>>
+   */
+  private function buildSaturationMatrix(float $amount): array {
+    $lumaR = 0.3086;
+    $lumaG = 0.6094;
+    $lumaB = 0.0820;
+
+    return [
+      [$lumaR * (1 - $amount) + $amount, $lumaG * (1 - $amount), $lumaB * (1 - $amount)],
+      [$lumaR * (1 - $amount), $lumaG * (1 - $amount) + $amount, $lumaB * (1 - $amount)],
+      [$lumaR * (1 - $amount), $lumaG * (1 - $amount), $lumaB * (1 - $amount) + $amount],
+    ];
   }
 
   /**
