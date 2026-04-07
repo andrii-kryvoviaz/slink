@@ -30,6 +30,7 @@ COPY --parents \
     services/api/src \
     services/api/composer.json \
     ./
+RUN chmod -R g+r /source
 
 FROM composer:${COMPOSER_VERSION} AS vendor
 WORKDIR /dependencies

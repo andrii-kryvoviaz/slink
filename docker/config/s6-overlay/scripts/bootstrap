@@ -1,13 +1,5 @@
 #!/command/with-contenv sh
 
-if [ "$(id -u)" = "0" ]; then
-  chown -R slink:slink /app
-fi
-
-if [ -f /app/var/data/dump.rdb ]; then
-  rm -f /app/var/data/dump.rdb
-fi
-
 slink slink:database:init --no-interaction --connection=event_store
 slink slink:database:init --no-interaction --connection=read_model
 

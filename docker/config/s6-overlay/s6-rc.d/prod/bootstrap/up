@@ -1,1 +1,1 @@
-delegate slink /etc/s6-overlay/scripts/bootstrap
+delegate www-data /etc/s6-overlay/scripts/bootstrap
