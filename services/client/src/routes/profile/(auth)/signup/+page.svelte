@@ -10,6 +10,7 @@
   import { Input } from '@slink/ui/components/input';
 
   import { enhance } from '$app/forms';
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
@@ -36,7 +37,7 @@
 </script>
 
 <svelte:head>
-  <title>Create Account | Slink</title>
+  <title>{$t('auth.signup.page_title')}</title>
 </svelte:head>
 
 <div
@@ -53,10 +54,10 @@
       <h1
         class="text-2xl font-semibold text-gray-900 dark:text-white tracking-tight"
       >
-        Create Account
+        {$t('auth.signup.title')}
       </h1>
       <p class="text-gray-500 dark:text-gray-400 text-sm mt-0.5">
-        Join Slink to start sharing your images
+        {$t('auth.signup.subtitle')}
       </p>
     </div>
   </div>
@@ -72,11 +73,11 @@
     >
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Input
-          label="Username"
+          label={$t('auth.signup.username_label')}
           name="username"
           type="text"
           autocomplete="username"
-          placeholder="Choose a username"
+          placeholder={$t('auth.signup.username_placeholder')}
           value={form?.username || ''}
           error={form?.errors?.username}
           variant="modern"
@@ -89,11 +90,11 @@
         </Input>
 
         <Input
-          label="Email Address"
+          label={$t('auth.signup.email_label')}
           name="email"
           type="email"
           autocomplete="email"
-          placeholder="Enter your email"
+          placeholder={$t('auth.signup.email_placeholder')}
           value={form?.email || ''}
           error={form?.errors?.email}
           variant="modern"
@@ -111,11 +112,11 @@
 
       <div class="space-y-2">
         <Input
-          label="Password"
+          label={$t('auth.signup.password_label')}
           name="password"
           type={showPassword ? 'text' : 'password'}
           autocomplete="new-password"
-          placeholder="Create a strong password"
+          placeholder={$t('auth.signup.password_placeholder')}
           bind:value={passwordValue}
           error={form?.errors?.password}
           variant="modern"
@@ -138,11 +139,11 @@
       </div>
 
       <Input
-        label="Confirm Password"
+        label={$t('auth.signup.confirm_password_label')}
         name="confirm"
         type={showConfirmPassword ? 'text' : 'password'}
         autocomplete="new-password"
-        placeholder="Confirm your password"
+        placeholder={$t('auth.signup.confirm_password_placeholder')}
         error={form?.errors?.confirm}
         variant="modern"
         size="lg"
@@ -167,7 +168,7 @@
         type="submit"
         loading={$isLoading}
       >
-        Create Account
+        {$t('auth.signup.title')}
         {#snippet rightIcon()}
           <Icon
             icon="ph:arrow-right"
@@ -185,12 +186,16 @@
       {/snippet}
       {#snippet content()}
         <BannerContent
-          title="Already have an account?"
-          description="Sign in to access your images"
+          title={$t('auth.signup.already_have_account_title')}
+          description={$t('auth.signup.already_have_account_description')}
         />
       {/snippet}
       {#snippet action()}
-        <BannerAction variant="success" href="/profile/login" text="Sign In" />
+        <BannerAction
+          variant="success"
+          href="/profile/login"
+          text={$t('auth.signin')}
+        />
       {/snippet}
     </Banner>
   </div>

@@ -11,6 +11,7 @@
   import { Input } from '@slink/ui/components/input';
 
   import { enhance } from '$app/forms';
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
@@ -73,7 +74,7 @@
 </script>
 
 <svelte:head>
-  <title>Sign In | Slink</title>
+  <title>{$t('auth.login.page_title')}</title>
 </svelte:head>
 
 <div
@@ -90,10 +91,10 @@
       <h1
         class="text-2xl font-semibold text-gray-900 dark:text-white tracking-tight"
       >
-        Welcome back
+        {$t('auth.login.title')}
       </h1>
       <p class="text-gray-500 dark:text-gray-400 text-sm mt-0.5">
-        Sign in to continue to Slink
+        {$t('auth.login.subtitle')}
       </p>
     </div>
   </div>
@@ -109,11 +110,11 @@
       in:fade={{ duration: 400, delay: 200 }}
     >
       <Input
-        label="Email or Username"
+        label={$t('auth.login.username_label')}
         name="username"
         type="text"
         autocomplete="username"
-        placeholder="Enter your email or username"
+        placeholder={$t('auth.login.username_placeholder')}
         bind:value={usernameValue}
         error={typeof form?.errors === 'object' && 'username' in form.errors
           ? form.errors.username
@@ -129,11 +130,11 @@
 
       <div class="space-y-2">
         <Input
-          label="Password"
+          label={$t('auth.login.password_label')}
           name="password"
           type={showPassword ? 'text' : 'password'}
           autocomplete="current-password"
-          placeholder="Enter your password"
+          placeholder={$t('auth.login.password_placeholder')}
           bind:value={passwordValue}
           error={typeof form?.errors === 'object' && 'password' in form.errors
             ? form.errors.password
@@ -162,7 +163,7 @@
         type="submit"
         loading={$isLoading}
       >
-        Sign In
+        {$t('auth.signin')}
         {#snippet rightIcon()}
           <Icon
             icon="ph:arrow-right"
@@ -180,7 +181,7 @@
           ></div>
           <span
             class="mx-4 shrink-0 text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide"
-            >or continue with</span
+            >{$t('auth.login.or_continue_with')}</span
           >
           <div
             class="flex-grow border-t border-gray-200/60 dark:border-gray-700/40"
@@ -204,14 +205,14 @@
         {/snippet}
         {#snippet content()}
           <BannerContent
-            title="Demo Mode"
-            description="Try the application with the test credentials"
+            title={$t('auth.login.demo_mode_title')}
+            description={$t('auth.login.demo_mode_description')}
           />
         {/snippet}
         {#snippet action()}
           <BannerAction
             variant="violet"
-            text="Get In"
+            text={$t('auth.login.get_in')}
             icon="ph:sign-in"
             onclick={fillDemoCredentials}
           />
@@ -220,7 +221,7 @@
           <BannerFooter
             variant="violet"
             icon="ph:cursor-click"
-            text="Automatically fills credentials and signs you in"
+            text={$t('auth.login.demo_mode_footer')}
           />
         {/snippet}
       </Banner>
@@ -233,12 +234,16 @@
         {/snippet}
         {#snippet content()}
           <BannerContent
-            title="Need an account?"
-            description="Create one to start sharing images"
+            title={$t('auth.login.need_account_title')}
+            description={$t('auth.login.need_account_description')}
           />
         {/snippet}
         {#snippet action()}
-          <BannerAction variant="info" href="/profile/signup" text="Sign Up" />
+          <BannerAction
+            variant="info"
+            href="/profile/signup"
+            text={$t('auth.signup.cta')}
+          />
         {/snippet}
       </Banner>
     {/if}

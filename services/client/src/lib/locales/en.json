@@ -1,0 +1,139 @@
+{
+  "poc": {
+    "test_btn": "Test Button"
+  },
+  "navigation": {
+    "sidebar": {
+      "groups": {
+        "admin": "Administration",
+        "system": "System"
+      },
+      "items": {
+        "explore": "Explore",
+        "upload": "Upload",
+        "history": "History",
+        "tags": "Tags",
+        "collections": "Collections",
+        "bookmarks": "Bookmarks",
+        "notifications": "Notifications",
+        "dashboard": "Dashboard",
+        "users": "Users",
+        "settings": "Settings",
+        "image_settings": "Image Settings",
+        "storage_configuration": "Storage Configuration",
+        "security_settings": "Security Settings",
+        "single_sign_on": "Single Sign-On",
+        "help_faq": "Help & FAQ",
+        "github": "GitHub"
+      }
+    }
+  },
+  "home": {
+    "empty": {
+      "title": "No images yet",
+      "description": "Be the first to share something amazing with the community. Start by uploading your favorite images.",
+      "button": "Upload First Image"
+    }
+  },
+  "common": {
+    "search_placeholder": "Search users...",
+    "user": "User"
+  },
+  "auth": {
+    "signin": "Sign In",
+    "login": {
+      "page_title": "Sign In | Slink",
+      "title": "Welcome back",
+      "subtitle": "Sign in to continue to Slink",
+      "username_label": "Email or Username",
+      "username_placeholder": "Enter your email or username",
+      "password_label": "Password",
+      "password_placeholder": "Enter your password",
+      "or_continue_with": "or continue with",
+      "demo_mode_title": "Demo Mode",
+      "demo_mode_description": "Try the application with the test credentials",
+      "get_in": "Get In",
+      "demo_mode_footer": "Automatically fills credentials and signs you in",
+      "need_account_title": "Need an account?",
+      "need_account_description": "Create one to start sharing images"
+    },
+    "signup": {
+      "cta": "Sign Up",
+      "page_title": "Create Account | Slink",
+      "title": "Create Account",
+      "subtitle": "Join Slink to start sharing your images",
+      "username_label": "Username",
+      "username_placeholder": "Choose a username",
+      "email_label": "Email Address",
+      "email_placeholder": "Enter your email",
+      "password_label": "Password",
+      "password_placeholder": "Create a strong password",
+      "confirm_password_label": "Confirm Password",
+      "confirm_password_placeholder": "Confirm your password",
+      "already_have_account_title": "Already have an account?",
+      "already_have_account_description": "Sign in to access your images"
+    },
+    "awaiting_approval": {
+      "page_title_pending": "Awaiting Approval | Slink",
+      "page_title_approved": "Account Approved | Slink",
+      "review_in_progress": "Review in Progress",
+      "under_review": "Your account is currently under review",
+      "what_happens_next": "What happens next?",
+      "what_happens_next_description": "Your account is being reviewed and will be activated once approved. Please check back later for updates on your account status.",
+      "need_help": "Need help?",
+      "need_help_description": "Contact the administrator if you have questions about your account or the review process.",
+      "account_reference_title": "Your Account Reference",
+      "account_reference_description": "Provide this ID when contacting the administrator",
+      "explore_while_waiting_title": "Explore while you wait",
+      "explore_while_waiting_description": "Browse the platform features",
+      "welcome_aboard": "Welcome Aboard",
+      "approved_and_activated": "Your account has been approved and activated",
+      "all_features_unlocked": "All Features Unlocked",
+      "all_features_unlocked_description": "Upload, share, and manage your content with full access to all platform features. Start creating and sharing your content.",
+      "ready_to_get_started": "Ready to get started?",
+      "ready_to_get_started_description": "Sign in to your account to begin using all the platform features or explore the public gallery to see what others are sharing.",
+      "ready_to_continue_title": "Ready to continue",
+      "ready_to_continue_description": "Sign in to access all platform features"
+    }
+  },
+  "search": {
+    "by_user": "Search by User",
+    "by_description": "Search by Description",
+    "by_hashtag": "Search by Hashtag",
+    "description": "Description",
+    "hashtag": "Hashtag",
+    "placeholder_images": "Search images...",
+    "placeholder_hashtags": "Search hashtags... (e.g., #nature)",
+    "placeholder_descriptions": "Search descriptions...",
+    "clear_aria": "Clear search",
+    "options_aria": "Search options"
+  },
+  "explore": {
+    "empty": {
+      "search": {
+        "title": "No images found",
+        "description_prefix": "No images match your search for",
+        "description_suffix": "Try a different search term or browse all images.",
+        "clear_button": "Clear Search"
+      }
+    }
+  },
+  "navbar": {
+    "upload": "Upload",
+    "upload_image": "Upload Image",
+    "upload_description": "Share your media with others by uploading them and organizing them into collections.",
+    "shortcut": "Shortcut",
+    "toggle_theme": "Toggle Theme",
+    "toggle_theme_description": "Switch between light and dark mode."
+  },
+  "layout": {
+    "translation_test_label": "Translation Test",
+    "switch_zh": "Switch Chinese",
+    "switch_en": "English"
+  },
+  "language": {
+    "switch_aria": "Switch language",
+    "en": "English",
+    "zh": "中文"
+  }
+}

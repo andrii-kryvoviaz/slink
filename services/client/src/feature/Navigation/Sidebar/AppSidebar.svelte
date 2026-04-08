@@ -5,6 +5,8 @@
   import * as Sidebar from '@slink/ui/components/sidebar/index.js';
   import type { ComponentProps } from 'svelte';
 
+  import { t } from '$lib/i18n';
+
   import type { User } from '@slink/lib/auth/Type/User';
 
   import SidebarStorageUsage from './SidebarStorageUsage.svelte';
@@ -26,7 +28,8 @@
   }: Props = $props();
 
   const createUser = (userConfig?: any) => ({
-    displayName: userConfig?.displayName || userConfig?.name || 'User',
+    displayName:
+      userConfig?.displayName || userConfig?.name || $t('common.user'),
     email: userConfig?.email || '',
     avatar: userConfig?.avatar,
   });

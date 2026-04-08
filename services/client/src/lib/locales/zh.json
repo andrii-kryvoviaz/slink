@@ -1,0 +1,139 @@
+{
+  "poc": {
+    "test_btn": "测试按钮"
+  },
+  "navigation": {
+    "sidebar": {
+      "groups": {
+        "admin": "管理",
+        "system": "系统"
+      },
+      "items": {
+        "explore": "探索",
+        "upload": "上传",
+        "history": "历史",
+        "tags": "标签",
+        "collections": "合集",
+        "bookmarks": "书签",
+        "notifications": "通知",
+        "dashboard": "仪表盘",
+        "users": "用户",
+        "settings": "设置",
+        "image_settings": "图像设置",
+        "storage_configuration": "存储配置",
+        "security_settings": "安全设置",
+        "single_sign_on": "单点登录",
+        "help_faq": "帮助与常见问题",
+        "github": "GitHub"
+      }
+    }
+  },
+  "home": {
+    "empty": {
+      "title": "暂无图片",
+      "description": "成为第一个分享精彩内容的人。先上传你最喜欢的图片吧。",
+      "button": "上传第一张图片"
+    }
+  },
+  "common": {
+    "search_placeholder": "搜索用户...",
+    "user": "用户"
+  },
+  "auth": {
+    "signin": "登录",
+    "login": {
+      "page_title": "登录 | Slink",
+      "title": "欢迎回来",
+      "subtitle": "登录以继续使用 Slink",
+      "username_label": "邮箱或用户名",
+      "username_placeholder": "请输入邮箱或用户名",
+      "password_label": "密码",
+      "password_placeholder": "请输入密码",
+      "or_continue_with": "或继续使用",
+      "demo_mode_title": "演示模式",
+      "demo_mode_description": "使用测试凭据体验应用",
+      "get_in": "立即进入",
+      "demo_mode_footer": "将自动填充凭据并为你登录",
+      "need_account_title": "还没有账号？",
+      "need_account_description": "创建账号以开始分享图片"
+    },
+    "signup": {
+      "cta": "注册",
+      "page_title": "创建账号 | Slink",
+      "title": "创建账号",
+      "subtitle": "加入 Slink，开始分享你的图片",
+      "username_label": "用户名",
+      "username_placeholder": "设置一个用户名",
+      "email_label": "邮箱地址",
+      "email_placeholder": "请输入邮箱",
+      "password_label": "密码",
+      "password_placeholder": "创建一个强密码",
+      "confirm_password_label": "确认密码",
+      "confirm_password_placeholder": "请再次输入密码",
+      "already_have_account_title": "已有账号？",
+      "already_have_account_description": "登录以访问你的图片"
+    },
+    "awaiting_approval": {
+      "page_title_pending": "等待审核 | Slink",
+      "page_title_approved": "账号已审核通过 | Slink",
+      "review_in_progress": "审核进行中",
+      "under_review": "你的账号正在审核中",
+      "what_happens_next": "接下来会发生什么？",
+      "what_happens_next_description": "你的账号正在审核，审核通过后将自动激活。请稍后回来查看账号状态更新。",
+      "need_help": "需要帮助？",
+      "need_help_description": "如果你对账号或审核流程有疑问，请联系管理员。",
+      "account_reference_title": "你的账号参考编号",
+      "account_reference_description": "联系管理员时请提供此编号",
+      "explore_while_waiting_title": "等待期间先去探索",
+      "explore_while_waiting_description": "浏览平台功能",
+      "welcome_aboard": "欢迎加入",
+      "approved_and_activated": "你的账号已通过审核并激活",
+      "all_features_unlocked": "全部功能已解锁",
+      "all_features_unlocked_description": "你现在可以完整使用平台功能来上传、分享和管理内容，开始创作并分享吧。",
+      "ready_to_get_started": "准备开始了吗？",
+      "ready_to_get_started_description": "登录账号即可使用全部平台功能，或前往公开画廊看看其他人在分享什么。",
+      "ready_to_continue_title": "准备继续",
+      "ready_to_continue_description": "登录以访问全部平台功能"
+    }
+  },
+  "search": {
+    "by_user": "按用户搜索",
+    "by_description": "按描述搜索",
+    "by_hashtag": "按标签搜索",
+    "description": "描述",
+    "hashtag": "标签",
+    "placeholder_images": "搜索图片...",
+    "placeholder_hashtags": "搜索标签...（例如：#nature）",
+    "placeholder_descriptions": "搜索描述...",
+    "clear_aria": "清除搜索",
+    "options_aria": "搜索选项"
+  },
+  "explore": {
+    "empty": {
+      "search": {
+        "title": "未找到图片",
+        "description_prefix": "没有图片匹配你的搜索",
+        "description_suffix": "请尝试其他搜索词，或浏览全部图片。",
+        "clear_button": "清除搜索"
+      }
+    }
+  },
+  "navbar": {
+    "upload": "上传",
+    "upload_image": "上传图片",
+    "upload_description": "上传并整理到合集，与他人分享你的媒体内容。",
+    "shortcut": "快捷键",
+    "toggle_theme": "切换主题",
+    "toggle_theme_description": "在浅色与深色模式之间切换。"
+  },
+  "layout": {
+    "translation_test_label": "当前翻译测试",
+    "switch_zh": "切换中文",
+    "switch_en": "English"
+  },
+  "language": {
+    "switch_aria": "切换语言",
+    "en": "英文",
+    "zh": "中文"
+  }
+}

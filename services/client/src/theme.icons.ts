@@ -223,4 +223,5 @@ export const themeIcons: string[] = [
   'ph:download',
   'ph:cloud-arrow-up',
   'ph:palette',
+  'ph:translate',
 ];

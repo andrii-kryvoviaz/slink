@@ -29,7 +29,7 @@ export const createAppSidebarItems = (options?: {
       items: [
         {
           id: 'explore',
-          title: 'Explore',
+          title: 'navigation.sidebar.items.explore',
           icon: 'ph:compass',
           href: '/explore',
         },
@@ -37,7 +37,7 @@ export const createAppSidebarItems = (options?: {
           ? [
               {
                 id: 'upload',
-                title: 'Upload',
+                title: 'navigation.sidebar.items.upload',
                 icon: 'ph:plus',
                 href: '/upload',
               },
@@ -47,31 +47,31 @@ export const createAppSidebarItems = (options?: {
           ? [
               {
                 id: 'history',
-                title: 'History',
+                title: 'navigation.sidebar.items.history',
                 icon: 'ph:clock-counter-clockwise',
                 href: '/history',
               },
               {
                 id: 'tags',
-                title: 'Tags',
+                title: 'navigation.sidebar.items.tags',
                 icon: 'ph:tag',
                 href: '/tags',
               },
               {
                 id: 'collections',
-                title: 'Collections',
+                title: 'navigation.sidebar.items.collections',
                 icon: 'ph:folder',
                 href: '/collections',
               },
               {
                 id: 'bookmarks',
-                title: 'Bookmarks',
+                title: 'navigation.sidebar.items.bookmarks',
                 icon: 'ph:bookmark-simple',
                 href: '/bookmarks',
               },
               {
                 id: 'notifications',
-                title: 'Notifications',
+                title: 'navigation.sidebar.items.notifications',
                 icon: 'ph:bell',
                 href: '/notifications',
               },
@@ -84,47 +84,47 @@ export const createAppSidebarItems = (options?: {
   if (showAdmin) {
     baseGroups.push({
       id: 'admin',
-      title: 'Administration',
+      title: 'navigation.sidebar.groups.admin',
       items: [
         {
           id: 'dashboard',
-          title: 'Dashboard',
+          title: 'navigation.sidebar.items.dashboard',
           icon: 'ph:chart-line',
           href: '/admin/dashboard',
         },
         {
           id: 'users',
-          title: 'Users',
+          title: 'navigation.sidebar.items.users',
           icon: 'ph:users',
           href: '/admin/user',
         },
         {
           id: 'admin-settings',
-          title: 'Settings',
+          title: 'navigation.sidebar.items.settings',
           icon: 'ph:gear-fine-light',
           href: '/admin/settings',
           children: [
             {
               id: 'settings-image',
-              title: 'Image Settings',
+              title: 'navigation.sidebar.items.image_settings',
               icon: 'solar:gallery-linear',
               href: '/admin/settings/image',
             },
             {
               id: 'settings-storage',
-              title: 'Storage Configuration',
+              title: 'navigation.sidebar.items.storage_configuration',
               icon: 'solar:database-linear',
               href: '/admin/settings/storage',
             },
             {
               id: 'settings-security',
-              title: 'Security Settings',
+              title: 'navigation.sidebar.items.security_settings',
               icon: 'solar:shield-check-linear',
               href: '/admin/settings/security',
             },
             {
               id: 'settings-sso',
-              title: 'Single Sign-On',
+              title: 'navigation.sidebar.items.single_sign_on',
               icon: 'solar:key-linear',
               href: '/admin/settings/sso',
             },
@@ -138,17 +138,17 @@ export const createAppSidebarItems = (options?: {
   if (showSystemItems) {
     baseGroups.push({
       id: 'system',
-      title: 'System',
+      title: 'navigation.sidebar.groups.system',
       items: [
         {
           id: 'help',
-          title: 'Help & FAQ',
+          title: 'navigation.sidebar.items.help_faq',
           icon: 'ph:question',
           href: '/help/faq',
         },
         {
           id: 'github',
-          title: 'GitHub',
+          title: 'navigation.sidebar.items.github',
           icon: 'ph:github-logo',
           href: `https://github.com/${GITHUB.REPO_OWNER}/${GITHUB.REPO_NAME}`,
         },

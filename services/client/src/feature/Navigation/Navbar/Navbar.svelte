@@ -2,12 +2,17 @@
   import { SearchBar } from '@slink/feature/Search';
   import { Shortcut } from '@slink/ui/components';
   import { Button } from '@slink/ui/components/button';
+  import {
+    DropdownSimple,
+    DropdownSimpleItem,
+  } from '@slink/ui/components/dropdown-simple';
   import * as HoverCard from '@slink/ui/components/hover-card';
   import type { Snippet } from 'svelte';
 
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import type { User } from '$lib/auth/Type/User';
+  import { locale, t } from '$lib/i18n';
   import { usePublicImagesFeed } from '$lib/state/PublicImagesFeed.svelte.js';
   import Icon from '@iconify/svelte';
 
@@ -47,6 +52,11 @@
   function handleUploadShortcut() {
     goto('/upload');
   }
+
+  const languageOptions = [
+    { value: 'zh', labelKey: 'language.zh', icon: 'ph:translate' },
+    { value: 'en', labelKey: 'language.en', icon: 'ph:translate' },
+  ] as const;
 </script>
 
 <svelte:window bind:innerWidth />
@@ -78,13 +88,41 @@
     {@render children?.()}
 
     {#if isExplorePage}
+      <DropdownSimple
+        triggerClass="w-fit"
+        contentProps={{ align: 'start', sideOffset: 12 }}
+      >
+        {#snippet trigger(triggerProps)}
+          <button
+            {...triggerProps}
+            class="inline-flex items-center gap-1.5 rounded-full border border-gray-200/60 bg-white/80 px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm transition-colors hover:border-gray-300 hover:bg-white dark:border-gray-700/60 dark:bg-gray-900/80 dark:text-gray-200 dark:hover:border-gray-600 dark:hover:bg-gray-800"
+            type="button"
+            aria-label={$t('language.switch_aria')}
+          >
+            <Icon icon="ph:translate" class="h-3.5 w-3.5 shrink-0" />
+            <span class="hidden sm:block">
+              {$t($locale === 'zh' ? 'language.zh' : 'language.en')}
+            </span>
+            <Icon icon="ph:caret-down" class="h-3 w-3 shrink-0 opacity-70" />
+          </button>
+        {/snippet}
+        {#each languageOptions as option}
+          <DropdownSimpleItem on={{ click: () => ($locale = option.value) }}>
+            {#snippet icon()}
+              <Icon icon={option.icon} class="h-4 w-4" />
+            {/snippet}
+            {$t(option.labelKey)}
+          </DropdownSimpleItem>
+        {/each}
+      </DropdownSimple>
+
       <SearchBar
         searchTerm={publicImagesFeed.searchTerm}
         searchBy={publicImagesFeed.searchBy as
           | 'user'
           | 'description'
           | 'hashtag'}
-        placeholder="Search images..."
+        placeholder={$t('common.search_placeholder')}
         onsearch={handleSearch}
         onclear={handleClearSearch}
       />
@@ -103,7 +141,7 @@
               class="flex flex-row gap-2"
             >
               <Icon icon="ph:plus-fill" class="h-3 w-3 sm:h-4 sm:w-4" />
-              Upload
+              {$t('navbar.upload')}
             </Button>
           {/snippet}
         </HoverCard.Trigger>
@@ -123,11 +161,12 @@
                 icon="ph:cloud-arrow-up"
                 class="h-4 w-4 text-blue-500 dark:text-blue-400"
               />
-              <span class="text-sm font-semibold">Upload Image</span>
+              <span class="text-sm font-semibold"
+                >{$t('navbar.upload_image')}</span
+              >
             </div>
             <p class="text-xs text-muted-foreground leading-relaxed">
-              Share your media with others by uploading them and organizing them
-              into collections.
+              {$t('navbar.upload_description')}
             </p>
             <div
               class="flex items-center justify-between pt-1.5 border-t border-slate-200/30 dark:border-slate-700/30"
@@ -135,7 +174,7 @@
               <span
                 class="text-[10px] uppercase tracking-wider text-muted-foreground/60 font-medium"
               >
-                Shortcut
+                {$t('navbar.shortcut')}
               </span>
               <Shortcut control={true} shift={true} key="u" size="sm" />
             </div>
@@ -160,7 +199,7 @@
         class="flex items-center gap-2"
       >
         <Icon icon="ph:sign-in" class="h-4 w-4" />
-        <span>Sign In</span>
+        <span>{$t('auth.signin')}</span>
       </Button>
     {/if}
 
@@ -187,10 +226,12 @@
                 icon="ph:palette"
                 class="h-4 w-4 text-blue-500 dark:text-blue-400"
               />
-              <span class="text-sm font-semibold">Toggle Theme</span>
+              <span class="text-sm font-semibold"
+                >{$t('navbar.toggle_theme')}</span
+              >
             </div>
             <p class="text-xs text-muted-foreground leading-relaxed">
-              Switch between light and dark mode.
+              {$t('navbar.toggle_theme_description')}
             </p>
           </div>
         </HoverCard.Content>

@@ -20,6 +20,7 @@
   import { untrack } from 'svelte';
 
   import { page } from '$app/state';
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
@@ -110,8 +111,8 @@
         {#if !publicFeedState.isSearching}
           <EmptyState
             icon="ph:images-duotone"
-            title="No images yet"
-            description="Be the first to share something amazing with the community. Start by uploading your favorite images."
+            title={$t('home.empty.title')}
+            description={$t('home.empty.description')}
             variant="blue"
             size="md"
           >
@@ -123,15 +124,15 @@
                 href="/upload"
               >
                 <Icon icon="ph:upload-simple" class="h-4 w-4" />
-                Upload First Image
+                {$t('home.empty.button')}
               </Button>
             {/snippet}
           </EmptyState>
         {:else}
           <EmptyState
             icon="ph:images-duotone"
-            title="No images found"
-            description={`No images match your search for "${publicFeedState.searchTerm}". Try a different search term or browse all images.`}
+            title={$t('explore.empty.search.title')}
+            description={`${$t('explore.empty.search.description_prefix')} "${publicFeedState.searchTerm}" ${$t('explore.empty.search.description_suffix')}`}
             variant="blue"
             size="md"
           >
@@ -143,7 +144,7 @@
                 onclick={() => publicFeedState.resetSearch()}
               >
                 <Icon icon="lucide:x" class="h-4 w-4" />
-                Clear Search
+                {$t('explore.empty.search.clear_button')}
               </Button>
             {/snippet}
           </EmptyState>

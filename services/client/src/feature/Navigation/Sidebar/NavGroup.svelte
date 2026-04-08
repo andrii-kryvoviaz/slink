@@ -5,6 +5,7 @@
   import * as Sidebar from '@slink/ui/components/sidebar/index.js';
 
   import { page } from '$app/state';
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   import type { AppSidebarGroup, AppSidebarItem } from './types';
@@ -62,7 +63,7 @@
 
 <Sidebar.Group>
   {#if group.title}
-    <Sidebar.GroupLabel>{group.title}</Sidebar.GroupLabel>
+    <Sidebar.GroupLabel>{$t(group.title)}</Sidebar.GroupLabel>
   {/if}
   <Sidebar.Menu>
     {#each group.items as item (item.id)}
@@ -87,7 +88,7 @@
                           <Icon icon={item.icon} class="w-4 h-4" />
                         {/if}
                         <span class="group-data-[collapsible=icon]:hidden"
-                          >{item.title}</span
+                          >{$t(item.title)}</span
                         >
                       </span>
                     {/snippet}
@@ -109,7 +110,7 @@
                     {#if item.icon}
                       <Icon icon={item.icon} class="w-4 h-4" />
                     {/if}
-                    {item.title}
+                    {$t(item.title)}
                   </a>
                 {/snippet}
               </DropdownMenu.Item>
@@ -130,7 +131,7 @@
                         <Icon icon={subItem.icon} class="w-4 h-4" />
                       {/if}
                       <span class:font-medium={isSubItemActive}
-                        >{subItem.title}</span
+                        >{$t(subItem.title)}</span
                       >
                     </a>
                   {/snippet}
@@ -162,7 +163,7 @@
                       {#if item.icon}
                         <Icon icon={item.icon} class="w-4 h-4" />
                       {/if}
-                      <span>{item.title}</span>
+                      <span>{$t(item.title)}</span>
                     </a>
                   {/snippet}
                 </Sidebar.MenuButton>
@@ -209,7 +210,7 @@
                             {#if subItem.icon}
                               <Icon icon={subItem.icon} class="w-3.5 h-3.5" />
                             {/if}
-                            <span>{subItem.title}</span>
+                            <span>{$t(subItem.title)}</span>
                           </a>
                         {/snippet}
                       </Sidebar.MenuSubButton>
@@ -223,7 +224,7 @@
       {:else}
         <Sidebar.MenuItem>
           <Sidebar.MenuButton
-            tooltipContent={item.title}
+            tooltipContent={$t(item.title)}
             {isActive}
             class="hover:pl-4 data-[active=true]:pl-4 group-data-[collapsible=icon]:hover:pl-2"
           >
@@ -239,7 +240,7 @@
                   <Icon icon={item.icon} class="w-4 h-4" />
                 {/if}
                 <span class="group-data-[collapsible=icon]:hidden"
-                  >{item.title}</span
+                  >{$t(item.title)}</span
                 >
                 {#if isExternalLink}
                   <Icon

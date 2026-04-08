@@ -4,6 +4,7 @@
     DropdownSimpleItem,
   } from '@slink/ui/components/dropdown-simple';
 
+  import { t } from '$lib/i18n';
   import { hasHashtags } from '$lib/utils/text/hashtag';
   import { debounce } from '$lib/utils/time/debounce';
   import { className as cn } from '$lib/utils/ui/className';
@@ -21,25 +22,25 @@
   let {
     searchTerm = $bindable(''),
     searchBy = $bindable('user'),
-    placeholder = 'Search images...',
+    placeholder = $t('search.placeholder_images'),
     disabled = false,
     onsearch,
     onclear,
   }: Props = $props();
 
   const searchOptions = [
-    { value: 'user', label: 'Search by User', icon: 'ph:user' },
+    { value: 'user', labelKey: 'search.by_user', icon: 'ph:user' },
     {
       value: 'description',
-      label: 'Search by Description',
+      labelKey: 'search.by_description',
       icon: 'ph:text-align-left',
     },
     {
       value: 'hashtag',
-      label: 'Search by Hashtag',
+      labelKey: 'search.by_hashtag',
       icon: 'ph:hash',
     },
-  ];
+  ] as const;
 
   let dropdownOpen = $state(false);
   let searchInput: HTMLInputElement;
@@ -96,18 +97,23 @@
   }
 
   let currentOption = $derived(
-    searchOptions
-      .find((opt) => opt.value === searchBy)
-      ?.label.replace('Search by ', '') || 'User',
+    searchBy === 'user'
+      ? $t('common.user')
+      : searchBy === 'description'
+        ? $t('search.description')
+        : $t('search.hashtag'),
   );
 
   const placeholderMap = {
-    hashtag: 'Search hashtags... (e.g., #nature)',
-    description: 'Search descriptions...',
-    user: 'Search users...',
+    hashtag: $t('search.placeholder_hashtags'),
+    description: $t('search.placeholder_descriptions'),
   };
 
-  let dynamicPlaceholder = $derived(placeholderMap[searchBy] ?? placeholder);
+  let dynamicPlaceholder = $derived(
+    searchBy === 'user'
+      ? $t('common.search_placeholder')
+      : (placeholderMap[searchBy] ?? placeholder),
+  );
 </script>
 
 <div class="relative z-40" class:opacity-60={disabled}>
@@ -150,7 +156,7 @@
           'hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors duration-150 shrink-0',
         )}
         type="button"
-        aria-label="Clear search"
+        aria-label={$t('search.clear_aria')}
         {disabled}
       >
         <Icon icon="ph:x" class="w-2.5 h-2.5 sm:w-3 sm:h-3" />
@@ -174,7 +180,7 @@
             'whitespace-nowrap shrink-0',
           )}
           type="button"
-          aria-label="Search options"
+          aria-label={$t('search.options_aria')}
           {disabled}
         >
           <span class="hidden sm:block">{currentOption}</span>
@@ -193,7 +199,7 @@
           {#snippet icon()}
             <Icon icon={option.icon} class="h-4 w-4" />
           {/snippet}
-          {option.label}
+          {$t(option.labelKey)}
         </DropdownSimpleItem>
       {/each}
     </DropdownSimple>

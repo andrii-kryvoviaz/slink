@@ -8,6 +8,7 @@
   import { CopyableText } from '@slink/feature/Text';
 
   import { page } from '$app/state';
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
@@ -22,7 +23,9 @@
 
 <svelte:head>
   <title
-    >{data.status === 'active' ? 'Account Approved' : 'Awaiting Approval'} | Slink</title
+    >{data.status === 'active'
+      ? $t('auth.awaiting_approval.page_title_approved')
+      : $t('auth.awaiting_approval.page_title_pending')}</title
   >
 </svelte:head>
 
@@ -44,10 +47,10 @@
         <h1
           class="text-3xl font-bold text-gray-900 dark:text-white tracking-tight mb-2"
         >
-          Review in Progress
+          {$t('auth.awaiting_approval.review_in_progress')}
         </h1>
         <p class="text-gray-600 dark:text-gray-400 text-base">
-          Your account is currently under review
+          {$t('auth.awaiting_approval.under_review')}
         </p>
       </div>
     </div>
@@ -70,14 +73,12 @@
             <h3
               class="text-xl font-semibold text-gray-900 dark:text-white mb-4 tracking-tight"
             >
-              What happens next?
+              {$t('auth.awaiting_approval.what_happens_next')}
             </h3>
             <p
               class="text-gray-600 dark:text-gray-400 leading-relaxed text-base"
             >
-              Your account is being reviewed and will be activated once
-              approved. Please check back later for updates on your account
-              status.
+              {$t('auth.awaiting_approval.what_happens_next_description')}
             </p>
           </div>
         </div>
@@ -100,13 +101,12 @@
             <h3
               class="text-xl font-semibold text-gray-900 dark:text-white mb-4 tracking-tight"
             >
-              Need help?
+              {$t('auth.awaiting_approval.need_help')}
             </h3>
             <p
               class="text-gray-600 dark:text-gray-400 mb-4 leading-relaxed text-base"
             >
-              Contact the administrator if you have questions about your account
-              or the review process.
+              {$t('auth.awaiting_approval.need_help_description')}
             </p>
           </div>
         </div>
@@ -119,8 +119,10 @@
       {/snippet}
       {#snippet content()}
         <BannerContent
-          title="Your Account Reference"
-          description="Provide this ID when contacting the administrator"
+          title={$t('auth.awaiting_approval.account_reference_title')}
+          description={$t(
+            'auth.awaiting_approval.account_reference_description',
+          )}
         />
       {/snippet}
       {#snippet action()}
@@ -140,12 +142,18 @@
         {/snippet}
         {#snippet content()}
           <BannerContent
-            title="Explore while you wait"
-            description="Browse the platform features"
+            title={$t('auth.awaiting_approval.explore_while_waiting_title')}
+            description={$t(
+              'auth.awaiting_approval.explore_while_waiting_description',
+            )}
           />
         {/snippet}
         {#snippet action()}
-          <BannerAction variant="neutral" href="/explore" text="Explore" />
+          <BannerAction
+            variant="neutral"
+            href="/explore"
+            text={$t('navigation.sidebar.items.explore')}
+          />
         {/snippet}
       </Banner>
     {/if}
@@ -170,10 +178,10 @@
         <h1
           class="text-3xl font-bold text-gray-900 dark:text-white tracking-tight mb-2"
         >
-          Welcome Aboard
+          {$t('auth.awaiting_approval.welcome_aboard')}
         </h1>
         <p class="text-gray-600 dark:text-gray-400 text-base">
-          Your account has been approved and activated
+          {$t('auth.awaiting_approval.approved_and_activated')}
         </p>
       </div>
     </div>
@@ -196,13 +204,12 @@
             <h3
               class="text-xl font-semibold text-gray-900 dark:text-white mb-4 tracking-tight"
             >
-              All Features Unlocked
+              {$t('auth.awaiting_approval.all_features_unlocked')}
             </h3>
             <p
               class="text-gray-600 dark:text-gray-400 leading-relaxed text-base"
             >
-              Upload, share, and manage your content with full access to all
-              platform features. Start creating and sharing your content.
+              {$t('auth.awaiting_approval.all_features_unlocked_description')}
             </p>
           </div>
         </div>
@@ -225,13 +232,12 @@
             <h3
               class="text-xl font-semibold text-gray-900 dark:text-white mb-4 tracking-tight"
             >
-              Ready to get started?
+              {$t('auth.awaiting_approval.ready_to_get_started')}
             </h3>
             <p
               class="text-gray-600 dark:text-gray-400 leading-relaxed text-base"
             >
-              Sign in to your account to begin using all the platform features
-              or explore the public gallery to see what others are sharing.
+              {$t('auth.awaiting_approval.ready_to_get_started_description')}
             </p>
           </div>
         </div>
@@ -244,12 +250,18 @@
       {/snippet}
       {#snippet content()}
         <BannerContent
-          title="Ready to continue"
-          description="Sign in to access all platform features"
+          title={$t('auth.awaiting_approval.ready_to_continue_title')}
+          description={$t(
+            'auth.awaiting_approval.ready_to_continue_description',
+          )}
         />
       {/snippet}
       {#snippet action()}
-        <BannerAction variant="info" href="/profile/login" text="Sign In" />
+        <BannerAction
+          variant="info"
+          href="/profile/login"
+          text={$t('auth.signin')}
+        />
       {/snippet}
     </Banner>
   </div>
