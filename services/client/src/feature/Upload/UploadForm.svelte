@@ -5,6 +5,7 @@
   import { Shortcut } from '@slink/ui/components';
   import { cva } from 'class-variance-authority';
 
+  import { t } from '$lib/i18n';
   import { className as cn } from '$lib/utils/ui/className';
   import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
   import Icon from '@iconify/svelte';
@@ -28,12 +29,12 @@
 
   const processFiles = (fileList: FileList | null | undefined) => {
     if (!fileList) {
-      toast.warning('No files selected');
+      toast.warning($t('upload.form.toast.no_files_selected'));
       return;
     }
 
     if (!allowMultiple && fileList.length > 1) {
-      toast.warning('Only one file allowed at a time');
+      toast.warning($t('upload.form.toast.only_one_file'));
       return;
     }
 
@@ -174,12 +175,14 @@
           <h2
             class="text-xl sm:text-2xl font-semibold bg-gradient-to-r from-slate-700 to-slate-900 dark:from-slate-200 dark:to-slate-400 bg-clip-text text-transparent"
           >
-            Drop your {allowMultiple ? 'images' : 'image'} here
+            {allowMultiple
+              ? $t('upload.form.drop_title_multiple')
+              : $t('upload.form.drop_title_single')}
           </h2>
           <p
             class="text-slate-500 dark:text-slate-400 text-base sm:text-lg font-light max-w-xs sm:max-w-md mx-auto"
           >
-            or click to browse from your device
+            {$t('upload.form.drop_subtitle')}
           </p>
         </div>
 
@@ -193,7 +196,7 @@
             />
             <span
               class="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300"
-              >Quick paste:</span
+              >{$t('upload.form.quick_paste')}</span
             >
             <Shortcut control={true} key="v" size="lg" />
           </div>
@@ -219,7 +222,7 @@
               onclick={(event) => event.stopPropagation()}
             >
               <Icon icon="ph:info-circle" class="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-              <span>View all supported formats</span>
+              <span>{$t('upload.form.supported_formats_link')}</span>
               <Icon
                 icon="ph:arrow-right"
                 class="h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform duration-200 group-hover/link:translate-x-0.5"
@@ -242,7 +245,7 @@
           <p
             class="text-lg font-light text-slate-700/90 dark:text-slate-200/90"
           >
-            Drop to upload
+            {$t('upload.form.drop_overlay')}
           </p>
         </div>
       </div>
@@ -262,10 +265,12 @@
           <h3
             class="text-2xl font-semibold bg-gradient-to-r from-slate-700 to-slate-900 dark:from-slate-200 dark:to-slate-400 bg-clip-text text-transparent"
           >
-            Almost there
+            {$t('upload.form.processing_title')}
           </h3>
           <p class="text-slate-500 dark:text-slate-400 text-lg">
-            Uploading your {allowMultiple ? 'images' : 'image'}...
+            {allowMultiple
+              ? $t('upload.form.processing_subtitle_multiple')
+              : $t('upload.form.processing_subtitle_single')}
           </p>
         </div>
       </div>

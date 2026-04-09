@@ -5,6 +5,8 @@
   import { Select } from '@slink/ui/components/select';
   import { Switch } from '@slink/ui/components/switch';
 
+  import { t } from '$lib/i18n';
+
   import type { SettingCategory } from '@slink/lib/settings/Type/GlobalSettings';
   import type { ImageSettings as ImageSettingsType } from '@slink/lib/settings/Type/ImageSettings';
 
@@ -26,9 +28,9 @@
   }: Props = $props();
 
   const targetFormatOptions = [
-    { value: 'webp', label: 'WEBP (Recommended)' },
-    { value: 'avif', label: 'AVIF' },
-    { value: 'jpg', label: 'JPEG' },
+    { value: 'webp', label: 'settings.image.target_format.webp' },
+    { value: 'avif', label: 'settings.image.target_format.avif' },
+    { value: 'jpg', label: 'settings.image.target_format.jpg' },
   ];
 
   let targetFormat = $derived.by(() => settings.targetFormat ?? 'webp');
@@ -36,10 +38,10 @@
 
 <SettingsPane category="image" {loading} on={{ save: onSave }}>
   {#snippet title()}
-    Image Settings
+    {$t('settings.image.title')}
   {/snippet}
   {#snippet description()}
-    Configure image upload limits and processing options
+    {$t('settings.image.description')}
   {/snippet}
 
   <SettingItem
@@ -50,10 +52,10 @@
     }}
   >
     {#snippet label()}
-      Maximum Image Size
+      {$t('settings.image.max_size.label')}
     {/snippet}
     {#snippet hint()}
-      Set the maximum size limit for image uploads
+      {$t('settings.image.max_size.hint')}
     {/snippet}
     <FileSizeInput name="imageMaxSize" bind:value={settings.maxSize} />
   </SettingItem>
@@ -66,10 +68,10 @@
     }}
   >
     {#snippet label()}
-      Strip EXIF Metadata
+      {$t('settings.image.strip_exif.label')}
     {/snippet}
     {#snippet hint()}
-      Automatically remove metadata from uploaded images for privacy
+      {$t('settings.image.strip_exif.hint')}
     {/snippet}
     <Switch
       name="imageStripExifMetadata"
@@ -85,11 +87,10 @@
     }}
   >
     {#snippet label()}
-      Allow Only Public Images
+      {$t('settings.image.allow_only_public.label')}
     {/snippet}
     {#snippet hint()}
-      When enabled, all images are automatically set to public and visibility
-      cannot be changed
+      {$t('settings.image.allow_only_public.hint')}
     {/snippet}
     <Switch
       name="imageAllowOnlyPublicImages"
@@ -105,10 +106,10 @@
     }}
   >
     {#snippet label()}
-      Enable Image Deduplication
+      {$t('settings.image.dedup.label')}
     {/snippet}
     {#snippet hint()}
-      Detect and reject duplicate images during upload
+      {$t('settings.image.dedup.hint')}
     {/snippet}
     <Switch
       name="imageEnableDeduplication"
@@ -118,7 +119,7 @@
     {#snippet footer()}
       {#if settings.enableDeduplication}
         <Notice variant="info" appearance="subtle" size="sm" class="px-4">
-          Only applies to new uploads. Existing images are not affected.
+          {$t('settings.image.dedup.notice')}
         </Notice>
       {/if}
     {/snippet}
@@ -132,11 +133,10 @@
     }}
   >
     {#snippet label()}
-      Compression Quality
+      {$t('settings.image.compression_quality.label')}
     {/snippet}
     {#snippet hint()}
-      Quality level for lossy image compression (1-100). Used during format
-      conversion if target format supports it
+      {$t('settings.image.compression_quality.hint')}
     {/snippet}
     <NumberInput
       name="imageCompressionQuality"
@@ -155,10 +155,10 @@
     }}
   >
     {#snippet label()}
-      Force Format Conversion
+      {$t('settings.image.force_conversion.label')}
     {/snippet}
     {#snippet hint()}
-      Automatically convert all uploaded images to a specific format
+      {$t('settings.image.force_conversion.hint')}
     {/snippet}
     <Switch
       name="imageForceFormatConversion"
@@ -175,18 +175,21 @@
       }}
     >
       {#snippet label()}
-        Target Format
+        {$t('settings.image.target_format.label')}
       {/snippet}
       {#snippet hint()}
-        Format to convert uploaded images to
+        {$t('settings.image.target_format.hint')}
       {/snippet}
       <Select
-        items={targetFormatOptions}
+        items={targetFormatOptions.map((item) => ({
+          ...item,
+          label: $t(item.label),
+        }))}
         value={targetFormat}
         onValueChange={(value: string) => {
           settings.targetFormat = value;
         }}
-        placeholder="Select format"
+        placeholder={$t('settings.image.target_format.placeholder')}
       />
     </SettingItem>
 
@@ -198,10 +201,10 @@
       }}
     >
       {#snippet label()}
-        Convert Animated Images
+        {$t('settings.image.convert_animated.label')}
       {/snippet}
       {#snippet hint()}
-        Include animated images (GIF, animated WebP/AVIF) in conversion
+        {$t('settings.image.convert_animated.hint')}
       {/snippet}
       <Switch
         name="imageConvertAnimatedImages"
@@ -210,7 +213,7 @@
 
       {#snippet footer()}
         <Notice variant="warning" appearance="subtle" size="sm" class="px-4">
-          Processing animated images is CPU-intensive and may slow down uploads.
+          {$t('settings.image.convert_animated.notice_processing')}
         </Notice>
         {#if settings.convertAnimatedImages}
           {#if settings.targetFormat !== 'webp'}
@@ -220,8 +223,9 @@
               size="sm"
               class="px-4"
             >
-              Converting to {settings.targetFormat?.toUpperCase()} will result in
-              loss of animation.
+              {$t('settings.image.convert_animated.notice_loss_prefix')}
+              {settings.targetFormat?.toUpperCase()}
+              {$t('settings.image.convert_animated.notice_loss_suffix')}
             </Notice>
           {/if}
         {/if}
@@ -237,10 +241,10 @@
     }}
   >
     {#snippet label()}
-      Enable Licensing
+      {$t('settings.image.enable_licensing.label')}
     {/snippet}
     {#snippet hint()}
-      Allow users to set licenses on their images (Creative Commons, etc.)
+      {$t('settings.image.enable_licensing.hint')}
     {/snippet}
     <div class="flex justify-end">
       <Switch

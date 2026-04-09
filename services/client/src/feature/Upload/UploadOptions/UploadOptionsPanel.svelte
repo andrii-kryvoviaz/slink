@@ -6,6 +6,7 @@
   } from '@slink/ui/components/collapsible';
   import type { Snippet } from 'svelte';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
   import { slide } from 'svelte/transition';
 
@@ -41,7 +42,7 @@
           <span
             class="text-sm font-medium text-slate-700 dark:text-slate-200 leading-tight"
           >
-            Upload Options
+            {$t('upload.options.title')}
           </span>
         </div>
       </div>

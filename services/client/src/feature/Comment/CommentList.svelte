@@ -4,6 +4,7 @@
   import { onDestroy } from 'svelte';
 
   import { page } from '$app/state';
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   import type { AuthenticatedUser } from '@slink/api/Response';
@@ -89,7 +90,9 @@
     class="flex flex-col w-full h-full bg-white/5 backdrop-blur-sm rounded-2xl p-4"
   >
     <div class="flex items-center justify-between mb-4">
-      <h3 class="text-sm font-medium text-white/80">Comments</h3>
+      <h3 class="text-sm font-medium text-white/80">
+        {$t('comments.title')}
+      </h3>
       <div class="flex items-center gap-1">
         {#if count > 0}
           <Tooltip side="bottom" size="xs" variant="dark">
@@ -107,8 +110,8 @@
               </button>
             {/snippet}
             {settings.comment.sortOrder === SortOrder.Asc
-              ? 'Oldest first'
-              : 'Newest first'}
+              ? $t('comments.sort.oldest_first')
+              : $t('comments.sort.newest_first')}
           </Tooltip>
           <span class="text-xs text-white/40 leading-6">{count}</span>
         {/if}
@@ -127,8 +130,8 @@
             icon="heroicons:chat-bubble-left-right"
             class="w-10 h-10 mb-3 text-white/20"
           />
-          <p class="text-sm">No comments yet</p>
-          <p class="text-xs mt-1">Be the first to comment</p>
+          <p class="text-sm">{$t('comments.empty.title')}</p>
+          <p class="text-xs mt-1">{$t('comments.empty.description')}</p>
         </div>
       {:else}
         {#key count}
@@ -162,7 +165,7 @@
       />
     {:else}
       <div class="mt-4 pt-4 border-t border-white/10 text-center">
-        <p class="text-sm text-white/50">Sign in to comment</p>
+        <p class="text-sm text-white/50">{$t('comments.sign_in_to_comment')}</p>
       </div>
     {/if}
   </div>

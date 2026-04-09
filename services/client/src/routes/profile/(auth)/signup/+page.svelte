@@ -11,6 +11,7 @@
 
   import { enhance } from '$app/forms';
   import { t } from '$lib/i18n';
+  import { translateApiErrorMessage } from '$lib/utils/error/translateApiErrorMessage';
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
@@ -31,7 +32,7 @@
 
   $effect(() => {
     if (form?.errors?.message) {
-      toast.error(form.errors.message);
+      toast.error(translateApiErrorMessage(form.errors.message));
     }
   });
 </script>
@@ -79,7 +80,9 @@
           autocomplete="username"
           placeholder={$t('auth.signup.username_placeholder')}
           value={form?.username || ''}
-          error={form?.errors?.username}
+          error={form?.errors?.username
+            ? translateApiErrorMessage(form.errors.username)
+            : undefined}
           variant="modern"
           size="lg"
           rounded="lg"
@@ -96,7 +99,9 @@
           autocomplete="email"
           placeholder={$t('auth.signup.email_placeholder')}
           value={form?.email || ''}
-          error={form?.errors?.email}
+          error={form?.errors?.email
+            ? translateApiErrorMessage(form.errors.email)
+            : undefined}
           variant="modern"
           size="lg"
           rounded="lg"
@@ -118,7 +123,9 @@
           autocomplete="new-password"
           placeholder={$t('auth.signup.password_placeholder')}
           bind:value={passwordValue}
-          error={form?.errors?.password}
+          error={form?.errors?.password
+            ? translateApiErrorMessage(form.errors.password)
+            : undefined}
           variant="modern"
           size="lg"
           rounded="lg"
@@ -144,7 +151,9 @@
         type={showConfirmPassword ? 'text' : 'password'}
         autocomplete="new-password"
         placeholder={$t('auth.signup.confirm_password_placeholder')}
-        error={form?.errors?.confirm}
+        error={form?.errors?.confirm
+          ? translateApiErrorMessage(form.errors.confirm)
+          : undefined}
         variant="modern"
         size="lg"
         rounded="lg"

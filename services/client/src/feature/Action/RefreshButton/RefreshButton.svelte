@@ -4,6 +4,7 @@
   import { cva } from 'class-variance-authority';
   import type { Snippet } from 'svelte';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   const refreshIconVariants = cva(
@@ -58,7 +59,7 @@
       {/snippet}
 
       {#if !loading}
-        Refresh
+        {$t('common.refresh')}
       {/if}
     </Tooltip>
   </div>

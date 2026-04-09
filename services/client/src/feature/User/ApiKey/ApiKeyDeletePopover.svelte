@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Button } from '@slink/ui/components/button';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
   import { type Readable, readable } from 'svelte/store';
 
@@ -34,10 +35,10 @@
     </div>
     <div>
       <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
-        Revoke API Key
+        {$t('pages.integrations.api_keys.delete.title')}
       </h3>
       <p class="text-xs text-gray-500 dark:text-gray-400">
-        This action cannot be undone
+        {$t('pages.integrations.api_keys.delete.subtitle')}
       </p>
     </div>
   </div>
@@ -51,7 +52,7 @@
           {apiKey.name}
         </span>
         <p class="text-xs text-gray-500 dark:text-gray-400">
-          This API key will be permanently revoked and cannot be recovered
+          {$t('pages.integrations.api_keys.delete.description')}
         </p>
       </div>
     </div>
@@ -66,7 +67,7 @@
       disabled={$loading}
       onclick={onCancel}
     >
-      Cancel
+      {$t('pages.integrations.api_keys.delete.cancel')}
     </Button>
     <Button
       variant="danger"
@@ -81,7 +82,7 @@
       {:else}
         <Icon icon="lucide:trash-2" class="h-4 w-4 mr-2" />
       {/if}
-      Revoke Key
+      {$t('pages.integrations.api_keys.delete.confirm')}
     </Button>
   </div>
 </div>

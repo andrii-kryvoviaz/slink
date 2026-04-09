@@ -10,6 +10,7 @@
   import type { Visibility } from '@slink/feature/Upload/UploadOptions';
 
   import { page } from '$app/state';
+  import { t } from '$lib/i18n';
   import { fade } from 'svelte/transition';
 
   import { useUploadPageState } from '@slink/lib/state/UploadPageState.svelte';
@@ -26,7 +27,7 @@
 </script>
 
 <svelte:head>
-  <title>Upload | Slink</title>
+  <title>{$t('upload.page_title')}</title>
 </svelte:head>
 
 <div class="min-h-full">
@@ -57,15 +58,15 @@
                 {/snippet}
                 {#snippet content()}
                   <BannerContent
-                    title="Guest Upload"
-                    description="You can upload images without an account, but consider signing in to manage them"
+                    title={$t('upload.guest_banner.title')}
+                    description={$t('upload.guest_banner.description')}
                   />
                 {/snippet}
                 {#snippet action()}
                   <BannerAction
                     variant="info"
                     href="/profile/login"
-                    text="Sign In"
+                    text={$t('auth.signin')}
                   />
                 {/snippet}
               </Banner>
@@ -76,15 +77,15 @@
                 {/snippet}
                 {#snippet content()}
                   <BannerContent
-                    title="Sign in to continue"
-                    description="Upload and manage your images securely"
+                    title={$t('upload.login_required_banner.title')}
+                    description={$t('upload.login_required_banner.description')}
                   />
                 {/snippet}
                 {#snippet action()}
                   <BannerAction
                     variant="warning"
                     href="/profile/login"
-                    text="Get Started"
+                    text={$t('upload.login_required_banner.cta')}
                   />
                 {/snippet}
               </Banner>

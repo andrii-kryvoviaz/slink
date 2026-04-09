@@ -26,6 +26,19 @@
         "help_faq": "帮助与常见问题",
         "github": "GitHub"
       }
+    },
+    "user_menu": {
+      "account_settings": "账号设置",
+      "external_integrations": "外部集成",
+      "preferences": "偏好设置",
+      "sign_out": "退出登录"
+    },
+    "projects": {
+      "title": "项目",
+      "more": "更多",
+      "view_project": "查看项目",
+      "share_project": "分享项目",
+      "delete_project": "删除项目"
     }
   },
   "home": {
@@ -37,7 +50,8 @@
   },
   "common": {
     "search_placeholder": "搜索用户...",
-    "user": "用户"
+    "user": "用户",
+    "refresh": "刷新"
   },
   "auth": {
     "signin": "登录",
@@ -94,6 +108,13 @@
       "ready_to_get_started_description": "登录账号即可使用全部平台功能，或前往公开画廊看看其他人在分享什么。",
       "ready_to_continue_title": "准备继续",
       "ready_to_continue_description": "登录以访问全部平台功能"
+    },
+    "password_strength": {
+      "weak": "弱",
+      "fair": "一般",
+      "good": "良好",
+      "strong": "强",
+      "very_strong": "很强"
     }
   },
   "search": {
@@ -126,6 +147,519 @@
     "toggle_theme": "切换主题",
     "toggle_theme_description": "在浅色与深色模式之间切换。"
   },
+  "upload": {
+    "page_title": "上传 | Slink",
+    "guest_banner": {
+      "title": "游客上传",
+      "description": "无需账号也可上传图片，但建议登录以便管理图片"
+    },
+    "login_required_banner": {
+      "title": "请先登录",
+      "description": "登录后可安全上传并管理你的图片",
+      "cta": "立即开始"
+    },
+    "form": {
+      "toast": {
+        "no_files_selected": "未选择文件",
+        "only_one_file": "一次只允许上传一个文件"
+      },
+      "drop_title_single": "将图片拖拽到这里",
+      "drop_title_multiple": "将图片拖拽到这里",
+      "drop_subtitle": "或点击从设备中选择",
+      "quick_paste": "快速粘贴：",
+      "supported_formats_link": "查看全部支持格式",
+      "drop_overlay": "松开以上传",
+      "processing_title": "即将完成",
+      "processing_subtitle_single": "正在上传你的图片...",
+      "processing_subtitle_multiple": "正在上传你的图片..."
+    },
+    "options": {
+      "title": "上传选项",
+      "add_more": "继续添加",
+      "add_tags": "添加标签",
+      "collection": "合集",
+      "public": "公开",
+      "private": "私密"
+    },
+    "multi": {
+      "complete": "已完成",
+      "uploading": "上传中",
+      "files_uploaded": "个文件已上传",
+      "failed": "失败",
+      "retry_failed": "重试失败项",
+      "cancel": "取消",
+      "done": "完成",
+      "overall_progress": "总体进度",
+      "upload_failed": "上传失败"
+    },
+    "success": {
+      "title": "上传成功！",
+      "description": "你的图片已成功上传到 Slink。",
+      "guest_notice_title": "游客上传提示",
+      "guest_notice_description": "如需管理图片并使用更多功能，建议创建账号。",
+      "upload_another": "继续上传",
+      "create_account": "创建账号",
+      "view_history": "查看历史"
+    }
+  },
+  "storage_usage": {
+    "title": "存储用量",
+    "error": "加载存储用量失败",
+    "provider": "存储提供方",
+    "total_usage": "总用量",
+    "images": "图片",
+    "cache": "缓存",
+    "files": "个文件",
+    "empty": "暂无存储数据",
+    "providers": {
+      "local": "本地存储",
+      "s3": "Amazon S3",
+      "smb": "SMB 共享"
+    }
+  },
+  "pages": {
+    "common": {
+      "view_more": "查看更多",
+      "try_adjust_search": "请尝试调整搜索关键词"
+    },
+    "history": {
+      "page_title": "上传历史 | Slink",
+      "title": "上传历史",
+      "subtitle": "查看并管理你上传的图片",
+      "empty": {
+        "filtered_title": "未找到匹配图片",
+        "filtered_description": "当前标签筛选下没有匹配图片，请尝试移除部分标签或清空筛选。",
+        "title": "暂无历史记录",
+        "description": "你的上传历史会显示在这里。开始上传图片即可在此查看和管理。",
+        "cta": "上传图片"
+      },
+      "batch": {
+        "add_to_collection": "添加到合集",
+        "tag": "标签",
+        "assign_tags": "分配标签"
+      }
+    },
+    "tags": {
+      "page_title": "我的标签 | Slink",
+      "title": "我的标签",
+      "subtitle": "为你的图片创建并管理标签",
+      "create": "创建",
+      "create_tag": "创建标签",
+      "search_placeholder": "搜索标签...",
+      "empty_title": "未找到标签",
+      "empty_description": "创建你的第一个标签开始使用"
+    },
+    "collections": {
+      "page_title": "合集 | Slink",
+      "title": "合集",
+      "subtitle": "将图片整理到专辑中",
+      "create": "创建",
+      "create_collection": "创建合集",
+      "search_placeholder": "搜索合集...",
+      "empty_title": "未找到合集",
+      "empty_description": "创建你的第一个合集，用于整理和分享图片。",
+      "table": {
+        "name": "名称",
+        "items": "项目数",
+        "description": "描述",
+        "created": "创建时间",
+        "actions": "操作"
+      },
+      "detail": {
+        "title": "合集",
+        "back_to_collections": "返回合集",
+        "name_placeholder": "合集名称...",
+        "name_empty": "添加名称...",
+        "items_count": "项",
+        "description_placeholder": "添加描述...",
+        "description_empty": "点击添加描述...",
+        "add_images": "添加图片",
+        "share_link": "分享链接",
+        "share": "分享",
+        "not_found_title": "未找到合集",
+        "not_found_description": "该合集不存在，或你没有查看权限。",
+        "empty_title": "还没有项目",
+        "empty_owner_description": "直接上传图片到此合集。",
+        "empty_guest_description": "该合集暂时没有项目。"
+      }
+    },
+    "bookmarks": {
+      "page_title": "书签 | Slink",
+      "title": "书签",
+      "subtitle": "你收藏的社区图片",
+      "empty_title": "还没有收藏",
+      "empty_description": "去探索并收藏你喜欢的图片，稍后可在这里快速找到。",
+      "explore_images": "探索图片",
+      "image_unavailable": "图片已不可用",
+      "remove_bookmark": "移除收藏",
+      "saved": "收藏于"
+    },
+    "explore": {
+      "page_title": "探索画廊 | Slink"
+    },
+    "faq": {
+      "page_title": "常见问题 | Slink",
+      "meta_description": "关于 Slink 图像分享平台的常见问题",
+      "title": "常见问题",
+      "subtitle": "查找使用 Slink 进行图片分享与管理的常见问题解答",
+      "more_questions_title": "还有问题？",
+      "more_questions_description": "如果没有找到你想要的答案，请联系我们获取进一步帮助。",
+      "report_issue": "反馈问题",
+      "view_docs": "查看文档",
+      "questions": {
+        "supported_image_formats": "Slink 支持哪些图片格式？",
+        "image_visibility": "我的图片可见性是怎样的？",
+        "share_feature": "我可以和别人分享图片吗？",
+        "found_an_issue": "我发现了问题，怎么反馈？"
+      },
+      "snippets": {
+        "supported_formats": {
+          "supported_mime_types": "Slink 支持以下 MIME 类型：",
+          "converted_note": "* 源图片将被强制转换为 JPEG 格式。"
+        },
+        "image_visibility": {
+          "slink_offers": "Slink 提供",
+          "public_gallery": "公开画廊",
+          "where_people_share": "，用户可在其中分享图片。",
+          "visibility_options": "可见性选项",
+          "public": "公开",
+          "public_description": "图片会展示在公开画廊中，所有用户可见",
+          "private": "私密",
+          "default": "默认",
+          "private_description": "图片不会展示在公开画廊中，仅拥有者可访问",
+          "important_note": "重要说明",
+          "raw_images_note": "无论可见性设置如何，持有直链的人都可以访问原图。"
+        },
+        "share_feature": {
+          "intro": "你可以使用每张已上传图片的直链轻松分享给他人。",
+          "current_options": "当前分享方式",
+          "direct_link": "可向任意对象分享直链",
+          "public_gallery": "可选公开画廊展示",
+          "link_access": "任何拿到链接的人都可访问",
+          "want_more_control": "想要更强的控制？",
+          "roadmap_intro": "我正在开发高级分享功能，让你更灵活地控制图片分享：",
+          "expiration_dates": "分享链接过期时间",
+          "password_protection": "密码保护",
+          "private_group_sharing": "私密群组分享",
+          "support_feature_request": "支持该功能需求"
+        },
+        "issue_report": {
+          "intro": "感谢你帮助 Slink 变得更好！如果你遇到 Bug 或有改进建议，可以按以下方式帮助我：",
+          "before_reporting": "反馈前请先确认",
+          "check_existing": "检查该问题是否已被报告",
+          "try_other_browser": "尝试在不同浏览器中复现问题",
+          "gather_details": "收集相关信息（浏览器、复现步骤、截图）",
+          "report_on_github": "在 GitHub 上反馈",
+          "github_description": "GitHub Issues 是我追踪 Bug 和功能需求的主要平台。你的反馈能帮助我更好地确定优先级。",
+          "create_issue": "创建新 Issue",
+          "thank_you": "感谢支持！",
+          "thank_you_description": "每一条反馈都在帮助我完善 Slink。我会查看所有问题，并按影响范围和频率优先修复。"
+        }
+      }
+    },
+    "notifications": {
+      "page_title": "通知 | Slink",
+      "title": "通知",
+      "unread": "未读",
+      "mark_all_read": "全部标为已读",
+      "empty_title": "你已全部查看",
+      "empty_description": "图片相关动态会显示在这里"
+    },
+    "admin": {
+      "dashboard": {
+        "page_title": "仪表盘 | Slink",
+        "title": "仪表盘",
+        "subtitle": "应用关键指标与活动总览",
+        "cards": {
+          "uploads": "上传量",
+          "users": "用户"
+        },
+        "users_count_suffix": "用户",
+        "no_data": "暂无数据",
+        "user_labels": {
+          "total": "总数",
+          "active": "活跃",
+          "inactive": "未激活",
+          "pending": "待审核"
+        },
+        "intervals": {
+          "today": "今天",
+          "current_week": "本周",
+          "last_week": "上周",
+          "current_year": "本年",
+          "last_year": "去年",
+          "current_month": "本月",
+          "last_month": "上月",
+          "last_30_days": "近 30 天",
+          "last_7_days": "近 7 天",
+          "all_time": "全部时间"
+        },
+        "latest_users": {
+          "title": "最新用户",
+          "subtitle": "最近加入的成员",
+          "search_placeholder": "搜索...",
+          "search_aria": "搜索用户",
+          "clear_search_aria": "清除搜索",
+          "empty_title": "未找到用户",
+          "empty_search": "请尝试调整搜索关键词",
+          "empty_default": "新用户加入后会显示在这里",
+          "view_all": "查看全部用户",
+          "total_suffix": "总计"
+        }
+      },
+      "users": {
+        "page_title": "用户管理 | Slink Admin",
+        "title": "用户",
+        "subtitle": "管理用户账号与权限",
+        "empty_title": "未找到用户",
+        "empty_description": "系统中还没有用户。",
+        "table": {
+          "user": "用户",
+          "username": "用户名",
+          "status": "状态",
+          "roles": "角色",
+          "actions": "操作"
+        },
+        "actions": {
+          "actions": "操作",
+          "suspend": "停用",
+          "activate": "启用",
+          "make_admin": "设为管理员",
+          "remove_admin": "移除管理员",
+          "delete": "删除"
+        },
+        "role": {
+          "admin": "管理员",
+          "user": "用户"
+        },
+        "status": {
+          "active": "启用",
+          "inactive": "未激活",
+          "suspended": "已停用",
+          "banned": "已封禁",
+          "unknown": "未知"
+        },
+        "current_user": "你",
+        "delete_confirmation": {
+          "title": "删除用户",
+          "subtitle": "此操作不可撤销",
+          "description": "该用户账号及其所有关联数据将被移除",
+          "cancel": "取消",
+          "confirm": "删除用户"
+        }
+      },
+      "settings": {
+        "page_title": "设置 | Slink",
+        "title": "设置",
+        "subtitle": "配置应用偏好并管理系统行为",
+        "categories": {
+          "image": {
+            "title": "图像设置",
+            "description": "配置图片上传、处理选项与分享链接偏好"
+          },
+          "storage": {
+            "title": "存储配置",
+            "description": "配置存储提供方、缓存设置与数据管理"
+          },
+          "security": {
+            "title": "安全设置",
+            "description": "管理用户注册、访问控制与认证策略"
+          },
+          "sso": {
+            "title": "单点登录",
+            "description": "管理用于外部认证的 SSO/OIDC 身份提供方"
+          }
+        },
+        "image": {
+          "page_title": "图像设置 | Slink",
+          "title": "图像",
+          "description": "配置图片处理与分享偏好"
+        },
+        "storage": {
+          "page_title": "存储设置 | Slink",
+          "title": "存储",
+          "description": "配置存储提供方与缓存管理"
+        },
+        "security": {
+          "page_title": "安全设置 | Slink",
+          "title": "安全",
+          "description": "管理访问控制与用户认证设置"
+        },
+        "sso": {
+          "page_title": "SSO 设置 | Slink",
+          "title": "单点登录",
+          "description": "管理 SSO/OIDC 身份提供方",
+          "back_to_settings": "返回设置",
+          "create": "创建",
+          "callback_help": "请将此回调地址添加到身份提供方的允许重定向 URI：",
+          "load_error": "加载 SSO 提供方失败。",
+          "new": {
+            "page_title": "添加 SSO 提供方 | Slink",
+            "title": "添加提供方",
+            "select_provider_description": "选择要配置的身份提供方",
+            "configure_provider_prefix": "配置",
+            "configure_provider_suffix": "提供方"
+          },
+          "edit": {
+            "page_title": "编辑 SSO 提供方 | Slink",
+            "title": "编辑提供方",
+            "description": "更新 SSO 提供方配置"
+          },
+          "form": {
+            "configuration": "配置",
+            "provider": "提供方",
+            "provider_hint": "当前选中的认证提供方",
+            "change": "更改",
+            "provider_name": "提供方名称",
+            "provider_name_hint": "提供方的显示名称",
+            "provider_name_placeholder": "例如：我的 SSO 提供方",
+            "slug": "标识符",
+            "slug_hint": "提供方唯一标识",
+            "slug_placeholder": "例如：my-provider",
+            "issuer_url": "签发者 URL",
+            "issuer_url_hint": "OpenID Connect 发现端点",
+            "client_id": "客户端 ID",
+            "client_id_hint": "OAuth 应用客户端标识",
+            "client_id_placeholder": "OAuth 客户端 ID",
+            "client_secret": "客户端密钥",
+            "client_secret_hint": "OAuth 应用客户端密钥",
+            "client_secret_placeholder": "OAuth 客户端密钥",
+            "enabled": "启用",
+            "enabled_hint": "允许用户通过此提供方登录",
+            "saving": "保存中...",
+            "cancel": "取消",
+            "update_provider": "更新提供方",
+            "add_provider": "添加提供方"
+          },
+          "list": {
+            "empty": "尚未配置 SSO 提供方",
+            "move_up": "上移",
+            "move_down": "下移",
+            "edit": "编辑",
+            "delete": "删除"
+          },
+          "delete": {
+            "title": "删除提供方",
+            "description": "此操作不可撤销",
+            "provider_removed": "该提供方及其配置将被删除",
+            "cancel": "取消",
+            "confirm": "删除提供方"
+          }
+        }
+      }
+    },
+    "preferences": {
+      "page_title": "偏好设置 | Slink",
+      "title": "偏好设置",
+      "subtitle": "配置你的默认设置与个性化偏好",
+      "toast": {
+        "updated_successfully": "偏好设置更新成功"
+      },
+      "navigation": {
+        "section_title": "导航",
+        "default_landing_page": "默认落地页",
+        "default_landing_page_hint": "访问站点时默认打开的页面",
+        "select_landing_page": "选择一个落地页..."
+      },
+      "uploads": {
+        "section_title": "图片上传",
+        "default_visibility": "默认可见性",
+        "default_visibility_hint": "新上传内容默认设为公开或私密",
+        "select_visibility": "选择可见性..."
+      },
+      "licensing": {
+        "section_title": "图片许可",
+        "default_license": "默认许可",
+        "default_license_hint": "该许可将自动应用到新上传图片",
+        "learn_more": "了解更多",
+        "select_license": "选择许可...",
+        "sync_to_existing_images": "同步到已有图片",
+        "sync_to_existing_images_hint": "将该许可应用到你所有已有图片"
+      },
+      "visibility": {
+        "public": "公开",
+        "private": "私密"
+      },
+      "landing": {
+        "explore": "探索",
+        "upload": "上传"
+      },
+      "saving": "保存中...",
+      "save_changes": "保存更改"
+    },
+    "integrations": {
+      "page_title": "集成 | Slink",
+      "title": "集成",
+      "subtitle": "通过 API Key 将 Slink 连接到 ShareX 和其他工具",
+      "create": "创建",
+      "api_keys": {
+        "section_title": "API Key",
+        "empty_title": "还没有 API Key",
+        "empty_description": "创建 API Key 以集成 ShareX 和其他工具",
+        "revoke_api_key": "撤销 API Key",
+        "create": {
+          "title": "创建 API Key",
+          "description": "为外部集成生成安全密钥",
+          "key_name": "密钥名称",
+          "key_name_placeholder": "例如：ShareX 上传密钥",
+          "expiry_date_optional": "过期时间（可选）",
+          "expiry_date_placeholder": "选择过期时间",
+          "security_notice_title": "安全提示",
+          "security_notice_message": "创建后 API Key 只会显示一次。请将其安全保存到密码管理器或环境变量中。如遗失，你需要重新生成一个新密钥。",
+          "creating": "创建中...",
+          "submit": "创建 API Key"
+        },
+        "created": {
+          "success_title": "创建成功！",
+          "success_description": "你的 API Key 已创建",
+          "your_api_key": "你的 API Key",
+          "api_key_placeholder": "你的 API Key 将显示在这里...",
+          "notice_title": "重要提示",
+          "notice_message": "该密钥不会再次显示。请妥善保存，或下载下方的 ShareX 配置文件。",
+          "close": "关闭",
+          "downloading": "下载中...",
+          "download_sharex_config": "下载 ShareX 配置"
+        },
+        "delete": {
+          "title": "撤销 API Key",
+          "subtitle": "此操作不可撤销",
+          "description": "该 API Key 将被永久撤销且无法恢复",
+          "cancel": "取消",
+          "confirm": "撤销密钥"
+        },
+        "service": {
+          "sharex_only_for_newly_created": "ShareX 配置只能为新创建的密钥下载。请先创建新密钥再下载配置。",
+          "download_failed_console": "下载 ShareX 配置失败：",
+          "download_failed": "下载 ShareX 配置失败",
+          "copied_to_clipboard": "已复制到剪贴板"
+        }
+      }
+    },
+    "image_details": {
+      "page_title": "图片详情 | Slink",
+      "license": {
+        "title": "授权",
+        "saving": "保存中...",
+        "description": "选择他人如何使用这张图片",
+        "placeholder": "选择授权..."
+      },
+      "resize": {
+        "title": "尺寸调整",
+        "description": "调整分享链接的尺寸"
+      },
+      "filter": {
+        "title": "滤镜",
+        "description": "为分享链接应用颜色滤镜"
+      },
+      "share": {
+        "title": "分享",
+        "description": "尺寸、滤镜和格式变更仅作用于分享链接，原图不会改变。",
+        "select_option_to_copy": "选择复制选项",
+        "quick": "快捷",
+        "output_format": "输出格式"
+      }
+    }
+  },
   "layout": {
     "translation_test_label": "当前翻译测试",
     "switch_zh": "切换中文",
@@ -138,8 +672,8 @@
   },
   "api_errors": {
     "COLLECTION_NAME_EMPTY": "合集名称不能为空",
-    "COLLECTION_NAME_TOO_LONG": "合集名称超出最大长度",
-    "COLLECTION_DESCRIPTION_TOO_LONG": "合集描述超出最大长度",
+    "COLLECTION_NAME_TOO_LONG": "合集名称不能超过 {max} 个字符",
+    "COLLECTION_DESCRIPTION_TOO_LONG": "合集描述不能超过 {max} 个字符",
     "COLLECTION_NOT_FOUND": "未找到合集",
     "COMMENT_DELETED_CANNOT_EDIT": "已删除的评论不可编辑",
     "COMMENT_CONTENT_EMPTY": "评论内容不能为空",
@@ -152,12 +686,26 @@
     "CURSOR_ID_TOO_LONG": "游标 ID 长度不能超过 255",
     "CURSOR_TIMESTAMP_EMPTY": "游标时间戳不能为空",
     "REQUEST_UNSUPPORTED_FORMAT": "不支持的格式",
-    "REQUEST_UNSUPPORTED_FORMAT_EXPECTED": "该接口不支持当前请求格式",
+    "REQUEST_UNSUPPORTED_FORMAT_EXPECTED": "不支持的格式，期望 \"{expected}\"，但收到 \"{given}\"。",
     "REQUEST_INVALID_FORM_DATA": "请求中的表单数据无效",
-    "REQUEST_UNSUPPORTED_FORMAT_VALUE": "请求数据格式不受支持",
-    "REQUEST_INVALID_FORMAT_DATA": "请求数据无效",
+    "REQUEST_UNSUPPORTED_FORMAT_VALUE": "不支持的格式：\"{format}\"。",
+    "REQUEST_INVALID_FORMAT_DATA": "请求负载包含无效的 \"{format}\" 数据。",
     "EMAIL_INVALID": "邮箱格式无效",
+    "EMAIL_ALREADY_REGISTERED": "该邮箱已被注册",
     "PASSWORD_TOO_SHORT": "密码长度过短",
+    "VALIDATION_REQUIRED": "该字段不能为空",
+    "AUTH_PASSWORDS_MISMATCH": "两次输入的密码不一致",
+    "AUTH_USERNAME_EQUALS_EMAIL": "用户名不能与邮箱相同",
+    "AUTH_PASSWORD_TOO_SHORT": "密码长度不足",
+    "AUTH_PASSWORD_MISSING_NUMBER": "密码需至少包含一个数字",
+    "AUTH_PASSWORD_MISSING_LOWERCASE": "密码需至少包含一个小写字母",
+    "AUTH_PASSWORD_MISSING_UPPERCASE": "密码需至少包含一个大写字母",
+    "AUTH_PASSWORD_MISSING_SPECIAL": "密码需至少包含一个特殊字符",
+    "AUTH_USERNAME_TOO_SHORT": "用户名过短",
+    "AUTH_USERNAME_TOO_LONG": "用户名过长",
+    "AUTH_USERNAME_INVALID_CHARACTERS": "用户名包含无效字符",
+    "AUTH_USERNAME_CONSECUTIVE_SPECIAL": "用户名不能包含连续特殊字符",
+    "AUTH_USERNAME_RESERVED": "该用户名为保留名",
     "DISPLAY_NAME_TOO_SHORT": "显示名至少需要 3 个字符",
     "DISPLAY_NAME_TOO_LONG": "显示名最多 30 个字符",
     "USERNAME_TOO_SHORT": "用户名至少需要 3 个字符",
@@ -190,5 +738,446 @@
     "SETTINGS_PASSWORD_LENGTH_TOO_LONG": "密码长度不能大于 64",
     "SETTINGS_IMAGE_MAX_SIZE_TOO_SMALL": "图片最大尺寸不能小于 0",
     "SETTINGS_IMAGE_MAX_SIZE_TOO_LARGE": "图片最大尺寸不能大于 1000"
+  },
+  "comments": {
+    "title": "评论",
+    "sort": {
+      "oldest_first": "最早优先",
+      "newest_first": "最新优先"
+    },
+    "empty": {
+      "title": "还没有评论",
+      "description": "来发表第一条评论吧"
+    },
+    "sign_in_to_comment": "登录后可评论",
+    "deleted_text": "该评论已删除",
+    "item": {
+      "edited": "已编辑",
+      "reply": "回复",
+      "edit": "编辑",
+      "delete": "删除",
+      "deleted_inline": "已删除"
+    },
+    "delete": {
+      "title": "删除评论",
+      "subtitle": "此操作不可撤销",
+      "cancel": "取消",
+      "confirm": "删除"
+    }
+  },
+  "tag": {
+    "filter": {
+      "search_select_placeholder": "搜索并选择标签"
+    },
+    "selector": {
+      "search_or_add_placeholder": "搜索或添加标签...",
+      "add_more_placeholder": "继续添加标签..."
+    },
+    "input": {
+      "child_tag_name_placeholder": "子标签名称...",
+      "cancel_child_creation": "取消创建子标签"
+    },
+    "picker": {
+      "search_placeholder": "搜索标签",
+      "no_tags_yet": "暂无标签",
+      "create_first_tag": "创建你的第一个标签",
+      "new_tag": "新建标签",
+      "root": "根目录"
+    },
+    "active_filter": {
+      "filtering_by": "筛选条件",
+      "tag_unit": "个标签",
+      "toggle_aria": "切换匹配所有或任一已选标签",
+      "match_all": "匹配全部",
+      "match_any": "匹配任一",
+      "match_all_title": "匹配全部",
+      "match_any_title": "匹配任一",
+      "match_all_description": "结果中仅显示包含所有已选标签的图片。",
+      "match_any_description": "结果中显示至少包含一个已选标签的图片。",
+      "switch_to_any": "点击切换为匹配任一",
+      "switch_to_all": "点击切换为匹配全部",
+      "clear_aria": "清除全部筛选",
+      "clear": "清除"
+    },
+    "dropdown": {
+      "create_with_name": "创建",
+      "no_tags_matching": "没有匹配的标签",
+      "no_tags_yet": "暂无标签"
+    },
+    "actions": {
+      "aria": "标签操作",
+      "move": "移动",
+      "delete": "删除"
+    },
+    "move_dialog": {
+      "failed_to_move": "移动标签失败",
+      "title": "移动标签",
+      "description_prefix": "将",
+      "description_suffix": "移动到新的父标签或根目录",
+      "new_parent_tag": "新父标签",
+      "search_parent_placeholder": "搜索父标签...（留空表示根目录）",
+      "empty_message": "未找到匹配标签。",
+      "leave_empty_hint": "留空可移动到根级",
+      "moving": "移动中...",
+      "submit": "移动标签"
+    },
+    "create_form": {
+      "description": "添加新标签以更好地组织你的图片",
+      "tag_name": "标签名",
+      "tag_name_placeholder": "例如：自然、摄影、艺术",
+      "parent_tag_optional": "父标签（可选）",
+      "search_parent_placeholder": "搜索父标签...",
+      "empty_message": "未找到匹配标签。",
+      "notice_title": "标签组织",
+      "notice_message": "标签可帮助组织图片。父标签可形成层级结构，便于管理。你之后也可以移动标签或创建子标签。",
+      "creating": "创建中..."
+    },
+    "badge": {
+      "remove_tag_prefix": "移除",
+      "remove_tag_suffix": "标签"
+    }
+  },
+  "collection": {
+    "picker": {
+      "search_placeholder": "搜索合集",
+      "no_collections_yet": "暂无合集",
+      "create_first_collection": "创建你的第一个合集",
+      "new_collection": "新建合集"
+    },
+    "actions": {
+      "remove_from_collection": "从合集中移除",
+      "aria": "合集操作",
+      "edit": "编辑",
+      "delete": "删除",
+      "delete_failed": "删除合集失败，请稍后重试。",
+      "updated_successfully": "合集更新成功",
+      "update_failed": "更新合集失败",
+      "image_remains": "图片仍会保留在你的库中",
+      "cancel": "取消",
+      "remove": "移除"
+    },
+    "form": {
+      "create_collection": "创建合集",
+      "edit_collection": "编辑合集",
+      "update_details": "更新合集详情",
+      "organize_description": "将你的图片整理到可分享的合集中",
+      "collection_name": "合集名称",
+      "collection_name_placeholder": "例如：夏日旅行、作品集",
+      "description_optional": "描述（可选）",
+      "description_placeholder": "这个合集是关于什么的？",
+      "notice_title": "合集分享",
+      "notice_message": "合集可以将多张图片分组并通过单个链接分享。创建后你可随时添加或移除图片。",
+      "save_changes": "保存更改"
+    }
+  },
+  "picker": {
+    "search_placeholder": "搜索...",
+    "no_items_yet": "暂无项目",
+    "no_matches_found": "未找到匹配项"
+  },
+  "image": {
+    "action_bar": {
+      "download_image": "下载图片",
+      "download": "下载",
+      "copy_image_url": "复制图片链接",
+      "delete_image": "删除图片",
+      "add_to_collection": "添加到合集",
+      "manage_tags": "管理标签",
+      "image_actions": "图片操作",
+      "generating": "生成中...",
+      "copied": "已复制！",
+      "copy_url": "复制链接",
+      "make_private": "设为私密",
+      "make_public": "设为公开",
+      "errors": {
+        "update_visibility": "更新可见性失败，请稍后再试。",
+        "generate_share_link": "生成分享链接失败，请稍后再试。",
+        "delete_image": "删除图片失败，请稍后再试。"
+      }
+    },
+    "description": {
+      "title": "描述",
+      "placeholder": "添加描述...",
+      "empty_text": "点击添加描述..."
+    },
+    "bookmarkers_panel": {
+      "bookmarked": "已收藏",
+      "time": "次",
+      "times": "次",
+      "no_bookmarks_yet": "还没有收藏",
+      "failed_to_load": "加载收藏失败"
+    },
+    "post_viewer": {
+      "views": "次浏览",
+      "description": "描述"
+    },
+    "tag_manager": {
+      "tags": "标签",
+      "add_more_placeholder": "继续添加标签...",
+      "add": "添加",
+      "click_to_add_tags": "点击添加标签..."
+    }
+  },
+  "settings": {
+    "common": {
+      "enabled": "启用",
+      "disabled": "禁用",
+      "reset_setting": "重置设置",
+      "reset_to_default": "重置为默认值",
+      "reset_to": "重置为",
+      "cancel": "取消",
+      "confirm": "确认",
+      "saving": "保存中...",
+      "save_changes": "保存更改"
+    },
+    "reset_dialog": {
+      "title": "重置设置",
+      "confirm": "重置为默认值",
+      "cancel": "保留当前值",
+      "confirm_message_prefix": "你确定要将",
+      "confirm_message_suffix": "重置为默认值吗？",
+      "warning": "该操作无法撤销，你当前设置将丢失。",
+      "current_value": "当前值："
+    },
+    "cache": {
+      "title": "缓存管理",
+      "image_cache": "图片缓存",
+      "image_cache_hint": "缓存文件用于保存图片转换结果（如缩放、裁剪、格式转换）以提升性能。清理缓存后将在下次请求时重新生成。",
+      "clearing": "清理中...",
+      "clear_cache": "清理缓存",
+      "clearing_cache": "正在清理缓存..."
+    },
+    "image": {
+      "title": "图像设置",
+      "description": "配置图片上传限制与处理选项",
+      "max_size": {
+        "label": "图片最大尺寸",
+        "hint": "设置图片上传的最大大小限制"
+      },
+      "strip_exif": {
+        "label": "移除 EXIF 元数据",
+        "hint": "为保护隐私，自动移除上传图片中的元数据"
+      },
+      "allow_only_public": {
+        "label": "仅允许公开图片",
+        "hint": "启用后，所有图片将自动设为公开，且不可更改可见性"
+      },
+      "dedup": {
+        "label": "启用图片去重",
+        "hint": "上传时检测并拒绝重复图片",
+        "notice": "仅对新上传生效，已有图片不受影响。"
+      },
+      "compression_quality": {
+        "label": "压缩质量",
+        "hint": "有损压缩质量等级（1-100）。当目标格式支持时用于格式转换"
+      },
+      "force_conversion": {
+        "label": "强制格式转换",
+        "hint": "自动将所有上传图片转换为指定格式"
+      },
+      "target_format": {
+        "label": "目标格式",
+        "hint": "上传图片将转换到的格式",
+        "placeholder": "选择格式",
+        "webp": "WEBP（推荐）",
+        "avif": "AVIF",
+        "jpg": "JPEG"
+      },
+      "convert_animated": {
+        "label": "转换动态图片",
+        "hint": "在转换中包含动态图片（GIF、动态 WebP/AVIF）",
+        "notice_processing": "处理动态图片会占用较多 CPU，可能导致上传变慢。",
+        "notice_loss_prefix": "转换为",
+        "notice_loss_suffix": "将导致动画丢失。"
+      },
+      "enable_licensing": {
+        "label": "启用授权许可",
+        "hint": "允许用户为图片设置许可（如 Creative Commons）"
+      }
+    },
+    "storage": {
+      "title": "存储配置",
+      "description": "选择数据的存储方式与位置",
+      "provider": {
+        "label": "存储提供方",
+        "hint": "选择你偏好的存储后端",
+        "local": "本地存储",
+        "smb": "网络存储（SMB）",
+        "s3": "Amazon S3"
+      },
+      "smb": {
+        "server_host": {
+          "label": "服务器地址",
+          "hint": "SMB 服务器的 IP 或主机名"
+        },
+        "share_name": {
+          "label": "共享名称",
+          "hint": "共享文件夹名称"
+        },
+        "workgroup": {
+          "label": "工作组",
+          "hint": "SMB 工作组名（可选）"
+        },
+        "username": {
+          "label": "用户名",
+          "hint": "认证用户名"
+        },
+        "password": {
+          "label": "密码",
+          "hint": "SMB 服务器认证密码"
+        }
+      },
+      "s3": {
+        "custom_provider": {
+          "label": "自定义 S3 提供方",
+          "hint": "用于 MinIO、Cloudflare R2、Wasabi 等 S3 兼容服务。启用后可配置自定义端点与 Path-Style 选项。"
+        },
+        "pricing_notice": "使用 Amazon S3 可能产生费用。",
+        "review_pricing": "查看价格",
+        "custom_endpoint": {
+          "label": "自定义端点",
+          "hint": "你的提供方的自定义 S3 端点 URL"
+        },
+        "region_optional": {
+          "label": "区域（可选）",
+          "hint": "大多数 S3 兼容服务不需要区域。Cloudflare R2 或自动识别的提供方可留空。必要时可填写 \"auto\" 或指定区域。"
+        },
+        "force_path_style": {
+          "label": "强制 Path-Style URL",
+          "hint": "若提供方要求 path-style bucket（http://host/bucket/key）请启用，常见于 MinIO 或自托管方案。"
+        },
+        "region": {
+          "label": "区域",
+          "hint": "你的 Bucket 所在 AWS 区域（例如 us-east-1）。",
+          "view_regions": "查看可用区域"
+        },
+        "bucket_name": {
+          "label": "Bucket 名称",
+          "hint": "你的 S3 Bucket 名称。",
+          "learn": "了解 Bucket 命名规则"
+        },
+        "access_key_id": {
+          "label": "访问密钥 ID",
+          "hint": "你的 AWS Access Key ID。",
+          "how_to": "如何创建访问密钥"
+        },
+        "secret_access_key": {
+          "label": "秘密访问密钥",
+          "hint": "你的 AWS Secret Access Key"
+        }
+      }
+    },
+    "access": {
+      "title": "访问控制",
+      "description": "配置游客访问与上传权限",
+      "guest_upload": {
+        "label": "游客上传",
+        "hint": "允许未登录用户在不创建账号的情况下上传图片。若未同时启用“游客访问”，用户将看到上传成功提示但无法浏览图片。"
+      },
+      "guest_access": {
+        "label": "游客访问（只读）",
+        "hint": "允许未登录用户查看和浏览图片"
+      }
+    },
+    "user": {
+      "title": "用户管理",
+      "description": "控制用户注册、认证与安全要求",
+      "registration": {
+        "label": "用户注册",
+        "hint": "允许新用户创建账号"
+      },
+      "approval_required": {
+        "label": "需要管理员审核",
+        "hint": "新用户在访问应用前必须先通过审核"
+      },
+      "password_min_length": {
+        "label": "最小密码长度",
+        "hint": "密码要求的最少字符数"
+      },
+      "password_requirements": {
+        "label": "密码规则",
+        "hint": "必须包含的字符类型",
+        "options": {
+          "numbers": "数字 (0-9)",
+          "lowercase": "小写字母 (a-z)",
+          "uppercase": "大写字母 (A-Z)",
+          "special": "特殊字符 (!@#$)"
+        }
+      }
+    },
+    "share": {
+      "title": "分享",
+      "description": "配置 URL 分享行为",
+      "url_shortening": {
+        "label": "短链接",
+        "hint": "复制图片链接时生成短链接"
+      }
+    },
+    "release_modal": {
+      "update_available": "发现更新",
+      "latest_version": "最新版本",
+      "update_description": "Slink 有新版本可用，以下是更新内容：",
+      "latest_description": "你正在使用最新版本，以下是发布说明：",
+      "current_version": "当前版本",
+      "up_to_date": "已是最新",
+      "released": "发布于",
+      "maybe_later": "稍后再说",
+      "close": "关闭",
+      "view_on_github": "在 GitHub 查看"
+    }
+  },
+  "profile": {
+    "title": "个人设置",
+    "subtitle": "管理你的账号信息与安全设置",
+    "sections": {
+      "profile_information": "个人信息",
+      "security": "安全"
+    },
+    "display_name": {
+      "label": "显示名称",
+      "hint": "该名称将显示在平台中的各处"
+    },
+    "password": {
+      "current": {
+        "label": "当前密码",
+        "hint": "请输入当前密码以验证身份",
+        "placeholder": "当前密码"
+      },
+      "new": {
+        "label": "新密码",
+        "hint": "设置一个新密码",
+        "placeholder": "新密码"
+      },
+      "confirm": {
+        "label": "确认密码",
+        "hint": "请再次输入新密码",
+        "placeholder": "确认密码"
+      },
+      "updating": "更新中...",
+      "update": "更新密码"
+    },
+    "toast": {
+      "password_changed": "密码修改成功",
+      "profile_updated": "资料更新成功"
+    }
+  },
+  "table": {
+    "view_mode_selection": "视图模式选择",
+    "view_modes": {
+      "grid": "网格",
+      "list": "列表",
+      "table": "表格"
+    },
+    "limit": "数量",
+    "columns": "列",
+    "pagination": {
+      "click_to_enter_page": "点击输入页码",
+      "current_page": "当前页",
+      "previous_page": "上一页",
+      "next_page": "下一页",
+      "go_to_page": "跳转到页码",
+      "of": "共",
+      "items": "条"
+    }
   }
 }

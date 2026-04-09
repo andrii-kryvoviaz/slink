@@ -3,6 +3,7 @@
   import { Loader } from '@slink/feature/Layout';
   import { TagBadge, TagSelector } from '@slink/feature/Tag';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   import { ReactiveState } from '@slink/api/ReactiveState';
@@ -136,7 +137,7 @@
 <div class="space-y-1.5" bind:this={containerRef}>
   <div class="flex items-center gap-2">
     <span class="text-sm font-medium text-gray-500 dark:text-gray-400">
-      Tags
+      {$t('image.tag_manager.tags')}
     </span>
     {#if isLoading}
       <Loader variant="minimal" size="xs" />
@@ -149,7 +150,7 @@
       selectedTags={tagManagerState.assignedTags}
       onTagsChange={handleTagsChange}
       {variant}
-      placeholder="Add more tags..."
+      placeholder={$t('image.tag_manager.add_more_placeholder')}
       disabled={isLoading}
       hideIcon={true}
     />
@@ -169,7 +170,7 @@
               class="inline-flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors"
             >
               <Icon icon="ph:plus" class="w-3.5 h-3.5" />
-              Add
+              {$t('image.tag_manager.add')}
             </span>
           {/if}
         </div>
@@ -178,7 +179,7 @@
           class="text-sm text-gray-400 dark:text-gray-500 group-hover:text-gray-500 dark:group-hover:text-gray-400 transition-colors flex items-center gap-1.5"
         >
           <Icon icon="ph:tag" class="w-4 h-4" />
-          Click to add tags...
+          {$t('image.tag_manager.click_to_add_tags')}
         </p>
       {/if}
     </button>

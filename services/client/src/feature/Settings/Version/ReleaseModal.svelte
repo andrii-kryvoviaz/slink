@@ -4,6 +4,7 @@
   import { Modal } from '@slink/ui/components/dialog';
   import { ScrollArea } from '@slink/ui/components/scroll-area';
 
+  import { t } from '$lib/i18n';
   import type { GitHubRelease } from '$lib/utils/version';
   import Icon from '@iconify/svelte';
 
@@ -76,17 +77,16 @@
       {/snippet}
       {#snippet title()}
         {#if hasUpdate}
-          Update Available
+          {$t('settings.release_modal.update_available')}
         {:else}
-          Latest Version
+          {$t('settings.release_modal.latest_version')}
         {/if}
       {/snippet}
       {#snippet description()}
         {#if hasUpdate}
-          A new version of Slink is available. Here's what's new:
+          {$t('settings.release_modal.update_description')}
         {:else}
-          You're running the latest version of Slink. Here are the release
-          notes:
+          {$t('settings.release_modal.latest_description')}
         {/if}
       {/snippet}
     </Modal.Header>
@@ -96,7 +96,9 @@
         class="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-lg"
       >
         <div>
-          <div class="text-sm text-muted-foreground">Current Version</div>
+          <div class="text-sm text-muted-foreground">
+            {$t('settings.release_modal.current_version')}
+          </div>
           <div class="font-mono font-medium">v{currentVersion}</div>
         </div>
         {#if hasUpdate}
@@ -105,7 +107,9 @@
             class="h-4 w-4 text-slate-400 dark:text-slate-500"
           />
           <div>
-            <div class="text-sm text-muted-foreground">Latest Version</div>
+            <div class="text-sm text-muted-foreground">
+              {$t('settings.release_modal.latest_version')}
+            </div>
             <div
               class="font-mono font-medium text-green-600 dark:text-green-400"
             >
@@ -117,7 +121,9 @@
             class="flex items-center gap-2 text-green-600 dark:text-green-400"
           >
             <Icon icon="ph:check-circle" class="h-4 w-4" />
-            <span class="text-sm font-medium">Up to date</span>
+            <span class="text-sm font-medium">
+              {$t('settings.release_modal.up_to_date')}
+            </span>
           </div>
         {/if}
       </div>
@@ -126,7 +132,8 @@
         <div class="flex items-center justify-between">
           <h3 class="text-lg font-semibold">{release.name}</h3>
           <div class="text-sm text-muted-foreground">
-            Released {formatReleaseDate(release.published_at)}
+            {$t('settings.release_modal.released')}
+            {formatReleaseDate(release.published_at)}
           </div>
         </div>
 
@@ -147,7 +154,9 @@
           onclick={onClose}
           class="flex-1"
         >
-          {hasUpdate ? 'Maybe Later' : 'Close'}
+          {hasUpdate
+            ? $t('settings.release_modal.maybe_later')
+            : $t('settings.release_modal.close')}
         </Button>
         <Button
           variant="outline-blue"
@@ -157,7 +166,7 @@
           class="flex-1"
         >
           <Icon icon="ph:github-logo" class="h-4 w-4 mr-2" />
-          View on GitHub
+          {$t('settings.release_modal.view_on_github')}
         </Button>
       {/snippet}
     </Modal.Footer>

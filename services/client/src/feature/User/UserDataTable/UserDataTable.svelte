@@ -15,6 +15,7 @@
   import type { ColumnDef } from '@tanstack/table-core';
 
   import type { User } from '$lib/auth/Type/User';
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   import type { TableSettingsState } from '@slink/lib/settings/composables/useTableSettings.svelte';
@@ -63,7 +64,7 @@
   const columns: ColumnDef<User>[] = [
     {
       accessorKey: 'displayName',
-      header: 'User',
+      header: $t('pages.admin.users.table.user'),
       cell: ({ row }) => {
         const user = row.original;
         return renderComponent(UserCell, { user });
@@ -71,7 +72,7 @@
     },
     {
       accessorKey: 'username',
-      header: 'Username',
+      header: $t('pages.admin.users.table.username'),
       cell: ({ row }) => {
         const username = row.getValue('username') as string;
         return renderComponent(UserUsernameCell, { username });
@@ -79,7 +80,7 @@
     },
     {
       accessorKey: 'status',
-      header: 'Status',
+      header: $t('pages.admin.users.table.status'),
       meta: {
         className: 'min-w-[120px]',
       },
@@ -91,7 +92,7 @@
     },
     {
       accessorKey: 'roles',
-      header: 'Roles',
+      header: $t('pages.admin.users.table.roles'),
       meta: {
         className: 'min-w-[100px]',
       },
@@ -102,7 +103,7 @@
     },
     {
       id: 'actions',
-      header: 'Actions',
+      header: $t('pages.admin.users.table.actions'),
       meta: {
         className: 'text-right',
       },
@@ -162,10 +163,10 @@
       </div>
       <div class="mt-5 space-y-1.5 text-center">
         <p class="text-lg font-semibold text-slate-700 dark:text-slate-300">
-          No users found
+          {$t('pages.admin.users.empty_title')}
         </p>
         <p class="text-sm text-slate-500 dark:text-slate-400">
-          Users will appear here once added
+          {$t('pages.admin.users.empty_description')}
         </p>
       </div>
     </div>

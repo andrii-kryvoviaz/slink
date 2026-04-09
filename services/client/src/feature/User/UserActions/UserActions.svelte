@@ -10,6 +10,7 @@
 
   import { type User, UserRole } from '$lib/auth/Type/User';
   import { UserStatus as UserStatusEnum } from '$lib/auth/Type/User';
+  import { t } from '$lib/i18n';
   import { printErrorsAsToastMessage } from '$lib/utils/ui/printErrorsAsToastMessage';
   import Icon from '@iconify/svelte';
 
@@ -206,14 +207,14 @@
         {#if variant === 'button'}
           <button {...triggerProps} class={triggerClass}>
             <Icon icon="heroicons:ellipsis-horizontal" class="w-4 h-4" />
-            Actions
+            {$t('pages.admin.users.actions.actions')}
           </button>
         {:else}
           <button
             {...triggerProps}
             class={triggerClass ||
               'group relative flex items-center justify-center h-8 w-8 rounded-md bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-gray-200/60 dark:border-gray-700/60 text-gray-500 dark:text-gray-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:border-slate-300 dark:hover:border-slate-600 active:scale-95 focus-visible:ring-slate-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-all duration-200 ease-out'}
-            aria-label="Actions"
+            aria-label={$t('pages.admin.users.actions.actions')}
           >
             <Icon icon="lucide:ellipsis" class="h-4 w-4" />
           </button>
@@ -234,7 +235,7 @@
               {#snippet icon()}
                 <Icon icon="heroicons:no-symbol" class="h-4 w-4" />
               {/snippet}
-              <span>Suspend</span>
+              <span>{$t('pages.admin.users.actions.suspend')}</span>
             </DropdownSimpleItem>
           {:else}
             <DropdownSimpleItem
@@ -248,7 +249,7 @@
               {#snippet icon()}
                 <Icon icon="heroicons:check-circle" class="h-4 w-4" />
               {/snippet}
-              <span>Activate</span>
+              <span>{$t('pages.admin.users.actions.activate')}</span>
             </DropdownSimpleItem>
           {/if}
         </DropdownSimpleGroup>
@@ -263,7 +264,7 @@
               {#snippet icon()}
                 <Icon icon="heroicons:key" class="h-4 w-4" />
               {/snippet}
-              <span>Make Admin</span>
+              <span>{$t('pages.admin.users.actions.make_admin')}</span>
             </DropdownSimpleItem>
           {:else}
             <DropdownSimpleItem
@@ -274,7 +275,7 @@
               {#snippet icon()}
                 <Icon icon="heroicons:lock-closed" class="h-4 w-4" />
               {/snippet}
-              <span>Remove Admin</span>
+              <span>{$t('pages.admin.users.actions.remove_admin')}</span>
             </DropdownSimpleItem>
           {/if}
         </DropdownSimpleGroup>
@@ -290,7 +291,7 @@
             {#snippet icon()}
               <Icon icon="heroicons:trash" class="h-4 w-4" />
             {/snippet}
-            <span>Delete</span>
+            <span>{$t('pages.admin.users.actions.delete')}</span>
           </DropdownSimpleItem>
         {:else}
           <UserDeleteConfirmation

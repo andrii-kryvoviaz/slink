@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   import type { ApiKeyResponse } from '@slink/api/Resources/ApiKeyResource';
@@ -45,9 +46,11 @@
       >
         <Icon icon="ph:key" class="h-8 w-8 text-gray-400 dark:text-gray-500" />
       </div>
-      <p class="text-gray-900 dark:text-white font-medium">No API keys yet</p>
+      <p class="text-gray-900 dark:text-white font-medium">
+        {$t('pages.integrations.api_keys.empty_title')}
+      </p>
       <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 max-w-xs">
-        Create an API key to integrate with ShareX and other tools
+        {$t('pages.integrations.api_keys.empty_description')}
       </p>
     </div>
   {:else}

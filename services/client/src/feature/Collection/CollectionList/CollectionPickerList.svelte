@@ -7,6 +7,7 @@
     createSelectionResolver,
   } from '@slink/ui/components/picker';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   import type { CollectionResponse } from '@slink/api/Response';
@@ -54,7 +55,7 @@
   color="indigo"
   {isLoading}
   {showSearch}
-  searchPlaceholder="Search collections"
+  searchPlaceholder={$t('collection.picker.search_placeholder')}
   filterFn={filterCollection}
   {onCreateNew}
 >
@@ -64,12 +65,14 @@
       class="w-5 h-5 text-gray-400 dark:text-gray-500"
     />
   {/snippet}
-  {#snippet emptyMessage()}No collections yet{/snippet}
+  {#snippet emptyMessage()}{$t(
+      'collection.picker.no_collections_yet',
+    )}{/snippet}
   {#snippet emptyAction()}
-    {#if onCreateNew}Create your first collection{/if}
+    {#if onCreateNew}{$t('collection.picker.create_first_collection')}{/if}
   {/snippet}
   {#snippet createFooter()}
-    {#if onCreateNew}New collection{/if}
+    {#if onCreateNew}{$t('collection.picker.new_collection')}{/if}
   {/snippet}
   {#snippet children({ item, highlighted })}
     {@const collection = item as CollectionResponse}

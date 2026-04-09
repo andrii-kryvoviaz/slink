@@ -8,6 +8,8 @@
   } from '@slink/ui/components/data-table';
   import type { ColumnDef } from '@tanstack/table-core';
 
+  import { t } from '$lib/i18n';
+
   import type { CollectionResponse } from '@slink/api/Response';
 
   import type { TableSettingsState } from '@slink/lib/settings/composables/useTableSettings.svelte';
@@ -43,7 +45,7 @@
   const columns: ColumnDef<CollectionResponse>[] = [
     {
       accessorKey: 'name',
-      header: 'Name',
+      header: $t('pages.collections.table.name'),
       meta: {
         className: 'sm:w-[300px]',
       },
@@ -55,7 +57,7 @@
     },
     {
       accessorKey: 'itemCount',
-      header: 'Items',
+      header: $t('pages.collections.table.items'),
       meta: {
         className: 'text-center',
       },
@@ -65,7 +67,7 @@
     },
     {
       accessorKey: 'description',
-      header: 'Description',
+      header: $t('pages.collections.table.description'),
       cell: ({ row }) => {
         const desc = row.original.description;
         if (!desc) return '\u2014';
@@ -74,7 +76,7 @@
     },
     {
       accessorKey: 'createdAt',
-      header: 'Created',
+      header: $t('pages.collections.table.created'),
       cell: ({ row }) => {
         return renderComponent(FormattedDate, {
           date: row.original.createdAt.timestamp,
@@ -83,7 +85,7 @@
     },
     {
       id: 'actions',
-      header: 'Actions',
+      header: $t('pages.collections.table.actions'),
       meta: {
         className: 'text-right',
       },
@@ -140,10 +142,10 @@
       </div>
       <div class="mt-5 space-y-1.5 text-center">
         <p class="text-lg font-semibold text-slate-700 dark:text-slate-300">
-          No collections found
+          {$t('pages.collections.empty_title')}
         </p>
         <p class="text-sm text-slate-500 dark:text-slate-400">
-          Create your first collection to get started
+          {$t('collection.picker.create_first_collection')}
         </p>
       </div>
     </div>

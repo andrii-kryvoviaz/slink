@@ -13,6 +13,7 @@
 
   import { page } from '$app/state';
   import type { User } from '$lib/auth/Type/User';
+  import { t } from '$lib/i18n';
   import { fade } from 'svelte/transition';
 
   import { skeleton } from '@slink/lib/actions/skeleton';
@@ -46,16 +47,19 @@
     userFeedState.items.map((user) => userUpdates[user.id] || user),
   );
 
-  const userColumns = createUserColumns({
-    getLoggedInUser: () => loggedInUser,
-    onDelete,
-    onUserUpdate: handleUserUpdate,
-  });
+  const userColumns = $derived(
+    createUserColumns({
+      getLoggedInUser: () => loggedInUser,
+      onDelete,
+      onUserUpdate: handleUserUpdate,
+      t: $t,
+    }),
+  );
 </script>
 
 <svelte:head>
-  <title>Users | Slink Admin</title>
-  <meta name="description" content="Manage user accounts and permissions" />
+  <title>{$t('pages.admin.users.page_title')}</title>
+  <meta name="description" content={$t('pages.admin.users.subtitle')} />
 </svelte:head>
 
 <div class="min-h-full p-6 w-full" use:skeleton={{ feed: userFeedState }}>
@@ -63,8 +67,8 @@
     <div class="mb-8" in:fade={{ duration: 400, delay: 100 }}>
       <div class="flex items-center justify-between w-full">
         <div class="flex-1 min-w-0">
-          <Title>Users</Title>
-          <Subtitle>Manage user accounts and permissions</Subtitle>
+          <Title>{$t('pages.admin.users.title')}</Title>
+          <Subtitle>{$t('pages.admin.users.subtitle')}</Subtitle>
         </div>
 
         <ViewModeToggle
@@ -139,8 +143,8 @@
         {#snippet empty()}
           <EmptyState
             icon="heroicons:users"
-            title="No users found"
-            description="There are no users in the system yet."
+            title={$t('pages.admin.users.empty_title')}
+            description={$t('pages.admin.users.empty_description')}
             variant="default"
             size="md"
           />

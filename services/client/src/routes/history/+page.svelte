@@ -35,6 +35,7 @@
   import { untrack } from 'svelte';
 
   import { page } from '$app/state';
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
@@ -161,7 +162,7 @@
 </script>
 
 <svelte:head>
-  <title>Upload History | Slink</title>
+  <title>{$t('pages.history.page_title')}</title>
 </svelte:head>
 
 <section>
@@ -177,8 +178,8 @@
         class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between w-full"
       >
         <div class="min-w-0">
-          <Title size="md">Upload History</Title>
-          <Subtitle>View and manage your uploaded images</Subtitle>
+          <Title size="md">{$t('pages.history.title')}</Title>
+          <Subtitle>{$t('pages.history.subtitle')}</Subtitle>
         </div>
 
         <div class="flex items-center gap-3 shrink-0">
@@ -284,16 +285,16 @@
           {#if historyFeedState.hasActiveFilter}
             <EmptyState
               icon="heroicons:funnel"
-              title="No matching images"
-              description="No images match your current tag filters. Try removing some tags or clearing all filters."
+              title={$t('pages.history.empty.filtered_title')}
+              description={$t('pages.history.empty.filtered_description')}
               variant="blue"
               size="md"
             />
           {:else}
             <EmptyState
               icon="ph:clock-clockwise-duotone"
-              title="No history yet"
-              description="Your upload history will appear here. Start uploading images to see your files and manage them easily."
+              title={$t('pages.history.empty.title')}
+              description={$t('pages.history.empty.description')}
               variant="purple"
               size="md"
             >
@@ -305,7 +306,7 @@
                   href="/upload"
                 >
                   <Icon icon="ph:upload-simple" class="h-4 w-4" />
-                  Upload Images
+                  {$t('pages.history.empty.cta')}
                 </Button>
               {/snippet}
             </EmptyState>
@@ -324,7 +325,7 @@
             rounded="full"
           >
             {#snippet text()}
-              <span>View More</span>
+              <span>{$t('pages.common.view_more')}</span>
             {/snippet}
           </LoadMoreButton>
         {/snippet}
@@ -349,8 +350,8 @@
       />
       <BatchPickerAction
         icon="lucide:folder"
-        label="Collection"
-        confirmLabel="Add to Collection"
+        label={$t('upload.options.collection')}
+        confirmLabel={$t('pages.history.batch.add_to_collection')}
         selectedCount={selectionState.selectedCount}
         pendingCount={batchCollectionPicker.selection.changeCount}
         loading={batchActions.isLoading}
@@ -371,8 +372,8 @@
       </BatchPickerAction>
       <BatchPickerAction
         icon="lucide:tag"
-        label="Tag"
-        confirmLabel="Assign Tags"
+        label={$t('pages.history.batch.tag')}
+        confirmLabel={$t('pages.history.batch.assign_tags')}
         selectedCount={selectionState.selectedCount}
         pendingCount={batchTagPicker.selection.changeCount}
         loading={batchActions.isLoading}

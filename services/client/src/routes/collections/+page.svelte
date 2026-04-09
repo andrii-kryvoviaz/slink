@@ -18,6 +18,7 @@
   import { ViewModeLayout } from '@slink/ui/components/view-mode-layout';
 
   import { page } from '$app/state';
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
@@ -40,7 +41,7 @@
 </script>
 
 <svelte:head>
-  <title>Collections | Slink</title>
+  <title>{$t('pages.collections.page_title')}</title>
 </svelte:head>
 
 <main in:fade={{ duration: 500 }} class="min-h-full">
@@ -51,8 +52,8 @@
     <div class="mb-8 space-y-6" in:fade={{ duration: 400, delay: 100 }}>
       <div class="flex items-center justify-between w-full">
         <div class="flex-1 min-w-0">
-          <Title>Collections</Title>
-          <Subtitle>Organize your images into albums</Subtitle>
+          <Title>{$t('pages.collections.title')}</Title>
+          <Subtitle>{$t('pages.collections.subtitle')}</Subtitle>
         </div>
 
         <div class="flex items-center gap-3 shrink-0">
@@ -66,7 +67,7 @@
             }}
           />
           <SplitButton onclick={handleCreateCollection}>
-            Create
+            {$t('pages.collections.create')}
             {#snippet aside()}
               <Icon icon="lucide:plus" class="w-3.5 h-3.5" />
             {/snippet}
@@ -111,7 +112,7 @@
                 debounce={300}
                 oninput={(e) =>
                   (collectionsFeed.search = e.currentTarget.value)}
-                placeholder="Search collections..."
+                placeholder={$t('pages.collections.search_placeholder')}
                 size="md"
               >
                 {#snippet leftIcon()}
@@ -134,10 +135,10 @@
       {#snippet empty()}
         <EmptyState
           icon="ph:folder-simple-duotone"
-          title="No collections found"
+          title={$t('pages.collections.empty_title')}
           description={collectionsFeed.search
-            ? 'Try adjusting your search term'
-            : 'Create your first collection to organize and share your images.'}
+            ? $t('pages.common.try_adjust_search')
+            : $t('pages.collections.empty_description')}
           variant="purple"
           size="md"
         >
@@ -150,7 +151,7 @@
                 onclick={handleCreateCollection}
               >
                 <Icon icon="lucide:plus" class="h-4 w-4" />
-                Create Collection
+                {$t('pages.collections.create_collection')}
               </Button>
             {/if}
           {/snippet}

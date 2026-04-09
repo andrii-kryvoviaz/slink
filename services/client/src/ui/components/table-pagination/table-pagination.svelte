@@ -7,6 +7,7 @@
   } from '@slink/ui/components/hover-card';
   import { tv } from 'tailwind-variants';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   const pageInputTheme = tv({
@@ -108,12 +109,13 @@
 
   const pageButtonTitle = $derived.by(() => {
     if (!isPageEditable) return undefined;
-    return 'Click to enter page number';
+    return $t('table.pagination.click_to_enter_page');
   });
 
   const pageButtonAriaLabel = $derived.by(() => {
-    if (!isPageEditable) return `Current page ${currentPage}`;
-    return `Current page ${currentPage}. Click to enter page number`;
+    if (!isPageEditable)
+      return `${$t('table.pagination.current_page')} ${currentPage}`;
+    return `${$t('table.pagination.current_page')} ${currentPage}. ${$t('table.pagination.click_to_enter_page')}`;
   });
 
   const handlePreviousPage = () => {
@@ -228,7 +230,7 @@
             onclick={handlePreviousPage}
             disabled={!canPreviousPage || loading}
             class="h-8 px-2 text-xs rounded-l-lg rounded-r-none border-0"
-            title="Previous page"
+            title={$t('table.pagination.previous_page')}
           >
             <Icon icon="heroicons:chevron-left" class="h-4 w-4" />
           </Button>
@@ -251,7 +253,7 @@
                     onkeydown={handleInputKeyDown}
                     class={inputClass}
                     placeholder={currentPage.toString()}
-                    aria-label="Go to page"
+                    aria-label={$t('table.pagination.go_to_page')}
                   />
                   {#if hasError}
                     <div
@@ -302,7 +304,7 @@
             onclick={handleNextPage}
             disabled={!canNextPage || loading}
             class="h-8 px-2 text-xs rounded-r-lg rounded-l-none border-0"
-            title="Next page"
+            title={$t('table.pagination.next_page')}
           >
             <Icon icon="heroicons:chevron-right" class="h-4 w-4" />
           </Button>
@@ -324,8 +326,11 @@
           <div class="flex items-center justify-between tabular-nums">
             <span class="text-xs text-gray-600 dark:text-gray-300">
               {startItem}–{endItem}
-              <span class="text-gray-400 dark:text-gray-500">of</span>
-              {totalItems} items
+              <span class="text-gray-400 dark:text-gray-500">
+                {$t('table.pagination.of')}
+              </span>
+              {totalItems}
+              {$t('table.pagination.items')}
             </span>
             <span class="text-xs text-gray-400 dark:text-gray-500"
               >{progress}%</span

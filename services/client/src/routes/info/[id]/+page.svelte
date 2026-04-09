@@ -20,6 +20,7 @@
   import { Shortcut } from '@slink/ui/components';
   import { Select } from '@slink/ui/components';
 
+  import { t } from '$lib/i18n';
   import { routes } from '$lib/utils/url/routes';
   import Icon from '@iconify/svelte';
   import { fly } from 'svelte/transition';
@@ -258,7 +259,7 @@
 </script>
 
 <svelte:head>
-  <title>Image Details | Slink</title>
+  <title>{$t('pages.image_details.page_title')}</title>
 </svelte:head>
 
 <main
@@ -332,22 +333,22 @@
         <div>
           <div class="flex items-center gap-2 mb-2">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-              License
+              {$t('pages.image_details.license.title')}
             </h2>
             {#if $licenseIsLoading}
               <span class="text-xs text-gray-500 dark:text-gray-400"
-                >Saving...</span
+                >{$t('pages.image_details.license.saving')}</span
               >
             {/if}
           </div>
           <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">
-            Choose how others can use this image
+            {$t('pages.image_details.license.description')}
           </p>
           <Select
             class="w-full"
             items={licenseOptions}
             bind:value={selectedLicense}
-            placeholder="Select a license..."
+            placeholder={$t('pages.image_details.license.placeholder')}
           />
         </div>
       {/if}
@@ -356,11 +357,11 @@
         <div>
           <div class="flex items-center gap-2 mb-4">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-              Resize
+              {$t('pages.image_details.resize.title')}
             </h2>
           </div>
           <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">
-            Adjust dimensions for the shared link
+            {$t('pages.image_details.resize.description')}
           </p>
           <ImageSizePicker
             width={image.width}
@@ -373,10 +374,10 @@
       {#if image.supportsResize}
         <div>
           <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-            Filter
+            {$t('pages.image_details.filter.title')}
           </h2>
           <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">
-            Apply a color filter to the shared link
+            {$t('pages.image_details.filter.description')}
           </p>
           <FilterPicker
             imageUrl={image.url}
@@ -388,23 +389,24 @@
 
       <div>
         <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-          Share
+          {$t('pages.image_details.share.title')}
         </h2>
         <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">
-          Resize, filter, and format changes apply only to the shared link. The
-          original image remains unchanged.
+          {$t('pages.image_details.share.description')}
         </p>
         <Notice variant="info" size="xs" class="mb-4">
           <span class="flex items-center justify-between">
             <span class="flex items-center gap-2">
               <Icon icon="lucide:clipboard-copy" class="h-3.5 w-3.5 shrink-0" />
-              <span>Select option to copy</span>
+              <span
+                >{$t('pages.image_details.share.select_option_to_copy')}</span
+              >
             </span>
             <span
               class="flex items-center gap-1.5 pl-3 border-l border-violet-300 dark:border-violet-600"
             >
               <span class="text-[10px] uppercase tracking-wide opacity-60"
-                >Quick</span
+                >{$t('pages.image_details.share.quick')}</span
               >
               <Shortcut control key="C" size="xs" />
             </span>
@@ -416,7 +418,7 @@
             <span
               class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
             >
-              Output Format
+              {$t('pages.image_details.share.output_format')}
             </span>
             <FormatPicker
               value={selectedFormat}

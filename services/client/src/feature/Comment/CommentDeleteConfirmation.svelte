@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Button } from '@slink/ui/components/button';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   interface Props {
@@ -20,8 +21,10 @@
       <Icon icon="heroicons:trash" class="h-5 w-5 text-red-400" />
     </div>
     <div>
-      <h3 class="text-sm font-semibold text-white">Delete Comment</h3>
-      <p class="text-xs text-white/50">This action cannot be undone</p>
+      <h3 class="text-sm font-semibold text-white">
+        {$t('comments.delete.title')}
+      </h3>
+      <p class="text-xs text-white/50">{$t('comments.delete.subtitle')}</p>
     </div>
   </div>
 
@@ -34,7 +37,7 @@
       class="flex-1"
       disabled={loading}
     >
-      Cancel
+      {$t('comments.delete.cancel')}
     </Button>
     <Button
       variant="danger"
@@ -49,7 +52,7 @@
       {:else}
         <Icon icon="heroicons:trash" class="h-4 w-4 mr-2" />
       {/if}
-      Delete
+      {$t('comments.delete.confirm')}
     </Button>
   </div>
 </div>

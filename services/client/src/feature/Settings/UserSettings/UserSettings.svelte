@@ -4,6 +4,8 @@
   import { NumberInput } from '@slink/ui/components/input';
   import { Switch } from '@slink/ui/components/switch';
 
+  import { t } from '$lib/i18n';
+
   import type { SettingCategory } from '@slink/lib/settings/Type/GlobalSettings';
   import type { UserSettings as UserSettingsType } from '@slink/lib/settings/Type/UserSettings';
 
@@ -27,10 +29,10 @@
 
 <SettingsPane category="user" {loading} on={{ save: onSave }}>
   {#snippet title()}
-    User Management
+    {$t('settings.user.title')}
   {/snippet}
   {#snippet description()}
-    Control user registration, authentication, and security requirements
+    {$t('settings.user.description')}
   {/snippet}
 
   <SettingItem
@@ -41,10 +43,10 @@
     }}
   >
     {#snippet label()}
-      User Registration
+      {$t('settings.user.registration.label')}
     {/snippet}
     {#snippet hint()}
-      Allow new users to create accounts
+      {$t('settings.user.registration.hint')}
     {/snippet}
     <Switch
       name="allowRegistration"
@@ -61,10 +63,10 @@
       }}
     >
       {#snippet label()}
-        Require Admin Approval
+        {$t('settings.user.approval_required.label')}
       {/snippet}
       {#snippet hint()}
-        New users must be approved before accessing the app
+        {$t('settings.user.approval_required.hint')}
       {/snippet}
       <Switch
         name="approvalRequired"
@@ -80,10 +82,10 @@
       }}
     >
       {#snippet label()}
-        Minimum Password Length
+        {$t('settings.user.password_min_length.label')}
       {/snippet}
       {#snippet hint()}
-        Minimum characters required
+        {$t('settings.user.password_min_length.hint')}
       {/snippet}
       <NumberInput
         name="passwordLength"
@@ -102,29 +104,33 @@
       }}
     >
       {#snippet label()}
-        Password Requirements
+        {$t('settings.user.password_requirements.label')}
       {/snippet}
       {#snippet hint()}
-        Required character types
+        {$t('settings.user.password_requirements.hint')}
       {/snippet}
       <Select
         type="bitmask"
         class="w-full max-w-md"
         items={[
-          { value: '1', label: 'Numbers (0-9)', icon: 'ph:number-nine-thin' },
+          {
+            value: '1',
+            label: $t('settings.user.password_requirements.options.numbers'),
+            icon: 'ph:number-nine-thin',
+          },
           {
             value: '2',
-            label: 'Lowercase (a-z)',
+            label: $t('settings.user.password_requirements.options.lowercase'),
             icon: 'material-symbols-light:lowercase-rounded',
           },
           {
             value: '4',
-            label: 'Uppercase (A-Z)',
+            label: $t('settings.user.password_requirements.options.uppercase'),
             icon: 'material-symbols-light:uppercase-rounded',
           },
           {
             value: '8',
-            label: 'Special (!@#$)',
+            label: $t('settings.user.password_requirements.options.special'),
             icon: 'material-symbols-light:asterisk-rounded',
           },
         ]}

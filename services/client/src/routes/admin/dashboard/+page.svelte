@@ -6,20 +6,19 @@
   } from '@slink/feature/Analytics';
   import { Subtitle, Title } from '@slink/feature/Text';
 
+  import { t } from '$lib/i18n';
   import { fade } from 'svelte/transition';
 </script>
 
 <svelte:head>
-  <title>Dashboard | Slink</title>
+  <title>{$t('pages.admin.dashboard.page_title')}</title>
 </svelte:head>
 
 <section in:fade={{ duration: 300 }} class="relative h-full grow">
   <div class="px-6 py-6">
     <div class="mb-8">
-      <Title>Dashboard</Title>
-      <Subtitle
-        >Overview of your application's key metrics and activity</Subtitle
-      >
+      <Title>{$t('pages.admin.dashboard.title')}</Title>
+      <Subtitle>{$t('pages.admin.dashboard.subtitle')}</Subtitle>
     </div>
 
     <div class="grid h-full grid-cols-1 md:grid-cols-5 content-start gap-4">

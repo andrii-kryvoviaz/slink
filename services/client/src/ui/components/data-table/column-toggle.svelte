@@ -3,6 +3,7 @@
   import { Select } from '@slink/ui/components/select';
   import type { Table as TanstackTable } from '@tanstack/table-core';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   interface Props {
@@ -50,7 +51,7 @@
       class="gap-2 w-full sm:w-auto"
     >
       <Icon icon="heroicons:adjustments-horizontal" class="size-4" />
-      Columns
+      {$t('table.columns')}
       <Icon icon="heroicons:chevron-down" class="size-4" />
     </Button>
   {/snippet}

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { EditableText } from '@slink/feature/Text';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   interface Props {
@@ -16,15 +17,15 @@
 
 <EditableText
   value={description}
-  placeholder="Add a description..."
-  emptyText="Click to add a description..."
+  placeholder={$t('image.description.placeholder')}
+  emptyText={$t('image.description.empty_text')}
   {isLoading}
   on={{ change: on?.change }}
 >
   {#snippet header({ isLoading })}
     <div class="flex items-center gap-2 mb-1.5">
       <span class="text-lg font-semibold text-gray-900 dark:text-white"
-        >Description</span
+        >{$t('image.description.title')}</span
       >
       {#if isLoading}
         <Icon

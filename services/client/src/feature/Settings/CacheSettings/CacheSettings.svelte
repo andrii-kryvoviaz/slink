@@ -4,6 +4,7 @@
   import { SettingItem } from '@slink/feature/Settings';
   import { Button } from '@slink/ui/components/button';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   import { ReactiveState } from '@slink/api/ReactiveState';
@@ -54,7 +55,7 @@
       <h2
         class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
       >
-        Cache Management
+        {$t('settings.cache.title')}
       </h2>
     </div>
   </div>
@@ -64,12 +65,10 @@
   >
     <SettingItem>
       {#snippet label()}
-        Image Cache
+        {$t('settings.cache.image_cache')}
       {/snippet}
       {#snippet hint()}
-        Cached files store transformed versions of images (resized, cropped,
-        format converted) to improve performance. Clearing the cache will
-        regenerate files on next request.
+        {$t('settings.cache.image_cache_hint')}
       {/snippet}
       <div class="flex items-center gap-3">
         {#if showConfirmation}
@@ -80,7 +79,7 @@
             onclick={() => (showConfirmation = false)}
             disabled={$isLoading}
           >
-            Cancel
+            {$t('settings.common.cancel')}
           </Button>
           <Button
             variant="soft-red"
@@ -94,10 +93,10 @@
                 icon="ph:circle-notch-duotone"
                 class="w-4 h-4 mr-2 animate-spin"
               />
-              Clearing...
+              {$t('settings.cache.clearing')}
             {:else}
               <Icon icon="ph:check-duotone" class="w-4 h-4 mr-2" />
-              Confirm
+              {$t('settings.common.confirm')}
             {/if}
           </Button>
         {:else}
@@ -109,7 +108,7 @@
             disabled={$isLoading}
           >
             <Icon icon="ph:trash-duotone" class="w-4 h-4 mr-2" />
-            Clear Cache
+            {$t('settings.cache.clear_cache')}
           </Button>
         {/if}
       </div>
@@ -122,7 +121,7 @@
         class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
       >
         <Loader variant="minimal" size="xs" />
-        <span>Clearing cache...</span>
+        <span>{$t('settings.cache.clearing_cache')}</span>
       </div>
     {/if}
   </div>

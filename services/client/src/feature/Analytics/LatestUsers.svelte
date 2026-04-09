@@ -10,6 +10,7 @@
   } from '@slink/feature/User';
   import { onMount } from 'svelte';
 
+  import { t } from '$lib/i18n';
   import { formatDate } from '$lib/utils/date';
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
@@ -92,10 +93,10 @@
     >
       <div>
         <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-          Latest Users
+          {$t('pages.admin.dashboard.latest_users.title')}
         </h2>
         <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
-          Recently joined members
+          {$t('pages.admin.dashboard.latest_users.subtitle')}
         </p>
       </div>
 
@@ -116,18 +117,22 @@
           </div>
           <input
             type="text"
-            placeholder="Search..."
+            placeholder={$t(
+              'pages.admin.dashboard.latest_users.search_placeholder',
+            )}
             bind:value={searchValue}
             class="w-36 sm:w-44 pl-9 pr-8 py-1.5 text-sm border border-gray-200/60 dark:border-gray-700/60 rounded-full bg-gray-50 dark:bg-gray-800/80 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 dark:focus:border-blue-500 transition-all duration-200"
             oninput={handleSearch}
-            aria-label="Search users"
+            aria-label={$t('pages.admin.dashboard.latest_users.search_aria')}
           />
           {#if searchValue}
             <button
               type="button"
               onclick={clearSearch}
               class="absolute inset-y-0 right-0 flex items-center pr-2.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-              aria-label="Clear search"
+              aria-label={$t(
+                'pages.admin.dashboard.latest_users.clear_search_aria',
+              )}
             >
               <Icon icon="heroicons:x-mark" class="w-3.5 h-3.5" />
             </button>
@@ -180,12 +185,12 @@
             />
           </div>
           <h3 class="text-base font-medium text-gray-900 dark:text-white mb-1">
-            No users found
+            {$t('pages.admin.dashboard.latest_users.empty_title')}
           </h3>
           <p class="text-sm text-gray-500 dark:text-gray-400 max-w-xs">
             {filterParams.searchTerm
-              ? 'Try adjusting your search terms'
-              : 'Users will appear here once they join'}
+              ? $t('pages.admin.dashboard.latest_users.empty_search')
+              : $t('pages.admin.dashboard.latest_users.empty_default')}
           </p>
         </div>
       {:else if isLoaded && $response}
@@ -244,10 +249,13 @@
               href="/admin/user"
               class="flex items-center justify-between px-3 py-2 -mx-1 rounded-lg text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all duration-200 group/link"
             >
-              <span class="font-medium">View all users</span>
+              <span class="font-medium">
+                {$t('pages.admin.dashboard.latest_users.view_all')}
+              </span>
               <div class="flex items-center gap-2">
                 <span class="text-gray-400 dark:text-gray-500"
-                  >{$response.meta.total} total</span
+                  >{$response.meta.total}
+                  {$t('pages.admin.dashboard.latest_users.total_suffix')}</span
                 >
                 <Icon
                   icon="heroicons:arrow-right"

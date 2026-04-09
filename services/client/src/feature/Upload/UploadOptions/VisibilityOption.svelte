@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Button } from '@slink/ui/components/button';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   import {
@@ -35,8 +36,8 @@
   {/if}
 
   {#if preference.isPublic}
-    Public
+    {$t('upload.options.public')}
   {:else}
-    Private
+    {$t('upload.options.private')}
   {/if}
 </Button>

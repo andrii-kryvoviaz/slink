@@ -1,6 +1,8 @@
 <script lang="ts">
   import { HashtagText } from '@slink/feature/Text';
 
+  import { t } from '$lib/i18n';
+
   import type { HashtagVariant } from '../HashtagText/HashtagText.theme';
 
   interface Props extends HashtagVariant {
@@ -24,7 +26,9 @@
 </script>
 
 {#if isDeleted}
-  <span class="{className} {deletedClass}">This comment has been deleted</span>
+  <span class="{className} {deletedClass}">
+    {$t('comments.deleted_text')}
+  </span>
 {:else}
   <HashtagText
     text={content}

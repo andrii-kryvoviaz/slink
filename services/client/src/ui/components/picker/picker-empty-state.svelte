@@ -2,6 +2,7 @@
   import { Button } from '@slink/ui/components/button';
   import type { Snippet } from 'svelte';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   import type { PickerColor } from './picker.theme';
@@ -25,7 +26,7 @@
 {/snippet}
 
 {#snippet defaultMessage()}
-  No items yet
+  {$t('picker.no_items_yet')}
 {/snippet}
 
 <div class="flex flex-col items-center gap-2 py-4 px-4">

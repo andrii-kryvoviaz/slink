@@ -2,6 +2,7 @@
   import { Loader } from '@slink/feature/Layout';
   import { Button } from '@slink/ui/components/button';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
   import { type Readable, readable } from 'svelte/store';
 
@@ -32,10 +33,10 @@
     </div>
     <div>
       <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
-        Remove from Collection
+        {$t('collection.actions.remove_from_collection')}
       </h3>
       <p class="text-xs text-gray-500 dark:text-gray-400">
-        Image will remain in your library
+        {$t('collection.actions.image_remains')}
       </p>
     </div>
   </div>
@@ -49,7 +50,7 @@
       class="flex-1"
       disabled={$loading}
     >
-      Cancel
+      {$t('collection.actions.cancel')}
     </Button>
     <Button
       variant="danger"
@@ -64,7 +65,7 @@
       {:else}
         <Icon icon="heroicons:trash" class="h-4 w-4 mr-2" />
       {/if}
-      Remove
+      {$t('collection.actions.remove')}
     </Button>
   </div>
 </div>

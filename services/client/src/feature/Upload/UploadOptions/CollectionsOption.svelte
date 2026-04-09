@@ -7,6 +7,7 @@
   import { SelectionPill } from '@slink/ui/components/pill';
   import * as Popover from '@slink/ui/components/popover';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   import type { CollectionResponse } from '@slink/api/Response';
@@ -33,7 +34,9 @@
 
   const selectedIds = $derived(selectedCollections.map((c) => c.id));
   const buttonLabel = $derived(
-    selectedCollections.length > 0 ? 'Add more' : 'Collection',
+    selectedCollections.length > 0
+      ? $t('upload.options.add_more')
+      : $t('upload.options.collection'),
   );
 
   const handleToggle = (collection: CollectionResponse) => {

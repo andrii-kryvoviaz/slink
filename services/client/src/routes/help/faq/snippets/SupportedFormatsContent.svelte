@@ -1,6 +1,8 @@
 <script lang="ts">
   import Badge from '@slink/feature/Text/Badge/Badge.svelte';
 
+  import { t } from '$lib/i18n';
+
   const imageFormats = [
     'image/bmp',
     'image/png',
@@ -19,7 +21,7 @@
   const convertedFormats = ['image/heic *', 'image/tiff *', 'image/tif *'];
 </script>
 
-<p>Slink supports the following mime types:</p>
+<p>{$t('pages.faq.snippets.supported_formats.supported_mime_types')}</p>
 
 <div class="mt-2 w-full flex flex-wrap gap-2">
   {#each imageFormats as format}
@@ -36,6 +38,6 @@
 
 <p class="mt-4 text-xs">
   <span class="font-light"
-    >* Source images are forced to be converted to JPEG format.</span
+    >{$t('pages.faq.snippets.supported_formats.converted_note')}</span
   >
 </p>

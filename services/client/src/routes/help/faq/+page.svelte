@@ -6,6 +6,7 @@
   import { browser } from '$app/environment';
   import { page } from '$app/state';
   import { GITHUB } from '$lib/constants/app';
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
   import { fade, slide } from 'svelte/transition';
 
@@ -49,11 +50,8 @@
 </script>
 
 <svelte:head>
-  <title>FAQ | Slink</title>
-  <meta
-    name="description"
-    content="Frequently asked questions about Slink - image sharing platform"
-  />
+  <title>{$t('pages.faq.page_title')}</title>
+  <meta name="description" content={$t('pages.faq.meta_description')} />
 </svelte:head>
 
 <div class="min-h-full">
@@ -62,12 +60,10 @@
     in:fade={{ duration: 400 }}
   >
     <div class="text-center mb-12">
-      <Title size="xl" weight="bold" class="mb-4"
-        >Frequently Asked Questions</Title
+      <Title size="xl" weight="bold" class="mb-4">{$t('pages.faq.title')}</Title
       >
       <Subtitle size="lg" class="max-w-2xl mx-auto">
-        Find answers to common questions about using Slink for image sharing and
-        management
+        {$t('pages.faq.subtitle')}
       </Subtitle>
     </div>
 
@@ -88,7 +84,7 @@
               <h3
                 class="text-lg font-semibold text-slate-900 dark:text-slate-100 pr-4"
               >
-                {title}
+                {$t(title)}
               </h3>
 
               <div class="flex-shrink-0">
@@ -137,11 +133,10 @@
         <h3
           class="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2"
         >
-          Still have questions?
+          {$t('pages.faq.more_questions_title')}
         </h3>
         <p class="text-slate-600 dark:text-slate-400 mb-6">
-          Can't find the answer you're looking for? Please get in touch with us
-          for further assistance.
+          {$t('pages.faq.more_questions_description')}
         </p>
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
           <a
@@ -151,7 +146,7 @@
             class="inline-flex items-center justify-center px-6 py-3 bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-slate-200 text-white dark:text-slate-900 font-medium rounded-xl transition-colors duration-200"
           >
             <Icon icon="ph:github-logo" class="h-5 w-5 mr-2" />
-            Report an Issue
+            {$t('pages.faq.report_issue')}
           </a>
           <a
             href="https://docs.slinkapp.io"
@@ -160,7 +155,7 @@
             class="inline-flex items-center justify-center px-6 py-3 bg-white hover:bg-slate-50 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-900 dark:text-slate-100 font-medium rounded-xl border border-slate-200 dark:border-slate-600 transition-colors duration-200"
           >
             <Icon icon="ph:book-open" class="h-5 w-5 mr-2" />
-            View Documentation
+            {$t('pages.faq.view_docs')}
           </a>
         </div>
       </div>

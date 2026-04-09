@@ -16,22 +16,22 @@ export interface FaqQuestion {
 export const faqQuestions: FaqQuestion[] = [
   {
     slug: 'supported-image-formats',
-    title: 'What image formats Slink supports?',
+    title: 'pages.faq.questions.supported_image_formats',
     content: SupportedFormatsContent,
   },
   {
     slug: 'image-visability',
-    title: 'What is the visibility of my images?',
+    title: 'pages.faq.questions.image_visibility',
     content: ImageVisibilityContent,
   },
   {
     slug: 'share-feature',
-    title: 'Can I share my images with others?',
+    title: 'pages.faq.questions.share_feature',
     content: ShareFeatureContent,
   },
   {
     slug: 'found-an-issue',
-    title: 'I found an issue, how can I report it?',
+    title: 'pages.faq.questions.found_an_issue',
     content: IssueReportContent,
   },
 ];

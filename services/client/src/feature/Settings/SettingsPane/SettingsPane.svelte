@@ -3,6 +3,7 @@
   import { Button } from '@slink/ui/components/button';
   import type { Snippet } from 'svelte';
 
+  import { t } from '$lib/i18n';
   import type { SettingCategory } from '$lib/settings/Type/GlobalSettings';
 
   interface Props {
@@ -65,7 +66,7 @@
           class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
         >
           <Loader variant="minimal" size="xs" />
-          <span>Saving...</span>
+          <span>{$t('settings.common.saving')}</span>
         </div>
       {/if}
 
@@ -80,7 +81,7 @@
         size="sm"
         disabled={loading}
       >
-        Save Changes
+        {$t('settings.common.save_changes')}
       </Button>
     </div>
   </form>

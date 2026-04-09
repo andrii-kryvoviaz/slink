@@ -30,6 +30,7 @@
   } from '@slink/ui/components/popover';
   import { untrack } from 'svelte';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
@@ -151,7 +152,9 @@
 </script>
 
 <svelte:head>
-  <title>{itemsFeed.collection?.name ?? 'Collection'} | Slink</title>
+  <title
+    >{itemsFeed.collection?.name ?? $t('pages.collections.detail.title')} | Slink</title
+  >
 </svelte:head>
 
 <main in:fade={{ duration: 500 }} class="min-h-full">
@@ -161,7 +164,8 @@
   >
     <div class="mb-8">
       {#if isOwner}
-        <BackLink href="/collections" class="mb-4">Back to Collections</BackLink
+        <BackLink href="/collections" class="mb-4"
+          >{$t('pages.collections.detail.back_to_collections')}</BackLink
         >
       {/if}
 
@@ -184,8 +188,10 @@
                   <EditableText
                     value={itemsFeed.collection.name}
                     type="input"
-                    placeholder="Collection name..."
-                    emptyText="Add a name..."
+                    placeholder={$t(
+                      'pages.collections.detail.name_placeholder',
+                    )}
+                    emptyText={$t('pages.collections.detail.name_empty')}
                     isLoading={isSavingName}
                     showActions={false}
                     class="[&_button]:py-1 [&_button]:px-2 [&_button]:-mx-2 [&_input]:py-1 [&_input]:px-2 [&_input]:text-lg [&_input]:font-semibold [&_span]:text-lg [&_span]:font-semibold [&_span]:text-gray-900 [&_span]:dark:text-white"
@@ -202,7 +208,8 @@
                   class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
                 >
                   <span
-                    >{itemsFeed.collection.itemCount ?? itemsFeed.items.length} items</span
+                    >{itemsFeed.collection.itemCount ?? itemsFeed.items.length}
+                    {$t('pages.collections.detail.items_count')}</span
                   >
                   <span class="text-gray-300 dark:text-gray-600">·</span>
                   <FormattedDate
@@ -215,8 +222,10 @@
               <EditableText
                 value={itemsFeed.collection.description ?? ''}
                 type="textarea"
-                placeholder="Add a description..."
-                emptyText="Click to add a description..."
+                placeholder={$t(
+                  'pages.collections.detail.description_placeholder',
+                )}
+                emptyText={$t('pages.collections.detail.description_empty')}
                 isLoading={isSavingDescription}
                 class="mt-3 ml-13"
                 on={{ change: handleUpdateDescription }}
@@ -237,14 +246,14 @@
                 class="flex flex-row gap-2"
               >
                 <Icon icon="ph:plus" class="h-4 w-4" />
-                Add images
+                {$t('pages.collections.detail.add_images')}
               </Button>
               {#if shareInfo}
                 <div class="relative flex items-center">
                   <span
                     class="absolute -top-4 left-0 text-[10px] font-medium uppercase tracking-wider text-gray-400 dark:text-gray-500"
                   >
-                    Share Link
+                    {$t('pages.collections.detail.share_link')}
                   </span>
                   <CopyContainer
                     value={shareInfo.shareUrl}
@@ -270,7 +279,7 @@
                       {:else}
                         <Icon icon="ph:share-network-fill" class="h-4 w-4" />
                       {/if}
-                      Share
+                      {$t('pages.collections.detail.share')}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent align="end" sideOffset={8}>
@@ -296,8 +305,8 @@
       <div in:fade={{ duration: 200 }}>
         <EmptyState
           icon="ph:folder-notch-open-duotone"
-          title="Collection not found"
-          description="This collection doesn't exist or you don't have permission to view it."
+          title={$t('pages.collections.detail.not_found_title')}
+          description={$t('pages.collections.detail.not_found_description')}
           size="md"
         />
       </div>
@@ -305,10 +314,10 @@
       <div in:fade={{ duration: 200 }}>
         <EmptyState
           icon="ph:images-duotone"
-          title="No items yet"
+          title={$t('pages.collections.detail.empty_title')}
           description={isOwner
-            ? 'Upload images directly to this collection.'
-            : 'No items in this collection yet.'}
+            ? $t('pages.collections.detail.empty_owner_description')
+            : $t('pages.collections.detail.empty_guest_description')}
           variant="purple"
           size="md"
         />

@@ -10,6 +10,7 @@
   import { SplitButton } from '@slink/ui/components/split-button';
   import { ViewModeLayout } from '@slink/ui/components/view-mode-layout';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
@@ -33,7 +34,7 @@
 </script>
 
 <svelte:head>
-  <title>My Tags | Slink</title>
+  <title>{$t('pages.tags.page_title')}</title>
 </svelte:head>
 
 <section in:fade={{ duration: 300 }}>
@@ -44,12 +45,12 @@
     <div class="mb-8 space-y-6" in:fade={{ duration: 400, delay: 100 }}>
       <div class="flex items-center justify-between w-full">
         <div class="flex-1 min-w-0">
-          <Title>My Tags</Title>
-          <Subtitle>Create and organize tags for your images</Subtitle>
+          <Title>{$t('pages.tags.title')}</Title>
+          <Subtitle>{$t('pages.tags.subtitle')}</Subtitle>
         </div>
         <div class="shrink-0">
           <SplitButton onclick={handleCreateTag}>
-            Create
+            {$t('pages.tags.create')}
             {#snippet aside()}
               <Icon icon="lucide:plus" class="w-3.5 h-3.5" />
             {/snippet}
@@ -90,7 +91,7 @@
               <EnhancedInput
                 debounce={300}
                 oninput={(e) => (tagFeed.search = e.currentTarget.value)}
-                placeholder="Search tags..."
+                placeholder={$t('pages.tags.search_placeholder')}
                 size="md"
               >
                 {#snippet leftIcon()}
@@ -110,10 +111,10 @@
       {#snippet empty()}
         <EmptyState
           icon="ph:tag-duotone"
-          title="No tags found"
+          title={$t('pages.tags.empty_title')}
           description={tagFeed.search
-            ? 'Try adjusting your search term'
-            : 'Create your first tag to get started'}
+            ? $t('pages.common.try_adjust_search')
+            : $t('pages.tags.empty_description')}
           variant="blue"
           size="md"
         >
@@ -126,7 +127,7 @@
                 onclick={handleCreateTag}
               >
                 <Icon icon="lucide:plus" class="h-4 w-4" />
-                Create Tag
+                {$t('pages.tags.create_tag')}
               </Button>
             {/if}
           {/snippet}

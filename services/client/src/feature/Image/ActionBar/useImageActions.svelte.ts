@@ -2,6 +2,7 @@ import { ApiClient } from '@slink/api';
 
 import { goto } from '$app/navigation';
 import { page } from '$app/state';
+import { t } from '$lib/i18n';
 import { useUploadHistoryFeed } from '$lib/state/UploadHistoryFeed.svelte.js';
 import { downloadByLink } from '$lib/utils/http/downloadByLink';
 import { createExclusiveToggle } from '$lib/utils/state/createExclusiveToggle.svelte';
@@ -9,6 +10,7 @@ import { bindRequestState } from '$lib/utils/store/bindRequestState.svelte';
 import { useAutoReset } from '$lib/utils/time/useAutoReset.svelte';
 import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
 import { routes } from '$lib/utils/url/routes';
+import { get } from 'svelte/store';
 
 import { ReactiveState } from '@slink/api/ReactiveState';
 import type { Tag } from '@slink/api/Resources/TagResource';
@@ -116,14 +118,16 @@ export function useImageActions(config: UseImageActionsConfig) {
   });
 
   const copyTooltip = $derived.by(() => {
-    if (share.isLoading) return 'Generating...';
-    if (isCopiedState.active) return 'Copied!';
-    return 'Copy URL';
+    if (share.isLoading) return get(t)('image.action_bar.generating');
+    if (isCopiedState.active) return get(t)('image.action_bar.copied');
+    return get(t)('image.action_bar.copy_url');
   });
 
   const visibilityTooltip = $derived.by(() => {
     const image = config.getImage();
-    return image.isPublic ? 'Make private' : 'Make public';
+    return image.isPublic
+      ? get(t)('image.action_bar.make_private')
+      : get(t)('image.action_bar.make_public');
   });
 
   const visibilityIcon = $derived.by(() => {
@@ -153,7 +157,7 @@ export function useImageActions(config: UseImageActionsConfig) {
     const newValue = !image.isPublic;
     await visibility.run(image.id, newValue);
     if (visibility.error) {
-      toast.error('Failed to update visibility. Please try again later.');
+      toast.error(get(t)('image.action_bar.errors.update_visibility'));
       return;
     }
     const updated = { ...image, isPublic: newValue };
@@ -167,7 +171,7 @@ export function useImageActions(config: UseImageActionsConfig) {
     const image = config.getImage();
     await share.run(image.id);
     if (share.error || !share.data) {
-      toast.error('Failed to generate share link. Please try again later.');
+      toast.error(get(t)('image.action_bar.errors.generate_share_link'));
       return;
     }
     await navigator.clipboard.writeText(routes.share.fromResponse(share.data));
@@ -212,7 +216,7 @@ export function useImageActions(config: UseImageActionsConfig) {
     const image = config.getImage();
     await deletion.run(image.id, preserveOnDiskAfterDeletion);
     if (deletion.error) {
-      toast.error('Failed to delete image. Please try again later.');
+      toast.error(get(t)('image.action_bar.errors.delete_image'));
       return;
     }
     historyFeedState.removeItem(image.id);

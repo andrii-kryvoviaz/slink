@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Button } from '@slink/ui/components/button';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
@@ -27,11 +28,11 @@
     </div>
 
     <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-      Upload Successful!
+      {$t('upload.success.title')}
     </h2>
 
     <p class="text-lg text-gray-600 dark:text-gray-400 mb-4">
-      Your image has been successfully uploaded to Slink.
+      {$t('upload.success.description')}
     </p>
 
     {#if isGuestUser}
@@ -45,11 +46,10 @@
           />
           <div class="text-left text-sm">
             <h3 class="font-medium text-blue-900 dark:text-blue-100 mb-1">
-              Guest Upload Notice
+              {$t('upload.success.guest_notice_title')}
             </h3>
             <p class="text-blue-800 dark:text-blue-200">
-              To manage your images and access additional features, consider
-              creating an account.
+              {$t('upload.success.guest_notice_description')}
             </p>
           </div>
         </div>
@@ -65,7 +65,7 @@
       class="inline-flex items-center justify-center"
     >
       <Icon icon="ph:upload-simple" class="h-4 w-4 mr-2" />
-      Upload Another Image
+      {$t('upload.success.upload_another')}
     </Button>
 
     {#if isGuestUser}
@@ -76,7 +76,7 @@
         class="inline-flex items-center justify-center"
       >
         <Icon icon="ph:user-plus" class="h-4 w-4 mr-2" />
-        Create Account
+        {$t('upload.success.create_account')}
       </Button>
     {:else}
       <Button
@@ -86,7 +86,7 @@
         class="inline-flex items-center justify-center"
       >
         <Icon icon="ph:clock-clockwise" class="h-4 w-4 mr-2" />
-        View History
+        {$t('upload.success.view_history')}
       </Button>
     {/if}
   </div>

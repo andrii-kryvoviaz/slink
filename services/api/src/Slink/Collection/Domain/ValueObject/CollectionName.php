@@ -26,7 +26,9 @@ final readonly class CollectionName extends AbstractValueObject {
     }
 
     if (mb_strlen($trimmed) > self::MAX_LENGTH) {
-      throw new InvalidArgumentException('COLLECTION_NAME_TOO_LONG', 'name');
+      throw new InvalidArgumentException('COLLECTION_NAME_TOO_LONG', 'name', [
+        'max' => self::MAX_LENGTH,
+      ]);
     }
 
     return new self($trimmed);

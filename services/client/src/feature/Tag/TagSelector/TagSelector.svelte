@@ -12,6 +12,7 @@
   import type { TagSelectorContainerVariants } from '@slink/feature/Tag';
   import { Popover } from 'bits-ui';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
@@ -33,7 +34,7 @@
     selectedTags = [],
     onTagsChange,
     disabled = false,
-    placeholder = 'Search or add tags...',
+    placeholder = 'tag.selector.search_or_add_placeholder',
     variant = 'default',
     allowCreate = true,
     hideIcon = false,
@@ -330,8 +331,8 @@
                     bind:childTagName
                     {variant}
                     placeholder={hasSelectedTags && !singleSelect
-                      ? 'Add more tags...'
-                      : placeholder}
+                      ? $t('tag.selector.add_more_placeholder')
+                      : $t(placeholder)}
                     {creatingChildFor}
                     onSearchChange={(value) => {
                       searchTerm = value;

@@ -4,6 +4,7 @@
   import type { ComboboxItem } from '@slink/ui/components/combobox';
   import { Dialog, Modal } from '@slink/ui/components/dialog';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
@@ -67,7 +68,7 @@
       await onMove(tag.id, newParentId);
       handleOpenChange(false);
     } catch {
-      console.warn('Failed to move tag');
+      console.warn($t('tag.move_dialog.failed_to_move'));
     } finally {
       isMoving = false;
     }
@@ -85,9 +86,10 @@
         {#snippet icon()}
           <Icon icon="lucide:arrow-right-left" />
         {/snippet}
-        {#snippet title()}Move Tag{/snippet}
+        {#snippet title()}{$t('tag.move_dialog.title')}{/snippet}
         {#snippet description()}
-          Move "{tag.name}" to a new parent tag or to root
+          {$t('tag.move_dialog.description_prefix')} "{tag.name}"
+          {$t('tag.move_dialog.description_suffix')}
         {/snippet}
       </Modal.Header>
 
@@ -98,26 +100,28 @@
               for="new-parent-tag"
               class="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3 block"
             >
-              New Parent Tag
+              {$t('tag.move_dialog.new_parent_tag')}
             </label>
             <Combobox
               items={tagItems}
               bind:value={selectedParentId}
-              placeholder="Search for parent tag... (empty = root)"
+              placeholder={$t('tag.move_dialog.search_parent_placeholder')}
               onSearch={handleTagSearch}
               loading={$isLoadingTags}
               clearable={true}
-              emptyMessage="No matching tags found."
+              emptyMessage={$t('tag.move_dialog.empty_message')}
             />
             <p class="text-xs text-slate-500 dark:text-slate-400">
-              Leave empty to move to root level
+              {$t('tag.move_dialog.leave_empty_hint')}
             </p>
           </div>
         </div>
 
         <Modal.Footer
           isSubmitting={isMoving}
-          submitText={isMoving ? 'Moving...' : 'Move Tag'}
+          submitText={isMoving
+            ? $t('tag.move_dialog.moving')
+            : $t('tag.move_dialog.submit')}
           onCancel={handleCancel}
         />
       </form>

@@ -1,14 +1,14 @@
 import type { ViewMode } from '@slink/lib/settings';
 
 export type ViewModeConfig = {
-  label: string;
+  labelKey: string;
   icon: string;
 };
 
 export const viewModeRegistry: Record<ViewMode, ViewModeConfig> = {
-  grid: { label: 'Grid', icon: 'heroicons:squares-2x2' },
-  list: { label: 'List', icon: 'heroicons:bars-3' },
-  table: { label: 'Table', icon: 'heroicons:table-cells' },
+  grid: { labelKey: 'table.view_modes.grid', icon: 'heroicons:squares-2x2' },
+  list: { labelKey: 'table.view_modes.list', icon: 'heroicons:bars-3' },
+  table: { labelKey: 'table.view_modes.table', icon: 'heroicons:table-cells' },
 };
 
 export interface ViewModeToggleProps {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Shared\Application\Http\RequestValueResolver;
 
+use Slink\Shared\Application\Http\Exception\LocalizedHttpException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -143,11 +144,18 @@ final class FileRequestValueResolver implements ValueResolverInterface, EventSub
    */
   private function mapRequestPayload(Request $request, string $type, MapRequestPayload $attribute): ?object {
     if (null === $format = $request->getContentTypeFormat()) {
-      throw new HttpException(Response::HTTP_UNSUPPORTED_MEDIA_TYPE, 'REQUEST_UNSUPPORTED_FORMAT');
+      throw new LocalizedHttpException(Response::HTTP_UNSUPPORTED_MEDIA_TYPE, 'REQUEST_UNSUPPORTED_FORMAT');
     }
     
     if ($attribute->acceptFormat && !\in_array($format, (array) $attribute->acceptFormat, true)) {
-      throw new HttpException(Response::HTTP_UNSUPPORTED_MEDIA_TYPE, 'REQUEST_UNSUPPORTED_FORMAT_EXPECTED');
+      throw new LocalizedHttpException(
+        Response::HTTP_UNSUPPORTED_MEDIA_TYPE,
+        'REQUEST_UNSUPPORTED_FORMAT_EXPECTED',
+        params: [
+          'expected' => implode(', ', (array) $attribute->acceptFormat),
+          'given' => $format,
+        ],
+      );
     }
     
     if ($data = [...$request->request->all(), ...$request->files->all()]) {
@@ -165,9 +173,19 @@ final class FileRequestValueResolver implements ValueResolverInterface, EventSub
     try {
       return $this->serializer->deserialize($data, $type, $format, self::CONTEXT_DESERIALIZE + $attribute->serializationContext);
     } catch (UnsupportedFormatException $e) {
-      throw new HttpException(Response::HTTP_UNSUPPORTED_MEDIA_TYPE, 'REQUEST_UNSUPPORTED_FORMAT_VALUE', $e);
+      throw new LocalizedHttpException(
+        Response::HTTP_UNSUPPORTED_MEDIA_TYPE,
+        'REQUEST_UNSUPPORTED_FORMAT_VALUE',
+        $e,
+        params: ['format' => $format],
+      );
     } catch (NotEncodableValueException $e) {
-      throw new HttpException(Response::HTTP_BAD_REQUEST, 'REQUEST_INVALID_FORMAT_DATA', $e);
+      throw new LocalizedHttpException(
+        Response::HTTP_BAD_REQUEST,
+        'REQUEST_INVALID_FORMAT_DATA',
+        $e,
+        params: ['format' => $format],
+      );
     }
   }
 }

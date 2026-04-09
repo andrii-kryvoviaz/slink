@@ -26,6 +26,19 @@
         "help_faq": "Help & FAQ",
         "github": "GitHub"
       }
+    },
+    "user_menu": {
+      "account_settings": "Account Settings",
+      "external_integrations": "External Integrations",
+      "preferences": "Preferences",
+      "sign_out": "Sign Out"
+    },
+    "projects": {
+      "title": "Projects",
+      "more": "More",
+      "view_project": "View Project",
+      "share_project": "Share Project",
+      "delete_project": "Delete Project"
     }
   },
   "home": {
@@ -37,7 +50,8 @@
   },
   "common": {
     "search_placeholder": "Search users...",
-    "user": "User"
+    "user": "User",
+    "refresh": "Refresh"
   },
   "auth": {
     "signin": "Sign In",
@@ -94,6 +108,13 @@
       "ready_to_get_started_description": "Sign in to your account to begin using all the platform features or explore the public gallery to see what others are sharing.",
       "ready_to_continue_title": "Ready to continue",
       "ready_to_continue_description": "Sign in to access all platform features"
+    },
+    "password_strength": {
+      "weak": "Weak",
+      "fair": "Fair",
+      "good": "Good",
+      "strong": "Strong",
+      "very_strong": "Very Strong"
     }
   },
   "search": {
@@ -126,6 +147,519 @@
     "toggle_theme": "Toggle Theme",
     "toggle_theme_description": "Switch between light and dark mode."
   },
+  "upload": {
+    "page_title": "Upload | Slink",
+    "guest_banner": {
+      "title": "Guest Upload",
+      "description": "You can upload images without an account, but consider signing in to manage them"
+    },
+    "login_required_banner": {
+      "title": "Sign in to continue",
+      "description": "Upload and manage your images securely",
+      "cta": "Get Started"
+    },
+    "form": {
+      "toast": {
+        "no_files_selected": "No files selected",
+        "only_one_file": "Only one file allowed at a time"
+      },
+      "drop_title_single": "Drop your image here",
+      "drop_title_multiple": "Drop your images here",
+      "drop_subtitle": "or click to browse from your device",
+      "quick_paste": "Quick paste:",
+      "supported_formats_link": "View all supported formats",
+      "drop_overlay": "Drop to upload",
+      "processing_title": "Almost there",
+      "processing_subtitle_single": "Uploading your image...",
+      "processing_subtitle_multiple": "Uploading your images..."
+    },
+    "options": {
+      "title": "Upload Options",
+      "add_more": "Add more",
+      "add_tags": "Add tags",
+      "collection": "Collection",
+      "public": "Public",
+      "private": "Private"
+    },
+    "multi": {
+      "complete": "Complete",
+      "uploading": "Uploading",
+      "files_uploaded": "files uploaded",
+      "failed": "failed",
+      "retry_failed": "Retry Failed",
+      "cancel": "Cancel",
+      "done": "Done",
+      "overall_progress": "Overall Progress",
+      "upload_failed": "Upload failed"
+    },
+    "success": {
+      "title": "Upload Successful!",
+      "description": "Your image has been successfully uploaded to Slink.",
+      "guest_notice_title": "Guest Upload Notice",
+      "guest_notice_description": "To manage your images and access additional features, consider creating an account.",
+      "upload_another": "Upload Another Image",
+      "create_account": "Create Account",
+      "view_history": "View History"
+    }
+  },
+  "storage_usage": {
+    "title": "Storage Usage",
+    "error": "Failed to load storage usage",
+    "provider": "Provider",
+    "total_usage": "Total Usage",
+    "images": "Images",
+    "cache": "Cache",
+    "files": "files",
+    "empty": "No storage data available",
+    "providers": {
+      "local": "Local Storage",
+      "s3": "Amazon S3",
+      "smb": "SMB Share"
+    }
+  },
+  "pages": {
+    "common": {
+      "view_more": "View More",
+      "try_adjust_search": "Try adjusting your search term"
+    },
+    "history": {
+      "page_title": "Upload History | Slink",
+      "title": "Upload History",
+      "subtitle": "View and manage your uploaded images",
+      "empty": {
+        "filtered_title": "No matching images",
+        "filtered_description": "No images match your current tag filters. Try removing some tags or clearing all filters.",
+        "title": "No history yet",
+        "description": "Your upload history will appear here. Start uploading images to see your files and manage them easily.",
+        "cta": "Upload Images"
+      },
+      "batch": {
+        "add_to_collection": "Add to Collection",
+        "tag": "Tag",
+        "assign_tags": "Assign Tags"
+      }
+    },
+    "tags": {
+      "page_title": "My Tags | Slink",
+      "title": "My Tags",
+      "subtitle": "Create and organize tags for your images",
+      "create": "Create",
+      "create_tag": "Create Tag",
+      "search_placeholder": "Search tags...",
+      "empty_title": "No tags found",
+      "empty_description": "Create your first tag to get started"
+    },
+    "collections": {
+      "page_title": "Collections | Slink",
+      "title": "Collections",
+      "subtitle": "Organize your images into albums",
+      "create": "Create",
+      "create_collection": "Create Collection",
+      "search_placeholder": "Search collections...",
+      "empty_title": "No collections found",
+      "empty_description": "Create your first collection to organize and share your images.",
+      "table": {
+        "name": "Name",
+        "items": "Items",
+        "description": "Description",
+        "created": "Created",
+        "actions": "Actions"
+      },
+      "detail": {
+        "title": "Collection",
+        "back_to_collections": "Back to Collections",
+        "name_placeholder": "Collection name...",
+        "name_empty": "Add a name...",
+        "items_count": "items",
+        "description_placeholder": "Add a description...",
+        "description_empty": "Click to add a description...",
+        "add_images": "Add images",
+        "share_link": "Share Link",
+        "share": "Share",
+        "not_found_title": "Collection not found",
+        "not_found_description": "This collection doesn't exist or you don't have permission to view it.",
+        "empty_title": "No items yet",
+        "empty_owner_description": "Upload images directly to this collection.",
+        "empty_guest_description": "No items in this collection yet."
+      }
+    },
+    "bookmarks": {
+      "page_title": "Bookmarks | Slink",
+      "title": "Bookmarks",
+      "subtitle": "Your saved images from the community",
+      "empty_title": "No bookmarks yet",
+      "empty_description": "Start exploring and bookmark images you love to find them here later.",
+      "explore_images": "Explore Images",
+      "image_unavailable": "Image no longer available",
+      "remove_bookmark": "Remove bookmark",
+      "saved": "Saved"
+    },
+    "explore": {
+      "page_title": "Explore Gallery | Slink"
+    },
+    "faq": {
+      "page_title": "FAQ | Slink",
+      "meta_description": "Frequently asked questions about Slink - image sharing platform",
+      "title": "Frequently Asked Questions",
+      "subtitle": "Find answers to common questions about using Slink for image sharing and management",
+      "more_questions_title": "Still have questions?",
+      "more_questions_description": "Can't find the answer you're looking for? Please get in touch with us for further assistance.",
+      "report_issue": "Report an Issue",
+      "view_docs": "View Documentation",
+      "questions": {
+        "supported_image_formats": "What image formats Slink supports?",
+        "image_visibility": "What is the visibility of my images?",
+        "share_feature": "Can I share my images with others?",
+        "found_an_issue": "I found an issue, how can I report it?"
+      },
+      "snippets": {
+        "supported_formats": {
+          "supported_mime_types": "Slink supports the following mime types:",
+          "converted_note": "* Source images are forced to be converted to JPEG format."
+        },
+        "image_visibility": {
+          "slink_offers": "Slink offers a",
+          "public_gallery": "public gallery",
+          "where_people_share": ", where people can share their images with others.",
+          "visibility_options": "Visibility Options",
+          "public": "Public",
+          "public_description": "Images are shared in the public gallery and visible to all users",
+          "private": "Private",
+          "default": "Default",
+          "private_description": "Images are not shared in the public gallery and only accessible by the owner",
+          "important_note": "Important Note",
+          "raw_images_note": "Raw images are accessible to anyone with a direct link, regardless of visibility setting."
+        },
+        "share_feature": {
+          "intro": "You can easily share your images with others using the direct link provided for each uploaded image.",
+          "current_options": "Current Sharing Options",
+          "direct_link": "Direct link sharing with anyone",
+          "public_gallery": "Public gallery visibility (optional)",
+          "link_access": "Link accessible to anyone who has it",
+          "want_more_control": "Want More Control?",
+          "roadmap_intro": "I'm working on advanced sharing features that will give you more control over your image sharing:",
+          "expiration_dates": "Expiration dates for shared links",
+          "password_protection": "Password protection",
+          "private_group_sharing": "Private group sharing",
+          "support_feature_request": "Support this feature request"
+        },
+        "issue_report": {
+          "intro": "I appreciate your help in making Slink better! If you've encountered a bug or have suggestions for improvement, here's how you can help:",
+          "before_reporting": "Before Reporting",
+          "check_existing": "Check if the issue has already been reported",
+          "try_other_browser": "Try reproducing the issue in a different browser",
+          "gather_details": "Gather relevant details (browser, steps to reproduce, screenshots)",
+          "report_on_github": "Report on GitHub",
+          "github_description": "GitHub Issues is my primary platform for tracking bugs and feature requests. Your reports help me prioritize improvements.",
+          "create_issue": "Create New Issue",
+          "thank_you": "Thank You!",
+          "thank_you_description": "Every report helps me improve Slink for the entire community. I review all issues and prioritize fixes based on impact and frequency."
+        }
+      }
+    },
+    "notifications": {
+      "page_title": "Notifications | Slink",
+      "title": "Notifications",
+      "unread": "unread",
+      "mark_all_read": "Mark all read",
+      "empty_title": "All caught up",
+      "empty_description": "You'll see activity on your images here"
+    },
+    "admin": {
+      "dashboard": {
+        "page_title": "Dashboard | Slink",
+        "title": "Dashboard",
+        "subtitle": "Overview of your application's key metrics and activity",
+        "cards": {
+          "uploads": "Uploads",
+          "users": "Users"
+        },
+        "users_count_suffix": "Users",
+        "no_data": "No Data",
+        "user_labels": {
+          "total": "Total",
+          "active": "Active",
+          "inactive": "Inactive",
+          "pending": "Pending"
+        },
+        "intervals": {
+          "today": "Today",
+          "current_week": "Current Week",
+          "last_week": "Last Week",
+          "current_year": "Current Year",
+          "last_year": "Last Year",
+          "current_month": "Current Month",
+          "last_month": "Last Month",
+          "last_30_days": "Last 30 Days",
+          "last_7_days": "Last 7 Days",
+          "all_time": "All Time"
+        },
+        "latest_users": {
+          "title": "Latest Users",
+          "subtitle": "Recently joined members",
+          "search_placeholder": "Search...",
+          "search_aria": "Search users",
+          "clear_search_aria": "Clear search",
+          "empty_title": "No users found",
+          "empty_search": "Try adjusting your search terms",
+          "empty_default": "Users will appear here once they join",
+          "view_all": "View all users",
+          "total_suffix": "total"
+        }
+      },
+      "users": {
+        "page_title": "Users | Slink Admin",
+        "title": "Users",
+        "subtitle": "Manage user accounts and permissions",
+        "empty_title": "No users found",
+        "empty_description": "There are no users in the system yet.",
+        "table": {
+          "user": "User",
+          "username": "Username",
+          "status": "Status",
+          "roles": "Roles",
+          "actions": "Actions"
+        },
+        "actions": {
+          "actions": "Actions",
+          "suspend": "Suspend",
+          "activate": "Activate",
+          "make_admin": "Make Admin",
+          "remove_admin": "Remove Admin",
+          "delete": "Delete"
+        },
+        "role": {
+          "admin": "Admin",
+          "user": "User"
+        },
+        "status": {
+          "active": "Active",
+          "inactive": "Inactive",
+          "suspended": "Suspended",
+          "banned": "Banned",
+          "unknown": "Unknown"
+        },
+        "current_user": "You",
+        "delete_confirmation": {
+          "title": "Delete User",
+          "subtitle": "This action cannot be undone",
+          "description": "User account and all associated data will be removed",
+          "cancel": "Cancel",
+          "confirm": "Delete User"
+        }
+      },
+      "settings": {
+        "page_title": "Settings | Slink",
+        "title": "Settings",
+        "subtitle": "Configure your application preferences and manage system behavior",
+        "categories": {
+          "image": {
+            "title": "Image Settings",
+            "description": "Configure image uploads, processing options, and URL sharing preferences"
+          },
+          "storage": {
+            "title": "Storage Configuration",
+            "description": "Configure storage providers, cache settings, and data management"
+          },
+          "security": {
+            "title": "Security Settings",
+            "description": "Manage user registration, access control, and authentication policies"
+          },
+          "sso": {
+            "title": "Single Sign-On",
+            "description": "Manage SSO/OIDC identity providers for external authentication"
+          }
+        },
+        "image": {
+          "page_title": "Image Settings | Slink",
+          "title": "Image",
+          "description": "Configure image handling and sharing preferences"
+        },
+        "storage": {
+          "page_title": "Storage Settings | Slink",
+          "title": "Storage",
+          "description": "Configure storage providers and cache management"
+        },
+        "security": {
+          "page_title": "Security Settings | Slink",
+          "title": "Security",
+          "description": "Manage access control and user authentication settings"
+        },
+        "sso": {
+          "page_title": "SSO Settings | Slink",
+          "title": "Single Sign-On",
+          "description": "Manage SSO/OIDC identity providers",
+          "back_to_settings": "Back to Settings",
+          "create": "Create",
+          "callback_help": "Add this callback URL to your identity provider's allowed redirect URIs:",
+          "load_error": "Failed to load SSO providers.",
+          "new": {
+            "page_title": "Add SSO Provider | Slink",
+            "title": "Add Provider",
+            "select_provider_description": "Select an identity provider to configure",
+            "configure_provider_prefix": "Configure the",
+            "configure_provider_suffix": "provider"
+          },
+          "edit": {
+            "page_title": "Edit SSO Provider | Slink",
+            "title": "Edit Provider",
+            "description": "Update the SSO provider configuration"
+          },
+          "form": {
+            "configuration": "Configuration",
+            "provider": "Provider",
+            "provider_hint": "Selected authentication provider",
+            "change": "Change",
+            "provider_name": "Provider Name",
+            "provider_name_hint": "Display name for the provider",
+            "provider_name_placeholder": "e.g. My SSO Provider",
+            "slug": "Slug",
+            "slug_hint": "Unique identifier for the provider",
+            "slug_placeholder": "e.g. my-provider",
+            "issuer_url": "Issuer URL",
+            "issuer_url_hint": "OpenID Connect discovery endpoint",
+            "client_id": "Client ID",
+            "client_id_hint": "OAuth application client identifier",
+            "client_id_placeholder": "OAuth Client ID",
+            "client_secret": "Client Secret",
+            "client_secret_hint": "OAuth application client secret",
+            "client_secret_placeholder": "OAuth Client Secret",
+            "enabled": "Enabled",
+            "enabled_hint": "Allow users to authenticate with this provider",
+            "saving": "Saving...",
+            "cancel": "Cancel",
+            "update_provider": "Update Provider",
+            "add_provider": "Add Provider"
+          },
+          "list": {
+            "empty": "No SSO providers configured yet",
+            "move_up": "Move Up",
+            "move_down": "Move Down",
+            "edit": "Edit",
+            "delete": "Delete"
+          },
+          "delete": {
+            "title": "Delete Provider",
+            "description": "This action cannot be undone",
+            "provider_removed": "Provider and its configuration will be removed",
+            "cancel": "Cancel",
+            "confirm": "Delete Provider"
+          }
+        }
+      }
+    },
+    "preferences": {
+      "page_title": "Preferences | Slink",
+      "title": "Preferences",
+      "subtitle": "Configure your default settings and preferences",
+      "toast": {
+        "updated_successfully": "Preferences updated successfully"
+      },
+      "navigation": {
+        "section_title": "Navigation",
+        "default_landing_page": "Default Landing Page",
+        "default_landing_page_hint": "The page to show when you visit the site",
+        "select_landing_page": "Select a landing page..."
+      },
+      "uploads": {
+        "section_title": "Image Uploads",
+        "default_visibility": "Default Visibility",
+        "default_visibility_hint": "New uploads will be set to public or private by default",
+        "select_visibility": "Select visibility..."
+      },
+      "licensing": {
+        "section_title": "Image Licensing",
+        "default_license": "Default License",
+        "default_license_hint": "This license will be automatically applied to new uploads",
+        "learn_more": "Learn more",
+        "select_license": "Select a license...",
+        "sync_to_existing_images": "Sync to existing images",
+        "sync_to_existing_images_hint": "Apply this license to all your existing images"
+      },
+      "visibility": {
+        "public": "Public",
+        "private": "Private"
+      },
+      "landing": {
+        "explore": "Explore",
+        "upload": "Upload"
+      },
+      "saving": "Saving...",
+      "save_changes": "Save Changes"
+    },
+    "integrations": {
+      "page_title": "Integrations | Slink",
+      "title": "Integrations",
+      "subtitle": "Connect Slink with ShareX and other tools via API keys",
+      "create": "Create",
+      "api_keys": {
+        "section_title": "API Keys",
+        "empty_title": "No API keys yet",
+        "empty_description": "Create an API key to integrate with ShareX and other tools",
+        "revoke_api_key": "Revoke API Key",
+        "create": {
+          "title": "Create API Key",
+          "description": "Generate a secure key for external integrations",
+          "key_name": "Key Name",
+          "key_name_placeholder": "e.g., ShareX Upload Key",
+          "expiry_date_optional": "Expiry Date (Optional)",
+          "expiry_date_placeholder": "Select expiry date",
+          "security_notice_title": "Security Notice",
+          "security_notice_message": "Your API key will be displayed only once after creation. Store it securely in your password manager or environment variables. If lost, you'll need to generate a new one.",
+          "creating": "Creating...",
+          "submit": "Create API Key"
+        },
+        "created": {
+          "success_title": "Success!",
+          "success_description": "Your API key has been created",
+          "your_api_key": "Your API Key",
+          "api_key_placeholder": "Your API key will appear here...",
+          "notice_title": "Important Notice",
+          "notice_message": "This key will not be shown again. Store it securely in your password manager or download the ShareX config file below.",
+          "close": "Close",
+          "downloading": "Downloading...",
+          "download_sharex_config": "Download ShareX Config"
+        },
+        "delete": {
+          "title": "Revoke API Key",
+          "subtitle": "This action cannot be undone",
+          "description": "This API key will be permanently revoked and cannot be recovered",
+          "cancel": "Cancel",
+          "confirm": "Revoke Key"
+        },
+        "service": {
+          "sharex_only_for_newly_created": "ShareX config can only be downloaded for newly created keys. Please create a new key to download the config.",
+          "download_failed_console": "Failed to download ShareX config:",
+          "download_failed": "Failed to download ShareX config",
+          "copied_to_clipboard": "Copied to clipboard"
+        }
+      }
+    },
+    "image_details": {
+      "page_title": "Image Details | Slink",
+      "license": {
+        "title": "License",
+        "saving": "Saving...",
+        "description": "Choose how others can use this image",
+        "placeholder": "Select a license..."
+      },
+      "resize": {
+        "title": "Resize",
+        "description": "Adjust dimensions for the shared link"
+      },
+      "filter": {
+        "title": "Filter",
+        "description": "Apply a color filter to the shared link"
+      },
+      "share": {
+        "title": "Share",
+        "description": "Resize, filter, and format changes apply only to the shared link. The original image remains unchanged.",
+        "select_option_to_copy": "Select option to copy",
+        "quick": "Quick",
+        "output_format": "Output Format"
+      }
+    }
+  },
   "layout": {
     "translation_test_label": "Translation Test",
     "switch_zh": "Switch Chinese",
@@ -138,8 +672,8 @@
   },
   "api_errors": {
     "COLLECTION_NAME_EMPTY": "Collection name cannot be empty",
-    "COLLECTION_NAME_TOO_LONG": "Collection name cannot exceed maximum length",
-    "COLLECTION_DESCRIPTION_TOO_LONG": "Collection description cannot exceed maximum length",
+    "COLLECTION_NAME_TOO_LONG": "Collection name cannot exceed {max} characters",
+    "COLLECTION_DESCRIPTION_TOO_LONG": "Collection description cannot exceed {max} characters",
     "COLLECTION_NOT_FOUND": "Collection not found",
     "COMMENT_DELETED_CANNOT_EDIT": "Cannot edit a deleted comment",
     "COMMENT_CONTENT_EMPTY": "Comment content cannot be empty",
@@ -152,12 +686,26 @@
     "CURSOR_ID_TOO_LONG": "Cursor ID cannot exceed 255 characters",
     "CURSOR_TIMESTAMP_EMPTY": "Cursor timestamp cannot be empty",
     "REQUEST_UNSUPPORTED_FORMAT": "Unsupported format",
-    "REQUEST_UNSUPPORTED_FORMAT_EXPECTED": "Unsupported format for this endpoint",
+    "REQUEST_UNSUPPORTED_FORMAT_EXPECTED": "Unsupported format, expects \"{expected}\", but \"{given}\" given.",
     "REQUEST_INVALID_FORM_DATA": "Request payload contains invalid form data",
-    "REQUEST_UNSUPPORTED_FORMAT_VALUE": "Unsupported payload format",
-    "REQUEST_INVALID_FORMAT_DATA": "Request payload contains invalid data",
+    "REQUEST_UNSUPPORTED_FORMAT_VALUE": "Unsupported format: \"{format}\".",
+    "REQUEST_INVALID_FORMAT_DATA": "Request payload contains invalid \"{format}\" data.",
     "EMAIL_INVALID": "Invalid email address",
+    "EMAIL_ALREADY_REGISTERED": "Email already registered",
     "PASSWORD_TOO_SHORT": "Password is too short",
+    "VALIDATION_REQUIRED": "This value should not be blank",
+    "AUTH_PASSWORDS_MISMATCH": "Passwords do not match",
+    "AUTH_USERNAME_EQUALS_EMAIL": "Username cannot be the same as email",
+    "AUTH_PASSWORD_TOO_SHORT": "Password is too short",
+    "AUTH_PASSWORD_MISSING_NUMBER": "Password must contain at least one number",
+    "AUTH_PASSWORD_MISSING_LOWERCASE": "Password must contain at least one lowercase letter",
+    "AUTH_PASSWORD_MISSING_UPPERCASE": "Password must contain at least one uppercase letter",
+    "AUTH_PASSWORD_MISSING_SPECIAL": "Password must contain at least one special character",
+    "AUTH_USERNAME_TOO_SHORT": "Username is too short",
+    "AUTH_USERNAME_TOO_LONG": "Username is too long",
+    "AUTH_USERNAME_INVALID_CHARACTERS": "Username contains invalid characters",
+    "AUTH_USERNAME_CONSECUTIVE_SPECIAL": "Username cannot contain consecutive special characters",
+    "AUTH_USERNAME_RESERVED": "This username is reserved",
     "DISPLAY_NAME_TOO_SHORT": "Display name must be at least 3 characters long",
     "DISPLAY_NAME_TOO_LONG": "Display name must be at most 30 characters long",
     "USERNAME_TOO_SHORT": "Username must be at least 3 characters long",
@@ -190,5 +738,446 @@
     "SETTINGS_PASSWORD_LENGTH_TOO_LONG": "Password length cannot be greater than 64",
     "SETTINGS_IMAGE_MAX_SIZE_TOO_SMALL": "Max size cannot be less than 0",
     "SETTINGS_IMAGE_MAX_SIZE_TOO_LARGE": "Max size cannot be greater than 1000"
+  },
+  "comments": {
+    "title": "Comments",
+    "sort": {
+      "oldest_first": "Oldest first",
+      "newest_first": "Newest first"
+    },
+    "empty": {
+      "title": "No comments yet",
+      "description": "Be the first to comment"
+    },
+    "sign_in_to_comment": "Sign in to comment",
+    "deleted_text": "This comment has been deleted",
+    "item": {
+      "edited": "edited",
+      "reply": "Reply",
+      "edit": "Edit",
+      "delete": "Delete",
+      "deleted_inline": "deleted"
+    },
+    "delete": {
+      "title": "Delete Comment",
+      "subtitle": "This action cannot be undone",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    }
+  },
+  "tag": {
+    "filter": {
+      "search_select_placeholder": "Search and select tags"
+    },
+    "selector": {
+      "search_or_add_placeholder": "Search or add tags...",
+      "add_more_placeholder": "Add more tags..."
+    },
+    "input": {
+      "child_tag_name_placeholder": "Child tag name...",
+      "cancel_child_creation": "Cancel child tag creation"
+    },
+    "picker": {
+      "search_placeholder": "Search tags",
+      "no_tags_yet": "No tags yet",
+      "create_first_tag": "Create your first tag",
+      "new_tag": "New tag",
+      "root": "Root"
+    },
+    "active_filter": {
+      "filtering_by": "Filtering by",
+      "tag_unit": "tag",
+      "toggle_aria": "Toggle between matching all or any selected tags",
+      "match_all": "Match all",
+      "match_any": "Match any",
+      "match_all_title": "Match All",
+      "match_any_title": "Match Any",
+      "match_all_description": "Images must have every selected tag to appear in results.",
+      "match_any_description": "Images with at least one selected tag will appear in results.",
+      "switch_to_any": "Click to switch to match any",
+      "switch_to_all": "Click to switch to match all",
+      "clear_aria": "Clear all filters",
+      "clear": "Clear"
+    },
+    "dropdown": {
+      "create_with_name": "Create",
+      "no_tags_matching": "No tags matching",
+      "no_tags_yet": "No tags yet"
+    },
+    "actions": {
+      "aria": "Tag actions",
+      "move": "Move",
+      "delete": "Delete"
+    },
+    "move_dialog": {
+      "failed_to_move": "Failed to move tag",
+      "title": "Move Tag",
+      "description_prefix": "Move",
+      "description_suffix": "to a new parent tag or to root",
+      "new_parent_tag": "New Parent Tag",
+      "search_parent_placeholder": "Search for parent tag... (empty = root)",
+      "empty_message": "No matching tags found.",
+      "leave_empty_hint": "Leave empty to move to root level",
+      "moving": "Moving...",
+      "submit": "Move Tag"
+    },
+    "create_form": {
+      "description": "Add a new tag to organize your images",
+      "tag_name": "Tag Name",
+      "tag_name_placeholder": "e.g., Nature, Photography, Art",
+      "parent_tag_optional": "Parent Tag (Optional)",
+      "search_parent_placeholder": "Search for parent tag...",
+      "empty_message": "No matching tags found.",
+      "notice_title": "Tag Organization",
+      "notice_message": "Tags help organize your images. Parent tags create a hierarchy for better organization. You can always move tags later or create sub-tags within existing ones.",
+      "creating": "Creating..."
+    },
+    "badge": {
+      "remove_tag_prefix": "Remove",
+      "remove_tag_suffix": "tag"
+    }
+  },
+  "collection": {
+    "picker": {
+      "search_placeholder": "Search collections",
+      "no_collections_yet": "No collections yet",
+      "create_first_collection": "Create your first collection",
+      "new_collection": "New collection"
+    },
+    "actions": {
+      "remove_from_collection": "Remove from Collection",
+      "aria": "Collection actions",
+      "edit": "Edit",
+      "delete": "Delete",
+      "delete_failed": "Failed to delete collection. Please try again later.",
+      "updated_successfully": "Collection updated successfully",
+      "update_failed": "Failed to update collection",
+      "image_remains": "Image will remain in your library",
+      "cancel": "Cancel",
+      "remove": "Remove"
+    },
+    "form": {
+      "create_collection": "Create Collection",
+      "edit_collection": "Edit Collection",
+      "update_details": "Update your collection details",
+      "organize_description": "Organize your images into a shareable collection",
+      "collection_name": "Collection Name",
+      "collection_name_placeholder": "e.g., Summer Vacation, Portfolio",
+      "description_optional": "Description (Optional)",
+      "description_placeholder": "What's this collection about?",
+      "notice_title": "Collection Sharing",
+      "notice_message": "Collections let you group images together and share them with a single link. You can add or remove images at any time after creating the collection.",
+      "save_changes": "Save Changes"
+    }
+  },
+  "picker": {
+    "search_placeholder": "Search...",
+    "no_items_yet": "No items yet",
+    "no_matches_found": "No matches found"
+  },
+  "image": {
+    "action_bar": {
+      "download_image": "Download image",
+      "download": "Download",
+      "copy_image_url": "Copy image URL",
+      "delete_image": "Delete image",
+      "add_to_collection": "Add to collection",
+      "manage_tags": "Manage tags",
+      "image_actions": "Image actions",
+      "generating": "Generating...",
+      "copied": "Copied!",
+      "copy_url": "Copy URL",
+      "make_private": "Make private",
+      "make_public": "Make public",
+      "errors": {
+        "update_visibility": "Failed to update visibility. Please try again later.",
+        "generate_share_link": "Failed to generate share link. Please try again later.",
+        "delete_image": "Failed to delete image. Please try again later."
+      }
+    },
+    "description": {
+      "title": "Description",
+      "placeholder": "Add a description...",
+      "empty_text": "Click to add a description..."
+    },
+    "bookmarkers_panel": {
+      "bookmarked": "Bookmarked",
+      "time": "time",
+      "times": "times",
+      "no_bookmarks_yet": "No bookmarks yet",
+      "failed_to_load": "Failed to load bookmarks"
+    },
+    "post_viewer": {
+      "views": "views",
+      "description": "Description"
+    },
+    "tag_manager": {
+      "tags": "Tags",
+      "add_more_placeholder": "Add more tags...",
+      "add": "Add",
+      "click_to_add_tags": "Click to add tags..."
+    }
+  },
+  "settings": {
+    "common": {
+      "enabled": "Enabled",
+      "disabled": "Disabled",
+      "reset_setting": "Reset Setting",
+      "reset_to_default": "Reset to default value",
+      "reset_to": "Reset to",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "saving": "Saving...",
+      "save_changes": "Save Changes"
+    },
+    "reset_dialog": {
+      "title": "Reset Setting",
+      "confirm": "Reset to Default",
+      "cancel": "Keep Current",
+      "confirm_message_prefix": "Are you sure you want to reset",
+      "confirm_message_suffix": "to its default value?",
+      "warning": "This action cannot be undone. Your current setting will be lost.",
+      "current_value": "Current Value:"
+    },
+    "cache": {
+      "title": "Cache Management",
+      "image_cache": "Image Cache",
+      "image_cache_hint": "Cached files store transformed versions of images (resized, cropped, format converted) to improve performance. Clearing the cache will regenerate files on next request.",
+      "clearing": "Clearing...",
+      "clear_cache": "Clear Cache",
+      "clearing_cache": "Clearing cache..."
+    },
+    "image": {
+      "title": "Image Settings",
+      "description": "Configure image upload limits and processing options",
+      "max_size": {
+        "label": "Maximum Image Size",
+        "hint": "Set the maximum size limit for image uploads"
+      },
+      "strip_exif": {
+        "label": "Strip EXIF Metadata",
+        "hint": "Automatically remove metadata from uploaded images for privacy"
+      },
+      "allow_only_public": {
+        "label": "Allow Only Public Images",
+        "hint": "When enabled, all images are automatically set to public and visibility cannot be changed"
+      },
+      "dedup": {
+        "label": "Enable Image Deduplication",
+        "hint": "Detect and reject duplicate images during upload",
+        "notice": "Only applies to new uploads. Existing images are not affected."
+      },
+      "compression_quality": {
+        "label": "Compression Quality",
+        "hint": "Quality level for lossy image compression (1-100). Used during format conversion if target format supports it"
+      },
+      "force_conversion": {
+        "label": "Force Format Conversion",
+        "hint": "Automatically convert all uploaded images to a specific format"
+      },
+      "target_format": {
+        "label": "Target Format",
+        "hint": "Format to convert uploaded images to",
+        "placeholder": "Select format",
+        "webp": "WEBP (Recommended)",
+        "avif": "AVIF",
+        "jpg": "JPEG"
+      },
+      "convert_animated": {
+        "label": "Convert Animated Images",
+        "hint": "Include animated images (GIF, animated WebP/AVIF) in conversion",
+        "notice_processing": "Processing animated images is CPU-intensive and may slow down uploads.",
+        "notice_loss_prefix": "Converting to",
+        "notice_loss_suffix": "will result in loss of animation."
+      },
+      "enable_licensing": {
+        "label": "Enable Licensing",
+        "hint": "Allow users to set licenses on their images (Creative Commons, etc.)"
+      }
+    },
+    "storage": {
+      "title": "Storage Configuration",
+      "description": "Choose how and where your data is stored",
+      "provider": {
+        "label": "Storage Provider",
+        "hint": "Select your preferred storage backend",
+        "local": "Local Storage",
+        "smb": "Network Storage (SMB)",
+        "s3": "Amazon S3"
+      },
+      "smb": {
+        "server_host": {
+          "label": "Server Host",
+          "hint": "IP address or hostname of your SMB server"
+        },
+        "share_name": {
+          "label": "Share Name",
+          "hint": "The name of the shared folder"
+        },
+        "workgroup": {
+          "label": "Workgroup",
+          "hint": "SMB workgroup name (optional)"
+        },
+        "username": {
+          "label": "Username",
+          "hint": "Authentication username"
+        },
+        "password": {
+          "label": "Password",
+          "hint": "Authentication password for SMB server"
+        }
+      },
+      "s3": {
+        "custom_provider": {
+          "label": "Custom S3 Provider",
+          "hint": "Enable for S3-compatible services like MinIO, Cloudflare R2, or Wasabi. This unlocks custom endpoint and path-style options."
+        },
+        "pricing_notice": "Amazon S3 usage may incur charges.",
+        "review_pricing": "Review pricing",
+        "custom_endpoint": {
+          "label": "Custom Endpoint",
+          "hint": "Custom S3 endpoint URL for your provider"
+        },
+        "region_optional": {
+          "label": "Region (Optional)",
+          "hint": "Most S3-compatible providers do not require a region. Leave empty for Cloudflare R2 or providers that auto-detect. Use \"auto\" or a specific region if required by your provider."
+        },
+        "force_path_style": {
+          "label": "Force Path-Style URLs",
+          "hint": "Enable if your provider requires path-style buckets (http://host/bucket/key). Common for MinIO and self-hosted solutions."
+        },
+        "region": {
+          "label": "Region",
+          "hint": "AWS region where your bucket is located (e.g., us-east-1).",
+          "view_regions": "View available regions"
+        },
+        "bucket_name": {
+          "label": "Bucket Name",
+          "hint": "Your S3 bucket name.",
+          "learn": "Learn about bucket naming"
+        },
+        "access_key_id": {
+          "label": "Access Key ID",
+          "hint": "Your AWS Access Key ID.",
+          "how_to": "How to create access keys"
+        },
+        "secret_access_key": {
+          "label": "Secret Access Key",
+          "hint": "Your AWS Secret Access Key"
+        }
+      }
+    },
+    "access": {
+      "title": "Access Control",
+      "description": "Configure guest access and upload permissions",
+      "guest_upload": {
+        "label": "Guest Upload",
+        "hint": "Allow unauthenticated users to upload images without creating an account. When enabled without Guest Access, users will see a success message but cannot browse uploaded images"
+      },
+      "guest_access": {
+        "label": "Guest Access (View-Only)",
+        "hint": "Allow unauthenticated users to view and browse images"
+      }
+    },
+    "user": {
+      "title": "User Management",
+      "description": "Control user registration, authentication, and security requirements",
+      "registration": {
+        "label": "User Registration",
+        "hint": "Allow new users to create accounts"
+      },
+      "approval_required": {
+        "label": "Require Admin Approval",
+        "hint": "New users must be approved before accessing the app"
+      },
+      "password_min_length": {
+        "label": "Minimum Password Length",
+        "hint": "Minimum characters required"
+      },
+      "password_requirements": {
+        "label": "Password Requirements",
+        "hint": "Required character types",
+        "options": {
+          "numbers": "Numbers (0-9)",
+          "lowercase": "Lowercase (a-z)",
+          "uppercase": "Uppercase (A-Z)",
+          "special": "Special (!@#$)"
+        }
+      }
+    },
+    "share": {
+      "title": "Share",
+      "description": "Configure URL sharing behavior",
+      "url_shortening": {
+        "label": "URL Shortening",
+        "hint": "Generate short URLs when copying image links"
+      }
+    },
+    "release_modal": {
+      "update_available": "Update Available",
+      "latest_version": "Latest Version",
+      "update_description": "A new version of Slink is available. Here's what's new:",
+      "latest_description": "You're running the latest version of Slink. Here are the release notes:",
+      "current_version": "Current Version",
+      "up_to_date": "Up to date",
+      "released": "Released",
+      "maybe_later": "Maybe Later",
+      "close": "Close",
+      "view_on_github": "View on GitHub"
+    }
+  },
+  "profile": {
+    "title": "Profile Settings",
+    "subtitle": "Manage your account information and security settings",
+    "sections": {
+      "profile_information": "Profile Information",
+      "security": "Security"
+    },
+    "display_name": {
+      "label": "Display Name",
+      "hint": "This is how your name will appear across the platform"
+    },
+    "password": {
+      "current": {
+        "label": "Current Password",
+        "hint": "Enter your current password to verify your identity",
+        "placeholder": "Current password"
+      },
+      "new": {
+        "label": "New Password",
+        "hint": "Choose a new password",
+        "placeholder": "New password"
+      },
+      "confirm": {
+        "label": "Confirm Password",
+        "hint": "Re-enter your new password",
+        "placeholder": "Confirm password"
+      },
+      "updating": "Updating...",
+      "update": "Update Password"
+    },
+    "toast": {
+      "password_changed": "Password changed successfully",
+      "profile_updated": "Profile updated successfully"
+    }
+  },
+  "table": {
+    "view_mode_selection": "View mode selection",
+    "view_modes": {
+      "grid": "Grid",
+      "list": "List",
+      "table": "Table"
+    },
+    "limit": "Limit",
+    "columns": "Columns",
+    "pagination": {
+      "click_to_enter_page": "Click to enter page number",
+      "current_page": "Current page",
+      "previous_page": "Previous page",
+      "next_page": "Next page",
+      "go_to_page": "Go to page",
+      "of": "of",
+      "items": "items"
+    }
   }
 }

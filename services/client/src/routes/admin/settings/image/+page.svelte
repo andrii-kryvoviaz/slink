@@ -5,6 +5,8 @@
     ShareSettings,
   } from '@slink/feature/Settings';
 
+  import { t } from '$lib/i18n';
+
   import { useSettingsPage } from '@slink/lib/state/SettingsPage.svelte';
 
   import type { PageData } from './$types';
@@ -26,12 +28,12 @@
 </script>
 
 <svelte:head>
-  <title>Image Settings | Slink</title>
+  <title>{$t('pages.admin.settings.image.page_title')}</title>
 </svelte:head>
 
 <SettingsPageLayout
-  title="Image"
-  description="Configure image handling and sharing preferences"
+  title={$t('pages.admin.settings.image.title')}
+  description={$t('pages.admin.settings.image.description')}
   isInitialized={page.isInitialized}
 >
   <ImageSettings

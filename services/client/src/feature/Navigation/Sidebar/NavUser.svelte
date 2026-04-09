@@ -10,6 +10,7 @@
   import { useSidebar } from '@slink/ui/components/sidebar/index.js';
 
   import { enhance } from '$app/forms';
+  import { t } from '$lib/i18n';
 
   let {
     user,
@@ -86,7 +87,7 @@
                 <UserIcon
                   class="size-4 text-gray-500 dark:text-gray-400 group-hover:text-blue-900 dark:group-hover:text-blue-200 transition-colors duration-200"
                 />
-                <span>Account Settings</span>
+                <span>{$t('navigation.user_menu.account_settings')}</span>
               </a>
             {/snippet}
           </DropdownMenu.Item>
@@ -101,7 +102,7 @@
                 <LinkIcon
                   class="size-4 text-gray-500 dark:text-gray-400 group-hover:text-blue-900 dark:group-hover:text-blue-200 transition-colors duration-200"
                 />
-                <span>External Integrations</span>
+                <span>{$t('navigation.user_menu.external_integrations')}</span>
               </a>
             {/snippet}
           </DropdownMenu.Item>
@@ -116,7 +117,7 @@
                 <SettingsIcon
                   class="size-4 text-gray-500 dark:text-gray-400 group-hover:text-blue-900 dark:group-hover:text-blue-200 transition-colors duration-200"
                 />
-                <span>Preferences</span>
+                <span>{$t('navigation.user_menu.preferences')}</span>
               </a>
             {/snippet}
           </DropdownMenu.Item>
@@ -137,7 +138,7 @@
                 onclick={handleNavigateAndClose}
               >
                 <LogOutIcon class="size-4" />
-                <span>Sign Out</span>
+                <span>{$t('navigation.user_menu.sign_out')}</span>
               </button>
             </form>
           {/snippet}

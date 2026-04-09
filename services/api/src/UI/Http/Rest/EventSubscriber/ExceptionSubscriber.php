@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace UI\Http\Rest\EventSubscriber;
 
 use Psr\Log\LoggerInterface;
+use Slink\Shared\Application\Http\Exception\LocalizedHttpException;
 use Slink\Shared\Domain\Exception\SpecificationException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -83,6 +84,13 @@ final readonly class ExceptionSubscriber implements EventSubscriberInterface {
       'title' => \str_replace('\\', '.', $exception::class),
       'message' => $this->getExceptionMessage($exception),
     ];
+
+    if ($exception instanceof LocalizedHttpException) {
+      $params = $exception->getParams();
+      if (!empty($params)) {
+        $error['params'] = $params;
+      }
+    }
     
     if($exception instanceof SpecificationException) {
       $violation = [

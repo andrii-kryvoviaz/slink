@@ -94,7 +94,7 @@
 </script>
 
 <svelte:head>
-  <title>Explore Gallery | Slink</title>
+  <title>{$t('pages.explore.page_title')}</title>
 </svelte:head>
 
 <main in:fade={{ duration: 500 }} class="min-h-full">

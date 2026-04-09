@@ -2,6 +2,8 @@
   import { SettingItem, SettingsPane } from '@slink/feature/Settings';
   import { Switch } from '@slink/ui/components/switch';
 
+  import { t } from '$lib/i18n';
+
   import type { AccessSettings as AccessSettingsType } from '@slink/lib/settings/Type/AccessSettings';
   import type { SettingCategory } from '@slink/lib/settings/Type/GlobalSettings';
 
@@ -25,10 +27,10 @@
 
 <SettingsPane category="access" {loading} on={{ save: onSave }}>
   {#snippet title()}
-    Access Control
+    {$t('settings.access.title')}
   {/snippet}
   {#snippet description()}
-    Configure guest access and upload permissions
+    {$t('settings.access.description')}
   {/snippet}
 
   <SettingItem
@@ -39,12 +41,10 @@
     }}
   >
     {#snippet label()}
-      Guest Upload
+      {$t('settings.access.guest_upload.label')}
     {/snippet}
     {#snippet hint()}
-      Allow unauthenticated users to upload images without creating an account.
-      When enabled without Guest Access, users will see a success message but
-      cannot browse uploaded images
+      {$t('settings.access.guest_upload.hint')}
     {/snippet}
     <Switch
       name="accessAllowGuestUploads"
@@ -60,10 +60,10 @@
     }}
   >
     {#snippet label()}
-      Guest Access (View-Only)
+      {$t('settings.access.guest_access.label')}
     {/snippet}
     {#snippet hint()}
-      Allow unauthenticated users to view and browse images
+      {$t('settings.access.guest_access.hint')}
     {/snippet}
     <Switch
       name="accessAllowUnauthenticatedAccess"

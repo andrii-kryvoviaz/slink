@@ -3,6 +3,7 @@
   import { Input } from '@slink/ui/components/input';
   import { Label } from '@slink/ui/components/label';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   interface Props {
@@ -54,20 +55,24 @@
     {#snippet icon()}
       <Icon icon={mode === 'edit' ? 'lucide:pencil' : 'lucide:folder-plus'} />
     {/snippet}
-    {#snippet title()}{mode === 'edit' ? 'Edit' : 'Create'} Collection{/snippet}
+    {#snippet title()}
+      {mode === 'edit'
+        ? $t('collection.form.edit_collection')
+        : $t('collection.form.create_collection')}
+    {/snippet}
     {#snippet description()}
       {mode === 'edit'
-        ? 'Update your collection details'
-        : 'Organize your images into a shareable collection'}
+        ? $t('collection.form.update_details')
+        : $t('collection.form.organize_description')}
     {/snippet}
   </Modal.Header>
 
   <form onsubmit={handleSubmit} class="space-y-6">
     <div class="space-y-5">
       <Input
-        label="Collection Name"
+        label={$t('collection.form.collection_name')}
         bind:value={formData.name}
-        placeholder="e.g., Summer Vacation, Portfolio"
+        placeholder={$t('collection.form.collection_name_placeholder')}
         error={errors?.name}
         maxlength={100}
         size="md"
@@ -81,10 +86,10 @@
       </Input>
 
       <div>
-        <Label class="mb-3">Description (Optional)</Label>
+        <Label class="mb-3">{$t('collection.form.description_optional')}</Label>
         <textarea
           bind:value={formData.description}
-          placeholder="What's this collection about?"
+          placeholder={$t('collection.form.description_placeholder')}
           maxlength={500}
           rows={3}
           class="border-border bg-background dark:bg-input/30 placeholder:text-muted-foreground shadow-xs flex w-full min-w-0 rounded-lg border px-4 py-2.5 text-base outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] resize-none md:text-sm"
@@ -101,18 +106,18 @@
         {#snippet icon()}
           <Icon icon="lucide:info" />
         {/snippet}
-        {#snippet title()}Collection Sharing{/snippet}
+        {#snippet title()}{$t('collection.form.notice_title')}{/snippet}
         {#snippet message()}
-          Collections let you group images together and share them with a single
-          link. You can add or remove images at any time after creating the
-          collection.
+          {$t('collection.form.notice_message')}
         {/snippet}
       </Modal.Notice>
     {/if}
 
     <Modal.Footer
       {isSubmitting}
-      submitText={mode === 'edit' ? 'Save Changes' : 'Create Collection'}
+      submitText={mode === 'edit'
+        ? $t('collection.form.save_changes')
+        : $t('collection.form.create_collection')}
       submitDisabled={!formData.name.trim()}
       {onCancel}
     />

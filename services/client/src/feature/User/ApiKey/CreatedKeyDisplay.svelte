@@ -3,6 +3,7 @@
   import { Button } from '@slink/ui/components/button';
   import { Modal } from '@slink/ui/components/dialog';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   import type { CreateApiKeyResponse } from '@slink/api/Resources/ApiKeyResource';
@@ -23,15 +24,23 @@
     {#snippet icon()}
       <Icon icon="ph:check" />
     {/snippet}
-    {#snippet title()}Success!{/snippet}
-    {#snippet description()}Your API key has been created{/snippet}
+    {#snippet title()}{$t(
+        'pages.integrations.api_keys.created.success_title',
+      )}{/snippet}
+    {#snippet description()}
+      {$t('pages.integrations.api_keys.created.success_description')}
+    {/snippet}
   </Modal.Header>
 
   <div class="space-y-2">
-    <span class="text-sm font-medium text-foreground/60">Your API Key</span>
+    <span class="text-sm font-medium text-foreground/60">
+      {$t('pages.integrations.api_keys.created.your_api_key')}
+    </span>
     <CopyContainer
       value={createdKey.key}
-      placeholder="Your API key will appear here..."
+      placeholder={$t(
+        'pages.integrations.api_keys.created.api_key_placeholder',
+      )}
       size="md"
       variant="default"
     />
@@ -41,10 +50,11 @@
     {#snippet icon()}
       <Icon icon="ph:warning-duotone" />
     {/snippet}
-    {#snippet title()}Important Notice{/snippet}
+    {#snippet title()}{$t(
+        'pages.integrations.api_keys.created.notice_title',
+      )}{/snippet}
     {#snippet message()}
-      This key will not be shown again. Store it securely in your password
-      manager or download the ShareX config file below.
+      {$t('pages.integrations.api_keys.created.notice_message')}
     {/snippet}
   </Modal.Notice>
 
@@ -57,7 +67,7 @@
         onclick={onClose}
         class="flex-1"
       >
-        Close
+        {$t('pages.integrations.api_keys.created.close')}
       </Button>
       <Button
         variant="primary"
@@ -69,10 +79,10 @@
       >
         {#if isDownloadingConfig}
           <Icon icon="lucide:loader-2" class="h-4 w-4 mr-2 animate-spin" />
-          Downloading...
+          {$t('pages.integrations.api_keys.created.downloading')}
         {:else}
           <Icon icon="lucide:download" class="h-4 w-4 mr-2" />
-          Download ShareX Config
+          {$t('pages.integrations.api_keys.created.download_sharex_config')}
         {/if}
       </Button>
     {/snippet}

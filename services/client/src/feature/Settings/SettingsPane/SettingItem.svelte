@@ -3,6 +3,7 @@
   import { Tooltip } from '@slink/ui/components/tooltip';
   import type { Snippet } from 'svelte';
 
+  import { t } from '$lib/i18n';
   import {
     parseFileSize,
     sizeMatchingRegex,
@@ -36,7 +37,9 @@
 
   const formatValue = (value: any) => {
     if (typeof value === 'boolean') {
-      return value ? 'Enabled' : 'Disabled';
+      return value
+        ? $t('settings.common.enabled')
+        : $t('settings.common.disabled');
     }
 
     if (typeof value === 'string' && value.match(sizeMatchingRegex)) {
@@ -68,7 +71,7 @@
   class="hidden"
   type="submit"
   aria-hidden="true"
-  aria-label="Reset Setting"
+  aria-label={$t('settings.common.reset_setting')}
 ></button>
 
 <div
@@ -99,12 +102,13 @@
                   type="button"
                   onclick={() => (showConfirm = true)}
                   class="inline-flex items-center justify-center w-5 h-5 rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 transition-colors duration-150"
-                  aria-label="Reset to default value"
+                  aria-label={$t('settings.common.reset_to_default')}
                 >
                   <Icon icon="lucide:rotate-ccw" class="w-3 h-3" />
                 </button>
               {/snippet}
-              Reset to {displayValue}
+              {$t('settings.common.reset_to')}
+              {displayValue}
             </Tooltip>
           </div>
         </div>
@@ -137,14 +141,15 @@
       >
         <Icon icon="lucide:rotate-ccw" class="w-4 h-4 text-gray-400" />
         <span>
-          Reset to <span class="font-medium text-gray-900 dark:text-white"
+          {$t('settings.common.reset_to')}
+          <span class="font-medium text-gray-900 dark:text-white"
             >{displayValue}</span
           >
         </span>
       </div>
       <div class="flex items-center gap-2">
         <Button variant="ghost" size="xs" rounded="lg" onclick={cancelReset}>
-          Cancel
+          {$t('settings.common.cancel')}
         </Button>
         <Button
           variant="soft-green"
@@ -153,7 +158,7 @@
           onclick={confirmReset}
         >
           <Icon icon="lucide:check" class="w-3.5 h-3.5 mr-1" />
-          Confirm
+          {$t('settings.common.confirm')}
         </Button>
       </div>
     </div>

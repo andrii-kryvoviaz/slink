@@ -2,6 +2,7 @@
   import { ApiKeyDeletePopover } from '@slink/feature/User';
   import { Overlay } from '@slink/ui/components/popover';
 
+  import { t } from '$lib/i18n';
   import { formatDate, formatExpiryDate } from '$lib/utils/date';
   import Icon from '@iconify/svelte';
   import { readable } from 'svelte/store';
@@ -81,7 +82,7 @@
       {#snippet trigger()}
         <button
           type="button"
-          title="Revoke API Key"
+          title={$t('pages.integrations.api_keys.revoke_api_key')}
           class="opacity-0 group-hover:opacity-100 w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 focus:opacity-100 focus:outline-none"
           disabled={isRevoking}
         >

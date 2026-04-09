@@ -22,7 +22,7 @@
   let {
     searchTerm = $bindable(''),
     searchBy = $bindable('user'),
-    placeholder = $t('search.placeholder_images'),
+    placeholder = '',
     disabled = false,
     onsearch,
     onclear,
@@ -104,16 +104,13 @@
         : $t('search.hashtag'),
   );
 
-  const placeholderMap = {
-    hashtag: $t('search.placeholder_hashtags'),
-    description: $t('search.placeholder_descriptions'),
-  };
-
-  let dynamicPlaceholder = $derived(
-    searchBy === 'user'
-      ? $t('common.search_placeholder')
-      : (placeholderMap[searchBy] ?? placeholder),
-  );
+  let dynamicPlaceholder = $derived.by(() => {
+    if (searchBy === 'user') return $t('common.search_placeholder');
+    if (searchBy === 'description')
+      return $t('search.placeholder_descriptions');
+    if (searchBy === 'hashtag') return $t('search.placeholder_hashtags');
+    return placeholder || $t('search.placeholder_images');
+  });
 </script>
 
 <div class="relative z-40" class:opacity-60={disabled}>

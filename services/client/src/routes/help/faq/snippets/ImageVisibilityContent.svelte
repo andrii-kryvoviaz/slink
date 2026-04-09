@@ -1,22 +1,26 @@
 <script lang="ts">
   import { InfoCard } from '@slink/feature/Feedback/InfoCard';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 </script>
 
 <div class="space-y-6">
   <p class="text-slate-700 dark:text-slate-300">
-    Slink offers a
+    {$t('pages.faq.snippets.image_visibility.slink_offers')}
     <a
       href="/explore"
       target="_blank"
       class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 underline underline-offset-2 font-medium transition-colors"
     >
-      public gallery
-    </a>, where people can share their images with others.
+      {$t('pages.faq.snippets.image_visibility.public_gallery')}
+    </a>{$t('pages.faq.snippets.image_visibility.where_people_share')}
   </p>
 
-  <InfoCard variant="neutral" title="Visibility Options">
+  <InfoCard
+    variant="neutral"
+    title={$t('pages.faq.snippets.image_visibility.visibility_options')}
+  >
     <div class="space-y-3">
       <div class="flex items-start gap-3">
         <div class="flex-shrink-0 mt-0.5">
@@ -29,11 +33,11 @@
           <div class="flex items-center gap-2 mb-1">
             <span
               class="text-sm font-semibold text-slate-900 dark:text-slate-100"
-              >Public</span
+              >{$t('pages.faq.snippets.image_visibility.public')}</span
             >
           </div>
           <p class="text-sm text-slate-600 dark:text-slate-400">
-            Images are shared in the public gallery and visible to all users
+            {$t('pages.faq.snippets.image_visibility.public_description')}
           </p>
         </div>
       </div>
@@ -49,27 +53,29 @@
           <div class="flex items-center gap-2 mb-1">
             <span
               class="text-sm font-semibold text-slate-900 dark:text-slate-100"
-              >Private</span
+              >{$t('pages.faq.snippets.image_visibility.private')}</span
             >
             <span
               class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300"
             >
-              Default
+              {$t('pages.faq.snippets.image_visibility.default')}
             </span>
           </div>
           <p class="text-sm text-slate-600 dark:text-slate-400">
-            Images are not shared in the public gallery and only accessible by
-            the owner
+            {$t('pages.faq.snippets.image_visibility.private_description')}
           </p>
         </div>
       </div>
     </div>
   </InfoCard>
 
-  <InfoCard variant="warning" icon="ph:warning" title="Important Note">
+  <InfoCard
+    variant="warning"
+    icon="ph:warning"
+    title={$t('pages.faq.snippets.image_visibility.important_note')}
+  >
     <p>
-      Raw images are accessible to anyone with a direct link, regardless of
-      visibility setting.
+      {$t('pages.faq.snippets.image_visibility.raw_images_note')}
     </p>
   </InfoCard>
 </div>

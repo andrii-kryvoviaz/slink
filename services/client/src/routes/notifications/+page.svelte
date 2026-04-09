@@ -9,6 +9,7 @@
   import { untrack } from 'svelte';
 
   import { goto } from '$app/navigation';
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
@@ -44,7 +45,7 @@
 </script>
 
 <svelte:head>
-  <title>Notifications | Slink</title>
+  <title>{$t('pages.notifications.page_title')}</title>
 </svelte:head>
 
 <section>
@@ -55,10 +56,11 @@
     <div class="mb-8" in:fade={{ duration: 300 }}>
       <div class="flex items-start justify-between gap-4">
         <div>
-          <Title size="md">Notifications</Title>
+          <Title size="md">{$t('pages.notifications.title')}</Title>
           {#if notificationFeed.unreadCount > 0}
             <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-              {notificationFeed.unreadCount} unread
+              {notificationFeed.unreadCount}
+              {$t('pages.notifications.unread')}
             </p>
           {/if}
         </div>
@@ -66,7 +68,7 @@
         {#if notificationFeed.unreadCount > 0}
           <Button variant="soft-violet" size="sm" onclick={handleMarkAllAsRead}>
             <Icon icon="ph:checks" class="w-4 h-4" />
-            Mark all read
+            {$t('pages.notifications.mark_all_read')}
           </Button>
         {/if}
       </div>
@@ -90,10 +92,10 @@
           />
         </div>
         <h3 class="text-base font-medium text-gray-900 dark:text-white mb-1">
-          All caught up
+          {$t('pages.notifications.empty_title')}
         </h3>
         <p class="text-sm text-gray-500 dark:text-gray-400">
-          You'll see activity on your images here
+          {$t('pages.notifications.empty_description')}
         </p>
       </div>
     {:else}

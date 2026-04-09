@@ -13,8 +13,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 final readonly class SignUpRequest {
   public function __construct(
     #[SensitiveParameter]
-    #[Assert\NotBlank]
-    #[Assert\Email]
+    #[Assert\NotBlank(message: 'VALIDATION_REQUIRED')]
+    #[Assert\Email(message: 'EMAIL_INVALID')]
     public string $email,
 
     #[SensitiveParameter]
@@ -22,13 +22,13 @@ final readonly class SignUpRequest {
     public string $password,
 
     #[SensitiveParameter]
-    #[Assert\NotBlank]
-    #[Assert\IdenticalTo(propertyPath: 'password', message: 'Passwords do not match.')]
+    #[Assert\NotBlank(message: 'VALIDATION_REQUIRED')]
+    #[Assert\IdenticalTo(propertyPath: 'password', message: 'AUTH_PASSWORDS_MISMATCH')]
     public string $confirm,
 
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'VALIDATION_REQUIRED')]
     #[UsernameConstraint]
-    #[Assert\NotEqualTo(propertyPath: 'email', message: 'Username cannot be the same as email.')]
+    #[Assert\NotEqualTo(propertyPath: 'email', message: 'AUTH_USERNAME_EQUALS_EMAIL')]
     public string $username
   ) {}
 

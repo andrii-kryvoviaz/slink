@@ -5,6 +5,8 @@
   import { Input } from '@slink/ui/components/input';
   import { Switch } from '@slink/ui/components/switch';
 
+  import { t } from '$lib/i18n';
+
   import type { SettingCategory } from '@slink/lib/settings/Type/GlobalSettings';
   import type { StorageSettings as StorageSettingsType } from '@slink/lib/settings/Type/StorageSettings';
 
@@ -28,10 +30,10 @@
 
 <SettingsPane category="storage" {loading} on={{ save: onSave }}>
   {#snippet title()}
-    Storage Configuration
+    {$t('settings.storage.title')}
   {/snippet}
   {#snippet description()}
-    Choose how and where your data is stored
+    {$t('settings.storage.description')}
   {/snippet}
 
   <SettingItem
@@ -42,18 +44,18 @@
     }}
   >
     {#snippet label()}
-      Storage Provider
+      {$t('settings.storage.provider.label')}
     {/snippet}
     {#snippet hint()}
-      Select your preferred storage backend
+      {$t('settings.storage.provider.hint')}
     {/snippet}
     <Select
       class="w-full max-w-md"
       type="single"
       items={[
-        { value: 'local', label: 'Local Storage' },
-        { value: 'smb', label: 'Network Storage (SMB)' },
-        { value: 's3', label: 'Amazon S3' },
+        { value: 'local', label: $t('settings.storage.provider.local') },
+        { value: 'smb', label: $t('settings.storage.provider.smb') },
+        { value: 's3', label: $t('settings.storage.provider.s3') },
       ]}
       bind:value={settings.provider}
     />
@@ -68,10 +70,10 @@
       }}
     >
       {#snippet label()}
-        Server Host
+        {$t('settings.storage.smb.server_host.label')}
       {/snippet}
       {#snippet hint()}
-        IP address or hostname of your SMB server
+        {$t('settings.storage.smb.server_host.hint')}
       {/snippet}
       <Input
         name="smbHost"
@@ -89,10 +91,10 @@
       }}
     >
       {#snippet label()}
-        Share Name
+        {$t('settings.storage.smb.share_name.label')}
       {/snippet}
       {#snippet hint()}
-        The name of the shared folder
+        {$t('settings.storage.smb.share_name.hint')}
       {/snippet}
       <Input
         name="smbShare"
@@ -110,10 +112,10 @@
       }}
     >
       {#snippet label()}
-        Workgroup
+        {$t('settings.storage.smb.workgroup.label')}
       {/snippet}
       {#snippet hint()}
-        SMB workgroup name (optional)
+        {$t('settings.storage.smb.workgroup.hint')}
       {/snippet}
       <Input
         name="smbWorkgroup"
@@ -131,10 +133,10 @@
       }}
     >
       {#snippet label()}
-        Username
+        {$t('settings.storage.smb.username.label')}
       {/snippet}
       {#snippet hint()}
-        Authentication username
+        {$t('settings.storage.smb.username.hint')}
       {/snippet}
       <Input
         name="smbUsername"
@@ -151,10 +153,10 @@
       }}
     >
       {#snippet label()}
-        Password
+        {$t('settings.storage.smb.password.label')}
       {/snippet}
       {#snippet hint()}
-        Authentication password for SMB server
+        {$t('settings.storage.smb.password.hint')}
       {/snippet}
       <Input
         type="password"
@@ -174,11 +176,10 @@
       }}
     >
       {#snippet label()}
-        Custom S3 Provider
+        {$t('settings.storage.s3.custom_provider.label')}
       {/snippet}
       {#snippet hint()}
-        Enable for S3-compatible services like MinIO, Cloudflare R2, or Wasabi.
-        This unlocks custom endpoint and path-style options.
+        {$t('settings.storage.s3.custom_provider.hint')}
       {/snippet}
       <Switch
         name="s3UseCustomProvider"
@@ -188,13 +189,13 @@
 
     {#if !settings.adapter.s3.useCustomProvider}
       <Notice variant="warning" appearance="subtle" size="sm" class="px-4">
-        Amazon S3 usage may incur charges.
+        {$t('settings.storage.s3.pricing_notice')}
         <a
           href="https://aws.amazon.com/s3/pricing/"
           target="_blank"
           rel="noopener noreferrer"
           class="underline hover:text-amber-700 dark:hover:text-amber-300"
-          >Review pricing</a
+          >{$t('settings.storage.s3.review_pricing')}</a
         >
       </Notice>
     {/if}
@@ -208,10 +209,10 @@
         }}
       >
         {#snippet label()}
-          Custom Endpoint
+          {$t('settings.storage.s3.custom_endpoint.label')}
         {/snippet}
         {#snippet hint()}
-          Custom S3 endpoint URL for your provider
+          {$t('settings.storage.s3.custom_endpoint.hint')}
         {/snippet}
         <Input
           name="s3Endpoint"
@@ -229,12 +230,10 @@
         }}
       >
         {#snippet label()}
-          Region (Optional)
+          {$t('settings.storage.s3.region_optional.label')}
         {/snippet}
         {#snippet hint()}
-          Most S3-compatible providers don't require a region. Leave empty for
-          Cloudflare R2 or providers that auto-detect. Use "auto" or a specific
-          region if required by your provider.
+          {$t('settings.storage.s3.region_optional.hint')}
         {/snippet}
         <Input
           name="s3Region"
@@ -252,11 +251,10 @@
         }}
       >
         {#snippet label()}
-          Force Path-Style URLs
+          {$t('settings.storage.s3.force_path_style.label')}
         {/snippet}
         {#snippet hint()}
-          Enable if your provider requires path-style buckets
-          (http://host/bucket/key). Common for MinIO and self-hosted solutions.
+          {$t('settings.storage.s3.force_path_style.hint')}
         {/snippet}
         <Switch
           name="s3ForcePathStyle"
@@ -272,17 +270,17 @@
         }}
       >
         {#snippet label()}
-          Region
+          {$t('settings.storage.s3.region.label')}
         {/snippet}
         {#snippet hint()}
-          AWS region where your bucket is located (e.g., us-east-1).
+          {$t('settings.storage.s3.region.hint')}
           <a
             href="https://docs.aws.amazon.com/general/latest/gr/s3.html"
             target="_blank"
             rel="noopener noreferrer"
             class="text-blue-600 dark:text-blue-400 hover:underline"
           >
-            View available regions
+            {$t('settings.storage.s3.region.view_regions')}
           </a>
         {/snippet}
         <Input
@@ -302,17 +300,17 @@
       }}
     >
       {#snippet label()}
-        Bucket Name
+        {$t('settings.storage.s3.bucket_name.label')}
       {/snippet}
       {#snippet hint()}
-        Your S3 bucket name.
+        {$t('settings.storage.s3.bucket_name.hint')}
         <a
           href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingBucket.html#general-purpose-buckets-overview"
           target="_blank"
           rel="noopener noreferrer"
           class="text-blue-600 dark:text-blue-400 hover:underline"
         >
-          Learn about bucket naming
+          {$t('settings.storage.s3.bucket_name.learn')}
         </a>
       {/snippet}
       <Input
@@ -331,17 +329,17 @@
       }}
     >
       {#snippet label()}
-        Access Key ID
+        {$t('settings.storage.s3.access_key_id.label')}
       {/snippet}
       {#snippet hint()}
-        Your AWS Access Key ID.
+        {$t('settings.storage.s3.access_key_id.hint')}
         <a
           href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access-key-self-managed.html#Using_CreateAccessKey"
           target="_blank"
           rel="noopener noreferrer"
           class="text-blue-600 dark:text-blue-400 hover:underline"
         >
-          How to create access keys
+          {$t('settings.storage.s3.access_key_id.how_to')}
         </a>
       {/snippet}
       <Input
@@ -359,10 +357,10 @@
       }}
     >
       {#snippet label()}
-        Secret Access Key
+        {$t('settings.storage.s3.secret_access_key.label')}
       {/snippet}
       {#snippet hint()}
-        Your AWS Secret Access Key
+        {$t('settings.storage.s3.secret_access_key.hint')}
       {/snippet}
       <Input
         type="password"

@@ -5,6 +5,8 @@
   import { Chart, type ChartOptions } from '@slink/feature/Layout';
   import { onMount } from 'svelte';
 
+  import { t } from '$lib/i18n';
+
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { UserAnalyticsData } from '@slink/api/Response';
 
@@ -21,7 +23,7 @@
 
   let options: ChartOptions = $state({
     labelFormatter: function (value) {
-      return `${value} Users`;
+      return `${value} ${$t('pages.admin.dashboard.users_count_suffix')}`;
     },
     chart: {
       type: 'radialBar',
@@ -29,7 +31,7 @@
     },
     colors: ['#4B8EDD', '#7029FF', '#4B5563'],
     series: [0],
-    labels: ['No Data'],
+    labels: [$t('pages.admin.dashboard.no_data')],
   });
 
   onMount(() => {
@@ -41,7 +43,11 @@
       }
 
       const labels = Object.keys(item).map((key) => {
-        return key.capitalizeFirstLetter();
+        const labelKey = `pages.admin.dashboard.user_labels.${key}`;
+        const translated = $t(labelKey);
+        return translated === labelKey
+          ? key.capitalizeFirstLetter()
+          : translated;
       });
 
       const series = Object.values(item).filter((value) => {
@@ -59,7 +65,9 @@
 
 <Card class="h-full" variant="enhanced" rounded="xl" shadow="lg">
   <div class="flex items-center justify-between">
-    <p class="text-lg font-semibold text-gray-900 dark:text-white">Users</p>
+    <p class="text-lg font-semibold text-gray-900 dark:text-white">
+      {$t('pages.admin.dashboard.cards.users')}
+    </p>
     <RefreshButton size="sm" loading={$isLoading} onclick={run} />
   </div>
 

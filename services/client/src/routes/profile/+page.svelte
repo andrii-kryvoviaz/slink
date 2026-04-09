@@ -7,6 +7,7 @@
   import { Input } from '@slink/ui/components/input';
 
   import { enhance } from '$app/forms';
+  import { t } from '$lib/i18n';
   import { fade } from 'svelte/transition';
 
   import { withLoadingState } from '@slink/utils/form/withLoadingState';
@@ -35,13 +36,13 @@
 
   $effect(() => {
     if (form?.passwordWasChanged) {
-      toast.success('Password changed successfully');
+      toast.success($t('profile.toast.password_changed'));
     }
   });
 
   $effect(() => {
     if (form?.profileWasUpdated) {
-      toast.success('Profile updated successfully');
+      toast.success($t('profile.toast.profile_updated'));
     }
   });
 
@@ -61,8 +62,8 @@
   in:fade={{ duration: 150 }}
 >
   <header class="mb-8">
-    <Title size="sm">Profile Settings</Title>
-    <Subtitle>Manage your account information and security settings</Subtitle>
+    <Title size="sm">{$t('profile.title')}</Title>
+    <Subtitle>{$t('profile.subtitle')}</Subtitle>
   </header>
 
   <div class="space-y-8">
@@ -71,7 +72,7 @@
         <h2
           class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
         >
-          Profile Information
+          {$t('profile.sections.profile_information')}
         </h2>
       </div>
 
@@ -100,10 +101,10 @@
         >
           <SettingItem>
             {#snippet label()}
-              Display Name
+              {$t('profile.display_name.label')}
             {/snippet}
             {#snippet hint()}
-              This is how your name will appear across the platform
+              {$t('profile.display_name.hint')}
             {/snippet}
             <Input
               name="display_name"
@@ -121,7 +122,7 @@
             class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
           >
             <Loader variant="minimal" size="xs" />
-            <span>Saving...</span>
+            <span>{$t('settings.common.saving')}</span>
           </div>
         {/if}
 
@@ -133,7 +134,7 @@
           size="sm"
           disabled={$isProfileFormLoading}
         >
-          Save Changes
+          {$t('settings.common.save_changes')}
         </Button>
       </div>
     </section>
@@ -143,7 +144,7 @@
         <h2
           class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
         >
-          Security
+          {$t('profile.sections.security')}
         </h2>
       </div>
 
@@ -158,15 +159,15 @@
         >
           <SettingItem>
             {#snippet label()}
-              Current Password
+              {$t('profile.password.current.label')}
             {/snippet}
             {#snippet hint()}
-              Enter your current password to verify your identity
+              {$t('profile.password.current.hint')}
             {/snippet}
             <Input
               name="old_password"
               type="password"
-              placeholder="Current password"
+              placeholder={$t('profile.password.current.placeholder')}
               error={form?.errors?.old_password}
               class="w-full max-w-md"
             />
@@ -174,15 +175,15 @@
 
           <SettingItem>
             {#snippet label()}
-              New Password
+              {$t('profile.password.new.label')}
             {/snippet}
             {#snippet hint()}
-              Choose a new password
+              {$t('profile.password.new.hint')}
             {/snippet}
             <Input
               name="password"
               type="password"
-              placeholder="New password"
+              placeholder={$t('profile.password.new.placeholder')}
               error={form?.errors?.password}
               class="w-full max-w-md"
             />
@@ -190,15 +191,15 @@
 
           <SettingItem>
             {#snippet label()}
-              Confirm Password
+              {$t('profile.password.confirm.label')}
             {/snippet}
             {#snippet hint()}
-              Re-enter your new password
+              {$t('profile.password.confirm.hint')}
             {/snippet}
             <Input
               name="confirm"
               type="password"
-              placeholder="Confirm password"
+              placeholder={$t('profile.password.confirm.placeholder')}
               error={form?.errors?.confirm}
               class="w-full max-w-md"
             />
@@ -212,7 +213,7 @@
             class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
           >
             <Loader variant="minimal" size="xs" />
-            <span>Updating...</span>
+            <span>{$t('profile.password.updating')}</span>
           </div>
         {/if}
 
@@ -224,7 +225,7 @@
           size="sm"
           disabled={$isPasswordFormLoading}
         >
-          Update Password
+          {$t('profile.password.update')}
         </Button>
       </div>
     </section>

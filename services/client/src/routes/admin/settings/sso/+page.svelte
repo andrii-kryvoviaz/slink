@@ -9,6 +9,7 @@
   import { SplitButton } from '@slink/ui/components/split-button';
 
   import { goto } from '$app/navigation';
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   import type { PageData } from './$types';
@@ -23,21 +24,23 @@
 </script>
 
 <svelte:head>
-  <title>SSO Settings | Slink</title>
+  <title>{$t('pages.admin.settings.sso.page_title')}</title>
 </svelte:head>
 
 <SettingsPageLayout
-  title="Single Sign-On"
-  description="Manage SSO/OIDC identity providers"
+  title={$t('pages.admin.settings.sso.title')}
+  description={$t('pages.admin.settings.sso.description')}
   isInitialized={true}
 >
   {#snippet navigation()}
-    <BackLink href="/admin/settings" class="mb-4">Back to Settings</BackLink>
+    <BackLink href="/admin/settings" class="mb-4">
+      {$t('pages.admin.settings.sso.back_to_settings')}
+    </BackLink>
   {/snippet}
 
   {#snippet actions()}
     <SplitButton onclick={() => goto('/admin/settings/sso/new')}>
-      Create
+      {$t('pages.admin.settings.sso.create')}
       {#snippet aside()}
         <Icon icon="lucide:plus" class="w-3.5 h-3.5" />
       {/snippet}
@@ -46,7 +49,7 @@
 
   <Notice variant="info" size="sm">
     <p>
-      Add this callback URL to your identity provider's allowed redirect URIs:
+      {$t('pages.admin.settings.sso.callback_help')}
     </p>
     <CopyableText text={callbackUrl} class="mt-1.5 font-mono text-xs" />
   </Notice>
@@ -61,6 +64,8 @@
       />
     {/key}
   {:catch}
-    <Notice variant="error">Failed to load SSO providers.</Notice>
+    <Notice variant="error">
+      {$t('pages.admin.settings.sso.load_error')}
+    </Notice>
   {/await}
 </SettingsPageLayout>

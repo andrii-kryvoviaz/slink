@@ -6,6 +6,7 @@
     DropdownSimpleItem,
   } from '@slink/ui/components';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
   import { readable } from 'svelte/store';
 
@@ -55,7 +56,7 @@
           {#snippet icon()}
             <Icon icon="ph:trash" class="h-4 w-4" />
           {/snippet}
-          <span>Remove from Collection</span>
+          <span>{$t('collection.actions.remove_from_collection')}</span>
         </DropdownSimpleItem>
       {:else}
         <RemoveFromCollectionPopover

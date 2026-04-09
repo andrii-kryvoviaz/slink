@@ -11,6 +11,7 @@
   import { Button } from '@slink/ui/components/button';
   import { Dialog } from '@slink/ui/components/dialog';
 
+  import { t } from '$lib/i18n';
   import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
   import Icon from '@iconify/svelte';
 
@@ -53,7 +54,7 @@
     await deleteCollection(collection.id, deleteImages);
 
     if ($deleteError) {
-      toast.error('Failed to delete collection. Please try again later.');
+      toast.error($t('collection.actions.delete_failed'));
       return;
     }
 
@@ -81,7 +82,7 @@
 
       await collectionsFeed.updateCollection(collection.id, data);
       editModalOpen = false;
-      toast.success('Collection updated successfully');
+      toast.success($t('collection.actions.updated_successfully'));
     } catch (error) {
       if (error instanceof ValidationException && error.violations) {
         editFormErrors = error.violations.reduce<Record<string, string>>(
@@ -92,7 +93,7 @@
           {},
         );
       } else {
-        toast.error('Failed to update collection');
+        toast.error($t('collection.actions.update_failed'));
       }
     } finally {
       isEditing = false;
@@ -114,7 +115,7 @@
         padding="none"
         rounded="md"
         {...triggerProps}
-        aria-label="Collection actions"
+        aria-label={$t('collection.actions.aria')}
       >
         <Icon icon="lucide:ellipsis" class="h-4 w-4" />
       </Button>
@@ -126,7 +127,7 @@
           {#snippet icon()}
             <Icon icon="ph:note-pencil" class="h-4 w-4" />
           {/snippet}
-          <span>Edit</span>
+          <span>{$t('collection.actions.edit')}</span>
         </DropdownSimpleItem>
         <DropdownSimpleItem
           danger={true}
@@ -136,7 +137,7 @@
           {#snippet icon()}
             <Icon icon="heroicons:trash" class="h-4 w-4" />
           {/snippet}
-          <span>Delete</span>
+          <span>{$t('collection.actions.delete')}</span>
         </DropdownSimpleItem>
       {:else}
         <CollectionDeletePopover

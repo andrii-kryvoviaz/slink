@@ -4,6 +4,7 @@
   import { Modal } from '@slink/ui/components/dialog';
   import { Input } from '@slink/ui/components/input';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   interface Props {
@@ -32,16 +33,20 @@
     {#snippet icon()}
       <Icon icon="ph:key" />
     {/snippet}
-    {#snippet title()}Create API Key{/snippet}
-    {#snippet description()}Generate a secure key for external integrations{/snippet}
+    {#snippet title()}{$t('pages.integrations.api_keys.create.title')}{/snippet}
+    {#snippet description()}
+      {$t('pages.integrations.api_keys.create.description')}
+    {/snippet}
   </Modal.Header>
 
   <form onsubmit={handleSubmit} class="space-y-6">
     <div class="space-y-5">
       <Input
-        label="Key Name"
+        label={$t('pages.integrations.api_keys.create.key_name')}
         bind:value={formData.name}
-        placeholder="e.g., ShareX Upload Key"
+        placeholder={$t(
+          'pages.integrations.api_keys.create.key_name_placeholder',
+        )}
         error={errors?.name}
         size="md"
         rounded="lg"
@@ -52,9 +57,11 @@
       </Input>
 
       <DatePickerField
-        label="Expiry Date (Optional)"
+        label={$t('pages.integrations.api_keys.create.expiry_date_optional')}
         bind:value={formData.expiresAt}
-        placeholder="Select expiry date"
+        placeholder={$t(
+          'pages.integrations.api_keys.create.expiry_date_placeholder',
+        )}
         error={errors?.expiresAt}
         id="expiry-date"
       />
@@ -64,17 +71,19 @@
       {#snippet icon()}
         <Icon icon="ph:shield-check-duotone" />
       {/snippet}
-      {#snippet title()}Security Notice{/snippet}
+      {#snippet title()}{$t(
+          'pages.integrations.api_keys.create.security_notice_title',
+        )}{/snippet}
       {#snippet message()}
-        Your API key will be displayed only once after creation. Store it
-        securely in your password manager or environment variables. If lost,
-        you'll need to generate a new one.
+        {$t('pages.integrations.api_keys.create.security_notice_message')}
       {/snippet}
     </Modal.Notice>
 
     <Modal.Footer
       isSubmitting={isCreating}
-      submitText={isCreating ? 'Creating...' : 'Create API Key'}
+      submitText={isCreating
+        ? $t('pages.integrations.api_keys.create.creating')
+        : $t('pages.integrations.api_keys.create.submit')}
       {onCancel}
     />
   </form>

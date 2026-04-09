@@ -14,15 +14,17 @@ interface UserColumnCallbacks {
   getLoggedInUser: () => User | null | undefined;
   onDelete?: (id: string) => void;
   onUserUpdate: (user: User) => void;
+  t: (key: string) => string;
 }
 
 export function createUserColumns(
   callbacks: UserColumnCallbacks,
 ): ColumnDef<User>[] {
+  const tr = callbacks.t;
   return [
     {
       accessorKey: 'displayName',
-      header: 'User',
+      header: tr('pages.admin.users.table.user'),
       cell: ({ row }) => {
         const user = row.original;
         return renderComponent(UserCell, { user });
@@ -30,7 +32,7 @@ export function createUserColumns(
     },
     {
       accessorKey: 'username',
-      header: 'Username',
+      header: tr('pages.admin.users.table.username'),
       cell: ({ row }) => {
         const username = row.getValue('username') as string;
         return renderComponent(UserUsernameCell, { username });
@@ -38,7 +40,7 @@ export function createUserColumns(
     },
     {
       accessorKey: 'status',
-      header: 'Status',
+      header: tr('pages.admin.users.table.status'),
       meta: {
         className: 'min-w-[120px]',
       },
@@ -50,7 +52,7 @@ export function createUserColumns(
     },
     {
       accessorKey: 'roles',
-      header: 'Roles',
+      header: tr('pages.admin.users.table.roles'),
       meta: {
         className: 'min-w-[100px]',
       },
@@ -61,7 +63,7 @@ export function createUserColumns(
     },
     {
       id: 'actions',
-      header: 'Actions',
+      header: tr('pages.admin.users.table.actions'),
       meta: {
         className: 'text-right',
       },

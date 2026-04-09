@@ -6,6 +6,8 @@
   import { Select } from '@slink/ui/components';
   import { onMount } from 'svelte';
 
+  import { t } from '$lib/i18n';
+
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { ImageAnalyticsResponse } from '@slink/api/Response';
 
@@ -40,6 +42,12 @@
     run({ dateInterval: interval });
   };
 
+  const getIntervalLabel = (value: string, fallback: string) => {
+    const key = `pages.admin.dashboard.intervals.${value}`;
+    const translated = $t(key);
+    return translated === key ? fallback : translated;
+  };
+
   let availableIntervals: Record<string, string> | null = $state(null);
 
   onMount(() => {
@@ -55,7 +63,7 @@
       options = {
         series: [
           {
-            name: 'Uploads',
+            name: $t('pages.admin.dashboard.cards.uploads'),
             data: item.data.map((item) => item.count),
           },
         ],
@@ -70,7 +78,9 @@
 
 <Card class="h-full" variant="enhanced" rounded="xl" shadow="lg">
   <div class="flex items-center justify-between">
-    <p class="text-lg font-semibold text-gray-900 dark:text-white">Uploads</p>
+    <p class="text-lg font-semibold text-gray-900 dark:text-white">
+      {$t('pages.admin.dashboard.cards.uploads')}
+    </p>
     <div class="flex items-center gap-2">
       <RefreshButton size="sm" loading={$isLoading} onclick={handleFetch} />
       {#if availableIntervals}
@@ -80,7 +90,10 @@
           size="sm"
           items={Object.keys(availableIntervals).map((value) => ({
             value,
-            label: availableIntervals?.[value] ?? 'N/A',
+            label: getIntervalLabel(
+              value,
+              availableIntervals?.[value] ?? 'N/A',
+            ),
           }))}
           bind:value={interval}
         />

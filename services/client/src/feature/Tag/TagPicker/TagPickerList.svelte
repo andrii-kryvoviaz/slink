@@ -7,6 +7,7 @@
     createSelectionResolver,
   } from '@slink/ui/components/picker';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
@@ -54,19 +55,19 @@
   color="blue"
   {isLoading}
   {showSearch}
-  searchPlaceholder="Search tags"
+  searchPlaceholder={$t('tag.picker.search_placeholder')}
   filterFn={filterTag}
   {onCreateNew}
 >
   {#snippet emptyIcon()}
     <Icon icon="ph:tag" class="w-5 h-5 text-gray-400 dark:text-gray-500" />
   {/snippet}
-  {#snippet emptyMessage()}No tags yet{/snippet}
+  {#snippet emptyMessage()}{$t('tag.picker.no_tags_yet')}{/snippet}
   {#snippet emptyAction()}
-    {#if onCreateNew}Create your first tag{/if}
+    {#if onCreateNew}{$t('tag.picker.create_first_tag')}{/if}
   {/snippet}
   {#snippet createFooter()}
-    {#if onCreateNew}New tag{/if}
+    {#if onCreateNew}{$t('tag.picker.new_tag')}{/if}
   {/snippet}
   {#snippet children({ item, highlighted })}
     {@const tag = item as Tag}
@@ -81,7 +82,7 @@
     >
       {#snippet children()}{@html getTagLastSegment(tag)}{/snippet}
       {#snippet subtext()}
-        {@html getTagParentPath(tag) || 'Root'}
+        {@html getTagParentPath(tag) || $t('tag.picker.root')}
       {/snippet}
     </PickerItem>
   {/snippet}

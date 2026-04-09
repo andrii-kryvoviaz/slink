@@ -5,6 +5,8 @@
     UserSettings,
   } from '@slink/feature/Settings';
 
+  import { t } from '$lib/i18n';
+
   import { useSettingsPage } from '@slink/lib/state/SettingsPage.svelte';
 
   import type { PageData } from './$types';
@@ -26,12 +28,12 @@
 </script>
 
 <svelte:head>
-  <title>Security Settings | Slink</title>
+  <title>{$t('pages.admin.settings.security.page_title')}</title>
 </svelte:head>
 
 <SettingsPageLayout
-  title="Security"
-  description="Manage access control and user authentication settings"
+  title={$t('pages.admin.settings.security.title')}
+  description={$t('pages.admin.settings.security.description')}
   isInitialized={page.isInitialized}
 >
   <AccessSettings

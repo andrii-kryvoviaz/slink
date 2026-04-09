@@ -2,6 +2,7 @@
   import { Button } from '@slink/ui/components/button';
 
   import type { User } from '$lib/auth/Type/User';
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   interface Props {
@@ -26,10 +27,10 @@
     </div>
     <div>
       <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
-        Delete User
+        {$t('pages.admin.users.delete_confirmation.title')}
       </h3>
       <p class="text-xs text-gray-500 dark:text-gray-400">
-        This action cannot be undone
+        {$t('pages.admin.users.delete_confirmation.subtitle')}
       </p>
     </div>
   </div>
@@ -43,7 +44,7 @@
           {user.email}
         </span>
         <p class="text-xs text-gray-500 dark:text-gray-400">
-          User account and all associated data will be removed
+          {$t('pages.admin.users.delete_confirmation.description')}
         </p>
       </div>
     </div>
@@ -58,7 +59,7 @@
       class="flex-1"
       disabled={loading}
     >
-      Cancel
+      {$t('pages.admin.users.delete_confirmation.cancel')}
     </Button>
     <Button
       variant="danger"
@@ -73,7 +74,7 @@
       {:else}
         <Icon icon="heroicons:trash" class="h-4 w-4 mr-2" />
       {/if}
-      Delete User
+      {$t('pages.admin.users.delete_confirmation.confirm')}
     </Button>
   </div>
 </div>

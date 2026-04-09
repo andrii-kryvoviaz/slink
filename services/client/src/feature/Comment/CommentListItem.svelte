@@ -9,6 +9,7 @@
   import * as HoverCard from '@slink/ui/components/hover-card';
   import { Tooltip } from '@slink/ui/components/tooltip';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   import type { CommentItem } from '@slink/api/Response';
@@ -112,7 +113,9 @@
         <FormattedDate date={comment.createdAt.timestamp} />
       </span>
       {#if comment.isEdited}
-        <span class="text-xs text-white/30 shrink-0">(edited)</span>
+        <span class="text-xs text-white/30 shrink-0">
+          ({$t('comments.item.edited')})
+        </span>
       {/if}
 
       <div class="ml-auto shrink-0 flex items-center gap-1">
@@ -126,7 +129,7 @@
                 <Icon icon="ph:arrow-bend-up-left" class="w-4 h-4" />
               </button>
             {/snippet}
-            Reply
+            {$t('comments.item.reply')}
           </Tooltip>
         {/if}
 
@@ -152,7 +155,7 @@
                     {#snippet icon()}
                       <Icon icon="heroicons:pencil" class="w-4 h-4" />
                     {/snippet}
-                    Edit
+                    {$t('comments.item.edit')}
                   </DropdownSimpleItem>
                 </DropdownSimpleGroup>
               {/if}
@@ -168,7 +171,7 @@
                     {#snippet icon()}
                       <Icon icon="heroicons:trash" class="w-4 h-4" />
                     {/snippet}
-                    Delete
+                    {$t('comments.item.delete')}
                   </DropdownSimpleItem>
                 </DropdownSimpleGroup>
               {/if}
@@ -191,7 +194,8 @@
           >@{comment.referencedComment.author.displayName}</span
         >
         {#if comment.referencedComment.isDeleted}
-          <span class="ml-1 italic">[deleted]</span>
+          <span class="ml-1 italic">[{$t('comments.item.deleted_inline')}]</span
+          >
         {:else}
           <p class="mt-0.5 line-clamp-1">
             <HashtagText

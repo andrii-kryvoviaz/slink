@@ -7,6 +7,7 @@
   import { Switch } from '@slink/ui/components/switch';
 
   import { enhance } from '$app/forms';
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
@@ -54,13 +55,13 @@
   );
 
   const visibilityOptions = [
-    { value: 'public', label: 'Public' },
-    { value: 'private', label: 'Private' },
+    { value: 'public', label: 'pages.preferences.visibility.public' },
+    { value: 'private', label: 'pages.preferences.visibility.private' },
   ];
 
   const landingPageOptions = [
-    { value: LandingPage.Explore, label: 'Explore' },
-    { value: LandingPage.Upload, label: 'Upload' },
+    { value: LandingPage.Explore, label: 'pages.preferences.landing.explore' },
+    { value: LandingPage.Upload, label: 'pages.preferences.landing.upload' },
   ];
 
   let isPreferencesFormLoading = useWritable(
@@ -70,7 +71,7 @@
 
   $effect(() => {
     if (form?.preferencesWasUpdated) {
-      toast.success('Preferences updated successfully');
+      toast.success($t('pages.preferences.toast.updated_successfully'));
       syncToImages = false;
     }
   });
@@ -90,7 +91,7 @@
 </script>
 
 <svelte:head>
-  <title>Preferences | Slink</title>
+  <title>{$t('pages.preferences.page_title')}</title>
 </svelte:head>
 
 <div
@@ -98,8 +99,8 @@
   in:fade={{ duration: 150 }}
 >
   <header class="mb-8">
-    <Title size="sm">Preferences</Title>
-    <Subtitle>Configure your default settings and preferences</Subtitle>
+    <Title size="sm">{$t('pages.preferences.title')}</Title>
+    <Subtitle>{$t('pages.preferences.subtitle')}</Subtitle>
   </header>
 
   <form
@@ -113,7 +114,7 @@
           <h2
             class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
           >
-            Navigation
+            {$t('pages.preferences.navigation.section_title')}
           </h2>
         </div>
 
@@ -122,15 +123,20 @@
         >
           <SettingItem>
             {#snippet label()}
-              Default Landing Page
+              {$t('pages.preferences.navigation.default_landing_page')}
             {/snippet}
             {#snippet hint()}
-              The page to show when you visit the site
+              {$t('pages.preferences.navigation.default_landing_page_hint')}
             {/snippet}
             <Select
-              items={landingPageOptions}
+              items={landingPageOptions.map((item) => ({
+                ...item,
+                label: $t(item.label),
+              }))}
               bind:value={selectedLandingPage}
-              placeholder="Select a landing page..."
+              placeholder={$t(
+                'pages.preferences.navigation.select_landing_page',
+              )}
             />
             <input
               type="hidden"
@@ -147,7 +153,7 @@
             <h2
               class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
             >
-              Image Uploads
+              {$t('pages.preferences.uploads.section_title')}
             </h2>
           </div>
           <div
@@ -155,15 +161,18 @@
           >
             <SettingItem>
               {#snippet label()}
-                Default Visibility
+                {$t('pages.preferences.uploads.default_visibility')}
               {/snippet}
               {#snippet hint()}
-                New uploads will be set to public or private by default
+                {$t('pages.preferences.uploads.default_visibility_hint')}
               {/snippet}
               <Select
-                items={visibilityOptions}
+                items={visibilityOptions.map((item) => ({
+                  ...item,
+                  label: $t(item.label),
+                }))}
                 bind:value={selectedVisibility}
-                placeholder="Select visibility..."
+                placeholder={$t('pages.preferences.uploads.select_visibility')}
               />
               <input
                 type="hidden"
@@ -181,7 +190,7 @@
             <h2
               class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
             >
-              Image Licensing
+              {$t('pages.preferences.licensing.section_title')}
             </h2>
           </div>
           <div
@@ -189,10 +198,10 @@
           >
             <SettingItem>
               {#snippet label()}
-                Default License
+                {$t('pages.preferences.licensing.default_license')}
               {/snippet}
               {#snippet hint()}
-                This license will be automatically applied to new uploads
+                {$t('pages.preferences.licensing.default_license_hint')}
               {/snippet}
               {#snippet footer()}
                 {#if selectedLicenseInfo}
@@ -216,7 +225,11 @@
                             rel="noopener noreferrer"
                             class="inline-flex items-center gap-1 text-xs hover:underline"
                           >
-                            <span>Learn more</span>
+                            <span
+                              >{$t(
+                                'pages.preferences.licensing.learn_more',
+                              )}</span
+                            >
                             <Icon
                               icon="heroicons:arrow-top-right-on-square"
                               class="w-3 h-3"
@@ -231,7 +244,7 @@
               <Select
                 items={licenseOptions}
                 bind:value={selectedLicense}
-                placeholder="Select a license..."
+                placeholder={$t('pages.preferences.licensing.select_license')}
               />
               <input
                 type="hidden"
@@ -242,10 +255,10 @@
 
             <SettingItem>
               {#snippet label()}
-                Sync to existing images
+                {$t('pages.preferences.licensing.sync_to_existing_images')}
               {/snippet}
               {#snippet hint()}
-                Apply this license to all your existing images
+                {$t('pages.preferences.licensing.sync_to_existing_images_hint')}
               {/snippet}
               <Switch
                 id="syncLicenseToImages"
@@ -264,7 +277,7 @@
           class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
         >
           <Loader variant="minimal" size="xs" />
-          <span>Saving...</span>
+          <span>{$t('pages.preferences.saving')}</span>
         </div>
       {/if}
 
@@ -275,7 +288,7 @@
         size="sm"
         disabled={$isPreferencesFormLoading}
       >
-        Save Changes
+        {$t('pages.preferences.save_changes')}
       </Button>
     </div>
   </form>

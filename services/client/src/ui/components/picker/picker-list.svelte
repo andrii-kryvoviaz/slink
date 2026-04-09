@@ -2,6 +2,7 @@
   import { Loader } from '@slink/feature/Layout';
   import type { Snippet } from 'svelte';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   import PickerCreateFooter from './picker-create-footer.svelte';
@@ -35,7 +36,7 @@
     variant = 'popover',
     color = 'blue',
     isLoading = false,
-    searchPlaceholder = 'Search...',
+    searchPlaceholder = 'picker.search_placeholder',
     showSearch: showSearchProp,
     children,
     emptyIcon,
@@ -89,7 +90,7 @@
   tabindex="0"
 >
   {#if (variant === 'popover' || variant === 'glass') && showSearch}
-    <PickerSearch bind:value={searchTerm} placeholder={searchPlaceholder} />
+    <PickerSearch bind:value={searchTerm} placeholder={$t(searchPlaceholder)} />
   {/if}
 
   {#if isLoading}
@@ -112,7 +113,7 @@
         {#if emptyMessage}
           {@render emptyMessage()}
         {:else}
-          No items yet
+          {$t('picker.no_items_yet')}
         {/if}
       {/snippet}
       {#snippet action()}
@@ -135,7 +136,7 @@
               />
             </div>
             <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
-              No matches found
+              {$t('picker.no_matches_found')}
             </p>
           </div>
         {:else}

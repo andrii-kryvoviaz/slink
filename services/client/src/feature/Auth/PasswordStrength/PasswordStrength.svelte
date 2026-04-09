@@ -1,11 +1,12 @@
 <script lang="ts">
+  import { t } from '$lib/i18n';
   import { slide } from 'svelte/transition';
 
   import {
     type StrengthLevel,
     passwordStrengthBarVariants,
     passwordStrengthLabelVariants,
-    strengthLabels,
+    strengthLabelKeys,
   } from './PasswordStrength.theme';
 
   interface Props {
@@ -53,7 +54,7 @@
       {/each}
     </div>
     <span class={passwordStrengthLabelVariants({ strength: strength.level })}>
-      {strengthLabels[strength.level]}
+      {$t(strengthLabelKeys[strength.level])}
     </span>
   </div>
 {/if}

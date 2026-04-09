@@ -2,6 +2,7 @@
   import { ProviderIcon } from '@slink/feature/Auth';
   import { Button } from '@slink/ui/components/button';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   import type { OAuthProviderDetails } from '@slink/api/Resources/OAuthResource';
@@ -31,10 +32,10 @@
     </div>
     <div>
       <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
-        Delete Provider
+        {$t('pages.admin.settings.sso.delete.title')}
       </h3>
       <p class="text-xs text-gray-500 dark:text-gray-400">
-        This action cannot be undone
+        {$t('pages.admin.settings.sso.delete.description')}
       </p>
     </div>
   </div>
@@ -49,8 +50,8 @@
           {provider.name}
         </span>
         <p class="text-xs text-gray-500 dark:text-gray-400">
-          <code class="font-mono">{provider.slug}</code> &mdash; Provider and its
-          configuration will be removed
+          <code class="font-mono">{provider.slug}</code>
+          &mdash; {$t('pages.admin.settings.sso.delete.provider_removed')}
         </p>
       </div>
     </div>
@@ -65,7 +66,7 @@
       class="flex-1"
       disabled={loading}
     >
-      Cancel
+      {$t('pages.admin.settings.sso.delete.cancel')}
     </Button>
     <Button
       variant="danger"
@@ -80,7 +81,7 @@
       {:else}
         <Icon icon="heroicons:trash" class="h-4 w-4 mr-2" />
       {/if}
-      Delete Provider
+      {$t('pages.admin.settings.sso.delete.confirm')}
     </Button>
   </div>
 </div>

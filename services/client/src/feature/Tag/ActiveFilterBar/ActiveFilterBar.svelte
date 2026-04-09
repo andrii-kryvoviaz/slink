@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Tooltip } from '@slink/ui/components/tooltip';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
@@ -49,9 +50,11 @@
     />
 
     <span class="text-slate-600 dark:text-slate-300">
-      <span class="hidden sm:inline">Filtering by</span>
+      <span class="hidden sm:inline"
+        >{$t('tag.active_filter.filtering_by')}</span
+      >
       <span class="font-semibold text-blue-600 dark:text-blue-400">
-        {pluralize(tagCount, 'tag')}
+        {pluralize(tagCount, $t('tag.active_filter.tag_unit'))}
       </span>
     </span>
 
@@ -75,14 +78,14 @@
             class={activeFilterToggleButtonVariants({ matchMode, disabled })}
             onclick={toggleMatchMode}
             {disabled}
-            aria-label="Toggle between matching all or any selected tags"
+            aria-label={$t('tag.active_filter.toggle_aria')}
           >
             {#if requireAllTags}
               <Icon icon="heroicons:check-circle-solid" class="w-3.5 h-3.5" />
-              <span>Match all</span>
+              <span>{$t('tag.active_filter.match_all')}</span>
             {:else}
               <Icon icon="heroicons:minus-circle-solid" class="w-3.5 h-3.5" />
-              <span>Match any</span>
+              <span>{$t('tag.active_filter.match_any')}</span>
             {/if}
           </button>
         {/snippet}
@@ -105,22 +108,26 @@
             <span
               class="text-xs font-semibold text-slate-900 dark:text-slate-100"
             >
-              {#if requireAllTags}Match All{:else}Match Any{/if}
+              {#if requireAllTags}
+                {$t('tag.active_filter.match_all_title')}
+              {:else}
+                {$t('tag.active_filter.match_any_title')}
+              {/if}
             </span>
             <span
               class="text-[11px] leading-relaxed text-slate-600 dark:text-slate-400"
             >
               {#if requireAllTags}
-                Images must have every selected tag to appear in results.
+                {$t('tag.active_filter.match_all_description')}
               {:else}
-                Images with at least one selected tag will appear in results.
+                {$t('tag.active_filter.match_any_description')}
               {/if}
             </span>
             <span class="text-[10px] text-slate-400 dark:text-slate-500 italic">
               {#if requireAllTags}
-                Click to switch to match any
+                {$t('tag.active_filter.switch_to_any')}
               {:else}
-                Click to switch to match all
+                {$t('tag.active_filter.switch_to_all')}
               {/if}
             </span>
           </div>
@@ -133,10 +140,10 @@
       class="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all duration-200"
       onclick={onClear}
       {disabled}
-      aria-label="Clear all filters"
+      aria-label={$t('tag.active_filter.clear_aria')}
     >
       <Icon icon="heroicons:x-mark-20-solid" class="w-3.5 h-3.5" />
-      <span>Clear</span>
+      <span>{$t('tag.active_filter.clear')}</span>
     </button>
   </div>
 {/if}

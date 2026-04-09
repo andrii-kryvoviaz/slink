@@ -7,6 +7,7 @@
   } from '@slink/ui/components';
   import { Switch } from '@slink/ui/components/switch';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   import type { OAuthProviderDetails } from '@slink/api/Resources/OAuthResource';
@@ -36,7 +37,7 @@
       <Icon icon="ph:key" class="w-6 h-6 text-gray-400 dark:text-gray-500" />
     </div>
     <p class="text-sm text-gray-500 dark:text-gray-400">
-      No SSO providers configured yet
+      {$t('pages.admin.settings.sso.list.empty')}
     </p>
   </div>
 {:else}
@@ -101,7 +102,7 @@
                   {#snippet icon()}
                     <Icon icon="ph:arrow-up" class="h-4 w-4" />
                   {/snippet}
-                  <span>Move Up</span>
+                  <span>{$t('pages.admin.settings.sso.list.move_up')}</span>
                 </DropdownSimpleItem>
                 <DropdownSimpleItem
                   on={{ click: () => state.moveDown(provider) }}
@@ -112,13 +113,13 @@
                   {#snippet icon()}
                     <Icon icon="ph:arrow-down" class="h-4 w-4" />
                   {/snippet}
-                  <span>Move Down</span>
+                  <span>{$t('pages.admin.settings.sso.list.move_down')}</span>
                 </DropdownSimpleItem>
                 <DropdownSimpleItem on={{ click: () => onEdit(provider) }}>
                   {#snippet icon()}
                     <Icon icon="ph:note-pencil" class="h-4 w-4" />
                   {/snippet}
-                  <span>Edit</span>
+                  <span>{$t('pages.admin.settings.sso.list.edit')}</span>
                 </DropdownSimpleItem>
                 <DropdownSimpleItem
                   danger={true}
@@ -128,7 +129,7 @@
                   {#snippet icon()}
                     <Icon icon="heroicons:trash" class="h-4 w-4" />
                   {/snippet}
-                  <span>Delete</span>
+                  <span>{$t('pages.admin.settings.sso.list.delete')}</span>
                 </DropdownSimpleItem>
               {:else}
                 <OAuthProviderDeleteConfirmation

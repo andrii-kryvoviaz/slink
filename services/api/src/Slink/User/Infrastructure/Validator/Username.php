@@ -27,11 +27,11 @@ class Username extends Constraint {
     mixed         $payload = null,
     public int    $minLength = 3,
     public int    $maxLength = 30,
-    public string $tooShortMessage = 'Username must be at least {{ limit }} characters long.',
-    public string $tooLongMessage = 'Username must be at most {{ limit }} characters long.',
-    public string $invalidCharactersMessage = 'Username can only contain lowercase letters, numbers, underscores, hyphens, and periods.',
-    public string $consecutiveSpecialCharsMessage = 'Username cannot contain consecutive special characters.',
-    public string $reservedUsernameMessage = '`{{ value }}` is a reserved username.',
+    public string $tooShortMessage = 'AUTH_USERNAME_TOO_SHORT',
+    public string $tooLongMessage = 'AUTH_USERNAME_TOO_LONG',
+    public string $invalidCharactersMessage = 'AUTH_USERNAME_INVALID_CHARACTERS',
+    public string $consecutiveSpecialCharsMessage = 'AUTH_USERNAME_CONSECUTIVE_SPECIAL',
+    public string $reservedUsernameMessage = 'AUTH_USERNAME_RESERVED',
     public array  $reservedUsernames = ['anonymous'],
   ) {
     parent::__construct($options, $groups, $payload);

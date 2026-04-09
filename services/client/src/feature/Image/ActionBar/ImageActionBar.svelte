@@ -10,6 +10,7 @@
   import { Overlay } from '@slink/ui/components/popover';
   import { TooltipProvider } from '@slink/ui/components/tooltip';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
   import { cubicOut } from 'svelte/easing';
   import { scale } from 'svelte/transition';
@@ -129,8 +130,8 @@
     })}
     onclick={actions.handleDownload}
     disabled={actions.downloadIsLoading}
-    aria-label="Download image"
-    tooltip={compact && !isHero ? 'Download' : undefined}
+    aria-label={$t('image.action_bar.download_image')}
+    tooltip={compact && !isHero ? $t('image.action_bar.download') : undefined}
   >
     {@render loaderOrIcon(
       'lucide:download',
@@ -138,7 +139,9 @@
       downloadIconVariants({ layout }),
     )}
     {#if isHero || !compact}
-      <span class={downloadLabelVariants({ layout })}>Download</span>
+      <span class={downloadLabelVariants({ layout })}
+        >{$t('image.action_bar.download')}</span
+      >
     {/if}
   </ButtonGroupItem>
 {/snippet}
@@ -167,7 +170,7 @@
     class={actionButtonVariants({ layout, variant: 'secondary' })}
     onclick={actions.handleCopy}
     disabled={actions.shareIsLoading || actions.isCopied.active}
-    aria-label="Copy image URL"
+    aria-label={$t('image.action_bar.copy_image_url')}
     tooltip={actions.copyTooltip}
   >
     {@render copyIconContent()}
@@ -187,9 +190,9 @@
         size="md"
         position={isHero ? 'only' : position}
         class={actionButtonVariants({ layout, variant: 'destructive' })}
-        aria-label="Delete image"
+        aria-label={$t('image.action_bar.delete_image')}
         disabled={actions.deleteIsLoading}
-        tooltip="Delete image"
+        tooltip={$t('image.action_bar.delete_image')}
         disableTooltip={actions.popover.delete}
       >
         <Icon icon="lucide:trash-2" class={iconClass} />
@@ -213,8 +216,8 @@
         size="md"
         position={isHero ? 'only' : position}
         class={actionButtonVariants({ layout })}
-        aria-label="Add to collection"
-        tooltip="Add to collection"
+        aria-label={$t('image.action_bar.add_to_collection')}
+        tooltip={$t('image.action_bar.add_to_collection')}
         disableTooltip={actions.popover.collection}
       >
         <Icon icon="lucide:folder" class={iconClass} />
@@ -245,8 +248,8 @@
         size="md"
         position={isHero ? 'only' : position}
         class={actionButtonVariants({ layout })}
-        aria-label="Manage tags"
-        tooltip="Manage tags"
+        aria-label={$t('image.action_bar.manage_tags')}
+        tooltip={$t('image.action_bar.manage_tags')}
         disableTooltip={actions.popover.tag}
       >
         <Icon icon="lucide:tag" class={iconClass} />
@@ -284,7 +287,7 @@
     <div
       class={actionBarContainerVariants({ layout })}
       role="toolbar"
-      aria-label="Image actions"
+      aria-label={$t('image.action_bar.image_actions')}
     >
       {#each visibleButtons as button, i (button)}
         {@const position = getPosition(i, visibleButtons.length)}
@@ -312,7 +315,7 @@
       gap="none"
       padding="none"
       role="toolbar"
-      aria-label="Image actions"
+      aria-label={$t('image.action_bar.image_actions')}
     >
       {#each visibleButtons as button, i (button)}
         {@const position = getPosition(i, visibleButtons.length)}

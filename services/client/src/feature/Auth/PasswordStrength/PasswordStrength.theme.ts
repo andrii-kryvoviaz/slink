@@ -43,10 +43,10 @@ export const passwordStrengthLabelVariants = cva('text-xs font-medium', {
 
 export type StrengthLevel = 'weak' | 'fair' | 'good' | 'strong' | 'veryStrong';
 
-export const strengthLabels: Record<StrengthLevel, string> = {
-  weak: 'Weak',
-  fair: 'Fair',
-  good: 'Good',
-  strong: 'Strong',
-  veryStrong: 'Very Strong',
+export const strengthLabelKeys: Record<StrengthLevel, string> = {
+  weak: 'auth.password_strength.weak',
+  fair: 'auth.password_strength.fair',
+  good: 'auth.password_strength.good',
+  strong: 'auth.password_strength.strong',
+  veryStrong: 'auth.password_strength.very_strong',
 };

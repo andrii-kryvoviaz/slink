@@ -9,6 +9,7 @@
   import { Button } from '@slink/ui/components/button';
   import { untrack } from 'svelte';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
@@ -33,7 +34,7 @@
 </script>
 
 <svelte:head>
-  <title>Bookmarks | Slink</title>
+  <title>{$t('pages.bookmarks.page_title')}</title>
 </svelte:head>
 
 <main in:fade={{ duration: 500 }} class="min-h-full">
@@ -42,8 +43,8 @@
     use:skeleton={{ feed: bookmarksFeed }}
   >
     <div class="mb-8">
-      <Title>Bookmarks</Title>
-      <Subtitle>Your saved images from the community</Subtitle>
+      <Title>{$t('pages.bookmarks.title')}</Title>
+      <Subtitle>{$t('pages.bookmarks.subtitle')}</Subtitle>
     </div>
 
     {#if bookmarksFeed.showSkeleton}
@@ -54,8 +55,8 @@
       <div in:fade={{ duration: 200 }}>
         <EmptyState
           icon="ph:bookmark-simple-duotone"
-          title="No bookmarks yet"
-          description="Start exploring and bookmark images you love to find them here later."
+          title={$t('pages.bookmarks.empty_title')}
+          description={$t('pages.bookmarks.empty_description')}
           variant="blue"
           size="md"
         >
@@ -67,7 +68,7 @@
               href="/explore"
             >
               <Icon icon="lucide:search" class="h-4 w-4" />
-              Explore Images
+              {$t('pages.bookmarks.explore_images')}
             </Button>
           {/snippet}
         </EmptyState>
@@ -85,13 +86,13 @@
                 class="w-12 h-12 mx-auto text-gray-400 dark:text-gray-500 mb-3"
               />
               <p class="text-gray-500 dark:text-gray-400 text-sm">
-                Image no longer available
+                {$t('pages.bookmarks.image_unavailable')}
               </p>
               <button
                 class="mt-4 text-sm text-red-500 hover:text-red-600 transition-colors"
                 onclick={() => handleRemoveBookmark(bookmark)}
               >
-                Remove bookmark
+                {$t('pages.bookmarks.remove_bookmark')}
               </button>
             </div>
           {:else}
@@ -148,7 +149,8 @@
                   >
                     <Icon icon="ph:bookmark-simple-fill" class="w-3.5 h-3.5" />
                     <span
-                      >Saved <FormattedDate
+                      >{$t('pages.bookmarks.saved')}
+                      <FormattedDate
                         date={bookmark.createdAt.timestamp}
                       /></span
                     >

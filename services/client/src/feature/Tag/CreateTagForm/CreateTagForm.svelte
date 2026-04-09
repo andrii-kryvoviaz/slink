@@ -5,6 +5,7 @@
   import { Modal } from '@slink/ui/components/dialog';
   import { Input } from '@slink/ui/components/input';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   interface Props {
@@ -55,16 +56,16 @@
     {#snippet icon()}
       <Icon icon="lucide:tag" />
     {/snippet}
-    {#snippet title()}Create Tag{/snippet}
-    {#snippet description()}Add a new tag to organize your images{/snippet}
+    {#snippet title()}{$t('pages.tags.create_tag')}{/snippet}
+    {#snippet description()}{$t('tag.create_form.description')}{/snippet}
   </Modal.Header>
 
   <form onsubmit={handleSubmit} class="space-y-6">
     <div class="space-y-5">
       <Input
-        label="Tag Name"
+        label={$t('tag.create_form.tag_name')}
         bind:value={name}
-        placeholder="e.g., Nature, Photography, Art"
+        placeholder={$t('tag.create_form.tag_name_placeholder')}
         error={errors?.name}
         size="md"
         rounded="lg"
@@ -81,16 +82,16 @@
           for="parent-tag"
           class="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3 block"
         >
-          Parent Tag (Optional)
+          {$t('tag.create_form.parent_tag_optional')}
         </label>
         <Combobox
           items={tagItems}
           bind:value={selectedParentTagId}
-          placeholder="Search for parent tag..."
+          placeholder={$t('tag.create_form.search_parent_placeholder')}
           onSearch={handleTagSearch}
           loading={$isLoadingTags}
           clearable={true}
-          emptyMessage="No matching tags found."
+          emptyMessage={$t('tag.create_form.empty_message')}
         />
       </div>
     </div>
@@ -99,17 +100,17 @@
       {#snippet icon()}
         <Icon icon="lucide:info" />
       {/snippet}
-      {#snippet title()}Tag Organization{/snippet}
+      {#snippet title()}{$t('tag.create_form.notice_title')}{/snippet}
       {#snippet message()}
-        Tags help organize your images. Parent tags create a hierarchy for
-        better organization. You can always move tags later or create sub-tags
-        within existing ones.
+        {$t('tag.create_form.notice_message')}
       {/snippet}
     </Modal.Notice>
 
     <Modal.Footer
       isSubmitting={isCreating}
-      submitText={isCreating ? 'Creating...' : 'Create Tag'}
+      submitText={isCreating
+        ? $t('tag.create_form.creating')
+        : $t('pages.tags.create_tag')}
       submitDisabled={!name.trim()}
       {onCancel}
     />

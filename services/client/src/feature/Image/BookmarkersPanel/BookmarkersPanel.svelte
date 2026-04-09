@@ -2,6 +2,7 @@
   import { ApiClient } from '@slink/api';
   import { UserAvatar } from '@slink/feature/User';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
   import { slide } from 'svelte/transition';
 
@@ -43,7 +44,11 @@
   let totalPages = $state(1);
   let cursor = $state<string | undefined>(undefined);
 
-  const label = $derived(count === 1 ? 'time' : 'times');
+  const label = $derived(
+    count === 1
+      ? $t('image.bookmarkers_panel.time')
+      : $t('image.bookmarkers_panel.times'),
+  );
   const currentPageItems = $derived(pages.get(currentPage) ?? []);
   const hasPrev = $derived(currentPage > 1);
   const hasNext = $derived(currentPage < totalPages);
@@ -112,7 +117,9 @@
         />
       </div>
       <div class="flex flex-col min-w-0 flex-1 text-left">
-        <span class={bookmarkersPanelLabelTheme()}>Bookmarked</span>
+        <span class={bookmarkersPanelLabelTheme()}
+          >{$t('image.bookmarkers_panel.bookmarked')}</span
+        >
         <span class={bookmarkersPanelValueTheme()}>{count} {label}</span>
       </div>
       {#if $isLoading && pages.size === 0}
@@ -135,7 +142,9 @@
         transition:slide={{ duration: 200 }}
       >
         {#if currentPageItems.length === 0 && !$isLoading}
-          <div class={bookmarkersPanelEmptyTheme()}>No bookmarks yet</div>
+          <div class={bookmarkersPanelEmptyTheme()}>
+            {$t('image.bookmarkers_panel.no_bookmarks_yet')}
+          </div>
         {:else}
           {#if totalPages > 1}
             <div
@@ -193,7 +202,7 @@
 
         {#if $error}
           <div class="px-4 py-3 text-sm text-red-500 dark:text-red-400">
-            Failed to load bookmarks
+            {$t('image.bookmarkers_panel.failed_to_load')}
           </div>
         {/if}
       </div>

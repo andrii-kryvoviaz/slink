@@ -21,7 +21,9 @@ final readonly class CollectionDescription extends AbstractValueObject {
     $trimmed = trim($description);
 
     if (mb_strlen($trimmed) > self::MAX_LENGTH) {
-      throw new InvalidArgumentException('COLLECTION_DESCRIPTION_TOO_LONG', 'description');
+      throw new InvalidArgumentException('COLLECTION_DESCRIPTION_TOO_LONG', 'description', [
+        'max' => self::MAX_LENGTH,
+      ]);
     }
 
     return new self($trimmed);

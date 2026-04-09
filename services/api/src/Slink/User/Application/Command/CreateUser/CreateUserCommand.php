@@ -21,20 +21,20 @@ final readonly class CreateUserCommand implements CommandInterface {
   private ID $id;
 
   public function __construct(
-    #[Assert\NotBlank]
-    #[Assert\Email]
+    #[Assert\NotBlank(message: 'VALIDATION_REQUIRED')]
+    #[Assert\Email(message: 'EMAIL_INVALID')]
     private string $email,
 
     #[SensitiveParameter]
     #[PasswordComplexity]
     private string $password,
 
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'VALIDATION_REQUIRED')]
     #[UsernameConstraint]
-    #[Assert\NotEqualTo(propertyPath: 'email', message: 'Username cannot be the same as email.')]
+    #[Assert\NotEqualTo(propertyPath: 'email', message: 'AUTH_USERNAME_EQUALS_EMAIL')]
     private string $username,
 
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'VALIDATION_REQUIRED')]
     #[Assert\Length(min: 1, max: 100)]
     private string $displayName,
 

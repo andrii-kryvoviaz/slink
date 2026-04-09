@@ -8,6 +8,7 @@
   import * as Collapsible from '@slink/ui/components/collapsible';
 
   import { page } from '$app/state';
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   import type {
@@ -75,7 +76,8 @@
       <div class="flex items-center gap-2">
         <Badge variant="glass" size="sm">
           <Icon icon="heroicons:eye" class="w-3.5 h-3.5 mr-1.5" />
-          {image.attributes.views} views
+          {image.attributes.views}
+          {$t('image.post_viewer.views')}
         </Badge>
         <Badge variant="glass" size="sm">
           <Icon icon="heroicons:photo" class="w-3.5 h-3.5 mr-1.5" />
@@ -114,7 +116,7 @@
         <Collapsible.Trigger
           class="flex items-center justify-between w-full py-2 text-sm text-white/70 hover:text-white transition-colors group"
         >
-          <span class="font-medium">Description</span>
+          <span class="font-medium">{$t('image.post_viewer.description')}</span>
           <Icon
             icon="heroicons:chevron-down"
             class="w-4 h-4 transition-transform duration-200 {descriptionOpen

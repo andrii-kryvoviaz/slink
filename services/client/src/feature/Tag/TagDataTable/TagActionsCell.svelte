@@ -7,6 +7,7 @@
   } from '@slink/ui/components';
   import { Button } from '@slink/ui/components/button';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   import { ReactiveState } from '@slink/api/ReactiveState';
@@ -64,7 +65,7 @@
         padding="none"
         rounded="md"
         {...triggerProps}
-        aria-label="Tag actions"
+        aria-label={$t('tag.actions.aria')}
       >
         <Icon icon="lucide:ellipsis" class="h-4 w-4" />
       </Button>
@@ -76,7 +77,7 @@
           {#snippet icon()}
             <Icon icon="lucide:arrow-right-left" class="h-4 w-4" />
           {/snippet}
-          <span>Move</span>
+          <span>{$t('tag.actions.move')}</span>
         </DropdownSimpleItem>
         <DropdownSimpleItem
           danger={true}
@@ -86,7 +87,7 @@
           {#snippet icon()}
             <Icon icon="heroicons:trash" class="h-4 w-4" />
           {/snippet}
-          <span>Delete</span>
+          <span>{$t('tag.actions.delete')}</span>
         </DropdownSimpleItem>
       {:else}
         <TagDeletePopover

@@ -6,6 +6,6 @@ namespace Slink\User\Domain\Exception;
 
 class EmailAlreadyExistException extends InvalidEmailException {
   public function __construct() {
-    parent::__construct('Email already registered.');
+    parent::__construct('EMAIL_ALREADY_REGISTERED');
   }
 }

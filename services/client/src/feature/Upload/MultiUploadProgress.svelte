@@ -4,6 +4,7 @@
   import { Progress } from '@slink/ui/components/progress';
   import { cva } from 'class-variance-authority';
 
+  import { t } from '$lib/i18n';
   import { bytesToSize } from '$lib/utils/bytesConverter';
   import { className as cn } from '$lib/utils/ui/className';
   import Icon from '@iconify/svelte';
@@ -73,15 +74,16 @@
           class="text-xl sm:text-2xl font-semibold bg-gradient-to-r from-slate-700 to-slate-900 dark:from-slate-200 dark:to-slate-400 bg-clip-text text-transparent"
         >
           {#if isCompleted}
-            Complete
+            {$t('upload.multi.complete')}
           {:else}
-            Uploading
+            {$t('upload.multi.uploading')}
           {/if}
         </h3>
         <p class="text-sm text-slate-500 dark:text-slate-400">
-          {completedUploads} of {totalUploads} files uploaded
+          {completedUploads} / {totalUploads}
+          {$t('upload.multi.files_uploaded')}
           {#if hasErrors}
-            • {failedUploads} failed
+            • {failedUploads} {$t('upload.multi.failed')}
           {/if}
         </p>
       </div>
@@ -95,19 +97,19 @@
             onclick={onRetryAll}
           >
             <Icon icon="ph:arrow-clockwise" class="w-4 h-4 mr-2" />
-            Retry Failed
+            {$t('upload.multi.retry_failed')}
           </Button>
         {/if}
 
         {#if onCancel && !isCompleted}
           <Button variant="glass" size="sm" rounded="full" onclick={onCancel}>
             <Icon icon="ph:x" class="w-4 h-4 mr-2" />
-            Cancel
+            {$t('upload.multi.cancel')}
           </Button>
         {:else if isCompleted && onGoBack}
           <Button variant="glass" size="sm" rounded="full" onclick={onGoBack}>
             <Icon icon="ph:check" class="w-4 h-4 mr-2" />
-            Done
+            {$t('upload.multi.done')}
           </Button>
         {/if}
       </div>
@@ -124,7 +126,7 @@
       <span
         class="text-[10px] uppercase tracking-widest text-slate-400 dark:text-slate-500"
       >
-        Overall Progress
+        {$t('upload.multi.overall_progress')}
       </span>
     </div>
 
@@ -179,7 +181,7 @@
               <p
                 class="text-xs text-red-500/80 dark:text-red-400/80 mt-1 break-words"
               >
-                {item.error || 'Upload failed'}
+                {item.error || $t('upload.multi.upload_failed')}
               </p>
             {/if}
           </div>

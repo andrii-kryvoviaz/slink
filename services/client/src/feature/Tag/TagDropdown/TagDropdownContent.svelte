@@ -8,6 +8,7 @@
   import { Button } from '@slink/ui/components/button';
   import { PickerEmptyState } from '@slink/ui/components/picker';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
@@ -63,9 +64,10 @@
           onclick={onCreateTag}
         >
           <Icon icon="ph:plus" class="w-4 h-4" />
-          <span class="truncate"
-            >Create "{getTagDisplayName(creatingChildFor)} › {childTagName}"</span
-          >
+          <span class="truncate">
+            {$t('tag.dropdown.create_with_name')}
+            "{getTagDisplayName(creatingChildFor)} › {childTagName}"
+          </span>
         </Button>
       </div>
     {/if}
@@ -104,10 +106,10 @@
             />
           {/snippet}
           {#snippet message()}
-            No tags matching "{searchTerm}"
+            {$t('tag.dropdown.no_tags_matching')} "{searchTerm}"
           {/snippet}
           {#snippet action()}
-            Create "{searchTerm}"
+            {$t('tag.dropdown.create_with_name')} "{searchTerm}"
           {/snippet}
         </PickerEmptyState>
       {/if}
@@ -125,7 +127,7 @@
             />
           {/snippet}
           {#snippet message()}
-            No tags yet
+            {$t('tag.dropdown.no_tags_yet')}
           {/snippet}
         </PickerEmptyState>
       {/if}

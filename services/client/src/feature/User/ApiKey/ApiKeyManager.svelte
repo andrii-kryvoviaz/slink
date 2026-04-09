@@ -11,6 +11,7 @@
   import { Dialog } from '@slink/ui/components/dialog';
   import { onMount } from 'svelte';
 
+  import { t } from '$lib/i18n';
   import { useApiKeyStore } from '$lib/state/ApiKeyStore.svelte.js';
   import Icon from '@iconify/svelte';
 
@@ -71,15 +72,15 @@
       class="text-lg font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-2"
     >
       <Icon icon="ph:key" class="h-5 w-5 text-slate-500 dark:text-slate-400" />
-      API Keys
+      {$t('pages.integrations.api_keys.section_title')}
     </h3>
     <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-      Create API keys for ShareX and other third-party integrations
+      {$t('pages.integrations.subtitle')}
     </p>
   </div>
   <Button variant="soft-blue" size="sm" onclick={handleCreateClick}>
     <Icon icon="ph:plus" class="h-4 w-4 mr-2" />
-    Create API Key
+    {$t('pages.integrations.api_keys.create.submit')}
   </Button>
 </div>
 

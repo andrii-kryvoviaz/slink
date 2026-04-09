@@ -12,6 +12,7 @@
   import { SplitButton } from '@slink/ui/components/split-button';
   import { onMount } from 'svelte';
 
+  import { t } from '$lib/i18n';
   import { useApiKeyStore } from '$lib/state/ApiKeyStore.svelte.js';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
@@ -68,7 +69,7 @@
 </script>
 
 <svelte:head>
-  <title>Integrations | Slink</title>
+  <title>{$t('pages.integrations.page_title')}</title>
 </svelte:head>
 
 <section in:fade={{ duration: 300 }}>
@@ -76,13 +77,11 @@
     <div class="mb-8 space-y-6" in:fade={{ duration: 400, delay: 100 }}>
       <div class="flex items-center justify-between w-full">
         <div class="flex-1 min-w-0">
-          <Title>Integrations</Title>
-          <Subtitle
-            >Connect Slink with ShareX and other tools via API keys</Subtitle
-          >
+          <Title>{$t('pages.integrations.title')}</Title>
+          <Subtitle>{$t('pages.integrations.subtitle')}</Subtitle>
         </div>
         <SplitButton onclick={handleCreateClick}>
-          Create
+          {$t('pages.integrations.create')}
           {#snippet aside()}
             <Icon icon="lucide:plus" class="w-3.5 h-3.5" />
           {/snippet}

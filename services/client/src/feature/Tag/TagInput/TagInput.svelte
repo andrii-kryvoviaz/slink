@@ -1,6 +1,7 @@
 <script lang="ts">
   import { type TagInputVariants, tagInputVariants } from '@slink/feature/Tag';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
@@ -31,7 +32,7 @@
 
   let {
     value = $bindable(),
-    placeholder = 'Search or add tags...',
+    placeholder = 'tag.selector.search_or_add_placeholder',
     disabled = false,
     searchTerm = $bindable(),
     onSearchChange,
@@ -118,7 +119,7 @@
       bind:this={childRef}
       bind:value={childTagName}
       class={tagInputVariants({ size, variant, disabled })}
-      placeholder="Child tag name..."
+      placeholder={$t('tag.input.child_tag_name_placeholder')}
       onkeydown={handleKeydown}
       oninput={handleChildInput}
       {onfocus}
@@ -128,7 +129,7 @@
       type="button"
       class="flex-shrink-0 p-1 hover:bg-muted rounded transition-colors"
       onclick={onCancelChild}
-      title="Cancel child tag creation"
+      title={$t('tag.input.cancel_child_creation')}
     >
       <Icon icon="ph:x" class="h-3 w-3" />
     </button>
@@ -138,7 +139,7 @@
     bind:this={ref}
     bind:value={inputValue}
     class={tagInputVariants({ size, variant, disabled })}
-    {placeholder}
+    placeholder={$t(placeholder)}
     {disabled}
     autocomplete="off"
     oninput={handleInput}

@@ -5,6 +5,8 @@
     StorageSettings,
   } from '@slink/feature/Settings';
 
+  import { t } from '$lib/i18n';
+
   import { useSettingsPage } from '@slink/lib/state/SettingsPage.svelte';
 
   import type { PageData } from './$types';
@@ -23,12 +25,12 @@
 </script>
 
 <svelte:head>
-  <title>Storage Settings | Slink</title>
+  <title>{$t('pages.admin.settings.storage.page_title')}</title>
 </svelte:head>
 
 <SettingsPageLayout
-  title="Storage"
-  description="Configure storage providers and cache management"
+  title={$t('pages.admin.settings.storage.title')}
+  description={$t('pages.admin.settings.storage.description')}
   isInitialized={page.isInitialized}
 >
   <StorageSettings

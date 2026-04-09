@@ -1,6 +1,7 @@
 import { HttpException, ValidationException } from '@slink/api/Exceptions';
 
 import { extractErrorMessage } from '@slink/lib/utils/error/extractErrorMessage';
+import { translateApiErrorMessage } from '@slink/lib/utils/error/translateApiErrorMessage';
 
 import { toast } from '@slink/utils/ui/toast-sonner.svelte';
 
@@ -18,7 +19,12 @@ function showViolationsAsToasts(violations: ValidationException['violations']) {
       toast.component(config.component, {
         duration: config.duration || 5000,
         props: {
-          message: violation.message,
+          message: translateApiErrorMessage(
+            violation.message,
+            violation.data?.params as
+              | Record<string, string | number>
+              | undefined,
+          ),
           data: violation.data,
         },
       });
@@ -26,19 +32,31 @@ function showViolationsAsToasts(violations: ValidationException['violations']) {
       const key = violation.property === 'error' ? '' : violation.property;
       const message =
         key && violations.length > 1
-          ? `[${key.capitalizeFirstLetter()}] ${violation.message}`
-          : violation.message;
+          ? `[${key.capitalizeFirstLetter()}] ${translateApiErrorMessage(violation.message, violation.data?.params as Record<string, string | number> | undefined)}`
+          : translateApiErrorMessage(
+              violation.message,
+              violation.data?.params as
+                | Record<string, string | number>
+                | undefined,
+            );
       showErrorAsToast(message);
     }
   }
 }
 
-function showHttpErrorsAsToasts(errors: HttpException['errors']) {
+function showHttpErrorsAsToasts(
+  errors: HttpException['errors'],
+  params?: Record<string, string | number>,
+) {
   for (const key in errors) {
+    const translated =
+      typeof errors[key] === 'string'
+        ? translateApiErrorMessage(errors[key] as string, params)
+        : String(errors[key]);
     const message =
       !parseInt(key) && key && Object.keys(errors).length > 1
-        ? `[${key.capitalizeFirstLetter()}] ${errors[key]}`
-        : errors[key];
+        ? `[${key.capitalizeFirstLetter()}] ${translated}`
+        : translated;
     showErrorAsToast(message as string);
   }
 }
@@ -50,7 +68,10 @@ export function printErrorsAsToastMessage(error: Error) {
   }
 
   if (error instanceof HttpException) {
-    showHttpErrorsAsToasts(error.errors);
+    showHttpErrorsAsToasts(
+      error.errors,
+      (error as unknown as { params?: Record<string, string | number> }).params,
+    );
     return;
   }
 

@@ -1,6 +1,7 @@
 <script lang="ts">
   import Badge from '@slink/feature/Text/Badge/Badge.svelte';
 
+  import { t } from '$lib/i18n';
   import { bytesToSize } from '$lib/utils/bytesConverter';
   import Icon from '@iconify/svelte';
 
@@ -29,16 +30,16 @@
     }
   }
 
-  function getProviderDisplayName(provider: string) {
+  function getProviderLabelKey(provider: string) {
     switch (provider) {
       case 'local':
-        return 'Local Storage';
+        return 'storage_usage.providers.local';
       case 's3':
-        return 'Amazon S3';
+        return 'storage_usage.providers.s3';
       case 'smb':
-        return 'SMB Share';
+        return 'storage_usage.providers.smb';
       default:
-        return provider;
+        return provider.toUpperCase();
     }
   }
 </script>
@@ -52,7 +53,9 @@
         icon={data ? getProviderIcon(data.provider) : 'heroicons:server'}
         class="h-4 w-4 text-sidebar-foreground/70"
       />
-      <h3 class="text-sm font-medium text-sidebar-foreground">Storage Usage</h3>
+      <h3 class="text-sm font-medium text-sidebar-foreground">
+        {$t('storage_usage.title')}
+      </h3>
     </div>
   </div>
 
@@ -60,21 +63,25 @@
     {#if error}
       <div class="flex items-center gap-2 text-red-500 text-sm">
         <Icon icon="heroicons:exclamation-triangle" class="h-4 w-4" />
-        <span>Failed to load storage usage</span>
+        <span>{$t('storage_usage.error')}</span>
       </div>
     {:else if data}
       <div class="space-y-3">
         <div class="flex items-center justify-between text-xs">
-          <span class="text-sidebar-foreground/60">Provider</span>
+          <span class="text-sidebar-foreground/60"
+            >{$t('storage_usage.provider')}</span
+          >
           <Badge size="xs" variant="blue">
-            {getProviderDisplayName(data.provider)}
+            {$t(getProviderLabelKey(data.provider))}
           </Badge>
         </div>
 
         <div class="space-y-3">
           <div>
             <div class="flex items-center justify-between text-xs mb-2">
-              <span class="text-sidebar-foreground/60">Total Usage</span>
+              <span class="text-sidebar-foreground/60">
+                {$t('storage_usage.total_usage')}
+              </span>
               <span class="font-medium text-sidebar-foreground">
                 {bytesToSize(data.usedBytes + data.cacheBytes)}
               </span>
@@ -105,7 +112,9 @@
               <div class="flex items-center justify-between text-xs">
                 <div class="flex items-center gap-1.5">
                   <div class="w-2 h-2 rounded-full bg-blue-500"></div>
-                  <span class="text-sidebar-foreground/60">Images</span>
+                  <span class="text-sidebar-foreground/60">
+                    {$t('storage_usage.images')}
+                  </span>
                 </div>
                 <div class="flex items-center gap-2">
                   <span class="font-medium text-sidebar-foreground"
@@ -113,7 +122,8 @@
                   >
                   <span class="text-sidebar-foreground/40">·</span>
                   <span class="text-sidebar-foreground/60 tabular-nums"
-                    >{data.fileCount.toLocaleString()} files</span
+                    >{data.fileCount.toLocaleString()}
+                    {$t('storage_usage.files')}</span
                   >
                 </div>
               </div>
@@ -121,7 +131,9 @@
                 <div class="flex items-center justify-between text-xs">
                   <div class="flex items-center gap-1.5">
                     <div class="w-2 h-2 rounded-full bg-purple-500"></div>
-                    <span class="text-sidebar-foreground/60">Cache</span>
+                    <span class="text-sidebar-foreground/60"
+                      >{$t('storage_usage.cache')}</span
+                    >
                   </div>
                   <div class="flex items-center gap-2">
                     <span class="font-medium text-sidebar-foreground"
@@ -129,7 +141,8 @@
                     >
                     <span class="text-sidebar-foreground/40">·</span>
                     <span class="text-sidebar-foreground/60 tabular-nums"
-                      >{data.cacheFileCount.toLocaleString()} files</span
+                      >{data.cacheFileCount.toLocaleString()}
+                      {$t('storage_usage.files')}</span
                     >
                   </div>
                 </div>
@@ -164,7 +177,7 @@
       </div>
     {:else}
       <div class="text-sm text-sidebar-foreground/60 text-center py-2">
-        No storage data available
+        {$t('storage_usage.empty')}
       </div>
     {/if}
   </div>

@@ -4,6 +4,7 @@
   import type { BadgeProps } from '@slink/feature/Text/Badge/Badge.types';
   import { Link } from '@slink/ui/components/link';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
@@ -103,7 +104,7 @@
         <button
           onclick={onClose}
           class={tagBadgeCloseButtonVariants({ variant })}
-          aria-label="Remove {tag.name} tag"
+          aria-label={`${$t('tag.badge.remove_tag_prefix')} ${tag.name} ${$t('tag.badge.remove_tag_suffix')}`}
         >
           <Icon icon="ph:x" class="h-2.5 w-2.5" />
         </button>

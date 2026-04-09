@@ -2,6 +2,8 @@
   import { ToggleGroup } from '@slink/ui/components';
   import type { ToggleGroupOption } from '@slink/ui/components';
 
+  import { t } from '$lib/i18n';
+
   import type { ViewMode } from '@slink/lib/settings';
 
   import type { ViewModeToggleProps } from './ViewModeToggle.types';
@@ -14,7 +16,8 @@
   const options: ToggleGroupOption<ViewMode>[] = $derived(
     modes.map((mode) => ({
       value: mode,
-      ...viewModeRegistry[mode],
+      icon: viewModeRegistry[mode].icon,
+      label: $t(viewModeRegistry[mode].labelKey),
     })),
   );
 
@@ -29,7 +32,7 @@
   {value}
   {options}
   onValueChange={handleChange}
-  aria-label="View mode selection"
+  aria-label={$t('table.view_mode_selection')}
   {className}
   {disabled}
 />

@@ -1,6 +1,8 @@
 <script lang="ts">
   import { TagSelector } from '@slink/feature/Tag';
 
+  import { t } from '$lib/i18n';
+
   import type { Tag } from '@slink/api/Resources/TagResource';
 
   import { useTagFilterState } from '@slink/lib/state/TagFilterState.svelte';
@@ -39,7 +41,7 @@
 <TagSelector
   selectedTags={tagFilterState.selectedTags}
   onTagsChange={handleTagsChange}
-  placeholder="Search and select tags"
+  placeholder={$t('tag.filter.search_select_placeholder')}
   {variant}
   allowCreate={false}
   {disabled}

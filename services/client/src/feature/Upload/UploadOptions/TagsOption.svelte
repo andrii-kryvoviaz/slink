@@ -4,6 +4,7 @@
   import { SelectionPill } from '@slink/ui/components/pill';
   import * as Popover from '@slink/ui/components/popover';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
@@ -26,7 +27,9 @@
 
   const selectedIds = $derived(selectedTags.map((t) => t.id));
   const buttonLabel = $derived(
-    selectedTags.length > 0 ? 'Add more' : 'Add tags',
+    selectedTags.length > 0
+      ? $t('upload.options.add_more')
+      : $t('upload.options.add_tags'),
   );
 
   const handleToggle = (tag: Tag) => {

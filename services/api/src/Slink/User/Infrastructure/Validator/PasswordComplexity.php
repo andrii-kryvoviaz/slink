@@ -32,11 +32,11 @@ class PasswordComplexity extends Constraint {
     mixed $payload = null,
     public int $minLength = 6,
     public int $requirements = 15,
-    public string $tooShortMessage = 'Password must be at least {{ limit }} characters long.',
-    public string $missingNumbersMessage = 'Password must contain at least one number.',
-    public string $missingLowercaseMessage = 'Password must contain at least one lowercase letter.',
-    public string $missingUppercaseMessage = 'Password must contain at least one uppercase letter.',
-    public string $missingSpecialCharactersMessage = 'Password must contain at least one special character.',
+    public string $tooShortMessage = 'AUTH_PASSWORD_TOO_SHORT',
+    public string $missingNumbersMessage = 'AUTH_PASSWORD_MISSING_NUMBER',
+    public string $missingLowercaseMessage = 'AUTH_PASSWORD_MISSING_LOWERCASE',
+    public string $missingUppercaseMessage = 'AUTH_PASSWORD_MISSING_UPPERCASE',
+    public string $missingSpecialCharactersMessage = 'AUTH_PASSWORD_MISSING_SPECIAL',
   ) {
     parent::__construct($options ?? [], $groups, $payload);
   }

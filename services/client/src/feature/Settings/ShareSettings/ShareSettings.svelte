@@ -2,6 +2,8 @@
   import { SettingItem, SettingsPane } from '@slink/feature/Settings';
   import { Switch } from '@slink/ui/components/switch';
 
+  import { t } from '$lib/i18n';
+
   import type { SettingCategory } from '@slink/lib/settings/Type/GlobalSettings';
   import type { ShareSettings as ShareSettingsType } from '@slink/lib/settings/Type/ShareSettings';
 
@@ -25,10 +27,10 @@
 
 <SettingsPane category="share" {loading} on={{ save: onSave }}>
   {#snippet title()}
-    Share
+    {$t('settings.share.title')}
   {/snippet}
   {#snippet description()}
-    Configure URL sharing behavior
+    {$t('settings.share.description')}
   {/snippet}
 
   <SettingItem
@@ -39,10 +41,10 @@
     }}
   >
     {#snippet label()}
-      URL Shortening
+      {$t('settings.share.url_shortening.label')}
     {/snippet}
     {#snippet hint()}
-      Generate short URLs when copying image links
+      {$t('settings.share.url_shortening.hint')}
     {/snippet}
     <Switch
       name="shareEnableUrlShortening"

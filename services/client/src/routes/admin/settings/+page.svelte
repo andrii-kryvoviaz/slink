@@ -1,41 +1,38 @@
 <script lang="ts">
   import { Subtitle, Title } from '@slink/feature/Text';
 
+  import { t } from '$lib/i18n';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
   const categories = [
     {
-      title: 'Image Settings',
-      description:
-        'Configure image uploads, processing options, and URL sharing preferences',
+      title: 'pages.admin.settings.categories.image.title',
+      description: 'pages.admin.settings.categories.image.description',
       href: '/admin/settings/image',
       icon: 'solar:gallery-linear',
       iconBg: 'bg-blue-100 dark:bg-blue-900/30',
       iconColor: 'text-blue-600 dark:text-blue-400',
     },
     {
-      title: 'Storage Configuration',
-      description:
-        'Configure storage providers, cache settings, and data management',
+      title: 'pages.admin.settings.categories.storage.title',
+      description: 'pages.admin.settings.categories.storage.description',
       href: '/admin/settings/storage',
       icon: 'solar:database-linear',
       iconBg: 'bg-purple-100 dark:bg-purple-900/30',
       iconColor: 'text-purple-600 dark:text-purple-400',
     },
     {
-      title: 'Security Settings',
-      description:
-        'Manage user registration, access control, and authentication policies',
+      title: 'pages.admin.settings.categories.security.title',
+      description: 'pages.admin.settings.categories.security.description',
       href: '/admin/settings/security',
       icon: 'solar:shield-check-linear',
       iconBg: 'bg-emerald-100 dark:bg-emerald-900/30',
       iconColor: 'text-emerald-600 dark:text-emerald-400',
     },
     {
-      title: 'Single Sign-On',
-      description:
-        'Manage SSO/OIDC identity providers for external authentication',
+      title: 'pages.admin.settings.categories.sso.title',
+      description: 'pages.admin.settings.categories.sso.description',
       href: '/admin/settings/sso',
       icon: 'solar:key-linear',
       iconBg: 'bg-indigo-100 dark:bg-indigo-900/30',
@@ -45,7 +42,7 @@
 </script>
 
 <svelte:head>
-  <title>Settings | Slink</title>
+  <title>{$t('pages.admin.settings.page_title')}</title>
 </svelte:head>
 
 <div
@@ -53,10 +50,8 @@
   in:fade={{ duration: 300 }}
 >
   <div class="mb-8">
-    <Title>Settings</Title>
-    <Subtitle
-      >Configure your application preferences and manage system behavior</Subtitle
-    >
+    <Title>{$t('pages.admin.settings.title')}</Title>
+    <Subtitle>{$t('pages.admin.settings.subtitle')}</Subtitle>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -78,11 +73,11 @@
         </div>
 
         <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
-          {category.title}
+          {$t(category.title)}
         </h3>
 
         <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-          {category.description}
+          {$t(category.description)}
         </p>
       </a>
     {/each}
