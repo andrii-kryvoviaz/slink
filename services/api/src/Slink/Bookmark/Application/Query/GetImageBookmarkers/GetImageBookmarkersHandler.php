@@ -32,7 +32,7 @@ final readonly class GetImageBookmarkersHandler implements QueryHandlerInterface
     $image = $this->imageRepository->oneById($query->imageId);
 
     if ($image->getUser()?->getUuid() !== $userId) {
-      throw new AccessDeniedException('You can only view bookmarkers for your own images');
+      throw new AccessDeniedException('BOOKMARKERS_VIEW_OWN_IMAGE_ONLY');
     }
 
     $bookmarks = $this->bookmarkRepository->findByImageId(

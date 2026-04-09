@@ -35,7 +35,7 @@ final readonly class MoveTagHandler implements CommandHandlerInterface {
     }
 
     if ($newParentId !== null && $newParentId->equals($tagId)) {
-      throw new InvalidTagMoveException('Cannot move a tag to itself');
+      throw new InvalidTagMoveException('TAG_MOVE_TO_SELF_FORBIDDEN');
     }
 
     if ($newParentId !== null) {

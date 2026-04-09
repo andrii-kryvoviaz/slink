@@ -128,7 +128,7 @@ final readonly class DateRange extends AbstractValueObject {
    */
   private function validate(): void {
     if($this->start->isAfter($this->end)) {
-      throw new DateIntervalException('Start date must be before end date');
+      throw new DateIntervalException('DATE_RANGE_INVALID');
     }
   }
 }

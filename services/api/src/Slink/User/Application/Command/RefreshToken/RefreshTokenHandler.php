@@ -27,11 +27,11 @@ final readonly class RefreshTokenHandler implements CommandHandlerInterface {
     $user = $this->userStore->getByRefreshToken($currentHashedRefreshToken);
     
     if($user === null) {
-      throw new InvalidCredentialsException('Invalid refresh token');
+      throw new InvalidCredentialsException('AUTH_REFRESH_TOKEN_INVALID');
     }
     
     if($user->getStatus()->isRestricted()) {
-      throw new InvalidCredentialsException('User is restricted');
+      throw new InvalidCredentialsException('AUTH_USER_RESTRICTED');
     }
     
     $tokenPair = $this->authenticationProvider->generateTokenPair($user);

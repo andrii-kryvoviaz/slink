@@ -143,11 +143,11 @@ final class FileRequestValueResolver implements ValueResolverInterface, EventSub
    */
   private function mapRequestPayload(Request $request, string $type, MapRequestPayload $attribute): ?object {
     if (null === $format = $request->getContentTypeFormat()) {
-      throw new HttpException(Response::HTTP_UNSUPPORTED_MEDIA_TYPE, 'Unsupported format.');
+      throw new HttpException(Response::HTTP_UNSUPPORTED_MEDIA_TYPE, 'REQUEST_UNSUPPORTED_FORMAT');
     }
     
     if ($attribute->acceptFormat && !\in_array($format, (array) $attribute->acceptFormat, true)) {
-      throw new HttpException(Response::HTTP_UNSUPPORTED_MEDIA_TYPE, sprintf('Unsupported format, expects "%s", but "%s" given.', implode('", "', (array) $attribute->acceptFormat), $format));
+      throw new HttpException(Response::HTTP_UNSUPPORTED_MEDIA_TYPE, 'REQUEST_UNSUPPORTED_FORMAT_EXPECTED');
     }
     
     if ($data = [...$request->request->all(), ...$request->files->all()]) {
@@ -159,15 +159,15 @@ final class FileRequestValueResolver implements ValueResolverInterface, EventSub
     }
     
     if ('form' === $format) {
-      throw new HttpException(Response::HTTP_BAD_REQUEST, 'Request payload contains invalid "form" data.');
+      throw new HttpException(Response::HTTP_BAD_REQUEST, 'REQUEST_INVALID_FORM_DATA');
     }
     
     try {
       return $this->serializer->deserialize($data, $type, $format, self::CONTEXT_DESERIALIZE + $attribute->serializationContext);
     } catch (UnsupportedFormatException $e) {
-      throw new HttpException(Response::HTTP_UNSUPPORTED_MEDIA_TYPE, sprintf('Unsupported format: "%s".', $format), $e);
+      throw new HttpException(Response::HTTP_UNSUPPORTED_MEDIA_TYPE, 'REQUEST_UNSUPPORTED_FORMAT_VALUE', $e);
     } catch (NotEncodableValueException $e) {
-      throw new HttpException(Response::HTTP_BAD_REQUEST, sprintf('Request payload contains invalid "%s" data.', $format), $e);
+      throw new HttpException(Response::HTTP_BAD_REQUEST, 'REQUEST_INVALID_FORMAT_DATA', $e);
     }
   }
 }

@@ -32,7 +32,7 @@ final class CollectionRepository extends AbstractRepository implements Collectio
     $collection = $this->findById($id);
 
     if ($collection === null) {
-      throw new NotFoundException('Collection not found');
+      throw new NotFoundException('COLLECTION_NOT_FOUND');
     }
 
     return $collection;

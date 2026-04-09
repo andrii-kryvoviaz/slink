@@ -13,7 +13,7 @@ final readonly class ImageDimensions extends AbstractCompoundValueObject {
     private int $height
   ) {
     if ($width <= 0 || $height <= 0) {
-      throw new InvalidArgumentException('Width and height must be positive integers');
+      throw new InvalidArgumentException('IMAGE_DIMENSIONS_POSITIVE_REQUIRED');
     }
   }
 
@@ -23,7 +23,7 @@ final readonly class ImageDimensions extends AbstractCompoundValueObject {
     ?ImageDimensions $originalDimensions = null
   ): self {
     if ($width === null && $height === null) {
-      throw new InvalidArgumentException('At least one dimension (width or height) must be specified');
+      throw new InvalidArgumentException('IMAGE_DIMENSIONS_AT_LEAST_ONE_REQUIRED');
     }
 
     if ($width !== null && $height !== null) {
@@ -31,7 +31,7 @@ final readonly class ImageDimensions extends AbstractCompoundValueObject {
     }
 
     if ($originalDimensions === null) {
-      throw new InvalidArgumentException('Original dimensions required for aspect ratio calculation when only one dimension is specified');
+      throw new InvalidArgumentException('IMAGE_DIMENSIONS_ORIGINAL_REQUIRED_FOR_RATIO');
     }
 
     $aspectRatio = $originalDimensions->getAspectRatio();

@@ -22,15 +22,15 @@ final readonly class GetShareXConfigHandler implements QueryHandlerInterface {
     $apiKeyEntity = $this->apiKeyRepository->findByKey($query->getApiKey());
 
     if (!$apiKeyEntity) {
-      throw new ApiKeyNotFoundException('API key not found');
+      throw new ApiKeyNotFoundException('API_KEY_NOT_FOUND');
     }
 
     if ($apiKeyEntity->getUserId() !== $userId) {
-      throw new ApiKeyNotFoundException('API key does not belong to user');
+      throw new ApiKeyNotFoundException('API_KEY_NOT_OWNED');
     }
 
     if ($apiKeyEntity->isExpired()) {
-      throw new ApiKeyNotFoundException('API key has expired');
+      throw new ApiKeyNotFoundException('API_KEY_EXPIRED');
     }
     
     return $this->shareXConfigService->generateConfig(

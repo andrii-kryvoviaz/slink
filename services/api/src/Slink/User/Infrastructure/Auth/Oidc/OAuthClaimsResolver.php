@@ -61,11 +61,11 @@ final readonly class OAuthClaimsResolver {
     }
 
     if (!$claims->isIssuedBy($discovery->getIssuer())) {
-      throw new IdTokenClaimValidationException('Invalid issuer.');
+      throw new IdTokenClaimValidationException('OIDC_ISSUER_INVALID');
     }
 
     if (!$claims->hasAudience($provider->getClientId())) {
-      throw new IdTokenClaimValidationException('Invalid audience.');
+      throw new IdTokenClaimValidationException('OIDC_AUDIENCE_INVALID');
     }
 
     return OAuthIdentity::fromTokenClaims($claims, $provider->getSlug());

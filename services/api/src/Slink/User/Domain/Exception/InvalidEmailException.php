@@ -7,7 +7,7 @@ namespace Slink\User\Domain\Exception;
 use Slink\Shared\Domain\Exception\SpecificationException;
 
 class InvalidEmailException extends SpecificationException {
-  public function __construct(string $message = 'Invalid email address.') {
+  public function __construct(string $message = 'EMAIL_INVALID') {
     parent::__construct($message);
   }
   

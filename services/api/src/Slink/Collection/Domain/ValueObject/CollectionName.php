@@ -22,11 +22,11 @@ final readonly class CollectionName extends AbstractValueObject {
     $trimmed = trim($name);
 
     if (empty($trimmed)) {
-      throw new InvalidArgumentException('Collection name cannot be empty', 'name');
+      throw new InvalidArgumentException('COLLECTION_NAME_EMPTY', 'name');
     }
 
     if (mb_strlen($trimmed) > self::MAX_LENGTH) {
-      throw new InvalidArgumentException(sprintf('Collection name cannot exceed %d characters', self::MAX_LENGTH), 'name');
+      throw new InvalidArgumentException('COLLECTION_NAME_TOO_LONG', 'name');
     }
 
     return new self($trimmed);

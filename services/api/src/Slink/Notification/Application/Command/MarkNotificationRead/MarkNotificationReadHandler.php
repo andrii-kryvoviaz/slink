@@ -21,7 +21,7 @@ final readonly class MarkNotificationReadHandler implements CommandHandlerInterf
     $notificationView = $this->notificationRepository->oneById($notificationId);
 
     if ($notificationView->getUserId() !== $userId) {
-      throw new ForbiddenException('You can only mark your own notifications as read');
+      throw new ForbiddenException('NOTIFICATION_MARK_READ_OWN_ONLY');
     }
 
     $notification = $this->notificationStore->get(ID::fromString($notificationId));

@@ -18,7 +18,7 @@ final readonly class ApiKeyUserProvider implements UserProviderInterface {
     $apiKey = $this->apiKeyRepository->findByKey($identifier);
     
     if ($apiKey === null || $apiKey->isExpired()) {
-      throw new \Symfony\Component\Security\Core\Exception\UserNotFoundException('API key not found or expired');
+      throw new \Symfony\Component\Security\Core\Exception\UserNotFoundException('API_KEY_NOT_FOUND_OR_EXPIRED');
     }
 
     $apiKey->updateLastUsed();

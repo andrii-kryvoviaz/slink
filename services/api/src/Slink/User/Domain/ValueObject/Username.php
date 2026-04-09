@@ -51,11 +51,11 @@ final readonly class Username extends AbstractValueObject implements Sanitizable
    */
   private function validate(string $username): void {
     if (strlen($username) < 3) {
-      throw new InvalidUsernameException('Username must be at least 3 characters long');
+      throw new InvalidUsernameException('USERNAME_TOO_SHORT');
     }
     
     if (strlen($username) > 30) {
-      throw new InvalidUsernameException('Username must be at most 30 characters long');
+      throw new InvalidUsernameException('USERNAME_TOO_LONG');
     }
   }
 }

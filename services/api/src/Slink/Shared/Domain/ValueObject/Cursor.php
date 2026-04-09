@@ -119,11 +119,11 @@ final readonly class Cursor {
    */
   private function validateId(string $id): void {
     if (empty($id)) {
-      throw new InvalidArgumentException('Cursor ID cannot be empty');
+      throw new InvalidArgumentException('CURSOR_ID_EMPTY');
     }
 
     if (strlen($id) > 255) {
-      throw new InvalidArgumentException('Cursor ID cannot exceed 255 characters');
+      throw new InvalidArgumentException('CURSOR_ID_TOO_LONG');
     }
   }
 
@@ -133,7 +133,7 @@ final readonly class Cursor {
    */
   private function validateTimestamp(string $timestamp): void {
     if (empty($timestamp)) {
-      throw new InvalidArgumentException('Cursor timestamp cannot be empty');
+      throw new InvalidArgumentException('CURSOR_TIMESTAMP_EMPTY');
     }
 
     if (!DateTime::createFromFormat('Y-m-d H:i:s.u', $timestamp)) {

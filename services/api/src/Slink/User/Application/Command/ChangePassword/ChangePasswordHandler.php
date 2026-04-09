@@ -22,7 +22,7 @@ final readonly class ChangePasswordHandler implements CommandHandlerInterface {
    */
   public function __invoke(ChangePasswordCommand $command, ?string $userId = null): void {
     if($userId === null) {
-      throw new InvalidCredentialsException('You must be logged in to change your password');
+      throw new InvalidCredentialsException('AUTH_LOGIN_REQUIRED_FOR_PASSWORD_CHANGE');
     }
     
     $user = $this->store->get(ID::fromString($userId));

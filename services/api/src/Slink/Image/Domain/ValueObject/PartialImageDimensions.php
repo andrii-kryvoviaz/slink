@@ -14,13 +14,13 @@ final readonly class PartialImageDimensions extends AbstractCompoundValueObject 
     private ?int $height = null
   ) {
     if ($width !== null && $width <= 0) {
-      throw new InvalidArgumentException('Width must be a positive integer when provided');
+      throw new InvalidArgumentException('IMAGE_WIDTH_POSITIVE_REQUIRED');
     }
     if ($height !== null && $height <= 0) {
-      throw new InvalidArgumentException('Height must be a positive integer when provided');
+      throw new InvalidArgumentException('IMAGE_HEIGHT_POSITIVE_REQUIRED');
     }
     if ($width === null && $height === null) {
-      throw new InvalidArgumentException('At least one dimension (width or height) must be specified');
+      throw new InvalidArgumentException('IMAGE_DIMENSIONS_AT_LEAST_ONE_REQUIRED');
     }
   }
 

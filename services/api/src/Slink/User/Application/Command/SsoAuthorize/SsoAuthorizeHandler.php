@@ -27,7 +27,7 @@ final readonly class SsoAuthorizeHandler implements CommandHandlerInterface {
     $provider = $this->providerRepository->findByProvider(ProviderSlug::fromString($command->getProvider()));
 
     if (!$provider?->isEnabled()) {
-      throw new InvalidCredentialsException('SSO provider is currently unavailable. Please try again later.');
+      throw new InvalidCredentialsException('AUTH_SSO_PROVIDER_UNAVAILABLE');
     }
 
     $redirectUri = RedirectUri::fromString(rtrim($this->origin, '/') . '/profile/sso/callback');
@@ -44,7 +44,7 @@ final readonly class SsoAuthorizeHandler implements CommandHandlerInterface {
         'exception' => $e,
       ]);
 
-      throw new InvalidCredentialsException('SSO provider is currently unavailable. Please try again later.');
+      throw new InvalidCredentialsException('AUTH_SSO_PROVIDER_UNAVAILABLE');
     }
   }
 }

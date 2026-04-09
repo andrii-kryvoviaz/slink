@@ -13,7 +13,7 @@ final readonly class AnimatedImageInfo extends AbstractCompoundValueObject {
     private int  $frameCount = 1
   ) {
     if ($frameCount < 1) {
-      throw new InvalidArgumentException('Frame count must be at least 1');
+      throw new InvalidArgumentException('IMAGE_FRAME_COUNT_MIN_1');
     }
   }
 

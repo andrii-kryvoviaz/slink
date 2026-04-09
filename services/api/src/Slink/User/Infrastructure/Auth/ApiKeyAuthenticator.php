@@ -30,13 +30,13 @@ final class ApiKeyAuthenticator extends AbstractAuthenticator {
     $authHeader = $request->headers->get('Authorization');
     
     if ($authHeader === null) {
-      throw new CustomUserMessageAuthenticationException('No API key provided');
+      throw new CustomUserMessageAuthenticationException('API_KEY_MISSING');
     }
 
     $apiKey = str_replace('Bearer ', '', $authHeader);
     
     if (!str_starts_with($apiKey, 'sk_')) {
-      throw new CustomUserMessageAuthenticationException('Invalid API key format');
+      throw new CustomUserMessageAuthenticationException('API_KEY_FORMAT_INVALID');
     }
 
     return new SelfValidatingPassport(

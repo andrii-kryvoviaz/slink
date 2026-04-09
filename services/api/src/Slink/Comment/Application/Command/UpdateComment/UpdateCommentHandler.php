@@ -20,7 +20,7 @@ final readonly class UpdateCommentHandler implements CommandHandlerInterface {
     $comment = $this->commentStore->get(ID::fromString($commentId));
 
     if (!$comment->isOwnedBy(ID::fromString($userId))) {
-      throw new ForbiddenException('You can only edit your own comments');
+      throw new ForbiddenException('COMMENT_EDIT_OWN_ONLY');
     }
 
     $content = CommentContent::fromString($command->getContent());

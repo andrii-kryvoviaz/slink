@@ -34,7 +34,7 @@ final readonly class Email extends AbstractValueObject{
 
   private static function validate(string $email): void {
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-      throw new InvalidEmailException('Invalid email address.');
+      throw new InvalidEmailException('EMAIL_INVALID');
     }
   }
 }

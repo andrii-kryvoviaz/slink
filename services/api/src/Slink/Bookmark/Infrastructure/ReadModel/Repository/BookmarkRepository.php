@@ -41,7 +41,7 @@ final class BookmarkRepository extends AbstractRepository implements BookmarkRep
     $bookmark = $this->findById($id);
 
     if ($bookmark === null) {
-      throw new NotFoundException('Bookmark not found');
+      throw new NotFoundException('BOOKMARK_NOT_FOUND');
     }
 
     return $bookmark;

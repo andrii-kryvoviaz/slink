@@ -49,7 +49,7 @@ final class Comment extends AbstractAggregateRoot {
 
   public function edit(CommentContent $content): void {
     if ($this->isDeleted()) {
-      throw new \DomainException('Cannot edit a deleted comment');
+      throw new \DomainException('COMMENT_DELETED_CANNOT_EDIT');
     }
 
     if (!CommentEditPolicy::canEdit($this->createdAt)) {

@@ -19,15 +19,15 @@ final readonly class PasswordSettings extends AbstractCompoundValueObject {
     private int $requirements
   ) {
     if ($minLength === null) {
-      throw new InvalidPasswordMinLengthException('Password length must be set');
+      throw new InvalidPasswordMinLengthException('SETTINGS_PASSWORD_LENGTH_REQUIRED');
     }
 
     if ($minLength < 3) {
-      throw new InvalidPasswordMinLengthException('Password length cannot be less than 3');
+      throw new InvalidPasswordMinLengthException('SETTINGS_PASSWORD_LENGTH_TOO_SHORT');
     }
     
     if ($minLength > 64) {
-      throw new InvalidPasswordMinLengthException('Password length cannot be greater than 64');
+      throw new InvalidPasswordMinLengthException('SETTINGS_PASSWORD_LENGTH_TOO_LONG');
     }
     
     $this->minLength = $minLength;

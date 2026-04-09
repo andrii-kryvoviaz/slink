@@ -28,7 +28,7 @@ final readonly class DeleteCommentHandler implements CommandHandlerInterface {
     $isImageOwner = $image->getUser()?->getUuid() === $userId;
 
     if (!$isOwner && !$isImageOwner) {
-      throw new ForbiddenException('You can only delete your own comments or comments on your images');
+      throw new ForbiddenException('COMMENT_DELETE_NOT_ALLOWED');
     }
 
     $comment->delete();

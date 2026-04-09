@@ -42,7 +42,7 @@ final readonly class TagName extends AbstractValueObject {
 
   private function validate(): void {
     if (empty($this->value)) {
-      throw new InvalidArgumentException('Tag name cannot be empty');
+      throw new InvalidArgumentException('TAG_NAME_EMPTY');
     }
 
     if (strlen($this->value) > self::MAX_LENGTH) {
@@ -52,7 +52,7 @@ final readonly class TagName extends AbstractValueObject {
     }
 
     if (!preg_match(self::PATTERN, $this->value)) {
-      throw new InvalidArgumentException('Tag name can only contain letters, numbers, hyphens, and underscores');
+      throw new InvalidArgumentException('TAG_NAME_INVALID_CHARS');
     }
   }
 

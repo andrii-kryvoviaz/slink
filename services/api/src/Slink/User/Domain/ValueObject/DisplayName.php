@@ -75,11 +75,11 @@ final readonly class DisplayName extends AbstractValueObject implements Sanitiza
    */
   private function validate(string $displayName): void {
     if (strlen($displayName) < 3) {
-      throw new InvalidDisplayNameException('Display name must be at least 3 characters long');
+      throw new InvalidDisplayNameException('DISPLAY_NAME_TOO_SHORT');
     }
     
     if (strlen($displayName) > 30) {
-      throw new InvalidDisplayNameException('Display name must be at most 30 characters long');
+      throw new InvalidDisplayNameException('DISPLAY_NAME_TOO_LONG');
     }
     
     $reservedNames = ['Anonymous', 'Guest'];

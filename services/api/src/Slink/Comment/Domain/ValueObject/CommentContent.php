@@ -25,7 +25,7 @@ final readonly class CommentContent extends AbstractValueObject {
     $length = mb_strlen($content);
 
     if ($length < self::MIN_LENGTH) {
-      throw new \InvalidArgumentException('Comment content cannot be empty');
+      throw new \InvalidArgumentException('COMMENT_CONTENT_EMPTY');
     }
 
     if ($length > self::MAX_LENGTH) {

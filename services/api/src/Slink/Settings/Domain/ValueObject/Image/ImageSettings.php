@@ -36,11 +36,11 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
     }
     
     if ((int) $maxSize < 0) {
-      throw new InvalidImageMaxSizeException('Max size cannot be less than 0');
+      throw new InvalidImageMaxSizeException('SETTINGS_IMAGE_MAX_SIZE_TOO_SMALL');
     }
     
     if ((int) $maxSize > 1000) {
-      throw new InvalidImageMaxSizeException('Max size cannot be greater than 1000');
+      throw new InvalidImageMaxSizeException('SETTINGS_IMAGE_MAX_SIZE_TOO_LARGE');
     }
   }
   

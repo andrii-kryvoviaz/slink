@@ -19,7 +19,7 @@ final readonly class TagCircularMoveSpecification implements TagCircularMoveSpec
     $parentPath = $newParentView->getPath();
 
     if (str_starts_with($parentPath, $tagPath . '/')) {
-      throw new InvalidTagMoveException('Cannot move a tag to one of its descendants');
+      throw new InvalidTagMoveException('TAG_MOVE_TO_DESCENDANT_FORBIDDEN');
     }
   }
 }
