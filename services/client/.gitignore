@@ -14,3 +14,9 @@ vite.config.ts.timestamp-*
 #vite-svelte-imports plugin
 src/api/**/index.ts
 !src/api/index.ts
+
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/e2e/.auth/

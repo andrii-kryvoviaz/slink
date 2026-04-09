@@ -86,6 +86,18 @@ target "test" {
   }
 }
 
+target "e2e" {
+  inherits   = ["_contexts"]
+  dockerfile = "docker/Dockerfile.prod"
+  target     = "prod"
+  tags       = ["slink:e2e"]
+  args = {
+    ALPINE_VERSION               = ALPINE_VERSION
+    COMPOSER_VERSION             = COMPOSER_VERSION
+    UPLOAD_MAX_FILESIZE_IN_BYTES = UPLOAD_MAX_FILESIZE_IN_BYTES
+  }
+}
+
 target "prod-amd64" {
   inherits  = ["prod"]
   platforms = ["linux/amd64"]

@@ -1,0 +1,71 @@
+name: 'E2E Tests'
+description: 'Build E2E image, start services, and run Playwright tests'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build E2E image
+      uses: docker/bake-action@v6
+      with:
+        targets: e2e
+        load: true
+        set: |
+          *.cache-from=type=gha,scope=e2e
+          *.cache-to=type=gha,scope=e2e,mode=max
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        cache: yarn
+        cache-dependency-path: services/client/yarn.lock
+
+    - name: Install Playwright
+      shell: bash
+      working-directory: services/client
+      run: yarn add --dev @playwright/test
+
+    - name: Get Playwright version
+      id: playwright-version
+      shell: bash
+      working-directory: services/client
+      run: echo "version=$(npx playwright --version)" >> $GITHUB_OUTPUT
+
+    - name: Cache Playwright browsers
+      uses: actions/cache@v4
+      id: playwright-cache
+      with:
+        path: ~/.cache/ms-playwright
+        key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
+
+    - name: Install Playwright Chromium
+      if: steps.playwright-cache.outputs.cache-hit != 'true'
+      shell: bash
+      working-directory: services/client
+      run: npx playwright install --with-deps chromium
+
+    - name: Install Playwright system deps
+      if: steps.playwright-cache.outputs.cache-hit == 'true'
+      shell: bash
+      working-directory: services/client
+      run: npx playwright install-deps chromium
+
+    - name: Start services
+      shell: bash
+      run: docker compose -p slink-e2e -f docker/docker-compose.yaml -f docker/docker-compose.e2e.yaml up -d
+
+    - name: Wait for application
+      shell: bash
+      run: docker compose -p slink-e2e -f docker/docker-compose.yaml -f docker/docker-compose.e2e.yaml exec slink sh -c 'until wget -qO- http://localhost:8080/api/health > /dev/null 2>&1; do sleep 1; done'
+
+    - name: Run Playwright tests
+      shell: bash
+      working-directory: services/client
+      run: npx playwright test
+
+    - name: Stop services
+      if: always()
+      shell: bash
+      run: docker compose -p slink-e2e -f docker/docker-compose.yaml -f docker/docker-compose.e2e.yaml down --volumes

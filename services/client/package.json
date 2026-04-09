@@ -12,16 +12,22 @@
     "lint": "eslint . && prettier --check .",
     "lint:fix": "eslint . --fix && prettier --write .",
     "format": "prettier --write .",
-    "prepare": "cd ../.. && husky ./services/client/.husky"
+    "prepare": "cd ../.. && husky ./services/client/.husky",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:report": "playwright show-report"
   },
   "dependencies": {
     "clsx": "^2.1.1"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@floating-ui/dom": "^1.7.6",
     "@iconify/svelte": "5.2.1",
     "@internationalized/date": "^3.12.0",
     "@lucide/svelte": "^0.577.0",
+    "@playwright/test": "^1.59.1",
     "@sveltejs/adapter-auto": "7.0.1",
     "@sveltejs/adapter-node": "^5.5.4",
     "@sveltejs/kit": "^2.56.1",
@@ -39,7 +45,6 @@
     "class-variance-authority": "^0.7.1",
     "crawler-user-agents": "^1.37.0",
     "dotenv": "17.4.1",
-    "@eslint/js": "^10.0.1",
     "eslint": "^10.2.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-svelte": "^3.17.0",

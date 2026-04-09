@@ -88,6 +88,7 @@ export default [
       '.svelte-kit/',
       'dist/',
       'node_modules/',
+      'e2e/',
       '*.config.js',
       '*.config.ts',
     ],
