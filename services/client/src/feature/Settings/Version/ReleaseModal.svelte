@@ -4,6 +4,7 @@
   import { Modal } from '@slink/ui/components/dialog';
   import { ScrollArea } from '@slink/ui/components/scroll-area';
 
+  import { getLocale } from '$lib/utils/date.svelte';
   import type { GitHubRelease } from '$lib/utils/version';
   import Icon from '@iconify/svelte';
 
@@ -32,7 +33,7 @@
   }
 
   function formatReleaseDate(dateString: string): string {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString(getLocale(), {
       year: 'numeric',
       month: 'long',
       day: 'numeric',

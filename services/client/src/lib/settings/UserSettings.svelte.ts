@@ -1,7 +1,7 @@
 import { browser } from '$app/environment';
 
 import { SortOrder } from '@slink/lib/enum/SortOrder';
-import { Theme } from '@slink/lib/settings/Settings.enums';
+import { Locale, Theme } from '@slink/lib/settings/Settings.enums';
 
 import { cookie } from '@slink/utils/http/cookie';
 import { deepMerge } from '@slink/utils/object/deepMerge';
@@ -31,6 +31,7 @@ export type UploadOptionsState = { expanded: boolean };
 
 export type SettingsKey =
   | 'theme'
+  | 'locale'
   | 'sidebar'
   | 'navigation'
   | 'userAdmin'
@@ -45,6 +46,7 @@ export type CookieSettings = { [K in SettingsKey]?: unknown };
 
 export const settingsKeys: SettingsKey[] = [
   'theme',
+  'locale',
   'sidebar',
   'navigation',
   'userAdmin',
@@ -58,6 +60,7 @@ export const settingsKeys: SettingsKey[] = [
 
 export const defaultSettings: Record<SettingsKey, unknown> = {
   theme: Theme.DARK,
+  locale: Locale.EN,
   sidebar: { expanded: true },
   navigation: { expandedGroups: {} },
   userAdmin: { viewMode: 'list' },
@@ -142,10 +145,28 @@ class ThemeState {
   }
 }
 
+class LocaleState {
+  _value = $state<Locale>(Locale.EN);
+
+  get current(): Locale {
+    return this._value;
+  }
+
+  set current(v: Locale) {
+    this._value = v;
+    persist('locale', v);
+  }
+
+  hydrate(v: Locale) {
+    this._value = v;
+  }
+}
+
 export class UserSettings {
   [USER_SETTINGS_BRAND] = true;
 
   readonly theme = new ThemeState();
+  readonly locale = new LocaleState();
 
   _sidebar = $state<SidebarState>(defaultSettings.sidebar as SidebarState);
   _navigation = $state<NavigationState>(

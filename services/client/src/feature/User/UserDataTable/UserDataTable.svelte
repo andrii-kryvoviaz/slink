@@ -63,7 +63,7 @@
   const columns: ColumnDef<User>[] = [
     {
       accessorKey: 'displayName',
-      header: 'User',
+      header: () => 'User',
       cell: ({ row }) => {
         const user = row.original;
         return renderComponent(UserCell, { user });
@@ -71,7 +71,7 @@
     },
     {
       accessorKey: 'username',
-      header: 'Username',
+      header: () => 'Username',
       cell: ({ row }) => {
         const username = row.getValue('username') as string;
         return renderComponent(UserUsernameCell, { username });
@@ -79,7 +79,7 @@
     },
     {
       accessorKey: 'status',
-      header: 'Status',
+      header: () => 'Status',
       meta: {
         className: 'min-w-[120px]',
       },
@@ -91,7 +91,7 @@
     },
     {
       accessorKey: 'roles',
-      header: 'Roles',
+      header: () => 'Roles',
       meta: {
         className: 'min-w-[100px]',
       },
@@ -102,7 +102,7 @@
     },
     {
       id: 'actions',
-      header: 'Actions',
+      header: () => 'Actions',
       meta: {
         className: 'text-right',
       },

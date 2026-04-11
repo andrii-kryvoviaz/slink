@@ -1,5 +1,10 @@
 <script lang="ts">
-  import { DemoNotice, FlashToast, ThemeSwitch } from '@slink/feature/Layout';
+  import {
+    DemoNotice,
+    FlashToast,
+    LocaleSwitcher,
+    ThemeSwitch,
+  } from '@slink/feature/Layout';
   import { AppFooter } from '@slink/feature/Layout/Footer';
   import { Navbar } from '@slink/feature/Navigation';
   import AppSidebar from '@slink/feature/Navigation/Sidebar/AppSidebar.svelte';
@@ -81,6 +86,14 @@
           showUploadButton={!!user ||
             !!data.globalSettings?.access?.allowGuestUploads}
         >
+          {#snippet localeSwitcher()}
+            <LocaleSwitcher
+              current={settings.locale.current}
+              variant="default"
+              animation="none"
+              on={{ change: (locale) => (settings.locale.current = locale) }}
+            />
+          {/snippet}
           {#snippet themeSwitch()}
             <ThemeSwitch
               checked={settings.theme.isDark}

@@ -1,11 +1,11 @@
 <script lang="ts">
   import { slide } from 'svelte/transition';
 
+  import { strengthLabels } from './PasswordStrength.labels.svelte';
   import {
     type StrengthLevel,
     passwordStrengthBarVariants,
     passwordStrengthLabelVariants,
-    strengthLabels,
   } from './PasswordStrength.theme';
 
   interface Props {

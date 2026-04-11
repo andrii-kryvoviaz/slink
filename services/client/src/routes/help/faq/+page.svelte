@@ -39,7 +39,7 @@
 
     if (!slug) return;
 
-    const question = faqQuestions.find((q) => q.slug === slug);
+    const question = faqQuestions().find((q) => q.slug === slug);
 
     if (question) {
       openedQuestion = slug;
@@ -72,7 +72,7 @@
     </div>
 
     <div class="space-y-4">
-      {#each faqQuestions as { title, content, slug }, _}
+      {#each faqQuestions() as { title, content, slug }, _}
         {@const ContentComponent = content}
         <div
           id={slug}

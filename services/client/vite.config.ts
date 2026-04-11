@@ -5,6 +5,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
+import { wuchale } from 'wuchale/vite';
 
 import iconifyExport from './plugins/vite-iconify-export';
 import svelteImports from './plugins/vite-svelte-imports';
@@ -36,6 +37,7 @@ export default defineConfig({
       enableLogging: true,
     }),
     iconifyExport(),
+    wuchale(),
     sveltekit(),
     tailwindcss(),
     SvelteKitPWA({

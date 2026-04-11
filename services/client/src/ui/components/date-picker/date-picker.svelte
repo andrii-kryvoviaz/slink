@@ -14,6 +14,7 @@
   import { DatePicker as DatePickerPrimitive } from 'bits-ui';
   import type { Snippet } from 'svelte';
 
+  import { getLocale } from '$lib/utils/date.svelte';
   import Icon from '@iconify/svelte';
 
   import { cn } from '@slink/utils/ui/index.js';
@@ -48,9 +49,12 @@
     value ? parseDate(value.split('T')[0]) : undefined,
   );
 
-  const df = new DateFormatter('en-US', {
-    dateStyle: 'medium',
-  });
+  const locale = $derived(getLocale());
+  const df = $derived(
+    new DateFormatter(locale, {
+      dateStyle: 'medium',
+    }),
+  );
 
   const minValue = today(getLocalTimeZone());
 

@@ -29,6 +29,7 @@ declare global {
       userPreferences: UserPreferencesResponse | null;
       cookieManager: CookieManager;
       flash: Flash;
+      locale: string;
     }
     interface PageData {
       settings: UserSettings;

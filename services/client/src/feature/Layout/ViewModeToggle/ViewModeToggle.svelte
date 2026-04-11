@@ -4,8 +4,8 @@
 
   import type { ViewMode } from '@slink/lib/settings';
 
-  import type { ViewModeToggleProps } from './ViewModeToggle.types';
-  import { viewModeRegistry } from './ViewModeToggle.types';
+  import type { ViewModeToggleProps } from './ViewModeToggle.types.svelte';
+  import { viewModeRegistry } from './ViewModeToggle.types.svelte';
 
   interface Props extends ViewModeToggleProps {}
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { formatDate } from '$lib/utils/date.js';
+  import { formatDate } from '$lib/utils/date.svelte';
   import { navigateToUrl } from '$lib/utils/navigation/navigate.js';
 
   import BaseToast from './BaseToast.svelte';

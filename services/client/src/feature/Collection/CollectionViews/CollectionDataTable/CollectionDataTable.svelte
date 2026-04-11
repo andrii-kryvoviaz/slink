@@ -43,7 +43,7 @@
   const columns: ColumnDef<CollectionResponse>[] = [
     {
       accessorKey: 'name',
-      header: 'Name',
+      header: () => 'Name',
       meta: {
         className: 'sm:w-[300px]',
       },
@@ -55,7 +55,7 @@
     },
     {
       accessorKey: 'itemCount',
-      header: 'Items',
+      header: () => 'Items',
       meta: {
         className: 'text-center',
       },
@@ -65,7 +65,7 @@
     },
     {
       accessorKey: 'description',
-      header: 'Description',
+      header: () => 'Description',
       cell: ({ row }) => {
         const desc = row.original.description;
         if (!desc) return '\u2014';
@@ -74,7 +74,7 @@
     },
     {
       accessorKey: 'createdAt',
-      header: 'Created',
+      header: () => 'Created',
       cell: ({ row }) => {
         return renderComponent(FormattedDate, {
           date: row.original.createdAt.timestamp,
@@ -83,7 +83,7 @@
     },
     {
       id: 'actions',
-      header: 'Actions',
+      header: () => 'Actions',
       meta: {
         className: 'text-right',
       },

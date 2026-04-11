@@ -17,6 +17,7 @@
     showLoginButton?: boolean;
     showUploadButton?: boolean;
     sidebarWidth?: number;
+    localeSwitcher?: Snippet;
     themeSwitch?: Snippet;
     children?: Snippet;
   }
@@ -25,6 +26,7 @@
     showLogo = true,
     showLoginButton = false,
     showUploadButton = true,
+    localeSwitcher,
     themeSwitch,
     children,
   }: Props = $props();
@@ -162,6 +164,39 @@
         <Icon icon="ph:sign-in" class="h-4 w-4" />
         <span>Sign In</span>
       </Button>
+    {/if}
+
+    {#if localeSwitcher}
+      <HoverCard.Root openDelay={1000} closeDelay={200}>
+        <HoverCard.Trigger>
+          <div class="flex items-center">
+            {@render localeSwitcher?.()}
+          </div>
+        </HoverCard.Trigger>
+        <HoverCard.Content
+          variant="glass"
+          size="sm"
+          rounded="xl"
+          width="auto"
+          side="bottom"
+          sideOffset={8}
+          align="end"
+          class="min-w-52"
+        >
+          <div class="flex flex-col gap-2">
+            <div class="flex items-center gap-2">
+              <Icon
+                icon="ph:translate"
+                class="h-4 w-4 text-blue-500 dark:text-blue-400"
+              />
+              <span class="text-sm font-semibold">Change language</span>
+            </div>
+            <p class="text-xs text-muted-foreground leading-relaxed">
+              Switch between available languages.
+            </p>
+          </div>
+        </HoverCard.Content>
+      </HoverCard.Root>
     {/if}
 
     {#if themeSwitch}

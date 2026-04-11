@@ -12,12 +12,16 @@
     "lint": "eslint . && prettier --check .",
     "lint:fix": "eslint . --fix && prettier --write .",
     "format": "prettier --write .",
-    "prepare": "cd ../.. && husky ./services/client/.husky"
+    "prepare": "cd ../.. && husky ./services/client/.husky",
+    "i18n": "wuchale",
+    "i18n:extract": "wuchale extract",
+    "i18n:compile": "wuchale compile"
   },
   "dependencies": {
     "clsx": "^2.1.1"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@floating-ui/dom": "^1.7.6",
     "@iconify/svelte": "5.2.1",
     "@internationalized/date": "^3.12.0",
@@ -34,12 +38,12 @@
     "@typescript-eslint/eslint-plugin": "^8.58.0",
     "@typescript-eslint/parser": "^8.58.0",
     "@vite-pwa/sveltekit": "^1.1.0",
+    "@wuchale/svelte": "^0.19.3",
     "apexcharts": "5.10.5",
     "bits-ui": "^2.17.2",
     "class-variance-authority": "^0.7.1",
     "crawler-user-agents": "^1.37.0",
     "dotenv": "17.4.1",
-    "@eslint/js": "^10.0.1",
     "eslint": "^10.2.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-svelte": "^3.17.0",
@@ -63,7 +67,8 @@
     "typescript": "^6.0.2",
     "vite": "8.0.6",
     "vite-plugin-pwa": "^1.2.0",
-    "workbox-window": "^7.4.0"
+    "workbox-window": "^7.4.0",
+    "wuchale": "^0.22.9"
   },
   "lint-staged": {
     "*.{js,ts,svelte}": [

@@ -3,6 +3,7 @@
   import { Button } from '@slink/ui/components/button';
   import { Switch } from '@slink/ui/components/switch';
 
+  import { plural } from '$lib/utils/i18n';
   import Icon from '@iconify/svelte';
   import { type Readable, readable } from 'svelte/store';
 
@@ -45,8 +46,7 @@
     </div>
     <div>
       <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
-        Delete {count}
-        {count === 1 ? 'Image' : 'Images'}
+        {plural(count, ['Delete # image', 'Delete # images'])}
       </h3>
       <p class="text-xs text-gray-500 dark:text-gray-400">
         This action cannot be undone
@@ -100,7 +100,7 @@
       {:else}
         <Icon icon="heroicons:trash" class="h-4 w-4 mr-2" />
       {/if}
-      Delete {count === 1 ? 'Image' : 'Images'}
+      {#if count === 1}Delete Image{:else}Delete Images{/if}
     </Button>
   </div>
 </div>

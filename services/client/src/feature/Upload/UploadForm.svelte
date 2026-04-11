@@ -174,7 +174,7 @@
           <h2
             class="text-xl sm:text-2xl font-semibold bg-gradient-to-r from-slate-700 to-slate-900 dark:from-slate-200 dark:to-slate-400 bg-clip-text text-transparent"
           >
-            Drop your {allowMultiple ? 'images' : 'image'} here
+            {#if allowMultiple}Drop your images here{:else}Drop your image here{/if}
           </h2>
           <p
             class="text-slate-500 dark:text-slate-400 text-base sm:text-lg font-light max-w-xs sm:max-w-md mx-auto"
@@ -265,7 +265,8 @@
             Almost there
           </h3>
           <p class="text-slate-500 dark:text-slate-400 text-lg">
-            Uploading your {allowMultiple ? 'images' : 'image'}...
+            {#if allowMultiple}Uploading your images...{:else}Uploading your
+              image...{/if}
           </p>
         </div>
       </div>

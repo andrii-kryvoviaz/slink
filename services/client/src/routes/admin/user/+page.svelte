@@ -3,7 +3,7 @@
   import { EmptyState, ViewModeToggle } from '@slink/feature/Layout';
   import { Subtitle, Title } from '@slink/feature/Text';
   import { UserGridView, UsersSkeleton } from '@slink/feature/User';
-  import { createUserColumns } from '@slink/feature/User/UserDataTable/columns';
+  import { createUserColumns } from '@slink/feature/User/UserDataTable/columns.svelte';
   import {
     DataTable,
     DataTableToolbar,

@@ -23,7 +23,9 @@ export function extractErrorMessage(
       return Object.entries(error.errors)
         .map(([key, message]) => {
           const displayKey = !parseInt(key) && key ? `[${key}]` : '';
-          return displayKey ? `${displayKey} ${message}` : String(message);
+          return displayKey
+            ? `${displayKey} ${String(message)}`
+            : String(message);
         })
         .join('\n');
     }

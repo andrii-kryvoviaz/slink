@@ -2,6 +2,7 @@ import { env } from '$env/dynamic/private';
 import { json } from '@sveltejs/kit';
 import type { Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
+import { loadLocales, runWithLocale } from 'wuchale/load-utils/server';
 
 import { ApiProxy } from '@slink/api/ApiProxy';
 import { createApiClient } from '@slink/api/Client';
@@ -9,6 +10,13 @@ import { createApiClient } from '@slink/api/Client';
 import { CookieManager } from '@slink/lib/auth/CookieManager';
 import { createFlash } from '@slink/lib/flash/flash';
 import { Theme, setCookieSettingsOnLocals } from '@slink/lib/settings/server';
+
+import { locales } from './locales/data.js';
+import * as js from './locales/js.loader.server.js';
+import * as main from './locales/main.loader.server.svelte.js';
+
+await loadLocales(main.key, main.loadIDs, main.loadCatalog, locales);
+await loadLocales(js.key, js.loadIDs, js.loadCatalog, locales);
 
 const handleWellKnownRequests: Handle = async ({ event, resolve }) => {
   const { pathname } = event.url;
@@ -37,6 +45,21 @@ const filterResponseHeaders: Handle = async ({ event, resolve }) => {
       return name.startsWith('x-') || headers.includes(name);
     },
   });
+};
+
+const initializeLocale: Handle = async ({ event, resolve }) => {
+  event.locals.locale = event.cookies.get('settings.locale') || 'en';
+  return resolve(event);
+};
+
+const applyClientLocale: Handle = async ({ event, resolve }) => {
+  const locale = event.locals.locale;
+
+  return await runWithLocale(locale, () =>
+    resolve(event, {
+      transformPageChunk: ({ html }) => html.replace('%app.locale%', locale),
+    }),
+  );
 };
 
 const applyClientTheme: Handle = async ({ event, resolve }) => {
@@ -111,6 +134,7 @@ export const handle = sequence(
   handleWellKnownRequests,
   filterResponseHeaders,
   initializeCookieManager,
+  initializeLocale,
   initializeFlash,
   initializeApiClient,
   injectApiHandling,
@@ -118,5 +142,6 @@ export const handle = sequence(
   setUserPreferencesOnLocals,
   setCookieSettingsOnLocals,
   applyClientTheme,
+  applyClientLocale,
   handleLinkHeaderPreloading,
 );

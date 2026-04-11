@@ -223,4 +223,8 @@ export const themeIcons: string[] = [
   'ph:download',
   'ph:cloud-arrow-up',
   'ph:palette',
+  'twemoji:flag-united-states',
+  'twemoji:flag-ukraine',
+  'ph:translate',
+  'twemoji:flag-germany',
 ];

@@ -1,5 +1,7 @@
 import type { Component } from 'svelte';
 
+import { localize } from '$lib/utils/i18n';
+
 import {
   ImageVisibilityContent,
   IssueReportContent,
@@ -13,25 +15,25 @@ export interface FaqQuestion {
   content: Component;
 }
 
-export const faqQuestions: FaqQuestion[] = [
+export const faqQuestions = (): FaqQuestion[] => [
   {
     slug: 'supported-image-formats',
-    title: 'What image formats Slink supports?',
+    title: localize('What image formats Slink supports?'),
     content: SupportedFormatsContent,
   },
   {
     slug: 'image-visability',
-    title: 'What is the visibility of my images?',
+    title: localize('What is the visibility of my images?'),
     content: ImageVisibilityContent,
   },
   {
     slug: 'share-feature',
-    title: 'Can I share my images with others?',
+    title: localize('Can I share my images with others?'),
     content: ShareFeatureContent,
   },
   {
     slug: 'found-an-issue',
-    title: 'I found an issue, how can I report it?',
+    title: localize('I found an issue, how can I report it?'),
     content: IssueReportContent,
   },
 ];
