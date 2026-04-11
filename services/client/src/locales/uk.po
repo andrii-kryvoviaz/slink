@@ -1,0 +1,4248 @@
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Source-Language: en\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/routes/info/[id]/+page.server.ts
+msgid "Take me to my Uploads"
+msgstr "До моїх завантажень"
+
+#: src/routes/info/[id]/+page.server.ts
+msgid "An error occurred. Please try again later."
+msgstr "Сталася помилка. Спробуйте пізніше."
+
+#: src/routes/i/[code]/+page.server.ts
+msgid "Location"
+msgstr "Місцезнаходження"
+
+#: src/routes/i/[code]/+page.server.ts
+msgid "User-Agent"
+msgstr "User-Agent"
+
+#: src/routes/profile/(auth)/signup/+page.server.ts
+msgid "Something went wrong. Please try again later."
+msgstr "Щось пішло не так. Спробуйте пізніше."
+
+#: src/routes/profile/(auth)/sso/callback/+page.server.ts
+msgid "Missing authorization parameters"
+msgstr "Відсутні параметри авторизації"
+
+#: src/lib/utils/i18n/apiErrors.ts
+#: src/routes/profile/(auth)/sso/callback/+page.server.ts
+#: src/routes/profile/(auth)/sso/login/[provider]/+page.server.ts
+msgid "An unexpected error occurred"
+msgstr "Сталася непередбачена помилка"
+
+#: src/routes/admin/settings/sso/[id]/edit/+page.server.ts
+msgid "Provider not found"
+msgstr "Провайдер не знайдено"
+
+#: src/routes/+error.svelte
+msgid "Take me Home"
+msgstr "На головну"
+
+#: src/feature/Analytics/ImageAnalytics.svelte
+#: src/feature/Analytics/ImageAnalytics.svelte
+msgid "Uploads"
+msgstr "Завантаження"
+
+#: src/feature/Analytics/LatestUsers.svelte
+msgid "Latest Users"
+msgstr "Нові користувачі"
+
+#: src/feature/Analytics/LatestUsers.svelte
+msgid "Recently joined members"
+msgstr "Нещодавно приєднані учасники"
+
+#: src/feature/Analytics/LatestUsers.svelte
+#: src/ui/components/combobox/combobox.svelte
+#: src/ui/components/picker/picker-list.svelte
+#: src/ui/components/picker/picker-search.svelte
+msgid "Search..."
+msgstr "Пошук..."
+
+#: src/feature/Analytics/LatestUsers.svelte
+msgid "Search users"
+msgstr "Пошук користувачів"
+
+#: src/feature/Analytics/LatestUsers.svelte
+#: src/feature/Search/SearchBar.svelte
+msgid "Clear search"
+msgstr "Очистити пошук"
+
+#: src/feature/Analytics/LatestUsers.svelte
+#: src/feature/User/UserDataTable/UserDataTable.svelte
+#: src/routes/admin/user/+page.svelte
+msgid "No users found"
+msgstr "Користувачів не знайдено"
+
+#: src/feature/Analytics/LatestUsers.svelte
+msgid "Try adjusting your search terms"
+msgstr "Спробуйте змінити умови пошуку"
+
+#: src/feature/Analytics/LatestUsers.svelte
+msgid "Users will appear here once they join"
+msgstr "Користувачі з'являться тут після приєднання"
+
+#: src/feature/Analytics/LatestUsers.svelte
+msgid "View all users"
+msgstr "Переглянути всіх користувачів"
+
+#. 0: $response.meta.total
+#: src/feature/Analytics/LatestUsers.svelte
+msgid "{0} total"
+msgstr "{0} всього"
+
+#: src/feature/Analytics/UserAnalytics.svelte
+msgid "No Data"
+msgstr "Немає даних"
+
+#: src/feature/Analytics/UserAnalytics.svelte
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/routes/admin/user/+page.svelte
+msgid "Users"
+msgstr "Користувачі"
+
+#: src/feature/Collection/CreateCollectionForm.svelte
+#: src/feature/Collection/CreateCollectionModal.svelte
+#: src/feature/Comment/CommentInput.svelte
+#: src/feature/Image/History/useHistoryItemActions.svelte.ts
+#: src/feature/Image/SizePicker/ImageSizePicker.svelte
+#: src/feature/Navigation/TabMenu/TabMenuItem.svelte
+#: src/feature/Notification/NotificationListItem.svelte
+#: src/feature/Search/SearchBar.svelte
+#: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
+#: src/feature/Tag/TagDataTable/TagCountCell.svelte
+#: src/feature/Tag/TagInput/TagInput.svelte
+#: src/feature/Tag/TagSelector/TagSelector.svelte
+#: src/feature/Text/EditableText/EditableText.svelte
+#: src/feature/Text/EditableText/EditableText.svelte
+#: src/feature/Text/EditableText/EditableText.svelte
+#: src/feature/Text/HashtagText/HashtagText.svelte
+#: src/feature/Upload/Dropzone/Dropzone.svelte
+#: src/routes/collection/[id]/+page.svelte
+#: src/routes/explore/+page.svelte
+#: src/ui/components/picker/picker-list.svelte
+msgid "Enter"
+msgstr "Enter"
+
+#: src/feature/Comment/CommentInput.svelte
+#: src/feature/Image/PostViewer/PostViewer.svelte
+#: src/feature/Image/SizePicker/ImageSizePicker.svelte
+#: src/feature/Image/TagManager/ImageTagManager.svelte
+#: src/feature/Search/SearchBar.svelte
+#: src/feature/Tag/TagInput/TagInput.svelte
+#: src/feature/Text/EditableText/EditableText.svelte
+#: src/ui/components/table-pagination/table-pagination.svelte
+msgid "Escape"
+msgstr "Escape"
+
+#: src/feature/Comment/CommentInput.svelte
+msgid "Editing reply to <0/>"
+msgstr "Редагування відповіді для <0/>"
+
+#: src/feature/Comment/CommentInput.svelte
+msgid "Replying to <0/>"
+msgstr "Відповідь для <0/>"
+
+#: src/feature/Comment/CommentInput.svelte
+msgid "Edit your comment..."
+msgstr "Редагуйте свій коментар..."
+
+#. 0: activeRef.author.displayName
+#: src/feature/Comment/CommentInput.svelte
+msgid "Reply to @{0}..."
+msgstr "Відповісти @{0}..."
+
+#: src/feature/Comment/CommentInput.svelte
+msgid "Write a comment..."
+msgstr "Напишіть коментар..."
+
+#: src/feature/Comment/CommentInput.svelte
+msgid "Use **bold** and *italic* for formatting • ⌘+Enter to submit"
+msgstr "Використовуйте **жирний** та *курсив* для форматування • ⌘+Enter для відправки"
+
+#: src/feature/Comment/CommentDeleteConfirmation.svelte
+msgid "Delete Comment"
+msgstr "Видалити коментар"
+
+#: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
+#: src/feature/Comment/CommentDeleteConfirmation.svelte
+#: src/feature/Image/History/Actions/DeleteAction.svelte
+#: src/feature/Image/History/BulkDeleteConfirmation.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
+#: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
+#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
+#: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "This action cannot be undone"
+msgstr "Цю дію неможливо скасувати"
+
+#: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
+#: src/feature/Collection/RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte
+#: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
+#: src/feature/Comment/CommentDeleteConfirmation.svelte
+#: src/feature/Image/History/Actions/BatchPickerAction.svelte
+#: src/feature/Image/History/BatchActionConfirmation.svelte
+#: src/feature/Image/History/BatchActionConfirmation.svelte
+#: src/feature/Image/History/BulkDeleteConfirmation.svelte
+#: src/feature/Image/History/SelectionActionBar.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
+#: src/feature/Settings/CacheSettings/CacheSettings.svelte
+#: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+#: src/feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte
+#: src/feature/Settings/SettingsPane/SettingItem.svelte
+#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
+#: src/feature/Text/EditableText/EditableText.svelte
+#: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+#: src/ui/components/confirmation-dialog/confirmation-dialog.svelte
+#: src/ui/components/dialog/modal-footer.svelte
+msgid "Cancel"
+msgstr "Скасувати"
+
+#: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
+#: src/feature/Comment/CommentDeleteConfirmation.svelte
+#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
+msgid "<0/> Delete"
+msgstr "<0/> Видалити"
+
+#: src/feature/Comment/CommentListItem.svelte
+msgid "(edited)"
+msgstr "(відредаговано)"
+
+#: src/feature/Comment/CommentListItem.svelte
+msgid "Reply"
+msgstr "Відповісти"
+
+#: src/feature/Collection/CollectionActionsDropdown/CollectionActionsDropdown.svelte
+#: src/feature/Comment/CommentListItem.svelte
+#: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
+msgid "Edit"
+msgstr "Редагувати"
+
+#: src/feature/Collection/CollectionActionsDropdown/CollectionActionsDropdown.svelte
+#: src/feature/Comment/CommentListItem.svelte
+#: src/feature/Image/AdminImageDropdown/AdminImageDropdown.svelte
+#: src/feature/Image/History/Actions/DeleteAction.svelte
+#: src/feature/Image/History/Actions/DeleteAction.svelte
+#: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
+#: src/feature/Tag/TagDataTable/TagActionsCell.svelte
+#: src/feature/User/UserActions/UserActions.svelte
+msgid "Delete"
+msgstr "Видалити"
+
+#: src/feature/Comment/CommentListItem.svelte
+msgid "[deleted]"
+msgstr "[видалено]"
+
+#: src/routes/admin/settings/sso/+page.svelte
+#: src/routes/collections/+page.svelte
+#: src/routes/integrations/+page.svelte
+#: src/routes/tags/+page.svelte
+msgid "Create"
+msgstr "Створити"
+
+#~ msgid "{0} Collection"
+#~ msgstr "{0} колекцію"
+
+#: src/feature/Collection/CreateCollectionForm.svelte
+msgid "Update your collection details"
+msgstr "Оновіть деталі колекції"
+
+#: src/feature/Collection/CreateCollectionForm.svelte
+#: src/feature/Collection/CreateCollectionModal.svelte
+msgid "Organize your images into a shareable collection"
+msgstr "Організуйте зображення у колекцію для спільного доступу"
+
+#: src/feature/Collection/CreateCollectionForm.svelte
+#: src/feature/Collection/CreateCollectionModal.svelte
+msgid "Collection Name"
+msgstr "Назва колекції"
+
+#: src/feature/Collection/CreateCollectionForm.svelte
+#: src/feature/Collection/CreateCollectionModal.svelte
+msgid "Description (Optional)"
+msgstr "Опис (необов'язково)"
+
+#: src/feature/Collection/CreateCollectionForm.svelte
+#: src/feature/Collection/CreateCollectionModal.svelte
+msgid "What's this collection about?"
+msgstr "Про що ця колекція?"
+
+#: src/feature/Collection/CreateCollectionForm.svelte
+msgid "Collection Sharing"
+msgstr "Спільний доступ до колекції"
+
+#: src/feature/Collection/CreateCollectionForm.svelte
+msgid "Collections let you group images together and share them with a single link. You can add or remove images at any time after creating the collection."
+msgstr "Колекції дозволяють групувати зображення та ділитися ними за одним посиланням. Ви можете додавати або видаляти зображення будь-коли після створення колекції."
+
+#: src/feature/Collection/CreateCollectionForm.svelte
+#: src/feature/Settings/SettingsPane/SettingsPane.svelte
+#: src/routes/preferences/+page.svelte
+#: src/routes/profile/+page.svelte
+msgid "Save Changes"
+msgstr "Зберегти зміни"
+
+#: src/feature/Collection/CreateCollectionForm.svelte
+#: src/feature/Collection/CreateCollectionForm.svelte
+#: src/feature/Collection/CreateCollectionModal.svelte
+#: src/feature/Collection/CreateCollectionModal.svelte
+msgid "Create Collection"
+msgstr "Створити колекцію"
+
+#: src/feature/Notification/NotificationGroupItem.svelte
+#: src/feature/Notification/NotificationListItem.svelte
+msgid "Someone"
+msgstr "Хтось"
+
+#: src/feature/Notification/NotificationListItem.svelte
+msgid "Mark as read"
+msgstr "Позначити як прочитане"
+
+#. 0: provider.name
+#: src/feature/Auth/SsoProviderButton.svelte
+msgid "Continue with {0}"
+msgstr "Продовжити з {0}"
+
+#: src/feature/Navigation/Navbar/Navbar.svelte
+#: src/feature/Search/SearchBar.svelte
+msgid "Search images..."
+msgstr "Пошук зображень..."
+
+#: src/feature/Search/SearchBar.svelte
+msgid "Search by User"
+msgstr "За користувачем"
+
+#: src/feature/Search/SearchBar.svelte
+msgid "Search by Description"
+msgstr "Пошук за описом"
+
+#: src/feature/Search/SearchBar.svelte
+msgid "Search by Hashtag"
+msgstr "Пошук за хештегом"
+
+#: src/feature/Search/SearchBar.svelte
+msgid "Search by "
+msgstr "За "
+
+#: src/feature/Navigation/Sidebar/AppSidebar.svelte
+#: src/feature/Search/SearchBar.svelte
+#: src/feature/User/UserDataTable/UserDataTable.svelte
+#: src/feature/User/UserDataTable/columns.svelte.ts
+msgid "User"
+msgstr "Користувач"
+
+#: src/feature/Search/SearchBar.svelte
+msgid "Search hashtags... (e.g., #nature)"
+msgstr "Пошук хештегів... (напр., #nature)"
+
+#: src/feature/Search/SearchBar.svelte
+msgid "Search descriptions..."
+msgstr "Пошук за описом..."
+
+#: src/feature/Search/SearchBar.svelte
+msgid "Search users..."
+msgstr "Пошук користувачів..."
+
+#: src/feature/Search/SearchBar.svelte
+msgid "Search options"
+msgstr "Параметри пошуку"
+
+#: src/feature/Comment/CommentList.svelte
+#: src/feature/Image/PostViewer/CommentsSkeleton.svelte
+msgid "Comments"
+msgstr "Коментарі"
+
+#: src/feature/Comment/CommentList.svelte
+msgid "Oldest first"
+msgstr "Спочатку старіші"
+
+#: src/feature/Comment/CommentList.svelte
+msgid "Newest first"
+msgstr "Спочатку новіші"
+
+#: src/feature/Comment/CommentList.svelte
+msgid "No comments yet"
+msgstr "Коментарів ще немає"
+
+#: src/feature/Comment/CommentList.svelte
+msgid "Be the first to comment"
+msgstr "Будьте першим, хто прокоментує"
+
+#: src/feature/Comment/CommentList.svelte
+msgid "Sign in to comment"
+msgstr "Увійдіть, щоб коментувати"
+
+#: src/feature/Upload/MultiUploadProgress.svelte
+msgid "Complete"
+msgstr "Завершено"
+
+#: src/feature/Upload/MultiUploadProgress.svelte
+msgid "Uploading"
+msgstr "Завантаження"
+
+#. 0: failedUploads
+#: src/feature/Upload/MultiUploadProgress.svelte
+msgid "• {0} failed"
+msgstr "• {0} невдалих"
+
+#. 0: completedUploads; 1: totalUploads
+#: src/feature/Upload/MultiUploadProgress.svelte
+msgid "{0} of {1} files uploaded <0/>"
+msgstr "{0} з {1} файлів завантажено <0/>"
+
+#: src/feature/Upload/MultiUploadProgress.svelte
+msgid "<0/> Retry Failed"
+msgstr "<0/> Повторити невдалі"
+
+#: src/feature/Upload/MultiUploadProgress.svelte
+msgid "<0/> Cancel"
+msgstr "<0/> Скасувати"
+
+#: src/feature/Upload/MultiUploadProgress.svelte
+msgid "<0/> Done"
+msgstr "<0/> Готово"
+
+#: src/feature/Upload/MultiUploadProgress.svelte
+msgid "Overall Progress"
+msgstr "Загальний прогрес"
+
+#: src/feature/Upload/MultiUploadProgress.svelte
+msgid "Upload failed"
+msgstr "Завантаження не вдалося"
+
+#: src/feature/Tag/useTagOperations.svelte.ts
+msgid "Tag already exists"
+msgstr "Тег вже існує"
+
+#: src/feature/Tag/useTagOperations.svelte.ts
+msgid "Failed to create tag"
+msgstr "Не вдалося створити тег"
+
+#: src/feature/Upload/UploadForm.svelte
+msgid "No files selected"
+msgstr "Файли не вибрано"
+
+#: src/feature/Upload/UploadForm.svelte
+msgid "Only one file allowed at a time"
+msgstr "Дозволено лише один файл за раз"
+
+#~ msgid "Drop your {0} here"
+#~ msgstr "Перетягніть {0} сюди"
+
+#: src/feature/Upload/UploadForm.svelte
+msgid "or click to browse from your device"
+msgstr "або натисніть, щоб вибрати з пристрою"
+
+#: src/feature/Upload/UploadForm.svelte
+msgid "Quick paste:"
+msgstr "Швидка вставка:"
+
+#: src/feature/Upload/UploadForm.svelte
+msgid "WebP"
+msgstr "WebP"
+
+#: src/feature/Upload/UploadForm.svelte
+msgid "View all supported formats"
+msgstr "Переглянути всі підтримувані формати"
+
+#: src/feature/Upload/UploadForm.svelte
+msgid "Drop to upload"
+msgstr "Відпустіть для завантаження"
+
+#: src/feature/Upload/UploadForm.svelte
+msgid "Almost there"
+msgstr "Майже готово"
+
+#~ msgid "Uploading your {0}..."
+#~ msgstr "Завантаження {0}..."
+
+#: src/feature/Upload/UploadSuccess.svelte
+msgid "Upload Successful!"
+msgstr "Успішно завантажено!"
+
+#: src/feature/Upload/UploadSuccess.svelte
+msgid "Your image has been successfully uploaded to Slink."
+msgstr "Ваше зображення успішно завантажено на Slink."
+
+#: src/feature/Upload/UploadSuccess.svelte
+msgid "Guest Upload Notice"
+msgstr "Повідомлення для гостей"
+
+#: src/feature/Upload/UploadSuccess.svelte
+msgid "To manage your images and access additional features, consider creating an account."
+msgstr "Щоб керувати зображеннями та отримати доступ до додаткових функцій, створіть обліковий запис."
+
+#: src/feature/Upload/UploadSuccess.svelte
+msgid "<0/> Upload Another Image"
+msgstr "<0/> Завантажити ще зображення"
+
+#: src/feature/Upload/UploadSuccess.svelte
+msgid "<0/> Create Account"
+msgstr "<0/> Створити обліковий запис"
+
+#: src/feature/Upload/UploadSuccess.svelte
+msgid "<0/> View History"
+msgstr "<0/> Переглянути історію"
+
+#: src/routes/bookmarks/+page.svelte
+msgid "Bookmarks | Slink"
+msgstr "Закладки | Slink"
+
+#: src/feature/Image/History/ImageMetadata.svelte
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/routes/bookmarks/+page.svelte
+msgid "Bookmarks"
+msgstr "Закладки"
+
+#: src/routes/bookmarks/+page.svelte
+msgid "Your saved images from the community"
+msgstr "Збережені зображення зі спільноти"
+
+#: src/feature/Image/BookmarkersPanel/BookmarkersPanel.svelte
+#: src/routes/bookmarks/+page.svelte
+msgid "No bookmarks yet"
+msgstr "Закладок ще немає"
+
+#: src/routes/bookmarks/+page.svelte
+msgid "Start exploring and bookmark images you love to find them here later."
+msgstr "Переглядайте та зберігайте зображення, щоб знайти їх тут пізніше."
+
+#: src/routes/bookmarks/+page.svelte
+msgid "<0/> Explore Images"
+msgstr "<0/> Переглянути зображення"
+
+#: src/routes/bookmarks/+page.svelte
+msgid "Image no longer available"
+msgstr "Зображення більше недоступне"
+
+#: src/feature/Image/BookmarkButton/BookmarkButton.svelte
+#: src/routes/bookmarks/+page.svelte
+msgid "Remove bookmark"
+msgstr "Видалити закладку"
+
+#: src/routes/bookmarks/+page.svelte
+msgid "Saved <0/>"
+msgstr "Збережено <0/>"
+
+#: src/routes/explore/+page.svelte
+msgid "Explore Gallery | Slink"
+msgstr "Галерея | Slink"
+
+#: src/routes/explore/+page.svelte
+msgid "No images yet"
+msgstr "Зображень ще немає"
+
+#: src/routes/explore/+page.svelte
+msgid "Be the first to share something amazing with the community. Start by uploading your favorite images."
+msgstr "Будьте першим, хто поділиться чимось цікавим зі спільнотою. Почніть із завантаження улюблених зображень."
+
+#: src/routes/explore/+page.svelte
+msgid "<0/> Upload First Image"
+msgstr "<0/> Завантажити перше зображення"
+
+#: src/routes/explore/+page.svelte
+msgid "No images found"
+msgstr "Зображень не знайдено"
+
+#. 0: publicFeedState.searchTerm
+#: src/routes/explore/+page.svelte
+msgid "No images match your search for \"{0}\". Try a different search term or browse all images."
+msgstr "Жодне зображення не відповідає вашому пошуку \"{0}\". Спробуйте інший пошуковий запит або перегляньте всі зображення."
+
+#: src/routes/explore/+page.svelte
+msgid "<0/> Clear Search"
+msgstr "<0/> Очистити пошук"
+
+#: src/routes/integrations/+page.svelte
+msgid "Integrations | Slink"
+msgstr "Інтеграції | Slink"
+
+#: src/routes/integrations/+page.svelte
+msgid "Integrations"
+msgstr "Інтеграції"
+
+#: src/routes/integrations/+page.svelte
+msgid "Connect Slink with ShareX and other tools via API keys"
+msgstr "Підключіть Slink до ShareX та інших інструментів через API ключі"
+
+#: src/routes/notifications/+page.svelte
+msgid "Notifications | Slink"
+msgstr "Сповіщення | Slink"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/routes/notifications/+page.svelte
+msgid "Notifications"
+msgstr "Сповіщення"
+
+#. 0: notificationFeed.unreadCount
+#: src/routes/notifications/+page.svelte
+msgid "{0} unread"
+msgstr "{0} непрочитаних"
+
+#: src/routes/notifications/+page.svelte
+msgid "<0/> Mark all read"
+msgstr "<0/> Позначити все прочитаним"
+
+#: src/routes/notifications/+page.svelte
+msgid "All caught up"
+msgstr "Все прочитано"
+
+#: src/routes/notifications/+page.svelte
+msgid "You'll see activity on your images here"
+msgstr "Тут відображатиметься активність щодо ваших зображень"
+
+#: src/routes/collections/+page.svelte
+msgid "Collections | Slink"
+msgstr "Колекції | Slink"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/routes/collections/+page.svelte
+msgid "Collections"
+msgstr "Колекції"
+
+#: src/routes/collections/+page.svelte
+msgid "Organize your images into albums"
+msgstr "Організуйте ваші зображення в альбоми"
+
+#: src/routes/collections/+page.svelte
+msgid "Search collections..."
+msgstr "Пошук колекцій..."
+
+#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
+#: src/routes/collections/+page.svelte
+msgid "No collections found"
+msgstr "Колекцій не знайдено"
+
+#: src/routes/collections/+page.svelte
+#: src/routes/tags/+page.svelte
+msgid "Try adjusting your search term"
+msgstr "Спробуйте змінити пошуковий запит"
+
+#: src/routes/collections/+page.svelte
+msgid "Create your first collection to organize and share your images."
+msgstr "Створіть свою першу колекцію, щоб організувати та поділитися зображеннями."
+
+#: src/routes/collections/+page.svelte
+msgid "<0/> Create Collection"
+msgstr "<0/> Створити колекцію"
+
+#: src/routes/profile/+page.svelte
+msgid "Password changed successfully"
+msgstr "Пароль успішно змінено"
+
+#: src/routes/profile/+page.svelte
+msgid "Profile updated successfully"
+msgstr "Профіль успішно оновлено"
+
+#. 0: itemsFeed.collection?.name ?? 'Collection'
+#. 0: data.status === 'active' ? 'Account Approved' \\: 'Awaiting Approval'
+#. 0: user.displayName
+#: src/routes/collection/[id]/+page.svelte
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+#: src/routes/profile/+page.svelte
+msgid "{0} | Slink"
+msgstr "{0} | Slink"
+
+#: src/routes/profile/+page.svelte
+msgid "Profile Settings"
+msgstr "Профіль"
+
+#: src/routes/profile/+page.svelte
+msgid "Manage your account information and security settings"
+msgstr "Керуйте інформацією облікового запису та налаштуваннями безпеки"
+
+#: src/routes/profile/+page.svelte
+msgid "Profile Information"
+msgstr "Інформація профілю"
+
+#: src/routes/profile/+page.svelte
+msgid "Display Name"
+msgstr "Відображуване ім'я"
+
+#: src/routes/profile/+page.svelte
+msgid "This is how your name will appear across the platform"
+msgstr "Так ваше ім'я відображатиметься на платформі"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+#: src/feature/Settings/SettingsPane/SettingsPane.svelte
+#: src/routes/info/[id]/+page.svelte
+#: src/routes/preferences/+page.svelte
+#: src/routes/profile/+page.svelte
+msgid "Saving..."
+msgstr "Збереження..."
+
+#: src/routes/admin/settings/security/+page.svelte
+#: src/routes/profile/+page.svelte
+msgid "Security"
+msgstr "Безпека"
+
+#: src/routes/profile/+page.svelte
+msgid "Current Password"
+msgstr "Поточний пароль"
+
+#: src/routes/profile/+page.svelte
+msgid "Enter your current password to verify your identity"
+msgstr "Введіть поточний пароль для підтвердження особи"
+
+#: src/routes/profile/+page.svelte
+msgid "Current password"
+msgstr "Поточний пароль"
+
+#: src/routes/profile/+page.svelte
+msgid "New Password"
+msgstr "Новий пароль"
+
+#: src/routes/profile/+page.svelte
+msgid "Choose a new password"
+msgstr "Оберіть новий пароль"
+
+#: src/routes/profile/+page.svelte
+msgid "New password"
+msgstr "Новий пароль"
+
+#: src/routes/profile/(auth)/signup/+page.svelte
+#: src/routes/profile/+page.svelte
+msgid "Confirm Password"
+msgstr "Підтвердження пароля"
+
+#: src/routes/profile/+page.svelte
+msgid "Re-enter your new password"
+msgstr "Повторіть новий пароль"
+
+#: src/routes/profile/+page.svelte
+msgid "Confirm password"
+msgstr "Підтвердження пароля"
+
+#: src/routes/profile/+page.svelte
+msgid "Updating..."
+msgstr "Оновлення..."
+
+#: src/routes/profile/+page.svelte
+msgid "Update Password"
+msgstr "Оновити пароль"
+
+#: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
+#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/routes/help/faq/snippets/ImageVisibilityContent.svelte
+#: src/routes/preferences/+page.svelte
+msgid "Public"
+msgstr "Публічне"
+
+#: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
+#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/routes/help/faq/snippets/ImageVisibilityContent.svelte
+#: src/routes/preferences/+page.svelte
+msgid "Private"
+msgstr "Приватне"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/routes/preferences/+page.svelte
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Explore"
+msgstr "Огляд"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/routes/preferences/+page.svelte
+msgid "Upload"
+msgstr "Завантаження"
+
+#: src/routes/preferences/+page.svelte
+msgid "Preferences updated successfully"
+msgstr "Налаштування успішно оновлено"
+
+#: src/routes/preferences/+page.svelte
+msgid "Preferences | Slink"
+msgstr "Налаштування | Slink"
+
+#: src/feature/Navigation/Sidebar/NavUser.svelte
+#: src/routes/preferences/+page.svelte
+msgid "Preferences"
+msgstr "Налаштування"
+
+#: src/routes/preferences/+page.svelte
+msgid "Configure your default settings and preferences"
+msgstr "Налаштуйте параметри за замовчуванням"
+
+#: src/routes/preferences/+page.svelte
+msgid "Navigation"
+msgstr "Навігація"
+
+#: src/routes/preferences/+page.svelte
+msgid "Default Landing Page"
+msgstr "Початкова сторінка"
+
+#: src/routes/preferences/+page.svelte
+msgid "The page to show when you visit the site"
+msgstr "Сторінка, яка відображається при відвідуванні сайту"
+
+#: src/routes/preferences/+page.svelte
+msgid "Select a landing page..."
+msgstr "Оберіть початкову сторінку..."
+
+#: src/routes/preferences/+page.svelte
+msgid "Image Uploads"
+msgstr "Завантаження зображень"
+
+#: src/routes/preferences/+page.svelte
+msgid "Default Visibility"
+msgstr "Видимість за замовчуванням"
+
+#: src/routes/preferences/+page.svelte
+msgid "New uploads will be set to public or private by default"
+msgstr "Нові завантаження будуть публічними або приватними за замовчуванням"
+
+#: src/routes/preferences/+page.svelte
+msgid "Select visibility..."
+msgstr "Оберіть видимість..."
+
+#: src/routes/preferences/+page.svelte
+msgid "Image Licensing"
+msgstr "Ліцензування зображень"
+
+#: src/routes/preferences/+page.svelte
+msgid "Default License"
+msgstr "Ліцензія за замовчуванням"
+
+#: src/routes/preferences/+page.svelte
+msgid "This license will be automatically applied to new uploads"
+msgstr "Ця ліцензія буде автоматично застосована до нових завантажень"
+
+#: src/feature/Image/License/LicenseInfo.svelte
+#: src/routes/preferences/+page.svelte
+msgid "Learn more"
+msgstr "Дізнатися більше"
+
+#: src/routes/info/[id]/+page.svelte
+#: src/routes/preferences/+page.svelte
+msgid "Select a license..."
+msgstr "Оберіть ліцензію..."
+
+#: src/routes/preferences/+page.svelte
+msgid "Sync to existing images"
+msgstr "Синхронізувати з наявними зображеннями"
+
+#: src/routes/preferences/+page.svelte
+msgid "Apply this license to all your existing images"
+msgstr "Застосувати цю ліцензію до всіх наявних зображень"
+
+#: src/routes/upload/+page.svelte
+msgid "Upload | Slink"
+msgstr "Завантаження | Slink"
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+#: src/routes/upload/+page.svelte
+msgid "Guest Upload"
+msgstr "Гостьове завантаження"
+
+#: src/routes/upload/+page.svelte
+msgid "You can upload images without an account, but consider signing in to manage them"
+msgstr "Ви можете завантажувати зображення без облікового запису, але для керування ними рекомендуємо увійти"
+
+#: src/feature/Navigation/Navbar/Navbar.svelte
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+#: src/routes/profile/(auth)/login/+page.svelte
+#: src/routes/profile/(auth)/signup/+page.svelte
+#: src/routes/upload/+page.svelte
+msgid "Sign In"
+msgstr "Увійти"
+
+#: src/routes/upload/+page.svelte
+msgid "Sign in to continue"
+msgstr "Увійдіть, щоб продовжити"
+
+#: src/routes/upload/+page.svelte
+msgid "Upload and manage your images securely"
+msgstr "Завантажуйте та керуйте зображеннями безпечно"
+
+#: src/routes/upload/+page.svelte
+msgid "Get Started"
+msgstr "Розпочати"
+
+#: src/routes/tags/+page.svelte
+msgid "My Tags | Slink"
+msgstr "Мої теги | Slink"
+
+#: src/routes/tags/+page.svelte
+msgid "My Tags"
+msgstr "Мої теги"
+
+#: src/routes/tags/+page.svelte
+msgid "Create and organize tags for your images"
+msgstr "Створюйте та організовуйте теги для зображень"
+
+#: src/routes/tags/+page.svelte
+msgid "Search tags..."
+msgstr "Пошук тегів..."
+
+#: src/routes/tags/+page.svelte
+msgid "No tags found"
+msgstr "Тегів не знайдено"
+
+#: src/routes/tags/+page.svelte
+msgid "Create your first tag to get started"
+msgstr "Створіть свій перший тег, щоб розпочати"
+
+#: src/routes/tags/+page.svelte
+msgid "<0/> Create Tag"
+msgstr "<0/> Створити тег"
+
+#: src/routes/history/+page.svelte
+msgid "Upload History | Slink"
+msgstr "Історія завантажень | Slink"
+
+#: src/routes/history/+page.svelte
+msgid "Upload History"
+msgstr "Історія завантажень"
+
+#: src/routes/history/+page.svelte
+msgid "View and manage your uploaded images"
+msgstr "Переглядайте та керуйте завантаженими зображеннями"
+
+#: src/routes/history/+page.svelte
+msgid "No matching images"
+msgstr "Відповідних зображень не знайдено"
+
+#: src/routes/history/+page.svelte
+msgid "No images match your current tag filters. Try removing some tags or clearing all filters."
+msgstr "Жодне зображення не відповідає поточним фільтрам тегів. Спробуйте видалити деякі теги або скинути всі фільтри."
+
+#: src/routes/history/+page.svelte
+msgid "No history yet"
+msgstr "Історія порожня"
+
+#: src/routes/history/+page.svelte
+msgid "Your upload history will appear here. Start uploading images to see your files and manage them easily."
+msgstr "Тут відображатиметься історія ваших завантажень. Почніть завантажувати зображення, щоб переглядати та керувати ними."
+
+#: src/routes/history/+page.svelte
+msgid "<0/> Upload Images"
+msgstr "<0/> Завантажити зображення"
+
+#: src/routes/history/+page.svelte
+msgid "View More"
+msgstr "Показати більше"
+
+#: src/feature/Upload/UploadOptions/CollectionsOption.svelte
+#: src/routes/collection/[id]/+page.svelte
+#: src/routes/history/+page.svelte
+msgid "Collection"
+msgstr "Колекція"
+
+#: src/routes/history/+page.svelte
+msgid "Add to Collection"
+msgstr "Додати до колекції"
+
+#: src/routes/history/+page.svelte
+msgid "Tag"
+msgstr "Тег"
+
+#: src/routes/history/+page.svelte
+msgid "Assign Tags"
+msgstr "Призначити теги"
+
+#: src/lib/state/ApiKeyStore.svelte.ts
+msgid "API key created successfully"
+msgstr "API ключ успішно створено"
+
+#: src/lib/state/ApiKeyStore.svelte.ts
+msgid "Failed to create API key"
+msgstr "Не вдалося створити API ключ"
+
+#: src/lib/state/ApiKeyStore.svelte.ts
+msgid "API key revoked successfully"
+msgstr "API ключ успішно відкликано"
+
+#: src/lib/state/ApiKeyStore.svelte.ts
+msgid "Failed to revoke API key"
+msgstr "Не вдалося відкликати API ключ"
+
+#: src/lib/state/ApiKeyStore.svelte.ts
+msgid "Failed to generate ShareX config"
+msgstr "Не вдалося згенерувати конфігурацію ShareX"
+
+#: src/lib/state/ApiKeyStore.svelte.ts
+msgid "ApiKeyStore"
+msgstr "ApiKeyStore"
+
+#: src/lib/state/CollectionItemsFeed.svelte.ts
+msgid "CollectionItemsFeed"
+msgstr "CollectionItemsFeed"
+
+#: src/lib/state/CollectionListFeed.svelte.ts
+msgid "CollectionListFeed"
+msgstr "CollectionListFeed"
+
+#: src/lib/state/CollectionSelectionState.svelte.ts
+#: src/lib/state/ImagePickerState.svelte.ts
+msgid "Failed to load collections"
+msgstr "Не вдалося завантажити колекції"
+
+#: src/lib/state/ImagePickerState.svelte.ts
+msgid "Failed to add to collection"
+msgstr "Не вдалося додати до колекції"
+
+#: src/lib/state/ImagePickerState.svelte.ts
+msgid "Failed to remove from collection"
+msgstr "Не вдалося видалити з колекції"
+
+#: src/lib/state/ImagePickerState.svelte.ts
+#: src/lib/state/TagSelectionState.svelte.ts
+msgid "Failed to load tags"
+msgstr "Не вдалося завантажити теги"
+
+#: src/lib/state/ImagePickerState.svelte.ts
+msgid "Failed to add tag"
+msgstr "Не вдалося додати тег"
+
+#: src/lib/state/ImagePickerState.svelte.ts
+msgid "Failed to remove tag"
+msgstr "Не вдалося видалити тег"
+
+#: src/lib/state/ImageTagManagerState.svelte.ts
+msgid "ImageTagManagerState"
+msgstr "ImageTagManagerState"
+
+#: src/lib/state/PostViewerState.svelte.ts
+msgid "PostViewerState"
+msgstr "PostViewerState"
+
+#: src/lib/state/PublicImagesFeed.svelte.ts
+msgid "PublicImagesFeed"
+msgstr "PublicImagesFeed"
+
+#: src/lib/state/TagFilterState.svelte.ts
+msgid "TagFilterState"
+msgstr "TagFilterState"
+
+#: src/lib/state/StorageUsageStore.svelte.ts
+msgid "StorageUsageStore"
+msgstr "StorageUsageStore"
+
+#. 0: data.name
+#: src/lib/state/TagListFeed.svelte.ts
+msgid "Tag \"{0}\" created successfully"
+msgstr "Тег \"{0}\" успішно створено"
+
+#: src/lib/state/TagListFeed.svelte.ts
+msgid "Failed to create tag. Please try again."
+msgstr "Не вдалося створити тег. Спробуйте ще раз."
+
+#. 0: tagName
+#: src/lib/state/TagListFeed.svelte.ts
+msgid "Tag \"{0}\" moved successfully"
+msgstr "Тег \"{0}\" успішно переміщено"
+
+#: src/lib/state/TagListFeed.svelte.ts
+msgid "Failed to move tag. Please try again."
+msgstr "Не вдалося перемістити тег. Спробуйте ще раз."
+
+#. 0: tagName
+#: src/lib/state/TagListFeed.svelte.ts
+msgid "Tag \"{0}\" deleted successfully"
+msgstr "Тег \"{0}\" успішно видалено"
+
+#: src/lib/state/TagListFeed.svelte.ts
+msgid "Failed to delete tag. Please try again."
+msgstr "Не вдалося видалити тег. Спробуйте ще раз."
+
+#: src/lib/state/TagListFeed.svelte.ts
+msgid "TagListFeed"
+msgstr "TagListFeed"
+
+#: src/lib/state/UploadHistoryFeed.svelte.ts
+msgid "UploadHistoryFeed"
+msgstr "UploadHistoryFeed"
+
+#: src/lib/state/UploadPageState.svelte.ts
+msgid "Unnamed"
+msgstr "Без назви"
+
+#: src/lib/state/UploadPageState.svelte.ts
+msgid "UploadPageState"
+msgstr "UploadPageState"
+
+#: src/lib/state/UserBookmarksFeed.svelte.ts
+msgid "UserBookmarksFeed"
+msgstr "UserBookmarksFeed"
+
+#: src/lib/state/UserListFeed.svelte.ts
+msgid "UserListFeed"
+msgstr "UserListFeed"
+
+#: src/feature/Auth/PasswordToggle/PasswordToggle.svelte
+msgid "Hide password"
+msgstr "Приховати пароль"
+
+#: src/feature/Auth/PasswordToggle/PasswordToggle.svelte
+msgid "Show password"
+msgstr "Показати пароль"
+
+#: src/feature/Action/LoadMoreButton/LoadMoreButton.svelte
+msgid "Load More"
+msgstr "Завантажити ще"
+
+#: src/feature/Action/RefreshButton/RefreshButton.svelte
+msgid "Refresh"
+msgstr "Оновити"
+
+#: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
+msgid "Sign in to add images to collections"
+msgstr "Увійдіть, щоб додавати зображення до колекцій"
+
+#: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
+msgid "You can only add your own images to collections"
+msgstr "До колекцій можна додавати лише власні зображення"
+
+#: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
+msgid "Sign in to add to collection"
+msgstr "Увійдіть, щоб додати до колекції"
+
+#: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
+msgid "Only own images can be added"
+msgstr "Можна додавати лише власні зображення"
+
+#: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+msgid "Add to collection"
+msgstr "Додати до колекції"
+
+#: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
+msgid "Delete Collection"
+msgstr "Видалити колекцію"
+
+#: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
+msgid "Also delete images"
+msgstr "Також видалити зображення"
+
+#. 0: collection.itemCount
+#: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
+msgid "Delete all {0} images in this collection"
+msgstr "Видалити всі {0} зображення з цієї колекції"
+
+#: src/feature/Collection/CollectionItemDropdown/CollectionItemDropdown.svelte
+#: src/feature/Collection/RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte
+msgid "Remove from Collection"
+msgstr "Вилучити з колекції"
+
+#: src/feature/Collection/CollectionActionsDropdown/CollectionActionsDropdown.svelte
+msgid "Failed to delete collection. Please try again later."
+msgstr "Не вдалося видалити колекцію. Спробуйте пізніше."
+
+#: src/feature/Collection/CollectionActionsDropdown/CollectionActionsDropdown.svelte
+msgid "Collection updated successfully"
+msgstr "Колекцію успішно оновлено"
+
+#: src/feature/Collection/CollectionActionsDropdown/CollectionActionsDropdown.svelte
+msgid "Failed to update collection"
+msgstr "Не вдалося оновити колекцію"
+
+#: src/feature/Collection/CollectionActionsDropdown/CollectionActionsDropdown.svelte
+msgid "Collection actions"
+msgstr "Дії з колекцією"
+
+#: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
+msgid "Share Collection"
+msgstr "Поділитися колекцією"
+
+#: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
+msgid "Anyone with the link can view"
+msgstr "Будь-хто з посиланням може переглянути"
+
+#: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
+#: src/ui/components/confirmation-dialog/confirmation-dialog.svelte
+msgid "Confirm"
+msgstr "Підтвердити"
+
+#: src/feature/Collection/RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte
+msgid "Image will remain in your library"
+msgstr "Зображення залишиться у вашій бібліотеці"
+
+#: src/feature/Collection/RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte
+msgid "<0/> Remove"
+msgstr "<0/> Вилучити"
+
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/DownloadButton/DownloadButton.svelte
+msgid "Download image"
+msgstr "Завантажити зображення"
+
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/DownloadButton/DownloadButton.svelte
+#: src/feature/Image/History/Actions/DownloadAction.svelte
+msgid "Download"
+msgstr "Завантажити"
+
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+msgid "Copy image URL"
+msgstr "Копіювати URL зображення"
+
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+msgid "Delete image"
+msgstr "Видалити зображення"
+
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+msgid "Manage tags"
+msgstr "Керувати тегами"
+
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+msgid "Image actions"
+msgstr "Дії із зображенням"
+
+#: src/feature/Image/ActionBar/useImageActions.svelte.ts
+msgid "Generating..."
+msgstr "Генерується..."
+
+#: src/feature/Image/ActionBar/useImageActions.svelte.ts
+#: src/feature/Text/CopyableText/CopyableText.svelte
+#: src/feature/Text/CopyableText/CopyableText.svelte
+msgid "Copied!"
+msgstr "Скопійовано!"
+
+#: src/feature/Image/ActionBar/useImageActions.svelte.ts
+msgid "Copy URL"
+msgstr "Копіювати URL"
+
+#: src/feature/Image/ActionBar/useImageActions.svelte.ts
+msgid "Make private"
+msgstr "Зробити приватним"
+
+#: src/feature/Image/ActionBar/useImageActions.svelte.ts
+msgid "Make public"
+msgstr "Зробити публічним"
+
+#: src/feature/Image/ActionBar/useImageActions.svelte.ts
+#: src/feature/Image/AdminImageDropdown/AdminImageDropdown.svelte
+msgid "Failed to update visibility. Please try again later."
+msgstr "Не вдалося змінити видимість. Спробуйте пізніше."
+
+#: src/feature/Image/ActionBar/useImageActions.svelte.ts
+msgid "Failed to generate share link. Please try again later."
+msgstr "Не вдалося створити посилання. Спробуйте пізніше."
+
+#: src/feature/Image/ActionBar/useImageActions.svelte.ts
+#: src/feature/Image/AdminImageDropdown/AdminImageDropdown.svelte
+msgid "Failed to delete image. Please try again later."
+msgstr "Не вдалося видалити зображення. Спробуйте пізніше."
+
+#: src/feature/Image/BookmarkButton/BookmarkButton.svelte
+msgid "Sign in to bookmark images"
+msgstr "Увійдіть, щоб зберігати зображення в закладки"
+
+#: src/feature/Image/BookmarkButton/BookmarkButton.svelte
+msgid "You can't bookmark your own images"
+msgstr "Не можна додавати власні зображення до закладок"
+
+#: src/feature/Image/BookmarkButton/BookmarkButton.svelte
+msgid "Image bookmarked"
+msgstr "Зображення додано до закладок"
+
+#: src/feature/Image/BookmarkButton/BookmarkButton.svelte
+msgid "Bookmark removed"
+msgstr "Закладку видалено"
+
+#: src/feature/Image/BookmarkButton/BookmarkButton.svelte
+msgid "Failed to update bookmark"
+msgstr "Не вдалося оновити закладку"
+
+#: src/feature/Image/BookmarkButton/BookmarkButton.svelte
+msgid "Can't bookmark own image"
+msgstr "Не можна додати власне зображення до закладок"
+
+#: src/feature/Image/BookmarkButton/BookmarkButton.svelte
+#: src/feature/Text/EditableText/EditableText.svelte
+msgid "Save"
+msgstr "Зберегти"
+
+#: src/feature/Image/BookmarkStat/BookmarkStat.svelte
+#: src/feature/Image/BookmarkersPanel/BookmarkersPanel.svelte
+msgid "Bookmarked"
+msgstr "В закладках"
+
+#: src/feature/Image/BookmarkersPanel/BookmarkersPanel.svelte
+msgid "Failed to load bookmarks"
+msgstr "Не вдалося завантажити закладки"
+
+#: src/feature/Image/Description/ImageDescription.svelte
+#: src/routes/collection/[id]/+page.svelte
+msgid "Add a description..."
+msgstr "Додати опис..."
+
+#: src/feature/Image/Description/ImageDescription.svelte
+#: src/routes/collection/[id]/+page.svelte
+msgid "Click to add a description..."
+msgstr "Натисніть, щоб додати опис..."
+
+#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
+#: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
+#: src/feature/Image/Description/ImageDescription.svelte
+#: src/feature/Image/PostViewer/PostViewerSidebar.svelte
+msgid "Description"
+msgstr "Опис"
+
+#: src/feature/Image/FormatPicker/FormatPicker.svelte
+msgid "Image format selection"
+msgstr "Вибір формату зображення"
+
+#. 0: value.toUpperCase()
+#: src/feature/Image/FormatPicker/FormatPicker.svelte
+msgid "Converting to {0} will remove animation"
+msgstr "Конвертація у {0} видалить анімацію"
+
+#: src/feature/Image/FractionPicker/FractionPicker.svelte
+msgid "Scale"
+msgstr "Масштаб"
+
+#: src/feature/Image/FractionPicker/FractionPicker.svelte
+msgid "Scale selection"
+msgstr "Вибір масштабу"
+
+#. 0: option.label
+#: src/feature/Image/FractionPicker/FractionPicker.svelte
+msgid "Scale to {0}"
+msgstr "Масштабувати до {0}"
+
+#. 0: pluralize(result.processed.length, 'image')
+#: src/feature/Image/History/BatchContext.svelte.ts
+msgid "Successfully updated {0}"
+msgstr "Успішно оновлено {0}"
+
+#. 0: pluralize(result.failed.length, 'image')
+#: src/feature/Image/History/BatchContext.svelte.ts
+msgid "Failed to update {0}"
+msgstr "Не вдалося оновити {0}"
+
+#: src/feature/Image/History/Actions/DeleteAction.svelte
+#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/routes/admin/settings/image/+page.svelte
+msgid "Image"
+msgstr "Зображення"
+
+#: src/feature/Image/History/Actions/DeleteAction.svelte
+#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
+#: src/feature/Tag/TagDataTable/columns.svelte.ts
+msgid "Images"
+msgstr "Зображення"
+
+#~ msgid "Delete {0} {1}"
+#~ msgstr "Видалити {0} {1}"
+
+#: src/feature/Image/History/Actions/DeleteAction.svelte
+#: src/feature/Image/History/BulkDeleteConfirmation.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
+msgid "Remove from storage"
+msgstr "Видалити зі сховища"
+
+#: src/feature/Image/History/Actions/DeleteAction.svelte
+#: src/feature/Image/History/BulkDeleteConfirmation.svelte
+msgid "Permanently delete the files from storage"
+msgstr "Назавжди видалити файли зі сховища"
+
+#~ msgid "<0/> Delete {0}"
+#~ msgstr "<0/> Видалити {0}"
+
+#: src/feature/Image/History/ImageMetadata.svelte
+msgid "File type & dimensions"
+msgstr "Тип файлу та розміри"
+
+#: src/feature/Image/History/ImageMetadata.svelte
+msgid "File size"
+msgstr "Розмір файлу"
+
+#: src/feature/Image/History/ImageMetadata.svelte
+msgid "Uploaded"
+msgstr "Завантажено"
+
+#: src/feature/Image/History/SelectionActionBar.svelte
+msgid "Deselect all"
+msgstr "Зняти вибір"
+
+#: src/feature/Image/History/SelectionActionBar.svelte
+msgid "Select all"
+msgstr "Вибрати все"
+
+#. 0: selectedCount
+#: src/feature/Image/History/SelectionActionBar.svelte
+msgid "{0} selected"
+msgstr "{0} вибрано"
+
+#: src/feature/Image/History/useHistoryItemActions.svelte.ts
+msgid "Deselect image"
+msgstr "Скасувати вибір зображення"
+
+#: src/feature/Image/History/useHistoryItemActions.svelte.ts
+msgid "Select image"
+msgstr "Вибрати зображення"
+
+#: src/feature/Image/History/BulkDeleteConfirmation.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
+msgid "Delete Image"
+msgstr "Видалити зображення"
+
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
+msgid "Permanently delete the file from storage"
+msgstr "Назавжди видалити файл зі сховища"
+
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
+msgid "<0/> Delete Image"
+msgstr "<0/> Видалити зображення"
+
+#: src/feature/Image/License/LicenseInfo.svelte
+msgid "Licensed under <0/>"
+msgstr "Ліцензія <0/>"
+
+#: src/feature/Image/Placeholder/ImagePlaceholder.svelte
+msgid "Image unavailable"
+msgstr "Зображення недоступне"
+
+#: src/feature/Image/Placeholder/ImagePlaceholder.svelte
+msgid "This image may have been removed or is temporarily inaccessible"
+msgstr "Це зображення могло бути видалене або тимчасово недоступне"
+
+#: src/feature/Image/Placeholder/ImagePlaceholder.svelte
+msgid "Open in new tab"
+msgstr "Відкрити в новій вкладці"
+
+#: src/feature/Image/PostViewer/PostViewer.svelte
+msgid "Close viewer"
+msgstr "Закрити перегляд"
+
+#: src/feature/Image/PostViewer/PostViewer.svelte
+#: src/feature/Tag/TagInput/TagInput.svelte
+#: src/ui/components/input/number-input.svelte
+#: src/ui/components/picker/picker-list.svelte
+msgid "ArrowUp"
+msgstr "ArrowUp"
+
+#: src/feature/Image/PostViewer/PostViewer.svelte
+#: src/ui/components/table-pagination/table-pagination.svelte
+msgid "ArrowLeft"
+msgstr "ArrowLeft"
+
+#: src/feature/Image/PostViewer/PostViewer.svelte
+#: src/feature/Tag/TagInput/TagInput.svelte
+#: src/ui/components/input/number-input.svelte
+#: src/ui/components/picker/picker-list.svelte
+msgid "ArrowDown"
+msgstr "ArrowDown"
+
+#: src/feature/Image/PostViewer/PostViewer.svelte
+#: src/ui/components/table-pagination/table-pagination.svelte
+msgid "ArrowRight"
+msgstr "ArrowRight"
+
+#: src/feature/Image/PostViewer/PostViewerNavigation.svelte
+msgid "Previous post"
+msgstr "Попередній допис"
+
+#: src/feature/Image/PostViewer/PostViewerNavigation.svelte
+msgid "Next post"
+msgstr "Наступний допис"
+
+#. 0: image.attributes.views
+#: src/feature/Image/PostViewer/PostViewerSidebar.svelte
+msgid "<0/> {0} views"
+msgstr "<0/> {0} переглядів"
+
+#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+msgid "Direct Link"
+msgstr "Пряме посилання"
+
+#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+msgid "Link"
+msgstr "Посилання"
+
+#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+msgid "Markdown"
+msgstr "Markdown"
+
+#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+msgid "BBCode"
+msgstr "BBCode"
+
+#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+msgid "Image Content"
+msgstr "Вміст зображення"
+
+#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+msgid "Failed to convert"
+msgstr "Не вдалося конвертувати"
+
+#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+msgid "Link copied to clipboard"
+msgstr "Посилання скопійовано"
+
+#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+msgid "Copying..."
+msgstr "Копіювання..."
+
+#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Text/CopyContainer/CopyContainer.svelte
+msgid "Signing..."
+msgstr "Підписання..."
+
+#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Text/CopyContainer/CopyContainer.svelte
+msgid "Copied"
+msgstr "Скопійовано"
+
+#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Text/CopyContainer/CopyContainer.svelte
+msgid "Copy"
+msgstr "Копіювати"
+
+#: src/feature/Image/SizePicker/ImageSizePicker.svelte
+msgid "Width"
+msgstr "Ширина"
+
+#: src/feature/Image/SizePicker/ImageSizePicker.svelte
+msgid "Height"
+msgstr "Висота"
+
+#. 0: formatValue(width); 1: formatValue(height)
+#: src/feature/Image/SizePicker/ImageSizePicker.svelte
+msgid "Original: {0} × {1}"
+msgstr "Оригінал: {0} × {1}"
+
+#: src/feature/Image/SizePicker/ImageSizePicker.svelte
+msgid "Reset to original dimensions"
+msgstr "Скинути до оригінальних розмірів"
+
+#: src/feature/Image/SizePicker/ImageSizePicker.svelte
+#: src/feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte
+msgid "<0/> Reset"
+msgstr "<0/> Скинути"
+
+#. 0: formatValue(calculatedWidth); 1: formatValue(calculatedHeight)
+#: src/feature/Image/SizePicker/ImageSizePicker.svelte
+msgid "New: {0} × {1}"
+msgstr "Новий: {0} × {1}"
+
+#: src/feature/Image/TagManager/ImageTagManager.svelte
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+msgid "Tags"
+msgstr "Теги"
+
+#: src/feature/Image/TagManager/ImageTagManager.svelte
+#: src/feature/Tag/TagSelector/TagSelector.svelte
+msgid "Add more tags..."
+msgstr "Додати теги..."
+
+#: src/feature/Image/TagManager/ImageTagManager.svelte
+msgid "<0/> Add"
+msgstr "<0/> Додати"
+
+#: src/feature/Image/TagManager/ImageTagManager.svelte
+msgid "<0/> Click to add tags..."
+msgstr "<0/> Натисніть, щоб додати теги..."
+
+#: src/feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte
+#: src/ui/components/sonner/toasts/UnsupportedFormatToast.svelte
+msgid "Unsupported file format"
+msgstr "Непідтримуваний формат файлу"
+
+#: src/feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte
+#: src/ui/components/sonner/toasts/UnsupportedFormatToast.svelte
+msgid "The file you're trying to upload is not supported. Please use one of the supported image formats."
+msgstr "Файл, який ви намагаєтесь завантажити, не підтримується. Використовуйте один із підтримуваних форматів."
+
+#: src/feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte
+#: src/ui/components/sonner/toasts/UnsupportedFormatToast.svelte
+msgid "<0/> View supported formats"
+msgstr "<0/> Переглянути підтримувані формати"
+
+#: src/feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte
+#: src/ui/components/sonner/toasts/BaseToast.svelte
+#: src/ui/components/sonner/toasts/ErrorToast.svelte
+#: src/ui/components/sonner/toasts/InfoToast.svelte
+#: src/ui/components/sonner/toasts/SuccessToast.svelte
+#: src/ui/components/sonner/toasts/WarningToast.svelte
+msgid "Close notification"
+msgstr "Закрити сповіщення"
+
+#: src/feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte
+#: src/feature/Settings/Version/ReleaseModal.svelte
+#: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
+#: src/ui/components/dialog/dialog-content.svelte
+#: src/ui/components/sheet/sheet-content.svelte
+#: src/ui/components/sonner/toasts/BaseToast.svelte
+#: src/ui/components/sonner/toasts/ErrorToast.svelte
+#: src/ui/components/sonner/toasts/InfoToast.svelte
+#: src/ui/components/sonner/toasts/SuccessToast.svelte
+#: src/ui/components/sonner/toasts/WarningToast.svelte
+msgid "Close"
+msgstr "Закрити"
+
+#: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+#: src/feature/Image/ViewCountBadge/ViewCountBadge.svelte
+msgid "Views"
+msgstr "Перегляди"
+
+#: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
+msgid "This image is publicly visible"
+msgstr "Це зображення є публічним"
+
+#: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
+msgid "This image is private"
+msgstr "Це зображення є приватним"
+
+#: src/feature/Navigation/Navbar/Navbar.svelte
+#: src/feature/Navigation/Navbar/Navbar.svelte
+#: src/feature/Navigation/Sidebar/AppSidebar.svelte
+#: src/feature/Navigation/Sidebar/AppSidebar.svelte
+#: src/routes/profile/(auth)/login/+page.svelte
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Slink"
+msgstr "Slink"
+
+#: src/feature/Navigation/Navbar/Navbar.svelte
+msgid "<0/> Upload"
+msgstr "<0/> Завантажити"
+
+#: src/feature/Navigation/Navbar/Navbar.svelte
+msgid "Upload Image"
+msgstr "Завантажити зображення"
+
+#: src/feature/Navigation/Navbar/Navbar.svelte
+msgid "Share your media with others by uploading them and organizing them into collections."
+msgstr "Діліться медіафайлами з іншими, завантажуючи їх та організовуючи у колекції."
+
+#: src/feature/Navigation/Navbar/Navbar.svelte
+msgid "Shortcut"
+msgstr "Гарячі клавіші"
+
+#: src/feature/Navigation/Navbar/Navbar.svelte
+msgid "Toggle Theme"
+msgstr "Змінити тему"
+
+#: src/feature/Navigation/Navbar/Navbar.svelte
+msgid "Switch between light and dark mode."
+msgstr "Перемикання між світлою та темною темами."
+
+#: src/feature/Navigation/Sidebar/NavProjects.svelte
+msgid "Projects"
+msgstr "Проєкти"
+
+#: src/feature/Navigation/Sidebar/NavProjects.svelte
+#: src/feature/Navigation/Sidebar/NavProjects.svelte
+#: src/ui/components/breadcrumb/breadcrumb-ellipsis.svelte
+msgid "More"
+msgstr "Більше"
+
+#: src/feature/Navigation/Sidebar/NavProjects.svelte
+msgid "View Project"
+msgstr "Переглянути проєкт"
+
+#: src/feature/Navigation/Sidebar/NavProjects.svelte
+msgid "Share Project"
+msgstr "Поділитися проєктом"
+
+#: src/feature/Navigation/Sidebar/NavProjects.svelte
+msgid "Delete Project"
+msgstr "Видалити проєкт"
+
+#: src/feature/Navigation/Sidebar/NavGroup.svelte
+msgid "Collapse submenu"
+msgstr "Згорнути підменю"
+
+#: src/feature/Navigation/Sidebar/NavGroup.svelte
+msgid "Expand submenu"
+msgstr "Розгорнути підменю"
+
+#: src/feature/Navigation/Sidebar/NavUser.svelte
+msgid "Account Settings"
+msgstr "Обліковий запис"
+
+#: src/feature/Navigation/Sidebar/NavUser.svelte
+msgid "External Integrations"
+msgstr "Зовнішні інтеграції"
+
+#: src/feature/Navigation/Sidebar/NavUser.svelte
+msgid "Sign Out"
+msgstr "Вийти"
+
+#: src/feature/Navigation/Sidebar/SidebarStorageUsage.svelte
+#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
+msgid "Failed to load storage usage"
+msgstr "Не вдалося завантажити дані про сховище"
+
+#: src/feature/Layout/DemoNotice/DemoNotice.svelte
+msgid "Demo instance - uploads and state changes are disabled"
+msgstr "Демо-режим — завантаження та зміни стану вимкнені"
+
+#: src/feature/Image/AdminImageDropdown/AdminImageDropdown.svelte
+msgid "Make Private"
+msgstr "Зробити приватним"
+
+#: src/feature/Image/AdminImageDropdown/AdminImageDropdown.svelte
+msgid "Make Public"
+msgstr "Зробити публічним"
+
+#: src/feature/Layout/ThemeSwitch/ThemeSwitch.svelte
+msgid "Switch to light mode"
+msgstr "Увімкнути світлу тему"
+
+#: src/feature/Layout/ThemeSwitch/ThemeSwitch.svelte
+msgid "Switch to dark mode"
+msgstr "Увімкнути темну тему"
+
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.svelte
+msgid "View mode selection"
+msgstr "Вибір режиму відображення"
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Access Control"
+msgstr "Контроль доступу"
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Configure guest access and upload permissions"
+msgstr "Налаштуйте гостьовий доступ та дозволи на завантаження"
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Allow unauthenticated users to upload images without creating an account. When enabled without Guest Access, users will see a success message but cannot browse uploaded images"
+msgstr "Дозволити неавтентифікованим користувачам завантажувати зображення без створення облікового запису. Якщо ввімкнено без гостьового доступу, користувачі побачать повідомлення про успіх, але не зможуть переглядати завантажені зображення"
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Guest Access (View-Only)"
+msgstr "Гостьовий доступ (лише перегляд)"
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Allow unauthenticated users to view and browse images"
+msgstr "Дозволити неавтентифікованим користувачам переглядати зображення"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
+msgid "Local Storage"
+msgstr "Локальне сховище"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
+msgid "Amazon S3"
+msgstr "Amazon S3"
+
+#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
+msgid "SMB Share"
+msgstr "SMB-ресурс"
+
+#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
+msgid "Storage Usage"
+msgstr "Використання сховища"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
+msgid "Provider"
+msgstr "Провайдер"
+
+#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
+msgid "Total Usage"
+msgstr "Загальне використання"
+
+#. 0: data.fileCount.toLocaleString()
+#. 0: data.cacheFileCount.toLocaleString()
+#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
+#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
+msgid "{0} files"
+msgstr "{0} файлів"
+
+#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
+msgid "Cache"
+msgstr "Кеш"
+
+#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
+msgid "No storage data available"
+msgstr "Дані про сховище відсутні"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "WEBP (Recommended)"
+msgstr "WEBP (Рекомендовано)"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+#: src/routes/admin/settings/+page.svelte
+msgid "Image Settings"
+msgstr "Зображення"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Configure image upload limits and processing options"
+msgstr "Налаштуйте обмеження завантаження та параметри обробки зображень"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Maximum Image Size"
+msgstr "Максимальний розмір зображення"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Set the maximum size limit for image uploads"
+msgstr "Встановіть максимальний розмір для завантаження зображень"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Strip EXIF Metadata"
+msgstr "Видалити EXIF-метадані"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Automatically remove metadata from uploaded images for privacy"
+msgstr "Автоматично видаляти метадані із завантажених зображень для конфіденційності"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Allow Only Public Images"
+msgstr "Дозволити лише публічні зображення"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "When enabled, all images are automatically set to public and visibility cannot be changed"
+msgstr "Коли ввімкнено, всі зображення автоматично стають публічними і видимість не можна змінити"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Enable Image Deduplication"
+msgstr "Увімкнути дедуплікацію зображень"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Detect and reject duplicate images during upload"
+msgstr "Виявляти та відхиляти дублікати зображень під час завантаження"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Only applies to new uploads. Existing images are not affected."
+msgstr "Застосовується лише до нових завантажень. Наявні зображення не зачіпаються."
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Compression Quality"
+msgstr "Якість стиснення"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Quality level for lossy image compression (1-100). Used during format conversion if target format supports it"
+msgstr "Рівень якості для стиснення зображень із втратами (1-100). Використовується при конвертації формату, якщо цільовий формат це підтримує"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Force Format Conversion"
+msgstr "Примусова конвертація формату"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Automatically convert all uploaded images to a specific format"
+msgstr "Автоматично конвертувати всі завантажені зображення у вказаний формат"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Target Format"
+msgstr "Цільовий формат"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Format to convert uploaded images to"
+msgstr "Формат для конвертації завантажених зображень"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Select format"
+msgstr "Обрати формат"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Convert Animated Images"
+msgstr "Конвертувати анімовані зображення"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Include animated images (GIF, animated WebP/AVIF) in conversion"
+msgstr "Включити анімовані зображення (GIF, анімовані WebP/AVIF) у конвертацію"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Processing animated images is CPU-intensive and may slow down uploads."
+msgstr "Обробка анімованих зображень потребує багато ресурсів і може уповільнити завантаження."
+
+#. 0: settings.targetFormat?.toUpperCase()
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Converting to {0} will result in loss of animation."
+msgstr "Конвертація у {0} призведе до втрати анімації."
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Enable Licensing"
+msgstr "Увімкнути ліцензування"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Allow users to set licenses on their images (Creative Commons, etc.)"
+msgstr "Дозволити користувачам встановлювати ліцензії на зображення (Creative Commons тощо)"
+
+#: src/feature/Settings/CacheSettings/CacheSettings.svelte
+msgid "Cache Management"
+msgstr "Керування кешем"
+
+#: src/feature/Settings/CacheSettings/CacheSettings.svelte
+msgid "Image Cache"
+msgstr "Кеш зображень"
+
+#: src/feature/Settings/CacheSettings/CacheSettings.svelte
+msgid "Cached files store transformed versions of images (resized, cropped, format converted) to improve performance. Clearing the cache will regenerate files on next request."
+msgstr "Кешовані файли зберігають трансформовані версії зображень (змінені розміри, обрізані, конвертовані) для покращення продуктивності. Очищення кешу призведе до повторної генерації файлів при наступному запиті."
+
+#: src/feature/Settings/CacheSettings/CacheSettings.svelte
+msgid "<0/> Clearing..."
+msgstr "<0/> Очищення..."
+
+#: src/feature/Settings/CacheSettings/CacheSettings.svelte
+#: src/feature/Settings/SettingsPane/SettingItem.svelte
+msgid "<0/> Confirm"
+msgstr "<0/> Підтвердити"
+
+#: src/feature/Settings/CacheSettings/CacheSettings.svelte
+msgid "<0/> Clear Cache"
+msgstr "<0/> Очистити кеш"
+
+#: src/feature/Settings/CacheSettings/CacheSettings.svelte
+msgid "Clearing cache..."
+msgstr "Очищення кешу..."
+
+#: src/feature/Settings/ResetSettingConfirmation/ResetSettingConfirmation.svelte
+#: src/feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte
+#: src/feature/Settings/SettingsPane/SettingItem.svelte
+msgid "Reset Setting"
+msgstr "Скинути налаштування"
+
+#: src/feature/Settings/ResetSettingConfirmation/ResetSettingConfirmation.svelte
+msgid "Reset to Default"
+msgstr "Скинути за замовчуванням"
+
+#: src/feature/Settings/ResetSettingConfirmation/ResetSettingConfirmation.svelte
+msgid "Keep Current"
+msgstr "Залишити поточне"
+
+#: src/feature/Settings/ResetSettingConfirmation/ResetSettingConfirmation.svelte
+msgid "Are you sure you want to reset <0/> to its default value?"
+msgstr "Ви впевнені, що хочете скинути <0/> до значення за замовчуванням?"
+
+#: src/feature/Settings/ResetSettingConfirmation/ResetSettingConfirmation.svelte
+msgid "This action cannot be undone. Your current setting will be lost."
+msgstr "Цю дію не можна скасувати. Поточне налаштування буде втрачено."
+
+#: src/feature/Settings/ResetSettingConfirmation/ResetSettingConfirmation.svelte
+msgid "Current Value:"
+msgstr "Поточне значення:"
+
+#: src/feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte
+msgid "Restore default value"
+msgstr "Відновити значення за замовчуванням"
+
+#: src/feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte
+msgid "Reset <0/> from current value to default?"
+msgstr "Скинути <0/> з поточного значення до стандартного?"
+
+#: src/feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte
+msgid "Reset <0/> to its default value?"
+msgstr "Скинути <0/> до значення за замовчуванням?"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderFormState.svelte.ts
+msgid "Provider updated"
+msgstr "Провайдера оновлено"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderFormState.svelte.ts
+msgid "Provider created"
+msgstr "Провайдера створено"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Configuration"
+msgstr "Конфігурація"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Selected authentication provider"
+msgstr "Обраний провайдер автентифікації"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Change"
+msgstr "Змінити"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Provider Name"
+msgstr "Назва провайдера"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Display name for the provider"
+msgstr "Відображувана назва провайдера"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Slug"
+msgstr "Slug"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Unique identifier for the provider"
+msgstr "Унікальний ідентифікатор провайдера"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Issuer URL"
+msgstr "URL видавця"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "OpenID Connect discovery endpoint"
+msgstr "Точка виявлення OpenID Connect"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Client ID"
+msgstr "Client ID"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "OAuth application client identifier"
+msgstr "Ідентифікатор клієнта OAuth-застосунку"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "OAuth Client ID"
+msgstr "OAuth Client ID"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Client Secret"
+msgstr "Client Secret"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "OAuth application client secret"
+msgstr "Секрет клієнта OAuth-застосунку"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "OAuth Client Secret"
+msgstr "OAuth Client Secret"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+#: src/feature/Settings/SettingsPane/SettingItem.svelte
+msgid "Enabled"
+msgstr "Увімкнено"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Allow users to authenticate with this provider"
+msgstr "Дозволити користувачам автентифікуватися через цього провайдера"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Update Provider"
+msgstr "Оновити провайдера"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+#: src/routes/admin/settings/sso/new/+page.svelte
+msgid "Add Provider"
+msgstr "Додати провайдера"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderListState.svelte.ts
+msgid "Provider deleted"
+msgstr "Провайдера видалено"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
+msgid "No SSO providers configured yet"
+msgstr "SSO-провайдери ще не налаштовані"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
+msgid "Move Up"
+msgstr "Вгору"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
+msgid "Move Down"
+msgstr "Вниз"
+
+#: src/feature/Settings/SettingsPane/SettingItem.svelte
+msgid "Disabled"
+msgstr "Вимкнено"
+
+#: src/feature/Settings/SettingsPane/SettingItem.svelte
+msgid "Reset to default value"
+msgstr "Скинути до значення за замовчуванням"
+
+#. 0: displayValue
+#: src/feature/Settings/SettingsPane/SettingItem.svelte
+msgid "Reset to {0}"
+msgstr "Скинути до {0}"
+
+#: src/feature/Settings/SettingsPane/SettingItem.svelte
+msgid "Reset to <0/>"
+msgstr "Скинути до <0/>"
+
+#: src/feature/Settings/ShareSettings/ShareSettings.svelte
+#: src/routes/info/[id]/+page.svelte
+msgid "Share"
+msgstr "Спільний доступ"
+
+#: src/feature/Settings/ShareSettings/ShareSettings.svelte
+msgid "Configure URL sharing behavior"
+msgstr "Налаштуйте поведінку поширення URL"
+
+#: src/feature/Settings/ShareSettings/ShareSettings.svelte
+msgid "URL Shortening"
+msgstr "Скорочення URL"
+
+#: src/feature/Settings/ShareSettings/ShareSettings.svelte
+msgid "Generate short URLs when copying image links"
+msgstr "Генерувати короткі URL при копіюванні посилань на зображення"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+#: src/routes/admin/settings/+page.svelte
+msgid "Storage Configuration"
+msgstr "Сховище"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Choose how and where your data is stored"
+msgstr "Оберіть спосіб та місце зберігання даних"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Storage Provider"
+msgstr "Провайдер сховища"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Select your preferred storage backend"
+msgstr "Оберіть бажаний бекенд сховища"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Network Storage (SMB)"
+msgstr "Мережеве сховище (SMB)"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Server Host"
+msgstr "Адреса сервера"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "IP address or hostname of your SMB server"
+msgstr "IP-адреса або ім'я хоста SMB-сервера"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Share Name"
+msgstr "Ім'я ресурсу"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "The name of the shared folder"
+msgstr "Назва спільної папки"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Workgroup"
+msgstr "Робоча група"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "SMB workgroup name (optional)"
+msgstr "Назва робочої групи SMB (необов'язково)"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+#: src/feature/User/UserDataTable/UserDataTable.svelte
+#: src/feature/User/UserDataTable/columns.svelte.ts
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Username"
+msgstr "Ім'я користувача"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Authentication username"
+msgstr "Ім'я користувача для автентифікації"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+#: src/routes/profile/(auth)/login/+page.svelte
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Password"
+msgstr "Пароль"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Authentication password for SMB server"
+msgstr "Пароль для автентифікації на SMB-сервері"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Custom S3 Provider"
+msgstr "Власний S3-провайдер"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Enable for S3-compatible services like MinIO, Cloudflare R2, or Wasabi. This unlocks custom endpoint and path-style options."
+msgstr "Увімкніть для S3-сумісних сервісів, таких як MinIO, Cloudflare R2 або Wasabi. Це розблокує власний endpoint та path-style опції."
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Amazon S3 usage may incur charges. <0>Review pricing</0>"
+msgstr "Використання Amazon S3 може бути платним. <0>Переглянути тарифи</0>"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Custom Endpoint"
+msgstr "Власний Endpoint"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Custom S3 endpoint URL for your provider"
+msgstr "URL власного S3 endpoint для вашого провайдера"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Region (Optional)"
+msgstr "Регіон (необов'язково)"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Most S3-compatible providers don't require a region. Leave empty for Cloudflare R2 or providers that auto-detect. Use \"auto\" or a specific region if required by your provider."
+msgstr "Більшість S3-сумісних провайдерів не потребують регіону. Залиште порожнім для Cloudflare R2 або провайдерів із автовизначенням. Використовуйте \"auto\" або конкретний регіон, якщо цього вимагає ваш провайдер."
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Force Path-Style URLs"
+msgstr "Примусові path-style URL"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Enable if your provider requires path-style buckets (http://host/bucket/key). Common for MinIO and self-hosted solutions."
+msgstr "Увімкніть, якщо ваш провайдер потребує path-style бакети (http://host/bucket/key). Поширено для MinIO та self-hosted рішень."
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Region"
+msgstr "Регіон"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "AWS region where your bucket is located (e.g., us-east-1). <0>View available regions</0>"
+msgstr "Регіон AWS, де розташований ваш бакет (наприклад, us-east-1). <0>Переглянути доступні регіони</0>"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Bucket Name"
+msgstr "Назва бакета"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Your S3 bucket name. <0>Learn about bucket naming</0>"
+msgstr "Назва вашого S3-бакета. <0>Дізнатися про іменування бакетів</0>"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Access Key ID"
+msgstr "Access Key ID"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Your AWS Access Key ID. <0>How to create access keys</0>"
+msgstr "Ваш AWS Access Key ID. <0>Як створити ключі доступу</0>"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Secret Access Key"
+msgstr "Secret Access Key"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Your AWS Secret Access Key"
+msgstr "Ваш AWS Secret Access Key"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "User Management"
+msgstr "Керування користувачами"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Control user registration, authentication, and security requirements"
+msgstr "Контролюйте реєстрацію, автентифікацію та вимоги безпеки"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "User Registration"
+msgstr "Реєстрація користувачів"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Allow new users to create accounts"
+msgstr "Дозволити новим користувачам створювати облікові записи"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Require Admin Approval"
+msgstr "Вимагати схвалення адміністратора"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "New users must be approved before accessing the app"
+msgstr "Нові користувачі повинні бути схвалені перед доступом до застосунку"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Minimum Password Length"
+msgstr "Мінімальна довжина пароля"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Minimum characters required"
+msgstr "Мінімальна кількість символів"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Password Requirements"
+msgstr "Вимоги до пароля"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Required character types"
+msgstr "Необхідні типи символів"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Numbers (0-9)"
+msgstr "Цифри (0-9)"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Lowercase (a-z)"
+msgstr "Малі літери (a-z)"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Uppercase (A-Z)"
+msgstr "Великі літери (A-Z)"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Special (!@#$)"
+msgstr "Спеціальні (!@#$)"
+
+#: src/feature/Settings/Version/ReleaseModal.svelte
+#: src/feature/Settings/Version/Version.svelte
+msgid "Update Available"
+msgstr "Доступне оновлення"
+
+#: src/feature/Settings/Version/ReleaseModal.svelte
+#: src/feature/Settings/Version/ReleaseModal.svelte
+msgid "Latest Version"
+msgstr "Остання версія"
+
+#: src/feature/Settings/Version/ReleaseModal.svelte
+msgid "A new version of Slink is available. Here's what's new:"
+msgstr "Доступна нова версія Slink. Ось що нового:"
+
+#: src/feature/Settings/Version/ReleaseModal.svelte
+msgid "You're running the latest version of Slink. Here are the release notes:"
+msgstr "Ви використовуєте останню версію Slink. Ось примітки до випуску:"
+
+#: src/feature/Settings/Version/ReleaseModal.svelte
+msgid "Current Version"
+msgstr "Поточна версія"
+
+#. 0: currentVersion
+#: src/feature/Settings/Version/ReleaseModal.svelte
+msgid "v{0}"
+msgstr "v{0}"
+
+#: src/feature/Settings/Version/ReleaseModal.svelte
+msgid "Up to date"
+msgstr "Актуальна версія"
+
+#. 0: formatReleaseDate(release.published_at)
+#: src/feature/Settings/Version/ReleaseModal.svelte
+msgid "Released {0}"
+msgstr "Випущено {0}"
+
+#: src/feature/Settings/Version/ReleaseModal.svelte
+msgid "Maybe Later"
+msgstr "Можливо пізніше"
+
+#: src/feature/Settings/Version/ReleaseModal.svelte
+msgid "<0/> View on GitHub"
+msgstr "<0/> Переглянути на GitHub"
+
+#: src/feature/Settings/Version/Version.svelte
+msgid "Latest"
+msgstr "Остання версія"
+
+#. 0: UpdateCheckState.hasUpdate ? 'update details' \\: 'release notes'
+#: src/feature/Settings/Version/Version.svelte
+msgid "Click to view {0}"
+msgstr "Натисніть для перегляду {0}"
+
+#. 0: versionInfo ? formatVersion(versionInfo) \\: ''
+#: src/feature/Settings/Version/Version.svelte
+msgid "Version {0}"
+msgstr "Версія {0}"
+
+#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+msgid "Filtering by"
+msgstr "Фільтрація за"
+
+#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+msgid "Toggle between matching all or any selected tags"
+msgstr "Перемикання між збігом усіх або будь-якого з вибраних тегів"
+
+#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+msgid "Match all"
+msgstr "Збіг усіх"
+
+#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+msgid "Match any"
+msgstr "Збіг будь-якого"
+
+#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+msgid "Match All"
+msgstr "Збіг усіх"
+
+#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+msgid "Match Any"
+msgstr "Збіг будь-якого"
+
+#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+msgid "Images must have every selected tag to appear in results."
+msgstr "Зображення повинні мати всі вибрані теги, щоб з'явитися в результатах."
+
+#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+msgid "Images with at least one selected tag will appear in results."
+msgstr "Зображення з хоча б одним вибраним тегом з'являться в результатах."
+
+#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+msgid "Click to switch to match any"
+msgstr "Натисніть, щоб перемкнути на збіг будь-якого"
+
+#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+msgid "Click to switch to match all"
+msgstr "Натисніть, щоб перемкнути на збіг усіх"
+
+#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+msgid "Clear all filters"
+msgstr "Очистити всі фільтри"
+
+#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+msgid "Clear"
+msgstr "Очистити"
+
+#: src/feature/Layout/DemoBadge/DemoBadge.svelte
+msgid "DEMO"
+msgstr "ДЕМО"
+
+#: src/feature/Tag/ImageTagList/ImageTagList.svelte
+msgid "No tags assigned to this image."
+msgstr "До цього зображення не призначено жодного тегу."
+
+#: src/feature/Collection/CollectionList/CollectionPickerList.svelte
+msgid "Search collections"
+msgstr "Пошук колекцій"
+
+#: src/feature/Collection/CollectionList/CollectionPickerList.svelte
+msgid "No collections yet"
+msgstr "Колекцій ще немає"
+
+#: src/feature/Collection/CollectionList/CollectionPickerList.svelte
+msgid "Create your first collection"
+msgstr "Створіть свою першу колекцію"
+
+#: src/feature/Collection/CollectionList/CollectionPickerList.svelte
+msgid "New collection"
+msgstr "Нова колекція"
+
+#. 0: tag.name
+#: src/feature/Tag/TagBadge/TagBadge.svelte
+msgid "Remove {0} tag"
+msgstr "Видалити тег {0}"
+
+#: src/feature/Tag/TagDataTable/TagActionsCell.svelte
+msgid "Tag actions"
+msgstr "Дії з тегом"
+
+#: src/feature/Tag/TagDataTable/TagActionsCell.svelte
+msgid "Move"
+msgstr "Перемістити"
+
+#. 0: selectedCount === 1 ? 'Image' \\: 'Images'
+#. 0: pluralize(childrenCount, 'child tag')
+#: src/feature/Image/History/Actions/DeleteAction.svelte
+#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
+msgid "Delete {0}"
+msgstr "Видалити {0}"
+
+#. 0: pluralize(tag.imageCount, 'image')
+#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
+msgid "Remove tag from {0}"
+msgstr "Видалити тег з {0}"
+
+#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
+msgid "Delete Tag"
+msgstr "Видалити тег"
+
+#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
+msgid "This will cascade:"
+msgstr "Каскадні наслідки:"
+
+#. 0: getTagDisplayName(creatingChildFor); 1: childTagName
+#: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
+msgid "Create \"{0} › {1}\""
+msgstr "Створити \"{0} › {1}\""
+
+#. 0: searchTerm
+#: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
+msgid "No tags matching \"{0}\""
+msgstr "Тегів за запитом \"{0}\" не знайдено"
+
+#. 0: searchTerm
+#: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
+msgid "Create \"{0}\""
+msgstr "Створити \"{0}\""
+
+#: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
+#: src/feature/Tag/TagPicker/TagPickerList.svelte
+msgid "No tags yet"
+msgstr "Тегів ще немає"
+
+#: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
+#: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
+msgid "Create Tag"
+msgstr "Створити тег"
+
+#: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
+msgid "Add a new tag to organize your images"
+msgstr "Додайте новий тег для організації зображень"
+
+#: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
+msgid "Tag Name"
+msgstr "Назва тегу"
+
+#: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
+msgid "Parent Tag (Optional)"
+msgstr "Батьківський тег (необов'язково)"
+
+#: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
+msgid "Search for parent tag..."
+msgstr "Пошук батьківського тегу..."
+
+#: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
+#: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
+msgid "No matching tags found."
+msgstr "Відповідних тегів не знайдено."
+
+#: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
+msgid "Tag Organization"
+msgstr "Організація тегів"
+
+#: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
+msgid "Tags help organize your images. Parent tags create a hierarchy for better organization. You can always move tags later or create sub-tags within existing ones."
+msgstr "Теги допомагають організовувати зображення. Батьківські теги створюють ієрархію. Ви завжди можете перемістити теги або створити підтеги."
+
+#: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
+#: src/feature/User/ApiKey/CreateApiKeyForm.svelte
+msgid "Creating..."
+msgstr "Створення..."
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
+msgid "Delete Provider"
+msgstr "Видалити провайдера"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
+msgid "<0/> — Provider and its configuration will be removed"
+msgstr "<0/> — Провайдера та його конфігурацію буде видалено"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
+msgid "<0/> Delete Provider"
+msgstr "<0/> Видалити провайдера"
+
+#: src/feature/Tag/TagFilter/TagFilter.svelte
+msgid "Search and select tags"
+msgstr "Знайти та вибрати теги"
+
+#: src/feature/Tag/TagInput/TagInput.svelte
+#: src/feature/Tag/TagSelector/TagSelector.svelte
+msgid "Search or add tags..."
+msgstr "Шукати або додати теги..."
+
+#: src/feature/Tag/TagInput/TagInput.svelte
+msgid "Backspace"
+msgstr "Backspace"
+
+#: src/feature/Tag/TagInput/TagInput.svelte
+msgid "Child tag name..."
+msgstr "Назва підтегу..."
+
+#: src/feature/Tag/TagInput/TagInput.svelte
+msgid "Cancel child tag creation"
+msgstr "Скасувати створення підтегу"
+
+#: src/feature/Tag/TagPicker/TagPickerList.svelte
+msgid "Search tags"
+msgstr "Пошук тегів"
+
+#: src/feature/Tag/TagPicker/TagPickerList.svelte
+msgid "Create your first tag"
+msgstr "Створіть свій перший тег"
+
+#: src/feature/Tag/TagPicker/TagPickerList.svelte
+msgid "New tag"
+msgstr "Новий тег"
+
+#: src/feature/Tag/TagPicker/TagPickerList.svelte
+msgid "Root"
+msgstr "Корінь"
+
+#. 0: tag.name
+#: src/feature/Tag/TagListItem/TagListItem.svelte
+msgid "Add child to {0}"
+msgstr "Додати підтег до {0}"
+
+#: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
+#: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
+msgid "Move Tag"
+msgstr "Перемістити тег"
+
+#. 0: tag.name
+#: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
+msgid "Move \"{0}\" to a new parent tag or to root"
+msgstr "Перемістити \"{0}\" до нового батьківського тегу або в корінь"
+
+#: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
+msgid "New Parent Tag"
+msgstr "Новий батьківський тег"
+
+#: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
+msgid "Search for parent tag... (empty = root)"
+msgstr "Пошук батьківського тегу... (порожнє = корінь)"
+
+#: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
+msgid "Leave empty to move to root level"
+msgstr "Залиште порожнім для переміщення на кореневий рівень"
+
+#: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
+msgid "Moving..."
+msgstr "Переміщення..."
+
+#: src/feature/Text/CommentText/CommentText.svelte
+msgid "This comment has been deleted"
+msgstr "Цей коментар було видалено"
+
+#: src/feature/Text/CopyContainer/CopyContainer.svelte
+msgid "Copy link..."
+msgstr "Копіювати посилання..."
+
+#: src/feature/Text/CopyableText/CopyableText.svelte
+msgid "Click to copy"
+msgstr "Натисніть для копіювання"
+
+#: src/feature/Text/CopyableText/CopyableText.svelte
+msgid "Copy to clipboard"
+msgstr "Копіювати в буфер обміну"
+
+#: src/feature/Text/EditableText/EditableText.svelte
+msgid "Click to add..."
+msgstr "Натисніть, щоб додати..."
+
+#: src/feature/Text/Heading/Heading.svelte
+msgid "Heading"
+msgstr "Заголовок"
+
+#. 0: segment.text
+#: src/feature/Text/HashtagText/HashtagText.svelte
+msgid "Click to search for {0}"
+msgstr "Натисніть для пошуку {0}"
+
+#: src/feature/Upload/UploadOptions/CollectionsOption.svelte
+#: src/feature/Upload/UploadOptions/TagsOption.svelte
+msgid "Add more"
+msgstr "Додати ще"
+
+#: src/feature/Upload/UploadOptions/TagsOption.svelte
+msgid "Add tags"
+msgstr "Додати теги"
+
+#: src/feature/Upload/UploadOptions/UploadOptionsPanel.svelte
+msgid "Upload Options"
+msgstr "Параметри завантаження"
+
+#: src/feature/User/UserActions/UserActions.svelte
+msgid "<0/> Actions"
+msgstr "<0/> Дії"
+
+#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
+#: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
+#: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+#: src/feature/Tag/TagDataTable/columns.svelte.ts
+#: src/feature/User/UserActions/UserActions.svelte
+#: src/feature/User/UserDataTable/UserDataTable.svelte
+#: src/feature/User/UserDataTable/columns.svelte.ts
+msgid "Actions"
+msgstr "Дії"
+
+#: src/feature/User/UserActions/UserActions.svelte
+msgid "Suspend"
+msgstr "Призупинити"
+
+#: src/feature/User/UserActions/UserActions.svelte
+msgid "Activate"
+msgstr "Активувати"
+
+#: src/feature/User/UserActions/UserActions.svelte
+msgid "Make Admin"
+msgstr "Зробити адміністратором"
+
+#: src/feature/User/UserActions/UserActions.svelte
+msgid "Remove Admin"
+msgstr "Зняти права адміністратора"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Delete User"
+msgstr "Видалити користувача"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "User account and all associated data will be removed"
+msgstr "Обліковий запис та всі пов'язані дані буде видалено"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "<0/> Delete User"
+msgstr "<0/> Видалити користувача"
+
+#: src/feature/User/UserDataTable/data-table-email-button.svelte
+msgid "Email <0/>"
+msgstr "Email <0/>"
+
+#: src/feature/User/UserDataTable/UserDataTable.svelte
+#: src/feature/User/UserDataTable/columns.svelte.ts
+msgid "Status"
+msgstr "Статус"
+
+#: src/feature/User/UserDataTable/UserDataTable.svelte
+#: src/feature/User/UserDataTable/columns.svelte.ts
+msgid "Roles"
+msgstr "Ролі"
+
+#: src/feature/User/UserDataTable/UserDataTable.svelte
+msgid "Users will appear here once added"
+msgstr "Користувачі з'являться тут після додавання"
+
+#: src/feature/User/UserRoleBadge/UserRoleBadge.svelte
+msgid "<0/> Admin"
+msgstr "<0/> Адмін"
+
+#: src/feature/User/UserRoleBadge/UserRoleBadge.svelte
+msgid "<0/> User"
+msgstr "<0/> Користувач"
+
+#: src/feature/User/UserStatusCell/UserStatusCell.svelte
+msgid "<0/> You"
+msgstr "<0/> Ви"
+
+#: src/routes/admin/dashboard/+page.svelte
+msgid "Dashboard | Slink"
+msgstr "Панель керування | Slink"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/routes/admin/dashboard/+page.svelte
+msgid "Dashboard"
+msgstr "Панель керування"
+
+#: src/routes/admin/dashboard/+page.svelte
+msgid "Overview of your application's key metrics and activity"
+msgstr "Огляд ключових метрик та активності вашого застосунку"
+
+#: src/routes/admin/settings/+page.svelte
+msgid "Configure image uploads, processing options, and URL sharing preferences"
+msgstr "Налаштуйте завантаження зображень, параметри обробки та налаштування URL"
+
+#: src/routes/admin/settings/+page.svelte
+msgid "Configure storage providers, cache settings, and data management"
+msgstr "Налаштуйте провайдери сховищ, кеш та керування даними"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/routes/admin/settings/+page.svelte
+msgid "Security Settings"
+msgstr "Безпека"
+
+#: src/routes/admin/settings/+page.svelte
+msgid "Manage user registration, access control, and authentication policies"
+msgstr "Керуйте реєстрацією, контролем доступу та політиками автентифікації"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/routes/admin/settings/+page.svelte
+#: src/routes/admin/settings/sso/+page.svelte
+msgid "Single Sign-On"
+msgstr "Єдиний вхід (SSO)"
+
+#: src/routes/admin/settings/+page.svelte
+msgid "Manage SSO/OIDC identity providers for external authentication"
+msgstr "Керуйте SSO/OIDC провайдерами для зовнішньої автентифікації"
+
+#: src/routes/admin/settings/+page.svelte
+msgid "Settings | Slink"
+msgstr "Налаштування | Slink"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/routes/admin/settings/+page.svelte
+msgid "Settings"
+msgstr "Налаштування"
+
+#: src/routes/admin/settings/+page.svelte
+msgid "Configure your application preferences and manage system behavior"
+msgstr "Налаштуйте параметри застосунку та керуйте поведінкою системи"
+
+#: src/routes/admin/user/+page.svelte
+msgid "Users | Slink Admin"
+msgstr "Користувачі | Slink Адмін"
+
+#: src/routes/admin/user/+page.svelte
+#: src/routes/admin/user/+page.svelte
+msgid "Manage user accounts and permissions"
+msgstr "Керуйте обліковими записами та дозволами"
+
+#: src/routes/admin/user/+page.svelte
+msgid "There are no users in the system yet."
+msgstr "У системі ще немає користувачів."
+
+#: src/feature/User/ApiKey/ApiKeyCard.svelte
+#: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
+msgid "Revoke API Key"
+msgstr "Відкликати API-ключ"
+
+#: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
+msgid "This API key will be permanently revoked and cannot be recovered"
+msgstr "Цей API-ключ буде назавжди відкликано без можливості відновлення"
+
+#: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
+msgid "<0/> Revoke Key"
+msgstr "<0/> Відкликати ключ"
+
+#: src/feature/User/ApiKey/ApiKeyList.svelte
+msgid "No API keys yet"
+msgstr "API-ключів ще немає"
+
+#: src/feature/User/ApiKey/ApiKeyList.svelte
+msgid "Create an API key to integrate with ShareX and other tools"
+msgstr "Створіть API-ключ для інтеграції з ShareX та іншими інструментами"
+
+#: src/feature/User/ApiKey/ApiKeyManager.svelte
+msgid "<0/> API Keys"
+msgstr "<0/> API-ключі"
+
+#: src/feature/User/ApiKey/ApiKeyManager.svelte
+msgid "Create API keys for ShareX and other third-party integrations"
+msgstr "Створюйте API-ключі для ShareX та інших інтеграцій"
+
+#: src/feature/User/ApiKey/ApiKeyManager.svelte
+msgid "<0/> Create API Key"
+msgstr "<0/> Створити API-ключ"
+
+#: src/feature/User/ApiKey/CreateApiKeyForm.svelte
+#: src/feature/User/ApiKey/CreateApiKeyForm.svelte
+msgid "Create API Key"
+msgstr "Створити API-ключ"
+
+#: src/feature/User/ApiKey/CreateApiKeyForm.svelte
+msgid "Generate a secure key for external integrations"
+msgstr "Згенеруйте безпечний ключ для зовнішніх інтеграцій"
+
+#: src/feature/User/ApiKey/CreateApiKeyForm.svelte
+msgid "Key Name"
+msgstr "Назва ключа"
+
+#: src/feature/User/ApiKey/CreateApiKeyForm.svelte
+msgid "Expiry Date (Optional)"
+msgstr "Дата закінчення (необов'язково)"
+
+#: src/feature/User/ApiKey/CreateApiKeyForm.svelte
+msgid "Select expiry date"
+msgstr "Оберіть дату закінчення"
+
+#: src/feature/User/ApiKey/CreateApiKeyForm.svelte
+msgid "Security Notice"
+msgstr "Зверніть увагу"
+
+#: src/feature/User/ApiKey/CreateApiKeyForm.svelte
+msgid "Your API key will be displayed only once after creation. Store it securely in your password manager or environment variables. If lost, you'll need to generate a new one."
+msgstr "Ваш API-ключ буде показано лише один раз після створення. Збережіть його у менеджері паролів або змінних середовища. У разі втрати потрібно створити новий."
+
+#: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
+msgid "Success!"
+msgstr "Успіх!"
+
+#: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
+msgid "Your API key has been created"
+msgstr "Ваш API-ключ створено"
+
+#: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
+msgid "Your API Key"
+msgstr "Ваш API-ключ"
+
+#: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
+msgid "Your API key will appear here..."
+msgstr "Ваш API-ключ з'явиться тут..."
+
+#: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
+msgid "Important Notice"
+msgstr "Важливе повідомлення"
+
+#: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
+msgid "This key will not be shown again. Store it securely in your password manager or download the ShareX config file below."
+msgstr "Цей ключ більше не буде показано. Збережіть його у менеджері паролів або завантажте конфігурацію ShareX нижче."
+
+#: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
+msgid "<0/> Downloading..."
+msgstr "<0/> Завантаження..."
+
+#: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
+msgid "<0/> Download ShareX Config"
+msgstr "<0/> Завантажити конфігурацію ShareX"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Back to Collections"
+msgstr "Назад до колекцій"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Collection name..."
+msgstr "Назва колекції..."
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Add a name..."
+msgstr "Додати назву..."
+
+#. 0: itemsFeed.collection.itemCount ?? itemsFeed.items.length
+#: src/routes/collection/[id]/+page.svelte
+msgid "{0} items"
+msgstr "{0} елементів"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "<0/> Add images"
+msgstr "<0/> Додати зображення"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Share Link"
+msgstr "Поділитися посиланням"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "<0/> Share"
+msgstr "<0/> Поділитися"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Collection not found"
+msgstr "Колекцію не знайдено"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "This collection doesn't exist or you don't have permission to view it."
+msgstr "Ця колекція не існує або у вас немає дозволу на її перегляд."
+
+#: src/routes/collection/[id]/+page.svelte
+#: src/ui/components/picker/picker-empty-state.svelte
+#: src/ui/components/picker/picker-list.svelte
+msgid "No items yet"
+msgstr "Елементів ще немає"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Upload images directly to this collection."
+msgstr "Завантажуйте зображення безпосередньо до цієї колекції."
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "No items in this collection yet."
+msgstr "У цій колекції ще немає елементів."
+
+#: src/routes/help/faq/+page.svelte
+msgid "FAQ | Slink"
+msgstr "FAQ | Slink"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Frequently asked questions about Slink - image sharing platform"
+msgstr "Часті запитання про Slink — платформу для обміну зображеннями"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Frequently Asked Questions"
+msgstr "Часті запитання"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Find answers to common questions about using Slink for image sharing and management"
+msgstr "Знайдіть відповіді на поширені запитання про використання Slink"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Still have questions?"
+msgstr "Залишились питання?"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Can't find the answer you're looking for? Please get in touch with us for further assistance."
+msgstr "Не знайшли відповідь? Зв'яжіться з нами для отримання додаткової допомоги."
+
+#: src/routes/help/faq/+page.svelte
+msgid "<0/> Report an Issue"
+msgstr "<0/> Повідомити про проблему"
+
+#: src/routes/help/faq/+page.svelte
+msgid "<0/> View Documentation"
+msgstr "<0/> Переглянути документацію"
+
+#: src/routes/info/[id]/+page.svelte
+msgid "Image Details | Slink"
+msgstr "Деталі зображення | Slink"
+
+#: src/routes/info/[id]/+page.svelte
+msgid "License"
+msgstr "Ліцензія"
+
+#: src/routes/info/[id]/+page.svelte
+msgid "Choose how others can use this image"
+msgstr "Оберіть, як інші можуть використовувати це зображення"
+
+#: src/routes/info/[id]/+page.svelte
+msgid "Resize"
+msgstr "Змінити розмір"
+
+#: src/routes/info/[id]/+page.svelte
+msgid "Adjust dimensions for the shared link"
+msgstr "Налаштуйте розміри для спільного посилання"
+
+#: src/routes/info/[id]/+page.svelte
+msgid "Filter"
+msgstr "Фільтр"
+
+#: src/routes/info/[id]/+page.svelte
+msgid "Apply a color filter to the shared link"
+msgstr "Застосуйте кольоровий фільтр до спільного посилання"
+
+#: src/routes/info/[id]/+page.svelte
+msgid "Resize, filter, and format changes apply only to the shared link. The original image remains unchanged."
+msgstr "Зміна розміру, фільтр та формат застосовуються лише до спільного посилання. Оригінальне зображення залишається незмінним."
+
+#: src/routes/info/[id]/+page.svelte
+msgid "Select option to copy"
+msgstr "Оберіть параметр для копіювання"
+
+#: src/routes/info/[id]/+page.svelte
+msgid "Quick"
+msgstr "Швидко"
+
+#: src/routes/info/[id]/+page.svelte
+msgid "Output Format"
+msgstr "Вихідний формат"
+
+#: src/ui/components/combobox/combobox.svelte
+msgid "No items found."
+msgstr "Елементів не знайдено."
+
+#: src/ui/components/combobox/combobox.svelte
+msgid "Clear selection"
+msgstr "Очистити вибір"
+
+#: src/ui/components/data-table/column-toggle.svelte
+msgid "<0/> Columns <1/>"
+msgstr "<0/> Стовпці <1/>"
+
+#. 0: pageSize
+#: src/ui/components/data-table/page-size-select.svelte
+msgid "<0/> Limit {0} <1/>"
+msgstr "<0/> Ліміт {0} <1/>"
+
+#: src/ui/components/date-picker/date-picker-field.svelte
+msgid "Select a date"
+msgstr "Оберіть дату"
+
+#: src/ui/components/date-picker/date-picker.svelte
+msgid "Pick a date"
+msgstr "Виберіть дату"
+
+#: src/ui/components/dialog/modal-footer.svelte
+msgid "Submit"
+msgstr "Надіслати"
+
+#: src/ui/components/enhanced-select/enhanced-select.svelte
+#: src/ui/components/select/select.svelte
+msgid "Select an option"
+msgstr "Оберіть опцію"
+
+#: src/ui/components/input/number-input.svelte
+msgid "Number input"
+msgstr "Числове поле"
+
+#: src/ui/components/input/number-input.svelte
+msgid "Increase value"
+msgstr "Збільшити значення"
+
+#: src/ui/components/input/number-input.svelte
+msgid "Decrease value"
+msgstr "Зменшити значення"
+
+#: src/ui/components/picker/picker-create-footer.svelte
+msgid "New item"
+msgstr "Новий елемент"
+
+#: src/ui/components/picker/picker-list.svelte
+msgid "No matches found"
+msgstr "Збігів не знайдено"
+
+#: src/ui/components/command/command-dialog.svelte
+msgid "Command Palette"
+msgstr "Палітра команд"
+
+#: src/ui/components/command/command-dialog.svelte
+msgid "Search for a command to run"
+msgstr "Знайти команду для виконання"
+
+#. 0: inner.value.length
+#: src/ui/components/select/select.svelte
+msgid "{0} items selected"
+msgstr "{0} елементів вибрано"
+
+#: src/ui/components/shortcut/shortcut.svelte
+msgid "⌘ cmd"
+msgstr "⌘ cmd"
+
+#: src/ui/components/shortcut/shortcut.svelte
+msgid "Ctrl"
+msgstr "Ctrl"
+
+#: src/ui/components/shortcut/shortcut.svelte
+msgid "Alt"
+msgstr "Alt"
+
+#: src/ui/components/shortcut/shortcut.svelte
+msgid "Shift"
+msgstr "Shift"
+
+#: src/ui/components/sidebar/sidebar-rail.svelte
+#: src/ui/components/sidebar/sidebar-rail.svelte
+#: src/ui/components/sidebar/sidebar-trigger.svelte
+msgid "Toggle Sidebar"
+msgstr "Перемкнути бічну панель"
+
+#: src/ui/components/sidebar/sidebar.svelte
+msgid "Sidebar"
+msgstr "Бічна панель"
+
+#: src/ui/components/sidebar/sidebar.svelte
+msgid "Displays the mobile sidebar."
+msgstr "Показує мобільну бічну панель."
+
+#: src/ui/components/table-pagination/table-pagination.svelte
+msgid "Click to enter page number"
+msgstr "Натисніть, щоб ввести номер сторінки"
+
+#. 0: currentPage
+#: src/ui/components/table-pagination/table-pagination.svelte
+msgid "Current page {0}"
+msgstr "Поточна сторінка {0}"
+
+#. 0: currentPage
+#: src/ui/components/table-pagination/table-pagination.svelte
+msgid "Current page {0}. Click to enter page number"
+msgstr "Поточна сторінка {0}. Натисніть, щоб ввести номер"
+
+#: src/ui/components/table-pagination/table-pagination.svelte
+msgid "Previous page"
+msgstr "Попередня сторінка"
+
+#: src/ui/components/table-pagination/table-pagination.svelte
+msgid "Go to page"
+msgstr "Перейти до сторінки"
+
+#: src/ui/components/table-pagination/table-pagination.svelte
+msgid "Next page"
+msgstr "Наступна сторінка"
+
+#. 0: startItem; 1: endItem; 2: totalItems
+#: src/ui/components/table-pagination/table-pagination.svelte
+msgid "{0}–{1} <0>of</0> {2} items"
+msgstr "{0}–{1} <0>з</0> {2} елементів"
+
+#. 0: option.label
+#. 0: option.value
+#: src/ui/components/toggle-group/toggle-group.svelte
+#: src/ui/components/toggle-group/toggle-group.svelte
+msgid "Select {0}"
+msgstr "Обрати {0}"
+
+#: src/lib/utils/ui/toast.svelte.ts
+msgid "ToastManager"
+msgstr "ToastManager"
+
+#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
+#: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
+#: src/feature/Tag/TagDataTable/columns.svelte.ts
+msgid "Name"
+msgstr "Назва"
+
+#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
+#: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
+msgid "Items"
+msgstr "Елементи"
+
+#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
+#: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
+#: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+msgid "Created"
+msgstr "Створено"
+
+#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
+msgid "Create your first collection to get started"
+msgstr "Створіть свою першу колекцію, щоб почати"
+
+#: src/feature/Image/History/Actions/BatchPickerAction.svelte
+msgid "Select items to apply"
+msgstr "Оберіть елементи для застосування"
+
+#: src/feature/Image/History/Actions/BatchPickerAction.svelte
+msgid "<0/> Apply"
+msgstr "<0/> Застосувати"
+
+#: src/feature/Image/History/Actions/VisibilityAction.svelte
+#: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+msgid "Visibility"
+msgstr "Видимість"
+
+#: src/feature/Image/History/Actions/VisibilityAction.svelte
+msgid "Change Visibility"
+msgstr "Змінити видимість"
+
+#: src/feature/Image/History/Actions/VisibilityAction.svelte
+msgid "Set visibility for selected images"
+msgstr "Встановити видимість для вибраних зображень"
+
+#: src/feature/Image/History/Actions/VisibilityAction.svelte
+msgid "<0/> Make Public"
+msgstr "<0/> Зробити публічним"
+
+#: src/feature/Image/History/Actions/VisibilityAction.svelte
+msgid "<0/> Make Private"
+msgstr "<0/> Зробити приватним"
+
+#: src/routes/admin/settings/security/+page.svelte
+msgid "Security Settings | Slink"
+msgstr "Безпека | Slink"
+
+#: src/routes/admin/settings/security/+page.svelte
+msgid "Manage access control and user authentication settings"
+msgstr "Керуйте контролем доступу та налаштуваннями автентифікації"
+
+#: src/routes/admin/settings/storage/+page.svelte
+msgid "Storage Settings | Slink"
+msgstr "Сховище | Slink"
+
+#: src/routes/admin/settings/storage/+page.svelte
+msgid "Storage"
+msgstr "Сховище"
+
+#: src/routes/admin/settings/storage/+page.svelte
+msgid "Configure storage providers and cache management"
+msgstr "Налаштуйте провайдери сховищ та керування кешем"
+
+#: src/routes/help/faq/snippets/ImageVisibilityContent.svelte
+msgid "Slink offers a <0>public gallery</0>, where people can share their images with others."
+msgstr "Slink пропонує <0>публічну галерею</0>, де люди можуть ділитися зображеннями з іншими."
+
+#: src/routes/help/faq/snippets/ImageVisibilityContent.svelte
+msgid "Visibility Options"
+msgstr "Параметри видимості"
+
+#: src/routes/help/faq/snippets/ImageVisibilityContent.svelte
+msgid "Images are shared in the public gallery and visible to all users"
+msgstr "Зображення розміщуються в публічній галереї та видимі всім користувачам"
+
+#: src/routes/help/faq/snippets/ImageVisibilityContent.svelte
+msgid "Default"
+msgstr "За замовчуванням"
+
+#: src/routes/help/faq/snippets/ImageVisibilityContent.svelte
+msgid "Images are not shared in the public gallery and only accessible by the owner"
+msgstr "Зображення не розміщуються в публічній галереї та доступні лише власнику"
+
+#: src/routes/help/faq/snippets/ImageVisibilityContent.svelte
+msgid "Important Note"
+msgstr "Важливо"
+
+#: src/routes/help/faq/snippets/ImageVisibilityContent.svelte
+msgid "Raw images are accessible to anyone with a direct link, regardless of visibility setting."
+msgstr "Оригінали зображень доступні будь-кому з прямим посиланням, незалежно від налаштувань видимості."
+
+#: src/routes/admin/settings/sso/+page.svelte
+msgid "SSO Settings | Slink"
+msgstr "SSO | Slink"
+
+#: src/routes/admin/settings/sso/+page.svelte
+msgid "Manage SSO/OIDC identity providers"
+msgstr "Керуйте SSO/OIDC провайдерами"
+
+#: src/routes/admin/settings/sso/+page.svelte
+msgid "Back to Settings"
+msgstr "Назад до налаштувань"
+
+#: src/routes/admin/settings/sso/+page.svelte
+msgid "Add this callback URL to your identity provider's allowed redirect URIs:"
+msgstr "Додайте цей callback URL до дозволених redirect URI вашого провайдера:"
+
+#: src/routes/admin/settings/sso/+page.svelte
+msgid "Failed to load SSO providers."
+msgstr "Не вдалося завантажити SSO-провайдери."
+
+#: src/routes/admin/settings/image/+page.svelte
+msgid "Image Settings | Slink"
+msgstr "Зображення | Slink"
+
+#: src/routes/admin/settings/image/+page.svelte
+msgid "Configure image handling and sharing preferences"
+msgstr "Налаштуйте обробку зображень та параметри спільного доступу"
+
+#: src/routes/help/faq/snippets/ShareFeatureContent.svelte
+msgid "You can easily share your images with others using the direct link provided for each uploaded image."
+msgstr "Ви можете легко ділитися зображеннями з іншими за допомогою прямого посилання для кожного завантаженого зображення."
+
+#: src/routes/help/faq/snippets/ShareFeatureContent.svelte
+msgid "<0/> Current Sharing Options"
+msgstr "<0/> Поточні параметри спільного доступу"
+
+#: src/routes/help/faq/snippets/ShareFeatureContent.svelte
+msgid "<0/> Direct link sharing with anyone"
+msgstr "<0/> Пряме посилання для будь-кого"
+
+#: src/routes/help/faq/snippets/ShareFeatureContent.svelte
+msgid "<0/> Public gallery visibility (optional)"
+msgstr "<0/> Видимість у публічній галереї (необов'язково)"
+
+#: src/routes/help/faq/snippets/ShareFeatureContent.svelte
+msgid "<0/> Link accessible to anyone who has it"
+msgstr "<0/> Посилання доступне кожному, хто його має"
+
+#: src/routes/help/faq/snippets/ShareFeatureContent.svelte
+msgid "Want More Control?"
+msgstr "Бажаєте більше контролю?"
+
+#: src/routes/help/faq/snippets/ShareFeatureContent.svelte
+msgid "I'm working on advanced sharing features that will give you more control over your image sharing:"
+msgstr "Я працюю над розширеними функціями спільного доступу для більшого контролю:"
+
+#: src/routes/help/faq/snippets/ShareFeatureContent.svelte
+msgid "<0/> Expiration dates for shared links"
+msgstr "<0/> Терміни дії спільних посилань"
+
+#: src/routes/help/faq/snippets/ShareFeatureContent.svelte
+msgid "<0/> Password protection"
+msgstr "<0/> Захист паролем"
+
+#: src/routes/help/faq/snippets/ShareFeatureContent.svelte
+msgid "<0/> Private group sharing"
+msgstr "<0/> Приватний доступ для груп"
+
+#: src/routes/help/faq/snippets/ShareFeatureContent.svelte
+msgid "<0/> Support this feature request <1/>"
+msgstr "<0/> Підтримати цей запит <1/>"
+
+#: src/routes/help/faq/snippets/IssueReportContent.svelte
+msgid "I appreciate your help in making Slink better! If you've encountered a bug or have suggestions for improvement, here's how you can help:"
+msgstr "Дякую за допомогу у покращенні Slink! Якщо ви знайшли помилку або маєте пропозиції, ось як ви можете допомогти:"
+
+#: src/routes/help/faq/snippets/IssueReportContent.svelte
+msgid "<0/> Before Reporting"
+msgstr "<0/> Перед повідомленням"
+
+#: src/routes/help/faq/snippets/IssueReportContent.svelte
+msgid "Check if the issue has already been reported"
+msgstr "Перевірте, чи не повідомляли про цю проблему раніше"
+
+#: src/routes/help/faq/snippets/IssueReportContent.svelte
+msgid "Try reproducing the issue in a different browser"
+msgstr "Спробуйте відтворити проблему в іншому браузері"
+
+#: src/routes/help/faq/snippets/IssueReportContent.svelte
+msgid "Gather relevant details (browser, steps to reproduce, screenshots)"
+msgstr "Зберіть необхідні деталі (браузер, кроки для відтворення, скріншоти)"
+
+#: src/routes/help/faq/snippets/IssueReportContent.svelte
+msgid "Report on GitHub"
+msgstr "Повідомити на GitHub"
+
+#: src/routes/help/faq/snippets/IssueReportContent.svelte
+msgid "GitHub Issues is my primary platform for tracking bugs and feature requests. Your reports help me prioritize improvements."
+msgstr "GitHub Issues — основна платформа для відстеження помилок та запитів. Ваші повідомлення допомагають мені визначати пріоритети."
+
+#: src/routes/help/faq/snippets/IssueReportContent.svelte
+msgid "<0/> Create New Issue <1/>"
+msgstr "<0/> Створити нове звернення <1/>"
+
+#: src/routes/help/faq/snippets/IssueReportContent.svelte
+msgid "Thank You!"
+msgstr "Дякуємо!"
+
+#: src/routes/help/faq/snippets/IssueReportContent.svelte
+msgid "Every report helps me improve Slink for the entire community. I review all issues and prioritize fixes based on impact and frequency."
+msgstr "Кожне повідомлення допомагає покращити Slink для всієї спільноти. Я переглядаю всі звернення та пріоритизую виправлення."
+
+#: src/routes/help/faq/snippets/SupportedFormatsContent.svelte
+msgid "Slink supports the following mime types:"
+msgstr "Slink підтримує наступні MIME-типи:"
+
+#: src/routes/help/faq/snippets/SupportedFormatsContent.svelte
+msgid "* Source images are forced to be converted to JPEG format."
+msgstr "* Вихідні зображення примусово конвертуються у формат JPEG."
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Account Approved"
+msgstr "Обліковий запис схвалено"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Awaiting Approval"
+msgstr "Очікування схвалення"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Review in Progress"
+msgstr "Перевірка в процесі"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Your account is currently under review"
+msgstr "Ваш обліковий запис зараз на перевірці"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "What happens next?"
+msgstr "Що далі?"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Your account is being reviewed and will be activated once approved. Please check back later for updates on your account status."
+msgstr "Ваш обліковий запис перевіряється і буде активований після схвалення. Перевірте пізніше статус вашого запису."
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Need help?"
+msgstr "Потрібна допомога?"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Contact the administrator if you have questions about your account or the review process."
+msgstr "Зверніться до адміністратора, якщо маєте питання щодо вашого облікового запису або процесу перевірки."
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Your Account Reference"
+msgstr "Ідентифікатор вашого запису"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Provide this ID when contacting the administrator"
+msgstr "Повідомте цей ID при зверненні до адміністратора"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Explore while you wait"
+msgstr "Переглядайте, поки чекаєте"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Browse the platform features"
+msgstr "Ознайомтесь із можливостями платформи"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Welcome Aboard"
+msgstr "Ласкаво просимо"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Your account has been approved and activated"
+msgstr "Ваш обліковий запис схвалено та активовано"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "All Features Unlocked"
+msgstr "Усі функції розблоковано"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Upload, share, and manage your content with full access to all platform features. Start creating and sharing your content."
+msgstr "Завантажуйте, діліться та керуйте контентом із повним доступом до всіх функцій. Починайте створювати та ділитися."
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Ready to get started?"
+msgstr "Готові почати?"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Sign in to your account to begin using all the platform features or explore the public gallery to see what others are sharing."
+msgstr "Увійдіть до облікового запису, щоб почати використовувати всі функції, або переглядайте публічну галерею."
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Ready to continue"
+msgstr "Готові продовжити"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Sign in to access all platform features"
+msgstr "Увійдіть для доступу до всіх функцій"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Sign In | Slink"
+msgstr "Вхід | Slink"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Welcome back"
+msgstr "З поверненням"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Sign in to continue to Slink"
+msgstr "Увійдіть, щоб продовжити роботу з Slink"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Email or Username"
+msgstr "Email або ім'я користувача"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Enter your email or username"
+msgstr "Введіть email або ім'я користувача"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Enter your password"
+msgstr "Введіть пароль"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "or continue with"
+msgstr "або продовжити через"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Demo Mode"
+msgstr "Демо-режим"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Try the application with the test credentials"
+msgstr "Спробуйте застосунок з тестовими обліковими даними"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Get In"
+msgstr "Увійти"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Automatically fills credentials and signs you in"
+msgstr "Автоматично заповнює облікові дані та входить"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Need an account?"
+msgstr "Немає облікового запису?"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Create one to start sharing images"
+msgstr "Створіть його, щоб почати ділитися зображеннями"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Sign Up"
+msgstr "Реєстрація"
+
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Create Account | Slink"
+msgstr "Створити обліковий запис | Slink"
+
+#: src/routes/profile/(auth)/signup/+page.svelte
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Create Account"
+msgstr "Створити обліковий запис"
+
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Join Slink to start sharing your images"
+msgstr "Приєднуйтесь до Slink, щоб почати ділитися зображеннями"
+
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Choose a username"
+msgstr "Оберіть ім'я користувача"
+
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Email Address"
+msgstr "Адреса електронної пошти"
+
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Enter your email"
+msgstr "Введіть вашу електронну пошту"
+
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Create a strong password"
+msgstr "Створіть надійний пароль"
+
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Confirm your password"
+msgstr "Підтвердіть пароль"
+
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Already have an account?"
+msgstr "Вже маєте обліковий запис?"
+
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Sign in to access your images"
+msgstr "Увійдіть для доступу до зображень"
+
+#: src/lib/utils/http/useUserAgent.svelte.ts
+msgid "Windows"
+msgstr "Windows"
+
+#: src/lib/utils/http/useUserAgent.svelte.ts
+msgid "Linux"
+msgstr "Linux"
+
+#: src/lib/utils/http/useUserAgent.svelte.ts
+msgid "Android"
+msgstr "Android"
+
+#: src/lib/utils/http/useUserAgent.svelte.ts
+msgid "Edge"
+msgstr "Edge"
+
+#: src/lib/utils/http/useUserAgent.svelte.ts
+msgid "Opera"
+msgstr "Opera"
+
+#: src/lib/utils/http/useUserAgent.svelte.ts
+msgid "Chrome"
+msgstr "Chrome"
+
+#: src/lib/utils/http/useUserAgent.svelte.ts
+msgid "Firefox"
+msgstr "Firefox"
+
+#: src/lib/utils/http/useUserAgent.svelte.ts
+msgid "Safari"
+msgstr "Safari"
+
+#: src/ui/components/sonner/toasts/DuplicateImageToast.svelte
+msgid "Image Already Exists"
+msgstr "Зображення вже існує"
+
+#: src/ui/components/sonner/toasts/DuplicateImageToast.svelte
+msgid "Duplicate"
+msgstr "Дублікат"
+
+#: src/ui/components/sonner/toasts/DuplicateImageToast.svelte
+msgid "This <0>image</0> was already uploaded <1/>."
+msgstr "Це <0>зображення</0> вже було завантажено <1/>."
+
+#: src/routes/admin/settings/sso/new/+page.svelte
+msgid "Select an identity provider to configure"
+msgstr "Оберіть провайдера для налаштування"
+
+#. 0: formState.provider?.name ?? ''
+#: src/routes/admin/settings/sso/new/+page.svelte
+msgid "Configure the {0} provider"
+msgstr "Налаштуйте провайдера {0}"
+
+#: src/routes/admin/settings/sso/new/+page.svelte
+msgid "Add SSO Provider | Slink"
+msgstr "Додати SSO-провайдера | Slink"
+
+#: src/routes/admin/settings/sso/[id]/edit/+page.svelte
+#: src/routes/admin/settings/sso/new/+page.svelte
+msgid "Back to SSO"
+msgstr "Назад до SSO"
+
+#: src/routes/profile/(auth)/sso/callback/+page.svelte
+msgid "Signing in..."
+msgstr "Вхід..."
+
+#: src/routes/admin/settings/sso/[id]/edit/+page.svelte
+msgid "Edit SSO Provider | Slink"
+msgstr "Редагувати SSO-провайдера | Slink"
+
+#: src/routes/admin/settings/sso/[id]/edit/+page.svelte
+msgid "Edit Provider"
+msgstr "Редагувати провайдера"
+
+#: src/routes/admin/settings/sso/[id]/edit/+page.svelte
+msgid "Update the SSO provider configuration"
+msgstr "Оновіть конфігурацію SSO-провайдера"
+
+#: src/feature/Layout/LocaleSwitcher/LocaleSwitcher.svelte
+msgid "English"
+msgstr "English"
+
+#: src/feature/Layout/LocaleSwitcher/LocaleSwitcher.svelte
+msgid "Українська"
+msgstr "Українська"
+
+#: src/feature/Layout/LocaleSwitcher/LocaleSwitcher.svelte
+#: src/feature/Navigation/Navbar/Navbar.svelte
+msgid "Change language"
+msgstr "Змінити мову"
+
+#: src/feature/Auth/PasswordStrength/PasswordStrength.labels.svelte.ts
+msgid "Weak"
+msgstr "Слабкий"
+
+#: src/feature/Auth/PasswordStrength/PasswordStrength.labels.svelte.ts
+msgid "Fair"
+msgstr "Задовільний"
+
+#: src/feature/Auth/PasswordStrength/PasswordStrength.labels.svelte.ts
+msgid "Good"
+msgstr "Добрий"
+
+#: src/feature/Auth/PasswordStrength/PasswordStrength.labels.svelte.ts
+msgid "Strong"
+msgstr "Надійний"
+
+#: src/feature/Auth/PasswordStrength/PasswordStrength.labels.svelte.ts
+msgid "Very Strong"
+msgstr "Дуже надійний"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+msgid "History"
+msgstr "Історія"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+msgid "Administration"
+msgstr "Адміністрування"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+msgid "System"
+msgstr "Система"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+msgid "Help & FAQ"
+msgstr "Довідка та FAQ"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+msgid "GitHub"
+msgstr "GitHub"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Passwords do not match."
+msgstr "Паролі не збігаються."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Username cannot be the same as email."
+msgstr "Ім'я користувача не може збігатися з email."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Password must be at least {limit} characters long."
+msgstr "Пароль повинен містити щонайменше {limit} символів."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Password must contain at least one number."
+msgstr "Пароль повинен містити щонайменше одну цифру."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Password must contain at least one lowercase letter."
+msgstr "Пароль повинен містити щонайменше одну малу літеру."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Password must contain at least one uppercase letter."
+msgstr "Пароль повинен містити щонайменше одну велику літеру."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Password must contain at least one special character."
+msgstr "Пароль повинен містити щонайменше один спеціальний символ."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Min 6 characters password"
+msgstr "Мінімум 6 символів у паролі"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Username must be at least {limit} characters long."
+msgstr "Ім'я користувача повинно містити щонайменше {limit} символів."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Username must be at most {limit} characters long."
+msgstr "Ім'я користувача повинно містити не більше {limit} символів."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Username can only contain lowercase letters, numbers, underscores, hyphens, and periods."
+msgstr "Ім'я користувача може містити лише малі літери, цифри, підкреслення, дефіси та крапки."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Username cannot contain consecutive special characters."
+msgstr "Ім'я користувача не може містити послідовні спеціальні символи."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "`{value}` is a reserved username."
+msgstr "`{value}` — зарезервоване ім'я користувача."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Invalid credentials. Please check your username/email and password and try again."
+msgstr "Невірні облікові дані. Перевірте ім'я/email та пароль і спробуйте знову."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "You must be logged in to change your password"
+msgstr "Ви повинні увійти, щоб змінити пароль"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Invalid refresh token"
+msgstr "Недійсний токен оновлення"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "User is restricted"
+msgstr "Користувача обмежено"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "SSO provider is currently unavailable. Please try again later."
+msgstr "SSO-провайдер наразі недоступний. Спробуйте пізніше."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Invalid email address."
+msgstr "Невірна адреса електронної пошти."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Email already registered."
+msgstr "Email вже зареєстровано."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "An email address is required for SSO authentication."
+msgstr "Для SSO-автентифікації потрібна адреса електронної пошти."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Email must be verified by the SSO provider before signing in."
+msgstr "Email повинен бути підтверджений SSO-провайдером перед входом."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Invalid password."
+msgstr "Невірний пароль."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Invalid old password provided."
+msgstr "Вказано невірний старий пароль."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Invalid or expired refresh token."
+msgstr "Недійсний або прострочений токен оновлення."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Invalid display name"
+msgstr "Невірне відображуване ім'я"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Display name already exist."
+msgstr "Відображуване ім'я вже існує."
+
+#~ msgid "Display name must be at least 3 characters long"
+#~ msgstr "Відображуване ім'я повинно містити щонайменше 3 символи"
+
+#~ msgid "Display name must be at most 30 characters long"
+#~ msgstr "Відображуване ім'я повинно містити не більше 30 символів"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "`{name}` is a reserved display name"
+msgstr "`{name}` — зарезервоване відображуване ім'я"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Invalid username"
+msgstr "Невірне ім'я користувача"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Username already exist."
+msgstr "Ім'я користувача вже існує."
+
+#~ msgid "Username must be at least 3 characters long"
+#~ msgstr "Ім'я користувача повинно містити щонайменше 3 символи"
+
+#~ msgid "Username must be at most 30 characters long"
+#~ msgstr "Ім'я користувача повинно містити не більше 30 символів"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Invalid settings configuration."
+msgstr "Невірна конфігурація налаштувань."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Invalid password min length"
+msgstr "Невірна мінімальна довжина пароля"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Invalid image max size"
+msgstr "Невірний максимальний розмір зображення"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Your account is pending approval."
+msgstr "Ваш обліковий запис очікує на схвалення."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Sign up is not allowed"
+msgstr "Реєстрація не дозволена"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Invalid or expired OAuth state"
+msgstr "Недійсний або прострочений стан OAuth"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "You cannot grant or revoke roles from yourself. Use CLI instead."
+msgstr "Ви не можете змінювати ролі для себе. Використовуйте CLI."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "You cannot change your own status."
+msgstr "Ви не можете змінити власний статус."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Invalid user role"
+msgstr "Невірна роль користувача"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "This action is not allowed in demo mode"
+msgstr "Ця дія не дозволена в демо-режимі"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Access denied"
+msgstr "Доступ заборонено"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Resource not found"
+msgstr "Ресурс не знайдено"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "An error occurred"
+msgstr "Сталася помилка"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "An error occurred, while processing the request"
+msgstr "Сталася помилка під час обробки запиту"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Validation Error"
+msgstr "Помилка валідації"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Specification Error"
+msgstr "Помилка специфікації"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "You cannot bookmark your own image"
+msgstr "Ви не можете додати власне зображення до закладок"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Cannot bookmark a private image"
+msgstr "Не можна додати приватне зображення до закладок"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Comment edit window has expired. Comments can only be edited within 24 hours of creation."
+msgstr "Час редагування коментаря вичерпано. Коментарі можна редагувати лише протягом 24 годин після створення."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "You can only access your own collections"
+msgstr "Ви можете переглядати лише власні колекції"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "You can only access your own tags"
+msgstr "Ви можете переглядати лише власні теги"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Cannot move a tag to itself"
+msgstr "Не можна перемістити тег до самого себе"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Cannot move a tag to one of its descendants"
+msgstr "Не можна перемістити тег до одного з його нащадків"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Storage provider is not configured."
+msgstr "Провайдер сховища не налаштовано."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "SMB configuration is incomplete."
+msgstr "Конфігурація SMB неповна."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Storage usage metrics are disabled for this provider"
+msgstr "Метрики використання сховища вимкнені для цього провайдера"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "S3 bucket is required."
+msgstr "Потрібно вказати S3-бакет."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "S3 region is required when using AWS."
+msgstr "Регіон S3 обов'язковий при використанні AWS."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "S3 Access key is required."
+msgstr "Потрібен S3 Access Key."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "S3 Secret key is required."
+msgstr "Потрібен S3 Secret Key."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "The expiry date must be in the future."
+msgstr "Дата закінчення повинна бути в майбутньому."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "API key not found"
+msgstr "API-ключ не знайдено"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "API key does not belong to user"
+msgstr "API-ключ не належить користувачу"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "API key has expired"
+msgstr "API-ключ прострочено"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Validation failed"
+msgstr "Помилка валідації"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "File too large. Please choose a smaller file and try again."
+msgstr "Файл занадто великий. Оберіть менший файл і спробуйте знову."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Max size cannot be less than 0"
+msgstr "Максимальний розмір не може бути менше 0"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Max size cannot be greater than 1000"
+msgstr "Максимальний розмір не може перевищувати 1000"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Invalid tag ID format"
+msgstr "Невірний формат ID тегу"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Invalid collection ID format"
+msgstr "Невірний формат ID колекції"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Password length cannot be less than 3"
+msgstr "Довжина пароля не може бути менше 3"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Password length cannot be greater than 64"
+msgstr "Довжина пароля не може перевищувати 64"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "This value should not be blank."
+msgstr "Це значення не повинно бути порожнім."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "This value is not a valid email address."
+msgstr "Це значення не є дійсною адресою електронної пошти."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "This value is not a valid URL."
+msgstr "Це значення не є дійсним URL."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "This value is not a valid UUID."
+msgstr "Це значення не є дійсним UUID."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "This value should be positive."
+msgstr "Це значення повинно бути додатним."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "This value is not valid."
+msgstr "Це значення недійсне."
+
+#~ msgid "This value should have {{ limit }} character or more.|This value should have {{ limit }} characters or more."
+#~ msgstr "Це значення повинно містити {{ limit }} або більше символів.|Це значення повинно містити {{ limit }} або більше символів."
+
+#~ msgid "This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less."
+#~ msgstr "Це значення занадто довге. Воно повинно містити {{ limit }} або менше символів.|Це значення занадто довге. Воно повинно містити {{ limit }} або менше символів."
+
+#~ msgid "This value should be {{ limit }} or less."
+#~ msgstr "Це значення повинно бути {{ limit }} або менше."
+
+#~ msgid "This value should be between {{ min }} and {{ max }}."
+#~ msgstr "Це значення повинно бути між {{ min }} та {{ max }}."
+
+#~ msgid "This collection should contain {{ limit }} element or less.|This collection should contain {{ limit }} elements or less."
+#~ msgstr "Ця колекція повинна містити {{ limit }} або менше елементів.|Ця колекція повинна містити {{ limit }} або менше елементів."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "The value you selected is not a valid choice."
+msgstr "Обране значення не є допустимим варіантом."
+
+#~ msgid "This value should be of type {{ type }}."
+#~ msgstr "Це значення повинно бути типу {{ type }}."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Invalid key format"
+msgstr "Невірний формат ключа"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Tag name can only contain letters, numbers, hyphens, and underscores"
+msgstr "Назва тегу може містити лише літери, цифри, дефіси та підкреслення"
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Display name can only contain letters, numbers, underscores, hyphens, spaces, and periods."
+msgstr "Відображуване ім'я може містити лише літери, цифри, підкреслення, дефіси, пробіли та крапки."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Display name cannot contain consecutive characters of the same type."
+msgstr "Відображуване ім'я не може містити послідовні символи одного типу."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "`Anonymous` is a reserved display name."
+msgstr "`Anonymous` — зарезервоване відображуване ім'я."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "API key is required. Create one first from your profile page."
+msgstr "Потрібен API-ключ. Спочатку створіть його на сторінці профілю."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "The refresh token is required."
+msgstr "Токен оновлення є обов'язковим."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Invalid license type."
+msgstr "Невірний тип ліцензії."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Invalid landing page."
+msgstr "Невірна початкова сторінка."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Invalid default visibility."
+msgstr "Невірна видимість за замовчуванням."
+
+#: src/feature/Upload/UploadForm.svelte
+msgid "Drop your images here"
+msgstr "Перетягніть зображення сюди"
+
+#: src/feature/Upload/UploadForm.svelte
+msgid "Drop your image here"
+msgstr "Перетягніть зображення сюди"
+
+#: src/feature/Upload/UploadForm.svelte
+msgid "Uploading your images..."
+msgstr "Завантаження зображень..."
+
+#: src/feature/Upload/UploadForm.svelte
+msgid "Uploading your image..."
+msgstr "Завантаження зображення..."
+
+#: src/feature/Collection/CreateCollectionForm.svelte
+msgid "Edit Collection"
+msgstr "Редагувати колекцію"
+
+#: src/feature/Text/ExpandableText/ExpandableText.svelte
+msgid "less"
+msgstr "менше"
+
+#: src/feature/Text/ExpandableText/ExpandableText.svelte
+msgid "more"
+msgstr "більше"
+
+#~ msgid "{0} image"
+#~ msgstr "{0} зображення"
+
+#~ msgid "{0} images"
+#~ msgstr "{0} зображень"
+
+#~ msgid "Delete {0} Image"
+#~ msgstr "Видалити {0} зображення"
+
+#~ msgid "Delete {0} Images"
+#~ msgstr "Видалити {0} зображень"
+
+#: src/feature/Image/History/BulkDeleteConfirmation.svelte
+msgid "Delete Images"
+msgstr "Видалити зображення"
+
+#: src/feature/Image/History/BatchActionConfirmation.svelte
+msgid "# image"
+msgid_plural "# images"
+msgstr[0] "# зображення"
+msgstr[1] "# зображення"
+msgstr[2] "# зображень"
+
+#~ msgid "Delete # Image"
+#~ msgid_plural "Delete # Images"
+#~ msgstr[0] "Видалити # зображення"
+#~ msgstr[1] "Видалити # зображення"
+#~ msgstr[2] "Видалити # зображень"
+
+#~ msgid "The file is too large. Allowed maximum size has been exceeded."
+#~ msgstr "Файл занадто великий. Максимально допустимий розмір перевищено."
+
+#~ msgid "The file type is not supported."
+#~ msgstr "Тип файлу не підтримується."
+
+#~ msgid "This value is too short."
+#~ msgstr "Це значення занадто коротке."
+
+#~ msgid "This value is too long."
+#~ msgstr "Це значення занадто довге."
+
+#~ msgid "This value is too large."
+#~ msgstr "Це значення занадто велике."
+
+#~ msgid "This value is out of range."
+#~ msgstr "Це значення виходить за межі допустимого діапазону."
+
+#: src/routes/help/faq/faq.questions.ts
+msgid "What image formats Slink supports?"
+msgstr "Які формати зображень підтримує Slink?"
+
+#: src/routes/help/faq/faq.questions.ts
+msgid "What is the visibility of my images?"
+msgstr "Яка видимість моїх зображень?"
+
+#: src/routes/help/faq/faq.questions.ts
+msgid "Can I share my images with others?"
+msgstr "Чи можу я ділитися зображеннями з іншими?"
+
+#: src/routes/help/faq/faq.questions.ts
+msgid "I found an issue, how can I report it?"
+msgstr "Я знайшов проблему, як повідомити про неї?"
+
+#~ msgid "This value has an invalid type."
+#~ msgstr ""
+
+#~ msgid "This collection has too many elements."
+#~ msgstr ""
+
+#~ msgid "Password is too short."
+#~ msgstr ""
+
+#~ msgid "Username is too short."
+#~ msgstr ""
+
+#~ msgid "Username is too long."
+#~ msgstr ""
+
+#~ msgid "Display name is too short."
+#~ msgstr ""
+
+#~ msgid "Display name is too long."
+#~ msgstr ""
+
+#~ msgid "This username is reserved."
+#~ msgstr ""
+
+#~ msgid "This display name is reserved."
+#~ msgstr ""
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "The file is too large ({size}). Allowed maximum size is {limit}."
+msgstr "Файл занадто великий ({size}). Максимально допустимий розмір — {limit}."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "The mime type {type} is not supported."
+msgstr "Тип файлу {type} не підтримується."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Display name must be at least {limit} characters long."
+msgstr "Відображуване ім'я повинно містити щонайменше {limit} символів."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Display name must be at most {limit} characters long."
+msgstr "Відображуване ім'я повинно містити не більше {limit} символів."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "This value should have {limit} characters or more."
+msgstr "Це значення повинно містити {limit} або більше символів."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "This value is too long. It should have {limit} characters or less."
+msgstr "Це значення занадто довге. Воно повинно містити {limit} або менше символів."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "This value should be {limit} or less."
+msgstr "Це значення повинно бути {limit} або менше."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "This value should be between {min} and {max}."
+msgstr "Це значення повинно бути між {min} та {max}."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "This value should be of type {type}."
+msgstr "Це значення повинно бути типу {type}."
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "This collection should contain {limit} elements or less."
+msgstr "Ця колекція повинна містити {limit} або менше елементів."
+
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+msgid "Grid"
+msgstr "Сітка"
+
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+msgid "List"
+msgstr "Список"
+
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+msgid "Table"
+msgstr "Таблиця"
+
+#: src/feature/Tag/TagDataTable/columns.svelte.ts
+msgid "Children"
+msgstr "Підтеги"
+
+#: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+msgid "File Name"
+msgstr "Ім'я файлу"
+
+#: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+msgid "Type"
+msgstr "Тип"
+
+#: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+msgid "Dimensions"
+msgstr "Розміри"
+
+#: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+msgid "Size"
+msgstr "Розмір"
+
+#: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+msgid "Tags / Collections"
+msgstr "Теги / Колекції"
+
+#: src/feature/Navigation/Navbar/Navbar.svelte
+msgid "Switch between available languages."
+msgstr "Перемикання між доступними мовами."
+
+#~ msgid "Delete {n} {image|images}"
+#~ msgstr "Видалити {n} {зображення|зображення|зображень}"
+
+#~ msgid "{n} {image|images}"
+#~ msgstr "{n} {зображення|зображення|зображень}"
+
+#~ msgid "Delete # {image|images}"
+#~ msgstr "Видалити # {зображення|зображення|зображень}"
+
+#~ msgid "# {image|images}"
+#~ msgstr "# {зображення|зображення|зображень}"
+
+#: src/feature/Image/History/BulkDeleteConfirmation.svelte
+msgid "Delete # image"
+msgid_plural "Delete # images"
+msgstr[0] "Видалити # зображення"
+msgstr[1] "Видалити # зображення"
+msgstr[2] "Видалити # зображень"
+
+#: src/feature/Layout/LocaleSwitcher/LocaleSwitcher.svelte
+msgid "Deutsch"
+msgstr ""
+
+#: src/lib/utils/i18n/apiErrors.ts
+msgid "Tag \"{name}\" already exists"
+msgstr "Тег \"{name}\" вже існує"
