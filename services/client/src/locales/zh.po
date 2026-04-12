@@ -4244,4 +4244,4 @@ msgstr "标签“{name}”已存在"
 
 #: src/feature/Layout/LocaleSwitcher/LocaleSwitcher.svelte
 msgid "中文"
-msgstr "中文"
+msgstr ""
