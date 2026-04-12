@@ -227,4 +227,5 @@ export const themeIcons: string[] = [
   'twemoji:flag-ukraine',
   'ph:translate',
   'twemoji:flag-germany',
+  'twemoji:flag-china',
 ];

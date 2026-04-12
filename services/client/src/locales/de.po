@@ -4243,3 +4243,7 @@ msgstr ""
 #: src/lib/utils/i18n/apiErrors.ts
 msgid "Tag \"{name}\" already exists"
 msgstr "Tag \"{name}\" existiert bereits"
+
+#: src/feature/Layout/LocaleSwitcher/LocaleSwitcher.svelte
+msgid "中文"
+msgstr ""

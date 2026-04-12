@@ -37,6 +37,7 @@
     { value: Locale.EN, label: 'English', icon: 'twemoji:flag-united-states' },
     { value: Locale.UK, label: 'Українська', icon: 'twemoji:flag-ukraine' },
     { value: Locale.DE, label: 'Deutsch', icon: 'twemoji:flag-germany' },
+    { value: Locale.ZH, label: '中文', icon: 'twemoji:flag-china' },
   ];
 
   const buttonClasses = $derived(

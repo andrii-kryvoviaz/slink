@@ -595,7 +595,7 @@ msgstr "<0/> 全部标为已读"
 
 #: src/routes/notifications/+page.svelte
 msgid "All caught up"
-msgstr "你已全部查看"
+msgstr "你已查看全部通知"
 
 #: src/routes/notifications/+page.svelte
 msgid "You'll see activity on your images here"
@@ -612,7 +612,7 @@ msgstr "合集"
 
 #: src/routes/collections/+page.svelte
 msgid "Organize your images into albums"
-msgstr "将图片整理到专辑中"
+msgstr "将图片整理到合集中"
 
 #: src/routes/collections/+page.svelte
 msgid "Search collections..."
@@ -2981,12 +2981,12 @@ msgstr "清除选择"
 
 #: src/ui/components/data-table/column-toggle.svelte
 msgid "<0/> Columns <1/>"
-msgstr "<0/> 列 <1/>"
+msgstr "<0/> 显示列 <1/>"
 
 #. 0: pageSize
 #: src/ui/components/data-table/page-size-select.svelte
 msgid "<0/> Limit {0} <1/>"
-msgstr "<0/> 限制 {0} <1/>"
+msgstr "<0/> 条/页 {0} <1/>"
 
 #: src/ui/components/date-picker/date-picker-field.svelte
 msgid "Select a date"
@@ -4241,3 +4241,7 @@ msgstr "Deutsch"
 #: src/lib/utils/i18n/apiErrors.ts
 msgid "Tag \"{name}\" already exists"
 msgstr "标签“{name}”已存在"
+
+#: src/feature/Layout/LocaleSwitcher/LocaleSwitcher.svelte
+msgid "中文"
+msgstr ""
