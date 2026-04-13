@@ -9,6 +9,8 @@
   import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
   import Icon from '@iconify/svelte';
 
+  import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
+
   interface Props {
     disabled?: boolean;
     processing?: boolean;
@@ -28,12 +30,12 @@
 
   const processFiles = (fileList: FileList | null | undefined) => {
     if (!fileList) {
-      toast.warning('No files selected');
+      toast.warning(messages.upload.noFilesSelected);
       return;
     }
 
     if (!allowMultiple && fileList.length > 1) {
-      toast.warning('Only one file allowed at a time');
+      toast.warning(messages.upload.onlyOneFile);
       return;
     }
 

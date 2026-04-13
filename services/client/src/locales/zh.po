@@ -32,6 +32,7 @@ msgid "Missing authorization parameters"
 msgstr "缺少授权参数"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 #: src/routes/profile/(auth)/sso/callback/+page.server.ts
 #: src/routes/profile/(auth)/sso/login/[provider]/+page.server.ts
 msgid "An unexpected error occurred"
@@ -424,15 +425,15 @@ msgstr "上传失败"
 msgid "Tag already exists"
 msgstr "标签已存在"
 
-#: src/feature/Tag/useTagOperations.svelte.ts
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to create tag"
 msgstr "创建标签失败"
 
-#: src/feature/Upload/UploadForm.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "No files selected"
 msgstr "未选择文件"
 
-#: src/feature/Upload/UploadForm.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Only one file allowed at a time"
 msgstr "一次只允许上传一个文件"
 
@@ -636,10 +637,12 @@ msgstr "创建你的第一个合集，用于整理和分享图片。"
 msgid "<0/> Create Collection"
 msgstr "<0/> 创建合集"
 
+#: src/lib/utils/i18n/messages/toast.language.ts
 #: src/routes/profile/+page.svelte
 msgid "Password changed successfully"
 msgstr "密码修改成功"
 
+#: src/lib/utils/i18n/messages/toast.language.ts
 #: src/routes/profile/+page.svelte
 msgid "Profile updated successfully"
 msgstr "资料更新成功"
@@ -733,6 +736,7 @@ msgstr "更新密码"
 
 #: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
 #: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ImageVisibilityContent.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Public"
@@ -740,6 +744,7 @@ msgstr "公开"
 
 #: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
 #: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ImageVisibilityContent.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Private"
@@ -756,7 +761,7 @@ msgstr "发现"
 msgid "Upload"
 msgstr "上传"
 
-#: src/routes/preferences/+page.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Preferences updated successfully"
 msgstr "偏好设置更新成功"
 
@@ -950,23 +955,23 @@ msgstr "标签"
 msgid "Assign Tags"
 msgstr "分配标签"
 
-#: src/lib/state/ApiKeyStore.svelte.ts
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "API key created successfully"
 msgstr "API Key 创建成功"
 
-#: src/lib/state/ApiKeyStore.svelte.ts
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to create API key"
 msgstr "创建 API Key 失败"
 
-#: src/lib/state/ApiKeyStore.svelte.ts
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "API key revoked successfully"
 msgstr "API Key 撤销成功"
 
-#: src/lib/state/ApiKeyStore.svelte.ts
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to revoke API key"
 msgstr "撤销 API Key 失败"
 
-#: src/lib/state/ApiKeyStore.svelte.ts
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to generate ShareX config"
 msgstr "生成 ShareX 配置失败"
 
@@ -982,31 +987,25 @@ msgstr "合集项目数据流"
 msgid "CollectionListFeed"
 msgstr "合集列表数据流"
 
-#: src/lib/state/CollectionSelectionState.svelte.ts
-#: src/lib/state/ImagePickerState.svelte.ts
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to load collections"
 msgstr "加载合集失败"
 
-#: src/lib/state/ImagePickerState.svelte.ts
-msgid "Failed to add to collection"
-msgstr "添加到合集失败"
+#~ msgid "Failed to add to collection"
+#~ msgstr "添加到合集失败"
 
-#: src/lib/state/ImagePickerState.svelte.ts
-msgid "Failed to remove from collection"
-msgstr "从合集移除失败"
+#~ msgid "Failed to remove from collection"
+#~ msgstr "从合集移除失败"
 
-#: src/lib/state/ImagePickerState.svelte.ts
-#: src/lib/state/TagSelectionState.svelte.ts
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to load tags"
 msgstr "加载标签失败"
 
-#: src/lib/state/ImagePickerState.svelte.ts
-msgid "Failed to add tag"
-msgstr "添加标签失败"
+#~ msgid "Failed to add tag"
+#~ msgstr "添加标签失败"
 
-#: src/lib/state/ImagePickerState.svelte.ts
-msgid "Failed to remove tag"
-msgstr "移除标签失败"
+#~ msgid "Failed to remove tag"
+#~ msgstr "移除标签失败"
 
 #: src/lib/state/ImageTagManagerState.svelte.ts
 msgid "ImageTagManagerState"
@@ -1095,11 +1094,11 @@ msgstr "加载更多"
 msgid "Refresh"
 msgstr "刷新"
 
-#: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Sign in to add images to collections"
 msgstr "登录后可将图片添加到合集"
 
-#: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "You can only add your own images to collections"
 msgstr "你只能将自己的图片添加到合集"
 
@@ -1135,15 +1134,15 @@ msgstr "删除此合集中的全部 {0} 张图片"
 msgid "Remove from Collection"
 msgstr "从合集中移除"
 
-#: src/feature/Collection/CollectionActionsDropdown/CollectionActionsDropdown.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to delete collection. Please try again later."
 msgstr "删除合集失败，请稍后重试。"
 
-#: src/feature/Collection/CollectionActionsDropdown/CollectionActionsDropdown.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Collection updated successfully"
 msgstr "合集更新成功"
 
-#: src/feature/Collection/CollectionActionsDropdown/CollectionActionsDropdown.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to update collection"
 msgstr "更新合集失败"
 
@@ -1225,37 +1224,35 @@ msgstr "设为私密"
 msgid "Make public"
 msgstr "设为公开"
 
-#: src/feature/Image/ActionBar/useImageActions.svelte.ts
-#: src/feature/Image/AdminImageDropdown/AdminImageDropdown.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to update visibility. Please try again later."
 msgstr "更新可见性失败，请稍后再试。"
 
-#: src/feature/Image/ActionBar/useImageActions.svelte.ts
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to generate share link. Please try again later."
 msgstr "生成分享链接失败，请稍后再试。"
 
-#: src/feature/Image/ActionBar/useImageActions.svelte.ts
-#: src/feature/Image/AdminImageDropdown/AdminImageDropdown.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to delete image. Please try again later."
 msgstr "删除图片失败，请稍后再试。"
 
-#: src/feature/Image/BookmarkButton/BookmarkButton.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Sign in to bookmark images"
 msgstr "登录后可收藏图片"
 
-#: src/feature/Image/BookmarkButton/BookmarkButton.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "You can't bookmark your own images"
 msgstr "你不能收藏自己的图片"
 
-#: src/feature/Image/BookmarkButton/BookmarkButton.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Image bookmarked"
 msgstr "图片已收藏"
 
-#: src/feature/Image/BookmarkButton/BookmarkButton.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Bookmark removed"
 msgstr "收藏已移除"
 
-#: src/feature/Image/BookmarkButton/BookmarkButton.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to update bookmark"
 msgstr "更新收藏失败"
 
@@ -1487,7 +1484,7 @@ msgstr "图片内容"
 msgid "Failed to convert"
 msgstr "转换失败"
 
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Link copied to clipboard"
 msgstr "链接已复制到剪贴板"
 
@@ -3180,30 +3177,37 @@ msgstr "存储"
 msgid "Configure storage providers and cache management"
 msgstr "配置存储提供方与缓存管理"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ImageVisibilityContent.svelte
 msgid "Slink offers a <0>public gallery</0>, where people can share their images with others."
 msgstr "Slink 提供了一个<0>公开画廊</0>，用户可以在这里与他人分享图片。"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ImageVisibilityContent.svelte
 msgid "Visibility Options"
 msgstr "可见性选项"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ImageVisibilityContent.svelte
 msgid "Images are shared in the public gallery and visible to all users"
 msgstr "图片会展示在公开画廊中，所有用户可见"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ImageVisibilityContent.svelte
 msgid "Default"
 msgstr "默认"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ImageVisibilityContent.svelte
 msgid "Images are not shared in the public gallery and only accessible by the owner"
 msgstr "图片不会展示在公开画廊中，仅拥有者可访问"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ImageVisibilityContent.svelte
 msgid "Important Note"
 msgstr "重要说明"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ImageVisibilityContent.svelte
 msgid "Raw images are accessible to anyone with a direct link, regardless of visibility setting."
 msgstr "无论可见性设置如何，持有直链的人都可以访问原图。"
@@ -3236,94 +3240,117 @@ msgstr "图像设置 | Slink"
 msgid "Configure image handling and sharing preferences"
 msgstr "配置图片处理与分享偏好"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ShareFeatureContent.svelte
 msgid "You can easily share your images with others using the direct link provided for each uploaded image."
 msgstr "复制图片直链即可轻松分享给他人。"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ShareFeatureContent.svelte
 msgid "<0/> Current Sharing Options"
 msgstr "<0/> 当前分享方式"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ShareFeatureContent.svelte
 msgid "<0/> Direct link sharing with anyone"
 msgstr "<0/> 可向任意对象分享直链"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ShareFeatureContent.svelte
 msgid "<0/> Public gallery visibility (optional)"
 msgstr "<0/> 可选公开画廊展示"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ShareFeatureContent.svelte
 msgid "<0/> Link accessible to anyone who has it"
 msgstr "<0/> 任何拿到链接的人都可访问"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ShareFeatureContent.svelte
 msgid "Want More Control?"
 msgstr "想要更多控制权？"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ShareFeatureContent.svelte
 msgid "I'm working on advanced sharing features that will give you more control over your image sharing:"
 msgstr "我正在开发更强大的分享功能，让你更灵活地管理图片分享："
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ShareFeatureContent.svelte
 msgid "<0/> Expiration dates for shared links"
 msgstr "<0/> 分享链接过期时间"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ShareFeatureContent.svelte
 msgid "<0/> Password protection"
 msgstr "<0/> 密码保护"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ShareFeatureContent.svelte
 msgid "<0/> Private group sharing"
 msgstr "<0/> 私密群组分享"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ShareFeatureContent.svelte
 msgid "<0/> Support this feature request <1/>"
 msgstr "<0/> 支持该功能需求 <1/>"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/IssueReportContent.svelte
 msgid "I appreciate your help in making Slink better! If you've encountered a bug or have suggestions for improvement, here's how you can help:"
 msgstr "感谢您帮助 Slink 变得更好！如果你遇到 Bug 或有改进建议，可以按以下方式帮助我："
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/IssueReportContent.svelte
 msgid "<0/> Before Reporting"
 msgstr "<0/> 反馈前请先确认"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/IssueReportContent.svelte
 msgid "Check if the issue has already been reported"
 msgstr "检查该问题是否已被报告"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/IssueReportContent.svelte
 msgid "Try reproducing the issue in a different browser"
 msgstr "尝试在不同浏览器中复现问题"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/IssueReportContent.svelte
 msgid "Gather relevant details (browser, steps to reproduce, screenshots)"
 msgstr "收集相关信息（浏览器、复现步骤、截图）"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/IssueReportContent.svelte
 msgid "Report on GitHub"
 msgstr "在 GitHub 上反馈"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/IssueReportContent.svelte
 msgid "GitHub Issues is my primary platform for tracking bugs and feature requests. Your reports help me prioritize improvements."
 msgstr "GitHub Issues 是我追踪 Bug 和功能需求的主要平台。你的反馈能帮助我更好地确定优先级。"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/IssueReportContent.svelte
 msgid "<0/> Create New Issue <1/>"
 msgstr "<0/> 创建新 Issue <1/>"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/IssueReportContent.svelte
 msgid "Thank You!"
 msgstr "感谢支持！"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/IssueReportContent.svelte
 msgid "Every report helps me improve Slink for the entire community. I review all issues and prioritize fixes based on impact and frequency."
 msgstr "每一条反馈都在帮助我完善 Slink。我会查看所有问题，并按影响范围和频率优先修复。"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/SupportedFormatsContent.svelte
 msgid "Slink supports the following mime types:"
 msgstr "Slink 支持以下 MIME 类型："
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/SupportedFormatsContent.svelte
 msgid "* Source images are forced to be converted to JPEG format."
 msgstr "* 源图片将被强制转换为 JPEG 格式。"
@@ -3584,15 +3611,16 @@ msgid "Update the SSO provider configuration"
 msgstr "更新 SSO 提供方配置"
 
 #: src/feature/Layout/LocaleSwitcher/LocaleSwitcher.svelte
+#: src/routes/preferences/+page.svelte
 msgid "English"
 msgstr "English"
 
 #: src/feature/Layout/LocaleSwitcher/LocaleSwitcher.svelte
+#: src/routes/preferences/+page.svelte
 msgid "Українська"
 msgstr "Українська"
 
 #: src/feature/Layout/LocaleSwitcher/LocaleSwitcher.svelte
-#: src/feature/Navigation/Navbar/Navbar.svelte
 msgid "Change language"
 msgstr "切换语言"
 
@@ -3637,110 +3665,137 @@ msgid "GitHub"
 msgstr "GitHub"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Passwords do not match."
 msgstr "两次输入的密码不一致。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Username cannot be the same as email."
 msgstr "用户名不能与邮箱相同。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Password must be at least {limit} characters long."
 msgstr "密码长度至少为 {limit} 个字符。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Password must contain at least one number."
 msgstr "密码必须至少包含一个数字。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Password must contain at least one lowercase letter."
 msgstr "密码必须至少包含一个小写字母。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Password must contain at least one uppercase letter."
 msgstr "密码必须至少包含一个大写字母。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Password must contain at least one special character."
 msgstr "密码必须至少包含一个特殊字符。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Min 6 characters password"
 msgstr "密码至少 6 个字符"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Username must be at least {limit} characters long."
 msgstr "用户名长度至少为 {limit} 个字符。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Username must be at most {limit} characters long."
 msgstr "用户名长度最多为 {limit} 个字符。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Username can only contain lowercase letters, numbers, underscores, hyphens, and periods."
 msgstr "用户名只能包含小写字母、数字、下划线、连字符和句点。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Username cannot contain consecutive special characters."
 msgstr "用户名不能包含连续的特殊字符。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "`{value}` is a reserved username."
 msgstr "`{value}` 是保留用户名。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid credentials. Please check your username/email and password and try again."
 msgstr "凭据无效。请检查你的用户名/邮箱和密码后重试。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "You must be logged in to change your password"
 msgstr "你需要登录后才能修改密码"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid refresh token"
 msgstr "刷新令牌无效"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "User is restricted"
 msgstr "用户受限"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "SSO provider is currently unavailable. Please try again later."
 msgstr "SSO 提供方暂不可用，请稍后重试"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid email address."
 msgstr "邮箱地址无效。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Email already registered."
 msgstr "邮箱已被注册。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "An email address is required for SSO authentication."
 msgstr "SSO 认证需要邮箱地址。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Email must be verified by the SSO provider before signing in."
 msgstr "登录前，邮箱必须已通过 SSO 提供方验证。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid password."
 msgstr "密码无效。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid old password provided."
 msgstr "提供的旧密码无效。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid or expired refresh token."
 msgstr "刷新令牌无效或已过期。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid display name"
 msgstr "显示名称无效"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Display name already exist."
 msgstr "显示名称已存在。"
 
@@ -3751,14 +3806,17 @@ msgstr "显示名称已存在。"
 #~ msgstr ""
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "`{name}` is a reserved display name"
 msgstr "`{name}` 是保留显示名称"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid username"
 msgstr "用户名无效"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Username already exist."
 msgstr "用户名已存在。"
 
@@ -3769,194 +3827,242 @@ msgstr "用户名已存在。"
 #~ msgstr ""
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid settings configuration."
 msgstr "设置配置无效。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid password min length"
 msgstr "密码最小长度无效"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid image max size"
 msgstr "图片最大值无效"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Your account is pending approval."
 msgstr "你的账号正在等待审核。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Sign up is not allowed"
 msgstr "不允许注册"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid or expired OAuth state"
 msgstr "OAuth state 无效或已过期"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "You cannot grant or revoke roles from yourself. Use CLI instead."
 msgstr "你不能给自己授予或撤销角色。请改用 CLI。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "You cannot change your own status."
 msgstr "你不能修改自己的状态。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid user role"
 msgstr "无效的用户角色"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "This action is not allowed in demo mode"
 msgstr "演示模式下不允许执行此操作"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Access denied"
 msgstr "拒绝访问"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Resource not found"
 msgstr "未找到资源"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "An error occurred"
 msgstr "发生错误"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "An error occurred, while processing the request"
 msgstr "处理请求时发生错误"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Validation Error"
 msgstr "验证错误"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Specification Error"
 msgstr "规范错误"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "You cannot bookmark your own image"
 msgstr "你不能收藏自己的图片"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Cannot bookmark a private image"
 msgstr "不能收藏私密图片"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Comment edit window has expired. Comments can only be edited within 24 hours of creation."
 msgstr "评论编辑时限已过。评论只能在创建后的 24 小时内编辑。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "You can only access your own collections"
 msgstr "你只能访问自己的合集"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "You can only access your own tags"
 msgstr "你只能访问自己的标签"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Cannot move a tag to itself"
 msgstr "不能把标签移动到自己本身"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Cannot move a tag to one of its descendants"
 msgstr "不能把标签移动到自己的子标签下"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Storage provider is not configured."
 msgstr "存储提供方未配置。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "SMB configuration is incomplete."
 msgstr "SMB 配置不完整。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Storage usage metrics are disabled for this provider"
 msgstr "此提供方已禁用存储用量指标"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "S3 bucket is required."
 msgstr "必须填写 S3 Bucket。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "S3 region is required when using AWS."
 msgstr "使用 AWS 时必须填写 S3 区域。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "S3 Access key is required."
 msgstr "必须填写 S3 Access Key。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "S3 Secret key is required."
 msgstr "必须填写 S3 Secret Key。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "The expiry date must be in the future."
 msgstr "过期时间必须是未来时间。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "API key not found"
 msgstr "未找到 API Key"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "API key does not belong to user"
 msgstr "API Key 不属于当前用户"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "API key has expired"
 msgstr "API Key 已过期"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Validation failed"
 msgstr "验证失败"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "File too large. Please choose a smaller file and try again."
 msgstr "文件过大。请选择更小的文件后重试。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Max size cannot be less than 0"
 msgstr "图片最大尺寸不能小于 0"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Max size cannot be greater than 1000"
 msgstr "图片最大尺寸不能大于 1000"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid tag ID format"
 msgstr "标签 ID 格式无效"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid collection ID format"
 msgstr "合集 ID 格式无效"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Password length cannot be less than 3"
 msgstr "密码长度不能小于 3"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Password length cannot be greater than 64"
 msgstr "密码长度不能大于 64"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value should not be blank."
 msgstr "该值不能为空。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value is not a valid email address."
 msgstr "该值不是有效的邮箱地址。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value is not a valid URL."
 msgstr "该值不是有效的 URL。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value is not a valid UUID."
 msgstr "该值不是有效的 UUID。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value should be positive."
 msgstr "该值必须为正数。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value is not valid."
 msgstr "该值无效。"
 
@@ -3976,6 +4082,7 @@ msgstr "该值无效。"
 #~ msgstr ""
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "The value you selected is not a valid choice."
 msgstr "你选择的值不是有效选项。"
 
@@ -3983,42 +4090,52 @@ msgstr "你选择的值不是有效选项。"
 #~ msgstr ""
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid key format"
 msgstr "Key 格式无效"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Tag name can only contain letters, numbers, hyphens, and underscores"
 msgstr "标签名仅支持字母、数字、连字符和下划线"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Display name can only contain letters, numbers, underscores, hyphens, spaces, and periods."
 msgstr "显示名称只能包含字母、数字、下划线、连字符、空格和句点。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Display name cannot contain consecutive characters of the same type."
 msgstr "显示名称不能包含连续同类字符。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "`Anonymous` is a reserved display name."
 msgstr "`Anonymous` 是保留显示名称。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "API key is required. Create one first from your profile page."
 msgstr "必须提供 API Key。请先在个人资料页创建一个。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "The refresh token is required."
 msgstr "必须提供刷新令牌。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid license type."
 msgstr "授权类型无效。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid landing page."
 msgstr "页面无效。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid default visibility."
 msgstr "默认可见性无效。"
 
@@ -4094,18 +4211,22 @@ msgstr[0] "# 张图片"
 #~ msgid "This value is out of range."
 #~ msgstr ""
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/faq.questions.ts
 msgid "What image formats Slink supports?"
 msgstr "Slink 支持哪些图片格式？"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/faq.questions.ts
 msgid "What is the visibility of my images?"
 msgstr "我的图片可见性是怎样的？"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/faq.questions.ts
 msgid "Can I share my images with others?"
 msgstr "我可以和别人分享图片吗？"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/faq.questions.ts
 msgid "I found an issue, how can I report it?"
 msgstr "我发现了问题，怎么反馈？"
@@ -4138,42 +4259,52 @@ msgstr "我发现了问题，怎么反馈？"
 #~ msgstr ""
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "The file is too large ({size}). Allowed maximum size is {limit}."
 msgstr "文件过大（{size}）。允许的最大值为 {limit}。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "The mime type {type} is not supported."
 msgstr "不支持 MIME 类型 {type}。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Display name must be at least {limit} characters long."
 msgstr "显示名称长度至少为 {limit} 个字符。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Display name must be at most {limit} characters long."
 msgstr "显示名称长度最多为 {limit} 个字符。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value should have {limit} characters or more."
 msgstr "该值长度应不少于 {limit} 个字符。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value is too long. It should have {limit} characters or less."
 msgstr "该值过长。长度应不超过 {limit} 个字符。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value should be {limit} or less."
 msgstr "该值应小于或等于 {limit}。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value should be between {min} and {max}."
 msgstr "该值应介于 {min} 和 {max} 之间。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value should be of type {type}."
 msgstr "该值的类型应为 {type}。"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "This collection should contain {limit} elements or less."
 msgstr "该集合包含的元素数量应不超过 {limit} 个。"
 
@@ -4213,9 +4344,8 @@ msgstr "大小"
 msgid "Tags / Collections"
 msgstr "标签 / 合集"
 
-#: src/feature/Navigation/Navbar/Navbar.svelte
-msgid "Switch between available languages."
-msgstr "在可用语言之间切换。"
+#~ msgid "Switch between available languages."
+#~ msgstr "在可用语言之间切换。"
 
 #~ msgid "Delete {n} {image|images}"
 #~ msgstr ""
@@ -4235,13 +4365,92 @@ msgid_plural "Delete # images"
 msgstr[0] "删除 # 张图片"
 
 #: src/feature/Layout/LocaleSwitcher/LocaleSwitcher.svelte
+#: src/routes/preferences/+page.svelte
 msgid "Deutsch"
 msgstr "Deutsch"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Tag \"{name}\" already exists"
 msgstr "标签“{name}”已存在"
 
 #: src/feature/Layout/LocaleSwitcher/LocaleSwitcher.svelte
+#: src/routes/preferences/+page.svelte
 msgid "中文"
-msgstr ""
+msgstr "中文"
+
+#: src/routes/preferences/+page.svelte
+msgid "Language"
+msgstr "语言"
+
+#: src/routes/preferences/+page.svelte
+msgid "Display Language"
+msgstr "显示语言"
+
+#: src/routes/preferences/+page.svelte
+msgid "The language used throughout the interface"
+msgstr "界面中使用的语言"
+
+#: src/routes/preferences/+page.svelte
+msgid "Select a language..."
+msgstr "选择语言..."
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Tag \"{name}\" created successfully"
+msgstr "标签 \"{name}\" 创建成功"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Tag \"{name}\" moved successfully"
+msgstr "标签 \"{name}\" 移动成功"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Tag \"{name}\" deleted successfully"
+msgstr "标签 \"{name}\" 删除成功"
+
+#~ msgid "Bytes"
+#~ msgstr "字节"
+
+#~ msgid "Tag name cannot be empty"
+#~ msgstr "标签名称不能为空"
+
+#~ msgid "Tag name must be at least {0} character long"
+#~ msgstr "标签名称至少需要 {0} 个字符"
+
+#~ msgid "Tag name must be {0} characters or less"
+#~ msgstr "标签名称不能超过 {0} 个字符"
+
+#~ msgid "Total"
+#~ msgstr "总计"
+
+#~ msgid "ShareX config can only be downloaded for newly created keys. Please create a new key to download the config."
+#~ msgstr "ShareX 配置只能为新创建的密钥下载。请创建新密钥以下载配置。"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Failed to download ShareX config"
+msgstr "下载 ShareX 配置失败"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Copied to clipboard"
+msgstr "已复制到剪贴板"
+
+#~ msgid "Set-Cookie"
+#~ msgstr "Set-Cookie"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Something went wrong"
+msgstr "出了点问题"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Failed to delete images. Please try again later."
+msgstr "删除图片失败。请稍后重试。"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Successfully deleted {count} from history"
+msgstr "成功从历史记录中删除了 {count} 项"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Failed to delete {count}"
+msgstr "删除 {count} 项失败"
+
+#~ msgid "msgstr"
+#~ msgstr ""

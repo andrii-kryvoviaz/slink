@@ -10,6 +10,7 @@ import type {
 import { AbstractHttpState } from '@slink/lib/state/core/AbstractHttpState.svelte';
 import type { RequestStateOptions } from '@slink/lib/state/core/AbstractHttpState.svelte';
 import { useState } from '@slink/lib/state/core/ContextAwareState';
+import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
 import { toast } from '@slink/utils/ui/toast-sonner.svelte';
 
@@ -76,7 +77,7 @@ class ApiKeyStore extends AbstractHttpState<ApiKeyResponse[]> {
     try {
       createdKey = await ApiClient.apiKey.createApiKey(data);
       this._createdKey = createdKey;
-      toast.success('API key created successfully');
+      toast.success(messages.apiKey.created);
 
       this.markDirty(true);
       await this.load();
@@ -84,7 +85,7 @@ class ApiKeyStore extends AbstractHttpState<ApiKeyResponse[]> {
       return createdKey;
     } catch (error) {
       if (!(error instanceof ValidationException)) {
-        toast.error('Failed to create API key');
+        toast.error(messages.apiKey.failedToCreate);
       }
       throw error;
     } finally {
@@ -101,9 +102,9 @@ class ApiKeyStore extends AbstractHttpState<ApiKeyResponse[]> {
       this._apiKeys = this._apiKeys.filter((key) => key.id !== keyId);
       this.markDirty(false);
 
-      toast.success('API key revoked successfully');
+      toast.success(messages.apiKey.revoked);
     } catch (error) {
-      toast.error('Failed to revoke API key');
+      toast.error(messages.apiKey.failedToRevoke);
       throw error;
     } finally {
       this._isRevoking = false;
@@ -132,7 +133,7 @@ class ApiKeyStore extends AbstractHttpState<ApiKeyResponse[]> {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (error) {
-      toast.error('Failed to generate ShareX config');
+      toast.error(messages.apiKey.failedToGenerateConfig);
       throw error;
     } finally {
       this._isDownloadingConfig = false;

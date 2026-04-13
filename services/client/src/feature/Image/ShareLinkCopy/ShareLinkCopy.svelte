@@ -12,6 +12,7 @@
   import { scale } from 'svelte/transition';
 
   import type { ShareFormat } from '@slink/lib/settings';
+  import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
   import { toast } from '@slink/utils/ui/toast-sonner.svelte';
 
@@ -158,7 +159,7 @@
       isCopiedState.trigger();
 
       if (showToast) {
-        toast.success('Link copied to clipboard');
+        toast.success(messages.clipboard.linkCopied);
       }
     } catch (error) {
       console.error('Failed to copy:', error);

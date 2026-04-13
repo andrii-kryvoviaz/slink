@@ -4,6 +4,8 @@ import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
 
 import type { CollectionResponse } from '@slink/api/Response';
 
+import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
+
 export class CollectionSelectionState {
   private _selectedIds: string[] = $state([]);
   private _collections: CollectionResponse[] = $state([]);
@@ -51,7 +53,7 @@ export class CollectionSelectionState {
       this._collections = response.data;
       this._isLoaded = true;
     } catch {
-      toast.error('Failed to load collections');
+      toast.error(messages.collection.failedToLoad);
     } finally {
       this._isLoading = false;
     }

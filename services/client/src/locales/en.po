@@ -32,6 +32,7 @@ msgid "Missing authorization parameters"
 msgstr "Missing authorization parameters"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 #: src/routes/profile/(auth)/sso/callback/+page.server.ts
 #: src/routes/profile/(auth)/sso/login/[provider]/+page.server.ts
 msgid "An unexpected error occurred"
@@ -424,15 +425,15 @@ msgstr "Upload failed"
 msgid "Tag already exists"
 msgstr "Tag already exists"
 
-#: src/feature/Tag/useTagOperations.svelte.ts
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to create tag"
 msgstr "Failed to create tag"
 
-#: src/feature/Upload/UploadForm.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "No files selected"
 msgstr "No files selected"
 
-#: src/feature/Upload/UploadForm.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Only one file allowed at a time"
 msgstr "Only one file allowed at a time"
 
@@ -636,10 +637,12 @@ msgstr "Create your first collection to organize and share your images."
 msgid "<0/> Create Collection"
 msgstr "<0/> Create Collection"
 
+#: src/lib/utils/i18n/messages/toast.language.ts
 #: src/routes/profile/+page.svelte
 msgid "Password changed successfully"
 msgstr "Password changed successfully"
 
+#: src/lib/utils/i18n/messages/toast.language.ts
 #: src/routes/profile/+page.svelte
 msgid "Profile updated successfully"
 msgstr "Profile updated successfully"
@@ -733,6 +736,7 @@ msgstr "Update Password"
 
 #: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
 #: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ImageVisibilityContent.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Public"
@@ -740,6 +744,7 @@ msgstr "Public"
 
 #: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
 #: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ImageVisibilityContent.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Private"
@@ -756,7 +761,7 @@ msgstr "Explore"
 msgid "Upload"
 msgstr "Upload"
 
-#: src/routes/preferences/+page.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Preferences updated successfully"
 msgstr "Preferences updated successfully"
 
@@ -950,23 +955,23 @@ msgstr "Tag"
 msgid "Assign Tags"
 msgstr "Assign Tags"
 
-#: src/lib/state/ApiKeyStore.svelte.ts
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "API key created successfully"
 msgstr "API key created successfully"
 
-#: src/lib/state/ApiKeyStore.svelte.ts
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to create API key"
 msgstr "Failed to create API key"
 
-#: src/lib/state/ApiKeyStore.svelte.ts
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "API key revoked successfully"
 msgstr "API key revoked successfully"
 
-#: src/lib/state/ApiKeyStore.svelte.ts
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to revoke API key"
 msgstr "Failed to revoke API key"
 
-#: src/lib/state/ApiKeyStore.svelte.ts
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to generate ShareX config"
 msgstr "Failed to generate ShareX config"
 
@@ -982,31 +987,25 @@ msgstr "CollectionItemsFeed"
 msgid "CollectionListFeed"
 msgstr "CollectionListFeed"
 
-#: src/lib/state/CollectionSelectionState.svelte.ts
-#: src/lib/state/ImagePickerState.svelte.ts
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to load collections"
 msgstr "Failed to load collections"
 
-#: src/lib/state/ImagePickerState.svelte.ts
-msgid "Failed to add to collection"
-msgstr "Failed to add to collection"
+#~ msgid "Failed to add to collection"
+#~ msgstr "Failed to add to collection"
 
-#: src/lib/state/ImagePickerState.svelte.ts
-msgid "Failed to remove from collection"
-msgstr "Failed to remove from collection"
+#~ msgid "Failed to remove from collection"
+#~ msgstr "Failed to remove from collection"
 
-#: src/lib/state/ImagePickerState.svelte.ts
-#: src/lib/state/TagSelectionState.svelte.ts
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to load tags"
 msgstr "Failed to load tags"
 
-#: src/lib/state/ImagePickerState.svelte.ts
-msgid "Failed to add tag"
-msgstr "Failed to add tag"
+#~ msgid "Failed to add tag"
+#~ msgstr "Failed to add tag"
 
-#: src/lib/state/ImagePickerState.svelte.ts
-msgid "Failed to remove tag"
-msgstr "Failed to remove tag"
+#~ msgid "Failed to remove tag"
+#~ msgstr "Failed to remove tag"
 
 #: src/lib/state/ImageTagManagerState.svelte.ts
 msgid "ImageTagManagerState"
@@ -1095,11 +1094,11 @@ msgstr "Load More"
 msgid "Refresh"
 msgstr "Refresh"
 
-#: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Sign in to add images to collections"
 msgstr "Sign in to add images to collections"
 
-#: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "You can only add your own images to collections"
 msgstr "You can only add your own images to collections"
 
@@ -1135,15 +1134,15 @@ msgstr "Delete all {0} images in this collection"
 msgid "Remove from Collection"
 msgstr "Remove from Collection"
 
-#: src/feature/Collection/CollectionActionsDropdown/CollectionActionsDropdown.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to delete collection. Please try again later."
 msgstr "Failed to delete collection. Please try again later."
 
-#: src/feature/Collection/CollectionActionsDropdown/CollectionActionsDropdown.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Collection updated successfully"
 msgstr "Collection updated successfully"
 
-#: src/feature/Collection/CollectionActionsDropdown/CollectionActionsDropdown.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to update collection"
 msgstr "Failed to update collection"
 
@@ -1225,37 +1224,35 @@ msgstr "Make private"
 msgid "Make public"
 msgstr "Make public"
 
-#: src/feature/Image/ActionBar/useImageActions.svelte.ts
-#: src/feature/Image/AdminImageDropdown/AdminImageDropdown.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to update visibility. Please try again later."
 msgstr "Failed to update visibility. Please try again later."
 
-#: src/feature/Image/ActionBar/useImageActions.svelte.ts
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to generate share link. Please try again later."
 msgstr "Failed to generate share link. Please try again later."
 
-#: src/feature/Image/ActionBar/useImageActions.svelte.ts
-#: src/feature/Image/AdminImageDropdown/AdminImageDropdown.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to delete image. Please try again later."
 msgstr "Failed to delete image. Please try again later."
 
-#: src/feature/Image/BookmarkButton/BookmarkButton.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Sign in to bookmark images"
 msgstr "Sign in to bookmark images"
 
-#: src/feature/Image/BookmarkButton/BookmarkButton.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "You can't bookmark your own images"
 msgstr "You can't bookmark your own images"
 
-#: src/feature/Image/BookmarkButton/BookmarkButton.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Image bookmarked"
 msgstr "Image bookmarked"
 
-#: src/feature/Image/BookmarkButton/BookmarkButton.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Bookmark removed"
 msgstr "Bookmark removed"
 
-#: src/feature/Image/BookmarkButton/BookmarkButton.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to update bookmark"
 msgstr "Failed to update bookmark"
 
@@ -1487,7 +1484,7 @@ msgstr "Image Content"
 msgid "Failed to convert"
 msgstr "Failed to convert"
 
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Link copied to clipboard"
 msgstr "Link copied to clipboard"
 
@@ -3180,30 +3177,37 @@ msgstr "Storage"
 msgid "Configure storage providers and cache management"
 msgstr "Configure storage providers and cache management"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ImageVisibilityContent.svelte
 msgid "Slink offers a <0>public gallery</0>, where people can share their images with others."
 msgstr "Slink offers a <0>public gallery</0>, where people can share their images with others."
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ImageVisibilityContent.svelte
 msgid "Visibility Options"
 msgstr "Visibility Options"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ImageVisibilityContent.svelte
 msgid "Images are shared in the public gallery and visible to all users"
 msgstr "Images are shared in the public gallery and visible to all users"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ImageVisibilityContent.svelte
 msgid "Default"
 msgstr "Default"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ImageVisibilityContent.svelte
 msgid "Images are not shared in the public gallery and only accessible by the owner"
 msgstr "Images are not shared in the public gallery and only accessible by the owner"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ImageVisibilityContent.svelte
 msgid "Important Note"
 msgstr "Important Note"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ImageVisibilityContent.svelte
 msgid "Raw images are accessible to anyone with a direct link, regardless of visibility setting."
 msgstr "Raw images are accessible to anyone with a direct link, regardless of visibility setting."
@@ -3236,94 +3240,117 @@ msgstr "Image Settings | Slink"
 msgid "Configure image handling and sharing preferences"
 msgstr "Configure image handling and sharing preferences"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ShareFeatureContent.svelte
 msgid "You can easily share your images with others using the direct link provided for each uploaded image."
 msgstr "You can easily share your images with others using the direct link provided for each uploaded image."
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ShareFeatureContent.svelte
 msgid "<0/> Current Sharing Options"
 msgstr "<0/> Current Sharing Options"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ShareFeatureContent.svelte
 msgid "<0/> Direct link sharing with anyone"
 msgstr "<0/> Direct link sharing with anyone"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ShareFeatureContent.svelte
 msgid "<0/> Public gallery visibility (optional)"
 msgstr "<0/> Public gallery visibility (optional)"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ShareFeatureContent.svelte
 msgid "<0/> Link accessible to anyone who has it"
 msgstr "<0/> Link accessible to anyone who has it"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ShareFeatureContent.svelte
 msgid "Want More Control?"
 msgstr "Want More Control?"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ShareFeatureContent.svelte
 msgid "I'm working on advanced sharing features that will give you more control over your image sharing:"
 msgstr "I'm working on advanced sharing features that will give you more control over your image sharing:"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ShareFeatureContent.svelte
 msgid "<0/> Expiration dates for shared links"
 msgstr "<0/> Expiration dates for shared links"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ShareFeatureContent.svelte
 msgid "<0/> Password protection"
 msgstr "<0/> Password protection"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ShareFeatureContent.svelte
 msgid "<0/> Private group sharing"
 msgstr "<0/> Private group sharing"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/ShareFeatureContent.svelte
 msgid "<0/> Support this feature request <1/>"
 msgstr "<0/> Support this feature request <1/>"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/IssueReportContent.svelte
 msgid "I appreciate your help in making Slink better! If you've encountered a bug or have suggestions for improvement, here's how you can help:"
 msgstr "I appreciate your help in making Slink better! If you've encountered a bug or have suggestions for improvement, here's how you can help:"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/IssueReportContent.svelte
 msgid "<0/> Before Reporting"
 msgstr "<0/> Before Reporting"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/IssueReportContent.svelte
 msgid "Check if the issue has already been reported"
 msgstr "Check if the issue has already been reported"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/IssueReportContent.svelte
 msgid "Try reproducing the issue in a different browser"
 msgstr "Try reproducing the issue in a different browser"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/IssueReportContent.svelte
 msgid "Gather relevant details (browser, steps to reproduce, screenshots)"
 msgstr "Gather relevant details (browser, steps to reproduce, screenshots)"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/IssueReportContent.svelte
 msgid "Report on GitHub"
 msgstr "Report on GitHub"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/IssueReportContent.svelte
 msgid "GitHub Issues is my primary platform for tracking bugs and feature requests. Your reports help me prioritize improvements."
 msgstr "GitHub Issues is my primary platform for tracking bugs and feature requests. Your reports help me prioritize improvements."
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/IssueReportContent.svelte
 msgid "<0/> Create New Issue <1/>"
 msgstr "<0/> Create New Issue <1/>"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/IssueReportContent.svelte
 msgid "Thank You!"
 msgstr "Thank You!"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/IssueReportContent.svelte
 msgid "Every report helps me improve Slink for the entire community. I review all issues and prioritize fixes based on impact and frequency."
 msgstr "Every report helps me improve Slink for the entire community. I review all issues and prioritize fixes based on impact and frequency."
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/SupportedFormatsContent.svelte
 msgid "Slink supports the following mime types:"
 msgstr "Slink supports the following mime types:"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/snippets/SupportedFormatsContent.svelte
 msgid "* Source images are forced to be converted to JPEG format."
 msgstr "* Source images are forced to be converted to JPEG format."
@@ -3584,15 +3611,16 @@ msgid "Update the SSO provider configuration"
 msgstr "Update the SSO provider configuration"
 
 #: src/feature/Layout/LocaleSwitcher/LocaleSwitcher.svelte
+#: src/routes/preferences/+page.svelte
 msgid "English"
 msgstr "English"
 
 #: src/feature/Layout/LocaleSwitcher/LocaleSwitcher.svelte
+#: src/routes/preferences/+page.svelte
 msgid "Українська"
 msgstr "Українська"
 
 #: src/feature/Layout/LocaleSwitcher/LocaleSwitcher.svelte
-#: src/feature/Navigation/Navbar/Navbar.svelte
 msgid "Change language"
 msgstr "Change language"
 
@@ -3637,110 +3665,137 @@ msgid "GitHub"
 msgstr "GitHub"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Passwords do not match."
 msgstr "Passwords do not match."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Username cannot be the same as email."
 msgstr "Username cannot be the same as email."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Password must be at least {limit} characters long."
 msgstr "Password must be at least {limit} characters long."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Password must contain at least one number."
 msgstr "Password must contain at least one number."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Password must contain at least one lowercase letter."
 msgstr "Password must contain at least one lowercase letter."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Password must contain at least one uppercase letter."
 msgstr "Password must contain at least one uppercase letter."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Password must contain at least one special character."
 msgstr "Password must contain at least one special character."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Min 6 characters password"
 msgstr "Min 6 characters password"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Username must be at least {limit} characters long."
 msgstr "Username must be at least {limit} characters long."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Username must be at most {limit} characters long."
 msgstr "Username must be at most {limit} characters long."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Username can only contain lowercase letters, numbers, underscores, hyphens, and periods."
 msgstr "Username can only contain lowercase letters, numbers, underscores, hyphens, and periods."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Username cannot contain consecutive special characters."
 msgstr "Username cannot contain consecutive special characters."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "`{value}` is a reserved username."
 msgstr "`{value}` is a reserved username."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid credentials. Please check your username/email and password and try again."
 msgstr "Invalid credentials. Please check your username/email and password and try again."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "You must be logged in to change your password"
 msgstr "You must be logged in to change your password"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid refresh token"
 msgstr "Invalid refresh token"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "User is restricted"
 msgstr "User is restricted"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "SSO provider is currently unavailable. Please try again later."
 msgstr "SSO provider is currently unavailable. Please try again later."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid email address."
 msgstr "Invalid email address."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Email already registered."
 msgstr "Email already registered."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "An email address is required for SSO authentication."
 msgstr "An email address is required for SSO authentication."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Email must be verified by the SSO provider before signing in."
 msgstr "Email must be verified by the SSO provider before signing in."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid password."
 msgstr "Invalid password."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid old password provided."
 msgstr "Invalid old password provided."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid or expired refresh token."
 msgstr "Invalid or expired refresh token."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid display name"
 msgstr "Invalid display name"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Display name already exist."
 msgstr "Display name already exist."
 
@@ -3751,14 +3806,17 @@ msgstr "Display name already exist."
 #~ msgstr "Display name must be at most 30 characters long"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "`{name}` is a reserved display name"
 msgstr "`{name}` is a reserved display name"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid username"
 msgstr "Invalid username"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Username already exist."
 msgstr "Username already exist."
 
@@ -3769,194 +3827,242 @@ msgstr "Username already exist."
 #~ msgstr "Username must be at most 30 characters long"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid settings configuration."
 msgstr "Invalid settings configuration."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid password min length"
 msgstr "Invalid password min length"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid image max size"
 msgstr "Invalid image max size"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Your account is pending approval."
 msgstr "Your account is pending approval."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Sign up is not allowed"
 msgstr "Sign up is not allowed"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid or expired OAuth state"
 msgstr "Invalid or expired OAuth state"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "You cannot grant or revoke roles from yourself. Use CLI instead."
 msgstr "You cannot grant or revoke roles from yourself. Use CLI instead."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "You cannot change your own status."
 msgstr "You cannot change your own status."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid user role"
 msgstr "Invalid user role"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "This action is not allowed in demo mode"
 msgstr "This action is not allowed in demo mode"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Access denied"
 msgstr "Access denied"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Resource not found"
 msgstr "Resource not found"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "An error occurred"
 msgstr "An error occurred"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "An error occurred, while processing the request"
 msgstr "An error occurred, while processing the request"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Validation Error"
 msgstr "Validation Error"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Specification Error"
 msgstr "Specification Error"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "You cannot bookmark your own image"
 msgstr "You cannot bookmark your own image"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Cannot bookmark a private image"
 msgstr "Cannot bookmark a private image"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Comment edit window has expired. Comments can only be edited within 24 hours of creation."
 msgstr "Comment edit window has expired. Comments can only be edited within 24 hours of creation."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "You can only access your own collections"
 msgstr "You can only access your own collections"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "You can only access your own tags"
 msgstr "You can only access your own tags"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Cannot move a tag to itself"
 msgstr "Cannot move a tag to itself"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Cannot move a tag to one of its descendants"
 msgstr "Cannot move a tag to one of its descendants"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Storage provider is not configured."
 msgstr "Storage provider is not configured."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "SMB configuration is incomplete."
 msgstr "SMB configuration is incomplete."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Storage usage metrics are disabled for this provider"
 msgstr "Storage usage metrics are disabled for this provider"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "S3 bucket is required."
 msgstr "S3 bucket is required."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "S3 region is required when using AWS."
 msgstr "S3 region is required when using AWS."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "S3 Access key is required."
 msgstr "S3 Access key is required."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "S3 Secret key is required."
 msgstr "S3 Secret key is required."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "The expiry date must be in the future."
 msgstr "The expiry date must be in the future."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "API key not found"
 msgstr "API key not found"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "API key does not belong to user"
 msgstr "API key does not belong to user"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "API key has expired"
 msgstr "API key has expired"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Validation failed"
 msgstr "Validation failed"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "File too large. Please choose a smaller file and try again."
 msgstr "File too large. Please choose a smaller file and try again."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Max size cannot be less than 0"
 msgstr "Max size cannot be less than 0"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Max size cannot be greater than 1000"
 msgstr "Max size cannot be greater than 1000"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid tag ID format"
 msgstr "Invalid tag ID format"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid collection ID format"
 msgstr "Invalid collection ID format"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Password length cannot be less than 3"
 msgstr "Password length cannot be less than 3"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Password length cannot be greater than 64"
 msgstr "Password length cannot be greater than 64"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value should not be blank."
 msgstr "This value should not be blank."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value is not a valid email address."
 msgstr "This value is not a valid email address."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value is not a valid URL."
 msgstr "This value is not a valid URL."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value is not a valid UUID."
 msgstr "This value is not a valid UUID."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value should be positive."
 msgstr "This value should be positive."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value is not valid."
 msgstr "This value is not valid."
 
@@ -3976,6 +4082,7 @@ msgstr "This value is not valid."
 #~ msgstr "This collection should contain {{ limit }} element or less.|This collection should contain {{ limit }} elements or less."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "The value you selected is not a valid choice."
 msgstr "The value you selected is not a valid choice."
 
@@ -3983,42 +4090,52 @@ msgstr "The value you selected is not a valid choice."
 #~ msgstr "This value should be of type {{ type }}."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid key format"
 msgstr "Invalid key format"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Tag name can only contain letters, numbers, hyphens, and underscores"
 msgstr "Tag name can only contain letters, numbers, hyphens, and underscores"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Display name can only contain letters, numbers, underscores, hyphens, spaces, and periods."
 msgstr "Display name can only contain letters, numbers, underscores, hyphens, spaces, and periods."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Display name cannot contain consecutive characters of the same type."
 msgstr "Display name cannot contain consecutive characters of the same type."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "`Anonymous` is a reserved display name."
 msgstr "`Anonymous` is a reserved display name."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "API key is required. Create one first from your profile page."
 msgstr "API key is required. Create one first from your profile page."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "The refresh token is required."
 msgstr "The refresh token is required."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid license type."
 msgstr "Invalid license type."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid landing page."
 msgstr "Invalid landing page."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid default visibility."
 msgstr "Invalid default visibility."
 
@@ -4095,18 +4212,22 @@ msgstr[1] "# images"
 #~ msgid "This value is out of range."
 #~ msgstr "This value is out of range."
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/faq.questions.ts
 msgid "What image formats Slink supports?"
 msgstr "What image formats Slink supports?"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/faq.questions.ts
 msgid "What is the visibility of my images?"
 msgstr "What is the visibility of my images?"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/faq.questions.ts
 msgid "Can I share my images with others?"
 msgstr "Can I share my images with others?"
 
+#: src/routes/help/faq/+page.svelte
 #: src/routes/help/faq/faq.questions.ts
 msgid "I found an issue, how can I report it?"
 msgstr "I found an issue, how can I report it?"
@@ -4139,42 +4260,52 @@ msgstr "I found an issue, how can I report it?"
 #~ msgstr "This display name is reserved."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "The file is too large ({size}). Allowed maximum size is {limit}."
 msgstr "The file is too large ({size}). Allowed maximum size is {limit}."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "The mime type {type} is not supported."
 msgstr "The mime type {type} is not supported."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Display name must be at least {limit} characters long."
 msgstr "Display name must be at least {limit} characters long."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Display name must be at most {limit} characters long."
 msgstr "Display name must be at most {limit} characters long."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value should have {limit} characters or more."
 msgstr "This value should have {limit} characters or more."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value is too long. It should have {limit} characters or less."
 msgstr "This value is too long. It should have {limit} characters or less."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value should be {limit} or less."
 msgstr "This value should be {limit} or less."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value should be between {min} and {max}."
 msgstr "This value should be between {min} and {max}."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value should be of type {type}."
 msgstr "This value should be of type {type}."
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "This collection should contain {limit} elements or less."
 msgstr "This collection should contain {limit} elements or less."
 
@@ -4214,9 +4345,8 @@ msgstr "Size"
 msgid "Tags / Collections"
 msgstr "Tags / Collections"
 
-#: src/feature/Navigation/Navbar/Navbar.svelte
-msgid "Switch between available languages."
-msgstr "Switch between available languages."
+#~ msgid "Switch between available languages."
+#~ msgstr "Switch between available languages."
 
 #~ msgid "Delete {n} {image|images}"
 #~ msgstr "Delete {n} {image|images}"
@@ -4237,13 +4367,92 @@ msgstr[0] "Delete # image"
 msgstr[1] "Delete # images"
 
 #: src/feature/Layout/LocaleSwitcher/LocaleSwitcher.svelte
+#: src/routes/preferences/+page.svelte
 msgid "Deutsch"
 msgstr "Deutsch"
 
 #: src/lib/utils/i18n/apiErrors.ts
+#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Tag \"{name}\" already exists"
 msgstr "Tag \"{name}\" already exists"
 
 #: src/feature/Layout/LocaleSwitcher/LocaleSwitcher.svelte
+#: src/routes/preferences/+page.svelte
 msgid "中文"
 msgstr "中文"
+
+#: src/routes/preferences/+page.svelte
+msgid "Language"
+msgstr "Language"
+
+#: src/routes/preferences/+page.svelte
+msgid "Display Language"
+msgstr "Display Language"
+
+#: src/routes/preferences/+page.svelte
+msgid "The language used throughout the interface"
+msgstr "The language used throughout the interface"
+
+#: src/routes/preferences/+page.svelte
+msgid "Select a language..."
+msgstr "Select a language..."
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Tag \"{name}\" created successfully"
+msgstr "Tag \"{name}\" created successfully"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Tag \"{name}\" moved successfully"
+msgstr "Tag \"{name}\" moved successfully"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Tag \"{name}\" deleted successfully"
+msgstr "Tag \"{name}\" deleted successfully"
+
+#~ msgid "Bytes"
+#~ msgstr "Bytes"
+
+#~ msgid "Tag name cannot be empty"
+#~ msgstr "Tag name cannot be empty"
+
+#~ msgid "Tag name must be at least {0} character long"
+#~ msgstr "Tag name must be at least {0} character long"
+
+#~ msgid "Tag name must be {0} characters or less"
+#~ msgstr "Tag name must be {0} characters or less"
+
+#~ msgid "Total"
+#~ msgstr "Total"
+
+#~ msgid "ShareX config can only be downloaded for newly created keys. Please create a new key to download the config."
+#~ msgstr "ShareX config can only be downloaded for newly created keys. Please create a new key to download the config."
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Failed to download ShareX config"
+msgstr "Failed to download ShareX config"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Copied to clipboard"
+msgstr "Copied to clipboard"
+
+#~ msgid "Set-Cookie"
+#~ msgstr "Set-Cookie"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Something went wrong"
+msgstr "Something went wrong"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Failed to delete images. Please try again later."
+msgstr "Failed to delete images. Please try again later."
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Successfully deleted {count} from history"
+msgstr "Successfully deleted {count} from history"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Failed to delete {count}"
+msgstr "Failed to delete {count}"
+
+#~ msgid "msgstr"
+#~ msgstr "msgstr"

@@ -4,6 +4,8 @@ import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
 
 import type { Tag } from '@slink/api/Resources/TagResource';
 
+import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
+
 export class TagSelectionState {
   private _tags: Tag[] = $state([]);
   private _isLoading: boolean = $state(false);
@@ -39,7 +41,7 @@ export class TagSelectionState {
       this._tags = this.flattenTags(response.data);
       this._isLoaded = true;
     } catch {
-      toast.error('Failed to load tags');
+      toast.error(messages.tag.failedToLoad);
     } finally {
       this._isLoading = false;
     }

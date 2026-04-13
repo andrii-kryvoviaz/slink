@@ -13,6 +13,8 @@
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { ImageListingItem } from '@slink/api/Response';
 
+  import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
+
   interface Props {
     image: ImageListingItem;
     on?: {
@@ -53,7 +55,7 @@
     await updateVisibility(image.id, isPublic);
 
     if ($updateVisibilityError) {
-      toast.error('Failed to update visibility. Please try again later.');
+      toast.error(messages.image.failedToUpdateVisibility);
       return;
     }
 
@@ -74,7 +76,7 @@
     await deleteImage(image.id, preserveOnDiskAfterDeletion);
 
     if ($deleteImageError) {
-      toast.error('Failed to delete image. Please try again later.');
+      toast.error(messages.image.failedToDelete);
       return;
     }
 

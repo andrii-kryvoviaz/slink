@@ -14,8 +14,7 @@ export default defineConfig({
         'src/**/+{page,layout}.{js,ts}',
         'src/**/+{page,layout}.server.{js,ts}',
         'src/lib/utils/i18n/!(*.svelte).ts',
-
-        'src/routes/**/*.questions.ts',
+        'src/**/*.language.ts',
       ],
       patterns: [{ name: 'localize', args: ['message', 'other'] }],
     }),

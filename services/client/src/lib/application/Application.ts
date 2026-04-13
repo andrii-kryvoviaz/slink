@@ -6,7 +6,7 @@ import { goto, invalidateAll } from '$app/navigation';
 
 import { type ApiClientType, createApiClient } from '@slink/api/Client';
 
-import '@slink/lib/utils/i18n/apiErrors';
+import '@slink/lib/utils/i18n/messages/api.language';
 
 import '@slink/utils/string/stringExtensions';
 import { preloadIconSet } from '@slink/utils/ui/preloadIconSet';

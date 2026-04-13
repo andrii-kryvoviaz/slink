@@ -1,5 +1,5 @@
-import { runtimeTranslator } from './RuntimeTranslator.svelte';
-import { localize } from './localize';
+import { runtimeTranslator } from '../RuntimeTranslator.svelte';
+import { localize } from '../localize';
 
 type ApiError = {
   match: string | RegExp;

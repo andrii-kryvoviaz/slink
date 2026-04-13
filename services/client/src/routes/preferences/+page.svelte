@@ -18,6 +18,7 @@
   import type { License } from '@slink/lib/enum/License';
   import { Locale } from '@slink/lib/settings/Settings.enums';
   import { applyLocale } from '@slink/lib/utils/i18n';
+  import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
   import { withLoadingState } from '@slink/utils/form/withLoadingState';
   import { useWritable } from '@slink/utils/store/contextAwareStore';
@@ -101,11 +102,11 @@
     use:enhance={withLoadingState(isPreferencesFormLoading, {
       onSuccess: async () => {
         await state.commit();
-        toast.success('Preferences updated successfully');
+        toast.success(messages.preferences.updated);
       },
       onError: (data) => {
         const errors = data?.errors as Record<string, string> | undefined;
-        toast.error(errors?.message ?? 'Something went wrong');
+        toast.error(errors?.message ?? messages.general.somethingWentWrong);
       },
     })}
   >
