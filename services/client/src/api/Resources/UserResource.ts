@@ -89,11 +89,13 @@ export class UserResource extends AbstractResource {
     syncLicenseToImages = false,
     defaultLandingPage,
     defaultVisibility,
+    displayLanguage,
   }: {
     defaultLicense?: string | null;
     syncLicenseToImages?: boolean;
     defaultLandingPage?: string | null;
     defaultVisibility?: string | null;
+    displayLanguage?: string | null;
   }): Promise<EmptyResponse> {
     return this.patch('/user/preferences', {
       json: {
@@ -101,6 +103,7 @@ export class UserResource extends AbstractResource {
         'license.syncToImages': syncLicenseToImages,
         'navigation.landingPage': defaultLandingPage,
         'image.defaultVisibility': defaultVisibility,
+        'display.language': displayLanguage,
       },
     });
   }

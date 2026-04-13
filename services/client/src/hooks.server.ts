@@ -115,6 +115,20 @@ const setUserPreferencesOnLocals: Handle = async ({ event, resolve }) => {
   return resolve(event);
 };
 
+const applyUserLocalePreference: Handle = async ({ event, resolve }) => {
+  const userLocale = event.locals.userPreferences?.['display.language'];
+  if (userLocale) {
+    event.locals.locale = userLocale;
+    if (userLocale !== event.cookies.get('settings.locale')) {
+      event.cookies.set('settings.locale', userLocale, {
+        path: '/',
+        maxAge: 31536000,
+      });
+    }
+  }
+  return resolve(event);
+};
+
 const handleLinkHeaderPreloading: Handle = async ({ event, resolve }) => {
   const response = await resolve(event);
 
@@ -140,6 +154,7 @@ export const handle = sequence(
   injectApiHandling,
   setGlobalSettingsOnLocals,
   setUserPreferencesOnLocals,
+  applyUserLocalePreference,
   setCookieSettingsOnLocals,
   applyClientTheme,
   applyClientLocale,

@@ -7,6 +7,7 @@
   import { Switch } from '@slink/ui/components/switch';
 
   import { enhance } from '$app/forms';
+  import { page } from '$app/state';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
@@ -15,10 +16,14 @@
   import type { User } from '@slink/lib/auth/Type/User';
   import { LandingPage } from '@slink/lib/enum/LandingPage';
   import type { License } from '@slink/lib/enum/License';
+  import { Locale } from '@slink/lib/settings/Settings.enums';
+  import { applyLocale } from '@slink/lib/utils/i18n';
 
   import { withLoadingState } from '@slink/utils/form/withLoadingState';
   import { useWritable } from '@slink/utils/store/contextAwareStore';
   import { toast } from '@slink/utils/ui/toast-sonner.svelte';
+
+  import { PreferencesPageState } from './PreferencesPageState.svelte';
 
   interface PageData {
     user: User;
@@ -30,27 +35,21 @@
 
   interface Props {
     data: PageData;
-    form: any;
   }
 
-  let { data, form }: Props = $props();
+  let { data }: Props = $props();
+
+  const { settings } = page.data;
+  const state = new PreferencesPageState(data.preferences);
+
+  state.onChanged('locale', (locale) =>
+    applyLocale(locale as Locale, settings),
+  );
 
   let licenses = $derived(data.licenses);
-  let selectedLicense = $state('');
-  let selectedLandingPage = $state(LandingPage.Explore);
-  let selectedVisibility = $state('private');
-  let syncToImages = $state(false);
-
-  $effect(() => {
-    selectedLicense = data.preferences?.['license.default'] ?? '';
-    selectedLandingPage =
-      data.preferences?.['navigation.landingPage'] ?? LandingPage.Explore;
-    selectedVisibility =
-      data.preferences?.['image.defaultVisibility'] ?? 'private';
-  });
 
   let selectedLicenseInfo = $derived(
-    licenses.find((l) => l.id === selectedLicense),
+    licenses.find((l) => l.id === state.license),
   );
 
   const visibilityOptions = [
@@ -63,23 +62,17 @@
     { value: LandingPage.Upload, label: 'Upload' },
   ];
 
+  const localeOptions = [
+    { value: Locale.EN, label: 'English' },
+    { value: Locale.UK, label: 'Українська' },
+    { value: Locale.DE, label: 'Deutsch' },
+    { value: Locale.ZH, label: '中文' },
+  ];
+
   let isPreferencesFormLoading = useWritable(
     'updatePreferencesFormLoadingState',
     false,
   );
-
-  $effect(() => {
-    if (form?.preferencesWasUpdated) {
-      toast.success('Preferences updated successfully');
-      syncToImages = false;
-    }
-  });
-
-  $effect(() => {
-    if (form?.errors?.message) {
-      toast.error(form.errors.message);
-    }
-  });
 
   const licenseOptions = $derived(
     licenses.map((license) => ({
@@ -105,9 +98,51 @@
   <form
     action="?/updatePreferences"
     method="POST"
-    use:enhance={withLoadingState(isPreferencesFormLoading)}
+    use:enhance={withLoadingState(isPreferencesFormLoading, {
+      onSuccess: async () => {
+        await state.commit();
+        toast.success('Preferences updated successfully');
+      },
+      onError: (data) => {
+        const errors = data?.errors as Record<string, string> | undefined;
+        toast.error(errors?.message ?? 'Something went wrong');
+      },
+    })}
   >
     <div class="space-y-8">
+      <section class="space-y-1">
+        <div class="flex items-center justify-between gap-4 pb-3">
+          <h2
+            class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+          >
+            Language
+          </h2>
+        </div>
+
+        <div
+          class="divide-y divide-gray-100 dark:divide-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 overflow-hidden"
+        >
+          <SettingItem>
+            {#snippet label()}
+              Display Language
+            {/snippet}
+            {#snippet hint()}
+              The language used throughout the interface
+            {/snippet}
+            <Select
+              items={localeOptions}
+              bind:value={state.locale}
+              placeholder="Select a language..."
+            />
+            <input
+              type="hidden"
+              name="displayLanguage"
+              value={state.locale ?? ''}
+            />
+          </SettingItem>
+        </div>
+      </section>
+
       <section class="space-y-1">
         <div class="flex items-center justify-between gap-4 pb-3">
           <h2
@@ -129,13 +164,13 @@
             {/snippet}
             <Select
               items={landingPageOptions}
-              bind:value={selectedLandingPage}
+              bind:value={state.landingPage}
               placeholder="Select a landing page..."
             />
             <input
               type="hidden"
               name="defaultLandingPage"
-              value={selectedLandingPage ?? ''}
+              value={state.landingPage ?? ''}
             />
           </SettingItem>
         </div>
@@ -162,13 +197,13 @@
               {/snippet}
               <Select
                 items={visibilityOptions}
-                bind:value={selectedVisibility}
+                bind:value={state.visibility}
                 placeholder="Select visibility..."
               />
               <input
                 type="hidden"
                 name="defaultVisibility"
-                value={selectedVisibility ?? ''}
+                value={state.visibility ?? ''}
               />
             </SettingItem>
           </div>
@@ -230,13 +265,13 @@
               {/snippet}
               <Select
                 items={licenseOptions}
-                bind:value={selectedLicense}
+                bind:value={state.license}
                 placeholder="Select a license..."
               />
               <input
                 type="hidden"
                 name="defaultLicense"
-                value={selectedLicense ?? ''}
+                value={state.license ?? ''}
               />
             </SettingItem>
 
@@ -250,7 +285,7 @@
               <Switch
                 id="syncLicenseToImages"
                 name="syncLicenseToImages"
-                bind:checked={syncToImages}
+                bind:checked={state.syncToImages}
               />
             </SettingItem>
           </div>
