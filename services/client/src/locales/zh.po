@@ -330,11 +330,11 @@ msgstr "按描述搜索"
 msgid "Search by Hashtag"
 msgstr "按标签搜索"
 
-#: src/feature/Search/SearchBar.svelte
-msgid "Search by "
-msgstr "按以下方式搜索 "
+#~ msgid "Search by "
+#~ msgstr "按以下方式搜索 "
 
 #: src/feature/Navigation/Sidebar/AppSidebar.svelte
+#: src/feature/Search/SearchBar.svelte
 #: src/feature/Search/SearchBar.svelte
 #: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
@@ -1277,6 +1277,7 @@ msgstr "点击添加描述..."
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/Description/ImageDescription.svelte
 #: src/feature/Image/PostViewer/PostViewerSidebar.svelte
+#: src/feature/Search/SearchBar.svelte
 msgid "Description"
 msgstr "描述"
 
@@ -4306,3 +4307,7 @@ msgstr "删除 {count} 项失败"
 #: src/routes/preferences/+page.svelte
 msgid "Choose your preferred language for the interface"
 msgstr "选择您首选的界面语言"
+
+#: src/feature/Search/SearchBar.svelte
+msgid "Hashtag"
+msgstr "标签"
