@@ -16,7 +16,7 @@ RUN yarn install --frozen-lockfile --non-interactive
 COPY services/client/plugins ./plugins
 COPY services/client/src ./src
 COPY services/client/static ./static
-COPY services/client/svelte.config.js services/client/tsconfig.json services/client/vite.config.ts ./
+COPY services/client/svelte.config.js services/client/tsconfig.json services/client/vite.config.ts services/client/wuchale.config.js ./
 RUN yarn svelte-kit sync && \
     NODE_OPTIONS="--max-old-space-size=2048 --expose-gc" yarn build
 
