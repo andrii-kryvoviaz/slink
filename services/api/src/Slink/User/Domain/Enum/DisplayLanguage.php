@@ -10,7 +10,11 @@ enum DisplayLanguage: string {
   use ValidatorAwareEnumTrait;
 
   case En = 'en';
-  case Uk = 'uk';
   case De = 'de';
+  case Es = 'es';
+  case Fr = 'fr';
+  case It = 'it';
+  case Pl = 'pl';
+  case Uk = 'uk';
   case Zh = 'zh';
 }

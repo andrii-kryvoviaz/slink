@@ -5,7 +5,11 @@ export enum Theme {
 
 export enum Locale {
   EN = 'en',
-  UK = 'uk',
   DE = 'de',
+  ES = 'es',
+  FR = 'fr',
+  IT = 'it',
+  PL = 'pl',
+  UK = 'uk',
   ZH = 'zh',
 }

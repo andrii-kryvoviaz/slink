@@ -4133,3 +4133,19 @@ msgstr "Оберіть бажану мову інтерфейсу"
 #: src/feature/Search/SearchBar.svelte
 msgid "Hashtag"
 msgstr "Хештег"
+
+#: src/routes/preferences/+page.svelte
+msgid "Español"
+msgstr ""
+
+#: src/routes/preferences/+page.svelte
+msgid "Français"
+msgstr ""
+
+#: src/routes/preferences/+page.svelte
+msgid "Italiano"
+msgstr ""
+
+#: src/routes/preferences/+page.svelte
+msgid "Polski"
+msgstr ""

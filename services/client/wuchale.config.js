@@ -3,7 +3,7 @@ import { defineConfig } from 'wuchale';
 import { adapter as js } from 'wuchale/adapter-vanilla';
 
 export default defineConfig({
-  locales: ['en', 'uk', 'de', 'zh'],
+  locales: ['en', 'de', 'es', 'fr', 'it', 'pl', 'uk', 'zh'],
   adapters: {
     main: svelte({
       loader: 'sveltekit',

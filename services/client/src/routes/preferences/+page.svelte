@@ -65,8 +65,12 @@
 
   const localeOptions = [
     { value: Locale.EN, label: 'English' },
-    { value: Locale.UK, label: 'Українська' },
     { value: Locale.DE, label: 'Deutsch' },
+    { value: Locale.ES, label: 'Español' },
+    { value: Locale.FR, label: 'Français' },
+    { value: Locale.IT, label: 'Italiano' },
+    { value: Locale.PL, label: 'Polski' },
+    { value: Locale.UK, label: 'Українська' },
     { value: Locale.ZH, label: '中文' },
   ];
 

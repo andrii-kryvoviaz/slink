@@ -1,111 +1,111 @@
 msgid ""
 msgstr ""
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=2; plural=(n > 1) ? 1 : 0;\n"
 "Source-Language: en\n"
-"Language: zh\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: src/routes/info/[id]/+page.server.ts
 msgid "Take me to my Uploads"
-msgstr "查看上传内容"
+msgstr "Aller à mes téléversements"
 
 #: src/routes/info/[id]/+page.server.ts
 msgid "An error occurred. Please try again later."
-msgstr "发生错误，请稍后再试。"
+msgstr "Une erreur est survenue. Veuillez réessayer plus tard."
 
 #: src/routes/i/[code]/+page.server.ts
 msgid "Location"
-msgstr "位置"
+msgstr "Emplacement"
 
 #: src/routes/i/[code]/+page.server.ts
 msgid "User-Agent"
-msgstr "用户代理"
+msgstr "User-Agent"
 
 #: src/routes/profile/(auth)/signup/+page.server.ts
 msgid "Something went wrong. Please try again later."
-msgstr "出了点问题，请稍后再试。"
+msgstr "Une erreur est survenue. Veuillez réessayer plus tard."
 
 #: src/routes/profile/(auth)/sso/callback/+page.server.ts
 msgid "Missing authorization parameters"
-msgstr "缺少授权参数"
+msgstr "Paramètres d'autorisation manquants"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 #: src/routes/profile/(auth)/sso/callback/+page.server.ts
 #: src/routes/profile/(auth)/sso/login/[provider]/+page.server.ts
 msgid "An unexpected error occurred"
-msgstr "发生了意外错误"
+msgstr "Une erreur inattendue est survenue"
 
 #: src/routes/admin/settings/sso/[id]/edit/+page.server.ts
 msgid "Provider not found"
-msgstr "未找到提供方"
+msgstr "Fournisseur introuvable"
 
 #: src/routes/+error.svelte
 msgid "Take me Home"
-msgstr "回到首页"
+msgstr "Retour à l'accueil"
 
 #: src/feature/Analytics/ImageAnalytics.svelte
 #: src/feature/Analytics/ImageAnalytics.svelte
 msgid "Uploads"
-msgstr "上传量"
+msgstr "Téléversements"
 
 #: src/feature/Analytics/LatestUsers.svelte
 msgid "Latest Users"
-msgstr "最新用户"
+msgstr "Derniers utilisateurs"
 
 #: src/feature/Analytics/LatestUsers.svelte
 msgid "Recently joined members"
-msgstr "最近加入的成员"
+msgstr "Membres récemment inscrits"
 
 #: src/feature/Analytics/LatestUsers.svelte
 #: src/ui/components/combobox/combobox.svelte
 #: src/ui/components/picker/picker-list.svelte
 #: src/ui/components/picker/picker-search.svelte
 msgid "Search..."
-msgstr "搜索..."
+msgstr "Rechercher..."
 
 #: src/feature/Analytics/LatestUsers.svelte
 msgid "Search users"
-msgstr "搜索用户"
+msgstr "Rechercher des utilisateurs"
 
 #: src/feature/Analytics/LatestUsers.svelte
 #: src/feature/Search/SearchBar.svelte
 msgid "Clear search"
-msgstr "清除搜索"
+msgstr "Effacer la recherche"
 
 #: src/feature/Analytics/LatestUsers.svelte
 #: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/routes/admin/user/+page.svelte
 msgid "No users found"
-msgstr "未找到用户"
+msgstr "Aucun utilisateur trouvé"
 
 #: src/feature/Analytics/LatestUsers.svelte
 msgid "Try adjusting your search terms"
-msgstr "请尝试调整搜索关键词"
+msgstr "Essayez d'ajuster vos termes de recherche"
 
 #: src/feature/Analytics/LatestUsers.svelte
 msgid "Users will appear here once they join"
-msgstr "新用户加入后会在此显示"
+msgstr "Les utilisateurs apparaîtront ici une fois inscrits"
 
 #: src/feature/Analytics/LatestUsers.svelte
 msgid "View all users"
-msgstr "查看全部用户"
+msgstr "Voir tous les utilisateurs"
 
 #. 0: $response.meta.total
 #: src/feature/Analytics/LatestUsers.svelte
 msgid "{0} total"
-msgstr "共 {0} 个"
+msgstr "{0} au total"
 
 #: src/feature/Analytics/UserAnalytics.svelte
 msgid "No Data"
-msgstr "暂无数据"
+msgstr "Aucune donnée"
 
 #: src/feature/Analytics/UserAnalytics.svelte
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/routes/admin/user/+page.svelte
 msgid "Users"
-msgstr "用户"
+msgstr "Utilisateurs"
 
 #: src/feature/Collection/CreateCollectionForm.svelte
 #: src/feature/Collection/CreateCollectionModal.svelte
@@ -128,7 +128,7 @@ msgstr "用户"
 #: src/routes/explore/+page.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "Enter"
-msgstr "回车"
+msgstr "Entrée"
 
 #: src/feature/Comment/CommentInput.svelte
 #: src/feature/Image/PostViewer/PostViewer.svelte
@@ -139,36 +139,36 @@ msgstr "回车"
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/ui/components/table-pagination/table-pagination.svelte
 msgid "Escape"
-msgstr "Esc"
+msgstr "Échap"
 
 #: src/feature/Comment/CommentInput.svelte
 msgid "Editing reply to <0/>"
-msgstr "正在编辑对 <0/> 的回复"
+msgstr "Modification de la réponse à <0/>"
 
 #: src/feature/Comment/CommentInput.svelte
 msgid "Replying to <0/>"
-msgstr "正在回复 <0/>"
+msgstr "Répondre à <0/>"
 
 #: src/feature/Comment/CommentInput.svelte
 msgid "Edit your comment..."
-msgstr "编辑你的评论..."
+msgstr "Modifiez votre commentaire..."
 
 #. 0: activeRef.author.displayName
 #: src/feature/Comment/CommentInput.svelte
 msgid "Reply to @{0}..."
-msgstr "回复 @{0}..."
+msgstr "Répondre à @{0}..."
 
 #: src/feature/Comment/CommentInput.svelte
 msgid "Write a comment..."
-msgstr "写下评论..."
+msgstr "Écrire un commentaire..."
 
 #: src/feature/Comment/CommentInput.svelte
 msgid "Use **bold** and *italic* for formatting • ⌘+Enter to submit"
-msgstr "使用 **粗体** 和 *斜体* 排版 • 按 ⌘+Enter 提交"
+msgstr "Utilisez **gras** et *italique* pour la mise en forme • ⌘+Entrée pour envoyer"
 
 #: src/feature/Comment/CommentDeleteConfirmation.svelte
 msgid "Delete Comment"
-msgstr "删除评论"
+msgstr "Supprimer le commentaire"
 
 #: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
 #: src/feature/Comment/CommentDeleteConfirmation.svelte
@@ -181,7 +181,7 @@ msgstr "删除评论"
 #: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "This action cannot be undone"
-msgstr "此操作不可撤销"
+msgstr "Cette action est irréversible"
 
 #: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
 #: src/feature/Collection/RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte
@@ -206,27 +206,27 @@ msgstr "此操作不可撤销"
 #: src/ui/components/confirmation-dialog/confirmation-dialog.svelte
 #: src/ui/components/dialog/modal-footer.svelte
 msgid "Cancel"
-msgstr "取消"
+msgstr "Annuler"
 
 #: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
 #: src/feature/Comment/CommentDeleteConfirmation.svelte
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "<0/> Delete"
-msgstr "<0/> 删除"
+msgstr "<0/> Supprimer"
 
 #: src/feature/Comment/CommentListItem.svelte
 msgid "(edited)"
-msgstr "（已编辑）"
+msgstr "(modifié)"
 
 #: src/feature/Comment/CommentListItem.svelte
 msgid "Reply"
-msgstr "回复"
+msgstr "Répondre"
 
 #: src/feature/Collection/CollectionActionsDropdown/CollectionActionsDropdown.svelte
 #: src/feature/Comment/CommentListItem.svelte
 #: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
 msgid "Edit"
-msgstr "编辑"
+msgstr "Modifier"
 
 #: src/feature/Collection/CollectionActionsDropdown/CollectionActionsDropdown.svelte
 #: src/feature/Comment/CommentListItem.svelte
@@ -237,95 +237,95 @@ msgstr "编辑"
 #: src/feature/Tag/TagDataTable/TagActionsCell.svelte
 #: src/feature/User/UserActions/UserActions.svelte
 msgid "Delete"
-msgstr "删除"
+msgstr "Supprimer"
 
 #: src/feature/Comment/CommentListItem.svelte
 msgid "[deleted]"
-msgstr "[已删除]"
+msgstr "[supprimé]"
 
 #: src/routes/admin/settings/sso/+page.svelte
 #: src/routes/collections/+page.svelte
 #: src/routes/integrations/+page.svelte
 #: src/routes/tags/+page.svelte
 msgid "Create"
-msgstr "创建"
+msgstr "Créer"
 
 #: src/feature/Collection/CreateCollectionForm.svelte
 msgid "Update your collection details"
-msgstr "更新合集详情"
+msgstr "Mettre à jour les détails de votre collection"
 
 #: src/feature/Collection/CreateCollectionForm.svelte
 #: src/feature/Collection/CreateCollectionModal.svelte
 msgid "Organize your images into a shareable collection"
-msgstr "将你的图片整理至可分享的合集中"
+msgstr "Organisez vos images dans une collection partageable"
 
 #: src/feature/Collection/CreateCollectionForm.svelte
 #: src/feature/Collection/CreateCollectionModal.svelte
 msgid "Collection Name"
-msgstr "合集名称"
+msgstr "Nom de la collection"
 
 #: src/feature/Collection/CreateCollectionForm.svelte
 #: src/feature/Collection/CreateCollectionModal.svelte
 msgid "Description (Optional)"
-msgstr "描述（可选）"
+msgstr "Description (Facultatif)"
 
 #: src/feature/Collection/CreateCollectionForm.svelte
 #: src/feature/Collection/CreateCollectionModal.svelte
 msgid "What's this collection about?"
-msgstr "这个合集是关于什么的？"
+msgstr "De quoi parle cette collection ?"
 
 #: src/feature/Collection/CreateCollectionForm.svelte
 msgid "Collection Sharing"
-msgstr "合集分享"
+msgstr "Partage de la collection"
 
 #: src/feature/Collection/CreateCollectionForm.svelte
 msgid "Collections let you group images together and share them with a single link. You can add or remove images at any time after creating the collection."
-msgstr "合集可以将多张图片分组并通过单个链接分享。创建后你可随时添加或移除图片。"
+msgstr "Les collections vous permettent de regrouper des images et de les partager avec un seul lien. Vous pouvez ajouter ou supprimer des images à tout moment après avoir créé la collection."
 
 #: src/feature/Collection/CreateCollectionForm.svelte
 #: src/feature/Settings/SettingsPane/SettingsPane.svelte
 #: src/routes/preferences/+page.svelte
 #: src/routes/profile/+page.svelte
 msgid "Save Changes"
-msgstr "保存更改"
+msgstr "Enregistrer les modifications"
 
 #: src/feature/Collection/CreateCollectionForm.svelte
 #: src/feature/Collection/CreateCollectionForm.svelte
 #: src/feature/Collection/CreateCollectionModal.svelte
 #: src/feature/Collection/CreateCollectionModal.svelte
 msgid "Create Collection"
-msgstr "新建合集"
+msgstr "Créer une collection"
 
 #: src/feature/Notification/NotificationGroupItem.svelte
 #: src/feature/Notification/NotificationListItem.svelte
 msgid "Someone"
-msgstr "有人"
+msgstr "Quelqu'un"
 
 #: src/feature/Notification/NotificationListItem.svelte
 msgid "Mark as read"
-msgstr "标记为已读"
+msgstr "Marquer comme lu"
 
 #. 0: provider.name
 #: src/feature/Auth/SsoProviderButton.svelte
 msgid "Continue with {0}"
-msgstr "使用 {0} 继续"
+msgstr "Continuer avec {0}"
 
 #: src/feature/Navigation/Navbar/Navbar.svelte
 #: src/feature/Search/SearchBar.svelte
 msgid "Search images..."
-msgstr "搜索图片..."
+msgstr "Rechercher des images..."
 
 #: src/feature/Search/SearchBar.svelte
 msgid "Search by User"
-msgstr "按用户搜索"
+msgstr "Rechercher par utilisateur"
 
 #: src/feature/Search/SearchBar.svelte
 msgid "Search by Description"
-msgstr "按描述搜索"
+msgstr "Rechercher par description"
 
 #: src/feature/Search/SearchBar.svelte
 msgid "Search by Hashtag"
-msgstr "按标签搜索"
+msgstr "Rechercher par hashtag"
 
 #: src/feature/Navigation/Sidebar/AppSidebar.svelte
 #: src/feature/Search/SearchBar.svelte
@@ -333,110 +333,110 @@ msgstr "按标签搜索"
 #: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 msgid "User"
-msgstr "用户"
+msgstr "Utilisateur"
 
 #: src/feature/Search/SearchBar.svelte
 msgid "Search hashtags... (e.g., #nature)"
-msgstr "搜索标签...（例如：#nature）"
+msgstr "Rechercher des hashtags... (ex. : #nature)"
 
 #: src/feature/Search/SearchBar.svelte
 msgid "Search descriptions..."
-msgstr "搜索描述..."
+msgstr "Rechercher dans les descriptions..."
 
 #: src/feature/Search/SearchBar.svelte
 msgid "Search users..."
-msgstr "搜索用户..."
+msgstr "Rechercher des utilisateurs..."
 
 #: src/feature/Search/SearchBar.svelte
 msgid "Search options"
-msgstr "搜索选项"
+msgstr "Options de recherche"
 
 #: src/feature/Comment/CommentList.svelte
 #: src/feature/Image/PostViewer/CommentsSkeleton.svelte
 msgid "Comments"
-msgstr "评论"
+msgstr "Commentaires"
 
 #: src/feature/Comment/CommentList.svelte
 msgid "Oldest first"
-msgstr "最早"
+msgstr "Plus anciens en premier"
 
 #: src/feature/Comment/CommentList.svelte
 msgid "Newest first"
-msgstr "最新"
+msgstr "Plus récents en premier"
 
 #: src/feature/Comment/CommentList.svelte
 msgid "No comments yet"
-msgstr "还没有评论"
+msgstr "Aucun commentaire pour l'instant"
 
 #: src/feature/Comment/CommentList.svelte
 msgid "Be the first to comment"
-msgstr "成为第一个评论的人"
+msgstr "Soyez le premier à commenter"
 
 #: src/feature/Comment/CommentList.svelte
 msgid "Sign in to comment"
-msgstr "登录后可评论"
+msgstr "Connectez-vous pour commenter"
 
 #: src/feature/Upload/MultiUploadProgress.svelte
 msgid "Complete"
-msgstr "已完成"
+msgstr "Terminé"
 
 #: src/feature/Upload/MultiUploadProgress.svelte
 msgid "Uploading"
-msgstr "上传中"
+msgstr "Téléversement en cours"
 
 #. 0: failedUploads
 #: src/feature/Upload/MultiUploadProgress.svelte
 msgid "• {0} failed"
-msgstr "• {0} 失败"
+msgstr "• {0} échoué"
 
 #. 0: completedUploads; 1: totalUploads
 #: src/feature/Upload/MultiUploadProgress.svelte
 msgid "{0} of {1} files uploaded <0/>"
-msgstr "已上传 {1} 个文件中的 {0} 个 <0/>"
+msgstr "{0} sur {1} fichiers téléversés <0/>"
 
 #: src/feature/Upload/MultiUploadProgress.svelte
 msgid "<0/> Retry Failed"
-msgstr "<0/> 重试失败项"
+msgstr "<0/> Réessayer les échecs"
 
 #: src/feature/Upload/MultiUploadProgress.svelte
 msgid "<0/> Cancel"
-msgstr "<0/> 取消"
+msgstr "<0/> Annuler"
 
 #: src/feature/Upload/MultiUploadProgress.svelte
 msgid "<0/> Done"
-msgstr "<0/> 完成"
+msgstr "<0/> Terminé"
 
 #: src/feature/Upload/MultiUploadProgress.svelte
 msgid "Overall Progress"
-msgstr "总体进度"
+msgstr "Progression globale"
 
 #: src/feature/Upload/MultiUploadProgress.svelte
 msgid "Upload failed"
-msgstr "上传失败"
+msgstr "Échec du téléversement"
 
 #: src/feature/Tag/useTagOperations.svelte.ts
 msgid "Tag already exists"
-msgstr "标签已存在"
+msgstr "Ce tag existe déjà"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to create tag"
-msgstr "创建标签失败"
+msgstr "Impossible de créer le tag"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "No files selected"
-msgstr "未选择文件"
+msgstr "Aucun fichier sélectionné"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Only one file allowed at a time"
-msgstr "一次只允许上传一个文件"
+msgstr "Un seul fichier autorisé à la fois"
 
 #: src/feature/Upload/UploadForm.svelte
 msgid "or click to browse from your device"
-msgstr "或点击从设备中选择"
+msgstr "ou cliquez pour parcourir vos fichiers"
 
 #: src/feature/Upload/UploadForm.svelte
 msgid "Quick paste:"
-msgstr "快速粘贴："
+msgstr "Coller rapidement :"
 
 #: src/feature/Upload/UploadForm.svelte
 msgid "WebP"
@@ -444,194 +444,194 @@ msgstr "WebP"
 
 #: src/feature/Upload/UploadForm.svelte
 msgid "View all supported formats"
-msgstr "查看全部支持格式"
+msgstr "Voir tous les formats supportés"
 
 #: src/feature/Upload/UploadForm.svelte
 msgid "Drop to upload"
-msgstr "拖拽图片到此处上传"
+msgstr "Déposer pour téléverser"
 
 #: src/feature/Upload/UploadForm.svelte
 msgid "Almost there"
-msgstr "即将完成"
+msgstr "Presque terminé"
 
 #: src/feature/Upload/UploadSuccess.svelte
 msgid "Upload Successful!"
-msgstr "上传成功！"
+msgstr "Téléversement réussi !"
 
 #: src/feature/Upload/UploadSuccess.svelte
 msgid "Your image has been successfully uploaded to Slink."
-msgstr "你的图片已成功上传到 Slink。"
+msgstr "Votre image a été téléversée avec succès sur Slink."
 
 #: src/feature/Upload/UploadSuccess.svelte
 msgid "Guest Upload Notice"
-msgstr "游客上传须知"
+msgstr "Avis de téléversement invité"
 
 #: src/feature/Upload/UploadSuccess.svelte
 msgid "To manage your images and access additional features, consider creating an account."
-msgstr "如需管理图片并使用更多功能，建议创建账号。"
+msgstr "Pour gérer vos images et accéder à des fonctionnalités supplémentaires, pensez à créer un compte."
 
 #: src/feature/Upload/UploadSuccess.svelte
 msgid "<0/> Upload Another Image"
-msgstr "<0/> 继续上传"
+msgstr "<0/> Téléverser une autre image"
 
 #: src/feature/Upload/UploadSuccess.svelte
 msgid "<0/> Create Account"
-msgstr "<0/> 创建账号"
+msgstr "<0/> Créer un compte"
 
 #: src/feature/Upload/UploadSuccess.svelte
 msgid "<0/> View History"
-msgstr "<0/> 查看历史"
+msgstr "<0/> Voir l'historique"
 
 #: src/routes/bookmarks/+page.svelte
 msgid "Bookmarks | Slink"
-msgstr "书签 | Slink"
+msgstr "Favoris | Slink"
 
 #: src/feature/Image/History/ImageMetadata.svelte
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/routes/bookmarks/+page.svelte
 msgid "Bookmarks"
-msgstr "书签"
+msgstr "Favoris"
 
 #: src/routes/bookmarks/+page.svelte
 msgid "Your saved images from the community"
-msgstr "你收藏的社区图片"
+msgstr "Vos images sauvegardées depuis la communauté"
 
 #: src/feature/Image/BookmarkersPanel/BookmarkersPanel.svelte
 #: src/routes/bookmarks/+page.svelte
 msgid "No bookmarks yet"
-msgstr "还没有收藏"
+msgstr "Aucun favori pour l'instant"
 
 #: src/routes/bookmarks/+page.svelte
 msgid "Start exploring and bookmark images you love to find them here later."
-msgstr "去探索并收藏你喜欢的图片，稍后可在这里快速找到。"
+msgstr "Explorez et ajoutez en favoris les images que vous aimez pour les retrouver ici plus tard."
 
 #: src/routes/bookmarks/+page.svelte
 msgid "<0/> Explore Images"
-msgstr "<0/> 发现图片"
+msgstr "<0/> Explorer les images"
 
 #: src/routes/bookmarks/+page.svelte
 msgid "Image no longer available"
-msgstr "图片已不可用"
+msgstr "Image non disponible"
 
 #: src/feature/Image/BookmarkButton/BookmarkButton.svelte
 #: src/routes/bookmarks/+page.svelte
 msgid "Remove bookmark"
-msgstr "移除收藏"
+msgstr "Retirer des favoris"
 
 #: src/routes/bookmarks/+page.svelte
 msgid "Saved <0/>"
-msgstr "收藏于 <0/>"
+msgstr "Sauvegardé <0/>"
 
 #: src/routes/explore/+page.svelte
 msgid "Explore Gallery | Slink"
-msgstr "发现作品 | Slink"
+msgstr "Explorer la galerie | Slink"
 
 #: src/routes/explore/+page.svelte
 msgid "No images yet"
-msgstr "暂无图片"
+msgstr "Aucune image pour l'instant"
 
 #: src/routes/explore/+page.svelte
 msgid "Be the first to share something amazing with the community. Start by uploading your favorite images."
-msgstr "成为第一个分享精彩内容的人。先上传你最喜欢的图片吧。"
+msgstr "Soyez le premier à partager quelque chose d'incroyable avec la communauté. Commencez par téléverser vos images préférées."
 
 #: src/routes/explore/+page.svelte
 msgid "<0/> Upload First Image"
-msgstr "<0/> 上传第一张图片"
+msgstr "<0/> Téléverser la première image"
 
 #: src/routes/explore/+page.svelte
 msgid "No images found"
-msgstr "未找到图片"
+msgstr "Aucune image trouvée"
 
 #. 0: publicFeedState.searchTerm
 #: src/routes/explore/+page.svelte
 msgid "No images match your search for \"{0}\". Try a different search term or browse all images."
-msgstr "没有图片匹配你的搜索“{0}”。请尝试其他关键词，或浏览全部图片。"
+msgstr "Aucune image ne correspond à votre recherche \"{0}\". Essayez un autre terme ou parcourez toutes les images."
 
 #: src/routes/explore/+page.svelte
 msgid "<0/> Clear Search"
-msgstr "<0/> 清除搜索"
+msgstr "<0/> Effacer la recherche"
 
 #: src/routes/integrations/+page.svelte
 msgid "Integrations | Slink"
-msgstr "集成 | Slink"
+msgstr "Intégrations | Slink"
 
 #: src/routes/integrations/+page.svelte
 msgid "Integrations"
-msgstr "集成"
+msgstr "Intégrations"
 
 #: src/routes/integrations/+page.svelte
 msgid "Connect Slink with ShareX and other tools via API keys"
-msgstr "通过 API Key 将 Slink 连接到 ShareX 和其他工具"
+msgstr "Connectez Slink à ShareX et d'autres outils via des clés API"
 
 #: src/routes/notifications/+page.svelte
 msgid "Notifications | Slink"
-msgstr "通知 | Slink"
+msgstr "Notifications | Slink"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/routes/notifications/+page.svelte
 msgid "Notifications"
-msgstr "通知"
+msgstr "Notifications"
 
 #. 0: notificationFeed.unreadCount
 #: src/routes/notifications/+page.svelte
 msgid "{0} unread"
-msgstr "{0} 条未读"
+msgstr "{0} non lu"
 
 #: src/routes/notifications/+page.svelte
 msgid "<0/> Mark all read"
-msgstr "<0/> 全部标为已读"
+msgstr "<0/> Tout marquer comme lu"
 
 #: src/routes/notifications/+page.svelte
 msgid "All caught up"
-msgstr "你已查看全部通知"
+msgstr "Tout est à jour"
 
 #: src/routes/notifications/+page.svelte
 msgid "You'll see activity on your images here"
-msgstr "图片相关动态会显示在这里"
+msgstr "Vous verrez ici l'activité sur vos images"
 
 #: src/routes/collections/+page.svelte
 msgid "Collections | Slink"
-msgstr "合集 | Slink"
+msgstr "Collections | Slink"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/feature/Upload/UploadOptions/CollectionsOption.svelte
 #: src/routes/collections/+page.svelte
 msgid "Collections"
-msgstr "合集"
+msgstr "Collections"
 
 #: src/routes/collections/+page.svelte
 msgid "Organize your images into albums"
-msgstr "将图片整理到合集中"
+msgstr "Organisez vos images en albums"
 
 #: src/routes/collections/+page.svelte
 msgid "Search collections..."
-msgstr "搜索合集..."
+msgstr "Rechercher des collections..."
 
 #: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/routes/collections/+page.svelte
 msgid "No collections found"
-msgstr "未找到合集"
+msgstr "Aucune collection trouvée"
 
 #: src/routes/collections/+page.svelte
 #: src/routes/tags/+page.svelte
 msgid "Try adjusting your search term"
-msgstr "请尝试调整搜索关键词"
+msgstr "Essayez d'ajuster votre terme de recherche"
 
 #: src/routes/collections/+page.svelte
 msgid "Create your first collection to organize and share your images."
-msgstr "创建你的第一个合集，用于整理和分享图片。"
+msgstr "Créez votre première collection pour organiser et partager vos images."
 
 #: src/routes/collections/+page.svelte
 msgid "<0/> Create Collection"
-msgstr "<0/> 创建合集"
+msgstr "<0/> Créer une collection"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Password changed successfully"
-msgstr "密码修改成功"
+msgstr "Mot de passe modifié avec succès"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Profile updated successfully"
-msgstr "资料更新成功"
+msgstr "Profil mis à jour avec succès"
 
 #. 0: itemsFeed.collection?.name ?? 'Collection'
 #. 0: data.status === 'active' ? 'Account Approved' \\: 'Awaiting Approval'
@@ -644,23 +644,23 @@ msgstr "{0} | Slink"
 
 #: src/routes/profile/+page.svelte
 msgid "Profile Settings"
-msgstr "个人设置"
+msgstr "Paramètres du profil"
 
 #: src/routes/profile/+page.svelte
 msgid "Manage your account information and security settings"
-msgstr "管理你的账号信息与安全设置"
+msgstr "Gérez les informations de votre compte et vos paramètres de sécurité"
 
 #: src/routes/profile/+page.svelte
 msgid "Profile Information"
-msgstr "个人信息"
+msgstr "Informations du profil"
 
 #: src/routes/profile/+page.svelte
 msgid "Display Name"
-msgstr "显示名称"
+msgstr "Nom d'affichage"
 
 #: src/routes/profile/+page.svelte
 msgid "This is how your name will appear across the platform"
-msgstr "该名称将显示在平台中的各处"
+msgstr "C'est ainsi que votre nom apparaîtra sur la plateforme"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 #: src/feature/Settings/SettingsPane/SettingsPane.svelte
@@ -668,174 +668,174 @@ msgstr "该名称将显示在平台中的各处"
 #: src/routes/preferences/+page.svelte
 #: src/routes/profile/+page.svelte
 msgid "Saving..."
-msgstr "保存中..."
+msgstr "Enregistrement..."
 
 #: src/routes/admin/settings/security/+page.svelte
 #: src/routes/profile/+page.svelte
 msgid "Security"
-msgstr "安全"
+msgstr "Sécurité"
 
 #: src/routes/profile/+page.svelte
 msgid "Current Password"
-msgstr "当前密码"
+msgstr "Mot de passe actuel"
 
 #: src/routes/profile/+page.svelte
 msgid "Enter your current password to verify your identity"
-msgstr "请输入当前密码以验证身份"
+msgstr "Saisissez votre mot de passe actuel pour vérifier votre identité"
 
 #: src/routes/profile/+page.svelte
 msgid "Current password"
-msgstr "当前密码"
+msgstr "Mot de passe actuel"
 
 #: src/routes/profile/+page.svelte
 msgid "New Password"
-msgstr "新密码"
+msgstr "Nouveau mot de passe"
 
 #: src/routes/profile/+page.svelte
 msgid "Choose a new password"
-msgstr "设置一个新密码"
+msgstr "Choisissez un nouveau mot de passe"
 
 #: src/routes/profile/+page.svelte
 msgid "New password"
-msgstr "新密码"
+msgstr "Nouveau mot de passe"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
 #: src/routes/profile/+page.svelte
 msgid "Confirm Password"
-msgstr "确认密码"
+msgstr "Confirmer le mot de passe"
 
 #: src/routes/profile/+page.svelte
 msgid "Re-enter your new password"
-msgstr "请再次输入新密码"
+msgstr "Ressaisissez votre nouveau mot de passe"
 
 #: src/routes/profile/+page.svelte
 msgid "Confirm password"
-msgstr "确认密码"
+msgstr "Confirmer le mot de passe"
 
 #: src/routes/profile/+page.svelte
 msgid "Updating..."
-msgstr "更新中..."
+msgstr "Mise à jour..."
 
 #: src/routes/profile/+page.svelte
 msgid "Update Password"
-msgstr "更新密码"
+msgstr "Mettre à jour le mot de passe"
 
 #: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
 #: src/feature/Upload/UploadOptions/VisibilityOption.svelte
 #: src/routes/help/faq/+page.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Public"
-msgstr "公开"
+msgstr "Public"
 
 #: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
 #: src/feature/Upload/UploadOptions/VisibilityOption.svelte
 #: src/routes/help/faq/+page.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Private"
-msgstr "私密"
+msgstr "Privé"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/routes/preferences/+page.svelte
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Explore"
-msgstr "发现"
+msgstr "Explorer"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/routes/preferences/+page.svelte
 msgid "Upload"
-msgstr "上传"
+msgstr "Importer"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Preferences updated successfully"
-msgstr "偏好设置更新成功"
+msgstr "Préférences mises à jour avec succès"
 
 #: src/routes/preferences/+page.svelte
 msgid "Preferences | Slink"
-msgstr "偏好设置 | Slink"
+msgstr "Préférences | Slink"
 
 #: src/feature/Navigation/Sidebar/NavUser.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Preferences"
-msgstr "偏好设置"
+msgstr "Préférences"
 
 #: src/routes/preferences/+page.svelte
 msgid "Configure your default settings and preferences"
-msgstr "配置你的默认设置与个性化偏好"
+msgstr "Configurez vos paramètres et préférences par défaut"
 
 #: src/routes/preferences/+page.svelte
 msgid "Navigation"
-msgstr "导航"
+msgstr "Navigation"
 
 #: src/routes/preferences/+page.svelte
 msgid "Default Landing Page"
-msgstr "默认落地页"
+msgstr "Page d'accueil par défaut"
 
 #: src/routes/preferences/+page.svelte
 msgid "The page to show when you visit the site"
-msgstr "访问站点时默认打开的页面"
+msgstr "La page affichée lors de votre visite du site"
 
 #: src/routes/preferences/+page.svelte
 msgid "Select a landing page..."
-msgstr "选择一个落地页..."
+msgstr "Sélectionnez une page d'accueil..."
 
 #: src/routes/preferences/+page.svelte
 msgid "Image Uploads"
-msgstr "图片上传"
+msgstr "Importation d'images"
 
 #: src/routes/preferences/+page.svelte
 msgid "Default Visibility"
-msgstr "默认可见性"
+msgstr "Visibilité par défaut"
 
 #: src/routes/preferences/+page.svelte
 msgid "New uploads will be set to public or private by default"
-msgstr "新上传内容默认设为公开或私密"
+msgstr "Les nouveaux imports seront définis comme publics ou privés par défaut"
 
 #: src/routes/preferences/+page.svelte
 msgid "Select visibility..."
-msgstr "选择可见性..."
+msgstr "Sélectionnez la visibilité..."
 
 #: src/routes/preferences/+page.svelte
 msgid "Image Licensing"
-msgstr "图片许可"
+msgstr "Licences des images"
 
 #: src/routes/preferences/+page.svelte
 msgid "Default License"
-msgstr "默认许可"
+msgstr "Licence par défaut"
 
 #: src/routes/preferences/+page.svelte
 msgid "This license will be automatically applied to new uploads"
-msgstr "该许可将自动应用到新上传图片"
+msgstr "Cette licence sera automatiquement appliquée aux nouveaux imports"
 
 #: src/feature/Image/License/LicenseInfo.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Learn more"
-msgstr "了解更多"
+msgstr "En savoir plus"
 
 #: src/routes/info/[id]/+page.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Select a license..."
-msgstr "选择授权..."
+msgstr "Sélectionnez une licence..."
 
 #: src/routes/preferences/+page.svelte
 msgid "Sync to existing images"
-msgstr "同步到已有图片"
+msgstr "Synchroniser avec les images existantes"
 
 #: src/routes/preferences/+page.svelte
 msgid "Apply this license to all your existing images"
-msgstr "将该许可应用到你所有已有图片"
+msgstr "Appliquer cette licence à toutes vos images existantes"
 
 #: src/routes/upload/+page.svelte
 msgid "Upload | Slink"
-msgstr "上传 | Slink"
+msgstr "Importer | Slink"
 
 #: src/feature/Settings/AccessSettings/AccessSettings.svelte
 #: src/routes/upload/+page.svelte
 msgid "Guest Upload"
-msgstr "游客上传"
+msgstr "Import invité"
 
 #: src/routes/upload/+page.svelte
 msgid "You can upload images without an account, but consider signing in to manage them"
-msgstr "无需账号也可上传图片，但建议登录以便管理图片"
+msgstr "Vous pouvez importer des images sans compte, mais envisagez de vous connecter pour les gérer"
 
 #: src/feature/Navigation/Navbar/Navbar.svelte
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
@@ -843,402 +843,402 @@ msgstr "无需账号也可上传图片，但建议登录以便管理图片"
 #: src/routes/profile/(auth)/signup/+page.svelte
 #: src/routes/upload/+page.svelte
 msgid "Sign In"
-msgstr "登录"
+msgstr "Se connecter"
 
 #: src/routes/upload/+page.svelte
 msgid "Sign in to continue"
-msgstr "请先登录"
+msgstr "Connectez-vous pour continuer"
 
 #: src/routes/upload/+page.svelte
 msgid "Upload and manage your images securely"
-msgstr "登录后可安全上传并管理你的图片"
+msgstr "Importez et gérez vos images en toute sécurité"
 
 #: src/routes/upload/+page.svelte
 msgid "Get Started"
-msgstr "立即开始"
+msgstr "Commencer"
 
 #: src/routes/tags/+page.svelte
 msgid "My Tags | Slink"
-msgstr "我的标签 | Slink"
+msgstr "Mes étiquettes | Slink"
 
 #: src/routes/tags/+page.svelte
 msgid "My Tags"
-msgstr "我的标签"
+msgstr "Mes étiquettes"
 
 #: src/routes/tags/+page.svelte
 msgid "Create and organize tags for your images"
-msgstr "为你的图片创建并管理标签"
+msgstr "Créez et organisez des étiquettes pour vos images"
 
 #: src/routes/tags/+page.svelte
 msgid "Search tags..."
-msgstr "搜索标签..."
+msgstr "Rechercher des étiquettes..."
 
 #: src/routes/tags/+page.svelte
 msgid "No tags found"
-msgstr "未找到标签"
+msgstr "Aucune étiquette trouvée"
 
 #: src/routes/tags/+page.svelte
 msgid "Create your first tag to get started"
-msgstr "创建你的第一个标签开始使用"
+msgstr "Créez votre première étiquette pour commencer"
 
 #: src/routes/tags/+page.svelte
 msgid "<0/> Create Tag"
-msgstr "<0/> 创建标签"
+msgstr "<0/> Créer une étiquette"
 
 #: src/routes/history/+page.svelte
 msgid "Upload History | Slink"
-msgstr "上传历史 | Slink"
+msgstr "Historique des imports | Slink"
 
 #: src/routes/history/+page.svelte
 msgid "Upload History"
-msgstr "上传历史"
+msgstr "Historique des imports"
 
 #: src/routes/history/+page.svelte
 msgid "View and manage your uploaded images"
-msgstr "查看并管理你上传的图片"
+msgstr "Consultez et gérez vos images importées"
 
 #: src/routes/history/+page.svelte
 msgid "No matching images"
-msgstr "未找到匹配图片"
+msgstr "Aucune image correspondante"
 
 #: src/routes/history/+page.svelte
 msgid "No images match your current tag filters. Try removing some tags or clearing all filters."
-msgstr "当前标签筛选下没有匹配图片，请尝试移除部分标签或清空筛选。"
+msgstr "Aucune image ne correspond à vos filtres d'étiquettes actuels. Essayez de supprimer certaines étiquettes ou d'effacer tous les filtres."
 
 #: src/routes/history/+page.svelte
 msgid "No history yet"
-msgstr "暂无历史记录"
+msgstr "Aucun historique pour l'instant"
 
 #: src/routes/history/+page.svelte
 msgid "Your upload history will appear here. Start uploading images to see your files and manage them easily."
-msgstr "你的上传历史会显示在这里。开始上传图片即可在此查看和管理。"
+msgstr "Votre historique d'imports apparaîtra ici. Commencez à importer des images pour voir vos fichiers et les gérer facilement."
 
 #: src/routes/history/+page.svelte
 msgid "<0/> Upload Images"
-msgstr "<0/> 上传图片"
+msgstr "<0/> Importer des images"
 
 #: src/routes/history/+page.svelte
 msgid "View More"
-msgstr "查看更多"
+msgstr "Voir plus"
 
 #: src/routes/collection/[id]/+page.svelte
 #: src/routes/history/+page.svelte
 msgid "Collection"
-msgstr "合集"
+msgstr "Collection"
 
 #: src/routes/history/+page.svelte
 msgid "Add to Collection"
-msgstr "添加到合集"
+msgstr "Ajouter à la collection"
 
 #: src/routes/history/+page.svelte
 msgid "Tag"
-msgstr "标签"
+msgstr "Étiquette"
 
 #: src/routes/history/+page.svelte
 msgid "Assign Tags"
-msgstr "分配标签"
+msgstr "Attribuer des étiquettes"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "API key created successfully"
-msgstr "API Key 创建成功"
+msgstr "Clé API créée avec succès"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to create API key"
-msgstr "创建 API Key 失败"
+msgstr "Échec de la création de la clé API"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "API key revoked successfully"
-msgstr "API Key 撤销成功"
+msgstr "Clé API révoquée avec succès"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to revoke API key"
-msgstr "撤销 API Key 失败"
+msgstr "Échec de la révocation de la clé API"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to generate ShareX config"
-msgstr "生成 ShareX 配置失败"
+msgstr "Échec de la génération de la configuration ShareX"
 
 #: src/lib/state/ApiKeyStore.svelte.ts
 msgid "ApiKeyStore"
-msgstr "API 密钥存储"
+msgstr "ApiKeyStore"
 
 #: src/lib/state/CollectionItemsFeed.svelte.ts
 msgid "CollectionItemsFeed"
-msgstr "合集项目数据流"
+msgstr "CollectionItemsFeed"
 
 #: src/lib/state/CollectionListFeed.svelte.ts
 msgid "CollectionListFeed"
-msgstr "合集列表数据流"
+msgstr "CollectionListFeed"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to load collections"
-msgstr "加载合集失败"
+msgstr "Échec du chargement des collections"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to load tags"
-msgstr "加载标签失败"
+msgstr "Échec du chargement des étiquettes"
 
 #: src/lib/state/ImageTagManagerState.svelte.ts
 msgid "ImageTagManagerState"
-msgstr "图片标签管理状态"
+msgstr "ImageTagManagerState"
 
 #: src/lib/state/PostViewerState.svelte.ts
 msgid "PostViewerState"
-msgstr "帖子查看器状态"
+msgstr "PostViewerState"
 
 #: src/lib/state/PublicImagesFeed.svelte.ts
 msgid "PublicImagesFeed"
-msgstr "公开图片数据流"
+msgstr "PublicImagesFeed"
 
 #: src/lib/state/TagFilterState.svelte.ts
 msgid "TagFilterState"
-msgstr "标签筛选状态"
+msgstr "TagFilterState"
 
 #: src/lib/state/StorageUsageStore.svelte.ts
 msgid "StorageUsageStore"
-msgstr "存储用量存储"
+msgstr "StorageUsageStore"
 
 #: src/lib/state/TagListFeed.svelte.ts
 msgid "Failed to create tag. Please try again."
-msgstr "创建标签失败，请重试。"
+msgstr "Échec de la création de l'étiquette. Veuillez réessayer."
 
 #: src/lib/state/TagListFeed.svelte.ts
 msgid "Failed to move tag. Please try again."
-msgstr "移动标签失败，请重试。"
+msgstr "Échec du déplacement de l'étiquette. Veuillez réessayer."
 
 #: src/lib/state/TagListFeed.svelte.ts
 msgid "Failed to delete tag. Please try again."
-msgstr "删除标签失败，请重试。"
+msgstr "Échec de la suppression de l'étiquette. Veuillez réessayer."
 
 #: src/lib/state/TagListFeed.svelte.ts
 msgid "TagListFeed"
-msgstr "标签列表数据流"
+msgstr "TagListFeed"
 
 #: src/lib/state/UploadHistoryFeed.svelte.ts
 msgid "UploadHistoryFeed"
-msgstr "上传历史数据流"
+msgstr "UploadHistoryFeed"
 
 #: src/lib/state/UploadPageState.svelte.ts
 msgid "Unnamed"
-msgstr "未命名"
+msgstr "Sans nom"
 
 #: src/lib/state/UploadPageState.svelte.ts
 msgid "UploadPageState"
-msgstr "上传页面状态"
+msgstr "UploadPageState"
 
 #: src/lib/state/UserBookmarksFeed.svelte.ts
 msgid "UserBookmarksFeed"
-msgstr "用户收藏数据流"
+msgstr "UserBookmarksFeed"
 
 #: src/lib/state/UserListFeed.svelte.ts
 msgid "UserListFeed"
-msgstr "用户列表数据流"
+msgstr "UserListFeed"
 
 #: src/feature/Auth/PasswordToggle/PasswordToggle.svelte
 msgid "Hide password"
-msgstr "隐藏密码"
+msgstr "Masquer le mot de passe"
 
 #: src/feature/Auth/PasswordToggle/PasswordToggle.svelte
 msgid "Show password"
-msgstr "显示密码"
+msgstr "Afficher le mot de passe"
 
 #: src/feature/Action/LoadMoreButton/LoadMoreButton.svelte
 msgid "Load More"
-msgstr "加载更多"
+msgstr "Charger plus"
 
 #: src/feature/Action/RefreshButton/RefreshButton.svelte
 msgid "Refresh"
-msgstr "刷新"
+msgstr "Actualiser"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Sign in to add images to collections"
-msgstr "登录后可将图片添加到合集"
+msgstr "Connectez-vous pour ajouter des images aux collections"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "You can only add your own images to collections"
-msgstr "你只能将自己的图片添加到合集"
+msgstr "Vous ne pouvez ajouter que vos propres images aux collections"
 
 #: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
 msgid "Sign in to add to collection"
-msgstr "登录后可添加到合集"
+msgstr "Connectez-vous pour ajouter à la collection"
 
 #: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
 msgid "Only own images can be added"
-msgstr "只能添加自己的图片"
+msgstr "Seules vos propres images peuvent être ajoutées"
 
 #: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 msgid "Add to collection"
-msgstr "添加到合集"
+msgstr "Ajouter à la collection"
 
 #: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
 msgid "Delete Collection"
-msgstr "删除合集"
+msgstr "Supprimer la collection"
 
 #: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
 msgid "Also delete images"
-msgstr "同时删除图片"
+msgstr "Supprimer également les images"
 
 #. 0: collection.itemCount
 #: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
 msgid "Delete all {0} images in this collection"
-msgstr "删除此合集中的全部 {0} 张图片"
+msgstr "Supprimer les {0} images de cette collection"
 
 #: src/feature/Collection/CollectionItemDropdown/CollectionItemDropdown.svelte
 #: src/feature/Collection/RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte
 msgid "Remove from Collection"
-msgstr "从合集中移除"
+msgstr "Retirer de la collection"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to delete collection. Please try again later."
-msgstr "删除合集失败，请稍后重试。"
+msgstr "Échec de la suppression de la collection. Veuillez réessayer plus tard."
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Collection updated successfully"
-msgstr "合集更新成功"
+msgstr "Collection mise à jour avec succès"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to update collection"
-msgstr "更新合集失败"
+msgstr "Échec de la mise à jour de la collection"
 
 #: src/feature/Collection/CollectionActionsDropdown/CollectionActionsDropdown.svelte
 msgid "Collection actions"
-msgstr "合集操作"
+msgstr "Actions de la collection"
 
 #: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
 msgid "Share Collection"
-msgstr "分享合集"
+msgstr "Partager la collection"
 
 #: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
 msgid "Anyone with the link can view"
-msgstr "任何拥有链接的人都可以查看"
+msgstr "Toute personne disposant du lien peut consulter"
 
 #: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
 #: src/ui/components/confirmation-dialog/confirmation-dialog.svelte
 msgid "Confirm"
-msgstr "确认"
+msgstr "Confirmer"
 
 #: src/feature/Collection/RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte
 msgid "Image will remain in your library"
-msgstr "图片仍会保留在你的库中"
+msgstr "L'image restera dans votre bibliothèque"
 
 #: src/feature/Collection/RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte
 msgid "<0/> Remove"
-msgstr "<0/> 移除"
+msgstr "<0/> Retirer"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/DownloadButton/DownloadButton.svelte
 msgid "Download image"
-msgstr "下载图片"
+msgstr "Télécharger l'image"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/DownloadButton/DownloadButton.svelte
 #: src/feature/Image/History/Actions/DownloadAction.svelte
 msgid "Download"
-msgstr "下载"
+msgstr "Télécharger"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 msgid "Copy image URL"
-msgstr "复制图片链接"
+msgstr "Copier l'URL de l'image"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 msgid "Delete image"
-msgstr "删除图片"
+msgstr "Supprimer l'image"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 msgid "Manage tags"
-msgstr "管理标签"
+msgstr "Gérer les étiquettes"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 msgid "Image actions"
-msgstr "图片操作"
+msgstr "Actions sur l'image"
 
 #: src/feature/Image/ActionBar/useImageActions.svelte.ts
 msgid "Generating..."
-msgstr "生成中..."
+msgstr "Génération en cours..."
 
 #: src/feature/Image/ActionBar/useImageActions.svelte.ts
 #: src/feature/Text/CopyableText/CopyableText.svelte
 #: src/feature/Text/CopyableText/CopyableText.svelte
 msgid "Copied!"
-msgstr "已复制！"
+msgstr "Copié !"
 
 #: src/feature/Image/ActionBar/useImageActions.svelte.ts
 msgid "Copy URL"
-msgstr "复制链接"
+msgstr "Copier l'URL"
 
 #: src/feature/Image/ActionBar/useImageActions.svelte.ts
 msgid "Make private"
-msgstr "设为私密"
+msgstr "Rendre privé"
 
 #: src/feature/Image/ActionBar/useImageActions.svelte.ts
 msgid "Make public"
-msgstr "设为公开"
+msgstr "Rendre public"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to update visibility. Please try again later."
-msgstr "更新可见性失败，请稍后再试。"
+msgstr "Échec de la mise à jour de la visibilité. Veuillez réessayer plus tard."
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to generate share link. Please try again later."
-msgstr "生成分享链接失败，请稍后再试。"
+msgstr "Échec de la génération du lien de partage. Veuillez réessayer plus tard."
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to delete image. Please try again later."
-msgstr "删除图片失败，请稍后再试。"
+msgstr "Échec de la suppression de l'image. Veuillez réessayer plus tard."
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Sign in to bookmark images"
-msgstr "登录后可收藏图片"
+msgstr "Connectez-vous pour mettre des images en favoris"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "You can't bookmark your own images"
-msgstr "你不能收藏自己的图片"
+msgstr "Vous ne pouvez pas mettre vos propres images en favoris"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Image bookmarked"
-msgstr "图片已收藏"
+msgstr "Image ajoutée aux favoris"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Bookmark removed"
-msgstr "收藏已移除"
+msgstr "Favori supprimé"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to update bookmark"
-msgstr "更新收藏失败"
+msgstr "Échec de la mise à jour du favori"
 
 #: src/feature/Image/BookmarkButton/BookmarkButton.svelte
 msgid "Can't bookmark own image"
-msgstr "不能收藏自己的图片"
+msgstr "Impossible de mettre sa propre image en favori"
 
 #: src/feature/Image/BookmarkButton/BookmarkButton.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 msgid "Save"
-msgstr "保存"
+msgstr "Enregistrer"
 
 #: src/feature/Image/BookmarkStat/BookmarkStat.svelte
 #: src/feature/Image/BookmarkersPanel/BookmarkersPanel.svelte
 msgid "Bookmarked"
-msgstr "已收藏"
+msgstr "En favoris"
 
 #: src/feature/Image/BookmarkersPanel/BookmarkersPanel.svelte
 msgid "Failed to load bookmarks"
-msgstr "加载收藏失败"
+msgstr "Échec du chargement des favoris"
 
 #: src/feature/Image/Description/ImageDescription.svelte
 #: src/routes/collection/[id]/+page.svelte
 msgid "Add a description..."
-msgstr "添加描述..."
+msgstr "Ajouter une description..."
 
 #: src/feature/Image/Description/ImageDescription.svelte
 #: src/routes/collection/[id]/+page.svelte
 msgid "Click to add a description..."
-msgstr "点击添加描述..."
+msgstr "Cliquez pour ajouter une description..."
 
 #: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
@@ -1246,178 +1246,178 @@ msgstr "点击添加描述..."
 #: src/feature/Image/PostViewer/PostViewerSidebar.svelte
 #: src/feature/Search/SearchBar.svelte
 msgid "Description"
-msgstr "描述"
+msgstr "Description"
 
 #: src/feature/Image/FormatPicker/FormatPicker.svelte
 msgid "Image format selection"
-msgstr "图片格式选择"
+msgstr "Sélection du format d'image"
 
 #. 0: value.toUpperCase()
 #: src/feature/Image/FormatPicker/FormatPicker.svelte
 msgid "Converting to {0} will remove animation"
-msgstr "转换为 {0} 将移除动画效果"
+msgstr "La conversion en {0} supprimera l'animation"
 
 #: src/feature/Image/FractionPicker/FractionPicker.svelte
 msgid "Scale"
-msgstr "缩放"
+msgstr "Échelle"
 
 #: src/feature/Image/FractionPicker/FractionPicker.svelte
 msgid "Scale selection"
-msgstr "缩放比例选择"
+msgstr "Sélection de l'échelle"
 
 #. 0: option.label
 #: src/feature/Image/FractionPicker/FractionPicker.svelte
 msgid "Scale to {0}"
-msgstr "缩放到 {0}"
+msgstr "Redimensionner à {0}"
 
 #. 0: pluralize(result.processed.length, 'image')
 #: src/feature/Image/History/BatchContext.svelte.ts
 msgid "Successfully updated {0}"
-msgstr "成功更新 {0}"
+msgstr "{0} mis à jour avec succès"
 
 #. 0: pluralize(result.failed.length, 'image')
 #: src/feature/Image/History/BatchContext.svelte.ts
 msgid "Failed to update {0}"
-msgstr "更新 {0} 失败"
+msgstr "Échec de la mise à jour de {0}"
 
 #: src/feature/Image/History/Actions/DeleteAction.svelte
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/routes/admin/settings/image/+page.svelte
 msgid "Image"
-msgstr "图像"
+msgstr "Image"
 
 #: src/feature/Image/History/Actions/DeleteAction.svelte
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
 msgid "Images"
-msgstr "图片"
+msgstr "Images"
 
 #: src/feature/Image/History/Actions/DeleteAction.svelte
 #: src/feature/Image/History/BulkDeleteConfirmation.svelte
 #: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
 #: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
 msgid "Remove from storage"
-msgstr "从存储中移除"
+msgstr "Supprimer du stockage"
 
 #: src/feature/Image/History/Actions/DeleteAction.svelte
 #: src/feature/Image/History/BulkDeleteConfirmation.svelte
 msgid "Permanently delete the files from storage"
-msgstr "从存储中永久删除这些文件"
+msgstr "Supprimer définitivement les fichiers du stockage"
 
 #: src/feature/Image/History/ImageMetadata.svelte
 msgid "File type & dimensions"
-msgstr "文件类型和尺寸"
+msgstr "Type de fichier et dimensions"
 
 #: src/feature/Image/History/ImageMetadata.svelte
 msgid "File size"
-msgstr "文件大小"
+msgstr "Taille du fichier"
 
 #: src/feature/Image/History/ImageMetadata.svelte
 msgid "Uploaded"
-msgstr "已上传"
+msgstr "Importé"
 
 #: src/feature/Image/History/SelectionActionBar.svelte
 msgid "Deselect all"
-msgstr "取消全选"
+msgstr "Tout désélectionner"
 
 #: src/feature/Image/History/SelectionActionBar.svelte
 msgid "Select all"
-msgstr "全选"
+msgstr "Tout sélectionner"
 
 #. 0: selectedCount
 #: src/feature/Image/History/SelectionActionBar.svelte
 msgid "{0} selected"
-msgstr "已选择 {0} 项"
+msgstr "{0} sélectionné(s)"
 
 #: src/feature/Image/History/useHistoryItemActions.svelte.ts
 msgid "Deselect image"
-msgstr "取消选择图片"
+msgstr "Désélectionner l'image"
 
 #: src/feature/Image/History/useHistoryItemActions.svelte.ts
 msgid "Select image"
-msgstr "选择图片"
+msgstr "Sélectionner l'image"
 
 #: src/feature/Image/History/BulkDeleteConfirmation.svelte
 #: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
 #: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
 msgid "Delete Image"
-msgstr "删除图片"
+msgstr "Supprimer l'image"
 
 #: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
 #: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
 msgid "Permanently delete the file from storage"
-msgstr "从存储中永久删除该文件"
+msgstr "Supprimer définitivement le fichier du stockage"
 
 #: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
 #: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
 msgid "<0/> Delete Image"
-msgstr "<0/> 删除图片"
+msgstr "<0/> Supprimer l'image"
 
 #: src/feature/Image/License/LicenseInfo.svelte
 msgid "Licensed under <0/>"
-msgstr "基于 <0/> 许可"
+msgstr "Sous licence <0/>"
 
 #: src/feature/Image/Placeholder/ImagePlaceholder.svelte
 msgid "Image unavailable"
-msgstr "图片不可用"
+msgstr "Image indisponible"
 
 #: src/feature/Image/Placeholder/ImagePlaceholder.svelte
 msgid "This image may have been removed or is temporarily inaccessible"
-msgstr "这张图片可能已被移除，或暂时无法访问"
+msgstr "Cette image a peut-être été supprimée ou est temporairement inaccessible"
 
 #: src/feature/Image/Placeholder/ImagePlaceholder.svelte
 msgid "Open in new tab"
-msgstr "在新标签页中打开"
+msgstr "Ouvrir dans un nouvel onglet"
 
 #: src/feature/Image/PostViewer/PostViewer.svelte
 msgid "Close viewer"
-msgstr "关闭预览"
+msgstr "Fermer la visionneuse"
 
 #: src/feature/Image/PostViewer/PostViewer.svelte
 #: src/feature/Tag/TagInput/TagInput.svelte
 #: src/ui/components/input/number-input.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "ArrowUp"
-msgstr "上"
+msgstr "ArrowUp"
 
 #: src/feature/Image/PostViewer/PostViewer.svelte
 #: src/ui/components/table-pagination/table-pagination.svelte
 msgid "ArrowLeft"
-msgstr "左"
+msgstr "ArrowLeft"
 
 #: src/feature/Image/PostViewer/PostViewer.svelte
 #: src/feature/Tag/TagInput/TagInput.svelte
 #: src/ui/components/input/number-input.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "ArrowDown"
-msgstr "下"
+msgstr "ArrowDown"
 
 #: src/feature/Image/PostViewer/PostViewer.svelte
 #: src/ui/components/table-pagination/table-pagination.svelte
 msgid "ArrowRight"
-msgstr "右"
+msgstr "ArrowRight"
 
 #: src/feature/Image/PostViewer/PostViewerNavigation.svelte
 msgid "Previous post"
-msgstr "上一条"
+msgstr "Publication précédente"
 
 #: src/feature/Image/PostViewer/PostViewerNavigation.svelte
 msgid "Next post"
-msgstr "下一条"
+msgstr "Publication suivante"
 
 #. 0: image.attributes.views
 #: src/feature/Image/PostViewer/PostViewerSidebar.svelte
 msgid "<0/> {0} views"
-msgstr "<0/> {0} 次查看"
+msgstr "<0/> {0} vues"
 
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 msgid "Direct Link"
-msgstr "直链"
+msgstr "Lien direct"
 
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 msgid "Link"
-msgstr "链接"
+msgstr "Lien"
 
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 msgid "Markdown"
@@ -1429,95 +1429,95 @@ msgstr "BBCode"
 
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 msgid "Image Content"
-msgstr "图片内容"
+msgstr "Contenu de l'image"
 
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 msgid "Failed to convert"
-msgstr "转换失败"
+msgstr "Échec de la conversion"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Link copied to clipboard"
-msgstr "链接已复制到剪贴板"
+msgstr "Lien copié dans le presse-papiers"
 
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 msgid "Copying..."
-msgstr "复制中..."
+msgstr "Copie en cours..."
 
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Text/CopyContainer/CopyContainer.svelte
 msgid "Signing..."
-msgstr "生成中..."
+msgstr "Signature en cours..."
 
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Text/CopyContainer/CopyContainer.svelte
 msgid "Copied"
-msgstr "已复制"
+msgstr "Copié"
 
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Text/CopyContainer/CopyContainer.svelte
 msgid "Copy"
-msgstr "复制"
+msgstr "Copier"
 
 #: src/feature/Image/SizePicker/ImageSizePicker.svelte
 msgid "Width"
-msgstr "宽度"
+msgstr "Largeur"
 
 #: src/feature/Image/SizePicker/ImageSizePicker.svelte
 msgid "Height"
-msgstr "高度"
+msgstr "Hauteur"
 
 #. 0: formatValue(width); 1: formatValue(height)
 #: src/feature/Image/SizePicker/ImageSizePicker.svelte
 msgid "Original: {0} × {1}"
-msgstr "原始：{0} × {1}"
+msgstr "Original : {0} × {1}"
 
 #: src/feature/Image/SizePicker/ImageSizePicker.svelte
 msgid "Reset to original dimensions"
-msgstr "重置为原始尺寸"
+msgstr "Rétablir les dimensions d'origine"
 
 #: src/feature/Image/SizePicker/ImageSizePicker.svelte
 #: src/feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte
 msgid "<0/> Reset"
-msgstr "<0/> 重置"
+msgstr "<0/> Réinitialiser"
 
 #. 0: formatValue(calculatedWidth); 1: formatValue(calculatedHeight)
 #: src/feature/Image/SizePicker/ImageSizePicker.svelte
 msgid "New: {0} × {1}"
-msgstr "新尺寸：{0} × {1}"
+msgstr "Nouveau : {0} × {1}"
 
 #: src/feature/Image/TagManager/ImageTagManager.svelte
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/feature/Upload/UploadOptions/TagsOption.svelte
 msgid "Tags"
-msgstr "标签"
+msgstr "Tags"
 
 #: src/feature/Image/TagManager/ImageTagManager.svelte
 #: src/feature/Tag/TagSelector/TagSelector.svelte
 msgid "Add more tags..."
-msgstr "继续添加标签..."
+msgstr "Ajouter des tags..."
 
 #: src/feature/Image/TagManager/ImageTagManager.svelte
 msgid "<0/> Add"
-msgstr "<0/> 添加"
+msgstr "<0/> Ajouter"
 
 #: src/feature/Image/TagManager/ImageTagManager.svelte
 msgid "<0/> Click to add tags..."
-msgstr "<0/> 点击添加标签..."
+msgstr "<0/> Cliquez pour ajouter des tags..."
 
 #: src/feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte
 #: src/ui/components/sonner/toasts/UnsupportedFormatToast.svelte
 msgid "Unsupported file format"
-msgstr "不支持的文件格式"
+msgstr "Format de fichier non pris en charge"
 
 #: src/feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte
 #: src/ui/components/sonner/toasts/UnsupportedFormatToast.svelte
 msgid "The file you're trying to upload is not supported. Please use one of the supported image formats."
-msgstr "不支持该文件格式，请上传支持的图片格式。"
+msgstr "Le fichier que vous essayez de téléverser n'est pas pris en charge. Veuillez utiliser l'un des formats d'image supportés."
 
 #: src/feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte
 #: src/ui/components/sonner/toasts/UnsupportedFormatToast.svelte
 msgid "<0/> View supported formats"
-msgstr "<0/> 查看支持的格式"
+msgstr "<0/> Voir les formats supportés"
 
 #: src/feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte
 #: src/ui/components/sonner/toasts/BaseToast.svelte
@@ -1526,7 +1526,7 @@ msgstr "<0/> 查看支持的格式"
 #: src/ui/components/sonner/toasts/SuccessToast.svelte
 #: src/ui/components/sonner/toasts/WarningToast.svelte
 msgid "Close notification"
-msgstr "关闭通知"
+msgstr "Fermer la notification"
 
 #: src/feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte
 #: src/feature/Settings/Version/ReleaseModal.svelte
@@ -1539,20 +1539,20 @@ msgstr "关闭通知"
 #: src/ui/components/sonner/toasts/SuccessToast.svelte
 #: src/ui/components/sonner/toasts/WarningToast.svelte
 msgid "Close"
-msgstr "关闭"
+msgstr "Fermer"
 
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 #: src/feature/Image/ViewCountBadge/ViewCountBadge.svelte
 msgid "Views"
-msgstr "查看次数"
+msgstr "Vues"
 
 #: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
 msgid "This image is publicly visible"
-msgstr "该图片公开可见"
+msgstr "Cette image est visible publiquement"
 
 #: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
 msgid "This image is private"
-msgstr "该图片为私密"
+msgstr "Cette image est privée"
 
 #: src/feature/Navigation/Navbar/Navbar.svelte
 #: src/feature/Navigation/Navbar/Navbar.svelte
@@ -1565,123 +1565,123 @@ msgstr "Slink"
 
 #: src/feature/Navigation/Navbar/Navbar.svelte
 msgid "<0/> Upload"
-msgstr "<0/> 上传"
+msgstr "<0/> Téléverser"
 
 #: src/feature/Navigation/Navbar/Navbar.svelte
 msgid "Upload Image"
-msgstr "上传图片"
+msgstr "Téléverser une image"
 
 #: src/feature/Navigation/Navbar/Navbar.svelte
 msgid "Share your media with others by uploading them and organizing them into collections."
-msgstr "上传并整理成合集，与他人分享你的内容。"
+msgstr "Partagez vos médias avec d'autres en les téléversant et en les organisant en collections."
 
 #: src/feature/Navigation/Navbar/Navbar.svelte
 msgid "Shortcut"
-msgstr "快捷键"
+msgstr "Raccourci"
 
 #: src/feature/Navigation/Navbar/Navbar.svelte
 msgid "Toggle Theme"
-msgstr "切换主题"
+msgstr "Changer le thème"
 
 #: src/feature/Navigation/Navbar/Navbar.svelte
 msgid "Switch between light and dark mode."
-msgstr "切换浅色/深色模式"
+msgstr "Basculer entre le mode clair et le mode sombre."
 
 #: src/feature/Navigation/Sidebar/NavProjects.svelte
 msgid "Projects"
-msgstr "项目"
+msgstr "Projets"
 
 #: src/feature/Navigation/Sidebar/NavProjects.svelte
 #: src/feature/Navigation/Sidebar/NavProjects.svelte
 #: src/ui/components/breadcrumb/breadcrumb-ellipsis.svelte
 msgid "More"
-msgstr "更多"
+msgstr "Plus"
 
 #: src/feature/Navigation/Sidebar/NavProjects.svelte
 msgid "View Project"
-msgstr "查看项目"
+msgstr "Voir le projet"
 
 #: src/feature/Navigation/Sidebar/NavProjects.svelte
 msgid "Share Project"
-msgstr "分享项目"
+msgstr "Partager le projet"
 
 #: src/feature/Navigation/Sidebar/NavProjects.svelte
 msgid "Delete Project"
-msgstr "删除项目"
+msgstr "Supprimer le projet"
 
 #: src/feature/Navigation/Sidebar/NavGroup.svelte
 msgid "Collapse submenu"
-msgstr "收起"
+msgstr "Réduire le sous-menu"
 
 #: src/feature/Navigation/Sidebar/NavGroup.svelte
 msgid "Expand submenu"
-msgstr "展开"
+msgstr "Développer le sous-menu"
 
 #: src/feature/Navigation/Sidebar/NavUser.svelte
 msgid "Account Settings"
-msgstr "账号设置"
+msgstr "Paramètres du compte"
 
 #: src/feature/Navigation/Sidebar/NavUser.svelte
 msgid "External Integrations"
-msgstr "外部集成"
+msgstr "Intégrations externes"
 
 #: src/feature/Navigation/Sidebar/NavUser.svelte
 msgid "Sign Out"
-msgstr "退出登录"
+msgstr "Se déconnecter"
 
 #: src/feature/Navigation/Sidebar/SidebarStorageUsage.svelte
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
 msgid "Failed to load storage usage"
-msgstr "加载存储用量失败"
+msgstr "Impossible de charger l'utilisation du stockage"
 
 #: src/feature/Layout/DemoNotice/DemoNotice.svelte
 msgid "Demo instance - uploads and state changes are disabled"
-msgstr "演示实例：上传和状态变更已被禁用"
+msgstr "Instance de démonstration - les téléversements et modifications d'état sont désactivés"
 
 #: src/feature/Image/AdminImageDropdown/AdminImageDropdown.svelte
 msgid "Make Private"
-msgstr "设为私密"
+msgstr "Rendre privée"
 
 #: src/feature/Image/AdminImageDropdown/AdminImageDropdown.svelte
 msgid "Make Public"
-msgstr "设为公开"
+msgstr "Rendre publique"
 
 #: src/feature/Layout/ThemeSwitch/ThemeSwitch.svelte
 msgid "Switch to light mode"
-msgstr "切换到浅色模式"
+msgstr "Passer en mode clair"
 
 #: src/feature/Layout/ThemeSwitch/ThemeSwitch.svelte
 msgid "Switch to dark mode"
-msgstr "切换到深色模式"
+msgstr "Passer en mode sombre"
 
 #: src/feature/Layout/ViewModeToggle/ViewModeToggle.svelte
 msgid "View mode selection"
-msgstr "视图模式选择"
+msgstr "Sélection du mode d'affichage"
 
 #: src/feature/Settings/AccessSettings/AccessSettings.svelte
 msgid "Access Control"
-msgstr "访问控制"
+msgstr "Contrôle d'accès"
 
 #: src/feature/Settings/AccessSettings/AccessSettings.svelte
 msgid "Configure guest access and upload permissions"
-msgstr "配置游客访问与上传权限"
+msgstr "Configurer l'accès invité et les permissions de téléversement"
 
 #: src/feature/Settings/AccessSettings/AccessSettings.svelte
 msgid "Allow unauthenticated users to upload images without creating an account. When enabled without Guest Access, users will see a success message but cannot browse uploaded images"
-msgstr "允许未登录用户在不创建账号的情况下上传图片。若未同时启用“游客访问”，用户将看到上传成功提示但无法浏览图片。"
+msgstr "Autoriser les utilisateurs non authentifiés à téléverser des images sans créer de compte. Lorsqu'activé sans accès invité, les utilisateurs verront un message de succès mais ne pourront pas parcourir les images téléversées"
 
 #: src/feature/Settings/AccessSettings/AccessSettings.svelte
 msgid "Guest Access (View-Only)"
-msgstr "游客访问（只读）"
+msgstr "Accès invité (lecture seule)"
 
 #: src/feature/Settings/AccessSettings/AccessSettings.svelte
 msgid "Allow unauthenticated users to view and browse images"
-msgstr "允许未登录用户查看和浏览图片"
+msgstr "Autoriser les utilisateurs non authentifiés à consulter et parcourir les images"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
 msgid "Local Storage"
-msgstr "本地存储"
+msgstr "Stockage local"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
@@ -1690,554 +1690,554 @@ msgstr "Amazon S3"
 
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
 msgid "SMB Share"
-msgstr "SMB 共享"
+msgstr "Partage SMB"
 
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
 msgid "Storage Usage"
-msgstr "存储用量"
+msgstr "Utilisation du stockage"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
 msgid "Provider"
-msgstr "提供方"
+msgstr "Fournisseur"
 
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
 msgid "Total Usage"
-msgstr "总用量"
+msgstr "Utilisation totale"
 
 #. 0: data.fileCount.toLocaleString()
 #. 0: data.cacheFileCount.toLocaleString()
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
 msgid "{0} files"
-msgstr "{0} 个文件"
+msgstr "{0} fichiers"
 
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
 msgid "Cache"
-msgstr "缓存"
+msgstr "Cache"
 
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
 msgid "No storage data available"
-msgstr "暂无存储数据"
+msgstr "Aucune donnée de stockage disponible"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "WEBP (Recommended)"
-msgstr "WEBP（推荐）"
+msgstr "WEBP (Recommandé)"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 #: src/routes/admin/settings/+page.svelte
 msgid "Image Settings"
-msgstr "图像设置"
+msgstr "Images"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Configure image upload limits and processing options"
-msgstr "配置图片上传限制和处理选项"
+msgstr "Configurer les limites de téléversement et les options de traitement des images"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Maximum Image Size"
-msgstr "图片最大尺寸"
+msgstr "Taille maximale des images"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Set the maximum size limit for image uploads"
-msgstr "设置图片上传的最大值"
+msgstr "Définir la taille maximale autorisée pour les téléversements d'images"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Strip EXIF Metadata"
-msgstr "移除 EXIF 元数据"
+msgstr "Supprimer les métadonnées EXIF"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Automatically remove metadata from uploaded images for privacy"
-msgstr "为保护隐私，自动移除上传图片中的元数据"
+msgstr "Supprimer automatiquement les métadonnées des images téléversées pour préserver la vie privée"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Allow Only Public Images"
-msgstr "仅允许公开图片"
+msgstr "Autoriser uniquement les images publiques"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "When enabled, all images are automatically set to public and visibility cannot be changed"
-msgstr "启用后，所有图片将自动设为公开，且不可更改可见性"
+msgstr "Lorsqu'activé, toutes les images sont automatiquement définies comme publiques et la visibilité ne peut pas être modifiée"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Enable Image Deduplication"
-msgstr "启用图片去重"
+msgstr "Activer la déduplication des images"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Detect and reject duplicate images during upload"
-msgstr "上传时检测并拒绝重复图片"
+msgstr "Détecter et rejeter les images en double lors du téléversement"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Only applies to new uploads. Existing images are not affected."
-msgstr "仅对新上传生效，已有图片不受影响。"
+msgstr "S'applique uniquement aux nouveaux téléversements. Les images existantes ne sont pas affectées."
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Compression Quality"
-msgstr "压缩质量"
+msgstr "Qualité de compression"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Quality level for lossy image compression (1-100). Used during format conversion if target format supports it"
-msgstr "有损压缩质量等级（1-100）。当目标格式支持时用于格式转换"
+msgstr "Niveau de qualité pour la compression avec perte (1-100). Utilisé lors de la conversion de format si le format cible le supporte"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Force Format Conversion"
-msgstr "强制格式转换"
+msgstr "Forcer la conversion de format"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Automatically convert all uploaded images to a specific format"
-msgstr "自动将所有上传图片转换为指定格式"
+msgstr "Convertir automatiquement toutes les images téléversées vers un format spécifique"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Target Format"
-msgstr "目标格式"
+msgstr "Format cible"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Format to convert uploaded images to"
-msgstr "上传图片将转换到的格式"
+msgstr "Format vers lequel convertir les images téléversées"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Select format"
-msgstr "选择格式"
+msgstr "Sélectionner un format"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Convert Animated Images"
-msgstr "转换动态图片"
+msgstr "Convertir les images animées"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Include animated images (GIF, animated WebP/AVIF) in conversion"
-msgstr "在转换中包含动态图片（GIF、动态 WebP/AVIF）"
+msgstr "Inclure les images animées (GIF, WebP/AVIF animé) dans la conversion"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Processing animated images is CPU-intensive and may slow down uploads."
-msgstr "处理动态图片会占用较多 CPU，可能导致上传变慢。"
+msgstr "Le traitement des images animées est gourmand en ressources CPU et peut ralentir les téléversements."
 
 #. 0: settings.targetFormat?.toUpperCase()
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Converting to {0} will result in loss of animation."
-msgstr "转换为 {0} 会导致动画丢失。"
+msgstr "La conversion vers {0} entraînera la perte de l'animation."
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Enable Licensing"
-msgstr "启用授权许可"
+msgstr "Activer les licences"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Allow users to set licenses on their images (Creative Commons, etc.)"
-msgstr "允许用户为图片设置许可（如 Creative Commons）"
+msgstr "Permettre aux utilisateurs de définir des licences sur leurs images (Creative Commons, etc.)"
 
 #: src/feature/Settings/CacheSettings/CacheSettings.svelte
 msgid "Cache Management"
-msgstr "缓存管理"
+msgstr "Gestion du cache"
 
 #: src/feature/Settings/CacheSettings/CacheSettings.svelte
 msgid "Image Cache"
-msgstr "图片缓存"
+msgstr "Cache des images"
 
 #: src/feature/Settings/CacheSettings/CacheSettings.svelte
 msgid "Cached files store transformed versions of images (resized, cropped, format converted) to improve performance. Clearing the cache will regenerate files on next request."
-msgstr "缓存文件用于保存图片转换结果（如缩放、裁剪、格式转换）以提升性能。清理缓存后将在下次请求时重新生成。"
+msgstr "Les fichiers mis en cache stockent des versions transformées des images (redimensionnées, recadrées, converties) pour améliorer les performances. Vider le cache régénérera les fichiers à la prochaine demande."
 
 #: src/feature/Settings/CacheSettings/CacheSettings.svelte
 msgid "<0/> Clearing..."
-msgstr "<0/> 清理中..."
+msgstr "<0/> Vidage en cours..."
 
 #: src/feature/Settings/CacheSettings/CacheSettings.svelte
 #: src/feature/Settings/SettingsPane/SettingItem.svelte
 msgid "<0/> Confirm"
-msgstr "<0/> 确认"
+msgstr "<0/> Confirmer"
 
 #: src/feature/Settings/CacheSettings/CacheSettings.svelte
 msgid "<0/> Clear Cache"
-msgstr "<0/> 清理缓存"
+msgstr "<0/> Vider le cache"
 
 #: src/feature/Settings/CacheSettings/CacheSettings.svelte
 msgid "Clearing cache..."
-msgstr "正在清理缓存..."
+msgstr "Vidage du cache..."
 
 #: src/feature/Settings/ResetSettingConfirmation/ResetSettingConfirmation.svelte
 #: src/feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte
 #: src/feature/Settings/SettingsPane/SettingItem.svelte
 msgid "Reset Setting"
-msgstr "重置设置"
+msgstr "Réinitialiser le paramètre"
 
 #: src/feature/Settings/ResetSettingConfirmation/ResetSettingConfirmation.svelte
 msgid "Reset to Default"
-msgstr "重置为默认值"
+msgstr "Rétablir par défaut"
 
 #: src/feature/Settings/ResetSettingConfirmation/ResetSettingConfirmation.svelte
 msgid "Keep Current"
-msgstr "保留当前值"
+msgstr "Conserver actuel"
 
 #: src/feature/Settings/ResetSettingConfirmation/ResetSettingConfirmation.svelte
 msgid "Are you sure you want to reset <0/> to its default value?"
-msgstr "确定要将 <0/> 重置为默认值吗？"
+msgstr "Êtes-vous sûr de vouloir réinitialiser <0/> à sa valeur par défaut ?"
 
 #: src/feature/Settings/ResetSettingConfirmation/ResetSettingConfirmation.svelte
 msgid "This action cannot be undone. Your current setting will be lost."
-msgstr "该操作无法撤销，当前设置将丢失。"
+msgstr "Cette action est irréversible. Votre paramètre actuel sera perdu."
 
 #: src/feature/Settings/ResetSettingConfirmation/ResetSettingConfirmation.svelte
 msgid "Current Value:"
-msgstr "当前值："
+msgstr "Valeur actuelle :"
 
 #: src/feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte
 msgid "Restore default value"
-msgstr "恢复默认值"
+msgstr "Restaurer la valeur par défaut"
 
 #: src/feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte
 msgid "Reset <0/> from current value to default?"
-msgstr "将 <0/> 从当前值重置为默认值？"
+msgstr "Réinitialiser <0/> de la valeur actuelle vers la valeur par défaut ?"
 
 #: src/feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte
 msgid "Reset <0/> to its default value?"
-msgstr "将 <0/> 重置为默认值？"
+msgstr "Réinitialiser <0/> à sa valeur par défaut ?"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderFormState.svelte.ts
 msgid "Provider updated"
-msgstr "提供方已更新"
+msgstr "Fournisseur mis à jour"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderFormState.svelte.ts
 msgid "Provider created"
-msgstr "提供方已创建"
+msgstr "Fournisseur créé"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Configuration"
-msgstr "配置"
+msgstr "Configuration"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Selected authentication provider"
-msgstr "当前选中的认证提供方"
+msgstr "Fournisseur d'authentification sélectionné"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Change"
-msgstr "更改"
+msgstr "Modifier"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Provider Name"
-msgstr "提供方名称"
+msgstr "Nom du fournisseur"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Display name for the provider"
-msgstr "提供方的显示名称"
+msgstr "Nom d'affichage du fournisseur"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Slug"
-msgstr "标识符"
+msgstr "Slug"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Unique identifier for the provider"
-msgstr "提供方唯一标识"
+msgstr "Identifiant unique du fournisseur"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Issuer URL"
-msgstr "签发者 URL"
+msgstr "URL de l'émetteur"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "OpenID Connect discovery endpoint"
-msgstr "OpenID Connect 发现端点"
+msgstr "Point de terminaison de découverte OpenID Connect"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Client ID"
-msgstr "客户端 ID"
+msgstr "Client ID"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "OAuth application client identifier"
-msgstr "OAuth 应用客户端标识"
+msgstr "Identifiant client de l'application OAuth"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "OAuth Client ID"
-msgstr "OAuth 客户端 ID"
+msgstr "OAuth Client ID"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Client Secret"
-msgstr "客户端密钥"
+msgstr "Client Secret"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "OAuth application client secret"
-msgstr "OAuth 应用客户端密钥"
+msgstr "Secret client de l'application OAuth"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "OAuth Client Secret"
-msgstr "OAuth 客户端密钥"
+msgstr "OAuth Client Secret"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 #: src/feature/Settings/SettingsPane/SettingItem.svelte
 msgid "Enabled"
-msgstr "启用"
+msgstr "Activé"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Allow users to authenticate with this provider"
-msgstr "允许用户通过此提供方登录"
+msgstr "Autoriser les utilisateurs à s'authentifier avec ce fournisseur"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Update Provider"
-msgstr "更新提供方"
+msgstr "Mettre à jour le fournisseur"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 #: src/routes/admin/settings/sso/new/+page.svelte
 msgid "Add Provider"
-msgstr "添加提供方"
+msgstr "Ajouter un fournisseur"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderListState.svelte.ts
 msgid "Provider deleted"
-msgstr "提供方已删除"
+msgstr "Fournisseur supprimé"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
 msgid "No SSO providers configured yet"
-msgstr "尚未配置 SSO 提供方"
+msgstr "Aucun fournisseur SSO configuré pour l'instant"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
 msgid "Move Up"
-msgstr "上移"
+msgstr "Monter"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
 msgid "Move Down"
-msgstr "下移"
+msgstr "Descendre"
 
 #: src/feature/Settings/SettingsPane/SettingItem.svelte
 msgid "Disabled"
-msgstr "禁用"
+msgstr "Désactivé"
 
 #: src/feature/Settings/SettingsPane/SettingItem.svelte
 msgid "Reset to default value"
-msgstr "重置为默认值"
+msgstr "Rétablir la valeur par défaut"
 
 #. 0: displayValue
 #: src/feature/Settings/SettingsPane/SettingItem.svelte
 msgid "Reset to {0}"
-msgstr "重置为 {0}"
+msgstr "Rétablir à {0}"
 
 #: src/feature/Settings/SettingsPane/SettingItem.svelte
 msgid "Reset to <0/>"
-msgstr "重置为 <0/>"
+msgstr "Rétablir à <0/>"
 
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
 #: src/routes/info/[id]/+page.svelte
 msgid "Share"
-msgstr "分享"
+msgstr "Partager"
 
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
 msgid "Configure URL sharing behavior"
-msgstr "配置 URL 分享行为"
+msgstr "Configurer le comportement du partage d'URL"
 
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
 msgid "URL Shortening"
-msgstr "短链接"
+msgstr "Raccourcissement d'URL"
 
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
 msgid "Generate short URLs when copying image links"
-msgstr "复制图片链接时生成短链接"
+msgstr "Générer des URL courtes lors de la copie des liens d'images"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 #: src/routes/admin/settings/+page.svelte
 msgid "Storage Configuration"
-msgstr "存储配置"
+msgstr "Stockage"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Choose how and where your data is stored"
-msgstr "选择数据的存储方式与位置"
+msgstr "Choisissez comment et où vos données sont stockées"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Storage Provider"
-msgstr "存储提供方"
+msgstr "Fournisseur de stockage"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Select your preferred storage backend"
-msgstr "选择你偏好的存储后端"
+msgstr "Sélectionnez votre backend de stockage préféré"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Network Storage (SMB)"
-msgstr "网络存储（SMB）"
+msgstr "Stockage réseau (SMB)"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Server Host"
-msgstr "服务器地址"
+msgstr "Hôte du serveur"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "IP address or hostname of your SMB server"
-msgstr "SMB 服务器的 IP 或主机名"
+msgstr "Adresse IP ou nom d'hôte de votre serveur SMB"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Share Name"
-msgstr "共享名称"
+msgstr "Nom du partage"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "The name of the shared folder"
-msgstr "共享文件夹名称"
+msgstr "Le nom du dossier partagé"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Workgroup"
-msgstr "工作组"
+msgstr "Groupe de travail"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "SMB workgroup name (optional)"
-msgstr "SMB 工作组名（可选）"
+msgstr "Nom du groupe de travail SMB (facultatif)"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 #: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Username"
-msgstr "用户名"
+msgstr "Nom d'utilisateur"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Authentication username"
-msgstr "认证用户名"
+msgstr "Nom d'utilisateur d'authentification"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 #: src/routes/profile/(auth)/login/+page.svelte
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Password"
-msgstr "密码"
+msgstr "Mot de passe"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Authentication password for SMB server"
-msgstr "SMB 服务器认证密码"
+msgstr "Mot de passe d'authentification pour le serveur SMB"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Custom S3 Provider"
-msgstr "自定义 S3 提供方"
+msgstr "Fournisseur S3 personnalisé"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Enable for S3-compatible services like MinIO, Cloudflare R2, or Wasabi. This unlocks custom endpoint and path-style options."
-msgstr "用于 MinIO、Cloudflare R2、Wasabi 等 S3 兼容服务。启用后可配置自定义端点与 Path-Style 选项。"
+msgstr "Activez cette option pour les services compatibles S3 comme MinIO, Cloudflare R2 ou Wasabi. Cela déverrouille les options de point de terminaison personnalisé et de style de chemin."
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Amazon S3 usage may incur charges. <0>Review pricing</0>"
-msgstr "使用 Amazon S3 可能会产生费用。<0>查看定价</0>"
+msgstr "L'utilisation d'Amazon S3 peut entraîner des frais. <0>Consulter les tarifs</0>"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Custom Endpoint"
-msgstr "自定义端点"
+msgstr "Point de terminaison personnalisé"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Custom S3 endpoint URL for your provider"
-msgstr "你的提供方的自定义 S3 端点 URL"
+msgstr "URL du point de terminaison S3 personnalisé pour votre fournisseur"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Region (Optional)"
-msgstr "区域（可选）"
+msgstr "Région (facultatif)"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Most S3-compatible providers don't require a region. Leave empty for Cloudflare R2 or providers that auto-detect. Use \"auto\" or a specific region if required by your provider."
-msgstr "大多数兼容 S3 的提供方都不要求填写区域。Cloudflare R2 或可自动检测的提供方可留空；如果你的提供方有要求，请使用“auto”或指定区域。"
+msgstr "La plupart des fournisseurs compatibles S3 ne nécessitent pas de région. Laissez vide pour Cloudflare R2 ou les fournisseurs qui la détectent automatiquement. Utilisez \"auto\" ou une région spécifique si votre fournisseur l'exige."
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Force Path-Style URLs"
-msgstr "强制 Path-Style URL"
+msgstr "Forcer les URL en style de chemin"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Enable if your provider requires path-style buckets (http://host/bucket/key). Common for MinIO and self-hosted solutions."
-msgstr "若提供方要求 path-style bucket（http://host/bucket/key）请启用，常见于 MinIO 或自托管方案。"
+msgstr "Activez si votre fournisseur exige des buckets en style de chemin (http://host/bucket/key). Courant pour MinIO et les solutions auto-hébergées."
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Region"
-msgstr "区域"
+msgstr "Région"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "AWS region where your bucket is located (e.g., us-east-1). <0>View available regions</0>"
-msgstr "你的 Bucket 所在的 AWS 区域（例如 `us-east-1`）。<0>查看可用区域</0>"
+msgstr "Région AWS où se trouve votre bucket (ex. : us-east-1). <0>Voir les régions disponibles</0>"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Bucket Name"
-msgstr "Bucket 名称"
+msgstr "Nom du bucket"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Your S3 bucket name. <0>Learn about bucket naming</0>"
-msgstr "你的 S3 Bucket 名称。<0>了解 Bucket 命名规则</0>"
+msgstr "Le nom de votre bucket S3. <0>En savoir plus sur le nommage des buckets</0>"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Access Key ID"
-msgstr "访问密钥 ID"
+msgstr "Identifiant de clé d'accès"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Your AWS Access Key ID. <0>How to create access keys</0>"
-msgstr "你的 AWS Access Key ID。<0>了解如何创建访问密钥</0>"
+msgstr "Votre identifiant de clé d'accès AWS. <0>Comment créer des clés d'accès</0>"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Secret Access Key"
-msgstr "秘密访问密钥"
+msgstr "Clé d'accès secrète"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Your AWS Secret Access Key"
-msgstr "你的 AWS Secret Access Key"
+msgstr "Votre clé d'accès secrète AWS"
 
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "User Management"
-msgstr "用户管理"
+msgstr "Gestion des utilisateurs"
 
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "Control user registration, authentication, and security requirements"
-msgstr "控制用户注册、认证与安全要求"
+msgstr "Contrôlez l'inscription des utilisateurs, l'authentification et les exigences de sécurité"
 
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "User Registration"
-msgstr "用户注册"
+msgstr "Inscription des utilisateurs"
 
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "Allow new users to create accounts"
-msgstr "允许新用户创建账号"
+msgstr "Autoriser les nouveaux utilisateurs à créer des comptes"
 
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "Require Admin Approval"
-msgstr "需要管理员审核"
+msgstr "Approbation de l'administrateur requise"
 
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "New users must be approved before accessing the app"
-msgstr "新用户在访问应用前必须先通过审核"
+msgstr "Les nouveaux utilisateurs doivent être approuvés avant d'accéder à l'application"
 
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "Minimum Password Length"
-msgstr "最小密码长度"
+msgstr "Longueur minimale du mot de passe"
 
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "Minimum characters required"
-msgstr "密码要求的最少字符数"
+msgstr "Nombre minimal de caractères requis"
 
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "Password Requirements"
-msgstr "密码规则"
+msgstr "Exigences du mot de passe"
 
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "Required character types"
-msgstr "必须包含的字符类型"
+msgstr "Types de caractères requis"
 
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "Numbers (0-9)"
-msgstr "数字 (0-9)"
+msgstr "Chiffres (0-9)"
 
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "Lowercase (a-z)"
-msgstr "小写字母 (a-z)"
+msgstr "Minuscules (a-z)"
 
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "Uppercase (A-Z)"
-msgstr "大写字母 (A-Z)"
+msgstr "Majuscules (A-Z)"
 
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "Special (!@#$)"
-msgstr "特殊字符 (!@#$)"
+msgstr "Spéciaux (!@#$)"
 
 #: src/feature/Settings/Version/ReleaseModal.svelte
 #: src/feature/Settings/Version/Version.svelte
 msgid "Update Available"
-msgstr "发现更新"
+msgstr "Mise à jour disponible"
 
 #: src/feature/Settings/Version/ReleaseModal.svelte
 #: src/feature/Settings/Version/ReleaseModal.svelte
 msgid "Latest Version"
-msgstr "最新版本"
+msgstr "Dernière version"
 
 #: src/feature/Settings/Version/ReleaseModal.svelte
 msgid "A new version of Slink is available. Here's what's new:"
-msgstr "Slink 有新版本可用，以下是更新内容："
+msgstr "Une nouvelle version de Slink est disponible. Voici les nouveautés :"
 
 #: src/feature/Settings/Version/ReleaseModal.svelte
 msgid "You're running the latest version of Slink. Here are the release notes:"
-msgstr "你正在使用最新版本，以下是发布说明："
+msgstr "Vous utilisez la dernière version de Slink. Voici les notes de version :"
 
 #: src/feature/Settings/Version/ReleaseModal.svelte
 msgid "Current Version"
-msgstr "当前版本"
+msgstr "Version actuelle"
 
 #. 0: currentVersion
 #: src/feature/Settings/Version/ReleaseModal.svelte
@@ -2246,320 +2246,320 @@ msgstr "v{0}"
 
 #: src/feature/Settings/Version/ReleaseModal.svelte
 msgid "Up to date"
-msgstr "已是最新"
+msgstr "À jour"
 
 #. 0: formatReleaseDate(release.published_at)
 #: src/feature/Settings/Version/ReleaseModal.svelte
 msgid "Released {0}"
-msgstr "发布于 {0}"
+msgstr "Publié le {0}"
 
 #: src/feature/Settings/Version/ReleaseModal.svelte
 msgid "Maybe Later"
-msgstr "稍后再说"
+msgstr "Peut-être plus tard"
 
 #: src/feature/Settings/Version/ReleaseModal.svelte
 msgid "<0/> View on GitHub"
-msgstr "<0/> 在 GitHub 查看"
+msgstr "<0/> Voir sur GitHub"
 
 #: src/feature/Settings/Version/Version.svelte
 msgid "Latest"
-msgstr "最新"
+msgstr "Dernière"
 
 #. 0: UpdateCheckState.hasUpdate ? 'update details' \\: 'release notes'
 #: src/feature/Settings/Version/Version.svelte
 msgid "Click to view {0}"
-msgstr "点击查看 {0}"
+msgstr "Cliquez pour afficher {0}"
 
 #. 0: versionInfo ? formatVersion(versionInfo) \\: ''
 #: src/feature/Settings/Version/Version.svelte
 msgid "Version {0}"
-msgstr "版本 {0}"
+msgstr "Version {0}"
 
 #: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
 msgid "Filtering by"
-msgstr "筛选条件"
+msgstr "Filtrer par"
 
 #: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
 msgid "Toggle between matching all or any selected tags"
-msgstr "切换匹配所有或任一已选标签"
+msgstr "Basculer entre correspondre à tous ou à l'un des tags sélectionnés"
 
 #: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
 msgid "Match all"
-msgstr "匹配全部"
+msgstr "Tout correspondre"
 
 #: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
 msgid "Match any"
-msgstr "匹配任一"
+msgstr "Au moins un"
 
 #: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
 msgid "Match All"
-msgstr "匹配全部"
+msgstr "Tout correspondre"
 
 #: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
 msgid "Match Any"
-msgstr "匹配任一"
+msgstr "Au moins un"
 
 #: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
 msgid "Images must have every selected tag to appear in results."
-msgstr "结果中仅显示包含所有已选标签的图片。"
+msgstr "Les images doivent avoir chaque tag sélectionné pour apparaître dans les résultats."
 
 #: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
 msgid "Images with at least one selected tag will appear in results."
-msgstr "结果中显示至少包含一个已选标签的图片。"
+msgstr "Les images ayant au moins un tag sélectionné apparaîtront dans les résultats."
 
 #: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
 msgid "Click to switch to match any"
-msgstr "点击切换为匹配任意"
+msgstr "Cliquez pour passer à « au moins un »"
 
 #: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
 msgid "Click to switch to match all"
-msgstr "点击切换为匹配全部"
+msgstr "Cliquez pour passer à « tout correspondre »"
 
 #: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
 msgid "Clear all filters"
-msgstr "清空筛选"
+msgstr "Effacer tous les filtres"
 
 #: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
 msgid "Clear"
-msgstr "清除"
+msgstr "Effacer"
 
 #: src/feature/Layout/DemoBadge/DemoBadge.svelte
 msgid "DEMO"
-msgstr "演示"
+msgstr "DÉMO"
 
 #: src/feature/Tag/ImageTagList/ImageTagList.svelte
 msgid "No tags assigned to this image."
-msgstr "这张图片还没有分配任何标签。"
+msgstr "Aucun tag assigné à cette image."
 
 #: src/feature/Collection/CollectionList/CollectionPickerList.svelte
 msgid "Search collections"
-msgstr "搜索合集"
+msgstr "Rechercher des collections"
 
 #: src/feature/Collection/CollectionList/CollectionPickerList.svelte
 msgid "No collections yet"
-msgstr "暂无合集"
+msgstr "Aucune collection pour l'instant"
 
 #: src/feature/Collection/CollectionList/CollectionPickerList.svelte
 msgid "Create your first collection"
-msgstr "创建你的第一个合集"
+msgstr "Créez votre première collection"
 
 #: src/feature/Collection/CollectionList/CollectionPickerList.svelte
 msgid "New collection"
-msgstr "新建合集"
+msgstr "Nouvelle collection"
 
 #. 0: tag.name
 #: src/feature/Tag/TagBadge/TagBadge.svelte
 msgid "Remove {0} tag"
-msgstr "移除标签 {0}"
+msgstr "Supprimer le tag {0}"
 
 #: src/feature/Tag/TagDataTable/TagActionsCell.svelte
 msgid "Tag actions"
-msgstr "标签操作"
+msgstr "Actions sur le tag"
 
 #: src/feature/Tag/TagDataTable/TagActionsCell.svelte
 msgid "Move"
-msgstr "移动"
+msgstr "Déplacer"
 
 #. 0: selectedCount === 1 ? 'Image' \\: 'Images'
 #. 0: pluralize(childrenCount, 'child tag')
 #: src/feature/Image/History/Actions/DeleteAction.svelte
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "Delete {0}"
-msgstr "删除 {0}"
+msgstr "Supprimer {0}"
 
 #. 0: pluralize(tag.imageCount, 'image')
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "Remove tag from {0}"
-msgstr "从 {0} 中移除标签"
+msgstr "Retirer le tag de {0}"
 
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "Delete Tag"
-msgstr "删除标签"
+msgstr "Supprimer le tag"
 
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "This will cascade:"
-msgstr "这将同时影响以下内容："
+msgstr "Cela entraînera en cascade :"
 
 #. 0: getTagDisplayName(creatingChildFor); 1: childTagName
 #: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
 msgid "Create \"{0} › {1}\""
-msgstr "创建“{0} › {1}”"
+msgstr "Créer « {0} › {1} »"
 
 #. 0: searchTerm
 #: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
 msgid "No tags matching \"{0}\""
-msgstr "没有匹配“{0}”的标签"
+msgstr "Aucun tag correspondant à « {0} »"
 
 #. 0: searchTerm
 #: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
 msgid "Create \"{0}\""
-msgstr "创建“{0}”"
+msgstr "Créer « {0} »"
 
 #: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
 msgid "No tags yet"
-msgstr "暂无标签"
+msgstr "Aucun tag pour l'instant"
 
 #: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
 #: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
 msgid "Create Tag"
-msgstr "创建标签"
+msgstr "Créer un tag"
 
 #: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
 msgid "Add a new tag to organize your images"
-msgstr "添加新标签以更好地组织你的图片"
+msgstr "Ajoutez un nouveau tag pour organiser vos images"
 
 #: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
 msgid "Tag Name"
-msgstr "标签名"
+msgstr "Nom du tag"
 
 #: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
 msgid "Parent Tag (Optional)"
-msgstr "父标签（可选）"
+msgstr "Tag parent (facultatif)"
 
 #: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
 msgid "Search for parent tag..."
-msgstr "搜索父标签..."
+msgstr "Rechercher un tag parent..."
 
 #: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
 #: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
 msgid "No matching tags found."
-msgstr "未找到匹配标签。"
+msgstr "Aucun tag correspondant trouvé."
 
 #: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
 msgid "Tag Organization"
-msgstr "标签组织"
+msgstr "Organisation des tags"
 
 #: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
 msgid "Tags help organize your images. Parent tags create a hierarchy for better organization. You can always move tags later or create sub-tags within existing ones."
-msgstr "标签可用于整理图片。父标签可以形成层级结构，方便管理。你也可以随时移动标签或在已有标签下创建子标签。"
+msgstr "Les tags permettent d'organiser vos images. Les tags parents créent une hiérarchie pour une meilleure organisation. Vous pouvez toujours déplacer des tags ultérieurement ou créer des sous-tags dans des tags existants."
 
 #: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
 #: src/feature/User/ApiKey/CreateApiKeyForm.svelte
 msgid "Creating..."
-msgstr "创建中..."
+msgstr "Création en cours..."
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
 msgid "Delete Provider"
-msgstr "删除提供方"
+msgstr "Supprimer le fournisseur"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
 msgid "<0/> — Provider and its configuration will be removed"
-msgstr "<0/> — 提供方及其配置将被移除"
+msgstr "<0/> — Le fournisseur et sa configuration seront supprimés"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
 msgid "<0/> Delete Provider"
-msgstr "<0/> 删除提供方"
+msgstr "<0/> Supprimer le fournisseur"
 
 #: src/feature/Tag/TagFilter/TagFilter.svelte
 msgid "Search and select tags"
-msgstr "搜索并选择标签"
+msgstr "Rechercher et sélectionner des tags"
 
 #: src/feature/Tag/TagInput/TagInput.svelte
 #: src/feature/Tag/TagSelector/TagSelector.svelte
 msgid "Search or add tags..."
-msgstr "搜索或添加标签..."
+msgstr "Rechercher ou ajouter des tags..."
 
 #: src/feature/Tag/TagInput/TagInput.svelte
 msgid "Backspace"
-msgstr "退格"
+msgstr "Retour arrière"
 
 #: src/feature/Tag/TagInput/TagInput.svelte
 msgid "Child tag name..."
-msgstr "子标签名称..."
+msgstr "Nom du tag enfant..."
 
 #: src/feature/Tag/TagInput/TagInput.svelte
 msgid "Cancel child tag creation"
-msgstr "取消创建子标签"
+msgstr "Annuler la création du tag enfant"
 
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
 msgid "Search tags"
-msgstr "搜索标签"
+msgstr "Rechercher des tags"
 
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
 msgid "Create your first tag"
-msgstr "创建你的第一个标签"
+msgstr "Créez votre premier tag"
 
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
 msgid "New tag"
-msgstr "新建标签"
+msgstr "Nouveau tag"
 
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
 msgid "Root"
-msgstr "根目录"
+msgstr "Racine"
 
 #. 0: tag.name
 #: src/feature/Tag/TagListItem/TagListItem.svelte
 msgid "Add child to {0}"
-msgstr "为 {0} 添加子项"
+msgstr "Ajouter un enfant à {0}"
 
 #: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
 #: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
 msgid "Move Tag"
-msgstr "移动标签"
+msgstr "Déplacer le tag"
 
 #. 0: tag.name
 #: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
 msgid "Move \"{0}\" to a new parent tag or to root"
-msgstr "将“{0}”移动到新的父标签下或根级"
+msgstr "Déplacer « {0} » vers un nouveau tag parent ou vers la racine"
 
 #: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
 msgid "New Parent Tag"
-msgstr "新父标签"
+msgstr "Nouveau tag parent"
 
 #: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
 msgid "Search for parent tag... (empty = root)"
-msgstr "搜索父标签...（留空表示根目录）"
+msgstr "Rechercher un tag parent... (vide = racine)"
 
 #: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
 msgid "Leave empty to move to root level"
-msgstr "留空可移动到根级"
+msgstr "Laissez vide pour déplacer au niveau racine"
 
 #: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
 msgid "Moving..."
-msgstr "移动中..."
+msgstr "Déplacement en cours..."
 
 #: src/feature/Text/CommentText/CommentText.svelte
 msgid "This comment has been deleted"
-msgstr "该评论已删除"
+msgstr "Ce commentaire a été supprimé"
 
 #: src/feature/Text/CopyContainer/CopyContainer.svelte
 msgid "Copy link..."
-msgstr "复制链接..."
+msgstr "Copier le lien..."
 
 #: src/feature/Text/CopyableText/CopyableText.svelte
 msgid "Click to copy"
-msgstr "点击复制"
+msgstr "Cliquez pour copier"
 
 #: src/feature/Text/CopyableText/CopyableText.svelte
 msgid "Copy to clipboard"
-msgstr "复制到剪贴板"
+msgstr "Copier dans le presse-papiers"
 
 #: src/feature/Text/EditableText/EditableText.svelte
 msgid "Click to add..."
-msgstr "点击添加..."
+msgstr "Cliquez pour ajouter..."
 
 #: src/feature/Text/Heading/Heading.svelte
 msgid "Heading"
-msgstr "标题"
+msgstr "Titre"
 
 #. 0: segment.text
 #: src/feature/Text/HashtagText/HashtagText.svelte
 msgid "Click to search for {0}"
-msgstr "点击搜索 {0}"
+msgstr "Cliquez pour rechercher {0}"
 
 #: src/feature/Upload/UploadOptions/CollectionsOption.svelte
 #: src/feature/Upload/UploadOptions/TagsOption.svelte
 msgid "Add more"
-msgstr "继续添加"
+msgstr "Ajouter plus"
 
 #: src/feature/Upload/UploadOptions/UploadOptionsPanel.svelte
 msgid "Upload Options"
-msgstr "上传选项"
+msgstr "Options d'importation"
 
 #: src/feature/User/UserActions/UserActions.svelte
 msgid "<0/> Actions"
-msgstr "<0/> 操作"
+msgstr "<0/> Actions"
 
 #: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
@@ -2569,419 +2569,419 @@ msgstr "<0/> 操作"
 #: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 msgid "Actions"
-msgstr "操作"
+msgstr "Actions"
 
 #: src/feature/User/UserActions/UserActions.svelte
 msgid "Suspend"
-msgstr "停用"
+msgstr "Suspendre"
 
 #: src/feature/User/UserActions/UserActions.svelte
 msgid "Activate"
-msgstr "启用"
+msgstr "Activer"
 
 #: src/feature/User/UserActions/UserActions.svelte
 msgid "Make Admin"
-msgstr "设为管理员"
+msgstr "Rendre administrateur"
 
 #: src/feature/User/UserActions/UserActions.svelte
 msgid "Remove Admin"
-msgstr "移除管理员"
+msgstr "Retirer les droits d'administrateur"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "Delete User"
-msgstr "删除用户"
+msgstr "Supprimer l'utilisateur"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "User account and all associated data will be removed"
-msgstr "该用户账号及其所有关联数据将被移除"
+msgstr "Le compte utilisateur et toutes les données associées seront supprimés"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "<0/> Delete User"
-msgstr "<0/> 删除用户"
+msgstr "<0/> Supprimer l'utilisateur"
 
 #: src/feature/User/UserDataTable/data-table-email-button.svelte
 msgid "Email <0/>"
-msgstr "邮箱 <0/>"
+msgstr "E-mail <0/>"
 
 #: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 msgid "Status"
-msgstr "状态"
+msgstr "Statut"
 
 #: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 msgid "Roles"
-msgstr "角色"
+msgstr "Rôles"
 
 #: src/feature/User/UserDataTable/UserDataTable.svelte
 msgid "Users will appear here once added"
-msgstr "添加后用户会显示在这里"
+msgstr "Les utilisateurs apparaîtront ici une fois ajoutés"
 
 #: src/feature/User/UserRoleBadge/UserRoleBadge.svelte
 msgid "<0/> Admin"
-msgstr "<0/> 管理员"
+msgstr "<0/> Administrateur"
 
 #: src/feature/User/UserRoleBadge/UserRoleBadge.svelte
 msgid "<0/> User"
-msgstr "<0/> 用户"
+msgstr "<0/> Utilisateur"
 
 #: src/feature/User/UserStatusCell/UserStatusCell.svelte
 msgid "<0/> You"
-msgstr "<0/> 你"
+msgstr "<0/> Vous"
 
 #: src/routes/admin/dashboard/+page.svelte
 msgid "Dashboard | Slink"
-msgstr "数据看板 | Slink"
+msgstr "Tableau de bord | Slink"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/routes/admin/dashboard/+page.svelte
 msgid "Dashboard"
-msgstr "数据看板"
+msgstr "Tableau de bord"
 
 #: src/routes/admin/dashboard/+page.svelte
 msgid "Overview of your application's key metrics and activity"
-msgstr "应用关键指标与活动概览"
+msgstr "Vue d'ensemble des métriques clés et de l'activité de votre application"
 
 #: src/routes/admin/settings/+page.svelte
 msgid "Configure image uploads, processing options, and URL sharing preferences"
-msgstr "配置图片上传、处理选项与分享链接偏好"
+msgstr "Configurez les importations d'images, les options de traitement et les préférences de partage d'URL"
 
 #: src/routes/admin/settings/+page.svelte
 msgid "Configure storage providers, cache settings, and data management"
-msgstr "配置存储提供方、缓存设置与数据管理"
+msgstr "Configurez les fournisseurs de stockage, les paramètres de cache et la gestion des données"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/routes/admin/settings/+page.svelte
 msgid "Security Settings"
-msgstr "安全设置"
+msgstr "Sécurité"
 
 #: src/routes/admin/settings/+page.svelte
 msgid "Manage user registration, access control, and authentication policies"
-msgstr "管理用户注册、访问控制与认证策略"
+msgstr "Gérez l'inscription des utilisateurs, le contrôle d'accès et les politiques d'authentification"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/routes/admin/settings/+page.svelte
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "Single Sign-On"
-msgstr "单点登录"
+msgstr "Authentification unique"
 
 #: src/routes/admin/settings/+page.svelte
 msgid "Manage SSO/OIDC identity providers for external authentication"
-msgstr "管理用于外部认证的 SSO/OIDC 身份提供方"
+msgstr "Gérez les fournisseurs d'identité SSO/OIDC pour l'authentification externe"
 
 #: src/routes/admin/settings/+page.svelte
 msgid "Settings | Slink"
-msgstr "设置 | Slink"
+msgstr "Paramètres | Slink"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/routes/admin/settings/+page.svelte
 msgid "Settings"
-msgstr "设置"
+msgstr "Paramètres"
 
 #: src/routes/admin/settings/+page.svelte
 msgid "Configure your application preferences and manage system behavior"
-msgstr "配置应用偏好并管理系统行为"
+msgstr "Configurez les préférences de votre application et gérez le comportement du système"
 
 #: src/routes/admin/user/+page.svelte
 msgid "Users | Slink Admin"
-msgstr "用户管理 | Slink Admin"
+msgstr "Utilisateurs | Slink Admin"
 
 #: src/routes/admin/user/+page.svelte
 #: src/routes/admin/user/+page.svelte
 msgid "Manage user accounts and permissions"
-msgstr "管理用户账号与权限"
+msgstr "Gérez les comptes utilisateurs et les permissions"
 
 #: src/routes/admin/user/+page.svelte
 msgid "There are no users in the system yet."
-msgstr "系统中还没有用户。"
+msgstr "Il n'y a encore aucun utilisateur dans le système."
 
 #: src/feature/User/ApiKey/ApiKeyCard.svelte
 #: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
 msgid "Revoke API Key"
-msgstr "撤销 API Key"
+msgstr "Révoquer la clé API"
 
 #: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
 msgid "This API key will be permanently revoked and cannot be recovered"
-msgstr "该 API Key 将被永久撤销且无法恢复"
+msgstr "Cette clé API sera révoquée définitivement et ne pourra pas être récupérée"
 
 #: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
 msgid "<0/> Revoke Key"
-msgstr "<0/> 撤销密钥"
+msgstr "<0/> Révoquer la clé"
 
 #: src/feature/User/ApiKey/ApiKeyList.svelte
 msgid "No API keys yet"
-msgstr "还没有 API Key"
+msgstr "Aucune clé API pour l'instant"
 
 #: src/feature/User/ApiKey/ApiKeyList.svelte
 msgid "Create an API key to integrate with ShareX and other tools"
-msgstr "创建 API Key 以集成 ShareX 和其他工具"
+msgstr "Créez une clé API pour vous intégrer avec ShareX et d'autres outils"
 
 #: src/feature/User/ApiKey/ApiKeyManager.svelte
 msgid "<0/> API Keys"
-msgstr "<0/> API Key"
+msgstr "<0/> Clés API"
 
 #: src/feature/User/ApiKey/ApiKeyManager.svelte
 msgid "Create API keys for ShareX and other third-party integrations"
-msgstr "为 ShareX 和其他第三方集成创建 API Key"
+msgstr "Créez des clés API pour ShareX et d'autres intégrations tierces"
 
 #: src/feature/User/ApiKey/ApiKeyManager.svelte
 msgid "<0/> Create API Key"
-msgstr "<0/> 创建 API Key"
+msgstr "<0/> Créer une clé API"
 
 #: src/feature/User/ApiKey/CreateApiKeyForm.svelte
 #: src/feature/User/ApiKey/CreateApiKeyForm.svelte
 msgid "Create API Key"
-msgstr "创建 API Key"
+msgstr "Créer une clé API"
 
 #: src/feature/User/ApiKey/CreateApiKeyForm.svelte
 msgid "Generate a secure key for external integrations"
-msgstr "为外部集成生成安全密钥"
+msgstr "Générez une clé sécurisée pour les intégrations externes"
 
 #: src/feature/User/ApiKey/CreateApiKeyForm.svelte
 msgid "Key Name"
-msgstr "密钥名称"
+msgstr "Nom de la clé"
 
 #: src/feature/User/ApiKey/CreateApiKeyForm.svelte
 msgid "Expiry Date (Optional)"
-msgstr "过期时间（可选）"
+msgstr "Date d'expiration (facultatif)"
 
 #: src/feature/User/ApiKey/CreateApiKeyForm.svelte
 msgid "Select expiry date"
-msgstr "选择过期时间"
+msgstr "Sélectionner une date d'expiration"
 
 #: src/feature/User/ApiKey/CreateApiKeyForm.svelte
 msgid "Security Notice"
-msgstr "安全提示"
+msgstr "Avis de sécurité"
 
 #: src/feature/User/ApiKey/CreateApiKeyForm.svelte
 msgid "Your API key will be displayed only once after creation. Store it securely in your password manager or environment variables. If lost, you'll need to generate a new one."
-msgstr "创建后 API Key 只会显示一次。请将其安全保存到密码管理器或环境变量中。如遗失，你需要重新生成一个新密钥。"
+msgstr "Votre clé API ne sera affichée qu'une seule fois après sa création. Conservez-la en sécurité dans votre gestionnaire de mots de passe ou vos variables d'environnement. En cas de perte, vous devrez en générer une nouvelle."
 
 #: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
 msgid "Success!"
-msgstr "创建成功！"
+msgstr "Succès !"
 
 #: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
 msgid "Your API key has been created"
-msgstr "你的 API Key 已创建"
+msgstr "Votre clé API a été créée"
 
 #: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
 msgid "Your API Key"
-msgstr "你的 API Key"
+msgstr "Votre clé API"
 
 #: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
 msgid "Your API key will appear here..."
-msgstr "你的 API Key 将显示在这里..."
+msgstr "Votre clé API apparaîtra ici..."
 
 #: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
 msgid "Important Notice"
-msgstr "重要提示"
+msgstr "Avis important"
 
 #: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
 msgid "This key will not be shown again. Store it securely in your password manager or download the ShareX config file below."
-msgstr "该密钥不会再次显示。请妥善保存，或下载下方的 ShareX 配置文件。"
+msgstr "Cette clé ne sera plus affichée. Conservez-la en sécurité dans votre gestionnaire de mots de passe ou téléchargez le fichier de configuration ShareX ci-dessous."
 
 #: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
 msgid "<0/> Downloading..."
-msgstr "<0/> 下载中..."
+msgstr "<0/> Téléchargement en cours..."
 
 #: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
 msgid "<0/> Download ShareX Config"
-msgstr "<0/> 下载 ShareX 配置"
+msgstr "<0/> Télécharger la config ShareX"
 
 #: src/routes/collection/[id]/+page.svelte
 msgid "Back to Collections"
-msgstr "返回合集"
+msgstr "Retour aux collections"
 
 #: src/routes/collection/[id]/+page.svelte
 msgid "Collection name..."
-msgstr "合集名称..."
+msgstr "Nom de la collection..."
 
 #: src/routes/collection/[id]/+page.svelte
 msgid "Add a name..."
-msgstr "添加名称..."
+msgstr "Ajouter un nom..."
 
 #. 0: itemsFeed.collection.itemCount ?? itemsFeed.items.length
 #: src/routes/collection/[id]/+page.svelte
 msgid "{0} items"
-msgstr "{0} 项"
+msgstr "{0} éléments"
 
 #: src/routes/collection/[id]/+page.svelte
 msgid "<0/> Add images"
-msgstr "<0/> 添加图片"
+msgstr "<0/> Ajouter des images"
 
 #: src/routes/collection/[id]/+page.svelte
 msgid "Share Link"
-msgstr "分享链接"
+msgstr "Partager le lien"
 
 #: src/routes/collection/[id]/+page.svelte
 msgid "<0/> Share"
-msgstr "<0/> 分享"
+msgstr "<0/> Partager"
 
 #: src/routes/collection/[id]/+page.svelte
 msgid "Collection not found"
-msgstr "未找到合集"
+msgstr "Collection introuvable"
 
 #: src/routes/collection/[id]/+page.svelte
 msgid "This collection doesn't exist or you don't have permission to view it."
-msgstr "该合集不存在，或你没有查看权限。"
+msgstr "Cette collection n'existe pas ou vous n'avez pas la permission de la consulter."
 
 #: src/routes/collection/[id]/+page.svelte
 #: src/ui/components/picker/picker-empty-state.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "No items yet"
-msgstr "暂无项目"
+msgstr "Aucun élément pour l'instant"
 
 #: src/routes/collection/[id]/+page.svelte
 msgid "Upload images directly to this collection."
-msgstr "直接上传图片到此合集。"
+msgstr "Importez des images directement dans cette collection."
 
 #: src/routes/collection/[id]/+page.svelte
 msgid "No items in this collection yet."
-msgstr "该合集暂时没有项目。"
+msgstr "Aucun élément dans cette collection pour l'instant."
 
 #: src/routes/help/faq/+page.svelte
 msgid "FAQ | Slink"
-msgstr "常见问题 | Slink"
+msgstr "FAQ | Slink"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Frequently asked questions about Slink - image sharing platform"
-msgstr "关于 Slink 图像分享平台的常见问题"
+msgstr "Questions fréquemment posées sur Slink - plateforme de partage d'images"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Frequently Asked Questions"
-msgstr "常见问题"
+msgstr "Questions fréquemment posées"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Find answers to common questions about using Slink for image sharing and management"
-msgstr "查找使用 Slink 进行图片分享与管理的常见问题解答"
+msgstr "Trouvez des réponses aux questions courantes sur l'utilisation de Slink pour le partage et la gestion d'images"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Still have questions?"
-msgstr "还有问题？"
+msgstr "Vous avez encore des questions ?"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Can't find the answer you're looking for? Please get in touch with us for further assistance."
-msgstr "如果没有找到你想要的答案，请联系我们获取进一步帮助。"
+msgstr "Vous ne trouvez pas la réponse que vous cherchez ? Contactez-nous pour obtenir de l'aide."
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Report an Issue"
-msgstr "<0/> 反馈问题"
+msgstr "<0/> Signaler un problème"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> View Documentation"
-msgstr "<0/> 查看文档"
+msgstr "<0/> Consulter la documentation"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Image Details | Slink"
-msgstr "图片详情 | Slink"
+msgstr "Détails de l'image | Slink"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "License"
-msgstr "授权"
+msgstr "Licence"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Choose how others can use this image"
-msgstr "选择他人如何使用这张图片"
+msgstr "Choisissez comment les autres peuvent utiliser cette image"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Resize"
-msgstr "尺寸调整"
+msgstr "Redimensionner"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Adjust dimensions for the shared link"
-msgstr "调整分享链接的尺寸"
+msgstr "Ajuster les dimensions pour le lien partagé"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Filter"
-msgstr "滤镜"
+msgstr "Filtre"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Apply a color filter to the shared link"
-msgstr "为分享链接应用颜色滤镜"
+msgstr "Appliquer un filtre coloré au lien partagé"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Resize, filter, and format changes apply only to the shared link. The original image remains unchanged."
-msgstr "尺寸、滤镜和格式变更仅作用于分享链接，原图不会改变。"
+msgstr "Les modifications de taille, de filtre et de format s'appliquent uniquement au lien partagé. L'image originale reste inchangée."
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Select option to copy"
-msgstr "选择复制选项"
+msgstr "Sélectionner l'option à copier"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Quick"
-msgstr "快捷"
+msgstr "Rapide"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Output Format"
-msgstr "输出格式"
+msgstr "Format de sortie"
 
 #: src/ui/components/combobox/combobox.svelte
 msgid "No items found."
-msgstr "未找到项目。"
+msgstr "Aucun élément trouvé."
 
 #: src/ui/components/combobox/combobox.svelte
 msgid "Clear selection"
-msgstr "清除选择"
+msgstr "Effacer la sélection"
 
 #: src/ui/components/data-table/column-toggle.svelte
 msgid "<0/> Columns <1/>"
-msgstr "<0/> 显示列 <1/>"
+msgstr "<0/> Colonnes <1/>"
 
 #. 0: pageSize
 #: src/ui/components/data-table/page-size-select.svelte
 msgid "<0/> Limit {0} <1/>"
-msgstr "<0/> 条/页 {0} <1/>"
+msgstr "<0/> Limite {0} <1/>"
 
 #: src/ui/components/date-picker/date-picker-field.svelte
 msgid "Select a date"
-msgstr "选择日期"
+msgstr "Sélectionner une date"
 
 #: src/ui/components/date-picker/date-picker.svelte
 msgid "Pick a date"
-msgstr "挑选日期"
+msgstr "Choisir une date"
 
 #: src/ui/components/dialog/modal-footer.svelte
 msgid "Submit"
-msgstr "提交"
+msgstr "Soumettre"
 
 #: src/ui/components/enhanced-select/enhanced-select.svelte
 #: src/ui/components/select/select.svelte
 msgid "Select an option"
-msgstr "选择一个选项"
+msgstr "Sélectionner une option"
 
 #: src/ui/components/input/number-input.svelte
 msgid "Number input"
-msgstr "数字输入"
+msgstr "Saisie numérique"
 
 #: src/ui/components/input/number-input.svelte
 msgid "Increase value"
-msgstr "增加数值"
+msgstr "Augmenter la valeur"
 
 #: src/ui/components/input/number-input.svelte
 msgid "Decrease value"
-msgstr "减少数值"
+msgstr "Diminuer la valeur"
 
 #: src/ui/components/picker/picker-create-footer.svelte
 msgid "New item"
-msgstr "新项目"
+msgstr "Nouvel élément"
 
 #: src/ui/components/picker/picker-list.svelte
 msgid "No matches found"
-msgstr "未找到匹配项"
+msgstr "Aucun résultat trouvé"
 
 #: src/ui/components/command/command-dialog.svelte
 msgid "Command Palette"
-msgstr "命令面板"
+msgstr "Palette de commandes"
 
 #: src/ui/components/command/command-dialog.svelte
 msgid "Search for a command to run"
-msgstr "搜索要执行的命令"
+msgstr "Rechercher une commande à exécuter"
 
 #. 0: inner.value.length
 #: src/ui/components/select/select.svelte
 msgid "{0} items selected"
-msgstr "已选择 {0} 项"
+msgstr "{0} éléments sélectionnés"
 
 #: src/ui/components/shortcut/shortcut.svelte
 msgid "⌘ cmd"
@@ -2997,458 +2997,458 @@ msgstr "Alt"
 
 #: src/ui/components/shortcut/shortcut.svelte
 msgid "Shift"
-msgstr "Shift"
+msgstr "Maj"
 
 #: src/ui/components/sidebar/sidebar-rail.svelte
 #: src/ui/components/sidebar/sidebar-rail.svelte
 #: src/ui/components/sidebar/sidebar-trigger.svelte
 msgid "Toggle Sidebar"
-msgstr "切换侧边栏"
+msgstr "Afficher/masquer la barre latérale"
 
 #: src/ui/components/sidebar/sidebar.svelte
 msgid "Sidebar"
-msgstr "侧边栏"
+msgstr "Barre latérale"
 
 #: src/ui/components/sidebar/sidebar.svelte
 msgid "Displays the mobile sidebar."
-msgstr "显示移动端侧边栏。"
+msgstr "Affiche la barre latérale mobile."
 
 #: src/ui/components/table-pagination/table-pagination.svelte
 msgid "Click to enter page number"
-msgstr "点击输入页码"
+msgstr "Cliquer pour saisir le numéro de page"
 
 #. 0: currentPage
 #: src/ui/components/table-pagination/table-pagination.svelte
 msgid "Current page {0}"
-msgstr "当前第 {0} 页"
+msgstr "Page actuelle {0}"
 
 #. 0: currentPage
 #: src/ui/components/table-pagination/table-pagination.svelte
 msgid "Current page {0}. Click to enter page number"
-msgstr "当前第 {0} 页。点击输入页码"
+msgstr "Page actuelle {0}. Cliquer pour saisir le numéro de page"
 
 #: src/ui/components/table-pagination/table-pagination.svelte
 msgid "Previous page"
-msgstr "上一页"
+msgstr "Page précédente"
 
 #: src/ui/components/table-pagination/table-pagination.svelte
 msgid "Go to page"
-msgstr "跳转到页码"
+msgstr "Aller à la page"
 
 #: src/ui/components/table-pagination/table-pagination.svelte
 msgid "Next page"
-msgstr "下一页"
+msgstr "Page suivante"
 
 #. 0: startItem; 1: endItem; 2: totalItems
 #: src/ui/components/table-pagination/table-pagination.svelte
 msgid "{0}–{1} <0>of</0> {2} items"
-msgstr "{0}–{1} <0>/</0> 共 {2} 项"
+msgstr "{0}–{1} <0>sur</0> {2} éléments"
 
 #. 0: option.label
 #. 0: option.value
 #: src/ui/components/toggle-group/toggle-group.svelte
 #: src/ui/components/toggle-group/toggle-group.svelte
 msgid "Select {0}"
-msgstr "选择 {0}"
+msgstr "Sélectionner {0}"
 
 #: src/lib/utils/ui/toast.svelte.ts
 msgid "ToastManager"
-msgstr "通知管理器"
+msgstr "ToastManager"
 
 #: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
 msgid "Name"
-msgstr "名称"
+msgstr "Nom"
 
 #: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 msgid "Items"
-msgstr "项目数"
+msgstr "Éléments"
 
 #: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 msgid "Created"
-msgstr "创建时间"
+msgstr "Créé"
 
 #: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 msgid "Create your first collection to get started"
-msgstr "创建你的第一个合集以开始使用"
+msgstr "Créez votre première collection pour commencer"
 
 #: src/feature/Image/History/Actions/BatchPickerAction.svelte
 msgid "Select items to apply"
-msgstr "选择要应用的项目"
+msgstr "Sélectionner les éléments à appliquer"
 
 #: src/feature/Image/History/Actions/BatchPickerAction.svelte
 msgid "<0/> Apply"
-msgstr "<0/> 应用"
+msgstr "<0/> Appliquer"
 
 #: src/feature/Image/History/Actions/VisibilityAction.svelte
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 msgid "Visibility"
-msgstr "可见性"
+msgstr "Visibilité"
 
 #: src/feature/Image/History/Actions/VisibilityAction.svelte
 msgid "Change Visibility"
-msgstr "修改可见性"
+msgstr "Modifier la visibilité"
 
 #: src/feature/Image/History/Actions/VisibilityAction.svelte
 msgid "Set visibility for selected images"
-msgstr "为所选图片设置可见性"
+msgstr "Définir la visibilité des images sélectionnées"
 
 #: src/feature/Image/History/Actions/VisibilityAction.svelte
 msgid "<0/> Make Public"
-msgstr "<0/> 设为公开"
+msgstr "<0/> Rendre public"
 
 #: src/feature/Image/History/Actions/VisibilityAction.svelte
 msgid "<0/> Make Private"
-msgstr "<0/> 设为私密"
+msgstr "<0/> Rendre privé"
 
 #: src/routes/admin/settings/security/+page.svelte
 msgid "Security Settings | Slink"
-msgstr "安全设置 | Slink"
+msgstr "Paramètres de sécurité | Slink"
 
 #: src/routes/admin/settings/security/+page.svelte
 msgid "Manage access control and user authentication settings"
-msgstr "管理访问控制与用户认证设置"
+msgstr "Gérer le contrôle d'accès et les paramètres d'authentification des utilisateurs"
 
 #: src/routes/admin/settings/storage/+page.svelte
 msgid "Storage Settings | Slink"
-msgstr "存储设置 | Slink"
+msgstr "Paramètres de stockage | Slink"
 
 #: src/routes/admin/settings/storage/+page.svelte
 msgid "Storage"
-msgstr "存储"
+msgstr "Stockage"
 
 #: src/routes/admin/settings/storage/+page.svelte
 msgid "Configure storage providers and cache management"
-msgstr "配置存储提供方与缓存管理"
+msgstr "Configurer les fournisseurs de stockage et la gestion du cache"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Slink offers a <0>public gallery</0>, where people can share their images with others."
-msgstr "Slink 提供了一个<0>公开画廊</0>，用户可以在这里与他人分享图片。"
+msgstr "Slink propose une <0>galerie publique</0>, où les utilisateurs peuvent partager leurs images avec les autres."
 
 #: src/routes/help/faq/+page.svelte
 msgid "Visibility Options"
-msgstr "可见性选项"
+msgstr "Options de visibilité"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Images are shared in the public gallery and visible to all users"
-msgstr "图片会展示在公开画廊中，所有用户可见"
+msgstr "Les images sont partagées dans la galerie publique et visibles par tous les utilisateurs"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Default"
-msgstr "默认"
+msgstr "Par défaut"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Images are not shared in the public gallery and only accessible by the owner"
-msgstr "图片不会展示在公开画廊中，仅拥有者可访问"
+msgstr "Les images ne sont pas partagées dans la galerie publique et sont uniquement accessibles par le propriétaire"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Important Note"
-msgstr "重要说明"
+msgstr "Remarque importante"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Raw images are accessible to anyone with a direct link, regardless of visibility setting."
-msgstr "无论可见性设置如何，持有直链的人都可以访问原图。"
+msgstr "Les images brutes sont accessibles à toute personne disposant d'un lien direct, quelle que soit la visibilité définie."
 
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "SSO Settings | Slink"
-msgstr "SSO 设置 | Slink"
+msgstr "Paramètres SSO | Slink"
 
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "Manage SSO/OIDC identity providers"
-msgstr "管理 SSO/OIDC 身份提供方"
+msgstr "Gérer les fournisseurs d'identité SSO/OIDC"
 
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "Back to Settings"
-msgstr "返回设置"
+msgstr "Retour aux paramètres"
 
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "Add this callback URL to your identity provider's allowed redirect URIs:"
-msgstr "请将此回调地址添加到身份提供方的允许重定向 URI："
+msgstr "Ajoutez cette URL de rappel aux URI de redirection autorisées de votre fournisseur d'identité :"
 
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "Failed to load SSO providers."
-msgstr "加载 SSO 提供方失败。"
+msgstr "Échec du chargement des fournisseurs SSO."
 
 #: src/routes/admin/settings/image/+page.svelte
 msgid "Image Settings | Slink"
-msgstr "图像设置 | Slink"
+msgstr "Paramètres des images | Slink"
 
 #: src/routes/admin/settings/image/+page.svelte
 msgid "Configure image handling and sharing preferences"
-msgstr "配置图片处理与分享偏好"
+msgstr "Configurer les préférences de gestion et de partage des images"
 
 #: src/routes/help/faq/+page.svelte
 msgid "You can easily share your images with others using the direct link provided for each uploaded image."
-msgstr "复制图片直链即可轻松分享给他人。"
+msgstr "Vous pouvez facilement partager vos images avec d'autres personnes en utilisant le lien direct fourni pour chaque image importée."
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Current Sharing Options"
-msgstr "<0/> 当前分享方式"
+msgstr "<0/> Options de partage actuelles"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Direct link sharing with anyone"
-msgstr "<0/> 可向任意对象分享直链"
+msgstr "<0/> Partage par lien direct avec n'importe qui"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Public gallery visibility (optional)"
-msgstr "<0/> 可选公开画廊展示"
+msgstr "<0/> Visibilité dans la galerie publique (facultatif)"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Link accessible to anyone who has it"
-msgstr "<0/> 任何拿到链接的人都可访问"
+msgstr "<0/> Lien accessible à toute personne qui le possède"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Want More Control?"
-msgstr "想要更多控制权？"
+msgstr "Vous souhaitez plus de contrôle ?"
 
 #: src/routes/help/faq/+page.svelte
 msgid "I'm working on advanced sharing features that will give you more control over your image sharing:"
-msgstr "我正在开发更强大的分享功能，让你更灵活地管理图片分享："
+msgstr "Je travaille sur des fonctionnalités de partage avancées qui vous donneront plus de contrôle sur le partage de vos images :"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Expiration dates for shared links"
-msgstr "<0/> 分享链接过期时间"
+msgstr "<0/> Dates d'expiration pour les liens partagés"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Password protection"
-msgstr "<0/> 密码保护"
+msgstr "<0/> Protection par mot de passe"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Private group sharing"
-msgstr "<0/> 私密群组分享"
+msgstr "<0/> Partage en groupe privé"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Support this feature request <1/>"
-msgstr "<0/> 支持该功能需求 <1/>"
+msgstr "<0/> Soutenir cette demande de fonctionnalité <1/>"
 
 #: src/routes/help/faq/+page.svelte
 msgid "I appreciate your help in making Slink better! If you've encountered a bug or have suggestions for improvement, here's how you can help:"
-msgstr "感谢您帮助 Slink 变得更好！如果你遇到 Bug 或有改进建议，可以按以下方式帮助我："
+msgstr "J'apprécie votre aide pour améliorer Slink ! Si vous avez rencontré un bug ou avez des suggestions d'amélioration, voici comment vous pouvez contribuer :"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Before Reporting"
-msgstr "<0/> 反馈前请先确认"
+msgstr "<0/> Avant de signaler"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Check if the issue has already been reported"
-msgstr "检查该问题是否已被报告"
+msgstr "Vérifier si le problème a déjà été signalé"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Try reproducing the issue in a different browser"
-msgstr "尝试在不同浏览器中复现问题"
+msgstr "Essayer de reproduire le problème dans un autre navigateur"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Gather relevant details (browser, steps to reproduce, screenshots)"
-msgstr "收集相关信息（浏览器、复现步骤、截图）"
+msgstr "Rassembler les informations pertinentes (navigateur, étapes de reproduction, captures d'écran)"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Report on GitHub"
-msgstr "在 GitHub 上反馈"
+msgstr "Signaler sur GitHub"
 
 #: src/routes/help/faq/+page.svelte
 msgid "GitHub Issues is my primary platform for tracking bugs and feature requests. Your reports help me prioritize improvements."
-msgstr "GitHub Issues 是我追踪 Bug 和功能需求的主要平台。你的反馈能帮助我更好地确定优先级。"
+msgstr "GitHub Issues est ma plateforme principale pour suivre les bugs et les demandes de fonctionnalités. Vos signalements m'aident à prioriser les améliorations."
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Create New Issue <1/>"
-msgstr "<0/> 创建新 Issue <1/>"
+msgstr "<0/> Créer un nouveau ticket <1/>"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Thank You!"
-msgstr "感谢支持！"
+msgstr "Merci !"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Every report helps me improve Slink for the entire community. I review all issues and prioritize fixes based on impact and frequency."
-msgstr "每一条反馈都在帮助我完善 Slink。我会查看所有问题，并按影响范围和频率优先修复。"
+msgstr "Chaque signalement m'aide à améliorer Slink pour toute la communauté. J'examine tous les problèmes et priorise les corrections en fonction de leur impact et de leur fréquence."
 
 #: src/routes/help/faq/+page.svelte
 msgid "Slink supports the following mime types:"
-msgstr "Slink 支持以下 MIME 类型："
+msgstr "Slink prend en charge les types MIME suivants :"
 
 #: src/routes/help/faq/+page.svelte
 msgid "* Source images are forced to be converted to JPEG format."
-msgstr "* 源图片将被强制转换为 JPEG 格式。"
+msgstr "* Les images sources sont converties de force au format JPEG."
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Account Approved"
-msgstr "账号已审核通过"
+msgstr "Compte approuvé"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Awaiting Approval"
-msgstr "等待审核"
+msgstr "En attente d'approbation"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Review in Progress"
-msgstr "审核进行中"
+msgstr "Examen en cours"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Your account is currently under review"
-msgstr "你的账号正在审核中"
+msgstr "Votre compte est actuellement en cours d'examen"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "What happens next?"
-msgstr "接下来会发生什么？"
+msgstr "Que se passe-t-il ensuite ?"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Your account is being reviewed and will be activated once approved. Please check back later for updates on your account status."
-msgstr "你的账号正在审核，审核通过后将自动激活。请稍后回来查看账号状态更新。"
+msgstr "Votre compte est en cours d'examen et sera activé une fois approuvé. Veuillez revenir ultérieurement pour obtenir des mises à jour sur le statut de votre compte."
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Need help?"
-msgstr "需要帮助？"
+msgstr "Besoin d'aide ?"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Contact the administrator if you have questions about your account or the review process."
-msgstr "如果你对账号或审核流程有疑问，请联系管理员。"
+msgstr "Contactez l'administrateur si vous avez des questions concernant votre compte ou le processus d'examen."
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Your Account Reference"
-msgstr "你的账号参考编号"
+msgstr "Référence de votre compte"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Provide this ID when contacting the administrator"
-msgstr "联系管理员时请提供此编号"
+msgstr "Fournissez cet identifiant lors de votre contact avec l'administrateur"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Explore while you wait"
-msgstr "等待期间先去逛逛"
+msgstr "Explorez pendant que vous attendez"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Browse the platform features"
-msgstr "浏览平台功能"
+msgstr "Parcourir les fonctionnalités de la plateforme"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Welcome Aboard"
-msgstr "欢迎加入"
+msgstr "Bienvenue à bord"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Your account has been approved and activated"
-msgstr "你的账号已通过审核并激活"
+msgstr "Votre compte a été approuvé et activé"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "All Features Unlocked"
-msgstr "全部功能已解锁"
+msgstr "Toutes les fonctionnalités déverrouillées"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Upload, share, and manage your content with full access to all platform features. Start creating and sharing your content."
-msgstr "你现在可以完整使用平台功能来上传、分享和管理内容，开始创作并分享吧。"
+msgstr "Importez, partagez et gérez votre contenu avec un accès complet à toutes les fonctionnalités de la plateforme. Commencez à créer et à partager votre contenu."
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Ready to get started?"
-msgstr "准备开始了吗？"
+msgstr "Prêt à commencer ?"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Sign in to your account to begin using all the platform features or explore the public gallery to see what others are sharing."
-msgstr "登录后即可使用全部功能，也可以先去公开内容区看看大家在分享什么。"
+msgstr "Connectez-vous à votre compte pour commencer à utiliser toutes les fonctionnalités de la plateforme ou explorez la galerie publique pour voir ce que les autres partagent."
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Ready to continue"
-msgstr "准备继续"
+msgstr "Prêt à continuer"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Sign in to access all platform features"
-msgstr "登录以访问全部平台功能"
+msgstr "Connectez-vous pour accéder à toutes les fonctionnalités de la plateforme"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Sign In | Slink"
-msgstr "登录 | Slink"
+msgstr "Connexion | Slink"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Welcome back"
-msgstr "欢迎回来"
+msgstr "Bon retour"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Sign in to continue to Slink"
-msgstr "登录以继续使用 Slink"
+msgstr "Connectez-vous pour continuer sur Slink"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Email or Username"
-msgstr "邮箱或用户名"
+msgstr "E-mail ou nom d'utilisateur"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Enter your email or username"
-msgstr "请输入邮箱或用户名"
+msgstr "Saisissez votre e-mail ou nom d'utilisateur"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Enter your password"
-msgstr "请输入密码"
+msgstr "Saisissez votre mot de passe"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "or continue with"
-msgstr "或继续使用"
+msgstr "ou continuer avec"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Demo Mode"
-msgstr "演示模式"
+msgstr "Mode démo"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Try the application with the test credentials"
-msgstr "使用测试凭据体验应用"
+msgstr "Essayez l'application avec les identifiants de test"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Get In"
-msgstr "立即进入"
+msgstr "Accéder"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Automatically fills credentials and signs you in"
-msgstr "将自动填充凭据并为你登录"
+msgstr "Remplit automatiquement les identifiants et vous connecte"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Need an account?"
-msgstr "还没有账号？"
+msgstr "Vous n'avez pas de compte ?"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Create one to start sharing images"
-msgstr "创建账号以开始分享图片"
+msgstr "Créez-en un pour commencer à partager des images"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Sign Up"
-msgstr "注册"
+msgstr "S'inscrire"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Create Account | Slink"
-msgstr "创建账号 | Slink"
+msgstr "Créer un compte | Slink"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Create Account"
-msgstr "创建账号"
+msgstr "Créer un compte"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Join Slink to start sharing your images"
-msgstr "加入 Slink，开始分享你的图片"
+msgstr "Rejoignez Slink pour commencer à partager vos images"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Choose a username"
-msgstr "设置一个用户名"
+msgstr "Choisissez un nom d'utilisateur"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Email Address"
-msgstr "邮箱地址"
+msgstr "Adresse e-mail"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Enter your email"
-msgstr "请输入邮箱"
+msgstr "Saisissez votre e-mail"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Create a strong password"
-msgstr "创建一个强密码"
+msgstr "Créez un mot de passe robuste"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Confirm your password"
-msgstr "请再次输入密码"
+msgstr "Confirmez votre mot de passe"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Already have an account?"
-msgstr "已有账号？"
+msgstr "Vous avez déjà un compte ?"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Sign in to access your images"
-msgstr "登录以访问你的图片"
+msgstr "Connectez-vous pour accéder à vos images"
 
 #: src/lib/utils/http/useUserAgent.svelte.ts
 msgid "Windows"
@@ -3484,49 +3484,49 @@ msgstr "Safari"
 
 #: src/ui/components/sonner/toasts/DuplicateImageToast.svelte
 msgid "Image Already Exists"
-msgstr "图片已存在"
+msgstr "L'image existe déjà"
 
 #: src/ui/components/sonner/toasts/DuplicateImageToast.svelte
 msgid "Duplicate"
-msgstr "重复"
+msgstr "Doublon"
 
 #: src/ui/components/sonner/toasts/DuplicateImageToast.svelte
 msgid "This <0>image</0> was already uploaded <1/>."
-msgstr "这张<0>图片</0>已上传于 <1/>。"
+msgstr "Cette <0>image</0> a déjà été téléversée <1/>."
 
 #: src/routes/admin/settings/sso/new/+page.svelte
 msgid "Select an identity provider to configure"
-msgstr "选择要配置的身份提供方"
+msgstr "Sélectionnez un fournisseur d'identité à configurer"
 
 #. 0: formState.provider?.name ?? ''
 #: src/routes/admin/settings/sso/new/+page.svelte
 msgid "Configure the {0} provider"
-msgstr "配置 {0} 提供方"
+msgstr "Configurer le fournisseur {0}"
 
 #: src/routes/admin/settings/sso/new/+page.svelte
 msgid "Add SSO Provider | Slink"
-msgstr "添加 SSO 提供方 | Slink"
+msgstr "Ajouter un fournisseur SSO | Slink"
 
 #: src/routes/admin/settings/sso/[id]/edit/+page.svelte
 #: src/routes/admin/settings/sso/new/+page.svelte
 msgid "Back to SSO"
-msgstr "返回 SSO"
+msgstr "Retour au SSO"
 
 #: src/routes/profile/(auth)/sso/callback/+page.svelte
 msgid "Signing in..."
-msgstr "登录中..."
+msgstr "Connexion en cours..."
 
 #: src/routes/admin/settings/sso/[id]/edit/+page.svelte
 msgid "Edit SSO Provider | Slink"
-msgstr "编辑 SSO 提供方 | Slink"
+msgstr "Modifier le fournisseur SSO | Slink"
 
 #: src/routes/admin/settings/sso/[id]/edit/+page.svelte
 msgid "Edit Provider"
-msgstr "编辑提供方"
+msgstr "Modifier le fournisseur"
 
 #: src/routes/admin/settings/sso/[id]/edit/+page.svelte
 msgid "Update the SSO provider configuration"
-msgstr "更新 SSO 提供方配置"
+msgstr "Mettre à jour la configuration du fournisseur SSO"
 
 #: src/routes/preferences/+page.svelte
 msgid "English"
@@ -3538,39 +3538,39 @@ msgstr "Українська"
 
 #: src/feature/Auth/PasswordStrength/PasswordStrength.labels.svelte.ts
 msgid "Weak"
-msgstr "弱"
+msgstr "Faible"
 
 #: src/feature/Auth/PasswordStrength/PasswordStrength.labels.svelte.ts
 msgid "Fair"
-msgstr "一般"
+msgstr "Passable"
 
 #: src/feature/Auth/PasswordStrength/PasswordStrength.labels.svelte.ts
 msgid "Good"
-msgstr "良好"
+msgstr "Bon"
 
 #: src/feature/Auth/PasswordStrength/PasswordStrength.labels.svelte.ts
 msgid "Strong"
-msgstr "强"
+msgstr "Fort"
 
 #: src/feature/Auth/PasswordStrength/PasswordStrength.labels.svelte.ts
 msgid "Very Strong"
-msgstr "很强"
+msgstr "Très fort"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 msgid "History"
-msgstr "历史"
+msgstr "Historique"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 msgid "Administration"
-msgstr "管理"
+msgstr "Administration"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 msgid "System"
-msgstr "系统"
+msgstr "Système"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 msgid "Help & FAQ"
-msgstr "帮助与常见问题"
+msgstr "Aide & FAQ"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 msgid "GitHub"
@@ -3578,493 +3578,495 @@ msgstr "GitHub"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Passwords do not match."
-msgstr "两次输入的密码不一致。"
+msgstr "Les mots de passe ne correspondent pas."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Username cannot be the same as email."
-msgstr "用户名不能与邮箱相同。"
+msgstr "Le nom d'utilisateur ne peut pas être identique à l'adresse e-mail."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Password must be at least {limit} characters long."
-msgstr "密码长度至少为 {limit} 个字符。"
+msgstr "Le mot de passe doit comporter au moins {limit} caractères."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Password must contain at least one number."
-msgstr "密码必须至少包含一个数字。"
+msgstr "Le mot de passe doit contenir au moins un chiffre."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Password must contain at least one lowercase letter."
-msgstr "密码必须至少包含一个小写字母。"
+msgstr "Le mot de passe doit contenir au moins une lettre minuscule."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Password must contain at least one uppercase letter."
-msgstr "密码必须至少包含一个大写字母。"
+msgstr "Le mot de passe doit contenir au moins une lettre majuscule."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Password must contain at least one special character."
-msgstr "密码必须至少包含一个特殊字符。"
+msgstr "Le mot de passe doit contenir au moins un caractère spécial."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Min 6 characters password"
-msgstr "密码至少 6 个字符"
+msgstr "Mot de passe de 6 caractères minimum"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Username must be at least {limit} characters long."
-msgstr "用户名长度至少为 {limit} 个字符。"
+msgstr "Le nom d'utilisateur doit comporter au moins {limit} caractères."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Username must be at most {limit} characters long."
-msgstr "用户名长度最多为 {limit} 个字符。"
+msgstr "Le nom d'utilisateur doit comporter au maximum {limit} caractères."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Username can only contain lowercase letters, numbers, underscores, hyphens, and periods."
-msgstr "用户名只能包含小写字母、数字、下划线、连字符和句点。"
+msgstr "Le nom d'utilisateur ne peut contenir que des lettres minuscules, des chiffres, des tirets bas, des tirets et des points."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Username cannot contain consecutive special characters."
-msgstr "用户名不能包含连续的特殊字符。"
+msgstr "Le nom d'utilisateur ne peut pas contenir des caractères spéciaux consécutifs."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "`{value}` is a reserved username."
-msgstr "`{value}` 是保留用户名。"
+msgstr "`{value}` est un nom d'utilisateur réservé."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid credentials. Please check your username/email and password and try again."
-msgstr "凭据无效。请检查你的用户名/邮箱和密码后重试。"
+msgstr "Identifiants invalides. Veuillez vérifier votre nom d'utilisateur/e-mail et votre mot de passe, puis réessayez."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "You must be logged in to change your password"
-msgstr "你需要登录后才能修改密码"
+msgstr "Vous devez être connecté pour modifier votre mot de passe"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid refresh token"
-msgstr "刷新令牌无效"
+msgstr "Jeton de renouvellement invalide"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "User is restricted"
-msgstr "用户受限"
+msgstr "L'utilisateur est restreint"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "SSO provider is currently unavailable. Please try again later."
-msgstr "SSO 提供方暂不可用，请稍后重试"
+msgstr "Le fournisseur SSO est actuellement indisponible. Veuillez réessayer ultérieurement."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid email address."
-msgstr "邮箱地址无效。"
+msgstr "Adresse e-mail invalide."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Email already registered."
-msgstr "邮箱已被注册。"
+msgstr "Adresse e-mail déjà enregistrée."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "An email address is required for SSO authentication."
-msgstr "SSO 认证需要邮箱地址。"
+msgstr "Une adresse e-mail est requise pour l'authentification SSO."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Email must be verified by the SSO provider before signing in."
-msgstr "登录前，邮箱必须已通过 SSO 提供方验证。"
+msgstr "L'adresse e-mail doit être vérifiée par le fournisseur SSO avant de vous connecter."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid password."
-msgstr "密码无效。"
+msgstr "Mot de passe invalide."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid old password provided."
-msgstr "提供的旧密码无效。"
+msgstr "L'ancien mot de passe fourni est invalide."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid or expired refresh token."
-msgstr "刷新令牌无效或已过期。"
+msgstr "Jeton de renouvellement invalide ou expiré."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid display name"
-msgstr "显示名称无效"
+msgstr "Nom d'affichage invalide"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Display name already exist."
-msgstr "显示名称已存在。"
+msgstr "Ce nom d'affichage existe déjà."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "`{name}` is a reserved display name"
-msgstr "`{name}` 是保留显示名称"
+msgstr "`{name}` est un nom d'affichage réservé"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid username"
-msgstr "用户名无效"
+msgstr "Nom d'utilisateur invalide"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Username already exist."
-msgstr "用户名已存在。"
+msgstr "Ce nom d'utilisateur existe déjà."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid settings configuration."
-msgstr "设置配置无效。"
+msgstr "Configuration des paramètres invalide."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid password min length"
-msgstr "密码最小长度无效"
+msgstr "Longueur minimale du mot de passe invalide"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid image max size"
-msgstr "图片最大值无效"
+msgstr "Taille maximale de l'image invalide"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Your account is pending approval."
-msgstr "你的账号正在等待审核。"
+msgstr "Votre compte est en attente d'approbation."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Sign up is not allowed"
-msgstr "不允许注册"
+msgstr "Les inscriptions ne sont pas autorisées"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid or expired OAuth state"
-msgstr "OAuth state 无效或已过期"
+msgstr "État OAuth invalide ou expiré"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "You cannot grant or revoke roles from yourself. Use CLI instead."
-msgstr "你不能给自己授予或撤销角色。请改用 CLI。"
+msgstr "Vous ne pouvez pas vous attribuer ou révoquer des rôles. Utilisez le CLI à la place."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "You cannot change your own status."
-msgstr "你不能修改自己的状态。"
+msgstr "Vous ne pouvez pas modifier votre propre statut."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid user role"
-msgstr "无效的用户角色"
+msgstr "Rôle utilisateur invalide"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This action is not allowed in demo mode"
-msgstr "演示模式下不允许执行此操作"
+msgstr "Cette action n'est pas autorisée en mode démo"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Access denied"
-msgstr "拒绝访问"
+msgstr "Accès refusé"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Resource not found"
-msgstr "未找到资源"
+msgstr "Ressource introuvable"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "An error occurred"
-msgstr "发生错误"
+msgstr "Une erreur est survenue"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "An error occurred, while processing the request"
-msgstr "处理请求时发生错误"
+msgstr "Une erreur est survenue lors du traitement de la requête"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Validation Error"
-msgstr "验证错误"
+msgstr "Erreur de validation"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Specification Error"
-msgstr "规范错误"
+msgstr "Erreur de spécification"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "You cannot bookmark your own image"
-msgstr "你不能收藏自己的图片"
+msgstr "Vous ne pouvez pas ajouter votre propre image aux favoris"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Cannot bookmark a private image"
-msgstr "不能收藏私密图片"
+msgstr "Impossible d'ajouter une image privée aux favoris"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Comment edit window has expired. Comments can only be edited within 24 hours of creation."
-msgstr "评论编辑时限已过。评论只能在创建后的 24 小时内编辑。"
+msgstr "La fenêtre de modification du commentaire a expiré. Les commentaires ne peuvent être modifiés que dans les 24 heures suivant leur création."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "You can only access your own collections"
-msgstr "你只能访问自己的合集"
+msgstr "Vous ne pouvez accéder qu'à vos propres collections"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "You can only access your own tags"
-msgstr "你只能访问自己的标签"
+msgstr "Vous ne pouvez accéder qu'à vos propres étiquettes"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Cannot move a tag to itself"
-msgstr "不能把标签移动到自己本身"
+msgstr "Impossible de déplacer une étiquette vers elle-même"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Cannot move a tag to one of its descendants"
-msgstr "不能把标签移动到自己的子标签下"
+msgstr "Impossible de déplacer une étiquette vers l'un de ses descendants"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Storage provider is not configured."
-msgstr "存储提供方未配置。"
+msgstr "Le fournisseur de stockage n'est pas configuré."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "SMB configuration is incomplete."
-msgstr "SMB 配置不完整。"
+msgstr "La configuration SMB est incomplète."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Storage usage metrics are disabled for this provider"
-msgstr "此提供方已禁用存储用量指标"
+msgstr "Les métriques d'utilisation du stockage sont désactivées pour ce fournisseur"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "S3 bucket is required."
-msgstr "必须填写 S3 Bucket。"
+msgstr "Le bucket S3 est requis."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "S3 region is required when using AWS."
-msgstr "使用 AWS 时必须填写 S3 区域。"
+msgstr "La région S3 est requise lors de l'utilisation d'AWS."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "S3 Access key is required."
-msgstr "必须填写 S3 Access Key。"
+msgstr "La clé d'accès S3 est requise."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "S3 Secret key is required."
-msgstr "必须填写 S3 Secret Key。"
+msgstr "La clé secrète S3 est requise."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "The expiry date must be in the future."
-msgstr "过期时间必须是未来时间。"
+msgstr "La date d'expiration doit être dans le futur."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "API key not found"
-msgstr "未找到 API Key"
+msgstr "Clé API introuvable"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "API key does not belong to user"
-msgstr "API Key 不属于当前用户"
+msgstr "La clé API n'appartient pas à cet utilisateur"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "API key has expired"
-msgstr "API Key 已过期"
+msgstr "La clé API a expiré"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Validation failed"
-msgstr "验证失败"
+msgstr "La validation a échoué"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "File too large. Please choose a smaller file and try again."
-msgstr "文件过大。请选择更小的文件后重试。"
+msgstr "Fichier trop volumineux. Veuillez choisir un fichier plus petit et réessayez."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Max size cannot be less than 0"
-msgstr "图片最大尺寸不能小于 0"
+msgstr "La taille maximale ne peut pas être inférieure à 0"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Max size cannot be greater than 1000"
-msgstr "图片最大尺寸不能大于 1000"
+msgstr "La taille maximale ne peut pas être supérieure à 1000"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid tag ID format"
-msgstr "标签 ID 格式无效"
+msgstr "Format d'identifiant d'étiquette invalide"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid collection ID format"
-msgstr "合集 ID 格式无效"
+msgstr "Format d'identifiant de collection invalide"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Password length cannot be less than 3"
-msgstr "密码长度不能小于 3"
+msgstr "La longueur du mot de passe ne peut pas être inférieure à 3"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Password length cannot be greater than 64"
-msgstr "密码长度不能大于 64"
+msgstr "La longueur du mot de passe ne peut pas être supérieure à 64"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value should not be blank."
-msgstr "该值不能为空。"
+msgstr "Cette valeur ne doit pas être vide."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value is not a valid email address."
-msgstr "该值不是有效的邮箱地址。"
+msgstr "Cette valeur n'est pas une adresse e-mail valide."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value is not a valid URL."
-msgstr "该值不是有效的 URL。"
+msgstr "Cette valeur n'est pas une URL valide."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value is not a valid UUID."
-msgstr "该值不是有效的 UUID。"
+msgstr "Cette valeur n'est pas un UUID valide."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value should be positive."
-msgstr "该值必须为正数。"
+msgstr "Cette valeur doit être positive."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value is not valid."
-msgstr "该值无效。"
+msgstr "Cette valeur n'est pas valide."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "The value you selected is not a valid choice."
-msgstr "你选择的值不是有效选项。"
+msgstr "La valeur sélectionnée n'est pas un choix valide."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid key format"
-msgstr "Key 格式无效"
+msgstr "Format de clé invalide"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Tag name can only contain letters, numbers, hyphens, and underscores"
-msgstr "标签名仅支持字母、数字、连字符和下划线"
+msgstr "Le nom de l'étiquette ne peut contenir que des lettres, des chiffres, des tirets et des tirets bas"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Display name can only contain letters, numbers, underscores, hyphens, spaces, and periods."
-msgstr "显示名称只能包含字母、数字、下划线、连字符、空格和句点。"
+msgstr "Le nom d'affichage ne peut contenir que des lettres, des chiffres, des tirets bas, des tirets, des espaces et des points."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Display name cannot contain consecutive characters of the same type."
-msgstr "显示名称不能包含连续同类字符。"
+msgstr "Le nom d'affichage ne peut pas contenir des caractères consécutifs du même type."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "`Anonymous` is a reserved display name."
-msgstr "`Anonymous` 是保留显示名称。"
+msgstr "`Anonymous` est un nom d'affichage réservé."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "API key is required. Create one first from your profile page."
-msgstr "必须提供 API Key。请先在个人资料页创建一个。"
+msgstr "Une clé API est requise. Créez-en une d'abord depuis votre page de profil."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "The refresh token is required."
-msgstr "必须提供刷新令牌。"
+msgstr "Le jeton de renouvellement est requis."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid license type."
-msgstr "授权类型无效。"
+msgstr "Type de licence invalide."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid landing page."
-msgstr "页面无效。"
+msgstr "Page d'accueil invalide."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid default visibility."
-msgstr "默认可见性无效。"
+msgstr "Visibilité par défaut invalide."
 
 #: src/feature/Upload/UploadForm.svelte
 msgid "Drop your images here"
-msgstr "将图片拖拽到这里"
+msgstr "Déposez vos images ici"
 
 #: src/feature/Upload/UploadForm.svelte
 msgid "Drop your image here"
-msgstr "将图片拖拽到这里"
+msgstr "Déposez votre image ici"
 
 #: src/feature/Upload/UploadForm.svelte
 msgid "Uploading your images..."
-msgstr "正在上传你的图片..."
+msgstr "Téléversement de vos images..."
 
 #: src/feature/Upload/UploadForm.svelte
 msgid "Uploading your image..."
-msgstr "正在上传你的图片..."
+msgstr "Téléversement de votre image..."
 
 #: src/feature/Collection/CreateCollectionForm.svelte
 msgid "Edit Collection"
-msgstr "编辑合集"
+msgstr "Modifier la collection"
 
 #: src/feature/Text/ExpandableText/ExpandableText.svelte
 msgid "less"
-msgstr "更少"
+msgstr "moins"
 
 #: src/feature/Text/ExpandableText/ExpandableText.svelte
 msgid "more"
-msgstr "更多"
+msgstr "plus"
 
 #: src/feature/Image/History/BulkDeleteConfirmation.svelte
 msgid "Delete Images"
-msgstr "删除图片"
+msgstr "Supprimer les images"
 
 #: src/feature/Image/History/BatchActionConfirmation.svelte
 msgid "# image"
 msgid_plural "# images"
-msgstr[0] "# 张图片"
+msgstr[0] "# image"
+msgstr[1] "# images"
 
 #: src/routes/help/faq/+page.svelte
 msgid "What image formats Slink supports?"
-msgstr "Slink 支持哪些图片格式？"
+msgstr "Quels formats d'image Slink prend-il en charge ?"
 
 #: src/routes/help/faq/+page.svelte
 msgid "What is the visibility of my images?"
-msgstr "我的图片可见性是怎样的？"
+msgstr "Quelle est la visibilité de mes images ?"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Can I share my images with others?"
-msgstr "我可以和别人分享图片吗？"
+msgstr "Puis-je partager mes images avec d'autres personnes ?"
 
 #: src/routes/help/faq/+page.svelte
 msgid "I found an issue, how can I report it?"
-msgstr "我发现了问题，怎么反馈？"
+msgstr "J'ai trouvé un problème, comment puis-je le signaler ?"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "The file is too large ({size}). Allowed maximum size is {limit}."
-msgstr "文件过大（{size}）。允许的最大值为 {limit}。"
+msgstr "Le fichier est trop volumineux ({size}). La taille maximale autorisée est {limit}."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "The mime type {type} is not supported."
-msgstr "不支持 MIME 类型 {type}。"
+msgstr "Le type MIME {type} n'est pas pris en charge."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Display name must be at least {limit} characters long."
-msgstr "显示名称长度至少为 {limit} 个字符。"
+msgstr "Le nom d'affichage doit comporter au moins {limit} caractères."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Display name must be at most {limit} characters long."
-msgstr "显示名称长度最多为 {limit} 个字符。"
+msgstr "Le nom d'affichage doit comporter au maximum {limit} caractères."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value should have {limit} characters or more."
-msgstr "该值长度应不少于 {limit} 个字符。"
+msgstr "Cette valeur doit comporter {limit} caractères ou plus."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value is too long. It should have {limit} characters or less."
-msgstr "该值过长。长度应不超过 {limit} 个字符。"
+msgstr "Cette valeur est trop longue. Elle doit comporter {limit} caractères ou moins."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value should be {limit} or less."
-msgstr "该值应小于或等于 {limit}。"
+msgstr "Cette valeur doit être {limit} ou moins."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value should be between {min} and {max}."
-msgstr "该值应介于 {min} 和 {max} 之间。"
+msgstr "Cette valeur doit être comprise entre {min} et {max}."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value should be of type {type}."
-msgstr "该值的类型应为 {type}。"
+msgstr "Cette valeur doit être de type {type}."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This collection should contain {limit} elements or less."
-msgstr "该集合包含的元素数量应不超过 {limit} 个。"
+msgstr "Cette collection doit contenir {limit} éléments ou moins."
 
 #: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
 msgid "Grid"
-msgstr "网格"
+msgstr "Grille"
 
 #: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
 msgid "List"
-msgstr "列表"
+msgstr "Liste"
 
 #: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
 msgid "Table"
-msgstr "表格"
+msgstr "Tableau"
 
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
 msgid "Children"
-msgstr "子项"
+msgstr "Sous-éléments"
 
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 msgid "File Name"
-msgstr "文件名"
+msgstr "Nom du fichier"
 
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 msgid "Type"
-msgstr "类型"
+msgstr "Type"
 
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 msgid "Dimensions"
-msgstr "尺寸"
+msgstr "Dimensions"
 
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 msgid "Size"
-msgstr "大小"
+msgstr "Taille"
 
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 msgid "Tags / Collections"
-msgstr "标签 / 合集"
+msgstr "Étiquettes / Collections"
 
 #: src/feature/Image/History/BulkDeleteConfirmation.svelte
 msgid "Delete # image"
 msgid_plural "Delete # images"
-msgstr[0] "删除 # 张图片"
+msgstr[0] "Supprimer # image"
+msgstr[1] "Supprimer # images"
 
 #: src/routes/preferences/+page.svelte
 msgid "Deutsch"
@@ -4072,7 +4074,7 @@ msgstr "Deutsch"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Tag \"{name}\" already exists"
-msgstr "标签“{name}”已存在"
+msgstr "L'étiquette \"{name}\" existe déjà"
 
 #: src/routes/preferences/+page.svelte
 msgid "中文"
@@ -4080,55 +4082,55 @@ msgstr "中文"
 
 #: src/routes/preferences/+page.svelte
 msgid "Language"
-msgstr "语言"
+msgstr "Langue"
 
 #: src/routes/preferences/+page.svelte
 msgid "Display Language"
-msgstr "显示语言"
+msgstr "Langue d'affichage"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Tag \"{name}\" created successfully"
-msgstr "标签 \"{name}\" 创建成功"
+msgstr "L'étiquette \"{name}\" a été créée avec succès"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Tag \"{name}\" moved successfully"
-msgstr "标签 \"{name}\" 移动成功"
+msgstr "L'étiquette \"{name}\" a été déplacée avec succès"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Tag \"{name}\" deleted successfully"
-msgstr "标签 \"{name}\" 删除成功"
+msgstr "L'étiquette \"{name}\" a été supprimée avec succès"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to download ShareX config"
-msgstr "下载 ShareX 配置失败"
+msgstr "Échec du téléchargement de la configuration ShareX"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Copied to clipboard"
-msgstr "已复制到剪贴板"
+msgstr "Copié dans le presse-papiers"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Something went wrong"
-msgstr "出了点问题"
+msgstr "Une erreur est survenue"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to delete images. Please try again later."
-msgstr "删除图片失败。请稍后重试。"
+msgstr "Échec de la suppression des images. Veuillez réessayer ultérieurement."
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Successfully deleted {count} from history"
-msgstr "成功从历史记录中删除了 {count} 项"
+msgstr "{count} supprimé(s) de l'historique avec succès"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to delete {count}"
-msgstr "删除 {count} 项失败"
+msgstr "Échec de la suppression de {count}"
 
 #: src/routes/preferences/+page.svelte
 msgid "Choose your preferred language for the interface"
-msgstr "选择您首选的界面语言"
+msgstr "Choisissez votre langue préférée pour l'interface"
 
 #: src/feature/Search/SearchBar.svelte
 msgid "Hashtag"
-msgstr "标签"
+msgstr "Hashtag"
 
 #: src/routes/preferences/+page.svelte
 msgid "Español"
