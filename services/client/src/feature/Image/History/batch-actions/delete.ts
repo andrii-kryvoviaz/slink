@@ -2,6 +2,7 @@ import { ApiClient } from '@slink/api';
 
 import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
 
+import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 import { pluralize } from '@slink/lib/utils/string/pluralize';
 
 import type { BatchContext } from '../BatchContext.svelte';
@@ -16,7 +17,7 @@ export async function batchDelete(
   );
 
   if (!result) {
-    toast.error('Failed to delete images. Please try again later.');
+    toast.error(messages.image.failedToDeleteBatch);
     return;
   }
 
@@ -24,7 +25,9 @@ export async function batchDelete(
     result.deleted.forEach((id) => ctx.historyFeed.removeItem(id));
     ctx.selection.removeIds(result.deleted);
     toast.success(
-      `Successfully deleted ${pluralize(result.deleted.length, 'image')} from history`,
+      messages.image.deletedFromHistory(
+        pluralize(result.deleted.length, 'image'),
+      ),
     );
 
     if (!ctx.historyFeed.hasItems && ctx.historyFeed.hasMore) {
@@ -34,7 +37,11 @@ export async function batchDelete(
   }
 
   if (result.failed.length > 0) {
-    toast.error(`Failed to delete ${pluralize(result.failed.length, 'image')}`);
+    toast.error(
+      messages.image.failedToDeleteCount(
+        pluralize(result.failed.length, 'image'),
+      ),
+    );
   }
 
   ctx.exitSelection();

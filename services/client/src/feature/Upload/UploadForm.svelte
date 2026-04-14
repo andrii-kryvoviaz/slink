@@ -9,6 +9,8 @@
   import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
   import Icon from '@iconify/svelte';
 
+  import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
+
   interface Props {
     disabled?: boolean;
     processing?: boolean;
@@ -28,12 +30,12 @@
 
   const processFiles = (fileList: FileList | null | undefined) => {
     if (!fileList) {
-      toast.warning('No files selected');
+      toast.warning(messages.upload.noFilesSelected);
       return;
     }
 
     if (!allowMultiple && fileList.length > 1) {
-      toast.warning('Only one file allowed at a time');
+      toast.warning(messages.upload.onlyOneFile);
       return;
     }
 
@@ -174,7 +176,7 @@
           <h2
             class="text-xl sm:text-2xl font-semibold bg-gradient-to-r from-slate-700 to-slate-900 dark:from-slate-200 dark:to-slate-400 bg-clip-text text-transparent"
           >
-            Drop your {allowMultiple ? 'images' : 'image'} here
+            {#if allowMultiple}Drop your images here{:else}Drop your image here{/if}
           </h2>
           <p
             class="text-slate-500 dark:text-slate-400 text-base sm:text-lg font-light max-w-xs sm:max-w-md mx-auto"
@@ -265,7 +267,8 @@
             Almost there
           </h3>
           <p class="text-slate-500 dark:text-slate-400 text-lg">
-            Uploading your {allowMultiple ? 'images' : 'image'}...
+            {#if allowMultiple}Uploading your images...{:else}Uploading your
+              image...{/if}
           </p>
         </div>
       </div>

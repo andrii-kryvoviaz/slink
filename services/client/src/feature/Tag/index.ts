@@ -8,7 +8,7 @@ export * from './TagBadge/TagBadge.theme';
 export { default as TagActionsCell } from './TagDataTable/TagActionsCell.svelte';
 export { default as TagCountCell } from './TagDataTable/TagCountCell.svelte';
 export { default as TagNameCell } from './TagDataTable/TagNameCell.svelte';
-export * from './TagDataTable/columns';
+export * from './TagDataTable/columns.svelte';
 export * from './TagDataTable/types';
 export { default as TagDeletePopover } from './TagDeleteConfirmation/TagDeletePopover.svelte';
 export { default as TagDepthDots } from './TagDepthDots/TagDepthDots.svelte';

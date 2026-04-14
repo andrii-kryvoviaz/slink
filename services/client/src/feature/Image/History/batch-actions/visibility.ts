@@ -2,6 +2,8 @@ import { ApiClient } from '@slink/api';
 
 import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
 
+import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
+
 import type { BatchContext } from '../BatchContext.svelte';
 
 export async function updateVisibility(
@@ -13,7 +15,7 @@ export async function updateVisibility(
     ApiClient.image.batch(selectedIds, { isPublic }),
   );
   if (!result) {
-    toast.error('Failed to update visibility. Please try again later.');
+    toast.error(messages.image.failedToUpdateVisibility);
     return;
   }
   if (!ctx.notifyBatchResult(result)) return;

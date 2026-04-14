@@ -19,6 +19,7 @@
   import type { CollectionResponse } from '@slink/api/Response';
 
   import { useCollectionListFeed } from '@slink/lib/state/CollectionListFeed.svelte';
+  import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
   interface Props {
     collection: CollectionResponse;
@@ -53,7 +54,7 @@
     await deleteCollection(collection.id, deleteImages);
 
     if ($deleteError) {
-      toast.error('Failed to delete collection. Please try again later.');
+      toast.error(messages.collection.failedToDelete);
       return;
     }
 
@@ -81,7 +82,7 @@
 
       await collectionsFeed.updateCollection(collection.id, data);
       editModalOpen = false;
-      toast.success('Collection updated successfully');
+      toast.success(messages.collection.updated);
     } catch (error) {
       if (error instanceof ValidationException && error.violations) {
         editFormErrors = error.violations.reduce<Record<string, string>>(
@@ -92,7 +93,7 @@
           {},
         );
       } else {
-        toast.error('Failed to update collection');
+        toast.error(messages.collection.failedToUpdate);
       }
     } finally {
       isEditing = false;

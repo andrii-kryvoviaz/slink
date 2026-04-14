@@ -15,6 +15,7 @@ import type {
 } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
 import { useState } from '@slink/lib/state/core/ContextAwareState';
 import { extractErrorMessage } from '@slink/lib/utils/error/extractErrorMessage';
+import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
 import { toast } from '@slink/utils/ui/toast-sonner.svelte';
 
@@ -161,7 +162,7 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
   async createTag(data: CreateTagRequest): Promise<string> {
     try {
       const response = await ApiClient.tag.create(data);
-      toast.success(`Tag "${data.name}" created successfully`);
+      toast.success(messages.tag.created(data.name));
       await this.refetch();
       return response.id;
     } catch (error: any) {
@@ -180,7 +181,7 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
       const tagName = tag?.name || 'tag';
 
       await ApiClient.tag.moveTag({ id, newParentId });
-      toast.success(`Tag "${tagName}" moved successfully`);
+      toast.success(messages.tag.moved(tagName));
       await this.refetch();
     } catch (error: any) {
       const message = extractErrorMessage(
@@ -198,7 +199,7 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
       const tagName = tag?.name || 'tag';
 
       await ApiClient.tag.deleteTag(id);
-      toast.success(`Tag "${tagName}" deleted successfully`);
+      toast.success(messages.tag.deleted(tagName));
       await this.refetch();
     } catch (error: any) {
       const message = extractErrorMessage(

@@ -11,7 +11,7 @@ export function createTagColumns(options: {
   return [
     {
       accessorKey: 'name',
-      header: 'Name',
+      header: () => 'Name',
       meta: {
         className: 'sm:w-[300px]',
       },
@@ -22,7 +22,7 @@ export function createTagColumns(options: {
     },
     {
       accessorKey: 'imageCount',
-      header: 'Images',
+      header: () => 'Images',
       meta: {
         className: 'text-center',
       },
@@ -37,7 +37,7 @@ export function createTagColumns(options: {
     },
     {
       accessorKey: 'children',
-      header: 'Children',
+      header: () => 'Children',
       meta: {
         className: 'text-center',
       },
@@ -53,7 +53,7 @@ export function createTagColumns(options: {
     },
     {
       id: 'actions',
-      header: 'Actions',
+      header: () => 'Actions',
       meta: {
         className: 'text-right',
       },

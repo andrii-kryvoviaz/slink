@@ -24,6 +24,7 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
     'license.default': null,
     'navigation.landingPage': null,
     'image.defaultVisibility': null,
+    'display.language': null,
   };
 
   let licenses: {
@@ -59,6 +60,7 @@ export const actions: Actions = {
       syncLicenseToImages,
       defaultLandingPage,
       defaultVisibility,
+      displayLanguage,
     } = await formData(request);
 
     try {
@@ -67,6 +69,7 @@ export const actions: Actions = {
         syncLicenseToImages: syncLicenseToImages === 'true',
         defaultLandingPage: defaultLandingPage || null,
         defaultVisibility: defaultVisibility || null,
+        displayLanguage: displayLanguage || null,
       });
     } catch (e) {
       if (e instanceof HttpException) {

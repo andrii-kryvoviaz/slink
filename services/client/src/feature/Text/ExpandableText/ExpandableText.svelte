@@ -26,7 +26,8 @@
       <button
         type="button"
         class="text-current opacity-0 group-hover:opacity-50 hover:opacity-100! cursor-pointer transition-opacity"
-        onclick={toggle}>{isExpanded ? 'less' : 'more'}</button
+        onclick={toggle}
+        >{#if isExpanded}less{:else}more{/if}</button
       >
     {/if}
   </div>

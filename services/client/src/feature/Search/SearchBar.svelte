@@ -28,15 +28,17 @@
   }: Props = $props();
 
   const searchOptions = [
-    { value: 'user', label: 'Search by User', icon: 'ph:user' },
+    { value: 'user', label: 'Search by User', short: 'User', icon: 'ph:user' },
     {
       value: 'description',
       label: 'Search by Description',
+      short: 'Description',
       icon: 'ph:text-align-left',
     },
     {
       value: 'hashtag',
       label: 'Search by Hashtag',
+      short: 'Hashtag',
       icon: 'ph:hash',
     },
   ];
@@ -96,9 +98,7 @@
   }
 
   let currentOption = $derived(
-    searchOptions
-      .find((opt) => opt.value === searchBy)
-      ?.label.replace('Search by ', '') || 'User',
+    searchOptions.find((opt) => opt.value === searchBy)?.short || 'User',
   );
 
   const placeholderMap = {
@@ -116,7 +116,7 @@
       'search-bar inline-flex items-center px-3 py-1.5 text-xs font-medium relative',
       'bg-white/80 border border-gray-200/60 text-gray-600 shadow-sm',
       'hover:text-gray-900 hover:bg-white hover:border-gray-300 hover:shadow-lg hover:shadow-gray-200/40',
-      'transition-all duration-200 rounded-full min-w-40 sm:min-w-50 max-w-50 sm:max-w-70',
+      'transition-all duration-200 rounded-full min-w-40 sm:min-w-50 max-w-60 sm:max-w-80',
       'dark:bg-gray-900/80 dark:border-gray-700/60 dark:text-gray-400 dark:shadow-black/10',
       'dark:hover:text-gray-100 dark:hover:bg-gray-800 dark:hover:border-gray-600 dark:hover:shadow-gray-900/40',
       dropdownOpen && 'ring-2 ring-blue-500/20 border-blue-300/60 shadow-md',

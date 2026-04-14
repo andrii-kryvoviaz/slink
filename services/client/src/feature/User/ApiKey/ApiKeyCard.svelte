@@ -2,7 +2,7 @@
   import { ApiKeyDeletePopover } from '@slink/feature/User';
   import { Overlay } from '@slink/ui/components/popover';
 
-  import { formatDate, formatExpiryDate } from '$lib/utils/date';
+  import { formatDate, formatExpiryDate } from '$lib/utils/date.svelte';
   import Icon from '@iconify/svelte';
   import { readable } from 'svelte/store';
   import { fade } from 'svelte/transition';

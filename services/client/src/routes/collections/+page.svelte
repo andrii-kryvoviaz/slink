@@ -4,7 +4,7 @@
     CollectionGridView,
     CreateCollectionDialog,
   } from '@slink/feature/Collection';
-  import { collectionColumns } from '@slink/feature/Collection/CollectionViews/CollectionDataTable/columns';
+  import { createCollectionColumns } from '@slink/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte';
   import {
     CollectionSkeleton,
     EmptyState,
@@ -83,7 +83,7 @@
           toolbar: true,
         },
         table: {
-          columns: collectionColumns,
+          columns: createCollectionColumns(),
         },
       }}
     >

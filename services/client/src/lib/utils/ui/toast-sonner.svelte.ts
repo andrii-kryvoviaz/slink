@@ -41,17 +41,13 @@ function showToast(
 }
 
 export const toast = {
-  success: (message: string, duration?: number) =>
-    showToast(SuccessToast, { message }, { duration }),
+  success: (message: string) => showToast(SuccessToast, { message }),
 
-  error: (message: string, duration?: number) =>
-    showToast(ErrorToast, { message }, { duration }),
+  error: (message: string) => showToast(ErrorToast, { message }),
 
-  warning: (message: string, duration?: number) =>
-    showToast(WarningToast, { message }, { duration }),
+  warning: (message: string) => showToast(WarningToast, { message }),
 
-  info: (message: string, duration?: number) =>
-    showToast(InfoToast, { message }, { duration }),
+  info: (message: string) => showToast(InfoToast, { message }),
 
   component: <Props extends Record<string, any> = {}>(
     component: Component<Props>,
@@ -61,8 +57,8 @@ export const toast = {
     return showToast(component, props ?? {}, rest);
   },
 
-  loading: (message: string, duration?: number) => {
-    return sonner.loading(message, { duration });
+  loading: (message: string) => {
+    return sonner.loading(message);
   },
 
   promise: sonner.promise,

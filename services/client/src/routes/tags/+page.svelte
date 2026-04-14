@@ -2,7 +2,7 @@
   import { EmptyState } from '@slink/feature/Layout';
   import { CreateTagDialog } from '@slink/feature/Tag';
   import { TagsSkeleton } from '@slink/feature/Tag';
-  import { createTagColumns } from '@slink/feature/Tag/TagDataTable/columns';
+  import { createTagColumns } from '@slink/feature/Tag/TagDataTable/columns.svelte';
   import { Subtitle, Title } from '@slink/feature/Text';
   import { Button } from '@slink/ui/components/button';
   import { DataTable, DataTableToolbar } from '@slink/ui/components/data-table';

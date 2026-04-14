@@ -7,6 +7,7 @@
   } from '@slink/ui/components/dialog/modal.theme';
   import type { Snippet } from 'svelte';
 
+  import { plural } from '$lib/utils/i18n';
   import Icon from '@iconify/svelte';
 
   import { className } from '@slink/utils/ui/className';
@@ -62,8 +63,7 @@
     </div>
     <div>
       <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
-        {@render title()} ({count}
-        {count === 1 ? 'image' : 'images'})
+        {@render title()} ({plural(count, ['# image', '# images'])})
       </h3>
       {#if description}
         <p class="text-xs text-gray-500 dark:text-gray-400">

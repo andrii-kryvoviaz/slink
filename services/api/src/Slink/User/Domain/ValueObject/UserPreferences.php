@@ -7,6 +7,7 @@ namespace Slink\User\Domain\ValueObject;
 use Slink\Image\Domain\Enum\License;
 use Slink\Shared\Domain\ValueObject\AbstractCompoundValueObject;
 use Slink\User\Domain\Enum\DefaultVisibility;
+use Slink\User\Domain\Enum\DisplayLanguage;
 use Slink\User\Domain\Enum\LandingPage;
 
 final readonly class UserPreferences extends AbstractCompoundValueObject {
@@ -17,11 +18,12 @@ final readonly class UserPreferences extends AbstractCompoundValueObject {
     private array $data = [],
   ) {}
 
-  public static function create(?License $defaultLicense = null, ?LandingPage $defaultLandingPage = null, ?DefaultVisibility $defaultVisibility = null): self {
+  public static function create(?License $defaultLicense = null, ?LandingPage $defaultLandingPage = null, ?DefaultVisibility $defaultVisibility = null, ?DisplayLanguage $displayLanguage = null): self {
     return new self([
       'license.default' => $defaultLicense?->value,
       'navigation.landingPage' => $defaultLandingPage?->value,
       'image.defaultVisibility' => $defaultVisibility?->value,
+      'display.language' => $displayLanguage?->value,
     ]);
   }
 
@@ -57,6 +59,16 @@ final readonly class UserPreferences extends AbstractCompoundValueObject {
 
   public function withDefaultVisibility(?DefaultVisibility $visibility): self {
     return new self([...$this->data, 'image.defaultVisibility' => $visibility?->value]);
+  }
+
+  public function getDisplayLanguage(): ?DisplayLanguage {
+    return isset($this->data['display.language'])
+      ? DisplayLanguage::tryFrom($this->data['display.language'])
+      : null;
+  }
+
+  public function withDisplayLanguage(?DisplayLanguage $language): self {
+    return new self([...$this->data, 'display.language' => $language?->value]);
   }
 
   /**

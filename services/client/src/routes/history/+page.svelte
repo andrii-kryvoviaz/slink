@@ -16,7 +16,7 @@
     createBatchCollectionPickerState,
     createBatchTagPickerState,
   } from '@slink/feature/Image';
-  import { createHistoryColumns } from '@slink/feature/Image/History/HistoryDataTable/columns';
+  import { createHistoryColumns } from '@slink/feature/Image/History/HistoryDataTable/columns.svelte';
   import {
     EmptyState,
     HistorySkeleton,

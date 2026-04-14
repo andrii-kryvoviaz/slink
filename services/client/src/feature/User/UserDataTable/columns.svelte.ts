@@ -22,7 +22,7 @@ export function createUserColumns(
   return [
     {
       accessorKey: 'displayName',
-      header: 'User',
+      header: () => 'User',
       cell: ({ row }) => {
         const user = row.original;
         return renderComponent(UserCell, { user });
@@ -30,7 +30,7 @@ export function createUserColumns(
     },
     {
       accessorKey: 'username',
-      header: 'Username',
+      header: () => 'Username',
       cell: ({ row }) => {
         const username = row.getValue('username') as string;
         return renderComponent(UserUsernameCell, { username });
@@ -38,7 +38,7 @@ export function createUserColumns(
     },
     {
       accessorKey: 'status',
-      header: 'Status',
+      header: () => 'Status',
       meta: {
         className: 'min-w-[120px]',
       },
@@ -50,7 +50,7 @@ export function createUserColumns(
     },
     {
       accessorKey: 'roles',
-      header: 'Roles',
+      header: () => 'Roles',
       meta: {
         className: 'min-w-[100px]',
       },
@@ -61,7 +61,7 @@ export function createUserColumns(
     },
     {
       id: 'actions',
-      header: 'Actions',
+      header: () => 'Actions',
       meta: {
         className: 'text-right',
       },

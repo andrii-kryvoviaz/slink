@@ -1,0 +1,4149 @@
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=2; plural=n == 1 ? 0 : 1;\n"
+"Source-Language: en\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/routes/info/[id]/+page.server.ts
+msgid "Take me to my Uploads"
+msgstr "Zu meinen Uploads"
+
+#: src/routes/info/[id]/+page.server.ts
+msgid "An error occurred. Please try again later."
+msgstr "Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut."
+
+#: src/routes/i/[code]/+page.server.ts
+msgid "Location"
+msgstr "Standort"
+
+#: src/routes/i/[code]/+page.server.ts
+msgid "User-Agent"
+msgstr "User-Agent"
+
+#: src/routes/profile/(auth)/signup/+page.server.ts
+msgid "Something went wrong. Please try again later."
+msgstr "Etwas ist schiefgelaufen. Bitte versuchen Sie es später erneut."
+
+#: src/routes/profile/(auth)/sso/callback/+page.server.ts
+msgid "Missing authorization parameters"
+msgstr "Fehlende Autorisierungsparameter"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+#: src/routes/profile/(auth)/sso/callback/+page.server.ts
+#: src/routes/profile/(auth)/sso/login/[provider]/+page.server.ts
+msgid "An unexpected error occurred"
+msgstr "Ein unerwarteter Fehler ist aufgetreten"
+
+#: src/routes/admin/settings/sso/[id]/edit/+page.server.ts
+msgid "Provider not found"
+msgstr "Anbieter nicht gefunden"
+
+#: src/routes/+error.svelte
+msgid "Take me Home"
+msgstr "Zur Startseite"
+
+#: src/feature/Analytics/ImageAnalytics.svelte
+#: src/feature/Analytics/ImageAnalytics.svelte
+msgid "Uploads"
+msgstr "Uploads"
+
+#: src/feature/Analytics/LatestUsers.svelte
+msgid "Latest Users"
+msgstr "Neueste Benutzer"
+
+#: src/feature/Analytics/LatestUsers.svelte
+msgid "Recently joined members"
+msgstr "Kürzlich beigetretene Mitglieder"
+
+#: src/feature/Analytics/LatestUsers.svelte
+#: src/ui/components/combobox/combobox.svelte
+#: src/ui/components/picker/picker-list.svelte
+#: src/ui/components/picker/picker-search.svelte
+msgid "Search..."
+msgstr "Suchen..."
+
+#: src/feature/Analytics/LatestUsers.svelte
+msgid "Search users"
+msgstr "Benutzer suchen"
+
+#: src/feature/Analytics/LatestUsers.svelte
+#: src/feature/Search/SearchBar.svelte
+msgid "Clear search"
+msgstr "Suche zurücksetzen"
+
+#: src/feature/Analytics/LatestUsers.svelte
+#: src/feature/User/UserDataTable/UserDataTable.svelte
+#: src/routes/admin/user/+page.svelte
+msgid "No users found"
+msgstr "Keine Benutzer gefunden"
+
+#: src/feature/Analytics/LatestUsers.svelte
+msgid "Try adjusting your search terms"
+msgstr "Passen Sie Ihre Suchbegriffe an"
+
+#: src/feature/Analytics/LatestUsers.svelte
+msgid "Users will appear here once they join"
+msgstr "Benutzer erscheinen hier, sobald sie beitreten"
+
+#: src/feature/Analytics/LatestUsers.svelte
+msgid "View all users"
+msgstr "Alle Benutzer anzeigen"
+
+#. 0: $response.meta.total
+#: src/feature/Analytics/LatestUsers.svelte
+msgid "{0} total"
+msgstr "{0} insgesamt"
+
+#: src/feature/Analytics/UserAnalytics.svelte
+msgid "No Data"
+msgstr "Keine Daten"
+
+#: src/feature/Analytics/UserAnalytics.svelte
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/routes/admin/user/+page.svelte
+msgid "Users"
+msgstr "Benutzer"
+
+#: src/feature/Collection/CreateCollectionForm.svelte
+#: src/feature/Collection/CreateCollectionModal.svelte
+#: src/feature/Comment/CommentInput.svelte
+#: src/feature/Image/History/useHistoryItemActions.svelte.ts
+#: src/feature/Image/SizePicker/ImageSizePicker.svelte
+#: src/feature/Navigation/TabMenu/TabMenuItem.svelte
+#: src/feature/Notification/NotificationListItem.svelte
+#: src/feature/Search/SearchBar.svelte
+#: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
+#: src/feature/Tag/TagDataTable/TagCountCell.svelte
+#: src/feature/Tag/TagInput/TagInput.svelte
+#: src/feature/Tag/TagSelector/TagSelector.svelte
+#: src/feature/Text/EditableText/EditableText.svelte
+#: src/feature/Text/EditableText/EditableText.svelte
+#: src/feature/Text/EditableText/EditableText.svelte
+#: src/feature/Text/HashtagText/HashtagText.svelte
+#: src/feature/Upload/Dropzone/Dropzone.svelte
+#: src/routes/collection/[id]/+page.svelte
+#: src/routes/explore/+page.svelte
+#: src/ui/components/picker/picker-list.svelte
+msgid "Enter"
+msgstr "Enter"
+
+#: src/feature/Comment/CommentInput.svelte
+#: src/feature/Image/PostViewer/PostViewer.svelte
+#: src/feature/Image/SizePicker/ImageSizePicker.svelte
+#: src/feature/Image/TagManager/ImageTagManager.svelte
+#: src/feature/Search/SearchBar.svelte
+#: src/feature/Tag/TagInput/TagInput.svelte
+#: src/feature/Text/EditableText/EditableText.svelte
+#: src/ui/components/table-pagination/table-pagination.svelte
+msgid "Escape"
+msgstr "Escape"
+
+#: src/feature/Comment/CommentInput.svelte
+msgid "Editing reply to <0/>"
+msgstr "Antwort an <0/> bearbeiten"
+
+#: src/feature/Comment/CommentInput.svelte
+msgid "Replying to <0/>"
+msgstr "Antwort an <0/>"
+
+#: src/feature/Comment/CommentInput.svelte
+msgid "Edit your comment..."
+msgstr "Kommentar bearbeiten..."
+
+#. 0: activeRef.author.displayName
+#: src/feature/Comment/CommentInput.svelte
+msgid "Reply to @{0}..."
+msgstr "Antwort an @{0}..."
+
+#: src/feature/Comment/CommentInput.svelte
+msgid "Write a comment..."
+msgstr "Kommentar schreiben..."
+
+#: src/feature/Comment/CommentInput.svelte
+msgid "Use **bold** and *italic* for formatting • ⌘+Enter to submit"
+msgstr "**Fett** und *kursiv* zur Formatierung • ⌘+Enter zum Absenden"
+
+#: src/feature/Comment/CommentDeleteConfirmation.svelte
+msgid "Delete Comment"
+msgstr "Kommentar löschen"
+
+#: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
+#: src/feature/Comment/CommentDeleteConfirmation.svelte
+#: src/feature/Image/History/Actions/DeleteAction.svelte
+#: src/feature/Image/History/BulkDeleteConfirmation.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
+#: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
+#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
+#: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "This action cannot be undone"
+msgstr "Diese Aktion kann nicht rückgängig gemacht werden"
+
+#: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
+#: src/feature/Collection/RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte
+#: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
+#: src/feature/Comment/CommentDeleteConfirmation.svelte
+#: src/feature/Image/History/Actions/BatchPickerAction.svelte
+#: src/feature/Image/History/BatchActionConfirmation.svelte
+#: src/feature/Image/History/BatchActionConfirmation.svelte
+#: src/feature/Image/History/BulkDeleteConfirmation.svelte
+#: src/feature/Image/History/SelectionActionBar.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
+#: src/feature/Settings/CacheSettings/CacheSettings.svelte
+#: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+#: src/feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte
+#: src/feature/Settings/SettingsPane/SettingItem.svelte
+#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
+#: src/feature/Text/EditableText/EditableText.svelte
+#: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+#: src/ui/components/confirmation-dialog/confirmation-dialog.svelte
+#: src/ui/components/dialog/modal-footer.svelte
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
+#: src/feature/Comment/CommentDeleteConfirmation.svelte
+#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
+msgid "<0/> Delete"
+msgstr "<0/> Löschen"
+
+#: src/feature/Comment/CommentListItem.svelte
+msgid "(edited)"
+msgstr "(bearbeitet)"
+
+#: src/feature/Comment/CommentListItem.svelte
+msgid "Reply"
+msgstr "Antworten"
+
+#: src/feature/Collection/CollectionActionsDropdown/CollectionActionsDropdown.svelte
+#: src/feature/Comment/CommentListItem.svelte
+#: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: src/feature/Collection/CollectionActionsDropdown/CollectionActionsDropdown.svelte
+#: src/feature/Comment/CommentListItem.svelte
+#: src/feature/Image/AdminImageDropdown/AdminImageDropdown.svelte
+#: src/feature/Image/History/Actions/DeleteAction.svelte
+#: src/feature/Image/History/Actions/DeleteAction.svelte
+#: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
+#: src/feature/Tag/TagDataTable/TagActionsCell.svelte
+#: src/feature/User/UserActions/UserActions.svelte
+msgid "Delete"
+msgstr "Löschen"
+
+#: src/feature/Comment/CommentListItem.svelte
+msgid "[deleted]"
+msgstr "[gelöscht]"
+
+#: src/routes/admin/settings/sso/+page.svelte
+#: src/routes/collections/+page.svelte
+#: src/routes/integrations/+page.svelte
+#: src/routes/tags/+page.svelte
+msgid "Create"
+msgstr "Erstellen"
+
+#: src/feature/Collection/CreateCollectionForm.svelte
+msgid "Update your collection details"
+msgstr "Sammlungsdetails aktualisieren"
+
+#: src/feature/Collection/CreateCollectionForm.svelte
+#: src/feature/Collection/CreateCollectionModal.svelte
+msgid "Organize your images into a shareable collection"
+msgstr "Organisieren Sie Ihre Bilder in einer teilbaren Sammlung"
+
+#: src/feature/Collection/CreateCollectionForm.svelte
+#: src/feature/Collection/CreateCollectionModal.svelte
+msgid "Collection Name"
+msgstr "Sammlungsname"
+
+#: src/feature/Collection/CreateCollectionForm.svelte
+#: src/feature/Collection/CreateCollectionModal.svelte
+msgid "Description (Optional)"
+msgstr "Beschreibung (Optional)"
+
+#: src/feature/Collection/CreateCollectionForm.svelte
+#: src/feature/Collection/CreateCollectionModal.svelte
+msgid "What's this collection about?"
+msgstr "Worum geht es in dieser Sammlung?"
+
+#: src/feature/Collection/CreateCollectionForm.svelte
+msgid "Collection Sharing"
+msgstr "Sammlung teilen"
+
+#: src/feature/Collection/CreateCollectionForm.svelte
+msgid "Collections let you group images together and share them with a single link. You can add or remove images at any time after creating the collection."
+msgstr "Sammlungen ermöglichen es, Bilder zu gruppieren und mit einem einzelnen Link zu teilen. Sie können jederzeit Bilder hinzufügen oder entfernen."
+
+#: src/feature/Collection/CreateCollectionForm.svelte
+#: src/feature/Settings/SettingsPane/SettingsPane.svelte
+#: src/routes/preferences/+page.svelte
+#: src/routes/profile/+page.svelte
+msgid "Save Changes"
+msgstr "Änderungen speichern"
+
+#: src/feature/Collection/CreateCollectionForm.svelte
+#: src/feature/Collection/CreateCollectionForm.svelte
+#: src/feature/Collection/CreateCollectionModal.svelte
+#: src/feature/Collection/CreateCollectionModal.svelte
+msgid "Create Collection"
+msgstr "Sammlung erstellen"
+
+#: src/feature/Notification/NotificationGroupItem.svelte
+#: src/feature/Notification/NotificationListItem.svelte
+msgid "Someone"
+msgstr "Jemand"
+
+#: src/feature/Notification/NotificationListItem.svelte
+msgid "Mark as read"
+msgstr "Als gelesen markieren"
+
+#. 0: provider.name
+#: src/feature/Auth/SsoProviderButton.svelte
+msgid "Continue with {0}"
+msgstr "Weiter mit {0}"
+
+#: src/feature/Navigation/Navbar/Navbar.svelte
+#: src/feature/Search/SearchBar.svelte
+msgid "Search images..."
+msgstr "Bilder suchen..."
+
+#: src/feature/Search/SearchBar.svelte
+msgid "Search by User"
+msgstr "Nach Benutzer suchen"
+
+#: src/feature/Search/SearchBar.svelte
+msgid "Search by Description"
+msgstr "Nach Beschreibung suchen"
+
+#: src/feature/Search/SearchBar.svelte
+msgid "Search by Hashtag"
+msgstr "Nach Hashtag suchen"
+
+#: src/feature/Navigation/Sidebar/AppSidebar.svelte
+#: src/feature/Search/SearchBar.svelte
+#: src/feature/Search/SearchBar.svelte
+#: src/feature/User/UserDataTable/UserDataTable.svelte
+#: src/feature/User/UserDataTable/columns.svelte.ts
+msgid "User"
+msgstr "Benutzer"
+
+#: src/feature/Search/SearchBar.svelte
+msgid "Search hashtags... (e.g., #nature)"
+msgstr "Hashtags suchen... (z.B. #nature)"
+
+#: src/feature/Search/SearchBar.svelte
+msgid "Search descriptions..."
+msgstr "Beschreibungen suchen..."
+
+#: src/feature/Search/SearchBar.svelte
+msgid "Search users..."
+msgstr "Benutzer suchen..."
+
+#: src/feature/Search/SearchBar.svelte
+msgid "Search options"
+msgstr "Suchoptionen"
+
+#: src/feature/Comment/CommentList.svelte
+#: src/feature/Image/PostViewer/CommentsSkeleton.svelte
+msgid "Comments"
+msgstr "Kommentare"
+
+#: src/feature/Comment/CommentList.svelte
+msgid "Oldest first"
+msgstr "Älteste zuerst"
+
+#: src/feature/Comment/CommentList.svelte
+msgid "Newest first"
+msgstr "Neueste zuerst"
+
+#: src/feature/Comment/CommentList.svelte
+msgid "No comments yet"
+msgstr "Noch keine Kommentare"
+
+#: src/feature/Comment/CommentList.svelte
+msgid "Be the first to comment"
+msgstr "Schreiben Sie den ersten Kommentar"
+
+#: src/feature/Comment/CommentList.svelte
+msgid "Sign in to comment"
+msgstr "Anmelden zum Kommentieren"
+
+#: src/feature/Upload/MultiUploadProgress.svelte
+msgid "Complete"
+msgstr "Abgeschlossen"
+
+#: src/feature/Upload/MultiUploadProgress.svelte
+msgid "Uploading"
+msgstr "Wird hochgeladen"
+
+#. 0: failedUploads
+#: src/feature/Upload/MultiUploadProgress.svelte
+msgid "• {0} failed"
+msgstr "• {0} fehlgeschlagen"
+
+#. 0: completedUploads; 1: totalUploads
+#: src/feature/Upload/MultiUploadProgress.svelte
+msgid "{0} of {1} files uploaded <0/>"
+msgstr "{0} von {1} Dateien hochgeladen <0/>"
+
+#: src/feature/Upload/MultiUploadProgress.svelte
+msgid "<0/> Retry Failed"
+msgstr "<0/> Fehlgeschlagene wiederholen"
+
+#: src/feature/Upload/MultiUploadProgress.svelte
+msgid "<0/> Cancel"
+msgstr "<0/> Abbrechen"
+
+#: src/feature/Upload/MultiUploadProgress.svelte
+msgid "<0/> Done"
+msgstr "<0/> Fertig"
+
+#: src/feature/Upload/MultiUploadProgress.svelte
+msgid "Overall Progress"
+msgstr "Gesamtfortschritt"
+
+#: src/feature/Upload/MultiUploadProgress.svelte
+msgid "Upload failed"
+msgstr "Upload fehlgeschlagen"
+
+#: src/feature/Tag/useTagOperations.svelte.ts
+msgid "Tag already exists"
+msgstr "Tag existiert bereits"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Failed to create tag"
+msgstr "Tag konnte nicht erstellt werden"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "No files selected"
+msgstr "Keine Dateien ausgewählt"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Only one file allowed at a time"
+msgstr "Nur eine Datei gleichzeitig erlaubt"
+
+#: src/feature/Upload/UploadForm.svelte
+msgid "or click to browse from your device"
+msgstr "oder klicken Sie, um auf Ihrem Gerät zu suchen"
+
+#: src/feature/Upload/UploadForm.svelte
+msgid "Quick paste:"
+msgstr "Schnell einfügen:"
+
+#: src/feature/Upload/UploadForm.svelte
+msgid "WebP"
+msgstr "WebP"
+
+#: src/feature/Upload/UploadForm.svelte
+msgid "View all supported formats"
+msgstr "Alle unterstützten Formate anzeigen"
+
+#: src/feature/Upload/UploadForm.svelte
+msgid "Drop to upload"
+msgstr "Zum Hochladen ablegen"
+
+#: src/feature/Upload/UploadForm.svelte
+msgid "Almost there"
+msgstr "Fast geschafft"
+
+#: src/feature/Upload/UploadSuccess.svelte
+msgid "Upload Successful!"
+msgstr "Upload erfolgreich!"
+
+#: src/feature/Upload/UploadSuccess.svelte
+msgid "Your image has been successfully uploaded to Slink."
+msgstr "Ihr Bild wurde erfolgreich auf Slink hochgeladen."
+
+#: src/feature/Upload/UploadSuccess.svelte
+msgid "Guest Upload Notice"
+msgstr "Hinweis für Gast-Upload"
+
+#: src/feature/Upload/UploadSuccess.svelte
+msgid "To manage your images and access additional features, consider creating an account."
+msgstr "Um Ihre Bilder zu verwalten und weitere Funktionen zu nutzen, erstellen Sie ein Konto."
+
+#: src/feature/Upload/UploadSuccess.svelte
+msgid "<0/> Upload Another Image"
+msgstr "<0/> Weiteres Bild hochladen"
+
+#: src/feature/Upload/UploadSuccess.svelte
+msgid "<0/> Create Account"
+msgstr "<0/> Konto erstellen"
+
+#: src/feature/Upload/UploadSuccess.svelte
+msgid "<0/> View History"
+msgstr "<0/> Verlauf anzeigen"
+
+#: src/routes/bookmarks/+page.svelte
+msgid "Bookmarks | Slink"
+msgstr "Lesezeichen | Slink"
+
+#: src/feature/Image/History/ImageMetadata.svelte
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/routes/bookmarks/+page.svelte
+msgid "Bookmarks"
+msgstr "Lesezeichen"
+
+#: src/routes/bookmarks/+page.svelte
+msgid "Your saved images from the community"
+msgstr "Ihre gespeicherten Bilder aus der Community"
+
+#: src/feature/Image/BookmarkersPanel/BookmarkersPanel.svelte
+#: src/routes/bookmarks/+page.svelte
+msgid "No bookmarks yet"
+msgstr "Noch keine Lesezeichen"
+
+#: src/routes/bookmarks/+page.svelte
+msgid "Start exploring and bookmark images you love to find them here later."
+msgstr "Entdecken Sie Bilder und setzen Sie Lesezeichen, um sie später hier wiederzufinden."
+
+#: src/routes/bookmarks/+page.svelte
+msgid "<0/> Explore Images"
+msgstr "<0/> Bilder entdecken"
+
+#: src/routes/bookmarks/+page.svelte
+msgid "Image no longer available"
+msgstr "Bild nicht mehr verfügbar"
+
+#: src/feature/Image/BookmarkButton/BookmarkButton.svelte
+#: src/routes/bookmarks/+page.svelte
+msgid "Remove bookmark"
+msgstr "Lesezeichen entfernen"
+
+#: src/routes/bookmarks/+page.svelte
+msgid "Saved <0/>"
+msgstr "Gespeichert <0/>"
+
+#: src/routes/explore/+page.svelte
+msgid "Explore Gallery | Slink"
+msgstr "Galerie entdecken | Slink"
+
+#: src/routes/explore/+page.svelte
+msgid "No images yet"
+msgstr "Noch keine Bilder"
+
+#: src/routes/explore/+page.svelte
+msgid "Be the first to share something amazing with the community. Start by uploading your favorite images."
+msgstr "Teilen Sie als Erste/r etwas mit der Community. Laden Sie Ihre Lieblingsbilder hoch."
+
+#: src/routes/explore/+page.svelte
+msgid "<0/> Upload First Image"
+msgstr "<0/> Erstes Bild hochladen"
+
+#: src/routes/explore/+page.svelte
+msgid "No images found"
+msgstr "Keine Bilder gefunden"
+
+#. 0: publicFeedState.searchTerm
+#: src/routes/explore/+page.svelte
+msgid "No images match your search for \"{0}\". Try a different search term or browse all images."
+msgstr "Keine Bilder für \"{0}\" gefunden. Versuchen Sie einen anderen Suchbegriff oder durchsuchen Sie alle Bilder."
+
+#: src/routes/explore/+page.svelte
+msgid "<0/> Clear Search"
+msgstr "<0/> Suche zurücksetzen"
+
+#: src/routes/integrations/+page.svelte
+msgid "Integrations | Slink"
+msgstr "Integrationen | Slink"
+
+#: src/routes/integrations/+page.svelte
+msgid "Integrations"
+msgstr "Integrationen"
+
+#: src/routes/integrations/+page.svelte
+msgid "Connect Slink with ShareX and other tools via API keys"
+msgstr "Verbinden Sie Slink mit ShareX und anderen Tools über API-Schlüssel"
+
+#: src/routes/notifications/+page.svelte
+msgid "Notifications | Slink"
+msgstr "Benachrichtigungen | Slink"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/routes/notifications/+page.svelte
+msgid "Notifications"
+msgstr "Benachrichtigungen"
+
+#. 0: notificationFeed.unreadCount
+#: src/routes/notifications/+page.svelte
+msgid "{0} unread"
+msgstr "{0} ungelesen"
+
+#: src/routes/notifications/+page.svelte
+msgid "<0/> Mark all read"
+msgstr "<0/> Alle als gelesen markieren"
+
+#: src/routes/notifications/+page.svelte
+msgid "All caught up"
+msgstr "Alles gelesen"
+
+#: src/routes/notifications/+page.svelte
+msgid "You'll see activity on your images here"
+msgstr "Hier sehen Sie Aktivitäten zu Ihren Bildern"
+
+#: src/routes/collections/+page.svelte
+msgid "Collections | Slink"
+msgstr "Sammlungen | Slink"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Upload/UploadOptions/CollectionsOption.svelte
+#: src/routes/collections/+page.svelte
+msgid "Collections"
+msgstr "Sammlungen"
+
+#: src/routes/collections/+page.svelte
+msgid "Organize your images into albums"
+msgstr "Organisieren Sie Ihre Bilder in Alben"
+
+#: src/routes/collections/+page.svelte
+msgid "Search collections..."
+msgstr "Sammlungen suchen..."
+
+#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
+#: src/routes/collections/+page.svelte
+msgid "No collections found"
+msgstr "Keine Sammlungen gefunden"
+
+#: src/routes/collections/+page.svelte
+#: src/routes/tags/+page.svelte
+msgid "Try adjusting your search term"
+msgstr "Passen Sie Ihren Suchbegriff an"
+
+#: src/routes/collections/+page.svelte
+msgid "Create your first collection to organize and share your images."
+msgstr "Erstellen Sie Ihre erste Sammlung, um Bilder zu organisieren und zu teilen."
+
+#: src/routes/collections/+page.svelte
+msgid "<0/> Create Collection"
+msgstr "<0/> Sammlung erstellen"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Password changed successfully"
+msgstr "Passwort erfolgreich geändert"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Profile updated successfully"
+msgstr "Profil erfolgreich aktualisiert"
+
+#. 0: itemsFeed.collection?.name ?? 'Collection'
+#. 0: data.status === 'active' ? 'Account Approved' \\: 'Awaiting Approval'
+#. 0: user.displayName
+#: src/routes/collection/[id]/+page.svelte
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+#: src/routes/profile/+page.svelte
+msgid "{0} | Slink"
+msgstr "{0} | Slink"
+
+#: src/routes/profile/+page.svelte
+msgid "Profile Settings"
+msgstr "Profileinstellungen"
+
+#: src/routes/profile/+page.svelte
+msgid "Manage your account information and security settings"
+msgstr "Verwalten Sie Ihre Kontoinformationen und Sicherheitseinstellungen"
+
+#: src/routes/profile/+page.svelte
+msgid "Profile Information"
+msgstr "Profilinformationen"
+
+#: src/routes/profile/+page.svelte
+msgid "Display Name"
+msgstr "Anzeigename"
+
+#: src/routes/profile/+page.svelte
+msgid "This is how your name will appear across the platform"
+msgstr "So wird Ihr Name auf der Plattform angezeigt"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+#: src/feature/Settings/SettingsPane/SettingsPane.svelte
+#: src/routes/info/[id]/+page.svelte
+#: src/routes/preferences/+page.svelte
+#: src/routes/profile/+page.svelte
+msgid "Saving..."
+msgstr "Wird gespeichert..."
+
+#: src/routes/admin/settings/security/+page.svelte
+#: src/routes/profile/+page.svelte
+msgid "Security"
+msgstr "Sicherheit"
+
+#: src/routes/profile/+page.svelte
+msgid "Current Password"
+msgstr "Aktuelles Passwort"
+
+#: src/routes/profile/+page.svelte
+msgid "Enter your current password to verify your identity"
+msgstr "Geben Sie Ihr aktuelles Passwort zur Identitätsprüfung ein"
+
+#: src/routes/profile/+page.svelte
+msgid "Current password"
+msgstr "Aktuelles Passwort"
+
+#: src/routes/profile/+page.svelte
+msgid "New Password"
+msgstr "Neues Passwort"
+
+#: src/routes/profile/+page.svelte
+msgid "Choose a new password"
+msgstr "Wählen Sie ein neues Passwort"
+
+#: src/routes/profile/+page.svelte
+msgid "New password"
+msgstr "Neues Passwort"
+
+#: src/routes/profile/(auth)/signup/+page.svelte
+#: src/routes/profile/+page.svelte
+msgid "Confirm Password"
+msgstr "Passwort bestätigen"
+
+#: src/routes/profile/+page.svelte
+msgid "Re-enter your new password"
+msgstr "Geben Sie Ihr neues Passwort erneut ein"
+
+#: src/routes/profile/+page.svelte
+msgid "Confirm password"
+msgstr "Passwort bestätigen"
+
+#: src/routes/profile/+page.svelte
+msgid "Updating..."
+msgstr "Wird aktualisiert..."
+
+#: src/routes/profile/+page.svelte
+msgid "Update Password"
+msgstr "Passwort ändern"
+
+#: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
+#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/routes/help/faq/+page.svelte
+#: src/routes/preferences/+page.svelte
+msgid "Public"
+msgstr "Öffentlich"
+
+#: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
+#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/routes/help/faq/+page.svelte
+#: src/routes/preferences/+page.svelte
+msgid "Private"
+msgstr "Privat"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/routes/preferences/+page.svelte
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Explore"
+msgstr "Entdecken"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/routes/preferences/+page.svelte
+msgid "Upload"
+msgstr "Hochladen"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Preferences updated successfully"
+msgstr "Einstellungen erfolgreich aktualisiert"
+
+#: src/routes/preferences/+page.svelte
+msgid "Preferences | Slink"
+msgstr "Einstellungen | Slink"
+
+#: src/feature/Navigation/Sidebar/NavUser.svelte
+#: src/routes/preferences/+page.svelte
+msgid "Preferences"
+msgstr "Einstellungen"
+
+#: src/routes/preferences/+page.svelte
+msgid "Configure your default settings and preferences"
+msgstr "Konfigurieren Sie Ihre Standardeinstellungen"
+
+#: src/routes/preferences/+page.svelte
+msgid "Navigation"
+msgstr "Navigation"
+
+#: src/routes/preferences/+page.svelte
+msgid "Default Landing Page"
+msgstr "Standard-Startseite"
+
+#: src/routes/preferences/+page.svelte
+msgid "The page to show when you visit the site"
+msgstr "Die Seite, die beim Besuch der Website angezeigt wird"
+
+#: src/routes/preferences/+page.svelte
+msgid "Select a landing page..."
+msgstr "Startseite auswählen..."
+
+#: src/routes/preferences/+page.svelte
+msgid "Image Uploads"
+msgstr "Bild-Uploads"
+
+#: src/routes/preferences/+page.svelte
+msgid "Default Visibility"
+msgstr "Standard-Sichtbarkeit"
+
+#: src/routes/preferences/+page.svelte
+msgid "New uploads will be set to public or private by default"
+msgstr "Neue Uploads werden standardmäßig als öffentlich oder privat festgelegt"
+
+#: src/routes/preferences/+page.svelte
+msgid "Select visibility..."
+msgstr "Sichtbarkeit auswählen..."
+
+#: src/routes/preferences/+page.svelte
+msgid "Image Licensing"
+msgstr "Bildlizenzierung"
+
+#: src/routes/preferences/+page.svelte
+msgid "Default License"
+msgstr "Standardlizenz"
+
+#: src/routes/preferences/+page.svelte
+msgid "This license will be automatically applied to new uploads"
+msgstr "Diese Lizenz wird automatisch auf neue Uploads angewendet"
+
+#: src/feature/Image/License/LicenseInfo.svelte
+#: src/routes/preferences/+page.svelte
+msgid "Learn more"
+msgstr "Mehr erfahren"
+
+#: src/routes/info/[id]/+page.svelte
+#: src/routes/preferences/+page.svelte
+msgid "Select a license..."
+msgstr "Lizenz auswählen..."
+
+#: src/routes/preferences/+page.svelte
+msgid "Sync to existing images"
+msgstr "Auf bestehende Bilder anwenden"
+
+#: src/routes/preferences/+page.svelte
+msgid "Apply this license to all your existing images"
+msgstr "Diese Lizenz auf alle Ihre bestehenden Bilder anwenden"
+
+#: src/routes/upload/+page.svelte
+msgid "Upload | Slink"
+msgstr "Hochladen | Slink"
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+#: src/routes/upload/+page.svelte
+msgid "Guest Upload"
+msgstr "Gast-Upload"
+
+#: src/routes/upload/+page.svelte
+msgid "You can upload images without an account, but consider signing in to manage them"
+msgstr "Sie können Bilder ohne Konto hochladen, melden Sie sich jedoch an, um sie zu verwalten"
+
+#: src/feature/Navigation/Navbar/Navbar.svelte
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+#: src/routes/profile/(auth)/login/+page.svelte
+#: src/routes/profile/(auth)/signup/+page.svelte
+#: src/routes/upload/+page.svelte
+msgid "Sign In"
+msgstr "Anmelden"
+
+#: src/routes/upload/+page.svelte
+msgid "Sign in to continue"
+msgstr "Anmelden zum Fortfahren"
+
+#: src/routes/upload/+page.svelte
+msgid "Upload and manage your images securely"
+msgstr "Laden Sie Ihre Bilder sicher hoch und verwalten Sie sie"
+
+#: src/routes/upload/+page.svelte
+msgid "Get Started"
+msgstr "Jetzt starten"
+
+#: src/routes/tags/+page.svelte
+msgid "My Tags | Slink"
+msgstr "Meine Tags | Slink"
+
+#: src/routes/tags/+page.svelte
+msgid "My Tags"
+msgstr "Meine Tags"
+
+#: src/routes/tags/+page.svelte
+msgid "Create and organize tags for your images"
+msgstr "Erstellen und organisieren Sie Tags für Ihre Bilder"
+
+#: src/routes/tags/+page.svelte
+msgid "Search tags..."
+msgstr "Tags suchen..."
+
+#: src/routes/tags/+page.svelte
+msgid "No tags found"
+msgstr "Keine Tags gefunden"
+
+#: src/routes/tags/+page.svelte
+msgid "Create your first tag to get started"
+msgstr "Erstellen Sie Ihren ersten Tag"
+
+#: src/routes/tags/+page.svelte
+msgid "<0/> Create Tag"
+msgstr "<0/> Tag erstellen"
+
+#: src/routes/history/+page.svelte
+msgid "Upload History | Slink"
+msgstr "Upload-Verlauf | Slink"
+
+#: src/routes/history/+page.svelte
+msgid "Upload History"
+msgstr "Upload-Verlauf"
+
+#: src/routes/history/+page.svelte
+msgid "View and manage your uploaded images"
+msgstr "Ihre hochgeladenen Bilder anzeigen und verwalten"
+
+#: src/routes/history/+page.svelte
+msgid "No matching images"
+msgstr "Keine passenden Bilder"
+
+#: src/routes/history/+page.svelte
+msgid "No images match your current tag filters. Try removing some tags or clearing all filters."
+msgstr "Keine Bilder entsprechen Ihren aktuellen Tag-Filtern. Entfernen Sie einige Tags oder setzen Sie alle Filter zurück."
+
+#: src/routes/history/+page.svelte
+msgid "No history yet"
+msgstr "Noch kein Verlauf"
+
+#: src/routes/history/+page.svelte
+msgid "Your upload history will appear here. Start uploading images to see your files and manage them easily."
+msgstr "Ihr Upload-Verlauf erscheint hier. Laden Sie Bilder hoch, um sie einfach zu verwalten."
+
+#: src/routes/history/+page.svelte
+msgid "<0/> Upload Images"
+msgstr "<0/> Bilder hochladen"
+
+#: src/routes/history/+page.svelte
+msgid "View More"
+msgstr "Mehr anzeigen"
+
+#: src/routes/collection/[id]/+page.svelte
+#: src/routes/history/+page.svelte
+msgid "Collection"
+msgstr "Sammlung"
+
+#: src/routes/history/+page.svelte
+msgid "Add to Collection"
+msgstr "Zur Sammlung hinzufügen"
+
+#: src/routes/history/+page.svelte
+msgid "Tag"
+msgstr "Tag"
+
+#: src/routes/history/+page.svelte
+msgid "Assign Tags"
+msgstr "Tags zuweisen"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "API key created successfully"
+msgstr "API-Schlüssel erfolgreich erstellt"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Failed to create API key"
+msgstr "API-Schlüssel konnte nicht erstellt werden"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "API key revoked successfully"
+msgstr "API-Schlüssel erfolgreich widerrufen"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Failed to revoke API key"
+msgstr "API-Schlüssel konnte nicht widerrufen werden"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Failed to generate ShareX config"
+msgstr "ShareX-Konfiguration konnte nicht generiert werden"
+
+#: src/lib/state/ApiKeyStore.svelte.ts
+msgid "ApiKeyStore"
+msgstr "ApiKeyStore"
+
+#: src/lib/state/CollectionItemsFeed.svelte.ts
+msgid "CollectionItemsFeed"
+msgstr "CollectionItemsFeed"
+
+#: src/lib/state/CollectionListFeed.svelte.ts
+msgid "CollectionListFeed"
+msgstr "CollectionListFeed"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Failed to load collections"
+msgstr "Sammlungen konnten nicht geladen werden"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Failed to load tags"
+msgstr "Tags konnten nicht geladen werden"
+
+#: src/lib/state/ImageTagManagerState.svelte.ts
+msgid "ImageTagManagerState"
+msgstr "ImageTagManagerState"
+
+#: src/lib/state/PostViewerState.svelte.ts
+msgid "PostViewerState"
+msgstr "PostViewerState"
+
+#: src/lib/state/PublicImagesFeed.svelte.ts
+msgid "PublicImagesFeed"
+msgstr "PublicImagesFeed"
+
+#: src/lib/state/TagFilterState.svelte.ts
+msgid "TagFilterState"
+msgstr "TagFilterState"
+
+#: src/lib/state/StorageUsageStore.svelte.ts
+msgid "StorageUsageStore"
+msgstr "StorageUsageStore"
+
+#: src/lib/state/TagListFeed.svelte.ts
+msgid "Failed to create tag. Please try again."
+msgstr "Tag konnte nicht erstellt werden. Bitte versuchen Sie es erneut."
+
+#: src/lib/state/TagListFeed.svelte.ts
+msgid "Failed to move tag. Please try again."
+msgstr "Tag konnte nicht verschoben werden. Bitte versuchen Sie es erneut."
+
+#: src/lib/state/TagListFeed.svelte.ts
+msgid "Failed to delete tag. Please try again."
+msgstr "Tag konnte nicht gelöscht werden. Bitte versuchen Sie es erneut."
+
+#: src/lib/state/TagListFeed.svelte.ts
+msgid "TagListFeed"
+msgstr "TagListFeed"
+
+#: src/lib/state/UploadHistoryFeed.svelte.ts
+msgid "UploadHistoryFeed"
+msgstr "UploadHistoryFeed"
+
+#: src/lib/state/UploadPageState.svelte.ts
+msgid "Unnamed"
+msgstr "Unbenannt"
+
+#: src/lib/state/UploadPageState.svelte.ts
+msgid "UploadPageState"
+msgstr "UploadPageState"
+
+#: src/lib/state/UserBookmarksFeed.svelte.ts
+msgid "UserBookmarksFeed"
+msgstr "UserBookmarksFeed"
+
+#: src/lib/state/UserListFeed.svelte.ts
+msgid "UserListFeed"
+msgstr "UserListFeed"
+
+#: src/feature/Auth/PasswordToggle/PasswordToggle.svelte
+msgid "Hide password"
+msgstr "Passwort verbergen"
+
+#: src/feature/Auth/PasswordToggle/PasswordToggle.svelte
+msgid "Show password"
+msgstr "Passwort anzeigen"
+
+#: src/feature/Action/LoadMoreButton/LoadMoreButton.svelte
+msgid "Load More"
+msgstr "Mehr laden"
+
+#: src/feature/Action/RefreshButton/RefreshButton.svelte
+msgid "Refresh"
+msgstr "Aktualisieren"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Sign in to add images to collections"
+msgstr "Anmelden, um Bilder zu Sammlungen hinzuzufügen"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "You can only add your own images to collections"
+msgstr "Sie können nur eigene Bilder zu Sammlungen hinzufügen"
+
+#: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
+msgid "Sign in to add to collection"
+msgstr "Anmelden, um zur Sammlung hinzuzufügen"
+
+#: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
+msgid "Only own images can be added"
+msgstr "Es können nur eigene Bilder hinzugefügt werden"
+
+#: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+msgid "Add to collection"
+msgstr "Zur Sammlung hinzufügen"
+
+#: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
+msgid "Delete Collection"
+msgstr "Sammlung löschen"
+
+#: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
+msgid "Also delete images"
+msgstr "Bilder ebenfalls löschen"
+
+#. 0: collection.itemCount
+#: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
+msgid "Delete all {0} images in this collection"
+msgstr "Alle {0} Bilder in dieser Sammlung löschen"
+
+#: src/feature/Collection/CollectionItemDropdown/CollectionItemDropdown.svelte
+#: src/feature/Collection/RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte
+msgid "Remove from Collection"
+msgstr "Aus Sammlung entfernen"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Failed to delete collection. Please try again later."
+msgstr "Sammlung konnte nicht gelöscht werden. Bitte versuchen Sie es später erneut."
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Collection updated successfully"
+msgstr "Sammlung erfolgreich aktualisiert"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Failed to update collection"
+msgstr "Sammlung konnte nicht aktualisiert werden"
+
+#: src/feature/Collection/CollectionActionsDropdown/CollectionActionsDropdown.svelte
+msgid "Collection actions"
+msgstr "Sammlungsaktionen"
+
+#: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
+msgid "Share Collection"
+msgstr "Sammlung teilen"
+
+#: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
+msgid "Anyone with the link can view"
+msgstr "Jeder mit dem Link kann ansehen"
+
+#: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
+#: src/ui/components/confirmation-dialog/confirmation-dialog.svelte
+msgid "Confirm"
+msgstr "Bestätigen"
+
+#: src/feature/Collection/RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte
+msgid "Image will remain in your library"
+msgstr "Das Bild bleibt in Ihrer Bibliothek"
+
+#: src/feature/Collection/RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte
+msgid "<0/> Remove"
+msgstr "<0/> Entfernen"
+
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/DownloadButton/DownloadButton.svelte
+msgid "Download image"
+msgstr "Bild herunterladen"
+
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/DownloadButton/DownloadButton.svelte
+#: src/feature/Image/History/Actions/DownloadAction.svelte
+msgid "Download"
+msgstr "Herunterladen"
+
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+msgid "Copy image URL"
+msgstr "Bild-URL kopieren"
+
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+msgid "Delete image"
+msgstr "Bild löschen"
+
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+msgid "Manage tags"
+msgstr "Tags verwalten"
+
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+msgid "Image actions"
+msgstr "Bildaktionen"
+
+#: src/feature/Image/ActionBar/useImageActions.svelte.ts
+msgid "Generating..."
+msgstr "Wird generiert..."
+
+#: src/feature/Image/ActionBar/useImageActions.svelte.ts
+#: src/feature/Text/CopyableText/CopyableText.svelte
+#: src/feature/Text/CopyableText/CopyableText.svelte
+msgid "Copied!"
+msgstr "Kopiert!"
+
+#: src/feature/Image/ActionBar/useImageActions.svelte.ts
+msgid "Copy URL"
+msgstr "URL kopieren"
+
+#: src/feature/Image/ActionBar/useImageActions.svelte.ts
+msgid "Make private"
+msgstr "Privat machen"
+
+#: src/feature/Image/ActionBar/useImageActions.svelte.ts
+msgid "Make public"
+msgstr "Öffentlich machen"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Failed to update visibility. Please try again later."
+msgstr "Sichtbarkeit konnte nicht geändert werden. Bitte versuchen Sie es später erneut."
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Failed to generate share link. Please try again later."
+msgstr "Freigabelink konnte nicht erstellt werden. Bitte versuchen Sie es später erneut."
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Failed to delete image. Please try again later."
+msgstr "Bild konnte nicht gelöscht werden. Bitte versuchen Sie es später erneut."
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Sign in to bookmark images"
+msgstr "Melden Sie sich an, um Bilder zu merken"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "You can't bookmark your own images"
+msgstr "Sie können Ihre eigenen Bilder nicht merken"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Image bookmarked"
+msgstr "Bild gemerkt"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Bookmark removed"
+msgstr "Lesezeichen entfernt"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Failed to update bookmark"
+msgstr "Lesezeichen konnte nicht aktualisiert werden"
+
+#: src/feature/Image/BookmarkButton/BookmarkButton.svelte
+msgid "Can't bookmark own image"
+msgstr "Eigenes Bild kann nicht gemerkt werden"
+
+#: src/feature/Image/BookmarkButton/BookmarkButton.svelte
+#: src/feature/Text/EditableText/EditableText.svelte
+msgid "Save"
+msgstr "Speichern"
+
+#: src/feature/Image/BookmarkStat/BookmarkStat.svelte
+#: src/feature/Image/BookmarkersPanel/BookmarkersPanel.svelte
+msgid "Bookmarked"
+msgstr "Gemerkt"
+
+#: src/feature/Image/BookmarkersPanel/BookmarkersPanel.svelte
+msgid "Failed to load bookmarks"
+msgstr "Lesezeichen konnten nicht geladen werden"
+
+#: src/feature/Image/Description/ImageDescription.svelte
+#: src/routes/collection/[id]/+page.svelte
+msgid "Add a description..."
+msgstr "Beschreibung hinzufügen..."
+
+#: src/feature/Image/Description/ImageDescription.svelte
+#: src/routes/collection/[id]/+page.svelte
+msgid "Click to add a description..."
+msgstr "Klicken, um eine Beschreibung hinzuzufügen..."
+
+#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
+#: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
+#: src/feature/Image/Description/ImageDescription.svelte
+#: src/feature/Image/PostViewer/PostViewerSidebar.svelte
+#: src/feature/Search/SearchBar.svelte
+msgid "Description"
+msgstr "Beschreibung"
+
+#: src/feature/Image/FormatPicker/FormatPicker.svelte
+msgid "Image format selection"
+msgstr "Bildformat-Auswahl"
+
+#. 0: value.toUpperCase()
+#: src/feature/Image/FormatPicker/FormatPicker.svelte
+msgid "Converting to {0} will remove animation"
+msgstr "Konvertierung zu {0} entfernt die Animation"
+
+#: src/feature/Image/FractionPicker/FractionPicker.svelte
+msgid "Scale"
+msgstr "Skalierung"
+
+#: src/feature/Image/FractionPicker/FractionPicker.svelte
+msgid "Scale selection"
+msgstr "Skalierungsauswahl"
+
+#. 0: option.label
+#: src/feature/Image/FractionPicker/FractionPicker.svelte
+msgid "Scale to {0}"
+msgstr "Auf {0} skalieren"
+
+#. 0: pluralize(result.processed.length, 'image')
+#: src/feature/Image/History/BatchContext.svelte.ts
+msgid "Successfully updated {0}"
+msgstr "{0} erfolgreich aktualisiert"
+
+#. 0: pluralize(result.failed.length, 'image')
+#: src/feature/Image/History/BatchContext.svelte.ts
+msgid "Failed to update {0}"
+msgstr "{0} konnte nicht aktualisiert werden"
+
+#: src/feature/Image/History/Actions/DeleteAction.svelte
+#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/routes/admin/settings/image/+page.svelte
+msgid "Image"
+msgstr "Bild"
+
+#: src/feature/Image/History/Actions/DeleteAction.svelte
+#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
+#: src/feature/Tag/TagDataTable/columns.svelte.ts
+msgid "Images"
+msgstr "Bilder"
+
+#: src/feature/Image/History/Actions/DeleteAction.svelte
+#: src/feature/Image/History/BulkDeleteConfirmation.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
+msgid "Remove from storage"
+msgstr "Aus dem Speicher entfernen"
+
+#: src/feature/Image/History/Actions/DeleteAction.svelte
+#: src/feature/Image/History/BulkDeleteConfirmation.svelte
+msgid "Permanently delete the files from storage"
+msgstr "Dateien dauerhaft aus dem Speicher löschen"
+
+#: src/feature/Image/History/ImageMetadata.svelte
+msgid "File type & dimensions"
+msgstr "Dateityp & Abmessungen"
+
+#: src/feature/Image/History/ImageMetadata.svelte
+msgid "File size"
+msgstr "Dateigröße"
+
+#: src/feature/Image/History/ImageMetadata.svelte
+msgid "Uploaded"
+msgstr "Hochgeladen"
+
+#: src/feature/Image/History/SelectionActionBar.svelte
+msgid "Deselect all"
+msgstr "Alle abwählen"
+
+#: src/feature/Image/History/SelectionActionBar.svelte
+msgid "Select all"
+msgstr "Alle auswählen"
+
+#. 0: selectedCount
+#: src/feature/Image/History/SelectionActionBar.svelte
+msgid "{0} selected"
+msgstr "{0} ausgewählt"
+
+#: src/feature/Image/History/useHistoryItemActions.svelte.ts
+msgid "Deselect image"
+msgstr "Bild abwählen"
+
+#: src/feature/Image/History/useHistoryItemActions.svelte.ts
+msgid "Select image"
+msgstr "Bild auswählen"
+
+#: src/feature/Image/History/BulkDeleteConfirmation.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
+msgid "Delete Image"
+msgstr "Bild löschen"
+
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
+msgid "Permanently delete the file from storage"
+msgstr "Datei dauerhaft aus dem Speicher löschen"
+
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
+msgid "<0/> Delete Image"
+msgstr "<0/> Bild löschen"
+
+#: src/feature/Image/License/LicenseInfo.svelte
+msgid "Licensed under <0/>"
+msgstr "Lizenziert unter <0/>"
+
+#: src/feature/Image/Placeholder/ImagePlaceholder.svelte
+msgid "Image unavailable"
+msgstr "Bild nicht verfügbar"
+
+#: src/feature/Image/Placeholder/ImagePlaceholder.svelte
+msgid "This image may have been removed or is temporarily inaccessible"
+msgstr "Dieses Bild wurde möglicherweise entfernt oder ist vorübergehend nicht zugänglich"
+
+#: src/feature/Image/Placeholder/ImagePlaceholder.svelte
+msgid "Open in new tab"
+msgstr "In neuem Tab öffnen"
+
+#: src/feature/Image/PostViewer/PostViewer.svelte
+msgid "Close viewer"
+msgstr "Ansicht schließen"
+
+#: src/feature/Image/PostViewer/PostViewer.svelte
+#: src/feature/Tag/TagInput/TagInput.svelte
+#: src/ui/components/input/number-input.svelte
+#: src/ui/components/picker/picker-list.svelte
+msgid "ArrowUp"
+msgstr "ArrowUp"
+
+#: src/feature/Image/PostViewer/PostViewer.svelte
+#: src/ui/components/table-pagination/table-pagination.svelte
+msgid "ArrowLeft"
+msgstr "ArrowLeft"
+
+#: src/feature/Image/PostViewer/PostViewer.svelte
+#: src/feature/Tag/TagInput/TagInput.svelte
+#: src/ui/components/input/number-input.svelte
+#: src/ui/components/picker/picker-list.svelte
+msgid "ArrowDown"
+msgstr "ArrowDown"
+
+#: src/feature/Image/PostViewer/PostViewer.svelte
+#: src/ui/components/table-pagination/table-pagination.svelte
+msgid "ArrowRight"
+msgstr "ArrowRight"
+
+#: src/feature/Image/PostViewer/PostViewerNavigation.svelte
+msgid "Previous post"
+msgstr "Vorheriger Beitrag"
+
+#: src/feature/Image/PostViewer/PostViewerNavigation.svelte
+msgid "Next post"
+msgstr "Nächster Beitrag"
+
+#. 0: image.attributes.views
+#: src/feature/Image/PostViewer/PostViewerSidebar.svelte
+msgid "<0/> {0} views"
+msgstr "<0/> {0} Aufrufe"
+
+#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+msgid "Direct Link"
+msgstr "Direktlink"
+
+#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+msgid "Link"
+msgstr "Link"
+
+#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+msgid "Markdown"
+msgstr "Markdown"
+
+#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+msgid "BBCode"
+msgstr "BBCode"
+
+#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+msgid "Image Content"
+msgstr "Bildinhalt"
+
+#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+msgid "Failed to convert"
+msgstr "Konvertierung fehlgeschlagen"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Link copied to clipboard"
+msgstr "Link in die Zwischenablage kopiert"
+
+#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+msgid "Copying..."
+msgstr "Wird kopiert..."
+
+#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Text/CopyContainer/CopyContainer.svelte
+msgid "Signing..."
+msgstr "Wird signiert..."
+
+#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Text/CopyContainer/CopyContainer.svelte
+msgid "Copied"
+msgstr "Kopiert"
+
+#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Text/CopyContainer/CopyContainer.svelte
+msgid "Copy"
+msgstr "Kopieren"
+
+#: src/feature/Image/SizePicker/ImageSizePicker.svelte
+msgid "Width"
+msgstr "Breite"
+
+#: src/feature/Image/SizePicker/ImageSizePicker.svelte
+msgid "Height"
+msgstr "Höhe"
+
+#. 0: formatValue(width); 1: formatValue(height)
+#: src/feature/Image/SizePicker/ImageSizePicker.svelte
+msgid "Original: {0} × {1}"
+msgstr "Original: {0} × {1}"
+
+#: src/feature/Image/SizePicker/ImageSizePicker.svelte
+msgid "Reset to original dimensions"
+msgstr "Auf Originalmaße zurücksetzen"
+
+#: src/feature/Image/SizePicker/ImageSizePicker.svelte
+#: src/feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte
+msgid "<0/> Reset"
+msgstr "<0/> Zurücksetzen"
+
+#. 0: formatValue(calculatedWidth); 1: formatValue(calculatedHeight)
+#: src/feature/Image/SizePicker/ImageSizePicker.svelte
+msgid "New: {0} × {1}"
+msgstr "Neu: {0} × {1}"
+
+#: src/feature/Image/TagManager/ImageTagManager.svelte
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Upload/UploadOptions/TagsOption.svelte
+msgid "Tags"
+msgstr "Tags"
+
+#: src/feature/Image/TagManager/ImageTagManager.svelte
+#: src/feature/Tag/TagSelector/TagSelector.svelte
+msgid "Add more tags..."
+msgstr "Weitere Tags hinzufügen..."
+
+#: src/feature/Image/TagManager/ImageTagManager.svelte
+msgid "<0/> Add"
+msgstr "<0/> Hinzufügen"
+
+#: src/feature/Image/TagManager/ImageTagManager.svelte
+msgid "<0/> Click to add tags..."
+msgstr "<0/> Klicken, um Tags hinzuzufügen..."
+
+#: src/feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte
+#: src/ui/components/sonner/toasts/UnsupportedFormatToast.svelte
+msgid "Unsupported file format"
+msgstr "Nicht unterstütztes Dateiformat"
+
+#: src/feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte
+#: src/ui/components/sonner/toasts/UnsupportedFormatToast.svelte
+msgid "The file you're trying to upload is not supported. Please use one of the supported image formats."
+msgstr "Die Datei, die Sie hochladen möchten, wird nicht unterstützt. Bitte verwenden Sie eines der unterstützten Bildformate."
+
+#: src/feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte
+#: src/ui/components/sonner/toasts/UnsupportedFormatToast.svelte
+msgid "<0/> View supported formats"
+msgstr "<0/> Unterstützte Formate anzeigen"
+
+#: src/feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte
+#: src/ui/components/sonner/toasts/BaseToast.svelte
+#: src/ui/components/sonner/toasts/ErrorToast.svelte
+#: src/ui/components/sonner/toasts/InfoToast.svelte
+#: src/ui/components/sonner/toasts/SuccessToast.svelte
+#: src/ui/components/sonner/toasts/WarningToast.svelte
+msgid "Close notification"
+msgstr "Benachrichtigung schließen"
+
+#: src/feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte
+#: src/feature/Settings/Version/ReleaseModal.svelte
+#: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
+#: src/ui/components/dialog/dialog-content.svelte
+#: src/ui/components/sheet/sheet-content.svelte
+#: src/ui/components/sonner/toasts/BaseToast.svelte
+#: src/ui/components/sonner/toasts/ErrorToast.svelte
+#: src/ui/components/sonner/toasts/InfoToast.svelte
+#: src/ui/components/sonner/toasts/SuccessToast.svelte
+#: src/ui/components/sonner/toasts/WarningToast.svelte
+msgid "Close"
+msgstr "Schließen"
+
+#: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+#: src/feature/Image/ViewCountBadge/ViewCountBadge.svelte
+msgid "Views"
+msgstr "Aufrufe"
+
+#: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
+msgid "This image is publicly visible"
+msgstr "Dieses Bild ist öffentlich sichtbar"
+
+#: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
+msgid "This image is private"
+msgstr "Dieses Bild ist privat"
+
+#: src/feature/Navigation/Navbar/Navbar.svelte
+#: src/feature/Navigation/Navbar/Navbar.svelte
+#: src/feature/Navigation/Sidebar/AppSidebar.svelte
+#: src/feature/Navigation/Sidebar/AppSidebar.svelte
+#: src/routes/profile/(auth)/login/+page.svelte
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Slink"
+msgstr "Slink"
+
+#: src/feature/Navigation/Navbar/Navbar.svelte
+msgid "<0/> Upload"
+msgstr "<0/> Hochladen"
+
+#: src/feature/Navigation/Navbar/Navbar.svelte
+msgid "Upload Image"
+msgstr "Bild hochladen"
+
+#: src/feature/Navigation/Navbar/Navbar.svelte
+msgid "Share your media with others by uploading them and organizing them into collections."
+msgstr "Teilen Sie Ihre Medien mit anderen, indem Sie sie hochladen und in Sammlungen organisieren."
+
+#: src/feature/Navigation/Navbar/Navbar.svelte
+msgid "Shortcut"
+msgstr "Tastenkürzel"
+
+#: src/feature/Navigation/Navbar/Navbar.svelte
+msgid "Toggle Theme"
+msgstr "Design umschalten"
+
+#: src/feature/Navigation/Navbar/Navbar.svelte
+msgid "Switch between light and dark mode."
+msgstr "Zwischen hellem und dunklem Modus wechseln."
+
+#: src/feature/Navigation/Sidebar/NavProjects.svelte
+msgid "Projects"
+msgstr "Projekte"
+
+#: src/feature/Navigation/Sidebar/NavProjects.svelte
+#: src/feature/Navigation/Sidebar/NavProjects.svelte
+#: src/ui/components/breadcrumb/breadcrumb-ellipsis.svelte
+msgid "More"
+msgstr "Mehr"
+
+#: src/feature/Navigation/Sidebar/NavProjects.svelte
+msgid "View Project"
+msgstr "Projekt anzeigen"
+
+#: src/feature/Navigation/Sidebar/NavProjects.svelte
+msgid "Share Project"
+msgstr "Projekt teilen"
+
+#: src/feature/Navigation/Sidebar/NavProjects.svelte
+msgid "Delete Project"
+msgstr "Projekt löschen"
+
+#: src/feature/Navigation/Sidebar/NavGroup.svelte
+msgid "Collapse submenu"
+msgstr "Untermenü einklappen"
+
+#: src/feature/Navigation/Sidebar/NavGroup.svelte
+msgid "Expand submenu"
+msgstr "Untermenü ausklappen"
+
+#: src/feature/Navigation/Sidebar/NavUser.svelte
+msgid "Account Settings"
+msgstr "Kontoeinstellungen"
+
+#: src/feature/Navigation/Sidebar/NavUser.svelte
+msgid "External Integrations"
+msgstr "Externe Integrationen"
+
+#: src/feature/Navigation/Sidebar/NavUser.svelte
+msgid "Sign Out"
+msgstr "Abmelden"
+
+#: src/feature/Navigation/Sidebar/SidebarStorageUsage.svelte
+#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
+msgid "Failed to load storage usage"
+msgstr "Speichernutzung konnte nicht geladen werden"
+
+#: src/feature/Layout/DemoNotice/DemoNotice.svelte
+msgid "Demo instance - uploads and state changes are disabled"
+msgstr "Demo-Instanz – Uploads und Statusänderungen sind deaktiviert"
+
+#: src/feature/Image/AdminImageDropdown/AdminImageDropdown.svelte
+msgid "Make Private"
+msgstr "Privat machen"
+
+#: src/feature/Image/AdminImageDropdown/AdminImageDropdown.svelte
+msgid "Make Public"
+msgstr "Öffentlich machen"
+
+#: src/feature/Layout/ThemeSwitch/ThemeSwitch.svelte
+msgid "Switch to light mode"
+msgstr "Zum hellen Modus wechseln"
+
+#: src/feature/Layout/ThemeSwitch/ThemeSwitch.svelte
+msgid "Switch to dark mode"
+msgstr "Zum dunklen Modus wechseln"
+
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.svelte
+msgid "View mode selection"
+msgstr "Ansichtsmodus-Auswahl"
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Access Control"
+msgstr "Zugriffskontrolle"
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Configure guest access and upload permissions"
+msgstr "Gastzugang und Upload-Berechtigungen konfigurieren"
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Allow unauthenticated users to upload images without creating an account. When enabled without Guest Access, users will see a success message but cannot browse uploaded images"
+msgstr "Nicht authentifizierten Benutzern erlauben, Bilder ohne Kontoerstellung hochzuladen. Wenn ohne Gastzugang aktiviert, sehen Benutzer eine Erfolgsmeldung, können aber hochgeladene Bilder nicht durchsuchen"
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Guest Access (View-Only)"
+msgstr "Gastzugang (nur Ansicht)"
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Allow unauthenticated users to view and browse images"
+msgstr "Nicht authentifizierten Benutzern erlauben, Bilder anzusehen und zu durchsuchen"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
+msgid "Local Storage"
+msgstr "Lokaler Speicher"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
+msgid "Amazon S3"
+msgstr "Amazon S3"
+
+#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
+msgid "SMB Share"
+msgstr "SMB-Freigabe"
+
+#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
+msgid "Storage Usage"
+msgstr "Speichernutzung"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
+msgid "Provider"
+msgstr "Anbieter"
+
+#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
+msgid "Total Usage"
+msgstr "Gesamtnutzung"
+
+#. 0: data.fileCount.toLocaleString()
+#. 0: data.cacheFileCount.toLocaleString()
+#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
+#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
+msgid "{0} files"
+msgstr "{0} Dateien"
+
+#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
+msgid "Cache"
+msgstr "Cache"
+
+#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
+msgid "No storage data available"
+msgstr "Keine Speicherdaten verfügbar"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "WEBP (Recommended)"
+msgstr "WEBP (Empfohlen)"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+#: src/routes/admin/settings/+page.svelte
+msgid "Image Settings"
+msgstr "Bildeinstellungen"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Configure image upload limits and processing options"
+msgstr "Upload-Limits und Verarbeitungsoptionen für Bilder konfigurieren"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Maximum Image Size"
+msgstr "Maximale Bildgröße"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Set the maximum size limit for image uploads"
+msgstr "Maximale Größe für Bild-Uploads festlegen"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Strip EXIF Metadata"
+msgstr "EXIF-Metadaten entfernen"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Automatically remove metadata from uploaded images for privacy"
+msgstr "Metadaten aus hochgeladenen Bildern automatisch zum Schutz der Privatsphäre entfernen"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Allow Only Public Images"
+msgstr "Nur öffentliche Bilder erlauben"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "When enabled, all images are automatically set to public and visibility cannot be changed"
+msgstr "Wenn aktiviert, werden alle Bilder automatisch als öffentlich festgelegt und die Sichtbarkeit kann nicht geändert werden"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Enable Image Deduplication"
+msgstr "Bild-Deduplizierung aktivieren"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Detect and reject duplicate images during upload"
+msgstr "Doppelte Bilder beim Upload erkennen und ablehnen"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Only applies to new uploads. Existing images are not affected."
+msgstr "Gilt nur für neue Uploads. Vorhandene Bilder sind nicht betroffen."
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Compression Quality"
+msgstr "Kompressionsqualität"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Quality level for lossy image compression (1-100). Used during format conversion if target format supports it"
+msgstr "Qualitätsstufe für verlustbehaftete Bildkompression (1-100). Wird bei der Formatkonvertierung verwendet, wenn das Zielformat dies unterstützt"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Force Format Conversion"
+msgstr "Formatkonvertierung erzwingen"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Automatically convert all uploaded images to a specific format"
+msgstr "Alle hochgeladenen Bilder automatisch in ein bestimmtes Format konvertieren"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Target Format"
+msgstr "Zielformat"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Format to convert uploaded images to"
+msgstr "Format, in das hochgeladene Bilder konvertiert werden"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Select format"
+msgstr "Format auswählen"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Convert Animated Images"
+msgstr "Animierte Bilder konvertieren"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Include animated images (GIF, animated WebP/AVIF) in conversion"
+msgstr "Animierte Bilder (GIF, animiertes WebP/AVIF) in die Konvertierung einbeziehen"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Processing animated images is CPU-intensive and may slow down uploads."
+msgstr "Die Verarbeitung animierter Bilder ist CPU-intensiv und kann Uploads verlangsamen."
+
+#. 0: settings.targetFormat?.toUpperCase()
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Converting to {0} will result in loss of animation."
+msgstr "Die Konvertierung zu {0} führt zum Verlust der Animation."
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Enable Licensing"
+msgstr "Lizenzierung aktivieren"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Allow users to set licenses on their images (Creative Commons, etc.)"
+msgstr "Benutzern erlauben, Lizenzen für ihre Bilder festzulegen (Creative Commons usw.)"
+
+#: src/feature/Settings/CacheSettings/CacheSettings.svelte
+msgid "Cache Management"
+msgstr "Cache-Verwaltung"
+
+#: src/feature/Settings/CacheSettings/CacheSettings.svelte
+msgid "Image Cache"
+msgstr "Bild-Cache"
+
+#: src/feature/Settings/CacheSettings/CacheSettings.svelte
+msgid "Cached files store transformed versions of images (resized, cropped, format converted) to improve performance. Clearing the cache will regenerate files on next request."
+msgstr "Zwischengespeicherte Dateien enthalten transformierte Bildversionen (skaliert, zugeschnitten, formatkonvertiert) zur Leistungsverbesserung. Das Leeren des Caches regeneriert Dateien bei der nächsten Anfrage."
+
+#: src/feature/Settings/CacheSettings/CacheSettings.svelte
+msgid "<0/> Clearing..."
+msgstr "<0/> Wird geleert..."
+
+#: src/feature/Settings/CacheSettings/CacheSettings.svelte
+#: src/feature/Settings/SettingsPane/SettingItem.svelte
+msgid "<0/> Confirm"
+msgstr "<0/> Bestätigen"
+
+#: src/feature/Settings/CacheSettings/CacheSettings.svelte
+msgid "<0/> Clear Cache"
+msgstr "<0/> Cache leeren"
+
+#: src/feature/Settings/CacheSettings/CacheSettings.svelte
+msgid "Clearing cache..."
+msgstr "Cache wird geleert..."
+
+#: src/feature/Settings/ResetSettingConfirmation/ResetSettingConfirmation.svelte
+#: src/feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte
+#: src/feature/Settings/SettingsPane/SettingItem.svelte
+msgid "Reset Setting"
+msgstr "Einstellung zurücksetzen"
+
+#: src/feature/Settings/ResetSettingConfirmation/ResetSettingConfirmation.svelte
+msgid "Reset to Default"
+msgstr "Auf Standard zurücksetzen"
+
+#: src/feature/Settings/ResetSettingConfirmation/ResetSettingConfirmation.svelte
+msgid "Keep Current"
+msgstr "Beibehalten"
+
+#: src/feature/Settings/ResetSettingConfirmation/ResetSettingConfirmation.svelte
+msgid "Are you sure you want to reset <0/> to its default value?"
+msgstr "Möchten Sie <0/> wirklich auf den Standardwert zurücksetzen?"
+
+#: src/feature/Settings/ResetSettingConfirmation/ResetSettingConfirmation.svelte
+msgid "This action cannot be undone. Your current setting will be lost."
+msgstr "Diese Aktion kann nicht rückgängig gemacht werden. Ihre aktuelle Einstellung geht verloren."
+
+#: src/feature/Settings/ResetSettingConfirmation/ResetSettingConfirmation.svelte
+msgid "Current Value:"
+msgstr "Aktueller Wert:"
+
+#: src/feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte
+msgid "Restore default value"
+msgstr "Standardwert wiederherstellen"
+
+#: src/feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte
+msgid "Reset <0/> from current value to default?"
+msgstr "<0/> vom aktuellen Wert auf Standard zurücksetzen?"
+
+#: src/feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte
+msgid "Reset <0/> to its default value?"
+msgstr "<0/> auf den Standardwert zurücksetzen?"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderFormState.svelte.ts
+msgid "Provider updated"
+msgstr "Anbieter aktualisiert"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderFormState.svelte.ts
+msgid "Provider created"
+msgstr "Anbieter erstellt"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Configuration"
+msgstr "Konfiguration"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Selected authentication provider"
+msgstr "Ausgewählter Authentifizierungsanbieter"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Change"
+msgstr "Ändern"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Provider Name"
+msgstr "Anbietername"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Display name for the provider"
+msgstr "Anzeigename für den Anbieter"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Slug"
+msgstr "Slug"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Unique identifier for the provider"
+msgstr "Eindeutiger Bezeichner für den Anbieter"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Issuer URL"
+msgstr "Issuer URL"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "OpenID Connect discovery endpoint"
+msgstr "OpenID Connect Discovery-Endpunkt"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Client ID"
+msgstr "Client ID"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "OAuth application client identifier"
+msgstr "OAuth-Anwendungs-Client-Bezeichner"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "OAuth Client ID"
+msgstr "OAuth Client ID"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Client Secret"
+msgstr "Client Secret"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "OAuth application client secret"
+msgstr "OAuth-Anwendungs-Client-Geheimnis"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "OAuth Client Secret"
+msgstr "OAuth Client Secret"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+#: src/feature/Settings/SettingsPane/SettingItem.svelte
+msgid "Enabled"
+msgstr "Aktiviert"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Allow users to authenticate with this provider"
+msgstr "Benutzern erlauben, sich mit diesem Anbieter zu authentifizieren"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Update Provider"
+msgstr "Anbieter aktualisieren"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+#: src/routes/admin/settings/sso/new/+page.svelte
+msgid "Add Provider"
+msgstr "Anbieter hinzufügen"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderListState.svelte.ts
+msgid "Provider deleted"
+msgstr "Anbieter gelöscht"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
+msgid "No SSO providers configured yet"
+msgstr "Noch keine SSO-Anbieter konfiguriert"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
+msgid "Move Up"
+msgstr "Nach oben"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
+msgid "Move Down"
+msgstr "Nach unten"
+
+#: src/feature/Settings/SettingsPane/SettingItem.svelte
+msgid "Disabled"
+msgstr "Deaktiviert"
+
+#: src/feature/Settings/SettingsPane/SettingItem.svelte
+msgid "Reset to default value"
+msgstr "Auf Standardwert zurücksetzen"
+
+#. 0: displayValue
+#: src/feature/Settings/SettingsPane/SettingItem.svelte
+msgid "Reset to {0}"
+msgstr "Auf {0} zurücksetzen"
+
+#: src/feature/Settings/SettingsPane/SettingItem.svelte
+msgid "Reset to <0/>"
+msgstr "Auf <0/> zurücksetzen"
+
+#: src/feature/Settings/ShareSettings/ShareSettings.svelte
+#: src/routes/info/[id]/+page.svelte
+msgid "Share"
+msgstr "Teilen"
+
+#: src/feature/Settings/ShareSettings/ShareSettings.svelte
+msgid "Configure URL sharing behavior"
+msgstr "URL-Freigabeverhalten konfigurieren"
+
+#: src/feature/Settings/ShareSettings/ShareSettings.svelte
+msgid "URL Shortening"
+msgstr "URL-Kürzung"
+
+#: src/feature/Settings/ShareSettings/ShareSettings.svelte
+msgid "Generate short URLs when copying image links"
+msgstr "Kurz-URLs beim Kopieren von Bildlinks generieren"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+#: src/routes/admin/settings/+page.svelte
+msgid "Storage Configuration"
+msgstr "Speicherkonfiguration"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Choose how and where your data is stored"
+msgstr "Wählen Sie, wie und wo Ihre Daten gespeichert werden"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Storage Provider"
+msgstr "Speicheranbieter"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Select your preferred storage backend"
+msgstr "Wählen Sie Ihr bevorzugtes Speicher-Backend"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Network Storage (SMB)"
+msgstr "Netzwerkspeicher (SMB)"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Server Host"
+msgstr "Server-Host"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "IP address or hostname of your SMB server"
+msgstr "IP-Adresse oder Hostname Ihres SMB-Servers"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Share Name"
+msgstr "Freigabename"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "The name of the shared folder"
+msgstr "Der Name des freigegebenen Ordners"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Workgroup"
+msgstr "Arbeitsgruppe"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "SMB workgroup name (optional)"
+msgstr "SMB-Arbeitsgruppenname (optional)"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+#: src/feature/User/UserDataTable/UserDataTable.svelte
+#: src/feature/User/UserDataTable/columns.svelte.ts
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Username"
+msgstr "Benutzername"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Authentication username"
+msgstr "Authentifizierungs-Benutzername"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+#: src/routes/profile/(auth)/login/+page.svelte
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Password"
+msgstr "Passwort"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Authentication password for SMB server"
+msgstr "Authentifizierungspasswort für den SMB-Server"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Custom S3 Provider"
+msgstr "Benutzerdefinierter S3-Anbieter"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Enable for S3-compatible services like MinIO, Cloudflare R2, or Wasabi. This unlocks custom endpoint and path-style options."
+msgstr "Für S3-kompatible Dienste wie MinIO, Cloudflare R2 oder Wasabi aktivieren. Dies schaltet benutzerdefinierte Endpunkt- und Pfadstil-Optionen frei."
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Amazon S3 usage may incur charges. <0>Review pricing</0>"
+msgstr "Die Nutzung von Amazon S3 kann Kosten verursachen. <0>Preise ansehen</0>"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Custom Endpoint"
+msgstr "Benutzerdefinierter Endpunkt"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Custom S3 endpoint URL for your provider"
+msgstr "Benutzerdefinierte S3-Endpunkt-URL für Ihren Anbieter"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Region (Optional)"
+msgstr "Region (Optional)"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Most S3-compatible providers don't require a region. Leave empty for Cloudflare R2 or providers that auto-detect. Use \"auto\" or a specific region if required by your provider."
+msgstr "Die meisten S3-kompatiblen Anbieter benötigen keine Region. Lassen Sie das Feld für Cloudflare R2 oder Anbieter mit automatischer Erkennung leer. Verwenden Sie \"auto\" oder eine bestimmte Region, falls Ihr Anbieter dies erfordert."
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Force Path-Style URLs"
+msgstr "Pfadbasierte URLs erzwingen"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Enable if your provider requires path-style buckets (http://host/bucket/key). Common for MinIO and self-hosted solutions."
+msgstr "Aktivieren, wenn Ihr Anbieter pfadbasierte Buckets erfordert (http://host/bucket/key). Üblich bei MinIO und selbst gehosteten Lösungen."
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Region"
+msgstr "Region"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "AWS region where your bucket is located (e.g., us-east-1). <0>View available regions</0>"
+msgstr "AWS-Region, in der sich Ihr Bucket befindet (z. B. us-east-1). <0>Verfügbare Regionen anzeigen</0>"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Bucket Name"
+msgstr "Bucket-Name"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Your S3 bucket name. <0>Learn about bucket naming</0>"
+msgstr "Ihr S3-Bucket-Name. <0>Mehr über Bucket-Benennung erfahren</0>"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Access Key ID"
+msgstr "Access Key ID"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Your AWS Access Key ID. <0>How to create access keys</0>"
+msgstr "Ihr AWS Access Key ID. <0>So erstellen Sie Zugriffsschlüssel</0>"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Secret Access Key"
+msgstr "Secret Access Key"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Your AWS Secret Access Key"
+msgstr "Ihr AWS Secret Access Key"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "User Management"
+msgstr "Benutzerverwaltung"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Control user registration, authentication, and security requirements"
+msgstr "Benutzerregistrierung, Authentifizierung und Sicherheitsanforderungen verwalten"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "User Registration"
+msgstr "Benutzerregistrierung"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Allow new users to create accounts"
+msgstr "Neuen Benutzern erlauben, Konten zu erstellen"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Require Admin Approval"
+msgstr "Admin-Genehmigung erforderlich"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "New users must be approved before accessing the app"
+msgstr "Neue Benutzer müssen genehmigt werden, bevor sie auf die App zugreifen können"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Minimum Password Length"
+msgstr "Minimale Passwortlänge"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Minimum characters required"
+msgstr "Mindestanzahl erforderlicher Zeichen"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Password Requirements"
+msgstr "Passwortanforderungen"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Required character types"
+msgstr "Erforderliche Zeichentypen"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Numbers (0-9)"
+msgstr "Zahlen (0-9)"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Lowercase (a-z)"
+msgstr "Kleinbuchstaben (a-z)"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Uppercase (A-Z)"
+msgstr "Großbuchstaben (A-Z)"
+
+#: src/feature/Settings/UserSettings/UserSettings.svelte
+msgid "Special (!@#$)"
+msgstr "Sonderzeichen (!@#$)"
+
+#: src/feature/Settings/Version/ReleaseModal.svelte
+#: src/feature/Settings/Version/Version.svelte
+msgid "Update Available"
+msgstr "Update verfügbar"
+
+#: src/feature/Settings/Version/ReleaseModal.svelte
+#: src/feature/Settings/Version/ReleaseModal.svelte
+msgid "Latest Version"
+msgstr "Neueste Version"
+
+#: src/feature/Settings/Version/ReleaseModal.svelte
+msgid "A new version of Slink is available. Here's what's new:"
+msgstr "Eine neue Version von Slink ist verfügbar. Das ist neu:"
+
+#: src/feature/Settings/Version/ReleaseModal.svelte
+msgid "You're running the latest version of Slink. Here are the release notes:"
+msgstr "Sie verwenden die neueste Version von Slink. Hier sind die Versionshinweise:"
+
+#: src/feature/Settings/Version/ReleaseModal.svelte
+msgid "Current Version"
+msgstr "Aktuelle Version"
+
+#. 0: currentVersion
+#: src/feature/Settings/Version/ReleaseModal.svelte
+msgid "v{0}"
+msgstr "v{0}"
+
+#: src/feature/Settings/Version/ReleaseModal.svelte
+msgid "Up to date"
+msgstr "Aktuell"
+
+#. 0: formatReleaseDate(release.published_at)
+#: src/feature/Settings/Version/ReleaseModal.svelte
+msgid "Released {0}"
+msgstr "Veröffentlicht {0}"
+
+#: src/feature/Settings/Version/ReleaseModal.svelte
+msgid "Maybe Later"
+msgstr "Vielleicht später"
+
+#: src/feature/Settings/Version/ReleaseModal.svelte
+msgid "<0/> View on GitHub"
+msgstr "<0/> Auf GitHub ansehen"
+
+#: src/feature/Settings/Version/Version.svelte
+msgid "Latest"
+msgstr "Neueste"
+
+#. 0: UpdateCheckState.hasUpdate ? 'update details' \\: 'release notes'
+#: src/feature/Settings/Version/Version.svelte
+msgid "Click to view {0}"
+msgstr "Klicken, um {0} anzuzeigen"
+
+#. 0: versionInfo ? formatVersion(versionInfo) \\: ''
+#: src/feature/Settings/Version/Version.svelte
+msgid "Version {0}"
+msgstr "Version {0}"
+
+#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+msgid "Filtering by"
+msgstr "Filtern nach"
+
+#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+msgid "Toggle between matching all or any selected tags"
+msgstr "Zwischen Übereinstimmung mit allen oder einem der ausgewählten Tags wechseln"
+
+#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+msgid "Match all"
+msgstr "Alle abgleichen"
+
+#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+msgid "Match any"
+msgstr "Beliebige abgleichen"
+
+#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+msgid "Match All"
+msgstr "Alle abgleichen"
+
+#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+msgid "Match Any"
+msgstr "Beliebige abgleichen"
+
+#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+msgid "Images must have every selected tag to appear in results."
+msgstr "Bilder müssen jeden ausgewählten Tag haben, um in den Ergebnissen zu erscheinen."
+
+#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+msgid "Images with at least one selected tag will appear in results."
+msgstr "Bilder mit mindestens einem ausgewählten Tag erscheinen in den Ergebnissen."
+
+#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+msgid "Click to switch to match any"
+msgstr "Klicken, um zu „Beliebige abgleichen\" zu wechseln"
+
+#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+msgid "Click to switch to match all"
+msgstr "Klicken, um zu „Alle abgleichen\" zu wechseln"
+
+#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+msgid "Clear all filters"
+msgstr "Alle Filter zurücksetzen"
+
+#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+msgid "Clear"
+msgstr "Löschen"
+
+#: src/feature/Layout/DemoBadge/DemoBadge.svelte
+msgid "DEMO"
+msgstr "DEMO"
+
+#: src/feature/Tag/ImageTagList/ImageTagList.svelte
+msgid "No tags assigned to this image."
+msgstr "Diesem Bild sind keine Tags zugewiesen."
+
+#: src/feature/Collection/CollectionList/CollectionPickerList.svelte
+msgid "Search collections"
+msgstr "Sammlungen durchsuchen"
+
+#: src/feature/Collection/CollectionList/CollectionPickerList.svelte
+msgid "No collections yet"
+msgstr "Noch keine Sammlungen"
+
+#: src/feature/Collection/CollectionList/CollectionPickerList.svelte
+msgid "Create your first collection"
+msgstr "Erstellen Sie Ihre erste Sammlung"
+
+#: src/feature/Collection/CollectionList/CollectionPickerList.svelte
+msgid "New collection"
+msgstr "Neue Sammlung"
+
+#. 0: tag.name
+#: src/feature/Tag/TagBadge/TagBadge.svelte
+msgid "Remove {0} tag"
+msgstr "Tag {0} entfernen"
+
+#: src/feature/Tag/TagDataTable/TagActionsCell.svelte
+msgid "Tag actions"
+msgstr "Tag-Aktionen"
+
+#: src/feature/Tag/TagDataTable/TagActionsCell.svelte
+msgid "Move"
+msgstr "Verschieben"
+
+#. 0: selectedCount === 1 ? 'Image' \\: 'Images'
+#. 0: pluralize(childrenCount, 'child tag')
+#: src/feature/Image/History/Actions/DeleteAction.svelte
+#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
+msgid "Delete {0}"
+msgstr "{0} löschen"
+
+#. 0: pluralize(tag.imageCount, 'image')
+#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
+msgid "Remove tag from {0}"
+msgstr "Tag von {0} entfernen"
+
+#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
+msgid "Delete Tag"
+msgstr "Tag löschen"
+
+#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
+msgid "This will cascade:"
+msgstr "Dies wird kaskadiert:"
+
+#. 0: getTagDisplayName(creatingChildFor); 1: childTagName
+#: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
+msgid "Create \"{0} › {1}\""
+msgstr "„{0} › {1}\" erstellen"
+
+#. 0: searchTerm
+#: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
+msgid "No tags matching \"{0}\""
+msgstr "Keine Tags passend zu „{0}\""
+
+#. 0: searchTerm
+#: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
+msgid "Create \"{0}\""
+msgstr "„{0}\" erstellen"
+
+#: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
+#: src/feature/Tag/TagPicker/TagPickerList.svelte
+msgid "No tags yet"
+msgstr "Noch keine Tags"
+
+#: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
+#: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
+msgid "Create Tag"
+msgstr "Tag erstellen"
+
+#: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
+msgid "Add a new tag to organize your images"
+msgstr "Neuen Tag hinzufügen, um Ihre Bilder zu organisieren"
+
+#: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
+msgid "Tag Name"
+msgstr "Tag-Name"
+
+#: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
+msgid "Parent Tag (Optional)"
+msgstr "Übergeordneter Tag (Optional)"
+
+#: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
+msgid "Search for parent tag..."
+msgstr "Übergeordneten Tag suchen..."
+
+#: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
+#: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
+msgid "No matching tags found."
+msgstr "Keine passenden Tags gefunden."
+
+#: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
+msgid "Tag Organization"
+msgstr "Tag-Organisation"
+
+#: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
+msgid "Tags help organize your images. Parent tags create a hierarchy for better organization. You can always move tags later or create sub-tags within existing ones."
+msgstr "Tags helfen, Ihre Bilder zu organisieren. Übergeordnete Tags erstellen eine Hierarchie für bessere Organisation. Sie können Tags jederzeit verschieben oder Unter-Tags innerhalb bestehender erstellen."
+
+#: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
+#: src/feature/User/ApiKey/CreateApiKeyForm.svelte
+msgid "Creating..."
+msgstr "Wird erstellt..."
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
+msgid "Delete Provider"
+msgstr "Anbieter löschen"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
+msgid "<0/> — Provider and its configuration will be removed"
+msgstr "<0/> — Anbieter und seine Konfiguration werden entfernt"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
+msgid "<0/> Delete Provider"
+msgstr "<0/> Anbieter löschen"
+
+#: src/feature/Tag/TagFilter/TagFilter.svelte
+msgid "Search and select tags"
+msgstr "Tags suchen und auswählen"
+
+#: src/feature/Tag/TagInput/TagInput.svelte
+#: src/feature/Tag/TagSelector/TagSelector.svelte
+msgid "Search or add tags..."
+msgstr "Tags suchen oder hinzufügen..."
+
+#: src/feature/Tag/TagInput/TagInput.svelte
+msgid "Backspace"
+msgstr "Backspace"
+
+#: src/feature/Tag/TagInput/TagInput.svelte
+msgid "Child tag name..."
+msgstr "Name des Unter-Tags..."
+
+#: src/feature/Tag/TagInput/TagInput.svelte
+msgid "Cancel child tag creation"
+msgstr "Unter-Tag-Erstellung abbrechen"
+
+#: src/feature/Tag/TagPicker/TagPickerList.svelte
+msgid "Search tags"
+msgstr "Tags durchsuchen"
+
+#: src/feature/Tag/TagPicker/TagPickerList.svelte
+msgid "Create your first tag"
+msgstr "Erstellen Sie Ihren ersten Tag"
+
+#: src/feature/Tag/TagPicker/TagPickerList.svelte
+msgid "New tag"
+msgstr "Neuer Tag"
+
+#: src/feature/Tag/TagPicker/TagPickerList.svelte
+msgid "Root"
+msgstr "Stammebene"
+
+#. 0: tag.name
+#: src/feature/Tag/TagListItem/TagListItem.svelte
+msgid "Add child to {0}"
+msgstr "Unter-Tag zu {0} hinzufügen"
+
+#: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
+#: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
+msgid "Move Tag"
+msgstr "Tag verschieben"
+
+#. 0: tag.name
+#: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
+msgid "Move \"{0}\" to a new parent tag or to root"
+msgstr "„{0}\" zu einem neuen übergeordneten Tag oder zur Stammebene verschieben"
+
+#: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
+msgid "New Parent Tag"
+msgstr "Neuer übergeordneter Tag"
+
+#: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
+msgid "Search for parent tag... (empty = root)"
+msgstr "Übergeordneten Tag suchen... (leer = Stammebene)"
+
+#: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
+msgid "Leave empty to move to root level"
+msgstr "Leer lassen, um zur Stammebene zu verschieben"
+
+#: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
+msgid "Moving..."
+msgstr "Wird verschoben..."
+
+#: src/feature/Text/CommentText/CommentText.svelte
+msgid "This comment has been deleted"
+msgstr "Dieser Kommentar wurde gelöscht"
+
+#: src/feature/Text/CopyContainer/CopyContainer.svelte
+msgid "Copy link..."
+msgstr "Link kopieren..."
+
+#: src/feature/Text/CopyableText/CopyableText.svelte
+msgid "Click to copy"
+msgstr "Zum Kopieren klicken"
+
+#: src/feature/Text/CopyableText/CopyableText.svelte
+msgid "Copy to clipboard"
+msgstr "In die Zwischenablage kopieren"
+
+#: src/feature/Text/EditableText/EditableText.svelte
+msgid "Click to add..."
+msgstr "Zum Hinzufügen klicken..."
+
+#: src/feature/Text/Heading/Heading.svelte
+msgid "Heading"
+msgstr "Überschrift"
+
+#. 0: segment.text
+#: src/feature/Text/HashtagText/HashtagText.svelte
+msgid "Click to search for {0}"
+msgstr "Klicken, um nach {0} zu suchen"
+
+#: src/feature/Upload/UploadOptions/CollectionsOption.svelte
+#: src/feature/Upload/UploadOptions/TagsOption.svelte
+msgid "Add more"
+msgstr "Weitere hinzufügen"
+
+#: src/feature/Upload/UploadOptions/UploadOptionsPanel.svelte
+msgid "Upload Options"
+msgstr "Upload-Optionen"
+
+#: src/feature/User/UserActions/UserActions.svelte
+msgid "<0/> Actions"
+msgstr "<0/> Aktionen"
+
+#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
+#: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
+#: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+#: src/feature/Tag/TagDataTable/columns.svelte.ts
+#: src/feature/User/UserActions/UserActions.svelte
+#: src/feature/User/UserDataTable/UserDataTable.svelte
+#: src/feature/User/UserDataTable/columns.svelte.ts
+msgid "Actions"
+msgstr "Aktionen"
+
+#: src/feature/User/UserActions/UserActions.svelte
+msgid "Suspend"
+msgstr "Sperren"
+
+#: src/feature/User/UserActions/UserActions.svelte
+msgid "Activate"
+msgstr "Aktivieren"
+
+#: src/feature/User/UserActions/UserActions.svelte
+msgid "Make Admin"
+msgstr "Zum Admin machen"
+
+#: src/feature/User/UserActions/UserActions.svelte
+msgid "Remove Admin"
+msgstr "Admin entfernen"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Delete User"
+msgstr "Benutzer löschen"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "User account and all associated data will be removed"
+msgstr "Benutzerkonto und alle zugehörigen Daten werden entfernt"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "<0/> Delete User"
+msgstr "<0/> Benutzer löschen"
+
+#: src/feature/User/UserDataTable/data-table-email-button.svelte
+msgid "Email <0/>"
+msgstr "E-Mail <0/>"
+
+#: src/feature/User/UserDataTable/UserDataTable.svelte
+#: src/feature/User/UserDataTable/columns.svelte.ts
+msgid "Status"
+msgstr "Status"
+
+#: src/feature/User/UserDataTable/UserDataTable.svelte
+#: src/feature/User/UserDataTable/columns.svelte.ts
+msgid "Roles"
+msgstr "Rollen"
+
+#: src/feature/User/UserDataTable/UserDataTable.svelte
+msgid "Users will appear here once added"
+msgstr "Benutzer erscheinen hier, sobald sie hinzugefügt wurden"
+
+#: src/feature/User/UserRoleBadge/UserRoleBadge.svelte
+msgid "<0/> Admin"
+msgstr "<0/> Admin"
+
+#: src/feature/User/UserRoleBadge/UserRoleBadge.svelte
+msgid "<0/> User"
+msgstr "<0/> Benutzer"
+
+#: src/feature/User/UserStatusCell/UserStatusCell.svelte
+msgid "<0/> You"
+msgstr "<0/> Sie"
+
+#: src/routes/admin/dashboard/+page.svelte
+msgid "Dashboard | Slink"
+msgstr "Dashboard | Slink"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/routes/admin/dashboard/+page.svelte
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: src/routes/admin/dashboard/+page.svelte
+msgid "Overview of your application's key metrics and activity"
+msgstr "Überblick über die wichtigsten Kennzahlen und Aktivitäten Ihrer Anwendung"
+
+#: src/routes/admin/settings/+page.svelte
+msgid "Configure image uploads, processing options, and URL sharing preferences"
+msgstr "Bild-Uploads, Verarbeitungsoptionen und URL-Freigabeeinstellungen konfigurieren"
+
+#: src/routes/admin/settings/+page.svelte
+msgid "Configure storage providers, cache settings, and data management"
+msgstr "Speicheranbieter, Cache-Einstellungen und Datenverwaltung konfigurieren"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/routes/admin/settings/+page.svelte
+msgid "Security Settings"
+msgstr "Sicherheitseinstellungen"
+
+#: src/routes/admin/settings/+page.svelte
+msgid "Manage user registration, access control, and authentication policies"
+msgstr "Benutzerregistrierung, Zugriffskontrolle und Authentifizierungsrichtlinien verwalten"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/routes/admin/settings/+page.svelte
+#: src/routes/admin/settings/sso/+page.svelte
+msgid "Single Sign-On"
+msgstr "Single Sign-On"
+
+#: src/routes/admin/settings/+page.svelte
+msgid "Manage SSO/OIDC identity providers for external authentication"
+msgstr "SSO/OIDC-Identitätsanbieter für externe Authentifizierung verwalten"
+
+#: src/routes/admin/settings/+page.svelte
+msgid "Settings | Slink"
+msgstr "Einstellungen | Slink"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/routes/admin/settings/+page.svelte
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: src/routes/admin/settings/+page.svelte
+msgid "Configure your application preferences and manage system behavior"
+msgstr "Anwendungseinstellungen konfigurieren und Systemverhalten verwalten"
+
+#: src/routes/admin/user/+page.svelte
+msgid "Users | Slink Admin"
+msgstr "Benutzer | Slink Admin"
+
+#: src/routes/admin/user/+page.svelte
+#: src/routes/admin/user/+page.svelte
+msgid "Manage user accounts and permissions"
+msgstr "Benutzerkonten und Berechtigungen verwalten"
+
+#: src/routes/admin/user/+page.svelte
+msgid "There are no users in the system yet."
+msgstr "Es sind noch keine Benutzer im System vorhanden."
+
+#: src/feature/User/ApiKey/ApiKeyCard.svelte
+#: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
+msgid "Revoke API Key"
+msgstr "API-Schlüssel widerrufen"
+
+#: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
+msgid "This API key will be permanently revoked and cannot be recovered"
+msgstr "Dieser API-Schlüssel wird dauerhaft widerrufen und kann nicht wiederhergestellt werden"
+
+#: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
+msgid "<0/> Revoke Key"
+msgstr "<0/> Schlüssel widerrufen"
+
+#: src/feature/User/ApiKey/ApiKeyList.svelte
+msgid "No API keys yet"
+msgstr "Noch keine API-Schlüssel"
+
+#: src/feature/User/ApiKey/ApiKeyList.svelte
+msgid "Create an API key to integrate with ShareX and other tools"
+msgstr "Erstellen Sie einen API-Schlüssel zur Integration mit ShareX und anderen Tools"
+
+#: src/feature/User/ApiKey/ApiKeyManager.svelte
+msgid "<0/> API Keys"
+msgstr "<0/> API-Schlüssel"
+
+#: src/feature/User/ApiKey/ApiKeyManager.svelte
+msgid "Create API keys for ShareX and other third-party integrations"
+msgstr "API-Schlüssel für ShareX und andere Drittanbieter-Integrationen erstellen"
+
+#: src/feature/User/ApiKey/ApiKeyManager.svelte
+msgid "<0/> Create API Key"
+msgstr "<0/> API-Schlüssel erstellen"
+
+#: src/feature/User/ApiKey/CreateApiKeyForm.svelte
+#: src/feature/User/ApiKey/CreateApiKeyForm.svelte
+msgid "Create API Key"
+msgstr "API-Schlüssel erstellen"
+
+#: src/feature/User/ApiKey/CreateApiKeyForm.svelte
+msgid "Generate a secure key for external integrations"
+msgstr "Sicheren Schlüssel für externe Integrationen generieren"
+
+#: src/feature/User/ApiKey/CreateApiKeyForm.svelte
+msgid "Key Name"
+msgstr "Schlüsselname"
+
+#: src/feature/User/ApiKey/CreateApiKeyForm.svelte
+msgid "Expiry Date (Optional)"
+msgstr "Ablaufdatum (Optional)"
+
+#: src/feature/User/ApiKey/CreateApiKeyForm.svelte
+msgid "Select expiry date"
+msgstr "Ablaufdatum auswählen"
+
+#: src/feature/User/ApiKey/CreateApiKeyForm.svelte
+msgid "Security Notice"
+msgstr "Sicherheitshinweis"
+
+#: src/feature/User/ApiKey/CreateApiKeyForm.svelte
+msgid "Your API key will be displayed only once after creation. Store it securely in your password manager or environment variables. If lost, you'll need to generate a new one."
+msgstr "Ihr API-Schlüssel wird nur einmal nach der Erstellung angezeigt. Speichern Sie ihn sicher in Ihrem Passwort-Manager oder in Umgebungsvariablen. Bei Verlust müssen Sie einen neuen generieren."
+
+#: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
+msgid "Success!"
+msgstr "Erfolg!"
+
+#: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
+msgid "Your API key has been created"
+msgstr "Ihr API-Schlüssel wurde erstellt"
+
+#: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
+msgid "Your API Key"
+msgstr "Ihr API-Schlüssel"
+
+#: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
+msgid "Your API key will appear here..."
+msgstr "Ihr API-Schlüssel wird hier angezeigt..."
+
+#: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
+msgid "Important Notice"
+msgstr "Wichtiger Hinweis"
+
+#: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
+msgid "This key will not be shown again. Store it securely in your password manager or download the ShareX config file below."
+msgstr "Dieser Schlüssel wird nicht erneut angezeigt. Speichern Sie ihn sicher in Ihrem Passwort-Manager oder laden Sie die ShareX-Konfigurationsdatei unten herunter."
+
+#: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
+msgid "<0/> Downloading..."
+msgstr "<0/> Wird heruntergeladen..."
+
+#: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
+msgid "<0/> Download ShareX Config"
+msgstr "<0/> ShareX-Konfiguration herunterladen"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Back to Collections"
+msgstr "Zurück zu Sammlungen"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Collection name..."
+msgstr "Sammlungsname..."
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Add a name..."
+msgstr "Namen hinzufügen..."
+
+#. 0: itemsFeed.collection.itemCount ?? itemsFeed.items.length
+#: src/routes/collection/[id]/+page.svelte
+msgid "{0} items"
+msgstr "{0} Elemente"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "<0/> Add images"
+msgstr "<0/> Bilder hinzufügen"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Share Link"
+msgstr "Link teilen"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "<0/> Share"
+msgstr "<0/> Teilen"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Collection not found"
+msgstr "Sammlung nicht gefunden"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "This collection doesn't exist or you don't have permission to view it."
+msgstr "Diese Sammlung existiert nicht oder Sie haben keine Berechtigung, sie anzuzeigen."
+
+#: src/routes/collection/[id]/+page.svelte
+#: src/ui/components/picker/picker-empty-state.svelte
+#: src/ui/components/picker/picker-list.svelte
+msgid "No items yet"
+msgstr "Noch keine Elemente"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Upload images directly to this collection."
+msgstr "Bilder direkt in diese Sammlung hochladen."
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "No items in this collection yet."
+msgstr "Noch keine Elemente in dieser Sammlung."
+
+#: src/routes/help/faq/+page.svelte
+msgid "FAQ | Slink"
+msgstr "FAQ | Slink"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Frequently asked questions about Slink - image sharing platform"
+msgstr "Häufig gestellte Fragen zu Slink – Bildfreigabeplattform"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Frequently Asked Questions"
+msgstr "Häufig gestellte Fragen"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Find answers to common questions about using Slink for image sharing and management"
+msgstr "Antworten auf häufige Fragen zur Nutzung von Slink für Bildfreigabe und -verwaltung"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Still have questions?"
+msgstr "Noch Fragen?"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Can't find the answer you're looking for? Please get in touch with us for further assistance."
+msgstr "Sie können die gesuchte Antwort nicht finden? Kontaktieren Sie uns für weitere Unterstützung."
+
+#: src/routes/help/faq/+page.svelte
+msgid "<0/> Report an Issue"
+msgstr "<0/> Problem melden"
+
+#: src/routes/help/faq/+page.svelte
+msgid "<0/> View Documentation"
+msgstr "<0/> Dokumentation ansehen"
+
+#: src/routes/info/[id]/+page.svelte
+msgid "Image Details | Slink"
+msgstr "Bilddetails | Slink"
+
+#: src/routes/info/[id]/+page.svelte
+msgid "License"
+msgstr "Lizenz"
+
+#: src/routes/info/[id]/+page.svelte
+msgid "Choose how others can use this image"
+msgstr "Wählen Sie, wie andere dieses Bild verwenden dürfen"
+
+#: src/routes/info/[id]/+page.svelte
+msgid "Resize"
+msgstr "Größe ändern"
+
+#: src/routes/info/[id]/+page.svelte
+msgid "Adjust dimensions for the shared link"
+msgstr "Abmessungen für den geteilten Link anpassen"
+
+#: src/routes/info/[id]/+page.svelte
+msgid "Filter"
+msgstr "Filter"
+
+#: src/routes/info/[id]/+page.svelte
+msgid "Apply a color filter to the shared link"
+msgstr "Farbfilter auf den geteilten Link anwenden"
+
+#: src/routes/info/[id]/+page.svelte
+msgid "Resize, filter, and format changes apply only to the shared link. The original image remains unchanged."
+msgstr "Größenänderung, Filter und Formatänderungen gelten nur für den geteilten Link. Das Originalbild bleibt unverändert."
+
+#: src/routes/info/[id]/+page.svelte
+msgid "Select option to copy"
+msgstr "Option zum Kopieren auswählen"
+
+#: src/routes/info/[id]/+page.svelte
+msgid "Quick"
+msgstr "Schnell"
+
+#: src/routes/info/[id]/+page.svelte
+msgid "Output Format"
+msgstr "Ausgabeformat"
+
+#: src/ui/components/combobox/combobox.svelte
+msgid "No items found."
+msgstr "Keine Elemente gefunden."
+
+#: src/ui/components/combobox/combobox.svelte
+msgid "Clear selection"
+msgstr "Auswahl aufheben"
+
+#: src/ui/components/data-table/column-toggle.svelte
+msgid "<0/> Columns <1/>"
+msgstr "<0/> Spalten <1/>"
+
+#. 0: pageSize
+#: src/ui/components/data-table/page-size-select.svelte
+msgid "<0/> Limit {0} <1/>"
+msgstr "<0/> Limit {0} <1/>"
+
+#: src/ui/components/date-picker/date-picker-field.svelte
+msgid "Select a date"
+msgstr "Datum auswählen"
+
+#: src/ui/components/date-picker/date-picker.svelte
+msgid "Pick a date"
+msgstr "Datum wählen"
+
+#: src/ui/components/dialog/modal-footer.svelte
+msgid "Submit"
+msgstr "Absenden"
+
+#: src/ui/components/enhanced-select/enhanced-select.svelte
+#: src/ui/components/select/select.svelte
+msgid "Select an option"
+msgstr "Option auswählen"
+
+#: src/ui/components/input/number-input.svelte
+msgid "Number input"
+msgstr "Zahleneingabe"
+
+#: src/ui/components/input/number-input.svelte
+msgid "Increase value"
+msgstr "Wert erhöhen"
+
+#: src/ui/components/input/number-input.svelte
+msgid "Decrease value"
+msgstr "Wert verringern"
+
+#: src/ui/components/picker/picker-create-footer.svelte
+msgid "New item"
+msgstr "Neues Element"
+
+#: src/ui/components/picker/picker-list.svelte
+msgid "No matches found"
+msgstr "Keine Treffer gefunden"
+
+#: src/ui/components/command/command-dialog.svelte
+msgid "Command Palette"
+msgstr "Befehlspalette"
+
+#: src/ui/components/command/command-dialog.svelte
+msgid "Search for a command to run"
+msgstr "Befehl zum Ausführen suchen"
+
+#. 0: inner.value.length
+#: src/ui/components/select/select.svelte
+msgid "{0} items selected"
+msgstr "{0} Elemente ausgewählt"
+
+#: src/ui/components/shortcut/shortcut.svelte
+msgid "⌘ cmd"
+msgstr "⌘ cmd"
+
+#: src/ui/components/shortcut/shortcut.svelte
+msgid "Ctrl"
+msgstr "Strg"
+
+#: src/ui/components/shortcut/shortcut.svelte
+msgid "Alt"
+msgstr "Alt"
+
+#: src/ui/components/shortcut/shortcut.svelte
+msgid "Shift"
+msgstr "Umschalt"
+
+#: src/ui/components/sidebar/sidebar-rail.svelte
+#: src/ui/components/sidebar/sidebar-rail.svelte
+#: src/ui/components/sidebar/sidebar-trigger.svelte
+msgid "Toggle Sidebar"
+msgstr "Seitenleiste umschalten"
+
+#: src/ui/components/sidebar/sidebar.svelte
+msgid "Sidebar"
+msgstr "Seitenleiste"
+
+#: src/ui/components/sidebar/sidebar.svelte
+msgid "Displays the mobile sidebar."
+msgstr "Zeigt die mobile Seitenleiste an."
+
+#: src/ui/components/table-pagination/table-pagination.svelte
+msgid "Click to enter page number"
+msgstr "Klicken, um Seitenzahl einzugeben"
+
+#. 0: currentPage
+#: src/ui/components/table-pagination/table-pagination.svelte
+msgid "Current page {0}"
+msgstr "Aktuelle Seite {0}"
+
+#. 0: currentPage
+#: src/ui/components/table-pagination/table-pagination.svelte
+msgid "Current page {0}. Click to enter page number"
+msgstr "Aktuelle Seite {0}. Klicken, um Seitenzahl einzugeben"
+
+#: src/ui/components/table-pagination/table-pagination.svelte
+msgid "Previous page"
+msgstr "Vorherige Seite"
+
+#: src/ui/components/table-pagination/table-pagination.svelte
+msgid "Go to page"
+msgstr "Gehe zu Seite"
+
+#: src/ui/components/table-pagination/table-pagination.svelte
+msgid "Next page"
+msgstr "Nächste Seite"
+
+#. 0: startItem; 1: endItem; 2: totalItems
+#: src/ui/components/table-pagination/table-pagination.svelte
+msgid "{0}–{1} <0>of</0> {2} items"
+msgstr "{0}–{1} <0>von</0> {2} Elementen"
+
+#. 0: option.label
+#. 0: option.value
+#: src/ui/components/toggle-group/toggle-group.svelte
+#: src/ui/components/toggle-group/toggle-group.svelte
+msgid "Select {0}"
+msgstr "{0} auswählen"
+
+#: src/lib/utils/ui/toast.svelte.ts
+msgid "ToastManager"
+msgstr "ToastManager"
+
+#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
+#: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
+#: src/feature/Tag/TagDataTable/columns.svelte.ts
+msgid "Name"
+msgstr "Name"
+
+#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
+#: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
+msgid "Items"
+msgstr "Elemente"
+
+#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
+#: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
+#: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+msgid "Created"
+msgstr "Erstellt"
+
+#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
+msgid "Create your first collection to get started"
+msgstr "Erstellen Sie Ihre erste Sammlung, um zu beginnen"
+
+#: src/feature/Image/History/Actions/BatchPickerAction.svelte
+msgid "Select items to apply"
+msgstr "Elemente zum Anwenden auswählen"
+
+#: src/feature/Image/History/Actions/BatchPickerAction.svelte
+msgid "<0/> Apply"
+msgstr "<0/> Anwenden"
+
+#: src/feature/Image/History/Actions/VisibilityAction.svelte
+#: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+msgid "Visibility"
+msgstr "Sichtbarkeit"
+
+#: src/feature/Image/History/Actions/VisibilityAction.svelte
+msgid "Change Visibility"
+msgstr "Sichtbarkeit ändern"
+
+#: src/feature/Image/History/Actions/VisibilityAction.svelte
+msgid "Set visibility for selected images"
+msgstr "Sichtbarkeit für ausgewählte Bilder festlegen"
+
+#: src/feature/Image/History/Actions/VisibilityAction.svelte
+msgid "<0/> Make Public"
+msgstr "<0/> Öffentlich machen"
+
+#: src/feature/Image/History/Actions/VisibilityAction.svelte
+msgid "<0/> Make Private"
+msgstr "<0/> Privat machen"
+
+#: src/routes/admin/settings/security/+page.svelte
+msgid "Security Settings | Slink"
+msgstr "Sicherheitseinstellungen | Slink"
+
+#: src/routes/admin/settings/security/+page.svelte
+msgid "Manage access control and user authentication settings"
+msgstr "Zugriffskontrolle und Benutzer-Authentifizierungseinstellungen verwalten"
+
+#: src/routes/admin/settings/storage/+page.svelte
+msgid "Storage Settings | Slink"
+msgstr "Speichereinstellungen | Slink"
+
+#: src/routes/admin/settings/storage/+page.svelte
+msgid "Storage"
+msgstr "Speicher"
+
+#: src/routes/admin/settings/storage/+page.svelte
+msgid "Configure storage providers and cache management"
+msgstr "Speicheranbieter und Cache-Verwaltung konfigurieren"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Slink offers a <0>public gallery</0>, where people can share their images with others."
+msgstr "Slink bietet eine <0>öffentliche Galerie</0>, in der Nutzer ihre Bilder mit anderen teilen können."
+
+#: src/routes/help/faq/+page.svelte
+msgid "Visibility Options"
+msgstr "Sichtbarkeitsoptionen"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Images are shared in the public gallery and visible to all users"
+msgstr "Bilder werden in der öffentlichen Galerie geteilt und sind für alle Nutzer sichtbar"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Default"
+msgstr "Standard"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Images are not shared in the public gallery and only accessible by the owner"
+msgstr "Bilder werden nicht in der öffentlichen Galerie geteilt und sind nur für den Eigentümer zugänglich"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Important Note"
+msgstr "Wichtiger Hinweis"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Raw images are accessible to anyone with a direct link, regardless of visibility setting."
+msgstr "Originalbilder sind für jeden mit einem direkten Link zugänglich, unabhängig von der Sichtbarkeitseinstellung."
+
+#: src/routes/admin/settings/sso/+page.svelte
+msgid "SSO Settings | Slink"
+msgstr "SSO-Einstellungen | Slink"
+
+#: src/routes/admin/settings/sso/+page.svelte
+msgid "Manage SSO/OIDC identity providers"
+msgstr "SSO/OIDC-Identitätsanbieter verwalten"
+
+#: src/routes/admin/settings/sso/+page.svelte
+msgid "Back to Settings"
+msgstr "Zurück zu Einstellungen"
+
+#: src/routes/admin/settings/sso/+page.svelte
+msgid "Add this callback URL to your identity provider's allowed redirect URIs:"
+msgstr "Fügen Sie diese Callback-URL zu den erlaubten Weiterleitungs-URIs Ihres Identitätsanbieters hinzu:"
+
+#: src/routes/admin/settings/sso/+page.svelte
+msgid "Failed to load SSO providers."
+msgstr "SSO-Anbieter konnten nicht geladen werden."
+
+#: src/routes/admin/settings/image/+page.svelte
+msgid "Image Settings | Slink"
+msgstr "Bildeinstellungen | Slink"
+
+#: src/routes/admin/settings/image/+page.svelte
+msgid "Configure image handling and sharing preferences"
+msgstr "Bildverarbeitung und Freigabeeinstellungen konfigurieren"
+
+#: src/routes/help/faq/+page.svelte
+msgid "You can easily share your images with others using the direct link provided for each uploaded image."
+msgstr "Sie können Ihre Bilder einfach über den direkten Link teilen, der für jedes hochgeladene Bild bereitgestellt wird."
+
+#: src/routes/help/faq/+page.svelte
+msgid "<0/> Current Sharing Options"
+msgstr "<0/> Aktuelle Freigabeoptionen"
+
+#: src/routes/help/faq/+page.svelte
+msgid "<0/> Direct link sharing with anyone"
+msgstr "<0/> Direktlink-Freigabe für jeden"
+
+#: src/routes/help/faq/+page.svelte
+msgid "<0/> Public gallery visibility (optional)"
+msgstr "<0/> Sichtbarkeit in der öffentlichen Galerie (optional)"
+
+#: src/routes/help/faq/+page.svelte
+msgid "<0/> Link accessible to anyone who has it"
+msgstr "<0/> Link für jeden zugänglich, der ihn hat"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Want More Control?"
+msgstr "Mehr Kontrolle gewünscht?"
+
+#: src/routes/help/faq/+page.svelte
+msgid "I'm working on advanced sharing features that will give you more control over your image sharing:"
+msgstr "Ich arbeite an erweiterten Freigabefunktionen, die Ihnen mehr Kontrolle über das Teilen Ihrer Bilder geben:"
+
+#: src/routes/help/faq/+page.svelte
+msgid "<0/> Expiration dates for shared links"
+msgstr "<0/> Ablaufdaten für geteilte Links"
+
+#: src/routes/help/faq/+page.svelte
+msgid "<0/> Password protection"
+msgstr "<0/> Passwortschutz"
+
+#: src/routes/help/faq/+page.svelte
+msgid "<0/> Private group sharing"
+msgstr "<0/> Private Gruppenfreigabe"
+
+#: src/routes/help/faq/+page.svelte
+msgid "<0/> Support this feature request <1/>"
+msgstr "<0/> Diese Funktionsanfrage unterstützen <1/>"
+
+#: src/routes/help/faq/+page.svelte
+msgid "I appreciate your help in making Slink better! If you've encountered a bug or have suggestions for improvement, here's how you can help:"
+msgstr "Ich schätze Ihre Hilfe, Slink zu verbessern! Wenn Sie einen Fehler gefunden haben oder Verbesserungsvorschläge haben, können Sie folgendermaßen helfen:"
+
+#: src/routes/help/faq/+page.svelte
+msgid "<0/> Before Reporting"
+msgstr "<0/> Vor der Meldung"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Check if the issue has already been reported"
+msgstr "Prüfen Sie, ob das Problem bereits gemeldet wurde"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Try reproducing the issue in a different browser"
+msgstr "Versuchen Sie, das Problem in einem anderen Browser zu reproduzieren"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Gather relevant details (browser, steps to reproduce, screenshots)"
+msgstr "Sammeln Sie relevante Details (Browser, Schritte zur Reproduktion, Screenshots)"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Report on GitHub"
+msgstr "Auf GitHub melden"
+
+#: src/routes/help/faq/+page.svelte
+msgid "GitHub Issues is my primary platform for tracking bugs and feature requests. Your reports help me prioritize improvements."
+msgstr "GitHub Issues ist meine primäre Plattform zur Verfolgung von Fehlern und Funktionsanfragen. Ihre Meldungen helfen mir, Verbesserungen zu priorisieren."
+
+#: src/routes/help/faq/+page.svelte
+msgid "<0/> Create New Issue <1/>"
+msgstr "<0/> Neues Issue erstellen <1/>"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Thank You!"
+msgstr "Vielen Dank!"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Every report helps me improve Slink for the entire community. I review all issues and prioritize fixes based on impact and frequency."
+msgstr "Jede Meldung hilft mir, Slink für die gesamte Community zu verbessern. Ich überprüfe alle Issues und priorisiere Korrekturen nach Auswirkung und Häufigkeit."
+
+#: src/routes/help/faq/+page.svelte
+msgid "Slink supports the following mime types:"
+msgstr "Slink unterstützt die folgenden MIME-Typen:"
+
+#: src/routes/help/faq/+page.svelte
+msgid "* Source images are forced to be converted to JPEG format."
+msgstr "* Quellbilder werden zwingend in das JPEG-Format konvertiert."
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Account Approved"
+msgstr "Konto genehmigt"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Awaiting Approval"
+msgstr "Genehmigung ausstehend"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Review in Progress"
+msgstr "Überprüfung läuft"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Your account is currently under review"
+msgstr "Ihr Konto wird derzeit überprüft"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "What happens next?"
+msgstr "Was passiert als Nächstes?"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Your account is being reviewed and will be activated once approved. Please check back later for updates on your account status."
+msgstr "Ihr Konto wird überprüft und nach Genehmigung aktiviert. Bitte schauen Sie später für Aktualisierungen zu Ihrem Kontostatus vorbei."
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Need help?"
+msgstr "Hilfe benötigt?"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Contact the administrator if you have questions about your account or the review process."
+msgstr "Kontaktieren Sie den Administrator, wenn Sie Fragen zu Ihrem Konto oder dem Überprüfungsprozess haben."
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Your Account Reference"
+msgstr "Ihre Kontoreferenz"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Provide this ID when contacting the administrator"
+msgstr "Geben Sie diese ID an, wenn Sie den Administrator kontaktieren"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Explore while you wait"
+msgstr "Erkunden Sie die Plattform in der Zwischenzeit"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Browse the platform features"
+msgstr "Plattformfunktionen durchstöbern"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Welcome Aboard"
+msgstr "Willkommen an Bord"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Your account has been approved and activated"
+msgstr "Ihr Konto wurde genehmigt und aktiviert"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "All Features Unlocked"
+msgstr "Alle Funktionen freigeschaltet"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Upload, share, and manage your content with full access to all platform features. Start creating and sharing your content."
+msgstr "Laden Sie Inhalte hoch, teilen und verwalten Sie sie mit vollem Zugriff auf alle Plattformfunktionen. Beginnen Sie mit dem Erstellen und Teilen Ihrer Inhalte."
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Ready to get started?"
+msgstr "Bereit loszulegen?"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Sign in to your account to begin using all the platform features or explore the public gallery to see what others are sharing."
+msgstr "Melden Sie sich an, um alle Plattformfunktionen zu nutzen, oder erkunden Sie die öffentliche Galerie, um zu sehen, was andere teilen."
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Ready to continue"
+msgstr "Bereit fortzufahren"
+
+#: src/routes/profile/(auth)/awaiting-approval/+page.svelte
+msgid "Sign in to access all platform features"
+msgstr "Anmelden, um auf alle Plattformfunktionen zuzugreifen"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Sign In | Slink"
+msgstr "Anmelden | Slink"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Welcome back"
+msgstr "Willkommen zurück"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Sign in to continue to Slink"
+msgstr "Melden Sie sich an, um mit Slink fortzufahren"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Email or Username"
+msgstr "E-Mail oder Benutzername"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Enter your email or username"
+msgstr "Geben Sie Ihre E-Mail oder Ihren Benutzernamen ein"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Enter your password"
+msgstr "Geben Sie Ihr Passwort ein"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "or continue with"
+msgstr "oder fortfahren mit"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Demo Mode"
+msgstr "Demo-Modus"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Try the application with the test credentials"
+msgstr "Testen Sie die Anwendung mit den Testanmeldedaten"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Get In"
+msgstr "Einloggen"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Automatically fills credentials and signs you in"
+msgstr "Füllt die Anmeldedaten automatisch aus und meldet Sie an"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Need an account?"
+msgstr "Kein Konto?"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Create one to start sharing images"
+msgstr "Erstellen Sie eines, um Bilder zu teilen"
+
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Sign Up"
+msgstr "Registrieren"
+
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Create Account | Slink"
+msgstr "Konto erstellen | Slink"
+
+#: src/routes/profile/(auth)/signup/+page.svelte
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Create Account"
+msgstr "Konto erstellen"
+
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Join Slink to start sharing your images"
+msgstr "Treten Sie Slink bei, um Ihre Bilder zu teilen"
+
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Choose a username"
+msgstr "Benutzernamen wählen"
+
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Email Address"
+msgstr "E-Mail-Adresse"
+
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Enter your email"
+msgstr "Geben Sie Ihre E-Mail ein"
+
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Create a strong password"
+msgstr "Erstellen Sie ein sicheres Passwort"
+
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Confirm your password"
+msgstr "Bestätigen Sie Ihr Passwort"
+
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Already have an account?"
+msgstr "Bereits ein Konto?"
+
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Sign in to access your images"
+msgstr "Melden Sie sich an, um auf Ihre Bilder zuzugreifen"
+
+#: src/lib/utils/http/useUserAgent.svelte.ts
+msgid "Windows"
+msgstr "Windows"
+
+#: src/lib/utils/http/useUserAgent.svelte.ts
+msgid "Linux"
+msgstr "Linux"
+
+#: src/lib/utils/http/useUserAgent.svelte.ts
+msgid "Android"
+msgstr "Android"
+
+#: src/lib/utils/http/useUserAgent.svelte.ts
+msgid "Edge"
+msgstr "Edge"
+
+#: src/lib/utils/http/useUserAgent.svelte.ts
+msgid "Opera"
+msgstr "Opera"
+
+#: src/lib/utils/http/useUserAgent.svelte.ts
+msgid "Chrome"
+msgstr "Chrome"
+
+#: src/lib/utils/http/useUserAgent.svelte.ts
+msgid "Firefox"
+msgstr "Firefox"
+
+#: src/lib/utils/http/useUserAgent.svelte.ts
+msgid "Safari"
+msgstr "Safari"
+
+#: src/ui/components/sonner/toasts/DuplicateImageToast.svelte
+msgid "Image Already Exists"
+msgstr "Bild existiert bereits"
+
+#: src/ui/components/sonner/toasts/DuplicateImageToast.svelte
+msgid "Duplicate"
+msgstr "Duplikat"
+
+#: src/ui/components/sonner/toasts/DuplicateImageToast.svelte
+msgid "This <0>image</0> was already uploaded <1/>."
+msgstr "Dieses <0>Bild</0> wurde bereits hochgeladen <1/>."
+
+#: src/routes/admin/settings/sso/new/+page.svelte
+msgid "Select an identity provider to configure"
+msgstr "Wählen Sie einen Identitätsanbieter zur Konfiguration"
+
+#. 0: formState.provider?.name ?? ''
+#: src/routes/admin/settings/sso/new/+page.svelte
+msgid "Configure the {0} provider"
+msgstr "Den {0}-Anbieter konfigurieren"
+
+#: src/routes/admin/settings/sso/new/+page.svelte
+msgid "Add SSO Provider | Slink"
+msgstr "SSO-Anbieter hinzufügen | Slink"
+
+#: src/routes/admin/settings/sso/[id]/edit/+page.svelte
+#: src/routes/admin/settings/sso/new/+page.svelte
+msgid "Back to SSO"
+msgstr "Zurück zu SSO"
+
+#: src/routes/profile/(auth)/sso/callback/+page.svelte
+msgid "Signing in..."
+msgstr "Anmeldung..."
+
+#: src/routes/admin/settings/sso/[id]/edit/+page.svelte
+msgid "Edit SSO Provider | Slink"
+msgstr "SSO-Anbieter bearbeiten | Slink"
+
+#: src/routes/admin/settings/sso/[id]/edit/+page.svelte
+msgid "Edit Provider"
+msgstr "Anbieter bearbeiten"
+
+#: src/routes/admin/settings/sso/[id]/edit/+page.svelte
+msgid "Update the SSO provider configuration"
+msgstr "SSO-Anbieterkonfiguration aktualisieren"
+
+#: src/routes/preferences/+page.svelte
+msgid "English"
+msgstr "English"
+
+#: src/routes/preferences/+page.svelte
+msgid "Українська"
+msgstr "Українська"
+
+#: src/feature/Auth/PasswordStrength/PasswordStrength.labels.svelte.ts
+msgid "Weak"
+msgstr "Schwach"
+
+#: src/feature/Auth/PasswordStrength/PasswordStrength.labels.svelte.ts
+msgid "Fair"
+msgstr "Mäßig"
+
+#: src/feature/Auth/PasswordStrength/PasswordStrength.labels.svelte.ts
+msgid "Good"
+msgstr "Gut"
+
+#: src/feature/Auth/PasswordStrength/PasswordStrength.labels.svelte.ts
+msgid "Strong"
+msgstr "Stark"
+
+#: src/feature/Auth/PasswordStrength/PasswordStrength.labels.svelte.ts
+msgid "Very Strong"
+msgstr "Sehr stark"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+msgid "History"
+msgstr "Verlauf"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+msgid "Administration"
+msgstr "Administration"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+msgid "System"
+msgstr "System"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+msgid "Help & FAQ"
+msgstr "Hilfe & FAQ"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+msgid "GitHub"
+msgstr "GitHub"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Passwords do not match."
+msgstr "Passwörter stimmen nicht überein."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Username cannot be the same as email."
+msgstr "Benutzername darf nicht mit der E-Mail übereinstimmen."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Password must be at least {limit} characters long."
+msgstr "Passwort muss mindestens {limit} Zeichen lang sein."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Password must contain at least one number."
+msgstr "Passwort muss mindestens eine Zahl enthalten."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Password must contain at least one lowercase letter."
+msgstr "Passwort muss mindestens einen Kleinbuchstaben enthalten."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Password must contain at least one uppercase letter."
+msgstr "Passwort muss mindestens einen Großbuchstaben enthalten."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Password must contain at least one special character."
+msgstr "Passwort muss mindestens ein Sonderzeichen enthalten."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Min 6 characters password"
+msgstr "Mindestens 6 Zeichen Passwort"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Username must be at least {limit} characters long."
+msgstr "Benutzername muss mindestens {limit} Zeichen lang sein."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Username must be at most {limit} characters long."
+msgstr "Benutzername darf höchstens {limit} Zeichen lang sein."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Username can only contain lowercase letters, numbers, underscores, hyphens, and periods."
+msgstr "Benutzername darf nur Kleinbuchstaben, Zahlen, Unterstriche, Bindestriche und Punkte enthalten."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Username cannot contain consecutive special characters."
+msgstr "Benutzername darf keine aufeinanderfolgenden Sonderzeichen enthalten."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "`{value}` is a reserved username."
+msgstr "`{value}` ist ein reservierter Benutzername."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Invalid credentials. Please check your username/email and password and try again."
+msgstr "Ungültige Anmeldedaten. Bitte überprüfen Sie Ihren Benutzernamen/E-Mail und Ihr Passwort und versuchen Sie es erneut."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "You must be logged in to change your password"
+msgstr "Sie müssen angemeldet sein, um Ihr Passwort zu ändern"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Invalid refresh token"
+msgstr "Ungültiger Refresh-Token"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "User is restricted"
+msgstr "Benutzer ist eingeschränkt"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "SSO provider is currently unavailable. Please try again later."
+msgstr "SSO-Anbieter ist derzeit nicht verfügbar. Bitte versuchen Sie es später erneut."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Invalid email address."
+msgstr "Ungültige E-Mail-Adresse."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Email already registered."
+msgstr "E-Mail bereits registriert."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "An email address is required for SSO authentication."
+msgstr "Eine E-Mail-Adresse ist für die SSO-Authentifizierung erforderlich."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Email must be verified by the SSO provider before signing in."
+msgstr "Die E-Mail muss vom SSO-Anbieter verifiziert werden, bevor Sie sich anmelden können."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Invalid password."
+msgstr "Ungültiges Passwort."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Invalid old password provided."
+msgstr "Ungültiges altes Passwort angegeben."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Invalid or expired refresh token."
+msgstr "Ungültiger oder abgelaufener Refresh-Token."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Invalid display name"
+msgstr "Ungültiger Anzeigename"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Display name already exist."
+msgstr "Anzeigename existiert bereits."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "`{name}` is a reserved display name"
+msgstr "`{name}` ist ein reservierter Anzeigename"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Invalid username"
+msgstr "Ungültiger Benutzername"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Username already exist."
+msgstr "Benutzername existiert bereits."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Invalid settings configuration."
+msgstr "Ungültige Einstellungskonfiguration."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Invalid password min length"
+msgstr "Ungültige Passwort-Mindestlänge"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Invalid image max size"
+msgstr "Ungültige maximale Bildgröße"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Your account is pending approval."
+msgstr "Ihr Konto wartet auf Genehmigung."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Sign up is not allowed"
+msgstr "Registrierung ist nicht erlaubt"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Invalid or expired OAuth state"
+msgstr "Ungültiger oder abgelaufener OAuth-Status"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "You cannot grant or revoke roles from yourself. Use CLI instead."
+msgstr "Sie können sich selbst keine Rollen zuweisen oder entziehen. Verwenden Sie stattdessen die CLI."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "You cannot change your own status."
+msgstr "Sie können Ihren eigenen Status nicht ändern."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Invalid user role"
+msgstr "Ungültige Benutzerrolle"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "This action is not allowed in demo mode"
+msgstr "Diese Aktion ist im Demo-Modus nicht erlaubt"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Access denied"
+msgstr "Zugriff verweigert"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Resource not found"
+msgstr "Ressource nicht gefunden"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "An error occurred"
+msgstr "Ein Fehler ist aufgetreten"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "An error occurred, while processing the request"
+msgstr "Bei der Verarbeitung der Anfrage ist ein Fehler aufgetreten"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Validation Error"
+msgstr "Validierungsfehler"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Specification Error"
+msgstr "Spezifikationsfehler"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "You cannot bookmark your own image"
+msgstr "Sie können Ihr eigenes Bild nicht als Lesezeichen speichern"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Cannot bookmark a private image"
+msgstr "Ein privates Bild kann nicht als Lesezeichen gespeichert werden"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Comment edit window has expired. Comments can only be edited within 24 hours of creation."
+msgstr "Das Bearbeitungsfenster für Kommentare ist abgelaufen. Kommentare können nur innerhalb von 24 Stunden nach Erstellung bearbeitet werden."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "You can only access your own collections"
+msgstr "Sie können nur auf Ihre eigenen Sammlungen zugreifen"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "You can only access your own tags"
+msgstr "Sie können nur auf Ihre eigenen Tags zugreifen"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Cannot move a tag to itself"
+msgstr "Ein Tag kann nicht auf sich selbst verschoben werden"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Cannot move a tag to one of its descendants"
+msgstr "Ein Tag kann nicht auf einen seiner Untereinträge verschoben werden"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Storage provider is not configured."
+msgstr "Speicheranbieter ist nicht konfiguriert."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "SMB configuration is incomplete."
+msgstr "SMB-Konfiguration ist unvollständig."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Storage usage metrics are disabled for this provider"
+msgstr "Speichernutzungsmetriken sind für diesen Anbieter deaktiviert"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "S3 bucket is required."
+msgstr "S3-Bucket ist erforderlich."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "S3 region is required when using AWS."
+msgstr "S3-Region ist bei Verwendung von AWS erforderlich."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "S3 Access key is required."
+msgstr "S3-Zugriffsschlüssel ist erforderlich."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "S3 Secret key is required."
+msgstr "S3-Geheimschlüssel ist erforderlich."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "The expiry date must be in the future."
+msgstr "Das Ablaufdatum muss in der Zukunft liegen."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "API key not found"
+msgstr "API-Schlüssel nicht gefunden"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "API key does not belong to user"
+msgstr "API-Schlüssel gehört nicht dem Benutzer"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "API key has expired"
+msgstr "API-Schlüssel ist abgelaufen"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Validation failed"
+msgstr "Validierung fehlgeschlagen"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "File too large. Please choose a smaller file and try again."
+msgstr "Datei zu groß. Bitte wählen Sie eine kleinere Datei und versuchen Sie es erneut."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Max size cannot be less than 0"
+msgstr "Maximale Größe darf nicht kleiner als 0 sein"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Max size cannot be greater than 1000"
+msgstr "Maximale Größe darf nicht größer als 1000 sein"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Invalid tag ID format"
+msgstr "Ungültiges Tag-ID-Format"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Invalid collection ID format"
+msgstr "Ungültiges Sammlungs-ID-Format"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Password length cannot be less than 3"
+msgstr "Passwortlänge darf nicht kleiner als 3 sein"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Password length cannot be greater than 64"
+msgstr "Passwortlänge darf nicht größer als 64 sein"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "This value should not be blank."
+msgstr "Dieses Feld darf nicht leer sein."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "This value is not a valid email address."
+msgstr "Dieser Wert ist keine gültige E-Mail-Adresse."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "This value is not a valid URL."
+msgstr "Dieser Wert ist keine gültige URL."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "This value is not a valid UUID."
+msgstr "Dieser Wert ist keine gültige UUID."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "This value should be positive."
+msgstr "Dieser Wert muss positiv sein."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "This value is not valid."
+msgstr "Dieser Wert ist ungültig."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "The value you selected is not a valid choice."
+msgstr "Der ausgewählte Wert ist keine gültige Option."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Invalid key format"
+msgstr "Ungültiges Schlüsselformat"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Tag name can only contain letters, numbers, hyphens, and underscores"
+msgstr "Tag-Name darf nur Buchstaben, Zahlen, Bindestriche und Unterstriche enthalten"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Display name can only contain letters, numbers, underscores, hyphens, spaces, and periods."
+msgstr "Anzeigename darf nur Buchstaben, Zahlen, Unterstriche, Bindestriche, Leerzeichen und Punkte enthalten."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Display name cannot contain consecutive characters of the same type."
+msgstr "Anzeigename darf keine aufeinanderfolgenden Zeichen desselben Typs enthalten."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "`Anonymous` is a reserved display name."
+msgstr "`Anonymous` ist ein reservierter Anzeigename."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "API key is required. Create one first from your profile page."
+msgstr "API-Schlüssel erforderlich. Erstellen Sie zuerst einen auf Ihrer Profilseite."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "The refresh token is required."
+msgstr "Der Refresh-Token ist erforderlich."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Invalid license type."
+msgstr "Ungültiger Lizenztyp."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Invalid landing page."
+msgstr "Ungültige Startseite."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Invalid default visibility."
+msgstr "Ungültige Standard-Sichtbarkeit."
+
+#: src/feature/Upload/UploadForm.svelte
+msgid "Drop your images here"
+msgstr "Bilder hier ablegen"
+
+#: src/feature/Upload/UploadForm.svelte
+msgid "Drop your image here"
+msgstr "Bild hier ablegen"
+
+#: src/feature/Upload/UploadForm.svelte
+msgid "Uploading your images..."
+msgstr "Ihre Bilder werden hochgeladen..."
+
+#: src/feature/Upload/UploadForm.svelte
+msgid "Uploading your image..."
+msgstr "Ihr Bild wird hochgeladen..."
+
+#: src/feature/Collection/CreateCollectionForm.svelte
+msgid "Edit Collection"
+msgstr "Sammlung bearbeiten"
+
+#: src/feature/Text/ExpandableText/ExpandableText.svelte
+msgid "less"
+msgstr "weniger"
+
+#: src/feature/Text/ExpandableText/ExpandableText.svelte
+msgid "more"
+msgstr "mehr"
+
+#: src/feature/Image/History/BulkDeleteConfirmation.svelte
+msgid "Delete Images"
+msgstr "Bilder löschen"
+
+#: src/feature/Image/History/BatchActionConfirmation.svelte
+msgid "# image"
+msgid_plural "# images"
+msgstr[0] "# Bild"
+msgstr[1] "# Bilder"
+
+#: src/routes/help/faq/+page.svelte
+msgid "What image formats Slink supports?"
+msgstr "Welche Bildformate unterstützt Slink?"
+
+#: src/routes/help/faq/+page.svelte
+msgid "What is the visibility of my images?"
+msgstr "Wie ist die Sichtbarkeit meiner Bilder?"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Can I share my images with others?"
+msgstr "Kann ich meine Bilder mit anderen teilen?"
+
+#: src/routes/help/faq/+page.svelte
+msgid "I found an issue, how can I report it?"
+msgstr "Ich habe ein Problem gefunden, wie kann ich es melden?"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "The file is too large ({size}). Allowed maximum size is {limit}."
+msgstr "Die Datei ist zu groß ({size}). Maximal erlaubte Größe ist {limit}."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "The mime type {type} is not supported."
+msgstr "Der MIME-Typ {type} wird nicht unterstützt."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Display name must be at least {limit} characters long."
+msgstr "Anzeigename muss mindestens {limit} Zeichen lang sein."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Display name must be at most {limit} characters long."
+msgstr "Anzeigename darf höchstens {limit} Zeichen lang sein."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "This value should have {limit} characters or more."
+msgstr "Dieser Wert muss mindestens {limit} Zeichen haben."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "This value is too long. It should have {limit} characters or less."
+msgstr "Dieser Wert ist zu lang. Er darf höchstens {limit} Zeichen haben."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "This value should be {limit} or less."
+msgstr "Dieser Wert muss {limit} oder weniger betragen."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "This value should be between {min} and {max}."
+msgstr "Dieser Wert muss zwischen {min} und {max} liegen."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "This value should be of type {type}."
+msgstr "Dieser Wert muss vom Typ {type} sein."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "This collection should contain {limit} elements or less."
+msgstr "Diese Sammlung darf höchstens {limit} Elemente enthalten."
+
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+msgid "Grid"
+msgstr "Raster"
+
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+msgid "List"
+msgstr "Liste"
+
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+msgid "Table"
+msgstr "Tabelle"
+
+#: src/feature/Tag/TagDataTable/columns.svelte.ts
+msgid "Children"
+msgstr "Untereinträge"
+
+#: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+msgid "File Name"
+msgstr "Dateiname"
+
+#: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+msgid "Type"
+msgstr "Typ"
+
+#: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+msgid "Dimensions"
+msgstr "Abmessungen"
+
+#: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+msgid "Size"
+msgstr "Größe"
+
+#: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+msgid "Tags / Collections"
+msgstr "Tags / Sammlungen"
+
+#: src/feature/Image/History/BulkDeleteConfirmation.svelte
+msgid "Delete # image"
+msgid_plural "Delete # images"
+msgstr[0] "# Bild löschen"
+msgstr[1] "# Bilder löschen"
+
+#: src/routes/preferences/+page.svelte
+msgid "Deutsch"
+msgstr ""
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Tag \"{name}\" already exists"
+msgstr "Tag \"{name}\" existiert bereits"
+
+#: src/routes/preferences/+page.svelte
+msgid "中文"
+msgstr ""
+
+#: src/routes/preferences/+page.svelte
+msgid "Language"
+msgstr ""
+
+#: src/routes/preferences/+page.svelte
+msgid "Display Language"
+msgstr "Anzeigesprache"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Tag \"{name}\" created successfully"
+msgstr "Tag \"{name}\" erfolgreich erstellt"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Tag \"{name}\" moved successfully"
+msgstr "Tag \"{name}\" erfolgreich verschoben"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Tag \"{name}\" deleted successfully"
+msgstr "Tag \"{name}\" erfolgreich gelöscht"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Failed to download ShareX config"
+msgstr "ShareX-Konfiguration konnte nicht heruntergeladen werden"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Copied to clipboard"
+msgstr "In die Zwischenablage kopiert"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Something went wrong"
+msgstr "Etwas ist schiefgelaufen"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Failed to delete images. Please try again later."
+msgstr "Bilder konnten nicht gelöscht werden. Bitte versuchen Sie es später erneut."
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Successfully deleted {count} from history"
+msgstr "{count} erfolgreich aus dem Verlauf gelöscht"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Failed to delete {count}"
+msgstr "{count} konnte nicht gelöscht werden"
+
+#: src/routes/preferences/+page.svelte
+msgid "Choose your preferred language for the interface"
+msgstr "Wählen Sie Ihre bevorzugte Sprache für die Benutzeroberfläche"
+
+#: src/feature/Search/SearchBar.svelte
+msgid "Hashtag"
+msgstr "Hashtag"
+
+#: src/routes/preferences/+page.svelte
+msgid "Español"
+msgstr ""
+
+#: src/routes/preferences/+page.svelte
+msgid "Français"
+msgstr ""
+
+#: src/routes/preferences/+page.svelte
+msgid "Italiano"
+msgstr ""
+
+#: src/routes/preferences/+page.svelte
+msgid "Polski"
+msgstr ""

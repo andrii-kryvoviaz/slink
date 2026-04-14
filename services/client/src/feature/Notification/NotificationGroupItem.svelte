@@ -1,7 +1,7 @@
 <script lang="ts">
   import { CommentText } from '@slink/feature/Text';
 
-  import { formatDate } from '$lib/utils/date';
+  import { formatDate } from '$lib/utils/date.svelte';
   import Icon from '@iconify/svelte';
   import { slide } from 'svelte/transition';
 

@@ -21,6 +21,7 @@ import {
   createCollectionPickerState,
   createImageTagPickerState,
 } from '@slink/lib/state/ImagePickerState.svelte';
+import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
 import type { ActionButton } from './ImageActionBar.theme';
 
@@ -153,7 +154,7 @@ export function useImageActions(config: UseImageActionsConfig) {
     const newValue = !image.isPublic;
     await visibility.run(image.id, newValue);
     if (visibility.error) {
-      toast.error('Failed to update visibility. Please try again later.');
+      toast.error(messages.image.failedToUpdateVisibility);
       return;
     }
     const updated = { ...image, isPublic: newValue };
@@ -167,7 +168,7 @@ export function useImageActions(config: UseImageActionsConfig) {
     const image = config.getImage();
     await share.run(image.id);
     if (share.error || !share.data) {
-      toast.error('Failed to generate share link. Please try again later.');
+      toast.error(messages.image.failedToGenerateShareLink);
       return;
     }
     await navigator.clipboard.writeText(routes.share.fromResponse(share.data));
@@ -212,7 +213,7 @@ export function useImageActions(config: UseImageActionsConfig) {
     const image = config.getImage();
     await deletion.run(image.id, preserveOnDiskAfterDeletion);
     if (deletion.error) {
-      toast.error('Failed to delete image. Please try again later.');
+      toast.error(messages.image.failedToDelete);
       return;
     }
     historyFeedState.removeItem(image.id);

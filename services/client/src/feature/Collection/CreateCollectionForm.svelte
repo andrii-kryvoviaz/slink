@@ -54,7 +54,8 @@
     {#snippet icon()}
       <Icon icon={mode === 'edit' ? 'lucide:pencil' : 'lucide:folder-plus'} />
     {/snippet}
-    {#snippet title()}{mode === 'edit' ? 'Edit' : 'Create'} Collection{/snippet}
+    {#snippet title()}{#if mode === 'edit'}Edit Collection{:else}Create
+        Collection{/if}{/snippet}
     {#snippet description()}
       {mode === 'edit'
         ? 'Update your collection details'

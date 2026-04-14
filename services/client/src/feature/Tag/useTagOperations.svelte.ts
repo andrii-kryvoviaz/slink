@@ -10,6 +10,8 @@ import type {
   TagListingResponse,
 } from '@slink/api/Resources/TagResource';
 
+import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
+
 const TAG_SEARCH_LIMIT = 50;
 
 export function useTagOperations() {
@@ -59,7 +61,7 @@ export function useTagOperations() {
       await tagCreation.run(request);
     } catch (error) {
       console.error('Error creating tag:', error);
-      toast.error('Failed to create tag');
+      toast.error(messages.tag.failedToCreate);
       tagCreation.reset();
       tagFetching.reset();
     }

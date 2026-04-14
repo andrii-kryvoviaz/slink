@@ -6,6 +6,8 @@
   import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
   import Icon from '@iconify/svelte';
 
+  import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
+
   import {
     type BookmarkButtonSize,
     type BookmarkButtonVariant,
@@ -51,12 +53,12 @@
     if (isLoading) return;
 
     if (!isAuthenticated) {
-      toast.info('Sign in to bookmark images');
+      toast.info(messages.bookmark.signInRequired);
       return;
     }
 
     if (isOwnImage) {
-      toast.info("You can't bookmark your own images");
+      toast.info(messages.bookmark.cantBookmarkOwn);
       return;
     }
 
@@ -79,11 +81,13 @@
       bookmarkCount = response.bookmarkCount;
       onBookmarkChange?.(isBookmarked, bookmarkCount);
 
-      toast.success(isBookmarked ? 'Image bookmarked' : 'Bookmark removed');
+      toast.success(
+        isBookmarked ? messages.bookmark.added : messages.bookmark.removed,
+      );
     } catch {
       isBookmarked = wasBookmarked;
       bookmarkCount = previousCount;
-      toast.error('Failed to update bookmark');
+      toast.error(messages.bookmark.failedToUpdate);
     } finally {
       isLoading = false;
     }

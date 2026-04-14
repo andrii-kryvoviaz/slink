@@ -11,7 +11,7 @@
     BookmarkersResponse,
   } from '@slink/api/Response';
 
-  import { formatDate } from '@slink/lib/utils/date';
+  import { formatDate } from '@slink/lib/utils/date.svelte';
 
   import {
     bookmarkersPanelChevronTheme,
