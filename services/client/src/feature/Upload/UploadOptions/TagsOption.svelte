@@ -25,9 +25,7 @@
   const createModalState = createCreateTagModalState();
 
   const selectedIds = $derived(selectedTags.map((t) => t.id));
-  const buttonLabel = $derived(
-    selectedTags.length > 0 ? 'Add more' : 'Add tags',
-  );
+  const buttonLabel = $derived(selectedTags.length > 0 ? 'Add more' : 'Tags');
 
   const handleToggle = (tag: Tag) => {
     if (disabled) return;

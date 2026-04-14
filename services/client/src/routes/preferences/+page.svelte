@@ -128,13 +128,9 @@
               Display Language
             {/snippet}
             {#snippet hint()}
-              The language used throughout the interface
+              Choose your preferred language for the interface
             {/snippet}
-            <Select
-              items={localeOptions}
-              bind:value={state.locale}
-              placeholder="Select a language..."
-            />
+            <Select items={localeOptions} bind:value={state.locale} />
             <input
               type="hidden"
               name="displayLanguage"
