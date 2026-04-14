@@ -250,9 +250,6 @@ msgstr "[deleted]"
 msgid "Create"
 msgstr "Create"
 
-#~ msgid "{0} Collection"
-#~ msgstr "{0} Collection"
-
 #: src/feature/Collection/CreateCollectionForm.svelte
 msgid "Update your collection details"
 msgstr "Update your collection details"
@@ -329,9 +326,6 @@ msgstr "Search by Description"
 #: src/feature/Search/SearchBar.svelte
 msgid "Search by Hashtag"
 msgstr "Search by Hashtag"
-
-#~ msgid "Search by "
-#~ msgstr "Search by "
 
 #: src/feature/Navigation/Sidebar/AppSidebar.svelte
 #: src/feature/Search/SearchBar.svelte
@@ -436,9 +430,6 @@ msgstr "No files selected"
 msgid "Only one file allowed at a time"
 msgstr "Only one file allowed at a time"
 
-#~ msgid "Drop your {0} here"
-#~ msgstr "Drop your {0} here"
-
 #: src/feature/Upload/UploadForm.svelte
 msgid "or click to browse from your device"
 msgstr "or click to browse from your device"
@@ -462,9 +453,6 @@ msgstr "Drop to upload"
 #: src/feature/Upload/UploadForm.svelte
 msgid "Almost there"
 msgstr "Almost there"
-
-#~ msgid "Uploading your {0}..."
-#~ msgstr "Uploading your {0}..."
 
 #: src/feature/Upload/UploadSuccess.svelte
 msgid "Upload Successful!"
@@ -986,21 +974,9 @@ msgstr "CollectionListFeed"
 msgid "Failed to load collections"
 msgstr "Failed to load collections"
 
-#~ msgid "Failed to add to collection"
-#~ msgstr "Failed to add to collection"
-
-#~ msgid "Failed to remove from collection"
-#~ msgstr "Failed to remove from collection"
-
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to load tags"
 msgstr "Failed to load tags"
-
-#~ msgid "Failed to add tag"
-#~ msgstr "Failed to add tag"
-
-#~ msgid "Failed to remove tag"
-#~ msgstr "Failed to remove tag"
 
 #: src/lib/state/ImageTagManagerState.svelte.ts
 msgid "ImageTagManagerState"
@@ -1022,22 +998,13 @@ msgstr "TagFilterState"
 msgid "StorageUsageStore"
 msgstr "StorageUsageStore"
 
-#~ msgid "Tag \"{0}\" created successfully"
-#~ msgstr "Tag \"{0}\" created successfully"
-
 #: src/lib/state/TagListFeed.svelte.ts
 msgid "Failed to create tag. Please try again."
 msgstr "Failed to create tag. Please try again."
 
-#~ msgid "Tag \"{0}\" moved successfully"
-#~ msgstr "Tag \"{0}\" moved successfully"
-
 #: src/lib/state/TagListFeed.svelte.ts
 msgid "Failed to move tag. Please try again."
 msgstr "Failed to move tag. Please try again."
-
-#~ msgid "Tag \"{0}\" deleted successfully"
-#~ msgstr "Tag \"{0}\" deleted successfully"
 
 #: src/lib/state/TagListFeed.svelte.ts
 msgid "Failed to delete tag. Please try again."
@@ -1326,9 +1293,6 @@ msgstr "Image"
 msgid "Images"
 msgstr "Images"
 
-#~ msgid "Delete {0} {1}"
-#~ msgstr "Delete {0} {1}"
-
 #: src/feature/Image/History/Actions/DeleteAction.svelte
 #: src/feature/Image/History/BulkDeleteConfirmation.svelte
 #: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
@@ -1340,9 +1304,6 @@ msgstr "Remove from storage"
 #: src/feature/Image/History/BulkDeleteConfirmation.svelte
 msgid "Permanently delete the files from storage"
 msgstr "Permanently delete the files from storage"
-
-#~ msgid "<0/> Delete {0}"
-#~ msgstr "<0/> Delete {0}"
 
 #: src/feature/Image/History/ImageMetadata.svelte
 msgid "File type & dimensions"
@@ -2592,9 +2553,6 @@ msgstr "Click to search for {0}"
 msgid "Add more"
 msgstr "Add more"
 
-#~ msgid "Add tags"
-#~ msgstr "Add tags"
-
 #: src/feature/Upload/UploadOptions/UploadOptionsPanel.svelte
 msgid "Upload Options"
 msgstr "Upload Options"
@@ -3578,9 +3536,6 @@ msgstr "English"
 msgid "Українська"
 msgstr "Українська"
 
-#~ msgid "Change language"
-#~ msgstr "Change language"
-
 #: src/feature/Auth/PasswordStrength/PasswordStrength.labels.svelte.ts
 msgid "Weak"
 msgstr "Weak"
@@ -3729,12 +3684,6 @@ msgstr "Invalid display name"
 msgid "Display name already exist."
 msgstr "Display name already exist."
 
-#~ msgid "Display name must be at least 3 characters long"
-#~ msgstr "Display name must be at least 3 characters long"
-
-#~ msgid "Display name must be at most 30 characters long"
-#~ msgstr "Display name must be at most 30 characters long"
-
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "`{name}` is a reserved display name"
 msgstr "`{name}` is a reserved display name"
@@ -3746,12 +3695,6 @@ msgstr "Invalid username"
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Username already exist."
 msgstr "Username already exist."
-
-#~ msgid "Username must be at least 3 characters long"
-#~ msgstr "Username must be at least 3 characters long"
-
-#~ msgid "Username must be at most 30 characters long"
-#~ msgstr "Username must be at most 30 characters long"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid settings configuration."
@@ -3945,27 +3888,9 @@ msgstr "This value should be positive."
 msgid "This value is not valid."
 msgstr "This value is not valid."
 
-#~ msgid "This value should have {{ limit }} character or more.|This value should have {{ limit }} characters or more."
-#~ msgstr "This value should have {{ limit }} character or more.|This value should have {{ limit }} characters or more."
-
-#~ msgid "This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less."
-#~ msgstr "This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less."
-
-#~ msgid "This value should be {{ limit }} or less."
-#~ msgstr "This value should be {{ limit }} or less."
-
-#~ msgid "This value should be between {{ min }} and {{ max }}."
-#~ msgstr "This value should be between {{ min }} and {{ max }}."
-
-#~ msgid "This collection should contain {{ limit }} element or less.|This collection should contain {{ limit }} elements or less."
-#~ msgstr "This collection should contain {{ limit }} element or less.|This collection should contain {{ limit }} elements or less."
-
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "The value you selected is not a valid choice."
 msgstr "The value you selected is not a valid choice."
-
-#~ msgid "This value should be of type {{ type }}."
-#~ msgstr "This value should be of type {{ type }}."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid key format"
@@ -4035,18 +3960,6 @@ msgstr "less"
 msgid "more"
 msgstr "more"
 
-#~ msgid "{0} image"
-#~ msgstr "{0} image"
-
-#~ msgid "{0} images"
-#~ msgstr "{0} images"
-
-#~ msgid "Delete {0} Image"
-#~ msgstr "Delete {0} Image"
-
-#~ msgid "Delete {0} Images"
-#~ msgstr "Delete {0} Images"
-
 #: src/feature/Image/History/BulkDeleteConfirmation.svelte
 msgid "Delete Images"
 msgstr "Delete Images"
@@ -4056,29 +3969,6 @@ msgid "# image"
 msgid_plural "# images"
 msgstr[0] "# image"
 msgstr[1] "# images"
-
-#~ msgid "Delete # Image"
-#~ msgid_plural "Delete # Images"
-#~ msgstr[0] "Delete # Image"
-#~ msgstr[1] "Delete # Images"
-
-#~ msgid "The file is too large. Allowed maximum size has been exceeded."
-#~ msgstr "The file is too large. Allowed maximum size has been exceeded."
-
-#~ msgid "The file type is not supported."
-#~ msgstr "The file type is not supported."
-
-#~ msgid "This value is too short."
-#~ msgstr "This value is too short."
-
-#~ msgid "This value is too long."
-#~ msgstr "This value is too long."
-
-#~ msgid "This value is too large."
-#~ msgstr "This value is too large."
-
-#~ msgid "This value is out of range."
-#~ msgstr "This value is out of range."
 
 #: src/routes/help/faq/+page.svelte
 msgid "What image formats Slink supports?"
@@ -4095,33 +3985,6 @@ msgstr "Can I share my images with others?"
 #: src/routes/help/faq/+page.svelte
 msgid "I found an issue, how can I report it?"
 msgstr "I found an issue, how can I report it?"
-
-#~ msgid "This value has an invalid type."
-#~ msgstr "This value has an invalid type."
-
-#~ msgid "This collection has too many elements."
-#~ msgstr "This collection has too many elements."
-
-#~ msgid "Password is too short."
-#~ msgstr "Password is too short."
-
-#~ msgid "Username is too short."
-#~ msgstr "Username is too short."
-
-#~ msgid "Username is too long."
-#~ msgstr "Username is too long."
-
-#~ msgid "Display name is too short."
-#~ msgstr "Display name is too short."
-
-#~ msgid "Display name is too long."
-#~ msgstr "Display name is too long."
-
-#~ msgid "This username is reserved."
-#~ msgstr "This username is reserved."
-
-#~ msgid "This display name is reserved."
-#~ msgstr "This display name is reserved."
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "The file is too large ({size}). Allowed maximum size is {limit}."
@@ -4199,21 +4062,6 @@ msgstr "Size"
 msgid "Tags / Collections"
 msgstr "Tags / Collections"
 
-#~ msgid "Switch between available languages."
-#~ msgstr "Switch between available languages."
-
-#~ msgid "Delete {n} {image|images}"
-#~ msgstr "Delete {n} {image|images}"
-
-#~ msgid "{n} {image|images}"
-#~ msgstr "{n} {image|images}"
-
-#~ msgid "Delete # {image|images}"
-#~ msgstr "Delete # {image|images}"
-
-#~ msgid "# {image|images}"
-#~ msgstr "# {image|images}"
-
 #: src/feature/Image/History/BulkDeleteConfirmation.svelte
 msgid "Delete # image"
 msgid_plural "Delete # images"
@@ -4240,12 +4088,6 @@ msgstr "Language"
 msgid "Display Language"
 msgstr "Display Language"
 
-#~ msgid "The language used throughout the interface"
-#~ msgstr "The language used throughout the interface"
-
-#~ msgid "Select a language..."
-#~ msgstr "Select a language..."
-
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Tag \"{name}\" created successfully"
 msgstr "Tag \"{name}\" created successfully"
@@ -4258,24 +4100,6 @@ msgstr "Tag \"{name}\" moved successfully"
 msgid "Tag \"{name}\" deleted successfully"
 msgstr "Tag \"{name}\" deleted successfully"
 
-#~ msgid "Bytes"
-#~ msgstr "Bytes"
-
-#~ msgid "Tag name cannot be empty"
-#~ msgstr "Tag name cannot be empty"
-
-#~ msgid "Tag name must be at least {0} character long"
-#~ msgstr "Tag name must be at least {0} character long"
-
-#~ msgid "Tag name must be {0} characters or less"
-#~ msgstr "Tag name must be {0} characters or less"
-
-#~ msgid "Total"
-#~ msgstr "Total"
-
-#~ msgid "ShareX config can only be downloaded for newly created keys. Please create a new key to download the config."
-#~ msgstr "ShareX config can only be downloaded for newly created keys. Please create a new key to download the config."
-
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to download ShareX config"
 msgstr "Failed to download ShareX config"
@@ -4283,9 +4107,6 @@ msgstr "Failed to download ShareX config"
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Copied to clipboard"
 msgstr "Copied to clipboard"
-
-#~ msgid "Set-Cookie"
-#~ msgstr "Set-Cookie"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Something went wrong"
@@ -4302,9 +4123,6 @@ msgstr "Successfully deleted {count} from history"
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to delete {count}"
 msgstr "Failed to delete {count}"
-
-#~ msgid "msgstr"
-#~ msgstr "msgstr"
 
 #: src/routes/preferences/+page.svelte
 msgid "Choose your preferred language for the interface"

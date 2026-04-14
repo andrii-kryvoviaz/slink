@@ -13,7 +13,7 @@
     "lint:fix": "eslint . --fix && prettier --write .",
     "format": "prettier --write .",
     "prepare": "cd ../.. && husky ./services/client/.husky",
-    "i18n": "wuchale",
+    "i18n": "wuchale --clean",
     "i18n:extract": "wuchale extract",
     "i18n:compile": "wuchale compile"
   },
