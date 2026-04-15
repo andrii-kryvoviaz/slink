@@ -70,3 +70,5 @@ services:
       - '%kernel.environment%'
       - '%exception_to_status%'
       - '%exception_code_to_message%'
+
+  Symfony\Component\Dotenv\Command\DotenvDumpCommand: ~

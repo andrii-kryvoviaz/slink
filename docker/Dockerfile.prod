@@ -75,7 +75,8 @@ COPY --from=deps-client-prod --chown=slink:slink /client/node_modules ./client/s
 COPY --chown=slink:slink services/api/.env.example ./api/.env
 
 RUN slink cache:warm --no-optional-warmers --quiet && \
-    slink cache:clear --quiet
+    slink cache:clear --quiet && \
+    chown -R slink:slink /services/api/var
 
 EXPOSE 3000
 
