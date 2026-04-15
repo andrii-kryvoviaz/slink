@@ -1,16 +1,32 @@
 <script lang="ts">
-  import { Loader } from '@slink/feature/Layout';
   import { Button, type ButtonVariant } from '@slink/ui/components/button';
-  import {
-    modalHeaderIconContainerVariants,
-    modalHeaderIconVariants,
-  } from '@slink/ui/components/dialog/modal.theme';
+  import { cva } from 'class-variance-authority';
   import type { Snippet } from 'svelte';
 
   import { plural } from '$lib/utils/i18n';
   import Icon from '@iconify/svelte';
 
-  import { className } from '@slink/utils/ui/className';
+  const iconContainerVariants = cva(
+    'flex h-10 w-10 items-center justify-center rounded-full shadow-sm shrink-0 border',
+    {
+      variants: {
+        variant: {
+          blue: 'bg-blue-100 dark:bg-blue-900/30 border-blue-200/40 dark:border-blue-800/30',
+          danger:
+            'bg-red-100 dark:bg-red-900/30 border-red-200/40 dark:border-red-800/30',
+        },
+      },
+    },
+  );
+
+  const iconVariants = cva('h-5 w-5', {
+    variants: {
+      variant: {
+        blue: 'text-blue-600 dark:text-blue-400',
+        danger: 'text-red-600 dark:text-red-400',
+      },
+    },
+  });
 
   interface Props {
     count: number;
@@ -43,23 +59,10 @@
   }: Props = $props();
 </script>
 
-<div class="w-xs max-w-screen space-y-4 relative">
-  {#if loading}
-    <div class="absolute top-2 right-2 z-10">
-      <Loader variant="minimal" size="xs" />
-    </div>
-  {/if}
-
+<div class="w-xs max-w-screen space-y-4">
   <div class="flex items-center gap-3">
-    <div
-      class={className(
-        modalHeaderIconContainerVariants({ variant }),
-        'rounded-full',
-      )}
-    >
-      <div class={modalHeaderIconVariants({ variant })}>
-        <Icon {icon} />
-      </div>
+    <div class={iconContainerVariants({ variant })}>
+      <Icon {icon} class={iconVariants({ variant })} />
     </div>
     <div>
       <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
@@ -96,14 +99,10 @@
         rounded="full"
         size="sm"
         onclick={onConfirm}
+        justify="center"
         class="flex-1 gap-1.5 font-medium shadow-lg hover:shadow-xl transition-all duration-200"
-        disabled={loading}
+        {loading}
       >
-        {#if loading}
-          <Icon icon="eos-icons:three-dots-loading" class="h-4 w-4" />
-        {:else}
-          <Icon {icon} class="h-4 w-4" />
-        {/if}
         {@render confirmText()}
       </Button>
     {:else}

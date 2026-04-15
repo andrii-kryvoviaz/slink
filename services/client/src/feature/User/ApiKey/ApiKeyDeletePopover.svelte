@@ -2,23 +2,17 @@
   import { Button } from '@slink/ui/components/button';
 
   import Icon from '@iconify/svelte';
-  import { type Readable, readable } from 'svelte/store';
 
   import type { ApiKeyResponse } from '@slink/api/Resources/ApiKeyResource';
 
   interface Props {
     apiKey: ApiKeyResponse;
-    loading?: Readable<boolean>;
+    loading?: boolean;
     confirm: (apiKey: ApiKeyResponse) => void;
     onCancel?: () => void;
   }
 
-  let {
-    apiKey,
-    loading = readable(false),
-    confirm,
-    onCancel,
-  }: Props = $props();
+  let { apiKey, loading = false, confirm, onCancel }: Props = $props();
 
   const handleConfirm = () => {
     confirm(apiKey);
@@ -37,7 +31,7 @@
         Revoke API Key
       </h3>
       <p class="text-xs text-gray-500 dark:text-gray-400">
-        This action cannot be undone
+        Key will be permanently revoked
       </p>
     </div>
   </div>
@@ -63,7 +57,7 @@
       rounded="full"
       size="sm"
       class="flex-1"
-      disabled={$loading}
+      disabled={loading}
       onclick={onCancel}
     >
       Cancel
@@ -73,14 +67,13 @@
       rounded="full"
       size="sm"
       onclick={handleConfirm}
+      justify="center"
       class="flex-1 font-medium shadow-lg hover:shadow-xl transition-all duration-200"
-      disabled={$loading}
+      {loading}
     >
-      {#if $loading}
-        <Icon icon="lucide:loader-2" class="h-4 w-4 mr-2 animate-spin" />
-      {:else}
-        <Icon icon="lucide:trash-2" class="h-4 w-4 mr-2" />
-      {/if}
+      {#snippet leftIcon()}
+        <Icon icon="ph:prohibit" class="h-4 w-4" />
+      {/snippet}
       Revoke Key
     </Button>
   </div>

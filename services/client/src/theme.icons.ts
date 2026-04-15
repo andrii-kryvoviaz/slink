@@ -223,4 +223,7 @@ export const themeIcons: string[] = [
   'ph:lock',
   'ph:bug',
   'ph:browser',
+  'ph:shield-check',
+  'ph:minus-circle',
+  'ph:prohibit',
 ];

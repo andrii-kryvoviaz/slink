@@ -42,7 +42,7 @@
         Delete Collection
       </h3>
       <p class="text-xs text-gray-500 dark:text-gray-400">
-        This action cannot be undone
+        Collection and its settings will be permanently removed
       </p>
     </div>
   </div>
@@ -87,14 +87,13 @@
       rounded="full"
       size="sm"
       onclick={onConfirm}
+      justify="center"
       class="flex-1 font-medium shadow-lg hover:shadow-xl transition-all duration-200"
-      disabled={loading}
+      {loading}
     >
-      {#if loading}
-        <Icon icon="eos-icons:three-dots-loading" class="h-4 w-4 mr-2" />
-      {:else}
-        <Icon icon="heroicons:trash" class="h-4 w-4 mr-2" />
-      {/if}
+      {#snippet leftIcon()}
+        <Icon icon="heroicons:trash" class="h-4 w-4" />
+      {/snippet}
       Delete
     </Button>
   </div>

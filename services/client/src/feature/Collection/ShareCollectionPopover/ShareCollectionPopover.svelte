@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { Loader } from '@slink/feature/Layout';
   import { Button } from '@slink/ui/components/button';
 
   import Icon from '@iconify/svelte';
@@ -13,13 +12,7 @@
   let { loading = false, close, confirm }: Props = $props();
 </script>
 
-<div class="w-full max-w-sm p-2 space-y-4 relative">
-  {#if loading}
-    <div class="absolute top-2 right-2 z-10">
-      <Loader variant="minimal" size="xs" />
-    </div>
-  {/if}
-
+<div class="w-full max-w-sm p-2 space-y-4">
   <div class="flex items-center gap-3">
     <div
       class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30 border border-blue-200/40 dark:border-blue-800/30 shadow-sm shrink-0"
@@ -56,7 +49,7 @@
       size="sm"
       onclick={confirm}
       class="flex-1 font-medium"
-      disabled={loading}
+      {loading}
     >
       Confirm
     </Button>

@@ -1,5 +1,8 @@
 #!/command/with-contenv sh
 
+slink cache:clear --quiet
+slink cache:warm --no-optional-warmers --quiet
+
 slink slink:database:init --no-interaction --connection=event_store
 slink slink:database:init --no-interaction --connection=read_model
 

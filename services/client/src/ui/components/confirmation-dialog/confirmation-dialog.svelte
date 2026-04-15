@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { Loader } from '@slink/feature/Layout';
   import { Button } from '@slink/ui/components/button';
   import {
     type ModalVariant,
@@ -10,10 +9,6 @@
   import type { Snippet } from 'svelte';
 
   import Icon from '@iconify/svelte';
-  import { quartOut } from 'svelte/easing';
-  import { readable } from 'svelte/store';
-  import type { Readable } from 'svelte/store';
-  import { scale } from 'svelte/transition';
 
   export type ConfirmationVariant = 'danger' | 'amber' | 'blue' | 'green';
 
@@ -25,7 +20,7 @@
     content?: Snippet;
     confirmText?: string;
     cancelText?: string;
-    loading?: Readable<boolean>;
+    loading?: boolean;
     close: () => void;
     confirm: () => void;
   }
@@ -38,7 +33,7 @@
     content,
     confirmText = 'Confirm',
     cancelText = 'Cancel',
-    loading = readable(false),
+    loading = false,
     close,
     confirm,
   }: Props = $props();
@@ -72,19 +67,11 @@
     </div>
 
     <div class="flex-1 min-w-0">
-      <div class="flex items-center justify-between gap-4">
-        <h3
-          class="text-xl font-semibold text-slate-900 dark:text-white tracking-tight"
-        >
-          {title}
-        </h3>
-
-        {#if $loading}
-          <div in:scale={{ duration: 200, easing: quartOut }}>
-            <Loader variant="minimal" size="sm" class="text-gray-400" />
-          </div>
-        {/if}
-      </div>
+      <h3
+        class="text-xl font-semibold text-slate-900 dark:text-white tracking-tight"
+      >
+        {title}
+      </h3>
 
       {#if message}
         <p
@@ -107,7 +94,7 @@
       rounded="full"
       onclick={close}
       class="flex-1"
-      disabled={$loading}
+      disabled={loading}
     >
       {cancelText}
     </Button>
@@ -118,12 +105,10 @@
       rounded="full"
       class="flex-1 shadow-lg hover:shadow-xl transition-shadow duration-200"
       onclick={confirm}
-      disabled={$loading}
+      disabled={loading}
+      {loading}
     >
       {confirmText}
-      {#if $loading}
-        <Icon icon="eos-icons:three-dots-loading" class="h-4 w-4 ml-2" />
-      {/if}
     </Button>
   </div>
 </div>
