@@ -16,5 +16,6 @@ enum DisplayLanguage: string {
   case It = 'it';
   case Pl = 'pl';
   case Uk = 'uk';
+  case Ja = 'ja';
   case Zh = 'zh';
 }

@@ -71,6 +71,7 @@
     { value: Locale.IT, label: 'Italiano' },
     { value: Locale.PL, label: 'Polski' },
     { value: Locale.UK, label: 'Українська' },
+    { value: Locale.JA, label: '日本語' },
     { value: Locale.ZH, label: '中文' },
   ];
 

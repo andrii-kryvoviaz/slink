@@ -4181,3 +4181,7 @@ msgid "# more tag"
 msgid_plural "# more tags"
 msgstr[0] "# weiterer Tag"
 msgstr[1] "# weitere Tags"
+
+#: src/routes/preferences/+page.svelte
+msgid "日本語"
+msgstr "日本語"

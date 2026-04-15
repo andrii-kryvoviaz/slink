@@ -1,23 +1,23 @@
 msgid ""
 msgstr ""
-"Plural-Forms: nplurals=2; plural=(n != 1) ? 1 : 0;\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "Source-Language: en\n"
-"Language: it\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: src/routes/info/[id]/+page.server.ts
 msgid "Take me to my Uploads"
-msgstr "Portami ai miei caricamenti"
+msgstr "アップロード一覧へ"
 
 #: src/routes/info/[id]/+page.server.ts
 msgid "An error occurred. Please try again later."
-msgstr "Si è verificato un errore. Riprova più tardi."
+msgstr "エラーが発生しました。しばらくしてからもう一度お試しください。"
 
 #: src/routes/i/[code]/+page.server.ts
 msgid "Location"
-msgstr "Posizione"
+msgstr "場所"
 
 #: src/routes/i/[code]/+page.server.ts
 msgid "User-Agent"
@@ -25,87 +25,87 @@ msgstr "User-Agent"
 
 #: src/routes/profile/(auth)/signup/+page.server.ts
 msgid "Something went wrong. Please try again later."
-msgstr "Qualcosa è andato storto. Riprova più tardi."
+msgstr "問題が発生しました。しばらくしてからもう一度お試しください。"
 
 #: src/routes/profile/(auth)/sso/callback/+page.server.ts
 msgid "Missing authorization parameters"
-msgstr "Parametri di autorizzazione mancanti"
+msgstr "認証パラメータが不足しています"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 #: src/routes/profile/(auth)/sso/callback/+page.server.ts
 #: src/routes/profile/(auth)/sso/login/[provider]/+page.server.ts
 msgid "An unexpected error occurred"
-msgstr "Si è verificato un errore imprevisto"
+msgstr "予期しないエラーが発生しました"
 
 #: src/routes/admin/settings/sso/[id]/edit/+page.server.ts
 msgid "Provider not found"
-msgstr "Provider non trovato"
+msgstr "プロバイダーが見つかりません"
 
 #: src/routes/+error.svelte
 msgid "Take me Home"
-msgstr "Portami alla home"
+msgstr "ホームへ戻る"
 
 #: src/feature/Analytics/ImageAnalytics.svelte
 #: src/feature/Analytics/ImageAnalytics.svelte
 msgid "Uploads"
-msgstr "Caricamenti"
+msgstr "アップロード"
 
 #: src/feature/Analytics/LatestUsers.svelte
 msgid "Latest Users"
-msgstr "Ultimi utenti"
+msgstr "最新のユーザー"
 
 #: src/feature/Analytics/LatestUsers.svelte
 msgid "Recently joined members"
-msgstr "Membri iscritti di recente"
+msgstr "最近参加したメンバー"
 
 #: src/feature/Analytics/LatestUsers.svelte
 #: src/ui/components/combobox/combobox.svelte
 #: src/ui/components/picker/picker-list.svelte
 #: src/ui/components/picker/picker-search.svelte
 msgid "Search..."
-msgstr "Cerca..."
+msgstr "検索..."
 
 #: src/feature/Analytics/LatestUsers.svelte
 msgid "Search users"
-msgstr "Cerca utenti"
+msgstr "ユーザーを検索"
 
 #: src/feature/Analytics/LatestUsers.svelte
 #: src/feature/Search/SearchBar.svelte
 msgid "Clear search"
-msgstr "Cancella ricerca"
+msgstr "検索をクリア"
 
 #: src/feature/Analytics/LatestUsers.svelte
 #: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/routes/admin/user/+page.svelte
 msgid "No users found"
-msgstr "Nessun utente trovato"
+msgstr "ユーザーが見つかりません"
 
 #: src/feature/Analytics/LatestUsers.svelte
 msgid "Try adjusting your search terms"
-msgstr "Prova a modificare i termini di ricerca"
+msgstr "検索条件を変更してみてください"
 
 #: src/feature/Analytics/LatestUsers.svelte
 msgid "Users will appear here once they join"
-msgstr "Gli utenti appariranno qui una volta iscritti"
+msgstr "ユーザーが参加するとここに表示されます"
 
 #: src/feature/Analytics/LatestUsers.svelte
 msgid "View all users"
-msgstr "Visualizza tutti gli utenti"
+msgstr "すべてのユーザーを表示"
 
 #. 0: $response.meta.total
 #: src/feature/Analytics/LatestUsers.svelte
 msgid "{0} total"
-msgstr "{0} in totale"
+msgstr "合計 {0}"
 
 #: src/feature/Analytics/UserAnalytics.svelte
 msgid "No Data"
-msgstr "Nessun dato"
+msgstr "データなし"
 
 #: src/feature/Analytics/UserAnalytics.svelte
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/routes/admin/user/+page.svelte
 msgid "Users"
-msgstr "Utenti"
+msgstr "ユーザー"
 
 #: src/feature/Collection/CreateCollectionForm.svelte
 #: src/feature/Collection/CreateCollectionModal.svelte
@@ -128,7 +128,7 @@ msgstr "Utenti"
 #: src/routes/explore/+page.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "Enter"
-msgstr "Invio"
+msgstr "Enter"
 
 #: src/feature/Comment/CommentInput.svelte
 #: src/feature/Image/PostViewer/PostViewer.svelte
@@ -139,40 +139,40 @@ msgstr "Invio"
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/ui/components/table-pagination/table-pagination.svelte
 msgid "Escape"
-msgstr "Esc"
+msgstr "Escape"
 
 #: src/feature/Comment/CommentInput.svelte
 msgid "Editing reply to <0/>"
-msgstr "Modifica risposta a <0/>"
+msgstr "<0/> への返信を編集中"
 
 #: src/feature/Comment/CommentInput.svelte
 msgid "Replying to <0/>"
-msgstr "Risposta a <0/>"
+msgstr "<0/> に返信中"
 
 #: src/feature/Comment/CommentInput.svelte
 msgid "Edit your comment..."
-msgstr "Modifica il tuo commento..."
+msgstr "コメントを編集..."
 
 #. 0: activeRef.author.displayName
 #: src/feature/Comment/CommentInput.svelte
 msgid "Reply to @{0}..."
-msgstr "Rispondi a @{0}..."
+msgstr "@{0} に返信..."
 
 #: src/feature/Comment/CommentInput.svelte
 msgid "Write a comment..."
-msgstr "Scrivi un commento..."
+msgstr "コメントを入力..."
 
 #: src/feature/Comment/CommentInput.svelte
 msgid "Use **bold** and *italic* for formatting • ⌘+Enter to submit"
-msgstr "Usa **grassetto** e *corsivo* per la formattazione • ⌘+Invio per inviare"
+msgstr "**太字** や *斜体* で装飾できます・⌘+Enterで送信"
 
 #: src/feature/Comment/CommentDeleteConfirmation.svelte
 msgid "Delete Comment"
-msgstr "Elimina commento"
+msgstr "コメントを削除"
 
 #: src/feature/Image/History/Actions/DeleteAction.svelte
 msgid "This action cannot be undone"
-msgstr "Questa azione non può essere annullata"
+msgstr "この操作は取り消せません"
 
 #: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
 #: src/feature/Collection/RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte
@@ -197,21 +197,21 @@ msgstr "Questa azione non può essere annullata"
 #: src/ui/components/confirmation-dialog/confirmation-dialog.svelte
 #: src/ui/components/dialog/modal-footer.svelte
 msgid "Cancel"
-msgstr "Annulla"
+msgstr "キャンセル"
 
 #: src/feature/Comment/CommentListItem.svelte
 msgid "(edited)"
-msgstr "(modificato)"
+msgstr "(編集済み)"
 
 #: src/feature/Comment/CommentListItem.svelte
 msgid "Reply"
-msgstr "Rispondi"
+msgstr "返信"
 
 #: src/feature/Collection/CollectionActionsDropdown/CollectionActionsDropdown.svelte
 #: src/feature/Comment/CommentListItem.svelte
 #: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
 msgid "Edit"
-msgstr "Modifica"
+msgstr "編集"
 
 #: src/feature/Collection/CollectionActionsDropdown/CollectionActionsDropdown.svelte
 #: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
@@ -225,95 +225,95 @@ msgstr "Modifica"
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 #: src/feature/User/UserActions/UserActions.svelte
 msgid "Delete"
-msgstr "Elimina"
+msgstr "削除"
 
 #: src/feature/Comment/CommentListItem.svelte
 msgid "[deleted]"
-msgstr "[eliminato]"
+msgstr "[削除済み]"
 
 #: src/routes/admin/settings/sso/+page.svelte
 #: src/routes/collections/+page.svelte
 #: src/routes/integrations/+page.svelte
 #: src/routes/tags/+page.svelte
 msgid "Create"
-msgstr "Crea"
+msgstr "作成"
 
 #: src/feature/Collection/CreateCollectionForm.svelte
 msgid "Update your collection details"
-msgstr "Aggiorna i dettagli della raccolta"
+msgstr "コレクションの詳細を更新"
 
 #: src/feature/Collection/CreateCollectionForm.svelte
 #: src/feature/Collection/CreateCollectionModal.svelte
 msgid "Organize your images into a shareable collection"
-msgstr "Organizza le tue immagini in una raccolta condivisibile"
+msgstr "画像を共有可能なコレクションにまとめましょう"
 
 #: src/feature/Collection/CreateCollectionForm.svelte
 #: src/feature/Collection/CreateCollectionModal.svelte
 msgid "Collection Name"
-msgstr "Nome raccolta"
+msgstr "コレクション名"
 
 #: src/feature/Collection/CreateCollectionForm.svelte
 #: src/feature/Collection/CreateCollectionModal.svelte
 msgid "Description (Optional)"
-msgstr "Descrizione (facoltativa)"
+msgstr "説明（任意）"
 
 #: src/feature/Collection/CreateCollectionForm.svelte
 #: src/feature/Collection/CreateCollectionModal.svelte
 msgid "What's this collection about?"
-msgstr "Di cosa tratta questa raccolta?"
+msgstr "このコレクションの内容は？"
 
 #: src/feature/Collection/CreateCollectionForm.svelte
 msgid "Collection Sharing"
-msgstr "Condivisione raccolta"
+msgstr "コレクションの共有"
 
 #: src/feature/Collection/CreateCollectionForm.svelte
 msgid "Collections let you group images together and share them with a single link. You can add or remove images at any time after creating the collection."
-msgstr "Le raccolte ti permettono di raggruppare le immagini e condividerle con un unico link. Puoi aggiungere o rimuovere immagini in qualsiasi momento dopo aver creato la raccolta."
+msgstr "コレクションを使うと、画像をまとめて1つのリンクで共有できます。作成後いつでも画像の追加や削除が可能です。"
 
 #: src/feature/Collection/CreateCollectionForm.svelte
 #: src/feature/Settings/SettingsPane/SettingsPane.svelte
 #: src/routes/preferences/+page.svelte
 #: src/routes/profile/+page.svelte
 msgid "Save Changes"
-msgstr "Salva modifiche"
+msgstr "変更を保存"
 
 #: src/feature/Collection/CreateCollectionForm.svelte
 #: src/feature/Collection/CreateCollectionForm.svelte
 #: src/feature/Collection/CreateCollectionModal.svelte
 #: src/feature/Collection/CreateCollectionModal.svelte
 msgid "Create Collection"
-msgstr "Crea raccolta"
+msgstr "コレクションを作成"
 
 #: src/feature/Notification/NotificationGroupItem.svelte
 #: src/feature/Notification/NotificationListItem.svelte
 msgid "Someone"
-msgstr "Qualcuno"
+msgstr "誰か"
 
 #: src/feature/Notification/NotificationListItem.svelte
 msgid "Mark as read"
-msgstr "Segna come letta"
+msgstr "既読にする"
 
 #. 0: provider.name
 #: src/feature/Auth/SsoProviderButton.svelte
 msgid "Continue with {0}"
-msgstr "Continua con {0}"
+msgstr "{0} で続行"
 
 #: src/feature/Navigation/Navbar/Navbar.svelte
 #: src/feature/Search/SearchBar.svelte
 msgid "Search images..."
-msgstr "Cerca immagini..."
+msgstr "画像を検索..."
 
 #: src/feature/Search/SearchBar.svelte
 msgid "Search by User"
-msgstr "Cerca per utente"
+msgstr "ユーザーで検索"
 
 #: src/feature/Search/SearchBar.svelte
 msgid "Search by Description"
-msgstr "Cerca per descrizione"
+msgstr "説明文で検索"
 
 #: src/feature/Search/SearchBar.svelte
 msgid "Search by Hashtag"
-msgstr "Cerca per hashtag"
+msgstr "ハッシュタグで検索"
 
 #: src/feature/Navigation/Sidebar/AppSidebar.svelte
 #: src/feature/Search/SearchBar.svelte
@@ -321,110 +321,110 @@ msgstr "Cerca per hashtag"
 #: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 msgid "User"
-msgstr "Utente"
+msgstr "ユーザー"
 
 #: src/feature/Search/SearchBar.svelte
 msgid "Search hashtags... (e.g., #nature)"
-msgstr "Cerca hashtag... (es., #natura)"
+msgstr "ハッシュタグを検索...（例: #nature）"
 
 #: src/feature/Search/SearchBar.svelte
 msgid "Search descriptions..."
-msgstr "Cerca nelle descrizioni..."
+msgstr "説明文を検索..."
 
 #: src/feature/Search/SearchBar.svelte
 msgid "Search users..."
-msgstr "Cerca utenti..."
+msgstr "ユーザーを検索..."
 
 #: src/feature/Search/SearchBar.svelte
 msgid "Search options"
-msgstr "Opzioni di ricerca"
+msgstr "検索オプション"
 
 #: src/feature/Comment/CommentList.svelte
 #: src/feature/Image/PostViewer/CommentsSkeleton.svelte
 msgid "Comments"
-msgstr "Commenti"
+msgstr "コメント"
 
 #: src/feature/Comment/CommentList.svelte
 msgid "Oldest first"
-msgstr "Dal più vecchio"
+msgstr "古い順"
 
 #: src/feature/Comment/CommentList.svelte
 msgid "Newest first"
-msgstr "Dal più recente"
+msgstr "新しい順"
 
 #: src/feature/Comment/CommentList.svelte
 msgid "No comments yet"
-msgstr "Ancora nessun commento"
+msgstr "まだコメントはありません"
 
 #: src/feature/Comment/CommentList.svelte
 msgid "Be the first to comment"
-msgstr "Sii il primo a commentare"
+msgstr "最初のコメントを投稿しましょう"
 
 #: src/feature/Comment/CommentList.svelte
 msgid "Sign in to comment"
-msgstr "Accedi per commentare"
+msgstr "コメントするにはログイン"
 
 #: src/feature/Upload/MultiUploadProgress.svelte
 msgid "Complete"
-msgstr "Completato"
+msgstr "完了"
 
 #: src/feature/Upload/MultiUploadProgress.svelte
 msgid "Uploading"
-msgstr "Caricamento in corso"
+msgstr "アップロード中"
 
 #. 0: failedUploads
 #: src/feature/Upload/MultiUploadProgress.svelte
 msgid "• {0} failed"
-msgstr "• {0} falliti"
+msgstr "・{0} 件失敗"
 
 #. 0: completedUploads; 1: totalUploads
 #: src/feature/Upload/MultiUploadProgress.svelte
 msgid "{0} of {1} files uploaded <0/>"
-msgstr "{0} di {1} file caricati <0/>"
+msgstr "{1} 件中 {0} 件アップロード完了 <0/>"
 
 #: src/feature/Upload/MultiUploadProgress.svelte
 msgid "<0/> Retry Failed"
-msgstr "<0/> Riprova i falliti"
+msgstr "<0/> 失敗を再試行"
 
 #: src/feature/Upload/MultiUploadProgress.svelte
 msgid "<0/> Cancel"
-msgstr "<0/> Annulla"
+msgstr "<0/> キャンセル"
 
 #: src/feature/Upload/MultiUploadProgress.svelte
 msgid "<0/> Done"
-msgstr "<0/> Fine"
+msgstr "<0/> 完了"
 
 #: src/feature/Upload/MultiUploadProgress.svelte
 msgid "Overall Progress"
-msgstr "Avanzamento totale"
+msgstr "全体の進捗"
 
 #: src/feature/Upload/MultiUploadProgress.svelte
 msgid "Upload failed"
-msgstr "Caricamento fallito"
+msgstr "アップロードに失敗しました"
 
 #: src/feature/Tag/useTagOperations.svelte.ts
 msgid "Tag already exists"
-msgstr "Il tag esiste già"
+msgstr "タグはすでに存在します"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to create tag"
-msgstr "Creazione del tag non riuscita"
+msgstr "タグの作成に失敗しました"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "No files selected"
-msgstr "Nessun file selezionato"
+msgstr "ファイルが選択されていません"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Only one file allowed at a time"
-msgstr "È consentito caricare un solo file alla volta"
+msgstr "一度にアップロードできるファイルは1つだけです"
 
 #: src/feature/Upload/UploadForm.svelte
 msgid "or click to browse from your device"
-msgstr "oppure clicca per sfogliare dal tuo dispositivo"
+msgstr "またはクリックしてデバイスから選択"
 
 #: src/feature/Upload/UploadForm.svelte
 msgid "Quick paste:"
-msgstr "Incolla rapido:"
+msgstr "クイックペースト:"
 
 #: src/feature/Upload/UploadForm.svelte
 msgid "WebP"
@@ -432,194 +432,194 @@ msgstr "WebP"
 
 #: src/feature/Upload/UploadForm.svelte
 msgid "View all supported formats"
-msgstr "Visualizza tutti i formati supportati"
+msgstr "対応フォーマット一覧"
 
 #: src/feature/Upload/UploadForm.svelte
 msgid "Drop to upload"
-msgstr "Rilascia per caricare"
+msgstr "ドロップしてアップロード"
 
 #: src/feature/Upload/UploadForm.svelte
 msgid "Almost there"
-msgstr "Ci siamo quasi"
+msgstr "あと少しです"
 
 #: src/feature/Upload/UploadSuccess.svelte
 msgid "Upload Successful!"
-msgstr "Caricamento riuscito!"
+msgstr "アップロード完了！"
 
 #: src/feature/Upload/UploadSuccess.svelte
 msgid "Your image has been successfully uploaded to Slink."
-msgstr "La tua immagine è stata caricata con successo su Slink."
+msgstr "画像が Slink に正常にアップロードされました。"
 
 #: src/feature/Upload/UploadSuccess.svelte
 msgid "Guest Upload Notice"
-msgstr "Avviso caricamento ospite"
+msgstr "ゲストアップロードについて"
 
 #: src/feature/Upload/UploadSuccess.svelte
 msgid "To manage your images and access additional features, consider creating an account."
-msgstr "Per gestire le tue immagini e accedere a funzionalità aggiuntive, considera di creare un account."
+msgstr "画像の管理やその他の機能を利用するには、アカウントの作成をご検討ください。"
 
 #: src/feature/Upload/UploadSuccess.svelte
 msgid "<0/> Upload Another Image"
-msgstr "<0/> Carica un'altra immagine"
+msgstr "<0/> 別の画像をアップロード"
 
 #: src/feature/Upload/UploadSuccess.svelte
 msgid "<0/> Create Account"
-msgstr "<0/> Crea account"
+msgstr "<0/> アカウントを作成"
 
 #: src/feature/Upload/UploadSuccess.svelte
 msgid "<0/> View History"
-msgstr "<0/> Visualizza cronologia"
+msgstr "<0/> 履歴を表示"
 
 #: src/routes/bookmarks/+page.svelte
 msgid "Bookmarks | Slink"
-msgstr "Preferiti | Slink"
+msgstr "ブックマーク | Slink"
 
 #: src/feature/Image/History/ImageMetadata.svelte
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/routes/bookmarks/+page.svelte
 msgid "Bookmarks"
-msgstr "Preferiti"
+msgstr "ブックマーク"
 
 #: src/routes/bookmarks/+page.svelte
 msgid "Your saved images from the community"
-msgstr "Le tue immagini salvate dalla community"
+msgstr "コミュニティから保存した画像"
 
 #: src/feature/Image/BookmarkersPanel/BookmarkersPanel.svelte
 #: src/routes/bookmarks/+page.svelte
 msgid "No bookmarks yet"
-msgstr "Ancora nessun preferito"
+msgstr "まだブックマークはありません"
 
 #: src/routes/bookmarks/+page.svelte
 msgid "Start exploring and bookmark images you love to find them here later."
-msgstr "Inizia a esplorare e aggiungi ai preferiti le immagini che ti piacciono per ritrovarle qui in seguito."
+msgstr "気に入った画像をブックマークして、後からここで見つけましょう。"
 
 #: src/routes/bookmarks/+page.svelte
 msgid "<0/> Explore Images"
-msgstr "<0/> Esplora immagini"
+msgstr "<0/> 画像を探す"
 
 #: src/routes/bookmarks/+page.svelte
 msgid "Image no longer available"
-msgstr "Immagine non più disponibile"
+msgstr "この画像は利用できなくなりました"
 
 #: src/feature/Image/BookmarkButton/BookmarkButton.svelte
 #: src/routes/bookmarks/+page.svelte
 msgid "Remove bookmark"
-msgstr "Rimuovi dai preferiti"
+msgstr "ブックマークを解除"
 
 #: src/routes/bookmarks/+page.svelte
 msgid "Saved <0/>"
-msgstr "Salvato <0/>"
+msgstr "保存済み <0/>"
 
 #: src/routes/explore/+page.svelte
 msgid "Explore Gallery | Slink"
-msgstr "Esplora galleria | Slink"
+msgstr "ギャラリーを探索 | Slink"
 
 #: src/routes/explore/+page.svelte
 msgid "No images yet"
-msgstr "Ancora nessuna immagine"
+msgstr "まだ画像がありません"
 
 #: src/routes/explore/+page.svelte
 msgid "Be the first to share something amazing with the community. Start by uploading your favorite images."
-msgstr "Sii il primo a condividere qualcosa di straordinario con la community. Inizia caricando le tue immagini preferite."
+msgstr "コミュニティで最初に素敵な画像を共有しましょう。お気に入りの画像をアップロードしてみてください。"
 
 #: src/routes/explore/+page.svelte
 msgid "<0/> Upload First Image"
-msgstr "<0/> Carica la prima immagine"
+msgstr "<0/> 最初の画像をアップロード"
 
 #: src/routes/explore/+page.svelte
 msgid "No images found"
-msgstr "Nessuna immagine trovata"
+msgstr "画像が見つかりません"
 
 #. 0: publicFeedState.searchTerm
 #: src/routes/explore/+page.svelte
 msgid "No images match your search for \"{0}\". Try a different search term or browse all images."
-msgstr "Nessuna immagine corrisponde alla ricerca di \"{0}\". Prova un termine diverso o sfoglia tutte le immagini."
+msgstr "「{0}」に一致する画像が見つかりません。別の検索語をお試しいただくか、すべての画像をご覧ください。"
 
 #: src/routes/explore/+page.svelte
 msgid "<0/> Clear Search"
-msgstr "<0/> Cancella ricerca"
+msgstr "<0/> 検索をクリア"
 
 #: src/routes/integrations/+page.svelte
 msgid "Integrations | Slink"
-msgstr "Integrazioni | Slink"
+msgstr "連携 | Slink"
 
 #: src/routes/integrations/+page.svelte
 msgid "Integrations"
-msgstr "Integrazioni"
+msgstr "連携"
 
 #: src/routes/integrations/+page.svelte
 msgid "Connect Slink with ShareX and other tools via API keys"
-msgstr "Collega Slink a ShareX e altri strumenti tramite chiavi API"
+msgstr "API キーを使って Slink を ShareX やその他のツールと連携"
 
 #: src/routes/notifications/+page.svelte
 msgid "Notifications | Slink"
-msgstr "Notifiche | Slink"
+msgstr "通知 | Slink"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/routes/notifications/+page.svelte
 msgid "Notifications"
-msgstr "Notifiche"
+msgstr "通知"
 
 #. 0: notificationFeed.unreadCount
 #: src/routes/notifications/+page.svelte
 msgid "{0} unread"
-msgstr "{0} non lette"
+msgstr "{0} 件未読"
 
 #: src/routes/notifications/+page.svelte
 msgid "<0/> Mark all read"
-msgstr "<0/> Segna tutte come lette"
+msgstr "<0/> すべて既読にする"
 
 #: src/routes/notifications/+page.svelte
 msgid "All caught up"
-msgstr "Sei in pari"
+msgstr "すべて確認済みです"
 
 #: src/routes/notifications/+page.svelte
 msgid "You'll see activity on your images here"
-msgstr "Qui vedrai l'attività sulle tue immagini"
+msgstr "画像に関するアクティビティがここに表示されます"
 
 #: src/routes/collections/+page.svelte
 msgid "Collections | Slink"
-msgstr "Raccolte | Slink"
+msgstr "コレクション | Slink"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/feature/Upload/UploadOptions/CollectionsOption.svelte
 #: src/routes/collections/+page.svelte
 msgid "Collections"
-msgstr "Raccolte"
+msgstr "コレクション"
 
 #: src/routes/collections/+page.svelte
 msgid "Organize your images into albums"
-msgstr "Organizza le tue immagini in album"
+msgstr "画像をアルバムにまとめましょう"
 
 #: src/routes/collections/+page.svelte
 msgid "Search collections..."
-msgstr "Cerca raccolte..."
+msgstr "コレクションを検索..."
 
 #: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/routes/collections/+page.svelte
 msgid "No collections found"
-msgstr "Nessuna raccolta trovata"
+msgstr "コレクションが見つかりません"
 
 #: src/routes/collections/+page.svelte
 #: src/routes/tags/+page.svelte
 msgid "Try adjusting your search term"
-msgstr "Prova a modificare il termine di ricerca"
+msgstr "検索語を変更してみてください"
 
 #: src/routes/collections/+page.svelte
 msgid "Create your first collection to organize and share your images."
-msgstr "Crea la tua prima raccolta per organizzare e condividere le tue immagini."
+msgstr "最初のコレクションを作成して、画像を整理・共有しましょう。"
 
 #: src/routes/collections/+page.svelte
 msgid "<0/> Create Collection"
-msgstr "<0/> Crea raccolta"
+msgstr "<0/> コレクションを作成"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Password changed successfully"
-msgstr "Password modificata con successo"
+msgstr "パスワードを変更しました"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Profile updated successfully"
-msgstr "Profilo aggiornato con successo"
+msgstr "プロフィールを更新しました"
 
 #. 0: itemsFeed.collection?.name ?? 'Collection'
 #. 0: data.status === 'active' ? 'Account Approved' \\: 'Awaiting Approval'
@@ -632,23 +632,23 @@ msgstr "{0} | Slink"
 
 #: src/routes/profile/+page.svelte
 msgid "Profile Settings"
-msgstr "Impostazioni profilo"
+msgstr "プロフィール設定"
 
 #: src/routes/profile/+page.svelte
 msgid "Manage your account information and security settings"
-msgstr "Gestisci le informazioni del tuo account e le impostazioni di sicurezza"
+msgstr "アカウント情報とセキュリティ設定を管理"
 
 #: src/routes/profile/+page.svelte
 msgid "Profile Information"
-msgstr "Informazioni profilo"
+msgstr "プロフィール情報"
 
 #: src/routes/profile/+page.svelte
 msgid "Display Name"
-msgstr "Nome visualizzato"
+msgstr "表示名"
 
 #: src/routes/profile/+page.svelte
 msgid "This is how your name will appear across the platform"
-msgstr "Questo è il nome che apparirà su tutta la piattaforma"
+msgstr "プラットフォーム上で表示される名前です"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 #: src/feature/Settings/SettingsPane/SettingsPane.svelte
@@ -656,174 +656,174 @@ msgstr "Questo è il nome che apparirà su tutta la piattaforma"
 #: src/routes/preferences/+page.svelte
 #: src/routes/profile/+page.svelte
 msgid "Saving..."
-msgstr "Salvataggio..."
+msgstr "保存中..."
 
 #: src/routes/admin/settings/security/+page.svelte
 #: src/routes/profile/+page.svelte
 msgid "Security"
-msgstr "Sicurezza"
+msgstr "セキュリティ"
 
 #: src/routes/profile/+page.svelte
 msgid "Current Password"
-msgstr "Password attuale"
+msgstr "現在のパスワード"
 
 #: src/routes/profile/+page.svelte
 msgid "Enter your current password to verify your identity"
-msgstr "Inserisci la password attuale per verificare la tua identità"
+msgstr "本人確認のため現在のパスワードを入力してください"
 
 #: src/routes/profile/+page.svelte
 msgid "Current password"
-msgstr "Password attuale"
+msgstr "現在のパスワード"
 
 #: src/routes/profile/+page.svelte
 msgid "New Password"
-msgstr "Nuova password"
+msgstr "新しいパスワード"
 
 #: src/routes/profile/+page.svelte
 msgid "Choose a new password"
-msgstr "Scegli una nuova password"
+msgstr "新しいパスワードを設定"
 
 #: src/routes/profile/+page.svelte
 msgid "New password"
-msgstr "Nuova password"
+msgstr "新しいパスワード"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
 #: src/routes/profile/+page.svelte
 msgid "Confirm Password"
-msgstr "Conferma password"
+msgstr "パスワードの確認"
 
 #: src/routes/profile/+page.svelte
 msgid "Re-enter your new password"
-msgstr "Reinserisci la nuova password"
+msgstr "新しいパスワードを再入力"
 
 #: src/routes/profile/+page.svelte
 msgid "Confirm password"
-msgstr "Conferma password"
+msgstr "パスワードの確認"
 
 #: src/routes/profile/+page.svelte
 msgid "Updating..."
-msgstr "Aggiornamento in corso..."
+msgstr "更新中..."
 
 #: src/routes/profile/+page.svelte
 msgid "Update Password"
-msgstr "Aggiorna password"
+msgstr "パスワードを更新"
 
 #: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
 #: src/feature/Upload/UploadOptions/VisibilityOption.svelte
 #: src/routes/help/faq/+page.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Public"
-msgstr "Pubblica"
+msgstr "公開"
 
 #: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
 #: src/feature/Upload/UploadOptions/VisibilityOption.svelte
 #: src/routes/help/faq/+page.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Private"
-msgstr "Privata"
+msgstr "非公開"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/routes/preferences/+page.svelte
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Explore"
-msgstr "Esplora"
+msgstr "探索"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/routes/preferences/+page.svelte
 msgid "Upload"
-msgstr "Carica"
+msgstr "アップロード"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Preferences updated successfully"
-msgstr "Preferenze aggiornate con successo"
+msgstr "設定を更新しました"
 
 #: src/routes/preferences/+page.svelte
 msgid "Preferences | Slink"
-msgstr "Preferenze | Slink"
+msgstr "設定 | Slink"
 
 #: src/feature/Navigation/Sidebar/NavUser.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Preferences"
-msgstr "Preferenze"
+msgstr "設定"
 
 #: src/routes/preferences/+page.svelte
 msgid "Configure your default settings and preferences"
-msgstr "Configura le impostazioni e le preferenze predefinite"
+msgstr "デフォルトの設定と環境設定を構成"
 
 #: src/routes/preferences/+page.svelte
 msgid "Navigation"
-msgstr "Navigazione"
+msgstr "ナビゲーション"
 
 #: src/routes/preferences/+page.svelte
 msgid "Default Landing Page"
-msgstr "Pagina iniziale predefinita"
+msgstr "デフォルトのランディングページ"
 
 #: src/routes/preferences/+page.svelte
 msgid "The page to show when you visit the site"
-msgstr "La pagina da mostrare quando visiti il sito"
+msgstr "サイトにアクセスした際に表示されるページ"
 
 #: src/routes/preferences/+page.svelte
 msgid "Select a landing page..."
-msgstr "Seleziona una pagina iniziale..."
+msgstr "ランディングページを選択..."
 
 #: src/routes/preferences/+page.svelte
 msgid "Image Uploads"
-msgstr "Caricamenti immagini"
+msgstr "画像アップロード"
 
 #: src/routes/preferences/+page.svelte
 msgid "Default Visibility"
-msgstr "Visibilità predefinita"
+msgstr "デフォルトの公開設定"
 
 #: src/routes/preferences/+page.svelte
 msgid "New uploads will be set to public or private by default"
-msgstr "I nuovi caricamenti saranno impostati come pubblici o privati per impostazione predefinita"
+msgstr "新しいアップロードはデフォルトで公開または非公開に設定されます"
 
 #: src/routes/preferences/+page.svelte
 msgid "Select visibility..."
-msgstr "Seleziona visibilità..."
+msgstr "公開設定を選択..."
 
 #: src/routes/preferences/+page.svelte
 msgid "Image Licensing"
-msgstr "Licenze immagini"
+msgstr "画像ライセンス"
 
 #: src/routes/preferences/+page.svelte
 msgid "Default License"
-msgstr "Licenza predefinita"
+msgstr "デフォルトライセンス"
 
 #: src/routes/preferences/+page.svelte
 msgid "This license will be automatically applied to new uploads"
-msgstr "Questa licenza verrà applicata automaticamente ai nuovi caricamenti"
+msgstr "このライセンスは新しいアップロードに自動的に適用されます"
 
 #: src/feature/Image/License/LicenseInfo.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Learn more"
-msgstr "Scopri di più"
+msgstr "詳しく見る"
 
 #: src/routes/info/[id]/+page.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Select a license..."
-msgstr "Seleziona una licenza..."
+msgstr "ライセンスを選択..."
 
 #: src/routes/preferences/+page.svelte
 msgid "Sync to existing images"
-msgstr "Sincronizza con le immagini esistenti"
+msgstr "既存の画像に同期"
 
 #: src/routes/preferences/+page.svelte
 msgid "Apply this license to all your existing images"
-msgstr "Applica questa licenza a tutte le tue immagini esistenti"
+msgstr "このライセンスをすべての既存画像に適用する"
 
 #: src/routes/upload/+page.svelte
 msgid "Upload | Slink"
-msgstr "Carica | Slink"
+msgstr "アップロード | Slink"
 
 #: src/feature/Settings/AccessSettings/AccessSettings.svelte
 #: src/routes/upload/+page.svelte
 msgid "Guest Upload"
-msgstr "Caricamento ospite"
+msgstr "ゲストアップロード"
 
 #: src/routes/upload/+page.svelte
 msgid "You can upload images without an account, but consider signing in to manage them"
-msgstr "Puoi caricare immagini senza un account, ma valuta di accedere per gestirle"
+msgstr "アカウントなしでも画像をアップロードできますが、管理するにはサインインをおすすめします"
 
 #: src/feature/Navigation/Navbar/Navbar.svelte
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
@@ -831,120 +831,120 @@ msgstr "Puoi caricare immagini senza un account, ma valuta di accedere per gesti
 #: src/routes/profile/(auth)/signup/+page.svelte
 #: src/routes/upload/+page.svelte
 msgid "Sign In"
-msgstr "Accedi"
+msgstr "サインイン"
 
 #: src/routes/upload/+page.svelte
 msgid "Sign in to continue"
-msgstr "Accedi per continuare"
+msgstr "続けるにはサインインしてください"
 
 #: src/routes/upload/+page.svelte
 msgid "Upload and manage your images securely"
-msgstr "Carica e gestisci le tue immagini in modo sicuro"
+msgstr "画像を安全にアップロード・管理"
 
 #: src/routes/upload/+page.svelte
 msgid "Get Started"
-msgstr "Inizia"
+msgstr "はじめる"
 
 #: src/routes/tags/+page.svelte
 msgid "My Tags | Slink"
-msgstr "I miei tag | Slink"
+msgstr "マイタグ | Slink"
 
 #: src/routes/tags/+page.svelte
 msgid "My Tags"
-msgstr "I miei tag"
+msgstr "マイタグ"
 
 #: src/routes/tags/+page.svelte
 msgid "Create and organize tags for your images"
-msgstr "Crea e organizza i tag per le tue immagini"
+msgstr "画像用のタグを作成・整理"
 
 #: src/routes/tags/+page.svelte
 msgid "Search tags..."
-msgstr "Cerca tag..."
+msgstr "タグを検索..."
 
 #: src/routes/tags/+page.svelte
 msgid "No tags found"
-msgstr "Nessun tag trovato"
+msgstr "タグが見つかりません"
 
 #: src/routes/tags/+page.svelte
 msgid "Create your first tag to get started"
-msgstr "Crea il tuo primo tag per iniziare"
+msgstr "最初のタグを作成して始めましょう"
 
 #: src/routes/tags/+page.svelte
 msgid "<0/> Create Tag"
-msgstr "<0/> Crea tag"
+msgstr "<0/> タグを作成"
 
 #: src/routes/history/+page.svelte
 msgid "Upload History | Slink"
-msgstr "Cronologia caricamenti | Slink"
+msgstr "アップロード履歴 | Slink"
 
 #: src/routes/history/+page.svelte
 msgid "Upload History"
-msgstr "Cronologia caricamenti"
+msgstr "アップロード履歴"
 
 #: src/routes/history/+page.svelte
 msgid "View and manage your uploaded images"
-msgstr "Visualizza e gestisci le tue immagini caricate"
+msgstr "アップロード済みの画像を表示・管理"
 
 #: src/routes/history/+page.svelte
 msgid "No matching images"
-msgstr "Nessuna immagine corrispondente"
+msgstr "一致する画像がありません"
 
 #: src/routes/history/+page.svelte
 msgid "No images match your current tag filters. Try removing some tags or clearing all filters."
-msgstr "Nessuna immagine corrisponde ai filtri tag attuali. Prova a rimuovere alcuni tag o a cancellare tutti i filtri."
+msgstr "現在のタグフィルターに一致する画像がありません。タグを一部削除するか、すべてのフィルターをクリアしてください。"
 
 #: src/routes/history/+page.svelte
 msgid "No history yet"
-msgstr "Nessuna cronologia"
+msgstr "履歴はまだありません"
 
 #: src/routes/history/+page.svelte
 msgid "Your upload history will appear here. Start uploading images to see your files and manage them easily."
-msgstr "La cronologia dei tuoi caricamenti apparirà qui. Inizia a caricare immagini per vedere i tuoi file e gestirli facilmente."
+msgstr "アップロード履歴はここに表示されます。画像をアップロードして、ファイルを簡単に管理しましょう。"
 
 #: src/routes/history/+page.svelte
 msgid "<0/> Upload Images"
-msgstr "<0/> Carica immagini"
+msgstr "<0/> 画像をアップロード"
 
 #: src/routes/history/+page.svelte
 msgid "View More"
-msgstr "Mostra altro"
+msgstr "もっと見る"
 
 #: src/routes/collection/[id]/+page.svelte
 #: src/routes/history/+page.svelte
 msgid "Collection"
-msgstr "Raccolta"
+msgstr "コレクション"
 
 #: src/routes/history/+page.svelte
 msgid "Add to Collection"
-msgstr "Aggiungi alla raccolta"
+msgstr "コレクションに追加"
 
 #: src/routes/history/+page.svelte
 msgid "Tag"
-msgstr "Tag"
+msgstr "タグ"
 
 #: src/routes/history/+page.svelte
 msgid "Assign Tags"
-msgstr "Assegna tag"
+msgstr "タグを割り当て"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "API key created successfully"
-msgstr "Chiave API creata con successo"
+msgstr "APIキーを作成しました"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to create API key"
-msgstr "Creazione della chiave API non riuscita"
+msgstr "APIキーの作成に失敗しました"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "API key revoked successfully"
-msgstr "Chiave API revocata con successo"
+msgstr "APIキーを無効化しました"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to revoke API key"
-msgstr "Revoca della chiave API non riuscita"
+msgstr "APIキーの無効化に失敗しました"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to generate ShareX config"
-msgstr "Generazione della configurazione ShareX non riuscita"
+msgstr "ShareX設定の生成に失敗しました"
 
 #: src/lib/state/ApiKeyStore.svelte.ts
 msgid "ApiKeyStore"
@@ -960,11 +960,11 @@ msgstr "CollectionListFeed"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to load collections"
-msgstr "Caricamento delle raccolte non riuscito"
+msgstr "コレクションの読み込みに失敗しました"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to load tags"
-msgstr "Caricamento dei tag non riuscito"
+msgstr "タグの読み込みに失敗しました"
 
 #: src/lib/state/ImageTagManagerState.svelte.ts
 msgid "ImageTagManagerState"
@@ -988,15 +988,15 @@ msgstr "StorageUsageStore"
 
 #: src/lib/state/TagListFeed.svelte.ts
 msgid "Failed to create tag. Please try again."
-msgstr "Creazione del tag non riuscita. Riprova."
+msgstr "タグの作成に失敗しました。もう一度お試しください。"
 
 #: src/lib/state/TagListFeed.svelte.ts
 msgid "Failed to move tag. Please try again."
-msgstr "Spostamento del tag non riuscito. Riprova."
+msgstr "タグの移動に失敗しました。もう一度お試しください。"
 
 #: src/lib/state/TagListFeed.svelte.ts
 msgid "Failed to delete tag. Please try again."
-msgstr "Eliminazione del tag non riuscita. Riprova."
+msgstr "タグの削除に失敗しました。もう一度お試しください。"
 
 #: src/lib/state/TagListFeed.svelte.ts
 msgid "TagListFeed"
@@ -1008,7 +1008,7 @@ msgstr "UploadHistoryFeed"
 
 #: src/lib/state/UploadPageState.svelte.ts
 msgid "Unnamed"
-msgstr "Senza nome"
+msgstr "名称未設定"
 
 #: src/lib/state/UploadPageState.svelte.ts
 msgid "UploadPageState"
@@ -1024,205 +1024,205 @@ msgstr "UserListFeed"
 
 #: src/feature/Auth/PasswordToggle/PasswordToggle.svelte
 msgid "Hide password"
-msgstr "Nascondi password"
+msgstr "パスワードを隠す"
 
 #: src/feature/Auth/PasswordToggle/PasswordToggle.svelte
 msgid "Show password"
-msgstr "Mostra password"
+msgstr "パスワードを表示"
 
 #: src/feature/Action/LoadMoreButton/LoadMoreButton.svelte
 msgid "Load More"
-msgstr "Carica altro"
+msgstr "もっと読み込む"
 
 #: src/feature/Action/RefreshButton/RefreshButton.svelte
 msgid "Refresh"
-msgstr "Aggiorna"
+msgstr "更新"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Sign in to add images to collections"
-msgstr "Accedi per aggiungere immagini alle raccolte"
+msgstr "コレクションに画像を追加するにはサインインしてください"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "You can only add your own images to collections"
-msgstr "Puoi aggiungere alle raccolte solo le tue immagini"
+msgstr "コレクションに追加できるのは自分の画像のみです"
 
 #: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
 msgid "Sign in to add to collection"
-msgstr "Accedi per aggiungere alla raccolta"
+msgstr "コレクションに追加するにはサインイン"
 
 #: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
 msgid "Only own images can be added"
-msgstr "È possibile aggiungere solo le proprie immagini"
+msgstr "自分の画像のみ追加できます"
 
 #: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 msgid "Add to collection"
-msgstr "Aggiungi alla raccolta"
+msgstr "コレクションに追加"
 
 #: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
 msgid "Delete Collection"
-msgstr "Elimina raccolta"
+msgstr "コレクションを削除"
 
 #: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
 msgid "Also delete images"
-msgstr "Elimina anche le immagini"
+msgstr "画像も削除する"
 
 #. 0: collection.itemCount
 #: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
 msgid "Delete all {0} images in this collection"
-msgstr "Elimina tutte le {0} immagini in questa raccolta"
+msgstr "このコレクション内の{0}枚の画像をすべて削除"
 
 #: src/feature/Collection/CollectionItemDropdown/CollectionItemDropdown.svelte
 #: src/feature/Collection/RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte
 msgid "Remove from Collection"
-msgstr "Rimuovi dalla raccolta"
+msgstr "コレクションから削除"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to delete collection. Please try again later."
-msgstr "Eliminazione della raccolta non riuscita. Riprova più tardi."
+msgstr "コレクションの削除に失敗しました。しばらくしてからもう一度お試しください。"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Collection updated successfully"
-msgstr "Raccolta aggiornata con successo"
+msgstr "コレクションを更新しました"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to update collection"
-msgstr "Aggiornamento della raccolta non riuscito"
+msgstr "コレクションの更新に失敗しました"
 
 #: src/feature/Collection/CollectionActionsDropdown/CollectionActionsDropdown.svelte
 msgid "Collection actions"
-msgstr "Azioni raccolta"
+msgstr "コレクション操作"
 
 #: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
 msgid "Share Collection"
-msgstr "Condividi raccolta"
+msgstr "コレクションを共有"
 
 #: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
 msgid "Anyone with the link can view"
-msgstr "Chiunque abbia il link può visualizzare"
+msgstr "リンクを知っている人は誰でも閲覧可能"
 
 #: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
 #: src/ui/components/confirmation-dialog/confirmation-dialog.svelte
 msgid "Confirm"
-msgstr "Conferma"
+msgstr "確認"
 
 #: src/feature/Collection/RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte
 msgid "Image will remain in your library"
-msgstr "L'immagine rimarrà nella tua libreria"
+msgstr "画像はライブラリに残ります"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/DownloadButton/DownloadButton.svelte
 msgid "Download image"
-msgstr "Scarica immagine"
+msgstr "画像をダウンロード"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/DownloadButton/DownloadButton.svelte
 #: src/feature/Image/History/Actions/DownloadAction.svelte
 msgid "Download"
-msgstr "Scarica"
+msgstr "ダウンロード"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 msgid "Copy image URL"
-msgstr "Copia URL immagine"
+msgstr "画像URLをコピー"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 msgid "Delete image"
-msgstr "Elimina immagine"
+msgstr "画像を削除"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 msgid "Manage tags"
-msgstr "Gestisci tag"
+msgstr "タグを管理"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 msgid "Image actions"
-msgstr "Azioni immagine"
+msgstr "画像の操作"
 
 #: src/feature/Image/ActionBar/useImageActions.svelte.ts
 msgid "Generating..."
-msgstr "Generazione in corso..."
+msgstr "生成中..."
 
 #: src/feature/Image/ActionBar/useImageActions.svelte.ts
 #: src/feature/Text/CopyableText/CopyableText.svelte
 #: src/feature/Text/CopyableText/CopyableText.svelte
 msgid "Copied!"
-msgstr "Copiato!"
+msgstr "コピーしました！"
 
 #: src/feature/Image/ActionBar/useImageActions.svelte.ts
 msgid "Copy URL"
-msgstr "Copia URL"
+msgstr "URLをコピー"
 
 #: src/feature/Image/ActionBar/useImageActions.svelte.ts
 msgid "Make private"
-msgstr "Rendi privata"
+msgstr "非公開にする"
 
 #: src/feature/Image/ActionBar/useImageActions.svelte.ts
 msgid "Make public"
-msgstr "Rendi pubblica"
+msgstr "公開にする"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to update visibility. Please try again later."
-msgstr "Aggiornamento della visibilità non riuscito. Riprova più tardi."
+msgstr "公開設定の更新に失敗しました。しばらくしてからもう一度お試しください。"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to generate share link. Please try again later."
-msgstr "Generazione del link di condivisione non riuscita. Riprova più tardi."
+msgstr "共有リンクの生成に失敗しました。しばらくしてからもう一度お試しください。"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to delete image. Please try again later."
-msgstr "Eliminazione dell'immagine non riuscita. Riprova più tardi."
+msgstr "画像の削除に失敗しました。しばらくしてからもう一度お試しください。"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Sign in to bookmark images"
-msgstr "Accedi per aggiungere immagini ai preferiti"
+msgstr "画像をブックマークするにはサインインしてください"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "You can't bookmark your own images"
-msgstr "Non puoi aggiungere le tue immagini ai preferiti"
+msgstr "自分の画像はブックマークできません"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Image bookmarked"
-msgstr "Immagine aggiunta ai preferiti"
+msgstr "画像をブックマークしました"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Bookmark removed"
-msgstr "Preferito rimosso"
+msgstr "ブックマークを解除しました"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to update bookmark"
-msgstr "Aggiornamento del preferito non riuscito"
+msgstr "ブックマークの更新に失敗しました"
 
 #: src/feature/Image/BookmarkButton/BookmarkButton.svelte
 msgid "Can't bookmark own image"
-msgstr "Non puoi salvare la tua immagine nei preferiti"
+msgstr "自分の画像はブックマークできません"
 
 #: src/feature/Image/BookmarkButton/BookmarkButton.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 msgid "Save"
-msgstr "Salva"
+msgstr "保存"
 
 #: src/feature/Image/BookmarkStat/BookmarkStat.svelte
 #: src/feature/Image/BookmarkersPanel/BookmarkersPanel.svelte
 msgid "Bookmarked"
-msgstr "Nei preferiti"
+msgstr "ブックマーク済み"
 
 #: src/feature/Image/BookmarkersPanel/BookmarkersPanel.svelte
 msgid "Failed to load bookmarks"
-msgstr "Caricamento dei preferiti non riuscito"
+msgstr "ブックマークの読み込みに失敗しました"
 
 #: src/feature/Image/Description/ImageDescription.svelte
 #: src/routes/collection/[id]/+page.svelte
 msgid "Add a description..."
-msgstr "Aggiungi una descrizione..."
+msgstr "説明を追加..."
 
 #: src/feature/Image/Description/ImageDescription.svelte
 #: src/routes/collection/[id]/+page.svelte
 msgid "Click to add a description..."
-msgstr "Clicca per aggiungere una descrizione..."
+msgstr "クリックして説明を追加..."
 
 #: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
@@ -1230,119 +1230,119 @@ msgstr "Clicca per aggiungere una descrizione..."
 #: src/feature/Image/PostViewer/PostViewerSidebar.svelte
 #: src/feature/Search/SearchBar.svelte
 msgid "Description"
-msgstr "Descrizione"
+msgstr "説明"
 
 #: src/feature/Image/FormatPicker/FormatPicker.svelte
 msgid "Image format selection"
-msgstr "Selezione formato immagine"
+msgstr "画像フォーマットの選択"
 
 #. 0: value.toUpperCase()
 #: src/feature/Image/FormatPicker/FormatPicker.svelte
 msgid "Converting to {0} will remove animation"
-msgstr "La conversione in {0} rimuoverà l'animazione"
+msgstr "{0}に変換するとアニメーションが削除されます"
 
 #: src/feature/Image/FractionPicker/FractionPicker.svelte
 msgid "Scale"
-msgstr "Scala"
+msgstr "倍率"
 
 #: src/feature/Image/FractionPicker/FractionPicker.svelte
 msgid "Scale selection"
-msgstr "Selezione scala"
+msgstr "倍率の選択"
 
 #. 0: option.label
 #: src/feature/Image/FractionPicker/FractionPicker.svelte
 msgid "Scale to {0}"
-msgstr "Scala a {0}"
+msgstr "{0}に拡大縮小"
 
 #: src/feature/Image/History/Actions/DeleteAction.svelte
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/routes/admin/settings/image/+page.svelte
 msgid "Image"
-msgstr "Immagine"
+msgstr "画像"
 
 #: src/feature/Image/History/Actions/DeleteAction.svelte
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
 msgid "Images"
-msgstr "Immagini"
+msgstr "画像"
 
 #: src/feature/Image/History/Actions/DeleteAction.svelte
 #: src/feature/Image/History/BulkDeleteConfirmation.svelte
 #: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
 #: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
 msgid "Remove from storage"
-msgstr "Rimuovi dall'archivio"
+msgstr "ストレージから削除"
 
 #: src/feature/Image/History/Actions/DeleteAction.svelte
 #: src/feature/Image/History/BulkDeleteConfirmation.svelte
 msgid "Permanently delete the files from storage"
-msgstr "Elimina definitivamente i file dall'archivio"
+msgstr "ファイルをストレージから完全に削除する"
 
 #: src/feature/Image/History/ImageMetadata.svelte
 msgid "File type & dimensions"
-msgstr "Tipo file e dimensioni"
+msgstr "ファイル形式とサイズ"
 
 #: src/feature/Image/History/ImageMetadata.svelte
 msgid "File size"
-msgstr "Dimensione file"
+msgstr "ファイルサイズ"
 
 #: src/feature/Image/History/ImageMetadata.svelte
 msgid "Uploaded"
-msgstr "Caricato"
+msgstr "アップロード日"
 
 #: src/feature/Image/History/SelectionActionBar.svelte
 msgid "Deselect all"
-msgstr "Deseleziona tutto"
+msgstr "すべて選択解除"
 
 #: src/feature/Image/History/SelectionActionBar.svelte
 msgid "Select all"
-msgstr "Seleziona tutto"
+msgstr "すべて選択"
 
 #. 0: selectedCount
 #: src/feature/Image/History/SelectionActionBar.svelte
 msgid "{0} selected"
-msgstr "{0} selezionati"
+msgstr "{0}件選択中"
 
 #: src/feature/Image/History/useHistoryItemActions.svelte.ts
 msgid "Deselect image"
-msgstr "Deseleziona immagine"
+msgstr "画像の選択を解除"
 
 #: src/feature/Image/History/useHistoryItemActions.svelte.ts
 msgid "Select image"
-msgstr "Seleziona immagine"
+msgstr "画像を選択"
 
 #: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
 #: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
 #: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
 #: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
 msgid "Delete Image"
-msgstr "Elimina immagine"
+msgstr "画像を削除"
 
 #: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
 #: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
 msgid "Permanently delete the file from storage"
-msgstr "Elimina definitivamente il file dall'archivio"
+msgstr "ファイルをストレージから完全に削除する"
 
 #: src/feature/Image/License/LicenseInfo.svelte
 msgid "Licensed under <0/>"
-msgstr "Concesso in licenza con <0/>"
+msgstr "<0/>の下でライセンス"
 
 #: src/feature/Image/Placeholder/ImagePlaceholder.svelte
 msgid "Image unavailable"
-msgstr "Immagine non disponibile"
+msgstr "画像を利用できません"
 
 #: src/feature/Image/Placeholder/ImagePlaceholder.svelte
 msgid "This image may have been removed or is temporarily inaccessible"
-msgstr "Questa immagine potrebbe essere stata rimossa o è temporaneamente inaccessibile"
+msgstr "この画像は削除されたか、一時的にアクセスできない状態です"
 
 #: src/feature/Image/Placeholder/ImagePlaceholder.svelte
 msgid "Open in new tab"
-msgstr "Apri in una nuova scheda"
+msgstr "新しいタブで開く"
 
 #: src/feature/Image/PostViewer/PostViewer.svelte
 msgid "Close viewer"
-msgstr "Chiudi visualizzatore"
+msgstr "ビューアーを閉じる"
 
 #: src/feature/Image/PostViewer/PostViewer.svelte
 #: src/feature/Tag/TagInput/TagInput.svelte
@@ -1370,24 +1370,24 @@ msgstr "ArrowRight"
 
 #: src/feature/Image/PostViewer/PostViewerNavigation.svelte
 msgid "Previous post"
-msgstr "Post precedente"
+msgstr "前の投稿"
 
 #: src/feature/Image/PostViewer/PostViewerNavigation.svelte
 msgid "Next post"
-msgstr "Post successivo"
+msgstr "次の投稿"
 
 #. 0: image.attributes.views
 #: src/feature/Image/PostViewer/PostViewerSidebar.svelte
 msgid "<0/> {0} views"
-msgstr "<0/> {0} visualizzazioni"
+msgstr "<0/> {0}回表示"
 
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 msgid "Direct Link"
-msgstr "Link diretto"
+msgstr "直接リンク"
 
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 msgid "Link"
-msgstr "Link"
+msgstr "リンク"
 
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 msgid "Markdown"
@@ -1399,95 +1399,95 @@ msgstr "BBCode"
 
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 msgid "Image Content"
-msgstr "Contenuto immagine"
+msgstr "画像コンテンツ"
 
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 msgid "Failed to convert"
-msgstr "Conversione non riuscita"
+msgstr "変換に失敗しました"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Link copied to clipboard"
-msgstr "Link copiato negli appunti"
+msgstr "リンクをクリップボードにコピーしました"
 
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 msgid "Copying..."
-msgstr "Copia in corso..."
+msgstr "コピー中..."
 
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Text/CopyContainer/CopyContainer.svelte
 msgid "Signing..."
-msgstr "Firma in corso..."
+msgstr "署名中..."
 
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Text/CopyContainer/CopyContainer.svelte
 msgid "Copied"
-msgstr "Copiato"
+msgstr "コピー済み"
 
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Text/CopyContainer/CopyContainer.svelte
 msgid "Copy"
-msgstr "Copia"
+msgstr "コピー"
 
 #: src/feature/Image/SizePicker/ImageSizePicker.svelte
 msgid "Width"
-msgstr "Larghezza"
+msgstr "幅"
 
 #: src/feature/Image/SizePicker/ImageSizePicker.svelte
 msgid "Height"
-msgstr "Altezza"
+msgstr "高さ"
 
 #. 0: formatValue(width); 1: formatValue(height)
 #: src/feature/Image/SizePicker/ImageSizePicker.svelte
 msgid "Original: {0} × {1}"
-msgstr "Originale: {0} × {1}"
+msgstr "元のサイズ: {0} × {1}"
 
 #: src/feature/Image/SizePicker/ImageSizePicker.svelte
 msgid "Reset to original dimensions"
-msgstr "Ripristina dimensioni originali"
+msgstr "元のサイズに戻す"
 
 #: src/feature/Image/SizePicker/ImageSizePicker.svelte
 #: src/feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte
 msgid "<0/> Reset"
-msgstr "<0/> Ripristina"
+msgstr "<0/> リセット"
 
 #. 0: formatValue(calculatedWidth); 1: formatValue(calculatedHeight)
 #: src/feature/Image/SizePicker/ImageSizePicker.svelte
 msgid "New: {0} × {1}"
-msgstr "Nuovo: {0} × {1}"
+msgstr "新しいサイズ: {0} × {1}"
 
 #: src/feature/Image/TagManager/ImageTagManager.svelte
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/feature/Upload/UploadOptions/TagsOption.svelte
 msgid "Tags"
-msgstr "Tag"
+msgstr "タグ"
 
 #: src/feature/Image/TagManager/ImageTagManager.svelte
 #: src/feature/Tag/TagSelector/TagSelector.svelte
 msgid "Add more tags..."
-msgstr "Aggiungi altri tag..."
+msgstr "タグを追加..."
 
 #: src/feature/Image/TagManager/ImageTagManager.svelte
 msgid "<0/> Add"
-msgstr "<0/> Aggiungi"
+msgstr "<0/> 追加"
 
 #: src/feature/Image/TagManager/ImageTagManager.svelte
 msgid "<0/> Click to add tags..."
-msgstr "<0/> Clicca per aggiungere tag..."
+msgstr "<0/> クリックしてタグを追加..."
 
 #: src/feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte
 #: src/ui/components/sonner/toasts/UnsupportedFormatToast.svelte
 msgid "Unsupported file format"
-msgstr "Formato file non supportato"
+msgstr "サポートされていないファイル形式"
 
 #: src/feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte
 #: src/ui/components/sonner/toasts/UnsupportedFormatToast.svelte
 msgid "The file you're trying to upload is not supported. Please use one of the supported image formats."
-msgstr "Il file che stai cercando di caricare non è supportato. Utilizza uno dei formati immagine supportati."
+msgstr "アップロードしようとしているファイルはサポートされていません。対応している画像形式をご利用ください。"
 
 #: src/feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte
 #: src/ui/components/sonner/toasts/UnsupportedFormatToast.svelte
 msgid "<0/> View supported formats"
-msgstr "<0/> Visualizza i formati supportati"
+msgstr "<0/> 対応形式を確認"
 
 #: src/feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte
 #: src/ui/components/sonner/toasts/BaseToast.svelte
@@ -1496,7 +1496,7 @@ msgstr "<0/> Visualizza i formati supportati"
 #: src/ui/components/sonner/toasts/SuccessToast.svelte
 #: src/ui/components/sonner/toasts/WarningToast.svelte
 msgid "Close notification"
-msgstr "Chiudi notifica"
+msgstr "通知を閉じる"
 
 #: src/feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte
 #: src/feature/Settings/Version/ReleaseModal.svelte
@@ -1509,20 +1509,20 @@ msgstr "Chiudi notifica"
 #: src/ui/components/sonner/toasts/SuccessToast.svelte
 #: src/ui/components/sonner/toasts/WarningToast.svelte
 msgid "Close"
-msgstr "Chiudi"
+msgstr "閉じる"
 
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 #: src/feature/Image/ViewCountBadge/ViewCountBadge.svelte
 msgid "Views"
-msgstr "Visualizzazioni"
+msgstr "閲覧数"
 
 #: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
 msgid "This image is publicly visible"
-msgstr "Questa immagine è visibile pubblicamente"
+msgstr "この画像は公開されています"
 
 #: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
 msgid "This image is private"
-msgstr "Questa immagine è privata"
+msgstr "この画像は非公開です"
 
 #: src/feature/Navigation/Navbar/Navbar.svelte
 #: src/feature/Navigation/Navbar/Navbar.svelte
@@ -1535,123 +1535,123 @@ msgstr "Slink"
 
 #: src/feature/Navigation/Navbar/Navbar.svelte
 msgid "<0/> Upload"
-msgstr "<0/> Carica"
+msgstr "<0/> アップロード"
 
 #: src/feature/Navigation/Navbar/Navbar.svelte
 msgid "Upload Image"
-msgstr "Carica immagine"
+msgstr "画像をアップロード"
 
 #: src/feature/Navigation/Navbar/Navbar.svelte
 msgid "Share your media with others by uploading them and organizing them into collections."
-msgstr "Condividi i tuoi file multimediali con gli altri caricandoli e organizzandoli in raccolte."
+msgstr "メディアをアップロードしてコレクションに整理し、他のユーザーと共有しましょう。"
 
 #: src/feature/Navigation/Navbar/Navbar.svelte
 msgid "Shortcut"
-msgstr "Scorciatoia"
+msgstr "ショートカット"
 
 #: src/feature/Navigation/Navbar/Navbar.svelte
 msgid "Toggle Theme"
-msgstr "Cambia tema"
+msgstr "テーマ切り替え"
 
 #: src/feature/Navigation/Navbar/Navbar.svelte
 msgid "Switch between light and dark mode."
-msgstr "Passa dalla modalità chiara a quella scura."
+msgstr "ライトモードとダークモードを切り替えます。"
 
 #: src/feature/Navigation/Sidebar/NavProjects.svelte
 msgid "Projects"
-msgstr "Progetti"
+msgstr "プロジェクト"
 
 #: src/feature/Navigation/Sidebar/NavProjects.svelte
 #: src/feature/Navigation/Sidebar/NavProjects.svelte
 #: src/ui/components/breadcrumb/breadcrumb-ellipsis.svelte
 msgid "More"
-msgstr "Altro"
+msgstr "もっと見る"
 
 #: src/feature/Navigation/Sidebar/NavProjects.svelte
 msgid "View Project"
-msgstr "Visualizza progetto"
+msgstr "プロジェクトを表示"
 
 #: src/feature/Navigation/Sidebar/NavProjects.svelte
 msgid "Share Project"
-msgstr "Condividi progetto"
+msgstr "プロジェクトを共有"
 
 #: src/feature/Navigation/Sidebar/NavProjects.svelte
 msgid "Delete Project"
-msgstr "Elimina progetto"
+msgstr "プロジェクトを削除"
 
 #: src/feature/Navigation/Sidebar/NavGroup.svelte
 msgid "Collapse submenu"
-msgstr "Comprimi sottomenu"
+msgstr "サブメニューを折りたたむ"
 
 #: src/feature/Navigation/Sidebar/NavGroup.svelte
 msgid "Expand submenu"
-msgstr "Espandi sottomenu"
+msgstr "サブメニューを展開"
 
 #: src/feature/Navigation/Sidebar/NavUser.svelte
 msgid "Account Settings"
-msgstr "Impostazioni account"
+msgstr "アカウント設定"
 
 #: src/feature/Navigation/Sidebar/NavUser.svelte
 msgid "External Integrations"
-msgstr "Integrazioni esterne"
+msgstr "外部連携"
 
 #: src/feature/Navigation/Sidebar/NavUser.svelte
 msgid "Sign Out"
-msgstr "Disconnetti"
+msgstr "ログアウト"
 
 #: src/feature/Navigation/Sidebar/SidebarStorageUsage.svelte
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
 msgid "Failed to load storage usage"
-msgstr "Caricamento utilizzo spazio non riuscito"
+msgstr "ストレージ使用量の読み込みに失敗しました"
 
 #: src/feature/Layout/DemoNotice/DemoNotice.svelte
 msgid "Demo instance - uploads and state changes are disabled"
-msgstr "Istanza demo - caricamenti e modifiche allo stato sono disabilitati"
+msgstr "デモインスタンス - アップロードと状態変更は無効です"
 
 #: src/feature/Image/AdminImageDropdown/AdminImageDropdown.svelte
 msgid "Make Private"
-msgstr "Rendi privata"
+msgstr "非公開にする"
 
 #: src/feature/Image/AdminImageDropdown/AdminImageDropdown.svelte
 msgid "Make Public"
-msgstr "Rendi pubblica"
+msgstr "公開にする"
 
 #: src/feature/Layout/ThemeSwitch/ThemeSwitch.svelte
 msgid "Switch to light mode"
-msgstr "Passa alla modalità chiara"
+msgstr "ライトモードに切り替え"
 
 #: src/feature/Layout/ThemeSwitch/ThemeSwitch.svelte
 msgid "Switch to dark mode"
-msgstr "Passa alla modalità scura"
+msgstr "ダークモードに切り替え"
 
 #: src/feature/Layout/ViewModeToggle/ViewModeToggle.svelte
 msgid "View mode selection"
-msgstr "Selezione modalità di visualizzazione"
+msgstr "表示モードの選択"
 
 #: src/feature/Settings/AccessSettings/AccessSettings.svelte
 msgid "Access Control"
-msgstr "Controllo accessi"
+msgstr "アクセス制御"
 
 #: src/feature/Settings/AccessSettings/AccessSettings.svelte
 msgid "Configure guest access and upload permissions"
-msgstr "Configura l'accesso ospite e i permessi di caricamento"
+msgstr "ゲストアクセスとアップロード権限を設定"
 
 #: src/feature/Settings/AccessSettings/AccessSettings.svelte
 msgid "Allow unauthenticated users to upload images without creating an account. When enabled without Guest Access, users will see a success message but cannot browse uploaded images"
-msgstr "Consenti agli utenti non autenticati di caricare immagini senza creare un account. Se abilitato senza accesso ospite, gli utenti vedranno un messaggio di successo ma non potranno sfogliare le immagini caricate"
+msgstr "未認証のユーザーがアカウントを作成せずに画像をアップロードできるようにします。ゲストアクセスなしで有効にした場合、ユーザーには成功メッセージが表示されますが、アップロードした画像を閲覧することはできません"
 
 #: src/feature/Settings/AccessSettings/AccessSettings.svelte
 msgid "Guest Access (View-Only)"
-msgstr "Accesso ospite (solo visualizzazione)"
+msgstr "ゲストアクセス（閲覧のみ）"
 
 #: src/feature/Settings/AccessSettings/AccessSettings.svelte
 msgid "Allow unauthenticated users to view and browse images"
-msgstr "Consenti agli utenti non autenticati di visualizzare e sfogliare le immagini"
+msgstr "未認証のユーザーが画像を閲覧・ブラウズできるようにする"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
 msgid "Local Storage"
-msgstr "Archiviazione locale"
+msgstr "ローカルストレージ"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
@@ -1660,249 +1660,249 @@ msgstr "Amazon S3"
 
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
 msgid "SMB Share"
-msgstr "Condivisione SMB"
+msgstr "SMB共有"
 
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
 msgid "Storage Usage"
-msgstr "Utilizzo spazio"
+msgstr "ストレージ使用量"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
 msgid "Provider"
-msgstr "Provider"
+msgstr "プロバイダー"
 
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
 msgid "Total Usage"
-msgstr "Utilizzo totale"
+msgstr "合計使用量"
 
 #. 0: data.fileCount.toLocaleString()
 #. 0: data.cacheFileCount.toLocaleString()
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
 msgid "{0} files"
-msgstr "{0} file"
+msgstr "{0} ファイル"
 
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
 msgid "Cache"
-msgstr "Cache"
+msgstr "キャッシュ"
 
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
 msgid "No storage data available"
-msgstr "Nessun dato di archiviazione disponibile"
+msgstr "ストレージデータがありません"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "WEBP (Recommended)"
-msgstr "WEBP (Consigliato)"
+msgstr "WEBP（推奨）"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 #: src/routes/admin/settings/+page.svelte
 msgid "Image Settings"
-msgstr "Impostazioni immagine"
+msgstr "画像設定"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Configure image upload limits and processing options"
-msgstr "Configura i limiti di caricamento e le opzioni di elaborazione delle immagini"
+msgstr "画像のアップロード制限と処理オプションを設定"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Maximum Image Size"
-msgstr "Dimensione massima immagine"
+msgstr "画像の最大サイズ"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Set the maximum size limit for image uploads"
-msgstr "Imposta il limite massimo di dimensione per i caricamenti di immagini"
+msgstr "画像アップロードの最大サイズ制限を設定"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Strip EXIF Metadata"
-msgstr "Rimuovi metadati EXIF"
+msgstr "EXIFメタデータを除去"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Automatically remove metadata from uploaded images for privacy"
-msgstr "Rimuovi automaticamente i metadati dalle immagini caricate per la privacy"
+msgstr "プライバシー保護のため、アップロードされた画像からメタデータを自動的に除去します"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Allow Only Public Images"
-msgstr "Consenti solo immagini pubbliche"
+msgstr "公開画像のみ許可"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "When enabled, all images are automatically set to public and visibility cannot be changed"
-msgstr "Se abilitato, tutte le immagini vengono impostate automaticamente come pubbliche e la visibilità non può essere modificata"
+msgstr "有効にすると、すべての画像が自動的に公開に設定され、公開設定を変更できなくなります"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Enable Image Deduplication"
-msgstr "Abilita deduplicazione immagini"
+msgstr "画像の重複排除を有効化"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Detect and reject duplicate images during upload"
-msgstr "Rileva e rifiuta le immagini duplicate durante il caricamento"
+msgstr "アップロード時に重複画像を検出して拒否します"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Only applies to new uploads. Existing images are not affected."
-msgstr "Si applica solo ai nuovi caricamenti. Le immagini esistenti non sono interessate."
+msgstr "新規アップロードにのみ適用されます。既存の画像には影響しません。"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Compression Quality"
-msgstr "Qualità di compressione"
+msgstr "圧縮品質"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Quality level for lossy image compression (1-100). Used during format conversion if target format supports it"
-msgstr "Livello di qualità per la compressione con perdita (1-100). Utilizzato durante la conversione del formato se il formato di destinazione lo supporta"
+msgstr "非可逆圧縮の品質レベル（1-100）。変換先の形式が対応している場合、フォーマット変換時に使用されます"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Force Format Conversion"
-msgstr "Forza conversione formato"
+msgstr "フォーマット変換を強制"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Automatically convert all uploaded images to a specific format"
-msgstr "Converti automaticamente tutte le immagini caricate in un formato specifico"
+msgstr "アップロードされたすべての画像を指定の形式に自動変換します"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Target Format"
-msgstr "Formato di destinazione"
+msgstr "変換先フォーマット"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Format to convert uploaded images to"
-msgstr "Formato in cui convertire le immagini caricate"
+msgstr "アップロード画像の変換先フォーマット"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Select format"
-msgstr "Seleziona formato"
+msgstr "フォーマットを選択"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Convert Animated Images"
-msgstr "Converti immagini animate"
+msgstr "アニメーション画像を変換"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Include animated images (GIF, animated WebP/AVIF) in conversion"
-msgstr "Includi le immagini animate (GIF, WebP/AVIF animati) nella conversione"
+msgstr "アニメーション画像（GIF、アニメーションWebP/AVIF）も変換対象に含める"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Processing animated images is CPU-intensive and may slow down uploads."
-msgstr "L'elaborazione di immagini animate è intensiva per la CPU e potrebbe rallentare i caricamenti."
+msgstr "アニメーション画像の処理はCPU負荷が高く、アップロードが遅くなる場合があります。"
 
 #. 0: settings.targetFormat?.toUpperCase()
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Converting to {0} will result in loss of animation."
-msgstr "La conversione in {0} comporterà la perdita dell'animazione."
+msgstr "{0}に変換すると、アニメーションが失われます。"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Enable Licensing"
-msgstr "Abilita licenze"
+msgstr "ライセンス機能を有効化"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
 msgid "Allow users to set licenses on their images (Creative Commons, etc.)"
-msgstr "Consenti agli utenti di impostare licenze sulle proprie immagini (Creative Commons, ecc.)"
+msgstr "ユーザーが画像にライセンス（Creative Commonsなど）を設定できるようにする"
 
 #: src/feature/Settings/CacheSettings/CacheSettings.svelte
 msgid "Cache Management"
-msgstr "Gestione cache"
+msgstr "キャッシュ管理"
 
 #: src/feature/Settings/CacheSettings/CacheSettings.svelte
 msgid "Image Cache"
-msgstr "Cache immagini"
+msgstr "画像キャッシュ"
 
 #: src/feature/Settings/CacheSettings/CacheSettings.svelte
 msgid "Cached files store transformed versions of images (resized, cropped, format converted) to improve performance. Clearing the cache will regenerate files on next request."
-msgstr "I file memorizzati nella cache conservano versioni trasformate delle immagini (ridimensionate, ritagliate, convertite di formato) per migliorare le prestazioni. La pulizia della cache rigenererà i file alla prossima richiesta."
+msgstr "キャッシュファイルには、パフォーマンス向上のために変換済みの画像（リサイズ、クロップ、フォーマット変換）が保存されます。キャッシュをクリアすると、次回リクエスト時にファイルが再生成されます。"
 
 #: src/feature/Settings/CacheSettings/CacheSettings.svelte
 msgid "<0/> Clearing..."
-msgstr "<0/> Pulizia in corso..."
+msgstr "<0/> クリア中..."
 
 #: src/feature/Settings/CacheSettings/CacheSettings.svelte
 #: src/feature/Settings/SettingsPane/SettingItem.svelte
 msgid "<0/> Confirm"
-msgstr "<0/> Conferma"
+msgstr "<0/> 確認"
 
 #: src/feature/Settings/CacheSettings/CacheSettings.svelte
 msgid "<0/> Clear Cache"
-msgstr "<0/> Svuota cache"
+msgstr "<0/> キャッシュをクリア"
 
 #: src/feature/Settings/CacheSettings/CacheSettings.svelte
 msgid "Clearing cache..."
-msgstr "Pulizia cache in corso..."
+msgstr "キャッシュをクリア中..."
 
 #: src/feature/Settings/ResetSettingConfirmation/ResetSettingConfirmation.svelte
 #: src/feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte
 #: src/feature/Settings/SettingsPane/SettingItem.svelte
 msgid "Reset Setting"
-msgstr "Ripristina impostazione"
+msgstr "設定をリセット"
 
 #: src/feature/Settings/ResetSettingConfirmation/ResetSettingConfirmation.svelte
 msgid "Reset to Default"
-msgstr "Ripristina predefinito"
+msgstr "デフォルトに戻す"
 
 #: src/feature/Settings/ResetSettingConfirmation/ResetSettingConfirmation.svelte
 msgid "Keep Current"
-msgstr "Mantieni attuale"
+msgstr "現在の値を維持"
 
 #: src/feature/Settings/ResetSettingConfirmation/ResetSettingConfirmation.svelte
 msgid "Are you sure you want to reset <0/> to its default value?"
-msgstr "Sei sicuro di voler ripristinare <0/> al suo valore predefinito?"
+msgstr "<0/>をデフォルト値にリセットしてもよろしいですか？"
 
 #: src/feature/Settings/ResetSettingConfirmation/ResetSettingConfirmation.svelte
 msgid "This action cannot be undone. Your current setting will be lost."
-msgstr "Questa azione non può essere annullata. L'impostazione attuale andrà persa."
+msgstr "この操作は元に戻せません。現在の設定は失われます。"
 
 #: src/feature/Settings/ResetSettingConfirmation/ResetSettingConfirmation.svelte
 msgid "Current Value:"
-msgstr "Valore attuale:"
+msgstr "現在の値:"
 
 #: src/feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte
 msgid "Restore default value"
-msgstr "Ripristina valore predefinito"
+msgstr "デフォルト値に復元"
 
 #: src/feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte
 msgid "Reset <0/> from current value to default?"
-msgstr "Ripristinare <0/> dal valore attuale a quello predefinito?"
+msgstr "<0/>を現在の値からデフォルトにリセットしますか？"
 
 #: src/feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte
 msgid "Reset <0/> to its default value?"
-msgstr "Ripristinare <0/> al suo valore predefinito?"
+msgstr "<0/>をデフォルト値にリセットしますか？"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderFormState.svelte.ts
 msgid "Provider updated"
-msgstr "Provider aggiornato"
+msgstr "プロバイダーを更新しました"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderFormState.svelte.ts
 msgid "Provider created"
-msgstr "Provider creato"
+msgstr "プロバイダーを作成しました"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Configuration"
-msgstr "Configurazione"
+msgstr "設定"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Selected authentication provider"
-msgstr "Provider di autenticazione selezionato"
+msgstr "選択中の認証プロバイダー"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Change"
-msgstr "Cambia"
+msgstr "変更"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Provider Name"
-msgstr "Nome provider"
+msgstr "プロバイダー名"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Display name for the provider"
-msgstr "Nome visualizzato del provider"
+msgstr "プロバイダーの表示名"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Slug"
-msgstr "Slug"
+msgstr "スラッグ"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Unique identifier for the provider"
-msgstr "Identificatore univoco del provider"
+msgstr "プロバイダーの一意な識別子"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Issuer URL"
-msgstr "URL emittente"
+msgstr "Issuer URL"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "OpenID Connect discovery endpoint"
-msgstr "Endpoint di discovery OpenID Connect"
+msgstr "OpenID Connectディスカバリーエンドポイント"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Client ID"
@@ -1910,7 +1910,7 @@ msgstr "Client ID"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "OAuth application client identifier"
-msgstr "Identificatore client dell'applicazione OAuth"
+msgstr "OAuthアプリケーションのクライアント識別子"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "OAuth Client ID"
@@ -1922,7 +1922,7 @@ msgstr "Client Secret"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "OAuth application client secret"
-msgstr "Segreto client dell'applicazione OAuth"
+msgstr "OAuthアプリケーションのクライアントシークレット"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "OAuth Client Secret"
@@ -1931,284 +1931,284 @@ msgstr "OAuth Client Secret"
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 #: src/feature/Settings/SettingsPane/SettingItem.svelte
 msgid "Enabled"
-msgstr "Abilitato"
+msgstr "有効"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Allow users to authenticate with this provider"
-msgstr "Consenti agli utenti di autenticarsi con questo provider"
+msgstr "このプロバイダーでの認証をユーザーに許可する"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Update Provider"
-msgstr "Aggiorna provider"
+msgstr "プロバイダーを更新"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 #: src/routes/admin/settings/sso/new/+page.svelte
 msgid "Add Provider"
-msgstr "Aggiungi provider"
+msgstr "プロバイダーを追加"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderListState.svelte.ts
 msgid "Provider deleted"
-msgstr "Provider eliminato"
+msgstr "プロバイダーを削除しました"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
 msgid "No SSO providers configured yet"
-msgstr "Nessun provider SSO configurato"
+msgstr "SSOプロバイダーはまだ設定されていません"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
 msgid "Move Up"
-msgstr "Sposta su"
+msgstr "上に移動"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
 msgid "Move Down"
-msgstr "Sposta giù"
+msgstr "下に移動"
 
 #: src/feature/Settings/SettingsPane/SettingItem.svelte
 msgid "Disabled"
-msgstr "Disabilitato"
+msgstr "無効"
 
 #: src/feature/Settings/SettingsPane/SettingItem.svelte
 msgid "Reset to default value"
-msgstr "Ripristina valore predefinito"
+msgstr "デフォルト値にリセット"
 
 #. 0: displayValue
 #: src/feature/Settings/SettingsPane/SettingItem.svelte
 msgid "Reset to {0}"
-msgstr "Ripristina a {0}"
+msgstr "{0}にリセット"
 
 #: src/feature/Settings/SettingsPane/SettingItem.svelte
 msgid "Reset to <0/>"
-msgstr "Ripristina a <0/>"
+msgstr "<0/>にリセット"
 
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
 #: src/routes/collection/[id]/+page.svelte
 #: src/routes/info/[id]/+page.svelte
 msgid "Share"
-msgstr "Condividi"
+msgstr "共有"
 
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
 msgid "Configure URL sharing behavior"
-msgstr "Configura il comportamento di condivisione degli URL"
+msgstr "URL共有の動作を設定"
 
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
 msgid "URL Shortening"
-msgstr "Abbreviazione URL"
+msgstr "URL短縮"
 
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
 msgid "Generate short URLs when copying image links"
-msgstr "Genera URL brevi quando si copiano i link delle immagini"
+msgstr "画像リンクのコピー時に短縮URLを生成する"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 #: src/routes/admin/settings/+page.svelte
 msgid "Storage Configuration"
-msgstr "Configurazione archiviazione"
+msgstr "ストレージ設定"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Choose how and where your data is stored"
-msgstr "Scegli come e dove vengono archiviati i tuoi dati"
+msgstr "データの保存方法と保存先を選択"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Storage Provider"
-msgstr "Provider di archiviazione"
+msgstr "ストレージプロバイダー"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Select your preferred storage backend"
-msgstr "Seleziona il backend di archiviazione preferito"
+msgstr "使用するストレージバックエンドを選択"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Network Storage (SMB)"
-msgstr "Archiviazione di rete (SMB)"
+msgstr "ネットワークストレージ（SMB）"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Server Host"
-msgstr "Host del server"
+msgstr "サーバーホスト"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "IP address or hostname of your SMB server"
-msgstr "Indirizzo IP o nome host del server SMB"
+msgstr "SMBサーバーのIPアドレスまたはホスト名"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Share Name"
-msgstr "Nome condivisione"
+msgstr "共有名"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "The name of the shared folder"
-msgstr "Il nome della cartella condivisa"
+msgstr "共有フォルダーの名前"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Workgroup"
-msgstr "Gruppo di lavoro"
+msgstr "ワークグループ"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "SMB workgroup name (optional)"
-msgstr "Nome del gruppo di lavoro SMB (opzionale)"
+msgstr "SMBワークグループ名（任意）"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 #: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Username"
-msgstr "Nome utente"
+msgstr "ユーザー名"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Authentication username"
-msgstr "Nome utente per l'autenticazione"
+msgstr "認証ユーザー名"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 #: src/routes/profile/(auth)/login/+page.svelte
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Password"
-msgstr "Password"
+msgstr "パスワード"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Authentication password for SMB server"
-msgstr "Password di autenticazione per il server SMB"
+msgstr "SMBサーバーの認証パスワード"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Custom S3 Provider"
-msgstr "Provider S3 personalizzato"
+msgstr "カスタムS3プロバイダー"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Enable for S3-compatible services like MinIO, Cloudflare R2, or Wasabi. This unlocks custom endpoint and path-style options."
-msgstr "Abilita per servizi compatibili con S3 come MinIO, Cloudflare R2 o Wasabi. Sblocca le opzioni di endpoint personalizzato e stile percorso."
+msgstr "MinIO、Cloudflare R2、WasabiなどのS3互換サービスで使用する場合に有効にします。カスタムエンドポイントとパススタイルのオプションが利用可能になります。"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Amazon S3 usage may incur charges. <0>Review pricing</0>"
-msgstr "L'utilizzo di Amazon S3 potrebbe comportare costi aggiuntivi. <0>Consulta i prezzi</0>"
+msgstr "Amazon S3の使用には料金が発生する場合があります。<0>料金を確認</0>"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Custom Endpoint"
-msgstr "Endpoint personalizzato"
+msgstr "カスタムエンドポイント"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Custom S3 endpoint URL for your provider"
-msgstr "URL endpoint S3 personalizzato per il tuo provider"
+msgstr "プロバイダーのカスタムS3エンドポイントURL"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Region (Optional)"
-msgstr "Regione (opzionale)"
+msgstr "リージョン（任意）"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Most S3-compatible providers don't require a region. Leave empty for Cloudflare R2 or providers that auto-detect. Use \"auto\" or a specific region if required by your provider."
-msgstr "La maggior parte dei provider compatibili con S3 non richiede una regione. Lascia vuoto per Cloudflare R2 o provider con rilevamento automatico. Usa \"auto\" o una regione specifica se richiesto dal tuo provider."
+msgstr "ほとんどのS3互換プロバイダーではリージョンは不要です。Cloudflare R2や自動検出に対応したプロバイダーの場合は空のままにしてください。プロバイダーが要求する場合は「auto」または特定のリージョンを使用してください。"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Force Path-Style URLs"
-msgstr "Forza URL in stile percorso"
+msgstr "パススタイルURLを強制"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Enable if your provider requires path-style buckets (http://host/bucket/key). Common for MinIO and self-hosted solutions."
-msgstr "Abilita se il tuo provider richiede bucket in stile percorso (http://host/bucket/key). Comune per MinIO e soluzioni self-hosted."
+msgstr "プロバイダーがパススタイルのバケット（http://host/bucket/key）を必要とする場合に有効にします。MinIOやセルフホスト環境で一般的です。"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Region"
-msgstr "Regione"
+msgstr "リージョン"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "AWS region where your bucket is located (e.g., us-east-1). <0>View available regions</0>"
-msgstr "Regione AWS in cui si trova il tuo bucket (es. us-east-1). <0>Visualizza le regioni disponibili</0>"
+msgstr "バケットが配置されているAWSリージョン（例: us-east-1）。<0>利用可能なリージョンを確認</0>"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Bucket Name"
-msgstr "Nome del bucket"
+msgstr "バケット名"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Your S3 bucket name. <0>Learn about bucket naming</0>"
-msgstr "Il nome del tuo bucket S3. <0>Scopri la denominazione dei bucket</0>"
+msgstr "S3バケット名。<0>バケットの命名規則について</0>"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Access Key ID"
-msgstr "ID chiave di accesso"
+msgstr "Access Key ID"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Your AWS Access Key ID. <0>How to create access keys</0>"
-msgstr "Il tuo ID chiave di accesso AWS. <0>Come creare le chiavi di accesso</0>"
+msgstr "AWS Access Key ID。<0>アクセスキーの作成方法</0>"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Secret Access Key"
-msgstr "Chiave di accesso segreta"
+msgstr "Secret Access Key"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Your AWS Secret Access Key"
-msgstr "La tua chiave di accesso segreta AWS"
+msgstr "AWS Secret Access Key"
 
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "User Management"
-msgstr "Gestione utenti"
+msgstr "ユーザー管理"
 
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "Control user registration, authentication, and security requirements"
-msgstr "Gestisci la registrazione degli utenti, l'autenticazione e i requisiti di sicurezza"
+msgstr "ユーザー登録、認証、セキュリティ要件を管理"
 
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "User Registration"
-msgstr "Registrazione utenti"
+msgstr "ユーザー登録"
 
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "Allow new users to create accounts"
-msgstr "Consenti ai nuovi utenti di creare account"
+msgstr "新規ユーザーのアカウント作成を許可する"
 
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "Require Admin Approval"
-msgstr "Richiedi approvazione amministratore"
+msgstr "管理者の承認を必須にする"
 
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "New users must be approved before accessing the app"
-msgstr "I nuovi utenti devono essere approvati prima di accedere all'applicazione"
+msgstr "新規ユーザーはアプリへのアクセス前に承認が必要です"
 
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "Minimum Password Length"
-msgstr "Lunghezza minima della password"
+msgstr "パスワードの最小文字数"
 
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "Minimum characters required"
-msgstr "Numero minimo di caratteri richiesti"
+msgstr "必要な最小文字数"
 
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "Password Requirements"
-msgstr "Requisiti della password"
+msgstr "パスワード要件"
 
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "Required character types"
-msgstr "Tipi di caratteri richiesti"
+msgstr "必須の文字種"
 
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "Numbers (0-9)"
-msgstr "Numeri (0-9)"
+msgstr "数字 (0-9)"
 
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "Lowercase (a-z)"
-msgstr "Minuscole (a-z)"
+msgstr "小文字 (a-z)"
 
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "Uppercase (A-Z)"
-msgstr "Maiuscole (A-Z)"
+msgstr "大文字 (A-Z)"
 
 #: src/feature/Settings/UserSettings/UserSettings.svelte
 msgid "Special (!@#$)"
-msgstr "Speciali (!@#$)"
+msgstr "記号 (!@#$)"
 
 #: src/feature/Settings/Version/ReleaseModal.svelte
 #: src/feature/Settings/Version/Version.svelte
 msgid "Update Available"
-msgstr "Aggiornamento disponibile"
+msgstr "アップデートがあります"
 
 #: src/feature/Settings/Version/ReleaseModal.svelte
 #: src/feature/Settings/Version/ReleaseModal.svelte
 msgid "Latest Version"
-msgstr "Ultima versione"
+msgstr "最新バージョン"
 
 #: src/feature/Settings/Version/ReleaseModal.svelte
 msgid "A new version of Slink is available. Here's what's new:"
-msgstr "È disponibile una nuova versione di Slink. Ecco le novità:"
+msgstr "Slinkの新しいバージョンが利用可能です。変更点は以下のとおりです："
 
 #: src/feature/Settings/Version/ReleaseModal.svelte
 msgid "You're running the latest version of Slink. Here are the release notes:"
-msgstr "Stai utilizzando l'ultima versione di Slink. Ecco le note di rilascio:"
+msgstr "Slinkは最新バージョンです。リリースノートは以下のとおりです："
 
 #: src/feature/Settings/Version/ReleaseModal.svelte
 msgid "Current Version"
-msgstr "Versione attuale"
+msgstr "現在のバージョン"
 
 #. 0: currentVersion
 #: src/feature/Settings/Version/ReleaseModal.svelte
@@ -2217,82 +2217,82 @@ msgstr "v{0}"
 
 #: src/feature/Settings/Version/ReleaseModal.svelte
 msgid "Up to date"
-msgstr "Aggiornato"
+msgstr "最新です"
 
 #. 0: formatReleaseDate(release.published_at)
 #: src/feature/Settings/Version/ReleaseModal.svelte
 msgid "Released {0}"
-msgstr "Rilasciato {0}"
+msgstr "{0} リリース"
 
 #: src/feature/Settings/Version/ReleaseModal.svelte
 msgid "Maybe Later"
-msgstr "Forse più tardi"
+msgstr "後で"
 
 #: src/feature/Settings/Version/ReleaseModal.svelte
 msgid "<0/> View on GitHub"
-msgstr "<0/> Visualizza su GitHub"
+msgstr "<0/> GitHubで見る"
 
 #: src/feature/Settings/Version/Version.svelte
 msgid "Latest"
-msgstr "Ultima"
+msgstr "最新"
 
 #. 0: UpdateCheckState.hasUpdate ? 'update details' \\: 'release notes'
 #: src/feature/Settings/Version/Version.svelte
 msgid "Click to view {0}"
-msgstr "Clicca per visualizzare {0}"
+msgstr "クリックして{0}を表示"
 
 #. 0: versionInfo ? formatVersion(versionInfo) \\: ''
 #: src/feature/Settings/Version/Version.svelte
 msgid "Version {0}"
-msgstr "Versione {0}"
+msgstr "バージョン {0}"
 
 #: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
 msgid "Filtering by"
-msgstr "Filtro per"
+msgstr "フィルター条件"
 
 #: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
 msgid "Toggle between matching all or any selected tags"
-msgstr "Passa tra la corrispondenza di tutti o qualsiasi tag selezionato"
+msgstr "選択したタグのすべてに一致またはいずれかに一致を切り替え"
 
 #: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
 msgid "Match all"
-msgstr "Tutti i tag"
+msgstr "すべてに一致"
 
 #: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
 msgid "Match any"
-msgstr "Qualsiasi tag"
+msgstr "いずれかに一致"
 
 #: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
 msgid "Match All"
-msgstr "Tutti i tag"
+msgstr "すべてに一致"
 
 #: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
 msgid "Match Any"
-msgstr "Qualsiasi tag"
+msgstr "いずれかに一致"
 
 #: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
 msgid "Images must have every selected tag to appear in results."
-msgstr "Le immagini devono avere ogni tag selezionato per apparire nei risultati."
+msgstr "選択したすべてのタグを持つ画像のみが結果に表示されます。"
 
 #: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
 msgid "Images with at least one selected tag will appear in results."
-msgstr "Le immagini con almeno un tag selezionato appariranno nei risultati."
+msgstr "選択したタグのいずれかを持つ画像が結果に表示されます。"
 
 #: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
 msgid "Click to switch to match any"
-msgstr "Clicca per passare a qualsiasi tag"
+msgstr "クリックして「いずれかに一致」に切り替え"
 
 #: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
 msgid "Click to switch to match all"
-msgstr "Clicca per passare a tutti i tag"
+msgstr "クリックして「すべてに一致」に切り替え"
 
 #: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
 msgid "Clear all filters"
-msgstr "Rimuovi tutti i filtri"
+msgstr "すべてのフィルターを解除"
 
 #: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
 msgid "Clear"
-msgstr "Rimuovi"
+msgstr "クリア"
 
 #: src/feature/Layout/DemoBadge/DemoBadge.svelte
 msgid "DEMO"
@@ -2300,126 +2300,126 @@ msgstr "DEMO"
 
 #: src/feature/Tag/ImageTagList/ImageTagList.svelte
 msgid "No tags assigned to this image."
-msgstr "Nessun tag assegnato a questa immagine."
+msgstr "この画像にタグは割り当てられていません。"
 
 #: src/feature/Collection/CollectionList/CollectionPickerList.svelte
 msgid "Search collections"
-msgstr "Cerca raccolte"
+msgstr "コレクションを検索"
 
 #: src/feature/Collection/CollectionList/CollectionPickerList.svelte
 msgid "No collections yet"
-msgstr "Nessuna raccolta ancora"
+msgstr "コレクションはまだありません"
 
 #: src/feature/Collection/CollectionList/CollectionPickerList.svelte
 msgid "Create your first collection"
-msgstr "Crea la tua prima raccolta"
+msgstr "最初のコレクションを作成"
 
 #: src/feature/Collection/CollectionList/CollectionPickerList.svelte
 msgid "New collection"
-msgstr "Nuova raccolta"
+msgstr "新規コレクション"
 
 #. 0: tag.name
 #: src/feature/Tag/TagBadge/TagBadge.svelte
 msgid "Remove {0} tag"
-msgstr "Rimuovi il tag {0}"
+msgstr "{0} タグを削除"
 
 #: src/feature/Tag/TagDataTable/TagActionsCell.svelte
 msgid "Tag actions"
-msgstr "Azioni tag"
+msgstr "タグ操作"
 
 #: src/feature/Tag/TagDataTable/TagActionsCell.svelte
 msgid "Move"
-msgstr "Sposta"
+msgstr "移動"
 
 #. 0: selectedCount === 1 ? 'Image' \\: 'Images'
 #: src/feature/Image/History/Actions/DeleteAction.svelte
 msgid "Delete {0}"
-msgstr "Elimina {0}"
+msgstr "{0}を削除"
 
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "Delete Tag"
-msgstr "Elimina tag"
+msgstr "タグを削除"
 
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "This will cascade:"
-msgstr "Questa azione si propagherà a:"
+msgstr "以下に連鎖的に影響します："
 
 #. 0: getTagDisplayName(creatingChildFor); 1: childTagName
 #: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
 msgid "Create \"{0} › {1}\""
-msgstr "Crea \"{0} › {1}\""
+msgstr "「{0} › {1}」を作成"
 
 #. 0: searchTerm
 #: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
 msgid "No tags matching \"{0}\""
-msgstr "Nessun tag corrisponde a \"{0}\""
+msgstr "「{0}」に一致するタグはありません"
 
 #. 0: searchTerm
 #: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
 msgid "Create \"{0}\""
-msgstr "Crea \"{0}\""
+msgstr "「{0}」を作成"
 
 #: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
 msgid "No tags yet"
-msgstr "Nessun tag ancora"
+msgstr "タグはまだありません"
 
 #: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
 #: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
 msgid "Create Tag"
-msgstr "Crea tag"
+msgstr "タグを作成"
 
 #: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
 msgid "Add a new tag to organize your images"
-msgstr "Aggiungi un nuovo tag per organizzare le tue immagini"
+msgstr "画像を整理するための新しいタグを追加"
 
 #: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
 msgid "Tag Name"
-msgstr "Nome tag"
+msgstr "タグ名"
 
 #: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
 msgid "Parent Tag (Optional)"
-msgstr "Tag padre (opzionale)"
+msgstr "親タグ（任意）"
 
 #: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
 msgid "Search for parent tag..."
-msgstr "Cerca tag padre..."
+msgstr "親タグを検索..."
 
 #: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
 #: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
 msgid "No matching tags found."
-msgstr "Nessun tag corrispondente trovato."
+msgstr "一致するタグが見つかりません。"
 
 #: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
 msgid "Tag Organization"
-msgstr "Organizzazione tag"
+msgstr "タグの整理"
 
 #: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
 msgid "Tags help organize your images. Parent tags create a hierarchy for better organization. You can always move tags later or create sub-tags within existing ones."
-msgstr "I tag aiutano a organizzare le tue immagini. I tag padre creano una gerarchia per una migliore organizzazione. Puoi sempre spostare i tag in seguito o creare sotto-tag all'interno di quelli esistenti."
+msgstr "タグは画像の整理に役立ちます。親タグを使えば階層構造で管理できます。タグの移動や、既存のタグ内にサブタグを作成することもいつでも可能です。"
 
 #: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
 #: src/feature/User/ApiKey/CreateApiKeyForm.svelte
 msgid "Creating..."
-msgstr "Creazione in corso..."
+msgstr "作成中..."
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
 #: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
 msgid "Delete Provider"
-msgstr "Elimina provider"
+msgstr "プロバイダーを削除"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
 msgid "<0/> — Provider and its configuration will be removed"
-msgstr "<0/> — Il provider e la sua configurazione verranno rimossi"
+msgstr "<0/> — プロバイダーとその設定が削除されます"
 
 #: src/feature/Tag/TagFilter/TagFilter.svelte
 msgid "Search and select tags"
-msgstr "Cerca e seleziona tag"
+msgstr "タグを検索して選択"
 
 #: src/feature/Tag/TagInput/TagInput.svelte
 #: src/feature/Tag/TagSelector/TagSelector.svelte
 msgid "Search or add tags..."
-msgstr "Cerca o aggiungi tag..."
+msgstr "タグを検索または追加..."
 
 #: src/feature/Tag/TagInput/TagInput.svelte
 msgid "Backspace"
@@ -2427,100 +2427,100 @@ msgstr "Backspace"
 
 #: src/feature/Tag/TagInput/TagInput.svelte
 msgid "Child tag name..."
-msgstr "Nome sotto-tag..."
+msgstr "子タグ名..."
 
 #: src/feature/Tag/TagInput/TagInput.svelte
 msgid "Cancel child tag creation"
-msgstr "Annulla la creazione del sotto-tag"
+msgstr "子タグの作成をキャンセル"
 
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
 msgid "Search tags"
-msgstr "Cerca tag"
+msgstr "タグを検索"
 
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
 msgid "Create your first tag"
-msgstr "Crea il tuo primo tag"
+msgstr "最初のタグを作成"
 
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
 msgid "New tag"
-msgstr "Nuovo tag"
+msgstr "新規タグ"
 
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
 msgid "Root"
-msgstr "Radice"
+msgstr "ルート"
 
 #. 0: tag.name
 #: src/feature/Tag/TagListItem/TagListItem.svelte
 msgid "Add child to {0}"
-msgstr "Aggiungi sotto-tag a {0}"
+msgstr "{0} に子タグを追加"
 
 #: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
 #: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
 msgid "Move Tag"
-msgstr "Sposta tag"
+msgstr "タグを移動"
 
 #. 0: tag.name
 #: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
 msgid "Move \"{0}\" to a new parent tag or to root"
-msgstr "Sposta \"{0}\" in un nuovo tag padre o alla radice"
+msgstr "「{0}」を新しい親タグまたはルートに移動"
 
 #: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
 msgid "New Parent Tag"
-msgstr "Nuovo tag padre"
+msgstr "新しい親タグ"
 
 #: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
 msgid "Search for parent tag... (empty = root)"
-msgstr "Cerca tag padre... (vuoto = radice)"
+msgstr "親タグを検索...（空欄 = ルート）"
 
 #: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
 msgid "Leave empty to move to root level"
-msgstr "Lascia vuoto per spostare al livello radice"
+msgstr "空欄のままでルートレベルに移動します"
 
 #: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
 msgid "Moving..."
-msgstr "Spostamento in corso..."
+msgstr "移動中..."
 
 #: src/feature/Text/CommentText/CommentText.svelte
 msgid "This comment has been deleted"
-msgstr "Questo commento è stato eliminato"
+msgstr "このコメントは削除されました"
 
 #: src/feature/Text/CopyContainer/CopyContainer.svelte
 msgid "Copy link..."
-msgstr "Copia link..."
+msgstr "リンクをコピー..."
 
 #: src/feature/Text/CopyableText/CopyableText.svelte
 msgid "Click to copy"
-msgstr "Clicca per copiare"
+msgstr "クリックしてコピー"
 
 #: src/feature/Text/CopyableText/CopyableText.svelte
 msgid "Copy to clipboard"
-msgstr "Copia negli appunti"
+msgstr "クリップボードにコピー"
 
 #: src/feature/Text/EditableText/EditableText.svelte
 msgid "Click to add..."
-msgstr "Clicca per aggiungere..."
+msgstr "クリックして追加..."
 
 #: src/feature/Text/Heading/Heading.svelte
 msgid "Heading"
-msgstr "Intestazione"
+msgstr "見出し"
 
 #. 0: segment.text
 #: src/feature/Text/HashtagText/HashtagText.svelte
 msgid "Click to search for {0}"
-msgstr "Clicca per cercare {0}"
+msgstr "クリックして {0} を検索"
 
 #: src/feature/Upload/UploadOptions/CollectionsOption.svelte
 #: src/feature/Upload/UploadOptions/TagsOption.svelte
 msgid "Add more"
-msgstr "Aggiungi altro"
+msgstr "さらに追加"
 
 #: src/feature/Upload/UploadOptions/UploadOptionsPanel.svelte
 msgid "Upload Options"
-msgstr "Opzioni di caricamento"
+msgstr "アップロードオプション"
 
 #: src/feature/User/UserActions/UserActions.svelte
 msgid "<0/> Actions"
-msgstr "<0/> Azioni"
+msgstr "<0/> 操作"
 
 #: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
@@ -2530,400 +2530,400 @@ msgstr "<0/> Azioni"
 #: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 msgid "Actions"
-msgstr "Azioni"
+msgstr "操作"
 
 #: src/feature/User/UserActions/UserActions.svelte
 msgid "Suspend"
-msgstr "Sospendi"
+msgstr "停止"
 
 #: src/feature/User/UserActions/UserActions.svelte
 msgid "Activate"
-msgstr "Attiva"
+msgstr "有効化"
 
 #: src/feature/User/UserActions/UserActions.svelte
 msgid "Make Admin"
-msgstr "Rendi amministratore"
+msgstr "管理者にする"
 
 #: src/feature/User/UserActions/UserActions.svelte
 msgid "Remove Admin"
-msgstr "Rimuovi amministratore"
+msgstr "管理者権限を解除"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "Delete User"
-msgstr "Elimina utente"
+msgstr "ユーザーを削除"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "User account and all associated data will be removed"
-msgstr "L'account utente e tutti i dati associati verranno rimossi"
+msgstr "ユーザーアカウントと関連するすべてのデータが削除されます"
 
 #: src/feature/User/UserDataTable/data-table-email-button.svelte
 msgid "Email <0/>"
-msgstr "Email <0/>"
+msgstr "メール <0/>"
 
 #: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 msgid "Status"
-msgstr "Stato"
+msgstr "ステータス"
 
 #: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 msgid "Roles"
-msgstr "Ruoli"
+msgstr "ロール"
 
 #: src/feature/User/UserDataTable/UserDataTable.svelte
 msgid "Users will appear here once added"
-msgstr "Gli utenti appariranno qui una volta aggiunti"
+msgstr "追加されたユーザーがここに表示されます"
 
 #: src/feature/User/UserRoleBadge/UserRoleBadge.svelte
 msgid "<0/> Admin"
-msgstr "<0/> Amministratore"
+msgstr "<0/> 管理者"
 
 #: src/feature/User/UserRoleBadge/UserRoleBadge.svelte
 msgid "<0/> User"
-msgstr "<0/> Utente"
+msgstr "<0/> ユーザー"
 
 #: src/feature/User/UserStatusCell/UserStatusCell.svelte
 msgid "<0/> You"
-msgstr "<0/> Tu"
+msgstr "<0/> あなた"
 
 #: src/routes/admin/dashboard/+page.svelte
 msgid "Dashboard | Slink"
-msgstr "Dashboard | Slink"
+msgstr "ダッシュボード | Slink"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/routes/admin/dashboard/+page.svelte
 msgid "Dashboard"
-msgstr "Dashboard"
+msgstr "ダッシュボード"
 
 #: src/routes/admin/dashboard/+page.svelte
 msgid "Overview of your application's key metrics and activity"
-msgstr "Panoramica delle metriche principali e dell'attività della tua applicazione"
+msgstr "アプリケーションの主要な指標とアクティビティの概要"
 
 #: src/routes/admin/settings/+page.svelte
 msgid "Configure image uploads, processing options, and URL sharing preferences"
-msgstr "Configura i caricamenti delle immagini, le opzioni di elaborazione e le preferenze di condivisione URL"
+msgstr "画像のアップロード、処理オプション、URL共有設定を構成"
 
 #: src/routes/admin/settings/+page.svelte
 msgid "Configure storage providers, cache settings, and data management"
-msgstr "Configura i provider di archiviazione, le impostazioni della cache e la gestione dei dati"
+msgstr "ストレージプロバイダー、キャッシュ設定、データ管理を構成"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/routes/admin/settings/+page.svelte
 msgid "Security Settings"
-msgstr "Impostazioni di sicurezza"
+msgstr "セキュリティ設定"
 
 #: src/routes/admin/settings/+page.svelte
 msgid "Manage user registration, access control, and authentication policies"
-msgstr "Gestisci la registrazione degli utenti, il controllo degli accessi e le politiche di autenticazione"
+msgstr "ユーザー登録、アクセス制御、認証ポリシーを管理"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/routes/admin/settings/+page.svelte
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "Single Sign-On"
-msgstr "Single Sign-On"
+msgstr "シングルサインオン"
 
 #: src/routes/admin/settings/+page.svelte
 msgid "Manage SSO/OIDC identity providers for external authentication"
-msgstr "Gestisci i provider di identità SSO/OIDC per l'autenticazione esterna"
+msgstr "外部認証用のSSO/OIDCアイデンティティプロバイダーを管理"
 
 #: src/routes/admin/settings/+page.svelte
 msgid "Settings | Slink"
-msgstr "Impostazioni | Slink"
+msgstr "設定 | Slink"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/routes/admin/settings/+page.svelte
 msgid "Settings"
-msgstr "Impostazioni"
+msgstr "設定"
 
 #: src/routes/admin/settings/+page.svelte
 msgid "Configure your application preferences and manage system behavior"
-msgstr "Configura le preferenze dell'applicazione e gestisci il comportamento del sistema"
+msgstr "アプリケーションの設定とシステム動作を管理"
 
 #: src/routes/admin/user/+page.svelte
 msgid "Users | Slink Admin"
-msgstr "Utenti | Slink Admin"
+msgstr "ユーザー | Slink管理"
 
 #: src/routes/admin/user/+page.svelte
 #: src/routes/admin/user/+page.svelte
 msgid "Manage user accounts and permissions"
-msgstr "Gestisci gli account utente e i permessi"
+msgstr "ユーザーアカウントと権限を管理"
 
 #: src/routes/admin/user/+page.svelte
 msgid "There are no users in the system yet."
-msgstr "Non ci sono ancora utenti nel sistema."
+msgstr "システムにはまだユーザーがいません。"
 
 #: src/feature/User/ApiKey/ApiKeyCard.svelte
 #: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
 msgid "Revoke API Key"
-msgstr "Revoca chiave API"
+msgstr "APIキーを失効"
 
 #: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
 msgid "This API key will be permanently revoked and cannot be recovered"
-msgstr "Questa chiave API verrà revocata definitivamente e non potrà essere recuperata"
+msgstr "このAPIキーは完全に失効され、復元できません"
 
 #: src/feature/User/ApiKey/ApiKeyList.svelte
 msgid "No API keys yet"
-msgstr "Nessuna chiave API ancora"
+msgstr "APIキーはまだありません"
 
 #: src/feature/User/ApiKey/ApiKeyList.svelte
 msgid "Create an API key to integrate with ShareX and other tools"
-msgstr "Crea una chiave API per integrarsi con ShareX e altri strumenti"
+msgstr "ShareXやその他のツールと連携するためのAPIキーを作成"
 
 #: src/feature/User/ApiKey/ApiKeyManager.svelte
 msgid "<0/> API Keys"
-msgstr "<0/> Chiavi API"
+msgstr "<0/> APIキー"
 
 #: src/feature/User/ApiKey/ApiKeyManager.svelte
 msgid "Create API keys for ShareX and other third-party integrations"
-msgstr "Crea chiavi API per ShareX e altre integrazioni di terze parti"
+msgstr "ShareXやその他のサードパーティ連携用のAPIキーを作成"
 
 #: src/feature/User/ApiKey/ApiKeyManager.svelte
 msgid "<0/> Create API Key"
-msgstr "<0/> Crea chiave API"
+msgstr "<0/> APIキーを作成"
 
 #: src/feature/User/ApiKey/CreateApiKeyForm.svelte
 #: src/feature/User/ApiKey/CreateApiKeyForm.svelte
 msgid "Create API Key"
-msgstr "Crea chiave API"
+msgstr "APIキーを作成"
 
 #: src/feature/User/ApiKey/CreateApiKeyForm.svelte
 msgid "Generate a secure key for external integrations"
-msgstr "Genera una chiave sicura per le integrazioni esterne"
+msgstr "外部連携用のセキュアなキーを生成"
 
 #: src/feature/User/ApiKey/CreateApiKeyForm.svelte
 msgid "Key Name"
-msgstr "Nome chiave"
+msgstr "キー名"
 
 #: src/feature/User/ApiKey/CreateApiKeyForm.svelte
 msgid "Expiry Date (Optional)"
-msgstr "Data di scadenza (opzionale)"
+msgstr "有効期限（任意）"
 
 #: src/feature/User/ApiKey/CreateApiKeyForm.svelte
 msgid "Select expiry date"
-msgstr "Seleziona la data di scadenza"
+msgstr "有効期限を選択"
 
 #: src/feature/User/ApiKey/CreateApiKeyForm.svelte
 msgid "Security Notice"
-msgstr "Avviso di sicurezza"
+msgstr "セキュリティに関する注意"
 
 #: src/feature/User/ApiKey/CreateApiKeyForm.svelte
 msgid "Your API key will be displayed only once after creation. Store it securely in your password manager or environment variables. If lost, you'll need to generate a new one."
-msgstr "La tua chiave API verrà mostrata una sola volta dopo la creazione. Conservala in modo sicuro nel tuo gestore di password o nelle variabili d'ambiente. Se persa, dovrai generarne una nuova."
+msgstr "APIキーは作成後に一度だけ表示されます。パスワードマネージャーや環境変数に安全に保管してください。紛失した場合は、新しいキーを生成する必要があります。"
 
 #: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
 msgid "Success!"
-msgstr "Operazione riuscita!"
+msgstr "成功！"
 
 #: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
 msgid "Your API key has been created"
-msgstr "La tua chiave API è stata creata"
+msgstr "APIキーが作成されました"
 
 #: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
 msgid "Your API Key"
-msgstr "La tua chiave API"
+msgstr "あなたのAPIキー"
 
 #: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
 msgid "Your API key will appear here..."
-msgstr "La tua chiave API apparirà qui..."
+msgstr "APIキーがここに表示されます..."
 
 #: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
 msgid "Important Notice"
-msgstr "Avviso importante"
+msgstr "重要なお知らせ"
 
 #: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
 msgid "This key will not be shown again. Store it securely in your password manager or download the ShareX config file below."
-msgstr "Questa chiave non verrà mostrata di nuovo. Conservala in modo sicuro nel tuo gestore di password o scarica il file di configurazione ShareX qui sotto."
+msgstr "このキーは再表示されません。パスワードマネージャーに安全に保管するか、以下からShareX設定ファイルをダウンロードしてください。"
 
 #: src/routes/collection/[id]/+page.svelte
 msgid "Back to Collections"
-msgstr "Torna alle raccolte"
+msgstr "コレクション一覧に戻る"
 
 #: src/routes/collection/[id]/+page.svelte
 msgid "Collection name..."
-msgstr "Nome della raccolta..."
+msgstr "コレクション名..."
 
 #: src/routes/collection/[id]/+page.svelte
 msgid "Add a name..."
-msgstr "Aggiungi un nome..."
+msgstr "名前を追加..."
 
 #. 0: itemsFeed.collection.itemCount ?? itemsFeed.items.length
 #: src/routes/collection/[id]/+page.svelte
 msgid "{0} items"
-msgstr "{0} elementi"
+msgstr "{0} 件"
 
 #: src/routes/collection/[id]/+page.svelte
 msgid "<0/> Add images"
-msgstr "<0/> Aggiungi immagini"
+msgstr "<0/> 画像を追加"
 
 #: src/routes/collection/[id]/+page.svelte
 msgid "Share Link"
-msgstr "Condividi link"
+msgstr "リンクを共有"
 
 #: src/routes/collection/[id]/+page.svelte
 msgid "Collection not found"
-msgstr "Raccolta non trovata"
+msgstr "コレクションが見つかりません"
 
 #: src/routes/collection/[id]/+page.svelte
 msgid "This collection doesn't exist or you don't have permission to view it."
-msgstr "Questa raccolta non esiste o non hai i permessi per visualizzarla."
+msgstr "このコレクションは存在しないか、閲覧権限がありません。"
 
 #: src/routes/collection/[id]/+page.svelte
 #: src/ui/components/picker/picker-empty-state.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "No items yet"
-msgstr "Nessun elemento ancora"
+msgstr "アイテムはまだありません"
 
 #: src/routes/collection/[id]/+page.svelte
 msgid "Upload images directly to this collection."
-msgstr "Carica immagini direttamente in questa raccolta."
+msgstr "このコレクションに直接画像をアップロードできます。"
 
 #: src/routes/collection/[id]/+page.svelte
 msgid "No items in this collection yet."
-msgstr "Nessun elemento in questa raccolta ancora."
+msgstr "このコレクションにはまだアイテムがありません。"
 
 #: src/routes/help/faq/+page.svelte
 msgid "FAQ | Slink"
-msgstr "FAQ | Slink"
+msgstr "よくある質問 | Slink"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Frequently asked questions about Slink - image sharing platform"
-msgstr "Domande frequenti su Slink - piattaforma di condivisione immagini"
+msgstr "画像共有プラットフォームSlinkについてのよくある質問"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Frequently Asked Questions"
-msgstr "Domande frequenti"
+msgstr "よくある質問"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Find answers to common questions about using Slink for image sharing and management"
-msgstr "Trova risposte alle domande più comuni sull'utilizzo di Slink per la condivisione e la gestione delle immagini"
+msgstr "Slinkでの画像共有と管理に関するよくある質問と回答"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Still have questions?"
-msgstr "Hai ancora domande?"
+msgstr "他にご質問がありますか？"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Can't find the answer you're looking for? Please get in touch with us for further assistance."
-msgstr "Non riesci a trovare la risposta che cerchi? Contattaci per ulteriore assistenza."
+msgstr "お探しの回答が見つかりませんか？お気軽にお問い合わせください。"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Report an Issue"
-msgstr "<0/> Segnala un problema"
+msgstr "<0/> 問題を報告"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> View Documentation"
-msgstr "<0/> Visualizza la documentazione"
+msgstr "<0/> ドキュメントを見る"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Image Details | Slink"
-msgstr "Dettagli immagine | Slink"
+msgstr "画像の詳細 | Slink"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "License"
-msgstr "Licenza"
+msgstr "ライセンス"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Choose how others can use this image"
-msgstr "Scegli come gli altri possono utilizzare questa immagine"
+msgstr "この画像の利用条件を選択"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Resize"
-msgstr "Ridimensiona"
+msgstr "リサイズ"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Adjust dimensions for the shared link"
-msgstr "Modifica le dimensioni per il link condiviso"
+msgstr "共有リンクのサイズを調整"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Filter"
-msgstr "Filtro"
+msgstr "フィルター"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Apply a color filter to the shared link"
-msgstr "Applica un filtro colore al link condiviso"
+msgstr "共有リンクにカラーフィルターを適用"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Resize, filter, and format changes apply only to the shared link. The original image remains unchanged."
-msgstr "Le modifiche di ridimensionamento, filtro e formato si applicano solo al link condiviso. L'immagine originale rimane invariata."
+msgstr "リサイズ、フィルター、フォーマットの変更は共有リンクにのみ適用されます。元の画像は変更されません。"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Select option to copy"
-msgstr "Seleziona l'opzione da copiare"
+msgstr "コピーするオプションを選択"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Quick"
-msgstr "Rapido"
+msgstr "クイック"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Output Format"
-msgstr "Formato di output"
+msgstr "出力フォーマット"
 
 #: src/ui/components/combobox/combobox.svelte
 msgid "No items found."
-msgstr "Nessun elemento trovato."
+msgstr "項目が見つかりません。"
 
 #: src/ui/components/combobox/combobox.svelte
 msgid "Clear selection"
-msgstr "Cancella selezione"
+msgstr "選択を解除"
 
 #: src/ui/components/data-table/column-toggle.svelte
 msgid "<0/> Columns <1/>"
-msgstr "<0/> Colonne <1/>"
+msgstr "<0/> カラム <1/>"
 
 #. 0: pageSize
 #: src/ui/components/data-table/page-size-select.svelte
 msgid "<0/> Limit {0} <1/>"
-msgstr "<0/> Limite {0} <1/>"
+msgstr "<0/> 表示件数 {0} <1/>"
 
 #: src/ui/components/date-picker/date-picker-field.svelte
 msgid "Select a date"
-msgstr "Seleziona una data"
+msgstr "日付を選択"
 
 #: src/ui/components/date-picker/date-picker.svelte
 msgid "Pick a date"
-msgstr "Scegli una data"
+msgstr "日付を選択してください"
 
 #: src/ui/components/dialog/modal-footer.svelte
 msgid "Submit"
-msgstr "Invia"
+msgstr "送信"
 
 #: src/ui/components/enhanced-select/enhanced-select.svelte
 #: src/ui/components/select/select.svelte
 msgid "Select an option"
-msgstr "Seleziona un'opzione"
+msgstr "オプションを選択"
 
 #: src/ui/components/input/number-input.svelte
 msgid "Number input"
-msgstr "Campo numerico"
+msgstr "数値入力"
 
 #: src/ui/components/input/number-input.svelte
 msgid "Increase value"
-msgstr "Aumenta valore"
+msgstr "値を増やす"
 
 #: src/ui/components/input/number-input.svelte
 msgid "Decrease value"
-msgstr "Diminuisci valore"
+msgstr "値を減らす"
 
 #: src/ui/components/picker/picker-create-footer.svelte
 msgid "New item"
-msgstr "Nuovo elemento"
+msgstr "新しい項目"
 
 #: src/ui/components/picker/picker-list.svelte
 msgid "No matches found"
-msgstr "Nessun risultato trovato"
+msgstr "一致する項目がありません"
 
 #: src/ui/components/command/command-dialog.svelte
 msgid "Command Palette"
-msgstr "Tavolozza dei comandi"
+msgstr "コマンドパレット"
 
 #: src/ui/components/command/command-dialog.svelte
 msgid "Search for a command to run"
-msgstr "Cerca un comando da eseguire"
+msgstr "実行するコマンドを検索"
 
 #. 0: inner.value.length
 #: src/ui/components/select/select.svelte
 msgid "{0} items selected"
-msgstr "{0} elementi selezionati"
+msgstr "{0}件選択中"
 
 #: src/ui/components/shortcut/shortcut.svelte
 msgid "⌘ cmd"
@@ -2945,53 +2945,53 @@ msgstr "Shift"
 #: src/ui/components/sidebar/sidebar-rail.svelte
 #: src/ui/components/sidebar/sidebar-trigger.svelte
 msgid "Toggle Sidebar"
-msgstr "Mostra/nascondi barra laterale"
+msgstr "サイドバーの切り替え"
 
 #: src/ui/components/sidebar/sidebar.svelte
 msgid "Sidebar"
-msgstr "Barra laterale"
+msgstr "サイドバー"
 
 #: src/ui/components/sidebar/sidebar.svelte
 msgid "Displays the mobile sidebar."
-msgstr "Mostra la barra laterale mobile."
+msgstr "モバイル用サイドバーを表示します。"
 
 #: src/ui/components/table-pagination/table-pagination.svelte
 msgid "Click to enter page number"
-msgstr "Clicca per inserire il numero di pagina"
+msgstr "クリックしてページ番号を入力"
 
 #. 0: currentPage
 #: src/ui/components/table-pagination/table-pagination.svelte
 msgid "Current page {0}"
-msgstr "Pagina corrente {0}"
+msgstr "現在のページ {0}"
 
 #. 0: currentPage
 #: src/ui/components/table-pagination/table-pagination.svelte
 msgid "Current page {0}. Click to enter page number"
-msgstr "Pagina corrente {0}. Clicca per inserire il numero di pagina"
+msgstr "現在のページ {0}。クリックしてページ番号を入力"
 
 #: src/ui/components/table-pagination/table-pagination.svelte
 msgid "Previous page"
-msgstr "Pagina precedente"
+msgstr "前のページ"
 
 #: src/ui/components/table-pagination/table-pagination.svelte
 msgid "Go to page"
-msgstr "Vai alla pagina"
+msgstr "ページに移動"
 
 #: src/ui/components/table-pagination/table-pagination.svelte
 msgid "Next page"
-msgstr "Pagina successiva"
+msgstr "次のページ"
 
 #. 0: startItem; 1: endItem; 2: totalItems
 #: src/ui/components/table-pagination/table-pagination.svelte
 msgid "{0}–{1} <0>of</0> {2} items"
-msgstr "{0}–{1} <0>di</0> {2} elementi"
+msgstr "{2}件中 {0}–{1}"
 
 #. 0: option.label
 #. 0: option.value
 #: src/ui/components/toggle-group/toggle-group.svelte
 #: src/ui/components/toggle-group/toggle-group.svelte
 msgid "Select {0}"
-msgstr "Seleziona {0}"
+msgstr "{0}を選択"
 
 #: src/lib/utils/ui/toast.svelte.ts
 msgid "ToastManager"
@@ -3001,396 +3001,396 @@ msgstr "ToastManager"
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
 msgid "Name"
-msgstr "Nome"
+msgstr "名前"
 
 #: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 msgid "Items"
-msgstr "Elementi"
+msgstr "項目数"
 
 #: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 msgid "Created"
-msgstr "Creato"
+msgstr "作成日"
 
 #: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 msgid "Create your first collection to get started"
-msgstr "Crea la tua prima raccolta per iniziare"
+msgstr "最初のコレクションを作成して始めましょう"
 
 #: src/feature/Image/History/Actions/BatchPickerAction.svelte
 msgid "Select items to apply"
-msgstr "Seleziona gli elementi da applicare"
+msgstr "適用する項目を選択"
 
 #: src/feature/Image/History/Actions/BatchPickerAction.svelte
 msgid "<0/> Apply"
-msgstr "<0/> Applica"
+msgstr "<0/> 適用"
 
 #: src/feature/Image/History/Actions/VisibilityAction.svelte
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 msgid "Visibility"
-msgstr "Visibilità"
+msgstr "公開設定"
 
 #: src/feature/Image/History/Actions/VisibilityAction.svelte
 msgid "Change Visibility"
-msgstr "Modifica visibilità"
+msgstr "公開設定の変更"
 
 #: src/feature/Image/History/Actions/VisibilityAction.svelte
 msgid "Set visibility for selected images"
-msgstr "Imposta la visibilità per le immagini selezionate"
+msgstr "選択した画像の公開設定を変更"
 
 #: src/feature/Image/History/Actions/VisibilityAction.svelte
 msgid "<0/> Make Public"
-msgstr "<0/> Rendi pubblico"
+msgstr "<0/> 公開にする"
 
 #: src/feature/Image/History/Actions/VisibilityAction.svelte
 msgid "<0/> Make Private"
-msgstr "<0/> Rendi privato"
+msgstr "<0/> 非公開にする"
 
 #: src/routes/admin/settings/security/+page.svelte
 msgid "Security Settings | Slink"
-msgstr "Impostazioni di sicurezza | Slink"
+msgstr "セキュリティ設定 | Slink"
 
 #: src/routes/admin/settings/security/+page.svelte
 msgid "Manage access control and user authentication settings"
-msgstr "Gestisci il controllo degli accessi e le impostazioni di autenticazione utente"
+msgstr "アクセス制御とユーザー認証の設定を管理"
 
 #: src/routes/admin/settings/storage/+page.svelte
 msgid "Storage Settings | Slink"
-msgstr "Impostazioni di archiviazione | Slink"
+msgstr "ストレージ設定 | Slink"
 
 #: src/routes/admin/settings/storage/+page.svelte
 msgid "Storage"
-msgstr "Archiviazione"
+msgstr "ストレージ"
 
 #: src/routes/admin/settings/storage/+page.svelte
 msgid "Configure storage providers and cache management"
-msgstr "Configura i provider di archiviazione e la gestione della cache"
+msgstr "ストレージプロバイダーとキャッシュ管理を設定"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Slink offers a <0>public gallery</0>, where people can share their images with others."
-msgstr "Slink offre una <0>galleria pubblica</0>, dove le persone possono condividere le loro immagini con gli altri."
+msgstr "Slinkには<0>パブリックギャラリー</0>があり、他のユーザーと画像を共有できます。"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Visibility Options"
-msgstr "Opzioni di visibilità"
+msgstr "公開設定オプション"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Images are shared in the public gallery and visible to all users"
-msgstr "Le immagini sono condivise nella galleria pubblica e visibili a tutti gli utenti"
+msgstr "画像はパブリックギャラリーで共有され、すべてのユーザーに表示されます"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Default"
-msgstr "Predefinito"
+msgstr "デフォルト"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Images are not shared in the public gallery and only accessible by the owner"
-msgstr "Le immagini non sono condivise nella galleria pubblica e sono accessibili solo dal proprietario"
+msgstr "画像はパブリックギャラリーで共有されず、所有者のみがアクセスできます"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Important Note"
-msgstr "Nota importante"
+msgstr "重要事項"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Raw images are accessible to anyone with a direct link, regardless of visibility setting."
-msgstr "Le immagini originali sono accessibili a chiunque abbia un link diretto, indipendentemente dall'impostazione di visibilità."
+msgstr "元画像は公開設定に関わらず、直接リンクを持つ人なら誰でもアクセスできます。"
 
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "SSO Settings | Slink"
-msgstr "Impostazioni SSO | Slink"
+msgstr "SSO設定 | Slink"
 
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "Manage SSO/OIDC identity providers"
-msgstr "Gestisci i provider di identità SSO/OIDC"
+msgstr "SSO/OIDCアイデンティティプロバイダーを管理"
 
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "Back to Settings"
-msgstr "Torna alle impostazioni"
+msgstr "設定に戻る"
 
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "Add this callback URL to your identity provider's allowed redirect URIs:"
-msgstr "Aggiungi questo URL di callback agli URI di reindirizzamento consentiti del tuo provider di identità:"
+msgstr "このコールバックURLをアイデンティティプロバイダーの許可済みリダイレクトURIに追加してください："
 
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "Failed to load SSO providers."
-msgstr "Caricamento dei provider SSO non riuscito."
+msgstr "SSOプロバイダーの読み込みに失敗しました。"
 
 #: src/routes/admin/settings/image/+page.svelte
 msgid "Image Settings | Slink"
-msgstr "Impostazioni immagini | Slink"
+msgstr "画像設定 | Slink"
 
 #: src/routes/admin/settings/image/+page.svelte
 msgid "Configure image handling and sharing preferences"
-msgstr "Configura le preferenze di gestione e condivisione delle immagini"
+msgstr "画像の処理と共有設定を構成"
 
 #: src/routes/help/faq/+page.svelte
 msgid "You can easily share your images with others using the direct link provided for each uploaded image."
-msgstr "Puoi condividere facilmente le tue immagini con altri utilizzando il link diretto fornito per ogni immagine caricata."
+msgstr "アップロードした各画像に提供される直接リンクを使って、簡単に画像を共有できます。"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Current Sharing Options"
-msgstr "<0/> Opzioni di condivisione attuali"
+msgstr "<0/> 現在の共有オプション"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Direct link sharing with anyone"
-msgstr "<0/> Condivisione tramite link diretto con chiunque"
+msgstr "<0/> 直接リンクで誰とでも共有"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Public gallery visibility (optional)"
-msgstr "<0/> Visibilità nella galleria pubblica (facoltativa)"
+msgstr "<0/> パブリックギャラリーでの表示（任意）"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Link accessible to anyone who has it"
-msgstr "<0/> Link accessibile a chiunque lo possieda"
+msgstr "<0/> リンクを持つ人なら誰でもアクセス可能"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Want More Control?"
-msgstr "Vuoi più controllo?"
+msgstr "もっと細かく管理したいですか？"
 
 #: src/routes/help/faq/+page.svelte
 msgid "I'm working on advanced sharing features that will give you more control over your image sharing:"
-msgstr "Sto lavorando su funzionalità di condivisione avanzate che ti daranno più controllo sulla condivisione delle tue immagini:"
+msgstr "画像共有をより細かく管理できる高度な共有機能を開発中です："
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Expiration dates for shared links"
-msgstr "<0/> Date di scadenza per i link condivisi"
+msgstr "<0/> 共有リンクの有効期限"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Password protection"
-msgstr "<0/> Protezione con password"
+msgstr "<0/> パスワード保護"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Private group sharing"
-msgstr "<0/> Condivisione con gruppi privati"
+msgstr "<0/> プライベートグループ共有"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Support this feature request <1/>"
-msgstr "<0/> Supporta questa richiesta di funzionalità <1/>"
+msgstr "<0/> この機能リクエストを応援する <1/>"
 
 #: src/routes/help/faq/+page.svelte
 msgid "I appreciate your help in making Slink better! If you've encountered a bug or have suggestions for improvement, here's how you can help:"
-msgstr "Apprezzo il tuo aiuto nel migliorare Slink! Se hai riscontrato un bug o hai suggerimenti per miglioramenti, ecco come puoi aiutare:"
+msgstr "Slinkの改善にご協力いただきありがとうございます！バグを発見された方や改善提案がある方は、以下の方法でご協力ください："
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Before Reporting"
-msgstr "<0/> Prima di segnalare"
+msgstr "<0/> 報告前の確認事項"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Check if the issue has already been reported"
-msgstr "Verifica se il problema è già stato segnalato"
+msgstr "同じ問題がすでに報告されていないか確認してください"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Try reproducing the issue in a different browser"
-msgstr "Prova a riprodurre il problema in un altro browser"
+msgstr "別のブラウザで問題を再現できるか試してください"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Gather relevant details (browser, steps to reproduce, screenshots)"
-msgstr "Raccogli i dettagli rilevanti (browser, passaggi per riprodurre, screenshot)"
+msgstr "関連情報を収集してください（ブラウザ、再現手順、スクリーンショット）"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Report on GitHub"
-msgstr "Segnala su GitHub"
+msgstr "GitHubで報告"
 
 #: src/routes/help/faq/+page.svelte
 msgid "GitHub Issues is my primary platform for tracking bugs and feature requests. Your reports help me prioritize improvements."
-msgstr "GitHub Issues è la mia piattaforma principale per tenere traccia dei bug e delle richieste di funzionalità. Le tue segnalazioni mi aiutano a dare priorità ai miglioramenti."
+msgstr "GitHub Issuesはバグや機能リクエストを管理する主要なプラットフォームです。皆さんの報告が改善の優先順位付けに役立ちます。"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Create New Issue <1/>"
-msgstr "<0/> Crea nuova segnalazione <1/>"
+msgstr "<0/> 新しいIssueを作成 <1/>"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Thank You!"
-msgstr "Grazie!"
+msgstr "ありがとうございます！"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Every report helps me improve Slink for the entire community. I review all issues and prioritize fixes based on impact and frequency."
-msgstr "Ogni segnalazione mi aiuta a migliorare Slink per tutta la community. Esamino tutti i problemi e assegno la priorità alle correzioni in base all'impatto e alla frequenza."
+msgstr "すべての報告がコミュニティ全体のためのSlink改善に役立ちます。すべてのIssueを確認し、影響度と頻度に基づいて修正の優先順位を決定しています。"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Slink supports the following mime types:"
-msgstr "Slink supporta i seguenti tipi MIME:"
+msgstr "Slinkは以下のMIMEタイプに対応しています："
 
 #: src/routes/help/faq/+page.svelte
 msgid "* Source images are forced to be converted to JPEG format."
-msgstr "* Le immagini sorgente vengono forzatamente convertite in formato JPEG."
+msgstr "※ ソース画像は強制的にJPEG形式に変換されます。"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Account Approved"
-msgstr "Account approvato"
+msgstr "アカウント承認済み"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Awaiting Approval"
-msgstr "In attesa di approvazione"
+msgstr "承認待ち"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Review in Progress"
-msgstr "Revisione in corso"
+msgstr "審査中"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Your account is currently under review"
-msgstr "Il tuo account è attualmente in fase di revisione"
+msgstr "現在アカウントを審査中です"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "What happens next?"
-msgstr "Cosa succede dopo?"
+msgstr "この後の流れ"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Your account is being reviewed and will be activated once approved. Please check back later for updates on your account status."
-msgstr "Il tuo account è in fase di revisione e verrà attivato una volta approvato. Controlla di nuovo in seguito per aggiornamenti sullo stato del tuo account."
+msgstr "アカウントは現在審査中で、承認後に有効化されます。アカウントの状況については後ほどご確認ください。"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Need help?"
-msgstr "Hai bisogno di aiuto?"
+msgstr "お困りですか？"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Contact the administrator if you have questions about your account or the review process."
-msgstr "Contatta l'amministratore se hai domande sul tuo account o sul processo di revisione."
+msgstr "アカウントや審査プロセスについてご不明な点があれば、管理者にお問い合わせください。"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Your Account Reference"
-msgstr "Riferimento del tuo account"
+msgstr "アカウント参照情報"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Provide this ID when contacting the administrator"
-msgstr "Fornisci questo ID quando contatti l'amministratore"
+msgstr "管理者へのお問い合わせ時にこのIDをお伝えください"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Explore while you wait"
-msgstr "Esplora mentre aspetti"
+msgstr "お待ちの間に探索"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Browse the platform features"
-msgstr "Scopri le funzionalità della piattaforma"
+msgstr "プラットフォームの機能を見る"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Welcome Aboard"
-msgstr "Benvenuto a bordo"
+msgstr "ようこそ"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Your account has been approved and activated"
-msgstr "Il tuo account è stato approvato e attivato"
+msgstr "アカウントが承認され、有効化されました"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "All Features Unlocked"
-msgstr "Tutte le funzionalità sbloccate"
+msgstr "すべての機能が利用可能"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Upload, share, and manage your content with full access to all platform features. Start creating and sharing your content."
-msgstr "Carica, condividi e gestisci i tuoi contenuti con accesso completo a tutte le funzionalità della piattaforma. Inizia a creare e condividere i tuoi contenuti."
+msgstr "すべてのプラットフォーム機能をフルにご利用いただけます。コンテンツのアップロード、共有、管理を始めましょう。"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Ready to get started?"
-msgstr "Pronto per iniziare?"
+msgstr "始める準備はできましたか？"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Sign in to your account to begin using all the platform features or explore the public gallery to see what others are sharing."
-msgstr "Accedi al tuo account per iniziare a utilizzare tutte le funzionalità della piattaforma o esplora la galleria pubblica per vedere cosa condividono gli altri."
+msgstr "アカウントにサインインしてすべての機能をご利用いただくか、パブリックギャラリーで他のユーザーの共有内容をご覧ください。"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Ready to continue"
-msgstr "Pronto per continuare"
+msgstr "続ける準備ができました"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Sign in to access all platform features"
-msgstr "Accedi per utilizzare tutte le funzionalità della piattaforma"
+msgstr "サインインしてすべての機能にアクセス"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Sign In | Slink"
-msgstr "Accedi | Slink"
+msgstr "サインイン | Slink"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Welcome back"
-msgstr "Bentornato"
+msgstr "おかえりなさい"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Sign in to continue to Slink"
-msgstr "Accedi per continuare su Slink"
+msgstr "Slinkにサインインして続ける"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Email or Username"
-msgstr "Email o nome utente"
+msgstr "メールアドレスまたはユーザー名"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Enter your email or username"
-msgstr "Inserisci la tua email o nome utente"
+msgstr "メールアドレスまたはユーザー名を入力"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Enter your password"
-msgstr "Inserisci la tua password"
+msgstr "パスワードを入力"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "or continue with"
-msgstr "o continua con"
+msgstr "または以下で続ける"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Demo Mode"
-msgstr "Modalità demo"
+msgstr "デモモード"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Try the application with the test credentials"
-msgstr "Prova l'applicazione con le credenziali di test"
+msgstr "テスト用の認証情報でアプリケーションを試す"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Get In"
-msgstr "Entra"
+msgstr "ログイン"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Automatically fills credentials and signs you in"
-msgstr "Compila automaticamente le credenziali e ti fa accedere"
+msgstr "認証情報を自動入力してサインインします"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Need an account?"
-msgstr "Non hai un account?"
+msgstr "アカウントをお持ちでないですか？"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Create one to start sharing images"
-msgstr "Creane uno per iniziare a condividere immagini"
+msgstr "アカウントを作成して画像の共有を始めましょう"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Sign Up"
-msgstr "Registrati"
+msgstr "新規登録"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Create Account | Slink"
-msgstr "Crea account | Slink"
+msgstr "アカウント作成 | Slink"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Create Account"
-msgstr "Crea account"
+msgstr "アカウント作成"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Join Slink to start sharing your images"
-msgstr "Unisciti a Slink per iniziare a condividere le tue immagini"
+msgstr "Slinkに参加して画像の共有を始めましょう"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Choose a username"
-msgstr "Scegli un nome utente"
+msgstr "ユーザー名を選択"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Email Address"
-msgstr "Indirizzo email"
+msgstr "メールアドレス"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Enter your email"
-msgstr "Inserisci la tua email"
+msgstr "メールアドレスを入力"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Create a strong password"
-msgstr "Crea una password sicura"
+msgstr "強力なパスワードを作成"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Confirm your password"
-msgstr "Conferma la tua password"
+msgstr "パスワードを確認"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Already have an account?"
-msgstr "Hai già un account?"
+msgstr "すでにアカウントをお持ちですか？"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Sign in to access your images"
-msgstr "Accedi per visualizzare le tue immagini"
+msgstr "サインインして画像にアクセス"
 
 #: src/lib/utils/http/useUserAgent.svelte.ts
 msgid "Windows"
@@ -3426,49 +3426,49 @@ msgstr "Safari"
 
 #: src/ui/components/sonner/toasts/DuplicateImageToast.svelte
 msgid "Image Already Exists"
-msgstr "Immagine già esistente"
+msgstr "画像は既に存在します"
 
 #: src/ui/components/sonner/toasts/DuplicateImageToast.svelte
 msgid "Duplicate"
-msgstr "Duplicato"
+msgstr "重複"
 
 #: src/ui/components/sonner/toasts/DuplicateImageToast.svelte
 msgid "This <0>image</0> was already uploaded <1/>."
-msgstr "Questa <0>immagine</0> è già stata caricata <1/>."
+msgstr "この<0>画像</0>は既にアップロードされています <1/>。"
 
 #: src/routes/admin/settings/sso/new/+page.svelte
 msgid "Select an identity provider to configure"
-msgstr "Seleziona un provider di identità da configurare"
+msgstr "設定するアイデンティティプロバイダーを選択"
 
 #. 0: formState.provider?.name ?? ''
 #: src/routes/admin/settings/sso/new/+page.svelte
 msgid "Configure the {0} provider"
-msgstr "Configura il provider {0}"
+msgstr "{0}プロバイダーを設定"
 
 #: src/routes/admin/settings/sso/new/+page.svelte
 msgid "Add SSO Provider | Slink"
-msgstr "Aggiungi provider SSO | Slink"
+msgstr "SSOプロバイダーの追加 | Slink"
 
 #: src/routes/admin/settings/sso/[id]/edit/+page.svelte
 #: src/routes/admin/settings/sso/new/+page.svelte
 msgid "Back to SSO"
-msgstr "Torna a SSO"
+msgstr "SSOに戻る"
 
 #: src/routes/profile/(auth)/sso/callback/+page.svelte
 msgid "Signing in..."
-msgstr "Accesso in corso..."
+msgstr "サインイン中..."
 
 #: src/routes/admin/settings/sso/[id]/edit/+page.svelte
 msgid "Edit SSO Provider | Slink"
-msgstr "Modifica provider SSO | Slink"
+msgstr "SSOプロバイダーの編集 | Slink"
 
 #: src/routes/admin/settings/sso/[id]/edit/+page.svelte
 msgid "Edit Provider"
-msgstr "Modifica provider"
+msgstr "プロバイダーを編集"
 
 #: src/routes/admin/settings/sso/[id]/edit/+page.svelte
 msgid "Update the SSO provider configuration"
-msgstr "Aggiorna la configurazione del provider SSO"
+msgstr "SSOプロバイダーの設定を更新"
 
 #: src/routes/preferences/+page.svelte
 msgid "English"
@@ -3480,39 +3480,39 @@ msgstr "Українська"
 
 #: src/feature/Auth/PasswordStrength/PasswordStrength.labels.svelte.ts
 msgid "Weak"
-msgstr "Debole"
+msgstr "弱い"
 
 #: src/feature/Auth/PasswordStrength/PasswordStrength.labels.svelte.ts
 msgid "Fair"
-msgstr "Sufficiente"
+msgstr "普通"
 
 #: src/feature/Auth/PasswordStrength/PasswordStrength.labels.svelte.ts
 msgid "Good"
-msgstr "Buona"
+msgstr "良い"
 
 #: src/feature/Auth/PasswordStrength/PasswordStrength.labels.svelte.ts
 msgid "Strong"
-msgstr "Forte"
+msgstr "強い"
 
 #: src/feature/Auth/PasswordStrength/PasswordStrength.labels.svelte.ts
 msgid "Very Strong"
-msgstr "Molto forte"
+msgstr "非常に強い"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 msgid "History"
-msgstr "Cronologia"
+msgstr "履歴"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 msgid "Administration"
-msgstr "Amministrazione"
+msgstr "管理"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 msgid "System"
-msgstr "Sistema"
+msgstr "システム"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 msgid "Help & FAQ"
-msgstr "Guida e FAQ"
+msgstr "ヘルプ・よくある質問"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 msgid "GitHub"
@@ -3520,492 +3520,492 @@ msgstr "GitHub"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Passwords do not match."
-msgstr "Le password non corrispondono."
+msgstr "パスワードが一致しません。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Username cannot be the same as email."
-msgstr "Il nome utente non può essere uguale all'email."
+msgstr "ユーザー名はメールアドレスと同じにできません。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Password must be at least {limit} characters long."
-msgstr "La password deve contenere almeno {limit} caratteri."
+msgstr "パスワードは{limit}文字以上で入力してください。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Password must contain at least one number."
-msgstr "La password deve contenere almeno un numero."
+msgstr "パスワードには数字を1文字以上含めてください。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Password must contain at least one lowercase letter."
-msgstr "La password deve contenere almeno una lettera minuscola."
+msgstr "パスワードには小文字を1文字以上含めてください。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Password must contain at least one uppercase letter."
-msgstr "La password deve contenere almeno una lettera maiuscola."
+msgstr "パスワードには大文字を1文字以上含めてください。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Password must contain at least one special character."
-msgstr "La password deve contenere almeno un carattere speciale."
+msgstr "パスワードには特殊文字を1文字以上含めてください。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Min 6 characters password"
-msgstr "Password di almeno 6 caratteri"
+msgstr "パスワードは6文字以上"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Username must be at least {limit} characters long."
-msgstr "Il nome utente deve contenere almeno {limit} caratteri."
+msgstr "ユーザー名は{limit}文字以上で入力してください。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Username must be at most {limit} characters long."
-msgstr "Il nome utente non può superare {limit} caratteri."
+msgstr "ユーザー名は{limit}文字以下で入力してください。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Username can only contain lowercase letters, numbers, underscores, hyphens, and periods."
-msgstr "Il nome utente può contenere solo lettere minuscole, numeri, trattini bassi, trattini e punti."
+msgstr "ユーザー名には小文字、数字、アンダースコア、ハイフン、ピリオドのみ使用できます。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Username cannot contain consecutive special characters."
-msgstr "Il nome utente non può contenere caratteri speciali consecutivi."
+msgstr "ユーザー名に特殊文字を連続して使用することはできません。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "`{value}` is a reserved username."
-msgstr "`{value}` è un nome utente riservato."
+msgstr "`{value}` は予約済みのユーザー名です。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid credentials. Please check your username/email and password and try again."
-msgstr "Credenziali non valide. Controlla il nome utente/email e la password e riprova."
+msgstr "認証情報が正しくありません。ユーザー名またはメールアドレスとパスワードを確認して、もう一度お試しください。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "You must be logged in to change your password"
-msgstr "Devi essere connesso per modificare la password"
+msgstr "パスワードを変更するにはログインが必要です"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid refresh token"
-msgstr "Refresh token non valido"
+msgstr "無効なリフレッシュトークン"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "User is restricted"
-msgstr "Utente limitato"
+msgstr "ユーザーは制限されています"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "SSO provider is currently unavailable. Please try again later."
-msgstr "Il provider SSO non è al momento disponibile. Riprova più tardi."
+msgstr "SSOプロバイダーは現在利用できません。しばらくしてからもう一度お試しください。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid email address."
-msgstr "Indirizzo email non valido."
+msgstr "無効なメールアドレスです。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Email already registered."
-msgstr "Email già registrata."
+msgstr "このメールアドレスは既に登録されています。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "An email address is required for SSO authentication."
-msgstr "È necessario un indirizzo email per l'autenticazione SSO."
+msgstr "SSO認証にはメールアドレスが必要です。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Email must be verified by the SSO provider before signing in."
-msgstr "L'email deve essere verificata dal provider SSO prima di accedere."
+msgstr "サインインする前に、SSOプロバイダーでメールアドレスの確認が必要です。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid password."
-msgstr "Password non valida."
+msgstr "無効なパスワードです。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid old password provided."
-msgstr "La vecchia password fornita non è valida."
+msgstr "現在のパスワードが正しくありません。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid or expired refresh token."
-msgstr "Refresh token non valido o scaduto."
+msgstr "リフレッシュトークンが無効または期限切れです。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid display name"
-msgstr "Nome visualizzato non valido"
+msgstr "無効な表示名"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Display name already exist."
-msgstr "Il nome visualizzato esiste già."
+msgstr "この表示名は既に使用されています。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "`{name}` is a reserved display name"
-msgstr "`{name}` è un nome visualizzato riservato"
+msgstr "`{name}` は予約済みの表示名です"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid username"
-msgstr "Nome utente non valido"
+msgstr "無効なユーザー名"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Username already exist."
-msgstr "Il nome utente esiste già."
+msgstr "このユーザー名は既に使用されています。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid settings configuration."
-msgstr "Configurazione delle impostazioni non valida."
+msgstr "無効な設定です。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid password min length"
-msgstr "Lunghezza minima della password non valida"
+msgstr "無効なパスワード最小文字数"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid image max size"
-msgstr "Dimensione massima dell'immagine non valida"
+msgstr "無効な画像最大サイズ"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Your account is pending approval."
-msgstr "Il tuo account è in attesa di approvazione."
+msgstr "アカウントは承認待ちです。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Sign up is not allowed"
-msgstr "La registrazione non è consentita"
+msgstr "新規登録は許可されていません"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid or expired OAuth state"
-msgstr "Stato OAuth non valido o scaduto"
+msgstr "OAuthの状態が無効または期限切れです"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "You cannot grant or revoke roles from yourself. Use CLI instead."
-msgstr "Non puoi assegnare o revocare ruoli a te stesso. Usa la CLI."
+msgstr "自分自身のロールを付与または取り消すことはできません。CLIを使用してください。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "You cannot change your own status."
-msgstr "Non puoi modificare il tuo stato."
+msgstr "自分自身のステータスは変更できません。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid user role"
-msgstr "Ruolo utente non valido"
+msgstr "無効なユーザーロール"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This action is not allowed in demo mode"
-msgstr "Questa azione non è consentita in modalità demo"
+msgstr "デモモードではこの操作は許可されていません"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Access denied"
-msgstr "Accesso negato"
+msgstr "アクセスが拒否されました"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Resource not found"
-msgstr "Risorsa non trovata"
+msgstr "リソースが見つかりません"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "An error occurred"
-msgstr "Si è verificato un errore"
+msgstr "エラーが発生しました"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "An error occurred, while processing the request"
-msgstr "Si è verificato un errore durante l'elaborazione della richiesta"
+msgstr "リクエストの処理中にエラーが発生しました"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Validation Error"
-msgstr "Errore di validazione"
+msgstr "バリデーションエラー"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Specification Error"
-msgstr "Errore di specifica"
+msgstr "仕様エラー"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "You cannot bookmark your own image"
-msgstr "Non puoi aggiungere ai preferiti la tua stessa immagine"
+msgstr "自分の画像はブックマークできません"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Cannot bookmark a private image"
-msgstr "Non è possibile aggiungere ai preferiti un'immagine privata"
+msgstr "非公開の画像はブックマークできません"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Comment edit window has expired. Comments can only be edited within 24 hours of creation."
-msgstr "Il periodo di modifica del commento è scaduto. I commenti possono essere modificati solo entro 24 ore dalla creazione."
+msgstr "コメントの編集期間が終了しました。コメントは作成後24時間以内のみ編集できます。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "You can only access your own collections"
-msgstr "Puoi accedere solo alle tue raccolte"
+msgstr "自分のコレクションのみアクセスできます"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "You can only access your own tags"
-msgstr "Puoi accedere solo ai tuoi tag"
+msgstr "自分のタグのみアクセスできます"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Cannot move a tag to itself"
-msgstr "Non è possibile spostare un tag su se stesso"
+msgstr "タグを自分自身に移動することはできません"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Cannot move a tag to one of its descendants"
-msgstr "Non è possibile spostare un tag in uno dei suoi discendenti"
+msgstr "タグを自身の子孫に移動することはできません"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Storage provider is not configured."
-msgstr "Il provider di archiviazione non è configurato."
+msgstr "ストレージプロバイダーが設定されていません。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "SMB configuration is incomplete."
-msgstr "La configurazione SMB è incompleta."
+msgstr "SMBの設定が不完全です。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Storage usage metrics are disabled for this provider"
-msgstr "Le metriche di utilizzo dello spazio sono disabilitate per questo provider"
+msgstr "このプロバイダーではストレージ使用量の指標が無効になっています"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "S3 bucket is required."
-msgstr "Il bucket S3 è obbligatorio."
+msgstr "S3バケットは必須です。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "S3 region is required when using AWS."
-msgstr "La regione S3 è obbligatoria quando si utilizza AWS."
+msgstr "AWSを使用する場合、S3リージョンは必須です。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "S3 Access key is required."
-msgstr "La chiave di accesso S3 è obbligatoria."
+msgstr "S3アクセスキーは必須です。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "S3 Secret key is required."
-msgstr "La chiave segreta S3 è obbligatoria."
+msgstr "S3シークレットキーは必須です。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "The expiry date must be in the future."
-msgstr "La data di scadenza deve essere nel futuro."
+msgstr "有効期限は未来の日付にしてください。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "API key not found"
-msgstr "Chiave API non trovata"
+msgstr "APIキーが見つかりません"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "API key does not belong to user"
-msgstr "La chiave API non appartiene all'utente"
+msgstr "APIキーはこのユーザーに属していません"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "API key has expired"
-msgstr "La chiave API è scaduta"
+msgstr "APIキーの有効期限が切れています"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Validation failed"
-msgstr "Validazione fallita"
+msgstr "バリデーションに失敗しました"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "File too large. Please choose a smaller file and try again."
-msgstr "File troppo grande. Scegli un file più piccolo e riprova."
+msgstr "ファイルが大きすぎます。より小さいファイルを選択して、もう一度お試しください。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Max size cannot be less than 0"
-msgstr "La dimensione massima non può essere inferiore a 0"
+msgstr "最大サイズは0未満にできません"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Max size cannot be greater than 1000"
-msgstr "La dimensione massima non può essere superiore a 1000"
+msgstr "最大サイズは1000を超えることはできません"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid tag ID format"
-msgstr "Formato ID tag non valido"
+msgstr "無効なタグID形式"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid collection ID format"
-msgstr "Formato ID raccolta non valido"
+msgstr "無効なコレクションID形式"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Password length cannot be less than 3"
-msgstr "La lunghezza della password non può essere inferiore a 3"
+msgstr "パスワードの長さは3文字未満にできません"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Password length cannot be greater than 64"
-msgstr "La lunghezza della password non può essere superiore a 64"
+msgstr "パスワードの長さは64文字を超えることはできません"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value should not be blank."
-msgstr "Questo campo non deve essere vuoto."
+msgstr "この項目は空にできません。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value is not a valid email address."
-msgstr "Questo valore non è un indirizzo email valido."
+msgstr "有効なメールアドレスではありません。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value is not a valid URL."
-msgstr "Questo valore non è un URL valido."
+msgstr "有効なURLではありません。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value is not a valid UUID."
-msgstr "Questo valore non è un UUID valido."
+msgstr "有効なUUIDではありません。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value should be positive."
-msgstr "Questo valore deve essere positivo."
+msgstr "この値は正の数にしてください。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value is not valid."
-msgstr "Questo valore non è valido."
+msgstr "この値は無効です。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "The value you selected is not a valid choice."
-msgstr "Il valore selezionato non è una scelta valida."
+msgstr "選択された値は有効な選択肢ではありません。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid key format"
-msgstr "Formato della chiave non valido"
+msgstr "無効なキー形式"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Tag name can only contain letters, numbers, hyphens, and underscores"
-msgstr "Il nome del tag può contenere solo lettere, numeri, trattini e trattini bassi"
+msgstr "タグ名には文字、数字、ハイフン、アンダースコアのみ使用できます"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Display name can only contain letters, numbers, underscores, hyphens, spaces, and periods."
-msgstr "Il nome visualizzato può contenere solo lettere, numeri, trattini bassi, trattini, spazi e punti."
+msgstr "表示名には文字、数字、アンダースコア、ハイフン、スペース、ピリオドのみ使用できます。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Display name cannot contain consecutive characters of the same type."
-msgstr "Il nome visualizzato non può contenere caratteri consecutivi dello stesso tipo."
+msgstr "表示名に同じ種類の文字を連続して使用することはできません。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "`Anonymous` is a reserved display name."
-msgstr "`Anonymous` è un nome visualizzato riservato."
+msgstr "`Anonymous` は予約済みの表示名です。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "API key is required. Create one first from your profile page."
-msgstr "La chiave API è obbligatoria. Creane una dalla tua pagina profilo."
+msgstr "APIキーが必要です。まずプロフィールページから作成してください。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "The refresh token is required."
-msgstr "Il refresh token è obbligatorio."
+msgstr "リフレッシュトークンは必須です。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid license type."
-msgstr "Tipo di licenza non valido."
+msgstr "無効なライセンスタイプです。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid landing page."
-msgstr "Pagina di destinazione non valida."
+msgstr "無効なランディングページです。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Invalid default visibility."
-msgstr "Visibilità predefinita non valida."
+msgstr "無効なデフォルト公開設定です。"
 
 #: src/feature/Upload/UploadForm.svelte
 msgid "Drop your images here"
-msgstr "Trascina le tue immagini qui"
+msgstr "ここに画像をドロップ"
 
 #: src/feature/Upload/UploadForm.svelte
 msgid "Drop your image here"
-msgstr "Trascina la tua immagine qui"
+msgstr "ここに画像をドロップ"
 
 #: src/feature/Upload/UploadForm.svelte
 msgid "Uploading your images..."
-msgstr "Caricamento delle immagini in corso..."
+msgstr "画像をアップロード中..."
 
 #: src/feature/Upload/UploadForm.svelte
 msgid "Uploading your image..."
-msgstr "Caricamento dell'immagine in corso..."
+msgstr "画像をアップロード中..."
 
 #: src/feature/Collection/CreateCollectionForm.svelte
 msgid "Edit Collection"
-msgstr "Modifica raccolta"
+msgstr "コレクションを編集"
 
 #: src/feature/Text/ExpandableText/ExpandableText.svelte
 msgid "less"
-msgstr "meno"
+msgstr "閉じる"
 
 #: src/feature/Text/ExpandableText/ExpandableText.svelte
 msgid "more"
-msgstr "altro"
+msgstr "もっと見る"
 
 #: src/feature/Image/History/BatchActionConfirmation.svelte
 msgid "# image"
 msgid_plural "# images"
-msgstr[0] "# immagine"
-msgstr[1] "# immagini"
+msgstr[0] "#件の画像"
+msgstr[1] "#件の画像"
 
 #: src/routes/help/faq/+page.svelte
 msgid "What image formats Slink supports?"
-msgstr "Quali formati di immagine supporta Slink?"
+msgstr "Slinkはどのような画像形式に対応していますか？"
 
 #: src/routes/help/faq/+page.svelte
 msgid "What is the visibility of my images?"
-msgstr "Qual è la visibilità delle mie immagini?"
+msgstr "画像の公開設定はどうなっていますか？"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Can I share my images with others?"
-msgstr "Posso condividere le mie immagini con altri?"
+msgstr "画像を他のユーザーと共有できますか？"
 
 #: src/routes/help/faq/+page.svelte
 msgid "I found an issue, how can I report it?"
-msgstr "Ho trovato un problema, come posso segnalarlo?"
+msgstr "問題を見つけたのですが、どのように報告できますか？"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "The file is too large ({size}). Allowed maximum size is {limit}."
-msgstr "Il file è troppo grande ({size}). La dimensione massima consentita è {limit}."
+msgstr "ファイルが大きすぎます（{size}）。許可される最大サイズは{limit}です。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "The mime type {type} is not supported."
-msgstr "Il tipo MIME {type} non è supportato."
+msgstr "MIMEタイプ {type} はサポートされていません。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Display name must be at least {limit} characters long."
-msgstr "Il nome visualizzato deve contenere almeno {limit} caratteri."
+msgstr "表示名は{limit}文字以上で入力してください。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Display name must be at most {limit} characters long."
-msgstr "Il nome visualizzato non può superare {limit} caratteri."
+msgstr "表示名は{limit}文字以下で入力してください。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value should have {limit} characters or more."
-msgstr "Questo valore deve contenere {limit} caratteri o più."
+msgstr "この値は{limit}文字以上にしてください。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value is too long. It should have {limit} characters or less."
-msgstr "Questo valore è troppo lungo. Deve contenere al massimo {limit} caratteri."
+msgstr "この値は長すぎます。{limit}文字以下にしてください。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value should be {limit} or less."
-msgstr "Questo valore deve essere {limit} o inferiore."
+msgstr "この値は{limit}以下にしてください。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value should be between {min} and {max}."
-msgstr "Questo valore deve essere compreso tra {min} e {max}."
+msgstr "この値は{min}から{max}の間にしてください。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This value should be of type {type}."
-msgstr "Questo valore deve essere di tipo {type}."
+msgstr "この値は{type}型である必要があります。"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "This collection should contain {limit} elements or less."
-msgstr "Questa raccolta deve contenere al massimo {limit} elementi."
+msgstr "このコレクションの要素数は{limit}以下にしてください。"
 
 #: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
 msgid "Grid"
-msgstr "Griglia"
+msgstr "グリッド"
 
 #: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
 msgid "List"
-msgstr "Lista"
+msgstr "リスト"
 
 #: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
 msgid "Table"
-msgstr "Tabella"
+msgstr "テーブル"
 
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
 msgid "Children"
-msgstr "Sottotag"
+msgstr "子タグ"
 
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 msgid "File Name"
-msgstr "Nome file"
+msgstr "ファイル名"
 
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 msgid "Type"
-msgstr "Tipo"
+msgstr "種類"
 
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 msgid "Dimensions"
-msgstr "Dimensioni"
+msgstr "サイズ"
 
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 msgid "Size"
-msgstr "Dimensione"
+msgstr "容量"
 
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 msgid "Tags / Collections"
-msgstr "Tag / Raccolte"
+msgstr "タグ / コレクション"
 
 #: src/feature/Image/History/BulkDeleteConfirmation.svelte
 #: src/feature/Image/History/BulkDeleteConfirmation.svelte
 msgid "Delete # image"
 msgid_plural "Delete # images"
-msgstr[0] "Elimina # immagine"
-msgstr[1] "Elimina # immagini"
+msgstr[0] "#件の画像を削除"
+msgstr[1] "#件の画像を削除"
 
 #: src/routes/preferences/+page.svelte
 msgid "Deutsch"
@@ -4013,7 +4013,7 @@ msgstr "Deutsch"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Tag \"{name}\" already exists"
-msgstr "Il tag \"{name}\" esiste già"
+msgstr "タグ「{name}」は既に存在します"
 
 #: src/routes/preferences/+page.svelte
 msgid "中文"
@@ -4021,55 +4021,55 @@ msgstr "中文"
 
 #: src/routes/preferences/+page.svelte
 msgid "Language"
-msgstr "Lingua"
+msgstr "言語"
 
 #: src/routes/preferences/+page.svelte
 msgid "Display Language"
-msgstr "Lingua di visualizzazione"
+msgstr "表示言語"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Tag \"{name}\" created successfully"
-msgstr "Tag \"{name}\" creato con successo"
+msgstr "タグ「{name}」を作成しました"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Tag \"{name}\" moved successfully"
-msgstr "Tag \"{name}\" spostato con successo"
+msgstr "タグ「{name}」を移動しました"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Tag \"{name}\" deleted successfully"
-msgstr "Tag \"{name}\" eliminato con successo"
+msgstr "タグ「{name}」を削除しました"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to download ShareX config"
-msgstr "Impossibile scaricare la configurazione ShareX"
+msgstr "ShareX設定のダウンロードに失敗しました"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Copied to clipboard"
-msgstr "Copiato negli appunti"
+msgstr "クリップボードにコピーしました"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Something went wrong"
-msgstr "Qualcosa è andato storto"
+msgstr "エラーが発生しました"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to delete images. Please try again later."
-msgstr "Impossibile eliminare le immagini. Riprova più tardi."
+msgstr "画像の削除に失敗しました。しばらくしてからもう一度お試しください。"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Successfully deleted {count} from history"
-msgstr "{count} eliminati dalla cronologia con successo"
+msgstr "履歴から{count}を削除しました"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to delete {count}"
-msgstr "Impossibile eliminare {count}"
+msgstr "{count}の削除に失敗しました"
 
 #: src/routes/preferences/+page.svelte
 msgid "Choose your preferred language for the interface"
-msgstr "Scegli la lingua preferita per l'interfaccia"
+msgstr "インターフェースの表示言語を選択してください"
 
 #: src/feature/Search/SearchBar.svelte
 msgid "Hashtag"
-msgstr "Hashtag"
+msgstr "ハッシュタグ"
 
 #: src/routes/preferences/+page.svelte
 msgid "Español"
@@ -4089,98 +4089,98 @@ msgstr "Polski"
 
 #: src/feature/Analytics/ImageAnalytics.svelte
 msgid "No uploads yet"
-msgstr "Nessun caricamento ancora"
+msgstr "アップロードはまだありません"
 
 #: src/feature/Analytics/ImageAnalytics.svelte
 msgid "Upload data will appear here once images are added"
-msgstr "I dati di caricamento appariranno qui una volta aggiunte le immagini"
+msgstr "画像が追加されると、ここにアップロードデータが表示されます"
 
 #: src/feature/Comment/CommentDeleteConfirmation.svelte
 msgid "Comment will be permanently removed"
-msgstr "Il commento verrà rimosso definitivamente"
+msgstr "コメントは完全に削除されます"
 
 #: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
 msgid "Collection and its settings will be permanently removed"
-msgstr "La collezione e le sue impostazioni verranno rimosse definitivamente"
+msgstr "コレクションとその設定は完全に削除されます"
 
 #: src/feature/Collection/RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte
 msgid "Remove"
-msgstr "Rimuovi"
+msgstr "削除"
 
 #: src/feature/Image/History/BulkDeleteConfirmation.svelte
 msgid "Selected images will be permanently removed"
-msgstr "Le immagini selezionate verranno rimosse definitivamente"
+msgstr "選択した画像は完全に削除されます"
 
 #: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
 #: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
 msgid "Image record will be permanently removed"
-msgstr "Il record dell'immagine verrà rimosso definitivamente"
+msgstr "画像レコードは完全に削除されます"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
 msgid "Provider and its configuration will be removed"
-msgstr "Il provider e la sua configurazione verranno rimossi"
+msgstr "プロバイダーとその設定は削除されます"
 
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "Tag will be permanently removed"
-msgstr "Il tag verrà rimosso definitivamente"
+msgstr "タグは完全に削除されます"
 
 #: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
 msgid "Key will be permanently revoked"
-msgstr "La chiave verrà revocata definitivamente"
+msgstr "キーは完全に無効化されます"
 
 #: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
 msgid "Revoke Key"
-msgstr "Revoca chiave"
+msgstr "キーを無効化"
 
 #: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
 msgid "Download ShareX Config"
-msgstr "Scarica configurazione ShareX"
+msgstr "ShareX設定をダウンロード"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "Account and all associated data will be removed"
-msgstr "L'account e tutti i dati associati verranno rimossi"
+msgstr "アカウントと関連するすべてのデータが削除されます"
 
 #: src/feature/Image/History/BatchContext.svelte.ts
 msgid "Successfully updated # image"
 msgid_plural "Successfully updated # images"
-msgstr[0] "# immagine aggiornata con successo"
-msgstr[1] "# immagini aggiornate con successo"
+msgstr[0] "#件の画像を更新しました"
+msgstr[1] "#件の画像を更新しました"
 
 #: src/feature/Image/History/BatchContext.svelte.ts
 msgid "Failed to update # image"
 msgid_plural "Failed to update # images"
-msgstr[0] "Impossibile aggiornare # immagine"
-msgstr[1] "Impossibile aggiornare # immagini"
+msgstr[0] "#件の画像の更新に失敗しました"
+msgstr[1] "#件の画像の更新に失敗しました"
 
 #: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
 msgid "# tag"
 msgid_plural "# tags"
-msgstr[0] "# tag"
-msgstr[1] "# tag"
+msgstr[0] "#件のタグ"
+msgstr[1] "#件のタグ"
 
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "Delete # child tag"
 msgid_plural "Delete # child tags"
-msgstr[0] "Elimina # tag secondario"
-msgstr[1] "Elimina # tag secondari"
+msgstr[0] "#件の子タグを削除"
+msgstr[1] "#件の子タグを削除"
 
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "Remove tag from # image"
 msgid_plural "Remove tag from # images"
-msgstr[0] "Rimuovi il tag da # immagine"
-msgstr[1] "Rimuovi il tag da # immagini"
+msgstr[0] "#件の画像からタグを削除"
+msgstr[1] "#件の画像からタグを削除"
 
 #: src/feature/Collection/ImageCollectionList/ImageCollectionList.svelte
 msgid "# more collection"
 msgid_plural "# more collections"
-msgstr[0] "# altra collezione"
-msgstr[1] "# altre collezioni"
+msgstr[0] "他#件のコレクション"
+msgstr[1] "他#件のコレクション"
 
 #: src/feature/Tag/ImageTagList/ImageTagList.svelte
 msgid "# more tag"
 msgid_plural "# more tags"
-msgstr[0] "# altro tag"
-msgstr[1] "# altri tag"
+msgstr[0] "他#件のタグ"
+msgstr[1] "他#件のタグ"
 
 #: src/routes/preferences/+page.svelte
 msgid "日本語"
