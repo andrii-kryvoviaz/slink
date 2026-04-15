@@ -17,11 +17,11 @@
     <div
       class="flex h-10 w-10 items-center justify-center rounded-full bg-red-500/15 border border-red-500/20 shrink-0"
     >
-      <Icon icon="heroicons:trash" class="h-5 w-5 text-red-400" />
+      <Icon icon="ph:chat-circle-text" class="h-5 w-5 text-red-400" />
     </div>
     <div>
       <h3 class="text-sm font-semibold text-white">Delete Comment</h3>
-      <p class="text-xs text-white/50">This action cannot be undone</p>
+      <p class="text-xs text-white/50">Comment will be permanently removed</p>
     </div>
   </div>
 

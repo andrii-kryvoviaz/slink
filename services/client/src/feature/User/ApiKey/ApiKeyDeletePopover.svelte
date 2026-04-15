@@ -31,7 +31,7 @@
         Revoke API Key
       </h3>
       <p class="text-xs text-gray-500 dark:text-gray-400">
-        This action cannot be undone
+        Key will be permanently revoked
       </p>
     </div>
   </div>
@@ -72,7 +72,7 @@
       {loading}
     >
       {#snippet leftIcon()}
-        <Icon icon="lucide:trash-2" class="h-4 w-4" />
+        <Icon icon="ph:prohibit" class="h-4 w-4" />
       {/snippet}
       Revoke Key
     </Button>

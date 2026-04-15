@@ -53,7 +53,7 @@
       {loading}
     >
       {#snippet leftIcon()}
-        <Icon icon="heroicons:trash" class="h-4 w-4" />
+        <Icon icon="ph:minus-circle" class="h-4 w-4" />
       {/snippet}
       Remove
     </Button>

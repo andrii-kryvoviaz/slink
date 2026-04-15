@@ -42,7 +42,7 @@
   {/snippet}
   <BatchActionConfirmation
     count={selectedCount}
-    icon="heroicons:trash"
+    icon="ph:images"
     variant="danger"
     {loading}
     confirmVariant="danger"

@@ -223,4 +223,7 @@ export const themeIcons: string[] = [
   'ph:download',
   'ph:cloud-arrow-up',
   'ph:palette',
+  'ph:shield-check',
+  'ph:minus-circle',
+  'ph:prohibit',
 ];

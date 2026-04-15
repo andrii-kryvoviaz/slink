@@ -42,7 +42,7 @@
         Delete Collection
       </h3>
       <p class="text-xs text-gray-500 dark:text-gray-400">
-        This action cannot be undone
+        Collection and its settings will be permanently removed
       </p>
     </div>
   </div>

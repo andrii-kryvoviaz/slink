@@ -25,7 +25,7 @@
       class="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 border border-red-200/40 dark:border-red-800/30 shadow-sm flex-shrink-0"
     >
       <Icon
-        icon="heroicons:trash"
+        icon="ph:shield-check"
         class="h-5 w-5 text-red-600 dark:text-red-400"
       />
     </div>
@@ -34,7 +34,7 @@
         Delete Provider
       </h3>
       <p class="text-xs text-gray-500 dark:text-gray-400">
-        This action cannot be undone
+        Provider and its configuration will be removed
       </p>
     </div>
   </div>
