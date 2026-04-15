@@ -1,10 +1,10 @@
 import { useUploadHistoryFeed } from '$lib/state/UploadHistoryFeed.svelte.js';
+import { plural } from '$lib/utils/i18n';
 import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
 
 import type { ImageListingItem } from '@slink/api/Response';
 
 import type { ImageSelectionState } from '@slink/lib/state/ImageSelectionState.svelte';
-import { pluralize } from '@slink/lib/utils/string/pluralize';
 
 export type BatchResult = {
   processed: string[];
@@ -93,13 +93,19 @@ export class BatchContext {
   notifyBatchResult(result: BatchResult): boolean {
     if (result.processed.length > 0) {
       toast.success(
-        `Successfully updated ${pluralize(result.processed.length, 'image')}`,
+        plural(result.processed.length, [
+          'Successfully updated # image',
+          'Successfully updated # images',
+        ]),
       );
     }
 
     if (result.failed.length > 0) {
       toast.error(
-        `Failed to update ${pluralize(result.failed.length, 'image')}`,
+        plural(result.failed.length, [
+          'Failed to update # image',
+          'Failed to update # images',
+        ]),
       );
     }
 

@@ -170,16 +170,7 @@ msgstr "使用 **粗体** 和 *斜体* 排版 • 按 ⌘+Enter 提交"
 msgid "Delete Comment"
 msgstr "删除评论"
 
-#: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
-#: src/feature/Comment/CommentDeleteConfirmation.svelte
 #: src/feature/Image/History/Actions/DeleteAction.svelte
-#: src/feature/Image/History/BulkDeleteConfirmation.svelte
-#: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
-#: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
-#: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
-#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
-#: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
-#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "This action cannot be undone"
 msgstr "此操作不可撤销"
 
@@ -208,12 +199,6 @@ msgstr "此操作不可撤销"
 msgid "Cancel"
 msgstr "取消"
 
-#: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
-#: src/feature/Comment/CommentDeleteConfirmation.svelte
-#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
-msgid "<0/> Delete"
-msgstr "<0/> 删除"
-
 #: src/feature/Comment/CommentListItem.svelte
 msgid "(edited)"
 msgstr "（已编辑）"
@@ -229,12 +214,15 @@ msgid "Edit"
 msgstr "编辑"
 
 #: src/feature/Collection/CollectionActionsDropdown/CollectionActionsDropdown.svelte
+#: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
+#: src/feature/Comment/CommentDeleteConfirmation.svelte
 #: src/feature/Comment/CommentListItem.svelte
 #: src/feature/Image/AdminImageDropdown/AdminImageDropdown.svelte
 #: src/feature/Image/History/Actions/DeleteAction.svelte
 #: src/feature/Image/History/Actions/DeleteAction.svelte
 #: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
 #: src/feature/Tag/TagDataTable/TagActionsCell.svelte
+#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 #: src/feature/User/UserActions/UserActions.svelte
 msgid "Delete"
 msgstr "删除"
@@ -1123,10 +1111,6 @@ msgstr "确认"
 msgid "Image will remain in your library"
 msgstr "图片仍会保留在你的库中"
 
-#: src/feature/Collection/RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte
-msgid "<0/> Remove"
-msgstr "<0/> 移除"
-
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/DownloadButton/DownloadButton.svelte
 msgid "Download image"
@@ -1270,16 +1254,6 @@ msgstr "缩放比例选择"
 msgid "Scale to {0}"
 msgstr "缩放到 {0}"
 
-#. 0: pluralize(result.processed.length, 'image')
-#: src/feature/Image/History/BatchContext.svelte.ts
-msgid "Successfully updated {0}"
-msgstr "成功更新 {0}"
-
-#. 0: pluralize(result.failed.length, 'image')
-#: src/feature/Image/History/BatchContext.svelte.ts
-msgid "Failed to update {0}"
-msgstr "更新 {0} 失败"
-
 #: src/feature/Image/History/Actions/DeleteAction.svelte
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
@@ -1338,8 +1312,9 @@ msgstr "取消选择图片"
 msgid "Select image"
 msgstr "选择图片"
 
-#: src/feature/Image/History/BulkDeleteConfirmation.svelte
 #: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
 #: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
 msgid "Delete Image"
 msgstr "删除图片"
@@ -1348,11 +1323,6 @@ msgstr "删除图片"
 #: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
 msgid "Permanently delete the file from storage"
 msgstr "从存储中永久删除该文件"
-
-#: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
-#: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
-msgid "<0/> Delete Image"
-msgstr "<0/> 删除图片"
 
 #: src/feature/Image/License/LicenseInfo.svelte
 msgid "Licensed under <0/>"
@@ -2010,6 +1980,7 @@ msgid "Reset to <0/>"
 msgstr "重置为 <0/>"
 
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
+#: src/routes/collection/[id]/+page.svelte
 #: src/routes/info/[id]/+page.svelte
 msgid "Share"
 msgstr "分享"
@@ -2361,16 +2332,9 @@ msgid "Move"
 msgstr "移动"
 
 #. 0: selectedCount === 1 ? 'Image' \\: 'Images'
-#. 0: pluralize(childrenCount, 'child tag')
 #: src/feature/Image/History/Actions/DeleteAction.svelte
-#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "Delete {0}"
 msgstr "删除 {0}"
-
-#. 0: pluralize(tag.imageCount, 'image')
-#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
-msgid "Remove tag from {0}"
-msgstr "从 {0} 中移除标签"
 
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "Delete Tag"
@@ -2440,16 +2404,13 @@ msgid "Creating..."
 msgstr "创建中..."
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
+#: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
 msgid "Delete Provider"
 msgstr "删除提供方"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
 msgid "<0/> — Provider and its configuration will be removed"
 msgstr "<0/> — 提供方及其配置将被移除"
-
-#: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
-msgid "<0/> Delete Provider"
-msgstr "<0/> 删除提供方"
 
 #: src/feature/Tag/TagFilter/TagFilter.svelte
 msgid "Search and select tags"
@@ -2588,16 +2549,13 @@ msgid "Remove Admin"
 msgstr "移除管理员"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "Delete User"
 msgstr "删除用户"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "User account and all associated data will be removed"
 msgstr "该用户账号及其所有关联数据将被移除"
-
-#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "<0/> Delete User"
-msgstr "<0/> 删除用户"
 
 #: src/feature/User/UserDataTable/data-table-email-button.svelte
 msgid "Email <0/>"
@@ -2704,10 +2662,6 @@ msgstr "撤销 API Key"
 msgid "This API key will be permanently revoked and cannot be recovered"
 msgstr "该 API Key 将被永久撤销且无法恢复"
 
-#: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
-msgid "<0/> Revoke Key"
-msgstr "<0/> 撤销密钥"
-
 #: src/feature/User/ApiKey/ApiKeyList.svelte
 msgid "No API keys yet"
 msgstr "还没有 API Key"
@@ -2781,14 +2735,6 @@ msgstr "重要提示"
 msgid "This key will not be shown again. Store it securely in your password manager or download the ShareX config file below."
 msgstr "该密钥不会再次显示。请妥善保存，或下载下方的 ShareX 配置文件。"
 
-#: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
-msgid "<0/> Downloading..."
-msgstr "<0/> 下载中..."
-
-#: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
-msgid "<0/> Download ShareX Config"
-msgstr "<0/> 下载 ShareX 配置"
-
 #: src/routes/collection/[id]/+page.svelte
 msgid "Back to Collections"
 msgstr "返回合集"
@@ -2813,10 +2759,6 @@ msgstr "<0/> 添加图片"
 #: src/routes/collection/[id]/+page.svelte
 msgid "Share Link"
 msgstr "分享链接"
-
-#: src/routes/collection/[id]/+page.svelte
-msgid "<0/> Share"
-msgstr "<0/> 分享"
 
 #: src/routes/collection/[id]/+page.svelte
 msgid "Collection not found"
@@ -3960,10 +3902,6 @@ msgstr "更少"
 msgid "more"
 msgstr "更多"
 
-#: src/feature/Image/History/BulkDeleteConfirmation.svelte
-msgid "Delete Images"
-msgstr "删除图片"
-
 #: src/feature/Image/History/BatchActionConfirmation.svelte
 msgid "# image"
 msgid_plural "# images"
@@ -4062,6 +4000,7 @@ msgid "Tags / Collections"
 msgstr "标签 / 合集"
 
 #: src/feature/Image/History/BulkDeleteConfirmation.svelte
+#: src/feature/Image/History/BulkDeleteConfirmation.svelte
 msgid "Delete # image"
 msgid_plural "Delete # images"
 msgstr[0] "删除 # 张图片"
@@ -4132,16 +4071,111 @@ msgstr "标签"
 
 #: src/routes/preferences/+page.svelte
 msgid "Español"
-msgstr ""
+msgstr "Español"
 
 #: src/routes/preferences/+page.svelte
 msgid "Français"
-msgstr ""
+msgstr "Français"
 
 #: src/routes/preferences/+page.svelte
 msgid "Italiano"
-msgstr ""
+msgstr "Italiano"
 
 #: src/routes/preferences/+page.svelte
 msgid "Polski"
-msgstr ""
+msgstr "Polski"
+
+#: src/feature/Analytics/ImageAnalytics.svelte
+msgid "No uploads yet"
+msgstr "暂无上传"
+
+#: src/feature/Analytics/ImageAnalytics.svelte
+msgid "Upload data will appear here once images are added"
+msgstr "添加图片后，上传数据将显示在此处"
+
+#: src/feature/Comment/CommentDeleteConfirmation.svelte
+msgid "Comment will be permanently removed"
+msgstr "评论将被永久删除"
+
+#: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
+msgid "Collection and its settings will be permanently removed"
+msgstr "收藏夹及其设置将被永久删除"
+
+#: src/feature/Collection/RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte
+msgid "Remove"
+msgstr "移除"
+
+#: src/feature/Image/History/BulkDeleteConfirmation.svelte
+msgid "Selected images will be permanently removed"
+msgstr "所选图片将被永久删除"
+
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
+msgid "Image record will be permanently removed"
+msgstr "图片记录将被永久删除"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
+msgid "Provider and its configuration will be removed"
+msgstr "提供商及其配置将被删除"
+
+#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
+msgid "Tag will be permanently removed"
+msgstr "标签将被永久删除"
+
+#: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
+msgid "Key will be permanently revoked"
+msgstr "密钥将被永久撤销"
+
+#: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
+msgid "Revoke Key"
+msgstr "撤销密钥"
+
+#: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
+msgid "Download ShareX Config"
+msgstr "下载 ShareX 配置"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Account and all associated data will be removed"
+msgstr "账户及所有关联数据将被删除"
+
+#: src/feature/Image/History/BatchContext.svelte.ts
+msgid "Successfully updated # image"
+msgid_plural "Successfully updated # images"
+msgstr[0] "成功更新 # 张图片"
+msgstr[1] "成功更新 # 张图片"
+
+#: src/feature/Image/History/BatchContext.svelte.ts
+msgid "Failed to update # image"
+msgid_plural "Failed to update # images"
+msgstr[0] "更新 # 张图片失败"
+msgstr[1] "更新 # 张图片失败"
+
+#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+msgid "# tag"
+msgid_plural "# tags"
+msgstr[0] "# 个标签"
+msgstr[1] "# 个标签"
+
+#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
+msgid "Delete # child tag"
+msgid_plural "Delete # child tags"
+msgstr[0] "删除 # 个子标签"
+msgstr[1] "删除 # 个子标签"
+
+#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
+msgid "Remove tag from # image"
+msgid_plural "Remove tag from # images"
+msgstr[0] "从 # 张图片中移除标签"
+msgstr[1] "从 # 张图片中移除标签"
+
+#: src/feature/Collection/ImageCollectionList/ImageCollectionList.svelte
+msgid "# more collection"
+msgid_plural "# more collections"
+msgstr[0] "还有 # 个收藏夹"
+msgstr[1] "还有 # 个收藏夹"
+
+#: src/feature/Tag/ImageTagList/ImageTagList.svelte
+msgid "# more tag"
+msgid_plural "# more tags"
+msgstr[0] "还有 # 个标签"
+msgstr[1] "还有 # 个标签"

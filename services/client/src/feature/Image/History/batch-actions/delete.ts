@@ -3,7 +3,6 @@ import { ApiClient } from '@slink/api';
 import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
 
 import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
-import { pluralize } from '@slink/lib/utils/string/pluralize';
 
 import type { BatchContext } from '../BatchContext.svelte';
 
@@ -25,9 +24,7 @@ export async function batchDelete(
     result.deleted.forEach((id) => ctx.historyFeed.removeItem(id));
     ctx.selection.removeIds(result.deleted);
     toast.success(
-      messages.image.deletedFromHistory(
-        pluralize(result.deleted.length, 'image'),
-      ),
+      messages.image.deletedFromHistory(String(result.deleted.length)),
     );
 
     if (!ctx.historyFeed.hasItems && ctx.historyFeed.hasMore) {
@@ -38,9 +35,7 @@ export async function batchDelete(
 
   if (result.failed.length > 0) {
     toast.error(
-      messages.image.failedToDeleteCount(
-        pluralize(result.failed.length, 'image'),
-      ),
+      messages.image.failedToDeleteCount(String(result.failed.length)),
     );
   }
 

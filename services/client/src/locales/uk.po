@@ -170,16 +170,7 @@ msgstr "Використовуйте **жирний** та *курсив* для
 msgid "Delete Comment"
 msgstr "Видалити коментар"
 
-#: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
-#: src/feature/Comment/CommentDeleteConfirmation.svelte
 #: src/feature/Image/History/Actions/DeleteAction.svelte
-#: src/feature/Image/History/BulkDeleteConfirmation.svelte
-#: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
-#: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
-#: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
-#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
-#: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
-#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "This action cannot be undone"
 msgstr "Цю дію неможливо скасувати"
 
@@ -208,12 +199,6 @@ msgstr "Цю дію неможливо скасувати"
 msgid "Cancel"
 msgstr "Скасувати"
 
-#: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
-#: src/feature/Comment/CommentDeleteConfirmation.svelte
-#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
-msgid "<0/> Delete"
-msgstr "<0/> Видалити"
-
 #: src/feature/Comment/CommentListItem.svelte
 msgid "(edited)"
 msgstr "(відредаговано)"
@@ -229,12 +214,15 @@ msgid "Edit"
 msgstr "Редагувати"
 
 #: src/feature/Collection/CollectionActionsDropdown/CollectionActionsDropdown.svelte
+#: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
+#: src/feature/Comment/CommentDeleteConfirmation.svelte
 #: src/feature/Comment/CommentListItem.svelte
 #: src/feature/Image/AdminImageDropdown/AdminImageDropdown.svelte
 #: src/feature/Image/History/Actions/DeleteAction.svelte
 #: src/feature/Image/History/Actions/DeleteAction.svelte
 #: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
 #: src/feature/Tag/TagDataTable/TagActionsCell.svelte
+#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 #: src/feature/User/UserActions/UserActions.svelte
 msgid "Delete"
 msgstr "Видалити"
@@ -1123,10 +1111,6 @@ msgstr "Підтвердити"
 msgid "Image will remain in your library"
 msgstr "Зображення залишиться у вашій бібліотеці"
 
-#: src/feature/Collection/RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte
-msgid "<0/> Remove"
-msgstr "<0/> Вилучити"
-
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/DownloadButton/DownloadButton.svelte
 msgid "Download image"
@@ -1270,16 +1254,6 @@ msgstr "Вибір масштабу"
 msgid "Scale to {0}"
 msgstr "Масштабувати до {0}"
 
-#. 0: pluralize(result.processed.length, 'image')
-#: src/feature/Image/History/BatchContext.svelte.ts
-msgid "Successfully updated {0}"
-msgstr "Успішно оновлено {0}"
-
-#. 0: pluralize(result.failed.length, 'image')
-#: src/feature/Image/History/BatchContext.svelte.ts
-msgid "Failed to update {0}"
-msgstr "Не вдалося оновити {0}"
-
 #: src/feature/Image/History/Actions/DeleteAction.svelte
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
@@ -1338,8 +1312,9 @@ msgstr "Скасувати вибір зображення"
 msgid "Select image"
 msgstr "Вибрати зображення"
 
-#: src/feature/Image/History/BulkDeleteConfirmation.svelte
 #: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
 #: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
 msgid "Delete Image"
 msgstr "Видалити зображення"
@@ -1348,11 +1323,6 @@ msgstr "Видалити зображення"
 #: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
 msgid "Permanently delete the file from storage"
 msgstr "Назавжди видалити файл зі сховища"
-
-#: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
-#: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
-msgid "<0/> Delete Image"
-msgstr "<0/> Видалити зображення"
 
 #: src/feature/Image/License/LicenseInfo.svelte
 msgid "Licensed under <0/>"
@@ -2010,6 +1980,7 @@ msgid "Reset to <0/>"
 msgstr "Скинути до <0/>"
 
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
+#: src/routes/collection/[id]/+page.svelte
 #: src/routes/info/[id]/+page.svelte
 msgid "Share"
 msgstr "Спільний доступ"
@@ -2361,16 +2332,9 @@ msgid "Move"
 msgstr "Перемістити"
 
 #. 0: selectedCount === 1 ? 'Image' \\: 'Images'
-#. 0: pluralize(childrenCount, 'child tag')
 #: src/feature/Image/History/Actions/DeleteAction.svelte
-#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "Delete {0}"
 msgstr "Видалити {0}"
-
-#. 0: pluralize(tag.imageCount, 'image')
-#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
-msgid "Remove tag from {0}"
-msgstr "Видалити тег з {0}"
 
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "Delete Tag"
@@ -2378,7 +2342,7 @@ msgstr "Видалити тег"
 
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "This will cascade:"
-msgstr "Каскадні наслідки:"
+msgstr "Це також вплине на:"
 
 #. 0: getTagDisplayName(creatingChildFor); 1: childTagName
 #: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
@@ -2440,16 +2404,13 @@ msgid "Creating..."
 msgstr "Створення..."
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
+#: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
 msgid "Delete Provider"
 msgstr "Видалити провайдера"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
 msgid "<0/> — Provider and its configuration will be removed"
 msgstr "<0/> — Провайдера та його конфігурацію буде видалено"
-
-#: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
-msgid "<0/> Delete Provider"
-msgstr "<0/> Видалити провайдера"
 
 #: src/feature/Tag/TagFilter/TagFilter.svelte
 msgid "Search and select tags"
@@ -2588,16 +2549,13 @@ msgid "Remove Admin"
 msgstr "Зняти права адміністратора"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "Delete User"
 msgstr "Видалити користувача"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "User account and all associated data will be removed"
 msgstr "Обліковий запис та всі пов'язані дані буде видалено"
-
-#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "<0/> Delete User"
-msgstr "<0/> Видалити користувача"
 
 #: src/feature/User/UserDataTable/data-table-email-button.svelte
 msgid "Email <0/>"
@@ -2704,10 +2662,6 @@ msgstr "Відкликати API-ключ"
 msgid "This API key will be permanently revoked and cannot be recovered"
 msgstr "Цей API-ключ буде назавжди відкликано без можливості відновлення"
 
-#: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
-msgid "<0/> Revoke Key"
-msgstr "<0/> Відкликати ключ"
-
 #: src/feature/User/ApiKey/ApiKeyList.svelte
 msgid "No API keys yet"
 msgstr "API-ключів ще немає"
@@ -2781,14 +2735,6 @@ msgstr "Важливе повідомлення"
 msgid "This key will not be shown again. Store it securely in your password manager or download the ShareX config file below."
 msgstr "Цей ключ більше не буде показано. Збережіть його у менеджері паролів або завантажте конфігурацію ShareX нижче."
 
-#: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
-msgid "<0/> Downloading..."
-msgstr "<0/> Завантаження..."
-
-#: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
-msgid "<0/> Download ShareX Config"
-msgstr "<0/> Завантажити конфігурацію ShareX"
-
 #: src/routes/collection/[id]/+page.svelte
 msgid "Back to Collections"
 msgstr "Назад до колекцій"
@@ -2813,10 +2759,6 @@ msgstr "<0/> Додати зображення"
 #: src/routes/collection/[id]/+page.svelte
 msgid "Share Link"
 msgstr "Поділитися посиланням"
-
-#: src/routes/collection/[id]/+page.svelte
-msgid "<0/> Share"
-msgstr "<0/> Поділитися"
 
 #: src/routes/collection/[id]/+page.svelte
 msgid "Collection not found"
@@ -3960,10 +3902,6 @@ msgstr "менше"
 msgid "more"
 msgstr "більше"
 
-#: src/feature/Image/History/BulkDeleteConfirmation.svelte
-msgid "Delete Images"
-msgstr "Видалити зображення"
-
 #: src/feature/Image/History/BatchActionConfirmation.svelte
 msgid "# image"
 msgid_plural "# images"
@@ -4064,6 +4002,7 @@ msgid "Tags / Collections"
 msgstr "Теги / Колекції"
 
 #: src/feature/Image/History/BulkDeleteConfirmation.svelte
+#: src/feature/Image/History/BulkDeleteConfirmation.svelte
 msgid "Delete # image"
 msgid_plural "Delete # images"
 msgstr[0] "Видалити # зображення"
@@ -4136,16 +4075,111 @@ msgstr "Хештег"
 
 #: src/routes/preferences/+page.svelte
 msgid "Español"
-msgstr ""
+msgstr "Español"
 
 #: src/routes/preferences/+page.svelte
 msgid "Français"
-msgstr ""
+msgstr "Français"
 
 #: src/routes/preferences/+page.svelte
 msgid "Italiano"
-msgstr ""
+msgstr "Italiano"
 
 #: src/routes/preferences/+page.svelte
 msgid "Polski"
-msgstr ""
+msgstr "Polski"
+
+#: src/feature/Analytics/ImageAnalytics.svelte
+msgid "No uploads yet"
+msgstr "Ще немає завантажень"
+
+#: src/feature/Analytics/ImageAnalytics.svelte
+msgid "Upload data will appear here once images are added"
+msgstr "Дані завантаження з'являться тут після додавання зображень"
+
+#: src/feature/Comment/CommentDeleteConfirmation.svelte
+msgid "Comment will be permanently removed"
+msgstr "Коментар буде остаточно видалено"
+
+#: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
+msgid "Collection and its settings will be permanently removed"
+msgstr "Колекцію та її налаштування буде остаточно видалено"
+
+#: src/feature/Collection/RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte
+msgid "Remove"
+msgstr "Видалити"
+
+#: src/feature/Image/History/BulkDeleteConfirmation.svelte
+msgid "Selected images will be permanently removed"
+msgstr "Вибрані зображення буде остаточно видалено"
+
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
+msgid "Image record will be permanently removed"
+msgstr "Запис зображення буде остаточно видалено"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
+msgid "Provider and its configuration will be removed"
+msgstr "Провайдер та його конфігурацію буде видалено"
+
+#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
+msgid "Tag will be permanently removed"
+msgstr "Тег буде остаточно видалено"
+
+#: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
+msgid "Key will be permanently revoked"
+msgstr "Ключ буде остаточно відкликано"
+
+#: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
+msgid "Revoke Key"
+msgstr "Відкликати ключ"
+
+#: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
+msgid "Download ShareX Config"
+msgstr "Завантажити конфігурацію ShareX"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Account and all associated data will be removed"
+msgstr "Обліковий запис та всі пов'язані дані буде видалено"
+
+#: src/feature/Image/History/BatchContext.svelte.ts
+msgid "Successfully updated # image"
+msgid_plural "Successfully updated # images"
+msgstr[0] "Успішно оновлено # зображення"
+msgstr[1] "Успішно оновлено # зображень"
+
+#: src/feature/Image/History/BatchContext.svelte.ts
+msgid "Failed to update # image"
+msgid_plural "Failed to update # images"
+msgstr[0] "Не вдалося оновити # зображення"
+msgstr[1] "Не вдалося оновити # зображень"
+
+#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+msgid "# tag"
+msgid_plural "# tags"
+msgstr[0] "# тег"
+msgstr[1] "# тегів"
+
+#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
+msgid "Delete # child tag"
+msgid_plural "Delete # child tags"
+msgstr[0] "Видалити # дочірній тег"
+msgstr[1] "Видалити # дочірніх тегів"
+
+#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
+msgid "Remove tag from # image"
+msgid_plural "Remove tag from # images"
+msgstr[0] "Видалити тег з # зображення"
+msgstr[1] "Видалити тег з # зображень"
+
+#: src/feature/Collection/ImageCollectionList/ImageCollectionList.svelte
+msgid "# more collection"
+msgid_plural "# more collections"
+msgstr[0] "Ще # колекція"
+msgstr[1] "Ще # колекцій"
+
+#: src/feature/Tag/ImageTagList/ImageTagList.svelte
+msgid "# more tag"
+msgid_plural "# more tags"
+msgstr[0] "Ще # тег"
+msgstr[1] "Ще # тегів"

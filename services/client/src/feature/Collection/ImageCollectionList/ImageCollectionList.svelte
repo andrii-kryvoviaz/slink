@@ -1,6 +1,8 @@
 <script lang="ts">
   import { OverflowBadgeList } from '@slink/feature/Layout/OverflowBadgeList';
 
+  import { plural } from '$lib/utils/i18n';
+
   import type { CollectionReference } from '@slink/api/Response/Collection/CollectionResponse';
 
   import { CollectionBadge } from '../CollectionBadge';
@@ -17,7 +19,8 @@
   <OverflowBadgeList
     items={collections}
     {maxVisible}
-    itemLabel="more collection"
+    overflowLabel={(count) =>
+      plural(count, ['# more collection', '# more collections'])}
   >
     {#snippet badge(collection)}
       <CollectionBadge {collection} />

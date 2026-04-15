@@ -1,11 +1,10 @@
 <script lang="ts">
   import { Button } from '@slink/ui/components/button';
 
+  import { plural } from '$lib/utils/i18n';
   import Icon from '@iconify/svelte';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
-
-  import { pluralize } from '@slink/lib/utils/string/pluralize';
 
   interface Props {
     tag: Tag;
@@ -21,10 +20,13 @@
   const hasCascade = $derived(hasImages || hasChildren);
   const childrenCount = $derived(tag.children?.length || 0);
   const childrenText = $derived(
-    `Delete ${pluralize(childrenCount, 'child tag')}`,
+    plural(childrenCount, ['Delete # child tag', 'Delete # child tags']),
   );
   const imagesText = $derived(
-    `Remove tag from ${pluralize(tag.imageCount, 'image')}`,
+    plural(tag.imageCount, [
+      'Remove tag from # image',
+      'Remove tag from # images',
+    ]),
   );
 </script>
 

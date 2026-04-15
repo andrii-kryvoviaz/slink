@@ -170,16 +170,7 @@ msgstr "**Fett** und *kursiv* zur Formatierung • ⌘+Enter zum Absenden"
 msgid "Delete Comment"
 msgstr "Kommentar löschen"
 
-#: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
-#: src/feature/Comment/CommentDeleteConfirmation.svelte
 #: src/feature/Image/History/Actions/DeleteAction.svelte
-#: src/feature/Image/History/BulkDeleteConfirmation.svelte
-#: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
-#: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
-#: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
-#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
-#: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
-#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "This action cannot be undone"
 msgstr "Diese Aktion kann nicht rückgängig gemacht werden"
 
@@ -208,12 +199,6 @@ msgstr "Diese Aktion kann nicht rückgängig gemacht werden"
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
-#: src/feature/Comment/CommentDeleteConfirmation.svelte
-#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
-msgid "<0/> Delete"
-msgstr "<0/> Löschen"
-
 #: src/feature/Comment/CommentListItem.svelte
 msgid "(edited)"
 msgstr "(bearbeitet)"
@@ -229,12 +214,15 @@ msgid "Edit"
 msgstr "Bearbeiten"
 
 #: src/feature/Collection/CollectionActionsDropdown/CollectionActionsDropdown.svelte
+#: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
+#: src/feature/Comment/CommentDeleteConfirmation.svelte
 #: src/feature/Comment/CommentListItem.svelte
 #: src/feature/Image/AdminImageDropdown/AdminImageDropdown.svelte
 #: src/feature/Image/History/Actions/DeleteAction.svelte
 #: src/feature/Image/History/Actions/DeleteAction.svelte
 #: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
 #: src/feature/Tag/TagDataTable/TagActionsCell.svelte
+#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 #: src/feature/User/UserActions/UserActions.svelte
 msgid "Delete"
 msgstr "Löschen"
@@ -1123,10 +1111,6 @@ msgstr "Bestätigen"
 msgid "Image will remain in your library"
 msgstr "Das Bild bleibt in Ihrer Bibliothek"
 
-#: src/feature/Collection/RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte
-msgid "<0/> Remove"
-msgstr "<0/> Entfernen"
-
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/DownloadButton/DownloadButton.svelte
 msgid "Download image"
@@ -1270,16 +1254,6 @@ msgstr "Skalierungsauswahl"
 msgid "Scale to {0}"
 msgstr "Auf {0} skalieren"
 
-#. 0: pluralize(result.processed.length, 'image')
-#: src/feature/Image/History/BatchContext.svelte.ts
-msgid "Successfully updated {0}"
-msgstr "{0} erfolgreich aktualisiert"
-
-#. 0: pluralize(result.failed.length, 'image')
-#: src/feature/Image/History/BatchContext.svelte.ts
-msgid "Failed to update {0}"
-msgstr "{0} konnte nicht aktualisiert werden"
-
 #: src/feature/Image/History/Actions/DeleteAction.svelte
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
@@ -1338,8 +1312,9 @@ msgstr "Bild abwählen"
 msgid "Select image"
 msgstr "Bild auswählen"
 
-#: src/feature/Image/History/BulkDeleteConfirmation.svelte
 #: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
 #: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
 msgid "Delete Image"
 msgstr "Bild löschen"
@@ -1348,11 +1323,6 @@ msgstr "Bild löschen"
 #: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
 msgid "Permanently delete the file from storage"
 msgstr "Datei dauerhaft aus dem Speicher löschen"
-
-#: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
-#: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
-msgid "<0/> Delete Image"
-msgstr "<0/> Bild löschen"
 
 #: src/feature/Image/License/LicenseInfo.svelte
 msgid "Licensed under <0/>"
@@ -2010,6 +1980,7 @@ msgid "Reset to <0/>"
 msgstr "Auf <0/> zurücksetzen"
 
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
+#: src/routes/collection/[id]/+page.svelte
 #: src/routes/info/[id]/+page.svelte
 msgid "Share"
 msgstr "Teilen"
@@ -2361,16 +2332,9 @@ msgid "Move"
 msgstr "Verschieben"
 
 #. 0: selectedCount === 1 ? 'Image' \\: 'Images'
-#. 0: pluralize(childrenCount, 'child tag')
 #: src/feature/Image/History/Actions/DeleteAction.svelte
-#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "Delete {0}"
 msgstr "{0} löschen"
-
-#. 0: pluralize(tag.imageCount, 'image')
-#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
-msgid "Remove tag from {0}"
-msgstr "Tag von {0} entfernen"
 
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "Delete Tag"
@@ -2378,7 +2342,7 @@ msgstr "Tag löschen"
 
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "This will cascade:"
-msgstr "Dies wird kaskadiert:"
+msgstr "Dies hat folgende Auswirkungen:"
 
 #. 0: getTagDisplayName(creatingChildFor); 1: childTagName
 #: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
@@ -2440,16 +2404,13 @@ msgid "Creating..."
 msgstr "Wird erstellt..."
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
+#: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
 msgid "Delete Provider"
 msgstr "Anbieter löschen"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
 msgid "<0/> — Provider and its configuration will be removed"
 msgstr "<0/> — Anbieter und seine Konfiguration werden entfernt"
-
-#: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
-msgid "<0/> Delete Provider"
-msgstr "<0/> Anbieter löschen"
 
 #: src/feature/Tag/TagFilter/TagFilter.svelte
 msgid "Search and select tags"
@@ -2588,16 +2549,13 @@ msgid "Remove Admin"
 msgstr "Admin entfernen"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "Delete User"
 msgstr "Benutzer löschen"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "User account and all associated data will be removed"
 msgstr "Benutzerkonto und alle zugehörigen Daten werden entfernt"
-
-#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "<0/> Delete User"
-msgstr "<0/> Benutzer löschen"
 
 #: src/feature/User/UserDataTable/data-table-email-button.svelte
 msgid "Email <0/>"
@@ -2704,10 +2662,6 @@ msgstr "API-Schlüssel widerrufen"
 msgid "This API key will be permanently revoked and cannot be recovered"
 msgstr "Dieser API-Schlüssel wird dauerhaft widerrufen und kann nicht wiederhergestellt werden"
 
-#: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
-msgid "<0/> Revoke Key"
-msgstr "<0/> Schlüssel widerrufen"
-
 #: src/feature/User/ApiKey/ApiKeyList.svelte
 msgid "No API keys yet"
 msgstr "Noch keine API-Schlüssel"
@@ -2781,14 +2735,6 @@ msgstr "Wichtiger Hinweis"
 msgid "This key will not be shown again. Store it securely in your password manager or download the ShareX config file below."
 msgstr "Dieser Schlüssel wird nicht erneut angezeigt. Speichern Sie ihn sicher in Ihrem Passwort-Manager oder laden Sie die ShareX-Konfigurationsdatei unten herunter."
 
-#: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
-msgid "<0/> Downloading..."
-msgstr "<0/> Wird heruntergeladen..."
-
-#: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
-msgid "<0/> Download ShareX Config"
-msgstr "<0/> ShareX-Konfiguration herunterladen"
-
 #: src/routes/collection/[id]/+page.svelte
 msgid "Back to Collections"
 msgstr "Zurück zu Sammlungen"
@@ -2813,10 +2759,6 @@ msgstr "<0/> Bilder hinzufügen"
 #: src/routes/collection/[id]/+page.svelte
 msgid "Share Link"
 msgstr "Link teilen"
-
-#: src/routes/collection/[id]/+page.svelte
-msgid "<0/> Share"
-msgstr "<0/> Teilen"
 
 #: src/routes/collection/[id]/+page.svelte
 msgid "Collection not found"
@@ -3960,10 +3902,6 @@ msgstr "weniger"
 msgid "more"
 msgstr "mehr"
 
-#: src/feature/Image/History/BulkDeleteConfirmation.svelte
-msgid "Delete Images"
-msgstr "Bilder löschen"
-
 #: src/feature/Image/History/BatchActionConfirmation.svelte
 msgid "# image"
 msgid_plural "# images"
@@ -4063,6 +4001,7 @@ msgid "Tags / Collections"
 msgstr "Tags / Sammlungen"
 
 #: src/feature/Image/History/BulkDeleteConfirmation.svelte
+#: src/feature/Image/History/BulkDeleteConfirmation.svelte
 msgid "Delete # image"
 msgid_plural "Delete # images"
 msgstr[0] "# Bild löschen"
@@ -4070,7 +4009,7 @@ msgstr[1] "# Bilder löschen"
 
 #: src/routes/preferences/+page.svelte
 msgid "Deutsch"
-msgstr ""
+msgstr "Deutsch"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Tag \"{name}\" already exists"
@@ -4078,11 +4017,11 @@ msgstr "Tag \"{name}\" existiert bereits"
 
 #: src/routes/preferences/+page.svelte
 msgid "中文"
-msgstr ""
+msgstr "中文"
 
 #: src/routes/preferences/+page.svelte
 msgid "Language"
-msgstr ""
+msgstr "Sprache"
 
 #: src/routes/preferences/+page.svelte
 msgid "Display Language"
@@ -4134,16 +4073,111 @@ msgstr "Hashtag"
 
 #: src/routes/preferences/+page.svelte
 msgid "Español"
-msgstr ""
+msgstr "Español"
 
 #: src/routes/preferences/+page.svelte
 msgid "Français"
-msgstr ""
+msgstr "Français"
 
 #: src/routes/preferences/+page.svelte
 msgid "Italiano"
-msgstr ""
+msgstr "Italiano"
 
 #: src/routes/preferences/+page.svelte
 msgid "Polski"
-msgstr ""
+msgstr "Polski"
+
+#: src/feature/Analytics/ImageAnalytics.svelte
+msgid "No uploads yet"
+msgstr "Noch keine Uploads"
+
+#: src/feature/Analytics/ImageAnalytics.svelte
+msgid "Upload data will appear here once images are added"
+msgstr "Upload-Daten werden hier angezeigt, sobald Bilder hinzugefügt werden"
+
+#: src/feature/Comment/CommentDeleteConfirmation.svelte
+msgid "Comment will be permanently removed"
+msgstr "Kommentar wird dauerhaft entfernt"
+
+#: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
+msgid "Collection and its settings will be permanently removed"
+msgstr "Sammlung und ihre Einstellungen werden dauerhaft entfernt"
+
+#: src/feature/Collection/RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte
+msgid "Remove"
+msgstr "Entfernen"
+
+#: src/feature/Image/History/BulkDeleteConfirmation.svelte
+msgid "Selected images will be permanently removed"
+msgstr "Ausgewählte Bilder werden dauerhaft entfernt"
+
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeleteConfirmation.svelte
+#: src/feature/Image/ImageDeleteConfirmation/ImageDeletePopover.svelte
+msgid "Image record will be permanently removed"
+msgstr "Bildeintrag wird dauerhaft entfernt"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderDeleteConfirmation.svelte
+msgid "Provider and its configuration will be removed"
+msgstr "Anbieter und seine Konfiguration werden entfernt"
+
+#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
+msgid "Tag will be permanently removed"
+msgstr "Tag wird dauerhaft entfernt"
+
+#: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
+msgid "Key will be permanently revoked"
+msgstr "Schlüssel wird dauerhaft widerrufen"
+
+#: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
+msgid "Revoke Key"
+msgstr "Schlüssel widerrufen"
+
+#: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
+msgid "Download ShareX Config"
+msgstr "ShareX-Konfiguration herunterladen"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Account and all associated data will be removed"
+msgstr "Konto und alle zugehörigen Daten werden entfernt"
+
+#: src/feature/Image/History/BatchContext.svelte.ts
+msgid "Successfully updated # image"
+msgid_plural "Successfully updated # images"
+msgstr[0] "# Bild erfolgreich aktualisiert"
+msgstr[1] "# Bilder erfolgreich aktualisiert"
+
+#: src/feature/Image/History/BatchContext.svelte.ts
+msgid "Failed to update # image"
+msgid_plural "Failed to update # images"
+msgstr[0] "# Bild konnte nicht aktualisiert werden"
+msgstr[1] "# Bilder konnten nicht aktualisiert werden"
+
+#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+msgid "# tag"
+msgid_plural "# tags"
+msgstr[0] "# Tag"
+msgstr[1] "# Tags"
+
+#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
+msgid "Delete # child tag"
+msgid_plural "Delete # child tags"
+msgstr[0] "# Unter-Tag löschen"
+msgstr[1] "# Unter-Tags löschen"
+
+#: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
+msgid "Remove tag from # image"
+msgid_plural "Remove tag from # images"
+msgstr[0] "Tag von # Bild entfernen"
+msgstr[1] "Tag von # Bildern entfernen"
+
+#: src/feature/Collection/ImageCollectionList/ImageCollectionList.svelte
+msgid "# more collection"
+msgid_plural "# more collections"
+msgstr[0] "# weitere Sammlung"
+msgstr[1] "# weitere Sammlungen"
+
+#: src/feature/Tag/ImageTagList/ImageTagList.svelte
+msgid "# more tag"
+msgid_plural "# more tags"
+msgstr[0] "# weiterer Tag"
+msgstr[1] "# weitere Tags"

@@ -1,11 +1,10 @@
 <script lang="ts">
   import { Tooltip } from '@slink/ui/components/tooltip';
 
+  import { plural } from '$lib/utils/i18n';
   import Icon from '@iconify/svelte';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
-
-  import { pluralize } from '@slink/lib/utils/string/pluralize';
 
   import {
     activeFilterToggleButtonVariants,
@@ -51,7 +50,7 @@
     <span class="text-slate-600 dark:text-slate-300">
       <span class="hidden sm:inline">Filtering by</span>
       <span class="font-semibold text-blue-600 dark:text-blue-400">
-        {pluralize(tagCount, 'tag')}
+        {plural(tagCount, ['# tag', '# tags'])}
       </span>
     </span>
 

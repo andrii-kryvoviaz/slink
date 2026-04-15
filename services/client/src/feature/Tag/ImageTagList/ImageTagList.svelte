@@ -4,6 +4,7 @@
   import { TagBadge } from '@slink/feature/Tag';
 
   import { browser } from '$app/environment';
+  import { plural } from '$lib/utils/i18n';
 
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { Tag } from '@slink/api/Resources/TagResource';
@@ -70,7 +71,11 @@
 </script>
 
 {#if tags.length > 0}
-  <OverflowBadgeList items={tags} {maxVisible} itemLabel="more tag">
+  <OverflowBadgeList
+    items={tags}
+    {maxVisible}
+    overflowLabel={(count) => plural(count, ['# more tag', '# more tags'])}
+  >
     {#snippet badge(tag)}
       <TagBadge
         {tag}
