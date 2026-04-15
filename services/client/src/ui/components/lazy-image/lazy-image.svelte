@@ -1,9 +1,21 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
+  import { tv } from 'tailwind-variants';
 
   import type { HTMLImgAttributes } from 'svelte/elements';
 
   import { cn } from '@slink/utils/ui/index.js';
+
+  const imageVariants = tv({
+    base: 'transition-opacity duration-300',
+    variants: {
+      status: {
+        loading: 'opacity-0',
+        loaded: 'opacity-100',
+        error: 'opacity-0',
+      },
+    },
+  });
 
   type LoadingStatus = 'loading' | 'loaded' | 'error';
 
@@ -23,41 +35,40 @@
     ...restProps
   }: Props = $props();
 
-  let status = $state<LoadingStatus>('loading');
+  let _loadedSrc = $state<typeof src>();
 
-  $effect(() => {
-    if (src) {
-      status = 'loading';
-    }
+  let status: LoadingStatus = $derived.by(() => {
+    if (!src) return 'error';
+    if (_loadedSrc === src) return 'loaded';
+    return 'loading';
   });
 
+  let showImage = $derived(src && status !== 'error');
+  let showPlaceholder = $derived(status !== 'loaded');
+
   function handleLoad() {
-    status = 'loaded';
+    _loadedSrc = src;
   }
 
   function handleError() {
-    status = 'error';
+    _loadedSrc = undefined;
   }
 </script>
 
 <div class={cn('relative', containerClass)}>
-  {#if status !== 'loaded'}
+  {#if showPlaceholder}
     <div class="absolute inset-0 flex items-center justify-center">
       {#if placeholder}
         {@render placeholder()}
       {/if}
     </div>
   {/if}
-  {#if src && status !== 'error'}
+  {#if showImage}
     <img
       bind:this={ref}
       {src}
       {alt}
-      class={cn(
-        'transition-opacity duration-300',
-        status === 'loaded' ? 'opacity-100' : 'opacity-0',
-        className,
-      )}
+      class={imageVariants({ status, class: className as string })}
       onload={handleLoad}
       onerror={handleError}
       {...restProps}
