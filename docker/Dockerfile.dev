@@ -9,6 +9,8 @@ COPY --link --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
 COPY --link --from=node /opt /opt
 COPY services/api/.env.example ./api/.env
 
+RUN mkdir -p /data/redis /data/caddy
+
 ENV APP_ENV=dev \
     NODE_ENV=development \
     MERCURE_HUB_URL=http://localhost:3333/.well-known/mercure
