@@ -4,7 +4,6 @@
 
   import { formatDate, formatExpiryDate } from '$lib/utils/date';
   import Icon from '@iconify/svelte';
-  import { readable } from 'svelte/store';
   import { fade } from 'svelte/transition';
 
   import type { ApiKeyResponse } from '@slink/api/Resources/ApiKeyResource';
@@ -91,7 +90,7 @@
 
       <ApiKeyDeletePopover
         {apiKey}
-        loading={readable(isRevoking)}
+        loading={isRevoking}
         confirm={onDeleteConfirm}
         onCancel={() => (popoverOpen = false)}
       />

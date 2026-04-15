@@ -1,24 +1,17 @@
 <script lang="ts">
-  import { Loader } from '@slink/feature/Layout';
   import { Button } from '@slink/ui/components/button';
   import { Switch } from '@slink/ui/components/switch';
 
   import Icon from '@iconify/svelte';
-  import { type Readable, readable } from 'svelte/store';
 
   interface Props {
     count: number;
-    loading?: Readable<boolean>;
+    loading?: boolean;
     onConfirm: (preserveOnDisk: boolean) => void;
     onCancel: () => void;
   }
 
-  let {
-    count,
-    loading = readable(false),
-    onConfirm,
-    onCancel,
-  }: Props = $props();
+  let { count, loading = false, onConfirm, onCancel }: Props = $props();
 
   let preserveOnDisk: boolean = $state(false);
 
@@ -27,13 +20,7 @@
   };
 </script>
 
-<div class="w-xs max-w-screen space-y-4 relative">
-  {#if $loading}
-    <div class="absolute top-2 right-2 z-10">
-      <Loader variant="minimal" size="xs" />
-    </div>
-  {/if}
-
+<div class="w-xs max-w-screen space-y-4">
   <div class="flex items-center gap-3">
     <div
       class="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 border border-red-200/40 dark:border-red-800/30 shadow-sm flex-shrink-0"
@@ -71,7 +58,7 @@
       <Switch
         checked={!preserveOnDisk}
         onCheckedChange={(checked) => (preserveOnDisk = !checked)}
-        disabled={$loading}
+        disabled={loading}
       />
     </label>
   </div>
@@ -83,7 +70,7 @@
       size="sm"
       onclick={onCancel}
       class="flex-1"
-      disabled={$loading}
+      disabled={loading}
     >
       Cancel
     </Button>
@@ -92,14 +79,13 @@
       rounded="full"
       size="sm"
       onclick={handleConfirm}
+      justify="center"
       class="flex-1 font-medium shadow-lg hover:shadow-xl transition-all duration-200"
-      disabled={$loading}
+      {loading}
     >
-      {#if $loading}
-        <Icon icon="eos-icons:three-dots-loading" class="h-4 w-4 mr-2" />
-      {:else}
-        <Icon icon="heroicons:trash" class="h-4 w-4 mr-2" />
-      {/if}
+      {#snippet leftIcon()}
+        <Icon icon="heroicons:trash" class="h-4 w-4" />
+      {/snippet}
       Delete {count === 1 ? 'Image' : 'Images'}
     </Button>
   </div>

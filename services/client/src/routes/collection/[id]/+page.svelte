@@ -259,17 +259,13 @@
                       variant="glass"
                       size="sm"
                       rounded="full"
-                      disabled={isSharing}
+                      loading={isSharing}
+                      justify="center"
                       class="flex flex-row gap-2"
                     >
-                      {#if isSharing}
-                        <Icon
-                          icon="eos-icons:three-dots-loading"
-                          class="h-4 w-4"
-                        />
-                      {:else}
+                      {#snippet leftIcon()}
                         <Icon icon="ph:share-network-fill" class="h-4 w-4" />
-                      {/if}
+                      {/snippet}
                       Share
                     </Button>
                   </PopoverTrigger>

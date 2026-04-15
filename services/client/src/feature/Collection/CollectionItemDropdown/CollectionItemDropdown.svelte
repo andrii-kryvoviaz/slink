@@ -7,7 +7,6 @@
   } from '@slink/ui/components';
 
   import Icon from '@iconify/svelte';
-  import { readable } from 'svelte/store';
 
   interface Props {
     loading?: boolean;
@@ -17,8 +16,6 @@
   let { loading = false, onRemove }: Props = $props();
 
   let confirmOpen = $state(false);
-
-  const loadingStore = $derived(readable(loading));
 
   const handleRemoveClick = () => {
     confirmOpen = true;
@@ -59,7 +56,7 @@
         </DropdownSimpleItem>
       {:else}
         <RemoveFromCollectionPopover
-          loading={loadingStore}
+          {loading}
           close={handleCancel}
           confirm={handleConfirm}
         />

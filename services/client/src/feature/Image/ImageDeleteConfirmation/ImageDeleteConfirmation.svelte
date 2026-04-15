@@ -79,14 +79,13 @@
       rounded="full"
       size="sm"
       onclick={onConfirm}
+      justify="center"
       class="flex-1 font-medium shadow-lg hover:shadow-xl transition-all duration-200"
-      disabled={loading}
+      {loading}
     >
-      {#if loading}
-        <Icon icon="eos-icons:three-dots-loading" class="h-4 w-4 mr-2" />
-      {:else}
-        <Icon icon="heroicons:trash" class="h-4 w-4 mr-2" />
-      {/if}
+      {#snippet leftIcon()}
+        <Icon icon="heroicons:trash" class="h-4 w-4" />
+      {/snippet}
       Delete Image
     </Button>
   </div>

@@ -1,26 +1,18 @@
 <script lang="ts">
-  import { Loader } from '@slink/feature/Layout';
   import { Button } from '@slink/ui/components/button';
 
   import Icon from '@iconify/svelte';
-  import { type Readable, readable } from 'svelte/store';
 
   interface Props {
-    loading?: Readable<boolean>;
+    loading?: boolean;
     close: () => void;
     confirm: () => void;
   }
 
-  let { loading = readable(false), close, confirm }: Props = $props();
+  let { loading = false, close, confirm }: Props = $props();
 </script>
 
-<div class="w-full max-w-sm p-2 space-y-4 relative">
-  {#if $loading}
-    <div class="absolute top-2 right-2 z-10">
-      <Loader variant="minimal" size="xs" />
-    </div>
-  {/if}
-
+<div class="w-full max-w-sm p-2 space-y-4">
   <div class="flex items-center gap-3">
     <div
       class="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 border border-red-200/40 dark:border-red-800/30 shadow-sm shrink-0"
@@ -47,7 +39,7 @@
       size="sm"
       onclick={close}
       class="flex-1"
-      disabled={$loading}
+      disabled={loading}
     >
       Cancel
     </Button>
@@ -56,14 +48,13 @@
       rounded="full"
       size="sm"
       onclick={confirm}
+      justify="center"
       class="flex-1 font-medium shadow-lg hover:shadow-xl transition-all duration-200"
-      disabled={$loading}
+      {loading}
     >
-      {#if $loading}
-        <Icon icon="eos-icons:three-dots-loading" class="h-4 w-4 mr-2" />
-      {:else}
-        <Icon icon="heroicons:trash" class="h-4 w-4 mr-2" />
-      {/if}
+      {#snippet leftIcon()}
+        <Icon icon="heroicons:trash" class="h-4 w-4" />
+      {/snippet}
       Remove
     </Button>
   </div>
