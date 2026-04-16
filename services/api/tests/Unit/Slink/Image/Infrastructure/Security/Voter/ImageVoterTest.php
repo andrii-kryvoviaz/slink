@@ -9,6 +9,7 @@ use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Slink\Image\Domain\Enum\ImageAccess;
 use Slink\Image\Domain\ValueObject\ImageAccessContext;
+use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Image\Infrastructure\Security\Voter\ImageVoter;
 use Slink\Share\Domain\Enum\ShareableType;
@@ -38,7 +39,11 @@ final class ImageVoterTest extends TestCase {
     return $token;
   }
 
-  private function createImageView(?string $ownerId, string $imageId = '550e8400-e29b-41d4-a716-446655440000'): ImageView&Stub {
+  private function createImageView(
+    ?string $ownerId,
+    string $imageId = '550e8400-e29b-41d4-a716-446655440000',
+    bool $isPublic = false,
+  ): ImageView&Stub {
     $user = null;
 
     if ($ownerId !== null) {
@@ -46,9 +51,13 @@ final class ImageVoterTest extends TestCase {
       $user->method('getUuid')->willReturn($ownerId);
     }
 
+    $attributes = $this->createStub(ImageAttributes::class);
+    $attributes->method('isPublic')->willReturn($isPublic);
+
     $image = $this->createStub(ImageView::class);
     $image->method('getUuid')->willReturn($imageId);
     $image->method('getUser')->willReturn($user);
+    $image->method('getAttributes')->willReturn($attributes);
 
     return $image;
   }
@@ -115,6 +124,31 @@ final class ImageVoterTest extends TestCase {
     $result = $voter->vote($this->createToken($requesterId), $image, [ImageAccess::View]);
 
     $this->assertSame(VoterInterface::ACCESS_DENIED, $result);
+  }
+
+  #[Test]
+  public function itGrantsViewToNonOwnerWhenImageIsPublic(): void {
+    $ownerId = '550e8400-e29b-41d4-a716-446655440000';
+    $requesterId = '660e8400-e29b-41d4-a716-446655440000';
+
+    $voter = $this->createVoter();
+    $image = $this->createImageView($ownerId, isPublic: true);
+
+    $result = $voter->vote($this->createToken($requesterId), $image, [ImageAccess::View]);
+
+    $this->assertSame(VoterInterface::ACCESS_GRANTED, $result);
+  }
+
+  #[Test]
+  public function itGrantsViewToAnonymousUserWhenImageIsPublic(): void {
+    $ownerId = '550e8400-e29b-41d4-a716-446655440000';
+
+    $voter = $this->createVoter();
+    $image = $this->createImageView($ownerId, isPublic: true);
+
+    $result = $voter->vote($this->createToken(), $image, [ImageAccess::View]);
+
+    $this->assertSame(VoterInterface::ACCESS_GRANTED, $result);
   }
 
   #[Test]
