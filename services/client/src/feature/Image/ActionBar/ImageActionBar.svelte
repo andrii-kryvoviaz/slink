@@ -28,7 +28,7 @@
     downloadLabelVariants,
     iconSizeVariants,
   } from './ImageActionBar.theme';
-  import { useImageActions } from './useImageActions.svelte';
+  import { createImageActionsState } from './ImageActionsState.svelte';
 
   type ButtonPosition = 'first' | 'middle' | 'last' | 'only';
 
@@ -64,7 +64,7 @@
   const isHero = $derived(layout === 'hero');
   const iconClass = $derived(iconSizeVariants({ layout }));
 
-  const actions = useImageActions({
+  const actions = createImageActionsState({
     getImage: () => image,
     onImageUpdate: (updated) => (image = updated),
     onImageDelete: (id) => on?.imageDelete?.(id),
