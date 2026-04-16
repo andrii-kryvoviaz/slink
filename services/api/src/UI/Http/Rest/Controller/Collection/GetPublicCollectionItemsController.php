@@ -32,7 +32,7 @@ final readonly class GetPublicCollectionItemsController {
       return ApiResponse::empty(Response::HTTP_NOT_FOUND);
     }
 
-    $result = $this->ask($query->withCollectionId($id));
+    $result = $this->ask($query->withCollectionId($id)->asScoped());
 
     return ApiResponse::collection($result);
   }

@@ -2,16 +2,15 @@ import { ApiClient } from '@slink/api';
 
 import { replaceState } from '$app/navigation';
 
-import type { ImageListingItem } from '@slink/api/Response';
-
+import type { MediaItem } from '@slink/lib/state/CollectionItemsFeed.svelte';
 import { useState } from '@slink/lib/state/core/ContextAwareState';
 
 export interface PostViewerFeed {
-  items: ImageListingItem[];
+  items: MediaItem[];
   hasMore: boolean;
   isDirty: boolean;
   isLoading: boolean;
-  updateItem(item: ImageListingItem, updates: Partial<ImageListingItem>): void;
+  updateItem(item: MediaItem, updates: Partial<MediaItem>): void;
   nextPage(): Promise<void>;
 }
 export type PostViewerSource = 'public' | 'collection';
@@ -20,7 +19,7 @@ class PostViewerState {
   private _isOpen: boolean = $state(false);
   private _currentIndex: number = $state(0);
   private _feed: PostViewerFeed | null = $state(null);
-  private _standaloneItem: ImageListingItem | null = $state(null);
+  private _standaloneItem: MediaItem | null = $state(null);
   private _lastFetchedPostId: string | null = null;
   private _prefetchThreshold: number = 3;
   private _prefetchCount: number = 2;
@@ -34,11 +33,11 @@ class PostViewerState {
     return this._currentIndex;
   }
 
-  get items(): ImageListingItem[] {
+  get items(): MediaItem[] {
     return this._feed?.items ?? [];
   }
 
-  get currentItem(): ImageListingItem | null {
+  get currentItem(): MediaItem | null {
     if (this._standaloneItem) return this._standaloneItem;
     return this.items[this._currentIndex] ?? null;
   }
@@ -80,7 +79,7 @@ class PostViewerState {
     this._source = source;
   }
 
-  updateCurrentItem(updates: Partial<ImageListingItem>): void {
+  updateCurrentItem(updates: Partial<MediaItem>): void {
     if (!this._feed || !this.currentItem) return;
     this._feed.updateItem(this.currentItem, updates);
   }
@@ -208,11 +207,11 @@ class PostViewerState {
     }
   }
 
-  private prefetchImage(item: ImageListingItem): void {
+  private prefetchImage(item: MediaItem): void {
     const link = document.createElement('link');
     link.rel = 'preload';
     link.as = 'image';
-    link.href = `/image/${item.attributes.fileName}`;
+    link.href = item.itemUrl ?? `/image/${item.attributes.fileName}`;
 
     const existingLink = document.querySelector(`link[href="${link.href}"]`);
     if (!existingLink) {

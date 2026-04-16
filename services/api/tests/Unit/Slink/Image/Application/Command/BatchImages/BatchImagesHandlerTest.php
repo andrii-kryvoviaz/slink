@@ -28,10 +28,10 @@ final class BatchImagesHandlerTest extends TestCase {
     $command = new BatchImagesCommand([self::IMAGE_ID_1, self::IMAGE_ID_2], true);
 
     $image1 = $this->createStub(Image::class);
-    $image1->method('isOwedBy')->willReturn(true);
+    $image1->method('isOwnedBy')->willReturn(true);
 
     $image2 = $this->createStub(Image::class);
-    $image2->method('isOwedBy')->willReturn(true);
+    $image2->method('isOwnedBy')->willReturn(true);
 
     $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturnCallback(
@@ -62,7 +62,7 @@ final class BatchImagesHandlerTest extends TestCase {
     $command = new BatchImagesCommand([self::IMAGE_ID_1], true);
 
     $image = $this->createStub(Image::class);
-    $image->method('isOwedBy')->willReturn(false);
+    $image->method('isOwnedBy')->willReturn(false);
 
     $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);
@@ -84,10 +84,10 @@ final class BatchImagesHandlerTest extends TestCase {
     $command = new BatchImagesCommand([self::IMAGE_ID_1, self::IMAGE_ID_2], true);
 
     $image1 = $this->createStub(Image::class);
-    $image1->method('isOwedBy')->willReturn(true);
+    $image1->method('isOwnedBy')->willReturn(true);
 
     $image2 = $this->createStub(Image::class);
-    $image2->method('isOwedBy')->willReturn(false);
+    $image2->method('isOwnedBy')->willReturn(false);
 
     $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturnCallback(
@@ -131,7 +131,7 @@ final class BatchImagesHandlerTest extends TestCase {
     $command = new BatchImagesCommand([self::IMAGE_ID_1], true);
 
     $image = $this->createStub(Image::class);
-    $image->method('isOwedBy')->willReturn(true);
+    $image->method('isOwnedBy')->willReturn(true);
 
     $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);
@@ -156,7 +156,7 @@ final class BatchImagesHandlerTest extends TestCase {
     $command = new BatchImagesCommand([self::IMAGE_ID_1], true);
 
     $image = $this->createStub(Image::class);
-    $image->method('isOwedBy')->willReturn(true);
+    $image->method('isOwnedBy')->willReturn(true);
 
     $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);

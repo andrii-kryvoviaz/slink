@@ -4,17 +4,19 @@ declare(strict_types=1);
 
 namespace Slink\Collection\Application\Query\GetCollection;
 
+use Slink\Collection\Domain\Enum\CollectionAccess;
 use Slink\Collection\Domain\Exception\CollectionAccessDeniedException;
 use Slink\Collection\Domain\Repository\CollectionItemRepositoryInterface;
 use Slink\Collection\Domain\Repository\CollectionRepositoryInterface;
 use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Application\Query\QueryHandlerInterface;
-use Slink\Shared\Domain\ValueObject\ID;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final readonly class GetCollectionHandler implements QueryHandlerInterface {
   public function __construct(
     private CollectionRepositoryInterface $collectionRepository,
     private CollectionItemRepositoryInterface $collectionItemRepository,
+    private AuthorizationCheckerInterface $access,
   ) {
   }
 
@@ -25,10 +27,7 @@ final readonly class GetCollectionHandler implements QueryHandlerInterface {
       return null;
     }
 
-    $ownerId = ID::fromString($collection->getUserId());
-    $currentUserId = ID::fromString($userId);
-
-    if (!$ownerId->equals($currentUserId)) {
+    if (!$this->access->isGranted(CollectionAccess::Edit, $collection)) {
       throw new CollectionAccessDeniedException();
     }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Image\Application\Command\UpdateImage;
 
+use Slink\Image\Domain\Enum\ImageAccess;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Settings\Application\Service\SettingsService;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
@@ -11,6 +12,7 @@ use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\User\Infrastructure\Auth\JwtUser;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final readonly class UpdateImageHandler implements CommandHandlerInterface {
@@ -22,6 +24,7 @@ final readonly class UpdateImageHandler implements CommandHandlerInterface {
   public function __construct(
     private ConfigurationProviderInterface $configurationProvider,
     private ImageStoreRepositoryInterface  $imageRepository,
+    private AuthorizationCheckerInterface  $access,
   ) {
   }
 
@@ -34,13 +37,12 @@ final readonly class UpdateImageHandler implements CommandHandlerInterface {
     string             $id
   ): void {
     $image = $this->imageRepository->get(ID::fromString($id));
-    $userId = ID::fromString($user?->getIdentifier() ?? '');
 
     if (!$image->aggregateRootVersion()) {
       throw new NotFoundException();
     }
 
-    if (!$user || !$image->getUserId() || !$image->getUserId()->equals($userId)) {
+    if (!$this->access->isGranted(ImageAccess::Edit, $image)) {
       throw new AccessDeniedException();
     }
 

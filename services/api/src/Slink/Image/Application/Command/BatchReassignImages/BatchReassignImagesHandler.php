@@ -39,7 +39,7 @@ final readonly class BatchReassignImagesHandler implements CommandHandlerInterfa
         $id = ID::fromString($imageId);
         $image = $this->imageRepository->get($id);
 
-        if (!$image->isOwedBy($userID)) {
+        if (!$image->isOwnedBy($userID)) {
           throw new AccessDeniedException();
         }
 

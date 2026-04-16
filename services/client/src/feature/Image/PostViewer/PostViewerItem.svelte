@@ -1,15 +1,14 @@
 <script lang="ts">
   import { ImagePlaceholder } from '@slink/feature/Image';
 
-  import type {
-    AuthenticatedUser,
-    ImageListingItem,
-  } from '@slink/api/Response';
+  import type { AuthenticatedUser } from '@slink/api/Response';
+
+  import type { MediaItem } from '@slink/lib/state/CollectionItemsFeed.svelte';
 
   import PostViewerSidebar from './PostViewerSidebar.svelte';
 
   interface Props {
-    image: ImageListingItem;
+    image: MediaItem;
     currentUser: AuthenticatedUser | null;
     isActive?: boolean;
     onClose?: () => void;
@@ -30,7 +29,7 @@
         class="shrink-0 lg:flex-1 lg:h-full flex items-start lg:items-center justify-center min-w-0 overflow-hidden h-[35%] lg:max-h-none lg:min-h-0 lg:@container-[size]"
       >
         <ImagePlaceholder
-          src={`/image/${image.attributes.fileName}`}
+          src={image.itemUrl ?? `/image/${image.attributes.fileName}`}
           metadata={image.metadata}
           showMetadata={false}
           showOpenInNewTab={true}

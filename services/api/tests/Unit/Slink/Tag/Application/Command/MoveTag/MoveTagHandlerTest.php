@@ -19,6 +19,7 @@ use Slink\Tag\Domain\Tag;
 use Slink\Tag\Domain\ValueObject\TagName;
 use Slink\Tag\Domain\ValueObject\TagPath;
 use Slink\Tag\Infrastructure\ReadModel\View\TagView;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class MoveTagHandlerTest extends TestCase {
 
@@ -28,6 +29,7 @@ final class MoveTagHandlerTest extends TestCase {
     $tagRepository = $this->createMock(TagRepositoryInterface::class);
     $duplicateSpec = $this->createStub(TagDuplicateSpecificationInterface::class);
     $circularMoveSpec = $this->createStub(TagCircularMoveSpecificationInterface::class);
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
     $tag = $this->createMock(Tag::class);
     $parentTag = $this->createStub(TagView::class);
     $userId = ID::generate();
@@ -37,6 +39,7 @@ final class MoveTagHandlerTest extends TestCase {
     $tag->method('getUserId')->willReturn($userId);
     $tag->method('getName')->willReturn(TagName::fromString('tag'));
     $parentTag->method('getPath')->willReturn('#1/2');
+    $access->method('isGranted')->willReturn(true);
 
     $tagStore->method('get')->willReturn($tag);
     $tagRepository->expects($this->once())
@@ -52,7 +55,7 @@ final class MoveTagHandlerTest extends TestCase {
       );
     $tagStore->expects($this->once())->method('store')->with($tag);
 
-    $handler = new MoveTagHandler($tagStore, $duplicateSpec, $circularMoveSpec, $tagRepository);
+    $handler = new MoveTagHandler($tagStore, $duplicateSpec, $circularMoveSpec, $tagRepository, $access);
     $command = new MoveTagCommand($tagId->toString(), $newParentId->toString());
     $handler($command, $userId->toString());
   }
@@ -63,12 +66,14 @@ final class MoveTagHandlerTest extends TestCase {
     $tagRepository = $this->createMock(TagRepositoryInterface::class);
     $duplicateSpec = $this->createStub(TagDuplicateSpecificationInterface::class);
     $circularMoveSpec = $this->createStub(TagCircularMoveSpecificationInterface::class);
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
     $tag = $this->createMock(Tag::class);
     $userId = ID::generate();
     $tagId = ID::generate();
 
     $tag->method('getUserId')->willReturn($userId);
     $tag->method('getName')->willReturn(TagName::fromString('tag'));
+    $access->method('isGranted')->willReturn(true);
 
     $tagStore->method('get')->willReturn($tag);
     $tagRepository->expects($this->never())->method('oneById');
@@ -81,7 +86,7 @@ final class MoveTagHandlerTest extends TestCase {
       );
     $tagStore->expects($this->once())->method('store')->with($tag);
 
-    $handler = new MoveTagHandler($tagStore, $duplicateSpec, $circularMoveSpec, $tagRepository);
+    $handler = new MoveTagHandler($tagStore, $duplicateSpec, $circularMoveSpec, $tagRepository, $access);
     $command = new MoveTagCommand($tagId->toString(), null);
     $handler($command, $userId->toString());
   }
@@ -92,6 +97,7 @@ final class MoveTagHandlerTest extends TestCase {
     $tagRepository = $this->createStub(TagRepositoryInterface::class);
     $duplicateSpec = $this->createStub(TagDuplicateSpecificationInterface::class);
     $circularMoveSpec = $this->createStub(TagCircularMoveSpecificationInterface::class);
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
     $tag = $this->createStub(Tag::class);
     $tagOwnerId = ID::generate();
     $differentUserId = ID::generate();
@@ -100,10 +106,11 @@ final class MoveTagHandlerTest extends TestCase {
 
     $tag->method('getUserId')->willReturn($tagOwnerId);
     $tagStore->method('get')->willReturn($tag);
+    $access->method('isGranted')->willReturn(false);
 
     $this->expectException(TagAccessDeniedException::class);
 
-    $handler = new MoveTagHandler($tagStore, $duplicateSpec, $circularMoveSpec, $tagRepository);
+    $handler = new MoveTagHandler($tagStore, $duplicateSpec, $circularMoveSpec, $tagRepository, $access);
     $command = new MoveTagCommand($tagId->toString(), $newParentId->toString());
     $handler($command, $differentUserId->toString());
   }
@@ -114,17 +121,19 @@ final class MoveTagHandlerTest extends TestCase {
     $tagRepository = $this->createStub(TagRepositoryInterface::class);
     $duplicateSpec = $this->createStub(TagDuplicateSpecificationInterface::class);
     $circularMoveSpec = $this->createStub(TagCircularMoveSpecificationInterface::class);
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
     $tag = $this->createStub(Tag::class);
     $userId = ID::generate();
     $tagId = ID::generate();
 
     $tag->method('getUserId')->willReturn($userId);
     $tagStore->method('get')->willReturn($tag);
+    $access->method('isGranted')->willReturn(true);
 
     $this->expectException(InvalidTagMoveException::class);
     $this->expectExceptionMessage('Cannot move a tag to itself');
 
-    $handler = new MoveTagHandler($tagStore, $duplicateSpec, $circularMoveSpec, $tagRepository);
+    $handler = new MoveTagHandler($tagStore, $duplicateSpec, $circularMoveSpec, $tagRepository, $access);
     $command = new MoveTagCommand($tagId->toString(), $tagId->toString());
     $handler($command, $userId->toString());
   }
@@ -135,6 +144,7 @@ final class MoveTagHandlerTest extends TestCase {
     $tagRepository = $this->createStub(TagRepositoryInterface::class);
     $duplicateSpec = $this->createStub(TagDuplicateSpecificationInterface::class);
     $circularMoveSpec = $this->createMock(TagCircularMoveSpecificationInterface::class);
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
     $tag = $this->createStub(Tag::class);
     $userId = ID::generate();
     $tagId = ID::generate();
@@ -142,6 +152,7 @@ final class MoveTagHandlerTest extends TestCase {
 
     $tag->method('getUserId')->willReturn($userId);
     $tagStore->method('get')->willReturn($tag);
+    $access->method('isGranted')->willReturn(true);
 
     $circularMoveSpec->expects($this->once())
       ->method('validate')
@@ -150,7 +161,7 @@ final class MoveTagHandlerTest extends TestCase {
     $this->expectException(InvalidTagMoveException::class);
     $this->expectExceptionMessage('Cannot move a tag to one of its descendants');
 
-    $handler = new MoveTagHandler($tagStore, $duplicateSpec, $circularMoveSpec, $tagRepository);
+    $handler = new MoveTagHandler($tagStore, $duplicateSpec, $circularMoveSpec, $tagRepository, $access);
     $command = new MoveTagCommand($tagId->toString(), $newParentId->toString());
     $handler($command, $userId->toString());
   }

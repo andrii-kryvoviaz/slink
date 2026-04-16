@@ -4,19 +4,21 @@ declare(strict_types=1);
 
 namespace Slink\Collection\Application\Query\GetCollectionCover;
 
+use Slink\Collection\Domain\Enum\CollectionAccess;
 use Slink\Collection\Domain\Repository\CollectionItemRepositoryInterface;
 use Slink\Collection\Domain\Repository\CollectionRepositoryInterface;
 use Slink\Collection\Domain\Service\CollectionCoverGeneratorInterface;
 use Slink\Shared\Application\Query\QueryHandlerInterface;
 use Slink\Shared\Domain\Exception\ForbiddenException;
-use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final readonly class GetCollectionCoverHandler implements QueryHandlerInterface {
   public function __construct(
     private CollectionRepositoryInterface $collectionRepository,
     private CollectionItemRepositoryInterface $collectionItemRepository,
     private CollectionCoverGeneratorInterface $coverGenerator,
+    private AuthorizationCheckerInterface $access,
   ) {
   }
 
@@ -27,10 +29,7 @@ final readonly class GetCollectionCoverHandler implements QueryHandlerInterface 
       throw new NotFoundException();
     }
 
-    $ownerId = ID::fromString($collection->getUserId());
-    $currentUserId = ID::fromString($userId);
-
-    if (!$ownerId->equals($currentUserId)) {
+    if (!$this->access->isGranted(CollectionAccess::Edit, $collection)) {
       throw new ForbiddenException();
     }
 

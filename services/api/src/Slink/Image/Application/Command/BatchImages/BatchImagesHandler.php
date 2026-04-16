@@ -42,7 +42,7 @@ final readonly class BatchImagesHandler implements CommandHandlerInterface {
         $id = ID::fromString($imageId);
         $image = $this->imageRepository->get($id);
 
-        if (!$image->isOwedBy($userID)) {
+        if (!$image->isOwnedBy($userID)) {
           throw new AccessDeniedException();
         }
 

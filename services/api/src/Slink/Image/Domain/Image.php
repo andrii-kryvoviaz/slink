@@ -112,7 +112,7 @@ final class Image extends AbstractAggregateRoot {
    * @param ID $userId
    * @return bool
    */
-  public function isOwedBy(ID $userId): bool {
+  public function isOwnedBy(ID $userId): bool {
     return $this->userId?->equals($userId) ?? false;
   }
 
@@ -253,7 +253,7 @@ final class Image extends AbstractAggregateRoot {
       throw new NotFoundException();
     }
 
-    if (!$this->isOwedBy($requestedBy)) {
+    if (!$this->isOwnedBy($requestedBy)) {
       throw new AccessDeniedException();
     }
 

@@ -19,6 +19,7 @@ final readonly class CollectionItemResourceContext extends AbstractResourceConte
     public array $itemIds = [],
     public array $itemIdsByType = [],
     public ?string $viewerUserId = null,
+    public ?string $scopedCollectionId = null,
   ) {
     parent::__construct($groups);
   }
@@ -44,7 +45,22 @@ final readonly class CollectionItemResourceContext extends AbstractResourceConte
       $itemIds,
       $itemIdsByType,
       $this->viewerUserId,
+      $this->scopedCollectionId,
     );
+  }
+
+  public function withScopedCollection(string $collectionId): self {
+    return new self(
+      $this->getGroups(),
+      $this->itemIds,
+      $this->itemIdsByType,
+      $this->viewerUserId,
+      $collectionId,
+    );
+  }
+
+  public function getScopedCollectionId(): ?string {
+    return $this->scopedCollectionId;
   }
 
   /**

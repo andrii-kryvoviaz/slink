@@ -15,7 +15,7 @@ import type {
 } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
 import { useState } from '@slink/lib/state/core/ContextAwareState';
 
-export type MediaItem = ImageListingItem;
+export type MediaItem = ImageListingItem & { itemUrl?: string | null };
 
 export class CollectionItemsFeed extends AbstractPaginatedFeed<CollectionItem> {
   private _collectionId: string | null = $state(null);
@@ -36,7 +36,7 @@ export class CollectionItemsFeed extends AbstractPaginatedFeed<CollectionItem> {
   public get media(): MediaItem[] {
     return this._items
       .filter((item) => item.item !== undefined)
-      .map((item) => item.item!);
+      .map((item) => ({ ...item.item!, itemUrl: item.itemUrl ?? null }));
   }
 
   public getItemIndex(mediaId: string): number {

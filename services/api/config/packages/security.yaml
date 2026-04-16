@@ -21,7 +21,7 @@ security:
         - Slink\User\Infrastructure\Auth\ApiKeyAuthenticator
 
     api:
-      pattern: ^/api(?!/(auth|public|guest|image/[^/]+\.[^/]+))
+      pattern: ^/api(?!/(auth|public|guest))
       stateless: true
       jwt:
         provider: slink.user.auth.jwt_user_provider

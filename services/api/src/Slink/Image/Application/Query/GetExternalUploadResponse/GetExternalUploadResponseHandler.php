@@ -44,7 +44,7 @@ final readonly class GetExternalUploadResponseHandler implements QueryHandlerInt
     ?int $height = null,
     bool $crop = false
   ): string {
-    $targetPath = $this->shareUrlBuilder->buildTargetUrl($imageId, $fileName, $width, $height, $crop);
+    $targetPath = $this->shareUrlBuilder->buildTargetPath($imageId, $fileName, $width, $height, $crop);
     $shareable = ShareableReference::forImage(ID::fromString($imageId));
     $params = ShareParams::withTargetPath($shareable, $targetPath);
 

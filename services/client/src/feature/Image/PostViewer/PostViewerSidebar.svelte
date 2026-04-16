@@ -10,17 +10,15 @@
   import { page } from '$app/state';
   import Icon from '@iconify/svelte';
 
-  import type {
-    AuthenticatedUser,
-    ImageListingItem,
-  } from '@slink/api/Response';
+  import type { AuthenticatedUser } from '@slink/api/Response';
 
+  import type { MediaItem } from '@slink/lib/state/CollectionItemsFeed.svelte';
   import { usePostViewerState } from '@slink/lib/state/PostViewerState.svelte';
 
   import PostViewerDescription from './PostViewerDescription.svelte';
 
   interface Props {
-    image: ImageListingItem;
+    image: MediaItem;
     currentUser: AuthenticatedUser | null;
     isActive?: boolean;
     onClose?: () => void;
@@ -84,7 +82,7 @@
       </div>
       <div class="flex items-center gap-2">
         <DownloadButton
-          imageUrl={`/image/${image.attributes.fileName}`}
+          imageUrl={image.itemUrl ?? `/image/${image.attributes.fileName}`}
           fileName={image.attributes.fileName}
           size="md"
           tooltipVariant="dark"

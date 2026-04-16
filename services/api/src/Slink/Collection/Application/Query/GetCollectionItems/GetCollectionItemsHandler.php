@@ -30,6 +30,11 @@ final readonly class GetCollectionItemsHandler implements QueryHandlerInterface 
     $total = $this->collectionItemRepository->countCollectionItems($query->getCollectionId());
 
     $context = (new CollectionItemResourceContext())->withItems($items);
+
+    if ($query->isScoped()) {
+      $context = $context->withScopedCollection($query->getCollectionId());
+    }
+
     $processedItems = $this->resourceProcessor->many($items, $context);
     $cursorResult = $this->cursorPaginator->paginate($processedItems, $query->getLimit());
 

@@ -82,8 +82,8 @@ final class ImageTest extends TestCase {
     $otherUserId = ID::generate();
     $image = $this->createTestImage($userId);
 
-    $this->assertTrue($image->isOwedBy($userId));
-    $this->assertFalse($image->isOwedBy($otherUserId));
+    $this->assertTrue($image->isOwnedBy($userId));
+    $this->assertFalse($image->isOwnedBy($otherUserId));
   }
 
   #[Test]
