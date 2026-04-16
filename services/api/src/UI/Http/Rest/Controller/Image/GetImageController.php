@@ -6,11 +6,9 @@ namespace UI\Http\Rest\Controller\Image;
 
 use Slink\Image\Application\Command\AddImageViewCount\AddImageViewCountCommand;
 use Slink\Image\Application\Query\GetImageContent\GetImageContentQuery;
-use Slink\Image\Domain\Service\ImageUrlSignatureInterface;
 use Slink\Shared\Application\Command\CommandTrait;
 use Slink\Shared\Application\Query\QueryTrait;
 use Slink\User\Infrastructure\Auth\JwtUser;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
@@ -23,70 +21,25 @@ final readonly class GetImageController {
   use CommandTrait;
   use QueryTrait;
 
-  public function __construct(
-    private ImageUrlSignatureInterface $signatureService
-  ) {
-  }
-  
   public function __invoke(
-    Request $request,
     #[MapQueryString] GetImageContentQuery $query,
     string $id,
     string $ext,
     #[CurrentUser] ?JwtUser $user = null
   ): ContentResponse {
-    $validatedQuery = $this->validateAndSanitizeQuery($request, $query, $id);
-    $queryWithFormat = $validatedQuery->withFormat($ext);
-    
-    $imageData = $this->ask($queryWithFormat->withContext([
+    $imageData = $this->ask($query->withFormat($ext)->withContext([
       'fileName' => "{$id}.{$ext}",
       'requestedFormat' => $ext,
     ]));
-    
-    $command = new AddImageViewCountCommand($id);
-    $this->handle($command->withContext([
+
+    $this->handle((new AddImageViewCountCommand($id))->withContext([
       'userId' => $user?->getIdentifier(),
     ]));
-    
-    return ContentResponse::file($imageData)->setCache(
-      [
-        'public' => true,
-        'immutable' => true,
-        'max_age' => 31536000,
-      ]
-    );
-  }
 
-  private function validateAndSanitizeQuery(
-    Request $request,
-    GetImageContentQuery $query,
-    string $imageId
-  ): GetImageContentQuery {
-    $width = $query->getWidth();
-    $height = $query->getHeight();
-    $crop = $query->isCropped();
-    $filter = $query->getFilter();
-    $signature = $request->query->get('s');
-
-    if ($width === null && $height === null && !$crop && $filter === null) {
-      return $query;
-    }
-
-    $params = array_filter([
-      'width' => $width,
-      'height' => $height,
-      'crop' => $crop,
-      'filter' => $filter,
-    ], fn($value) => $value !== null && $value !== false);
-
-    if (!is_string($signature) || !$this->signatureService->verify(
-      $imageId,
-      $params,
-      $signature
-    )) {
-      return new GetImageContentQuery();
-    }
-
-    return $query;
+    return ContentResponse::file($imageData)->setCache([
+      'public' => $user === null,
+      'immutable' => true,
+      'max_age' => 31536000,
+    ]);
   }
 }

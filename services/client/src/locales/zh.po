@@ -650,9 +650,9 @@ msgstr "显示名称"
 msgid "This is how your name will appear across the platform"
 msgstr "该名称将显示在平台中的各处"
 
+#: src/feature/Image/License/LicenseCard.svelte
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 #: src/feature/Settings/SettingsPane/SettingsPane.svelte
-#: src/routes/info/[id]/+page.svelte
 #: src/routes/preferences/+page.svelte
 #: src/routes/profile/+page.svelte
 msgid "Saving..."
@@ -799,7 +799,7 @@ msgstr "该许可将自动应用到新上传图片"
 msgid "Learn more"
 msgstr "了解更多"
 
-#: src/routes/info/[id]/+page.svelte
+#: src/feature/Image/License/LicenseCard.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Select a license..."
 msgstr "选择授权..."
@@ -1979,9 +1979,9 @@ msgstr "重置为 {0}"
 msgid "Reset to <0/>"
 msgstr "重置为 <0/>"
 
+#: src/feature/Image/Share/ShareCard.svelte
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
 #: src/routes/collection/[id]/+page.svelte
-#: src/routes/info/[id]/+page.svelte
 msgid "Share"
 msgstr "分享"
 
@@ -2818,11 +2818,11 @@ msgstr "<0/> 查看文档"
 msgid "Image Details | Slink"
 msgstr "图片详情 | Slink"
 
-#: src/routes/info/[id]/+page.svelte
+#: src/feature/Image/License/LicenseCard.svelte
 msgid "License"
 msgstr "授权"
 
-#: src/routes/info/[id]/+page.svelte
+#: src/feature/Image/License/LicenseCard.svelte
 msgid "Choose how others can use this image"
 msgstr "选择他人如何使用这张图片"
 
@@ -2842,19 +2842,19 @@ msgstr "滤镜"
 msgid "Apply a color filter to the shared link"
 msgstr "为分享链接应用颜色滤镜"
 
-#: src/routes/info/[id]/+page.svelte
+#: src/feature/Image/Share/ShareCard.svelte
 msgid "Resize, filter, and format changes apply only to the shared link. The original image remains unchanged."
 msgstr "尺寸、滤镜和格式变更仅作用于分享链接，原图不会改变。"
 
-#: src/routes/info/[id]/+page.svelte
+#: src/feature/Image/Share/ShareCard.svelte
 msgid "Select option to copy"
 msgstr "选择复制选项"
 
-#: src/routes/info/[id]/+page.svelte
+#: src/feature/Image/Share/ShareCard.svelte
 msgid "Quick"
 msgstr "快捷"
 
-#: src/routes/info/[id]/+page.svelte
+#: src/feature/Image/Share/ShareCard.svelte
 msgid "Output Format"
 msgstr "输出格式"
 

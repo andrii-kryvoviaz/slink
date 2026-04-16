@@ -22,7 +22,7 @@ final readonly class CreateShareHandler implements CommandHandlerInterface {
   public function __invoke(CreateShareCommand $command): CreateShareResult {
     $params = $command->getParams();
 
-    $existingShare = $this->shareStore->findByTargetUrl($params->getTargetPath());
+    $existingShare = $this->shareStore->findByTargetPath($params->getTargetPath());
     if ($existingShare !== null) {
       $this->enhanceIfNeeded($existingShare);
       return CreateShareResult::existing($existingShare);

@@ -13,6 +13,7 @@ export interface CollectionItem {
     formattedDate: string;
     timestamp: number;
   };
+  itemUrl?: string | null;
   item?: ImageListingItem;
 }
 

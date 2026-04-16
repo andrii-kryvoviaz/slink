@@ -650,9 +650,9 @@ msgstr "Nom d'affichage"
 msgid "This is how your name will appear across the platform"
 msgstr "C'est ainsi que votre nom apparaîtra sur la plateforme"
 
+#: src/feature/Image/License/LicenseCard.svelte
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 #: src/feature/Settings/SettingsPane/SettingsPane.svelte
-#: src/routes/info/[id]/+page.svelte
 #: src/routes/preferences/+page.svelte
 #: src/routes/profile/+page.svelte
 msgid "Saving..."
@@ -799,7 +799,7 @@ msgstr "Cette licence sera automatiquement appliquée aux nouveaux imports"
 msgid "Learn more"
 msgstr "En savoir plus"
 
-#: src/routes/info/[id]/+page.svelte
+#: src/feature/Image/License/LicenseCard.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Select a license..."
 msgstr "Sélectionnez une licence..."
@@ -1979,9 +1979,9 @@ msgstr "Rétablir à {0}"
 msgid "Reset to <0/>"
 msgstr "Rétablir à <0/>"
 
+#: src/feature/Image/Share/ShareCard.svelte
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
 #: src/routes/collection/[id]/+page.svelte
-#: src/routes/info/[id]/+page.svelte
 msgid "Share"
 msgstr "Partager"
 
@@ -2818,11 +2818,11 @@ msgstr "<0/> Consulter la documentation"
 msgid "Image Details | Slink"
 msgstr "Détails de l'image | Slink"
 
-#: src/routes/info/[id]/+page.svelte
+#: src/feature/Image/License/LicenseCard.svelte
 msgid "License"
 msgstr "Licence"
 
-#: src/routes/info/[id]/+page.svelte
+#: src/feature/Image/License/LicenseCard.svelte
 msgid "Choose how others can use this image"
 msgstr "Choisissez comment les autres peuvent utiliser cette image"
 
@@ -2842,19 +2842,19 @@ msgstr "Filtre"
 msgid "Apply a color filter to the shared link"
 msgstr "Appliquer un filtre coloré au lien partagé"
 
-#: src/routes/info/[id]/+page.svelte
+#: src/feature/Image/Share/ShareCard.svelte
 msgid "Resize, filter, and format changes apply only to the shared link. The original image remains unchanged."
 msgstr "Les modifications de taille, de filtre et de format s'appliquent uniquement au lien partagé. L'image originale reste inchangée."
 
-#: src/routes/info/[id]/+page.svelte
+#: src/feature/Image/Share/ShareCard.svelte
 msgid "Select option to copy"
 msgstr "Sélectionner l'option à copier"
 
-#: src/routes/info/[id]/+page.svelte
+#: src/feature/Image/Share/ShareCard.svelte
 msgid "Quick"
 msgstr "Rapide"
 
-#: src/routes/info/[id]/+page.svelte
+#: src/feature/Image/Share/ShareCard.svelte
 msgid "Output Format"
 msgstr "Format de sortie"
 

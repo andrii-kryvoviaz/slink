@@ -66,6 +66,8 @@ class CollectionView extends AbstractView {
     return $this->user;
   }
 
+  #[Groups(['public'])]
+  #[SerializedName('userId')]
   public function getUserId(): string {
     return $this->user->getUuid();
   }

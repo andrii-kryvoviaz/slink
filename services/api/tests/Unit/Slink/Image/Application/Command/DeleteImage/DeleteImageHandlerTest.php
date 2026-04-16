@@ -13,6 +13,7 @@ use Slink\Image\Domain\Image;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final class DeleteImageHandlerTest extends TestCase {
@@ -26,13 +27,17 @@ final class DeleteImageHandlerTest extends TestCase {
     $command = new DeleteImageCommand(false);
 
     $image = $this->createMock(Image::class);
+    $image->method('aggregateRootVersion')->willReturn(1);
     $image->expects($this->once())->method('delete')->with($this->isInstanceOf(ID::class), false);
 
     $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);
     $imageRepository->expects($this->once())->method('store')->with($image);
 
-    $handler = new DeleteImageHandler($imageRepository);
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
+    $access->method('isGranted')->willReturn(true);
+
+    $handler = new DeleteImageHandler($imageRepository, $access);
     $handler($command, $userId, '123');
   }
 
@@ -42,13 +47,17 @@ final class DeleteImageHandlerTest extends TestCase {
     $command = new DeleteImageCommand(true);
 
     $image = $this->createMock(Image::class);
+    $image->method('aggregateRootVersion')->willReturn(1);
     $image->expects($this->once())->method('delete')->with($this->isInstanceOf(ID::class), true);
 
     $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);
     $imageRepository->expects($this->once())->method('store')->with($image);
 
-    $handler = new DeleteImageHandler($imageRepository);
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
+    $access->method('isGranted')->willReturn(true);
+
+    $handler = new DeleteImageHandler($imageRepository, $access);
     $handler($command, $userId, '123');
   }
 
@@ -60,12 +69,14 @@ final class DeleteImageHandlerTest extends TestCase {
     $command = new DeleteImageCommand(false);
 
     $image = $this->createStub(Image::class);
-    $image->method('delete')->willThrowException(new NotFoundException());
+    $image->method('aggregateRootVersion')->willReturn(0);
 
     $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);
 
-    $handler = new DeleteImageHandler($imageRepository);
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
+
+    $handler = new DeleteImageHandler($imageRepository, $access);
     $handler($command, $userId, '123');
   }
 
@@ -77,12 +88,14 @@ final class DeleteImageHandlerTest extends TestCase {
     $command = new DeleteImageCommand(false);
 
     $image = $this->createStub(Image::class);
-    $image->method('delete')->willThrowException(new NotFoundException());
+    $image->method('aggregateRootVersion')->willReturn(0);
 
     $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);
 
-    $handler = new DeleteImageHandler($imageRepository);
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
+
+    $handler = new DeleteImageHandler($imageRepository, $access);
     $handler($command, $userId, '123');
   }
 
@@ -93,12 +106,15 @@ final class DeleteImageHandlerTest extends TestCase {
     $command = new DeleteImageCommand(false);
 
     $image = $this->createStub(Image::class);
-    $image->method('delete')->willThrowException(new AccessDeniedException());
+    $image->method('aggregateRootVersion')->willReturn(1);
 
     $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);
 
-    $handler = new DeleteImageHandler($imageRepository);
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
+    $access->method('isGranted')->willReturn(false);
+
+    $handler = new DeleteImageHandler($imageRepository, $access);
     $handler($command, '', '123');
   }
 
@@ -110,12 +126,15 @@ final class DeleteImageHandlerTest extends TestCase {
     $command = new DeleteImageCommand(false);
 
     $image = $this->createStub(Image::class);
-    $image->method('delete')->willThrowException(new AccessDeniedException());
+    $image->method('aggregateRootVersion')->willReturn(1);
 
     $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);
 
-    $handler = new DeleteImageHandler($imageRepository);
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
+    $access->method('isGranted')->willReturn(false);
+
+    $handler = new DeleteImageHandler($imageRepository, $access);
     $handler($command, $userId, '123');
   }
 
@@ -127,12 +146,15 @@ final class DeleteImageHandlerTest extends TestCase {
     $command = new DeleteImageCommand(false);
 
     $image = $this->createStub(Image::class);
-    $image->method('delete')->willThrowException(new AccessDeniedException());
+    $image->method('aggregateRootVersion')->willReturn(1);
 
     $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);
 
-    $handler = new DeleteImageHandler($imageRepository);
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
+    $access->method('isGranted')->willReturn(false);
+
+    $handler = new DeleteImageHandler($imageRepository, $access);
     $handler($command, $userId, '123');
   }
 }

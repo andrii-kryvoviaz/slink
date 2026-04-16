@@ -17,6 +17,7 @@ use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\User\Infrastructure\Auth\JwtUser;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class UpdateImageHandlerTest extends TestCase {
   /**
@@ -27,10 +28,10 @@ final class UpdateImageHandlerTest extends TestCase {
   public function itHandlesUpdateImageCommand(): void {
     $userId = '123e4567-e89b-12d3-a456-426614174000';
     $command = new UpdateImageCommand( 'New Description', true);
-    
+
     $user = $this->createStub(JwtUser::class);
     $user->method('getIdentifier')->willReturn($userId);
-    
+
     $imageUserId = ID::fromString($userId);
     $image = $this->createMock(Image::class);
     $attributes = $this->createStub(ImageAttributes::class);
@@ -38,23 +39,26 @@ final class UpdateImageHandlerTest extends TestCase {
     $image->method('aggregateRootVersion')->willReturn(1);
     $image->method('getUserId')->willReturn($imageUserId);
     $image->expects($this->once())->method('updateAttributes');
-    
+
     $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);
     $imageRepository->expects($this->once())->method('store')->with($image);
-    
+
     $configurationProvider = $this->createStub(ConfigurationProviderInterface::class);
-    
-    $handler = new UpdateImageHandler($configurationProvider, $imageRepository);
+
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
+    $access->method('isGranted')->willReturn(true);
+
+    $handler = new UpdateImageHandler($configurationProvider, $imageRepository, $access);
     $handler($command, $user, '123');
   }
 
   #[Test]
   public function itThrowsAccessDeniedForGuestUser(): void {
     $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
-    
+
     $command = new UpdateImageCommand('New Description', true);
-    
+
     $image = $this->createStub(Image::class);
     $image->method('aggregateRootVersion')->willReturn(1);
 
@@ -63,21 +67,24 @@ final class UpdateImageHandlerTest extends TestCase {
 
     $configurationProvider = $this->createStub(ConfigurationProviderInterface::class);
 
-    $handler = new UpdateImageHandler($configurationProvider, $imageRepository);
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
+    $access->method('isGranted')->willReturn(false);
+
+    $handler = new UpdateImageHandler($configurationProvider, $imageRepository, $access);
     $handler($command, null, '123');
   }
 
   #[Test]
   public function itThrowsAccessDeniedForDifferentUser(): void {
     $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
-    
+
     $userId = '123e4567-e89b-12d3-a456-426614174000';
     $differentUserId = '987e6543-e21b-34c5-b654-321098765432';
     $command = new UpdateImageCommand('New Description', true);
-    
+
     $user = $this->createStub(JwtUser::class);
     $user->method('getIdentifier')->willReturn($userId);
-    
+
     $imageUserId = ID::fromString($differentUserId);
     $image = $this->createStub(Image::class);
     $image->method('aggregateRootVersion')->willReturn(1);
@@ -88,20 +95,23 @@ final class UpdateImageHandlerTest extends TestCase {
 
     $configurationProvider = $this->createStub(ConfigurationProviderInterface::class);
 
-    $handler = new UpdateImageHandler($configurationProvider, $imageRepository);
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
+    $access->method('isGranted')->willReturn(false);
+
+    $handler = new UpdateImageHandler($configurationProvider, $imageRepository, $access);
     $handler($command, $user, '123');
   }
 
   #[Test]
   public function itThrowsAccessDeniedForImageWithNullUserId(): void {
     $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
-    
+
     $userId = '123e4567-e89b-12d3-a456-426614174000';
     $command = new UpdateImageCommand('New Description', true);
-    
+
     $user = $this->createStub(JwtUser::class);
     $user->method('getIdentifier')->willReturn($userId);
-    
+
     $image = $this->createStub(Image::class);
     $image->method('aggregateRootVersion')->willReturn(1);
     $image->method('getUserId')->willReturn(null);
@@ -111,7 +121,10 @@ final class UpdateImageHandlerTest extends TestCase {
 
     $configurationProvider = $this->createStub(ConfigurationProviderInterface::class);
 
-    $handler = new UpdateImageHandler($configurationProvider, $imageRepository);
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
+    $access->method('isGranted')->willReturn(false);
+
+    $handler = new UpdateImageHandler($configurationProvider, $imageRepository, $access);
     $handler($command, $user, '123');
   }
 }

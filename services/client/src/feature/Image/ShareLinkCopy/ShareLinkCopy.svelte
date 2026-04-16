@@ -93,11 +93,11 @@
     formats.find((f) => f.id === selectedFormat) || formats[0];
 
   const resolveUrl = async (): Promise<string> => {
-    if (shareUrl) return shareUrl;
     if (onBeforeCopy) {
       const result = await onBeforeCopy();
       if (result) return result;
     }
+    if (shareUrl) return shareUrl;
     return value;
   };
 

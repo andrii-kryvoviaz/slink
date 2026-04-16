@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Collection\Application\Command\DeleteCollection;
 
+use Slink\Collection\Domain\Enum\CollectionAccess;
 use Slink\Collection\Domain\Enum\ItemType;
 use Slink\Collection\Domain\Exception\CollectionAccessDeniedException;
 use Slink\Collection\Domain\Repository\CollectionStoreRepositoryInterface;
@@ -12,19 +13,21 @@ use Slink\Shared\Application\Command\CommandBusInterface;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final readonly class DeleteCollectionHandler implements CommandHandlerInterface {
   public function __construct(
     private CollectionStoreRepositoryInterface $collectionStore,
     private CommandBusInterface $commandBus,
+    private AuthorizationCheckerInterface $access,
   ) {
   }
 
   public function __invoke(DeleteCollectionCommand $command, string $userId): void {
     $collection = $this->collectionStore->get(ID::fromString($command->getId()));
 
-    if (!$collection->isOwnedBy(ID::fromString($userId))) {
+    if (!$this->access->isGranted(CollectionAccess::Delete, $collection)) {
       throw new CollectionAccessDeniedException();
     }
 

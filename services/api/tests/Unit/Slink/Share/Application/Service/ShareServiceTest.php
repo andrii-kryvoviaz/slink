@@ -13,6 +13,7 @@ use Slink\Share\Domain\Service\ShareFeatureHandlerInterface;
 use Slink\Share\Domain\Share;
 use Slink\Share\Domain\ValueObject\ShareableReference;
 use Slink\Share\Domain\ValueObject\ShareContext;
+use Slink\Share\Domain\ValueObject\TargetPath;
 use Slink\Share\Infrastructure\ReadModel\View\ShareView;
 use Slink\Share\Infrastructure\ReadModel\View\ShortUrlView;
 use Slink\Shared\Domain\ValueObject\ID;
@@ -71,7 +72,7 @@ final class ShareServiceTest extends TestCase {
     $shareView = $this->createStub(ShareView::class);
     $shareView->method('getShortUrl')->willReturn($shortUrlView);
     $shareView->method('getShareable')->willReturn($shareable);
-    $shareView->method('getTargetUrl')->willReturn('/image/test.jpg');
+    $shareView->method('getTargetPath')->willReturn('/image/test.jpg');
 
     $service = new ShareService(self::ORIGIN, [$this->createSupportingHandler()]);
 
@@ -87,7 +88,7 @@ final class ShareServiceTest extends TestCase {
     $share = $this->createStub(Share::class);
     $share->method('getShortCode')->willReturn('col123');
     $share->method('getShareable')->willReturn($shareable);
-    $share->method('getTargetUrl')->willReturn('/collection/test');
+    $share->method('getTargetPath')->willReturn(TargetPath::fromString('/collection/test'));
 
     $service = new ShareService(self::ORIGIN, [$this->createSupportingHandler()]);
 
@@ -103,7 +104,7 @@ final class ShareServiceTest extends TestCase {
     $shareView = $this->createStub(ShareView::class);
     $shareView->method('getShortUrl')->willReturn(null);
     $shareView->method('getShareable')->willReturn($shareable);
-    $shareView->method('getTargetUrl')->willReturn('/image/test.jpg');
+    $shareView->method('getTargetPath')->willReturn('/image/test.jpg');
 
     $service = new ShareService(self::ORIGIN, []);
 

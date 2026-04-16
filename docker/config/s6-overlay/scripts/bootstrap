@@ -9,6 +9,8 @@ slink slink:database:init --no-interaction --connection=read_model
 slink doctrine:migrations:migrate --no-interaction --configuration=/services/api/config/migrations/event_store.yaml --em=event_store
 slink doctrine:migrations:migrate --no-interaction --em=read_model
 
+slink data:migrate --no-interaction
+
 if [ "${SKIP_HASH_CALCULATION:-false}" != "true" ]; then
   timeout 300 slink image:calculate-missing-hashes --no-interaction || echo "[system:init] Hash calculation timed out or failed"
 fi

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Slink\Share\Infrastructure\ReadModel\Projection;
 
 use Slink\Share\Domain\Event\ShareWasCreated;
+use Slink\Share\Domain\Event\ShareWasPublished;
 use Slink\Share\Domain\Event\ShortUrlWasAdded;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
 use Slink\Share\Domain\Repository\ShortUrlRepositoryInterface;
@@ -23,8 +24,9 @@ final class ShareProjection extends AbstractProjection {
     $share = new ShareView(
       $event->id->toString(),
       $event->shareable,
-      $event->targetUrl,
+      $event->targetPath->toString(),
       $event->createdAt,
+      $event->isPublished,
     );
 
     $this->shareRepository->add($share);
@@ -32,6 +34,16 @@ final class ShareProjection extends AbstractProjection {
     if ($event->context->hasShortUrl()) {
       $this->createShortUrl($share, $event->context->getShortUrlId()?->toString(), $event->context->getShortCode());
     }
+  }
+
+  public function handleShareWasPublished(ShareWasPublished $event): void {
+    $share = $this->shareRepository->findById($event->shareId->toString());
+
+    if ($share === null) {
+      return;
+    }
+
+    $share->setIsPublished(true);
   }
 
   public function handleShortUrlWasAdded(ShortUrlWasAdded $event): void {

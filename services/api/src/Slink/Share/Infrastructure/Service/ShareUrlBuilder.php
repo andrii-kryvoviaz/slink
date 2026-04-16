@@ -6,6 +6,7 @@ namespace Slink\Share\Infrastructure\Service;
 
 use Slink\Image\Domain\Service\ImageUrlSignatureInterface;
 use Slink\Share\Domain\Service\ShareUrlBuilderInterface;
+use Slink\Share\Domain\ValueObject\TargetPath;
 
 final readonly class ShareUrlBuilder implements ShareUrlBuilderInterface {
   public function __construct(
@@ -13,26 +14,26 @@ final readonly class ShareUrlBuilder implements ShareUrlBuilderInterface {
   ) {
   }
 
-  public function buildTargetUrl(string $imageId, string $fileName, ?int $width, ?int $height, bool $crop, ?string $format = null, ?string $filter = null): string {
-    $targetFileName = $format && $format !== 'original' 
-      ? $this->applyFormat($fileName, $format) 
+  public function buildTargetPath(string $imageId, string $fileName, ?int $width, ?int $height, bool $crop, ?string $format = null, ?string $filter = null): TargetPath {
+    $targetFileName = $format && $format !== 'original'
+      ? $this->applyFormat($fileName, $format)
       : $fileName;
     $params = $this->buildParams($width, $height, $crop, $filter);
     $url = "/image/{$targetFileName}";
 
     if (empty($params)) {
-      return $url;
+      return TargetPath::fromString($url);
     }
 
     $signature = $this->signatureService->sign($imageId, $params);
     $queryParams = [...$params, 's' => $signature];
 
-    return "{$url}?" . http_build_query($queryParams);
+    return TargetPath::fromString("{$url}?" . http_build_query($queryParams));
   }
 
   private function applyFormat(string $fileName, string $format): string {
     $baseName = pathinfo($fileName, PATHINFO_FILENAME);
-    
+
     return "{$baseName}.{$format}";
   }
 

@@ -7,6 +7,7 @@ namespace Slink\Share\Infrastructure\ReadModel\Repository;
 use Override;
 use Slink\Share\Domain\Enum\ShareableType;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
+use Slink\Share\Domain\ValueObject\TargetPath;
 use Slink\Share\Infrastructure\ReadModel\View\ShareView;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractRepository;
 
@@ -36,10 +37,10 @@ final class ShareRepository extends AbstractRepository implements ShareRepositor
   }
 
   #[Override]
-  public function findByTargetUrl(string $targetUrl): ?ShareView {
+  public function findByTargetPath(TargetPath $targetPath): ?ShareView {
     return $this->createQueryBuilder('s')
       ->where('s.targetUrl = :targetUrl')
-      ->setParameter('targetUrl', $targetUrl)
+      ->setParameter('targetUrl', $targetPath->toString())
       ->getQuery()
       ->getOneOrNullResult();
   }
@@ -66,5 +67,26 @@ final class ShareRepository extends AbstractRepository implements ShareRepositor
       ->setParameter('shareableType', $shareableType)
       ->getQuery()
       ->execute();
+  }
+
+  #[Override]
+  public function findAllByShareable(string $shareableId, ShareableType $shareableType): array {
+    return $this->createQueryBuilder('s')
+      ->where('s.shareable.shareableId = :shareableId')
+      ->andWhere('s.shareable.shareableType = :shareableType')
+      ->setParameter('shareableId', $shareableId)
+      ->setParameter('shareableType', $shareableType)
+      ->orderBy('s.createdAt', 'DESC')
+      ->getQuery()
+      ->getResult();
+  }
+
+  #[Override]
+  public function findAllUnpublished(): array {
+    return $this->createQueryBuilder('s')
+      ->where('s.isPublished = :isPublished')
+      ->setParameter('isPublished', false)
+      ->getQuery()
+      ->getResult();
   }
 }

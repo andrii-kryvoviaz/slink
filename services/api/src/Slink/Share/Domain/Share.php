@@ -7,18 +7,21 @@ namespace Slink\Share\Domain;
 use EventSauce\EventSourcing\AggregateRootId;
 use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use Slink\Share\Domain\Event\ShareWasCreated;
+use Slink\Share\Domain\Event\ShareWasPublished;
 use Slink\Share\Domain\Event\ShortUrlWasAdded;
 use Slink\Share\Domain\ValueObject\ShareableReference;
 use Slink\Share\Domain\ValueObject\ShareContext;
+use Slink\Share\Domain\ValueObject\TargetPath;
 use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
 
 final class Share extends AbstractAggregateRoot {
   private ShareableReference $shareable;
-  private string $targetUrl;
+  private TargetPath $targetPath;
   private DateTime $createdAt;
   private ShareContext $context;
+  private bool $isPublished = false;
 
   protected function __construct(ID $id) {
     parent::__construct($id);
@@ -27,7 +30,7 @@ final class Share extends AbstractAggregateRoot {
   public static function create(
     ID $id,
     ShareableReference $shareable,
-    string $targetUrl,
+    TargetPath $targetPath,
     DateTime $createdAt,
     ShareContext $context,
   ): self {
@@ -35,9 +38,10 @@ final class Share extends AbstractAggregateRoot {
     $share->recordThat(new ShareWasCreated(
       $id,
       $shareable,
-      $targetUrl,
+      $targetPath,
       $createdAt,
       $context,
+      $shareable->getShareableType()->autoPublishOnCreate(),
     ));
 
     return $share;
@@ -57,13 +61,30 @@ final class Share extends AbstractAggregateRoot {
 
   protected function applyShareWasCreated(ShareWasCreated $event): void {
     $this->shareable = $event->shareable;
-    $this->targetUrl = $event->targetUrl;
+    $this->targetPath = $event->targetPath;
     $this->createdAt = $event->createdAt;
     $this->context = $event->context;
+    $this->isPublished = $event->isPublished;
   }
 
   protected function applyShortUrlWasAdded(ShortUrlWasAdded $event): void {
     $this->context = $this->context->withShortUrl($event->shortUrlId, $event->shortCode);
+  }
+
+  public function publish(): void {
+    if ($this->isPublished) {
+      return;
+    }
+
+    $this->recordThat(new ShareWasPublished($this->aggregateRootId()));
+  }
+
+  protected function applyShareWasPublished(ShareWasPublished $event): void {
+    $this->isPublished = true;
+  }
+
+  public function isPublished(): bool {
+    return $this->isPublished;
   }
 
   public function getShareable(): ShareableReference {
@@ -74,8 +95,8 @@ final class Share extends AbstractAggregateRoot {
     return $this->shareable->getShareableId();
   }
 
-  public function getTargetUrl(): string {
-    return $this->targetUrl;
+  public function getTargetPath(): TargetPath {
+    return $this->targetPath;
   }
 
   public function getCreatedAt(): DateTime {
@@ -96,9 +117,10 @@ final class Share extends AbstractAggregateRoot {
   protected function createSnapshotState(): array {
     return [
       'shareable' => $this->shareable->toPayload(),
-      'targetUrl' => $this->targetUrl,
+      'targetUrl' => $this->targetPath->toString(),
       'createdAt' => $this->createdAt->toString(),
       'context' => $this->context->toPayload(),
+      'isPublished' => $this->isPublished,
     ];
   }
 
@@ -114,9 +136,10 @@ final class Share extends AbstractAggregateRoot {
       $share->shareable = ShareableReference::fromPayload($state['shareable']);
     }
 
-    $share->targetUrl = $state['targetUrl'];
+    $share->targetPath = TargetPath::fromString($state['targetUrl']);
     $share->createdAt = DateTime::fromString($state['createdAt']);
     $share->context = ShareContext::fromPayload($state['context'] ?? [], $share->shareable);
+    $share->isPublished = $state['isPublished'] ?? false;
 
     return $share;
   }

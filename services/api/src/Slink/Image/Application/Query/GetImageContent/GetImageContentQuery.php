@@ -5,53 +5,36 @@ declare(strict_types=1);
 namespace Slink\Image\Application\Query\GetImageContent;
 
 use Slink\Shared\Application\Query\QueryInterface;
-use Slink\Shared\Domain\ValueObject\ImageOptions;
 use Slink\Shared\Infrastructure\MessageBus\EnvelopedMessage;
 
 final readonly class GetImageContentQuery implements QueryInterface {
   use EnvelopedMessage;
-  
-  /**
-   * @param int|null $width
-   * @param int|null $height
-   * @param int|null $quality
-   * @param bool $crop
-   * @param string|null $format
-   */
+
   public function __construct(
     private ?int $width = null,
     private ?int $height = null,
     private ?int $quality = null,
     private bool $crop = false,
     private ?string $format = null,
-    private ?string $filter = null
+    private ?string $filter = null,
+    private ?string $s = null,
+    private ?string $collection = null,
+    private ?string $cs = null,
   ) {
   }
-  
-  /**
-   * @return int|null
-   */
+
   public function getWidth(): ?int {
     return $this->width;
   }
-  
-  /**
-   * @return int|null
-   */
+
   public function getHeight(): ?int {
     return $this->height;
   }
-  
-  /**
-   * @return int|null
-   */
+
   public function getQuality(): ?int {
     return $this->quality;
   }
-  
-  /**
-   * @return bool
-   */
+
   public function isCropped(): bool {
     return $this->crop;
   }
@@ -64,6 +47,38 @@ final readonly class GetImageContentQuery implements QueryInterface {
     return $this->filter;
   }
 
+  public function getTransformSignature(): ?string {
+    return $this->s;
+  }
+
+  public function getScopeCollectionId(): ?string {
+    return $this->collection;
+  }
+
+  public function getScopeSignature(): ?string {
+    return $this->cs;
+  }
+
+  public function hasTransformParams(): bool {
+    if ($this->width !== null) {
+      return true;
+    }
+
+    if ($this->height !== null) {
+      return true;
+    }
+
+    if ($this->crop) {
+      return true;
+    }
+
+    if ($this->filter !== null) {
+      return true;
+    }
+
+    return false;
+  }
+
   public function withFormat(?string $format): self {
     return new self(
       $this->width,
@@ -71,10 +86,27 @@ final readonly class GetImageContentQuery implements QueryInterface {
       $this->quality,
       $this->crop,
       $format,
-      $this->filter
+      $this->filter,
+      $this->s,
+      $this->collection,
+      $this->cs,
     );
   }
-  
+
+  public function withoutTransformParams(): self {
+    return new self(
+      null,
+      null,
+      null,
+      false,
+      $this->format,
+      null,
+      null,
+      $this->collection,
+      $this->cs,
+    );
+  }
+
   /**
    * @return array<string, mixed>
    */
@@ -86,5 +118,17 @@ final readonly class GetImageContentQuery implements QueryInterface {
       'crop' => $this->crop,
       'filter' => $this->filter,
     ];
+  }
+
+  /**
+   * @return array<string, int|bool|string>
+   */
+  public function getSignedTransformParams(): array {
+    return array_filter([
+      'width' => $this->width,
+      'height' => $this->height,
+      'crop' => $this->crop,
+      'filter' => $this->filter,
+    ], fn($value) => $value !== null && $value !== false);
   }
 }
