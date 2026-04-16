@@ -182,14 +182,39 @@
       shareUrl = undefined;
       return;
     }
-
     const response = $shareImageData;
     if (!response) {
       return;
     }
-
     shareUrl = routes.share.fromResponse(response);
   });
+
+  const handleBeforeCopy = async (): Promise<string | void> => {
+    let shareData = $shareImageData;
+
+    if (!shareData) {
+      await shareImage(image.id, {
+        ...unsignedParams,
+        format: selectedFormat,
+        filter: selectedFilter === 'none' ? undefined : selectedFilter,
+      });
+
+      if ($shareImageError) {
+        printErrorsAsToastMessage($shareImageError);
+        return;
+      }
+
+      if (!$shareImageData) {
+        return;
+      }
+
+      shareData = $shareImageData;
+    }
+
+    await ApiClient.image.publishShare(shareData.shareId);
+
+    return routes.share.fromResponse(shareData);
+  };
 
   const handleImageSizeChange = (value?: Partial<ImageParams>) => {
     unsignedParams = value ?? {};
@@ -432,6 +457,7 @@
           {shareUrl}
           imageAlt={image.id}
           isLoading={$isSharingImage}
+          onBeforeCopy={handleBeforeCopy}
         />
       </div>
     </div>

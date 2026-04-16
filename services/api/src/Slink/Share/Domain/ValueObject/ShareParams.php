@@ -9,7 +9,7 @@ use Slink\Shared\Domain\ValueObject\AbstractValueObject;
 final readonly class ShareParams extends AbstractValueObject {
   private function __construct(
     private ShareableReference $shareable,
-    private string $targetPath,
+    private TargetPath $targetPath,
   ) {}
 
   public static function fromShareable(ShareableReference $shareable): self {
@@ -19,7 +19,7 @@ final readonly class ShareParams extends AbstractValueObject {
     );
   }
 
-  public static function withTargetPath(ShareableReference $shareable, string $targetPath): self {
+  public static function withTargetPath(ShareableReference $shareable, TargetPath $targetPath): self {
     return new self($shareable, $targetPath);
   }
 
@@ -27,7 +27,7 @@ final readonly class ShareParams extends AbstractValueObject {
     return $this->shareable;
   }
 
-  public function getTargetPath(): string {
+  public function getTargetPath(): TargetPath {
     return $this->targetPath;
   }
 }

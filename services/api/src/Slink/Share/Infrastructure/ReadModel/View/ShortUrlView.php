@@ -45,7 +45,7 @@ class ShortUrlView extends AbstractView {
     return $this->shortCode;
   }
 
-  public function getTargetUrl(): string {
-    return $this->share->getTargetUrl();
+  public function getTargetPath(): string {
+    return $this->share->getTargetPath();
   }
 }

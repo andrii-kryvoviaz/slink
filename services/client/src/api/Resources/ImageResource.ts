@@ -227,6 +227,10 @@ export class ImageResource extends AbstractResource {
     return this.get(`/image/${id}/share?${searchParams.toString()}`);
   }
 
+  public async publishShare(shareId: string): Promise<void> {
+    return this.put(`/share/${shareId}/publish`);
+  }
+
   public async getLicenses(): Promise<{ licenses: License[] }> {
     return this.get('/licenses');
   }

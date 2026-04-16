@@ -28,6 +28,9 @@ class ShareView extends AbstractView {
   #[ORM\Column(type: 'datetime_immutable')]
   private DateTime $createdAt;
 
+  #[ORM\Column(type: 'boolean', options: ['default' => false])]
+  private bool $isPublished = false;
+
   #[ORM\OneToOne(mappedBy: 'share', targetEntity: ShortUrlView::class, cascade: ['persist', 'remove'])]
   private ?ShortUrlView $shortUrl = null;
 
@@ -36,11 +39,13 @@ class ShareView extends AbstractView {
     ShareableReference $shareable,
     string $targetUrl,
     DateTime $createdAt,
+    bool $isPublished = false,
   ) {
     $this->uuid = $uuid;
     $this->shareable = $shareable;
     $this->targetUrl = $targetUrl;
     $this->createdAt = $createdAt;
+    $this->isPublished = $isPublished;
   }
 
   public function getId(): string {
@@ -55,12 +60,20 @@ class ShareView extends AbstractView {
     return $this->shareable->getShareableId();
   }
 
-  public function getTargetUrl(): string {
+  public function getTargetPath(): string {
     return $this->targetUrl;
   }
 
   public function getCreatedAt(): DateTime {
     return $this->createdAt;
+  }
+
+  public function isPublished(): bool {
+    return $this->isPublished;
+  }
+
+  public function setIsPublished(bool $isPublished): void {
+    $this->isPublished = $isPublished;
   }
 
   public function getShortUrl(): ?ShortUrlView {

@@ -32,12 +32,12 @@ final readonly class ShortUrlController {
     }
 
     $share = $shortUrl->getShare();
-    $targetUrl = $share->getTargetUrl();
+    $targetPath = $share->getTargetPath();
 
-    if (str_starts_with($targetUrl, '/')) {
-      $targetUrl = $this->origin . $targetUrl;
+    if (str_starts_with($targetPath, '/')) {
+      $targetPath = $this->origin . $targetPath;
     }
 
-    return new RedirectResponse($targetUrl, Response::HTTP_FOUND);
+    return new RedirectResponse($targetPath, Response::HTTP_FOUND);
   }
 }
