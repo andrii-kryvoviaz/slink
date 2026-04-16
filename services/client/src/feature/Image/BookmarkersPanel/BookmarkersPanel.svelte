@@ -2,6 +2,7 @@
   import { ApiClient } from '@slink/api';
   import { UserAvatar } from '@slink/feature/User';
 
+  import { plural } from '$lib/utils/i18n';
   import Icon from '@iconify/svelte';
   import { slide } from 'svelte/transition';
 
@@ -43,7 +44,6 @@
   let totalPages = $state(1);
   let cursor = $state<string | undefined>(undefined);
 
-  const label = $derived(count === 1 ? 'time' : 'times');
   const currentPageItems = $derived(pages.get(currentPage) ?? []);
   const hasPrev = $derived(currentPage > 1);
   const hasNext = $derived(currentPage < totalPages);
@@ -113,7 +113,9 @@
       </div>
       <div class="flex flex-col min-w-0 flex-1 text-left">
         <span class={bookmarkersPanelLabelTheme()}>Bookmarked</span>
-        <span class={bookmarkersPanelValueTheme()}>{count} {label}</span>
+        <span class={bookmarkersPanelValueTheme()}
+          >{plural(count, ['# time', '# times'])}</span
+        >
       </div>
       {#if $isLoading && pages.size === 0}
         <Icon

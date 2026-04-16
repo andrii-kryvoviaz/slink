@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { getLicenseLabels } from '@slink/feature/Image';
   import { Loader } from '@slink/feature/Layout';
   import { SettingItem } from '@slink/feature/Settings';
   import { Notice, Subtitle, Title } from '@slink/feature/Text';
@@ -83,8 +84,12 @@
   const licenseOptions = $derived(
     licenses.map((license) => ({
       value: license.id,
-      label: license.title,
+      label: getLicenseLabels(license.id).title,
     })),
+  );
+
+  const selectedLicenseLabels = $derived(
+    selectedLicenseInfo ? getLicenseLabels(selectedLicenseInfo.id) : null,
   );
 </script>
 
@@ -232,7 +237,7 @@
                 This license will be automatically applied to new uploads
               {/snippet}
               {#snippet footer()}
-                {#if selectedLicenseInfo}
+                {#if selectedLicenseInfo && selectedLicenseLabels}
                   <Notice
                     variant="info"
                     appearance="subtle"
@@ -242,9 +247,9 @@
                     <div class="flex gap-3">
                       <Icon icon="ph:scales" class="w-4 h-4 shrink-0 mt-0.5" />
                       <div class="space-y-1">
-                        <p class="font-medium">{selectedLicenseInfo.title}</p>
+                        <p class="font-medium">{selectedLicenseLabels.title}</p>
                         <p class="text-xs opacity-75">
-                          {selectedLicenseInfo.description}
+                          {selectedLicenseLabels.description}
                         </p>
                         {#if selectedLicenseInfo.url}
                           <a

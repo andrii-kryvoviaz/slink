@@ -56,6 +56,7 @@ export { default as LicenseCard } from './License/LicenseCard.svelte';
 export * from './License/LicenseCardState.svelte';
 export { default as LicenseInfo } from './License/LicenseInfo.svelte';
 export * from './License/LicenseInfo.theme';
+export * from './License/license.language';
 export { default as ImagePlaceholder } from './Placeholder/ImagePlaceholder.svelte';
 export * from './Placeholder/ImagePlaceholder.theme';
 export { default as CommentsSkeleton } from './PostViewer/CommentsSkeleton.svelte';

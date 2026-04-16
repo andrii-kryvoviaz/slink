@@ -74,6 +74,17 @@
 
   const visibleButtons = $derived(actions.filterVisibleButtons(buttons));
 
+  const copyTooltip = $derived.by(() => {
+    if (actions.shareIsLoading) return 'Generating...';
+    if (actions.isCopied.active) return 'Copied!';
+    return 'Copy URL';
+  });
+
+  const visibilityTooltip = $derived.by(() => {
+    if (image.isPublic) return 'Make private';
+    return 'Make public';
+  });
+
   const getPosition = (index: number, total: number): ButtonPosition => {
     if (total === 1) return 'only';
     if (index === 0) return 'first';
@@ -151,9 +162,9 @@
     class={actionButtonVariants({ layout })}
     onclick={actions.handleVisibilityChange}
     disabled={actions.visibilityIsLoading}
-    aria-label={actions.visibilityTooltip}
+    aria-label={visibilityTooltip}
     aria-pressed={image.isPublic}
-    tooltip={actions.visibilityTooltip}
+    tooltip={visibilityTooltip}
   >
     {@render loaderOrIcon(actions.visibilityIcon, actions.visibilityIsLoading)}
   </ButtonGroupItem>
@@ -168,7 +179,7 @@
     onclick={actions.handleCopy}
     disabled={actions.shareIsLoading || actions.isCopied.active}
     aria-label="Copy image URL"
-    tooltip={actions.copyTooltip}
+    tooltip={copyTooltip}
   >
     {@render copyIconContent()}
   </ButtonGroupItem>

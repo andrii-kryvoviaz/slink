@@ -12,6 +12,7 @@
     licenseInfoIconTheme,
     licenseInfoLabelTheme,
   } from './LicenseInfo.theme';
+  import { getLicenseLabels } from './license.language';
 
   interface Props {
     license: LicenseType;
@@ -20,6 +21,8 @@
   }
 
   let { license, size = 'md', variant = 'overlay' }: Props = $props();
+
+  const labels = $derived(getLicenseLabels(license.id));
 </script>
 
 {#snippet popoverContent()}
@@ -30,12 +33,12 @@
         class="w-5 h-5 text-current opacity-60 mt-0.5"
       />
       <div>
-        <h4 class="font-semibold text-sm">{license.title}</h4>
-        <p class="text-xs opacity-60 mt-0.5">{license.name}</p>
+        <h4 class="font-semibold text-sm">{labels.title}</h4>
+        <p class="text-xs opacity-60 mt-0.5">{labels.name}</p>
       </div>
     </div>
     <p class="text-sm opacity-80 leading-relaxed">
-      {license.description}
+      {labels.description}
     </p>
     {#if license.url}
       <a
@@ -58,7 +61,7 @@
       <span
         class="underline underline-offset-2 decoration-white/40 hover:decoration-white/80 hover:text-white/80 transition-colors cursor-pointer"
       >
-        {license.title}
+        {labels.title}
       </span>
     </span>
   {:else}
@@ -68,7 +71,7 @@
         class={licenseInfoIconTheme({ variant, size })}
       />
       <span class={licenseInfoLabelTheme({ variant, size })}
-        >{license.title}</span
+        >{labels.title}</span
       >
     </span>
   {/if}

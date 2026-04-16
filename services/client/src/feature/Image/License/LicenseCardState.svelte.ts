@@ -7,6 +7,8 @@ import { ReactiveState } from '@slink/api/ReactiveState';
 
 import type { License } from '@slink/lib/enum/License';
 
+import { getLicenseLabels } from './license.language';
+
 export interface LicenseCardImage {
   id: string;
   license?: string | null;
@@ -40,7 +42,7 @@ export class LicenseCardState {
   readonly licenseOptions = $derived.by(() =>
     this.licenses.map((license) => ({
       value: license.id,
-      label: license.title,
+      label: getLicenseLabels(license.id).title,
     })),
   );
 

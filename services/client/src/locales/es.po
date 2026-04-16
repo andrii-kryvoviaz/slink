@@ -1142,25 +1142,25 @@ msgstr "Administrar etiquetas"
 msgid "Image actions"
 msgstr "Acciones de imagen"
 
-#: src/feature/Image/ActionBar/useImageActions.svelte.ts
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
 msgid "Generating..."
 msgstr "Generando..."
 
-#: src/feature/Image/ActionBar/useImageActions.svelte.ts
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Text/CopyableText/CopyableText.svelte
 #: src/feature/Text/CopyableText/CopyableText.svelte
 msgid "Copied!"
 msgstr "¡Copiado!"
 
-#: src/feature/Image/ActionBar/useImageActions.svelte.ts
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
 msgid "Copy URL"
 msgstr "Copiar URL"
 
-#: src/feature/Image/ActionBar/useImageActions.svelte.ts
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
 msgid "Make private"
 msgstr "Hacer privado"
 
-#: src/feature/Image/ActionBar/useImageActions.svelte.ts
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
 msgid "Make public"
 msgstr "Hacer público"
 
@@ -3083,17 +3083,15 @@ msgstr "Las imágenes se comparten en la galería pública y son visibles para t
 msgid "Default"
 msgstr "Predeterminado"
 
-#: src/routes/help/faq/+page.svelte
-msgid "Images are not shared in the public gallery and only accessible by the owner"
-msgstr "Las imágenes no se comparten en la galería pública y solo son accesibles por el propietario"
+#~ msgid "Images are not shared in the public gallery and only accessible by the owner"
+#~ msgstr "Las imágenes no se comparten en la galería pública y solo son accesibles por el propietario"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Important Note"
 msgstr "Nota importante"
 
-#: src/routes/help/faq/+page.svelte
-msgid "Raw images are accessible to anyone with a direct link, regardless of visibility setting."
-msgstr "Las imágenes originales son accesibles para cualquier persona con un enlace directo, independientemente de la configuración de visibilidad."
+#~ msgid "Raw images are accessible to anyone with a direct link, regardless of visibility setting."
+#~ msgstr "Las imágenes originales son accesibles para cualquier persona con un enlace directo, independientemente de la configuración de visibilidad."
 
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "SSO Settings | Slink"
@@ -4185,3 +4183,122 @@ msgstr[1] "# etiquetas más"
 #: src/routes/preferences/+page.svelte
 msgid "日本語"
 msgstr "日本語"
+
+#: src/feature/Image/License/license.language.ts
+#: src/feature/Image/License/license.language.ts
+msgid "All Rights Reserved"
+msgstr "Todos los derechos reservados"
+
+#: src/feature/Image/License/license.language.ts
+msgid "All rights are reserved by the copyright holder. You may not use, copy, or distribute this work without explicit permission."
+msgstr "Todos los derechos están reservados por el titular de los derechos de autor. No puede usar, copiar ni distribuir esta obra sin permiso explícito."
+
+#: src/feature/Image/License/license.language.ts
+msgid "Public Domain"
+msgstr "Dominio público"
+
+#: src/feature/Image/License/license.language.ts
+msgid "Public Domain Work"
+msgstr "Obra de dominio público"
+
+#: src/feature/Image/License/license.language.ts
+msgid "This work is free of known copyright restrictions and can be used without permission."
+msgstr "Esta obra está libre de restricciones conocidas de derechos de autor y puede usarse sin permiso."
+
+#: src/feature/Image/License/license.language.ts
+msgid "CC0"
+msgstr "CC0"
+
+#: src/feature/Image/License/license.language.ts
+msgid "Public Domain Dedication (CC0)"
+msgstr "Dedicación al dominio público (CC0)"
+
+#: src/feature/Image/License/license.language.ts
+msgid "The creator has waived all rights and dedicated this work to the public domain. You can use it for any purpose without restriction."
+msgstr "El creador ha renunciado a todos los derechos y ha dedicado esta obra al dominio público. Puede usarla para cualquier fin sin restricción."
+
+#: src/feature/Image/License/license.language.ts
+msgid "CC BY"
+msgstr "CC BY"
+
+#: src/feature/Image/License/license.language.ts
+msgid "Attribution"
+msgstr "Atribución"
+
+#: src/feature/Image/License/license.language.ts
+msgid "You may distribute, remix, adapt, and build upon this work, even commercially, as long as you credit the creator."
+msgstr "Puede distribuir, remezclar, adaptar y crear a partir de esta obra, incluso con fines comerciales, siempre que acredite al creador."
+
+#: src/feature/Image/License/license.language.ts
+msgid "CC BY-SA"
+msgstr "CC BY-SA"
+
+#: src/feature/Image/License/license.language.ts
+msgid "Attribution-ShareAlike"
+msgstr "Atribución-CompartirIgual"
+
+#: src/feature/Image/License/license.language.ts
+msgid "You may remix, adapt, and build upon this work even commercially, as long as you credit the creator and license new creations under identical terms."
+msgstr "Puede remezclar, adaptar y crear a partir de esta obra, incluso con fines comerciales, siempre que acredite al creador y licencie las nuevas creaciones bajo los mismos términos."
+
+#: src/feature/Image/License/license.language.ts
+msgid "CC BY-NC"
+msgstr "CC BY-NC"
+
+#: src/feature/Image/License/license.language.ts
+msgid "Attribution-NonCommercial"
+msgstr "Atribución-NoComercial"
+
+#: src/feature/Image/License/license.language.ts
+msgid "You may remix, adapt, and build upon this work non-commercially, as long as you credit the creator."
+msgstr "Puede remezclar, adaptar y crear a partir de esta obra de forma no comercial, siempre que acredite al creador."
+
+#: src/feature/Image/License/license.language.ts
+msgid "CC BY-NC-SA"
+msgstr "CC BY-NC-SA"
+
+#: src/feature/Image/License/license.language.ts
+msgid "Attribution-NonCommercial-ShareAlike"
+msgstr "Atribución-NoComercial-CompartirIgual"
+
+#: src/feature/Image/License/license.language.ts
+msgid "You may remix, adapt, and build upon this work non-commercially, as long as you credit the creator and license new creations under identical terms."
+msgstr "Puede remezclar, adaptar y crear a partir de esta obra de forma no comercial, siempre que acredite al creador y licencie las nuevas creaciones bajo los mismos términos."
+
+#: src/feature/Image/License/license.language.ts
+msgid "CC BY-ND"
+msgstr "CC BY-ND"
+
+#: src/feature/Image/License/license.language.ts
+msgid "Attribution-NoDerivs"
+msgstr "Atribución-SinDerivadas"
+
+#: src/feature/Image/License/license.language.ts
+msgid "You may copy and distribute this work, but not adapt it, as long as you credit the creator."
+msgstr "Puede copiar y distribuir esta obra, pero no adaptarla, siempre que acredite al creador."
+
+#: src/feature/Image/License/license.language.ts
+msgid "CC BY-NC-ND"
+msgstr "CC BY-NC-ND"
+
+#: src/feature/Image/License/license.language.ts
+msgid "Attribution-NonCommercial-NoDerivs"
+msgstr "Atribución-NoComercial-SinDerivadas"
+
+#: src/feature/Image/License/license.language.ts
+msgid "You may copy and distribute this work non-commercially, but not adapt it, as long as you credit the creator."
+msgstr "Puede copiar y distribuir esta obra de forma no comercial, pero no adaptarla, siempre que acredite al creador."
+
+#: src/feature/Image/BookmarkersPanel/BookmarkersPanel.svelte
+msgid "# time"
+msgid_plural "# times"
+msgstr[0] "# vez"
+msgstr[1] "# veces"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Images are truly private and only accessible by the owner. To share a private image, use the copy button to create a shared link"
+msgstr ""
+
+#: src/routes/help/faq/+page.svelte
+msgid "Images are private by default and only accessible to the authenticated owner. To share an image with others, use the copy button which creates a shared link."
+msgstr ""

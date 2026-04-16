@@ -87,17 +87,6 @@ export class ImageActionsState {
     page.data.globalSettings?.image?.allowOnlyPublicImages || false,
   );
 
-  readonly copyTooltip: string = $derived.by(() => {
-    if (this._share.isLoading) return 'Generating...';
-    if (this._isCopied.active) return 'Copied!';
-    return 'Copy URL';
-  });
-
-  readonly visibilityTooltip: string = $derived.by(() => {
-    const image = this._config.getImage();
-    return image.isPublic ? 'Make private' : 'Make public';
-  });
-
   readonly visibilityIcon: string = $derived.by(() => {
     const image = this._config.getImage();
     return image.isPublic ? 'lucide:eye' : 'lucide:eye-off';
