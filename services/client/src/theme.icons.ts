@@ -226,4 +226,5 @@ export const themeIcons: string[] = [
   'ph:shield-check',
   'ph:minus-circle',
   'ph:prohibit',
+  'heroicons:chart-bar',
 ];

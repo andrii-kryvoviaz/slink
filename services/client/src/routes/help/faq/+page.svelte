@@ -214,18 +214,20 @@
                     </span>
                   </div>
                   <p class="text-sm text-slate-600 dark:text-slate-400">
-                    Images are not shared in the public gallery and only
-                    accessible by the owner
+                    Images are truly private and only accessible by the owner.
+                    To share a private image, use the copy button to create a
+                    shared link
                   </p>
                 </div>
               </div>
             </div>
           </InfoCard>
 
-          <InfoCard variant="warning" icon="ph:warning" title="Important Note">
+          <InfoCard variant="info" icon="ph:info" title="Important Note">
             <p>
-              Raw images are accessible to anyone with a direct link, regardless
-              of visibility setting.
+              Images are private by default and only accessible to the
+              authenticated owner. To share an image with others, use the copy
+              button which creates a shared link.
             </p>
           </InfoCard>
         </div>
