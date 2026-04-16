@@ -64,18 +64,26 @@
       </div>
     {:else if data}
       <div class="space-y-3">
-        <div class="flex items-center justify-between text-xs">
+        <div
+          class="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 text-xs"
+        >
           <span class="text-sidebar-foreground/60">Provider</span>
           <Badge size="xs" variant="blue">
-            {getProviderDisplayName(data.provider)}
+            <span class="whitespace-nowrap">
+              {getProviderDisplayName(data.provider)}
+            </span>
           </Badge>
         </div>
 
         <div class="space-y-3">
           <div>
-            <div class="flex items-center justify-between text-xs mb-2">
+            <div
+              class="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 text-xs mb-2"
+            >
               <span class="text-sidebar-foreground/60">Total Usage</span>
-              <span class="font-medium text-sidebar-foreground">
+              <span
+                class="font-medium text-sidebar-foreground whitespace-nowrap"
+              >
                 {bytesToSize(data.usedBytes + data.cacheBytes)}
               </span>
             </div>
@@ -102,12 +110,14 @@
             </div>
 
             <div class="space-y-2 mt-3">
-              <div class="flex items-center justify-between text-xs">
-                <div class="flex items-center gap-1.5">
-                  <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+              <div
+                class="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 text-xs"
+              >
+                <div class="flex items-center gap-1.5 min-w-0">
+                  <div class="w-2 h-2 rounded-full bg-blue-500 shrink-0"></div>
                   <span class="text-sidebar-foreground/60">Images</span>
                 </div>
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 whitespace-nowrap">
                   <span class="font-medium text-sidebar-foreground"
                     >{bytesToSize(data.usedBytes)}</span
                   >
@@ -118,12 +128,16 @@
                 </div>
               </div>
               {#if data.cacheBytes > 0}
-                <div class="flex items-center justify-between text-xs">
-                  <div class="flex items-center gap-1.5">
-                    <div class="w-2 h-2 rounded-full bg-purple-500"></div>
+                <div
+                  class="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 text-xs"
+                >
+                  <div class="flex items-center gap-1.5 min-w-0">
+                    <div
+                      class="w-2 h-2 rounded-full bg-purple-500 shrink-0"
+                    ></div>
                     <span class="text-sidebar-foreground/60">Cache</span>
                   </div>
-                  <div class="flex items-center gap-2">
+                  <div class="flex items-center gap-2 whitespace-nowrap">
                     <span class="font-medium text-sidebar-foreground"
                       >{bytesToSize(data.cacheBytes)}</span
                     >
