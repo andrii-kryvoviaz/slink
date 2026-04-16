@@ -650,9 +650,9 @@ msgstr "表示名"
 msgid "This is how your name will appear across the platform"
 msgstr "プラットフォーム上で表示される名前です"
 
+#: src/feature/Image/License/LicenseCard.svelte
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 #: src/feature/Settings/SettingsPane/SettingsPane.svelte
-#: src/routes/info/[id]/+page.svelte
 #: src/routes/preferences/+page.svelte
 #: src/routes/profile/+page.svelte
 msgid "Saving..."
@@ -799,7 +799,7 @@ msgstr "このライセンスは新しいアップロードに自動的に適用
 msgid "Learn more"
 msgstr "詳しく見る"
 
-#: src/routes/info/[id]/+page.svelte
+#: src/feature/Image/License/LicenseCard.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Select a license..."
 msgstr "ライセンスを選択..."
@@ -1979,9 +1979,9 @@ msgstr "{0}にリセット"
 msgid "Reset to <0/>"
 msgstr "<0/>にリセット"
 
+#: src/feature/Image/Share/ShareCard.svelte
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
 #: src/routes/collection/[id]/+page.svelte
-#: src/routes/info/[id]/+page.svelte
 msgid "Share"
 msgstr "共有"
 
@@ -2818,11 +2818,11 @@ msgstr "<0/> ドキュメントを見る"
 msgid "Image Details | Slink"
 msgstr "画像の詳細 | Slink"
 
-#: src/routes/info/[id]/+page.svelte
+#: src/feature/Image/License/LicenseCard.svelte
 msgid "License"
 msgstr "ライセンス"
 
-#: src/routes/info/[id]/+page.svelte
+#: src/feature/Image/License/LicenseCard.svelte
 msgid "Choose how others can use this image"
 msgstr "この画像の利用条件を選択"
 
@@ -2842,19 +2842,19 @@ msgstr "フィルター"
 msgid "Apply a color filter to the shared link"
 msgstr "共有リンクにカラーフィルターを適用"
 
-#: src/routes/info/[id]/+page.svelte
+#: src/feature/Image/Share/ShareCard.svelte
 msgid "Resize, filter, and format changes apply only to the shared link. The original image remains unchanged."
 msgstr "リサイズ、フィルター、フォーマットの変更は共有リンクにのみ適用されます。元の画像は変更されません。"
 
-#: src/routes/info/[id]/+page.svelte
+#: src/feature/Image/Share/ShareCard.svelte
 msgid "Select option to copy"
 msgstr "コピーするオプションを選択"
 
-#: src/routes/info/[id]/+page.svelte
+#: src/feature/Image/Share/ShareCard.svelte
 msgid "Quick"
 msgstr "クイック"
 
-#: src/routes/info/[id]/+page.svelte
+#: src/feature/Image/Share/ShareCard.svelte
 msgid "Output Format"
 msgstr "出力フォーマット"
 

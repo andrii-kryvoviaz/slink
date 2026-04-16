@@ -52,6 +52,8 @@ export * from './History/batch-actions/visibility';
 export * from './History/useHistoryItemActions.svelte';
 export { default as ImageDeleteConfirmation } from './ImageDeleteConfirmation/ImageDeleteConfirmation.svelte';
 export { default as ImageDeletePopover } from './ImageDeleteConfirmation/ImageDeletePopover.svelte';
+export { default as LicenseCard } from './License/LicenseCard.svelte';
+export * from './License/LicenseCardState.svelte';
 export { default as LicenseInfo } from './License/LicenseInfo.svelte';
 export * from './License/LicenseInfo.theme';
 export { default as ImagePlaceholder } from './Placeholder/ImagePlaceholder.svelte';
@@ -62,6 +64,8 @@ export { default as PostViewerDescription } from './PostViewer/PostViewerDescrip
 export { default as PostViewerItem } from './PostViewer/PostViewerItem.svelte';
 export { default as PostViewerNavigation } from './PostViewer/PostViewerNavigation.svelte';
 export { default as PostViewerSidebar } from './PostViewer/PostViewerSidebar.svelte';
+export { default as ShareCard } from './Share/ShareCard.svelte';
+export * from './Share/ShareCardState.svelte';
 export { default as ShareLinkCopy } from './ShareLinkCopy/ShareLinkCopy.svelte';
 export { default as ImageSizePicker } from './SizePicker/ImageSizePicker.svelte';
 export * from './SizePicker/ImageSizePicker.theme';
