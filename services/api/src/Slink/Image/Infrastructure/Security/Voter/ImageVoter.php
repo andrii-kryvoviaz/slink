@@ -8,8 +8,8 @@ use Slink\Image\Domain\Enum\ImageAccess;
 use Slink\Image\Domain\Image;
 use Slink\Image\Domain\ValueObject\ImageAccessContext;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
-use Slink\Share\Domain\Enum\ShareableType;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
+use Slink\Share\Domain\ValueObject\TargetPath;
 use Slink\Shared\Domain\ValueObject\ID;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
@@ -64,7 +64,7 @@ final class ImageVoter extends Voter {
         return true;
       }
 
-      return $this->hasPublishedShare($imageId);
+      return $this->hasAccessibleShareForUrl($this->targetPathFrom($subject));
     }
 
     if ($attribute === ImageAccess::Tag) {
@@ -142,13 +142,21 @@ final class ImageVoter extends Voter {
     return null;
   }
 
-  private function hasPublishedShare(string $imageId): bool {
-    $share = $this->shareRepository->findByShareable($imageId, ShareableType::Image);
-
-    if ($share === null) {
+  private function hasAccessibleShareForUrl(?TargetPath $targetPath): bool {
+    if ($targetPath === null) {
       return false;
     }
 
-    return $share->isPublished();
+    $share = $this->shareRepository->findByTargetPath($targetPath);
+
+    return $share !== null && $share->isAccessible();
+  }
+
+  private function targetPathFrom(mixed $subject): ?TargetPath {
+    if ($subject instanceof ImageAccessContext) {
+      return $subject->targetPath;
+    }
+
+    return null;
   }
 }

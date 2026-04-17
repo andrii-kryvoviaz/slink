@@ -43,6 +43,16 @@ final class OwnerShareInfoResolverTest extends TestCase {
   }
 
   #[Test]
+  public function itReturnsEmptyArrayWhenOwnerIsNull(): void {
+    $viewerId = ID::fromString('550e8400-e29b-41d4-a716-446655440000');
+
+    $resolver = $this->createResolver();
+    $result = $resolver->resolve('shareable-id', ShareableType::Collection, null, $viewerId);
+
+    $this->assertSame([], $result);
+  }
+
+  #[Test]
   public function itReturnsEmptyArrayWhenViewerIsNotOwner(): void {
     $ownerId = ID::fromString('550e8400-e29b-41d4-a716-446655440000');
     $viewerId = ID::fromString('660e8400-e29b-41d4-a716-446655440000');
@@ -90,6 +100,7 @@ final class OwnerShareInfoResolverTest extends TestCase {
         'shareId' => 'share-id',
         'shareUrl' => 'https://example.com/c/abc',
         'type' => ShareableType::Collection->value,
+        'expiresAt' => null,
       ],
     ], $result);
   }

@@ -35,7 +35,7 @@ final readonly class GetAccessibleCollectionHandler implements QueryHandlerInter
     $extra = $this->ownerShareInfoResolver->resolve(
       $query->getId(),
       ShareableType::Collection,
-      ID::fromString($collection->getUserId()),
+      ID::fromUnknown($collection->getUserId()),
       ID::fromUnknown($userId),
     );
 

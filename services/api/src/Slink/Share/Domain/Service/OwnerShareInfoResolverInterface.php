@@ -11,5 +11,5 @@ interface OwnerShareInfoResolverInterface {
   /**
    * @return array{shareInfo?: array{shareId: string, shareUrl: string, type: string}}
    */
-  public function resolve(string $shareableId, ShareableType $type, ID $ownerId, ?ID $viewerId): array;
+  public function resolve(string $shareableId, ShareableType $type, ?ID $ownerId, ?ID $viewerId): array;
 }

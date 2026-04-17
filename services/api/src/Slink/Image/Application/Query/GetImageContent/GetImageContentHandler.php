@@ -12,6 +12,7 @@ use Slink\Image\Domain\Service\ImageSanitizerInterface;
 use Slink\Image\Domain\Service\ImageRetrievalInterface;
 use Slink\Image\Domain\Service\ImageUrlSignatureInterface;
 use Slink\Image\Domain\ValueObject\ImageAccessContext;
+use Slink\Share\Domain\Service\ShareUrlBuilderInterface;
 use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Application\Query\QueryHandlerInterface;
 use Slink\Shared\Domain\ValueObject\ImageOptions;
@@ -26,6 +27,7 @@ final readonly class GetImageContentHandler implements QueryHandlerInterface {
     private ImageSanitizerInterface $sanitizer,
     private ImageUrlSignatureInterface $transformSignature,
     private AuthorizationCheckerInterface $access,
+    private ShareUrlBuilderInterface $shareUrlBuilder,
   ) {
   }
 
@@ -38,10 +40,21 @@ final readonly class GetImageContentHandler implements QueryHandlerInterface {
 
     $query = $this->sanitizeTransforms($query, $imageId);
 
+    $targetPath = $this->shareUrlBuilder->buildTargetPath(
+      $imageId,
+      $imageView->getFileName(),
+      $query->getWidth(),
+      $query->getHeight(),
+      $query->isCropped(),
+      $requestedFormat,
+      $query->getFilter(),
+    );
+
     $context = new ImageAccessContext(
       $imageView,
       $query->getScopeCollectionId(),
       $query->getScopeSignature(),
+      $targetPath,
     );
 
     if (!$this->access->isGranted(ImageAccess::View, $context)) {
