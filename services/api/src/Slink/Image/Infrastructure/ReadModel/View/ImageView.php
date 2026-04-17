@@ -13,6 +13,7 @@ use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Domain\ValueObject\ImageMetadata;
 use Slink\Image\Infrastructure\ReadModel\Repository\ImageRepository;
 use Slink\Shared\Domain\Contract\CursorAwareInterface;
+use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Attribute\Sanitize;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
 use Slink\Tag\Infrastructure\ReadModel\View\TagView;
@@ -122,6 +123,16 @@ class ImageView extends AbstractView implements CursorAwareInterface {
    */
   public function getUser(): ?UserView {
     return $this->user;
+  }
+
+  public function getUserId(): ?ID {
+    $user = $this->getUser();
+
+    if ($user === null) {
+      return null;
+    }
+
+    return ID::fromString($user->getUuid());
   }
 
   /**

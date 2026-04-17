@@ -6,9 +6,13 @@ namespace Slink\Share\Domain;
 
 use EventSauce\EventSourcing\AggregateRootId;
 use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
+use Slink\Share\Domain\AccessRule\ExpirationAware;
+use Slink\Share\Domain\AccessRule\PublicationAware;
+use Slink\Share\Domain\Event\ShareExpirationWasSet;
 use Slink\Share\Domain\Event\ShareWasCreated;
 use Slink\Share\Domain\Event\ShareWasPublished;
 use Slink\Share\Domain\Event\ShortUrlWasAdded;
+use Slink\Share\Domain\ValueObject\AccessControl;
 use Slink\Share\Domain\ValueObject\ShareableReference;
 use Slink\Share\Domain\ValueObject\ShareContext;
 use Slink\Share\Domain\ValueObject\TargetPath;
@@ -16,15 +20,16 @@ use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
 
-final class Share extends AbstractAggregateRoot {
+final class Share extends AbstractAggregateRoot implements PublicationAware, ExpirationAware {
   private ShareableReference $shareable;
   private TargetPath $targetPath;
   private DateTime $createdAt;
   private ShareContext $context;
-  private bool $isPublished = false;
+  private AccessControl $accessControl;
 
   protected function __construct(ID $id) {
     parent::__construct($id);
+    $this->accessControl = AccessControl::initial(false);
   }
 
   public static function create(
@@ -64,7 +69,7 @@ final class Share extends AbstractAggregateRoot {
     $this->targetPath = $event->targetPath;
     $this->createdAt = $event->createdAt;
     $this->context = $event->context;
-    $this->isPublished = $event->isPublished;
+    $this->accessControl = AccessControl::initial($event->isPublished);
   }
 
   protected function applyShortUrlWasAdded(ShortUrlWasAdded $event): void {
@@ -72,7 +77,7 @@ final class Share extends AbstractAggregateRoot {
   }
 
   public function publish(): void {
-    if ($this->isPublished) {
+    if ($this->accessControl->isPublished) {
       return;
     }
 
@@ -80,11 +85,33 @@ final class Share extends AbstractAggregateRoot {
   }
 
   protected function applyShareWasPublished(ShareWasPublished $event): void {
-    $this->isPublished = true;
+    $this->accessControl = $this->accessControl->publish();
+  }
+
+  public function setExpiration(?DateTime $expiresAt): void {
+    $next = $this->accessControl->expireAt($expiresAt);
+
+    if ($next === $this->accessControl) {
+      return;
+    }
+
+    $this->recordThat(new ShareExpirationWasSet($this->aggregateRootId(), $expiresAt));
+  }
+
+  protected function applyShareExpirationWasSet(ShareExpirationWasSet $event): void {
+    $this->accessControl = $this->accessControl->expireAt($event->expiresAt);
   }
 
   public function isPublished(): bool {
-    return $this->isPublished;
+    return $this->accessControl->isPublished;
+  }
+
+  public function getAccessControl(): AccessControl {
+    return $this->accessControl;
+  }
+
+  public function getExpiresAt(): ?DateTime {
+    return $this->accessControl->expiresAt;
   }
 
   public function getShareable(): ShareableReference {
@@ -120,7 +147,7 @@ final class Share extends AbstractAggregateRoot {
       'targetUrl' => $this->targetPath->toString(),
       'createdAt' => $this->createdAt->toString(),
       'context' => $this->context->toPayload(),
-      'isPublished' => $this->isPublished,
+      'accessControl' => $this->accessControl->toPayload(),
     ];
   }
 
@@ -130,16 +157,11 @@ final class Share extends AbstractAggregateRoot {
   protected static function reconstituteFromSnapshotState(AggregateRootId $id, $state): AggregateRootWithSnapshotting {
     $share = new self(ID::fromString($id->toString()));
 
-    if (isset($state['imageId'])) {
-      $share->shareable = ShareableReference::forImage(ID::fromString($state['imageId']));
-    } else {
-      $share->shareable = ShareableReference::fromPayload($state['shareable']);
-    }
-
+    $share->shareable = ShareableReference::fromPayload($state['shareable']);
     $share->targetPath = TargetPath::fromString($state['targetUrl']);
     $share->createdAt = DateTime::fromString($state['createdAt']);
     $share->context = ShareContext::fromPayload($state['context'] ?? [], $share->shareable);
-    $share->isPublished = $state['isPublished'] ?? false;
+    $share->accessControl = AccessControl::fromPayload($state['accessControl']);
 
     return $share;
   }

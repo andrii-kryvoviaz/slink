@@ -8,6 +8,7 @@ use Slink\Share\Domain\Enum\ShareableType;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
 use Slink\Share\Domain\Service\OwnerShareInfoResolverInterface;
 use Slink\Share\Domain\Service\ShareServiceInterface;
+use Slink\Share\Domain\ValueObject\ShareResponse;
 use Slink\Shared\Domain\ValueObject\ID;
 use Symfony\Component\DependencyInjection\Attribute\AsAlias;
 
@@ -18,27 +19,22 @@ final readonly class OwnerShareInfoResolver implements OwnerShareInfoResolverInt
     private ShareServiceInterface $shareService,
   ) {}
 
-  public function resolve(string $shareableId, ShareableType $type, ID $ownerId, ?ID $viewerId): array {
-    if ($viewerId === null) {
-      return [];
-    }
-
-    if (!$ownerId->equals($viewerId)) {
-      return [];
+  public function resolve(
+    string $shareableId,
+    ShareableType $type,
+    ?ID $ownerId,
+    ?ID $viewerId,
+  ): ?ShareResponse {
+    if (!$ownerId?->equals($viewerId)) {
+      return null;
     }
 
     $share = $this->shareRepository->findByShareable($shareableId, $type);
 
     if ($share === null) {
-      return [];
+      return null;
     }
 
-    return [
-      'shareInfo' => [
-        'shareId' => $share->getId(),
-        'shareUrl' => $this->shareService->resolveUrl($share),
-        'type' => $type->value,
-      ],
-    ];
+    return ShareResponse::fromShare($share, $this->shareService->resolveUrl($share));
   }
 }

@@ -12,24 +12,35 @@ use Slink\Image\Domain\ValueObject\ImageAccessContext;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Image\Infrastructure\Security\Voter\ImageVoter;
+use Slink\Share\Application\Service\ShareAccessGuard;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
 use Slink\Share\Domain\ValueObject\TargetPath;
 use Slink\Share\Infrastructure\ReadModel\View\ShareView;
+use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 final class ImageVoterTest extends TestCase {
   private ShareRepositoryInterface&Stub $shareRepository;
+  private ShareAccessGuard $accessGuard;
 
   protected function setUp(): void {
     parent::setUp();
 
     $this->shareRepository = $this->createStub(ShareRepositoryInterface::class);
+    $this->accessGuard = $this->createStub(ShareAccessGuard::class);
   }
 
   private function createVoter(): ImageVoter {
-    return new ImageVoter($this->shareRepository);
+    return new ImageVoter($this->shareRepository, $this->accessGuard);
+  }
+
+  private function stubAccessGuard(bool $allows): ShareAccessGuard {
+    $guard = $this->createStub(ShareAccessGuard::class);
+    $guard->method('allows')->willReturn($allows);
+
+    return $guard;
   }
 
   private function createToken(string $userIdentifier = ''): TokenInterface&Stub {
@@ -57,23 +68,28 @@ final class ImageVoterTest extends TestCase {
     $image = $this->createStub(ImageView::class);
     $image->method('getUuid')->willReturn($imageId);
     $image->method('getUser')->willReturn($user);
+    $userId = null;
+
+    if ($ownerId !== null) {
+      $userId = ID::fromString($ownerId);
+    }
+
+    $image->method('getUserId')->willReturn($userId);
     $image->method('getAttributes')->willReturn($attributes);
 
     return $image;
   }
 
   private function createAccessibleShareStub(): ShareView&Stub {
-    $share = $this->createStub(ShareView::class);
-    $share->method('isAccessible')->willReturn(true);
+    $this->accessGuard->method('allows')->willReturn(true);
 
-    return $share;
+    return $this->createStub(ShareView::class);
   }
 
   private function createInaccessibleShareStub(): ShareView&Stub {
-    $share = $this->createStub(ShareView::class);
-    $share->method('isAccessible')->willReturn(false);
+    $this->accessGuard->method('allows')->willReturn(false);
 
-    return $share;
+    return $this->createStub(ShareView::class);
   }
 
   #[Test]
@@ -214,8 +230,8 @@ final class ImageVoterTest extends TestCase {
     $expiredPath = TargetPath::fromString('/image/test.jpg');
     $accessiblePath = TargetPath::fromString('/image/test.webp');
 
-    $expiredShare = $this->createInaccessibleShareStub();
-    $accessibleShare = $this->createAccessibleShareStub();
+    $expiredShare = $this->createStub(ShareView::class);
+    $accessibleShare = $this->createStub(ShareView::class);
 
     $shareRepository = $this->createStub(ShareRepositoryInterface::class);
     $shareRepository
@@ -228,7 +244,18 @@ final class ImageVoterTest extends TestCase {
         return $accessibleShare;
       });
 
-    $voter = new ImageVoter($shareRepository);
+    $accessGuard = $this->createStub(ShareAccessGuard::class);
+    $accessGuard
+      ->method('allows')
+      ->willReturnCallback(static function (object $share) use ($expiredShare): bool {
+        if ($share === $expiredShare) {
+          return false;
+        }
+
+        return true;
+      });
+
+    $voter = new ImageVoter($shareRepository, $accessGuard);
     $image = $this->createImageView($ownerId);
 
     $expiredContext = new ImageAccessContext($image, targetPath: $expiredPath);
@@ -267,7 +294,7 @@ final class ImageVoterTest extends TestCase {
       ->with($this->callback(static fn(TargetPath $path): bool => $path->toString() === $targetPath->toString()))
       ->willReturn($this->createAccessibleShareStub());
 
-    $voter = new ImageVoter($shareRepository);
+    $voter = new ImageVoter($shareRepository, $this->stubAccessGuard(true));
     $image = $this->createImageView($ownerId);
     $context = new ImageAccessContext($image, targetPath: $targetPath);
 
@@ -326,37 +353,14 @@ final class ImageVoterTest extends TestCase {
   }
 
   #[Test]
-  public function itGrantsTagToOwner(): void {
+  public function itAbstainsForTagAttribute(): void {
     $ownerId = '550e8400-e29b-41d4-a716-446655440000';
     $voter = $this->createVoter();
     $image = $this->createImageView($ownerId);
 
     $result = $voter->vote($this->createToken($ownerId), $image, [ImageAccess::Tag]);
 
-    $this->assertSame(VoterInterface::ACCESS_GRANTED, $result);
-  }
-
-  #[Test]
-  public function itDeniesTagToNonOwnerWhenImageHasOwner(): void {
-    $ownerId = '550e8400-e29b-41d4-a716-446655440000';
-    $requesterId = '660e8400-e29b-41d4-a716-446655440000';
-
-    $voter = $this->createVoter();
-    $image = $this->createImageView($ownerId);
-
-    $result = $voter->vote($this->createToken($requesterId), $image, [ImageAccess::Tag]);
-
-    $this->assertSame(VoterInterface::ACCESS_DENIED, $result);
-  }
-
-  #[Test]
-  public function itGrantsTagOnOrphanImageToAnyUser(): void {
-    $voter = $this->createVoter();
-    $image = $this->createImageView(null);
-
-    $result = $voter->vote($this->createToken('660e8400-e29b-41d4-a716-446655440000'), $image, [ImageAccess::Tag]);
-
-    $this->assertSame(VoterInterface::ACCESS_GRANTED, $result);
+    $this->assertSame(VoterInterface::ACCESS_ABSTAIN, $result);
   }
 
   #[Test]

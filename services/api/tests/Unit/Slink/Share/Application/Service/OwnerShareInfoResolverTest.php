@@ -11,6 +11,8 @@ use Slink\Share\Application\Service\OwnerShareInfoResolver;
 use Slink\Share\Domain\Enum\ShareableType;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
 use Slink\Share\Domain\Service\ShareServiceInterface;
+use Slink\Share\Domain\ValueObject\ShareableReference;
+use Slink\Share\Domain\ValueObject\ShareResponse;
 use Slink\Share\Infrastructure\ReadModel\View\ShareView;
 use Slink\Shared\Domain\ValueObject\ID;
 
@@ -33,38 +35,38 @@ final class OwnerShareInfoResolverTest extends TestCase {
   }
 
   #[Test]
-  public function itReturnsEmptyArrayWhenViewerIsNull(): void {
+  public function itReturnsNullWhenViewerIsNull(): void {
     $ownerId = ID::fromString('550e8400-e29b-41d4-a716-446655440000');
 
     $resolver = $this->createResolver();
     $result = $resolver->resolve('shareable-id', ShareableType::Collection, $ownerId, null);
 
-    $this->assertSame([], $result);
+    $this->assertNull($result);
   }
 
   #[Test]
-  public function itReturnsEmptyArrayWhenOwnerIsNull(): void {
+  public function itReturnsNullWhenOwnerIsNull(): void {
     $viewerId = ID::fromString('550e8400-e29b-41d4-a716-446655440000');
 
     $resolver = $this->createResolver();
     $result = $resolver->resolve('shareable-id', ShareableType::Collection, null, $viewerId);
 
-    $this->assertSame([], $result);
+    $this->assertNull($result);
   }
 
   #[Test]
-  public function itReturnsEmptyArrayWhenViewerIsNotOwner(): void {
+  public function itReturnsNullWhenViewerIsNotOwner(): void {
     $ownerId = ID::fromString('550e8400-e29b-41d4-a716-446655440000');
     $viewerId = ID::fromString('660e8400-e29b-41d4-a716-446655440000');
 
     $resolver = $this->createResolver();
     $result = $resolver->resolve('shareable-id', ShareableType::Collection, $ownerId, $viewerId);
 
-    $this->assertSame([], $result);
+    $this->assertNull($result);
   }
 
   #[Test]
-  public function itReturnsEmptyArrayWhenOwnerHasNoShare(): void {
+  public function itReturnsNullWhenOwnerHasNoShare(): void {
     $ownerId = ID::fromString('550e8400-e29b-41d4-a716-446655440000');
 
     $this->shareRepository
@@ -75,15 +77,20 @@ final class OwnerShareInfoResolverTest extends TestCase {
     $resolver = $this->createResolver();
     $result = $resolver->resolve('shareable-id', ShareableType::Collection, $ownerId, $ownerId);
 
-    $this->assertSame([], $result);
+    $this->assertNull($result);
   }
 
   #[Test]
-  public function itReturnsShareInfoWhenOwnerHasShare(): void {
+  public function itReturnsShareResponseWhenOwnerHasShare(): void {
     $ownerId = ID::fromString('550e8400-e29b-41d4-a716-446655440000');
+
+    $shareable = $this->createStub(ShareableReference::class);
+    $shareable->method('getShareableType')->willReturn(ShareableType::Collection);
 
     $share = $this->createStub(ShareView::class);
     $share->method('getId')->willReturn('share-id');
+    $share->method('getShareable')->willReturn($shareable);
+    $share->method('getExpiresAt')->willReturn(null);
 
     $this->shareRepository
       ->method('findByShareable')
@@ -95,13 +102,11 @@ final class OwnerShareInfoResolverTest extends TestCase {
     $resolver = $this->createResolver();
     $result = $resolver->resolve('shareable-id', ShareableType::Collection, $ownerId, $ownerId);
 
-    $this->assertSame([
-      'shareInfo' => [
-        'shareId' => 'share-id',
-        'shareUrl' => 'https://example.com/c/abc',
-        'type' => ShareableType::Collection->value,
-        'expiresAt' => null,
-      ],
-    ], $result);
+    $this->assertInstanceOf(ShareResponse::class, $result);
+    $this->assertSame('share-id', $result->getShareId());
+    $this->assertSame('https://example.com/c/abc', $result->getShareUrl());
+    $this->assertSame(ShareableType::Collection, $result->getType());
+    $this->assertFalse($result->wasCreated());
+    $this->assertNull($result->getExpiresAt());
   }
 }

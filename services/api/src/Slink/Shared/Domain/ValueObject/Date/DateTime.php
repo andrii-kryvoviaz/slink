@@ -102,12 +102,12 @@ final class DateTime extends DateTimeImmutable {
     return $this <= $now;
   }
 
-  /**
-   * @param DateTime $dateTime
-   * @return bool
-   */
-  public function equals(DateTime $dateTime): bool {
-    return $this === $dateTime;
+  public function equals(?DateTime $dateTime): bool {
+    if ($dateTime === null) {
+      return false;
+    }
+
+    return $this == $dateTime;
   }
 
   /**

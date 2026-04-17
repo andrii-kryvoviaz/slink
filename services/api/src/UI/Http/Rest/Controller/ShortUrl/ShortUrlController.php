@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace UI\Http\Rest\Controller\ShortUrl;
 
 use Slink\Share\Application\Query\FindShortUrlByCode\FindShortUrlByCodeQuery;
+use Slink\Share\Application\Service\ShareAccessGuard;
 use Slink\Shared\Application\Query\QueryTrait;
+use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
+use UI\Http\Rest\Response\ApiResponse;
 
 #[AsController]
 #[Route(path: '/i/{code}', name: 'short_url_redirect', methods: ['GET'])]
@@ -21,23 +23,29 @@ final readonly class ShortUrlController {
   public function __construct(
     #[Autowire('%env(ORIGIN)%')]
     private string $origin,
+    private ShareAccessGuard $accessGuard,
   ) {
   }
 
-  public function __invoke(string $code): Response {
+  public function __invoke(string $code): RedirectResponse {
     $shortUrl = $this->ask(new FindShortUrlByCodeQuery($code));
 
     if ($shortUrl === null) {
-      return new Response('Not Found', Response::HTTP_NOT_FOUND);
+      throw new NotFoundException();
     }
 
     $share = $shortUrl->getShare();
+
+    if (!$this->accessGuard->allows($share)) {
+      throw new NotFoundException();
+    }
+
     $targetPath = $share->getTargetPath();
 
     if (str_starts_with($targetPath, '/')) {
       $targetPath = $this->origin . $targetPath;
     }
 
-    return new RedirectResponse($targetPath, Response::HTTP_FOUND);
+    return ApiResponse::redirect($targetPath);
   }
 }

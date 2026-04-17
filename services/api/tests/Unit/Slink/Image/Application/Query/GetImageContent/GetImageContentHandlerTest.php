@@ -18,6 +18,8 @@ use Slink\Image\Domain\Service\ImageUrlSignatureInterface;
 use Slink\Image\Domain\ValueObject\ImageAccessContext;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
+use Slink\Share\Domain\Service\ShareUrlBuilderInterface;
+use Slink\Share\Domain\ValueObject\TargetPath;
 use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -29,6 +31,7 @@ final class GetImageContentHandlerTest extends TestCase {
   private ImageSanitizerInterface&Stub $sanitizer;
   private ImageUrlSignatureInterface&Stub $transformSignature;
   private AuthorizationCheckerInterface&Stub $access;
+  private ShareUrlBuilderInterface&Stub $shareUrlBuilder;
 
   public function setUp(): void {
     parent::setUp();
@@ -39,9 +42,11 @@ final class GetImageContentHandlerTest extends TestCase {
     $this->sanitizer = $this->createStub(ImageSanitizerInterface::class);
     $this->transformSignature = $this->createStub(ImageUrlSignatureInterface::class);
     $this->access = $this->createStub(AuthorizationCheckerInterface::class);
+    $this->shareUrlBuilder = $this->createStub(ShareUrlBuilderInterface::class);
 
     $this->transformSignature->method('verify')->willReturn(true);
     $this->access->method('isGranted')->willReturn(true);
+    $this->shareUrlBuilder->method('buildTargetPath')->willReturn(TargetPath::fromString('/image/test.jpg'));
   }
 
   private function createHandler(): GetImageContentHandler {
@@ -52,6 +57,7 @@ final class GetImageContentHandlerTest extends TestCase {
       $this->sanitizer,
       $this->transformSignature,
       $this->access,
+      $this->shareUrlBuilder,
     );
   }
 
@@ -278,11 +284,66 @@ final class GetImageContentHandlerTest extends TestCase {
       $this->sanitizer,
       $this->transformSignature,
       $access,
+      $this->shareUrlBuilder,
     );
 
     $query = new GetImageContentQuery(collection: 'collection-id', cs: 'sig');
     $result = ($handler)($query, $fileName);
 
     $this->assertInstanceOf(Item::class, $result);
+  }
+
+  #[Test]
+  public function itPassesTargetPathBuiltFromSanitizedQueryInAccessContext(): void {
+    $fileName = 'test-file-name.jpg';
+    $imageContent = 'image content';
+    $mimeType = 'image/jpeg';
+    $expectedPath = TargetPath::fromString('/image/test-file-name.jpg?width=200&s=sig');
+
+    $image = $this->createStub(ImageView::class);
+    $image->method('getFileName')->willReturn($fileName);
+    $image->method('getMimeType')->willReturn($mimeType);
+    $image->method('getUser')->willReturn(null);
+
+    $this->repository->method('oneById')->willReturn($image);
+    $this->imageAnalyzer->method('supportsResize')->willReturn(true);
+    $this->imageRetrieval->method('getImage')->willReturn($imageContent);
+    $this->sanitizer->method('requiresSanitization')->willReturn(false);
+
+    $shareUrlBuilder = $this->createMock(ShareUrlBuilderInterface::class);
+    $shareUrlBuilder
+      ->expects($this->once())
+      ->method('buildTargetPath')
+      ->with('test-file-name', $fileName, 200, null, false, null, null)
+      ->willReturn($expectedPath);
+
+    $access = $this->createMock(AuthorizationCheckerInterface::class);
+    $access
+      ->expects($this->once())
+      ->method('isGranted')
+      ->with(
+        ImageAccess::View,
+        $this->callback(static function (mixed $subject) use ($expectedPath): bool {
+          if (!$subject instanceof ImageAccessContext) {
+            return false;
+          }
+
+          return $subject->targetPath?->toString() === $expectedPath->toString();
+        }),
+      )
+      ->willReturn(true);
+
+    $handler = new GetImageContentHandler(
+      $this->imageAnalyzer,
+      $this->repository,
+      $this->imageRetrieval,
+      $this->sanitizer,
+      $this->transformSignature,
+      $access,
+      $shareUrlBuilder,
+    );
+
+    $query = new GetImageContentQuery(width: 200, s: 'sig');
+    ($handler)($query, $fileName);
   }
 }

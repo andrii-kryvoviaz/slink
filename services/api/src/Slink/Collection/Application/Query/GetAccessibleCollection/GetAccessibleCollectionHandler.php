@@ -32,12 +32,14 @@ final readonly class GetAccessibleCollectionHandler implements QueryHandlerInter
       return null;
     }
 
-    $extra = $this->ownerShareInfoResolver->resolve(
+    $sharing = $this->ownerShareInfoResolver->resolve(
       $query->getId(),
       ShareableType::Collection,
       ID::fromUnknown($collection->getUserId()),
       ID::fromUnknown($userId),
     );
+
+    $extra = $sharing !== null ? ['sharing' => $sharing->toPayload()] : [];
 
     return Item::fromEntity($collection, $extra);
   }
