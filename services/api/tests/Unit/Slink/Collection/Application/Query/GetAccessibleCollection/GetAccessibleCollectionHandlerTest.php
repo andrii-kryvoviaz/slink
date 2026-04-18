@@ -126,10 +126,10 @@ final class GetAccessibleCollectionHandlerTest extends TestCase {
     $this->assertInstanceOf(Item::class, $result);
     $this->assertIsArray($result->resource);
     $this->assertArrayHasKey('sharing', $result->resource);
-    $this->assertInstanceOf(ShareResponse::class, $result->resource['sharing']);
-    $this->assertSame('share-id', $result->resource['sharing']->getShareId());
-    $this->assertSame('https://example.com/c/abc', $result->resource['sharing']->getShareUrl());
-    $this->assertSame(ShareableType::Collection, $result->resource['sharing']->getType());
+    $this->assertIsArray($result->resource['sharing']);
+    $this->assertSame('share-id', $result->resource['sharing']['shareId']);
+    $this->assertSame('https://example.com/c/abc', $result->resource['sharing']['shareUrl']);
+    $this->assertSame(ShareableType::Collection->value, $result->resource['sharing']['type']);
   }
 
   #[Test]
