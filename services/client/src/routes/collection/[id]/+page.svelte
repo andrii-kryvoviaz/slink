@@ -1,9 +1,7 @@
 <script lang="ts">
   import { LoadMoreButton, StopPropagation } from '@slink/feature/Action';
-  import {
-    CollectionItemDropdown,
-    ShareCollectionPopover,
-  } from '@slink/feature/Collection';
+  import * as Collection from '@slink/feature/Collection';
+  import { CollectionItemDropdown } from '@slink/feature/Collection';
   import {
     DimensionsBadge,
     DownloadButton,
@@ -15,7 +13,6 @@
   import { EmptyState, Masonry } from '@slink/feature/Layout';
   import { ExploreSkeleton } from '@slink/feature/Layout';
   import {
-    CopyContainer,
     EditableText,
     ExpandableText,
     FormattedDate,
@@ -23,18 +20,12 @@
   import { UserAvatar } from '@slink/feature/User';
   import { BackLink } from '@slink/ui/components/back-link';
   import { Button } from '@slink/ui/components/button';
-  import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-  } from '@slink/ui/components/popover';
   import { untrack } from 'svelte';
 
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
   import type { CollectionItem } from '@slink/api/Response';
-  import type { ShareResponse } from '@slink/api/Response/Share/ShareResponse';
   import type { AuthenticatedUser } from '@slink/api/Response/User/AuthenticatedUser';
 
   import { skeleton } from '@slink/lib/actions/skeleton';
@@ -92,31 +83,16 @@
     }
   });
 
-  let shareInfo: ShareResponse | null = $state(null);
   let sharePopoverOpen = $state(false);
   let removingItems: Set<string> = $state(new Set());
-  let isSharing = $state(false);
   let isSavingName = $state(false);
   let isSavingDescription = $state(false);
-
-  $effect(() => {
-    if (itemsFeed.collection?.shareInfo) {
-      shareInfo = itemsFeed.collection.shareInfo;
-    }
-  });
 
   const openPostViewer = (imageId: string) => {
     const index = itemsFeed.getItemIndex(imageId);
     if (index !== -1) {
       postViewerState.open(index);
     }
-  };
-
-  const handleShareConfirm = async () => {
-    isSharing = true;
-    shareInfo = await itemsFeed.share();
-    isSharing = false;
-    sharePopoverOpen = false;
   };
 
   const handleRemoveItem = async (item: CollectionItem) => {
@@ -239,45 +215,37 @@
                 <Icon icon="ph:plus" class="h-4 w-4" />
                 Add images
               </Button>
-              {#if shareInfo}
-                <div class="relative flex items-center">
-                  <span
-                    class="absolute -top-4 left-0 text-[10px] font-medium uppercase tracking-wider text-gray-400 dark:text-gray-500"
-                  >
-                    Share Link
-                  </span>
-                  <CopyContainer
-                    value={shareInfo.shareUrl}
+              <Collection.Popover
+                collectionId={data.collectionId}
+                bind:open={sharePopoverOpen}
+                initialShare={itemsFeed.collection.sharing ?? null}
+              >
+                {#snippet trigger({ isShared }: { isShared: boolean })}
+                  <Button
+                    variant="glass"
                     size="sm"
-                    variant="default"
-                  />
-                </div>
-              {:else}
-                <Popover bind:open={sharePopoverOpen}>
-                  <PopoverTrigger>
-                    <Button
-                      variant="glass"
-                      size="sm"
-                      rounded="full"
-                      loading={isSharing}
-                      justify="center"
-                      class="flex flex-row gap-2"
-                    >
-                      {#snippet leftIcon()}
-                        <Icon icon="ph:share-network-fill" class="h-4 w-4" />
-                      {/snippet}
-                      Share
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent align="end" sideOffset={8}>
-                    <ShareCollectionPopover
-                      loading={isSharing}
-                      close={() => (sharePopoverOpen = false)}
-                      confirm={handleShareConfirm}
-                    />
-                  </PopoverContent>
-                </Popover>
-              {/if}
+                    rounded="full"
+                    justify="center"
+                    class="flex flex-row gap-2"
+                    title={isShared ? 'Manage share link' : 'Share collection'}
+                  >
+                    {#snippet leftIcon()}
+                      <span class="relative inline-flex">
+                        <Icon
+                          icon="lets-icons:folder-send-light"
+                          class="h-4 w-4"
+                        />
+                        {#if isShared}
+                          <span
+                            class="absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-full bg-blue-500 ring-2 ring-white dark:ring-gray-900"
+                          ></span>
+                        {/if}
+                      </span>
+                    {/snippet}
+                    {isShared ? 'Shared' : 'Share Collection'}
+                  </Button>
+                {/snippet}
+              </Collection.Popover>
             </div>
           {/if}
         </div>

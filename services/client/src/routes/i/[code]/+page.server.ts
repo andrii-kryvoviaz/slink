@@ -17,29 +17,38 @@ type OgMeta = {
   height: string;
 };
 
+type ResolveResult =
+  | { kind: 'redirect'; location: string }
+  | { kind: 'unavailable' };
+
 async function resolveShortCode(
   code: string,
   apiUrl: string,
   fetch: typeof globalThis.fetch,
-): Promise<string> {
+): Promise<ResolveResult> {
   const response = await fetch(`${apiUrl}/i/${code}`, {
     redirect: 'manual',
   });
 
-  if (response.status !== 302 && response.status !== 301) {
-    error(response.status);
+  if (response.status === 302 || response.status === 301) {
+    const location = response.headers.get('Location');
+
+    if (!location) {
+      error(502);
+    }
+
+    return { kind: 'redirect', location };
   }
 
-  const location = response.headers.get('Location');
-  if (!location) {
-    error(502);
-  }
-
-  return location;
+  return { kind: 'unavailable' };
 }
 
 function resolveUrl(origin: string, location: string): string {
-  return location.startsWith('/') ? `${origin}${location}` : location;
+  if (location.startsWith('/')) {
+    return `${origin}${location}`;
+  }
+
+  return location;
 }
 
 async function buildOgMeta(
@@ -88,13 +97,23 @@ async function buildOgMeta(
 
 export const load: PageServerLoad = async ({ params, fetch, request, url }) => {
   const apiUrl = env.API_URL || 'http://localhost:8080';
-  const location = await resolveShortCode(params.code, apiUrl, fetch);
+  const result = await resolveShortCode(params.code, apiUrl, fetch);
+
+  if (result.kind === 'unavailable') {
+    return {
+      unavailable: true,
+      ogMeta: null,
+    };
+  }
+
+  const { location } = result;
 
   if (!crawlerDetect.isCrawler(request.headers.get('User-Agent'))) {
     redirect(302, resolveUrl(url.origin, location));
   }
 
   return {
+    unavailable: false,
     ogMeta: await buildOgMeta(location, params.code, url.origin, apiUrl, fetch),
   };
 };

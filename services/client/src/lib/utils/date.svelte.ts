@@ -1,9 +1,9 @@
-import { page } from '$app/state';
+import { runtimeTranslator } from '$lib/utils/i18n/RuntimeTranslator.svelte';
 
 const DAY_MS = 1000 * 60 * 60 * 24;
 
 export function getLocale(): string {
-  return page.data.settings?.locale?.current ?? 'en';
+  return runtimeTranslator.locale;
 }
 
 function toDate(input: Date | string): Date {
@@ -17,6 +17,10 @@ function toDate(input: Date | string): Date {
   }
 
   return new Date(input);
+}
+
+export function datesEqual(a: Date | null, b: Date | null): boolean {
+  return a?.getTime() === b?.getTime();
 }
 
 export function todayPlusDays(days: number): Date {
@@ -37,6 +41,17 @@ export function daysUntil(date: Date | string): number {
   const todayOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
   return Math.floor((dateOnly.getTime() - todayOnly.getTime()) / DAY_MS);
+}
+
+export function narrowUnit(
+  value: number,
+  unit: 'day' | 'week' | 'month' | 'year',
+): string {
+  return new Intl.NumberFormat(getLocale(), {
+    style: 'unit',
+    unit,
+    unitDisplay: 'narrow',
+  }).format(value);
 }
 
 export function relativeFromDays(days: number): string {

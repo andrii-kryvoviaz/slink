@@ -15,6 +15,7 @@ msgstr "アップロード一覧へ"
 msgid "An error occurred. Please try again later."
 msgstr "エラーが発生しました。しばらくしてからもう一度お試しください。"
 
+#: src/routes/c/[code]/+page.server.ts
 #: src/routes/i/[code]/+page.server.ts
 msgid "Location"
 msgstr "場所"
@@ -176,7 +177,6 @@ msgstr "この操作は取り消せません"
 
 #: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
 #: src/feature/Collection/RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte
-#: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
 #: src/feature/Comment/CommentDeleteConfirmation.svelte
 #: src/feature/Image/History/Actions/BatchPickerAction.svelte
 #: src/feature/Image/History/BatchActionConfirmation.svelte
@@ -1094,15 +1094,10 @@ msgstr "コレクションの更新に失敗しました"
 msgid "Collection actions"
 msgstr "コレクション操作"
 
-#: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
+#: src/routes/collection/[id]/+page.svelte
 msgid "Share Collection"
 msgstr "コレクションを共有"
 
-#: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
-msgid "Anyone with the link can view"
-msgstr "リンクを知っている人は誰でも閲覧可能"
-
-#: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
 #: src/ui/components/confirmation-dialog/confirmation-dialog.svelte
 msgid "Confirm"
 msgstr "確認"
@@ -1501,6 +1496,7 @@ msgstr "通知を閉じる"
 #: src/feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte
 #: src/feature/Settings/Version/ReleaseModal.svelte
 #: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
+#: src/ui/components/action-popover/action-popover-content.svelte
 #: src/ui/components/dialog/dialog-content.svelte
 #: src/ui/components/sheet/sheet-content.svelte
 #: src/ui/components/sonner/toasts/BaseToast.svelte
@@ -1979,9 +1975,8 @@ msgstr "{0}にリセット"
 msgid "Reset to <0/>"
 msgstr "<0/>にリセット"
 
-#: src/feature/Image/Share/ShareCard.svelte
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
-#: src/routes/collection/[id]/+page.svelte
+#: src/feature/Share/Options/Toolbar.svelte
 msgid "Share"
 msgstr "共有"
 
@@ -2055,6 +2050,7 @@ msgid "Authentication username"
 msgstr "認証ユーザー名"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
+#: src/feature/Share/Controls/List.svelte
 #: src/routes/profile/(auth)/login/+page.svelte
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Password"
@@ -2757,10 +2753,6 @@ msgid "<0/> Add images"
 msgstr "<0/> 画像を追加"
 
 #: src/routes/collection/[id]/+page.svelte
-msgid "Share Link"
-msgstr "リンクを共有"
-
-#: src/routes/collection/[id]/+page.svelte
 msgid "Collection not found"
 msgstr "コレクションが見つかりません"
 
@@ -2842,21 +2834,13 @@ msgstr "フィルター"
 msgid "Apply a color filter to the shared link"
 msgstr "共有リンクにカラーフィルターを適用"
 
-#: src/feature/Image/Share/ShareCard.svelte
-msgid "Resize, filter, and format changes apply only to the shared link. The original image remains unchanged."
-msgstr "リサイズ、フィルター、フォーマットの変更は共有リンクにのみ適用されます。元の画像は変更されません。"
-
-#: src/feature/Image/Share/ShareCard.svelte
+#: src/feature/Image/Share/Card.svelte
 msgid "Select option to copy"
 msgstr "コピーするオプションを選択"
 
-#: src/feature/Image/Share/ShareCard.svelte
+#: src/feature/Image/Share/Card.svelte
 msgid "Quick"
 msgstr "クイック"
-
-#: src/feature/Image/Share/ShareCard.svelte
-msgid "Output Format"
-msgstr "出力フォーマット"
 
 #: src/ui/components/combobox/combobox.svelte
 msgid "No items found."
@@ -2879,6 +2863,7 @@ msgstr "<0/> 表示件数 {0} <1/>"
 msgid "Select a date"
 msgstr "日付を選択"
 
+#: src/feature/Share/Controls/ExpirationDetail.svelte
 #: src/ui/components/date-picker/date-picker.svelte
 msgid "Pick a date"
 msgstr "日付を選択してください"
@@ -3083,15 +3068,9 @@ msgstr "画像はパブリックギャラリーで共有され、すべてのユ
 msgid "Default"
 msgstr "デフォルト"
 
-#~ msgid "Images are not shared in the public gallery and only accessible by the owner"
-#~ msgstr "画像はパブリックギャラリーで共有されず、所有者のみがアクセスできます"
-
 #: src/routes/help/faq/+page.svelte
 msgid "Important Note"
 msgstr "重要事項"
-
-#~ msgid "Raw images are accessible to anyone with a direct link, regardless of visibility setting."
-#~ msgstr "元画像は公開設定に関わらず、直接リンクを持つ人なら誰でもアクセスできます。"
 
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "SSO Settings | Slink"
@@ -4301,4 +4280,117 @@ msgstr ""
 
 #: src/routes/help/faq/+page.svelte
 msgid "Images are private by default and only accessible to the authenticated owner. To share an image with others, use the copy button which creates a shared link."
+msgstr ""
+
+#: src/feature/Share/Controls/ExpirationDetail.svelte
+#: src/feature/Share/Controls/List.svelte
+msgid "Expiration"
+msgstr "有効期限"
+
+#: src/feature/Share/Controls/ExpirationDetail.svelte
+msgid "Restrict link availability after the chosen date"
+msgstr "指定した日付以降はリンクを無効にします"
+
+#: src/feature/Share/Unavailable/Unavailable.svelte
+msgid "The link you followed is no longer available or does not exist."
+msgstr "アクセスしたリンクは存在しないか、利用できません。"
+
+#: src/feature/Share/Unavailable/Unavailable.svelte
+msgid "Take me home"
+msgstr "ホームへ戻る"
+
+#: src/feature/Share/Controls/List.svelte
+msgid "SOON"
+msgstr "近日対応"
+
+#: src/feature/Share/share.language.ts
+msgid "Saved"
+msgstr "保存しました"
+
+#: src/feature/Share/share.language.ts
+#: src/feature/Share/share.language.ts
+msgid "Expired"
+msgstr "期限切れ"
+
+#: src/feature/Share/share.language.ts
+msgid "Today"
+msgstr "今日"
+
+#: src/feature/Share/Controls/Popover.svelte
+msgid "Configure share"
+msgstr "共有を設定"
+
+#: src/feature/Share/Controls/List.svelte
+msgid "Not set"
+msgstr "未設定"
+
+#: src/feature/Share/Controls/List.svelte
+msgid "Require a password to view"
+msgstr "閲覧にパスワードを要求"
+
+#: src/feature/Share/Controls/ExpirationDetail.svelte
+msgid "Back to options"
+msgstr "オプションに戻る"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Manage share link"
+msgstr "共有リンクを管理"
+
+#: src/feature/Share/Controls/ExpirationDetail.svelte
+msgid "Custom"
+msgstr "カスタム"
+
+#: src/feature/Collection/Share/Popover.svelte
+#: src/routes/collection/[id]/+page.svelte
+msgid "Share collection"
+msgstr "コレクションを共有"
+
+#: src/feature/Collection/Share/Popover.svelte
+msgid "Share this collection"
+msgstr "このコレクションを共有"
+
+#: src/feature/Collection/Share/Popover.svelte
+msgid "Create a public link. Anyone with the link will be able to view this collection."
+msgstr "公開リンクを作成します。リンクを持つ全員がこのコレクションを閲覧できます。"
+
+#: src/feature/Collection/Share/Popover.svelte
+msgid "Create share link"
+msgstr "共有リンクを作成"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Shared"
+msgstr "共有中"
+
+#: src/feature/Share/share.language.ts
+msgid "Expires today"
+msgstr "今日で期限切れ"
+
+#: src/feature/Image/Share/Card.svelte
+msgid "Resize, filter, and format changes create a new share link and reset its options (e.g. expiration). The original image remains unchanged."
+msgstr "サイズ・フィルタ・フォーマットを変更すると、新しい共有リンクが作成され、有効期限などのオプションはリセットされます。元の画像は変更されません。"
+
+#: src/feature/Image/Share/Card.svelte
+msgid "Format"
+msgstr "フォーマット"
+
+#: src/feature/Share/share.language.ts
+msgid "Saving expiration"
+msgstr "有効期限を保存中"
+
+#: src/feature/Share/share.language.ts
+msgid "Failed to save expiration"
+msgstr "有効期限を保存できませんでした"
+
+#: src/feature/Share/share.language.ts
+msgid "Expires {phrase}"
+msgstr "{phrase}に期限切れ"
+
+#: src/feature/Share/Controls/ExpirationDetail.svelte
+msgid "# day"
+msgid_plural "# days"
+msgstr[0] "#日"
+msgstr[1] "#日"
+
+#: src/feature/Share/Unavailable/Unavailable.svelte
+msgid "Share unavailable"
 msgstr ""
