@@ -24,7 +24,7 @@
   let state: ApiKeyManagerState = $state({
     createModalOpen: false,
     createdKeyModalOpen: false,
-    formData: { name: '', expiresAt: '' },
+    formData: { name: '', expiresAt: null },
     errors: {},
   });
 
@@ -47,7 +47,7 @@
     try {
       state.errors = {};
       await apiKeyService.createApiKey(formData);
-      state.formData = { name: '', expiresAt: '' };
+      state.formData = { name: '', expiresAt: null };
       state.createModalOpen = false;
       state.createdKeyModalOpen = true;
     } catch (error: any) {
