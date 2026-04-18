@@ -32,7 +32,7 @@ final class SetShareExpirationHandlerTest extends TestCase {
   #[Test]
   public function itSetsExpirationFromDateString(): void {
     $shareId = ID::generate()->toString();
-    $command = new SetShareExpirationCommand('2099-12-31');
+    $command = new SetShareExpirationCommand(new \DateTimeImmutable('2099-12-31T23:59:59.000Z'));
 
     $share = $this->createMock(Share::class);
     $share->method('aggregateRootVersion')->willReturn(1);
