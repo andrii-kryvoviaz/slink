@@ -19,6 +19,7 @@ import {
   ImageResource,
   NotificationResource,
   SettingResource,
+  ShareResource,
   TagResource,
 } from '@slink/api/Resources';
 import { ApiKeyResource } from '@slink/api/Resources/ApiKeyResource';
@@ -42,6 +43,7 @@ const RESOURCES = {
   notification: NotificationResource,
   bookmark: BookmarkResource,
   collection: CollectionResource,
+  share: ShareResource,
   sso: SsoResource,
   oauth: OAuthResource,
 };
