@@ -1,26 +1,45 @@
 import { page } from '$app/state';
 
+const DAY_MS = 1000 * 60 * 60 * 24;
+
 export function getLocale(): string {
   return page.data.settings?.locale?.current ?? 'en';
 }
 
-function getDaysDifference(dateString: string): number {
-  const date = new Date(dateString);
-  const now = new Date();
+function toDate(input: Date | string): Date {
+  if (input instanceof Date) {
+    return input;
+  }
 
+  if (input.length === 10) {
+    const [y, m, d] = input.split('-').map(Number);
+    return new Date(y, m - 1, d);
+  }
+
+  return new Date(input);
+}
+
+export function todayPlusDays(days: number): Date {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  d.setDate(d.getDate() + days);
+  return d;
+}
+
+export function daysUntil(date: Date | string): number {
+  const target = toDate(date);
+  const now = new Date();
   const dateOnly = new Date(
-    date.getFullYear(),
-    date.getMonth(),
-    date.getDate(),
+    target.getFullYear(),
+    target.getMonth(),
+    target.getDate(),
   );
   const todayOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-  return Math.floor(
-    (dateOnly.getTime() - todayOnly.getTime()) / (1000 * 60 * 60 * 24),
-  );
+  return Math.floor((dateOnly.getTime() - todayOnly.getTime()) / DAY_MS);
 }
 
-function relativeFromDays(days: number): string {
+export function relativeFromDays(days: number): string {
   const locale = getLocale();
   const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
   const absDays = Math.abs(days);
@@ -32,27 +51,11 @@ function relativeFromDays(days: number): string {
   if (absDays < 365)
     return rtf.format(sign * Math.floor(absDays / 30), 'month');
 
-  return new Date(
-    new Date().getTime() + days * 24 * 60 * 60 * 1000,
-  ).toLocaleDateString(locale);
+  return new Date(new Date().getTime() + days * DAY_MS).toLocaleDateString(
+    locale,
+  );
 }
 
-export function formatRelativeTime(
-  days: number,
-  prefix: string = '',
-  suffix: string = '',
-): string {
-  return `${prefix}${relativeFromDays(days)}${suffix}`;
-}
-
-export function formatDate(dateString: string): string {
-  return relativeFromDays(getDaysDifference(dateString));
-}
-
-export function formatExpiryDate(dateString: string): string {
-  return relativeFromDays(getDaysDifference(dateString));
-}
-
-export function formatDateTime(dateString: string): string {
-  return new Date(dateString).toLocaleString(getLocale());
+export function formatDate(date: Date | string): string {
+  return relativeFromDays(daysUntil(date));
 }
