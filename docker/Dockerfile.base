@@ -19,7 +19,8 @@ RUN rm -rf /usr/src/php* \
         /usr/local/lib/php/build \
         /usr/local/bin/phpdbg \
         /usr/local/bin/php-cgi \
-        /tmp/* /var/cache/apk/*
+        /tmp/* /var/cache/apk/* \
+    && setcap -r /usr/local/bin/frankenphp
 
 FROM frankenphp-upstream AS php-extensions
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
