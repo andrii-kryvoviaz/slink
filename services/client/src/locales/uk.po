@@ -15,6 +15,7 @@ msgstr "До моїх завантажень"
 msgid "An error occurred. Please try again later."
 msgstr "Сталася помилка. Спробуйте пізніше."
 
+#: src/routes/c/[code]/+page.server.ts
 #: src/routes/i/[code]/+page.server.ts
 msgid "Location"
 msgstr "Місцезнаходження"
@@ -176,7 +177,6 @@ msgstr "Цю дію неможливо скасувати"
 
 #: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
 #: src/feature/Collection/RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte
-#: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
 #: src/feature/Comment/CommentDeleteConfirmation.svelte
 #: src/feature/Image/History/Actions/BatchPickerAction.svelte
 #: src/feature/Image/History/BatchActionConfirmation.svelte
@@ -1094,15 +1094,10 @@ msgstr "Не вдалося оновити колекцію"
 msgid "Collection actions"
 msgstr "Дії з колекцією"
 
-#: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
+#: src/routes/collection/[id]/+page.svelte
 msgid "Share Collection"
 msgstr "Поділитися колекцією"
 
-#: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
-msgid "Anyone with the link can view"
-msgstr "Будь-хто з посиланням може переглянути"
-
-#: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
 #: src/ui/components/confirmation-dialog/confirmation-dialog.svelte
 msgid "Confirm"
 msgstr "Підтвердити"
@@ -1501,6 +1496,7 @@ msgstr "Закрити сповіщення"
 #: src/feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte
 #: src/feature/Settings/Version/ReleaseModal.svelte
 #: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
+#: src/ui/components/action-popover/action-popover-content.svelte
 #: src/ui/components/dialog/dialog-content.svelte
 #: src/ui/components/sheet/sheet-content.svelte
 #: src/ui/components/sonner/toasts/BaseToast.svelte
@@ -1979,9 +1975,8 @@ msgstr "Скинути до {0}"
 msgid "Reset to <0/>"
 msgstr "Скинути до <0/>"
 
-#: src/feature/Image/Share/ShareCard.svelte
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
-#: src/routes/collection/[id]/+page.svelte
+#: src/feature/Share/Options/Toolbar.svelte
 msgid "Share"
 msgstr "Спільний доступ"
 
@@ -2055,6 +2050,7 @@ msgid "Authentication username"
 msgstr "Ім'я користувача для автентифікації"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
+#: src/feature/Share/Controls/List.svelte
 #: src/routes/profile/(auth)/login/+page.svelte
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Password"
@@ -2757,10 +2753,6 @@ msgid "<0/> Add images"
 msgstr "<0/> Додати зображення"
 
 #: src/routes/collection/[id]/+page.svelte
-msgid "Share Link"
-msgstr "Поділитися посиланням"
-
-#: src/routes/collection/[id]/+page.svelte
 msgid "Collection not found"
 msgstr "Колекцію не знайдено"
 
@@ -2842,21 +2834,13 @@ msgstr "Фільтр"
 msgid "Apply a color filter to the shared link"
 msgstr "Застосуйте кольоровий фільтр до спільного посилання"
 
-#: src/feature/Image/Share/ShareCard.svelte
-msgid "Resize, filter, and format changes apply only to the shared link. The original image remains unchanged."
-msgstr "Зміна розміру, фільтр та формат застосовуються лише до спільного посилання. Оригінальне зображення залишається незмінним."
-
-#: src/feature/Image/Share/ShareCard.svelte
+#: src/feature/Image/Share/Card.svelte
 msgid "Select option to copy"
 msgstr "Оберіть параметр для копіювання"
 
-#: src/feature/Image/Share/ShareCard.svelte
+#: src/feature/Image/Share/Card.svelte
 msgid "Quick"
 msgstr "Швидко"
-
-#: src/feature/Image/Share/ShareCard.svelte
-msgid "Output Format"
-msgstr "Вихідний формат"
 
 #: src/ui/components/combobox/combobox.svelte
 msgid "No items found."
@@ -2879,6 +2863,7 @@ msgstr "<0/> Ліміт {0} <1/>"
 msgid "Select a date"
 msgstr "Оберіть дату"
 
+#: src/feature/Share/Controls/ExpirationDetail.svelte
 #: src/ui/components/date-picker/date-picker.svelte
 msgid "Pick a date"
 msgstr "Виберіть дату"
@@ -3083,15 +3068,9 @@ msgstr "Зображення розміщуються в публічній га
 msgid "Default"
 msgstr "За замовчуванням"
 
-#~ msgid "Images are not shared in the public gallery and only accessible by the owner"
-#~ msgstr "Зображення не розміщуються в публічній галереї та доступні лише власнику"
-
 #: src/routes/help/faq/+page.svelte
 msgid "Important Note"
 msgstr "Важливо"
-
-#~ msgid "Raw images are accessible to anyone with a direct link, regardless of visibility setting."
-#~ msgstr "Оригінали зображень доступні будь-кому з прямим посиланням, незалежно від налаштувань видимості."
 
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "SSO Settings | Slink"
@@ -4304,4 +4283,117 @@ msgstr ""
 
 #: src/routes/help/faq/+page.svelte
 msgid "Images are private by default and only accessible to the authenticated owner. To share an image with others, use the copy button which creates a shared link."
+msgstr ""
+
+#: src/feature/Share/Controls/ExpirationDetail.svelte
+#: src/feature/Share/Controls/List.svelte
+msgid "Expiration"
+msgstr "Термін дії"
+
+#: src/feature/Share/Controls/ExpirationDetail.svelte
+msgid "Restrict link availability after the chosen date"
+msgstr "Обмежити доступність посилання після обраної дати"
+
+#: src/feature/Share/Unavailable/Unavailable.svelte
+msgid "The link you followed is no longer available or does not exist."
+msgstr "Посилання, за яким ви перейшли, більше не існує або недоступне."
+
+#: src/feature/Share/Unavailable/Unavailable.svelte
+msgid "Take me home"
+msgstr "На головну"
+
+#: src/feature/Share/Controls/List.svelte
+msgid "SOON"
+msgstr "СКОРО"
+
+#: src/feature/Share/share.language.ts
+msgid "Saved"
+msgstr "Збережено"
+
+#: src/feature/Share/share.language.ts
+#: src/feature/Share/share.language.ts
+msgid "Expired"
+msgstr "Минув"
+
+#: src/feature/Share/share.language.ts
+msgid "Today"
+msgstr "Сьогодні"
+
+#: src/feature/Share/Controls/Popover.svelte
+msgid "Configure share"
+msgstr "Налаштувати доступ"
+
+#: src/feature/Share/Controls/List.svelte
+msgid "Not set"
+msgstr "Не задано"
+
+#: src/feature/Share/Controls/List.svelte
+msgid "Require a password to view"
+msgstr "Запитувати пароль для перегляду"
+
+#: src/feature/Share/Controls/ExpirationDetail.svelte
+msgid "Back to options"
+msgstr "До опцій"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Manage share link"
+msgstr "Керувати посиланням"
+
+#: src/feature/Share/Controls/ExpirationDetail.svelte
+msgid "Custom"
+msgstr "Інше"
+
+#: src/feature/Collection/Share/Popover.svelte
+#: src/routes/collection/[id]/+page.svelte
+msgid "Share collection"
+msgstr "Поділитися колекцією"
+
+#: src/feature/Collection/Share/Popover.svelte
+msgid "Share this collection"
+msgstr "Поділитися цією колекцією"
+
+#: src/feature/Collection/Share/Popover.svelte
+msgid "Create a public link. Anyone with the link will be able to view this collection."
+msgstr "Створіть публічне посилання. Будь-хто з посиланням зможе переглянути цю колекцію."
+
+#: src/feature/Collection/Share/Popover.svelte
+msgid "Create share link"
+msgstr "Створити посилання"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Shared"
+msgstr "Поширено"
+
+#: src/feature/Share/share.language.ts
+msgid "Expires today"
+msgstr "Спливає сьогодні"
+
+#: src/feature/Image/Share/Card.svelte
+msgid "Resize, filter, and format changes create a new share link and reset its options (e.g. expiration). The original image remains unchanged."
+msgstr "Зміна розміру, фільтру та формату створює нове посилання та скидає його налаштування (наприклад, термін дії). Оригінальне зображення не змінюється."
+
+#: src/feature/Image/Share/Card.svelte
+msgid "Format"
+msgstr "Формат"
+
+#: src/feature/Share/share.language.ts
+msgid "Saving expiration"
+msgstr "Збереження терміну"
+
+#: src/feature/Share/share.language.ts
+msgid "Failed to save expiration"
+msgstr "Не вдалося зберегти термін"
+
+#: src/feature/Share/share.language.ts
+msgid "Expires {phrase}"
+msgstr "Спливає {phrase}"
+
+#: src/feature/Share/Controls/ExpirationDetail.svelte
+msgid "# day"
+msgid_plural "# days"
+msgstr[0] "# день"
+msgstr[1] "# днів"
+
+#: src/feature/Share/Unavailable/Unavailable.svelte
+msgid "Share unavailable"
 msgstr ""

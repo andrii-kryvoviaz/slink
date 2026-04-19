@@ -11,7 +11,9 @@ export class ApiKeyService {
   async createApiKey(formData: ApiKeyFormData): Promise<boolean> {
     const data = {
       name: formData.name.trim(),
-      ...(formData.expiresAt ? { expiresAt: formData.expiresAt } : {}),
+      ...(formData.expiresAt
+        ? { expiresAt: formData.expiresAt.toISOString() }
+        : {}),
     };
 
     await this.apiKeyStore.create(data);

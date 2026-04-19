@@ -44,6 +44,9 @@ services:
       tags:
         - { name: messenger.message_handler, bus: messenger.bus.event.async }
 
+    Slink\Share\Domain\AccessRule\ShareAccessRule:
+      tags: ['slink.share.access_rule']
+
   Slink\:
     resource: '../src/Slink/*'
     exclude: '../src/Slink/**/{Migrations,Kernel.php}'

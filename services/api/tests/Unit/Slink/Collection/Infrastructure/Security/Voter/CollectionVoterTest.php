@@ -76,7 +76,7 @@ final class CollectionVoterTest extends TestCase {
   }
 
   #[Test]
-  public function itGrantsViewToNonOwnerWhenShareIsPublished(): void {
+  public function itGrantsViewToNonOwnerWhenShareIsAccessible(): void {
     $ownerId = '550e8400-e29b-41d4-a716-446655440000';
     $requesterId = '660e8400-e29b-41d4-a716-446655440000';
 
@@ -93,7 +93,7 @@ final class CollectionVoterTest extends TestCase {
   }
 
   #[Test]
-  public function itDeniesViewToNonOwnerWhenShareIsUnpublished(): void {
+  public function itDeniesViewToNonOwnerWhenShareIsInaccessible(): void {
     $ownerId = '550e8400-e29b-41d4-a716-446655440000';
     $requesterId = '660e8400-e29b-41d4-a716-446655440000';
 
@@ -150,7 +150,7 @@ final class CollectionVoterTest extends TestCase {
   }
 
   #[Test]
-  public function itDeniesEditToNonOwnerEvenWithPublishedShare(): void {
+  public function itDeniesEditToNonOwnerEvenWithAccessibleShare(): void {
     $ownerId = '550e8400-e29b-41d4-a716-446655440000';
     $requesterId = '660e8400-e29b-41d4-a716-446655440000';
 

@@ -65,8 +65,8 @@ export { default as PostViewerDescription } from './PostViewer/PostViewerDescrip
 export { default as PostViewerItem } from './PostViewer/PostViewerItem.svelte';
 export { default as PostViewerNavigation } from './PostViewer/PostViewerNavigation.svelte';
 export { default as PostViewerSidebar } from './PostViewer/PostViewerSidebar.svelte';
-export { default as ShareCard } from './Share/ShareCard.svelte';
-export * from './Share/ShareCardState.svelte';
+export { default as Card } from './Share/Card.svelte';
+export * from './Share/CardState.svelte';
 export { default as ShareLinkCopy } from './ShareLinkCopy/ShareLinkCopy.svelte';
 export { default as ImageSizePicker } from './SizePicker/ImageSizePicker.svelte';
 export * from './SizePicker/ImageSizePicker.theme';

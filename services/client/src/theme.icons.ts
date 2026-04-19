@@ -177,7 +177,6 @@ export const themeIcons: string[] = [
   'svg-spinners:90-ring-with-bg',
   'ph:folder-open',
   'ph:link-simple-fill',
-  'ph:share-network-fill',
   'ph:folder-simple-fill',
   'ph:tag-fill',
   'ph:note-pencil',
@@ -227,4 +226,7 @@ export const themeIcons: string[] = [
   'ph:minus-circle',
   'ph:prohibit',
   'heroicons:chart-bar',
+  'ph:link-break-duotone',
+  'ph:caret-left',
+  'lets-icons:folder-send-light',
 ];

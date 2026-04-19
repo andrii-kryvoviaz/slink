@@ -2,7 +2,7 @@ import type { User } from '@slink/lib/auth/Type/User';
 
 export interface ApiKeyFormData {
   name: string;
-  expiresAt?: string;
+  expiresAt?: Date | null;
 }
 
 export interface ApiKeyManagerProps {

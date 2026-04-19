@@ -2,7 +2,7 @@
   import { ApiKeyDeletePopover } from '@slink/feature/User';
   import { Overlay } from '@slink/ui/components/popover';
 
-  import { formatDate, formatExpiryDate } from '$lib/utils/date.svelte';
+  import { formatDate } from '$lib/utils/date.svelte';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
@@ -59,7 +59,7 @@
           <span class="text-gray-300 dark:text-gray-600">·</span>
           <span class="flex items-center gap-1">
             <Icon icon="lucide:clock" class="h-3 w-3" />
-            {formatExpiryDate(apiKey.expiresAt)}
+            {formatDate(apiKey.expiresAt)}
           </span>
         {/if}
         {#if apiKey.lastUsedAt}

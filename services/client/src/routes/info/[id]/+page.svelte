@@ -12,7 +12,7 @@
   } from '@slink/feature/Image';
   import { getCssFilter } from '@slink/feature/Image';
   import { LicenseCard } from '@slink/feature/Image';
-  import { ShareCard } from '@slink/feature/Image';
+  import { Card as ShareCard } from '@slink/feature/Image';
   import { ImageTagList } from '@slink/feature/Tag';
 
   import { fly } from 'svelte/transition';

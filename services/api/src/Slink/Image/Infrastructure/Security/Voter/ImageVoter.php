@@ -8,8 +8,9 @@ use Slink\Image\Domain\Enum\ImageAccess;
 use Slink\Image\Domain\Image;
 use Slink\Image\Domain\ValueObject\ImageAccessContext;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
-use Slink\Share\Domain\Enum\ShareableType;
+use Slink\Share\Application\Service\ShareAccessGuard;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
+use Slink\Share\Domain\ValueObject\TargetPath;
 use Slink\Shared\Domain\ValueObject\ID;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
@@ -18,6 +19,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 final class ImageVoter extends Voter {
   public function __construct(
     private readonly ShareRepositoryInterface $shareRepository,
+    private readonly ShareAccessGuard $accessGuard,
   ) {}
 
   /**
@@ -25,6 +27,10 @@ final class ImageVoter extends Voter {
    */
   protected function supports(mixed $attribute, mixed $subject): bool {
     if (!$attribute instanceof ImageAccess) {
+      return false;
+    }
+
+    if ($attribute === ImageAccess::Tag) {
       return false;
     }
 
@@ -64,11 +70,7 @@ final class ImageVoter extends Voter {
         return true;
       }
 
-      return $this->hasPublishedShare($imageId);
-    }
-
-    if ($attribute === ImageAccess::Tag) {
-      return $this->extractOwnerId($image) === null;
+      return $this->hasAccessibleShareForUrl($this->targetPathFrom($subject));
     }
 
     return false;
@@ -103,7 +105,11 @@ final class ImageVoter extends Voter {
   }
 
   private function isOwner(mixed $image, TokenInterface $token): bool {
-    $ownerId = $this->extractOwnerId($image);
+    if (!$image instanceof ImageView && !$image instanceof Image) {
+      return false;
+    }
+
+    $ownerId = $image->getUserId();
 
     if ($ownerId === null) {
       return false;
@@ -115,40 +121,28 @@ final class ImageVoter extends Voter {
       return false;
     }
 
-    return ID::fromString($ownerId)->equals(ID::fromString($userIdentifier));
+    return $ownerId->equals(ID::fromString($userIdentifier));
   }
 
-  private function extractOwnerId(mixed $image): ?string {
-    if ($image instanceof ImageView) {
-      $user = $image->getUser();
-
-      if ($user === null) {
-        return null;
-      }
-
-      return $user->getUuid();
+  private function hasAccessibleShareForUrl(?TargetPath $targetPath): bool {
+    if ($targetPath === null) {
+      return false;
     }
 
-    if ($image instanceof Image) {
-      $userId = $image->getUserId();
-
-      if ($userId === null) {
-        return null;
-      }
-
-      return $userId->toString();
-    }
-
-    return null;
-  }
-
-  private function hasPublishedShare(string $imageId): bool {
-    $share = $this->shareRepository->findByShareable($imageId, ShareableType::Image);
+    $share = $this->shareRepository->findByTargetPath($targetPath);
 
     if ($share === null) {
       return false;
     }
 
-    return $share->isPublished();
+    return $this->accessGuard->allows($share);
+  }
+
+  private function targetPathFrom(mixed $subject): ?TargetPath {
+    if ($subject instanceof ImageAccessContext) {
+      return $subject->targetPath;
+    }
+
+    return null;
   }
 }

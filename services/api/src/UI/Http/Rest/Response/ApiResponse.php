@@ -7,6 +7,7 @@ namespace UI\Http\Rest\Response;
 use Slink\Shared\Application\Http\Collection;
 use Slink\Shared\Application\Http\Item;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class ApiResponse extends JsonResponse {
 
@@ -34,6 +35,10 @@ class ApiResponse extends JsonResponse {
    */
   public static function empty(int $status = self::HTTP_NO_CONTENT): self {
     return new self(null, $status);
+  }
+
+  public static function redirect(string $url, int $status = self::HTTP_FOUND): RedirectResponse {
+    return new RedirectResponse($url, $status);
   }
 
   /**

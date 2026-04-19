@@ -15,6 +15,7 @@ msgstr "Portami ai miei caricamenti"
 msgid "An error occurred. Please try again later."
 msgstr "Si è verificato un errore. Riprova più tardi."
 
+#: src/routes/c/[code]/+page.server.ts
 #: src/routes/i/[code]/+page.server.ts
 msgid "Location"
 msgstr "Posizione"
@@ -176,7 +177,6 @@ msgstr "Questa azione non può essere annullata"
 
 #: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
 #: src/feature/Collection/RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte
-#: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
 #: src/feature/Comment/CommentDeleteConfirmation.svelte
 #: src/feature/Image/History/Actions/BatchPickerAction.svelte
 #: src/feature/Image/History/BatchActionConfirmation.svelte
@@ -1094,15 +1094,10 @@ msgstr "Aggiornamento della raccolta non riuscito"
 msgid "Collection actions"
 msgstr "Azioni raccolta"
 
-#: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
+#: src/routes/collection/[id]/+page.svelte
 msgid "Share Collection"
 msgstr "Condividi raccolta"
 
-#: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
-msgid "Anyone with the link can view"
-msgstr "Chiunque abbia il link può visualizzare"
-
-#: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
 #: src/ui/components/confirmation-dialog/confirmation-dialog.svelte
 msgid "Confirm"
 msgstr "Conferma"
@@ -1501,6 +1496,7 @@ msgstr "Chiudi notifica"
 #: src/feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte
 #: src/feature/Settings/Version/ReleaseModal.svelte
 #: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
+#: src/ui/components/action-popover/action-popover-content.svelte
 #: src/ui/components/dialog/dialog-content.svelte
 #: src/ui/components/sheet/sheet-content.svelte
 #: src/ui/components/sonner/toasts/BaseToast.svelte
@@ -1979,9 +1975,8 @@ msgstr "Ripristina a {0}"
 msgid "Reset to <0/>"
 msgstr "Ripristina a <0/>"
 
-#: src/feature/Image/Share/ShareCard.svelte
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
-#: src/routes/collection/[id]/+page.svelte
+#: src/feature/Share/Options/Toolbar.svelte
 msgid "Share"
 msgstr "Condividi"
 
@@ -2055,6 +2050,7 @@ msgid "Authentication username"
 msgstr "Nome utente per l'autenticazione"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
+#: src/feature/Share/Controls/List.svelte
 #: src/routes/profile/(auth)/login/+page.svelte
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Password"
@@ -2757,10 +2753,6 @@ msgid "<0/> Add images"
 msgstr "<0/> Aggiungi immagini"
 
 #: src/routes/collection/[id]/+page.svelte
-msgid "Share Link"
-msgstr "Condividi link"
-
-#: src/routes/collection/[id]/+page.svelte
 msgid "Collection not found"
 msgstr "Raccolta non trovata"
 
@@ -2842,21 +2834,13 @@ msgstr "Filtro"
 msgid "Apply a color filter to the shared link"
 msgstr "Applica un filtro colore al link condiviso"
 
-#: src/feature/Image/Share/ShareCard.svelte
-msgid "Resize, filter, and format changes apply only to the shared link. The original image remains unchanged."
-msgstr "Le modifiche di ridimensionamento, filtro e formato si applicano solo al link condiviso. L'immagine originale rimane invariata."
-
-#: src/feature/Image/Share/ShareCard.svelte
+#: src/feature/Image/Share/Card.svelte
 msgid "Select option to copy"
 msgstr "Seleziona l'opzione da copiare"
 
-#: src/feature/Image/Share/ShareCard.svelte
+#: src/feature/Image/Share/Card.svelte
 msgid "Quick"
 msgstr "Rapido"
-
-#: src/feature/Image/Share/ShareCard.svelte
-msgid "Output Format"
-msgstr "Formato di output"
 
 #: src/ui/components/combobox/combobox.svelte
 msgid "No items found."
@@ -2879,6 +2863,7 @@ msgstr "<0/> Limite {0} <1/>"
 msgid "Select a date"
 msgstr "Seleziona una data"
 
+#: src/feature/Share/Controls/ExpirationDetail.svelte
 #: src/ui/components/date-picker/date-picker.svelte
 msgid "Pick a date"
 msgstr "Scegli una data"
@@ -3083,15 +3068,9 @@ msgstr "Le immagini sono condivise nella galleria pubblica e visibili a tutti gl
 msgid "Default"
 msgstr "Predefinito"
 
-#~ msgid "Images are not shared in the public gallery and only accessible by the owner"
-#~ msgstr "Le immagini non sono condivise nella galleria pubblica e sono accessibili solo dal proprietario"
-
 #: src/routes/help/faq/+page.svelte
 msgid "Important Note"
 msgstr "Nota importante"
-
-#~ msgid "Raw images are accessible to anyone with a direct link, regardless of visibility setting."
-#~ msgstr "Le immagini originali sono accessibili a chiunque abbia un link diretto, indipendentemente dall'impostazione di visibilità."
 
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "SSO Settings | Slink"
@@ -4301,4 +4280,117 @@ msgstr ""
 
 #: src/routes/help/faq/+page.svelte
 msgid "Images are private by default and only accessible to the authenticated owner. To share an image with others, use the copy button which creates a shared link."
+msgstr ""
+
+#: src/feature/Share/Controls/ExpirationDetail.svelte
+#: src/feature/Share/Controls/List.svelte
+msgid "Expiration"
+msgstr "Scadenza"
+
+#: src/feature/Share/Controls/ExpirationDetail.svelte
+msgid "Restrict link availability after the chosen date"
+msgstr "Limita la disponibilità del link dopo la data scelta"
+
+#: src/feature/Share/Unavailable/Unavailable.svelte
+msgid "The link you followed is no longer available or does not exist."
+msgstr "Il link che hai aperto non è più disponibile o non esiste."
+
+#: src/feature/Share/Unavailable/Unavailable.svelte
+msgid "Take me home"
+msgstr "Torna alla home"
+
+#: src/feature/Share/Controls/List.svelte
+msgid "SOON"
+msgstr "PROSSIMO"
+
+#: src/feature/Share/share.language.ts
+msgid "Saved"
+msgstr "Salvato"
+
+#: src/feature/Share/share.language.ts
+#: src/feature/Share/share.language.ts
+msgid "Expired"
+msgstr "Scaduto"
+
+#: src/feature/Share/share.language.ts
+msgid "Today"
+msgstr "Oggi"
+
+#: src/feature/Share/Controls/Popover.svelte
+msgid "Configure share"
+msgstr "Configura condivisione"
+
+#: src/feature/Share/Controls/List.svelte
+msgid "Not set"
+msgstr "Non impostato"
+
+#: src/feature/Share/Controls/List.svelte
+msgid "Require a password to view"
+msgstr "Richiedi password per visualizzare"
+
+#: src/feature/Share/Controls/ExpirationDetail.svelte
+msgid "Back to options"
+msgstr "Torna alle opzioni"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Manage share link"
+msgstr "Gestisci link di condivisione"
+
+#: src/feature/Share/Controls/ExpirationDetail.svelte
+msgid "Custom"
+msgstr "Personalizzato"
+
+#: src/feature/Collection/Share/Popover.svelte
+#: src/routes/collection/[id]/+page.svelte
+msgid "Share collection"
+msgstr "Condividi raccolta"
+
+#: src/feature/Collection/Share/Popover.svelte
+msgid "Share this collection"
+msgstr "Condividi questa raccolta"
+
+#: src/feature/Collection/Share/Popover.svelte
+msgid "Create a public link. Anyone with the link will be able to view this collection."
+msgstr "Crea un link pubblico. Chiunque abbia il link potrà vedere questa raccolta."
+
+#: src/feature/Collection/Share/Popover.svelte
+msgid "Create share link"
+msgstr "Crea link di condivisione"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Shared"
+msgstr "Condiviso"
+
+#: src/feature/Share/share.language.ts
+msgid "Expires today"
+msgstr "Scade oggi"
+
+#: src/feature/Image/Share/Card.svelte
+msgid "Resize, filter, and format changes create a new share link and reset its options (e.g. expiration). The original image remains unchanged."
+msgstr "Le modifiche di ridimensionamento, filtro e formato creano un nuovo link di condivisione e ne resettano le opzioni (es. scadenza). L’immagine originale rimane invariata."
+
+#: src/feature/Image/Share/Card.svelte
+msgid "Format"
+msgstr "Formato"
+
+#: src/feature/Share/share.language.ts
+msgid "Saving expiration"
+msgstr "Salvataggio scadenza"
+
+#: src/feature/Share/share.language.ts
+msgid "Failed to save expiration"
+msgstr "Impossibile salvare la scadenza"
+
+#: src/feature/Share/share.language.ts
+msgid "Expires {phrase}"
+msgstr "Scade {phrase}"
+
+#: src/feature/Share/Controls/ExpirationDetail.svelte
+msgid "# day"
+msgid_plural "# days"
+msgstr[0] "# giorno"
+msgstr[1] "# giorni"
+
+#: src/feature/Share/Unavailable/Unavailable.svelte
+msgid "Share unavailable"
 msgstr ""

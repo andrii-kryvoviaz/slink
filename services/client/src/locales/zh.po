@@ -15,6 +15,7 @@ msgstr "查看上传内容"
 msgid "An error occurred. Please try again later."
 msgstr "发生错误，请稍后再试。"
 
+#: src/routes/c/[code]/+page.server.ts
 #: src/routes/i/[code]/+page.server.ts
 msgid "Location"
 msgstr "位置"
@@ -176,7 +177,6 @@ msgstr "此操作不可撤销"
 
 #: src/feature/Collection/CollectionDeletePopover/CollectionDeletePopover.svelte
 #: src/feature/Collection/RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte
-#: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
 #: src/feature/Comment/CommentDeleteConfirmation.svelte
 #: src/feature/Image/History/Actions/BatchPickerAction.svelte
 #: src/feature/Image/History/BatchActionConfirmation.svelte
@@ -1094,15 +1094,10 @@ msgstr "更新合集失败"
 msgid "Collection actions"
 msgstr "合集操作"
 
-#: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
+#: src/routes/collection/[id]/+page.svelte
 msgid "Share Collection"
 msgstr "分享合集"
 
-#: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
-msgid "Anyone with the link can view"
-msgstr "任何拥有链接的人都可以查看"
-
-#: src/feature/Collection/ShareCollectionPopover/ShareCollectionPopover.svelte
 #: src/ui/components/confirmation-dialog/confirmation-dialog.svelte
 msgid "Confirm"
 msgstr "确认"
@@ -1501,6 +1496,7 @@ msgstr "关闭通知"
 #: src/feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte
 #: src/feature/Settings/Version/ReleaseModal.svelte
 #: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
+#: src/ui/components/action-popover/action-popover-content.svelte
 #: src/ui/components/dialog/dialog-content.svelte
 #: src/ui/components/sheet/sheet-content.svelte
 #: src/ui/components/sonner/toasts/BaseToast.svelte
@@ -1979,9 +1975,8 @@ msgstr "重置为 {0}"
 msgid "Reset to <0/>"
 msgstr "重置为 <0/>"
 
-#: src/feature/Image/Share/ShareCard.svelte
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
-#: src/routes/collection/[id]/+page.svelte
+#: src/feature/Share/Options/Toolbar.svelte
 msgid "Share"
 msgstr "分享"
 
@@ -2055,6 +2050,7 @@ msgid "Authentication username"
 msgstr "认证用户名"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
+#: src/feature/Share/Controls/List.svelte
 #: src/routes/profile/(auth)/login/+page.svelte
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Password"
@@ -2757,10 +2753,6 @@ msgid "<0/> Add images"
 msgstr "<0/> 添加图片"
 
 #: src/routes/collection/[id]/+page.svelte
-msgid "Share Link"
-msgstr "分享链接"
-
-#: src/routes/collection/[id]/+page.svelte
 msgid "Collection not found"
 msgstr "未找到合集"
 
@@ -2842,21 +2834,13 @@ msgstr "滤镜"
 msgid "Apply a color filter to the shared link"
 msgstr "为分享链接应用颜色滤镜"
 
-#: src/feature/Image/Share/ShareCard.svelte
-msgid "Resize, filter, and format changes apply only to the shared link. The original image remains unchanged."
-msgstr "尺寸、滤镜和格式变更仅作用于分享链接，原图不会改变。"
-
-#: src/feature/Image/Share/ShareCard.svelte
+#: src/feature/Image/Share/Card.svelte
 msgid "Select option to copy"
 msgstr "选择复制选项"
 
-#: src/feature/Image/Share/ShareCard.svelte
+#: src/feature/Image/Share/Card.svelte
 msgid "Quick"
 msgstr "快捷"
-
-#: src/feature/Image/Share/ShareCard.svelte
-msgid "Output Format"
-msgstr "输出格式"
 
 #: src/ui/components/combobox/combobox.svelte
 msgid "No items found."
@@ -2879,6 +2863,7 @@ msgstr "<0/> 条/页 {0} <1/>"
 msgid "Select a date"
 msgstr "选择日期"
 
+#: src/feature/Share/Controls/ExpirationDetail.svelte
 #: src/ui/components/date-picker/date-picker.svelte
 msgid "Pick a date"
 msgstr "挑选日期"
@@ -3083,15 +3068,9 @@ msgstr "图片会展示在公开画廊中，所有用户可见"
 msgid "Default"
 msgstr "默认"
 
-#~ msgid "Images are not shared in the public gallery and only accessible by the owner"
-#~ msgstr "图片不会展示在公开画廊中，仅拥有者可访问"
-
 #: src/routes/help/faq/+page.svelte
 msgid "Important Note"
 msgstr "重要说明"
-
-#~ msgid "Raw images are accessible to anyone with a direct link, regardless of visibility setting."
-#~ msgstr "无论可见性设置如何，持有直链的人都可以访问原图。"
 
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "SSO Settings | Slink"
@@ -4298,4 +4277,117 @@ msgstr ""
 
 #: src/routes/help/faq/+page.svelte
 msgid "Images are private by default and only accessible to the authenticated owner. To share an image with others, use the copy button which creates a shared link."
+msgstr ""
+
+#: src/feature/Share/Controls/ExpirationDetail.svelte
+#: src/feature/Share/Controls/List.svelte
+msgid "Expiration"
+msgstr "过期时间"
+
+#: src/feature/Share/Controls/ExpirationDetail.svelte
+msgid "Restrict link availability after the chosen date"
+msgstr "在所选日期后限制链接可用性"
+
+#: src/feature/Share/Unavailable/Unavailable.svelte
+msgid "The link you followed is no longer available or does not exist."
+msgstr "您访问的链接已不存在或不可用。"
+
+#: src/feature/Share/Unavailable/Unavailable.svelte
+msgid "Take me home"
+msgstr "返回首页"
+
+#: src/feature/Share/Controls/List.svelte
+msgid "SOON"
+msgstr "即将推出"
+
+#: src/feature/Share/share.language.ts
+msgid "Saved"
+msgstr "已保存"
+
+#: src/feature/Share/share.language.ts
+#: src/feature/Share/share.language.ts
+msgid "Expired"
+msgstr "已过期"
+
+#: src/feature/Share/share.language.ts
+msgid "Today"
+msgstr "今天"
+
+#: src/feature/Share/Controls/Popover.svelte
+msgid "Configure share"
+msgstr "配置分享"
+
+#: src/feature/Share/Controls/List.svelte
+msgid "Not set"
+msgstr "未设置"
+
+#: src/feature/Share/Controls/List.svelte
+msgid "Require a password to view"
+msgstr "查看时需要密码"
+
+#: src/feature/Share/Controls/ExpirationDetail.svelte
+msgid "Back to options"
+msgstr "返回选项"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Manage share link"
+msgstr "管理分享链接"
+
+#: src/feature/Share/Controls/ExpirationDetail.svelte
+msgid "Custom"
+msgstr "自定义"
+
+#: src/feature/Collection/Share/Popover.svelte
+#: src/routes/collection/[id]/+page.svelte
+msgid "Share collection"
+msgstr "分享合集"
+
+#: src/feature/Collection/Share/Popover.svelte
+msgid "Share this collection"
+msgstr "分享此合集"
+
+#: src/feature/Collection/Share/Popover.svelte
+msgid "Create a public link. Anyone with the link will be able to view this collection."
+msgstr "创建公开链接。任何拥有此链接的人都能查看该合集。"
+
+#: src/feature/Collection/Share/Popover.svelte
+msgid "Create share link"
+msgstr "创建分享链接"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Shared"
+msgstr "已分享"
+
+#: src/feature/Share/share.language.ts
+msgid "Expires today"
+msgstr "今天过期"
+
+#: src/feature/Image/Share/Card.svelte
+msgid "Resize, filter, and format changes create a new share link and reset its options (e.g. expiration). The original image remains unchanged."
+msgstr "调整尺寸、滤镜和格式会生成新的分享链接并重置其选项（如过期时间）。原始图片不会改变。"
+
+#: src/feature/Image/Share/Card.svelte
+msgid "Format"
+msgstr "格式"
+
+#: src/feature/Share/share.language.ts
+msgid "Saving expiration"
+msgstr "正在保存过期时间"
+
+#: src/feature/Share/share.language.ts
+msgid "Failed to save expiration"
+msgstr "保存过期时间失败"
+
+#: src/feature/Share/share.language.ts
+msgid "Expires {phrase}"
+msgstr "{phrase}过期"
+
+#: src/feature/Share/Controls/ExpirationDetail.svelte
+msgid "# day"
+msgid_plural "# days"
+msgstr[0] "# 天"
+msgstr[1] "# 天"
+
+#: src/feature/Share/Unavailable/Unavailable.svelte
+msgid "Share unavailable"
 msgstr ""

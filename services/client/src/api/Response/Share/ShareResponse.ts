@@ -5,4 +5,5 @@ export interface ShareResponse {
   shareUrl: string;
   type: ShareableType;
   created: boolean;
+  expiresAt: string | null;
 }
