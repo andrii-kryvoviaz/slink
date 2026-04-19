@@ -177,7 +177,9 @@ final class ImageTest extends TestCase {
       ->willReturn($sha1Hash);
 
     $configurationProvider = $this->createStub(ConfigurationProviderInterface::class);
-    $configurationProvider->method('get')->with('image.enableDeduplication')->willReturn(true);
+    $configurationProvider->method('get')->willReturnMap([
+      ['image.enableDeduplication', true],
+    ]);
 
     $duplicateSpecification = new ImageDuplicateSpecification($repository, $hashCalculator, $configurationProvider);
     $context = new ImageCreationContext($duplicateSpecification);
@@ -214,7 +216,9 @@ final class ImageTest extends TestCase {
       ->willReturn($sha1Hash);
 
     $configurationProvider = $this->createStub(ConfigurationProviderInterface::class);
-    $configurationProvider->method('get')->with('image.enableDeduplication')->willReturn(true);
+    $configurationProvider->method('get')->willReturnMap([
+      ['image.enableDeduplication', true],
+    ]);
 
     $duplicateSpecification = new ImageDuplicateSpecification($repository, $hashCalculator, $configurationProvider);
     $context = new ImageCreationContext($duplicateSpecification);
@@ -250,7 +254,9 @@ final class ImageTest extends TestCase {
       ->willReturn($sha1Hash);
 
     $configurationProvider = $this->createStub(ConfigurationProviderInterface::class);
-    $configurationProvider->method('get')->with('image.enableDeduplication')->willReturn(true);
+    $configurationProvider->method('get')->willReturnMap([
+      ['image.enableDeduplication', true],
+    ]);
 
     $duplicateSpecification = new ImageDuplicateSpecification($repository, $hashCalculator, $configurationProvider);
     $context = new ImageCreationContext($duplicateSpecification);

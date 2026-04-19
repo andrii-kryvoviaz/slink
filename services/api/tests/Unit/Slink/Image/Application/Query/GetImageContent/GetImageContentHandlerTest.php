@@ -46,10 +46,16 @@ final class GetImageContentHandlerTest extends TestCase {
     $image->method('getMimeType')->willReturn($mimeType);
     $image->method('getFileName')->willReturn($fileName);
 
-    $this->repository->method('oneById')->with($imageId)->willReturn($image);
-    $this->imageAnalyzer->method('supportsResize')->with($mimeType)->willReturn(true);
+    $this->repository->method('oneById')->willReturnMap([
+      [$imageId, $image],
+    ]);
+    $this->imageAnalyzer->method('supportsResize')->willReturnMap([
+      [$mimeType, true],
+    ]);
     $this->imageRetrieval->method('getImage')->willReturn($imageContent);
-    $this->sanitizer->method('requiresSanitization')->with($mimeType)->willReturn(false);
+    $this->sanitizer->method('requiresSanitization')->willReturnMap([
+      [$mimeType, false],
+    ]);
 
     $handler = new GetImageContentHandler($this->imageAnalyzer, $this->repository, $this->imageRetrieval, $this->sanitizer);
     $result = ($handler)(new GetImageContentQuery(), $fileName);
@@ -64,7 +70,12 @@ final class GetImageContentHandlerTest extends TestCase {
     $imageId = 'test-file-name';
     $fileName = 'test-file-name.jpg';
 
-    $this->repository->method('oneById')->with($imageId)->willThrowException(new NotFoundException());
+    $this->repository->method('oneById')->willReturnCallback(function (string $id) use ($imageId): never {
+      if ($id === $imageId) {
+        throw new NotFoundException();
+      }
+      throw new \LogicException('Unexpected id: ' . $id);
+    });
 
     $this->expectException(NotFoundException::class);
 
@@ -85,11 +96,19 @@ final class GetImageContentHandlerTest extends TestCase {
     $image->method('getMimeType')->willReturn($mimeType);
     $image->method('getFileName')->willReturn($fileName);
 
-    $this->repository->method('oneById')->with($imageId)->willReturn($image);
-    $this->imageAnalyzer->method('supportsResize')->with($mimeType)->willReturn(false);
+    $this->repository->method('oneById')->willReturnMap([
+      [$imageId, $image],
+    ]);
+    $this->imageAnalyzer->method('supportsResize')->willReturnMap([
+      [$mimeType, false],
+    ]);
     $this->imageRetrieval->method('getImage')->willReturn($originalSvgContent);
-    $this->sanitizer->method('requiresSanitization')->with($mimeType)->willReturn(true);
-    $this->sanitizer->method('sanitize')->with($originalSvgContent)->willReturn($sanitizedSvgContent);
+    $this->sanitizer->method('requiresSanitization')->willReturnMap([
+      [$mimeType, true],
+    ]);
+    $this->sanitizer->method('sanitize')->willReturnMap([
+      [$originalSvgContent, $sanitizedSvgContent],
+    ]);
 
     $handler = new GetImageContentHandler($this->imageAnalyzer, $this->repository, $this->imageRetrieval, $this->sanitizer);
     $result = ($handler)(new GetImageContentQuery(), $fileName);
@@ -111,10 +130,16 @@ final class GetImageContentHandlerTest extends TestCase {
     $image->method('getMimeType')->willReturn($originalMimeType);
     $image->method('getFileName')->willReturn($originalFileName);
 
-    $this->repository->method('oneById')->with($imageId)->willReturn($image);
-    $this->imageAnalyzer->method('supportsResize')->with($originalMimeType)->willReturn(true);
+    $this->repository->method('oneById')->willReturnMap([
+      [$imageId, $image],
+    ]);
+    $this->imageAnalyzer->method('supportsResize')->willReturnMap([
+      [$originalMimeType, true],
+    ]);
     $this->imageRetrieval->method('getImage')->willReturn($imageContent);
-    $this->sanitizer->method('requiresSanitization')->with($originalMimeType)->willReturn(false);
+    $this->sanitizer->method('requiresSanitization')->willReturnMap([
+      [$originalMimeType, false],
+    ]);
 
     $handler = new GetImageContentHandler($this->imageAnalyzer, $this->repository, $this->imageRetrieval, $this->sanitizer);
     $result = ($handler)(new GetImageContentQuery(), 'test-file-name.webp', 'webp');
@@ -135,10 +160,16 @@ final class GetImageContentHandlerTest extends TestCase {
     $image->method('getMimeType')->willReturn($mimeType);
     $image->method('getFileName')->willReturn($fileName);
 
-    $this->repository->method('oneById')->with($imageId)->willReturn($image);
-    $this->imageAnalyzer->method('supportsResize')->with($mimeType)->willReturn(true);
+    $this->repository->method('oneById')->willReturnMap([
+      [$imageId, $image],
+    ]);
+    $this->imageAnalyzer->method('supportsResize')->willReturnMap([
+      [$mimeType, true],
+    ]);
     $this->imageRetrieval->method('getImage')->willReturn($imageContent);
-    $this->sanitizer->method('requiresSanitization')->with($mimeType)->willReturn(false);
+    $this->sanitizer->method('requiresSanitization')->willReturnMap([
+      [$mimeType, false],
+    ]);
 
     $handler = new GetImageContentHandler($this->imageAnalyzer, $this->repository, $this->imageRetrieval, $this->sanitizer);
     $result = ($handler)(new GetImageContentQuery(), $fileName, 'gif');
@@ -159,10 +190,16 @@ final class GetImageContentHandlerTest extends TestCase {
     $image->method('getMimeType')->willReturn($mimeType);
     $image->method('getFileName')->willReturn($fileName);
 
-    $this->repository->method('oneById')->with($imageId)->willReturn($image);
-    $this->imageAnalyzer->method('supportsResize')->with($mimeType)->willReturn(true);
+    $this->repository->method('oneById')->willReturnMap([
+      [$imageId, $image],
+    ]);
+    $this->imageAnalyzer->method('supportsResize')->willReturnMap([
+      [$mimeType, true],
+    ]);
     $this->imageRetrieval->method('getImage')->willReturn($imageContent);
-    $this->sanitizer->method('requiresSanitization')->with($mimeType)->willReturn(false);
+    $this->sanitizer->method('requiresSanitization')->willReturnMap([
+      [$mimeType, false],
+    ]);
 
     $handler = new GetImageContentHandler($this->imageAnalyzer, $this->repository, $this->imageRetrieval, $this->sanitizer);
     $result = ($handler)(new GetImageContentQuery(), 'test-file-name.jpg', 'jpg');

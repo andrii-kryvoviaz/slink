@@ -74,11 +74,11 @@ final class ReassignCollectionsOperationTest extends TestCase {
     ]);
 
     $collectionToRemove = $this->createMock(Collection::class);
-    $collectionToRemove->method('isOwnedBy')->with($userId)->willReturn(true);
+    $collectionToRemove->method('isOwnedBy')->willReturnMap([[$userId, true]]);
     $collectionToRemove->expects($this->once())->method('removeItem')->with($imageId);
 
     $collectionToAdd = $this->createMock(Collection::class);
-    $collectionToAdd->method('isOwnedBy')->with($userId)->willReturn(true);
+    $collectionToAdd->method('isOwnedBy')->willReturnMap([[$userId, true]]);
     $collectionToAdd->expects($this->once())->method('addItem');
 
     $collectionsMap = new HashMap();
@@ -114,11 +114,11 @@ final class ReassignCollectionsOperationTest extends TestCase {
     ]);
 
     $ownedCollection = $this->createMock(Collection::class);
-    $ownedCollection->method('isOwnedBy')->with($userId)->willReturn(true);
+    $ownedCollection->method('isOwnedBy')->willReturnMap([[$userId, true]]);
     $ownedCollection->expects($this->once())->method('addItem');
 
     $otherCollection = $this->createMock(Collection::class);
-    $otherCollection->method('isOwnedBy')->with($userId)->willReturn(false);
+    $otherCollection->method('isOwnedBy')->willReturnMap([[$userId, false]]);
     $otherCollection->expects($this->never())->method('addItem');
 
     $collectionsMap = new HashMap();

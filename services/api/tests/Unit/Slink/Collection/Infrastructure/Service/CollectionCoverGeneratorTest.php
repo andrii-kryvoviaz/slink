@@ -68,8 +68,9 @@ final class CollectionCoverGeneratorTest extends TestCase {
 
     $this->cache
       ->method('readFromCache')
-      ->with('collection-id.avif')
-      ->willReturn($cachedContent);
+      ->willReturnMap([
+        ['collection-id.avif', $cachedContent],
+      ]);
 
     $result = $this->generator->getCoverContent($collectionId, $imageIds);
 
@@ -98,8 +99,9 @@ final class CollectionCoverGeneratorTest extends TestCase {
 
     $imageRepository
       ->method('oneById')
-      ->with('image-1')
-      ->willReturn($imageView);
+      ->willReturnMap([
+        ['image-1', $imageView],
+      ]);
 
     $storage
       ->method('readImage')
