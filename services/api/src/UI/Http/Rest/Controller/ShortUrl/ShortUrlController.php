@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace UI\Http\Rest\Controller\ShortUrl;
 
 use Slink\Share\Application\Query\FindShortUrlByCode\FindShortUrlByCodeQuery;
-use Slink\Share\Application\Service\ShareAccessGuard;
 use Slink\Shared\Application\Query\QueryTrait;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -23,7 +22,6 @@ final readonly class ShortUrlController {
   public function __construct(
     #[Autowire('%env(ORIGIN)%')]
     private string $origin,
-    private ShareAccessGuard $accessGuard,
   ) {
   }
 
@@ -35,10 +33,6 @@ final readonly class ShortUrlController {
     }
 
     $share = $shortUrl->getShare();
-
-    if (!$this->accessGuard->allows($share)) {
-      throw new NotFoundException();
-    }
 
     $targetPath = $share->getTargetPath();
 

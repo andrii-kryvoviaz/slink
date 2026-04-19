@@ -15,6 +15,8 @@ final readonly class AccessControl extends AbstractValueObject {
     public bool $isPublished = false,
     #[ORM\Column(type: 'datetime_immutable', name: 'expires_at', nullable: true)]
     public ?DateTime $expiresAt = null,
+    #[ORM\Column(type: 'string', name: 'password_hash', nullable: true)]
+    public ?string $passwordHash = null,
   ) {}
 
   public static function initial(bool $isPublished): self {
@@ -37,6 +39,24 @@ final readonly class AccessControl extends AbstractValueObject {
     return clone($this, ['expiresAt' => $expiresAt]);
   }
 
+  public function withPassword(?HashedSharePassword $password): self {
+    $nextHash = $password?->toString();
+
+    if ($this->passwordHash === $nextHash) {
+      return $this;
+    }
+
+    return clone($this, ['passwordHash' => $nextHash]);
+  }
+
+  public function getPassword(): ?HashedSharePassword {
+    if ($this->passwordHash === null) {
+      return null;
+    }
+
+    return HashedSharePassword::fromHash($this->passwordHash);
+  }
+
   /**
    * @return array<string, mixed>
    */
@@ -44,6 +64,7 @@ final readonly class AccessControl extends AbstractValueObject {
     return [
       'isPublished' => $this->isPublished,
       'expiresAt' => $this->expiresAt?->toString(),
+      'passwordHash' => $this->passwordHash,
     ];
   }
 
@@ -51,15 +72,12 @@ final readonly class AccessControl extends AbstractValueObject {
    * @param array<string, mixed> $payload
    */
   public static function fromPayload(array $payload): self {
-    $expiresAtRaw = $payload['expiresAt'] ?? null;
-
-    if ($expiresAtRaw === null) {
-      return new self((bool) ($payload['isPublished'] ?? false));
-    }
-
     return new self(
-      (bool) ($payload['isPublished'] ?? false),
-      DateTime::fromString($expiresAtRaw),
+      isPublished: $payload['isPublished'] ?? false,
+      expiresAt: isset($payload['expiresAt'])
+        ? DateTime::fromString($payload['expiresAt'])
+        : null,
+      passwordHash: $payload['passwordHash'] ?? null,
     );
   }
 }

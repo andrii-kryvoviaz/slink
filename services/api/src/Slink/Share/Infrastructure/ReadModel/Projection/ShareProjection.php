@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Slink\Share\Infrastructure\ReadModel\Projection;
 
+use Slink\Share\Domain\Event\SharePasswordWasSet;
 use Slink\Share\Domain\Event\ShareExpirationWasSet;
 use Slink\Share\Domain\Event\ShareWasCreated;
 use Slink\Share\Domain\Event\ShareWasPublished;
 use Slink\Share\Domain\Event\ShortUrlWasAdded;
+use Slink\Share\Domain\ValueObject\HashedSharePassword;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
 use Slink\Share\Domain\Repository\ShortUrlRepositoryInterface;
 use Slink\Share\Domain\ValueObject\AccessControl;
@@ -45,7 +47,7 @@ final class ShareProjection extends AbstractProjection {
       return;
     }
 
-    $share->setAccessControl($share->getAccessControl()->publish());
+    $share->markPublished();
   }
 
   public function handleShortUrlWasAdded(ShortUrlWasAdded $event): void {
@@ -65,7 +67,21 @@ final class ShareProjection extends AbstractProjection {
       return;
     }
 
-    $share->setAccessControl($share->getAccessControl()->expireAt($event->expiresAt));
+    $share->expireAt($event->expiresAt);
+  }
+
+  public function handleSharePasswordWasSet(SharePasswordWasSet $event): void {
+    $share = $this->shareRepository->findById($event->shareId->toString());
+
+    if ($share === null) {
+      return;
+    }
+
+    $password = $event->passwordHash !== null
+      ? HashedSharePassword::fromHash($event->passwordHash)
+      : null;
+
+    $share->setPassword($password);
   }
 
   private function createShortUrl(ShareView $share, ?string $shortUrlId, ?string $shortCode): void {

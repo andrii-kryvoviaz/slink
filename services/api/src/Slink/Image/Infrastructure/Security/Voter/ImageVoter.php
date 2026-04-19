@@ -9,6 +9,7 @@ use Slink\Image\Domain\Image;
 use Slink\Image\Domain\ValueObject\ImageAccessContext;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Share\Application\Service\ShareAccessGuard;
+use Slink\Share\Domain\Enum\ShareableType;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
 use Slink\Share\Domain\ValueObject\TargetPath;
 use Slink\Shared\Domain\ValueObject\ID;
@@ -70,7 +71,7 @@ final class ImageVoter extends Voter {
         return true;
       }
 
-      return $this->hasAccessibleShareForUrl($this->targetPathFrom($subject));
+      return $this->hasAccessibleShare($imageId, $this->targetPathFrom($subject));
     }
 
     return false;
@@ -124,12 +125,12 @@ final class ImageVoter extends Voter {
     return $ownerId->equals(ID::fromString($userIdentifier));
   }
 
-  private function hasAccessibleShareForUrl(?TargetPath $targetPath): bool {
-    if ($targetPath === null) {
-      return false;
+  private function hasAccessibleShare(string $imageId, ?TargetPath $targetPath): bool {
+    if ($targetPath !== null) {
+      $share = $this->shareRepository->findByTargetPath($targetPath);
+    } else {
+      $share = $this->shareRepository->findByShareable($imageId, ShareableType::Image);
     }
-
-    $share = $this->shareRepository->findByTargetPath($targetPath);
 
     if ($share === null) {
       return false;

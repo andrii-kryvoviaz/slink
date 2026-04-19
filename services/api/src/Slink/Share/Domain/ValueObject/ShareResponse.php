@@ -15,6 +15,7 @@ final readonly class ShareResponse extends AbstractValueObject {
     private string $shareUrl,
     private ShareableType $type,
     private bool $created,
+    private bool $requiresPassword,
     private ?string $expiresAt = null,
   ) {}
 
@@ -30,6 +31,7 @@ final readonly class ShareResponse extends AbstractValueObject {
       $shareUrl,
       $share->getShareable()->getShareableType(),
       $created,
+      $share->getPassword() !== null,
       $share->getExpiresAt()?->toString(),
     );
   }
@@ -54,6 +56,10 @@ final readonly class ShareResponse extends AbstractValueObject {
     return $this->expiresAt;
   }
 
+  public function getRequiresPassword(): bool {
+    return $this->requiresPassword;
+  }
+
   /**
    * @return array<string, mixed>
    */
@@ -64,6 +70,7 @@ final readonly class ShareResponse extends AbstractValueObject {
       'type' => $this->type->value,
       'created' => $this->created,
       'expiresAt' => $this->expiresAt,
+      'requiresPassword' => $this->requiresPassword,
     ];
   }
 }

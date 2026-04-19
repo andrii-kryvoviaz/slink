@@ -5,12 +5,17 @@ declare(strict_types=1);
 namespace UI\Http\Rest\Controller\Image;
 
 use Slink\Image\Application\Query\GetPublicImageById\GetPublicImageByIdQuery;
+use Slink\Image\Domain\Enum\ImageAccess;
+use Slink\Image\Domain\Repository\ImageRepositoryInterface;
+use Slink\Image\Domain\ValueObject\ImageAccessContext;
 use Slink\Image\Infrastructure\Resource\ImageResourceContext;
 use Slink\Shared\Application\Query\QueryTrait;
+use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\Security\Voter\GuestAccessVoter;
 use Slink\User\Infrastructure\Auth\JwtUser;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use UI\Http\Rest\Response\ApiResponse;
@@ -21,7 +26,19 @@ use UI\Http\Rest\Response\ApiResponse;
 final class GetPublicImageByIdController {
   use QueryTrait;
 
+  public function __construct(
+    private readonly ImageRepositoryInterface $imageRepository,
+    private readonly AuthorizationCheckerInterface $access,
+  ) {
+  }
+
   public function __invoke(string $id, #[CurrentUser] ?JwtUser $user = null): ApiResponse {
+    $imageView = $this->imageRepository->oneById($id);
+
+    if (!$this->access->isGranted(ImageAccess::View, new ImageAccessContext(image: $imageView))) {
+      throw new NotFoundException();
+    }
+
     $query = new GetPublicImageByIdQuery($id);
 
     $resourceContext = new ImageResourceContext(

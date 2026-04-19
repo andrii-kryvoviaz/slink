@@ -7,12 +7,15 @@ namespace Slink\Share\Domain;
 use EventSauce\EventSourcing\AggregateRootId;
 use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use Slink\Share\Domain\AccessRule\ExpirationAware;
+use Slink\Share\Domain\AccessRule\PasswordProtected;
 use Slink\Share\Domain\AccessRule\PublicationAware;
+use Slink\Share\Domain\Event\SharePasswordWasSet;
 use Slink\Share\Domain\Event\ShareExpirationWasSet;
 use Slink\Share\Domain\Event\ShareWasCreated;
 use Slink\Share\Domain\Event\ShareWasPublished;
 use Slink\Share\Domain\Event\ShortUrlWasAdded;
 use Slink\Share\Domain\ValueObject\AccessControl;
+use Slink\Share\Domain\ValueObject\HashedSharePassword;
 use Slink\Share\Domain\ValueObject\ShareableReference;
 use Slink\Share\Domain\ValueObject\ShareContext;
 use Slink\Share\Domain\ValueObject\TargetPath;
@@ -20,7 +23,7 @@ use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
 
-final class Share extends AbstractAggregateRoot implements PublicationAware, ExpirationAware {
+final class Share extends AbstractAggregateRoot implements PublicationAware, ExpirationAware, PasswordProtected {
   private ShareableReference $shareable;
   private TargetPath $targetPath;
   private DateTime $createdAt;
@@ -102,6 +105,27 @@ final class Share extends AbstractAggregateRoot implements PublicationAware, Exp
     $this->accessControl = $this->accessControl->expireAt($event->expiresAt);
   }
 
+  public function setPassword(?HashedSharePassword $password): void {
+    $next = $this->accessControl->withPassword($password);
+
+    if ($next === $this->accessControl) {
+      return;
+    }
+
+    $this->recordThat(new SharePasswordWasSet($this->aggregateRootId(), $password?->toString()));
+  }
+
+  protected function applySharePasswordWasSet(SharePasswordWasSet $event): void {
+    $hash = $event->passwordHash;
+
+    if ($hash === null) {
+      $this->accessControl = $this->accessControl->withPassword(null);
+      return;
+    }
+
+    $this->accessControl = $this->accessControl->withPassword(HashedSharePassword::fromHash($hash));
+  }
+
   public function isPublished(): bool {
     return $this->accessControl->isPublished;
   }
@@ -112,6 +136,14 @@ final class Share extends AbstractAggregateRoot implements PublicationAware, Exp
 
   public function getExpiresAt(): ?DateTime {
     return $this->accessControl->expiresAt;
+  }
+
+  public function getPassword(): ?HashedSharePassword {
+    return $this->accessControl->getPassword();
+  }
+
+  public function getId(): string {
+    return $this->aggregateRootId()->toString();
   }
 
   public function getShareable(): ShareableReference {

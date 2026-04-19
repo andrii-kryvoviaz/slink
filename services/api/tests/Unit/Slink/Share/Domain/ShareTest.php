@@ -6,8 +6,10 @@ namespace Tests\Unit\Slink\Share\Domain;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Slink\Share\Domain\Event\SharePasswordWasSet;
 use Slink\Share\Domain\Event\ShareExpirationWasSet;
 use Slink\Share\Domain\Share;
+use Slink\Share\Domain\ValueObject\HashedSharePassword;
 use Slink\Share\Domain\ValueObject\ShareableReference;
 use Slink\Share\Domain\ValueObject\ShareContext;
 use Slink\Share\Domain\ValueObject\TargetPath;
@@ -98,6 +100,111 @@ final class ShareTest extends TestCase {
       $restored->getExpiresAt()?->toString()
     );
     $this->assertSame($share->isPublished(), $restored->isPublished());
+  }
+
+  #[Test]
+  public function itRecordsEventWhenSettingPassword(): void {
+    $share = $this->createShare();
+    $share->releaseEvents();
+
+    $password = HashedSharePassword::encode('hunter2');
+    $share->setPassword($password);
+
+    $events = $share->releaseEvents();
+    $this->assertCount(1, $events);
+    $this->assertInstanceOf(SharePasswordWasSet::class, $events[0]);
+    $this->assertSame($password->toString(), $events[0]->passwordHash);
+    $stored = $share->getPassword();
+    $this->assertNotNull($stored);
+    $this->assertSame($password->toString(), $stored->toString());
+  }
+
+  #[Test]
+  public function itIsIdempotentWhenSettingSamePasswordTwice(): void {
+    $share = $this->createShare();
+    $share->releaseEvents();
+
+    $password = HashedSharePassword::encode('hunter2');
+    $share->setPassword($password);
+    $share->releaseEvents();
+
+    $share->setPassword(HashedSharePassword::fromHash($password->toString()));
+
+    $events = $share->releaseEvents();
+    $this->assertCount(0, $events);
+  }
+
+  #[Test]
+  public function itClearsPasswordWhenSetToNull(): void {
+    $share = $this->createShare();
+    $share->releaseEvents();
+
+    $share->setPassword(HashedSharePassword::encode('hunter2'));
+    $share->releaseEvents();
+
+    $share->setPassword(null);
+
+    $events = $share->releaseEvents();
+    $this->assertCount(1, $events);
+    $this->assertInstanceOf(SharePasswordWasSet::class, $events[0]);
+    $this->assertNull($events[0]->passwordHash);
+    $this->assertNull($share->getPassword());
+  }
+
+  #[Test]
+  public function itDoesNotRecordEventWhenClearingAlreadyNullPassword(): void {
+    $share = $this->createShare();
+    $share->releaseEvents();
+
+    $share->setPassword(null);
+
+    $events = $share->releaseEvents();
+    $this->assertCount(0, $events);
+  }
+
+  #[Test]
+  public function itDoesNotLeakPlaintextInEvents(): void {
+    $share = $this->createShare();
+    $share->releaseEvents();
+
+    $plaintext = 'super-secret-hunter2';
+    $share->setPassword(HashedSharePassword::encode($plaintext));
+
+    $events = $share->releaseEvents();
+    $this->assertCount(1, $events);
+    $event = $events[0];
+    $this->assertInstanceOf(SharePasswordWasSet::class, $event);
+    $this->assertNotSame($plaintext, $event->passwordHash);
+    $this->assertStringStartsWith('$2y$', (string) $event->passwordHash);
+
+    $payload = $event->toPayload();
+    $this->assertArrayNotHasKey('password', $payload);
+    $this->assertArrayHasKey('passwordHash', $payload);
+    $this->assertNotSame($plaintext, $payload['passwordHash']);
+    $this->assertStringNotContainsString($plaintext, json_encode($payload, JSON_THROW_ON_ERROR));
+  }
+
+  #[Test]
+  public function itRoundTripsSnapshotWithPassword(): void {
+    $share = $this->createShare();
+    $password = HashedSharePassword::encode('hunter2');
+    $share->setPassword($password);
+    $share->releaseEvents();
+
+    $reflection = new \ReflectionClass($share);
+    $createMethod = $reflection->getMethod('createSnapshotState');
+
+    /** @var array<string, mixed> $snapshot */
+    $snapshot = $createMethod->invoke($share);
+
+    $restoreMethod = $reflection->getMethod('reconstituteFromSnapshotState');
+    /** @var Share $restored */
+    $restored = $restoreMethod->invoke(null, $share->aggregateRootId(), $snapshot);
+
+    $restoredPassword = $restored->getPassword();
+    $this->assertNotNull($restoredPassword);
+    $this->assertSame($password->toString(), $restoredPassword->toString());
+    $this->assertTrue($restoredPassword->match('hunter2'));
   }
 
   private function createShare(): Share {
