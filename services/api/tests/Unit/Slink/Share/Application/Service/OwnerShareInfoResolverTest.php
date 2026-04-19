@@ -71,8 +71,7 @@ final class OwnerShareInfoResolverTest extends TestCase {
 
     $this->shareRepository
       ->method('findByShareable')
-      ->with('shareable-id', ShareableType::Collection)
-      ->willReturn(null);
+      ->willReturnMap([['shareable-id', ShareableType::Collection, null]]);
 
     $resolver = $this->createResolver();
     $result = $resolver->resolve('shareable-id', ShareableType::Collection, $ownerId, $ownerId);
@@ -94,8 +93,7 @@ final class OwnerShareInfoResolverTest extends TestCase {
 
     $this->shareRepository
       ->method('findByShareable')
-      ->with('shareable-id', ShareableType::Collection)
-      ->willReturn($share);
+      ->willReturnMap([['shareable-id', ShareableType::Collection, $share]]);
 
     $this->shareService->method('resolveUrl')->willReturn('https://example.com/c/abc');
 

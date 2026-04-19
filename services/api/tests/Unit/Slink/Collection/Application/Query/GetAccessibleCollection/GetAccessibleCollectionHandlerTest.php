@@ -95,8 +95,7 @@ final class GetAccessibleCollectionHandlerTest extends TestCase {
     $collection = $this->createCollection($ownerId);
     $this->collectionRepository->method('findById')->willReturn($collection);
     $this->access->method('isGranted')
-      ->with(CollectionAccess::View, $collection)
-      ->willReturn(true);
+      ->willReturnMap([[CollectionAccess::View, $collection, true]]);
     $this->ownerShareInfoResolver->method('resolve')->willReturn(null);
 
     $handler = $this->createHandler();
