@@ -45,8 +45,9 @@ final class GetCollectionCoverHandlerTest extends TestCase {
 
     $this->collectionRepository
       ->method('findById')
-      ->with($collectionId)
-      ->willReturn(null);
+      ->willReturnMap([
+        [$collectionId, null],
+      ]);
 
     $query = new GetCollectionCoverQuery($collectionId);
 
@@ -66,8 +67,9 @@ final class GetCollectionCoverHandlerTest extends TestCase {
 
     $this->collectionRepository
       ->method('findById')
-      ->with($collectionId)
-      ->willReturn($collection);
+      ->willReturnMap([
+        [$collectionId, $collection],
+      ]);
 
     $access = $this->createStub(AuthorizationCheckerInterface::class);
     $access->method('isGranted')->willReturn(false);
@@ -96,13 +98,15 @@ final class GetCollectionCoverHandlerTest extends TestCase {
 
     $this->collectionRepository
       ->method('findById')
-      ->with($collectionId)
-      ->willReturn($collection);
+      ->willReturnMap([
+        [$collectionId, $collection],
+      ]);
 
     $this->collectionItemRepository
       ->method('getFirstImageIdsByCollectionIds')
-      ->with([$collectionId], 5)
-      ->willReturn([]);
+      ->willReturnMap([
+        [[$collectionId], 5, []],
+      ]);
 
     $query = new GetCollectionCoverQuery($collectionId);
 
@@ -124,14 +128,16 @@ final class GetCollectionCoverHandlerTest extends TestCase {
     $collectionRepository = $this->createStub(CollectionRepositoryInterface::class);
     $collectionRepository
       ->method('findById')
-      ->with($collectionId)
-      ->willReturn($collection);
+      ->willReturnMap([
+        [$collectionId, $collection],
+      ]);
 
     $collectionItemRepository = $this->createStub(CollectionItemRepositoryInterface::class);
     $collectionItemRepository
       ->method('getFirstImageIdsByCollectionIds')
-      ->with([$collectionId], 5)
-      ->willReturn([$collectionId => $imageIds]);
+      ->willReturnMap([
+        [[$collectionId], 5, [$collectionId => $imageIds]],
+      ]);
 
     $coverGenerator = $this->createMock(CollectionCoverGeneratorInterface::class);
     $coverGenerator

@@ -52,8 +52,9 @@ final class AbstractSnapshotStoreRepositoryTest extends TestCase {
 
     $this->factory
       ->method('createForAggregate')
-      ->with('Slink\\Image\\Domain\\Image')
-      ->willReturn($this->constructingRepository);
+      ->willReturnMap([
+        ['Slink\\Image\\Domain\\Image', $this->constructingRepository],
+      ]);
 
     $this->repository = new TestSnapshotStoreRepository(
       $this->factory,

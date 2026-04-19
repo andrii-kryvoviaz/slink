@@ -108,8 +108,9 @@ final class ApiKeyUserProviderTest extends TestCase {
 
     $this->apiKeyRepository
       ->method('findByKey')
-      ->with($userId)
-      ->willReturn($apiKeyView);
+      ->willReturnMap([
+        [$userId, $apiKeyView],
+      ]);
     
     $refreshedUser = $this->userProvider->refreshUser($apiKeyUser);
     
