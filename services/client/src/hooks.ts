@@ -1,15 +1,19 @@
+import { ShareReroute } from '@slink/feature/Share';
 import type { Transport } from '@sveltejs/kit';
 
 import { Application } from '$lib/application';
 
 import { API_CLIENT_BRAND } from '@slink/api/Client';
 
+import { sequenceReroute } from '@slink/lib/routing/reroute';
 import {
   USER_SETTINGS_BRAND,
   UserSettings,
 } from '@slink/lib/settings/UserSettings.svelte';
 
 let _clientSettings: UserSettings;
+
+export const reroute = sequenceReroute(ShareReroute.handle);
 
 export const transport: Transport = {
   ApiClient: {

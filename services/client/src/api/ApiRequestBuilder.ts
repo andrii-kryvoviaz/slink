@@ -47,6 +47,15 @@ export class ApiRequestBuilder {
       headers.set('Authorization', `Bearer ${accessToken}`);
     }
 
+    const forwarded = this.requestEvent.cookies
+      .getAll()
+      .filter(({ name }) => name.startsWith('__'))
+      .map(({ name, value }) => `${name}=${value}`)
+      .join('; ');
+    if (forwarded) {
+      headers.set('Cookie', forwarded);
+    }
+
     const body = await this.cloneRequestBody();
 
     return {

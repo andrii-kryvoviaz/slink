@@ -28,7 +28,9 @@
 
   let { data }: Props = $props();
 
-  const state = createImageInfoPageState({ getData: () => data });
+  const state = createImageInfoPageState({
+    getData: () => data,
+  });
 </script>
 
 <svelte:head>
