@@ -1,10 +1,17 @@
 import { runtimeTranslator } from '../RuntimeTranslator.svelte';
 import { localize } from '../localize';
 
-type ApiError = {
-  match: string | RegExp;
-  translate: (...args: any[]) => string;
+type StringApiError = {
+  match: string;
+  translate: () => string;
 };
+
+type RegexApiError = {
+  match: RegExp;
+  translate: (match: RegExpMatchArray) => string;
+};
+
+type ApiError = StringApiError | RegexApiError;
 
 function errors(): ApiError[] {
   return [
@@ -513,12 +520,16 @@ function errors(): ApiError[] {
 }
 
 runtimeTranslator.registerTranslator((message) => {
-  for (const { match, translate } of errors()) {
-    if (typeof match === 'string') {
-      if (match === message) return translate();
+  for (const error of errors()) {
+    if (typeof error.match === 'string') {
+      if (error.match === message) {
+        return (error as StringApiError).translate();
+      }
     } else {
-      const result = message.match(match);
-      if (result) return translate(result);
+      const result = message.match(error.match);
+      if (result) {
+        return (error as RegexApiError).translate(result);
+      }
     }
   }
 
