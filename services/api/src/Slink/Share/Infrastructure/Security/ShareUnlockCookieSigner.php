@@ -32,6 +32,16 @@ final readonly class ShareUnlockCookieSigner implements ShareUnlockVerifierInter
     return $this->verifyFromCookies($shareId, $request->cookies);
   }
 
+  public function verifyFromCookies(ID $shareId, InputBag $cookies): bool {
+    $value = $cookies->get(self::cookieName($shareId));
+
+    if (!\is_string($value)) {
+      return false;
+    }
+
+    return $this->verify($shareId, $value);
+  }
+
   public function mint(ID $shareId): SignedShareUnlock {
     $expiresAt = (new DateTimeImmutable())->add(new DateInterval('PT24H'));
     $token = $this->sign($shareId, $expiresAt);
@@ -50,16 +60,6 @@ final readonly class ShareUnlockCookieSigner implements ShareUnlockVerifierInter
     $signature = $this->signature($shareId->toString(), $expiresTimestamp);
 
     return new ShareUnlockToken($expiresTimestamp, $signature);
-  }
-
-  public function verifyFromCookies(ID $shareId, InputBag $cookies): bool {
-    $value = $cookies->get(self::cookieName($shareId));
-
-    if (!\is_string($value)) {
-      return false;
-    }
-
-    return $this->verify($shareId, $value);
   }
 
   public function verify(ID $shareId, string $cookieValue): bool {
@@ -85,7 +85,7 @@ final readonly class ShareUnlockCookieSigner implements ShareUnlockVerifierInter
   }
 
   public static function cookieName(ID $shareId): string {
-    return "share_unlock_{$shareId->toString()}";
+    return "__share_{$shareId->toString()}";
   }
 
   private function signature(string $shareId, int $expiresTimestamp): string {

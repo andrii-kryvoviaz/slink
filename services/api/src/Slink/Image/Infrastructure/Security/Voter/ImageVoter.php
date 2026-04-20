@@ -9,7 +9,6 @@ use Slink\Image\Domain\Image;
 use Slink\Image\Domain\ValueObject\ImageAccessContext;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Share\Application\Service\ShareAccessGuard;
-use Slink\Share\Domain\Enum\ShareableType;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
 use Slink\Share\Domain\ValueObject\TargetPath;
 use Slink\Shared\Domain\ValueObject\ID;
@@ -56,12 +55,6 @@ final class ImageVoter extends Voter {
   protected function voteOnAttribute(mixed $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool {
     $image = $this->unwrap($subject);
 
-    $imageId = $this->extractImageId($image);
-
-    if ($imageId === null) {
-      return false;
-    }
-
     if ($this->isOwner($image, $token)) {
       return true;
     }
@@ -71,7 +64,13 @@ final class ImageVoter extends Voter {
         return true;
       }
 
-      return $this->hasAccessibleShare($imageId, $this->targetPathFrom($subject));
+      $targetPath = $this->targetPathFrom($subject);
+
+      if ($targetPath === null) {
+        return false;
+      }
+
+      return $this->hasAccessibleShare($targetPath);
     }
 
     return false;
@@ -91,18 +90,6 @@ final class ImageVoter extends Voter {
     }
 
     return $subject;
-  }
-
-  private function extractImageId(mixed $image): ?string {
-    if ($image instanceof ImageView) {
-      return $image->getUuid();
-    }
-
-    if ($image instanceof Image) {
-      return $image->aggregateRootId()->toString();
-    }
-
-    return null;
   }
 
   private function isOwner(mixed $image, TokenInterface $token): bool {
@@ -125,12 +112,8 @@ final class ImageVoter extends Voter {
     return $ownerId->equals(ID::fromString($userIdentifier));
   }
 
-  private function hasAccessibleShare(string $imageId, ?TargetPath $targetPath): bool {
-    if ($targetPath !== null) {
-      $share = $this->shareRepository->findByTargetPath($targetPath);
-    } else {
-      $share = $this->shareRepository->findByShareable($imageId, ShareableType::Image);
-    }
+  private function hasAccessibleShare(TargetPath $targetPath): bool {
+    $share = $this->shareRepository->findByTargetPath($targetPath);
 
     if ($share === null) {
       return false;

@@ -90,7 +90,7 @@ final class ShareUnlockCookieSignerTest extends TestCase {
     $value = $signer->sign($shareId, $expiresAt)->toString();
     $cookie = $signer->buildCookie($shareId, $value, $expiresAt);
 
-    $this->assertSame('share_unlock_share-123', $cookie->getName());
+    $this->assertSame('__share_share-123', $cookie->getName());
     $this->assertSame($value, $cookie->getValue());
     $this->assertTrue($cookie->isHttpOnly());
     $this->assertTrue($cookie->isSecure());
@@ -111,7 +111,7 @@ final class ShareUnlockCookieSignerTest extends TestCase {
 
   #[Test]
   public function itDerivesCookieNameDeterministically(): void {
-    $this->assertSame('share_unlock_abc', ShareUnlockCookieSigner::cookieName(ID::fromString('abc')));
+    $this->assertSame('__share_abc', ShareUnlockCookieSigner::cookieName(ID::fromString('abc')));
   }
 
   #[Test]

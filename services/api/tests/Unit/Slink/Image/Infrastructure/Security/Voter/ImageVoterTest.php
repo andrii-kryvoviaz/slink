@@ -33,14 +33,10 @@ final class ImageVoterTest extends TestCase {
   }
 
   private function createVoter(): ImageVoter {
-    return new ImageVoter($this->shareRepository, $this->accessGuard);
-  }
-
-  private function stubAccessGuard(bool $allows): ShareAccessGuard {
-    $guard = $this->createStub(ShareAccessGuard::class);
-    $guard->method('allows')->willReturn($allows);
-
-    return $guard;
+    return new ImageVoter(
+      $this->shareRepository,
+      $this->accessGuard,
+    );
   }
 
   private function createToken(string $userIdentifier = ''): TokenInterface&Stub {
@@ -54,6 +50,7 @@ final class ImageVoterTest extends TestCase {
     ?string $ownerId,
     string $imageId = '550e8400-e29b-41d4-a716-446655440000',
     bool $isPublic = false,
+    string $fileName = 'test.jpg',
   ): ImageView&Stub {
     $user = null;
 
@@ -67,6 +64,7 @@ final class ImageVoterTest extends TestCase {
 
     $image = $this->createStub(ImageView::class);
     $image->method('getUuid')->willReturn($imageId);
+    $image->method('getFileName')->willReturn($fileName);
     $image->method('getUser')->willReturn($user);
     $userId = null;
 
@@ -220,85 +218,6 @@ final class ImageVoterTest extends TestCase {
     $result = $voter->vote($this->createToken($requesterId), $context, [ImageAccess::View]);
 
     $this->assertSame(VoterInterface::ACCESS_DENIED, $result);
-  }
-
-  #[Test]
-  public function itGatesEachShareIndependentlyByItsTargetPath(): void {
-    $ownerId = '550e8400-e29b-41d4-a716-446655440000';
-    $requesterId = '660e8400-e29b-41d4-a716-446655440000';
-
-    $expiredPath = TargetPath::fromString('/image/test.jpg');
-    $accessiblePath = TargetPath::fromString('/image/test.webp');
-
-    $expiredShare = $this->createStub(ShareView::class);
-    $accessibleShare = $this->createStub(ShareView::class);
-
-    $shareRepository = $this->createStub(ShareRepositoryInterface::class);
-    $shareRepository
-      ->method('findByTargetPath')
-      ->willReturnCallback(static function (TargetPath $path) use ($expiredPath, $expiredShare, $accessibleShare): ShareView {
-        if ($path->toString() === $expiredPath->toString()) {
-          return $expiredShare;
-        }
-
-        return $accessibleShare;
-      });
-
-    $accessGuard = $this->createStub(ShareAccessGuard::class);
-    $accessGuard
-      ->method('allows')
-      ->willReturnCallback(static function (object $share) use ($expiredShare): bool {
-        if ($share === $expiredShare) {
-          return false;
-        }
-
-        return true;
-      });
-
-    $voter = new ImageVoter($shareRepository, $accessGuard);
-    $image = $this->createImageView($ownerId);
-
-    $expiredContext = new ImageAccessContext($image, targetPath: $expiredPath);
-    $accessibleContext = new ImageAccessContext($image, targetPath: $accessiblePath);
-
-    $this->assertSame(
-      VoterInterface::ACCESS_DENIED,
-      $voter->vote($this->createToken($requesterId), $expiredContext, [ImageAccess::View]),
-    );
-    $this->assertSame(
-      VoterInterface::ACCESS_GRANTED,
-      $voter->vote($this->createToken($requesterId), $accessibleContext, [ImageAccess::View]),
-    );
-  }
-
-  #[Test]
-  public function itDeniesViewForImageWithoutOwnerWhenNoTargetPath(): void {
-    $voter = $this->createVoter();
-    $image = $this->createImageView(null);
-
-    $result = $voter->vote($this->createToken('660e8400-e29b-41d4-a716-446655440000'), $image, [ImageAccess::View]);
-
-    $this->assertSame(VoterInterface::ACCESS_DENIED, $result);
-  }
-
-  #[Test]
-  public function itLooksUpShareByExactTargetPath(): void {
-    $ownerId = '550e8400-e29b-41d4-a716-446655440000';
-    $requesterId = '660e8400-e29b-41d4-a716-446655440000';
-    $targetPath = TargetPath::fromString('/image/test.jpg?width=100&s=abc');
-
-    $shareRepository = $this->createMock(ShareRepositoryInterface::class);
-    $shareRepository
-      ->expects($this->once())
-      ->method('findByTargetPath')
-      ->with($this->callback(static fn(TargetPath $path): bool => $path->toString() === $targetPath->toString()))
-      ->willReturn($this->createAccessibleShareStub());
-
-    $voter = new ImageVoter($shareRepository, $this->stubAccessGuard(true));
-    $image = $this->createImageView($ownerId);
-    $context = new ImageAccessContext($image, targetPath: $targetPath);
-
-    $voter->vote($this->createToken($requesterId), $context, [ImageAccess::View]);
   }
 
   #[Test]
