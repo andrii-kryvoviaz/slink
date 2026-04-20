@@ -9,6 +9,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 final class InvalidSharePasswordException extends HttpException {
   public function __construct() {
-    parent::__construct(Response::HTTP_UNAUTHORIZED, 'invalid_password');
+    parent::__construct(Response::HTTP_BAD_REQUEST, 'invalid_password');
   }
 }
