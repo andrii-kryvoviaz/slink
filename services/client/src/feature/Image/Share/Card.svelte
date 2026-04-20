@@ -45,7 +45,7 @@
     {/if}
 
     <div class="mb-3">
-      <Share.Toolbar expirationState={state.expiration} />
+      <Share.Toolbar />
     </div>
 
     <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">

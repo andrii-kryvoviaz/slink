@@ -1,22 +1,22 @@
 <script lang="ts">
-  import type { ShareExpirationState } from '@slink/feature/Share';
   import type { Snippet } from 'svelte';
 
   import Icon from '@iconify/svelte';
   import { fly } from 'svelte/transition';
 
+  import { getShareControls } from '../State/Context';
   import { controls } from './Popover.theme';
 
   interface Props {
-    expirationState: ShareExpirationState;
     header?: Snippet;
     onOpenExpiration: () => void;
+    onOpenPassword: () => void;
   }
 
-  let { expirationState, header, onOpenExpiration }: Props = $props();
+  let { header, onOpenExpiration, onOpenPassword }: Props = $props();
 
+  const share = getShareControls();
   const list = controls.list();
-  const disabledList = controls.list({ state: 'disabled' });
 </script>
 
 <div in:fly|local={{ x: -6, duration: 120 }} class={list.wrap()}>
@@ -30,8 +30,8 @@
     <Icon icon="ph:clock" class={list.icon()} />
     <div class={list.labels()}>
       <span class={list.label()}>Expiration</span>
-      {#if expirationState.description}
-        <span class={list.sublabel()}>{expirationState.description}</span>
+      {#if share.expiration.description}
+        <span class={list.sublabel()}>{share.expiration.description}</span>
       {:else}
         <span class={list.sublabel()}>Not set</span>
       {/if}
@@ -39,12 +39,16 @@
     <Icon icon="ph:caret-right" class={list.chevron()} />
   </button>
 
-  <div class={disabledList.item()}>
-    <Icon icon="ph:lock-simple" class={disabledList.icon()} />
-    <div class={disabledList.labels()}>
-      <span class={disabledList.label()}>Password</span>
-      <span class={disabledList.sublabel()}> Require a password to view </span>
+  <button type="button" class={list.item()} onclick={onOpenPassword}>
+    <Icon icon="ph:lock-simple" class={list.icon()} />
+    <div class={list.labels()}>
+      <span class={list.label()}>Password</span>
+      {#if share.password.enabled}
+        <span class={list.sublabel()}>Protected</span>
+      {:else}
+        <span class={list.sublabel()}>Require a password to view</span>
+      {/if}
     </div>
-    <span class={disabledList.badge()}>SOON</span>
-  </div>
+    <Icon icon="ph:caret-right" class={list.chevron()} />
+  </button>
 </div>

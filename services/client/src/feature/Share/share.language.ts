@@ -15,4 +15,17 @@ export const shareMessages = {
     expired: () => localize('Expired'),
     today: () => localize('Today'),
   },
+  password: {
+    status: {
+      saving: () => localize('Saving password'),
+      saved: () => localize('Saved'),
+      error: () => localize('Failed to save password'),
+    },
+    minLengthHint: (min: number) =>
+      localize('Use at least {min} characters', { min: String(min) }),
+  },
+  locked: {
+    invalid: () => localize('Incorrect password. Try again.'),
+    error: () => localize('Something went wrong. Please try again.'),
+  },
 };

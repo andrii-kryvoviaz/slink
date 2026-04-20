@@ -1,4 +1,4 @@
-import { ShareExpirationState } from '@slink/feature/Share';
+import { ShareExpirationState, SharePasswordState } from '@slink/feature/Share';
 
 import { bindRequestState } from '$lib/utils/store/bindRequestState.svelte';
 import { printErrorsAsToastMessage } from '$lib/utils/ui/printErrorsAsToastMessage';
@@ -27,11 +27,16 @@ export class ShareState {
   );
 
   private _expiration: ShareExpirationState;
+  private _password: SharePasswordState;
 
   constructor(config: ShareStateConfig) {
     this._config = config;
 
     this._expiration = new ShareExpirationState({
+      getShareId: () => this._shareId,
+    });
+
+    this._password = new SharePasswordState({
       getShareId: () => this._shareId,
     });
 
@@ -59,6 +64,7 @@ export class ShareState {
     this._shareId = response.shareId;
     this._shareUrl = routes.share.fromResponse(response);
     this._expiration.rebindTo(response.shareId, expiresAt);
+    this._password.rebindTo(response.shareId, response.requiresPassword);
   }
 
   get shareUrl(): string | null {
@@ -77,6 +83,10 @@ export class ShareState {
     return this._expiration;
   }
 
+  get password(): SharePasswordState {
+    return this._password;
+  }
+
   load = async (): Promise<void> => {
     await this._request.run();
   };
@@ -84,6 +94,10 @@ export class ShareState {
   hydrate = (response: ShareResponse): void => {
     this._apply(response);
   };
+
+  hasPending(): boolean {
+    return this._expiration.hasPending();
+  }
 
   ensurePublished = async (): Promise<string | void> => {
     if (!this.isInitialized) {

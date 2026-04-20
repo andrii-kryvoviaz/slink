@@ -7,21 +7,23 @@
   import Icon from '@iconify/svelte';
   import { fly, slide } from 'svelte/transition';
 
+  import { getShareControls } from '../State/Context';
   import type { ShareStatusKind } from '../share.theme';
   import { statusIconName, status as statusTheme } from '../share.theme';
   import { controls } from './Popover.theme';
 
   interface Props {
-    expirationState: ShareExpirationState;
     onBack: () => void;
   }
 
-  let { expirationState, onBack }: Props = $props();
+  let { onBack }: Props = $props();
+
+  const expiration = getShareControls().expiration;
 
   let customRevealed: boolean = $state(false);
 
   const isCustomActive = $derived.by<boolean>(() => {
-    if (!expirationState.enabled) {
+    if (!expiration.enabled) {
       return false;
     }
 
@@ -29,14 +31,12 @@
       return true;
     }
 
-    return (
-      expirationState.date !== null && expirationState.activePresetDays === null
-    );
+    return expiration.date !== null && expiration.activePresetDays === null;
   });
 
   const handlePreset = (days: number): void => {
     customRevealed = false;
-    expirationState.setFromDays(days);
+    expiration.setFromDays(days);
   };
 
   const handleCustomSelect = (): void => {
@@ -44,11 +44,11 @@
   };
 
   const handleToggle = (checked: boolean): void => {
-    expirationState.toggle(checked);
+    expiration.toggle(checked);
   };
 
   const statusKind = $derived<ShareStatusKind | null>(
-    expirationState.status?.kind ?? null,
+    expiration.status?.kind ?? null,
   );
 
   const detail = $derived(controls.detail({ chipActive: isCustomActive }));
@@ -75,20 +75,17 @@
       <div class={detail.titleRow()}>
         <div class={detail.titleGroup()}>
           <span class={detail.title()}>Expiration</span>
-          {#if expirationState.status !== null && statusKind !== null}
+          {#if expiration.status !== null && statusKind !== null}
             <span
               class={status.line()}
               aria-live="polite"
-              title={expirationState.status.message}
+              title={expiration.status.message}
             >
               <Icon icon={statusIconName(statusKind)} class={status.icon()} />
             </span>
           {/if}
         </div>
-        <Switch
-          checked={expirationState.enabled}
-          onCheckedChange={handleToggle}
-        />
+        <Switch checked={expiration.enabled} onCheckedChange={handleToggle} />
       </div>
       <span class={detail.description()}>
         Restrict link availability after the chosen date
@@ -96,7 +93,7 @@
     </div>
   </div>
 
-  {#if expirationState.enabled}
+  {#if expiration.enabled}
     <div transition:slide={{ duration: 180 }} class={detail.body()}>
       <div class={detail.presets()}>
         {#each ShareExpirationState.PRESET_DAYS as days (days)}
@@ -104,11 +101,11 @@
             type="button"
             class={controls
               .detail({
-                chipActive: expirationState.activePresetDays === days,
+                chipActive: expiration.activePresetDays === days,
               })
               .chip()}
             onclick={() => handlePreset(days)}
-            disabled={expirationState.isSaving}
+            disabled={expiration.isSaving}
           >
             {plural(days, ['# day', '# days'])}
           </button>
@@ -117,7 +114,7 @@
           type="button"
           class={detail.chip()}
           onclick={handleCustomSelect}
-          disabled={expirationState.isSaving}
+          disabled={expiration.isSaving}
         >
           Custom
         </button>
@@ -126,9 +123,9 @@
       {#if isCustomActive}
         <div transition:slide={{ duration: 180 }}>
           <DatePickerField
-            bind:value={expirationState.date}
+            bind:value={expiration.date}
             placeholder="Pick a date"
-            disabled={expirationState.isSaving}
+            disabled={expiration.isSaving}
             class={detail.field()}
           />
         </div>

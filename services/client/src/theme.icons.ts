@@ -229,4 +229,5 @@ export const themeIcons: string[] = [
   'ph:link-break-duotone',
   'ph:caret-left',
   'lets-icons:folder-send-light',
+  'ph:lock-key-duotone',
 ];
