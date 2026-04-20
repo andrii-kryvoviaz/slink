@@ -4,11 +4,14 @@ import { invalidateAll } from '$app/navigation';
 import {
   BadRequestException,
   ForbiddenException,
+  LockedException,
   NotFoundException,
   PayloadTooLargeException,
   UnauthorizedException,
   ValidationException,
 } from '@slink/api/Exceptions';
+import type { LockedExceptionPayload } from '@slink/api/Exceptions/LockedException';
+import { HttpStatus } from '@slink/api/Http/HttpStatus';
 import { JsonMapper } from '@slink/api/Mapper/JsonMapper';
 import {
   AnalyticsResource,
@@ -27,8 +30,18 @@ import { OAuthResource } from '@slink/api/Resources/OAuthResource';
 import { SsoResource } from '@slink/api/Resources/SsoResource';
 import { StorageResource } from '@slink/api/Resources/StorageResource';
 import { UserResource } from '@slink/api/Resources/UserResource';
+import type { Violation } from '@slink/api/Response/Error/ViolationResponse';
 import type { RequestMapper } from '@slink/api/Type/RequestMapper';
 import type { RequestOptions } from '@slink/api/Type/RequestOptions';
+
+type ErrorPayload = {
+  title?: string;
+  message?: string;
+  violations?: Violation[];
+};
+
+const errorOf = (body: unknown): ErrorPayload =>
+  (body as { error?: ErrorPayload } | undefined)?.error ?? {};
 
 const RESOURCES = {
   image: ImageResource,
@@ -66,11 +79,12 @@ export type ApiClientType = Resources & {
   on: (event: EventType, listener: EventListener) => void;
 };
 
-type EventType =
+export type EventType =
   | 'auth-refreshed'
   | 'unauthorized'
   | 'forbidden'
   | 'not-found'
+  | 'locked'
   | 'payload-too-large'
   | 'bad-request'
   | 'validation'
@@ -82,6 +96,50 @@ type Event<T> = {
 };
 
 type EventListener = (event: Event<unknown>) => void;
+
+type EventContext = {
+  url: string;
+  method: string;
+  body?: unknown;
+};
+
+type ResolvedException = { event: EventType; exception: Error };
+
+type ExceptionResolver = (body: unknown) => ResolvedException;
+
+const STATUS_EXCEPTIONS: Record<number, ExceptionResolver> = {
+  [HttpStatus.Unauthorized]: () => ({
+    event: 'unauthorized',
+    exception: new UnauthorizedException(),
+  }),
+  [HttpStatus.Forbidden]: () => ({
+    event: 'forbidden',
+    exception: new ForbiddenException(),
+  }),
+  [HttpStatus.NotFound]: () => ({
+    event: 'not-found',
+    exception: new NotFoundException(),
+  }),
+  [HttpStatus.PayloadTooLarge]: () => ({
+    event: 'payload-too-large',
+    exception: new PayloadTooLargeException(),
+  }),
+  [HttpStatus.Locked]: (body) => ({
+    event: 'locked',
+    exception: new LockedException((body ?? {}) as LockedExceptionPayload),
+  }),
+  [HttpStatus.BadRequest]: (body) => {
+    const error = errorOf(body);
+    if (error.violations !== undefined) {
+      return { event: 'validation', exception: new ValidationException(error) };
+    }
+    return { event: 'bad-request', exception: new BadRequestException(error) };
+  },
+  [HttpStatus.UnprocessableEntity]: (body) => ({
+    event: 'validation',
+    exception: new ValidationException(errorOf(body)),
+  }),
+};
 
 export class Client {
   private _resources: Resources = {} as Resources;
@@ -137,84 +195,27 @@ export class Client {
     const response = await fetchFn(url + queryString, options);
 
     if (browser && response.headers.has('x-auth-refreshed')) {
-      const { handled } = this.emit({
-        event: 'auth-refreshed',
-      });
-
-      if (!handled) {
-        invalidateAll();
-      }
+      this.emit({ event: 'auth-refreshed' });
+      invalidateAll();
     }
 
-    if (response.status === 204) {
+    if (response.status === HttpStatus.NoContent) {
       return;
     }
 
-    if (response.status === 401) {
-      const { handled } = this.emit({
-        event: 'unauthorized',
-      });
+    const resolver = STATUS_EXCEPTIONS[response.status];
+    const method = options?.method ?? 'GET';
 
-      if (!handled) {
-        throw new UnauthorizedException();
-      }
-    }
-
-    if (response.status === 403) {
-      const { handled } = this.emit({
-        event: 'forbidden',
-      });
-
-      if (!handled) {
-        throw new ForbiddenException();
-      }
-    }
-
-    if (response.status === 404) {
-      const { handled } = this.emit({
-        event: 'not-found',
-      });
-
-      if (!handled) {
-        throw new NotFoundException();
-      }
-    }
-
-    if (response.status === 413) {
-      const { handled } = this.emit({
-        event: 'payload-too-large',
-      });
-
-      if (!handled) {
-        throw new PayloadTooLargeException();
-      }
+    if (resolver !== undefined) {
+      const body = await this.safeJson(response);
+      const { event, exception } = resolver(body);
+      this.emit<EventContext>({ event, data: { url, method, body } });
+      throw exception;
     }
 
     const responseBody = await response.json();
 
-    if (response.status === 400 && !responseBody.error?.violations) {
-      const { handled } = this.emit({
-        event: 'bad-request',
-        data: responseBody.error,
-      });
-
-      if (!handled) {
-        throw new BadRequestException(responseBody.error);
-      }
-    }
-
-    if (response.status === 422 || responseBody.error?.violations) {
-      const { handled } = this.emit({
-        event: 'validation',
-        data: responseBody.error,
-      });
-
-      if (!handled) {
-        throw new ValidationException(responseBody.error);
-      }
-    }
-
-    if (response.ok && response.status < 400) {
+    if (response.ok && response.status < HttpStatus.BadRequest) {
       const parsedBody = this.parseBody(responseBody);
       return {
         ...(typeof parsedBody === 'object' && parsedBody !== null
@@ -224,6 +225,14 @@ export class Client {
           ? { headers: response.headers }
           : {}),
       };
+    }
+  }
+
+  private async safeJson(response: Response): Promise<unknown> {
+    try {
+      return await response.json();
+    } catch {
+      return undefined;
     }
   }
 
@@ -243,22 +252,10 @@ export class Client {
     return body;
   }
 
-  private emit<T>({ event, data }: { event: EventType; data?: T }): {
-    handled: boolean;
-  } {
-    const listeners = this._eventListeners.get(event);
-
-    if (listeners) {
-      listeners.forEach((listener) => listener({ type: event, data }));
-
-      return {
-        handled: true,
-      };
-    } else {
-      return {
-        handled: false,
-      };
-    }
+  private emit<T>({ event, data }: { event: EventType; data?: T }): void {
+    this._eventListeners
+      .get(event)
+      ?.forEach((listener) => listener({ type: event, data }));
   }
 
   public on(event: EventType, listener: EventListener) {
