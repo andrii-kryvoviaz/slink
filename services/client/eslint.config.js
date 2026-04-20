@@ -90,6 +90,7 @@ export default [
       'node_modules/',
       '*.config.js',
       '*.config.ts',
+      'src/locales/**',
     ],
   },
   prettier,
