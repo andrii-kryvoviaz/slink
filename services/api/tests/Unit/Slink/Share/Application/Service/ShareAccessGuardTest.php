@@ -165,7 +165,7 @@ final class ShareAccessGuardTest extends TestCase {
        */
       public function __construct(private readonly array $verified) {}
 
-      public function isVerified(ID $shareId): bool {
+      public function isVerified(ID $shareId, ?HashedSharePassword $password): bool {
         foreach ($this->verified as $verified) {
           if ($verified->equals($shareId)) {
             return true;

@@ -96,6 +96,7 @@ export const getResponseWithCookies = async ({
 
   cookies.getAll().forEach(({ name, value }) => {
     if (name.startsWith('settings.')) return;
+    if (name.startsWith('__')) return;
     if (!authRefreshed && AUTH_COOKIE_NAMES.has(name)) return;
 
     let cookieString = `${name}=${value}; Path=/; HttpOnly; SameSite=Strict;`;

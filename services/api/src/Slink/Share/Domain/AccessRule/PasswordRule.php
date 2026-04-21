@@ -18,11 +18,13 @@ final readonly class PasswordRule implements ShareAccessRule {
   }
 
   public function allows(PasswordProtected $subject): bool {
-    if ($subject->getPassword() === null) {
+    $password = $subject->getPassword();
+
+    if ($password === null) {
       return true;
     }
 
-    if ($this->unlockVerifier->isVerified(ID::fromString($subject->getId()))) {
+    if ($this->unlockVerifier->isVerified(ID::fromString($subject->getId()), $password)) {
       return true;
     }
 

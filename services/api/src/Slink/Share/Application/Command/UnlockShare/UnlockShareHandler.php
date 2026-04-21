@@ -36,6 +36,6 @@ final readonly class UnlockShareHandler implements CommandHandlerInterface {
       throw new InvalidSharePasswordException();
     }
 
-    return $this->signer->issueCookie($id);
+    return $this->signer->issueCookie($id, $password);
   }
 }
