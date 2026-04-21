@@ -50,11 +50,15 @@ final readonly class AccessControl extends AbstractValueObject {
   }
 
   public function getPassword(): ?HashedSharePassword {
-    if ($this->passwordHash === null) {
-      return null;
+    return HashedSharePassword::fromNullableHash($this->passwordHash);
+  }
+
+  public function matchesPassword(#[\SensitiveParameter] ?string $plaintext): bool {
+    if ($plaintext === null) {
+      return $this->passwordHash === null;
     }
 
-    return HashedSharePassword::fromHash($this->passwordHash);
+    return $this->getPassword()?->match($plaintext) === true;
   }
 
   /**

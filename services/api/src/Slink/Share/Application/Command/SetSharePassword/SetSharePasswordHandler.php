@@ -29,7 +29,7 @@ final readonly class SetSharePasswordHandler implements CommandHandlerInterface 
       throw new ShareAccessDeniedException();
     }
 
-    $share->setPassword($command->getHashedPassword());
+    $share->setPassword($command->getPassword());
     $this->shareStore->store($share);
   }
 }

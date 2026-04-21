@@ -11,7 +11,6 @@ use Slink\Share\Application\Command\SetSharePassword\SetSharePasswordCommand;
 use Slink\Share\Application\Command\SetSharePassword\SetSharePasswordHandler;
 use Slink\Share\Domain\Repository\ShareStoreRepositoryInterface;
 use Slink\Share\Domain\Share;
-use Slink\Share\Domain\ValueObject\HashedSharePassword;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -30,7 +29,7 @@ final class SetSharePasswordHandlerTest extends TestCase {
   }
 
   #[Test]
-  public function itHashesPasswordBeforeInvokingAggregate(): void {
+  public function itPassesPlaintextToAggregate(): void {
     $shareId = ID::generate()->toString();
     $plaintext = 'hunter2';
     $command = new SetSharePasswordCommand($plaintext);
@@ -41,12 +40,7 @@ final class SetSharePasswordHandlerTest extends TestCase {
     $share
       ->expects($this->once())
       ->method('setPassword')
-      ->with($this->callback(function ($value) use ($plaintext): bool {
-        return $value instanceof HashedSharePassword
-          && $value->toString() !== $plaintext
-          && \str_starts_with($value->toString(), '$2y$')
-          && $value->match($plaintext);
-      }));
+      ->with($plaintext);
 
     $this->shareStore
       ->expects($this->once())

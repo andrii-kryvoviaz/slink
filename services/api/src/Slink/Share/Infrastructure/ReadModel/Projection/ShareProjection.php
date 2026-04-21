@@ -77,11 +77,7 @@ final class ShareProjection extends AbstractProjection {
       return;
     }
 
-    $password = $event->passwordHash !== null
-      ? HashedSharePassword::fromHash($event->passwordHash)
-      : null;
-
-    $share->setPassword($password);
+    $share->setPassword($event->password);
   }
 
   private function createShortUrl(ShareView $share, ?string $shortUrlId, ?string $shortCode): void {

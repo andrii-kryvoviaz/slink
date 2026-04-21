@@ -174,4 +174,42 @@ final class AccessControlTest extends TestCase {
     $this->assertNotNull($restoredPassword);
     $this->assertTrue($restoredPassword->match('hunter2'));
   }
+
+  #[Test]
+  public function matchesPasswordReturnsTrueWhenBothAreNull(): void {
+    $accessControl = AccessControl::initial(true);
+
+    $this->assertTrue($accessControl->matchesPassword(null));
+  }
+
+  #[Test]
+  public function matchesPasswordReturnsFalseWhenClearingAgainstExistingHash(): void {
+    $accessControl = AccessControl::initial(true)
+      ->withPassword(HashedSharePassword::encode('hunter2'));
+
+    $this->assertFalse($accessControl->matchesPassword(null));
+  }
+
+  #[Test]
+  public function matchesPasswordReturnsFalseWhenPlaintextGivenButNoneStored(): void {
+    $accessControl = AccessControl::initial(true);
+
+    $this->assertFalse($accessControl->matchesPassword('hunter2'));
+  }
+
+  #[Test]
+  public function matchesPasswordReturnsTrueWhenPlaintextMatchesStoredHash(): void {
+    $accessControl = AccessControl::initial(true)
+      ->withPassword(HashedSharePassword::encode('hunter2'));
+
+    $this->assertTrue($accessControl->matchesPassword('hunter2'));
+  }
+
+  #[Test]
+  public function matchesPasswordReturnsFalseWhenPlaintextDiffersFromStoredHash(): void {
+    $accessControl = AccessControl::initial(true)
+      ->withPassword(HashedSharePassword::encode('hunter2'));
+
+    $this->assertFalse($accessControl->matchesPassword('different'));
+  }
 }

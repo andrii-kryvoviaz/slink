@@ -110,25 +110,19 @@ final class Share extends AbstractAggregateRoot implements PublicationAware, Exp
     $this->accessControl = $this->accessControl->expireAt($event->expiresAt);
   }
 
-  public function setPassword(?HashedSharePassword $password): void {
-    $next = $this->accessControl->withPassword($password);
-
-    if ($next === $this->accessControl) {
+  public function setPassword(#[\SensitiveParameter] ?string $plaintext): void {
+    if ($this->accessControl->matchesPassword($plaintext)) {
       return;
     }
 
-    $this->recordThat(new SharePasswordWasSet($this->aggregateRootId(), $password?->toString()));
+    $this->recordThat(new SharePasswordWasSet(
+      $this->aggregateRootId(),
+      HashedSharePassword::fromNullable($plaintext),
+    ));
   }
 
   protected function applySharePasswordWasSet(SharePasswordWasSet $event): void {
-    $hash = $event->passwordHash;
-
-    if ($hash === null) {
-      $this->accessControl = $this->accessControl->withPassword(null);
-      return;
-    }
-
-    $this->accessControl = $this->accessControl->withPassword(HashedSharePassword::fromHash($hash));
+    $this->accessControl = $this->accessControl->withPassword($event->password);
   }
 
   public function isPublished(): bool {

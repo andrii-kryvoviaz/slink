@@ -128,16 +128,16 @@ final class ShareTest extends TestCase {
     $share = $this->createShare();
     $share->releaseEvents();
 
-    $password = HashedSharePassword::encode('hunter2');
-    $share->setPassword($password);
+    $share->setPassword('hunter2');
 
     $events = $share->releaseEvents();
     $this->assertCount(1, $events);
     $this->assertInstanceOf(SharePasswordWasSet::class, $events[0]);
-    $this->assertSame($password->toString(), $events[0]->passwordHash);
+    $this->assertNotNull($events[0]->password);
+    $this->assertTrue($events[0]->password->match('hunter2'));
     $stored = $share->getPassword();
     $this->assertNotNull($stored);
-    $this->assertSame($password->toString(), $stored->toString());
+    $this->assertTrue($stored->match('hunter2'));
   }
 
   #[Test]
@@ -145,14 +145,30 @@ final class ShareTest extends TestCase {
     $share = $this->createShare();
     $share->releaseEvents();
 
-    $password = HashedSharePassword::encode('hunter2');
-    $share->setPassword($password);
+    $share->setPassword('hunter2');
     $share->releaseEvents();
 
-    $share->setPassword(HashedSharePassword::fromHash($password->toString()));
+    $share->setPassword('hunter2');
 
     $events = $share->releaseEvents();
     $this->assertCount(0, $events);
+  }
+
+  #[Test]
+  public function itRecordsEventWhenPasswordChanges(): void {
+    $share = $this->createShare();
+    $share->setPassword('hunter2');
+    $share->releaseEvents();
+
+    $share->setPassword('different-password');
+
+    $events = $share->releaseEvents();
+    $this->assertCount(1, $events);
+    $this->assertInstanceOf(SharePasswordWasSet::class, $events[0]);
+    $stored = $share->getPassword();
+    $this->assertNotNull($stored);
+    $this->assertTrue($stored->match('different-password'));
+    $this->assertFalse($stored->match('hunter2'));
   }
 
   #[Test]
@@ -160,7 +176,7 @@ final class ShareTest extends TestCase {
     $share = $this->createShare();
     $share->releaseEvents();
 
-    $share->setPassword(HashedSharePassword::encode('hunter2'));
+    $share->setPassword('hunter2');
     $share->releaseEvents();
 
     $share->setPassword(null);
@@ -168,7 +184,7 @@ final class ShareTest extends TestCase {
     $events = $share->releaseEvents();
     $this->assertCount(1, $events);
     $this->assertInstanceOf(SharePasswordWasSet::class, $events[0]);
-    $this->assertNull($events[0]->passwordHash);
+    $this->assertNull($events[0]->password);
     $this->assertNull($share->getPassword());
   }
 
@@ -189,14 +205,15 @@ final class ShareTest extends TestCase {
     $share->releaseEvents();
 
     $plaintext = 'super-secret-hunter2';
-    $share->setPassword(HashedSharePassword::encode($plaintext));
+    $share->setPassword($plaintext);
 
     $events = $share->releaseEvents();
     $this->assertCount(1, $events);
     $event = $events[0];
     $this->assertInstanceOf(SharePasswordWasSet::class, $event);
-    $this->assertNotSame($plaintext, $event->passwordHash);
-    $this->assertStringStartsWith('$2y$', (string) $event->passwordHash);
+    $this->assertNotNull($event->password);
+    $this->assertNotSame($plaintext, $event->password->toString());
+    $this->assertTrue($event->password->match($plaintext));
 
     $payload = $event->toPayload();
     $this->assertArrayNotHasKey('password', $payload);
@@ -208,8 +225,9 @@ final class ShareTest extends TestCase {
   #[Test]
   public function itRoundTripsSnapshotWithPassword(): void {
     $share = $this->createShare();
-    $password = HashedSharePassword::encode('hunter2');
-    $share->setPassword($password);
+    $share->setPassword('hunter2');
+    $original = $share->getPassword();
+    $this->assertNotNull($original);
     $share->releaseEvents();
 
     $reflection = new \ReflectionClass($share);
@@ -224,7 +242,7 @@ final class ShareTest extends TestCase {
 
     $restoredPassword = $restored->getPassword();
     $this->assertNotNull($restoredPassword);
-    $this->assertSame($password->toString(), $restoredPassword->toString());
+    $this->assertSame($original->toString(), $restoredPassword->toString());
     $this->assertTrue($restoredPassword->match('hunter2'));
   }
 

@@ -19,8 +19,16 @@ final readonly class HashedSharePassword extends AbstractValueObject {
     return new self(self::hash($plainPassword));
   }
 
+  public static function fromNullable(#[\SensitiveParameter] ?string $plainPassword): ?self {
+    return $plainPassword === null ? null : self::encode($plainPassword);
+  }
+
   public static function fromHash(string $hashedPassword): self {
     return new self($hashedPassword);
+  }
+
+  public static function fromNullableHash(?string $hashedPassword): ?self {
+    return $hashedPassword === null ? null : self::fromHash($hashedPassword);
   }
 
   public function match(#[\SensitiveParameter] string $plainPassword): bool {
