@@ -6,31 +6,36 @@
 
   const share = getShareControls();
 
-  const expiryChip = $derived.by<{
-    kind: 'expired' | 'active';
-    short: string;
-  } | null>(() => {
+  const expiryKind = $derived.by<'expired' | 'active' | null>(() => {
     if (share.expiration.descriptionShort === null) {
       return null;
     }
 
     if (share.expiration.isExpired) {
-      return { kind: 'expired', short: share.expiration.descriptionShort };
+      return 'expired';
     }
 
-    return { kind: 'active', short: share.expiration.descriptionShort };
+    return 'active';
   });
 
   const wrap = indicators().wrap();
-  const expiryTheme = $derived(indicators({ kind: expiryChip?.kind }));
+  const expiryTheme = $derived(indicators({ kind: expiryKind ?? undefined }));
   const protectedTheme = indicators({ kind: 'protected' });
 </script>
 
 <div class={wrap}>
-  {#if expiryChip !== null}
+  {#if share.expiration.descriptionShort !== null && expiryKind !== null}
     <span class={expiryTheme.chip()}>
       <Icon icon="ph:clock" class={expiryTheme.chipIcon()} />
-      <span>{expiryChip.short}</span>
+      <span>
+        {#if share.expiration.descriptionShort.kind === 'expired'}
+          Expired
+        {:else if share.expiration.descriptionShort.kind === 'today'}
+          Today
+        {:else}
+          {share.expiration.descriptionShort.label}
+        {/if}
+      </span>
     </span>
   {/if}
 

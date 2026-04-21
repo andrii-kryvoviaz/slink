@@ -4,16 +4,10 @@ import { bindRequestState } from '$lib/utils/store/bindRequestState.svelte';
 
 import { ReactiveState } from '@slink/api/ReactiveState';
 
-import { shareMessages } from '../share.language';
 import type { ShareStatusKind } from '../share.theme';
 
 export interface SharePasswordConfig {
   getShareId: () => string | null;
-}
-
-export interface SharePasswordStatus {
-  kind: ShareStatusKind;
-  message: string;
 }
 
 export class SharePasswordState {
@@ -93,23 +87,20 @@ export class SharePasswordState {
     return this._password.length >= SharePasswordState.MIN_LENGTH;
   }
 
-  get status(): SharePasswordStatus | null {
+  get status(): ShareStatusKind | null {
     if (this._save.isLoading) {
-      return {
-        kind: 'saving',
-        message: shareMessages.password.status.saving(),
-      };
+      return 'saving';
     }
 
     if (this._save.error) {
-      return { kind: 'error', message: shareMessages.password.status.error() };
+      return 'error';
     }
 
     if (!this._hasSavedOnce) {
       return null;
     }
 
-    return { kind: 'saved', message: shareMessages.password.status.saved() };
+    return 'saved';
   }
 
   setPassword = (value: string): void => {

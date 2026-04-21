@@ -20,5 +20,4 @@ export * from './Reroute/ShareReroute';
 export * from './State/Context';
 export * from './State/State.svelte';
 export { default as Unavailable } from './Unavailable/Unavailable.svelte';
-export * from './share.language';
 export * from './share.theme';

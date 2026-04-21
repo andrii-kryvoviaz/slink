@@ -5,9 +5,9 @@ import { bindRequestState } from '$lib/utils/store/bindRequestState.svelte';
 import { BadRequestException } from '@slink/api/Exceptions/BadRequestException';
 import { ReactiveState } from '@slink/api/ReactiveState';
 
-import { toast } from '@slink/utils/ui/toast-sonner.svelte';
+import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
-import { shareMessages } from '../share.language';
+import { toast } from '@slink/utils/ui/toast-sonner.svelte';
 
 export interface ShareUnlockConfig {
   shareId: string;
@@ -71,9 +71,9 @@ export class ShareUnlockState {
 
     if (error) {
       if (error instanceof BadRequestException) {
-        toast.error(shareMessages.locked.invalid());
+        toast.error(messages.share.locked.invalid);
       } else {
-        toast.error(shareMessages.locked.error());
+        toast.error(messages.share.locked.error);
       }
 
       this._password = '';

@@ -4,11 +4,11 @@
   import { Input } from '@slink/ui/components/input';
   import { Switch } from '@slink/ui/components/switch';
 
+  import { plural } from '$lib/utils/i18n';
   import Icon from '@iconify/svelte';
   import { fly, slide } from 'svelte/transition';
 
   import { getShareControls } from '../State/Context';
-  import { shareMessages } from '../share.language';
   import type { ShareStatusKind } from '../share.theme';
   import { statusIconName, status as statusTheme } from '../share.theme';
   import { controls } from './Popover.theme';
@@ -75,7 +75,7 @@
 
     await passwordState.commit();
 
-    if (passwordState.status?.kind === 'error') {
+    if (passwordState.status === 'error') {
       return;
     }
 
@@ -83,9 +83,19 @@
     revealed = false;
   };
 
-  const statusKind = $derived<ShareStatusKind | null>(
-    passwordState.status?.kind ?? null,
-  );
+  const statusKind = $derived<ShareStatusKind | null>(passwordState.status);
+
+  const statusTitle = $derived.by<string>(() => {
+    if (statusKind === 'saving') {
+      return 'Saving password';
+    }
+
+    if (statusKind === 'error') {
+      return 'Failed to save password';
+    }
+
+    return 'Saved';
+  });
 
   const detail = $derived(controls.detail());
   const status = $derived(
@@ -111,12 +121,8 @@
       <div class={detail.titleRow()}>
         <div class={detail.titleGroup()}>
           <span class={detail.title()}>Password</span>
-          {#if passwordState.status !== null && statusKind !== null}
-            <span
-              class={status.line()}
-              aria-live="polite"
-              title={passwordState.status.message}
-            >
+          {#if statusKind !== null}
+            <span class={status.line()} aria-live="polite" title={statusTitle}>
               <Icon icon={statusIconName(statusKind)} class={status.icon()} />
             </span>
           {/if}
@@ -185,7 +191,10 @@
 
       {#if showMinLengthHint}
         <p class={detail.passwordHint()}>
-          {shareMessages.password.minLengthHint(passwordState.minLength)}
+          Use at least {plural(passwordState.minLength, [
+            '# character',
+            '# characters',
+          ])}
         </p>
       {:else}
         <p class={detail.passwordHelper()}>

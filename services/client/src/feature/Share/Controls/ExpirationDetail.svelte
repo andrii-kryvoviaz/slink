@@ -47,9 +47,19 @@
     expiration.toggle(checked);
   };
 
-  const statusKind = $derived<ShareStatusKind | null>(
-    expiration.status?.kind ?? null,
-  );
+  const statusKind = $derived<ShareStatusKind | null>(expiration.status);
+
+  const statusTitle = $derived.by<string>(() => {
+    if (statusKind === 'saving') {
+      return 'Saving expiration';
+    }
+
+    if (statusKind === 'error') {
+      return 'Failed to save expiration';
+    }
+
+    return 'Saved';
+  });
 
   const detail = $derived(controls.detail({ chipActive: isCustomActive }));
   const status = $derived(
@@ -75,12 +85,8 @@
       <div class={detail.titleRow()}>
         <div class={detail.titleGroup()}>
           <span class={detail.title()}>Expiration</span>
-          {#if expiration.status !== null && statusKind !== null}
-            <span
-              class={status.line()}
-              aria-live="polite"
-              title={expiration.status.message}
-            >
+          {#if statusKind !== null}
+            <span class={status.line()} aria-live="polite" title={statusTitle}>
               <Icon icon={statusIconName(statusKind)} class={status.icon()} />
             </span>
           {/if}

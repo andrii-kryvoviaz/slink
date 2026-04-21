@@ -30,10 +30,16 @@
     <Icon icon="ph:clock" class={list.icon()} />
     <div class={list.labels()}>
       <span class={list.label()}>Expiration</span>
-      {#if share.expiration.description}
-        <span class={list.sublabel()}>{share.expiration.description}</span>
-      {:else}
+      {#if share.expiration.description === null}
         <span class={list.sublabel()}>Not set</span>
+      {:else if share.expiration.description.kind === 'expired'}
+        <span class={list.sublabel()}>Expired</span>
+      {:else if share.expiration.description.kind === 'today'}
+        <span class={list.sublabel()}>Expires today</span>
+      {:else}
+        <span class={list.sublabel()}>
+          Expires {share.expiration.description.phrase}
+        </span>
       {/if}
     </div>
     <Icon icon="ph:caret-right" class={list.chevron()} />
