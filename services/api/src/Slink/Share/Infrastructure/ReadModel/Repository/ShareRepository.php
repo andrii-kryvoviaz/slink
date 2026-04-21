@@ -59,14 +59,11 @@ final class ShareRepository extends AbstractRepository implements ShareRepositor
 
   #[Override]
   public function removeByShareable(string $shareableId, ShareableType $shareableType): void {
-    $this->createQueryBuilder('s')
-      ->delete()
-      ->where('s.shareable.shareableId = :shareableId')
-      ->andWhere('s.shareable.shareableType = :shareableType')
-      ->setParameter('shareableId', $shareableId)
-      ->setParameter('shareableType', $shareableType)
-      ->getQuery()
-      ->execute();
+    $entityManager = $this->getEntityManager();
+
+    foreach ($this->findAllByShareable($shareableId, $shareableType) as $share) {
+      $entityManager->remove($share);
+    }
   }
 
   #[Override]
@@ -84,7 +81,7 @@ final class ShareRepository extends AbstractRepository implements ShareRepositor
   #[Override]
   public function findAllUnpublished(): array {
     return $this->createQueryBuilder('s')
-      ->where('s.isPublished = :isPublished')
+      ->where('s.accessControl.isPublished = :isPublished')
       ->setParameter('isPublished', false)
       ->getQuery()
       ->getResult();
