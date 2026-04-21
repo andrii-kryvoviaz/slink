@@ -18,7 +18,7 @@ export class SharePasswordState {
   private _enabled: boolean = $state(false);
   private _password: string = $state('');
   private _initialEnabled: boolean = $state(false);
-  private _wasSaving: boolean = false;
+  private _wasSaving: boolean = $state.raw(false);
   private _hasSavedOnce: boolean = $state(false);
   private _lastTarget: string | null = null;
   private _currentShareId: string | null = null;

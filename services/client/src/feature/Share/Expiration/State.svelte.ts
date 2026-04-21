@@ -36,7 +36,7 @@ export class ShareExpirationState {
   private _date: Date | null = $state(null);
   private _initial: Date | null = $state(null);
   private _pendingTarget: Date | null = $state(null);
-  private _wasSaving: boolean = false;
+  private _wasSaving: boolean = $state.raw(false);
   private _hasSavedOnce: boolean = $state(false);
   private _currentShareId: string | null = null;
 
