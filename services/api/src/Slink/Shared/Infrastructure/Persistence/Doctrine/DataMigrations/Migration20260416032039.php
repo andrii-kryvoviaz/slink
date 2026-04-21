@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Shared\Infrastructure\Persistence\Doctrine\DataMigrations;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Slink\Image\Domain\Filter\ImageListFilter;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Share\Application\Command\CreateShare\CreateShareCommand;
@@ -16,16 +17,20 @@ use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\DataMigration\DataMigrationInterface;
 
 final class Migration20260416032039 implements DataMigrationInterface {
+  private const BATCH_SIZE = 100;
+
   public function __construct(
     private readonly ImageRepositoryInterface $imageRepository,
     private readonly ShareRepositoryInterface $shareRepository,
     private readonly CommandBusInterface $commandBus,
     private readonly ShareUrlBuilderInterface $shareUrlBuilder,
+    private readonly EntityManagerInterface $entityManager,
   ) {}
 
   public function up(): void {
     $filter = new ImageListFilter(limit: null);
     $errors = [];
+    $count = 0;
 
     foreach ($this->imageRepository->geImageList($filter) as $imageView) {
       try {
@@ -47,6 +52,10 @@ final class Migration20260416032039 implements DataMigrationInterface {
         );
 
         $this->commandBus->handle(new CreateShareCommand($params));
+
+        if (++$count % self::BATCH_SIZE === 0) {
+          $this->entityManager->clear();
+        }
       } catch (\Throwable $e) {
         $errors[] = sprintf('image %s: %s', $imageView->getFileName(), $e->getMessage());
       }

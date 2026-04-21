@@ -79,11 +79,12 @@ final class ShareRepository extends AbstractRepository implements ShareRepositor
   }
 
   #[Override]
-  public function findAllUnpublished(): array {
+  public function findAllUnpublished(): iterable {
     return $this->createQueryBuilder('s')
       ->where('s.accessControl.isPublished = :isPublished')
       ->setParameter('isPublished', false)
       ->getQuery()
-      ->getResult();
+      ->toIterable();
+  }
   }
 }

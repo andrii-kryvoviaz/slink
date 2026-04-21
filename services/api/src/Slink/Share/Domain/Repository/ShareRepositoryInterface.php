@@ -24,6 +24,6 @@ interface ShareRepositoryInterface {
   /** @return ShareView[] */
   public function findAllByShareable(string $shareableId, ShareableType $shareableType): array;
 
-  /** @return ShareView[] */
-  public function findAllUnpublished(): array;
+  /** @return iterable<ShareView> */
+  public function findAllUnpublished(): iterable;
 }
