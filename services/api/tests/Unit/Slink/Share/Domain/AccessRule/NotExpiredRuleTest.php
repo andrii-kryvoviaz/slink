@@ -43,10 +43,10 @@ final class NotExpiredRuleTest extends TestCase {
   }
 
   #[Test]
-  public function itThrowsAtBoundary(): void {
+  public function itThrowsWhenExpirationIsJustBeforeNow(): void {
     $rule = new NotExpiredRule();
-    $now = DateTime::now();
-    $subject = $this->subject($now);
+    $justBefore = DateTime::fromTimeStamp(\time() - 1);
+    $subject = $this->subject($justBefore);
 
     $this->expectException(ShareExpiredException::class);
 

@@ -9,6 +9,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Slink\Share\Application\Command\SetShareExpiration\SetShareExpirationCommand;
 use Slink\Share\Application\Command\SetShareExpiration\SetShareExpirationHandler;
+use Slink\Share\Domain\Exception\ShareAccessDeniedException;
 use Slink\Share\Domain\Repository\ShareStoreRepositoryInterface;
 use Slink\Share\Domain\Share;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
@@ -24,9 +25,14 @@ final class SetShareExpirationHandlerTest extends TestCase {
     parent::setUp();
 
     $this->shareStore = $this->createMock(ShareStoreRepositoryInterface::class);
+    $this->handler = $this->createHandler(accessGranted: true);
+  }
+
+  private function createHandler(bool $accessGranted): SetShareExpirationHandler {
     $access = $this->createStub(AuthorizationCheckerInterface::class);
-    $access->method('isGranted')->willReturn(true);
-    $this->handler = new SetShareExpirationHandler($this->shareStore, $access);
+    $access->method('isGranted')->willReturn($accessGranted);
+
+    return new SetShareExpirationHandler($this->shareStore, $access);
   }
 
   #[Test]
@@ -103,5 +109,28 @@ final class SetShareExpirationHandlerTest extends TestCase {
     $this->expectException(NotFoundException::class);
 
     $this->handler->__invoke($command, $shareId);
+  }
+
+  #[Test]
+  public function itDeniesAccessWhenVoterRejectsCaller(): void {
+    $handler = $this->createHandler(accessGranted: false);
+    $shareId = ID::generate()->toString();
+    $command = new SetShareExpirationCommand(null);
+
+    $share = $this->createMock(Share::class);
+    $share->method('aggregateRootVersion')->willReturn(1);
+    $share->expects($this->never())->method('setExpiration');
+
+    $this->shareStore
+      ->method('get')
+      ->willReturn($share);
+
+    $this->shareStore
+      ->expects($this->never())
+      ->method('store');
+
+    $this->expectException(ShareAccessDeniedException::class);
+
+    $handler->__invoke($command, $shareId);
   }
 }

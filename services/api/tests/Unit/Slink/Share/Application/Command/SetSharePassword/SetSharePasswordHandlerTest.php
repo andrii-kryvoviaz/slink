@@ -9,6 +9,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Slink\Share\Application\Command\SetSharePassword\SetSharePasswordCommand;
 use Slink\Share\Application\Command\SetSharePassword\SetSharePasswordHandler;
+use Slink\Share\Domain\Exception\ShareAccessDeniedException;
 use Slink\Share\Domain\Repository\ShareStoreRepositoryInterface;
 use Slink\Share\Domain\Share;
 use Slink\Shared\Domain\ValueObject\ID;
@@ -23,9 +24,14 @@ final class SetSharePasswordHandlerTest extends TestCase {
     parent::setUp();
 
     $this->shareStore = $this->createMock(ShareStoreRepositoryInterface::class);
+    $this->handler = $this->createHandler(accessGranted: true);
+  }
+
+  private function createHandler(bool $accessGranted): SetSharePasswordHandler {
     $access = $this->createStub(AuthorizationCheckerInterface::class);
-    $access->method('isGranted')->willReturn(true);
-    $this->handler = new SetSharePasswordHandler($this->shareStore, $access);
+    $access->method('isGranted')->willReturn($accessGranted);
+
+    return new SetSharePasswordHandler($this->shareStore, $access);
   }
 
   #[Test]
@@ -100,5 +106,28 @@ final class SetSharePasswordHandlerTest extends TestCase {
     $this->expectException(NotFoundException::class);
 
     $this->handler->__invoke($command, $shareId);
+  }
+
+  #[Test]
+  public function itDeniesAccessWhenVoterRejectsCaller(): void {
+    $handler = $this->createHandler(accessGranted: false);
+    $shareId = ID::generate()->toString();
+    $command = new SetSharePasswordCommand('hunter2');
+
+    $share = $this->createMock(Share::class);
+    $share->method('aggregateRootVersion')->willReturn(1);
+    $share->expects($this->never())->method('setPassword');
+
+    $this->shareStore
+      ->method('get')
+      ->willReturn($share);
+
+    $this->shareStore
+      ->expects($this->never())
+      ->method('store');
+
+    $this->expectException(ShareAccessDeniedException::class);
+
+    $handler->__invoke($command, $shareId);
   }
 }
