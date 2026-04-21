@@ -11,17 +11,21 @@ import { bindRequestState } from '$lib/utils/store/bindRequestState.svelte';
 
 import { ReactiveState } from '@slink/api/ReactiveState';
 
-import { shareMessages } from '../share.language';
 import type { ShareStatusKind } from '../share.theme';
 
 export interface ShareExpirationConfig {
   getShareId: () => string | null;
 }
 
-export interface ShareExpirationStatus {
-  kind: ShareStatusKind;
-  message: string;
-}
+export type ShareExpirationDescription =
+  | { kind: 'expired' }
+  | { kind: 'today' }
+  | { kind: 'in-future'; phrase: string };
+
+export type ShareExpirationShort =
+  | { kind: 'expired' }
+  | { kind: 'today' }
+  | { kind: 'unit'; label: string };
 
 export class ShareExpirationState {
   static readonly PRESET_DAYS = [1, 7, 30] as const;
@@ -32,7 +36,7 @@ export class ShareExpirationState {
   private _date: Date | null = $state(null);
   private _initial: Date | null = $state(null);
   private _pendingTarget: Date | null = $state(null);
-  private _wasSaving: boolean = false;
+  private _wasSaving: boolean = $state.raw(false);
   private _hasSavedOnce: boolean = $state(false);
   private _currentShareId: string | null = null;
 
@@ -122,13 +126,13 @@ export class ShareExpirationState {
     return this._save.isLoading;
   }
 
-  get status(): ShareExpirationStatus | null {
+  get status(): ShareStatusKind | null {
     if (this._save.isLoading) {
-      return { kind: 'saving', message: shareMessages.status.saving() };
+      return 'saving';
     }
 
     if (this._save.error) {
-      return { kind: 'error', message: shareMessages.status.error() };
+      return 'error';
     }
 
     if (!this._hasSavedOnce) {
@@ -143,7 +147,7 @@ export class ShareExpirationState {
       return null;
     }
 
-    return { kind: 'saved', message: shareMessages.status.saved() };
+    return 'saved';
   }
 
   get activePresetDays(): number | null {
@@ -162,7 +166,7 @@ export class ShareExpirationState {
     return days !== null && days < 0;
   }
 
-  get description(): string | null {
+  get description(): ShareExpirationDescription | null {
     const days = this._days;
 
     if (days === null) {
@@ -170,17 +174,17 @@ export class ShareExpirationState {
     }
 
     if (days < 0) {
-      return shareMessages.expirationDescription.expired();
+      return { kind: 'expired' };
     }
 
     if (days === 0) {
-      return shareMessages.expirationDescription.today();
+      return { kind: 'today' };
     }
 
-    return shareMessages.expirationDescription.inFuture(relativeFromDays(days));
+    return { kind: 'in-future', phrase: relativeFromDays(days) };
   }
 
-  get descriptionShort(): string | null {
+  get descriptionShort(): ShareExpirationShort | null {
     const days = this._days;
 
     if (days === null) {
@@ -188,26 +192,29 @@ export class ShareExpirationState {
     }
 
     if (days < 0) {
-      return shareMessages.expirationShort.expired();
+      return { kind: 'expired' };
     }
 
     if (days === 0) {
-      return shareMessages.expirationShort.today();
+      return { kind: 'today' };
     }
 
     if (days < 7) {
-      return narrowUnit(days, 'day');
+      return { kind: 'unit', label: narrowUnit(days, 'day') };
     }
 
     if (days < 30) {
-      return narrowUnit(Math.floor(days / 7), 'week');
+      return { kind: 'unit', label: narrowUnit(Math.floor(days / 7), 'week') };
     }
 
     if (days < 365) {
-      return narrowUnit(Math.floor(days / 30), 'month');
+      return {
+        kind: 'unit',
+        label: narrowUnit(Math.floor(days / 30), 'month'),
+      };
     }
 
-    return narrowUnit(Math.floor(days / 365), 'year');
+    return { kind: 'unit', label: narrowUnit(Math.floor(days / 365), 'year') };
   }
 
   setFromDays(days: number): void {

@@ -7,6 +7,7 @@ namespace Tests\Unit\Slink\Share\Domain\ValueObject;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Share\Domain\ValueObject\AccessControl;
+use Slink\Share\Domain\ValueObject\HashedSharePassword;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 
 final class AccessControlTest extends TestCase {
@@ -97,9 +98,10 @@ final class AccessControlTest extends TestCase {
     $payload = $accessControl->toPayload();
     $restored = AccessControl::fromPayload($payload);
 
-    $this->assertSame(['isPublished' => true, 'expiresAt' => null], $payload);
+    $this->assertSame(['isPublished' => true, 'expiresAt' => null, 'passwordHash' => null], $payload);
     $this->assertTrue($restored->isPublished);
     $this->assertNull($restored->expiresAt);
+    $this->assertNull($restored->passwordHash);
   }
 
   #[Test]
@@ -111,5 +113,103 @@ final class AccessControlTest extends TestCase {
 
     $this->assertTrue($restored->isPublished);
     $this->assertEquals($expiresAt->toString(), $restored->expiresAt?->toString());
+  }
+
+  #[Test]
+  public function itSetsPasswordWithoutTouchingPublicationOrExpiration(): void {
+    $expiresAt = DateTime::fromString('2099-12-31T23:59:59+00:00');
+    $accessControl = AccessControl::initial(true)->expireAt($expiresAt);
+    $password = HashedSharePassword::encode('hunter2');
+
+    $next = $accessControl->withPassword($password);
+
+    $this->assertNotSame($accessControl, $next);
+    $this->assertTrue($next->isPublished);
+    $this->assertEquals($expiresAt->toString(), $next->expiresAt?->toString());
+    $this->assertSame($password->toString(), $next->passwordHash);
+  }
+
+  #[Test]
+  public function itIsIdempotentWhenSettingSamePasswordHashTwice(): void {
+    $password = HashedSharePassword::encode('hunter2');
+    $accessControl = AccessControl::initial(true)->withPassword($password);
+
+    $next = $accessControl->withPassword(HashedSharePassword::fromHash($password->toString()));
+
+    $this->assertSame($accessControl, $next);
+  }
+
+  #[Test]
+  public function itIsIdempotentWhenClearingAlreadyNullPassword(): void {
+    $accessControl = AccessControl::initial(true);
+
+    $next = $accessControl->withPassword(null);
+
+    $this->assertSame($accessControl, $next);
+  }
+
+  #[Test]
+  public function itClearsPassword(): void {
+    $password = HashedSharePassword::encode('hunter2');
+    $accessControl = AccessControl::initial(true)->withPassword($password);
+
+    $next = $accessControl->withPassword(null);
+
+    $this->assertNotSame($accessControl, $next);
+    $this->assertNull($next->passwordHash);
+    $this->assertTrue($next->isPublished);
+  }
+
+  #[Test]
+  public function itRoundTripsPayloadWithPassword(): void {
+    $password = HashedSharePassword::encode('hunter2');
+    $accessControl = AccessControl::initial(true)->withPassword($password);
+
+    $restored = AccessControl::fromPayload($accessControl->toPayload());
+
+    $this->assertTrue($restored->isPublished);
+    $this->assertSame($password->toString(), $restored->passwordHash);
+
+    $restoredPassword = $restored->getPassword();
+    $this->assertNotNull($restoredPassword);
+    $this->assertTrue($restoredPassword->match('hunter2'));
+  }
+
+  #[Test]
+  public function matchesPasswordReturnsTrueWhenBothAreNull(): void {
+    $accessControl = AccessControl::initial(true);
+
+    $this->assertTrue($accessControl->matchesPassword(null));
+  }
+
+  #[Test]
+  public function matchesPasswordReturnsFalseWhenClearingAgainstExistingHash(): void {
+    $accessControl = AccessControl::initial(true)
+      ->withPassword(HashedSharePassword::encode('hunter2'));
+
+    $this->assertFalse($accessControl->matchesPassword(null));
+  }
+
+  #[Test]
+  public function matchesPasswordReturnsFalseWhenPlaintextGivenButNoneStored(): void {
+    $accessControl = AccessControl::initial(true);
+
+    $this->assertFalse($accessControl->matchesPassword('hunter2'));
+  }
+
+  #[Test]
+  public function matchesPasswordReturnsTrueWhenPlaintextMatchesStoredHash(): void {
+    $accessControl = AccessControl::initial(true)
+      ->withPassword(HashedSharePassword::encode('hunter2'));
+
+    $this->assertTrue($accessControl->matchesPassword('hunter2'));
+  }
+
+  #[Test]
+  public function matchesPasswordReturnsFalseWhenPlaintextDiffersFromStoredHash(): void {
+    $accessControl = AccessControl::initial(true)
+      ->withPassword(HashedSharePassword::encode('hunter2'));
+
+    $this->assertFalse($accessControl->matchesPassword('different'));
   }
 }

@@ -2,16 +2,20 @@ import {
   type ErrorList,
   HttpException,
 } from '@slink/api/Exceptions/HttpException';
-import type { Violation, ViolationResponse } from '@slink/api/Response';
+import type { Violation } from '@slink/api/Response';
 
 import { t } from '@slink/lib/utils/i18n';
 
 export class ValidationException extends HttpException {
   private readonly _violations: Violation[];
 
-  constructor(violationResponse: ViolationResponse) {
-    super(violationResponse.message, 422);
-    this._violations = violationResponse.violations.map((v) => ({
+  constructor(response?: {
+    title?: string;
+    message?: string;
+    violations?: Violation[];
+  }) {
+    super(response?.message ?? '', 422);
+    this._violations = (response?.violations ?? []).map((v) => ({
       ...v,
       message: t(v.message),
     }));

@@ -7,6 +7,7 @@ namespace Slink\Collection\Infrastructure\Security\Voter;
 use Slink\Collection\Domain\Collection;
 use Slink\Collection\Domain\Enum\CollectionAccess;
 use Slink\Collection\Infrastructure\ReadModel\View\CollectionView;
+use Slink\Share\Application\Service\ShareAccessGuard;
 use Slink\Share\Domain\Enum\ShareableType;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
 use Slink\Shared\Domain\ValueObject\ID;
@@ -17,6 +18,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 final class CollectionVoter extends Voter {
   public function __construct(
     private readonly ShareRepositoryInterface $shareRepository,
+    private readonly ShareAccessGuard $accessGuard,
   ) {}
 
   /**
@@ -53,7 +55,7 @@ final class CollectionVoter extends Voter {
     }
 
     if ($attribute === CollectionAccess::View) {
-      return $this->hasPublishedShare($collectionId);
+      return $this->hasAccessibleShare($collectionId);
     }
 
     return false;
@@ -99,13 +101,13 @@ final class CollectionVoter extends Voter {
     return null;
   }
 
-  private function hasPublishedShare(string $collectionId): bool {
+  private function hasAccessibleShare(string $collectionId): bool {
     $share = $this->shareRepository->findByShareable($collectionId, ShareableType::Collection);
 
     if ($share === null) {
       return false;
     }
 
-    return $share->isPublished();
+    return $this->accessGuard->allows($share);
   }
 }

@@ -17,30 +17,25 @@ type OgMeta = {
   height: string;
 };
 
-type ResolveResult =
-  | { kind: 'redirect'; location: string }
-  | { kind: 'unavailable' };
-
 async function resolveShortCode(
   code: string,
   apiUrl: string,
   fetch: typeof globalThis.fetch,
-): Promise<ResolveResult> {
+): Promise<string> {
   const response = await fetch(`${apiUrl}/i/${code}`, {
     redirect: 'manual',
   });
 
-  if (response.status === 302 || response.status === 301) {
-    const location = response.headers.get('Location');
-
-    if (!location) {
-      error(502);
-    }
-
-    return { kind: 'redirect', location };
+  if (response.status !== 302 && response.status !== 301) {
+    error(response.status);
   }
 
-  return { kind: 'unavailable' };
+  const location = response.headers.get('Location');
+  if (!location) {
+    error(502);
+  }
+
+  return location;
 }
 
 function resolveUrl(origin: string, location: string): string {
@@ -97,23 +92,13 @@ async function buildOgMeta(
 
 export const load: PageServerLoad = async ({ params, fetch, request, url }) => {
   const apiUrl = env.API_URL || 'http://localhost:8080';
-  const result = await resolveShortCode(params.code, apiUrl, fetch);
-
-  if (result.kind === 'unavailable') {
-    return {
-      unavailable: true,
-      ogMeta: null,
-    };
-  }
-
-  const { location } = result;
+  const location = await resolveShortCode(params.code, apiUrl, fetch);
 
   if (!crawlerDetect.isCrawler(request.headers.get('User-Agent'))) {
     redirect(302, resolveUrl(url.origin, location));
   }
 
   return {
-    unavailable: false,
     ogMeta: await buildOgMeta(location, params.code, url.origin, apiUrl, fetch),
   };
 };

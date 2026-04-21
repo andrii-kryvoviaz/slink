@@ -1,8 +1,9 @@
 <script lang="ts">
-  import type { ShareState } from '@slink/feature/Share';
   import type { Snippet } from 'svelte';
 
   import { AccentIcon } from '../AccentIcon';
+  import { setShareControls } from '../State/Context';
+  import type { ShareState } from '../State/State.svelte';
   import { panel } from './Panel.theme';
 
   interface Props {
@@ -17,7 +18,7 @@
   }
 
   let {
-    state: _state,
+    state,
     variant = 'card',
     icon,
     title,
@@ -26,6 +27,8 @@
     body,
     footer,
   }: Props = $props();
+
+  setShareControls(state);
 
   const hasHeader = $derived(
     Boolean(icon) || Boolean(title) || Boolean(description) || Boolean(options),

@@ -99,17 +99,13 @@ export class ImageActionsState {
     $effect(() => {
       const image = this._config.getImage();
       this._collectionPickerState.setImage(image.id, image.collectionIds ?? []);
+      this._tagPickerState.setImage(image.id, image.tagIds ?? []);
     });
 
     $effect(() => {
       if (this._popover.collection) {
         this._collectionPickerState.load();
       }
-    });
-
-    $effect(() => {
-      const image = this._config.getImage();
-      this._tagPickerState.setImage(image.id, image.tagIds ?? []);
     });
 
     $effect(() => {

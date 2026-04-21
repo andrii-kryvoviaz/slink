@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { ShareExpirationState } from '@slink/feature/Share';
   import {
     ActionPopoverContent,
     ActionPopoverRoot,
@@ -11,9 +10,9 @@
 
   import ExpirationDetail from './ExpirationDetail.svelte';
   import List from './List.svelte';
+  import PasswordDetail from './PasswordDetail.svelte';
 
   interface Props {
-    expirationState: ShareExpirationState;
     trigger: Snippet;
     triggerClass?: string;
     triggerLabel?: string;
@@ -28,7 +27,6 @@
   }
 
   let {
-    expirationState,
     trigger,
     triggerClass,
     triggerLabel = 'Configure share',
@@ -42,7 +40,7 @@
     introActive = false,
   }: Props = $props();
 
-  let view: 'list' | 'expiration' = $state('list');
+  let view: 'list' | 'expiration' | 'password' = $state('list');
 
   $effect(() => {
     if (!open) {
@@ -62,12 +60,14 @@
       </div>
     {:else if view === 'list'}
       <List
-        {expirationState}
         {header}
         onOpenExpiration={() => (view = 'expiration')}
+        onOpenPassword={() => (view = 'password')}
       />
     {:else if view === 'expiration'}
-      <ExpirationDetail {expirationState} onBack={() => (view = 'list')} />
+      <ExpirationDetail onBack={() => (view = 'list')} />
+    {:else if view === 'password'}
+      <PasswordDetail onBack={() => (view = 'list')} />
     {/if}
   </ActionPopoverContent>
 </ActionPopoverRoot>

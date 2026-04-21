@@ -57,6 +57,22 @@ export const controls = {
       chip: 'inline-flex items-center rounded-full font-medium leading-none transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30 px-2.5 py-1 text-xs cursor-pointer',
       field:
         'h-auto border-transparent bg-transparent shadow-none rounded-lg px-2 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-800/60 dark:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-transparent',
+      passwordRow: 'flex items-center gap-1.5',
+      passwordInput:
+        'flex-1 h-9 rounded-md border border-gray-200 bg-white px-2.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none transition-colors focus-visible:border-blue-500/60 focus-visible:ring-2 focus-visible:ring-blue-500/30 dark:border-gray-700 dark:bg-gray-900/40 dark:text-white dark:placeholder:text-gray-500 disabled:cursor-not-allowed disabled:opacity-60',
+      passwordToggle:
+        'inline-flex items-center justify-center shrink-0 rounded-md h-8 w-8 text-gray-500 transition-colors cursor-pointer hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30 dark:text-gray-400 dark:hover:bg-gray-800/60 dark:hover:text-white',
+      passwordToggleIcon: 'h-4 w-4',
+      passwordHelper:
+        'text-[11px] text-gray-500 dark:text-gray-400 leading-snug',
+      passwordHint:
+        'text-[11px] text-amber-600 dark:text-amber-400 leading-snug',
+      replaceButton:
+        'inline-flex items-center self-start rounded-full px-2.5 py-1 text-xs font-medium leading-none transition-colors cursor-pointer bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-900 dark:bg-gray-800/60 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/30',
+      placeholderRow:
+        'flex items-center justify-between gap-2 rounded-md px-2.5 py-2 text-sm text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/40',
+      placeholderDots:
+        'tracking-[0.2em] font-mono text-gray-400 dark:text-gray-500',
     },
     variants: {
       chipActive: {

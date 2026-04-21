@@ -2051,6 +2051,9 @@ msgstr "Nom d'utilisateur d'authentification"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 #: src/feature/Share/Controls/List.svelte
+#: src/feature/Share/Controls/PasswordDetail.svelte
+#: src/feature/Share/Locked/PasswordPrompt.svelte
+#: src/feature/Share/Locked/PasswordPrompt.svelte
 #: src/routes/profile/(auth)/login/+page.svelte
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Password"
@@ -4299,20 +4302,17 @@ msgstr "Le lien que vous avez suivi n’est plus disponible ou n’existe pas."
 msgid "Take me home"
 msgstr "Retour à l’accueil"
 
-#: src/feature/Share/Controls/List.svelte
-msgid "SOON"
-msgstr "BIENTÔT"
-
-#: src/feature/Share/share.language.ts
+#: src/feature/Share/Controls/ExpirationDetail.svelte
+#: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "Saved"
 msgstr "Enregistré"
 
-#: src/feature/Share/share.language.ts
-#: src/feature/Share/share.language.ts
+#: src/feature/Share/Controls/List.svelte
+#: src/feature/Share/Options/Indicators.svelte
 msgid "Expired"
 msgstr "Expiré"
 
-#: src/feature/Share/share.language.ts
+#: src/feature/Share/Options/Indicators.svelte
 msgid "Today"
 msgstr "Aujourd’hui"
 
@@ -4325,10 +4325,12 @@ msgid "Not set"
 msgstr "Non défini"
 
 #: src/feature/Share/Controls/List.svelte
+#: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "Require a password to view"
 msgstr "Mot de passe requis pour voir"
 
 #: src/feature/Share/Controls/ExpirationDetail.svelte
+#: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "Back to options"
 msgstr "Retour aux options"
 
@@ -4361,7 +4363,7 @@ msgstr "Créer un lien de partage"
 msgid "Shared"
 msgstr "Partagé"
 
-#: src/feature/Share/share.language.ts
+#: src/feature/Share/Controls/List.svelte
 msgid "Expires today"
 msgstr "Expire aujourd’hui"
 
@@ -4373,17 +4375,13 @@ msgstr "Les modifications de taille, de filtre et de format créent un nouveau l
 msgid "Format"
 msgstr "Format"
 
-#: src/feature/Share/share.language.ts
+#: src/feature/Share/Controls/ExpirationDetail.svelte
 msgid "Saving expiration"
 msgstr "Enregistrement de l’expiration"
 
-#: src/feature/Share/share.language.ts
+#: src/feature/Share/Controls/ExpirationDetail.svelte
 msgid "Failed to save expiration"
 msgstr "Échec de l’enregistrement de l’expiration"
-
-#: src/feature/Share/share.language.ts
-msgid "Expires {phrase}"
-msgstr "Expire {phrase}"
 
 #: src/feature/Share/Controls/ExpirationDetail.svelte
 msgid "# day"
@@ -4393,4 +4391,70 @@ msgstr[1] "# jours"
 
 #: src/feature/Share/Unavailable/Unavailable.svelte
 msgid "Share unavailable"
+msgstr ""
+
+#: src/feature/Share/Controls/PasswordDetail.svelte
+msgid "Saving password"
+msgstr ""
+
+#: src/feature/Share/Controls/PasswordDetail.svelte
+msgid "Failed to save password"
+msgstr ""
+
+#: src/feature/Share/Controls/PasswordDetail.svelte
+msgid "Enter a password"
+msgstr "Saisissez un mot de passe"
+
+#: src/feature/Share/Controls/PasswordDetail.svelte
+msgid "Anyone with the link will need this password to view"
+msgstr "Toute personne avec le lien aura besoin de ce mot de passe pour voir"
+
+#: src/feature/Share/Controls/PasswordDetail.svelte
+msgid "Replace password"
+msgstr "Remplacer le mot de passe"
+
+#: src/feature/Share/Controls/List.svelte
+#: src/feature/Share/Options/Indicators.svelte
+#: src/feature/Share/Options/Indicators.svelte
+msgid "Protected"
+msgstr "Protégé"
+
+#: src/feature/Share/Controls/PasswordDetail.svelte
+msgid "Set password"
+msgstr "Définir un mot de passe"
+
+#: src/feature/Share/Locked/PasswordPrompt.svelte
+msgid "Continue"
+msgstr "Continuer"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Incorrect password. Try again."
+msgstr "Mot de passe incorrect. Réessayez."
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Something went wrong. Please try again."
+msgstr "Une erreur est survenue. Veuillez réessayer."
+
+#: src/feature/Share/Locked/PasswordPrompt.svelte
+msgid "This share is protected"
+msgstr "Ce partage est protégé"
+
+#: src/feature/Share/Locked/PasswordPrompt.svelte
+msgid "Enter the password below to unlock the shared content."
+msgstr "Saisissez le mot de passe ci-dessous pour déverrouiller le contenu partagé."
+
+#. 0: share.expiration.description.phrase
+#: src/feature/Share/Controls/List.svelte
+msgid "Expires {0}"
+msgstr "Expire {0}"
+
+#: src/feature/Share/Controls/PasswordDetail.svelte
+msgid "# character"
+msgid_plural "# characters"
+msgstr[0] ""
+msgstr[1] ""
+
+#. 0: plural(passwordState.minLength, [ '# character', '# characters', ])
+#: src/feature/Share/Controls/PasswordDetail.svelte
+msgid "Use at least {0}"
 msgstr ""

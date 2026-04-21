@@ -2051,6 +2051,9 @@ msgstr "Ім'я користувача для автентифікації"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 #: src/feature/Share/Controls/List.svelte
+#: src/feature/Share/Controls/PasswordDetail.svelte
+#: src/feature/Share/Locked/PasswordPrompt.svelte
+#: src/feature/Share/Locked/PasswordPrompt.svelte
 #: src/routes/profile/(auth)/login/+page.svelte
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Password"
@@ -4302,20 +4305,17 @@ msgstr "Посилання, за яким ви перейшли, більше н
 msgid "Take me home"
 msgstr "На головну"
 
-#: src/feature/Share/Controls/List.svelte
-msgid "SOON"
-msgstr "СКОРО"
-
-#: src/feature/Share/share.language.ts
+#: src/feature/Share/Controls/ExpirationDetail.svelte
+#: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "Saved"
 msgstr "Збережено"
 
-#: src/feature/Share/share.language.ts
-#: src/feature/Share/share.language.ts
+#: src/feature/Share/Controls/List.svelte
+#: src/feature/Share/Options/Indicators.svelte
 msgid "Expired"
 msgstr "Минув"
 
-#: src/feature/Share/share.language.ts
+#: src/feature/Share/Options/Indicators.svelte
 msgid "Today"
 msgstr "Сьогодні"
 
@@ -4328,10 +4328,12 @@ msgid "Not set"
 msgstr "Не задано"
 
 #: src/feature/Share/Controls/List.svelte
+#: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "Require a password to view"
 msgstr "Запитувати пароль для перегляду"
 
 #: src/feature/Share/Controls/ExpirationDetail.svelte
+#: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "Back to options"
 msgstr "До опцій"
 
@@ -4364,7 +4366,7 @@ msgstr "Створити посилання"
 msgid "Shared"
 msgstr "Поширено"
 
-#: src/feature/Share/share.language.ts
+#: src/feature/Share/Controls/List.svelte
 msgid "Expires today"
 msgstr "Спливає сьогодні"
 
@@ -4376,17 +4378,13 @@ msgstr "Зміна розміру, фільтру та формату створ
 msgid "Format"
 msgstr "Формат"
 
-#: src/feature/Share/share.language.ts
+#: src/feature/Share/Controls/ExpirationDetail.svelte
 msgid "Saving expiration"
 msgstr "Збереження терміну"
 
-#: src/feature/Share/share.language.ts
+#: src/feature/Share/Controls/ExpirationDetail.svelte
 msgid "Failed to save expiration"
 msgstr "Не вдалося зберегти термін"
-
-#: src/feature/Share/share.language.ts
-msgid "Expires {phrase}"
-msgstr "Спливає {phrase}"
 
 #: src/feature/Share/Controls/ExpirationDetail.svelte
 msgid "# day"
@@ -4396,4 +4394,70 @@ msgstr[1] "# днів"
 
 #: src/feature/Share/Unavailable/Unavailable.svelte
 msgid "Share unavailable"
+msgstr ""
+
+#: src/feature/Share/Controls/PasswordDetail.svelte
+msgid "Saving password"
+msgstr ""
+
+#: src/feature/Share/Controls/PasswordDetail.svelte
+msgid "Failed to save password"
+msgstr ""
+
+#: src/feature/Share/Controls/PasswordDetail.svelte
+msgid "Enter a password"
+msgstr "Введіть пароль"
+
+#: src/feature/Share/Controls/PasswordDetail.svelte
+msgid "Anyone with the link will need this password to view"
+msgstr "Кожен, хто має посилання, потребуватиме цей пароль для перегляду"
+
+#: src/feature/Share/Controls/PasswordDetail.svelte
+msgid "Replace password"
+msgstr "Змінити пароль"
+
+#: src/feature/Share/Controls/List.svelte
+#: src/feature/Share/Options/Indicators.svelte
+#: src/feature/Share/Options/Indicators.svelte
+msgid "Protected"
+msgstr "Захищено"
+
+#: src/feature/Share/Controls/PasswordDetail.svelte
+msgid "Set password"
+msgstr "Встановити пароль"
+
+#: src/feature/Share/Locked/PasswordPrompt.svelte
+msgid "Continue"
+msgstr "Продовжити"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Incorrect password. Try again."
+msgstr "Неправильний пароль. Спробуйте ще раз."
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Something went wrong. Please try again."
+msgstr "Щось пішло не так. Спробуйте ще раз."
+
+#: src/feature/Share/Locked/PasswordPrompt.svelte
+msgid "This share is protected"
+msgstr "Цей спільний доступ захищено"
+
+#: src/feature/Share/Locked/PasswordPrompt.svelte
+msgid "Enter the password below to unlock the shared content."
+msgstr "Введіть пароль нижче, щоб розблокувати спільний вміст."
+
+#. 0: share.expiration.description.phrase
+#: src/feature/Share/Controls/List.svelte
+msgid "Expires {0}"
+msgstr "Спливає {0}"
+
+#: src/feature/Share/Controls/PasswordDetail.svelte
+msgid "# character"
+msgid_plural "# characters"
+msgstr[0] ""
+msgstr[1] ""
+
+#. 0: plural(passwordState.minLength, [ '# character', '# characters', ])
+#: src/feature/Share/Controls/PasswordDetail.svelte
+msgid "Use at least {0}"
 msgstr ""

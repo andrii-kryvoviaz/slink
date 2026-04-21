@@ -2051,6 +2051,9 @@ msgstr "认证用户名"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 #: src/feature/Share/Controls/List.svelte
+#: src/feature/Share/Controls/PasswordDetail.svelte
+#: src/feature/Share/Locked/PasswordPrompt.svelte
+#: src/feature/Share/Locked/PasswordPrompt.svelte
 #: src/routes/profile/(auth)/login/+page.svelte
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Password"
@@ -4296,20 +4299,17 @@ msgstr "您访问的链接已不存在或不可用。"
 msgid "Take me home"
 msgstr "返回首页"
 
-#: src/feature/Share/Controls/List.svelte
-msgid "SOON"
-msgstr "即将推出"
-
-#: src/feature/Share/share.language.ts
+#: src/feature/Share/Controls/ExpirationDetail.svelte
+#: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "Saved"
 msgstr "已保存"
 
-#: src/feature/Share/share.language.ts
-#: src/feature/Share/share.language.ts
+#: src/feature/Share/Controls/List.svelte
+#: src/feature/Share/Options/Indicators.svelte
 msgid "Expired"
 msgstr "已过期"
 
-#: src/feature/Share/share.language.ts
+#: src/feature/Share/Options/Indicators.svelte
 msgid "Today"
 msgstr "今天"
 
@@ -4322,10 +4322,12 @@ msgid "Not set"
 msgstr "未设置"
 
 #: src/feature/Share/Controls/List.svelte
+#: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "Require a password to view"
 msgstr "查看时需要密码"
 
 #: src/feature/Share/Controls/ExpirationDetail.svelte
+#: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "Back to options"
 msgstr "返回选项"
 
@@ -4358,7 +4360,7 @@ msgstr "创建分享链接"
 msgid "Shared"
 msgstr "已分享"
 
-#: src/feature/Share/share.language.ts
+#: src/feature/Share/Controls/List.svelte
 msgid "Expires today"
 msgstr "今天过期"
 
@@ -4370,17 +4372,13 @@ msgstr "调整尺寸、滤镜和格式会生成新的分享链接并重置其选
 msgid "Format"
 msgstr "格式"
 
-#: src/feature/Share/share.language.ts
+#: src/feature/Share/Controls/ExpirationDetail.svelte
 msgid "Saving expiration"
 msgstr "正在保存过期时间"
 
-#: src/feature/Share/share.language.ts
+#: src/feature/Share/Controls/ExpirationDetail.svelte
 msgid "Failed to save expiration"
 msgstr "保存过期时间失败"
-
-#: src/feature/Share/share.language.ts
-msgid "Expires {phrase}"
-msgstr "{phrase}过期"
 
 #: src/feature/Share/Controls/ExpirationDetail.svelte
 msgid "# day"
@@ -4390,4 +4388,70 @@ msgstr[1] "# 天"
 
 #: src/feature/Share/Unavailable/Unavailable.svelte
 msgid "Share unavailable"
+msgstr ""
+
+#: src/feature/Share/Controls/PasswordDetail.svelte
+msgid "Saving password"
+msgstr ""
+
+#: src/feature/Share/Controls/PasswordDetail.svelte
+msgid "Failed to save password"
+msgstr ""
+
+#: src/feature/Share/Controls/PasswordDetail.svelte
+msgid "Enter a password"
+msgstr "输入密码"
+
+#: src/feature/Share/Controls/PasswordDetail.svelte
+msgid "Anyone with the link will need this password to view"
+msgstr "任何拥有该链接的人都需要此密码才能查看"
+
+#: src/feature/Share/Controls/PasswordDetail.svelte
+msgid "Replace password"
+msgstr "更换密码"
+
+#: src/feature/Share/Controls/List.svelte
+#: src/feature/Share/Options/Indicators.svelte
+#: src/feature/Share/Options/Indicators.svelte
+msgid "Protected"
+msgstr "已保护"
+
+#: src/feature/Share/Controls/PasswordDetail.svelte
+msgid "Set password"
+msgstr "设置密码"
+
+#: src/feature/Share/Locked/PasswordPrompt.svelte
+msgid "Continue"
+msgstr "继续"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Incorrect password. Try again."
+msgstr "密码错误，请重试。"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Something went wrong. Please try again."
+msgstr "出现问题，请重试。"
+
+#: src/feature/Share/Locked/PasswordPrompt.svelte
+msgid "This share is protected"
+msgstr "此分享受保护"
+
+#: src/feature/Share/Locked/PasswordPrompt.svelte
+msgid "Enter the password below to unlock the shared content."
+msgstr "请在下方输入密码以解锁分享的内容。"
+
+#. 0: share.expiration.description.phrase
+#: src/feature/Share/Controls/List.svelte
+msgid "Expires {0}"
+msgstr "{0}过期"
+
+#: src/feature/Share/Controls/PasswordDetail.svelte
+msgid "# character"
+msgid_plural "# characters"
+msgstr[0] ""
+msgstr[1] ""
+
+#. 0: plural(passwordState.minLength, [ '# character', '# characters', ])
+#: src/feature/Share/Controls/PasswordDetail.svelte
+msgid "Use at least {0}"
 msgstr ""

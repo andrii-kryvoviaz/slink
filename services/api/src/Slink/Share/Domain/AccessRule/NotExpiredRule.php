@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Share\Domain\AccessRule;
 
+use Slink\Share\Domain\Exception\ShareExpiredException;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 
@@ -20,9 +21,13 @@ final readonly class NotExpiredRule implements ShareAccessRule {
         return true;
       }
 
-      return $expiresAt->isAfter(DateTime::now());
+      if ($expiresAt->isAfter(DateTime::now())) {
+        return true;
+      }
     } catch (DateTimeException) {
-      return false;
+      throw new ShareExpiredException();
     }
+
+    throw new ShareExpiredException();
   }
 }

@@ -63,21 +63,25 @@ final readonly class DataMigrationRunner {
   }
 
   public function execute(DataMigrationInterface $migration): void {
-    $migration->up();
+    $this->connection->transactional(function () use ($migration): void {
+      $migration->up();
 
-    $this->connection->insert('data_migration_versions', [
-      'version' => get_class($migration),
-      'description' => $migration->getDescription(),
-      'executed_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
-    ]);
+      $this->connection->insert('data_migration_versions', [
+        'version' => get_class($migration),
+        'description' => $migration->getDescription(),
+        'executed_at' => (new \DateTimeImmutable())->format('Y-m-d H:i:s'),
+      ]);
+    });
   }
 
   public function rollback(DataMigrationInterface $migration): void {
-    $migration->down();
+    $this->connection->transactional(function () use ($migration): void {
+      $migration->down();
 
-    $this->connection->delete('data_migration_versions', [
-      'version' => get_class($migration),
-    ]);
+      $this->connection->delete('data_migration_versions', [
+        'version' => get_class($migration),
+      ]);
+    });
   }
 
   public function findByVersion(string $version): ?DataMigrationInterface {

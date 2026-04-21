@@ -8,9 +8,10 @@
     icon="ph:link-break-duotone"
     title="Share unavailable"
     description="The link you followed is no longer available or does not exist."
+    size="md"
   >
     {#snippet action()}
-      <Button variant="outline" rounded="full" size="sm" href="/">
+      <Button variant="primary" size="md" rounded="lg" href="/">
         Take me home
       </Button>
     {/snippet}

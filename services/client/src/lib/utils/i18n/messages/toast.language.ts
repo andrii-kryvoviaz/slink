@@ -124,4 +124,14 @@ export const messages = {
       return localize('Something went wrong');
     },
   },
+  share: {
+    locked: {
+      get invalid() {
+        return localize('Incorrect password. Try again.');
+      },
+      get error() {
+        return localize('Something went wrong. Please try again.');
+      },
+    },
+  },
 };

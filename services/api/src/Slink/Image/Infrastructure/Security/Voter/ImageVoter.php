@@ -55,12 +55,6 @@ final class ImageVoter extends Voter {
   protected function voteOnAttribute(mixed $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool {
     $image = $this->unwrap($subject);
 
-    $imageId = $this->extractImageId($image);
-
-    if ($imageId === null) {
-      return false;
-    }
-
     if ($this->isOwner($image, $token)) {
       return true;
     }
@@ -70,7 +64,13 @@ final class ImageVoter extends Voter {
         return true;
       }
 
-      return $this->hasAccessibleShareForUrl($this->targetPathFrom($subject));
+      $targetPath = $this->targetPathFrom($subject);
+
+      if ($targetPath === null) {
+        return false;
+      }
+
+      return $this->hasAccessibleShare($targetPath);
     }
 
     return false;
@@ -90,18 +90,6 @@ final class ImageVoter extends Voter {
     }
 
     return $subject;
-  }
-
-  private function extractImageId(mixed $image): ?string {
-    if ($image instanceof ImageView) {
-      return $image->getUuid();
-    }
-
-    if ($image instanceof Image) {
-      return $image->aggregateRootId()->toString();
-    }
-
-    return null;
   }
 
   private function isOwner(mixed $image, TokenInterface $token): bool {
@@ -124,11 +112,7 @@ final class ImageVoter extends Voter {
     return $ownerId->equals(ID::fromString($userIdentifier));
   }
 
-  private function hasAccessibleShareForUrl(?TargetPath $targetPath): bool {
-    if ($targetPath === null) {
-      return false;
-    }
-
+  private function hasAccessibleShare(TargetPath $targetPath): bool {
     $share = $this->shareRepository->findByTargetPath($targetPath);
 
     if ($share === null) {

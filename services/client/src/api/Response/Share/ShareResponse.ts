@@ -6,4 +6,5 @@ export interface ShareResponse {
   type: ShareableType;
   created: boolean;
   expiresAt: string | null;
+  requiresPassword: boolean;
 }

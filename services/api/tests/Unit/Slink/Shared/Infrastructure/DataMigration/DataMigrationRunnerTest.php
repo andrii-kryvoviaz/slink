@@ -66,6 +66,8 @@ final class DataMigrationRunnerTest extends TestCase {
     $migration = new StubMigrationA();
 
     $connection = $this->createMock(Connection::class);
+    $connection->method('transactional')
+      ->willReturnCallback(fn(\Closure $cb) => $cb($connection));
     $connection->expects($this->once())
       ->method('insert')
       ->with(
@@ -84,10 +86,33 @@ final class DataMigrationRunnerTest extends TestCase {
   }
 
   #[Test]
+  public function itDoesNotRecordVersionWhenMigrationFails(): void {
+    $migration = new FailingMigration();
+
+    $connection = $this->createMock(Connection::class);
+    $connection->method('transactional')
+      ->willReturnCallback(fn(\Closure $cb) => $cb($connection));
+    $connection->expects($this->never())
+      ->method('insert');
+
+    $runner = new DataMigrationRunner([], $connection);
+
+    $this->expectException(\RuntimeException::class);
+
+    try {
+      $runner->execute($migration);
+    } finally {
+      $this->assertTrue($migration->upCalled);
+    }
+  }
+
+  #[Test]
   public function itRollsBackMigrationAndRemovesRecord(): void {
     $migration = new StubMigrationA();
 
     $connection = $this->createMock(Connection::class);
+    $connection->method('transactional')
+      ->willReturnCallback(fn(\Closure $cb) => $cb($connection));
     $connection->expects($this->once())
       ->method('delete')
       ->with('data_migration_versions', ['version' => StubMigrationA::class]);
@@ -96,6 +121,27 @@ final class DataMigrationRunnerTest extends TestCase {
     $runner->rollback($migration);
 
     $this->assertTrue($migration->downCalled);
+  }
+
+  #[Test]
+  public function itDoesNotRemoveRecordWhenRollbackFails(): void {
+    $migration = new FailingMigration();
+
+    $connection = $this->createMock(Connection::class);
+    $connection->method('transactional')
+      ->willReturnCallback(fn(\Closure $cb) => $cb($connection));
+    $connection->expects($this->never())
+      ->method('delete');
+
+    $runner = new DataMigrationRunner([], $connection);
+
+    $this->expectException(\RuntimeException::class);
+
+    try {
+      $runner->rollback($migration);
+    } finally {
+      $this->assertTrue($migration->downCalled);
+    }
   }
 
   #[Test]
@@ -137,4 +183,21 @@ class StubMigrationB implements DataMigrationInterface {
   public function up(): void { $this->upCalled = true; }
   public function down(): void { $this->downCalled = true; }
   public function getDescription(): string { return 'Stub migration B'; }
+}
+
+class FailingMigration implements DataMigrationInterface {
+  public bool $upCalled = false;
+  public bool $downCalled = false;
+
+  public function up(): void {
+    $this->upCalled = true;
+    throw new \RuntimeException('boom');
+  }
+
+  public function down(): void {
+    $this->downCalled = true;
+    throw new \RuntimeException('boom');
+  }
+
+  public function getDescription(): string { return 'Failing migration'; }
 }

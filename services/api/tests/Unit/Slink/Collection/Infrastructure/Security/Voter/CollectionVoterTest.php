@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Slink\Collection\Domain\Enum\CollectionAccess;
 use Slink\Collection\Infrastructure\ReadModel\View\CollectionView;
 use Slink\Collection\Infrastructure\Security\Voter\CollectionVoter;
+use Slink\Share\Application\Service\ShareAccessGuard;
 use Slink\Share\Domain\Enum\ShareableType;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
 use Slink\Share\Infrastructure\ReadModel\View\ShareView;
@@ -18,15 +19,17 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 final class CollectionVoterTest extends TestCase {
   private ShareRepositoryInterface&Stub $shareRepository;
+  private ShareAccessGuard $accessGuard;
 
   protected function setUp(): void {
     parent::setUp();
 
     $this->shareRepository = $this->createStub(ShareRepositoryInterface::class);
+    $this->accessGuard = $this->createStub(ShareAccessGuard::class);
   }
 
   private function createVoter(): CollectionVoter {
-    return new CollectionVoter($this->shareRepository);
+    return new CollectionVoter($this->shareRepository, $this->accessGuard);
   }
 
   private function createToken(string $userIdentifier = ''): TokenInterface&Stub {
@@ -81,8 +84,8 @@ final class CollectionVoterTest extends TestCase {
     $requesterId = '660e8400-e29b-41d4-a716-446655440000';
 
     $share = $this->createStub(ShareView::class);
-    $share->method('isPublished')->willReturn(true);
     $this->shareRepository->method('findByShareable')->willReturn($share);
+    $this->accessGuard->method('allows')->willReturn(true);
 
     $voter = $this->createVoter();
     $collection = $this->createCollectionView($ownerId);
@@ -93,13 +96,47 @@ final class CollectionVoterTest extends TestCase {
   }
 
   #[Test]
-  public function itDeniesViewToNonOwnerWhenShareIsInaccessible(): void {
+  public function itDeniesViewToNonOwnerWhenShareIsUnpublished(): void {
     $ownerId = '550e8400-e29b-41d4-a716-446655440000';
     $requesterId = '660e8400-e29b-41d4-a716-446655440000';
 
     $share = $this->createStub(ShareView::class);
-    $share->method('isPublished')->willReturn(false);
     $this->shareRepository->method('findByShareable')->willReturn($share);
+    $this->accessGuard->method('allows')->willReturn(false);
+
+    $voter = $this->createVoter();
+    $collection = $this->createCollectionView($ownerId);
+
+    $result = $voter->vote($this->createToken($requesterId), $collection, [CollectionAccess::View]);
+
+    $this->assertSame(VoterInterface::ACCESS_DENIED, $result);
+  }
+
+  #[Test]
+  public function itDeniesViewToNonOwnerWhenShareIsLocked(): void {
+    $ownerId = '550e8400-e29b-41d4-a716-446655440000';
+    $requesterId = '660e8400-e29b-41d4-a716-446655440000';
+
+    $share = $this->createStub(ShareView::class);
+    $this->shareRepository->method('findByShareable')->willReturn($share);
+    $this->accessGuard->method('allows')->willReturn(false);
+
+    $voter = $this->createVoter();
+    $collection = $this->createCollectionView($ownerId);
+
+    $result = $voter->vote($this->createToken($requesterId), $collection, [CollectionAccess::View]);
+
+    $this->assertSame(VoterInterface::ACCESS_DENIED, $result);
+  }
+
+  #[Test]
+  public function itDeniesViewToNonOwnerWhenShareIsExpired(): void {
+    $ownerId = '550e8400-e29b-41d4-a716-446655440000';
+    $requesterId = '660e8400-e29b-41d4-a716-446655440000';
+
+    $share = $this->createStub(ShareView::class);
+    $this->shareRepository->method('findByShareable')->willReturn($share);
+    $this->accessGuard->method('allows')->willReturn(false);
 
     $voter = $this->createVoter();
     $collection = $this->createCollectionView($ownerId);
@@ -155,8 +192,8 @@ final class CollectionVoterTest extends TestCase {
     $requesterId = '660e8400-e29b-41d4-a716-446655440000';
 
     $share = $this->createStub(ShareView::class);
-    $share->method('isPublished')->willReturn(true);
     $this->shareRepository->method('findByShareable')->willReturn($share);
+    $this->accessGuard->method('allows')->willReturn(true);
 
     $voter = $this->createVoter();
     $collection = $this->createCollectionView($ownerId);
@@ -221,7 +258,6 @@ final class CollectionVoterTest extends TestCase {
     $collectionId = '770e8400-e29b-41d4-a716-446655440000';
 
     $share = $this->createStub(ShareView::class);
-    $share->method('isPublished')->willReturn(true);
 
     $shareRepository = $this->createMock(ShareRepositoryInterface::class);
     $shareRepository
@@ -230,7 +266,10 @@ final class CollectionVoterTest extends TestCase {
       ->with($collectionId, ShareableType::Collection)
       ->willReturn($share);
 
-    $voter = new CollectionVoter($shareRepository);
+    $accessGuard = $this->createStub(ShareAccessGuard::class);
+    $accessGuard->method('allows')->willReturn(true);
+
+    $voter = new CollectionVoter($shareRepository, $accessGuard);
     $collection = $this->createCollectionView($ownerId, $collectionId);
 
     $voter->vote($this->createToken($requesterId), $collection, [CollectionAccess::View]);

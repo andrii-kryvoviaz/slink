@@ -45,6 +45,8 @@ export class ShareCardState {
 
   private _share: ShareState;
 
+  private _lastLoadKey: string | null = null;
+
   readonly originalFormat: string = $derived.by(() => {
     const fileName = this._config.getImage().fileName;
     const lastDotIndex = fileName.lastIndexOf('.');
@@ -82,15 +84,22 @@ export class ShareCardState {
           filter: filter === 'none' ? undefined : filter,
         });
       },
-      onEnsurePublished: ApiClient.image.publishShare,
+      onEnsurePublished: (shareId) => ApiClient.image.publishShare(shareId),
     });
 
     $effect(() => {
-      this._config.getImage();
-      this._config.getFilter();
-      this._config.getResizeParams();
-      this._selectedFormat;
+      const key = JSON.stringify({
+        imageId: this._config.getImage().id,
+        filter: this._config.getFilter(),
+        format: this._selectedFormat,
+        resize: this._config.getResizeParams(),
+      });
 
+      if (key === this._lastLoadKey) {
+        return;
+      }
+
+      this._lastLoadKey = key;
       void this._share.load();
     });
   }

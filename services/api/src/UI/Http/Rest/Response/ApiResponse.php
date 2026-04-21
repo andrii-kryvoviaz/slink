@@ -6,6 +6,7 @@ namespace UI\Http\Rest\Response;
 
 use Slink\Shared\Application\Http\Collection;
 use Slink\Shared\Application\Http\Item;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -31,10 +32,17 @@ class ApiResponse extends JsonResponse {
 
   /**
    * @param int $status
+   * @param list<Cookie> $cookies
    * @return self
    */
-  public static function empty(int $status = self::HTTP_NO_CONTENT): self {
-    return new self(null, $status);
+  public static function empty(int $status = self::HTTP_NO_CONTENT, array $cookies = []): self {
+    $response = new self(null, $status);
+
+    foreach ($cookies as $cookie) {
+      $response->headers->setCookie($cookie);
+    }
+
+    return $response;
   }
 
   public static function redirect(string $url, int $status = self::HTTP_FOUND): RedirectResponse {

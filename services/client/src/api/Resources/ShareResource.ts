@@ -9,4 +9,19 @@ export class ShareResource extends AbstractResource {
       json: { expiresAt: expiresAt?.toISOString() ?? null },
     });
   }
+
+  public async setPassword(
+    shareId: string,
+    password: string | null,
+  ): Promise<void> {
+    return this.put(`/share/${shareId}/password`, {
+      json: { password },
+    });
+  }
+
+  public async unlock(shareId: string, password: string): Promise<void> {
+    return this.post(`/share/${shareId}/unlock`, {
+      json: { password },
+    });
+  }
 }

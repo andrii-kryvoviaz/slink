@@ -9,6 +9,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Share\Domain\AccessRule\ExpirationAware;
 use Slink\Share\Domain\AccessRule\NotExpiredRule;
+use Slink\Share\Domain\Exception\ShareExpiredException;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 
@@ -31,25 +32,29 @@ final class NotExpiredRuleTest extends TestCase {
   }
 
   #[Test]
-  public function itDeniesWhenExpirationIsInThePast(): void {
+  public function itThrowsWhenExpirationIsInThePast(): void {
     $rule = new NotExpiredRule();
     $past = DateTime::fromString('2000-01-01T00:00:00+00:00');
     $subject = $this->subject($past);
 
-    $this->assertFalse($rule->allows($subject));
+    $this->expectException(ShareExpiredException::class);
+
+    $rule->allows($subject);
   }
 
   #[Test]
-  public function itDeniesAtBoundary(): void {
+  public function itThrowsWhenExpirationIsJustBeforeNow(): void {
     $rule = new NotExpiredRule();
-    $now = DateTime::now();
-    $subject = $this->subject($now);
+    $justBefore = DateTime::fromTimeStamp(\time() - 1);
+    $subject = $this->subject($justBefore);
 
-    $this->assertFalse($rule->allows($subject));
+    $this->expectException(ShareExpiredException::class);
+
+    $rule->allows($subject);
   }
 
   #[Test]
-  public function itDeniesWhenDateTimeExceptionIsThrown(): void {
+  public function itThrowsWhenDateTimeExceptionIsThrown(): void {
     $rule = new NotExpiredRule();
     $subject = new class implements ExpirationAware {
       public function getExpiresAt(): ?DateTime {
@@ -57,7 +62,9 @@ final class NotExpiredRuleTest extends TestCase {
       }
     };
 
-    $this->assertFalse($rule->allows($subject));
+    $this->expectException(ShareExpiredException::class);
+
+    $rule->allows($subject);
   }
 
   #[Test]
