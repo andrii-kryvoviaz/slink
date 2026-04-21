@@ -192,7 +192,7 @@ final class Share extends AbstractAggregateRoot implements PublicationAware, Exp
     $share->targetPath = TargetPath::fromString($state['targetUrl']);
     $share->createdAt = DateTime::fromString($state['createdAt']);
     $share->context = ShareContext::fromPayload($state['context'] ?? [], $share->shareable);
-    $share->accessControl = AccessControl::fromPayload($state['accessControl']);
+    $share->accessControl = AccessControl::fromPayload($state['accessControl'] ?? []);
 
     return $share;
   }
