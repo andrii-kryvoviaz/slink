@@ -131,10 +131,10 @@ final readonly class Item implements CursorAwareInterface {
       return new DateTime();
     }
 
-    if (is_array($timestampField)) {
-      return DateTime::fromUnknown($timestampField);
+    if ($timestampField instanceof DateTimeInterface) {
+      return $timestampField;
     }
 
-    return $timestampField;
+    return DateTime::fromUnknown($timestampField);
   }
 }
