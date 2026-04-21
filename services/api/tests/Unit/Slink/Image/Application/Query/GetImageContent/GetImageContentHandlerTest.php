@@ -56,8 +56,8 @@ final class GetImageContentHandlerTest extends TestCase {
       $this->imageRetrieval,
       $this->sanitizer,
       $this->transformSignature,
-      $this->shareUrlBuilder,
       $this->access,
+      $this->shareUrlBuilder,
     );
   }
 
@@ -320,8 +320,8 @@ final class GetImageContentHandlerTest extends TestCase {
       $this->imageRetrieval,
       $this->sanitizer,
       $this->transformSignature,
-      $this->shareUrlBuilder,
       $access,
+      $this->shareUrlBuilder,
     );
 
     $query = new GetImageContentQuery(collection: 'collection-id', cs: 'sig');
