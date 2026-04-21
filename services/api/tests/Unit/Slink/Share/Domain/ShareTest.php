@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Share\Domain\Event\SharePasswordWasSet;
 use Slink\Share\Domain\Event\ShareExpirationWasSet;
+use Slink\Share\Domain\Exception\InvalidShareExpirationException;
 use Slink\Share\Domain\Share;
 use Slink\Share\Domain\ValueObject\HashedSharePassword;
 use Slink\Share\Domain\ValueObject\ShareableReference;
@@ -63,6 +64,26 @@ final class ShareTest extends TestCase {
     $this->assertInstanceOf(ShareExpirationWasSet::class, $events[0]);
     $this->assertNull($events[0]->expiresAt);
     $this->assertNull($share->getExpiresAt());
+  }
+
+  #[Test]
+  public function itRejectsExpirationInThePast(): void {
+    $share = $this->createShare();
+    $share->releaseEvents();
+
+    $this->expectException(InvalidShareExpirationException::class);
+
+    $share->setExpiration(DateTime::fromString('2000-01-01T00:00:00+00:00'));
+  }
+
+  #[Test]
+  public function itRejectsExpirationEqualToNow(): void {
+    $share = $this->createShare();
+    $share->releaseEvents();
+
+    $this->expectException(InvalidShareExpirationException::class);
+
+    $share->setExpiration(DateTime::now());
   }
 
   #[Test]

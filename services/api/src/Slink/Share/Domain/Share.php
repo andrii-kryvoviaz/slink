@@ -14,6 +14,7 @@ use Slink\Share\Domain\Event\ShareExpirationWasSet;
 use Slink\Share\Domain\Event\ShareWasCreated;
 use Slink\Share\Domain\Event\ShareWasPublished;
 use Slink\Share\Domain\Event\ShortUrlWasAdded;
+use Slink\Share\Domain\Exception\InvalidShareExpirationException;
 use Slink\Share\Domain\ValueObject\AccessControl;
 use Slink\Share\Domain\ValueObject\HashedSharePassword;
 use Slink\Share\Domain\ValueObject\ShareableReference;
@@ -92,6 +93,10 @@ final class Share extends AbstractAggregateRoot implements PublicationAware, Exp
   }
 
   public function setExpiration(?DateTime $expiresAt): void {
+    if ($expiresAt?->isBeforeEquals(DateTime::now())) {
+      throw new InvalidShareExpirationException();
+    }
+
     $next = $this->accessControl->expireAt($expiresAt);
 
     if ($next === $this->accessControl) {
