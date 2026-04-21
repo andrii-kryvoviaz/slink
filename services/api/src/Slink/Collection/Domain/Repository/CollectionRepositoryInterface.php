@@ -25,4 +25,10 @@ interface CollectionRepositoryInterface {
    * @return string[]
    */
   public function findNamesByPatternAndUser(string $baseName, string $userId): array;
+
+  /**
+   * @param list<string> $ids
+   * @return CollectionView[]
+   */
+  public function findByIds(array $ids): array;
 }

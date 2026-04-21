@@ -31,6 +31,14 @@ final readonly class AccessControl extends AbstractValueObject {
     return clone($this, ['isPublished' => true]);
   }
 
+  public function unpublish(): self {
+    if (!$this->isPublished) {
+      return $this;
+    }
+
+    return clone($this, ['isPublished' => false]);
+  }
+
   public function expireAt(?DateTime $expiresAt): self {
     if ($this->expiresAt === $expiresAt || $this->expiresAt?->equals($expiresAt) === true) {
       return $this;

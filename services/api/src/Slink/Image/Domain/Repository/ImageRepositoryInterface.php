@@ -54,4 +54,10 @@ interface ImageRepositoryInterface extends ServiceEntityRepositoryInterface {
    * @return ImageView[]
    */
   public function findByUserId(ID $userId): array;
+
+  /**
+   * @param list<string> $ids
+   * @return ImageView[]
+   */
+  public function findByIds(array $ids): array;
 }

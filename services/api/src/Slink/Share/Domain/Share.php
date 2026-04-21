@@ -13,6 +13,7 @@ use Slink\Share\Domain\Event\SharePasswordWasSet;
 use Slink\Share\Domain\Event\ShareExpirationWasSet;
 use Slink\Share\Domain\Event\ShareWasCreated;
 use Slink\Share\Domain\Event\ShareWasPublished;
+use Slink\Share\Domain\Event\ShareWasUnpublished;
 use Slink\Share\Domain\Event\ShortUrlWasAdded;
 use Slink\Share\Domain\Exception\InvalidShareExpirationException;
 use Slink\Share\Domain\ValueObject\AccessControl;
@@ -90,6 +91,18 @@ final class Share extends AbstractAggregateRoot implements PublicationAware, Exp
 
   protected function applyShareWasPublished(ShareWasPublished $event): void {
     $this->accessControl = $this->accessControl->publish();
+  }
+
+  public function unpublish(): void {
+    if (!$this->accessControl->isPublished) {
+      return;
+    }
+
+    $this->recordThat(new ShareWasUnpublished($this->aggregateRootId()));
+  }
+
+  protected function applyShareWasUnpublished(ShareWasUnpublished $event): void {
+    $this->accessControl = $this->accessControl->unpublish();
   }
 
   public function setExpiration(?DateTime $expiresAt): void {

@@ -49,6 +49,31 @@ final class AccessControlTest extends TestCase {
   }
 
   #[Test]
+  public function itUnpublishesWithoutTouchingExpirationOrPassword(): void {
+    $expiresAt = DateTime::fromString('2099-12-31T23:59:59+00:00');
+    $password = HashedSharePassword::encode('hunter2');
+    $accessControl = AccessControl::initial(true)
+      ->expireAt($expiresAt)
+      ->withPassword($password);
+
+    $next = $accessControl->unpublish();
+
+    $this->assertNotSame($accessControl, $next);
+    $this->assertFalse($next->isPublished);
+    $this->assertEquals($expiresAt->toString(), $next->expiresAt?->toString());
+    $this->assertSame($password->toString(), $next->passwordHash);
+  }
+
+  #[Test]
+  public function itReturnsSameInstanceWhenUnpublishingAlreadyUnpublished(): void {
+    $accessControl = AccessControl::initial(false);
+
+    $next = $accessControl->unpublish();
+
+    $this->assertSame($accessControl, $next);
+  }
+
+  #[Test]
   public function itSetsExpirationWithoutTouchingPublication(): void {
     $accessControl = AccessControl::initial(true);
     $expiresAt = DateTime::fromString('2099-12-31T23:59:59+00:00');

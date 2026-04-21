@@ -110,4 +110,16 @@ final class CollectionRepository extends AbstractRepository implements Collectio
 
     return array_column($qb->getQuery()->getArrayResult(), 'name');
   }
+
+  public function findByIds(array $ids): array {
+    if ($ids === []) {
+      return [];
+    }
+
+    return $this->createQueryBuilder('c')
+      ->where('c.uuid IN (:ids)')
+      ->setParameter('ids', $ids)
+      ->getQuery()
+      ->getResult();
+  }
 }
