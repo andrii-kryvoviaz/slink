@@ -8,8 +8,12 @@ run-dev:
 	docker attach slink
 
 run-dev-host:
-	docker buildx bake -f docker-bake.hcl dev --load
-	docker compose -p slink -f docker/docker-compose.yaml -f docker/docker-compose.dev-host.yaml up -d --wait
+	@if [ -z "$$(docker compose -p slink -f docker/docker-compose.yaml -f docker/docker-compose.dev-host.yaml ps --status=running -q slink)" ]; then \
+		docker buildx bake -f docker-bake.hcl dev --load && \
+		docker compose -p slink -f docker/docker-compose.yaml -f docker/docker-compose.dev-host.yaml up -d --wait; \
+	else \
+		echo "slink dev container already running — skipping bake + compose up"; \
+	fi
 	API_URL=http://localhost:8080 yarn --cwd services/client run dev:with-deps --host
 
 purge:
