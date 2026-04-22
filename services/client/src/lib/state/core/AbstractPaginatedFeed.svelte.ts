@@ -362,7 +362,7 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
     return this._config.useCursor;
   }
 
-  get key(): 'users' | 'tags' | 'history' | 'collections' | null {
+  get key(): 'users' | 'tags' | 'history' | 'collections' | 'shares' | null {
     return null;
   }
 
