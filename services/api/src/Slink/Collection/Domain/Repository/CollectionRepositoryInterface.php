@@ -17,6 +17,9 @@ interface CollectionRepositoryInterface {
 
   public function findById(string $id): ?CollectionView;
 
+  /**
+   * @return Paginator<CollectionView>
+   */
   public function getByUserId(CollectionListFilter $filter): Paginator;
 
   public function countByUserId(CollectionListFilter $filter): int;

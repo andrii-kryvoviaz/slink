@@ -9,8 +9,11 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Slink\Collection\Domain\Repository\CollectionRepositoryInterface;
+use Slink\Collection\Domain\Service\CollectionCoverGeneratorInterface;
 use Slink\Collection\Infrastructure\ReadModel\View\CollectionView;
+use Slink\Collection\Infrastructure\Service\CollectionShareableMetaProvider;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
+use Slink\Image\Infrastructure\Service\ImageShareableMetaProvider;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Share\Application\Query\ListShares\ListSharesHandler;
 use Slink\Share\Application\Query\ListShares\ListSharesQuery;
@@ -32,6 +35,7 @@ final class ListSharesHandlerTest extends TestCase {
   private ShareRepositoryInterface $shareRepository;
   private ImageRepositoryInterface $imageRepository;
   private CollectionRepositoryInterface $collectionRepository;
+  private CollectionCoverGeneratorInterface $collectionCoverGenerator;
   private ShareServiceInterface $shareService;
   private ListSharesHandler $handler;
 
@@ -41,6 +45,7 @@ final class ListSharesHandlerTest extends TestCase {
     $this->shareRepository = $this->createStub(ShareRepositoryInterface::class);
     $this->imageRepository = $this->createStub(ImageRepositoryInterface::class);
     $this->collectionRepository = $this->createStub(CollectionRepositoryInterface::class);
+    $this->collectionCoverGenerator = $this->createStub(CollectionCoverGeneratorInterface::class);
     $this->shareService = $this->createStub(ShareServiceInterface::class);
 
     $this->handler = $this->createHandler();
@@ -50,7 +55,10 @@ final class ListSharesHandlerTest extends TestCase {
     return new ListSharesHandler(
       $this->shareRepository,
       $this->shareService,
-      new ShareableMetaResolver($this->imageRepository, $this->collectionRepository),
+      new ShareableMetaResolver([
+        new ImageShareableMetaProvider($this->imageRepository),
+        new CollectionShareableMetaProvider($this->collectionRepository, $this->collectionCoverGenerator),
+      ]),
       new CursorPaginator(),
     );
   }

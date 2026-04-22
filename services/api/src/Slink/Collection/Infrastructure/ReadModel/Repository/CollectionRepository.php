@@ -53,6 +53,9 @@ final class CollectionRepository extends AbstractRepository implements Collectio
     }
   }
 
+  /**
+   * @return Paginator<CollectionView>
+   */
   public function getByUserId(CollectionListFilter $filter): Paginator {
     $userId = $filter->getUserId();
     $limit = $filter->getLimit();

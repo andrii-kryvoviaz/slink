@@ -5,15 +5,18 @@ declare(strict_types=1);
 namespace Slink\Share\Infrastructure\Resource;
 
 use Closure;
-use Slink\Collection\Domain\Repository\CollectionRepositoryInterface;
-use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Share\Domain\Enum\ShareableType;
+use Slink\Share\Domain\Service\ShareableMetaProviderInterface;
 use Slink\Share\Infrastructure\ReadModel\View\ShareView;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 final readonly class ShareableMetaResolver {
+  /**
+   * @param iterable<ShareableMetaProviderInterface> $providers
+   */
   public function __construct(
-    private ImageRepositoryInterface $imageRepository,
-    private CollectionRepositoryInterface $collectionRepository,
+    #[AutowireIterator(ShareableMetaProviderInterface::class)]
+    private iterable $providers,
   ) {}
 
   /**
@@ -21,41 +24,22 @@ final readonly class ShareableMetaResolver {
    * @return Closure(string, ShareableType): array{id: string, name: string, previewUrl: ?string}
    */
   public function resolver(array $shares): Closure {
-    $imageIds = [];
-    $collectionIds = [];
-
+    /** @var array<string, array<string, bool>> $idsByType */
+    $idsByType = [];
     foreach ($shares as $share) {
       $ref = $share->getShareable();
-      $id = $ref->getShareableId();
-
-      match ($ref->getShareableType()) {
-        ShareableType::Image => $imageIds[$id] = true,
-        ShareableType::Collection => $collectionIds[$id] = true,
-      };
+      $idsByType[$ref->getShareableType()->value][$ref->getShareableId()] = true;
     }
 
-    $imageMeta = [];
-    foreach ($this->imageRepository->findByIds(array_keys($imageIds)) as $image) {
-      $fileName = $image->getFileName();
-      $imageMeta[$image->getUuid()] = [
-        'id' => $image->getUuid(),
-        'name' => $fileName,
-        'previewUrl' => '/image/' . $fileName,
-      ];
+    /** @var array<string, array<string, array{id: string, name: string, previewUrl: ?string}>> $metaByType */
+    $metaByType = [];
+    foreach ($this->providers as $provider) {
+      $type = $provider->supports();
+      $ids = array_keys($idsByType[$type->value] ?? []);
+      $metaByType[$type->value] = $provider->resolve($ids);
     }
 
-    $collectionMeta = [];
-    foreach ($this->collectionRepository->findByIds(array_keys($collectionIds)) as $collection) {
-      $collectionMeta[$collection->getId()] = [
-        'id' => $collection->getId(),
-        'name' => $collection->getName(),
-        'previewUrl' => null,
-      ];
-    }
-
-    return static fn(string $id, ShareableType $type): array => match ($type) {
-      ShareableType::Image => $imageMeta[$id] ?? ['id' => $id, 'name' => $id, 'previewUrl' => null],
-      ShareableType::Collection => $collectionMeta[$id] ?? ['id' => $id, 'name' => $id, 'previewUrl' => null],
-    };
+    return static fn(string $id, ShareableType $type): array =>
+      $metaByType[$type->value][$id] ?? ['id' => $id, 'name' => $id, 'previewUrl' => null];
   }
 }
