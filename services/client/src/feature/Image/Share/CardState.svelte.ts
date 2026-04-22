@@ -4,7 +4,7 @@ import type {
   ImageOutputFormat,
   ImageParams,
 } from '@slink/feature/Image';
-import { ShareState } from '@slink/feature/Share';
+import { ShareState, type ShareStateRegistry } from '@slink/feature/Share';
 
 import { routes } from '$lib/utils/url/routes';
 
@@ -19,6 +19,8 @@ export interface ShareCardConfig {
   getImage: () => ShareCardImage;
   getFilter: () => ImageFilter;
   getResizeParams: () => Partial<ImageParams>;
+  onPublished?: (shareId: string) => void | Promise<void>;
+  registry?: ShareStateRegistry | null;
 }
 
 const applyFormatToFileName = (
@@ -84,7 +86,11 @@ export class ShareCardState {
           filter: filter === 'none' ? undefined : filter,
         });
       },
-      onEnsurePublished: (shareId) => ApiClient.image.publishShare(shareId),
+      onEnsurePublished: async (shareId) => {
+        await ApiClient.image.publishShare(shareId);
+        await this._config.onPublished?.(shareId);
+      },
+      registry: this._config.registry,
     });
 
     $effect(() => {

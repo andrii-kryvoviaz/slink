@@ -22,6 +22,7 @@ export { default as Panel } from './Panel/Panel.svelte';
 export * from './Panel/Panel.theme';
 export * from './Password/State.svelte';
 export { default as Provider } from './Provider/Provider.svelte';
+export * from './Registry/ShareStateRegistry.svelte';
 export * from './Reroute/ShareReroute';
 export * from './State/Context';
 export * from './State/State.svelte';

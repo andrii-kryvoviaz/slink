@@ -1,5 +1,9 @@
 import { ApiClient } from '@slink/api';
-import { ShareExpirationState, SharePasswordState } from '@slink/feature/Share';
+import {
+  ShareExpirationState,
+  SharePasswordState,
+  type ShareStateRegistry,
+} from '@slink/feature/Share';
 
 import { bindRequestState } from '$lib/utils/store/bindRequestState.svelte';
 import { printErrorsAsToastMessage } from '$lib/utils/ui/printErrorsAsToastMessage';
@@ -13,6 +17,7 @@ export interface ShareStateConfig {
   onEnsurePublished?: (shareId: string) => Promise<void>;
   onUnpublished?: (shareId: string) => Promise<void> | void;
   initial?: ShareResponse | null;
+  registry?: ShareStateRegistry | null;
 }
 
 export class ShareState {
@@ -28,19 +33,15 @@ export class ShareState {
     }),
   );
 
-  private _expiration: ShareExpirationState;
-  private _password: SharePasswordState;
+  private _expiration: ShareExpirationState = $state(
+    new ShareExpirationState({ getShareId: () => this._shareId }),
+  );
+  private _password: SharePasswordState = $state(
+    new SharePasswordState({ getShareId: () => this._shareId }),
+  );
 
   constructor(config: ShareStateConfig) {
     this._config = config;
-
-    this._expiration = new ShareExpirationState({
-      getShareId: () => this._shareId,
-    });
-
-    this._password = new SharePasswordState({
-      getShareId: () => this._shareId,
-    });
 
     $effect(() => {
       if (this._request.data) {
@@ -65,6 +66,17 @@ export class ShareState {
     const expiresAt = response.expiresAt ? new Date(response.expiresAt) : null;
     this._shareId = response.shareId;
     this._shareUrl = routes.share.fromResponse(response);
+
+    const registry = this._config.registry;
+
+    if (registry) {
+      this._expiration = registry.expiration(response.shareId, { expiresAt });
+      this._password = registry.password(response.shareId, {
+        requiresPassword: response.requiresPassword,
+      });
+      return;
+    }
+
     this._expiration.rebindTo(response.shareId, expiresAt);
     this._password.rebindTo(response.shareId, response.requiresPassword);
   }
