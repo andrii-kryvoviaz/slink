@@ -190,6 +190,7 @@ msgstr "この操作は取り消せません"
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 #: src/feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte
 #: src/feature/Settings/SettingsPane/SettingItem.svelte
+#: src/feature/Share/Controls/UnpublishDetail.svelte
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
@@ -582,6 +583,7 @@ msgid "Collections | Slink"
 msgstr "コレクション | Slink"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 #: src/feature/Upload/UploadOptions/CollectionsOption.svelte
 #: src/routes/collections/+page.svelte
 msgid "Collections"
@@ -1094,10 +1096,6 @@ msgstr "コレクションの更新に失敗しました"
 msgid "Collection actions"
 msgstr "コレクション操作"
 
-#: src/routes/collection/[id]/+page.svelte
-msgid "Share Collection"
-msgstr "コレクションを共有"
-
 #: src/ui/components/confirmation-dialog/confirmation-dialog.svelte
 msgid "Confirm"
 msgstr "確認"
@@ -1257,6 +1255,7 @@ msgid "Image"
 msgstr "画像"
 
 #: src/feature/Image/History/Actions/DeleteAction.svelte
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
 msgid "Images"
@@ -1977,8 +1976,9 @@ msgstr "<0/>にリセット"
 
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
 #: src/feature/Share/Options/Toolbar.svelte
+#: src/routes/collection/[id]/+page.svelte
 msgid "Share"
-msgstr "共有"
+msgstr "公開"
 
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
 msgid "Configure URL sharing behavior"
@@ -2245,51 +2245,52 @@ msgstr "クリックして{0}を表示"
 msgid "Version {0}"
 msgstr "バージョン {0}"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/routes/history/+page.svelte
+#: src/ui/components/filter-bar/active-filter-bar.svelte
 msgid "Filtering by"
 msgstr "フィルター条件"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Toggle between matching all or any selected tags"
 msgstr "選択したタグのすべてに一致またはいずれかに一致を切り替え"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Match all"
 msgstr "すべてに一致"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Match any"
 msgstr "いずれかに一致"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Match All"
 msgstr "すべてに一致"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Match Any"
 msgstr "いずれかに一致"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Images must have every selected tag to appear in results."
 msgstr "選択したすべてのタグを持つ画像のみが結果に表示されます。"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Images with at least one selected tag will appear in results."
 msgstr "選択したタグのいずれかを持つ画像が結果に表示されます。"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Click to switch to match any"
 msgstr "クリックして「いずれかに一致」に切り替え"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Click to switch to match all"
 msgstr "クリックして「すべてに一致」に切り替え"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/ui/components/filter-bar/active-filter-bar.svelte
 msgid "Clear all filters"
 msgstr "すべてのフィルターを解除"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/ui/components/filter-bar/active-filter-bar.svelte
 msgid "Clear"
 msgstr "クリア"
 
@@ -2528,6 +2529,7 @@ msgstr "<0/> 操作"
 #: src/feature/User/UserActions/UserActions.svelte
 #: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
+#: src/routes/shares/+page.svelte
 msgid "Actions"
 msgstr "操作"
 
@@ -2908,11 +2910,6 @@ msgstr "コマンドパレット"
 msgid "Search for a command to run"
 msgstr "実行するコマンドを検索"
 
-#. 0: inner.value.length
-#: src/ui/components/select/select.svelte
-msgid "{0} items selected"
-msgstr "{0}件選択中"
-
 #: src/ui/components/shortcut/shortcut.svelte
 msgid "⌘ cmd"
 msgstr "⌘ cmd"
@@ -2999,6 +2996,7 @@ msgstr "項目数"
 #: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+#: src/routes/shares/+page.svelte
 msgid "Created"
 msgstr "作成日"
 
@@ -3103,13 +3101,11 @@ msgstr "画像設定 | Slink"
 msgid "Configure image handling and sharing preferences"
 msgstr "画像の処理と共有設定を構成"
 
-#: src/routes/help/faq/+page.svelte
-msgid "You can easily share your images with others using the direct link provided for each uploaded image."
-msgstr "アップロードした各画像に提供される直接リンクを使って、簡単に画像を共有できます。"
+#~ msgid "You can easily share your images with others using the direct link provided for each uploaded image."
+#~ msgstr "アップロードした各画像に提供される直接リンクを使って、簡単に画像を共有できます。"
 
-#: src/routes/help/faq/+page.svelte
-msgid "<0/> Current Sharing Options"
-msgstr "<0/> 現在の共有オプション"
+#~ msgid "<0/> Current Sharing Options"
+#~ msgstr "<0/> 現在の共有オプション"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Direct link sharing with anyone"
@@ -3119,33 +3115,27 @@ msgstr "<0/> 直接リンクで誰とでも共有"
 msgid "<0/> Public gallery visibility (optional)"
 msgstr "<0/> パブリックギャラリーでの表示（任意）"
 
-#: src/routes/help/faq/+page.svelte
-msgid "<0/> Link accessible to anyone who has it"
-msgstr "<0/> リンクを持つ人なら誰でもアクセス可能"
+#~ msgid "<0/> Link accessible to anyone who has it"
+#~ msgstr "<0/> リンクを持つ人なら誰でもアクセス可能"
 
-#: src/routes/help/faq/+page.svelte
-msgid "Want More Control?"
-msgstr "もっと細かく管理したいですか？"
+#~ msgid "Want More Control?"
+#~ msgstr "もっと細かく管理したいですか？"
 
-#: src/routes/help/faq/+page.svelte
-msgid "I'm working on advanced sharing features that will give you more control over your image sharing:"
-msgstr "画像共有をより細かく管理できる高度な共有機能を開発中です："
+#~ msgid "I'm working on advanced sharing features that will give you more control over your image sharing:"
+#~ msgstr "画像共有をより細かく管理できる高度な共有機能を開発中です："
 
-#: src/routes/help/faq/+page.svelte
-msgid "<0/> Expiration dates for shared links"
-msgstr "<0/> 共有リンクの有効期限"
+#~ msgid "<0/> Expiration dates for shared links"
+#~ msgstr "<0/> 共有リンクの有効期限"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Password protection"
 msgstr "<0/> パスワード保護"
 
-#: src/routes/help/faq/+page.svelte
-msgid "<0/> Private group sharing"
-msgstr "<0/> プライベートグループ共有"
+#~ msgid "<0/> Private group sharing"
+#~ msgstr "<0/> プライベートグループ共有"
 
-#: src/routes/help/faq/+page.svelte
-msgid "<0/> Support this feature request <1/>"
-msgstr "<0/> この機能リクエストを応援する <1/>"
+#~ msgid "<0/> Support this feature request <1/>"
+#~ msgstr "<0/> この機能リクエストを応援する <1/>"
 
 #: src/routes/help/faq/+page.svelte
 msgid "I appreciate your help in making Slink better! If you've encountered a bug or have suggestions for improvement, here's how you can help:"
@@ -4023,6 +4013,7 @@ msgstr "タグ「{name}」を削除しました"
 msgid "Failed to download ShareX config"
 msgstr "ShareX設定のダウンロードに失敗しました"
 
+#: src/feature/Share/Controls/List.svelte
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Copied to clipboard"
 msgstr "クリップボードにコピーしました"
@@ -4131,12 +4122,6 @@ msgid "Failed to update # image"
 msgid_plural "Failed to update # images"
 msgstr[0] "#件の画像の更新に失敗しました"
 msgstr[1] "#件の画像の更新に失敗しました"
-
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
-msgid "# tag"
-msgid_plural "# tags"
-msgstr[0] "#件のタグ"
-msgstr[1] "#件のタグ"
 
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "Delete # child tag"
@@ -4279,11 +4264,11 @@ msgstr[1] "#回"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Images are truly private and only accessible by the owner. To share a private image, use the copy button to create a shared link"
-msgstr ""
+msgstr "画像は完全にプライベートで、所有者のみがアクセスできます。プライベート画像を共有するには、コピーボタンを使用して共有リンクを作成します"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Images are private by default and only accessible to the authenticated owner. To share an image with others, use the copy button which creates a shared link."
-msgstr ""
+msgstr "画像はデフォルトでプライベートであり、認証された所有者のみがアクセスできます。画像を他の人と共有するには、共有リンクを作成するコピーボタンを使用します。"
 
 #: src/feature/Share/Controls/ExpirationDetail.svelte
 #: src/feature/Share/Controls/List.svelte
@@ -4308,13 +4293,9 @@ msgid "Saved"
 msgstr "保存しました"
 
 #: src/feature/Share/Controls/List.svelte
-#: src/feature/Share/Options/Indicators.svelte
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 msgid "Expired"
 msgstr "期限切れ"
-
-#: src/feature/Share/Options/Indicators.svelte
-msgid "Today"
-msgstr "今日"
 
 #: src/feature/Share/Controls/Popover.svelte
 msgid "Configure share"
@@ -4331,6 +4312,7 @@ msgstr "閲覧にパスワードを要求"
 
 #: src/feature/Share/Controls/ExpirationDetail.svelte
 #: src/feature/Share/Controls/PasswordDetail.svelte
+#: src/feature/Share/Controls/UnpublishDetail.svelte
 msgid "Back to options"
 msgstr "オプションに戻る"
 
@@ -4342,26 +4324,22 @@ msgstr "共有リンクを管理"
 msgid "Custom"
 msgstr "カスタム"
 
-#: src/feature/Collection/Share/Popover.svelte
+#: src/routes/collection/[id]/+page.svelte
 #: src/routes/collection/[id]/+page.svelte
 msgid "Share collection"
 msgstr "コレクションを共有"
 
-#: src/feature/Collection/Share/Popover.svelte
+#: src/routes/collection/[id]/+page.svelte
 msgid "Share this collection"
 msgstr "このコレクションを共有"
 
-#: src/feature/Collection/Share/Popover.svelte
+#: src/routes/collection/[id]/+page.svelte
 msgid "Create a public link. Anyone with the link will be able to view this collection."
 msgstr "公開リンクを作成します。リンクを持つ全員がこのコレクションを閲覧できます。"
 
-#: src/feature/Collection/Share/Popover.svelte
+#: src/routes/collection/[id]/+page.svelte
 msgid "Create share link"
 msgstr "共有リンクを作成"
-
-#: src/routes/collection/[id]/+page.svelte
-msgid "Shared"
-msgstr "共有中"
 
 #: src/feature/Share/Controls/List.svelte
 msgid "Expires today"
@@ -4391,15 +4369,15 @@ msgstr[1] "#日"
 
 #: src/feature/Share/Unavailable/Unavailable.svelte
 msgid "Share unavailable"
-msgstr ""
+msgstr "公開は利用できません"
 
 #: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "Saving password"
-msgstr ""
+msgstr "パスワードを保存中"
 
 #: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "Failed to save password"
-msgstr ""
+msgstr "パスワードの保存に失敗しました"
 
 #: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "Enter a password"
@@ -4413,9 +4391,8 @@ msgstr "リンクを持っている人は、表示にこのパスワードが必
 msgid "Replace password"
 msgstr "パスワードを変更"
 
+#: src/feature/Share/Attributes/ShareAttributes.svelte
 #: src/feature/Share/Controls/List.svelte
-#: src/feature/Share/Options/Indicators.svelte
-#: src/feature/Share/Options/Indicators.svelte
 msgid "Protected"
 msgstr "保護済み"
 
@@ -4443,7 +4420,9 @@ msgstr "この共有は保護されています"
 msgid "Enter the password below to unlock the shared content."
 msgstr "下のパスワードを入力して、共有されたコンテンツのロックを解除してください。"
 
+#. 0: expiresAt ?? ''
 #. 0: share.expiration.description.phrase
+#: src/feature/Share/Attributes/ShareAttributes.svelte
 #: src/feature/Share/Controls/List.svelte
 msgid "Expires {0}"
 msgstr "{0}に期限切れ"
@@ -4451,10 +4430,157 @@ msgstr "{0}に期限切れ"
 #: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "# character"
 msgid_plural "# characters"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "# 文字"
+msgstr[1] "# 文字"
 
 #. 0: plural(passwordState.minLength, [ '# character', '# characters', ])
 #: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "Use at least {0}"
-msgstr ""
+msgstr "少なくとも{0}使用してください"
+
+#: src/routes/shares/+page.svelte
+msgid "My Shares"
+msgstr "公開一覧"
+
+#: src/routes/shares/+page.svelte
+msgid "Manage links you have shared from images and collections"
+msgstr "画像やコレクションから公開したリンクを管理します"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "Search shares..."
+msgstr "公開を検索..."
+
+#: src/routes/shares/+page.svelte
+#: src/routes/shares/+page.svelte
+msgid "No shares yet"
+msgstr "まだ公開はありません"
+
+#: src/routes/shares/+page.svelte
+msgid "Publish a link from any image or collection to see it here."
+msgstr "画像やコレクションからリンクを公開すると、ここに表示されます。"
+
+#: src/routes/shares/+page.svelte
+msgid "Try adjusting your filters or search term."
+msgstr "フィルターまたは検索語句を調整してみてください。"
+
+#: src/feature/Share/Attributes/ShareAttributes.svelte
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "Password protected"
+msgstr "パスワード保護"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "All types"
+msgstr "すべてのタイプ"
+
+#: src/routes/shares/+page.svelte
+msgid "Item"
+msgstr "項目"
+
+#: src/feature/Share/Controls/List.svelte
+#: src/feature/Share/Controls/UnpublishDetail.svelte
+#: src/feature/Share/Controls/UnpublishDetail.svelte
+msgid "Unpublish"
+msgstr "公開を取り消す"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+msgid "Shares"
+msgstr "公開"
+
+#: src/lib/state/SharesFeed.svelte.ts
+msgid "SharesFeed"
+msgstr "SharesFeed"
+
+#: src/lib/state/SharesFeed.svelte.ts
+msgid "SharesFeedScope"
+msgstr "SharesFeedScope"
+
+#: src/feature/Image/ImageSharesPanel/PublishedLinkItem.svelte
+#: src/feature/Image/ImageSharesPanel/PublishedLinkItem.svelte
+#: src/feature/Share/MyShares/SharesDataTable/cells/ActionsCell.svelte
+#: src/feature/Share/MyShares/SharesDataTable/cells/ActionsCell.svelte
+msgid "Share actions"
+msgstr "公開アクション"
+
+#: src/feature/Share/Controls/List.svelte
+msgid "Copy link"
+msgstr "リンクをコピー"
+
+#: src/feature/Share/Controls/List.svelte
+msgid "Copy the share URL"
+msgstr "公開URLをコピー"
+
+#: src/feature/Share/Controls/List.svelte
+msgid "Stop sharing this link"
+msgstr "このリンクの公開を停止"
+
+#: src/feature/Share/Controls/UnpublishDetail.svelte
+msgid "The link will stop working for anyone who has it."
+msgstr "リンクは、それを所有する全員に対して機能しなくなります。"
+
+#: src/routes/shares/+page.svelte
+msgid "Attributes"
+msgstr "属性"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "Has expiry"
+msgstr "有効期限あり"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "Any expiry"
+msgstr "任意の有効期限"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "No expiry"
+msgstr "有効期限なし"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "Any protection"
+msgstr "任意の保護"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "No password"
+msgstr "パスワードなし"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Manage"
+msgstr "管理"
+
+#: src/routes/shares/+page.svelte
+msgid "My Shares | Slink"
+msgstr "公開一覧 | Slink"
+
+#. 0: plural(count, ['# active link', '# active links'])
+#: src/feature/Image/ImageSharesPanel/ImageSharesPanel.svelte
+msgid "{0} for this image"
+msgstr "この画像の{0}"
+
+#: src/feature/Image/ImageSharesPanel/ImageSharesPanel.svelte
+msgid "# active link"
+msgid_plural "# active links"
+msgstr[0] "# 個のアクティブなリンク"
+msgstr[1] "# 個のアクティブなリンク"
+
+#: src/feature/Image/ImageSharesPanel/ImageSharesPanel.svelte
+msgid "Published Links"
+msgstr "公開リンク"
+
+#: src/feature/Share/Registry/ShareStateRegistry.svelte.ts
+msgid "ShareStateRegistry"
+msgstr "ShareStateRegistry"
+
+#: src/routes/help/faq/+page.svelte
+msgid "You can easily share your images and collections with others by publishing a link. Manage every published link from the <0>Publications</0> page."
+msgstr "リンクを公開することで、画像やコレクションを他の人と簡単に共有できます。<0>公開一覧</0>ページからすべての公開リンクを管理できます。"
+
+#: src/routes/help/faq/+page.svelte
+msgid "<0/> Sharing Options"
+msgstr "<0/> 共有オプション"
+
+#: src/routes/help/faq/+page.svelte
+msgid "<0/> Expiration dates for published links"
+msgstr "<0/> 公開リンクの有効期限"
+
+#: src/routes/help/faq/+page.svelte
+msgid "<0/> Unpublish at any time to revoke access"
+msgstr "<0/> いつでも公開を取り消してアクセスを無効にできます"

@@ -190,6 +190,7 @@ msgstr "此操作不可撤销"
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 #: src/feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte
 #: src/feature/Settings/SettingsPane/SettingItem.svelte
+#: src/feature/Share/Controls/UnpublishDetail.svelte
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
@@ -582,6 +583,7 @@ msgid "Collections | Slink"
 msgstr "合集 | Slink"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 #: src/feature/Upload/UploadOptions/CollectionsOption.svelte
 #: src/routes/collections/+page.svelte
 msgid "Collections"
@@ -1094,10 +1096,6 @@ msgstr "更新合集失败"
 msgid "Collection actions"
 msgstr "合集操作"
 
-#: src/routes/collection/[id]/+page.svelte
-msgid "Share Collection"
-msgstr "分享合集"
-
 #: src/ui/components/confirmation-dialog/confirmation-dialog.svelte
 msgid "Confirm"
 msgstr "确认"
@@ -1257,6 +1255,7 @@ msgid "Image"
 msgstr "图像"
 
 #: src/feature/Image/History/Actions/DeleteAction.svelte
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
 msgid "Images"
@@ -1977,8 +1976,9 @@ msgstr "重置为 <0/>"
 
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
 #: src/feature/Share/Options/Toolbar.svelte
+#: src/routes/collection/[id]/+page.svelte
 msgid "Share"
-msgstr "分享"
+msgstr "发布"
 
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
 msgid "Configure URL sharing behavior"
@@ -2245,51 +2245,52 @@ msgstr "点击查看 {0}"
 msgid "Version {0}"
 msgstr "版本 {0}"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/routes/history/+page.svelte
+#: src/ui/components/filter-bar/active-filter-bar.svelte
 msgid "Filtering by"
 msgstr "筛选条件"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Toggle between matching all or any selected tags"
 msgstr "切换匹配所有或任一已选标签"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Match all"
 msgstr "匹配全部"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Match any"
 msgstr "匹配任一"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Match All"
 msgstr "匹配全部"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Match Any"
 msgstr "匹配任一"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Images must have every selected tag to appear in results."
 msgstr "结果中仅显示包含所有已选标签的图片。"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Images with at least one selected tag will appear in results."
 msgstr "结果中显示至少包含一个已选标签的图片。"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Click to switch to match any"
 msgstr "点击切换为匹配任意"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Click to switch to match all"
 msgstr "点击切换为匹配全部"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/ui/components/filter-bar/active-filter-bar.svelte
 msgid "Clear all filters"
 msgstr "清空筛选"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/ui/components/filter-bar/active-filter-bar.svelte
 msgid "Clear"
 msgstr "清除"
 
@@ -2528,6 +2529,7 @@ msgstr "<0/> 操作"
 #: src/feature/User/UserActions/UserActions.svelte
 #: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
+#: src/routes/shares/+page.svelte
 msgid "Actions"
 msgstr "操作"
 
@@ -2908,11 +2910,6 @@ msgstr "命令面板"
 msgid "Search for a command to run"
 msgstr "搜索要执行的命令"
 
-#. 0: inner.value.length
-#: src/ui/components/select/select.svelte
-msgid "{0} items selected"
-msgstr "已选择 {0} 项"
-
 #: src/ui/components/shortcut/shortcut.svelte
 msgid "⌘ cmd"
 msgstr "⌘ cmd"
@@ -2999,6 +2996,7 @@ msgstr "项目数"
 #: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+#: src/routes/shares/+page.svelte
 msgid "Created"
 msgstr "创建时间"
 
@@ -3103,13 +3101,11 @@ msgstr "图像设置 | Slink"
 msgid "Configure image handling and sharing preferences"
 msgstr "配置图片处理与分享偏好"
 
-#: src/routes/help/faq/+page.svelte
-msgid "You can easily share your images with others using the direct link provided for each uploaded image."
-msgstr "复制图片直链即可轻松分享给他人。"
+#~ msgid "You can easily share your images with others using the direct link provided for each uploaded image."
+#~ msgstr "复制图片直链即可轻松分享给他人。"
 
-#: src/routes/help/faq/+page.svelte
-msgid "<0/> Current Sharing Options"
-msgstr "<0/> 当前分享方式"
+#~ msgid "<0/> Current Sharing Options"
+#~ msgstr "<0/> 当前分享方式"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Direct link sharing with anyone"
@@ -3119,33 +3115,27 @@ msgstr "<0/> 可向任意对象分享直链"
 msgid "<0/> Public gallery visibility (optional)"
 msgstr "<0/> 可选公开画廊展示"
 
-#: src/routes/help/faq/+page.svelte
-msgid "<0/> Link accessible to anyone who has it"
-msgstr "<0/> 任何拿到链接的人都可访问"
+#~ msgid "<0/> Link accessible to anyone who has it"
+#~ msgstr "<0/> 任何拿到链接的人都可访问"
 
-#: src/routes/help/faq/+page.svelte
-msgid "Want More Control?"
-msgstr "想要更多控制权？"
+#~ msgid "Want More Control?"
+#~ msgstr "想要更多控制权？"
 
-#: src/routes/help/faq/+page.svelte
-msgid "I'm working on advanced sharing features that will give you more control over your image sharing:"
-msgstr "我正在开发更强大的分享功能，让你更灵活地管理图片分享："
+#~ msgid "I'm working on advanced sharing features that will give you more control over your image sharing:"
+#~ msgstr "我正在开发更强大的分享功能，让你更灵活地管理图片分享："
 
-#: src/routes/help/faq/+page.svelte
-msgid "<0/> Expiration dates for shared links"
-msgstr "<0/> 分享链接过期时间"
+#~ msgid "<0/> Expiration dates for shared links"
+#~ msgstr "<0/> 分享链接过期时间"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Password protection"
 msgstr "<0/> 密码保护"
 
-#: src/routes/help/faq/+page.svelte
-msgid "<0/> Private group sharing"
-msgstr "<0/> 私密群组分享"
+#~ msgid "<0/> Private group sharing"
+#~ msgstr "<0/> 私密群组分享"
 
-#: src/routes/help/faq/+page.svelte
-msgid "<0/> Support this feature request <1/>"
-msgstr "<0/> 支持该功能需求 <1/>"
+#~ msgid "<0/> Support this feature request <1/>"
+#~ msgstr "<0/> 支持该功能需求 <1/>"
 
 #: src/routes/help/faq/+page.svelte
 msgid "I appreciate your help in making Slink better! If you've encountered a bug or have suggestions for improvement, here's how you can help:"
@@ -4021,6 +4011,7 @@ msgstr "标签 \"{name}\" 删除成功"
 msgid "Failed to download ShareX config"
 msgstr "下载 ShareX 配置失败"
 
+#: src/feature/Share/Controls/List.svelte
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Copied to clipboard"
 msgstr "已复制到剪贴板"
@@ -4129,12 +4120,6 @@ msgid "Failed to update # image"
 msgid_plural "Failed to update # images"
 msgstr[0] "更新 # 张图片失败"
 msgstr[1] "更新 # 张图片失败"
-
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
-msgid "# tag"
-msgid_plural "# tags"
-msgstr[0] "# 个标签"
-msgstr[1] "# 个标签"
 
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "Delete # child tag"
@@ -4276,11 +4261,11 @@ msgstr[0] "# 次"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Images are truly private and only accessible by the owner. To share a private image, use the copy button to create a shared link"
-msgstr ""
+msgstr "图像完全私密，仅所有者可访问。要共享私密图像，请使用复制按钮创建共享链接"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Images are private by default and only accessible to the authenticated owner. To share an image with others, use the copy button which creates a shared link."
-msgstr ""
+msgstr "图像默认私密，仅已认证的所有者可访问。要与他人共享图像，请使用复制按钮创建共享链接。"
 
 #: src/feature/Share/Controls/ExpirationDetail.svelte
 #: src/feature/Share/Controls/List.svelte
@@ -4305,13 +4290,9 @@ msgid "Saved"
 msgstr "已保存"
 
 #: src/feature/Share/Controls/List.svelte
-#: src/feature/Share/Options/Indicators.svelte
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 msgid "Expired"
 msgstr "已过期"
-
-#: src/feature/Share/Options/Indicators.svelte
-msgid "Today"
-msgstr "今天"
 
 #: src/feature/Share/Controls/Popover.svelte
 msgid "Configure share"
@@ -4328,6 +4309,7 @@ msgstr "查看时需要密码"
 
 #: src/feature/Share/Controls/ExpirationDetail.svelte
 #: src/feature/Share/Controls/PasswordDetail.svelte
+#: src/feature/Share/Controls/UnpublishDetail.svelte
 msgid "Back to options"
 msgstr "返回选项"
 
@@ -4339,26 +4321,22 @@ msgstr "管理分享链接"
 msgid "Custom"
 msgstr "自定义"
 
-#: src/feature/Collection/Share/Popover.svelte
+#: src/routes/collection/[id]/+page.svelte
 #: src/routes/collection/[id]/+page.svelte
 msgid "Share collection"
 msgstr "分享合集"
 
-#: src/feature/Collection/Share/Popover.svelte
+#: src/routes/collection/[id]/+page.svelte
 msgid "Share this collection"
 msgstr "分享此合集"
 
-#: src/feature/Collection/Share/Popover.svelte
+#: src/routes/collection/[id]/+page.svelte
 msgid "Create a public link. Anyone with the link will be able to view this collection."
 msgstr "创建公开链接。任何拥有此链接的人都能查看该合集。"
 
-#: src/feature/Collection/Share/Popover.svelte
+#: src/routes/collection/[id]/+page.svelte
 msgid "Create share link"
 msgstr "创建分享链接"
-
-#: src/routes/collection/[id]/+page.svelte
-msgid "Shared"
-msgstr "已分享"
 
 #: src/feature/Share/Controls/List.svelte
 msgid "Expires today"
@@ -4388,15 +4366,15 @@ msgstr[1] "# 天"
 
 #: src/feature/Share/Unavailable/Unavailable.svelte
 msgid "Share unavailable"
-msgstr ""
+msgstr "发布不可用"
 
 #: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "Saving password"
-msgstr ""
+msgstr "正在保存密码"
 
 #: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "Failed to save password"
-msgstr ""
+msgstr "保存密码失败"
 
 #: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "Enter a password"
@@ -4410,9 +4388,8 @@ msgstr "任何拥有该链接的人都需要此密码才能查看"
 msgid "Replace password"
 msgstr "更换密码"
 
+#: src/feature/Share/Attributes/ShareAttributes.svelte
 #: src/feature/Share/Controls/List.svelte
-#: src/feature/Share/Options/Indicators.svelte
-#: src/feature/Share/Options/Indicators.svelte
 msgid "Protected"
 msgstr "已保护"
 
@@ -4440,7 +4417,9 @@ msgstr "此分享受保护"
 msgid "Enter the password below to unlock the shared content."
 msgstr "请在下方输入密码以解锁分享的内容。"
 
+#. 0: expiresAt ?? ''
 #. 0: share.expiration.description.phrase
+#: src/feature/Share/Attributes/ShareAttributes.svelte
 #: src/feature/Share/Controls/List.svelte
 msgid "Expires {0}"
 msgstr "{0}过期"
@@ -4448,10 +4427,155 @@ msgstr "{0}过期"
 #: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "# character"
 msgid_plural "# characters"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "# 个字符"
 
 #. 0: plural(passwordState.minLength, [ '# character', '# characters', ])
 #: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "Use at least {0}"
-msgstr ""
+msgstr "至少使用 {0}"
+
+#: src/routes/shares/+page.svelte
+msgid "My Shares"
+msgstr "我的发布"
+
+#: src/routes/shares/+page.svelte
+msgid "Manage links you have shared from images and collections"
+msgstr "管理您从图像和收藏中发布的链接"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "Search shares..."
+msgstr "搜索发布..."
+
+#: src/routes/shares/+page.svelte
+#: src/routes/shares/+page.svelte
+msgid "No shares yet"
+msgstr "暂无发布"
+
+#: src/routes/shares/+page.svelte
+msgid "Publish a link from any image or collection to see it here."
+msgstr "从任意图像或收藏发布链接以在此处查看。"
+
+#: src/routes/shares/+page.svelte
+msgid "Try adjusting your filters or search term."
+msgstr "请尝试调整筛选条件或搜索词。"
+
+#: src/feature/Share/Attributes/ShareAttributes.svelte
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "Password protected"
+msgstr "密码保护"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "All types"
+msgstr "所有类型"
+
+#: src/routes/shares/+page.svelte
+msgid "Item"
+msgstr "项目"
+
+#: src/feature/Share/Controls/List.svelte
+#: src/feature/Share/Controls/UnpublishDetail.svelte
+#: src/feature/Share/Controls/UnpublishDetail.svelte
+msgid "Unpublish"
+msgstr "取消发布"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+msgid "Shares"
+msgstr "发布"
+
+#: src/lib/state/SharesFeed.svelte.ts
+msgid "SharesFeed"
+msgstr "SharesFeed"
+
+#: src/lib/state/SharesFeed.svelte.ts
+msgid "SharesFeedScope"
+msgstr "SharesFeedScope"
+
+#: src/feature/Image/ImageSharesPanel/PublishedLinkItem.svelte
+#: src/feature/Image/ImageSharesPanel/PublishedLinkItem.svelte
+#: src/feature/Share/MyShares/SharesDataTable/cells/ActionsCell.svelte
+#: src/feature/Share/MyShares/SharesDataTable/cells/ActionsCell.svelte
+msgid "Share actions"
+msgstr "发布操作"
+
+#: src/feature/Share/Controls/List.svelte
+msgid "Copy link"
+msgstr "复制链接"
+
+#: src/feature/Share/Controls/List.svelte
+msgid "Copy the share URL"
+msgstr "复制发布 URL"
+
+#: src/feature/Share/Controls/List.svelte
+msgid "Stop sharing this link"
+msgstr "停止发布此链接"
+
+#: src/feature/Share/Controls/UnpublishDetail.svelte
+msgid "The link will stop working for anyone who has it."
+msgstr "该链接将对所有拥有它的人停止工作。"
+
+#: src/routes/shares/+page.svelte
+msgid "Attributes"
+msgstr "属性"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "Has expiry"
+msgstr "有过期时间"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "Any expiry"
+msgstr "任何过期时间"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "No expiry"
+msgstr "无过期时间"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "Any protection"
+msgstr "任何保护"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "No password"
+msgstr "无密码"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Manage"
+msgstr "管理"
+
+#: src/routes/shares/+page.svelte
+msgid "My Shares | Slink"
+msgstr "我的发布 | Slink"
+
+#. 0: plural(count, ['# active link', '# active links'])
+#: src/feature/Image/ImageSharesPanel/ImageSharesPanel.svelte
+msgid "{0} for this image"
+msgstr "此图像的 {0}"
+
+#: src/feature/Image/ImageSharesPanel/ImageSharesPanel.svelte
+msgid "# active link"
+msgid_plural "# active links"
+msgstr[0] "# 个活动链接"
+
+#: src/feature/Image/ImageSharesPanel/ImageSharesPanel.svelte
+msgid "Published Links"
+msgstr "已发布链接"
+
+#: src/feature/Share/Registry/ShareStateRegistry.svelte.ts
+msgid "ShareStateRegistry"
+msgstr "ShareStateRegistry"
+
+#: src/routes/help/faq/+page.svelte
+msgid "You can easily share your images and collections with others by publishing a link. Manage every published link from the <0>Publications</0> page."
+msgstr "您可以通过发布链接轻松地与他人共享您的图像和收藏。在<0>我的发布</0>页面管理每个已发布的链接。"
+
+#: src/routes/help/faq/+page.svelte
+msgid "<0/> Sharing Options"
+msgstr "<0/> 共享选项"
+
+#: src/routes/help/faq/+page.svelte
+msgid "<0/> Expiration dates for published links"
+msgstr "<0/> 已发布链接的过期时间"
+
+#: src/routes/help/faq/+page.svelte
+msgid "<0/> Unpublish at any time to revoke access"
+msgstr "<0/> 随时取消发布以撤销访问权限"

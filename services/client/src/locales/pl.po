@@ -190,6 +190,7 @@ msgstr "Tej operacji nie można cofnąć"
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 #: src/feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte
 #: src/feature/Settings/SettingsPane/SettingItem.svelte
+#: src/feature/Share/Controls/UnpublishDetail.svelte
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
@@ -582,6 +583,7 @@ msgid "Collections | Slink"
 msgstr "Kolekcje | Slink"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 #: src/feature/Upload/UploadOptions/CollectionsOption.svelte
 #: src/routes/collections/+page.svelte
 msgid "Collections"
@@ -1094,10 +1096,6 @@ msgstr "Nie udało się zaktualizować kolekcji"
 msgid "Collection actions"
 msgstr "Akcje kolekcji"
 
-#: src/routes/collection/[id]/+page.svelte
-msgid "Share Collection"
-msgstr "Udostępnij kolekcję"
-
 #: src/ui/components/confirmation-dialog/confirmation-dialog.svelte
 msgid "Confirm"
 msgstr "Potwierdź"
@@ -1257,6 +1255,7 @@ msgid "Image"
 msgstr "Obraz"
 
 #: src/feature/Image/History/Actions/DeleteAction.svelte
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
 msgid "Images"
@@ -1977,8 +1976,9 @@ msgstr "Resetuj do <0/>"
 
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
 #: src/feature/Share/Options/Toolbar.svelte
+#: src/routes/collection/[id]/+page.svelte
 msgid "Share"
-msgstr "Udostępnij"
+msgstr "Opublikuj"
 
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
 msgid "Configure URL sharing behavior"
@@ -2245,51 +2245,52 @@ msgstr "Kliknij, aby wyświetlić {0}"
 msgid "Version {0}"
 msgstr "Wersja {0}"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/routes/history/+page.svelte
+#: src/ui/components/filter-bar/active-filter-bar.svelte
 msgid "Filtering by"
 msgstr "Filtrowanie według"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Toggle between matching all or any selected tags"
 msgstr "Przełącz między dopasowaniem wszystkich lub dowolnych wybranych tagów"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Match all"
 msgstr "Dopasuj wszystkie"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Match any"
 msgstr "Dopasuj dowolny"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Match All"
 msgstr "Dopasuj wszystkie"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Match Any"
 msgstr "Dopasuj dowolny"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Images must have every selected tag to appear in results."
 msgstr "Obrazy muszą posiadać każdy wybrany tag, aby pojawić się w wynikach."
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Images with at least one selected tag will appear in results."
 msgstr "Obrazy z co najmniej jednym wybranym tagiem pojawią się w wynikach."
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Click to switch to match any"
 msgstr "Kliknij, aby przełączyć na dopasowanie dowolnego"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Click to switch to match all"
 msgstr "Kliknij, aby przełączyć na dopasowanie wszystkich"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/ui/components/filter-bar/active-filter-bar.svelte
 msgid "Clear all filters"
 msgstr "Wyczyść wszystkie filtry"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/ui/components/filter-bar/active-filter-bar.svelte
 msgid "Clear"
 msgstr "Wyczyść"
 
@@ -2528,6 +2529,7 @@ msgstr "<0/> Akcje"
 #: src/feature/User/UserActions/UserActions.svelte
 #: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
+#: src/routes/shares/+page.svelte
 msgid "Actions"
 msgstr "Akcje"
 
@@ -2908,11 +2910,6 @@ msgstr "Paleta poleceń"
 msgid "Search for a command to run"
 msgstr "Wyszukaj polecenie do wykonania"
 
-#. 0: inner.value.length
-#: src/ui/components/select/select.svelte
-msgid "{0} items selected"
-msgstr "Wybrano {0} elementów"
-
 #: src/ui/components/shortcut/shortcut.svelte
 msgid "⌘ cmd"
 msgstr "⌘ cmd"
@@ -2999,6 +2996,7 @@ msgstr "Elementy"
 #: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+#: src/routes/shares/+page.svelte
 msgid "Created"
 msgstr "Utworzono"
 
@@ -3103,13 +3101,11 @@ msgstr "Ustawienia obrazów | Slink"
 msgid "Configure image handling and sharing preferences"
 msgstr "Skonfiguruj preferencje dotyczące obsługi i udostępniania obrazów"
 
-#: src/routes/help/faq/+page.svelte
-msgid "You can easily share your images with others using the direct link provided for each uploaded image."
-msgstr "Możesz łatwo udostępniać swoje obrazy innym, korzystając z bezpośredniego linku dostępnego dla każdego przesłanego obrazu."
+#~ msgid "You can easily share your images with others using the direct link provided for each uploaded image."
+#~ msgstr "Możesz łatwo udostępniać swoje obrazy innym, korzystając z bezpośredniego linku dostępnego dla każdego przesłanego obrazu."
 
-#: src/routes/help/faq/+page.svelte
-msgid "<0/> Current Sharing Options"
-msgstr "<0/> Aktualne opcje udostępniania"
+#~ msgid "<0/> Current Sharing Options"
+#~ msgstr "<0/> Aktualne opcje udostępniania"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Direct link sharing with anyone"
@@ -3119,33 +3115,27 @@ msgstr "<0/> Udostępnianie bezpośredniego linku komukolwiek"
 msgid "<0/> Public gallery visibility (optional)"
 msgstr "<0/> Widoczność w publicznej galerii (opcjonalnie)"
 
-#: src/routes/help/faq/+page.svelte
-msgid "<0/> Link accessible to anyone who has it"
-msgstr "<0/> Link dostępny dla każdego, kto go posiada"
+#~ msgid "<0/> Link accessible to anyone who has it"
+#~ msgstr "<0/> Link dostępny dla każdego, kto go posiada"
 
-#: src/routes/help/faq/+page.svelte
-msgid "Want More Control?"
-msgstr "Chcesz mieć większą kontrolę?"
+#~ msgid "Want More Control?"
+#~ msgstr "Chcesz mieć większą kontrolę?"
 
-#: src/routes/help/faq/+page.svelte
-msgid "I'm working on advanced sharing features that will give you more control over your image sharing:"
-msgstr "Pracuję nad zaawansowanymi funkcjami udostępniania, które dadzą ci większą kontrolę nad udostępnianiem obrazów:"
+#~ msgid "I'm working on advanced sharing features that will give you more control over your image sharing:"
+#~ msgstr "Pracuję nad zaawansowanymi funkcjami udostępniania, które dadzą ci większą kontrolę nad udostępnianiem obrazów:"
 
-#: src/routes/help/faq/+page.svelte
-msgid "<0/> Expiration dates for shared links"
-msgstr "<0/> Daty wygaśnięcia udostępnionych linków"
+#~ msgid "<0/> Expiration dates for shared links"
+#~ msgstr "<0/> Daty wygaśnięcia udostępnionych linków"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Password protection"
 msgstr "<0/> Ochrona hasłem"
 
-#: src/routes/help/faq/+page.svelte
-msgid "<0/> Private group sharing"
-msgstr "<0/> Udostępnianie prywatnym grupom"
+#~ msgid "<0/> Private group sharing"
+#~ msgstr "<0/> Udostępnianie prywatnym grupom"
 
-#: src/routes/help/faq/+page.svelte
-msgid "<0/> Support this feature request <1/>"
-msgstr "<0/> Wesprzyj tę prośbę o funkcję <1/>"
+#~ msgid "<0/> Support this feature request <1/>"
+#~ msgstr "<0/> Wesprzyj tę prośbę o funkcję <1/>"
 
 #: src/routes/help/faq/+page.svelte
 msgid "I appreciate your help in making Slink better! If you've encountered a bug or have suggestions for improvement, here's how you can help:"
@@ -4027,6 +4017,7 @@ msgstr "Tag \"{name}\" został pomyślnie usunięty"
 msgid "Failed to download ShareX config"
 msgstr "Nie udało się pobrać konfiguracji ShareX"
 
+#: src/feature/Share/Controls/List.svelte
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Copied to clipboard"
 msgstr "Skopiowano do schowka"
@@ -4135,12 +4126,6 @@ msgid "Failed to update # image"
 msgid_plural "Failed to update # images"
 msgstr[0] "Nie udało się zaktualizować # obrazu"
 msgstr[1] "Nie udało się zaktualizować # obrazów"
-
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
-msgid "# tag"
-msgid_plural "# tags"
-msgstr[0] "# tag"
-msgstr[1] "# tagów"
 
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "Delete # child tag"
@@ -4285,11 +4270,11 @@ msgstr[3] "# razy"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Images are truly private and only accessible by the owner. To share a private image, use the copy button to create a shared link"
-msgstr ""
+msgstr "Obrazy są naprawdę prywatne i dostępne tylko dla właściciela. Aby udostępnić prywatny obraz, użyj przycisku kopiowania, aby utworzyć udostępniony link"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Images are private by default and only accessible to the authenticated owner. To share an image with others, use the copy button which creates a shared link."
-msgstr ""
+msgstr "Obrazy są domyślnie prywatne i dostępne tylko dla uwierzytelnionego właściciela. Aby udostępnić obraz innym, użyj przycisku kopiowania, który tworzy udostępniony link."
 
 #: src/feature/Share/Controls/ExpirationDetail.svelte
 #: src/feature/Share/Controls/List.svelte
@@ -4314,13 +4299,9 @@ msgid "Saved"
 msgstr "Zapisano"
 
 #: src/feature/Share/Controls/List.svelte
-#: src/feature/Share/Options/Indicators.svelte
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 msgid "Expired"
 msgstr "Wygasły"
-
-#: src/feature/Share/Options/Indicators.svelte
-msgid "Today"
-msgstr "Dziś"
 
 #: src/feature/Share/Controls/Popover.svelte
 msgid "Configure share"
@@ -4337,6 +4318,7 @@ msgstr "Wymagaj hasła do podglądu"
 
 #: src/feature/Share/Controls/ExpirationDetail.svelte
 #: src/feature/Share/Controls/PasswordDetail.svelte
+#: src/feature/Share/Controls/UnpublishDetail.svelte
 msgid "Back to options"
 msgstr "Wróć do opcji"
 
@@ -4348,26 +4330,22 @@ msgstr "Zarządzaj linkiem udostępniania"
 msgid "Custom"
 msgstr "Niestandardowo"
 
-#: src/feature/Collection/Share/Popover.svelte
+#: src/routes/collection/[id]/+page.svelte
 #: src/routes/collection/[id]/+page.svelte
 msgid "Share collection"
 msgstr "Udostępnij kolekcję"
 
-#: src/feature/Collection/Share/Popover.svelte
+#: src/routes/collection/[id]/+page.svelte
 msgid "Share this collection"
 msgstr "Udostępnij tę kolekcję"
 
-#: src/feature/Collection/Share/Popover.svelte
+#: src/routes/collection/[id]/+page.svelte
 msgid "Create a public link. Anyone with the link will be able to view this collection."
 msgstr "Utwórz publiczny link. Każdy, kto go otrzyma, będzie mógł zobaczyć tę kolekcję."
 
-#: src/feature/Collection/Share/Popover.svelte
+#: src/routes/collection/[id]/+page.svelte
 msgid "Create share link"
 msgstr "Utwórz link udostępniania"
-
-#: src/routes/collection/[id]/+page.svelte
-msgid "Shared"
-msgstr "Udostępniono"
 
 #: src/feature/Share/Controls/List.svelte
 msgid "Expires today"
@@ -4397,15 +4375,15 @@ msgstr[1] "# dni"
 
 #: src/feature/Share/Unavailable/Unavailable.svelte
 msgid "Share unavailable"
-msgstr ""
+msgstr "Publikacja niedostępna"
 
 #: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "Saving password"
-msgstr ""
+msgstr "Zapisywanie hasła"
 
 #: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "Failed to save password"
-msgstr ""
+msgstr "Nie udało się zapisać hasła"
 
 #: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "Enter a password"
@@ -4419,9 +4397,8 @@ msgstr "Każdy z linkiem będzie potrzebował tego hasła, aby zobaczyć"
 msgid "Replace password"
 msgstr "Zmień hasło"
 
+#: src/feature/Share/Attributes/ShareAttributes.svelte
 #: src/feature/Share/Controls/List.svelte
-#: src/feature/Share/Options/Indicators.svelte
-#: src/feature/Share/Options/Indicators.svelte
 msgid "Protected"
 msgstr "Chronione"
 
@@ -4449,7 +4426,9 @@ msgstr "To udostępnienie jest chronione"
 msgid "Enter the password below to unlock the shared content."
 msgstr "Wprowadź hasło poniżej, aby odblokować udostępnioną zawartość."
 
+#. 0: expiresAt ?? ''
 #. 0: share.expiration.description.phrase
+#: src/feature/Share/Attributes/ShareAttributes.svelte
 #: src/feature/Share/Controls/List.svelte
 msgid "Expires {0}"
 msgstr "Wygasa {0}"
@@ -4457,10 +4436,161 @@ msgstr "Wygasa {0}"
 #: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "# character"
 msgid_plural "# characters"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "# znak"
+msgstr[1] "# znaki"
+msgstr[2] "# znaków"
+msgstr[3] "# znaków"
 
 #. 0: plural(passwordState.minLength, [ '# character', '# characters', ])
 #: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "Use at least {0}"
-msgstr ""
+msgstr "Użyj co najmniej {0}"
+
+#: src/routes/shares/+page.svelte
+msgid "My Shares"
+msgstr "Moje publikacje"
+
+#: src/routes/shares/+page.svelte
+msgid "Manage links you have shared from images and collections"
+msgstr "Zarządzaj linkami opublikowanymi z obrazów i kolekcji"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "Search shares..."
+msgstr "Szukaj publikacji..."
+
+#: src/routes/shares/+page.svelte
+#: src/routes/shares/+page.svelte
+msgid "No shares yet"
+msgstr "Brak publikacji"
+
+#: src/routes/shares/+page.svelte
+msgid "Publish a link from any image or collection to see it here."
+msgstr "Opublikuj link z dowolnego obrazu lub kolekcji, aby zobaczyć go tutaj."
+
+#: src/routes/shares/+page.svelte
+msgid "Try adjusting your filters or search term."
+msgstr "Spróbuj dostosować filtry lub wyszukiwane hasło."
+
+#: src/feature/Share/Attributes/ShareAttributes.svelte
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "Password protected"
+msgstr "Chronione hasłem"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "All types"
+msgstr "Wszystkie typy"
+
+#: src/routes/shares/+page.svelte
+msgid "Item"
+msgstr "Element"
+
+#: src/feature/Share/Controls/List.svelte
+#: src/feature/Share/Controls/UnpublishDetail.svelte
+#: src/feature/Share/Controls/UnpublishDetail.svelte
+msgid "Unpublish"
+msgstr "Cofnij publikację"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+msgid "Shares"
+msgstr "Publikacje"
+
+#: src/lib/state/SharesFeed.svelte.ts
+msgid "SharesFeed"
+msgstr "SharesFeed"
+
+#: src/lib/state/SharesFeed.svelte.ts
+msgid "SharesFeedScope"
+msgstr "SharesFeedScope"
+
+#: src/feature/Image/ImageSharesPanel/PublishedLinkItem.svelte
+#: src/feature/Image/ImageSharesPanel/PublishedLinkItem.svelte
+#: src/feature/Share/MyShares/SharesDataTable/cells/ActionsCell.svelte
+#: src/feature/Share/MyShares/SharesDataTable/cells/ActionsCell.svelte
+msgid "Share actions"
+msgstr "Akcje publikacji"
+
+#: src/feature/Share/Controls/List.svelte
+msgid "Copy link"
+msgstr "Kopiuj link"
+
+#: src/feature/Share/Controls/List.svelte
+msgid "Copy the share URL"
+msgstr "Kopiuj adres URL publikacji"
+
+#: src/feature/Share/Controls/List.svelte
+msgid "Stop sharing this link"
+msgstr "Przestań publikować ten link"
+
+#: src/feature/Share/Controls/UnpublishDetail.svelte
+msgid "The link will stop working for anyone who has it."
+msgstr "Link przestanie działać dla każdego, kto go posiada."
+
+#: src/routes/shares/+page.svelte
+msgid "Attributes"
+msgstr "Atrybuty"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "Has expiry"
+msgstr "Z wygaśnięciem"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "Any expiry"
+msgstr "Dowolne wygaśnięcie"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "No expiry"
+msgstr "Bez wygaśnięcia"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "Any protection"
+msgstr "Dowolna ochrona"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "No password"
+msgstr "Bez hasła"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Manage"
+msgstr "Zarządzaj"
+
+#: src/routes/shares/+page.svelte
+msgid "My Shares | Slink"
+msgstr "Moje publikacje | Slink"
+
+#. 0: plural(count, ['# active link', '# active links'])
+#: src/feature/Image/ImageSharesPanel/ImageSharesPanel.svelte
+msgid "{0} for this image"
+msgstr "{0} dla tego obrazu"
+
+#: src/feature/Image/ImageSharesPanel/ImageSharesPanel.svelte
+msgid "# active link"
+msgid_plural "# active links"
+msgstr[0] "# aktywny link"
+msgstr[1] "# aktywne linki"
+msgstr[2] "# aktywnych linków"
+msgstr[3] "# aktywnych linków"
+
+#: src/feature/Image/ImageSharesPanel/ImageSharesPanel.svelte
+msgid "Published Links"
+msgstr "Opublikowane linki"
+
+#: src/feature/Share/Registry/ShareStateRegistry.svelte.ts
+msgid "ShareStateRegistry"
+msgstr "ShareStateRegistry"
+
+#: src/routes/help/faq/+page.svelte
+msgid "You can easily share your images and collections with others by publishing a link. Manage every published link from the <0>Publications</0> page."
+msgstr "Możesz łatwo udostępniać swoje obrazy i kolekcje innym, publikując link. Zarządzaj każdym opublikowanym linkiem na stronie <0>Publikacje</0>."
+
+#: src/routes/help/faq/+page.svelte
+msgid "<0/> Sharing Options"
+msgstr "<0/> Opcje udostępniania"
+
+#: src/routes/help/faq/+page.svelte
+msgid "<0/> Expiration dates for published links"
+msgstr "<0/> Daty wygaśnięcia dla opublikowanych linków"
+
+#: src/routes/help/faq/+page.svelte
+msgid "<0/> Unpublish at any time to revoke access"
+msgstr "<0/> Cofnij publikację w dowolnym momencie, aby odebrać dostęp"

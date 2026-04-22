@@ -190,6 +190,7 @@ msgstr "Цю дію неможливо скасувати"
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 #: src/feature/Settings/ResetSettingConfirmation/ResetSettingPopover.svelte
 #: src/feature/Settings/SettingsPane/SettingItem.svelte
+#: src/feature/Share/Controls/UnpublishDetail.svelte
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/feature/User/ApiKey/ApiKeyDeletePopover.svelte
@@ -582,6 +583,7 @@ msgid "Collections | Slink"
 msgstr "Колекції | Slink"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 #: src/feature/Upload/UploadOptions/CollectionsOption.svelte
 #: src/routes/collections/+page.svelte
 msgid "Collections"
@@ -1094,10 +1096,6 @@ msgstr "Не вдалося оновити колекцію"
 msgid "Collection actions"
 msgstr "Дії з колекцією"
 
-#: src/routes/collection/[id]/+page.svelte
-msgid "Share Collection"
-msgstr "Поділитися колекцією"
-
 #: src/ui/components/confirmation-dialog/confirmation-dialog.svelte
 msgid "Confirm"
 msgstr "Підтвердити"
@@ -1257,6 +1255,7 @@ msgid "Image"
 msgstr "Зображення"
 
 #: src/feature/Image/History/Actions/DeleteAction.svelte
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
 msgid "Images"
@@ -1977,8 +1976,9 @@ msgstr "Скинути до <0/>"
 
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
 #: src/feature/Share/Options/Toolbar.svelte
+#: src/routes/collection/[id]/+page.svelte
 msgid "Share"
-msgstr "Спільний доступ"
+msgstr "Опублікувати"
 
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
 msgid "Configure URL sharing behavior"
@@ -2245,51 +2245,52 @@ msgstr "Натисніть для перегляду {0}"
 msgid "Version {0}"
 msgstr "Версія {0}"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/routes/history/+page.svelte
+#: src/ui/components/filter-bar/active-filter-bar.svelte
 msgid "Filtering by"
 msgstr "Фільтрація за"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Toggle between matching all or any selected tags"
 msgstr "Перемикання між збігом усіх або будь-якого з вибраних тегів"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Match all"
 msgstr "Збіг усіх"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Match any"
 msgstr "Збіг будь-якого"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Match All"
 msgstr "Збіг усіх"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Match Any"
 msgstr "Збіг будь-якого"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Images must have every selected tag to appear in results."
 msgstr "Зображення повинні мати всі вибрані теги, щоб з'явитися в результатах."
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Images with at least one selected tag will appear in results."
 msgstr "Зображення з хоча б одним вибраним тегом з'являться в результатах."
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Click to switch to match any"
 msgstr "Натисніть, щоб перемкнути на збіг будь-якого"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/feature/Tag/TagMatchModeToggle/TagMatchModeToggle.svelte
 msgid "Click to switch to match all"
 msgstr "Натисніть, щоб перемкнути на збіг усіх"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/ui/components/filter-bar/active-filter-bar.svelte
 msgid "Clear all filters"
 msgstr "Очистити всі фільтри"
 
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
+#: src/ui/components/filter-bar/active-filter-bar.svelte
 msgid "Clear"
 msgstr "Очистити"
 
@@ -2528,6 +2529,7 @@ msgstr "<0/> Дії"
 #: src/feature/User/UserActions/UserActions.svelte
 #: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
+#: src/routes/shares/+page.svelte
 msgid "Actions"
 msgstr "Дії"
 
@@ -2908,11 +2910,6 @@ msgstr "Палітра команд"
 msgid "Search for a command to run"
 msgstr "Знайти команду для виконання"
 
-#. 0: inner.value.length
-#: src/ui/components/select/select.svelte
-msgid "{0} items selected"
-msgstr "{0} елементів вибрано"
-
 #: src/ui/components/shortcut/shortcut.svelte
 msgid "⌘ cmd"
 msgstr "⌘ cmd"
@@ -2999,6 +2996,7 @@ msgstr "Елементи"
 #: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+#: src/routes/shares/+page.svelte
 msgid "Created"
 msgstr "Створено"
 
@@ -3103,13 +3101,11 @@ msgstr "Зображення | Slink"
 msgid "Configure image handling and sharing preferences"
 msgstr "Налаштуйте обробку зображень та параметри спільного доступу"
 
-#: src/routes/help/faq/+page.svelte
-msgid "You can easily share your images with others using the direct link provided for each uploaded image."
-msgstr "Ви можете легко ділитися зображеннями з іншими за допомогою прямого посилання для кожного завантаженого зображення."
+#~ msgid "You can easily share your images with others using the direct link provided for each uploaded image."
+#~ msgstr "Ви можете легко ділитися зображеннями з іншими за допомогою прямого посилання для кожного завантаженого зображення."
 
-#: src/routes/help/faq/+page.svelte
-msgid "<0/> Current Sharing Options"
-msgstr "<0/> Поточні параметри спільного доступу"
+#~ msgid "<0/> Current Sharing Options"
+#~ msgstr "<0/> Поточні параметри спільного доступу"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Direct link sharing with anyone"
@@ -3119,33 +3115,27 @@ msgstr "<0/> Пряме посилання для будь-кого"
 msgid "<0/> Public gallery visibility (optional)"
 msgstr "<0/> Видимість у публічній галереї (необов'язково)"
 
-#: src/routes/help/faq/+page.svelte
-msgid "<0/> Link accessible to anyone who has it"
-msgstr "<0/> Посилання доступне кожному, хто його має"
+#~ msgid "<0/> Link accessible to anyone who has it"
+#~ msgstr "<0/> Посилання доступне кожному, хто його має"
 
-#: src/routes/help/faq/+page.svelte
-msgid "Want More Control?"
-msgstr "Бажаєте більше контролю?"
+#~ msgid "Want More Control?"
+#~ msgstr "Бажаєте більше контролю?"
 
-#: src/routes/help/faq/+page.svelte
-msgid "I'm working on advanced sharing features that will give you more control over your image sharing:"
-msgstr "Я працюю над розширеними функціями спільного доступу для більшого контролю:"
+#~ msgid "I'm working on advanced sharing features that will give you more control over your image sharing:"
+#~ msgstr "Я працюю над розширеними функціями спільного доступу для більшого контролю:"
 
-#: src/routes/help/faq/+page.svelte
-msgid "<0/> Expiration dates for shared links"
-msgstr "<0/> Терміни дії спільних посилань"
+#~ msgid "<0/> Expiration dates for shared links"
+#~ msgstr "<0/> Терміни дії спільних посилань"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Password protection"
 msgstr "<0/> Захист паролем"
 
-#: src/routes/help/faq/+page.svelte
-msgid "<0/> Private group sharing"
-msgstr "<0/> Приватний доступ для груп"
+#~ msgid "<0/> Private group sharing"
+#~ msgstr "<0/> Приватний доступ для груп"
 
-#: src/routes/help/faq/+page.svelte
-msgid "<0/> Support this feature request <1/>"
-msgstr "<0/> Підтримати цей запит <1/>"
+#~ msgid "<0/> Support this feature request <1/>"
+#~ msgstr "<0/> Підтримати цей запит <1/>"
 
 #: src/routes/help/faq/+page.svelte
 msgid "I appreciate your help in making Slink better! If you've encountered a bug or have suggestions for improvement, here's how you can help:"
@@ -4025,6 +4015,7 @@ msgstr "Тег \"{name}\" успішно видалено"
 msgid "Failed to download ShareX config"
 msgstr "Не вдалося завантажити конфігурацію ShareX"
 
+#: src/feature/Share/Controls/List.svelte
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Copied to clipboard"
 msgstr "Скопійовано до буфера обміну"
@@ -4133,12 +4124,6 @@ msgid "Failed to update # image"
 msgid_plural "Failed to update # images"
 msgstr[0] "Не вдалося оновити # зображення"
 msgstr[1] "Не вдалося оновити # зображень"
-
-#: src/feature/Tag/ActiveFilterBar/ActiveFilterBar.svelte
-msgid "# tag"
-msgid_plural "# tags"
-msgstr[0] "# тег"
-msgstr[1] "# тегів"
 
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "Delete # child tag"
@@ -4282,11 +4267,11 @@ msgstr[2] "# разів"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Images are truly private and only accessible by the owner. To share a private image, use the copy button to create a shared link"
-msgstr ""
+msgstr "Зображення справді приватні та доступні лише власнику. Щоб поділитися приватним зображенням, скористайтеся кнопкою копіювання, щоб створити посилання для спільного доступу"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Images are private by default and only accessible to the authenticated owner. To share an image with others, use the copy button which creates a shared link."
-msgstr ""
+msgstr "Зображення за замовчуванням приватні та доступні лише автентифікованому власнику. Щоб поділитися зображенням з іншими, скористайтеся кнопкою копіювання, яка створює посилання для спільного доступу."
 
 #: src/feature/Share/Controls/ExpirationDetail.svelte
 #: src/feature/Share/Controls/List.svelte
@@ -4311,13 +4296,9 @@ msgid "Saved"
 msgstr "Збережено"
 
 #: src/feature/Share/Controls/List.svelte
-#: src/feature/Share/Options/Indicators.svelte
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 msgid "Expired"
 msgstr "Минув"
-
-#: src/feature/Share/Options/Indicators.svelte
-msgid "Today"
-msgstr "Сьогодні"
 
 #: src/feature/Share/Controls/Popover.svelte
 msgid "Configure share"
@@ -4334,6 +4315,7 @@ msgstr "Запитувати пароль для перегляду"
 
 #: src/feature/Share/Controls/ExpirationDetail.svelte
 #: src/feature/Share/Controls/PasswordDetail.svelte
+#: src/feature/Share/Controls/UnpublishDetail.svelte
 msgid "Back to options"
 msgstr "До опцій"
 
@@ -4345,26 +4327,22 @@ msgstr "Керувати посиланням"
 msgid "Custom"
 msgstr "Інше"
 
-#: src/feature/Collection/Share/Popover.svelte
+#: src/routes/collection/[id]/+page.svelte
 #: src/routes/collection/[id]/+page.svelte
 msgid "Share collection"
 msgstr "Поділитися колекцією"
 
-#: src/feature/Collection/Share/Popover.svelte
+#: src/routes/collection/[id]/+page.svelte
 msgid "Share this collection"
 msgstr "Поділитися цією колекцією"
 
-#: src/feature/Collection/Share/Popover.svelte
+#: src/routes/collection/[id]/+page.svelte
 msgid "Create a public link. Anyone with the link will be able to view this collection."
 msgstr "Створіть публічне посилання. Будь-хто з посиланням зможе переглянути цю колекцію."
 
-#: src/feature/Collection/Share/Popover.svelte
+#: src/routes/collection/[id]/+page.svelte
 msgid "Create share link"
 msgstr "Створити посилання"
-
-#: src/routes/collection/[id]/+page.svelte
-msgid "Shared"
-msgstr "Поширено"
 
 #: src/feature/Share/Controls/List.svelte
 msgid "Expires today"
@@ -4394,15 +4372,15 @@ msgstr[1] "# днів"
 
 #: src/feature/Share/Unavailable/Unavailable.svelte
 msgid "Share unavailable"
-msgstr ""
+msgstr "Публікація недоступна"
 
 #: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "Saving password"
-msgstr ""
+msgstr "Збереження пароля"
 
 #: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "Failed to save password"
-msgstr ""
+msgstr "Не вдалося зберегти пароль"
 
 #: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "Enter a password"
@@ -4416,9 +4394,8 @@ msgstr "Кожен, хто має посилання, потребуватиме
 msgid "Replace password"
 msgstr "Змінити пароль"
 
+#: src/feature/Share/Attributes/ShareAttributes.svelte
 #: src/feature/Share/Controls/List.svelte
-#: src/feature/Share/Options/Indicators.svelte
-#: src/feature/Share/Options/Indicators.svelte
 msgid "Protected"
 msgstr "Захищено"
 
@@ -4446,7 +4423,9 @@ msgstr "Цей спільний доступ захищено"
 msgid "Enter the password below to unlock the shared content."
 msgstr "Введіть пароль нижче, щоб розблокувати спільний вміст."
 
+#. 0: expiresAt ?? ''
 #. 0: share.expiration.description.phrase
+#: src/feature/Share/Attributes/ShareAttributes.svelte
 #: src/feature/Share/Controls/List.svelte
 msgid "Expires {0}"
 msgstr "Спливає {0}"
@@ -4454,10 +4433,159 @@ msgstr "Спливає {0}"
 #: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "# character"
 msgid_plural "# characters"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "# символ"
+msgstr[1] "# символи"
+msgstr[2] "# символів"
 
 #. 0: plural(passwordState.minLength, [ '# character', '# characters', ])
 #: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "Use at least {0}"
-msgstr ""
+msgstr "Використовуйте щонайменше {0}"
+
+#: src/routes/shares/+page.svelte
+msgid "My Shares"
+msgstr "Мої публікації"
+
+#: src/routes/shares/+page.svelte
+msgid "Manage links you have shared from images and collections"
+msgstr "Керуйте посиланнями, опублікованими із зображень і колекцій"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "Search shares..."
+msgstr "Пошук публікацій..."
+
+#: src/routes/shares/+page.svelte
+#: src/routes/shares/+page.svelte
+msgid "No shares yet"
+msgstr "Ще немає публікацій"
+
+#: src/routes/shares/+page.svelte
+msgid "Publish a link from any image or collection to see it here."
+msgstr "Опублікуйте посилання з будь-якого зображення або колекції, щоб побачити його тут."
+
+#: src/routes/shares/+page.svelte
+msgid "Try adjusting your filters or search term."
+msgstr "Спробуйте скоригувати фільтри або пошуковий запит."
+
+#: src/feature/Share/Attributes/ShareAttributes.svelte
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "Password protected"
+msgstr "Захищено паролем"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "All types"
+msgstr "Усі типи"
+
+#: src/routes/shares/+page.svelte
+msgid "Item"
+msgstr "Елемент"
+
+#: src/feature/Share/Controls/List.svelte
+#: src/feature/Share/Controls/UnpublishDetail.svelte
+#: src/feature/Share/Controls/UnpublishDetail.svelte
+msgid "Unpublish"
+msgstr "Скасувати публікацію"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+msgid "Shares"
+msgstr "Публікації"
+
+#: src/lib/state/SharesFeed.svelte.ts
+msgid "SharesFeed"
+msgstr "SharesFeed"
+
+#: src/lib/state/SharesFeed.svelte.ts
+msgid "SharesFeedScope"
+msgstr "SharesFeedScope"
+
+#: src/feature/Image/ImageSharesPanel/PublishedLinkItem.svelte
+#: src/feature/Image/ImageSharesPanel/PublishedLinkItem.svelte
+#: src/feature/Share/MyShares/SharesDataTable/cells/ActionsCell.svelte
+#: src/feature/Share/MyShares/SharesDataTable/cells/ActionsCell.svelte
+msgid "Share actions"
+msgstr "Дії з публікацією"
+
+#: src/feature/Share/Controls/List.svelte
+msgid "Copy link"
+msgstr "Копіювати посилання"
+
+#: src/feature/Share/Controls/List.svelte
+msgid "Copy the share URL"
+msgstr "Копіювати URL-адресу публікації"
+
+#: src/feature/Share/Controls/List.svelte
+msgid "Stop sharing this link"
+msgstr "Скасувати публікацію цього посилання"
+
+#: src/feature/Share/Controls/UnpublishDetail.svelte
+msgid "The link will stop working for anyone who has it."
+msgstr "Посилання перестане працювати для всіх, хто його має."
+
+#: src/routes/shares/+page.svelte
+msgid "Attributes"
+msgstr "Атрибути"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "Has expiry"
+msgstr "З терміном дії"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "Any expiry"
+msgstr "Будь-який термін дії"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "No expiry"
+msgstr "Без терміну дії"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "Any protection"
+msgstr "Будь-який захист"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "No password"
+msgstr "Без пароля"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Manage"
+msgstr "Керувати"
+
+#: src/routes/shares/+page.svelte
+msgid "My Shares | Slink"
+msgstr "Мої публікації | Slink"
+
+#. 0: plural(count, ['# active link', '# active links'])
+#: src/feature/Image/ImageSharesPanel/ImageSharesPanel.svelte
+msgid "{0} for this image"
+msgstr "{0} для цього зображення"
+
+#: src/feature/Image/ImageSharesPanel/ImageSharesPanel.svelte
+msgid "# active link"
+msgid_plural "# active links"
+msgstr[0] "# активне посилання"
+msgstr[1] "# активні посилання"
+msgstr[2] "# активних посилань"
+
+#: src/feature/Image/ImageSharesPanel/ImageSharesPanel.svelte
+msgid "Published Links"
+msgstr "Опубліковані посилання"
+
+#: src/feature/Share/Registry/ShareStateRegistry.svelte.ts
+msgid "ShareStateRegistry"
+msgstr "ShareStateRegistry"
+
+#: src/routes/help/faq/+page.svelte
+msgid "You can easily share your images and collections with others by publishing a link. Manage every published link from the <0>Publications</0> page."
+msgstr "Ви можете легко ділитися своїми зображеннями та колекціями з іншими, публікуючи посилання. Керуйте кожним опублікованим посиланням на сторінці <0>Публікації</0>."
+
+#: src/routes/help/faq/+page.svelte
+msgid "<0/> Sharing Options"
+msgstr "<0/> Параметри спільного доступу"
+
+#: src/routes/help/faq/+page.svelte
+msgid "<0/> Expiration dates for published links"
+msgstr "<0/> Терміни дії для опублікованих посилань"
+
+#: src/routes/help/faq/+page.svelte
+msgid "<0/> Unpublish at any time to revoke access"
+msgstr "<0/> Скасуйте публікацію будь-коли, щоб відкликати доступ"
