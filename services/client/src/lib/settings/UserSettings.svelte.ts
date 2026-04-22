@@ -22,6 +22,7 @@ export type TableState = {
   tags: TableKeySettings;
   history: TableKeySettings;
   collections: TableKeySettings;
+  shares: TableKeySettings;
 };
 export type HistoryState = { viewMode: ViewMode };
 export type CollectionsState = { viewMode: ViewMode };
@@ -102,6 +103,14 @@ export const defaultSettings: Record<SettingsKey, unknown> = {
         itemCount: true,
         description: true,
         createdAt: true,
+      },
+    },
+    shares: {
+      pageSize: 10,
+      columnVisibility: {
+        shareable: true,
+        createdAt: true,
+        attributes: true,
       },
     },
   },

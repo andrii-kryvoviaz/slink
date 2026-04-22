@@ -64,6 +64,12 @@ export const createAppSidebarItems = (options?: {
                 href: '/collections',
               },
               {
+                id: 'shares',
+                title: 'Shares',
+                icon: 'ph:paper-plane-tilt-duotone',
+                href: '/shares',
+              },
+              {
                 id: 'bookmarks',
                 title: 'Bookmarks',
                 icon: 'ph:bookmark-simple',

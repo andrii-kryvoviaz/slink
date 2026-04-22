@@ -16,8 +16,6 @@
 
   import type { SharesFeed } from '@slink/lib/state/SharesFeed.svelte';
 
-  import { shareLabels } from '../share.language';
-
   interface Props {
     feed: SharesFeed;
   }
@@ -29,26 +27,10 @@
     label: string;
     icon?: string;
   }[] = [
-    {
-      value: 'any',
-      label: shareLabels.expiry.any,
-      icon: 'heroicons:squares-2x2',
-    },
-    {
-      value: 'hasExpiry',
-      label: shareLabels.expiry.hasExpiry,
-      icon: 'heroicons:clock',
-    },
-    {
-      value: 'expired',
-      label: shareLabels.expiry.expired,
-      icon: 'heroicons:x-circle',
-    },
-    {
-      value: 'noExpiry',
-      label: shareLabels.expiry.noExpiry,
-      icon: 'heroicons:minus-circle',
-    },
+    { value: 'any', label: 'Any expiry', icon: 'heroicons:squares-2x2' },
+    { value: 'hasExpiry', label: 'Has expiry', icon: 'heroicons:clock' },
+    { value: 'expired', label: 'Expired', icon: 'heroicons:x-circle' },
+    { value: 'noExpiry', label: 'No expiry', icon: 'heroicons:minus-circle' },
   ];
 
   const protectionOptions: {
@@ -56,21 +38,13 @@
     label: string;
     icon?: string;
   }[] = [
-    {
-      value: 'any',
-      label: shareLabels.protection.any,
-      icon: 'heroicons:squares-2x2',
-    },
+    { value: 'any', label: 'Any protection', icon: 'heroicons:squares-2x2' },
     {
       value: 'passwordProtected',
-      label: shareLabels.protection.passwordProtected,
+      label: 'Password protected',
       icon: 'heroicons:lock-closed',
     },
-    {
-      value: 'noPassword',
-      label: shareLabels.protection.noPassword,
-      icon: 'heroicons:lock-open',
-    },
+    { value: 'noPassword', label: 'No password', icon: 'heroicons:lock-open' },
   ];
 
   const typeOptions: {
@@ -78,21 +52,9 @@
     label: string;
     icon?: string;
   }[] = [
-    {
-      value: 'all',
-      label: shareLabels.type.all,
-      icon: 'heroicons:rectangle-stack',
-    },
-    {
-      value: 'image',
-      label: shareLabels.type.image,
-      icon: 'heroicons:photo',
-    },
-    {
-      value: 'collection',
-      label: shareLabels.type.collection,
-      icon: 'heroicons:folder',
-    },
+    { value: 'all', label: 'All types', icon: 'heroicons:rectangle-stack' },
+    { value: 'image', label: 'Images', icon: 'heroicons:photo' },
+    { value: 'collection', label: 'Collections', icon: 'heroicons:folder' },
   ];
 </script>
 
@@ -106,9 +68,9 @@
           type="text"
           value={feed.filters.search.value}
           oninput={(e) => feed.applyFilters({ search: e.currentTarget.value })}
-          placeholder={shareLabels.searchPlaceholder}
+          placeholder="Search shares..."
           class="flex-1 min-w-0 bg-transparent text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 border-0 outline-none focus:ring-0"
-          aria-label={shareLabels.searchPlaceholder}
+          aria-label="Search shares..."
         />
       </div>
 

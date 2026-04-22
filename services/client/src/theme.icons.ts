@@ -228,6 +228,12 @@ export const themeIcons: string[] = [
   'heroicons:chart-bar',
   'ph:link-break-duotone',
   'ph:caret-left',
-  'lets-icons:folder-send-light',
   'ph:lock-key-duotone',
+  'ph:copy',
+  'heroicons:clock',
+  'heroicons:rectangle-stack',
+  'heroicons:folder',
+  'heroicons:minus-circle',
+  'heroicons:lock-open',
+  'ph:paper-plane-tilt-duotone',
 ];
