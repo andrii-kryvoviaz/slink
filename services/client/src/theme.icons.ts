@@ -218,7 +218,6 @@ export const themeIcons: string[] = [
   'ph:palette',
   'ph:lightbulb',
   'ph:globe',
-  'ph:rocket',
   'ph:lock',
   'ph:bug',
   'ph:browser',
@@ -236,4 +235,5 @@ export const themeIcons: string[] = [
   'heroicons:minus-circle',
   'heroicons:lock-open',
   'ph:paper-plane-tilt-duotone',
+  'ph:x-circle',
 ];
