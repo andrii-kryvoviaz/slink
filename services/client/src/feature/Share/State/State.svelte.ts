@@ -1,3 +1,4 @@
+import { ApiClient } from '@slink/api';
 import { ShareExpirationState, SharePasswordState } from '@slink/feature/Share';
 
 import { bindRequestState } from '$lib/utils/store/bindRequestState.svelte';
@@ -10,6 +11,7 @@ import type { ShareResponse } from '@slink/api/Response';
 export interface ShareStateConfig {
   fetchShare: () => Promise<ShareResponse>;
   onEnsurePublished?: (shareId: string) => Promise<void>;
+  onUnpublished?: (shareId: string) => Promise<void> | void;
   initial?: ShareResponse | null;
 }
 
@@ -71,6 +73,15 @@ export class ShareState {
     return this._shareUrl;
   }
 
+  get shareId(): string | null {
+    return this._shareId;
+  }
+
+  clear = (): void => {
+    this._shareId = null;
+    this._shareUrl = null;
+  };
+
   get isLoading(): boolean {
     return this._request.isLoading;
   }
@@ -114,6 +125,32 @@ export class ShareState {
     await this._config.onEnsurePublished?.(shareId);
 
     return this._shareUrl ?? undefined;
+  };
+
+  copy = async (): Promise<void> => {
+    const url = await this.ensurePublished();
+
+    if (!url) {
+      return;
+    }
+
+    await navigator.clipboard.writeText(url);
+  };
+
+  unpublish = async (): Promise<void> => {
+    const shareId = this._shareId;
+
+    if (shareId === null) {
+      return;
+    }
+
+    try {
+      await ApiClient.share.unpublish(shareId);
+      this.clear();
+      await this._config.onUnpublished?.(shareId);
+    } catch (error: unknown) {
+      printErrorsAsToastMessage(error as Error);
+    }
   };
 }
 

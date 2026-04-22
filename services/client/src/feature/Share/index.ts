@@ -6,6 +6,7 @@ export { default as List } from './Controls/List.svelte';
 export { default as PasswordDetail } from './Controls/PasswordDetail.svelte';
 export { default as Popover } from './Controls/Popover.svelte';
 export * from './Controls/Popover.theme';
+export { default as UnpublishDetail } from './Controls/UnpublishDetail.svelte';
 export * from './Expiration/State.svelte';
 export { default as PasswordPrompt } from './Locked/PasswordPrompt.svelte';
 export * from './Locked/State.svelte';

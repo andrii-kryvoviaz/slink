@@ -25,6 +25,7 @@ export const controls = {
       chevron: 'h-4 w-4 shrink-0 text-gray-400 dark:text-gray-500',
       badge:
         'inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide bg-gray-100 text-gray-400 dark:bg-gray-800/40 dark:text-gray-500',
+      separator: 'my-1 h-px bg-gray-100 dark:bg-gray-800/60',
     },
     variants: {
       state: {
@@ -35,9 +36,20 @@ export const controls = {
           item: 'opacity-60 cursor-not-allowed',
         },
       },
+      tone: {
+        neutral: {},
+        danger: {
+          item: 'text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 focus-visible:bg-red-50 dark:focus-visible:bg-red-950/30',
+          icon: 'text-red-500 dark:text-red-400',
+          label: 'text-red-600 dark:text-red-400',
+          sublabel: 'text-red-500/80 dark:text-red-400/80',
+          chevron: 'text-red-400 dark:text-red-500',
+        },
+      },
     },
     defaultVariants: {
       state: 'interactive',
+      tone: 'neutral',
     },
   }),
 

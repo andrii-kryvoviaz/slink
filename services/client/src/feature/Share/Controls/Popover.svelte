@@ -11,6 +11,7 @@
   import ExpirationDetail from './ExpirationDetail.svelte';
   import List from './List.svelte';
   import PasswordDetail from './PasswordDetail.svelte';
+  import UnpublishDetail from './UnpublishDetail.svelte';
 
   interface Props {
     trigger: Snippet;
@@ -24,6 +25,8 @@
     intro?: Snippet;
     header?: Snippet;
     introActive?: boolean;
+    onCopy?: () => void | Promise<void>;
+    onUnpublish?: () => void | Promise<void>;
   }
 
   let {
@@ -38,15 +41,22 @@
     intro,
     header,
     introActive = false,
+    onCopy,
+    onUnpublish,
   }: Props = $props();
 
-  let view: 'list' | 'expiration' | 'password' = $state('list');
+  let view: 'list' | 'expiration' | 'password' | 'unpublish' = $state('list');
 
   $effect(() => {
     if (!open) {
       view = 'list';
     }
   });
+
+  const handleUnpublish = async (): Promise<void> => {
+    await onUnpublish?.();
+    open = false;
+  };
 </script>
 
 <ActionPopoverRoot bind:open>
@@ -63,11 +73,18 @@
         {header}
         onOpenExpiration={() => (view = 'expiration')}
         onOpenPassword={() => (view = 'password')}
+        {onCopy}
+        onOpenUnpublish={onUnpublish ? () => (view = 'unpublish') : undefined}
       />
     {:else if view === 'expiration'}
       <ExpirationDetail onBack={() => (view = 'list')} />
     {:else if view === 'password'}
       <PasswordDetail onBack={() => (view = 'list')} />
+    {:else if view === 'unpublish'}
+      <UnpublishDetail
+        onBack={() => (view = 'list')}
+        onConfirm={handleUnpublish}
+      />
     {/if}
   </ActionPopoverContent>
 </ActionPopoverRoot>
