@@ -7,6 +7,11 @@ run-dev:
 	docker compose -p slink -f docker/docker-compose.yaml -f docker/docker-compose.dev.yaml up -d
 	docker attach slink
 
+run-dev-host:
+	docker buildx bake -f docker-bake.hcl dev --load
+	docker compose -p slink -f docker/docker-compose.yaml -f docker/docker-compose.dev-host.yaml up -d --wait
+	API_URL=http://localhost:8080 yarn --cwd services/client run dev:with-deps --host
+
 purge:
 	docker compose -f docker/docker-compose.yaml down --rmi all --volumes --remove-orphans
 

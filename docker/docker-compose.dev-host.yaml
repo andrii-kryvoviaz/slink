@@ -1,0 +1,29 @@
+services:
+  slink:
+    image: slink:dev
+    environment:
+      - ORIGIN=http://localhost:5173
+      - OAUTH_VERIFY_SSL=false
+      - DISABLE_CLIENT_APP=1
+    volumes:
+      - ../services:/services
+      - ../var:/app/var
+      - ../slink:/app/slink
+    ports:
+      - "8080:8080"
+      - "6379:6379"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "authentik.loc:host-gateway"
+      - "authelia.loc:host-gateway"
+      - "keycloak.loc:host-gateway"
+      - "pocket-id.loc:host-gateway"
+      - "zitadel.loc:host-gateway"
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - php -r "exit(@file_get_contents('http://127.0.0.1:8080/api/health')==='OK'?0:1);"
+      interval: 3s
+      timeout: 3s
+      retries: 30
+      start_period: 5s
