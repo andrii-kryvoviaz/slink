@@ -13,7 +13,7 @@ interface ShareableMetaProviderInterface {
 
   /**
    * @param list<string> $ids
-   * @return array<string, array{id: string, name: string, previewUrl: ?string}>
+   * @return array<string, array{id: string, name: string, previewUrl: ?string, width?: int, height?: int, format?: string}>
    */
   public function resolve(array $ids): array;
 }

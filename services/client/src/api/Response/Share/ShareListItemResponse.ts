@@ -11,6 +11,16 @@ export interface ShareListItemShareable {
   id: string;
   name: string;
   previewUrl: string | null;
+  width?: number;
+  height?: number;
+  format?: string;
+}
+
+export interface ShareListItemVariant {
+  width: number | null;
+  height: number | null;
+  filter: string | null;
+  format: string | null;
 }
 
 export interface ShareListItemResponse {
@@ -24,6 +34,7 @@ export interface ShareListItemResponse {
   requiresPassword: boolean;
   createdAt: string;
   shareable: ShareListItemShareable;
+  variant: ShareListItemVariant;
 }
 
 export interface ShareListingResponse {

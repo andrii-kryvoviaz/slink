@@ -25,11 +25,20 @@ final readonly class ImageShareableMetaProvider implements ShareableMetaProvider
     $meta = [];
     foreach ($this->imageRepository->findByIds($ids) as $image) {
       $fileName = $image->getFileName();
-      $meta[$image->getUuid()] = [
+      $metadata = $image->getMetadata();
+      $entry = [
         'id' => $image->getUuid(),
         'name' => $fileName,
         'previewUrl' => '/image/' . $fileName,
+        'format' => strtolower($image->getAttributes()->getExtension()),
       ];
+
+      if ($metadata !== null) {
+        $entry['width'] = $metadata->getWidth();
+        $entry['height'] = $metadata->getHeight();
+      }
+
+      $meta[$image->getUuid()] = $entry;
     }
 
     return $meta;

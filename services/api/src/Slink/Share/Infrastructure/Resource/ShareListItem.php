@@ -11,13 +11,20 @@ use Symfony\Component\Serializer\Attribute\Groups;
 
 final class ShareListItem {
   /**
-   * @param array{id: string, name: string, previewUrl: ?string} $shareableMeta
+   * @var array{width: ?int, height: ?int, filter: ?string, format: ?string}
+   */
+  private readonly array $parsedTarget;
+
+  /**
+   * @param array{id: string, name: string, previewUrl: ?string, width?: int, height?: int, format?: string} $shareableMeta
    */
   public function __construct(
     private readonly ShareView $view,
     private readonly string $url,
     private readonly array $shareableMeta,
-  ) {}
+  ) {
+    $this->parsedTarget = self::parseTargetPath($this->view->getTargetPath());
+  }
 
   #[Groups(['public'])]
   public string $shareId {
@@ -67,9 +74,50 @@ final class ShareListItem {
     get => $this->view->getCreatedAt()->toString();
   }
 
-  /** @var array{id: string, name: string, previewUrl: ?string} */
+  /** @var array{id: string, name: string, previewUrl: ?string, width?: int, height?: int, format?: string} */
   #[Groups(['public'])]
   public array $shareable {
     get => $this->shareableMeta;
+  }
+
+  /** @var array{width: ?int, height: ?int, filter: ?string, format: ?string} */
+  #[Groups(['public'])]
+  public array $variant {
+    get => [
+      'width' => $this->parsedTarget['width'] ?? $this->shareableMeta['width'] ?? null,
+      'height' => $this->parsedTarget['height'] ?? $this->shareableMeta['height'] ?? null,
+      'filter' => $this->parsedTarget['filter'],
+      'format' => $this->parsedTarget['format'] ?? $this->shareableMeta['format'] ?? null,
+    ];
+  }
+
+  /**
+   * @return array{width: ?int, height: ?int, filter: ?string, format: ?string}
+   */
+  private static function parseTargetPath(string $path): array {
+    $parts = parse_url($path);
+    $pathOnly = $parts['path'] ?? '';
+    $query = [];
+
+    if (isset($parts['query'])) {
+      parse_str($parts['query'], $query);
+    }
+
+    $format = null;
+    if (preg_match('/\.([a-zA-Z0-9]+)$/', $pathOnly, $match) === 1) {
+      $format = strtolower($match[1]);
+    }
+
+    $filter = isset($query['filter']) && is_string($query['filter']) ? $query['filter'] : null;
+    if ($filter === 'none' || $filter === '') {
+      $filter = null;
+    }
+
+    return [
+      'width' => isset($query['width']) ? (int) $query['width'] : null,
+      'height' => isset($query['height']) ? (int) $query['height'] : null,
+      'filter' => $filter,
+      'format' => $format,
+    ];
   }
 }

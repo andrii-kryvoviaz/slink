@@ -21,7 +21,7 @@ final readonly class ShareableMetaResolver {
 
   /**
    * @param list<ShareView> $shares
-   * @return Closure(string, ShareableType): array{id: string, name: string, previewUrl: ?string}
+   * @return Closure(string, ShareableType): array{id: string, name: string, previewUrl: ?string, width?: int, height?: int, format?: string}
    */
   public function resolver(array $shares): Closure {
     /** @var array<string, array<string, bool>> $idsByType */
@@ -31,7 +31,7 @@ final readonly class ShareableMetaResolver {
       $idsByType[$ref->getShareableType()->value][$ref->getShareableId()] = true;
     }
 
-    /** @var array<string, array<string, array{id: string, name: string, previewUrl: ?string}>> $metaByType */
+    /** @var array<string, array<string, array{id: string, name: string, previewUrl: ?string, width?: int, height?: int, format?: string}>> $metaByType */
     $metaByType = [];
     foreach ($this->providers as $provider) {
       $type = $provider->supports();
