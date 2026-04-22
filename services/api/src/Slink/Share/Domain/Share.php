@@ -57,8 +57,8 @@ final class Share extends AbstractAggregateRoot implements PublicationAware, Exp
     return $share;
   }
 
-  public function addShortUrl(ID $shortUrlId, string $shortCode): void {
-    if ($this->context->hasShortUrl()) {
+  public function addShortUrl(?ID $shortUrlId, ?string $shortCode): void {
+    if ($shortUrlId === null || $shortCode === null || $this->context->hasShortUrl()) {
       return;
     }
 
