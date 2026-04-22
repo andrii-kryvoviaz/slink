@@ -1,5 +1,6 @@
 export { default as AccentIcon } from './AccentIcon/AccentIcon.svelte';
 export * from './AccentIcon/AccentIcon.theme';
+export { default as ShareAttributes } from './Attributes/ShareAttributes.svelte';
 export { default as ExpirationDetail } from './Controls/ExpirationDetail.svelte';
 export { default as List } from './Controls/List.svelte';
 export { default as PasswordDetail } from './Controls/PasswordDetail.svelte';
@@ -9,7 +10,6 @@ export * from './Expiration/State.svelte';
 export { default as PasswordPrompt } from './Locked/PasswordPrompt.svelte';
 export * from './Locked/State.svelte';
 export { default as Indicators } from './Options/Indicators.svelte';
-export * from './Options/Indicators.theme';
 export { default as Toolbar } from './Options/Toolbar.svelte';
 export * from './Options/Toolbar.theme';
 export { default as Panel } from './Panel/Panel.svelte';
