@@ -43,10 +43,9 @@ export function daysUntil(date: Date | string): number {
   return Math.floor((dateOnly.getTime() - todayOnly.getTime()) / DAY_MS);
 }
 
-export function narrowUnit(
-  value: number,
-  unit: 'day' | 'week' | 'month' | 'year',
-): string {
+type TimeUnit = 'day' | 'week' | 'month' | 'year';
+
+export function narrowUnit(value: number, unit: TimeUnit): string {
   return new Intl.NumberFormat(getLocale(), {
     style: 'unit',
     unit,
@@ -54,17 +53,35 @@ export function narrowUnit(
   }).format(value);
 }
 
+function unitFromDays(
+  absDays: number,
+): { value: number; unit: Exclude<TimeUnit, 'year'> } | null {
+  if (absDays < 7) return { value: absDays, unit: 'day' };
+  if (absDays < 30) return { value: Math.floor(absDays / 7), unit: 'week' };
+  if (absDays < 365) return { value: Math.floor(absDays / 30), unit: 'month' };
+  return null;
+}
+
+export function narrowFromDays(days: number): string {
+  if (days < 0) return 'expired';
+  if (days === 0) return 'today';
+  const bucket = unitFromDays(days);
+  if (bucket) return narrowUnit(bucket.value, bucket.unit);
+  return narrowUnit(Math.floor(days / 365), 'year');
+}
+
 export function relativeFromDays(days: number): string {
   const locale = getLocale();
   const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
   const absDays = Math.abs(days);
-  const sign = days >= 0 ? 1 : -1;
 
   if (absDays === 0) return rtf.format(0, 'day');
-  if (absDays < 7) return rtf.format(sign * absDays, 'day');
-  if (absDays < 30) return rtf.format(sign * Math.floor(absDays / 7), 'week');
-  if (absDays < 365)
-    return rtf.format(sign * Math.floor(absDays / 30), 'month');
+
+  const bucket = unitFromDays(absDays);
+  if (bucket) {
+    const sign = days >= 0 ? 1 : -1;
+    return rtf.format(sign * bucket.value, bucket.unit);
+  }
 
   return new Date(new Date().getTime() + days * DAY_MS).toLocaleDateString(
     locale,
