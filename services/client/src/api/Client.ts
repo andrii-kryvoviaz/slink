@@ -170,14 +170,19 @@ export class Client {
     return this._resources;
   }
 
-  private generateQueryString(query: Record<string, string> | null = null) {
+  private generateQueryString(query: Record<string, unknown> | null = null) {
     if (!query) {
       return '';
     }
 
-    const params = new URLSearchParams(query);
+    const params = new URLSearchParams();
+    for (const [key, value] of Object.entries(query)) {
+      if (value === undefined || value === null || value === '') continue;
+      params.append(key, String(value));
+    }
 
-    return `?${params.toString()}`;
+    const result = params.toString();
+    return result ? `?${result}` : '';
   }
 
   public async fetch(path: string, options?: RequestOptions): Promise<unknown> {
@@ -189,9 +194,7 @@ export class Client {
 
     const url = [this._basePath, path].join('');
 
-    const queryString = this.generateQueryString(
-      options?.query as Record<string, string> | undefined,
-    );
+    const queryString = this.generateQueryString(options?.query ?? null);
     const response = await fetchFn(url + queryString, options);
 
     if (browser && response.headers.has('x-auth-refreshed')) {
