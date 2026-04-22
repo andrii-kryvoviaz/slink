@@ -6,6 +6,7 @@ namespace Slink\Share\Application\Query\ListShares;
 
 use Slink\Share\Domain\Enum\ShareExpiryFilter;
 use Slink\Share\Domain\Enum\ShareProtectionFilter;
+use Slink\Share\Domain\Enum\ShareTypeFilter;
 use Slink\Share\Domain\Enum\ShareableType;
 use Slink\Shared\Application\Query\QueryInterface;
 use Slink\Shared\Infrastructure\MessageBus\EnvelopedMessage;
@@ -21,7 +22,7 @@ final readonly class ListSharesQuery implements QueryInterface {
     private ?string $searchTerm = null,
     private ?ShareExpiryFilter $expiry = null,
     private ?ShareProtectionFilter $protection = null,
-    private ?ShareableType $type = null,
+    private ?ShareTypeFilter $type = null,
     private ?string $shareableId = null,
     private ?ShareableType $shareableType = null,
   ) {
@@ -56,7 +57,7 @@ final readonly class ListSharesQuery implements QueryInterface {
   }
 
   public function getType(): ?ShareableType {
-    return $this->type;
+    return $this->type?->toShareableType();
   }
 
   public function getShareableId(): ?string {
