@@ -127,6 +127,12 @@ export class CollectionItemsFeed extends AbstractPaginatedFeed<CollectionItem> {
     return ApiClient.collection.share(this._collectionId);
   }
 
+  public clearSharing(): void {
+    if (this._collection) {
+      this._collection = { ...this._collection, sharing: undefined };
+    }
+  }
+
   public async updateDetails(data: {
     name?: string;
     description?: string;

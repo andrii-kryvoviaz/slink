@@ -1,6 +1,6 @@
 <script lang="ts">
+  import { ApiClient } from '@slink/api';
   import { LoadMoreButton, StopPropagation } from '@slink/feature/Action';
-  import * as Collection from '@slink/feature/Collection';
   import { CollectionItemDropdown } from '@slink/feature/Collection';
   import {
     DimensionsBadge,
@@ -12,6 +12,7 @@
   } from '@slink/feature/Image';
   import { EmptyState, Masonry } from '@slink/feature/Layout';
   import { ExploreSkeleton } from '@slink/feature/Layout';
+  import * as Share from '@slink/feature/Share';
   import {
     EditableText,
     ExpandableText,
@@ -87,6 +88,20 @@
   let removingItems: Set<string> = $state(new Set());
   let isSavingName = $state(false);
   let isSavingDescription = $state(false);
+
+  const share = Share.createShare({
+    fetchShare: () => ApiClient.collection.share(data.collectionId),
+    onUnpublished: () => itemsFeed.clearSharing(),
+  });
+
+  $effect(() => {
+    const initial = itemsFeed.collection?.sharing;
+    if (initial && !share.isInitialized) {
+      untrack(() => share.hydrate(initial));
+    }
+  });
+
+  const shareIntro = Share.controls.intro();
 
   const openPostViewer = (imageId: string) => {
     const index = itemsFeed.getItemIndex(imageId);
@@ -215,37 +230,64 @@
                 <Icon icon="ph:plus" class="h-4 w-4" />
                 Add images
               </Button>
-              <Collection.Popover
-                collectionId={data.collectionId}
-                bind:open={sharePopoverOpen}
-                initialShare={itemsFeed.collection.sharing ?? null}
-              >
-                {#snippet trigger({ isShared }: { isShared: boolean })}
-                  <Button
-                    variant="glass"
-                    size="sm"
-                    rounded="full"
-                    justify="center"
-                    class="flex flex-row gap-2"
-                    title={isShared ? 'Manage share link' : 'Share collection'}
-                  >
-                    {#snippet leftIcon()}
-                      <span class="relative inline-flex">
+              <Share.Provider state={share}>
+                <Share.Popover
+                  bind:open={sharePopoverOpen}
+                  width="w-80 p-3"
+                  triggerLabel="Share collection"
+                  introActive={!share.isInitialized}
+                  onCopy={() => share.copy()}
+                  onUnpublish={() => share.unpublish()}
+                >
+                  {#snippet trigger()}
+                    <Button
+                      variant={share.isInitialized ? 'outline-blue' : 'glass'}
+                      size="sm"
+                      rounded="full"
+                      justify="center"
+                      class="flex flex-row gap-2"
+                      title={share.isInitialized
+                        ? 'Manage share link'
+                        : 'Share collection'}
+                    >
+                      {#snippet leftIcon()}
                         <Icon
-                          icon="lets-icons:folder-send-light"
+                          icon={share.isInitialized
+                            ? 'ph:paper-plane-tilt-fill'
+                            : 'ph:paper-plane-tilt-duotone'}
                           class="h-4 w-4"
                         />
-                        {#if isShared}
-                          <span
-                            class="absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-full bg-blue-500 ring-2 ring-white dark:ring-gray-900"
-                          ></span>
-                        {/if}
-                      </span>
-                    {/snippet}
-                    {isShared ? 'Shared' : 'Share Collection'}
-                  </Button>
-                {/snippet}
-              </Collection.Popover>
+                      {/snippet}
+                      {share.isInitialized ? 'Manage' : 'Share'}
+                    </Button>
+                  {/snippet}
+
+                  {#snippet intro()}
+                    <div class={shareIntro.wrap()}>
+                      <Share.AccentIcon size="lg">
+                        <Icon icon="ph:link-simple-fill" class="h-5 w-5" />
+                      </Share.AccentIcon>
+                      <h3 class={shareIntro.title()}>Share this collection</h3>
+                      <p class={shareIntro.description()}>
+                        Create a public link. Anyone with the link will be able
+                        to view this collection.
+                      </p>
+                      <div class={shareIntro.actions()}>
+                        <Button
+                          variant="outline-blue"
+                          rounded="full"
+                          size="sm"
+                          class="w-full font-medium"
+                          loading={share.isLoading}
+                          onclick={share.load}
+                        >
+                          Create share link
+                        </Button>
+                      </div>
+                    </div>
+                  {/snippet}
+                </Share.Popover>
+              </Share.Provider>
             </div>
           {/if}
         </div>
