@@ -20,6 +20,7 @@ use Slink\Share\Application\Query\ListShares\ListSharesQuery;
 use Slink\Share\Domain\Filter\ShareListFilter;
 use Slink\Share\Domain\Enum\ShareExpiryFilter;
 use Slink\Share\Domain\Enum\ShareProtectionFilter;
+use Slink\Share\Domain\Enum\ShareTypeFilter;
 use Slink\Share\Domain\Enum\ShareableType;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
 use Slink\Share\Domain\Service\ShareServiceInterface;
@@ -127,7 +128,7 @@ final class ListSharesHandlerTest extends TestCase {
     $query = new ListSharesQuery(
       expiry: ShareExpiryFilter::HasExpiry,
       protection: ShareProtectionFilter::PasswordProtected,
-      type: ShareableType::Image,
+      type: ShareTypeFilter::Image,
     );
 
     ($handler)($query, $userId);
@@ -214,7 +215,7 @@ final class ListSharesHandlerTest extends TestCase {
     $query = new ListSharesQuery(
       searchTerm: 'holiday',
       expiry: ShareExpiryFilter::Expired,
-      type: ShareableType::Collection,
+      type: ShareTypeFilter::Collection,
     );
 
     ($handler)($query, $userId);
