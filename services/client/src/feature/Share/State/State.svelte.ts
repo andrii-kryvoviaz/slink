@@ -33,10 +33,10 @@ export class ShareState {
     }),
   );
 
-  private _expiration: ShareExpirationState = $state(
+  private _expiration: ShareExpirationState = $state.raw(
     new ShareExpirationState({ getShareId: () => this._shareId }),
   );
-  private _password: SharePasswordState = $state(
+  private _password: SharePasswordState = $state.raw(
     new SharePasswordState({ getShareId: () => this._shareId }),
   );
 
