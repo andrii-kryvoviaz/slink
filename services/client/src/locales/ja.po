@@ -3101,8 +3101,6 @@ msgstr "画像設定 | Slink"
 msgid "Configure image handling and sharing preferences"
 msgstr "画像の処理と共有設定を構成"
 
-
-
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Direct link sharing with anyone"
 msgstr "<0/> 直接リンクで誰とでも共有"
@@ -3111,15 +3109,9 @@ msgstr "<0/> 直接リンクで誰とでも共有"
 msgid "<0/> Public gallery visibility (optional)"
 msgstr "<0/> パブリックギャラリーでの表示（任意）"
 
-
-
-
-
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Password protection"
 msgstr "<0/> パスワード保護"
-
-
 
 #: src/routes/help/faq/+page.svelte
 msgid "I appreciate your help in making Slink better! If you've encountered a bug or have suggestions for improvement, here's how you can help:"
@@ -4431,7 +4423,6 @@ msgid "Manage links you have shared from images and collections"
 msgstr "画像やコレクションから公開したリンクを管理します"
 
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
-#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 msgid "Search shares..."
 msgstr "公開を検索..."
 
@@ -4474,7 +4465,6 @@ msgstr "公開"
 #: src/lib/state/SharesFeed.svelte.ts
 msgid "SharesFeed"
 msgstr "SharesFeed"
-
 
 #: src/feature/Image/ImageSharesPanel/PublishedLinkItem.svelte
 #: src/feature/Image/ImageSharesPanel/PublishedLinkItem.svelte
@@ -4565,3 +4555,8 @@ msgstr "<0/> 公開リンクの有効期限"
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Unpublish at any time to revoke access"
 msgstr "<0/> いつでも公開を取り消してアクセスを無効にできます"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "Search shares"
+msgid "Search shares"
+msgstr "公開を検索"

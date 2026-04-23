@@ -3101,8 +3101,6 @@ msgstr "Paramètres des images | Slink"
 msgid "Configure image handling and sharing preferences"
 msgstr "Configurer les préférences de gestion et de partage des images"
 
-
-
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Direct link sharing with anyone"
 msgstr "<0/> Partage par lien direct avec n'importe qui"
@@ -3111,15 +3109,9 @@ msgstr "<0/> Partage par lien direct avec n'importe qui"
 msgid "<0/> Public gallery visibility (optional)"
 msgstr "<0/> Visibilité dans la galerie publique (facultatif)"
 
-
-
-
-
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Password protection"
 msgstr "<0/> Protection par mot de passe"
-
-
 
 #: src/routes/help/faq/+page.svelte
 msgid "I appreciate your help in making Slink better! If you've encountered a bug or have suggestions for improvement, here's how you can help:"
@@ -4431,7 +4423,6 @@ msgid "Manage links you have shared from images and collections"
 msgstr "Gérez les liens que vous avez publiés depuis des images et collections"
 
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
-#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 msgid "Search shares..."
 msgstr "Rechercher des publications..."
 
@@ -4474,7 +4465,6 @@ msgstr "Publications"
 #: src/lib/state/SharesFeed.svelte.ts
 msgid "SharesFeed"
 msgstr "SharesFeed"
-
 
 #: src/feature/Image/ImageSharesPanel/PublishedLinkItem.svelte
 #: src/feature/Image/ImageSharesPanel/PublishedLinkItem.svelte
@@ -4565,3 +4555,8 @@ msgstr "<0/> Dates d'expiration pour les liens publiés"
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Unpublish at any time to revoke access"
 msgstr "<0/> Dépubliez à tout moment pour révoquer l'accès"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "Search shares"
+msgid "Search shares"
+msgstr "Rechercher des publications"

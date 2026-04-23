@@ -3101,8 +3101,6 @@ msgstr "图像设置 | Slink"
 msgid "Configure image handling and sharing preferences"
 msgstr "配置图片处理与分享偏好"
 
-
-
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Direct link sharing with anyone"
 msgstr "<0/> 可向任意对象分享直链"
@@ -3111,15 +3109,9 @@ msgstr "<0/> 可向任意对象分享直链"
 msgid "<0/> Public gallery visibility (optional)"
 msgstr "<0/> 可选公开画廊展示"
 
-
-
-
-
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Password protection"
 msgstr "<0/> 密码保护"
-
-
 
 #: src/routes/help/faq/+page.svelte
 msgid "I appreciate your help in making Slink better! If you've encountered a bug or have suggestions for improvement, here's how you can help:"
@@ -4427,7 +4419,6 @@ msgid "Manage links you have shared from images and collections"
 msgstr "管理您从图像和收藏中发布的链接"
 
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
-#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 msgid "Search shares..."
 msgstr "搜索发布..."
 
@@ -4470,7 +4461,6 @@ msgstr "发布"
 #: src/lib/state/SharesFeed.svelte.ts
 msgid "SharesFeed"
 msgstr "SharesFeed"
-
 
 #: src/feature/Image/ImageSharesPanel/PublishedLinkItem.svelte
 #: src/feature/Image/ImageSharesPanel/PublishedLinkItem.svelte
@@ -4560,3 +4550,8 @@ msgstr "<0/> 已发布链接的过期时间"
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Unpublish at any time to revoke access"
 msgstr "<0/> 随时取消发布以撤销访问权限"
+
+#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+msgid "Search shares"
+msgid "Search shares"
+msgstr "搜索发布"
