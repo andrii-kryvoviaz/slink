@@ -21,6 +21,8 @@ use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
 #[ORM\Entity(repositoryClass: ShareRepository::class)]
 #[ORM\Index(columns: ['shareable_id', 'shareable_type'], name: 'idx_share_shareable')]
 #[ORM\Index(columns: ['target_url'], name: 'idx_share_target_url')]
+#[ORM\Index(columns: ['is_published', 'created_at', 'uuid'], name: 'idx_share_listing')]
+#[ORM\Index(columns: ['expires_at'], name: 'idx_share_expires_at')]
 class ShareView extends AbstractView implements PublicationAware, ExpirationAware, PasswordProtected, CursorAwareInterface {
   #[ORM\Id]
   #[ORM\Column(type: 'uuid')]
