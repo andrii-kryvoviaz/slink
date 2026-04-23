@@ -1,4 +1,5 @@
 import { useApiKeyStore } from '$lib/state/ApiKeyStore.svelte.js';
+import { copyText } from '$lib/utils/ui/clipboard';
 import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
 
 import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
@@ -46,8 +47,7 @@ export class ApiKeyService {
     }
   }
 
-  copyToClipboard(text: string): void {
-    navigator.clipboard.writeText(text);
-    toast.success(messages.clipboard.copied);
+  async copyToClipboard(text: string): Promise<void> {
+    await copyText(text);
   }
 }

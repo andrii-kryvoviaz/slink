@@ -7,14 +7,12 @@
 
   import { page } from '$app/state';
   import { useAutoReset } from '$lib/utils/time/useAutoReset.svelte';
+  import { copyClipboardItems, copyText } from '$lib/utils/ui/clipboard';
   import Icon from '@iconify/svelte';
   import { cubicOut } from 'svelte/easing';
   import { scale } from 'svelte/transition';
 
   import type { ShareFormat } from '@slink/lib/settings';
-  import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
-
-  import { toast } from '@slink/utils/ui/toast-sonner.svelte';
 
   interface Props {
     value: string;
@@ -132,39 +130,30 @@
         URL.revokeObjectURL(img.src);
       }
 
-      await navigator.clipboard.write([
+      return await copyClipboardItems([
         new ClipboardItem({ 'image/png': pngBlob }),
       ]);
-      return true;
     } catch (error) {
       console.error('Failed to copy image:', error);
       return false;
     }
   };
 
-  const handleCopy = async (showToast = false) => {
+  const handleCopy = async () => {
     const format = getSelectedFormat();
-    try {
-      const url = await resolveUrl();
+    const url = await resolveUrl();
 
-      if (format.id === 'image') {
-        isCopyingImage = true;
-        const success = await copyImageToClipboard(url);
-        isCopyingImage = false;
-        if (!success) return;
-      } else {
-        await navigator.clipboard.writeText(format.generate(url, imageAlt));
-      }
-
-      isCopiedState.trigger();
-
-      if (showToast) {
-        toast.success(messages.clipboard.linkCopied);
-      }
-    } catch (error) {
-      console.error('Failed to copy:', error);
+    if (format.id === 'image') {
+      isCopyingImage = true;
+      const success = await copyImageToClipboard(url);
       isCopyingImage = false;
+      if (!success) return;
+    } else {
+      const success = await copyText(format.generate(url, imageAlt));
+      if (!success) return;
     }
+
+    isCopiedState.trigger();
   };
 
   const handleFormatSelect = (format: Format) => {
@@ -260,7 +249,7 @@
     onHit={() => {
       const selection = window.getSelection();
       if (selection && !selection.isCollapsed) return false;
-      handleCopy(true);
+      handleCopy();
     }}
   />
 </div>

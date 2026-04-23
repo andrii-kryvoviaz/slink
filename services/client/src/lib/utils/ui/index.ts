@@ -25,3 +25,5 @@ export type {
 } from './ToastComponentService.js';
 export { printErrorsAsToastMessage } from './printErrorsAsToastMessage.js';
 export { getSkeletonHeight } from './skeletonHeight.js';
+export { sounds } from './feedback/index.js';
+export { copyText, copyClipboardItems, playCopyFeedback } from './clipboard.js';

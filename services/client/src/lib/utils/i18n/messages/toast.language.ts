@@ -83,14 +83,6 @@ export const messages = {
       return localize("You can't bookmark your own images");
     },
   },
-  clipboard: {
-    get linkCopied() {
-      return localize('Link copied to clipboard');
-    },
-    get copied() {
-      return localize('Copied to clipboard');
-    },
-  },
   apiKey: {
     get created() {
       return localize('API key created successfully');

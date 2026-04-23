@@ -3,6 +3,7 @@
   import type { Snippet } from 'svelte';
 
   import { useAutoReset } from '$lib/utils/time/useAutoReset.svelte';
+  import { copyText } from '$lib/utils/ui/clipboard';
   import Icon from '@iconify/svelte';
   import { cubicOut } from 'svelte/easing';
   import { scale } from 'svelte/transition';
@@ -61,14 +62,11 @@
   };
 
   const handleCopy = async () => {
-    try {
-      const textToCopy = await resolveValue();
-      await navigator.clipboard.writeText(textToCopy);
-      isCopiedState.trigger();
-      inputElement?.select();
-    } catch (error) {
-      console.error('Failed to copy text:', error);
-    }
+    const textToCopy = await resolveValue();
+    const success = await copyText(textToCopy);
+    if (!success) return;
+    isCopiedState.trigger();
+    inputElement?.select();
   };
 
   let prevActive = false;

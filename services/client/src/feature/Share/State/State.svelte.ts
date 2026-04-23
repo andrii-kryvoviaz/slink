@@ -6,6 +6,7 @@ import {
 } from '@slink/feature/Share';
 
 import { bindRequestState } from '$lib/utils/store/bindRequestState.svelte';
+import { copyText } from '$lib/utils/ui/clipboard';
 import { printErrorsAsToastMessage } from '$lib/utils/ui/printErrorsAsToastMessage';
 import { routes } from '$lib/utils/url/routes';
 
@@ -146,7 +147,7 @@ export class ShareState {
       return;
     }
 
-    await navigator.clipboard.writeText(url);
+    await copyText(url);
   };
 
   unpublish = async (): Promise<void> => {

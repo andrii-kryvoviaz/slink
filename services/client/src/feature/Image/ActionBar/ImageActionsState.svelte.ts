@@ -7,6 +7,7 @@ import { downloadByLink } from '$lib/utils/http/downloadByLink';
 import { createExclusiveToggle } from '$lib/utils/state/createExclusiveToggle.svelte';
 import { bindRequestState } from '$lib/utils/store/bindRequestState.svelte';
 import { useAutoReset } from '$lib/utils/time/useAutoReset.svelte';
+import { copyText } from '$lib/utils/ui/clipboard';
 import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
 import { routes } from '$lib/utils/url/routes';
 
@@ -203,9 +204,7 @@ export class ImageActionsState {
       return;
     }
     await ApiClient.image.publishShare(this._share.data.shareId);
-    await navigator.clipboard.writeText(
-      routes.share.fromResponse(this._share.data),
-    );
+    await copyText(routes.share.fromResponse(this._share.data));
     this._isCopied.trigger();
   };
 
