@@ -15,15 +15,6 @@ msgstr "Take me to my Uploads"
 msgid "An error occurred. Please try again later."
 msgstr "An error occurred. Please try again later."
 
-#: src/routes/c/[code]/+page.server.ts
-#: src/routes/i/[code]/+page.server.ts
-msgid "Location"
-msgstr "Location"
-
-#: src/routes/i/[code]/+page.server.ts
-msgid "User-Agent"
-msgstr "User-Agent"
-
 #: src/routes/profile/(auth)/signup/+page.server.ts
 msgid "Something went wrong. Please try again later."
 msgstr "Something went wrong. Please try again later."
@@ -65,8 +56,6 @@ msgstr "Recently joined members"
 #: src/ui/components/filter/filter-search.svelte
 #: src/ui/components/picker/picker-list.svelte
 #: src/ui/components/picker/picker-search.svelte
-#: src/ui/components/search-field/search-field-input.svelte
-#: src/ui/components/search-field/search-field.svelte
 msgid "Search..."
 msgstr "Search..."
 
@@ -75,7 +64,6 @@ msgid "Search users"
 msgstr "Search users"
 
 #: src/feature/Analytics/LatestUsers.svelte
-#: src/ui/components/search-field/search-field-input.svelte
 msgid "Clear search"
 msgstr "Clear search"
 
@@ -121,7 +109,6 @@ msgstr "Users"
 #: src/feature/Notification/NotificationListItem.svelte
 #: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
 #: src/feature/Tag/TagDataTable/TagCountCell.svelte
-#: src/feature/Tag/TagInput/TagInput.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
@@ -131,15 +118,12 @@ msgstr "Users"
 #: src/routes/explore/+page.svelte
 #: src/ui/components/filter/filter-search.svelte
 #: src/ui/components/picker/picker-list.svelte
-#: src/ui/components/search-field/search-field.svelte
 msgid "Enter"
 msgstr "Enter"
 
 #: src/feature/Comment/CommentInput.svelte
 #: src/feature/Image/PostViewer/PostViewer.svelte
 #: src/feature/Image/SizePicker/ImageSizePicker.svelte
-#: src/feature/Image/TagManager/ImageTagManager.svelte
-#: src/feature/Tag/TagInput/TagInput.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/ui/components/table-pagination/table-pagination.svelte
 msgid "Escape"
@@ -971,10 +955,6 @@ msgstr "Failed to load collections"
 msgid "Failed to load tags"
 msgstr "Failed to load tags"
 
-#: src/lib/state/ImageTagManagerState.svelte.ts
-msgid "ImageTagManagerState"
-msgstr "ImageTagManagerState"
-
 #: src/lib/state/PostViewerState.svelte.ts
 msgid "PostViewerState"
 msgstr "PostViewerState"
@@ -1342,7 +1322,6 @@ msgid "Close viewer"
 msgstr "Close viewer"
 
 #: src/feature/Image/PostViewer/PostViewer.svelte
-#: src/feature/Tag/TagInput/TagInput.svelte
 #: src/ui/components/input/number-input.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "ArrowUp"
@@ -1354,7 +1333,6 @@ msgid "ArrowLeft"
 msgstr "ArrowLeft"
 
 #: src/feature/Image/PostViewer/PostViewer.svelte
-#: src/feature/Tag/TagInput/TagInput.svelte
 #: src/ui/components/input/number-input.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "ArrowDown"
@@ -1402,10 +1380,6 @@ msgstr "Image Content"
 msgid "Failed to convert"
 msgstr "Failed to convert"
 
-#: src/lib/utils/i18n/messages/toast.language.ts
-msgid "Link copied to clipboard"
-msgstr "Link copied to clipboard"
-
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 msgid "Copying..."
 msgstr "Copying..."
@@ -1452,24 +1426,14 @@ msgstr "<0/> Reset"
 msgid "New: {0} × {1}"
 msgstr "New: {0} × {1}"
 
-#: src/feature/Image/TagManager/ImageTagManager.svelte
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/feature/Upload/UploadOptions/TagsOption.svelte
 msgid "Tags"
 msgstr "Tags"
 
-#: src/feature/Image/TagManager/ImageTagManager.svelte
 #: src/feature/Tag/TagSelector/TagSelector.svelte
 msgid "Add more tags..."
 msgstr "Add more tags..."
-
-#: src/feature/Image/TagManager/ImageTagManager.svelte
-msgid "<0/> Add"
-msgstr "<0/> Add"
-
-#: src/feature/Image/TagManager/ImageTagManager.svelte
-msgid "<0/> Click to add tags..."
-msgstr "<0/> Click to add tags..."
 
 #: src/feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte
 #: src/ui/components/sonner/toasts/UnsupportedFormatToast.svelte
@@ -2249,7 +2213,6 @@ msgid "Version {0}"
 msgstr "Version {0}"
 
 #: src/routes/history/+page.svelte
-#: src/ui/components/filter-bar/active-filter-bar.svelte
 #: src/ui/components/filter/filter-summary.svelte
 msgid "Filtering by"
 msgstr "Filtering by"
@@ -2290,12 +2253,10 @@ msgstr "Click to switch to match any"
 msgid "Click to switch to match all"
 msgstr "Click to switch to match all"
 
-#: src/ui/components/filter-bar/active-filter-bar.svelte
 #: src/ui/components/filter/filter-summary.svelte
 msgid "Clear all filters"
 msgstr "Clear all filters"
 
-#: src/ui/components/filter-bar/active-filter-bar.svelte
 #: src/ui/components/filter/filter-field.svelte
 #: src/ui/components/filter/filter-summary.svelte
 msgid "Clear"
@@ -2351,24 +2312,11 @@ msgstr "Delete Tag"
 msgid "This will cascade:"
 msgstr "This will cascade:"
 
-#. 0: getTagDisplayName(creatingChildFor); 1: childTagName
-#: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
-msgid "Create \"{0} › {1}\""
-msgstr "Create \"{0} › {1}\""
-
 #. 0: searchTerm
-#. 0: searchTerm
-#: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
 #: src/feature/Tag/TagSelector/TagSelector.svelte
 msgid "No tags matching \"{0}\""
 msgstr "No tags matching \"{0}\""
 
-#. 0: searchTerm
-#: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
-msgid "Create \"{0}\""
-msgstr "Create \"{0}\""
-
-#: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
 #: src/feature/Tag/TagSelector/TagSelector.svelte
 msgid "No tags yet"
@@ -2426,22 +2374,6 @@ msgstr "<0/> — Provider and its configuration will be removed"
 msgid "Search and select tags"
 msgstr "Search and select tags"
 
-#: src/feature/Tag/TagInput/TagInput.svelte
-msgid "Search or add tags..."
-msgstr "Search or add tags..."
-
-#: src/feature/Tag/TagInput/TagInput.svelte
-msgid "Backspace"
-msgstr "Backspace"
-
-#: src/feature/Tag/TagInput/TagInput.svelte
-msgid "Child tag name..."
-msgstr "Child tag name..."
-
-#: src/feature/Tag/TagInput/TagInput.svelte
-msgid "Cancel child tag creation"
-msgstr "Cancel child tag creation"
-
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
 msgid "Search tags"
 msgstr "Search tags"
@@ -2457,11 +2389,6 @@ msgstr "New tag"
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
 msgid "Root"
 msgstr "Root"
-
-#. 0: tag.name
-#: src/feature/Tag/TagListItem/TagListItem.svelte
-msgid "Add child to {0}"
-msgstr "Add child to {0}"
 
 #: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
 #: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
@@ -3999,7 +3926,6 @@ msgid "Failed to download ShareX config"
 msgstr "Failed to download ShareX config"
 
 #: src/feature/Share/Controls/List.svelte
-#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Copied to clipboard"
 msgstr "Copied to clipboard"
 
@@ -4564,6 +4490,3 @@ msgstr "<0/> Expiration dates for published links"
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Unpublish at any time to revoke access"
 msgstr "<0/> Unpublish at any time to revoke access"
-
-#~ msgid "Search shares"
-#~ msgstr "Search shares"

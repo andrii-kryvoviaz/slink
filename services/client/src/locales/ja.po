@@ -15,15 +15,6 @@ msgstr "アップロード一覧へ"
 msgid "An error occurred. Please try again later."
 msgstr "エラーが発生しました。しばらくしてからもう一度お試しください。"
 
-#: src/routes/c/[code]/+page.server.ts
-#: src/routes/i/[code]/+page.server.ts
-msgid "Location"
-msgstr "場所"
-
-#: src/routes/i/[code]/+page.server.ts
-msgid "User-Agent"
-msgstr "User-Agent"
-
 #: src/routes/profile/(auth)/signup/+page.server.ts
 msgid "Something went wrong. Please try again later."
 msgstr "問題が発生しました。しばらくしてからもう一度お試しください。"
@@ -65,8 +56,6 @@ msgstr "最近参加したメンバー"
 #: src/ui/components/filter/filter-search.svelte
 #: src/ui/components/picker/picker-list.svelte
 #: src/ui/components/picker/picker-search.svelte
-#: src/ui/components/search-field/search-field-input.svelte
-#: src/ui/components/search-field/search-field.svelte
 msgid "Search..."
 msgstr "検索..."
 
@@ -75,7 +64,6 @@ msgid "Search users"
 msgstr "ユーザーを検索"
 
 #: src/feature/Analytics/LatestUsers.svelte
-#: src/ui/components/search-field/search-field-input.svelte
 msgid "Clear search"
 msgstr "検索をクリア"
 
@@ -121,7 +109,6 @@ msgstr "ユーザー"
 #: src/feature/Notification/NotificationListItem.svelte
 #: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
 #: src/feature/Tag/TagDataTable/TagCountCell.svelte
-#: src/feature/Tag/TagInput/TagInput.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
@@ -131,15 +118,12 @@ msgstr "ユーザー"
 #: src/routes/explore/+page.svelte
 #: src/ui/components/filter/filter-search.svelte
 #: src/ui/components/picker/picker-list.svelte
-#: src/ui/components/search-field/search-field.svelte
 msgid "Enter"
 msgstr "Enter"
 
 #: src/feature/Comment/CommentInput.svelte
 #: src/feature/Image/PostViewer/PostViewer.svelte
 #: src/feature/Image/SizePicker/ImageSizePicker.svelte
-#: src/feature/Image/TagManager/ImageTagManager.svelte
-#: src/feature/Tag/TagInput/TagInput.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/ui/components/table-pagination/table-pagination.svelte
 msgid "Escape"
@@ -971,10 +955,6 @@ msgstr "コレクションの読み込みに失敗しました"
 msgid "Failed to load tags"
 msgstr "タグの読み込みに失敗しました"
 
-#: src/lib/state/ImageTagManagerState.svelte.ts
-msgid "ImageTagManagerState"
-msgstr "ImageTagManagerState"
-
 #: src/lib/state/PostViewerState.svelte.ts
 msgid "PostViewerState"
 msgstr "PostViewerState"
@@ -1342,7 +1322,6 @@ msgid "Close viewer"
 msgstr "ビューアーを閉じる"
 
 #: src/feature/Image/PostViewer/PostViewer.svelte
-#: src/feature/Tag/TagInput/TagInput.svelte
 #: src/ui/components/input/number-input.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "ArrowUp"
@@ -1354,7 +1333,6 @@ msgid "ArrowLeft"
 msgstr "ArrowLeft"
 
 #: src/feature/Image/PostViewer/PostViewer.svelte
-#: src/feature/Tag/TagInput/TagInput.svelte
 #: src/ui/components/input/number-input.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "ArrowDown"
@@ -1402,10 +1380,6 @@ msgstr "画像コンテンツ"
 msgid "Failed to convert"
 msgstr "変換に失敗しました"
 
-#: src/lib/utils/i18n/messages/toast.language.ts
-msgid "Link copied to clipboard"
-msgstr "リンクをクリップボードにコピーしました"
-
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 msgid "Copying..."
 msgstr "コピー中..."
@@ -1452,24 +1426,14 @@ msgstr "<0/> リセット"
 msgid "New: {0} × {1}"
 msgstr "新しいサイズ: {0} × {1}"
 
-#: src/feature/Image/TagManager/ImageTagManager.svelte
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/feature/Upload/UploadOptions/TagsOption.svelte
 msgid "Tags"
 msgstr "タグ"
 
-#: src/feature/Image/TagManager/ImageTagManager.svelte
 #: src/feature/Tag/TagSelector/TagSelector.svelte
 msgid "Add more tags..."
 msgstr "タグを追加..."
-
-#: src/feature/Image/TagManager/ImageTagManager.svelte
-msgid "<0/> Add"
-msgstr "<0/> 追加"
-
-#: src/feature/Image/TagManager/ImageTagManager.svelte
-msgid "<0/> Click to add tags..."
-msgstr "<0/> クリックしてタグを追加..."
 
 #: src/feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte
 #: src/ui/components/sonner/toasts/UnsupportedFormatToast.svelte
@@ -2249,7 +2213,6 @@ msgid "Version {0}"
 msgstr "バージョン {0}"
 
 #: src/routes/history/+page.svelte
-#: src/ui/components/filter-bar/active-filter-bar.svelte
 #: src/ui/components/filter/filter-summary.svelte
 msgid "Filtering by"
 msgstr "フィルター条件"
@@ -2290,12 +2253,10 @@ msgstr "クリックして「いずれかに一致」に切り替え"
 msgid "Click to switch to match all"
 msgstr "クリックして「すべてに一致」に切り替え"
 
-#: src/ui/components/filter-bar/active-filter-bar.svelte
 #: src/ui/components/filter/filter-summary.svelte
 msgid "Clear all filters"
 msgstr "すべてのフィルターを解除"
 
-#: src/ui/components/filter-bar/active-filter-bar.svelte
 #: src/ui/components/filter/filter-field.svelte
 #: src/ui/components/filter/filter-summary.svelte
 msgid "Clear"
@@ -2351,24 +2312,11 @@ msgstr "タグを削除"
 msgid "This will cascade:"
 msgstr "以下に連鎖的に影響します："
 
-#. 0: getTagDisplayName(creatingChildFor); 1: childTagName
-#: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
-msgid "Create \"{0} › {1}\""
-msgstr "「{0} › {1}」を作成"
-
 #. 0: searchTerm
-#. 0: searchTerm
-#: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
 #: src/feature/Tag/TagSelector/TagSelector.svelte
 msgid "No tags matching \"{0}\""
 msgstr "「{0}」に一致するタグはありません"
 
-#. 0: searchTerm
-#: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
-msgid "Create \"{0}\""
-msgstr "「{0}」を作成"
-
-#: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
 #: src/feature/Tag/TagSelector/TagSelector.svelte
 msgid "No tags yet"
@@ -2426,22 +2374,6 @@ msgstr "<0/> — プロバイダーとその設定が削除されます"
 msgid "Search and select tags"
 msgstr "タグを検索して選択"
 
-#: src/feature/Tag/TagInput/TagInput.svelte
-msgid "Search or add tags..."
-msgstr "タグを検索または追加..."
-
-#: src/feature/Tag/TagInput/TagInput.svelte
-msgid "Backspace"
-msgstr "Backspace"
-
-#: src/feature/Tag/TagInput/TagInput.svelte
-msgid "Child tag name..."
-msgstr "子タグ名..."
-
-#: src/feature/Tag/TagInput/TagInput.svelte
-msgid "Cancel child tag creation"
-msgstr "子タグの作成をキャンセル"
-
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
 msgid "Search tags"
 msgstr "タグを検索"
@@ -2457,11 +2389,6 @@ msgstr "新規タグ"
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
 msgid "Root"
 msgstr "ルート"
-
-#. 0: tag.name
-#: src/feature/Tag/TagListItem/TagListItem.svelte
-msgid "Add child to {0}"
-msgstr "{0} に子タグを追加"
 
 #: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
 #: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
@@ -3999,7 +3926,6 @@ msgid "Failed to download ShareX config"
 msgstr "ShareX設定のダウンロードに失敗しました"
 
 #: src/feature/Share/Controls/List.svelte
-#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Copied to clipboard"
 msgstr "クリップボードにコピーしました"
 
@@ -4564,6 +4490,3 @@ msgstr "<0/> 公開リンクの有効期限"
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Unpublish at any time to revoke access"
 msgstr "<0/> いつでも公開を取り消してアクセスを無効にできます"
-
-#~ msgid "Search shares"
-#~ msgstr "公開を検索"

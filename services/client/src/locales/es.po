@@ -15,15 +15,6 @@ msgstr "Llevarme a mis cargas"
 msgid "An error occurred. Please try again later."
 msgstr "Ocurrió un error. Por favor, inténtalo de nuevo más tarde."
 
-#: src/routes/c/[code]/+page.server.ts
-#: src/routes/i/[code]/+page.server.ts
-msgid "Location"
-msgstr "Ubicación"
-
-#: src/routes/i/[code]/+page.server.ts
-msgid "User-Agent"
-msgstr "User-Agent"
-
 #: src/routes/profile/(auth)/signup/+page.server.ts
 msgid "Something went wrong. Please try again later."
 msgstr "Algo salió mal. Por favor, inténtalo de nuevo más tarde."
@@ -65,8 +56,6 @@ msgstr "Miembros que se unieron recientemente"
 #: src/ui/components/filter/filter-search.svelte
 #: src/ui/components/picker/picker-list.svelte
 #: src/ui/components/picker/picker-search.svelte
-#: src/ui/components/search-field/search-field-input.svelte
-#: src/ui/components/search-field/search-field.svelte
 msgid "Search..."
 msgstr "Buscar..."
 
@@ -75,7 +64,6 @@ msgid "Search users"
 msgstr "Buscar usuarios"
 
 #: src/feature/Analytics/LatestUsers.svelte
-#: src/ui/components/search-field/search-field-input.svelte
 msgid "Clear search"
 msgstr "Borrar búsqueda"
 
@@ -121,7 +109,6 @@ msgstr "Usuarios"
 #: src/feature/Notification/NotificationListItem.svelte
 #: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
 #: src/feature/Tag/TagDataTable/TagCountCell.svelte
-#: src/feature/Tag/TagInput/TagInput.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
@@ -131,15 +118,12 @@ msgstr "Usuarios"
 #: src/routes/explore/+page.svelte
 #: src/ui/components/filter/filter-search.svelte
 #: src/ui/components/picker/picker-list.svelte
-#: src/ui/components/search-field/search-field.svelte
 msgid "Enter"
 msgstr "Enter"
 
 #: src/feature/Comment/CommentInput.svelte
 #: src/feature/Image/PostViewer/PostViewer.svelte
 #: src/feature/Image/SizePicker/ImageSizePicker.svelte
-#: src/feature/Image/TagManager/ImageTagManager.svelte
-#: src/feature/Tag/TagInput/TagInput.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/ui/components/table-pagination/table-pagination.svelte
 msgid "Escape"
@@ -971,10 +955,6 @@ msgstr "Error al cargar las colecciones"
 msgid "Failed to load tags"
 msgstr "Error al cargar las etiquetas"
 
-#: src/lib/state/ImageTagManagerState.svelte.ts
-msgid "ImageTagManagerState"
-msgstr "ImageTagManagerState"
-
 #: src/lib/state/PostViewerState.svelte.ts
 msgid "PostViewerState"
 msgstr "PostViewerState"
@@ -1342,7 +1322,6 @@ msgid "Close viewer"
 msgstr "Cerrar visor"
 
 #: src/feature/Image/PostViewer/PostViewer.svelte
-#: src/feature/Tag/TagInput/TagInput.svelte
 #: src/ui/components/input/number-input.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "ArrowUp"
@@ -1354,7 +1333,6 @@ msgid "ArrowLeft"
 msgstr "ArrowLeft"
 
 #: src/feature/Image/PostViewer/PostViewer.svelte
-#: src/feature/Tag/TagInput/TagInput.svelte
 #: src/ui/components/input/number-input.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "ArrowDown"
@@ -1402,10 +1380,6 @@ msgstr "Contenido de imagen"
 msgid "Failed to convert"
 msgstr "Error al convertir"
 
-#: src/lib/utils/i18n/messages/toast.language.ts
-msgid "Link copied to clipboard"
-msgstr "Enlace copiado al portapapeles"
-
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 msgid "Copying..."
 msgstr "Copiando..."
@@ -1452,24 +1426,14 @@ msgstr "<0/> Restablecer"
 msgid "New: {0} × {1}"
 msgstr "Nuevo: {0} × {1}"
 
-#: src/feature/Image/TagManager/ImageTagManager.svelte
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/feature/Upload/UploadOptions/TagsOption.svelte
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: src/feature/Image/TagManager/ImageTagManager.svelte
 #: src/feature/Tag/TagSelector/TagSelector.svelte
 msgid "Add more tags..."
 msgstr "Agregar más etiquetas..."
-
-#: src/feature/Image/TagManager/ImageTagManager.svelte
-msgid "<0/> Add"
-msgstr "<0/> Agregar"
-
-#: src/feature/Image/TagManager/ImageTagManager.svelte
-msgid "<0/> Click to add tags..."
-msgstr "<0/> Haz clic para agregar etiquetas..."
 
 #: src/feature/Image/UnsupportedFIleFormat/UnsupportedFileFormat.svelte
 #: src/ui/components/sonner/toasts/UnsupportedFormatToast.svelte
@@ -2249,7 +2213,6 @@ msgid "Version {0}"
 msgstr "Versión {0}"
 
 #: src/routes/history/+page.svelte
-#: src/ui/components/filter-bar/active-filter-bar.svelte
 #: src/ui/components/filter/filter-summary.svelte
 msgid "Filtering by"
 msgstr "Filtrando por"
@@ -2290,12 +2253,10 @@ msgstr "Haz clic para cambiar a coincidir con alguna"
 msgid "Click to switch to match all"
 msgstr "Haz clic para cambiar a coincidir con todas"
 
-#: src/ui/components/filter-bar/active-filter-bar.svelte
 #: src/ui/components/filter/filter-summary.svelte
 msgid "Clear all filters"
 msgstr "Limpiar todos los filtros"
 
-#: src/ui/components/filter-bar/active-filter-bar.svelte
 #: src/ui/components/filter/filter-field.svelte
 #: src/ui/components/filter/filter-summary.svelte
 msgid "Clear"
@@ -2351,24 +2312,11 @@ msgstr "Eliminar etiqueta"
 msgid "This will cascade:"
 msgstr "Esto también afectará a:"
 
-#. 0: getTagDisplayName(creatingChildFor); 1: childTagName
-#: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
-msgid "Create \"{0} › {1}\""
-msgstr "Crear \"{0} › {1}\""
-
 #. 0: searchTerm
-#. 0: searchTerm
-#: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
 #: src/feature/Tag/TagSelector/TagSelector.svelte
 msgid "No tags matching \"{0}\""
 msgstr "No hay etiquetas que coincidan con \"{0}\""
 
-#. 0: searchTerm
-#: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
-msgid "Create \"{0}\""
-msgstr "Crear \"{0}\""
-
-#: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
 #: src/feature/Tag/TagSelector/TagSelector.svelte
 msgid "No tags yet"
@@ -2426,22 +2374,6 @@ msgstr "<0/> — El proveedor y su configuración serán eliminados"
 msgid "Search and select tags"
 msgstr "Buscar y seleccionar etiquetas"
 
-#: src/feature/Tag/TagInput/TagInput.svelte
-msgid "Search or add tags..."
-msgstr "Buscar o agregar etiquetas..."
-
-#: src/feature/Tag/TagInput/TagInput.svelte
-msgid "Backspace"
-msgstr "Retroceso"
-
-#: src/feature/Tag/TagInput/TagInput.svelte
-msgid "Child tag name..."
-msgstr "Nombre de etiqueta hija..."
-
-#: src/feature/Tag/TagInput/TagInput.svelte
-msgid "Cancel child tag creation"
-msgstr "Cancelar creación de etiqueta hija"
-
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
 msgid "Search tags"
 msgstr "Buscar etiquetas"
@@ -2457,11 +2389,6 @@ msgstr "Nueva etiqueta"
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
 msgid "Root"
 msgstr "Raíz"
-
-#. 0: tag.name
-#: src/feature/Tag/TagListItem/TagListItem.svelte
-msgid "Add child to {0}"
-msgstr "Agregar elemento hijo a {0}"
 
 #: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
 #: src/feature/Tag/TagMoveDialog/TagMoveDialog.svelte
@@ -3999,7 +3926,6 @@ msgid "Failed to download ShareX config"
 msgstr "Error al descargar la configuración de ShareX"
 
 #: src/feature/Share/Controls/List.svelte
-#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Copied to clipboard"
 msgstr "Copiado al portapapeles"
 
@@ -4564,6 +4490,3 @@ msgstr "<0/> Fechas de caducidad para enlaces publicados"
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Unpublish at any time to revoke access"
 msgstr "<0/> Despublica en cualquier momento para revocar el acceso"
-
-#~ msgid "Search shares"
-#~ msgstr "Buscar publicaciones"
