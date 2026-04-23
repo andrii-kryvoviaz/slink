@@ -254,5 +254,13 @@
 </CopyContainer>
 
 <div class="hidden">
-  <Shortcut control key="c" onHit={() => handleCopy(true)} />
+  <Shortcut
+    control
+    key="c"
+    onHit={() => {
+      const selection = window.getSelection();
+      if (selection && !selection.isCollapsed) return false;
+      handleCopy(true);
+    }}
+  />
 </div>
