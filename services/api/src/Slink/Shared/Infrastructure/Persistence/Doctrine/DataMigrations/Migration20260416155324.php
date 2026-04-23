@@ -7,6 +7,7 @@ namespace Slink\Shared\Infrastructure\Persistence\Doctrine\DataMigrations;
 use Doctrine\ORM\EntityManagerInterface;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
 use Slink\Share\Domain\Repository\ShareStoreRepositoryInterface;
+use Slink\Share\Infrastructure\ReadModel\View\ShareView;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\DataMigration\DataMigrationInterface;
 
@@ -20,12 +21,15 @@ final class Migration20260416155324 implements DataMigrationInterface {
   ) {}
 
   public function up(): void {
+    $ids = array_map(
+      static fn(ShareView $view): string => $view->getId(),
+      iterator_to_array($this->shareRepository->findAllUnpublished(), false)
+    );
+
     $errors = [];
     $count = 0;
 
-    foreach ($this->shareRepository->findAllUnpublished() as $shareView) {
-      $id = $shareView->getId();
-
+    foreach ($ids as $id) {
       try {
         $share = $this->shareStore->get(ID::fromString($id));
         $share->publish();
