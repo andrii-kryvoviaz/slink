@@ -46,5 +46,10 @@ export const publishedLinks = tv({
       'text-gray-400 dark:text-gray-500',
     ],
     actions: ['flex-shrink-0 self-center', 'flex items-center'],
+    actionTrigger: [
+      'h-7 w-7',
+      'opacity-70 group-hover:opacity-100',
+      'transition-all duration-150',
+    ],
   },
 });

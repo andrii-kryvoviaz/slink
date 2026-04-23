@@ -128,7 +128,7 @@
             padding="none"
             rounded="md"
             aria-label="Share actions"
-            class="h-7 w-7 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white opacity-70 group-hover:opacity-100 transition-opacity"
+            class={theme.actionTrigger()}
           >
             <Icon icon="lucide:ellipsis" class="h-4 w-4" />
           </Button>
