@@ -41,6 +41,5 @@
   onTagsChange={handleTagsChange}
   placeholder="Search and select tags"
   {variant}
-  allowCreate={false}
   {disabled}
 />

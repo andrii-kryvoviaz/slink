@@ -61,8 +61,12 @@ msgstr "最近加入的成员"
 
 #: src/feature/Analytics/LatestUsers.svelte
 #: src/ui/components/combobox/combobox.svelte
+#: src/ui/components/filter/filter-field.svelte
+#: src/ui/components/filter/filter-search.svelte
 #: src/ui/components/picker/picker-list.svelte
 #: src/ui/components/picker/picker-search.svelte
+#: src/ui/components/search-field/search-field-input.svelte
+#: src/ui/components/search-field/search-field.svelte
 msgid "Search..."
 msgstr "搜索..."
 
@@ -71,7 +75,7 @@ msgid "Search users"
 msgstr "搜索用户"
 
 #: src/feature/Analytics/LatestUsers.svelte
-#: src/feature/Search/SearchBar.svelte
+#: src/ui/components/search-field/search-field-input.svelte
 msgid "Clear search"
 msgstr "清除搜索"
 
@@ -115,11 +119,9 @@ msgstr "用户"
 #: src/feature/Image/SizePicker/ImageSizePicker.svelte
 #: src/feature/Navigation/TabMenu/TabMenuItem.svelte
 #: src/feature/Notification/NotificationListItem.svelte
-#: src/feature/Search/SearchBar.svelte
 #: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
 #: src/feature/Tag/TagDataTable/TagCountCell.svelte
 #: src/feature/Tag/TagInput/TagInput.svelte
-#: src/feature/Tag/TagSelector/TagSelector.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
@@ -127,7 +129,9 @@ msgstr "用户"
 #: src/feature/Upload/Dropzone/Dropzone.svelte
 #: src/routes/collection/[id]/+page.svelte
 #: src/routes/explore/+page.svelte
+#: src/ui/components/filter/filter-search.svelte
 #: src/ui/components/picker/picker-list.svelte
+#: src/ui/components/search-field/search-field.svelte
 msgid "Enter"
 msgstr "回车"
 
@@ -135,7 +139,6 @@ msgstr "回车"
 #: src/feature/Image/PostViewer/PostViewer.svelte
 #: src/feature/Image/SizePicker/ImageSizePicker.svelte
 #: src/feature/Image/TagManager/ImageTagManager.svelte
-#: src/feature/Search/SearchBar.svelte
 #: src/feature/Tag/TagInput/TagInput.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/ui/components/table-pagination/table-pagination.svelte
@@ -317,7 +320,6 @@ msgid "Search by Hashtag"
 msgstr "按标签搜索"
 
 #: src/feature/Navigation/Sidebar/AppSidebar.svelte
-#: src/feature/Search/SearchBar.svelte
 #: src/feature/Search/SearchBar.svelte
 #: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
@@ -859,6 +861,7 @@ msgstr "我的标签"
 msgid "Create and organize tags for your images"
 msgstr "为你的图片创建并管理标签"
 
+#: src/feature/Tag/TagSelector/TagSelector.svelte
 #: src/routes/tags/+page.svelte
 msgid "Search tags..."
 msgstr "搜索标签..."
@@ -2247,6 +2250,7 @@ msgstr "版本 {0}"
 
 #: src/routes/history/+page.svelte
 #: src/ui/components/filter-bar/active-filter-bar.svelte
+#: src/ui/components/filter/filter-summary.svelte
 msgid "Filtering by"
 msgstr "筛选条件"
 
@@ -2287,10 +2291,13 @@ msgid "Click to switch to match all"
 msgstr "点击切换为匹配全部"
 
 #: src/ui/components/filter-bar/active-filter-bar.svelte
+#: src/ui/components/filter/filter-summary.svelte
 msgid "Clear all filters"
 msgstr "清空筛选"
 
 #: src/ui/components/filter-bar/active-filter-bar.svelte
+#: src/ui/components/filter/filter-field.svelte
+#: src/ui/components/filter/filter-summary.svelte
 msgid "Clear"
 msgstr "清除"
 
@@ -2350,7 +2357,9 @@ msgid "Create \"{0} › {1}\""
 msgstr "创建“{0} › {1}”"
 
 #. 0: searchTerm
+#. 0: searchTerm
 #: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
+#: src/feature/Tag/TagSelector/TagSelector.svelte
 msgid "No tags matching \"{0}\""
 msgstr "没有匹配“{0}”的标签"
 
@@ -2361,6 +2370,7 @@ msgstr "创建“{0}”"
 
 #: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
+#: src/feature/Tag/TagSelector/TagSelector.svelte
 msgid "No tags yet"
 msgstr "暂无标签"
 
@@ -2417,7 +2427,6 @@ msgid "Search and select tags"
 msgstr "搜索并选择标签"
 
 #: src/feature/Tag/TagInput/TagInput.svelte
-#: src/feature/Tag/TagSelector/TagSelector.svelte
 msgid "Search or add tags..."
 msgstr "搜索或添加标签..."
 
@@ -4551,7 +4560,5 @@ msgstr "<0/> 已发布链接的过期时间"
 msgid "<0/> Unpublish at any time to revoke access"
 msgstr "<0/> 随时取消发布以撤销访问权限"
 
-#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
-msgid "Search shares"
-msgid "Search shares"
-msgstr "搜索发布"
+#~ msgid "Search shares"
+#~ msgstr "搜索发布"

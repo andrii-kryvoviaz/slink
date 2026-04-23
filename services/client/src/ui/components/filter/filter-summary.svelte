@@ -4,7 +4,7 @@
   import { plural } from '$lib/utils/i18n';
   import Icon from '@iconify/svelte';
 
-  import { activeFilterBar } from './filter-bar.theme';
+  import { filterSummaryVariants } from './filter.theme';
 
   interface Props {
     count: number;
@@ -28,7 +28,7 @@
     extras,
   }: Props = $props();
 
-  const theme = activeFilterBar();
+  const theme = filterSummaryVariants();
 </script>
 
 {#if visible && count > 0}

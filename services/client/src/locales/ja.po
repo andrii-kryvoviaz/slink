@@ -61,8 +61,12 @@ msgstr "最近参加したメンバー"
 
 #: src/feature/Analytics/LatestUsers.svelte
 #: src/ui/components/combobox/combobox.svelte
+#: src/ui/components/filter/filter-field.svelte
+#: src/ui/components/filter/filter-search.svelte
 #: src/ui/components/picker/picker-list.svelte
 #: src/ui/components/picker/picker-search.svelte
+#: src/ui/components/search-field/search-field-input.svelte
+#: src/ui/components/search-field/search-field.svelte
 msgid "Search..."
 msgstr "検索..."
 
@@ -71,7 +75,7 @@ msgid "Search users"
 msgstr "ユーザーを検索"
 
 #: src/feature/Analytics/LatestUsers.svelte
-#: src/feature/Search/SearchBar.svelte
+#: src/ui/components/search-field/search-field-input.svelte
 msgid "Clear search"
 msgstr "検索をクリア"
 
@@ -115,11 +119,9 @@ msgstr "ユーザー"
 #: src/feature/Image/SizePicker/ImageSizePicker.svelte
 #: src/feature/Navigation/TabMenu/TabMenuItem.svelte
 #: src/feature/Notification/NotificationListItem.svelte
-#: src/feature/Search/SearchBar.svelte
 #: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
 #: src/feature/Tag/TagDataTable/TagCountCell.svelte
 #: src/feature/Tag/TagInput/TagInput.svelte
-#: src/feature/Tag/TagSelector/TagSelector.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
@@ -127,7 +129,9 @@ msgstr "ユーザー"
 #: src/feature/Upload/Dropzone/Dropzone.svelte
 #: src/routes/collection/[id]/+page.svelte
 #: src/routes/explore/+page.svelte
+#: src/ui/components/filter/filter-search.svelte
 #: src/ui/components/picker/picker-list.svelte
+#: src/ui/components/search-field/search-field.svelte
 msgid "Enter"
 msgstr "Enter"
 
@@ -135,7 +139,6 @@ msgstr "Enter"
 #: src/feature/Image/PostViewer/PostViewer.svelte
 #: src/feature/Image/SizePicker/ImageSizePicker.svelte
 #: src/feature/Image/TagManager/ImageTagManager.svelte
-#: src/feature/Search/SearchBar.svelte
 #: src/feature/Tag/TagInput/TagInput.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/ui/components/table-pagination/table-pagination.svelte
@@ -317,7 +320,6 @@ msgid "Search by Hashtag"
 msgstr "ハッシュタグで検索"
 
 #: src/feature/Navigation/Sidebar/AppSidebar.svelte
-#: src/feature/Search/SearchBar.svelte
 #: src/feature/Search/SearchBar.svelte
 #: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
@@ -859,6 +861,7 @@ msgstr "マイタグ"
 msgid "Create and organize tags for your images"
 msgstr "画像用のタグを作成・整理"
 
+#: src/feature/Tag/TagSelector/TagSelector.svelte
 #: src/routes/tags/+page.svelte
 msgid "Search tags..."
 msgstr "タグを検索..."
@@ -2247,6 +2250,7 @@ msgstr "バージョン {0}"
 
 #: src/routes/history/+page.svelte
 #: src/ui/components/filter-bar/active-filter-bar.svelte
+#: src/ui/components/filter/filter-summary.svelte
 msgid "Filtering by"
 msgstr "フィルター条件"
 
@@ -2287,10 +2291,13 @@ msgid "Click to switch to match all"
 msgstr "クリックして「すべてに一致」に切り替え"
 
 #: src/ui/components/filter-bar/active-filter-bar.svelte
+#: src/ui/components/filter/filter-summary.svelte
 msgid "Clear all filters"
 msgstr "すべてのフィルターを解除"
 
 #: src/ui/components/filter-bar/active-filter-bar.svelte
+#: src/ui/components/filter/filter-field.svelte
+#: src/ui/components/filter/filter-summary.svelte
 msgid "Clear"
 msgstr "クリア"
 
@@ -2350,7 +2357,9 @@ msgid "Create \"{0} › {1}\""
 msgstr "「{0} › {1}」を作成"
 
 #. 0: searchTerm
+#. 0: searchTerm
 #: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
+#: src/feature/Tag/TagSelector/TagSelector.svelte
 msgid "No tags matching \"{0}\""
 msgstr "「{0}」に一致するタグはありません"
 
@@ -2361,6 +2370,7 @@ msgstr "「{0}」を作成"
 
 #: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
+#: src/feature/Tag/TagSelector/TagSelector.svelte
 msgid "No tags yet"
 msgstr "タグはまだありません"
 
@@ -2417,7 +2427,6 @@ msgid "Search and select tags"
 msgstr "タグを検索して選択"
 
 #: src/feature/Tag/TagInput/TagInput.svelte
-#: src/feature/Tag/TagSelector/TagSelector.svelte
 msgid "Search or add tags..."
 msgstr "タグを検索または追加..."
 
@@ -4556,7 +4565,5 @@ msgstr "<0/> 公開リンクの有効期限"
 msgid "<0/> Unpublish at any time to revoke access"
 msgstr "<0/> いつでも公開を取り消してアクセスを無効にできます"
 
-#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
-msgid "Search shares"
-msgid "Search shares"
-msgstr "公開を検索"
+#~ msgid "Search shares"
+#~ msgstr "公開を検索"

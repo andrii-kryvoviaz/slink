@@ -1,12 +1,6 @@
 <script lang="ts">
-  import {
-    ActiveFilterBar,
-    FilterIcon,
-    FilterShell,
-  } from '@slink/ui/components/filter-bar';
+  import * as Filter from '@slink/ui/components/filter';
   import { Select } from '@slink/ui/components/select';
-
-  import Icon from '@iconify/svelte';
 
   import type {
     ShareExpiryFilter,
@@ -16,15 +10,11 @@
 
   import type { SharesFeed } from '@slink/lib/state/SharesFeed.svelte';
 
-  import { sharesFilterBar } from './SharesFilterBar.theme';
-
   interface Props {
     feed: SharesFeed;
   }
 
   let { feed }: Props = $props();
-
-  const theme = sharesFilterBar();
 
   const expiryOptions: {
     value: ShareExpiryFilter;
@@ -62,25 +52,22 @@
   ];
 </script>
 
-<div class={theme.root()}>
-  <FilterShell variant="neon">
-    <div class={theme.shellLayout()}>
-      <div class={theme.searchGroup()}>
-        <FilterIcon icon="lucide:search" variant="neon" />
-
-        <input
-          type="text"
+<div class="relative">
+  <Filter.Container variant="neon">
+    <Filter.Group direction="responsive" breakpoint="lg" gap="md" grow>
+      <Filter.Group grow>
+        <Filter.Icon icon="lucide:search" variant="neon" />
+        <Filter.Field
           value={feed.filters.search.value}
-          oninput={(e) => feed.applyFilters({ search: e.currentTarget.value })}
+          onValueChange={(value) => feed.applyFilters({ search: value })}
           placeholder="Search shares..."
-          class={theme.searchInput()}
-          aria-label="Search shares"
+          hideIcon={true}
         />
-      </div>
+      </Filter.Group>
 
-      <div class={theme.divider()}></div>
+      <Filter.Divider class="hidden lg:block h-6" />
 
-      <div class={theme.filterGroup()}>
+      <Filter.Group direction="responsive" breakpoint="sm" gap="sm">
         <Select
           type="single"
           value={feed.filters.expiry.value}
@@ -88,7 +75,7 @@
           onValueChange={(value) =>
             feed.applyFilters({ expiry: value as ShareExpiryFilter })}
           size="sm"
-          class={theme.expirySelect()}
+          class="w-full sm:w-40"
         />
 
         <Select
@@ -98,7 +85,7 @@
           onValueChange={(value) =>
             feed.applyFilters({ protection: value as ShareProtectionFilter })}
           size="sm"
-          class={theme.protectionSelect()}
+          class="w-full sm:w-44"
         />
 
         <Select
@@ -108,27 +95,24 @@
           onValueChange={(value) =>
             feed.applyFilters({ type: value as ShareTypeFilter })}
           size="sm"
-          class={theme.typeSelect()}
+          class="w-full sm:w-40"
         />
-      </div>
-    </div>
-  </FilterShell>
+      </Filter.Group>
+    </Filter.Group>
+  </Filter.Container>
 
-  <ActiveFilterBar
+  <Filter.Summary
     count={feed.activeFilterCount}
     visible={feed.hasActiveFilters}
     onClear={() => feed.resetFilters()}
   >
     {#snippet extras()}
       {#if feed.filters.search.value.length > 0}
-        <div class={theme.searchChipDivider()}></div>
-        <span class={theme.searchChip()}>
-          <Icon icon="lucide:search" class="w-3 h-3" />
-          <span class={theme.searchChipText()}>
-            "{feed.filters.search.value}"
-          </span>
-        </span>
+        <Filter.Divider class="hidden sm:block h-3.5" />
+        <Filter.Chip icon="lucide:search">
+          "{feed.filters.search.value}"
+        </Filter.Chip>
       {/if}
     {/snippet}
-  </ActiveFilterBar>
+  </Filter.Summary>
 </div>

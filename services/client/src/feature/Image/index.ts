@@ -74,7 +74,6 @@ export { default as ShareLinkCopy } from './ShareLinkCopy/ShareLinkCopy.svelte';
 export { default as ImageSizePicker } from './SizePicker/ImageSizePicker.svelte';
 export * from './SizePicker/ImageSizePicker.theme';
 export * from './SizePicker/ImageSizePicker.types';
-export { default as ImageTagManager } from './TagManager/ImageTagManager.svelte';
 export { default as UnsupportedFileFormat } from './UnsupportedFIleFormat/UnsupportedFileFormat.svelte';
 export { default as ViewCountBadge } from './ViewCountBadge/ViewCountBadge.svelte';
 export * from './ViewCountBadge/ViewCountBadge.theme';

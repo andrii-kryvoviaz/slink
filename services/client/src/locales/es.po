@@ -61,8 +61,12 @@ msgstr "Miembros que se unieron recientemente"
 
 #: src/feature/Analytics/LatestUsers.svelte
 #: src/ui/components/combobox/combobox.svelte
+#: src/ui/components/filter/filter-field.svelte
+#: src/ui/components/filter/filter-search.svelte
 #: src/ui/components/picker/picker-list.svelte
 #: src/ui/components/picker/picker-search.svelte
+#: src/ui/components/search-field/search-field-input.svelte
+#: src/ui/components/search-field/search-field.svelte
 msgid "Search..."
 msgstr "Buscar..."
 
@@ -71,7 +75,7 @@ msgid "Search users"
 msgstr "Buscar usuarios"
 
 #: src/feature/Analytics/LatestUsers.svelte
-#: src/feature/Search/SearchBar.svelte
+#: src/ui/components/search-field/search-field-input.svelte
 msgid "Clear search"
 msgstr "Borrar búsqueda"
 
@@ -115,11 +119,9 @@ msgstr "Usuarios"
 #: src/feature/Image/SizePicker/ImageSizePicker.svelte
 #: src/feature/Navigation/TabMenu/TabMenuItem.svelte
 #: src/feature/Notification/NotificationListItem.svelte
-#: src/feature/Search/SearchBar.svelte
 #: src/feature/Tag/CreateTagForm/CreateTagForm.svelte
 #: src/feature/Tag/TagDataTable/TagCountCell.svelte
 #: src/feature/Tag/TagInput/TagInput.svelte
-#: src/feature/Tag/TagSelector/TagSelector.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
@@ -127,7 +129,9 @@ msgstr "Usuarios"
 #: src/feature/Upload/Dropzone/Dropzone.svelte
 #: src/routes/collection/[id]/+page.svelte
 #: src/routes/explore/+page.svelte
+#: src/ui/components/filter/filter-search.svelte
 #: src/ui/components/picker/picker-list.svelte
+#: src/ui/components/search-field/search-field.svelte
 msgid "Enter"
 msgstr "Enter"
 
@@ -135,7 +139,6 @@ msgstr "Enter"
 #: src/feature/Image/PostViewer/PostViewer.svelte
 #: src/feature/Image/SizePicker/ImageSizePicker.svelte
 #: src/feature/Image/TagManager/ImageTagManager.svelte
-#: src/feature/Search/SearchBar.svelte
 #: src/feature/Tag/TagInput/TagInput.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/ui/components/table-pagination/table-pagination.svelte
@@ -317,7 +320,6 @@ msgid "Search by Hashtag"
 msgstr "Buscar por hashtag"
 
 #: src/feature/Navigation/Sidebar/AppSidebar.svelte
-#: src/feature/Search/SearchBar.svelte
 #: src/feature/Search/SearchBar.svelte
 #: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
@@ -859,6 +861,7 @@ msgstr "Mis etiquetas"
 msgid "Create and organize tags for your images"
 msgstr "Crea y organiza etiquetas para tus imágenes"
 
+#: src/feature/Tag/TagSelector/TagSelector.svelte
 #: src/routes/tags/+page.svelte
 msgid "Search tags..."
 msgstr "Buscar etiquetas..."
@@ -2247,6 +2250,7 @@ msgstr "Versión {0}"
 
 #: src/routes/history/+page.svelte
 #: src/ui/components/filter-bar/active-filter-bar.svelte
+#: src/ui/components/filter/filter-summary.svelte
 msgid "Filtering by"
 msgstr "Filtrando por"
 
@@ -2287,10 +2291,13 @@ msgid "Click to switch to match all"
 msgstr "Haz clic para cambiar a coincidir con todas"
 
 #: src/ui/components/filter-bar/active-filter-bar.svelte
+#: src/ui/components/filter/filter-summary.svelte
 msgid "Clear all filters"
 msgstr "Limpiar todos los filtros"
 
 #: src/ui/components/filter-bar/active-filter-bar.svelte
+#: src/ui/components/filter/filter-field.svelte
+#: src/ui/components/filter/filter-summary.svelte
 msgid "Clear"
 msgstr "Limpiar"
 
@@ -2350,7 +2357,9 @@ msgid "Create \"{0} › {1}\""
 msgstr "Crear \"{0} › {1}\""
 
 #. 0: searchTerm
+#. 0: searchTerm
 #: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
+#: src/feature/Tag/TagSelector/TagSelector.svelte
 msgid "No tags matching \"{0}\""
 msgstr "No hay etiquetas que coincidan con \"{0}\""
 
@@ -2361,6 +2370,7 @@ msgstr "Crear \"{0}\""
 
 #: src/feature/Tag/TagDropdown/TagDropdownContent.svelte
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
+#: src/feature/Tag/TagSelector/TagSelector.svelte
 msgid "No tags yet"
 msgstr "Aún no hay etiquetas"
 
@@ -2417,7 +2427,6 @@ msgid "Search and select tags"
 msgstr "Buscar y seleccionar etiquetas"
 
 #: src/feature/Tag/TagInput/TagInput.svelte
-#: src/feature/Tag/TagSelector/TagSelector.svelte
 msgid "Search or add tags..."
 msgstr "Buscar o agregar etiquetas..."
 
@@ -4556,7 +4565,5 @@ msgstr "<0/> Fechas de caducidad para enlaces publicados"
 msgid "<0/> Unpublish at any time to revoke access"
 msgstr "<0/> Despublica en cualquier momento para revocar el acceso"
 
-#: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
-msgid "Search shares"
-msgid "Search shares"
-msgstr "Buscar publicaciones"
+#~ msgid "Search shares"
+#~ msgstr "Buscar publicaciones"

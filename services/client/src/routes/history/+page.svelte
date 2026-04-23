@@ -31,9 +31,9 @@
   import { Subtitle, Title } from '@slink/feature/Text';
   import { Button } from '@slink/ui/components/button';
   import { DataTable, DataTableToolbar } from '@slink/ui/components/data-table';
-  import { ActiveFilterBar } from '@slink/ui/components/filter-bar';
+  import { FilterSummary } from '@slink/ui/components/filter';
   import { ViewModeLayout } from '@slink/ui/components/view-mode-layout';
-  import { untrack } from 'svelte';
+  import { tick, untrack } from 'svelte';
 
   import { page } from '$app/state';
   import Icon from '@iconify/svelte';
@@ -55,8 +55,21 @@
   const tagFilterManager = $derived(createTagFilterManager(page.url));
   const selectionState = createImageSelectionState();
 
+  let isWritingUrlFromState = false;
+
+  const syncStateToUrl = async (writer: () => Promise<void> | void) => {
+    isWritingUrlFromState = true;
+    try {
+      await writer();
+      await tick();
+    } finally {
+      isWritingUrlFromState = false;
+    }
+  };
+
   $effect(() => {
     const search = page.url.search;
+    if (isWritingUrlFromState) return;
 
     untrack(() => {
       const currentIds = historyFeedState.tagFilter.selectedTags
@@ -125,27 +138,27 @@
     }
   };
 
-  const handleTagFilterChange = async (
-    tags: TagType[],
-    requireAllTags: boolean,
-  ) => {
-    historyFeedState.setTagFilter(tags, requireAllTags);
-    await tagFilterManager.updateUrl(tags, requireAllTags);
-    await historyFeedState.load();
-  };
+  const handleTagFilterChange = (tags: TagType[], requireAllTags: boolean) =>
+    syncStateToUrl(async () => {
+      historyFeedState.setTagFilter(tags, requireAllTags);
+      await tagFilterManager.updateUrl(tags, requireAllTags);
+      await historyFeedState.load();
+    });
 
-  const handleClearTagFilter = async () => {
-    historyFeedState.clearTagFilter();
-    await tagFilterManager.clearUrl();
-    await historyFeedState.load();
-  };
+  const handleClearTagFilter = () =>
+    syncStateToUrl(async () => {
+      historyFeedState.clearTagFilter();
+      await tagFilterManager.clearUrl();
+      await historyFeedState.load();
+    });
 
-  const handleMatchModeChange = async (requireAllTags: boolean) => {
-    const tags = historyFeedState.tagFilter.selectedTags;
-    historyFeedState.setTagFilter(tags, requireAllTags);
-    await tagFilterManager.updateUrl(tags, requireAllTags);
-    await historyFeedState.load();
-  };
+  const handleMatchModeChange = (requireAllTags: boolean) =>
+    syncStateToUrl(async () => {
+      const tags = historyFeedState.tagFilter.selectedTags;
+      historyFeedState.setTagFilter(tags, requireAllTags);
+      await tagFilterManager.updateUrl(tags, requireAllTags);
+      await historyFeedState.load();
+    });
 
   const handleSelectAll = () => {
     const allIds = historyFeedState.items.map((item) => item.id);
@@ -155,10 +168,6 @@
   const handleDeselectAll = () => {
     selectionState.deselectAll();
   };
-
-  const filterKey = $derived(
-    `${historyFeedState.tagFilter.selectedTags.map((t) => t.id).join(',')}-${historyFeedState.tagFilter.requireAllTags}`,
-  );
 </script>
 
 <svelte:head>
@@ -204,7 +213,7 @@
           variant="neon"
         />
 
-        <ActiveFilterBar
+        <FilterSummary
           count={historyFeedState.tagFilter.selectedTags.length}
           countLabel={['# tag', '# tags']}
           visible={historyFeedState.hasActiveFilter}
@@ -224,125 +233,123 @@
               />
             {/if}
           {/snippet}
-        </ActiveFilterBar>
+        </FilterSummary>
       </div>
     </div>
 
-    {#key filterKey}
-      <ViewModeLayout
-        feed={historyFeedState}
-        mode={settings.history.viewMode}
-        onBeforeLoad={() => {
-          if (tagFilterManager.hasFiltersInUrl()) {
-            loadTagFiltersFromUrl();
-            return true;
-          }
-        }}
-        config={{
-          table: {
-            columns: historyColumns,
-          },
-        }}
-      >
-        {#snippet toolbar({
-          table,
-          pageSize,
-          pagination,
-          feed,
-          handlePageSizeChange,
-        })}
-          <DataTableToolbar
-            {table}
-            {pageSize}
-            {pagination}
-            onPageSizeChange={handlePageSizeChange}
-            onNextPage={() => feed.nextPage()}
-            onPrevPage={() => feed.prevPage()}
-            isLoading={feed.isLoading}
+    <ViewModeLayout
+      feed={historyFeedState}
+      mode={settings.history.viewMode}
+      onBeforeLoad={() => {
+        if (tagFilterManager.hasFiltersInUrl()) {
+          loadTagFiltersFromUrl();
+          return true;
+        }
+      }}
+      config={{
+        table: {
+          columns: historyColumns,
+        },
+      }}
+    >
+      {#snippet toolbar({
+        table,
+        pageSize,
+        pagination,
+        feed,
+        handlePageSizeChange,
+      })}
+        <DataTableToolbar
+          {table}
+          {pageSize}
+          {pagination}
+          onPageSizeChange={handlePageSizeChange}
+          onNextPage={() => feed.nextPage()}
+          onPrevPage={() => feed.prevPage()}
+          isLoading={feed.isLoading}
+        />
+      {/snippet}
+      {#snippet loading(mode)}
+        <HistorySkeleton count={12} viewMode={mode} />
+      {/snippet}
+      {#snippet grid(_ctx)}
+        <HistoryGridView
+          items={historyFeedState.items}
+          {selectionState}
+          on={{
+            delete: onImageDelete,
+            collectionChange: onCollectionChange,
+            tagChange: onTagChange,
+          }}
+        />
+      {/snippet}
+      {#snippet list(_ctx)}
+        <HistoryListView
+          items={historyFeedState.items}
+          {selectionState}
+          on={{
+            delete: onImageDelete,
+            collectionChange: onCollectionChange,
+            tagChange: onTagChange,
+          }}
+        />
+      {/snippet}
+      {#snippet table({ table: historyTable, feed })}
+        <DataTable
+          table={historyTable!}
+          isLoading={feed.isLoading}
+          onRowClick={(item) => selectionState.select(item.id)}
+        />
+      {/snippet}
+      {#snippet empty()}
+        {#if historyFeedState.hasActiveFilter}
+          <EmptyState
+            icon="heroicons:funnel"
+            title="No matching images"
+            description="No images match your current tag filters. Try removing some tags or clearing all filters."
+            variant="blue"
+            size="md"
           />
-        {/snippet}
-        {#snippet loading(mode)}
-          <HistorySkeleton count={12} viewMode={mode} />
-        {/snippet}
-        {#snippet grid(_ctx)}
-          <HistoryGridView
-            items={historyFeedState.items}
-            {selectionState}
-            on={{
-              delete: onImageDelete,
-              collectionChange: onCollectionChange,
-              tagChange: onTagChange,
-            }}
-          />
-        {/snippet}
-        {#snippet list(_ctx)}
-          <HistoryListView
-            items={historyFeedState.items}
-            {selectionState}
-            on={{
-              delete: onImageDelete,
-              collectionChange: onCollectionChange,
-              tagChange: onTagChange,
-            }}
-          />
-        {/snippet}
-        {#snippet table({ table: historyTable, feed })}
-          <DataTable
-            table={historyTable!}
-            isLoading={feed.isLoading}
-            onRowClick={(item) => selectionState.select(item.id)}
-          />
-        {/snippet}
-        {#snippet empty()}
-          {#if historyFeedState.hasActiveFilter}
-            <EmptyState
-              icon="heroicons:funnel"
-              title="No matching images"
-              description="No images match your current tag filters. Try removing some tags or clearing all filters."
-              variant="blue"
-              size="md"
-            />
-          {:else}
-            <EmptyState
-              icon="ph:clock-clockwise-duotone"
-              title="No history yet"
-              description="Your upload history will appear here. Start uploading images to see your files and manage them easily."
-              variant="purple"
-              size="md"
-            >
-              {#snippet action()}
-                <Button
-                  variant="soft-violet"
-                  size="md"
-                  rounded="full"
-                  href="/upload"
-                >
-                  <Icon icon="ph:upload-simple" class="h-4 w-4" />
-                  Upload Images
-                </Button>
-              {/snippet}
-            </EmptyState>
-          {/if}
-        {/snippet}
-        {#snippet more()}
-          <LoadMoreButton
-            class="mt-8"
-            visible={historyFeedState.hasMore}
-            loading={historyFeedState.isLoading}
-            onclick={() =>
-              historyFeedState.nextPage({
-                debounce: 300,
-              })}
-            variant="modern"
-            rounded="full"
+        {:else}
+          <EmptyState
+            icon="ph:clock-clockwise-duotone"
+            title="No history yet"
+            description="Your upload history will appear here. Start uploading images to see your files and manage them easily."
+            variant="purple"
+            size="md"
           >
-            {#snippet text()}
-              <span>View More</span>
+            {#snippet action()}
+              <Button
+                variant="soft-violet"
+                size="md"
+                rounded="full"
+                href="/upload"
+              >
+                <Icon icon="ph:upload-simple" class="h-4 w-4" />
+                Upload Images
+              </Button>
             {/snippet}
-          </LoadMoreButton>
-        {/snippet}
-      </ViewModeLayout>
-    {/key}
+          </EmptyState>
+        {/if}
+      {/snippet}
+      {#snippet more()}
+        <LoadMoreButton
+          class="mt-8"
+          visible={historyFeedState.hasMore}
+          loading={historyFeedState.isLoading}
+          onclick={() =>
+            historyFeedState.nextPage({
+              debounce: 300,
+            })}
+          variant="modern"
+          rounded="full"
+        >
+          {#snippet text()}
+            <span>View More</span>
+          {/snippet}
+        </LoadMoreButton>
+      {/snippet}
+    </ViewModeLayout>
   </div>
 </section>
 
