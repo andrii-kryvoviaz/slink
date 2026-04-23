@@ -1,10 +1,7 @@
 <script lang="ts">
   import { plural } from '$lib/utils/i18n';
 
-  import {
-    type SharesFeed,
-    provideSharesFeedScope,
-  } from '@slink/lib/state/SharesFeed.svelte';
+  import type { SharesFeed } from '@slink/lib/state/SharesFeed.svelte';
 
   import { publishedLinks } from './ImageSharesPanel.theme';
   import PublishedLinkItem from './PublishedLinkItem.svelte';
@@ -14,8 +11,6 @@
   }
 
   let { feed }: Props = $props();
-
-  provideSharesFeedScope(feed);
 
   const count = $derived(feed.items.length);
   const hasLoaded = $derived(feed.isDirty);
@@ -32,7 +27,10 @@
 
     <div class={theme.list()}>
       {#each feed.items as share (share.shareId)}
-        <PublishedLinkItem {share} />
+        <PublishedLinkItem
+          {share}
+          onUnpublished={(id) => feed.applyUnpublished(id)}
+        />
       {/each}
     </div>
   </div>

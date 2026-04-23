@@ -20,14 +20,10 @@
   import type { ShareListItemResponse } from '@slink/api/Response/Share/ShareListItemResponse';
 
   import { skeleton } from '@slink/lib/actions/skeleton';
-  import {
-    provideSharesFeedScope,
-    useSharesFeed,
-  } from '@slink/lib/state/SharesFeed.svelte';
+  import { provideSharesFeed } from '@slink/lib/state/SharesFeed.svelte';
 
-  const feed = useSharesFeed();
+  const feed = provideSharesFeed();
 
-  provideSharesFeedScope(feed);
   feed.setScope({});
   feed.reset();
 

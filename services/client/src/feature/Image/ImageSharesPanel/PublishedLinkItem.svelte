@@ -13,21 +13,14 @@
 
   import type { ShareListItemResponse } from '@slink/api/Response/Share/ShareListItemResponse';
 
-  import { getSharesFeedScope } from '@slink/lib/state/SharesFeed.svelte';
-
   import { publishedLinks } from './ImageSharesPanel.theme';
 
   interface Props {
     share: ShareListItemResponse;
+    onUnpublished: (shareId: string) => void;
   }
 
-  let { share }: Props = $props();
-
-  const feed = getSharesFeedScope();
-
-  if (feed === null) {
-    throw new Error('PublishedLinkItem requires SharesFeed scope');
-  }
+  let { share, onUnpublished }: Props = $props();
 
   const registry = getShareStateRegistry();
 
@@ -58,7 +51,7 @@
     initial: toShareResponse(),
     registry,
     onUnpublished: (shareId) => {
-      feed.applyUnpublished(shareId);
+      onUnpublished(shareId);
       registry?.forget(shareId);
     },
   });

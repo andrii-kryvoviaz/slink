@@ -3101,11 +3101,7 @@ msgstr "图像设置 | Slink"
 msgid "Configure image handling and sharing preferences"
 msgstr "配置图片处理与分享偏好"
 
-#~ msgid "You can easily share your images with others using the direct link provided for each uploaded image."
-#~ msgstr "复制图片直链即可轻松分享给他人。"
 
-#~ msgid "<0/> Current Sharing Options"
-#~ msgstr "<0/> 当前分享方式"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Direct link sharing with anyone"
@@ -3115,27 +3111,15 @@ msgstr "<0/> 可向任意对象分享直链"
 msgid "<0/> Public gallery visibility (optional)"
 msgstr "<0/> 可选公开画廊展示"
 
-#~ msgid "<0/> Link accessible to anyone who has it"
-#~ msgstr "<0/> 任何拿到链接的人都可访问"
 
-#~ msgid "Want More Control?"
-#~ msgstr "想要更多控制权？"
 
-#~ msgid "I'm working on advanced sharing features that will give you more control over your image sharing:"
-#~ msgstr "我正在开发更强大的分享功能，让你更灵活地管理图片分享："
 
-#~ msgid "<0/> Expiration dates for shared links"
-#~ msgstr "<0/> 分享链接过期时间"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Password protection"
 msgstr "<0/> 密码保护"
 
-#~ msgid "<0/> Private group sharing"
-#~ msgstr "<0/> 私密群组分享"
 
-#~ msgid "<0/> Support this feature request <1/>"
-#~ msgstr "<0/> 支持该功能需求 <1/>"
 
 #: src/routes/help/faq/+page.svelte
 msgid "I appreciate your help in making Slink better! If you've encountered a bug or have suggestions for improvement, here's how you can help:"
@@ -4487,9 +4471,6 @@ msgstr "发布"
 msgid "SharesFeed"
 msgstr "SharesFeed"
 
-#: src/lib/state/SharesFeed.svelte.ts
-msgid "SharesFeedScope"
-msgstr "SharesFeedScope"
 
 #: src/feature/Image/ImageSharesPanel/PublishedLinkItem.svelte
 #: src/feature/Image/ImageSharesPanel/PublishedLinkItem.svelte

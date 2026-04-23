@@ -1,5 +1,5 @@
 import { ApiClient } from '@slink/api';
-import { getContext, setContext } from 'svelte';
+import { getContext, hasContext, setContext } from 'svelte';
 
 import type {
   ShareExpiryFilter,
@@ -16,9 +16,10 @@ import type {
   PaginatedResponse,
   SearchParams,
 } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
-import { useState } from '@slink/lib/state/core/ContextAwareState';
 
 import { debounce } from '@slink/utils/time/debounce';
+
+const SHARES_FEED_CONTEXT = Symbol('SharesFeed');
 
 export interface SharesFeedScope {
   shareableId?: string;
@@ -178,21 +179,17 @@ export class SharesFeed extends AbstractPaginatedFeed<ShareListItemResponse> {
   }
 }
 
-const SHARES_FEED = Symbol('SharesFeed');
-
-const sharesFeed = new SharesFeed();
-
-export const useSharesFeed = (): SharesFeed => {
-  return useState<SharesFeed>(SHARES_FEED, sharesFeed);
-};
-
-const SHARES_FEED_SCOPE = Symbol('SharesFeedScope');
-
-export const provideSharesFeedScope = (feed: SharesFeed): SharesFeed => {
-  setContext(SHARES_FEED_SCOPE, feed);
+export function provideSharesFeed(): SharesFeed {
+  const feed = new SharesFeed();
+  setContext(SHARES_FEED_CONTEXT, feed);
   return feed;
-};
+}
 
-export const getSharesFeedScope = (): SharesFeed | null => {
-  return getContext<SharesFeed | null>(SHARES_FEED_SCOPE) ?? null;
-};
+export function getSharesFeed(): SharesFeed {
+  if (!hasContext(SHARES_FEED_CONTEXT)) {
+    throw new Error(
+      'SharesFeed is not available in context. Call provideSharesFeed() in an ancestor component.',
+    );
+  }
+  return getContext<SharesFeed>(SHARES_FEED_CONTEXT);
+}

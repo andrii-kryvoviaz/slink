@@ -10,7 +10,7 @@
 
   import type { ShareListItemResponse } from '@slink/api/Response/Share/ShareListItemResponse';
 
-  import { getSharesFeedScope } from '@slink/lib/state/SharesFeed.svelte';
+  import { getSharesFeed } from '@slink/lib/state/SharesFeed.svelte';
 
   interface Props {
     share: ShareListItemResponse;
@@ -18,11 +18,7 @@
 
   let { share }: Props = $props();
 
-  const feed = getSharesFeedScope();
-
-  if (feed === null) {
-    throw new Error('SharesDataTable cells require SharesFeed scope');
-  }
+  const feed = getSharesFeed();
 
   const shareState = createShare({
     fetchShare: () => Promise.resolve(toShareResponse()),

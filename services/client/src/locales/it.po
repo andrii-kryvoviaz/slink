@@ -3101,11 +3101,7 @@ msgstr "Impostazioni immagini | Slink"
 msgid "Configure image handling and sharing preferences"
 msgstr "Configura le preferenze di gestione e condivisione delle immagini"
 
-#~ msgid "You can easily share your images with others using the direct link provided for each uploaded image."
-#~ msgstr "Puoi condividere facilmente le tue immagini con altri utilizzando il link diretto fornito per ogni immagine caricata."
 
-#~ msgid "<0/> Current Sharing Options"
-#~ msgstr "<0/> Opzioni di condivisione attuali"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Direct link sharing with anyone"
@@ -3115,27 +3111,15 @@ msgstr "<0/> Condivisione tramite link diretto con chiunque"
 msgid "<0/> Public gallery visibility (optional)"
 msgstr "<0/> Visibilità nella galleria pubblica (facoltativa)"
 
-#~ msgid "<0/> Link accessible to anyone who has it"
-#~ msgstr "<0/> Link accessibile a chiunque lo possieda"
 
-#~ msgid "Want More Control?"
-#~ msgstr "Vuoi più controllo?"
 
-#~ msgid "I'm working on advanced sharing features that will give you more control over your image sharing:"
-#~ msgstr "Sto lavorando su funzionalità di condivisione avanzate che ti daranno più controllo sulla condivisione delle tue immagini:"
 
-#~ msgid "<0/> Expiration dates for shared links"
-#~ msgstr "<0/> Date di scadenza per i link condivisi"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Password protection"
 msgstr "<0/> Protezione con password"
 
-#~ msgid "<0/> Private group sharing"
-#~ msgstr "<0/> Condivisione con gruppi privati"
 
-#~ msgid "<0/> Support this feature request <1/>"
-#~ msgstr "<0/> Supporta questa richiesta di funzionalità <1/>"
 
 #: src/routes/help/faq/+page.svelte
 msgid "I appreciate your help in making Slink better! If you've encountered a bug or have suggestions for improvement, here's how you can help:"
@@ -4491,9 +4475,6 @@ msgstr "Pubblicazioni"
 msgid "SharesFeed"
 msgstr "SharesFeed"
 
-#: src/lib/state/SharesFeed.svelte.ts
-msgid "SharesFeedScope"
-msgstr "SharesFeedScope"
 
 #: src/feature/Image/ImageSharesPanel/PublishedLinkItem.svelte
 #: src/feature/Image/ImageSharesPanel/PublishedLinkItem.svelte

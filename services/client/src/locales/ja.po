@@ -3101,11 +3101,7 @@ msgstr "画像設定 | Slink"
 msgid "Configure image handling and sharing preferences"
 msgstr "画像の処理と共有設定を構成"
 
-#~ msgid "You can easily share your images with others using the direct link provided for each uploaded image."
-#~ msgstr "アップロードした各画像に提供される直接リンクを使って、簡単に画像を共有できます。"
 
-#~ msgid "<0/> Current Sharing Options"
-#~ msgstr "<0/> 現在の共有オプション"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Direct link sharing with anyone"
@@ -3115,27 +3111,15 @@ msgstr "<0/> 直接リンクで誰とでも共有"
 msgid "<0/> Public gallery visibility (optional)"
 msgstr "<0/> パブリックギャラリーでの表示（任意）"
 
-#~ msgid "<0/> Link accessible to anyone who has it"
-#~ msgstr "<0/> リンクを持つ人なら誰でもアクセス可能"
 
-#~ msgid "Want More Control?"
-#~ msgstr "もっと細かく管理したいですか？"
 
-#~ msgid "I'm working on advanced sharing features that will give you more control over your image sharing:"
-#~ msgstr "画像共有をより細かく管理できる高度な共有機能を開発中です："
 
-#~ msgid "<0/> Expiration dates for shared links"
-#~ msgstr "<0/> 共有リンクの有効期限"
 
 #: src/routes/help/faq/+page.svelte
 msgid "<0/> Password protection"
 msgstr "<0/> パスワード保護"
 
-#~ msgid "<0/> Private group sharing"
-#~ msgstr "<0/> プライベートグループ共有"
 
-#~ msgid "<0/> Support this feature request <1/>"
-#~ msgstr "<0/> この機能リクエストを応援する <1/>"
 
 #: src/routes/help/faq/+page.svelte
 msgid "I appreciate your help in making Slink better! If you've encountered a bug or have suggestions for improvement, here's how you can help:"
@@ -4491,9 +4475,6 @@ msgstr "公開"
 msgid "SharesFeed"
 msgstr "SharesFeed"
 
-#: src/lib/state/SharesFeed.svelte.ts
-msgid "SharesFeedScope"
-msgstr "SharesFeedScope"
 
 #: src/feature/Image/ImageSharesPanel/PublishedLinkItem.svelte
 #: src/feature/Image/ImageSharesPanel/PublishedLinkItem.svelte
