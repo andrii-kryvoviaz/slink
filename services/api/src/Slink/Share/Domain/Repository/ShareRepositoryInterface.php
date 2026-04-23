@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Slink\Share\Domain\Repository;
 
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Slink\Share\Domain\Enum\ShareableType;
+use Slink\Share\Domain\Filter\ShareListFilter;
 use Slink\Share\Domain\ValueObject\TargetPath;
 use Slink\Share\Infrastructure\ReadModel\View\ShareView;
 
@@ -24,6 +26,13 @@ interface ShareRepositoryInterface {
   /** @return ShareView[] */
   public function findAllByShareable(string $shareableId, ShareableType $shareableType): array;
 
-  /** @return ShareView[] */
-  public function findAllUnpublished(): array;
+  /** @return iterable<ShareView> */
+  public function findAllUnpublished(): iterable;
+
+  /**
+   * @return Paginator<ShareView>
+   */
+  public function getShareList(ShareListFilter $filter): Paginator;
+
+  public function countShareList(ShareListFilter $filter): int;
 }

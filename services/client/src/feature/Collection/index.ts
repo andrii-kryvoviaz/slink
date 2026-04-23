@@ -17,4 +17,3 @@ export { default as CreateCollectionModal } from './CreateCollectionModal.svelte
 export { default as ImageCollectionList } from './ImageCollectionList/ImageCollectionList.svelte';
 export { default as ImageCollectionManager } from './ImageCollectionManager/ImageCollectionManager.svelte';
 export { default as RemoveFromCollectionPopover } from './RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte';
-export { default as Popover } from './Share/Popover.svelte';

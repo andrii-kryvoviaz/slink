@@ -95,25 +95,25 @@
     },
   });
 
-  const getDisplayValue = (): string => {
+  const selectedItem = $derived.by<SelectItem | undefined>(() => {
     if (type === 'single') {
-      const selectedItem = items.find((item) => item.value === value);
-      return selectedItem?.label || placeholder;
-    } else {
-      const selectedItems = items.filter(
-        (item) =>
-          Array.isArray(inner.value) && inner.value.includes(item.value),
-      );
-
-      if (selectedItems.length === 0) {
-        return placeholder;
-      } else if (selectedItems.length === 1) {
-        return selectedItems[0].label;
-      } else {
-        return `${selectedItems.length} items selected`;
-      }
+      return items.find((item) => item.value === value);
     }
-  };
+    if (Array.isArray(inner.value) && inner.value.length === 1) {
+      return items.find((item) => item.value === inner.value[0]);
+    }
+    return undefined;
+  });
+
+  const selectedCount = $derived(
+    type === 'single' ? (value ? 1 : 0) : (inner.value as string[]).length,
+  );
+
+  const displayValue = $derived.by<string>(() => {
+    if (selectedCount === 0) return placeholder;
+    if (selectedItem) return selectedItem.label;
+    return `${selectedCount} items selected`;
+  });
 
   const handleSingleValueChange = (newValue: string) => {
     value = newValue;
@@ -140,8 +140,14 @@
     {:else}
       <Trigger class={cn('justify-between', className)} {size}>
         <div class="flex items-center gap-2 flex-1 min-w-0">
+          {#if selectedItem?.icon}
+            <Icon
+              icon={selectedItem.icon}
+              class="w-4 h-4 shrink-0 text-muted-foreground"
+            />
+          {/if}
           <span class={cn('truncate', !value ? 'text-muted-foreground' : '')}>
-            {getDisplayValue()}
+            {displayValue}
           </span>
         </div>
       </Trigger>
@@ -183,17 +189,14 @@
     {:else}
       <Trigger class={cn('justify-between', className)} {size}>
         <div class="flex items-center gap-2 flex-1 min-w-0">
-          {#if Array.isArray(inner.value) && inner.value.length > 0}
-            <span class="text-sm truncate">
-              {#if inner.value.length === 1}
-                {@const selectedItem = items.find(
-                  (item) => item.value === inner.value[0],
-                )}
-                {selectedItem?.label || inner.value[0]}
-              {:else}
-                {inner.value.length} items selected
-              {/if}
-            </span>
+          {#if selectedCount > 0}
+            {#if selectedItem?.icon}
+              <Icon
+                icon={selectedItem.icon}
+                class="w-4 h-4 shrink-0 text-muted-foreground"
+              />
+            {/if}
+            <span class="text-sm truncate">{displayValue}</span>
           {:else}
             <span class="text-muted-foreground text-sm truncate">
               {placeholder}

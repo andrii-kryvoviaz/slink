@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Share\Domain\Event\SharePasswordWasSet;
 use Slink\Share\Domain\Event\ShareExpirationWasSet;
+use Slink\Share\Domain\Event\ShareWasUnpublished;
 use Slink\Share\Domain\Exception\InvalidShareExpirationException;
 use Slink\Share\Domain\Share;
 use Slink\Share\Domain\ValueObject\HashedSharePassword;
@@ -244,6 +245,32 @@ final class ShareTest extends TestCase {
     $this->assertNotNull($restoredPassword);
     $this->assertSame($original->toString(), $restoredPassword->toString());
     $this->assertTrue($restoredPassword->match('hunter2'));
+  }
+
+  #[Test]
+  public function itRecordsEventWhenUnpublishingPublishedShare(): void {
+    $share = $this->createShare();
+    $share->publish();
+    $share->releaseEvents();
+
+    $share->unpublish();
+
+    $events = $share->releaseEvents();
+    $this->assertCount(1, $events);
+    $this->assertInstanceOf(ShareWasUnpublished::class, $events[0]);
+    $this->assertFalse($share->isPublished());
+  }
+
+  #[Test]
+  public function itIsIdempotentWhenUnpublishingAlreadyUnpublished(): void {
+    $share = $this->createShare();
+    $share->releaseEvents();
+
+    $share->unpublish();
+
+    $events = $share->releaseEvents();
+    $this->assertCount(0, $events);
+    $this->assertFalse($share->isPublished());
   }
 
   private function createShare(): Share {

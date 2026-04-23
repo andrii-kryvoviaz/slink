@@ -6,6 +6,7 @@
     ShareLinkCopy,
   } from '@slink/feature/Image';
   import * as Share from '@slink/feature/Share';
+  import { getShareStateRegistry } from '@slink/feature/Share';
   import { Notice } from '@slink/feature/Text';
   import { Shortcut } from '@slink/ui/components';
 
@@ -17,14 +18,22 @@
     image: ShareCardImage;
     filter?: ImageFilter;
     resizeParams?: Partial<ImageParams>;
+    onPublished?: (shareId: string) => void | Promise<void>;
   }
 
-  let { image, filter = 'none', resizeParams = {} }: Props = $props();
+  let {
+    image,
+    filter = 'none',
+    resizeParams = {},
+    onPublished,
+  }: Props = $props();
 
   const state = new ShareCardState({
     getImage: () => image,
     getFilter: () => filter,
     getResizeParams: () => resizeParams,
+    onPublished: (shareId) => onPublished?.(shareId),
+    registry: getShareStateRegistry(),
   });
 </script>
 

@@ -4,8 +4,9 @@
   import type { Snippet } from 'svelte';
 
   import { className } from '$lib/utils/ui/className';
+  import type { HTMLAttributes } from 'svelte/elements';
 
-  interface Props extends BadgeProps {
+  interface Props extends BadgeProps, HTMLAttributes<HTMLSpanElement> {
     class?: string;
     children?: Snippet;
   }
@@ -14,15 +15,16 @@
     variant = 'default',
     size = 'md',
     outline = false,
+    class: classOverride,
     children,
-    ...props
+    ...rest
   }: Props = $props();
 
   let classes = $derived(
-    className(BadgeTheme({ variant, size, outline }), props.class),
+    className(BadgeTheme({ variant, size, outline }), classOverride),
   );
 </script>
 
-<span class={className(classes)}>
+<span class={className(classes)} {...rest}>
   {@render children?.()}
 </span>

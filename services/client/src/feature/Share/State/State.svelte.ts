@@ -1,4 +1,9 @@
-import { ShareExpirationState, SharePasswordState } from '@slink/feature/Share';
+import { ApiClient } from '@slink/api';
+import {
+  ShareExpirationState,
+  SharePasswordState,
+  type ShareStateRegistry,
+} from '@slink/feature/Share';
 
 import { bindRequestState } from '$lib/utils/store/bindRequestState.svelte';
 import { printErrorsAsToastMessage } from '$lib/utils/ui/printErrorsAsToastMessage';
@@ -10,7 +15,9 @@ import type { ShareResponse } from '@slink/api/Response';
 export interface ShareStateConfig {
   fetchShare: () => Promise<ShareResponse>;
   onEnsurePublished?: (shareId: string) => Promise<void>;
+  onUnpublished?: (shareId: string) => Promise<void> | void;
   initial?: ShareResponse | null;
+  registry?: ShareStateRegistry | null;
 }
 
 export class ShareState {
@@ -26,19 +33,15 @@ export class ShareState {
     }),
   );
 
-  private _expiration: ShareExpirationState;
-  private _password: SharePasswordState;
+  private _expiration: ShareExpirationState = $state.raw(
+    new ShareExpirationState({ getShareId: () => this._shareId }),
+  );
+  private _password: SharePasswordState = $state.raw(
+    new SharePasswordState({ getShareId: () => this._shareId }),
+  );
 
   constructor(config: ShareStateConfig) {
     this._config = config;
-
-    this._expiration = new ShareExpirationState({
-      getShareId: () => this._shareId,
-    });
-
-    this._password = new SharePasswordState({
-      getShareId: () => this._shareId,
-    });
 
     $effect(() => {
       if (this._request.data) {
@@ -63,6 +66,17 @@ export class ShareState {
     const expiresAt = response.expiresAt ? new Date(response.expiresAt) : null;
     this._shareId = response.shareId;
     this._shareUrl = routes.share.fromResponse(response);
+
+    const registry = this._config.registry;
+
+    if (registry) {
+      this._expiration = registry.expiration(response.shareId, { expiresAt });
+      this._password = registry.password(response.shareId, {
+        requiresPassword: response.requiresPassword,
+      });
+      return;
+    }
+
     this._expiration.rebindTo(response.shareId, expiresAt);
     this._password.rebindTo(response.shareId, response.requiresPassword);
   }
@@ -70,6 +84,15 @@ export class ShareState {
   get shareUrl(): string | null {
     return this._shareUrl;
   }
+
+  get shareId(): string | null {
+    return this._shareId;
+  }
+
+  clear = (): void => {
+    this._shareId = null;
+    this._shareUrl = null;
+  };
 
   get isLoading(): boolean {
     return this._request.isLoading;
@@ -114,6 +137,32 @@ export class ShareState {
     await this._config.onEnsurePublished?.(shareId);
 
     return this._shareUrl ?? undefined;
+  };
+
+  copy = async (): Promise<void> => {
+    const url = await this.ensurePublished();
+
+    if (!url) {
+      return;
+    }
+
+    await navigator.clipboard.writeText(url);
+  };
+
+  unpublish = async (): Promise<void> => {
+    const shareId = this._shareId;
+
+    if (shareId === null) {
+      return;
+    }
+
+    try {
+      await ApiClient.share.unpublish(shareId);
+      this.clear();
+      await this._config.onUnpublished?.(shareId);
+    } catch (error: unknown) {
+      printErrorsAsToastMessage(error as Error);
+    }
   };
 }
 

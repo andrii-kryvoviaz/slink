@@ -1,48 +1,26 @@
 <script lang="ts">
-  import Icon from '@iconify/svelte';
+  import { ButtonIcon } from '@slink/ui/components/button';
 
+  import ShareAttributes from '../Attributes/ShareAttributes.svelte';
   import { getShareControls } from '../State/Context';
-  import { indicators } from './Indicators.theme';
 
   const share = getShareControls();
 
-  const expiryKind = $derived.by<'expired' | 'active' | null>(() => {
-    if (share.expiration.descriptionShort === null) {
-      return null;
-    }
-
-    if (share.expiration.isExpired) {
-      return 'expired';
-    }
-
-    return 'active';
+  const expiresAt = $derived.by<string | null>(() => {
+    const date = share.expiration.date;
+    return date ? date.toISOString() : null;
   });
-
-  const wrap = indicators().wrap();
-  const expiryTheme = $derived(indicators({ kind: expiryKind ?? undefined }));
-  const protectedTheme = indicators({ kind: 'protected' });
 </script>
 
-<div class={wrap}>
-  {#if share.expiration.descriptionShort !== null && expiryKind !== null}
-    <span class={expiryTheme.chip()}>
-      <Icon icon="ph:clock" class={expiryTheme.chipIcon()} />
-      <span>
-        {#if share.expiration.descriptionShort.kind === 'expired'}
-          Expired
-        {:else if share.expiration.descriptionShort.kind === 'today'}
-          Today
-        {:else}
-          {share.expiration.descriptionShort.label}
-        {/if}
-      </span>
-    </span>
-  {/if}
-
-  {#if share.password.enabled}
-    <span class={protectedTheme.chip()} title="Protected">
-      <Icon icon="ph:lock-simple" class={protectedTheme.chipIcon()} />
-      <span>Protected</span>
-    </span>
-  {/if}
-</div>
+{#if share.isLoading}
+  <span class="inline-flex h-4 w-4 items-center justify-center text-gray-400">
+    <ButtonIcon loading />
+  </span>
+{:else}
+  <ShareAttributes
+    requiresPassword={share.password.enabled}
+    {expiresAt}
+    isExpired={share.expiration.isExpired}
+    emptyFallback={false}
+  />
+{/if}

@@ -1,6 +1,22 @@
 import { AbstractResource } from '@slink/api/AbstractResource';
+import type {
+  ShareListQuery,
+  ShareListingResponse,
+} from '@slink/api/Response/Share/ShareListItemResponse';
 
 export class ShareResource extends AbstractResource {
+  public async list(
+    params: ShareListQuery = {},
+  ): Promise<ShareListingResponse> {
+    return this.get('/shares', {
+      query: params as Record<string, unknown>,
+    });
+  }
+
+  public async unpublish(shareId: string): Promise<void> {
+    return this.put(`/share/${shareId}/unpublish`);
+  }
+
   public async setExpiration(
     shareId: string,
     expiresAt: Date | null,

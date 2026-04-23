@@ -53,6 +53,9 @@ final class CollectionRepository extends AbstractRepository implements Collectio
     }
   }
 
+  /**
+   * @return Paginator<CollectionView>
+   */
   public function getByUserId(CollectionListFilter $filter): Paginator {
     $userId = $filter->getUserId();
     $limit = $filter->getLimit();
@@ -109,5 +112,17 @@ final class CollectionRepository extends AbstractRepository implements Collectio
       ->setParameter('pattern', $baseName . ' (%)');
 
     return array_column($qb->getQuery()->getArrayResult(), 'name');
+  }
+
+  public function findByIds(array $ids): array {
+    if ($ids === []) {
+      return [];
+    }
+
+    return $this->createQueryBuilder('c')
+      ->where('c.uuid IN (:ids)')
+      ->setParameter('ids', $ids)
+      ->getQuery()
+      ->getResult();
   }
 }

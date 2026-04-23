@@ -23,14 +23,15 @@
     ViewModeToggle,
   } from '@slink/feature/Layout';
   import {
-    ActiveFilterBar,
     CreateTagDialog,
     TagFilter,
+    TagMatchModeToggle,
     TagPickerList,
   } from '@slink/feature/Tag';
   import { Subtitle, Title } from '@slink/feature/Text';
   import { Button } from '@slink/ui/components/button';
   import { DataTable, DataTableToolbar } from '@slink/ui/components/data-table';
+  import { ActiveFilterBar } from '@slink/ui/components/filter-bar';
   import { ViewModeLayout } from '@slink/ui/components/view-mode-layout';
   import { untrack } from 'svelte';
 
@@ -203,15 +204,27 @@
           variant="neon"
         />
 
-        {#if historyFeedState.hasActiveFilter}
-          <ActiveFilterBar
-            selectedTags={historyFeedState.tagFilter.selectedTags}
-            requireAllTags={historyFeedState.tagFilter.requireAllTags}
-            onClear={handleClearTagFilter}
-            onMatchModeChange={handleMatchModeChange}
-            disabled={historyFeedState.isLoading}
-          />
-        {/if}
+        <ActiveFilterBar
+          count={historyFeedState.tagFilter.selectedTags.length}
+          countLabel={['# tag', '# tags']}
+          visible={historyFeedState.hasActiveFilter}
+          onClear={handleClearTagFilter}
+          disabled={historyFeedState.isLoading}
+          label="Filtering by"
+        >
+          {#snippet extras()}
+            {#if historyFeedState.tagFilter.selectedTags.length > 1}
+              <div
+                class="w-px h-3.5 bg-slate-300 dark:bg-slate-600 hidden sm:block"
+              ></div>
+              <TagMatchModeToggle
+                requireAllTags={historyFeedState.tagFilter.requireAllTags}
+                onChange={handleMatchModeChange}
+                disabled={historyFeedState.isLoading}
+              />
+            {/if}
+          {/snippet}
+        </ActiveFilterBar>
       </div>
     </div>
 

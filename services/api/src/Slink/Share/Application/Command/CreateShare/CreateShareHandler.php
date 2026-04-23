@@ -21,44 +21,31 @@ final readonly class CreateShareHandler implements CommandHandlerInterface {
 
   public function __invoke(CreateShareCommand $command): CreateShareResult {
     $params = $command->getParams();
-
-    $existingShare = $this->shareStore->findByTargetPath($params->getTargetPath());
-    if ($existingShare !== null) {
-      $this->enhanceIfNeeded($existingShare);
-      return CreateShareResult::existing($existingShare);
-    }
-
-    $share = $this->createShare($params);
-    return CreateShareResult::created($share);
-  }
-
-  private function createShare(ShareParams $params): Share {
     $shareable = $params->getShareable();
     $context = $this->shareService->buildContext($shareable);
 
-    $share = Share::create(
-      ID::generate(),
-      $shareable,
-      $params->getTargetPath(),
-      DateTime::now(),
-      $context,
-    );
+    $share = $this->shareStore->findByTargetPath($params->getTargetPath());
 
-    $this->shareStore->store($share);
+    if ($share === null) {
+      $share = Share::create(
+        ID::generate(),
+        $shareable,
+        $params->getTargetPath(),
+        DateTime::now(),
+        $context,
+      );
 
-    return $share;
-  }
-
-  private function enhanceIfNeeded(Share $share): void {
-    $context = $this->shareService->buildContext($share->getShareable());
-    $shortUrlId = $context->getShortUrlId();
-    $shortCode = $context->getShortCode();
-
-    if ($shortUrlId === null || $shortCode === null || $share->getShortCode() !== null) {
-      return;
+      $this->shareStore->store($share);
+      return CreateShareResult::created($share);
     }
 
-    $share->addShortUrl($shortUrlId, $shortCode);
+    $share->addShortUrl($context->getShortUrlId(), $context->getShortCode());
+
+    if ($shareable->getShareableType()->autoPublishOnCreate()) {
+      $share->publish();
+    }
+
     $this->shareStore->store($share);
+    return CreateShareResult::existing($share);
   }
 }

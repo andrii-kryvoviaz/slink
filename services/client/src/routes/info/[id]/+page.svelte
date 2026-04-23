@@ -6,6 +6,7 @@
     ImageActionBar,
     ImageDescription,
     ImagePlaceholder,
+    ImageSharesPanel,
     ImageSizePicker,
     ViewCountBadge,
     VisibilityBadge,
@@ -13,9 +14,16 @@
   import { getCssFilter } from '@slink/feature/Image';
   import { LicenseCard } from '@slink/feature/Image';
   import { Card as ShareCard } from '@slink/feature/Image';
+  import {
+    ShareStateRegistry,
+    provideShareStateRegistry,
+  } from '@slink/feature/Share';
   import { ImageTagList } from '@slink/feature/Tag';
+  import { onMount } from 'svelte';
 
   import { fly } from 'svelte/transition';
+
+  import { SharesFeed } from '@slink/lib/state/SharesFeed.svelte';
 
   import { cn } from '@slink/utils/ui';
 
@@ -31,6 +39,23 @@
   const state = createImageInfoPageState({
     getData: () => data,
   });
+
+  const sharesFeed = new SharesFeed();
+
+  provideShareStateRegistry(new ShareStateRegistry());
+
+  sharesFeed.setScope({
+    shareableId: state.image.id,
+    shareableType: 'image',
+  });
+
+  onMount(() => {
+    void sharesFeed.load({ limit: 100 });
+  });
+
+  const handleSharePublished = async (): Promise<void> => {
+    await sharesFeed.reload({ limit: 100 });
+  };
 </script>
 
 <svelte:head>
@@ -153,7 +178,10 @@
         image={state.image}
         filter={state.selectedFilter}
         resizeParams={state.unsignedParams}
+        onPublished={handleSharePublished}
       />
+
+      <ImageSharesPanel feed={sharesFeed} />
     </div>
   </div>
 </main>

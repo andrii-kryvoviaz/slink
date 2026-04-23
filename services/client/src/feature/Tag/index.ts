@@ -1,5 +1,3 @@
-export { default as ActiveFilterBar } from './ActiveFilterBar/ActiveFilterBar.svelte';
-export * from './ActiveFilterBar/ActiveFilterBar.theme';
 export { default as CreateTagDialog } from './CreateTagDialog/CreateTagDialog.svelte';
 export { default as CreateTagForm } from './CreateTagForm/CreateTagForm.svelte';
 export { default as ImageTagList } from './ImageTagList/ImageTagList.svelte';
@@ -21,6 +19,8 @@ export { default as TagInput } from './TagInput/TagInput.svelte';
 export * from './TagInput/TagInput.theme';
 export { default as TagListItem } from './TagListItem/TagListItem.svelte';
 export * from './TagListItem/TagListItem.theme';
+export { default as TagMatchModeToggle } from './TagMatchModeToggle/TagMatchModeToggle.svelte';
+export * from './TagMatchModeToggle/TagMatchModeToggle.theme';
 export { default as TagMoveDialog } from './TagMoveDialog/TagMoveDialog.svelte';
 export { default as TagPicker } from './TagPicker/TagPicker.svelte';
 export { default as TagPickerList } from './TagPicker/TagPickerList.svelte';

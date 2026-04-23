@@ -8,8 +8,8 @@
   import { fly, slide } from 'svelte/transition';
 
   import { getShareControls } from '../State/Context';
+  import StatusIndicator from '../StatusIndicator/StatusIndicator.svelte';
   import type { ShareStatusKind } from '../share.theme';
-  import { statusIconName, status as statusTheme } from '../share.theme';
   import { controls } from './Popover.theme';
 
   interface Props {
@@ -62,12 +62,6 @@
   });
 
   const detail = $derived(controls.detail({ chipActive: isCustomActive }));
-  const status = $derived(
-    statusTheme({
-      kind: statusKind ?? undefined,
-      spinning: statusKind === 'saving',
-    }),
-  );
 </script>
 
 <div in:fly|local={{ x: 6, duration: 120 }} class={detail.root()}>
@@ -85,11 +79,7 @@
       <div class={detail.titleRow()}>
         <div class={detail.titleGroup()}>
           <span class={detail.title()}>Expiration</span>
-          {#if statusKind !== null}
-            <span class={status.line()} aria-live="polite" title={statusTitle}>
-              <Icon icon={statusIconName(statusKind)} class={status.icon()} />
-            </span>
-          {/if}
+          <StatusIndicator kind={statusKind} title={statusTitle} />
         </div>
         <Switch checked={expiration.enabled} onCheckedChange={handleToggle} />
       </div>
