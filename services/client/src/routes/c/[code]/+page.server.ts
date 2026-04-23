@@ -17,7 +17,7 @@ async function resolveShortCode(
   });
 
   if (response.status === 302 || response.status === 301) {
-    const location = response.headers.get('Location');
+    const location = response.headers.get(/* @wc-ignore */ 'Location');
 
     if (!location) {
       error(502);

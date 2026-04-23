@@ -30,7 +30,7 @@ async function resolveShortCode(
     error(response.status);
   }
 
-  const location = response.headers.get('Location');
+  const location = response.headers.get(/* @wc-ignore */ 'Location');
   if (!location) {
     error(502);
   }
@@ -94,7 +94,9 @@ export const load: PageServerLoad = async ({ params, fetch, request, url }) => {
   const apiUrl = env.API_URL || 'http://localhost:8080';
   const location = await resolveShortCode(params.code, apiUrl, fetch);
 
-  if (!crawlerDetect.isCrawler(request.headers.get('User-Agent'))) {
+  if (
+    !crawlerDetect.isCrawler(request.headers.get(/* @wc-ignore */ 'User-Agent'))
+  ) {
     redirect(302, resolveUrl(url.origin, location));
   }
 
