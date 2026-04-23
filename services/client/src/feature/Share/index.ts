@@ -26,5 +26,6 @@ export * from './Registry/ShareStateRegistry.svelte';
 export * from './Reroute/ShareReroute';
 export * from './State/Context';
 export * from './State/State.svelte';
+export { default as StatusIndicator } from './StatusIndicator/StatusIndicator.svelte';
 export { default as Unavailable } from './Unavailable/Unavailable.svelte';
 export * from './share.theme';
