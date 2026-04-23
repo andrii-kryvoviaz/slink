@@ -4,6 +4,8 @@
   import { plural } from '$lib/utils/i18n';
   import Icon from '@iconify/svelte';
 
+  import { activeFilterBar } from './filter-bar.theme';
+
   interface Props {
     count: number;
     label?: string;
@@ -25,20 +27,17 @@
     visible = true,
     extras,
   }: Props = $props();
+
+  const theme = activeFilterBar();
 </script>
 
 {#if visible && count > 0}
-  <div
-    class="mx-auto w-[calc(100%-1.5rem)] flex flex-wrap items-center gap-x-2 gap-y-1.5 px-3 py-2 rounded-b-lg bg-white dark:bg-gray-900/60 border border-t-0 border-gray-200/60 dark:border-white/10 shadow-sm text-sm"
-  >
-    <Icon
-      icon="heroicons:funnel-solid"
-      class="w-3.5 h-3.5 text-blue-500 dark:text-blue-400 shrink-0"
-    />
+  <div class={theme.root()}>
+    <Icon icon="heroicons:funnel-solid" class={theme.leadIcon()} />
 
-    <span class="text-slate-600 dark:text-slate-300">
-      <span class="hidden sm:inline">{label}</span>
-      <span class="font-semibold text-blue-600 dark:text-blue-400">
+    <span class={theme.summary()}>
+      <span class={theme.summaryLabel()}>{label}</span>
+      <span class={theme.summaryCount()}>
         {plural(count, countLabel)}
       </span>
     </span>
@@ -49,7 +48,7 @@
 
     <button
       type="button"
-      class="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+      class={theme.clearButton()}
       onclick={onClear}
       {disabled}
       aria-label="Clear all filters"

@@ -1,5 +1,6 @@
 import { cva } from 'class-variance-authority';
 import type { VariantProps } from 'class-variance-authority';
+import { tv } from 'tailwind-variants';
 
 export const filterShellVariants = cva(
   'w-full px-3 py-2.5 rounded-lg transition-colors duration-200',
@@ -93,6 +94,33 @@ export const filterIconVariants = cva('h-3.5 w-3.5 transition-colors', {
   },
   defaultVariants: {
     variant: 'default',
+  },
+});
+
+export const activeFilterBar = tv({
+  slots: {
+    root: [
+      'mx-auto w-[calc(100%-1.5rem)]',
+      'flex flex-wrap items-center gap-x-2 gap-y-1.5',
+      'px-3 py-2 rounded-b-lg',
+      'bg-white dark:bg-gray-900/60',
+      'border border-t-0 border-gray-200/60 dark:border-white/10',
+      'shadow-sm text-sm',
+    ],
+    leadIcon: 'w-3.5 h-3.5 text-blue-500 dark:text-blue-400 shrink-0',
+    summary: 'text-slate-600 dark:text-slate-300',
+    summaryLabel: 'hidden sm:inline',
+    summaryCount: 'font-semibold text-blue-600 dark:text-blue-400',
+    clearButton: [
+      'ml-auto inline-flex items-center gap-1',
+      'px-2 py-0.5 rounded-md',
+      'text-xs font-medium',
+      'text-slate-400 dark:text-slate-500',
+      'hover:text-red-600 dark:hover:text-red-400',
+      'hover:bg-red-50 dark:hover:bg-red-950/30',
+      'transition-all duration-200',
+      'disabled:opacity-50 disabled:cursor-not-allowed',
+    ],
   },
 });
 
