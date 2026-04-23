@@ -16,11 +16,15 @@
 
   import type { SharesFeed } from '@slink/lib/state/SharesFeed.svelte';
 
+  import { sharesFilterBar } from './SharesFilterBar.theme';
+
   interface Props {
     feed: SharesFeed;
   }
 
   let { feed }: Props = $props();
+
+  const theme = sharesFilterBar();
 
   const expiryOptions: {
     value: ShareExpiryFilter;
@@ -58,10 +62,10 @@
   ];
 </script>
 
-<div class="relative">
+<div class={theme.root()}>
   <FilterShell variant="neon">
-    <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-3">
-      <div class="flex items-center gap-3 min-w-0 flex-1">
+    <div class={theme.shellLayout()}>
+      <div class={theme.searchGroup()}>
         <FilterIcon icon="lucide:search" variant="neon" />
 
         <input
@@ -69,16 +73,14 @@
           value={feed.filters.search.value}
           oninput={(e) => feed.applyFilters({ search: e.currentTarget.value })}
           placeholder="Search shares..."
-          class="flex-1 min-w-0 bg-transparent text-sm text-slate-700 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 border-0 outline-none focus:ring-0"
-          aria-label="Search shares..."
+          class={theme.searchInput()}
+          aria-label="Search shares"
         />
       </div>
 
-      <div
-        class="hidden h-6 w-px bg-slate-200/70 dark:bg-slate-700/70 lg:block"
-      ></div>
+      <div class={theme.divider()}></div>
 
-      <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-2">
+      <div class={theme.filterGroup()}>
         <Select
           type="single"
           value={feed.filters.expiry.value}
@@ -86,7 +88,7 @@
           onValueChange={(value) =>
             feed.applyFilters({ expiry: value as ShareExpiryFilter })}
           size="sm"
-          class="w-full sm:w-40"
+          class={theme.expirySelect()}
         />
 
         <Select
@@ -96,7 +98,7 @@
           onValueChange={(value) =>
             feed.applyFilters({ protection: value as ShareProtectionFilter })}
           size="sm"
-          class="w-full sm:w-44"
+          class={theme.protectionSelect()}
         />
 
         <Select
@@ -106,7 +108,7 @@
           onValueChange={(value) =>
             feed.applyFilters({ type: value as ShareTypeFilter })}
           size="sm"
-          class="w-full sm:w-40"
+          class={theme.typeSelect()}
         />
       </div>
     </div>
@@ -119,16 +121,10 @@
   >
     {#snippet extras()}
       {#if feed.filters.search.value.length > 0}
-        <div
-          class="w-px h-3.5 bg-slate-300 dark:bg-slate-600 hidden sm:block"
-        ></div>
-        <span
-          class="inline-flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400"
-        >
+        <div class={theme.searchChipDivider()}></div>
+        <span class={theme.searchChip()}>
           <Icon icon="lucide:search" class="w-3 h-3" />
-          <span
-            class="max-w-[160px] truncate font-medium text-slate-700 dark:text-slate-200"
-          >
+          <span class={theme.searchChipText()}>
             "{feed.filters.search.value}"
           </span>
         </span>
