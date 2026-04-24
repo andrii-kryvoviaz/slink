@@ -48,7 +48,7 @@ msgstr "最新のユーザー"
 
 #: src/feature/Analytics/LatestUsers.svelte
 msgid "Recently joined members"
-msgstr "最近参加したメンバー"
+msgstr "最近登録したユーザー"
 
 #: src/feature/Analytics/LatestUsers.svelte
 #: src/ui/components/combobox/combobox.svelte
@@ -2533,10 +2533,6 @@ msgstr "ダッシュボード | Slink"
 msgid "Dashboard"
 msgstr "ダッシュボード"
 
-#: src/routes/admin/dashboard/+page.svelte
-msgid "Overview of your application's key metrics and activity"
-msgstr "アプリケーションの主要な指標とアクティビティの概要"
-
 #: src/routes/admin/settings/+page.svelte
 msgid "Configure image uploads, processing options, and URL sharing preferences"
 msgstr "画像のアップロード、処理オプション、URL共有設定を構成"
@@ -4155,6 +4151,7 @@ msgstr "ホームへ戻る"
 msgid "Saved"
 msgstr "保存しました"
 
+#: src/feature/Share/Attributes/ShareAttributes.svelte
 #: src/feature/Share/Controls/List.svelte
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 msgid "Expired"
@@ -4283,9 +4280,7 @@ msgstr "この共有は保護されています"
 msgid "Enter the password below to unlock the shared content."
 msgstr "下のパスワードを入力して、共有されたコンテンツのロックを解除してください。"
 
-#. 0: expiresAt ?? ''
 #. 0: share.expiration.description.phrase
-#: src/feature/Share/Attributes/ShareAttributes.svelte
 #: src/feature/Share/Controls/List.svelte
 msgid "Expires {0}"
 msgstr "{0}に期限切れ"
@@ -4326,7 +4321,6 @@ msgstr "画像やコレクションからリンクを公開すると、ここに
 msgid "Try adjusting your filters or search term."
 msgstr "フィルターまたは検索語句を調整してみてください。"
 
-#: src/feature/Share/Attributes/ShareAttributes.svelte
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 msgid "Password protected"
 msgstr "パスワード保護"
@@ -4530,3 +4524,87 @@ msgstr "公開・非公開を問わず、どんな画像にも作成できる、
 #: src/routes/help/faq/+page.svelte
 msgid "* These formats are automatically converted to JPEG on upload."
 msgstr "※ これらの形式はアップロード時に自動的にJPEGへ変換されます。"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "Today"
+msgstr "今日"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "Current Week"
+msgstr "今週"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "Last Week"
+msgstr "先週"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "Last 7 Days"
+msgstr "過去7日間"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "Current Month"
+msgstr "今月"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "Last Month"
+msgstr "先月"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "Last 30 Days"
+msgstr "過去30日間"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "Current Year"
+msgstr "今年"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "All Time"
+msgstr "全期間"
+
+#: src/feature/User/UserStatus/userStatus.language.ts
+msgid "Active"
+msgstr "アクティブ"
+
+#: src/feature/User/UserStatus/userStatus.language.ts
+msgid "Inactive"
+msgstr "非アクティブ"
+
+#: src/feature/User/UserStatus/userStatus.language.ts
+msgid "Suspended"
+msgstr "停止中"
+
+#: src/feature/User/UserStatus/userStatus.language.ts
+msgid "Deleted"
+msgstr "削除済み"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "Total"
+msgstr "合計"
+
+#: src/feature/Analytics/UserAnalytics.svelte
+msgid "# User"
+msgid_plural "# Users"
+msgstr[0] "#人のユーザー"
+msgstr[1] "#人のユーザー"
+
+#: src/feature/User/UserStatus/userStatus.language.ts
+msgid "Banned"
+msgstr "BAN"
+
+#: src/routes/admin/dashboard/+page.svelte
+msgid "Overview of key metrics and activity"
+msgstr "主要指標とアクティビティの概要"
+
+#: src/feature/Share/Attributes/ShareAttributes.svelte
+msgid "Password required to open this link"
+msgstr "このリンクを開くにはパスワードが必要です"
+
+#. 0: expiresAtFormatted
+#: src/feature/Share/Attributes/ShareAttributes.svelte
+msgid "Expired on {0}"
+msgstr "{0}に期限切れ"
+
+#. 0: expiresAtFormatted
+#: src/feature/Share/Attributes/ShareAttributes.svelte
+msgid "Expires on {0}"
+msgstr "{0}に有効期限切れ"

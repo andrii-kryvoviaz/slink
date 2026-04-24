@@ -24,6 +24,7 @@ export { default as UserGridView } from './UserGridView/UserGridView.svelte';
 export { default as UserRoleBadge } from './UserRoleBadge/UserRoleBadge.svelte';
 export { default as UserRoleCell } from './UserRoleCell/UserRoleCell.svelte';
 export { default as UserStatus } from './UserStatus/UserStatus.svelte';
+export * from './UserStatus/userStatus.language';
 export { default as UserStatusCell } from './UserStatusCell/UserStatusCell.svelte';
 export { default as UserUsernameCell } from './UserUsernameCell/UserUsernameCell.svelte';
 export { default as UsersSkeleton } from './UsersSkeleton/UsersSkeleton.svelte';

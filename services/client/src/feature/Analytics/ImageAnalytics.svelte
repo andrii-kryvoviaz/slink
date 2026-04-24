@@ -12,6 +12,8 @@
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { ImageAnalyticsResponse } from '@slink/api/Response';
 
+  import { getIntervalLabel } from './analytics.language';
+
   const {
     run,
     data: response,
@@ -85,7 +87,7 @@
           size="sm"
           items={Object.keys(availableIntervals).map((value) => ({
             value,
-            label: availableIntervals?.[value] ?? 'N/A',
+            label: getIntervalLabel(value),
           }))}
           bind:value={interval}
         />

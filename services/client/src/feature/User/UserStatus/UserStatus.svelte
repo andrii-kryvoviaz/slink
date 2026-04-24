@@ -3,6 +3,8 @@
 
   import { UserStatus } from '$lib/auth/Type/User';
 
+  import { getUserStatusLabel } from './userStatus.language';
+
   interface Props extends Omit<BadgeProps, 'variant'> {
     status?: UserStatus;
   }
@@ -26,6 +28,6 @@
 
 {#if status}
   <Badge outline {variant} {...props}>
-    <span class="capitalize">{status}</span>
+    <span>{getUserStatusLabel(status)}</span>
   </Badge>
 {/if}

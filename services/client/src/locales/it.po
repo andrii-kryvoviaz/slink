@@ -48,7 +48,7 @@ msgstr "Ultimi utenti"
 
 #: src/feature/Analytics/LatestUsers.svelte
 msgid "Recently joined members"
-msgstr "Membri iscritti di recente"
+msgstr "Utenti registrati di recente"
 
 #: src/feature/Analytics/LatestUsers.svelte
 #: src/ui/components/combobox/combobox.svelte
@@ -2533,10 +2533,6 @@ msgstr "Dashboard | Slink"
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: src/routes/admin/dashboard/+page.svelte
-msgid "Overview of your application's key metrics and activity"
-msgstr "Panoramica delle metriche principali e dell'attività della tua applicazione"
-
 #: src/routes/admin/settings/+page.svelte
 msgid "Configure image uploads, processing options, and URL sharing preferences"
 msgstr "Configura i caricamenti delle immagini, le opzioni di elaborazione e le preferenze di condivisione URL"
@@ -4155,6 +4151,7 @@ msgstr "Torna alla home"
 msgid "Saved"
 msgstr "Salvato"
 
+#: src/feature/Share/Attributes/ShareAttributes.svelte
 #: src/feature/Share/Controls/List.svelte
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 msgid "Expired"
@@ -4283,9 +4280,7 @@ msgstr "Questa condivisione è protetta"
 msgid "Enter the password below to unlock the shared content."
 msgstr "Inserisci la password qui sotto per sbloccare il contenuto condiviso."
 
-#. 0: expiresAt ?? ''
 #. 0: share.expiration.description.phrase
-#: src/feature/Share/Attributes/ShareAttributes.svelte
 #: src/feature/Share/Controls/List.svelte
 msgid "Expires {0}"
 msgstr "Scade {0}"
@@ -4326,7 +4321,6 @@ msgstr "Pubblica un link da un'immagine o raccolta per vederlo qui."
 msgid "Try adjusting your filters or search term."
 msgstr "Prova a regolare i filtri o il termine di ricerca."
 
-#: src/feature/Share/Attributes/ShareAttributes.svelte
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 msgid "Password protected"
 msgstr "Protetto da password"
@@ -4530,3 +4524,87 @@ msgstr "Un link separato e controllato, generato sopra qualsiasi immagine, pubbl
 #: src/routes/help/faq/+page.svelte
 msgid "* These formats are automatically converted to JPEG on upload."
 msgstr "* Questi formati vengono convertiti automaticamente in JPEG al caricamento."
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "Today"
+msgstr "Oggi"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "Current Week"
+msgstr "Settimana corrente"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "Last Week"
+msgstr "Settimana scorsa"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "Last 7 Days"
+msgstr "Ultimi 7 giorni"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "Current Month"
+msgstr "Mese corrente"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "Last Month"
+msgstr "Mese scorso"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "Last 30 Days"
+msgstr "Ultimi 30 giorni"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "Current Year"
+msgstr "Anno corrente"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "All Time"
+msgstr "Da sempre"
+
+#: src/feature/User/UserStatus/userStatus.language.ts
+msgid "Active"
+msgstr "Attivo"
+
+#: src/feature/User/UserStatus/userStatus.language.ts
+msgid "Inactive"
+msgstr "Inattivo"
+
+#: src/feature/User/UserStatus/userStatus.language.ts
+msgid "Suspended"
+msgstr "Sospeso"
+
+#: src/feature/User/UserStatus/userStatus.language.ts
+msgid "Deleted"
+msgstr "Eliminato"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "Total"
+msgstr "Totale"
+
+#: src/feature/Analytics/UserAnalytics.svelte
+msgid "# User"
+msgid_plural "# Users"
+msgstr[0] "# utente"
+msgstr[1] "# utenti"
+
+#: src/feature/User/UserStatus/userStatus.language.ts
+msgid "Banned"
+msgstr "Bannato"
+
+#: src/routes/admin/dashboard/+page.svelte
+msgid "Overview of key metrics and activity"
+msgstr "Panoramica delle metriche chiave e delle attività"
+
+#: src/feature/Share/Attributes/ShareAttributes.svelte
+msgid "Password required to open this link"
+msgstr "Password richiesta per aprire questo link"
+
+#. 0: expiresAtFormatted
+#: src/feature/Share/Attributes/ShareAttributes.svelte
+msgid "Expired on {0}"
+msgstr "Scaduto il {0}"
+
+#. 0: expiresAtFormatted
+#: src/feature/Share/Attributes/ShareAttributes.svelte
+msgid "Expires on {0}"
+msgstr "Scade il {0}"

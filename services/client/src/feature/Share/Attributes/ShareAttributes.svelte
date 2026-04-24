@@ -1,9 +1,16 @@
 <script lang="ts">
   import { Badge } from '@slink/feature/Text';
+  import { Tooltip } from '@slink/ui/components/tooltip';
 
   import Icon from '@iconify/svelte';
 
-  import { daysUntil, narrowFromDays } from '@slink/lib/utils/date.svelte';
+  import {
+    daysUntil,
+    formatDate,
+    getLocale,
+    narrowFromDays,
+  } from '@slink/lib/utils/date.svelte';
+  import { localize } from '@slink/lib/utils/i18n';
 
   type BadgeVariant = 'blue' | 'amber' | 'red';
 
@@ -25,7 +32,7 @@
 
   const expiryLabel = $derived.by<string | null>(() => {
     if (expiryDays === null) return null;
-    if (isExpired) return 'expired';
+    if (isExpired) return localize('Expired');
     return narrowFromDays(expiryDays);
   });
 
@@ -35,32 +42,62 @@
     return 'blue';
   });
 
+  const expiresAtFormatted = $derived(
+    expiresAt
+      ? new Intl.DateTimeFormat(getLocale(), { dateStyle: 'long' }).format(
+          new Date(expiresAt),
+        )
+      : '',
+  );
+
+  const expiryRelative = $derived(expiresAt ? formatDate(expiresAt) : '');
+
   const hasAny = $derived(requiresPassword || expiryLabel !== null);
 </script>
 
 <div class="flex items-center gap-1.5">
   {#if requiresPassword}
-    <Badge
-      variant="indigo"
-      size="xs"
-      class="gap-1 leading-none"
-      title="Password protected"
-    >
-      <Icon icon="ph:lock-simple" class="h-3 w-3" />
-      <span>Protected</span>
-    </Badge>
+    <Tooltip side="top" size="sm">
+      {#snippet trigger()}
+        <Badge variant="indigo" size="xs" class="gap-1 leading-none">
+          <Icon icon="ph:lock-simple" class="h-3 w-3" />
+          <span>Protected</span>
+        </Badge>
+      {/snippet}
+      <div class="flex items-start gap-2">
+        <Icon
+          icon="ph:lock-simple"
+          class="h-3.5 w-3.5 mt-0.5 shrink-0 text-indigo-400"
+        />
+        <span>Password required to open this link</span>
+      </div>
+    </Tooltip>
   {/if}
 
   {#if expiryLabel}
-    <Badge
-      variant={expiryVariant}
-      size="xs"
-      class="gap-1 leading-none"
-      title={`Expires ${expiresAt ?? ''}`}
-    >
-      <Icon icon="ph:clock" class="h-3 w-3" />
-      <span>{expiryLabel}</span>
-    </Badge>
+    <Tooltip side="top" size="sm">
+      {#snippet trigger()}
+        <Badge variant={expiryVariant} size="xs" class="gap-1 leading-none">
+          <Icon icon="ph:clock" class="h-3 w-3" />
+          <span>{expiryLabel}</span>
+        </Badge>
+      {/snippet}
+      <div class="flex items-start gap-2">
+        <Icon icon="ph:clock" class="h-3.5 w-3.5 mt-0.5 shrink-0 opacity-70" />
+        <div class="flex flex-col gap-0.5">
+          {#if isExpired}
+            <span class="whitespace-nowrap"
+              >Expired on {expiresAtFormatted}</span
+            >
+          {:else}
+            <span class="whitespace-nowrap"
+              >Expires on {expiresAtFormatted}</span
+            >
+          {/if}
+          <span class="text-[11px] opacity-70">{expiryRelative}</span>
+        </div>
+      </div>
+    </Tooltip>
   {/if}
 
   {#if !hasAny && emptyFallback}

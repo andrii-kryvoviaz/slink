@@ -48,7 +48,7 @@ msgstr "最新用户"
 
 #: src/feature/Analytics/LatestUsers.svelte
 msgid "Recently joined members"
-msgstr "最近加入的成员"
+msgstr "最近注册的用户"
 
 #: src/feature/Analytics/LatestUsers.svelte
 #: src/ui/components/combobox/combobox.svelte
@@ -2533,10 +2533,6 @@ msgstr "数据看板 | Slink"
 msgid "Dashboard"
 msgstr "数据看板"
 
-#: src/routes/admin/dashboard/+page.svelte
-msgid "Overview of your application's key metrics and activity"
-msgstr "应用关键指标与活动概览"
-
 #: src/routes/admin/settings/+page.svelte
 msgid "Configure image uploads, processing options, and URL sharing preferences"
 msgstr "配置图片上传、处理选项与分享链接偏好"
@@ -4152,6 +4148,7 @@ msgstr "返回首页"
 msgid "Saved"
 msgstr "已保存"
 
+#: src/feature/Share/Attributes/ShareAttributes.svelte
 #: src/feature/Share/Controls/List.svelte
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 msgid "Expired"
@@ -4280,9 +4277,7 @@ msgstr "此分享受保护"
 msgid "Enter the password below to unlock the shared content."
 msgstr "请在下方输入密码以解锁分享的内容。"
 
-#. 0: expiresAt ?? ''
 #. 0: share.expiration.description.phrase
-#: src/feature/Share/Attributes/ShareAttributes.svelte
 #: src/feature/Share/Controls/List.svelte
 msgid "Expires {0}"
 msgstr "{0}过期"
@@ -4322,7 +4317,6 @@ msgstr "从任意图像或收藏发布链接以在此处查看。"
 msgid "Try adjusting your filters or search term."
 msgstr "请尝试调整筛选条件或搜索词。"
 
-#: src/feature/Share/Attributes/ShareAttributes.svelte
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 msgid "Password protected"
 msgstr "密码保护"
@@ -4525,3 +4519,87 @@ msgstr "在任何图片（公开或私密）之上生成的独立、可控链接
 #: src/routes/help/faq/+page.svelte
 msgid "* These formats are automatically converted to JPEG on upload."
 msgstr "* 这些格式会在上传时自动转换为 JPEG。"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "Today"
+msgstr "今天"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "Current Week"
+msgstr "本周"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "Last Week"
+msgstr "上周"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "Last 7 Days"
+msgstr "过去 7 天"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "Current Month"
+msgstr "本月"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "Last Month"
+msgstr "上月"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "Last 30 Days"
+msgstr "过去 30 天"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "Current Year"
+msgstr "本年"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "All Time"
+msgstr "全部时间"
+
+#: src/feature/User/UserStatus/userStatus.language.ts
+msgid "Active"
+msgstr "活跃"
+
+#: src/feature/User/UserStatus/userStatus.language.ts
+msgid "Inactive"
+msgstr "不活跃"
+
+#: src/feature/User/UserStatus/userStatus.language.ts
+msgid "Suspended"
+msgstr "已暂停"
+
+#: src/feature/User/UserStatus/userStatus.language.ts
+msgid "Deleted"
+msgstr "已删除"
+
+#: src/feature/Analytics/analytics.language.ts
+msgid "Total"
+msgstr "合计"
+
+#: src/feature/Analytics/UserAnalytics.svelte
+msgid "# User"
+msgid_plural "# Users"
+msgstr[0] "# 位用户"
+msgstr[1] "# 位用户"
+
+#: src/feature/User/UserStatus/userStatus.language.ts
+msgid "Banned"
+msgstr "已封禁"
+
+#: src/routes/admin/dashboard/+page.svelte
+msgid "Overview of key metrics and activity"
+msgstr "关键指标与活动概览"
+
+#: src/feature/Share/Attributes/ShareAttributes.svelte
+msgid "Password required to open this link"
+msgstr "打开此链接需要密码"
+
+#. 0: expiresAtFormatted
+#: src/feature/Share/Attributes/ShareAttributes.svelte
+msgid "Expired on {0}"
+msgstr "已于 {0} 过期"
+
+#. 0: expiresAtFormatted
+#: src/feature/Share/Attributes/ShareAttributes.svelte
+msgid "Expires on {0}"
+msgstr "有效期至 {0}"

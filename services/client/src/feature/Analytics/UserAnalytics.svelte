@@ -5,8 +5,12 @@
   import { Chart, type ChartOptions } from '@slink/feature/Layout';
   import { onMount } from 'svelte';
 
+  import { plural } from '$lib/utils/i18n';
+
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { UserAnalyticsData } from '@slink/api/Response';
+
+  import { getTotalLabel, getUserStatusLabel } from './analytics.language';
 
   const {
     run,
@@ -21,8 +25,9 @@
 
   let options: ChartOptions = $state({
     labelFormatter: function (value) {
-      return `${value} Users`;
+      return plural(Number(value), ['# User', '# Users']);
     },
+    totalLabel: getTotalLabel(),
     chart: {
       type: 'radialBar',
       height: '95%',
@@ -40,9 +45,7 @@
         return;
       }
 
-      const labels = Object.keys(item).map((key) => {
-        return key.capitalizeFirstLetter();
-      });
+      const labels = Object.keys(item).map((key) => getUserStatusLabel(key));
 
       const series = Object.values(item).filter((value) => {
         return value > 0;
