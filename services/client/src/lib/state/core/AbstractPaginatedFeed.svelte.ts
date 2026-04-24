@@ -121,12 +121,8 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
     } = params;
 
     const isInitialLoad = this._config.useCursor ? !cursor : page === 1;
-    const shouldAppend = this._shouldAppendItems(isInitialLoad);
-
-    if (isInitialLoad && this._itemMap.size > 0) {
-      this._itemMap.clear();
-      this._order = [];
-    }
+    const shouldAppend =
+      !isInitialLoad && this._shouldAppendItems(isInitialLoad);
 
     const shouldTrackSkeleton = isInitialLoad && this._itemMap.size === 0;
 

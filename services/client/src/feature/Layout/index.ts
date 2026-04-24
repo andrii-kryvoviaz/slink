@@ -26,6 +26,7 @@ export { default as OverflowBadgeList } from './OverflowBadgeList/OverflowBadgeL
 export { default as CollectionSkeleton } from './Skeleton/CollectionSkeleton.svelte';
 export { default as ExploreSkeleton } from './Skeleton/ExploreSkeleton.svelte';
 export { default as HistorySkeleton } from './Skeleton/HistorySkeleton.svelte';
+export { default as ShareSkeleton } from './Skeleton/ShareSkeleton.svelte';
 export { default as Skeleton } from './Skeleton/Skeleton.svelte';
 export { default as ThemeSwitch } from './ThemeSwitch/ThemeSwitch.svelte';
 export * from './ThemeSwitch/ThemeSwitch.theme';

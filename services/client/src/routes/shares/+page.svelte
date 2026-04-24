@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { EmptyState } from '@slink/feature/Layout';
+  import { EmptyState, ShareSkeleton } from '@slink/feature/Layout';
   import {
     ActionsCell,
     AttributesCell,
@@ -111,6 +111,9 @@
       {/snippet}
       {#snippet table({ table: sharesTable, feed: tableFeed })}
         <DataTable table={sharesTable!} isLoading={tableFeed.isLoading} />
+      {/snippet}
+      {#snippet loading()}
+        <ShareSkeleton count={feed.meta.size} />
       {/snippet}
       {#snippet empty()}
         {#if feed.hasActiveFilters}
