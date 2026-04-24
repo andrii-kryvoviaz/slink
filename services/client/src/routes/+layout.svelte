@@ -97,7 +97,7 @@
       <div class="flex flex-1 flex-col min-h-0 relative">
         <ScrollArea
           bind:ref={scrollAreaRef}
-          class="flex-1 h-full"
+          class="flex-1 min-h-0"
           type="scroll"
           orientation="vertical"
           scrollbarYClasses="w-2"
