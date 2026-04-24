@@ -2,6 +2,7 @@ import { SvelteMap } from 'svelte/reactivity';
 
 import { AbstractHttpState } from '@slink/lib/state/core/AbstractHttpState.svelte';
 import type { RequestStateOptions } from '@slink/lib/state/core/AbstractHttpState.svelte';
+import { LatestCall } from '@slink/lib/state/core/LatestCall';
 import { SkeletonManager } from '@slink/lib/state/core/SkeletonConfig.svelte';
 
 import { deepMerge } from '@slink/utils/object/deepMerge';
@@ -39,6 +40,8 @@ export interface SearchParams {
 
 export type AppendMode = 'auto' | 'always' | 'never';
 
+export type FeedPhase = 'idle' | 'loading' | 'empty' | 'ready' | 'error';
+
 export interface PaginationConfig {
   defaultPageSize: number;
   useCursor: boolean;
@@ -60,6 +63,7 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
   protected _currentLoadCursor: string | null = $state(null);
   protected _config: PaginationConfig;
   protected _skeletonManager = new SkeletonManager();
+  private _latestLoad = new LatestCall();
 
   protected constructor(config: Partial<PaginationConfig> = {}) {
     super();
@@ -83,6 +87,7 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
     this._nextCursor = null;
     this._cursorHistory = [];
     this._currentLoadCursor = null;
+    this._latestLoad.invalidate();
     this._skeletonManager.reset();
     this._meta = {
       page: this._config.useCursor ? undefined : 1,
@@ -129,10 +134,14 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
       this._skeletonManager.startLoading();
     }
 
+    const isLatest = this._latestLoad.enter();
+
     try {
       await this.fetch(
         () => this.fetchData({ page, limit, cursor, ...searchParams }),
         (response) => {
+          if (!isLatest()) return;
+
           if (shouldAppend) {
             for (const item of response.data) {
               const id = this._getItemId(item);
@@ -350,12 +359,28 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
     return this._itemMap.size > 0;
   }
 
-  get isEmpty(): boolean {
-    return !this.hasItems && this.isDirty;
+  get phase(): FeedPhase {
+    if (this._skeletonManager.isVisible) return 'loading';
+    if (this.hasError && !this.hasItems) return 'error';
+    if (this.hasItems) return 'ready';
+    if (this.isDirty) return 'empty';
+    return 'idle';
   }
 
   get showSkeleton(): boolean {
-    return this._skeletonManager.isVisible;
+    return this.phase === 'loading';
+  }
+
+  get isEmpty(): boolean {
+    return this.phase === 'empty';
+  }
+
+  get isReady(): boolean {
+    return this.phase === 'ready';
+  }
+
+  get isErrored(): boolean {
+    return this.phase === 'error';
   }
 
   get isCursorBased(): boolean {

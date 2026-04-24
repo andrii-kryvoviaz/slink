@@ -68,7 +68,7 @@ export class SharesFeed extends AbstractPaginatedFeed<ShareListItemResponse> {
   );
   readonly hasActiveFilters = $derived(this.activeFilterCount > 0);
 
-  private readonly _debouncedLoad = debounce(() => this.load(), 300);
+  private readonly _debouncedSearchLoad = debounce(() => this.load(), 300);
   private _scope: SharesFeedScope = $state({});
 
   public constructor() {
@@ -122,18 +122,18 @@ export class SharesFeed extends AbstractPaginatedFeed<ShareListItemResponse> {
     const isSearchOnly = Object.keys(patch).length === 1 && 'search' in patch;
 
     if (isSearchOnly) {
-      this._debouncedLoad();
+      this._debouncedSearchLoad();
       return;
     }
 
-    this._debouncedLoad.cancel();
+    this._debouncedSearchLoad.cancel();
     this.load('search' in patch ? { searchTerm: patch.search } : undefined);
   }
 
   resetFilters(): void {
     if (!this.hasActiveFilters) return;
     Object.values(this.filters).forEach((f) => f.reset());
-    this._debouncedLoad.cancel();
+    this._debouncedSearchLoad.cancel();
     this.load({ searchTerm: '' });
   }
 

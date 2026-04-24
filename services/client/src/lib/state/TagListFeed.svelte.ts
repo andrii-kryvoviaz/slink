@@ -16,6 +16,7 @@ import type {
 import { useState } from '@slink/lib/state/core/ContextAwareState';
 import { extractErrorMessage } from '@slink/lib/utils/error/extractErrorMessage';
 import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
+import { debounce } from '@slink/lib/utils/time/debounce';
 
 import { toast } from '@slink/utils/ui/toast-sonner.svelte';
 
@@ -26,6 +27,10 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
     'updatedAt',
   );
   private _sortOrder = $state<'asc' | 'desc'>('desc');
+
+  private readonly _debouncedSearchLoad = debounce(() => {
+    this.load({ searchTerm: this._searchTerm, page: 1 });
+  }, 300);
 
   public constructor() {
     super({
@@ -90,7 +95,7 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
   set search(value: string) {
     if (this._searchTerm === value) return;
     this._searchTerm = value;
-    this.load({ searchTerm: value, page: 1 });
+    this._debouncedSearchLoad();
   }
 
   get includeChildren() {
@@ -220,6 +225,7 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
   }
 
   clear(): void {
+    this._debouncedSearchLoad.cancel();
     this._items = [];
     this._searchTerm = '';
     this._meta = {

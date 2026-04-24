@@ -9,9 +9,14 @@ import type {
   SearchParams,
 } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
 import { useState } from '@slink/lib/state/core/ContextAwareState';
+import { debounce } from '@slink/lib/utils/time/debounce';
 
 class CollectionListFeed extends AbstractPaginatedFeed<CollectionResponse> {
   private _searchTerm = $state('');
+
+  private readonly _debouncedSearchLoad = debounce(() => {
+    this.load({ searchTerm: this._searchTerm });
+  }, 300);
 
   public constructor() {
     super({
@@ -44,7 +49,7 @@ class CollectionListFeed extends AbstractPaginatedFeed<CollectionResponse> {
   set search(value: string) {
     if (this._searchTerm === value) return;
     this._searchTerm = value;
-    this.load({ searchTerm: value });
+    this._debouncedSearchLoad();
   }
 
   protected _getItemId(item: CollectionResponse): string {
