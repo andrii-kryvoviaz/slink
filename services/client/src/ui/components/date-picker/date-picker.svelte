@@ -139,6 +139,7 @@
       fixedWeeks={true}
       {disabled}
       {minValue}
+      {locale}
       onValueChange={handleValueChange}
     >
       <DatePickerPrimitive.Calendar
