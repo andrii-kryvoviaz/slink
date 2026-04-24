@@ -37,7 +37,7 @@
     side = 'bottom',
     align = 'end',
     sideOffset = 8,
-    width = 'w-72 p-2',
+    width = 'w-max min-w-72 max-w-[22rem] p-2',
     intro,
     header,
     introActive = false,
