@@ -30,9 +30,3 @@ export const apiKeyIconVariants = cva('w-5 h-5', {
 });
 
 export type ApiKeyStatus = 'expired' | 'active' | 'permanent';
-
-export const statusLabels: Record<ApiKeyStatus, string> = {
-  expired: 'Expired',
-  active: 'Active',
-  permanent: 'Permanent',
-};

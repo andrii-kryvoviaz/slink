@@ -2761,7 +2761,7 @@ msgstr "Ridimensiona"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Adjust dimensions for the shared link"
-msgstr "Modifica le dimensioni per il link condiviso"
+msgstr "Modifica le dimensioni per questo link"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Filter"
@@ -2769,7 +2769,7 @@ msgstr "Filtro"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Apply a color filter to the shared link"
-msgstr "Applica un filtro colore al link condiviso"
+msgstr "Applica un filtro colore a questo link"
 
 #: src/feature/Image/Share/Card.svelte
 msgid "Select option to copy"
@@ -4154,6 +4154,7 @@ msgstr "Salvato"
 #: src/feature/Share/Attributes/ShareAttributes.svelte
 #: src/feature/Share/Controls/List.svelte
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+#: src/feature/User/ApiKey/apiKey.language.ts
 msgid "Expired"
 msgstr "Scaduto"
 
@@ -4561,6 +4562,7 @@ msgstr "Anno corrente"
 msgid "All Time"
 msgstr "Da sempre"
 
+#: src/feature/User/ApiKey/apiKey.language.ts
 #: src/feature/User/UserStatus/userStatus.language.ts
 msgid "Active"
 msgstr "Attivo"
@@ -4608,3 +4610,18 @@ msgstr "Scaduto il {0}"
 #: src/feature/Share/Attributes/ShareAttributes.svelte
 msgid "Expires on {0}"
 msgstr "Scade il {0}"
+
+#: src/feature/User/ApiKey/apiKey.language.ts
+msgid "Permanent"
+msgstr "Permanente"
+
+#: src/ui/components/filter/filter-summary.svelte
+msgid "# filter"
+msgid_plural "# filters"
+msgstr[0] "# filtro"
+msgstr[1] "# filtri"
+#: src/routes/history/+page.svelte
+msgid "# tag"
+msgid_plural "# tags"
+msgstr[0] "# tag"
+msgstr[1] "# tag"

@@ -7,6 +7,7 @@ export { default as ApiKeyManager } from './ApiKey/ApiKeyManager.svelte';
 export * from './ApiKey/ApiKeyService';
 export { default as CreateApiKeyForm } from './ApiKey/CreateApiKeyForm.svelte';
 export { default as CreatedKeyDisplay } from './ApiKey/CreatedKeyDisplay.svelte';
+export * from './ApiKey/apiKey.language';
 export * from './ApiKey/types';
 export { default as UserActions } from './UserActions/UserActions.svelte';
 export { default as UserAvatar } from './UserAvatar/UserAvatar.svelte';

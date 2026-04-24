@@ -12,8 +12,8 @@
     type ApiKeyStatus,
     apiKeyIconContainerVariants,
     apiKeyIconVariants,
-    statusLabels,
   } from './ApiKeyCard.theme';
+  import { getApiKeyStatusLabel } from './apiKey.language';
 
   interface Props {
     apiKey: ApiKeyResponse;
@@ -45,7 +45,7 @@
           {apiKey.name}
         </h5>
         <span class="text-xs text-gray-400 dark:text-gray-500">
-          · {statusLabels[status]}
+          · {getApiKeyStatusLabel(status)}
         </span>
       </div>
       <div

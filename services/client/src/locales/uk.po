@@ -701,14 +701,14 @@ msgstr "Оновити пароль"
 #: src/routes/help/faq/+page.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Public"
-msgstr "Публічний"
+msgstr "Публічне"
 
 #: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
 #: src/feature/Upload/UploadOptions/VisibilityOption.svelte
 #: src/routes/help/faq/+page.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Private"
-msgstr "Прихований"
+msgstr "Приватне"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/routes/preferences/+page.svelte
@@ -2761,7 +2761,7 @@ msgstr "Змінити розмір"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Adjust dimensions for the shared link"
-msgstr "Налаштуйте розміри для спільного посилання"
+msgstr "Налаштуйте розміри зображення для цього посилання"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Filter"
@@ -2769,7 +2769,7 @@ msgstr "Фільтр"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Apply a color filter to the shared link"
-msgstr "Застосуйте кольоровий фільтр до спільного посилання"
+msgstr "Застосуйте кольоровий фільтр до цього посилання"
 
 #: src/feature/Image/Share/Card.svelte
 msgid "Select option to copy"
@@ -4157,8 +4157,9 @@ msgstr "Збережено"
 #: src/feature/Share/Attributes/ShareAttributes.svelte
 #: src/feature/Share/Controls/List.svelte
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+#: src/feature/User/ApiKey/apiKey.language.ts
 msgid "Expired"
-msgstr "Прострочено"
+msgstr "Недійсне"
 
 #: src/feature/Share/Controls/Popover.svelte
 msgid "Configure share"
@@ -4566,6 +4567,7 @@ msgstr "Поточний рік"
 msgid "All Time"
 msgstr "За весь час"
 
+#: src/feature/User/ApiKey/apiKey.language.ts
 #: src/feature/User/UserStatus/userStatus.language.ts
 msgid "Active"
 msgstr "Активний"
@@ -4607,9 +4609,26 @@ msgstr "Щоб відкрити це посилання, потрібен пар
 #. 0: expiresAtFormatted
 #: src/feature/Share/Attributes/ShareAttributes.svelte
 msgid "Expired on {0}"
-msgstr "Прострочено {0}"
+msgstr "Термін дії закінчився {0}"
 
 #. 0: expiresAtFormatted
 #: src/feature/Share/Attributes/ShareAttributes.svelte
 msgid "Expires on {0}"
 msgstr "Діє до {0}"
+
+#: src/feature/User/ApiKey/apiKey.language.ts
+msgid "Permanent"
+msgstr "Безстроковий"
+
+#: src/ui/components/filter/filter-summary.svelte
+msgid "# filter"
+msgid_plural "# filters"
+msgstr[0] "# фільтром"
+msgstr[1] "# фільтрами"
+msgstr[2] "# фільтрами"
+#: src/routes/history/+page.svelte
+msgid "# tag"
+msgid_plural "# tags"
+msgstr[0] "# тегом"
+msgstr[1] "# тегами"
+msgstr[2] "# тегами"

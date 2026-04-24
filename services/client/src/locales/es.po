@@ -701,14 +701,14 @@ msgstr "Actualizar contraseña"
 #: src/routes/help/faq/+page.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Public"
-msgstr "Público"
+msgstr "Pública"
 
 #: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
 #: src/feature/Upload/UploadOptions/VisibilityOption.svelte
 #: src/routes/help/faq/+page.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Private"
-msgstr "Privado"
+msgstr "Privada"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/routes/preferences/+page.svelte
@@ -2761,7 +2761,7 @@ msgstr "Redimensionar"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Adjust dimensions for the shared link"
-msgstr "Ajusta las dimensiones para el enlace compartido"
+msgstr "Ajusta las dimensiones para este enlace"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Filter"
@@ -2769,7 +2769,7 @@ msgstr "Filtro"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Apply a color filter to the shared link"
-msgstr "Aplica un filtro de color al enlace compartido"
+msgstr "Aplica un filtro de color a este enlace"
 
 #: src/feature/Image/Share/Card.svelte
 msgid "Select option to copy"
@@ -4154,6 +4154,7 @@ msgstr "Guardado"
 #: src/feature/Share/Attributes/ShareAttributes.svelte
 #: src/feature/Share/Controls/List.svelte
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+#: src/feature/User/ApiKey/apiKey.language.ts
 msgid "Expired"
 msgstr "Caducado"
 
@@ -4561,6 +4562,7 @@ msgstr "Año actual"
 msgid "All Time"
 msgstr "Todo el tiempo"
 
+#: src/feature/User/ApiKey/apiKey.language.ts
 #: src/feature/User/UserStatus/userStatus.language.ts
 msgid "Active"
 msgstr "Activo"
@@ -4608,3 +4610,18 @@ msgstr "Caducó el {0}"
 #: src/feature/Share/Attributes/ShareAttributes.svelte
 msgid "Expires on {0}"
 msgstr "Caduca el {0}"
+
+#: src/feature/User/ApiKey/apiKey.language.ts
+msgid "Permanent"
+msgstr "Permanente"
+
+#: src/ui/components/filter/filter-summary.svelte
+msgid "# filter"
+msgid_plural "# filters"
+msgstr[0] "# filtro"
+msgstr[1] "# filtros"
+#: src/routes/history/+page.svelte
+msgid "# tag"
+msgid_plural "# tags"
+msgstr[0] "# etiqueta"
+msgstr[1] "# etiquetas"

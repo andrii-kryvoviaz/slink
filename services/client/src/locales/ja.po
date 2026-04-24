@@ -2761,7 +2761,7 @@ msgstr "リサイズ"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Adjust dimensions for the shared link"
-msgstr "共有リンクのサイズを調整"
+msgstr "このリンクのサイズを調整"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Filter"
@@ -2769,7 +2769,7 @@ msgstr "フィルター"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Apply a color filter to the shared link"
-msgstr "共有リンクにカラーフィルターを適用"
+msgstr "このリンクにカラーフィルターを適用"
 
 #: src/feature/Image/Share/Card.svelte
 msgid "Select option to copy"
@@ -4154,6 +4154,7 @@ msgstr "保存しました"
 #: src/feature/Share/Attributes/ShareAttributes.svelte
 #: src/feature/Share/Controls/List.svelte
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+#: src/feature/User/ApiKey/apiKey.language.ts
 msgid "Expired"
 msgstr "期限切れ"
 
@@ -4561,6 +4562,7 @@ msgstr "今年"
 msgid "All Time"
 msgstr "全期間"
 
+#: src/feature/User/ApiKey/apiKey.language.ts
 #: src/feature/User/UserStatus/userStatus.language.ts
 msgid "Active"
 msgstr "アクティブ"
@@ -4602,9 +4604,24 @@ msgstr "このリンクを開くにはパスワードが必要です"
 #. 0: expiresAtFormatted
 #: src/feature/Share/Attributes/ShareAttributes.svelte
 msgid "Expired on {0}"
-msgstr "{0}に期限切れ"
+msgstr "有効期限切れ（{0}）"
 
 #. 0: expiresAtFormatted
 #: src/feature/Share/Attributes/ShareAttributes.svelte
 msgid "Expires on {0}"
-msgstr "{0}に有効期限切れ"
+msgstr "有効期限: {0}"
+
+#: src/feature/User/ApiKey/apiKey.language.ts
+msgid "Permanent"
+msgstr "無期限"
+
+#: src/ui/components/filter/filter-summary.svelte
+msgid "# filter"
+msgid_plural "# filters"
+msgstr[0] "# 件のフィルター"
+msgstr[1] "# 件のフィルター"
+#: src/routes/history/+page.svelte
+msgid "# tag"
+msgid_plural "# tags"
+msgstr[0] "# 件のタグ"
+msgstr[1] "# 件のタグ"

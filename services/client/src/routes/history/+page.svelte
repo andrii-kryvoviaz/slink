@@ -36,6 +36,7 @@
   import { tick, untrack } from 'svelte';
 
   import { page } from '$app/state';
+  import { plural } from '$lib/utils/i18n';
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
@@ -215,7 +216,10 @@
 
         <FilterSummary
           count={historyFeedState.tagFilter.selectedTags.length}
-          countLabel={['# tag', '# tags']}
+          countLabel={plural(historyFeedState.tagFilter.selectedTags.length, [
+            '# tag',
+            '# tags',
+          ])}
           visible={historyFeedState.hasActiveFilter}
           onClear={handleClearTagFilter}
           disabled={historyFeedState.isLoading}

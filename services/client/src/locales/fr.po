@@ -701,14 +701,14 @@ msgstr "Mettre à jour le mot de passe"
 #: src/routes/help/faq/+page.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Public"
-msgstr "Public"
+msgstr "Publique"
 
 #: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
 #: src/feature/Upload/UploadOptions/VisibilityOption.svelte
 #: src/routes/help/faq/+page.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Private"
-msgstr "Privé"
+msgstr "Privée"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/routes/preferences/+page.svelte
@@ -2761,7 +2761,7 @@ msgstr "Redimensionner"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Adjust dimensions for the shared link"
-msgstr "Ajuster les dimensions pour le lien partagé"
+msgstr "Ajuster les dimensions pour ce lien"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Filter"
@@ -2769,7 +2769,7 @@ msgstr "Filtre"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Apply a color filter to the shared link"
-msgstr "Appliquer un filtre coloré au lien partagé"
+msgstr "Appliquer un filtre coloré à ce lien"
 
 #: src/feature/Image/Share/Card.svelte
 msgid "Select option to copy"
@@ -4154,6 +4154,7 @@ msgstr "Enregistré"
 #: src/feature/Share/Attributes/ShareAttributes.svelte
 #: src/feature/Share/Controls/List.svelte
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+#: src/feature/User/ApiKey/apiKey.language.ts
 msgid "Expired"
 msgstr "Expiré"
 
@@ -4561,6 +4562,7 @@ msgstr "Année en cours"
 msgid "All Time"
 msgstr "Depuis le début"
 
+#: src/feature/User/ApiKey/apiKey.language.ts
 #: src/feature/User/UserStatus/userStatus.language.ts
 msgid "Active"
 msgstr "Actif"
@@ -4608,3 +4610,18 @@ msgstr "Expiré le {0}"
 #: src/feature/Share/Attributes/ShareAttributes.svelte
 msgid "Expires on {0}"
 msgstr "Expire le {0}"
+
+#: src/feature/User/ApiKey/apiKey.language.ts
+msgid "Permanent"
+msgstr "Permanente"
+
+#: src/ui/components/filter/filter-summary.svelte
+msgid "# filter"
+msgid_plural "# filters"
+msgstr[0] "# filtre"
+msgstr[1] "# filtres"
+#: src/routes/history/+page.svelte
+msgid "# tag"
+msgid_plural "# tags"
+msgstr[0] "# étiquette"
+msgstr[1] "# étiquettes"

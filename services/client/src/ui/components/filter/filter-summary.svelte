@@ -9,7 +9,7 @@
   interface Props {
     count: number;
     label?: string;
-    countLabel?: [string, string];
+    countLabel?: string;
     clearLabel?: string;
     onClear: () => void;
     disabled?: boolean;
@@ -20,7 +20,7 @@
   let {
     count,
     label = 'Filtering by',
-    countLabel = ['# filter', '# filters'],
+    countLabel,
     clearLabel = 'Clear',
     onClear,
     disabled = false,
@@ -29,6 +29,10 @@
   }: Props = $props();
 
   const theme = filterSummaryVariants();
+
+  const resolvedCountLabel = $derived(
+    countLabel ?? plural(count, ['# filter', '# filters']),
+  );
 </script>
 
 {#if visible && count > 0}
@@ -38,7 +42,7 @@
     <span class={theme.summary()}>
       <span class={theme.summaryLabel()}>{label}</span>
       <span class={theme.summaryCount()}>
-        {plural(count, countLabel)}
+        {resolvedCountLabel}
       </span>
     </span>
 

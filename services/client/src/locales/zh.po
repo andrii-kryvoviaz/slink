@@ -2761,7 +2761,7 @@ msgstr "尺寸调整"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Adjust dimensions for the shared link"
-msgstr "调整分享链接的尺寸"
+msgstr "调整此链接的尺寸"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Filter"
@@ -2769,7 +2769,7 @@ msgstr "滤镜"
 
 #: src/routes/info/[id]/+page.svelte
 msgid "Apply a color filter to the shared link"
-msgstr "为分享链接应用颜色滤镜"
+msgstr "为此链接应用颜色滤镜"
 
 #: src/feature/Image/Share/Card.svelte
 msgid "Select option to copy"
@@ -4151,6 +4151,7 @@ msgstr "已保存"
 #: src/feature/Share/Attributes/ShareAttributes.svelte
 #: src/feature/Share/Controls/List.svelte
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
+#: src/feature/User/ApiKey/apiKey.language.ts
 msgid "Expired"
 msgstr "已过期"
 
@@ -4556,6 +4557,7 @@ msgstr "本年"
 msgid "All Time"
 msgstr "全部时间"
 
+#: src/feature/User/ApiKey/apiKey.language.ts
 #: src/feature/User/UserStatus/userStatus.language.ts
 msgid "Active"
 msgstr "活跃"
@@ -4603,3 +4605,17 @@ msgstr "已于 {0} 过期"
 #: src/feature/Share/Attributes/ShareAttributes.svelte
 msgid "Expires on {0}"
 msgstr "有效期至 {0}"
+
+#: src/feature/User/ApiKey/apiKey.language.ts
+msgid "Permanent"
+msgstr "永久"
+
+#: src/ui/components/filter/filter-summary.svelte
+msgid "# filter"
+msgid_plural "# filters"
+msgstr[0] "# 个筛选条件"
+#: src/routes/history/+page.svelte
+msgid "# tag"
+msgid_plural "# tags"
+msgstr[0] "# 个标签"
+msgstr[1] "# 个标签"
