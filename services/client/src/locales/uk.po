@@ -389,10 +389,6 @@ msgstr "Загальний прогрес"
 msgid "Upload failed"
 msgstr "Завантаження не вдалося"
 
-#: src/feature/Tag/useTagOperations.svelte.ts
-msgid "Tag already exists"
-msgstr "Тег вже існує"
-
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to create tag"
 msgstr "Не вдалося створити тег"
@@ -3685,10 +3681,6 @@ msgid "Invalid key format"
 msgstr "Невірний формат ключа"
 
 #: src/lib/utils/i18n/messages/api.language.ts
-msgid "Tag name can only contain letters, numbers, hyphens, and underscores"
-msgstr "Назва тегу може містити лише літери, цифри, дефіси та підкреслення"
-
-#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Display name can only contain letters, numbers, underscores, hyphens, spaces, and periods."
 msgstr "Відображуване ім'я може містити лише літери, цифри, підкреслення, дефіси, пробіли та крапки."
 
@@ -4626,9 +4618,14 @@ msgid_plural "# filters"
 msgstr[0] "# фільтром"
 msgstr[1] "# фільтрами"
 msgstr[2] "# фільтрами"
+
 #: src/routes/history/+page.svelte
 msgid "# tag"
 msgid_plural "# tags"
 msgstr[0] "# тегом"
 msgstr[1] "# тегами"
 msgstr[2] "# тегами"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Tag name cannot contain a slash"
+msgstr "Назва тегу не може містити слеш"

@@ -15,6 +15,7 @@ export {
   CreateTagModalState,
   createCreateTagModalState,
 } from './CreateTagModalState.svelte';
+export { TagListState } from './TagListState.svelte';
 export { UpdateCheckState } from './UpdateCheck.svelte';
 export {
   type SelectionState,

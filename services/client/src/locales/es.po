@@ -389,10 +389,6 @@ msgstr "Progreso general"
 msgid "Upload failed"
 msgstr "La carga falló"
 
-#: src/feature/Tag/useTagOperations.svelte.ts
-msgid "Tag already exists"
-msgstr "La etiqueta ya existe"
-
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to create tag"
 msgstr "No se pudo crear la etiqueta"
@@ -3685,10 +3681,6 @@ msgid "Invalid key format"
 msgstr "Formato de clave inválido"
 
 #: src/lib/utils/i18n/messages/api.language.ts
-msgid "Tag name can only contain letters, numbers, hyphens, and underscores"
-msgstr "El nombre de la etiqueta solo puede contener letras, números, guiones y guiones bajos"
-
-#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Display name can only contain letters, numbers, underscores, hyphens, spaces, and periods."
 msgstr "El nombre para mostrar solo puede contener letras, números, guiones bajos, guiones, espacios y puntos."
 
@@ -4620,8 +4612,13 @@ msgid "# filter"
 msgid_plural "# filters"
 msgstr[0] "# filtro"
 msgstr[1] "# filtros"
+
 #: src/routes/history/+page.svelte
 msgid "# tag"
 msgid_plural "# tags"
 msgstr[0] "# etiqueta"
 msgstr[1] "# etiquetas"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Tag name cannot contain a slash"
+msgstr "El nombre de la etiqueta no puede contener una barra"

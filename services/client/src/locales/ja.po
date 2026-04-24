@@ -389,10 +389,6 @@ msgstr "全体の進捗"
 msgid "Upload failed"
 msgstr "アップロードに失敗しました"
 
-#: src/feature/Tag/useTagOperations.svelte.ts
-msgid "Tag already exists"
-msgstr "タグはすでに存在します"
-
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to create tag"
 msgstr "タグの作成に失敗しました"
@@ -3685,10 +3681,6 @@ msgid "Invalid key format"
 msgstr "無効なキー形式"
 
 #: src/lib/utils/i18n/messages/api.language.ts
-msgid "Tag name can only contain letters, numbers, hyphens, and underscores"
-msgstr "タグ名には文字、数字、ハイフン、アンダースコアのみ使用できます"
-
-#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Display name can only contain letters, numbers, underscores, hyphens, spaces, and periods."
 msgstr "表示名には文字、数字、アンダースコア、ハイフン、スペース、ピリオドのみ使用できます。"
 
@@ -4620,8 +4612,13 @@ msgid "# filter"
 msgid_plural "# filters"
 msgstr[0] "# 件のフィルター"
 msgstr[1] "# 件のフィルター"
+
 #: src/routes/history/+page.svelte
 msgid "# tag"
 msgid_plural "# tags"
 msgstr[0] "# 件のタグ"
 msgstr[1] "# 件のタグ"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Tag name cannot contain a slash"
+msgstr "タグ名にスラッシュは使えません"

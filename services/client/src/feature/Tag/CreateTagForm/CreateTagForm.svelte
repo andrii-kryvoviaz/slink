@@ -1,11 +1,12 @@
 <script lang="ts">
-  import { useTagOperations } from '@slink/feature/Tag';
   import { Combobox } from '@slink/ui/components/combobox';
   import type { ComboboxItem } from '@slink/ui/components/combobox';
   import { Modal } from '@slink/ui/components/dialog';
   import { Input } from '@slink/ui/components/input';
 
   import Icon from '@iconify/svelte';
+
+  import { TagListState } from '@slink/lib/state/TagListState.svelte';
 
   interface Props {
     isCreating: boolean;
@@ -19,10 +20,10 @@
   let name = $state('');
   let selectedParentTagId = $state('');
 
-  const { loadTags, isLoadingTags, tagsResponse } = useTagOperations();
+  const tagList = TagListState.create();
 
   const tagItems = $derived<ComboboxItem[]>(
-    ($tagsResponse?.data || []).map((tag) => ({
+    (tagList?.tags ?? []).map((tag) => ({
       value: tag.id,
       label: tag.name,
       description: tag.path,
@@ -30,7 +31,7 @@
   );
 
   const handleTagSearch = (query: string) => {
-    loadTags(query);
+    tagList?.load(query);
   };
 
   function handleSubmit(event: Event) {
@@ -88,7 +89,7 @@
           bind:value={selectedParentTagId}
           placeholder="Search for parent tag..."
           onSearch={handleTagSearch}
-          loading={$isLoadingTags}
+          loading={tagList?.isLoading ?? false}
           clearable={true}
           emptyMessage="No matching tags found."
         />

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Loader } from '@slink/feature/Layout';
-  import { TagBadge, useTagOperations } from '@slink/feature/Tag';
+  import { TagBadge } from '@slink/feature/Tag';
   import * as Command from '@slink/ui/components/command';
   import * as Filter from '@slink/ui/components/filter';
   import type { FilterVariant } from '@slink/ui/components/filter';
@@ -10,6 +10,8 @@
   import Icon from '@iconify/svelte';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
+
+  import { TagListState } from '@slink/lib/state/TagListState.svelte';
 
   import {
     getTagDisplayName,
@@ -49,11 +51,11 @@
   const hasSelectedTags = $derived(selectedTags.length > 0);
   const selectedTagIds = $derived(new Set(selectedTags.map((t) => t.id)));
 
-  const { loadTags, isLoadingTags, tagsResponse } = useTagOperations();
+  const tagList = TagListState.create();
 
-  const availableTags = $derived($tagsResponse?.data || []);
+  const availableTags = $derived(tagList?.tags ?? []);
   const shouldShowLoader = $derived(
-    $isLoadingTags && isOpen && !availableTags.length,
+    (tagList?.isLoading ?? false) && isOpen && !availableTags.length,
   );
 
   const filteredTags = $derived(
@@ -98,7 +100,7 @@
   };
 
   $effect(() => {
-    if (isOpen) loadTags(searchTerm);
+    if (isOpen) tagList?.load(searchTerm);
   });
 
   $effect(() => {
@@ -167,7 +169,7 @@
             </Filter.Item>
           {/each}
         </CommandPrimitive.Group>
-      {:else if $isLoadingTags}
+      {:else if tagList?.isLoading}
         <div class="flex items-center justify-center py-10">
           <Loader variant="minimal" size="sm" />
         </div>

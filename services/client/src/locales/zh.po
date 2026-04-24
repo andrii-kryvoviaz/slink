@@ -389,10 +389,6 @@ msgstr "总体进度"
 msgid "Upload failed"
 msgstr "上传失败"
 
-#: src/feature/Tag/useTagOperations.svelte.ts
-msgid "Tag already exists"
-msgstr "标签已存在"
-
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to create tag"
 msgstr "创建标签失败"
@@ -3685,10 +3681,6 @@ msgid "Invalid key format"
 msgstr "Key 格式无效"
 
 #: src/lib/utils/i18n/messages/api.language.ts
-msgid "Tag name can only contain letters, numbers, hyphens, and underscores"
-msgstr "标签名仅支持字母、数字、连字符和下划线"
-
-#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Display name can only contain letters, numbers, underscores, hyphens, spaces, and periods."
 msgstr "显示名称只能包含字母、数字、下划线、连字符、空格和句点。"
 
@@ -4614,8 +4606,13 @@ msgstr "永久"
 msgid "# filter"
 msgid_plural "# filters"
 msgstr[0] "# 个筛选条件"
+
 #: src/routes/history/+page.svelte
 msgid "# tag"
 msgid_plural "# tags"
 msgstr[0] "# 个标签"
 msgstr[1] "# 个标签"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Tag name cannot contain a slash"
+msgstr "标签名不能包含斜杠"

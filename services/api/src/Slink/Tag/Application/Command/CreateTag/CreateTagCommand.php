@@ -15,8 +15,9 @@ final readonly class CreateTagCommand implements CommandInterface {
     #[Assert\NotBlank]
     #[Assert\Length(min: 1, max: 50)]
     #[Assert\Regex(
-      pattern: '/^[a-zA-Z0-9_-]+$/',
-      message: 'Tag name can only contain letters, numbers, hyphens, and underscores'
+      pattern: '/\//',
+      match: false,
+      message: 'Tag name cannot contain a slash'
     )]
     private string $name,
 

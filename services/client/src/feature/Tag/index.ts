@@ -21,4 +21,3 @@ export { default as TagPicker } from './TagPicker/TagPicker.svelte';
 export { default as TagPickerList } from './TagPicker/TagPickerList.svelte';
 export { default as TagSelector } from './TagSelector/TagSelector.svelte';
 export { default as TagsSkeleton } from './TagsSkeleton/TagsSkeleton.svelte';
-export * from './useTagOperations.svelte';

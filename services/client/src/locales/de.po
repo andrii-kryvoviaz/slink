@@ -389,10 +389,6 @@ msgstr "Gesamtfortschritt"
 msgid "Upload failed"
 msgstr "Upload fehlgeschlagen"
 
-#: src/feature/Tag/useTagOperations.svelte.ts
-msgid "Tag already exists"
-msgstr "Tag existiert bereits"
-
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to create tag"
 msgstr "Tag konnte nicht erstellt werden"
@@ -3685,10 +3681,6 @@ msgid "Invalid key format"
 msgstr "Ungültiges Schlüsselformat"
 
 #: src/lib/utils/i18n/messages/api.language.ts
-msgid "Tag name can only contain letters, numbers, hyphens, and underscores"
-msgstr "Tag-Name darf nur Buchstaben, Zahlen, Bindestriche und Unterstriche enthalten"
-
-#: src/lib/utils/i18n/messages/api.language.ts
 msgid "Display name can only contain letters, numbers, underscores, hyphens, spaces, and periods."
 msgstr "Anzeigename darf nur Buchstaben, Zahlen, Unterstriche, Bindestriche, Leerzeichen und Punkte enthalten."
 
@@ -4620,8 +4612,13 @@ msgid "# filter"
 msgid_plural "# filters"
 msgstr[0] "# Filter"
 msgstr[1] "# Filter"
+
 #: src/routes/history/+page.svelte
 msgid "# tag"
 msgid_plural "# tags"
 msgstr[0] "# Tag"
 msgstr[1] "# Tags"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Tag name cannot contain a slash"
+msgstr "Tag-Name darf keinen Schrägstrich enthalten"

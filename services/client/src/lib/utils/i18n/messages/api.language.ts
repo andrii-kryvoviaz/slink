@@ -361,12 +361,8 @@ function errors(): ApiError[] {
       translate: () => localize('Invalid key format'),
     },
     {
-      match:
-        /* @wc-ignore */ 'Tag name can only contain letters, numbers, hyphens, and underscores',
-      translate: () =>
-        localize(
-          'Tag name can only contain letters, numbers, hyphens, and underscores',
-        ),
+      match: /* @wc-ignore */ 'Tag name cannot contain a slash',
+      translate: () => localize('Tag name cannot contain a slash'),
     },
     {
       match:
