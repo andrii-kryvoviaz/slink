@@ -153,7 +153,7 @@
 
         <p class="mt-4 text-xs">
           <span class="font-light"
-            >* Source images are forced to be converted to JPEG format.</span
+            >* These formats are automatically converted to JPEG on upload.</span
           >
         </p>
       {/snippet}
@@ -161,14 +161,8 @@
       {#snippet visibilityContent()}
         <div class="space-y-6">
           <p class="text-slate-700 dark:text-slate-300">
-            Slink offers a
-            <a
-              href="/explore"
-              target="_blank"
-              class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 underline underline-offset-2 font-medium transition-colors"
-            >
-              public gallery
-            </a>, where people can share their images with others.
+            Every image you upload has a visibility setting. You can toggle it
+            from the upload screen or later on the image itself.
           </p>
 
           <InfoCard variant="neutral" title="Visibility Options">
@@ -176,7 +170,7 @@
               <div class="flex items-start gap-3">
                 <div class="flex-shrink-0 mt-0.5">
                   <Icon
-                    icon="ph:eye"
+                    icon="lucide:globe"
                     class="w-5 h-5 text-emerald-600 dark:text-emerald-400"
                   />
                 </div>
@@ -188,8 +182,14 @@
                     >
                   </div>
                   <p class="text-sm text-slate-600 dark:text-slate-400">
-                    Images are shared in the public gallery and visible to all
-                    users
+                    Shown on the
+                    <a
+                      href="/explore"
+                      target="_blank"
+                      class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 underline underline-offset-2 font-medium transition-colors"
+                    >
+                      explore page
+                    </a>. Anyone with the direct link can open it.
                   </p>
                 </div>
               </div>
@@ -197,7 +197,7 @@
               <div class="flex items-start gap-3">
                 <div class="flex-shrink-0 mt-0.5">
                   <Icon
-                    icon="ph:eye-slash"
+                    icon="lucide:lock"
                     class="w-5 h-5 text-slate-500 dark:text-slate-400"
                   />
                 </div>
@@ -214,30 +214,22 @@
                     </span>
                   </div>
                   <p class="text-sm text-slate-600 dark:text-slate-400">
-                    Images are truly private and only accessible by the owner.
-                    To share a private image, use the copy button to create a
-                    shared link
+                    Hidden from the explore page. The direct link only works for
+                    you, unless you share it with a published link.
                   </p>
                 </div>
               </div>
             </div>
-          </InfoCard>
-
-          <InfoCard variant="info" icon="ph:info" title="Important Note">
-            <p>
-              Images are private by default and only accessible to the
-              authenticated owner. To share an image with others, use the copy
-              button which creates a shared link.
-            </p>
           </InfoCard>
         </div>
       {/snippet}
 
       {#snippet shareContent()}
         <div class="space-y-6">
-          <p>
-            You can easily share your images and collections with others by
-            publishing a link. Manage every published link from the
+          <p class="text-slate-700 dark:text-slate-300">
+            Sharing creates a separate link on top of your image or collection.
+            The original stays untouched, and you can revoke access at any time.
+            Manage every link from the
             <a
               href="/shares"
               class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 underline underline-offset-2 font-medium transition-colors"
@@ -247,36 +239,142 @@
             page.
           </p>
 
-          <InfoCard variant="neutral">
-            {#snippet titleSnippet()}
-              <div class="flex items-center gap-2">
-                <Icon icon="ph:lightbulb" class="w-4 h-4 text-amber-500" />
-                Sharing Options
-              </div>
-            {/snippet}
-
+          <InfoCard variant="neutral" title="What you can do">
             <ul class="space-y-2">
-              <li class="flex items-center gap-2">
-                <Icon icon="ph:link" class="w-4 h-4 text-slate-400" />
-                Direct link sharing with anyone
+              <li class="flex items-start gap-2">
+                <Icon
+                  icon="ph:paper-plane-tilt-duotone"
+                  class="w-4 h-4 text-slate-400 flex-shrink-0 mt-0.5"
+                />
+                <span>Share a single image or a whole collection</span>
               </li>
-              <li class="flex items-center gap-2">
-                <Icon icon="ph:clock" class="w-4 h-4 text-slate-400" />
-                Expiration dates for published links
+              <li class="flex items-start gap-2">
+                <Icon
+                  icon="ph:lock-simple"
+                  class="w-4 h-4 text-slate-400 flex-shrink-0 mt-0.5"
+                />
+                <span>Protect the link with a password</span>
               </li>
-              <li class="flex items-center gap-2">
-                <Icon icon="ph:lock" class="w-4 h-4 text-slate-400" />
-                Password protection
+              <li class="flex items-start gap-2">
+                <Icon
+                  icon="ph:clock"
+                  class="w-4 h-4 text-slate-400 flex-shrink-0 mt-0.5"
+                />
+                <span>Set an expiration date</span>
               </li>
-              <li class="flex items-center gap-2">
-                <Icon icon="ph:globe" class="w-4 h-4 text-slate-400" />
-                Public gallery visibility (optional)
+              <li class="flex items-start gap-2">
+                <Icon
+                  icon="lucide:globe"
+                  class="w-4 h-4 text-slate-400 flex-shrink-0 mt-0.5"
+                />
+                <span
+                  >Optionally list the share on the explore page so others can
+                  discover it</span
+                >
               </li>
-              <li class="flex items-center gap-2">
-                <Icon icon="ph:x-circle" class="w-4 h-4 text-slate-400" />
-                Unpublish at any time to revoke access
+              <li class="flex items-start gap-2">
+                <Icon
+                  icon="ph:eye-slash"
+                  class="w-4 h-4 text-slate-400 flex-shrink-0 mt-0.5"
+                />
+                <span
+                  >Unpublish at any time to revoke access, without changing the
+                  original image</span
+                >
               </li>
             </ul>
+          </InfoCard>
+
+          <InfoCard
+            variant="info"
+            icon="ph:stack-duotone"
+            title="One image, many shares"
+          >
+            <p>
+              Each time you tweak the image parameters like size, format, or
+              filters, a new share link is created. That way a single image can
+              have multiple share links, one per variation, and you can manage
+              them independently. Copying a link publishes it automatically, so
+              it's ready to send.
+            </p>
+          </InfoCard>
+
+          <InfoCard
+            variant="info"
+            icon="ph:folder-simple-duotone"
+            title="Collections are share-only"
+          >
+            <p>
+              Collections don't have a public or private setting of their own.
+              Publishing a share link is the only way to show a collection to
+              someone else.
+            </p>
+          </InfoCard>
+        </div>
+      {/snippet}
+
+      {#snippet publicVsSharedContent()}
+        <div class="space-y-6">
+          <InfoCard variant="neutral" title="Side by side">
+            <div class="space-y-3">
+              <div class="flex items-start gap-3">
+                <div class="flex-shrink-0 mt-0.5">
+                  <Icon
+                    icon="lucide:globe"
+                    class="w-5 h-5 text-emerald-600 dark:text-emerald-400"
+                  />
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span
+                      class="text-sm font-semibold text-slate-900 dark:text-slate-100"
+                      >Public image</span
+                    >
+                  </div>
+                  <p class="text-sm text-slate-600 dark:text-slate-400">
+                    Open access on the image itself. It appears on the explore
+                    page, and the direct URL works for anyone. Use it when you
+                    want the image out in the open.
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-3">
+                <div class="flex-shrink-0 mt-0.5">
+                  <Icon
+                    icon="ph:paper-plane-tilt-duotone"
+                    class="w-5 h-5 text-indigo-600 dark:text-indigo-400"
+                  />
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span
+                      class="text-sm font-semibold text-slate-900 dark:text-slate-100"
+                      >Shared link</span
+                    >
+                  </div>
+                  <p class="text-sm text-slate-600 dark:text-slate-400">
+                    A separate, controlled link generated on top of any image,
+                    public or private. Add a password, set an expiration, or
+                    revoke it at any time without affecting the image. Use it
+                    when you want to hand someone a specific link you can pull
+                    back later.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </InfoCard>
+
+          <InfoCard
+            variant="info"
+            icon="ph:info"
+            title="A private image can still be shared"
+          >
+            <p>
+              Publishing a share link for a private image lets the recipients
+              open it through that link only. The image stays hidden everywhere
+              else.
+            </p>
           </InfoCard>
         </div>
       {/snippet}
@@ -290,10 +388,7 @@
 
           <InfoCard variant="neutral">
             {#snippet titleSnippet()}
-              <div class="flex items-center gap-2">
-                <Icon icon="ph:bug" class="w-4 h-4 text-red-500" />
-                Before Reporting
-              </div>
+              <div class="flex items-center gap-2">Before Reporting</div>
             {/snippet}
 
             <ul class="space-y-2">
@@ -362,13 +457,18 @@
       )}
       {@render faqItem(
         'image-visibility',
-        'What is the visibility of my images?',
+        'Who can see my images?',
         visibilityContent,
       )}
       {@render faqItem(
         'share-feature',
-        'Can I share my images with others?',
+        'How do I share an image or collection?',
         shareContent,
+      )}
+      {@render faqItem(
+        'public-vs-shared',
+        "What's the difference between making an image public and sharing it?",
+        publicVsSharedContent,
       )}
       {@render faqItem(
         'found-an-issue',

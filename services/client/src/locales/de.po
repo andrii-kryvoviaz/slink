@@ -2990,24 +2990,12 @@ msgid "Configure storage providers and cache management"
 msgstr "Speicheranbieter und Cache-Verwaltung konfigurieren"
 
 #: src/routes/help/faq/+page.svelte
-msgid "Slink offers a <0>public gallery</0>, where people can share their images with others."
-msgstr "Slink bietet eine <0>öffentliche Galerie</0>, in der Nutzer ihre Bilder mit anderen teilen können."
-
-#: src/routes/help/faq/+page.svelte
 msgid "Visibility Options"
 msgstr "Sichtbarkeitsoptionen"
 
 #: src/routes/help/faq/+page.svelte
-msgid "Images are shared in the public gallery and visible to all users"
-msgstr "Bilder werden in der öffentlichen Galerie geteilt und sind für alle Nutzer sichtbar"
-
-#: src/routes/help/faq/+page.svelte
 msgid "Default"
 msgstr "Standard"
-
-#: src/routes/help/faq/+page.svelte
-msgid "Important Note"
-msgstr "Wichtiger Hinweis"
 
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "SSO Settings | Slink"
@@ -3038,24 +3026,8 @@ msgid "Configure image handling and sharing preferences"
 msgstr "Bildverarbeitung und Freigabeeinstellungen konfigurieren"
 
 #: src/routes/help/faq/+page.svelte
-msgid "<0/> Direct link sharing with anyone"
-msgstr "<0/> Direktlink-Freigabe für jeden"
-
-#: src/routes/help/faq/+page.svelte
-msgid "<0/> Public gallery visibility (optional)"
-msgstr "<0/> Sichtbarkeit in der öffentlichen Galerie (optional)"
-
-#: src/routes/help/faq/+page.svelte
-msgid "<0/> Password protection"
-msgstr "<0/> Passwortschutz"
-
-#: src/routes/help/faq/+page.svelte
 msgid "I appreciate your help in making Slink better! If you've encountered a bug or have suggestions for improvement, here's how you can help:"
 msgstr "Ich schätze Ihre Hilfe, Slink zu verbessern! Wenn Sie einen Fehler gefunden haben oder Verbesserungsvorschläge haben, können Sie folgendermaßen helfen:"
-
-#: src/routes/help/faq/+page.svelte
-msgid "<0/> Before Reporting"
-msgstr "<0/> Vor der Meldung"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Check if the issue has already been reported"
@@ -3092,10 +3064,6 @@ msgstr "Jede Meldung hilft mir, Slink für die gesamte Community zu verbessern. 
 #: src/routes/help/faq/+page.svelte
 msgid "Slink supports the following mime types:"
 msgstr "Slink unterstützt die folgenden MIME-Typen:"
-
-#: src/routes/help/faq/+page.svelte
-msgid "* Source images are forced to be converted to JPEG format."
-msgstr "* Quellbilder werden zwingend in das JPEG-Format konvertiert."
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Account Approved"
@@ -3795,14 +3763,6 @@ msgid "What image formats Slink supports?"
 msgstr "Welche Bildformate unterstützt Slink?"
 
 #: src/routes/help/faq/+page.svelte
-msgid "What is the visibility of my images?"
-msgstr "Wie ist die Sichtbarkeit meiner Bilder?"
-
-#: src/routes/help/faq/+page.svelte
-msgid "Can I share my images with others?"
-msgstr "Kann ich meine Bilder mit anderen teilen?"
-
-#: src/routes/help/faq/+page.svelte
 msgid "I found an issue, how can I report it?"
 msgstr "Ich habe ein Problem gefunden, wie kann ich es melden?"
 
@@ -4173,14 +4133,6 @@ msgid_plural "# times"
 msgstr[0] "# Mal"
 msgstr[1] "# Mal"
 
-#: src/routes/help/faq/+page.svelte
-msgid "Images are truly private and only accessible by the owner. To share a private image, use the copy button to create a shared link"
-msgstr "Bilder sind wirklich privat und nur für den Besitzer zugänglich. Um ein privates Bild zu teilen, verwenden Sie die Kopieren-Schaltfläche, um einen geteilten Link zu erstellen"
-
-#: src/routes/help/faq/+page.svelte
-msgid "Images are private by default and only accessible to the authenticated owner. To share an image with others, use the copy button which creates a shared link."
-msgstr "Bilder sind standardmäßig privat und nur für den authentifizierten Besitzer zugänglich. Um ein Bild mit anderen zu teilen, verwenden Sie die Kopieren-Schaltfläche, die einen geteilten Link erstellt."
-
 #: src/feature/Share/Controls/ExpirationDetail.svelte
 #: src/feature/Share/Controls/List.svelte
 msgid "Expiration"
@@ -4476,17 +4428,105 @@ msgid "ShareStateRegistry"
 msgstr "ShareStateRegistry"
 
 #: src/routes/help/faq/+page.svelte
-msgid "You can easily share your images and collections with others by publishing a link. Manage every published link from the <0>Publications</0> page."
-msgstr "Sie können Ihre Bilder und Sammlungen ganz einfach mit anderen teilen, indem Sie einen Link veröffentlichen. Verwalten Sie jeden veröffentlichten Link auf der Seite <0>Veröffentlichungen</0>."
+msgid "Every image you upload has a visibility setting. You can toggle it from the upload screen or later on the image itself."
+msgstr "Jedes Bild, das du hochlädst, hat eine Sichtbarkeitseinstellung. Du kannst sie im Upload-Bildschirm oder später am Bild selbst umschalten."
 
 #: src/routes/help/faq/+page.svelte
-msgid "<0/> Sharing Options"
-msgstr "<0/> Freigabeoptionen"
+msgid "Shown on the <0>explore page</0>. Anyone with the direct link can open it."
+msgstr "Wird auf der <0>Explore-Seite</0> angezeigt. Jeder mit dem direkten Link kann es öffnen."
 
 #: src/routes/help/faq/+page.svelte
-msgid "<0/> Expiration dates for published links"
-msgstr "<0/> Ablaufdaten für veröffentlichte Links"
+msgid "Hidden from the explore page. The direct link only works for you, unless you share it with a published link."
+msgstr "Auf der Explore-Seite ausgeblendet. Der direkte Link funktioniert nur für dich, es sei denn, du teilst ihn über einen veröffentlichten Link."
 
 #: src/routes/help/faq/+page.svelte
-msgid "<0/> Unpublish at any time to revoke access"
-msgstr "<0/> Veröffentlichung jederzeit aufheben, um den Zugriff zu entziehen"
+msgid "Sharing creates a separate link on top of your image or collection. The original stays untouched, and you can revoke access at any time. Manage every link from the <0>Publications</0> page."
+msgstr "Beim Teilen wird ein separater Link zu deinem Bild oder deiner Sammlung erstellt. Das Original bleibt unverändert, und du kannst den Zugriff jederzeit widerrufen. Verwalte alle Links über die Seite <0>Veröffentlichungen</0>."
+
+#: src/routes/help/faq/+page.svelte
+msgid "Share a single image or a whole collection"
+msgstr "Teile ein einzelnes Bild oder eine ganze Sammlung"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Protect the link with a password"
+msgstr "Schütze den Link mit einem Passwort"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Set an expiration date"
+msgstr "Lege ein Ablaufdatum fest"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Optionally list the share on the explore page so others can discover it"
+msgstr "Optional: den Share auf der Explore-Seite anzeigen, damit andere ihn entdecken können"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Unpublish at any time to revoke access, without changing the original image"
+msgstr "Jederzeit zurücknehmen, um den Zugriff zu widerrufen, ohne das Originalbild zu verändern"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Collections are share-only"
+msgstr "Sammlungen nur über Links teilbar"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Collections don't have a public or private setting of their own. Publishing a share link is the only way to show a collection to someone else."
+msgstr "Sammlungen haben keine eigene Einstellung für öffentlich oder privat. Das Veröffentlichen eines Share-Links ist die einzige Möglichkeit, eine Sammlung jemand anderem zu zeigen."
+
+#: src/routes/help/faq/+page.svelte
+msgid "Side by side"
+msgstr "Im Vergleich"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Public image"
+msgstr "Öffentliches Bild"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Shared link"
+msgstr "Freigabe-Link"
+
+#: src/routes/help/faq/+page.svelte
+msgid "A private image can still be shared"
+msgstr "Auch ein privates Bild kann geteilt werden"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Publishing a share link for a private image lets the recipients open it through that link only. The image stays hidden everywhere else."
+msgstr "Wenn du für ein privates Bild einen Share-Link veröffentlichst, können die Empfänger es nur über diesen Link öffnen. Überall sonst bleibt das Bild verborgen."
+
+#: src/routes/help/faq/+page.svelte
+msgid "Who can see my images?"
+msgstr "Wer kann meine Bilder sehen?"
+
+#: src/routes/help/faq/+page.svelte
+msgid "How do I share an image or collection?"
+msgstr "Wie teile ich ein Bild oder eine Sammlung?"
+
+#: src/routes/help/faq/+page.svelte
+msgid "What's the difference between making an image public and sharing it?"
+msgstr "Was ist der Unterschied zwischen einem öffentlichen Bild und dem Teilen?"
+
+#: src/routes/help/faq/+page.svelte
+msgid "What you can do"
+msgstr "Was du tun kannst"
+
+#: src/routes/help/faq/+page.svelte
+msgid "One image, many shares"
+msgstr "Ein Bild, viele Shares"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Before Reporting"
+msgstr "Vor dem Melden"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Each time you tweak the image parameters like size, format, or filters, a new share link is created. That way a single image can have multiple share links, one per variation, and you can manage them independently. Copying a link publishes it automatically, so it's ready to send."
+msgstr "Jedes Mal, wenn du Bildparameter wie Größe, Format oder Filter änderst, wird ein neuer Share-Link erstellt. So kann ein einzelnes Bild mehrere Links haben, einen pro Variante, die du unabhängig voneinander verwalten kannst. Beim Kopieren wird der Link automatisch veröffentlicht und ist sofort einsatzbereit."
+
+#: src/routes/help/faq/+page.svelte
+msgid "Open access on the image itself. It appears on the explore page, and the direct URL works for anyone. Use it when you want the image out in the open."
+msgstr "Offener Zugriff auf das Bild selbst. Es erscheint auf der Explore-Seite, und die direkte URL funktioniert für jeden. Nutze das, wenn das Bild frei zugänglich sein soll."
+
+#: src/routes/help/faq/+page.svelte
+msgid "A separate, controlled link generated on top of any image, public or private. Add a password, set an expiration, or revoke it at any time without affecting the image. Use it when you want to hand someone a specific link you can pull back later."
+msgstr "Ein separater, verwaltbarer Link für jedes Bild, egal ob öffentlich oder privat. Füge ein Passwort hinzu, lege ein Ablaufdatum fest oder widerrufe ihn jederzeit, ohne das Bild zu verändern. Nutze das, wenn du jemandem einen bestimmten Link geben möchtest, den du später zurücknehmen kannst."
+
+#: src/routes/help/faq/+page.svelte
+msgid "* These formats are automatically converted to JPEG on upload."
+msgstr "* Diese Formate werden beim Hochladen automatisch in JPEG konvertiert."

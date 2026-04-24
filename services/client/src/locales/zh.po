@@ -2990,24 +2990,12 @@ msgid "Configure storage providers and cache management"
 msgstr "配置存储提供方与缓存管理"
 
 #: src/routes/help/faq/+page.svelte
-msgid "Slink offers a <0>public gallery</0>, where people can share their images with others."
-msgstr "Slink 提供了一个<0>公开画廊</0>，用户可以在这里与他人分享图片。"
-
-#: src/routes/help/faq/+page.svelte
 msgid "Visibility Options"
 msgstr "可见性选项"
 
 #: src/routes/help/faq/+page.svelte
-msgid "Images are shared in the public gallery and visible to all users"
-msgstr "图片会展示在公开画廊中，所有用户可见"
-
-#: src/routes/help/faq/+page.svelte
 msgid "Default"
 msgstr "默认"
-
-#: src/routes/help/faq/+page.svelte
-msgid "Important Note"
-msgstr "重要说明"
 
 #: src/routes/admin/settings/sso/+page.svelte
 msgid "SSO Settings | Slink"
@@ -3038,24 +3026,8 @@ msgid "Configure image handling and sharing preferences"
 msgstr "配置图片处理与分享偏好"
 
 #: src/routes/help/faq/+page.svelte
-msgid "<0/> Direct link sharing with anyone"
-msgstr "<0/> 可向任意对象分享直链"
-
-#: src/routes/help/faq/+page.svelte
-msgid "<0/> Public gallery visibility (optional)"
-msgstr "<0/> 可选公开画廊展示"
-
-#: src/routes/help/faq/+page.svelte
-msgid "<0/> Password protection"
-msgstr "<0/> 密码保护"
-
-#: src/routes/help/faq/+page.svelte
 msgid "I appreciate your help in making Slink better! If you've encountered a bug or have suggestions for improvement, here's how you can help:"
 msgstr "感谢您帮助 Slink 变得更好！如果你遇到 Bug 或有改进建议，可以按以下方式帮助我："
-
-#: src/routes/help/faq/+page.svelte
-msgid "<0/> Before Reporting"
-msgstr "<0/> 反馈前请先确认"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Check if the issue has already been reported"
@@ -3092,10 +3064,6 @@ msgstr "每一条反馈都在帮助我完善 Slink。我会查看所有问题，
 #: src/routes/help/faq/+page.svelte
 msgid "Slink supports the following mime types:"
 msgstr "Slink 支持以下 MIME 类型："
-
-#: src/routes/help/faq/+page.svelte
-msgid "* Source images are forced to be converted to JPEG format."
-msgstr "* 源图片将被强制转换为 JPEG 格式。"
 
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 msgid "Account Approved"
@@ -3794,14 +3762,6 @@ msgid "What image formats Slink supports?"
 msgstr "Slink 支持哪些图片格式？"
 
 #: src/routes/help/faq/+page.svelte
-msgid "What is the visibility of my images?"
-msgstr "我的图片可见性是怎样的？"
-
-#: src/routes/help/faq/+page.svelte
-msgid "Can I share my images with others?"
-msgstr "我可以和别人分享图片吗？"
-
-#: src/routes/help/faq/+page.svelte
 msgid "I found an issue, how can I report it?"
 msgstr "我发现了问题，怎么反馈？"
 
@@ -4170,14 +4130,6 @@ msgid "# time"
 msgid_plural "# times"
 msgstr[0] "# 次"
 
-#: src/routes/help/faq/+page.svelte
-msgid "Images are truly private and only accessible by the owner. To share a private image, use the copy button to create a shared link"
-msgstr "图像完全私密，仅所有者可访问。要共享私密图像，请使用复制按钮创建共享链接"
-
-#: src/routes/help/faq/+page.svelte
-msgid "Images are private by default and only accessible to the authenticated owner. To share an image with others, use the copy button which creates a shared link."
-msgstr "图像默认私密，仅已认证的所有者可访问。要与他人共享图像，请使用复制按钮创建共享链接。"
-
 #: src/feature/Share/Controls/ExpirationDetail.svelte
 #: src/feature/Share/Controls/List.svelte
 msgid "Expiration"
@@ -4471,17 +4423,105 @@ msgid "ShareStateRegistry"
 msgstr "ShareStateRegistry"
 
 #: src/routes/help/faq/+page.svelte
-msgid "You can easily share your images and collections with others by publishing a link. Manage every published link from the <0>Publications</0> page."
-msgstr "您可以通过发布链接轻松地与他人共享您的图像和收藏。在<0>我的发布</0>页面管理每个已发布的链接。"
+msgid "Every image you upload has a visibility setting. You can toggle it from the upload screen or later on the image itself."
+msgstr "你上传的每张图片都有可见性设置。你可以在上传界面切换，也可以稍后在图片上更改。"
 
 #: src/routes/help/faq/+page.svelte
-msgid "<0/> Sharing Options"
-msgstr "<0/> 共享选项"
+msgid "Shown on the <0>explore page</0>. Anyone with the direct link can open it."
+msgstr "显示在<0>探索页面</0>。拥有直接链接的任何人都能打开。"
 
 #: src/routes/help/faq/+page.svelte
-msgid "<0/> Expiration dates for published links"
-msgstr "<0/> 已发布链接的过期时间"
+msgid "Hidden from the explore page. The direct link only works for you, unless you share it with a published link."
+msgstr "从探索页面隐藏。直接链接只对你自己有效，除非你通过已发布的分享链接分享。"
 
 #: src/routes/help/faq/+page.svelte
-msgid "<0/> Unpublish at any time to revoke access"
-msgstr "<0/> 随时取消发布以撤销访问权限"
+msgid "Sharing creates a separate link on top of your image or collection. The original stays untouched, and you can revoke access at any time. Manage every link from the <0>Publications</0> page."
+msgstr "分享会在图片或合集之上创建一个独立链接。原件保持不变，你可以随时撤销访问权限。在<0>发布</0>页面管理所有链接。"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Share a single image or a whole collection"
+msgstr "分享单张图片或整个合集"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Protect the link with a password"
+msgstr "使用密码保护链接"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Set an expiration date"
+msgstr "设置过期日期"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Optionally list the share on the explore page so others can discover it"
+msgstr "可选择将分享列在探索页面，方便他人发现"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Unpublish at any time to revoke access, without changing the original image"
+msgstr "随时取消发布即可撤销访问权限，不会影响原始图片"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Collections are share-only"
+msgstr "合集仅可通过分享链接查看"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Collections don't have a public or private setting of their own. Publishing a share link is the only way to show a collection to someone else."
+msgstr "合集本身没有公开或私密设置。发布分享链接是将合集展示给他人的唯一方式。"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Side by side"
+msgstr "对比"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Public image"
+msgstr "公开图片"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Shared link"
+msgstr "分享链接"
+
+#: src/routes/help/faq/+page.svelte
+msgid "A private image can still be shared"
+msgstr "私密图片同样可以分享"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Publishing a share link for a private image lets the recipients open it through that link only. The image stays hidden everywhere else."
+msgstr "为私密图片发布分享链接后，收件人只能通过该链接打开图片。在其他地方图片仍保持隐藏。"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Who can see my images?"
+msgstr "谁可以看到我的图片？"
+
+#: src/routes/help/faq/+page.svelte
+msgid "How do I share an image or collection?"
+msgstr "如何分享图片或合集？"
+
+#: src/routes/help/faq/+page.svelte
+msgid "What's the difference between making an image public and sharing it?"
+msgstr "把图片设为公开和分享图片有什么区别？"
+
+#: src/routes/help/faq/+page.svelte
+msgid "What you can do"
+msgstr "你可以做什么"
+
+#: src/routes/help/faq/+page.svelte
+msgid "One image, many shares"
+msgstr "一张图片，多个分享"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Before Reporting"
+msgstr "报告前"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Each time you tweak the image parameters like size, format, or filters, a new share link is created. That way a single image can have multiple share links, one per variation, and you can manage them independently. Copying a link publishes it automatically, so it's ready to send."
+msgstr "每当你调整图片参数（如尺寸、格式或滤镜）时，都会生成一个新的分享链接。这样一张图片可以拥有多个分享链接（每个变体一个），并可以独立管理。复制链接时会自动发布，可以直接发送。"
+
+#: src/routes/help/faq/+page.svelte
+msgid "Open access on the image itself. It appears on the explore page, and the direct URL works for anyone. Use it when you want the image out in the open."
+msgstr "对图片本身开放访问。它会显示在探索页面，且直接链接对任何人都有效。当你希望图片公开可见时使用。"
+
+#: src/routes/help/faq/+page.svelte
+msgid "A separate, controlled link generated on top of any image, public or private. Add a password, set an expiration, or revoke it at any time without affecting the image. Use it when you want to hand someone a specific link you can pull back later."
+msgstr "在任何图片（公开或私密）之上生成的独立、可控链接。可以添加密码、设置有效期，也可以随时撤销，且不会影响图片本身。当你希望给某人一个特定链接并保留收回能力时使用。"
+
+#: src/routes/help/faq/+page.svelte
+msgid "* These formats are automatically converted to JPEG on upload."
+msgstr "* 这些格式会在上传时自动转换为 JPEG。"

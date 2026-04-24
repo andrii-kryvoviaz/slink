@@ -216,10 +216,6 @@ export const themeIcons: string[] = [
   'ph:download',
   'ph:cloud-arrow-up',
   'ph:palette',
-  'ph:lightbulb',
-  'ph:globe',
-  'ph:lock',
-  'ph:bug',
   'ph:browser',
   'ph:shield-check',
   'ph:minus-circle',
@@ -235,5 +231,5 @@ export const themeIcons: string[] = [
   'heroicons:minus-circle',
   'heroicons:lock-open',
   'ph:paper-plane-tilt-duotone',
-  'ph:x-circle',
+  'ph:stack-duotone',
 ];
