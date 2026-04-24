@@ -6,7 +6,7 @@ parameters:
   exception_to_status:
     Slink\Share\Domain\Exception\SharePasswordRequiredException: 423
     Slink\Share\Domain\Exception\ShareExpiredException: 410
-    Slink\User\Domain\Exception\InvalidCredentialsException: 401
+    Slink\User\Domain\Exception\InvalidCredentialsException: 400
     Slink\User\Domain\Exception\ForbiddenException: 403
     Slink\Shared\Domain\Exception\ForbiddenException: 403
     Slink\User\Domain\Exception\ApiKeyNotFoundException: 404

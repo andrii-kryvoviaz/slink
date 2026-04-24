@@ -46,8 +46,20 @@ export const ApiProxy = (options: ApiOptions): Handle => {
     let response = await makeRequest(session?.accessToken as string);
     let authRefreshed = false;
 
-    if (response.status === 401 && cookies.get('sessionId')) {
-      const sessionId = cookies.get('sessionId') as string;
+    const sessionId = cookies.get('sessionId');
+    const refreshToken = cookies.get('refreshToken');
+
+    if (response.status === 401 && sessionId) {
+      if (!refreshToken) {
+        await Session.destroy(cookies, locals.cookieManager);
+
+        return getResponseWithCookies({
+          response,
+          cookies,
+          requireSsl: globalSettings?.access?.requireSsl ?? false,
+          authRefreshed: true,
+        });
+      }
 
       try {
         const result = await tokenManager.handleTokenRefresh(
@@ -61,7 +73,7 @@ export const ApiProxy = (options: ApiOptions): Handle => {
         console.warn('Token refresh failed:', error);
 
         locals.cookieManager.deleteCookie(cookies, 'refreshToken');
-        locals.cookieManager.deleteCookie(cookies, 'sessionId');
+        await Session.destroy(cookies, locals.cookieManager);
 
         return getResponseWithCookies({
           response: new Response(null, {
