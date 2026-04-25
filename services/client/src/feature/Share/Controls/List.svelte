@@ -75,7 +75,7 @@
         {#if copiedState.active}
           <span class={list.sublabel()}>Copied to clipboard</span>
         {:else}
-          <span class={list.sublabel()}>Copy the share URL</span>
+          <span class={list.sublabel()}>Copy the share link</span>
         {/if}
       </div>
     </button>

@@ -1096,10 +1096,6 @@ msgid "Download"
 msgstr "ダウンロード"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
-msgid "Copy image URL"
-msgstr "画像URLをコピー"
-
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 msgid "Delete image"
 msgstr "画像を削除"
@@ -1123,10 +1119,6 @@ msgstr "生成中..."
 #: src/feature/Text/CopyableText/CopyableText.svelte
 msgid "Copied!"
 msgstr "コピーしました！"
-
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-msgid "Copy URL"
-msgstr "URLをコピー"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 msgid "Make private"
@@ -4343,13 +4335,10 @@ msgstr "SharesFeed"
 msgid "Share actions"
 msgstr "公開アクション"
 
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Share/Controls/List.svelte
 msgid "Copy link"
 msgstr "リンクをコピー"
-
-#: src/feature/Share/Controls/List.svelte
-msgid "Copy the share URL"
-msgstr "公開URLをコピー"
 
 #: src/feature/Share/Controls/List.svelte
 msgid "Stop sharing this link"
@@ -4638,3 +4627,11 @@ msgstr "がブックマークに追加しました"
 #: src/feature/Notification/NotificationGroupItem.svelte
 msgid "interacted"
 msgstr "が反応しました"
+
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+msgid "Copy image link"
+msgstr "画像リンクをコピー"
+
+#: src/feature/Share/Controls/List.svelte
+msgid "Copy the share link"
+msgstr "共有リンクをコピー"

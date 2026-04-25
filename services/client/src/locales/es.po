@@ -1096,10 +1096,6 @@ msgid "Download"
 msgstr "Descargar"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
-msgid "Copy image URL"
-msgstr "Copiar URL de la imagen"
-
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 msgid "Delete image"
 msgstr "Eliminar imagen"
@@ -1123,10 +1119,6 @@ msgstr "Generando..."
 #: src/feature/Text/CopyableText/CopyableText.svelte
 msgid "Copied!"
 msgstr "¡Copiado!"
-
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-msgid "Copy URL"
-msgstr "Copiar URL"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 msgid "Make private"
@@ -4343,13 +4335,10 @@ msgstr "SharesFeed"
 msgid "Share actions"
 msgstr "Acciones de publicación"
 
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Share/Controls/List.svelte
 msgid "Copy link"
 msgstr "Copiar enlace"
-
-#: src/feature/Share/Controls/List.svelte
-msgid "Copy the share URL"
-msgstr "Copiar la URL de la publicación"
 
 #: src/feature/Share/Controls/List.svelte
 msgid "Stop sharing this link"
@@ -4638,3 +4627,11 @@ msgstr "añadió a marcadores"
 #: src/feature/Notification/NotificationGroupItem.svelte
 msgid "interacted"
 msgstr "ha interactuado"
+
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+msgid "Copy image link"
+msgstr "Copiar enlace de la imagen"
+
+#: src/feature/Share/Controls/List.svelte
+msgid "Copy the share link"
+msgstr "Copiar enlace de publicación"

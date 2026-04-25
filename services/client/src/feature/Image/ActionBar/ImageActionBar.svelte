@@ -77,7 +77,7 @@
   const copyTooltip = $derived.by(() => {
     if (actions.shareIsLoading) return 'Generating...';
     if (actions.isCopied.active) return 'Copied!';
-    return 'Copy URL';
+    return 'Copy link';
   });
 
   const visibilityTooltip = $derived.by(() => {
@@ -178,7 +178,7 @@
     class={actionButtonVariants({ layout, variant: 'secondary' })}
     onclick={actions.handleCopy}
     disabled={actions.shareIsLoading || actions.isCopied.active}
-    aria-label="Copy image URL"
+    aria-label="Copy image link"
     tooltip={copyTooltip}
   >
     {@render copyIconContent()}

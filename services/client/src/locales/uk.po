@@ -1096,10 +1096,6 @@ msgid "Download"
 msgstr "Завантажити"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
-msgid "Copy image URL"
-msgstr "Копіювати URL зображення"
-
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 msgid "Delete image"
 msgstr "Видалити зображення"
@@ -1123,10 +1119,6 @@ msgstr "Генерується..."
 #: src/feature/Text/CopyableText/CopyableText.svelte
 msgid "Copied!"
 msgstr "Скопійовано!"
-
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-msgid "Copy URL"
-msgstr "Копіювати URL"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 msgid "Make private"
@@ -4347,13 +4339,10 @@ msgstr "SharesFeed"
 msgid "Share actions"
 msgstr "Дії з публікацією"
 
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Share/Controls/List.svelte
 msgid "Copy link"
 msgstr "Копіювати посилання"
-
-#: src/feature/Share/Controls/List.svelte
-msgid "Copy the share URL"
-msgstr "Копіювати URL-адресу публікації"
 
 #: src/feature/Share/Controls/List.svelte
 msgid "Stop sharing this link"
@@ -4645,3 +4634,11 @@ msgstr "додав(-ла) до закладок"
 #: src/feature/Notification/NotificationGroupItem.svelte
 msgid "interacted"
 msgstr "взаємодіяв(-ла)"
+
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+msgid "Copy image link"
+msgstr "Копіювати посилання на зображення"
+
+#: src/feature/Share/Controls/List.svelte
+msgid "Copy the share link"
+msgstr "Копіювати посилання на публікацію"
