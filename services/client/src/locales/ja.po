@@ -4635,3 +4635,12 @@ msgstr "画像リンクをコピー"
 #: src/feature/Share/Controls/List.svelte
 msgid "Copy the share link"
 msgstr "共有リンクをコピー"
+
+#: src/feature/Search/SearchBar.svelte
+msgid "Search"
+msgstr "検索"
+
+#: src/feature/Search/SearchBar.svelte
+#: src/feature/Search/SearchBar.svelte
+msgid "Close search"
+msgstr "検索を閉じる"

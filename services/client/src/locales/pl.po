@@ -4649,3 +4649,12 @@ msgstr "Kopiuj link do obrazu"
 #: src/feature/Share/Controls/List.svelte
 msgid "Copy the share link"
 msgstr "Kopiuj link udostępniania"
+
+#: src/feature/Search/SearchBar.svelte
+msgid "Search"
+msgstr "Szukaj"
+
+#: src/feature/Search/SearchBar.svelte
+#: src/feature/Search/SearchBar.svelte
+msgid "Close search"
+msgstr "Zamknij wyszukiwanie"

@@ -4635,3 +4635,12 @@ msgstr "Copia link immagine"
 #: src/feature/Share/Controls/List.svelte
 msgid "Copy the share link"
 msgstr "Copia link di condivisione"
+
+#: src/feature/Search/SearchBar.svelte
+msgid "Search"
+msgstr "Cerca"
+
+#: src/feature/Search/SearchBar.svelte
+#: src/feature/Search/SearchBar.svelte
+msgid "Close search"
+msgstr "Chiudi ricerca"

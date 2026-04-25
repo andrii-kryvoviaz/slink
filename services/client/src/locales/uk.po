@@ -4642,3 +4642,12 @@ msgstr "Копіювати посилання на зображення"
 #: src/feature/Share/Controls/List.svelte
 msgid "Copy the share link"
 msgstr "Копіювати посилання на публікацію"
+
+#: src/feature/Search/SearchBar.svelte
+msgid "Search"
+msgstr "Пошук"
+
+#: src/feature/Search/SearchBar.svelte
+#: src/feature/Search/SearchBar.svelte
+msgid "Close search"
+msgstr "Закрити пошук"

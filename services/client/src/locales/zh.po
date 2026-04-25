@@ -4629,3 +4629,12 @@ msgstr "复制图片链接"
 #: src/feature/Share/Controls/List.svelte
 msgid "Copy the share link"
 msgstr "复制分享链接"
+
+#: src/feature/Search/SearchBar.svelte
+msgid "Search"
+msgstr "搜索"
+
+#: src/feature/Search/SearchBar.svelte
+#: src/feature/Search/SearchBar.svelte
+msgid "Close search"
+msgstr "关闭搜索"

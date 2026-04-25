@@ -1,5 +1,14 @@
 <script lang="ts">
   import {
+    searchBarBack,
+    searchBarBackdrop,
+    searchBarContainer,
+    searchBarDropdownChevron,
+    searchBarField,
+    searchBarTrigger,
+  } from '@slink/feature/Search/SearchBar.theme';
+  import { Button } from '@slink/ui/components/button';
+  import {
     DropdownSimple,
     DropdownSimpleItem,
   } from '@slink/ui/components/dropdown-simple';
@@ -59,10 +68,20 @@
   };
 
   let dropdownOpen = $state(false);
+  let expanded = $state(false);
+  let searchRef:
+    | { focus: () => void; blur: () => void; clear: () => void }
+    | undefined;
 
   $effect(() => {
     if (hasHashtags(searchTerm) && searchBy !== 'hashtag') {
       searchBy = 'hashtag';
+    }
+  });
+
+  $effect(() => {
+    if (expanded) {
+      requestAnimationFrame(() => searchRef?.focus());
     }
   });
 
@@ -77,12 +96,71 @@
     fireSearch();
   };
 
+  const openMobile = () => {
+    expanded = true;
+  };
+
+  const closeMobile = () => {
+    expanded = false;
+    searchRef?.blur();
+  };
+
+  const handleEscape = (event: KeyboardEvent) => {
+    if (searchTerm) {
+      searchTerm = '';
+      return;
+    }
+    if (expanded) {
+      event.preventDefault();
+      closeMobile();
+    }
+  };
+
   const currentOption = $derived(searchOptions[searchBy]);
   const dynamicPlaceholder = $derived(currentOption.placeholder ?? placeholder);
 </script>
 
-<div class="relative z-40">
+{#if !expanded}
+  <Button
+    variant="glass"
+    size="sm"
+    rounded="full"
+    class={searchBarTrigger()}
+    onclick={openMobile}
+  >
+    {#snippet children()}
+      <Icon icon="ph:magnifying-glass" class="h-3 w-3 sm:h-4 sm:w-4" />
+      <span>Search</span>
+    {/snippet}
+  </Button>
+{/if}
+
+{#if expanded}
+  <button
+    type="button"
+    aria-label="Close search"
+    tabindex="-1"
+    class={searchBarBackdrop()}
+    onclick={closeMobile}
+  ></button>
+{/if}
+
+<div class={searchBarContainer({ expanded })}>
+  {#if expanded}
+    <Button
+      variant="glass"
+      size="sm"
+      rounded="full"
+      aria-label="Close search"
+      class={searchBarBack()}
+      onclick={closeMobile}
+    >
+      <Icon icon="ph:arrow-left" class="h-4 w-4" />
+    </Button>
+  {/if}
+
   <Filter.Search
+    bind:this={searchRef}
     bind:searchTerm
     {disabled}
     placeholder={dynamicPlaceholder}
@@ -92,19 +170,13 @@
     debounceMs={1000}
     onSearch={(term) => onsearch?.({ searchTerm: term, searchBy })}
     onClear={onclear}
-    class={cn(
-      'min-w-40 sm:min-w-50 max-w-60 sm:max-w-80',
-      dropdownOpen &&
-        'ring-2 ring-blue-500/20 border-blue-300/60 shadow-md dark:border-blue-500/40',
-    )}
+    class={searchBarField({ focused: dropdownOpen })}
     inputClass="px-2"
     onEnter={(event) => {
       event.preventDefault();
       fireSearch();
     }}
-    onEscape={() => {
-      searchTerm = '';
-    }}
+    onEscape={handleEscape}
   >
     {#snippet trailing()}
       <div class="w-px h-4 bg-gray-200 dark:bg-gray-700 shrink-0"></div>
@@ -130,10 +202,7 @@
             <span class="hidden sm:block">{currentOption.short}</span>
             <Icon
               icon="ph:caret-down"
-              class={cn(
-                'w-3 h-3 transition-transform duration-200 shrink-0',
-                dropdownOpen && 'rotate-180',
-              )}
+              class={searchBarDropdownChevron({ open: dropdownOpen })}
             />
           </button>
         {/snippet}
