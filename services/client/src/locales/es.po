@@ -1161,10 +1161,6 @@ msgid "Image bookmarked"
 msgstr "Imagen guardada en favoritos"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
-msgid "Bookmark removed"
-msgstr "Favorito eliminado"
-
-#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to update bookmark"
 msgstr "Error al actualizar el favorito"
 
@@ -4622,3 +4618,23 @@ msgstr[1] "# etiquetas"
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Tag name cannot contain a slash"
 msgstr "El nombre de la etiqueta no puede contener una barra"
+
+#: src/feature/Notification/NotificationGroupItem.svelte
+msgid "commented"
+msgstr "ha comentado"
+
+#: src/feature/Notification/NotificationGroupItem.svelte
+msgid "replied"
+msgstr "ha respondido"
+
+#: src/feature/Notification/NotificationGroupItem.svelte
+msgid "favorited"
+msgstr "añadió a favoritos"
+
+#: src/feature/Notification/NotificationGroupItem.svelte
+msgid "bookmarked"
+msgstr "añadió a marcadores"
+
+#: src/feature/Notification/NotificationGroupItem.svelte
+msgid "interacted"
+msgstr "ha interactuado"

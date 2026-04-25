@@ -1161,10 +1161,6 @@ msgid "Image bookmarked"
 msgstr "画像をブックマークしました"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
-msgid "Bookmark removed"
-msgstr "ブックマークを解除しました"
-
-#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to update bookmark"
 msgstr "ブックマークの更新に失敗しました"
 
@@ -4622,3 +4618,23 @@ msgstr[1] "# 件のタグ"
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Tag name cannot contain a slash"
 msgstr "タグ名にスラッシュは使えません"
+
+#: src/feature/Notification/NotificationGroupItem.svelte
+msgid "commented"
+msgstr "がコメントしました"
+
+#: src/feature/Notification/NotificationGroupItem.svelte
+msgid "replied"
+msgstr "が返信しました"
+
+#: src/feature/Notification/NotificationGroupItem.svelte
+msgid "favorited"
+msgstr "がお気に入りに追加しました"
+
+#: src/feature/Notification/NotificationGroupItem.svelte
+msgid "bookmarked"
+msgstr "がブックマークに追加しました"
+
+#: src/feature/Notification/NotificationGroupItem.svelte
+msgid "interacted"
+msgstr "が反応しました"

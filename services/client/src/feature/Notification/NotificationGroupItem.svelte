@@ -28,23 +28,6 @@
   let isExpanded = $state(false);
   const isGrouped = $derived(group.items.length > 1);
 
-  const actorName = $derived(group.actor?.displayName ?? 'Someone');
-
-  const actionText = $derived.by(() => {
-    switch (group.type) {
-      case 'comment':
-        return 'commented';
-      case 'comment_reply':
-        return 'replied';
-      case 'added_to_favorite':
-        return 'favorited';
-      case 'added_to_bookmarks':
-        return 'bookmarked';
-      default:
-        return 'interacted';
-    }
-  });
-
   function handleHeaderClick() {
     if (isGrouped) {
       isExpanded = !isExpanded;
@@ -97,10 +80,24 @@
         <span
           class="font-semibold text-gray-900 dark:text-white text-[15px] leading-tight"
         >
-          {actorName}
+          {#if group.actor}
+            {group.actor.displayName}
+          {:else}
+            Someone
+          {/if}
         </span>
         <span class="text-gray-500 dark:text-gray-400 text-sm">
-          {actionText}
+          {#if group.type === 'comment'}
+            commented
+          {:else if group.type === 'comment_reply'}
+            replied
+          {:else if group.type === 'added_to_favorite'}
+            favorited
+          {:else if group.type === 'added_to_bookmarks'}
+            bookmarked
+          {:else}
+            interacted
+          {/if}
         </span>
       </div>
 

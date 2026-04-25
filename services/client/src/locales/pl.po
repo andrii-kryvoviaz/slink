@@ -1161,10 +1161,6 @@ msgid "Image bookmarked"
 msgstr "Obraz dodany do zakładek"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
-msgid "Bookmark removed"
-msgstr "Zakładka usunięta"
-
-#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to update bookmark"
 msgstr "Nie udało się zaktualizować zakładki"
 
@@ -4636,3 +4632,23 @@ msgstr[3] "# tagów"
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Tag name cannot contain a slash"
 msgstr "Nazwa tagu nie może zawierać ukośnika"
+
+#: src/feature/Notification/NotificationGroupItem.svelte
+msgid "commented"
+msgstr "skomentował(a)"
+
+#: src/feature/Notification/NotificationGroupItem.svelte
+msgid "replied"
+msgstr "odpowiedział(a)"
+
+#: src/feature/Notification/NotificationGroupItem.svelte
+msgid "favorited"
+msgstr "dodał(a) do ulubionych"
+
+#: src/feature/Notification/NotificationGroupItem.svelte
+msgid "bookmarked"
+msgstr "dodał(a) do zakładek"
+
+#: src/feature/Notification/NotificationGroupItem.svelte
+msgid "interacted"
+msgstr "wszedł(a) w interakcję"

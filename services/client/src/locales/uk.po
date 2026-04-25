@@ -1161,10 +1161,6 @@ msgid "Image bookmarked"
 msgstr "Зображення додано до закладок"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
-msgid "Bookmark removed"
-msgstr "Закладку видалено"
-
-#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to update bookmark"
 msgstr "Не вдалося оновити закладку"
 
@@ -4629,3 +4625,23 @@ msgstr[2] "# тегами"
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Tag name cannot contain a slash"
 msgstr "Назва тегу не може містити слеш"
+
+#: src/feature/Notification/NotificationGroupItem.svelte
+msgid "commented"
+msgstr "прокоментував(-ла)"
+
+#: src/feature/Notification/NotificationGroupItem.svelte
+msgid "replied"
+msgstr "відповів(-ла)"
+
+#: src/feature/Notification/NotificationGroupItem.svelte
+msgid "favorited"
+msgstr "додав(-ла) до улюбленого"
+
+#: src/feature/Notification/NotificationGroupItem.svelte
+msgid "bookmarked"
+msgstr "додав(-ла) до закладок"
+
+#: src/feature/Notification/NotificationGroupItem.svelte
+msgid "interacted"
+msgstr "взаємодіяв(-ла)"

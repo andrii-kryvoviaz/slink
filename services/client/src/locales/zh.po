@@ -1161,10 +1161,6 @@ msgid "Image bookmarked"
 msgstr "图片已收藏"
 
 #: src/lib/utils/i18n/messages/toast.language.ts
-msgid "Bookmark removed"
-msgstr "收藏已移除"
-
-#: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to update bookmark"
 msgstr "更新收藏失败"
 
@@ -4616,3 +4612,23 @@ msgstr[1] "# 个标签"
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Tag name cannot contain a slash"
 msgstr "标签名不能包含斜杠"
+
+#: src/feature/Notification/NotificationGroupItem.svelte
+msgid "commented"
+msgstr "发表了评论"
+
+#: src/feature/Notification/NotificationGroupItem.svelte
+msgid "replied"
+msgstr "进行了回复"
+
+#: src/feature/Notification/NotificationGroupItem.svelte
+msgid "favorited"
+msgstr "收藏了"
+
+#: src/feature/Notification/NotificationGroupItem.svelte
+msgid "bookmarked"
+msgstr "加入了书签"
+
+#: src/feature/Notification/NotificationGroupItem.svelte
+msgid "interacted"
+msgstr "进行了互动"
