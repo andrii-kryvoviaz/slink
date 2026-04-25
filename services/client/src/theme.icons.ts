@@ -231,4 +231,7 @@ export const themeIcons: string[] = [
   'heroicons:lock-open',
   'ph:paper-plane-tilt-duotone',
   'ph:stack-duotone',
+  'ph:lightbulb',
+  'ph:megaphone-simple',
+  'ph:warning-octagon',
 ];

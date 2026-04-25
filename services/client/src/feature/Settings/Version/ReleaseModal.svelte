@@ -2,6 +2,7 @@
   import { Button } from '@slink/ui/components/button';
   import * as Dialog from '@slink/ui/components/dialog';
   import { Modal } from '@slink/ui/components/dialog';
+  import { MarkdownAlert } from '@slink/ui/components/markdown-alert';
   import { ScrollArea } from '@slink/ui/components/scroll-area';
 
   import { getLocale } from '$lib/utils/date.svelte';
@@ -9,6 +10,14 @@
   import Icon from '@iconify/svelte';
 
   import { navigateToUrl } from '@slink/utils/navigation/navigate';
+
+  import {
+    MarkdownProcessor,
+    extractAlerts,
+    formatHeadings,
+    formatInlineMarkdown,
+    stripFullChangelog,
+  } from './markdown-processor';
 
   interface Props {
     open: boolean;
@@ -40,29 +49,13 @@
     });
   }
 
-  function formatChangelog(body: string): string {
-    return body
-      .replace(/\*\*Full Changelog\*\*.*$/s, '')
-      .replace(
-        /### (.*)/g,
-        '<h3 class="text-lg font-semibold first:mt-0 mt-4 mb-2">$1</h3>',
-      )
-      .replace(
-        /## (.*)/g,
-        '<h2 class="text-xl font-bold first:mt-0 mt-6 mb-3">$1</h2>',
-      )
-      .replace(
-        /# (.*)/g,
-        '<h1 class="text-2xl font-bold first:mt-0 mt-8 mb-4">$1</h1>',
-      )
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.*?)\*/g, '<em>$1</em>')
-      .replace(
-        /`(.*?)`/g,
-        '<code class="bg-muted px-1 py-0.5 rounded text-sm">$1</code>',
-      )
-      .replace(/- (.*)/g, '<li class="ml-4 my-2">$1</li>');
-  }
+  const processor = new MarkdownProcessor()
+    .use(stripFullChangelog)
+    .use(extractAlerts)
+    .use(formatHeadings)
+    .use(formatInlineMarkdown);
+
+  let nodes = $derived(processor.process(release.body));
 </script>
 
 <Dialog.Root {open} onOpenChange={handleOpenChange}>
@@ -132,9 +125,15 @@
         </div>
 
         <ScrollArea class="h-64 w-full border rounded-lg p-4">
-          <div class="prose prose-sm max-w-none dark:prose-invert">
-            {@html formatChangelog(release.body)}
-          </div>
+          {#each nodes as node}
+            {#if node.kind === 'alert'}
+              <MarkdownAlert type={node.type} content={node.content} />
+            {:else}
+              <div class="prose prose-sm max-w-none dark:prose-invert">
+                {@html node.html}
+              </div>
+            {/if}
+          {/each}
         </ScrollArea>
       </div>
     </div>
