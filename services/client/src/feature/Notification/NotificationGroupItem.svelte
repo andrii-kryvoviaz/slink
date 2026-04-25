@@ -26,10 +26,14 @@
   let { group, onItemClick }: Props = $props();
 
   let isExpanded = $state(false);
+  const hasPerItemContent = $derived(
+    group.type === 'comment' || group.type === 'comment_reply',
+  );
   const isGrouped = $derived(group.items.length > 1);
+  const isExpandable = $derived(isGrouped && hasPerItemContent);
 
   function handleHeaderClick() {
-    if (isGrouped) {
+    if (isExpandable) {
       isExpanded = !isExpanded;
     } else {
       onItemClick(group.items[0]);
@@ -121,12 +125,19 @@
     </div>
 
     <div class="shrink-0 self-center flex items-center gap-2">
+      {#if isGrouped && !hasPerItemContent}
+        <span
+          class="text-xs font-medium text-gray-500 dark:text-gray-400 px-2 py-0.5 rounded-full bg-gray-100 dark:bg-white/5"
+        >
+          {group.items.length}
+        </span>
+      {/if}
       {#if !group.isRead}
         <div
           class="w-2.5 h-2.5 rounded-full bg-indigo-500 ring-4 ring-indigo-500/20"
         ></div>
       {/if}
-      {#if isGrouped}
+      {#if isExpandable}
         <Icon
           icon="ph:caret-down"
           class={caretVariants({ expanded: isExpanded })}
@@ -135,7 +146,7 @@
     </div>
   </button>
 
-  {#if isExpanded && isGrouped}
+  {#if isExpanded && isExpandable}
     <div
       class="border-t border-gray-100 dark:border-white/5"
       transition:slide={{ duration: 200 }}
