@@ -24,6 +24,8 @@ interface BookmarkRepositoryInterface extends ServiceEntityRepositoryInterface {
 
   public function countByUserId(string $userId): int;
 
+  public function existsByUserId(string $userId): bool;
+
   public function countByImageId(string $imageId): int;
 
   public function isBookmarkedByUser(string $imageId, string $userId): bool;

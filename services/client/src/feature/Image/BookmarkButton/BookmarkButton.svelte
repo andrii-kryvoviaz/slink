@@ -81,9 +81,9 @@
       bookmarkCount = response.bookmarkCount;
       onBookmarkChange?.(isBookmarked, bookmarkCount);
 
-      toast.success(
-        isBookmarked ? messages.bookmark.added : messages.bookmark.removed,
-      );
+      if (isBookmarked) {
+        toast.success(messages.bookmark.added);
+      }
     } catch {
       isBookmarked = wasBookmarked;
       bookmarkCount = previousCount;

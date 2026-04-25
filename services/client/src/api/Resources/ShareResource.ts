@@ -1,8 +1,12 @@
 import { AbstractResource } from '@slink/api/AbstractResource';
 import type {
+  ShareExpiryFilter,
   ShareListQuery,
   ShareListingResponse,
+  ShareProtectionFilter,
+  ShareTypeFilter,
 } from '@slink/api/Response/Share/ShareListItemResponse';
+import type { ShareableType } from '@slink/api/Response/Share/ShareResponse';
 
 export class ShareResource extends AbstractResource {
   public async list(
@@ -11,6 +15,22 @@ export class ShareResource extends AbstractResource {
     return this.get('/shares', {
       query: params as Record<string, unknown>,
     });
+  }
+
+  public async exists(
+    filters: {
+      searchTerm?: string;
+      expiry?: ShareExpiryFilter;
+      protection?: ShareProtectionFilter;
+      type?: ShareTypeFilter;
+      shareableId?: string;
+      shareableType?: ShareableType;
+    } = {},
+  ): Promise<boolean> {
+    const response = await this.get<{ exists: boolean }>('/shares/exists', {
+      query: filters as Record<string, unknown>,
+    });
+    return response.exists;
   }
 
   public async unpublish(shareId: string): Promise<void> {

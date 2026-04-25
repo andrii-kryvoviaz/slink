@@ -50,9 +50,22 @@
 
   import { cn } from '@slink/utils/ui';
 
+  import type { PageServerData } from './$types';
+
+  interface Props {
+    data: PageServerData;
+  }
+
+  let { data }: Props = $props();
+
   const { settings } = page.data;
 
   const historyFeedState = useUploadHistoryFeed();
+  historyFeedState.hydrate({ hasItems: data.hasAny });
+
+  if (historyFeedState.hasItems) {
+    historyFeedState.reload();
+  }
   const tagFilterManager = $derived(createTagFilterManager(page.url));
   const selectionState = createImageSelectionState();
 

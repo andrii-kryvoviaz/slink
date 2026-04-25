@@ -45,6 +45,7 @@
   const publicFeedState = usePublicImagesFeed();
   const postViewerState = usePostViewerState();
   publicFeedState.reset();
+  publicFeedState.hydrate({ hasItems: data.hasAny });
   postViewerState.setFeed(publicFeedState);
 
   $effect(() => {

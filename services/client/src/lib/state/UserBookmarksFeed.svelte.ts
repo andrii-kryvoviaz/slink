@@ -30,6 +30,20 @@ class UserBookmarksFeed extends AbstractPaginatedFeed<BookmarkItem> {
   protected _getItemId(item: BookmarkItem): string {
     return item.id;
   }
+
+  public async removeBookmark(bookmark: BookmarkItem): Promise<void> {
+    await ApiClient.bookmark.removeBookmark(bookmark.image.id);
+    this.removeItem(bookmark);
+  }
+
+  public applyBookmarkChange(
+    bookmark: BookmarkItem,
+    isBookmarked: boolean,
+  ): void {
+    if (!isBookmarked) {
+      this.removeItem(bookmark);
+    }
+  }
 }
 
 const USER_BOOKMARKS_FEED = Symbol('UserBookmarksFeed');

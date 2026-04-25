@@ -40,8 +40,6 @@ export interface SearchParams {
 
 export type AppendMode = 'auto' | 'always' | 'never';
 
-export type FeedPhase = 'idle' | 'loading' | 'empty' | 'ready' | 'error';
-
 export interface PaginationConfig {
   defaultPageSize: number;
   useCursor: boolean;
@@ -64,6 +62,7 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
   protected _config: PaginationConfig;
   protected _skeletonManager = new SkeletonManager();
   private _latestLoad = new LatestCall();
+  private _hydrationHint: { hasItems: boolean } | null = null;
 
   protected constructor(config: Partial<PaginationConfig> = {}) {
     super();
@@ -94,6 +93,7 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
       size: this._config.defaultPageSize,
       total: 0,
     };
+    this._applyHydrationHint();
   }
 
   public invalidate(): void {
@@ -157,6 +157,7 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
           }
           this._meta = response.meta;
           this._nextCursor = response.meta.nextCursor || null;
+          this._hydrationHint = null;
         },
         options,
       );
@@ -187,6 +188,7 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
         }
         this._meta = response.meta;
         this._nextCursor = response.meta.nextCursor || null;
+        this._hydrationHint = null;
       },
       options,
     );
@@ -247,9 +249,7 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
   }
 
   public setMode(mode: AppendMode): void {
-    if (this._config.appendMode === mode) return;
     this._config.appendMode = mode;
-    this.reset();
   }
 
   public setPageSize(pageSize: number): void {
@@ -355,28 +355,17 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
     return this._itemMap.size > 0;
   }
 
-  get phase(): FeedPhase {
-    if (this._skeletonManager.isVisible) return 'loading';
-    if (this.hasError && !this.hasItems) return 'error';
-    if (this.hasItems) return 'ready';
-    if (this.isDirty) return 'empty';
-    return 'idle';
-  }
-
   get showSkeleton(): boolean {
-    return this.phase === 'loading';
+    return this._skeletonManager.isVisible;
   }
 
   get isEmpty(): boolean {
-    return this.phase === 'empty';
-  }
-
-  get isReady(): boolean {
-    return this.phase === 'ready';
-  }
-
-  get isErrored(): boolean {
-    return this.phase === 'error';
+    return (
+      !this._skeletonManager.isVisible &&
+      !this.hasItems &&
+      !this.hasError &&
+      this.isDirty
+    );
   }
 
   get isCursorBased(): boolean {
@@ -393,15 +382,26 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
     this._skeletonManager.configure(config);
   }
 
+  public hydrate(hint: { hasItems: boolean }): void {
+    this._hydrationHint = hint;
+    this._applyHydrationHint();
+  }
+
+  private _applyHydrationHint(): void {
+    if (this._hydrationHint === null) return;
+
+    if (this.hasItems) {
+      this._hydrationHint = null;
+      return;
+    }
+
+    const { hasItems } = this._hydrationHint;
+    this._skeletonManager.configure({ initiallyVisible: hasItems });
+    this._skeletonManager.reset();
+    this.markDirty(!hasItems);
+  }
+
   protected abstract _getItemId(item: T): string;
-
-  protected _hasItem(item: T): boolean {
-    return this._itemMap.has(this._getItemId(item));
-  }
-
-  protected _findItemIndex(item: T): number {
-    return this._order.indexOf(this._getItemId(item));
-  }
 
   protected _shouldAppendItems(isInitialLoad: boolean): boolean {
     switch (this._config.appendMode) {

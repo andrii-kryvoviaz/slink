@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Slink\Tag\Infrastructure\ReadModel\Repository;
 
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Override;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
@@ -83,9 +84,27 @@ final class TagRepository extends AbstractRepository implements TagRepositoryInt
   }
 
   public function getAllByPage(int $page, TagListFilter $filter): Paginator {
-    $qb = $this->createQueryBuilder('t')
+    $qb = $this->buildTagListQuery($filter)
       ->leftJoin('t.user', 'u')
       ->addSelect('u');
+
+    $orderBy = $filter->getOrderBy() ?: 'name';
+    $order = $filter->getOrder() ?: 'asc';
+    $qb->orderBy("t.$orderBy", $order);
+
+    return $this->paginate($qb, $page, $filter->getLimit() ?: 50);
+  }
+
+  public function existsByFilter(TagListFilter $filter): bool {
+    $qb = $this->buildTagListQuery($filter)
+      ->select('1')
+      ->setMaxResults(1);
+
+    return (bool) $qb->getQuery()->getOneOrNullResult();
+  }
+
+  private function buildTagListQuery(TagListFilter $filter): QueryBuilder {
+    $qb = $this->createQueryBuilder('t');
 
     if ($filter->getUserId()) {
       $qb->andWhere('t.userId = :userId')
@@ -101,6 +120,11 @@ final class TagRepository extends AbstractRepository implements TagRepositoryInt
       $qb->andWhere('t.parentId IS NULL');
     }
 
+    if ($ids = $filter->getIds()) {
+      $qb->andWhere('t.uuid IN (:ids)')
+        ->setParameter('ids', $ids);
+    }
+
     if ($filter->getSearchTerm()) {
       if (!$filter->getUserId()) {
         throw new \InvalidArgumentException('User ID is required when searching tags');
@@ -110,11 +134,7 @@ final class TagRepository extends AbstractRepository implements TagRepositoryInt
         ->setParameter('searchUserId', $filter->getUserId());
     }
 
-    $orderBy = $filter->getOrderBy() ?: 'name';
-    $order = $filter->getOrder() ?: 'asc';
-    $qb->orderBy("t.$orderBy", $order);
-
-    return $this->paginate($qb, $page, $filter->getLimit() ?: 50);
+    return $qb;
   }
 
   public function findByUserId(ID $userId): array {

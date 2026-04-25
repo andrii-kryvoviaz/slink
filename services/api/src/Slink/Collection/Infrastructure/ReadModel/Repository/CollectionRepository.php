@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Slink\Collection\Infrastructure\ReadModel\Repository;
 
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Slink\Collection\Domain\Filter\CollectionListFilter;
 use Slink\Collection\Domain\Repository\CollectionRepositoryInterface;
@@ -57,23 +58,10 @@ final class CollectionRepository extends AbstractRepository implements Collectio
    * @return Paginator<CollectionView>
    */
   public function getByUserId(CollectionListFilter $filter): Paginator {
-    $userId = $filter->getUserId();
-    $limit = $filter->getLimit();
-
-    $qb = $this->getEntityManager()
-      ->createQueryBuilder()
-      ->from(CollectionView::class, 'c')
-      ->select('c')
-      ->where('c.user = :userId')
-      ->setParameter('userId', $userId)
+    $qb = $this->buildCollectionListQuery($filter)
       ->orderBy('c.createdAt', 'DESC')
       ->addOrderBy('c.uuid', 'DESC')
-      ->setMaxResults($limit + 1);
-
-    if ($searchTerm = $filter->getSearchTerm()) {
-      $qb->andWhere('c.name LIKE :searchTerm OR c.description LIKE :searchTerm')
-        ->setParameter('searchTerm', "%{$searchTerm}%");
-    }
+      ->setMaxResults(($filter->getLimit() ?? 12) + 1);
 
     if ($cursor = $filter->getCursor()) {
       $this->applyCursorPagination($qb, $cursor, 'createdAt', 'desc', 'uuid', 'c');
@@ -83,21 +71,34 @@ final class CollectionRepository extends AbstractRepository implements Collectio
   }
 
   public function countByUserId(CollectionListFilter $filter): int {
-    $userId = $filter->getUserId();
+    $qb = $this->buildCollectionListQuery($filter)
+      ->select('COUNT(c.uuid)');
 
+    return (int) $qb->getQuery()->getSingleScalarResult();
+  }
+
+  public function existsByFilter(CollectionListFilter $filter): bool {
+    $qb = $this->buildCollectionListQuery($filter)
+      ->select('1')
+      ->setMaxResults(1);
+
+    return (bool) $qb->getQuery()->getOneOrNullResult();
+  }
+
+  private function buildCollectionListQuery(CollectionListFilter $filter): QueryBuilder {
     $qb = $this->getEntityManager()
       ->createQueryBuilder()
       ->from(CollectionView::class, 'c')
-      ->select('COUNT(c.uuid)')
+      ->select('c')
       ->where('c.user = :userId')
-      ->setParameter('userId', $userId);
+      ->setParameter('userId', $filter->getUserId());
 
     if ($searchTerm = $filter->getSearchTerm()) {
       $qb->andWhere('c.name LIKE :searchTerm OR c.description LIKE :searchTerm')
         ->setParameter('searchTerm', "%{$searchTerm}%");
     }
 
-    return (int) $qb->getQuery()->getSingleScalarResult();
+    return $qb;
   }
 
   public function findNamesByPatternAndUser(string $baseName, string $userId): array {

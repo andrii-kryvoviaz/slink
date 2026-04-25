@@ -178,6 +178,17 @@ export class Client {
     const params = new URLSearchParams();
     for (const [key, value] of Object.entries(query)) {
       if (value === undefined || value === null || value === '') continue;
+
+      if (Array.isArray(value)) {
+        if (value.length === 0) continue;
+        const arrayKey = key.endsWith('[]') ? key : `${key}[]`;
+        for (const item of value) {
+          if (item === undefined || item === null || item === '') continue;
+          params.append(arrayKey, String(item));
+        }
+        continue;
+      }
+
       params.append(key, String(value));
     }
 

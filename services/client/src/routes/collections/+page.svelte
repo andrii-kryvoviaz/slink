@@ -25,10 +25,19 @@
   import { useCollectionListFeed } from '@slink/lib/state/CollectionListFeed.svelte';
   import { createCreateCollectionModalState } from '@slink/lib/state/CreateCollectionModalState.svelte';
 
+  import type { PageServerData } from './$types';
+
+  interface Props {
+    data: PageServerData;
+  }
+
+  let { data }: Props = $props();
+
   const { settings } = page.data;
 
   const collectionsFeed = useCollectionListFeed();
   collectionsFeed.reset();
+  collectionsFeed.hydrate({ hasItems: data.hasAny });
 
   const createModalState = createCreateCollectionModalState();
 

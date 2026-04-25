@@ -42,6 +42,11 @@ export class BookmarkResource extends AbstractResource {
     return this.get(`/bookmarks?${searchParams.toString()}`);
   }
 
+  public async exists(): Promise<boolean> {
+    const response = await this.get<{ exists: boolean }>('/bookmarks/exists');
+    return response.exists;
+  }
+
   public async getImageBookmarkers(
     imageId: string,
     limit: number = 10,

@@ -24,6 +24,8 @@ interface CollectionRepositoryInterface {
 
   public function countByUserId(CollectionListFilter $filter): int;
 
+  public function existsByFilter(CollectionListFilter $filter): bool;
+
   /**
    * @return string[]
    */

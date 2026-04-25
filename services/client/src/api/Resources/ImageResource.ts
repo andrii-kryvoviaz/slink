@@ -104,21 +104,23 @@ export class ImageResource extends AbstractResource {
     searchBy?: string,
     cursor?: string,
   ): Promise<ImageListingResponse> {
-    const searchParams = new URLSearchParams({
-      limit: limit.toString(),
-      orderBy,
+    return this.get('/images', {
+      query: { limit, orderBy, searchTerm, searchBy, cursor },
     });
+  }
 
-    if (searchTerm && searchBy) {
-      searchParams.append('searchTerm', searchTerm);
-      searchParams.append('searchBy', searchBy);
-    }
-
-    if (cursor) {
-      searchParams.append('cursor', cursor);
-    }
-
-    return this.get(`/images?${searchParams.toString()}`);
+  public async existsPublicImages(
+    filters: {
+      searchTerm?: string;
+      searchBy?: string;
+      tagIds?: string[];
+      requireAllTags?: boolean;
+    } = {},
+  ): Promise<boolean> {
+    const response = await this.get<{ exists: boolean }>('/images/exists', {
+      query: filters as Record<string, unknown>,
+    });
+    return response.exists;
   }
 
   public async getHistory(
@@ -128,46 +130,44 @@ export class ImageResource extends AbstractResource {
     tagIds?: string[],
     requireAllTags: boolean = false,
   ): Promise<ImageListingResponse> {
-    const searchParams = new URLSearchParams({
-      limit: limit.toString(),
+    return this.get('/images/history', {
+      query: {
+        limit,
+        cursor,
+        includeTags: includeTags || undefined,
+        tagIds,
+        requireAllTags: requireAllTags || undefined,
+      },
     });
+  }
 
-    if (cursor) {
-      searchParams.append('cursor', cursor);
-    }
-
-    if (includeTags) {
-      searchParams.append('includeTags', 'true');
-    }
-
-    if (tagIds && tagIds.length > 0) {
-      tagIds.forEach((tagId) => {
-        searchParams.append('tagIds[]', tagId);
-      });
-    }
-
-    if (requireAllTags) {
-      searchParams.append('requireAllTags', 'true');
-    }
-
-    return this.get(`/images/history?${searchParams.toString()}`);
+  public async existsHistory(
+    filters: {
+      searchTerm?: string;
+      searchBy?: string;
+      tagIds?: string[];
+      requireAllTags?: boolean;
+    } = {},
+  ): Promise<boolean> {
+    const response = await this.get<{ exists: boolean }>(
+      '/images/history/exists',
+      {
+        query: filters as Record<string, unknown>,
+      },
+    );
+    return response.exists;
   }
 
   public async getImagesByIds(
     uuids: string[],
     includeTags: boolean = false,
   ): Promise<ImagePlainListingResponse> {
-    const searchParams = new URLSearchParams();
-
-    uuids.forEach((uuid) => {
-      searchParams.append('uuid[]', uuid);
+    return this.get('/images/by-id', {
+      query: {
+        uuid: uuids,
+        includeTags: includeTags || undefined,
+      },
     });
-
-    if (includeTags) {
-      searchParams.append('includeTags', 'true');
-    }
-
-    return this.get(`/images/by-id?${searchParams.toString()}`);
   }
 
   public async adminUpdateDetails(
@@ -202,29 +202,9 @@ export class ImageResource extends AbstractResource {
       filter?: string;
     },
   ): Promise<ShareResponse> {
-    const searchParams = new URLSearchParams();
-
-    if (params.width !== undefined) {
-      searchParams.append('width', params.width.toString());
-    }
-
-    if (params.height !== undefined) {
-      searchParams.append('height', params.height.toString());
-    }
-
-    if (params.crop !== undefined) {
-      searchParams.append('crop', params.crop.toString());
-    }
-
-    if (params.format !== undefined) {
-      searchParams.append('format', params.format);
-    }
-
-    if (params.filter !== undefined) {
-      searchParams.append('filter', params.filter);
-    }
-
-    return this.get(`/image/${id}/share?${searchParams.toString()}`);
+    return this.get(`/image/${id}/share`, {
+      query: params as Record<string, unknown>,
+    });
   }
 
   public async publishShare(shareId: string): Promise<void> {

@@ -49,6 +49,8 @@ interface ImageRepositoryInterface extends ServiceEntityRepositoryInterface {
 
   public function countImageList(ImageListFilter $imageListFilter): int;
 
+  public function existsByFilter(ImageListFilter $imageListFilter): bool;
+
   /**
    * @param ID $userId
    * @return ImageView[]

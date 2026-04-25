@@ -35,4 +35,6 @@ interface ShareRepositoryInterface {
   public function getShareList(ShareListFilter $filter): Paginator;
 
   public function countShareList(ShareListFilter $filter): int;
+
+  public function existsByFilter(ShareListFilter $filter): bool;
 }

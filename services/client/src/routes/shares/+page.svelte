@@ -22,10 +22,19 @@
   import { skeleton } from '@slink/lib/actions/skeleton';
   import { provideSharesFeed } from '@slink/lib/state/SharesFeed.svelte';
 
+  import type { PageServerData } from './$types';
+
+  interface Props {
+    data: PageServerData;
+  }
+
+  let { data }: Props = $props();
+
   const feed = provideSharesFeed();
 
   feed.setScope({});
   feed.reset();
+  feed.hydrate({ hasItems: data.hasAny });
 
   const toTimestamp = (iso: string): number =>
     Math.floor(new Date(iso).getTime() / 1000);

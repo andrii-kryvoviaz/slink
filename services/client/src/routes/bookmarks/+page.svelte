@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { ApiClient } from '@slink/api';
   import { LoadMoreButton } from '@slink/feature/Action';
   import { BookmarkButton, ImagePlaceholder } from '@slink/feature/Image';
   import { EmptyState, Masonry } from '@slink/feature/Layout';
@@ -17,8 +16,17 @@
   import { skeleton } from '@slink/lib/actions/skeleton';
   import { useUserBookmarksFeed } from '@slink/lib/state/UserBookmarksFeed.svelte';
 
+  import type { PageServerData } from './$types';
+
+  interface Props {
+    data: PageServerData;
+  }
+
+  let { data }: Props = $props();
+
   const bookmarksFeed = useUserBookmarksFeed();
   bookmarksFeed.reset();
+  bookmarksFeed.hydrate({ hasItems: data.hasAny });
 
   $effect(() => {
     if (untrack(() => bookmarksFeed.needsLoad)) {
@@ -26,10 +34,8 @@
     }
   });
 
-  const handleRemoveBookmark = async (bookmark: BookmarkItem) => {
-    await ApiClient.bookmark.removeBookmark(bookmark.image.id);
-    bookmarksFeed.removeItem(bookmark);
-  };
+  const handleRemoveBookmark = (bookmark: BookmarkItem) =>
+    bookmarksFeed.removeBookmark(bookmark);
 </script>
 
 <svelte:head>
@@ -178,11 +184,8 @@
                   isBookmarked={true}
                   size="sm"
                   variant="overlay"
-                  onBookmarkChange={(isBookmarked: boolean, _count: number) => {
-                    if (!isBookmarked) {
-                      bookmarksFeed.removeItem(bookmark);
-                    }
-                  }}
+                  onBookmarkChange={(isBookmarked: boolean) =>
+                    bookmarksFeed.applyBookmarkChange(bookmark, isBookmarked)}
                 />
               </div>
 

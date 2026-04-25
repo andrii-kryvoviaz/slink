@@ -49,6 +49,20 @@ export class TagResource extends AbstractResource {
     return this.get('/tags', { query: params as Record<string, unknown> });
   }
 
+  async exists(
+    filters: {
+      parentId?: string;
+      searchTerm?: string;
+      rootOnly?: boolean;
+      ids?: string[];
+    } = {},
+  ): Promise<boolean> {
+    const response = await this.get<{ exists: boolean }>('/tags/exists', {
+      query: filters as Record<string, unknown>,
+    });
+    return response.exists;
+  }
+
   async create(data: CreateTagRequest): Promise<{ id: string }> {
     return this.post('/tags', { json: data });
   }

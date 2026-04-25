@@ -70,9 +70,6 @@ export const messages = {
     get added() {
       return localize('Image bookmarked');
     },
-    get removed() {
-      return localize('Bookmark removed');
-    },
     get failedToUpdate() {
       return localize('Failed to update bookmark');
     },

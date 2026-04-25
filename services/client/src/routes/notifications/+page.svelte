@@ -17,7 +17,16 @@
   import { skeleton } from '@slink/lib/actions/skeleton';
   import { useNotificationFeed } from '@slink/lib/state/NotificationFeed.svelte';
 
+  import type { PageServerData } from './$types';
+
+  interface Props {
+    data: PageServerData;
+  }
+
+  let { data }: Props = $props();
+
   const notificationFeed = useNotificationFeed();
+  notificationFeed.hydrate({ hasItems: data.hasAny });
 
   $effect(() => {
     if (untrack(() => notificationFeed.needsLoad)) {

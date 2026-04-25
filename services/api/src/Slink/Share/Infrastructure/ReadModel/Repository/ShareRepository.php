@@ -140,6 +140,15 @@ final class ShareRepository extends AbstractRepository implements ShareRepositor
     return (int) $qb->getQuery()->getSingleScalarResult();
   }
 
+  #[Override]
+  public function existsByFilter(ShareListFilter $filter): bool {
+    $qb = $this->buildShareListQuery($filter)
+      ->select('1')
+      ->setMaxResults(1);
+
+    return (bool) $qb->getQuery()->getOneOrNullResult();
+  }
+
   private function buildShareListQuery(ShareListFilter $filter): QueryBuilder {
     $qb = $this->getEntityManager()
       ->createQueryBuilder()

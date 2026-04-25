@@ -17,5 +17,7 @@ interface NotificationRepositoryInterface extends ServiceEntityRepositoryInterfa
 
   public function countUnreadByUserId(string $userId): int;
 
+  public function existsByUserId(string $userId): bool;
+
   public function markAllAsReadByUserId(string $userId): void;
 }

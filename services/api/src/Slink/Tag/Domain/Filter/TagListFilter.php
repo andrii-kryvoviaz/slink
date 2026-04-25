@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Slink\Tag\Domain\Filter;
 
 final readonly class TagListFilter {
+  /**
+   * @param array<string>|null $ids
+   */
   public function __construct(
     private ?int $limit = 50,
     private ?string $orderBy = 'name',
@@ -14,7 +17,8 @@ final readonly class TagListFilter {
     private ?string $searchTerm = null,
     private ?bool $rootOnly = null,
     private ?bool $includeChildren = false,
-    private ?string $cursor = null
+    private ?string $cursor = null,
+    private ?array $ids = null,
   ) {}
 
   public function getLimit(): ?int {
@@ -51,5 +55,12 @@ final readonly class TagListFilter {
 
   public function getCursor(): ?string {
     return $this->cursor;
+  }
+
+  /**
+   * @return array<string>|null
+   */
+  public function getIds(): ?array {
+    return $this->ids;
   }
 }

@@ -34,6 +34,20 @@ export class CollectionResource extends AbstractResource {
     return this.get('/collections', { query });
   }
 
+  public async exists(
+    filters: {
+      searchTerm?: string;
+    } = {},
+  ): Promise<boolean> {
+    const response = await this.get<{ exists: boolean }>(
+      '/collections/exists',
+      {
+        query: filters as Record<string, unknown>,
+      },
+    );
+    return response.exists;
+  }
+
   public async getById(collectionId: string): Promise<CollectionResponse> {
     return this.get(`/collection/${collectionId}`);
   }

@@ -17,7 +17,16 @@
   import { createCreateTagModalState } from '@slink/lib/state/CreateTagModalState.svelte';
   import { useTagListFeed } from '@slink/lib/state/TagListFeed.svelte';
 
+  import type { PageServerData } from './$types';
+
+  interface Props {
+    data: PageServerData;
+  }
+
+  let { data }: Props = $props();
+
   const tagFeed = useTagListFeed();
+  tagFeed.hydrate({ hasItems: data.hasAny });
   const createModalState = createCreateTagModalState();
 
   function handleCreateTag() {
