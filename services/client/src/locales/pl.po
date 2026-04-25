@@ -406,14 +406,6 @@ msgid "or click to browse from your device"
 msgstr "lub kliknij, aby przeglądać pliki na urządzeniu"
 
 #: src/feature/Upload/UploadForm.svelte
-msgid "Quick paste:"
-msgstr "Szybkie wklejanie:"
-
-#: src/feature/Upload/UploadForm.svelte
-msgid "WebP"
-msgstr "WebP"
-
-#: src/feature/Upload/UploadForm.svelte
 msgid "View all supported formats"
 msgstr "Wyświetl wszystkie obsługiwane formaty"
 
@@ -694,12 +686,16 @@ msgstr "Zaktualizuj hasło"
 
 #: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
 #: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
 #: src/routes/help/faq/+page.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Public"
 msgstr "Publiczny"
 
 #: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
+#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
 #: src/feature/Upload/UploadOptions/VisibilityOption.svelte
 #: src/routes/help/faq/+page.svelte
 #: src/routes/preferences/+page.svelte
@@ -4658,3 +4654,36 @@ msgstr "Zamknij wyszukiwanie"
 #: src/feature/Layout/ViewModeToggle/ViewModeToggle.svelte
 msgid "View mode"
 msgstr "Tryb widoku"
+
+#: src/feature/Upload/UploadForm.svelte
+msgid "Quick paste"
+msgstr "Szybkie wklejanie"
+
+#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+msgid "Current"
+msgstr "Aktualny"
+
+#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+msgid "Image visibility"
+msgstr "Widoczność obrazu"
+
+#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+msgid "Choose who can find this image. You can change it any time from the image page."
+msgstr "Wybierz, kto może znaleźć ten obraz. Możesz to zmienić w dowolnym momencie ze strony obrazu."
+
+#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+msgid "Listed on the explore page. Anyone with the direct link can open it."
+msgstr "Wyświetlany na stronie odkrywania. Każdy z bezpośrednim linkiem może go otworzyć."
+
+#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+msgid "Hidden from explore. Only you can open the direct link, unless you publish a share."
+msgstr "Ukryty na stronie odkrywania. Tylko Ty możesz otworzyć bezpośredni link, chyba że opublikujesz link udostępnienia."
+
+#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+msgid "Click the badge to switch"
+msgstr "Kliknij plakietkę, aby przełączyć"
+
+#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+msgid "Learn more <0/>"
+msgstr "Dowiedz się więcej <0/>"

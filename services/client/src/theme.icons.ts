@@ -59,7 +59,6 @@ export const themeIcons: string[] = [
   'ph:envelope-simple',
   'ph:user-plus',
   'ph:check-circle',
-  'ph:keyboard',
   'ph:info-circle',
   'heroicons:x-mark',
   'clarity:block-line',

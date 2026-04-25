@@ -406,14 +406,6 @@ msgid "or click to browse from your device"
 msgstr "或点击从设备中选择"
 
 #: src/feature/Upload/UploadForm.svelte
-msgid "Quick paste:"
-msgstr "快速粘贴："
-
-#: src/feature/Upload/UploadForm.svelte
-msgid "WebP"
-msgstr "WebP"
-
-#: src/feature/Upload/UploadForm.svelte
 msgid "View all supported formats"
 msgstr "查看全部支持格式"
 
@@ -694,12 +686,16 @@ msgstr "更新密码"
 
 #: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
 #: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
 #: src/routes/help/faq/+page.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Public"
 msgstr "公开"
 
 #: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
+#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
 #: src/feature/Upload/UploadOptions/VisibilityOption.svelte
 #: src/routes/help/faq/+page.svelte
 #: src/routes/preferences/+page.svelte
@@ -4638,3 +4634,36 @@ msgstr "关闭搜索"
 #: src/feature/Layout/ViewModeToggle/ViewModeToggle.svelte
 msgid "View mode"
 msgstr "视图模式"
+
+#: src/feature/Upload/UploadForm.svelte
+msgid "Quick paste"
+msgstr "快速粘贴"
+
+#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+msgid "Current"
+msgstr "当前"
+
+#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+msgid "Image visibility"
+msgstr "图片可见性"
+
+#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+msgid "Choose who can find this image. You can change it any time from the image page."
+msgstr "选择谁能找到此图片。您可以随时从图片页面更改。"
+
+#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+msgid "Listed on the explore page. Anyone with the direct link can open it."
+msgstr "在发现页面中列出。任何拥有直接链接的人都可以打开。"
+
+#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+msgid "Hidden from explore. Only you can open the direct link, unless you publish a share."
+msgstr "在发现中隐藏。只有您可以打开直接链接，除非您发布共享链接。"
+
+#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+msgid "Click the badge to switch"
+msgstr "点击徽章切换"
+
+#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+msgid "Learn more <0/>"
+msgstr "了解更多 <0/>"
