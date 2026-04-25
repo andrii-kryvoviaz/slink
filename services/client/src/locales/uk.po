@@ -1570,10 +1570,6 @@ msgstr "Увімкнути світлу тему"
 msgid "Switch to dark mode"
 msgstr "Увімкнути темну тему"
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.svelte
-msgid "View mode selection"
-msgstr "Вибір режиму відображення"
-
 #: src/feature/Settings/AccessSettings/AccessSettings.svelte
 msgid "Access Control"
 msgstr "Контроль доступу"
@@ -4651,3 +4647,7 @@ msgstr "Пошук"
 #: src/feature/Search/SearchBar.svelte
 msgid "Close search"
 msgstr "Закрити пошук"
+
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.svelte
+msgid "View mode"
+msgstr "Режим перегляду"

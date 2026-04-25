@@ -23,6 +23,7 @@ export const viewModeRegistry: Record<ViewMode, ViewModeConfig> =
 export interface ViewModeToggleProps {
   value: ViewMode;
   modes: ViewMode[];
+  size?: 'sm' | 'md' | 'lg';
   className?: string;
   disabled?: boolean;
   on: {

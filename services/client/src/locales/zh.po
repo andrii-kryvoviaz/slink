@@ -1570,10 +1570,6 @@ msgstr "切换到浅色模式"
 msgid "Switch to dark mode"
 msgstr "切换到深色模式"
 
-#: src/feature/Layout/ViewModeToggle/ViewModeToggle.svelte
-msgid "View mode selection"
-msgstr "视图模式选择"
-
 #: src/feature/Settings/AccessSettings/AccessSettings.svelte
 msgid "Access Control"
 msgstr "访问控制"
@@ -4638,3 +4634,7 @@ msgstr "搜索"
 #: src/feature/Search/SearchBar.svelte
 msgid "Close search"
 msgstr "关闭搜索"
+
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.svelte
+msgid "View mode"
+msgstr "视图模式"
