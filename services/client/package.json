@@ -88,6 +88,10 @@
     "flatted": ">=3.4.2",
     "picomatch": ">=4.0.4",
     "minimatch": ">=10.0.0",
-    "serialize-javascript": ">=7.0.0"
+    "serialize-javascript": ">=7.0.0",
+    "cookie": "^0.7.2",
+    "postcss": "^8.5.10",
+    "workbox-build/rollup": "^2.80.0",
+    "@sveltejs/adapter-node/rollup": "4.59.1"
   }
 }

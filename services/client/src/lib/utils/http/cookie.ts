@@ -83,6 +83,8 @@ type ResponseWithCookiesData = {
   authRefreshed?: boolean;
 };
 
+const VALID_COOKIE_NAME = /^[!#$%&'*+\-.^_`|~0-9A-Za-z]+$/;
+
 export const getResponseWithCookies = async ({
   response,
   cookies,
@@ -95,11 +97,12 @@ export const getResponseWithCookies = async ({
   const AUTH_COOKIE_NAMES = new Set(['refreshToken', 'sessionId']);
 
   cookies.getAll().forEach(({ name, value }) => {
+    if (!VALID_COOKIE_NAME.test(name)) return;
     if (name.startsWith('settings.')) return;
     if (name.startsWith('__')) return;
     if (!authRefreshed && AUTH_COOKIE_NAMES.has(name)) return;
 
-    let cookieString = `${name}=${value}; Path=/; HttpOnly; SameSite=Strict;`;
+    let cookieString = `${name}=${encodeURIComponent(value)}; Path=/; HttpOnly; SameSite=Strict;`;
 
     if (requireSsl) {
       cookieString += ' Secure;';
