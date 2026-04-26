@@ -21,32 +21,47 @@ Slink solves the problem of sharing images with friends, family, and colleagues 
 
 ## Features
 
-- **Image Upload**: Supports _PNG_, _JPG_, _WEBP_, _SVG_, _BMP_, _ICO_, _GIF_, _AVIF_, _HEIC\*_ and _TIFF\*_.
-- **Multi-File Upload**: Upload multiple files simultaneously with progress tracking and error handling.
-- **Image Compression**: Compress images to reduce file size and improve performance.
-- **Share Links**: Users can share links to their uploaded images and customize the image size.
+### Sharing & Access Control
+- **Privacy-First Shares**: All shares are private by default; access is granted only to whoever holds the link.
+- **Password-Protected Shares**: Optionally require a password to view a shared image.
+- **Expiring Shares**: Set an expiration so a share auto-revokes after a chosen time.
+- **Share Management**: Dedicated page to list, edit, publish, or revoke your shares.
 - **URL Shortening**: Shorten image URLs for easier sharing.
-- **Upload History**: Provides an overview of all images uploaded by the user with both list and grid view options.
-- **Explore Images**: Features a listing page of public images uploaded by other users.
-- **Collections**: Create collections of images and share them with others.
-- **Image Deduplication**: Automatic detection and handling of duplicate images with user-friendly notifications.
-- **Nested Tags System**: Organize and filter images with hierarchical tag management, search capabilities, and dedicated management page.
-- **Comments**: Leave comments on public images for discussion and feedback.
-- **Bookmarking**: Bookmark public images for easy access later.
-- **Notifications**: Receive notifications for user interactions with your images.
-- **Authentication**: Users can sign up and log in to the platform.
-- **SSO/OIDC**: Single Sign-On with support for Google, Authentik, Keycloak, Authelia, Pocket ID, and custom OIDC providers.
-- **User Approval**: Require user approval before they can upload images.
+- **Collections**: Group images and share an entire collection via a single link.
+- **Explore**: Browse images other users have made publicly visible.
+
+### Uploads & Media
+- **Image Upload**: Supports _PNG_, _JPG_, _WEBP_, _SVG_, _BMP_, _ICO_, _GIF_, _AVIF_, _HEIC\*_ and _TIFF\*_.
+- **Multi-File Upload**: Parallel uploads with progress tracking and per-file error handling.
+- **Image Compression**: Compress images to reduce file size and improve performance.
+- **Deduplication on Upload**: Detects duplicate images at upload time and notifies the user.
 - **Guest Upload**: Allow unauthenticated users to upload images without creating accounts.
-- **API Key Management**: Generate and manage personal API keys for external integrations.
-- **Public API**: A public API to access the platform programmatically.
 - **ShareX Integration**: Seamless integration with ShareX for automatic screenshot uploads.
-- **Storage Providers**: Support for _local_, _SMB_, _AWS S3_ storage providers.
-- **Storage Usage Tracking**: Monitor and display storage consumption metrics.
-- **Admin Image Management**: Full administrative control over image visibility and content moderation.
-- **Dashboard**: Enhanced statistics and analytics for admin users.
-- **Settings Configuration**: Ability to manage users, storage, and other settings.
+
+### Organization
+- **Nested Tags**: Hierarchical tag management with search capabilities and a dedicated management page.
+- **Upload History**: Overview of all your uploads with list and grid views.
+- **Bookmarks**: Save public images for easy access later.
+- **Comments**: Leave comments on public images for discussion and feedback.
+- **Notifications**: Receive notifications for user interactions with your images.
+
+### Authentication & API
+- **Authentication**: Email/password sign-up and login.
+- **SSO / OIDC**: Single Sign-On with support for Google, Authentik, Keycloak, Authelia, Pocket ID, and custom OIDC providers.
+- **User Approval**: Require user approval before they can upload images.
+- **API Keys**: Generate and manage personal API keys for external integrations.
+- **Public API**: A public API to access the platform programmatically.
+
+### Personalization
+- **Multi-Language UI**: Available in English, German, Spanish, French, Italian, Japanese, Polish, Ukrainian, and Chinese.
 - **Dark Mode**: Includes support for both _Dark_ and _Light_ modes in the application.
+
+### Administration
+- **Admin Dashboard**: Enhanced statistics and analytics for admin users.
+- **User & Settings Management**: Manage users, storage, and other platform settings.
+- **Image Moderation**: Full administrative control over image visibility and content moderation.
+- **Storage Providers**: Support for _local_, _SMB_, and _AWS S3_ storage providers.
+- **Storage Usage Tracking**: Monitor and display storage consumption metrics.
 
 Don't see a feature you need? Feel free to [open an issue](https://github.com/andrii-kryvoviaz/slink/issues/new) or [contribute](#contributing) to the project.
 You may also want to check the list of [upcoming features](https://docs.slinkapp.io/getting-started/01-introduction/#upcoming-features).
