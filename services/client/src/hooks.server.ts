@@ -8,7 +8,6 @@ import { ApiProxy } from '@slink/api/ApiProxy';
 import { createApiClient } from '@slink/api/Client';
 
 import { CookieManager } from '@slink/lib/auth/CookieManager';
-import { createFlash } from '@slink/lib/flash/flash';
 import { Theme, setCookieSettingsOnLocals } from '@slink/lib/settings/server';
 
 import { locales } from './locales/data.js';
@@ -73,11 +72,6 @@ const applyClientTheme: Handle = async ({ event, resolve }) => {
 const initializeCookieManager: Handle = async ({ event, resolve }) => {
   const requireSsl = env.REQUIRE_SSL?.toLowerCase() === 'true' || false;
   event.locals.cookieManager = new CookieManager(requireSsl);
-  return resolve(event);
-};
-
-const initializeFlash: Handle = async ({ event, resolve }) => {
-  event.locals.flash = createFlash(event.locals.cookieManager, event.cookies);
   return resolve(event);
 };
 
@@ -166,7 +160,6 @@ export const handle = sequence(
   filterResponseHeaders,
   initializeCookieManager,
   initializeLocale,
-  initializeFlash,
   initializeApiClient,
   injectApiHandling,
   setGlobalSettingsOnLocals,

@@ -7,6 +7,7 @@
     BannerFooter,
     BannerIcon,
   } from '@slink/feature/Layout';
+  import { Notice } from '@slink/feature/Text';
   import { Button } from '@slink/ui/components/button';
   import { Input } from '@slink/ui/components/input';
 
@@ -42,7 +43,7 @@
   let formElement: HTMLFormElement;
 
   let providers = $derived(
-    (data.ssoProviders ?? []).map((p) => ({
+    (data.sso?.providers ?? []).map((p) => ({
       ...OAuthProviderConfig.resolve(p.slug),
       name: p.name,
     })),
@@ -101,6 +102,12 @@
   <div
     class="bg-white/60 dark:bg-gray-900/40 backdrop-blur-sm rounded-2xl border border-gray-200/60 dark:border-gray-700/40 p-6 shadow-sm"
   >
+    {#if data.sso?.error}
+      <Notice variant="error" class="mb-5">
+        {data.sso.error}
+      </Notice>
+    {/if}
+
     <form
       bind:this={formElement}
       class="space-y-5"

@@ -1,31 +1,31 @@
-import { isRedirect, redirect } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 
 import { Auth } from '@slink/lib/auth/Auth';
-import { extractShortErrorMessage } from '@slink/lib/utils/error/extractErrorMessage';
+import { SsoError } from '@slink/lib/auth/sso';
+import { localize } from '@slink/lib/utils/i18n';
 
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ url, locals, cookies, fetch }) => {
+export const load: PageServerLoad = async (event) => {
+  const { url, locals, cookies, fetch } = event;
+
   const code = url.searchParams.get('code');
   const state = url.searchParams.get('state');
   const error = url.searchParams.get('error');
   const errorDescription = url.searchParams.get('error_description');
 
   if (error) {
-    const message = errorDescription || error;
-    locals.flash.error(message);
-    redirect(302, '/profile/login');
+    SsoError.redirect(event, errorDescription || error);
   }
 
   if (!code || !state) {
-    locals.flash.error('Missing authorization parameters');
-    redirect(302, '/profile/login');
+    SsoError.redirect(event, localize('Missing authorization parameters'));
   }
 
   try {
     const response = await locals.api.sso.token({
-      code,
-      state,
+      code: code as string,
+      state: state as string,
     });
 
     if ('approval_required' in response) {
@@ -40,11 +40,7 @@ export const load: PageServerLoad = async ({ url, locals, cookies, fetch }) => {
       { cookies, cookieManager: locals.cookieManager, fetch },
     );
   } catch (e) {
-    if (isRedirect(e)) throw e;
-    const err =
-      e instanceof Error ? e : new Error('An unexpected error occurred');
-    locals.flash.error(extractShortErrorMessage(err));
-    redirect(302, '/profile/login');
+    SsoError.handle(event, e);
   }
 
   redirect(302, '/');

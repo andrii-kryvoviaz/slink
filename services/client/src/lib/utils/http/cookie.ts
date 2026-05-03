@@ -83,7 +83,7 @@ type ResponseWithCookiesData = {
   authRefreshed?: boolean;
 };
 
-const VALID_COOKIE_NAME = /^[!#$%&'*+\-.^_`|~0-9A-Za-z]+$/;
+const AUTH_COOKIE_NAMES = ['refreshToken', 'sessionId'] as const;
 
 export const getResponseWithCookies = async ({
   response,
@@ -91,36 +91,33 @@ export const getResponseWithCookies = async ({
   requireSsl = false,
   authRefreshed,
 }: ResponseWithCookiesData): Promise<Response> => {
-  const { body, status } = response;
+  if (!authRefreshed) {
+    return response;
+  }
+
   const headers = new Headers(response.headers);
 
-  const AUTH_COOKIE_NAMES = new Set(['refreshToken', 'sessionId']);
+  for (const name of AUTH_COOKIE_NAMES) {
+    const value = cookies.get(name);
 
-  cookies.getAll().forEach(({ name, value }) => {
-    if (!VALID_COOKIE_NAME.test(name)) return;
-    if (name.startsWith('settings.')) return;
-    if (name.startsWith('__')) return;
-    if (!authRefreshed && AUTH_COOKIE_NAMES.has(name)) return;
-
-    let cookieString = `${name}=${encodeURIComponent(value)}; Path=/; HttpOnly; SameSite=Strict;`;
+    let cookieString: string;
+    if (!value) {
+      cookieString = `${name}=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0;`;
+    } else {
+      cookieString = `${name}=${encodeURIComponent(value)}; Path=/; HttpOnly; SameSite=Strict;`;
+    }
 
     if (requireSsl) {
       cookieString += ' Secure;';
     }
 
-    if (!value) {
-      cookieString = `${cookieString} Max-Age=0;`;
-    }
-
     headers.append('Set-Cookie', cookieString);
-  });
-
-  if (authRefreshed) {
-    headers.append('x-auth-refreshed', 'true');
   }
 
-  return new Response(body, {
-    status,
+  headers.append('x-auth-refreshed', 'true');
+
+  return new Response(response.body, {
+    status: response.status,
     headers,
   });
 };

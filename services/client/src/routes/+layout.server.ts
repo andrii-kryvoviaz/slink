@@ -31,8 +31,6 @@ export const load: LayoutServerLoad = async ({ locals, request }) => {
         (!group.roles || (user && isAuthorized(user, group.roles))),
     );
 
-  const flash = locals.flash.consume();
-
   return {
     settings,
     globalSettings,
@@ -40,7 +38,6 @@ export const load: LayoutServerLoad = async ({ locals, request }) => {
     userPreferences,
     userAgent,
     sidebarGroups,
-    flash,
     locale: locals.locale,
   };
 };
