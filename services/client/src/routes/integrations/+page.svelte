@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Subtitle, Title } from '@slink/feature/Text';
+  import { Notice, Subtitle, Title } from '@slink/feature/Text';
   import type { ApiKeyFormData, ApiKeyManagerState } from '@slink/feature/User';
   import {
     ApiKeyCard,
@@ -17,6 +17,12 @@
   import { fade } from 'svelte/transition';
 
   import type { ApiKeyResponse } from '@slink/api/Resources/ApiKeyResource';
+
+  interface PageData {
+    externalUploadAutoPublish: boolean;
+  }
+
+  let { data }: { data: PageData } = $props();
 
   const apiKeyStore = useApiKeyStore();
   const apiKeyService = new ApiKeyService();
@@ -89,6 +95,20 @@
         </SplitButton>
       </div>
     </div>
+
+    {#if !data.externalUploadAutoPublish}
+      <Notice variant="info" appearance="bordered" size="md" class="mb-6">
+        <p>
+          By default, API uploads aren't auto-published.
+          <a
+            href="/preferences"
+            class="font-semibold underline underline-offset-2 decoration-2 hover:no-underline transition-all"
+          >
+            Enable in Preferences
+          </a>
+        </p>
+      </Notice>
+    {/if}
 
     <ApiKeyList
       apiKeys={apiKeyStore.apiKeys}

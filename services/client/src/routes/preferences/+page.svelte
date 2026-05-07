@@ -213,6 +213,20 @@
                 value={state.visibility ?? ''}
               />
             </SettingItem>
+
+            <SettingItem>
+              {#snippet label()}
+                Auto-publish API uploads
+              {/snippet}
+              {#snippet hint()}
+                Make uploads from API tools (e.g. ShareX) immediately shareable.
+              {/snippet}
+              <Switch
+                id="externalUploadAutoPublish"
+                name="externalUploadAutoPublish"
+                bind:checked={state.externalUploadAutoPublish}
+              />
+            </SettingItem>
           </div>
         </section>
       {/if}

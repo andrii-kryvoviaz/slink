@@ -39,7 +39,8 @@ final class UploadController {
     
     $query = new GetExternalUploadResponseQuery(
       $imageId,
-      "{$imageId}.{$extension}"
+      "{$imageId}.{$extension}",
+      $user->getIdentifier(),
     );
     
     $response = $this->ask($query);

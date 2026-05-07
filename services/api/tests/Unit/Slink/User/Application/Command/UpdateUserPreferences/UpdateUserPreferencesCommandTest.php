@@ -105,4 +105,38 @@ final class UpdateUserPreferencesCommandTest extends TestCase {
         $this->assertEquals(License::CC_BY, $prefs1->getDefaultLicense());
         $this->assertEquals(License::CC_BY_SA, $prefs2->getDefaultLicense());
     }
+
+    #[Test]
+    public function itAcceptsExternalUploadAutoPublishTrue(): void {
+        $command = new UpdateUserPreferencesCommand(externalUploadAutoPublish: true);
+
+        $this->assertTrue($command->getExternalUploadAutoPublish());
+    }
+
+    #[Test]
+    public function itIncludesExternalUploadAutoPublishInPayloadWhenSet(): void {
+        $command = new UpdateUserPreferencesCommand(externalUploadAutoPublish: true);
+
+        $payload = $command->toPayload();
+
+        $this->assertArrayHasKey('image.externalUploadAutoPublish', $payload);
+        $this->assertTrue($payload['image.externalUploadAutoPublish']);
+    }
+
+    #[Test]
+    public function itReflectsExternalUploadAutoPublishInPreferences(): void {
+        $command = new UpdateUserPreferencesCommand(externalUploadAutoPublish: true);
+
+        $preferences = $command->getPreferences();
+
+        $this->assertTrue($preferences->getExternalUploadAutoPublish());
+    }
+
+    #[Test]
+    public function itDefaultsExternalUploadAutoPublishToNull(): void {
+        $command = new UpdateUserPreferencesCommand();
+
+        $this->assertNull($command->getExternalUploadAutoPublish());
+        $this->assertNull($command->toPayload()['image.externalUploadAutoPublish']);
+    }
 }

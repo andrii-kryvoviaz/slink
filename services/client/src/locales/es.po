@@ -24,8 +24,6 @@ msgid "Missing authorization parameters"
 msgstr "Faltan parámetros de autorización"
 
 #: src/lib/utils/i18n/messages/api.language.ts
-#: src/routes/profile/(auth)/sso/callback/+page.server.ts
-#: src/routes/profile/(auth)/sso/login/[provider]/+page.server.ts
 msgid "An unexpected error occurred"
 msgstr "Ocurrió un error inesperado"
 
@@ -4673,3 +4671,15 @@ msgstr "Haz clic en la insignia para cambiar"
 #: src/feature/Upload/UploadOptions/VisibilityOption.svelte
 msgid "Learn more <0/>"
 msgstr "Más información <0/>"
+
+#: src/routes/preferences/+page.svelte
+msgid "Auto-publish API uploads"
+msgstr "Publicación automática de subidas por API"
+
+#: src/routes/preferences/+page.svelte
+msgid "Make uploads from API tools (e.g. ShareX) immediately shareable."
+msgstr "Hace que las subidas desde herramientas API (p. ej. ShareX) se puedan compartir al instante."
+
+#: src/routes/integrations/+page.svelte
+msgid "By default, API uploads aren't auto-published. <0>Enable in Preferences</0>"
+msgstr "Por defecto, las subidas por API no se publican automáticamente. <0>Activar en Preferencias</0>"

@@ -32,6 +32,8 @@ final readonly class UpdateUserPreferencesCommand implements CommandInterface {
     #[SerializedName('display.language')]
     #[Assert\Choice(callback: [DisplayLanguage::class, 'values'], message: 'Invalid display language.')]
     private ?string $displayLanguage = null,
+    #[SerializedName('image.externalUploadAutoPublish')]
+    private ?bool $externalUploadAutoPublish = null,
   ) {
   }
 
@@ -41,11 +43,12 @@ final readonly class UpdateUserPreferencesCommand implements CommandInterface {
       defaultLandingPage: $this->getDefaultLandingPage(),
       defaultVisibility: $this->getDefaultVisibility(),
       displayLanguage: $this->getDisplayLanguage(),
+      externalUploadAutoPublish: $this->externalUploadAutoPublish,
     );
   }
 
   /**
-   * @return array<string, string|null>
+   * @return array<string, string|bool|null>
    */
   public function toPayload(): array {
     return [
@@ -53,6 +56,7 @@ final readonly class UpdateUserPreferencesCommand implements CommandInterface {
       'navigation.landingPage' => $this->defaultLandingPage,
       'image.defaultVisibility' => $this->defaultVisibility,
       'display.language' => $this->displayLanguage,
+      'image.externalUploadAutoPublish' => $this->externalUploadAutoPublish,
     ];
   }
 
@@ -74,5 +78,9 @@ final readonly class UpdateUserPreferencesCommand implements CommandInterface {
 
   public function shouldSyncLicenseToImages(): bool {
     return $this->syncLicenseToImages;
+  }
+
+  public function getExternalUploadAutoPublish(): ?bool {
+    return $this->externalUploadAutoPublish;
   }
 }

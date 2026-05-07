@@ -24,8 +24,6 @@ msgid "Missing authorization parameters"
 msgstr "缺少授权参数"
 
 #: src/lib/utils/i18n/messages/api.language.ts
-#: src/routes/profile/(auth)/sso/callback/+page.server.ts
-#: src/routes/profile/(auth)/sso/login/[provider]/+page.server.ts
 msgid "An unexpected error occurred"
 msgstr "发生了意外错误"
 
@@ -4667,3 +4665,15 @@ msgstr "点击徽章切换"
 #: src/feature/Upload/UploadOptions/VisibilityOption.svelte
 msgid "Learn more <0/>"
 msgstr "了解更多 <0/>"
+
+#: src/routes/preferences/+page.svelte
+msgid "Auto-publish API uploads"
+msgstr "自动发布 API 上传"
+
+#: src/routes/preferences/+page.svelte
+msgid "Make uploads from API tools (e.g. ShareX) immediately shareable."
+msgstr "使来自 API 工具（例如 ShareX）的上传立即可分享。"
+
+#: src/routes/integrations/+page.svelte
+msgid "By default, API uploads aren't auto-published. <0>Enable in Preferences</0>"
+msgstr "默认情况下，API 上传不会自动发布。<0>在偏好设置中启用</0>"

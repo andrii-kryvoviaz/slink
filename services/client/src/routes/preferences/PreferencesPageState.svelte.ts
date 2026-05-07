@@ -9,6 +9,7 @@ export class PreferencesPageState {
   locale = $state(Locale.EN);
   landingPage = $state(LandingPage.Explore);
   visibility = $state('private');
+  externalUploadAutoPublish = $state(false);
   license = $state('');
   syncToImages = $state(false);
 
@@ -21,6 +22,8 @@ export class PreferencesPageState {
     this.landingPage =
       preferences?.['navigation.landingPage'] ?? LandingPage.Explore;
     this.visibility = preferences?.['image.defaultVisibility'] ?? 'private';
+    this.externalUploadAutoPublish =
+      preferences?.['image.externalUploadAutoPublish'] ?? false;
     this.license = preferences?.['license.default'] ?? '';
     this._takeSnapshot();
   }
@@ -47,6 +50,7 @@ export class PreferencesPageState {
       locale: this.locale,
       landingPage: this.landingPage,
       visibility: this.visibility,
+      externalUploadAutoPublish: this.externalUploadAutoPublish,
       license: this.license,
     };
   }

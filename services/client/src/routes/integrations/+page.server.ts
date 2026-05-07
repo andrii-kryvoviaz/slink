@@ -9,5 +9,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 
   return {
     user: locals.user,
+    externalUploadAutoPublish:
+      locals.userPreferences?.['image.externalUploadAutoPublish'] ?? false,
   };
 };
