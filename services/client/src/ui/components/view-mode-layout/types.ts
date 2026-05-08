@@ -17,6 +17,7 @@ export interface BaseModeConfig {
   appendMode?: AppendMode;
 }
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface TableModeConfig<
   TData extends RowData = any,
 > extends BaseModeConfig {

@@ -1,4 +1,4 @@
-ARG PHP_VERSION
+ARG PHP_VERSION=8.5.5
 
 FROM php:${PHP_VERSION}-alpine AS test
 

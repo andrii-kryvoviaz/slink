@@ -28,6 +28,7 @@ permissions:
 
 env:
   image: docker.io/${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.APP_NAME }}
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   build:
@@ -44,7 +45,7 @@ jobs:
             runner: ubuntu-24.04-arm
             scope: prod-arm64
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ inputs.ref || github.sha }}
 
@@ -80,7 +81,7 @@ jobs:
           touch "${{ runner.temp }}/digests/${digest#sha256:}"
 
       - name: Upload digest
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: digests-${{ matrix.scope }}
           path: ${{ runner.temp }}/digests/*
@@ -93,7 +94,7 @@ jobs:
     needs: build
     steps:
       - name: Download digests
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           path: ${{ runner.temp }}/digests
           pattern: digests-*
