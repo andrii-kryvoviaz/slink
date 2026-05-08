@@ -8,6 +8,7 @@ on:
       - "services/**"
       - "docker/**"
       - "docker-bake.hcl"
+  workflow_dispatch:
 
 permissions:
   contents: read
