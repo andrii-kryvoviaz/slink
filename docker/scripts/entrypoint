@@ -34,6 +34,6 @@ if [ -f /app/var/data/keys/app_secret ]; then
   export APP_SECRET=$(cat /app/var/data/keys/app_secret)
 fi
 
-delegate slink slink dotenv:dump prod
+delegate slink slink dotenv:dump prod --quiet
 
 exec /init "$@"

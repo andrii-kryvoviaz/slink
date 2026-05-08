@@ -80,6 +80,13 @@ UPLOADS
 echo 'date.timezone = ${TZ}' > /usr/local/etc/php/conf.d/timezone.ini
 EOF
 
+COPY --link --from=node /usr/local/bin/node /usr/local/bin/node
+
+RUN mkdir -p /app/etc/runtime && \
+    /usr/local/bin/node -v | sed 's/^v//' | tr -d '\n' > /app/etc/runtime/node && \
+    (grep '^PRETTY_NAME=' /etc/os-release 2>/dev/null | cut -d'"' -f2 | tr '[:upper:]' '[:lower:]' | tr -d '\n' || true) > /app/etc/runtime/container && \
+    chmod 644 /app/etc/runtime/*
+
 COPY --chmod=755 ./docker/config/s6-overlay/scripts/bootstrap /etc/s6-overlay/scripts/bootstrap
 COPY ./docker/config/s6-overlay/s6-rc.d/shared/ /etc/s6-overlay/s6-rc.d/
 COPY ./docker/config/caddy/Caddyfile ./docker/config/caddy/Caddyfile.mercure /etc/caddy/
