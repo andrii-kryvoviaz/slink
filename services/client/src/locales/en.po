@@ -4683,3 +4683,11 @@ msgstr "Make uploads from API tools (e.g. ShareX) immediately shareable."
 #: src/routes/integrations/+page.svelte
 msgid "By default, API uploads aren't auto-published. <0>Enable in Preferences</0>"
 msgstr "By default, API uploads aren't auto-published. <0>Enable in Preferences</0>"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Use IAM Role"
+msgstr "Use IAM Role"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Use the instance's IAM role or AWS default credential chain (IRSA, environment variables) instead of static access keys. Recommended when running on EC2, ECS, or EKS."
+msgstr "Use the instance's IAM role or AWS default credential chain (IRSA, environment variables) instead of static access keys. Recommended when running on EC2, ECS, or EKS."

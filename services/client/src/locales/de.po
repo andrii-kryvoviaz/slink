@@ -4683,3 +4683,11 @@ msgstr "Macht Uploads aus API-Tools (z. B. ShareX) sofort teilbar."
 #: src/routes/integrations/+page.svelte
 msgid "By default, API uploads aren't auto-published. <0>Enable in Preferences</0>"
 msgstr "API-Uploads werden standardmäßig nicht automatisch veröffentlicht. <0>In den Einstellungen aktivieren</0>"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Use IAM Role"
+msgstr "IAM-Rolle verwenden"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Use the instance's IAM role or AWS default credential chain (IRSA, environment variables) instead of static access keys. Recommended when running on EC2, ECS, or EKS."
+msgstr "IAM-Rolle der Instanz oder AWS-Standard-Credential-Chain (IRSA, Umgebungsvariablen) statt statischer Zugriffsschlüssel verwenden. Empfohlen für EC2, ECS und EKS."

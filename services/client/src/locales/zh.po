@@ -4677,3 +4677,11 @@ msgstr "使来自 API 工具（例如 ShareX）的上传立即可分享。"
 #: src/routes/integrations/+page.svelte
 msgid "By default, API uploads aren't auto-published. <0>Enable in Preferences</0>"
 msgstr "默认情况下，API 上传不会自动发布。<0>在偏好设置中启用</0>"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Use IAM Role"
+msgstr "使用 IAM 角色"
+
+#: src/feature/Settings/StorageSettings/StorageSettings.svelte
+msgid "Use the instance's IAM role or AWS default credential chain (IRSA, environment variables) instead of static access keys. Recommended when running on EC2, ECS, or EKS."
+msgstr "使用实例的 IAM 角色或 AWS 默认凭证链（IRSA、环境变量），而非静态访问密钥。推荐用于 EC2、ECS 或 EKS。"

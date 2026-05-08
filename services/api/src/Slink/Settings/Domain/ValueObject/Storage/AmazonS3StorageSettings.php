@@ -21,20 +21,22 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
    * @param string|null $endpoint
    * @param bool $useCustomProvider
    * @param bool $forcePathStyle
+   * @param bool $useIamRole
    */
   private function __construct(
     private string $region,
     private string $bucket,
-    
+
     #[SensitiveParameter]
     private string $key,
-    
+
     #[SensitiveParameter]
     private string $secret,
-    
+
     private ?string $endpoint = null,
     private bool $useCustomProvider = false,
-    private bool $forcePathStyle = false
+    private bool $forcePathStyle = false,
+    private bool $useIamRole = false
   ) {}
   
   /**
@@ -85,7 +87,14 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
   public function isForcePathStyle(): bool {
     return $this->forcePathStyle;
   }
-  
+
+  /**
+   * @return bool
+   */
+  public function usesIamRole(): bool {
+    return $this->useIamRole;
+  }
+
   /**
    * @param array{
    *   region?: string,
@@ -94,7 +103,8 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
    *   secret?: string,
    *   endpoint?: string|null,
    *   useCustomProvider?: bool|null,
-   *   forcePathStyle?: bool|null
+   *   forcePathStyle?: bool|null,
+   *   useIamRole?: bool|null
    * } $payload
    * @return static
    */
@@ -107,6 +117,11 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
     $key = trim(EncryptionRegistry::decrypt((string) ($payload['key'] ?? '')));
     $secret = trim(EncryptionRegistry::decrypt((string) ($payload['secret'] ?? '')));
     $forcePathStyle = (bool) ($payload['forcePathStyle'] ?? false);
+    $useIamRole = (bool) ($payload['useIamRole'] ?? false);
+
+    if ($useCustomProvider && $useIamRole) {
+      $useIamRole = false;
+    }
 
     if (!$useCustomProvider && empty($region)) {
       throw new S3RegionNotConfiguredException();
@@ -116,12 +131,14 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
       throw new S3BucketNotConfiguredException();
     }
 
-    if (empty($key)) {
-      throw new S3CredentialsNotConfiguredException('key');
-    }
+    if (!$useIamRole) {
+      if (empty($key)) {
+        throw new S3CredentialsNotConfiguredException('key');
+      }
 
-    if (empty($secret)) {
-      throw new S3CredentialsNotConfiguredException('secret');
+      if (empty($secret)) {
+        throw new S3CredentialsNotConfiguredException('secret');
+      }
     }
 
     return new self(
@@ -131,7 +148,8 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
       $secret,
       $endpoint,
       $useCustomProvider,
-      $forcePathStyle
+      $forcePathStyle,
+      $useIamRole
     );
   }
   
@@ -144,6 +162,7 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
       'endpoint' => $configurationProvider->get('storage.adapter.s3.endpoint'),
       'useCustomProvider' => $configurationProvider->get('storage.adapter.s3.useCustomProvider'),
       'forcePathStyle' => $configurationProvider->get('storage.adapter.s3.forcePathStyle'),
+      'useIamRole' => $configurationProvider->get('storage.adapter.s3.useIamRole'),
     ]);
   }
   
@@ -155,7 +174,8 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
    *   secret: string,
    *   endpoint: string|null,
    *   useCustomProvider: bool,
-   *   forcePathStyle: bool
+   *   forcePathStyle: bool,
+   *   useIamRole: bool
    * }
    */
   #[\Override]
@@ -167,7 +187,8 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
       'secret' => EncryptionRegistry::encrypt($this->secret),
       'endpoint' => $this->endpoint,
       'useCustomProvider' => $this->useCustomProvider,
-      'forcePathStyle' => $this->forcePathStyle
+      'forcePathStyle' => $this->forcePathStyle,
+      'useIamRole' => $this->useIamRole
     ];
   }
   
@@ -184,12 +205,15 @@ final readonly class AmazonS3StorageSettings extends AbstractCompoundValueObject
     $config = [
       'version' => 'latest',
       'region' => $region,
-      'credentials' => [
+    ];
+
+    if (!$this->useIamRole) {
+      $config['credentials'] = [
         'key' => $this->key,
         'secret' => $this->secret,
-      ],
-    ];
-    
+      ];
+    }
+
     if (!$this->useCustomProvider) {
       return $config;
     }

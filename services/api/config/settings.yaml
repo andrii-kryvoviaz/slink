@@ -18,6 +18,7 @@ parameters:
         endpoint: '%env(string:default::AMAZON_S3_ENDPOINT)%'
         useCustomProvider: '%env(bool:default::AMAZON_S3_USE_CUSTOM_PROVIDER)%'
         forcePathStyle: '%env(bool:default::AMAZON_S3_FORCE_PATH_STYLE)%'
+        useIamRole: '%env(bool:default::AMAZON_S3_USE_IAM_ROLE)%'
   user:
     allowRegistration: '%env(bool:USER_ALLOW_REGISTRATION)%'
     approvalRequired: '%env(bool:USER_APPROVAL_REQUIRED)%'
@@ -68,3 +69,4 @@ when@prod:
           endpoint: '%env(string:default::AMAZON_S3_ENDPOINT)%'
           useCustomProvider: '%env(bool:default::AMAZON_S3_USE_CUSTOM_PROVIDER)%'
           forcePathStyle: '%env(bool:default::AMAZON_S3_FORCE_PATH_STYLE)%'
+          useIamRole: '%env(bool:default::AMAZON_S3_USE_IAM_ROLE)%'
