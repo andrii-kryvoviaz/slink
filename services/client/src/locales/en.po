@@ -118,7 +118,6 @@ msgstr "Users"
 #: src/feature/Upload/Dropzone/Dropzone.svelte
 #: src/routes/collection/[id]/+page.svelte
 #: src/routes/explore/+page.svelte
-#: src/ui/components/filter/context.svelte.ts
 #: src/ui/components/filter/filter-search.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "Enter"
@@ -128,7 +127,6 @@ msgstr "Enter"
 #: src/feature/Image/PostViewer/PostViewer.svelte
 #: src/feature/Image/SizePicker/ImageSizePicker.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
-#: src/ui/components/filter/context.svelte.ts
 #: src/ui/components/table-pagination/table-pagination.svelte
 msgid "Escape"
 msgstr "Escape"
@@ -1306,7 +1304,6 @@ msgid "Close viewer"
 msgstr "Close viewer"
 
 #: src/feature/Image/PostViewer/PostViewer.svelte
-#: src/ui/components/filter/context.svelte.ts
 #: src/ui/components/input/number-input.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "ArrowUp"
@@ -1318,7 +1315,6 @@ msgid "ArrowLeft"
 msgstr "ArrowLeft"
 
 #: src/feature/Image/PostViewer/PostViewer.svelte
-#: src/ui/components/filter/context.svelte.ts
 #: src/ui/components/input/number-input.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "ArrowDown"
@@ -4711,7 +4707,3 @@ msgstr "Short URL Length"
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
 msgid "Number of characters in generated short codes (4 to 32)"
 msgstr "Number of characters in generated short codes (4 to 32)"
-
-#: src/ui/components/filter/context.svelte.ts
-msgid "Backspace"
-msgstr "Backspace"

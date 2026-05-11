@@ -118,7 +118,6 @@ msgstr "Користувачі"
 #: src/feature/Upload/Dropzone/Dropzone.svelte
 #: src/routes/collection/[id]/+page.svelte
 #: src/routes/explore/+page.svelte
-#: src/ui/components/filter/context.svelte.ts
 #: src/ui/components/filter/filter-search.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "Enter"
@@ -128,7 +127,6 @@ msgstr "Enter"
 #: src/feature/Image/PostViewer/PostViewer.svelte
 #: src/feature/Image/SizePicker/ImageSizePicker.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
-#: src/ui/components/filter/context.svelte.ts
 #: src/ui/components/table-pagination/table-pagination.svelte
 msgid "Escape"
 msgstr "Escape"
@@ -1306,7 +1304,6 @@ msgid "Close viewer"
 msgstr "Закрити перегляд"
 
 #: src/feature/Image/PostViewer/PostViewer.svelte
-#: src/ui/components/filter/context.svelte.ts
 #: src/ui/components/input/number-input.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "ArrowUp"
@@ -1318,7 +1315,6 @@ msgid "ArrowLeft"
 msgstr "ArrowLeft"
 
 #: src/feature/Image/PostViewer/PostViewer.svelte
-#: src/ui/components/filter/context.svelte.ts
 #: src/ui/components/input/number-input.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "ArrowDown"
@@ -4709,7 +4705,7 @@ msgstr "Використовуйте IAM-роль інстансу або тип
 
 #: src/routes/profile/+page.server.ts
 msgid "Display name is the same as the current one."
-msgstr ""
+msgstr "Відображуване ім'я збігається з поточним."
 
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
 msgid "Short URL Length"
@@ -4718,7 +4714,3 @@ msgstr "Довжина короткого URL"
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
 msgid "Number of characters in generated short codes (4 to 32)"
 msgstr "Кількість символів у згенерованих коротких кодах (від 4 до 32)"
-
-#: src/ui/components/filter/context.svelte.ts
-msgid "Backspace"
-msgstr ""

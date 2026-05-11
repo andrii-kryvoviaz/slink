@@ -118,7 +118,6 @@ msgstr "Użytkownicy"
 #: src/feature/Upload/Dropzone/Dropzone.svelte
 #: src/routes/collection/[id]/+page.svelte
 #: src/routes/explore/+page.svelte
-#: src/ui/components/filter/context.svelte.ts
 #: src/ui/components/filter/filter-search.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "Enter"
@@ -128,7 +127,6 @@ msgstr "Enter"
 #: src/feature/Image/PostViewer/PostViewer.svelte
 #: src/feature/Image/SizePicker/ImageSizePicker.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
-#: src/ui/components/filter/context.svelte.ts
 #: src/ui/components/table-pagination/table-pagination.svelte
 msgid "Escape"
 msgstr "Escape"
@@ -1306,7 +1304,6 @@ msgid "Close viewer"
 msgstr "Zamknij podgląd"
 
 #: src/feature/Image/PostViewer/PostViewer.svelte
-#: src/ui/components/filter/context.svelte.ts
 #: src/ui/components/input/number-input.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "ArrowUp"
@@ -1318,7 +1315,6 @@ msgid "ArrowLeft"
 msgstr "ArrowLeft"
 
 #: src/feature/Image/PostViewer/PostViewer.svelte
-#: src/ui/components/filter/context.svelte.ts
 #: src/ui/components/input/number-input.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "ArrowDown"
@@ -4716,7 +4712,7 @@ msgstr "Używaj roli IAM instancji lub domyślnego łańcucha poświadczeń AWS 
 
 #: src/routes/profile/+page.server.ts
 msgid "Display name is the same as the current one."
-msgstr ""
+msgstr "Wyświetlana nazwa jest taka sama jak obecna."
 
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
 msgid "Short URL Length"
@@ -4725,7 +4721,3 @@ msgstr "Długość krótkiego URL"
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
 msgid "Number of characters in generated short codes (4 to 32)"
 msgstr "Liczba znaków w generowanych krótkich kodach (od 4 do 32)"
-
-#: src/ui/components/filter/context.svelte.ts
-msgid "Backspace"
-msgstr ""
