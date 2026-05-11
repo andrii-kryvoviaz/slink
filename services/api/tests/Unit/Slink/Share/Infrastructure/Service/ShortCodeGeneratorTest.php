@@ -6,16 +6,24 @@ namespace Tests\Unit\Slink\Share\Infrastructure\Service;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Share\Domain\Repository\ShortUrlRepositoryInterface;
 use Slink\Share\Infrastructure\Service\ShortCodeGenerator;
 
 final class ShortCodeGeneratorTest extends TestCase {
   private ShortUrlRepositoryInterface $shortUrlRepository;
+  private ConfigurationProviderInterface $configurationProvider;
   private ShortCodeGenerator $generator;
 
   protected function setUp(): void {
     $this->shortUrlRepository = $this->createStub(ShortUrlRepositoryInterface::class);
-    $this->generator = new ShortCodeGenerator($this->shortUrlRepository);
+    $this->configurationProvider = $this->createStub(ConfigurationProviderInterface::class);
+    $this->configurationProvider
+      ->method('get')
+      ->willReturnMap([
+        ['share.shortUrlLength', 8],
+      ]);
+    $this->generator = new ShortCodeGenerator($this->shortUrlRepository, $this->configurationProvider);
   }
 
   #[Test]
@@ -48,7 +56,7 @@ final class ShortCodeGeneratorTest extends TestCase {
       ->method('existsByShortCode')
       ->willReturnOnConsecutiveCalls(true, true, false);
 
-    $generator = new ShortCodeGenerator($shortUrlRepository);
+    $generator = new ShortCodeGenerator($shortUrlRepository, $this->configurationProvider);
     $code = $generator->generate();
 
     $this->assertEquals(8, strlen($code));
@@ -91,5 +99,31 @@ final class ShortCodeGeneratorTest extends TestCase {
       $code = $this->generator->generate();
       $this->assertDoesNotMatchRegularExpression('/[^0-9A-Za-z]/', $code);
     }
+  }
+
+  #[Test]
+  public function itHonorsConfiguredCodeLength(): void {
+    $shortUrlRepository = $this->createStub(ShortUrlRepositoryInterface::class);
+    $shortUrlRepository->method('existsByShortCode')->willReturn(false);
+
+    $configurationProvider = $this->createStub(ConfigurationProviderInterface::class);
+    $configurationProvider->method('get')->willReturn(12);
+
+    $generator = new ShortCodeGenerator($shortUrlRepository, $configurationProvider);
+
+    $this->assertEquals(12, strlen($generator->generate()));
+  }
+
+  #[Test]
+  public function itFallsBackToDefaultWhenConfigMissing(): void {
+    $shortUrlRepository = $this->createStub(ShortUrlRepositoryInterface::class);
+    $shortUrlRepository->method('existsByShortCode')->willReturn(false);
+
+    $configurationProvider = $this->createStub(ConfigurationProviderInterface::class);
+    $configurationProvider->method('get')->willReturn(null);
+
+    $generator = new ShortCodeGenerator($shortUrlRepository, $configurationProvider);
+
+    $this->assertEquals(8, strlen($generator->generate()));
   }
 }

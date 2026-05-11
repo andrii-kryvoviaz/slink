@@ -15,7 +15,11 @@ msgstr "Llevarme a mis cargas"
 msgid "An error occurred. Please try again later."
 msgstr "Ocurrió un error. Por favor, inténtalo de nuevo más tarde."
 
+#: src/routes/preferences/+page.server.ts
+#: src/routes/profile/(auth)/login/+page.server.ts
 #: src/routes/profile/(auth)/signup/+page.server.ts
+#: src/routes/profile/+page.server.ts
+#: src/routes/profile/+page.server.ts
 msgid "Something went wrong. Please try again later."
 msgstr "Algo salió mal. Por favor, inténtalo de nuevo más tarde."
 
@@ -114,6 +118,7 @@ msgstr "Usuarios"
 #: src/feature/Upload/Dropzone/Dropzone.svelte
 #: src/routes/collection/[id]/+page.svelte
 #: src/routes/explore/+page.svelte
+#: src/ui/components/filter/context.svelte.ts
 #: src/ui/components/filter/filter-search.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "Enter"
@@ -123,6 +128,7 @@ msgstr "Enter"
 #: src/feature/Image/PostViewer/PostViewer.svelte
 #: src/feature/Image/SizePicker/ImageSizePicker.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
+#: src/ui/components/filter/context.svelte.ts
 #: src/ui/components/table-pagination/table-pagination.svelte
 msgid "Escape"
 msgstr "Escape"
@@ -1300,6 +1306,7 @@ msgid "Close viewer"
 msgstr "Cerrar visor"
 
 #: src/feature/Image/PostViewer/PostViewer.svelte
+#: src/ui/components/filter/context.svelte.ts
 #: src/ui/components/input/number-input.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "ArrowUp"
@@ -1311,6 +1318,7 @@ msgid "ArrowLeft"
 msgstr "ArrowLeft"
 
 #: src/feature/Image/PostViewer/PostViewer.svelte
+#: src/ui/components/filter/context.svelte.ts
 #: src/ui/components/input/number-input.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "ArrowDown"
@@ -4691,3 +4699,19 @@ msgstr "Usar rol IAM"
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Use the instance's IAM role or AWS default credential chain (IRSA, environment variables) instead of static access keys. Recommended when running on EC2, ECS, or EKS."
 msgstr "Usa el rol IAM de la instancia o la cadena de credenciales predeterminada de AWS (IRSA, variables de entorno) en lugar de claves de acceso estáticas. Recomendado para EC2, ECS o EKS."
+
+#: src/routes/profile/+page.server.ts
+msgid "Display name is the same as the current one."
+msgstr ""
+
+#: src/feature/Settings/ShareSettings/ShareSettings.svelte
+msgid "Short URL Length"
+msgstr "Longitud de URL corta"
+
+#: src/feature/Settings/ShareSettings/ShareSettings.svelte
+msgid "Number of characters in generated short codes (4 to 32)"
+msgstr "Número de caracteres en los códigos cortos generados (4 a 32)"
+
+#: src/ui/components/filter/context.svelte.ts
+msgid "Backspace"
+msgstr ""

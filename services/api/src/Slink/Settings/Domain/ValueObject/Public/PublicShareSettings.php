@@ -11,6 +11,8 @@ final readonly class PublicShareSettings {
   public function __construct(
     #[Groups(['public'])]
     public bool $enableUrlShortening,
+    #[Groups(['public'])]
+    public int $shortUrlLength,
   ) {}
 
   /**
@@ -18,7 +20,8 @@ final readonly class PublicShareSettings {
    */
   public static function fromArray(array $settings): self {
     return new self(
-      $settings['enableUrlShortening'] ?? true
+      $settings['enableUrlShortening'] ?? true,
+      (int) ($settings['shortUrlLength'] ?? 8),
     );
   }
 }
