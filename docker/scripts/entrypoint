@@ -20,7 +20,10 @@ if [ "$(id -u)" = "0" ]; then
   chown root:root /run
 fi
 
-delegate slink /usr/local/bin/init-secrets
+if ! /usr/local/bin/init-secrets; then
+  echo "[entrypoint] FATAL: init-secrets failed — refusing to start" >&2
+  exit 1
+fi
 
 if [ -f /app/var/data/keys/passphrase ]; then
   export JWT_PASSPHRASE=$(cat /app/var/data/keys/passphrase)
