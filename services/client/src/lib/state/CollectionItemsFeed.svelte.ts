@@ -57,11 +57,9 @@ export class CollectionItemsFeed extends AbstractPaginatedFeed<CollectionItem> {
   }
 
   public setCollectionId(collectionId: string): void {
-    if (this._collectionId !== collectionId) {
-      this._collectionId = collectionId;
-      this._collection = null;
-      this.reset();
-    }
+    this._collectionId = collectionId;
+    this._collection = null;
+    this.reset();
   }
 
   protected async fetchData(
