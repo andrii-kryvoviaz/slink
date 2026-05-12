@@ -8,8 +8,10 @@ use Slink\Collection\Domain\Repository\CollectionItemRepositoryInterface;
 use Slink\Image\Domain\Enum\ImageAccess;
 use Slink\Image\Domain\Service\ImageUrlSignatureInterface;
 use Slink\Image\Domain\ValueObject\ImageAccessContext;
+use Slink\Share\Application\Service\ShareAccessGuard;
 use Slink\Share\Domain\Enum\ShareableType;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
+use Slink\Shared\Application\Security\Viewer;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -19,6 +21,7 @@ final class CollectionScopedImageVoter extends Voter {
     private readonly ImageUrlSignatureInterface $signature,
     private readonly ShareRepositoryInterface $shareRepository,
     private readonly CollectionItemRepositoryInterface $collectionItemRepository,
+    private readonly ShareAccessGuard $accessGuard,
   ) {}
 
   /**
@@ -42,6 +45,10 @@ final class CollectionScopedImageVoter extends Voter {
   protected function voteOnAttribute(mixed $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool {
     if (!$subject instanceof ImageAccessContext) {
       return false;
+    }
+
+    if (Viewer::fromToken($token)->owns($subject->image)) {
+      return true;
     }
 
     $collectionId = $subject->scopeCollectionId;
@@ -76,16 +83,12 @@ final class CollectionScopedImageVoter extends Voter {
       return false;
     }
 
-    if (!$share->isPublished()) {
-      return false;
-    }
-
     $item = $this->collectionItemRepository->findByCollectionAndItemId($collectionId, $imageId);
 
     if ($item === null) {
       return false;
     }
 
-    return true;
+    return $this->accessGuard->allows($share);
   }
 }
