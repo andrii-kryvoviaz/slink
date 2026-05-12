@@ -8,7 +8,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Slink\Collection\Infrastructure\ReadModel\Repository\CollectionRepository;
+use Slink\Shared\Domain\Contract\OwnerAwareInterface;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
+use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Attribute\Sanitize;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
@@ -18,7 +20,7 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 #[ORM\Table(name: '`collection`')]
 #[ORM\Entity(repositoryClass: CollectionRepository::class)]
 #[ORM\Index(columns: ['user_id', 'created_at'], name: 'idx_collection_user_created_at')]
-class CollectionView extends AbstractView {
+class CollectionView extends AbstractView implements OwnerAwareInterface {
   #[ORM\OneToMany(targetEntity: CollectionItemView::class, mappedBy: 'collection', cascade: ['remove'], orphanRemoval: true)]
   private Collection $items;
 
@@ -70,6 +72,10 @@ class CollectionView extends AbstractView {
   #[SerializedName('userId')]
   public function getUserId(): string {
     return $this->user->getUuid();
+  }
+
+  public function isOwnedBy(?ID $userId): bool {
+    return ID::fromString($this->getUserId())->equals($userId);
   }
 
   public function getItems(): Collection {

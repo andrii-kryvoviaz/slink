@@ -295,6 +295,14 @@ final class ImageTest extends TestCase {
     );
   }
 
+  #[Test]
+  public function isOwnedByDeniesWhenUserIdIsNull(): void {
+    $image = $this->createTestImage();
+    $image->setUserId(null);
+
+    $this->assertFalse($image->isOwnedBy(ID::generate()));
+  }
+
   private function createTestImage(
     ?ID              $userId = null,
     ?ImageAttributes $attributes = null,

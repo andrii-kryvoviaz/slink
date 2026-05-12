@@ -14,6 +14,7 @@ use Slink\Share\Application\Service\ShareAccessGuard;
 use Slink\Share\Domain\Enum\ShareableType;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
 use Slink\Share\Infrastructure\ReadModel\View\ShareView;
+use Slink\Shared\Domain\ValueObject\ID;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
@@ -44,6 +45,9 @@ final class CollectionVoterTest extends TestCase {
     $collection->method('getId')->willReturn($collectionId);
     $collection->method('getUuid')->willReturn($collectionId);
     $collection->method('getUserId')->willReturn($ownerId);
+    $collection
+      ->method('isOwnedBy')
+      ->willReturnCallback(fn (?ID $userId): bool => $userId?->equals(ID::fromString($ownerId)) === true);
 
     return $collection;
   }

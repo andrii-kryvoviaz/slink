@@ -22,11 +22,12 @@ use Slink\Image\Domain\ValueObject\ImageFile;
 use Slink\Image\Domain\ValueObject\ImageMetadata;
 use Slink\Image\Domain\ValueObject\TagSet;
 use Slink\Shared\Domain\AbstractAggregateRoot;
+use Slink\Shared\Domain\Contract\OwnerAwareInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-final class Image extends AbstractAggregateRoot {
+final class Image extends AbstractAggregateRoot implements OwnerAwareInterface {
   private ?ID $userId;
 
   private ImageAttributes $attributes;
@@ -108,11 +109,7 @@ final class Image extends AbstractAggregateRoot {
     return $this->deleted;
   }
 
-  /**
-   * @param ID $userId
-   * @return bool
-   */
-  public function isOwnedBy(ID $userId): bool {
+  public function isOwnedBy(?ID $userId): bool {
     return $this->userId?->equals($userId) ?? false;
   }
 

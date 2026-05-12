@@ -73,6 +73,9 @@ final class ImageVoterTest extends TestCase {
     }
 
     $image->method('getUserId')->willReturn($userId);
+    $image
+      ->method('isOwnedBy')
+      ->willReturnCallback(fn (?ID $userId): bool => $ownerId !== null && $userId?->equals(ID::fromString($ownerId)) === true);
     $image->method('getAttributes')->willReturn($attributes);
 
     return $image;

@@ -10,7 +10,7 @@ use Slink\Collection\Infrastructure\ReadModel\View\CollectionView;
 use Slink\Share\Application\Service\ShareAccessGuard;
 use Slink\Share\Domain\Enum\ShareableType;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
-use Slink\Shared\Domain\ValueObject\ID;
+use Slink\Shared\Application\Security\Viewer;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -50,7 +50,7 @@ final class CollectionVoter extends Voter {
       return false;
     }
 
-    if ($this->isOwner($subject, $token)) {
+    if (Viewer::fromToken($token)->owns($subject)) {
       return true;
     }
 
@@ -68,34 +68,6 @@ final class CollectionVoter extends Voter {
 
     if ($subject instanceof Collection) {
       return $subject->aggregateRootId()->toString();
-    }
-
-    return null;
-  }
-
-  private function isOwner(mixed $subject, TokenInterface $token): bool {
-    $ownerId = $this->extractOwnerId($subject);
-
-    if ($ownerId === null) {
-      return false;
-    }
-
-    $userIdentifier = $token->getUserIdentifier();
-
-    if ($userIdentifier === '') {
-      return false;
-    }
-
-    return ID::fromString($ownerId)->equals(ID::fromString($userIdentifier));
-  }
-
-  private function extractOwnerId(mixed $subject): ?string {
-    if ($subject instanceof CollectionView) {
-      return $subject->getUserId();
-    }
-
-    if ($subject instanceof Collection) {
-      return $subject->getUserId()->toString();
     }
 
     return null;

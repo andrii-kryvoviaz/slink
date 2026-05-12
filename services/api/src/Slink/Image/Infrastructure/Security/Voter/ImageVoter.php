@@ -11,7 +11,7 @@ use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Share\Application\Service\ShareAccessGuard;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
 use Slink\Share\Domain\ValueObject\TargetPath;
-use Slink\Shared\Domain\ValueObject\ID;
+use Slink\Shared\Application\Security\Viewer;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -55,7 +55,7 @@ final class ImageVoter extends Voter {
   protected function voteOnAttribute(mixed $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool {
     $image = $this->unwrap($subject);
 
-    if ($this->isOwner($image, $token)) {
+    if (Viewer::fromToken($token)->owns($image)) {
       return true;
     }
 
@@ -90,26 +90,6 @@ final class ImageVoter extends Voter {
     }
 
     return $subject;
-  }
-
-  private function isOwner(mixed $image, TokenInterface $token): bool {
-    if (!$image instanceof ImageView && !$image instanceof Image) {
-      return false;
-    }
-
-    $ownerId = $image->getUserId();
-
-    if ($ownerId === null) {
-      return false;
-    }
-
-    $userIdentifier = $token->getUserIdentifier();
-
-    if ($userIdentifier === '') {
-      return false;
-    }
-
-    return $ownerId->equals(ID::fromString($userIdentifier));
   }
 
   private function hasAccessibleShare(TargetPath $targetPath): bool {
