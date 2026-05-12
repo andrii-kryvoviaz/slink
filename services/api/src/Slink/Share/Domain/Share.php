@@ -15,6 +15,7 @@ use Slink\Share\Domain\Event\ShareWasCreated;
 use Slink\Share\Domain\Event\ShareWasPublished;
 use Slink\Share\Domain\Event\ShareWasUnpublished;
 use Slink\Share\Domain\Event\ShortUrlWasAdded;
+use Slink\Share\Domain\Event\ShortUrlWasRegenerated;
 use Slink\Share\Domain\Exception\InvalidShareExpirationException;
 use Slink\Share\Domain\ValueObject\AccessControl;
 use Slink\Share\Domain\ValueObject\HashedSharePassword;
@@ -78,6 +79,40 @@ final class Share extends AbstractAggregateRoot implements PublicationAware, Exp
   }
 
   protected function applyShortUrlWasAdded(ShortUrlWasAdded $event): void {
+    $this->context = $this->context->withShortUrl($event->shortUrlId, $event->shortCode);
+  }
+
+  public function hasStaleShortCode(int $expectedLength): bool {
+    if ($this->accessControl->isPublished) {
+      return false;
+    }
+
+    $currentCode = $this->context->getShortCode();
+    if ($currentCode === null) {
+      return false;
+    }
+
+    return strlen($currentCode) !== $expectedLength;
+  }
+
+  public function regenerateShortUrl(string $shortCode): void {
+    if ($this->accessControl->isPublished) {
+      return;
+    }
+
+    $shortUrlId = $this->context->getShortUrlId();
+    if ($shortUrlId === null || $shortCode === $this->context->getShortCode()) {
+      return;
+    }
+
+    $this->recordThat(new ShortUrlWasRegenerated(
+      $this->aggregateRootId(),
+      $shortUrlId,
+      $shortCode,
+    ));
+  }
+
+  protected function applyShortUrlWasRegenerated(ShortUrlWasRegenerated $event): void {
     $this->context = $this->context->withShortUrl($event->shortUrlId, $event->shortCode);
   }
 

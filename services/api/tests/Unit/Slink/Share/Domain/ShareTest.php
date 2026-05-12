@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Slink\Share\Domain\Event\SharePasswordWasSet;
 use Slink\Share\Domain\Event\ShareExpirationWasSet;
 use Slink\Share\Domain\Event\ShareWasUnpublished;
+use Slink\Share\Domain\Event\ShortUrlWasRegenerated;
 use Slink\Share\Domain\Exception\InvalidShareExpirationException;
 use Slink\Share\Domain\Share;
 use Slink\Share\Domain\ValueObject\HashedSharePassword;
@@ -273,6 +274,79 @@ final class ShareTest extends TestCase {
     $this->assertFalse($share->isPublished());
   }
 
+  #[Test]
+  public function itRecordsEventWhenRegeneratingShortUrlOnUnpublishedShare(): void {
+    $share = $this->createShareWithShortUrl('SHORTOLD');
+    $share->releaseEvents();
+
+    $share->regenerateShortUrl('NEWLONGERCODE');
+
+    $events = $share->releaseEvents();
+    $this->assertCount(1, $events);
+    $this->assertInstanceOf(ShortUrlWasRegenerated::class, $events[0]);
+    $this->assertSame('NEWLONGERCODE', $events[0]->shortCode);
+    $this->assertSame('NEWLONGERCODE', $share->getShortCode());
+  }
+
+  #[Test]
+  public function itDoesNotRegenerateShortUrlWhenShareIsPublished(): void {
+    $share = $this->createShareWithShortUrl('SHORTOLD');
+    $share->publish();
+    $share->releaseEvents();
+
+    $share->regenerateShortUrl('NEWLONGERCODE');
+
+    $events = $share->releaseEvents();
+    $this->assertCount(0, $events);
+    $this->assertSame('SHORTOLD', $share->getShortCode());
+  }
+
+  #[Test]
+  public function itDoesNotRegenerateShortUrlWhenShareHasNoShortUrl(): void {
+    $share = $this->createShare();
+    $share->releaseEvents();
+
+    $share->regenerateShortUrl('NEWLONGERCODE');
+
+    $events = $share->releaseEvents();
+    $this->assertCount(0, $events);
+    $this->assertNull($share->getShortCode());
+  }
+
+  #[Test]
+  public function itReportsStaleShortCodeWhenLengthDiffersOnUnpublishedShare(): void {
+    $share = $this->createShareWithShortUrl('SHORT8AA');
+
+    $this->assertTrue($share->hasStaleShortCode(12));
+    $this->assertFalse($share->hasStaleShortCode(8));
+  }
+
+  #[Test]
+  public function itDoesNotReportStaleShortCodeForPublishedShare(): void {
+    $share = $this->createShareWithShortUrl('SHORT8AA');
+    $share->publish();
+
+    $this->assertFalse($share->hasStaleShortCode(12));
+  }
+
+  #[Test]
+  public function itDoesNotReportStaleShortCodeWhenNoShortUrlIsSet(): void {
+    $share = $this->createShare();
+
+    $this->assertFalse($share->hasStaleShortCode(8));
+  }
+
+  #[Test]
+  public function itDoesNotRegenerateShortUrlWhenNewCodeMatchesCurrent(): void {
+    $share = $this->createShareWithShortUrl('SAMECODE');
+    $share->releaseEvents();
+
+    $share->regenerateShortUrl('SAMECODE');
+
+    $events = $share->releaseEvents();
+    $this->assertCount(0, $events);
+  }
+
   private function createShare(): Share {
     $shareable = ShareableReference::forImage(ID::generate());
 
@@ -283,5 +357,12 @@ final class ShareTest extends TestCase {
       DateTime::now(),
       ShareContext::for($shareable),
     );
+  }
+
+  private function createShareWithShortUrl(string $shortCode): Share {
+    $share = $this->createShare();
+    $share->addShortUrl(ID::generate(), $shortCode);
+
+    return $share;
   }
 }
