@@ -1,5 +1,5 @@
 variable "NODE_VERSION"                  { default = "24.15.0" }
-variable "PHP_VERSION"                   { default = "8.5.5" }
+variable "PHP_VERSION"                   { default = "8.5.6" }
 variable "ALPINE_VERSION"                { default = "3.23" }
 variable "COMPOSER_VERSION"              { default = "2" }
 variable "MEMORY_LIMIT"                  { default = "512" }
