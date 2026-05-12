@@ -20,7 +20,7 @@ class ShortUrlView extends AbstractView {
   #[ORM\JoinColumn(name: 'share_id', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
   private ShareView $share;
 
-  #[ORM\Column(type: 'string', length: 8)]
+  #[ORM\Column(type: 'string', length: 32)]
   private string $shortCode;
 
   public function __construct(
@@ -43,6 +43,10 @@ class ShortUrlView extends AbstractView {
 
   public function getShortCode(): string {
     return $this->shortCode;
+  }
+
+  public function changeShortCode(string $shortCode): void {
+    $this->shortCode = $shortCode;
   }
 
   public function getTargetPath(): string {

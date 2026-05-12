@@ -15,7 +15,11 @@ msgstr "Portami ai miei caricamenti"
 msgid "An error occurred. Please try again later."
 msgstr "Si è verificato un errore. Riprova più tardi."
 
+#: src/routes/preferences/+page.server.ts
+#: src/routes/profile/(auth)/login/+page.server.ts
 #: src/routes/profile/(auth)/signup/+page.server.ts
+#: src/routes/profile/+page.server.ts
+#: src/routes/profile/+page.server.ts
 msgid "Something went wrong. Please try again later."
 msgstr "Qualcosa è andato storto. Riprova più tardi."
 
@@ -4691,3 +4695,15 @@ msgstr "Usa ruolo IAM"
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Use the instance's IAM role or AWS default credential chain (IRSA, environment variables) instead of static access keys. Recommended when running on EC2, ECS, or EKS."
 msgstr "Usa il ruolo IAM dell'istanza o la catena di credenziali AWS predefinita (IRSA, variabili d'ambiente) invece di chiavi di accesso statiche. Consigliato per EC2, ECS o EKS."
+
+#: src/routes/profile/+page.server.ts
+msgid "Display name is the same as the current one."
+msgstr "Il nome visualizzato è uguale a quello attuale."
+
+#: src/feature/Settings/ShareSettings/ShareSettings.svelte
+msgid "Short URL Length"
+msgstr "Lunghezza URL breve"
+
+#: src/feature/Settings/ShareSettings/ShareSettings.svelte
+msgid "Number of characters in generated short codes (4 to 32)"
+msgstr "Numero di caratteri nei codici brevi generati (da 4 a 32)"

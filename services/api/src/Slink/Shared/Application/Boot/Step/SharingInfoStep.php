@@ -28,6 +28,7 @@ final readonly class SharingInfoStep implements BootStepInterface {
   public function run(BootContext $context): BootResult {
     return BootResult::settings([
       ['Short URL Generation', $this->boolLabel('share.enableUrlShortening')],
+      ['Short URL Length', (string) ($this->config->get('share.shortUrlLength') ?? 8)],
     ]);
   }
 

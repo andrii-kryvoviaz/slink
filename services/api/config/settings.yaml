@@ -41,6 +41,7 @@ parameters:
     requireSsl: '%env(bool:REQUIRE_SSL)%'
   share:
     enableUrlShortening: '%env(bool:SHARE_ENABLE_URL_SHORTENING)%'
+    shortUrlLength: '%env(int:SHARE_SHORT_URL_LENGTH)%'
   demo:
     enabled: '%env(bool:DEMO_MODE_ENABLED)%'
     demoUsername: '%env(DEMO_USERNAME)%'

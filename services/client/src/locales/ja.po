@@ -15,7 +15,11 @@ msgstr "アップロード一覧へ"
 msgid "An error occurred. Please try again later."
 msgstr "エラーが発生しました。しばらくしてからもう一度お試しください。"
 
+#: src/routes/preferences/+page.server.ts
+#: src/routes/profile/(auth)/login/+page.server.ts
 #: src/routes/profile/(auth)/signup/+page.server.ts
+#: src/routes/profile/+page.server.ts
+#: src/routes/profile/+page.server.ts
 msgid "Something went wrong. Please try again later."
 msgstr "問題が発生しました。しばらくしてからもう一度お試しください。"
 
@@ -4691,3 +4695,15 @@ msgstr "IAM ロールを使用"
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Use the instance's IAM role or AWS default credential chain (IRSA, environment variables) instead of static access keys. Recommended when running on EC2, ECS, or EKS."
 msgstr "静的アクセスキーの代わりに、インスタンスのIAMロールまたはAWSのデフォルト認証情報チェーン（IRSA、環境変数）を使用します。EC2、ECS、EKSでの利用時に推奨されます。"
+
+#: src/routes/profile/+page.server.ts
+msgid "Display name is the same as the current one."
+msgstr "表示名が現在のものと同じです。"
+
+#: src/feature/Settings/ShareSettings/ShareSettings.svelte
+msgid "Short URL Length"
+msgstr "短縮URLの長さ"
+
+#: src/feature/Settings/ShareSettings/ShareSettings.svelte
+msgid "Number of characters in generated short codes (4 to 32)"
+msgstr "生成される短縮コードの文字数（4〜32）"

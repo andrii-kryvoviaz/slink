@@ -1,3 +1,4 @@
+// @wc-ignore-file
 import { getContext, setContext } from 'svelte';
 
 import type { FilterSize, FilterVariant } from './filter.theme';

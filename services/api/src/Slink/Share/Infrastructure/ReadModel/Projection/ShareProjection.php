@@ -10,6 +10,7 @@ use Slink\Share\Domain\Event\ShareWasCreated;
 use Slink\Share\Domain\Event\ShareWasPublished;
 use Slink\Share\Domain\Event\ShareWasUnpublished;
 use Slink\Share\Domain\Event\ShortUrlWasAdded;
+use Slink\Share\Domain\Event\ShortUrlWasRegenerated;
 use Slink\Share\Domain\ValueObject\HashedSharePassword;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
 use Slink\Share\Domain\Repository\ShortUrlRepositoryInterface;
@@ -69,6 +70,16 @@ final class ShareProjection extends AbstractProjection {
     }
 
     $this->createShortUrl($share, $event->shortUrlId->toString(), $event->shortCode);
+  }
+
+  public function handleShortUrlWasRegenerated(ShortUrlWasRegenerated $event): void {
+    $shortUrl = $this->shortUrlRepository->findByShareId($event->shareId->toString());
+
+    if ($shortUrl === null) {
+      return;
+    }
+
+    $shortUrl->changeShortCode($event->shortCode);
   }
 
   public function handleShareExpirationWasSet(ShareExpirationWasSet $event): void {

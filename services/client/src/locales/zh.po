@@ -15,7 +15,11 @@ msgstr "查看上传内容"
 msgid "An error occurred. Please try again later."
 msgstr "发生错误，请稍后再试。"
 
+#: src/routes/preferences/+page.server.ts
+#: src/routes/profile/(auth)/login/+page.server.ts
 #: src/routes/profile/(auth)/signup/+page.server.ts
+#: src/routes/profile/+page.server.ts
+#: src/routes/profile/+page.server.ts
 msgid "Something went wrong. Please try again later."
 msgstr "出了点问题，请稍后再试。"
 
@@ -4685,3 +4689,15 @@ msgstr "使用 IAM 角色"
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 msgid "Use the instance's IAM role or AWS default credential chain (IRSA, environment variables) instead of static access keys. Recommended when running on EC2, ECS, or EKS."
 msgstr "使用实例的 IAM 角色或 AWS 默认凭证链（IRSA、环境变量），而非静态访问密钥。推荐用于 EC2、ECS 或 EKS。"
+
+#: src/routes/profile/+page.server.ts
+msgid "Display name is the same as the current one."
+msgstr "显示名称与当前名称相同。"
+
+#: src/feature/Settings/ShareSettings/ShareSettings.svelte
+msgid "Short URL Length"
+msgstr "短链接长度"
+
+#: src/feature/Settings/ShareSettings/ShareSettings.svelte
+msgid "Number of characters in generated short codes (4 to 32)"
+msgstr "生成的短代码字符数（4 到 32）"

@@ -21,6 +21,15 @@ final class ShortUrlRepository extends AbstractRepository implements ShortUrlRep
   }
 
   #[Override]
+  public function findByShareId(string $shareId): ?ShortUrlView {
+    return $this->createQueryBuilder('s')
+      ->where('s.share = :shareId')
+      ->setParameter('shareId', $shareId)
+      ->getQuery()
+      ->getOneOrNullResult();
+  }
+
+  #[Override]
   public function findByShortCode(string $shortCode): ?ShortUrlView {
     return $this->createQueryBuilder('s')
       ->where('s.shortCode = :shortCode')
