@@ -35,6 +35,10 @@ final readonly class OwnerShareInfoResolver implements OwnerShareInfoResolverInt
       return null;
     }
 
+    if (!$share->isPublished()) {
+      return null;
+    }
+
     return ShareResponse::fromShare($share, $this->shareService->resolveUrl($share));
   }
 }

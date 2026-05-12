@@ -80,6 +80,23 @@ final class OwnerShareInfoResolverTest extends TestCase {
   }
 
   #[Test]
+  public function itReturnsNullWhenShareIsUnpublished(): void {
+    $ownerId = ID::fromString('550e8400-e29b-41d4-a716-446655440000');
+
+    $share = $this->createStub(ShareView::class);
+    $share->method('isPublished')->willReturn(false);
+
+    $this->shareRepository
+      ->method('findByShareable')
+      ->willReturnMap([['shareable-id', ShareableType::Collection, $share]]);
+
+    $resolver = $this->createResolver();
+    $result = $resolver->resolve('shareable-id', ShareableType::Collection, $ownerId, $ownerId);
+
+    $this->assertNull($result);
+  }
+
+  #[Test]
   public function itReturnsShareResponseWhenOwnerHasShare(): void {
     $ownerId = ID::fromString('550e8400-e29b-41d4-a716-446655440000');
 
@@ -90,6 +107,7 @@ final class OwnerShareInfoResolverTest extends TestCase {
     $share->method('getId')->willReturn('share-id');
     $share->method('getShareable')->willReturn($shareable);
     $share->method('getExpiresAt')->willReturn(null);
+    $share->method('isPublished')->willReturn(true);
 
     $this->shareRepository
       ->method('findByShareable')
