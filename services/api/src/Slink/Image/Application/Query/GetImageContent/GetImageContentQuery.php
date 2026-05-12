@@ -59,6 +59,10 @@ final readonly class GetImageContentQuery implements QueryInterface {
     return $this->cs;
   }
 
+  public function isScoped(): bool {
+    return $this->collection !== null || $this->cs !== null;
+  }
+
   public function hasTransformParams(): bool {
     if ($this->width !== null) {
       return true;

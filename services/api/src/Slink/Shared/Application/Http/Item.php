@@ -14,6 +14,8 @@ use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Infrastructure\Serializer\SerializerFactory;
 
 final readonly class Item implements CursorAwareInterface {
+  public CachePolicy $cachePolicy;
+
   /**
    * @param string $type
    * @param array<string, mixed>|object|string $resource
@@ -22,8 +24,10 @@ final readonly class Item implements CursorAwareInterface {
   private function __construct(
     public string              $type,
     public array|object|string $resource,
-    public array               $relationships = []
+    public array               $relationships = [],
+    ?CachePolicy               $cachePolicy = null,
   ) {
+    $this->cachePolicy = $cachePolicy ?? CachePolicy::revocable();
   }
 
   /**
@@ -45,10 +49,11 @@ final readonly class Item implements CursorAwareInterface {
    * @param string $mimeType
    * @return self
    */
-  public static function fromContent(string $content, string $mimeType): self {
+  public static function fromContent(string $content, string $mimeType, ?CachePolicy $cachePolicy = null): self {
     return new self(
       $mimeType,
-      $content
+      $content,
+      cachePolicy: $cachePolicy,
     );
   }
 

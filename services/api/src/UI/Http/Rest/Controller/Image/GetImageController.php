@@ -30,16 +30,13 @@ final readonly class GetImageController {
     $imageData = $this->ask($query->withFormat($ext)->withContext([
       'fileName' => "{$id}.{$ext}",
       'requestedFormat' => $ext,
+      'userId' => $user?->getIdentifier(),
     ]));
 
     $this->handle((new AddImageViewCountCommand($id))->withContext([
       'userId' => $user?->getIdentifier(),
     ]));
 
-    return ContentResponse::file($imageData)->setCache([
-      'public' => $user === null,
-      'immutable' => true,
-      'max_age' => 31536000,
-    ]);
+    return ContentResponse::file($imageData);
   }
 }

@@ -20,7 +20,10 @@ use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Share\Domain\Service\ShareUrlBuilderInterface;
 use Slink\Share\Domain\ValueObject\TargetPath;
+use Slink\Shared\Application\Http\CachePolicy;
 use Slink\Shared\Application\Http\Item;
+use Slink\Shared\Domain\ValueObject\ID;
+use Slink\User\Infrastructure\ReadModel\View\UserView;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
@@ -328,5 +331,111 @@ final class GetImageContentHandlerTest extends TestCase {
     $result = ($handler)($query, $fileName);
 
     $this->assertInstanceOf(Item::class, $result);
+  }
+
+  #[Test]
+  public function itSelectsPublicImmutableCacheForPublicUnscopedImage(): void {
+    $result = $this->serveForCache(isPublic: true, query: new GetImageContentQuery());
+
+    $this->assertEquals(CachePolicy::publicImmutable(), $result->cachePolicy);
+  }
+
+  #[Test]
+  public function itSelectsRevocableCacheForPrivateImage(): void {
+    $result = $this->serveForCache(isPublic: false, query: new GetImageContentQuery());
+
+    $this->assertEquals(CachePolicy::revocable(), $result->cachePolicy);
+  }
+
+  #[Test]
+  public function itSelectsRevocableCacheForCollectionScopedRequest(): void {
+    $result = $this->serveForCache(
+      isPublic: true,
+      query: new GetImageContentQuery(collection: 'collection-id', cs: 'sig'),
+    );
+
+    $this->assertEquals(CachePolicy::revocable(), $result->cachePolicy);
+  }
+
+  #[Test]
+  public function itSelectsPublicImmutableCacheEvenForOwnerWhenImageIsPublic(): void {
+    $ownerId = '11111111-1111-1111-1111-111111111111';
+    $result = $this->serveForCache(
+      isPublic: true,
+      query: new GetImageContentQuery(),
+      ownerId: $ownerId,
+      viewerId: $ownerId,
+    );
+
+    $this->assertEquals(CachePolicy::publicImmutable(), $result->cachePolicy);
+  }
+
+  #[Test]
+  public function itSelectsPrivateImmutableCacheForOwnerViewingOwnPrivateImage(): void {
+    $ownerId = '11111111-1111-1111-1111-111111111111';
+    $result = $this->serveForCache(
+      isPublic: false,
+      query: new GetImageContentQuery(),
+      ownerId: $ownerId,
+      viewerId: $ownerId,
+    );
+
+    $this->assertEquals(CachePolicy::privateImmutable(), $result->cachePolicy);
+  }
+
+  #[Test]
+  public function itSelectsPrivateImmutableCacheForOwnerEvenOnScopedUrl(): void {
+    $ownerId = '11111111-1111-1111-1111-111111111111';
+    $result = $this->serveForCache(
+      isPublic: false,
+      query: new GetImageContentQuery(collection: 'collection-id', cs: 'sig'),
+      ownerId: $ownerId,
+      viewerId: $ownerId,
+    );
+
+    $this->assertEquals(CachePolicy::privateImmutable(), $result->cachePolicy);
+  }
+
+  #[Test]
+  public function itSelectsRevocableCacheForAuthenticatedNonOwnerOnScopedUrl(): void {
+    $result = $this->serveForCache(
+      isPublic: false,
+      query: new GetImageContentQuery(collection: 'collection-id', cs: 'sig'),
+      ownerId: '11111111-1111-1111-1111-111111111111',
+      viewerId: '22222222-2222-2222-2222-222222222222',
+    );
+
+    $this->assertEquals(CachePolicy::revocable(), $result->cachePolicy);
+  }
+
+  private function serveForCache(
+    bool $isPublic,
+    GetImageContentQuery $query,
+    ?string $ownerId = null,
+    ?string $viewerId = null,
+  ): Item {
+    $fileName = 'cache-test.jpg';
+
+    $user = null;
+    if ($ownerId !== null) {
+      $user = $this->createStub(UserView::class);
+      $user->method('getUuid')->willReturn($ownerId);
+    }
+
+    $image = $this->createStub(ImageView::class);
+    $image->method('getFileName')->willReturn($fileName);
+    $image->method('getMimeType')->willReturn('image/jpeg');
+    $image->method('getUser')->willReturn($user);
+    $image->method('getAttributes')->willReturn(ImageAttributes::create($fileName, '', $isPublic));
+    $image
+      ->method('isOwnedBy')
+      ->willReturnCallback(fn (?ID $userId): bool => $ownerId !== null && $userId?->toString() === $ownerId);
+
+    $this->repository->method('oneById')->willReturn($image);
+    $this->imageAnalyzer->method('supportsResize')->willReturn(true);
+    $this->imageRetrieval->method('getImage')->willReturn('bytes');
+    $this->sanitizer->method('requiresSanitization')->willReturn(false);
+
+    return ($this->createHandler())($query, $fileName, null, $viewerId);
   }
 }

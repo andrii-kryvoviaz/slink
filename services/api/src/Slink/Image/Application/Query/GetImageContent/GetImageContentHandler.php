@@ -12,8 +12,11 @@ use Slink\Image\Domain\Service\ImageSanitizerInterface;
 use Slink\Image\Domain\Service\ImageRetrievalInterface;
 use Slink\Image\Domain\Service\ImageUrlSignatureInterface;
 use Slink\Image\Domain\ValueObject\ImageAccessContext;
+use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Share\Domain\Service\ShareUrlBuilderInterface;
+use Slink\Shared\Application\Http\CachePolicy;
 use Slink\Shared\Application\Http\Item;
+use Slink\Shared\Application\Security\Viewer;
 use Slink\Shared\Application\Query\QueryHandlerInterface;
 use Slink\Shared\Domain\ValueObject\ImageOptions;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
@@ -34,7 +37,7 @@ final readonly class GetImageContentHandler implements QueryHandlerInterface {
   /**
    * @throws NotFoundException
    */
-  public function __invoke(GetImageContentQuery $query, string $fileName, ?string $requestedFormat = null): Item {
+  public function __invoke(GetImageContentQuery $query, string $fileName, ?string $requestedFormat = null, ?string $userId = null): Item {
     $imageId = $this->extractImageId($fileName);
     $imageView = $this->repository->oneById($imageId);
 
@@ -93,7 +96,9 @@ final readonly class GetImageContentHandler implements QueryHandlerInterface {
       ? $targetFormat->getMimeType()
       : $originalMimeType;
 
-    return Item::fromContent($imageContent, $responseMimeType);
+    $cachePolicy = $this->resolveCachePolicy($query, $imageView, Viewer::fromIdentifier($userId));
+
+    return Item::fromContent($imageContent, $responseMimeType, $cachePolicy);
   }
 
   private function sanitizeTransforms(GetImageContentQuery $query, string $imageId): GetImageContentQuery {
@@ -112,6 +117,18 @@ final readonly class GetImageContentHandler implements QueryHandlerInterface {
     }
 
     return $query;
+  }
+
+  private function resolveCachePolicy(GetImageContentQuery $query, ImageView $imageView, Viewer $viewer): CachePolicy {
+    if (!$query->isScoped() && $imageView->getAttributes()->isPublic()) {
+      return CachePolicy::publicImmutable();
+    }
+
+    if ($viewer->owns($imageView)) {
+      return CachePolicy::privateImmutable();
+    }
+
+    return CachePolicy::revocable();
   }
 
   private function extractImageId(string $fileName): string {
