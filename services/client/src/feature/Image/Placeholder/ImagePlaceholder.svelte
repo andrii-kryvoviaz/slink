@@ -44,7 +44,6 @@
 
   let isLoaded = $state(false);
   let hasError = $state(false);
-  let originalImage = $derived(src.split('?')[0]);
   let actualAspectRatio = $state(metadata.width / metadata.height);
 
   let isSvg = $derived(
@@ -186,7 +185,7 @@
   {#if isLoaded && !hasError}
     {#if showOpenInNewTab}
       <a
-        href={originalImage || src}
+        href={src}
         target="_blank"
         rel="noopener noreferrer"
         onclick={(e) => e.stopPropagation()}
