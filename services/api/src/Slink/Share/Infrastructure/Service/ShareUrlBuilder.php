@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Slink\Share\Infrastructure\Service;
 
-use Slink\Image\Domain\Service\ImageUrlSignatureInterface;
 use Slink\Share\Domain\Service\ShareUrlBuilderInterface;
 use Slink\Share\Domain\ValueObject\TargetPath;
+use Slink\Shared\Domain\Service\UrlSignatureInterface;
 
 final readonly class ShareUrlBuilder implements ShareUrlBuilderInterface {
   public function __construct(
-    private ImageUrlSignatureInterface $signatureService,
+    private UrlSignatureInterface $signatureService,
   ) {
   }
 

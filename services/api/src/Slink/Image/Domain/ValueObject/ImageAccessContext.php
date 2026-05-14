@@ -10,8 +10,6 @@ use Slink\Share\Domain\ValueObject\TargetPath;
 final readonly class ImageAccessContext {
   public function __construct(
     public ImageView $image,
-    public ?string $scopeCollectionId = null,
-    public ?string $scopeSignature = null,
     public ?TargetPath $targetPath = null,
   ) {}
 }

@@ -18,8 +18,8 @@ final readonly class GetImageContentQuery implements QueryInterface {
     private ?string $format = null,
     private ?string $filter = null,
     private ?string $s = null,
-    private ?string $collection = null,
-    private ?string $cs = null,
+    private ?string $imageId = null,
+    private ?string $userId = null,
   ) {
   }
 
@@ -51,36 +51,26 @@ final readonly class GetImageContentQuery implements QueryInterface {
     return $this->s;
   }
 
-  public function getScopeCollectionId(): ?string {
-    return $this->collection;
+  public function getImageId(): ?string {
+    return $this->imageId;
   }
 
-  public function getScopeSignature(): ?string {
-    return $this->cs;
+  public function getUserId(): ?string {
+    return $this->userId;
   }
 
-  public function isScoped(): bool {
-    return $this->collection !== null || $this->cs !== null;
-  }
-
-  public function hasTransformParams(): bool {
-    if ($this->width !== null) {
-      return true;
-    }
-
-    if ($this->height !== null) {
-      return true;
-    }
-
-    if ($this->crop) {
-      return true;
-    }
-
-    if ($this->filter !== null) {
-      return true;
-    }
-
-    return false;
+  public function withImageId(string $imageId): self {
+    return new self(
+      $this->width,
+      $this->height,
+      $this->quality,
+      $this->crop,
+      $this->format,
+      $this->filter,
+      $this->s,
+      $imageId,
+      $this->userId,
+    );
   }
 
   public function withFormat(?string $format): self {
@@ -92,22 +82,22 @@ final readonly class GetImageContentQuery implements QueryInterface {
       $format,
       $this->filter,
       $this->s,
-      $this->collection,
-      $this->cs,
+      $this->imageId,
+      $this->userId,
     );
   }
 
-  public function withoutTransformParams(): self {
+  public function withUserId(?string $userId): self {
     return new self(
-      null,
-      null,
-      null,
-      false,
+      $this->width,
+      $this->height,
+      $this->quality,
+      $this->crop,
       $this->format,
-      null,
-      null,
-      $this->collection,
-      $this->cs,
+      $this->filter,
+      $this->s,
+      $this->imageId,
+      $userId,
     );
   }
 
@@ -122,17 +112,5 @@ final readonly class GetImageContentQuery implements QueryInterface {
       'crop' => $this->crop,
       'filter' => $this->filter,
     ];
-  }
-
-  /**
-   * @return array<string, int|bool|string>
-   */
-  public function getSignedTransformParams(): array {
-    return array_filter([
-      'width' => $this->width,
-      'height' => $this->height,
-      'crop' => $this->crop,
-      'filter' => $this->filter,
-    ], fn($value) => $value !== null && $value !== false);
   }
 }
