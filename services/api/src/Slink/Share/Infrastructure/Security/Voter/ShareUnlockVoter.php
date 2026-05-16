@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Slink\Share\Infrastructure\Security\Voter;
 
+use Slink\Settings\Application\Service\SettingsService;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Share\Domain\Enum\ShareAccess;
+use Slink\Share\Domain\Enum\ShareableType;
 use Slink\Share\Domain\Service\ShareableOwnerResolverInterface;
 use Slink\Share\Domain\Share;
 use Slink\Share\Domain\ValueObject\ShareableReference;
@@ -14,13 +17,17 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
-final class ShareVoter extends Voter {
+final class ShareUnlockVoter extends Voter {
+  /**
+   * @param ConfigurationProviderInterface<SettingsService> $configurationProvider
+   */
   public function __construct(
     private readonly ShareableOwnerResolverInterface $ownerResolver,
+    private readonly ConfigurationProviderInterface $configurationProvider,
   ) {}
 
   protected function supports(mixed $attribute, mixed $subject): bool {
-    if ($attribute !== ShareAccess::Edit) {
+    if ($attribute !== ShareAccess::Unlock) {
       return false;
     }
 
@@ -36,33 +43,46 @@ final class ShareVoter extends Voter {
   }
 
   protected function voteOnAttribute(mixed $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool {
-    return $this->isOwner($subject, $token);
-  }
+    if ($this->isOwner($subject, $token)) {
+      return true;
+    }
 
-  private function isOwner(mixed $subject, TokenInterface $token): bool {
-    $ownerId = $this->resolveOwnerId($subject);
+    if ($token->getUser() !== null) {
+      return true;
+    }
 
-    if ($ownerId === null) {
+    $shareable = $this->extractShareable($subject);
+
+    if ($shareable === null) {
       return false;
     }
 
+    return match ($shareable->getShareableType()) {
+      ShareableType::Image => !$this->configurationProvider->get('access.requireAuthForMediaShares'),
+      ShareableType::Collection => !$this->configurationProvider->get('access.requireAuthForCollectionShares'),
+    };
+  }
+
+  private function isOwner(mixed $subject, TokenInterface $token): bool {
     $userIdentifier = $token->getUserIdentifier();
 
     if ($userIdentifier === '') {
       return false;
     }
 
-    return ID::fromString($ownerId)->equals(ID::fromString($userIdentifier));
-  }
-
-  private function resolveOwnerId(mixed $subject): ?string {
     $shareable = $this->extractShareable($subject);
 
     if ($shareable === null) {
-      return null;
+      return false;
     }
 
-    return $this->ownerResolver->resolveOwnerId($shareable);
+    $ownerId = $this->ownerResolver->resolveOwnerId($shareable);
+
+    if ($ownerId === null) {
+      return false;
+    }
+
+    return ID::fromString($ownerId)->equals(ID::fromString($userIdentifier));
   }
 
   private function extractShareable(mixed $subject): ?ShareableReference {
