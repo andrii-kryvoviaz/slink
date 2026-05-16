@@ -34,6 +34,15 @@ final class ImageResource implements ResourceInterface {
     get => $this->image->getOwner();
   }
 
+  #[Groups(['public'])]
+  public ?string $url {
+    get {
+      $url = $this->data->get('urls', $this->image->getUuid());
+
+      return is_string($url) ? $url : null;
+    }
+  }
+
   /**
    * @var array{
    *   fileName: string,

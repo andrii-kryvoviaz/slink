@@ -6,7 +6,6 @@ namespace Slink\Image\Application\Query\GetImageList;
 
 use Slink\Image\Domain\Filter\ImageListFilter;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
-use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Image\Infrastructure\Resource\ImageResourceContext;
 use Slink\Image\Infrastructure\Resource\ImageResourceProcessor;
 use Slink\Shared\Application\Http\Collection;
@@ -62,10 +61,8 @@ final readonly class GetImageListHandler implements QueryHandlerInterface {
     $images = $this->repository->geImageList($filter);
     $total = $this->repository->countImageList($filter);
 
-    $imageIds = iterator_map($images, fn(ImageView $image) => (string)$image->getUuid());
-
     $resourceContext ??= new ImageResourceContext();
-    $items = $this->resourceProcessor->many($images, $resourceContext->withImageIds($imageIds));
+    $items = $this->resourceProcessor->many($images, $resourceContext);
     $paginator = $this->cursorPaginator->paginate($items, $query->getLimit());
 
     return Collection::fromCursorPaginator($paginator, limit: $query->getLimit(), total: $total);
