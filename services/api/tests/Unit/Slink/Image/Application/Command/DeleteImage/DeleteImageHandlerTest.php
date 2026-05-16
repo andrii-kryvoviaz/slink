@@ -11,10 +11,10 @@ use Slink\Image\Application\Command\DeleteImage\DeleteImageCommand;
 use Slink\Image\Application\Command\DeleteImage\DeleteImageHandler;
 use Slink\Image\Domain\Image;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
+use Slink\Shared\Domain\Exception\ForbiddenException;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final class DeleteImageHandlerTest extends TestCase {
   /**
@@ -101,7 +101,7 @@ final class DeleteImageHandlerTest extends TestCase {
 
   #[Test]
   public function itThrowsAccessDeniedForGuestUser(): void {
-    $this->expectException(AccessDeniedException::class);
+    $this->expectException(ForbiddenException::class);
 
     $command = new DeleteImageCommand(false);
 
@@ -120,7 +120,7 @@ final class DeleteImageHandlerTest extends TestCase {
 
   #[Test]
   public function itThrowsAccessDeniedForDifferentUser(): void {
-    $this->expectException(AccessDeniedException::class);
+    $this->expectException(ForbiddenException::class);
 
     $userId = '123e4567-e89b-12d3-a456-426614174000';
     $command = new DeleteImageCommand(false);
@@ -140,7 +140,7 @@ final class DeleteImageHandlerTest extends TestCase {
 
   #[Test]
   public function itThrowsAccessDeniedForImageWithNullUserId(): void {
-    $this->expectException(AccessDeniedException::class);
+    $this->expectException(ForbiddenException::class);
 
     $userId = '123e4567-e89b-12d3-a456-426614174000';
     $command = new DeleteImageCommand(false);

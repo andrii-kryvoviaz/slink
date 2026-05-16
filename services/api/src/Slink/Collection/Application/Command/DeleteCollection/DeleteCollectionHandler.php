@@ -13,8 +13,8 @@ use Slink\Shared\Application\Command\CommandBusInterface;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
+use Slink\Shared\Domain\Exception\ForbiddenException;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final readonly class DeleteCollectionHandler implements CommandHandlerInterface {
   public function __construct(
@@ -43,7 +43,7 @@ final readonly class DeleteCollectionHandler implements CommandHandlerInterface 
             'id' => $item->getItemId()->toString(),
             'userId' => $userId,
           ]));
-        } catch (NotFoundException|AccessDeniedException) {
+        } catch (NotFoundException|ForbiddenException) {
         }
       }
     }

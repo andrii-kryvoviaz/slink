@@ -10,10 +10,10 @@ use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Shared\Application\Http\Collection;
 use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Application\Query\QueryHandlerInterface;
+use Slink\Shared\Domain\Exception\ForbiddenException;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\Pagination\CursorPaginationTrait;
 use Slink\Shared\Infrastructure\Pagination\CursorPaginator;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final readonly class GetImageBookmarkersHandler implements QueryHandlerInterface {
   use CursorPaginationTrait;
@@ -32,7 +32,7 @@ final readonly class GetImageBookmarkersHandler implements QueryHandlerInterface
     $image = $this->imageRepository->oneById($query->imageId);
 
     if ($image->getUser()?->getUuid() !== $userId) {
-      throw new AccessDeniedException('You can only view bookmarkers for your own images');
+      throw new ForbiddenException('You can only view bookmarkers for your own images');
     }
 
     $bookmarks = $this->bookmarkRepository->findByImageId(

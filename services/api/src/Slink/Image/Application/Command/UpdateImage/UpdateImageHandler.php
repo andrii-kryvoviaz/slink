@@ -9,11 +9,11 @@ use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Settings\Application\Service\SettingsService;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
+use Slink\Shared\Domain\Exception\ForbiddenException;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\User\Infrastructure\Auth\JwtUser;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final readonly class UpdateImageHandler implements CommandHandlerInterface {
 
@@ -43,7 +43,7 @@ final readonly class UpdateImageHandler implements CommandHandlerInterface {
     }
 
     if (!$this->access->isGranted(ImageAccess::Edit, $image)) {
-      throw new AccessDeniedException();
+      throw new ForbiddenException();
     }
 
     $isPublic = $command->getIsPublic();

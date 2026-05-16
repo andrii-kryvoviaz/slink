@@ -14,6 +14,7 @@ use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Settings\Application\Service\SettingsService;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
+use Slink\Shared\Domain\Exception\ForbiddenException;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\User\Infrastructure\Auth\JwtUser;
@@ -55,7 +56,7 @@ final class UpdateImageHandlerTest extends TestCase {
 
   #[Test]
   public function itThrowsAccessDeniedForGuestUser(): void {
-    $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+    $this->expectException(ForbiddenException::class);
 
     $command = new UpdateImageCommand('New Description', true);
 
@@ -76,7 +77,7 @@ final class UpdateImageHandlerTest extends TestCase {
 
   #[Test]
   public function itThrowsAccessDeniedForDifferentUser(): void {
-    $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+    $this->expectException(ForbiddenException::class);
 
     $userId = '123e4567-e89b-12d3-a456-426614174000';
     $differentUserId = '987e6543-e21b-34c5-b654-321098765432';
@@ -104,7 +105,7 @@ final class UpdateImageHandlerTest extends TestCase {
 
   #[Test]
   public function itThrowsAccessDeniedForImageWithNullUserId(): void {
-    $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+    $this->expectException(ForbiddenException::class);
 
     $userId = '123e4567-e89b-12d3-a456-426614174000';
     $command = new UpdateImageCommand('New Description', true);
