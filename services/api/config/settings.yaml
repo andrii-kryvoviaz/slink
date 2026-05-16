@@ -38,6 +38,8 @@ parameters:
   access:
     allowGuestUploads: '%env(bool:IMAGE_ALLOW_GUEST_UPLOADS)%'
     allowUnauthenticatedAccess: '%env(bool:USER_ALLOW_UNAUTHENTICATED_ACCESS)%'
+    requireAuthForMediaShares: '%env(bool:USER_REQUIRE_AUTH_FOR_MEDIA_SHARES)%'
+    requireAuthForCollectionShares: '%env(bool:USER_REQUIRE_AUTH_FOR_COLLECTION_SHARES)%'
     requireSsl: '%env(bool:REQUIRE_SSL)%'
   share:
     enableUrlShortening: '%env(bool:SHARE_ENABLE_URL_SHORTENING)%'

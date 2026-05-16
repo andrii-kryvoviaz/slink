@@ -1577,16 +1577,8 @@ msgid "Configure guest access and upload permissions"
 msgstr "配置游客访问与上传权限"
 
 #: src/feature/Settings/AccessSettings/AccessSettings.svelte
-msgid "Allow unauthenticated users to upload images without creating an account. When enabled without Guest Access, users will see a success message but cannot browse uploaded images"
-msgstr "允许未登录用户在不创建账号的情况下上传图片。若未同时启用“游客访问”，用户将看到上传成功提示但无法浏览图片。"
-
-#: src/feature/Settings/AccessSettings/AccessSettings.svelte
 msgid "Guest Access (View-Only)"
 msgstr "游客访问（只读）"
-
-#: src/feature/Settings/AccessSettings/AccessSettings.svelte
-msgid "Allow unauthenticated users to view and browse images"
-msgstr "允许未登录用户查看和浏览图片"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
@@ -4701,3 +4693,35 @@ msgstr "短链接长度"
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
 msgid "Number of characters in generated short codes (4 to 32)"
 msgstr "生成的短代码字符数（4 到 32）"
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Allow unauthenticated users to browse the public gallery and open images marked as public."
+msgstr "允许未登录用户浏览公开图库并打开标记为公开的图片。"
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Require users to log in before opening shared collections."
+msgstr "要求用户登录后才能打开分享的合集。"
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Require users to log in before opening shared media."
+msgstr "要求用户登录后才能打开分享的媒体。"
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Keep this off if you intend to embed media on external sites."
+msgstr "如果你打算将媒体嵌入到外部网站，请保持关闭。"
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Media Share Access"
+msgstr "媒体分享访问"
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Collection Share Access"
+msgstr "合集分享访问"
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Allow unauthenticated users to upload images without creating an account."
+msgstr "允许未登录用户在不创建账号的情况下上传图片。"
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Anyone can upload without identifying themselves. This can lead to uncontrolled storage growth and exposure to illegal or abusive content."
+msgstr "任何人都可以匿名上传。这可能导致存储空间不受控制地增长，并面临非法或滥用内容的风险。"

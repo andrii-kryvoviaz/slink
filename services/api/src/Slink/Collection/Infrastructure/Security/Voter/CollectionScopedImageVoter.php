@@ -7,6 +7,8 @@ namespace Slink\Collection\Infrastructure\Security\Voter;
 use Slink\Collection\Domain\Enum\CollectionScopedImageAccess;
 use Slink\Collection\Domain\Repository\CollectionItemRepositoryInterface;
 use Slink\Collection\Domain\ValueObject\CollectionScopedImageAccessContext;
+use Slink\Settings\Application\Service\SettingsService;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Share\Application\Service\ShareAccessGuard;
 use Slink\Share\Domain\Enum\ShareableType;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
@@ -16,10 +18,14 @@ use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 final class CollectionScopedImageVoter extends Voter {
+  /**
+   * @param ConfigurationProviderInterface<SettingsService> $configurationProvider
+   */
   public function __construct(
     private readonly ShareRepositoryInterface $shareRepository,
     private readonly CollectionItemRepositoryInterface $collectionItemRepository,
     private readonly ShareAccessGuard $accessGuard,
+    private readonly ConfigurationProviderInterface $configurationProvider,
   ) {}
 
   /**
@@ -43,6 +49,10 @@ final class CollectionScopedImageVoter extends Voter {
 
     if (Viewer::fromToken($token)->owns($subject->imageView)) {
       return true;
+    }
+
+    if ($token->getUser() === null && $this->configurationProvider->get('access.requireAuthForCollectionShares')) {
+      return false;
     }
 
     $share = $this->shareRepository->findByShareable($subject->collectionId, ShareableType::Collection);

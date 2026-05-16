@@ -1577,16 +1577,8 @@ msgid "Configure guest access and upload permissions"
 msgstr "Налаштуйте гостьовий доступ та дозволи на завантаження"
 
 #: src/feature/Settings/AccessSettings/AccessSettings.svelte
-msgid "Allow unauthenticated users to upload images without creating an account. When enabled without Guest Access, users will see a success message but cannot browse uploaded images"
-msgstr "Дозволити неавтентифікованим користувачам завантажувати зображення без створення облікового запису. Якщо ввімкнено без гостьового доступу, користувачі побачать повідомлення про успіх, але не зможуть переглядати завантажені зображення"
-
-#: src/feature/Settings/AccessSettings/AccessSettings.svelte
 msgid "Guest Access (View-Only)"
 msgstr "Гостьовий доступ (лише перегляд)"
-
-#: src/feature/Settings/AccessSettings/AccessSettings.svelte
-msgid "Allow unauthenticated users to view and browse images"
-msgstr "Дозволити неавтентифікованим користувачам переглядати зображення"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
@@ -4714,3 +4706,35 @@ msgstr "Довжина короткого URL"
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
 msgid "Number of characters in generated short codes (4 to 32)"
 msgstr "Кількість символів у згенерованих коротких кодах (від 4 до 32)"
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Allow unauthenticated users to browse the public gallery and open images marked as public."
+msgstr "Дозволити неавтентифікованим користувачам переглядати публічну галерею та відкривати зображення, позначені як публічні."
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Require users to log in before opening shared collections."
+msgstr "Вимагати від користувачів увійти перед відкриттям колекцій зі спільним доступом."
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Require users to log in before opening shared media."
+msgstr "Вимагати від користувачів увійти перед відкриттям медіа зі спільним доступом."
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Keep this off if you intend to embed media on external sites."
+msgstr "Залиште вимкненим, якщо плануєте вбудовувати медіа на зовнішніх сайтах."
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Media Share Access"
+msgstr "Доступ до спільних медіа"
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Collection Share Access"
+msgstr "Доступ до спільних колекцій"
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Allow unauthenticated users to upload images without creating an account."
+msgstr "Дозволити неавтентифікованим користувачам завантажувати зображення без створення облікового запису."
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Anyone can upload without identifying themselves. This can lead to uncontrolled storage growth and exposure to illegal or abusive content."
+msgstr "Будь-хто може завантажувати без ідентифікації. Це може призвести до неконтрольованого зростання використання сховища та появи нелегального або зловмисного контенту."

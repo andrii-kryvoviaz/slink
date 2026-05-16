@@ -1577,16 +1577,8 @@ msgid "Configure guest access and upload permissions"
 msgstr "Configure guest access and upload permissions"
 
 #: src/feature/Settings/AccessSettings/AccessSettings.svelte
-msgid "Allow unauthenticated users to upload images without creating an account. When enabled without Guest Access, users will see a success message but cannot browse uploaded images"
-msgstr "Allow unauthenticated users to upload images without creating an account. When enabled without Guest Access, users will see a success message but cannot browse uploaded images"
-
-#: src/feature/Settings/AccessSettings/AccessSettings.svelte
 msgid "Guest Access (View-Only)"
 msgstr "Guest Access (View-Only)"
-
-#: src/feature/Settings/AccessSettings/AccessSettings.svelte
-msgid "Allow unauthenticated users to view and browse images"
-msgstr "Allow unauthenticated users to view and browse images"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
@@ -4707,3 +4699,35 @@ msgstr "Short URL Length"
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
 msgid "Number of characters in generated short codes (4 to 32)"
 msgstr "Number of characters in generated short codes (4 to 32)"
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Allow unauthenticated users to browse the public gallery and open images marked as public."
+msgstr "Allow unauthenticated users to browse the public gallery and open images marked as public."
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Require users to log in before opening shared collections."
+msgstr "Require users to log in before opening shared collections."
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Require users to log in before opening shared media."
+msgstr "Require users to log in before opening shared media."
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Keep this off if you intend to embed media on external sites."
+msgstr "Keep this off if you intend to embed media on external sites."
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Media Share Access"
+msgstr "Media Share Access"
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Collection Share Access"
+msgstr "Collection Share Access"
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Allow unauthenticated users to upload images without creating an account."
+msgstr "Allow unauthenticated users to upload images without creating an account."
+
+#: src/feature/Settings/AccessSettings/AccessSettings.svelte
+msgid "Anyone can upload without identifying themselves. This can lead to uncontrolled storage growth and exposure to illegal or abusive content."
+msgstr "Anyone can upload without identifying themselves. This can lead to uncontrolled storage growth and exposure to illegal or abusive content."
