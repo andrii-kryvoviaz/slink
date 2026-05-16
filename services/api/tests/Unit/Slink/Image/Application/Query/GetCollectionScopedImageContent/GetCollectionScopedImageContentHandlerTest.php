@@ -63,6 +63,7 @@ final class GetCollectionScopedImageContentHandlerTest extends TestCase {
   #[Test]
   public function itThrowsNotFoundWhenVoterDenies(): void {
     $this->access->method('isGranted')->willReturn(false);
+    $this->repository->method('oneById')->willReturn($this->createImageView('item-id'));
 
     $loader = $this->createMock(ImageContentLoader::class);
     $loader->expects($this->never())->method('load');
@@ -98,6 +99,7 @@ final class GetCollectionScopedImageContentHandlerTest extends TestCase {
   public function itChecksAccessWithCollectionScopedImageAccessContext(): void {
     $itemId = 'item-id';
     $collectionId = 'collection-id';
+    $imageView = $this->createImageView($itemId);
 
     $access = $this->createMock(AuthorizationCheckerInterface::class);
     $access
@@ -107,11 +109,12 @@ final class GetCollectionScopedImageContentHandlerTest extends TestCase {
         CollectionScopedImageAccess::View,
         $this->callback(static fn (mixed $subject): bool => $subject instanceof CollectionScopedImageAccessContext
           && $subject->collectionId === $collectionId
-          && $subject->itemId === $itemId),
+          && $subject->itemId === $itemId
+          && $subject->imageView === $imageView),
       )
       ->willReturn(true);
 
-    $this->repository->method('oneById')->willReturn($this->createImageView($itemId));
+    $this->repository->method('oneById')->willReturn($imageView);
 
     $handler = new GetCollectionScopedImageContentHandler(
       $this->repository,

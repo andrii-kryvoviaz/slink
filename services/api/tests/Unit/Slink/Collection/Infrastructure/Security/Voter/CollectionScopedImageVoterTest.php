@@ -12,14 +12,19 @@ use Slink\Collection\Domain\Repository\CollectionItemRepositoryInterface;
 use Slink\Collection\Domain\ValueObject\CollectionScopedImageAccessContext;
 use Slink\Collection\Infrastructure\ReadModel\View\CollectionItemView;
 use Slink\Collection\Infrastructure\Security\Voter\CollectionScopedImageVoter;
+use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Share\Application\Service\ShareAccessGuard;
 use Slink\Share\Domain\Enum\ShareableType;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
 use Slink\Share\Infrastructure\ReadModel\View\ShareView;
+use Slink\Shared\Domain\ValueObject\ID;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 final class CollectionScopedImageVoterTest extends TestCase {
+  private const string OWNER_ID = '550e8400-e29b-41d4-a716-446655440000';
+  private const string ANONYMOUS_ID = '';
+
   private ShareRepositoryInterface&Stub $shareRepository;
   private CollectionItemRepositoryInterface&Stub $collectionItemRepository;
   private ShareAccessGuard $accessGuard;
@@ -40,15 +45,28 @@ final class CollectionScopedImageVoterTest extends TestCase {
     );
   }
 
-  private function createToken(string $userIdentifier = ''): TokenInterface&Stub {
+  private function createToken(string $userIdentifier = self::ANONYMOUS_ID): TokenInterface&Stub {
     $token = $this->createStub(TokenInterface::class);
     $token->method('getUserIdentifier')->willReturn($userIdentifier);
 
     return $token;
   }
 
-  private function createContext(string $collectionId = 'collection-id', string $itemId = 'item-id'): CollectionScopedImageAccessContext {
-    return new CollectionScopedImageAccessContext($collectionId, $itemId);
+  private function createImageView(?string $ownerId): ImageView&Stub {
+    $image = $this->createStub(ImageView::class);
+    $image
+      ->method('isOwnedBy')
+      ->willReturnCallback(fn (?ID $userId): bool => $ownerId !== null && $userId?->equals(ID::fromString($ownerId)) === true);
+
+    return $image;
+  }
+
+  private function createContext(
+    string $collectionId = 'collection-id',
+    string $itemId = 'item-id',
+    ?string $ownerId = null,
+  ): CollectionScopedImageAccessContext {
+    return new CollectionScopedImageAccessContext($collectionId, $itemId, $this->createImageView($ownerId));
   }
 
   #[Test]
@@ -137,6 +155,39 @@ final class CollectionScopedImageVoterTest extends TestCase {
     );
 
     $voter->vote($this->createToken(), $this->createContext(), [CollectionScopedImageAccess::View]);
+  }
+
+  #[Test]
+  public function itGrantsAccessToOwnerEvenWhenShareIsPasswordProtected(): void {
+    $accessGuard = $this->createMock(ShareAccessGuard::class);
+    $accessGuard->expects($this->never())->method('allows');
+
+    $shareRepository = $this->createMock(ShareRepositoryInterface::class);
+    $shareRepository->expects($this->never())->method('findByShareable');
+
+    $voter = new CollectionScopedImageVoter(
+      $shareRepository,
+      $this->collectionItemRepository,
+      $accessGuard,
+    );
+
+    $context = $this->createContext(ownerId: self::OWNER_ID);
+
+    $result = $voter->vote($this->createToken(self::OWNER_ID), $context, [CollectionScopedImageAccess::View]);
+
+    $this->assertSame(VoterInterface::ACCESS_GRANTED, $result);
+  }
+
+  #[Test]
+  public function itGrantsAccessToOwnerEvenWhenShareIsMissing(): void {
+    $this->shareRepository->method('findByShareable')->willReturn(null);
+
+    $voter = $this->createVoter();
+    $context = $this->createContext(ownerId: self::OWNER_ID);
+
+    $result = $voter->vote($this->createToken(self::OWNER_ID), $context, [CollectionScopedImageAccess::View]);
+
+    $this->assertSame(VoterInterface::ACCESS_GRANTED, $result);
   }
 
   #[Test]

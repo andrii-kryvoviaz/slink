@@ -30,11 +30,11 @@ final readonly class GetCollectionScopedImageContentHandler implements QueryHand
    * @throws NotFoundException
    */
   public function __invoke(GetCollectionScopedImageContentQuery $query): Item {
-    if (!$this->access->isGranted(CollectionScopedImageAccess::View, $query->toAccessContext())) {
+    $imageView = $this->repository->oneById($query->itemId);
+
+    if (!$this->access->isGranted(CollectionScopedImageAccess::View, $query->toAccessContext($imageView))) {
       throw new NotFoundException();
     }
-
-    $imageView = $this->repository->oneById($query->itemId);
 
     $payload = $this->loader->load(
       $imageView,

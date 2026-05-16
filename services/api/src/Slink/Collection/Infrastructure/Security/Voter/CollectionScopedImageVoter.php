@@ -10,6 +10,7 @@ use Slink\Collection\Domain\ValueObject\CollectionScopedImageAccessContext;
 use Slink\Share\Application\Service\ShareAccessGuard;
 use Slink\Share\Domain\Enum\ShareableType;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
+use Slink\Shared\Application\Security\Viewer;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -38,6 +39,10 @@ final class CollectionScopedImageVoter extends Voter {
   protected function voteOnAttribute(mixed $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool {
     if (!$subject instanceof CollectionScopedImageAccessContext) {
       return false;
+    }
+
+    if (Viewer::fromToken($token)->owns($subject->imageView)) {
+      return true;
     }
 
     $share = $this->shareRepository->findByShareable($subject->collectionId, ShareableType::Collection);
