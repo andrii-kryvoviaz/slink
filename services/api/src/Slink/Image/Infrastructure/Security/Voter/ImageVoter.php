@@ -60,10 +60,6 @@ final class ImageVoter extends Voter {
     }
 
     if ($attribute === ImageAccess::View) {
-      if ($this->isPublic($image)) {
-        return true;
-      }
-
       $targetPath = $this->targetPathFrom($subject);
 
       if ($targetPath === null) {
@@ -74,14 +70,6 @@ final class ImageVoter extends Voter {
     }
 
     return false;
-  }
-
-  private function isPublic(mixed $image): bool {
-    if (!$image instanceof ImageView && !$image instanceof Image) {
-      return false;
-    }
-
-    return $image->getAttributes()->isPublic();
   }
 
   private function unwrap(mixed $subject): mixed {

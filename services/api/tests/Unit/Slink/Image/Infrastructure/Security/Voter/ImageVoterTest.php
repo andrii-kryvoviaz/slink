@@ -124,7 +124,7 @@ final class ImageVoterTest extends TestCase {
   }
 
   #[Test]
-  public function itGrantsViewToNonOwnerWhenImageIsPublic(): void {
+  public function itDeniesViewToNonOwnerWhenImageIsPublicWithoutShare(): void {
     $ownerId = '550e8400-e29b-41d4-a716-446655440000';
     $requesterId = '660e8400-e29b-41d4-a716-446655440000';
 
@@ -133,17 +133,43 @@ final class ImageVoterTest extends TestCase {
 
     $result = $voter->vote($this->createToken($requesterId), $image, [ImageAccess::View]);
 
-    $this->assertSame(VoterInterface::ACCESS_GRANTED, $result);
+    $this->assertSame(VoterInterface::ACCESS_DENIED, $result);
   }
 
   #[Test]
-  public function itGrantsViewToAnonymousUserWhenImageIsPublic(): void {
+  public function itDeniesViewToAnonymousUserWhenImageIsPublicWithoutShare(): void {
     $ownerId = '550e8400-e29b-41d4-a716-446655440000';
 
     $voter = $this->createVoter();
     $image = $this->createImageView($ownerId, isPublic: true);
 
     $result = $voter->vote($this->createToken(), $image, [ImageAccess::View]);
+
+    $this->assertSame(VoterInterface::ACCESS_DENIED, $result);
+  }
+
+  #[Test]
+  public function itGrantsViewToOwnerWhenImageIsPublic(): void {
+    $ownerId = '550e8400-e29b-41d4-a716-446655440000';
+    $voter = $this->createVoter();
+    $image = $this->createImageView($ownerId, isPublic: true);
+
+    $result = $voter->vote($this->createToken($ownerId), $image, [ImageAccess::View]);
+
+    $this->assertSame(VoterInterface::ACCESS_GRANTED, $result);
+  }
+
+  #[Test]
+  public function itGrantsViewToAnonymousUserWhenPublicImageHasAccessibleShare(): void {
+    $ownerId = '550e8400-e29b-41d4-a716-446655440000';
+
+    $this->shareRepository->method('findByTargetPath')->willReturn($this->createAccessibleShareStub());
+
+    $voter = $this->createVoter();
+    $image = $this->createImageView($ownerId, isPublic: true);
+    $context = new ImageAccessContext($image, targetPath: TargetPath::fromString('/image/test.jpg'));
+
+    $result = $voter->vote($this->createToken(), $context, [ImageAccess::View]);
 
     $this->assertSame(VoterInterface::ACCESS_GRANTED, $result);
   }
