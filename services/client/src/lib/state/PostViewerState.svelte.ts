@@ -211,7 +211,7 @@ class PostViewerState {
     const link = document.createElement('link');
     link.rel = 'preload';
     link.as = 'image';
-    link.href = item.itemUrl ?? `/image/${item.attributes.fileName}`;
+    link.href = item.itemUrl ?? `/api/image/public/${item.attributes.fileName}`;
 
     const existingLink = document.querySelector(`link[href="${link.href}"]`);
     if (!existingLink) {

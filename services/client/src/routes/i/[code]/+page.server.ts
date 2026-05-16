@@ -64,7 +64,7 @@ async function buildOgMeta(
     url: `${origin}/i/${code}`,
     title: code,
     description: '',
-    imageUrl: `${origin}/image/${imageId}.${ext}`,
+    imageUrl: `${origin}/api/image/public/${imageId}.${ext}`,
     mimeType: `image/${ext}`,
     width: '',
     height: '',

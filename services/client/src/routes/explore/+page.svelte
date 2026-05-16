@@ -171,7 +171,7 @@
             <div class="relative">
               <ImagePlaceholder
                 uniqueId={image.id}
-                src={`/image/${image.attributes.fileName}`}
+                src={`/api/image/public/${image.attributes.fileName}`}
                 metadata={image.metadata}
                 showMetadata={false}
                 showOpenInNewTab={false}
@@ -219,7 +219,7 @@
               >
                 <StopPropagation>
                   <DownloadButton
-                    imageUrl={`/image/${image.attributes.fileName}`}
+                    imageUrl={`/api/image/public/${image.attributes.fileName}`}
                     fileName={image.attributes.fileName}
                     size="sm"
                     variant="overlay"
