@@ -1,6 +1,7 @@
 import type {
   ColumnDef,
   RowData,
+  SortingState,
   Table as TanstackTable,
 } from '@tanstack/table-core';
 
@@ -25,7 +26,9 @@ export interface TableModeConfig<
   data?: TData[];
   currentPage?: number;
   totalPages?: number;
+  initialSorting?: SortingState;
   onPageChange?: (page: number) => void;
+  onSortingChange?: (orderBy: string | null, order: 'asc' | 'desc') => void;
 }
 
 export type ModeConfig<TData extends RowData = any> =

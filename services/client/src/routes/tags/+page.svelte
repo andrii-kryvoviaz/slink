@@ -13,6 +13,8 @@
   import Icon from '@iconify/svelte';
   import { fade } from 'svelte/transition';
 
+  import type { TagOrderBy } from '@slink/api/Resources/TagResource';
+
   import { skeleton } from '@slink/lib/actions/skeleton';
   import { createCreateTagModalState } from '@slink/lib/state/CreateTagModalState.svelte';
   import { useTagListFeed } from '@slink/lib/state/TagListFeed.svelte';
@@ -74,7 +76,15 @@
       config={{
         table: {
           columns: tagColumns,
+          initialSorting: [],
           onPageChange: (page) => tagFeed.loadPage(page),
+          onSortingChange: (orderBy, order) => {
+            if (!orderBy) {
+              tagFeed.setSorting('updatedAt', 'desc');
+              return;
+            }
+            tagFeed.setSorting(orderBy as TagOrderBy, order);
+          },
         },
       }}
     >

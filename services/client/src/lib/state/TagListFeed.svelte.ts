@@ -5,6 +5,7 @@ import type {
   Tag,
   TagListRequest,
   TagListingResponse,
+  TagOrderBy,
 } from '@slink/api/Resources/TagResource';
 
 import { AbstractPaginatedFeed } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
@@ -23,9 +24,7 @@ import { toast } from '@slink/utils/ui/toast-sonner.svelte';
 class TagListFeed extends AbstractPaginatedFeed<Tag> {
   private _includeChildren = $state(true);
   private _searchTerm = $state('');
-  private _orderBy = $state<'name' | 'path' | 'createdAt' | 'updatedAt'>(
-    'updatedAt',
-  );
+  private _orderBy = $state<TagOrderBy>('updatedAt');
   private _sortOrder = $state<'asc' | 'desc'>('desc');
 
   private readonly _debouncedSearchLoad = debounce(() => {
@@ -112,7 +111,7 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
     return this._orderBy;
   }
 
-  set orderBy(value: 'name' | 'path' | 'createdAt' | 'updatedAt') {
+  set orderBy(value: TagOrderBy) {
     if (this._orderBy === value) return;
     this._orderBy = value;
     this.load({ page: 1 });
@@ -128,10 +127,7 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
     this.load({ page: 1 });
   }
 
-  setSorting(
-    orderBy: 'name' | 'path' | 'createdAt' | 'updatedAt',
-    order: 'asc' | 'desc',
-  ) {
+  setSorting(orderBy: TagOrderBy, order: 'asc' | 'desc') {
     this._orderBy = orderBy;
     this._sortOrder = order;
     this.load({ page: 1 });

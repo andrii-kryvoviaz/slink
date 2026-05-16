@@ -234,4 +234,5 @@ export const themeIcons: string[] = [
   'ph:lightbulb',
   'ph:megaphone-simple',
   'ph:warning-octagon',
+  'lucide:chevrons-up-down',
 ];

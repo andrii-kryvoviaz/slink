@@ -76,7 +76,9 @@
             totalPages: () =>
               resolveTableConfig(modeKey)?.totalPages ??
               feed.pagination.totalPages,
+            initialSorting: modeConfig.initialSorting,
             onPageChange: modeConfig.onPageChange,
+            onSortingChange: modeConfig.onSortingChange,
             tableSettings,
           }),
         );

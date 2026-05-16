@@ -28,9 +28,11 @@ export interface MoveTagRequest {
   newParentId: string | null;
 }
 
+export type TagOrderBy = 'name' | 'path' | 'createdAt' | 'updatedAt';
+
 export interface TagListRequest {
   limit?: number;
-  orderBy?: 'name' | 'path' | 'createdAt' | 'updatedAt';
+  orderBy?: TagOrderBy;
   order?: 'asc' | 'desc';
   page?: number;
   parentId?: string;

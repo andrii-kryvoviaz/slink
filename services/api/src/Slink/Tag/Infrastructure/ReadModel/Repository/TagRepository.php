@@ -90,7 +90,12 @@ final class TagRepository extends AbstractRepository implements TagRepositoryInt
 
     $orderBy = $filter->getOrderBy() ?: 'name';
     $order = $filter->getOrder() ?: 'asc';
-    $qb->orderBy("t.$orderBy", $order);
+    $stringSortColumns = ['name', 'path'];
+    if (in_array($orderBy, $stringSortColumns, true)) {
+      $qb->orderBy("LOWER(t.$orderBy)", $order);
+    } else {
+      $qb->orderBy("t.$orderBy", $order);
+    }
 
     return $this->paginate($qb, $page, $filter->getLimit() ?: 50);
   }

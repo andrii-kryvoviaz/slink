@@ -1,5 +1,8 @@
 import { TagActionsCell, TagCountCell, TagNameCell } from '@slink/feature/Tag';
-import { renderComponent } from '@slink/ui/components/data-table';
+import {
+  SortableHeader,
+  renderComponent,
+} from '@slink/ui/components/data-table';
 import type { ColumnDef } from '@tanstack/table-core';
 
 import type { Tag } from '@slink/api/Resources/TagResource';
@@ -11,7 +14,9 @@ export function createTagColumns(options: {
   return [
     {
       accessorKey: 'name',
-      header: () => 'Name',
+      enableSorting: true,
+      header: ({ column }) =>
+        renderComponent(SortableHeader, { label: 'Name', column }),
       meta: {
         className: 'sm:w-[300px]',
       },
@@ -22,6 +27,7 @@ export function createTagColumns(options: {
     },
     {
       accessorKey: 'imageCount',
+      enableSorting: false,
       header: () => 'Images',
       meta: {
         className: 'text-center',
@@ -37,6 +43,7 @@ export function createTagColumns(options: {
     },
     {
       accessorKey: 'children',
+      enableSorting: false,
       header: () => 'Children',
       meta: {
         className: 'text-center',
