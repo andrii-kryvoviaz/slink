@@ -112,7 +112,7 @@
               >
                 <ImagePlaceholder
                   uniqueId={image.id}
-                  src={`/api/image/public/${image.attributes?.fileName}`}
+                  src={image.url ?? ''}
                   metadata={image.metadata ?? {
                     height: 0,
                     width: 0,

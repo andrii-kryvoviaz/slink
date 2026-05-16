@@ -82,8 +82,7 @@
       </div>
       <div class="flex items-center gap-2">
         <DownloadButton
-          imageUrl={image.itemUrl ??
-            `/api/image/public/${image.attributes.fileName}`}
+          imageUrl={image.url}
           fileName={image.attributes.fileName}
           size="md"
           tooltipVariant="dark"

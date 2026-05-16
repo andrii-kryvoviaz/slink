@@ -64,9 +64,9 @@ final class CollectionItemResource implements ResourceInterface {
   }
 
   #[Groups(['public'])]
-  public ?string $itemUrl {
+  public ?string $url {
     get {
-      $url = $this->data->get('itemUrls', $this->item->getItemId());
+      $url = $this->data->get('urls', $this->item->getItemId());
 
       return is_string($url) ? $url : null;
     }

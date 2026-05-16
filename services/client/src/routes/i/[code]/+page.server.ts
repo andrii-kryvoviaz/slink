@@ -78,6 +78,7 @@ async function buildOgMeta(
         ...defaults,
         title: data.attributes.fileName || code,
         description: data.attributes.description || '',
+        imageUrl: data.url ? `${origin}${data.url}` : defaults.imageUrl,
         mimeType: data.metadata.mimeType || defaults.mimeType,
         width: data.metadata.width ? String(data.metadata.width) : '',
         height: data.metadata.height ? String(data.metadata.height) : '',

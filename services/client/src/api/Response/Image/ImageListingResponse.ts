@@ -13,6 +13,7 @@ export type LicenseInfo = {
 
 export type ImageListingItem = {
   id: string;
+  url: string;
   owner: {
     id: string;
     email: string;
