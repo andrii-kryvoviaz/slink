@@ -7,9 +7,9 @@ namespace Slink\Image\Application\Command\BatchReassignImages;
 use Slink\Image\Application\Command\BatchReassignImages\Operation\BatchReassignOperationInterface;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
+use Slink\Shared\Domain\Exception\ForbiddenException;
 use Slink\Shared\Domain\ValueObject\ID;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final readonly class BatchReassignImagesHandler implements CommandHandlerInterface {
   /**
@@ -40,7 +40,7 @@ final readonly class BatchReassignImagesHandler implements CommandHandlerInterfa
         $image = $this->imageRepository->get($id);
 
         if (!$image->isOwnedBy($userID)) {
-          throw new AccessDeniedException();
+          throw new ForbiddenException();
         }
 
         foreach ($allOperations as $operation) {

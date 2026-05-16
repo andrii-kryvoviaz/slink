@@ -9,96 +9,97 @@ use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Slink\Image\Application\Query\GetImageContent\GetImageContentHandler;
 use Slink\Image\Application\Query\GetImageContent\GetImageContentQuery;
-use Slink\Image\Domain\Enum\ImageAccess;
+use Slink\Image\Application\Service\ImageContentLoader;
+use Slink\Image\Domain\ValueObject\ImageContent;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
-use Slink\Image\Domain\Service\ImageAnalyzerInterface;
-use Slink\Image\Domain\Service\ImageRetrievalInterface;
-use Slink\Image\Domain\Service\ImageSanitizerInterface;
-use Slink\Image\Domain\Service\ImageUrlSignatureInterface;
-use Slink\Image\Domain\ValueObject\ImageAccessContext;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Share\Domain\Service\ShareUrlBuilderInterface;
 use Slink\Share\Domain\ValueObject\TargetPath;
 use Slink\Shared\Application\Http\CachePolicy;
 use Slink\Shared\Application\Http\Item;
+use Slink\Shared\Domain\Service\UrlSignatureInterface;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\User\Infrastructure\ReadModel\View\UserView;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
+use Slink\User\Infrastructure\ReadModel\View\UserView;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class GetImageContentHandlerTest extends TestCase {
-  private ImageRetrievalInterface&Stub $imageRetrieval;
   private ImageRepositoryInterface&Stub $repository;
-  private ImageAnalyzerInterface&Stub $imageAnalyzer;
-  private ImageSanitizerInterface&Stub $sanitizer;
-  private ImageUrlSignatureInterface&Stub $transformSignature;
   private ShareUrlBuilderInterface&Stub $shareUrlBuilder;
   private AuthorizationCheckerInterface&Stub $access;
+  private ImageContentLoader&Stub $loader;
+  private UrlSignatureInterface&Stub $signature;
 
   public function setUp(): void {
     parent::setUp();
 
-    $this->imageRetrieval = $this->createStub(ImageRetrievalInterface::class);
     $this->repository = $this->createStub(ImageRepositoryInterface::class);
-    $this->imageAnalyzer = $this->createStub(ImageAnalyzerInterface::class);
-    $this->sanitizer = $this->createStub(ImageSanitizerInterface::class);
-    $this->transformSignature = $this->createStub(ImageUrlSignatureInterface::class);
     $this->shareUrlBuilder = $this->createStub(ShareUrlBuilderInterface::class);
     $this->access = $this->createStub(AuthorizationCheckerInterface::class);
+    $this->loader = $this->createStub(ImageContentLoader::class);
+    $this->signature = $this->createStub(UrlSignatureInterface::class);
 
-    $this->transformSignature->method('verify')->willReturn(true);
     $this->shareUrlBuilder->method('buildTargetPath')->willReturn(TargetPath::fromString('/image/test.jpg'));
     $this->access->method('isGranted')->willReturn(true);
+    $this->loader->method('load')->willReturn(new ImageContent('bytes', 'image/jpeg'));
+    $this->signature->method('verify')->willReturn(true);
   }
 
   private function createHandler(): GetImageContentHandler {
     return new GetImageContentHandler(
-      $this->imageAnalyzer,
       $this->repository,
-      $this->imageRetrieval,
-      $this->sanitizer,
-      $this->transformSignature,
       $this->access,
       $this->shareUrlBuilder,
+      $this->loader,
+      $this->signature,
     );
   }
 
   #[Test]
-  public function itHandlesGetImageContentQuery(): void {
+  public function itDelegatesContentRetrievalToLoader(): void {
     $imageId = 'test-file-name';
-    $fileName = 'test-file-name.jpg';
-    $imageContent = 'image content';
-    $mimeType = 'image/jpeg';
+    $fileName = $imageId;
 
     $image = $this->createStub(ImageView::class);
     $image->method('getAttributes')->willReturn(ImageAttributes::create($imageId, 'description', true));
-    $image->method('getMimeType')->willReturn($mimeType);
-    $image->method('getFileName')->willReturn($fileName);
+    $image->method('getMimeType')->willReturn('image/jpeg');
+    $image->method('getFileName')->willReturn((string) $fileName);
 
     $this->repository->method('oneById')->willReturnMap([
       [$imageId, $image],
     ]);
-    $this->imageAnalyzer->method('supportsResize')->willReturnMap([
-      [$mimeType, true],
-    ]);
-    $this->imageRetrieval->method('getImage')->willReturn($imageContent);
-    $this->sanitizer->method('requiresSanitization')->willReturnMap([
-      [$mimeType, false],
-    ]);
 
-    $handler = $this->createHandler();
-    $result = ($handler)(new GetImageContentQuery(), $fileName);
+    $loader = $this->createMock(ImageContentLoader::class);
+    $loader
+      ->expects($this->once())
+      ->method('load')
+      ->with(
+        $image,
+        null,
+        $this->callback(static fn (array $params): bool => array_key_exists('width', $params)),
+      )
+      ->willReturn(new ImageContent('binary-bytes', 'image/jpeg'));
+
+    $handler = new GetImageContentHandler(
+      $this->repository,
+      $this->access,
+      $this->shareUrlBuilder,
+      $loader,
+      $this->signature,
+    );
+
+    $result = $handler(new GetImageContentQuery()->withImageId($fileName));
 
     $this->assertInstanceOf(Item::class, $result);
-    $this->assertEquals($imageContent, $result->resource);
-    $this->assertEquals($mimeType, $result->type);
+    $this->assertEquals('binary-bytes', $result->resource);
+    $this->assertEquals('image/jpeg', $result->type);
   }
 
   #[Test]
-  public function itThrowsNotFoundExceptionWhenImageIsNotFound(): void {
+  public function itPropagatesLoaderNotFoundException(): void {
     $imageId = 'test-file-name';
-    $fileName = 'test-file-name.jpg';
+    $fileName = $imageId;
 
     $this->repository->method('oneById')->willReturnCallback(function (string $id) use ($imageId): never {
       if ($id === $imageId) {
@@ -108,266 +109,230 @@ final class GetImageContentHandlerTest extends TestCase {
     });
 
     $this->expectException(NotFoundException::class);
-
-    $handler = $this->createHandler();
-    $handler(new GetImageContentQuery(), $fileName);
-  }
-
-  #[Test]
-  public function itSanitizesSvgContentWhenServing(): void {
-    $imageId = 'test-file-name';
-    $fileName = 'test-file-name.svg';
-    $originalSvgContent = '<svg><script>alert("xss")</script><rect/></svg>';
-    $sanitizedSvgContent = '<svg><rect/></svg>';
-    $mimeType = 'image/svg+xml';
-
-    $image = $this->createStub(ImageView::class);
-    $image->method('getAttributes')->willReturn(ImageAttributes::create($imageId, 'description', true));
-    $image->method('getMimeType')->willReturn($mimeType);
-    $image->method('getFileName')->willReturn($fileName);
-
-    $this->repository->method('oneById')->willReturnMap([
-      [$imageId, $image],
-    ]);
-    $this->imageAnalyzer->method('supportsResize')->willReturnMap([
-      [$mimeType, false],
-    ]);
-    $this->imageRetrieval->method('getImage')->willReturn($originalSvgContent);
-    $this->sanitizer->method('requiresSanitization')->willReturnMap([
-      [$mimeType, true],
-    ]);
-    $this->sanitizer->method('sanitize')->willReturnMap([
-      [$originalSvgContent, $sanitizedSvgContent],
-    ]);
-
-    $handler = $this->createHandler();
-    $result = ($handler)(new GetImageContentQuery(), $fileName);
-
-    $this->assertInstanceOf(Item::class, $result);
-    $this->assertEquals($sanitizedSvgContent, $result->resource);
-    $this->assertEquals($mimeType, $result->type);
-  }
-
-  #[Test]
-  public function itConvertsImageFormatWhenRequested(): void {
-    $imageId = 'test-file-name';
-    $originalFileName = 'test-file-name.png';
-    $imageContent = 'converted image content';
-    $originalMimeType = 'image/png';
-    $targetMimeType = 'image/webp';
-
-    $image = $this->createStub(ImageView::class);
-    $image->method('getMimeType')->willReturn($originalMimeType);
-    $image->method('getFileName')->willReturn($originalFileName);
-
-    $this->repository->method('oneById')->willReturnMap([
-      [$imageId, $image],
-    ]);
-    $this->imageAnalyzer->method('supportsResize')->willReturnMap([
-      [$originalMimeType, true],
-    ]);
-    $this->imageRetrieval->method('getImage')->willReturn($imageContent);
-    $this->sanitizer->method('requiresSanitization')->willReturnMap([
-      [$originalMimeType, false],
-    ]);
-
-    $handler = $this->createHandler();
-    $result = ($handler)(new GetImageContentQuery(), 'test-file-name.webp', 'webp');
-
-    $this->assertInstanceOf(Item::class, $result);
-    $this->assertEquals($imageContent, $result->resource);
-    $this->assertEquals($targetMimeType, $result->type);
-  }
-
-  #[Test]
-  public function itDoesNotConvertWhenRequestedFormatMatchesOriginal(): void {
-    $imageId = 'test-file-name';
-    $fileName = 'test-file-name.gif';
-    $imageContent = 'animated gif content';
-    $mimeType = 'image/gif';
-
-    $image = $this->createStub(ImageView::class);
-    $image->method('getMimeType')->willReturn($mimeType);
-    $image->method('getFileName')->willReturn($fileName);
-
-    $this->repository->method('oneById')->willReturnMap([
-      [$imageId, $image],
-    ]);
-    $this->imageAnalyzer->method('supportsResize')->willReturnMap([
-      [$mimeType, true],
-    ]);
-    $this->imageRetrieval->method('getImage')->willReturn($imageContent);
-    $this->sanitizer->method('requiresSanitization')->willReturnMap([
-      [$mimeType, false],
-    ]);
-
-    $handler = $this->createHandler();
-    $result = ($handler)(new GetImageContentQuery(), $fileName, 'gif');
-
-    $this->assertInstanceOf(Item::class, $result);
-    $this->assertEquals($imageContent, $result->resource);
-    $this->assertEquals($mimeType, $result->type);
-  }
-
-  #[Test]
-  public function itHandlesJpegJpgAliasesWithoutConversion(): void {
-    $imageId = 'test-file-name';
-    $fileName = 'test-file-name.jpeg';
-    $imageContent = 'jpeg image content';
-    $mimeType = 'image/jpeg';
-
-    $image = $this->createStub(ImageView::class);
-    $image->method('getMimeType')->willReturn($mimeType);
-    $image->method('getFileName')->willReturn($fileName);
-
-    $this->repository->method('oneById')->willReturnMap([
-      [$imageId, $image],
-    ]);
-    $this->imageAnalyzer->method('supportsResize')->willReturnMap([
-      [$mimeType, true],
-    ]);
-    $this->imageRetrieval->method('getImage')->willReturn($imageContent);
-    $this->sanitizer->method('requiresSanitization')->willReturnMap([
-      [$mimeType, false],
-    ]);
-
-    $handler = $this->createHandler();
-    $result = ($handler)(new GetImageContentQuery(), 'test-file-name.jpg', 'jpg');
-
-    $this->assertInstanceOf(Item::class, $result);
-    $this->assertEquals($imageContent, $result->resource);
-    $this->assertEquals($mimeType, $result->type);
+    $this->createHandler()(new GetImageContentQuery()->withImageId($fileName));
   }
 
   #[Test]
   public function itServesImageWhenAccessGranted(): void {
-    $fileName = 'test-file-name.jpg';
-    $imageContent = 'image content';
-    $mimeType = 'image/jpeg';
+    $fileName = 'test-file-name';
 
     $image = $this->createStub(ImageView::class);
-    $image->method('getFileName')->willReturn($fileName);
-    $image->method('getMimeType')->willReturn($mimeType);
+    $image->method('getFileName')->willReturn((string) $fileName);
+    $image->method('getMimeType')->willReturn('image/jpeg');
+    $image->method('getAttributes')->willReturn(ImageAttributes::create((string) $fileName, '', true));
     $image->method('getUser')->willReturn(null);
 
     $this->repository->method('oneById')->willReturn($image);
-    $this->imageAnalyzer->method('supportsResize')->willReturn(true);
-    $this->imageRetrieval->method('getImage')->willReturn($imageContent);
-    $this->sanitizer->method('requiresSanitization')->willReturn(false);
 
-    $handler = $this->createHandler();
-    $result = ($handler)(new GetImageContentQuery(), $fileName);
+    $result = $this->createHandler()(new GetImageContentQuery()->withImageId($fileName));
 
     $this->assertInstanceOf(Item::class, $result);
   }
 
   #[Test]
   public function itThrowsNotFoundWhenAccessDenied(): void {
-    $fileName = 'test-file-name.jpg';
+    $fileName = 'test-file-name';
 
     $this->access = $this->createStub(AuthorizationCheckerInterface::class);
     $this->access->method('isGranted')->willReturn(false);
 
     $image = $this->createStub(ImageView::class);
-    $image->method('getFileName')->willReturn($fileName);
+    $image->method('getFileName')->willReturn((string) $fileName);
     $image->method('getMimeType')->willReturn('image/jpeg');
-    $image->method('getUser')->willReturn(null);
 
     $this->repository->method('oneById')->willReturn($image);
 
     $this->expectException(NotFoundException::class);
-
-    $handler = $this->createHandler();
-    ($handler)(new GetImageContentQuery(), $fileName);
+    $this->createHandler()(new GetImageContentQuery()->withImageId($fileName));
   }
 
   #[Test]
-  public function itPassesScopeParamsInAccessContext(): void {
-    $fileName = 'test-file-name.jpg';
-    $imageContent = 'image content';
-    $mimeType = 'image/jpeg';
+  public function itForwardsRequestedFormatToLoader(): void {
+    $imageId = 'test-file-name';
+    $fileName = $imageId;
+
+    $image = $this->createStub(ImageView::class);
+    $image->method('getFileName')->willReturn('test-file-name.png');
+    $image->method('getMimeType')->willReturn('image/png');
+    $image->method('getAttributes')->willReturn(ImageAttributes::create($imageId, '', true));
+
+    $this->repository->method('oneById')->willReturn($image);
+
+    $loader = $this->createMock(ImageContentLoader::class);
+    $loader
+      ->expects($this->once())
+      ->method('load')
+      ->with($image, 'webp', $this->callback(static fn (mixed $v): bool => is_array($v)))
+      ->willReturn(new ImageContent('converted', 'image/webp'));
+
+    $handler = new GetImageContentHandler(
+      $this->repository,
+      $this->access,
+      $this->shareUrlBuilder,
+      $loader,
+      $this->signature,
+    );
+
+    $result = $handler(new GetImageContentQuery()->withImageId($fileName)->withFormat('webp'));
+
+    $this->assertEquals('image/webp', $result->type);
+    $this->assertEquals('converted', $result->resource);
+  }
+
+  #[Test]
+  public function itAppliesTransformsWhenSignatureValid(): void {
+    $fileName = 'transform-test';
 
     $image = $this->createStub(ImageView::class);
     $image->method('getFileName')->willReturn($fileName);
-    $image->method('getMimeType')->willReturn($mimeType);
-    $image->method('getUser')->willReturn(null);
+    $image->method('getMimeType')->willReturn('image/jpeg');
+    $image->method('getAttributes')->willReturn(ImageAttributes::create($fileName, '', true));
 
     $this->repository->method('oneById')->willReturn($image);
-    $this->imageAnalyzer->method('supportsResize')->willReturn(true);
-    $this->imageRetrieval->method('getImage')->willReturn($imageContent);
-    $this->sanitizer->method('requiresSanitization')->willReturn(false);
 
-    $access = $this->createMock(AuthorizationCheckerInterface::class);
-    $access
+    $signature = $this->createStub(UrlSignatureInterface::class);
+    $signature->method('verify')->willReturn(true);
+
+    $loader = $this->createMock(ImageContentLoader::class);
+    $loader
       ->expects($this->once())
-      ->method('isGranted')
+      ->method('load')
       ->with(
-        ImageAccess::View,
-        $this->callback(static function (mixed $subject): bool {
-          if (!$subject instanceof ImageAccessContext) {
-            return false;
-          }
-
-          if ($subject->scopeCollectionId !== 'collection-id') {
-            return false;
-          }
-
-          return $subject->scopeSignature === 'sig';
-        }),
+        $image,
+        null,
+        $this->callback(static fn (array $params): bool => ($params['width'] ?? null) === 100),
       )
-      ->willReturn(true);
+      ->willReturn(new ImageContent('bytes', 'image/jpeg'));
 
     $handler = new GetImageContentHandler(
-      $this->imageAnalyzer,
       $this->repository,
-      $this->imageRetrieval,
-      $this->sanitizer,
-      $this->transformSignature,
-      $access,
+      $this->access,
       $this->shareUrlBuilder,
+      $loader,
+      $signature,
     );
 
-    $query = new GetImageContentQuery(collection: 'collection-id', cs: 'sig');
-    $result = ($handler)($query, $fileName);
-
-    $this->assertInstanceOf(Item::class, $result);
+    $handler(new GetImageContentQuery(width: 100, s: 'sig')->withImageId($fileName));
   }
 
   #[Test]
-  public function itSelectsPublicImmutableCacheForPublicUnscopedImage(): void {
-    $result = $this->serveForCache(isPublic: true, query: new GetImageContentQuery());
+  public function itDropsTransformsWhenSignatureMissing(): void {
+    $fileName = 'transform-test';
 
-    $this->assertEquals(CachePolicy::publicImmutable(), $result->cachePolicy);
+    $image = $this->createStub(ImageView::class);
+    $image->method('getFileName')->willReturn($fileName);
+    $image->method('getMimeType')->willReturn('image/jpeg');
+    $image->method('getAttributes')->willReturn(ImageAttributes::create($fileName, '', true));
+
+    $this->repository->method('oneById')->willReturn($image);
+
+    $loader = $this->createMock(ImageContentLoader::class);
+    $loader
+      ->expects($this->once())
+      ->method('load')
+      ->with($image, null, [])
+      ->willReturn(new ImageContent('bytes', 'image/jpeg'));
+
+    $handler = new GetImageContentHandler(
+      $this->repository,
+      $this->access,
+      $this->shareUrlBuilder,
+      $loader,
+      $this->signature,
+    );
+
+    $handler(new GetImageContentQuery(width: 100)->withImageId($fileName));
+  }
+
+  #[Test]
+  public function itDropsTransformsWhenSignatureInvalid(): void {
+    $fileName = 'transform-test';
+
+    $image = $this->createStub(ImageView::class);
+    $image->method('getFileName')->willReturn($fileName);
+    $image->method('getMimeType')->willReturn('image/jpeg');
+    $image->method('getAttributes')->willReturn(ImageAttributes::create($fileName, '', true));
+
+    $this->repository->method('oneById')->willReturn($image);
+
+    $signature = $this->createStub(UrlSignatureInterface::class);
+    $signature->method('verify')->willReturn(false);
+
+    $loader = $this->createMock(ImageContentLoader::class);
+    $loader
+      ->expects($this->once())
+      ->method('load')
+      ->with($image, null, [])
+      ->willReturn(new ImageContent('bytes', 'image/jpeg'));
+
+    $handler = new GetImageContentHandler(
+      $this->repository,
+      $this->access,
+      $this->shareUrlBuilder,
+      $loader,
+      $signature,
+    );
+
+    $handler(new GetImageContentQuery(width: 100, s: 'bad-sig')->withImageId($fileName));
+  }
+
+  #[Test]
+  public function itPassesQualityOnlyTransformsWithoutSignature(): void {
+    $fileName = 'transform-test';
+
+    $image = $this->createStub(ImageView::class);
+    $image->method('getFileName')->willReturn($fileName);
+    $image->method('getMimeType')->willReturn('image/jpeg');
+    $image->method('getAttributes')->willReturn(ImageAttributes::create($fileName, '', true));
+
+    $this->repository->method('oneById')->willReturn($image);
+
+    $loader = $this->createMock(ImageContentLoader::class);
+    $loader
+      ->expects($this->once())
+      ->method('load')
+      ->with(
+        $image,
+        null,
+        $this->callback(static fn (array $params): bool => ($params['quality'] ?? null) === 80),
+      )
+      ->willReturn(new ImageContent('bytes', 'image/jpeg'));
+
+    $handler = new GetImageContentHandler(
+      $this->repository,
+      $this->access,
+      $this->shareUrlBuilder,
+      $loader,
+      $this->signature,
+    );
+
+    $handler(new GetImageContentQuery(quality: 80)->withImageId($fileName));
+  }
+
+  #[Test]
+  public function itSelectsRevocableCacheForPublicImageViewedByGuest(): void {
+    $result = $this->serveForCache(isPublic: true);
+
+    $this->assertEquals(CachePolicy::revocable(), $result->cachePolicy);
   }
 
   #[Test]
   public function itSelectsRevocableCacheForPrivateImage(): void {
-    $result = $this->serveForCache(isPublic: false, query: new GetImageContentQuery());
+    $result = $this->serveForCache(isPublic: false);
 
     $this->assertEquals(CachePolicy::revocable(), $result->cachePolicy);
   }
 
   #[Test]
-  public function itSelectsRevocableCacheForCollectionScopedRequest(): void {
-    $result = $this->serveForCache(
-      isPublic: true,
-      query: new GetImageContentQuery(collection: 'collection-id', cs: 'sig'),
-    );
-
-    $this->assertEquals(CachePolicy::revocable(), $result->cachePolicy);
-  }
-
-  #[Test]
-  public function itSelectsPublicImmutableCacheEvenForOwnerWhenImageIsPublic(): void {
+  public function itSelectsPrivateImmutableCacheForOwnerViewingOwnPublicImage(): void {
     $ownerId = '11111111-1111-1111-1111-111111111111';
     $result = $this->serveForCache(
       isPublic: true,
-      query: new GetImageContentQuery(),
       ownerId: $ownerId,
       viewerId: $ownerId,
     );
 
-    $this->assertEquals(CachePolicy::publicImmutable(), $result->cachePolicy);
+    $this->assertEquals(CachePolicy::privateImmutable(), $result->cachePolicy);
   }
 
   #[Test]
@@ -375,7 +340,6 @@ final class GetImageContentHandlerTest extends TestCase {
     $ownerId = '11111111-1111-1111-1111-111111111111';
     $result = $this->serveForCache(
       isPublic: false,
-      query: new GetImageContentQuery(),
       ownerId: $ownerId,
       viewerId: $ownerId,
     );
@@ -384,23 +348,9 @@ final class GetImageContentHandlerTest extends TestCase {
   }
 
   #[Test]
-  public function itSelectsPrivateImmutableCacheForOwnerEvenOnScopedUrl(): void {
-    $ownerId = '11111111-1111-1111-1111-111111111111';
+  public function itSelectsRevocableCacheForAuthenticatedNonOwner(): void {
     $result = $this->serveForCache(
       isPublic: false,
-      query: new GetImageContentQuery(collection: 'collection-id', cs: 'sig'),
-      ownerId: $ownerId,
-      viewerId: $ownerId,
-    );
-
-    $this->assertEquals(CachePolicy::privateImmutable(), $result->cachePolicy);
-  }
-
-  #[Test]
-  public function itSelectsRevocableCacheForAuthenticatedNonOwnerOnScopedUrl(): void {
-    $result = $this->serveForCache(
-      isPublic: false,
-      query: new GetImageContentQuery(collection: 'collection-id', cs: 'sig'),
       ownerId: '11111111-1111-1111-1111-111111111111',
       viewerId: '22222222-2222-2222-2222-222222222222',
     );
@@ -410,11 +360,10 @@ final class GetImageContentHandlerTest extends TestCase {
 
   private function serveForCache(
     bool $isPublic,
-    GetImageContentQuery $query,
     ?string $ownerId = null,
     ?string $viewerId = null,
   ): Item {
-    $fileName = 'cache-test.jpg';
+    $fileName = 'cache-test';
 
     $user = null;
     if ($ownerId !== null) {
@@ -423,19 +372,16 @@ final class GetImageContentHandlerTest extends TestCase {
     }
 
     $image = $this->createStub(ImageView::class);
-    $image->method('getFileName')->willReturn($fileName);
+    $image->method('getFileName')->willReturn((string) $fileName);
     $image->method('getMimeType')->willReturn('image/jpeg');
     $image->method('getUser')->willReturn($user);
-    $image->method('getAttributes')->willReturn(ImageAttributes::create($fileName, '', $isPublic));
+    $image->method('getAttributes')->willReturn(ImageAttributes::create((string) $fileName, '', $isPublic));
     $image
       ->method('isOwnedBy')
       ->willReturnCallback(fn (?ID $userId): bool => $ownerId !== null && $userId?->toString() === $ownerId);
 
     $this->repository->method('oneById')->willReturn($image);
-    $this->imageAnalyzer->method('supportsResize')->willReturn(true);
-    $this->imageRetrieval->method('getImage')->willReturn('bytes');
-    $this->sanitizer->method('requiresSanitization')->willReturn(false);
 
-    return ($this->createHandler())($query, $fileName, null, $viewerId);
+    return $this->createHandler()(new GetImageContentQuery()->withImageId($fileName)->withUserId($viewerId));
   }
 }

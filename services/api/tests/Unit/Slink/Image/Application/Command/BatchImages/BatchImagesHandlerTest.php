@@ -13,7 +13,6 @@ use Slink\Image\Application\Command\BatchImages\Operation\BatchImageOperationInt
 use Slink\Image\Domain\Image;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Shared\Domain\ValueObject\ID;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final class BatchImagesHandlerTest extends TestCase {
   private const USER_ID = '123e4567-e89b-12d3-a456-426614174000';
@@ -73,7 +72,7 @@ final class BatchImagesHandlerTest extends TestCase {
     $this->assertEmpty($result['processed']);
     $this->assertCount(1, $result['failed']);
     $this->assertSame(self::IMAGE_ID_1, $result['failed'][0]['id']);
-    $this->assertSame('Access Denied.', $result['failed'][0]['reason']);
+    $this->assertSame('Access denied', $result['failed'][0]['reason']);
   }
 
   /**

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { SettingItem, SettingsPane } from '@slink/feature/Settings';
+  import { Notice } from '@slink/feature/Text';
   import { Switch } from '@slink/ui/components/switch';
 
   import type { AccessSettings as AccessSettingsType } from '@slink/lib/settings/Type/AccessSettings';
@@ -43,13 +44,21 @@
     {/snippet}
     {#snippet hint()}
       Allow unauthenticated users to upload images without creating an account.
-      When enabled without Guest Access, users will see a success message but
-      cannot browse uploaded images
     {/snippet}
     <Switch
       name="accessAllowGuestUploads"
       bind:checked={settings.allowGuestUploads}
     />
+
+    {#snippet footer()}
+      {#if settings.allowGuestUploads}
+        <Notice variant="warning" appearance="subtle" size="sm" class="px-4">
+          Anyone can upload without identifying themselves. This can lead to
+          uncontrolled storage growth and exposure to illegal or abusive
+          content.
+        </Notice>
+      {/if}
+    {/snippet}
   </SettingItem>
 
   <SettingItem
@@ -63,11 +72,56 @@
       Guest Access (View-Only)
     {/snippet}
     {#snippet hint()}
-      Allow unauthenticated users to view and browse images
+      Allow unauthenticated users to browse the public gallery and open images
+      marked as public.
     {/snippet}
     <Switch
       name="accessAllowUnauthenticatedAccess"
       bind:checked={settings.allowUnauthenticatedAccess}
+    />
+  </SettingItem>
+
+  <SettingItem
+    defaultValue={defaultSettings?.requireAuthForMediaShares}
+    currentValue={settings.requireAuthForMediaShares}
+    reset={(value) => {
+      settings.requireAuthForMediaShares = value;
+    }}
+  >
+    {#snippet label()}
+      Media Share Access
+    {/snippet}
+    {#snippet hint()}
+      Require users to log in before opening shared media.
+    {/snippet}
+    <Switch
+      name="accessRequireAuthForMediaShares"
+      bind:checked={settings.requireAuthForMediaShares}
+    />
+
+    {#snippet footer()}
+      <Notice variant="info" appearance="subtle" size="sm" class="px-4">
+        Keep this off if you intend to embed media on external sites.
+      </Notice>
+    {/snippet}
+  </SettingItem>
+
+  <SettingItem
+    defaultValue={defaultSettings?.requireAuthForCollectionShares}
+    currentValue={settings.requireAuthForCollectionShares}
+    reset={(value) => {
+      settings.requireAuthForCollectionShares = value;
+    }}
+  >
+    {#snippet label()}
+      Collection Share Access
+    {/snippet}
+    {#snippet hint()}
+      Require users to log in before opening shared collections.
+    {/snippet}
+    <Switch
+      name="accessRequireAuthForCollectionShares"
+      bind:checked={settings.requireAuthForCollectionShares}
     />
   </SettingItem>
 </SettingsPane>

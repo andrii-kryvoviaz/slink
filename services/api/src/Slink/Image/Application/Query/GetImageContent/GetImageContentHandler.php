@@ -4,44 +4,35 @@ declare(strict_types=1);
 
 namespace Slink\Image\Application\Query\GetImageContent;
 
+use Slink\Image\Application\Service\ImageContentLoader;
 use Slink\Image\Domain\Enum\ImageAccess;
-use Slink\Image\Domain\Enum\ImageFormat;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
-use Slink\Image\Domain\Service\ImageAnalyzerInterface;
-use Slink\Image\Domain\Service\ImageSanitizerInterface;
-use Slink\Image\Domain\Service\ImageRetrievalInterface;
-use Slink\Image\Domain\Service\ImageUrlSignatureInterface;
 use Slink\Image\Domain\ValueObject\ImageAccessContext;
-use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Share\Domain\Service\ShareUrlBuilderInterface;
 use Slink\Shared\Application\Http\CachePolicy;
 use Slink\Shared\Application\Http\Item;
-use Slink\Shared\Application\Security\Viewer;
 use Slink\Shared\Application\Query\QueryHandlerInterface;
-use Slink\Shared\Domain\ValueObject\ImageOptions;
+use Slink\Shared\Application\Security\Viewer;
+use Slink\Shared\Domain\Service\UrlSignatureInterface;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final readonly class GetImageContentHandler implements QueryHandlerInterface {
   public function __construct(
-    private ImageAnalyzerInterface $imageAnalyzer,
     private ImageRepositoryInterface $repository,
-    private ImageRetrievalInterface $imageRetrievalService,
-    private ImageSanitizerInterface $sanitizer,
-    private ImageUrlSignatureInterface $transformSignature,
     private AuthorizationCheckerInterface $access,
     private ShareUrlBuilderInterface $shareUrlBuilder,
+    private ImageContentLoader $loader,
+    private UrlSignatureInterface $signature,
   ) {
   }
 
   /**
    * @throws NotFoundException
    */
-  public function __invoke(GetImageContentQuery $query, string $fileName, ?string $requestedFormat = null, ?string $userId = null): Item {
-    $imageId = $this->extractImageId($fileName);
+  public function __invoke(GetImageContentQuery $query): Item {
+    $imageId = (string) $query->getImageId();
     $imageView = $this->repository->oneById($imageId);
-
-    $query = $this->sanitizeTransforms($query, $imageId);
 
     $targetPath = $this->shareUrlBuilder->buildTargetPath(
       $imageId,
@@ -49,103 +40,62 @@ final readonly class GetImageContentHandler implements QueryHandlerInterface {
       $query->getWidth(),
       $query->getHeight(),
       $query->isCropped(),
-      $requestedFormat,
+      $query->getFormat(),
       $query->getFilter(),
     );
 
-    $context = new ImageAccessContext(
-      $imageView,
-      $query->getScopeCollectionId(),
-      $query->getScopeSignature(),
-      $targetPath,
-    );
+    $context = new ImageAccessContext($imageView, $targetPath);
 
     if (!$this->access->isGranted(ImageAccess::View, $context)) {
       throw new NotFoundException();
     }
 
-    $originalMimeType = $imageView->getMimeType();
-    $targetFormat = $requestedFormat ? ImageFormat::fromString($requestedFormat) : null;
-    $needsConversion = $this->needsFormatConversion($originalMimeType, $targetFormat);
+    $transforms = $this->authorizedTransforms(
+      $imageId,
+      $query->getTransformParams(),
+      $query->getTransformSignature(),
+    );
 
-    $transformParams = $this->imageAnalyzer->supportsResize($originalMimeType)
-      ? $query->getTransformParams()
-      : [];
+    $payload = $this->loader->load(
+      $imageView,
+      $query->getFormat(),
+      $transforms,
+    );
 
-    if ($needsConversion && $targetFormat) {
-      $transformParams['format'] = $targetFormat->getExtension();
-    }
+    $cachePolicy = CachePolicy::forImageAccess(
+      Viewer::fromIdentifier($query->getUserId())->owns($imageView),
+    );
 
-    $imageOptions = ImageOptions::fromPayload([
-      'fileName' => $imageView->getFileName(),
-      'mimeType' => $originalMimeType,
-      ...$transformParams
-    ]);
-
-    $imageContent = $this->imageRetrievalService->getImage($imageOptions);
-
-    if($imageContent === null) {
-      throw new NotFoundException();
-    }
-
-    if($this->sanitizer->requiresSanitization($originalMimeType)) {
-      $imageContent = $this->sanitizer->sanitize($imageContent);
-    }
-
-    $responseMimeType = $needsConversion && $targetFormat
-      ? $targetFormat->getMimeType()
-      : $originalMimeType;
-
-    $cachePolicy = $this->resolveCachePolicy($query, $imageView, Viewer::fromIdentifier($userId));
-
-    return Item::fromContent($imageContent, $responseMimeType, $cachePolicy);
+    return Item::fromContent($payload->content, $payload->mimeType, $cachePolicy);
   }
 
-  private function sanitizeTransforms(GetImageContentQuery $query, string $imageId): GetImageContentQuery {
-    if (!$query->hasTransformParams()) {
-      return $query;
-    }
+  /**
+   * @param array<string, mixed> $transforms
+   * @return array<string, mixed>
+   */
+  private function authorizedTransforms(string $imageId, array $transforms, ?string $signature): array {
+    $signedPayload = array_filter(
+      [
+        'width' => $transforms['width'] ?? null,
+        'height' => $transforms['height'] ?? null,
+        'crop' => $transforms['crop'] ?? null,
+        'filter' => $transforms['filter'] ?? null,
+      ],
+      static fn ($value): bool => $value !== null && $value !== false,
+    );
 
-    $signature = $query->getTransformSignature();
+    if ($signedPayload === []) {
+      return $transforms;
+    }
 
     if ($signature === null) {
-      return $query->withoutTransformParams();
+      return [];
     }
 
-    if (!$this->transformSignature->verify($imageId, $query->getSignedTransformParams(), $signature)) {
-      return $query->withoutTransformParams();
+    if (!$this->signature->verify($imageId, $signedPayload, $signature)) {
+      return [];
     }
 
-    return $query;
-  }
-
-  private function resolveCachePolicy(GetImageContentQuery $query, ImageView $imageView, Viewer $viewer): CachePolicy {
-    if (!$query->isScoped() && $imageView->getAttributes()->isPublic()) {
-      return CachePolicy::publicImmutable();
-    }
-
-    if ($viewer->owns($imageView)) {
-      return CachePolicy::privateImmutable();
-    }
-
-    return CachePolicy::revocable();
-  }
-
-  private function extractImageId(string $fileName): string {
-    $lastDotIndex = strrpos($fileName, '.');
-    return $lastDotIndex !== false ? substr($fileName, 0, $lastDotIndex) : $fileName;
-  }
-
-  private function needsFormatConversion(?string $originalMimeType, ?ImageFormat $targetFormat): bool {
-    if (!$targetFormat || !$originalMimeType) {
-      return false;
-    }
-
-    $originalFormat = ImageFormat::fromMimeType($originalMimeType);
-    if (!$originalFormat) {
-      return false;
-    }
-
-    return $originalFormat !== $targetFormat;
+    return $transforms;
   }
 }

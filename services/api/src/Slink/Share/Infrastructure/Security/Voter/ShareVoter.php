@@ -20,7 +20,7 @@ final class ShareVoter extends Voter {
   ) {}
 
   protected function supports(mixed $attribute, mixed $subject): bool {
-    if (!$attribute instanceof ShareAccess) {
+    if ($attribute !== ShareAccess::Edit) {
       return false;
     }
 

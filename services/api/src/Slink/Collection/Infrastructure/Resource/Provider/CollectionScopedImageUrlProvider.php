@@ -23,7 +23,7 @@ final readonly class CollectionScopedImageUrlProvider implements ItemDataProvide
   }
 
   public function getProviderKey(): string {
-    return 'itemUrls';
+    return 'urls';
   }
 
   public function supportsItemType(ItemType $type): bool {

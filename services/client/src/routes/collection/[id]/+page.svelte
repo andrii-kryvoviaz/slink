@@ -335,7 +335,7 @@
               <div class="relative">
                 <ImagePlaceholder
                   uniqueId={image.id}
-                  src={item.itemUrl ?? `/image/${image.attributes.fileName}`}
+                  src={item.url ?? `/image/${image.attributes.fileName}`}
                   metadata={image.metadata}
                   showMetadata={false}
                   showOpenInNewTab={false}
@@ -383,7 +383,7 @@
                 >
                   <StopPropagation>
                     <DownloadButton
-                      imageUrl={item.itemUrl ??
+                      imageUrl={item.url ??
                         `/image/${image.attributes.fileName}`}
                       fileName={image.attributes.fileName}
                       size="sm"

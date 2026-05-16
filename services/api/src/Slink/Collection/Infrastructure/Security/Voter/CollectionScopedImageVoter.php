@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Slink\Collection\Infrastructure\Security\Voter;
 
+use Slink\Collection\Domain\Enum\CollectionScopedImageAccess;
 use Slink\Collection\Domain\Repository\CollectionItemRepositoryInterface;
-use Slink\Image\Domain\Enum\ImageAccess;
-use Slink\Image\Domain\Service\ImageUrlSignatureInterface;
-use Slink\Image\Domain\ValueObject\ImageAccessContext;
+use Slink\Collection\Domain\ValueObject\CollectionScopedImageAccessContext;
+use Slink\Settings\Application\Service\SettingsService;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Share\Application\Service\ShareAccessGuard;
 use Slink\Share\Domain\Enum\ShareableType;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
@@ -17,78 +18,56 @@ use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 final class CollectionScopedImageVoter extends Voter {
+  /**
+   * @param ConfigurationProviderInterface<SettingsService> $configurationProvider
+   */
   public function __construct(
-    private readonly ImageUrlSignatureInterface $signature,
     private readonly ShareRepositoryInterface $shareRepository,
     private readonly CollectionItemRepositoryInterface $collectionItemRepository,
     private readonly ShareAccessGuard $accessGuard,
+    private readonly ConfigurationProviderInterface $configurationProvider,
   ) {}
 
   /**
    * @param mixed $attribute
    */
   protected function supports(mixed $attribute, mixed $subject): bool {
-    if ($attribute !== ImageAccess::View) {
+    if (!$attribute instanceof CollectionScopedImageAccess) {
       return false;
     }
 
-    if (!$subject instanceof ImageAccessContext) {
-      return false;
-    }
-
-    return true;
+    return $subject instanceof CollectionScopedImageAccessContext;
   }
 
   /**
    * @param mixed $attribute
    */
   protected function voteOnAttribute(mixed $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool {
-    if (!$subject instanceof ImageAccessContext) {
+    if (!$subject instanceof CollectionScopedImageAccessContext) {
       return false;
     }
 
-    if (Viewer::fromToken($token)->owns($subject->image)) {
+    if (Viewer::fromToken($token)->owns($subject->imageView)) {
       return true;
     }
 
-    $collectionId = $subject->scopeCollectionId;
-
-    if ($collectionId === null) {
+    if ($token->getUser() === null && $this->configurationProvider->get('access.requireAuthForCollectionShares')) {
       return false;
     }
 
-    if ($collectionId === '') {
-      return false;
-    }
-
-    $signature = $subject->scopeSignature;
-
-    if ($signature === null) {
-      return false;
-    }
-
-    if ($signature === '') {
-      return false;
-    }
-
-    $imageId = $subject->image->getUuid();
-
-    if (!$this->signature->verify($imageId, ['collection' => $collectionId], $signature)) {
-      return false;
-    }
-
-    $share = $this->shareRepository->findByShareable($collectionId, ShareableType::Collection);
+    $share = $this->shareRepository->findByShareable($subject->collectionId, ShareableType::Collection);
 
     if ($share === null) {
       return false;
     }
 
-    $item = $this->collectionItemRepository->findByCollectionAndItemId($collectionId, $imageId);
-
-    if ($item === null) {
+    if (!$this->accessGuard->allows($share)) {
       return false;
     }
 
-    return $this->accessGuard->allows($share);
+    return $this->collectionItemRepository->findByCollectionAndItemId(
+      $subject->collectionId,
+      $subject->itemId,
+    ) !== null;
   }
 }

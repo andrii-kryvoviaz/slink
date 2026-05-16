@@ -4,6 +4,7 @@ import type { ImageListingItem } from '@slink/api/Response/Image/ImageListingRes
 export interface BookmarkImage {
   id: string;
   available: boolean;
+  url?: string;
   owner?: ImageListingItem['owner'];
   attributes?: ImageListingItem['attributes'];
   metadata?: ImageListingItem['metadata'];

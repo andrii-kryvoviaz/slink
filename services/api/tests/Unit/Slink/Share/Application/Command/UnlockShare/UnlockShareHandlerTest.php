@@ -17,10 +17,12 @@ use Slink\Share\Infrastructure\Security\ShareUnlockCookieSigner;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class UnlockShareHandlerTest extends TestCase {
   private ShareStoreRepositoryInterface&Stub $shareStore;
   private ShareUnlockCookieSigner $signer;
+  private AuthorizationCheckerInterface&Stub $access;
   private UnlockShareHandler $handler;
 
   protected function setUp(): void {
@@ -28,7 +30,9 @@ final class UnlockShareHandlerTest extends TestCase {
 
     $this->shareStore = $this->createStub(ShareStoreRepositoryInterface::class);
     $this->signer = new ShareUnlockCookieSigner('test-secret', 'test', new RequestStack());
-    $this->handler = new UnlockShareHandler($this->shareStore, $this->signer);
+    $this->access = $this->createStub(AuthorizationCheckerInterface::class);
+    $this->access->method('isGranted')->willReturn(true);
+    $this->handler = new UnlockShareHandler($this->shareStore, $this->signer, $this->access);
   }
 
   #[Test]
@@ -94,5 +98,25 @@ final class UnlockShareHandlerTest extends TestCase {
     $this->expectException(NotFoundException::class);
 
     $this->handler->__invoke(new UnlockShareCommand('hunter2'), $shareId);
+  }
+
+  #[Test]
+  public function itThrowsNotFoundWhenAccessIsDenied(): void {
+    $shareId = ID::generate()->toString();
+
+    $share = $this->createStub(Share::class);
+    $share->method('aggregateRootVersion')->willReturn(1);
+
+    $this->shareStore = $this->createStub(ShareStoreRepositoryInterface::class);
+    $this->shareStore->method('get')->willReturn($share);
+
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
+    $access->method('isGranted')->willReturn(false);
+
+    $handler = new UnlockShareHandler($this->shareStore, $this->signer, $access);
+
+    $this->expectException(NotFoundException::class);
+
+    $handler->__invoke(new UnlockShareCommand('hunter2'), $shareId);
   }
 }

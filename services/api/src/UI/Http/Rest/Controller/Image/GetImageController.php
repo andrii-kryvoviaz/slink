@@ -25,13 +25,14 @@ final readonly class GetImageController {
     #[MapQueryString] GetImageContentQuery $query,
     string $id,
     string $ext,
-    #[CurrentUser] ?JwtUser $user = null
+    #[CurrentUser] ?JwtUser $user = null,
   ): ContentResponse {
-    $imageData = $this->ask($query->withFormat($ext)->withContext([
-      'fileName' => "{$id}.{$ext}",
-      'requestedFormat' => $ext,
-      'userId' => $user?->getIdentifier(),
-    ]));
+    $imageData = $this->ask(
+      $query
+        ->withImageId($id)
+        ->withFormat($ext)
+        ->withUserId($user?->getIdentifier()),
+    );
 
     $this->handle((new AddImageViewCountCommand($id))->withContext([
       'userId' => $user?->getIdentifier(),

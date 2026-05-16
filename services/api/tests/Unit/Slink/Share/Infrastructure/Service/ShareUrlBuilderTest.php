@@ -8,15 +8,15 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Slink\Image\Domain\Service\ImageUrlSignatureInterface;
+use Slink\Shared\Domain\Service\UrlSignatureInterface;
 use Slink\Share\Infrastructure\Service\ShareUrlBuilder;
 
 final class ShareUrlBuilderTest extends TestCase {
-  private ImageUrlSignatureInterface $signatureService;
+  private UrlSignatureInterface $signatureService;
   private ShareUrlBuilder $builder;
 
   protected function setUp(): void {
-    $this->signatureService = $this->createStub(ImageUrlSignatureInterface::class);
+    $this->signatureService = $this->createStub(UrlSignatureInterface::class);
     $this->builder = new ShareUrlBuilder($this->signatureService);
   }
 
@@ -28,7 +28,7 @@ final class ShareUrlBuilderTest extends TestCase {
     $height = 600;
     $crop = true;
 
-    $signatureService = $this->createMock(ImageUrlSignatureInterface::class);
+    $signatureService = $this->createMock(UrlSignatureInterface::class);
     $signatureService
       ->expects($this->once())
       ->method('sign')
@@ -51,7 +51,7 @@ final class ShareUrlBuilderTest extends TestCase {
     $fileName = 'test.jpg';
     $width = 800;
 
-    $signatureService = $this->createMock(ImageUrlSignatureInterface::class);
+    $signatureService = $this->createMock(UrlSignatureInterface::class);
     $signatureService
       ->expects($this->once())
       ->method('sign')
@@ -72,7 +72,7 @@ final class ShareUrlBuilderTest extends TestCase {
     $fileName = 'test.jpg';
     $height = 600;
 
-    $signatureService = $this->createMock(ImageUrlSignatureInterface::class);
+    $signatureService = $this->createMock(UrlSignatureInterface::class);
     $signatureService
       ->expects($this->once())
       ->method('sign')
@@ -91,7 +91,7 @@ final class ShareUrlBuilderTest extends TestCase {
     $imageId = '12345678-1234-1234-1234-123456789abc';
     $fileName = 'test.jpg';
 
-    $signatureService = $this->createMock(ImageUrlSignatureInterface::class);
+    $signatureService = $this->createMock(UrlSignatureInterface::class);
     $signatureService
       ->expects($this->never())
       ->method('sign');
@@ -108,7 +108,7 @@ final class ShareUrlBuilderTest extends TestCase {
     $fileName = 'test.jpg';
     $width = 800;
 
-    $signatureService = $this->createMock(ImageUrlSignatureInterface::class);
+    $signatureService = $this->createMock(UrlSignatureInterface::class);
     $signatureService
       ->expects($this->once())
       ->method('sign')
@@ -148,7 +148,7 @@ final class ShareUrlBuilderTest extends TestCase {
     $imageId = '12345678-1234-1234-1234-123456789abc';
     $fileName = 'test.png';
 
-    $signatureService = $this->createMock(ImageUrlSignatureInterface::class);
+    $signatureService = $this->createMock(UrlSignatureInterface::class);
     $signatureService
       ->expects($this->never())
       ->method('sign');
@@ -166,7 +166,7 @@ final class ShareUrlBuilderTest extends TestCase {
     $width = 800;
     $height = 600;
 
-    $signatureService = $this->createMock(ImageUrlSignatureInterface::class);
+    $signatureService = $this->createMock(UrlSignatureInterface::class);
     $signatureService
       ->expects($this->once())
       ->method('sign')
@@ -207,7 +207,7 @@ final class ShareUrlBuilderTest extends TestCase {
     $imageId = '12345678-1234-1234-1234-123456789abc';
     $fileName = 'test.jpg';
 
-    $signatureService = $this->createMock(ImageUrlSignatureInterface::class);
+    $signatureService = $this->createMock(UrlSignatureInterface::class);
     $signatureService
       ->expects($this->once())
       ->method('sign')
@@ -227,7 +227,7 @@ final class ShareUrlBuilderTest extends TestCase {
     $fileName = 'test.jpg';
     $width = 800;
 
-    $signatureService = $this->createMock(ImageUrlSignatureInterface::class);
+    $signatureService = $this->createMock(UrlSignatureInterface::class);
     $signatureService
       ->expects($this->once())
       ->method('sign')

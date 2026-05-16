@@ -13,7 +13,9 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 final class GuestAccessVoter extends Voter {
   public const GUEST_UPLOAD_ALLOWED = 'GUEST_UPLOAD_ALLOWED';
   public const GUEST_VIEW_ALLOWED = 'GUEST_VIEW_ALLOWED';
-  
+  public const GUEST_MEDIA_SHARE_ALLOWED = 'GUEST_MEDIA_SHARE_ALLOWED';
+  public const GUEST_COLLECTION_SHARE_ALLOWED = 'GUEST_COLLECTION_SHARE_ALLOWED';
+
   /**
    * @param ConfigurationProviderInterface<SettingsService> $configurationProvider
    */
@@ -21,7 +23,7 @@ final class GuestAccessVoter extends Voter {
     private readonly ConfigurationProviderInterface $configurationProvider,
   ) {
   }
-  
+
   /**
    * @param string $attribute
    * @param mixed $subject
@@ -30,10 +32,12 @@ final class GuestAccessVoter extends Voter {
   protected function supports(string $attribute, mixed $subject): bool {
     return in_array($attribute, [
       self::GUEST_UPLOAD_ALLOWED,
-      self::GUEST_VIEW_ALLOWED
+      self::GUEST_VIEW_ALLOWED,
+      self::GUEST_MEDIA_SHARE_ALLOWED,
+      self::GUEST_COLLECTION_SHARE_ALLOWED,
     ]);
   }
-  
+
   /**
    * @param string $attribute
    * @param mixed $subject
@@ -44,10 +48,12 @@ final class GuestAccessVoter extends Voter {
     if ($token->getUser() !== null) {
       return true;
     }
-    
+
     return match ($attribute) {
       self::GUEST_UPLOAD_ALLOWED => $this->configurationProvider->get('access.allowGuestUploads'),
       self::GUEST_VIEW_ALLOWED => $this->configurationProvider->get('access.allowUnauthenticatedAccess'),
+      self::GUEST_MEDIA_SHARE_ALLOWED => !$this->configurationProvider->get('access.requireAuthForMediaShares'),
+      self::GUEST_COLLECTION_SHARE_ALLOWED => !$this->configurationProvider->get('access.requireAuthForCollectionShares'),
 
       default => false
     };

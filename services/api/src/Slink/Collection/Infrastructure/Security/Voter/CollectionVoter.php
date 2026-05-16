@@ -7,6 +7,8 @@ namespace Slink\Collection\Infrastructure\Security\Voter;
 use Slink\Collection\Domain\Collection;
 use Slink\Collection\Domain\Enum\CollectionAccess;
 use Slink\Collection\Infrastructure\ReadModel\View\CollectionView;
+use Slink\Settings\Application\Service\SettingsService;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Share\Application\Service\ShareAccessGuard;
 use Slink\Share\Domain\Enum\ShareableType;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
@@ -16,9 +18,13 @@ use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 final class CollectionVoter extends Voter {
+  /**
+   * @param ConfigurationProviderInterface<SettingsService> $configurationProvider
+   */
   public function __construct(
     private readonly ShareRepositoryInterface $shareRepository,
     private readonly ShareAccessGuard $accessGuard,
+    private readonly ConfigurationProviderInterface $configurationProvider,
   ) {}
 
   /**
@@ -55,6 +61,10 @@ final class CollectionVoter extends Voter {
     }
 
     if ($attribute === CollectionAccess::View) {
+      if ($token->getUser() === null && $this->configurationProvider->get('access.requireAuthForCollectionShares')) {
+        return false;
+      }
+
       return $this->hasAccessibleShare($collectionId);
     }
 

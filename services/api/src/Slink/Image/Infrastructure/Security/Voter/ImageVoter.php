@@ -8,6 +8,8 @@ use Slink\Image\Domain\Enum\ImageAccess;
 use Slink\Image\Domain\Image;
 use Slink\Image\Domain\ValueObject\ImageAccessContext;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
+use Slink\Settings\Application\Service\SettingsService;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Share\Application\Service\ShareAccessGuard;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
 use Slink\Share\Domain\ValueObject\TargetPath;
@@ -17,9 +19,13 @@ use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 final class ImageVoter extends Voter {
+  /**
+   * @param ConfigurationProviderInterface<SettingsService> $configurationProvider
+   */
   public function __construct(
     private readonly ShareRepositoryInterface $shareRepository,
     private readonly ShareAccessGuard $accessGuard,
+    private readonly ConfigurationProviderInterface $configurationProvider,
   ) {}
 
   /**
@@ -60,13 +66,13 @@ final class ImageVoter extends Voter {
     }
 
     if ($attribute === ImageAccess::View) {
-      if ($this->isPublic($image)) {
-        return true;
-      }
-
       $targetPath = $this->targetPathFrom($subject);
 
       if ($targetPath === null) {
+        return false;
+      }
+
+      if ($token->getUser() === null && $this->configurationProvider->get('access.requireAuthForMediaShares')) {
         return false;
       }
 
@@ -74,14 +80,6 @@ final class ImageVoter extends Voter {
     }
 
     return false;
-  }
-
-  private function isPublic(mixed $image): bool {
-    if (!$image instanceof ImageView && !$image instanceof Image) {
-      return false;
-    }
-
-    return $image->getAttributes()->isPublic();
   }
 
   private function unwrap(mixed $subject): mixed {

@@ -43,6 +43,14 @@ final readonly class CachePolicy {
     );
   }
 
+  public static function forImageAccess(bool $isOwned): self {
+    if ($isOwned) {
+      return self::privateImmutable();
+    }
+
+    return self::revocable();
+  }
+
   /**
    * @return array<string, mixed>
    */

@@ -23,9 +23,9 @@ use Slink\Image\Domain\ValueObject\ImageMetadata;
 use Slink\Image\Domain\ValueObject\TagSet;
 use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\Contract\OwnerAwareInterface;
+use Slink\Shared\Domain\Exception\ForbiddenException;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final class Image extends AbstractAggregateRoot implements OwnerAwareInterface {
   private ?ID $userId;
@@ -251,7 +251,7 @@ final class Image extends AbstractAggregateRoot implements OwnerAwareInterface {
     }
 
     if (!$this->isOwnedBy($requestedBy)) {
-      throw new AccessDeniedException();
+      throw new ForbiddenException();
     }
 
     $this->recordThat(new ImageWasDeleted($this->aggregateRootId(), $preserveOnDisk));

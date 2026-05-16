@@ -29,7 +29,7 @@
         class="shrink-0 lg:flex-1 lg:h-full flex items-start lg:items-center justify-center min-w-0 overflow-hidden h-[35%] lg:max-h-none lg:min-h-0 lg:@container-[size]"
       >
         <ImagePlaceholder
-          src={image.itemUrl ?? `/image/${image.attributes.fileName}`}
+          src={image.url}
           metadata={image.metadata}
           showMetadata={false}
           showOpenInNewTab={true}
