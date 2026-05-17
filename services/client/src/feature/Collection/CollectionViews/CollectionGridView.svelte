@@ -1,6 +1,7 @@
 <script lang="ts">
   import { StopPropagation } from '@slink/feature/Action';
   import { CollectionActionsDropdown } from '@slink/feature/Collection';
+  import { Masonry } from '@slink/feature/Layout';
   import { FormattedDate } from '@slink/feature/Text';
   import { LazyImage } from '@slink/ui/components/lazy-image';
 
@@ -16,8 +17,18 @@
   let { items }: Props = $props();
 </script>
 
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-  {#each items as collection (collection.id)}
+<Masonry
+  {items}
+  class="gap-4"
+  columns={{
+    xs: 1,
+    sm: 2,
+    md: 2,
+    lg: 3,
+    xl: 4,
+  }}
+>
+  {#snippet itemTemplate(collection)}
     <div
       in:fly={{ y: 20, duration: 300, delay: Math.random() * 100 }}
       class="group relative overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/60 transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-700/80 hover:shadow-md dark:hover:shadow-gray-900/50"
@@ -47,6 +58,13 @@
               {collection.itemCount ?? 0}
             </span>
           </div>
+          <div class="absolute bottom-2 right-2">
+            <span
+              class="flex items-center gap-1 px-2 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-xs"
+            >
+              <FormattedDate date={collection.createdAt.timestamp} />
+            </span>
+          </div>
         </div>
       </a>
       <div class="p-3 flex items-start justify-between gap-2">
@@ -63,14 +81,11 @@
               {@html collection.description}
             </p>
           {/if}
-          <div class="mt-2 text-xs text-gray-400 dark:text-gray-500">
-            <FormattedDate date={collection.createdAt.timestamp} />
-          </div>
         </a>
         <StopPropagation>
           <CollectionActionsDropdown {collection} />
         </StopPropagation>
       </div>
     </div>
-  {/each}
-</div>
+  {/snippet}
+</Masonry>
