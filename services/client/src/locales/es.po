@@ -70,7 +70,6 @@ msgid "Clear search"
 msgstr "Borrar búsqueda"
 
 #: src/feature/Analytics/LatestUsers.svelte
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/routes/admin/user/+page.svelte
 msgid "No users found"
 msgstr "No se encontraron usuarios"
@@ -307,7 +306,6 @@ msgstr "Buscar por hashtag"
 
 #: src/feature/Navigation/Sidebar/AppSidebar.svelte
 #: src/feature/Search/SearchBar.svelte
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 msgid "User"
 msgstr "Usuario"
@@ -573,7 +571,6 @@ msgstr "Organiza tus imágenes en álbumes"
 msgid "Search collections..."
 msgstr "Buscar colecciones..."
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/routes/collections/+page.svelte
 msgid "No collections found"
 msgstr "No se encontraron colecciones"
@@ -1182,7 +1179,6 @@ msgstr "Agregar una descripción..."
 msgid "Click to add a description..."
 msgstr "Haz clic para agregar una descripción..."
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/Description/ImageDescription.svelte
 #: src/feature/Image/PostViewer/PostViewerSidebar.svelte
@@ -1976,7 +1972,6 @@ msgid "SMB workgroup name (optional)"
 msgstr "Nombre del grupo de trabajo SMB (opcional)"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Username"
@@ -2428,12 +2423,10 @@ msgstr "Opciones de carga"
 msgid "<0/> Actions"
 msgstr "<0/> Acciones"
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
 #: src/feature/User/UserActions/UserActions.svelte
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 #: src/routes/shares/+page.svelte
 msgid "Actions"
@@ -2468,19 +2461,13 @@ msgstr "La cuenta de usuario y todos los datos asociados serán eliminados"
 msgid "Email <0/>"
 msgstr "Correo electrónico <0/>"
 
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 msgid "Status"
 msgstr "Estado"
 
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 msgid "Roles"
 msgstr "Roles"
-
-#: src/feature/User/UserDataTable/UserDataTable.svelte
-msgid "Users will appear here once added"
-msgstr "Los usuarios aparecerán aquí una vez agregados"
 
 #: src/feature/User/UserRoleBadge/UserRoleBadge.svelte
 msgid "<0/> Admin"
@@ -2884,27 +2871,20 @@ msgstr "Seleccionar {0}"
 msgid "ToastManager"
 msgstr "ToastManager"
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
 msgid "Name"
 msgstr "Nombre"
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 msgid "Items"
 msgstr "Elementos"
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 #: src/routes/shares/+page.svelte
 msgid "Created"
 msgstr "Creado"
-
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
-msgid "Create your first collection to get started"
-msgstr "Crea tu primera colección para comenzar"
 
 #: src/feature/Image/History/Actions/BatchPickerAction.svelte
 msgid "Select items to apply"

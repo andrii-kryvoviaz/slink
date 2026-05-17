@@ -6,7 +6,6 @@ export { default as CollectionDeletePopover } from './CollectionDeletePopover/Co
 export { default as CollectionItemDropdown } from './CollectionItemDropdown/CollectionItemDropdown.svelte';
 export { default as CollectionPickerList } from './CollectionList/CollectionPickerList.svelte';
 export { default as CollectionPicker } from './CollectionPicker/CollectionPicker.svelte';
-export { default as CollectionDataTable } from './CollectionViews/CollectionDataTable/CollectionDataTable.svelte';
 export { default as CollectionActionsCell } from './CollectionViews/CollectionDataTable/cells/CollectionActionsCell.svelte';
 export { default as CollectionNameCell } from './CollectionViews/CollectionDataTable/cells/CollectionNameCell.svelte';
 export * from './CollectionViews/CollectionDataTable/columns.svelte';

@@ -70,7 +70,6 @@ msgid "Clear search"
 msgstr "Effacer la recherche"
 
 #: src/feature/Analytics/LatestUsers.svelte
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/routes/admin/user/+page.svelte
 msgid "No users found"
 msgstr "Aucun utilisateur trouvé"
@@ -307,7 +306,6 @@ msgstr "Rechercher par hashtag"
 
 #: src/feature/Navigation/Sidebar/AppSidebar.svelte
 #: src/feature/Search/SearchBar.svelte
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 msgid "User"
 msgstr "Utilisateur"
@@ -573,7 +571,6 @@ msgstr "Organisez vos images en albums"
 msgid "Search collections..."
 msgstr "Rechercher des collections..."
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/routes/collections/+page.svelte
 msgid "No collections found"
 msgstr "Aucune collection trouvée"
@@ -1182,7 +1179,6 @@ msgstr "Ajouter une description..."
 msgid "Click to add a description..."
 msgstr "Cliquez pour ajouter une description..."
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/Description/ImageDescription.svelte
 #: src/feature/Image/PostViewer/PostViewerSidebar.svelte
@@ -1976,7 +1972,6 @@ msgid "SMB workgroup name (optional)"
 msgstr "Nom du groupe de travail SMB (facultatif)"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Username"
@@ -2428,12 +2423,10 @@ msgstr "Options d'importation"
 msgid "<0/> Actions"
 msgstr "<0/> Actions"
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
 #: src/feature/User/UserActions/UserActions.svelte
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 #: src/routes/shares/+page.svelte
 msgid "Actions"
@@ -2468,19 +2461,13 @@ msgstr "Le compte utilisateur et toutes les données associées seront supprimé
 msgid "Email <0/>"
 msgstr "E-mail <0/>"
 
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 msgid "Status"
 msgstr "Statut"
 
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 msgid "Roles"
 msgstr "Rôles"
-
-#: src/feature/User/UserDataTable/UserDataTable.svelte
-msgid "Users will appear here once added"
-msgstr "Les utilisateurs apparaîtront ici une fois ajoutés"
 
 #: src/feature/User/UserRoleBadge/UserRoleBadge.svelte
 msgid "<0/> Admin"
@@ -2884,27 +2871,20 @@ msgstr "Sélectionner {0}"
 msgid "ToastManager"
 msgstr "ToastManager"
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
 msgid "Name"
 msgstr "Nom"
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 msgid "Items"
 msgstr "Éléments"
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 #: src/routes/shares/+page.svelte
 msgid "Created"
 msgstr "Créé"
-
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
-msgid "Create your first collection to get started"
-msgstr "Créez votre première collection pour commencer"
 
 #: src/feature/Image/History/Actions/BatchPickerAction.svelte
 msgid "Select items to apply"

@@ -30,7 +30,7 @@
   } from '@slink/feature/Tag';
   import { Subtitle, Title } from '@slink/feature/Text';
   import { Button } from '@slink/ui/components/button';
-  import { DataTable, DataTableToolbar } from '@slink/ui/components/data-table';
+  import { DataTable } from '@slink/ui/components/data-table';
   import { FilterSummary } from '@slink/ui/components/filter';
   import { ViewModeLayout } from '@slink/ui/components/view-mode-layout';
   import { tick, untrack } from 'svelte';
@@ -264,28 +264,13 @@
         }
       }}
       config={{
+        grid: { pageSize: false },
+        list: { pageSize: false },
         table: {
           columns: historyColumns,
         },
       }}
     >
-      {#snippet toolbar({
-        table,
-        pageSize,
-        pagination,
-        feed,
-        handlePageSizeChange,
-      })}
-        <DataTableToolbar
-          {table}
-          {pageSize}
-          {pagination}
-          onPageSizeChange={handlePageSizeChange}
-          onNextPage={() => feed.nextPage()}
-          onPrevPage={() => feed.prevPage()}
-          isLoading={feed.isLoading}
-        />
-      {/snippet}
       {#snippet loading(mode)}
         <HistorySkeleton count={12} viewMode={mode} />
       {/snippet}

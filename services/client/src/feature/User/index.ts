@@ -17,7 +17,6 @@ export * from './UserAvatarLegacy/UserAvatarLegacy.theme';
 export * from './UserAvatarLegacy/UserAvatarLegacy.types';
 export { default as UserCard } from './UserCard/UserCard.svelte';
 export { default as UserCell } from './UserCell/UserCell.svelte';
-export { default as UserDataTable } from './UserDataTable/UserDataTable.svelte';
 export * from './UserDataTable/columns.svelte';
 export { default as DataTableEmailButton } from './UserDataTable/data-table-email-button.svelte';
 export { default as UserDeleteConfirmation } from './UserDeleteConfirmation/UserDeleteConfirmation.svelte';

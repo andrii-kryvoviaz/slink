@@ -70,7 +70,6 @@ msgid "Clear search"
 msgstr "清除搜索"
 
 #: src/feature/Analytics/LatestUsers.svelte
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/routes/admin/user/+page.svelte
 msgid "No users found"
 msgstr "未找到用户"
@@ -307,7 +306,6 @@ msgstr "按标签搜索"
 
 #: src/feature/Navigation/Sidebar/AppSidebar.svelte
 #: src/feature/Search/SearchBar.svelte
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 msgid "User"
 msgstr "用户"
@@ -573,7 +571,6 @@ msgstr "将图片整理到合集中"
 msgid "Search collections..."
 msgstr "搜索合集..."
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/routes/collections/+page.svelte
 msgid "No collections found"
 msgstr "未找到合集"
@@ -1182,7 +1179,6 @@ msgstr "添加描述..."
 msgid "Click to add a description..."
 msgstr "点击添加描述..."
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/Description/ImageDescription.svelte
 #: src/feature/Image/PostViewer/PostViewerSidebar.svelte
@@ -1976,7 +1972,6 @@ msgid "SMB workgroup name (optional)"
 msgstr "SMB 工作组名（可选）"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Username"
@@ -2428,12 +2423,10 @@ msgstr "上传选项"
 msgid "<0/> Actions"
 msgstr "<0/> 操作"
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
 #: src/feature/User/UserActions/UserActions.svelte
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 #: src/routes/shares/+page.svelte
 msgid "Actions"
@@ -2468,19 +2461,13 @@ msgstr "该用户账号及其所有关联数据将被移除"
 msgid "Email <0/>"
 msgstr "邮箱 <0/>"
 
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 msgid "Status"
 msgstr "状态"
 
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 msgid "Roles"
 msgstr "角色"
-
-#: src/feature/User/UserDataTable/UserDataTable.svelte
-msgid "Users will appear here once added"
-msgstr "添加后用户会显示在这里"
 
 #: src/feature/User/UserRoleBadge/UserRoleBadge.svelte
 msgid "<0/> Admin"
@@ -2884,27 +2871,20 @@ msgstr "选择 {0}"
 msgid "ToastManager"
 msgstr "通知管理器"
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
 msgid "Name"
 msgstr "名称"
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 msgid "Items"
 msgstr "项目数"
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 #: src/routes/shares/+page.svelte
 msgid "Created"
 msgstr "创建时间"
-
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
-msgid "Create your first collection to get started"
-msgstr "创建你的第一个合集以开始使用"
 
 #: src/feature/Image/History/Actions/BatchPickerAction.svelte
 msgid "Select items to apply"

@@ -5,7 +5,7 @@
   import { createTagColumns } from '@slink/feature/Tag/TagDataTable/columns.svelte';
   import { Subtitle, Title } from '@slink/feature/Text';
   import { Button } from '@slink/ui/components/button';
-  import { DataTable, DataTableToolbar } from '@slink/ui/components/data-table';
+  import { DataTable } from '@slink/ui/components/data-table';
   import { EnhancedInput } from '@slink/ui/components/input';
   import { SplitButton } from '@slink/ui/components/split-button';
   import { ViewModeLayout } from '@slink/ui/components/view-mode-layout';
@@ -72,6 +72,7 @@
     <ViewModeLayout
       feed={tagFeed}
       mode="table"
+      pageSizeOptions={[10, 20, 50, 100]}
       onPageSizeChange={(size) => tagFeed.load({ page: 1, limit: size })}
       config={{
         table: {
@@ -88,37 +89,19 @@
         },
       }}
     >
-      {#snippet toolbar({
-        table,
-        pageSize,
-        pagination,
-        feed,
-        handlePageSizeChange,
-      })}
-        <DataTableToolbar
-          {table}
-          {pageSize}
-          {pagination}
-          isLoading={feed.isLoading}
-          onPageSizeChange={handlePageSizeChange}
-          onPageChange={(page) => tagFeed.loadPage(page)}
-          pageSizeOptions={[10, 20, 50, 100]}
-        >
-          {#snippet leading()}
-            <div class="lg:max-w-sm">
-              <EnhancedInput
-                debounce={300}
-                oninput={(e) => (tagFeed.search = e.currentTarget.value)}
-                placeholder="Search tags..."
-                size="md"
-              >
-                {#snippet leftIcon()}
-                  <Icon icon="lucide:search" class="h-4 w-4" />
-                {/snippet}
-              </EnhancedInput>
-            </div>
-          {/snippet}
-        </DataTableToolbar>
+      {#snippet toolbar()}
+        <div class="lg:max-w-sm">
+          <EnhancedInput
+            debounce={300}
+            oninput={(e) => (tagFeed.search = e.currentTarget.value)}
+            placeholder="Search tags..."
+            size="md"
+          >
+            {#snippet leftIcon()}
+              <Icon icon="lucide:search" class="h-4 w-4" />
+            {/snippet}
+          </EnhancedInput>
+        </div>
       {/snippet}
       {#snippet loading()}
         <TagsSkeleton count={10} />

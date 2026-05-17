@@ -18,12 +18,14 @@
     type ViewModeLayoutVariants,
     viewModeLayoutVariants,
   } from './view-mode-layout.variants';
+  import ViewModeToolbar from './view-mode-toolbar.svelte';
 
   interface Props {
     feed: AbstractPaginatedFeed<any>;
     mode: ViewMode;
     config?: Partial<Record<ViewMode, ModeConfig>>;
     spacing?: ViewModeLayoutVariants['spacing'];
+    pageSizeOptions?: number[];
     onBeforeLoad?: () => boolean | void;
     onPageSizeChange?: (size: number) => void | Promise<void>;
 
@@ -41,6 +43,7 @@
     mode,
     config,
     spacing,
+    pageSizeOptions = [12, 24, 48, 96],
     onBeforeLoad,
     onPageSizeChange,
     grid,
@@ -92,13 +95,15 @@
     if (modeConfig && isTableMode(modeConfig)) {
       return {
         toolbar: modeConfig.toolbar ?? true,
+        pageSize: modeConfig.pageSize ?? true,
         more: modeConfig.more ?? false,
         appendMode: modeConfig.appendMode ?? ('never' as const),
       };
     }
 
     return {
-      toolbar: modeConfig?.toolbar ?? false,
+      toolbar: modeConfig?.toolbar ?? true,
+      pageSize: modeConfig?.pageSize ?? true,
       more: modeConfig?.more ?? true,
       appendMode: modeConfig?.appendMode ?? ('always' as const),
     };
@@ -131,6 +136,21 @@
 
   const activeTableResult = $derived(tableInstances.get(mode));
 
+  const handlePaginationPageChange = (page: number) => {
+    const tableConfig = resolveTableConfig(mode);
+    if (tableConfig?.onPageChange) {
+      tableConfig.onPageChange(page);
+      return;
+    }
+
+    const current = feed.pagination.currentPage;
+    if (page > current) {
+      feed.nextPage();
+    } else if (page < current) {
+      feed.prevPage();
+    }
+  };
+
   const context = $derived<ListingContext>({
     feed,
     handlePageSizeChange,
@@ -158,13 +178,30 @@
     pagination: feed.pagination,
   });
 
-  const showToolbar = $derived(toolbar && resolvedConfig.toolbar);
+  const hasTrailing = $derived(
+    resolvedConfig.pageSize || activeTableResult !== undefined,
+  );
+  const showToolbar = $derived(
+    resolvedConfig.toolbar &&
+      (toolbar !== undefined || activeTableResult !== undefined || hasTrailing),
+  );
   const showMore = $derived(more && resolvedConfig.more);
 </script>
 
 <div class={viewModeLayoutVariants({ spacing })}>
-  {#if showToolbar && toolbar}
-    {@render toolbar(toolbarContext)}
+  {#if showToolbar}
+    <ViewModeToolbar
+      pagination={feed.pagination}
+      isLoading={feed.isLoading}
+      pageSize={tableSettings.pageSize}
+      {pageSizeOptions}
+      showPageSize={resolvedConfig.pageSize}
+      activeTable={activeTableResult?.table}
+      {toolbarContext}
+      {toolbar}
+      onPageSizeChange={handlePageSizeChange}
+      onPaginationPageChange={handlePaginationPageChange}
+    />
   {/if}
 
   {#if processing && loading}

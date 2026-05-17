@@ -70,7 +70,6 @@ msgid "Clear search"
 msgstr "検索をクリア"
 
 #: src/feature/Analytics/LatestUsers.svelte
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/routes/admin/user/+page.svelte
 msgid "No users found"
 msgstr "ユーザーが見つかりません"
@@ -307,7 +306,6 @@ msgstr "ハッシュタグで検索"
 
 #: src/feature/Navigation/Sidebar/AppSidebar.svelte
 #: src/feature/Search/SearchBar.svelte
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 msgid "User"
 msgstr "ユーザー"
@@ -573,7 +571,6 @@ msgstr "画像をアルバムにまとめましょう"
 msgid "Search collections..."
 msgstr "コレクションを検索..."
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/routes/collections/+page.svelte
 msgid "No collections found"
 msgstr "コレクションが見つかりません"
@@ -1182,7 +1179,6 @@ msgstr "説明を追加..."
 msgid "Click to add a description..."
 msgstr "クリックして説明を追加..."
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/Description/ImageDescription.svelte
 #: src/feature/Image/PostViewer/PostViewerSidebar.svelte
@@ -1976,7 +1972,6 @@ msgid "SMB workgroup name (optional)"
 msgstr "SMBワークグループ名（任意）"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Username"
@@ -2428,12 +2423,10 @@ msgstr "アップロードオプション"
 msgid "<0/> Actions"
 msgstr "<0/> 操作"
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
 #: src/feature/User/UserActions/UserActions.svelte
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 #: src/routes/shares/+page.svelte
 msgid "Actions"
@@ -2468,19 +2461,13 @@ msgstr "ユーザーアカウントと関連するすべてのデータが削除
 msgid "Email <0/>"
 msgstr "メール <0/>"
 
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 msgid "Status"
 msgstr "ステータス"
 
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 msgid "Roles"
 msgstr "ロール"
-
-#: src/feature/User/UserDataTable/UserDataTable.svelte
-msgid "Users will appear here once added"
-msgstr "追加されたユーザーがここに表示されます"
 
 #: src/feature/User/UserRoleBadge/UserRoleBadge.svelte
 msgid "<0/> Admin"
@@ -2884,27 +2871,20 @@ msgstr "{0}を選択"
 msgid "ToastManager"
 msgstr "ToastManager"
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
 msgid "Name"
 msgstr "名前"
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 msgid "Items"
 msgstr "項目数"
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 #: src/routes/shares/+page.svelte
 msgid "Created"
 msgstr "作成日"
-
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
-msgid "Create your first collection to get started"
-msgstr "最初のコレクションを作成して始めましょう"
 
 #: src/feature/Image/History/Actions/BatchPickerAction.svelte
 msgid "Select items to apply"

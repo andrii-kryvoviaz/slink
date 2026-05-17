@@ -70,7 +70,6 @@ msgid "Clear search"
 msgstr "Suche zurücksetzen"
 
 #: src/feature/Analytics/LatestUsers.svelte
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/routes/admin/user/+page.svelte
 msgid "No users found"
 msgstr "Keine Benutzer gefunden"
@@ -307,7 +306,6 @@ msgstr "Nach Hashtag suchen"
 
 #: src/feature/Navigation/Sidebar/AppSidebar.svelte
 #: src/feature/Search/SearchBar.svelte
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 msgid "User"
 msgstr "Benutzer"
@@ -573,7 +571,6 @@ msgstr "Organisieren Sie Ihre Bilder in Alben"
 msgid "Search collections..."
 msgstr "Sammlungen suchen..."
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/routes/collections/+page.svelte
 msgid "No collections found"
 msgstr "Keine Sammlungen gefunden"
@@ -1182,7 +1179,6 @@ msgstr "Beschreibung hinzufügen..."
 msgid "Click to add a description..."
 msgstr "Klicken, um eine Beschreibung hinzuzufügen..."
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/Description/ImageDescription.svelte
 #: src/feature/Image/PostViewer/PostViewerSidebar.svelte
@@ -1976,7 +1972,6 @@ msgid "SMB workgroup name (optional)"
 msgstr "SMB-Arbeitsgruppenname (optional)"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Username"
@@ -2428,12 +2423,10 @@ msgstr "Upload-Optionen"
 msgid "<0/> Actions"
 msgstr "<0/> Aktionen"
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
 #: src/feature/User/UserActions/UserActions.svelte
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 #: src/routes/shares/+page.svelte
 msgid "Actions"
@@ -2468,19 +2461,13 @@ msgstr "Benutzerkonto und alle zugehörigen Daten werden entfernt"
 msgid "Email <0/>"
 msgstr "E-Mail <0/>"
 
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 msgid "Status"
 msgstr "Status"
 
-#: src/feature/User/UserDataTable/UserDataTable.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 msgid "Roles"
 msgstr "Rollen"
-
-#: src/feature/User/UserDataTable/UserDataTable.svelte
-msgid "Users will appear here once added"
-msgstr "Benutzer erscheinen hier, sobald sie hinzugefügt wurden"
 
 #: src/feature/User/UserRoleBadge/UserRoleBadge.svelte
 msgid "<0/> Admin"
@@ -2884,27 +2871,20 @@ msgstr "{0} auswählen"
 msgid "ToastManager"
 msgstr "ToastManager"
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
 msgid "Name"
 msgstr "Name"
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 msgid "Items"
 msgstr "Elemente"
 
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 #: src/routes/shares/+page.svelte
 msgid "Created"
 msgstr "Erstellt"
-
-#: src/feature/Collection/CollectionViews/CollectionDataTable/CollectionDataTable.svelte
-msgid "Create your first collection to get started"
-msgstr "Erstellen Sie Ihre erste Sammlung, um zu beginnen"
 
 #: src/feature/Image/History/Actions/BatchPickerAction.svelte
 msgid "Select items to apply"

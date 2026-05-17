@@ -12,7 +12,7 @@
   } from '@slink/feature/Layout';
   import { Subtitle, Title } from '@slink/feature/Text';
   import { Button } from '@slink/ui/components/button';
-  import { DataTable, DataTableToolbar } from '@slink/ui/components/data-table';
+  import { DataTable } from '@slink/ui/components/data-table';
   import { EnhancedInput } from '@slink/ui/components/input';
   import { SplitButton } from '@slink/ui/components/split-button';
   import { ViewModeLayout } from '@slink/ui/components/view-mode-layout';
@@ -88,48 +88,24 @@
       feed={collectionsFeed}
       mode={settings.collections.viewMode}
       config={{
-        grid: {
-          toolbar: true,
-        },
         table: {
           columns: createCollectionColumns(),
         },
       }}
     >
-      {#snippet toolbar({
-        table,
-        pageSize,
-        pagination,
-        feed,
-        handlePageSizeChange,
-      })}
-        <DataTableToolbar
-          {table}
-          {pageSize}
-          {pagination}
-          onPageSizeChange={handlePageSizeChange}
-          onNextPage={() => feed.nextPage()}
-          onPrevPage={() => feed.prevPage()}
-          isLoading={feed.isLoading}
-          showPagination={!!table}
-          showColumnToggle={!!table}
-        >
-          {#snippet leading()}
-            <div class="lg:max-w-sm">
-              <EnhancedInput
-                debounce={300}
-                oninput={(e) =>
-                  (collectionsFeed.search = e.currentTarget.value)}
-                placeholder="Search collections..."
-                size="md"
-              >
-                {#snippet leftIcon()}
-                  <Icon icon="lucide:search" class="h-4 w-4" />
-                {/snippet}
-              </EnhancedInput>
-            </div>
-          {/snippet}
-        </DataTableToolbar>
+      {#snippet toolbar()}
+        <div class="lg:max-w-sm">
+          <EnhancedInput
+            debounce={300}
+            oninput={(e) => (collectionsFeed.search = e.currentTarget.value)}
+            placeholder="Search collections..."
+            size="md"
+          >
+            {#snippet leftIcon()}
+              <Icon icon="lucide:search" class="h-4 w-4" />
+            {/snippet}
+          </EnhancedInput>
+        </div>
       {/snippet}
       {#snippet loading(mode)}
         <CollectionSkeleton count={12} viewMode={mode} />

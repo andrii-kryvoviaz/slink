@@ -7,11 +7,7 @@
     SharesFilterBar,
   } from '@slink/feature/Share/MyShares';
   import { FormattedDate, Subtitle, Title } from '@slink/feature/Text';
-  import {
-    DataTable,
-    DataTableToolbar,
-    renderComponent,
-  } from '@slink/ui/components/data-table';
+  import { DataTable, renderComponent } from '@slink/ui/components/data-table';
   import { ViewModeLayout } from '@slink/ui/components/view-mode-layout';
   import type { ColumnDef } from '@tanstack/table-core';
 
@@ -94,30 +90,13 @@
     <ViewModeLayout
       {feed}
       mode="table"
+      pageSizeOptions={[10, 20, 50, 100]}
       config={{
         table: {
           columns: shareColumns,
         },
       }}
     >
-      {#snippet toolbar({
-        table,
-        pageSize,
-        pagination,
-        feed: tableFeed,
-        handlePageSizeChange,
-      })}
-        <DataTableToolbar
-          {table}
-          {pageSize}
-          {pagination}
-          isLoading={tableFeed.isLoading}
-          onPageSizeChange={handlePageSizeChange}
-          onNextPage={() => tableFeed.nextPage()}
-          onPrevPage={() => tableFeed.prevPage()}
-          pageSizeOptions={[10, 20, 50, 100]}
-        />
-      {/snippet}
       {#snippet table({ table: sharesTable, feed: tableFeed })}
         <DataTable table={sharesTable!} isLoading={tableFeed.isLoading} />
       {/snippet}

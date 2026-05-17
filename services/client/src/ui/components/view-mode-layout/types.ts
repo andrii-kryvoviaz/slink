@@ -14,6 +14,7 @@ import type {
 
 export interface BaseModeConfig {
   toolbar?: boolean;
+  pageSize?: boolean;
   more?: boolean;
   appendMode?: AppendMode;
 }
