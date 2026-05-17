@@ -34,6 +34,8 @@ final readonly class AuthInfoStep implements BootStepInterface {
       ['New Account Approval', $approval ? 'Required' : 'Not Required'],
       ['Unauthenticated Access', $this->boolLabel('access.allowUnauthenticatedAccess')],
       ['Anonymous Guest Uploads', $this->boolLabel('access.allowGuestUploads')],
+      ['Auth Required for Media Shares', $this->boolLabel('access.requireAuthForMediaShares')],
+      ['Auth Required for Collection Shares', $this->boolLabel('access.requireAuthForCollectionShares')],
       ['Force HTTPS Connections', $this->boolLabel('access.requireSsl')],
       ['Minimum Password Length', sprintf('%d characters', $minLength)],
     ]);
