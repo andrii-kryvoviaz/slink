@@ -1,6 +1,8 @@
 export { default as AccentIcon } from './AccentIcon/AccentIcon.svelte';
 export * from './AccentIcon/AccentIcon.theme';
 export { default as ShareAttributes } from './Attributes/ShareAttributes.svelte';
+export { default as ShareVariantBadges } from './Attributes/ShareVariantBadges.svelte';
+export * from './Attributes/hasVariantParams';
 export { default as ExpirationDetail } from './Controls/ExpirationDetail.svelte';
 export { default as List } from './Controls/List.svelte';
 export { default as PasswordDetail } from './Controls/PasswordDetail.svelte';
@@ -27,5 +29,6 @@ export * from './Reroute/ShareReroute';
 export * from './State/Context';
 export * from './State/State.svelte';
 export { default as StatusIndicator } from './StatusIndicator/StatusIndicator.svelte';
+export { default as ShareTypeBadge } from './Type/ShareTypeBadge.svelte';
 export { default as Unavailable } from './Unavailable/Unavailable.svelte';
 export * from './share.theme';

@@ -889,6 +889,7 @@ msgstr "<0/> Carica immagini"
 msgid "View More"
 msgstr "Mostra altro"
 
+#: src/feature/Share/Type/ShareTypeBadge.svelte
 #: src/routes/collection/[id]/+page.svelte
 #: src/routes/history/+page.svelte
 msgid "Collection"
@@ -1211,6 +1212,7 @@ msgstr "Scala a {0}"
 #: src/feature/Image/History/Actions/DeleteAction.svelte
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Share/Type/ShareTypeBadge.svelte
 #: src/routes/admin/settings/image/+page.svelte
 msgid "Image"
 msgstr "Immagine"
@@ -3769,6 +3771,7 @@ msgid "File Name"
 msgstr "Nome file"
 
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+#: src/routes/shares/+page.svelte
 msgid "Type"
 msgstr "Tipo"
 
@@ -4738,3 +4741,15 @@ msgstr "<0/> Infinito"
 #: src/routes/collection/[id]/+page.svelte
 msgid "Loading more"
 msgstr "Caricamento"
+
+#: src/feature/Share/Attributes/ShareVariantBadges.svelte
+msgid "Image dimensions"
+msgstr "Dimensioni immagine"
+
+#: src/feature/Share/Attributes/ShareVariantBadges.svelte
+msgid "Image format"
+msgstr "Formato immagine"
+
+#: src/feature/Share/Attributes/ShareVariantBadges.svelte
+msgid "Applied filter"
+msgstr "Filtro applicato"

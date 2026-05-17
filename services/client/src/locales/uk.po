@@ -889,6 +889,7 @@ msgstr "<0/> Завантажити зображення"
 msgid "View More"
 msgstr "Показати більше"
 
+#: src/feature/Share/Type/ShareTypeBadge.svelte
 #: src/routes/collection/[id]/+page.svelte
 #: src/routes/history/+page.svelte
 msgid "Collection"
@@ -1211,6 +1212,7 @@ msgstr "Масштабувати до {0}"
 #: src/feature/Image/History/Actions/DeleteAction.svelte
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Share/Type/ShareTypeBadge.svelte
 #: src/routes/admin/settings/image/+page.svelte
 msgid "Image"
 msgstr "Зображення"
@@ -3770,6 +3772,7 @@ msgid "File Name"
 msgstr "Ім'я файлу"
 
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+#: src/routes/shares/+page.svelte
 msgid "Type"
 msgstr "Тип"
 
@@ -4745,3 +4748,15 @@ msgstr "<0/> Безкінечно"
 #: src/routes/collection/[id]/+page.svelte
 msgid "Loading more"
 msgstr "Завантаження"
+
+#: src/feature/Share/Attributes/ShareVariantBadges.svelte
+msgid "Image dimensions"
+msgstr "Розмір зображення"
+
+#: src/feature/Share/Attributes/ShareVariantBadges.svelte
+msgid "Image format"
+msgstr "Формат зображення"
+
+#: src/feature/Share/Attributes/ShareVariantBadges.svelte
+msgid "Applied filter"
+msgstr "Застосований фільтр"

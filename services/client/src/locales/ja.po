@@ -889,6 +889,7 @@ msgstr "<0/> 画像をアップロード"
 msgid "View More"
 msgstr "もっと見る"
 
+#: src/feature/Share/Type/ShareTypeBadge.svelte
 #: src/routes/collection/[id]/+page.svelte
 #: src/routes/history/+page.svelte
 msgid "Collection"
@@ -1211,6 +1212,7 @@ msgstr "{0}に拡大縮小"
 #: src/feature/Image/History/Actions/DeleteAction.svelte
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Share/Type/ShareTypeBadge.svelte
 #: src/routes/admin/settings/image/+page.svelte
 msgid "Image"
 msgstr "画像"
@@ -3769,6 +3771,7 @@ msgid "File Name"
 msgstr "ファイル名"
 
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+#: src/routes/shares/+page.svelte
 msgid "Type"
 msgstr "種類"
 
@@ -4738,3 +4741,15 @@ msgstr "<0/> 無限"
 #: src/routes/collection/[id]/+page.svelte
 msgid "Loading more"
 msgstr "読み込み中"
+
+#: src/feature/Share/Attributes/ShareVariantBadges.svelte
+msgid "Image dimensions"
+msgstr "画像サイズ"
+
+#: src/feature/Share/Attributes/ShareVariantBadges.svelte
+msgid "Image format"
+msgstr "画像フォーマット"
+
+#: src/feature/Share/Attributes/ShareVariantBadges.svelte
+msgid "Applied filter"
+msgstr "適用中のフィルター"

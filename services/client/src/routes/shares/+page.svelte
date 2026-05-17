@@ -1,5 +1,6 @@
 <script lang="ts">
   import { EmptyState, ShareSkeleton } from '@slink/feature/Layout';
+  import { ShareTypeBadge } from '@slink/feature/Share';
   import {
     ActionsCell,
     AttributesCell,
@@ -44,6 +45,20 @@
         renderComponent(ShareableCell, { share: row.original, size: 'md' }),
     },
     {
+      id: 'type',
+      header: () => 'Type',
+      meta: { className: 'w-[120px]' },
+      cell: ({ row }) =>
+        renderComponent(ShareTypeBadge, { type: row.original.type }),
+    },
+    {
+      id: 'attributes',
+      header: () => 'Attributes',
+      meta: { className: 'w-[260px]' },
+      cell: ({ row }) =>
+        renderComponent(AttributesCell, { share: row.original }),
+    },
+    {
       accessorKey: 'createdAt',
       header: () => 'Created',
       meta: { className: 'w-[160px]' },
@@ -51,13 +66,6 @@
         renderComponent(FormattedDate, {
           date: toTimestamp(row.original.createdAt),
         }),
-    },
-    {
-      id: 'attributes',
-      header: () => 'Attributes',
-      meta: { className: 'w-[140px]' },
-      cell: ({ row }) =>
-        renderComponent(AttributesCell, { share: row.original }),
     },
     {
       id: 'actions',

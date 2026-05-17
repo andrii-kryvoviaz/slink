@@ -240,4 +240,6 @@ export const themeIcons: string[] = [
   'ph:circle-notch',
   'ph:plus-circle',
   'ph:infinity',
+  'ph:file-image',
+  'ph:magic-wand',
 ];

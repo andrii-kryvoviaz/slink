@@ -889,6 +889,7 @@ msgstr "<0/> Prześlij obrazy"
 msgid "View More"
 msgstr "Pokaż więcej"
 
+#: src/feature/Share/Type/ShareTypeBadge.svelte
 #: src/routes/collection/[id]/+page.svelte
 #: src/routes/history/+page.svelte
 msgid "Collection"
@@ -1211,6 +1212,7 @@ msgstr "Skaluj do {0}"
 #: src/feature/Image/History/Actions/DeleteAction.svelte
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Share/Type/ShareTypeBadge.svelte
 #: src/routes/admin/settings/image/+page.svelte
 msgid "Image"
 msgstr "Obraz"
@@ -3771,6 +3773,7 @@ msgid "File Name"
 msgstr "Nazwa pliku"
 
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
+#: src/routes/shares/+page.svelte
 msgid "Type"
 msgstr "Typ"
 
@@ -4752,3 +4755,15 @@ msgstr "<0/> Nieskończone"
 #: src/routes/collection/[id]/+page.svelte
 msgid "Loading more"
 msgstr "Ładowanie"
+
+#: src/feature/Share/Attributes/ShareVariantBadges.svelte
+msgid "Image dimensions"
+msgstr "Wymiary obrazu"
+
+#: src/feature/Share/Attributes/ShareVariantBadges.svelte
+msgid "Image format"
+msgstr "Format obrazu"
+
+#: src/feature/Share/Attributes/ShareVariantBadges.svelte
+msgid "Applied filter"
+msgstr "Zastosowany filtr"
