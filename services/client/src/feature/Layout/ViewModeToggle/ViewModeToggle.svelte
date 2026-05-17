@@ -23,12 +23,13 @@
     value,
     modes,
     size = 'md',
+    rounded = 'lg',
     className: customClassName,
     disabled = false,
     on,
   }: Props = $props();
 
-  const styles = $derived(viewModeSliderTheme({ size }));
+  const styles = $derived(viewModeSliderTheme({ size, rounded }));
 
   const activeIndex = $derived(Math.max(0, modes.indexOf(value)));
   const stepCount = $derived(modes.length);

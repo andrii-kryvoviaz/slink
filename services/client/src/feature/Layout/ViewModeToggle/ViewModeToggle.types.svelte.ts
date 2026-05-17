@@ -24,6 +24,7 @@ export interface ViewModeToggleProps {
   value: ViewMode;
   modes: ViewMode[];
   size?: 'sm' | 'md' | 'lg';
+  rounded?: 'md' | 'lg' | 'pill';
   className?: string;
   disabled?: boolean;
   on: {
