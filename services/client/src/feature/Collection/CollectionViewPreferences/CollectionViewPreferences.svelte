@@ -34,6 +34,7 @@
   bind:open
   variant="floating"
   rounded="xl"
+  size="none"
   contentProps={{ align: 'end', side: 'bottom', sideOffset: 8 }}
 >
   {#snippet trigger()}
