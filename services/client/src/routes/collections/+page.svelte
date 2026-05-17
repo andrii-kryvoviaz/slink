@@ -70,7 +70,10 @@
             modes={['grid', 'table']}
             on={{
               change: (mode) => {
-                settings.collections = { viewMode: mode };
+                settings.collections = {
+                  ...settings.collections,
+                  viewMode: mode,
+                };
               },
             }}
           />

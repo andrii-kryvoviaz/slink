@@ -257,6 +257,10 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
     this._meta.size = pageSize;
   }
 
+  get pageSize(): number {
+    return this._meta.size;
+  }
+
   public addItem(item: T): void {
     const id = this._getItemId(item);
     this._itemMap.set(id, item);

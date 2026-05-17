@@ -237,4 +237,7 @@ export const themeIcons: string[] = [
   'lucide:chevrons-up-down',
   'fluent:link-multiple-20-regular',
   'fluent:link-settings-24-regular',
+  'ph:circle-notch',
+  'ph:plus-circle',
+  'ph:infinity',
 ];

@@ -4711,3 +4711,30 @@ msgstr "Allow unauthenticated users to upload images without creating an account
 #: src/feature/Settings/AccessSettings/AccessSettings.svelte
 msgid "Anyone can upload without identifying themselves. This can lead to uncontrolled storage growth and exposure to illegal or abusive content."
 msgstr "Anyone can upload without identifying themselves. This can lead to uncontrolled storage growth and exposure to illegal or abusive content."
+
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+msgid "View preferences"
+msgstr "View preferences"
+
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+msgid "Items per page"
+msgstr "Items per page"
+
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+msgid "Load strategy"
+msgstr "Load strategy"
+
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+msgid "<0/> Load more"
+msgstr "<0/> Load more"
+
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+msgid "<0/> Infinite"
+msgstr "<0/> Infinite"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Loading more"
+msgstr "Loading more"

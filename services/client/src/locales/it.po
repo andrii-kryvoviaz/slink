@@ -4711,3 +4711,30 @@ msgstr "Consenti agli utenti non autenticati di caricare immagini senza creare u
 #: src/feature/Settings/AccessSettings/AccessSettings.svelte
 msgid "Anyone can upload without identifying themselves. This can lead to uncontrolled storage growth and exposure to illegal or abusive content."
 msgstr "Chiunque può caricare senza identificarsi. Questo può portare a una crescita incontrollata dell'archiviazione e all'esposizione a contenuti illegali o abusivi."
+
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+msgid "View preferences"
+msgstr "Preferenze di visualizzazione"
+
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+msgid "Items per page"
+msgstr "Elementi per pagina"
+
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+msgid "Load strategy"
+msgstr "Strategia di caricamento"
+
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+msgid "<0/> Load more"
+msgstr "<0/> Carica altri"
+
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+msgid "<0/> Infinite"
+msgstr "<0/> Infinito"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Loading more"
+msgstr "Caricamento"

@@ -4718,3 +4718,30 @@ msgstr "Дозволити неавтентифікованим користув
 #: src/feature/Settings/AccessSettings/AccessSettings.svelte
 msgid "Anyone can upload without identifying themselves. This can lead to uncontrolled storage growth and exposure to illegal or abusive content."
 msgstr "Будь-хто може завантажувати без ідентифікації. Це може призвести до неконтрольованого зростання використання сховища та появи нелегального або зловмисного контенту."
+
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+msgid "View preferences"
+msgstr "Параметри перегляду"
+
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+msgid "Items per page"
+msgstr "Елементів на сторінці"
+
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+msgid "Load strategy"
+msgstr "Стратегія завантаження"
+
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+msgid "<0/> Load more"
+msgstr "<0/> Завантажити ще"
+
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+msgid "<0/> Infinite"
+msgstr "<0/> Безкінечно"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Loading more"
+msgstr "Завантаження"

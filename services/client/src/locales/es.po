@@ -4711,3 +4711,30 @@ msgstr "Permitir que usuarios no autenticados suban imágenes sin crear una cuen
 #: src/feature/Settings/AccessSettings/AccessSettings.svelte
 msgid "Anyone can upload without identifying themselves. This can lead to uncontrolled storage growth and exposure to illegal or abusive content."
 msgstr "Cualquiera puede subir contenido sin identificarse. Esto puede provocar un crecimiento descontrolado del almacenamiento y la exposición a contenido ilegal o abusivo."
+
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+msgid "View preferences"
+msgstr "Preferencias de vista"
+
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+msgid "Items per page"
+msgstr "Elementos por página"
+
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+msgid "Load strategy"
+msgstr "Estrategia de carga"
+
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+msgid "<0/> Load more"
+msgstr "<0/> Cargar más"
+
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+msgid "<0/> Infinite"
+msgstr "<0/> Infinito"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Loading more"
+msgstr "Cargando más"

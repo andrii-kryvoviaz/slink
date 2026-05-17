@@ -78,6 +78,7 @@ export class CollectionItemsFeed extends AbstractPaginatedFeed<CollectionItem> {
     const response = await ApiClient.collection.getItems(
       this._collectionId,
       cursor,
+      this._meta.size,
     );
 
     if (this._collection) {
@@ -139,6 +140,13 @@ export class CollectionItemsFeed extends AbstractPaginatedFeed<CollectionItem> {
 
     const updated = await ApiClient.collection.update(this._collectionId, data);
     this._collection = { ...this._collection, ...updated };
+  }
+
+  public async applyPageSize(size: number): Promise<void> {
+    if (this.pageSize === size) return;
+    this.setPageSize(size);
+    this.reset();
+    await this.load();
   }
 }
 

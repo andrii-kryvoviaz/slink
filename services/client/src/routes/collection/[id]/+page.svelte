@@ -1,7 +1,10 @@
 <script lang="ts">
   import { ApiClient } from '@slink/api';
   import { LoadMoreButton, StopPropagation } from '@slink/feature/Action';
-  import { CollectionItemDropdown } from '@slink/feature/Collection';
+  import {
+    CollectionItemDropdown,
+    CollectionViewPreferences,
+  } from '@slink/feature/Collection';
   import {
     DimensionsBadge,
     DownloadButton,
@@ -23,13 +26,16 @@
   import { Button } from '@slink/ui/components/button';
   import { untrack } from 'svelte';
 
+  import { page } from '$app/state';
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
   import type { CollectionItem } from '@slink/api/Response';
   import type { AuthenticatedUser } from '@slink/api/Response/User/AuthenticatedUser';
 
+  import { intersect } from '@slink/lib/actions/intersect';
   import { skeleton } from '@slink/lib/actions/skeleton';
+  import type { CollectionsState } from '@slink/lib/settings/UserSettings.svelte';
   import { CollectionImagesFeedAdapter } from '@slink/lib/state/CollectionImagesFeedAdapter';
   import { useCollectionItemsFeed } from '@slink/lib/state/CollectionItemsFeed.svelte';
   import { usePostViewerState } from '@slink/lib/state/PostViewerState.svelte';
@@ -51,12 +57,20 @@
 
   let { data }: Props = $props();
 
+  const { settings } = page.data;
+
   const licensingEnabled = $derived(
     data.globalSettings?.image?.enableLicensing ?? false,
   );
   const itemsFeed = useCollectionItemsFeed();
   const postViewerState = usePostViewerState();
+  itemsFeed.setPageSize(settings.collections.pageSize);
   itemsFeed.reset();
+
+  const handleViewPreferencesChange = async (next: CollectionsState) => {
+    settings.collections = next;
+    await itemsFeed.applyPageSize(next.pageSize);
+  };
 
   const isOwner = $derived(
     data.user !== null &&
@@ -218,8 +232,8 @@
               </p>
             {/if}
           </div>
-          {#if isOwner}
-            <div class="shrink-0 h-10 flex items-center gap-2">
+          <div class="shrink-0 h-10 flex items-center gap-2">
+            {#if isOwner}
               <Button
                 variant="glass"
                 size="sm"
@@ -293,8 +307,12 @@
                   {/snippet}
                 </Share.Popover>
               </Share.Provider>
-            </div>
-          {/if}
+            {/if}
+            <CollectionViewPreferences
+              value={settings.collections}
+              onChange={handleViewPreferencesChange}
+            />
+          </div>
         </div>
       {/if}
     </div>
@@ -440,15 +458,34 @@
       </Masonry>
 
       {#if itemsFeed.hasMore}
-        <div class="flex justify-center mt-12">
-          <LoadMoreButton
-            visible={itemsFeed.hasMore}
-            loading={itemsFeed.isLoading}
-            onclick={() => itemsFeed.nextPage({ debounce: 300 })}
-            variant="modern"
-            rounded="full"
-          />
-        </div>
+        {#if settings.collections.loadStrategy === 'infinite_scroll'}
+          <div
+            class="flex justify-center mt-12 h-10"
+            use:intersect={{
+              enabled: itemsFeed.hasMore && !itemsFeed.isLoading,
+              onEnter: () => itemsFeed.nextPage({ debounce: 300 }),
+            }}
+          >
+            {#if itemsFeed.isLoading}
+              <div
+                class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
+              >
+                <Icon icon="ph:circle-notch" class="h-4 w-4 animate-spin" />
+                <span>Loading more</span>
+              </div>
+            {/if}
+          </div>
+        {:else}
+          <div class="flex justify-center mt-12">
+            <LoadMoreButton
+              visible={itemsFeed.hasMore}
+              loading={itemsFeed.isLoading}
+              onclick={() => itemsFeed.nextPage({ debounce: 300 })}
+              variant="modern"
+              rounded="full"
+            />
+          </div>
+        {/if}
       {/if}
     {/if}
   </div>

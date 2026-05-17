@@ -4711,3 +4711,30 @@ msgstr "Nicht authentifizierten Benutzern erlauben, Bilder ohne Kontoerstellung 
 #: src/feature/Settings/AccessSettings/AccessSettings.svelte
 msgid "Anyone can upload without identifying themselves. This can lead to uncontrolled storage growth and exposure to illegal or abusive content."
 msgstr "Jeder kann hochladen, ohne sich zu identifizieren. Dies kann zu unkontrolliertem Speicherwachstum und der Konfrontation mit illegalen oder missbräuchlichen Inhalten führen."
+
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+msgid "View preferences"
+msgstr "Ansichtseinstellungen"
+
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+msgid "Items per page"
+msgstr "Elemente pro Seite"
+
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+msgid "Load strategy"
+msgstr "Ladestrategie"
+
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+msgid "<0/> Load more"
+msgstr "<0/> Mehr laden"
+
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+#: src/feature/Collection/CollectionViewPreferences/CollectionViewPreferences.svelte
+msgid "<0/> Infinite"
+msgstr "<0/> Unendlich"
+
+#: src/routes/collection/[id]/+page.svelte
+msgid "Loading more"
+msgstr "Lade mehr"

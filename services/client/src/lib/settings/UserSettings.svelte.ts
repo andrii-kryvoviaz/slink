@@ -25,7 +25,12 @@ export type TableState = {
   shares: TableKeySettings;
 };
 export type HistoryState = { viewMode: ViewMode };
-export type CollectionsState = { viewMode: ViewMode };
+export type CollectionLoadStrategy = 'load_more' | 'infinite_scroll';
+export type CollectionsState = {
+  viewMode: ViewMode;
+  pageSize: number;
+  loadStrategy: CollectionLoadStrategy;
+};
 export type ShareState = { format: ShareFormat };
 export type CommentState = { sortOrder: SortOrder };
 export type UploadOptionsState = { expanded: boolean };
@@ -118,7 +123,7 @@ export const defaultSettings: Record<SettingsKey, unknown> = {
   share: { format: 'direct' },
   comment: { sortOrder: SortOrder.Asc },
   uploadOptions: { expanded: false },
-  collections: { viewMode: 'grid' },
+  collections: { viewMode: 'grid', pageSize: 12, loadStrategy: 'load_more' },
 };
 
 export const USER_SETTINGS_BRAND = Symbol.for('slink:user-settings');
@@ -207,7 +212,29 @@ export class UserSettings {
     return settingsKeys.reduce(
       (acc, key) => {
         const value = cookie.get(`settings.${key}`);
-        acc[key] = value ? tryJson(value) : defaultSettings[key];
+        const parsed = value ? tryJson(value) : undefined;
+        const fallback = defaultSettings[key];
+
+        if (parsed === undefined || parsed === null) {
+          acc[key] = fallback;
+          return acc;
+        }
+
+        if (
+          typeof parsed === 'object' &&
+          !Array.isArray(parsed) &&
+          typeof fallback === 'object' &&
+          fallback !== null &&
+          !Array.isArray(fallback)
+        ) {
+          acc[key] = deepMerge(
+            fallback as Record<string, unknown>,
+            parsed as Record<string, unknown>,
+          );
+          return acc;
+        }
+
+        acc[key] = parsed;
         return acc;
       },
       {} as Record<string, unknown>,

@@ -73,9 +73,11 @@ export class CollectionResource extends AbstractResource {
   public async getItems(
     collectionId: string,
     cursor?: string,
+    limit?: number,
   ): Promise<CollectionItemsResponse> {
     const params = new URLSearchParams();
     if (cursor) params.set('cursor', cursor);
+    if (limit) params.set('limit', String(limit));
     const query = params.toString();
     return this.get(
       `/collection/${collectionId}/items${query ? `?${query}` : ''}`,
