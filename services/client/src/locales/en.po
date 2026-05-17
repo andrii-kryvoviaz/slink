@@ -4132,10 +4132,10 @@ msgid "Custom"
 msgstr "Custom"
 
 #: src/routes/collection/[id]/+page.svelte
-#: src/routes/collection/[id]/+page.svelte
 msgid "Share collection"
 msgstr "Share collection"
 
+#: src/routes/collection/[id]/+page.svelte
 #: src/routes/collection/[id]/+page.svelte
 msgid "Share this collection"
 msgstr "Share this collection"

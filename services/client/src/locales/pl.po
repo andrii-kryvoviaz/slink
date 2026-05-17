@@ -4138,10 +4138,10 @@ msgid "Custom"
 msgstr "Niestandardowo"
 
 #: src/routes/collection/[id]/+page.svelte
-#: src/routes/collection/[id]/+page.svelte
 msgid "Share collection"
 msgstr "Udostępnij kolekcję"
 
+#: src/routes/collection/[id]/+page.svelte
 #: src/routes/collection/[id]/+page.svelte
 msgid "Share this collection"
 msgstr "Udostępnij tę kolekcję"

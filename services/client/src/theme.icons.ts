@@ -235,4 +235,6 @@ export const themeIcons: string[] = [
   'ph:megaphone-simple',
   'ph:warning-octagon',
   'lucide:chevrons-up-down',
+  'fluent:link-multiple-20-regular',
+  'fluent:link-settings-24-regular',
 ];

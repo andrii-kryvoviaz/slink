@@ -241,22 +241,27 @@
                 >
                   {#snippet trigger()}
                     <Button
-                      variant={share.isInitialized ? 'outline-blue' : 'glass'}
+                      variant="glass"
                       size="sm"
                       rounded="full"
                       justify="center"
                       class="flex flex-row gap-2"
                       title={share.isInitialized
                         ? 'Manage share link'
-                        : 'Share collection'}
+                        : 'Share this collection'}
                     >
                       {#snippet leftIcon()}
-                        <Icon
-                          icon={share.isInitialized
-                            ? 'ph:paper-plane-tilt-fill'
-                            : 'ph:paper-plane-tilt-duotone'}
-                          class="h-4 w-4"
-                        />
+                        {#if share.isInitialized}
+                          <Icon
+                            icon="fluent:link-settings-24-regular"
+                            class="h-4 w-4"
+                          />
+                        {:else}
+                          <Icon
+                            icon="fluent:link-multiple-20-regular"
+                            class="h-4 w-4"
+                          />
+                        {/if}
                       {/snippet}
                       {share.isInitialized ? 'Manage' : 'Share'}
                     </Button>
