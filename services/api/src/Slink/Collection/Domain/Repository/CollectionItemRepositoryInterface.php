@@ -45,6 +45,8 @@ interface CollectionItemRepositoryInterface {
 
   public function countByCollectionId(string $collectionId): int;
 
+  public function existsByCollectionId(string $collectionId): bool;
+
   /**
    * @param string[] $collectionIds
    * @return array<string, int>

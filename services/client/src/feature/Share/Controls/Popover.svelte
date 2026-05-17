@@ -6,6 +6,7 @@
   } from '@slink/ui/components/action-popover';
   import type { Snippet } from 'svelte';
 
+  import { browser } from '$app/environment';
   import { fly } from 'svelte/transition';
 
   import ExpirationDetail from './ExpirationDetail.svelte';
@@ -59,32 +60,36 @@
   };
 </script>
 
-<ActionPopoverRoot bind:open>
-  <ActionPopoverTrigger class={triggerClass} aria-label={triggerLabel}>
-    {@render trigger()}
-  </ActionPopoverTrigger>
-  <ActionPopoverContent {side} {align} {sideOffset} {width}>
-    {#if introActive && intro}
-      <div in:fly|local={{ x: -6, duration: 120 }}>
-        {@render intro()}
-      </div>
-    {:else if view === 'list'}
-      <List
-        {header}
-        onOpenExpiration={() => (view = 'expiration')}
-        onOpenPassword={() => (view = 'password')}
-        {onCopy}
-        onOpenUnpublish={onUnpublish ? () => (view = 'unpublish') : undefined}
-      />
-    {:else if view === 'expiration'}
-      <ExpirationDetail onBack={() => (view = 'list')} />
-    {:else if view === 'password'}
-      <PasswordDetail onBack={() => (view = 'list')} />
-    {:else if view === 'unpublish'}
-      <UnpublishDetail
-        onBack={() => (view = 'list')}
-        onConfirm={handleUnpublish}
-      />
-    {/if}
-  </ActionPopoverContent>
-</ActionPopoverRoot>
+{#if !browser}
+  {@render trigger()}
+{:else}
+  <ActionPopoverRoot bind:open>
+    <ActionPopoverTrigger class={triggerClass} aria-label={triggerLabel}>
+      {@render trigger()}
+    </ActionPopoverTrigger>
+    <ActionPopoverContent {side} {align} {sideOffset} {width}>
+      {#if introActive && intro}
+        <div in:fly|local={{ x: -6, duration: 120 }}>
+          {@render intro()}
+        </div>
+      {:else if view === 'list'}
+        <List
+          {header}
+          onOpenExpiration={() => (view = 'expiration')}
+          onOpenPassword={() => (view = 'password')}
+          {onCopy}
+          onOpenUnpublish={onUnpublish ? () => (view = 'unpublish') : undefined}
+        />
+      {:else if view === 'expiration'}
+        <ExpirationDetail onBack={() => (view = 'list')} />
+      {:else if view === 'password'}
+        <PasswordDetail onBack={() => (view = 'list')} />
+      {:else if view === 'unpublish'}
+        <UnpublishDetail
+          onBack={() => (view = 'list')}
+          onConfirm={handleUnpublish}
+        />
+      {/if}
+    </ActionPopoverContent>
+  </ActionPopoverRoot>
+{/if}

@@ -126,6 +126,19 @@ final class CollectionItemRepository extends AbstractRepository implements Colle
       ->getSingleScalarResult();
   }
 
+  public function existsByCollectionId(string $collectionId): bool {
+    $result = $this->createQueryBuilder('ci')
+      ->select('1')
+      ->join('ci.collection', 'c')
+      ->where('c.uuid = :collectionId')
+      ->setParameter('collectionId', $collectionId)
+      ->setMaxResults(1)
+      ->getQuery()
+      ->getOneOrNullResult();
+
+    return (bool) $result;
+  }
+
   public function countByCollectionIds(array $collectionIds): array {
     if (empty($collectionIds)) {
       return [];

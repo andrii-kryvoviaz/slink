@@ -30,7 +30,7 @@
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
-  import type { CollectionItem } from '@slink/api/Response';
+  import type { CollectionItem, CollectionResponse } from '@slink/api/Response';
   import type { AuthenticatedUser } from '@slink/api/Response/User/AuthenticatedUser';
 
   import { intersect } from '@slink/lib/actions/intersect';
@@ -47,6 +47,8 @@
     data: {
       collectionId: string;
       user: AuthenticatedUser | null;
+      hasAny: boolean;
+      collection: CollectionResponse | null;
       globalSettings?: {
         image?: {
           enableLicensing?: boolean;
@@ -65,7 +67,9 @@
   const itemsFeed = useCollectionItemsFeed();
   const postViewerState = usePostViewerState();
   itemsFeed.setPageSize(settings.collections.pageSize);
-  itemsFeed.reset();
+  itemsFeed.setCollectionId(data.collectionId);
+  itemsFeed.hydrateCollection(data.collection);
+  itemsFeed.hydrate({ hasItems: data.hasAny });
 
   const handleViewPreferencesChange = async (next: CollectionsState) => {
     settings.collections = next;
@@ -80,9 +84,13 @@
 
   $effect(() => {
     const collectionId = data.collectionId;
+    const collection = data.collection;
+    const hasAny = data.hasAny;
 
     untrack(() => {
       itemsFeed.setCollectionId(collectionId);
+      itemsFeed.hydrateCollection(collection);
+      itemsFeed.hydrate({ hasItems: hasAny });
       if (itemsFeed.needsLoad) {
         itemsFeed.load();
       }
@@ -106,13 +114,7 @@
   const share = Share.createShare({
     fetchShare: () => ApiClient.collection.share(data.collectionId),
     onUnpublished: () => itemsFeed.clearSharing(),
-  });
-
-  $effect(() => {
-    const initial = itemsFeed.collection?.sharing;
-    if (initial && !share.isInitialized) {
-      untrack(() => share.hydrate(initial));
-    }
+    initial: data.collection?.sharing ?? null,
   });
 
   const shareIntro = Share.controls.intro();

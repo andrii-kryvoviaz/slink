@@ -62,6 +62,11 @@ export class CollectionItemsFeed extends AbstractPaginatedFeed<CollectionItem> {
     this.reset();
   }
 
+  public hydrateCollection(collection: CollectionResponse | null): void {
+    if (collection === null) return;
+    this._collection = collection;
+  }
+
   protected async fetchData(
     params: LoadParams & SearchParams,
   ): Promise<PaginatedResponse<CollectionItem>> {

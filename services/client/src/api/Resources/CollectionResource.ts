@@ -84,6 +84,13 @@ export class CollectionResource extends AbstractResource {
     );
   }
 
+  public async itemsExist(collectionId: string): Promise<boolean> {
+    const response = await this.get<{ exists: boolean }>(
+      `/collection/${collectionId}/items/exists`,
+    );
+    return response.exists;
+  }
+
   public async addItem(collectionId: string, itemId: string): Promise<void> {
     return this.post(`/collection/${collectionId}/items/${itemId}`);
   }
