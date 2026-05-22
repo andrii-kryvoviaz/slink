@@ -4222,6 +4222,19 @@ svelte-eslint-parser@^1.4.0:
     postcss-selector-parser "^7.0.0"
     semver "^7.7.2"
 
+svelte-eslint-parser@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/svelte-eslint-parser/-/svelte-eslint-parser-1.6.1.tgz#79c36060b5236fb92fd8ff37dfc548e5a748379b"
+  integrity sha512-hhvSH6kRj46UzrBVO5TaotD+Iuvruj5ccKBcO4wAhVcPTLmIc/c32D8UllBTYO0on4LzYuM0rNzf1lM/gBlkSQ==
+  dependencies:
+    eslint-scope "^8.2.0"
+    eslint-visitor-keys "^4.0.0"
+    espree "^10.0.0"
+    postcss "^8.4.49"
+    postcss-scss "^4.0.9"
+    postcss-selector-parser "^7.0.0"
+    semver "^7.7.2"
+
 svelte-sonner@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/svelte-sonner/-/svelte-sonner-1.1.1.tgz#dcdbe23fbfde0566cf096db10b1a8967bee5133d"
