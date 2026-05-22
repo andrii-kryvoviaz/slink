@@ -14,6 +14,7 @@ use Slink\User\Domain\Event\Role\UserGrantedRole;
 use Slink\User\Domain\Event\Role\UserRevokedRole;
 use Slink\User\Domain\Event\UserDisplayNameWasChanged;
 use Slink\User\Domain\Event\UserPasswordWasChanged;
+use Slink\User\Domain\Event\UserPasswordWasReset;
 use Slink\User\Domain\Event\UserPreferencesWasUpdated;
 use Slink\User\Domain\Event\UserStatusWasChanged;
 use Slink\User\Domain\Event\UserWasCreated;
@@ -54,7 +55,20 @@ final class UserProjection extends AbstractProjection {
 
     $this->repository->save($user);
   }
-  
+
+  /**
+   * @param UserPasswordWasReset $event
+   * @return void
+   * @throws NonUniqueResultException
+   * @throws NotFoundException
+   */
+  public function handleUserPasswordWasReset(UserPasswordWasReset $event): void {
+    $user = $this->repository->one($event->id);
+    $user->setPassword($event->password);
+
+    $this->repository->save($user);
+  }
+
   /**
    * @throws NonUniqueResultException
    * @throws NotFoundException
