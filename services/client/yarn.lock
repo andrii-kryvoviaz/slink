@@ -2522,13 +2522,6 @@ esquery@^1.7.0:
   dependencies:
     estraverse "^5.1.0"
 
-esrap@^2.2.4:
-  version "2.2.5"
-  resolved "https://registry.yarnpkg.com/esrap/-/esrap-2.2.5.tgz#23dd923664bd84d7b069ce3dea3b3c0dc91b6d3d"
-  integrity sha512-/yLB1538mag+dn0wsePTe8C0rDIjUOaJpMs2McodSzmM2msWcZsBSdRtg6HOBt0A/r82BN+Md3pgwSc/uWt2Ig==
-  dependencies:
-    "@jridgewell/sourcemap-codec" "^1.4.15"
-
 esrap@^2.2.9:
   version "2.2.9"
   resolved "https://registry.yarnpkg.com/esrap/-/esrap-2.2.9.tgz#97b7939015dccfb8c00b0d3e1a2c8735ba46bac9"
@@ -4260,29 +4253,7 @@ svelte-toolbelt@^0.7.1:
     runed "^0.23.2"
     style-to-object "^1.0.8"
 
-svelte@^5, svelte@^5.55.7:
-  version "5.55.7"
-  resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.55.7.tgz#04d19e5d4e8e5b6afd7e648c30ab434bb20bfc86"
-  integrity sha512-ymI5ykLPwIHW839E053FQbI1G+jnRFJEw3Kv5Y4njixVWywQBx+NUFpkkKyk5LIb36Fg9DVXSYpqiGekLD0hyw==
-  dependencies:
-    "@jridgewell/remapping" "^2.3.4"
-    "@jridgewell/sourcemap-codec" "^1.5.0"
-    "@sveltejs/acorn-typescript" "^1.0.5"
-    "@types/estree" "^1.0.5"
-    "@types/trusted-types" "^2.0.7"
-    acorn "^8.12.1"
-    aria-query "5.3.1"
-    axobject-query "^4.1.0"
-    clsx "^2.1.1"
-    devalue "^5.8.1"
-    esm-env "^1.2.1"
-    esrap "^2.2.4"
-    is-reference "^3.0.3"
-    locate-character "^3.0.0"
-    magic-string "^0.30.11"
-    zimmerframe "^1.1.2"
-
-svelte@^5.55.9:
+svelte@^5, svelte@^5.55.9:
   version "5.55.9"
   resolved "https://registry.yarnpkg.com/svelte/-/svelte-5.55.9.tgz#ebefa195db723c9732910d8fd17f8514105b688d"
   integrity sha512-fTjjT8cHLDwigcu2j3pv7Jq04LklXevPB8uBgyHNiTXv+RMNvVnrjS4UEYrLMkhuq1vpCodHjiW+z/95SDs/fg==
