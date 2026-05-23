@@ -1,13 +1,15 @@
 import { ApiClient } from '@slink/api';
 
+import { SvelteMap, SvelteSet } from 'svelte/reactivity';
+
 import type {
   CreateTagRequest,
   Tag,
-  TagListRequest,
   TagListingResponse,
   TagOrderBy,
 } from '@slink/api/Resources/TagResource';
 
+import type { ViewMode } from '@slink/lib/settings';
 import { AbstractPaginatedFeed } from '@slink/lib/state/core/AbstractPaginatedFeed.svelte';
 import type {
   LoadParams,
@@ -21,11 +23,18 @@ import { debounce } from '@slink/lib/utils/time/debounce';
 
 import { toast } from '@slink/utils/ui/toast-sonner.svelte';
 
-class TagListFeed extends AbstractPaginatedFeed<Tag> {
-  private _includeChildren = $state(true);
+import { tagStrategyFor } from './TagFetchStrategy';
+import type { TagFetchStrategy } from './TagFetchStrategy';
+
+class TagFeed extends AbstractPaginatedFeed<Tag> {
+  private _strategy: TagFetchStrategy = tagStrategyFor('table');
   private _searchTerm = $state('');
   private _orderBy = $state<TagOrderBy>('updatedAt');
   private _sortOrder = $state<'asc' | 'desc'>('desc');
+
+  private _expanded = new SvelteSet<string>();
+  private _childrenCache = new SvelteMap<string, Tag[]>();
+  private _loadingNodes = new SvelteSet<string>();
 
   private readonly _debouncedSearchLoad = debounce(() => {
     this.load({ searchTerm: this._searchTerm, page: 1 });
@@ -43,31 +52,42 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
     return 'tags' as const;
   }
 
+  setViewMode(viewMode: ViewMode): void {
+    const strategy = tagStrategyFor(viewMode);
+    if (this._strategy === strategy) return;
+    this._strategy = strategy;
+    this._clearExpansion();
+    this.load({ page: 1 });
+  }
+
+  override hydrate(hint: { hasItems: boolean; viewMode?: ViewMode }): void {
+    if (hint.viewMode) {
+      this._strategy = tagStrategyFor(hint.viewMode);
+    }
+    super.hydrate({ hasItems: hint.hasItems });
+  }
+
   protected async fetchData(
     params: LoadParams & SearchParams,
   ): Promise<PaginatedResponse<Tag>> {
-    const { page = 1, limit = 20, searchTerm } = params;
-
-    const apiParams: TagListRequest = {
-      limit,
-      page,
-      includeChildren: this._includeChildren,
-      searchTerm: searchTerm || this._searchTerm,
+    const response = await this._strategy.fetch({
+      page: params.page ?? 1,
+      limit: params.limit ?? this._meta.size,
+      searchTerm: params.searchTerm ?? this._searchTerm,
       orderBy: this._orderBy,
       order: this._sortOrder,
-    };
+    });
 
-    const response: TagListingResponse = await ApiClient.tag.getList(apiParams);
+    return { data: response.data, meta: this._toMeta(response) };
+  }
 
+  private _toMeta(response: TagListingResponse) {
     return {
-      data: response.data,
-      meta: {
-        page: response.meta.page,
-        size: response.meta.size,
-        total: response.meta.total,
-        nextCursor: response.meta.nextCursor,
-        prevCursor: response.meta.prevCursor,
-      },
+      page: response.meta.page,
+      size: response.meta.size,
+      total: response.meta.total,
+      nextCursor: response.meta.nextCursor,
+      prevCursor: response.meta.prevCursor,
     };
   }
 
@@ -94,37 +114,20 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
   set search(value: string) {
     if (this._searchTerm === value) return;
     this._searchTerm = value;
+    this._clearExpansion();
     this._debouncedSearchLoad();
   }
 
-  get includeChildren() {
-    return this._includeChildren;
-  }
-
-  set includeChildren(value: boolean) {
-    if (this._includeChildren === value) return;
-    this._includeChildren = value;
-    this.load({ page: 1 });
+  get searching(): boolean {
+    return this._searchTerm.trim().length > 0;
   }
 
   get orderBy() {
     return this._orderBy;
   }
 
-  set orderBy(value: TagOrderBy) {
-    if (this._orderBy === value) return;
-    this._orderBy = value;
-    this.load({ page: 1 });
-  }
-
   get order() {
     return this._sortOrder;
-  }
-
-  set order(value: 'asc' | 'desc') {
-    if (this._sortOrder === value) return;
-    this._sortOrder = value;
-    this.load({ page: 1 });
   }
 
   setSorting(orderBy: TagOrderBy, order: 'asc' | 'desc') {
@@ -133,14 +136,53 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
     this.load({ page: 1 });
   }
 
-  async fetchTags(params: TagListRequest = {}) {
-    const { searchTerm, ...otherParams } = params;
-    await this.load({
-      searchTerm: searchTerm || this._searchTerm,
-      page: 1,
-      limit: this._meta.size || 20,
-      ...otherParams,
-    });
+  isExpanded(id: string): boolean {
+    return this._expanded.has(id);
+  }
+
+  getChildren(id: string): Tag[] {
+    return this._childrenCache.get(id) ?? [];
+  }
+
+  isNodeLoading(id: string): boolean {
+    return this._loadingNodes.has(id);
+  }
+
+  async toggle(node: Tag): Promise<void> {
+    const id = node.id;
+
+    if (this._expanded.has(id)) {
+      this._expanded.delete(id);
+      return;
+    }
+
+    if (!this._childrenCache.has(id)) {
+      if (this._loadingNodes.has(id)) {
+        return;
+      }
+
+      this._loadingNodes.add(id);
+
+      try {
+        const response = await ApiClient.tag.getList({
+          parentId: id,
+          includeChildren: false,
+        });
+        this._childrenCache.set(id, response.data);
+      } catch (error: any) {
+        const message = extractErrorMessage(
+          error,
+          'Failed to load child tags. Please try again.',
+        );
+        toast.error(message);
+        this._loadingNodes.delete(id);
+        return;
+      }
+
+      this._loadingNodes.delete(id);
+    }
+
+    this._expanded.add(id);
   }
 
   public async loadPage(
@@ -178,7 +220,7 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
 
   async moveTag(id: string, newParentId: string | null): Promise<void> {
     try {
-      const tag = this._items.find((item) => item.id === id);
+      const tag = this._findTag(id);
       const tagName = tag?.name || 'tag';
 
       await ApiClient.tag.moveTag({ id, newParentId });
@@ -196,7 +238,7 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
 
   async deleteTag(id: string): Promise<void> {
     try {
-      const tag = this._items.find((item) => item.id === id);
+      const tag = this._findTag(id);
       const tagName = tag?.name || 'tag';
 
       await ApiClient.tag.deleteTag(id);
@@ -212,18 +254,38 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
     }
   }
 
-  public removeTag(id: string): void {
-    this._items = this._items.filter((item) => item.id !== id);
+  async refetch(): Promise<void> {
+    this._clearExpansion();
+    await this.load({ page: this._meta.page || 1 });
   }
 
-  async refetch(): Promise<void> {
-    await this.load({ page: this._meta.page || 1 });
+  private _findTag(id: string): Tag | undefined {
+    const root = this._items.find((item) => item.id === id);
+    if (root) {
+      return root;
+    }
+
+    for (const children of this._childrenCache.values()) {
+      const match = children.find((child) => child.id === id);
+      if (match) {
+        return match;
+      }
+    }
+
+    return undefined;
+  }
+
+  private _clearExpansion(): void {
+    this._expanded.clear();
+    this._childrenCache.clear();
+    this._loadingNodes.clear();
   }
 
   clear(): void {
     this._debouncedSearchLoad.cancel();
     this._items = [];
     this._searchTerm = '';
+    this._clearExpansion();
     this._meta = {
       page: 1,
       size: this._config.defaultPageSize,
@@ -232,16 +294,18 @@ class TagListFeed extends AbstractPaginatedFeed<Tag> {
   }
 }
 
-const TAG_LIST_FEED = Symbol('TagListFeed');
+const TAG_FEED = Symbol('TagFeed');
 
-const tagListFeed = new TagListFeed();
+const tagFeed = new TagFeed();
 
-export const useTagListFeed = (
-  func: ((state: TagListFeed) => void) | undefined = undefined,
-): TagListFeed => {
+export const useTagFeed = (
+  func: ((state: TagFeed) => void) | undefined = undefined,
+): TagFeed => {
   if (func) {
-    func(tagListFeed);
+    func(tagFeed);
   }
 
-  return useState<TagListFeed>(TAG_LIST_FEED, tagListFeed);
+  return useState<TagFeed>(TAG_FEED, tagFeed);
 };
+
+export { TagFeed };

@@ -2,11 +2,12 @@
   import HistoryDataTableSkeleton from '@slink/feature/Image/History/HistoryDataTable/HistoryDataTableSkeleton.svelte';
   import { Skeleton } from '@slink/feature/Layout';
 
+  import type { ViewMode } from '@slink/lib/settings';
   import { getSkeletonHeight } from '@slink/lib/utils/ui/skeletonHeight';
 
   interface Props {
     count?: number;
-    viewMode?: 'list' | 'grid' | 'table';
+    viewMode?: ViewMode;
     class?: string;
   }
 

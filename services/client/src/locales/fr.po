@@ -927,18 +927,6 @@ msgstr "Échec de la révocation de la clé API"
 msgid "Failed to generate ShareX config"
 msgstr "Échec de la génération de la configuration ShareX"
 
-#: src/lib/state/ApiKeyStore.svelte.ts
-msgid "ApiKeyStore"
-msgstr "ApiKeyStore"
-
-#: src/lib/state/CollectionItemsFeed.svelte.ts
-msgid "CollectionItemsFeed"
-msgstr "CollectionItemsFeed"
-
-#: src/lib/state/CollectionListFeed.svelte.ts
-msgid "CollectionListFeed"
-msgstr "CollectionListFeed"
-
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to load collections"
 msgstr "Échec du chargement des collections"
@@ -947,57 +935,21 @@ msgstr "Échec du chargement des collections"
 msgid "Failed to load tags"
 msgstr "Échec du chargement des étiquettes"
 
-#: src/lib/state/PostViewerState.svelte.ts
-msgid "PostViewerState"
-msgstr "PostViewerState"
-
-#: src/lib/state/PublicImagesFeed.svelte.ts
-msgid "PublicImagesFeed"
-msgstr "PublicImagesFeed"
-
-#: src/lib/state/TagFilterState.svelte.ts
-msgid "TagFilterState"
-msgstr "TagFilterState"
-
-#: src/lib/state/StorageUsageStore.svelte.ts
-msgid "StorageUsageStore"
-msgstr "StorageUsageStore"
-
-#: src/lib/state/TagListFeed.svelte.ts
+#: src/lib/state/TagFeed.svelte.ts
 msgid "Failed to create tag. Please try again."
 msgstr "Échec de la création de l'étiquette. Veuillez réessayer."
 
-#: src/lib/state/TagListFeed.svelte.ts
+#: src/lib/state/TagFeed.svelte.ts
 msgid "Failed to move tag. Please try again."
 msgstr "Échec du déplacement de l'étiquette. Veuillez réessayer."
 
-#: src/lib/state/TagListFeed.svelte.ts
+#: src/lib/state/TagFeed.svelte.ts
 msgid "Failed to delete tag. Please try again."
 msgstr "Échec de la suppression de l'étiquette. Veuillez réessayer."
-
-#: src/lib/state/TagListFeed.svelte.ts
-msgid "TagListFeed"
-msgstr "TagListFeed"
-
-#: src/lib/state/UploadHistoryFeed.svelte.ts
-msgid "UploadHistoryFeed"
-msgstr "UploadHistoryFeed"
 
 #: src/lib/state/UploadPageState.svelte.ts
 msgid "Unnamed"
 msgstr "Sans nom"
-
-#: src/lib/state/UploadPageState.svelte.ts
-msgid "UploadPageState"
-msgstr "UploadPageState"
-
-#: src/lib/state/UserBookmarksFeed.svelte.ts
-msgid "UserBookmarksFeed"
-msgstr "UserBookmarksFeed"
-
-#: src/lib/state/UserListFeed.svelte.ts
-msgid "UserListFeed"
-msgstr "UserListFeed"
 
 #: src/feature/Auth/PasswordToggle/PasswordToggle.svelte
 msgid "Hide password"
@@ -2869,10 +2821,6 @@ msgstr "{0}–{1} <0>sur</0> {2} éléments"
 msgid "Select {0}"
 msgstr "Sélectionner {0}"
 
-#: src/lib/utils/ui/toast.svelte.ts
-msgid "ToastManager"
-msgstr "ToastManager"
-
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
 msgid "Name"
@@ -4293,10 +4241,6 @@ msgstr "Dépublier"
 msgid "Shares"
 msgstr "Publications"
 
-#: src/lib/state/SharesFeed.svelte.ts
-msgid "SharesFeed"
-msgstr "SharesFeed"
-
 #: src/feature/Image/ImageSharesPanel/PublishedLinkItem.svelte
 #: src/feature/Image/ImageSharesPanel/PublishedLinkItem.svelte
 #: src/feature/Share/MyShares/SharesDataTable/cells/ActionsCell.svelte
@@ -4363,10 +4307,6 @@ msgstr[1] "# liens actifs"
 #: src/feature/Image/ImageSharesPanel/ImageSharesPanel.svelte
 msgid "Published Links"
 msgstr "Liens publiés"
-
-#: src/feature/Share/Registry/ShareStateRegistry.svelte.ts
-msgid "ShareStateRegistry"
-msgstr "ShareStateRegistry"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Every image you upload has a visibility setting. You can toggle it from the upload screen or later on the image itself."
@@ -4753,3 +4693,15 @@ msgstr "Format de l'image"
 #: src/feature/Share/Attributes/ShareVariantBadges.svelte
 msgid "Applied filter"
 msgstr "Filtre appliqué"
+
+#: src/lib/state/TagFeed.svelte.ts
+msgid "Failed to load child tags. Please try again."
+msgstr "Échec du chargement des étiquettes enfants. Veuillez réessayer."
+
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+msgid "Tree"
+msgstr "Arbre"
+
+#: src/feature/Tag/TagTreeView/TagTreeRowMeta.svelte
+msgid "View images"
+msgstr "Voir les images"

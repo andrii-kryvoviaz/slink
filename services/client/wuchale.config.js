@@ -1,4 +1,4 @@
-import { adapter as svelte } from '@wuchale/svelte';
+import { adapter as svelte, svelteKitDefaultHeuristic } from '@wuchale/svelte';
 import { defineConfig } from 'wuchale';
 import { adapter as js } from 'wuchale/adapter-vanilla';
 
@@ -7,6 +7,16 @@ export default defineConfig({
   adapters: {
     main: svelte({
       loader: 'sveltekit',
+      heuristic: (message) => {
+        if (message.details?.call === 'Symbol') {
+          return false;
+        }
+        const text = message.msgStr?.[0] ?? '';
+        if (text.startsWith('/')) {
+          return false;
+        }
+        return svelteKitDefaultHeuristic(message);
+      },
     }),
     js: js({
       loader: 'vite',

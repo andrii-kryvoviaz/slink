@@ -84,6 +84,17 @@ final class TagRepository extends AbstractRepository implements TagRepositoryInt
   }
 
   public function getAllByPage(int $page, TagListFilter $filter): Paginator {
+    return $this->paginate($this->buildOrderedTagListQuery($filter), $page, $filter->getLimit() ?: 50);
+  }
+
+  /**
+   * @return TagView[]
+   */
+  public function getAllByFilter(TagListFilter $filter): array {
+    return $this->buildOrderedTagListQuery($filter)->getQuery()->getResult();
+  }
+
+  private function buildOrderedTagListQuery(TagListFilter $filter): QueryBuilder {
     $qb = $this->buildTagListQuery($filter)
       ->leftJoin('t.user', 'u')
       ->addSelect('u');
@@ -97,7 +108,7 @@ final class TagRepository extends AbstractRepository implements TagRepositoryInt
       $qb->orderBy("t.$orderBy", $order);
     }
 
-    return $this->paginate($qb, $page, $filter->getLimit() ?: 50);
+    return $qb;
   }
 
   public function existsByFilter(TagListFilter $filter): bool {

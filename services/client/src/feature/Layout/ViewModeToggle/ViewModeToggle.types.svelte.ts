@@ -15,6 +15,9 @@ class ViewModeRegistryState {
   get table(): ViewModeConfig {
     return { label: 'Table', icon: 'heroicons:table-cells' };
   }
+  get tree(): ViewModeConfig {
+    return { label: 'Tree', icon: 'lucide:list-tree' };
+  }
 }
 
 export const viewModeRegistry: Record<ViewMode, ViewModeConfig> =

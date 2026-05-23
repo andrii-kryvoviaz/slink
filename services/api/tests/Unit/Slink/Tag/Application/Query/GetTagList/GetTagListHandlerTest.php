@@ -89,28 +89,23 @@ final class GetTagListHandlerTest extends TestCase {
   public function itAppliesFiltersCorrectly(): void {
     $tagRepository = $this->createMock(TagRepositoryInterface::class);
     $tagViews = [];
-    
+
     $userIdString = 'user-789';
     $parentId = 'parent-123';
     $searchTerm = 'search-term';
 
-    $paginator = $this->createStub(Paginator::class);
-    $paginator->method('getIterator')->willReturn(new \ArrayIterator($tagViews));
-    $paginator->method('count')->willReturn(0);
-    
     $tagRepository->expects($this->once())
-      ->method('getAllByPage')
+      ->method('getAllByFilter')
       ->with(
-        1,
         $this->callback(function (TagListFilter $filter) use ($parentId, $searchTerm, $userIdString) {
-          return $filter->getParentId() === $parentId 
+          return $filter->getParentId() === $parentId
             && $filter->getSearchTerm() === $searchTerm
             && $filter->getUserId() === $userIdString
             && $filter->isRootOnly() === true
             && $filter->shouldIncludeChildren() === false;
         })
       )
-      ->willReturn($paginator);
+      ->willReturn($tagViews);
 
     $handler = new GetTagListHandler($tagRepository);
     $query = new GetTagListQuery(

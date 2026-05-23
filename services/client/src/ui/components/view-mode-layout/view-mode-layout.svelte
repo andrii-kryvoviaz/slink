@@ -32,6 +32,7 @@
     grid?: Snippet<[ListingContext]>;
     list?: Snippet<[ListingContext]>;
     table?: Snippet<[ListingContext]>;
+    tree?: Snippet<[ListingContext]>;
     loading?: Snippet<[ViewMode]>;
     toolbar?: Snippet<[ToolbarContext]>;
     empty?: Snippet;
@@ -49,6 +50,7 @@
     grid,
     list,
     table,
+    tree,
     loading,
     toolbar,
     empty,
@@ -166,6 +168,7 @@
     grid,
     list,
     table,
+    tree,
   });
   const active = $derived(modes[mode]);
 

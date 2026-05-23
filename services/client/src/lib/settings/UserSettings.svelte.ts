@@ -7,7 +7,7 @@ import { cookie } from '@slink/utils/http/cookie';
 import { deepMerge } from '@slink/utils/object/deepMerge';
 import { tryJson } from '@slink/utils/string/json';
 
-export type ViewMode = 'grid' | 'list' | 'table';
+export type ViewMode = 'grid' | 'list' | 'table' | 'tree';
 export type ShareFormat = 'direct' | 'markdown' | 'bbcode' | 'html' | 'image';
 
 export type SidebarState = { expanded: boolean };
@@ -25,6 +25,7 @@ export type TableState = {
   shares: TableKeySettings;
 };
 export type HistoryState = { viewMode: ViewMode };
+export type TagsState = { viewMode: ViewMode };
 export type CollectionLoadStrategy = 'load_more' | 'infinite_scroll';
 export type CollectionsState = {
   viewMode: ViewMode;
@@ -43,6 +44,7 @@ export type SettingsKey =
   | 'userAdmin'
   | 'table'
   | 'history'
+  | 'tags'
   | 'share'
   | 'comment'
   | 'uploadOptions'
@@ -58,6 +60,7 @@ export const settingsKeys: SettingsKey[] = [
   'userAdmin',
   'table',
   'history',
+  'tags',
   'share',
   'comment',
   'uploadOptions',
@@ -120,6 +123,7 @@ export const defaultSettings: Record<SettingsKey, unknown> = {
     },
   },
   history: { viewMode: 'table' },
+  tags: { viewMode: 'table' },
   share: { format: 'direct' },
   comment: { sortOrder: SortOrder.Asc },
   uploadOptions: { expanded: false },
@@ -191,6 +195,7 @@ export class UserSettings {
   );
   _table = $state<TableState>(defaultSettings.table as TableState);
   _history = $state<HistoryState>(defaultSettings.history as HistoryState);
+  _tags = $state<TagsState>(defaultSettings.tags as TagsState);
   _share = $state<ShareState>(defaultSettings.share as ShareState);
   _comment = $state<CommentState>(defaultSettings.comment as CommentState);
   _collections = $state<CollectionsState>(
@@ -294,6 +299,15 @@ export class UserSettings {
   set history(v: HistoryState) {
     this._history = v;
     persist('history', v);
+  }
+
+  get tags(): TagsState {
+    return this._tags;
+  }
+
+  set tags(v: TagsState) {
+    this._tags = v;
+    persist('tags', v);
   }
 
   get share(): ShareState {

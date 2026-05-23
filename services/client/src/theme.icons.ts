@@ -242,4 +242,5 @@ export const themeIcons: string[] = [
   'ph:infinity',
   'ph:file-image',
   'ph:magic-wand',
+  'lucide:list-tree',
 ];

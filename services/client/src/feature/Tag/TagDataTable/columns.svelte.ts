@@ -50,7 +50,7 @@ export function createTagColumns(options: {
       },
       cell: ({ row }) => {
         const tag = row.original;
-        const childrenCount = tag.children?.length || 0;
+        const childrenCount = tag.childCount ?? tag.children?.length ?? 0;
         return renderComponent(TagCountCell, {
           count: childrenCount,
           type: 'children',

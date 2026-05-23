@@ -8,6 +8,7 @@ export interface Tag {
   isRoot: boolean;
   depth: number;
   imageCount: number;
+  childCount: number;
   createdAt?: string;
   updatedAt?: string;
   children?: Tag[];

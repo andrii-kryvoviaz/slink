@@ -6,6 +6,7 @@
     DropdownSimpleItem,
   } from '@slink/ui/components';
   import { Button } from '@slink/ui/components/button';
+  import type { ButtonVariant } from '@slink/ui/components/button';
 
   import Icon from '@iconify/svelte';
 
@@ -16,9 +17,17 @@
     tag: Tag;
     onDelete: (tag: Tag) => Promise<void>;
     onMove: (tagId: string, newParentId: string | null) => Promise<void>;
+    variant?: ButtonVariant;
+    triggerClass?: string;
   }
 
-  let { tag, onDelete, onMove }: Props = $props();
+  let {
+    tag,
+    onDelete,
+    onMove,
+    variant = 'glass',
+    triggerClass,
+  }: Props = $props();
 
   let deleteConfirmOpen = $state(false);
   let moveDialogOpen = $state(false);
@@ -59,11 +68,12 @@
   <DropdownSimple bind:open={dropdownOpen} variant="invisible" size="xs">
     {#snippet trigger(triggerProps)}
       <Button
-        variant="glass"
+        {variant}
         size="icon"
         padding="none"
         rounded="md"
         {...triggerProps}
+        class={triggerClass}
         aria-label="Tag actions"
       >
         <Icon icon="lucide:ellipsis" class="h-4 w-4" />

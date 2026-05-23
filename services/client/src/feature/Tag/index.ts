@@ -20,4 +20,8 @@ export { default as TagMoveDialog } from './TagMoveDialog/TagMoveDialog.svelte';
 export { default as TagPicker } from './TagPicker/TagPicker.svelte';
 export { default as TagPickerList } from './TagPicker/TagPickerList.svelte';
 export { default as TagSelector } from './TagSelector/TagSelector.svelte';
+export { default as TagTreeNode } from './TagTreeView/TagTreeNode.svelte';
+export { default as TagTreeRowMeta } from './TagTreeView/TagTreeRowMeta.svelte';
+export { default as TagTreeView } from './TagTreeView/TagTreeView.svelte';
+export * from './TagTreeView/TagTreeView.theme';
 export { default as TagsSkeleton } from './TagsSkeleton/TagsSkeleton.svelte';

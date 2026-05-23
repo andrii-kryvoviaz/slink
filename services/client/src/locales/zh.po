@@ -927,18 +927,6 @@ msgstr "撤销 API Key 失败"
 msgid "Failed to generate ShareX config"
 msgstr "生成 ShareX 配置失败"
 
-#: src/lib/state/ApiKeyStore.svelte.ts
-msgid "ApiKeyStore"
-msgstr "API 密钥存储"
-
-#: src/lib/state/CollectionItemsFeed.svelte.ts
-msgid "CollectionItemsFeed"
-msgstr "合集项目数据流"
-
-#: src/lib/state/CollectionListFeed.svelte.ts
-msgid "CollectionListFeed"
-msgstr "合集列表数据流"
-
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to load collections"
 msgstr "加载合集失败"
@@ -947,57 +935,21 @@ msgstr "加载合集失败"
 msgid "Failed to load tags"
 msgstr "加载标签失败"
 
-#: src/lib/state/PostViewerState.svelte.ts
-msgid "PostViewerState"
-msgstr "帖子查看器状态"
-
-#: src/lib/state/PublicImagesFeed.svelte.ts
-msgid "PublicImagesFeed"
-msgstr "公开图片数据流"
-
-#: src/lib/state/TagFilterState.svelte.ts
-msgid "TagFilterState"
-msgstr "标签筛选状态"
-
-#: src/lib/state/StorageUsageStore.svelte.ts
-msgid "StorageUsageStore"
-msgstr "存储用量存储"
-
-#: src/lib/state/TagListFeed.svelte.ts
+#: src/lib/state/TagFeed.svelte.ts
 msgid "Failed to create tag. Please try again."
 msgstr "创建标签失败，请重试。"
 
-#: src/lib/state/TagListFeed.svelte.ts
+#: src/lib/state/TagFeed.svelte.ts
 msgid "Failed to move tag. Please try again."
 msgstr "移动标签失败，请重试。"
 
-#: src/lib/state/TagListFeed.svelte.ts
+#: src/lib/state/TagFeed.svelte.ts
 msgid "Failed to delete tag. Please try again."
 msgstr "删除标签失败，请重试。"
-
-#: src/lib/state/TagListFeed.svelte.ts
-msgid "TagListFeed"
-msgstr "标签列表数据流"
-
-#: src/lib/state/UploadHistoryFeed.svelte.ts
-msgid "UploadHistoryFeed"
-msgstr "上传历史数据流"
 
 #: src/lib/state/UploadPageState.svelte.ts
 msgid "Unnamed"
 msgstr "未命名"
-
-#: src/lib/state/UploadPageState.svelte.ts
-msgid "UploadPageState"
-msgstr "上传页面状态"
-
-#: src/lib/state/UserBookmarksFeed.svelte.ts
-msgid "UserBookmarksFeed"
-msgstr "用户收藏数据流"
-
-#: src/lib/state/UserListFeed.svelte.ts
-msgid "UserListFeed"
-msgstr "用户列表数据流"
 
 #: src/feature/Auth/PasswordToggle/PasswordToggle.svelte
 msgid "Hide password"
@@ -2869,10 +2821,6 @@ msgstr "{0}–{1} <0>/</0> 共 {2} 项"
 msgid "Select {0}"
 msgstr "选择 {0}"
 
-#: src/lib/utils/ui/toast.svelte.ts
-msgid "ToastManager"
-msgstr "通知管理器"
-
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
 msgid "Name"
@@ -4289,10 +4237,6 @@ msgstr "取消发布"
 msgid "Shares"
 msgstr "发布"
 
-#: src/lib/state/SharesFeed.svelte.ts
-msgid "SharesFeed"
-msgstr "SharesFeed"
-
 #: src/feature/Image/ImageSharesPanel/PublishedLinkItem.svelte
 #: src/feature/Image/ImageSharesPanel/PublishedLinkItem.svelte
 #: src/feature/Share/MyShares/SharesDataTable/cells/ActionsCell.svelte
@@ -4358,10 +4302,6 @@ msgstr[0] "# 个活动链接"
 #: src/feature/Image/ImageSharesPanel/ImageSharesPanel.svelte
 msgid "Published Links"
 msgstr "已发布链接"
-
-#: src/feature/Share/Registry/ShareStateRegistry.svelte.ts
-msgid "ShareStateRegistry"
-msgstr "ShareStateRegistry"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Every image you upload has a visibility setting. You can toggle it from the upload screen or later on the image itself."
@@ -4747,3 +4687,15 @@ msgstr "图像格式"
 #: src/feature/Share/Attributes/ShareVariantBadges.svelte
 msgid "Applied filter"
 msgstr "已应用滤镜"
+
+#: src/lib/state/TagFeed.svelte.ts
+msgid "Failed to load child tags. Please try again."
+msgstr "加载子标签失败，请重试。"
+
+#: src/feature/Layout/ViewModeToggle/ViewModeToggle.types.svelte.ts
+msgid "Tree"
+msgstr "树形"
+
+#: src/feature/Tag/TagTreeView/TagTreeRowMeta.svelte
+msgid "View images"
+msgstr "查看图片"
