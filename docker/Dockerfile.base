@@ -25,7 +25,7 @@ RUN rm -rf /usr/src/php* \
 FROM frankenphp-upstream AS php-extensions
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions \
-        curl intl mbstring exif ffi redis smbclient vips && \
+        curl intl mbstring exif ffi redis vips && \
     rm -rf /tmp/* /var/cache/apk/*
 
 # ToDo: migrate to dhi.io/alpine-base:${ALPINE_VERSION} (requires manual dependencies installation)    
@@ -42,6 +42,7 @@ RUN --mount=type=cache,target=/var/cache/apk \
         libcurl \
         icu-libs \
         libsmbclient \
+        samba-client \
         imagemagick \
         vips \
         libheif \
