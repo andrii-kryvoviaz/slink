@@ -2,7 +2,7 @@
   import { CommentText, FormattedDate, HashtagText } from '@slink/feature/Text';
   import { UserAvatar } from '@slink/feature/User';
   import {
-    DropdownSimple,
+    ActionsMenu,
     DropdownSimpleGroup,
     DropdownSimpleItem,
   } from '@slink/ui/components';
@@ -131,16 +131,11 @@
         {/if}
 
         {#if showDropdown}
-          <DropdownSimple variant="invisible" size="xs" contentVariant="dark">
-            {#snippet trigger(triggerProps)}
-              <button
-                {...triggerProps}
-                class="p-1 text-white/40 hover:text-white/70 rounded transition-colors"
-              >
-                <Icon icon="heroicons:ellipsis-vertical" class="w-4 h-4" />
-              </button>
-            {/snippet}
-
+          <ActionsMenu
+            tone="dark"
+            contentVariant="dark"
+            label="Comment actions"
+          >
             {#if !deleteConfirmOpen}
               {#if isAuthor}
                 <DropdownSimpleGroup>
@@ -180,7 +175,7 @@
                 />
               </DropdownSimpleGroup>
             {/if}
-          </DropdownSimple>
+          </ActionsMenu>
         {/if}
       </div>
     </div>

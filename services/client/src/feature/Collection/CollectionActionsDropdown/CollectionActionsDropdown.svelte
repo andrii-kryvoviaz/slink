@@ -4,11 +4,10 @@
     CreateCollectionForm,
   } from '@slink/feature/Collection';
   import {
-    DropdownSimple,
+    ActionsMenu,
     DropdownSimpleGroup,
     DropdownSimpleItem,
   } from '@slink/ui/components';
-  import { Button } from '@slink/ui/components/button';
   import { Dialog } from '@slink/ui/components/dialog';
 
   import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
@@ -107,20 +106,7 @@
 </script>
 
 <div class="relative">
-  <DropdownSimple variant="invisible" size="xs">
-    {#snippet trigger(triggerProps)}
-      <Button
-        variant="glass"
-        size="icon"
-        padding="none"
-        rounded="md"
-        {...triggerProps}
-        aria-label="Collection actions"
-      >
-        <Icon icon="lucide:ellipsis" class="h-4 w-4" />
-      </Button>
-    {/snippet}
-
+  <ActionsMenu tone="surface" label="Collection actions">
     <DropdownSimpleGroup>
       {#if !deleteConfirmOpen}
         <DropdownSimpleItem on={{ click: handleEditClick }}>
@@ -150,7 +136,7 @@
         />
       {/if}
     </DropdownSimpleGroup>
-  </DropdownSimple>
+  </ActionsMenu>
 </div>
 
 <Dialog bind:open={editModalOpen} size="md">

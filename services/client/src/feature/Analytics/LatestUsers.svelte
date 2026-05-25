@@ -215,7 +215,6 @@
                   >
                     <UserActions
                       {user}
-                      variant="icon"
                       onUserUpdate={handleUserUpdate}
                       onDelete={handleUserDelete}
                     />

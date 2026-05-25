@@ -7,3 +7,4 @@ export {
   Group as DropdownSimpleGroup,
   Item as DropdownSimpleItem,
 };
+export { type DropdownSimpleContentVariant } from './dropdown-simple-item.theme';

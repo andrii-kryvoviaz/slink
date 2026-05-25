@@ -41,7 +41,7 @@
     {tag}
     {onDelete}
     {onMove}
-    variant="transparent"
+    tone="ghost"
     triggerClass="hover:bg-transparent focus:bg-transparent dark:hover:bg-transparent dark:focus:bg-transparent"
   />
 </div>

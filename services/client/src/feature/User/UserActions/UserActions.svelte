@@ -2,7 +2,7 @@
   import { ApiClient } from '@slink/api';
   import { UserDeleteConfirmation } from '@slink/feature/User';
   import {
-    DropdownSimple,
+    ActionsMenu,
     DropdownSimpleGroup,
     DropdownSimpleItem,
   } from '@slink/ui/components';
@@ -21,20 +21,11 @@
     loggedInUser?: User | null;
     onDelete?: (id: string) => void;
     onUserUpdate?: (user: User) => void;
-    triggerClass?: string;
-    variant?: 'button' | 'icon';
   }
 
-  let {
-    user,
-    loggedInUser,
-    onDelete,
-    onUserUpdate,
-    triggerClass = '',
-    variant = 'icon',
-  }: Props = $props();
+  let { user, loggedInUser, onDelete, onUserUpdate }: Props = $props();
 
-  let dropdownRef: DropdownSimple | null = $state(null);
+  let dropdownRef: { close: () => void } | null = $state(null);
   let showDeleteConfirmation = $state(false);
 
   const {
@@ -201,25 +192,7 @@
 
 {#if !isCurrentUser}
   <div class="flex items-center justify-end">
-    <DropdownSimple bind:this={dropdownRef}>
-      {#snippet trigger(triggerProps)}
-        {#if variant === 'button'}
-          <button {...triggerProps} class={triggerClass}>
-            <Icon icon="heroicons:ellipsis-horizontal" class="w-4 h-4" />
-            Actions
-          </button>
-        {:else}
-          <button
-            {...triggerProps}
-            class={triggerClass ||
-              'group relative flex items-center justify-center h-8 w-8 rounded-md bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-gray-200/60 dark:border-gray-700/60 text-gray-500 dark:text-gray-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:border-slate-300 dark:hover:border-slate-600 active:scale-95 focus-visible:ring-slate-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-all duration-200 ease-out'}
-            aria-label="Actions"
-          >
-            <Icon icon="lucide:ellipsis" class="h-4 w-4" />
-          </button>
-        {/if}
-      {/snippet}
-
+    <ActionsMenu bind:this={dropdownRef} tone="surface" label="Actions">
       {#if !showDeleteConfirmation}
         <DropdownSimpleGroup>
           {#if user.status === UserStatusEnum.Active}
@@ -301,6 +274,6 @@
           />
         {/if}
       </DropdownSimpleGroup>
-    </DropdownSimple>
+    </ActionsMenu>
   </div>
 {/if}
