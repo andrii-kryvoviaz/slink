@@ -16,7 +16,6 @@ use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Domain\ValueObject\ImageContent;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
-use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Application\Http\CachePolicy;
 use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
@@ -26,7 +25,6 @@ final class GetCollectionScopedImageContentHandlerTest extends TestCase {
   private ImageRepositoryInterface&Stub $repository;
   private AuthorizationCheckerInterface&Stub $access;
   private ImageContentLoader&Stub $loader;
-  private ConfigurationProviderInterface&Stub $configurationProvider;
 
   protected function setUp(): void {
     parent::setUp();
@@ -34,10 +32,8 @@ final class GetCollectionScopedImageContentHandlerTest extends TestCase {
     $this->repository = $this->createStub(ImageRepositoryInterface::class);
     $this->access = $this->createStub(AuthorizationCheckerInterface::class);
     $this->loader = $this->createStub(ImageContentLoader::class);
-    $this->configurationProvider = $this->createStub(ConfigurationProviderInterface::class);
 
     $this->loader->method('load')->willReturn(new ImageContent('bytes', 'image/jpeg'));
-    $this->configurationProvider->method('get')->willReturn(80);
   }
 
   private function createHandler(int $maxWidth = 1920): GetCollectionScopedImageContentHandler {
@@ -45,7 +41,6 @@ final class GetCollectionScopedImageContentHandlerTest extends TestCase {
       $this->repository,
       $this->access,
       $this->loader,
-      $this->configurationProvider,
       $maxWidth,
     );
   }
@@ -72,7 +67,6 @@ final class GetCollectionScopedImageContentHandlerTest extends TestCase {
       $this->repository,
       $this->access,
       $loader,
-      $this->configurationProvider,
       1920,
     );
 
@@ -120,7 +114,6 @@ final class GetCollectionScopedImageContentHandlerTest extends TestCase {
       $this->repository,
       $access,
       $this->loader,
-      $this->configurationProvider,
       1920,
     );
 
@@ -128,7 +121,7 @@ final class GetCollectionScopedImageContentHandlerTest extends TestCase {
   }
 
   #[Test]
-  public function itCallsLoaderWithConfiguredMaxWidthAndQuality(): void {
+  public function itCallsLoaderWithConfiguredMaxWidth(): void {
     $itemId = 'item-id';
     $image = $this->createImageView($itemId);
 
@@ -139,14 +132,13 @@ final class GetCollectionScopedImageContentHandlerTest extends TestCase {
     $loader
       ->expects($this->once())
       ->method('load')
-      ->with($image, null, ['width' => 1920, 'quality' => 80])
+      ->with($image, null, ['width' => 1920])
       ->willReturn(new ImageContent('bytes', 'image/jpeg'));
 
     $handler = new GetCollectionScopedImageContentHandler(
       $this->repository,
       $this->access,
       $loader,
-      $this->configurationProvider,
       1920,
     );
 

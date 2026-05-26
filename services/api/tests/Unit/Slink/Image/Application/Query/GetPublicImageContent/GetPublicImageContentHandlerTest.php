@@ -14,7 +14,6 @@ use Slink\Image\Domain\ValueObject\ImageContent;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
-use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Application\Http\CachePolicy;
 use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
@@ -23,7 +22,6 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 final class GetPublicImageContentHandlerTest extends TestCase {
   private ImageRepositoryInterface&Stub $repository;
   private ImageContentLoader&Stub $loader;
-  private ConfigurationProviderInterface&Stub $configurationProvider;
 
   public function setUp(): void {
     parent::setUp();
@@ -31,15 +29,12 @@ final class GetPublicImageContentHandlerTest extends TestCase {
     $this->repository = $this->createStub(ImageRepositoryInterface::class);
     $this->loader = $this->createStub(ImageContentLoader::class);
     $this->loader->method('load')->willReturn(new ImageContent('binary-bytes', 'image/png'));
-    $this->configurationProvider = $this->createStub(ConfigurationProviderInterface::class);
-    $this->configurationProvider->method('get')->willReturn(80);
   }
 
   private function createHandler(): GetPublicImageContentHandler {
     return new GetPublicImageContentHandler(
       $this->repository,
       $this->loader,
-      $this->configurationProvider,
       1920,
     );
   }
@@ -91,7 +86,7 @@ final class GetPublicImageContentHandlerTest extends TestCase {
   }
 
   #[Test]
-  public function itDelegatesContentRetrievalToLoaderWithMaxWidthAndConfiguredQuality(): void {
+  public function itDelegatesContentRetrievalToLoaderWithMaxWidth(): void {
     $imageId = 'public-image';
     $image = $this->image($imageId, true);
 
@@ -103,13 +98,12 @@ final class GetPublicImageContentHandlerTest extends TestCase {
     $loader
       ->expects($this->once())
       ->method('load')
-      ->with($image, null, ['width' => 1920, 'quality' => 80])
+      ->with($image, null, ['width' => 1920])
       ->willReturn(new ImageContent('delegated-bytes', 'image/png'));
 
     $handler = new GetPublicImageContentHandler(
       $this->repository,
       $loader,
-      $this->configurationProvider,
       1920,
     );
 
