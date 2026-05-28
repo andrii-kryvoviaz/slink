@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:8080';
+const API_URL = process.env.E2E_API_URL ?? 'http://localhost:8180';
 
 export class AdminApiClient {
   private _accessToken: string;

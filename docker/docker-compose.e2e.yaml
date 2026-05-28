@@ -1,6 +1,9 @@
 services:
   slink:
     image: slink:e2e
+    container_name: slink-e2e
     ports:
-      - "3000:3000"
-      - "8080:8080"
+      - "3100:3000"
+      - "8180:8080"
+    environment:
+      - ORIGIN=http://localhost:3100

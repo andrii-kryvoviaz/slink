@@ -22,16 +22,16 @@ runs:
         cache: yarn
         cache-dependency-path: services/client/yarn.lock
 
-    - name: Install Playwright
+    - name: Install dependencies
       shell: bash
       working-directory: services/client
-      run: yarn add --dev @playwright/test
+      run: yarn install --immutable
 
     - name: Get Playwright version
       id: playwright-version
       shell: bash
       working-directory: services/client
-      run: echo "version=$(npx playwright --version)" >> $GITHUB_OUTPUT
+      run: echo "version=$(yarn playwright --version | tail -n1)" >> $GITHUB_OUTPUT
 
     - name: Cache Playwright browsers
       uses: actions/cache@v4
@@ -44,13 +44,13 @@ runs:
       if: steps.playwright-cache.outputs.cache-hit != 'true'
       shell: bash
       working-directory: services/client
-      run: npx playwright install --with-deps chromium
+      run: yarn playwright install --with-deps chromium
 
     - name: Install Playwright system deps
       if: steps.playwright-cache.outputs.cache-hit == 'true'
       shell: bash
       working-directory: services/client
-      run: npx playwright install-deps chromium
+      run: yarn playwright install-deps chromium
 
     - name: Start services
       shell: bash
@@ -63,7 +63,10 @@ runs:
     - name: Run Playwright tests
       shell: bash
       working-directory: services/client
-      run: npx playwright test
+      env:
+        E2E_BASE_URL: http://localhost:3100
+        E2E_API_URL: http://localhost:8180
+      run: yarn e2e
 
     - name: Stop services
       if: always()

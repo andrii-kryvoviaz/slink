@@ -15,7 +15,9 @@
     "prepare": "cd ../.. && husky ./services/client/.husky",
     "i18n": "wuchale --clean",
     "i18n:extract": "wuchale extract",
-    "i18n:compile": "wuchale compile"
+    "i18n:compile": "wuchale compile",
+    "e2e": "playwright test",
+    "e2e:install": "playwright install --with-deps chromium"
   },
   "dependencies": {
     "clsx": "^2.1.1"
@@ -26,6 +28,7 @@
     "@iconify/svelte": "5.2.1",
     "@internationalized/date": "^3.12.1",
     "@lucide/svelte": "^0.577.0",
+    "@playwright/test": "^1.60.0",
     "@sveltejs/adapter-auto": "7.0.1",
     "@sveltejs/adapter-node": "^5.5.4",
     "@sveltejs/kit": "^2.61.1",
