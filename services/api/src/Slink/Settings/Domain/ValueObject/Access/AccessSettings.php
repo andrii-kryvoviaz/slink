@@ -12,40 +12,54 @@ final readonly class AccessSettings extends AbstractSettingsValueObject {
     private bool $allowGuestUploads = false,
     private bool $allowUnauthenticatedAccess = false,
     private bool $requireSsl = false,
+    private bool $requireAuthForMediaShares = false,
+    private bool $requireAuthForCollectionShares = false,
   ) {}
-  
+
   #[\Override]
   public function toPayload(): array {
     return [
       'allowGuestUploads' => $this->allowGuestUploads,
       'allowUnauthenticatedAccess' => $this->allowUnauthenticatedAccess,
       'requireSsl' => $this->requireSsl,
+      'requireAuthForMediaShares' => $this->requireAuthForMediaShares,
+      'requireAuthForCollectionShares' => $this->requireAuthForCollectionShares,
     ];
   }
-  
+
   #[\Override]
   public static function fromPayload(array $payload): static {
     return new self(
       $payload['allowGuestUploads'] ?? false,
       $payload['allowUnauthenticatedAccess'] ?? false,
       $payload['requireSsl'] ?? false,
+      $payload['requireAuthForMediaShares'] ?? false,
+      $payload['requireAuthForCollectionShares'] ?? false,
     );
   }
-  
+
   #[\Override]
   public function getSettingsCategory(): SettingCategory {
     return SettingCategory::Access;
   }
-  
+
   public function isAllowGuestUploads(): bool {
     return $this->allowGuestUploads;
   }
-  
+
   public function isAllowUnauthenticatedAccess(): bool {
     return $this->allowUnauthenticatedAccess;
   }
-  
+
   public function isRequireSsl(): bool {
     return $this->requireSsl;
+  }
+
+  public function isRequireAuthForMediaShares(): bool {
+    return $this->requireAuthForMediaShares;
+  }
+
+  public function isRequireAuthForCollectionShares(): bool {
+    return $this->requireAuthForCollectionShares;
   }
 }

@@ -6,6 +6,7 @@ namespace Slink\Share\Domain\ValueObject;
 
 use Slink\Share\Domain\Enum\ShareableType;
 use Slink\Share\Domain\Share;
+use Slink\Share\Infrastructure\ReadModel\View\ShareView;
 use Slink\Shared\Domain\ValueObject\AbstractValueObject;
 
 final readonly class ShareResponse extends AbstractValueObject {
@@ -14,14 +15,24 @@ final readonly class ShareResponse extends AbstractValueObject {
     private string $shareUrl,
     private ShareableType $type,
     private bool $created,
+    private bool $requiresPassword,
+    private ?string $expiresAt = null,
   ) {}
 
-  public static function fromShare(Share $share, string $shareUrl, bool $created): self {
+  public static function fromShare(Share|ShareView $share, string $shareUrl, bool $created = false): self {
+    if ($share instanceof Share) {
+      $shareId = $share->aggregateRootId()->toString();
+    } else {
+      $shareId = $share->getId();
+    }
+
     return new self(
-      $share->aggregateRootId()->toString(),
+      $shareId,
       $shareUrl,
       $share->getShareable()->getShareableType(),
       $created,
+      $share->getPassword() !== null,
+      $share->getExpiresAt()?->toString(),
     );
   }
 
@@ -41,6 +52,14 @@ final readonly class ShareResponse extends AbstractValueObject {
     return $this->created;
   }
 
+  public function getExpiresAt(): ?string {
+    return $this->expiresAt;
+  }
+
+  public function getRequiresPassword(): bool {
+    return $this->requiresPassword;
+  }
+
   /**
    * @return array<string, mixed>
    */
@@ -50,6 +69,8 @@ final readonly class ShareResponse extends AbstractValueObject {
       'shareUrl' => $this->shareUrl,
       'type' => $this->type->value,
       'created' => $this->created,
+      'expiresAt' => $this->expiresAt,
+      'requiresPassword' => $this->requiresPassword,
     ];
   }
 }

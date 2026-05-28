@@ -13,7 +13,7 @@
     alt?: boolean;
     shift?: boolean;
     key: string;
-    onHit?: () => void;
+    onHit?: () => boolean | void;
     enabled?: boolean;
     hidden?: boolean;
   }
@@ -29,6 +29,16 @@
     ...props
   }: Props = $props();
 
+  const isEditableTarget = (target: EventTarget | null): boolean => {
+    if (!(target instanceof HTMLElement)) return false;
+    return (
+      target instanceof HTMLInputElement ||
+      target instanceof HTMLTextAreaElement ||
+      target instanceof HTMLSelectElement ||
+      target.isContentEditable
+    );
+  };
+
   let userAgent = useUserAgent(page.data.userAgent);
 
   $effect(() => {
@@ -36,6 +46,7 @@
 
     const handleKeydown = (event: KeyboardEvent) => {
       if (!enabled) return;
+      if (isEditableTarget(event.target)) return;
 
       const keyMatches =
         event.key.toLowerCase() === key.toLowerCase() ||
@@ -50,8 +61,8 @@
       const shiftMatches = shift ? event.shiftKey : !event.shiftKey;
 
       if (keyMatches && controlMatches && altMatches && shiftMatches) {
+        if (onHit() === false) return;
         event.preventDefault();
-        onHit();
       }
     };
 

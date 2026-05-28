@@ -7,9 +7,9 @@ namespace Slink\Image\Application\Command\BatchImages;
 use Slink\Image\Application\Command\BatchImages\Operation\BatchImageOperationInterface;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
+use Slink\Shared\Domain\Exception\ForbiddenException;
 use Slink\Shared\Domain\ValueObject\ID;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final readonly class BatchImagesHandler implements CommandHandlerInterface {
   /**
@@ -42,8 +42,8 @@ final readonly class BatchImagesHandler implements CommandHandlerInterface {
         $id = ID::fromString($imageId);
         $image = $this->imageRepository->get($id);
 
-        if (!$image->isOwedBy($userID)) {
-          throw new AccessDeniedException();
+        if (!$image->isOwnedBy($userID)) {
+          throw new ForbiddenException();
         }
 
         foreach ($activeOperations as $operation) {

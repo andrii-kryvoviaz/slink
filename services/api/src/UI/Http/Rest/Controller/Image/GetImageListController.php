@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace UI\Http\Rest\Controller\Image;
 
 use Slink\Image\Application\Query\GetImageList\GetImageListQuery;
+use Slink\Image\Application\Service\ImageVisibilityResolver;
 use Slink\Image\Infrastructure\Resource\ImageResourceContext;
-use Slink\Settings\Application\Service\SettingsService;
-use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Application\Query\QueryTrait;
 use Slink\Shared\Infrastructure\Security\Voter\GuestAccessVoter;
 use Slink\User\Infrastructure\Auth\JwtUser;
@@ -24,11 +23,8 @@ use UI\Http\Rest\Response\ApiResponse;
 final class GetImageListController {
   use QueryTrait;
 
-  /**
-   * @param ConfigurationProviderInterface<SettingsService> $configurationProvider
-   */
   public function __construct(
-    private readonly ConfigurationProviderInterface $configurationProvider
+    private readonly ImageVisibilityResolver $visibilityResolver,
   ) {
   }
 
@@ -36,15 +32,13 @@ final class GetImageListController {
     #[MapQueryString] GetImageListQuery $query,
     #[CurrentUser] ?JWTUser             $user = null,
   ): ApiResponse {
-    $isPublicFilter = $this->configurationProvider->get('image.allowOnlyPublicImages') ? null : true;
-
     $resourceContext = new ImageResourceContext(
       groups: ['public', 'bookmark', 'license'],
       viewerUserId: $user?->getIdentifier(),
     );
 
     $collection = $this->ask($query->withContext([
-      'isPublic' => $isPublicFilter,
+      'isPublic' => $this->visibilityResolver->resolveListIsPublicFilter(),
       'resourceContext' => $resourceContext,
     ]));
 

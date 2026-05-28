@@ -14,7 +14,12 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use UI\Http\Rest\Response\ApiResponse;
 
 #[AsController]
-#[Route(path: '/tags/{id}', name: 'get_tag_by_id', methods: ['GET'])]
+#[Route(
+  path: '/tags/{id}',
+  name: 'get_tag_by_id',
+  requirements: ['id' => '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}'],
+  methods: ['GET'],
+)]
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 final readonly class GetTagByIdController {
   use QueryTrait;

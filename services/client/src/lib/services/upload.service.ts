@@ -4,6 +4,7 @@ import { HttpException, ValidationException } from '@slink/api/Exceptions';
 import type { UploadedImageResponse } from '@slink/api/Response';
 
 import { extractShortErrorMessage } from '@slink/lib/utils/error/extractErrorMessage';
+import { randomId } from '@slink/lib/utils/string/randomId';
 
 export interface UploadItem {
   file: File;
@@ -30,7 +31,7 @@ class UploadService {
   public createUploadItems(files: File[]): UploadItem[] {
     return files.map((file) => ({
       file,
-      id: crypto.randomUUID(),
+      id: randomId('upload'),
       status: 'pending' as const,
       progress: 0,
     }));

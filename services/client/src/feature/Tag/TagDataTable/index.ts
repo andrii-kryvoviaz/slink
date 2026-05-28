@@ -1,2 +1,2 @@
-export { createTagColumns } from './columns';
+export { createTagColumns } from './columns.svelte';
 export * from './types';

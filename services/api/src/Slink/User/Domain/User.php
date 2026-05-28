@@ -19,6 +19,7 @@ use Slink\User\Domain\Event\Role\UserRevokedRole;
 use Slink\User\Domain\Event\UserDisplayNameWasChanged;
 use Slink\User\Domain\Event\UserLoggedOut;
 use Slink\User\Domain\Event\UserPasswordWasChanged;
+use Slink\User\Domain\Event\UserPasswordWasReset;
 use Slink\User\Domain\Event\UserPreferencesWasUpdated;
 use Slink\User\Domain\Event\UserSignedIn;
 use Slink\User\Domain\Event\UserStatusWasChanged;
@@ -211,7 +212,23 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   public function applyUserPasswordWasChanged(UserPasswordWasChanged $event): void {
     $this->setHashedPassword($event->password);
   }
-  
+
+  /**
+   * @param HashedPassword $password
+   * @return void
+   */
+  public function resetPassword(HashedPassword $password): void {
+    $this->recordThat(new UserPasswordWasReset($this->aggregateRootId(), $password));
+  }
+
+  /**
+   * @param UserPasswordWasReset $event
+   * @return void
+   */
+  public function applyUserPasswordWasReset(UserPasswordWasReset $event): void {
+    $this->setHashedPassword($event->password);
+  }
+
   /**
    * @param string $password
    * @return void

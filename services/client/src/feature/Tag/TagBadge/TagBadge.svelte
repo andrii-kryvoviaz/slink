@@ -101,7 +101,12 @@
 
       {#if onClose}
         <button
-          onclick={onClose}
+          type="button"
+          onclick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onClose();
+          }}
           class={tagBadgeCloseButtonVariants({ variant })}
           aria-label="Remove {tag.name} tag"
         >

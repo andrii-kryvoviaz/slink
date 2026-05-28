@@ -21,6 +21,7 @@ export type StorageSettings = {
       useCustomProvider: boolean;
       endpoint?: string;
       forcePathStyle: boolean;
+      useIamRole: boolean;
     };
   };
 };

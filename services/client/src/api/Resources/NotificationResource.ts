@@ -9,12 +9,16 @@ export class NotificationResource extends AbstractResource {
     page: number = 1,
     limit: number = 20,
   ): Promise<NotificationListingResponse> {
-    const searchParams = new URLSearchParams({
-      page: page.toString(),
-      limit: limit.toString(),
+    return this.get('/notifications', {
+      query: { page, limit },
     });
+  }
 
-    return this.get(`/notifications?${searchParams.toString()}`);
+  public async exists(): Promise<boolean> {
+    const response = await this.get<{ exists: boolean }>(
+      '/notifications/exists',
+    );
+    return response.exists;
   }
 
   public async getUnreadCount(): Promise<UnreadCountResponse> {

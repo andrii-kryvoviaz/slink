@@ -1,3 +1,6 @@
 #!/command/with-contenv sh
+if [ "${DISABLE_CLIENT_APP:-0}" = "1" ]; then
+  exec /command/s6-svc -O /run/service/client-app
+fi
 export FORCE_COLOR=true
 exec yarn --cwd /services/client run dev:with-deps --host

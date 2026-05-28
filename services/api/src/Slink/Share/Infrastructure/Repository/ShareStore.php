@@ -7,6 +7,7 @@ namespace Slink\Share\Infrastructure\Repository;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
 use Slink\Share\Domain\Repository\ShareStoreRepositoryInterface;
 use Slink\Share\Domain\Share;
+use Slink\Share\Domain\ValueObject\TargetPath;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Persistence\EventStore\AbstractSnapshotStoreRepository;
 use Slink\Shared\Infrastructure\Persistence\EventStore\SnapshotRepositoryFactory;
@@ -36,8 +37,8 @@ final class ShareStore extends AbstractSnapshotStoreRepository implements ShareS
     return $share;
   }
 
-  public function findByTargetUrl(string $targetUrl): ?Share {
-    $shareView = $this->shareRepository->findByTargetUrl($targetUrl);
+  public function findByTargetPath(TargetPath $targetPath): ?Share {
+    $shareView = $this->shareRepository->findByTargetPath($targetPath);
     if ($shareView === null) {
       return null;
     }

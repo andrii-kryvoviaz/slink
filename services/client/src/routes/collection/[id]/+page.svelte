@@ -1,8 +1,9 @@
 <script lang="ts">
+  import { ApiClient } from '@slink/api';
   import { LoadMoreButton, StopPropagation } from '@slink/feature/Action';
   import {
     CollectionItemDropdown,
-    ShareCollectionPopover,
+    CollectionViewPreferences,
   } from '@slink/feature/Collection';
   import {
     DimensionsBadge,
@@ -14,8 +15,8 @@
   } from '@slink/feature/Image';
   import { EmptyState, Masonry } from '@slink/feature/Layout';
   import { ExploreSkeleton } from '@slink/feature/Layout';
+  import * as Share from '@slink/feature/Share';
   import {
-    CopyContainer,
     EditableText,
     ExpandableText,
     FormattedDate,
@@ -23,21 +24,18 @@
   import { UserAvatar } from '@slink/feature/User';
   import { BackLink } from '@slink/ui/components/back-link';
   import { Button } from '@slink/ui/components/button';
-  import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-  } from '@slink/ui/components/popover';
   import { untrack } from 'svelte';
 
+  import { page } from '$app/state';
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
-  import type { CollectionItem } from '@slink/api/Response';
-  import type { ShareResponse } from '@slink/api/Response/Share/ShareResponse';
+  import type { CollectionItem, CollectionResponse } from '@slink/api/Response';
   import type { AuthenticatedUser } from '@slink/api/Response/User/AuthenticatedUser';
 
+  import { intersect } from '@slink/lib/actions/intersect';
   import { skeleton } from '@slink/lib/actions/skeleton';
+  import type { CollectionsState } from '@slink/lib/settings/UserSettings.svelte';
   import { CollectionImagesFeedAdapter } from '@slink/lib/state/CollectionImagesFeedAdapter';
   import { useCollectionItemsFeed } from '@slink/lib/state/CollectionItemsFeed.svelte';
   import { usePostViewerState } from '@slink/lib/state/PostViewerState.svelte';
@@ -49,6 +47,8 @@
     data: {
       collectionId: string;
       user: AuthenticatedUser | null;
+      hasAny: boolean;
+      collection: CollectionResponse | null;
       globalSettings?: {
         image?: {
           enableLicensing?: boolean;
@@ -59,12 +59,22 @@
 
   let { data }: Props = $props();
 
+  const { settings } = page.data;
+
   const licensingEnabled = $derived(
     data.globalSettings?.image?.enableLicensing ?? false,
   );
   const itemsFeed = useCollectionItemsFeed();
   const postViewerState = usePostViewerState();
-  itemsFeed.reset();
+  itemsFeed.setPageSize(settings.collections.pageSize);
+  itemsFeed.setCollectionId(data.collectionId);
+  itemsFeed.hydrateCollection(data.collection);
+  itemsFeed.hydrate({ hasItems: data.hasAny });
+
+  const handleViewPreferencesChange = async (next: CollectionsState) => {
+    settings.collections = next;
+    await itemsFeed.applyPageSize(next.pageSize);
+  };
 
   const isOwner = $derived(
     data.user !== null &&
@@ -74,9 +84,13 @@
 
   $effect(() => {
     const collectionId = data.collectionId;
+    const collection = data.collection;
+    const hasAny = data.hasAny;
 
     untrack(() => {
       itemsFeed.setCollectionId(collectionId);
+      itemsFeed.hydrateCollection(collection);
+      itemsFeed.hydrate({ hasItems: hasAny });
       if (itemsFeed.needsLoad) {
         itemsFeed.load();
       }
@@ -92,31 +106,24 @@
     }
   });
 
-  let shareInfo: ShareResponse | null = $state(null);
   let sharePopoverOpen = $state(false);
   let removingItems: Set<string> = $state(new Set());
-  let isSharing = $state(false);
   let isSavingName = $state(false);
   let isSavingDescription = $state(false);
 
-  $effect(() => {
-    if (itemsFeed.collection?.shareInfo) {
-      shareInfo = itemsFeed.collection.shareInfo;
-    }
+  const share = Share.createShare({
+    fetchShare: () => ApiClient.collection.share(data.collectionId),
+    onUnpublished: () => itemsFeed.clearSharing(),
+    initial: data.collection?.sharing ?? null,
   });
+
+  const shareIntro = Share.controls.intro();
 
   const openPostViewer = (imageId: string) => {
     const index = itemsFeed.getItemIndex(imageId);
     if (index !== -1) {
       postViewerState.open(index);
     }
-  };
-
-  const handleShareConfirm = async () => {
-    isSharing = true;
-    shareInfo = await itemsFeed.share();
-    isSharing = false;
-    sharePopoverOpen = false;
   };
 
   const handleRemoveItem = async (item: CollectionItem) => {
@@ -227,8 +234,8 @@
               </p>
             {/if}
           </div>
-          {#if isOwner}
-            <div class="shrink-0 h-10 flex items-center gap-2">
+          <div class="shrink-0 h-10 flex items-center gap-2">
+            {#if isOwner}
               <Button
                 variant="glass"
                 size="sm"
@@ -239,51 +246,75 @@
                 <Icon icon="ph:plus" class="h-4 w-4" />
                 Add images
               </Button>
-              {#if shareInfo}
-                <div class="relative flex items-center">
-                  <span
-                    class="absolute -top-4 left-0 text-[10px] font-medium uppercase tracking-wider text-gray-400 dark:text-gray-500"
-                  >
-                    Share Link
-                  </span>
-                  <CopyContainer
-                    value={shareInfo.shareUrl}
-                    size="sm"
-                    variant="default"
-                  />
-                </div>
-              {:else}
-                <Popover bind:open={sharePopoverOpen}>
-                  <PopoverTrigger>
+              <Share.Provider state={share}>
+                <Share.Popover
+                  bind:open={sharePopoverOpen}
+                  width="w-80 p-3"
+                  triggerLabel="Share collection"
+                  introActive={!share.isInitialized}
+                  onCopy={() => share.copy()}
+                  onUnpublish={() => share.unpublish()}
+                >
+                  {#snippet trigger()}
                     <Button
                       variant="glass"
                       size="sm"
                       rounded="full"
-                      disabled={isSharing}
+                      justify="center"
                       class="flex flex-row gap-2"
+                      title={share.isInitialized
+                        ? 'Manage share link'
+                        : 'Share this collection'}
                     >
-                      {#if isSharing}
-                        <Icon
-                          icon="eos-icons:three-dots-loading"
-                          class="h-4 w-4"
-                        />
-                      {:else}
-                        <Icon icon="ph:share-network-fill" class="h-4 w-4" />
-                      {/if}
-                      Share
+                      {#snippet leftIcon()}
+                        {#if share.isInitialized}
+                          <Icon
+                            icon="fluent:link-settings-24-regular"
+                            class="h-4 w-4"
+                          />
+                        {:else}
+                          <Icon
+                            icon="fluent:link-multiple-20-regular"
+                            class="h-4 w-4"
+                          />
+                        {/if}
+                      {/snippet}
+                      {share.isInitialized ? 'Manage' : 'Share'}
                     </Button>
-                  </PopoverTrigger>
-                  <PopoverContent align="end" sideOffset={8}>
-                    <ShareCollectionPopover
-                      loading={isSharing}
-                      close={() => (sharePopoverOpen = false)}
-                      confirm={handleShareConfirm}
-                    />
-                  </PopoverContent>
-                </Popover>
-              {/if}
-            </div>
-          {/if}
+                  {/snippet}
+
+                  {#snippet intro()}
+                    <div class={shareIntro.wrap()}>
+                      <Share.AccentIcon size="lg">
+                        <Icon icon="ph:link-simple-fill" class="h-5 w-5" />
+                      </Share.AccentIcon>
+                      <h3 class={shareIntro.title()}>Share this collection</h3>
+                      <p class={shareIntro.description()}>
+                        Create a public link. Anyone with the link will be able
+                        to view this collection.
+                      </p>
+                      <div class={shareIntro.actions()}>
+                        <Button
+                          variant="outline-blue"
+                          rounded="full"
+                          size="sm"
+                          class="w-full font-medium"
+                          loading={share.isLoading}
+                          onclick={share.load}
+                        >
+                          Create share link
+                        </Button>
+                      </div>
+                    </div>
+                  {/snippet}
+                </Share.Popover>
+              </Share.Provider>
+            {/if}
+            <CollectionViewPreferences
+              value={settings.collections}
+              onChange={handleViewPreferencesChange}
+            />
+          </div>
         </div>
       {/if}
     </div>
@@ -329,7 +360,7 @@
               <div class="relative">
                 <ImagePlaceholder
                   uniqueId={image.id}
-                  src={`/image/${image.attributes.fileName}`}
+                  src={item.url ?? `/image/${image.attributes.fileName}`}
                   metadata={image.metadata}
                   showMetadata={false}
                   showOpenInNewTab={false}
@@ -377,7 +408,8 @@
                 >
                   <StopPropagation>
                     <DownloadButton
-                      imageUrl={`/image/${image.attributes.fileName}`}
+                      imageUrl={item.url ??
+                        `/image/${image.attributes.fileName}`}
                       fileName={image.attributes.fileName}
                       size="sm"
                       variant="overlay"
@@ -428,15 +460,34 @@
       </Masonry>
 
       {#if itemsFeed.hasMore}
-        <div class="flex justify-center mt-12">
-          <LoadMoreButton
-            visible={itemsFeed.hasMore}
-            loading={itemsFeed.isLoading}
-            onclick={() => itemsFeed.nextPage({ debounce: 300 })}
-            variant="modern"
-            rounded="full"
-          />
-        </div>
+        {#if settings.collections.loadStrategy === 'infinite_scroll'}
+          <div
+            class="flex justify-center mt-12 h-10"
+            use:intersect={{
+              enabled: itemsFeed.hasMore && !itemsFeed.isLoading,
+              onEnter: () => itemsFeed.nextPage({ debounce: 300 }),
+            }}
+          >
+            {#if itemsFeed.isLoading}
+              <div
+                class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
+              >
+                <Icon icon="ph:circle-notch" class="h-4 w-4 animate-spin" />
+                <span>Loading more</span>
+              </div>
+            {/if}
+          </div>
+        {:else}
+          <div class="flex justify-center mt-12">
+            <LoadMoreButton
+              visible={itemsFeed.hasMore}
+              loading={itemsFeed.isLoading}
+              onclick={() => itemsFeed.nextPage({ debounce: 300 })}
+              variant="modern"
+              rounded="full"
+            />
+          </div>
+        {/if}
       {/if}
     {/if}
   </div>

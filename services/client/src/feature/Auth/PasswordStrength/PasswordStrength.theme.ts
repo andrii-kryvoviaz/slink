@@ -41,12 +41,4 @@ export const passwordStrengthLabelVariants = cva('text-xs font-medium', {
   },
 });
 
-export type StrengthLevel = 'weak' | 'fair' | 'good' | 'strong' | 'veryStrong';
-
-export const strengthLabels: Record<StrengthLevel, string> = {
-  weak: 'Weak',
-  fair: 'Fair',
-  good: 'Good',
-  strong: 'Strong',
-  veryStrong: 'Very Strong',
-};
+export type { StrengthLevel } from './PasswordStrength.labels.svelte';

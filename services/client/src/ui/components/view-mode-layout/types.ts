@@ -1,6 +1,7 @@
 import type {
   ColumnDef,
   RowData,
+  SortingState,
   Table as TanstackTable,
 } from '@tanstack/table-core';
 
@@ -13,10 +14,12 @@ import type {
 
 export interface BaseModeConfig {
   toolbar?: boolean;
+  pageSize?: boolean;
   more?: boolean;
   appendMode?: AppendMode;
 }
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface TableModeConfig<
   TData extends RowData = any,
 > extends BaseModeConfig {
@@ -24,7 +27,9 @@ export interface TableModeConfig<
   data?: TData[];
   currentPage?: number;
   totalPages?: number;
+  initialSorting?: SortingState;
   onPageChange?: (page: number) => void;
+  onSortingChange?: (orderBy: string | null, order: 'asc' | 'desc') => void;
 }
 
 export type ModeConfig<TData extends RowData = any> =

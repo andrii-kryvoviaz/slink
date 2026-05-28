@@ -3,17 +3,16 @@
   import * as HoverCard from '@slink/ui/components/hover-card';
   import { type Snippet } from 'svelte';
 
-  import { pluralize } from '@slink/lib/utils/string/pluralize';
-
   interface Props {
     items: T[];
     maxVisible?: number;
-    itemLabel: string;
+    overflowLabel: (count: number) => string;
     badge: Snippet<[T]>;
     overflowBadge?: Snippet<[T]>;
   }
 
-  let { items, maxVisible, itemLabel, badge, overflowBadge }: Props = $props();
+  let { items, maxVisible, overflowLabel, badge, overflowBadge }: Props =
+    $props();
 
   const visibleItems = $derived(
     maxVisible !== undefined ? items.slice(0, maxVisible) : items,
@@ -38,7 +37,7 @@
       </HoverCard.Trigger>
       <HoverCard.Content side="bottom" align="start" variant="glass" size="sm">
         <p class="text-xs text-muted-foreground mb-2">
-          {pluralize(overflowCount, itemLabel)}
+          {overflowLabel(overflowCount)}
         </p>
         <div class="flex flex-wrap gap-2">
           {#each overflowItems as item (item.id)}

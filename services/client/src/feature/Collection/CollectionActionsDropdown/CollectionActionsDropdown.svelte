@@ -4,11 +4,10 @@
     CreateCollectionForm,
   } from '@slink/feature/Collection';
   import {
-    DropdownSimple,
+    ActionsMenu,
     DropdownSimpleGroup,
     DropdownSimpleItem,
   } from '@slink/ui/components';
-  import { Button } from '@slink/ui/components/button';
   import { Dialog } from '@slink/ui/components/dialog';
 
   import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
@@ -19,6 +18,7 @@
   import type { CollectionResponse } from '@slink/api/Response';
 
   import { useCollectionListFeed } from '@slink/lib/state/CollectionListFeed.svelte';
+  import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
   interface Props {
     collection: CollectionResponse;
@@ -53,7 +53,7 @@
     await deleteCollection(collection.id, deleteImages);
 
     if ($deleteError) {
-      toast.error('Failed to delete collection. Please try again later.');
+      toast.error(messages.collection.failedToDelete);
       return;
     }
 
@@ -81,7 +81,7 @@
 
       await collectionsFeed.updateCollection(collection.id, data);
       editModalOpen = false;
-      toast.success('Collection updated successfully');
+      toast.success(messages.collection.updated);
     } catch (error) {
       if (error instanceof ValidationException && error.violations) {
         editFormErrors = error.violations.reduce<Record<string, string>>(
@@ -92,7 +92,7 @@
           {},
         );
       } else {
-        toast.error('Failed to update collection');
+        toast.error(messages.collection.failedToUpdate);
       }
     } finally {
       isEditing = false;
@@ -106,20 +106,7 @@
 </script>
 
 <div class="relative">
-  <DropdownSimple variant="invisible" size="xs">
-    {#snippet trigger(triggerProps)}
-      <Button
-        variant="glass"
-        size="icon"
-        padding="none"
-        rounded="md"
-        {...triggerProps}
-        aria-label="Collection actions"
-      >
-        <Icon icon="lucide:ellipsis" class="h-4 w-4" />
-      </Button>
-    {/snippet}
-
+  <ActionsMenu tone="surface" label="Collection actions">
     <DropdownSimpleGroup>
       {#if !deleteConfirmOpen}
         <DropdownSimpleItem on={{ click: handleEditClick }}>
@@ -149,7 +136,7 @@
         />
       {/if}
     </DropdownSimpleGroup>
-  </DropdownSimple>
+  </ActionsMenu>
 </div>
 
 <Dialog bind:open={editModalOpen} size="md">

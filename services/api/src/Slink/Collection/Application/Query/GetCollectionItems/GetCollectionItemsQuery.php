@@ -14,11 +14,16 @@ final readonly class GetCollectionItemsQuery implements QueryInterface {
     private string $collectionId = '',
     private int $limit = 12,
     private ?string $cursor = null,
+    private bool $scoped = false,
   ) {
   }
 
   public function withCollectionId(string $collectionId): self {
-    return new self($collectionId, $this->limit, $this->cursor);
+    return new self($collectionId, $this->limit, $this->cursor, $this->scoped);
+  }
+
+  public function asScoped(): self {
+    return new self($this->collectionId, $this->limit, $this->cursor, true);
   }
 
   public function getCollectionId(): string {
@@ -31,5 +36,9 @@ final readonly class GetCollectionItemsQuery implements QueryInterface {
 
   public function getCursor(): ?string {
     return $this->cursor;
+  }
+
+  public function isScoped(): bool {
+    return $this->scoped;
   }
 }

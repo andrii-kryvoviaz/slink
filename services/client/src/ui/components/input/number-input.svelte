@@ -56,6 +56,9 @@
   let isAtMin = $derived(min !== undefined && value <= min);
   let isAtMax = $derived(max !== undefined && value >= max);
 
+  let pendingInput = $state<string | null>(null);
+  let displayValue = $derived(pendingInput ?? String(value));
+
   const clamp = (val: number): number => {
     let result = val;
     if (min !== undefined && result < min) result = min;
@@ -63,29 +66,37 @@
     return result;
   };
 
+  const commit = (next: number) => {
+    pendingInput = null;
+    value = next;
+    onchange?.(next);
+  };
+
   const increment = () => {
     if (disabled || readonly || isAtMax) return;
-    value = clamp(value + step);
-    onchange?.(value);
+    commit(clamp(value + step));
   };
 
   const decrement = () => {
     if (disabled || readonly || isAtMin) return;
-    value = clamp(value - step);
-    onchange?.(value);
+    commit(clamp(value - step));
   };
 
   const handleInputChange = (event: Event) => {
-    const target = event.target as HTMLInputElement;
-    const parsed = parseFloat(target.value);
+    const text = (event.target as HTMLInputElement).value;
+    pendingInput = text;
 
-    if (isNaN(parsed)) {
-      value = min ?? 0;
-    } else {
-      value = clamp(parsed);
+    const parsed = parseFloat(text);
+    if (!isNaN(parsed)) {
+      value = parsed;
+      onchange?.(parsed);
     }
+  };
 
-    onchange?.(value);
+  const handleBlur = () => {
+    if (pendingInput === null) return;
+    const parsed = parseFloat(pendingInput);
+    commit(clamp(isNaN(parsed) ? (min ?? 0) : parsed));
   };
 
   const handleKeyDown = (event: KeyboardEvent) => {
@@ -150,11 +161,12 @@
     {min}
     {max}
     {step}
-    {value}
+    value={displayValue}
     {disabled}
     {readonly}
     class={numberInputFieldVariants({ variant, size, hasError })}
     oninput={handleInputChange}
+    onblur={handleBlur}
     onkeydown={handleKeyDown}
     onwheel={handleWheel}
     onfocus={handleFocus}

@@ -13,6 +13,8 @@ use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Domain\ValueObject\ImageMetadata;
 use Slink\Image\Infrastructure\ReadModel\Repository\ImageRepository;
 use Slink\Shared\Domain\Contract\CursorAwareInterface;
+use Slink\Shared\Domain\Contract\OwnerAwareInterface;
+use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Attribute\Sanitize;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
 use Slink\Tag\Infrastructure\ReadModel\View\TagView;
@@ -24,7 +26,7 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 #[ORM\Table(name: '`image`')]
 #[ORM\Entity(repositoryClass: ImageRepository::class)]
 #[ORM\Index(name: 'idx_image_user_created_at', columns: ['user_id', 'created_at'])]
-class ImageView extends AbstractView implements CursorAwareInterface {
+class ImageView extends AbstractView implements CursorAwareInterface, OwnerAwareInterface {
   #[ORM\ManyToMany(targetEntity: TagView::class)]
   #[ORM\JoinTable(name: 'image_to_tag')]
   #[ORM\JoinColumn(name: 'image_id', referencedColumnName: 'uuid')]
@@ -122,6 +124,20 @@ class ImageView extends AbstractView implements CursorAwareInterface {
    */
   public function getUser(): ?UserView {
     return $this->user;
+  }
+
+  public function getUserId(): ?ID {
+    $user = $this->getUser();
+
+    if ($user === null) {
+      return null;
+    }
+
+    return ID::fromString($user->getUuid());
+  }
+
+  public function isOwnedBy(?ID $userId): bool {
+    return $this->getUserId()?->equals($userId) ?? false;
   }
 
   /**

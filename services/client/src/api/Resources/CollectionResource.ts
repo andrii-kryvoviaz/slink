@@ -34,6 +34,20 @@ export class CollectionResource extends AbstractResource {
     return this.get('/collections', { query });
   }
 
+  public async exists(
+    filters: {
+      searchTerm?: string;
+    } = {},
+  ): Promise<boolean> {
+    const response = await this.get<{ exists: boolean }>(
+      '/collections/exists',
+      {
+        query: filters as Record<string, unknown>,
+      },
+    );
+    return response.exists;
+  }
+
   public async getById(collectionId: string): Promise<CollectionResponse> {
     return this.get(`/collection/${collectionId}`);
   }
@@ -59,13 +73,22 @@ export class CollectionResource extends AbstractResource {
   public async getItems(
     collectionId: string,
     cursor?: string,
+    limit?: number,
   ): Promise<CollectionItemsResponse> {
     const params = new URLSearchParams();
     if (cursor) params.set('cursor', cursor);
+    if (limit) params.set('limit', String(limit));
     const query = params.toString();
     return this.get(
       `/collection/${collectionId}/items${query ? `?${query}` : ''}`,
     );
+  }
+
+  public async itemsExist(collectionId: string): Promise<boolean> {
+    const response = await this.get<{ exists: boolean }>(
+      `/collection/${collectionId}/items/exists`,
+    );
+    return response.exists;
   }
 
   public async addItem(collectionId: string, itemId: string): Promise<void> {

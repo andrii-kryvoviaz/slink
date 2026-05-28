@@ -137,14 +137,20 @@ class UploadImageHandlerSvgTest extends TestCase {
         $file->method('getMimeType')->willReturn('image/jpeg');
         $file->method('getPathname')->willReturn('/tmp/test.jpg');
         $file->method('getSize')->willReturn(1024);
-        
+
         $metadataFactory->method('createFromImageFile')->willReturn(
             new ImageMetadata(1024, 'image/jpeg', 800, 600, 'test_hash')
         );
-        
-        $imageAnalyzer->method('isConversionRequired')->with('image/jpeg')->willReturn(false);
-        $imageAnalyzer->method('requiresSanitization')->with('image/jpeg')->willReturn(false);
-        $imageAnalyzer->method('supportsExifProfile')->with('image/jpeg')->willReturn(true);
+
+        $imageAnalyzer->method('isConversionRequired')->willReturnMap([
+            ['image/jpeg', false],
+        ]);
+        $imageAnalyzer->method('requiresSanitization')->willReturnMap([
+            ['image/jpeg', false],
+        ]);
+        $imageAnalyzer->method('supportsExifProfile')->willReturnMap([
+            ['image/jpeg', true],
+        ]);
         
         $conversionResolver->method('resolve')->willReturn(null);
         

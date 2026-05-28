@@ -11,14 +11,20 @@ final readonly class PublicAccessSettings {
   public function __construct(
     #[Groups(['public'])]
     public bool $allowGuestUploads,
-    
+
     #[Groups(['public'])]
     public bool $allowUnauthenticatedAccess,
 
     #[Groups(['public'])]
     public bool $requireSsl = false,
+
+    #[Groups(['public'])]
+    public bool $requireAuthForMediaShares = false,
+
+    #[Groups(['public'])]
+    public bool $requireAuthForCollectionShares = false,
   ) {}
-  
+
   /**
    * @param array<string, mixed> $settings
    */
@@ -26,7 +32,9 @@ final readonly class PublicAccessSettings {
     return new self(
       $settings['allowGuestUploads'] ?? false,
       $settings['allowUnauthenticatedAccess'] ?? false,
-      $settings['requireSsl'] ?? false
+      $settings['requireSsl'] ?? false,
+      $settings['requireAuthForMediaShares'] ?? false,
+      $settings['requireAuthForCollectionShares'] ?? false,
     );
   }
 }

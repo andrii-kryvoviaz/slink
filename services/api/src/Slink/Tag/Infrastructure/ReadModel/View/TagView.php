@@ -29,7 +29,7 @@ class TagView extends AbstractView {
   #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'uuid', onDelete: 'SET NULL')]
   private ?TagView $parent = null;
 
-  #[ORM\OneToMany(mappedBy: 'parent', targetEntity: TagView::class)]
+  #[ORM\OneToMany(mappedBy: 'parent', targetEntity: TagView::class, fetch: 'EXTRA_LAZY')]
   private Collection $children;
 
   #[ORM\ManyToMany(targetEntity: ImageView::class, mappedBy: 'tags')]
@@ -138,7 +138,7 @@ class TagView extends AbstractView {
     $this->updatedAt = $updatedAt;
   }
 
-  #[Groups(['public', 'private'])]
+  #[Groups(['tag-children'])]
   #[SerializedName('children')]
   public function getChildren(): Collection {
     return $this->children;
@@ -196,6 +196,12 @@ class TagView extends AbstractView {
     return $this->images->count();
   }
 
+  #[Groups(['public', 'private'])]
+  #[SerializedName('childCount')]
+  public function getChildCount(): int {
+    return $this->children->count();
+  }
+
   /**
    * @return array<string, mixed>
    */
@@ -208,6 +214,7 @@ class TagView extends AbstractView {
       'isRoot' => $this->isRoot(),
       'depth' => $this->getDepth(),
       'imageCount' => $this->getImageCount(),
+      'childCount' => $this->getChildCount(),
       'createdAt' => $this->createdAt?->toString(),
       'updatedAt' => $this->updatedAt?->toString(),
     ];

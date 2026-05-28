@@ -91,6 +91,7 @@ export default [
       'e2e/',
       '*.config.js',
       '*.config.ts',
+      'src/locales/**',
     ],
   },
   prettier,

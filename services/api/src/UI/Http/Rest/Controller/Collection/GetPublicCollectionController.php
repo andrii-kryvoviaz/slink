@@ -6,15 +6,18 @@ namespace UI\Http\Rest\Controller\Collection;
 
 use Slink\Collection\Application\Query\GetAccessibleCollection\GetAccessibleCollectionQuery;
 use Slink\Shared\Application\Query\QueryTrait;
+use Slink\Shared\Infrastructure\Security\Voter\GuestAccessVoter;
 use Slink\User\Infrastructure\Auth\JwtUser;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use UI\Http\Rest\Response\ApiResponse;
 
 #[AsController]
 #[Route(path: '/collection/{id}', name: 'get_shared_collection', methods: ['GET'], priority: -1)]
+#[IsGranted(GuestAccessVoter::GUEST_COLLECTION_SHARE_ALLOWED)]
 final readonly class GetPublicCollectionController {
   use QueryTrait;
 

@@ -1,11 +1,11 @@
 <script lang="ts">
   import { TagDeletePopover, TagMoveDialog } from '@slink/feature/Tag';
   import {
-    DropdownSimple,
+    ActionsMenu,
     DropdownSimpleGroup,
     DropdownSimpleItem,
   } from '@slink/ui/components';
-  import { Button } from '@slink/ui/components/button';
+  import type { ActionsMenuTone } from '@slink/ui/components';
 
   import Icon from '@iconify/svelte';
 
@@ -16,9 +16,17 @@
     tag: Tag;
     onDelete: (tag: Tag) => Promise<void>;
     onMove: (tagId: string, newParentId: string | null) => Promise<void>;
+    tone?: ActionsMenuTone;
+    triggerClass?: string;
   }
 
-  let { tag, onDelete, onMove }: Props = $props();
+  let {
+    tag,
+    onDelete,
+    onMove,
+    tone = 'surface',
+    triggerClass,
+  }: Props = $props();
 
   let deleteConfirmOpen = $state(false);
   let moveDialogOpen = $state(false);
@@ -56,20 +64,12 @@
 </script>
 
 <div class="flex items-center justify-end">
-  <DropdownSimple bind:open={dropdownOpen} variant="invisible" size="xs">
-    {#snippet trigger(triggerProps)}
-      <Button
-        variant="glass"
-        size="icon"
-        padding="none"
-        rounded="md"
-        {...triggerProps}
-        aria-label="Tag actions"
-      >
-        <Icon icon="lucide:ellipsis" class="h-4 w-4" />
-      </Button>
-    {/snippet}
-
+  <ActionsMenu
+    bind:open={dropdownOpen}
+    {tone}
+    {triggerClass}
+    label="Tag actions"
+  >
     <DropdownSimpleGroup>
       {#if !deleteConfirmOpen}
         <DropdownSimpleItem on={{ click: handleMoveClick }}>
@@ -97,7 +97,7 @@
         />
       {/if}
     </DropdownSimpleGroup>
-  </DropdownSimple>
+  </ActionsMenu>
 </div>
 
 <TagMoveDialog

@@ -3,12 +3,8 @@
   import { EmptyState, ViewModeToggle } from '@slink/feature/Layout';
   import { Subtitle, Title } from '@slink/feature/Text';
   import { UserGridView, UsersSkeleton } from '@slink/feature/User';
-  import { createUserColumns } from '@slink/feature/User/UserDataTable/columns';
-  import {
-    DataTable,
-    DataTableToolbar,
-    PageSizeSelect,
-  } from '@slink/ui/components/data-table';
+  import { createUserColumns } from '@slink/feature/User/UserDataTable/columns.svelte';
+  import { DataTable } from '@slink/ui/components/data-table';
   import { ViewModeLayout } from '@slink/ui/components/view-mode-layout';
 
   import { page } from '$app/state';
@@ -95,36 +91,13 @@
           },
         }}
       >
-        {#snippet toolbar({
-          table,
-          pageSize,
-          pagination,
-          feed,
-          handlePageSizeChange,
-        })}
-          <DataTableToolbar
-            {table}
-            {pageSize}
-            {pagination}
-            isLoading={feed.isLoading}
-            onPageSizeChange={handlePageSizeChange}
-            onPageChange={(page) => userFeedState.loadPage(page, false)}
-          />
-        {/snippet}
         {#snippet loading(mode)}
           <UsersSkeleton
             viewMode={mode === 'list' ? 'list' : 'grid'}
             count={12}
           />
         {/snippet}
-        {#snippet grid({ tableSettings, handlePageSizeChange })}
-          <div class="flex justify-end mb-4">
-            <PageSizeSelect
-              pageSize={tableSettings.pageSize}
-              options={[12, 24, 48, 96]}
-              onPageSizeChange={handlePageSizeChange}
-            />
-          </div>
+        {#snippet grid()}
           <div class="min-h-100 w-full">
             <UserGridView
               users={userFeedState.items}

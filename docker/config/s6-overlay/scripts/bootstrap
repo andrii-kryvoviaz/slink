@@ -1,17 +1,6 @@
 #!/command/with-contenv sh
 
-slink slink:database:init --no-interaction --connection=event_store
-slink slink:database:init --no-interaction --connection=read_model
+slink cache:clear --quiet
+slink cache:warm --no-optional-warmers --quiet
 
-slink doctrine:migrations:migrate --no-interaction --configuration=/services/api/config/migrations/event_store.yaml --em=event_store
-slink doctrine:migrations:migrate --no-interaction --em=read_model
-
-if [ "${SKIP_HASH_CALCULATION:-false}" != "true" ]; then
-  timeout 300 slink image:calculate-missing-hashes --no-interaction || echo "[system:init] Hash calculation timed out or failed"
-fi
-
-if [ -n "${ADMIN_EMAIL:-}" ]; then
-  slink slink:admin:init --no-interaction
-fi
-
-slink slink:about
+exec slink slink:boot --ansi

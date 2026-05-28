@@ -54,7 +54,7 @@ final class UploadImageHandlerUserSpecificDeduplicationTest extends TestCase {
     $metadataFactory = $this->createStub(ImageMetadataFactory::class);
 
     $configurationProvider = $this->createStub(ConfigurationProviderInterface::class);
-    $configurationProvider->method('get')->with('image.enableDeduplication')->willReturn(true);
+    $configurationProvider->method('get')->willReturnMap([['image.enableDeduplication', true]]);
 
     $duplicateSpecification = new ImageDuplicateSpecification($this->imageRepository, $this->hashCalculator, $configurationProvider);
     $creationContext = new ImageCreationContext($duplicateSpecification);

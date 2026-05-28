@@ -8,6 +8,7 @@ export interface Tag {
   isRoot: boolean;
   depth: number;
   imageCount: number;
+  childCount: number;
   createdAt?: string;
   updatedAt?: string;
   children?: Tag[];
@@ -28,9 +29,11 @@ export interface MoveTagRequest {
   newParentId: string | null;
 }
 
+export type TagOrderBy = 'name' | 'path' | 'createdAt' | 'updatedAt';
+
 export interface TagListRequest {
   limit?: number;
-  orderBy?: 'name' | 'path' | 'createdAt' | 'updatedAt';
+  orderBy?: TagOrderBy;
   order?: 'asc' | 'desc';
   page?: number;
   parentId?: string;
@@ -47,6 +50,20 @@ export interface TagListingResponse {
 export class TagResource extends AbstractResource {
   async getList(params: TagListRequest = {}): Promise<TagListingResponse> {
     return this.get('/tags', { query: params as Record<string, unknown> });
+  }
+
+  async exists(
+    filters: {
+      parentId?: string;
+      searchTerm?: string;
+      rootOnly?: boolean;
+      ids?: string[];
+    } = {},
+  ): Promise<boolean> {
+    const response = await this.get<{ exists: boolean }>('/tags/exists', {
+      query: filters as Record<string, unknown>,
+    });
+    return response.exists;
   }
 
   async create(data: CreateTagRequest): Promise<{ id: string }> {

@@ -4,10 +4,17 @@ declare(strict_types=1);
 
 namespace Slink\Share\Infrastructure\ReadModel\Projection;
 
+use Slink\Share\Domain\Event\SharePasswordWasSet;
+use Slink\Share\Domain\Event\ShareExpirationWasSet;
 use Slink\Share\Domain\Event\ShareWasCreated;
+use Slink\Share\Domain\Event\ShareWasPublished;
+use Slink\Share\Domain\Event\ShareWasUnpublished;
 use Slink\Share\Domain\Event\ShortUrlWasAdded;
+use Slink\Share\Domain\Event\ShortUrlWasRegenerated;
+use Slink\Share\Domain\ValueObject\HashedSharePassword;
 use Slink\Share\Domain\Repository\ShareRepositoryInterface;
 use Slink\Share\Domain\Repository\ShortUrlRepositoryInterface;
+use Slink\Share\Domain\ValueObject\AccessControl;
 use Slink\Share\Infrastructure\ReadModel\View\ShareView;
 use Slink\Share\Infrastructure\ReadModel\View\ShortUrlView;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractProjection;
@@ -23,8 +30,9 @@ final class ShareProjection extends AbstractProjection {
     $share = new ShareView(
       $event->id->toString(),
       $event->shareable,
-      $event->targetUrl,
+      $event->targetPath->toString(),
       $event->createdAt,
+      AccessControl::initial($event->isPublished),
     );
 
     $this->shareRepository->add($share);
@@ -32,6 +40,26 @@ final class ShareProjection extends AbstractProjection {
     if ($event->context->hasShortUrl()) {
       $this->createShortUrl($share, $event->context->getShortUrlId()?->toString(), $event->context->getShortCode());
     }
+  }
+
+  public function handleShareWasPublished(ShareWasPublished $event): void {
+    $share = $this->shareRepository->findById($event->shareId->toString());
+
+    if ($share === null) {
+      return;
+    }
+
+    $share->markPublished();
+  }
+
+  public function handleShareWasUnpublished(ShareWasUnpublished $event): void {
+    $share = $this->shareRepository->findById($event->shareId->toString());
+
+    if ($share === null) {
+      return;
+    }
+
+    $share->markUnpublished();
   }
 
   public function handleShortUrlWasAdded(ShortUrlWasAdded $event): void {
@@ -42,6 +70,36 @@ final class ShareProjection extends AbstractProjection {
     }
 
     $this->createShortUrl($share, $event->shortUrlId->toString(), $event->shortCode);
+  }
+
+  public function handleShortUrlWasRegenerated(ShortUrlWasRegenerated $event): void {
+    $shortUrl = $this->shortUrlRepository->findByShareId($event->shareId->toString());
+
+    if ($shortUrl === null) {
+      return;
+    }
+
+    $shortUrl->changeShortCode($event->shortCode);
+  }
+
+  public function handleShareExpirationWasSet(ShareExpirationWasSet $event): void {
+    $share = $this->shareRepository->findById($event->shareId->toString());
+
+    if ($share === null) {
+      return;
+    }
+
+    $share->expireAt($event->expiresAt);
+  }
+
+  public function handleSharePasswordWasSet(SharePasswordWasSet $event): void {
+    $share = $this->shareRepository->findById($event->shareId->toString());
+
+    if ($share === null) {
+      return;
+    }
+
+    $share->setPassword($event->password);
   }
 
   private function createShortUrl(ShareView $share, ?string $shortUrlId, ?string $shortCode): void {

@@ -49,8 +49,9 @@ final class GuestAccessVoterTest extends TestCase {
   public function itGrantsUploadAccessForGuestUploadsWhenEnabled(): void {
     $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')
-      ->with('access.allowGuestUploads')
-      ->willReturn(true);
+      ->willReturnMap([
+        ['access.allowGuestUploads', true],
+      ]);
 
     $token = $this->createStub(TokenInterface::class);
     $token->method('getUser')->willReturn(null);
@@ -66,8 +67,9 @@ final class GuestAccessVoterTest extends TestCase {
   public function itDeniesUploadAccessForGuestUploadsWhenDisabled(): void {
     $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')
-      ->with('access.allowGuestUploads')
-      ->willReturn(false);
+      ->willReturnMap([
+        ['access.allowGuestUploads', false],
+      ]);
 
     $token = $this->createStub(TokenInterface::class);
     $token->method('getUser')->willReturn(null);
@@ -83,8 +85,9 @@ final class GuestAccessVoterTest extends TestCase {
   public function itGrantsViewAccessForGuestViewingWhenEnabled(): void {
     $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')
-      ->with('access.allowUnauthenticatedAccess')
-      ->willReturn(true);
+      ->willReturnMap([
+        ['access.allowUnauthenticatedAccess', true],
+      ]);
 
     $token = $this->createStub(TokenInterface::class);
     $token->method('getUser')->willReturn(null);
@@ -100,8 +103,9 @@ final class GuestAccessVoterTest extends TestCase {
   public function itDeniesViewAccessForGuestViewingWhenDisabled(): void {
     $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')
-      ->with('access.allowUnauthenticatedAccess')
-      ->willReturn(false);
+      ->willReturnMap([
+        ['access.allowUnauthenticatedAccess', false],
+      ]);
 
     $token = $this->createStub(TokenInterface::class);
     $token->method('getUser')->willReturn(null);
@@ -138,8 +142,9 @@ final class GuestAccessVoterTest extends TestCase {
   public function itDeniesViewAccessWhenOnlyGuestUploadsIsEnabled(): void {
     $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')
-      ->with('access.allowUnauthenticatedAccess')
-      ->willReturn(false);
+      ->willReturnMap([
+        ['access.allowUnauthenticatedAccess', false],
+      ]);
 
     $token = $this->createStub(TokenInterface::class);
     $token->method('getUser')->willReturn(null);
@@ -155,8 +160,9 @@ final class GuestAccessVoterTest extends TestCase {
   public function itDeniesUploadAccessWhenOnlyGuestViewingIsEnabled(): void {
     $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')
-      ->with('access.allowGuestUploads')
-      ->willReturn(false);
+      ->willReturnMap([
+        ['access.allowGuestUploads', false],
+      ]);
 
     $token = $this->createStub(TokenInterface::class);
     $token->method('getUser')->willReturn(null);
@@ -166,6 +172,165 @@ final class GuestAccessVoterTest extends TestCase {
     $result = $voter->vote($token, null, [GuestAccessVoter::GUEST_UPLOAD_ALLOWED]);
     
     $this->assertEquals(GuestAccessVoter::ACCESS_DENIED, $result);
+  }
+
+  #[Test]
+  public function itGrantsImageShareAccessForAuthenticatedUsers(): void {
+    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $configProvider->expects($this->never())->method('get');
+
+    $user = $this->createStub(UserInterface::class);
+    $token = $this->createStub(TokenInterface::class);
+    $token->method('getUser')->willReturn($user);
+
+    $voter = new GuestAccessVoter($configProvider);
+
+    $result = $voter->vote($token, null, [GuestAccessVoter::GUEST_MEDIA_SHARE_ALLOWED]);
+
+    $this->assertEquals(GuestAccessVoter::ACCESS_GRANTED, $result);
+  }
+
+  #[Test]
+  public function itGrantsCollectionShareAccessForAuthenticatedUsers(): void {
+    $configProvider = $this->createMock(ConfigurationProviderInterface::class);
+    $configProvider->expects($this->never())->method('get');
+
+    $user = $this->createStub(UserInterface::class);
+    $token = $this->createStub(TokenInterface::class);
+    $token->method('getUser')->willReturn($user);
+
+    $voter = new GuestAccessVoter($configProvider);
+
+    $result = $voter->vote($token, null, [GuestAccessVoter::GUEST_COLLECTION_SHARE_ALLOWED]);
+
+    $this->assertEquals(GuestAccessVoter::ACCESS_GRANTED, $result);
+  }
+
+  #[Test]
+  public function itGrantsImageShareAccessForGuestSharingWhenEnabled(): void {
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
+    $configProvider->method('get')
+      ->willReturnMap([
+        ['access.requireAuthForMediaShares', false],
+      ]);
+
+    $token = $this->createStub(TokenInterface::class);
+    $token->method('getUser')->willReturn(null);
+
+    $voter = new GuestAccessVoter($configProvider);
+
+    $result = $voter->vote($token, null, [GuestAccessVoter::GUEST_MEDIA_SHARE_ALLOWED]);
+
+    $this->assertEquals(GuestAccessVoter::ACCESS_GRANTED, $result);
+  }
+
+  #[Test]
+  public function itDeniesImageShareAccessForGuestSharingWhenDisabled(): void {
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
+    $configProvider->method('get')
+      ->willReturnMap([
+        ['access.requireAuthForMediaShares', true],
+      ]);
+
+    $token = $this->createStub(TokenInterface::class);
+    $token->method('getUser')->willReturn(null);
+
+    $voter = new GuestAccessVoter($configProvider);
+
+    $result = $voter->vote($token, null, [GuestAccessVoter::GUEST_MEDIA_SHARE_ALLOWED]);
+
+    $this->assertEquals(GuestAccessVoter::ACCESS_DENIED, $result);
+  }
+
+  #[Test]
+  public function itGrantsCollectionShareAccessForGuestSharingWhenEnabled(): void {
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
+    $configProvider->method('get')
+      ->willReturnMap([
+        ['access.requireAuthForCollectionShares', false],
+      ]);
+
+    $token = $this->createStub(TokenInterface::class);
+    $token->method('getUser')->willReturn(null);
+
+    $voter = new GuestAccessVoter($configProvider);
+
+    $result = $voter->vote($token, null, [GuestAccessVoter::GUEST_COLLECTION_SHARE_ALLOWED]);
+
+    $this->assertEquals(GuestAccessVoter::ACCESS_GRANTED, $result);
+  }
+
+  #[Test]
+  public function itDeniesCollectionShareAccessForGuestSharingWhenDisabled(): void {
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
+    $configProvider->method('get')
+      ->willReturnMap([
+        ['access.requireAuthForCollectionShares', true],
+      ]);
+
+    $token = $this->createStub(TokenInterface::class);
+    $token->method('getUser')->willReturn(null);
+
+    $voter = new GuestAccessVoter($configProvider);
+
+    $result = $voter->vote($token, null, [GuestAccessVoter::GUEST_COLLECTION_SHARE_ALLOWED]);
+
+    $this->assertEquals(GuestAccessVoter::ACCESS_DENIED, $result);
+  }
+
+  #[Test]
+  public function itHandlesImageAndCollectionShareFlagsIndependently(): void {
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
+    $configProvider->method('get')
+      ->willReturnMap([
+        ['access.requireAuthForMediaShares', false],
+        ['access.requireAuthForCollectionShares', true],
+      ]);
+
+    $token = $this->createStub(TokenInterface::class);
+    $token->method('getUser')->willReturn(null);
+
+    $voter = new GuestAccessVoter($configProvider);
+
+    $imageResult = $voter->vote($token, null, [GuestAccessVoter::GUEST_MEDIA_SHARE_ALLOWED]);
+    $collectionResult = $voter->vote($token, null, [GuestAccessVoter::GUEST_COLLECTION_SHARE_ALLOWED]);
+
+    $this->assertEquals(GuestAccessVoter::ACCESS_GRANTED, $imageResult);
+    $this->assertEquals(GuestAccessVoter::ACCESS_DENIED, $collectionResult);
+  }
+
+  #[Test]
+  public function itSupportsGuestImageShareAllowedAttribute(): void {
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
+    $configProvider->method('get')
+      ->willReturnMap([
+        ['access.requireAuthForMediaShares', true],
+      ]);
+
+    $voter = new GuestAccessVoter($configProvider);
+    $token = $this->createStub(TokenInterface::class);
+    $token->method('getUser')->willReturn(null);
+
+    $result = $voter->vote($token, null, [GuestAccessVoter::GUEST_MEDIA_SHARE_ALLOWED]);
+
+    $this->assertNotEquals(GuestAccessVoter::ACCESS_ABSTAIN, $result);
+  }
+
+  #[Test]
+  public function itSupportsGuestCollectionShareAllowedAttribute(): void {
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
+    $configProvider->method('get')
+      ->willReturnMap([
+        ['access.requireAuthForCollectionShares', true],
+      ]);
+
+    $voter = new GuestAccessVoter($configProvider);
+    $token = $this->createStub(TokenInterface::class);
+    $token->method('getUser')->willReturn(null);
+
+    $result = $voter->vote($token, null, [GuestAccessVoter::GUEST_COLLECTION_SHARE_ALLOWED]);
+
+    $this->assertNotEquals(GuestAccessVoter::ACCESS_ABSTAIN, $result);
   }
 
   #[Test]
@@ -184,8 +349,9 @@ final class GuestAccessVoterTest extends TestCase {
   public function itSupportsGuestUploadAllowedAttribute(): void {
     $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')
-      ->with('access.allowGuestUploads')
-      ->willReturn(false);
+      ->willReturnMap([
+        ['access.allowGuestUploads', false],
+      ]);
 
     $voter = new GuestAccessVoter($configProvider);
     $token = $this->createStub(TokenInterface::class);
@@ -200,8 +366,9 @@ final class GuestAccessVoterTest extends TestCase {
   public function itSupportsGuestViewAllowedAttribute(): void {
     $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')
-      ->with('access.allowUnauthenticatedAccess')
-      ->willReturn(false);
+      ->willReturnMap([
+        ['access.allowUnauthenticatedAccess', false],
+      ]);
 
     $voter = new GuestAccessVoter($configProvider);
     $token = $this->createStub(TokenInterface::class);

@@ -1,4 +1,4 @@
-import { createAppSidebarItems } from '@slink/feature/Navigation/Sidebar/config';
+import { createAppSidebarItems } from '@slink/feature/Navigation/Sidebar/config.svelte';
 import type { AppSidebarGroup } from '@slink/feature/Navigation/Sidebar/types';
 
 import { isAdmin, isAuthorized } from '@slink/lib/auth/utils';
@@ -31,8 +31,6 @@ export const load: LayoutServerLoad = async ({ locals, request }) => {
         (!group.roles || (user && isAuthorized(user, group.roles))),
     );
 
-  const flash = locals.flash.consume();
-
   return {
     settings,
     globalSettings,
@@ -40,6 +38,6 @@ export const load: LayoutServerLoad = async ({ locals, request }) => {
     userPreferences,
     userAgent,
     sidebarGroups,
-    flash,
+    locale: locals.locale,
   };
 };

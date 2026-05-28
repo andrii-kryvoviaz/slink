@@ -85,11 +85,11 @@
   </div>
 {:else}
   <div
-    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 {customClass}"
+    class="columns-1 sm:columns-2 md:columns-2 lg:columns-3 xl:columns-4 gap-4 {customClass}"
   >
     {#each Array(count) as _, index}
       <div
-        class="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/60"
+        class="break-inside-avoid mb-4 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/60"
         style="animation-delay: {index * 100}ms"
       >
         <div class="aspect-4/3 relative bg-gray-100 dark:bg-gray-800/50">
@@ -102,6 +102,14 @@
               class="opacity-60"
             />
           </div>
+          <div class="absolute bottom-2 right-2">
+            <Skeleton
+              width="80px"
+              height="24px"
+              rounded="full"
+              class="opacity-60"
+            />
+          </div>
         </div>
 
         <div class="p-3 flex items-start justify-between gap-2">
@@ -109,9 +117,8 @@
             <Skeleton width="70%" height="16px" class="mb-2" />
             {#if index % 2 === 0}
               <Skeleton width="100%" height="12px" class="mb-1" />
-              <Skeleton width="60%" height="12px" class="mb-2" />
+              <Skeleton width="60%" height="12px" />
             {/if}
-            <Skeleton width="80px" height="10px" class="mt-2" />
           </div>
           <Skeleton width="28px" height="28px" rounded="md" class="shrink-0" />
         </div>

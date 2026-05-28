@@ -8,6 +8,7 @@ use Slink\Collection\Domain\Filter\CollectionListFilter;
 use Slink\Collection\Domain\Repository\CollectionItemRepositoryInterface;
 use Slink\Collection\Domain\Repository\CollectionRepositoryInterface;
 use Slink\Collection\Domain\Service\CollectionCoverGeneratorInterface;
+use Slink\Collection\Infrastructure\ReadModel\View\CollectionView;
 use Slink\Shared\Application\Http\Collection;
 use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Application\Query\QueryHandlerInterface;
@@ -32,17 +33,17 @@ final readonly class GetUserCollectionsHandler implements QueryHandlerInterface 
 
     $paginator = $this->collectionRepository->getByUserId($filter);
 
-    $collections = iterator_to_array($paginator);
-    $collectionIds = array_map(fn($c) => $c->getId(), $collections);
+    $collections = iterator_to_array($paginator, preserve_keys: false);
+    $collectionIds = array_map(static fn(CollectionView $c) => $c->getId(), $collections);
     $itemCounts = $this->collectionItemRepository->countByCollectionIds($collectionIds);
-    $coverImageIds = $this->collectionItemRepository->getFirstImageIdsByCollectionIds($collectionIds, 5);
+    $coverUrls = $this->coverGenerator->getCoverUrlsByIds($collectionIds);
 
     $items = array_map(
-      fn($c) => Item::fromEntity($c, [
+      static fn(CollectionView $c) => Item::fromEntity($c, [
         'itemCount' => $itemCounts[$c->getId()] ?? 0,
-        'coverImage' => $this->coverGenerator->getCoverUrl($c->getId(), $coverImageIds[$c->getId()] ?? []),
+        'coverImage' => $coverUrls[$c->getId()] ?? null,
       ]),
-      $collections
+      $collections,
     );
 
     $cursorResult = $this->cursorPaginator->paginate($items, $query->getLimit());

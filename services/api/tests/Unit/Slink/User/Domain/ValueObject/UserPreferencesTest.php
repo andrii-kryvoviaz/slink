@@ -165,4 +165,61 @@ final class UserPreferencesTest extends TestCase {
         $this->assertEquals(License::CC_BY_NC, $updated->getDefaultLicense());
         $this->assertNotSame($preferences, $updated);
     }
+
+    #[Test]
+    public function itDefaultsExternalUploadAutoPublishToFalseWhenCreatedWithoutArg(): void {
+        $preferences = UserPreferences::create();
+
+        $this->assertFalse($preferences->getExternalUploadAutoPublish());
+    }
+
+    #[Test]
+    public function itDefaultsExternalUploadAutoPublishToFalseFromEmptyPayload(): void {
+        $preferences = UserPreferences::fromPayload([]);
+
+        $this->assertFalse($preferences->getExternalUploadAutoPublish());
+    }
+
+    #[Test]
+    public function itRoundTripsExternalUploadAutoPublishThroughPayload(): void {
+        $preferences = UserPreferences::create(externalUploadAutoPublish: true);
+
+        $payload = $preferences->toPayload();
+
+        $this->assertArrayHasKey('image.externalUploadAutoPublish', $payload);
+        $this->assertTrue($payload['image.externalUploadAutoPublish']);
+
+        $restored = UserPreferences::fromPayload($payload);
+
+        $this->assertTrue($restored->getExternalUploadAutoPublish());
+    }
+
+    #[Test]
+    public function itUpdatesExternalUploadAutoPublishImmutably(): void {
+        $preferences = UserPreferences::create(externalUploadAutoPublish: false);
+
+        $updated = $preferences->withExternalUploadAutoPublish(true);
+
+        $this->assertFalse($preferences->getExternalUploadAutoPublish());
+        $this->assertTrue($updated->getExternalUploadAutoPublish());
+        $this->assertNotSame($preferences, $updated);
+    }
+
+    #[Test]
+    public function itAppliesExternalUploadAutoPublishChange(): void {
+        $preferences = UserPreferences::create(externalUploadAutoPublish: false);
+
+        $updated = $preferences->applyChanges(['image.externalUploadAutoPublish' => true]);
+
+        $this->assertTrue($updated->getExternalUploadAutoPublish());
+    }
+
+    #[Test]
+    public function itDoesNotClearExternalUploadAutoPublishWhenNullApplied(): void {
+        $preferences = UserPreferences::create(externalUploadAutoPublish: true);
+
+        $updated = $preferences->applyChanges(['image.externalUploadAutoPublish' => null]);
+
+        $this->assertTrue($updated->getExternalUploadAutoPublish());
+    }
 }

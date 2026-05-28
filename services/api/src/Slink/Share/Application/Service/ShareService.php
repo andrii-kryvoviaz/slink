@@ -44,12 +44,12 @@ final readonly class ShareService implements ShareServiceInterface {
     $type = $share->getShareable()->getShareableType();
     $prefix = $type->urlPrefix();
     $origin = $isAbsolute ? rtrim($this->origin, '/') : '';
-    $targetUrl = ltrim($share->getTargetUrl(), '/');
+    $targetPath = ltrim((string) $share->getTargetPath(), '/');
 
     if ($shortCode === null) {
       return $isAbsolute
-        ? "{$origin}/{$targetUrl}"
-        : $targetUrl;
+        ? "{$origin}/{$targetPath}"
+        : $targetPath;
     }
 
     return $isAbsolute

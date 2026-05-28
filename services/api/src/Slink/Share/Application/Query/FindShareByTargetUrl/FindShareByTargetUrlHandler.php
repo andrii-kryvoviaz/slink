@@ -15,6 +15,6 @@ final readonly class FindShareByTargetUrlHandler implements QueryHandlerInterfac
   }
 
   public function __invoke(FindShareByTargetUrlQuery $query): ?ShareView {
-    return $this->shareRepository->findByTargetUrl($query->getTargetUrl());
+    return $this->shareRepository->findByTargetPath($query->getTargetPath());
   }
 }

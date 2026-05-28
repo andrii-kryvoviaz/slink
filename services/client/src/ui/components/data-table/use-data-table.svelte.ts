@@ -5,7 +5,6 @@ import {
   type SortingState,
   type VisibilityState,
   getCoreRowModel,
-  getSortedRowModel,
 } from '@tanstack/table-core';
 
 import type { TableSettingsState } from '@slink/lib/settings/composables/useTableSettings.svelte';
@@ -16,11 +15,13 @@ interface UseDataTableOptions<TData extends RowData> {
   data: () => TData[];
   columns: ColumnDef<TData>[];
   initialVisibility?: VisibilityState;
+  initialSorting?: SortingState;
   currentPage: () => number;
   pageSize?: () => number;
   totalPages: () => number;
   getRowId?: (row: TData) => string;
   onPageChange?: (page: number) => void;
+  onSortingChange?: (orderBy: string | null, order: 'asc' | 'desc') => void;
   onColumnVisibilityChange?: (visibility: VisibilityState) => void;
   tableSettings?: TableSettingsState;
 }
@@ -39,7 +40,7 @@ export function useDataTable<TData extends RowData>(
     pageIndex: 0,
     pageSize: resolvedPageSize(),
   });
-  let sorting = $state<SortingState>([]);
+  let sorting = $state<SortingState>([...(options.initialSorting ?? [])]);
   let columnVisibility = $state<VisibilityState>({
     ...(options.initialVisibility ?? {}),
   });
@@ -62,8 +63,8 @@ export function useDataTable<TData extends RowData>(
       },
     },
     getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
     manualPagination: true,
+    manualSorting: true,
     get pageCount() {
       return options.totalPages();
     },
@@ -93,6 +94,22 @@ export function useDataTable<TData extends RowData>(
       } else {
         sorting = updater;
       }
+
+      if (!options.onSortingChange) {
+        return;
+      }
+
+      if (sorting.length === 0) {
+        options.onSortingChange(null, 'asc');
+        return;
+      }
+
+      const first = sorting[0];
+      if (first.desc) {
+        options.onSortingChange(first.id, 'desc');
+        return;
+      }
+      options.onSortingChange(first.id, 'asc');
     },
     onColumnVisibilityChange: (updater) => {
       if (typeof updater === 'function') {

@@ -323,53 +323,78 @@
       />
     </SettingItem>
 
-    <SettingItem
-      defaultValue={defaultSettings?.adapter.s3.key}
-      currentValue={settings.adapter.s3.key}
-      reset={(value) => {
-        settings.adapter.s3.key = value;
-      }}
-    >
-      {#snippet label()}
-        Access Key ID
-      {/snippet}
-      {#snippet hint()}
-        Your AWS Access Key ID.
-        <a
-          href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access-key-self-managed.html#Using_CreateAccessKey"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-blue-600 dark:text-blue-400 hover:underline"
-        >
-          How to create access keys
-        </a>
-      {/snippet}
-      <Input
-        name="s3AccessKey"
-        bind:value={settings.adapter.s3.key}
-        size="md"
-      />
-    </SettingItem>
+    {#if !settings.adapter.s3.useCustomProvider}
+      <SettingItem
+        defaultValue={defaultSettings?.adapter.s3.useIamRole}
+        currentValue={settings.adapter.s3.useIamRole}
+        reset={(value) => {
+          settings.adapter.s3.useIamRole = value;
+        }}
+      >
+        {#snippet label()}
+          Use IAM Role
+        {/snippet}
+        {#snippet hint()}
+          Use the instance's IAM role or AWS default credential chain (IRSA,
+          environment variables) instead of static access keys. Recommended when
+          running on EC2, ECS, or EKS.
+        {/snippet}
+        <Switch
+          name="s3UseIamRole"
+          bind:checked={settings.adapter.s3.useIamRole}
+        />
+      </SettingItem>
+    {/if}
 
-    <SettingItem
-      defaultValue={defaultSettings?.adapter.s3.secret}
-      currentValue={settings.adapter.s3.secret}
-      reset={(value) => {
-        settings.adapter.s3.secret = value;
-      }}
-    >
-      {#snippet label()}
-        Secret Access Key
-      {/snippet}
-      {#snippet hint()}
-        Your AWS Secret Access Key
-      {/snippet}
-      <Input
-        type="password"
-        name="s3SecretKey"
-        bind:value={settings.adapter.s3.secret}
-        size="md"
-      />
-    </SettingItem>
+    {#if !settings.adapter.s3.useIamRole}
+      <SettingItem
+        defaultValue={defaultSettings?.adapter.s3.key}
+        currentValue={settings.adapter.s3.key}
+        reset={(value) => {
+          settings.adapter.s3.key = value;
+        }}
+      >
+        {#snippet label()}
+          Access Key ID
+        {/snippet}
+        {#snippet hint()}
+          Your AWS Access Key ID.
+          <a
+            href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access-key-self-managed.html#Using_CreateAccessKey"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-blue-600 dark:text-blue-400 hover:underline"
+          >
+            How to create access keys
+          </a>
+        {/snippet}
+        <Input
+          name="s3AccessKey"
+          bind:value={settings.adapter.s3.key}
+          size="md"
+        />
+      </SettingItem>
+
+      <SettingItem
+        defaultValue={defaultSettings?.adapter.s3.secret}
+        currentValue={settings.adapter.s3.secret}
+        reset={(value) => {
+          settings.adapter.s3.secret = value;
+        }}
+      >
+        {#snippet label()}
+          Secret Access Key
+        {/snippet}
+        {#snippet hint()}
+          Your AWS Secret Access Key
+        {/snippet}
+        <Input
+          type="password"
+          name="s3SecretKey"
+          bind:value={settings.adapter.s3.secret}
+          size="md"
+        />
+      </SettingItem>
+    {/if}
   {/if}
 </SettingsPane>

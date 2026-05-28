@@ -59,7 +59,12 @@ final readonly class ExceptionSubscriber implements EventSubscriberInterface {
       }
 
       $response->setStatusCode($statusCode);
-      $response->setData($this->getErrorMessage($exception));
+
+      if ($exception instanceof \JsonSerializable) {
+        $response->setData($exception->jsonSerialize());
+      } else {
+        $response->setData($this->getErrorMessage($exception));
+      }
 
       $event->setResponse($response);
     } catch (\Throwable $exception) {

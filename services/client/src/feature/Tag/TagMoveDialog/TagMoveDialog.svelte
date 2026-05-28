@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { useTagOperations } from '@slink/feature/Tag';
   import { Combobox } from '@slink/ui/components/combobox';
   import type { ComboboxItem } from '@slink/ui/components/combobox';
   import { Dialog, Modal } from '@slink/ui/components/dialog';
@@ -7,6 +6,8 @@
   import Icon from '@iconify/svelte';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
+
+  import { TagListState } from '@slink/lib/state/TagListState.svelte';
 
   interface Props {
     tag: Tag;
@@ -20,7 +21,7 @@
   let selectedParentId = $state('');
   let isMoving = $state(false);
 
-  const { loadTags, isLoadingTags, tagsResponse } = useTagOperations();
+  const tagList = TagListState.create();
 
   function collectDescendantIds(t: Tag): Set<string> {
     const ids = new Set<string>();
@@ -38,7 +39,7 @@
   const excludedIds = $derived(collectDescendantIds(tag));
 
   const tagItems = $derived<ComboboxItem[]>(
-    ($tagsResponse?.data || [])
+    (tagList?.tags ?? [])
       .filter((t) => !excludedIds.has(t.id))
       .map((t) => ({
         value: t.id,
@@ -48,7 +49,7 @@
   );
 
   const handleTagSearch = (query: string) => {
-    loadTags(query);
+    tagList?.load(query);
   };
 
   const handleOpenChange = (newOpen: boolean) => {
@@ -105,7 +106,7 @@
               bind:value={selectedParentId}
               placeholder="Search for parent tag... (empty = root)"
               onSearch={handleTagSearch}
-              loading={$isLoadingTags}
+              loading={tagList?.isLoading ?? false}
               clearable={true}
               emptyMessage="No matching tags found."
             />

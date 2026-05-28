@@ -250,4 +250,121 @@ final class AmazonS3StorageSettingsTest extends TestCase {
 
     $this->assertSame('auto', $config['region']);
   }
+
+  #[Test]
+  public function itAllowsEmptyCredentialsWhenIamRoleEnabled(): void {
+    $payload = [
+      'region' => 'us-east-1',
+      'bucket' => 'test-bucket',
+      'key' => '',
+      'secret' => '',
+      'useIamRole' => true,
+      'useCustomProvider' => false,
+    ];
+
+    $settings = AmazonS3StorageSettings::fromPayload($payload);
+
+    $this->assertTrue($settings->usesIamRole());
+    $this->assertTrue($settings->toPayload()['useIamRole']);
+  }
+
+  #[Test]
+  public function itStillRequiresBucketWhenIamRoleEnabled(): void {
+    $payload = [
+      'region' => 'us-east-1',
+      'bucket' => '',
+      'key' => '',
+      'secret' => '',
+      'useIamRole' => true,
+      'useCustomProvider' => false,
+    ];
+
+    $this->expectException(S3BucketNotConfiguredException::class);
+
+    AmazonS3StorageSettings::fromPayload($payload);
+  }
+
+  #[Test]
+  public function itStillRequiresRegionWhenIamRoleEnabledForAwsProvider(): void {
+    $payload = [
+      'region' => '',
+      'bucket' => 'test-bucket',
+      'key' => '',
+      'secret' => '',
+      'useIamRole' => true,
+      'useCustomProvider' => false,
+    ];
+
+    $this->expectException(S3RegionNotConfiguredException::class);
+
+    AmazonS3StorageSettings::fromPayload($payload);
+  }
+
+  #[Test]
+  public function itOmitsCredentialsFromClientConfigWhenIamRoleEnabled(): void {
+    $payload = [
+      'region' => 'us-east-1',
+      'bucket' => 'test-bucket',
+      'key' => '',
+      'secret' => '',
+      'useIamRole' => true,
+      'useCustomProvider' => false,
+    ];
+
+    $settings = AmazonS3StorageSettings::fromPayload($payload);
+    $config = $settings->toClientConfig();
+
+    $this->assertArrayNotHasKey('credentials', $config);
+    $this->assertSame('us-east-1', $config['region']);
+    $this->assertSame('latest', $config['version']);
+  }
+
+  #[Test]
+  public function itIncludesCredentialsInClientConfigWhenIamRoleDisabled(): void {
+    $payload = [
+      'region' => 'us-east-1',
+      'bucket' => 'test-bucket',
+      'key' => 'access-key',
+      'secret' => 'secret-key',
+      'useIamRole' => false,
+      'useCustomProvider' => false,
+    ];
+
+    $settings = AmazonS3StorageSettings::fromPayload($payload);
+    $config = $settings->toClientConfig();
+
+    $this->assertArrayHasKey('credentials', $config);
+    $this->assertSame('access-key', $config['credentials']['key']);
+    $this->assertSame('secret-key', $config['credentials']['secret']);
+  }
+
+  #[Test]
+  public function itIgnoresIamRoleFlagForCustomProvider(): void {
+    $payloadWithCredentials = [
+      'region' => 'custom-region',
+      'bucket' => 'test-bucket',
+      'key' => 'access-key',
+      'secret' => 'secret-key',
+      'endpoint' => 'http://minio:9000',
+      'useCustomProvider' => true,
+      'useIamRole' => true,
+    ];
+
+    $settings = AmazonS3StorageSettings::fromPayload($payloadWithCredentials);
+    $this->assertFalse($settings->usesIamRole());
+
+    $payloadWithoutCredentials = [
+      'region' => 'custom-region',
+      'bucket' => 'test-bucket',
+      'key' => '',
+      'secret' => 'secret-key',
+      'endpoint' => 'http://minio:9000',
+      'useCustomProvider' => true,
+      'useIamRole' => true,
+    ];
+
+    $this->expectException(S3CredentialsNotConfiguredException::class);
+
+    AmazonS3StorageSettings::fromPayload($payloadWithoutCredentials);
+  }
 }

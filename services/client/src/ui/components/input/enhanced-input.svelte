@@ -19,6 +19,7 @@
     extends
       Omit<HTMLInputAttributes, 'size'>,
       Pick<InputVariants, 'size' | 'variant' | 'rounded'> {
+    ref?: HTMLInputElement | null;
     key?: string;
     label?: string;
     debounce?: number;
@@ -29,6 +30,7 @@
   }
 
   let {
+    ref = $bindable(null),
     value = $bindable(),
     label,
     size = 'md',
@@ -103,6 +105,7 @@
       disabled={props.disabled}
       readonly={props.readonly}
       required={props.required}
+      autocomplete={props.autocomplete}
       oninput={inputHandler}
       onchange={props.onchange}
       onblur={props.onblur}
@@ -110,6 +113,7 @@
       onkeydown={props.onkeydown}
       onkeyup={props.onkeyup}
       onkeypress={props.onkeypress}
+      bind:ref
       bind:value
       class={twMerge(combinedClasses)}
       aria-invalid={error ? true : undefined}

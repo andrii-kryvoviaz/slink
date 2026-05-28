@@ -134,18 +134,24 @@ export class Auth {
     cookieManager,
     fetch,
   }: AuthDependencies) {
-    const api = createApiClient(fetch);
-
     const refreshToken = cookies.get('refreshToken');
     const sessionId = cookies.get('sessionId');
 
-    if (!refreshToken || !sessionId) {
+    if (!refreshToken && !sessionId) {
       return;
     }
 
     cookieManager.deleteCookie(cookies, 'refreshToken');
 
-    await Session.destroy(cookies, cookieManager);
+    if (sessionId) {
+      await Session.destroy(cookies, cookieManager);
+    }
+
+    if (!refreshToken) {
+      return;
+    }
+
+    const api = createApiClient(fetch);
 
     try {
       await api.auth.logout(refreshToken);

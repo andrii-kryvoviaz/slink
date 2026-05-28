@@ -1,6 +1,7 @@
 import { HttpException, ValidationException } from '@slink/api/Exceptions';
 
 import { extractErrorMessage } from '@slink/lib/utils/error/extractErrorMessage';
+import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
 import { toast } from '@slink/utils/ui/toast-sonner.svelte';
 
@@ -58,6 +59,6 @@ export function printErrorsAsToastMessage(error: Error) {
   if (errorMessage !== 'An unexpected error occurred') {
     showErrorAsToast(errorMessage);
   } else {
-    showErrorAsToast('Something went wrong');
+    showErrorAsToast(messages.general.somethingWentWrong);
   }
 }

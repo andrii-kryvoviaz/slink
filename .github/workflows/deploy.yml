@@ -8,6 +8,7 @@ on:
       - "services/**"
       - "docker/**"
       - "docker-bake.hcl"
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -15,6 +16,9 @@ permissions:
 concurrency:
   group: deploy-${{ github.ref_name }}
   cancel-in-progress: true
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   ci:

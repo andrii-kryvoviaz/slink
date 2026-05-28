@@ -53,8 +53,9 @@ final class ImageTransformerTest extends TestCase {
         $settingsService = $this->createStub(SettingsService::class);
         $settingsService
             ->method('get')
-            ->with('image.compressionQuality')
-            ->willReturn(85);
+            ->willReturnMap([
+                ['image.compressionQuality', 85],
+            ]);
 
         $imageProcessor = $this->createMock(ImageProcessorInterface::class);
         $imageProcessor
@@ -204,7 +205,6 @@ final class ImageTransformerTest extends TestCase {
         $strategy = $this->createMock(ImageTransformationStrategyInterface::class);
         $strategy
             ->method('supports')
-            ->with($this->isInstanceOf(ImageTransformationRequest::class))
             ->willReturn(true);
 
         $strategy
@@ -275,8 +275,7 @@ final class ImageTransformerTest extends TestCase {
         $strategy = $this->createMock(ImageTransformationStrategyInterface::class);
         $strategy
             ->method('supports')
-            ->with($request)
-            ->willReturn(true);
+            ->willReturnMap([[$request, true]]);
 
         $strategy
             ->expects($this->once())

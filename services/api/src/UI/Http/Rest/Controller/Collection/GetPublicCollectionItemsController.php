@@ -7,16 +7,19 @@ namespace UI\Http\Rest\Controller\Collection;
 use Slink\Collection\Application\Query\GetAccessibleCollection\GetAccessibleCollectionQuery;
 use Slink\Collection\Application\Query\GetCollectionItems\GetCollectionItemsQuery;
 use Slink\Shared\Application\Query\QueryTrait;
+use Slink\Shared\Infrastructure\Security\Voter\GuestAccessVoter;
 use Slink\User\Infrastructure\Auth\JwtUser;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use UI\Http\Rest\Response\ApiResponse;
 
 #[AsController]
 #[Route(path: '/collection/{id}/items', name: 'get_shared_collection_items', methods: ['GET'], priority: -1)]
+#[IsGranted(GuestAccessVoter::GUEST_COLLECTION_SHARE_ALLOWED)]
 final readonly class GetPublicCollectionItemsController {
   use QueryTrait;
 
@@ -32,7 +35,7 @@ final readonly class GetPublicCollectionItemsController {
       return ApiResponse::empty(Response::HTTP_NOT_FOUND);
     }
 
-    $result = $this->ask($query->withCollectionId($id));
+    $result = $this->ask($query->withCollectionId($id)->asScoped());
 
     return ApiResponse::collection($result);
   }

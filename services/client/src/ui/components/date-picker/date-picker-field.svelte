@@ -6,7 +6,7 @@
   import DatePicker from './date-picker.svelte';
 
   interface Props {
-    value?: string | null;
+    value?: Date | null;
     label?: string;
     placeholder?: string;
     error?: string;

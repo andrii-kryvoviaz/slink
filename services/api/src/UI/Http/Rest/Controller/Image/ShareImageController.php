@@ -38,7 +38,7 @@ final readonly class ShareImageController {
     $request = $request ?? new ShareImageRequest();
     $image = $this->imageRepository->oneById($id);
 
-    $targetPath = $this->shareUrlBuilder->buildTargetUrl(
+    $targetPath = $this->shareUrlBuilder->buildTargetPath(
       $id,
       $image->getFileName(),
       $request->width,

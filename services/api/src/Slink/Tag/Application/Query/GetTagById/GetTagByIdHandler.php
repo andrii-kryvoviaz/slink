@@ -9,12 +9,15 @@ use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Application\Query\QueryHandlerInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
+use Slink\Tag\Domain\Enum\TagAccess;
 use Slink\Tag\Domain\Exception\TagAccessDeniedException;
 use Slink\Tag\Domain\Repository\TagRepositoryInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final readonly class GetTagByIdHandler implements QueryHandlerInterface {
   public function __construct(
     private TagRepositoryInterface $tagRepository,
+    private AuthorizationCheckerInterface $access,
   ) {
   }
 
@@ -25,10 +28,7 @@ final readonly class GetTagByIdHandler implements QueryHandlerInterface {
   public function __invoke(GetTagByIdQuery $query, string $userId): Item {
     $tag = $this->tagRepository->oneById(ID::fromString($query->getId()));
 
-    $ownerId = ID::fromString($tag->getUserId());
-    $currentUserId = ID::fromString($userId);
-
-    if (!$ownerId->equals($currentUserId)) {
+    if (!$this->access->isGranted(TagAccess::View, $tag)) {
       throw new TagAccessDeniedException();
     }
 

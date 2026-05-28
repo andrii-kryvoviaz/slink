@@ -6,6 +6,7 @@ namespace Slink\Tag\Application\Command\MoveTag;
 
 use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\ValueObject\ID;
+use Slink\Tag\Domain\Enum\TagAccess;
 use Slink\Tag\Domain\Exception\InvalidTagMoveException;
 use Slink\Tag\Domain\Exception\TagAccessDeniedException;
 use Slink\Tag\Domain\Repository\TagRepositoryInterface;
@@ -13,6 +14,7 @@ use Slink\Tag\Domain\Repository\TagStoreRepositoryInterface;
 use Slink\Tag\Domain\Specification\TagCircularMoveSpecificationInterface;
 use Slink\Tag\Domain\Specification\TagDuplicateSpecificationInterface;
 use Slink\Tag\Domain\ValueObject\TagPath;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final readonly class MoveTagHandler implements CommandHandlerInterface {
   public function __construct(
@@ -20,6 +22,7 @@ final readonly class MoveTagHandler implements CommandHandlerInterface {
     private TagDuplicateSpecificationInterface        $duplicateSpecification,
     private TagCircularMoveSpecificationInterface     $circularMoveSpecification,
     private TagRepositoryInterface                    $tagRepository,
+    private AuthorizationCheckerInterface             $access,
   ) {
   }
 
@@ -30,7 +33,7 @@ final readonly class MoveTagHandler implements CommandHandlerInterface {
 
     $tag = $this->tagStore->get($tagId);
 
-    if (!$tag->getUserId()->equals($userId)) {
+    if (!$this->access->isGranted(TagAccess::Edit, $tag)) {
       throw new TagAccessDeniedException();
     }
 

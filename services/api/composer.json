@@ -8,9 +8,9 @@
         "ext-gd": "*",
         "ext-vips": "*",
         "aws/aws-sdk-php": "^3.374",
-        "doctrine/doctrine-bundle": "^3.1",
+        "doctrine/doctrine-bundle": "^3.2",
         "doctrine/doctrine-migrations-bundle": "^3.2",
-        "doctrine/orm": "^3.5",
+        "doctrine/orm": "^3.6",
         "enshrined/svg-sanitize": "^0.22.0",
         "eventsauce/eventsauce": "^3.6",
         "eventsauce/message-repository-for-doctrine": "^1.1",
@@ -45,7 +45,7 @@
     "require-dev": {
         "dg/bypass-finals": "dev-master",
         "phpstan/phpstan": "^2.1",
-        "phpunit/phpunit": "^12.5.8",
+        "phpunit/phpunit": "^13.1",
         "symfony/phpunit-bridge": "^8.0",
         "symfony/stopwatch": "^8.0",
         "symfony/web-profiler-bundle": "^8.0"

@@ -66,6 +66,15 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
     return (int) $qb->getQuery()->getSingleScalarResult();
   }
 
+  #[Override]
+  public function existsByFilter(ImageListFilter $imageListFilter): bool {
+    $qb = $this->buildImageListQuery($imageListFilter);
+    $qb->select('1')
+      ->setMaxResults(1);
+
+    return (bool) $qb->getQuery()->getOneOrNullResult();
+  }
+
   private function buildImageListQuery(ImageListFilter $imageListFilter): QueryBuilder {
     $qb = $this->getEntityManager()
       ->createQueryBuilder()
@@ -223,6 +232,19 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
       ->where('image.user = :userId')
       ->setParameter('userId', $userId->toString())
       ->orderBy('image.attributes.createdAt', 'DESC')
+      ->getQuery()
+      ->getResult();
+  }
+
+  #[Override]
+  public function findByIds(array $ids): array {
+    if ($ids === []) {
+      return [];
+    }
+
+    return $this->createQueryBuilder('image')
+      ->where('image.uuid IN (:ids)')
+      ->setParameter('ids', $ids)
       ->getQuery()
       ->getResult();
   }

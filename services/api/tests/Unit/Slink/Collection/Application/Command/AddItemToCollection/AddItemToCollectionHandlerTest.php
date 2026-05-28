@@ -15,6 +15,7 @@ use Slink\Collection\Domain\Repository\CollectionStoreRepositoryInterface;
 use Slink\Collection\Domain\ValueObject\CollectionDescription;
 use Slink\Collection\Domain\ValueObject\CollectionName;
 use Slink\Shared\Domain\ValueObject\ID;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class AddItemToCollectionHandlerTest extends TestCase {
 
@@ -44,7 +45,10 @@ final class AddItemToCollectionHandlerTest extends TestCase {
       ->method('store')
       ->with($collection);
 
-    $handler = new AddItemToCollectionHandler($collectionStore);
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
+    $access->method('isGranted')->willReturn(true);
+
+    $handler = new AddItemToCollectionHandler($collectionStore, $access);
 
     $command = new AddItemToCollectionCommand(
       $collectionId->toString(),
@@ -76,7 +80,10 @@ final class AddItemToCollectionHandlerTest extends TestCase {
       ->method('get')
       ->willReturn($collection);
 
-    $handler = new AddItemToCollectionHandler($collectionStore);
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
+    $access->method('isGranted')->willReturn(false);
+
+    $handler = new AddItemToCollectionHandler($collectionStore, $access);
 
     $command = new AddItemToCollectionCommand(
       $collectionId->toString(),

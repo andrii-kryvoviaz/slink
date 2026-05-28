@@ -86,6 +86,13 @@ final class TagNameTest extends TestCase {
       'with underscores' => ['tag_name'],
       'mixed characters' => ['Tag_Name-123'],
       'uppercase letters' => ['TAG'],
+      'with spaces' => ['tag name'],
+      'with special chars' => ['tag@name'],
+      'with dots' => ['tag.name'],
+      'with accented latin' => ['tagñame'],
+      'cyrillic' => ['подорож'],
+      'cjk' => ['休暇'],
+      'emoji' => ['vacation 🏖️'],
       'max length' => [str_repeat('a', 50)],
     ];
   }
@@ -98,11 +105,7 @@ final class TagNameTest extends TestCase {
       'empty string' => ['', 'Tag name cannot be empty'],
       'only whitespace' => ['   ', 'Tag name cannot be empty'],
       'too long' => [str_repeat('a', 51), 'Tag name must be between 1 and 50 characters'],
-      'with spaces' => ['tag name', 'Tag name can only contain letters, numbers, hyphens, and underscores'],
-      'with special chars' => ['tag@name', 'Tag name can only contain letters, numbers, hyphens, and underscores'],
-      'with dots' => ['tag.name', 'Tag name can only contain letters, numbers, hyphens, and underscores'],
-      'with slashes' => ['tag/name', 'Tag name can only contain letters, numbers, hyphens, and underscores'],
-      'with unicode' => ['tagñame', 'Tag name can only contain letters, numbers, hyphens, and underscores'],
+      'with slashes' => ['tag/name', 'Tag name cannot contain a slash'],
     ];
   }
 }

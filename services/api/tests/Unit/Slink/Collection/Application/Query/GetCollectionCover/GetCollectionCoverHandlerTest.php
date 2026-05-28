@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\Unit\Slink\Collection\Application\Query\GetCollectionCover;
 
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Slink\Collection\Application\Query\GetCollectionCover\GetCollectionCoverHandler;
 use Slink\Collection\Application\Query\GetCollectionCover\GetCollectionCoverQuery;
@@ -15,22 +14,27 @@ use Slink\Collection\Domain\Service\CollectionCoverGeneratorInterface;
 use Slink\Collection\Infrastructure\ReadModel\View\CollectionView;
 use Slink\Shared\Domain\Exception\ForbiddenException;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class GetCollectionCoverHandlerTest extends TestCase {
   private CollectionRepositoryInterface $collectionRepository;
   private CollectionItemRepositoryInterface $collectionItemRepository;
   private CollectionCoverGeneratorInterface $coverGenerator;
+  private AuthorizationCheckerInterface $access;
   private GetCollectionCoverHandler $handler;
 
   protected function setUp(): void {
     $this->collectionRepository = $this->createStub(CollectionRepositoryInterface::class);
     $this->collectionItemRepository = $this->createStub(CollectionItemRepositoryInterface::class);
     $this->coverGenerator = $this->createStub(CollectionCoverGeneratorInterface::class);
+    $this->access = $this->createStub(AuthorizationCheckerInterface::class);
+    $this->access->method('isGranted')->willReturn(true);
 
     $this->handler = new GetCollectionCoverHandler(
       $this->collectionRepository,
       $this->collectionItemRepository,
       $this->coverGenerator,
+      $this->access,
     );
   }
 
@@ -41,8 +45,9 @@ final class GetCollectionCoverHandlerTest extends TestCase {
 
     $this->collectionRepository
       ->method('findById')
-      ->with($collectionId)
-      ->willReturn(null);
+      ->willReturnMap([
+        [$collectionId, null],
+      ]);
 
     $query = new GetCollectionCoverQuery($collectionId);
 
@@ -62,14 +67,25 @@ final class GetCollectionCoverHandlerTest extends TestCase {
 
     $this->collectionRepository
       ->method('findById')
-      ->with($collectionId)
-      ->willReturn($collection);
+      ->willReturnMap([
+        [$collectionId, $collection],
+      ]);
+
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
+    $access->method('isGranted')->willReturn(false);
+
+    $handler = new GetCollectionCoverHandler(
+      $this->collectionRepository,
+      $this->collectionItemRepository,
+      $this->coverGenerator,
+      $access,
+    );
 
     $query = new GetCollectionCoverQuery($collectionId);
 
     $this->expectException(ForbiddenException::class);
 
-    ($this->handler)($query, $userId);
+    ($handler)($query, $userId);
   }
 
   #[Test]
@@ -82,13 +98,15 @@ final class GetCollectionCoverHandlerTest extends TestCase {
 
     $this->collectionRepository
       ->method('findById')
-      ->with($collectionId)
-      ->willReturn($collection);
+      ->willReturnMap([
+        [$collectionId, $collection],
+      ]);
 
     $this->collectionItemRepository
       ->method('getFirstImageIdsByCollectionIds')
-      ->with([$collectionId], 5)
-      ->willReturn([]);
+      ->willReturnMap([
+        [[$collectionId], 5, []],
+      ]);
 
     $query = new GetCollectionCoverQuery($collectionId);
 
@@ -110,14 +128,16 @@ final class GetCollectionCoverHandlerTest extends TestCase {
     $collectionRepository = $this->createStub(CollectionRepositoryInterface::class);
     $collectionRepository
       ->method('findById')
-      ->with($collectionId)
-      ->willReturn($collection);
+      ->willReturnMap([
+        [$collectionId, $collection],
+      ]);
 
     $collectionItemRepository = $this->createStub(CollectionItemRepositoryInterface::class);
     $collectionItemRepository
       ->method('getFirstImageIdsByCollectionIds')
-      ->with([$collectionId], 5)
-      ->willReturn([$collectionId => $imageIds]);
+      ->willReturnMap([
+        [[$collectionId], 5, [$collectionId => $imageIds]],
+      ]);
 
     $coverGenerator = $this->createMock(CollectionCoverGeneratorInterface::class);
     $coverGenerator
@@ -126,7 +146,15 @@ final class GetCollectionCoverHandlerTest extends TestCase {
       ->with($collectionId, $imageIds)
       ->willReturn($coverContent);
 
-    $handler = new GetCollectionCoverHandler($collectionRepository, $collectionItemRepository, $coverGenerator);
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
+    $access->method('isGranted')->willReturn(true);
+
+    $handler = new GetCollectionCoverHandler(
+      $collectionRepository,
+      $collectionItemRepository,
+      $coverGenerator,
+      $access,
+    );
     $query = new GetCollectionCoverQuery($collectionId);
 
     $result = ($handler)($query, $userId);

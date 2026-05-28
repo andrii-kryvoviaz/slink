@@ -16,6 +16,7 @@ use Slink\User\Domain\Event\Role\UserRevokedRole;
 use Slink\User\Domain\Event\UserDisplayNameWasChanged;
 use Slink\User\Domain\Event\UserLoggedOut;
 use Slink\User\Domain\Event\UserPasswordWasChanged;
+use Slink\User\Domain\Event\UserPasswordWasReset;
 use Slink\User\Domain\Event\UserSignedIn;
 use Slink\User\Domain\Event\UserStatusWasChanged;
 use Slink\User\Domain\Event\UserWasCreated;
@@ -96,6 +97,18 @@ final class UserTest extends TestCase {
     $events = $user->releaseEvents();
     $this->assertCount(1, $events);
     $this->assertInstanceOf(UserPasswordWasChanged::class, $events[0]);
+  }
+
+  #[Test]
+  public function itResetsPasswordSuccessfully(): void {
+    $user = $this->createUser();
+
+    $newPassword = HashedPassword::encode(self::NEW_PASSWORD);
+    $user->resetPassword($newPassword);
+
+    $events = $user->releaseEvents();
+    $this->assertCount(1, $events);
+    $this->assertInstanceOf(UserPasswordWasReset::class, $events[0]);
   }
 
   #[Test]

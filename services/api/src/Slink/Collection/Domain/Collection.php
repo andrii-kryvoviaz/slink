@@ -18,10 +18,11 @@ use Slink\Collection\Domain\ValueObject\CollectionItem;
 use Slink\Collection\Domain\ValueObject\CollectionItemSet;
 use Slink\Collection\Domain\ValueObject\CollectionName;
 use Slink\Shared\Domain\AbstractAggregateRoot;
+use Slink\Shared\Domain\Contract\OwnerAwareInterface;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
 
-final class Collection extends AbstractAggregateRoot {
+final class Collection extends AbstractAggregateRoot implements OwnerAwareInterface {
   private ID $userId;
   private CollectionName $name;
   private CollectionDescription $description;
@@ -167,7 +168,7 @@ final class Collection extends AbstractAggregateRoot {
     return $this->deleted;
   }
 
-  public function isOwnedBy(ID $userId): bool {
+  public function isOwnedBy(?ID $userId): bool {
     return $this->userId->equals($userId);
   }
 

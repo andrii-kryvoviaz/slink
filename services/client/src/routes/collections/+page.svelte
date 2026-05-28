@@ -4,7 +4,7 @@
     CollectionGridView,
     CreateCollectionDialog,
   } from '@slink/feature/Collection';
-  import { collectionColumns } from '@slink/feature/Collection/CollectionViews/CollectionDataTable/columns';
+  import { createCollectionColumns } from '@slink/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte';
   import {
     CollectionSkeleton,
     EmptyState,
@@ -12,7 +12,7 @@
   } from '@slink/feature/Layout';
   import { Subtitle, Title } from '@slink/feature/Text';
   import { Button } from '@slink/ui/components/button';
-  import { DataTable, DataTableToolbar } from '@slink/ui/components/data-table';
+  import { DataTable } from '@slink/ui/components/data-table';
   import { EnhancedInput } from '@slink/ui/components/input';
   import { SplitButton } from '@slink/ui/components/split-button';
   import { ViewModeLayout } from '@slink/ui/components/view-mode-layout';
@@ -25,10 +25,19 @@
   import { useCollectionListFeed } from '@slink/lib/state/CollectionListFeed.svelte';
   import { createCreateCollectionModalState } from '@slink/lib/state/CreateCollectionModalState.svelte';
 
+  import type { PageServerData } from './$types';
+
+  interface Props {
+    data: PageServerData;
+  }
+
+  let { data }: Props = $props();
+
   const { settings } = page.data;
 
   const collectionsFeed = useCollectionListFeed();
   collectionsFeed.reset();
+  collectionsFeed.hydrate({ hasItems: data.hasAny });
 
   const createModalState = createCreateCollectionModalState();
 
@@ -61,7 +70,10 @@
             modes={['grid', 'table']}
             on={{
               change: (mode) => {
-                settings.collections = { viewMode: mode };
+                settings.collections = {
+                  ...settings.collections,
+                  viewMode: mode,
+                };
               },
             }}
           />
@@ -79,48 +91,24 @@
       feed={collectionsFeed}
       mode={settings.collections.viewMode}
       config={{
-        grid: {
-          toolbar: true,
-        },
         table: {
-          columns: collectionColumns,
+          columns: createCollectionColumns(),
         },
       }}
     >
-      {#snippet toolbar({
-        table,
-        pageSize,
-        pagination,
-        feed,
-        handlePageSizeChange,
-      })}
-        <DataTableToolbar
-          {table}
-          {pageSize}
-          {pagination}
-          onPageSizeChange={handlePageSizeChange}
-          onNextPage={() => feed.nextPage()}
-          onPrevPage={() => feed.prevPage()}
-          isLoading={feed.isLoading}
-          showPagination={!!table}
-          showColumnToggle={!!table}
-        >
-          {#snippet leading()}
-            <div class="lg:max-w-sm">
-              <EnhancedInput
-                debounce={300}
-                oninput={(e) =>
-                  (collectionsFeed.search = e.currentTarget.value)}
-                placeholder="Search collections..."
-                size="md"
-              >
-                {#snippet leftIcon()}
-                  <Icon icon="lucide:search" class="h-4 w-4" />
-                {/snippet}
-              </EnhancedInput>
-            </div>
-          {/snippet}
-        </DataTableToolbar>
+      {#snippet toolbar()}
+        <div class="lg:max-w-sm">
+          <EnhancedInput
+            debounce={300}
+            oninput={(e) => (collectionsFeed.search = e.currentTarget.value)}
+            placeholder="Search collections..."
+            size="md"
+          >
+            {#snippet leftIcon()}
+              <Icon icon="lucide:search" class="h-4 w-4" />
+            {/snippet}
+          </EnhancedInput>
+        </div>
       {/snippet}
       {#snippet loading(mode)}
         <CollectionSkeleton count={12} viewMode={mode} />

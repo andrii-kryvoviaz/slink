@@ -19,12 +19,13 @@ RUN rm -rf /usr/src/php* \
         /usr/local/lib/php/build \
         /usr/local/bin/phpdbg \
         /usr/local/bin/php-cgi \
-        /tmp/* /var/cache/apk/*
+        /tmp/* /var/cache/apk/* \
+    && setcap -r /usr/local/bin/frankenphp
 
 FROM frankenphp-upstream AS php-extensions
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions \
-        curl intl mbstring exif ffi redis smbclient vips && \
+        curl intl mbstring exif ffi redis vips && \
     rm -rf /tmp/* /var/cache/apk/*
 
 # ToDo: migrate to dhi.io/alpine-base:${ALPINE_VERSION} (requires manual dependencies installation)    
@@ -41,6 +42,7 @@ RUN --mount=type=cache,target=/var/cache/apk \
         libcurl \
         icu-libs \
         libsmbclient \
+        samba-client \
         imagemagick \
         vips \
         libheif \
@@ -78,6 +80,13 @@ post_max_size = $((UPLOAD_MAX_FILESIZE_IN_BYTES / 1024 / 1024))M
 UPLOADS
 echo 'date.timezone = ${TZ}' > /usr/local/etc/php/conf.d/timezone.ini
 EOF
+
+COPY --link --from=node /usr/local/bin/node /usr/local/bin/node
+
+RUN mkdir -p /app/etc/runtime && \
+    /usr/local/bin/node -v | sed 's/^v//' | tr -d '\n' > /app/etc/runtime/node && \
+    (grep '^PRETTY_NAME=' /etc/os-release 2>/dev/null | cut -d'"' -f2 | tr '[:upper:]' '[:lower:]' | tr -d '\n' || true) > /app/etc/runtime/container && \
+    chmod 644 /app/etc/runtime/*
 
 COPY --chmod=755 ./docker/config/s6-overlay/scripts/bootstrap /etc/s6-overlay/scripts/bootstrap
 COPY ./docker/config/s6-overlay/s6-rc.d/shared/ /etc/s6-overlay/s6-rc.d/

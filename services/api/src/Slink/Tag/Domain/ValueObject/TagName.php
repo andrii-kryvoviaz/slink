@@ -10,7 +10,6 @@ use Slink\Shared\Domain\ValueObject\AbstractValueObject;
 final readonly class TagName extends AbstractValueObject {
   private const int MIN_LENGTH = 1;
   private const int MAX_LENGTH = 50;
-  private const string PATTERN = '/^[a-zA-Z0-9_-]+$/';
 
   private function __construct(
     private string $value,
@@ -45,18 +44,14 @@ final readonly class TagName extends AbstractValueObject {
       throw new InvalidArgumentException('Tag name cannot be empty');
     }
 
-    if (strlen($this->value) > self::MAX_LENGTH) {
+    if (mb_strlen($this->value) > self::MAX_LENGTH) {
       throw new InvalidArgumentException(
         sprintf('Tag name must be between %d and %d characters', self::MIN_LENGTH, self::MAX_LENGTH)
       );
     }
 
-    if (!preg_match(self::PATTERN, $this->value)) {
-      throw new InvalidArgumentException('Tag name can only contain letters, numbers, hyphens, and underscores');
+    if (str_contains($this->value, '/')) {
+      throw new InvalidArgumentException('Tag name cannot contain a slash');
     }
-  }
-
-  public function normalize(): self {
-    return new self(strtolower($this->value));
   }
 }

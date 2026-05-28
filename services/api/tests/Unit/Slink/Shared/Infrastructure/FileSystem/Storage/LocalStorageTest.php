@@ -21,8 +21,9 @@ final class LocalStorageTest extends TestCase {
 
     $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')
-      ->with('storage.adapter.local.dir')
-      ->willReturn($this->testDir);
+      ->willReturnMap([
+        ['storage.adapter.local.dir', $this->testDir],
+      ]);
 
     $this->storage = new LocalStorage($configProvider);
   }
@@ -108,6 +109,8 @@ final class LocalStorageTest extends TestCase {
   #[Test]
   public function itHandlesDeletionWhenImageFileDoesNotExist(): void {
     $fileName = 'non-existent.jpg';
+
+    $this->expectNotToPerformAssertions();
 
     $this->storage->delete($fileName);
   }

@@ -33,7 +33,7 @@
 
   const selectedIds = $derived(selectedCollections.map((c) => c.id));
   const buttonLabel = $derived(
-    selectedCollections.length > 0 ? 'Add more' : 'Collection',
+    selectedCollections.length > 0 ? 'Add more' : 'Collections',
   );
 
   const handleToggle = (collection: CollectionResponse) => {

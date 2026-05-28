@@ -64,16 +64,14 @@
         size="sm"
         rounded="full"
         onclick={onDownloadConfig}
+        justify="center"
         class="flex-1"
-        disabled={isDownloadingConfig}
+        loading={isDownloadingConfig}
       >
-        {#if isDownloadingConfig}
-          <Icon icon="lucide:loader-2" class="h-4 w-4 mr-2 animate-spin" />
-          Downloading...
-        {:else}
-          <Icon icon="lucide:download" class="h-4 w-4 mr-2" />
-          Download ShareX Config
-        {/if}
+        {#snippet leftIcon()}
+          <Icon icon="lucide:download" class="h-4 w-4" />
+        {/snippet}
+        Download ShareX Config
       </Button>
     {/snippet}
   </Modal.Footer>

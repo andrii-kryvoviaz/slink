@@ -1,6 +1,7 @@
 <script lang="ts">
   let { data } = $props();
-  let { ogMeta } = data;
+
+  const ogMeta = $derived(data.ogMeta);
 </script>
 
 <svelte:head>

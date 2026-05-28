@@ -15,6 +15,7 @@ use Slink\Collection\Domain\Repository\CollectionStoreRepositoryInterface;
 use Slink\Collection\Domain\ValueObject\CollectionDescription;
 use Slink\Collection\Domain\ValueObject\CollectionName;
 use Slink\Shared\Domain\ValueObject\ID;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class ReorderCollectionItemsHandlerTest extends TestCase {
 
@@ -49,7 +50,10 @@ final class ReorderCollectionItemsHandlerTest extends TestCase {
       ->method('store')
       ->with($collection);
 
-    $handler = new ReorderCollectionItemsHandler($collectionStore);
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
+    $access->method('isGranted')->willReturn(true);
+
+    $handler = new ReorderCollectionItemsHandler($collectionStore, $access);
 
     $newOrder = [$item3Id->toString(), $item1Id->toString(), $item2Id->toString()];
     $command = new ReorderCollectionItemsCommand($collectionId->toString(), $newOrder);
@@ -80,7 +84,10 @@ final class ReorderCollectionItemsHandlerTest extends TestCase {
       ->method('get')
       ->willReturn($collection);
 
-    $handler = new ReorderCollectionItemsHandler($collectionStore);
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
+    $access->method('isGranted')->willReturn(false);
+
+    $handler = new ReorderCollectionItemsHandler($collectionStore, $access);
 
     $command = new ReorderCollectionItemsCommand($collectionId->toString(), []);
 

@@ -221,6 +221,8 @@
       padding?: ButtonPadding;
       status?: ButtonStatus;
       loading?: boolean;
+      loadingVariant?: 'spinner' | 'dots';
+      justify?: 'between' | 'center';
       leftIcon?: Snippet<[]>;
       rightIcon?: Snippet<[]>;
       loadingIcon?: Snippet<[]>;
@@ -242,6 +244,8 @@
     padding = 'xs',
     status = 'active',
     loading = false,
+    loadingVariant,
+    justify,
     leftIcon,
     rightIcon,
     loadingIcon,
@@ -303,6 +307,8 @@
     <div class={innerClasses}>
       <ButtonContent
         {loading}
+        {loadingVariant}
+        {justify}
         {leftIcon}
         {rightIcon}
         {loadingIcon}
@@ -323,6 +329,8 @@
     <div class={innerClasses}>
       <ButtonContent
         {loading}
+        {loadingVariant}
+        {justify}
         {leftIcon}
         {rightIcon}
         {loadingIcon}

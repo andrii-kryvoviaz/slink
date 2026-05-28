@@ -5,53 +5,36 @@ declare(strict_types=1);
 namespace Slink\Image\Application\Query\GetImageContent;
 
 use Slink\Shared\Application\Query\QueryInterface;
-use Slink\Shared\Domain\ValueObject\ImageOptions;
 use Slink\Shared\Infrastructure\MessageBus\EnvelopedMessage;
 
 final readonly class GetImageContentQuery implements QueryInterface {
   use EnvelopedMessage;
-  
-  /**
-   * @param int|null $width
-   * @param int|null $height
-   * @param int|null $quality
-   * @param bool $crop
-   * @param string|null $format
-   */
+
   public function __construct(
     private ?int $width = null,
     private ?int $height = null,
     private ?int $quality = null,
     private bool $crop = false,
     private ?string $format = null,
-    private ?string $filter = null
+    private ?string $filter = null,
+    private ?string $s = null,
+    private ?string $imageId = null,
+    private ?string $userId = null,
   ) {
   }
-  
-  /**
-   * @return int|null
-   */
+
   public function getWidth(): ?int {
     return $this->width;
   }
-  
-  /**
-   * @return int|null
-   */
+
   public function getHeight(): ?int {
     return $this->height;
   }
-  
-  /**
-   * @return int|null
-   */
+
   public function getQuality(): ?int {
     return $this->quality;
   }
-  
-  /**
-   * @return bool
-   */
+
   public function isCropped(): bool {
     return $this->crop;
   }
@@ -64,6 +47,32 @@ final readonly class GetImageContentQuery implements QueryInterface {
     return $this->filter;
   }
 
+  public function getTransformSignature(): ?string {
+    return $this->s;
+  }
+
+  public function getImageId(): ?string {
+    return $this->imageId;
+  }
+
+  public function getUserId(): ?string {
+    return $this->userId;
+  }
+
+  public function withImageId(string $imageId): self {
+    return new self(
+      $this->width,
+      $this->height,
+      $this->quality,
+      $this->crop,
+      $this->format,
+      $this->filter,
+      $this->s,
+      $imageId,
+      $this->userId,
+    );
+  }
+
   public function withFormat(?string $format): self {
     return new self(
       $this->width,
@@ -71,10 +80,27 @@ final readonly class GetImageContentQuery implements QueryInterface {
       $this->quality,
       $this->crop,
       $format,
-      $this->filter
+      $this->filter,
+      $this->s,
+      $this->imageId,
+      $this->userId,
     );
   }
-  
+
+  public function withUserId(?string $userId): self {
+    return new self(
+      $this->width,
+      $this->height,
+      $this->quality,
+      $this->crop,
+      $this->format,
+      $this->filter,
+      $this->s,
+      $this->imageId,
+      $userId,
+    );
+  }
+
   /**
    * @return array<string, mixed>
    */

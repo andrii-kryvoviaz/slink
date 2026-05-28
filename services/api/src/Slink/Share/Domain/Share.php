@@ -6,28 +6,42 @@ namespace Slink\Share\Domain;
 
 use EventSauce\EventSourcing\AggregateRootId;
 use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
+use Slink\Share\Domain\AccessRule\ExpirationAware;
+use Slink\Share\Domain\AccessRule\PasswordProtected;
+use Slink\Share\Domain\AccessRule\PublicationAware;
+use Slink\Share\Domain\Event\SharePasswordWasSet;
+use Slink\Share\Domain\Event\ShareExpirationWasSet;
 use Slink\Share\Domain\Event\ShareWasCreated;
+use Slink\Share\Domain\Event\ShareWasPublished;
+use Slink\Share\Domain\Event\ShareWasUnpublished;
 use Slink\Share\Domain\Event\ShortUrlWasAdded;
+use Slink\Share\Domain\Event\ShortUrlWasRegenerated;
+use Slink\Share\Domain\Exception\InvalidShareExpirationException;
+use Slink\Share\Domain\ValueObject\AccessControl;
+use Slink\Share\Domain\ValueObject\HashedSharePassword;
 use Slink\Share\Domain\ValueObject\ShareableReference;
 use Slink\Share\Domain\ValueObject\ShareContext;
+use Slink\Share\Domain\ValueObject\TargetPath;
 use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
 
-final class Share extends AbstractAggregateRoot {
+final class Share extends AbstractAggregateRoot implements PublicationAware, ExpirationAware, PasswordProtected {
   private ShareableReference $shareable;
-  private string $targetUrl;
+  private TargetPath $targetPath;
   private DateTime $createdAt;
   private ShareContext $context;
+  private AccessControl $accessControl;
 
   protected function __construct(ID $id) {
     parent::__construct($id);
+    $this->accessControl = AccessControl::initial(false);
   }
 
   public static function create(
     ID $id,
     ShareableReference $shareable,
-    string $targetUrl,
+    TargetPath $targetPath,
     DateTime $createdAt,
     ShareContext $context,
   ): self {
@@ -35,16 +49,17 @@ final class Share extends AbstractAggregateRoot {
     $share->recordThat(new ShareWasCreated(
       $id,
       $shareable,
-      $targetUrl,
+      $targetPath,
       $createdAt,
       $context,
+      $shareable->getShareableType()->autoPublishOnCreate(),
     ));
 
     return $share;
   }
 
-  public function addShortUrl(ID $shortUrlId, string $shortCode): void {
-    if ($this->context->hasShortUrl()) {
+  public function addShortUrl(?ID $shortUrlId, ?string $shortCode): void {
+    if ($shortUrlId === null || $shortCode === null || $this->context->hasShortUrl()) {
       return;
     }
 
@@ -57,13 +72,125 @@ final class Share extends AbstractAggregateRoot {
 
   protected function applyShareWasCreated(ShareWasCreated $event): void {
     $this->shareable = $event->shareable;
-    $this->targetUrl = $event->targetUrl;
+    $this->targetPath = $event->targetPath;
     $this->createdAt = $event->createdAt;
     $this->context = $event->context;
+    $this->accessControl = AccessControl::initial($event->isPublished);
   }
 
   protected function applyShortUrlWasAdded(ShortUrlWasAdded $event): void {
     $this->context = $this->context->withShortUrl($event->shortUrlId, $event->shortCode);
+  }
+
+  public function hasStaleShortCode(int $expectedLength): bool {
+    if ($this->accessControl->isPublished) {
+      return false;
+    }
+
+    $currentCode = $this->context->getShortCode();
+    if ($currentCode === null) {
+      return false;
+    }
+
+    return strlen($currentCode) !== $expectedLength;
+  }
+
+  public function regenerateShortUrl(string $shortCode): void {
+    if ($this->accessControl->isPublished) {
+      return;
+    }
+
+    $shortUrlId = $this->context->getShortUrlId();
+    if ($shortUrlId === null || $shortCode === $this->context->getShortCode()) {
+      return;
+    }
+
+    $this->recordThat(new ShortUrlWasRegenerated(
+      $this->aggregateRootId(),
+      $shortUrlId,
+      $shortCode,
+    ));
+  }
+
+  protected function applyShortUrlWasRegenerated(ShortUrlWasRegenerated $event): void {
+    $this->context = $this->context->withShortUrl($event->shortUrlId, $event->shortCode);
+  }
+
+  public function publish(): void {
+    if ($this->accessControl->isPublished) {
+      return;
+    }
+
+    $this->recordThat(new ShareWasPublished($this->aggregateRootId()));
+  }
+
+  protected function applyShareWasPublished(ShareWasPublished $event): void {
+    $this->accessControl = $this->accessControl->publish();
+  }
+
+  public function unpublish(): void {
+    if (!$this->accessControl->isPublished) {
+      return;
+    }
+
+    $this->recordThat(new ShareWasUnpublished($this->aggregateRootId()));
+  }
+
+  protected function applyShareWasUnpublished(ShareWasUnpublished $event): void {
+    $this->accessControl = $this->accessControl->unpublish();
+  }
+
+  public function setExpiration(?DateTime $expiresAt): void {
+    if ($expiresAt?->isBeforeEquals(DateTime::now())) {
+      throw new InvalidShareExpirationException();
+    }
+
+    $next = $this->accessControl->expireAt($expiresAt);
+
+    if ($next === $this->accessControl) {
+      return;
+    }
+
+    $this->recordThat(new ShareExpirationWasSet($this->aggregateRootId(), $expiresAt));
+  }
+
+  protected function applyShareExpirationWasSet(ShareExpirationWasSet $event): void {
+    $this->accessControl = $this->accessControl->expireAt($event->expiresAt);
+  }
+
+  public function setPassword(#[\SensitiveParameter] ?string $plaintext): void {
+    if ($this->accessControl->matchesPassword($plaintext)) {
+      return;
+    }
+
+    $this->recordThat(new SharePasswordWasSet(
+      $this->aggregateRootId(),
+      HashedSharePassword::fromNullable($plaintext),
+    ));
+  }
+
+  protected function applySharePasswordWasSet(SharePasswordWasSet $event): void {
+    $this->accessControl = $this->accessControl->withPassword($event->password);
+  }
+
+  public function isPublished(): bool {
+    return $this->accessControl->isPublished;
+  }
+
+  public function getAccessControl(): AccessControl {
+    return $this->accessControl;
+  }
+
+  public function getExpiresAt(): ?DateTime {
+    return $this->accessControl->expiresAt;
+  }
+
+  public function getPassword(): ?HashedSharePassword {
+    return $this->accessControl->getPassword();
+  }
+
+  public function getId(): string {
+    return $this->aggregateRootId()->toString();
   }
 
   public function getShareable(): ShareableReference {
@@ -74,8 +201,8 @@ final class Share extends AbstractAggregateRoot {
     return $this->shareable->getShareableId();
   }
 
-  public function getTargetUrl(): string {
-    return $this->targetUrl;
+  public function getTargetPath(): TargetPath {
+    return $this->targetPath;
   }
 
   public function getCreatedAt(): DateTime {
@@ -96,9 +223,10 @@ final class Share extends AbstractAggregateRoot {
   protected function createSnapshotState(): array {
     return [
       'shareable' => $this->shareable->toPayload(),
-      'targetUrl' => $this->targetUrl,
+      'targetUrl' => $this->targetPath->toString(),
       'createdAt' => $this->createdAt->toString(),
       'context' => $this->context->toPayload(),
+      'accessControl' => $this->accessControl->toPayload(),
     ];
   }
 
@@ -108,15 +236,11 @@ final class Share extends AbstractAggregateRoot {
   protected static function reconstituteFromSnapshotState(AggregateRootId $id, $state): AggregateRootWithSnapshotting {
     $share = new self(ID::fromString($id->toString()));
 
-    if (isset($state['imageId'])) {
-      $share->shareable = ShareableReference::forImage(ID::fromString($state['imageId']));
-    } else {
-      $share->shareable = ShareableReference::fromPayload($state['shareable']);
-    }
-
-    $share->targetUrl = $state['targetUrl'];
+    $share->shareable = ShareableReference::fromPayload($state['shareable']);
+    $share->targetPath = TargetPath::fromString($state['targetUrl']);
     $share->createdAt = DateTime::fromString($state['createdAt']);
     $share->context = ShareContext::fromPayload($state['context'] ?? [], $share->shareable);
+    $share->accessControl = AccessControl::fromPayload($state['accessControl'] ?? []);
 
     return $share;
   }

@@ -13,6 +13,7 @@ export interface CollectionItem {
     formattedDate: string;
     timestamp: number;
   };
+  url?: string | null;
   item?: ImageListingItem;
 }
 
@@ -24,7 +25,7 @@ export interface CollectionResponse {
   description: string | null;
   itemCount?: number;
   coverImage?: string | null;
-  shareInfo?: ShareResponse;
+  sharing?: ShareResponse;
   createdAt: {
     formattedDate: string;
     timestamp: number;

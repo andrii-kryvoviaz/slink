@@ -3,22 +3,29 @@ imports:
   - { resource: 'services/*.yaml' }
 
 parameters:
+  slink.runtime_dir: '/app/etc/runtime'
+  image.public_max_width: 1920
+
   exception_to_status:
-    LogicException: 400
-    InvalidArgumentException: 400
-    Slink\User\Domain\Exception\InvalidCredentialsException: 401
+    Slink\Share\Domain\Exception\SharePasswordRequiredException: 423
+    Slink\Share\Domain\Exception\ShareExpiredException: 410
+    Slink\User\Domain\Exception\InvalidCredentialsException: 400
     Slink\User\Domain\Exception\ForbiddenException: 403
     Slink\Shared\Domain\Exception\ForbiddenException: 403
     Slink\User\Domain\Exception\ApiKeyNotFoundException: 404
     Slink\Shared\Infrastructure\Exception\NotFoundException: 404
     Slink\Shared\Domain\Exception\DemoForbiddenException: 403
     Slink\User\Domain\Exception\OidcDiscoveryException: 502
+    LogicException: 400
+    InvalidArgumentException: 400
 
   exception_code_to_message:
     400: 'Bad Request'
     401: 'Unauthorized'
     403: 'Forbidden'
     404: 'Not Found'
+    410: 'Gone'
+    423: 'Locked'
     500: 'Internal Server Error'
     502: 'Bad Gateway'
 
@@ -43,6 +50,9 @@ services:
       public: true
       tags:
         - { name: messenger.message_handler, bus: messenger.bus.event.async }
+
+    Slink\Share\Domain\AccessRule\ShareAccessRule:
+      tags: ['slink.share.access_rule']
 
   Slink\:
     resource: '../src/Slink/*'
@@ -70,3 +80,5 @@ services:
       - '%kernel.environment%'
       - '%exception_to_status%'
       - '%exception_code_to_message%'
+
+  Symfony\Component\Dotenv\Command\DotenvDumpCommand: ~

@@ -14,12 +14,13 @@
   import { DatePicker as DatePickerPrimitive } from 'bits-ui';
   import type { Snippet } from 'svelte';
 
+  import { getLocale } from '$lib/utils/date.svelte';
   import Icon from '@iconify/svelte';
 
   import { cn } from '@slink/utils/ui/index.js';
 
   interface Props {
-    value?: string | null;
+    value?: Date | null;
     placeholder?: string;
     disabled?: boolean;
     class?: string;
@@ -43,27 +44,56 @@
     ...restProps
   }: Props = $props();
 
+  const toDateValue = (d: Date | null | undefined): DateValue | undefined => {
+    if (!d) {
+      return undefined;
+    }
+
+    const pad = (n: number) => String(n).padStart(2, '0');
+    return parseDate(
+      `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`,
+    );
+  };
+
+  const sameCalendarDay = (
+    a: DateValue | undefined,
+    b: DateValue | undefined,
+  ): boolean => {
+    if (!a && !b) {
+      return true;
+    }
+
+    if (!a || !b) {
+      return false;
+    }
+
+    return a.compare(b) === 0;
+  };
+
   let open = $state(false);
-  let calendarValue: DateValue | undefined = $state(
-    value ? parseDate(value.split('T')[0]) : undefined,
-  );
-
-  const df = new DateFormatter('en-US', {
-    dateStyle: 'medium',
-  });
-
-  const minValue = today(getLocalTimeZone());
+  let calendarValue: DateValue | undefined = $state(toDateValue(value));
 
   $effect(() => {
-    if (calendarValue) {
-      const year = calendarValue.year;
-      const month = calendarValue.month.toString().padStart(2, '0');
-      const day = calendarValue.day.toString().padStart(2, '0');
-      value = `${year}-${month}-${day}T00:00:00`;
-    } else {
-      value = null;
+    const next = toDateValue(value);
+
+    if (!sameCalendarDay(next, calendarValue)) {
+      calendarValue = next;
     }
   });
+
+  const handleValueChange = (next: DateValue | undefined): void => {
+    value = next ? new Date(next.year, next.month - 1, next.day) : null;
+    open = false;
+  };
+
+  const locale = $derived(getLocale());
+  const df = $derived(
+    new DateFormatter(locale, {
+      dateStyle: 'medium',
+    }),
+  );
+
+  const minValue = today(getLocalTimeZone());
 </script>
 
 <Popover bind:open>
@@ -109,9 +139,8 @@
       fixedWeeks={true}
       {disabled}
       {minValue}
-      onValueChange={() => {
-        open = false;
-      }}
+      {locale}
+      onValueChange={handleValueChange}
     >
       <DatePickerPrimitive.Calendar
         class="bg-white dark:bg-gray-900/95 text-gray-900 dark:text-gray-100 backdrop-blur-sm border border-gray-200/40 dark:border-gray-700/40 rounded-xl shadow-xl shadow-black/10 dark:shadow-black/25 p-4"
@@ -194,5 +223,5 @@
 </Popover>
 
 {#if name}
-  <input type="hidden" {name} {value} />
+  <input type="hidden" {name} value={value?.toISOString() ?? ''} />
 {/if}

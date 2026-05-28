@@ -18,6 +18,7 @@ parameters:
         endpoint: '%env(string:default::AMAZON_S3_ENDPOINT)%'
         useCustomProvider: '%env(bool:default::AMAZON_S3_USE_CUSTOM_PROVIDER)%'
         forcePathStyle: '%env(bool:default::AMAZON_S3_FORCE_PATH_STYLE)%'
+        useIamRole: '%env(bool:default::AMAZON_S3_USE_IAM_ROLE)%'
   user:
     allowRegistration: '%env(bool:USER_ALLOW_REGISTRATION)%'
     approvalRequired: '%env(bool:USER_APPROVAL_REQUIRED)%'
@@ -37,9 +38,12 @@ parameters:
   access:
     allowGuestUploads: '%env(bool:IMAGE_ALLOW_GUEST_UPLOADS)%'
     allowUnauthenticatedAccess: '%env(bool:USER_ALLOW_UNAUTHENTICATED_ACCESS)%'
+    requireAuthForMediaShares: '%env(bool:USER_REQUIRE_AUTH_FOR_MEDIA_SHARES)%'
+    requireAuthForCollectionShares: '%env(bool:USER_REQUIRE_AUTH_FOR_COLLECTION_SHARES)%'
     requireSsl: '%env(bool:REQUIRE_SSL)%'
   share:
     enableUrlShortening: '%env(bool:SHARE_ENABLE_URL_SHORTENING)%'
+    shortUrlLength: '%env(int:SHARE_SHORT_URL_LENGTH)%'
   demo:
     enabled: '%env(bool:DEMO_MODE_ENABLED)%'
     demoUsername: '%env(DEMO_USERNAME)%'
@@ -68,3 +72,4 @@ when@prod:
           endpoint: '%env(string:default::AMAZON_S3_ENDPOINT)%'
           useCustomProvider: '%env(bool:default::AMAZON_S3_USE_CUSTOM_PROVIDER)%'
           forcePathStyle: '%env(bool:default::AMAZON_S3_FORCE_PATH_STYLE)%'
+          useIamRole: '%env(bool:default::AMAZON_S3_USE_IAM_ROLE)%'

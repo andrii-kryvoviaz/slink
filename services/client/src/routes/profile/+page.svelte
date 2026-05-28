@@ -9,6 +9,8 @@
   import { enhance } from '$app/forms';
   import { fade } from 'svelte/transition';
 
+  import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
+
   import { withLoadingState } from '@slink/utils/form/withLoadingState';
   import { useWritable } from '@slink/utils/store/contextAwareStore';
   import { toast } from '@slink/utils/ui/toast-sonner.svelte';
@@ -35,13 +37,13 @@
 
   $effect(() => {
     if (form?.passwordWasChanged) {
-      toast.success('Password changed successfully');
+      toast.success(messages.profile.passwordChanged);
     }
   });
 
   $effect(() => {
     if (form?.profileWasUpdated) {
-      toast.success('Profile updated successfully');
+      toast.success(messages.profile.updated);
     }
   });
 

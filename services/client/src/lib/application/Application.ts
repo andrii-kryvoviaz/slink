@@ -2,9 +2,11 @@ import { themeIcons } from '@slink/theme.icons';
 import { error, redirect } from '@sveltejs/kit';
 
 import { browser } from '$app/environment';
-import { goto, invalidateAll } from '$app/navigation';
+import { goto } from '$app/navigation';
 
 import { type ApiClientType, createApiClient } from '@slink/api/Client';
+
+import '@slink/lib/utils/i18n/messages/api.language';
 
 import '@slink/utils/string/stringExtensions';
 import { preloadIconSet } from '@slink/utils/ui/preloadIconSet';
@@ -12,6 +14,7 @@ import { preloadIconSet } from '@slink/utils/ui/preloadIconSet';
 export class Application {
   private static _api: ApiClientType;
   private static _bootstrapped: Promise<void> | null = null;
+  private static _redirectingUnauthorized: Promise<void> | null = null;
 
   static get api(): ApiClientType {
     return this._api;
@@ -30,19 +33,26 @@ export class Application {
   }
 
   private static registerApiEventHandlers(): void {
-    this.api.on('unauthorized', async () => {
-      if (!browser) {
-        redirect(302, '/profile/login');
-      }
-
-      await invalidateAll();
-      goto('/profile/login');
-    });
+    this.api.on('unauthorized', () => this.redirectToLogin());
 
     this.api.on('forbidden', () => {
       error(403, {
         message: 'You do not have permission to access this page.',
       });
     });
+  }
+
+  private static redirectToLogin(): Promise<void> {
+    if (!browser) {
+      redirect(302, '/profile/login');
+    }
+
+    this._redirectingUnauthorized ??= goto('/profile/login', {
+      invalidateAll: true,
+    }).finally(() => {
+      this._redirectingUnauthorized = null;
+    });
+
+    return this._redirectingUnauthorized;
   }
 }

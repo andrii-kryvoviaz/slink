@@ -18,7 +18,10 @@
   const columnItems = $derived(
     hidableColumns.map((col) => ({
       value: col.id,
-      label: col.columnDef.header?.toString() ?? col.id,
+      label:
+        typeof col.columnDef.header === 'function'
+          ? String(col.columnDef.header({} as any))
+          : (col.columnDef.header ?? col.id),
     })),
   );
 

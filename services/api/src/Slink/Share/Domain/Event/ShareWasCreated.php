@@ -7,6 +7,7 @@ namespace Slink\Share\Domain\Event;
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
 use Slink\Share\Domain\ValueObject\ShareableReference;
 use Slink\Share\Domain\ValueObject\ShareContext;
+use Slink\Share\Domain\ValueObject\TargetPath;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
 
@@ -14,9 +15,10 @@ final readonly class ShareWasCreated implements SerializablePayload {
   public function __construct(
     public ID $id,
     public ShareableReference $shareable,
-    public string $targetUrl,
+    public TargetPath $targetPath,
     public DateTime $createdAt,
     public ShareContext $context,
+    public bool $isPublished = false,
   ) {
   }
 
@@ -27,9 +29,10 @@ final readonly class ShareWasCreated implements SerializablePayload {
     return [
       'uuid' => $this->id->toString(),
       'shareable' => $this->shareable->toPayload(),
-      'targetUrl' => $this->targetUrl,
+      'targetUrl' => $this->targetPath->toString(),
       'createdAt' => $this->createdAt->toString(),
       'context' => $this->context->toPayload(),
+      'isPublished' => $this->isPublished,
     ];
   }
 
@@ -46,9 +49,10 @@ final readonly class ShareWasCreated implements SerializablePayload {
     return new self(
       ID::fromString($payload['uuid']),
       $shareable,
-      $payload['targetUrl'],
+      TargetPath::fromString($payload['targetUrl']),
       DateTime::fromString($payload['createdAt']),
       ShareContext::fromPayload($payload['context'] ?? [], $shareable),
+      $payload['isPublished'] ?? false,
     );
   }
 }

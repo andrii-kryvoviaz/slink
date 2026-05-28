@@ -110,9 +110,9 @@ class PublicImagesFeed extends AbstractSearchablePaginatedFeed<ImageListingItem>
   }
 
   private async handleImageAdded(image?: ImageListingItem): Promise<void> {
-    if (!this.isValidImage(image) || this._hasItem(image)) return;
+    if (!this.isValidImage(image) || this.has(image.id)) return;
     const isBookmarked = await this.fetchBookmarkStatus(image.id);
-    if (this._hasItem(image)) return;
+    if (this.has(image.id)) return;
     this.addItem({ ...image, isBookmarked });
   }
 

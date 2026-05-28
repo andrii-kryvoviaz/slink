@@ -98,6 +98,20 @@ final class BookmarkRepository extends AbstractRepository implements BookmarkRep
   }
 
   #[Override]
+  public function existsByUserId(string $userId): bool {
+    $result = $this->createQueryBuilder('b')
+      ->select('1')
+      ->join('b.user', 'u')
+      ->where('u.uuid = :userId')
+      ->setParameter('userId', $userId)
+      ->setMaxResults(1)
+      ->getQuery()
+      ->getOneOrNullResult();
+
+    return $result !== null;
+  }
+
+  #[Override]
   public function countByImageId(string $imageId): int {
     return (int) $this->createQueryBuilder('b')
       ->select('COUNT(b.uuid)')

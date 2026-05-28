@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace Slink\Collection\Application\Query\GetAccessibleCollection;
 
+use Slink\Collection\Domain\Enum\CollectionAccess;
 use Slink\Collection\Domain\Repository\CollectionRepositoryInterface;
 use Slink\Share\Domain\Enum\ShareableType;
-use Slink\Share\Domain\Repository\ShareRepositoryInterface;
-use Slink\Share\Domain\Service\ShareServiceInterface;
+use Slink\Share\Domain\Service\OwnerShareInfoResolverInterface;
 use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Application\Query\QueryHandlerInterface;
 use Slink\Shared\Domain\ValueObject\ID;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final readonly class GetAccessibleCollectionHandler implements QueryHandlerInterface {
   public function __construct(
     private CollectionRepositoryInterface $collectionRepository,
-    private ShareRepositoryInterface $shareRepository,
-    private ShareServiceInterface $shareService,
+    private OwnerShareInfoResolverInterface $ownerShareInfoResolver,
+    private AuthorizationCheckerInterface $access,
   ) {
   }
 
@@ -27,22 +28,18 @@ final readonly class GetAccessibleCollectionHandler implements QueryHandlerInter
       return null;
     }
 
-    $isOwner = ID::fromString($collection->getUserId())->equals(ID::fromUnknown($userId));
-    $share = $this->shareRepository->findByShareable($query->getId(), ShareableType::Collection);
-
-    if (!$isOwner && $share === null) {
+    if (!$this->access->isGranted(CollectionAccess::View, $collection)) {
       return null;
     }
 
-    $extra = ['userId' => $collection->getUserId()];
+    $sharing = $this->ownerShareInfoResolver->resolve(
+      $query->getId(),
+      ShareableType::Collection,
+      ID::fromUnknown($collection->getUserId()),
+      ID::fromUnknown($userId),
+    );
 
-    if ($isOwner && $share !== null) {
-      $extra['shareInfo'] = [
-        'shareId' => $share->getId(),
-        'shareUrl' => $this->shareService->resolveUrl($share),
-        'type' => ShareableType::Collection->value,
-      ];
-    }
+    $extra = $sharing !== null ? ['sharing' => $sharing->toPayload()] : [];
 
     return Item::fromEntity($collection, $extra);
   }

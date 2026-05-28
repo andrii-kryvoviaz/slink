@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { formatDate } from '$lib/utils/date';
+  import { formatDate } from '$lib/utils/date.svelte';
   import Icon from '@iconify/svelte';
 
   import type { NotificationItem } from '@slink/api/Response';

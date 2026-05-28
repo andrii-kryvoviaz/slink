@@ -4,7 +4,7 @@ export { default as NavGroup } from './Sidebar/NavGroup.svelte';
 export { default as NavProjects } from './Sidebar/NavProjects.svelte';
 export { default as NavUser } from './Sidebar/NavUser.svelte';
 export { default as SidebarStorageUsage } from './Sidebar/SidebarStorageUsage.svelte';
-export * from './Sidebar/config';
+export * from './Sidebar/config.svelte';
 export * from './Sidebar/types';
 export { default as TabMenu } from './TabMenu/TabMenu.svelte';
 export * from './TabMenu/TabMenu.theme';

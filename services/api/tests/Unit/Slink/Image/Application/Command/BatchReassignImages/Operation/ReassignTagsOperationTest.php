@@ -14,6 +14,7 @@ use Slink\Image\Domain\ValueObject\TagSet;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Tag\Domain\Repository\TagStoreRepositoryInterface;
 use Slink\Tag\Domain\Tag;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class ReassignTagsOperationTest extends TestCase {
   private const USER_ID = '123e4567-e89b-12d3-a456-426614174000';
@@ -32,7 +33,8 @@ final class ReassignTagsOperationTest extends TestCase {
     ]);
 
     $tagRepository = $this->createStub(TagStoreRepositoryInterface::class);
-    $operation = new ReassignTagsOperation($tagRepository);
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
+    $operation = new ReassignTagsOperation($tagRepository, $access);
 
     $this->assertTrue($operation->supports($command, self::IMAGE_ID));
   }
@@ -47,7 +49,8 @@ final class ReassignTagsOperationTest extends TestCase {
     ]);
 
     $tagRepository = $this->createStub(TagStoreRepositoryInterface::class);
-    $operation = new ReassignTagsOperation($tagRepository);
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
+    $operation = new ReassignTagsOperation($tagRepository, $access);
 
     $this->assertFalse($operation->supports($command, self::IMAGE_ID));
   }
@@ -77,13 +80,16 @@ final class ReassignTagsOperationTest extends TestCase {
       }
     );
 
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
+    $access->method('isGranted')->willReturn(true);
+
     $image = $this->createMock(Image::class);
     $image->expects($this->once())->method('reassignTags')->with(
       $this->callback(fn (TagSet $tags) => $tags->count() === 2),
       $userId,
     );
 
-    $operation = new ReassignTagsOperation($tagRepository);
+    $operation = new ReassignTagsOperation($tagRepository, $access);
     $operation->apply($image, $command, self::IMAGE_ID, $userId);
   }
 
@@ -113,13 +119,25 @@ final class ReassignTagsOperationTest extends TestCase {
       }
     );
 
+    $ownedTagHash = spl_object_hash($ownedTag);
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
+    $access->method('isGranted')->willReturnCallback(
+      function (mixed $attribute, mixed $subject) use ($ownedTagHash): bool {
+        if (!is_object($subject)) {
+          return false;
+        }
+
+        return spl_object_hash($subject) === $ownedTagHash;
+      },
+    );
+
     $image = $this->createMock(Image::class);
     $image->expects($this->once())->method('reassignTags')->with(
       $this->callback(fn (TagSet $tags) => $tags->count() === 1),
       $userId,
     );
 
-    $operation = new ReassignTagsOperation($tagRepository);
+    $operation = new ReassignTagsOperation($tagRepository, $access);
     $operation->apply($image, $command, self::IMAGE_ID, $userId);
   }
 }

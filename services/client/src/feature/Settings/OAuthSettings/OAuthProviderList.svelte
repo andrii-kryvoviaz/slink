@@ -1,7 +1,7 @@
 <script lang="ts">
   import { ProviderIcon } from '@slink/feature/Auth';
   import {
-    DropdownSimple,
+    ActionsMenu,
     DropdownSimpleGroup,
     DropdownSimpleItem,
   } from '@slink/ui/components';
@@ -80,16 +80,7 @@
             onCheckedChange={(checked) => state.toggle(provider, checked)}
           />
 
-          <DropdownSimple variant="invisible" size="xs">
-            {#snippet trigger(triggerProps)}
-              <button
-                {...triggerProps}
-                class="p-1.5 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors duration-150"
-              >
-                <Icon icon="heroicons:ellipsis-vertical" class="w-4 h-4" />
-              </button>
-            {/snippet}
-
+          <ActionsMenu tone="ghost" label="Provider actions">
             <DropdownSimpleGroup>
               {#if state.deleteConfirmId !== provider.id}
                 <DropdownSimpleItem
@@ -140,7 +131,7 @@
                 />
               {/if}
             </DropdownSimpleGroup>
-          </DropdownSimple>
+          </ActionsMenu>
         </div>
       </div>
     {/each}

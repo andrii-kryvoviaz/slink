@@ -63,6 +63,9 @@ final class CreateTagCommandTest extends TestCase {
       'with underscores' => ['tag_name'],
       'mixed characters' => ['Tag_Name-123'],
       'uppercase letters' => ['TAG'],
+      'with spaces' => ['tag name'],
+      'cyrillic' => ['подорож'],
+      'cjk' => ['休暇'],
       'max length' => [str_repeat('a', 50)],
     ];
   }

@@ -8,15 +8,15 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Slink\Image\Domain\Service\ImageUrlSignatureInterface;
+use Slink\Shared\Domain\Service\UrlSignatureInterface;
 use Slink\Share\Infrastructure\Service\ShareUrlBuilder;
 
 final class ShareUrlBuilderTest extends TestCase {
-  private ImageUrlSignatureInterface $signatureService;
+  private UrlSignatureInterface $signatureService;
   private ShareUrlBuilder $builder;
 
   protected function setUp(): void {
-    $this->signatureService = $this->createStub(ImageUrlSignatureInterface::class);
+    $this->signatureService = $this->createStub(UrlSignatureInterface::class);
     $this->builder = new ShareUrlBuilder($this->signatureService);
   }
 
@@ -28,7 +28,7 @@ final class ShareUrlBuilderTest extends TestCase {
     $height = 600;
     $crop = true;
 
-    $signatureService = $this->createMock(ImageUrlSignatureInterface::class);
+    $signatureService = $this->createMock(UrlSignatureInterface::class);
     $signatureService
       ->expects($this->once())
       ->method('sign')
@@ -36,7 +36,7 @@ final class ShareUrlBuilderTest extends TestCase {
       ->willReturn('test_signature');
 
     $builder = new ShareUrlBuilder($signatureService);
-    $result = $builder->buildTargetUrl($imageId, $fileName, $width, $height, $crop);
+    $result = $builder->buildTargetPath($imageId, $fileName, $width, $height, $crop)->toString();
 
     $this->assertStringContainsString('/image/test.jpg', $result);
     $this->assertStringContainsString('width=800', $result);
@@ -51,7 +51,7 @@ final class ShareUrlBuilderTest extends TestCase {
     $fileName = 'test.jpg';
     $width = 800;
 
-    $signatureService = $this->createMock(ImageUrlSignatureInterface::class);
+    $signatureService = $this->createMock(UrlSignatureInterface::class);
     $signatureService
       ->expects($this->once())
       ->method('sign')
@@ -59,7 +59,7 @@ final class ShareUrlBuilderTest extends TestCase {
       ->willReturn('test_signature');
 
     $builder = new ShareUrlBuilder($signatureService);
-    $result = $builder->buildTargetUrl($imageId, $fileName, $width, null, false);
+    $result = $builder->buildTargetPath($imageId, $fileName, $width, null, false)->toString();
 
     $this->assertStringContainsString('width=800', $result);
     $this->assertStringNotContainsString('height=', $result);
@@ -72,7 +72,7 @@ final class ShareUrlBuilderTest extends TestCase {
     $fileName = 'test.jpg';
     $height = 600;
 
-    $signatureService = $this->createMock(ImageUrlSignatureInterface::class);
+    $signatureService = $this->createMock(UrlSignatureInterface::class);
     $signatureService
       ->expects($this->once())
       ->method('sign')
@@ -80,7 +80,7 @@ final class ShareUrlBuilderTest extends TestCase {
       ->willReturn('test_signature');
 
     $builder = new ShareUrlBuilder($signatureService);
-    $result = $builder->buildTargetUrl($imageId, $fileName, null, $height, false);
+    $result = $builder->buildTargetPath($imageId, $fileName, null, $height, false)->toString();
 
     $this->assertStringContainsString('height=600', $result);
     $this->assertStringNotContainsString('width=', $result);
@@ -91,13 +91,13 @@ final class ShareUrlBuilderTest extends TestCase {
     $imageId = '12345678-1234-1234-1234-123456789abc';
     $fileName = 'test.jpg';
 
-    $signatureService = $this->createMock(ImageUrlSignatureInterface::class);
+    $signatureService = $this->createMock(UrlSignatureInterface::class);
     $signatureService
       ->expects($this->never())
       ->method('sign');
 
     $builder = new ShareUrlBuilder($signatureService);
-    $result = $builder->buildTargetUrl($imageId, $fileName, null, null, false);
+    $result = $builder->buildTargetPath($imageId, $fileName, null, null, false)->toString();
 
     $this->assertEquals('/image/test.jpg', $result);
   }
@@ -108,7 +108,7 @@ final class ShareUrlBuilderTest extends TestCase {
     $fileName = 'test.jpg';
     $width = 800;
 
-    $signatureService = $this->createMock(ImageUrlSignatureInterface::class);
+    $signatureService = $this->createMock(UrlSignatureInterface::class);
     $signatureService
       ->expects($this->once())
       ->method('sign')
@@ -116,7 +116,7 @@ final class ShareUrlBuilderTest extends TestCase {
       ->willReturn('test_signature');
 
     $builder = new ShareUrlBuilder($signatureService);
-    $result = $builder->buildTargetUrl($imageId, $fileName, $width, null, false);
+    $result = $builder->buildTargetPath($imageId, $fileName, $width, null, false)->toString();
 
     $this->assertStringNotContainsString('crop=', $result);
   }
@@ -126,7 +126,7 @@ final class ShareUrlBuilderTest extends TestCase {
   public function itHandlesVariousFileNames(string $fileName, string $expectedPath): void {
     $imageId = '12345678-1234-1234-1234-123456789abc';
 
-    $result = $this->builder->buildTargetUrl($imageId, $fileName, null, null, false);
+    $result = $this->builder->buildTargetPath($imageId, $fileName, null, null, false)->toString();
 
     $this->assertEquals($expectedPath, $result);
   }
@@ -148,13 +148,13 @@ final class ShareUrlBuilderTest extends TestCase {
     $imageId = '12345678-1234-1234-1234-123456789abc';
     $fileName = 'test.png';
 
-    $signatureService = $this->createMock(ImageUrlSignatureInterface::class);
+    $signatureService = $this->createMock(UrlSignatureInterface::class);
     $signatureService
       ->expects($this->never())
       ->method('sign');
 
     $builder = new ShareUrlBuilder($signatureService);
-    $result = $builder->buildTargetUrl($imageId, $fileName, null, null, false, 'webp');
+    $result = $builder->buildTargetPath($imageId, $fileName, null, null, false, 'webp')->toString();
 
     $this->assertEquals('/image/test.webp', $result);
   }
@@ -166,7 +166,7 @@ final class ShareUrlBuilderTest extends TestCase {
     $width = 800;
     $height = 600;
 
-    $signatureService = $this->createMock(ImageUrlSignatureInterface::class);
+    $signatureService = $this->createMock(UrlSignatureInterface::class);
     $signatureService
       ->expects($this->once())
       ->method('sign')
@@ -174,7 +174,7 @@ final class ShareUrlBuilderTest extends TestCase {
       ->willReturn('test_signature');
 
     $builder = new ShareUrlBuilder($signatureService);
-    $result = $builder->buildTargetUrl($imageId, $fileName, $width, $height, false, 'avif');
+    $result = $builder->buildTargetPath($imageId, $fileName, $width, $height, false, 'avif')->toString();
 
     $this->assertStringContainsString('/image/test.avif', $result);
     $this->assertStringContainsString('width=800', $result);
@@ -187,7 +187,7 @@ final class ShareUrlBuilderTest extends TestCase {
     $imageId = '12345678-1234-1234-1234-123456789abc';
     $fileName = 'test.jpg';
 
-    $result = $this->builder->buildTargetUrl($imageId, $fileName, null, null, false, null);
+    $result = $this->builder->buildTargetPath($imageId, $fileName, null, null, false, null)->toString();
 
     $this->assertEquals('/image/test.jpg', $result);
   }
@@ -197,7 +197,7 @@ final class ShareUrlBuilderTest extends TestCase {
     $imageId = '12345678-1234-1234-1234-123456789abc';
     $fileName = 'test.png';
 
-    $result = $this->builder->buildTargetUrl($imageId, $fileName, null, null, false, 'original');
+    $result = $this->builder->buildTargetPath($imageId, $fileName, null, null, false, 'original')->toString();
 
     $this->assertEquals('/image/test.png', $result);
   }
@@ -207,7 +207,7 @@ final class ShareUrlBuilderTest extends TestCase {
     $imageId = '12345678-1234-1234-1234-123456789abc';
     $fileName = 'test.jpg';
 
-    $signatureService = $this->createMock(ImageUrlSignatureInterface::class);
+    $signatureService = $this->createMock(UrlSignatureInterface::class);
     $signatureService
       ->expects($this->once())
       ->method('sign')
@@ -215,7 +215,7 @@ final class ShareUrlBuilderTest extends TestCase {
       ->willReturn('test_signature');
 
     $builder = new ShareUrlBuilder($signatureService);
-    $result = $builder->buildTargetUrl($imageId, $fileName, null, null, false, null, 'sepia');
+    $result = $builder->buildTargetPath($imageId, $fileName, null, null, false, null, 'sepia')->toString();
 
     $this->assertStringContainsString('filter=sepia', $result);
     $this->assertStringContainsString('s=test_signature', $result);
@@ -227,7 +227,7 @@ final class ShareUrlBuilderTest extends TestCase {
     $fileName = 'test.jpg';
     $width = 800;
 
-    $signatureService = $this->createMock(ImageUrlSignatureInterface::class);
+    $signatureService = $this->createMock(UrlSignatureInterface::class);
     $signatureService
       ->expects($this->once())
       ->method('sign')
@@ -235,7 +235,7 @@ final class ShareUrlBuilderTest extends TestCase {
       ->willReturn('test_signature');
 
     $builder = new ShareUrlBuilder($signatureService);
-    $result = $builder->buildTargetUrl($imageId, $fileName, $width, null, false, null, 'noir');
+    $result = $builder->buildTargetPath($imageId, $fileName, $width, null, false, null, 'noir')->toString();
 
     $this->assertStringContainsString('width=800', $result);
     $this->assertStringContainsString('filter=noir', $result);
@@ -247,7 +247,7 @@ final class ShareUrlBuilderTest extends TestCase {
     $imageId = '12345678-1234-1234-1234-123456789abc';
     $fileName = 'test.jpg';
 
-    $result = $this->builder->buildTargetUrl($imageId, $fileName, null, null, false, null, null);
+    $result = $this->builder->buildTargetPath($imageId, $fileName, null, null, false, null, null)->toString();
 
     $this->assertStringNotContainsString('filter=', $result);
   }

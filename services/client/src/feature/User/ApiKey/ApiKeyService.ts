@@ -1,5 +1,8 @@
 import { useApiKeyStore } from '$lib/state/ApiKeyStore.svelte.js';
+import { copyText } from '$lib/utils/ui/clipboard';
 import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
+
+import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
 import type { ApiKeyFormData } from './types';
 
@@ -9,7 +12,9 @@ export class ApiKeyService {
   async createApiKey(formData: ApiKeyFormData): Promise<boolean> {
     const data = {
       name: formData.name.trim(),
-      ...(formData.expiresAt ? { expiresAt: formData.expiresAt } : {}),
+      ...(formData.expiresAt
+        ? { expiresAt: formData.expiresAt.toISOString() }
+        : {}),
     };
 
     await this.apiKeyStore.create(data);
@@ -30,9 +35,7 @@ export class ApiKeyService {
       const baseUrl = window.location.origin;
 
       if (!this.apiKeyStore.createdKey) {
-        toast.error(
-          'ShareX config can only be downloaded for newly created keys. Please create a new key to download the config.',
-        );
+        toast.error(messages.apiKey.failedToDownloadConfig);
         return;
       }
 
@@ -40,12 +43,11 @@ export class ApiKeyService {
       await this.apiKeyStore.downloadShareXConfig(baseUrl, key);
     } catch (error) {
       console.error('Failed to download ShareX config:', error);
-      toast.error('Failed to download ShareX config');
+      toast.error(messages.apiKey.failedToDownloadConfig);
     }
   }
 
-  copyToClipboard(text: string): void {
-    navigator.clipboard.writeText(text);
-    toast.success('Copied to clipboard');
+  async copyToClipboard(text: string): Promise<void> {
+    await copyText(text);
   }
 }

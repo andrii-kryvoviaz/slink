@@ -12,7 +12,8 @@ final readonly class GetExternalUploadResponseQuery implements QueryInterface {
 
   public function __construct(
     private string $imageId,
-    private string $fileName
+    private string $fileName,
+    private string $userId,
   ) {}
 
   public function getImageId(): string {
@@ -21,5 +22,9 @@ final readonly class GetExternalUploadResponseQuery implements QueryInterface {
 
   public function getFileName(): string {
     return $this->fileName;
+  }
+
+  public function getUserId(): string {
+    return $this->userId;
   }
 }

@@ -36,7 +36,7 @@ export class CollectionItemsFeed extends AbstractPaginatedFeed<CollectionItem> {
   public get media(): MediaItem[] {
     return this._items
       .filter((item) => item.item !== undefined)
-      .map((item) => item.item!);
+      .map((item) => ({ ...item.item!, url: item.url ?? item.item!.url }));
   }
 
   public getItemIndex(mediaId: string): number {
@@ -57,11 +57,14 @@ export class CollectionItemsFeed extends AbstractPaginatedFeed<CollectionItem> {
   }
 
   public setCollectionId(collectionId: string): void {
-    if (this._collectionId !== collectionId) {
-      this._collectionId = collectionId;
-      this._collection = null;
-      this.reset();
-    }
+    this._collectionId = collectionId;
+    this._collection = null;
+    this.reset();
+  }
+
+  public hydrateCollection(collection: CollectionResponse | null): void {
+    if (collection === null) return;
+    this._collection = collection;
   }
 
   protected async fetchData(
@@ -80,6 +83,7 @@ export class CollectionItemsFeed extends AbstractPaginatedFeed<CollectionItem> {
     const response = await ApiClient.collection.getItems(
       this._collectionId,
       cursor,
+      this._meta.size,
     );
 
     if (this._collection) {
@@ -127,6 +131,12 @@ export class CollectionItemsFeed extends AbstractPaginatedFeed<CollectionItem> {
     return ApiClient.collection.share(this._collectionId);
   }
 
+  public clearSharing(): void {
+    if (this._collection) {
+      this._collection = { ...this._collection, sharing: undefined };
+    }
+  }
+
   public async updateDetails(data: {
     name?: string;
     description?: string;
@@ -135,6 +145,13 @@ export class CollectionItemsFeed extends AbstractPaginatedFeed<CollectionItem> {
 
     const updated = await ApiClient.collection.update(this._collectionId, data);
     this._collection = { ...this._collection, ...updated };
+  }
+
+  public async applyPageSize(size: number): Promise<void> {
+    if (this.pageSize === size) return;
+    this.setPageSize(size);
+    this.reset();
+    await this.load();
   }
 }
 

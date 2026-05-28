@@ -28,7 +28,7 @@
     downloadLabelVariants,
     iconSizeVariants,
   } from './ImageActionBar.theme';
-  import { useImageActions } from './useImageActions.svelte';
+  import { createImageActionsState } from './ImageActionsState.svelte';
 
   type ButtonPosition = 'first' | 'middle' | 'last' | 'only';
 
@@ -64,7 +64,7 @@
   const isHero = $derived(layout === 'hero');
   const iconClass = $derived(iconSizeVariants({ layout }));
 
-  const actions = useImageActions({
+  const actions = createImageActionsState({
     getImage: () => image,
     onImageUpdate: (updated) => (image = updated),
     onImageDelete: (id) => on?.imageDelete?.(id),
@@ -73,6 +73,17 @@
   });
 
   const visibleButtons = $derived(actions.filterVisibleButtons(buttons));
+
+  const copyTooltip = $derived.by(() => {
+    if (actions.shareIsLoading) return 'Generating...';
+    if (actions.isCopied.active) return 'Copied!';
+    return 'Copy link';
+  });
+
+  const visibilityTooltip = $derived.by(() => {
+    if (image.isPublic) return 'Make private';
+    return 'Make public';
+  });
 
   const getPosition = (index: number, total: number): ButtonPosition => {
     if (total === 1) return 'only';
@@ -151,9 +162,9 @@
     class={actionButtonVariants({ layout })}
     onclick={actions.handleVisibilityChange}
     disabled={actions.visibilityIsLoading}
-    aria-label={actions.visibilityTooltip}
+    aria-label={visibilityTooltip}
     aria-pressed={image.isPublic}
-    tooltip={actions.visibilityTooltip}
+    tooltip={visibilityTooltip}
   >
     {@render loaderOrIcon(actions.visibilityIcon, actions.visibilityIsLoading)}
   </ButtonGroupItem>
@@ -167,8 +178,8 @@
     class={actionButtonVariants({ layout, variant: 'secondary' })}
     onclick={actions.handleCopy}
     disabled={actions.shareIsLoading || actions.isCopied.active}
-    aria-label="Copy image URL"
-    tooltip={actions.copyTooltip}
+    aria-label="Copy image link"
+    tooltip={copyTooltip}
   >
     {@render copyIconContent()}
   </ButtonGroupItem>

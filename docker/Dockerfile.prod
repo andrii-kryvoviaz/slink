@@ -16,7 +16,7 @@ RUN yarn install --frozen-lockfile --non-interactive
 COPY services/client/plugins ./plugins
 COPY services/client/src ./src
 COPY services/client/static ./static
-COPY services/client/svelte.config.js services/client/tsconfig.json services/client/vite.config.ts ./
+COPY services/client/svelte.config.js services/client/tsconfig.json services/client/vite.config.ts services/client/wuchale.config.js ./
 RUN yarn svelte-kit sync && \
     NODE_OPTIONS="--max-old-space-size=2048 --expose-gc" yarn build
 
@@ -53,7 +53,6 @@ ARG UPLOAD_MAX_FILESIZE_IN_BYTES
 COPY --link --from=frankenphp /usr/local/bin/frankenphp /usr/local/bin/php /usr/local/bin/
 COPY --link --from=frankenphp /usr/local/lib/ /usr/local/lib/
 COPY --link --chmod=755 ./docker/config/s6-overlay/s6-rc.d/prod/ /etc/s6-overlay/s6-rc.d/
-COPY --link --from=node /usr/local/bin/node /usr/local/bin/node
 
 ENV APP_ENV=prod \
     NODE_ENV=production \
@@ -75,7 +74,8 @@ COPY --from=deps-client-prod --chown=slink:slink /client/node_modules ./client/s
 COPY --chown=slink:slink services/api/.env.example ./api/.env
 
 RUN slink cache:warm --no-optional-warmers --quiet && \
-    slink cache:clear --quiet
+    slink cache:clear --quiet && \
+    chown -R slink:slink /services/api/var
 
 EXPOSE 3000
 

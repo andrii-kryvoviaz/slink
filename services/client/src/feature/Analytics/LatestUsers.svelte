@@ -10,7 +10,7 @@
   } from '@slink/feature/User';
   import { onMount } from 'svelte';
 
-  import { formatDate } from '$lib/utils/date';
+  import { formatDate } from '$lib/utils/date.svelte';
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
@@ -215,7 +215,6 @@
                   >
                     <UserActions
                       {user}
-                      variant="icon"
                       onUserUpdate={handleUserUpdate}
                       onDelete={handleUserDelete}
                     />

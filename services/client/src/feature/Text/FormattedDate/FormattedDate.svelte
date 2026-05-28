@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { getLocale } from '$lib/utils/date.svelte';
+
   interface Props {
     date: number;
     showTime?: boolean;
@@ -7,6 +9,7 @@
   let { date, showTime = true }: Props = $props();
 
   let formattedDate: string = $derived.by(() => {
+    const locale = getLocale();
     const dateObj = new Date(date * 1000);
     const isSameYear = dateObj.getFullYear() === new Date().getFullYear();
 
@@ -17,7 +20,7 @@
       ...(showTime && { hour: 'numeric', minute: 'numeric' }),
     };
 
-    return dateObj.toLocaleDateString('en-US', options);
+    return dateObj.toLocaleDateString(locale, options);
   });
 </script>
 

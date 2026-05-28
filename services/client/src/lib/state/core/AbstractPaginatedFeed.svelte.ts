@@ -2,6 +2,7 @@ import { SvelteMap } from 'svelte/reactivity';
 
 import { AbstractHttpState } from '@slink/lib/state/core/AbstractHttpState.svelte';
 import type { RequestStateOptions } from '@slink/lib/state/core/AbstractHttpState.svelte';
+import { LatestCall } from '@slink/lib/state/core/LatestCall';
 import { SkeletonManager } from '@slink/lib/state/core/SkeletonConfig.svelte';
 
 import { deepMerge } from '@slink/utils/object/deepMerge';
@@ -60,6 +61,8 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
   protected _currentLoadCursor: string | null = $state(null);
   protected _config: PaginationConfig;
   protected _skeletonManager = new SkeletonManager();
+  private _latestLoad = new LatestCall();
+  private _hydrationHint: { hasItems: boolean } | null = null;
 
   protected constructor(config: Partial<PaginationConfig> = {}) {
     super();
@@ -83,12 +86,14 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
     this._nextCursor = null;
     this._cursorHistory = [];
     this._currentLoadCursor = null;
+    this._latestLoad.invalidate();
     this._skeletonManager.reset();
     this._meta = {
       page: this._config.useCursor ? undefined : 1,
       size: this._config.defaultPageSize,
       total: 0,
     };
+    this._applyHydrationHint();
   }
 
   public invalidate(): void {
@@ -116,12 +121,8 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
     } = params;
 
     const isInitialLoad = this._config.useCursor ? !cursor : page === 1;
-    const shouldAppend = this._shouldAppendItems(isInitialLoad);
-
-    if (isInitialLoad && this._itemMap.size > 0) {
-      this._itemMap.clear();
-      this._order = [];
-    }
+    const shouldAppend =
+      !isInitialLoad && this._shouldAppendItems(isInitialLoad);
 
     const shouldTrackSkeleton = isInitialLoad && this._itemMap.size === 0;
 
@@ -129,10 +130,14 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
       this._skeletonManager.startLoading();
     }
 
+    const isLatest = this._latestLoad.enter();
+
     try {
       await this.fetch(
         () => this.fetchData({ page, limit, cursor, ...searchParams }),
         (response) => {
+          if (!isLatest()) return;
+
           if (shouldAppend) {
             for (const item of response.data) {
               const id = this._getItemId(item);
@@ -152,6 +157,7 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
           }
           this._meta = response.meta;
           this._nextCursor = response.meta.nextCursor || null;
+          this._hydrationHint = null;
         },
         options,
       );
@@ -182,6 +188,7 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
         }
         this._meta = response.meta;
         this._nextCursor = response.meta.nextCursor || null;
+        this._hydrationHint = null;
       },
       options,
     );
@@ -242,14 +249,16 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
   }
 
   public setMode(mode: AppendMode): void {
-    if (this._config.appendMode === mode) return;
     this._config.appendMode = mode;
-    this.reset();
   }
 
   public setPageSize(pageSize: number): void {
     this._config.defaultPageSize = pageSize;
     this._meta.size = pageSize;
+  }
+
+  get pageSize(): number {
+    return this._meta.size;
   }
 
   public addItem(item: T): void {
@@ -350,19 +359,24 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
     return this._itemMap.size > 0;
   }
 
-  get isEmpty(): boolean {
-    return !this.hasItems && this.isDirty;
-  }
-
   get showSkeleton(): boolean {
     return this._skeletonManager.isVisible;
+  }
+
+  get isEmpty(): boolean {
+    return (
+      !this._skeletonManager.isVisible &&
+      !this.hasItems &&
+      !this.hasError &&
+      this.isDirty
+    );
   }
 
   get isCursorBased(): boolean {
     return this._config.useCursor;
   }
 
-  get key(): 'users' | 'tags' | 'history' | 'collections' | null {
+  get key(): 'users' | 'tags' | 'history' | 'collections' | 'shares' | null {
     return null;
   }
 
@@ -372,15 +386,26 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
     this._skeletonManager.configure(config);
   }
 
+  public hydrate(hint: { hasItems: boolean }): void {
+    this._hydrationHint = hint;
+    this._applyHydrationHint();
+  }
+
+  private _applyHydrationHint(): void {
+    if (this._hydrationHint === null) return;
+
+    if (this.hasItems) {
+      this._hydrationHint = null;
+      return;
+    }
+
+    const { hasItems } = this._hydrationHint;
+    this._skeletonManager.configure({ initiallyVisible: hasItems });
+    this._skeletonManager.reset();
+    this.markDirty(!hasItems);
+  }
+
   protected abstract _getItemId(item: T): string;
-
-  protected _hasItem(item: T): boolean {
-    return this._itemMap.has(this._getItemId(item));
-  }
-
-  protected _findItemIndex(item: T): number {
-    return this._order.indexOf(this._getItemId(item));
-  }
 
   protected _shouldAppendItems(isInitialLoad: boolean): boolean {
     switch (this._config.appendMode) {

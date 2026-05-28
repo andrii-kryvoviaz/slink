@@ -1,13 +1,13 @@
 import { browser } from '$app/environment';
 
 import { SortOrder } from '@slink/lib/enum/SortOrder';
-import { Theme } from '@slink/lib/settings/Settings.enums';
+import { Locale, Theme } from '@slink/lib/settings/Settings.enums';
 
 import { cookie } from '@slink/utils/http/cookie';
 import { deepMerge } from '@slink/utils/object/deepMerge';
 import { tryJson } from '@slink/utils/string/json';
 
-export type ViewMode = 'grid' | 'list' | 'table';
+export type ViewMode = 'grid' | 'list' | 'table' | 'tree';
 export type ShareFormat = 'direct' | 'markdown' | 'bbcode' | 'html' | 'image';
 
 export type SidebarState = { expanded: boolean };
@@ -22,20 +22,29 @@ export type TableState = {
   tags: TableKeySettings;
   history: TableKeySettings;
   collections: TableKeySettings;
+  shares: TableKeySettings;
 };
 export type HistoryState = { viewMode: ViewMode };
-export type CollectionsState = { viewMode: ViewMode };
+export type TagsState = { viewMode: ViewMode };
+export type CollectionLoadStrategy = 'load_more' | 'infinite_scroll';
+export type CollectionsState = {
+  viewMode: ViewMode;
+  pageSize: number;
+  loadStrategy: CollectionLoadStrategy;
+};
 export type ShareState = { format: ShareFormat };
 export type CommentState = { sortOrder: SortOrder };
 export type UploadOptionsState = { expanded: boolean };
 
 export type SettingsKey =
   | 'theme'
+  | 'locale'
   | 'sidebar'
   | 'navigation'
   | 'userAdmin'
   | 'table'
   | 'history'
+  | 'tags'
   | 'share'
   | 'comment'
   | 'uploadOptions'
@@ -45,11 +54,13 @@ export type CookieSettings = { [K in SettingsKey]?: unknown };
 
 export const settingsKeys: SettingsKey[] = [
   'theme',
+  'locale',
   'sidebar',
   'navigation',
   'userAdmin',
   'table',
   'history',
+  'tags',
   'share',
   'comment',
   'uploadOptions',
@@ -58,6 +69,7 @@ export const settingsKeys: SettingsKey[] = [
 
 export const defaultSettings: Record<SettingsKey, unknown> = {
   theme: Theme.DARK,
+  locale: Locale.EN,
   sidebar: { expanded: true },
   navigation: { expandedGroups: {} },
   userAdmin: { viewMode: 'list' },
@@ -101,12 +113,21 @@ export const defaultSettings: Record<SettingsKey, unknown> = {
         createdAt: true,
       },
     },
+    shares: {
+      pageSize: 10,
+      columnVisibility: {
+        shareable: true,
+        createdAt: true,
+        attributes: true,
+      },
+    },
   },
   history: { viewMode: 'table' },
+  tags: { viewMode: 'table' },
   share: { format: 'direct' },
   comment: { sortOrder: SortOrder.Asc },
   uploadOptions: { expanded: false },
-  collections: { viewMode: 'grid' },
+  collections: { viewMode: 'grid', pageSize: 12, loadStrategy: 'load_more' },
 };
 
 export const USER_SETTINGS_BRAND = Symbol.for('slink:user-settings');
@@ -142,10 +163,28 @@ class ThemeState {
   }
 }
 
+class LocaleState {
+  _value = $state<Locale>(Locale.EN);
+
+  get current(): Locale {
+    return this._value;
+  }
+
+  set current(v: Locale) {
+    this._value = v;
+    persist('locale', v);
+  }
+
+  hydrate(v: Locale) {
+    this._value = v;
+  }
+}
+
 export class UserSettings {
   [USER_SETTINGS_BRAND] = true;
 
   readonly theme = new ThemeState();
+  readonly locale = new LocaleState();
 
   _sidebar = $state<SidebarState>(defaultSettings.sidebar as SidebarState);
   _navigation = $state<NavigationState>(
@@ -156,6 +195,7 @@ export class UserSettings {
   );
   _table = $state<TableState>(defaultSettings.table as TableState);
   _history = $state<HistoryState>(defaultSettings.history as HistoryState);
+  _tags = $state<TagsState>(defaultSettings.tags as TagsState);
   _share = $state<ShareState>(defaultSettings.share as ShareState);
   _comment = $state<CommentState>(defaultSettings.comment as CommentState);
   _collections = $state<CollectionsState>(
@@ -177,7 +217,29 @@ export class UserSettings {
     return settingsKeys.reduce(
       (acc, key) => {
         const value = cookie.get(`settings.${key}`);
-        acc[key] = value ? tryJson(value) : defaultSettings[key];
+        const parsed = value ? tryJson(value) : undefined;
+        const fallback = defaultSettings[key];
+
+        if (parsed === undefined || parsed === null) {
+          acc[key] = fallback;
+          return acc;
+        }
+
+        if (
+          typeof parsed === 'object' &&
+          !Array.isArray(parsed) &&
+          typeof fallback === 'object' &&
+          fallback !== null &&
+          !Array.isArray(fallback)
+        ) {
+          acc[key] = deepMerge(
+            fallback as Record<string, unknown>,
+            parsed as Record<string, unknown>,
+          );
+          return acc;
+        }
+
+        acc[key] = parsed;
         return acc;
       },
       {} as Record<string, unknown>,
@@ -237,6 +299,15 @@ export class UserSettings {
   set history(v: HistoryState) {
     this._history = v;
     persist('history', v);
+  }
+
+  get tags(): TagsState {
+    return this._tags;
+  }
+
+  set tags(v: TagsState) {
+    this._tags = v;
+    persist('tags', v);
   }
 
   get share(): ShareState {

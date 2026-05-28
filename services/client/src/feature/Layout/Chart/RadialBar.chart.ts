@@ -2,7 +2,7 @@ import type { ChartNormalizer, ChartOptions } from '@slink/feature/Layout';
 
 export class RadialBarChart implements ChartNormalizer {
   normalize(options: ChartOptions): ChartOptions {
-    const { series, labelFormatter } = options;
+    const { series, labelFormatter, totalLabel } = options;
 
     if (!series || !series.length) {
       return options;
@@ -53,7 +53,7 @@ export class RadialBarChart implements ChartNormalizer {
             },
             total: {
               show: true,
-              label: 'Total',
+              label: totalLabel ?? 'Total',
               formatter: function () {
                 return formatter(total);
               },

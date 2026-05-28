@@ -51,6 +51,20 @@ final class NotificationRepository extends AbstractRepository implements Notific
   }
 
   #[Override]
+  public function existsByUserId(string $userId): bool {
+    $result = $this->createQueryBuilder('n')
+      ->select('1')
+      ->join('n.user', 'u')
+      ->where('u.uuid = :userId')
+      ->setParameter('userId', $userId)
+      ->setMaxResults(1)
+      ->getQuery()
+      ->getOneOrNullResult();
+
+    return (bool) $result;
+  }
+
+  #[Override]
   public function countUnreadByUserId(string $userId): int {
     return (int) $this->createQueryBuilder('n')
       ->select('COUNT(n.uuid)')

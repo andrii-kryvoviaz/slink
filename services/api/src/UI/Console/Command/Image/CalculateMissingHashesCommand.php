@@ -53,8 +53,6 @@ final class CalculateMissingHashesCommand extends Command {
       $io->note('Running in DRY RUN mode - no changes will be made');
     }
 
-    $io->title('Calculating SHA-1 hashes for images');
-
     $imagesWithoutHash = $this->imageRepository->findImagesWithoutSha1Hash();
     $totalImages = count($imagesWithoutHash);
 

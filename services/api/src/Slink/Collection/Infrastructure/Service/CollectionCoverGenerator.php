@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Slink\Collection\Infrastructure\Service;
 
 use Jcupitt\Vips\Image as VipsImage;
+use Slink\Collection\Domain\Repository\CollectionItemRepositoryInterface;
 use Slink\Collection\Domain\Service\CollageBuilderInterface;
 use Slink\Collection\Domain\Service\CollectionCoverGeneratorInterface;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
@@ -23,6 +24,7 @@ final class CollectionCoverGenerator implements CollectionCoverGeneratorInterfac
     private readonly StorageCacheInterface $cache,
     private readonly ImageRepositoryInterface $imageRepository,
     private readonly CollageBuilderInterface $collageBuilder,
+    private readonly CollectionItemRepositoryInterface $collectionItemRepository,
   ) {
   }
 
@@ -35,6 +37,21 @@ final class CollectionCoverGenerator implements CollectionCoverGeneratorInterfac
     }
 
     return sprintf('/api/collection/%s/cover', $collectionId);
+  }
+
+  public function getCoverUrlsByIds(array $collectionIds): array {
+    if ($collectionIds === []) {
+      return [];
+    }
+
+    $firstImages = $this->collectionItemRepository->getFirstImageIdsByCollectionIds($collectionIds, 1);
+
+    $urls = [];
+    foreach ($collectionIds as $collectionId) {
+      $urls[$collectionId] = $this->getCoverUrl($collectionId, $firstImages[$collectionId] ?? []);
+    }
+
+    return $urls;
   }
 
   /**

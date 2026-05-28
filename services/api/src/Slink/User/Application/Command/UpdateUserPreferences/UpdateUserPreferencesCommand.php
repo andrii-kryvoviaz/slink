@@ -8,6 +8,7 @@ use Slink\Image\Domain\Enum\License;
 use Slink\Shared\Application\Command\CommandInterface;
 use Slink\Shared\Infrastructure\MessageBus\EnvelopedMessage;
 use Slink\User\Domain\Enum\DefaultVisibility;
+use Slink\User\Domain\Enum\DisplayLanguage;
 use Slink\User\Domain\Enum\LandingPage;
 use Slink\User\Domain\ValueObject\UserPreferences;
 use Symfony\Component\Serializer\Attribute\SerializedName;
@@ -28,6 +29,11 @@ final readonly class UpdateUserPreferencesCommand implements CommandInterface {
     #[SerializedName('image.defaultVisibility')]
     #[Assert\Choice(callback: [DefaultVisibility::class, 'values'], message: 'Invalid default visibility.')]
     private ?string $defaultVisibility = null,
+    #[SerializedName('display.language')]
+    #[Assert\Choice(callback: [DisplayLanguage::class, 'values'], message: 'Invalid display language.')]
+    private ?string $displayLanguage = null,
+    #[SerializedName('image.externalUploadAutoPublish')]
+    private ?bool $externalUploadAutoPublish = null,
   ) {
   }
 
@@ -36,17 +42,21 @@ final readonly class UpdateUserPreferencesCommand implements CommandInterface {
       defaultLicense: $this->getDefaultLicense(),
       defaultLandingPage: $this->getDefaultLandingPage(),
       defaultVisibility: $this->getDefaultVisibility(),
+      displayLanguage: $this->getDisplayLanguage(),
+      externalUploadAutoPublish: $this->externalUploadAutoPublish,
     );
   }
 
   /**
-   * @return array<string, string|null>
+   * @return array<string, string|bool|null>
    */
   public function toPayload(): array {
     return [
       'license.default' => $this->defaultLicense,
       'navigation.landingPage' => $this->defaultLandingPage,
       'image.defaultVisibility' => $this->defaultVisibility,
+      'display.language' => $this->displayLanguage,
+      'image.externalUploadAutoPublish' => $this->externalUploadAutoPublish,
     ];
   }
 
@@ -62,7 +72,15 @@ final readonly class UpdateUserPreferencesCommand implements CommandInterface {
     return $this->defaultVisibility ? DefaultVisibility::tryFrom($this->defaultVisibility) : null;
   }
 
+  public function getDisplayLanguage(): ?DisplayLanguage {
+    return $this->displayLanguage ? DisplayLanguage::tryFrom($this->displayLanguage) : null;
+  }
+
   public function shouldSyncLicenseToImages(): bool {
     return $this->syncLicenseToImages;
+  }
+
+  public function getExternalUploadAutoPublish(): ?bool {
+    return $this->externalUploadAutoPublish;
   }
 }

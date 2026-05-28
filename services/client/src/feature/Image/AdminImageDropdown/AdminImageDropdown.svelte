@@ -2,7 +2,7 @@
   import { ApiClient } from '@slink/api';
   import { ImageDeleteConfirmation } from '@slink/feature/Image';
   import {
-    DropdownSimple,
+    ActionsMenu,
     DropdownSimpleGroup,
     DropdownSimpleItem,
   } from '@slink/ui/components';
@@ -12,6 +12,8 @@
 
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type { ImageListingItem } from '@slink/api/Response';
+
+  import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
   interface Props {
     image: ImageListingItem;
@@ -53,7 +55,7 @@
     await updateVisibility(image.id, isPublic);
 
     if ($updateVisibilityError) {
-      toast.error('Failed to update visibility. Please try again later.');
+      toast.error(messages.image.failedToUpdateVisibility);
       return;
     }
 
@@ -74,7 +76,7 @@
     await deleteImage(image.id, preserveOnDiskAfterDeletion);
 
     if ($deleteImageError) {
-      toast.error('Failed to delete image. Please try again later.');
+      toast.error(messages.image.failedToDelete);
       return;
     }
 
@@ -89,16 +91,7 @@
 </script>
 
 <div class="relative -mr-1.5">
-  <DropdownSimple variant="invisible" size="xs">
-    {#snippet trigger(triggerProps)}
-      <button
-        {...triggerProps}
-        class="p-1.5 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors duration-150"
-      >
-        <Icon icon="heroicons:ellipsis-vertical" class="w-4 h-4" />
-      </button>
-    {/snippet}
-
+  <ActionsMenu tone="ghost" label="Image actions">
     <DropdownSimpleGroup>
       {#if !deleteConfirmOpen}
         <DropdownSimpleItem
@@ -145,5 +138,5 @@
         />
       {/if}
     </DropdownSimpleGroup>
-  </DropdownSimple>
+  </ActionsMenu>
 </div>

@@ -4,18 +4,22 @@ declare(strict_types=1);
 
 namespace Slink\Image\Application\Command\UntagImage;
 
+use Slink\Image\Domain\Enum\ImageAccess;
 use Slink\Image\Domain\Exception\UnauthorizedImageAccessException;
 use Slink\Image\Domain\Exception\UnauthorizedTagAccessException;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
+use Slink\Tag\Domain\Enum\TagAccess;
 use Slink\Tag\Domain\Repository\TagStoreRepositoryInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final readonly class UntagImageHandler implements CommandHandlerInterface {
   public function __construct(
     private ImageStoreRepositoryInterface $imageStore,
     private TagStoreRepositoryInterface $tagStore,
+    private AuthorizationCheckerInterface $access,
   ) {}
 
   public function __invoke(UntagImageCommand $command, string $userId): void {
@@ -28,12 +32,12 @@ final readonly class UntagImageHandler implements CommandHandlerInterface {
       throw new NotFoundException();
     }
 
-    if ($image->getUserId() && !$image->getUserId()->equals($userId)) {
+    if (!$this->access->isGranted(ImageAccess::Tag, $image)) {
       throw new UnauthorizedImageAccessException($imageId, $userId);
     }
 
     $tag = $this->tagStore->get($tagId);
-    if (!$tag->getUserId()->equals($userId)) {
+    if (!$this->access->isGranted(TagAccess::Use, $tag)) {
       throw new UnauthorizedTagAccessException($tagId, $userId);
     }
 

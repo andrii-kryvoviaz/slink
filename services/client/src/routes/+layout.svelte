@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { DemoNotice, FlashToast, ThemeSwitch } from '@slink/feature/Layout';
+  import { DemoNotice, ThemeSwitch } from '@slink/feature/Layout';
   import { AppFooter } from '@slink/feature/Layout/Footer';
   import { Navbar } from '@slink/feature/Navigation';
   import AppSidebar from '@slink/feature/Navigation/Sidebar/AppSidebar.svelte';
@@ -97,7 +97,7 @@
       <div class="flex flex-1 flex-col min-h-0 relative">
         <ScrollArea
           bind:ref={scrollAreaRef}
-          class="flex-1 h-full"
+          class="flex-1 min-h-0"
           type="scroll"
           orientation="vertical"
           scrollbarYClasses="w-2"
@@ -111,5 +111,4 @@
   </Sidebar.Provider>
 
   <Toaster />
-  <FlashToast />
 </div>

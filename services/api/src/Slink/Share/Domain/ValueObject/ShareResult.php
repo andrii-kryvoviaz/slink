@@ -10,7 +10,7 @@ use Slink\Shared\Domain\ValueObject\AbstractValueObject;
 final readonly class ShareResult extends AbstractValueObject {
   private function __construct(
     private ShareType $type,
-    private ?string $targetUrl = null,
+    private ?TargetPath $targetPath = null,
     private ?string $shortCode = null,
   ) {}
 
@@ -18,8 +18,8 @@ final readonly class ShareResult extends AbstractValueObject {
     return new self(ShareType::ShortUrl, shortCode: $shortCode);
   }
 
-  public static function signed(string $targetUrl): self {
-    return new self(ShareType::Signed, targetUrl: $targetUrl);
+  public static function signed(TargetPath $targetPath): self {
+    return new self(ShareType::Signed, targetPath: $targetPath);
   }
 
   public function getType(): ShareType {
@@ -30,14 +30,14 @@ final readonly class ShareResult extends AbstractValueObject {
     return $this->shortCode;
   }
 
-  public function getTargetUrl(): ?string {
-    return $this->targetUrl;
+  public function getTargetPath(): ?TargetPath {
+    return $this->targetPath;
   }
 
   public function getUrl(): string {
     return match ($this->type) {
       ShareType::ShortUrl => "i/{$this->shortCode}",
-      ShareType::Signed => $this->targetUrl ?? '',
+      ShareType::Signed => $this->targetPath?->toString() ?? '',
     };
   }
 
@@ -52,7 +52,7 @@ final readonly class ShareResult extends AbstractValueObject {
       ],
       ShareType::Signed => [
         'type' => $this->type->value,
-        'targetUrl' => $this->targetUrl,
+        'targetUrl' => $this->targetPath?->toString(),
       ],
     };
   }

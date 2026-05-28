@@ -1,13 +1,12 @@
 <script lang="ts">
   import { RemoveFromCollectionPopover } from '@slink/feature/Collection';
   import {
-    DropdownSimple,
+    ActionsMenu,
     DropdownSimpleGroup,
     DropdownSimpleItem,
   } from '@slink/ui/components';
 
   import Icon from '@iconify/svelte';
-  import { readable } from 'svelte/store';
 
   interface Props {
     loading?: boolean;
@@ -17,8 +16,6 @@
   let { loading = false, onRemove }: Props = $props();
 
   let confirmOpen = $state(false);
-
-  const loadingStore = $derived(readable(loading));
 
   const handleRemoveClick = () => {
     confirmOpen = true;
@@ -35,16 +32,7 @@
 </script>
 
 <div class="relative -mr-1.5">
-  <DropdownSimple variant="invisible" size="xs">
-    {#snippet trigger(triggerProps)}
-      <button
-        {...triggerProps}
-        class="p-1.5 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors duration-150"
-      >
-        <Icon icon="heroicons:ellipsis-vertical" class="w-4 h-4" />
-      </button>
-    {/snippet}
-
+  <ActionsMenu tone="ghost" label="Collection item actions">
     <DropdownSimpleGroup>
       {#if !confirmOpen}
         <DropdownSimpleItem
@@ -59,11 +47,11 @@
         </DropdownSimpleItem>
       {:else}
         <RemoveFromCollectionPopover
-          loading={loadingStore}
+          {loading}
           close={handleCancel}
           confirm={handleConfirm}
         />
       {/if}
     </DropdownSimpleGroup>
-  </DropdownSimple>
+  </ActionsMenu>
 </div>

@@ -30,7 +30,7 @@ async function resolveShortCode(
     error(response.status);
   }
 
-  const location = response.headers.get('Location');
+  const location = response.headers.get(/* @wc-ignore */ 'Location');
   if (!location) {
     error(502);
   }
@@ -39,7 +39,11 @@ async function resolveShortCode(
 }
 
 function resolveUrl(origin: string, location: string): string {
-  return location.startsWith('/') ? `${origin}${location}` : location;
+  if (location.startsWith('/')) {
+    return `${origin}${location}`;
+  }
+
+  return location;
 }
 
 async function buildOgMeta(
@@ -60,7 +64,7 @@ async function buildOgMeta(
     url: `${origin}/i/${code}`,
     title: code,
     description: '',
-    imageUrl: `${origin}/image/${imageId}.${ext}`,
+    imageUrl: `${origin}/api/image/public/${imageId}.${ext}`,
     mimeType: `image/${ext}`,
     width: '',
     height: '',
@@ -74,6 +78,7 @@ async function buildOgMeta(
         ...defaults,
         title: data.attributes.fileName || code,
         description: data.attributes.description || '',
+        imageUrl: data.url ? `${origin}${data.url}` : defaults.imageUrl,
         mimeType: data.metadata.mimeType || defaults.mimeType,
         width: data.metadata.width ? String(data.metadata.width) : '',
         height: data.metadata.height ? String(data.metadata.height) : '',
@@ -90,7 +95,9 @@ export const load: PageServerLoad = async ({ params, fetch, request, url }) => {
   const apiUrl = env.API_URL || 'http://localhost:8080';
   const location = await resolveShortCode(params.code, apiUrl, fetch);
 
-  if (!crawlerDetect.isCrawler(request.headers.get('User-Agent'))) {
+  if (
+    !crawlerDetect.isCrawler(request.headers.get(/* @wc-ignore */ 'User-Agent'))
+  ) {
     redirect(302, resolveUrl(url.origin, location));
   }
 

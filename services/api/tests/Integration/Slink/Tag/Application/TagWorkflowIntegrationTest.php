@@ -22,6 +22,7 @@ use Slink\Tag\Domain\Specification\TagDuplicateSpecificationInterface;
 use Slink\Tag\Domain\Tag;
 use Slink\Tag\Domain\ValueObject\TagPath;
 use Slink\Tag\Infrastructure\ReadModel\View\TagView;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class TagWorkflowIntegrationTest extends TestCase {
 
@@ -33,7 +34,9 @@ final class TagWorkflowIntegrationTest extends TestCase {
 
     $userId = 'user-123';
     $tagView = $this->createStub(TagView::class);
-    
+    $access = $this->createStub(AuthorizationCheckerInterface::class);
+    $access->method('isGranted')->willReturn(true);
+
     $duplicateSpec->method('ensureUnique');
     $tagStore->method('store');
     $tagStore->method('get')->willReturn($this->createMock(Tag::class));
@@ -42,9 +45,9 @@ final class TagWorkflowIntegrationTest extends TestCase {
     $tagRepository->method('getTotalCount')->willReturn(1);
 
     $createHandler = new CreateTagHandler($tagStore, $duplicateSpec);
-    $getByIdHandler = new GetTagByIdHandler($tagRepository);
+    $getByIdHandler = new GetTagByIdHandler($tagRepository, $access);
     $getListHandler = new GetTagListHandler($tagRepository);
-    $deleteHandler = new DeleteTagHandler($tagStore, $tagRepository);
+    $deleteHandler = new DeleteTagHandler($tagStore, $tagRepository, $access);
 
     $createCommand = new CreateTagCommand('integration-test-tag');
     $createdTagId = $createHandler($createCommand, $userId);

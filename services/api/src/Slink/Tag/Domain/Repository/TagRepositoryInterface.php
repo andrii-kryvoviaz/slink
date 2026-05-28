@@ -51,6 +51,14 @@ interface TagRepositoryInterface extends ServiceEntityRepositoryInterface {
   public function getAllByPage(int $page, TagListFilter $filter): Paginator;
 
   /**
+   * @param TagListFilter $filter
+   * @return TagView[]
+   */
+  public function getAllByFilter(TagListFilter $filter): array;
+
+  public function existsByFilter(TagListFilter $filter): bool;
+
+  /**
    * @param ID $userId
    * @return TagView[]
    */

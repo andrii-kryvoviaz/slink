@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Slink\Shared\Domain\ValueObject;
 
 use DateTime;
+use DateTimeImmutable;
 use DateTimeInterface;
+use DateTimeZone;
 use Exception;
 use InvalidArgumentException;
 use JsonException;
@@ -49,8 +51,11 @@ final readonly class Cursor {
    * @throws InvalidArgumentException
    */
   public static function fromEntityData(DateTimeInterface $dateTime, string $id): self {
+    $utc = DateTimeImmutable::createFromInterface($dateTime)
+      ->setTimezone(new DateTimeZone('UTC'));
+
     return new self(
-      $dateTime->format('Y-m-d H:i:s.u'),
+      $utc->format('Y-m-d H:i:s.u'),
       $id
     );
   }
@@ -93,11 +98,11 @@ final readonly class Cursor {
   }
 
   /**
-   * @return DateTime|null
+   * @return DateTimeImmutable|null
    */
-  public function toDateTime(): ?DateTime {
+  public function toDateTime(): ?DateTimeImmutable {
     try {
-      return new DateTime($this->timestamp);
+      return new DateTimeImmutable($this->timestamp, new DateTimeZone('UTC'));
     } catch (Exception) {
       return null;
     }

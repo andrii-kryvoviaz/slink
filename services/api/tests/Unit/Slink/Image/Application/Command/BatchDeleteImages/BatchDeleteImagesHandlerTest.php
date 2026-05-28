@@ -12,9 +12,9 @@ use Slink\Image\Application\Command\BatchDeleteImages\BatchDeleteImagesHandler;
 use Slink\Image\Application\Command\BatchDeleteImages\BatchDeleteImagesResult;
 use Slink\Image\Domain\Image;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
+use Slink\Shared\Domain\Exception\ForbiddenException;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final class BatchDeleteImagesHandlerTest extends TestCase {
   private const USER_ID = '123e4567-e89b-12d3-a456-426614174000';
@@ -119,7 +119,7 @@ final class BatchDeleteImagesHandlerTest extends TestCase {
     $image1->expects($this->once())->method('delete')->with($this->anything(), false);
 
     $image2 = $this->createStub(Image::class);
-    $image2->method('delete')->willThrowException(new AccessDeniedException());
+    $image2->method('delete')->willThrowException(new ForbiddenException());
 
     $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturnCallback(
@@ -138,7 +138,7 @@ final class BatchDeleteImagesHandlerTest extends TestCase {
     $this->assertContains(self::IMAGE_ID_1, $result->deleted());
     $this->assertCount(1, $result->failed());
     $this->assertEquals(self::IMAGE_ID_2, $result->failed()[0]['id']);
-    $this->assertEquals('Access Denied.', $result->failed()[0]['reason']);
+    $this->assertEquals('Access denied', $result->failed()[0]['reason']);
   }
 
   /**
@@ -206,7 +206,7 @@ final class BatchDeleteImagesHandlerTest extends TestCase {
     $command = new BatchDeleteImagesCommand([self::IMAGE_ID_1], false);
 
     $image = $this->createStub(Image::class);
-    $image->method('delete')->willThrowException(new AccessDeniedException());
+    $image->method('delete')->willThrowException(new ForbiddenException());
 
     $imageRepository = $this->createStub(ImageStoreRepositoryInterface::class);
     $imageRepository->method('get')->willReturn($image);
@@ -217,7 +217,7 @@ final class BatchDeleteImagesHandlerTest extends TestCase {
     $this->assertEmpty($result->deleted());
     $this->assertCount(1, $result->failed());
     $this->assertEquals(self::IMAGE_ID_1, $result->failed()[0]['id']);
-    $this->assertEquals('Access Denied.', $result->failed()[0]['reason']);
+    $this->assertEquals('Access denied', $result->failed()[0]['reason']);
   }
 
   #[Test]

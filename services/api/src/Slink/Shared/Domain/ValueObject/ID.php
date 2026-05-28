@@ -28,10 +28,10 @@ final readonly class ID extends AbstractValueObject implements AggregateRootId {
    * @return static|null
    */
   public static function fromUnknown(mixed $value): ?static {
-    if (\is_null($value)) {
+    if ($value === null || $value === '') {
       return null;
     }
-    
+
     return self::fromString((string) $value);
   }
   

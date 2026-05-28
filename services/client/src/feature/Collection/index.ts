@@ -6,10 +6,10 @@ export { default as CollectionDeletePopover } from './CollectionDeletePopover/Co
 export { default as CollectionItemDropdown } from './CollectionItemDropdown/CollectionItemDropdown.svelte';
 export { default as CollectionPickerList } from './CollectionList/CollectionPickerList.svelte';
 export { default as CollectionPicker } from './CollectionPicker/CollectionPicker.svelte';
-export { default as CollectionDataTable } from './CollectionViews/CollectionDataTable/CollectionDataTable.svelte';
+export { default as CollectionViewPreferences } from './CollectionViewPreferences/CollectionViewPreferences.svelte';
 export { default as CollectionActionsCell } from './CollectionViews/CollectionDataTable/cells/CollectionActionsCell.svelte';
 export { default as CollectionNameCell } from './CollectionViews/CollectionDataTable/cells/CollectionNameCell.svelte';
-export * from './CollectionViews/CollectionDataTable/columns';
+export * from './CollectionViews/CollectionDataTable/columns.svelte';
 export { default as CollectionGridView } from './CollectionViews/CollectionGridView.svelte';
 export { default as CreateCollectionDialog } from './CreateCollectionDialog.svelte';
 export { default as CreateCollectionForm } from './CreateCollectionForm.svelte';
@@ -17,4 +17,3 @@ export { default as CreateCollectionModal } from './CreateCollectionModal.svelte
 export { default as ImageCollectionList } from './ImageCollectionList/ImageCollectionList.svelte';
 export { default as ImageCollectionManager } from './ImageCollectionManager/ImageCollectionManager.svelte';
 export { default as RemoveFromCollectionPopover } from './RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte';
-export { default as ShareCollectionPopover } from './ShareCollectionPopover/ShareCollectionPopover.svelte';

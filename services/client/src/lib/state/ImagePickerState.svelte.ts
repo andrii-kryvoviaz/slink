@@ -5,6 +5,8 @@ import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
 import type { Tag } from '@slink/api/Resources/TagResource';
 import type { CollectionResponse } from '@slink/api/Response';
 
+import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
+
 interface ImagePickerDeps<TItem extends { id: string }> {
   load: () => Promise<TItem[]>;
   assign: (imageId: string, itemId: string) => Promise<void>;
@@ -125,9 +127,9 @@ export function createCollectionPickerState(): ImagePickerState<CollectionRespon
     onError: (action) =>
       toast.error(
         {
-          load: 'Failed to load collections',
-          assign: 'Failed to add to collection',
-          unassign: 'Failed to remove from collection',
+          load: messages.collection.failedToLoad,
+          assign: messages.collection.failedToUpdate,
+          unassign: messages.collection.failedToUpdate,
         }[action],
       ),
   });
@@ -149,9 +151,9 @@ export function createImageTagPickerState(): ImagePickerState<Tag> {
     onError: (action) =>
       toast.error(
         {
-          load: 'Failed to load tags',
-          assign: 'Failed to add tag',
-          unassign: 'Failed to remove tag',
+          load: messages.tag.failedToLoad,
+          assign: messages.tag.failedToCreate,
+          unassign: messages.tag.failedToCreate,
         }[action],
       ),
   });

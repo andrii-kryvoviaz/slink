@@ -18,6 +18,7 @@
 
   import { createCreateCollectionModalState } from '@slink/lib/state/CreateCollectionModalState.svelte';
   import { createCollectionPickerState } from '@slink/lib/state/ImagePickerState.svelte';
+  import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
   interface Props {
     imageId: string;
@@ -64,12 +65,12 @@
     e.preventDefault();
 
     if (!isAuthenticated) {
-      toast.info('Sign in to add images to collections');
+      toast.info(messages.collection.signInToAdd);
       return;
     }
 
     if (!isOwnImage) {
-      toast.info('You can only add your own images to collections');
+      toast.info(messages.collection.onlyOwnImages);
       return;
     }
   }

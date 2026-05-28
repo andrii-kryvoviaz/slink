@@ -21,3 +21,6 @@ export { default as StorageSettings } from './StorageSettings/StorageSettings.sv
 export { default as UserSettings } from './UserSettings/UserSettings.svelte';
 export { default as ReleaseModal } from './Version/ReleaseModal.svelte';
 export { default as Version } from './Version/Version.svelte';
+export * from './Version/markdown-processor/markdown-processor';
+export * from './Version/markdown-processor/transformers';
+export * from './Version/markdown-processor/types';

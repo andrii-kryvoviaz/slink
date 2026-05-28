@@ -43,11 +43,27 @@ final readonly class GetTagListHandler implements QueryHandlerInterface {
       includeChildren: $query->shouldIncludeChildren(),
     );
 
+    $groups = $query->shouldIncludeChildren()
+      ? ['public', 'tag-children']
+      : ['public'];
+
+    if ($query->isRootOnly() || $query->getParentId() !== null) {
+      $tagEntities = $this->tagRepository->getAllByFilter($filter);
+      $items = array_map(fn($tag) => Item::fromEntity($tag, groups: $groups), $tagEntities);
+
+      return new Collection(
+        1,
+        count($items),
+        count($items),
+        $items
+      );
+    }
+
     $page = $query->getPage() ?? 1;
     $paginator = $this->tagRepository->getAllByPage($page, $filter);
     $tagEntities = iterator_to_array($paginator);
 
-    $items = array_map(fn($tag) => Item::fromEntity($tag), $tagEntities);
+    $items = array_map(fn($tag) => Item::fromEntity($tag, groups: $groups), $tagEntities);
 
     return new Collection(
       $page,

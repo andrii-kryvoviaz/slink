@@ -9,6 +9,8 @@
   import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
   import Icon from '@iconify/svelte';
 
+  import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
+
   interface Props {
     disabled?: boolean;
     processing?: boolean;
@@ -28,12 +30,12 @@
 
   const processFiles = (fileList: FileList | null | undefined) => {
     if (!fileList) {
-      toast.warning('No files selected');
+      toast.warning(messages.upload.noFilesSelected);
       return;
     }
 
     if (!allowMultiple && fileList.length > 1) {
-      toast.warning('Only one file allowed at a time');
+      toast.warning(messages.upload.onlyOneFile);
       return;
     }
 
@@ -174,7 +176,7 @@
           <h2
             class="text-xl sm:text-2xl font-semibold bg-gradient-to-r from-slate-700 to-slate-900 dark:from-slate-200 dark:to-slate-400 bg-clip-text text-transparent"
           >
-            Drop your {allowMultiple ? 'images' : 'image'} here
+            {#if allowMultiple}Drop your images here{:else}Drop your image here{/if}
           </h2>
           <p
             class="text-slate-500 dark:text-slate-400 text-base sm:text-lg font-light max-w-xs sm:max-w-md mx-auto"
@@ -185,16 +187,16 @@
 
         <div class="mb-6 sm:mb-8 group/shortcut hidden sm:block">
           <div
-            class="flex items-center gap-2 sm:gap-3 px-3 sm:px-5 py-2 sm:py-3 rounded-xl bg-slate-100/70 dark:bg-slate-700/40 border border-slate-200/50 dark:border-slate-600/30 backdrop-blur-sm group-hover/shortcut:bg-slate-200/80 dark:group-hover/shortcut:bg-slate-600/50 transition-all duration-200"
+            class="flex items-center gap-4 pl-4 pr-3 py-2 rounded-xl bg-slate-100/70 dark:bg-slate-700/40 border border-slate-200/50 dark:border-slate-600/30 backdrop-blur-sm group-hover/shortcut:bg-slate-200/80 dark:group-hover/shortcut:bg-slate-600/50 transition-all duration-200"
           >
-            <Icon
-              icon="ph:keyboard"
-              class="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-500 dark:text-slate-400"
-            />
             <span
-              class="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-300"
-              >Quick paste:</span
+              class="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400"
+              >Quick paste</span
             >
+            <span
+              class="h-5 w-px bg-slate-300/70 dark:bg-slate-600/60"
+              aria-hidden="true"
+            ></span>
             <Shortcut control={true} key="v" size="lg" />
           </div>
         </div>
@@ -203,9 +205,9 @@
           <div
             class="flex flex-wrap justify-center gap-2 sm:gap-2.5 mb-3 sm:mb-4"
           >
-            {#each ['PNG', 'JPG', 'GIF', 'SVG', 'WebP', 'HEIC'] as format}
+            {#each ['png', 'jpg', 'gif', 'svg', 'webp', 'heic'] as format}
               <span
-                class="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium bg-slate-100/70 dark:bg-slate-700/40 text-slate-600 dark:text-slate-400 rounded-lg border border-slate-200/50 dark:border-slate-600/30 backdrop-blur-sm"
+                class="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium uppercase tracking-wider bg-slate-100/70 dark:bg-slate-700/40 text-slate-600 dark:text-slate-400 rounded-lg border border-slate-200/50 dark:border-slate-600/30 backdrop-blur-sm"
               >
                 {format}
               </span>
@@ -265,7 +267,8 @@
             Almost there
           </h3>
           <p class="text-slate-500 dark:text-slate-400 text-lg">
-            Uploading your {allowMultiple ? 'images' : 'image'}...
+            {#if allowMultiple}Uploading your images...{:else}Uploading your
+              image...{/if}
           </p>
         </div>
       </div>

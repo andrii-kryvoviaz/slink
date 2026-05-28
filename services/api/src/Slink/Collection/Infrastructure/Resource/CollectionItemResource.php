@@ -62,4 +62,13 @@ final class CollectionItemResource implements ResourceInterface {
       return is_array($item) ? $item : null;
     }
   }
+
+  #[Groups(['public'])]
+  public ?string $url {
+    get {
+      $url = $this->data->get('urls', $this->item->getItemId());
+
+      return is_string($url) ? $url : null;
+    }
+  }
 }
