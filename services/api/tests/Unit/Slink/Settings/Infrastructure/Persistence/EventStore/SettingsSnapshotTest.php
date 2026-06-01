@@ -6,6 +6,8 @@ namespace Tests\Unit\Slink\Settings\Infrastructure\Persistence\EventStore;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Slink\Settings\Domain\Event\SettingsChanged;
+use Slink\Settings\Domain\Enum\SettingCategory;
 use Slink\Settings\Domain\Settings;
 use Slink\Settings\Domain\ValueObject\Access\AccessSettings;
 use Slink\Settings\Domain\ValueObject\Image\ImageSettings;
@@ -234,6 +236,70 @@ final class SettingsSnapshotTest extends TestCase {
     $this->assertEquals('s3', $restoredSettings->get('storage.provider'));
     $this->assertFalse($restoredSettings->get('user.approvalRequired'));
     $this->assertTrue($restoredSettings->get('access.allowUnauthenticatedAccess'));
+  }
+
+  #[Test]
+  public function itCreatesSparseSnapshotWhenOnlyOneCategoryWasEverChanged(): void {
+    $settings = $this->reconstituteFromAccessOnlyStream();
+
+    $reflection = new \ReflectionClass(Settings::class);
+    $method = $reflection->getMethod('createSnapshotState');
+
+    $snapshot = $method->invoke($settings);
+
+    $this->assertIsArray($snapshot['access']);
+    $this->assertTrue($snapshot['access']['allowGuestUploads']);
+
+    $this->assertNull($snapshot['storage']);
+    $this->assertNull($snapshot['user']);
+    $this->assertNull($snapshot['image']);
+    $this->assertNull($snapshot['share']);
+  }
+
+  #[Test]
+  public function itThrowsForUntouchedCategoryAfterEventReplay(): void {
+    $settings = $this->reconstituteFromAccessOnlyStream();
+
+    $this->assertTrue($settings->get('access.allowGuestUploads'));
+
+    $this->expectException(\RuntimeException::class);
+    $this->expectExceptionMessage('Invalid Settings key');
+
+    $settings->get('storage.provider');
+  }
+
+  #[Test]
+  public function itKeepsSparseSnapshotStableThroughRestoreCycle(): void {
+    $settings = $this->reconstituteFromAccessOnlyStream();
+
+    $reflection = new \ReflectionClass(Settings::class);
+    $createMethod = $reflection->getMethod('createSnapshotState');
+    $restoreMethod = $reflection->getMethod('reconstituteFromSnapshotState');
+
+    $snapshot = $createMethod->invoke($settings);
+
+    $settingsId = ID::fromString(Settings::getIdReference());
+    $restored = $restoreMethod->invoke(null, $settingsId, $snapshot);
+
+    $this->assertTrue($restored->get('access.allowGuestUploads'));
+
+    $secondSnapshot = $createMethod->invoke($restored);
+
+    $this->assertEquals($snapshot, $secondSnapshot);
+    $this->assertNull($secondSnapshot['storage']);
+    $this->assertNull($secondSnapshot['user']);
+    $this->assertNull($secondSnapshot['image']);
+    $this->assertNull($secondSnapshot['share']);
+  }
+
+  private function reconstituteFromAccessOnlyStream(): Settings {
+    $accessSettings = AccessSettings::fromPayload(['allowGuestUploads' => true]);
+    $event = new SettingsChanged(SettingCategory::Access, $accessSettings);
+
+    $settings = $this->createSettings();
+    $settings->applySettingsChanged($event);
+
+    return $settings;
   }
 
   private function createSettings(): Settings {

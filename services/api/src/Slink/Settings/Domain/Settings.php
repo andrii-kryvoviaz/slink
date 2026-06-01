@@ -37,12 +37,12 @@ final class Settings extends AbstractAggregateRoot {
     $id = ID::fromString(self::getIdReference());
     parent::__construct($id);
   }
-  
-  private StorageSettings $storage;
-  private UserSettings $user;
-  private ImageSettings $image;
-  private AccessSettings $access;
-  private ShareSettings $share;
+
+  private ?StorageSettings $storage = null;
+  private ?UserSettings $user = null;
+  private ?ImageSettings $image = null;
+  private ?AccessSettings $access = null;
+  private ?ShareSettings $share = null;
   
   /**
    * @param array<int, ?AbstractSettingsValueObject> $data
@@ -106,11 +106,11 @@ final class Settings extends AbstractAggregateRoot {
    */
   protected function createSnapshotState(): array {
     return [
-      'storage' => $this->storage->toPayload(),
-      'user' => $this->user->toPayload(),
-      'image' => $this->image->toPayload(),
-      'access' => $this->access->toPayload(),
-      'share' => $this->share->toPayload(),
+      'storage' => $this->storage?->toPayload(),
+      'user' => $this->user?->toPayload(),
+      'image' => $this->image?->toPayload(),
+      'access' => $this->access?->toPayload(),
+      'share' => $this->share?->toPayload(),
     ];
   }
 
@@ -119,13 +119,13 @@ final class Settings extends AbstractAggregateRoot {
    */
   protected static function reconstituteFromSnapshotState(AggregateRootId $id, $state): AggregateRootWithSnapshotting {
     $settings = new static();
-    
-    $settings->storage = StorageSettings::fromPayload($state['storage']);
-    $settings->user = UserSettings::fromPayload($state['user']);
-    $settings->image = ImageSettings::fromPayload($state['image']);
-    $settings->access = AccessSettings::fromPayload($state['access']);
-    $settings->share = ShareSettings::fromPayload($state['share'] ?? []);
-    
+
+    $settings->storage = isset($state['storage']) ? StorageSettings::fromPayload($state['storage']) : null;
+    $settings->user = isset($state['user']) ? UserSettings::fromPayload($state['user']) : null;
+    $settings->image = isset($state['image']) ? ImageSettings::fromPayload($state['image']) : null;
+    $settings->access = isset($state['access']) ? AccessSettings::fromPayload($state['access']) : null;
+    $settings->share = isset($state['share']) ? ShareSettings::fromPayload($state['share']) : null;
+
     return $settings;
   }
 }
