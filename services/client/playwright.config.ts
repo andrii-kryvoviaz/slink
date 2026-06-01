@@ -6,7 +6,6 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
   reporter: process.env.CI ? [['html'], ['github']] : 'html',
   use: {
     baseURL: process.env.E2E_BASE_URL ?? 'http://localhost:3100',
@@ -20,11 +19,28 @@ export default defineConfig({
     },
     {
       name: 'chromium',
+      testIgnore: [
+        /admin\/settings-save\.spec\.ts/,
+        /preferences\/locale\.spec\.ts/,
+      ],
       use: {
         ...devices['Desktop Chrome'],
         storageState: 'e2e/.auth/user.json',
       },
       dependencies: ['setup'],
+    },
+    {
+      name: 'shared-state-mutating',
+      testMatch: [
+        /admin\/settings-save\.spec\.ts/,
+        /preferences\/locale\.spec\.ts/,
+      ],
+      fullyParallel: false,
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: 'e2e/.auth/user.json',
+      },
+      dependencies: ['chromium'],
     },
   ],
 });

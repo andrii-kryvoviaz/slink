@@ -42,4 +42,27 @@ export default async function globalSetup() {
   const admin = await AdminApiClient.create();
   process.env.E2E_ADMIN_TOKEN = admin.token;
   console.log('[e2e] Admin API token cached');
+
+  const current = await admin.getSettings();
+
+  await admin.updateSettings('access', {
+    ...current.access,
+    allowGuestUploads: false,
+    allowUnauthenticatedAccess: true,
+    requireSsl: false,
+    requireAuthForMediaShares: false,
+    requireAuthForCollectionShares: false,
+  });
+
+  await admin.updateSettings('user', {
+    ...current.user,
+    allowRegistration: true,
+    approvalRequired: true,
+    password: {
+      ...current.user?.password,
+      minLength: 8,
+    },
+  });
+
+  console.log('[e2e] Baseline settings established');
 }

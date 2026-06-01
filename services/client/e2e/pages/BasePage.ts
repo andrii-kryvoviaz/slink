@@ -1,4 +1,4 @@
-import type { Locator, Page } from '@playwright/test';
+import { type Locator, type Page, expect } from '@playwright/test';
 
 export class BasePage {
   readonly page: Page;
@@ -24,5 +24,12 @@ export class BasePage {
   protected async fillField(locator: Locator, value: string) {
     await locator.click();
     await locator.fill(value);
+  }
+
+  async clickUntil(trigger: Locator, target: Locator) {
+    await expect(async () => {
+      await trigger.click();
+      await expect(target).toBeVisible({ timeout: 1000 });
+    }).toPass({ timeout: 15000 });
   }
 }

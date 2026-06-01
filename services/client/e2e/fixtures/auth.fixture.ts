@@ -1,9 +1,18 @@
 import { test as base, expect } from '@playwright/test';
 
 import { AdminApiClient } from '../helpers/AdminApiClient';
+import { ContentApiClient } from '../helpers/ContentApiClient';
+import { AdminSettingsPage } from '../pages/AdminSettingsPage';
 import { AwaitingApprovalPage } from '../pages/AwaitingApprovalPage';
+import { CollectionsPage } from '../pages/CollectionsPage';
+import { ExplorePage } from '../pages/ExplorePage';
+import { HistoryPage } from '../pages/HistoryPage';
+import { LayoutControls } from '../pages/LayoutControls';
 import { LoginPage } from '../pages/LoginPage';
+import { PreferencesPage } from '../pages/PreferencesPage';
+import { SharePage } from '../pages/SharePage';
 import { SignupPage } from '../pages/SignupPage';
+import { UploadPage } from '../pages/UploadPage';
 
 function deepMerge(
   target: Record<string, any>,
@@ -35,7 +44,16 @@ type AuthFixtures = {
   loginPage: LoginPage;
   signupPage: SignupPage;
   awaitingApprovalPage: AwaitingApprovalPage;
+  uploadPage: UploadPage;
+  sharePage: SharePage;
+  explorePage: ExplorePage;
+  historyPage: HistoryPage;
+  collectionsPage: CollectionsPage;
+  preferencesPage: PreferencesPage;
+  adminSettingsPage: AdminSettingsPage;
+  layoutControls: LayoutControls;
   adminApi: AdminApiClient;
+  contentApi: ContentApiClient;
   settingsApi: SettingsApi;
 };
 
@@ -59,8 +77,44 @@ export const test = base.extend<AuthFixtures>({
     await use(new AwaitingApprovalPage(page));
   },
 
+  uploadPage: async ({ page }, use) => {
+    await use(new UploadPage(page));
+  },
+
+  sharePage: async ({ page }, use) => {
+    await use(new SharePage(page));
+  },
+
+  explorePage: async ({ page }, use) => {
+    await use(new ExplorePage(page));
+  },
+
+  historyPage: async ({ page }, use) => {
+    await use(new HistoryPage(page));
+  },
+
+  collectionsPage: async ({ page }, use) => {
+    await use(new CollectionsPage(page));
+  },
+
+  preferencesPage: async ({ page }, use) => {
+    await use(new PreferencesPage(page));
+  },
+
+  adminSettingsPage: async ({ page }, use) => {
+    await use(new AdminSettingsPage(page));
+  },
+
+  layoutControls: async ({ page }, use) => {
+    await use(new LayoutControls(page));
+  },
+
   adminApi: async ({}, use) => {
     await use(await AdminApiClient.create());
+  },
+
+  contentApi: async ({}, use) => {
+    await use(await ContentApiClient.create());
   },
 
   settingsApi: async ({ adminApi }, use) => {

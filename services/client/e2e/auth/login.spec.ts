@@ -40,10 +40,9 @@ test.describe('Login', () => {
     );
   });
 
-  test('shows error for invalid credentials', async ({ loginPage }) => {
+  test('rejects login for invalid credentials', async ({ loginPage }) => {
     await loginPage.login('wrong@user.com', 'wrongpassword');
-    await loginPage.waitForToast();
-    await expect(loginPage.page).toHaveURL(/\/profile\/login/);
+    await loginPage.expectRejected();
   });
 
   test('shows validation errors for empty fields', async ({ loginPage }) => {
@@ -64,8 +63,7 @@ test.describe('Login', () => {
     } catch {}
 
     await loginPage.login('inactive-login', 'Test123!');
-    await loginPage.waitForToast();
-    await expect(loginPage.page).toHaveURL(/\/profile\/login/);
+    await loginPage.expectRejected();
   });
 
   test('rejects login for suspended user', async ({ loginPage, adminApi }) => {
@@ -86,8 +84,7 @@ test.describe('Login', () => {
     await adminApi.changeUserStatus(user.id, 'suspended');
 
     await loginPage.login('suspended-login', 'Test123!');
-    await loginPage.waitForToast();
-    await expect(loginPage.page).toHaveURL(/\/profile\/login/);
+    await loginPage.expectRejected();
   });
 
   test('navigates to signup page from login page', async ({ page }) => {

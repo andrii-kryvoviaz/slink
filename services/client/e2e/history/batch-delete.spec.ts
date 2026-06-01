@@ -1,0 +1,31 @@
+import { expect, test } from '../fixtures/auth.fixture';
+
+test.describe('History batch delete', () => {
+  test.use({ storageState: 'e2e/.auth/user.json' });
+
+  test('selects multiple images and removes them from the feed', async ({
+    page,
+    historyPage,
+    contentApi,
+  }) => {
+    await contentApi.uploadImage();
+    await contentApi.uploadImage();
+    await contentApi.uploadImage();
+
+    await historyPage.useGridView();
+    await historyPage.goto();
+    await historyPage.gridCards.first().waitFor({ state: 'visible' });
+
+    const before = await historyPage.gridCards.count();
+    const selectCount = 2;
+
+    await historyPage.selectImages(selectCount);
+    await expect(historyPage.deleteButton).toBeVisible();
+
+    await historyPage.batchDelete(selectCount);
+
+    await expect
+      .poll(() => historyPage.gridCards.count())
+      .toBe(before - selectCount);
+  });
+});

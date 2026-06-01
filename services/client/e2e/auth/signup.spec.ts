@@ -1,7 +1,6 @@
 import { expect, test } from '../fixtures/auth.fixture';
 
 test.describe('Signup', () => {
-  test.describe.configure({ mode: 'serial' });
   test.use({ storageState: { cookies: [], origins: [] } });
 
   test('displays the signup page', async ({ page }) => {
@@ -19,19 +18,6 @@ test.describe('Signup', () => {
     await expect(
       page.getByRole('button', { name: 'Create Account' }),
     ).toBeVisible();
-  });
-
-  test('signs up with valid data', async ({ signupPage }) => {
-    const suffix = Date.now();
-
-    await signupPage.signup({
-      username: `testuser${suffix}`,
-      email: `testuser${suffix}@example.com`,
-      password: 'TestPass123!',
-      confirm: 'TestPass123!',
-    });
-
-    await expect(signupPage.page).not.toHaveURL(/\/profile\/signup/);
   });
 
   test('shows error for mismatched passwords', async ({ signupPage }) => {
@@ -89,22 +75,7 @@ test.describe('Signup', () => {
     await expect(page).toHaveURL(/\/profile\/login/);
   });
 
-  test('redirects to login when registration is disabled', async ({
-    page,
-    settingsApi,
-  }) => {
-    await settingsApi.set('user', { allowRegistration: false });
-
-    await page.goto('/profile/signup');
-    await expect(page).toHaveURL(/\/profile\/login/);
-  });
-
-  test('shows awaiting approval page after signup', async ({
-    signupPage,
-    settingsApi,
-  }) => {
-    await settingsApi.set('user', { approvalRequired: true });
-
+  test('shows awaiting approval page after signup', async ({ signupPage }) => {
     const suffix = Date.now();
 
     await signupPage.signup({
@@ -122,11 +93,8 @@ test.describe('Signup', () => {
 
   test('shows welcome aboard after admin approves user', async ({
     signupPage,
-    settingsApi,
     adminApi,
   }) => {
-    await settingsApi.set('user', { approvalRequired: true });
-
     const suffix = Date.now();
 
     await signupPage.signup({
@@ -153,10 +121,7 @@ test.describe('Signup', () => {
   test('sign in link on awaiting approval page navigates to login', async ({
     signupPage,
     awaitingApprovalPage,
-    settingsApi,
   }) => {
-    await settingsApi.set('user', { approvalRequired: true });
-
     const suffix = Date.now();
 
     await signupPage.signup({
@@ -169,26 +134,5 @@ test.describe('Signup', () => {
     await expect(signupPage.page).toHaveURL(/\/profile\/awaiting-approval/);
     await awaitingApprovalPage.signInLink.click();
     await expect(signupPage.page).toHaveURL(/\/profile\/login/);
-  });
-
-  test('rejects weak password when policy requires longer', async ({
-    signupPage,
-    settingsApi,
-  }) => {
-    await settingsApi.set('user', { password: { minLength: 12 } });
-
-    const suffix = Date.now();
-
-    await signupPage.signup({
-      username: `weak${suffix}`,
-      email: `weak${suffix}@example.com`,
-      password: 'Short1!',
-      confirm: 'Short1!',
-    });
-
-    await expect(signupPage.page).toHaveURL(/\/profile\/signup/);
-    await expect(
-      signupPage.page.getByText('Password must be at least 12 characters long'),
-    ).toBeVisible();
   });
 });

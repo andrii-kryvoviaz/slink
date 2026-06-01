@@ -2,7 +2,14 @@ import { expect, test } from '../fixtures/auth.fixture';
 
 test.describe('Logout', () => {
   test.describe.configure({ mode: 'serial' });
-  test.use({ storageState: 'e2e/.auth/user.json' });
+  test.use({ storageState: { cookies: [], origins: [] } });
+
+  test.beforeEach(async ({ loginPage, testUser, page }) => {
+    await loginPage.login(testUser.username, testUser.password);
+    await page.waitForURL((url) => !url.pathname.startsWith('/profile/login'), {
+      timeout: 30000,
+    });
+  });
 
   test('logs out and redirects to login', async ({ page }) => {
     await page.goto('/');

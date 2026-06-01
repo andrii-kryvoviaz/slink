@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test';
+import { type Page, expect } from '@playwright/test';
 
 import { BasePage } from './BasePage';
 
@@ -29,5 +29,17 @@ export class LoginPage extends BasePage {
     await this.usernameInput.fill(username);
     await this.fillField(this.passwordInput, password);
     await this.submitButton.click();
+  }
+
+  async expectRejected() {
+    await expect(this.page).toHaveURL(/\/profile\/login/);
+    await expect(this.heading).toBeVisible();
+    await expect(this.submitButton).toBeVisible();
+    await expect
+      .poll(async () => {
+        const cookies = await this.page.context().cookies();
+        return cookies.some((cookie) => cookie.name === 'sessionId');
+      })
+      .toBe(false);
   }
 }
