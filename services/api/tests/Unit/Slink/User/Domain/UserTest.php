@@ -359,46 +359,51 @@ final class UserTest extends TestCase {
   #[Test]
   public function itCreatesApiKeySuccessfully(): void {
     $user = $this->createUser();
+    $keyId = ID::generate();
     $keyName = 'Test API Key';
-    
-    $key = $user->createApiKey($keyName);
-    
+
+    $key = $user->createApiKey($keyId, $keyName);
+
     $this->assertStringStartsWith('sk_', $key);
     $this->assertEquals(67, strlen($key));
-    
+
     $events = $user->releaseEvents();
     $lastEvent = end($events);
-    
+
     $this->assertInstanceOf(\Slink\User\Domain\Event\ApiKeyWasCreated::class, $lastEvent);
+    $this->assertSame($keyId->toString(), $lastEvent->keyId);
   }
 
   #[Test]
   public function itCreatesApiKeyWithExpirationDate(): void {
     $user = $this->createUser();
+    $keyId = ID::generate();
     $keyName = 'Expiring API Key';
     $expiresAt = \Slink\Shared\Domain\ValueObject\Date\DateTime::fromString('2025-12-31 23:59:59');
-    
-    $key = $user->createApiKey($keyName, $expiresAt);
-    
+
+    $key = $user->createApiKey($keyId, $keyName, $expiresAt);
+
     $this->assertStringStartsWith('sk_', $key);
-    
+
     $events = $user->releaseEvents();
     $lastEvent = end($events);
-    
+
     $this->assertInstanceOf(\Slink\User\Domain\Event\ApiKeyWasCreated::class, $lastEvent);
+    $this->assertSame($keyId->toString(), $lastEvent->keyId);
   }
 
   #[Test]
   public function itRevokesApiKeySuccessfully(): void {
     $user = $this->createUser();
     $keyId = 'key-123';
-    
+
     $user->revokeApiKey($keyId);
-    
+
     $events = $user->releaseEvents();
     $lastEvent = end($events);
-    
+
     $this->assertInstanceOf(\Slink\User\Domain\Event\ApiKeyWasRevoked::class, $lastEvent);
+    $this->assertSame($keyId, $lastEvent->keyId);
   }
 
   private function createChangeUserRoleContext(
