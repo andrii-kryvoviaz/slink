@@ -24,12 +24,24 @@ final class VipsImageProcessorExifTest extends TestCase {
     
     $this->fixturesPath = self::getFixturesPath();
     $this->testImagePath = $this->fixturesPath . '/test_with_exif.jpg';
-    
+
+    if (!is_dir($this->fixturesPath)) {
+      mkdir($this->fixturesPath, 0777, true);
+    }
+
     $this->createTestImageWithExif();
   }
 
   private static function getFixturesPath(): string {
     return dirname(__DIR__, 6) . '/fixtures';
+  }
+
+  private static function exiftoolAvailable(): bool {
+    $output = [];
+    $returnCode = 1;
+    \exec('command -v exiftool', $output, $returnCode);
+
+    return $returnCode === 0;
   }
 
   protected function tearDown(): void {
@@ -41,8 +53,12 @@ final class VipsImageProcessorExifTest extends TestCase {
 
   #[Test]
   public function itStripsExifMetadata(): void {
+    if (!self::exiftoolAvailable()) {
+      $this->markTestSkipped('exiftool is not available');
+    }
+
     $this->assertFileExists($this->testImagePath);
-    
+
     exec(sprintf('exiftool %s', escapeshellarg($this->testImagePath)), $outputBefore);
     $exifBefore = implode("\n", $outputBefore);
     
@@ -88,8 +104,12 @@ final class VipsImageProcessorExifTest extends TestCase {
 
   #[Test]
   public function itRemovesXmpData(): void {
+    if (!self::exiftoolAvailable()) {
+      $this->markTestSkipped('exiftool is not available');
+    }
+
     $this->assertFileExists($this->testImagePath);
-    
+
     exec(sprintf('exiftool -XMP:all="TestXMP" -overwrite_original %s', escapeshellarg($this->testImagePath)));
     
     exec(sprintf('exiftool %s | grep -i xmp', escapeshellarg($this->testImagePath)), $xmpBefore);
