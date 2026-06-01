@@ -19,6 +19,7 @@ RUN composer install --ignore-platform-reqs --no-interaction --no-scripts
 
 COPY --chown=www-data:www-data ./services/api .
 RUN mv .env.example .env && \
+    mkdir -p config/jwt && \
     openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:4096 -out config/jwt/private.pem && \
     openssl pkey -in config/jwt/private.pem -pubout -out config/jwt/public.pem && \
     chmod 644 config/jwt/private.pem config/jwt/public.pem && \
