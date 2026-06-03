@@ -14,16 +14,14 @@ export class Locale {
     await this.api.preferences.updatePreferences({
       'display.language': language,
     });
-    await this.page
-      .context()
-      .addCookies([
-        {
-          name: LOCALE_COOKIE,
-          value: language,
-          domain: 'localhost',
-          path: '/',
-        },
-      ]);
+    await this.page.context().addCookies([
+      {
+        name: LOCALE_COOKIE,
+        value: language,
+        domain: 'localhost',
+        path: '/',
+      },
+    ]);
   }
 
   async reset() {
