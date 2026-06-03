@@ -1,20 +1,5 @@
-import { execFileSync } from 'child_process';
-
 import { expect, test } from '../fixtures/auth.fixture';
-
-const DOCKER_ARGS = [
-  'compose',
-  '-p',
-  'slink-e2e',
-  'exec',
-  '-T',
-  'slink',
-  'slink',
-];
-
-function slink(...args: string[]) {
-  execFileSync('docker', [...DOCKER_ARGS, ...args]);
-}
+import { ensureUser } from '../helpers/slink';
 
 test.describe('Login', () => {
   test.use({ storageState: { cookies: [], origins: [] } });
@@ -52,36 +37,26 @@ test.describe('Login', () => {
   });
 
   test('rejects login for inactive user', async ({ loginPage }) => {
-    try {
-      slink(
-        'user:create',
-        '--email=inactive@test.local',
-        '--username=inactive-login',
-        '-p',
-        'Test123!',
-      );
-    } catch {}
+    ensureUser({
+      email: 'inactive@test.local',
+      username: 'inactive-login',
+      password: 'Test123!',
+    });
 
     await loginPage.login('inactive-login', 'Test123!');
     await loginPage.expectRejected();
   });
 
-  test('rejects login for suspended user', async ({ loginPage, adminApi }) => {
-    try {
-      slink(
-        'user:create',
-        '--email=suspended@test.local',
-        '--username=suspended-login',
-        '-p',
-        'Test123!',
-        '-a',
-      );
-    } catch {
-      slink('user:activate', '--email=suspended@test.local');
-    }
+  test('rejects login for suspended user', async ({ loginPage, api }) => {
+    ensureUser({
+      email: 'suspended@test.local',
+      username: 'suspended-login',
+      password: 'Test123!',
+      active: true,
+    });
 
-    const user = await adminApi.findUserByEmail('suspended@test.local');
-    await adminApi.changeUserStatus(user.id, 'suspended');
+    const user = await api.users.findUserByEmail('suspended@test.local');
+    await api.users.changeUserStatus(user.id, 'suspended');
 
     await loginPage.login('suspended-login', 'Test123!');
     await loginPage.expectRejected();

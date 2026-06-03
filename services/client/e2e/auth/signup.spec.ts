@@ -93,7 +93,7 @@ test.describe('Signup', () => {
 
   test('shows welcome aboard after admin approves user', async ({
     signupPage,
-    adminApi,
+    api,
   }) => {
     const suffix = Date.now();
 
@@ -110,7 +110,7 @@ test.describe('Signup', () => {
       .getByText('Your Account Reference')
       .locator('xpath=ancestor::*[3]');
     const userId = await accountRef.getByRole('button').first().textContent();
-    await adminApi.changeUserStatus(userId!.trim(), 'active');
+    await api.users.changeUserStatus(userId!.trim(), 'active');
 
     await signupPage.page.reload();
     await expect(

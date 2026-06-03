@@ -1,12 +1,12 @@
 import { expect, test } from '../fixtures/auth.fixture';
 
-test.describe('Admin security settings', () => {
-  test.use({ storageState: 'e2e/.auth/user.json' });
+test.describe('Admin security settings', { tag: '@serial' }, () => {
+  test.use({ storageState: 'e2e/.auth/serial.json' });
 
   test('toggles a security setting and persists it across reload', async ({
     page,
     adminSettingsPage,
-    adminApi,
+    api,
   }) => {
     await adminSettingsPage.gotoSecurity();
     await expect(adminSettingsPage.heading).toBeVisible();
@@ -23,7 +23,7 @@ test.describe('Admin security settings', () => {
 
     await expect
       .poll(async () => {
-        const current = await adminApi.getSettings();
+        const current = await api.settings.getSettings();
         return String(Boolean(current.user?.allowRegistration));
       })
       .toBe(expected);

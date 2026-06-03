@@ -20,7 +20,7 @@ test.describe('Admin navigation', () => {
       page,
       signupPage,
       loginPage,
-      adminApi,
+      api,
     }) => {
       const suffix = Date.now();
       const username = `nonadmin${suffix}`;
@@ -35,8 +35,8 @@ test.describe('Admin navigation', () => {
       });
       await expect(signupPage.page).not.toHaveURL(/\/profile\/signup/);
 
-      const user = await adminApi.findUserByEmail(email);
-      await adminApi.changeUserStatus(user.id, 'active');
+      const user = await api.users.findUserByEmail(email);
+      await api.users.changeUserStatus(user.id, 'active');
 
       await loginPage.login(username, password);
       await loginPage.page.waitForURL(

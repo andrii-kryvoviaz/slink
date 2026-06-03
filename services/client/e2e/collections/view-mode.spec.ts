@@ -7,9 +7,9 @@ test.describe('Collections view mode', () => {
     page,
     collectionsPage,
     layoutControls,
-    contentApi,
+    api,
   }) => {
-    await contentApi.createCollection({ name: `E2E ViewMode ${Date.now()}` });
+    await api.content.createCollection({ name: `E2E ViewMode ${Date.now()}` });
 
     await collectionsPage.goto();
     await expect(collectionsPage.heading).toBeVisible();

@@ -6,11 +6,11 @@ test.describe('History batch delete', () => {
   test('selects multiple images and removes them from the feed', async ({
     page,
     historyPage,
-    contentApi,
+    api,
   }) => {
-    await contentApi.uploadImage();
-    await contentApi.uploadImage();
-    await contentApi.uploadImage();
+    await api.content.uploadImage();
+    await api.content.uploadImage();
+    await api.content.uploadImage();
 
     await historyPage.useGridView();
     await historyPage.goto();

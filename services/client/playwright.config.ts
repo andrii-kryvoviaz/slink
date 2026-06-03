@@ -1,7 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
 
+export const USER_STORAGE_STATE = 'e2e/.auth/user.json';
+export const SERIAL_STORAGE_STATE = 'e2e/.auth/serial.json';
+
 export default defineConfig({
-  globalSetup: './e2e/global-setup.ts',
   testDir: './e2e',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
@@ -14,33 +16,38 @@ export default defineConfig({
   },
   projects: [
     {
+      name: 'provision',
+      testMatch: '**/provision.setup.ts',
+    },
+    {
       name: 'setup',
-      testMatch: /.*\.setup\.ts/,
+      testMatch: '**/auth.setup.ts',
+      dependencies: ['provision'],
     },
     {
       name: 'chromium',
-      testIgnore: [
-        /admin\/settings-save\.spec\.ts/,
-        /preferences\/locale\.spec\.ts/,
-      ],
+      grepInvert: /@serial/,
       use: {
         ...devices['Desktop Chrome'],
-        storageState: 'e2e/.auth/user.json',
+        storageState: USER_STORAGE_STATE,
       },
       dependencies: ['setup'],
     },
     {
+      name: 'serial-setup',
+      testMatch: '**/serial-auth.setup.ts',
+      dependencies: ['chromium'],
+    },
+    {
       name: 'shared-state-mutating',
-      testMatch: [
-        /admin\/settings-save\.spec\.ts/,
-        /preferences\/locale\.spec\.ts/,
-      ],
+      grep: /@serial/,
       fullyParallel: false,
+      workers: 1,
       use: {
         ...devices['Desktop Chrome'],
-        storageState: 'e2e/.auth/user.json',
+        storageState: SERIAL_STORAGE_STATE,
       },
-      dependencies: ['chromium'],
+      dependencies: ['serial-setup'],
     },
   ],
 });

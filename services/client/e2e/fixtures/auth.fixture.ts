@@ -1,7 +1,7 @@
 import { test as base, expect } from '@playwright/test';
 
-import { AdminApiClient } from '../helpers/AdminApiClient';
-import { ContentApiClient } from '../helpers/ContentApiClient';
+import { Locale } from '../helpers/Locale';
+import { ApiClient } from '../helpers/api';
 import { AdminSettingsPage } from '../pages/AdminSettingsPage';
 import { AwaitingApprovalPage } from '../pages/AwaitingApprovalPage';
 import { CollectionsPage } from '../pages/CollectionsPage';
@@ -52,8 +52,8 @@ type AuthFixtures = {
   preferencesPage: PreferencesPage;
   adminSettingsPage: AdminSettingsPage;
   layoutControls: LayoutControls;
-  adminApi: AdminApiClient;
-  contentApi: ContentApiClient;
+  api: ApiClient;
+  localeHelper: Locale;
   settingsApi: SettingsApi;
 };
 
@@ -109,29 +109,29 @@ export const test = base.extend<AuthFixtures>({
     await use(new LayoutControls(page));
   },
 
-  adminApi: async ({}, use) => {
-    await use(await AdminApiClient.create());
+  api: async ({}, use) => {
+    await use(await ApiClient.create());
   },
 
-  contentApi: async ({}, use) => {
-    await use(await ContentApiClient.create());
+  localeHelper: async ({ page, api }, use) => {
+    await use(new Locale(page, api));
   },
 
-  settingsApi: async ({ adminApi }, use) => {
+  settingsApi: async ({ api }, use) => {
     const pending: Array<{ category: string; settings: object }> = [];
 
     await use({
       set: async (category: string, settings: Record<string, unknown>) => {
-        const allSettings = await adminApi.getSettings();
+        const allSettings = await api.settings.getSettings();
         const current = allSettings[category] ?? {};
         pending.push({ category, settings: { ...current } });
         const merged = deepMerge(current, settings as Record<string, any>);
-        await adminApi.updateSettings(category, merged);
+        await api.settings.updateSettings(category, merged);
       },
     });
 
     for (const { category, settings } of pending) {
-      await adminApi.updateSettings(category, settings);
+      await api.settings.updateSettings(category, settings);
     }
   },
 });

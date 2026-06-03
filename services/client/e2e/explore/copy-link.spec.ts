@@ -7,11 +7,11 @@ test.use({
 
 test.describe('Image share link copy', () => {
   test('copies the share link from the image info page', async ({
-    contentApi,
+    api,
     page,
     explorePage,
   }) => {
-    const imageId = await contentApi.uploadImage({ isPublic: false });
+    const imageId = await api.content.uploadImage({ isPublic: false });
 
     await page.goto(`/info/${imageId}`);
 
@@ -27,11 +27,11 @@ test.describe('Image share link copy', () => {
   });
 
   test('writes a non-empty value to the clipboard', async ({
-    contentApi,
+    api,
     page,
     explorePage,
   }) => {
-    const imageId = await contentApi.uploadImage({ isPublic: false });
+    const imageId = await api.content.uploadImage({ isPublic: false });
 
     await page.goto(`/info/${imageId}`);
 

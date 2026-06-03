@@ -3,11 +3,8 @@ import { expect, test } from '../fixtures/auth.fixture';
 test.describe('Explore search', () => {
   test.use({ storageState: 'e2e/.auth/user.json' });
 
-  test('filters the feed by the search term', async ({
-    explorePage,
-    contentApi,
-  }) => {
-    await contentApi.uploadImage({ isPublic: true });
+  test('filters the feed by the search term', async ({ explorePage, api }) => {
+    await api.content.uploadImage({ isPublic: true });
 
     await explorePage.goto();
     await explorePage.feedItems.first().waitFor({ state: 'visible' });

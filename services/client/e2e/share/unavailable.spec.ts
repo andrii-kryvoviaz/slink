@@ -6,15 +6,15 @@ test.describe('Unavailable share', () => {
   test('reroutes an expired image share to the unavailable page', async ({
     page,
     sharePage,
-    contentApi,
+    api,
   }) => {
     const seconds = 4;
-    const imageId = await contentApi.uploadImage({ isPublic: false });
-    const share = await contentApi.createImageShare(imageId);
-    await contentApi.publishShare(share.shareId);
+    const imageId = await api.content.uploadImage({ isPublic: false });
+    const share = await api.shares.createImageShare(imageId);
+    await api.shares.publishShare(share.shareId);
 
     const expiresAt = new Date(Date.now() + seconds * 1000).toISOString();
-    await contentApi.setShareExpiration(share.shareId, expiresAt);
+    await api.shares.setShareExpiration(share.shareId, expiresAt);
 
     await new Promise((resolve) => setTimeout(resolve, (seconds + 1) * 1000));
 
@@ -25,12 +25,12 @@ test.describe('Unavailable share', () => {
   test('shows the unavailable page for an unpublished image share', async ({
     page,
     sharePage,
-    contentApi,
+    api,
   }) => {
-    const imageId = await contentApi.uploadImage({ isPublic: false });
-    const share = await contentApi.createImageShare(imageId);
-    await contentApi.publishShare(share.shareId);
-    await contentApi.unpublishShare(share.shareId);
+    const imageId = await api.content.uploadImage({ isPublic: false });
+    const share = await api.shares.createImageShare(imageId);
+    await api.shares.publishShare(share.shareId);
+    await api.shares.unpublishShare(share.shareId);
 
     await page.goto(`/image/${imageId}.png`);
     await sharePage.expectUnavailable();

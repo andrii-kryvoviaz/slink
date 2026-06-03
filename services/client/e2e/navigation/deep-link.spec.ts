@@ -27,10 +27,10 @@ test.describe('Authenticated deep-link cold load', () => {
 
   test('hard-navigates directly to a seeded collection detail page', async ({
     page,
-    contentApi,
+    api,
   }) => {
     const name = `Deep Link ${Date.now()}`;
-    const collectionId = await contentApi.createCollection({ name });
+    const collectionId = await api.content.createCollection({ name });
 
     await page.goto(`/collection/${collectionId}`, { waitUntil: 'load' });
 

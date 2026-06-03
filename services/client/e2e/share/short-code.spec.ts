@@ -5,11 +5,11 @@ test.describe('Short code resolution', () => {
 
   test('resolves a published image short code to the image content', async ({
     page,
-    contentApi,
+    api,
   }) => {
-    const imageId = await contentApi.uploadImage({ isPublic: true });
-    const share = await contentApi.publishImageShare(imageId);
-    const code = contentApi.getShortCode(share);
+    const imageId = await api.content.uploadImage({ isPublic: true });
+    const share = await api.shares.publishImageShare(imageId);
+    const code = api.shares.getShortCode(share);
     expect(code).not.toBeNull();
 
     const response = await page.goto(`/i/${code}`);
@@ -20,17 +20,17 @@ test.describe('Short code resolution', () => {
 
   test('resolves a published collection short code to the collection page', async ({
     page,
-    contentApi,
+    api,
   }) => {
     const collectionName = `Shared Collection ${Date.now()}`;
-    const collectionId = await contentApi.createCollection({
+    const collectionId = await api.content.createCollection({
       name: collectionName,
     });
-    const imageId = await contentApi.uploadImage({ isPublic: true });
-    await contentApi.addImageToCollection(collectionId, imageId);
+    const imageId = await api.content.uploadImage({ isPublic: true });
+    await api.content.addImageToCollection(collectionId, imageId);
 
-    const share = await contentApi.publishCollectionShare(collectionId);
-    const code = contentApi.getShortCode(share);
+    const share = await api.shares.publishCollectionShare(collectionId);
+    const code = api.shares.getShortCode(share);
     expect(code).not.toBeNull();
 
     await page.goto(`/c/${code}`);

@@ -1,21 +1,6 @@
-import { execFileSync } from 'child_process';
-
 import { expect, test } from '../fixtures/auth.fixture';
-import { ContentApiClient } from '../helpers/ContentApiClient';
-
-const DOCKER_ARGS = [
-  'compose',
-  '-p',
-  'slink-e2e',
-  'exec',
-  '-T',
-  'slink',
-  'slink',
-];
-
-function slink(...args: string[]) {
-  execFileSync('docker', [...DOCKER_ARGS, ...args]);
-}
+import { ApiClient } from '../helpers/api';
+import { ensureUser } from '../helpers/slink';
 
 const OTHER_USER = {
   email: 'bookmark-owner@test.local',
@@ -24,26 +9,18 @@ const OTHER_USER = {
 };
 
 async function uploadOtherUserPublicImage(): Promise<string> {
-  try {
-    slink(
-      'user:create',
-      `--email=${OTHER_USER.email}`,
-      `--username=${OTHER_USER.username}`,
-      '-p',
-      OTHER_USER.password,
-      '-a',
-    );
-  } catch {
-    try {
-      slink('user:activate', `--email=${OTHER_USER.email}`);
-    } catch {}
-  }
+  ensureUser({
+    email: OTHER_USER.email,
+    username: OTHER_USER.username,
+    password: OTHER_USER.password,
+    active: true,
+  });
 
-  const client = await ContentApiClient.createForUser(
+  const client = await ApiClient.createForUser(
     OTHER_USER.username,
     OTHER_USER.password,
   );
-  return client.uploadImage({ isPublic: true });
+  return client.content.uploadImage({ isPublic: true });
 }
 
 test.use({ storageState: 'e2e/.auth/user.json' });
@@ -84,11 +61,24 @@ test.describe('Explore bookmark', () => {
     const bookmarkButton = explorePage.viewer
       .locator(`[data-post-id="${imageId}"]`)
       .locator('button[aria-pressed]');
-    await explorePage.toggleBookmark(bookmarkButton, 'true');
 
-    await page.goto('/bookmarks');
-    await expect(
-      page.locator(`main a[href*="post=${imageId}"]`).first(),
-    ).toBeVisible();
+    const saved = page.waitForResponse(
+      (response) =>
+        response.request().method() === 'POST' &&
+        new URL(response.url()).pathname.endsWith(
+          `/image/${imageId}/bookmark`,
+        ) &&
+        response.ok(),
+    );
+    await explorePage.toggleBookmark(bookmarkButton, 'true');
+    await saved;
+
+    const bookmarkLink = page
+      .locator(`main a[href*="post=${imageId}"]`)
+      .first();
+    await expect(async () => {
+      await page.goto('/bookmarks');
+      await expect(bookmarkLink).toBeVisible({ timeout: 2000 });
+    }).toPass({ timeout: 15000 });
   });
 });

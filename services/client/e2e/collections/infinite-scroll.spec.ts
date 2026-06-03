@@ -21,17 +21,14 @@ test.describe('Collection paginated loading', () => {
     ]);
   });
 
-  test('appends more items via the Load More button', async ({
-    contentApi,
-    page,
-  }) => {
-    const collectionId = await contentApi.createCollection({
+  test('appends more items via the Load More button', async ({ api, page }) => {
+    const collectionId = await api.content.createCollection({
       name: `Paginated ${Date.now()}`,
     });
 
     for (let i = 0; i < TOTAL_IMAGES; i++) {
-      const imageId = await contentApi.uploadImage({ isPublic: false });
-      await contentApi.addImageToCollection(collectionId, imageId);
+      const imageId = await api.content.uploadImage({ isPublic: false });
+      await api.content.addImageToCollection(collectionId, imageId);
     }
 
     await page.goto(`/collection/${collectionId}`);

@@ -8,12 +8,37 @@ export class AdminSettingsPage extends BasePage {
   readonly allowRegistrationSwitch = this.switchByName('allowRegistration');
   readonly approvalRequiredSwitch = this.switchByName('approvalRequired');
 
+  readonly allowGuestUploadsSwitch = this.switchByName(
+    'accessAllowGuestUploads',
+  );
+  readonly allowUnauthenticatedAccessSwitch = this.switchByName(
+    'accessAllowUnauthenticatedAccess',
+  );
+  readonly requireAuthForMediaSharesSwitch = this.switchByName(
+    'accessRequireAuthForMediaShares',
+  );
+  readonly requireAuthForCollectionSharesSwitch = this.switchByName(
+    'accessRequireAuthForCollectionShares',
+  );
+
   constructor(page: Page) {
     super(page);
   }
 
   get heading() {
     return this.page.getByRole('heading', { name: 'Security' });
+  }
+
+  get guestUploadWarningNotice() {
+    return this.page.getByText(
+      'Anyone can upload without identifying themselves',
+    );
+  }
+
+  get embedNotice() {
+    return this.page.getByText(
+      'Keep this off if you intend to embed media on external sites',
+    );
   }
 
   async gotoSecurity() {
@@ -36,10 +61,42 @@ export class AdminSettingsPage extends BasePage {
     }).toPass({ timeout: 15000 });
   }
 
+  async setSwitch(name: string, checked: boolean) {
+    const toggle = this.switchByName(name);
+    const current = await toggle.getAttribute('aria-checked');
+
+    if (current === String(checked)) {
+      return;
+    }
+
+    await this.toggleSetting(name);
+  }
+
   async saveUserSettings() {
-    const pane = this.page
-      .locator('form')
-      .filter({ has: this.allowRegistrationSwitch });
+    await this.saveSettings(this.allowRegistrationSwitch);
+  }
+
+  async saveAccessSettings() {
+    await this.saveSettings(this.allowGuestUploadsSwitch);
+  }
+
+  private settingRow(name: string): Locator {
+    return this.page
+      .locator('div.flex-col', { has: this.switchByName(name) })
+      .last();
+  }
+
+  async resetAccessSetting(name: string) {
+    const row = this.settingRow(name);
+    const resetTrigger = row.getByLabel('Reset to default value');
+    const confirmButton = row.getByRole('button', { name: 'Confirm' });
+
+    await this.clickUntil(resetTrigger, confirmButton);
+    await confirmButton.click();
+  }
+
+  private async saveSettings(paneSwitch: Locator) {
+    const pane = this.page.locator('form').filter({ has: paneSwitch });
     const saveButton = pane.getByRole('button', { name: 'Save Changes' });
 
     await expect(async () => {

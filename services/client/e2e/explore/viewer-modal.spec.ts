@@ -3,10 +3,10 @@ import { expect, test } from '../fixtures/auth.fixture';
 test.use({ storageState: 'e2e/.auth/user.json' });
 
 test.describe('Explore viewer modal', () => {
-  test.beforeEach(async ({ contentApi }) => {
-    await contentApi.uploadImage({ isPublic: true });
-    await contentApi.uploadImage({ isPublic: true });
-    await contentApi.uploadImage({ isPublic: true });
+  test.beforeEach(async ({ api }) => {
+    await api.content.uploadImage({ isPublic: true });
+    await api.content.uploadImage({ isPublic: true });
+    await api.content.uploadImage({ isPublic: true });
   });
 
   test('opens, navigates with buttons, and closes', async ({ explorePage }) => {

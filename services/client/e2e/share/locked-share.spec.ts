@@ -8,12 +8,12 @@ test.describe('Password protected share', () => {
   test('reroutes a protected image to the locked page and unlocks with the correct password', async ({
     page,
     sharePage,
-    contentApi,
+    api,
   }) => {
-    const imageId = await contentApi.uploadImage({ isPublic: false });
-    const share = await contentApi.createImageShare(imageId);
-    await contentApi.setSharePassword(share.shareId, password);
-    await contentApi.publishShare(share.shareId);
+    const imageId = await api.content.uploadImage({ isPublic: false });
+    const share = await api.shares.createImageShare(imageId);
+    await api.shares.setSharePassword(share.shareId, password);
+    await api.shares.publishShare(share.shareId);
 
     await expect
       .poll(
