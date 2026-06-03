@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace UI\Console\Command\User;
 
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Slink\Shared\Application\Command\CommandTrait;
 use Slink\User\Application\Command\CreateUser\CreateUserCommand as CreateUser;
 use Slink\User\Domain\Enum\UserStatus;
+use Slink\User\Domain\Exception\DisplayNameAlreadyExistException;
+use Slink\User\Domain\Exception\EmailAlreadyExistException;
+use Slink\User\Domain\Exception\UsernameAlreadyExistException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,6 +18,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Question\Question;
+use Symfony\Component\Messenger\Exception\WrappedExceptionsInterface;
 
 #[AsCommand(
   name: 'user:create',
@@ -28,7 +33,8 @@ final class CreateUserCommand extends Command {
       ->addOption('username', null, InputOption::VALUE_REQUIRED, 'Username')
       ->addOption('display-name', null, InputOption::VALUE_OPTIONAL, 'Display name (defaults to username)')
       ->addOption('password', 'p', InputOption::VALUE_REQUIRED, 'User password (will be prompted if not provided)')
-      ->addOption('activate', 'a', InputOption::VALUE_NONE, 'Activate the user account immediately');
+      ->addOption('activate', 'a', InputOption::VALUE_NONE, 'Activate the user account immediately')
+      ->addOption('if-not-exists', null, InputOption::VALUE_NONE, 'Exit successfully if a user with this email/username already exists');
   }
 
   protected function execute(InputInterface $input, OutputInterface $output): int {
@@ -48,6 +54,7 @@ final class CreateUserCommand extends Command {
     }
 
     $activate = $input->getOption('activate');
+    $ifNotExists = $input->getOption('if-not-exists');
 
     try {
       $command = new CreateUser(
@@ -72,8 +79,41 @@ final class CreateUserCommand extends Command {
 
       return Command::SUCCESS;
     } catch (\Exception $e) {
+      if ($ifNotExists && $this->isAlreadyExists($e)) {
+        $output->writeln(sprintf(
+          '<comment>User `%s` already exists; skipping.</comment>',
+          $email
+        ));
+        return Command::SUCCESS;
+      }
+
       $output->writeln(sprintf('<error>Error: %s</error>', $e->getMessage()));
       return Command::FAILURE;
     }
+  }
+
+  private function isAlreadyExists(\Throwable $e): bool {
+    $candidates = [$e];
+
+    if ($e instanceof WrappedExceptionsInterface) {
+      $candidates = [...$candidates, ...$e->getWrappedExceptions(recursive: true)];
+    }
+
+    for ($previous = $e->getPrevious(); $previous !== null; $previous = $previous->getPrevious()) {
+      $candidates[] = $previous;
+    }
+
+    foreach ($candidates as $candidate) {
+      if (
+        $candidate instanceof EmailAlreadyExistException
+        || $candidate instanceof UsernameAlreadyExistException
+        || $candidate instanceof DisplayNameAlreadyExistException
+        || $candidate instanceof UniqueConstraintViolationException
+      ) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
