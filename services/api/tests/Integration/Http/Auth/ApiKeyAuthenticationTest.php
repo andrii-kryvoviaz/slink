@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Integration\Http\Auth;
 
 use PHPUnit\Framework\Attributes\Test;
+use Slink\User\Domain\Enum\UserStatus;
 use Tests\Integration\Http\HttpTestCase;
 
 final class ApiKeyAuthenticationTest extends HttpTestCase {
@@ -87,6 +88,35 @@ final class ApiKeyAuthenticationTest extends HttpTestCase {
     );
 
     $this->revokeApiKey($token, $apiKey['keyId']);
+
+    self::assertSame(401, $this->externalUpload($apiKey['key']));
+  }
+
+  private function suspendUser(string $adminToken, string $userId): void {
+    $status = $this->apiRequest(
+      'PATCH',
+      '/api/user/status',
+      $adminToken,
+      ['CONTENT_TYPE' => 'application/json'],
+      \json_encode(['id' => $userId, 'status' => UserStatus::Suspended->value], JSON_THROW_ON_ERROR),
+    );
+
+    self::assertSame(200, $status, 'Suspending the user failed.');
+  }
+
+  #[Test]
+  public function suspendedOwnerApiKeyIsRejected(): void {
+    $ownerId = $this->createUser('apikey-suspended@local.test', 'apikeysuspended', self::PASSWORD);
+    $ownerToken = $this->login('apikeysuspended', self::PASSWORD);
+
+    $apiKey = $this->createApiKey($ownerToken);
+    self::assertSame(201, $this->externalUpload($apiKey['key']));
+
+    $adminId = $this->createUser('apikey-admin@local.test', 'apikeyadmin', self::PASSWORD);
+    $this->grantAdmin($adminId);
+    $adminToken = $this->login('apikeyadmin', self::PASSWORD);
+
+    $this->suspendUser($adminToken, $ownerId);
 
     self::assertSame(401, $this->externalUpload($apiKey['key']));
   }
