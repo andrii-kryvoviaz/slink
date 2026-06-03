@@ -1,8 +1,6 @@
 import { expect, test } from '../fixtures/auth.fixture';
 
 test.describe('Collections view mode', () => {
-  test.use({ storageState: 'e2e/.auth/user.json' });
-
   test('switches to table mode and persists the choice across reload', async ({
     page,
     collectionsPage,

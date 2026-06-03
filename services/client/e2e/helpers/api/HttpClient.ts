@@ -1,30 +1,10 @@
-import fs from 'fs';
-import path from 'path';
-
 const API_URL = process.env.E2E_API_URL ?? 'http://localhost:8180';
-
-export const API_TOKEN_PATH = path.join(
-  process.cwd(),
-  'e2e',
-  '.auth',
-  'api-token',
-);
 
 export class HttpClient {
   private _accessToken: string;
 
   private constructor(token: string) {
     this._accessToken = token;
-  }
-
-  static async create(): Promise<HttpClient> {
-    if (fs.existsSync(API_TOKEN_PATH)) {
-      return new HttpClient(fs.readFileSync(API_TOKEN_PATH, 'utf8').trim());
-    }
-
-    const client = new HttpClient('');
-    await client.login('e2e', 'E2eTest123!');
-    return client;
   }
 
   static async createForUser(

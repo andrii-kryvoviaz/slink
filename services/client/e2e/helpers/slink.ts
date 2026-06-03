@@ -17,18 +17,6 @@ export function slink(...args: string[]): string {
   });
 }
 
-const ALREADY_EXISTS_SIGNALS = ['already exist', 'already registered'];
-
-function capturedOutput(error: unknown): string {
-  const { stdout, stderr } = error as { stdout?: string; stderr?: string };
-  return [stdout, stderr].filter(Boolean).join('\n');
-}
-
-function isAlreadyExistsError(error: unknown): boolean {
-  const output = capturedOutput(error).toLowerCase();
-  return ALREADY_EXISTS_SIGNALS.some((signal) => output.includes(signal));
-}
-
 export function ensureUser(user: {
   email: string;
   username: string;
@@ -37,6 +25,7 @@ export function ensureUser(user: {
 }): void {
   const args = [
     'user:create',
+    '--if-not-exists',
     `--email=${user.email}`,
     `--username=${user.username}`,
     '-p',
@@ -47,13 +36,7 @@ export function ensureUser(user: {
     args.push('-a');
   }
 
-  try {
-    slink(...args);
-  } catch (error) {
-    if (!isAlreadyExistsError(error)) {
-      throw new Error(`user:create failed:\n${capturedOutput(error)}`);
-    }
-  }
+  slink(...args);
 }
 
 export function grantRole(email: string, role: string): void {

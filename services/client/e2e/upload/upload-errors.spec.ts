@@ -1,8 +1,6 @@
 import { expect, test } from '../fixtures/auth.fixture';
 
 test.describe('Upload errors', () => {
-  test.use({ storageState: 'e2e/.auth/user.json' });
-
   test('rejects a non-image file and does not start an upload', async ({
     uploadPage,
     page,

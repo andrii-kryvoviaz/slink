@@ -1,8 +1,6 @@
 import { expect, test } from '../fixtures/auth.fixture';
 
-test.describe('Password protected share', () => {
-  test.use({ storageState: { cookies: [], origins: [] } });
-
+test.describe('Password protected share', { tag: '@anonymous' }, () => {
   const password = 'SharePass123!';
 
   test('reroutes a protected image to the locked page and unlocks with the correct password', async ({

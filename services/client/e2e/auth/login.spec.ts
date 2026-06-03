@@ -1,9 +1,7 @@
 import { expect, test } from '../fixtures/auth.fixture';
 import { ensureUser } from '../helpers/slink';
 
-test.describe('Login', () => {
-  test.use({ storageState: { cookies: [], origins: [] } });
-
+test.describe('Login', { tag: '@anonymous' }, () => {
   test('displays the login page', async ({ page }) => {
     await page.goto('/profile/login');
 

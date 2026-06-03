@@ -1,8 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
 
-export const USER_STORAGE_STATE = 'e2e/.auth/user.json';
-export const SERIAL_STORAGE_STATE = 'e2e/.auth/serial.json';
-
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
@@ -20,34 +17,18 @@ export default defineConfig({
       testMatch: '**/provision.setup.ts',
     },
     {
-      name: 'setup',
-      testMatch: '**/auth.setup.ts',
-      dependencies: ['provision'],
-    },
-    {
       name: 'chromium',
       grepInvert: /@serial/,
-      use: {
-        ...devices['Desktop Chrome'],
-        storageState: USER_STORAGE_STATE,
-      },
-      dependencies: ['setup'],
-    },
-    {
-      name: 'serial-setup',
-      testMatch: '**/serial-auth.setup.ts',
-      dependencies: ['chromium'],
+      use: { ...devices['Desktop Chrome'] },
+      dependencies: ['provision'],
     },
     {
       name: 'shared-state-mutating',
       grep: /@serial/,
       fullyParallel: false,
       workers: 1,
-      use: {
-        ...devices['Desktop Chrome'],
-        storageState: SERIAL_STORAGE_STATE,
-      },
-      dependencies: ['serial-setup'],
+      use: { ...devices['Desktop Chrome'] },
+      dependencies: ['chromium'],
     },
   ],
 });

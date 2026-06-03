@@ -1,8 +1,6 @@
 import { expect, test } from '../fixtures/auth.fixture';
 
 test.describe('Theme', () => {
-  test.use({ storageState: 'e2e/.auth/user.json' });
-
   test('toggles theme, applies the dark class, and persists across reload', async ({
     page,
     layoutControls,

@@ -24,10 +24,6 @@ export class ApiClient {
     return this.http.token;
   }
 
-  static async create() {
-    return new ApiClient(await HttpClient.create());
-  }
-
   static async createForUser(username: string, password: string) {
     return new ApiClient(await HttpClient.createForUser(username, password));
   }

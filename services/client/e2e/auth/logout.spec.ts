@@ -1,8 +1,7 @@
 import { expect, test } from '../fixtures/auth.fixture';
 
-test.describe('Logout', () => {
+test.describe('Logout', { tag: '@anonymous' }, () => {
   test.describe.configure({ mode: 'serial' });
-  test.use({ storageState: { cookies: [], origins: [] } });
 
   test.beforeEach(async ({ loginPage, testUser, page }) => {
     await loginPage.login(testUser.username, testUser.password);

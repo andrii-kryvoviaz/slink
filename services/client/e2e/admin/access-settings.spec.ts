@@ -9,8 +9,6 @@ const BASELINE_ACCESS = {
 };
 
 test.describe('Admin access settings', { tag: '@serial' }, () => {
-  test.use({ storageState: 'e2e/.auth/serial.json' });
-
   test.beforeEach(async ({ adminSettingsPage }) => {
     await adminSettingsPage.gotoSecurity();
     await expect(adminSettingsPage.heading).toBeVisible();

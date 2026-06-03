@@ -1,7 +1,6 @@
 import { expect, test } from '../fixtures/auth.fixture';
 
 test.use({
-  storageState: 'e2e/.auth/user.json',
   permissions: ['clipboard-read', 'clipboard-write'],
 });
 

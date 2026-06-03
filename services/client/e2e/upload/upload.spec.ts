@@ -1,8 +1,6 @@
 import { expect, test } from '../fixtures/auth.fixture';
 
 test.describe('Upload', () => {
-  test.use({ storageState: 'e2e/.auth/user.json' });
-
   test('uploads an image and navigates to the image page', async ({
     uploadPage,
     page,

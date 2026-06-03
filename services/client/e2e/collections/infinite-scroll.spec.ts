@@ -4,8 +4,6 @@ const PAGE_SIZE = 2;
 const TOTAL_IMAGES = 5;
 const BASE_URL = process.env.E2E_BASE_URL ?? 'http://localhost:3100';
 
-test.use({ storageState: 'e2e/.auth/user.json' });
-
 test.describe('Collection paginated loading', () => {
   test.beforeEach(async ({ page }) => {
     await page.context().addCookies([

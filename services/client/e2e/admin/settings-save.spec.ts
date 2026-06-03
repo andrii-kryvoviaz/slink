@@ -1,8 +1,6 @@
 import { expect, test } from '../fixtures/auth.fixture';
 
 test.describe('Admin security settings', { tag: '@serial' }, () => {
-  test.use({ storageState: 'e2e/.auth/serial.json' });
-
   test('toggles a security setting and persists it across reload', async ({
     page,
     adminSettingsPage,

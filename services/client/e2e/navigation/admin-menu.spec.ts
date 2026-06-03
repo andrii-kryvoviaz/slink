@@ -2,8 +2,6 @@ import { expect, test } from '../fixtures/auth.fixture';
 
 test.describe('Admin navigation', () => {
   test.describe('as admin user', () => {
-    test.use({ storageState: 'e2e/.auth/user.json' });
-
     test('shows the Administration group in the sidebar', async ({ page }) => {
       await page.goto('/');
 
@@ -12,9 +10,8 @@ test.describe('Admin navigation', () => {
     });
   });
 
-  test.describe('as regular user', () => {
+  test.describe('as regular user', { tag: '@anonymous' }, () => {
     test.describe.configure({ mode: 'serial' });
-    test.use({ storageState: { cookies: [], origins: [] } });
 
     test('hides admin navigation for a non-admin user', async ({
       page,

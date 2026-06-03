@@ -1,8 +1,6 @@
 import { expect, test } from '../fixtures/auth.fixture';
 
 test.describe('Create collection', () => {
-  test.use({ storageState: 'e2e/.auth/user.json' });
-
   test('creates a collection and shows it in the list', async ({
     collectionsPage,
   }) => {

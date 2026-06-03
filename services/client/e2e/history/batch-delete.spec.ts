@@ -1,8 +1,6 @@
 import { expect, test } from '../fixtures/auth.fixture';
 
 test.describe('History batch delete', () => {
-  test.use({ storageState: 'e2e/.auth/user.json' });
-
   test('selects multiple images and removes them from the feed', async ({
     page,
     historyPage,

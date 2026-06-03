@@ -1,8 +1,6 @@
 import { expect, test } from '../fixtures/auth.fixture';
 
-test.describe('Unavailable share', () => {
-  test.use({ storageState: { cookies: [], origins: [] } });
-
+test.describe('Unavailable share', { tag: '@anonymous' }, () => {
   test('reroutes an expired image share to the unavailable page', async ({
     page,
     sharePage,

@@ -1,8 +1,6 @@
 import { expect, test } from '../fixtures/auth.fixture';
 
 test.describe('Sidebar', () => {
-  test.use({ storageState: 'e2e/.auth/user.json' });
-
   test('toggles the sidebar and persists the collapsed state across reload', async ({
     page,
     layoutControls,

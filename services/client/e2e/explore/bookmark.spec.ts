@@ -23,8 +23,6 @@ async function uploadOtherUserPublicImage(): Promise<string> {
   return client.content.uploadImage({ isPublic: true });
 }
 
-test.use({ storageState: 'e2e/.auth/user.json' });
-
 test.describe('Explore bookmark', () => {
   test('saves and removes a bookmark from the viewer', async ({
     explorePage,

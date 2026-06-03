@@ -1,8 +1,6 @@
 import { expect, test } from '../fixtures/auth.fixture';
 
 test.describe('Locale preference', { tag: '@serial' }, () => {
-  test.use({ storageState: 'e2e/.auth/serial.json' });
-
   test.beforeEach(async ({ localeHelper }) => {
     await localeHelper.reset();
   });

@@ -1,8 +1,6 @@
 import { expect, test } from '../fixtures/auth.fixture';
 
-test.describe('Short code resolution', () => {
-  test.use({ storageState: { cookies: [], origins: [] } });
-
+test.describe('Short code resolution', { tag: '@anonymous' }, () => {
   test('resolves a published image short code to the image content', async ({
     page,
     api,

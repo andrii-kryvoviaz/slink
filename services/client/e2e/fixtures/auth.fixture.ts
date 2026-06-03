@@ -1,7 +1,6 @@
-import { test as base, expect } from '@playwright/test';
-
 import { Locale } from '../helpers/Locale';
 import { ApiClient } from '../helpers/api';
+import { type TestUser, resolveTestUser } from '../helpers/testUsers';
 import { AdminSettingsPage } from '../pages/AdminSettingsPage';
 import { AwaitingApprovalPage } from '../pages/AwaitingApprovalPage';
 import { CollectionsPage } from '../pages/CollectionsPage';
@@ -13,6 +12,7 @@ import { PreferencesPage } from '../pages/PreferencesPage';
 import { SharePage } from '../pages/SharePage';
 import { SignupPage } from '../pages/SignupPage';
 import { UploadPage } from '../pages/UploadPage';
+import { test as base, expect } from './worker-auth.fixture';
 
 function deepMerge(
   target: Record<string, any>,
@@ -40,7 +40,7 @@ type SettingsApi = {
 };
 
 type AuthFixtures = {
-  testUser: { username: string; password: string };
+  testUser: TestUser;
   loginPage: LoginPage;
   signupPage: SignupPage;
   awaitingApprovalPage: AwaitingApprovalPage;
@@ -59,10 +59,9 @@ type AuthFixtures = {
 
 export const test = base.extend<AuthFixtures>({
   testUser: async ({}, use) => {
-    await use({
-      username: 'e2e',
-      password: 'E2eTest123!',
-    });
+    await use(
+      resolveTestUser(test.info().project.name, test.info().parallelIndex),
+    );
   },
 
   loginPage: async ({ page }, use) => {
@@ -109,8 +108,8 @@ export const test = base.extend<AuthFixtures>({
     await use(new LayoutControls(page));
   },
 
-  api: async ({}, use) => {
-    await use(await ApiClient.create());
+  api: async ({ workerApi }, use) => {
+    await use(workerApi);
   },
 
   localeHelper: async ({ page, api }, use) => {

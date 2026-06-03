@@ -1,8 +1,6 @@
 import { expect, test } from '../fixtures/auth.fixture';
 
-test.describe('Protected route guard', () => {
-  test.use({ storageState: { cookies: [], origins: [] } });
-
+test.describe('Protected route guard', { tag: '@anonymous' }, () => {
   const protectedRoutes = ['/history', '/collections', '/shares'];
 
   for (const route of protectedRoutes) {

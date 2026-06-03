@@ -1,8 +1,6 @@
 import { expect, test } from '../fixtures/auth.fixture';
 
 test.describe('Authenticated deep-link cold load', () => {
-  test.use({ storageState: 'e2e/.auth/user.json' });
-
   test('hard-navigates directly to /history and renders the page', async ({
     page,
   }) => {

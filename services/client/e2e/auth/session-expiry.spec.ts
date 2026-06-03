@@ -1,8 +1,6 @@
 import { expect, test } from '../fixtures/auth.fixture';
 
 test.describe('Session expiry', () => {
-  test.use({ storageState: 'e2e/.auth/user.json' });
-
   const protectedRoutes = ['/history', '/profile'];
 
   for (const route of protectedRoutes) {

@@ -1,8 +1,6 @@
 import { expect, test } from '../fixtures/auth.fixture';
 
-test.describe('Signup', () => {
-  test.use({ storageState: { cookies: [], origins: [] } });
-
+test.describe('Signup', { tag: '@anonymous' }, () => {
   test('displays the signup page', async ({ page }) => {
     await page.goto('/profile/signup');
 
