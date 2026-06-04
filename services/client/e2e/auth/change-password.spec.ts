@@ -1,8 +1,9 @@
 import type { BrowserContext } from '@playwright/test';
 
 import { expect, test } from '../fixtures/auth.fixture';
-import { provisionUser, signInContext } from '../helpers/auth';
-import { type TestUser, uniqueUser } from '../helpers/testUsers';
+import { type Account, unique } from '../helpers/accounts';
+import { provisionUser } from '../helpers/provisioning';
+import { signInContext } from '../helpers/session';
 import { LoginPage } from '../pages/LoginPage';
 import { ProfilePage } from '../pages/ProfilePage';
 
@@ -14,7 +15,7 @@ test.describe('Change password', { tag: '@anonymous' }, () => {
   test('rejects a wrong current password and keeps the original usable', async ({
     browser,
   }) => {
-    const user = uniqueUser('pwd-wrong');
+    const user = unique('pwd-wrong');
     await provisionUser(user);
     const context = await signInContext(browser, user);
     const page = await context.newPage();
@@ -42,7 +43,7 @@ test.describe('Change password', { tag: '@anonymous' }, () => {
   test('changes the password and rotates the valid credentials', async ({
     browser,
   }) => {
-    const user = uniqueUser('pwd-happy');
+    const user = unique('pwd-happy');
     await provisionUser(user);
     const context: BrowserContext = await signInContext(browser, user);
     const page = await context.newPage();
@@ -56,7 +57,7 @@ test.describe('Change password', { tag: '@anonymous' }, () => {
 
     await context.close();
 
-    const updated: TestUser = { ...user, password: NEW_PASSWORD };
+    const updated: Account = { ...user, password: NEW_PASSWORD };
 
     const newContext = await browser.newContext({ storageState: undefined });
     const newLogin = new LoginPage(await newContext.newPage());

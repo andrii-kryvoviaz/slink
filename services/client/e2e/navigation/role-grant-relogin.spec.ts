@@ -1,6 +1,6 @@
 import { expect, test } from '../fixtures/auth.fixture';
-import { ensureUser, grantRole } from '../helpers/slink';
-import { uniqueUser } from '../helpers/testUsers';
+import { unique } from '../helpers/accounts';
+import { ensureUser, grantRole } from '../helpers/provisioning';
 import { LoginPage } from '../pages/LoginPage';
 
 test.describe(
@@ -12,7 +12,7 @@ test.describe(
     test('hides the admin group until the user logs in again', async ({
       browser,
     }) => {
-      const user = uniqueUser('rolegrant');
+      const user = unique('rolegrant');
       ensureUser({ ...user, active: true });
 
       const context = await browser.newContext({ storageState: undefined });

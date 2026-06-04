@@ -1,5 +1,5 @@
 import { expect, test } from '../fixtures/auth.fixture';
-import { ensureUser } from '../helpers/slink';
+import { ensureUser } from '../helpers/provisioning';
 
 test.describe('Login', { tag: '@anonymous' }, () => {
   test('displays the login page', async ({ page }) => {

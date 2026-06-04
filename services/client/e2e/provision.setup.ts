@@ -1,20 +1,17 @@
 import { test } from '@playwright/test';
 
+import { admin } from './helpers/accounts';
 import { ApiClient } from './helpers/api';
-import { ensureUser, grantRole } from './helpers/slink';
-import { ADMIN_USER } from './helpers/testUsers';
+import { ensureUser, grantRole } from './helpers/provisioning';
 
 test('provision', async () => {
-  ensureUser({ ...ADMIN_USER, active: true });
+  ensureUser({ ...admin, active: true });
   console.log('[e2e] Test user provisioned and active');
 
-  grantRole(ADMIN_USER.email, 'ROLE_ADMIN');
+  grantRole(admin.email, 'ROLE_ADMIN');
   console.log('[e2e] Admin role granted');
 
-  const api = await ApiClient.createForUser(
-    ADMIN_USER.username,
-    ADMIN_USER.password,
-  );
+  const api = await ApiClient.createForUser(admin.username, admin.password);
 
   const current = await api.settings.getSettings();
 

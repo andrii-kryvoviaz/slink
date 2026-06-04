@@ -2,12 +2,22 @@ import { test as base, expect } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
 
+import { type Account, admin, worker } from '../helpers/accounts';
 import { ApiClient } from '../helpers/api';
-import { provisionUser, signInContext } from '../helpers/auth';
-import { type TestUser, resolveTestUser } from '../helpers/testUsers';
+import { provisionUser } from '../helpers/provisioning';
+import { signInContext } from '../helpers/session';
+
+export const SERIAL_PROJECT = 'shared-state-mutating';
+
+export function accountForWorker(
+  projectName: string,
+  parallelIndex: number,
+): Account {
+  return projectName === SERIAL_PROJECT ? admin : worker(parallelIndex);
+}
 
 type WorkerAuthFixtures = {
-  workerUserReady: { user: TestUser; api: ApiClient };
+  workerUserReady: { user: Account; api: ApiClient };
   workerApi: ApiClient;
   workerStorageState: string;
 };
@@ -15,7 +25,7 @@ type WorkerAuthFixtures = {
 export const test = base.extend<{}, WorkerAuthFixtures>({
   workerUserReady: [
     async ({}, use) => {
-      const user = resolveTestUser(
+      const user = accountForWorker(
         test.info().project.name,
         test.info().parallelIndex,
       );

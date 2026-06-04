@@ -16,29 +16,3 @@ export function slink(...args: string[]): string {
     stdio: ['ignore', 'pipe', 'pipe'],
   });
 }
-
-export function ensureUser(user: {
-  email: string;
-  username: string;
-  password: string;
-  active?: boolean;
-}): void {
-  const args = [
-    'user:create',
-    '--if-not-exists',
-    `--email=${user.email}`,
-    `--username=${user.username}`,
-    '-p',
-    user.password,
-  ];
-
-  if (user.active) {
-    args.push('-a');
-  }
-
-  slink(...args);
-}
-
-export function grantRole(email: string, role: string): void {
-  slink('user:grant:role', `--email=${email}`, role);
-}

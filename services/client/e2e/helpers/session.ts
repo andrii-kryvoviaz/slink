@@ -1,29 +1,11 @@
 import { type Browser, type BrowserContext, test } from '@playwright/test';
 
 import { LoginPage } from '../pages/LoginPage';
-import { ApiClient } from './api';
-import { ensureUser, grantRole } from './slink';
-import type { TestUser } from './testUsers';
-
-export async function provisionUser(
-  user: TestUser,
-  opts?: { admin?: boolean },
-): Promise<ApiClient> {
-  ensureUser({ ...user, active: true });
-
-  if (opts?.admin) {
-    grantRole(user.email, 'ROLE_ADMIN');
-  }
-
-  const api = await ApiClient.createForUser(user.username, user.password);
-  await api.preferences.updatePreferences({ 'display.language': 'en' });
-
-  return api;
-}
+import type { Account } from './accounts';
 
 export async function signInContext(
   browser: Browser,
-  user: TestUser,
+  account: Account,
 ): Promise<BrowserContext> {
   const context = await browser.newContext({
     storageState: undefined,
@@ -35,7 +17,7 @@ export async function signInContext(
 
   const page = await context.newPage();
   const loginPage = new LoginPage(page);
-  await loginPage.login(user.username, user.password);
+  await loginPage.login(account.username, account.password);
   await page.waitForURL((url) => !url.pathname.includes('/profile/login'), {
     timeout: 15000,
   });

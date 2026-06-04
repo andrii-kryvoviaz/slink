@@ -1,11 +1,7 @@
 import { Locale } from '../helpers/Locale';
+import { type Account, unique } from '../helpers/accounts';
 import { ApiClient } from '../helpers/api';
-import { provisionUser } from '../helpers/auth';
-import {
-  type TestUser,
-  resolveTestUser,
-  uniqueUser,
-} from '../helpers/testUsers';
+import { provisionUser } from '../helpers/provisioning';
 import { AdminSettingsPage } from '../pages/AdminSettingsPage';
 import { AwaitingApprovalPage } from '../pages/AwaitingApprovalPage';
 import { CollectionsPage } from '../pages/CollectionsPage';
@@ -19,7 +15,7 @@ import { SharePage } from '../pages/SharePage';
 import { SharesPage } from '../pages/SharesPage';
 import { SignupPage } from '../pages/SignupPage';
 import { UploadPage } from '../pages/UploadPage';
-import { test as base, expect } from './worker-auth.fixture';
+import { accountForWorker, test as base, expect } from './worker-auth.fixture';
 
 function deepMerge(
   target: Record<string, any>,
@@ -47,7 +43,7 @@ type SettingsApi = {
 };
 
 type AuthFixtures = {
-  testUser: TestUser;
+  testUser: Account;
   loginPage: LoginPage;
   signupPage: SignupPage;
   awaitingApprovalPage: AwaitingApprovalPage;
@@ -70,7 +66,7 @@ type AuthFixtures = {
 export const test = base.extend<AuthFixtures>({
   testUser: async ({}, use) => {
     await use(
-      resolveTestUser(test.info().project.name, test.info().parallelIndex),
+      accountForWorker(test.info().project.name, test.info().parallelIndex),
     );
   },
 
@@ -131,7 +127,7 @@ export const test = base.extend<AuthFixtures>({
   },
 
   actor: async ({}, use) => {
-    await use((label = 'actor') => provisionUser(uniqueUser(label)));
+    await use((label = 'actor') => provisionUser(unique(label)));
   },
 
   localeHelper: async ({ page, api }, use) => {

@@ -1,8 +1,9 @@
 import type { BrowserContext } from '@playwright/test';
 
 import { expect, test } from './fixtures/auth.fixture';
-import { provisionUser, signInContext } from './helpers/auth';
-import { uniqueUser } from './helpers/testUsers';
+import { unique } from './helpers/accounts';
+import { provisionUser } from './helpers/provisioning';
+import { signInContext } from './helpers/session';
 
 test.describe('First-run empty states', () => {
   const cases = [
@@ -16,7 +17,7 @@ test.describe('First-run empty states', () => {
     test(`shows "${title}" for a fresh user at ${path}`, async ({
       browser,
     }) => {
-      const user = uniqueUser('empty');
+      const user = unique('empty');
       await provisionUser(user);
       let context: BrowserContext | undefined;
 
