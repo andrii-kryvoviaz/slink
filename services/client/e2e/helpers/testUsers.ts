@@ -28,3 +28,12 @@ export function resolveTestUser(
 
   return workerUser(parallelIndex);
 }
+
+export function uniqueUser(prefix: string): TestUser {
+  const suffix = `${Date.now()}${Math.floor(Math.random() * 1000)}`;
+  return {
+    email: `e2e-${prefix}-${suffix}@test.local`,
+    username: `e2e${prefix}${suffix}`,
+    password: TEST_PASSWORD,
+  };
+}

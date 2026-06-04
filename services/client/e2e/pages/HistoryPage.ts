@@ -77,4 +77,46 @@ export class HistoryPage extends BasePage {
     await confirm.waitFor({ state: 'visible' });
     await confirm.click();
   }
+
+  infoLink(id: string) {
+    return this.page.locator(`a[href="/info/${id}"]`);
+  }
+
+  cardFor(id: string) {
+    return this.infoLink(id).locator(
+      'xpath=ancestor::article[@role="button"][1]',
+    );
+  }
+
+  async deleteSingle(id: string) {
+    const card = this.cardFor(id);
+    await card.waitFor({ state: 'visible' });
+    await card.hover();
+
+    const trigger = card.locator('button[aria-label="Delete image"]');
+    const confirm = this.page
+      .getByRole('button', { name: 'Delete Image', exact: true })
+      .last();
+
+    await expect(async () => {
+      await trigger.click();
+      await expect(confirm).toBeVisible({ timeout: 1000 });
+    }).toPass({ timeout: 15000 });
+
+    await confirm.click();
+  }
+
+  viewModeOption(name: 'Grid' | 'List' | 'Table') {
+    return this.page.getByRole('radio', { name });
+  }
+
+  async switchViewMode(name: 'Grid' | 'List' | 'Table') {
+    const option = this.viewModeOption(name);
+    await expect(async () => {
+      await option.click();
+      await expect(option).toHaveAttribute('aria-checked', 'true', {
+        timeout: 1000,
+      });
+    }).toPass({ timeout: 15000 });
+  }
 }

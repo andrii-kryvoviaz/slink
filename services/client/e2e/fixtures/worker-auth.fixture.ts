@@ -3,12 +3,11 @@ import fs from 'fs';
 import path from 'path';
 
 import { ApiClient } from '../helpers/api';
-import { ensureUser, grantRole } from '../helpers/slink';
+import { provisionUser, signInContext } from '../helpers/auth';
 import { type TestUser, resolveTestUser } from '../helpers/testUsers';
-import { LoginPage } from '../pages/LoginPage';
 
 type WorkerAuthFixtures = {
-  workerUserReady: TestUser;
+  workerUserReady: { user: TestUser; api: ApiClient };
   workerApi: ApiClient;
   workerStorageState: string;
 };
@@ -21,24 +20,16 @@ export const test = base.extend<{}, WorkerAuthFixtures>({
         test.info().parallelIndex,
       );
 
-      ensureUser({ ...user, active: true });
-      grantRole(user.email, 'ROLE_ADMIN');
+      const api = await provisionUser(user, { admin: true });
 
-      const api = await ApiClient.createForUser(user.username, user.password);
-      await api.preferences.updatePreferences({ 'display.language': 'en' });
-
-      await use(user);
+      await use({ user, api });
     },
     { scope: 'worker' },
   ],
 
   workerApi: [
     async ({ workerUserReady }, use) => {
-      const api = await ApiClient.createForUser(
-        workerUserReady.username,
-        workerUserReady.password,
-      );
-      await use(api);
+      await use(workerUserReady.api);
     },
     { scope: 'worker' },
   ],
@@ -55,19 +46,9 @@ export const test = base.extend<{}, WorkerAuthFixtures>({
         return;
       }
 
-      const page = await browser.newPage({
-        storageState: undefined,
-        baseURL:
-          test.info().project.use.baseURL ??
-          process.env.E2E_BASE_URL ??
-          'http://localhost:3100',
-      });
-      const loginPage = new LoginPage(page);
-      await loginPage.login(workerUserReady.username, workerUserReady.password);
-      await expect(page).not.toHaveURL(/\/profile\/login/);
-
-      await page.context().storageState({ path: fileName });
-      await page.close();
+      const context = await signInContext(browser, workerUserReady.user);
+      await context.storageState({ path: fileName });
+      await context.close();
 
       await use(fileName);
     },

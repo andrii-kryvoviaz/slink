@@ -1,15 +1,22 @@
 import { Locale } from '../helpers/Locale';
 import { ApiClient } from '../helpers/api';
-import { type TestUser, resolveTestUser } from '../helpers/testUsers';
+import { provisionUser } from '../helpers/auth';
+import {
+  type TestUser,
+  resolveTestUser,
+  uniqueUser,
+} from '../helpers/testUsers';
 import { AdminSettingsPage } from '../pages/AdminSettingsPage';
 import { AwaitingApprovalPage } from '../pages/AwaitingApprovalPage';
 import { CollectionsPage } from '../pages/CollectionsPage';
 import { ExplorePage } from '../pages/ExplorePage';
 import { HistoryPage } from '../pages/HistoryPage';
+import { ImageInfoPage } from '../pages/ImageInfoPage';
 import { LayoutControls } from '../pages/LayoutControls';
 import { LoginPage } from '../pages/LoginPage';
 import { PreferencesPage } from '../pages/PreferencesPage';
 import { SharePage } from '../pages/SharePage';
+import { SharesPage } from '../pages/SharesPage';
 import { SignupPage } from '../pages/SignupPage';
 import { UploadPage } from '../pages/UploadPage';
 import { test as base, expect } from './worker-auth.fixture';
@@ -46,6 +53,8 @@ type AuthFixtures = {
   awaitingApprovalPage: AwaitingApprovalPage;
   uploadPage: UploadPage;
   sharePage: SharePage;
+  sharesPage: SharesPage;
+  imageInfoPage: ImageInfoPage;
   explorePage: ExplorePage;
   historyPage: HistoryPage;
   collectionsPage: CollectionsPage;
@@ -53,6 +62,7 @@ type AuthFixtures = {
   adminSettingsPage: AdminSettingsPage;
   layoutControls: LayoutControls;
   api: ApiClient;
+  actor: (label?: string) => Promise<ApiClient>;
   localeHelper: Locale;
   settingsApi: SettingsApi;
 };
@@ -84,6 +94,14 @@ export const test = base.extend<AuthFixtures>({
     await use(new SharePage(page));
   },
 
+  sharesPage: async ({ page }, use) => {
+    await use(new SharesPage(page));
+  },
+
+  imageInfoPage: async ({ page }, use) => {
+    await use(new ImageInfoPage(page));
+  },
+
   explorePage: async ({ page }, use) => {
     await use(new ExplorePage(page));
   },
@@ -110,6 +128,10 @@ export const test = base.extend<AuthFixtures>({
 
   api: async ({ workerApi }, use) => {
     await use(workerApi);
+  },
+
+  actor: async ({}, use) => {
+    await use((label = 'actor') => provisionUser(uniqueUser(label)));
   },
 
   localeHelper: async ({ page, api }, use) => {

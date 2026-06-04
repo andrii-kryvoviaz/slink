@@ -1,33 +1,12 @@
 import { expect, test } from '../fixtures/auth.fixture';
-import { ApiClient } from '../helpers/api';
-import { ensureUser } from '../helpers/slink';
-
-const OTHER_USER = {
-  email: 'bookmark-owner@test.local',
-  username: 'bookmark-owner',
-  password: 'Test123!',
-};
-
-async function uploadOtherUserPublicImage(): Promise<string> {
-  ensureUser({
-    email: OTHER_USER.email,
-    username: OTHER_USER.username,
-    password: OTHER_USER.password,
-    active: true,
-  });
-
-  const client = await ApiClient.createForUser(
-    OTHER_USER.username,
-    OTHER_USER.password,
-  );
-  return client.content.uploadImage({ isPublic: true });
-}
 
 test.describe('Explore bookmark', () => {
   test('saves and removes a bookmark from the viewer', async ({
     explorePage,
+    actor,
   }) => {
-    const imageId = await uploadOtherUserPublicImage();
+    const owner = await actor('owner');
+    const imageId = await owner.content.uploadImage({ isPublic: true });
 
     await explorePage.page.goto(`/explore?post=${imageId}`);
     await expect(explorePage.viewer).toBeVisible();
@@ -49,9 +28,11 @@ test.describe('Explore bookmark', () => {
 
   test('bookmarked image appears in bookmarks page', async ({
     explorePage,
+    actor,
     page,
   }) => {
-    const imageId = await uploadOtherUserPublicImage();
+    const owner = await actor('owner');
+    const imageId = await owner.content.uploadImage({ isPublic: true });
 
     await explorePage.page.goto(`/explore?post=${imageId}`);
     await expect(explorePage.viewer).toBeVisible();

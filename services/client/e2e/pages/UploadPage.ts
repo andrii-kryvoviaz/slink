@@ -70,6 +70,42 @@ export class UploadPage extends BasePage {
     await this.fileInput.setInputFiles(paths);
   }
 
+  async uploadSingleImage() {
+    await this.heading.waitFor({ state: 'visible' });
+
+    const { buffer, name } = createUniquePng();
+
+    await expect(async () => {
+      const requestPromise = this.page.waitForRequest(
+        (request) =>
+          request.url().includes('/api/upload') && request.method() === 'POST',
+        { timeout: 1500 },
+      );
+      await this.fileInput.setInputFiles({
+        name,
+        mimeType: 'image/png',
+        buffer,
+      });
+      await requestPromise;
+    }).toPass({ timeout: 15000 });
+  }
+
+  async uploadFilesExpectingRequest(
+    files: { name: string; mimeType: string; buffer: Buffer }[],
+  ) {
+    await this.heading.waitFor({ state: 'visible' });
+
+    await expect(async () => {
+      const requestPromise = this.page.waitForRequest(
+        (request) =>
+          request.url().includes('/api/upload') && request.method() === 'POST',
+        { timeout: 1500 },
+      );
+      await this.fileInput.setInputFiles(files);
+      await requestPromise;
+    }).toPass({ timeout: 15000 });
+  }
+
   async uploadUniqueImage() {
     await this.heading.waitFor({ state: 'visible' });
 
