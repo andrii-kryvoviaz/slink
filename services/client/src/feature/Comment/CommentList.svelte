@@ -1,5 +1,6 @@
 <script lang="ts">
   import { CommentsSkeleton } from '@slink/feature/Image';
+  import { ScrollArea } from '@slink/ui/components/scroll-area/index.js';
   import { Tooltip } from '@slink/ui/components/tooltip';
   import { onDestroy } from 'svelte';
 
@@ -115,8 +116,10 @@
       </div>
     </div>
 
-    <div
-      class="flex-1 min-h-0 overflow-y-auto"
+    <ScrollArea
+      class="flex-1 min-h-0"
+      orientation="vertical"
+      type="scroll"
       onwheel={(e) => e.stopPropagation()}
     >
       {#if isEmpty}
@@ -148,7 +151,7 @@
           </div>
         {/key}
       {/if}
-    </div>
+    </ScrollArea>
 
     {#if hasCurrentUser && state}
       <CommentInput

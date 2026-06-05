@@ -2,6 +2,7 @@
   import { Loader } from '@slink/feature/Layout';
   import { Button } from '@slink/ui/components/button';
   import { Progress } from '@slink/ui/components/progress';
+  import { ScrollArea } from '@slink/ui/components/scroll-area/index.js';
   import { cva } from 'class-variance-authority';
 
   import { bytesToSize } from '$lib/utils/bytesConverter';
@@ -132,59 +133,61 @@
   </div>
 
   <div class="relative">
-    <div class="max-h-64 overflow-y-auto space-y-2 pr-1">
-      {#each uploads as item, index (item.id)}
-        <div
-          class="flex items-center gap-3 p-3 rounded-lg bg-slate-50/80 dark:bg-slate-700/30 border border-slate-200/50 dark:border-slate-600/30 backdrop-blur-sm"
-          in:fly={{ duration: 250, delay: 150 + index * 40, y: 8 }}
-        >
-          <div class="flex-shrink-0">
-            {#if item.status === 'uploading'}
-              <Loader variant="minimal" size="xs" />
-            {:else if item.status === 'completed'}
-              <Icon
-                icon="ph:check-circle-fill"
-                class={statusIconVariants({ status: 'completed' })}
-              />
-            {:else if item.status === 'error'}
-              <Icon
-                icon="ph:x-circle-fill"
-                class={statusIconVariants({ status: 'error' })}
-              />
-            {:else}
-              <Icon
-                icon="ph:clock"
-                class={statusIconVariants({ status: 'pending' })}
-              />
-            {/if}
-          </div>
-
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center justify-between">
-              <p
-                class="text-sm font-medium text-slate-900 dark:text-slate-100 truncate"
-              >
-                {item.file.name}
-              </p>
-              <span class="text-xs text-slate-500 dark:text-slate-400 ml-2">
-                {bytesToSize(item.file.size)}
-              </span>
+    <ScrollArea maxHeight="md" orientation="vertical" type="scroll">
+      <div class="space-y-2 pr-1">
+        {#each uploads as item, index (item.id)}
+          <div
+            class="flex items-center gap-3 p-3 rounded-lg bg-slate-50/80 dark:bg-slate-700/30 border border-slate-200/50 dark:border-slate-600/30 backdrop-blur-sm"
+            in:fly={{ duration: 250, delay: 150 + index * 40, y: 8 }}
+          >
+            <div class="flex-shrink-0">
+              {#if item.status === 'uploading'}
+                <Loader variant="minimal" size="xs" />
+              {:else if item.status === 'completed'}
+                <Icon
+                  icon="ph:check-circle-fill"
+                  class={statusIconVariants({ status: 'completed' })}
+                />
+              {:else if item.status === 'error'}
+                <Icon
+                  icon="ph:x-circle-fill"
+                  class={statusIconVariants({ status: 'error' })}
+                />
+              {:else}
+                <Icon
+                  icon="ph:clock"
+                  class={statusIconVariants({ status: 'pending' })}
+                />
+              {/if}
             </div>
 
-            {#if item.status === 'uploading'}
-              <div class="mt-1">
-                <Progress value={item.progress} size="sm" variant="subtle" />
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between">
+                <p
+                  class="text-sm font-medium text-slate-900 dark:text-slate-100 truncate"
+                >
+                  {item.file.name}
+                </p>
+                <span class="text-xs text-slate-500 dark:text-slate-400 ml-2">
+                  {bytesToSize(item.file.size)}
+                </span>
               </div>
-            {:else if item.status === 'error'}
-              <p
-                class="text-xs text-red-500/80 dark:text-red-400/80 mt-1 break-words"
-              >
-                {item.error || 'Upload failed'}
-              </p>
-            {/if}
+
+              {#if item.status === 'uploading'}
+                <div class="mt-1">
+                  <Progress value={item.progress} size="sm" variant="subtle" />
+                </div>
+              {:else if item.status === 'error'}
+                <p
+                  class="text-xs text-red-500/80 dark:text-red-400/80 mt-1 break-words"
+                >
+                  {item.error || 'Upload failed'}
+                </p>
+              {/if}
+            </div>
           </div>
-        </div>
-      {/each}
-    </div>
+        {/each}
+      </div>
+    </ScrollArea>
   </div>
 </div>

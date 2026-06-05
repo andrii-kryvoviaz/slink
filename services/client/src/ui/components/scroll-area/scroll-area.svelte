@@ -4,20 +4,22 @@
   import { type WithoutChild, cn } from '@slink/utils/ui/index.js';
 
   import { Scrollbar } from './index.js';
+  import {
+    type ScrollAreaViewportVariants,
+    scrollAreaViewportTheme,
+  } from './scroll-area.theme';
 
   let {
     ref = $bindable(null),
     class: className,
     orientation = 'vertical',
-    scrollbarXClasses = '',
-    scrollbarYClasses = '',
+    maxHeight,
     children,
     ...restProps
-  }: WithoutChild<ScrollAreaPrimitive.RootProps> & {
-    orientation?: 'vertical' | 'horizontal' | 'both' | undefined;
-    scrollbarXClasses?: string | undefined;
-    scrollbarYClasses?: string | undefined;
-  } = $props();
+  }: WithoutChild<ScrollAreaPrimitive.RootProps> &
+    ScrollAreaViewportVariants & {
+      orientation?: 'vertical' | 'horizontal' | 'both' | undefined;
+    } = $props();
 </script>
 
 <ScrollAreaPrimitive.Root
@@ -28,15 +30,15 @@
 >
   <ScrollAreaPrimitive.Viewport
     data-slot="scroll-area-viewport"
-    class="ring-ring/10 dark:ring-ring/20 dark:outline-ring/40 outline-ring/50 size-full rounded-[inherit] transition-[color,box-shadow] focus-visible:outline-1 focus-visible:ring-4"
+    class={scrollAreaViewportTheme({ maxHeight })}
   >
     {@render children?.()}
   </ScrollAreaPrimitive.Viewport>
   {#if orientation === 'vertical' || orientation === 'both'}
-    <Scrollbar orientation="vertical" class={scrollbarYClasses} />
+    <Scrollbar orientation="vertical" />
   {/if}
   {#if orientation === 'horizontal' || orientation === 'both'}
-    <Scrollbar orientation="horizontal" class={scrollbarXClasses} />
+    <Scrollbar orientation="horizontal" />
   {/if}
   <ScrollAreaPrimitive.Corner />
 </ScrollAreaPrimitive.Root>

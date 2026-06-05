@@ -1,5 +1,6 @@
 <script lang="ts" generics="T">
   import { Loader } from '@slink/feature/Layout';
+  import { ScrollArea } from '@slink/ui/components/scroll-area/index.js';
   import type { Snippet } from 'svelte';
 
   import Icon from '@iconify/svelte';
@@ -122,7 +123,7 @@
       {/snippet}
     </PickerEmptyState>
   {:else}
-    <div class="max-h-60 overflow-y-auto">
+    <ScrollArea maxHeight="sm" orientation="vertical" type="scroll">
       <div class={pickerListTheme({ variant })}>
         {#if filteredItems.length === 0}
           <div class="flex flex-col items-center gap-2 py-4">
@@ -148,7 +149,7 @@
           {/each}
         {/if}
       </div>
-    </div>
+    </ScrollArea>
 
     {#if onCreateNew && createFooter}
       <PickerCreateFooter onclick={onCreateNew}>

@@ -100,7 +100,6 @@
           class="flex-1 min-h-0"
           type="scroll"
           orientation="vertical"
-          scrollbarYClasses="w-2"
         >
           {@render children?.()}
         </ScrollArea>
