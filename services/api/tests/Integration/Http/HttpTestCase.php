@@ -401,7 +401,7 @@ abstract class HttpTestCase extends WebTestCase {
 
   protected function futureIso(int $offsetSeconds): string {
     return (new \DateTimeImmutable('+' . $offsetSeconds . ' seconds', new \DateTimeZone('UTC')))
-      ->format('Y-m-d\TH:i:sP');
+      ->format('Y-m-d\TH:i:s.uP');
   }
 
   protected function sampleImage(): UploadedFile {
