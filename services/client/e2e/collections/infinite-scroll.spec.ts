@@ -1,0 +1,51 @@
+import { expect, test } from '../fixtures/auth.fixture';
+
+const PAGE_SIZE = 2;
+const TOTAL_IMAGES = 5;
+const BASE_URL = process.env.E2E_BASE_URL ?? 'http://localhost:3100';
+
+test.describe('Collection paginated loading', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.context().addCookies([
+      {
+        name: 'settings.collections',
+        value: JSON.stringify({
+          viewMode: 'grid',
+          pageSize: PAGE_SIZE,
+          loadStrategy: 'load_more',
+        }),
+        url: BASE_URL,
+      },
+    ]);
+  });
+
+  test('appends more items via the Load More button', async ({ api, page }) => {
+    const collectionId = await api.content.createCollection({
+      name: `Paginated ${Date.now()}`,
+    });
+
+    for (let i = 0; i < TOTAL_IMAGES; i++) {
+      const imageId = await api.content.uploadImage({ isPublic: false });
+      await api.content.addImageToCollection(collectionId, imageId);
+    }
+
+    await page.goto(`/collection/${collectionId}`);
+
+    const cards = page.locator('main [role="button"][tabindex="0"]');
+    await expect(cards.first()).toBeVisible();
+    await expect(cards).toHaveCount(PAGE_SIZE);
+
+    const loadMore = page.getByRole('button', {
+      name: 'Load More',
+      exact: true,
+    });
+    await expect(loadMore).toBeVisible();
+
+    await loadMore.click();
+    await expect(cards).toHaveCount(PAGE_SIZE * 2);
+
+    await loadMore.click();
+    await expect(cards).toHaveCount(TOTAL_IMAGES);
+    await expect(loadMore).toBeHidden();
+  });
+});

@@ -384,14 +384,13 @@ final class User extends AbstractAggregateRoot implements UserInterface {
     $this->roles->removeRole($event->role);
   }
 
-  public function createApiKey(string $name, ?DateTime $expiresAt = null): string {
-    $keyId = ID::generate()->toString();
+  public function createApiKey(ID $keyId, string $name, ?DateTime $expiresAt = null): string {
     $key = 'sk_' . bin2hex(random_bytes(32));
     $hashedApiKey = HashedApiKey::encode($key);
 
     $this->recordThat(new ApiKeyWasCreated(
       $this->aggregateRootId(),
-      $keyId,
+      $keyId->toString(),
       $hashedApiKey->toString(),
       $name,
       DateTime::now(),

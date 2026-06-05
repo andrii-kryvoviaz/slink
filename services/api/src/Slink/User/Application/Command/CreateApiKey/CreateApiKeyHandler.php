@@ -16,7 +16,7 @@ final readonly class CreateApiKeyHandler implements CommandHandlerInterface {
   public function __invoke(CreateApiKeyCommand $command, string $userId): string {
     $user = $this->userRepository->get(ID::fromString($userId));
     
-    $key = $user->createApiKey($command->getName(), $command->getExpiresAt());
+    $key = $user->createApiKey($command->getId(), $command->getName(), $command->getExpiresAt());
     
     $this->userRepository->store($user);
     
