@@ -1055,6 +1055,7 @@ msgstr "Gestisci tag"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/AdminImageDropdown/AdminImageDropdown.svelte
 msgid "Image actions"
 msgstr "Azioni immagine"
 
@@ -2373,9 +2374,8 @@ msgstr "Aggiungi altro"
 msgid "Upload Options"
 msgstr "Opzioni di caricamento"
 
-#: src/feature/User/UserActions/UserActions.svelte
-msgid "<0/> Actions"
-msgstr "<0/> Azioni"
+#~ msgid "<0/> Actions"
+#~ msgstr "<0/> Azioni"
 
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
@@ -2383,6 +2383,7 @@ msgstr "<0/> Azioni"
 #: src/feature/User/UserActions/UserActions.svelte
 #: src/feature/User/UserDataTable/columns.svelte.ts
 #: src/routes/shares/+page.svelte
+#: src/ui/components/actions-menu/actions-menu.svelte
 msgid "Actions"
 msgstr "Azioni"
 
@@ -4705,3 +4706,11 @@ msgstr "Albero"
 #: src/feature/Tag/TagTreeView/TagTreeRowMeta.svelte
 msgid "View images"
 msgstr "Visualizza immagini"
+
+#: src/feature/Collection/CollectionItemDropdown/CollectionItemDropdown.svelte
+msgid "Collection item actions"
+msgstr "Azioni elemento raccolta"
+
+#: src/feature/Comment/CommentListItem.svelte
+msgid "Comment actions"
+msgstr "Azioni commento"
