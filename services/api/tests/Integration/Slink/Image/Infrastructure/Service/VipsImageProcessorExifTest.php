@@ -7,21 +7,21 @@ namespace Tests\Integration\Slink\Image\Infrastructure\Service;
 use Jcupitt\Vips\Image as VipsImage;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Slink\Image\Domain\Enum\ImageFormat;
-use Slink\Image\Infrastructure\Service\VipsFormatAdapter;
 use Slink\Image\Infrastructure\Service\VipsImageProcessor;
+use Tests\Support\WiresVipsProcessor;
 
 final class VipsImageProcessorExifTest extends TestCase {
+  use WiresVipsProcessor;
+
   private VipsImageProcessor $processor;
   private string $testImagePath;
   private string $fixturesPath;
 
   protected function setUp(): void {
     parent::setUp();
-    
-    $formatAdapter = new VipsFormatAdapter();
-    $this->processor = new VipsImageProcessor($formatAdapter);
-    
+
+    $this->processor = $this->createVipsProcessor();
+
     $this->fixturesPath = self::getFixturesPath();
     $this->testImagePath = $this->fixturesPath . '/test_with_exif.jpg';
 

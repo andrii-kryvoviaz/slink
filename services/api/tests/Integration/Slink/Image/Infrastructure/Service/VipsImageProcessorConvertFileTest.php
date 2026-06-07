@@ -8,17 +8,19 @@ use Jcupitt\Vips\Image as VipsImage;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Image\Domain\Enum\ImageFormat;
-use Slink\Image\Infrastructure\Service\VipsFormatAdapter;
 use Slink\Image\Infrastructure\Service\VipsImageProcessor;
+use Tests\Support\WiresVipsProcessor;
 
 final class VipsImageProcessorConvertFileTest extends TestCase {
+  use WiresVipsProcessor;
+
   private VipsImageProcessor $processor;
   private string $workingDir;
 
   protected function setUp(): void {
     parent::setUp();
 
-    $this->processor = new VipsImageProcessor(new VipsFormatAdapter());
+    $this->processor = $this->createVipsProcessor();
     $this->workingDir = \sys_get_temp_dir() . '/slink_convert_file_' . \uniqid('', true);
     \mkdir($this->workingDir, 0777, true);
   }

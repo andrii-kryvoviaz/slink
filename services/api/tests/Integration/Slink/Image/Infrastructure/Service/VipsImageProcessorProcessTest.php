@@ -7,23 +7,26 @@ namespace Tests\Integration\Slink\Image\Infrastructure\Service;
 use Jcupitt\Vips\Image as VipsImage;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Slink\Image\Domain\Enum\ImageFilter;
 use Slink\Image\Domain\Enum\ImageFormat;
 use Slink\Image\Domain\ValueObject\Operation\Cover;
 use Slink\Image\Domain\ValueObject\Operation\Filter;
 use Slink\Image\Domain\ValueObject\Operation\Fit;
-use Slink\Image\Infrastructure\Service\VipsFormatAdapter;
 use Slink\Image\Infrastructure\Service\VipsImageProcessor;
 use Slink\Shared\Infrastructure\FileSystem\FileSource;
 use Slink\Shared\Infrastructure\FileSystem\FileStream;
+use Tests\Support\WiresVipsProcessor;
 
 final class VipsImageProcessorProcessTest extends TestCase {
+  use WiresVipsProcessor;
+
   private VipsImageProcessor $processor;
   private string $workingDir;
 
   protected function setUp(): void {
     parent::setUp();
 
-    $this->processor = new VipsImageProcessor(new VipsFormatAdapter());
+    $this->processor = $this->createVipsProcessor();
     $this->workingDir = \sys_get_temp_dir() . '/slink_process_' . \uniqid('', true);
     \mkdir($this->workingDir, 0777, true);
   }
@@ -257,7 +260,7 @@ final class VipsImageProcessorProcessTest extends TestCase {
 
     VipsImage::black(64, 48, ['bands' => 3])->add(80)->cast('uchar')->writeToFile($sourcePath);
 
-    $bytes = $this->processor->process($this->streamSource($sourcePath), [new Filter('noir')]);
+    $bytes = $this->processor->process($this->streamSource($sourcePath), [new Filter(ImageFilter::Noir)]);
 
     $result = $this->decode($bytes);
     $this->assertSame(64, $result->width);

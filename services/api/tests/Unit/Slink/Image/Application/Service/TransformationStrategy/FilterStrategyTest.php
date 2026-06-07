@@ -7,6 +7,7 @@ namespace Tests\Unit\Slink\Image\Application\Service\TransformationStrategy;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Image\Application\Service\TransformationStrategy\FilterStrategy;
+use Slink\Image\Domain\Enum\ImageFilter;
 use Slink\Image\Domain\ValueObject\ImageTransformationRequest;
 use Slink\Image\Domain\ValueObject\Operation\Filter;
 
@@ -41,7 +42,7 @@ final class FilterStrategyTest extends TestCase {
 
         $this->assertCount(1, $operations);
         $this->assertInstanceOf(Filter::class, $operations[0]);
-        $this->assertSame('sepia', $operations[0]->name);
+        $this->assertSame(ImageFilter::Sepia, $operations[0]->getFilter());
     }
 
     #[Test]

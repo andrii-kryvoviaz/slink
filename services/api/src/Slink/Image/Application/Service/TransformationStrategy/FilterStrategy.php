@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Image\Application\Service\TransformationStrategy;
 
+use Slink\Image\Domain\Enum\ImageFilter;
 use Slink\Image\Domain\Service\ImageTransformationStrategyInterface;
 use Slink\Image\Domain\ValueObject\ImageTransformationRequest;
 use Slink\Image\Domain\ValueObject\Operation\Filter;
@@ -20,7 +21,7 @@ final readonly class FilterStrategy implements ImageTransformationStrategyInterf
    * @return ImageOperation[]
    */
   public function operations(ImageTransformationRequest $request): array {
-    $filter = $request->getFilter();
+    $filter = ImageFilter::tryFromString($request->getFilter());
     if ($filter === null) {
       return [];
     }

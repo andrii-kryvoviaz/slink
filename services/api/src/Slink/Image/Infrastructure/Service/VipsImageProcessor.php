@@ -6,17 +6,15 @@ namespace Slink\Image\Infrastructure\Service;
 use Jcupitt\Vips\Exception as VipsException;
 use Jcupitt\Vips\Image as VipsImage;
 use RuntimeException;
-use Slink\Image\Domain\Enum\ImageFilter;
 use Slink\Image\Domain\Enum\ImageFormat;
 use Slink\Image\Domain\Service\ImageFileProcessorInterface;
 use Slink\Image\Domain\Service\ImageInspectorInterface;
 use Slink\Image\Domain\Service\ImageProcessorInterface;
 use Slink\Image\Domain\Service\ImageSource;
 use Slink\Image\Domain\ValueObject\AnimatedImageInfo;
-use Slink\Image\Domain\ValueObject\Operation\Cover;
-use Slink\Image\Domain\ValueObject\Operation\Filter;
-use Slink\Image\Domain\ValueObject\Operation\Fit;
 use Slink\Image\Domain\ValueObject\Operation\ImageOperation;
+use Slink\Image\Infrastructure\Service\Operation\VipsContext;
+use Slink\Image\Infrastructure\Service\Operation\VipsOperationApplierRegistry;
 use Symfony\Component\DependencyInjection\Attribute\AsAlias;
 use Throwable;
 
@@ -24,13 +22,10 @@ use Throwable;
 #[AsAlias(ImageFileProcessorInterface::class)]
 #[AsAlias(ImageInspectorInterface::class)]
 final class VipsImageProcessor implements ImageProcessorInterface, ImageFileProcessorInterface, ImageInspectorInterface {
-  private const int LARGE_DIMENSION = 1000000;
-
-  /**
-   * @param VipsFormatAdapter $formatAdapter
-   */
-  public function __construct(private readonly VipsFormatAdapter $formatAdapter)
-  {
+  public function __construct(
+    private readonly VipsFormatAdapter $formatAdapter,
+    private readonly VipsOperationApplierRegistry $applierRegistry
+  ) {
   }
 
   public function process(
@@ -42,7 +37,6 @@ final class VipsImageProcessor implements ImageProcessorInterface, ImageFileProc
   ): string {
     try {
       $vipsSource = new VipsImageSource($source);
-      $geometry = $this->findGeometry($operations);
 
       $probe = $vipsSource->load();
       $pages = $this->getImagePages($probe);
@@ -52,11 +46,12 @@ final class VipsImageProcessor implements ImageProcessorInterface, ImageFileProc
       if ($animated) {
         $image = $vipsSource->load(['access' => 'sequential', 'n' => -1]);
 
-        return $this->processAnimated($image, $operations, $geometry, $resolvedFormat, $pages);
+        return $this->processAnimated($image, $operations, $resolvedFormat, $pages);
       }
 
-      $image = $this->loadForGeometry($vipsSource, $geometry);
-      $image = $this->applyFilters($image, $operations);
+      $context = VipsContext::forSource($vipsSource);
+      $this->applyOperations($context, $operations);
+      $image = $context->result();
 
       $options = $this->formatAdapter->buildFormatOptions($resolvedFormat, $quality)
         + ($strip ? ['strip' => true] : []);
@@ -70,104 +65,35 @@ final class VipsImageProcessor implements ImageProcessorInterface, ImageFileProc
   /**
    * @param ImageOperation[] $operations
    */
-  private function findGeometry(array $operations): Fit|Cover|null {
+  private function applyOperations(VipsContext $context, array $operations): void {
     foreach ($operations as $operation) {
-      if ($operation instanceof Fit || $operation instanceof Cover) {
-        return $operation;
-      }
+      $this->applierRegistry->applierFor($operation)?->apply($context, $operation);
     }
-
-    return null;
-  }
-
-  private function loadForGeometry(VipsImageSource $vipsSource, Fit|Cover|null $geometry): VipsImage {
-    if ($geometry === null) {
-      return $vipsSource->load(['access' => 'sequential']);
-    }
-
-    if ($geometry instanceof Fit) {
-      return $vipsSource->loadThumbnail($this->fitWidth($geometry), $this->fitOptions($geometry));
-    }
-
-    return $vipsSource->loadThumbnail($geometry->width, [
-      'height' => $geometry->height,
-      'crop' => 'centre',
-      'size' => 'both',
-    ]);
-  }
-
-  private function fitWidth(Fit $fit): int {
-    return $fit->width ?? self::LARGE_DIMENSION;
-  }
-
-  /**
-   * @return array<string, mixed>
-   */
-  private function fitOptions(Fit $fit): array {
-    return [
-      'height' => $fit->height ?? self::LARGE_DIMENSION,
-      'size' => $fit->allowEnlarge ? 'both' : 'down',
-    ];
-  }
-
-  /**
-   * @param ImageOperation[] $operations
-   */
-  private function applyFilters(VipsImage $image, array $operations): VipsImage {
-    foreach ($operations as $operation) {
-      if ($operation instanceof Filter) {
-        $image = $this->applyFilterByName($image, $operation->name);
-      }
-    }
-
-    return $image;
-  }
-
-  private function applyFilterByName(VipsImage $image, string $filter): VipsImage {
-    $imageFilter = ImageFilter::tryFromString($filter);
-
-    if ($imageFilter === null) {
-      return $image;
-    }
-
-    return $this->applyFilterOperation($image, $imageFilter);
   }
 
   /**
    * @param ImageOperation[] $operations
    */
   private function processAnimated(
-    VipsImage      $animated,
-    array          $operations,
-    Fit|Cover|null $geometry,
-    ImageFormat    $format,
-    int            $pages
+    VipsImage   $animated,
+    array       $operations,
+    ImageFormat $format,
+    int         $pages
   ): string {
     $delays = $this->getAnimatedDelays($animated, $pages);
     $frames = $this->extractAnimatedFrames(
       $animated,
-      fn(VipsImage $frame): VipsImage => $this->applyFilters($this->applyGeometry($frame, $geometry), $operations),
+      function (VipsImage $frame) use ($operations): VipsImage {
+        $context = VipsContext::forFrame($frame);
+        $this->applyOperations($context, $operations);
+
+        return $context->result();
+      },
       $pages
     );
     $combined = $this->combineAnimatedFrames($frames, $delays);
 
     return $this->formatAdapter->writeAnimatedToBuffer($combined, $format);
-  }
-
-  private function applyGeometry(VipsImage $frame, Fit|Cover|null $geometry): VipsImage {
-    if ($geometry === null) {
-      return $frame;
-    }
-
-    if ($geometry instanceof Fit) {
-      return $frame->thumbnail_image($this->fitWidth($geometry), $this->fitOptions($geometry));
-    }
-
-    return $frame->thumbnail_image($geometry->width, [
-      'height' => $geometry->height,
-      'crop' => 'centre',
-      'size' => 'both',
-    ]);
   }
 
   /**
@@ -286,89 +212,6 @@ final class VipsImageProcessor implements ImageProcessorInterface, ImageFileProc
     } catch (Throwable) {
       return $path;
     }
-  }
-
-  private function applyFilterOperation(VipsImage $image, ImageFilter $filter): VipsImage {
-    return match ($filter) {
-      ImageFilter::Dramatic => $this->applyDramaticFilter($image),
-      ImageFilter::Noir => $this->applyNoirFilter($image),
-      ImageFilter::Sepia => $this->applyRecombFilter($image, [
-        [0.393, 0.769, 0.189],
-        [0.349, 0.686, 0.168],
-        [0.272, 0.534, 0.131],
-      ]),
-      ImageFilter::Warm => $this->applyRecombFilter($image, [
-        [1.06, 0.1, 0.0],
-        [0.0, 1.0, 0.0],
-        [0.0, 0.0, 0.92],
-      ]),
-      ImageFilter::Cool => $this->applyRecombFilter($image, [
-        [0.92, 0.0, 0.0],
-        [0.0, 1.0, 0.05],
-        [0.0, 0.05, 1.08],
-      ]),
-      ImageFilter::Vivid => $this->applyRecombFilter($image, $this->buildSaturationMatrix(1.3)),
-      ImageFilter::Fade => $image->linear([0.85], [20]),
-    };
-  }
-
-  /**
-   * @param VipsImage $image
-   * @param array<int, array<int, float>> $matrix
-   * @return VipsImage
-   */
-  private function applyRecombFilter(VipsImage $image, array $matrix): VipsImage {
-    $image = $this->ensureSrgb($image);
-    $alpha = null;
-
-    if ($image->hasAlpha()) {
-      $alpha = $image->extract_band($image->bands - 1);
-      $image = $image->extract_band(0, ['n' => $image->bands - 1]);
-    }
-
-    $image = $image->recomb(VipsImage::newFromArray($matrix));
-
-    if ($alpha !== null) {
-      $image = $image->bandjoin($alpha);
-    }
-
-    return $image;
-  }
-
-  private function applyDramaticFilter(VipsImage $image): VipsImage {
-    $image = $this->applyRecombFilter($image, $this->buildSaturationMatrix(0.7));
-    return $image->linear([1.4], [-30]);
-  }
-
-  private function applyNoirFilter(VipsImage $image): VipsImage {
-    $image = $image->colourspace('b-w');
-    return $image->linear([1.3], [-20]);
-  }
-
-  private function ensureSrgb(VipsImage $image): VipsImage {
-    $interpretation = $image->interpretation;
-
-    if ($interpretation !== 'srgb' && $interpretation !== 'rgb') {
-      return $image->colourspace('srgb');
-    }
-
-    return $image;
-  }
-
-  /**
-   * @param float $amount
-   * @return array<int, array<int, float>>
-   */
-  private function buildSaturationMatrix(float $amount): array {
-    $lumaR = 0.3086;
-    $lumaG = 0.6094;
-    $lumaB = 0.0820;
-
-    return [
-      [$lumaR * (1 - $amount) + $amount, $lumaG * (1 - $amount), $lumaB * (1 - $amount)],
-      [$lumaR * (1 - $amount), $lumaG * (1 - $amount) + $amount, $lumaB * (1 - $amount)],
-      [$lumaR * (1 - $amount), $lumaG * (1 - $amount), $lumaB * (1 - $amount) + $amount],
-    ];
   }
 
   /**

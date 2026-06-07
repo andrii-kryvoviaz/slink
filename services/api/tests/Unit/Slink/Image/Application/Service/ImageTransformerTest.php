@@ -11,6 +11,7 @@ use Slink\Image\Application\Service\ImageTransformer;
 use Slink\Image\Application\Service\TransformationStrategy\CropStrategy;
 use Slink\Image\Application\Service\TransformationStrategy\FilterStrategy;
 use Slink\Image\Application\Service\TransformationStrategy\ResizeStrategy;
+use Slink\Image\Domain\Enum\ImageFilter;
 use Slink\Image\Domain\Enum\ImageFormat;
 use Slink\Image\Domain\Service\ImageFileProcessorInterface;
 use Slink\Image\Domain\Service\ImageProcessorInterface;
@@ -267,7 +268,7 @@ final class ImageTransformerTest extends TestCase {
                 $this->callback(static function (array $operations): bool {
                     return count($operations) === 1
                         && $operations[0] instanceof Filter
-                        && $operations[0]->name === 'sepia';
+                        && $operations[0]->getFilter() === ImageFilter::Sepia;
                 }),
                 null,
                 null,
@@ -305,7 +306,7 @@ final class ImageTransformerTest extends TestCase {
                         && $operations[0]->width === 400
                         && $operations[0]->height === 300
                         && $operations[1] instanceof Filter
-                        && $operations[1]->name === 'sepia';
+                        && $operations[1]->getFilter() === ImageFilter::Sepia;
                 }),
                 null,
                 null,
@@ -343,7 +344,7 @@ final class ImageTransformerTest extends TestCase {
                         && $operations[0]->width === 800
                         && $operations[0]->height === 600
                         && $operations[1] instanceof Filter
-                        && $operations[1]->name === 'sepia';
+                        && $operations[1]->getFilter() === ImageFilter::Sepia;
                 }),
                 null,
                 null,

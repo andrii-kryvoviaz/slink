@@ -8,18 +8,20 @@ use Jcupitt\Vips\Image as VipsImage;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Slink\Image\Domain\Enum\ImageFilter;
 use Slink\Image\Domain\Enum\ImageFormat;
 use Slink\Image\Domain\ValueObject\Operation\Cover;
 use Slink\Image\Domain\ValueObject\Operation\Filter;
 use Slink\Image\Domain\ValueObject\Operation\Fit;
-use Slink\Image\Infrastructure\Service\VipsFormatAdapter;
 use Slink\Image\Infrastructure\Service\VipsImageProcessor;
 use Slink\Shared\Infrastructure\FileSystem\FileSource;
 use Slink\Shared\Infrastructure\FileSystem\FileStream;
 use Tests\Support\ImageFormatFixtures;
+use Tests\Support\WiresVipsProcessor;
 
 final class VipsImageProcessorFormatMatrixTest extends TestCase {
   use ImageFormatFixtures;
+  use WiresVipsProcessor;
 
   /** @var array<string, string> */
   private const array PRESERVED_LOADERS = [
@@ -36,7 +38,7 @@ final class VipsImageProcessorFormatMatrixTest extends TestCase {
   protected function setUp(): void {
     parent::setUp();
 
-    $this->processor = new VipsImageProcessor(new VipsFormatAdapter());
+    $this->processor = $this->createVipsProcessor();
     $this->workingDir = \sys_get_temp_dir() . '/slink_format_matrix_' . \uniqid('', true);
     \mkdir($this->workingDir, 0777, true);
   }
@@ -238,12 +240,31 @@ final class VipsImageProcessorFormatMatrixTest extends TestCase {
   public function itAppliesFilter(): void {
     $source = $this->sourceFromBytes($this->imageBytes('png', 48, 48), 'png');
 
-    $bytes = $this->processor->process($source, [new Filter('sepia')]);
+    $bytes = $this->processor->process($source, [new Filter(ImageFilter::Sepia)]);
 
     $result = $this->decode($bytes);
     $this->assertSame('pngload_buffer', $result->get('vips-loader'));
     $this->assertSame(48, $result->width);
     $this->assertSame(48, $result->height);
+  }
+
+  /**
+   * @return array<int, array{0: ImageFilter}>
+   */
+  public static function filterProvider(): array {
+    return \array_map(static fn(ImageFilter $filter): array => [$filter], ImageFilter::cases());
+  }
+
+  #[Test]
+  #[DataProvider('filterProvider')]
+  public function itAppliesEachFilter(ImageFilter $filter): void {
+    $source = $this->sourceFromBytes($this->imageBytes('png', 48, 48), 'png');
+
+    $bytes = $this->processor->process($source, [new Filter($filter)]);
+
+    $result = $this->decode($bytes);
+    $this->assertSame(48, $result->width, \sprintf('Width changed for filter %s', $filter->value));
+    $this->assertSame(48, $result->height, \sprintf('Height changed for filter %s', $filter->value));
   }
 
   #[Test]
