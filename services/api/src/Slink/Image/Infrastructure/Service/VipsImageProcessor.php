@@ -46,7 +46,7 @@ final class VipsImageProcessor implements ImageProcessorInterface, ImageFileProc
       if ($animated) {
         $image = $vipsSource->load(['access' => 'sequential', 'n' => -1]);
 
-        return $this->processAnimated($image, $operations, $resolvedFormat, $pages);
+        return $this->processAnimated($image, $operations, $resolvedFormat, $pages, $quality);
       }
 
       $context = VipsContext::forSource($vipsSource);
@@ -78,7 +78,8 @@ final class VipsImageProcessor implements ImageProcessorInterface, ImageFileProc
     VipsImage   $animated,
     array       $operations,
     ImageFormat $format,
-    int         $pages
+    int         $pages,
+    ?int        $quality
   ): string {
     $delays = $this->getAnimatedDelays($animated, $pages);
     $frames = $this->extractAnimatedFrames(
@@ -93,7 +94,7 @@ final class VipsImageProcessor implements ImageProcessorInterface, ImageFileProc
     );
     $combined = $this->combineAnimatedFrames($frames, $delays);
 
-    return $this->formatAdapter->writeAnimatedToBuffer($combined, $format);
+    return $this->formatAdapter->writeAnimatedToBuffer($combined, $format, $quality);
   }
 
   /**
@@ -142,7 +143,7 @@ final class VipsImageProcessor implements ImageProcessorInterface, ImageFileProc
       $pages = $this->getImagePages($source);
 
       if ($pages > 1 && $format->supportsAnimation()) {
-        file_put_contents($targetPath, $this->convertAnimatedFormat($sourcePath, $format, $pages));
+        file_put_contents($targetPath, $this->convertAnimatedFormat($sourcePath, $format, $pages, $quality));
 
         return;
       }
@@ -157,13 +158,13 @@ final class VipsImageProcessor implements ImageProcessorInterface, ImageFileProc
     }
   }
 
-  private function convertAnimatedFormat(string $sourcePath, ImageFormat $format, int $pages): string {
+  private function convertAnimatedFormat(string $sourcePath, ImageFormat $format, int $pages, ?int $quality): string {
     $animated = VipsImage::newFromFile($sourcePath, ['access' => 'sequential', 'n' => -1]);
     $delays = $this->getAnimatedDelays($animated, $pages);
     $frames = $this->extractAnimatedFrames($animated, fn(VipsImage $frame): VipsImage => $frame, $pages);
     $combined = $this->combineAnimatedFrames($frames, $delays);
 
-    return $this->formatAdapter->writeAnimatedToBuffer($combined, $format);
+    return $this->formatAdapter->writeAnimatedToBuffer($combined, $format, $quality);
   }
 
   /**

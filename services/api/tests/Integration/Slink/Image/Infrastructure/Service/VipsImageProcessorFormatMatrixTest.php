@@ -237,6 +237,29 @@ final class VipsImageProcessorFormatMatrixTest extends TestCase {
   }
 
   #[Test]
+  public function itAppliesQualityToAnimatedWebp(): void {
+    $source = $this->sourceFromBytes($this->noisyAnimatedWebpBytes(3, 160, 160), 'webp');
+    $reference = $this->sourceFromBytes($this->noisyAnimatedWebpBytes(3, 160, 160), 'webp');
+
+    $low = $this->processor->process($source, [], ImageFormat::WEBP, 20);
+    $high = $this->processor->process($reference, [], ImageFormat::WEBP, 90);
+
+    $lowResult = VipsImage::newFromBuffer($low, '', ['n' => -1]);
+    $highResult = VipsImage::newFromBuffer($high, '', ['n' => -1]);
+
+    $this->assertSame('webpload_buffer', $lowResult->get('vips-loader'), 'Low quality output is not webp');
+    $this->assertSame('webpload_buffer', $highResult->get('vips-loader'), 'High quality output is not webp');
+    $this->assertGreaterThanOrEqual(2, (int) $lowResult->get('n-pages'), 'Animation lost in low quality output');
+    $this->assertGreaterThanOrEqual(2, (int) $highResult->get('n-pages'), 'Animation lost in high quality output');
+
+    $this->assertLessThan(
+      \strlen($high),
+      \strlen($low),
+      \sprintf('Quality not threaded to animated webp encoder (low Q20 = %d bytes, high Q90 = %d bytes)', \strlen($low), \strlen($high))
+    );
+  }
+
+  #[Test]
   public function itAppliesFilter(): void {
     $source = $this->sourceFromBytes($this->imageBytes('png', 48, 48), 'png');
 
@@ -287,6 +310,25 @@ final class VipsImageProcessorFormatMatrixTest extends TestCase {
     }
 
     $this->assertSame(self::PRESERVED_LOADERS[$format], $result->get('vips-loader'), \sprintf('Codec changed for %s', $format));
+  }
+
+  private function noisyAnimatedWebpBytes(int $frames, int $width, int $height): string {
+    $pages = [];
+    for ($i = 0; $i < $frames; $i++) {
+      $pages[] = VipsImage::gaussnoise($width, $height, ['mean' => 128, 'sigma' => 80, 'seed' => $i + 1])
+        ->bandjoin([
+          VipsImage::gaussnoise($width, $height, ['mean' => 128, 'sigma' => 80, 'seed' => $i + 11]),
+          VipsImage::gaussnoise($width, $height, ['mean' => 128, 'sigma' => 80, 'seed' => $i + 21]),
+        ])
+        ->cast('uchar');
+    }
+
+    $joined = VipsImage::arrayjoin($pages, ['across' => 1])->copy();
+    $joined->set('page-height', $height);
+    $joined->set('n-pages', $frames);
+    $joined->set('delay', \array_fill(0, $frames, 100));
+
+    return $joined->writeToBuffer('.webp');
   }
 
   private function sourceFromBytes(string $bytes, string $format): FileSource {
