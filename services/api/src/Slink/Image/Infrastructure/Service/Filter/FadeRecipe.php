@@ -9,12 +9,12 @@ use Slink\Image\Domain\Enum\ImageFilter;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('image.vips_filter_recipe')]
-final class FadeRecipe implements VipsFilterRecipe {
+final class FadeRecipe extends AbstractColorFilterRecipe {
   public function filter(): ImageFilter {
     return ImageFilter::Fade;
   }
 
-  public function applyTo(VipsImage $image): VipsImage {
-    return $image->linear([0.85], [20]);
+  protected function transformColor(VipsImage $color): VipsImage {
+    return $color->linear([0.85], [20]);
   }
 }

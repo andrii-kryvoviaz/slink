@@ -9,18 +9,16 @@ use Slink\Image\Domain\Enum\ImageFilter;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('image.vips_filter_recipe')]
-final class CoolRecipe implements VipsFilterRecipe {
-  use VipsColorOps;
-
+final class CoolRecipe extends AbstractColorFilterRecipe {
   public function filter(): ImageFilter {
     return ImageFilter::Cool;
   }
 
-  public function applyTo(VipsImage $image): VipsImage {
-    return $this->recombWithAlpha($image, [
+  protected function transformColor(VipsImage $color): VipsImage {
+    return $color->recomb(VipsImage::newFromArray([
       [0.92, 0.0, 0.0],
       [0.0, 1.0, 0.05],
       [0.0, 0.05, 1.08],
-    ]);
+    ]));
   }
 }

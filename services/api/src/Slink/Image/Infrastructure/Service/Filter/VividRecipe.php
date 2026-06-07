@@ -9,14 +9,12 @@ use Slink\Image\Domain\Enum\ImageFilter;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('image.vips_filter_recipe')]
-final class VividRecipe implements VipsFilterRecipe {
-  use VipsColorOps;
-
+final class VividRecipe extends AbstractColorFilterRecipe {
   public function filter(): ImageFilter {
     return ImageFilter::Vivid;
   }
 
-  public function applyTo(VipsImage $image): VipsImage {
-    return $this->recombWithAlpha($image, $this->buildSaturationMatrix(1.3));
+  protected function transformColor(VipsImage $color): VipsImage {
+    return $color->recomb(VipsImage::newFromArray($this->buildSaturationMatrix(1.3)));
   }
 }

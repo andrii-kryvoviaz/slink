@@ -9,14 +9,12 @@ use Slink\Image\Domain\Enum\ImageFilter;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('image.vips_filter_recipe')]
-final class NoirRecipe implements VipsFilterRecipe {
+final class NoirRecipe extends AbstractColorFilterRecipe {
   public function filter(): ImageFilter {
     return ImageFilter::Noir;
   }
 
-  public function applyTo(VipsImage $image): VipsImage {
-    $image = $image->colourspace('b-w');
-
-    return $image->linear([1.3], [-20]);
+  protected function transformColor(VipsImage $color): VipsImage {
+    return $color->colourspace('b-w')->linear([1.3], [-20]);
   }
 }
