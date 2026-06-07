@@ -71,6 +71,7 @@ final class CropStrategyTest extends TestCase {
         $this->assertInstanceOf(Cover::class, $operations[0]);
         $this->assertSame(400, $operations[0]->width);
         $this->assertSame(400, $operations[0]->height);
+        $this->assertFalse($operations[0]->upscale);
     }
 
     #[Test]
@@ -86,6 +87,22 @@ final class CropStrategyTest extends TestCase {
         $this->assertInstanceOf(Cover::class, $operations[0]);
         $this->assertSame(400, $operations[0]->width);
         $this->assertSame(400, $operations[0]->height);
+        $this->assertFalse($operations[0]->upscale);
+    }
+
+    #[Test]
+    public function itPassesUpscaleToCover(): void {
+        $request = new ImageTransformationRequest(
+            targetDimensions: new ImageDimensions(400, 400),
+            crop: true,
+            upscale: true
+        );
+
+        $operations = $this->strategy->operations($request);
+
+        $this->assertCount(1, $operations);
+        $this->assertInstanceOf(Cover::class, $operations[0]);
+        $this->assertTrue($operations[0]->upscale);
     }
 
     #[Test]

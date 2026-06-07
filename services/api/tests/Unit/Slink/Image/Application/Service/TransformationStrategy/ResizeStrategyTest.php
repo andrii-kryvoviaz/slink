@@ -60,7 +60,7 @@ final class ResizeStrategyTest extends TestCase {
         $this->assertInstanceOf(Fit::class, $operations[0]);
         $this->assertSame(200, $operations[0]->width);
         $this->assertSame(200, $operations[0]->height);
-        $this->assertFalse($operations[0]->allowEnlarge);
+        $this->assertFalse($operations[0]->upscale);
     }
 
     #[Test]
@@ -99,7 +99,7 @@ final class ResizeStrategyTest extends TestCase {
         $this->assertInstanceOf(Fit::class, $operations[0]);
         $this->assertSame(400, $operations[0]->width);
         $this->assertSame(300, $operations[0]->height);
-        $this->assertFalse($operations[0]->allowEnlarge);
+        $this->assertFalse($operations[0]->upscale);
     }
 
     #[Test]
@@ -127,17 +127,17 @@ final class ResizeStrategyTest extends TestCase {
     }
 
     #[Test]
-    public function itPropagatesEnlargeFlag(): void {
+    public function itPropagatesUpscaleFlag(): void {
         $request = new ImageTransformationRequest(
             targetDimensions: new ImageDimensions(400, 300),
-            allowEnlarge: true
+            upscale: true
         );
 
         $operations = $this->strategy->operations($request);
 
         $this->assertCount(1, $operations);
         $this->assertInstanceOf(Fit::class, $operations[0]);
-        $this->assertTrue($operations[0]->allowEnlarge);
+        $this->assertTrue($operations[0]->upscale);
     }
 
     #[Test]

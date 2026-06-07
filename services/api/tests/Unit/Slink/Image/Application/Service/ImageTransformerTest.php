@@ -158,7 +158,7 @@ final class ImageTransformerTest extends TestCase {
                         && $operations[0] instanceof Fit
                         && $operations[0]->width === 400
                         && $operations[0]->height === 300
-                        && $operations[0]->allowEnlarge === false;
+                        && $operations[0]->upscale === false;
                 }),
                 null,
                 null,
@@ -194,7 +194,7 @@ final class ImageTransformerTest extends TestCase {
                         && $operations[0] instanceof Fit
                         && $operations[0]->width === 300
                         && $operations[0]->height === 300
-                        && $operations[0]->allowEnlarge === false;
+                        && $operations[0]->upscale === false;
                 }),
                 null,
                 null,
@@ -514,7 +514,7 @@ final class ImageTransformerTest extends TestCase {
     }
 
     #[Test]
-    public function itEmitsFitWithoutEnlargeByDefault(): void {
+    public function itEmitsFitWithoutUpscaleByDefault(): void {
         $imageOptions = ImageOptions::fromPayload([
             'fileName' => 'test.jpg',
             'mimeType' => 'image/jpeg',
@@ -536,7 +536,7 @@ final class ImageTransformerTest extends TestCase {
                         && $operations[0] instanceof Fit
                         && $operations[0]->width === 1600
                         && $operations[0]->height === 1200
-                        && $operations[0]->allowEnlarge === false;
+                        && $operations[0]->upscale === false;
                 }),
                 null,
                 null,

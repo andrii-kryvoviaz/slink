@@ -102,7 +102,7 @@ final class VipsImageProcessorProcessTest extends TestCase {
   }
 
   #[Test]
-  public function itDoesNotEnlargeWhenAllowEnlargeIsFalse(): void {
+  public function itDoesNotUpscaleFitWhenUpscaleIsFalse(): void {
     $sourcePath = $this->workingDir . '/source.png';
 
     VipsImage::black(200, 150, ['bands' => 3])->writeToFile($sourcePath);
@@ -115,7 +115,7 @@ final class VipsImageProcessorProcessTest extends TestCase {
   }
 
   #[Test]
-  public function itEnlargesWhenAllowEnlargeIsTrue(): void {
+  public function itUpscalesFitWhenUpscaleIsTrue(): void {
     $sourcePath = $this->workingDir . '/source.png';
 
     VipsImage::black(200, 150, ['bands' => 3])->writeToFile($sourcePath);
@@ -133,7 +133,33 @@ final class VipsImageProcessorProcessTest extends TestCase {
 
     VipsImage::black(800, 600, ['bands' => 3])->writeToFile($sourcePath);
 
-    $bytes = $this->processor->process($this->streamSource($sourcePath), [new Cover(400, 400)]);
+    $bytes = $this->processor->process($this->streamSource($sourcePath), [new Cover(400, 400, false)]);
+
+    $result = $this->decode($bytes);
+    $this->assertSame(400, $result->width);
+    $this->assertSame(400, $result->height);
+  }
+
+  #[Test]
+  public function itDoesNotUpscaleCoverWhenUpscaleIsFalse(): void {
+    $sourcePath = $this->workingDir . '/source.png';
+
+    VipsImage::black(200, 150, ['bands' => 3])->writeToFile($sourcePath);
+
+    $bytes = $this->processor->process($this->streamSource($sourcePath), [new Cover(400, 400, false)]);
+
+    $result = $this->decode($bytes);
+    $this->assertSame(200, $result->width);
+    $this->assertSame(150, $result->height);
+  }
+
+  #[Test]
+  public function itUpscalesCoverWhenUpscaleIsTrue(): void {
+    $sourcePath = $this->workingDir . '/source.png';
+
+    VipsImage::black(200, 150, ['bands' => 3])->writeToFile($sourcePath);
+
+    $bytes = $this->processor->process($this->streamSource($sourcePath), [new Cover(400, 400, true)]);
 
     $result = $this->decode($bytes);
     $this->assertSame(400, $result->width);

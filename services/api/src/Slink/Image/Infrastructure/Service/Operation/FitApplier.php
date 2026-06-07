@@ -22,7 +22,7 @@ final class FitApplier implements VipsOperationApplier {
     $width = $operation->width ?? self::LARGE_DIMENSION;
     $options = [
       'height' => $operation->height ?? self::LARGE_DIMENSION,
-      'size' => $operation->allowEnlarge ? 'both' : 'down',
+      'size' => $operation->upscale ? 'both' : 'down',
     ];
 
     $context->resize($width, $options);

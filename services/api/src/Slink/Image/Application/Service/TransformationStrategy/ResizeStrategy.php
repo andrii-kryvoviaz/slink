@@ -23,7 +23,7 @@ final readonly class ResizeStrategy implements ImageTransformationStrategyInterf
   public function operations(ImageTransformationRequest $request): array {
     $targetDimensions = $request->getTargetDimensions();
     if ($targetDimensions !== null) {
-      return [new Fit($targetDimensions->getWidth(), $targetDimensions->getHeight(), $request->allowEnlarge())];
+      return [new Fit($targetDimensions->getWidth(), $targetDimensions->getHeight(), $request->upscale())];
     }
 
     $partialDimensions = $request->getPartialDimensions();
@@ -31,6 +31,6 @@ final readonly class ResizeStrategy implements ImageTransformationStrategyInterf
       return [];
     }
 
-    return [new Fit($partialDimensions->getWidth(), $partialDimensions->getHeight(), $request->allowEnlarge())];
+    return [new Fit($partialDimensions->getWidth(), $partialDimensions->getHeight(), $request->upscale())];
   }
 }

@@ -8,7 +8,7 @@ final readonly class Fit implements ImageOperation {
   public function __construct(
     public ?int $width,
     public ?int $height,
-    public bool $allowEnlarge
+    public bool $upscale
   ) {
   }
 }

@@ -188,7 +188,7 @@ final class VipsImageProcessorFormatMatrixTest extends TestCase {
   public function itCoverCropsStaticImageToExactDimensions(): void {
     $source = $this->sourceFromBytes($this->imageBytes('png', 800, 600), 'png');
 
-    $bytes = $this->processor->process($source, [new Cover(400, 400)]);
+    $bytes = $this->processor->process($source, [new Cover(400, 400, false)]);
 
     $result = $this->decode($bytes);
     $this->assertSame(400, $result->width, 'Cover did not crop width to exact dimension');
@@ -199,7 +199,7 @@ final class VipsImageProcessorFormatMatrixTest extends TestCase {
   public function itPreservesAnimationWhenCroppingAnimatedImage(): void {
     $source = $this->sourceFromBytes($this->animatedImageBytes('gif', 3, 64, 64), 'gif');
 
-    $bytes = $this->processor->process($source, [new Cover(400, 400)], ImageFormat::WEBP);
+    $bytes = $this->processor->process($source, [new Cover(400, 400, true)], ImageFormat::WEBP);
 
     $result = VipsImage::newFromBuffer($bytes, '', ['n' => -1]);
     $this->assertSame('webpload_buffer', $result->get('vips-loader'), 'Cropped animation not produced as webp');
@@ -212,7 +212,7 @@ final class VipsImageProcessorFormatMatrixTest extends TestCase {
   public function itPreservesAnimationWhenCroppingAnimatedGifToGif(): void {
     $source = $this->sourceFromBytes($this->animatedImageBytes('gif', 3, 64, 64), 'gif');
 
-    $bytes = $this->processor->process($source, [new Cover(400, 400)], ImageFormat::GIF);
+    $bytes = $this->processor->process($source, [new Cover(400, 400, true)], ImageFormat::GIF);
 
     $result = VipsImage::newFromBuffer($bytes, '', ['n' => -1]);
     $this->assertSame('gifload_buffer', $result->get('vips-loader'), 'Cropped animation not produced as gif');

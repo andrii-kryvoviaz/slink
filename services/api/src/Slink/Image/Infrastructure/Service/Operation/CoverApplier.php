@@ -20,7 +20,7 @@ final class CoverApplier implements VipsOperationApplier {
     $context->resize($operation->width, [
       'height' => $operation->height,
       'crop' => 'centre',
-      'size' => 'both',
+      'size' => $operation->upscale ? 'both' : 'down',
     ]);
   }
 }

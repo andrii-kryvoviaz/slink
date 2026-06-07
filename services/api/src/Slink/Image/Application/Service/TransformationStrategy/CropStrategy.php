@@ -26,7 +26,7 @@ final readonly class CropStrategy implements ImageTransformationStrategyInterfac
       return [];
     }
 
-    return [new Cover($targetDimensions->getWidth(), $targetDimensions->getHeight())];
+    return [new Cover($targetDimensions->getWidth(), $targetDimensions->getHeight(), $request->upscale())];
   }
 
   private function resolveTargetDimensions(ImageTransformationRequest $request): ?ImageDimensions {
