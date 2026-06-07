@@ -31,19 +31,16 @@ final readonly class ImageRetrievalService implements ImageRetrievalInterface {
   private function getTransformedImage(ImageOptions $image): ?string {
     $cacheFileName = $image->getCacheFileName();
 
-    $cached = $this->cache->readFromCache($cacheFileName);
-    if ($cached !== null) {
-      return $cached;
+    if ($this->cache->existsInCache($cacheFileName)) {
+      return $this->cache->readFromCache($cacheFileName);
     }
 
-    $originalContent = $this->storage->readImage($image->getFileName());
-    if ($originalContent === null) {
-      return null;
-    }
+    $source = $this->storage->readSource($image->getFileName());
 
-    $transformed = $this->imageTransformer->transform($originalContent, $image);
-    $this->cache->writeToCache($cacheFileName, $transformed);
+    $bytes = $this->imageTransformer->transform($source, $image);
 
-    return $transformed;
+    $this->cache->writeToCache($cacheFileName, $bytes);
+
+    return $bytes;
   }
 }

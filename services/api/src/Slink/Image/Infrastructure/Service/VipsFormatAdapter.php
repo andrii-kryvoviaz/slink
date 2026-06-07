@@ -34,8 +34,15 @@ final class VipsFormatAdapter {
   /**
    * @return array<string, int>
    */
-  public function buildFormatOptions(?int $quality): array {
-    return $quality !== null ? [self::QUALITY_PARAM => $quality] : [];
+  public function buildFormatOptions(ImageFormat $format, ?int $quality): array {
+    if ($quality === null) {
+      return [];
+    }
+
+    return match ($format) {
+      ImageFormat::JPEG, ImageFormat::WEBP, ImageFormat::AVIF, ImageFormat::TIFF => [self::QUALITY_PARAM => $quality],
+      default => [],
+    };
   }
 
   public function detectFormatFromLoader(string $loader): ImageFormat {
@@ -77,6 +84,14 @@ final class VipsFormatAdapter {
    */
   public function writeToBuffer(VipsImage $image, ImageFormat $format, array $options = []): string {
     return $image->writeToBuffer($this->getBufferFormat($format), $options);
+  }
+
+  /**
+   * @param array<string, mixed> $options
+   * @throws Exception
+   */
+  public function writeToFile(VipsImage $image, string $targetPath, array $options = []): void {
+    $image->writeToFile($targetPath, $options);
   }
 
   /**

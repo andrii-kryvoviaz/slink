@@ -56,10 +56,16 @@ final readonly class ImageConversionResolver implements ImageConversionResolverI
   }
 
   private function isAnimatedImage(File $file): bool {
-    $mimeType = $file->getMimeType();
+    if (!$this->imageAnalyzer->supportsAnimation($file->getMimeType())) {
+      return false;
+    }
 
-    return $this->imageAnalyzer->supportsAnimation($mimeType)
-      && $this->imageAnalyzer->isAnimated($file->getPathname());
+    $content = @file_get_contents($file->getPathname());
+    if ($content === false) {
+      return false;
+    }
+
+    return $this->imageAnalyzer->isAnimated($content);
   }
 
   private function getTargetFormat(): ImageFormat {

@@ -8,13 +8,23 @@ use Jcupitt\Vips\Image as VipsImage;
 use RuntimeException;
 use Slink\Image\Domain\Enum\ImageFilter;
 use Slink\Image\Domain\Enum\ImageFormat;
+use Slink\Image\Domain\Service\ImageFileProcessorInterface;
+use Slink\Image\Domain\Service\ImageInspectorInterface;
 use Slink\Image\Domain\Service\ImageProcessorInterface;
+use Slink\Image\Domain\Service\ImageSource;
 use Slink\Image\Domain\ValueObject\AnimatedImageInfo;
+use Slink\Image\Domain\ValueObject\Operation\Cover;
+use Slink\Image\Domain\ValueObject\Operation\Filter;
+use Slink\Image\Domain\ValueObject\Operation\Fit;
+use Slink\Image\Domain\ValueObject\Operation\ImageOperation;
 use Symfony\Component\DependencyInjection\Attribute\AsAlias;
 use Throwable;
 
 #[AsAlias(ImageProcessorInterface::class)]
-final class VipsImageProcessor implements ImageProcessorInterface {
+#[AsAlias(ImageFileProcessorInterface::class)]
+#[AsAlias(ImageInspectorInterface::class)]
+final class VipsImageProcessor implements ImageProcessorInterface, ImageFileProcessorInterface, ImageInspectorInterface {
+  private const int LARGE_DIMENSION = 1000000;
 
   /**
    * @param VipsFormatAdapter $formatAdapter
@@ -23,56 +33,193 @@ final class VipsImageProcessor implements ImageProcessorInterface {
   {
   }
 
-  /**
-   * @param string $imageContent
-   * @param string $format
-   * @param int|null $quality
-   * @return string
-   */
-  public function convertFormat(string $imageContent, string $format, ?int $quality = null): string {
+  public function process(
+    ImageSource  $source,
+    array        $operations,
+    ?ImageFormat $format = null,
+    ?int         $quality = null,
+    bool         $strip = false
+  ): string {
     try {
-      $imageFormat = ImageFormat::fromString($format);
-      
-      $image = VipsImage::newFromBuffer($imageContent);
-      $pages = $this->getImagePages($image);
-      $isAnimated = $pages > 1;
-      
-      if ($isAnimated && $imageFormat->supportsAnimation()) {
-        $image = VipsImage::newFromBuffer($imageContent, '', ['n' => -1]);
-        return $this->convertAnimatedFormat($imageContent, $imageFormat, $pages);
+      $vipsSource = new VipsImageSource($source);
+      $geometry = $this->findGeometry($operations);
+
+      $probe = $vipsSource->load();
+      $pages = $this->getImagePages($probe);
+      $resolvedFormat = $format ?? $this->formatAdapter->detectFormatFromLoader($probe->get('vips-loader'));
+      $animated = $pages > 1 && $resolvedFormat->supportsAnimation();
+
+      $image = $this->loadForGeometry($vipsSource, $geometry, $animated);
+
+      if ($animated) {
+        return $this->processAnimated($image, $operations, $resolvedFormat, $pages);
       }
-      
-      return $this->formatAdapter->writeToBuffer(
-        $image,
-        $imageFormat,
-        $this->formatAdapter->buildFormatOptions($quality)
+
+      $image = $this->applyFilters($image, $operations);
+
+      $options = $this->formatAdapter->buildFormatOptions($resolvedFormat, $quality)
+        + ($strip ? ['strip' => true] : []);
+
+      return $this->formatAdapter->writeToBuffer($image, $resolvedFormat, $options);
+    } catch (Throwable $e) {
+      throw new RuntimeException('Failed to process image: ' . $e->getMessage(), 0, $e);
+    }
+  }
+
+  /**
+   * @param ImageOperation[] $operations
+   */
+  private function findGeometry(array $operations): Fit|Cover|null {
+    foreach ($operations as $operation) {
+      if ($operation instanceof Fit || $operation instanceof Cover) {
+        return $operation;
+      }
+    }
+
+    return null;
+  }
+
+  private function loadForGeometry(VipsImageSource $vipsSource, Fit|Cover|null $geometry, bool $animated): VipsImage {
+    if ($geometry === null) {
+      return $vipsSource->load($animated ? ['access' => 'sequential', 'n' => -1] : ['access' => 'sequential']);
+    }
+
+    if ($geometry instanceof Fit) {
+      return $vipsSource->loadThumbnail($this->fitWidth($geometry), $this->fitOptions($geometry), $animated);
+    }
+
+    return $vipsSource->loadThumbnail($geometry->width, [
+      'height' => $geometry->height,
+      'crop' => 'centre',
+      'size' => 'both',
+    ], $animated);
+  }
+
+  private function fitWidth(Fit $fit): int {
+    return $fit->width ?? self::LARGE_DIMENSION;
+  }
+
+  /**
+   * @return array<string, mixed>
+   */
+  private function fitOptions(Fit $fit): array {
+    return [
+      'height' => $fit->height ?? self::LARGE_DIMENSION,
+      'size' => $fit->allowEnlarge ? 'both' : 'down',
+    ];
+  }
+
+  /**
+   * @param ImageOperation[] $operations
+   */
+  private function applyFilters(VipsImage $image, array $operations): VipsImage {
+    foreach ($operations as $operation) {
+      if ($operation instanceof Filter) {
+        $image = $this->applyFilterByName($image, $operation->name);
+      }
+    }
+
+    return $image;
+  }
+
+  private function applyFilterByName(VipsImage $image, string $filter): VipsImage {
+    $imageFilter = ImageFilter::tryFromString($filter);
+
+    if ($imageFilter === null) {
+      return $image;
+    }
+
+    return $this->applyFilterOperation($image, $imageFilter);
+  }
+
+  /**
+   * @param ImageOperation[] $operations
+   */
+  private function processAnimated(
+    VipsImage   $animated,
+    array       $operations,
+    ImageFormat $format,
+    int         $pages
+  ): string {
+    $delays = $this->getAnimatedDelays($animated, $pages);
+    $frames = $this->extractAnimatedFrames(
+      $animated,
+      fn(VipsImage $frame): VipsImage => $this->applyFilters($frame, $operations),
+      $pages
+    );
+    $combined = $this->combineAnimatedFrames($frames, $delays);
+
+    return $this->formatAdapter->writeAnimatedToBuffer($combined, $format);
+  }
+
+  /**
+   * @param callable(VipsImage): VipsImage $operation
+   * @return array<int, VipsImage>
+   * @throws VipsException
+   */
+  private function extractAnimatedFrames(VipsImage $animated, callable $operation, int $pages): array {
+    $frameHeight = $this->getFrameHeight($animated, $pages);
+
+    $frames = [];
+    for ($i = 0; $i < $pages; $i++) {
+      $frame = $animated->crop(0, $i * $frameHeight, $animated->width, $frameHeight);
+      $frames[] = $operation($frame);
+    }
+
+    return $frames;
+  }
+
+  private function getFrameHeight(VipsImage $animated, int $pages): int {
+    try {
+      return (int) $animated->get('page-height');
+    } catch (Throwable) {
+      return \intdiv($animated->height, $pages);
+    }
+  }
+
+  /**
+   * @return array<int, int>
+   */
+  private function getAnimatedDelays(VipsImage $animated, int $pages): array {
+    try {
+      return $animated->get('delay');
+    } catch (Throwable) {
+      return $this->formatAdapter->getDefaultAnimationDelays($pages);
+    }
+  }
+
+  public function convertFormatFile(string $sourcePath, string $targetPath, string $format, ?int $quality = null, bool $strip = true): void {
+    $this->doConvertFile($sourcePath, $targetPath, ImageFormat::fromString($format), $quality, $strip);
+  }
+
+  private function doConvertFile(string $sourcePath, string $targetPath, ImageFormat $format, ?int $quality, bool $strip): void {
+    try {
+      $source = VipsImage::newFromFile($sourcePath, ['access' => 'sequential']);
+      $pages = $this->getImagePages($source);
+
+      if ($pages > 1 && $format->supportsAnimation()) {
+        file_put_contents($targetPath, $this->convertAnimatedFormat($sourcePath, $format, $pages));
+
+        return;
+      }
+
+      $this->formatAdapter->writeToFile(
+        $source,
+        $targetPath,
+        $this->formatAdapter->buildFormatOptions($format, $quality) + ($strip ? ['strip' => true] : [])
       );
     } catch (Throwable $e) {
       throw new RuntimeException('Failed to convert image format: ' . $e->getMessage(), 0, $e);
     }
   }
 
-  private function convertAnimatedFormat(string $imageContent, ImageFormat $format, int $pages): string {
-    $delays = $this->getImageDelays($imageContent, $pages);
-    $frames = $this->processAnimatedFrames($imageContent, fn(VipsImage $frame) => $frame, $pages);
+  private function convertAnimatedFormat(string $sourcePath, ImageFormat $format, int $pages): string {
+    $animated = VipsImage::newFromFile($sourcePath, ['access' => 'sequential', 'n' => -1]);
+    $delays = $this->getAnimatedDelays($animated, $pages);
+    $frames = $this->extractAnimatedFrames($animated, fn(VipsImage $frame): VipsImage => $frame, $pages);
     $combined = $this->combineAnimatedFrames($frames, $delays);
-    
-    return $this->formatAdapter->writeAnimatedToBuffer($combined, $format);
-  }
 
-  /**
-   * @param string $imageContent
-   * @param int $width
-   * @param int $height
-   * @param int $x
-   * @param int $y
-   * @return string
-   */
-  public function crop(string $imageContent, int $width, int $height, int $x = 0, int $y = 0): string {
-    return $this->processImage(
-      $imageContent,
-      fn(VipsImage $image) => $image->crop($x, $y, $width, $height)
-    );
+    return $this->formatAdapter->writeAnimatedToBuffer($combined, $format);
   }
 
   /**
@@ -83,38 +230,12 @@ final class VipsImageProcessor implements ImageProcessorInterface {
     try {
       $image = VipsImage::newFromBuffer($imageContent);
       $count = $this->getImagePages($image);
-      return $count > 1 
+      return $count > 1
         ? AnimatedImageInfo::animated($count)
         : AnimatedImageInfo::static();
     } catch (Throwable $e) {
       throw new RuntimeException('Failed to get animated image info: ' . $e->getMessage(), 0, $e);
     }
-  }
-
-  /**
-   * @param string $imageContent
-   * @return array{int, int}
-   */
-  public function getImageDimensions(string $imageContent): array {
-    try {
-      $image = VipsImage::newFromBuffer($imageContent);
-      return [$image->width, $image->height];
-    } catch (Throwable $e) {
-      throw new RuntimeException('Failed to get image dimensions: ' . $e->getMessage(), 0, $e);
-    }
-  }
-
-  /**
-   * @param string $imageContent
-   * @param int $width
-   * @param int $height
-   * @return string
-   */
-  public function resize(string $imageContent, int $width, int $height): string {
-    return $this->processImage(
-      $imageContent,
-      fn(VipsImage $image) => $image->resize(min($width / $image->width, $height / $image->height))
-    );
   }
 
   /**
@@ -137,26 +258,16 @@ final class VipsImageProcessor implements ImageProcessorInterface {
       }
 
       $image = $image->autorot();
-      
+
       $extension = $imageFormat->getExtension();
 
       $image->writeToFile("$path.$extension", ['strip' => true]);
       rename("$path.$extension", $path);
-      
+
       return $path;
     } catch (Throwable) {
       return $path;
     }
-  }
-
-  public function applyFilter(string $imageContent, string $filter): string {
-    $imageFilter = ImageFilter::tryFromString($filter);
-
-    if ($imageFilter === null) {
-      return $imageContent;
-    }
-
-    return $this->processImage($imageContent, fn(VipsImage $image) => $this->applyFilterOperation($image, $imageFilter));
   }
 
   private function applyFilterOperation(VipsImage $image, ImageFilter $filter): VipsImage {
@@ -243,38 +354,6 @@ final class VipsImageProcessor implements ImageProcessorInterface {
   }
 
   /**
-   * @param string $buf
-   * @param callable $operation
-   * @return string
-   */
-  private function processImage(string $buf, callable $operation): string {
-    $this->validateImageContent($buf);
-    
-    try {
-      $img = VipsImage::newFromBuffer($buf);
-      $originalFormat = $this->formatAdapter->detectFormatFromLoader($img->get('vips-loader'));
-      $pages = $this->getImagePages($img);
-      $this->validateImagePages($pages);
-      
-      return $this->isStaticImage($pages) 
-        ? $this->processStaticImage($img, $operation, $originalFormat)
-        : $this->processAnimatedImage($buf, $operation, $originalFormat, $pages);
-    } catch (Throwable $e) {
-      throw new RuntimeException($e->getMessage(), 0, $e);
-    }
-  }
-
-  /**
-   * @param string $buf
-   * @return void
-   */
-  private function validateImageContent(string $buf): void {
-    if ($buf === '') {
-      throw new RuntimeException("Empty content");
-    }
-  }
-
-  /**
    * @param VipsImage $img
    * @return int
    */
@@ -287,79 +366,6 @@ final class VipsImageProcessor implements ImageProcessorInterface {
   }
 
   /**
-   * @param int $pages
-   * @return void
-   */
-  private function validateImagePages(int $pages): void {
-    if ($pages < 1) {
-      throw new RuntimeException("No pages");
-    }
-  }
-
-  /**
-   * @param int $pages
-   * @return bool
-   */
-  private function isStaticImage(int $pages): bool {
-    return $pages === 1;
-  }
-
-  /**
-   * @param VipsImage $img
-   * @param callable $operation
-   * @param ImageFormat $format
-   * @return string
-   */
-  private function processStaticImage(VipsImage $img, callable $operation, ImageFormat $format): string {
-    return $this->formatAdapter->writeToBuffer($operation($img), $format);
-  }
-
-  /**
-   * @param string $buf
-   * @param callable $operation
-   * @param ImageFormat $format
-   * @param int $pages
-   * @return string
-   */
-  private function processAnimatedImage(string $buf, callable $operation, ImageFormat $format, int $pages): string {
-    $delays = $this->getImageDelays($buf, $pages);
-    $frames = $this->processAnimatedFrames($buf, $operation, $pages);
-    $combined = $this->combineAnimatedFrames($frames, $delays);
-
-    return $this->writeAnimatedImage($combined, $format);
-  }
-
-  /**
-   * @param string $buf
-   * @param int $pages
-   * @return array<int, int>
-   */
-  private function getImageDelays(string $buf, int $pages): array {
-    try {
-      $img = VipsImage::newFromBuffer($buf);
-      return $img->get('delay');
-    } catch (Throwable) {
-      return $this->formatAdapter->getDefaultAnimationDelays($pages);
-    }
-  }
-
-  /**
-   * @param string $buf
-   * @param callable $operation
-   * @param int $pages
-   * @return array<int, VipsImage>
-   * @throws VipsException
-   */
-  private function processAnimatedFrames(string $buf, callable $operation, int $pages): array {
-    $frames = [];
-    for ($i = 0; $i < $pages; $i++) {
-      $frame = VipsImage::newFromBuffer($buf, '', ['page' => $i]);
-      $frames[] = $operation($frame);
-    }
-    return $frames;
-  }
-
-  /**
    * @param array<int, VipsImage> $frames
    * @param array<int, int> $delays
    * @return VipsImage
@@ -369,7 +375,7 @@ final class VipsImageProcessor implements ImageProcessorInterface {
     if (empty($frames)) {
       throw new RuntimeException('No frames to combine');
     }
-    
+
     $first = array_shift($frames);
     $frameHeight = $first->height;
 
@@ -380,17 +386,7 @@ final class VipsImageProcessor implements ImageProcessorInterface {
     $first->set('delay', $delays);
     $first->set('loop', $this->formatAdapter->getDefaultAnimationLoop());
     $first->set('page-height', $frameHeight);
-    
-    return $first;
-  }
 
-  /**
-   * @param VipsImage $combined
-   * @param ImageFormat $format
-   * @return string
-   * @throws VipsException
-   */
-  private function writeAnimatedImage(VipsImage $combined, ImageFormat $format): string {
-    return $this->formatAdapter->writeAnimatedToBuffer($combined, $format);
+    return $first;
   }
 }

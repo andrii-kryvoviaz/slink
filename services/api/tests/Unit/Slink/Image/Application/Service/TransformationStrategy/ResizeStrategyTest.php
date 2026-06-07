@@ -5,27 +5,20 @@ declare(strict_types=1);
 namespace Tests\Unit\Slink\Image\Application\Service\TransformationStrategy;
 
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\MockObject\Exception;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Slink\Image\Application\Service\TransformationStrategy\ResizeStrategy;
-use Slink\Image\Domain\Service\ImageProcessorInterface;
 use Slink\Image\Domain\ValueObject\ImageDimensions;
 use Slink\Image\Domain\ValueObject\ImageTransformationRequest;
+use Slink\Image\Domain\ValueObject\Operation\Fit;
 use Slink\Image\Domain\ValueObject\PartialImageDimensions;
 
 final class ResizeStrategyTest extends TestCase {
-    private ImageProcessorInterface $imageProcessor;
     private ResizeStrategy $strategy;
 
-    /**
-     * @throws Exception
-     */
     protected function setUp(): void {
         parent::setUp();
 
-        $this->imageProcessor = $this->createStub(ImageProcessorInterface::class);
-        $this->strategy = new ResizeStrategy($this->imageProcessor);
+        $this->strategy = new ResizeStrategy();
     }
 
     #[Test]
@@ -41,6 +34,39 @@ final class ResizeStrategyTest extends TestCase {
     public function itSupportsResizeWithPartialDimensions(): void {
         $request = new ImageTransformationRequest(
             partialDimensions: new PartialImageDimensions(400, null)
+        );
+
+        $this->assertTrue($this->strategy->supports($request));
+    }
+
+    #[Test]
+    public function itSupportsSmallBothDimensions(): void {
+        $request = new ImageTransformationRequest(
+            targetDimensions: new ImageDimensions(200, 200)
+        );
+
+        $this->assertTrue($this->strategy->supports($request));
+    }
+
+    #[Test]
+    public function itEmitsFitForSmallBothDimensions(): void {
+        $request = new ImageTransformationRequest(
+            targetDimensions: new ImageDimensions(200, 200)
+        );
+
+        $operations = $this->strategy->operations($request);
+
+        $this->assertCount(1, $operations);
+        $this->assertInstanceOf(Fit::class, $operations[0]);
+        $this->assertSame(200, $operations[0]->width);
+        $this->assertSame(200, $operations[0]->height);
+        $this->assertFalse($operations[0]->allowEnlarge);
+    }
+
+    #[Test]
+    public function itSupportsLargeBothDimensions(): void {
+        $request = new ImageTransformationRequest(
+            targetDimensions: new ImageDimensions(4000, 3000)
         );
 
         $this->assertTrue($this->strategy->supports($request));
@@ -64,100 +90,62 @@ final class ResizeStrategyTest extends TestCase {
     }
 
     #[Test]
-    public function itTransformsWithTargetDimensions(): void {
-        $originalDimensions = new ImageDimensions(800, 600);
-        $targetDimensions = new ImageDimensions(400, 300);
-        $request = new ImageTransformationRequest(targetDimensions: $targetDimensions);
-        $imageContent = 'image content';
+    public function itEmitsFitWithTargetDimensions(): void {
+        $request = new ImageTransformationRequest(targetDimensions: new ImageDimensions(400, 300));
 
-        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
-        $imageProcessor
-            ->expects($this->once())
-            ->method('resize')
-            ->with($imageContent, 400, 300)
-            ->willReturn('resized content');
+        $operations = $this->strategy->operations($request);
 
-        $strategy = new ResizeStrategy($imageProcessor);
-        $result = $strategy->transform($imageContent, $originalDimensions, $request);
-
-        $this->assertEquals('resized content', $result);
+        $this->assertCount(1, $operations);
+        $this->assertInstanceOf(Fit::class, $operations[0]);
+        $this->assertSame(400, $operations[0]->width);
+        $this->assertSame(300, $operations[0]->height);
+        $this->assertFalse($operations[0]->allowEnlarge);
     }
 
     #[Test]
-    public function itTransformsWithPartialDimensions(): void {
-        $originalDimensions = new ImageDimensions(800, 600);
-        $partialDimensions = new PartialImageDimensions(400, null);
-        $request = new ImageTransformationRequest(partialDimensions: $partialDimensions);
-        $imageContent = 'image content';
+    public function itEmitsFitWithPartialWidthOnly(): void {
+        $request = new ImageTransformationRequest(partialDimensions: new PartialImageDimensions(400, null));
 
-        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
-        $imageProcessor
-            ->expects($this->once())
-            ->method('resize')
-            ->with($imageContent, 400, 300)
-            ->willReturn('resized content');
+        $operations = $this->strategy->operations($request);
 
-        $strategy = new ResizeStrategy($imageProcessor);
-        $result = $strategy->transform($imageContent, $originalDimensions, $request);
-
-        $this->assertEquals('resized content', $result);
+        $this->assertCount(1, $operations);
+        $this->assertInstanceOf(Fit::class, $operations[0]);
+        $this->assertSame(400, $operations[0]->width);
+        $this->assertNull($operations[0]->height);
     }
 
     #[Test]
-    public function itScalesToFitWithinBounds(): void {
-        $originalDimensions = new ImageDimensions(1600, 1200);
-        $targetDimensions = new ImageDimensions(400, 400);
-        $request = new ImageTransformationRequest(targetDimensions: $targetDimensions);
-        $imageContent = 'image content';
+    public function itEmitsFitWithPartialHeightOnly(): void {
+        $request = new ImageTransformationRequest(partialDimensions: new PartialImageDimensions(null, 300));
 
-        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
-        $imageProcessor
-            ->expects($this->once())
-            ->method('resize')
-            ->with($imageContent, 400, 300)
-            ->willReturn('resized content');
+        $operations = $this->strategy->operations($request);
 
-        $strategy = new ResizeStrategy($imageProcessor);
-        $result = $strategy->transform($imageContent, $originalDimensions, $request);
-
-        $this->assertEquals('resized content', $result);
+        $this->assertCount(1, $operations);
+        $this->assertInstanceOf(Fit::class, $operations[0]);
+        $this->assertNull($operations[0]->width);
+        $this->assertSame(300, $operations[0]->height);
     }
 
     #[Test]
-    public function itHandlesEnlargeFlag(): void {
-        $originalDimensions = new ImageDimensions(200, 150);
-        $targetDimensions = new ImageDimensions(400, 300);
+    public function itPropagatesEnlargeFlag(): void {
         $request = new ImageTransformationRequest(
-            targetDimensions: $targetDimensions,
+            targetDimensions: new ImageDimensions(400, 300),
             allowEnlarge: true
         );
-        $imageContent = 'image content';
 
-        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
-        $imageProcessor
-            ->expects($this->once())
-            ->method('resize')
-            ->with($imageContent, 400, 300)
-            ->willReturn('enlarged content');
+        $operations = $this->strategy->operations($request);
 
-        $strategy = new ResizeStrategy($imageProcessor);
-        $result = $strategy->transform($imageContent, $originalDimensions, $request);
-
-        $this->assertEquals('enlarged content', $result);
+        $this->assertCount(1, $operations);
+        $this->assertInstanceOf(Fit::class, $operations[0]);
+        $this->assertTrue($operations[0]->allowEnlarge);
     }
 
     #[Test]
-    public function itReturnsOriginalWhenNoValidDimensions(): void {
-        $originalDimensions = new ImageDimensions(800, 600);
+    public function itEmitsNoOperationsWhenNoValidDimensions(): void {
         $request = new ImageTransformationRequest(quality: 85);
-        $imageContent = 'image content';
 
-        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
-        $imageProcessor->expects($this->never())->method('resize');
+        $operations = $this->strategy->operations($request);
 
-        $strategy = new ResizeStrategy($imageProcessor);
-        $result = $strategy->transform($imageContent, $originalDimensions, $request);
-
-        $this->assertEquals('image content', $result);
+        $this->assertSame([], $operations);
     }
 }

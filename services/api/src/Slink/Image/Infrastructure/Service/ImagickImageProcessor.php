@@ -6,45 +6,132 @@ namespace Slink\Image\Infrastructure\Service;
 
 use Imagick;
 use ImagickException;
-use Slink\Image\Domain\Enum\AnimationStrategy;
 use Slink\Image\Domain\Enum\ImageFilter;
+use Slink\Image\Domain\Enum\ImageFormat;
+use Slink\Image\Domain\Service\ImageFileProcessorInterface;
+use Slink\Image\Domain\Service\ImageInspectorInterface;
 use Slink\Image\Domain\Service\ImageProcessorInterface;
+use Slink\Image\Domain\Service\ImageSource;
 use Slink\Image\Domain\ValueObject\AnimatedImageInfo;
+use Slink\Image\Domain\ValueObject\Operation\Cover;
+use Slink\Image\Domain\ValueObject\Operation\Filter;
+use Slink\Image\Domain\ValueObject\Operation\Fit;
+use Slink\Image\Domain\ValueObject\Operation\ImageOperation;
 use RuntimeException;
 
-final class ImagickImageProcessor implements ImageProcessorInterface {
-  public function convertFormat(string $imageContent, string $format, ?int $quality = null): string {
+final class ImagickImageProcessor implements ImageProcessorInterface, ImageFileProcessorInterface, ImageInspectorInterface {
+  public function process(
+    ImageSource  $source,
+    array        $operations,
+    ?ImageFormat $format = null,
+    ?int         $quality = null,
+    bool         $strip = false
+  ): string {
     try {
       $imagick = new Imagick();
-      $imagick->readImageBlob($imageContent);
+      $this->readSource($imagick, $source);
+      $imagick->autoOrient();
+
+      $this->applyOperations($imagick, $operations);
+
+      if ($format !== null) {
+        $imagick->setImageFormat($format->value);
+      }
+
+      if ($quality !== null) {
+        $imagick->setImageCompressionQuality($quality);
+      }
+
+      if ($strip) {
+        $imagick->stripImage();
+      }
+
+      $result = $imagick->getImagesBlob();
+      $imagick->clear();
+
+      return $result;
+    } catch (ImagickException $e) {
+      throw new RuntimeException('Failed to process image: ' . $e->getMessage(), 0, $e);
+    }
+  }
+
+  private function readSource(Imagick $imagick, ImageSource $source): void {
+    if ($source->hasLocalPath()) {
+      $imagick->readImage($source->getLocalPath());
+
+      return;
+    }
+
+    $imagick->readImageBlob($source->readBytes());
+  }
+
+  /**
+   * @param ImageOperation[] $operations
+   */
+  private function applyOperations(Imagick $imagick, array $operations): void {
+    foreach ($operations as $operation) {
+      match (true) {
+        $operation instanceof Fit => $this->applyFit($imagick, $operation),
+        $operation instanceof Cover => $imagick->cropThumbnailImage($operation->width, $operation->height),
+        $operation instanceof Filter => $this->applyFilterToImagick($imagick, $operation->name),
+        default => null,
+      };
+    }
+  }
+
+  private function applyFit(Imagick $imagick, Fit $fit): void {
+    $width = $fit->width ?? 0;
+    $height = $fit->height ?? 0;
+
+    if (!$fit->allowEnlarge) {
+      $width = $width === 0 ? 0 : min($width, $imagick->getImageWidth());
+      $height = $height === 0 ? 0 : min($height, $imagick->getImageHeight());
+    }
+
+    $imagick->thumbnailImage($width, $height, true);
+  }
+
+  private function applyFilterToImagick(Imagick $imagick, string $filter): void {
+    $imageFilter = ImageFilter::tryFromString($filter);
+
+    if ($imageFilter === null) {
+      return;
+    }
+
+    match ($imageFilter) {
+      ImageFilter::Dramatic => $this->applyDramaticFilter($imagick),
+      ImageFilter::Noir => $this->applyNoirFilter($imagick),
+      ImageFilter::Sepia => $this->applySepiaFilter($imagick),
+      ImageFilter::Warm => $this->applyColorTint($imagick, 1.06, 1.0, 0.92),
+      ImageFilter::Cool => $this->applyColorTint($imagick, 0.92, 1.0, 1.08),
+      ImageFilter::Vivid => $imagick->modulateImage(100, 140, 100),
+      ImageFilter::Fade => $this->applyFadeFilter($imagick),
+    };
+  }
+
+  public function convertFormatFile(string $sourcePath, string $targetPath, string $format, ?int $quality = null, bool $strip = true): void {
+    $this->doConvertFile($sourcePath, $targetPath, $format, $quality, $strip);
+  }
+
+  private function doConvertFile(string $sourcePath, string $targetPath, string $format, ?int $quality, bool $strip): void {
+    try {
+      $imagick = new Imagick();
+      $imagick->readImage($sourcePath);
       $imagick->setImageFormat($format);
 
       if ($quality !== null) {
         $imagick->setImageCompressionQuality($quality);
       }
 
-      $result = $imagick->getImageBlob();
-      $imagick->clear();
+      if ($strip) {
+        $imagick->stripImage();
+      }
 
-      return $result;
+      $imagick->writeImage($targetPath);
+      $imagick->clear();
     } catch (ImagickException $e) {
       throw new RuntimeException('Failed to convert image format: ' . $e->getMessage(), 0, $e);
     }
-  }
-
-  public function crop(
-    string $imageContent,
-    int    $width,
-    int    $height,
-    int    $x = 0,
-    int    $y = 0
-  ): string {
-    return $this->processImage(
-      $imageContent,
-      $width,
-      $height,
-      fn($imagick) => $imagick->cropImage($width, $height, $x, $y)
-    );
   }
 
   public function getAnimatedImageInfo(string $imageContent): AnimatedImageInfo {
@@ -62,69 +149,6 @@ final class ImagickImageProcessor implements ImageProcessorInterface {
         : AnimatedImageInfo::static();
     } catch (ImagickException $e) {
       throw new RuntimeException('Failed to get animated image info: ' . $e->getMessage(), 0, $e);
-    }
-  }
-
-  /**
-   * @param string $imageContent
-   * @return array{int, int}
-   */
-  public function getImageDimensions(string $imageContent): array {
-    try {
-      $imagick = new Imagick();
-      $imagick->readImageBlob($imageContent);
-
-      $width = $imagick->getImageWidth();
-      $height = $imagick->getImageHeight();
-
-      $imagick->clear();
-
-      return [$width, $height];
-    } catch (ImagickException $e) {
-      throw new RuntimeException('Failed to get image dimensions: ' . $e->getMessage(), 0, $e);
-    }
-  }
-
-  public function resize(
-    string $imageContent,
-    int    $width,
-    int    $height
-  ): string {
-    return $this->processImage(
-      $imageContent,
-      $width,
-      $height,
-      fn($imagick) => $imagick->resizeImage($width, $height, Imagick::FILTER_LANCZOS, 1)
-    );
-  }
-
-  public function applyFilter(string $imageContent, string $filter): string {
-    $imageFilter = ImageFilter::tryFromString($filter);
-
-    if ($imageFilter === null) {
-      return $imageContent;
-    }
-
-    try {
-      $imagick = new Imagick();
-      $imagick->readImageBlob($imageContent);
-
-      match ($imageFilter) {
-        ImageFilter::Dramatic => $this->applyDramaticFilter($imagick),
-        ImageFilter::Noir => $this->applyNoirFilter($imagick),
-        ImageFilter::Sepia => $this->applySepiaFilter($imagick),
-        ImageFilter::Warm => $this->applyColorTint($imagick, 1.06, 1.0, 0.92),
-        ImageFilter::Cool => $this->applyColorTint($imagick, 0.92, 1.0, 1.08),
-        ImageFilter::Vivid => $imagick->modulateImage(100, 140, 100),
-        ImageFilter::Fade => $this->applyFadeFilter($imagick),
-      };
-
-      $result = $imagick->getImageBlob();
-      $imagick->clear();
-
-      return $result;
-    } catch (ImagickException $e) {
-      throw new RuntimeException('Failed to apply filter: ' . $e->getMessage(), 0, $e);
     }
   }
 
@@ -172,51 +196,5 @@ final class ImagickImageProcessor implements ImageProcessorInterface {
     } catch (ImagickException) {
       return $path;
     }
-  }
-
-  private function processImage(
-    string   $imageContent,
-    int      $width,
-    int      $height,
-    callable $operation
-  ): string {
-    try {
-      $imagick = new Imagick();
-      $imagick->readImageBlob($imageContent);
-      $imagick->autoOrient();
-
-      $isAnimated = $imagick->getNumberImages() > 1;
-      $shouldPreserveAnimation = $this->shouldPreserveAnimation($isAnimated, AnimationStrategy::AUTO);
-
-      if ($shouldPreserveAnimation && $isAnimated) {
-        $imagick = $imagick->coalesceImages();
-        foreach ($imagick as $frame) {
-          $operation($frame);
-          $frame->setImagePage($width, $height, 0, 0);
-        }
-        $imagick = $imagick->deconstructImages();
-        $result = $imagick->getImagesBlob();
-      } else {
-        if ($isAnimated) {
-          $imagick->setIteratorIndex(0);
-          $imagick = $imagick->getImage();
-        }
-        $operation($imagick);
-        $result = $imagick->getImageBlob();
-      }
-
-      $imagick->clear();
-      return $result;
-    } catch (ImagickException $e) {
-      throw new RuntimeException($e->getMessage(), 0, $e);
-    }
-  }
-
-  private function shouldPreserveAnimation(bool $isAnimated, AnimationStrategy $strategy): bool {
-    return match ($strategy) {
-      AnimationStrategy::PRESERVE_ANIMATION => true,
-      AnimationStrategy::FIRST_FRAME_ONLY => false,
-      AnimationStrategy::AUTO => $isAnimated,
-    };
   }
 }

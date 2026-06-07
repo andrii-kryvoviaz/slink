@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace Slink\Image\Domain\Service;
 
-use Slink\Image\Domain\ValueObject\ImageDimensions;
 use Slink\Image\Domain\ValueObject\ImageTransformationRequest;
+use Slink\Image\Domain\ValueObject\Operation\ImageOperation;
 
 interface ImageTransformationStrategyInterface
 {
     public function supports(ImageTransformationRequest $request): bool;
-    
-    public function transform(
-        string $imageContent,
-        ImageDimensions $originalDimensions,
-        ImageTransformationRequest $request
-    ): string;
+
+    /**
+     * @return ImageOperation[]
+     */
+    public function operations(ImageTransformationRequest $request): array;
 }

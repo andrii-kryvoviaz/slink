@@ -90,8 +90,9 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
    * @return string
    */
   public function getCacheFileName(): string {
-    [$name, $extension] = explode('.', $this->fileName);
-    
+    [$name, $originalExtension] = explode('.', $this->fileName);
+    $extension = $this->format ?? $originalExtension;
+
     $reflection = new \ReflectionClass($this);
     
     $options = array_reduce($reflection->getProperties(), function ($carry, $property) {
@@ -158,7 +159,7 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
   public function getFilter(): ?string {
     return $this->filter;
   }
-  
+
   /**
    * @return bool
    */

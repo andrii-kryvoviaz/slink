@@ -10,7 +10,6 @@ use Slink\Collection\Domain\Repository\CollectionItemRepositoryInterface;
 use Slink\Collection\Infrastructure\ReadModel\View\CollectionView;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Image\Domain\Service\ImageAnalyzerInterface;
-use Slink\Image\Domain\Service\ImageProcessorInterface;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Application\Query\QueryHandlerInterface;
@@ -25,7 +24,6 @@ final readonly class GetImageByIdHandler implements QueryHandlerInterface {
     private ImageRepositoryInterface $repository,
     private ImageAnalyzerInterface $imageAnalyzer,
     private StorageInterface $storage,
-    private ImageProcessorInterface $imageProcessor,
     private CollectionItemRepositoryInterface $collectionItemRepository,
   ) {
   }
@@ -72,7 +70,6 @@ final readonly class GetImageByIdHandler implements QueryHandlerInterface {
       return false;
     }
 
-    $animationInfo = $this->imageProcessor->getAnimatedImageInfo($content);
-    return $animationInfo->isAnimated();
+    return $this->imageAnalyzer->isAnimated($content);
   }
 }

@@ -12,8 +12,11 @@ use Slink\Image\Domain\Enum\ImageFormat;
 use Slink\Image\Domain\Service\ImageAnalyzerInterface;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Symfony\Component\HttpFoundation\File\File;
+use Tests\Traits\FixturePathTrait;
 
 class ImageConversionResolverTest extends TestCase {
+  use FixturePathTrait;
+
   /**
    * @throws Exception
    */
@@ -105,7 +108,7 @@ class ImageConversionResolverTest extends TestCase {
 
     $file = $this->createStub(File::class);
     $file->method('getMimeType')->willReturn('image/gif');
-    $file->method('getPathname')->willReturn('/tmp/test.gif');
+    $file->method('getPathname')->willReturn($this->getFixturePath('test.jpg'));
 
     $imageAnalyzer->method('isConversionRequired')->willReturn(false);
     $imageAnalyzer->method('supportsFormatConversion')->willReturn(true);
@@ -134,7 +137,7 @@ class ImageConversionResolverTest extends TestCase {
 
     $file = $this->createStub(File::class);
     $file->method('getMimeType')->willReturn('image/gif');
-    $file->method('getPathname')->willReturn('/tmp/test.gif');
+    $file->method('getPathname')->willReturn($this->getFixturePath('test.jpg'));
 
     $imageAnalyzer->method('isConversionRequired')->willReturn(false);
     $imageAnalyzer->method('supportsFormatConversion')->willReturn(true);
