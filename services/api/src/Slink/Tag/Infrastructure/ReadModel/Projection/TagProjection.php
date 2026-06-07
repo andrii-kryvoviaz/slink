@@ -11,6 +11,7 @@ use Slink\Image\Domain\Event\ImageWasTagged;
 use Slink\Image\Domain\Event\ImageTagsWereReassigned;
 use Slink\Image\Domain\Event\ImageWasUntagged;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
+use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractProjection;
 use Slink\Tag\Domain\Event\TagWasCreated;
@@ -112,10 +113,10 @@ final class TagProjection extends AbstractProjection {
    * @throws ORMException
    */
   public function handleImageWasTagged(ImageWasTagged $event): void {
-    $imageView = $this->imageRepository->oneById($event->imageId->toString());
+    $imageView = $this->entityManager->getReference(ImageView::class, $event->imageId->toString());
     $tagView = $this->entityManager->getReference(TagView::class, $event->tagId->toString());
 
-    if ($tagView instanceof TagView) {
+    if ($imageView instanceof ImageView && $tagView instanceof TagView) {
       $imageView->addTag($tagView);
       $this->imageRepository->add($imageView);
     }
@@ -127,17 +128,22 @@ final class TagProjection extends AbstractProjection {
    * @throws ORMException
    */
   public function handleImageWasUntagged(ImageWasUntagged $event): void {
-    $imageView = $this->imageRepository->oneById($event->imageId->toString());
+    $imageView = $this->entityManager->getReference(ImageView::class, $event->imageId->toString());
     $tagView = $this->entityManager->getReference(TagView::class, $event->tagId->toString());
 
-    if ($tagView instanceof TagView) {
+    if ($imageView instanceof ImageView && $tagView instanceof TagView) {
       $imageView->removeTag($tagView);
       $this->imageRepository->add($imageView);
     }
   }
 
   public function handleImageTagsWereReassigned(ImageTagsWereReassigned $event): void {
-    $imageView = $this->imageRepository->oneById($event->imageId->toString());
+    $imageView = $this->entityManager->getReference(ImageView::class, $event->imageId->toString());
+
+    if (!$imageView instanceof ImageView) {
+      return;
+    }
+
     $imageView->clearTags();
 
     foreach ($event->tags->getTags() as $tagId) {
