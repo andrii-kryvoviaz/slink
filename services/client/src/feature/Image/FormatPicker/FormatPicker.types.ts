@@ -4,14 +4,20 @@ export interface FormatOption {
   value: ImageOutputFormat;
   label: string;
   extension: string;
+  supportsAnimation: boolean;
 }
 
 export const FORMAT_OPTIONS: FormatOption[] = [
-  { value: 'original', label: 'Original', extension: '' },
-  { value: 'png', label: 'PNG', extension: 'png' },
-  { value: 'jpg', label: 'JPG', extension: 'jpg' },
-  { value: 'webp', label: 'WebP', extension: 'webp' },
-  { value: 'avif', label: 'AVIF', extension: 'avif' },
+  {
+    value: 'original',
+    label: 'Original',
+    extension: '',
+    supportsAnimation: true,
+  },
+  { value: 'png', label: 'PNG', extension: 'png', supportsAnimation: false },
+  { value: 'jpg', label: 'JPG', extension: 'jpg', supportsAnimation: false },
+  { value: 'webp', label: 'WebP', extension: 'webp', supportsAnimation: true },
+  { value: 'avif', label: 'AVIF', extension: 'avif', supportsAnimation: false },
 ];
 
 const FORMAT_ALIASES: Record<string, ImageOutputFormat> = {

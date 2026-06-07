@@ -409,7 +409,7 @@ final class FormatRoundTripTest extends HttpTestCase {
   public function itServesOwnerCroppedAnimatedImageAsWebp(): void {
     $this->bootOwner();
 
-    $bytes = $this->animatedImageBytes('gif', 3, 64, 64);
+    $bytes = $this->animatedImageBytes('gif', 3, 800, 600);
     $imageId = $this->uploadOrSkip($this->ownerToken, 'gif', false, $bytes);
 
     [$status, $contentType, $body] = $this->fetchAsOwner(
@@ -447,6 +447,34 @@ final class FormatRoundTripTest extends HttpTestCase {
       2,
       (int) $decoded->get('n-pages'),
       'Animation lost through width-only quality preview.',
+    );
+  }
+
+  #[Test]
+  #[DataProvider('animatedFormatProvider')]
+  public function itPreservesAnimationForQualityOnlyRequest(string $format): void {
+    $this->bootOwner();
+
+    $bytes = $this->animatedImageBytes($format, 3);
+    $imageId = $this->uploadOrSkip($this->ownerToken, $format, false, $bytes);
+    $extension = self::formatExtension($format);
+
+    [$status, $contentType, $body] = $this->fetchAsOwner(
+      \sprintf('/api/image/%s.%s?quality=50', $imageId, $extension),
+    );
+
+    self::assertSame(200, $status, \sprintf('Owner could not read quality-only animated %s: %s', $format, $body));
+    self::assertSame(
+      self::formatMimeType($format),
+      $contentType,
+      \sprintf('Quality-only request changed content type for animated %s.', $format),
+    );
+
+    $decoded = VipsImage::newFromBuffer($body, '', ['n' => -1]);
+    self::assertGreaterThanOrEqual(
+      2,
+      (int) $decoded->get('n-pages'),
+      \sprintf('Animation lost through quality-only request for %s.', $format),
     );
   }
 }

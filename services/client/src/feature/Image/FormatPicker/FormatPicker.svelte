@@ -37,7 +37,15 @@
     );
   });
 
-  const showAnimationWarning = $derived(isAnimated && value !== 'original');
+  const showAnimationWarning = $derived.by(() => {
+    if (!isAnimated) {
+      return false;
+    }
+
+    const option = FORMAT_OPTIONS.find((opt) => opt.value === value);
+
+    return !(option?.supportsAnimation ?? false);
+  });
 
   const handleValueChange = (format: ImageOutputFormat) => {
     on?.change(format);

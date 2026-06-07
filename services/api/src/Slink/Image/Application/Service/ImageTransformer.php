@@ -63,7 +63,7 @@ final readonly class ImageTransformer implements ImageTransformerInterface, Imag
 
     $operations = $this->resolveOperations($request);
 
-    $format = $this->resolveFormat($imageOptions, $request);
+    $format = $this->resolveFormat($imageOptions);
     $quality = $this->resolveQuality($imageOptions, $format);
 
     return $this->imageProcessor->process($source, $operations, $format, $quality, false);
@@ -92,14 +92,10 @@ final readonly class ImageTransformer implements ImageTransformerInterface, Imag
     return $operations;
   }
 
-  private function resolveFormat(ImageOptions $imageOptions, ImageTransformationRequest $request): ?ImageFormat {
+  private function resolveFormat(ImageOptions $imageOptions): ?ImageFormat {
     $format = $imageOptions->getFormat();
     if ($format !== null) {
       return ImageFormat::fromString($format);
-    }
-
-    if ($imageOptions->getQuality() !== null && $request->getTargetDimensions() === null && !$request->hasPartialDimensions()) {
-      return ImageFormat::JPEG;
     }
 
     return null;

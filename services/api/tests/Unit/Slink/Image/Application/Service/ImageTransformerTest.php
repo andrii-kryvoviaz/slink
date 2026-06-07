@@ -396,7 +396,7 @@ final class ImageTransformerTest extends TestCase {
     }
 
     #[Test]
-    public function itFoldsQualityOnlyOptionIntoJpegEncode(): void {
+    public function itPreservesJpegSourceFormatForQualityOnly(): void {
         $imageOptions = ImageOptions::fromPayload([
             'fileName' => 'test.jpg',
             'mimeType' => 'image/jpeg',
@@ -413,7 +413,7 @@ final class ImageTransformerTest extends TestCase {
             ->with(
                 $this->anything(),
                 [],
-                ImageFormat::JPEG,
+                null,
                 60,
                 false
             )
@@ -425,7 +425,7 @@ final class ImageTransformerTest extends TestCase {
     }
 
     #[Test]
-    public function itKeepsJpegEncodeForDimensionlessQualityOnlyRequest(): void {
+    public function itPreservesWebpSourceFormatForQualityOnly(): void {
         $imageOptions = ImageOptions::fromPayload([
             'fileName' => 'test.webp',
             'mimeType' => 'image/webp',
@@ -442,7 +442,7 @@ final class ImageTransformerTest extends TestCase {
             ->with(
                 $this->anything(),
                 [],
-                ImageFormat::JPEG,
+                null,
                 82,
                 false
             )
