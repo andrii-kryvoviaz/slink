@@ -3,14 +3,14 @@
   import { FILTER_OPTIONS, type ImageFilter } from './FilterPicker.types';
 
   interface Props {
-    imageUrl: string;
+    previewUrl: string;
     value: ImageFilter;
     on?: {
       change: (filter: ImageFilter) => void;
     };
   }
 
-  let { imageUrl, value, on }: Props = $props();
+  let { previewUrl, value, on }: Props = $props();
 </script>
 
 <div class="grid grid-cols-4 gap-3">
@@ -22,8 +22,10 @@
       onclick={() => on?.change(option.value)}
     >
       <img
-        src={imageUrl}
+        src={previewUrl}
         alt={option.label}
+        decoding="async"
+        loading="lazy"
         class="w-full aspect-square object-cover rounded-md"
         style:filter={option.cssFilter}
       />

@@ -15,6 +15,7 @@
   import { fade, fly } from 'svelte/transition';
 
   import { cn } from '@slink/utils/ui';
+  import { imagePreview } from '@slink/utils/url';
 
   import {
     checkboxVariants,
@@ -80,7 +81,12 @@
           </button>
           <div class="aspect-4/3 sm:aspect-square w-full h-full">
             <ImagePlaceholder
-              src={`/image/${item.attributes.fileName}?width=300&height=300&crop=true`}
+              src={imagePreview(item.attributes.fileName, {
+                width: 300,
+                height: 300,
+                crop: true,
+                format: 'webp',
+              })}
               metadata={item.metadata}
               uniqueId={item.id}
               showOpenInNewTab={false}

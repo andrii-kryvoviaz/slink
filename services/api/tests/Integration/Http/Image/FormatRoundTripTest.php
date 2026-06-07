@@ -186,6 +186,22 @@ final class FormatRoundTripTest extends HttpTestCase {
     ];
   }
 
+  /**
+   * @return array{0: int, 1: string, 2: string}
+   */
+  private function fetchAsOwner(string $path): array {
+    $this->client->request('GET', $path, [], [], ['HTTP_AUTHORIZATION' => 'Bearer ' . $this->ownerToken]);
+
+    $response = $this->client->getResponse();
+    $content = $response->getContent();
+
+    return [
+      $response->getStatusCode(),
+      (string) $response->headers->get('Content-Type'),
+      $content === false ? '' : $content,
+    ];
+  }
+
   private function decode(string $bytes): VipsImage {
     self::assertNotSame('', $bytes, 'Served image body is empty.');
 
@@ -387,5 +403,28 @@ final class FormatRoundTripTest extends HttpTestCase {
     );
     self::assertGreaterThan(0, $decoded->width);
     self::assertLessThanOrEqual(17, $decoded->width, 'Resize not applied through cross-format share.');
+  }
+
+  #[Test]
+  public function itServesOwnerCroppedAnimatedImageAsWebp(): void {
+    $this->bootOwner();
+
+    $bytes = $this->animatedImageBytes('gif', 3, 64, 64);
+    $imageId = $this->uploadOrSkip($this->ownerToken, 'gif', false, $bytes);
+
+    [$status, $contentType, $body] = $this->fetchAsOwner(
+      \sprintf('/api/image/%s.webp?width=400&height=400&crop=true', $imageId),
+    );
+
+    self::assertSame(200, $status, \sprintf('Owner could not read cropped animated image: %s', $body));
+    self::assertSame('image/webp', $contentType, 'Owner cropped animated image did not return webp content type.');
+
+    $decoded = VipsImage::newFromBuffer($body, '', ['n' => -1]);
+    self::assertGreaterThanOrEqual(
+      2,
+      (int) $decoded->get('n-pages'),
+      'Animation lost through owner cover crop.',
+    );
+    self::assertSame(400, $decoded->width, 'Cover crop width not applied for owner cropped animated image.');
   }
 }

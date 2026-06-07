@@ -49,12 +49,13 @@ final class VipsImageProcessor implements ImageProcessorInterface, ImageFileProc
       $resolvedFormat = $format ?? $this->formatAdapter->detectFormatFromLoader($probe->get('vips-loader'));
       $animated = $pages > 1 && $resolvedFormat->supportsAnimation();
 
-      $image = $this->loadForGeometry($vipsSource, $geometry, $animated);
-
       if ($animated) {
-        return $this->processAnimated($image, $operations, $resolvedFormat, $pages);
+        $image = $vipsSource->load(['access' => 'sequential', 'n' => -1]);
+
+        return $this->processAnimated($image, $operations, $geometry, $resolvedFormat, $pages);
       }
 
+      $image = $this->loadForGeometry($vipsSource, $geometry);
       $image = $this->applyFilters($image, $operations);
 
       $options = $this->formatAdapter->buildFormatOptions($resolvedFormat, $quality)
@@ -79,20 +80,20 @@ final class VipsImageProcessor implements ImageProcessorInterface, ImageFileProc
     return null;
   }
 
-  private function loadForGeometry(VipsImageSource $vipsSource, Fit|Cover|null $geometry, bool $animated): VipsImage {
+  private function loadForGeometry(VipsImageSource $vipsSource, Fit|Cover|null $geometry): VipsImage {
     if ($geometry === null) {
-      return $vipsSource->load($animated ? ['access' => 'sequential', 'n' => -1] : ['access' => 'sequential']);
+      return $vipsSource->load(['access' => 'sequential']);
     }
 
     if ($geometry instanceof Fit) {
-      return $vipsSource->loadThumbnail($this->fitWidth($geometry), $this->fitOptions($geometry), $animated);
+      return $vipsSource->loadThumbnail($this->fitWidth($geometry), $this->fitOptions($geometry));
     }
 
     return $vipsSource->loadThumbnail($geometry->width, [
       'height' => $geometry->height,
       'crop' => 'centre',
       'size' => 'both',
-    ], $animated);
+    ]);
   }
 
   private function fitWidth(Fit $fit): int {
@@ -136,20 +137,37 @@ final class VipsImageProcessor implements ImageProcessorInterface, ImageFileProc
    * @param ImageOperation[] $operations
    */
   private function processAnimated(
-    VipsImage   $animated,
-    array       $operations,
-    ImageFormat $format,
-    int         $pages
+    VipsImage      $animated,
+    array          $operations,
+    Fit|Cover|null $geometry,
+    ImageFormat    $format,
+    int            $pages
   ): string {
     $delays = $this->getAnimatedDelays($animated, $pages);
     $frames = $this->extractAnimatedFrames(
       $animated,
-      fn(VipsImage $frame): VipsImage => $this->applyFilters($frame, $operations),
+      fn(VipsImage $frame): VipsImage => $this->applyFilters($this->applyGeometry($frame, $geometry), $operations),
       $pages
     );
     $combined = $this->combineAnimatedFrames($frames, $delays);
 
     return $this->formatAdapter->writeAnimatedToBuffer($combined, $format);
+  }
+
+  private function applyGeometry(VipsImage $frame, Fit|Cover|null $geometry): VipsImage {
+    if ($geometry === null) {
+      return $frame;
+    }
+
+    if ($geometry instanceof Fit) {
+      return $frame->thumbnail_image($this->fitWidth($geometry), $this->fitOptions($geometry));
+    }
+
+    return $frame->thumbnail_image($geometry->width, [
+      'height' => $geometry->height,
+      'crop' => 'centre',
+      'size' => 'both',
+    ]);
   }
 
   /**

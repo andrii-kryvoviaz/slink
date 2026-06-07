@@ -45,17 +45,19 @@ final readonly class GetImageByIdHandler implements QueryHandlerInterface {
 
     $mimeType = $imageView->getMimeType();
     $isAnimated = $this->checkIsAnimated($imageView->getFileName(), $mimeType);
-    
+    $supportsResize = $this->imageAnalyzer->supportsResize($mimeType);
+
     $imageId = (string) $imageView->getUuid();
+    $fileName = $imageView->getFileName();
     $collectionsByImageId = $this->collectionItemRepository->getCollectionsByImageIds([$imageId]);
     $collections = $collectionsByImageId[$imageId] ?? [];
 
     return Item::fromPayload(ImageView::class, [
       ...$imageView->toPayload(),
-      'supportsResize' => $this->imageAnalyzer->supportsResize($mimeType),
+      'supportsResize' => $supportsResize,
       'supportsFormatConversion' => $this->imageAnalyzer->supportsFormatConversion($mimeType),
       'isAnimated' => $isAnimated,
-      'url' => "/image/{$imageView->getFileName()}",
+      'src' => "/image/{$fileName}",
       'collections' => array_map(fn(CollectionView $c) => ['id' => (string) $c->getUuid(), 'name' => $c->getName()], $collections),
     ]);
   }

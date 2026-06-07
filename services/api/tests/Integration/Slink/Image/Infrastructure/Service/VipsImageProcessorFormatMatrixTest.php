@@ -9,6 +9,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Image\Domain\Enum\ImageFormat;
+use Slink\Image\Domain\ValueObject\Operation\Cover;
 use Slink\Image\Domain\ValueObject\Operation\Filter;
 use Slink\Image\Domain\ValueObject\Operation\Fit;
 use Slink\Image\Infrastructure\Service\VipsFormatAdapter;
@@ -164,6 +165,58 @@ final class VipsImageProcessorFormatMatrixTest extends TestCase {
 
     $info = $this->processor->getAnimatedImageInfo($bytes);
     $this->assertFalse($info->isAnimated(), \sprintf('Frames not collapsed for %s', $target->value));
+  }
+
+  #[Test]
+  public function itPreservesAnimationWhenConvertingAnimatedGifToWebp(): void {
+    $animatedBytes = $this->animatedImageBytes('gif', 3, 40, 40);
+
+    $sourceInfo = $this->processor->getAnimatedImageInfo($animatedBytes);
+    $this->assertTrue($sourceInfo->isAnimated(), 'Animated gif source not detected as animated');
+
+    $source = $this->sourceFromBytes($animatedBytes, 'gif');
+    $bytes = $this->processor->process($source, [new Fit(20, 20, false)], ImageFormat::WEBP, 75);
+
+    $result = VipsImage::newFromBuffer($bytes, '', ['n' => -1]);
+    $this->assertSame('webpload_buffer', $result->get('vips-loader'), 'Target webp not produced from gif source');
+    $this->assertGreaterThanOrEqual(2, (int) $result->get('n-pages'), 'Animation lost converting animated gif to webp');
+  }
+
+  #[Test]
+  public function itCoverCropsStaticImageToExactDimensions(): void {
+    $source = $this->sourceFromBytes($this->imageBytes('png', 800, 600), 'png');
+
+    $bytes = $this->processor->process($source, [new Cover(400, 400)]);
+
+    $result = $this->decode($bytes);
+    $this->assertSame(400, $result->width, 'Cover did not crop width to exact dimension');
+    $this->assertSame(400, $result->height, 'Cover did not crop height to exact dimension');
+  }
+
+  #[Test]
+  public function itPreservesAnimationWhenCroppingAnimatedImage(): void {
+    $source = $this->sourceFromBytes($this->animatedImageBytes('gif', 3, 64, 64), 'gif');
+
+    $bytes = $this->processor->process($source, [new Cover(400, 400)], ImageFormat::WEBP);
+
+    $result = VipsImage::newFromBuffer($bytes, '', ['n' => -1]);
+    $this->assertSame('webpload_buffer', $result->get('vips-loader'), 'Cropped animation not produced as webp');
+    $this->assertGreaterThanOrEqual(2, (int) $result->get('n-pages'), 'Animation lost when cropping animated image');
+    $this->assertSame(400, $result->width, 'Cover did not crop animated frame width to exact dimension');
+    $this->assertSame(400, (int) $result->get('page-height'), 'Cover did not crop animated frame height to exact dimension');
+  }
+
+  #[Test]
+  public function itPreservesAnimationWhenCroppingAnimatedGifToGif(): void {
+    $source = $this->sourceFromBytes($this->animatedImageBytes('gif', 3, 64, 64), 'gif');
+
+    $bytes = $this->processor->process($source, [new Cover(400, 400)], ImageFormat::GIF);
+
+    $result = VipsImage::newFromBuffer($bytes, '', ['n' => -1]);
+    $this->assertSame('gifload_buffer', $result->get('vips-loader'), 'Cropped animation not produced as gif');
+    $this->assertGreaterThanOrEqual(2, (int) $result->get('n-pages'), 'Animation lost when cropping animated gif');
+    $this->assertSame(400, $result->width, 'Cover did not crop animated gif frame width to exact dimension');
+    $this->assertSame(400, (int) $result->get('page-height'), 'Cover did not crop animated gif frame height to exact dimension');
   }
 
   #[Test]

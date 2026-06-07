@@ -14,6 +14,7 @@
 
   interface Props {
     src: string;
+    fetchpriority?: 'high' | 'low' | 'auto';
     alt?: string;
     metadata: {
       height: number;
@@ -32,6 +33,7 @@
 
   let {
     src,
+    fetchpriority = 'auto',
     alt = '',
     metadata,
     class: className = '',
@@ -112,7 +114,9 @@
 {#snippet content()}
   <img
     {src}
+    {fetchpriority}
     {alt}
+    decoding="async"
     onload={(event) => {
       const img = event.target as HTMLImageElement;
       updateAspectRatioFromImage(img);
