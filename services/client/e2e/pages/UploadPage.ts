@@ -1,4 +1,6 @@
-import { type Page, expect } from '@playwright/test';
+import { type Page, type Response, expect } from '@playwright/test';
+import { readFileSync } from 'fs';
+import { basename } from 'path';
 
 import { isChunkedUploadCompletionResponse } from '../helpers/chunkedUpload';
 import { createUniquePng } from '../helpers/uniqueImage';
@@ -67,6 +69,41 @@ export class UploadPage extends BasePage {
 
   async uploadFiles(paths: string[]) {
     await this.fileInput.setInputFiles(paths);
+  }
+
+  async uploadFixtureFile(path: string, mimeType: string): Promise<Response> {
+    const name = basename(path);
+    const buffer = readFileSync(path);
+
+    return this.uploadBuffer({ name, mimeType, buffer });
+  }
+
+  async uploadBuffer(file: {
+    name: string;
+    mimeType: string;
+    buffer: Buffer;
+  }): Promise<Response> {
+    await this.heading.waitFor({ state: 'visible' });
+
+    let completion: Response | undefined;
+
+    await expect(async () => {
+      if (!/\/upload(\/|$|\?)/.test(this.page.url())) {
+        return;
+      }
+      const responsePromise = this.page.waitForResponse(
+        isChunkedUploadCompletionResponse,
+        { timeout: 10000 },
+      );
+      await this.fileInput.setInputFiles(file);
+      completion = await responsePromise;
+    }).toPass({ timeout: 30000 });
+
+    if (!completion) {
+      throw new Error('Chunked upload did not complete');
+    }
+
+    return completion;
   }
 
   async uploadSingleImage() {

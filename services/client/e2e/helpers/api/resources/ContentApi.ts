@@ -1,8 +1,25 @@
 import { createUniquePng } from '../../uniqueImage';
 import type { HttpClient } from '../HttpClient';
 
+export interface ImageDetail {
+  id: string;
+  fileName: string;
+  mimeType: string;
+}
+
 export class ContentApi {
   constructor(private http: HttpClient) {}
+
+  async getImageDetail(imageId: string): Promise<ImageDetail> {
+    const data = await this.http.request('GET', `/api/image/${imageId}/detail`);
+    const payload = data?.data ?? data;
+
+    return {
+      id: String(payload.id),
+      fileName: String(payload.fileName),
+      mimeType: String(payload.mimeType),
+    };
+  }
 
   async uploadImage(
     options: { isPublic?: boolean; file?: Blob; fileName?: string } = {},
