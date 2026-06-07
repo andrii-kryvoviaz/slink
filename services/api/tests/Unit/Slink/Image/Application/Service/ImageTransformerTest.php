@@ -425,6 +425,65 @@ final class ImageTransformerTest extends TestCase {
     }
 
     #[Test]
+    public function itKeepsJpegEncodeForDimensionlessQualityOnlyRequest(): void {
+        $imageOptions = ImageOptions::fromPayload([
+            'fileName' => 'test.webp',
+            'mimeType' => 'image/webp',
+            'quality' => 82,
+        ]);
+
+        $source = $this->createFileSource();
+
+        $imageFileProcessor = $this->createStub(ImageFileProcessorInterface::class);
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor
+            ->expects($this->once())
+            ->method('process')
+            ->with(
+                $this->anything(),
+                [],
+                ImageFormat::JPEG,
+                82,
+                false
+            )
+            ->willReturn('transformed bytes');
+
+        $transformer = new ImageTransformer($imageProcessor, $imageFileProcessor, $this->settingsService, [new ResizeStrategy()]);
+
+        $transformer->transform($source, $imageOptions);
+    }
+
+    #[Test]
+    public function itPreservesSourceFormatForWidthOnlyQualityPreview(): void {
+        $imageOptions = ImageOptions::fromPayload([
+            'fileName' => 'test.webp',
+            'mimeType' => 'image/webp',
+            'width' => 1600,
+            'quality' => 82,
+        ]);
+
+        $source = $this->createFileSource();
+
+        $imageFileProcessor = $this->createStub(ImageFileProcessorInterface::class);
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor
+            ->expects($this->once())
+            ->method('process')
+            ->with(
+                $this->anything(),
+                $this->anything(),
+                null,
+                82,
+                false
+            )
+            ->willReturn('transformed bytes');
+
+        $transformer = new ImageTransformer($imageProcessor, $imageFileProcessor, $this->settingsService, [new ResizeStrategy()]);
+
+        $transformer->transform($source, $imageOptions);
+    }
+
+    #[Test]
     public function itResolvesNoFormatOrQualityForResizeOnly(): void {
         $imageOptions = ImageOptions::fromPayload([
             'fileName' => 'test.jpg',

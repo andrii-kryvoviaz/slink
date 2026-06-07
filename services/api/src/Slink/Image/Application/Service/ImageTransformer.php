@@ -98,7 +98,7 @@ final readonly class ImageTransformer implements ImageTransformerInterface, Imag
       return ImageFormat::fromString($format);
     }
 
-    if ($imageOptions->getQuality() !== null && $request->getTargetDimensions() === null) {
+    if ($imageOptions->getQuality() !== null && $request->getTargetDimensions() === null && !$request->hasPartialDimensions()) {
       return ImageFormat::JPEG;
     }
 

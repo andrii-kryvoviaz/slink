@@ -427,4 +427,26 @@ final class FormatRoundTripTest extends HttpTestCase {
     );
     self::assertSame(400, $decoded->width, 'Cover crop width not applied for owner cropped animated image.');
   }
+
+  #[Test]
+  public function itKeepsAnimatedWebpAnimatedThroughWidthAndQualityPreview(): void {
+    $this->bootOwner();
+
+    $bytes = $this->animatedImageBytes('webp', 3);
+    $imageId = $this->uploadOrSkip($this->ownerToken, 'webp', false, $bytes);
+
+    [$status, $contentType, $body] = $this->fetchAsOwner(
+      \sprintf('/api/image/%s.webp?width=1600&quality=82', $imageId),
+    );
+
+    self::assertSame(200, $status, \sprintf('Owner could not read animated webp preview: %s', $body));
+    self::assertSame('image/webp', $contentType, 'Animated webp preview did not return webp content type.');
+
+    $decoded = VipsImage::newFromBuffer($body, '', ['n' => -1]);
+    self::assertGreaterThanOrEqual(
+      2,
+      (int) $decoded->get('n-pages'),
+      'Animation lost through width-only quality preview.',
+    );
+  }
 }
