@@ -7,6 +7,8 @@ namespace Slink\Shared\Infrastructure\FileSystem\Storage;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\Enum\StorageProvider;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
+use Slink\Shared\Infrastructure\FileSystem\FileSource;
+use Slink\Shared\Infrastructure\FileSystem\FileStream;
 use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\DirectoryStorageInterface;
 use Symfony\Component\HttpFoundation\File\File;
 
@@ -57,6 +59,38 @@ final class LocalStorage extends AbstractStorage implements DirectoryStorageInte
     }
   }
   
+  /**
+   * @param string $fileName
+   * @return FileStream
+   * @throws NotFoundException
+   */
+  public function readStream(string $fileName): FileStream {
+    $path = $this->getPath($fileName);
+
+    if (!$path || !is_file($path)) {
+      throw new NotFoundException();
+    }
+
+    $resource = fopen($path, 'rb');
+
+    if ($resource === false) {
+      throw new NotFoundException();
+    }
+
+    return new FileStream($resource);
+  }
+
+  #[\Override]
+  public function readSource(string $fileName): FileSource {
+    $path = $this->getPath($fileName);
+
+    if (!$path || !is_file($path)) {
+      throw new NotFoundException();
+    }
+
+    return FileSource::fromLocalPath($path);
+  }
+
   public function delete(string $fileName): void {
     $imagePath = $this->getPath() . '/' . $fileName;
     

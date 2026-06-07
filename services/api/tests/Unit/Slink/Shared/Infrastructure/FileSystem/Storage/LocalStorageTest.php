@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
+use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\FileSystem\Storage\LocalStorage;
 use Symfony\Component\HttpFoundation\File\File;
 
@@ -168,6 +169,75 @@ final class LocalStorageTest extends TestCase {
     $this->assertDirectoryExists($subDir);
 
     rmdir($subDir);
+  }
+
+  #[Test]
+  public function itReadsRealFileAsStreamWithoutCreatingTemporaryFile(): void {
+    $fileName = 'local-copy.jpg';
+    $imagePath = $this->testDir . '/slink/images/' . $fileName;
+
+    mkdir(dirname($imagePath), 0755, true);
+    file_put_contents($imagePath, 'local content');
+
+    $temporaryBefore = $this->countTemporaryCopies();
+
+    $stream = $this->storage->readStream($fileName);
+    $resource = $stream->resource();
+    $this->assertSame('local content', stream_get_contents($resource));
+    $this->assertSame($temporaryBefore, $this->countTemporaryCopies());
+    $this->assertFileExists($imagePath);
+  }
+
+  #[Test]
+  public function itClosesResourceWhenStreamIsDestroyed(): void {
+    $fileName = 'local-copy.jpg';
+    $imagePath = $this->testDir . '/slink/images/' . $fileName;
+
+    mkdir(dirname($imagePath), 0755, true);
+    file_put_contents($imagePath, 'local content');
+
+    $stream = $this->storage->readStream($fileName);
+    $resource = $stream->resource();
+
+    unset($stream);
+
+    $this->assertFalse(is_resource($resource));
+  }
+
+  #[Test]
+  public function itReadsSourceAsLocalPathForExistingFile(): void {
+    $fileName = 'local-copy.jpg';
+    $imagePath = $this->testDir . '/slink/images/' . $fileName;
+
+    mkdir(dirname($imagePath), 0755, true);
+    file_put_contents($imagePath, 'local content');
+
+    $source = $this->storage->readSource($fileName);
+
+    $this->assertTrue($source->hasLocalPath());
+    $this->assertSame($imagePath, $source->getLocalPath());
+  }
+
+  #[Test]
+  public function itThrowsWhenReadingSourceForMissingFile(): void {
+    $this->expectException(NotFoundException::class);
+
+    $this->storage->readSource('does-not-exist.jpg');
+  }
+
+  #[Test]
+  public function itResolvesCachePathUnderCacheDirectory(): void {
+    $fileName = 'abc123-w350.jpg';
+
+    $expected = $this->testDir . '/slink/cache/' . $fileName;
+
+    $this->assertSame($expected, $this->storage->cachePath($fileName));
+  }
+
+  private function countTemporaryCopies(): int {
+    $files = glob(sys_get_temp_dir() . '/slink_src_*');
+
+    return $files === false ? 0 : count($files);
   }
 
   #[Test]

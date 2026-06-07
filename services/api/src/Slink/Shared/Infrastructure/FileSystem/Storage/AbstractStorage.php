@@ -3,6 +3,7 @@
 namespace Slink\Shared\Infrastructure\FileSystem\Storage;
 
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
+use Slink\Shared\Infrastructure\FileSystem\FileSource;
 use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\DirectoryStorageInterface;
 use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\ObjectStorageInterface;
 use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageCacheInterface;
@@ -137,20 +138,24 @@ abstract class AbstractStorage implements StorageInterface, StorageCacheInterfac
     return implode('/', [$absolutePath, $fileName]);
   }
 
+  public function readSource(string $fileName): FileSource {
+    return FileSource::fromStream($this->readStream($fileName));
+  }
+
   abstract public function clearCache(): int;
 
   public function existsInCache(string $fileName): bool {
-    $cachePath = $this->getCacheDirPath() . '/' . $fileName;
+    $cachePath = $this->cachePath($fileName);
     return $this->exists($cachePath);
   }
 
   public function writeToCache(string $fileName, string $content): void {
-    $cachePath = $this->getCacheDirPath() . '/' . $fileName;
+    $cachePath = $this->cachePath($fileName);
     $this->write($cachePath, $content);
   }
 
   public function readFromCache(string $fileName): ?string {
-    $cachePath = $this->getCacheDirPath() . '/' . $fileName;
+    $cachePath = $this->cachePath($fileName);
 
     if (!$this->exists($cachePath)) {
       return null;
@@ -159,8 +164,12 @@ abstract class AbstractStorage implements StorageInterface, StorageCacheInterfac
     return $this->read($cachePath);
   }
 
+  public function cachePath(string $fileName): string {
+    return $this->getCacheDirPath() . '/' . $fileName;
+  }
+
   public function deleteFromCache(string $fileName): void {
-    $cachePath = $this->getCacheDirPath() . '/' . $fileName;
+    $cachePath = $this->cachePath($fileName);
 
     if ($this->exists($cachePath)) {
       if ($this instanceof DirectoryStorageInterface) {

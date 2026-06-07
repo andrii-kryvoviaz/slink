@@ -7,6 +7,8 @@ namespace Slink\Shared\Infrastructure\FileSystem;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\Enum\StorageProvider;
 use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageCacheInterface;
+use Slink\Shared\Infrastructure\FileSystem\FileSource;
+use Slink\Shared\Infrastructure\FileSystem\FileStream;
 use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
 use Symfony\Component\DependencyInjection\Attribute\AsAlias;
 use Symfony\Component\HttpFoundation\File\File;
@@ -74,6 +76,18 @@ final class StorageProxy implements StorageInterface, StorageCacheInterface {
    */
   public function read(string $path): ?string {
     return $this->storageProvider->read($path);
+  }
+
+  public function readStream(string $fileName): FileStream {
+    return $this->storageProvider->readStream($fileName);
+  }
+
+  public function readSource(string $fileName): FileSource {
+    return $this->storageProvider->readSource($fileName);
+  }
+
+  public function cachePath(string $fileName): string {
+    return $this->storageProvider->cachePath($fileName);
   }
 
   public function clearCache(): int {

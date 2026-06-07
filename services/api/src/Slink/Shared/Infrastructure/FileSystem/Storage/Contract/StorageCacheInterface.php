@@ -10,4 +10,5 @@ interface StorageCacheInterface {
   public function writeToCache(string $fileName, string $content): void;
   public function readFromCache(string $fileName): ?string;
   public function deleteFromCache(string $fileName): void;
+  public function cachePath(string $fileName): string;
 }

@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Slink\Shared\Infrastructure\FileSystem\Storage;
 
 use Aws\S3\S3Client;
+use GuzzleHttp\Psr7\StreamWrapper;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Settings\Domain\ValueObject\Storage\AmazonS3StorageSettings;
 use Slink\Shared\Domain\Enum\StorageProvider;
+use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\Exception\Storage\AmazonS3Exception;
+use Slink\Shared\Infrastructure\FileSystem\FileStream;
 use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\ObjectStorageInterface;
 use Symfony\Component\HttpFoundation\File\File;
 
@@ -107,6 +110,25 @@ final class AmazonS3Storage extends AbstractStorage implements ObjectStorageInte
     }
   }
   
+  public function readStream(string $fileName): FileStream {
+    try {
+      $result = $this->client->getObject([
+        'Bucket' => $this->settings->getBucket(),
+        'Key' => $fileName
+      ]);
+    } catch (\Exception $e) {
+      throw new NotFoundException();
+    }
+
+    $resource = StreamWrapper::getResource($result['Body']);
+
+    if (!\is_resource($resource)) {
+      throw new NotFoundException();
+    }
+
+    return new FileStream($resource);
+  }
+
   public function clearCache(): int {
     try {
       $bucket = $this->settings->getBucket();

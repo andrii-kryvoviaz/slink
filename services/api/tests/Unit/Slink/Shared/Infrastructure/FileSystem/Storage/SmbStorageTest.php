@@ -196,6 +196,90 @@ final class SmbStorageTest extends TestCase {
     $this->storage->delete($fileName);
   }
 
+  #[Test]
+  public function itBuffersRemoteFileIntoMemoryStream(): void {
+    $fileName = 'remote-image.jpg';
+    $bytes = 'remote smb content';
+
+    $this->share->expects($this->once())
+      ->method('read')
+      ->with($this->stringContains($fileName))
+      ->willReturn($this->createStreamFromString($bytes));
+
+    $temporaryBefore = $this->countTemporaryCopies();
+
+    $stream = $this->storage->readStream($fileName);
+    $resource = $stream->resource();
+    $this->assertSame($bytes, stream_get_contents($resource));
+    $this->assertSame($temporaryBefore, $this->countTemporaryCopies());
+  }
+
+  #[Test]
+  public function itClosesResourceWhenStreamIsDestroyed(): void {
+    $fileName = 'remote-image.jpg';
+
+    $this->share->expects($this->once())
+      ->method('read')
+      ->willReturn($this->createStreamFromString('remote smb content'));
+
+    $stream = $this->storage->readStream($fileName);
+    $resource = $stream->resource();
+
+    unset($stream);
+
+    $this->assertFalse(is_resource($resource));
+  }
+
+  #[Test]
+  public function itReadsSourceAsStreamForRemoteFile(): void {
+    $fileName = 'remote-image.jpg';
+    $bytes = 'remote smb content';
+
+    $this->share->expects($this->once())
+      ->method('read')
+      ->with($this->stringContains($fileName))
+      ->willReturn($this->createStreamFromString($bytes));
+
+    $source = $this->storage->readSource($fileName);
+
+    $this->assertFalse($source->hasLocalPath());
+    $this->assertSame($bytes, stream_get_contents($source->getStream()->resource()));
+  }
+
+  #[Test]
+  public function itResolvesCachePathUnderCacheDirectory(): void {
+    $fileName = 'abc123-w350.jpg';
+
+    $this->share->expects($this->once())
+      ->method('stat')
+      ->with('slink/cache')
+      ->willReturn($this->createStub(IFileInfo::class));
+
+    $this->assertSame('slink/cache/' . $fileName, $this->storage->cachePath($fileName));
+  }
+
+  /**
+   * @return resource
+   */
+  private function createStreamFromString(string $content) {
+    $stream = fopen('php://temp', 'r+');
+
+    if ($stream === false) {
+      $this->fail('Unable to create in-memory stream.');
+    }
+
+    fwrite($stream, $content);
+    rewind($stream);
+
+    return $stream;
+  }
+
+  private function countTemporaryCopies(): int {
+    $files = glob(sys_get_temp_dir() . '/slink_src_*');
+
+    return $files === false ? 0 : count($files);
+  }
+
   private function createFileInfo(string $name, bool $isDirectory): IFileInfo&Stub {
     $fileInfo = $this->createStub(IFileInfo::class);
     $fileInfo->method('getName')->willReturn($name);
