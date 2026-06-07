@@ -112,9 +112,12 @@ final class ChunkedUploadTest extends HttpTestCase {
    */
   private function putChunkResponse(string $uploadId, int $index, string $bytes, ?string $uploadToken, bool $complete = false): array {
     $headers = [
-      'HTTP_AUTHORIZATION' => 'Bearer ' . $this->authToken,
       'CONTENT_TYPE' => 'application/octet-stream',
     ];
+
+    if ($this->authToken !== '') {
+      $headers['HTTP_AUTHORIZATION'] = 'Bearer ' . $this->authToken;
+    }
 
     if ($uploadToken !== null) {
       $headers['HTTP_X_UPLOAD_TOKEN'] = $uploadToken;
@@ -380,6 +383,28 @@ final class ChunkedUploadTest extends HttpTestCase {
     ));
 
     self::assertSame(403, $this->putChunk('foreign-upload', 0, 'data', $foreign));
+  }
+
+  #[Test]
+  public function itRejectsAnonymousRequestWithOwnedToken(): void {
+    $this->setAccessSettings(['allowGuestUploads' => true]);
+
+    $owned = $this->codec()->encode(UploadToken::create(
+      uploadId: 'owned-upload',
+      ownerId: 'owner',
+      isGuest: false,
+      fileName: 'sample.png',
+      totalSize: 1024,
+      mimeType: 'image/png',
+      isPublic: false,
+      description: '',
+      tagIds: [],
+      collectionIds: [],
+      totalChunks: 1,
+      expiresAt: \time() + UploadTokenCodec::TTL,
+    ));
+
+    self::assertSame(403, $this->putChunk('owned-upload', 0, 'data', $owned));
   }
 
   #[Test]

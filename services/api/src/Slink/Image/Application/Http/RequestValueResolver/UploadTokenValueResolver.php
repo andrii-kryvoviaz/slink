@@ -49,7 +49,7 @@ final readonly class UploadTokenValueResolver implements ValueResolverInterface 
     $user = $this->security->getUser();
     $currentUserId = $user instanceof UserInterface ? $user->getIdentifier() : null;
 
-    if ($currentUserId !== null && $token->getOwnerId() !== $currentUserId) {
+    if ($token->getOwnerId() !== $currentUserId) {
       throw new ForbiddenException('Upload token owner mismatch.');
     }
 
