@@ -46,9 +46,21 @@
     uploads.filter((item) => item.status === 'error').length,
   );
   let totalUploads = $derived(uploads.length);
-  let overallProgress = $derived(
-    totalUploads > 0 ? (completedUploads / totalUploads) * 100 : 0,
+  let totalBytes = $derived(
+    uploads.reduce((sum, item) => sum + item.file.size, 0),
   );
+  let overallProgress = $derived.by(() => {
+    if (totalBytes === 0) {
+      return 0;
+    }
+
+    const uploadedBytes = uploads.reduce(
+      (sum, item) => sum + (item.progress / 100) * item.file.size,
+      0,
+    );
+
+    return (uploadedBytes / totalBytes) * 100;
+  });
   let isCompleted = $derived(completedUploads + failedUploads === totalUploads);
   let hasErrors = $derived(failedUploads > 0);
 </script>
