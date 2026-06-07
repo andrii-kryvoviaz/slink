@@ -98,13 +98,6 @@ class UploadPageState {
     return this._uploadTarget;
   }
 
-  get isGuestUpload(): boolean {
-    return (
-      !this._pageData.user &&
-      !!this._pageData.globalSettings?.access?.allowGuestUploads
-    );
-  }
-
   async handleUpload(files: File[]) {
     const isBatch = files.length > 1;
 

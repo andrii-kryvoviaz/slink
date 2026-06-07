@@ -49,6 +49,10 @@ class UploadService {
         if (item.status === 'error') {
           onError?.(item, item.errorDetails ?? (error as Error));
         }
+      } finally {
+        if (item.status === 'completed') {
+          this._uploads.delete(item.id);
+        }
       }
     });
 

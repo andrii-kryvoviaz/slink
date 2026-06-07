@@ -102,6 +102,15 @@ export class ChunkedUpload {
   public cancel(): void {
     this._cancelled = true;
     this._abortController?.abort();
+
+    const session = this._session;
+    if (!session) {
+      return;
+    }
+
+    void ApiClient.image
+      .abortUpload(session.uploadId, session.token)
+      .catch(() => {});
   }
 
   private async _resolveSession(signal: AbortSignal): Promise<UploadSession> {
