@@ -2374,9 +2374,6 @@ msgstr "Ajouter plus"
 msgid "Upload Options"
 msgstr "Options d'importation"
 
-#~ msgid "<0/> Actions"
-#~ msgstr "<0/> Actions"
-
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
@@ -4714,3 +4711,68 @@ msgstr "Actions sur l'élément de la collection"
 #: src/feature/Comment/CommentListItem.svelte
 msgid "Comment actions"
 msgstr "Actions sur le commentaire"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Upload failed: server timed out"
+msgstr "Échec de l'envoi : délai d'attente du serveur dépassé"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Upload failed: connection interrupted"
+msgstr "Échec de l'envoi : connexion interrompue"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Upload failed: file is too large"
+msgstr "Échec de l'envoi : le fichier est trop volumineux"
+
+#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Upload cancelled"
+msgstr "Envoi annulé"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Upload failed: upload session expired"
+msgstr "Échec de l'envoi : la session d'envoi a expiré"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
+msgid "Provider actions"
+msgstr "Actions du fournisseur"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Upload Chunk Size"
+msgstr "Taille des fragments d'envoi"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Size of each upload chunk. Smaller chunks improve resumability on slow connections"
+msgstr "Taille de chaque fragment d'envoi. Des fragments plus petits améliorent la reprise sur les connexions lentes."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Invalid chunk size"
+msgstr "Taille de fragment invalide"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Chunk size cannot be smaller than 1M"
+msgstr "La taille du fragment ne peut pas être inférieure à 1M"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Chunk size cannot be greater than 25M"
+msgstr "La taille du fragment ne peut pas être supérieure à 25M"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "The uploaded file exceeds the maximum allowed size."
+msgstr "Le fichier envoyé dépasse la taille maximale autorisée."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "The uploaded chunk exceeds the maximum allowed chunk size."
+msgstr "Le fragment envoyé dépasse la taille maximale autorisée pour un fragment."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "The chunk index is out of range."
+msgstr "L'index du fragment est hors limites."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "The assembled file size does not match the declared total size."
+msgstr "La taille du fichier assemblé ne correspond pas à la taille totale déclarée."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Missing chunks: {chunks}."
+msgstr "Fragments manquants : {chunks}."

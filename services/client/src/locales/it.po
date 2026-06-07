@@ -2374,9 +2374,6 @@ msgstr "Aggiungi altro"
 msgid "Upload Options"
 msgstr "Opzioni di caricamento"
 
-#~ msgid "<0/> Actions"
-#~ msgstr "<0/> Azioni"
-
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
@@ -4714,3 +4711,68 @@ msgstr "Azioni elemento raccolta"
 #: src/feature/Comment/CommentListItem.svelte
 msgid "Comment actions"
 msgstr "Azioni commento"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Upload failed: server timed out"
+msgstr "Caricamento non riuscito: timeout del server"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Upload failed: connection interrupted"
+msgstr "Caricamento non riuscito: connessione interrotta"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Upload failed: file is too large"
+msgstr "Caricamento non riuscito: file troppo grande"
+
+#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Upload cancelled"
+msgstr "Caricamento annullato"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Upload failed: upload session expired"
+msgstr "Caricamento non riuscito: sessione di caricamento scaduta"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
+msgid "Provider actions"
+msgstr "Azioni del provider"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Upload Chunk Size"
+msgstr "Dimensione dei blocchi di caricamento"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Size of each upload chunk. Smaller chunks improve resumability on slow connections"
+msgstr "Dimensione di ogni blocco di caricamento. Blocchi più piccoli migliorano la ripresa su connessioni lente"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Invalid chunk size"
+msgstr "Dimensione del blocco non valida"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Chunk size cannot be smaller than 1M"
+msgstr "La dimensione del blocco non può essere inferiore a 1M"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Chunk size cannot be greater than 25M"
+msgstr "La dimensione del blocco non può essere superiore a 25M"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "The uploaded file exceeds the maximum allowed size."
+msgstr "Il file caricato supera la dimensione massima consentita."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "The uploaded chunk exceeds the maximum allowed chunk size."
+msgstr "Il blocco caricato supera la dimensione massima consentita per i blocchi."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "The chunk index is out of range."
+msgstr "L'indice del blocco non è compreso nell'intervallo consentito."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "The assembled file size does not match the declared total size."
+msgstr "La dimensione del file assemblato non corrisponde alla dimensione totale dichiarata."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Missing chunks: {chunks}."
+msgstr "Blocchi mancanti: {chunks}."

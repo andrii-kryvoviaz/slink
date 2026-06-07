@@ -107,6 +107,21 @@ export const messages = {
     get onlyOneFile() {
       return localize('Only one file allowed at a time');
     },
+    get timedOut() {
+      return localize('Upload failed: server timed out');
+    },
+    get connectionInterrupted() {
+      return localize('Upload failed: connection interrupted');
+    },
+    get tooLarge() {
+      return localize('Upload failed: file is too large');
+    },
+    get sessionExpired() {
+      return localize('Upload failed: upload session expired');
+    },
+    get cancelled() {
+      return localize('Upload cancelled');
+    },
   },
   general: {
     get somethingWentWrong() {

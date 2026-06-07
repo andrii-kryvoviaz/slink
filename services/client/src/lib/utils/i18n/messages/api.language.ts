@@ -312,6 +312,42 @@ function errors(): ApiError[] {
       translate: () => localize('Max size cannot be greater than 1000'),
     },
     {
+      match: /* @wc-ignore */ 'Invalid chunk size',
+      translate: () => localize('Invalid chunk size'),
+    },
+    {
+      match: /* @wc-ignore */ 'Chunk size cannot be smaller than 1M',
+      translate: () => localize('Chunk size cannot be smaller than 1M'),
+    },
+    {
+      match: /* @wc-ignore */ 'Chunk size cannot be greater than 25M',
+      translate: () => localize('Chunk size cannot be greater than 25M'),
+    },
+    {
+      match:
+        /* @wc-ignore */ 'The uploaded file exceeds the maximum allowed size.',
+      translate: () =>
+        localize('The uploaded file exceeds the maximum allowed size.'),
+    },
+    {
+      match:
+        /* @wc-ignore */ 'The uploaded chunk exceeds the maximum allowed chunk size.',
+      translate: () =>
+        localize('The uploaded chunk exceeds the maximum allowed chunk size.'),
+    },
+    {
+      match: /* @wc-ignore */ 'The chunk index is out of range.',
+      translate: () => localize('The chunk index is out of range.'),
+    },
+    {
+      match:
+        /* @wc-ignore */ 'The assembled file size does not match the declared total size.',
+      translate: () =>
+        localize(
+          'The assembled file size does not match the declared total size.',
+        ),
+    },
+    {
       match: /* @wc-ignore */ 'Invalid tag ID format',
       translate: () => localize('Invalid tag ID format'),
     },
@@ -421,6 +457,10 @@ function errors(): ApiError[] {
       match: /^The mime type (.+) is not supported\./,
       translate: (m) =>
         localize('The mime type {type} is not supported.', { type: m[1] }),
+    },
+    {
+      match: /^Missing chunks: (.+)\.$/,
+      translate: (m) => localize('Missing chunks: {chunks}.', { chunks: m[1] }),
     },
     {
       match: /^Password must be at least (\d+) characters? long\.$/,
