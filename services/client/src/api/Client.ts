@@ -4,6 +4,7 @@ import { invalidateAll } from '$app/navigation';
 import {
   BadRequestException,
   ForbiddenException,
+  GoneException,
   LockedException,
   NotFoundException,
   PayloadTooLargeException,
@@ -84,6 +85,7 @@ export type EventType =
   | 'unauthorized'
   | 'forbidden'
   | 'not-found'
+  | 'gone'
   | 'locked'
   | 'payload-too-large'
   | 'bad-request'
@@ -119,6 +121,10 @@ const STATUS_EXCEPTIONS: Record<number, ExceptionResolver> = {
   [HttpStatus.NotFound]: () => ({
     event: 'not-found',
     exception: new NotFoundException(),
+  }),
+  [HttpStatus.Gone]: (body) => ({
+    event: 'gone',
+    exception: new GoneException(errorOf(body)),
   }),
   [HttpStatus.PayloadTooLarge]: () => ({
     event: 'payload-too-large',

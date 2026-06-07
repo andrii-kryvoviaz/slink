@@ -4,27 +4,79 @@ import type {
   ImageListingItem,
   ImageListingResponse,
   ImagePlainListingResponse,
-  UploadedImageResponse,
+  UploadChunkResponse,
+  UploadCompleteResponse,
+  UploadInitResponse,
+  UploadStatusResponse,
 } from '@slink/api/Response';
 import type { ShareResponse } from '@slink/api/Response/Share/ShareResponse';
 
 import type { License } from '@slink/lib/enum/License';
 
 export class ImageResource extends AbstractResource {
-  public async upload(
-    image: File,
-    options: {
+  public async initUpload(
+    params: {
+      fileName: string;
+      totalSize: number;
+      mimeType: string;
+      isPublic?: boolean;
+      description?: string;
       tagIds?: string[];
       collectionIds?: string[];
-      asGuest?: boolean;
-    } = {},
-  ): Promise<UploadedImageResponse> {
-    const { tagIds = [], collectionIds = [], asGuest = false } = options;
-    const body = new FormData();
-    body.append('image', image);
-    tagIds.forEach((id) => body.append('tagIds[]', id));
-    collectionIds.forEach((id) => body.append('collectionIds[]', id));
-    return this.post(asGuest ? '/guest/upload' : '/upload', { body });
+    },
+    signal?: AbortSignal,
+  ): Promise<UploadInitResponse> {
+    return this.post('/upload/chunked', {
+      json: {
+        isPublic: false,
+        description: '',
+        tagIds: [],
+        collectionIds: [],
+        ...params,
+      },
+      signal,
+    });
+  }
+
+  public async putChunk(
+    uploadId: string,
+    index: number,
+    chunk: Blob,
+    token: string,
+    options: { complete?: boolean } = {},
+    signal?: AbortSignal,
+  ): Promise<UploadChunkResponse | UploadCompleteResponse> {
+    const headers: Record<string, string> = {
+      'X-Upload-Token': token,
+      'Content-Type': 'application/octet-stream',
+    };
+
+    if (options.complete) {
+      headers['X-Upload-Complete'] = 'true';
+    }
+
+    return this.put(`/upload/chunked/${uploadId}/${index}`, {
+      body: chunk,
+      headers,
+      signal,
+    });
+  }
+
+  public async getUploadStatus(
+    uploadId: string,
+    token: string,
+    signal?: AbortSignal,
+  ): Promise<UploadStatusResponse> {
+    return this.get(`/upload/chunked/${uploadId}`, {
+      headers: { 'X-Upload-Token': token },
+      signal,
+    });
+  }
+
+  public async abortUpload(uploadId: string, token: string): Promise<void> {
+    return this.delete(`/upload/chunked/${uploadId}`, {
+      headers: { 'X-Upload-Token': token },
+    });
   }
 
   public async remove(

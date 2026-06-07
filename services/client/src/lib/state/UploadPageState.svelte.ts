@@ -124,7 +124,6 @@ class UploadPageState {
     const { successful, failed } = await uploadService.uploadFiles(
       this._uploads,
       {
-        isGuest: this.isGuestUpload,
         tagIds,
         collectionIds,
         onProgress: () => {
@@ -178,7 +177,6 @@ class UploadPageState {
     const { tagIds, collectionIds } = this._getUploadOptions();
 
     await uploadService.uploadFiles(failedUploads, {
-      isGuest: this.isGuestUpload,
       tagIds,
       collectionIds,
       onProgress: () => {

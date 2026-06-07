@@ -1,5 +1,6 @@
 import { type Page, expect } from '@playwright/test';
 
+import { isChunkedUploadCompletionResponse } from '../helpers/chunkedUpload';
 import { createUniquePng } from '../helpers/uniqueImage';
 import { BasePage } from './BasePage';
 
@@ -56,9 +57,7 @@ export class UploadPage extends BasePage {
 
     await expect(async () => {
       const responsePromise = this.page.waitForResponse(
-        (response) =>
-          response.url().includes('/api/upload') &&
-          response.request().method() === 'POST',
+        isChunkedUploadCompletionResponse,
         { timeout: 1500 },
       );
       await this.fileInput.setInputFiles(files);
@@ -78,7 +77,8 @@ export class UploadPage extends BasePage {
     await expect(async () => {
       const requestPromise = this.page.waitForRequest(
         (request) =>
-          request.url().includes('/api/upload') && request.method() === 'POST',
+          /\/api\/upload\/chunked$/.test(request.url()) &&
+          request.method() === 'POST',
         { timeout: 1500 },
       );
       await this.fileInput.setInputFiles({
@@ -98,7 +98,8 @@ export class UploadPage extends BasePage {
     await expect(async () => {
       const requestPromise = this.page.waitForRequest(
         (request) =>
-          request.url().includes('/api/upload') && request.method() === 'POST',
+          /\/api\/upload\/chunked$/.test(request.url()) &&
+          request.method() === 'POST',
         { timeout: 1500 },
       );
       await this.fileInput.setInputFiles(files);
@@ -113,9 +114,7 @@ export class UploadPage extends BasePage {
 
     await expect(async () => {
       const responsePromise = this.page.waitForResponse(
-        (response) =>
-          response.url().includes('/api/upload') &&
-          response.request().method() === 'POST',
+        isChunkedUploadCompletionResponse,
         { timeout: 1500 },
       );
       await this.fileInput.setInputFiles({

@@ -47,6 +47,12 @@ export class ApiRequestBuilder {
       headers.set('Authorization', `Bearer ${accessToken}`);
     }
 
+    request.headers.forEach((value, name) => {
+      if (/^x-upload-/i.test(name)) {
+        headers.set(name, value);
+      }
+    });
+
     const forwarded = this.requestEvent.cookies
       .getAll()
       .filter(({ name }) => name.startsWith('__'))
@@ -85,6 +91,10 @@ export class ApiRequestBuilder {
 
     if (/^application\/x-www-form-urlencoded/i.test(contentType)) {
       return await request.clone().text();
+    }
+
+    if (/^application\/octet-stream/i.test(contentType)) {
+      return request.clone().body as globalThis.BodyInit;
     }
 
     return undefined;

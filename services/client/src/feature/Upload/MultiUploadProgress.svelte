@@ -10,25 +10,18 @@
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
+  import type { UploadItem } from '@slink/lib/services/upload.service';
+
   const statusIconVariants = cva('w-5 h-5', {
     variants: {
       status: {
         completed: 'text-slate-600 dark:text-slate-300',
         error: 'text-red-500 dark:text-red-400',
+        cancelled: 'text-slate-400 dark:text-slate-500',
         pending: 'text-slate-300 dark:text-slate-600',
       },
     },
   });
-
-  interface UploadItem {
-    file: File;
-    id: string;
-    status: 'pending' | 'uploading' | 'completed' | 'error';
-    progress: number;
-    result?: any;
-    error?: string;
-    errorDetails?: Error;
-  }
 
   interface Props {
     uploads: UploadItem[];
@@ -153,6 +146,11 @@
                   icon="ph:x-circle-fill"
                   class={statusIconVariants({ status: 'error' })}
                 />
+              {:else if item.status === 'cancelled'}
+                <Icon
+                  icon="ph:prohibit"
+                  class={statusIconVariants({ status: 'cancelled' })}
+                />
               {:else}
                 <Icon
                   icon="ph:clock"
@@ -182,6 +180,12 @@
                   class="text-xs text-red-500/80 dark:text-red-400/80 mt-1 break-words"
                 >
                   {item.error || 'Upload failed'}
+                </p>
+              {:else if item.status === 'cancelled'}
+                <p
+                  class="text-xs text-slate-400 dark:text-slate-500 mt-1 break-words"
+                >
+                  {item.error || 'Upload cancelled'}
                 </p>
               {/if}
             </div>

@@ -6,7 +6,7 @@ test.describe('Upload failure feedback', () => {
     uploadPage,
     page,
   }) => {
-    await page.route('**/api/upload', async (route) => {
+    await page.route(/\/api\/upload\/chunked$/, async (route) => {
       await route.fulfill({
         status: 413,
         contentType: 'application/json',
@@ -36,9 +36,9 @@ test.describe('Upload failure feedback', () => {
     const failing = createUniquePng();
     const succeeding = createUniquePng();
 
-    await page.route('**/api/upload', async (route) => {
-      const body = route.request().postData() ?? '';
-      if (body.includes(failing.name)) {
+    await page.route(/\/api\/upload\/chunked$/, async (route) => {
+      const body = route.request().postDataJSON() as { fileName?: string };
+      if (body?.fileName === failing.name) {
         await route.fulfill({
           status: 500,
           contentType: 'text/plain',
