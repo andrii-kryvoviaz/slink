@@ -275,6 +275,40 @@ final class ChunkedUploadTest extends HttpTestCase {
   }
 
   #[Test]
+  public function itDoesNotCreateASecondImageWhenCompletionRunsAgain(): void {
+    $this->bootUser();
+
+    $chunkSize = $this->chunkSize();
+    $bytes = $this->multiChunkPng($chunkSize);
+    $chunks = $this->splitIntoChunks($bytes, $chunkSize);
+
+    [, $data] = $this->init([
+      'fileName' => 'sample.png',
+      'totalSize' => \strlen($bytes),
+      'mimeType' => 'image/png',
+    ]);
+
+    $uploadId = (string) $data['uploadId'];
+    $token = (string) $data['token'];
+
+    foreach ($chunks as $index => $chunk) {
+      self::assertSame(200, $this->putChunk($uploadId, $index, $chunk, $token));
+    }
+
+    $decoded = $this->codec()->decode($token, \time());
+
+    /** @var \Slink\Image\Infrastructure\ChunkedUpload\ChunkedUploadCompleter $completer */
+    $completer = static::getContainer()->get(\Slink\Image\Infrastructure\ChunkedUpload\ChunkedUploadCompleter::class);
+
+    $first = $completer->complete($decoded);
+    $second = $completer->complete($decoded);
+
+    self::assertTrue($first->created);
+    self::assertFalse($second->created);
+    self::assertSame($first->imageId, $second->imageId);
+  }
+
+  #[Test]
   public function itReportsCompletedStatusWithImageId(): void {
     $this->bootUser();
 

@@ -70,9 +70,13 @@ final readonly class UploadChunkController {
 
     $this->storeChunk($token, $index, $request);
 
-    $imageId = $this->completer->complete($token);
+    $result = $this->completer->complete($token);
 
-    return $this->createdResponse($imageId, $token, Response::HTTP_CREATED);
+    return $this->createdResponse(
+      $result->imageId,
+      $token,
+      $result->created ? Response::HTTP_CREATED : Response::HTTP_OK,
+    );
   }
 
   private function storeChunk(UploadToken $token, int $index, Request $request): void {
