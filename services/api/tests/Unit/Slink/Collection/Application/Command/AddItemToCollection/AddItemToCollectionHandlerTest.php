@@ -15,9 +15,15 @@ use Slink\Collection\Domain\Repository\CollectionStoreRepositoryInterface;
 use Slink\Collection\Domain\ValueObject\CollectionDescription;
 use Slink\Collection\Domain\ValueObject\CollectionName;
 use Slink\Shared\Domain\ValueObject\ID;
+use Symfony\Component\Lock\LockFactory;
+use Symfony\Component\Lock\Store\InMemoryStore;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class AddItemToCollectionHandlerTest extends TestCase {
+
+  private function createLockFactory(): LockFactory {
+    return new LockFactory(new InMemoryStore());
+  }
 
   #[Test]
   public function itAddsItemToCollection(): void {
@@ -48,7 +54,7 @@ final class AddItemToCollectionHandlerTest extends TestCase {
     $access = $this->createStub(AuthorizationCheckerInterface::class);
     $access->method('isGranted')->willReturn(true);
 
-    $handler = new AddItemToCollectionHandler($collectionStore, $access);
+    $handler = new AddItemToCollectionHandler($collectionStore, $access, $this->createLockFactory());
 
     $command = new AddItemToCollectionCommand(
       $collectionId->toString(),
@@ -83,7 +89,7 @@ final class AddItemToCollectionHandlerTest extends TestCase {
     $access = $this->createStub(AuthorizationCheckerInterface::class);
     $access->method('isGranted')->willReturn(false);
 
-    $handler = new AddItemToCollectionHandler($collectionStore, $access);
+    $handler = new AddItemToCollectionHandler($collectionStore, $access, $this->createLockFactory());
 
     $command = new AddItemToCollectionCommand(
       $collectionId->toString(),
