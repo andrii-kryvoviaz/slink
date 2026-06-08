@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Button } from '@slink/ui/components/button';
+  import { InputGroup } from '@slink/ui/components/input-group';
   import type { Snippet } from 'svelte';
 
   import { useAutoReset } from '$lib/utils/time/useAutoReset.svelte';
@@ -11,7 +12,6 @@
   import {
     CopyContainerButtonTheme,
     CopyContainerInputTheme,
-    CopyContainerTheme,
   } from './CopyContainer.theme';
   import type {
     CopyContainerSize,
@@ -31,6 +31,7 @@
     copyButtonContent?: Snippet<[]>;
     size?: CopyContainerSize;
     variant?: CopyContainerVariant;
+    fluid?: boolean;
     isLoading?: boolean;
     onBeforeCopy?: () => Promise<string | void>;
     actionSlot?: Snippet<[CopyState]>;
@@ -43,6 +44,7 @@
     copyButtonContent,
     size = 'md',
     variant = 'default',
+    fluid = false,
     isLoading = false,
     onBeforeCopy,
     actionSlot,
@@ -83,8 +85,9 @@
     }
   };
 
-  const containerClasses = $derived(CopyContainerTheme({ variant, size }));
-  const inputClasses = $derived(CopyContainerInputTheme({ variant, size }));
+  const inputClasses = $derived(
+    CopyContainerInputTheme({ variant, size, mono: true }),
+  );
   const buttonClasses = $derived(CopyContainerButtonTheme({ size }));
 
   const copyState: CopyState = $derived({
@@ -95,7 +98,7 @@
 </script>
 
 <div class="flex w-full items-center">
-  <div class={containerClasses}>
+  <InputGroup {variant} {size} {fluid}>
     <div class="flex-1 min-w-0">
       <input
         bind:this={inputElement}
@@ -152,5 +155,5 @@
         </Button>
       {/if}
     </div>
-  </div>
+  </InputGroup>
 </div>
