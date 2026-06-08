@@ -86,9 +86,15 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
    * @inheritDoc
    */
   public static function fromPayload(array $payload): static {
+    $chunkSize = $payload['chunkSize'] ?? '2M';
+
+    if (!is_string($chunkSize) || !preg_match('/^(\d+)([kM])$/', $chunkSize)) {
+      $chunkSize = convertBytesToSize((int) $chunkSize);
+    }
+
     return new self(
       $payload['maxSize'],
-      $payload['chunkSize'] ?? '2M',
+      $chunkSize,
       $payload['stripExifMetadata'] ?? true,
       $payload['compressionQuality'] ?? 80,
       $payload['allowOnlyPublicImages'] ?? false,

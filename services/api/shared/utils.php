@@ -33,6 +33,22 @@ if (!function_exists('convertSizeToBytes')) {
   }
 }
 
+if (!function_exists('convertBytesToSize')) {
+  /**
+   * Convert a byte count to a canonical size string (e.g., 2097152 -> "2M", 512000 -> "500k")
+   *
+   * @param int $bytes Size in bytes
+   * @return string Size string in format: number + unit (k|M)
+   */
+  function convertBytesToSize(int $bytes): string {
+    if ($bytes % (1024 * 1024) === 0) {
+      return ($bytes / (1024 * 1024)) . 'M';
+    }
+
+    return ((int) round($bytes / 1024)) . 'k';
+  }
+}
+
 if (!function_exists('iterator_map')) {
   /**
    * @param iterable<mixed> $iterator
