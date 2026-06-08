@@ -13,9 +13,10 @@ import {
   createUploadTargetState,
 } from '@slink/lib/state/UploadTargetState.svelte';
 import { useState } from '@slink/lib/state/core/ContextAwareState';
+import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
 import { navigateToUrl } from '@slink/utils/navigation';
-import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
+import { toast } from '@slink/utils/ui/toast-sonner.svelte';
 import { routes } from '@slink/utils/url';
 
 interface UploadPageData {
@@ -130,7 +131,7 @@ class UploadPageState {
 
     if (failed.length > 0 && !isBatch) {
       this._isUploading = false;
-      printErrorsAsToastMessage(failed[0].errorDetails!);
+      toast.error(failed[0].error ?? messages.general.somethingWentWrong);
       return;
     }
 

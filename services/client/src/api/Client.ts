@@ -8,6 +8,7 @@ import {
   LockedException,
   NotFoundException,
   PayloadTooLargeException,
+  ServerException,
   UnauthorizedException,
   ValidationException,
 } from '@slink/api/Exceptions';
@@ -231,6 +232,16 @@ export class Client {
       const { event, exception } = resolver(body);
       this.emit<EventContext>({ event, data: { url, method, body } });
       throw exception;
+    }
+
+    if (response.status >= HttpStatus.InternalServerError) {
+      const body = await this.safeJson(response);
+      const { message, title } = errorOf(body);
+      const detail = message ?? title ?? response.statusText;
+
+      this.emit<EventContext>({ event: 'error', data: { url, method, body } });
+
+      throw new ServerException(detail || 'Request failed', response.status);
     }
 
     const responseBody = await response.json();

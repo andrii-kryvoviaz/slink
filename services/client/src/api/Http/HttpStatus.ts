@@ -8,4 +8,5 @@ export const HttpStatus = {
   PayloadTooLarge: 413,
   UnprocessableEntity: 422,
   Locked: 423,
+  InternalServerError: 500,
 } as const;
