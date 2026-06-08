@@ -4805,6 +4805,7 @@ msgid "Optionally group this # image into a collection to view and share them as
 msgid_plural "Optionally group these # images into a collection to view and share them as one."
 msgstr[0] "За бажанням об'єднайте це # зображення в колекцію, щоб переглядати та ділитися ними як одним цілим."
 msgstr[1] "За бажанням об'єднайте ці # зображення в колекцію, щоб переглядати та ділитися ними як одним цілим."
+msgstr[2] "За бажанням об'єднайте ці # зображень у колекцію, щоб переглядати та ділитися ними як одним цілим."
 
 #: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
 msgid "Anyone with this link can view the collection."
@@ -4845,3 +4846,7 @@ msgstr "Обʼєднати у колекцію"
 #: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
 msgid "<0/> Create publication"
 msgstr "<0/> Створити публікацію"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Some images could not be added to the collection"
+msgstr "Не вдалося додати деякі зображення до колекції"

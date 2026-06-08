@@ -4811,7 +4811,9 @@ msgstr "<0/> Utwórz kolekcję"
 msgid "Optionally group this # image into a collection to view and share them as one."
 msgid_plural "Optionally group these # images into a collection to view and share them as one."
 msgstr[0] "Opcjonalnie zgrupuj ten # obraz w kolekcję, aby wyświetlać i udostępniać go jako całość."
-msgstr[1] "Opcjonalnie zgrupuj te # obrazów w kolekcję, aby wyświetlać i udostępniać je jako całość."
+msgstr[1] "Opcjonalnie zgrupuj te # obrazy w kolekcję, aby wyświetlać i udostępniać je jako całość."
+msgstr[2] "Opcjonalnie zgrupuj te # obrazów w kolekcję, aby wyświetlać i udostępniać je jako całość."
+msgstr[3] "Opcjonalnie zgrupuj te # obrazów w kolekcję, aby wyświetlać i udostępniać je jako całość."
 
 #: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
 msgid "Anyone with this link can view the collection."
@@ -4852,3 +4854,7 @@ msgstr "Połącz w kolekcję"
 #: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
 msgid "<0/> Create publication"
 msgstr "<0/> Utwórz publikację"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Some images could not be added to the collection"
+msgstr "Nie udało się dodać niektórych obrazów do kolekcji"

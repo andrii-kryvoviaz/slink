@@ -4838,3 +4838,7 @@ msgstr "Regrouper dans une collection"
 #: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
 msgid "<0/> Create publication"
 msgstr "<0/> Créer une publication"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Some images could not be added to the collection"
+msgstr "Certaines images n'ont pas pu être ajoutées à la collection"

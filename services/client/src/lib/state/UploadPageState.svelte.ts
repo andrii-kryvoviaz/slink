@@ -231,6 +231,15 @@ class UploadPageState {
 
     if (successful.length > 0) {
       this._historyFeedState.invalidate();
+      if (this._createdCollection) {
+        const retriedIds = successful
+          .map((item) => item.result?.id)
+          .filter((id): id is string => Boolean(id));
+        await this._assignImagesToCollection(
+          this._createdCollection.id,
+          retriedIds,
+        );
+      }
     }
   }
 
@@ -252,6 +261,20 @@ class UploadPageState {
       .map((item) => item.result!.id);
   }
 
+  private async _assignImagesToCollection(
+    collectionId: string,
+    imageIds: string[],
+  ): Promise<void> {
+    if (imageIds.length === 0) return;
+    const assignments = Object.fromEntries(
+      imageIds.map((id) => [id, { collectionIds: [collectionId] }]),
+    );
+    const result = await ApiClient.image.batchReassign(assignments);
+    if (result.failed.length > 0) {
+      toast.error(messages.collection.failedToAddImages());
+    }
+  }
+
   private async _commitCollection(
     name: string,
   ): Promise<CreatedCollection | null> {
@@ -267,10 +290,7 @@ class UploadPageState {
         name: name.trim() || 'Unnamed',
       });
 
-      const assignments = Object.fromEntries(
-        imageIds.map((id) => [id, { collectionIds: [collection.id] }]),
-      );
-      await ApiClient.image.batchReassign(assignments);
+      await this._assignImagesToCollection(collection.id, imageIds);
 
       this._createdCollection = { id: collection.id, name: collection.name };
       this._historyFeedState.invalidate();

@@ -4838,3 +4838,7 @@ msgstr "Combine into a collection"
 #: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
 msgid "<0/> Create publication"
 msgstr "<0/> Create publication"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Some images could not be added to the collection"
+msgstr "Some images could not be added to the collection"
