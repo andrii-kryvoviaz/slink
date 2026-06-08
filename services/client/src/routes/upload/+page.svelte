@@ -6,6 +6,7 @@
     BannerIcon,
   } from '@slink/feature/Layout';
   import { UploadFormWithOptions, UploadSuccess } from '@slink/feature/Upload';
+  import AutoGroupBanner from '@slink/feature/Upload/AutoGroupBanner.svelte';
   import MultiUploadProgress from '@slink/feature/Upload/MultiUploadProgress.svelte';
   import type { Visibility } from '@slink/feature/Upload/UploadOptions';
 
@@ -23,6 +24,16 @@
   let { data }: Props = $props();
 
   const state = useUploadPageState(data, page.url);
+
+  const uploadsComplete = $derived(
+    state.uploads.length > 0 &&
+      state.uploads.every(
+        (upload) =>
+          upload.status === 'completed' ||
+          upload.status === 'error' ||
+          upload.status === 'cancelled',
+      ),
+  );
 </script>
 
 <svelte:head>
@@ -41,12 +52,32 @@
           isGuestUser={!data.user}
         />
       {:else if state.isMultiUpload}
-        <MultiUploadProgress
-          uploads={state.uploads}
-          onCancel={() => state.handleCancelMultiUpload()}
-          onRetryAll={() => state.handleRetryFailedUploads()}
-          onGoBack={() => state.handleGoBackToUploadForm()}
-        />
+        <div class="space-y-4">
+          {#if uploadsComplete && state.autoGroup.createdCollection}
+            <AutoGroupBanner
+              variant="created"
+              collectionName={state.autoGroup.createdCollection.name}
+              pending={state.autoGroup.undoPending}
+              autoGroupEnabled={state.autoGroup.enabled}
+              togglePending={state.autoGroup.pending}
+              onView={() => state.handleViewAutoCollection()}
+              onUndo={() => state.handleUndoAutoCollection()}
+              onToggleAutoGroup={(value) => state.autoGroup.setEnabled(value)}
+            />
+          {:else if uploadsComplete && state.autoGroup.failed}
+            <AutoGroupBanner variant="failed" />
+          {/if}
+
+          <MultiUploadProgress
+            uploads={state.uploads}
+            onCancel={() => state.handleCancelMultiUpload()}
+            onRetryAll={() => state.handleRetryFailedUploads()}
+            onGoBack={() => state.handleGoBackToUploadForm()}
+            onViewUploads={state.showViewUploads
+              ? () => state.handleViewUploads()
+              : undefined}
+          />
+        </div>
       {:else}
         {#if !data.user}
           <div class="mb-8">
@@ -100,9 +131,12 @@
           selectedCollections={state.selectedCollections}
           visibility={(data.defaultVisibility as Visibility) ?? 'private'}
           allowOnlyPublicImages={data.allowOnlyPublicImages}
+          autoGroupBatchUploads={state.autoGroup.enabled}
+          autoGroupPending={state.autoGroup.pending}
           onTagsChange={(tags) => state.setSelectedTags(tags)}
           onCollectionsChange={(collections) =>
             state.setSelectedCollections(collections)}
+          onAutoGroupChange={(value) => state.autoGroup.setEnabled(value)}
           onchange={(files) => state.handleUpload(files)}
         />
       {/if}

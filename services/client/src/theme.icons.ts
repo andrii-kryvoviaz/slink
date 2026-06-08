@@ -241,4 +241,6 @@ export const themeIcons: string[] = [
   'ph:file-image',
   'ph:magic-wand',
   'lucide:list-tree',
+  'ph:arrow-u-up-left',
+  'tabler:stack-filled',
 ];

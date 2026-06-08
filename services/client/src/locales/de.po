@@ -947,7 +947,7 @@ msgstr "Tag konnte nicht verschoben werden. Bitte versuchen Sie es erneut."
 msgid "Failed to delete tag. Please try again."
 msgstr "Tag konnte nicht gelöscht werden. Bitte versuchen Sie es erneut."
 
-#: src/lib/state/UploadPageState.svelte.ts
+#: src/lib/state/AutoGroupState.svelte.ts
 msgid "Unnamed"
 msgstr "Unbenannt"
 
@@ -4560,6 +4560,8 @@ msgstr "Ansichtsmodus"
 msgid "Quick paste"
 msgstr "Schnelles Einfügen"
 
+#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
+#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
 #: src/feature/Upload/UploadOptions/VisibilityOption.svelte
 #: src/feature/Upload/UploadOptions/VisibilityOption.svelte
 msgid "Current"
@@ -4776,3 +4778,72 @@ msgstr "Die Größe der zusammengesetzten Datei stimmt nicht mit der angegebenen
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Missing chunks: {chunks}."
 msgstr "Fehlende Blöcke: {chunks}."
+
+#: src/routes/preferences/+page.svelte
+msgid "Automatically group multiple uploads"
+msgstr "Mehrere Uploads automatisch gruppieren"
+
+#: src/routes/preferences/+page.svelte
+msgid "When on, uploading two or more images at once creates a collection for them. When off, each image is uploaded on its own."
+msgstr "Wenn aktiviert, wird beim gleichzeitigen Hochladen von zwei oder mehr Bildern eine Sammlung dafür erstellt. Wenn deaktiviert, wird jedes Bild einzeln hochgeladen."
+
+#: src/routes/info/[id]/+page.svelte
+msgid "Image preview"
+msgstr "Bildvorschau"
+
+#. 0: collectionName
+#: src/feature/Upload/AutoGroupBanner.svelte
+msgid "Added these images to a new collection, {0}."
+msgstr "Diese Bilder wurden zu einer neuen Sammlung hinzugefügt, {0}."
+
+#: src/feature/Upload/AutoGroupBanner.svelte
+msgid "<0/> View"
+msgstr "<0/> Anzeigen"
+
+#: src/feature/Upload/AutoGroupBanner.svelte
+msgid "<0/> Undo"
+msgstr "<0/> Rückgängig"
+
+#: src/feature/Upload/AutoGroupBanner.svelte
+msgid "Uploaded without grouping. We could not create a collection."
+msgstr "Ohne Gruppierung hochgeladen. Wir konnten keine Sammlung erstellen."
+
+#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
+#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
+#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
+msgid "Separate"
+msgstr "Einzeln"
+
+#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
+msgid "Group multiple uploads"
+msgstr "Mehrere Uploads gruppieren"
+
+#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
+msgid "When you upload more than one image, Slink puts them into a new collection so you can view and share them together. Turn this off to upload them as separate images."
+msgstr "Wenn Sie mehr als ein Bild hochladen, fasst Slink sie in einer neuen Sammlung zusammen, damit Sie sie gemeinsam anzeigen und teilen können. Deaktivieren Sie diese Option, um sie als einzelne Bilder hochzuladen."
+
+#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
+msgid "Batch uploads land in a new collection you can name, view, and share together."
+msgstr "Stapel-Uploads landen in einer neuen Sammlung, die Sie benennen, anzeigen und gemeinsam teilen können."
+
+#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
+msgid "Each image is uploaded on its own. No collection is created for you."
+msgstr "Jedes Bild wird einzeln hochgeladen. Es wird keine Sammlung für Sie erstellt."
+
+#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
+msgid "Click to switch."
+msgstr "Zum Umschalten klicken."
+
+#: src/feature/Upload/MultiUploadProgress.svelte
+msgid "<0/> Go to uploads"
+msgstr "<0/> Zu den Uploads"
+
+#: src/feature/Upload/AutoGroupBanner.svelte
+msgid "Auto-group"
+msgstr "Automatisch gruppieren"
+
+#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
+#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
+#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
+msgid "Grouping"
+msgstr "Gruppierung"

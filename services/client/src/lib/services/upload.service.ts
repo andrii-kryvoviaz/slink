@@ -37,13 +37,10 @@ class UploadService {
     } = options;
 
     const uploadPromises = uploadItems.map(async (item) => {
-      const upload = this._resolveUpload(item, {
-        tagIds,
-        collectionIds,
-      });
+      const upload = this._resolveUpload(item);
 
       try {
-        await upload.run(onProgress);
+        await upload.run({ tagIds, collectionIds }, onProgress);
         onComplete?.(item);
       } catch (error) {
         if (item.status === 'error') {
@@ -71,16 +68,13 @@ class UploadService {
     this._uploads.clear();
   }
 
-  private _resolveUpload(
-    item: UploadItem,
-    params: { tagIds: string[]; collectionIds: string[] },
-  ): ChunkedUpload {
+  private _resolveUpload(item: UploadItem): ChunkedUpload {
     const existing = this._uploads.get(item.id);
     if (existing) {
       return existing;
     }
 
-    const upload = new ChunkedUpload(item, params);
+    const upload = new ChunkedUpload(item);
     this._uploads.set(item.id, upload);
     return upload;
   }

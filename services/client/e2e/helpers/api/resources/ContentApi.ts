@@ -7,8 +7,34 @@ export interface ImageDetail {
   mimeType: string;
 }
 
+export interface CollectionSummary {
+  id: string;
+}
+
+export interface CollectionItemSummary {
+  itemId: string;
+}
+
 export class ContentApi {
   constructor(private http: HttpClient) {}
+
+  async listCollections(): Promise<CollectionSummary[]> {
+    const data = await this.http.request('GET', '/api/collections');
+    const items = (data?.data ?? data ?? []) as Array<{ id: unknown }>;
+
+    return items.map((item) => ({ id: String(item.id) }));
+  }
+
+  async getCollection(id: string): Promise<{ status: number; data: unknown }> {
+    return this.http.requestRaw('GET', `/api/collection/${id}`);
+  }
+
+  async getCollectionItems(id: string): Promise<CollectionItemSummary[]> {
+    const data = await this.http.request('GET', `/api/collection/${id}/items`);
+    const items = (data?.data ?? data ?? []) as Array<{ itemId: unknown }>;
+
+    return items.map((item) => ({ itemId: String(item.itemId) }));
+  }
 
   async getImageDetail(imageId: string): Promise<ImageDetail> {
     const data = await this.http.request('GET', `/api/image/${imageId}/detail`);

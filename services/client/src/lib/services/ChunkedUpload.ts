@@ -46,12 +46,12 @@ export class ChunkedUpload {
   private _cancelled = false;
   private _timedOut = false;
 
-  constructor(
-    public readonly item: UploadItem,
-    private readonly _params: ChunkedUploadParams,
-  ) {}
+  constructor(public readonly item: UploadItem) {}
 
-  public async run(onProgress?: (item: UploadItem) => void): Promise<void> {
+  public async run(
+    params: ChunkedUploadParams,
+    onProgress?: (item: UploadItem) => void,
+  ): Promise<void> {
     this._abortController = new AbortController();
     this._completedResult = null;
     this._cancelled = false;
@@ -63,7 +63,7 @@ export class ChunkedUpload {
       this.item.status = 'uploading';
       onProgress?.(this.item);
 
-      const session = await this._resolveSession(signal);
+      const session = await this._resolveSession(params, signal);
 
       const result =
         this._completedResult ??
@@ -113,7 +113,10 @@ export class ChunkedUpload {
       .catch(() => {});
   }
 
-  private async _resolveSession(signal: AbortSignal): Promise<UploadSession> {
+  private async _resolveSession(
+    params: ChunkedUploadParams,
+    signal: AbortSignal,
+  ): Promise<UploadSession> {
     if (this._session) {
       const status = await ApiClient.image.getUploadStatus(
         this._session.uploadId,
@@ -135,8 +138,8 @@ export class ChunkedUpload {
         fileName: this.item.file.name,
         totalSize: this.item.file.size,
         mimeType: this.item.file.type || 'application/octet-stream',
-        tagIds: this._params.tagIds,
-        collectionIds: this._params.collectionIds,
+        tagIds: params.tagIds,
+        collectionIds: params.collectionIds,
       },
       signal,
     );

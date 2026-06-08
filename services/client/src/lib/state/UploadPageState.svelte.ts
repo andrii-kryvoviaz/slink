@@ -1,5 +1,3 @@
-import { ApiClient } from '@slink/api';
-
 import type { Tag } from '@slink/api/Resources/TagResource';
 import type { CollectionResponse } from '@slink/api/Response';
 
@@ -7,6 +5,10 @@ import type { User } from '@slink/lib/auth/Type/User';
 import { uploadService } from '@slink/lib/services/upload.service';
 import type { UploadItem } from '@slink/lib/services/upload.service';
 import type { GlobalSettings } from '@slink/lib/settings/Type/GlobalSettings';
+import {
+  type AutoGroupState,
+  createAutoGroupState,
+} from '@slink/lib/state/AutoGroupState.svelte';
 import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
 import {
   type UploadTargetState,
@@ -24,6 +26,7 @@ interface UploadPageData {
   globalSettings: GlobalSettings | null;
   defaultVisibility: string | null;
   allowOnlyPublicImages: boolean;
+  autoGroupBatchUploads: boolean;
 }
 
 type UploadHistoryFeed = ReturnType<typeof useUploadHistoryFeed>;
@@ -37,6 +40,7 @@ class UploadPageState {
 
   private _pageData!: UploadPageData;
   private _uploadTarget!: UploadTargetState;
+  private _autoGroup!: AutoGroupState;
   private _historyFeedState!: UploadHistoryFeed;
 
   initialize(pageData: UploadPageData, url: URL) {
@@ -48,6 +52,7 @@ class UploadPageState {
 
     this._pageData = pageData;
     this._uploadTarget = createUploadTargetState(url);
+    this._autoGroup = createAutoGroupState(pageData.autoGroupBatchUploads);
     this._historyFeedState = useUploadHistoryFeed();
 
     $effect(() => {
@@ -99,6 +104,36 @@ class UploadPageState {
     return this._uploadTarget;
   }
 
+  get autoGroup(): AutoGroupState {
+    return this._autoGroup;
+  }
+
+  async handleViewAutoCollection(): Promise<void> {
+    const collection = this._autoGroup.createdCollection;
+    if (!collection) return;
+    await navigateToUrl(routes.collection.detail(collection.id));
+  }
+
+  async handleUndoAutoCollection(): Promise<void> {
+    const ok = await this._autoGroup.undo();
+    if (ok) {
+      this._selectedCollections = [];
+      this._historyFeedState.invalidate();
+    }
+  }
+
+  get showViewUploads(): boolean {
+    return (
+      this._isMultiUpload &&
+      !!this._pageData.user &&
+      !this._autoGroup.createdCollection
+    );
+  }
+
+  async handleViewUploads(): Promise<void> {
+    await navigateToUrl(routes.general.history);
+  }
+
   async handleUpload(files: File[]) {
     const isBatch = files.length > 1;
 
@@ -109,7 +144,7 @@ class UploadPageState {
 
     this._uploads = uploadService.createUploadItems(files);
 
-    if (isBatch) {
+    if (isBatch && this._autoGroup.enabled) {
       await this._ensureTargetCollection();
     }
 
@@ -129,6 +164,8 @@ class UploadPageState {
       },
     );
 
+    await this._finalizeAutoCollection();
+
     if (failed.length > 0 && !isBatch) {
       this._isUploading = false;
       toast.error(failed[0].error ?? messages.general.somethingWentWrong);
@@ -142,15 +179,20 @@ class UploadPageState {
     this._isUploading = false;
   }
 
-  handleCancelMultiUpload() {
+  async handleCancelMultiUpload() {
     uploadService.cancelAllUploads();
+    await this._finalizeAutoCollection();
     this._isMultiUpload = false;
     this._uploads = [];
+    this._autoGroup.reset();
   }
 
   handleGoBackToUploadForm() {
     this._isMultiUpload = false;
     this._uploads = [];
+    this._selectedTags = [];
+    this._selectedCollections = [];
+    this._autoGroup.reset();
   }
 
   async handleRetryFailedUploads() {
@@ -168,9 +210,13 @@ class UploadPageState {
 
     this._uploads = [...this._uploads];
 
+    if (this._autoGroup.enabled && this._selectedCollections.length === 0) {
+      await this._ensureTargetCollection();
+    }
+
     const { tagIds, collectionIds } = this._getUploadOptions();
 
-    await uploadService.uploadFiles(failedUploads, {
+    const { successful } = await uploadService.uploadFiles(failedUploads, {
       tagIds,
       collectionIds,
       onProgress: () => {
@@ -180,6 +226,12 @@ class UploadPageState {
         console.error('Retry upload error for file:', _item.file.name, error);
       },
     });
+
+    await this._finalizeAutoCollection();
+
+    if (successful.length > 0) {
+      this._historyFeedState.invalidate();
+    }
   }
 
   setSelectedTags(tags: Tag[]) {
@@ -230,6 +282,18 @@ class UploadPageState {
 
     this._historyFeedState.invalidate();
 
+    if (this._autoGroup.createdCollection) {
+      return;
+    }
+
+    if (
+      this._isMultiUpload &&
+      this._selectedCollections.length === 0 &&
+      !this._uploadTarget.redirectUrl
+    ) {
+      return;
+    }
+
     const destination = this._resolveNavigationUrl(successful);
     await navigateToUrl(destination);
   }
@@ -252,16 +316,21 @@ class UploadPageState {
 
     if (!this._pageData.user) return undefined;
 
-    try {
-      const collection = await ApiClient.collection.create({
-        name: 'Unnamed',
-      });
+    const collection = await this._autoGroup.create();
+    if (collection) {
       this._selectedCollections = [collection];
-      return collection;
-    } catch (error) {
-      console.error('Failed to create unnamed collection:', error);
-      return undefined;
     }
+    return collection;
+  }
+
+  private async _finalizeAutoCollection(): Promise<void> {
+    if (!this._autoGroup.createdCollection) return;
+
+    const anyCompleted = this._uploads.some((u) => u.status === 'completed');
+    if (anyCompleted) return;
+
+    await this._autoGroup.discardCreated();
+    this._selectedCollections = [];
   }
 }
 

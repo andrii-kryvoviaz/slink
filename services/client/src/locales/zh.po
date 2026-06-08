@@ -947,7 +947,7 @@ msgstr "移动标签失败，请重试。"
 msgid "Failed to delete tag. Please try again."
 msgstr "删除标签失败，请重试。"
 
-#: src/lib/state/UploadPageState.svelte.ts
+#: src/lib/state/AutoGroupState.svelte.ts
 msgid "Unnamed"
 msgstr "未命名"
 
@@ -4554,6 +4554,8 @@ msgstr "视图模式"
 msgid "Quick paste"
 msgstr "快速粘贴"
 
+#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
+#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
 #: src/feature/Upload/UploadOptions/VisibilityOption.svelte
 #: src/feature/Upload/UploadOptions/VisibilityOption.svelte
 msgid "Current"
@@ -4770,3 +4772,72 @@ msgstr "组装后的文件大小与声明的总大小不一致。"
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Missing chunks: {chunks}."
 msgstr "缺少分块：{chunks}。"
+
+#: src/routes/preferences/+page.svelte
+msgid "Automatically group multiple uploads"
+msgstr "自动将多张上传的图片分组"
+
+#: src/routes/preferences/+page.svelte
+msgid "When on, uploading two or more images at once creates a collection for them. When off, each image is uploaded on its own."
+msgstr "开启后，一次上传两张或更多图片时会为它们创建一个合集。关闭后，每张图片将单独上传。"
+
+#: src/routes/info/[id]/+page.svelte
+msgid "Image preview"
+msgstr "图片预览"
+
+#. 0: collectionName
+#: src/feature/Upload/AutoGroupBanner.svelte
+msgid "Added these images to a new collection, {0}."
+msgstr "已将这些图片添加到新合集 {0}。"
+
+#: src/feature/Upload/AutoGroupBanner.svelte
+msgid "<0/> View"
+msgstr "<0/> 查看"
+
+#: src/feature/Upload/AutoGroupBanner.svelte
+msgid "<0/> Undo"
+msgstr "<0/> 撤销"
+
+#: src/feature/Upload/AutoGroupBanner.svelte
+msgid "Uploaded without grouping. We could not create a collection."
+msgstr "已上传但未分组。我们无法创建合集。"
+
+#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
+#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
+#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
+msgid "Separate"
+msgstr "单独"
+
+#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
+msgid "Group multiple uploads"
+msgstr "将多张上传的图片分组"
+
+#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
+msgid "When you upload more than one image, Slink puts them into a new collection so you can view and share them together. Turn this off to upload them as separate images."
+msgstr "当你一次上传多张图片时，Slink 会将它们放入一个新合集，方便你一起查看和分享。关闭此项可将它们作为单独的图片上传。"
+
+#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
+msgid "Batch uploads land in a new collection you can name, view, and share together."
+msgstr "批量上传的图片会进入一个新合集，你可以为其命名、查看并一起分享。"
+
+#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
+msgid "Each image is uploaded on its own. No collection is created for you."
+msgstr "每张图片单独上传，不会为你创建合集。"
+
+#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
+msgid "Click to switch."
+msgstr "点击切换。"
+
+#: src/feature/Upload/MultiUploadProgress.svelte
+msgid "<0/> Go to uploads"
+msgstr "<0/> 前往上传内容"
+
+#: src/feature/Upload/AutoGroupBanner.svelte
+msgid "Auto-group"
+msgstr "自动分组"
+
+#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
+#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
+#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
+msgid "Grouping"
+msgstr "分组"

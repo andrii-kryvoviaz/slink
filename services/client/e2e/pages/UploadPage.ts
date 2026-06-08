@@ -19,6 +19,27 @@ export class UploadPage extends BasePage {
   readonly visibilityToggle = this.page
     .getByRole('button', { name: /^(Public|Private)$/ })
     .first();
+  readonly autoGroupToggle = this.page
+    .getByRole('button', { name: /^(Grouping|Separate)$/ })
+    .and(this.page.locator('[data-slot="button"]'));
+  readonly autoGroupBanner = this.page.getByText(
+    /Added these images to a new collection/,
+  );
+  readonly autoGroupFailedBanner = this.page.getByText(
+    /Uploaded without grouping/,
+  );
+  readonly viewCollectionButton = this.page.getByRole('button', {
+    name: 'View',
+  });
+  readonly undoButton = this.page.getByRole('button', { name: 'Undo' });
+  readonly goToUploadsButton = this.page.getByRole('button', {
+    name: 'Go to uploads',
+  });
+  readonly cancelButton = this.page.getByRole('button', { name: 'Cancel' });
+  readonly retryFailedButton = this.page.getByRole('button', {
+    name: 'Retry Failed',
+  });
+  readonly doneButton = this.page.getByRole('button', { name: 'Done' });
 
   constructor(page: Page) {
     super(page);

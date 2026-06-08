@@ -5,5 +5,6 @@ export type UserPreferencesResponse = {
   'navigation.landingPage': LandingPage | null;
   'image.defaultVisibility': 'public' | 'private' | null;
   'image.externalUploadAutoPublish': boolean | null;
+  'image.autoGroupBatchUploads': boolean | null;
   'display.language': string | null;
 };

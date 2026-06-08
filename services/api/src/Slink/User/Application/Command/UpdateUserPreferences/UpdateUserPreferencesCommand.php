@@ -34,6 +34,8 @@ final readonly class UpdateUserPreferencesCommand implements CommandInterface {
     private ?string $displayLanguage = null,
     #[SerializedName('image.externalUploadAutoPublish')]
     private ?bool $externalUploadAutoPublish = null,
+    #[SerializedName('image.autoGroupBatchUploads')]
+    private ?bool $autoGroupBatchUploads = null,
   ) {
   }
 
@@ -44,6 +46,7 @@ final readonly class UpdateUserPreferencesCommand implements CommandInterface {
       defaultVisibility: $this->getDefaultVisibility(),
       displayLanguage: $this->getDisplayLanguage(),
       externalUploadAutoPublish: $this->externalUploadAutoPublish,
+      autoGroupBatchUploads: $this->autoGroupBatchUploads,
     );
   }
 
@@ -57,6 +60,7 @@ final readonly class UpdateUserPreferencesCommand implements CommandInterface {
       'image.defaultVisibility' => $this->defaultVisibility,
       'display.language' => $this->displayLanguage,
       'image.externalUploadAutoPublish' => $this->externalUploadAutoPublish,
+      'image.autoGroupBatchUploads' => $this->autoGroupBatchUploads,
     ];
   }
 
@@ -82,5 +86,9 @@ final readonly class UpdateUserPreferencesCommand implements CommandInterface {
 
   public function getExternalUploadAutoPublish(): ?bool {
     return $this->externalUploadAutoPublish;
+  }
+
+  public function getAutoGroupBatchUploads(): ?bool {
+    return $this->autoGroupBatchUploads;
   }
 }

@@ -65,6 +65,29 @@ export class HttpClient {
     return data;
   }
 
+  async requestRaw(
+    method: string,
+    path: string,
+    body?: object,
+  ): Promise<{ status: number; data: unknown }> {
+    const res = await fetch(`${API_URL}${path}`, {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this._accessToken}`,
+      },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+
+    const text = await res.text();
+    let data: unknown = null;
+    try {
+      data = JSON.parse(text);
+    } catch {}
+
+    return { status: res.status, data };
+  }
+
   async postForm(path: string, form: FormData) {
     const res = await fetch(`${API_URL}${path}`, {
       method: 'POST',

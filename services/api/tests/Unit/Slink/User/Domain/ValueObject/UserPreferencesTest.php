@@ -222,4 +222,75 @@ final class UserPreferencesTest extends TestCase {
 
         $this->assertTrue($updated->getExternalUploadAutoPublish());
     }
+
+    #[Test]
+    public function itDefaultsAutoGroupBatchUploadsToTrueWhenCreatedWithoutArg(): void {
+        $preferences = UserPreferences::create();
+
+        $this->assertTrue($preferences->getAutoGroupBatchUploads());
+    }
+
+    #[Test]
+    public function itDefaultsAutoGroupBatchUploadsToTrueFromEmptyPayload(): void {
+        $preferences = UserPreferences::fromPayload([]);
+
+        $this->assertTrue($preferences->getAutoGroupBatchUploads());
+    }
+
+    #[Test]
+    public function itRoundTripsAutoGroupBatchUploadsFalseThroughPayload(): void {
+        $preferences = UserPreferences::create(autoGroupBatchUploads: false);
+
+        $payload = $preferences->toPayload();
+
+        $this->assertArrayHasKey('image.autoGroupBatchUploads', $payload);
+        $this->assertFalse($payload['image.autoGroupBatchUploads']);
+
+        $restored = UserPreferences::fromPayload($payload);
+
+        $this->assertFalse($restored->getAutoGroupBatchUploads());
+    }
+
+    #[Test]
+    public function itRoundTripsAutoGroupBatchUploadsTrueThroughPayload(): void {
+        $preferences = UserPreferences::create(autoGroupBatchUploads: true);
+
+        $payload = $preferences->toPayload();
+
+        $this->assertArrayHasKey('image.autoGroupBatchUploads', $payload);
+        $this->assertTrue($payload['image.autoGroupBatchUploads']);
+
+        $restored = UserPreferences::fromPayload($payload);
+
+        $this->assertTrue($restored->getAutoGroupBatchUploads());
+    }
+
+    #[Test]
+    public function itUpdatesAutoGroupBatchUploadsImmutably(): void {
+        $preferences = UserPreferences::create(autoGroupBatchUploads: true);
+
+        $updated = $preferences->withAutoGroupBatchUploads(false);
+
+        $this->assertTrue($preferences->getAutoGroupBatchUploads());
+        $this->assertFalse($updated->getAutoGroupBatchUploads());
+        $this->assertNotSame($preferences, $updated);
+    }
+
+    #[Test]
+    public function itAppliesAutoGroupBatchUploadsChange(): void {
+        $preferences = UserPreferences::create(autoGroupBatchUploads: true);
+
+        $updated = $preferences->applyChanges(['image.autoGroupBatchUploads' => false]);
+
+        $this->assertFalse($updated->getAutoGroupBatchUploads());
+    }
+
+    #[Test]
+    public function itDoesNotClearAutoGroupBatchUploadsWhenNullApplied(): void {
+        $preferences = UserPreferences::create(autoGroupBatchUploads: false);
+
+        $updated = $preferences->applyChanges(['image.autoGroupBatchUploads' => null]);
+
+        $this->assertFalse($updated->getAutoGroupBatchUploads());
+    }
 }

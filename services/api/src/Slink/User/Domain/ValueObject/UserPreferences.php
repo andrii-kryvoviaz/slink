@@ -18,13 +18,14 @@ final readonly class UserPreferences extends AbstractCompoundValueObject {
     private array $data = [],
   ) {}
 
-  public static function create(?License $defaultLicense = null, ?LandingPage $defaultLandingPage = null, ?DefaultVisibility $defaultVisibility = null, ?DisplayLanguage $displayLanguage = null, ?bool $externalUploadAutoPublish = null): self {
+  public static function create(?License $defaultLicense = null, ?LandingPage $defaultLandingPage = null, ?DefaultVisibility $defaultVisibility = null, ?DisplayLanguage $displayLanguage = null, ?bool $externalUploadAutoPublish = null, ?bool $autoGroupBatchUploads = null): self {
     return new self([
       'license.default' => $defaultLicense?->value,
       'navigation.landingPage' => $defaultLandingPage?->value,
       'image.defaultVisibility' => $defaultVisibility?->value,
       'display.language' => $displayLanguage?->value,
       'image.externalUploadAutoPublish' => $externalUploadAutoPublish,
+      'image.autoGroupBatchUploads' => $autoGroupBatchUploads,
     ]);
   }
 
@@ -78,6 +79,14 @@ final readonly class UserPreferences extends AbstractCompoundValueObject {
 
   public function withExternalUploadAutoPublish(?bool $value): self {
     return new self([...$this->data, 'image.externalUploadAutoPublish' => $value]);
+  }
+
+  public function getAutoGroupBatchUploads(): bool {
+    return (bool) ($this->data['image.autoGroupBatchUploads'] ?? true);
+  }
+
+  public function withAutoGroupBatchUploads(?bool $value): self {
+    return new self([...$this->data, 'image.autoGroupBatchUploads' => $value]);
   }
 
   /**

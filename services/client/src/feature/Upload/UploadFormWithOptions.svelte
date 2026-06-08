@@ -1,6 +1,7 @@
 <script lang="ts">
   import { UploadForm } from '@slink/feature/Upload';
   import {
+    AutoGroupOption,
     CollectionsOption,
     TagsOption,
     VisibilityOption,
@@ -20,9 +21,12 @@
     selectedCollections?: CollectionResponse[];
     visibility?: Visibility;
     allowOnlyPublicImages?: boolean;
+    autoGroupBatchUploads?: boolean;
+    autoGroupPending?: boolean;
     onchange?: (files: File[]) => void;
     onTagsChange?: (tags: Tag[]) => void;
     onCollectionsChange?: (collections: CollectionResponse[]) => void;
+    onAutoGroupChange?: (value: boolean) => void;
   }
 
   let {
@@ -33,13 +37,19 @@
     selectedCollections = [],
     visibility = 'private',
     allowOnlyPublicImages = false,
+    autoGroupBatchUploads = true,
+    autoGroupPending = false,
     onchange,
     onTagsChange,
     onCollectionsChange,
+    onAutoGroupChange,
   }: Props = $props();
 
   const isUserAuthenticated = $derived(page.data.user);
   const showOptions = $derived(!disabled && isUserAuthenticated);
+  const showAutoGroup = $derived(
+    showOptions && selectedCollections.length === 0,
+  );
 </script>
 
 <div class="space-y-4">
@@ -49,6 +59,14 @@
     <div class="flex flex-wrap items-center gap-2">
       {#if !allowOnlyPublicImages}
         <VisibilityOption {visibility} disabled={processing} />
+      {/if}
+      {#if showAutoGroup && onAutoGroupChange}
+        <AutoGroupOption
+          enabled={autoGroupBatchUploads}
+          disabled={processing}
+          pending={autoGroupPending}
+          onToggle={onAutoGroupChange}
+        />
       {/if}
       <TagsOption {selectedTags} {onTagsChange} disabled={processing} />
       <CollectionsOption

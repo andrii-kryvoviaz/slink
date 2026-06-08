@@ -139,4 +139,55 @@ final class UpdateUserPreferencesCommandTest extends TestCase {
         $this->assertNull($command->getExternalUploadAutoPublish());
         $this->assertNull($command->toPayload()['image.externalUploadAutoPublish']);
     }
+
+    #[Test]
+    public function itAcceptsAutoGroupBatchUploadsTrue(): void {
+        $command = new UpdateUserPreferencesCommand(autoGroupBatchUploads: true);
+
+        $this->assertTrue($command->getAutoGroupBatchUploads());
+    }
+
+    #[Test]
+    public function itAcceptsAutoGroupBatchUploadsFalse(): void {
+        $command = new UpdateUserPreferencesCommand(autoGroupBatchUploads: false);
+
+        $this->assertFalse($command->getAutoGroupBatchUploads());
+    }
+
+    #[Test]
+    public function itIncludesAutoGroupBatchUploadsInPayloadWhenSetTrue(): void {
+        $command = new UpdateUserPreferencesCommand(autoGroupBatchUploads: true);
+
+        $payload = $command->toPayload();
+
+        $this->assertArrayHasKey('image.autoGroupBatchUploads', $payload);
+        $this->assertTrue($payload['image.autoGroupBatchUploads']);
+    }
+
+    #[Test]
+    public function itIncludesAutoGroupBatchUploadsInPayloadWhenSetFalse(): void {
+        $command = new UpdateUserPreferencesCommand(autoGroupBatchUploads: false);
+
+        $payload = $command->toPayload();
+
+        $this->assertArrayHasKey('image.autoGroupBatchUploads', $payload);
+        $this->assertFalse($payload['image.autoGroupBatchUploads']);
+    }
+
+    #[Test]
+    public function itReflectsAutoGroupBatchUploadsInPreferences(): void {
+        $command = new UpdateUserPreferencesCommand(autoGroupBatchUploads: false);
+
+        $preferences = $command->getPreferences();
+
+        $this->assertFalse($preferences->getAutoGroupBatchUploads());
+    }
+
+    #[Test]
+    public function itDefaultsAutoGroupBatchUploadsToNull(): void {
+        $command = new UpdateUserPreferencesCommand();
+
+        $this->assertNull($command->getAutoGroupBatchUploads());
+        $this->assertNull($command->toPayload()['image.autoGroupBatchUploads']);
+    }
 }

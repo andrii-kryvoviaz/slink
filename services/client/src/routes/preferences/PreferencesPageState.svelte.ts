@@ -10,6 +10,7 @@ export class PreferencesPageState {
   landingPage = $state(LandingPage.Explore);
   visibility = $state('private');
   externalUploadAutoPublish = $state(false);
+  autoGroupBatchUploads = $state(true);
   license = $state('');
   syncToImages = $state(false);
 
@@ -24,6 +25,8 @@ export class PreferencesPageState {
     this.visibility = preferences?.['image.defaultVisibility'] ?? 'private';
     this.externalUploadAutoPublish =
       preferences?.['image.externalUploadAutoPublish'] ?? false;
+    this.autoGroupBatchUploads =
+      preferences?.['image.autoGroupBatchUploads'] ?? true;
     this.license = preferences?.['license.default'] ?? '';
     this._takeSnapshot();
   }
@@ -51,6 +54,7 @@ export class PreferencesPageState {
       landingPage: this.landingPage,
       visibility: this.visibility,
       externalUploadAutoPublish: this.externalUploadAutoPublish,
+      autoGroupBatchUploads: this.autoGroupBatchUploads,
       license: this.license,
     };
   }

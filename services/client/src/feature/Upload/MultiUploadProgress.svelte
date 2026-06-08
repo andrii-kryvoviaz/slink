@@ -28,6 +28,7 @@
     onCancel?: () => void;
     onRetryAll?: () => void;
     onGoBack?: () => void;
+    onViewUploads?: () => void;
     class?: string;
   }
 
@@ -36,6 +37,7 @@
     onCancel,
     onRetryAll,
     onGoBack,
+    onViewUploads,
     class: className,
   }: Props = $props();
 
@@ -102,6 +104,18 @@
           >
             <Icon icon="ph:arrow-clockwise" class="w-4 h-4 mr-2" />
             Retry Failed
+          </Button>
+        {/if}
+
+        {#if isCompleted && onViewUploads}
+          <Button
+            variant="glass"
+            size="sm"
+            rounded="full"
+            onclick={onViewUploads}
+          >
+            <Icon icon="ph:clock-counter-clockwise" class="w-4 h-4 mr-2" />
+            Go to uploads
           </Button>
         {/if}
 
