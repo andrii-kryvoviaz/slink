@@ -69,24 +69,28 @@
   <div class="flex flex-col lg:flex-row gap-8">
     <div
       class={cn(
-        'w-full relative group transition-[filter] duration-300',
+        'w-full relative group',
         'lg:sticky lg:top-8 lg:self-start',
         state.maxWidthClass,
       )}
-      style:filter={getCssFilter(state.selectedFilter)}
     >
-      <ImagePlaceholder
-        src={state.displayPreview}
-        alt={state.image.description || 'Image preview'}
-        fetchpriority="high"
-        metadata={state.image}
-        showOpenInNewTab={false}
-      />
       <div
-        class="absolute top-4 left-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+        class="relative transition-[filter] duration-300"
+        style:filter={getCssFilter(state.selectedFilter)}
       >
-        <VisibilityBadge isPublic={state.image.isPublic} variant="overlay" />
-        <ViewCountBadge count={state.image.views} variant="overlay" />
+        <ImagePlaceholder
+          src={state.displayPreview}
+          alt={state.image.description || 'Image preview'}
+          fetchpriority="high"
+          metadata={state.image}
+          showOpenInNewTab={false}
+        />
+        <div
+          class="absolute top-4 left-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+        >
+          <VisibilityBadge isPublic={state.image.isPublic} variant="overlay" />
+          <ViewCountBadge count={state.image.views} variant="overlay" />
+        </div>
       </div>
       <div class="mt-4">
         <ImageActionBar
