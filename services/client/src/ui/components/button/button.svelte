@@ -120,8 +120,14 @@
   });
 
   export const buttonInnerVariants = tv({
-    base: 'w-full h-full flex items-center gap-2 justify-center text-center whitespace-nowrap transition-all [&_svg:not([class*="size-"])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+    base: 'w-full h-full flex items-center justify-center text-center whitespace-nowrap transition-all [&_svg:not([class*="size-"])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0',
     variants: {
+      spacing: {
+        tight: 'gap-1',
+        normal: 'gap-2',
+        relaxed: 'gap-3',
+        wide: 'gap-4',
+      },
       variant: {
         default:
           'bg-transparent text-button-default dark:text-gray-200 hover:text-button-hover-default dark:hover:text-white',
@@ -198,11 +204,15 @@
       size: 'default',
       rounded: 'lg',
       status: 'active',
+      spacing: 'normal',
     },
   });
 
   export type ButtonVariant = VariantProps<typeof buttonVariants>['variant'];
   export type ButtonSize = VariantProps<typeof buttonInnerVariants>['size'];
+  export type ButtonSpacing = VariantProps<
+    typeof buttonInnerVariants
+  >['spacing'];
   export type ButtonRounded = VariantProps<typeof buttonVariants>['rounded'];
   export type ButtonFontWeight = VariantProps<
     typeof buttonVariants
@@ -215,6 +225,7 @@
     WithElementRef<HTMLAnchorAttributes> & {
       variant?: ButtonVariant;
       size?: ButtonSize;
+      spacing?: ButtonSpacing;
       rounded?: ButtonRounded;
       fontWeight?: ButtonFontWeight;
       motion?: ButtonMotion;
@@ -238,6 +249,7 @@
     class: customClass,
     variant = 'default',
     size = 'default',
+    spacing = 'normal',
     rounded = 'lg',
     fontWeight = 'medium',
     motion = 'none',
@@ -279,6 +291,7 @@
     buttonInnerVariants({
       variant,
       size,
+      spacing,
       rounded,
       status: currentStatus,
     }),
