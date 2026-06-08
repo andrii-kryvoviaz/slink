@@ -10,7 +10,6 @@ use Slink\Collection\Domain\Repository\CollectionItemRepositoryInterface;
 use Slink\Collection\Infrastructure\ReadModel\View\CollectionView;
 use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Image\Domain\Service\ImageAnalyzerInterface;
-use Slink\Image\Domain\Service\ImageProcessorInterface;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
 use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Application\Query\QueryHandlerInterface;
@@ -25,7 +24,6 @@ final readonly class GetImageByIdHandler implements QueryHandlerInterface {
     private ImageRepositoryInterface $repository,
     private ImageAnalyzerInterface $imageAnalyzer,
     private StorageInterface $storage,
-    private ImageProcessorInterface $imageProcessor,
     private CollectionItemRepositoryInterface $collectionItemRepository,
   ) {
   }
@@ -47,17 +45,19 @@ final readonly class GetImageByIdHandler implements QueryHandlerInterface {
 
     $mimeType = $imageView->getMimeType();
     $isAnimated = $this->checkIsAnimated($imageView->getFileName(), $mimeType);
-    
+    $supportsResize = $this->imageAnalyzer->supportsResize($mimeType);
+
     $imageId = (string) $imageView->getUuid();
+    $fileName = $imageView->getFileName();
     $collectionsByImageId = $this->collectionItemRepository->getCollectionsByImageIds([$imageId]);
     $collections = $collectionsByImageId[$imageId] ?? [];
 
     return Item::fromPayload(ImageView::class, [
       ...$imageView->toPayload(),
-      'supportsResize' => $this->imageAnalyzer->supportsResize($mimeType),
+      'supportsResize' => $supportsResize,
       'supportsFormatConversion' => $this->imageAnalyzer->supportsFormatConversion($mimeType),
       'isAnimated' => $isAnimated,
-      'url' => "/image/{$imageView->getFileName()}",
+      'src' => "/image/{$fileName}",
       'collections' => array_map(fn(CollectionView $c) => ['id' => (string) $c->getUuid(), 'name' => $c->getName()], $collections),
     ]);
   }
@@ -72,7 +72,6 @@ final readonly class GetImageByIdHandler implements QueryHandlerInterface {
       return false;
     }
 
-    $animationInfo = $this->imageProcessor->getAnimatedImageInfo($content);
-    return $animationInfo->isAnimated();
+    return $this->imageAnalyzer->isAnimated($content);
   }
 }

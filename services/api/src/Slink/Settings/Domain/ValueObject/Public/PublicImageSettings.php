@@ -11,11 +11,14 @@ final readonly class PublicImageSettings {
   public function __construct(
     #[Groups(['public'])]
     public bool $enableLicensing = false,
-    
+
     #[Groups(['public'])]
     public bool $allowOnlyPublicImages = false,
+
+    #[Groups(['public'])]
+    public string $chunkSize = '2M',
   ) {}
-  
+
   /**
    * @param array<string, mixed> $settings
    */
@@ -23,6 +26,7 @@ final readonly class PublicImageSettings {
     return new self(
       $settings['enableLicensing'] ?? false,
       $settings['allowOnlyPublicImages'] ?? false,
+      $settings['chunkSize'] ?? '2M',
     );
   }
 }

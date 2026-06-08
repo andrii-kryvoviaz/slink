@@ -13,7 +13,8 @@ final readonly class ImageTransformationRequest extends AbstractCompoundValueObj
     private ?PartialImageDimensions $partialDimensions = null,
     private bool                    $crop = false,
     private ?int                    $quality = null,
-    private bool                    $allowEnlarge = false
+    private bool                    $upscale = false,
+    private ?string                 $filter = null
   ) {
   }
 
@@ -33,7 +34,8 @@ final readonly class ImageTransformationRequest extends AbstractCompoundValueObj
       targetDimensions: $targetDimensions,
       partialDimensions: $partialDimensions,
       crop: $options->isCropped(),
-      quality: $options->getQuality()
+      quality: $options->getQuality(),
+      filter: $options->getFilter()
     );
   }
 
@@ -57,12 +59,17 @@ final readonly class ImageTransformationRequest extends AbstractCompoundValueObj
       partialDimensions: $partialDimensions,
       crop: (bool)($payload['crop'] ?? false),
       quality: isset($payload['quality']) ? (int)$payload['quality'] : null,
-      allowEnlarge: (bool)($payload['allowEnlarge'] ?? false)
+      upscale: (bool)($payload['upscale'] ?? false),
+      filter: isset($payload['filter']) ? (string)$payload['filter'] : null
     );
   }
 
-  public function allowEnlarge(): bool {
-    return $this->allowEnlarge;
+  public function upscale(): bool {
+    return $this->upscale;
+  }
+
+  public function getFilter(): ?string {
+    return $this->filter;
   }
 
   public function getPartialDimensions(): ?PartialImageDimensions {
@@ -81,10 +88,6 @@ final readonly class ImageTransformationRequest extends AbstractCompoundValueObj
     return $this->partialDimensions !== null;
   }
 
-  public function hasTransformations(): bool {
-    return $this->targetDimensions !== null || $this->partialDimensions !== null || $this->quality !== null;
-  }
-
   public function shouldCrop(): bool {
     return $this->crop;
   }
@@ -98,7 +101,8 @@ final readonly class ImageTransformationRequest extends AbstractCompoundValueObj
       'partialDimensions' => $this->partialDimensions?->toPayload(),
       'crop' => $this->crop,
       'quality' => $this->quality,
-      'allowEnlarge' => $this->allowEnlarge,
+      'upscale' => $this->upscale,
+      'filter' => $this->filter,
     ];
   }
 }

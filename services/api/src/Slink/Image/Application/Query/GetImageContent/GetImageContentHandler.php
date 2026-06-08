@@ -50,10 +50,13 @@ final readonly class GetImageContentHandler implements QueryHandlerInterface {
       throw new NotFoundException();
     }
 
+    $isOwner = Viewer::fromIdentifier($query->getUserId())->owns($imageView);
+
     $transforms = $this->authorizedTransforms(
       $imageId,
       $query->getTransformParams(),
       $query->getTransformSignature(),
+      $isOwner,
     );
 
     $payload = $this->loader->load(
@@ -62,9 +65,7 @@ final readonly class GetImageContentHandler implements QueryHandlerInterface {
       $transforms,
     );
 
-    $cachePolicy = CachePolicy::forImageAccess(
-      Viewer::fromIdentifier($query->getUserId())->owns($imageView),
-    );
+    $cachePolicy = CachePolicy::forImageAccess($isOwner);
 
     return Item::fromContent($payload->content, $payload->mimeType, $cachePolicy);
   }
@@ -73,7 +74,11 @@ final readonly class GetImageContentHandler implements QueryHandlerInterface {
    * @param array<string, mixed> $transforms
    * @return array<string, mixed>
    */
-  private function authorizedTransforms(string $imageId, array $transforms, ?string $signature): array {
+  private function authorizedTransforms(string $imageId, array $transforms, ?string $signature, bool $isOwner): array {
+    if ($isOwner) {
+      return $transforms;
+    }
+
     $signedPayload = array_filter(
       [
         'width' => $transforms['width'] ?? null,

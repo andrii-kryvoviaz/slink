@@ -16,6 +16,10 @@ parameters:
     Slink\Shared\Infrastructure\Exception\NotFoundException: 404
     Slink\Shared\Domain\Exception\DemoForbiddenException: 403
     Slink\User\Domain\Exception\OidcDiscoveryException: 502
+    Slink\Image\Infrastructure\ChunkedUpload\Exception\InvalidUploadTokenException: 401
+    Slink\Image\Infrastructure\ChunkedUpload\Exception\ExpiredUploadTokenException: 410
+    Slink\Image\Infrastructure\ChunkedUpload\Exception\ChunkIndexOutOfRangeException: 422
+    Slink\Image\Infrastructure\ChunkedUpload\Exception\ChunkTooLargeException: 413
     LogicException: 400
     InvalidArgumentException: 400
 
@@ -25,6 +29,8 @@ parameters:
     403: 'Forbidden'
     404: 'Not Found'
     410: 'Gone'
+    413: 'Payload Too Large'
+    422: 'Unprocessable Entity'
     423: 'Locked'
     500: 'Internal Server Error'
     502: 'Bad Gateway'

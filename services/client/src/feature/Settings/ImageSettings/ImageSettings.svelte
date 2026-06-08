@@ -59,6 +59,23 @@
   </SettingItem>
 
   <SettingItem
+    defaultValue={defaultSettings?.chunkSize}
+    currentValue={settings.chunkSize}
+    reset={(value) => {
+      settings.chunkSize = value;
+    }}
+  >
+    {#snippet label()}
+      Upload Chunk Size
+    {/snippet}
+    {#snippet hint()}
+      Size of each upload chunk. Smaller chunks improve resumability on slow
+      connections
+    {/snippet}
+    <FileSizeInput name="imageChunkSize" bind:value={settings.chunkSize} />
+  </SettingItem>
+
+  <SettingItem
     defaultValue={defaultSettings?.stripExifMetadata}
     currentValue={settings.stripExifMetadata}
     reset={(value) => {

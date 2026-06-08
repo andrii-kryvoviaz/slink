@@ -8,7 +8,7 @@ export type { ImageParams } from './image';
 export { bookmarkRoutes } from './bookmark';
 export { collectionRoutes } from './collection';
 export { generalRoutes } from './general';
-export { imageRoutes } from './image';
+export { imagePreview, imageRoutes } from './image';
 export { shareRoutes } from './share';
 
 export const routes = {

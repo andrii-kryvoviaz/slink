@@ -2374,9 +2374,6 @@ msgstr "さらに追加"
 msgid "Upload Options"
 msgstr "アップロードオプション"
 
-#~ msgid "<0/> Actions"
-#~ msgstr "<0/> 操作"
-
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
 #: src/feature/Tag/TagDataTable/columns.svelte.ts
@@ -4714,3 +4711,68 @@ msgstr "コレクションアイテムの操作"
 #: src/feature/Comment/CommentListItem.svelte
 msgid "Comment actions"
 msgstr "コメントの操作"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Upload failed: server timed out"
+msgstr "アップロードに失敗しました: サーバーがタイムアウトしました"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Upload failed: connection interrupted"
+msgstr "アップロードに失敗しました: 接続が中断されました"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Upload failed: file is too large"
+msgstr "アップロードに失敗しました: ファイルが大きすぎます"
+
+#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Upload cancelled"
+msgstr "アップロードをキャンセルしました"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Upload failed: upload session expired"
+msgstr "アップロードに失敗しました: アップロードセッションの有効期限が切れました"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
+msgid "Provider actions"
+msgstr "プロバイダーの操作"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Upload Chunk Size"
+msgstr "アップロードチャンクサイズ"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Size of each upload chunk. Smaller chunks improve resumability on slow connections"
+msgstr "アップロードチャンク1つあたりのサイズ。チャンクを小さくすると、低速回線での再開性が向上します"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Invalid chunk size"
+msgstr "チャンクサイズが無効です"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Chunk size cannot be smaller than 1M"
+msgstr "チャンクサイズを1Mより小さくすることはできません"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Chunk size cannot be greater than 25M"
+msgstr "チャンクサイズを25Mより大きくすることはできません"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "The uploaded file exceeds the maximum allowed size."
+msgstr "アップロードされたファイルが許可されている最大サイズを超えています。"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "The uploaded chunk exceeds the maximum allowed chunk size."
+msgstr "アップロードされたチャンクが許可されている最大チャンクサイズを超えています。"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "The chunk index is out of range."
+msgstr "チャンクのインデックスが範囲外です。"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "The assembled file size does not match the declared total size."
+msgstr "結合されたファイルのサイズが申告された合計サイズと一致しません。"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "Missing chunks: {chunks}."
+msgstr "不足しているチャンク: {chunks}。"

@@ -13,6 +13,8 @@ use Icewind\SMB\IShare;
 use Icewind\SMB\ServerFactory;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\Enum\StorageProvider;
+use Slink\Shared\Infrastructure\Exception\NotFoundException as StorageNotFoundException;
+use Slink\Shared\Infrastructure\FileSystem\FileStream;
 use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\DirectoryStorageInterface;
 use Symfony\Component\HttpFoundation\File\File;
 
@@ -94,6 +96,27 @@ final class SmbStorage extends AbstractStorage implements DirectoryStorageInterf
     }
   }
   
+  /**
+   * @param string $fileName
+   * @return FileStream
+   * @throws StorageNotFoundException
+   */
+  public function readStream(string $fileName): FileStream {
+    $path = $this->getPath($fileName);
+
+    if (!$path) {
+      throw new StorageNotFoundException();
+    }
+
+    try {
+      $sourceStream = $this->share->read($path);
+    } catch (NotFoundException) {
+      throw new StorageNotFoundException();
+    }
+
+    return new FileStream($sourceStream);
+  }
+
   /**
    * @throws NotFoundException
    * @throws InvalidTypeException

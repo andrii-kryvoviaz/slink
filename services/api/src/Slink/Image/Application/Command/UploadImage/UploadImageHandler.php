@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Slink\Image\Application\Command\UploadImage;
 
-use Slink\Image\Application\Service\ImageConversionResolver;
+use Slink\Image\Application\Service\CollectionMembershipAssigner;
+use Slink\Image\Application\Service\ImageTagAssigner;
 use Slink\Image\Domain\Context\ImageCreationContext;
 use Slink\Image\Domain\Exception\DuplicateImageException;
 use Slink\Image\Domain\Factory\ImageMetadataFactory;
@@ -12,8 +13,8 @@ use Slink\Image\Domain\Image;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Image\Domain\Service\ImageAnalyzerInterface;
 use Slink\Image\Domain\Service\ImageConversionResolverInterface;
+use Slink\Image\Domain\Service\ImageFileTransformerInterface;
 use Slink\Image\Domain\Service\ImageSanitizerInterface;
-use Slink\Image\Domain\Service\ImageTransformerInterface;
 use Slink\Image\Domain\ValueObject\ImageAttributes;
 use Slink\Image\Domain\ValueObject\ImageFile;
 use Slink\Settings\Application\Service\SettingsService;
@@ -33,13 +34,15 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
     private ConfigurationProviderInterface $configurationProvider,
     private ImageStoreRepositoryInterface  $imageRepository,
     private ImageAnalyzerInterface         $imageAnalyzer,
-    private ImageTransformerInterface      $imageTransformer,
+    private ImageFileTransformerInterface  $imageTransformer,
     private ImageSanitizerInterface        $sanitizer,
     private ImageConversionResolverInterface $conversionResolver,
     private ImageCreationContext           $creationContext,
     private ImageMetadataFactory           $metadataFactory,
     private StorageInterface               $storage,
     private UserPreferencesService         $preferencesService,
+    private ImageTagAssigner               $tagAssigner,
+    private CollectionMembershipAssigner   $collectionAssigner,
   ) {
   }
 
@@ -100,11 +103,15 @@ final readonly class UploadImageHandler implements CommandHandlerInterface {
       attributes: $attributes,
       metadata: $metadata,
       imageFile: $imageFile,
-      license: $license
+      license: $license,
     );
+
+    $this->tagAssigner->assign($image, $command->getTagIds(), $userId);
 
     $this->storage->upload($file, $fileName);
 
     $this->imageRepository->store($image);
+
+    $this->collectionAssigner->assign($imageId, $command->getCollectionIds(), $userId);
   }
 }

@@ -34,8 +34,15 @@ final class VipsFormatAdapter {
   /**
    * @return array<string, int>
    */
-  public function buildFormatOptions(?int $quality): array {
-    return $quality !== null ? [self::QUALITY_PARAM => $quality] : [];
+  public function buildFormatOptions(ImageFormat $format, ?int $quality): array {
+    if ($quality === null) {
+      return [];
+    }
+
+    return match ($format) {
+      ImageFormat::JPEG, ImageFormat::WEBP, ImageFormat::AVIF, ImageFormat::TIFF => [self::QUALITY_PARAM => $quality],
+      default => [],
+    };
   }
 
   public function detectFormatFromLoader(string $loader): ImageFormat {
@@ -60,13 +67,13 @@ final class VipsFormatAdapter {
   /**
    * @throws Exception
    */
-  public function writeAnimatedToBuffer(VipsImage $image, ImageFormat $format): string {
+  public function writeAnimatedToBuffer(VipsImage $image, ImageFormat $format, ?int $quality = null): string {
     if (!$this->hasSpecializedAnimatedWriter($format)) {
-      return $this->writeToBuffer($image, $format);
+      return $this->writeToBuffer($image, $format, $this->buildFormatOptions($format, $quality));
     }
 
     $method = $this->getAnimatedWriteMethod($format);
-    $options = $this->getAnimatedOptions($format);
+    $options = $this->getAnimatedOptions($format, $quality);
 
     return $image->$method($options);
   }
@@ -80,12 +87,20 @@ final class VipsFormatAdapter {
   }
 
   /**
+   * @param array<string, mixed> $options
+   * @throws Exception
+   */
+  public function writeToFile(VipsImage $image, string $targetPath, array $options = []): void {
+    $image->writeToFile($targetPath, $options);
+  }
+
+  /**
    * @return array<string, mixed>
    */
-  private function getAnimatedOptions(ImageFormat $format): array {
+  private function getAnimatedOptions(ImageFormat $format, ?int $quality): array {
     return match ($format) {
       ImageFormat::GIF => ['dither' => 1.0, 'effort' => 5],
-      ImageFormat::WEBP => ['Q' => 75, 'lossless' => false, 'effort' => 4],
+      ImageFormat::WEBP => ['Q' => $quality ?? 75, 'lossless' => false, 'effort' => 4],
       default => []
     };
   }

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Slink\Shared\Infrastructure\FileSystem\Storage;
 
+use Aws\Result;
+use Aws\S3\S3Client;
+use GuzzleHttp\Psr7\Utils;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Settings\Domain\Exception\S3BucketNotConfiguredException;
@@ -11,6 +14,7 @@ use Slink\Settings\Domain\Exception\S3CredentialsNotConfiguredException;
 use Slink\Settings\Domain\Exception\S3RegionNotConfiguredException;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Settings\Domain\ValueObject\Storage\AmazonS3StorageSettings;
+use Slink\Shared\Infrastructure\FileSystem\Storage\AmazonS3Storage;
 
 final class AmazonS3StorageTest extends TestCase {
   #[Test]
@@ -149,6 +153,86 @@ final class AmazonS3StorageTest extends TestCase {
     $settings = AmazonS3StorageSettings::fromConfig($configProvider);
 
     $this->assertTrue($settings->usesCustomProvider());
+  }
+
+  #[Test]
+  public function itStreamsObjectBodyAsResourceWithoutTemporaryFile(): void {
+    $fileName = 'object-image.jpg';
+    $bytes = 'remote s3 content';
+
+    $storage = $this->createStorageWithObjectBytes($bytes);
+
+    $temporaryBefore = $this->countTemporaryCopies();
+
+    $stream = $storage->readStream($fileName);
+    $resource = $stream->resource();
+    $this->assertSame($bytes, stream_get_contents($resource));
+    $this->assertSame($temporaryBefore, $this->countTemporaryCopies());
+  }
+
+  #[Test]
+  public function itClosesResourceWhenStreamIsDestroyed(): void {
+    $fileName = 'object-image.jpg';
+
+    $storage = $this->createStorageWithObjectBytes('remote s3 content');
+
+    $stream = $storage->readStream($fileName);
+    $resource = $stream->resource();
+
+    unset($stream);
+
+    $this->assertFalse(is_resource($resource));
+  }
+
+  #[Test]
+  public function itResolvesCachePathUnderCacheDirectory(): void {
+    $storage = $this->createStorageWithObjectBytes('');
+
+    $this->assertSame('cache/abc123-w350.jpg', $storage->cachePath('abc123-w350.jpg'));
+  }
+
+  #[Test]
+  public function itReadsSourceAsStreamForObjectStorage(): void {
+    $bytes = 'remote s3 content';
+
+    $storage = $this->createStorageWithObjectBytes($bytes);
+
+    $source = $storage->readSource('object-image.jpg');
+
+    $this->assertFalse($source->hasLocalPath());
+    $this->assertSame($bytes, stream_get_contents($source->getStream()->resource()));
+  }
+
+  private function createStorageWithObjectBytes(string $bytes): AmazonS3Storage {
+    $client = new class($bytes) extends S3Client {
+      public function __construct(private readonly string $bytes) {
+      }
+
+      /**
+       * @param array<string, mixed> $args
+       * @return Result<int|string, mixed>
+       */
+      public function getObject(array $args = []): Result {
+        return new Result(['Body' => Utils::streamFor($this->bytes)]);
+      }
+    };
+
+    $settings = $this->createStub(AmazonS3StorageSettings::class);
+    $settings->method('getBucket')->willReturn('my-bucket');
+
+    $reflection = new \ReflectionClass(AmazonS3Storage::class);
+    $storage = $reflection->newInstanceWithoutConstructor();
+
+    $reflection->getProperty('client')->setValue($storage, $client);
+    $reflection->getProperty('settings')->setValue($storage, $settings);
+
+    return $storage;
+  }
+
+  private function countTemporaryCopies(): int {
+    $files = glob(sys_get_temp_dir() . '/slink_src_*');
+
+    return $files === false ? 0 : count($files);
   }
 
   /**

@@ -12,7 +12,7 @@ export type ImageDetailsResponse = {
   width: number;
   height: number;
   views: number;
-  url: string;
+  src: string;
   supportsResize: boolean;
   supportsFormatConversion: boolean;
   isAnimated: boolean;

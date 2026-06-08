@@ -5,12 +5,17 @@ declare(strict_types=1);
 namespace Slink\Settings\Domain\ValueObject\Image;
 
 use Slink\Settings\Domain\Enum\SettingCategory;
+use Slink\Settings\Domain\Exception\InvalidChunkSizeException;
 use Slink\Settings\Domain\Exception\InvalidImageMaxSizeException;
 use Slink\Settings\Domain\ValueObject\AbstractSettingsValueObject;
 
 final readonly class ImageSettings extends AbstractSettingsValueObject {
+  private const int MIN_CHUNK_SIZE_BYTES = 1 * 1024 * 1024;
+  private const int MAX_CHUNK_SIZE_BYTES = 25 * 1024 * 1024;
+
   /**
    * @param string $maxSize
+   * @param string $chunkSize
    * @param bool $stripExifMetadata
    * @param int $compressionQuality
    * @param bool $allowOnlyPublicImages
@@ -22,7 +27,8 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
    */
   private function __construct(
     private string $maxSize,
-    private bool $stripExifMetadata,
+    private string $chunkSize = '2M',
+    private bool $stripExifMetadata = true,
     private int $compressionQuality = 80,
     private bool $allowOnlyPublicImages = false,
     private bool $enableDeduplication = true,
@@ -42,6 +48,20 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
     if ((int) $maxSize > 1000) {
       throw new InvalidImageMaxSizeException('Max size cannot be greater than 1000');
     }
+
+    if (!preg_match('/^(\d+)([kM])$/', $chunkSize)) {
+      throw new InvalidChunkSizeException();
+    }
+
+    $chunkSizeBytes = convertSizeToBytes($chunkSize);
+
+    if ($chunkSizeBytes < self::MIN_CHUNK_SIZE_BYTES) {
+      throw new InvalidChunkSizeException('Chunk size cannot be smaller than 1M');
+    }
+
+    if ($chunkSizeBytes > self::MAX_CHUNK_SIZE_BYTES) {
+      throw new InvalidChunkSizeException('Chunk size cannot be greater than 25M');
+    }
   }
   
   /**
@@ -50,6 +70,7 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
   public function toPayload(): array {
     return [
       'maxSize' => $this->maxSize,
+      'chunkSize' => $this->chunkSize,
       'stripExifMetadata' => $this->stripExifMetadata,
       'compressionQuality' => $this->compressionQuality,
       'allowOnlyPublicImages' => $this->allowOnlyPublicImages,
@@ -67,7 +88,8 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
   public static function fromPayload(array $payload): static {
     return new self(
       $payload['maxSize'],
-      $payload['stripExifMetadata'],
+      $payload['chunkSize'] ?? '2M',
+      $payload['stripExifMetadata'] ?? true,
       $payload['compressionQuality'] ?? 80,
       $payload['allowOnlyPublicImages'] ?? false,
       $payload['enableDeduplication'] ?? true,
@@ -90,6 +112,13 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
    */
   public function getMaxSize(): string {
     return $this->maxSize;
+  }
+
+  /**
+   * @return string
+   */
+  public function getChunkSize(): string {
+    return $this->chunkSize;
   }
   
   /**

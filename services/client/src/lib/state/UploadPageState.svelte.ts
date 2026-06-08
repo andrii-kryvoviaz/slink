@@ -13,9 +13,10 @@ import {
   createUploadTargetState,
 } from '@slink/lib/state/UploadTargetState.svelte';
 import { useState } from '@slink/lib/state/core/ContextAwareState';
+import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
 import { navigateToUrl } from '@slink/utils/navigation';
-import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
+import { toast } from '@slink/utils/ui/toast-sonner.svelte';
 import { routes } from '@slink/utils/url';
 
 interface UploadPageData {
@@ -98,13 +99,6 @@ class UploadPageState {
     return this._uploadTarget;
   }
 
-  get isGuestUpload(): boolean {
-    return (
-      !this._pageData.user &&
-      !!this._pageData.globalSettings?.access?.allowGuestUploads
-    );
-  }
-
   async handleUpload(files: File[]) {
     const isBatch = files.length > 1;
 
@@ -124,7 +118,6 @@ class UploadPageState {
     const { successful, failed } = await uploadService.uploadFiles(
       this._uploads,
       {
-        isGuest: this.isGuestUpload,
         tagIds,
         collectionIds,
         onProgress: () => {
@@ -138,7 +131,7 @@ class UploadPageState {
 
     if (failed.length > 0 && !isBatch) {
       this._isUploading = false;
-      printErrorsAsToastMessage(failed[0].errorDetails!);
+      toast.error(failed[0].error ?? messages.general.somethingWentWrong);
       return;
     }
 
@@ -178,7 +171,6 @@ class UploadPageState {
     const { tagIds, collectionIds } = this._getUploadOptions();
 
     await uploadService.uploadFiles(failedUploads, {
-      isGuest: this.isGuestUpload,
       tagIds,
       collectionIds,
       onProgress: () => {

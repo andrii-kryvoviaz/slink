@@ -1,5 +1,6 @@
 export type ImageSettings = {
   maxSize: string;
+  chunkSize: string;
   stripExifMetadata: boolean;
   compressionQuality: number;
   allowOnlyPublicImages: boolean;

@@ -6,24 +6,27 @@ namespace Tests\Unit\Slink\Image\Application\Service;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
 use Slink\Image\Application\Service\ImageTransformer;
+use Slink\Image\Application\Service\TransformationStrategy\CropStrategy;
+use Slink\Image\Application\Service\TransformationStrategy\FilterStrategy;
+use Slink\Image\Application\Service\TransformationStrategy\ResizeStrategy;
+use Slink\Image\Domain\Enum\ImageFilter;
+use Slink\Image\Domain\Enum\ImageFormat;
+use Slink\Image\Domain\Service\ImageFileProcessorInterface;
 use Slink\Image\Domain\Service\ImageProcessorInterface;
-use Slink\Image\Domain\Service\ImageTransformationStrategyInterface;
-use Slink\Image\Domain\ValueObject\ImageDimensions;
-use Slink\Image\Domain\ValueObject\ImageTransformationRequest;
+use Slink\Image\Domain\ValueObject\Operation\Cover;
+use Slink\Image\Domain\ValueObject\Operation\Filter;
+use Slink\Image\Domain\ValueObject\Operation\Fit;
 use Slink\Settings\Application\Service\SettingsService;
 use Slink\Shared\Domain\ValueObject\ImageOptions;
+use Slink\Shared\Infrastructure\FileSystem\FileSource;
+use Slink\Shared\Infrastructure\FileSystem\FileStream;
 use SplFileInfo;
 use Symfony\Component\HttpFoundation\File\File;
 
 final class ImageTransformerTest extends TestCase {
-    private ImageProcessorInterface $imageProcessor;
     private SettingsService $settingsService;
-    private ImageTransformationStrategyInterface $strategy;
-    private ImageTransformer $transformer;
 
     /**
      * @throws Exception
@@ -31,19 +34,20 @@ final class ImageTransformerTest extends TestCase {
     protected function setUp(): void {
         parent::setUp();
 
-        $this->imageProcessor = $this->createStub(ImageProcessorInterface::class);
         $this->settingsService = $this->createStub(SettingsService::class);
-        $this->strategy = $this->createStub(ImageTransformationStrategyInterface::class);
+    }
 
-        $this->transformer = new ImageTransformer(
-            $this->imageProcessor,
-            $this->settingsService,
-            [$this->strategy]
-        );
+    private function createFileSource(): FileSource {
+        $resource = fopen('php://temp', 'r+b');
+        self::assertIsResource($resource);
+        fwrite($resource, 'source bytes');
+        rewind($resource);
+
+        return FileSource::fromStream(new FileStream($resource));
     }
 
     #[Test]
-    public function itConvertsToJpeg(): void {
+    public function itConvertsToFormatJpegUsingFileBasedSequentialPath(): void {
         $file = $this->createStub(SplFileInfo::class);
         $file->method('getPathname')->willReturn('/tmp/test.png');
         $file->method('getBasename')->willReturn('test');
@@ -57,19 +61,23 @@ final class ImageTransformerTest extends TestCase {
                 ['image.compressionQuality', 85],
             ]);
 
-        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
-        $imageProcessor
+        $imageProcessor = $this->createStub(ImageProcessorInterface::class);
+        $imageFileProcessor = $this->createMock(ImageFileProcessorInterface::class);
+        $imageFileProcessor
             ->expects($this->once())
-            ->method('convertFormat')
-            ->with('file content', 'jpg', 85)
-            ->willReturn('converted jpeg content');
+            ->method('convertFormatFile')
+            ->with('/tmp/test.png', '/tmp/test.jpg', 'jpg', 85)
+            ->willReturnCallback(static function (string $source, string $target): void {
+                file_put_contents($target, 'converted jpeg content');
+            });
 
-        $transformer = new ImageTransformer($imageProcessor, $settingsService, []);
+        $transformer = new ImageTransformer($imageProcessor, $imageFileProcessor, $settingsService, []);
 
         file_put_contents('/tmp/test.png', 'file content');
-        $result = $transformer->convertToJpeg($file, null);
+        $result = $transformer->convertToFormat($file, ImageFormat::JPEG, null);
 
         $this->assertInstanceOf(File::class, $result);
+        $this->assertSame('/tmp/test.jpg', $result->getPathname());
 
         unlink('/tmp/test.png');
         if (file_exists('/tmp/test.jpg')) {
@@ -78,24 +86,27 @@ final class ImageTransformerTest extends TestCase {
     }
 
     #[Test]
-    public function itConvertsToJpegWithCustomQuality(): void {
+    public function itConvertsToFormatFileWithCustomQuality(): void {
         $file = $this->createStub(SplFileInfo::class);
         $file->method('getPathname')->willReturn('/tmp/test.png');
         $file->method('getBasename')->willReturn('test');
         $file->method('getExtension')->willReturn('png');
         $file->method('getPath')->willReturn('/tmp');
 
-        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
-        $imageProcessor
+        $imageProcessor = $this->createStub(ImageProcessorInterface::class);
+        $imageFileProcessor = $this->createMock(ImageFileProcessorInterface::class);
+        $imageFileProcessor
             ->expects($this->once())
-            ->method('convertFormat')
-            ->with('file content', 'jpg', 95)
-            ->willReturn('converted jpeg content');
+            ->method('convertFormatFile')
+            ->with('/tmp/test.png', '/tmp/test.jpg', 'jpg', 95)
+            ->willReturnCallback(static function (string $source, string $target): void {
+                file_put_contents($target, 'converted jpeg content');
+            });
 
-        $transformer = new ImageTransformer($imageProcessor, $this->settingsService, []);
+        $transformer = new ImageTransformer($imageProcessor, $imageFileProcessor, $this->settingsService, []);
 
         file_put_contents('/tmp/test.png', 'file content');
-        $result = $transformer->convertToJpeg($file, 95);
+        $result = $transformer->convertToFormat($file, ImageFormat::JPEG, 95);
 
         $this->assertInstanceOf(File::class, $result);
 
@@ -106,83 +117,18 @@ final class ImageTransformerTest extends TestCase {
     }
 
     #[Test]
-    public function itThrowsExceptionWhenFileReadFails(): void {
-        $file = $this->createStub(SplFileInfo::class);
-        $file->method('getPathname')->willReturn('/non/existent/file.png');
-
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Failed to read file content');
-
-        $originalErrorReporting = error_reporting(0);
-        try {
-            $this->transformer->convertToJpeg($file);
-        } finally {
-            error_reporting($originalErrorReporting);
-        }
-    }
-
-    #[Test]
-    public function itCropsImage(): void {
-        $content = 'image content';
-        $imageProcessor = $this->createStub(ImageProcessorInterface::class);
-        $imageProcessor
-            ->method('getImageDimensions')
-            ->willReturn([800, 600]);
-
-        $strategy = $this->createMock(ImageTransformationStrategyInterface::class);
-        $strategy
-            ->method('supports')
-            ->willReturn(true);
-
-        $strategy
-            ->expects($this->once())
-            ->method('transform')
-            ->willReturn('cropped content');
-
-        $transformer = new ImageTransformer($imageProcessor, $this->settingsService, [$strategy]);
-
-        $result = $transformer->crop($content, 400, 300);
-
-        $this->assertEquals('cropped content', $result);
-    }
-
-    #[Test]
-    public function itResizesImage(): void {
-        $content = 'image content';
-        $imageProcessor = $this->createStub(ImageProcessorInterface::class);
-        $imageProcessor
-            ->method('getImageDimensions')
-            ->willReturn([800, 600]);
-
-        $strategy = $this->createMock(ImageTransformationStrategyInterface::class);
-        $strategy
-            ->method('supports')
-            ->willReturn(true);
-
-        $strategy
-            ->expects($this->once())
-            ->method('transform')
-            ->willReturn('resized content');
-
-        $transformer = new ImageTransformer($imageProcessor, $this->settingsService, [$strategy]);
-
-        $result = $transformer->resize($content, 400, 300);
-
-        $this->assertEquals('resized content', $result);
-    }
-
-    #[Test]
     public function itStripsExifMetadata(): void {
         $path = '/tmp/image.jpg';
 
-        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
-        $imageProcessor
+        $imageProcessor = $this->createStub(ImageProcessorInterface::class);
+        $imageFileProcessor = $this->createMock(ImageFileProcessorInterface::class);
+        $imageFileProcessor
             ->expects($this->once())
             ->method('stripMetadata')
             ->with($path)
             ->willReturn('cleaned image');
 
-        $transformer = new ImageTransformer($imageProcessor, $this->settingsService, []);
+        $transformer = new ImageTransformer($imageProcessor, $imageFileProcessor, $this->settingsService, []);
 
         $result = $transformer->stripExifMetadata($path);
 
@@ -190,208 +136,474 @@ final class ImageTransformerTest extends TestCase {
     }
 
     #[Test]
-    public function itTransformsImageWithOptions(): void {
-        $content = 'image content';
-        $imageOptions = $this->createStub(ImageOptions::class);
-
-        $imageProcessor = $this->createStub(ImageProcessorInterface::class);
-        $imageProcessor
-            ->method('getImageDimensions')
-            ->willReturn([800, 600]);
-
-        $request = $this->createStub(ImageTransformationRequest::class);
-        $request->method('hasTransformations')->willReturn(true);
-
-        $strategy = $this->createMock(ImageTransformationStrategyInterface::class);
-        $strategy
-            ->method('supports')
-            ->willReturn(true);
-
-        $strategy
-            ->expects($this->once())
-            ->method('transform')
-            ->willReturn('transformed content');
-
-        $transformer = new ImageTransformer($imageProcessor, $this->settingsService, [$strategy]);
-
-        $result = $transformer->executeTransformation($content, $request);
-
-        $this->assertEquals('transformed content', $result);
-    }
-
-    #[Test]
-    public function itReturnsOriginalContentWhenNoTransformationNeeded(): void {
-        $content = 'image content';
-        $imageOptions = $this->createStub(ImageOptions::class);
-        
-        $request = $this->createStub(ImageTransformationRequest::class);
-        $request->method('hasTransformations')->willReturn(false);
-
-        $result = $this->transformer->transform($content, $imageOptions);
-
-        $this->assertEquals($content, $result);
-    }
-
-    #[Test]
-    public function itReturnsOriginalContentWhenNoStrategySupports(): void {
-        $content = 'image content';
-
-        $imageProcessor = $this->createStub(ImageProcessorInterface::class);
-        $imageProcessor
-            ->method('getImageDimensions')
-            ->willReturn([800, 600]);
-
-        $strategy = $this->createStub(ImageTransformationStrategyInterface::class);
-        $strategy
-            ->method('supports')
-            ->willReturn(false);
-
-        $transformer = new ImageTransformer($imageProcessor, $this->settingsService, [$strategy]);
-
-        $request = ImageTransformationRequest::fromImageOptions(
-            ImageOptions::fromPayload([
-                'fileName' => 'test.jpg',
-                'mimeType' => 'image/jpeg',
-                'width' => 400,
-                'height' => 300
-            ])
-        );
-
-        $result = $transformer->executeTransformation($content, $request);
-
-        $this->assertEquals($content, $result);
-    }
-
-    #[Test]
-    public function itExecutesTransformationWithStrategy(): void {
-        $content = 'image content';
-        $request = $this->createStub(ImageTransformationRequest::class);
-
-        $imageProcessor = $this->createStub(ImageProcessorInterface::class);
-        $imageProcessor
-            ->method('getImageDimensions')
-            ->willReturn([800, 600]);
-
-        $strategy = $this->createMock(ImageTransformationStrategyInterface::class);
-        $strategy
-            ->method('supports')
-            ->willReturnMap([[$request, true]]);
-
-        $strategy
-            ->expects($this->once())
-            ->method('transform')
-            ->with(
-                $content,
-                $this->isInstanceOf(ImageDimensions::class),
-                $request
-            )
-            ->willReturn('transformed content');
-
-        $transformer = new ImageTransformer($imageProcessor, $this->settingsService, [$strategy]);
-
-        $result = $transformer->executeTransformation($content, $request);
-
-        $this->assertEquals('transformed content', $result);
-    }
-
-    #[Test]
-    public function itAppliesFilterDuringTransform(): void {
-        $content = 'image content';
-        $imageOptions = ImageOptions::fromPayload([
-            'fileName' => 'test.jpg',
-            'mimeType' => 'image/jpeg',
-            'filter' => 'sepia'
-        ]);
-
-        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
-        $imageProcessor
-            ->expects($this->once())
-            ->method('applyFilter')
-            ->with($content, 'sepia')
-            ->willReturn('filtered content');
-
-        $transformer = new ImageTransformer($imageProcessor, $this->settingsService, []);
-
-        $result = $transformer->transform($content, $imageOptions);
-
-        $this->assertEquals('filtered content', $result);
-    }
-
-    #[Test]
-    public function itDoesNotApplyFilterWhenNotSet(): void {
-        $content = 'image content';
-        $imageOptions = ImageOptions::fromPayload([
-            'fileName' => 'test.jpg',
-            'mimeType' => 'image/jpeg'
-        ]);
-
-        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
-        $imageProcessor
-            ->expects($this->never())
-            ->method('applyFilter');
-
-        $transformer = new ImageTransformer($imageProcessor, $this->settingsService, []);
-
-        $result = $transformer->transform($content, $imageOptions);
-
-        $this->assertEquals($content, $result);
-    }
-
-    #[Test]
-    public function itAppliesFilterAfterStrategyAndBeforeFormat(): void {
-        $content = 'image content';
+    public function itBuildsFitOperationsFromOptions(): void {
         $imageOptions = ImageOptions::fromPayload([
             'fileName' => 'test.jpg',
             'mimeType' => 'image/jpeg',
             'width' => 400,
             'height' => 300,
-            'filter' => 'vivid',
-            'format' => 'webp'
         ]);
 
-        $callOrder = [];
+        $source = $this->createFileSource();
 
+        $imageFileProcessor = $this->createStub(ImageFileProcessorInterface::class);
         $imageProcessor = $this->createMock(ImageProcessorInterface::class);
         $imageProcessor
-            ->method('getImageDimensions')
-            ->willReturn([800, 600]);
+            ->expects($this->once())
+            ->method('process')
+            ->with(
+                $source,
+                $this->callback(static function (array $operations): bool {
+                    return count($operations) === 1
+                        && $operations[0] instanceof Fit
+                        && $operations[0]->width === 400
+                        && $operations[0]->height === 300
+                        && $operations[0]->upscale === false;
+                }),
+                null,
+                null,
+                false
+            )
+            ->willReturn('transformed bytes');
 
+        $transformer = new ImageTransformer($imageProcessor, $imageFileProcessor, $this->settingsService, [new ResizeStrategy()]);
+
+        $this->assertSame('transformed bytes', $transformer->transform($source, $imageOptions));
+    }
+
+    #[Test]
+    public function itBuildsFitForSmallBothDimensionsViaResize(): void {
+        $imageOptions = ImageOptions::fromPayload([
+            'fileName' => 'test.jpg',
+            'mimeType' => 'image/jpeg',
+            'width' => 300,
+            'height' => 300,
+        ]);
+
+        $source = $this->createFileSource();
+
+        $imageFileProcessor = $this->createStub(ImageFileProcessorInterface::class);
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
         $imageProcessor
             ->expects($this->once())
-            ->method('applyFilter')
-            ->with('strategy result', 'vivid')
-            ->willReturnCallback(function () use (&$callOrder) {
-                $callOrder[] = 'filter';
-                return 'filtered content';
-            });
+            ->method('process')
+            ->with(
+                $this->anything(),
+                $this->callback(static function (array $operations): bool {
+                    return count($operations) === 1
+                        && $operations[0] instanceof Fit
+                        && $operations[0]->width === 300
+                        && $operations[0]->height === 300
+                        && $operations[0]->upscale === false;
+                }),
+                null,
+                null,
+                false
+            )
+            ->willReturn('transformed bytes');
 
+        $transformer = new ImageTransformer(
+            $imageProcessor,
+            $imageFileProcessor,
+            $this->settingsService,
+            [new ResizeStrategy()]
+        );
+
+        $transformer->transform($source, $imageOptions);
+    }
+
+    #[Test]
+    public function itBuildsCoverOperationForSquareCrop(): void {
+        $imageOptions = ImageOptions::fromPayload([
+            'fileName' => 'test.jpg',
+            'mimeType' => 'image/jpeg',
+            'width' => 400,
+            'height' => 400,
+            'crop' => true,
+        ]);
+
+        $source = $this->createFileSource();
+
+        $imageFileProcessor = $this->createStub(ImageFileProcessorInterface::class);
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
         $imageProcessor
             ->expects($this->once())
-            ->method('convertFormat')
-            ->with('filtered content', 'webp', $this->anything())
-            ->willReturnCallback(function () use (&$callOrder) {
-                $callOrder[] = 'format';
-                return 'final content';
-            });
+            ->method('process')
+            ->with(
+                $this->anything(),
+                $this->callback(static function (array $operations): bool {
+                    return count($operations) === 1
+                        && $operations[0] instanceof Cover
+                        && $operations[0]->width === 400
+                        && $operations[0]->height === 400;
+                }),
+                null,
+                null,
+                false
+            )
+            ->willReturn('transformed bytes');
 
-        $strategy = $this->createMock(ImageTransformationStrategyInterface::class);
-        $strategy->method('supports')->willReturn(true);
-        $strategy
+        $transformer = new ImageTransformer($imageProcessor, $imageFileProcessor, $this->settingsService, [new CropStrategy()]);
+
+        $transformer->transform($source, $imageOptions);
+    }
+
+    #[Test]
+    public function itAppendsFilterOperationFromOptions(): void {
+        $imageOptions = ImageOptions::fromPayload([
+            'fileName' => 'test.jpg',
+            'mimeType' => 'image/jpeg',
+            'filter' => 'sepia',
+        ]);
+
+        $source = $this->createFileSource();
+
+        $imageFileProcessor = $this->createStub(ImageFileProcessorInterface::class);
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor
             ->expects($this->once())
-            ->method('transform')
-            ->willReturnCallback(function () use (&$callOrder) {
-                $callOrder[] = 'strategy';
-                return 'strategy result';
-            });
+            ->method('process')
+            ->with(
+                $this->anything(),
+                $this->callback(static function (array $operations): bool {
+                    return count($operations) === 1
+                        && $operations[0] instanceof Filter
+                        && $operations[0]->getFilter() === ImageFilter::Sepia;
+                }),
+                null,
+                null,
+                false
+            )
+            ->willReturn('transformed bytes');
+
+        $transformer = new ImageTransformer($imageProcessor, $imageFileProcessor, $this->settingsService, [new FilterStrategy()]);
+
+        $transformer->transform($source, $imageOptions);
+    }
+
+    #[Test]
+    public function itAppendsFilterAfterGeometryOperations(): void {
+        $imageOptions = ImageOptions::fromPayload([
+            'fileName' => 'test.jpg',
+            'mimeType' => 'image/jpeg',
+            'width' => 400,
+            'height' => 300,
+            'filter' => 'sepia',
+        ]);
+
+        $source = $this->createFileSource();
+
+        $imageFileProcessor = $this->createStub(ImageFileProcessorInterface::class);
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor
+            ->expects($this->once())
+            ->method('process')
+            ->with(
+                $this->anything(),
+                $this->callback(static function (array $operations): bool {
+                    return count($operations) === 2
+                        && $operations[0] instanceof Fit
+                        && $operations[0]->width === 400
+                        && $operations[0]->height === 300
+                        && $operations[1] instanceof Filter
+                        && $operations[1]->getFilter() === ImageFilter::Sepia;
+                }),
+                null,
+                null,
+                false
+            )
+            ->willReturn('transformed bytes');
+
+        $transformer = new ImageTransformer($imageProcessor, $imageFileProcessor, $this->settingsService, [new ResizeStrategy(), new FilterStrategy()]);
+
+        $transformer->transform($source, $imageOptions);
+    }
+
+    #[Test]
+    public function itAccumulatesGeometryAndFilterFromFullStrategySet(): void {
+        $imageOptions = ImageOptions::fromPayload([
+            'fileName' => 'test.jpg',
+            'mimeType' => 'image/jpeg',
+            'width' => 800,
+            'height' => 600,
+            'filter' => 'sepia',
+        ]);
+
+        $source = $this->createFileSource();
+
+        $imageFileProcessor = $this->createStub(ImageFileProcessorInterface::class);
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor
+            ->expects($this->once())
+            ->method('process')
+            ->with(
+                $this->anything(),
+                $this->callback(static function (array $operations): bool {
+                    return count($operations) === 2
+                        && $operations[0] instanceof Fit
+                        && $operations[0]->width === 800
+                        && $operations[0]->height === 600
+                        && $operations[1] instanceof Filter
+                        && $operations[1]->getFilter() === ImageFilter::Sepia;
+                }),
+                null,
+                null,
+                false
+            )
+            ->willReturn('transformed bytes');
+
+        $strategies = [
+            new CropStrategy(),
+            new ResizeStrategy(),
+            new FilterStrategy(),
+        ];
+
+        $transformer = new ImageTransformer($imageProcessor, $imageFileProcessor, $this->settingsService, $strategies);
+
+        $transformer->transform($source, $imageOptions);
+    }
+
+    #[Test]
+    public function itResolvesFormatWithDefaultQualityFromSettings(): void {
+        $imageOptions = ImageOptions::fromPayload([
+            'fileName' => 'test.jpg',
+            'mimeType' => 'image/jpeg',
+            'format' => 'webp',
+        ]);
 
         $settingsService = $this->createStub(SettingsService::class);
-        $settingsService->method('get')->willReturn(85);
+        $settingsService->method('get')->willReturn(82);
 
-        $transformer = new ImageTransformer($imageProcessor, $settingsService, [$strategy]);
+        $source = $this->createFileSource();
 
-        $result = $transformer->transform($content, $imageOptions);
+        $imageFileProcessor = $this->createStub(ImageFileProcessorInterface::class);
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor
+            ->expects($this->once())
+            ->method('process')
+            ->with(
+                $this->anything(),
+                [],
+                ImageFormat::WEBP,
+                82,
+                false
+            )
+            ->willReturn('transformed bytes');
 
-        $this->assertEquals('final content', $result);
-        $this->assertEquals(['strategy', 'filter', 'format'], $callOrder);
+        $transformer = new ImageTransformer($imageProcessor, $imageFileProcessor, $settingsService, []);
+
+        $transformer->transform($source, $imageOptions);
+    }
+
+    #[Test]
+    public function itPreservesJpegSourceFormatForQualityOnly(): void {
+        $imageOptions = ImageOptions::fromPayload([
+            'fileName' => 'test.jpg',
+            'mimeType' => 'image/jpeg',
+            'quality' => 60,
+        ]);
+
+        $source = $this->createFileSource();
+
+        $imageFileProcessor = $this->createStub(ImageFileProcessorInterface::class);
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor
+            ->expects($this->once())
+            ->method('process')
+            ->with(
+                $this->anything(),
+                [],
+                null,
+                60,
+                false
+            )
+            ->willReturn('transformed bytes');
+
+        $transformer = new ImageTransformer($imageProcessor, $imageFileProcessor, $this->settingsService, []);
+
+        $transformer->transform($source, $imageOptions);
+    }
+
+    #[Test]
+    public function itPreservesWebpSourceFormatForQualityOnly(): void {
+        $imageOptions = ImageOptions::fromPayload([
+            'fileName' => 'test.webp',
+            'mimeType' => 'image/webp',
+            'quality' => 82,
+        ]);
+
+        $source = $this->createFileSource();
+
+        $imageFileProcessor = $this->createStub(ImageFileProcessorInterface::class);
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor
+            ->expects($this->once())
+            ->method('process')
+            ->with(
+                $this->anything(),
+                [],
+                null,
+                82,
+                false
+            )
+            ->willReturn('transformed bytes');
+
+        $transformer = new ImageTransformer($imageProcessor, $imageFileProcessor, $this->settingsService, [new ResizeStrategy()]);
+
+        $transformer->transform($source, $imageOptions);
+    }
+
+    #[Test]
+    public function itPreservesSourceFormatForWidthOnlyQualityPreview(): void {
+        $imageOptions = ImageOptions::fromPayload([
+            'fileName' => 'test.webp',
+            'mimeType' => 'image/webp',
+            'width' => 1600,
+            'quality' => 82,
+        ]);
+
+        $source = $this->createFileSource();
+
+        $imageFileProcessor = $this->createStub(ImageFileProcessorInterface::class);
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor
+            ->expects($this->once())
+            ->method('process')
+            ->with(
+                $this->anything(),
+                $this->anything(),
+                null,
+                82,
+                false
+            )
+            ->willReturn('transformed bytes');
+
+        $transformer = new ImageTransformer($imageProcessor, $imageFileProcessor, $this->settingsService, [new ResizeStrategy()]);
+
+        $transformer->transform($source, $imageOptions);
+    }
+
+    #[Test]
+    public function itResolvesNoFormatOrQualityForResizeOnly(): void {
+        $imageOptions = ImageOptions::fromPayload([
+            'fileName' => 'test.jpg',
+            'mimeType' => 'image/jpeg',
+            'width' => 400,
+            'height' => 300,
+        ]);
+
+        $source = $this->createFileSource();
+
+        $imageFileProcessor = $this->createStub(ImageFileProcessorInterface::class);
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor
+            ->expects($this->once())
+            ->method('process')
+            ->with(
+                $this->anything(),
+                $this->anything(),
+                null,
+                null,
+                false
+            )
+            ->willReturn('transformed bytes');
+
+        $transformer = new ImageTransformer($imageProcessor, $imageFileProcessor, $this->settingsService, [new ResizeStrategy()]);
+
+        $transformer->transform($source, $imageOptions);
+    }
+
+    #[Test]
+    public function itEmitsFitWithoutUpscaleByDefault(): void {
+        $imageOptions = ImageOptions::fromPayload([
+            'fileName' => 'test.jpg',
+            'mimeType' => 'image/jpeg',
+            'width' => 1600,
+            'height' => 1200,
+        ]);
+
+        $source = $this->createFileSource();
+
+        $imageFileProcessor = $this->createStub(ImageFileProcessorInterface::class);
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor
+            ->expects($this->once())
+            ->method('process')
+            ->with(
+                $this->anything(),
+                $this->callback(static function (array $operations): bool {
+                    return count($operations) === 1
+                        && $operations[0] instanceof Fit
+                        && $operations[0]->width === 1600
+                        && $operations[0]->height === 1200
+                        && $operations[0]->upscale === false;
+                }),
+                null,
+                null,
+                false
+            )
+            ->willReturn('transformed bytes');
+
+        $transformer = new ImageTransformer($imageProcessor, $imageFileProcessor, $this->settingsService, [new ResizeStrategy()]);
+
+        $transformer->transform($source, $imageOptions);
+    }
+
+    #[Test]
+    public function itBuildsPartialDimensionFitFromOptions(): void {
+        $imageOptions = ImageOptions::fromPayload([
+            'fileName' => 'test.jpg',
+            'mimeType' => 'image/jpeg',
+            'width' => 400,
+        ]);
+
+        $source = $this->createFileSource();
+
+        $imageFileProcessor = $this->createStub(ImageFileProcessorInterface::class);
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor
+            ->expects($this->once())
+            ->method('process')
+            ->with(
+                $this->anything(),
+                $this->callback(static function (array $operations): bool {
+                    return count($operations) === 1
+                        && $operations[0] instanceof Fit
+                        && $operations[0]->width === 400
+                        && $operations[0]->height === null;
+                }),
+                null,
+                null,
+                false
+            )
+            ->willReturn('transformed bytes');
+
+        $transformer = new ImageTransformer($imageProcessor, $imageFileProcessor, $this->settingsService, [new ResizeStrategy()]);
+
+        $transformer->transform($source, $imageOptions);
+    }
+
+    #[Test]
+    public function itTransformsWithoutReadingSourceDimensions(): void {
+        $imageOptions = ImageOptions::fromPayload([
+            'fileName' => 'test.jpg',
+            'mimeType' => 'image/jpeg',
+            'width' => 400,
+            'height' => 300,
+        ]);
+
+        $source = $this->createFileSource();
+
+        $imageFileProcessor = $this->createStub(ImageFileProcessorInterface::class);
+        $imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $imageProcessor
+            ->expects($this->once())
+            ->method('process')
+            ->with($source, $this->anything())
+            ->willReturn('transformed bytes');
+
+        $transformer = new ImageTransformer($imageProcessor, $imageFileProcessor, $this->settingsService, [new ResizeStrategy()]);
+
+        $this->assertSame('transformed bytes', $transformer->transform($source, $imageOptions));
     }
 }

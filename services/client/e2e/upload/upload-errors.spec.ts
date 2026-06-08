@@ -1,4 +1,5 @@
 import { expect, test } from '../fixtures/auth.fixture';
+import { isChunkedUploadCompletionResponse } from '../helpers/chunkedUpload';
 
 test.describe('Upload errors', () => {
   test('rejects a non-image file and does not start an upload', async ({
@@ -8,7 +9,7 @@ test.describe('Upload errors', () => {
     let uploadRequested = false;
     page.on('request', (request) => {
       if (
-        request.url().includes('/api/upload') &&
+        /\/api\/upload\/chunked$/.test(request.url()) &&
         request.method() === 'POST'
       ) {
         uploadRequested = true;
@@ -33,10 +34,7 @@ test.describe('Upload errors', () => {
   }) => {
     const uploadStatuses: number[] = [];
     page.on('response', (response) => {
-      if (
-        response.url().includes('/api/upload') &&
-        response.request().method() === 'POST'
-      ) {
+      if (isChunkedUploadCompletionResponse(response)) {
         uploadStatuses.push(response.status());
       }
     });

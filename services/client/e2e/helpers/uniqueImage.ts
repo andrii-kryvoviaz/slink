@@ -1,4 +1,10 @@
+import { readFileSync } from 'fs';
 import zlib from 'zlib';
+
+function uniqueToken(): Buffer {
+  const token = `${Date.now().toString(16)}${Math.random().toString(16).slice(2)}`;
+  return Buffer.from(token, 'ascii');
+}
 
 function crc32(buffer: Buffer): number {
   let crc = 0xffffffff;
@@ -56,5 +62,27 @@ export function createUniquePng(): { buffer: Buffer; name: string } {
   return {
     buffer,
     name: `e2e-${Date.now()}-${Math.random().toString(36).slice(2)}.png`,
+  };
+}
+
+export function createUniqueGif(fixturePath: string): {
+  buffer: Buffer;
+  name: string;
+} {
+  const base = readFileSync(fixturePath);
+  const trailerIndex = base.lastIndexOf(0x3b);
+  const head = base.subarray(0, trailerIndex);
+  const trailer = base.subarray(trailerIndex);
+
+  const token = uniqueToken();
+  const comment = Buffer.concat([
+    Buffer.from([0x21, 0xfe, token.length]),
+    token,
+    Buffer.from([0x00]),
+  ]);
+
+  return {
+    buffer: Buffer.concat([head, comment, trailer]),
+    name: `e2e-${Date.now()}-${Math.random().toString(36).slice(2)}.gif`,
   };
 }

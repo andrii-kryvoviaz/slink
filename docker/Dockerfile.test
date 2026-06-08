@@ -9,7 +9,7 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 
 WORKDIR /services/api
 
-RUN apk add --no-cache git unzip vips exiftool && \
+RUN apk add --no-cache git unzip vips vips-magick vips-heif imagemagick exiftool && \
     install-php-extensions ffi vips && \
     echo "memory_limit=${MEMORY_LIMIT}M" > /usr/local/etc/php/conf.d/memory-limit.ini && \
     echo "ffi.enable=1" > /usr/local/etc/php/conf.d/zz-ffi-enable.ini

@@ -4,9 +4,11 @@ import { invalidateAll } from '$app/navigation';
 import {
   BadRequestException,
   ForbiddenException,
+  GoneException,
   LockedException,
   NotFoundException,
   PayloadTooLargeException,
+  ServerException,
   UnauthorizedException,
   ValidationException,
 } from '@slink/api/Exceptions';
@@ -84,6 +86,7 @@ export type EventType =
   | 'unauthorized'
   | 'forbidden'
   | 'not-found'
+  | 'gone'
   | 'locked'
   | 'payload-too-large'
   | 'bad-request'
@@ -119,6 +122,10 @@ const STATUS_EXCEPTIONS: Record<number, ExceptionResolver> = {
   [HttpStatus.NotFound]: () => ({
     event: 'not-found',
     exception: new NotFoundException(),
+  }),
+  [HttpStatus.Gone]: (body) => ({
+    event: 'gone',
+    exception: new GoneException(errorOf(body)),
   }),
   [HttpStatus.PayloadTooLarge]: () => ({
     event: 'payload-too-large',
@@ -225,6 +232,16 @@ export class Client {
       const { event, exception } = resolver(body);
       this.emit<EventContext>({ event, data: { url, method, body } });
       throw exception;
+    }
+
+    if (response.status >= HttpStatus.InternalServerError) {
+      const body = await this.safeJson(response);
+      const { message, title } = errorOf(body);
+      const detail = message ?? title ?? response.statusText;
+
+      this.emit<EventContext>({ event: 'error', data: { url, method, body } });
+
+      throw new ServerException(detail || 'Request failed', response.status);
     }
 
     const responseBody = await response.json();

@@ -91,8 +91,8 @@ final readonly class ImageDimensions extends AbstractCompoundValueObject {
     );
   }
 
-  public function scaleToFitWithin(self $bounds, bool $allowEnlarge = false): self {
-    if (!$allowEnlarge && $this->fitsWithin($bounds)) {
+  public function scaleToFitWithin(self $bounds, bool $upscale = false): self {
+    if (!$upscale && $this->fitsWithin($bounds)) {
       return $this;
     }
 

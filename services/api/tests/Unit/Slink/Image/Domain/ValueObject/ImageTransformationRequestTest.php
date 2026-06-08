@@ -22,15 +22,16 @@ final class ImageTransformationRequestTest extends TestCase {
             partialDimensions: $partialDimensions,
             crop: true,
             quality: 85,
-            allowEnlarge: true
+            upscale: true,
+            filter: 'sepia'
         );
 
         $this->assertEquals($targetDimensions, $request->getTargetDimensions());
         $this->assertEquals($partialDimensions, $request->getPartialDimensions());
         $this->assertTrue($request->shouldCrop());
         $this->assertEquals(85, $request->getQuality());
-        $this->assertTrue($request->allowEnlarge());
-        $this->assertTrue($request->hasTransformations());
+        $this->assertTrue($request->upscale());
+        $this->assertEquals('sepia', $request->getFilter());
         $this->assertTrue($request->hasPartialDimensions());
     }
 
@@ -42,34 +43,9 @@ final class ImageTransformationRequestTest extends TestCase {
         $this->assertNull($request->getPartialDimensions());
         $this->assertFalse($request->shouldCrop());
         $this->assertNull($request->getQuality());
-        $this->assertFalse($request->allowEnlarge());
-        $this->assertFalse($request->hasTransformations());
+        $this->assertFalse($request->upscale());
+        $this->assertNull($request->getFilter());
         $this->assertFalse($request->hasPartialDimensions());
-    }
-
-    #[Test]
-    public function itDetectsTransformationsWithTargetDimensions(): void {
-        $request = new ImageTransformationRequest(
-            targetDimensions: new ImageDimensions(800, 600)
-        );
-
-        $this->assertTrue($request->hasTransformations());
-    }
-
-    #[Test]
-    public function itDetectsTransformationsWithPartialDimensions(): void {
-        $request = new ImageTransformationRequest(
-            partialDimensions: new PartialImageDimensions(400, null)
-        );
-
-        $this->assertTrue($request->hasTransformations());
-    }
-
-    #[Test]
-    public function itDetectsTransformationsWithQuality(): void {
-        $request = new ImageTransformationRequest(quality: 85);
-
-        $this->assertTrue($request->hasTransformations());
     }
 
     #[Test]
@@ -80,14 +56,15 @@ final class ImageTransformationRequestTest extends TestCase {
             'width' => 800,
             'height' => 600,
             'quality' => 90,
-            'crop' => true
+            'crop' => true,
+            'filter' => 'sepia'
         ]);
 
         $request = ImageTransformationRequest::fromImageOptions($imageOptions);
 
         $targetDimensions = $request->getTargetDimensions();
         $partialDimensions = $request->getPartialDimensions();
-        
+
         $this->assertNotNull($targetDimensions);
         $this->assertNotNull($partialDimensions);
         $this->assertEquals(800, $targetDimensions->getWidth());
@@ -96,6 +73,7 @@ final class ImageTransformationRequestTest extends TestCase {
         $this->assertEquals(600, $partialDimensions->getHeight());
         $this->assertTrue($request->shouldCrop());
         $this->assertEquals(90, $request->getQuality());
+        $this->assertEquals('sepia', $request->getFilter());
     }
 
     #[Test]
@@ -132,7 +110,6 @@ final class ImageTransformationRequestTest extends TestCase {
         $this->assertNull($request->getPartialDimensions());
         $this->assertFalse($request->shouldCrop());
         $this->assertNull($request->getQuality());
-        $this->assertFalse($request->hasTransformations());
     }
 
     #[Test]
@@ -142,14 +119,15 @@ final class ImageTransformationRequestTest extends TestCase {
             'partialDimensions' => ['width' => 400, 'height' => null],
             'crop' => true,
             'quality' => 85,
-            'allowEnlarge' => true
+            'upscale' => true,
+            'filter' => 'sepia'
         ];
 
         $request = ImageTransformationRequest::fromPayload($payload);
 
         $targetDimensions = $request->getTargetDimensions();
         $partialDimensions = $request->getPartialDimensions();
-        
+
         $this->assertNotNull($targetDimensions);
         $this->assertNotNull($partialDimensions);
         $this->assertEquals(800, $targetDimensions->getWidth());
@@ -158,7 +136,8 @@ final class ImageTransformationRequestTest extends TestCase {
         $this->assertNull($partialDimensions->getHeight());
         $this->assertTrue($request->shouldCrop());
         $this->assertEquals(85, $request->getQuality());
-        $this->assertTrue($request->allowEnlarge());
+        $this->assertTrue($request->upscale());
+        $this->assertEquals('sepia', $request->getFilter());
     }
 
     #[Test]
@@ -168,7 +147,7 @@ final class ImageTransformationRequestTest extends TestCase {
             'partialDimensions' => null,
             'crop' => false,
             'quality' => null,
-            'allowEnlarge' => false
+            'upscale' => false
         ];
 
         $request = ImageTransformationRequest::fromPayload($payload);
@@ -177,7 +156,23 @@ final class ImageTransformationRequestTest extends TestCase {
         $this->assertNull($request->getPartialDimensions());
         $this->assertFalse($request->shouldCrop());
         $this->assertNull($request->getQuality());
-        $this->assertFalse($request->allowEnlarge());
+        $this->assertFalse($request->upscale());
+        $this->assertNull($request->getFilter());
+    }
+
+    #[Test]
+    public function itCreatesFromPayloadWithoutFilterKey(): void {
+        $payload = [
+            'targetDimensions' => null,
+            'partialDimensions' => null,
+            'crop' => false,
+            'quality' => null,
+            'upscale' => false
+        ];
+
+        $request = ImageTransformationRequest::fromPayload($payload);
+
+        $this->assertNull($request->getFilter());
     }
 
     #[Test]
@@ -187,7 +182,8 @@ final class ImageTransformationRequestTest extends TestCase {
             partialDimensions: new PartialImageDimensions(400, null),
             crop: true,
             quality: 85,
-            allowEnlarge: true
+            upscale: true,
+            filter: 'sepia'
         );
 
         $payload = $request->toPayload();
@@ -197,8 +193,18 @@ final class ImageTransformationRequestTest extends TestCase {
             'partialDimensions' => ['width' => 400, 'height' => null],
             'crop' => true,
             'quality' => 85,
-            'allowEnlarge' => true
+            'upscale' => true,
+            'filter' => 'sepia'
         ], $payload);
+    }
+
+    #[Test]
+    public function itRoundTripsFilterThroughPayload(): void {
+        $request = new ImageTransformationRequest(filter: 'noir');
+
+        $restored = ImageTransformationRequest::fromPayload($request->toPayload());
+
+        $this->assertEquals('noir', $restored->getFilter());
     }
 
     #[Test]
@@ -212,7 +218,8 @@ final class ImageTransformationRequestTest extends TestCase {
             'partialDimensions' => null,
             'crop' => false,
             'quality' => null,
-            'allowEnlarge' => false
+            'upscale' => false,
+            'filter' => null
         ], $payload);
     }
 

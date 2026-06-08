@@ -1,5 +1,8 @@
-import { type Page, expect } from '@playwright/test';
+import { type Page, type Response, expect } from '@playwright/test';
+import { readFileSync } from 'fs';
+import { basename } from 'path';
 
+import { isChunkedUploadCompletionResponse } from '../helpers/chunkedUpload';
 import { createUniquePng } from '../helpers/uniqueImage';
 import { BasePage } from './BasePage';
 
@@ -56,9 +59,7 @@ export class UploadPage extends BasePage {
 
     await expect(async () => {
       const responsePromise = this.page.waitForResponse(
-        (response) =>
-          response.url().includes('/api/upload') &&
-          response.request().method() === 'POST',
+        isChunkedUploadCompletionResponse,
         { timeout: 1500 },
       );
       await this.fileInput.setInputFiles(files);
@@ -70,6 +71,41 @@ export class UploadPage extends BasePage {
     await this.fileInput.setInputFiles(paths);
   }
 
+  async uploadFixtureFile(path: string, mimeType: string): Promise<Response> {
+    const name = basename(path);
+    const buffer = readFileSync(path);
+
+    return this.uploadBuffer({ name, mimeType, buffer });
+  }
+
+  async uploadBuffer(file: {
+    name: string;
+    mimeType: string;
+    buffer: Buffer;
+  }): Promise<Response> {
+    await this.heading.waitFor({ state: 'visible' });
+
+    let completion: Response | undefined;
+
+    await expect(async () => {
+      if (!/\/upload(\/|$|\?)/.test(this.page.url())) {
+        return;
+      }
+      const responsePromise = this.page.waitForResponse(
+        isChunkedUploadCompletionResponse,
+        { timeout: 10000 },
+      );
+      await this.fileInput.setInputFiles(file);
+      completion = await responsePromise;
+    }).toPass({ timeout: 30000 });
+
+    if (!completion) {
+      throw new Error('Chunked upload did not complete');
+    }
+
+    return completion;
+  }
+
   async uploadSingleImage() {
     await this.heading.waitFor({ state: 'visible' });
 
@@ -78,7 +114,8 @@ export class UploadPage extends BasePage {
     await expect(async () => {
       const requestPromise = this.page.waitForRequest(
         (request) =>
-          request.url().includes('/api/upload') && request.method() === 'POST',
+          /\/api\/upload\/chunked$/.test(request.url()) &&
+          request.method() === 'POST',
         { timeout: 1500 },
       );
       await this.fileInput.setInputFiles({
@@ -98,7 +135,8 @@ export class UploadPage extends BasePage {
     await expect(async () => {
       const requestPromise = this.page.waitForRequest(
         (request) =>
-          request.url().includes('/api/upload') && request.method() === 'POST',
+          /\/api\/upload\/chunked$/.test(request.url()) &&
+          request.method() === 'POST',
         { timeout: 1500 },
       );
       await this.fileInput.setInputFiles(files);
@@ -113,9 +151,7 @@ export class UploadPage extends BasePage {
 
     await expect(async () => {
       const responsePromise = this.page.waitForResponse(
-        (response) =>
-          response.url().includes('/api/upload') &&
-          response.request().method() === 'POST',
+        isChunkedUploadCompletionResponse,
         { timeout: 1500 },
       );
       await this.fileInput.setInputFiles({

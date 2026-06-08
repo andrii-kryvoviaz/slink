@@ -76,7 +76,9 @@
       style:filter={getCssFilter(state.selectedFilter)}
     >
       <ImagePlaceholder
-        src={state.image.url}
+        src={state.displayPreview}
+        alt={state.image.description || 'Image preview'}
+        fetchpriority="high"
         metadata={state.image}
         showOpenInNewTab={false}
       />
@@ -167,7 +169,7 @@
             Apply a color filter to the shared link
           </p>
           <FilterPicker
-            imageUrl={state.image.url}
+            previewUrl={state.thumbnailPreview}
             value={state.selectedFilter}
             on={{ change: state.handleFilterChange }}
           />

@@ -9,14 +9,15 @@ use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Slink\Image\Application\Command\UploadImage\UploadImageCommand;
 use Slink\Image\Application\Command\UploadImage\UploadImageHandler;
-use Slink\Image\Application\Service\ImageConversionResolver;
+use Slink\Image\Application\Service\CollectionMembershipAssigner;
+use Slink\Image\Application\Service\ImageTagAssigner;
 use Slink\Image\Domain\Context\ImageCreationContext;
 use Slink\Image\Domain\Enum\ImageFormat;
 use Slink\Image\Domain\Factory\ImageMetadataFactory;
 use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
 use Slink\Image\Domain\Service\ImageAnalyzerInterface;
 use Slink\Image\Domain\Service\ImageConversionResolverInterface;
-use Slink\Image\Domain\Service\ImageTransformerInterface;
+use Slink\Image\Domain\Service\ImageFileTransformerInterface;
 use Slink\Image\Domain\Service\ImageSanitizerInterface;
 use Slink\Image\Domain\Specification\ImageDuplicateSpecificationInterface;
 use Slink\Image\Domain\ValueObject\ImageMetadata;
@@ -39,7 +40,7 @@ class UploadImageHandlerTest extends TestCase {
     $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
     $imageAnalyzer = $this->createStub(ImageAnalyzerInterface::class);
-    $imageTransformer = $this->createStub(ImageTransformerInterface::class);
+    $imageTransformer = $this->createStub(ImageFileTransformerInterface::class);
     $sanitizer = $this->createStub(ImageSanitizerInterface::class);
     $conversionResolver = $this->createStub(ImageConversionResolverInterface::class);
     $storage = $this->createMock(StorageInterface::class);
@@ -48,6 +49,8 @@ class UploadImageHandlerTest extends TestCase {
     $metadataFactory = $this->createStub(ImageMetadataFactory::class);
     $userPreferencesRepo = $this->createStub(UserPreferencesRepositoryInterface::class);
     $preferencesService = new UserPreferencesService($userPreferencesRepo);
+    $tagAssigner = $this->createStub(ImageTagAssigner::class);
+    $collectionAssigner = $this->createStub(CollectionMembershipAssigner::class);
 
     $handler = new UploadImageHandler(
       $configProvider,
@@ -59,7 +62,9 @@ class UploadImageHandlerTest extends TestCase {
       $creationContext,
       $metadataFactory,
       $storage,
-      $preferencesService
+      $preferencesService,
+      $tagAssigner,
+      $collectionAssigner
     );
 
     $file = $this->createStub(File::class);
@@ -100,7 +105,7 @@ class UploadImageHandlerTest extends TestCase {
     $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
     $imageAnalyzer = $this->createStub(ImageAnalyzerInterface::class);
-    $imageTransformer = $this->createMock(ImageTransformerInterface::class);
+    $imageTransformer = $this->createMock(ImageFileTransformerInterface::class);
     $sanitizer = $this->createStub(ImageSanitizerInterface::class);
     $conversionResolver = $this->createStub(ImageConversionResolverInterface::class);
     $storage = $this->createMock(StorageInterface::class);
@@ -109,6 +114,8 @@ class UploadImageHandlerTest extends TestCase {
     $metadataFactory = $this->createStub(ImageMetadataFactory::class);
     $userPreferencesRepo = $this->createStub(UserPreferencesRepositoryInterface::class);
     $preferencesService = new UserPreferencesService($userPreferencesRepo);
+    $tagAssigner = $this->createStub(ImageTagAssigner::class);
+    $collectionAssigner = $this->createStub(CollectionMembershipAssigner::class);
 
     $handler = new UploadImageHandler(
       $configProvider,
@@ -120,7 +127,9 @@ class UploadImageHandlerTest extends TestCase {
       $creationContext,
       $metadataFactory,
       $storage,
-      $preferencesService
+      $preferencesService,
+      $tagAssigner,
+      $collectionAssigner
     );
 
     $file = $this->createStub(File::class);
@@ -171,7 +180,7 @@ class UploadImageHandlerTest extends TestCase {
     $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
     $imageAnalyzer = $this->createStub(ImageAnalyzerInterface::class);
-    $imageTransformer = $this->createMock(ImageTransformerInterface::class);
+    $imageTransformer = $this->createMock(ImageFileTransformerInterface::class);
     $sanitizer = $this->createStub(ImageSanitizerInterface::class);
     $conversionResolver = $this->createStub(ImageConversionResolverInterface::class);
     $storage = $this->createMock(StorageInterface::class);
@@ -180,6 +189,8 @@ class UploadImageHandlerTest extends TestCase {
     $metadataFactory = $this->createStub(ImageMetadataFactory::class);
     $userPreferencesRepo = $this->createStub(UserPreferencesRepositoryInterface::class);
     $preferencesService = new UserPreferencesService($userPreferencesRepo);
+    $tagAssigner = $this->createStub(ImageTagAssigner::class);
+    $collectionAssigner = $this->createStub(CollectionMembershipAssigner::class);
 
     $handler = new UploadImageHandler(
       $configProvider,
@@ -191,7 +202,9 @@ class UploadImageHandlerTest extends TestCase {
       $creationContext,
       $metadataFactory,
       $storage,
-      $preferencesService
+      $preferencesService,
+      $tagAssigner,
+      $collectionAssigner
     );
 
     $file = $this->createStub(File::class);
@@ -233,7 +246,7 @@ class UploadImageHandlerTest extends TestCase {
     $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
     $imageAnalyzer = $this->createStub(ImageAnalyzerInterface::class);
-    $imageTransformer = $this->createMock(ImageTransformerInterface::class);
+    $imageTransformer = $this->createMock(ImageFileTransformerInterface::class);
     $sanitizer = $this->createStub(ImageSanitizerInterface::class);
     $conversionResolver = $this->createStub(ImageConversionResolverInterface::class);
     $storage = $this->createMock(StorageInterface::class);
@@ -242,6 +255,8 @@ class UploadImageHandlerTest extends TestCase {
     $metadataFactory = $this->createStub(ImageMetadataFactory::class);
     $userPreferencesRepo = $this->createStub(UserPreferencesRepositoryInterface::class);
     $preferencesService = new UserPreferencesService($userPreferencesRepo);
+    $tagAssigner = $this->createStub(ImageTagAssigner::class);
+    $collectionAssigner = $this->createStub(CollectionMembershipAssigner::class);
 
     $handler = new UploadImageHandler(
       $configProvider,
@@ -253,7 +268,9 @@ class UploadImageHandlerTest extends TestCase {
       $creationContext,
       $metadataFactory,
       $storage,
-      $preferencesService
+      $preferencesService,
+      $tagAssigner,
+      $collectionAssigner
     );
 
     $file = $this->createStub(File::class);
@@ -304,7 +321,7 @@ class UploadImageHandlerTest extends TestCase {
     $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
     $imageAnalyzer = $this->createStub(ImageAnalyzerInterface::class);
-    $imageTransformer = $this->createMock(ImageTransformerInterface::class);
+    $imageTransformer = $this->createMock(ImageFileTransformerInterface::class);
     $sanitizer = $this->createStub(ImageSanitizerInterface::class);
     $conversionResolver = $this->createStub(ImageConversionResolverInterface::class);
     $storage = $this->createMock(StorageInterface::class);
@@ -313,6 +330,8 @@ class UploadImageHandlerTest extends TestCase {
     $metadataFactory = $this->createStub(ImageMetadataFactory::class);
     $userPreferencesRepo = $this->createStub(UserPreferencesRepositoryInterface::class);
     $preferencesService = new UserPreferencesService($userPreferencesRepo);
+    $tagAssigner = $this->createStub(ImageTagAssigner::class);
+    $collectionAssigner = $this->createStub(CollectionMembershipAssigner::class);
 
     $handler = new UploadImageHandler(
       $configProvider,
@@ -324,7 +343,9 @@ class UploadImageHandlerTest extends TestCase {
       $creationContext,
       $metadataFactory,
       $storage,
-      $preferencesService
+      $preferencesService,
+      $tagAssigner,
+      $collectionAssigner
     );
 
     $file = $this->createStub(File::class);

@@ -8,6 +8,8 @@ import { ReactiveState } from '@slink/api/ReactiveState';
 import type { Tag } from '@slink/api/Resources/TagResource';
 import type { CollectionReference } from '@slink/api/Response/Collection/CollectionResponse';
 
+import { imagePreview } from '@slink/utils/url';
+
 import type { PageData } from './$types';
 
 type ImageData = PageData['image'];
@@ -128,6 +130,22 @@ export class ImageInfoPageState {
 
   get image(): ImageData {
     return this._image;
+  }
+
+  get displayPreview(): string {
+    return imagePreview(this._image.fileName, {
+      width: 1600,
+      quality: 82,
+      format: 'webp',
+    });
+  }
+
+  get thumbnailPreview(): string {
+    return imagePreview(this._image.fileName, {
+      width: 320,
+      quality: 50,
+      format: 'webp',
+    });
   }
 
   get imageTags(): Tag[] {

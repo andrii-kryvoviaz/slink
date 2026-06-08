@@ -5,53 +5,59 @@ declare(strict_types=1);
 namespace Tests\Integration\Http\Access;
 
 use PHPUnit\Framework\Attributes\Test;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\Integration\Http\HttpTestCase;
 
 final class GuestUploadTest extends HttpTestCase {
-  private function guestUpload(?string $token = null): int {
+  private function upload(?string $token = null): Response {
     $headers = [];
 
     if ($token !== null) {
       $headers['HTTP_AUTHORIZATION'] = 'Bearer ' . $token;
     }
 
-    $this->client->request('POST', '/api/guest/upload', [], ['image' => $this->sampleImage()], $headers);
+    $this->client->request('POST', '/api/upload', [], ['image' => $this->sampleImage()], $headers);
 
-    return $this->client->getResponse()->getStatusCode();
+    return $this->client->getResponse();
   }
 
   #[Test]
-  public function anonymousGuestUploadIsForbiddenWhenDisabled(): void {
+  public function anonymousUploadIsUnauthorizedWhenGuestUploadsDisabled(): void {
     $this->setAccessSettings(['allowGuestUploads' => false]);
 
-    self::assertSame(403, $this->guestUpload());
+    self::assertSame(401, $this->upload()->getStatusCode());
   }
 
   #[Test]
-  public function anonymousGuestUploadIsAllowedWhenEnabled(): void {
+  public function anonymousUploadIsAllowedAsGuestWhenEnabled(): void {
     $this->setAccessSettings(['allowGuestUploads' => true]);
 
-    self::assertContains($this->guestUpload(), [200, 201]);
+    $response = $this->upload();
+
+    self::assertContains($response->getStatusCode(), [200, 201]);
+    self::assertFalse($response->headers->has('Location'));
   }
 
   #[Test]
-  public function authenticatedBearerIsIgnoredOnGuestRouteAndForbiddenWhenDisabled(): void {
+  public function authenticatedUploadIsAllowedEvenWhenGuestUploadsDisabled(): void {
     $this->setAccessSettings(['allowGuestUploads' => false]);
 
-    $userId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
-    self::assertNotSame('', $userId);
+    $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
     $token = $this->login('memberuser', self::PASSWORD);
 
-    self::assertSame(403, $this->guestUpload($token));
+    $response = $this->upload($token);
+
+    self::assertContains($response->getStatusCode(), [200, 201]);
+    self::assertTrue($response->headers->has('Location'));
   }
 
   #[Test]
-  public function authenticatedGuestUploadIsAllowedWhenEnabled(): void {
+  public function authenticatedUploadIsAllowedWhenGuestUploadsEnabled(): void {
     $this->setAccessSettings(['allowGuestUploads' => true]);
 
     $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
     $token = $this->login('memberuser', self::PASSWORD);
 
-    self::assertContains($this->guestUpload($token), [200, 201]);
+    self::assertContains($this->upload($token)->getStatusCode(), [200, 201]);
   }
 }
