@@ -29,6 +29,18 @@ export class ContentApi {
     return this.http.requestRaw('GET', `/api/collection/${id}`);
   }
 
+  async getCollectionSharing(id: string): Promise<{ shareUrl: string } | null> {
+    const { data } = await this.getCollection(id);
+    const payload = (data as { data?: unknown })?.data ?? data;
+    const sharing = (payload as { sharing?: unknown })?.sharing;
+
+    if (!sharing || typeof sharing !== 'object') {
+      return null;
+    }
+
+    return { shareUrl: String((sharing as { shareUrl?: unknown }).shareUrl) };
+  }
+
   async getCollectionItems(id: string): Promise<CollectionItemSummary[]> {
     const data = await this.http.request('GET', `/api/collection/${id}/items`);
     const items = (data?.data ?? data ?? []) as Array<{ itemId: unknown }>;

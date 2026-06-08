@@ -33,10 +33,6 @@ test.describe('Upload errors', () => {
     page,
     api,
   }) => {
-    await api.preferences.updatePreferences({
-      'image.autoGroupBatchUploads': true,
-    });
-
     const before = new Set(
       (await api.content.listCollections()).map((c) => c.id),
     );
@@ -63,39 +59,10 @@ test.describe('Upload errors', () => {
     ).toBe(true);
 
     await expect(page).toHaveURL(/\/upload/);
-    await expect(uploadPage.autoGroupBanner).toBeVisible();
 
-    await expect
-      .poll(
-        async () =>
-          (await api.content.listCollections())
-            .map((c) => c.id)
-            .filter((id) => !before.has(id)).length,
-        { timeout: 10000 },
-      )
-      .toBe(1);
-
-    const newCollectionId = (await api.content.listCollections())
-      .map((c) => c.id)
-      .find((id) => !before.has(id))!;
-
-    await expect
-      .poll(
-        async () => {
-          try {
-            return (await api.content.getCollectionItems(newCollectionId))
-              .length;
-          } catch {
-            return -1;
-          }
-        },
-        { timeout: 20000 },
-      )
-      .toBe(2);
-
-    await uploadPage.viewCollectionButton.click();
-
-    await page.waitForURL(/\/collection\//, { timeout: 30000 });
-    await expect(page.getByText(/items/).first()).toBeVisible();
+    const after = new Set(
+      (await api.content.listCollections()).map((c) => c.id),
+    );
+    expect([...after].filter((id) => !before.has(id))).toHaveLength(0);
   });
 });

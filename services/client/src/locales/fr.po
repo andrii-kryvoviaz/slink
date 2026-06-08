@@ -115,6 +115,7 @@ msgstr "Utilisateurs"
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/feature/Text/HashtagText/HashtagText.svelte
 #: src/feature/Upload/Dropzone/Dropzone.svelte
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
 #: src/routes/collection/[id]/+page.svelte
 #: src/routes/explore/+page.svelte
 #: src/ui/components/filter/filter-search.svelte
@@ -376,10 +377,6 @@ msgstr "<0/> Réessayer les échecs"
 #: src/feature/Upload/MultiUploadProgress.svelte
 msgid "<0/> Cancel"
 msgstr "<0/> Annuler"
-
-#: src/feature/Upload/MultiUploadProgress.svelte
-msgid "<0/> Done"
-msgstr "<0/> Terminé"
 
 #: src/feature/Upload/MultiUploadProgress.svelte
 msgid "Overall Progress"
@@ -947,7 +944,9 @@ msgstr "Échec du déplacement de l'étiquette. Veuillez réessayer."
 msgid "Failed to delete tag. Please try again."
 msgstr "Échec de la suppression de l'étiquette. Veuillez réessayer."
 
-#: src/lib/state/AutoGroupState.svelte.ts
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/lib/state/UploadPageState.svelte.ts
 msgid "Unnamed"
 msgstr "Sans nom"
 
@@ -4560,8 +4559,6 @@ msgstr "Mode d'affichage"
 msgid "Quick paste"
 msgstr "Collage rapide"
 
-#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
-#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
 #: src/feature/Upload/UploadOptions/VisibilityOption.svelte
 #: src/feature/Upload/UploadOptions/VisibilityOption.svelte
 msgid "Current"
@@ -4779,71 +4776,65 @@ msgstr "La taille du fichier assemblé ne correspond pas à la taille totale dé
 msgid "Missing chunks: {chunks}."
 msgstr "Fragments manquants : {chunks}."
 
-#: src/routes/preferences/+page.svelte
-msgid "Automatically group multiple uploads"
-msgstr "Regrouper automatiquement plusieurs téléversements"
-
-#: src/routes/preferences/+page.svelte
-msgid "When on, uploading two or more images at once creates a collection for them. When off, each image is uploaded on its own."
-msgstr "Lorsque cette option est activée, le téléversement simultané de deux images ou plus crée une collection pour celles-ci. Lorsqu'elle est désactivée, chaque image est téléversée séparément."
-
 #: src/routes/info/[id]/+page.svelte
 msgid "Image preview"
 msgstr "Aperçu de l'image"
 
-#. 0: collectionName
-#: src/feature/Upload/AutoGroupBanner.svelte
-msgid "Added these images to a new collection, {0}."
-msgstr "Ces images ont été ajoutées à une nouvelle collection, {0}."
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Collection created"
+msgstr "Collection créée"
 
-#: src/feature/Upload/AutoGroupBanner.svelte
-msgid "<0/> View"
-msgstr "<0/> Voir"
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "<0/> View collection"
+msgstr "<0/> Voir la collection"
 
-#: src/feature/Upload/AutoGroupBanner.svelte
-msgid "<0/> Undo"
-msgstr "<0/> Annuler"
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "<0/> Create collection"
+msgstr "<0/> Créer la collection"
 
-#: src/feature/Upload/AutoGroupBanner.svelte
-msgid "Uploaded without grouping. We could not create a collection."
-msgstr "Téléversées sans regroupement. Nous n'avons pas pu créer de collection."
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Optionally group this # image into a collection to view and share them as one."
+msgid_plural "Optionally group these # images into a collection to view and share them as one."
+msgstr[0] "Vous pouvez regrouper cette # image dans une collection pour les voir et les partager en une seule fois."
+msgstr[1] "Vous pouvez regrouper ces # images dans une collection pour les voir et les partager en une seule fois."
 
-#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
-#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
-#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
-msgid "Separate"
-msgstr "Séparées"
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Anyone with this link can view the collection."
+msgstr "Toute personne disposant de ce lien peut voir la collection."
 
-#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
-msgid "Group multiple uploads"
-msgstr "Regrouper plusieurs téléversements"
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Maybe later"
+msgstr "Peut-être plus tard"
 
-#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
-msgid "When you upload more than one image, Slink puts them into a new collection so you can view and share them together. Turn this off to upload them as separate images."
-msgstr "Lorsque vous téléversez plusieurs images, Slink les place dans une nouvelle collection afin que vous puissiez les voir et les partager ensemble. Désactivez cette option pour les téléverser comme des images séparées."
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Dismiss"
+msgstr "Ignorer"
 
-#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
-msgid "Batch uploads land in a new collection you can name, view, and share together."
-msgstr "Les téléversements groupés sont placés dans une nouvelle collection que vous pouvez nommer, voir et partager ensemble."
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "<0/> Unpublish"
+msgstr "<0/> Dépublier"
 
-#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
-msgid "Each image is uploaded on its own. No collection is created for you."
-msgstr "Chaque image est téléversée séparément. Aucune collection n'est créée pour vous."
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Create a collection from these images"
+msgstr "Créer une collection à partir de ces images"
 
-#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
-msgid "Click to switch."
-msgstr "Cliquez pour changer."
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Ready to share"
+msgstr "Prêt à partager"
 
 #: src/feature/Upload/MultiUploadProgress.svelte
-msgid "<0/> Go to uploads"
-msgstr "<0/> Aller aux téléversements"
+msgid "<0/> Upload more"
+msgstr "<0/> Téléverser plus"
 
-#: src/feature/Upload/AutoGroupBanner.svelte
-msgid "Auto-group"
-msgstr "Regroupement auto"
+#: src/feature/Upload/MultiUploadProgress.svelte
+msgid "View all <0/>"
+msgstr "Tout voir <0/>"
 
-#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
-#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
-#: src/feature/Upload/UploadOptions/AutoGroupOption.svelte
-msgid "Grouping"
-msgstr "Regroupement"
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Combine into a collection"
+msgstr "Regrouper dans une collection"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "<0/> Create publication"
+msgstr "<0/> Créer une publication"

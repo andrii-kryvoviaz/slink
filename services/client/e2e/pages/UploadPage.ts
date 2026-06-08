@@ -19,19 +19,6 @@ export class UploadPage extends BasePage {
   readonly visibilityToggle = this.page
     .getByRole('button', { name: /^(Public|Private)$/ })
     .first();
-  readonly autoGroupToggle = this.page
-    .getByRole('button', { name: /^(Grouping|Separate)$/ })
-    .and(this.page.locator('[data-slot="button"]'));
-  readonly autoGroupBanner = this.page.getByText(
-    /Added these images to a new collection/,
-  );
-  readonly autoGroupFailedBanner = this.page.getByText(
-    /Uploaded without grouping/,
-  );
-  readonly viewCollectionButton = this.page.getByRole('button', {
-    name: 'View',
-  });
-  readonly undoButton = this.page.getByRole('button', { name: 'Undo' });
   readonly goToUploadsButton = this.page.getByRole('button', {
     name: 'Go to uploads',
   });
@@ -39,7 +26,27 @@ export class UploadPage extends BasePage {
   readonly retryFailedButton = this.page.getByRole('button', {
     name: 'Retry Failed',
   });
-  readonly doneButton = this.page.getByRole('button', { name: 'Done' });
+  readonly uploadMoreButton = this.page.getByRole('button', {
+    name: 'Upload more',
+  });
+
+  readonly collectionBanner = this.page
+    .locator('div.rounded-xl')
+    .filter({
+      hasText: /Combine into a collection|Collection created|Ready to share/,
+    })
+    .last();
+  readonly collectionNameInput = this.page.getByPlaceholder('Unnamed');
+  readonly createPublicationButton = this.page.getByRole('button', {
+    name: 'Create publication',
+  });
+  readonly createCollectionButton = this.page.getByRole('button', {
+    name: 'Create collection',
+  });
+  readonly viewCollectionButton = this.page.getByRole('button', {
+    name: 'View collection',
+  });
+  readonly collectionCreatedHeading = this.page.getByText('Collection created');
 
   constructor(page: Page) {
     super(page);
