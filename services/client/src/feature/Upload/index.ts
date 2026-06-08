@@ -1,9 +1,8 @@
-export { default as AutoGroupBanner } from './AutoGroupBanner.svelte';
 export { default as Dropzone } from './Dropzone/Dropzone.svelte';
 export { default as MultiUploadProgress } from './MultiUploadProgress.svelte';
+export { default as UploadCollectionBanner } from './UploadCollectionBanner/UploadCollectionBanner.svelte';
 export { default as UploadForm } from './UploadForm.svelte';
 export { default as UploadFormWithOptions } from './UploadFormWithOptions.svelte';
-export { default as AutoGroupOption } from './UploadOptions/AutoGroupOption.svelte';
 export { default as CollectionsOption } from './UploadOptions/CollectionsOption.svelte';
 export { default as TagsOption } from './UploadOptions/TagsOption.svelte';
 export { default as UploadOptionItem } from './UploadOptions/UploadOptionItem.svelte';

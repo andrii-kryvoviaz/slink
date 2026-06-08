@@ -90,7 +90,6 @@ export class UserResource extends AbstractResource {
     defaultLandingPage,
     defaultVisibility,
     externalUploadAutoPublish,
-    autoGroupBatchUploads,
     displayLanguage,
   }: {
     defaultLicense?: string | null;
@@ -98,7 +97,6 @@ export class UserResource extends AbstractResource {
     defaultLandingPage?: string | null;
     defaultVisibility?: string | null;
     externalUploadAutoPublish?: boolean | null;
-    autoGroupBatchUploads?: boolean | null;
     displayLanguage?: string | null;
   }): Promise<EmptyResponse> {
     return this.patch('/user/preferences', {
@@ -108,7 +106,6 @@ export class UserResource extends AbstractResource {
         'navigation.landingPage': defaultLandingPage,
         'image.defaultVisibility': defaultVisibility,
         'image.externalUploadAutoPublish': externalUploadAutoPublish,
-        'image.autoGroupBatchUploads': autoGroupBatchUploads,
         'display.language': displayLanguage,
       },
     });

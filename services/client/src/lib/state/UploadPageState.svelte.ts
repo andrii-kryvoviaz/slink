@@ -1,3 +1,5 @@
+import { ApiClient } from '@slink/api';
+
 import type { Tag } from '@slink/api/Resources/TagResource';
 import type { CollectionResponse } from '@slink/api/Response';
 
@@ -5,10 +7,6 @@ import type { User } from '@slink/lib/auth/Type/User';
 import { uploadService } from '@slink/lib/services/upload.service';
 import type { UploadItem } from '@slink/lib/services/upload.service';
 import type { GlobalSettings } from '@slink/lib/settings/Type/GlobalSettings';
-import {
-  type AutoGroupState,
-  createAutoGroupState,
-} from '@slink/lib/state/AutoGroupState.svelte';
 import { useUploadHistoryFeed } from '@slink/lib/state/UploadHistoryFeed.svelte';
 import {
   type UploadTargetState,
@@ -18,6 +16,7 @@ import { useState } from '@slink/lib/state/core/ContextAwareState';
 import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
 import { navigateToUrl } from '@slink/utils/navigation';
+import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
 import { toast } from '@slink/utils/ui/toast-sonner.svelte';
 import { routes } from '@slink/utils/url';
 
@@ -26,7 +25,11 @@ interface UploadPageData {
   globalSettings: GlobalSettings | null;
   defaultVisibility: string | null;
   allowOnlyPublicImages: boolean;
-  autoGroupBatchUploads: boolean;
+}
+
+interface CreatedCollection {
+  id: string;
+  name: string;
 }
 
 type UploadHistoryFeed = ReturnType<typeof useUploadHistoryFeed>;
@@ -37,10 +40,12 @@ class UploadPageState {
   private _isMultiUpload: boolean = $state(false);
   private _uploads: UploadItem[] = $state([]);
   private _isUploading: boolean = $state(false);
+  private _createdCollection: CreatedCollection | null = $state(null);
+  private _collectionPending: boolean = $state(false);
+  private _batchUploadCompleted: boolean = $state(false);
 
   private _pageData!: UploadPageData;
   private _uploadTarget!: UploadTargetState;
-  private _autoGroup!: AutoGroupState;
   private _historyFeedState!: UploadHistoryFeed;
 
   initialize(pageData: UploadPageData, url: URL) {
@@ -49,10 +54,12 @@ class UploadPageState {
     this._isMultiUpload = false;
     this._uploads = [];
     this._isUploading = false;
+    this._createdCollection = null;
+    this._collectionPending = false;
+    this._batchUploadCompleted = false;
 
     this._pageData = pageData;
     this._uploadTarget = createUploadTargetState(url);
-    this._autoGroup = createAutoGroupState(pageData.autoGroupBatchUploads);
     this._historyFeedState = useUploadHistoryFeed();
 
     $effect(() => {
@@ -104,34 +111,40 @@ class UploadPageState {
     return this._uploadTarget;
   }
 
-  get autoGroup(): AutoGroupState {
-    return this._autoGroup;
+  get createdCollection(): CreatedCollection | null {
+    return this._createdCollection;
   }
 
-  async handleViewAutoCollection(): Promise<void> {
-    const collection = this._autoGroup.createdCollection;
-    if (!collection) return;
-    await navigateToUrl(routes.collection.detail(collection.id));
+  get collectionPending(): boolean {
+    return this._collectionPending;
   }
 
-  async handleUndoAutoCollection(): Promise<void> {
-    const ok = await this._autoGroup.undo();
-    if (ok) {
-      this._selectedCollections = [];
-      this._historyFeedState.invalidate();
-    }
-  }
-
-  get showViewUploads(): boolean {
+  get showCollectionBanner(): boolean {
     return (
       this._isMultiUpload &&
       !!this._pageData.user &&
-      !this._autoGroup.createdCollection
+      this._selectedCollections.length === 0 &&
+      !this._uploadTarget.redirectUrl &&
+      this._succeededUploadIds.length > 0 &&
+      this._batchUploadCompleted
     );
+  }
+
+  get showViewUploads(): boolean {
+    return this._isMultiUpload && !!this._pageData.user;
   }
 
   async handleViewUploads(): Promise<void> {
     await navigateToUrl(routes.general.history);
+  }
+
+  async handleViewCreatedCollection(): Promise<void> {
+    if (!this._createdCollection) return;
+    await navigateToUrl(routes.collection.detail(this._createdCollection.id));
+  }
+
+  async createCollection(name: string): Promise<CreatedCollection | null> {
+    return this._commitCollection(name);
   }
 
   async handleUpload(files: File[]) {
@@ -143,10 +156,6 @@ class UploadPageState {
     }
 
     this._uploads = uploadService.createUploadItems(files);
-
-    if (isBatch && this._autoGroup.enabled) {
-      await this._ensureTargetCollection();
-    }
 
     const { tagIds, collectionIds } = this._getUploadOptions();
 
@@ -164,7 +173,9 @@ class UploadPageState {
       },
     );
 
-    await this._finalizeAutoCollection();
+    if (isBatch) {
+      this._batchUploadCompleted = true;
+    }
 
     if (failed.length > 0 && !isBatch) {
       this._isUploading = false;
@@ -179,20 +190,15 @@ class UploadPageState {
     this._isUploading = false;
   }
 
-  async handleCancelMultiUpload() {
+  handleCancelMultiUpload() {
     uploadService.cancelAllUploads();
-    await this._finalizeAutoCollection();
-    this._isMultiUpload = false;
-    this._uploads = [];
-    this._autoGroup.reset();
+    this._resetMultiUpload();
   }
 
   handleGoBackToUploadForm() {
-    this._isMultiUpload = false;
-    this._uploads = [];
     this._selectedTags = [];
     this._selectedCollections = [];
-    this._autoGroup.reset();
+    this._resetMultiUpload();
   }
 
   async handleRetryFailedUploads() {
@@ -210,10 +216,6 @@ class UploadPageState {
 
     this._uploads = [...this._uploads];
 
-    if (this._autoGroup.enabled && this._selectedCollections.length === 0) {
-      await this._ensureTargetCollection();
-    }
-
     const { tagIds, collectionIds } = this._getUploadOptions();
 
     const { successful } = await uploadService.uploadFiles(failedUploads, {
@@ -226,8 +228,6 @@ class UploadPageState {
         console.error('Retry upload error for file:', _item.file.name, error);
       },
     });
-
-    await this._finalizeAutoCollection();
 
     if (successful.length > 0) {
       this._historyFeedState.invalidate();
@@ -244,6 +244,52 @@ class UploadPageState {
 
   dismissSuccess() {
     this._uploads = [];
+  }
+
+  private get _succeededUploadIds(): string[] {
+    return this._uploads
+      .filter((item) => item.status === 'completed' && item.result?.id)
+      .map((item) => item.result!.id);
+  }
+
+  private async _commitCollection(
+    name: string,
+  ): Promise<CreatedCollection | null> {
+    if (this._collectionPending) return this._createdCollection;
+
+    const imageIds = this._succeededUploadIds;
+    if (imageIds.length === 0) return null;
+
+    this._collectionPending = true;
+
+    try {
+      const collection = await ApiClient.collection.create({
+        name: name.trim() || 'Unnamed',
+      });
+
+      const assignments = Object.fromEntries(
+        imageIds.map((id) => [id, { collectionIds: [collection.id] }]),
+      );
+      await ApiClient.image.batchReassign(assignments);
+
+      this._createdCollection = { id: collection.id, name: collection.name };
+      this._historyFeedState.invalidate();
+
+      return this._createdCollection;
+    } catch (error: unknown) {
+      printErrorsAsToastMessage(error as Error);
+      return null;
+    } finally {
+      this._collectionPending = false;
+    }
+  }
+
+  private _resetMultiUpload() {
+    this._isMultiUpload = false;
+    this._uploads = [];
+    this._createdCollection = null;
+    this._collectionPending = false;
+    this._batchUploadCompleted = false;
   }
 
   private get _targetCollection(): CollectionResponse | undefined {
@@ -282,10 +328,6 @@ class UploadPageState {
 
     this._historyFeedState.invalidate();
 
-    if (this._autoGroup.createdCollection) {
-      return;
-    }
-
     if (
       this._isMultiUpload &&
       this._selectedCollections.length === 0 &&
@@ -305,32 +347,6 @@ class UploadPageState {
         (collection) => collection.id,
       ),
     };
-  }
-
-  private async _ensureTargetCollection(): Promise<
-    CollectionResponse | undefined
-  > {
-    if (this._selectedCollections.length > 0) {
-      return this._selectedCollections[0];
-    }
-
-    if (!this._pageData.user) return undefined;
-
-    const collection = await this._autoGroup.create();
-    if (collection) {
-      this._selectedCollections = [collection];
-    }
-    return collection;
-  }
-
-  private async _finalizeAutoCollection(): Promise<void> {
-    if (!this._autoGroup.createdCollection) return;
-
-    const anyCompleted = this._uploads.some((u) => u.status === 'completed');
-    if (anyCompleted) return;
-
-    await this._autoGroup.discardCreated();
-    this._selectedCollections = [];
   }
 }
 

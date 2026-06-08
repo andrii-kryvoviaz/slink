@@ -51,7 +51,6 @@ export const themeIcons: string[] = [
   'ph:sign-in',
   'lucide:clock',
   'lucide:log-in',
-  'ph:plus-fill',
   'ph:x',
   'ph:lock-simple',
   'ph:arrow-right',
@@ -241,6 +240,5 @@ export const themeIcons: string[] = [
   'ph:file-image',
   'ph:magic-wand',
   'lucide:list-tree',
-  'ph:arrow-u-up-left',
-  'tabler:stack-filled',
+  'ph:link-simple',
 ];

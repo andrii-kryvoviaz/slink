@@ -227,22 +227,6 @@
                 bind:checked={state.externalUploadAutoPublish}
               />
             </SettingItem>
-
-            <SettingItem>
-              {#snippet label()}
-                Automatically group multiple uploads
-              {/snippet}
-              {#snippet hint()}
-                When on, uploading two or more images at once creates a
-                collection for them. When off, each image is uploaded on its
-                own.
-              {/snippet}
-              <Switch
-                id="autoGroupBatchUploads"
-                name="autoGroupBatchUploads"
-                bind:checked={state.autoGroupBatchUploads}
-              />
-            </SettingItem>
           </div>
         </section>
       {/if}

@@ -7,13 +7,10 @@ export const load: PageServerLoad = async ({ locals }) => {
     globalSettings?.image?.allowOnlyPublicImages ?? false;
   const defaultVisibility =
     userPreferences?.['image.defaultVisibility'] ?? null;
-  const autoGroupBatchUploads =
-    userPreferences?.['image.autoGroupBatchUploads'] ?? true;
 
   return {
     user,
     defaultVisibility,
     allowOnlyPublicImages,
-    autoGroupBatchUploads,
   };
 };

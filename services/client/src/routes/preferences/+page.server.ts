@@ -25,7 +25,6 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
     'navigation.landingPage': null,
     'image.defaultVisibility': null,
     'image.externalUploadAutoPublish': null,
-    'image.autoGroupBatchUploads': true,
     'display.language': null,
   };
 
@@ -63,7 +62,6 @@ export const actions: Actions = {
       defaultLandingPage,
       defaultVisibility,
       externalUploadAutoPublish,
-      autoGroupBatchUploads,
       displayLanguage,
     } = await formData(request);
 
@@ -74,7 +72,6 @@ export const actions: Actions = {
         defaultLandingPage: defaultLandingPage || null,
         defaultVisibility: defaultVisibility || null,
         externalUploadAutoPublish: externalUploadAutoPublish === 'true',
-        autoGroupBatchUploads: autoGroupBatchUploads === 'true',
         displayLanguage: displayLanguage || null,
       });
     } catch (e) {
