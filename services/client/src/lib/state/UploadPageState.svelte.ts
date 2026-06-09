@@ -16,6 +16,7 @@ import { useState } from '@slink/lib/state/core/ContextAwareState';
 import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
 import { navigateToUrl } from '@slink/utils/navigation';
+import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
 import { toast } from '@slink/utils/ui/toast-sonner.svelte';
 import { routes } from '@slink/utils/url';
 
@@ -26,6 +27,11 @@ interface UploadPageData {
   allowOnlyPublicImages: boolean;
 }
 
+interface CreatedCollection {
+  id: string;
+  name: string;
+}
+
 type UploadHistoryFeed = ReturnType<typeof useUploadHistoryFeed>;
 
 class UploadPageState {
@@ -34,6 +40,9 @@ class UploadPageState {
   private _isMultiUpload: boolean = $state(false);
   private _uploads: UploadItem[] = $state([]);
   private _isUploading: boolean = $state(false);
+  private _createdCollection: CreatedCollection | null = $state(null);
+  private _collectionPending: boolean = $state(false);
+  private _batchUploadCompleted: boolean = $state(false);
 
   private _pageData!: UploadPageData;
   private _uploadTarget!: UploadTargetState;
@@ -45,6 +54,9 @@ class UploadPageState {
     this._isMultiUpload = false;
     this._uploads = [];
     this._isUploading = false;
+    this._createdCollection = null;
+    this._collectionPending = false;
+    this._batchUploadCompleted = false;
 
     this._pageData = pageData;
     this._uploadTarget = createUploadTargetState(url);
@@ -99,6 +111,42 @@ class UploadPageState {
     return this._uploadTarget;
   }
 
+  get createdCollection(): CreatedCollection | null {
+    return this._createdCollection;
+  }
+
+  get collectionPending(): boolean {
+    return this._collectionPending;
+  }
+
+  get showCollectionBanner(): boolean {
+    return (
+      this._isMultiUpload &&
+      !!this._pageData.user &&
+      this._selectedCollections.length === 0 &&
+      !this._uploadTarget.redirectUrl &&
+      this._succeededUploadIds.length > 0 &&
+      this._batchUploadCompleted
+    );
+  }
+
+  get showViewUploads(): boolean {
+    return this._isMultiUpload && !!this._pageData.user;
+  }
+
+  async handleViewUploads(): Promise<void> {
+    await navigateToUrl(routes.general.history);
+  }
+
+  async handleViewCreatedCollection(): Promise<void> {
+    if (!this._createdCollection) return;
+    await navigateToUrl(routes.collection.detail(this._createdCollection.id));
+  }
+
+  async createCollection(name: string): Promise<CreatedCollection | null> {
+    return this._commitCollection(name);
+  }
+
   async handleUpload(files: File[]) {
     const isBatch = files.length > 1;
 
@@ -108,10 +156,6 @@ class UploadPageState {
     }
 
     this._uploads = uploadService.createUploadItems(files);
-
-    if (isBatch) {
-      await this._ensureTargetCollection();
-    }
 
     const { tagIds, collectionIds } = this._getUploadOptions();
 
@@ -129,6 +173,10 @@ class UploadPageState {
       },
     );
 
+    if (isBatch) {
+      this._batchUploadCompleted = true;
+    }
+
     if (failed.length > 0 && !isBatch) {
       this._isUploading = false;
       toast.error(failed[0].error ?? messages.general.somethingWentWrong);
@@ -144,13 +192,13 @@ class UploadPageState {
 
   handleCancelMultiUpload() {
     uploadService.cancelAllUploads();
-    this._isMultiUpload = false;
-    this._uploads = [];
+    this._resetMultiUpload();
   }
 
   handleGoBackToUploadForm() {
-    this._isMultiUpload = false;
-    this._uploads = [];
+    this._selectedTags = [];
+    this._selectedCollections = [];
+    this._resetMultiUpload();
   }
 
   async handleRetryFailedUploads() {
@@ -170,7 +218,7 @@ class UploadPageState {
 
     const { tagIds, collectionIds } = this._getUploadOptions();
 
-    await uploadService.uploadFiles(failedUploads, {
+    const { successful } = await uploadService.uploadFiles(failedUploads, {
       tagIds,
       collectionIds,
       onProgress: () => {
@@ -180,6 +228,19 @@ class UploadPageState {
         console.error('Retry upload error for file:', _item.file.name, error);
       },
     });
+
+    if (successful.length > 0) {
+      this._historyFeedState.invalidate();
+      if (this._createdCollection) {
+        const retriedIds = successful
+          .map((item) => item.result?.id)
+          .filter((id): id is string => Boolean(id));
+        await this._assignImagesToCollection(
+          this._createdCollection.id,
+          retriedIds,
+        );
+      }
+    }
   }
 
   setSelectedTags(tags: Tag[]) {
@@ -192,6 +253,67 @@ class UploadPageState {
 
   dismissSuccess() {
     this._uploads = [];
+  }
+
+  private get _succeededUploadIds(): string[] {
+    return this._uploads
+      .filter((item) => item.status === 'completed' && item.result?.id)
+      .map((item) => item.result!.id);
+  }
+
+  private async _assignImagesToCollection(
+    collectionId: string,
+    imageIds: string[],
+  ): Promise<void> {
+    if (imageIds.length === 0) return;
+    const assignments = Object.fromEntries(
+      imageIds.map((id) => [id, { collectionIds: [collectionId] }]),
+    );
+    try {
+      const result = await ApiClient.image.batchReassign(assignments);
+      if (result.failed.length > 0) {
+        toast.error(messages.collection.failedToAddImages);
+      }
+    } catch (error: unknown) {
+      printErrorsAsToastMessage(error as Error);
+    }
+  }
+
+  private async _commitCollection(
+    name: string,
+  ): Promise<CreatedCollection | null> {
+    if (this._collectionPending) return this._createdCollection;
+
+    const imageIds = this._succeededUploadIds;
+    if (imageIds.length === 0) return null;
+
+    this._collectionPending = true;
+
+    try {
+      const collection = await ApiClient.collection.create({
+        name: name.trim() || 'Unnamed',
+      });
+
+      await this._assignImagesToCollection(collection.id, imageIds);
+
+      this._createdCollection = { id: collection.id, name: collection.name };
+      this._historyFeedState.invalidate();
+
+      return this._createdCollection;
+    } catch (error: unknown) {
+      printErrorsAsToastMessage(error as Error);
+      return null;
+    } finally {
+      this._collectionPending = false;
+    }
+  }
+
+  private _resetMultiUpload() {
+    this._isMultiUpload = false;
+    this._uploads = [];
+    this._createdCollection = null;
+    this._collectionPending = false;
+    this._batchUploadCompleted = false;
   }
 
   private get _targetCollection(): CollectionResponse | undefined {
@@ -230,6 +352,14 @@ class UploadPageState {
 
     this._historyFeedState.invalidate();
 
+    if (
+      this._isMultiUpload &&
+      this._selectedCollections.length === 0 &&
+      !this._uploadTarget.redirectUrl
+    ) {
+      return;
+    }
+
     const destination = this._resolveNavigationUrl(successful);
     await navigateToUrl(destination);
   }
@@ -241,27 +371,6 @@ class UploadPageState {
         (collection) => collection.id,
       ),
     };
-  }
-
-  private async _ensureTargetCollection(): Promise<
-    CollectionResponse | undefined
-  > {
-    if (this._selectedCollections.length > 0) {
-      return this._selectedCollections[0];
-    }
-
-    if (!this._pageData.user) return undefined;
-
-    try {
-      const collection = await ApiClient.collection.create({
-        name: 'Unnamed',
-      });
-      this._selectedCollections = [collection];
-      return collection;
-    } catch (error) {
-      console.error('Failed to create unnamed collection:', error);
-      return undefined;
-    }
   }
 }
 

@@ -99,10 +99,10 @@
               variant="glass"
               size="sm"
               rounded="full"
+              spacing="relaxed"
               id="uploadImageLink"
-              class="flex flex-row gap-2"
             >
-              <Icon icon="ph:plus-fill" class="h-3 w-3 sm:h-4 sm:w-4" />
+              <Icon icon="ph:upload-simple" class="h-3 w-3 sm:h-4 sm:w-4" />
               Upload
             </Button>
           {/snippet}

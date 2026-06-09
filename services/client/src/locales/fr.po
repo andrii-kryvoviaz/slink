@@ -115,6 +115,7 @@ msgstr "Utilisateurs"
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/feature/Text/HashtagText/HashtagText.svelte
 #: src/feature/Upload/Dropzone/Dropzone.svelte
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
 #: src/routes/collection/[id]/+page.svelte
 #: src/routes/explore/+page.svelte
 #: src/ui/components/filter/filter-search.svelte
@@ -376,10 +377,6 @@ msgstr "<0/> Réessayer les échecs"
 #: src/feature/Upload/MultiUploadProgress.svelte
 msgid "<0/> Cancel"
 msgstr "<0/> Annuler"
-
-#: src/feature/Upload/MultiUploadProgress.svelte
-msgid "<0/> Done"
-msgstr "<0/> Terminé"
 
 #: src/feature/Upload/MultiUploadProgress.svelte
 msgid "Overall Progress"
@@ -947,6 +944,8 @@ msgstr "Échec du déplacement de l'étiquette. Veuillez réessayer."
 msgid "Failed to delete tag. Please try again."
 msgstr "Échec de la suppression de l'étiquette. Veuillez réessayer."
 
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
 #: src/lib/state/UploadPageState.svelte.ts
 msgid "Unnamed"
 msgstr "Sans nom"
@@ -4776,3 +4775,67 @@ msgstr "La taille du fichier assemblé ne correspond pas à la taille totale dé
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Missing chunks: {chunks}."
 msgstr "Fragments manquants : {chunks}."
+
+#: src/routes/info/[id]/+page.svelte
+msgid "Image preview"
+msgstr "Aperçu de l'image"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Collection created"
+msgstr "Collection créée"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "<0/> View collection"
+msgstr "<0/> Voir la collection"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "<0/> Create collection"
+msgstr "<0/> Créer la collection"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Optionally group this # image into a collection to view and share them as one."
+msgid_plural "Optionally group these # images into a collection to view and share them as one."
+msgstr[0] "Vous pouvez regrouper cette # image dans une collection pour les voir et les partager en une seule fois."
+msgstr[1] "Vous pouvez regrouper ces # images dans une collection pour les voir et les partager en une seule fois."
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Anyone with this link can view the collection."
+msgstr "Toute personne disposant de ce lien peut voir la collection."
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Maybe later"
+msgstr "Peut-être plus tard"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "<0/> Unpublish"
+msgstr "<0/> Dépublier"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Create a collection from these images"
+msgstr "Créer une collection à partir de ces images"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Ready to share"
+msgstr "Prêt à partager"
+
+#: src/feature/Upload/MultiUploadProgress.svelte
+msgid "<0/> Upload more"
+msgstr "<0/> Téléverser plus"
+
+#: src/feature/Upload/MultiUploadProgress.svelte
+msgid "View all <0/>"
+msgstr "Tout voir <0/>"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Combine into a collection"
+msgstr "Regrouper dans une collection"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "<0/> Create publication"
+msgstr "<0/> Créer une publication"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Some images could not be added to the collection"
+msgstr "Certaines images n'ont pas pu être ajoutées à la collection"

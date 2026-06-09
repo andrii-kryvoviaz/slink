@@ -115,6 +115,7 @@ msgstr "Użytkownicy"
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/feature/Text/HashtagText/HashtagText.svelte
 #: src/feature/Upload/Dropzone/Dropzone.svelte
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
 #: src/routes/collection/[id]/+page.svelte
 #: src/routes/explore/+page.svelte
 #: src/ui/components/filter/filter-search.svelte
@@ -376,10 +377,6 @@ msgstr "<0/> Ponów nieudane"
 #: src/feature/Upload/MultiUploadProgress.svelte
 msgid "<0/> Cancel"
 msgstr "<0/> Anuluj"
-
-#: src/feature/Upload/MultiUploadProgress.svelte
-msgid "<0/> Done"
-msgstr "<0/> Gotowe"
 
 #: src/feature/Upload/MultiUploadProgress.svelte
 msgid "Overall Progress"
@@ -947,6 +944,8 @@ msgstr "Nie udało się przenieść tagu. Spróbuj ponownie."
 msgid "Failed to delete tag. Please try again."
 msgstr "Nie udało się usunąć tagu. Spróbuj ponownie."
 
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
 #: src/lib/state/UploadPageState.svelte.ts
 msgid "Unnamed"
 msgstr "Bez nazwy"
@@ -4790,3 +4789,69 @@ msgstr "Rozmiar złożonego pliku nie odpowiada zadeklarowanemu całkowitemu roz
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Missing chunks: {chunks}."
 msgstr "Brakujące fragmenty: {chunks}."
+
+#: src/routes/info/[id]/+page.svelte
+msgid "Image preview"
+msgstr "Podgląd obrazu"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Collection created"
+msgstr "Kolekcja utworzona"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "<0/> View collection"
+msgstr "<0/> Zobacz kolekcję"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "<0/> Create collection"
+msgstr "<0/> Utwórz kolekcję"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Optionally group this # image into a collection to view and share them as one."
+msgid_plural "Optionally group these # images into a collection to view and share them as one."
+msgstr[0] "Opcjonalnie zgrupuj ten # obraz w kolekcję, aby wyświetlać i udostępniać go jako całość."
+msgstr[1] "Opcjonalnie zgrupuj te # obrazy w kolekcję, aby wyświetlać i udostępniać je jako całość."
+msgstr[2] "Opcjonalnie zgrupuj te # obrazów w kolekcję, aby wyświetlać i udostępniać je jako całość."
+msgstr[3] "Opcjonalnie zgrupuj te # obrazów w kolekcję, aby wyświetlać i udostępniać je jako całość."
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Anyone with this link can view the collection."
+msgstr "Każdy, kto ma ten link, może wyświetlić kolekcję."
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Maybe later"
+msgstr "Może później"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "<0/> Unpublish"
+msgstr "<0/> Cofnij publikację"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Create a collection from these images"
+msgstr "Utwórz kolekcję z tych obrazów"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Ready to share"
+msgstr "Gotowe do udostępnienia"
+
+#: src/feature/Upload/MultiUploadProgress.svelte
+msgid "<0/> Upload more"
+msgstr "<0/> Prześlij więcej"
+
+#: src/feature/Upload/MultiUploadProgress.svelte
+msgid "View all <0/>"
+msgstr "Zobacz wszystkie <0/>"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Combine into a collection"
+msgstr "Połącz w kolekcję"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "<0/> Create publication"
+msgstr "<0/> Utwórz publikację"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Some images could not be added to the collection"
+msgstr "Nie udało się dodać niektórych obrazów do kolekcji"

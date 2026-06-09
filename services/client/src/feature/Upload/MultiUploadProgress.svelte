@@ -28,6 +28,7 @@
     onCancel?: () => void;
     onRetryAll?: () => void;
     onGoBack?: () => void;
+    onViewUploads?: () => void;
     class?: string;
   }
 
@@ -36,6 +37,7 @@
     onCancel,
     onRetryAll,
     onGoBack,
+    onViewUploads,
     class: className,
   }: Props = $props();
 
@@ -98,22 +100,35 @@
             variant="soft-red"
             size="sm"
             rounded="full"
+            spacing="relaxed"
             onclick={onRetryAll}
           >
-            <Icon icon="ph:arrow-clockwise" class="w-4 h-4 mr-2" />
+            <Icon icon="ph:arrow-clockwise" class="w-4 h-4" />
             Retry Failed
           </Button>
         {/if}
 
         {#if onCancel && !isCompleted}
-          <Button variant="glass" size="sm" rounded="full" onclick={onCancel}>
-            <Icon icon="ph:x" class="w-4 h-4 mr-2" />
+          <Button
+            variant="glass"
+            size="sm"
+            rounded="full"
+            spacing="relaxed"
+            onclick={onCancel}
+          >
+            <Icon icon="ph:x" class="w-4 h-4" />
             Cancel
           </Button>
         {:else if isCompleted && onGoBack}
-          <Button variant="glass" size="sm" rounded="full" onclick={onGoBack}>
-            <Icon icon="ph:check" class="w-4 h-4 mr-2" />
-            Done
+          <Button
+            variant="glass"
+            size="sm"
+            rounded="full"
+            spacing="relaxed"
+            onclick={onGoBack}
+          >
+            <Icon icon="ph:upload-simple" class="w-4 h-4" />
+            Upload more
           </Button>
         {/if}
       </div>
@@ -205,5 +220,26 @@
         {/each}
       </div>
     </ScrollArea>
+
+    {#if isCompleted && onViewUploads}
+      <div
+        class="mt-3 pt-3 flex items-center justify-between border-t border-slate-200/50 dark:border-slate-700/50"
+      >
+        <span class="text-xs text-slate-500 dark:text-slate-400">
+          {bytesToSize(totalBytes)}
+        </span>
+        <button
+          type="button"
+          onclick={onViewUploads}
+          class="group/link inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded"
+        >
+          View all
+          <Icon
+            icon="ph:arrow-right"
+            class="w-3.5 h-3.5 transition-transform duration-200 group-hover/link:translate-x-0.5"
+          />
+        </button>
+      </div>
+    {/if}
   </div>
 </div>

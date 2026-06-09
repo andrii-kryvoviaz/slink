@@ -115,6 +115,7 @@ msgstr "用户"
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/feature/Text/HashtagText/HashtagText.svelte
 #: src/feature/Upload/Dropzone/Dropzone.svelte
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
 #: src/routes/collection/[id]/+page.svelte
 #: src/routes/explore/+page.svelte
 #: src/ui/components/filter/filter-search.svelte
@@ -376,10 +377,6 @@ msgstr "<0/> 重试失败项"
 #: src/feature/Upload/MultiUploadProgress.svelte
 msgid "<0/> Cancel"
 msgstr "<0/> 取消"
-
-#: src/feature/Upload/MultiUploadProgress.svelte
-msgid "<0/> Done"
-msgstr "<0/> 完成"
 
 #: src/feature/Upload/MultiUploadProgress.svelte
 msgid "Overall Progress"
@@ -947,6 +944,8 @@ msgstr "移动标签失败，请重试。"
 msgid "Failed to delete tag. Please try again."
 msgstr "删除标签失败，请重试。"
 
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
 #: src/lib/state/UploadPageState.svelte.ts
 msgid "Unnamed"
 msgstr "未命名"
@@ -4770,3 +4769,67 @@ msgstr "组装后的文件大小与声明的总大小不一致。"
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Missing chunks: {chunks}."
 msgstr "缺少分块：{chunks}。"
+
+#: src/routes/info/[id]/+page.svelte
+msgid "Image preview"
+msgstr "图片预览"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Collection created"
+msgstr "合集已创建"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "<0/> View collection"
+msgstr "<0/> 查看合集"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "<0/> Create collection"
+msgstr "<0/> 创建合集"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Optionally group this # image into a collection to view and share them as one."
+msgid_plural "Optionally group these # images into a collection to view and share them as one."
+msgstr[0] "可将这 # 张图片归入一个合集，作为整体查看和分享（可选）。"
+msgstr[1] "可将这 # 张图片归入一个合集，作为整体查看和分享（可选）。"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Anyone with this link can view the collection."
+msgstr "任何人只要拥有此链接即可查看该合集。"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Maybe later"
+msgstr "稍后再说"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "<0/> Unpublish"
+msgstr "<0/> 取消发布"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Create a collection from these images"
+msgstr "用这些图片创建合集"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Ready to share"
+msgstr "可以分享了"
+
+#: src/feature/Upload/MultiUploadProgress.svelte
+msgid "<0/> Upload more"
+msgstr "<0/> 上传更多"
+
+#: src/feature/Upload/MultiUploadProgress.svelte
+msgid "View all <0/>"
+msgstr "查看全部 <0/>"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "Combine into a collection"
+msgstr "合并为合集"
+
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+msgid "<0/> Create publication"
+msgstr "<0/> 创建发布"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Some images could not be added to the collection"
+msgstr "部分图片无法添加到合集"

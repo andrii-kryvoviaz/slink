@@ -8,6 +8,7 @@ import type {
   ButtonProps,
   ButtonRounded,
   ButtonSize,
+  ButtonSpacing,
   ButtonStatus,
   ButtonVariant,
 } from './button.svelte';
@@ -24,6 +25,7 @@ export {
   type ButtonProps,
   type ButtonProps as ButtonAttributes,
   type ButtonSize,
+  type ButtonSpacing,
   type ButtonVariant,
   type ButtonRounded,
   type ButtonFontWeight,

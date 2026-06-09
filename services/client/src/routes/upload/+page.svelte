@@ -1,13 +1,21 @@
 <script lang="ts">
+  import { ApiClient } from '@slink/api';
   import {
     Banner,
     BannerAction,
     BannerContent,
     BannerIcon,
   } from '@slink/feature/Layout';
-  import { UploadFormWithOptions, UploadSuccess } from '@slink/feature/Upload';
-  import MultiUploadProgress from '@slink/feature/Upload/MultiUploadProgress.svelte';
+  import * as Share from '@slink/feature/Share';
+  import type { ShareState } from '@slink/feature/Share';
+  import {
+    MultiUploadProgress,
+    UploadCollectionBanner,
+    UploadFormWithOptions,
+    UploadSuccess,
+  } from '@slink/feature/Upload';
   import type { Visibility } from '@slink/feature/Upload/UploadOptions';
+  import { untrack } from 'svelte';
 
   import { page } from '$app/state';
   import { fade } from 'svelte/transition';
@@ -22,7 +30,36 @@
 
   let { data }: Props = $props();
 
-  const state = useUploadPageState(data, page.url);
+  const uploadState = useUploadPageState(data, page.url);
+
+  let share: ShareState | null = $state(null);
+  let lastSharedCollectionId: string | null = $state(null);
+
+  $effect(() => {
+    const collection = uploadState.createdCollection;
+
+    untrack(() => {
+      if (!collection) {
+        share = null;
+        lastSharedCollectionId = null;
+        return;
+      }
+
+      if (collection.id === lastSharedCollectionId) {
+        return;
+      }
+
+      lastSharedCollectionId = collection.id;
+      share = Share.createShare({
+        fetchShare: () => ApiClient.collection.share(collection.id),
+      });
+    });
+  });
+
+  const completedCount = $derived(
+    uploadState.uploads.filter((upload) => upload.status === 'completed')
+      .length,
+  );
 </script>
 
 <svelte:head>
@@ -35,18 +72,33 @@
       in:fade={{ duration: 500, delay: 100 }}
       class="w-full max-w-2xl mx-auto"
     >
-      {#if state.showSuccess}
+      {#if uploadState.showSuccess}
         <UploadSuccess
-          onUploadAnother={() => state.dismissSuccess()}
+          onUploadAnother={() => uploadState.dismissSuccess()}
           isGuestUser={!data.user}
         />
-      {:else if state.isMultiUpload}
-        <MultiUploadProgress
-          uploads={state.uploads}
-          onCancel={() => state.handleCancelMultiUpload()}
-          onRetryAll={() => state.handleRetryFailedUploads()}
-          onGoBack={() => state.handleGoBackToUploadForm()}
-        />
+      {:else if uploadState.isMultiUpload}
+        <div class="space-y-3">
+          {#if uploadState.showCollectionBanner}
+            <UploadCollectionBanner
+              count={completedCount}
+              created={uploadState.createdCollection}
+              pending={uploadState.collectionPending}
+              {share}
+              onCreate={(name) => uploadState.createCollection(name)}
+              onView={() => uploadState.handleViewCreatedCollection()}
+            />
+          {/if}
+          <MultiUploadProgress
+            uploads={uploadState.uploads}
+            onCancel={() => uploadState.handleCancelMultiUpload()}
+            onRetryAll={() => uploadState.handleRetryFailedUploads()}
+            onGoBack={() => uploadState.handleGoBackToUploadForm()}
+            onViewUploads={uploadState.showViewUploads
+              ? () => uploadState.handleViewUploads()
+              : undefined}
+          />
+        </div>
       {:else}
         {#if !data.user}
           <div class="mb-8">
@@ -93,17 +145,17 @@
         {/if}
 
         <UploadFormWithOptions
-          disabled={state.disabled}
-          processing={state.processing}
+          disabled={uploadState.disabled}
+          processing={uploadState.processing}
           allowMultiple={true}
-          selectedTags={state.selectedTags}
-          selectedCollections={state.selectedCollections}
+          selectedTags={uploadState.selectedTags}
+          selectedCollections={uploadState.selectedCollections}
           visibility={(data.defaultVisibility as Visibility) ?? 'private'}
           allowOnlyPublicImages={data.allowOnlyPublicImages}
-          onTagsChange={(tags) => state.setSelectedTags(tags)}
+          onTagsChange={(tags) => uploadState.setSelectedTags(tags)}
           onCollectionsChange={(collections) =>
-            state.setSelectedCollections(collections)}
-          onchange={(files) => state.handleUpload(files)}
+            uploadState.setSelectedCollections(collections)}
+          onchange={(files) => uploadState.handleUpload(files)}
         />
       {/if}
     </div>

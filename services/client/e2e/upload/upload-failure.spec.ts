@@ -273,9 +273,11 @@ test.describe('Upload failure feedback', () => {
     await expect(page.getByRole('button', { name: 'Retry Failed' })).toBeHidden(
       { timeout: 30000 },
     );
-    await expect(page.getByRole('button', { name: 'Done' })).toBeVisible({
-      timeout: 30000,
-    });
+    await expect(page.getByRole('button', { name: 'Upload more' })).toBeVisible(
+      {
+        timeout: 30000,
+      },
+    );
     await expect(page.getByText('1 failed', { exact: false })).toBeHidden();
   });
 });

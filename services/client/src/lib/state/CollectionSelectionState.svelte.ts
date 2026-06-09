@@ -49,8 +49,16 @@ export class CollectionSelectionState {
 
     this._isLoading = true;
     try {
-      const response = await ApiClient.collection.getList(1);
-      this._collections = response.data;
+      const collections: CollectionResponse[] = [];
+      let cursor: string | undefined;
+
+      do {
+        const response = await ApiClient.collection.getList(50, cursor);
+        collections.push(...response.data);
+        cursor = response.meta.nextCursor;
+      } while (cursor);
+
+      this._collections = collections;
       this._isLoaded = true;
     } catch {
       toast.error(messages.collection.failedToLoad);

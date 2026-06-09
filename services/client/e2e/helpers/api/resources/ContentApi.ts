@@ -7,8 +7,46 @@ export interface ImageDetail {
   mimeType: string;
 }
 
+export interface CollectionSummary {
+  id: string;
+}
+
+export interface CollectionItemSummary {
+  itemId: string;
+}
+
 export class ContentApi {
   constructor(private http: HttpClient) {}
+
+  async listCollections(): Promise<CollectionSummary[]> {
+    const data = await this.http.request('GET', '/api/collections');
+    const items = (data?.data ?? data ?? []) as Array<{ id: unknown }>;
+
+    return items.map((item) => ({ id: String(item.id) }));
+  }
+
+  async getCollection(id: string): Promise<{ status: number; data: unknown }> {
+    return this.http.requestRaw('GET', `/api/collection/${id}`);
+  }
+
+  async getCollectionSharing(id: string): Promise<{ shareUrl: string } | null> {
+    const { data } = await this.getCollection(id);
+    const payload = (data as { data?: unknown })?.data ?? data;
+    const sharing = (payload as { sharing?: unknown })?.sharing;
+
+    if (!sharing || typeof sharing !== 'object') {
+      return null;
+    }
+
+    return { shareUrl: String((sharing as { shareUrl?: unknown }).shareUrl) };
+  }
+
+  async getCollectionItems(id: string): Promise<CollectionItemSummary[]> {
+    const data = await this.http.request('GET', `/api/collection/${id}/items`);
+    const items = (data?.data ?? data ?? []) as Array<{ itemId: unknown }>;
+
+    return items.map((item) => ({ itemId: String(item.itemId) }));
+  }
 
   async getImageDetail(imageId: string): Promise<ImageDetail> {
     const data = await this.http.request('GET', `/api/image/${imageId}/detail`);

@@ -19,6 +19,34 @@ export class UploadPage extends BasePage {
   readonly visibilityToggle = this.page
     .getByRole('button', { name: /^(Public|Private)$/ })
     .first();
+  readonly goToUploadsButton = this.page.getByRole('button', {
+    name: 'Go to uploads',
+  });
+  readonly cancelButton = this.page.getByRole('button', { name: 'Cancel' });
+  readonly retryFailedButton = this.page.getByRole('button', {
+    name: 'Retry Failed',
+  });
+  readonly uploadMoreButton = this.page.getByRole('button', {
+    name: 'Upload more',
+  });
+
+  readonly collectionBanner = this.page
+    .locator('div.rounded-xl')
+    .filter({
+      hasText: /Combine into a collection|Collection created|Ready to share/,
+    })
+    .last();
+  readonly collectionNameInput = this.page.getByPlaceholder('Unnamed');
+  readonly createPublicationButton = this.page.getByRole('button', {
+    name: 'Create publication',
+  });
+  readonly createCollectionButton = this.page.getByRole('button', {
+    name: 'Create collection',
+  });
+  readonly viewCollectionButton = this.page.getByRole('button', {
+    name: 'View collection',
+  });
+  readonly collectionCreatedHeading = this.page.getByText('Collection created');
 
   constructor(page: Page) {
     super(page);
