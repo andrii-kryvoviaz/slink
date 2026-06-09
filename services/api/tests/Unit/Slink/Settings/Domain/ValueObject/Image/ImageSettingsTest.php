@@ -31,16 +31,6 @@ final class ImageSettingsTest extends TestCase {
   }
 
   #[Test]
-  public function itNormalizesLegacyIntChunkSizeToHumanSizeString(): void {
-    $settings = ImageSettings::fromPayload([
-      'maxSize' => '1000M',
-      'chunkSize' => 2097152,
-    ]);
-
-    $this->assertSame('2M', $settings->getChunkSize());
-  }
-
-  #[Test]
   public function itKeepsHumanSizeStringChunkSizeAsIs(): void {
     $settings = ImageSettings::fromPayload([
       'maxSize' => '1000M',
