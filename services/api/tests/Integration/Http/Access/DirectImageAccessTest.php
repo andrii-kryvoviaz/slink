@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Http\Access;
 
+use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\Test;
+use Slink\Share\Domain\Enum\ShareableType;
+use Slink\Share\Domain\Repository\ShareRepositoryInterface;
 use Tests\Integration\Http\HttpTestCase;
 
 final class DirectImageAccessTest extends HttpTestCase {
@@ -155,5 +158,57 @@ final class DirectImageAccessTest extends HttpTestCase {
     $image = $this->sharedImage();
 
     self::assertSame(404, $this->apiRequest('GET', $this->url($image)));
+  }
+
+  #[Test]
+  public function deletingImageRemovesItsPublication(): void {
+    $this->setAccessSettings(['requireAuthForMediaShares' => false]);
+    $this->bootActors();
+    $image = $this->sharedImage();
+
+    /** @var ShareRepositoryInterface $shareRepository */
+    $shareRepository = static::getContainer()->get(ShareRepositoryInterface::class);
+    self::assertNotNull($shareRepository->findByShareable($image, ShareableType::Image));
+
+    self::assertContains(
+      $this->apiRequest('DELETE', \sprintf('/api/image/%s', $image), $this->ownerToken),
+      [200, 204],
+      'Delete failed: ' . (string) $this->client->getResponse()->getContent(),
+    );
+
+    /** @var EntityManagerInterface $entityManager */
+    $entityManager = static::getContainer()->get(EntityManagerInterface::class);
+    $entityManager->clear();
+
+    self::assertNull($shareRepository->findByShareable($image, ShareableType::Image));
+  }
+
+  #[Test]
+  public function deletingImageRevokesUnpublishedShare(): void {
+    $this->setAccessSettings(['requireAuthForMediaShares' => false]);
+    $this->bootActors();
+
+    $image = $this->uploadImage($this->ownerToken, false);
+    $share = $this->createImageShare($this->ownerToken, $image);
+    $this->unpublishShare($this->ownerToken, $share);
+
+    /** @var ShareRepositoryInterface $shareRepository */
+    $shareRepository = static::getContainer()->get(ShareRepositoryInterface::class);
+    self::assertNotNull($shareRepository->findByShareable($image, ShareableType::Image));
+
+    self::assertContains(
+      $this->apiRequest('DELETE', \sprintf('/api/image/%s', $image), $this->ownerToken),
+      [200, 204],
+      'Delete failed: ' . (string) $this->client->getResponse()->getContent(),
+    );
+
+    /** @var EntityManagerInterface $entityManager */
+    $entityManager = static::getContainer()->get(EntityManagerInterface::class);
+    $entityManager->clear();
+
+    self::assertNull(
+      $shareRepository->findByShareable($image, ShareableType::Image),
+      'Unpublished share for a deleted image must also be revoked.',
+    );
   }
 }

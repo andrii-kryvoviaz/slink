@@ -17,8 +17,6 @@ use Slink\Image\Domain\Repository\ImageRepositoryInterface;
 use Slink\Image\Infrastructure\ReadModel\Repository\ImageLicenseRepository;
 use Slink\Image\Infrastructure\ReadModel\View\ImageLicenseView;
 use Slink\Image\Infrastructure\ReadModel\View\ImageView;
-use Slink\Share\Domain\Enum\ShareableType;
-use Slink\Share\Domain\Repository\ShareRepositoryInterface;
 use Slink\Shared\Domain\Event\EventWithEntityManager;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractProjection;
@@ -28,7 +26,6 @@ final class ImageProjection extends AbstractProjection {
   public function __construct(
     private readonly ImageRepositoryInterface $repository,
     private readonly ImageLicenseRepository $licenseRepository,
-    private readonly ShareRepositoryInterface $shareRepository,
     private readonly CollectionItemRepositoryInterface $collectionItemRepository,
     private readonly EntityManagerInterface $em,
     private readonly LoggerInterface $logger,
@@ -77,12 +74,6 @@ final class ImageProjection extends AbstractProjection {
 
   public function handleImageWasDeleted(ImageWasDeleted $event): void {
     $imageId = $event->id->toString();
-
-    try {
-      $this->shareRepository->removeByShareable($imageId, ShareableType::Image);
-    } catch (\Throwable $e) {
-      $this->logger->error(sprintf('Failed to remove shares for image %s: %s in %s:%s', $imageId, $e->getMessage(), $e->getFile(), $e->getLine()));
-    }
 
     try {
       $this->collectionItemRepository->removeByItemId($imageId);

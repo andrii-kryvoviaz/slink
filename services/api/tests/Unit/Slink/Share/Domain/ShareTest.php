@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Share\Domain\Event\SharePasswordWasSet;
 use Slink\Share\Domain\Event\ShareExpirationWasSet;
+use Slink\Share\Domain\Event\ShareWasRevoked;
 use Slink\Share\Domain\Event\ShareWasUnpublished;
 use Slink\Share\Domain\Event\ShortUrlWasRegenerated;
 use Slink\Share\Domain\Exception\InvalidShareExpirationException;
@@ -272,6 +273,19 @@ final class ShareTest extends TestCase {
     $events = $share->releaseEvents();
     $this->assertCount(0, $events);
     $this->assertFalse($share->isPublished());
+  }
+
+  #[Test]
+  public function itRecordsEventWhenRevokingShare(): void {
+    $share = $this->createShare();
+    $share->publish();
+    $share->releaseEvents();
+
+    $share->revoke();
+
+    $events = $share->releaseEvents();
+    $this->assertCount(1, $events);
+    $this->assertInstanceOf(ShareWasRevoked::class, $events[0]);
   }
 
   #[Test]

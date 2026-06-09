@@ -8,6 +8,7 @@ use Slink\Share\Domain\Event\SharePasswordWasSet;
 use Slink\Share\Domain\Event\ShareExpirationWasSet;
 use Slink\Share\Domain\Event\ShareWasCreated;
 use Slink\Share\Domain\Event\ShareWasPublished;
+use Slink\Share\Domain\Event\ShareWasRevoked;
 use Slink\Share\Domain\Event\ShareWasUnpublished;
 use Slink\Share\Domain\Event\ShortUrlWasAdded;
 use Slink\Share\Domain\Event\ShortUrlWasRegenerated;
@@ -60,6 +61,16 @@ final class ShareProjection extends AbstractProjection {
     }
 
     $share->markUnpublished();
+  }
+
+  public function handleShareWasRevoked(ShareWasRevoked $event): void {
+    $share = $this->shareRepository->findById($event->shareId->toString());
+
+    if ($share === null) {
+      return;
+    }
+
+    $this->shareRepository->remove($share);
   }
 
   public function handleShortUrlWasAdded(ShortUrlWasAdded $event): void {

@@ -69,20 +69,6 @@ final class ShareRepository extends AbstractRepository implements ShareRepositor
   }
 
   #[Override]
-  public function removeByShareable(string $shareableId, ShareableType $shareableType): void {
-    $this->getEntityManager()
-      ->createQuery(
-        'DELETE FROM ' . ShareView::class . ' s
-         WHERE s.shareable.shareableId = :shareableId
-           AND s.shareable.shareableType = :shareableType'
-      )
-      ->execute([
-        'shareableId' => $shareableId,
-        'shareableType' => $shareableType,
-      ]);
-  }
-
-  #[Override]
   public function findAllByShareable(string $shareableId, ShareableType $shareableType): array {
     return $this->createQueryBuilder('s')
       ->where('s.shareable.shareableId = :shareableId')
