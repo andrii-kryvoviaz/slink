@@ -4804,12 +4804,9 @@ msgid "Anyone with this link can view the collection."
 msgstr "このリンクを知っている人は誰でもコレクションを表示できます。"
 
 #: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
 msgid "Maybe later"
 msgstr "後で"
-
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
-msgid "Dismiss"
-msgstr "閉じる"
 
 #: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
 msgid "<0/> Unpublish"

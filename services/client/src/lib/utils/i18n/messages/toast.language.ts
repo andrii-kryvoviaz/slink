@@ -47,8 +47,9 @@ export const messages = {
     get onlyOwnImages() {
       return localize('You can only add your own images to collections');
     },
-    failedToAddImages: () =>
-      localize('Some images could not be added to the collection'),
+    get failedToAddImages() {
+      return localize('Some images could not be added to the collection');
+    },
   },
   image: {
     get failedToUpdateVisibility() {

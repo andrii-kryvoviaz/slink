@@ -144,7 +144,7 @@
         type="button"
         class="shrink-0 -mr-1 -mt-1 rounded-md p-1 text-slate-400 transition-colors hover:bg-slate-500/10 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500/30 dark:text-slate-500 dark:hover:bg-slate-400/10 dark:hover:text-slate-300"
         title="Maybe later"
-        aria-label="Dismiss"
+        aria-label="Maybe later"
         onclick={() => (dismissed = true)}
       >
         <Icon icon="ph:x" class="h-4 w-4" />

@@ -4820,12 +4820,9 @@ msgid "Anyone with this link can view the collection."
 msgstr "Każdy, kto ma ten link, może wyświetlić kolekcję."
 
 #: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
 msgid "Maybe later"
 msgstr "Może później"
-
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
-msgid "Dismiss"
-msgstr "Odrzuć"
 
 #: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
 msgid "<0/> Unpublish"

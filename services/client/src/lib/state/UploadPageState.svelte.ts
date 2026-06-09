@@ -269,9 +269,13 @@ class UploadPageState {
     const assignments = Object.fromEntries(
       imageIds.map((id) => [id, { collectionIds: [collectionId] }]),
     );
-    const result = await ApiClient.image.batchReassign(assignments);
-    if (result.failed.length > 0) {
-      toast.error(messages.collection.failedToAddImages());
+    try {
+      const result = await ApiClient.image.batchReassign(assignments);
+      if (result.failed.length > 0) {
+        toast.error(messages.collection.failedToAddImages);
+      }
+    } catch (error: unknown) {
+      printErrorsAsToastMessage(error as Error);
     }
   }
 
