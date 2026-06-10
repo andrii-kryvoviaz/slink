@@ -4839,3 +4839,43 @@ msgstr "<0/> 公開する"
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Some images could not be added to the collection"
 msgstr "一部の画像をコレクションに追加できませんでした"
+
+#: src/routes/preferences/+page.svelte
+msgid "Use server default"
+msgstr "サーバーのデフォルトを使用"
+
+#: src/routes/preferences/+page.svelte
+msgid "Always strip"
+msgstr "常に除去"
+
+#: src/routes/preferences/+page.svelte
+msgid "Always keep"
+msgstr "常に保持"
+
+#: src/routes/preferences/+page.svelte
+msgid "EXIF Metadata"
+msgstr "EXIFメタデータ"
+
+#: src/routes/preferences/+page.svelte
+msgid "Override how metadata is stripped from your uploads."
+msgstr "アップロードした画像からメタデータを除去する方法を上書きします。"
+
+#: src/routes/preferences/+page.svelte
+msgid "Select metadata handling..."
+msgstr "メタデータの処理方法を選択..."
+
+#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+msgid "Metadata kept on uploads"
+msgstr "アップロード時にメタデータが保持されます"
+
+#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+msgid "Don't show again"
+msgstr "今後表示しない"
+
+#: src/feature/Layout/Banner/Banner.svelte
+msgid "Dismiss"
+msgstr "閉じる"
+
+#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+msgid "Location, camera and other EXIF metadata is preserved in your uploads. <0>Adjust in preferences</0>"
+msgstr "位置情報やカメラ情報などのEXIFメタデータは、アップロードした画像に保持されます。<0>設定で変更</0>"
