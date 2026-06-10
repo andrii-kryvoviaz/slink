@@ -4847,3 +4847,47 @@ msgstr "<0/> Створити публікацію"
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Some images could not be added to the collection"
 msgstr "Не вдалося додати деякі зображення до колекції"
+
+#: src/routes/preferences/+page.svelte
+msgid "Use server default"
+msgstr "Використовувати налаштування сервера"
+
+#: src/routes/preferences/+page.svelte
+msgid "Always strip"
+msgstr "Завжди видаляти"
+
+#: src/routes/preferences/+page.svelte
+msgid "Always keep"
+msgstr "Завжди зберігати"
+
+#: src/routes/preferences/+page.svelte
+msgid "EXIF Metadata"
+msgstr "EXIF-метадані"
+
+#: src/routes/preferences/+page.svelte
+msgid "Override how metadata is stripped from your uploads."
+msgstr "Перевизначає, як видаляються метадані з ваших завантажень."
+
+#: src/routes/preferences/+page.svelte
+msgid "Select metadata handling..."
+msgstr "Оберіть обробку метаданих..."
+
+#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+msgid "Metadata kept on uploads"
+msgstr "Метадані залишаються у зображеннях"
+
+#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+msgid "Don't show again"
+msgstr "Більше не показувати"
+
+#: src/feature/Layout/Banner/Banner.svelte
+msgid "Dismiss"
+msgstr "Закрити"
+
+#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+msgid "Adjust in preferences"
+msgstr "Змінити в налаштуваннях"
+
+#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+msgid "Location, camera and other EXIF metadata is preserved in your uploads. <0/>"
+msgstr "Геолокація, дані камери та інші EXIF-метадані не видаляються із зображень, які ви завантажуєте. <0/>"

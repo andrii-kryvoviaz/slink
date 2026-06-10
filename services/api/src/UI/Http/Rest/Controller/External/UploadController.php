@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace UI\Http\Rest\Controller\External;
 
 use Slink\Image\Application\Command\UploadImage\UploadImageCommand;
+use Slink\Image\Application\Command\UploadImage\UploadImageResult;
 use Slink\Image\Application\Query\GetExternalUploadResponse\GetExternalUploadResponseQuery;
 use Slink\Shared\Application\Command\CommandTrait;
 use Slink\Shared\Application\Http\RequestValueResolver\FileRequestValueResolver;
@@ -31,15 +32,15 @@ final class UploadController {
     #[CurrentUser] ApiKeyUser $user
   ): ApiResponse {
     $imageId = $command->getId()->toString();
-    $extension = $command->getImageFile()->guessExtension();
-    
-    $this->handle($command->withContext([
+
+    /** @var UploadImageResult $result */
+    $result = $this->handleSync($command->withContext([
       'userId' => $user->getIdentifier()
     ]));
-    
+
     $query = new GetExternalUploadResponseQuery(
       $imageId,
-      "{$imageId}.{$extension}",
+      $result->getFileName(),
       $user->getIdentifier(),
     );
     

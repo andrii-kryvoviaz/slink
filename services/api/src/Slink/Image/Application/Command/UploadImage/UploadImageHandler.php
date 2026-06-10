@@ -4,114 +4,27 @@ declare(strict_types=1);
 
 namespace Slink\Image\Application\Command\UploadImage;
 
-use Slink\Image\Application\Service\CollectionMembershipAssigner;
-use Slink\Image\Application\Service\ImageTagAssigner;
-use Slink\Image\Domain\Context\ImageCreationContext;
+use Slink\Image\Application\Service\Upload\UploadContext;
+use Slink\Image\Application\Service\Upload\UploadPipeline;
 use Slink\Image\Domain\Exception\DuplicateImageException;
-use Slink\Image\Domain\Factory\ImageMetadataFactory;
-use Slink\Image\Domain\Image;
-use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
-use Slink\Image\Domain\Service\ImageAnalyzerInterface;
-use Slink\Image\Domain\Service\ImageConversionResolverInterface;
-use Slink\Image\Domain\Service\ImageFileTransformerInterface;
-use Slink\Image\Domain\Service\ImageSanitizerInterface;
-use Slink\Image\Domain\ValueObject\ImageAttributes;
-use Slink\Image\Domain\ValueObject\ImageFile;
-use Slink\Settings\Application\Service\SettingsService;
-use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
+use Slink\Image\Domain\Exception\UnauthorizedTagAccessException;
 use Slink\Shared\Application\Command\CommandHandlerInterface;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
-use Slink\Shared\Domain\ValueObject\ID;
-use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
-use Slink\User\Application\Service\UserPreferencesService;
 
 final readonly class UploadImageHandler implements CommandHandlerInterface {
-
-  /**
-   * @param ConfigurationProviderInterface<SettingsService> $configurationProvider
-   */
   public function __construct(
-    private ConfigurationProviderInterface $configurationProvider,
-    private ImageStoreRepositoryInterface  $imageRepository,
-    private ImageAnalyzerInterface         $imageAnalyzer,
-    private ImageFileTransformerInterface  $imageTransformer,
-    private ImageSanitizerInterface        $sanitizer,
-    private ImageConversionResolverInterface $conversionResolver,
-    private ImageCreationContext           $creationContext,
-    private ImageMetadataFactory           $metadataFactory,
-    private StorageInterface               $storage,
-    private UserPreferencesService         $preferencesService,
-    private ImageTagAssigner               $tagAssigner,
-    private CollectionMembershipAssigner   $collectionAssigner,
+    private UploadPipeline $pipeline,
   ) {
   }
 
   /**
    * @throws DateTimeException
    * @throws DuplicateImageException
+   * @throws UnauthorizedTagAccessException
    */
-  public function __invoke(UploadImageCommand $command, ?string $userId = null): void {
-    $file = $command->getImageFile();
-    $imageId = $command->getId();
+  public function __invoke(UploadImageCommand $command, ?string $userId = null): UploadImageResult {
+    $context = $this->pipeline->run(UploadContext::fromCommand($command, $userId));
 
-    $userId = $userId
-      ? ID::fromString($userId)
-      : null;
-
-    if ($this->imageAnalyzer->requiresSanitization($file->getMimeType())) {
-      $file = $this->sanitizer->sanitizeFile($file);
-    }
-
-    if ($targetFormat = $this->conversionResolver->resolve($file)) {
-      $file = $this->imageTransformer->convertToFormat($file, $targetFormat);
-    }
-
-    if (
-      $this->imageAnalyzer->supportsExifProfile($file->getMimeType())
-      && $this->configurationProvider->get('image.stripExifMetadata')
-    ) {
-      $this->imageTransformer->stripExifMetadata($file->getPathname());
-    }
-
-    $fileName = sprintf('%s.%s', $imageId, $file->guessExtension());
-
-    $imageFile = ImageFile::fromSymfonyFile($file);
-    $metadata = $this->metadataFactory->createFromImageFile($imageFile);
-
-    $preferences = $this->preferencesService->getForUser($userId);
-
-    $isPublic = $preferences->getDefaultVisibility()?->isPublic() ?? $command->isPublic();
-
-    if ($this->configurationProvider->get('image.allowOnlyPublicImages') || $userId === null) {
-      $isPublic = true;
-    }
-
-    $license = $this->configurationProvider->get('image.enableLicensing')
-      ? $preferences->getDefaultLicense()
-      : null;
-
-    $attributes = ImageAttributes::create(
-      $fileName,
-      $command->getDescription(),
-      $isPublic,
-    );
-
-    $image = Image::create(
-      context: $this->creationContext,
-      id: $imageId,
-      userId: $userId,
-      attributes: $attributes,
-      metadata: $metadata,
-      imageFile: $imageFile,
-      license: $license,
-    );
-
-    $this->tagAssigner->assign($image, $command->getTagIds(), $userId);
-
-    $this->storage->upload($file, $fileName);
-
-    $this->imageRepository->store($image);
-
-    $this->collectionAssigner->assign($imageId, $command->getCollectionIds(), $userId);
+    return new UploadImageResult($context->fileName());
   }
 }

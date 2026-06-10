@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 
 export const BannerTheme = cva(
-  'flex flex-col gap-4 mb-6 p-4 rounded-xl border shadow-sm transition-all duration-200',
+  'flex flex-col gap-4 p-4 rounded-xl border shadow-sm transition-all duration-200',
   {
     variants: {
       variant: {

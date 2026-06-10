@@ -89,6 +89,7 @@ export class UserResource extends AbstractResource {
     syncLicenseToImages = false,
     defaultLandingPage,
     defaultVisibility,
+    exifMetadataPreference,
     externalUploadAutoPublish,
     displayLanguage,
   }: {
@@ -96,6 +97,7 @@ export class UserResource extends AbstractResource {
     syncLicenseToImages?: boolean;
     defaultLandingPage?: string | null;
     defaultVisibility?: string | null;
+    exifMetadataPreference?: string | null;
     externalUploadAutoPublish?: boolean | null;
     displayLanguage?: string | null;
   }): Promise<EmptyResponse> {
@@ -105,6 +107,7 @@ export class UserResource extends AbstractResource {
         'license.syncToImages': syncLicenseToImages,
         'navigation.landingPage': defaultLandingPage,
         'image.defaultVisibility': defaultVisibility,
+        'image.stripExifMetadataOverride': exifMetadataPreference,
         'image.externalUploadAutoPublish': externalUploadAutoPublish,
         'display.language': displayLanguage,
       },

@@ -2,6 +2,7 @@
   import {
     Banner,
     BannerAction,
+    BannerContainer,
     BannerContent,
     BannerIcon,
   } from '@slink/feature/Layout';
@@ -113,42 +114,44 @@
       </div>
     </div>
 
-    <Banner variant="info" class="mt-8">
-      {#snippet icon()}
-        <BannerIcon variant="info" icon="lucide:id-card" />
-      {/snippet}
-      {#snippet content()}
-        <BannerContent
-          title="Your Account Reference"
-          description="Provide this ID when contacting the administrator"
-        />
-      {/snippet}
-      {#snippet action()}
-        <div class="flex items-center">
-          <CopyableText
-            text={data.userId}
-            class="text-sm font-mono font-semibold"
-          />
-        </div>
-      {/snippet}
-    </Banner>
-
-    {#if page.data.globalSettings?.access?.allowUnauthenticatedAccess}
-      <Banner variant="neutral" class="mt-4">
+    <BannerContainer class="mt-8">
+      <Banner variant="info">
         {#snippet icon()}
-          <BannerIcon variant="neutral" icon="lucide:home" />
+          <BannerIcon variant="info" icon="lucide:id-card" />
         {/snippet}
         {#snippet content()}
           <BannerContent
-            title="Explore while you wait"
-            description="Browse the platform features"
+            title="Your Account Reference"
+            description="Provide this ID when contacting the administrator"
           />
         {/snippet}
         {#snippet action()}
-          <BannerAction variant="neutral" href="/explore" text="Explore" />
+          <div class="flex items-center">
+            <CopyableText
+              text={data.userId}
+              class="text-sm font-mono font-semibold"
+            />
+          </div>
         {/snippet}
       </Banner>
-    {/if}
+
+      {#if page.data.globalSettings?.access?.allowUnauthenticatedAccess}
+        <Banner variant="neutral">
+          {#snippet icon()}
+            <BannerIcon variant="neutral" icon="lucide:home" />
+          {/snippet}
+          {#snippet content()}
+            <BannerContent
+              title="Explore while you wait"
+              description="Browse the platform features"
+            />
+          {/snippet}
+          {#snippet action()}
+            <BannerAction variant="neutral" href="/explore" text="Explore" />
+          {/snippet}
+        </Banner>
+      {/if}
+    </BannerContainer>
   </div>
 {/if}
 
@@ -238,19 +241,21 @@
       </div>
     </div>
 
-    <Banner variant="info" class="mt-8">
-      {#snippet icon()}
-        <BannerIcon variant="info" icon="lucide:log-in" />
-      {/snippet}
-      {#snippet content()}
-        <BannerContent
-          title="Ready to continue"
-          description="Sign in to access all platform features"
-        />
-      {/snippet}
-      {#snippet action()}
-        <BannerAction variant="info" href="/profile/login" text="Sign In" />
-      {/snippet}
-    </Banner>
+    <BannerContainer class="mt-8">
+      <Banner variant="info">
+        {#snippet icon()}
+          <BannerIcon variant="info" icon="lucide:log-in" />
+        {/snippet}
+        {#snippet content()}
+          <BannerContent
+            title="Ready to continue"
+            description="Sign in to access all platform features"
+          />
+        {/snippet}
+        {#snippet action()}
+          <BannerAction variant="info" href="/profile/login" text="Sign In" />
+        {/snippet}
+      </Banner>
+    </BannerContainer>
   </div>
 {/if}

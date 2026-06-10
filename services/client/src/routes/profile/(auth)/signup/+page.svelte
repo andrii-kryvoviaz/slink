@@ -3,6 +3,7 @@
   import {
     Banner,
     BannerAction,
+    BannerContainer,
     BannerContent,
     BannerIcon,
   } from '@slink/feature/Layout';
@@ -178,7 +179,7 @@
     </form>
   </div>
 
-  <div class="mt-6">
+  <BannerContainer class="mt-6">
     <Banner variant="success">
       {#snippet icon()}
         <BannerIcon variant="success" icon="ph:sign-in" />
@@ -193,5 +194,5 @@
         <BannerAction variant="success" href="/profile/login" text="Sign In" />
       {/snippet}
     </Banner>
-  </div>
+  </BannerContainer>
 </div>

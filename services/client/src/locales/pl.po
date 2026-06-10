@@ -4855,3 +4855,47 @@ msgstr "<0/> Utwórz publikację"
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Some images could not be added to the collection"
 msgstr "Nie udało się dodać niektórych obrazów do kolekcji"
+
+#: src/routes/preferences/+page.svelte
+msgid "Use server default"
+msgstr "Użyj domyślnego ustawienia serwera"
+
+#: src/routes/preferences/+page.svelte
+msgid "Always strip"
+msgstr "Zawsze usuwaj"
+
+#: src/routes/preferences/+page.svelte
+msgid "Always keep"
+msgstr "Zawsze zachowuj"
+
+#: src/routes/preferences/+page.svelte
+msgid "EXIF Metadata"
+msgstr "Metadane EXIF"
+
+#: src/routes/preferences/+page.svelte
+msgid "Override how metadata is stripped from your uploads."
+msgstr "Zmień sposób usuwania metadanych z przesyłanych plików."
+
+#: src/routes/preferences/+page.svelte
+msgid "Select metadata handling..."
+msgstr "Wybierz sposób obsługi metadanych..."
+
+#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+msgid "Metadata kept on uploads"
+msgstr "Metadane pozostają w obrazach"
+
+#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+msgid "Don't show again"
+msgstr "Nie pokazuj ponownie"
+
+#: src/feature/Layout/Banner/Banner.svelte
+msgid "Dismiss"
+msgstr "Zamknij"
+
+#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+msgid "Adjust in preferences"
+msgstr "Dostosuj w preferencjach"
+
+#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+msgid "Location, camera and other EXIF metadata is preserved in your uploads. <0/>"
+msgstr "Lokalizacja, dane aparatu i inne metadane EXIF nie są usuwane z przesyłanych obrazów. <0/>"

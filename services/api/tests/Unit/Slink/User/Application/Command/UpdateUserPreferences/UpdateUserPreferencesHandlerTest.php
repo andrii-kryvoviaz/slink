@@ -12,6 +12,7 @@ use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Application\Command\UpdateUserPreferences\UpdateUserPreferencesCommand;
 use Slink\User\Application\Command\UpdateUserPreferences\UpdateUserPreferencesHandler;
 use Slink\User\Domain\Repository\UserPreferencesRepositoryInterface;
+use Slink\User\Domain\Enum\ExifMetadataPreference;
 use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
 use Slink\User\Domain\User;
 use Slink\User\Domain\ValueObject\UserPreferences;
@@ -22,14 +23,15 @@ final class UpdateUserPreferencesHandlerTest extends TestCase {
     #[Test]
     public function itUpdatesUserPreferencesWithoutExistingPreferences(): void {
         $userId = ID::generate()->toString();
-        $command = new UpdateUserPreferencesCommand('cc-by');
+        $command = new UpdateUserPreferencesCommand('cc-by', exifMetadataPreference: 'strip');
 
         $user = $this->createMock(User::class);
         $user->expects($this->once())
             ->method('updatePreferences')
             ->with($this->callback(function ($prefs) {
                 return $prefs instanceof UserPreferences
-                    && $prefs->getDefaultLicense() === License::CC_BY;
+                    && $prefs->getDefaultLicense() === License::CC_BY
+                    && $prefs->getExifMetadataPreference() === ExifMetadataPreference::Strip;
             }));
 
         $userStore = $this->createMock(UserStoreRepositoryInterface::class);

@@ -17,13 +17,11 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
 
   const licensingEnabled = globalSettings?.image?.enableLicensing ?? false;
 
-  const allowOnlyPublicImages =
-    globalSettings?.image?.allowOnlyPublicImages ?? false;
-
   const preferences = locals.userPreferences ?? {
     'license.default': null,
     'navigation.landingPage': null,
     'image.defaultVisibility': null,
+    'image.stripExifMetadataOverride': null,
     'image.externalUploadAutoPublish': null,
     'display.language': null,
   };
@@ -50,7 +48,7 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
     preferences,
     licenses,
     licensingEnabled,
-    allowOnlyPublicImages,
+    uploadPolicy: locals.uploadPolicy,
   };
 };
 
@@ -61,6 +59,7 @@ export const actions: Actions = {
       syncLicenseToImages,
       defaultLandingPage,
       defaultVisibility,
+      exifMetadataPreference,
       externalUploadAutoPublish,
       displayLanguage,
     } = await formData(request);
@@ -71,6 +70,7 @@ export const actions: Actions = {
         syncLicenseToImages: syncLicenseToImages === 'true',
         defaultLandingPage: defaultLandingPage || null,
         defaultVisibility: defaultVisibility || null,
+        exifMetadataPreference: exifMetadataPreference || null,
         externalUploadAutoPublish: externalUploadAutoPublish === 'true',
         displayLanguage: displayLanguage || null,
       });

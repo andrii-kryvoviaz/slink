@@ -8,7 +8,10 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Image\Domain\Enum\License;
 use Slink\User\Application\Command\UpdateUserPreferences\UpdateUserPreferencesCommand;
+use Slink\User\Domain\Enum\ExifMetadataPreference;
 use Slink\User\Domain\ValueObject\UserPreferences;
+use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class UpdateUserPreferencesCommandTest extends TestCase {
     #[Test]
@@ -138,5 +141,58 @@ final class UpdateUserPreferencesCommandTest extends TestCase {
 
         $this->assertNull($command->getExternalUploadAutoPublish());
         $this->assertNull($command->toPayload()['image.externalUploadAutoPublish']);
+    }
+
+    #[Test]
+    public function itIncludesExifMetadataPreferenceInPayloadWhenSet(): void {
+        $command = new UpdateUserPreferencesCommand(exifMetadataPreference: 'strip');
+
+        $payload = $command->toPayload();
+
+        $this->assertArrayHasKey('image.stripExifMetadataOverride', $payload);
+        $this->assertSame('strip', $payload['image.stripExifMetadataOverride']);
+    }
+
+    #[Test]
+    public function itIncludesExifMetadataPreferenceInPreferencesWhenSet(): void {
+        $command = new UpdateUserPreferencesCommand(exifMetadataPreference: 'strip');
+
+        $preferences = $command->getPreferences();
+
+        $this->assertSame(ExifMetadataPreference::Strip, $preferences->getExifMetadataPreference());
+    }
+
+    #[Test]
+    public function itDefaultsExifMetadataPreferenceToNullInPayload(): void {
+        $command = new UpdateUserPreferencesCommand();
+
+        $this->assertNull($command->toPayload()['image.stripExifMetadataOverride']);
+    }
+
+    #[Test]
+    public function itAcceptsValidExifMetadataPreference(): void {
+        $command = new UpdateUserPreferencesCommand(exifMetadataPreference: 'keep');
+
+        $violations = $this->validator()->validate($command);
+
+        $this->assertCount(0, $violations);
+    }
+
+    #[Test]
+    public function itRejectsInvalidExifMetadataPreference(): void {
+        $command = new UpdateUserPreferencesCommand(exifMetadataPreference: 'invalid');
+
+        $violations = $this->validator()->validate($command);
+
+        $this->assertCount(1, $violations);
+
+        $violation = $violations->get(0);
+        $this->assertSame('exifMetadataPreference', $violation->getPropertyPath());
+    }
+
+    private function validator(): ValidatorInterface {
+        return Validation::createValidatorBuilder()
+            ->enableAttributeMapping()
+            ->getValidator();
     }
 }

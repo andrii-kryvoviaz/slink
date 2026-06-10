@@ -1,4 +1,6 @@
 export { default as Dropzone } from './Dropzone/Dropzone.svelte';
+export * from './ExifPrivacyBanner/ExifNoticeState.svelte';
+export { default as ExifPrivacyBanner } from './ExifPrivacyBanner/ExifPrivacyBanner.svelte';
 export { default as MultiUploadProgress } from './MultiUploadProgress.svelte';
 export { default as UploadCollectionBanner } from './UploadCollectionBanner/UploadCollectionBanner.svelte';
 export { default as UploadForm } from './UploadForm.svelte';

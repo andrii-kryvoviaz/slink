@@ -16,6 +16,9 @@ final readonly class PublicImageSettings {
     public bool $allowOnlyPublicImages = false,
 
     #[Groups(['public'])]
+    public bool $stripExifMetadata = true,
+
+    #[Groups(['public'])]
     public string $chunkSize = '2M',
   ) {}
 
@@ -26,6 +29,7 @@ final readonly class PublicImageSettings {
     return new self(
       $settings['enableLicensing'] ?? false,
       $settings['allowOnlyPublicImages'] ?? false,
+      $settings['stripExifMetadata'] ?? true,
       $settings['chunkSize'] ?? '2M',
     );
   }

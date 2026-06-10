@@ -4833,3 +4833,47 @@ msgstr "<0/> 创建发布"
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Some images could not be added to the collection"
 msgstr "部分图片无法添加到合集"
+
+#: src/routes/preferences/+page.svelte
+msgid "Use server default"
+msgstr "使用服务器默认设置"
+
+#: src/routes/preferences/+page.svelte
+msgid "Always strip"
+msgstr "始终移除"
+
+#: src/routes/preferences/+page.svelte
+msgid "Always keep"
+msgstr "始终保留"
+
+#: src/routes/preferences/+page.svelte
+msgid "EXIF Metadata"
+msgstr "EXIF 元数据"
+
+#: src/routes/preferences/+page.svelte
+msgid "Override how metadata is stripped from your uploads."
+msgstr "覆盖你上传内容的元数据移除方式。"
+
+#: src/routes/preferences/+page.svelte
+msgid "Select metadata handling..."
+msgstr "选择元数据处理方式..."
+
+#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+msgid "Metadata kept on uploads"
+msgstr "元数据将被保留"
+
+#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+msgid "Don't show again"
+msgstr "不再显示"
+
+#: src/feature/Layout/Banner/Banner.svelte
+msgid "Dismiss"
+msgstr "关闭"
+
+#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+msgid "Adjust in preferences"
+msgstr "在偏好设置中调整"
+
+#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+msgid "Location, camera and other EXIF metadata is preserved in your uploads. <0/>"
+msgstr "位置、相机等 EXIF 元数据不会从您上传的图片中移除。<0/>"

@@ -8,6 +8,7 @@ use Slink\Image\Domain\Enum\License;
 use Slink\Shared\Domain\ValueObject\AbstractCompoundValueObject;
 use Slink\User\Domain\Enum\DefaultVisibility;
 use Slink\User\Domain\Enum\DisplayLanguage;
+use Slink\User\Domain\Enum\ExifMetadataPreference;
 use Slink\User\Domain\Enum\LandingPage;
 
 final readonly class UserPreferences extends AbstractCompoundValueObject {
@@ -18,13 +19,14 @@ final readonly class UserPreferences extends AbstractCompoundValueObject {
     private array $data = [],
   ) {}
 
-  public static function create(?License $defaultLicense = null, ?LandingPage $defaultLandingPage = null, ?DefaultVisibility $defaultVisibility = null, ?DisplayLanguage $displayLanguage = null, ?bool $externalUploadAutoPublish = null): self {
+  public static function create(?License $defaultLicense = null, ?LandingPage $defaultLandingPage = null, ?DefaultVisibility $defaultVisibility = null, ?DisplayLanguage $displayLanguage = null, ?bool $externalUploadAutoPublish = null, ?ExifMetadataPreference $exifMetadataPreference = null): self {
     return new self([
       'license.default' => $defaultLicense?->value,
       'navigation.landingPage' => $defaultLandingPage?->value,
       'image.defaultVisibility' => $defaultVisibility?->value,
       'display.language' => $displayLanguage?->value,
       'image.externalUploadAutoPublish' => $externalUploadAutoPublish,
+      'image.stripExifMetadataOverride' => $exifMetadataPreference?->value,
     ]);
   }
 
@@ -62,6 +64,10 @@ final readonly class UserPreferences extends AbstractCompoundValueObject {
     return new self([...$this->data, 'image.defaultVisibility' => $visibility?->value]);
   }
 
+  public function resolveVisibility(bool $requested): bool {
+    return $this->getDefaultVisibility()?->isPublic() ?? $requested;
+  }
+
   public function getDisplayLanguage(): ?DisplayLanguage {
     return isset($this->data['display.language']) && is_string($this->data['display.language'])
       ? DisplayLanguage::tryFrom($this->data['display.language'])
@@ -78,6 +84,16 @@ final readonly class UserPreferences extends AbstractCompoundValueObject {
 
   public function withExternalUploadAutoPublish(?bool $value): self {
     return new self([...$this->data, 'image.externalUploadAutoPublish' => $value]);
+  }
+
+  public function getExifMetadataPreference(): ExifMetadataPreference {
+    return isset($this->data['image.stripExifMetadataOverride']) && is_string($this->data['image.stripExifMetadataOverride'])
+      ? ExifMetadataPreference::tryFrom($this->data['image.stripExifMetadataOverride']) ?? ExifMetadataPreference::Default
+      : ExifMetadataPreference::Default;
+  }
+
+  public function withExifMetadataPreference(?ExifMetadataPreference $value): self {
+    return new self([...$this->data, 'image.stripExifMetadataOverride' => $value?->value]);
   }
 
   /**
