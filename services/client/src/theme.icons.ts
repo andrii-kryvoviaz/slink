@@ -157,7 +157,6 @@ export const themeIcons: string[] = [
   'lucide:chevron-down',
   'lucide:globe',
   'lucide:lock',
-  'ph:circle',
   'ph:sliders-horizontal',
   'lucide:clipboard-copy',
   'ph:at',

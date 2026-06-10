@@ -114,10 +114,10 @@ msgstr "ユーザー"
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/feature/Text/HashtagText/HashtagText.svelte
-#: src/feature/Upload/Dropzone/Dropzone.svelte
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 #: src/routes/collection/[id]/+page.svelte
 #: src/routes/explore/+page.svelte
+#: src/ui/components/dropzone/dropzone-input.svelte
 #: src/ui/components/filter/filter-search.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "Enter"
@@ -352,37 +352,38 @@ msgstr "最初のコメントを投稿しましょう"
 msgid "Sign in to comment"
 msgstr "コメントするにはログイン"
 
-#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/routes/upload/+page.svelte
 msgid "Complete"
 msgstr "完了"
 
-#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/routes/upload/+page.svelte
 msgid "Uploading"
 msgstr "アップロード中"
 
-#. 0: failedUploads
-#: src/feature/Upload/MultiUploadProgress.svelte
+#. 0: progress.failedCount
+#: src/feature/Upload/Progress/ProgressSummary.svelte
 msgid "• {0} failed"
 msgstr "・{0} 件失敗"
 
-#. 0: completedUploads; 1: totalUploads
-#: src/feature/Upload/MultiUploadProgress.svelte
+#. 0: progress.completedCount; 1: progress.totalCount
+#: src/feature/Upload/Progress/ProgressSummary.svelte
 msgid "{0} of {1} files uploaded <0/>"
 msgstr "{1} 件中 {0} 件アップロード完了 <0/>"
 
-#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/routes/upload/+page.svelte
 msgid "<0/> Retry Failed"
 msgstr "<0/> 失敗を再試行"
 
-#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/routes/upload/+page.svelte
+#: src/routes/upload/+page.svelte
 msgid "<0/> Cancel"
 msgstr "<0/> キャンセル"
 
-#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/routes/upload/+page.svelte
 msgid "Overall Progress"
 msgstr "全体の進捗"
 
-#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/feature/Upload/Progress/ProgressItem.svelte
 msgid "Upload failed"
 msgstr "アップロードに失敗しました"
 
@@ -398,47 +399,43 @@ msgstr "ファイルが選択されていません"
 msgid "Only one file allowed at a time"
 msgstr "一度にアップロードできるファイルは1つだけです"
 
-#: src/feature/Upload/UploadForm.svelte
+#: src/feature/Upload/Uploader/UploaderIdle.svelte
 msgid "or click to browse from your device"
 msgstr "またはクリックしてデバイスから選択"
 
-#: src/feature/Upload/UploadForm.svelte
+#: src/feature/Upload/Uploader/UploaderIdle.svelte
 msgid "View all supported formats"
 msgstr "対応フォーマット一覧"
 
-#: src/feature/Upload/UploadForm.svelte
+#: src/feature/Upload/Uploader/UploaderDragOverlay.svelte
 msgid "Drop to upload"
 msgstr "ドロップしてアップロード"
 
-#: src/feature/Upload/UploadForm.svelte
-msgid "Almost there"
-msgstr "あと少しです"
-
-#: src/feature/Upload/UploadSuccess.svelte
+#: src/feature/Upload/Success/Success.svelte
 msgid "Upload Successful!"
 msgstr "アップロード完了！"
 
-#: src/feature/Upload/UploadSuccess.svelte
+#: src/feature/Upload/Success/Success.svelte
 msgid "Your image has been successfully uploaded to Slink."
 msgstr "画像が Slink に正常にアップロードされました。"
 
-#: src/feature/Upload/UploadSuccess.svelte
+#: src/feature/Upload/Success/Success.svelte
 msgid "Guest Upload Notice"
 msgstr "ゲストアップロードについて"
 
-#: src/feature/Upload/UploadSuccess.svelte
+#: src/feature/Upload/Success/Success.svelte
 msgid "To manage your images and access additional features, consider creating an account."
 msgstr "画像の管理やその他の機能を利用するには、アカウントの作成をご検討ください。"
 
-#: src/feature/Upload/UploadSuccess.svelte
+#: src/feature/Upload/Success/Success.svelte
 msgid "<0/> Upload Another Image"
 msgstr "<0/> 別の画像をアップロード"
 
-#: src/feature/Upload/UploadSuccess.svelte
+#: src/feature/Upload/Success/Success.svelte
 msgid "<0/> Create Account"
 msgstr "<0/> アカウントを作成"
 
-#: src/feature/Upload/UploadSuccess.svelte
+#: src/feature/Upload/Success/Success.svelte
 msgid "<0/> View History"
 msgstr "<0/> 履歴を表示"
 
@@ -555,7 +552,7 @@ msgstr "コレクション | Slink"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
-#: src/feature/Upload/UploadOptions/CollectionsOption.svelte
+#: src/feature/Upload/Options/Collections.svelte
 #: src/routes/collections/+page.svelte
 msgid "Collections"
 msgstr "コレクション"
@@ -681,18 +678,18 @@ msgid "Update Password"
 msgstr "パスワードを更新"
 
 #: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/Options/Visibility.svelte
+#: src/feature/Upload/Options/Visibility.svelte
+#: src/feature/Upload/Options/Visibility.svelte
 #: src/routes/help/faq/+page.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Public"
 msgstr "公開"
 
 #: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/Options/Visibility.svelte
+#: src/feature/Upload/Options/Visibility.svelte
+#: src/feature/Upload/Options/Visibility.svelte
 #: src/routes/help/faq/+page.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Private"
@@ -793,31 +790,31 @@ msgid "Upload | Slink"
 msgstr "アップロード | Slink"
 
 #: src/feature/Settings/AccessSettings/AccessSettings.svelte
-#: src/routes/upload/+page.svelte
+#: src/feature/Upload/GuestBanner/GuestBanner.svelte
 msgid "Guest Upload"
 msgstr "ゲストアップロード"
 
-#: src/routes/upload/+page.svelte
+#: src/feature/Upload/GuestBanner/GuestBanner.svelte
 msgid "You can upload images without an account, but consider signing in to manage them"
 msgstr "アカウントなしでも画像をアップロードできますが、管理するにはサインインをおすすめします"
 
 #: src/feature/Navigation/Navbar/Navbar.svelte
+#: src/feature/Upload/GuestBanner/GuestBanner.svelte
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 #: src/routes/profile/(auth)/login/+page.svelte
 #: src/routes/profile/(auth)/signup/+page.svelte
-#: src/routes/upload/+page.svelte
 msgid "Sign In"
 msgstr "サインイン"
 
-#: src/routes/upload/+page.svelte
+#: src/feature/Upload/GuestBanner/GuestBanner.svelte
 msgid "Sign in to continue"
 msgstr "続けるにはサインインしてください"
 
-#: src/routes/upload/+page.svelte
+#: src/feature/Upload/GuestBanner/GuestBanner.svelte
 msgid "Upload and manage your images securely"
 msgstr "画像を安全にアップロード・管理"
 
-#: src/routes/upload/+page.svelte
+#: src/feature/Upload/GuestBanner/GuestBanner.svelte
 msgid "Get Started"
 msgstr "はじめる"
 
@@ -944,8 +941,8 @@ msgstr "タグの移動に失敗しました。もう一度お試しください
 msgid "Failed to delete tag. Please try again."
 msgstr "タグの削除に失敗しました。もう一度お試しください。"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 #: src/lib/state/UploadPageState.svelte.ts
 msgid "Unnamed"
 msgstr "名称未設定"
@@ -1359,7 +1356,7 @@ msgid "New: {0} × {1}"
 msgstr "新しいサイズ: {0} × {1}"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
-#: src/feature/Upload/UploadOptions/TagsOption.svelte
+#: src/feature/Upload/Options/Tags.svelte
 msgid "Tags"
 msgstr "タグ"
 
@@ -2364,14 +2361,10 @@ msgstr "見出し"
 msgid "Click to search for {0}"
 msgstr "クリックして {0} を検索"
 
-#: src/feature/Upload/UploadOptions/CollectionsOption.svelte
-#: src/feature/Upload/UploadOptions/TagsOption.svelte
+#: src/feature/Upload/Options/Collections.svelte
+#: src/feature/Upload/Options/Tags.svelte
 msgid "Add more"
 msgstr "さらに追加"
-
-#: src/feature/Upload/UploadOptions/UploadOptionsPanel.svelte
-msgid "Upload Options"
-msgstr "アップロードオプション"
 
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
@@ -3613,21 +3606,13 @@ msgstr "無効なランディングページです。"
 msgid "Invalid default visibility."
 msgstr "無効なデフォルト公開設定です。"
 
-#: src/feature/Upload/UploadForm.svelte
+#: src/feature/Upload/Uploader/UploaderIdle.svelte
 msgid "Drop your images here"
 msgstr "ここに画像をドロップ"
 
-#: src/feature/Upload/UploadForm.svelte
+#: src/feature/Upload/Uploader/UploaderIdle.svelte
 msgid "Drop your image here"
 msgstr "ここに画像をドロップ"
-
-#: src/feature/Upload/UploadForm.svelte
-msgid "Uploading your images..."
-msgstr "画像をアップロード中..."
-
-#: src/feature/Upload/UploadForm.svelte
-msgid "Uploading your image..."
-msgstr "画像をアップロード中..."
 
 #: src/feature/Collection/CreateCollectionForm.svelte
 msgid "Edit Collection"
@@ -4555,36 +4540,35 @@ msgstr "検索を閉じる"
 msgid "View mode"
 msgstr "表示モード"
 
-#: src/feature/Upload/UploadForm.svelte
+#: src/feature/Upload/Uploader/UploaderIdle.svelte
 msgid "Quick paste"
 msgstr "クイック貼り付け"
 
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/Options/Visibility.svelte
 msgid "Current"
 msgstr "現在"
 
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/Options/Visibility.svelte
 msgid "Image visibility"
 msgstr "画像の公開設定"
 
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/Options/Visibility.svelte
 msgid "Choose who can find this image. You can change it any time from the image page."
 msgstr "この画像を見つけられる人を選択してください。画像ページからいつでも変更できます。"
 
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/Options/Visibility.svelte
 msgid "Listed on the explore page. Anyone with the direct link can open it."
 msgstr "発見ページに表示されます。直接リンクを持つ人なら誰でも開くことができます。"
 
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/Options/Visibility.svelte
 msgid "Hidden from explore. Only you can open the direct link, unless you publish a share."
 msgstr "発見ページに非表示。共有リンクを公開しない限り、直接リンクはあなただけが開けます。"
 
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/Options/Visibility.svelte
 msgid "Click the badge to switch"
 msgstr "バッジをクリックして切り替え"
 
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/Options/Visibility.svelte
 msgid "Learn more <0/>"
 msgstr "詳しく見る <0/>"
 
@@ -4723,7 +4707,7 @@ msgstr "アップロードに失敗しました: 接続が中断されました"
 msgid "Upload failed: file is too large"
 msgstr "アップロードに失敗しました: ファイルが大きすぎます"
 
-#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/feature/Upload/Progress/ProgressItem.svelte
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Upload cancelled"
 msgstr "アップロードをキャンセルしました"
@@ -4780,59 +4764,59 @@ msgstr "不足しているチャンク: {chunks}。"
 msgid "Image preview"
 msgstr "画像プレビュー"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "Collection created"
 msgstr "コレクションを作成しました"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "<0/> View collection"
 msgstr "<0/> コレクションを表示"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "<0/> Create collection"
 msgstr "<0/> コレクションを作成"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "Optionally group this # image into a collection to view and share them as one."
 msgid_plural "Optionally group these # images into a collection to view and share them as one."
 msgstr[0] "この # 枚の画像をコレクションにまとめて、ひとつとして表示・共有することもできます。"
 msgstr[1] "これら # 枚の画像をコレクションにまとめて、ひとつとして表示・共有することもできます。"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "Anyone with this link can view the collection."
 msgstr "このリンクを知っている人は誰でもコレクションを表示できます。"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "Maybe later"
 msgstr "後で"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "<0/> Unpublish"
 msgstr "<0/> 公開を取り消す"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "Create a collection from these images"
 msgstr "これらの画像からコレクションを作成"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "Ready to share"
 msgstr "共有の準備ができました"
 
-#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/routes/upload/+page.svelte
 msgid "<0/> Upload more"
 msgstr "<0/> もっとアップロード"
 
-#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/feature/Upload/Progress/ProgressFooter.svelte
 msgid "View all <0/>"
 msgstr "すべて表示 <0/>"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "Combine into a collection"
 msgstr "コレクションにまとめる"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "<0/> Create publication"
 msgstr "<0/> 公開する"
 
@@ -4864,11 +4848,11 @@ msgstr "アップロードした画像からメタデータを除去する方法
 msgid "Select metadata handling..."
 msgstr "メタデータの処理方法を選択..."
 
-#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+#: src/feature/Upload/ExifBanner/ExifBanner.svelte
 msgid "Metadata kept on uploads"
 msgstr "メタデータは保持されます"
 
-#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+#: src/feature/Upload/ExifBanner/ExifBanner.svelte
 msgid "Don't show again"
 msgstr "今後表示しない"
 
@@ -4876,10 +4860,14 @@ msgstr "今後表示しない"
 msgid "Dismiss"
 msgstr "閉じる"
 
-#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+#: src/feature/Upload/ExifBanner/ExifBanner.svelte
 msgid "Adjust in preferences"
 msgstr "設定で変更"
 
-#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+#: src/feature/Upload/ExifBanner/ExifBanner.svelte
 msgid "Location, camera and other EXIF metadata is preserved in your uploads. <0/>"
 msgstr "位置情報、カメラ情報などのEXIFメタデータは、アップロードした画像から削除されません。<0/>"
+
+#: src/routes/upload/+page.svelte
+msgid "Upload in progress"
+msgstr "アップロード中"

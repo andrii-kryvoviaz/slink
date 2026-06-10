@@ -14,6 +14,8 @@
   import { createCollectionSelectionState } from '@slink/lib/state/CollectionSelectionState.svelte';
   import { createCreateCollectionModalState } from '@slink/lib/state/CreateCollectionModalState.svelte';
 
+  import { UploadOptionsPopoverTheme } from './Options.theme';
+
   interface Props {
     selectedCollections?: CollectionResponse[];
     onCollectionsChange?: (collections: CollectionResponse[]) => void;
@@ -91,7 +93,7 @@
     {/snippet}
   </Popover.Trigger>
   <Popover.Content
-    class="p-0 bg-white/95 dark:bg-slate-900/95 border border-slate-200/50 dark:border-slate-700/40 rounded-xl shadow-lg shadow-black/8 dark:shadow-black/25 overflow-hidden backdrop-blur-sm"
+    class={UploadOptionsPopoverTheme()}
     sideOffset={8}
     align="start"
     onpaste={(e: ClipboardEvent) => e.stopPropagation()}

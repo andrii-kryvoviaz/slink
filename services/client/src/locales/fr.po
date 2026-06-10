@@ -114,10 +114,10 @@ msgstr "Utilisateurs"
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/feature/Text/HashtagText/HashtagText.svelte
-#: src/feature/Upload/Dropzone/Dropzone.svelte
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 #: src/routes/collection/[id]/+page.svelte
 #: src/routes/explore/+page.svelte
+#: src/ui/components/dropzone/dropzone-input.svelte
 #: src/ui/components/filter/filter-search.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "Enter"
@@ -352,37 +352,38 @@ msgstr "Soyez le premier à commenter"
 msgid "Sign in to comment"
 msgstr "Connectez-vous pour commenter"
 
-#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/routes/upload/+page.svelte
 msgid "Complete"
 msgstr "Terminé"
 
-#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/routes/upload/+page.svelte
 msgid "Uploading"
 msgstr "Téléversement en cours"
 
-#. 0: failedUploads
-#: src/feature/Upload/MultiUploadProgress.svelte
+#. 0: progress.failedCount
+#: src/feature/Upload/Progress/ProgressSummary.svelte
 msgid "• {0} failed"
 msgstr "• {0} échoué"
 
-#. 0: completedUploads; 1: totalUploads
-#: src/feature/Upload/MultiUploadProgress.svelte
+#. 0: progress.completedCount; 1: progress.totalCount
+#: src/feature/Upload/Progress/ProgressSummary.svelte
 msgid "{0} of {1} files uploaded <0/>"
 msgstr "{0} sur {1} fichiers téléversés <0/>"
 
-#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/routes/upload/+page.svelte
 msgid "<0/> Retry Failed"
 msgstr "<0/> Réessayer les échecs"
 
-#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/routes/upload/+page.svelte
+#: src/routes/upload/+page.svelte
 msgid "<0/> Cancel"
 msgstr "<0/> Annuler"
 
-#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/routes/upload/+page.svelte
 msgid "Overall Progress"
 msgstr "Progression globale"
 
-#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/feature/Upload/Progress/ProgressItem.svelte
 msgid "Upload failed"
 msgstr "Échec du téléversement"
 
@@ -398,47 +399,43 @@ msgstr "Aucun fichier sélectionné"
 msgid "Only one file allowed at a time"
 msgstr "Un seul fichier autorisé à la fois"
 
-#: src/feature/Upload/UploadForm.svelte
+#: src/feature/Upload/Uploader/UploaderIdle.svelte
 msgid "or click to browse from your device"
 msgstr "ou cliquez pour parcourir vos fichiers"
 
-#: src/feature/Upload/UploadForm.svelte
+#: src/feature/Upload/Uploader/UploaderIdle.svelte
 msgid "View all supported formats"
 msgstr "Voir tous les formats supportés"
 
-#: src/feature/Upload/UploadForm.svelte
+#: src/feature/Upload/Uploader/UploaderDragOverlay.svelte
 msgid "Drop to upload"
 msgstr "Déposer pour téléverser"
 
-#: src/feature/Upload/UploadForm.svelte
-msgid "Almost there"
-msgstr "Presque terminé"
-
-#: src/feature/Upload/UploadSuccess.svelte
+#: src/feature/Upload/Success/Success.svelte
 msgid "Upload Successful!"
 msgstr "Téléversement réussi !"
 
-#: src/feature/Upload/UploadSuccess.svelte
+#: src/feature/Upload/Success/Success.svelte
 msgid "Your image has been successfully uploaded to Slink."
 msgstr "Votre image a été téléversée avec succès sur Slink."
 
-#: src/feature/Upload/UploadSuccess.svelte
+#: src/feature/Upload/Success/Success.svelte
 msgid "Guest Upload Notice"
 msgstr "Avis de téléversement invité"
 
-#: src/feature/Upload/UploadSuccess.svelte
+#: src/feature/Upload/Success/Success.svelte
 msgid "To manage your images and access additional features, consider creating an account."
 msgstr "Pour gérer vos images et accéder à des fonctionnalités supplémentaires, pensez à créer un compte."
 
-#: src/feature/Upload/UploadSuccess.svelte
+#: src/feature/Upload/Success/Success.svelte
 msgid "<0/> Upload Another Image"
 msgstr "<0/> Téléverser une autre image"
 
-#: src/feature/Upload/UploadSuccess.svelte
+#: src/feature/Upload/Success/Success.svelte
 msgid "<0/> Create Account"
 msgstr "<0/> Créer un compte"
 
-#: src/feature/Upload/UploadSuccess.svelte
+#: src/feature/Upload/Success/Success.svelte
 msgid "<0/> View History"
 msgstr "<0/> Voir l'historique"
 
@@ -555,7 +552,7 @@ msgstr "Collections | Slink"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
-#: src/feature/Upload/UploadOptions/CollectionsOption.svelte
+#: src/feature/Upload/Options/Collections.svelte
 #: src/routes/collections/+page.svelte
 msgid "Collections"
 msgstr "Collections"
@@ -681,18 +678,18 @@ msgid "Update Password"
 msgstr "Mettre à jour le mot de passe"
 
 #: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/Options/Visibility.svelte
+#: src/feature/Upload/Options/Visibility.svelte
+#: src/feature/Upload/Options/Visibility.svelte
 #: src/routes/help/faq/+page.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Public"
 msgstr "Publique"
 
 #: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/Options/Visibility.svelte
+#: src/feature/Upload/Options/Visibility.svelte
+#: src/feature/Upload/Options/Visibility.svelte
 #: src/routes/help/faq/+page.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Private"
@@ -793,31 +790,31 @@ msgid "Upload | Slink"
 msgstr "Importer | Slink"
 
 #: src/feature/Settings/AccessSettings/AccessSettings.svelte
-#: src/routes/upload/+page.svelte
+#: src/feature/Upload/GuestBanner/GuestBanner.svelte
 msgid "Guest Upload"
 msgstr "Import invité"
 
-#: src/routes/upload/+page.svelte
+#: src/feature/Upload/GuestBanner/GuestBanner.svelte
 msgid "You can upload images without an account, but consider signing in to manage them"
 msgstr "Vous pouvez importer des images sans compte, mais envisagez de vous connecter pour les gérer"
 
 #: src/feature/Navigation/Navbar/Navbar.svelte
+#: src/feature/Upload/GuestBanner/GuestBanner.svelte
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 #: src/routes/profile/(auth)/login/+page.svelte
 #: src/routes/profile/(auth)/signup/+page.svelte
-#: src/routes/upload/+page.svelte
 msgid "Sign In"
 msgstr "Se connecter"
 
-#: src/routes/upload/+page.svelte
+#: src/feature/Upload/GuestBanner/GuestBanner.svelte
 msgid "Sign in to continue"
 msgstr "Connectez-vous pour continuer"
 
-#: src/routes/upload/+page.svelte
+#: src/feature/Upload/GuestBanner/GuestBanner.svelte
 msgid "Upload and manage your images securely"
 msgstr "Importez et gérez vos images en toute sécurité"
 
-#: src/routes/upload/+page.svelte
+#: src/feature/Upload/GuestBanner/GuestBanner.svelte
 msgid "Get Started"
 msgstr "Commencer"
 
@@ -944,8 +941,8 @@ msgstr "Échec du déplacement de l'étiquette. Veuillez réessayer."
 msgid "Failed to delete tag. Please try again."
 msgstr "Échec de la suppression de l'étiquette. Veuillez réessayer."
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 #: src/lib/state/UploadPageState.svelte.ts
 msgid "Unnamed"
 msgstr "Sans nom"
@@ -1359,7 +1356,7 @@ msgid "New: {0} × {1}"
 msgstr "Nouveau : {0} × {1}"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
-#: src/feature/Upload/UploadOptions/TagsOption.svelte
+#: src/feature/Upload/Options/Tags.svelte
 msgid "Tags"
 msgstr "Tags"
 
@@ -2364,14 +2361,10 @@ msgstr "Titre"
 msgid "Click to search for {0}"
 msgstr "Cliquez pour rechercher {0}"
 
-#: src/feature/Upload/UploadOptions/CollectionsOption.svelte
-#: src/feature/Upload/UploadOptions/TagsOption.svelte
+#: src/feature/Upload/Options/Collections.svelte
+#: src/feature/Upload/Options/Tags.svelte
 msgid "Add more"
 msgstr "Ajouter plus"
-
-#: src/feature/Upload/UploadOptions/UploadOptionsPanel.svelte
-msgid "Upload Options"
-msgstr "Options d'importation"
 
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
@@ -3613,21 +3606,13 @@ msgstr "Page d'accueil invalide."
 msgid "Invalid default visibility."
 msgstr "Visibilité par défaut invalide."
 
-#: src/feature/Upload/UploadForm.svelte
+#: src/feature/Upload/Uploader/UploaderIdle.svelte
 msgid "Drop your images here"
 msgstr "Déposez vos images ici"
 
-#: src/feature/Upload/UploadForm.svelte
+#: src/feature/Upload/Uploader/UploaderIdle.svelte
 msgid "Drop your image here"
 msgstr "Déposez votre image ici"
-
-#: src/feature/Upload/UploadForm.svelte
-msgid "Uploading your images..."
-msgstr "Téléversement de vos images..."
-
-#: src/feature/Upload/UploadForm.svelte
-msgid "Uploading your image..."
-msgstr "Téléversement de votre image..."
 
 #: src/feature/Collection/CreateCollectionForm.svelte
 msgid "Edit Collection"
@@ -4555,36 +4540,35 @@ msgstr "Fermer la recherche"
 msgid "View mode"
 msgstr "Mode d'affichage"
 
-#: src/feature/Upload/UploadForm.svelte
+#: src/feature/Upload/Uploader/UploaderIdle.svelte
 msgid "Quick paste"
 msgstr "Collage rapide"
 
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/Options/Visibility.svelte
 msgid "Current"
 msgstr "Actuel"
 
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/Options/Visibility.svelte
 msgid "Image visibility"
 msgstr "Visibilité de l'image"
 
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/Options/Visibility.svelte
 msgid "Choose who can find this image. You can change it any time from the image page."
 msgstr "Choisissez qui peut trouver cette image. Vous pouvez la modifier à tout moment depuis la page de l'image."
 
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/Options/Visibility.svelte
 msgid "Listed on the explore page. Anyone with the direct link can open it."
 msgstr "Affichée sur la page Explorer. Toute personne disposant du lien direct peut l'ouvrir."
 
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/Options/Visibility.svelte
 msgid "Hidden from explore. Only you can open the direct link, unless you publish a share."
 msgstr "Masquée d'Explorer. Seul vous pouvez ouvrir le lien direct, sauf si vous publiez un lien de partage."
 
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/Options/Visibility.svelte
 msgid "Click the badge to switch"
 msgstr "Cliquez sur le badge pour changer"
 
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/Options/Visibility.svelte
 msgid "Learn more <0/>"
 msgstr "En savoir plus <0/>"
 
@@ -4723,7 +4707,7 @@ msgstr "Échec de l'envoi : connexion interrompue"
 msgid "Upload failed: file is too large"
 msgstr "Échec de l'envoi : le fichier est trop volumineux"
 
-#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/feature/Upload/Progress/ProgressItem.svelte
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Upload cancelled"
 msgstr "Envoi annulé"
@@ -4780,59 +4764,59 @@ msgstr "Fragments manquants : {chunks}."
 msgid "Image preview"
 msgstr "Aperçu de l'image"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "Collection created"
 msgstr "Collection créée"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "<0/> View collection"
 msgstr "<0/> Voir la collection"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "<0/> Create collection"
 msgstr "<0/> Créer la collection"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "Optionally group this # image into a collection to view and share them as one."
 msgid_plural "Optionally group these # images into a collection to view and share them as one."
 msgstr[0] "Vous pouvez regrouper cette # image dans une collection pour les voir et les partager en une seule fois."
 msgstr[1] "Vous pouvez regrouper ces # images dans une collection pour les voir et les partager en une seule fois."
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "Anyone with this link can view the collection."
 msgstr "Toute personne disposant de ce lien peut voir la collection."
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "Maybe later"
 msgstr "Peut-être plus tard"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "<0/> Unpublish"
 msgstr "<0/> Dépublier"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "Create a collection from these images"
 msgstr "Créer une collection à partir de ces images"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "Ready to share"
 msgstr "Prêt à partager"
 
-#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/routes/upload/+page.svelte
 msgid "<0/> Upload more"
 msgstr "<0/> Téléverser plus"
 
-#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/feature/Upload/Progress/ProgressFooter.svelte
 msgid "View all <0/>"
 msgstr "Tout voir <0/>"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "Combine into a collection"
 msgstr "Regrouper dans une collection"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "<0/> Create publication"
 msgstr "<0/> Créer une publication"
 
@@ -4864,11 +4848,11 @@ msgstr "Personnalisez la façon dont les métadonnées sont supprimées de vos t
 msgid "Select metadata handling..."
 msgstr "Sélectionnez la gestion des métadonnées..."
 
-#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+#: src/feature/Upload/ExifBanner/ExifBanner.svelte
 msgid "Metadata kept on uploads"
 msgstr "Les métadonnées sont conservées"
 
-#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+#: src/feature/Upload/ExifBanner/ExifBanner.svelte
 msgid "Don't show again"
 msgstr "Ne plus afficher"
 
@@ -4876,10 +4860,14 @@ msgstr "Ne plus afficher"
 msgid "Dismiss"
 msgstr "Fermer"
 
-#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+#: src/feature/Upload/ExifBanner/ExifBanner.svelte
 msgid "Adjust in preferences"
 msgstr "Ajuster dans les préférences"
 
-#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+#: src/feature/Upload/ExifBanner/ExifBanner.svelte
 msgid "Location, camera and other EXIF metadata is preserved in your uploads. <0/>"
 msgstr "La localisation, l'appareil photo et d'autres métadonnées EXIF ne sont pas supprimées des images que vous téléversez. <0/>"
+
+#: src/routes/upload/+page.svelte
+msgid "Upload in progress"
+msgstr "Téléversement en cours"

@@ -114,10 +114,10 @@ msgstr "用户"
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/feature/Text/EditableText/EditableText.svelte
 #: src/feature/Text/HashtagText/HashtagText.svelte
-#: src/feature/Upload/Dropzone/Dropzone.svelte
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 #: src/routes/collection/[id]/+page.svelte
 #: src/routes/explore/+page.svelte
+#: src/ui/components/dropzone/dropzone-input.svelte
 #: src/ui/components/filter/filter-search.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "Enter"
@@ -352,37 +352,38 @@ msgstr "成为第一个评论的人"
 msgid "Sign in to comment"
 msgstr "登录后可评论"
 
-#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/routes/upload/+page.svelte
 msgid "Complete"
 msgstr "已完成"
 
-#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/routes/upload/+page.svelte
 msgid "Uploading"
 msgstr "上传中"
 
-#. 0: failedUploads
-#: src/feature/Upload/MultiUploadProgress.svelte
+#. 0: progress.failedCount
+#: src/feature/Upload/Progress/ProgressSummary.svelte
 msgid "• {0} failed"
 msgstr "• {0} 失败"
 
-#. 0: completedUploads; 1: totalUploads
-#: src/feature/Upload/MultiUploadProgress.svelte
+#. 0: progress.completedCount; 1: progress.totalCount
+#: src/feature/Upload/Progress/ProgressSummary.svelte
 msgid "{0} of {1} files uploaded <0/>"
 msgstr "已上传 {1} 个文件中的 {0} 个 <0/>"
 
-#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/routes/upload/+page.svelte
 msgid "<0/> Retry Failed"
 msgstr "<0/> 重试失败项"
 
-#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/routes/upload/+page.svelte
+#: src/routes/upload/+page.svelte
 msgid "<0/> Cancel"
 msgstr "<0/> 取消"
 
-#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/routes/upload/+page.svelte
 msgid "Overall Progress"
 msgstr "总体进度"
 
-#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/feature/Upload/Progress/ProgressItem.svelte
 msgid "Upload failed"
 msgstr "上传失败"
 
@@ -398,47 +399,43 @@ msgstr "未选择文件"
 msgid "Only one file allowed at a time"
 msgstr "一次只允许上传一个文件"
 
-#: src/feature/Upload/UploadForm.svelte
+#: src/feature/Upload/Uploader/UploaderIdle.svelte
 msgid "or click to browse from your device"
 msgstr "或点击从设备中选择"
 
-#: src/feature/Upload/UploadForm.svelte
+#: src/feature/Upload/Uploader/UploaderIdle.svelte
 msgid "View all supported formats"
 msgstr "查看全部支持格式"
 
-#: src/feature/Upload/UploadForm.svelte
+#: src/feature/Upload/Uploader/UploaderDragOverlay.svelte
 msgid "Drop to upload"
 msgstr "拖拽图片到此处上传"
 
-#: src/feature/Upload/UploadForm.svelte
-msgid "Almost there"
-msgstr "即将完成"
-
-#: src/feature/Upload/UploadSuccess.svelte
+#: src/feature/Upload/Success/Success.svelte
 msgid "Upload Successful!"
 msgstr "上传成功！"
 
-#: src/feature/Upload/UploadSuccess.svelte
+#: src/feature/Upload/Success/Success.svelte
 msgid "Your image has been successfully uploaded to Slink."
 msgstr "你的图片已成功上传到 Slink。"
 
-#: src/feature/Upload/UploadSuccess.svelte
+#: src/feature/Upload/Success/Success.svelte
 msgid "Guest Upload Notice"
 msgstr "游客上传须知"
 
-#: src/feature/Upload/UploadSuccess.svelte
+#: src/feature/Upload/Success/Success.svelte
 msgid "To manage your images and access additional features, consider creating an account."
 msgstr "如需管理图片并使用更多功能，建议创建账号。"
 
-#: src/feature/Upload/UploadSuccess.svelte
+#: src/feature/Upload/Success/Success.svelte
 msgid "<0/> Upload Another Image"
 msgstr "<0/> 继续上传"
 
-#: src/feature/Upload/UploadSuccess.svelte
+#: src/feature/Upload/Success/Success.svelte
 msgid "<0/> Create Account"
 msgstr "<0/> 创建账号"
 
-#: src/feature/Upload/UploadSuccess.svelte
+#: src/feature/Upload/Success/Success.svelte
 msgid "<0/> View History"
 msgstr "<0/> 查看历史"
 
@@ -555,7 +552,7 @@ msgstr "合集 | Slink"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
-#: src/feature/Upload/UploadOptions/CollectionsOption.svelte
+#: src/feature/Upload/Options/Collections.svelte
 #: src/routes/collections/+page.svelte
 msgid "Collections"
 msgstr "合集"
@@ -681,18 +678,18 @@ msgid "Update Password"
 msgstr "更新密码"
 
 #: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/Options/Visibility.svelte
+#: src/feature/Upload/Options/Visibility.svelte
+#: src/feature/Upload/Options/Visibility.svelte
 #: src/routes/help/faq/+page.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Public"
 msgstr "公开"
 
 #: src/feature/Image/VisibilityBadge/VisibilityBadge.svelte
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/Options/Visibility.svelte
+#: src/feature/Upload/Options/Visibility.svelte
+#: src/feature/Upload/Options/Visibility.svelte
 #: src/routes/help/faq/+page.svelte
 #: src/routes/preferences/+page.svelte
 msgid "Private"
@@ -793,31 +790,31 @@ msgid "Upload | Slink"
 msgstr "上传 | Slink"
 
 #: src/feature/Settings/AccessSettings/AccessSettings.svelte
-#: src/routes/upload/+page.svelte
+#: src/feature/Upload/GuestBanner/GuestBanner.svelte
 msgid "Guest Upload"
 msgstr "游客上传"
 
-#: src/routes/upload/+page.svelte
+#: src/feature/Upload/GuestBanner/GuestBanner.svelte
 msgid "You can upload images without an account, but consider signing in to manage them"
 msgstr "无需账号也可上传图片，但建议登录以便管理图片"
 
 #: src/feature/Navigation/Navbar/Navbar.svelte
+#: src/feature/Upload/GuestBanner/GuestBanner.svelte
 #: src/routes/profile/(auth)/awaiting-approval/+page.svelte
 #: src/routes/profile/(auth)/login/+page.svelte
 #: src/routes/profile/(auth)/signup/+page.svelte
-#: src/routes/upload/+page.svelte
 msgid "Sign In"
 msgstr "登录"
 
-#: src/routes/upload/+page.svelte
+#: src/feature/Upload/GuestBanner/GuestBanner.svelte
 msgid "Sign in to continue"
 msgstr "请先登录"
 
-#: src/routes/upload/+page.svelte
+#: src/feature/Upload/GuestBanner/GuestBanner.svelte
 msgid "Upload and manage your images securely"
 msgstr "登录后可安全上传并管理你的图片"
 
-#: src/routes/upload/+page.svelte
+#: src/feature/Upload/GuestBanner/GuestBanner.svelte
 msgid "Get Started"
 msgstr "立即开始"
 
@@ -944,8 +941,8 @@ msgstr "移动标签失败，请重试。"
 msgid "Failed to delete tag. Please try again."
 msgstr "删除标签失败，请重试。"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 #: src/lib/state/UploadPageState.svelte.ts
 msgid "Unnamed"
 msgstr "未命名"
@@ -1359,7 +1356,7 @@ msgid "New: {0} × {1}"
 msgstr "新尺寸：{0} × {1}"
 
 #: src/feature/Navigation/Sidebar/config.svelte.ts
-#: src/feature/Upload/UploadOptions/TagsOption.svelte
+#: src/feature/Upload/Options/Tags.svelte
 msgid "Tags"
 msgstr "标签"
 
@@ -2364,14 +2361,10 @@ msgstr "标题"
 msgid "Click to search for {0}"
 msgstr "点击搜索 {0}"
 
-#: src/feature/Upload/UploadOptions/CollectionsOption.svelte
-#: src/feature/Upload/UploadOptions/TagsOption.svelte
+#: src/feature/Upload/Options/Collections.svelte
+#: src/feature/Upload/Options/Tags.svelte
 msgid "Add more"
 msgstr "继续添加"
-
-#: src/feature/Upload/UploadOptions/UploadOptionsPanel.svelte
-msgid "Upload Options"
-msgstr "上传选项"
 
 #: src/feature/Collection/CollectionViews/CollectionDataTable/columns.svelte.ts
 #: src/feature/Image/History/HistoryDataTable/columns.svelte.ts
@@ -3613,21 +3606,13 @@ msgstr "页面无效。"
 msgid "Invalid default visibility."
 msgstr "默认可见性无效。"
 
-#: src/feature/Upload/UploadForm.svelte
+#: src/feature/Upload/Uploader/UploaderIdle.svelte
 msgid "Drop your images here"
 msgstr "将图片拖拽到这里"
 
-#: src/feature/Upload/UploadForm.svelte
+#: src/feature/Upload/Uploader/UploaderIdle.svelte
 msgid "Drop your image here"
 msgstr "将图片拖拽到这里"
-
-#: src/feature/Upload/UploadForm.svelte
-msgid "Uploading your images..."
-msgstr "正在上传你的图片..."
-
-#: src/feature/Upload/UploadForm.svelte
-msgid "Uploading your image..."
-msgstr "正在上传你的图片..."
 
 #: src/feature/Collection/CreateCollectionForm.svelte
 msgid "Edit Collection"
@@ -4549,36 +4534,35 @@ msgstr "关闭搜索"
 msgid "View mode"
 msgstr "视图模式"
 
-#: src/feature/Upload/UploadForm.svelte
+#: src/feature/Upload/Uploader/UploaderIdle.svelte
 msgid "Quick paste"
 msgstr "快速粘贴"
 
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/Options/Visibility.svelte
 msgid "Current"
 msgstr "当前"
 
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/Options/Visibility.svelte
 msgid "Image visibility"
 msgstr "图片可见性"
 
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/Options/Visibility.svelte
 msgid "Choose who can find this image. You can change it any time from the image page."
 msgstr "选择谁能找到此图片。您可以随时从图片页面更改。"
 
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/Options/Visibility.svelte
 msgid "Listed on the explore page. Anyone with the direct link can open it."
 msgstr "在发现页面中列出。任何拥有直接链接的人都可以打开。"
 
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/Options/Visibility.svelte
 msgid "Hidden from explore. Only you can open the direct link, unless you publish a share."
 msgstr "在发现中隐藏。只有您可以打开直接链接，除非您发布共享链接。"
 
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/Options/Visibility.svelte
 msgid "Click the badge to switch"
 msgstr "点击徽章切换"
 
-#: src/feature/Upload/UploadOptions/VisibilityOption.svelte
+#: src/feature/Upload/Options/Visibility.svelte
 msgid "Learn more <0/>"
 msgstr "了解更多 <0/>"
 
@@ -4717,7 +4701,7 @@ msgstr "上传失败：连接中断"
 msgid "Upload failed: file is too large"
 msgstr "上传失败：文件过大"
 
-#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/feature/Upload/Progress/ProgressItem.svelte
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Upload cancelled"
 msgstr "已取消上传"
@@ -4774,59 +4758,59 @@ msgstr "缺少分块：{chunks}。"
 msgid "Image preview"
 msgstr "图片预览"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "Collection created"
 msgstr "合集已创建"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "<0/> View collection"
 msgstr "<0/> 查看合集"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "<0/> Create collection"
 msgstr "<0/> 创建合集"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "Optionally group this # image into a collection to view and share them as one."
 msgid_plural "Optionally group these # images into a collection to view and share them as one."
 msgstr[0] "可将这 # 张图片归入一个合集，作为整体查看和分享（可选）。"
 msgstr[1] "可将这 # 张图片归入一个合集，作为整体查看和分享（可选）。"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "Anyone with this link can view the collection."
 msgstr "任何人只要拥有此链接即可查看该合集。"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "Maybe later"
 msgstr "稍后再说"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "<0/> Unpublish"
 msgstr "<0/> 取消发布"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "Create a collection from these images"
 msgstr "用这些图片创建合集"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "Ready to share"
 msgstr "可以分享了"
 
-#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/routes/upload/+page.svelte
 msgid "<0/> Upload more"
 msgstr "<0/> 上传更多"
 
-#: src/feature/Upload/MultiUploadProgress.svelte
+#: src/feature/Upload/Progress/ProgressFooter.svelte
 msgid "View all <0/>"
 msgstr "查看全部 <0/>"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "Combine into a collection"
 msgstr "合并为合集"
 
-#: src/feature/Upload/UploadCollectionBanner/UploadCollectionBanner.svelte
+#: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "<0/> Create publication"
 msgstr "<0/> 创建发布"
 
@@ -4858,11 +4842,11 @@ msgstr "覆盖你上传内容的元数据移除方式。"
 msgid "Select metadata handling..."
 msgstr "选择元数据处理方式..."
 
-#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+#: src/feature/Upload/ExifBanner/ExifBanner.svelte
 msgid "Metadata kept on uploads"
 msgstr "元数据将被保留"
 
-#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+#: src/feature/Upload/ExifBanner/ExifBanner.svelte
 msgid "Don't show again"
 msgstr "不再显示"
 
@@ -4870,10 +4854,14 @@ msgstr "不再显示"
 msgid "Dismiss"
 msgstr "关闭"
 
-#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+#: src/feature/Upload/ExifBanner/ExifBanner.svelte
 msgid "Adjust in preferences"
 msgstr "在偏好设置中调整"
 
-#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+#: src/feature/Upload/ExifBanner/ExifBanner.svelte
 msgid "Location, camera and other EXIF metadata is preserved in your uploads. <0/>"
 msgstr "位置、相机等 EXIF 元数据不会从您上传的图片中移除。<0/>"
+
+#: src/routes/upload/+page.svelte
+msgid "Upload in progress"
+msgstr "正在上传"

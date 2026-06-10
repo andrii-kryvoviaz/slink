@@ -2,6 +2,7 @@
   import type { ShareState } from '@slink/feature/Share';
   import { CopyContainer } from '@slink/feature/Text';
   import { Button } from '@slink/ui/components/button';
+  import { cardTheme, cardTitleTheme } from '@slink/ui/components/card';
   import { Root as BaseInput } from '@slink/ui/components/input';
   import {
     InputGroup,
@@ -77,12 +78,7 @@
 </script>
 
 {#if !dismissed}
-  <div
-    class={cn(
-      'rounded-xl bg-white/80 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-700/50 shadow-sm backdrop-blur-sm p-5 space-y-4',
-      className,
-    )}
-  >
+  <div class={cn(cardTheme({ elevation: 'flat' }), 'p-5 space-y-4', className)}>
     <div class="flex items-start gap-4">
       <div
         class="w-10 h-10 rounded-xl bg-slate-100/70 dark:bg-slate-700/40 flex items-center justify-center shrink-0 border border-slate-200/50 dark:border-slate-600/30"
@@ -102,9 +98,7 @@
 
       <div class="flex-1 min-w-0 space-y-1">
         {#if step === 'choose'}
-          <span
-            class="block text-base sm:text-lg font-semibold bg-gradient-to-r from-slate-700 to-slate-900 dark:from-slate-200 dark:to-slate-400 bg-clip-text text-transparent"
-          >
+          <span class={cardTitleTheme({ size: 'md' })}>
             Combine into a collection
           </span>
           <span
@@ -116,9 +110,7 @@
             ])}
           </span>
         {:else if step === 'created'}
-          <span
-            class="block text-base sm:text-lg font-semibold bg-gradient-to-r from-slate-700 to-slate-900 dark:from-slate-200 dark:to-slate-400 bg-clip-text text-transparent"
-          >
+          <span class={cardTitleTheme({ size: 'md' })}>
             Collection created
           </span>
           <span
@@ -127,11 +119,7 @@
             {created?.name ?? 'Unnamed'}
           </span>
         {:else}
-          <span
-            class="block text-base sm:text-lg font-semibold bg-gradient-to-r from-slate-700 to-slate-900 dark:from-slate-200 dark:to-slate-400 bg-clip-text text-transparent"
-          >
-            Ready to share
-          </span>
+          <span class={cardTitleTheme({ size: 'md' })}> Ready to share </span>
           <span
             class="block text-sm leading-snug text-slate-500 dark:text-slate-400"
           >

@@ -33,6 +33,14 @@
   );
 </script>
 
+{#snippet currentBadge()}
+  <span
+    class="inline-flex items-center px-1.5 py-px rounded-full text-[10px] font-semibold uppercase tracking-wider bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300"
+  >
+    Current
+  </span>
+{/snippet}
+
 <HoverCard.Root openDelay={500} closeDelay={200}>
   <HoverCard.Trigger>
     <Button
@@ -92,11 +100,7 @@
                 >Public</span
               >
               {#if preference.isPublic}
-                <span
-                  class="inline-flex items-center px-1.5 py-px rounded-full text-[10px] font-semibold uppercase tracking-wider bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300"
-                >
-                  Current
-                </span>
+                {@render currentBadge()}
               {/if}
             </div>
             <p
@@ -122,11 +126,7 @@
                 >Private</span
               >
               {#if !preference.isPublic}
-                <span
-                  class="inline-flex items-center px-1.5 py-px rounded-full text-[10px] font-semibold uppercase tracking-wider bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300"
-                >
-                  Current
-                </span>
+                {@render currentBadge()}
               {/if}
             </div>
             <p

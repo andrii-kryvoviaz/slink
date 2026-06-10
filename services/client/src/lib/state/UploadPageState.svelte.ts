@@ -93,6 +93,11 @@ class UploadPageState {
     return this._uploads;
   }
 
+  get singleUploadItem(): UploadItem | null {
+    if (this._isMultiUpload || !this._isUploading) return null;
+    return this._uploads[0] ?? null;
+  }
+
   get processing(): boolean {
     return this._isUploading || this._isMultiUpload;
   }
@@ -191,6 +196,14 @@ class UploadPageState {
   handleCancelMultiUpload() {
     uploadService.cancelAllUploads();
     this._resetMultiUpload();
+  }
+
+  handleCancelSingleUpload() {
+    if (this._isMultiUpload || !this._isUploading) return;
+
+    uploadService.cancelAllUploads();
+    this._uploads = [];
+    this._isUploading = false;
   }
 
   handleGoBackToUploadForm() {
