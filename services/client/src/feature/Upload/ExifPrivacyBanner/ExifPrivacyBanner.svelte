@@ -19,11 +19,15 @@
     {#snippet content()}
       <BannerContent title="Metadata kept on uploads">
         Location, camera and other EXIF metadata is preserved in your uploads.
-        <Link
-          href="/preferences"
-          class="font-medium text-blue-600 underline decoration-blue-600/40 underline-offset-2 transition-colors hover:text-blue-700 hover:decoration-blue-600/80 dark:text-blue-300 dark:decoration-blue-300/40 dark:hover:text-blue-200"
-          >Adjust in preferences</Link
-        >
+        {#if notice.canAdjustPreferences}
+          <span class="mt-1 block">
+            <Link
+              href="/preferences"
+              class="font-medium text-blue-600 underline decoration-blue-600/40 underline-offset-2 transition-colors hover:text-blue-700 hover:decoration-blue-600/80 dark:text-blue-300 dark:decoration-blue-300/40 dark:hover:text-blue-200"
+              >Adjust in preferences</Link
+            >
+          </span>
+        {/if}
       </BannerContent>
     {/snippet}
   </Banner>

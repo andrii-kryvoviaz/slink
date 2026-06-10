@@ -4877,5 +4877,9 @@ msgid "Dismiss"
 msgstr "Dismiss"
 
 #: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
-msgid "Location, camera and other EXIF metadata is preserved in your uploads. <0>Adjust in preferences</0>"
-msgstr "Location, camera and other EXIF metadata is preserved in your uploads. <0>Adjust in preferences</0>"
+msgid "Adjust in preferences"
+msgstr "Adjust in preferences"
+
+#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+msgid "Location, camera and other EXIF metadata is preserved in your uploads. <0/>"
+msgstr "Location, camera and other EXIF metadata is preserved in your uploads. <0/>"

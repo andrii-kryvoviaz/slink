@@ -5,6 +5,10 @@ export class ExifNoticeState {
     return !(page.data.uploadPolicy?.stripExif ?? true);
   }
 
+  get canAdjustPreferences(): boolean {
+    return Boolean(page.data.user);
+  }
+
   get visible(): boolean {
     return this.metadataKept && !page.data.settings.banners.hideExifKeptNotice;
   }

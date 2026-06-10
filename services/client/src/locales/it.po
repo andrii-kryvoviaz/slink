@@ -4866,7 +4866,7 @@ msgstr "Seleziona gestione dei metadati..."
 
 #: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
 msgid "Metadata kept on uploads"
-msgstr "Metadati mantenuti nei caricamenti"
+msgstr "I metadati vengono mantenuti"
 
 #: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
 msgid "Don't show again"
@@ -4877,5 +4877,9 @@ msgid "Dismiss"
 msgstr "Ignora"
 
 #: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
-msgid "Location, camera and other EXIF metadata is preserved in your uploads. <0>Adjust in preferences</0>"
-msgstr "Posizione, fotocamera e altri metadati EXIF vengono mantenuti nei tuoi caricamenti. <0>Modifica nelle preferenze</0>"
+msgid "Adjust in preferences"
+msgstr "Modifica nelle preferenze"
+
+#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+msgid "Location, camera and other EXIF metadata is preserved in your uploads. <0/>"
+msgstr "Posizione, fotocamera e altri metadati EXIF non vengono rimossi dalle immagini caricate. <0/>"

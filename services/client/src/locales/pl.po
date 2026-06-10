@@ -4882,7 +4882,7 @@ msgstr "Wybierz sposób obsługi metadanych..."
 
 #: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
 msgid "Metadata kept on uploads"
-msgstr "Metadane zachowywane w przesyłanych plikach"
+msgstr "Metadane pozostają w obrazach"
 
 #: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
 msgid "Don't show again"
@@ -4893,5 +4893,9 @@ msgid "Dismiss"
 msgstr "Zamknij"
 
 #: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
-msgid "Location, camera and other EXIF metadata is preserved in your uploads. <0>Adjust in preferences</0>"
-msgstr "Lokalizacja, aparat i inne metadane EXIF są zachowywane w przesyłanych plikach. <0>Dostosuj w preferencjach</0>"
+msgid "Adjust in preferences"
+msgstr "Dostosuj w preferencjach"
+
+#: src/feature/Upload/ExifPrivacyBanner/ExifPrivacyBanner.svelte
+msgid "Location, camera and other EXIF metadata is preserved in your uploads. <0/>"
+msgstr "Lokalizacja, dane aparatu i inne metadane EXIF nie są usuwane z przesyłanych obrazów. <0/>"

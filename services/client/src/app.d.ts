@@ -36,6 +36,7 @@ declare global {
       userAgent: string;
       sidebarGroups?: AppSidebarGroup[];
       uploadPolicy?: UploadPolicy;
+      user?: User | null;
     }
     // interface Platform {}
   }
