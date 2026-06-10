@@ -7,6 +7,8 @@ namespace Tests\Unit\Slink\User\Domain\ValueObject;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Image\Domain\Enum\License;
+use Slink\User\Domain\Enum\DefaultVisibility;
+use Slink\User\Domain\Enum\ExifMetadataPreference;
 use Slink\User\Domain\Enum\LandingPage;
 use Slink\User\Domain\ValueObject\UserPreferences;
 
@@ -221,5 +223,88 @@ final class UserPreferencesTest extends TestCase {
         $updated = $preferences->applyChanges(['image.externalUploadAutoPublish' => null]);
 
         $this->assertTrue($updated->getExternalUploadAutoPublish());
+    }
+
+    #[Test]
+    public function itDefaultsExifMetadataPreferenceToDefaultWhenCreatedWithoutArg(): void {
+        $preferences = UserPreferences::create();
+
+        $this->assertSame(ExifMetadataPreference::Default, $preferences->getExifMetadataPreference());
+    }
+
+    #[Test]
+    public function itDefaultsExifMetadataPreferenceToDefaultFromEmptyPayload(): void {
+        $preferences = UserPreferences::fromPayload([]);
+
+        $this->assertSame(ExifMetadataPreference::Default, $preferences->getExifMetadataPreference());
+    }
+
+    #[Test]
+    public function itDefaultsExifMetadataPreferenceToDefaultFromInvalidPayload(): void {
+        $preferences = UserPreferences::fromPayload(['image.stripExifMetadataOverride' => 'invalid']);
+
+        $this->assertSame(ExifMetadataPreference::Default, $preferences->getExifMetadataPreference());
+    }
+
+    #[Test]
+    public function itUpdatesExifMetadataPreferenceImmutably(): void {
+        $preferences = UserPreferences::create(exifMetadataPreference: ExifMetadataPreference::Keep);
+
+        $updated = $preferences->withExifMetadataPreference(ExifMetadataPreference::Strip);
+
+        $this->assertSame(ExifMetadataPreference::Keep, $preferences->getExifMetadataPreference());
+        $this->assertSame(ExifMetadataPreference::Strip, $updated->getExifMetadataPreference());
+        $this->assertNotSame($preferences, $updated);
+    }
+
+    #[Test]
+    public function itRoundTripsExifMetadataPreferenceThroughPayload(): void {
+        $preferences = UserPreferences::create(exifMetadataPreference: ExifMetadataPreference::Strip);
+
+        $payload = $preferences->toPayload();
+
+        $this->assertArrayHasKey('image.stripExifMetadataOverride', $payload);
+        $this->assertSame('strip', $payload['image.stripExifMetadataOverride']);
+
+        $restored = UserPreferences::fromPayload($payload);
+
+        $this->assertSame(ExifMetadataPreference::Strip, $restored->getExifMetadataPreference());
+    }
+
+    #[Test]
+    public function itOverwritesExifMetadataPreferenceWhenDefaultApplied(): void {
+        $preferences = UserPreferences::create(exifMetadataPreference: ExifMetadataPreference::Strip);
+
+        $updated = $preferences->applyChanges(['image.stripExifMetadataOverride' => 'default']);
+
+        $this->assertSame(ExifMetadataPreference::Default, $updated->getExifMetadataPreference());
+    }
+
+    #[Test]
+    public function itResolvesVisibilityToPublicWhenDefaultVisibilityPublic(): void {
+        $preferences = UserPreferences::create(defaultVisibility: DefaultVisibility::Public);
+
+        $this->assertTrue($preferences->resolveVisibility(false));
+    }
+
+    #[Test]
+    public function itResolvesVisibilityToPrivateWhenDefaultVisibilityPrivate(): void {
+        $preferences = UserPreferences::create(defaultVisibility: DefaultVisibility::Private);
+
+        $this->assertFalse($preferences->resolveVisibility(true));
+    }
+
+    #[Test]
+    public function itResolvesVisibilityToRequestedTrueWhenDefaultVisibilityUnset(): void {
+        $preferences = UserPreferences::empty();
+
+        $this->assertTrue($preferences->resolveVisibility(true));
+    }
+
+    #[Test]
+    public function itResolvesVisibilityToRequestedFalseWhenDefaultVisibilityUnset(): void {
+        $preferences = UserPreferences::empty();
+
+        $this->assertFalse($preferences->resolveVisibility(false));
     }
 }

@@ -9,6 +9,7 @@ use Slink\Shared\Application\Command\CommandInterface;
 use Slink\Shared\Infrastructure\MessageBus\EnvelopedMessage;
 use Slink\User\Domain\Enum\DefaultVisibility;
 use Slink\User\Domain\Enum\DisplayLanguage;
+use Slink\User\Domain\Enum\ExifMetadataPreference;
 use Slink\User\Domain\Enum\LandingPage;
 use Slink\User\Domain\ValueObject\UserPreferences;
 use Symfony\Component\Serializer\Attribute\SerializedName;
@@ -34,6 +35,9 @@ final readonly class UpdateUserPreferencesCommand implements CommandInterface {
     private ?string $displayLanguage = null,
     #[SerializedName('image.externalUploadAutoPublish')]
     private ?bool $externalUploadAutoPublish = null,
+    #[SerializedName('image.stripExifMetadataOverride')]
+    #[Assert\Choice(callback: [ExifMetadataPreference::class, 'values'], message: 'Invalid EXIF metadata preference.')]
+    private ?string $exifMetadataPreference = null,
   ) {
   }
 
@@ -44,6 +48,7 @@ final readonly class UpdateUserPreferencesCommand implements CommandInterface {
       defaultVisibility: $this->getDefaultVisibility(),
       displayLanguage: $this->getDisplayLanguage(),
       externalUploadAutoPublish: $this->externalUploadAutoPublish,
+      exifMetadataPreference: $this->getExifMetadataPreference(),
     );
   }
 
@@ -57,6 +62,7 @@ final readonly class UpdateUserPreferencesCommand implements CommandInterface {
       'image.defaultVisibility' => $this->defaultVisibility,
       'display.language' => $this->displayLanguage,
       'image.externalUploadAutoPublish' => $this->externalUploadAutoPublish,
+      'image.stripExifMetadataOverride' => $this->exifMetadataPreference,
     ];
   }
 
@@ -74,6 +80,10 @@ final readonly class UpdateUserPreferencesCommand implements CommandInterface {
 
   public function getDisplayLanguage(): ?DisplayLanguage {
     return $this->displayLanguage ? DisplayLanguage::tryFrom($this->displayLanguage) : null;
+  }
+
+  public function getExifMetadataPreference(): ?ExifMetadataPreference {
+    return $this->exifMetadataPreference ? ExifMetadataPreference::tryFrom($this->exifMetadataPreference) : null;
   }
 
   public function shouldSyncLicenseToImages(): bool {
