@@ -8,13 +8,13 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Slink\Image\Application\Command\UploadImage\UploadImageCommand;
+use Slink\Image\Application\Command\UploadImage\UploadImageResult;
 use Slink\Image\Application\Query\GetExternalUploadResponse\GetExternalUploadResponseQuery;
 use Slink\Shared\Application\Command\CommandBusInterface;
 use Slink\Shared\Application\Query\QueryBusInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Infrastructure\Auth\ApiKeyUser;
 use Slink\User\Infrastructure\ReadModel\View\ApiKeyView;
-use Symfony\Component\HttpFoundation\File\File;
 use UI\Http\Rest\Response\ApiResponse;
 
 final class UploadControllerTest extends TestCase {
@@ -47,32 +47,33 @@ final class UploadControllerTest extends TestCase {
       'id' => $imageId
     ];
     
-    $mockFile = $this->createStub(File::class);
-    $mockFile->method('guessExtension')->willReturn('jpg');
-    
     $command = $this->createMock(UploadImageCommand::class);
     $envelope = $this->createStub(\Symfony\Component\Messenger\Envelope::class);
-    
+
     $command->expects($this->once())
       ->method('withContext')
       ->with(['userId' => 'user-123'])
       ->willReturn($envelope);
-    
+
     $command->expects($this->once())
       ->method('getId')
       ->willReturn(ID::fromString($imageId));
-      
-    $command->expects($this->once())
-      ->method('getImageFile')
-      ->willReturn($mockFile);
-    
+
+    $command->expects($this->never())
+      ->method('getImageFile');
+
     $this->commandBus->expects($this->once())
-      ->method('handle')
-      ->with($envelope);
-    
+      ->method('handleSync')
+      ->with($envelope)
+      ->willReturn(new UploadImageResult('123e4567-e89b-12d3-a456-426614174000.jpg'));
+
     $this->queryBus->expects($this->once())
       ->method('ask')
-      ->with($this->isInstanceOf(GetExternalUploadResponseQuery::class))
+      ->with($this->callback(static function (GetExternalUploadResponseQuery $query) use ($imageId): bool {
+        return $query->getImageId() === $imageId
+          && $query->getFileName() === '123e4567-e89b-12d3-a456-426614174000.jpg'
+          && $query->getUserId() === 'user-123';
+      }))
       ->willReturn($expectedResponse);
     
     $apiKeyView = $this->createStub(ApiKeyView::class);
