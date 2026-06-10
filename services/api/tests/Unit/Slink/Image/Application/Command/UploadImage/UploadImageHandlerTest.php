@@ -9,383 +9,83 @@ use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Slink\Image\Application\Command\UploadImage\UploadImageCommand;
 use Slink\Image\Application\Command\UploadImage\UploadImageHandler;
-use Slink\Image\Application\Service\CollectionMembershipAssigner;
-use Slink\Image\Application\Service\ImageTagAssigner;
-use Slink\Image\Domain\Context\ImageCreationContext;
-use Slink\Image\Domain\Enum\ImageFormat;
-use Slink\Image\Domain\Factory\ImageMetadataFactory;
-use Slink\Image\Domain\Repository\ImageStoreRepositoryInterface;
-use Slink\Image\Domain\Service\ImageAnalyzerInterface;
-use Slink\Image\Domain\Service\ImageConversionResolverInterface;
-use Slink\Image\Domain\Service\ImageFileTransformerInterface;
-use Slink\Image\Domain\Service\ImageSanitizerInterface;
-use Slink\Image\Domain\Specification\ImageDuplicateSpecificationInterface;
-use Slink\Image\Domain\ValueObject\ImageMetadata;
-use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
-use Slink\Shared\Domain\Exception\Date\DateTimeException;
+use Slink\Image\Application\Command\UploadImage\UploadImageResult;
+use Slink\Image\Application\Service\Upload\UploadContext;
+use Slink\Image\Application\Service\Upload\UploadPipeline;
 use Slink\Shared\Domain\ValueObject\ID;
-use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\StorageInterface;
-use Slink\User\Application\Service\UserPreferencesService;
-use Slink\User\Domain\Repository\UserPreferencesRepositoryInterface;
 use Symfony\Component\HttpFoundation\File\File;
 
 class UploadImageHandlerTest extends TestCase {
-  
+
   /**
    * @throws Exception
-   * @throws DateTimeException
    */
   #[Test]
-  public function itHandlesUploadImageCommand(): void {
-    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
-    $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
-    $imageAnalyzer = $this->createStub(ImageAnalyzerInterface::class);
-    $imageTransformer = $this->createStub(ImageFileTransformerInterface::class);
-    $sanitizer = $this->createStub(ImageSanitizerInterface::class);
-    $conversionResolver = $this->createStub(ImageConversionResolverInterface::class);
-    $storage = $this->createMock(StorageInterface::class);
-    $duplicateSpec = $this->createStub(ImageDuplicateSpecificationInterface::class);
-    $creationContext = new ImageCreationContext($duplicateSpec);
-    $metadataFactory = $this->createStub(ImageMetadataFactory::class);
-    $userPreferencesRepo = $this->createStub(UserPreferencesRepositoryInterface::class);
-    $preferencesService = new UserPreferencesService($userPreferencesRepo);
-    $tagAssigner = $this->createStub(ImageTagAssigner::class);
-    $collectionAssigner = $this->createStub(CollectionMembershipAssigner::class);
-
-    $handler = new UploadImageHandler(
-      $configProvider,
-      $imageRepository,
-      $imageAnalyzer,
-      $imageTransformer,
-      $sanitizer,
-      $conversionResolver,
-      $creationContext,
-      $metadataFactory,
-      $storage,
-      $preferencesService,
-      $tagAssigner,
-      $collectionAssigner
-    );
+  public function itRunsPipelineWithContextBuiltFromCommand(): void {
+    $pipeline = $this->createMock(UploadPipeline::class);
 
     $file = $this->createStub(File::class);
-    $file->method('guessExtension')->willReturn('jpg');
-    $file->method('getMimeType')->willReturn('image/jpeg');
-    $file->method('getPathname')->willReturn('/tmp/test.jpg');
-    $file->method('getSize')->willReturn(1024);
-    
-    $metadataFactory->method('createFromImageFile')->willReturn(
-      new ImageMetadata(1024, 'image/jpeg', 800, 600, 'test_hash')
-    );
-    
-    $imageAnalyzer->method('requiresSanitization')->willReturn(false);
-    $imageAnalyzer->method('supportsExifProfile')->willReturn(false);
-    
-    $conversionResolver->method('resolve')->willReturn(null);
-    
-    $configProvider->method('get')->willReturnMap([
-      ['image.stripExifMetadata', false],
-      ['image.allowOnlyPublicImages', false],
-    ]);
-    
+    $imageId = ID::generate();
+    $userId = ID::generate();
+
     $command = $this->createStub(UploadImageCommand::class);
     $command->method('getImageFile')->willReturn($file);
-    $command->method('getId')->willReturn(ID::fromString('123'));
-    $command->method('getDescription')->willReturn('Test description');
+    $command->method('getId')->willReturn($imageId);
     $command->method('isPublic')->willReturn(true);
-    
-    $fileName = '123.jpg';
-    $storage->expects($this->once())->method('upload')->with($file, $fileName);
-    $imageRepository->expects($this->once())->method('store');
+    $command->method('getDescription')->willReturn('A description');
+    $command->method('getTagIds')->willReturn([]);
+    $command->method('getCollectionIds')->willReturn([]);
 
-    $handler($command);
+    $resolvedContext = $this->createStub(UploadContext::class);
+    $resolvedContext->method('fileName')->willReturn('resolved.webp');
+
+    $pipeline->expects($this->once())
+      ->method('run')
+      ->with($this->callback(static function (UploadContext $context) use ($imageId, $userId, $file): bool {
+        return $context->id() === $imageId
+          && $context->userId() !== null
+          && $context->userId()->toString() === $userId->toString()
+          && $context->requestedPublic() === true
+          && $context->description() === 'A description'
+          && $context->file() === $file;
+      }))
+      ->willReturn($resolvedContext);
+
+    $handler = new UploadImageHandler($pipeline);
+
+    $result = $handler($command, $userId->toString());
+
+    $this->assertInstanceOf(UploadImageResult::class, $result);
+    $this->assertSame('resolved.webp', $result->getFileName());
   }
 
+  /**
+   * @throws Exception
+   */
   #[Test]
-  public function itConvertsImageWhenForceFormatConversionEnabled(): void {
-    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
-    $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
-    $imageAnalyzer = $this->createStub(ImageAnalyzerInterface::class);
-    $imageTransformer = $this->createMock(ImageFileTransformerInterface::class);
-    $sanitizer = $this->createStub(ImageSanitizerInterface::class);
-    $conversionResolver = $this->createStub(ImageConversionResolverInterface::class);
-    $storage = $this->createMock(StorageInterface::class);
-    $duplicateSpec = $this->createStub(ImageDuplicateSpecificationInterface::class);
-    $creationContext = new ImageCreationContext($duplicateSpec);
-    $metadataFactory = $this->createStub(ImageMetadataFactory::class);
-    $userPreferencesRepo = $this->createStub(UserPreferencesRepositoryInterface::class);
-    $preferencesService = new UserPreferencesService($userPreferencesRepo);
-    $tagAssigner = $this->createStub(ImageTagAssigner::class);
-    $collectionAssigner = $this->createStub(CollectionMembershipAssigner::class);
-
-    $handler = new UploadImageHandler(
-      $configProvider,
-      $imageRepository,
-      $imageAnalyzer,
-      $imageTransformer,
-      $sanitizer,
-      $conversionResolver,
-      $creationContext,
-      $metadataFactory,
-      $storage,
-      $preferencesService,
-      $tagAssigner,
-      $collectionAssigner
-    );
-
-    $file = $this->createStub(File::class);
-    $file->method('guessExtension')->willReturn('jpg');
-    $file->method('getMimeType')->willReturn('image/jpeg');
-    $file->method('getPathname')->willReturn('/tmp/test.jpg');
-    $file->method('getSize')->willReturn(1024);
-
-    $convertedFile = $this->createStub(File::class);
-    $convertedFile->method('guessExtension')->willReturn('webp');
-    $convertedFile->method('getMimeType')->willReturn('image/webp');
-    $convertedFile->method('getPathname')->willReturn('/tmp/test.webp');
-    $convertedFile->method('getSize')->willReturn(512);
-
-    $metadataFactory->method('createFromImageFile')->willReturn(
-      new ImageMetadata(512, 'image/webp', 800, 600, 'test_hash')
-    );
-
-    $imageAnalyzer->method('requiresSanitization')->willReturn(false);
-    $imageAnalyzer->method('supportsExifProfile')->willReturn(false);
-
-    $conversionResolver->method('resolve')->willReturn(ImageFormat::WEBP);
-
-    $configProvider->method('get')->willReturnMap([
-      ['image.stripExifMetadata', false],
-      ['image.allowOnlyPublicImages', false],
-    ]);
-
-    $imageTransformer->expects($this->once())
-      ->method('convertToFormat')
-      ->with($file, ImageFormat::WEBP)
-      ->willReturn($convertedFile);
+  public function itBuildsContextWithNullUserForGuestUpload(): void {
+    $pipeline = $this->createMock(UploadPipeline::class);
 
     $command = $this->createStub(UploadImageCommand::class);
-    $command->method('getImageFile')->willReturn($file);
-    $command->method('getId')->willReturn(ID::fromString('123'));
-    $command->method('getDescription')->willReturn('Test description');
-    $command->method('isPublic')->willReturn(true);
+    $command->method('getImageFile')->willReturn($this->createStub(File::class));
+    $command->method('getId')->willReturn(ID::generate());
+    $command->method('isPublic')->willReturn(false);
+    $command->method('getDescription')->willReturn('');
+    $command->method('getTagIds')->willReturn([]);
+    $command->method('getCollectionIds')->willReturn([]);
 
-    $storage->expects($this->once())->method('upload')->with($convertedFile, '123.webp');
-    $imageRepository->expects($this->once())->method('store');
+    $resolvedContext = $this->createStub(UploadContext::class);
+    $resolvedContext->method('fileName')->willReturn('guest.webp');
 
-    $handler($command);
-  }
+    $pipeline->expects($this->once())
+      ->method('run')
+      ->with($this->callback(static fn(UploadContext $context): bool => $context->userId() === null))
+      ->willReturn($resolvedContext);
 
-  #[Test]
-  public function itSkipsAnimatedImagesWhenConvertAnimatedImagesDisabled(): void {
-    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
-    $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
-    $imageAnalyzer = $this->createStub(ImageAnalyzerInterface::class);
-    $imageTransformer = $this->createMock(ImageFileTransformerInterface::class);
-    $sanitizer = $this->createStub(ImageSanitizerInterface::class);
-    $conversionResolver = $this->createStub(ImageConversionResolverInterface::class);
-    $storage = $this->createMock(StorageInterface::class);
-    $duplicateSpec = $this->createStub(ImageDuplicateSpecificationInterface::class);
-    $creationContext = new ImageCreationContext($duplicateSpec);
-    $metadataFactory = $this->createStub(ImageMetadataFactory::class);
-    $userPreferencesRepo = $this->createStub(UserPreferencesRepositoryInterface::class);
-    $preferencesService = new UserPreferencesService($userPreferencesRepo);
-    $tagAssigner = $this->createStub(ImageTagAssigner::class);
-    $collectionAssigner = $this->createStub(CollectionMembershipAssigner::class);
+    $handler = new UploadImageHandler($pipeline);
 
-    $handler = new UploadImageHandler(
-      $configProvider,
-      $imageRepository,
-      $imageAnalyzer,
-      $imageTransformer,
-      $sanitizer,
-      $conversionResolver,
-      $creationContext,
-      $metadataFactory,
-      $storage,
-      $preferencesService,
-      $tagAssigner,
-      $collectionAssigner
-    );
+    $result = $handler($command);
 
-    $file = $this->createStub(File::class);
-    $file->method('guessExtension')->willReturn('gif');
-    $file->method('getMimeType')->willReturn('image/gif');
-    $file->method('getPathname')->willReturn('/tmp/test.gif');
-    $file->method('getSize')->willReturn(2048);
-
-    $metadataFactory->method('createFromImageFile')->willReturn(
-      new ImageMetadata(2048, 'image/gif', 200, 200, 'test_hash')
-    );
-
-    $imageAnalyzer->method('requiresSanitization')->willReturn(false);
-    $imageAnalyzer->method('supportsExifProfile')->willReturn(false);
-
-    $conversionResolver->method('resolve')->willReturn(null);
-
-    $configProvider->method('get')->willReturnMap([
-      ['image.stripExifMetadata', false],
-      ['image.allowOnlyPublicImages', false],
-    ]);
-
-    $imageTransformer->expects($this->never())->method('convertToFormat');
-
-    $command = $this->createStub(UploadImageCommand::class);
-    $command->method('getImageFile')->willReturn($file);
-    $command->method('getId')->willReturn(ID::fromString('123'));
-    $command->method('getDescription')->willReturn('Test description');
-    $command->method('isPublic')->willReturn(true);
-
-    $storage->expects($this->once())->method('upload')->with($file, '123.gif');
-    $imageRepository->expects($this->once())->method('store');
-
-    $handler($command);
-  }
-
-  #[Test]
-  public function itConvertsAnimatedImagesWhenConvertAnimatedImagesEnabled(): void {
-    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
-    $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
-    $imageAnalyzer = $this->createStub(ImageAnalyzerInterface::class);
-    $imageTransformer = $this->createMock(ImageFileTransformerInterface::class);
-    $sanitizer = $this->createStub(ImageSanitizerInterface::class);
-    $conversionResolver = $this->createStub(ImageConversionResolverInterface::class);
-    $storage = $this->createMock(StorageInterface::class);
-    $duplicateSpec = $this->createStub(ImageDuplicateSpecificationInterface::class);
-    $creationContext = new ImageCreationContext($duplicateSpec);
-    $metadataFactory = $this->createStub(ImageMetadataFactory::class);
-    $userPreferencesRepo = $this->createStub(UserPreferencesRepositoryInterface::class);
-    $preferencesService = new UserPreferencesService($userPreferencesRepo);
-    $tagAssigner = $this->createStub(ImageTagAssigner::class);
-    $collectionAssigner = $this->createStub(CollectionMembershipAssigner::class);
-
-    $handler = new UploadImageHandler(
-      $configProvider,
-      $imageRepository,
-      $imageAnalyzer,
-      $imageTransformer,
-      $sanitizer,
-      $conversionResolver,
-      $creationContext,
-      $metadataFactory,
-      $storage,
-      $preferencesService,
-      $tagAssigner,
-      $collectionAssigner
-    );
-
-    $file = $this->createStub(File::class);
-    $file->method('guessExtension')->willReturn('gif');
-    $file->method('getMimeType')->willReturn('image/gif');
-    $file->method('getPathname')->willReturn('/tmp/test.gif');
-    $file->method('getSize')->willReturn(2048);
-
-    $convertedFile = $this->createStub(File::class);
-    $convertedFile->method('guessExtension')->willReturn('webp');
-    $convertedFile->method('getMimeType')->willReturn('image/webp');
-    $convertedFile->method('getPathname')->willReturn('/tmp/test.webp');
-    $convertedFile->method('getSize')->willReturn(1024);
-
-    $metadataFactory->method('createFromImageFile')->willReturn(
-      new ImageMetadata(1024, 'image/webp', 200, 200, 'test_hash')
-    );
-
-    $imageAnalyzer->method('requiresSanitization')->willReturn(false);
-    $imageAnalyzer->method('supportsExifProfile')->willReturn(false);
-
-    $conversionResolver->method('resolve')->willReturn(ImageFormat::WEBP);
-
-    $configProvider->method('get')->willReturnMap([
-      ['image.stripExifMetadata', false],
-      ['image.allowOnlyPublicImages', false],
-    ]);
-
-    $imageTransformer->expects($this->once())
-      ->method('convertToFormat')
-      ->with($file, ImageFormat::WEBP)
-      ->willReturn($convertedFile);
-
-    $command = $this->createStub(UploadImageCommand::class);
-    $command->method('getImageFile')->willReturn($file);
-    $command->method('getId')->willReturn(ID::fromString('123'));
-    $command->method('getDescription')->willReturn('Test description');
-    $command->method('isPublic')->willReturn(true);
-
-    $storage->expects($this->once())->method('upload')->with($convertedFile, '123.webp');
-    $imageRepository->expects($this->once())->method('store');
-
-    $handler($command);
-  }
-
-  #[Test]
-  public function itSkipsSvgFromForceFormatConversion(): void {
-    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
-    $imageRepository = $this->createMock(ImageStoreRepositoryInterface::class);
-    $imageAnalyzer = $this->createStub(ImageAnalyzerInterface::class);
-    $imageTransformer = $this->createMock(ImageFileTransformerInterface::class);
-    $sanitizer = $this->createStub(ImageSanitizerInterface::class);
-    $conversionResolver = $this->createStub(ImageConversionResolverInterface::class);
-    $storage = $this->createMock(StorageInterface::class);
-    $duplicateSpec = $this->createStub(ImageDuplicateSpecificationInterface::class);
-    $creationContext = new ImageCreationContext($duplicateSpec);
-    $metadataFactory = $this->createStub(ImageMetadataFactory::class);
-    $userPreferencesRepo = $this->createStub(UserPreferencesRepositoryInterface::class);
-    $preferencesService = new UserPreferencesService($userPreferencesRepo);
-    $tagAssigner = $this->createStub(ImageTagAssigner::class);
-    $collectionAssigner = $this->createStub(CollectionMembershipAssigner::class);
-
-    $handler = new UploadImageHandler(
-      $configProvider,
-      $imageRepository,
-      $imageAnalyzer,
-      $imageTransformer,
-      $sanitizer,
-      $conversionResolver,
-      $creationContext,
-      $metadataFactory,
-      $storage,
-      $preferencesService,
-      $tagAssigner,
-      $collectionAssigner
-    );
-
-    $file = $this->createStub(File::class);
-    $file->method('guessExtension')->willReturn('svg');
-    $file->method('getMimeType')->willReturn('image/svg+xml');
-    $file->method('getPathname')->willReturn('/tmp/test.svg');
-    $file->method('getSize')->willReturn(512);
-
-    $sanitizedFile = $this->createStub(File::class);
-    $sanitizedFile->method('guessExtension')->willReturn('svg');
-    $sanitizedFile->method('getMimeType')->willReturn('image/svg+xml');
-    $sanitizedFile->method('getPathname')->willReturn('/tmp/test.svg');
-    $sanitizedFile->method('getSize')->willReturn(512);
-
-    $metadataFactory->method('createFromImageFile')->willReturn(
-      new ImageMetadata(512, 'image/svg+xml', 100, 100, 'test_hash')
-    );
-
-    $imageAnalyzer->method('requiresSanitization')->willReturn(true);
-    $imageAnalyzer->method('supportsExifProfile')->willReturn(false);
-
-    $sanitizer->method('sanitizeFile')->willReturn($sanitizedFile);
-    $conversionResolver->method('resolve')->willReturn(null);
-
-    $configProvider->method('get')->willReturnMap([
-      ['image.stripExifMetadata', false],
-      ['image.allowOnlyPublicImages', false],
-    ]);
-
-    $imageTransformer->expects($this->never())->method('convertToFormat');
-
-    $command = $this->createStub(UploadImageCommand::class);
-    $command->method('getImageFile')->willReturn($file);
-    $command->method('getId')->willReturn(ID::fromString('123'));
-    $command->method('getDescription')->willReturn('Test description');
-    $command->method('isPublic')->willReturn(true);
-
-    $storage->expects($this->once())->method('upload')->with($sanitizedFile, '123.svg');
-    $imageRepository->expects($this->once())->method('store');
-
-    $handler($command);
+    $this->assertSame('guest.webp', $result->getFileName());
   }
 }
