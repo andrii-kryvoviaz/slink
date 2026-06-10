@@ -240,6 +240,38 @@ abstract class HttpTestCase extends WebTestCase {
   }
 
   /**
+   * @return array{key: string, keyId: string}
+   */
+  protected function createApiKey(string $token, ?string $expiresAt = null): array {
+    $body = ['name' => 'integration-key'];
+
+    if ($expiresAt !== null) {
+      $body['expiresAt'] = $expiresAt;
+    }
+
+    $this->client->request(
+      'POST',
+      '/api/user/api-keys',
+      [],
+      [],
+      ['HTTP_AUTHORIZATION' => 'Bearer ' . $token, 'CONTENT_TYPE' => 'application/json'],
+      \json_encode($body, JSON_THROW_ON_ERROR),
+    );
+
+    $response = $this->client->getResponse();
+    self::assertSame(200, $response->getStatusCode(), 'Create API key failed: ' . (string) $response->getContent());
+
+    /** @var array{key: string, keyId: string} $payload */
+    $payload = \json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+    self::assertArrayHasKey('key', $payload);
+    self::assertArrayHasKey('keyId', $payload);
+    self::assertStringStartsWith('sk_', $payload['key']);
+
+    return $payload;
+  }
+
+  /**
    * @param array<string, string> $server
    */
   protected function apiRequest(

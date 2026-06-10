@@ -9,32 +9,6 @@ use Slink\User\Domain\Enum\UserStatus;
 use Tests\Integration\Http\HttpTestCase;
 
 final class ApiKeyAuthenticationTest extends HttpTestCase {
-  /**
-   * @return array{key: string, keyId: string}
-   */
-  private function createApiKey(string $token): array {
-    $this->client->request(
-      'POST',
-      '/api/user/api-keys',
-      [],
-      [],
-      ['HTTP_AUTHORIZATION' => 'Bearer ' . $token, 'CONTENT_TYPE' => 'application/json'],
-      \json_encode(['name' => 'integration-key'], JSON_THROW_ON_ERROR),
-    );
-
-    $response = $this->client->getResponse();
-    self::assertSame(200, $response->getStatusCode(), 'Create API key failed: ' . (string) $response->getContent());
-
-    /** @var array{key: string, keyId: string} $payload */
-    $payload = \json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
-
-    self::assertArrayHasKey('key', $payload);
-    self::assertArrayHasKey('keyId', $payload);
-    self::assertStringStartsWith('sk_', $payload['key']);
-
-    return $payload;
-  }
-
   private function storedKeyId(string $token): string {
     $this->apiRequest('GET', '/api/user/api-keys', $token);
 
