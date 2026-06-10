@@ -241,4 +241,5 @@ export const themeIcons: string[] = [
   'ph:magic-wand',
   'lucide:list-tree',
   'ph:link-simple',
+  'ph:map-pin',
 ];

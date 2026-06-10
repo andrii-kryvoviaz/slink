@@ -35,6 +35,7 @@ export type CollectionsState = {
 export type ShareState = { format: ShareFormat };
 export type CommentState = { sortOrder: SortOrder };
 export type UploadOptionsState = { expanded: boolean };
+export type BannersState = { hideExifKeptNotice: boolean };
 
 export type SettingsKey =
   | 'theme'
@@ -48,6 +49,7 @@ export type SettingsKey =
   | 'share'
   | 'comment'
   | 'uploadOptions'
+  | 'banners'
   | 'collections';
 
 export type CookieSettings = { [K in SettingsKey]?: unknown };
@@ -64,6 +66,7 @@ export const settingsKeys: SettingsKey[] = [
   'share',
   'comment',
   'uploadOptions',
+  'banners',
   'collections',
 ];
 
@@ -127,6 +130,7 @@ export const defaultSettings: Record<SettingsKey, unknown> = {
   share: { format: 'direct' },
   comment: { sortOrder: SortOrder.Asc },
   uploadOptions: { expanded: false },
+  banners: { hideExifKeptNotice: false },
   collections: { viewMode: 'grid', pageSize: 12, loadStrategy: 'load_more' },
 };
 
@@ -204,6 +208,7 @@ export class UserSettings {
   _uploadOptions = $state<UploadOptionsState>(
     defaultSettings.uploadOptions as UploadOptionsState,
   );
+  _banners = $state<BannersState>(defaultSettings.banners as BannersState);
 
   constructor(initial?: CookieSettings) {
     if (initial) {
@@ -344,6 +349,15 @@ export class UserSettings {
   set uploadOptions(v: UploadOptionsState) {
     this._uploadOptions = v;
     persist('uploadOptions', v);
+  }
+
+  get banners(): BannersState {
+    return this._banners;
+  }
+
+  set banners(v: BannersState) {
+    this._banners = v;
+    persist('banners', v);
   }
 
   private _apply(data: Record<string, unknown>): void {

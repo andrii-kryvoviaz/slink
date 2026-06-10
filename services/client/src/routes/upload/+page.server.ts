@@ -7,10 +7,15 @@ export const load: PageServerLoad = async ({ locals }) => {
     globalSettings?.image?.allowOnlyPublicImages ?? false;
   const defaultVisibility =
     userPreferences?.['image.defaultVisibility'] ?? null;
+  const stripExifMetadata = globalSettings?.image?.stripExifMetadata ?? true;
+  const exifOverride =
+    userPreferences?.['image.stripExifMetadataOverride'] ?? 'default';
 
   return {
     user,
     defaultVisibility,
+    stripExifMetadata,
+    exifOverride,
     allowOnlyPublicImages,
   };
 };

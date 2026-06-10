@@ -3,16 +3,19 @@
   import {
     Banner,
     BannerAction,
+    BannerContainer,
     BannerContent,
     BannerIcon,
   } from '@slink/feature/Layout';
   import * as Share from '@slink/feature/Share';
   import type { ShareState } from '@slink/feature/Share';
   import {
+    ExifPrivacyBanner,
     MultiUploadProgress,
     UploadCollectionBanner,
     UploadFormWithOptions,
     UploadSuccess,
+    isExifNoticeVisible,
   } from '@slink/feature/Upload';
   import type { Visibility } from '@slink/feature/Upload/UploadOptions';
   import { untrack } from 'svelte';
@@ -100,48 +103,61 @@
           />
         </div>
       {:else}
-        {#if !data.user}
-          <div class="mb-8">
-            {#if data.globalSettings?.access?.allowGuestUploads}
-              <Banner variant="info">
-                {#snippet icon()}
-                  <BannerIcon variant="info" icon="ph:upload-simple" />
-                {/snippet}
-                {#snippet content()}
-                  <BannerContent
-                    title="Guest Upload"
-                    description="You can upload images without an account, but consider signing in to manage them"
-                  />
-                {/snippet}
-                {#snippet action()}
-                  <BannerAction
-                    variant="info"
-                    href="/profile/login"
-                    text="Sign In"
-                  />
-                {/snippet}
-              </Banner>
-            {:else}
-              <Banner variant="warning">
-                {#snippet icon()}
-                  <BannerIcon variant="warning" icon="ph:lock-simple" />
-                {/snippet}
-                {#snippet content()}
-                  <BannerContent
-                    title="Sign in to continue"
-                    description="Upload and manage your images securely"
-                  />
-                {/snippet}
-                {#snippet action()}
-                  <BannerAction
-                    variant="warning"
-                    href="/profile/login"
-                    text="Get Started"
-                  />
-                {/snippet}
-              </Banner>
+        {@const showGuestNotice = !data.user}
+        {@const showExifNotice = isExifNoticeVisible(
+          data.stripExifMetadata,
+          data.exifOverride,
+          page.data.settings.banners.hideExifKeptNotice,
+        )}
+        {#if showGuestNotice || showExifNotice}
+          <BannerContainer class="mb-8">
+            {#if showGuestNotice}
+              {#if data.globalSettings?.access?.allowGuestUploads}
+                <Banner variant="info">
+                  {#snippet icon()}
+                    <BannerIcon variant="info" icon="ph:upload-simple" />
+                  {/snippet}
+                  {#snippet content()}
+                    <BannerContent
+                      title="Guest Upload"
+                      description="You can upload images without an account, but consider signing in to manage them"
+                    />
+                  {/snippet}
+                  {#snippet action()}
+                    <BannerAction
+                      variant="info"
+                      href="/profile/login"
+                      text="Sign In"
+                    />
+                  {/snippet}
+                </Banner>
+              {:else}
+                <Banner variant="warning">
+                  {#snippet icon()}
+                    <BannerIcon variant="warning" icon="ph:lock-simple" />
+                  {/snippet}
+                  {#snippet content()}
+                    <BannerContent
+                      title="Sign in to continue"
+                      description="Upload and manage your images securely"
+                    />
+                  {/snippet}
+                  {#snippet action()}
+                    <BannerAction
+                      variant="warning"
+                      href="/profile/login"
+                      text="Get Started"
+                    />
+                  {/snippet}
+                </Banner>
+              {/if}
             {/if}
-          </div>
+
+            <ExifPrivacyBanner
+              stripExifMetadata={data.stripExifMetadata}
+              exifOverride={data.exifOverride}
+            />
+          </BannerContainer>
         {/if}
 
         <UploadFormWithOptions
