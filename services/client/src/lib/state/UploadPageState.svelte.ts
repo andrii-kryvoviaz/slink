@@ -23,8 +23,6 @@ import { routes } from '@slink/utils/url';
 interface UploadPageData {
   user: User | null;
   globalSettings: GlobalSettings | null;
-  defaultVisibility: string | null;
-  allowOnlyPublicImages: boolean;
 }
 
 interface CreatedCollection {

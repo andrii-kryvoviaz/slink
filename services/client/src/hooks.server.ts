@@ -8,6 +8,7 @@ import { ApiProxy } from '@slink/api/ApiProxy';
 import { createApiClient } from '@slink/api/Client';
 
 import { CookieManager } from '@slink/lib/auth/CookieManager';
+import { resolveUploadPolicy } from '@slink/lib/settings/UploadPolicy';
 import { Theme, setCookieSettingsOnLocals } from '@slink/lib/settings/server';
 
 import { locales } from './locales/data.js';
@@ -109,6 +110,15 @@ const setUserPreferencesOnLocals: Handle = async ({ event, resolve }) => {
   return resolve(event);
 };
 
+const setUploadPolicyOnLocals: Handle = async ({ event, resolve }) => {
+  event.locals.uploadPolicy = resolveUploadPolicy(
+    event.locals.globalSettings,
+    event.locals.userPreferences,
+  );
+
+  return resolve(event);
+};
+
 const applyUserLocalePreference: Handle = async ({ event, resolve }) => {
   const userLocale = event.locals.userPreferences?.['display.language'];
   if (userLocale) {
@@ -164,6 +174,7 @@ export const handle = sequence(
   injectApiHandling,
   setGlobalSettingsOnLocals,
   setUserPreferencesOnLocals,
+  setUploadPolicyOnLocals,
   applyUserLocalePreference,
   setCookieSettingsOnLocals,
   applyClientTheme,

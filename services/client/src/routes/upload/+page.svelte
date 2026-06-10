@@ -15,9 +15,8 @@
     UploadCollectionBanner,
     UploadFormWithOptions,
     UploadSuccess,
-    isExifNoticeVisible,
+    useExifNotice,
   } from '@slink/feature/Upload';
-  import type { Visibility } from '@slink/feature/Upload/UploadOptions';
   import { untrack } from 'svelte';
 
   import { page } from '$app/state';
@@ -34,6 +33,8 @@
   let { data }: Props = $props();
 
   const uploadState = useUploadPageState(data, page.url);
+
+  const exifNotice = useExifNotice();
 
   let share: ShareState | null = $state(null);
   let lastSharedCollectionId: string | null = $state(null);
@@ -104,12 +105,7 @@
         </div>
       {:else}
         {@const showGuestNotice = !data.user}
-        {@const showExifNotice = isExifNoticeVisible(
-          data.stripExifMetadata,
-          data.exifOverride,
-          page.data.settings.banners.hideExifKeptNotice,
-        )}
-        {#if showGuestNotice || showExifNotice}
+        {#if showGuestNotice || exifNotice.visible}
           <BannerContainer class="mb-8">
             {#if showGuestNotice}
               {#if data.globalSettings?.access?.allowGuestUploads}
@@ -153,10 +149,7 @@
               {/if}
             {/if}
 
-            <ExifPrivacyBanner
-              stripExifMetadata={data.stripExifMetadata}
-              exifOverride={data.exifOverride}
-            />
+            <ExifPrivacyBanner />
           </BannerContainer>
         {/if}
 
@@ -166,8 +159,8 @@
           allowMultiple={true}
           selectedTags={uploadState.selectedTags}
           selectedCollections={uploadState.selectedCollections}
-          visibility={(data.defaultVisibility as Visibility) ?? 'private'}
-          allowOnlyPublicImages={data.allowOnlyPublicImages}
+          visibility={data.uploadPolicy.defaultVisibility ?? 'private'}
+          allowOnlyPublicImages={data.uploadPolicy.allowOnlyPublicImages}
           onTagsChange={(tags) => uploadState.setSelectedTags(tags)}
           onCollectionsChange={(collections) =>
             uploadState.setSelectedCollections(collections)}

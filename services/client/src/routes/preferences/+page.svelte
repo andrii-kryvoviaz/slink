@@ -18,6 +18,7 @@
   import { LandingPage } from '@slink/lib/enum/LandingPage';
   import type { License } from '@slink/lib/enum/License';
   import { Locale } from '@slink/lib/settings/Settings.enums';
+  import type { UploadPolicy } from '@slink/lib/settings/UploadPolicy';
   import { applyLocale } from '@slink/lib/utils/i18n';
   import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
@@ -32,7 +33,7 @@
     preferences: UserPreferencesResponse;
     licenses: License[];
     licensingEnabled: boolean;
-    allowOnlyPublicImages: boolean;
+    uploadPolicy: UploadPolicy;
   }
 
   interface Props {
@@ -189,7 +190,7 @@
         </div>
       </section>
 
-      {#if !data.allowOnlyPublicImages}
+      {#if !data.uploadPolicy.allowOnlyPublicImages}
         <section class="space-y-1">
           <div class="flex items-center justify-between gap-4 pb-3">
             <h2

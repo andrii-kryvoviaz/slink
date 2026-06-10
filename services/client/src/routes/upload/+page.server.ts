@@ -1,21 +1,10 @@
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals }) => {
-  const { user, globalSettings, userPreferences } = locals;
-
-  const allowOnlyPublicImages =
-    globalSettings?.image?.allowOnlyPublicImages ?? false;
-  const defaultVisibility =
-    userPreferences?.['image.defaultVisibility'] ?? null;
-  const stripExifMetadata = globalSettings?.image?.stripExifMetadata ?? true;
-  const exifOverride =
-    userPreferences?.['image.stripExifMetadataOverride'] ?? 'default';
+  const { user, uploadPolicy } = locals;
 
   return {
     user,
-    defaultVisibility,
-    stripExifMetadata,
-    exifOverride,
-    allowOnlyPublicImages,
+    uploadPolicy,
   };
 };

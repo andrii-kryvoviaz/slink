@@ -1,4 +1,5 @@
 export * from './Settings.enums';
+export * from './UploadPolicy';
 export {
   UserSettings,
   type CookieSettings,

@@ -1,45 +1,18 @@
-<script module lang="ts">
-  export function isExifNoticeVisible(
-    stripExifMetadata: boolean,
-    exifOverride: 'default' | 'strip' | 'keep',
-    hidden: boolean,
-  ): boolean {
-    const metadataKept =
-      exifOverride === 'default' ? !stripExifMetadata : exifOverride === 'keep';
-    return metadataKept && !hidden;
-  }
-</script>
-
 <script lang="ts">
   import { Banner, BannerContent, BannerIcon } from '@slink/feature/Layout';
   import { Link } from '@slink/ui/components/link';
 
-  import { page } from '$app/state';
+  import { useExifNotice } from './ExifNoticeState.svelte';
 
-  interface Props {
-    stripExifMetadata: boolean;
-    exifOverride: 'default' | 'strip' | 'keep';
-  }
-
-  let { stripExifMetadata, exifOverride }: Props = $props();
-
-  const { settings } = page.data;
-
-  const visible = $derived(
-    isExifNoticeVisible(
-      stripExifMetadata,
-      exifOverride,
-      settings.banners.hideExifKeptNotice,
-    ),
-  );
-
-  function dismiss(): void {
-    settings.banners = { ...settings.banners, hideExifKeptNotice: true };
-  }
+  const notice = useExifNotice();
 </script>
 
-{#if visible}
-  <Banner variant="info" onDismiss={dismiss} dismissLabel="Don't show again">
+{#if notice.visible}
+  <Banner
+    variant="info"
+    onDismiss={() => notice.dismiss()}
+    dismissLabel="Don't show again"
+  >
     {#snippet icon()}
       <BannerIcon variant="info" icon="ph:map-pin" />
     {/snippet}

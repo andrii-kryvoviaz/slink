@@ -17,9 +17,6 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
 
   const licensingEnabled = globalSettings?.image?.enableLicensing ?? false;
 
-  const allowOnlyPublicImages =
-    globalSettings?.image?.allowOnlyPublicImages ?? false;
-
   const preferences = locals.userPreferences ?? {
     'license.default': null,
     'navigation.landingPage': null,
@@ -51,7 +48,7 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
     preferences,
     licenses,
     licensingEnabled,
-    allowOnlyPublicImages,
+    uploadPolicy: locals.uploadPolicy,
   };
 };
 

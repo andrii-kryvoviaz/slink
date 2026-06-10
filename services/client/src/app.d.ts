@@ -8,6 +8,7 @@ import type { UserPreferencesResponse } from '@slink/api/Response/User/UserPrefe
 import type { CookieManager } from '@slink/lib/auth/CookieManager';
 import type { User } from '@slink/lib/auth/Type/User';
 import type { GlobalSettings } from '@slink/lib/settings/Type/GlobalSettings';
+import type { UploadPolicy } from '@slink/lib/settings/UploadPolicy';
 import type { UserSettings } from '@slink/lib/settings/UserSettings.svelte';
 
 declare global {
@@ -26,6 +27,7 @@ declare global {
       globalSettings: GlobalSettings | null;
       user: User | null;
       userPreferences: UserPreferencesResponse | null;
+      uploadPolicy: UploadPolicy;
       cookieManager: CookieManager;
       locale: string;
     }
@@ -33,6 +35,7 @@ declare global {
       settings: UserSettings;
       userAgent: string;
       sidebarGroups?: AppSidebarGroup[];
+      uploadPolicy?: UploadPolicy;
     }
     // interface Platform {}
   }
