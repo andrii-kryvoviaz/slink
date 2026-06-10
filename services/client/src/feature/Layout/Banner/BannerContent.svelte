@@ -1,10 +1,13 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte';
+
   interface Props {
     title: string;
-    description: string;
+    description?: string;
+    children?: Snippet<[]>;
   }
 
-  let { title, description }: Props = $props();
+  let { title, description, children }: Props = $props();
 </script>
 
 <div>
@@ -12,6 +15,6 @@
     {title}
   </h3>
   <p class="text-xs text-slate-600 dark:text-slate-400">
-    {description}
+    {#if children}{@render children()}{:else}{description}{/if}
   </p>
 </div>

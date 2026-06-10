@@ -3,6 +3,7 @@
   import {
     Banner,
     BannerAction,
+    BannerContainer,
     BannerContent,
     BannerFooter,
     BannerIcon,
@@ -203,7 +204,7 @@
     {/if}
   </div>
 
-  <div class="mt-6 space-y-4">
+  <BannerContainer class="mt-6">
     {#if data.globalSettings?.demo?.enabled}
       <Banner variant="violet">
         {#snippet icon()}
@@ -249,5 +250,5 @@
         {/snippet}
       </Banner>
     {/if}
-  </div>
+  </BannerContainer>
 </div>
