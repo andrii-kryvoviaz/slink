@@ -24,6 +24,7 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
     'license.default': null,
     'navigation.landingPage': null,
     'image.defaultVisibility': null,
+    'image.stripExifMetadataOverride': null,
     'image.externalUploadAutoPublish': null,
     'display.language': null,
   };
@@ -61,6 +62,7 @@ export const actions: Actions = {
       syncLicenseToImages,
       defaultLandingPage,
       defaultVisibility,
+      exifMetadataPreference,
       externalUploadAutoPublish,
       displayLanguage,
     } = await formData(request);
@@ -71,6 +73,7 @@ export const actions: Actions = {
         syncLicenseToImages: syncLicenseToImages === 'true',
         defaultLandingPage: defaultLandingPage || null,
         defaultVisibility: defaultVisibility || null,
+        exifMetadataPreference: exifMetadataPreference || null,
         externalUploadAutoPublish: externalUploadAutoPublish === 'true',
         displayLanguage: displayLanguage || null,
       });

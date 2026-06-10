@@ -59,6 +59,12 @@
     { value: 'private', label: 'Private' },
   ];
 
+  const exifPreferenceOptions = [
+    { value: 'default', label: 'Use server default' },
+    { value: 'strip', label: 'Always strip' },
+    { value: 'keep', label: 'Always keep' },
+  ];
+
   const landingPageOptions = [
     { value: LandingPage.Explore, label: 'Explore' },
     { value: LandingPage.Upload, label: 'Upload' },
@@ -211,6 +217,25 @@
                 type="hidden"
                 name="defaultVisibility"
                 value={state.visibility ?? ''}
+              />
+            </SettingItem>
+
+            <SettingItem>
+              {#snippet label()}
+                EXIF Metadata
+              {/snippet}
+              {#snippet hint()}
+                Override how metadata is stripped from your uploads.
+              {/snippet}
+              <Select
+                items={exifPreferenceOptions}
+                bind:value={state.exifPreference}
+                placeholder="Select metadata handling..."
+              />
+              <input
+                type="hidden"
+                name="exifMetadataPreference"
+                value={state.exifPreference}
               />
             </SettingItem>
 

@@ -9,6 +9,7 @@ export class PreferencesPageState {
   locale = $state(Locale.EN);
   landingPage = $state(LandingPage.Explore);
   visibility = $state('private');
+  exifPreference = $state('default');
   externalUploadAutoPublish = $state(false);
   license = $state('');
   syncToImages = $state(false);
@@ -22,6 +23,8 @@ export class PreferencesPageState {
     this.landingPage =
       preferences?.['navigation.landingPage'] ?? LandingPage.Explore;
     this.visibility = preferences?.['image.defaultVisibility'] ?? 'private';
+    this.exifPreference =
+      preferences?.['image.stripExifMetadataOverride'] ?? 'default';
     this.externalUploadAutoPublish =
       preferences?.['image.externalUploadAutoPublish'] ?? false;
     this.license = preferences?.['license.default'] ?? '';
@@ -50,6 +53,7 @@ export class PreferencesPageState {
       locale: this.locale,
       landingPage: this.landingPage,
       visibility: this.visibility,
+      exifPreference: this.exifPreference,
       externalUploadAutoPublish: this.externalUploadAutoPublish,
       license: this.license,
     };
