@@ -1,0 +1,31 @@
+services:
+  samba:
+    image: ghcr.io/servercontainers/samba:smbd-only-a3.24.0-s4.23.8-r0@sha256:196b45cb5fad07343e57be1f36cba285f7ffe868d72ced5b7e8c462a26b236be
+    container_name: slink-storage-test-samba
+    environment:
+      - ACCOUNT_test=test
+      - UID_test=1000
+      - "SAMBA_VOLUME_CONFIG_slink=[slink]; path = /shares/slink; valid users = test; guest ok = no; read only = no; browseable = yes"
+    ports:
+      - "445:445"
+    tmpfs:
+      - /shares/slink
+
+  seaweedfs:
+    image: chrislusf/seaweedfs:4.33@sha256:f0b358973e81f884304737645dd3b278c590c2c9d47d60089729d46324f70495
+    container_name: slink-storage-test-seaweedfs
+    command: mini -dir=/data
+    environment:
+      - AWS_ACCESS_KEY_ID=slink-test-key
+      - AWS_SECRET_ACCESS_KEY=slink-test-secret
+      - S3_BUCKET=slink-test
+    ports:
+      - "8333:8333"
+    tmpfs:
+      - /data
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8333/healthz"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+      start_period: 5s

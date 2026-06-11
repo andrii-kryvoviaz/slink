@@ -132,7 +132,14 @@ final class SmbStorage extends AbstractStorage implements DirectoryStorageInterf
     [$name, $_] = explode('.', $fileName);
     $this->deleteCacheFiles($name);
   }
-  
+
+  protected function deletePath(string $path): void {
+    try {
+      $this->share->del($path);
+    } catch (NotFoundException) {
+    }
+  }
+
   private function deleteCacheFiles(string $prefix): void {
     $cachePath = $this->getPath(isCache: true);
     

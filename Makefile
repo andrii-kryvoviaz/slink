@@ -11,6 +11,15 @@ test-e2e:
 	cd ../.. && docker compose -p slink-e2e -f docker/docker-compose.yaml -f docker/docker-compose.e2e.yaml down --volumes; \
 	exit $$rc
 
+test-storage:
+	docker compose -p slink-storage-test -f docker/docker-compose.storage-test.yaml up -d --wait
+	cd services/api && vendor/bin/phpunit --group storage-integration --no-coverage; \
+	rc=$$?; \
+	cd ../.. && docker run --rm --network slink-storage-test_default -v $(PWD)/services/api:/app -w /app -e STORAGE_TEST_SMB_HOST=samba php:8.5-cli-alpine sh -lc 'apk add -q samba-client && php vendor/bin/phpunit --group storage-integration --filter SmbStorageContractTest --no-coverage'; \
+	rc2=$$?; \
+	docker compose -p slink-storage-test -f docker/docker-compose.storage-test.yaml down --volumes; \
+	exit $$((rc | rc2))
+
 run-dev:
 	docker buildx bake -f docker-bake.hcl dev --load
 	docker compose -p slink -f docker/docker-compose.yaml -f docker/docker-compose.dev.yaml up -d

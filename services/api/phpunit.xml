@@ -27,6 +27,12 @@
         </testsuite>
     </testsuites>
 
+    <groups>
+        <exclude>
+            <group>storage-integration</group>
+        </exclude>
+    </groups>
+
     <source>
         <include>
             <directory suffix=".php">src</directory>

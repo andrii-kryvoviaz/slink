@@ -101,7 +101,13 @@ final class LocalStorage extends AbstractStorage implements DirectoryStorageInte
     [$name, $_] = explode('.', $fileName);
     $this->deleteCacheFiles($name);
   }
-  
+
+  protected function deletePath(string $path): void {
+    if (file_exists($path)) {
+      unlink($path);
+    }
+  }
+
   private function deleteCacheFiles(string $prefix): void {
     $cachePath = $this->getPath(isCache: true);
     

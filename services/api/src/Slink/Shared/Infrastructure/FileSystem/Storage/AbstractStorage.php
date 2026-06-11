@@ -144,6 +144,8 @@ abstract class AbstractStorage implements StorageInterface, StorageCacheInterfac
 
   abstract public function clearCache(): int;
 
+  abstract protected function deletePath(string $path): void;
+
   public function existsInCache(string $fileName): bool {
     $cachePath = $this->cachePath($fileName);
     return $this->exists($cachePath);
@@ -171,13 +173,11 @@ abstract class AbstractStorage implements StorageInterface, StorageCacheInterfac
   public function deleteFromCache(string $fileName): void {
     $cachePath = $this->cachePath($fileName);
 
-    if ($this->exists($cachePath)) {
-      if ($this instanceof DirectoryStorageInterface) {
-        unlink($cachePath);
-      } else {
-        $this->delete($fileName);
-      }
+    if (!$this->exists($cachePath)) {
+      return;
     }
+
+    $this->deletePath($cachePath);
   }
 
   private function getCacheDirPath(): string {

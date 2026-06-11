@@ -47,6 +47,17 @@ final class AmazonS3Storage extends AbstractStorage implements ObjectStorageInte
     $this->deleteByPrefix($name);
   }
   
+  protected function deletePath(string $path): void {
+    try {
+      $this->client->deleteObject([
+        'Bucket' => $this->settings->getBucket(),
+        'Key' => $path
+      ]);
+    } catch (\Exception $e) {
+      throw new AmazonS3Exception($e->getMessage());
+    }
+  }
+
   public function deleteByPrefix(string $prefix): void {
     try {
       $bucket = $this->settings->getBucket();
