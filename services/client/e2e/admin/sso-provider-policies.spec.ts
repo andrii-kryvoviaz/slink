@@ -41,7 +41,7 @@ test.describe('Admin SSO provider policies', { tag: '@serial' }, () => {
     const slug = uniqueSlug();
 
     await ssoSettingsPage.gotoNew();
-    await ssoSettingsPage.customProviderTile.click();
+    await ssoSettingsPage.selectCustomProvider();
 
     await ssoSettingsPage.fillCustomProviderForm({
       name: 'E2E Policy Provider',
@@ -51,8 +51,8 @@ test.describe('Admin SSO provider policies', { tag: '@serial' }, () => {
       clientSecret: 'e2e-client-secret',
     });
 
-    await ssoSettingsPage.registrationPolicyRadio('Allowed').click();
-    await ssoSettingsPage.approvalPolicyRadio('Auto-approve').click();
+    await ssoSettingsPage.selectRegistrationPolicy('Allowed');
+    await ssoSettingsPage.selectApprovalPolicy('Auto-approve');
 
     await expect(
       ssoSettingsPage.registrationPolicyRadio('Allowed'),
@@ -91,7 +91,7 @@ test.describe('Admin SSO provider policies', { tag: '@serial' }, () => {
       ssoSettingsPage.approvalPolicyRadio('Auto-approve'),
     ).toHaveAttribute('aria-checked', 'true');
 
-    await ssoSettingsPage.registrationPolicyRadio('Blocked').click();
+    await ssoSettingsPage.selectRegistrationPolicy('Blocked');
 
     await expect(
       page.getByText('Only existing users can sign in with this provider'),
@@ -131,8 +131,8 @@ test.describe('Admin SSO provider policies', { tag: '@serial' }, () => {
 
     await ssoSettingsPage.gotoEdit(id);
 
-    await ssoSettingsPage.approvalPolicyRadio('Global').click();
-    await ssoSettingsPage.registrationPolicyRadio('Global').click();
+    await ssoSettingsPage.selectApprovalPolicy('Global');
+    await ssoSettingsPage.selectRegistrationPolicy('Global');
 
     await ssoSettingsPage.updateProviderButton.click();
     await ssoSettingsPage.waitForList();

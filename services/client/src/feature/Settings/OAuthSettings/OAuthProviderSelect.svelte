@@ -24,6 +24,7 @@
       class={providerSelectTileTheme({
         intent: provider.isCustom ? 'custom' : 'provider',
       })}
+      aria-label={provider.isCustom ? provider.name : undefined}
       onclick={() => onSelect(provider.slug)}
     >
       <div class={providerSelectIconTheme()}>

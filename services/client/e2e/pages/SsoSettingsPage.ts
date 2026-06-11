@@ -1,4 +1,4 @@
-import { type Locator } from '@playwright/test';
+import { type Locator, expect } from '@playwright/test';
 
 import { BasePage } from './BasePage';
 
@@ -35,9 +35,15 @@ export class SsoSettingsPage extends BasePage {
   }
 
   get customProviderTile(): Locator {
-    return this.providerTileGrid
-      .getByRole('button')
-      .filter({ hasNotText: /\S/ });
+    return this.page
+      .getByRole('button', { name: 'Custom', exact: true })
+      .or(
+        this.providerTileGrid.getByRole('button').filter({ hasNotText: /\S/ }),
+      );
+  }
+
+  get customProviderNameInput(): Locator {
+    return this.page.getByPlaceholder('e.g. My SSO Provider');
   }
 
   get addProviderButton(): Locator {
@@ -71,6 +77,21 @@ export class SsoSettingsPage extends BasePage {
     await this.page.waitForURL(`**${SsoSettingsPage.LIST_URL}`);
   }
 
+  async selectCustomProvider() {
+    await this.clickUntil(
+      this.customProviderTile,
+      this.customProviderNameInput,
+    );
+  }
+
+  async selectRegistrationPolicy(label: RegistrationPolicyLabel) {
+    await this.checkRadio(this.registrationPolicyRadio(label));
+  }
+
+  async selectApprovalPolicy(label: ApprovalPolicyLabel) {
+    await this.checkRadio(this.approvalPolicyRadio(label));
+  }
+
   async fillCustomProviderForm(fields: {
     name: string;
     slug: string;
@@ -78,7 +99,7 @@ export class SsoSettingsPage extends BasePage {
     clientId: string;
     clientSecret: string;
   }) {
-    await this.page.getByPlaceholder('e.g. My SSO Provider').fill(fields.name);
+    await this.customProviderNameInput.fill(fields.name);
     await this.page.getByPlaceholder('e.g. my-provider').fill(fields.slug);
     await this.page
       .getByPlaceholder('https://idp.example.com')
@@ -95,5 +116,14 @@ export class SsoSettingsPage extends BasePage {
         has: this.page.getByRole('button', { name: 'Google' }),
       })
       .last();
+  }
+
+  private async checkRadio(radio: Locator) {
+    await expect(async () => {
+      await radio.click();
+      await expect(radio).toHaveAttribute('aria-checked', 'true', {
+        timeout: 1000,
+      });
+    }).toPass({ timeout: 15000 });
   }
 }
