@@ -9,6 +9,8 @@ use PHPUnit\Framework\TestCase;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Application\Command\UpdateOAuthProvider\UpdateOAuthProviderCommand;
 use Slink\User\Application\Command\UpdateOAuthProvider\UpdateOAuthProviderHandler;
+use Slink\User\Domain\Enum\ApprovalPolicy;
+use Slink\User\Domain\Enum\RegistrationPolicy;
 use Slink\User\Domain\ValueObject\OAuth\ProviderSlug;
 use Slink\User\Domain\OAuthProvider;
 use Slink\User\Domain\Repository\OAuthProviderStoreRepositoryInterface;
@@ -36,6 +38,8 @@ final class UpdateOAuthProviderHandlerTest extends TestCase {
         $this->equalTo(ClientSecret::fromString('new-client-secret')),
         $this->equalTo(DiscoveryUrl::fromString('https://accounts.google.com/.well-known/openid-configuration')),
         $this->equalTo(OAuthScopes::fromString('openid email')),
+        RegistrationPolicy::Allowed,
+        ApprovalPolicy::None,
         true,
         2.0,
       );
@@ -61,7 +65,40 @@ final class UpdateOAuthProviderHandlerTest extends TestCase {
       scopes: 'openid email',
       enabled: true,
       sortOrder: 2.0,
+      registrationPolicy: 'allowed',
+      approvalPolicy: 'none',
     );
+
+    $handler($command, $id->toString());
+  }
+
+  #[Test]
+  public function itLeavesPoliciesUnchangedWhenNotProvided(): void {
+    $id = ID::generate();
+    $provider = $this->createMock(OAuthProvider::class);
+
+    $provider->expects($this->once())
+      ->method('update')
+      ->with(
+        $this->equalTo(ProviderName::fromString('Updated Google')),
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+      );
+
+    $providerStore = $this->createStub(OAuthProviderStoreRepositoryInterface::class);
+    $providerStore->method('get')->willReturn($provider);
+
+    $handler = new UpdateOAuthProviderHandler($providerStore);
+
+    $command = new UpdateOAuthProviderCommand(name: 'Updated Google');
 
     $handler($command, $id->toString());
   }

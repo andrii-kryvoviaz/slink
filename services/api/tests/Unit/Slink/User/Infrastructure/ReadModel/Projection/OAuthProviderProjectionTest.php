@@ -9,6 +9,8 @@ use PHPUnit\Framework\TestCase;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Encryption\EncryptionRegistry;
 use Slink\Shared\Infrastructure\Encryption\EncryptionService;
+use Slink\User\Domain\Enum\ApprovalPolicy;
+use Slink\User\Domain\Enum\RegistrationPolicy;
 use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasCreated;
 use Slink\User\Domain\ValueObject\OAuth\ProviderSlug;
 use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasRemoved;
@@ -49,6 +51,8 @@ final class OAuthProviderProjectionTest extends TestCase {
       clientSecret: ClientSecret::fromString('client-secret-456'),
       discoveryUrl: DiscoveryUrl::fromString('https://accounts.google.com/.well-known/openid-configuration'),
       scopes: OAuthScopes::fromString('openid email profile'),
+      registrationPolicy: RegistrationPolicy::Inherit,
+      approvalPolicy: ApprovalPolicy::Inherit,
       enabled: true,
       sortOrder: 1.0,
     );
@@ -57,12 +61,57 @@ final class OAuthProviderProjectionTest extends TestCase {
   }
 
   #[Test]
-  public function itUpdatesViewOnProviderUpdated(): void {
+  public function itUpdatesAllFieldsOnProviderUpdated(): void {
     $id = ID::generate();
+    $providerView = $this->createProviderView($id->toString());
 
-    $providerView = $this->createMock(OAuthProviderView::class);
-    $providerView->expects($this->once())->method('setName')->with('Updated Google');
-    $providerView->expects($this->once())->method('setEnabled')->with(false);
+    $repository = $this->createMock(OAuthProviderRepositoryInterface::class);
+    $repository->expects($this->once())
+      ->method('findById')
+      ->with($this->callback(fn(ID $argId) => $argId->toString() === $id->toString()))
+      ->willReturn($providerView);
+    $repository->expects($this->once())
+      ->method('save')
+      ->with($providerView);
+
+    $linkRepository = $this->createStub(OAuthLinkRepositoryInterface::class);
+
+    $projection = new OAuthProviderProjection($repository, $linkRepository);
+
+    $event = new OAuthProviderWasUpdated(
+      id: $id,
+      name: ProviderName::fromString('Updated Google'),
+      slug: ProviderSlug::fromString('updated-google'),
+      type: OAuthType::fromString('oidc'),
+      clientId: ClientId::fromString('new-client-id'),
+      clientSecret: ClientSecret::fromString('new-client-secret'),
+      discoveryUrl: DiscoveryUrl::fromString('https://login.example.com/.well-known/openid-configuration'),
+      scopes: OAuthScopes::fromString('openid profile'),
+      registrationPolicy: RegistrationPolicy::Allowed,
+      approvalPolicy: ApprovalPolicy::Required,
+      enabled: false,
+      sortOrder: 5.0,
+    );
+
+    $projection->handleOAuthProviderWasUpdated($event);
+
+    $this->assertSame('Updated Google', $providerView->getName());
+    $this->assertSame('updated-google', $providerView->getSlug()->toString());
+    $this->assertSame('oidc', $providerView->getType());
+    $this->assertSame('new-client-id', $providerView->getClientId()->toString());
+    $this->assertSame('new-client-secret', $providerView->getClientSecret()->toString());
+    $this->assertSame('https://login.example.com/.well-known/openid-configuration', $providerView->getDiscoveryUrl()->toString());
+    $this->assertSame('openid profile', $providerView->getScopes()->toString());
+    $this->assertFalse($providerView->isEnabled());
+    $this->assertSame(5.0, $providerView->getSortOrder());
+    $this->assertSame(RegistrationPolicy::Allowed, $providerView->getRegistrationPolicy());
+    $this->assertSame(ApprovalPolicy::Required, $providerView->getApprovalPolicy());
+  }
+
+  #[Test]
+  public function itKeepsUnchangedFieldsOnPartialUpdate(): void {
+    $id = ID::generate();
+    $providerView = $this->createProviderView($id->toString());
 
     $repository = $this->createMock(OAuthProviderRepositoryInterface::class);
     $repository->expects($this->once())
@@ -84,6 +133,18 @@ final class OAuthProviderProjectionTest extends TestCase {
     );
 
     $projection->handleOAuthProviderWasUpdated($event);
+
+    $this->assertSame('Updated Google', $providerView->getName());
+    $this->assertFalse($providerView->isEnabled());
+    $this->assertSame('google', $providerView->getSlug()->toString());
+    $this->assertSame('oidc', $providerView->getType());
+    $this->assertSame('client-id-123', $providerView->getClientId()->toString());
+    $this->assertSame('client-secret-456', $providerView->getClientSecret()->toString());
+    $this->assertSame('https://accounts.google.com/.well-known/openid-configuration', $providerView->getDiscoveryUrl()->toString());
+    $this->assertSame('openid email profile', $providerView->getScopes()->toString());
+    $this->assertSame(1.0, $providerView->getSortOrder());
+    $this->assertSame(RegistrationPolicy::Inherit, $providerView->getRegistrationPolicy());
+    $this->assertSame(ApprovalPolicy::Inherit, $providerView->getApprovalPolicy());
   }
 
   #[Test]
@@ -156,5 +217,22 @@ final class OAuthProviderProjectionTest extends TestCase {
     $event = new OAuthProviderWasRemoved(id: $id->toString());
 
     $projection->handleOAuthProviderWasRemoved($event);
+  }
+
+  private function createProviderView(string $id): OAuthProviderView {
+    return new OAuthProviderView(
+      id: $id,
+      name: 'Google',
+      slug: 'google',
+      type: 'oidc',
+      clientId: 'client-id-123',
+      clientSecret: 'client-secret-456',
+      discoveryUrl: 'https://accounts.google.com/.well-known/openid-configuration',
+      scopes: 'openid email profile',
+      enabled: true,
+      sortOrder: 1.0,
+      registrationPolicy: 'inherit',
+      approvalPolicy: 'inherit',
+    );
   }
 }

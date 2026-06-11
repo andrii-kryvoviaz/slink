@@ -22,7 +22,7 @@ final class MoveOAuthProviderHandlerTest extends TestCase {
   private function expectSortOrderUpdate(MockObject $aggregate, float $sortOrder): void {
     $aggregate->expects($this->once())
       ->method('update')
-      ->with(null, null, null, null, null, null, null, null, $sortOrder);
+      ->with(null, null, null, null, null, null, null, null, null, null, $sortOrder);
   }
 
   #[Test]

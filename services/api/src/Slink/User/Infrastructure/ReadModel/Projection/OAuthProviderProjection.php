@@ -31,6 +31,8 @@ final class OAuthProviderProjection extends AbstractProjection {
       scopes: (string) $event->scopes,
       enabled: $event->enabled,
       sortOrder: $event->sortOrder,
+      registrationPolicy: $event->registrationPolicy->value,
+      approvalPolicy: $event->approvalPolicy->value,
     );
 
     $this->repository->save($provider);
@@ -43,15 +45,7 @@ final class OAuthProviderProjection extends AbstractProjection {
       return;
     }
 
-    if ($event->name !== null) $provider->setName((string) $event->name);
-    if ($event->slug !== null) $provider->setSlug((string) $event->slug);
-    if ($event->type !== null) $provider->setType((string) $event->type);
-    if ($event->clientId !== null) $provider->setClientId((string) $event->clientId);
-    if ($event->clientSecret !== null) $provider->setClientSecret((string) $event->clientSecret);
-    if ($event->discoveryUrl !== null) $provider->setDiscoveryUrl((string) $event->discoveryUrl);
-    if ($event->scopes !== null) $provider->setScopes((string) $event->scopes);
-    if ($event->enabled !== null) $provider->setEnabled($event->enabled);
-    if ($event->sortOrder !== null) $provider->setSortOrder($event->sortOrder);
+    $provider->update($event);
 
     $this->repository->save($provider);
   }

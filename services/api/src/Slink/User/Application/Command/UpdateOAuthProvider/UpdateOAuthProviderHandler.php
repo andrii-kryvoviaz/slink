@@ -24,6 +24,8 @@ final readonly class UpdateOAuthProviderHandler implements CommandHandlerInterfa
       clientSecret: $command->getClientSecret(),
       discoveryUrl: $command->getDiscoveryUrl(),
       scopes: $command->getScopes(),
+      registrationPolicy: $command->getRegistrationPolicy(),
+      approvalPolicy: $command->getApprovalPolicy(),
       enabled: $command->isEnabled(),
       sortOrder: $command->getSortOrder(),
     );

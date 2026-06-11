@@ -12,6 +12,8 @@ use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasCreated;
 use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasUpdated;
 use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasRemoved;
 use Slink\Shared\Infrastructure\Encryption\EncryptionRegistry;
+use Slink\User\Domain\Enum\ApprovalPolicy;
+use Slink\User\Domain\Enum\RegistrationPolicy;
 use Slink\User\Domain\ValueObject\OAuth\ClientId;
 use Slink\User\Domain\ValueObject\OAuth\ClientSecret;
 use Slink\User\Domain\ValueObject\OAuth\DiscoveryUrl;
@@ -30,6 +32,8 @@ final class OAuthProvider extends AbstractAggregateRoot {
   private OAuthScopes $scopes;
   private bool $enabled;
   private float $sortOrder;
+  private RegistrationPolicy $registrationPolicy;
+  private ApprovalPolicy $approvalPolicy;
 
   protected function __construct(ID $id) {
     parent::__construct($id);
@@ -44,6 +48,8 @@ final class OAuthProvider extends AbstractAggregateRoot {
     ClientSecret $clientSecret,
     DiscoveryUrl $discoveryUrl,
     OAuthScopes $scopes,
+    RegistrationPolicy $registrationPolicy,
+    ApprovalPolicy $approvalPolicy,
     bool $enabled,
     float $sortOrder = 0,
   ): self {
@@ -57,6 +63,8 @@ final class OAuthProvider extends AbstractAggregateRoot {
       $clientSecret,
       $discoveryUrl,
       $scopes,
+      $registrationPolicy,
+      $approvalPolicy,
       $enabled,
       $sortOrder,
     ));
@@ -72,6 +80,8 @@ final class OAuthProvider extends AbstractAggregateRoot {
     ?ClientSecret $clientSecret = null,
     ?DiscoveryUrl $discoveryUrl = null,
     ?OAuthScopes $scopes = null,
+    ?RegistrationPolicy $registrationPolicy = null,
+    ?ApprovalPolicy $approvalPolicy = null,
     ?bool $enabled = null,
     ?float $sortOrder = null,
   ): void {
@@ -84,6 +94,8 @@ final class OAuthProvider extends AbstractAggregateRoot {
       $clientSecret,
       $discoveryUrl,
       $scopes,
+      $registrationPolicy,
+      $approvalPolicy,
       $enabled,
       $sortOrder,
     ));
@@ -105,18 +117,22 @@ final class OAuthProvider extends AbstractAggregateRoot {
     $this->scopes = $event->scopes;
     $this->enabled = $event->enabled;
     $this->sortOrder = $event->sortOrder;
+    $this->registrationPolicy = $event->registrationPolicy;
+    $this->approvalPolicy = $event->approvalPolicy;
   }
 
   public function applyOAuthProviderWasUpdated(OAuthProviderWasUpdated $event): void {
-    if ($event->name !== null) $this->name = $event->name;
-    if ($event->slug !== null) $this->slug = $event->slug;
-    if ($event->type !== null) $this->type = $event->type;
-    if ($event->clientId !== null) $this->clientId = $event->clientId;
-    if ($event->clientSecret !== null) $this->clientSecret = $event->clientSecret;
-    if ($event->discoveryUrl !== null) $this->discoveryUrl = $event->discoveryUrl;
-    if ($event->scopes !== null) $this->scopes = $event->scopes;
-    if ($event->enabled !== null) $this->enabled = $event->enabled;
-    if ($event->sortOrder !== null) $this->sortOrder = $event->sortOrder;
+    $this->name = $event->name ?? $this->name;
+    $this->slug = $event->slug ?? $this->slug;
+    $this->type = $event->type ?? $this->type;
+    $this->clientId = $event->clientId ?? $this->clientId;
+    $this->clientSecret = $event->clientSecret ?? $this->clientSecret;
+    $this->discoveryUrl = $event->discoveryUrl ?? $this->discoveryUrl;
+    $this->scopes = $event->scopes ?? $this->scopes;
+    $this->enabled = $event->enabled ?? $this->enabled;
+    $this->sortOrder = $event->sortOrder ?? $this->sortOrder;
+    $this->registrationPolicy = $event->registrationPolicy ?? $this->registrationPolicy;
+    $this->approvalPolicy = $event->approvalPolicy ?? $this->approvalPolicy;
   }
 
   public function applyOAuthProviderWasRemoved(OAuthProviderWasRemoved $event): void {
@@ -136,6 +152,8 @@ final class OAuthProvider extends AbstractAggregateRoot {
       'scopes' => $this->scopes->toString(),
       'enabled' => $this->enabled,
       'sortOrder' => $this->sortOrder,
+      'registrationPolicy' => $this->registrationPolicy->value,
+      'approvalPolicy' => $this->approvalPolicy->value,
     ];
   }
 
@@ -154,6 +172,8 @@ final class OAuthProvider extends AbstractAggregateRoot {
     $provider->scopes = OAuthScopes::fromString($state['scopes']);
     $provider->enabled = $state['enabled'];
     $provider->sortOrder = $state['sortOrder'] ?? 0.0;
+    $provider->registrationPolicy = RegistrationPolicy::from($state['registrationPolicy'] ?? 'inherit');
+    $provider->approvalPolicy = ApprovalPolicy::from($state['approvalPolicy'] ?? 'inherit');
 
     return $provider;
   }

@@ -70,4 +70,22 @@ final class OAuthProviderWasUpdatedTest extends TestCase {
     $this->assertNull($restored->scopes);
     $this->assertNull($restored->sortOrder);
   }
+
+  #[Test]
+  public function itDeserializesMissingPoliciesAsNull(): void {
+    $event = new OAuthProviderWasUpdated(
+      ID::fromString('provider-id-1'),
+      name: ProviderName::fromString('Updated Google'),
+    );
+
+    $payload = $event->toPayload();
+
+    $this->assertArrayNotHasKey('registrationPolicy', $payload);
+    $this->assertArrayNotHasKey('approvalPolicy', $payload);
+
+    $restored = OAuthProviderWasUpdated::fromPayload($payload);
+
+    $this->assertNull($restored->registrationPolicy);
+    $this->assertNull($restored->approvalPolicy);
+  }
 }
