@@ -9,6 +9,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Tests\Integration\Http\Double\NullServerSentEventPublisher;
+use Tests\Integration\Http\Double\StubOAuthAdapter;
 
 final class HttpTestKernel extends Kernel implements CompilerPassInterface {
   #[\Override]
@@ -30,6 +31,14 @@ final class HttpTestKernel extends Kernel implements CompilerPassInterface {
     if ($container->hasDefinition($publisherId)) {
       $definition = $container->getDefinition($publisherId);
       $definition->setClass(NullServerSentEventPublisher::class);
+      $definition->setArguments([]);
+    }
+
+    $oauthAdapterId = \Slink\User\Infrastructure\Auth\Oidc\OAuthAdapter::class;
+
+    if ($container->hasDefinition($oauthAdapterId)) {
+      $definition = $container->getDefinition($oauthAdapterId);
+      $definition->setClass(StubOAuthAdapter::class);
       $definition->setArguments([]);
     }
 

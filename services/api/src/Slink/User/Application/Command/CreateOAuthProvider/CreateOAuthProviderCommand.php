@@ -7,6 +7,8 @@ namespace Slink\User\Application\Command\CreateOAuthProvider;
 use SensitiveParameter;
 use Slink\Shared\Application\Command\CommandInterface;
 use Slink\Shared\Infrastructure\MessageBus\EnvelopedMessage;
+use Slink\User\Domain\Enum\ApprovalPolicy;
+use Slink\User\Domain\Enum\RegistrationPolicy;
 use Slink\User\Domain\ValueObject\OAuth\ClientId;
 use Slink\User\Domain\ValueObject\OAuth\ClientSecret;
 use Slink\User\Domain\ValueObject\OAuth\DiscoveryUrl;
@@ -45,6 +47,12 @@ final readonly class CreateOAuthProviderCommand implements CommandInterface {
     #[Assert\Regex(pattern: '/^[a-zA-Z0-9_\-\.\s]+$/')]
     private string $scopes = 'openid email profile',
 
+    #[Assert\Choice(callback: [RegistrationPolicy::class, 'values'])]
+    private string $registrationPolicy = 'inherit',
+
+    #[Assert\Choice(callback: [ApprovalPolicy::class, 'values'])]
+    private string $approvalPolicy = 'inherit',
+
     private bool $enabled = false,
   ) {}
 
@@ -78,5 +86,13 @@ final readonly class CreateOAuthProviderCommand implements CommandInterface {
 
   public function isEnabled(): bool {
     return $this->enabled;
+  }
+
+  public function getRegistrationPolicy(): RegistrationPolicy {
+    return RegistrationPolicy::from($this->registrationPolicy);
+  }
+
+  public function getApprovalPolicy(): ApprovalPolicy {
+    return ApprovalPolicy::from($this->approvalPolicy);
   }
 }

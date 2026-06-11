@@ -6,6 +6,9 @@ namespace Slink\User\Domain\Factory;
 
 use SensitiveParameter;
 use Slink\Shared\Domain\ValueObject\ID;
+use Slink\User\Domain\Contracts\OAuthProviderProfile;
+use Slink\User\Domain\Enum\ApprovalPolicy;
+use Slink\User\Domain\Enum\RegistrationPolicy;
 use Slink\User\Domain\User;
 use Slink\User\Domain\ValueObject\Auth\Credentials;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;
@@ -21,7 +24,7 @@ final readonly class OAuthUserFactory {
     private UniqueUsernameSpecificationInterface $uniqueUsernameSpecification,
   ) {}
 
-  public function create(#[SensitiveParameter] OAuthIdentity $identity): User {
+  public function create(#[SensitiveParameter] OAuthIdentity $identity, ?OAuthProviderProfile $provider = null): User {
     $username = $this->resolveUniqueUsername($identity->getDisplayName());
     $credentials = Credentials::create(
       $identity->getEmail() ?? throw new OAuthEmailRequiredException(),
@@ -29,21 +32,24 @@ final readonly class OAuthUserFactory {
       HashedPassword::encode(bin2hex(random_bytes(32))),
     );
 
-    return $this->userFactory->create(ID::generate(), $credentials, $identity->getDisplayName());
+    return $this->userFactory->create(
+      ID::generate(),
+      $credentials,
+      $identity->getDisplayName(),
+      registrationPolicy: $provider?->getRegistrationPolicy() ?? RegistrationPolicy::Inherit,
+      approvalPolicy: $provider?->getApprovalPolicy() ?? ApprovalPolicy::Inherit,
+    );
   }
 
   private function resolveUniqueUsername(DisplayName $displayName): Username {
     $base = Username::fromDisplayName($displayName);
+    $candidate = $base;
+    $suffix = 1;
 
-    if ($this->uniqueUsernameSpecification->isUnique($base)) {
-      return $base;
+    while (!$this->uniqueUsernameSpecification->isUnique($candidate)) {
+      $candidate = $base->withSuffix($suffix);
+      $suffix++;
     }
-
-    $i = 1;
-    do {
-      $candidate = Username::fromString($base->toString() . $i);
-      $i++;
-    } while (!$this->uniqueUsernameSpecification->isUnique($candidate));
 
     return $candidate;
   }

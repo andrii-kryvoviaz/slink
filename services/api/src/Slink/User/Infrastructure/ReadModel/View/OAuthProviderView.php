@@ -8,6 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Slink\Shared\Infrastructure\Encryption\EncryptionRegistry;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractView;
 use Slink\User\Domain\Contracts\OAuthProviderProfile;
+use Slink\User\Domain\Enum\ApprovalPolicy;
+use Slink\User\Domain\Enum\RegistrationPolicy;
+use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasUpdated;
 use Slink\User\Domain\ValueObject\OAuth\ClientId;
 use Slink\User\Domain\ValueObject\OAuth\ClientSecret;
 use Slink\User\Domain\ValueObject\OAuth\DiscoveryUrl;
@@ -62,9 +65,35 @@ class OAuthProviderView extends AbstractView implements OAuthProviderProfile {
     #[ORM\Column(type: 'float')]
     #[Groups(['admin'])]
     private float $sortOrder = 0,
+
+    #[ORM\Column(type: 'string', length: 20, options: ['default' => 'inherit'])]
+    #[Groups(['admin'])]
+    private string $registrationPolicy = 'inherit',
+
+    #[ORM\Column(type: 'string', length: 20, options: ['default' => 'inherit'])]
+    #[Groups(['admin'])]
+    private string $approvalPolicy = 'inherit',
   ) {
     $this->clientId = EncryptionRegistry::encrypt($clientId);
     $this->clientSecret = EncryptionRegistry::encrypt($clientSecret);
+  }
+
+  /**
+   * @param OAuthProviderWasUpdated $event
+   * @return void
+   */
+  public function update(OAuthProviderWasUpdated $event): void {
+    $this->name = $event->name?->toString() ?? $this->name;
+    $this->slug = $event->slug?->toString() ?? $this->slug;
+    $this->type = $event->type?->toString() ?? $this->type;
+    $this->clientId = $this->encryptNullable($event->clientId?->toString()) ?? $this->clientId;
+    $this->clientSecret = $this->encryptNullable($event->clientSecret?->toString()) ?? $this->clientSecret;
+    $this->discoveryUrl = $event->discoveryUrl?->toString() ?? $this->discoveryUrl;
+    $this->scopes = $event->scopes?->toString() ?? $this->scopes;
+    $this->enabled = $event->enabled ?? $this->enabled;
+    $this->sortOrder = $event->sortOrder ?? $this->sortOrder;
+    $this->registrationPolicy = $event->registrationPolicy->value ?? $this->registrationPolicy;
+    $this->approvalPolicy = $event->approvalPolicy->value ?? $this->approvalPolicy;
   }
 
   public function getId(): string {
@@ -104,43 +133,23 @@ class OAuthProviderView extends AbstractView implements OAuthProviderProfile {
     return $this->enabled;
   }
 
-  public function setName(string $name): void {
-    $this->name = $name;
-  }
-
-  public function setSlug(string $slug): void {
-    $this->slug = $slug;
-  }
-
-  public function setType(string $type): void {
-    $this->type = $type;
-  }
-
-  public function setClientId(string $clientId): void {
-    $this->clientId = EncryptionRegistry::encrypt($clientId);
-  }
-
-  public function setClientSecret(string $clientSecret): void {
-    $this->clientSecret = EncryptionRegistry::encrypt($clientSecret);
-  }
-
-  public function setDiscoveryUrl(string $discoveryUrl): void {
-    $this->discoveryUrl = $discoveryUrl;
-  }
-
-  public function setScopes(string $scopes): void {
-    $this->scopes = $scopes;
-  }
-
-  public function setEnabled(bool $enabled): void {
-    $this->enabled = $enabled;
-  }
-
   public function getSortOrder(): float {
     return $this->sortOrder;
   }
 
-  public function setSortOrder(float $sortOrder): void {
-    $this->sortOrder = $sortOrder;
+  public function getRegistrationPolicy(): RegistrationPolicy {
+    return RegistrationPolicy::from($this->registrationPolicy);
+  }
+
+  public function getApprovalPolicy(): ApprovalPolicy {
+    return ApprovalPolicy::from($this->approvalPolicy);
+  }
+
+  private function encryptNullable(?string $plaintext): ?string {
+    if ($plaintext === null) {
+      return null;
+    }
+
+    return EncryptionRegistry::encrypt($plaintext);
   }
 }

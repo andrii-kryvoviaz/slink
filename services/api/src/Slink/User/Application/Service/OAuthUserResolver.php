@@ -8,6 +8,7 @@ use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Factory\OAuthUserFactory;
 use Slink\User\Domain\Repository\CheckUserByEmailInterface;
 use Slink\User\Domain\Repository\OAuthLinkRepositoryInterface;
+use Slink\User\Domain\Repository\OAuthProviderRepositoryInterface;
 use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
 use Slink\User\Domain\Exception\OAuthEmailNotVerifiedException;
 use Slink\User\Domain\Exception\OAuthEmailRequiredException;
@@ -20,6 +21,7 @@ final readonly class OAuthUserResolver implements OAuthUserResolverInterface {
     private UserStoreRepositoryInterface $userStore,
     private CheckUserByEmailInterface $checkUserByEmail,
     private OAuthUserFactory $oauthUserFactory,
+    private OAuthProviderRepositoryInterface $providerRepository,
   ) {}
 
   #[\Override]
@@ -41,7 +43,9 @@ final readonly class OAuthUserResolver implements OAuthUserResolverInterface {
     }
 
     if (!$existingUserId) {
-      return $this->oauthUserFactory->create($identity);
+      $provider = $this->providerRepository->findByProvider($identity->getSubject()->getProvider());
+
+      return $this->oauthUserFactory->create($identity, $provider);
     }
 
     return $this->userStore->get(ID::fromString((string) $existingUserId));

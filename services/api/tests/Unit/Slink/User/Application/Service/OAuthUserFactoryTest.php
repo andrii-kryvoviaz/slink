@@ -7,13 +7,18 @@ namespace Unit\Slink\User\Application\Service;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
+use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Context\UserCreationContext;
+use Slink\User\Domain\Contracts\OAuthProviderProfile;
+use Slink\User\Domain\Enum\ApprovalPolicy;
+use Slink\User\Domain\Enum\RegistrationPolicy;
 use Slink\User\Domain\Factory\OAuthUserFactory;
 use Slink\User\Domain\Factory\UserFactory;
 use Slink\User\Domain\Specification\UniqueDisplayNameSpecificationInterface;
 use Slink\User\Domain\Specification\UniqueEmailSpecificationInterface;
 use Slink\User\Domain\Specification\UniqueUsernameSpecificationInterface;
 use Slink\User\Domain\User;
+use Slink\User\Domain\ValueObject\Auth\Credentials;
 use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Email;
 use Slink\User\Domain\ValueObject\OAuth\OAuthIdentity;
@@ -24,21 +29,12 @@ final class OAuthUserFactoryTest extends TestCase {
 
   #[Test]
   public function itCreatesUserWithClaimsData(): void {
-    $email = Email::fromString('user@example.com');
-    $displayName = DisplayName::fromString('Test User');
-    $subject = $this->createStub(OAuthSubject::class);
-
-    $identity = $this->createStub(OAuthIdentity::class);
-    $identity->method('getEmail')->willReturn($email);
-    $identity->method('getDisplayName')->willReturn($displayName);
-    $identity->method('getSubject')->willReturn($subject);
+    $identity = $this->createIdentity();
 
     $uniqueUsernameSpec = $this->createStub(UniqueUsernameSpecificationInterface::class);
     $uniqueUsernameSpec->method('isUnique')->willReturn(true);
 
-    $userFactory = $this->createStubUserFactory();
-
-    $factory = new OAuthUserFactory($userFactory, $uniqueUsernameSpec);
+    $factory = new OAuthUserFactory($this->createRealUserFactory(), $uniqueUsernameSpec);
 
     $result = $factory->create($identity);
 
@@ -47,14 +43,7 @@ final class OAuthUserFactoryTest extends TestCase {
 
   #[Test]
   public function itHandlesUsernameCollision(): void {
-    $email = Email::fromString('user@example.com');
-    $displayName = DisplayName::fromString('Test User');
-    $subject = $this->createStub(OAuthSubject::class);
-
-    $identity = $this->createStub(OAuthIdentity::class);
-    $identity->method('getEmail')->willReturn($email);
-    $identity->method('getDisplayName')->willReturn($displayName);
-    $identity->method('getSubject')->willReturn($subject);
+    $identity = $this->createIdentity();
 
     $callCount = 0;
     $uniqueUsernameSpec = $this->createStub(UniqueUsernameSpecificationInterface::class);
@@ -67,9 +56,7 @@ final class OAuthUserFactoryTest extends TestCase {
         return true;
       });
 
-    $userFactory = $this->createStubUserFactory();
-
-    $factory = new OAuthUserFactory($userFactory, $uniqueUsernameSpec);
+    $factory = new OAuthUserFactory($this->createRealUserFactory(), $uniqueUsernameSpec);
 
     $result = $factory->create($identity);
 
@@ -77,7 +64,95 @@ final class OAuthUserFactoryTest extends TestCase {
     $this->assertGreaterThan(1, $callCount);
   }
 
-  private function createStubUserFactory(): UserFactory {
+  #[Test]
+  public function itTruncatesMaxLengthUsernameOnCollision(): void {
+    $identity = $this->createIdentity(str_repeat('a', 30));
+
+    $callCount = 0;
+    $uniqueUsernameSpec = $this->createStub(UniqueUsernameSpecificationInterface::class);
+    $uniqueUsernameSpec->method('isUnique')
+      ->willReturnCallback(function (Username $username) use (&$callCount) {
+        $callCount++;
+        return $callCount > 1;
+      });
+
+    $userFactory = $this->createMock(UserFactory::class);
+    $userFactory->expects($this->once())
+      ->method('create')
+      ->with(
+        $this->isInstanceOf(ID::class),
+        $this->callback(
+          fn(Credentials $credentials): bool => $credentials->username->toString() === str_repeat('a', 29) . '1',
+        ),
+      );
+
+    $factory = new OAuthUserFactory($userFactory, $uniqueUsernameSpec);
+
+    $factory->create($identity);
+  }
+
+  #[Test]
+  public function itForwardsProviderPoliciesToUserFactory(): void {
+    $identity = $this->createIdentity();
+
+    $provider = $this->createStub(OAuthProviderProfile::class);
+    $provider->method('getRegistrationPolicy')->willReturn(RegistrationPolicy::Allowed);
+    $provider->method('getApprovalPolicy')->willReturn(ApprovalPolicy::Required);
+
+    $userFactory = $this->createMock(UserFactory::class);
+    $userFactory->expects($this->once())
+      ->method('create')
+      ->with(
+        $this->isInstanceOf(ID::class),
+        $this->isInstanceOf(Credentials::class),
+        $identity->getDisplayName(),
+        null,
+        RegistrationPolicy::Allowed,
+        ApprovalPolicy::Required,
+      );
+
+    $uniqueUsernameSpec = $this->createStub(UniqueUsernameSpecificationInterface::class);
+    $uniqueUsernameSpec->method('isUnique')->willReturn(true);
+
+    $factory = new OAuthUserFactory($userFactory, $uniqueUsernameSpec);
+
+    $factory->create($identity, $provider);
+  }
+
+  #[Test]
+  public function itDefaultsPoliciesToInheritWhenProviderIsMissing(): void {
+    $identity = $this->createIdentity();
+
+    $userFactory = $this->createMock(UserFactory::class);
+    $userFactory->expects($this->once())
+      ->method('create')
+      ->with(
+        $this->isInstanceOf(ID::class),
+        $this->isInstanceOf(Credentials::class),
+        $identity->getDisplayName(),
+        null,
+        RegistrationPolicy::Inherit,
+        ApprovalPolicy::Inherit,
+      );
+
+    $uniqueUsernameSpec = $this->createStub(UniqueUsernameSpecificationInterface::class);
+    $uniqueUsernameSpec->method('isUnique')->willReturn(true);
+
+    $factory = new OAuthUserFactory($userFactory, $uniqueUsernameSpec);
+
+    $factory->create($identity);
+  }
+
+  private function createIdentity(string $displayName = 'Test User'): OAuthIdentity {
+    $identity = $this->createStub(OAuthIdentity::class);
+    $identity->method('getEmail')->willReturn(Email::fromString('user@example.com'));
+    $identity->method('getDisplayName')->willReturn(DisplayName::fromString($displayName));
+    $identity->method('getSubject')->willReturn($this->createStub(OAuthSubject::class));
+
+    return $identity;
+  }
+
+  private function createRealUserFactory(): UserFactory {
     $configProvider = $this->createStub(ConfigurationProviderInterface::class);
     $configProvider->method('get')->willReturnCallback(fn(string $key) => match ($key) {
       'user.allowRegistration' => true,

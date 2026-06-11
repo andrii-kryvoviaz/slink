@@ -3,6 +3,9 @@ import type { EmptyResponse } from '@slink/api/Response';
 
 import type { SortDirection } from '@slink/lib/enum/SortDirection';
 
+export type OAuthRegistrationPolicy = 'inherit' | 'allowed' | 'blocked';
+export type OAuthApprovalPolicy = 'inherit' | 'required' | 'none';
+
 export type OAuthProviderDetails = {
   id: string;
   name: string;
@@ -13,6 +16,8 @@ export type OAuthProviderDetails = {
   scopes: string;
   enabled: boolean;
   sortOrder: number;
+  registrationPolicy: OAuthRegistrationPolicy;
+  approvalPolicy: OAuthApprovalPolicy;
 };
 
 export type OAuthProviderFormData = {
@@ -24,6 +29,8 @@ export type OAuthProviderFormData = {
   discoveryUrl: string;
   scopes: string;
   enabled: boolean;
+  registrationPolicy: OAuthRegistrationPolicy;
+  approvalPolicy: OAuthApprovalPolicy;
 };
 
 export class OAuthResource extends AbstractResource {

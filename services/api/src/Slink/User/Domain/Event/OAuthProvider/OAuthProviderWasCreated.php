@@ -7,6 +7,8 @@ namespace Slink\User\Domain\Event\OAuthProvider;
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Encryption\EncryptionRegistry;
+use Slink\User\Domain\Enum\ApprovalPolicy;
+use Slink\User\Domain\Enum\RegistrationPolicy;
 use Slink\User\Domain\ValueObject\OAuth\ClientId;
 use Slink\User\Domain\ValueObject\OAuth\ClientSecret;
 use Slink\User\Domain\ValueObject\OAuth\DiscoveryUrl;
@@ -25,6 +27,8 @@ final readonly class OAuthProviderWasCreated implements SerializablePayload {
     public ClientSecret $clientSecret,
     public DiscoveryUrl $discoveryUrl,
     public OAuthScopes $scopes,
+    public RegistrationPolicy $registrationPolicy,
+    public ApprovalPolicy $approvalPolicy,
     public bool $enabled,
     public float $sortOrder = 0,
   ) {}
@@ -42,6 +46,8 @@ final readonly class OAuthProviderWasCreated implements SerializablePayload {
       'clientSecret' => EncryptionRegistry::encrypt($this->clientSecret->toString()),
       'discoveryUrl' => $this->discoveryUrl->toString(),
       'scopes' => $this->scopes->toString(),
+      'registrationPolicy' => $this->registrationPolicy->value,
+      'approvalPolicy' => $this->approvalPolicy->value,
       'enabled' => $this->enabled,
       'sortOrder' => $this->sortOrder,
     ];
@@ -60,6 +66,8 @@ final readonly class OAuthProviderWasCreated implements SerializablePayload {
       ClientSecret::fromString(EncryptionRegistry::decrypt($payload['clientSecret'])),
       DiscoveryUrl::fromString($payload['discoveryUrl']),
       OAuthScopes::fromString($payload['scopes']),
+      RegistrationPolicy::from($payload['registrationPolicy'] ?? 'inherit'),
+      ApprovalPolicy::from($payload['approvalPolicy'] ?? 'inherit'),
       $payload['enabled'],
       (float)($payload['sortOrder'] ?? 0),
     );

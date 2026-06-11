@@ -4871,3 +4871,88 @@ msgstr "La ubicación, la cámara y otros metadatos EXIF no se eliminan de las i
 #: src/routes/upload/+page.svelte
 msgid "Upload in progress"
 msgstr "Carga en curso"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Global"
+msgstr "Global"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Allowed"
+msgstr "Permitido"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Blocked"
+msgstr "Bloqueado"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Required"
+msgstr "Obligatoria"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Auto-approve"
+msgstr "Aprobar auto."
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Registration"
+msgstr "Registro"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "New User Registration"
+msgstr "Registro de nuevos usuarios"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Follows the global registration setting, currently enabled"
+msgstr "Sigue la configuración global de registro, actualmente activada"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Follows the global registration setting, currently disabled"
+msgstr "Sigue la configuración global de registro, actualmente desactivada"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "New users signing in with this provider get an account automatically"
+msgstr "Los nuevos usuarios que inicien sesión con este proveedor obtienen una cuenta automáticamente"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Only existing users can sign in with this provider"
+msgstr "Solo los usuarios existentes pueden iniciar sesión con este proveedor"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "New user registration policy"
+msgstr "Política de registro de nuevos usuarios"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Admin Approval"
+msgstr "Aprobación del administrador"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "No effect while registration is blocked for this provider"
+msgstr "Sin efecto mientras el registro esté bloqueado para este proveedor"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Follows the global approval setting, currently required"
+msgstr "Sigue la configuración global de aprobación, actualmente obligatoria"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Follows the global approval setting, currently not required"
+msgstr "Sigue la configuración global de aprobación, actualmente no obligatoria"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "New accounts wait for admin approval"
+msgstr "Las cuentas nuevas esperan la aprobación del administrador"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "New accounts are activated immediately"
+msgstr "Las cuentas nuevas se activan de inmediato"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Admin approval policy"
+msgstr "Política de aprobación del administrador"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
+msgid "Open registration"
+msgstr "Registro abierto"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
+msgid "Sign-in only"
+msgstr "Solo inicio de sesión"

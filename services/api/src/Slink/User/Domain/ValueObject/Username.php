@@ -10,6 +10,9 @@ use Slink\Shared\Domain\ValueObject\SanitizableValueObject;
 use Slink\User\Domain\Exception\InvalidUsernameException;
 
 final readonly class Username extends AbstractValueObject implements SanitizableValueObject {
+  private const int MIN_LENGTH = 3;
+  private const int MAX_LENGTH = 30;
+
   /**
    * @param string $username
    */
@@ -35,6 +38,17 @@ final readonly class Username extends AbstractValueObject implements Sanitizable
   }
   
   /**
+   * @param int $suffix
+   * @return self
+   */
+  public function withSuffix(int $suffix): self {
+    $suffixString = (string) $suffix;
+    $base = substr($this->username, 0, self::MAX_LENGTH - strlen($suffixString));
+
+    return new self($base . $suffixString);
+  }
+
+  /**
    * @return string
    */
   public function toString(): string {
@@ -50,11 +64,11 @@ final readonly class Username extends AbstractValueObject implements Sanitizable
    * @return void
    */
   private function validate(string $username): void {
-    if (strlen($username) < 3) {
+    if (strlen($username) < self::MIN_LENGTH) {
       throw new InvalidUsernameException('Username must be at least 3 characters long');
     }
-    
-    if (strlen($username) > 30) {
+
+    if (strlen($username) > self::MAX_LENGTH) {
       throw new InvalidUsernameException('Username must be at most 30 characters long');
     }
   }

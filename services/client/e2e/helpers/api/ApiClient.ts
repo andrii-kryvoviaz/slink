@@ -1,5 +1,6 @@
 import { HttpClient } from './HttpClient';
 import { ContentApi } from './resources/ContentApi';
+import { OAuthApi } from './resources/OAuthApi';
 import { PreferencesApi } from './resources/PreferencesApi';
 import { SettingsApi } from './resources/SettingsApi';
 import { SharesApi } from './resources/SharesApi';
@@ -11,6 +12,7 @@ export class ApiClient {
   readonly preferences: PreferencesApi;
   readonly content: ContentApi;
   readonly shares: SharesApi;
+  readonly oauth: OAuthApi;
 
   private constructor(private http: HttpClient) {
     this.settings = new SettingsApi(http);
@@ -18,6 +20,7 @@ export class ApiClient {
     this.preferences = new PreferencesApi(http);
     this.content = new ContentApi(http);
     this.shares = new SharesApi(http);
+    this.oauth = new OAuthApi(http);
   }
 
   get token() {

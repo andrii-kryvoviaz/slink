@@ -7,6 +7,8 @@ namespace Slink\User\Application\Command\UpdateOAuthProvider;
 use SensitiveParameter;
 use Slink\Shared\Application\Command\CommandInterface;
 use Slink\Shared\Infrastructure\MessageBus\EnvelopedMessage;
+use Slink\User\Domain\Enum\ApprovalPolicy;
+use Slink\User\Domain\Enum\RegistrationPolicy;
 use Slink\User\Domain\ValueObject\OAuth\ClientId;
 use Slink\User\Domain\ValueObject\OAuth\ClientSecret;
 use Slink\User\Domain\ValueObject\OAuth\DiscoveryUrl;
@@ -42,6 +44,12 @@ final readonly class UpdateOAuthProviderCommand implements CommandInterface {
     #[Assert\Length(max: 255)]
     #[Assert\Regex(pattern: '/^[a-zA-Z0-9_\-\.\s]+$/')]
     private ?string $scopes = null,
+
+    #[Assert\Choice(callback: [RegistrationPolicy::class, 'values'])]
+    private ?string $registrationPolicy = null,
+
+    #[Assert\Choice(callback: [ApprovalPolicy::class, 'values'])]
+    private ?string $approvalPolicy = null,
 
     private ?bool $enabled = null,
 
@@ -82,5 +90,13 @@ final readonly class UpdateOAuthProviderCommand implements CommandInterface {
 
   public function getSortOrder(): ?float {
     return $this->sortOrder;
+  }
+
+  public function getRegistrationPolicy(): ?RegistrationPolicy {
+    return $this->registrationPolicy !== null ? RegistrationPolicy::from($this->registrationPolicy) : null;
+  }
+
+  public function getApprovalPolicy(): ?ApprovalPolicy {
+    return $this->approvalPolicy !== null ? ApprovalPolicy::from($this->approvalPolicy) : null;
   }
 }

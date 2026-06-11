@@ -9,6 +9,8 @@ use PHPUnit\Framework\TestCase;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Encryption\EncryptionRegistry;
 use Slink\Shared\Infrastructure\Encryption\EncryptionService;
+use Slink\User\Domain\Enum\ApprovalPolicy;
+use Slink\User\Domain\Enum\RegistrationPolicy;
 use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasCreated;
 use Slink\User\Domain\ValueObject\OAuth\ClientId;
 use Slink\User\Domain\ValueObject\OAuth\ClientSecret;
@@ -36,6 +38,8 @@ final class OAuthProviderWasCreatedTest extends TestCase {
       ClientSecret::fromString('client-secret-456'),
       DiscoveryUrl::fromString('https://accounts.google.com/.well-known/openid-configuration'),
       OAuthScopes::fromString('openid profile email'),
+      RegistrationPolicy::Inherit,
+      ApprovalPolicy::Inherit,
       true,
       1.0,
     );
@@ -59,6 +63,8 @@ final class OAuthProviderWasCreatedTest extends TestCase {
       ClientSecret::fromString('auth-client-secret'),
       DiscoveryUrl::fromString('https://authentik.example.com/.well-known/openid-configuration'),
       OAuthScopes::fromString('openid profile email'),
+      RegistrationPolicy::Inherit,
+      ApprovalPolicy::Inherit,
       false,
       3.0,
     );
@@ -75,5 +81,31 @@ final class OAuthProviderWasCreatedTest extends TestCase {
     $this->assertEquals($event->scopes, $restored->scopes);
     $this->assertSame($event->enabled, $restored->enabled);
     $this->assertSame($event->sortOrder, $restored->sortOrder);
+  }
+
+  #[Test]
+  public function itDefaultsPoliciesToInheritWhenPayloadOmitsThem(): void {
+    $event = new OAuthProviderWasCreated(
+      ID::fromString('provider-id-1'),
+      ProviderName::fromString('Google'),
+      ProviderSlug::fromString('google'),
+      OAuthType::fromString('oidc'),
+      ClientId::fromString('client-id-123'),
+      ClientSecret::fromString('client-secret-456'),
+      DiscoveryUrl::fromString('https://accounts.google.com/.well-known/openid-configuration'),
+      OAuthScopes::fromString('openid profile email'),
+      RegistrationPolicy::Inherit,
+      ApprovalPolicy::Inherit,
+      true,
+      1.0,
+    );
+
+    $payload = $event->toPayload();
+    unset($payload['registrationPolicy'], $payload['approvalPolicy']);
+
+    $restored = OAuthProviderWasCreated::fromPayload($payload);
+
+    $this->assertSame(RegistrationPolicy::Inherit, $restored->registrationPolicy);
+    $this->assertSame(ApprovalPolicy::Inherit, $restored->approvalPolicy);
   }
 }

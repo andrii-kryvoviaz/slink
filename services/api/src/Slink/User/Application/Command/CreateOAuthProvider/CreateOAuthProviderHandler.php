@@ -33,6 +33,8 @@ final readonly class CreateOAuthProviderHandler implements CommandHandlerInterfa
       clientSecret: $command->getClientSecret(),
       discoveryUrl: $command->getDiscoveryUrl(),
       scopes: $command->getScopes(),
+      registrationPolicy: $command->getRegistrationPolicy(),
+      approvalPolicy: $command->getApprovalPolicy(),
       enabled: $command->isEnabled(),
       sortOrder: $sortOrder,
     );

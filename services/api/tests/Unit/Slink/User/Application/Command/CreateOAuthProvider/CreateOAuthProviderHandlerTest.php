@@ -8,6 +8,9 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\User\Application\Command\CreateOAuthProvider\CreateOAuthProviderCommand;
 use Slink\User\Application\Command\CreateOAuthProvider\CreateOAuthProviderHandler;
+use Slink\User\Domain\Enum\ApprovalPolicy;
+use Slink\User\Domain\Enum\RegistrationPolicy;
+use Slink\User\Domain\Event\OAuthProvider\OAuthProviderWasCreated;
 use Slink\User\Domain\Exception\DuplicateOAuthProviderException;
 use Slink\User\Domain\OAuthProvider;
 use Slink\User\Domain\Repository\OAuthProviderRepositoryInterface;
@@ -46,6 +49,72 @@ final class CreateOAuthProviderHandlerTest extends TestCase {
     $result = $handler($command);
 
     $this->assertNotEmpty($result);
+  }
+
+  #[Test]
+  public function itPersistsProviderPolicies(): void {
+    $uniqueSpec = $this->createStub(UniqueOAuthProviderSpecificationInterface::class);
+
+    $repository = $this->createStub(OAuthProviderRepositoryInterface::class);
+    $repository->method('getMaxSortOrder')->willReturn(0.0);
+
+    $providerStore = $this->createMock(OAuthProviderStoreRepositoryInterface::class);
+    $providerStore->expects($this->once())
+      ->method('store')
+      ->with($this->callback(function (OAuthProvider $provider): bool {
+        $events = $provider->releaseEvents();
+        $created = $events[0] ?? null;
+
+        return $created instanceof OAuthProviderWasCreated
+          && $created->registrationPolicy === RegistrationPolicy::Allowed
+          && $created->approvalPolicy === ApprovalPolicy::Required;
+      }));
+
+    $handler = new CreateOAuthProviderHandler($providerStore, $uniqueSpec, $repository);
+
+    $command = new CreateOAuthProviderCommand(
+      name: 'Google',
+      slug: 'google',
+      clientId: 'client-id-123',
+      clientSecret: 'client-secret-456',
+      discoveryUrl: 'https://accounts.google.com/.well-known/openid-configuration',
+      registrationPolicy: 'allowed',
+      approvalPolicy: 'required',
+    );
+
+    $handler($command);
+  }
+
+  #[Test]
+  public function itDefaultsPoliciesToInherit(): void {
+    $uniqueSpec = $this->createStub(UniqueOAuthProviderSpecificationInterface::class);
+
+    $repository = $this->createStub(OAuthProviderRepositoryInterface::class);
+    $repository->method('getMaxSortOrder')->willReturn(0.0);
+
+    $providerStore = $this->createMock(OAuthProviderStoreRepositoryInterface::class);
+    $providerStore->expects($this->once())
+      ->method('store')
+      ->with($this->callback(function (OAuthProvider $provider): bool {
+        $events = $provider->releaseEvents();
+        $created = $events[0] ?? null;
+
+        return $created instanceof OAuthProviderWasCreated
+          && $created->registrationPolicy === RegistrationPolicy::Inherit
+          && $created->approvalPolicy === ApprovalPolicy::Inherit;
+      }));
+
+    $handler = new CreateOAuthProviderHandler($providerStore, $uniqueSpec, $repository);
+
+    $command = new CreateOAuthProviderCommand(
+      name: 'Google',
+      slug: 'google',
+      clientId: 'client-id-123',
+      clientSecret: 'client-secret-456',
+      discoveryUrl: 'https://accounts.google.com/.well-known/openid-configuration',
+    );
+
+    $handler($command);
   }
 
   #[Test]
