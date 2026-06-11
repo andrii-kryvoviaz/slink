@@ -4,7 +4,7 @@ inputs:
   memory_limit:
     description: 'The memory limit for PHPStan'
     required: false
-    default: '256M'
+    default: '1G'
 
 runs:
   using: 'composite'

@@ -101,6 +101,14 @@ jobs:
         working-directory: services/api
         run: composer install --ignore-platform-reqs --no-interaction --no-scripts
 
+      - name: Prepare test environment
+        working-directory: services/api
+        run: |
+          cp .env.example .env
+          mkdir -p config/jwt
+          openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:4096 -out config/jwt/private.pem
+          openssl pkey -in config/jwt/private.pem -pubout -out config/jwt/public.pem
+
       - name: Run storage integration tests
         working-directory: services/api
         run: vendor/bin/phpunit --group storage-integration --no-coverage
