@@ -1,5 +1,7 @@
 import { ApiClient } from '@slink/api';
 
+import { invalidate } from '$app/navigation';
+
 import { ReactiveState } from '@slink/api/ReactiveState';
 import type { EmptyResponse } from '@slink/api/Response';
 
@@ -16,8 +18,10 @@ class SettingsPageState {
   private _settings = $state<GlobalSettings | null>(null);
   private _categoryBeingSaved: SettingCategory | null = $state(null);
   private _reactiveState = ReactiveState<EmptyResponse>(
-    (category: SettingCategory, data: SettingCategoryData) => {
-      return ApiClient.setting.updateSettings(category, data);
+    async (category: SettingCategory, data: SettingCategoryData) => {
+      const response = await ApiClient.setting.updateSettings(category, data);
+      await invalidate('app:settings');
+      return response;
     },
     { debounce: 300, minExecutionTime: 500 },
   );
