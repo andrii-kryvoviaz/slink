@@ -43,16 +43,13 @@ final readonly class OAuthUserFactory {
 
   private function resolveUniqueUsername(DisplayName $displayName): Username {
     $base = Username::fromDisplayName($displayName);
+    $candidate = $base;
+    $suffix = 1;
 
-    if ($this->uniqueUsernameSpecification->isUnique($base)) {
-      return $base;
+    while (!$this->uniqueUsernameSpecification->isUnique($candidate)) {
+      $candidate = $base->withSuffix($suffix);
+      $suffix++;
     }
-
-    $i = 1;
-    do {
-      $candidate = Username::fromString($base->toString() . $i);
-      $i++;
-    } while (!$this->uniqueUsernameSpecification->isUnique($candidate));
 
     return $candidate;
   }

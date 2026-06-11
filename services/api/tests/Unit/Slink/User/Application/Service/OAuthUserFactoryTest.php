@@ -65,6 +65,33 @@ final class OAuthUserFactoryTest extends TestCase {
   }
 
   #[Test]
+  public function itTruncatesMaxLengthUsernameOnCollision(): void {
+    $identity = $this->createIdentity(str_repeat('a', 30));
+
+    $callCount = 0;
+    $uniqueUsernameSpec = $this->createStub(UniqueUsernameSpecificationInterface::class);
+    $uniqueUsernameSpec->method('isUnique')
+      ->willReturnCallback(function (Username $username) use (&$callCount) {
+        $callCount++;
+        return $callCount > 1;
+      });
+
+    $userFactory = $this->createMock(UserFactory::class);
+    $userFactory->expects($this->once())
+      ->method('create')
+      ->with(
+        $this->isInstanceOf(ID::class),
+        $this->callback(
+          fn(Credentials $credentials): bool => $credentials->username->toString() === str_repeat('a', 29) . '1',
+        ),
+      );
+
+    $factory = new OAuthUserFactory($userFactory, $uniqueUsernameSpec);
+
+    $factory->create($identity);
+  }
+
+  #[Test]
   public function itForwardsProviderPoliciesToUserFactory(): void {
     $identity = $this->createIdentity();
 

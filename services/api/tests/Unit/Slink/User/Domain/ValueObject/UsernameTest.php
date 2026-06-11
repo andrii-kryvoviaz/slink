@@ -58,6 +58,25 @@ final class UsernameTest extends TestCase {
     ];
   }
 
+  /**
+   * @return array<string, array{string, int, string}>
+   */
+  public static function provideWithSuffixData(): array {
+    return [
+      'Appends suffix' => ['john', 1, 'john1'],
+      'Truncates at maximum length' => [str_repeat('a', 30), 1, str_repeat('a', 29) . '1'],
+      'Truncates for multi-digit suffix' => [str_repeat('a', 30), 10, str_repeat('a', 28) . '10'],
+    ];
+  }
+
+  #[Test]
+  #[DataProvider('provideWithSuffixData')]
+  public function itAppendsSuffixWithinMaximumLength(string $base, int $suffix, string $expected): void {
+    $username = Username::fromString($base)->withSuffix($suffix);
+
+    $this->assertSame($expected, $username->toString());
+  }
+
   #[Test]
   #[DataProvider('provideDisplayNameToUsernameData')]
   public function itCreatesUsernameFromDisplayName(string $displayNameString, string $expectedUsername): void {
