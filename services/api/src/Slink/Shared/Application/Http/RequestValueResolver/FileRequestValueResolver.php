@@ -19,6 +19,7 @@ use Symfony\Component\Serializer\Exception\PartialDenormalizationException;
 use Symfony\Component\Serializer\Exception\UnsupportedFormatException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Constraints\GroupSequence;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -106,7 +107,13 @@ final class FileRequestValueResolver implements ValueResolverInterface, EventSub
         }
         
         if (null !== $payload) {
-          $violations->addAll($this->validator->validate($payload, null, $argument->validationGroups ?? null));
+          $groups = $argument->validationGroups;
+
+          if (null !== $groups && !\is_string($groups) && !\is_array($groups) && !$groups instanceof GroupSequence) {
+            throw new \LogicException(sprintf('Validation groups of type "%s" are not supported by "%s".', get_debug_type($groups), self::class));
+          }
+
+          $violations->addAll($this->validator->validate($payload, null, $groups));
         }
         
         if (\count($violations)) {
