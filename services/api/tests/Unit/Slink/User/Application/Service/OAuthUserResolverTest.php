@@ -15,13 +15,16 @@ use Slink\User\Domain\Exception\OAuthEmailRequiredException;
 use Slink\User\Domain\Factory\OAuthUserFactory;
 use Slink\User\Domain\Repository\CheckUserByEmailInterface;
 use Slink\User\Domain\Repository\OAuthLinkRepositoryInterface;
+use Slink\User\Domain\Repository\OAuthProviderRepositoryInterface;
 use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
 use Slink\User\Domain\User;
 use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Email;
 use Slink\User\Domain\ValueObject\OAuth\OAuthIdentity;
 use Slink\User\Domain\ValueObject\OAuth\OAuthSubject;
+use Slink\User\Domain\ValueObject\OAuth\ProviderSlug;
 use Slink\User\Infrastructure\ReadModel\View\OAuthLinkView;
+use Slink\User\Infrastructure\ReadModel\View\OAuthProviderView;
 
 final class OAuthUserResolverTest extends TestCase {
 
@@ -130,39 +133,6 @@ final class OAuthUserResolverTest extends TestCase {
   }
 
   #[Test]
-  public function itCreatesNewUserWhenNoLinkAndNoExistingEmail(): void {
-    $email = Email::fromString('newuser@example.com');
-    $subject = $this->createStub(OAuthSubject::class);
-
-    $identity = $this->createStub(OAuthIdentity::class);
-    $identity->method('getSubject')->willReturn($subject);
-    $identity->method('getEmail')->willReturn($email);
-    $identity->method('getDisplayName')->willReturn(DisplayName::fromString('New User'));
-    $identity->method('isEmailVerified')->willReturn(true);
-
-    $resolver = $this->createResolver(
-      storeConfig: function (UserStoreRepositoryInterface&MockObject $store) {
-        $store->expects($this->never())->method('get');
-      },
-      emailCheckConfig: function (CheckUserByEmailInterface&MockObject $check) use ($email) {
-        $check->expects($this->once())
-          ->method('existsEmail')
-          ->with($email)
-          ->willReturn(null);
-      },
-      factoryConfig: function (MockObject $factory) use ($identity) {
-        $factory->expects($this->once())
-          ->method('create')
-          ->with($identity);
-      },
-    );
-
-    $result = $resolver->resolve($identity);
-
-    $this->assertInstanceOf(User::class, $result);
-  }
-
-  #[Test]
   public function itThrowsWhenEmailNotVerifiedForNewUser(): void {
     $email = Email::fromString('newuser@example.com');
     $subject = $this->createStub(OAuthSubject::class);
@@ -186,11 +156,141 @@ final class OAuthUserResolverTest extends TestCase {
     $resolver->resolve($identity);
   }
 
+  #[Test]
+  public function itLooksUpProviderBySlugAndPassesItToFactoryForNewUser(): void {
+    $slug = ProviderSlug::fromString('acme');
+    $identity = $this->createNewUserIdentity($slug);
+    $providerView = $this->createStub(OAuthProviderView::class);
+
+    $resolver = $this->createResolver(
+      emailCheckConfig: function (CheckUserByEmailInterface&MockObject $check) {
+        $check->expects($this->once())
+          ->method('existsEmail')
+          ->willReturn(null);
+      },
+      factoryConfig: function (MockObject $factory) use ($identity, $providerView) {
+        $factory->expects($this->once())
+          ->method('create')
+          ->with($identity, $providerView);
+      },
+      providerConfig: function (OAuthProviderRepositoryInterface&MockObject $repo) use ($slug, $providerView) {
+        $repo->expects($this->once())
+          ->method('findByProvider')
+          ->with($slug)
+          ->willReturn($providerView);
+      },
+    );
+
+    $result = $resolver->resolve($identity);
+
+    $this->assertInstanceOf(User::class, $result);
+  }
+
+  #[Test]
+  public function itPassesNullProviderToFactoryWhenProviderIsUnknown(): void {
+    $identity = $this->createNewUserIdentity(ProviderSlug::fromString('acme'));
+
+    $resolver = $this->createResolver(
+      emailCheckConfig: function (CheckUserByEmailInterface&MockObject $check) {
+        $check->expects($this->once())
+          ->method('existsEmail')
+          ->willReturn(null);
+      },
+      factoryConfig: function (MockObject $factory) use ($identity) {
+        $factory->expects($this->once())
+          ->method('create')
+          ->with($identity, null);
+      },
+      providerConfig: function (OAuthProviderRepositoryInterface&MockObject $repo) {
+        $repo->expects($this->once())
+          ->method('findByProvider')
+          ->willReturn(null);
+      },
+    );
+
+    $result = $resolver->resolve($identity);
+
+    $this->assertInstanceOf(User::class, $result);
+  }
+
+  #[Test]
+  public function itResolvesExistingLinkWithoutProviderLookupOrFactory(): void {
+    $userId = ID::generate();
+    $subject = $this->createStub(OAuthSubject::class);
+    $identity = $this->createStub(OAuthIdentity::class);
+    $identity->method('getSubject')->willReturn($subject);
+
+    $existingLink = $this->createStub(OAuthLinkView::class);
+    $existingLink->method('getUserId')->willReturn($userId->toString());
+
+    $resolver = $this->createResolver(
+      linkConfig: function (OAuthLinkRepositoryInterface&MockObject $repo) use ($existingLink) {
+        $repo->expects($this->once())
+          ->method('findBySubject')
+          ->willReturn($existingLink);
+      },
+      factoryConfig: function (MockObject $factory) {
+        $factory->expects($this->never())->method('create');
+      },
+      providerConfig: function (OAuthProviderRepositoryInterface&MockObject $repo) {
+        $repo->expects($this->never())->method('findByProvider');
+      },
+    );
+
+    $result = $resolver->resolve($identity);
+
+    $this->assertInstanceOf(User::class, $result);
+  }
+
+  #[Test]
+  public function itResolvesExistingEmailMatchWithoutProviderLookupOrFactory(): void {
+    $existingUserId = Uuid::uuid4();
+    $email = Email::fromString('existing@example.com');
+    $subject = $this->createStub(OAuthSubject::class);
+
+    $identity = $this->createStub(OAuthIdentity::class);
+    $identity->method('getSubject')->willReturn($subject);
+    $identity->method('getEmail')->willReturn($email);
+    $identity->method('isEmailVerified')->willReturn(true);
+
+    $resolver = $this->createResolver(
+      emailCheckConfig: function (CheckUserByEmailInterface&MockObject $check) use ($existingUserId) {
+        $check->expects($this->once())
+          ->method('existsEmail')
+          ->willReturn($existingUserId);
+      },
+      factoryConfig: function (MockObject $factory) {
+        $factory->expects($this->never())->method('create');
+      },
+      providerConfig: function (OAuthProviderRepositoryInterface&MockObject $repo) {
+        $repo->expects($this->never())->method('findByProvider');
+      },
+    );
+
+    $result = $resolver->resolve($identity);
+
+    $this->assertInstanceOf(User::class, $result);
+  }
+
+  private function createNewUserIdentity(ProviderSlug $slug): OAuthIdentity {
+    $subject = $this->createStub(OAuthSubject::class);
+    $subject->method('getProvider')->willReturn($slug);
+
+    $identity = $this->createStub(OAuthIdentity::class);
+    $identity->method('getSubject')->willReturn($subject);
+    $identity->method('getEmail')->willReturn(Email::fromString('newuser@example.com'));
+    $identity->method('getDisplayName')->willReturn(DisplayName::fromString('New User'));
+    $identity->method('isEmailVerified')->willReturn(true);
+
+    return $identity;
+  }
+
   private function createResolver(
     ?callable $linkConfig = null,
     ?callable $storeConfig = null,
     ?callable $emailCheckConfig = null,
     ?callable $factoryConfig = null,
+    ?callable $providerConfig = null,
   ): OAuthUserResolver {
     if ($linkConfig) {
       $linkRepository = $this->createMock(OAuthLinkRepositoryInterface::class);
@@ -220,6 +320,19 @@ final class OAuthUserResolverTest extends TestCase {
       $oauthUserFactory = $this->createStub(OAuthUserFactory::class);
     }
 
-    return new OAuthUserResolver($linkRepository, $userStore, $checkUserByEmail, $oauthUserFactory);
+    if ($providerConfig) {
+      $providerRepository = $this->createMock(OAuthProviderRepositoryInterface::class);
+      $providerConfig($providerRepository);
+    } else {
+      $providerRepository = $this->createStub(OAuthProviderRepositoryInterface::class);
+    }
+
+    return new OAuthUserResolver(
+      $linkRepository,
+      $userStore,
+      $checkUserByEmail,
+      $oauthUserFactory,
+      $providerRepository,
+    );
   }
 }
