@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Http\Registration;
 
+use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\Test;
 use Slink\User\Application\Command\CreateOAuthProvider\CreateOAuthProviderCommand;
+use Slink\User\Application\Command\UpdateOAuthProvider\UpdateOAuthProviderCommand;
 use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Email;
 use Slink\User\Domain\ValueObject\OAuth\OAuthIdentity;
@@ -41,8 +43,9 @@ final class SsoRegistrationPolicyTest extends HttpTestCase {
     string $slug,
     string $registrationPolicy = 'inherit',
     string $approvalPolicy = 'inherit',
-  ): void {
-    $this->commandBus()->handleSync(new CreateOAuthProviderCommand(
+  ): string {
+    /** @var string $providerId */
+    $providerId = $this->commandBus()->handleSync(new CreateOAuthProviderCommand(
       name: 'Acme SSO',
       slug: $slug,
       clientId: 'client-id-123',
@@ -52,6 +55,24 @@ final class SsoRegistrationPolicyTest extends HttpTestCase {
       registrationPolicy: $registrationPolicy,
       approvalPolicy: $approvalPolicy,
     ));
+
+    return $providerId;
+  }
+
+  private function updateRegistrationPolicy(string $providerId, string $registrationPolicy): void {
+    $command = new UpdateOAuthProviderCommand(registrationPolicy: $registrationPolicy);
+
+    $this->commandBus()->handleSync($command->withContext(['id' => $providerId]));
+  }
+
+  private function countUsersByEmail(string $email): int {
+    /** @var EntityManagerInterface $entityManager */
+    $entityManager = static::getContainer()->get(EntityManagerInterface::class);
+
+    return (int) $entityManager->getConnection()->fetchOne(
+      'SELECT COUNT(*) FROM "user" WHERE email = :email',
+      ['email' => $email],
+    );
   }
 
   private function stubIdentity(string $slug, string $email): void {
@@ -181,6 +202,41 @@ final class SsoRegistrationPolicyTest extends HttpTestCase {
     self::assertSame('acme', $publicProvider['slug'] ?? null);
     self::assertArrayNotHasKey('registrationPolicy', $publicProvider);
     self::assertArrayNotHasKey('approvalPolicy', $publicProvider);
+  }
+
+  #[Test]
+  public function itKeepsIssuingTokensToExistingUserAfterProviderBlocksRegistration(): void {
+    $this->configureUserSettings(allowRegistration: false);
+    $providerId = $this->createProvider('acme', registrationPolicy: 'allowed');
+    $this->stubIdentity('acme', 'sso-existing@local.test');
+
+    self::assertSame(200, $this->ssoToken());
+
+    $this->updateRegistrationPolicy($providerId, 'blocked');
+
+    $status = $this->ssoToken();
+
+    self::assertSame(200, $status);
+
+    $payload = $this->responsePayload();
+    $accessToken = $payload['accessToken'] ?? $payload['access_token'] ?? '';
+
+    self::assertNotSame('', $accessToken);
+  }
+
+  #[Test]
+  public function itKeepsReturningApprovalRequiredOnRepeatSignInWithoutDuplicatingUser(): void {
+    $this->configureUserSettings(allowRegistration: false);
+    $this->createProvider('acme', registrationPolicy: 'allowed', approvalPolicy: 'required');
+    $this->stubIdentity('acme', 'sso-pending@local.test');
+
+    self::assertSame(200, $this->ssoToken());
+    self::assertTrue($this->responsePayload()['approval_required'] ?? false);
+
+    self::assertSame(200, $this->ssoToken());
+    self::assertTrue($this->responsePayload()['approval_required'] ?? false);
+
+    self::assertSame(1, $this->countUsersByEmail('sso-pending@local.test'));
   }
 
   #[Test]
