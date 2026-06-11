@@ -1,6 +1,6 @@
 variable "NODE_VERSION"                  { default = "24.16.0" }
 variable "PHP_VERSION"                   { default = "8.5.7" }
-variable "ALPINE_VERSION"                { default = "3.23" }
+variable "ALPINE_VERSION"                { default = "3.24" }
 variable "COMPOSER_VERSION"              { default = "2" }
 variable "MEMORY_LIMIT"                  { default = "512" }
 variable "UPLOAD_MAX_FILESIZE_IN_BYTES"  { default = "52428800" }

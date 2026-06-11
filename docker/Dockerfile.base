@@ -31,10 +31,13 @@ RUN install-php-extensions \
 # ToDo: migrate to dhi.io/alpine-base:${ALPINE_VERSION} (requires manual dependencies installation)    
 FROM dhi.io/alpine-base:${ALPINE_VERSION}-dev AS common
 
+ARG ALPINE_VERSION
 ARG USER_ID
 ARG GROUP_ID
 
 RUN --mount=type=cache,target=/var/cache/apk \
+    printf '\nhttps://dl-cdn.alpinelinux.org/alpine/v%s/main\nhttps://dl-cdn.alpinelinux.org/alpine/v%s/community\n' \
+        "${ALPINE_VERSION}" "${ALPINE_VERSION}" >> /etc/apk/repositories && \
     apk add \
         s6-overlay \
         redis \
