@@ -49,6 +49,10 @@ RUN --mount=type=cache,target=/var/cache/apk \
         imagemagick \
         vips \
         libheif \
+        libheif-aom \
+        libheif-dav1d \
+        libheif-x265 \
+        libheif-libde265 \
         tzdata \
         libffi \
         libexif \
