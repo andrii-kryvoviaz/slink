@@ -4538,6 +4538,7 @@ msgstr "视图模式"
 msgid "Quick paste"
 msgstr "快速粘贴"
 
+#: src/feature/Settings/OAuthSettings/PolicyInfoOption.svelte
 #: src/feature/Upload/Options/Visibility.svelte
 msgid "Current"
 msgstr "当前"
@@ -4868,21 +4869,20 @@ msgstr "正在上传"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
-msgid "Global"
-msgstr "全局"
-
-#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Allowed"
 msgstr "允许"
 
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Blocked"
 msgstr "禁止"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Required"
 msgstr "需要"
 
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Auto-approve"
 msgstr "自动通过"
@@ -4892,52 +4892,18 @@ msgid "Registration"
 msgstr "注册"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "New User Registration"
 msgstr "新用户注册"
-
-#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
-msgid "Follows the global registration setting, currently enabled"
-msgstr "跟随全局注册设置，当前为启用。"
-
-#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
-msgid "Follows the global registration setting, currently disabled"
-msgstr "跟随全局注册设置，当前为禁用。"
-
-#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
-msgid "New users signing in with this provider get an account automatically"
-msgstr "使用此提供方登录的新用户将自动获得账号。"
-
-#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
-msgid "Only existing users can sign in with this provider"
-msgstr "只有已有用户才能使用此提供方登录。"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "New user registration policy"
 msgstr "新用户注册策略"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Admin Approval"
 msgstr "管理员审核"
-
-#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
-msgid "No effect while registration is blocked for this provider"
-msgstr "当此提供方的注册被禁止时，此设置无效。"
-
-#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
-msgid "Follows the global approval setting, currently required"
-msgstr "跟随全局审核设置，当前为需要审核。"
-
-#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
-msgid "Follows the global approval setting, currently not required"
-msgstr "跟随全局审核设置，当前为无需审核。"
-
-#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
-msgid "New accounts wait for admin approval"
-msgstr "新账号需等待管理员审核。"
-
-#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
-msgid "New accounts are activated immediately"
-msgstr "新账号将立即激活。"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Admin approval policy"
@@ -4950,3 +4916,46 @@ msgstr "开放注册"
 #: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
 msgid "Sign-in only"
 msgstr "仅限登录"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Whether new users can sign up through this provider."
+msgstr "是否允许新用户通过此提供方注册。"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Has no effect while registration is blocked for this provider."
+msgstr "当此提供方禁止注册时，此设置不生效。"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "New accounts wait for admin approval."
+msgstr "新账号需等待管理员审核。"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "New accounts are activated immediately."
+msgstr "新账号立即启用。"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Whether new accounts need admin approval before activation."
+msgstr "新账号在启用前是否需要管理员审核。"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "New users signing in with this provider get an account automatically."
+msgstr "新用户通过此提供方登录时会自动创建账号。"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Only existing users can sign in with this provider."
+msgstr "仅已有账号的用户可通过此提供方登录。"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Inherit"
+msgstr "继承"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Inherits the global registration setting."
+msgstr "继承全局注册设置。"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Inherits the global approval setting."
+msgstr "继承全局审核设置。"

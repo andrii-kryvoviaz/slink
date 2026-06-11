@@ -8,6 +8,8 @@
   import { Input } from '@slink/ui/components/input';
   import { Switch } from '@slink/ui/components/switch';
 
+  import Icon from '@iconify/svelte';
+
   import type {
     OAuthApprovalPolicy,
     OAuthRegistrationPolicy,
@@ -16,6 +18,8 @@
   import type { UserSettings } from '@slink/lib/settings/Type/UserSettings';
 
   import { type OAuthProviderFormState } from './OAuthProviderFormState.svelte';
+  import PolicyInfo from './PolicyInfo.svelte';
+  import PolicyInfoOption from './PolicyInfoOption.svelte';
 
   interface Props {
     formState: OAuthProviderFormState;
@@ -34,13 +38,13 @@
   }: Props = $props();
 
   const registrationOptions: ToggleGroupOption<OAuthRegistrationPolicy>[] = [
-    { value: 'inherit', label: 'Global' },
+    { value: 'inherit', label: 'Inherit' },
     { value: 'allowed', label: 'Allowed' },
     { value: 'blocked', label: 'Blocked' },
   ];
 
   const approvalOptions: ToggleGroupOption<OAuthApprovalPolicy>[] = [
-    { value: 'inherit', label: 'Global' },
+    { value: 'inherit', label: 'Inherit' },
     { value: 'required', label: 'Required' },
     { value: 'none', label: 'Auto-approve' },
   ];
@@ -178,19 +182,48 @@
       class="divide-y divide-gray-100 dark:divide-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 overflow-hidden"
     >
       <SettingItem>
-        {#snippet label()}New User Registration{/snippet}
+        {#snippet label()}
+          <span class="inline-flex items-center gap-1.5">
+            <span>New User Registration</span>
+            <PolicyInfo
+              title="New User Registration"
+              value={formState.fields.registrationPolicy}
+            >
+              <PolicyInfoOption value="inherit">
+                {#snippet icon()}
+                  <Icon
+                    icon="lucide:globe"
+                    class="w-4 h-4 text-slate-500 dark:text-slate-400"
+                  />
+                {/snippet}
+                {#snippet label()}Inherit{/snippet}
+                Inherits the global registration setting.
+              </PolicyInfoOption>
+              <PolicyInfoOption value="allowed">
+                {#snippet icon()}
+                  <Icon
+                    icon="lucide:user-plus"
+                    class="w-4 h-4 text-slate-500 dark:text-slate-400"
+                  />
+                {/snippet}
+                {#snippet label()}Allowed{/snippet}
+                New users signing in with this provider get an account automatically.
+              </PolicyInfoOption>
+              <PolicyInfoOption value="blocked">
+                {#snippet icon()}
+                  <Icon
+                    icon="lucide:user-x"
+                    class="w-4 h-4 text-slate-500 dark:text-slate-400"
+                  />
+                {/snippet}
+                {#snippet label()}Blocked{/snippet}
+                Only existing users can sign in with this provider.
+              </PolicyInfoOption>
+            </PolicyInfo>
+          </span>
+        {/snippet}
         {#snippet hint()}
-          {#if formState.fields.registrationPolicy === 'inherit'}
-            {#if globalUserSettings.allowRegistration}
-              Follows the global registration setting, currently enabled
-            {:else}
-              Follows the global registration setting, currently disabled
-            {/if}
-          {:else if formState.fields.registrationPolicy === 'allowed'}
-            New users signing in with this provider get an account automatically
-          {:else}
-            Only existing users can sign in with this provider
-          {/if}
+          Whether new users can sign up through this provider.
         {/snippet}
         <ToggleGroup
           value={formState.fields.registrationPolicy}
@@ -202,25 +235,56 @@
         />
       </SettingItem>
 
+      {#snippet approvalNote()}
+        Has no effect while registration is blocked for this provider.
+      {/snippet}
+
       <SettingItem>
         {#snippet label()}
-          <span class:opacity-50={!effectiveRegistration}>Admin Approval</span>
+          <span class="inline-flex items-center gap-1.5">
+            <span class:opacity-50={!effectiveRegistration}>Admin Approval</span
+            >
+            <PolicyInfo
+              title="Admin Approval"
+              value={formState.fields.approvalPolicy}
+              note={!effectiveRegistration ? approvalNote : undefined}
+            >
+              <PolicyInfoOption value="inherit">
+                {#snippet icon()}
+                  <Icon
+                    icon="lucide:globe"
+                    class="w-4 h-4 text-slate-500 dark:text-slate-400"
+                  />
+                {/snippet}
+                {#snippet label()}Inherit{/snippet}
+                Inherits the global approval setting.
+              </PolicyInfoOption>
+              <PolicyInfoOption value="required">
+                {#snippet icon()}
+                  <Icon
+                    icon="lucide:clock"
+                    class="w-4 h-4 text-slate-500 dark:text-slate-400"
+                  />
+                {/snippet}
+                {#snippet label()}Required{/snippet}
+                New accounts wait for admin approval.
+              </PolicyInfoOption>
+              <PolicyInfoOption value="none">
+                {#snippet icon()}
+                  <Icon
+                    icon="lucide:user-check"
+                    class="w-4 h-4 text-slate-500 dark:text-slate-400"
+                  />
+                {/snippet}
+                {#snippet label()}Auto-approve{/snippet}
+                New accounts are activated immediately.
+              </PolicyInfoOption>
+            </PolicyInfo>
+          </span>
         {/snippet}
         {#snippet hint()}
           <span class:opacity-50={!effectiveRegistration}>
-            {#if !effectiveRegistration}
-              No effect while registration is blocked for this provider
-            {:else if formState.fields.approvalPolicy === 'inherit'}
-              {#if globalUserSettings.approvalRequired}
-                Follows the global approval setting, currently required
-              {:else}
-                Follows the global approval setting, currently not required
-              {/if}
-            {:else if formState.fields.approvalPolicy === 'required'}
-              New accounts wait for admin approval
-            {:else}
-              New accounts are activated immediately
-            {/if}
+            Whether new accounts need admin approval before activation.
           </span>
         {/snippet}
         <ToggleGroup

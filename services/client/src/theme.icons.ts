@@ -241,4 +241,7 @@ export const themeIcons: string[] = [
   'lucide:list-tree',
   'ph:link-simple',
   'ph:map-pin',
+  'lucide:user-plus',
+  'lucide:user-x',
+  'lucide:user-check',
 ];

@@ -4558,6 +4558,7 @@ msgstr "Tryb widoku"
 msgid "Quick paste"
 msgstr "Szybkie wklejanie"
 
+#: src/feature/Settings/OAuthSettings/PolicyInfoOption.svelte
 #: src/feature/Upload/Options/Visibility.svelte
 msgid "Current"
 msgstr "Aktualny"
@@ -4890,21 +4891,20 @@ msgstr "Przesyłanie w toku"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
-msgid "Global"
-msgstr "Globalne"
-
-#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Allowed"
 msgstr "Dozwolona"
 
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Blocked"
 msgstr "Zablokowana"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Required"
 msgstr "Wymagane"
 
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Auto-approve"
 msgstr "Automatyczne"
@@ -4914,52 +4914,18 @@ msgid "Registration"
 msgstr "Rejestracja"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "New User Registration"
 msgstr "Rejestracja nowych użytkowników"
-
-#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
-msgid "Follows the global registration setting, currently enabled"
-msgstr "Stosuje globalne ustawienie rejestracji, obecnie włączone"
-
-#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
-msgid "Follows the global registration setting, currently disabled"
-msgstr "Stosuje globalne ustawienie rejestracji, obecnie wyłączone"
-
-#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
-msgid "New users signing in with this provider get an account automatically"
-msgstr "Nowi użytkownicy logujący się przez tego dostawcę automatycznie otrzymują konto"
-
-#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
-msgid "Only existing users can sign in with this provider"
-msgstr "Tylko istniejący użytkownicy mogą logować się przez tego dostawcę"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "New user registration policy"
 msgstr "Zasady rejestracji nowych użytkowników"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Admin Approval"
 msgstr "Zatwierdzenie przez administratora"
-
-#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
-msgid "No effect while registration is blocked for this provider"
-msgstr "Bez efektu, gdy rejestracja jest zablokowana dla tego dostawcy"
-
-#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
-msgid "Follows the global approval setting, currently required"
-msgstr "Stosuje globalne ustawienie zatwierdzania, obecnie wymagane"
-
-#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
-msgid "Follows the global approval setting, currently not required"
-msgstr "Stosuje globalne ustawienie zatwierdzania, obecnie niewymagane"
-
-#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
-msgid "New accounts wait for admin approval"
-msgstr "Nowe konta oczekują na zatwierdzenie przez administratora"
-
-#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
-msgid "New accounts are activated immediately"
-msgstr "Nowe konta są aktywowane natychmiast"
 
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Admin approval policy"
@@ -4972,3 +4938,46 @@ msgstr "Otwarta rejestracja"
 #: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
 msgid "Sign-in only"
 msgstr "Tylko logowanie"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Whether new users can sign up through this provider."
+msgstr "Określa, czy nowi użytkownicy mogą zarejestrować się za pomocą tego dostawcy."
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Has no effect while registration is blocked for this provider."
+msgstr "Nie ma znaczenia, gdy rejestracja dla tego dostawcy jest zablokowana."
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "New accounts wait for admin approval."
+msgstr "Nowe konta oczekują na zatwierdzenie przez administratora."
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "New accounts are activated immediately."
+msgstr "Nowe konta są aktywowane natychmiast."
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Whether new accounts need admin approval before activation."
+msgstr "Określa, czy nowe konta wymagają zatwierdzenia przez administratora przed aktywacją."
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "New users signing in with this provider get an account automatically."
+msgstr "Nowi użytkownicy logujący się za pomocą tego dostawcy automatycznie otrzymują konto."
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Only existing users can sign in with this provider."
+msgstr "Tylko istniejący użytkownicy mogą zalogować się za pomocą tego dostawcy."
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Inherit"
+msgstr "Dziedzicz"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Inherits the global registration setting."
+msgstr "Dziedziczy globalne ustawienie rejestracji."
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
+msgid "Inherits the global approval setting."
+msgstr "Dziedziczy globalne ustawienie zatwierdzania."
