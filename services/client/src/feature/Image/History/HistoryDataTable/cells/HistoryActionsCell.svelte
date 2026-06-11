@@ -10,6 +10,8 @@
   import type { ImageListingItem } from '@slink/api/Response';
   import type { CollectionReference } from '@slink/api/Response/Collection/CollectionResponse';
 
+  import HistoryActionsMenu from './HistoryActionsMenu.svelte';
+
   interface Props {
     item: ImageListingItem;
     onDelete: (id: string) => void;
@@ -24,7 +26,7 @@
 </script>
 
 <StopPropagation>
-  <div class="flex items-center justify-end">
+  <div class="flex items-center justify-end @max-2xl:hidden">
     <ImageActionBar
       image={createActionBarImage(item)}
       buttons={historyActionBarButtons}
@@ -35,6 +37,17 @@
         tagChange: (imageId, tags) => onTagChange?.(imageId, tags),
       }}
       compact
+    />
+  </div>
+  <div class="@2xl:hidden">
+    <HistoryActionsMenu
+      image={createActionBarImage(item)}
+      on={{
+        imageDelete: onDelete,
+        collectionChange: (imageId, collections) =>
+          onCollectionChange(imageId, collections),
+        tagChange: (imageId, tags) => onTagChange?.(imageId, tags),
+      }}
     />
   </div>
 </StopPropagation>

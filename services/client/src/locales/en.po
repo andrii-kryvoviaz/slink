@@ -982,6 +982,7 @@ msgstr "Only own images can be added"
 #: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/History/HistoryDataTable/cells/HistoryActionsMenu.svelte
 msgid "Add to collection"
 msgstr "Add to collection"
 
@@ -1036,22 +1037,26 @@ msgstr "Download image"
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/DownloadButton/DownloadButton.svelte
 #: src/feature/Image/History/Actions/DownloadAction.svelte
+#: src/feature/Image/History/HistoryDataTable/cells/HistoryActionsMenu.svelte
 msgid "Download"
 msgstr "Download"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/History/HistoryDataTable/cells/HistoryActionsMenu.svelte
 msgid "Delete image"
 msgstr "Delete image"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/History/HistoryDataTable/cells/HistoryActionsMenu.svelte
 msgid "Manage tags"
 msgstr "Manage tags"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/AdminImageDropdown/AdminImageDropdown.svelte
+#: src/feature/Image/History/HistoryDataTable/cells/HistoryActionsMenu.svelte
 msgid "Image actions"
 msgstr "Image actions"
 
@@ -1066,10 +1071,12 @@ msgid "Copied!"
 msgstr "Copied!"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/History/HistoryDataTable/cells/HistoryActionsMenu.svelte
 msgid "Make private"
 msgstr "Make private"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/History/HistoryDataTable/cells/HistoryActionsMenu.svelte
 msgid "Make public"
 msgstr "Make public"
 
@@ -4231,6 +4238,7 @@ msgid "Share actions"
 msgstr "Share actions"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/History/HistoryDataTable/cells/HistoryActionsMenu.svelte
 #: src/feature/Share/Controls/List.svelte
 msgid "Copy link"
 msgstr "Copy link"

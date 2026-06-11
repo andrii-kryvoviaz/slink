@@ -49,7 +49,7 @@
 <div
   class="flex-1 overflow-hidden rounded-xl border border-slate-200/60 dark:border-slate-700/40 bg-white dark:bg-slate-800/30"
 >
-  <div class="overflow-x-auto">
+  <div class="@container overflow-x-auto">
     <Table.Root>
       <Table.Header>
         {#each dataTable.getHeaderGroups() as headerGroup (headerGroup.id)}

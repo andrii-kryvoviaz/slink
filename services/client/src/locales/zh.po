@@ -982,6 +982,7 @@ msgstr "只能添加自己的图片"
 #: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/History/HistoryDataTable/cells/HistoryActionsMenu.svelte
 msgid "Add to collection"
 msgstr "添加到合集"
 
@@ -1036,22 +1037,26 @@ msgstr "下载图片"
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/DownloadButton/DownloadButton.svelte
 #: src/feature/Image/History/Actions/DownloadAction.svelte
+#: src/feature/Image/History/HistoryDataTable/cells/HistoryActionsMenu.svelte
 msgid "Download"
 msgstr "下载"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/History/HistoryDataTable/cells/HistoryActionsMenu.svelte
 msgid "Delete image"
 msgstr "删除图片"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/History/HistoryDataTable/cells/HistoryActionsMenu.svelte
 msgid "Manage tags"
 msgstr "管理标签"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/AdminImageDropdown/AdminImageDropdown.svelte
+#: src/feature/Image/History/HistoryDataTable/cells/HistoryActionsMenu.svelte
 msgid "Image actions"
 msgstr "图片操作"
 
@@ -1066,10 +1071,12 @@ msgid "Copied!"
 msgstr "已复制！"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/History/HistoryDataTable/cells/HistoryActionsMenu.svelte
 msgid "Make private"
 msgstr "设为私密"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/History/HistoryDataTable/cells/HistoryActionsMenu.svelte
 msgid "Make public"
 msgstr "设为公开"
 
@@ -4227,6 +4234,7 @@ msgid "Share actions"
 msgstr "发布操作"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/History/HistoryDataTable/cells/HistoryActionsMenu.svelte
 #: src/feature/Share/Controls/List.svelte
 msgid "Copy link"
 msgstr "复制链接"

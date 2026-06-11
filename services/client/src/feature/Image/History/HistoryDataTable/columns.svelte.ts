@@ -90,7 +90,7 @@ export function createHistoryColumns(
       header: () => 'Type',
       accessorFn: (row) => row.metadata.mimeType,
       meta: {
-        className: 'w-[80px]',
+        className: 'w-[80px] @max-6xl:hidden',
       },
       cell: ({ row }) => {
         return formatMimeType(row.original.metadata.mimeType);
@@ -100,7 +100,7 @@ export function createHistoryColumns(
       accessorKey: 'dimensions',
       header: () => 'Dimensions',
       meta: {
-        className: 'w-[120px]',
+        className: 'w-[120px] @max-5xl:hidden',
       },
       cell: ({ row }) => {
         return `${row.original.metadata.width}\u00D7${row.original.metadata.height}`;
@@ -111,7 +111,7 @@ export function createHistoryColumns(
       header: () => 'Size',
       accessorFn: (row) => row.metadata.size,
       meta: {
-        className: 'w-[90px]',
+        className: 'w-[90px] @max-lg:hidden',
       },
       cell: ({ row }) => {
         return bytesToSize(row.original.metadata.size);
@@ -122,7 +122,7 @@ export function createHistoryColumns(
       header: () => 'Visibility',
       accessorFn: (row) => row.attributes.isPublic,
       meta: {
-        className: 'w-[100px]',
+        className: 'w-[100px] @max-md:hidden',
       },
       cell: ({ row }) => {
         return renderComponent(VisibilityBadge, {
@@ -136,7 +136,7 @@ export function createHistoryColumns(
       header: () => 'Views',
       accessorFn: (row) => row.attributes.views,
       meta: {
-        className: 'w-[70px] text-center',
+        className: 'w-[70px] text-center @max-6xl:hidden',
       },
       cell: ({ row }) => {
         return renderComponent(ViewCountBadge, {
@@ -150,7 +150,7 @@ export function createHistoryColumns(
       header: () => 'Created',
       accessorFn: (row) => row.attributes.createdAt.timestamp,
       meta: {
-        className: 'w-[140px]',
+        className: 'w-[140px] @max-2xl:hidden',
       },
       cell: ({ row }) => {
         return renderComponent(FormattedDate, {
@@ -162,7 +162,7 @@ export function createHistoryColumns(
       id: 'tagsCollections',
       header: () => 'Tags / Collections',
       meta: {
-        className: 'min-w-[150px]',
+        className: 'min-w-[150px] @max-4xl:hidden',
       },
       cell: ({ row }) => {
         const item = row.original;
