@@ -1,5 +1,6 @@
 <script lang="ts">
   import { ProviderIcon } from '@slink/feature/Auth';
+  import { Badge } from '@slink/feature/Text';
   import {
     ActionsMenu,
     DropdownSimpleGroup,
@@ -65,6 +66,15 @@
               <span class="text-xs text-gray-400 dark:text-gray-500 font-mono">
                 {provider.slug}
               </span>
+              {#if provider.registrationPolicy === 'allowed'}
+                <Badge variant="emerald" size="xs" class="shrink-0">
+                  Open registration
+                </Badge>
+              {:else if provider.registrationPolicy === 'blocked'}
+                <Badge variant="slate" size="xs" class="shrink-0">
+                  Sign-in only
+                </Badge>
+              {/if}
             </div>
             <p
               class="text-xs text-gray-400 dark:text-gray-500 truncate max-w-xs"

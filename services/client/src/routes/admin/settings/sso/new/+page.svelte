@@ -10,6 +10,14 @@
 
   import { goto, invalidate } from '$app/navigation';
 
+  import type { PageData } from './$types';
+
+  interface Props {
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
+
   const formState = new OAuthProviderFormState();
   const wizard = new OAuthProviderWizardState(formState);
 
@@ -33,6 +41,7 @@
   {:else}
     <OAuthProviderForm
       {formState}
+      globalUserSettings={data.adminSettings.user}
       onChangeProvider={() => wizard.goBack()}
       onCancel={() => goto('/admin/settings/sso')}
       onSuccess={async () => {

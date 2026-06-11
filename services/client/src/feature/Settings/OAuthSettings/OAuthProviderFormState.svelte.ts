@@ -22,6 +22,8 @@ export class OAuthProviderFormState extends AbstractFormState<void> {
     discoveryUrl: '',
     scopes: '',
     enabled: true,
+    registrationPolicy: 'inherit',
+    approvalPolicy: 'inherit',
   };
 
   private _editingProvider: OAuthProviderDetails | null = $state(null);
@@ -67,6 +69,8 @@ export class OAuthProviderFormState extends AbstractFormState<void> {
         discoveryUrl: provider.discoveryUrl ?? '',
         clientId: provider.clientId ?? '',
         enabled: provider.enabled,
+        registrationPolicy: provider.registrationPolicy ?? 'inherit',
+        approvalPolicy: provider.approvalPolicy ?? 'inherit',
       };
     } else {
       this._editingProvider = null;
@@ -113,6 +117,8 @@ export class OAuthProviderFormState extends AbstractFormState<void> {
       discoveryUrl: this.fields.discoveryUrl || this._preset.discoveryUrl || '',
       scopes: this._preset.scopes,
       enabled: this.fields.enabled,
+      registrationPolicy: this.fields.registrationPolicy,
+      approvalPolicy: this.fields.approvalPolicy,
     };
 
     if (this.fields.clientSecret) data.clientSecret = this.fields.clientSecret;

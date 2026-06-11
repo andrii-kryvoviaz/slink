@@ -34,6 +34,7 @@
   {/snippet}
   <OAuthProviderForm
     {formState}
+    globalUserSettings={data.adminSettings.user}
     onCancel={() => goto('/admin/settings/sso')}
     onSuccess={async () => {
       await invalidate('app:sso-providers');

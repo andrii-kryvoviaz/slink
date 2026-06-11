@@ -52,26 +52,23 @@
     />
   </SettingItem>
 
-  {#if settings.allowRegistration}
-    <SettingItem
-      defaultValue={defaultSettings?.approvalRequired}
-      currentValue={settings.approvalRequired}
-      reset={(value) => {
-        settings.approvalRequired = value;
-      }}
-    >
-      {#snippet label()}
-        Require Admin Approval
-      {/snippet}
-      {#snippet hint()}
-        New users must be approved before accessing the app
-      {/snippet}
-      <Switch
-        name="approvalRequired"
-        bind:checked={settings.approvalRequired}
-      />
-    </SettingItem>
+  <SettingItem
+    defaultValue={defaultSettings?.approvalRequired}
+    currentValue={settings.approvalRequired}
+    reset={(value) => {
+      settings.approvalRequired = value;
+    }}
+  >
+    {#snippet label()}
+      Require Admin Approval
+    {/snippet}
+    {#snippet hint()}
+      New users must be approved before accessing the app
+    {/snippet}
+    <Switch name="approvalRequired" bind:checked={settings.approvalRequired} />
+  </SettingItem>
 
+  {#if settings.allowRegistration}
     <SettingItem
       defaultValue={defaultSettings?.password.minLength}
       currentValue={settings.password.minLength}
