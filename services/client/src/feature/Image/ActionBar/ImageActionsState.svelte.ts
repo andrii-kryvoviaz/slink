@@ -174,7 +174,7 @@ export class ImageActionsState {
   handleDownload = (): void => {
     if (this._downloadLoading.active) return;
     const image = this._config.getImage();
-    const directLink = routes.image.view(image.fileName, undefined, {
+    const directLink = routes.image.view(image.fileName, {
       absolute: true,
     });
     this._downloadLoading.trigger();

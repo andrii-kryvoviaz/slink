@@ -41,7 +41,7 @@
   import { usePostViewerState } from '@slink/lib/state/PostViewerState.svelte';
 
   import { printErrorsAsToastMessage } from '@slink/utils/ui/printErrorsAsToastMessage';
-  import { routes } from '@slink/utils/url';
+  import { PreviewUrl, routes } from '@slink/utils/url';
 
   interface Props {
     data: {
@@ -360,7 +360,11 @@
               <div class="relative">
                 <ImagePlaceholder
                   uniqueId={image.id}
-                  src={item.url ?? `/image/${image.attributes.fileName}`}
+                  src={item.url ??
+                    PreviewUrl.image(image.attributes.fileName, {
+                      width: 400,
+                      format: 'webp',
+                    })}
                   metadata={image.metadata}
                   showMetadata={false}
                   showOpenInNewTab={false}

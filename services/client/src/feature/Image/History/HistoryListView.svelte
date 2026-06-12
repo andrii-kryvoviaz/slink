@@ -13,7 +13,7 @@
   import { fade, fly } from 'svelte/transition';
 
   import { cn } from '@slink/utils/ui';
-  import { imagePreview } from '@slink/utils/url';
+  import { PreviewUrl } from '@slink/utils/url';
 
   import HistoryItemActions from './HistoryItemActions.svelte';
   import {
@@ -77,7 +77,7 @@
           </button>
           <div class="aspect-4/3 @xl:aspect-square w-full h-full">
             <ImagePlaceholder
-              src={imagePreview(item.attributes.fileName, {
+              src={PreviewUrl.image(item.attributes.fileName, {
                 width: 300,
                 height: 300,
                 crop: true,

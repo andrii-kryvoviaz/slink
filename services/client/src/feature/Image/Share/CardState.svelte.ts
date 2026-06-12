@@ -68,7 +68,7 @@ export class ShareCardState {
   );
 
   readonly directLink: string = $derived.by(() =>
-    routes.image.view(this.formattedFileName, {}, { absolute: true }),
+    routes.image.view(this.formattedFileName, { absolute: true }),
   );
 
   constructor(config: ShareCardConfig) {

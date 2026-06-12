@@ -16,7 +16,7 @@
   import { fade, fly } from 'svelte/transition';
 
   import { cn } from '@slink/utils/ui';
-  import { imagePreview } from '@slink/utils/url';
+  import { PreviewUrl } from '@slink/utils/url';
 
   import {
     actionBarVisibilityVariants,
@@ -84,7 +84,7 @@
         <div>
           <ImagePlaceholder
             uniqueId={item.id}
-            src={imagePreview(item.attributes.fileName, {
+            src={PreviewUrl.image(item.attributes.fileName, {
               width: 400,
               format: 'webp',
             })}

@@ -8,7 +8,7 @@ import { ReactiveState } from '@slink/api/ReactiveState';
 import type { Tag } from '@slink/api/Resources/TagResource';
 import type { CollectionReference } from '@slink/api/Response/Collection/CollectionResponse';
 
-import { imagePreview } from '@slink/utils/url';
+import { PreviewUrl } from '@slink/utils/url';
 
 import type { PageData } from './$types';
 
@@ -133,7 +133,7 @@ export class ImageInfoPageState {
   }
 
   get displayPreview(): string {
-    return imagePreview(this._image.fileName, {
+    return PreviewUrl.image(this._image.fileName, {
       width: 1600,
       quality: 82,
       format: 'webp',
@@ -141,7 +141,7 @@ export class ImageInfoPageState {
   }
 
   get thumbnailPreview(): string {
-    return imagePreview(this._image.fileName, {
+    return PreviewUrl.image(this._image.fileName, {
       width: 320,
       quality: 50,
       format: 'webp',

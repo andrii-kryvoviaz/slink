@@ -4,7 +4,7 @@
 
   import type { ImageListingItem } from '@slink/api/Response';
 
-  import { imagePreview } from '@slink/utils/url';
+  import { PreviewUrl } from '@slink/utils/url';
 
   interface Props {
     item: ImageListingItem;
@@ -18,7 +18,7 @@
   class="block w-12 h-12 rounded-md overflow-hidden shrink-0"
 >
   <ImagePlaceholder
-    src={imagePreview(item.attributes.fileName, {
+    src={PreviewUrl.image(item.attributes.fileName, {
       width: 96,
       height: 96,
       crop: true,
