@@ -1,4 +1,5 @@
 import { cva } from 'class-variance-authority';
+import { tv } from 'tailwind-variants';
 
 import type { ImageListingItem } from '@slink/api/Response';
 
@@ -40,7 +41,7 @@ export const historyCardVariants = cva(
 );
 
 export const historyListRowVariants = cva(
-  'group relative flex flex-col sm:flex-row w-full overflow-hidden rounded-lg border bg-white dark:bg-gray-900/60 transition-all duration-200 hover:shadow-md dark:hover:shadow-gray-900/50',
+  'group relative flex flex-col @xl:flex-row w-full overflow-hidden rounded-lg border bg-white dark:bg-gray-900/60 transition-all duration-200 hover:shadow-md dark:hover:shadow-gray-900/50',
   {
     variants: {
       selected: {
@@ -73,15 +74,45 @@ export const actionBarVisibilityVariants = cva('absolute top-2 right-2', {
   },
 });
 
-export const listActionBarVisibilityVariants = cva('shrink-0', {
+export const historyItemActionsVariants = tv({
+  slots: {
+    bar: '@max-2xl:hidden',
+    menu: '@2xl:hidden',
+  },
   variants: {
+    layout: {
+      table: {
+        bar: 'flex items-center justify-end',
+      },
+      list: {
+        bar: 'shrink-0',
+        menu: 'shrink-0',
+      },
+    },
+    hoverReveal: {
+      true: {},
+      false: {},
+    },
     selectionMode: {
-      true: 'opacity-0 pointer-events-none',
-      false:
-        'opacity-0 group-hover:opacity-100 sm:opacity-100 [&:has([data-state=open])]:opacity-100 transition-opacity duration-200',
+      true: {
+        bar: 'opacity-0 pointer-events-none',
+        menu: 'opacity-0 pointer-events-none',
+      },
+      false: {},
     },
   },
+  compoundVariants: [
+    {
+      hoverReveal: true,
+      selectionMode: false,
+      class: {
+        bar: 'opacity-0 group-hover:opacity-100 @2xl:opacity-100 [&:has([data-state=open])]:opacity-100 transition-opacity duration-200',
+      },
+    },
+  ],
   defaultVariants: {
+    layout: 'table',
+    hoverReveal: false,
     selectionMode: false,
   },
 });

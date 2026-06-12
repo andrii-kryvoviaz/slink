@@ -1,8 +1,6 @@
 <script lang="ts">
-  import { StopPropagation } from '@slink/feature/Action';
   import { ImageCollectionList } from '@slink/feature/Collection';
   import {
-    ImageActionBar,
     ImagePlaceholder,
     ViewCountBadge,
     VisibilityBadge,
@@ -17,12 +15,10 @@
   import { cn } from '@slink/utils/ui';
   import { imagePreview } from '@slink/utils/url';
 
+  import HistoryItemActions from './HistoryItemActions.svelte';
   import {
     checkboxVariants,
-    createActionBarImage,
-    historyActionBarButtons,
     historyListRowVariants,
-    listActionBarVisibilityVariants,
   } from './HistoryView.theme';
   import type { HistoryViewProps } from './HistoryView.types';
   import ImageMetadata from './ImageMetadata.svelte';
@@ -42,7 +38,7 @@
     });
 </script>
 
-<ul class="flex flex-col gap-3" role="list">
+<ul class="@container flex flex-col gap-3" role="list">
   {#each items as item, index (item.id)}
     <li
       in:fly={{ y: 20, duration: 300, delay: index * 50 }}
@@ -63,7 +59,7 @@
         tabindex={0}
       >
         <div
-          class="relative block w-full sm:w-40 md:w-48 lg:w-56 shrink-0 overflow-hidden bg-gray-100 dark:bg-gray-800/80"
+          class="relative block w-full @xl:w-40 @2xl:w-48 @4xl:w-56 shrink-0 overflow-hidden bg-gray-100 dark:bg-gray-800/80"
         >
           <button
             type="button"
@@ -79,7 +75,7 @@
           >
             <OverlayCheckbox selected={getItemState(item).isSelected} />
           </button>
-          <div class="aspect-4/3 sm:aspect-square w-full h-full">
+          <div class="aspect-4/3 @xl:aspect-square w-full h-full">
             <ImagePlaceholder
               src={imagePreview(item.attributes.fileName, {
                 width: 300,
@@ -107,7 +103,7 @@
           </div>
         </div>
 
-        <div class="flex flex-col flex-1 p-3 sm:p-4 min-w-0">
+        <div class="flex flex-col flex-1 p-3 @xl:p-4 min-w-0">
           <div class="flex items-start justify-between gap-3 mb-2">
             <Link
               href={`/info/${item.id}`}
@@ -117,26 +113,18 @@
               {item.attributes.fileName}
             </Link>
 
-            <StopPropagation>
-              <div
-                class={listActionBarVisibilityVariants({
-                  selectionMode: isSelectionMode ?? false,
-                })}
-              >
-                <ImageActionBar
-                  image={createActionBarImage(item)}
-                  buttons={historyActionBarButtons}
-                  on={{
-                    imageDelete: handleDelete,
-                    collectionChange: (imageId, collections) =>
-                      on?.collectionChange(imageId, collections),
-                    tagChange: (imageId, tags) =>
-                      on?.tagChange?.(imageId, tags),
-                  }}
-                  compact
-                />
-              </div>
-            </StopPropagation>
+            <HistoryItemActions
+              {item}
+              layout="list"
+              hoverReveal
+              selectionMode={isSelectionMode ?? false}
+              on={{
+                imageDelete: handleDelete,
+                collectionChange: (imageId, collections) =>
+                  on?.collectionChange(imageId, collections),
+                tagChange: (imageId, tags) => on?.tagChange?.(imageId, tags),
+              }}
+            />
           </div>
 
           <div class="mb-3">
@@ -154,7 +142,7 @@
                 maxVisible={5}
               />
             {:else}
-              <div class="text-xs text-gray-400 dark:text-gray-600 sm:hidden">
+              <div class="text-xs text-gray-400 dark:text-gray-600 @xl:hidden">
                 <FormattedDate date={item.attributes.createdAt.timestamp} />
               </div>
             {/if}

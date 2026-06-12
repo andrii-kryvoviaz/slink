@@ -11,7 +11,7 @@
 <div
   class="rounded-xl border border-slate-200/60 dark:border-slate-700/40 bg-white dark:bg-slate-800/30 overflow-hidden"
 >
-  <div class="overflow-x-auto">
+  <div class="@container overflow-x-auto">
     <table class="w-full">
       <thead>
         <tr class="bg-slate-50 dark:bg-slate-800/50">
@@ -22,25 +22,25 @@
           <th class="h-10 px-4 min-w-[150px] text-left"
             ><Skeleton width="60px" height="12px" /></th
           >
-          <th class="h-10 px-4 w-[80px] text-left"
+          <th class="h-10 px-4 w-[80px] text-left @max-6xl:hidden"
             ><Skeleton width="30px" height="12px" /></th
           >
-          <th class="h-10 px-4 w-[120px] text-left"
+          <th class="h-10 px-4 w-[120px] text-left @max-5xl:hidden"
             ><Skeleton width="65px" height="12px" /></th
           >
-          <th class="h-10 px-4 w-[90px] text-left"
+          <th class="h-10 px-4 w-[90px] text-left @max-lg:hidden"
             ><Skeleton width="28px" height="12px" /></th
           >
-          <th class="h-10 px-4 w-[100px] text-left"
+          <th class="h-10 px-4 w-[100px] text-left @max-md:hidden"
             ><Skeleton width="50px" height="12px" /></th
           >
-          <th class="h-10 px-4 w-[70px] text-center"
+          <th class="h-10 px-4 w-[70px] text-center @max-6xl:hidden"
             ><Skeleton width="35px" height="12px" /></th
           >
-          <th class="h-10 px-4 w-[140px] text-left"
+          <th class="h-10 px-4 w-[140px] text-left @max-2xl:hidden"
             ><Skeleton width="48px" height="12px" /></th
           >
-          <th class="h-10 px-4 min-w-[150px] text-left"
+          <th class="h-10 px-4 min-w-[150px] text-left @max-4xl:hidden"
             ><Skeleton width="28px" height="12px" /></th
           >
           <th class="h-10 px-4 w-[100px] text-right"
@@ -61,17 +61,25 @@
               ><Skeleton width="40px" height="40px" rounded="md" /></td
             >
             <td class="h-14 px-4"><Skeleton width="120px" height="14px" /></td>
-            <td class="h-14 px-4"><Skeleton width="50px" height="14px" /></td>
-            <td class="h-14 px-4"><Skeleton width="80px" height="14px" /></td>
-            <td class="h-14 px-4"><Skeleton width="50px" height="14px" /></td>
-            <td class="h-14 px-4"
+            <td class="h-14 px-4 @max-6xl:hidden"
+              ><Skeleton width="50px" height="14px" /></td
+            >
+            <td class="h-14 px-4 @max-5xl:hidden"
+              ><Skeleton width="80px" height="14px" /></td
+            >
+            <td class="h-14 px-4 @max-lg:hidden"
+              ><Skeleton width="50px" height="14px" /></td
+            >
+            <td class="h-14 px-4 @max-md:hidden"
               ><Skeleton width="60px" height="22px" rounded="full" /></td
             >
-            <td class="h-14 px-4 text-center"
+            <td class="h-14 px-4 text-center @max-6xl:hidden"
               ><Skeleton width="30px" height="14px" /></td
             >
-            <td class="h-14 px-4"><Skeleton width="90px" height="14px" /></td>
-            <td class="h-14 px-4">
+            <td class="h-14 px-4 @max-2xl:hidden"
+              ><Skeleton width="90px" height="14px" /></td
+            >
+            <td class="h-14 px-4 @max-4xl:hidden">
               <div class="flex gap-1.5">
                 <Skeleton width="40px" height="20px" rounded="full" />
                 <Skeleton width="35px" height="20px" rounded="full" />

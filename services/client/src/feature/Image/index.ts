@@ -30,6 +30,7 @@ export * from './History/BatchActionsState.svelte';
 export * from './History/BatchContext.svelte';
 export * from './History/BatchPickerState.svelte';
 export { default as BulkDeleteConfirmation } from './History/BulkDeleteConfirmation.svelte';
+export { default as HistoryActionsMenu } from './History/HistoryActionsMenu.svelte';
 export { default as HistoryDataTableSkeleton } from './History/HistoryDataTable/HistoryDataTableSkeleton.svelte';
 export { default as HistoryActionsCell } from './History/HistoryDataTable/cells/HistoryActionsCell.svelte';
 export { default as HistoryFileNameCell } from './History/HistoryDataTable/cells/HistoryFileNameCell.svelte';
@@ -39,6 +40,7 @@ export { default as HistoryThumbnailCell } from './History/HistoryDataTable/cell
 export { default as TagsCollectionsCell } from './History/HistoryDataTable/cells/TagsCollectionsCell.svelte';
 export * from './History/HistoryDataTable/columns.svelte';
 export { default as HistoryGridView } from './History/HistoryGridView.svelte';
+export { default as HistoryItemActions } from './History/HistoryItemActions.svelte';
 export { default as HistoryListView } from './History/HistoryListView.svelte';
 export * from './History/HistoryView.theme';
 export * from './History/HistoryView.types';
