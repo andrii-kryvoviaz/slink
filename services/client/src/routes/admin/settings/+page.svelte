@@ -48,10 +48,7 @@
   <title>Settings | Slink</title>
 </svelte:head>
 
-<div
-  class="flex flex-col w-full max-w-4xl px-6 py-6"
-  in:fade={{ duration: 300 }}
->
+<div class="flex flex-col w-full px-6 py-6" in:fade={{ duration: 300 }}>
   <div class="mb-8">
     <Title>Settings</Title>
     <Subtitle
@@ -59,7 +56,7 @@
     >
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  <div class="grid grid-cols-[repeat(auto-fill,minmax(16rem,1fr))] gap-4">
     {#each categories as category}
       <a
         href={category.href}
