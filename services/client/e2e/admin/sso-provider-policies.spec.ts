@@ -70,7 +70,6 @@ test.describe('Admin SSO provider policies', { tag: '@serial' }, () => {
   });
 
   test('reflects persisted policies on edit and disables approval when registration is blocked', async ({
-    page,
     api,
     ssoSettingsPage,
   }) => {
@@ -94,14 +93,10 @@ test.describe('Admin SSO provider policies', { tag: '@serial' }, () => {
     await ssoSettingsPage.selectRegistrationPolicy('Blocked');
 
     await expect(
-      page.getByText('Only existing users can sign in with this provider'),
-    ).toBeVisible();
-    await expect(
-      page.getByText(
-        'No effect while registration is blocked for this provider',
-      ),
-    ).toBeVisible();
-    await expect(ssoSettingsPage.approvalPolicyRadio('Global')).toBeDisabled();
+      ssoSettingsPage.registrationPolicyRadio('Blocked'),
+    ).toHaveAttribute('aria-checked', 'true');
+
+    await expect(ssoSettingsPage.approvalPolicyRadio('Inherit')).toBeDisabled();
     await expect(
       ssoSettingsPage.approvalPolicyRadio('Required'),
     ).toBeDisabled();
@@ -131,8 +126,8 @@ test.describe('Admin SSO provider policies', { tag: '@serial' }, () => {
 
     await ssoSettingsPage.gotoEdit(id);
 
-    await ssoSettingsPage.selectApprovalPolicy('Global');
-    await ssoSettingsPage.selectRegistrationPolicy('Global');
+    await ssoSettingsPage.selectApprovalPolicy('Inherit');
+    await ssoSettingsPage.selectRegistrationPolicy('Inherit');
 
     await ssoSettingsPage.updateProviderButton.click();
     await ssoSettingsPage.waitForList();
@@ -144,7 +139,6 @@ test.describe('Admin SSO provider policies', { tag: '@serial' }, () => {
   });
 
   test('disables admin approval when registration inherits a disabled global setting', async ({
-    page,
     api,
     settingsApi,
     ssoSettingsPage,
@@ -157,25 +151,53 @@ test.describe('Admin SSO provider policies', { tag: '@serial' }, () => {
     await ssoSettingsPage.gotoEdit(id);
 
     await expect(
-      ssoSettingsPage.registrationPolicyRadio('Global'),
+      ssoSettingsPage.registrationPolicyRadio('Inherit'),
     ).toHaveAttribute('aria-checked', 'true');
-    await expect(
-      page.getByText(
-        'Follows the global registration setting, currently disabled',
-      ),
-    ).toBeVisible();
-    await expect(
-      page.getByText(
-        'No effect while registration is blocked for this provider',
-      ),
-    ).toBeVisible();
-    await expect(ssoSettingsPage.approvalPolicyRadio('Global')).toBeDisabled();
+
+    await expect(ssoSettingsPage.approvalPolicyRadio('Inherit')).toBeDisabled();
     await expect(
       ssoSettingsPage.approvalPolicyRadio('Required'),
     ).toBeDisabled();
     await expect(
       ssoSettingsPage.approvalPolicyRadio('Auto-approve'),
     ).toBeDisabled();
+  });
+
+  test('shows policy option details in the hover card', async ({
+    page,
+    api,
+    ssoSettingsPage,
+  }) => {
+    const slug = uniqueSlug();
+    const id = await api.oauth.createProvider(
+      providerPayload(slug, { registrationPolicy: 'blocked' }),
+    );
+
+    await ssoSettingsPage.gotoEdit(id);
+
+    await ssoSettingsPage.openRegistrationPolicyInfo();
+    const card = page.locator('[data-slot="hover-card-content"]');
+    await expect(
+      card.getByText('Inherits the global registration setting.'),
+    ).toBeVisible();
+    await expect(
+      card.getByText(
+        'New users signing in with this provider get an account automatically.',
+      ),
+    ).toBeVisible();
+    await expect(
+      card.getByText('Only existing users can sign in with this provider.'),
+    ).toBeVisible();
+    await expect(card.getByText('Current')).toBeVisible();
+
+    await ssoSettingsPage.closeHoverCards();
+
+    await ssoSettingsPage.openApprovalPolicyInfo();
+    await expect(
+      page.getByText(
+        'Has no effect while registration is blocked for this provider.',
+      ),
+    ).toBeVisible();
   });
 
   test('keeps the admin approval switch visible when registration is disabled', async ({

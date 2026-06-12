@@ -2,8 +2,8 @@ import { type Locator, expect } from '@playwright/test';
 
 import { BasePage } from './BasePage';
 
-export type RegistrationPolicyLabel = 'Global' | 'Allowed' | 'Blocked';
-export type ApprovalPolicyLabel = 'Global' | 'Required' | 'Auto-approve';
+export type RegistrationPolicyLabel = 'Inherit' | 'Allowed' | 'Blocked';
+export type ApprovalPolicyLabel = 'Inherit' | 'Required' | 'Auto-approve';
 
 export class SsoSettingsPage extends BasePage {
   static readonly LIST_URL = '/admin/settings/sso';
@@ -32,6 +32,39 @@ export class SsoSettingsPage extends BasePage {
       name: `Select ${label}`,
       exact: true,
     });
+  }
+
+  get registrationPolicyInfo(): Locator {
+    return this.page.getByRole('button', {
+      name: 'New User Registration options',
+    });
+  }
+
+  get approvalPolicyInfo(): Locator {
+    return this.page.getByRole('button', { name: 'Admin Approval options' });
+  }
+
+  async openRegistrationPolicyInfo() {
+    await this.openHoverCard(this.registrationPolicyInfo);
+  }
+
+  async openApprovalPolicyInfo() {
+    await this.openHoverCard(this.approvalPolicyInfo);
+  }
+
+  async closeHoverCards() {
+    await this.page.mouse.move(0, 0);
+    await expect(
+      this.page.locator('[data-slot="hover-card-content"]'),
+    ).toBeHidden();
+  }
+
+  private async openHoverCard(trigger: Locator) {
+    const content = this.page.locator('[data-slot="hover-card-content"]');
+    await expect(async () => {
+      await trigger.hover();
+      await expect(content.first()).toBeVisible({ timeout: 1000 });
+    }).toPass({ timeout: 10000 });
   }
 
   get customProviderTile(): Locator {
