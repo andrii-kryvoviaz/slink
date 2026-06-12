@@ -139,13 +139,17 @@ final class VipsImageProcessor implements ImageProcessorInterface, ImageFileProc
 
   private function doConvertFile(string $sourcePath, string $targetPath, ImageFormat $format, ?int $quality, bool $strip): void {
     try {
-      $source = VipsImage::newFromFile($sourcePath, ['access' => 'sequential']);
+      $source = VipsImage::newFromFile($sourcePath);
       $pages = $this->getImagePages($source);
 
       if ($pages > 1 && $format->supportsAnimation()) {
         file_put_contents($targetPath, $this->convertAnimatedFormat($sourcePath, $format, $pages, $quality));
 
         return;
+      }
+
+      if ($strip) {
+        $source = $source->autorot();
       }
 
       $this->formatAdapter->writeToFile(

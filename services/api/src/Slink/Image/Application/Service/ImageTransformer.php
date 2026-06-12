@@ -38,7 +38,7 @@ final readonly class ImageTransformer implements ImageTransformerInterface, Imag
   ) {
   }
 
-  public function convertToFormat(SplFileInfo $file, ImageFormat $format, ?int $quality = null): File {
+  public function convertToFormat(SplFileInfo $file, ImageFormat $format, ?int $quality = null, bool $strip = true): File {
     $quality ??= $this->settingsService->get('image.compressionQuality');
 
     $extension = $format->getExtension();
@@ -49,7 +49,8 @@ final readonly class ImageTransformer implements ImageTransformerInterface, Imag
       $file->getPathname(),
       $newPath,
       $format->value,
-      $quality
+      $quality,
+      $strip
     );
 
     return new File($newPath, true);

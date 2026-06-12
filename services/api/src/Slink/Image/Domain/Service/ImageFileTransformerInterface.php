@@ -16,7 +16,8 @@ interface ImageFileTransformerInterface {
    * @param T $file
    * @param ImageFormat $format
    * @param int|null $quality
+   * @param bool $strip
    * @return T
    */
-  public function convertToFormat(SplFileInfo $file, ImageFormat $format, ?int $quality = null): SplFileInfo;
+  public function convertToFormat(SplFileInfo $file, ImageFormat $format, ?int $quality = null, bool $strip = true): SplFileInfo;
 }

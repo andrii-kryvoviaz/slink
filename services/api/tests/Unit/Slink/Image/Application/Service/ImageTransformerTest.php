@@ -117,6 +117,37 @@ final class ImageTransformerTest extends TestCase {
     }
 
     #[Test]
+    public function itForwardsStripFlagToConvertFormatFile(): void {
+        $file = $this->createStub(SplFileInfo::class);
+        $file->method('getPathname')->willReturn('/tmp/test.png');
+        $file->method('getBasename')->willReturn('test');
+        $file->method('getExtension')->willReturn('png');
+        $file->method('getPath')->willReturn('/tmp');
+
+        $imageProcessor = $this->createStub(ImageProcessorInterface::class);
+        $imageFileProcessor = $this->createMock(ImageFileProcessorInterface::class);
+        $imageFileProcessor
+            ->expects($this->once())
+            ->method('convertFormatFile')
+            ->with('/tmp/test.png', '/tmp/test.jpg', 'jpg', 95, false)
+            ->willReturnCallback(static function (string $source, string $target): void {
+                file_put_contents($target, 'converted jpeg content');
+            });
+
+        $transformer = new ImageTransformer($imageProcessor, $imageFileProcessor, $this->settingsService, []);
+
+        file_put_contents('/tmp/test.png', 'file content');
+        $result = $transformer->convertToFormat($file, ImageFormat::JPEG, 95, false);
+
+        $this->assertInstanceOf(File::class, $result);
+
+        unlink('/tmp/test.png');
+        if (file_exists('/tmp/test.jpg')) {
+            unlink('/tmp/test.jpg');
+        }
+    }
+
+    #[Test]
     public function itStripsExifMetadata(): void {
         $path = '/tmp/image.jpg';
 
