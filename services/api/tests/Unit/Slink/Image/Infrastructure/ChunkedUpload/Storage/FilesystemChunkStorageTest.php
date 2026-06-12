@@ -78,6 +78,27 @@ final class FilesystemChunkStorageTest extends TestCase {
     self::assertSame([], $storage->listUploadIds());
   }
 
+  #[Test]
+  public function itAssemblesChunksWithoutLeavingStrayTempFiles(): void {
+    $storage = $this->storage();
+
+    $storage->writeChunk('upload-5', 0, 'aa');
+    $storage->writeChunk('upload-5', 1, 'bb');
+
+    $tempDir = (string) \realpath(\sys_get_temp_dir());
+    $before = \glob($tempDir . '/slink_chunked_*') ?: [];
+
+    $assembled = $storage->assemble('upload-5', [0, 1], 'image.png');
+
+    $after = \glob($tempDir . '/slink_chunked_*') ?: [];
+    $created = \array_values(\array_diff($after, $before));
+
+    self::assertSame([$assembled->getPathname()], $created);
+    self::assertSame('aabb', \file_get_contents($assembled->getPathname()));
+
+    \unlink($assembled->getPathname());
+  }
+
   private function removeRecursively(string $path): void {
     if (!\is_dir($path)) {
       return;

@@ -23,7 +23,15 @@ abstract class AbstractChunkStorage implements ChunkStorageInterface {
    * @param array<int> $indices
    */
   public function assemble(string $uploadId, array $indices, string $fileName): File {
-    $target = \tempnam(\sys_get_temp_dir(), 'slink_chunked_') . '-' . $fileName;
+    $temp = \tempnam(\sys_get_temp_dir(), 'slink_chunked_');
+    if ($temp === false) {
+      throw new \RuntimeException('Unable to create temporary file for chunk assembly.');
+    }
+
+    $target = $temp . '-' . $fileName;
+    if (!\rename($temp, $target)) {
+      throw new \RuntimeException('Unable to prepare target file for chunk assembly.');
+    }
 
     $handle = \fopen($target, 'wb');
     if ($handle === false) {
