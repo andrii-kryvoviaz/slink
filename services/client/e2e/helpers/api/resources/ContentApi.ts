@@ -48,6 +48,16 @@ export class ContentApi {
     return items.map((item) => ({ itemId: String(item.itemId) }));
   }
 
+  async listHistoryIds(limit = 100): Promise<string[]> {
+    const data = await this.http.request(
+      'GET',
+      `/api/images/history?limit=${limit}`,
+    );
+    const items = (data?.data ?? []) as Array<{ id: unknown }>;
+
+    return items.map((item) => String(item.id));
+  }
+
   async getImageDetail(imageId: string): Promise<ImageDetail> {
     const data = await this.http.request('GET', `/api/image/${imageId}/detail`);
     const payload = data?.data ?? data;

@@ -119,8 +119,8 @@
     },
   );
 
-  function onImageDelete(id: string) {
-    historyFeedState.removeItem(id);
+  async function onImageDelete(id: string) {
+    await historyFeedState.removeItems([id]);
   }
 
   function onCollectionChange(

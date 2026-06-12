@@ -31,6 +31,7 @@ export interface LoadParams {
   page?: number;
   limit?: number;
   cursor?: string;
+  append?: boolean;
 }
 
 export interface SearchParams {
@@ -117,12 +118,12 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
       cursor = this._config.useCursor
         ? this._nextCursor || undefined
         : undefined,
+      append,
       ...searchParams
     } = params;
 
     const isInitialLoad = this._config.useCursor ? !cursor : page === 1;
-    const shouldAppend =
-      !isInitialLoad && this._shouldAppendItems(isInitialLoad);
+    const shouldAppend = this._resolveShouldAppend(append, isInitialLoad);
 
     const shouldTrackSkeleton = isInitialLoad && this._itemMap.size === 0;
 
@@ -225,6 +226,30 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
     }
   }
 
+  private async _backfill(
+    count: number,
+    options?: RequestStateOptions,
+  ): Promise<void> {
+    if (!this._config.useCursor || !this.hasMore || count <= 0) return;
+
+    const pageSize = this._meta.size;
+    await this.load(
+      { cursor: this._nextCursor!, limit: count, append: true },
+      options,
+    );
+    this._meta.size = pageSize;
+  }
+
+  private _resolveShouldAppend(
+    append: boolean | undefined,
+    isInitialLoad: boolean,
+  ): boolean {
+    if (append !== undefined) return append;
+    if (isInitialLoad) return false;
+
+    return this._shouldAppendItems(isInitialLoad);
+  }
+
   get currentPage(): number {
     if (this._config.useCursor) {
       return this._cursorHistory.length + 1;
@@ -311,6 +336,17 @@ export abstract class AbstractPaginatedFeed<T> extends AbstractHttpState<
 
     this._itemMap.delete(id);
     this._order = this._order.filter((orderId) => orderId !== id);
+  }
+
+  public async removeItems(
+    ids: string[],
+    options?: RequestStateOptions,
+  ): Promise<void> {
+    const removed = ids.filter((id) => this._itemMap.has(id));
+    if (removed.length === 0) return;
+
+    removed.forEach((id) => this.removeItem(id));
+    await this._backfill(removed.length, options);
   }
 
   get hasMore(): boolean {

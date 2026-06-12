@@ -16,14 +16,14 @@ test.describe('History batch delete', () => {
 
     const before = await historyPage.gridCards.count();
     const selectCount = 2;
+    const total = (await api.content.listHistoryIds(1000)).length;
+    const expected = Math.min(total - selectCount, before);
 
     await historyPage.selectImages(selectCount);
     await expect(historyPage.deleteButton).toBeVisible();
 
     await historyPage.batchDelete(selectCount);
 
-    await expect
-      .poll(() => historyPage.gridCards.count())
-      .toBe(before - selectCount);
+    await expect.poll(() => historyPage.gridCards.count()).toBe(expected);
   });
 });

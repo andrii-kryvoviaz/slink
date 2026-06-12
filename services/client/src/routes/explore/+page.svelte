@@ -80,16 +80,17 @@
     postViewerState.open(index);
   };
 
-  const handleImageUpdate = (updatedImage: ImageListingItem) => {
+  const handleImageUpdate = async (updatedImage: ImageListingItem) => {
     if (updatedImage.attributes.isPublic) {
       publicFeedState.replaceItem(updatedImage);
-    } else {
-      publicFeedState.removeItem(updatedImage.id);
+      return;
     }
+
+    await publicFeedState.removeItems([updatedImage.id]);
   };
 
-  const handleImageDelete = (imageId: string) => {
-    publicFeedState.removeItem(imageId);
+  const handleImageDelete = async (imageId: string) => {
+    await publicFeedState.removeItems([imageId]);
   };
 </script>
 

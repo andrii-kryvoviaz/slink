@@ -127,9 +127,9 @@ class PublicImagesFeed extends AbstractSearchablePaginatedFeed<ImageListingItem>
     }
   }
 
-  private handleImageRemoved(imageId?: string): void {
+  private async handleImageRemoved(imageId?: string): Promise<void> {
     if (!imageId) return;
-    this.removeItem(imageId);
+    await this.removeItems([imageId]);
   }
 }
 

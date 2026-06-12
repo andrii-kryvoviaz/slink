@@ -251,7 +251,7 @@ export class ImageActionsState {
       toast.error(messages.image.failedToDelete);
       return;
     }
-    this._historyFeedState.removeItem(image.id);
+    await this._historyFeedState.removeItems([image.id]);
     this._popover.delete = false;
     await goto('/history');
     this._config.onImageDelete?.(image.id);

@@ -33,16 +33,15 @@ class UserBookmarksFeed extends AbstractPaginatedFeed<BookmarkItem> {
 
   public async removeBookmark(bookmark: BookmarkItem): Promise<void> {
     await ApiClient.bookmark.removeBookmark(bookmark.image.id);
-    this.removeItem(bookmark);
+    await this.removeItems([bookmark.id]);
   }
 
-  public applyBookmarkChange(
+  public async applyBookmarkChange(
     bookmark: BookmarkItem,
     isBookmarked: boolean,
-  ): void {
-    if (!isBookmarked) {
-      this.removeItem(bookmark);
-    }
+  ): Promise<void> {
+    if (isBookmarked) return;
+    await this.removeItems([bookmark.id]);
   }
 }
 

@@ -17,7 +17,7 @@
 
   interface Props {
     share: ShareListItemResponse;
-    onUnpublished: (shareId: string) => void;
+    onUnpublished: (shareId: string) => Promise<void> | void;
   }
 
   let { share, onUnpublished }: Props = $props();
@@ -50,8 +50,8 @@
     fetchShare: () => Promise.resolve(toShareResponse()),
     initial: toShareResponse(),
     registry,
-    onUnpublished: (shareId) => {
-      onUnpublished(shareId);
+    onUnpublished: async (shareId) => {
+      await onUnpublished(shareId);
       registry?.forget(shareId);
     },
   });

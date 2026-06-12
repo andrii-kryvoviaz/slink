@@ -79,7 +79,7 @@ class CollectionListFeed extends AbstractPaginatedFeed<CollectionResponse> {
     deleteImages: boolean = false,
   ): Promise<void> {
     await ApiClient.collection.remove(collectionId, deleteImages);
-    this.removeItem(collectionId);
+    await this.removeItems([collectionId]);
   }
 }
 

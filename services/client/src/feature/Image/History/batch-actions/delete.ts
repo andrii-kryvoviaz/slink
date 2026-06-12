@@ -21,16 +21,11 @@ export async function batchDelete(
   }
 
   if (result.deleted.length > 0) {
-    result.deleted.forEach((id) => ctx.historyFeed.removeItem(id));
+    await ctx.historyFeed.removeItems(result.deleted);
     ctx.selection.removeIds(result.deleted);
     toast.success(
       messages.image.deletedFromHistory(String(result.deleted.length)),
     );
-
-    if (!ctx.historyFeed.hasItems && ctx.historyFeed.hasMore) {
-      ctx.historyFeed.reset();
-      await ctx.historyFeed.load();
-    }
   }
 
   if (result.failed.length > 0) {

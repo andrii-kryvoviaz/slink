@@ -16,12 +16,14 @@ test.describe('History single delete', () => {
     await expect(historyPage.infoLink(secondId)).toBeVisible();
 
     const before = await historyPage.gridCards.count();
+    const total = (await api.content.listHistoryIds(1000)).length;
+    const expected = Math.min(total - 1, before);
 
     await historyPage.deleteSingle(firstId);
 
     await expect(historyPage.infoLink(firstId)).toBeHidden();
     await expect(historyPage.infoLink(secondId)).toBeVisible();
-    await expect.poll(() => historyPage.gridCards.count()).toBe(before - 1);
+    await expect.poll(() => historyPage.gridCards.count()).toBe(expected);
   });
 });
 

@@ -174,8 +174,8 @@ export class SharesFeed extends AbstractPaginatedFeed<ShareListItemResponse> {
     this.update(shareId, { requiresPassword });
   }
 
-  public applyUnpublished(shareId: string): void {
-    this.removeItem(shareId);
+  public async applyUnpublished(shareId: string): Promise<void> {
+    await this.removeItems([shareId]);
   }
 }
 

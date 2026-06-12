@@ -29,6 +29,10 @@ export class HistoryPage extends BasePage {
     return this.page.getByRole('heading', { name: 'Upload History' });
   }
 
+  get loadMoreButton() {
+    return this.page.getByRole('button', { name: 'View More' });
+  }
+
   get deleteButton() {
     return this.actionBar
       .getByRole('button', { name: 'Delete', exact: true })
@@ -40,10 +44,18 @@ export class HistoryPage extends BasePage {
   }
 
   async useGridView() {
+    await this.useView('grid');
+  }
+
+  async useTableView() {
+    await this.useView('table');
+  }
+
+  private async useView(viewMode: 'grid' | 'list' | 'table') {
     await this.page.context().addCookies([
       {
         name: 'settings.history',
-        value: JSON.stringify({ viewMode: 'grid' }),
+        value: JSON.stringify({ viewMode }),
         url: process.env.E2E_BASE_URL ?? 'http://localhost:3100',
       },
     ]);
@@ -78,6 +90,16 @@ export class HistoryPage extends BasePage {
     await confirm.click();
   }
 
+  async visibleImageIds(): Promise<string[]> {
+    const hrefs = await this.gridCards
+      .locator('a[href^="/info/"]')
+      .evaluateAll((links) =>
+        links.map((link) => link.getAttribute('href') ?? ''),
+      );
+
+    return hrefs.map((href) => href.replace('/info/', ''));
+  }
+
   infoLink(id: string) {
     return this.page.locator(`a[href="/info/${id}"]`);
   }
@@ -94,6 +116,44 @@ export class HistoryPage extends BasePage {
     await card.hover();
 
     const trigger = card.locator('button[aria-label="Delete image"]');
+    const confirm = this.page
+      .getByRole('button', { name: 'Delete Image', exact: true })
+      .last();
+
+    await expect(async () => {
+      await trigger.click();
+      await expect(confirm).toBeVisible({ timeout: 1000 });
+    }).toPass({ timeout: 15000 });
+
+    await confirm.click();
+  }
+
+  get tableRows() {
+    return this.page.getByRole('table').locator('tbody tr');
+  }
+
+  tableRowFor(id: string) {
+    return this.tableRows.filter({
+      has: this.page.locator(`a[href="/info/${id}"]`),
+    });
+  }
+
+  async visibleTableImageIds(): Promise<string[]> {
+    const hrefs = await this.tableRows.evaluateAll((rows) =>
+      rows.map(
+        (row) =>
+          row.querySelector('a[href^="/info/"]')?.getAttribute('href') ?? '',
+      ),
+    );
+
+    return hrefs.map((href) => href.replace('/info/', ''));
+  }
+
+  async deleteTableRow(id: string) {
+    const row = this.tableRowFor(id);
+    await row.waitFor({ state: 'visible' });
+
+    const trigger = row.locator('button[aria-label="Delete image"]');
     const confirm = this.page
       .getByRole('button', { name: 'Delete Image', exact: true })
       .last();
