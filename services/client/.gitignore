@@ -16,10 +16,6 @@ src/locales/.wuchale/
 src/locales/*.loader.*
 src/locales/data.js
 
-#vite-svelte-imports plugin
-src/api/**/index.ts
-!src/api/index.ts
-
 /test-results/
 /playwright-report/
 /blob-report/

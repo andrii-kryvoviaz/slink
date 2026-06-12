@@ -9,7 +9,6 @@ import { wuchale } from 'wuchale/vite';
 
 import hookManifest from './plugins/vite-hook-manifest';
 import iconifyExport from './plugins/vite-iconify-export';
-import svelteImports from './plugins/vite-svelte-imports';
 
 const getPackageVersion = (): string => {
   try {
@@ -33,10 +32,6 @@ export default defineConfig({
     },
   },
   plugins: [
-    svelteImports({
-      dirs: ['src/api', 'src/feature'],
-      enableLogging: true,
-    }),
     hookManifest({
       dir: 'src/lib/server/hooks',
       enableLogging: true,
