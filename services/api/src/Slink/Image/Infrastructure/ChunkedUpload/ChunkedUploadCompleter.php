@@ -10,7 +10,6 @@ use Slink\Shared\Application\Command\CommandBusInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -19,13 +18,12 @@ final readonly class ChunkedUploadCompleter {
     private ChunkStorageInterface $chunkStorage,
     private CommandBusInterface $commandBus,
     private ValidatorInterface $validator,
-    private LockFactory $lockFactory,
+    private ChunkedUploadLock $uploadLock,
   ) {
   }
 
   public function complete(UploadToken $token): CompletionResult {
-    $lock = $this->lockFactory->createLock('chunked-upload-' . $token->getUploadId());
-    $lock->acquire(true);
+    $lock = $this->uploadLock->acquire($token->getUploadId());
 
     try {
       return $this->completeExclusively($token);
