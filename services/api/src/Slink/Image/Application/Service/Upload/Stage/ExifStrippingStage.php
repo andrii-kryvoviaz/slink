@@ -9,8 +9,6 @@ use Slink\Image\Application\Service\Upload\UploadPhase;
 use Slink\Image\Application\Service\Upload\UploadStageInterface;
 use Slink\Image\Domain\Service\ImageAnalyzerInterface;
 use Slink\Image\Domain\Service\ImageFileTransformerInterface;
-use Slink\Settings\Application\Service\SettingsService;
-use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Symfony\Component\DependencyInjection\Attribute\AsTaggedItem;
 
 #[AsTaggedItem(priority: UploadPhase::Transform->value - 2)]
@@ -18,15 +16,11 @@ final readonly class ExifStrippingStage implements UploadStageInterface {
   public function __construct(
     private ImageAnalyzerInterface $imageAnalyzer,
     private ImageFileTransformerInterface $imageTransformer,
-    /** @var ConfigurationProviderInterface<SettingsService> */
-    private ConfigurationProviderInterface $configurationProvider,
   ) {
   }
 
   public function process(UploadContext $context): UploadContext {
-    $serverStrip = (bool) $this->configurationProvider->get('image.stripExifMetadata');
-
-    if (!$context->preferences()->getExifMetadataPreference()->resolveStripExif($serverStrip)) {
+    if (!$context->stripExifMetadata()) {
       return $context;
     }
 

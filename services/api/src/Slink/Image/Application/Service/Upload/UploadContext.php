@@ -25,6 +25,8 @@ final class UploadContext {
 
   private bool $isPublic = false;
 
+  private ?bool $stripExifMetadata = null;
+
   private ?License $license = null;
 
   /**
@@ -80,6 +82,13 @@ final class UploadContext {
   public function withVisibility(bool $isPublic): self {
     $clone = clone $this;
     $clone->isPublic = $isPublic;
+
+    return $clone;
+  }
+
+  public function withStripExifMetadata(bool $stripExifMetadata): self {
+    $clone = clone $this;
+    $clone->stripExifMetadata = $stripExifMetadata;
 
     return $clone;
   }
@@ -143,6 +152,10 @@ final class UploadContext {
 
   public function isPublic(): bool {
     return $this->isPublic;
+  }
+
+  public function stripExifMetadata(): bool {
+    return $this->stripExifMetadata ?? throw new \LogicException('stripExifMetadata not resolved');
   }
 
   public function license(): ?License {

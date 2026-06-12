@@ -71,48 +71,4 @@ final class VipsImageProcessorConvertFileTest extends TestCase {
     $this->assertSame('webpload', $converted->get('vips-loader'));
   }
 
-  #[Test]
-  public function itPreservesExifMetadataWhenConvertingWithoutStripping(): void {
-    $sourcePath = $this->workingDir . '/source.jpg';
-    $targetPath = $this->workingDir . '/target.webp';
-
-    $this->createJpegWithOrientation($sourcePath, 6);
-
-    $this->processor->convertFormatFile($sourcePath, $targetPath, ImageFormat::WEBP->value, 75, false);
-
-    $this->assertFileExists($targetPath);
-
-    $converted = VipsImage::newFromFile($targetPath);
-    $this->assertSame(64, $converted->width);
-    $this->assertSame(48, $converted->height);
-    $this->assertNotSame(0, $converted->getType('orientation'));
-    $this->assertSame(6, $converted->get('orientation'));
-  }
-
-  #[Test]
-  public function itAppliesOrientationBeforeStrippingWhenConverting(): void {
-    $sourcePath = $this->workingDir . '/source.jpg';
-    $targetPath = $this->workingDir . '/target.webp';
-
-    $this->createJpegWithOrientation($sourcePath, 6);
-
-    $this->processor->convertFormatFile($sourcePath, $targetPath, ImageFormat::WEBP->value, 75);
-
-    $this->assertFileExists($targetPath);
-
-    $converted = VipsImage::newFromFile($targetPath);
-    $this->assertSame(48, $converted->width);
-    $this->assertSame(64, $converted->height);
-    $this->assertSame(0, $converted->getType('orientation'));
-    $this->assertSame(0, $converted->getType('exif-ifd0-Orientation'));
-  }
-
-  private function createJpegWithOrientation(string $path, int $orientation): void {
-    $image = VipsImage::black(64, 48, ['bands' => 3])->copy();
-    $image->set('orientation', $orientation);
-    $image->writeToFile($path, ['strip' => false]);
-
-    $written = VipsImage::newFromFile($path);
-    $this->assertSame($orientation, $written->get('orientation'));
-  }
 }

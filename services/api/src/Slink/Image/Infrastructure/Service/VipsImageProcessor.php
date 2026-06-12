@@ -139,7 +139,7 @@ final class VipsImageProcessor implements ImageProcessorInterface, ImageFileProc
 
   private function doConvertFile(string $sourcePath, string $targetPath, ImageFormat $format, ?int $quality, bool $strip): void {
     try {
-      $source = VipsImage::newFromFile($sourcePath);
+      $source = VipsImage::newFromFile($sourcePath, ['access' => 'sequential']);
       $pages = $this->getImagePages($source);
 
       if ($pages > 1 && $format->supportsAnimation()) {
@@ -149,13 +149,13 @@ final class VipsImageProcessor implements ImageProcessorInterface, ImageFileProc
       }
 
       if ($strip) {
-        $source = $source->autorot();
+        $source = $this->withSensitiveMetadataRemoved($source);
       }
 
       $this->formatAdapter->writeToFile(
         $source,
         $targetPath,
-        $this->formatAdapter->buildFormatOptions($format, $quality) + ($strip ? ['strip' => true] : [])
+        $this->formatAdapter->buildFormatOptions($format, $quality)
       );
     } catch (Throwable $e) {
       throw new RuntimeException('Failed to convert image format: ' . $e->getMessage(), 0, $e);
@@ -193,7 +193,7 @@ final class VipsImageProcessor implements ImageProcessorInterface, ImageFileProc
    */
   public function stripMetadata(string $path): string {
     try {
-      $image = VipsImage::newFromFile($path);
+      $image = VipsImage::newFromFile($path, ['access' => 'sequential']);
       $mimeType = mime_content_type($path);
 
       if ($mimeType === false) {
@@ -206,17 +206,38 @@ final class VipsImageProcessor implements ImageProcessorInterface, ImageFileProc
         return $path;
       }
 
-      $image = $image->autorot();
-
+      $image = $this->withSensitiveMetadataRemoved($image);
       $extension = $imageFormat->getExtension();
 
-      $image->writeToFile("$path.$extension", ['strip' => true]);
+      $image->writeToFile("$path.$extension");
       rename("$path.$extension", $path);
 
       return $path;
     } catch (Throwable) {
       return $path;
     }
+  }
+
+  private function withSensitiveMetadataRemoved(VipsImage $image): VipsImage {
+    $image = $image->copy();
+    $preserved = [
+      'orientation',
+      'icc-profile-data',
+      'n-pages',
+      'page-height',
+      'delay',
+      'loop',
+      'background',
+      ...VipsImage::black(1, 1)->getFields(),
+    ];
+
+    foreach ($image->getFields() as $field) {
+      if (!\in_array($field, $preserved, true)) {
+        $image->remove($field);
+      }
+    }
+
+    return $image;
   }
 
   /**

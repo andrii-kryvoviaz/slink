@@ -50,4 +50,11 @@ trait UploadContextFactoryTrait {
   private function contextWithPreferences(File $file, UserPreferences $preferences): UploadContext {
     return $this->uploadContext($file)->withPreferences($preferences);
   }
+
+  /**
+   * @throws Exception
+   */
+  private function contextWithStripExifMetadata(File $file, bool $stripExifMetadata): UploadContext {
+    return $this->uploadContext($file)->withStripExifMetadata($stripExifMetadata);
+  }
 }

@@ -76,6 +76,7 @@ final class VipsImageProcessorExifTest extends TestCase {
     
     $this->assertStringNotContainsString('TestCamera', $exifAfter, 'Camera Make should be removed');
     $this->assertStringNotContainsString('TestModel', $exifAfter, 'Camera Model should be removed');
+    $this->assertStringContainsString('Orientation', $exifAfter, 'Orientation tag should be retained');
   }
 
   #[Test]

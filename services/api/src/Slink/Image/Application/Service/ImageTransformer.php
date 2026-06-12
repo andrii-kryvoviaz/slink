@@ -11,6 +11,7 @@ use Slink\Image\Domain\Service\ImageProcessorInterface;
 use Slink\Image\Domain\Service\ImageSource;
 use Slink\Image\Domain\Service\ImageTransformationStrategyInterface;
 use Slink\Image\Domain\Service\ImageTransformerInterface;
+use Slink\Image\Domain\ValueObject\ImageConversionOptions;
 use Slink\Image\Domain\ValueObject\ImageTransformationRequest;
 use Slink\Image\Domain\ValueObject\Operation\ImageOperation;
 use Slink\Settings\Application\Service\SettingsService;
@@ -38,19 +39,19 @@ final readonly class ImageTransformer implements ImageTransformerInterface, Imag
   ) {
   }
 
-  public function convertToFormat(SplFileInfo $file, ImageFormat $format, ?int $quality = null, bool $strip = true): File {
-    $quality ??= $this->settingsService->get('image.compressionQuality');
+  public function convertToFormat(SplFileInfo $file, ImageConversionOptions $options): File {
+    $quality = $options->quality ?? $this->settingsService->get('image.compressionQuality');
 
-    $extension = $format->getExtension();
+    $extension = $options->format->getExtension();
     $fileName = $file->getBasename('.' . $file->getExtension());
     $newPath = sprintf('%s/%s.%s', $file->getPath(), $fileName, $extension);
 
     $this->imageFileProcessor->convertFormatFile(
       $file->getPathname(),
       $newPath,
-      $format->value,
+      $options->format->value,
       $quality,
-      $strip
+      $options->stripMetadata
     );
 
     return new File($newPath, true);

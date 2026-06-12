@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Image\Domain\Service;
 
-use Slink\Image\Domain\Enum\ImageFormat;
+use Slink\Image\Domain\ValueObject\ImageConversionOptions;
 use SplFileInfo;
 
 interface ImageFileTransformerInterface {
@@ -14,10 +14,8 @@ interface ImageFileTransformerInterface {
    * @template T of SplFileInfo
    *
    * @param T $file
-   * @param ImageFormat $format
-   * @param int|null $quality
-   * @param bool $strip
+   * @param ImageConversionOptions $options
    * @return T
    */
-  public function convertToFormat(SplFileInfo $file, ImageFormat $format, ?int $quality = null, bool $strip = true): SplFileInfo;
+  public function convertToFormat(SplFileInfo $file, ImageConversionOptions $options): SplFileInfo;
 }

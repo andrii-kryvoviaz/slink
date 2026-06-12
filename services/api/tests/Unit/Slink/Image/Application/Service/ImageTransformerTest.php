@@ -15,6 +15,7 @@ use Slink\Image\Domain\Enum\ImageFilter;
 use Slink\Image\Domain\Enum\ImageFormat;
 use Slink\Image\Domain\Service\ImageFileProcessorInterface;
 use Slink\Image\Domain\Service\ImageProcessorInterface;
+use Slink\Image\Domain\ValueObject\ImageConversionOptions;
 use Slink\Image\Domain\ValueObject\Operation\Cover;
 use Slink\Image\Domain\ValueObject\Operation\Filter;
 use Slink\Image\Domain\ValueObject\Operation\Fit;
@@ -74,7 +75,7 @@ final class ImageTransformerTest extends TestCase {
         $transformer = new ImageTransformer($imageProcessor, $imageFileProcessor, $settingsService, []);
 
         file_put_contents('/tmp/test.png', 'file content');
-        $result = $transformer->convertToFormat($file, ImageFormat::JPEG, null);
+        $result = $transformer->convertToFormat($file, new ImageConversionOptions(ImageFormat::JPEG));
 
         $this->assertInstanceOf(File::class, $result);
         $this->assertSame('/tmp/test.jpg', $result->getPathname());
@@ -106,7 +107,7 @@ final class ImageTransformerTest extends TestCase {
         $transformer = new ImageTransformer($imageProcessor, $imageFileProcessor, $this->settingsService, []);
 
         file_put_contents('/tmp/test.png', 'file content');
-        $result = $transformer->convertToFormat($file, ImageFormat::JPEG, 95);
+        $result = $transformer->convertToFormat($file, new ImageConversionOptions(ImageFormat::JPEG, 95));
 
         $this->assertInstanceOf(File::class, $result);
 
@@ -137,7 +138,7 @@ final class ImageTransformerTest extends TestCase {
         $transformer = new ImageTransformer($imageProcessor, $imageFileProcessor, $this->settingsService, []);
 
         file_put_contents('/tmp/test.png', 'file content');
-        $result = $transformer->convertToFormat($file, ImageFormat::JPEG, 95, false);
+        $result = $transformer->convertToFormat($file, new ImageConversionOptions(ImageFormat::JPEG, 95, false));
 
         $this->assertInstanceOf(File::class, $result);
 
