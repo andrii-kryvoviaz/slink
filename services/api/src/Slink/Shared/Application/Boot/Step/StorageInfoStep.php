@@ -29,6 +29,7 @@ final readonly class StorageInfoStep implements BootStepInterface {
     return BootResult::settings([
       ['Storage Provider', (string) $this->config->get('storage.provider')],
       ['Maximum Upload File Size', (string) $this->config->get('image.maxSize')],
+      ['Upload Chunk Size', (string) $this->config->get('image.chunkSize')],
     ]);
   }
 }
