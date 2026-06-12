@@ -12,11 +12,13 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Scheduler\Attribute\AsCronTask;
 
 #[AsCommand(
   name: 'image:chunked-upload:gc',
   description: 'Removes orphaned chunked-upload fragments older than the token TTL plus a grace period'
 )]
+#[AsCronTask('@hourly')]
 final class ChunkedUploadGarbageCollectCommand extends Command {
   private const int DEFAULT_GRACE = 7200;
 

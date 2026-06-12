@@ -599,6 +599,66 @@ final class ChunkedUploadTest extends HttpTestCase {
     self::assertNull($chunkStorage->findCompletedImageId($uploadId));
   }
 
+  #[Test]
+  public function garbageCollectionReapsAbandonedUploadsAndKeepsFreshOnes(): void {
+    $this->bootUser();
+
+    $chunkSize = $this->chunkSize();
+    $bytes = $this->multiChunkPng($chunkSize);
+    $chunks = $this->splitIntoChunks($bytes, $chunkSize);
+    $lastIndex = \count($chunks) - 1;
+    self::assertGreaterThanOrEqual(2, \count($chunks));
+
+    [, $abandonedData] = $this->init([
+      'fileName' => 'abandoned.png',
+      'totalSize' => \strlen($bytes),
+      'mimeType' => 'image/png',
+    ]);
+
+    $abandonedUploadId = (string) $abandonedData['uploadId'];
+    $abandonedToken = (string) $abandonedData['token'];
+
+    self::assertSame(200, $this->putChunk($abandonedUploadId, 0, $chunks[0], $abandonedToken));
+
+    $abandonedDirectory = $this->chunkDir() . '/slink/chunks/' . $abandonedUploadId;
+    self::assertDirectoryExists($abandonedDirectory);
+    \touch($abandonedDirectory, \time() - UploadTokenCodec::TTL - 100000);
+
+    [, $freshData] = $this->init([
+      'fileName' => 'fresh.png',
+      'totalSize' => \strlen($bytes),
+      'mimeType' => 'image/png',
+    ]);
+
+    $freshUploadId = (string) $freshData['uploadId'];
+    $freshToken = (string) $freshData['token'];
+
+    foreach ($chunks as $index => $chunk) {
+      if ($index < $lastIndex) {
+        self::assertSame(200, $this->putChunk($freshUploadId, $index, $chunk, $freshToken));
+      }
+    }
+
+    $freshDirectory = $this->chunkDir() . '/slink/chunks/' . $freshUploadId;
+    self::assertDirectoryExists($freshDirectory);
+
+    self::assertSame(0, $this->runGarbageCollect());
+
+    self::assertDirectoryDoesNotExist($abandonedDirectory);
+    self::assertDirectoryExists($freshDirectory);
+    self::assertFileExists($freshDirectory . '/0');
+
+    [$status, $completionData] = $this->putChunkResponse($freshUploadId, $lastIndex, $chunks[$lastIndex], $freshToken, complete: true);
+    self::assertSame(201, $status);
+    self::assertArrayHasKey('id', $completionData);
+
+    $imageId = (string) $completionData['id'];
+    self::assertNotSame('', $imageId);
+
+    self::assertNotNull($this->chunkStorage()->findCompletedImageId($freshUploadId));
+    self::assertSame(200, $this->apiRequest('GET', \sprintf('/api/image/%s/detail', $imageId), $this->authToken));
+  }
+
   private function chunkDir(): string {
     /** @var ConfigurationProviderInterface<object> $provider */
     $provider = static::getContainer()->get(ConfigurationProviderInterface::class);

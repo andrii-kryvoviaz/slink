@@ -1,0 +1,2 @@
+#!/command/with-contenv sh
+exec delegate www-data slink messenger:consume scheduler_default --time-limit=3600
