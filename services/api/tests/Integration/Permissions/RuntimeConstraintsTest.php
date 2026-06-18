@@ -94,4 +94,28 @@ final class RuntimeConstraintsTest extends PermissionTestCase {
       'the ownership fix must not follow a symlink to chown a file outside the storage tree',
     );
   }
+
+  #[Test]
+  #[TestDox('The recursive chown does not follow a symlinked directory, so a root-owned file inside the link target keeps its ownership')]
+  public function ownershipFixDoesNotDescendIntoSymlinkedDirectory(): void {
+    $scenario = $this->bootBareScenario();
+    $scenario->buildImageState();
+
+    $outsideDir = $scenario->testRoot() . '/outside_dir';
+    @mkdir($outsideDir, 0o755, true);
+
+    $outsideFile = $outsideDir . '/secret.jpg';
+    file_put_contents($outsideFile, "outside\n");
+    self::assertSame(0, $scenario->fileOwnerUid($outsideFile), 'the file inside the outside dir must start root-owned');
+
+    symlink($outsideDir, $scenario->imagesDir() . '/evil_dir');
+
+    $scenario->runOwnershipFix();
+
+    self::assertSame(
+      0,
+      $scenario->fileOwnerUid($outsideFile),
+      'the ownership fix must not descend into a symlinked directory to chown files inside it',
+    );
+  }
 }

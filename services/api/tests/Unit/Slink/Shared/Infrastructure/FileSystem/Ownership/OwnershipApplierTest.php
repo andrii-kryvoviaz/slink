@@ -28,7 +28,7 @@ final class OwnershipApplierTest extends TestCase {
   public function itAppliesChmodModesToDirectories(): void {
     (new OwnershipApplier())->apply($this->plan());
 
-    self::assertSame(0o770, $this->permsOf($this->appDir() . '/slink/images'));
+    self::assertSame(0o2770, $this->permsOf($this->appDir() . '/slink/images'));
     self::assertSame(0o770, $this->permsOf($this->appDir() . '/var/data'));
     self::assertSame(0o750, $this->permsOf($this->appDir() . '/var/data/keys'));
   }

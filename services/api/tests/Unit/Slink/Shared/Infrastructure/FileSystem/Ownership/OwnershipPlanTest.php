@@ -11,7 +11,7 @@ use Slink\Shared\Infrastructure\FileSystem\Ownership\OwnershipPlan;
 
 final class OwnershipPlanTest extends TestCase {
   #[Test]
-  public function itMirrorsTheCurrentShellScriptEntryListInOrder(): void {
+  public function itMatchesTheDesiredStorageOwnershipPlanInOrder(): void {
     $plan = OwnershipPlan::fromStoragePaths('/app', '/services/api/var', '/data', '/run');
 
     $actual = \array_map($this->describe(...), $plan->getEntries());
@@ -23,21 +23,23 @@ final class OwnershipPlanTest extends TestCase {
       ['path' => '/app/var/data/*.db', 'owner' => 'www-data', 'group' => 'www-data', 'mode' => null, 'recursive' => false, 'optional' => true, 'glob' => true],
       ['path' => '/data/caddy', 'owner' => 'www-data', 'group' => 'slink', 'mode' => null, 'recursive' => true, 'optional' => false, 'glob' => false],
       ['path' => '/data/redis', 'owner' => 'redis', 'group' => 'slink', 'mode' => null, 'recursive' => true, 'optional' => false, 'glob' => false],
+      ['path' => '/app/slink/images', 'owner' => 'www-data', 'group' => 'slink', 'mode' => null, 'recursive' => true, 'optional' => false, 'glob' => false],
+      ['path' => '/app/slink/cache', 'owner' => 'www-data', 'group' => 'slink', 'mode' => null, 'recursive' => true, 'optional' => true, 'glob' => false],
       ['path' => '/app/var/data', 'owner' => null, 'group' => null, 'mode' => 0o770, 'recursive' => false, 'optional' => false, 'glob' => false],
-      ['path' => '/app/slink/images', 'owner' => null, 'group' => null, 'mode' => 0o770, 'recursive' => false, 'optional' => false, 'glob' => false],
-      ['path' => '/app/slink/cache', 'owner' => null, 'group' => null, 'mode' => 0o770, 'recursive' => false, 'optional' => true, 'glob' => false],
+      ['path' => '/app/slink/images', 'owner' => null, 'group' => null, 'mode' => 0o2770, 'recursive' => false, 'optional' => false, 'glob' => false],
+      ['path' => '/app/slink/cache', 'owner' => null, 'group' => null, 'mode' => 0o2770, 'recursive' => false, 'optional' => true, 'glob' => false],
       ['path' => '/app/var/data/keys', 'owner' => null, 'group' => null, 'mode' => 0o750, 'recursive' => false, 'optional' => false, 'glob' => false],
       ['path' => '/app/var/data/keys/private.pem', 'owner' => null, 'group' => null, 'mode' => 0o640, 'recursive' => false, 'optional' => true, 'glob' => false],
       ['path' => '/app/var/data/keys/passphrase', 'owner' => null, 'group' => null, 'mode' => 0o640, 'recursive' => false, 'optional' => true, 'glob' => false],
       ['path' => '/run', 'owner' => 'root', 'group' => 'root', 'mode' => null, 'recursive' => false, 'optional' => false, 'glob' => false],
     ];
 
-    self::assertCount(13, $plan->getEntries());
+    self::assertCount(15, $plan->getEntries());
     self::assertSame($expected, $actual);
   }
 
   #[Test]
-  public function theRecursiveAppEntryIsWhatGivesImagesItsSlinkOwnership(): void {
+  public function theFirstEntryTakesRecursiveSlinkOwnershipOfTheWholeAppTree(): void {
     $plan = OwnershipPlan::fromStoragePaths('/app', '/services/api/var', '/data', '/run');
 
     $first = $plan->getEntries()[0];
@@ -49,21 +51,38 @@ final class OwnershipPlanTest extends TestCase {
   }
 
   #[Test]
-  public function imagesAndCacheRemainSlinkOwnedAndNotSetgid(): void {
+  public function imagesAndCacheAreWwwDataOwnedRecursivelyWithSetgid(): void {
     $plan = OwnershipPlan::fromStoragePaths('/app', '/services/api/var', '/data', '/run');
 
-    foreach ($plan->getEntries() as $entry) {
-      $isLeaf = \str_ends_with($entry->getPath(), '/slink/images') || \str_ends_with($entry->getPath(), '/slink/cache');
+    foreach (['/app/slink/images', '/app/slink/cache'] as $leaf) {
+      $ownership = $this->ownershipEntryFor($plan, $leaf);
+      $mode = $this->modeEntryFor($plan, $leaf);
 
-      if (!$isLeaf) {
-        continue;
-      }
-
-      self::assertNotSame('www-data', $entry->getOwner());
-      self::assertSame(0o770, $entry->getMode());
-      self::assertNotSame(0o2770, $entry->getMode());
-      self::assertFalse($entry->isRecursive());
+      self::assertSame('www-data', $ownership->getOwner());
+      self::assertSame('slink', $ownership->getGroup());
+      self::assertTrue($ownership->isRecursive());
+      self::assertSame(0o2770, $mode->getMode());
     }
+  }
+
+  private function ownershipEntryFor(OwnershipPlan $plan, string $path): OwnershipEntry {
+    foreach ($plan->getEntries() as $entry) {
+      if ($entry->getPath() === $path && $entry->getOwner() !== null) {
+        return $entry;
+      }
+    }
+
+    self::fail(\sprintf('No ownership entry found for %s', $path));
+  }
+
+  private function modeEntryFor(OwnershipPlan $plan, string $path): OwnershipEntry {
+    foreach ($plan->getEntries() as $entry) {
+      if ($entry->getPath() === $path && $entry->getMode() !== null) {
+        return $entry;
+      }
+    }
+
+    self::fail(\sprintf('No mode entry found for %s', $path));
   }
 
   /**

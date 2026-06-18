@@ -43,7 +43,7 @@ final class FixOwnershipCommandTest extends TestCase {
     ]);
 
     self::assertSame(Command::SUCCESS, $exitCode);
-    self::assertSame(0o770, $this->permsOf($this->appDir() . '/slink/images'));
+    self::assertSame(0o2770, $this->permsOf($this->appDir() . '/slink/images'));
     self::assertSame(0o750, $this->permsOf($this->appDir() . '/var/data/keys'));
   }
 
@@ -59,7 +59,7 @@ final class FixOwnershipCommandTest extends TestCase {
     $exitCode = $tester->execute([]);
 
     self::assertSame(Command::SUCCESS, $exitCode);
-    self::assertSame(0o770, $this->permsOf($this->appDir() . '/slink/images'));
+    self::assertSame(0o2770, $this->permsOf($this->appDir() . '/slink/images'));
   }
 
   private function appDir(): string {
