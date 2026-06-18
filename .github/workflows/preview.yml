@@ -1,0 +1,149 @@
+name: Preview
+
+on:
+  pull_request:
+    types: [labeled, synchronize]
+
+concurrency:
+  group: preview-${{ github.head_ref }}
+  cancel-in-progress: true
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  meta:
+    name: Resolve preview tag
+    runs-on: ubuntu-24.04
+    outputs:
+      tag: ${{ steps.tag.outputs.value }}
+    steps:
+      - id: tag
+        env:
+          BRANCH: ${{ github.head_ref }}
+        run: |
+          hash=$(printf '%s' "$BRANCH" | sha256sum | cut -c1-12)
+          echo "value=preview-${hash}" >> "$GITHUB_OUTPUT"
+
+  build:
+    name: Build (${{ matrix.platform }})
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      (
+        (github.event.action == 'labeled' && github.event.label.name == 'preview') ||
+        (github.event.action != 'labeled' && github.event.action != 'closed' && contains(github.event.pull_request.labels.*.name, 'preview'))
+      )
+    runs-on: ${{ matrix.runner }}
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - platform: linux/amd64
+            runner: ubuntu-24.04
+            scope: pr-preview-amd64
+            target: prod-amd64
+          - platform: linux/arm64
+            runner: ubuntu-24.04-arm
+            scope: pr-preview-arm64
+            target: prod-arm64
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+
+      - name: Build and push by digest
+        id: build
+        uses: docker/bake-action@v6
+        with:
+          source: .
+          targets: ${{ matrix.target }}
+          provenance: false
+          sbom: false
+          set: |
+            *.cache-from=type=gha,scope=${{ matrix.scope }}
+            *.cache-to=type=gha,scope=${{ matrix.scope }},mode=max
+            *.output=type=image,name=docker.io/${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.APP_NAME }}-preview,push-by-digest=true,name-canonical=true,push=true
+
+      - name: Export digest
+        env:
+          BUILD_METADATA: ${{ steps.build.outputs.metadata }}
+          BAKE_TARGET: ${{ matrix.target }}
+        run: |
+          mkdir -p ${{ runner.temp }}/digests
+          digest=$(echo "$BUILD_METADATA" | jq -r '.[$ENV.BAKE_TARGET]["containerimage.digest"]')
+          touch "${{ runner.temp }}/digests/${digest#sha256:}"
+
+      - name: Upload digest
+        uses: actions/upload-artifact@v5
+        with:
+          name: digests-${{ matrix.scope }}
+          path: ${{ runner.temp }}/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  merge:
+    name: Create Manifest
+    needs: [build, meta]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Download digests
+        uses: actions/download-artifact@v5
+        with:
+          path: ${{ runner.temp }}/digests
+          pattern: digests-*
+          merge-multiple: true
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+
+      - name: Create manifest list and push
+        env:
+          IMAGE_BASE: docker.io/${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.APP_NAME }}-preview
+          PREVIEW_TAG: ${{ needs.meta.outputs.tag }}
+        working-directory: ${{ runner.temp }}/digests
+        run: |
+          refs=()
+          for digest in *; do
+            refs+=("${IMAGE_BASE}@sha256:${digest}")
+          done
+          docker buildx imagetools create --prefer-index=true \
+            -t "${IMAGE_BASE}:${PREVIEW_TAG}" \
+            "${refs[@]}"
+
+  comment:
+    name: Post Preview Comment
+    needs: [merge, meta]
+    runs-on: ubuntu-24.04
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Sticky comment with pull command
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: pr-preview
+          message: |
+            **Preview image ready** (commit `${{ github.event.pull_request.head.sha }}`)
+
+            ```
+            docker pull anirdev/slink-preview:${{ needs.meta.outputs.tag }}
+            docker run --rm -p 3000:3000 -p 8080:8080 -e ORIGIN=http://localhost:3000 anirdev/slink-preview:${{ needs.meta.outputs.tag }}
+            ```
+
+            Open http://localhost:3000 in your browser.
