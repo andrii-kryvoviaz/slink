@@ -76,6 +76,9 @@ USER root
 COPY --from=php-extensions /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
 COPY --from=php-extensions /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
 
+COPY --link --from=frankenphp /usr/local/bin/frankenphp /usr/local/bin/php /usr/local/bin/
+COPY --link --from=frankenphp /usr/local/lib/ /usr/local/lib/
+
 ARG MEMORY_LIMIT
 ARG UPLOAD_MAX_FILESIZE_IN_BYTES
 RUN <<EOF

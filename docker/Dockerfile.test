@@ -1,18 +1,12 @@
-ARG PHP_VERSION=8.5.5
-
-FROM php:${PHP_VERSION}-alpine AS test
+FROM common AS test
 
 ARG MEMORY_LIMIT
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
 WORKDIR /services/api
 
-RUN apk add --no-cache git unzip vips vips-magick vips-heif libheif-aom libheif-dav1d libheif-x265 libheif-libde265 imagemagick exiftool && \
-    install-php-extensions ffi vips && \
-    echo "memory_limit=${MEMORY_LIMIT}M" > /usr/local/etc/php/conf.d/memory-limit.ini && \
-    echo "ffi.enable=1" > /usr/local/etc/php/conf.d/zz-ffi-enable.ini
+RUN apk add --no-cache git unzip exiftool
 
 COPY services/api/composer.json services/api/composer.lock ./
 RUN composer install --ignore-platform-reqs --no-interaction --no-scripts
@@ -28,3 +22,5 @@ RUN mv .env.example .env && \
     chmod 777 var/functional-test
 
 ENV APP_ENV=test
+
+ENTRYPOINT []

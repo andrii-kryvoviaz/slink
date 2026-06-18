@@ -30,6 +30,7 @@
     <groups>
         <exclude>
             <group>storage-integration</group>
+            <group>permissions</group>
         </exclude>
     </groups>
 

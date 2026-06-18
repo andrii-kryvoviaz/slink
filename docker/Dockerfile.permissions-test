@@ -1,0 +1,35 @@
+FROM test AS permissions-test
+
+ENV SLINK_PERMTEST_SANDBOX=1
+
+ARG ALPINE_VERSION=3.24
+
+# Install OS tooling on top of the slink:test stage (PHP + composer + app + the
+# common users www-data uid 33 / slink uid 1000) so the PHPUnit permission
+# matrix can orchestrate real DAC/mount operations.
+#   util-linux  — real setpriv (not the busybox stub)
+#   acl         — setfacl / getfacl (A4 ACL mask row)
+#   attr        — xattr utilities
+#   dosfstools  — mkfs.vfat (B2 loop/FAT rows)
+#   fuse3       — FUSE kernel interface (B1 bindfs rows)
+#   bindfs      — FUSE-based bind mount (alpine edge/testing)
+RUN --mount=type=cache,target=/var/cache/apk \
+    apk add --no-cache \
+        util-linux \
+        acl \
+        attr \
+        dosfstools \
+        fuse3 && \
+    apk add --no-cache \
+        -X https://dl-cdn.alpinelinux.org/alpine/edge/testing \
+        bindfs
+
+# Allow user-space FUSE mounts inside the container (needed for bindfs rows).
+RUN echo "user_allow_other" >> /etc/fuse.conf
+
+WORKDIR /services/api
+
+# The slink:test stage clears ENTRYPOINT already; keep it cleared so the runner
+# invokes `php bin/phpunit` directly.
+ENTRYPOINT []
+CMD ["php", "-d", "opcache.preload=", "-d", "opcache.enable_cli=0", "bin/phpunit", "--group", "permissions", "--testdox"]

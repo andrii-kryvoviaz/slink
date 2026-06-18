@@ -50,8 +50,6 @@ RUN rm -rf /sbin/apk /etc/apk /lib/apk /usr/share/apk /var/cache/apk
 
 ARG UPLOAD_MAX_FILESIZE_IN_BYTES
 
-COPY --link --from=frankenphp /usr/local/bin/frankenphp /usr/local/bin/php /usr/local/bin/
-COPY --link --from=frankenphp /usr/local/lib/ /usr/local/lib/
 COPY --link --chmod=755 ./docker/config/s6-overlay/s6-rc.d/prod/ /etc/s6-overlay/s6-rc.d/
 
 ENV APP_ENV=prod \

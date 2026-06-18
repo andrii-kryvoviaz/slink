@@ -78,10 +78,11 @@ target "dev" {
 }
 
 target "test" {
+  inherits   = ["_contexts"]
   dockerfile = "docker/Dockerfile.test"
+  target     = "test"
   tags       = ["slink:test"]
   args = {
-    PHP_VERSION  = PHP_VERSION
     MEMORY_LIMIT = MEMORY_LIMIT
   }
 }
@@ -95,6 +96,22 @@ target "e2e" {
     ALPINE_VERSION               = ALPINE_VERSION
     COMPOSER_VERSION             = COMPOSER_VERSION
     UPLOAD_MAX_FILESIZE_IN_BYTES = UPLOAD_MAX_FILESIZE_IN_BYTES
+  }
+}
+
+target "permissions-test" {
+  inherits   = ["_contexts"]
+  dockerfile = "docker/Dockerfile.permissions-test"
+  target     = "permissions-test"
+  tags       = ["slink:permissions-test"]
+  contexts = {
+    node         = "target:_node"
+    common       = "target:_common"
+    frankenphp   = "target:_frankenphp"
+    test         = "target:test"
+  }
+  args = {
+    ALPINE_VERSION = ALPINE_VERSION
   }
 }
 
