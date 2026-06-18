@@ -21,6 +21,7 @@ RUN mv .env.example .env && \
     mkdir -p var/functional-test && \
     chmod 777 var/functional-test
 
-ENV APP_ENV=test
+ENV APP_ENV=test \
+    IMAGE_MAX_SIZE=5M
 
 ENTRYPOINT []
