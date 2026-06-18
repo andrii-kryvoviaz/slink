@@ -1,0 +1,56 @@
+name: 'Build image digest'
+description: 'Log in, build one platform, and push it to a registry by digest'
+inputs:
+  image:
+    required: true
+  target:
+    required: true
+  artifact-name:
+    required: true
+  username:
+    required: true
+  token:
+    required: true
+  provenance:
+    default: 'false'
+  sbom:
+    default: 'false'
+  extra-set:
+    default: ''
+runs:
+  using: 'composite'
+  steps:
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ inputs.username }}
+        password: ${{ inputs.token }}
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    - name: Build and push by digest
+      id: bake
+      uses: docker/bake-action@v6
+      with:
+        source: .
+        targets: ${{ inputs.target }}
+        provenance: ${{ inputs.provenance }}
+        sbom: ${{ inputs.sbom }}
+        set: |
+          *.output=type=image,name=${{ inputs.image }},push-by-digest=true,name-canonical=true,push=true
+          ${{ inputs.extra-set }}
+    - name: Export digest
+      shell: bash
+      env:
+        BUILD_METADATA: ${{ steps.bake.outputs.metadata }}
+        BAKE_TARGET: ${{ inputs.target }}
+      run: |
+        mkdir -p "${{ runner.temp }}/digests"
+        digest=$(echo "$BUILD_METADATA" | jq -r '.[$ENV.BAKE_TARGET]["containerimage.digest"]')
+        touch "${{ runner.temp }}/digests/${digest#sha256:}"
+    - name: Upload digest
+      uses: actions/upload-artifact@v5
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: ${{ runner.temp }}/digests/*
+        if-no-files-found: error
+        retention-days: 1

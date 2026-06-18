@@ -49,65 +49,28 @@ jobs:
         with:
           ref: ${{ inputs.ref || github.sha }}
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to DockerHub
-        uses: docker/login-action@v3
+      - uses: ./.github/actions/build-digest
         with:
+          image: ${{ env.image }}
+          target: ${{ matrix.scope }}
+          artifact-name: digests-${{ matrix.scope }}
           username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
-
-      - name: Build and push by digest
-        id: build
-        uses: docker/bake-action@v6
-        with:
-          source: .
-          targets: ${{ matrix.scope }}
-          sbom: true
+          token: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
           provenance: mode=max
-          set: |
+          sbom: 'true'
+          extra-set: |
             *.cache-from=type=gha,scope=${{ matrix.scope }}
             *.cache-to=type=gha,scope=${{ matrix.scope }},mode=max
-            *.output=type=image,name=${{ env.image }},push-by-digest=true,name-canonical=true,push=true
             *.labels.org.opencontainers.image.title=${{ vars.APP_NAME }}
             *.labels.org.opencontainers.image.version=${{ inputs.tag }}
             *.labels.org.opencontainers.image.revision=${{ inputs.ref || github.sha }}
-
-      - name: Export digest
-        run: |
-          mkdir -p ${{ runner.temp }}/digests
-          digest=$(echo '${{ steps.build.outputs.metadata }}' | jq -r '.["${{ matrix.scope }}"]["containerimage.digest"]')
-          touch "${{ runner.temp }}/digests/${digest#sha256:}"
-
-      - name: Upload digest
-        uses: actions/upload-artifact@v5
-        with:
-          name: digests-${{ matrix.scope }}
-          path: ${{ runner.temp }}/digests/*
-          if-no-files-found: error
-          retention-days: 1
 
   manifest:
     name: Create Manifest
     runs-on: ubuntu-24.04
     needs: build
     steps:
-      - name: Download digests
-        uses: actions/download-artifact@v5
-        with:
-          path: ${{ runner.temp }}/digests
-          pattern: digests-*
-          merge-multiple: true
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to DockerHub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+      - uses: actions/checkout@v5
 
       - name: Setup Docker Metadata
         uses: docker/metadata-action@v5
@@ -118,12 +81,12 @@ jobs:
             type=raw,value=${{ inputs.tag }}
             type=raw,value=latest,enable=${{ inputs.latest }}
 
-      - name: Create manifest list and push
-        working-directory: ${{ runner.temp }}/digests
-        run: |
-          docker buildx imagetools create --prefer-index=true \
-            $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
-            $(printf '${{ env.image }}@sha256:%s ' *)
+      - uses: ./.github/actions/merge-manifest
+        with:
+          image: ${{ env.image }}
+          tags: ${{ steps.meta.outputs.tags }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          token: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
 
       - name: Verify image
         run: |
