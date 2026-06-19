@@ -41,11 +41,13 @@ runs:
     - name: Export digest
       shell: bash
       env:
-        BUILD_METADATA: ${{ steps.bake.outputs.metadata }}
         BAKE_TARGET: ${{ inputs.target }}
       run: |
         mkdir -p "${{ runner.temp }}/digests"
-        digest=$(echo "$BUILD_METADATA" | jq -r '.[$ENV.BAKE_TARGET]["containerimage.digest"]')
+        cat > "${{ runner.temp }}/bake-metadata.json" <<'BAKE_METADATA_EOF'
+        ${{ steps.bake.outputs.metadata }}
+        BAKE_METADATA_EOF
+        digest=$(jq -r --arg t "$BAKE_TARGET" '.[$t]["containerimage.digest"]' "${{ runner.temp }}/bake-metadata.json")
         touch "${{ runner.temp }}/digests/${digest#sha256:}"
     - name: Upload digest
       uses: actions/upload-artifact@v5
