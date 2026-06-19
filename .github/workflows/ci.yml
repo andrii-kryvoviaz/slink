@@ -23,9 +23,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 jobs:
   changes:
     name: Detect Changes
@@ -91,7 +88,7 @@ jobs:
         run: sudo apt-get install -y smbclient
 
       - name: Cache Composer dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: services/api/vendor
           key: composer-${{ hashFiles('services/api/composer.lock') }}
@@ -146,21 +143,21 @@ jobs:
     needs: changes
     if: needs.changes.outputs.frontend == 'true' || needs.changes.outputs.backend == 'true'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: E2E Tests
         uses: ./.github/actions/e2e
 
       - name: Upload Playwright report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-report
           path: services/client/playwright-report/
 
       - name: Upload test results
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-results
           path: services/client/test-results/

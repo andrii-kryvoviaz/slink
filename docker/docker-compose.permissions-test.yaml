@@ -1,0 +1,11 @@
+services:
+  permissions-test:
+    image: slink:permissions-test
+    container_name: slink-permissions-test
+    working_dir: /services/api
+    user: root
+    security_opt:
+      - seccomp=unconfined
+    command: >-
+      unshare --user --map-users=0:0:65536 --map-groups=0:0:65536 --setgroups=allow --mount --
+      vendor/bin/phpunit --group permissions --no-coverage --testdox --log-junit var/permissions-junit.xml

@@ -5,19 +5,7 @@ if [ -f /app/var/data/dump.rdb ]; then
 fi
 
 if [ "$(id -u)" = "0" ]; then
-  chown -R slink:slink /app
-  chown www-data:slink /app/var/data
-  chown -R www-data:slink /services/api/var
-  chown www-data:www-data /app/var/data/*.db 2>/dev/null || true
-  chown -R www-data:slink /data/caddy
-  chown -R redis:slink /data/redis
-
-  chmod 770 /app/var/data
-  chmod 770 /app/slink/images
-  chmod 770 /app/slink/cache 2>/dev/null || true
-  chmod 750 /app/var/data/keys
-  chmod 640 /app/var/data/keys/private.pem /app/var/data/keys/passphrase 2>/dev/null || true
-  chown root:root /run
+  slink slink:storage:fix-ownership
 fi
 
 if ! /usr/local/bin/init-secrets; then

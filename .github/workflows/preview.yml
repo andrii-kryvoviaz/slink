@@ -1,0 +1,97 @@
+name: Preview
+
+on:
+  pull_request:
+    types: [labeled, synchronize]
+
+concurrency:
+  group: preview-${{ github.head_ref }}
+  cancel-in-progress: true
+
+env:
+  image: docker.io/${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.APP_NAME }}
+
+jobs:
+  meta:
+    name: Resolve preview tag
+    runs-on: ubuntu-24.04
+    outputs:
+      tag: ${{ steps.tag.outputs.value }}
+    steps:
+      - id: tag
+        env:
+          BRANCH: ${{ github.head_ref }}
+        run: |
+          hash=$(printf '%s' "$BRANCH" | sha256sum | cut -c1-12)
+          echo "value=preview-${hash}" >> "$GITHUB_OUTPUT"
+
+  build:
+    name: Build (${{ matrix.platform }})
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      (
+        (github.event.action == 'labeled' && github.event.label.name == 'preview') ||
+        (github.event.action != 'labeled' && github.event.action != 'closed' && contains(github.event.pull_request.labels.*.name, 'preview'))
+      )
+    runs-on: ${{ matrix.runner }}
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - platform: linux/amd64
+            runner: ubuntu-24.04
+            scope: pr-preview-amd64
+            target: prod-amd64
+          - platform: linux/arm64
+            runner: ubuntu-24.04-arm
+            scope: pr-preview-arm64
+            target: prod-arm64
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: ./.github/actions/build-digest
+        with:
+          image: ${{ env.image }}
+          target: ${{ matrix.target }}
+          artifact-name: digests-${{ matrix.scope }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          token: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+          extra-set: |
+            *.cache-from=type=gha,scope=${{ matrix.scope }}
+            *.cache-to=type=gha,scope=${{ matrix.scope }},mode=max
+
+  merge:
+    name: Create Manifest
+    needs: [build, meta]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: ./.github/actions/merge-manifest
+        with:
+          image: ${{ env.image }}
+          tags: ${{ env.image }}:${{ needs.meta.outputs.tag }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          token: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+
+  comment:
+    name: Post Preview Comment
+    needs: [merge, meta]
+    runs-on: ubuntu-24.04
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Sticky comment with pull command
+        uses: marocchino/sticky-pull-request-comment@v3
+        with:
+          header: pr-preview
+          message: |
+            **Preview image ready** (commit `${{ github.event.pull_request.head.sha }}`)
+
+            ```
+            docker pull anirdev/slink:${{ needs.meta.outputs.tag }}
+            ```
