@@ -10,7 +10,6 @@ concurrency:
 
 env:
   image: docker.io/${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.APP_NAME }}
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   meta:
@@ -87,7 +86,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Sticky comment with pull command
-        uses: marocchino/sticky-pull-request-comment@v2
+        uses: marocchino/sticky-pull-request-comment@v3
         with:
           header: pr-preview
           message: |

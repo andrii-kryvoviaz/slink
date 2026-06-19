@@ -28,7 +28,6 @@ permissions:
 
 env:
   image: docker.io/${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.APP_NAME }}
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   build:
@@ -73,7 +72,7 @@ jobs:
       - uses: actions/checkout@v5
 
       - name: Setup Docker Metadata
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         id: meta
         with:
           images: ${{ env.image }}

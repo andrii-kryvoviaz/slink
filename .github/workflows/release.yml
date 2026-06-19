@@ -14,7 +14,6 @@ permissions:
 
 env:
   tag: v${{ github.event.inputs.version }}
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   ci:
@@ -41,7 +40,7 @@ jobs:
           echo "latest=${latest#v}" >> $GITHUB_OUTPUT
           echo "current=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
 
-      - uses: madhead/semver-utils@v4
+      - uses: madhead/semver-utils@v5
         id: semver
         with:
           version: ${{ steps.version.outputs.current }}
