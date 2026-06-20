@@ -1,8 +1,18 @@
 <script lang="ts">
+  import { cva } from 'class-variance-authority';
+
   import { formatDate } from '$lib/utils/date.svelte';
   import { navigateToUrl } from '$lib/utils/navigation/navigate.js';
+  import Icon from '@iconify/svelte';
 
   import BaseToast from './BaseToast.svelte';
+
+  const viewButton = cva([
+    'group inline-flex w-fit items-center gap-1.5 self-start rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors duration-200',
+    'text-purple-700 bg-purple-100/60 hover:bg-purple-200/70 hover:text-purple-800',
+    'dark:text-purple-300 dark:bg-purple-900/40 dark:hover:bg-purple-900/70 dark:hover:text-purple-200',
+    'focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500/30',
+  ]);
 
   interface DuplicateImageData {
     uploadedAt: string;
@@ -18,6 +28,12 @@
   let { message = '', data, oncloseToast }: Props = $props();
 
   let duplicateImageData = $derived(data as DuplicateImageData | undefined);
+
+  let uploadedDate = $derived(
+    duplicateImageData
+      ? formatDate(duplicateImageData.uploadedAt).toLowerCase()
+      : '',
+  );
 
   const viewExistingImage = () => {
     if (duplicateImageData?.existingImageUrl) {
@@ -40,20 +56,23 @@
     </div>
 
     {#if duplicateImageData}
-      <div class="space-y-3">
-        <p class="text-sm text-purple-700 dark:text-purple-300/90">
-          This <button
+      <div
+        class="flex flex-wrap items-center gap-x-2 gap-y-1.5 text-sm text-purple-700 dark:text-purple-300/90"
+      >
+        <span>This image was already uploaded {uploadedDate}.</span>
+        {#if duplicateImageData.existingImageUrl}
+          <button
             type="button"
-            class="font-medium text-purple-700 hover:text-purple-800 dark:text-purple-300 dark:hover:text-purple-200 underline underline-offset-2 transition-colors duration-200"
             onclick={viewExistingImage}
+            class={viewButton()}
           >
-            image
+            <span>View image</span>
+            <Icon
+              icon="ph:arrow-right"
+              class="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5"
+            />
           </button>
-          was already uploaded
-          <span class="font-medium"
-            >{formatDate(duplicateImageData.uploadedAt).toLowerCase()}</span
-          >.
-        </p>
+        {/if}
       </div>
     {:else}
       <p class="text-sm text-purple-700 dark:text-purple-300/90">

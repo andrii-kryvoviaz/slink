@@ -3175,10 +3175,6 @@ msgstr "Immagine già esistente"
 msgid "Duplicate"
 msgstr "Duplicato"
 
-#: src/ui/components/sonner/toasts/DuplicateImageToast.svelte
-msgid "This <0>image</0> was already uploaded <1/>."
-msgstr "Questa <0>immagine</0> è già stata caricata <1/>."
-
 #: src/routes/admin/settings/sso/new/+page.svelte
 msgid "Select an identity provider to configure"
 msgstr "Seleziona un provider di identità da configurare"
@@ -4985,3 +4981,12 @@ msgstr "Opzioni di {0}"
 #: src/ui/components/select/select.svelte
 msgid "{0} items selected"
 msgstr "{0} elementi selezionati"
+
+#. 0: uploadedDate
+#: src/ui/components/sonner/toasts/DuplicateImageToast.svelte
+msgid "This image was already uploaded {0}."
+msgstr "Questa immagine è già stata caricata {0}."
+
+#: src/ui/components/sonner/toasts/DuplicateImageToast.svelte
+msgid "View image"
+msgstr "Visualizza immagine"

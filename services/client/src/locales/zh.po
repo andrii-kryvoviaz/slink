@@ -3175,10 +3175,6 @@ msgstr "图片已存在"
 msgid "Duplicate"
 msgstr "重复"
 
-#: src/ui/components/sonner/toasts/DuplicateImageToast.svelte
-msgid "This <0>image</0> was already uploaded <1/>."
-msgstr "这张<0>图片</0>已上传于 <1/>。"
-
 #: src/routes/admin/settings/sso/new/+page.svelte
 msgid "Select an identity provider to configure"
 msgstr "选择要配置的身份提供方"
@@ -4979,3 +4975,12 @@ msgstr "{0} 选项"
 #: src/ui/components/select/select.svelte
 msgid "{0} items selected"
 msgstr "已选择 {0} 项"
+
+#. 0: uploadedDate
+#: src/ui/components/sonner/toasts/DuplicateImageToast.svelte
+msgid "This image was already uploaded {0}."
+msgstr "此图片{0}已上传。"
+
+#: src/ui/components/sonner/toasts/DuplicateImageToast.svelte
+msgid "View image"
+msgstr "查看图片"
