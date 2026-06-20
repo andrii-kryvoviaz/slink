@@ -141,8 +141,7 @@
           oninput={(e) =>
             e.target && autoResize(e.target as HTMLTextAreaElement)}
           {placeholder}
-          rows="2"
-        ></textarea>
+          rows="2"></textarea>
       {/if}
       {#if showActions && hasChanges}
         <div data-editable-actions class="flex items-center gap-3 mt-2 text-xs">

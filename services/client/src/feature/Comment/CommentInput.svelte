@@ -123,8 +123,7 @@
         : activeRef
           ? `Reply to @${activeRef.author.displayName}...`
           : 'Write a comment...'}
-      disabled={isSubmitting}
-    ></textarea>
+      disabled={isSubmitting}></textarea>
     <div class="absolute right-1.5 flex items-center gap-1">
       {#if isEditing}
         <Button
