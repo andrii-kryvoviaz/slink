@@ -68,11 +68,11 @@
       </div>
     {:else if item.status === 'error'}
       <p class="text-xs text-red-500/80 dark:text-red-400/80 mt-1 break-words">
-        {item.error || 'Upload failed'}
+        {#if item.error}{item.error}{:else}Upload failed{/if}
       </p>
     {:else if item.status === 'cancelled'}
       <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 break-words">
-        {item.error || 'Upload cancelled'}
+        {#if item.error}{item.error}{:else}Upload cancelled{/if}
       </p>
     {/if}
   </div>

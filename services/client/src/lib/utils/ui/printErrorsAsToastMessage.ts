@@ -44,7 +44,7 @@ function showHttpErrorsAsToasts(errors: HttpException['errors']) {
   }
 }
 
-export function printErrorsAsToastMessage(error: Error) {
+export function printErrorsAsToastMessage(error: Error | undefined) {
   if (error instanceof ValidationException) {
     showViolationsAsToasts(error.violations);
     return;
@@ -55,9 +55,9 @@ export function printErrorsAsToastMessage(error: Error) {
     return;
   }
 
-  const errorMessage = extractErrorMessage(error);
-  if (errorMessage !== 'An unexpected error occurred') {
-    showErrorAsToast(errorMessage);
+  const message = error ? extractErrorMessage(error) : '';
+  if (message && message !== 'An unexpected error occurred') {
+    showErrorAsToast(message);
   } else {
     showErrorAsToast(messages.general.somethingWentWrong);
   }

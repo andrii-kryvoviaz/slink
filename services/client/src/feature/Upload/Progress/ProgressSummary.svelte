@@ -7,6 +7,6 @@
 <p class="text-sm text-slate-500 dark:text-slate-400">
   {progress.completedCount} of {progress.totalCount} files uploaded
   {#if progress.hasErrors}
-    • {progress.failedCount} failed
+    <span>• {progress.failedCount} failed</span>
   {/if}
 </p>

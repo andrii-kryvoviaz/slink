@@ -4973,3 +4973,15 @@ msgstr "全体の登録設定を継承します。"
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Inherits the global approval setting."
 msgstr "全体の承認設定を継承します。"
+
+#. 0: title
+#: src/feature/Settings/OAuthSettings/PolicyInfo.svelte
+msgid "{0} options"
+msgstr "{0} のオプション"
+
+#. 0: selectedItems.length
+#. 0: selectedCount
+#: src/ui/components/enhanced-select/enhanced-select.svelte
+#: src/ui/components/select/select.svelte
+msgid "{0} items selected"
+msgstr "{0} 件選択中"

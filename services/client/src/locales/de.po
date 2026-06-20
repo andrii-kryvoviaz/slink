@@ -4973,3 +4973,15 @@ msgstr "Erbt die globale Registrierungseinstellung."
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Inherits the global approval setting."
 msgstr "Erbt die globale Genehmigungseinstellung."
+
+#. 0: title
+#: src/feature/Settings/OAuthSettings/PolicyInfo.svelte
+msgid "{0} options"
+msgstr "{0} Optionen"
+
+#. 0: selectedItems.length
+#. 0: selectedCount
+#: src/ui/components/enhanced-select/enhanced-select.svelte
+#: src/ui/components/select/select.svelte
+msgid "{0} items selected"
+msgstr "{0} Elemente ausgewählt"

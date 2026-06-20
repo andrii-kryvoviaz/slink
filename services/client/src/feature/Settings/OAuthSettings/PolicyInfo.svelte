@@ -15,6 +15,8 @@
 
   let { title, value, note, children }: Props = $props();
 
+  const optionsLabel = $derived(`${title} options`);
+
   setPolicyInfoContext({
     get value() {
       return value;
@@ -28,7 +30,7 @@
       <button
         {...props}
         type="button"
-        aria-label={`${title} options`}
+        aria-label={optionsLabel}
         class="inline-flex items-center justify-center w-3.5 h-3.5 rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-150"
       >
         <Icon icon="lucide:info" class="w-3.5 h-3.5" />

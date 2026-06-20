@@ -89,8 +89,12 @@ export class ChunkedUpload {
       }
 
       this.item.status = 'error';
-      this.item.errorDetails = errorInstance;
       this.item.error = this._resolveErrorMessage(errorInstance);
+      if (errorInstance instanceof ValidationException) {
+        this.item.errorDetails = errorInstance;
+      } else {
+        this.item.errorDetails = new Error(this.item.error);
+      }
 
       onProgress?.(this.item);
       throw errorInstance;

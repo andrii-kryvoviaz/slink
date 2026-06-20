@@ -4973,3 +4973,15 @@ msgstr "Hérite du paramètre global d'inscription."
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Inherits the global approval setting."
 msgstr "Hérite du paramètre global d'approbation."
+
+#. 0: title
+#: src/feature/Settings/OAuthSettings/PolicyInfo.svelte
+msgid "{0} options"
+msgstr "Options de {0}"
+
+#. 0: selectedItems.length
+#. 0: selectedCount
+#: src/ui/components/enhanced-select/enhanced-select.svelte
+#: src/ui/components/select/select.svelte
+msgid "{0} items selected"
+msgstr "{0} éléments sélectionnés"

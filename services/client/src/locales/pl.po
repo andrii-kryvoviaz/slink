@@ -4989,3 +4989,15 @@ msgstr "Dziedziczy globalne ustawienie rejestracji."
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
 msgid "Inherits the global approval setting."
 msgstr "Dziedziczy globalne ustawienie zatwierdzania."
+
+#. 0: title
+#: src/feature/Settings/OAuthSettings/PolicyInfo.svelte
+msgid "{0} options"
+msgstr "Opcje: {0}"
+
+#. 0: selectedItems.length
+#. 0: selectedCount
+#: src/ui/components/enhanced-select/enhanced-select.svelte
+#: src/ui/components/select/select.svelte
+msgid "{0} items selected"
+msgstr "Zaznaczono: {0}"
