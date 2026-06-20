@@ -182,7 +182,7 @@ class UploadPageState {
 
     if (failed.length > 0 && !isBatch) {
       this._isUploading = false;
-      toast.error(failed[0].error ?? messages.general.somethingWentWrong);
+      printErrorsAsToastMessage(failed[0].errorDetails!);
       return;
     }
 
