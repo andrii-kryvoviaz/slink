@@ -4,13 +4,16 @@ if [ -f /app/var/data/dump.rdb ]; then
   rm -f /app/var/data/dump.rdb
 fi
 
-if [ "$(id -u)" = "0" ]; then
-  slink slink:storage:fix-ownership
-fi
-
 if ! /usr/local/bin/init-secrets; then
   echo "[entrypoint] FATAL: init-secrets failed — refusing to start" >&2
   exit 1
+fi
+
+if [ "$(id -u)" = "0" ]; then
+  if ! php /services/api/bin/fix-ownership; then
+    echo "[entrypoint] FATAL: storage ownership fix failed" >&2
+    exit 1
+  fi
 fi
 
 if [ -f /app/var/data/keys/passphrase ]; then

@@ -6,6 +6,7 @@ namespace Slink\Image\Infrastructure\ChunkedUpload\Storage;
 
 use Slink\Settings\Application\Service\SettingsService;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
+use Slink\Shared\Infrastructure\Exception\Storage\LocalStorageException;
 use Symfony\Component\DependencyInjection\Attribute\AsAlias;
 
 #[AsAlias(ChunkStorageInterface::class)]
@@ -21,9 +22,7 @@ final class FilesystemChunkStorage extends AbstractChunkStorage {
   public function writeChunk(string $uploadId, int $index, string $content): void {
     $directory = $this->uploadDirectory($uploadId);
 
-    if (!\is_dir($directory)) {
-      \mkdir($directory, 0755, true);
-    }
+    $this->ensureDirectory($directory);
 
     \file_put_contents($this->chunkPath($uploadId, $index), $content);
   }
@@ -115,9 +114,7 @@ final class FilesystemChunkStorage extends AbstractChunkStorage {
   public function markComplete(string $uploadId, string $imageId): void {
     $directory = $this->uploadDirectory($uploadId);
 
-    if (!\is_dir($directory)) {
-      \mkdir($directory, 0755, true);
-    }
+    $this->ensureDirectory($directory);
 
     \file_put_contents($this->markerPath($uploadId), $imageId);
 
@@ -160,6 +157,12 @@ final class FilesystemChunkStorage extends AbstractChunkStorage {
     }
 
     \rmdir($directory);
+  }
+
+  private function ensureDirectory(string $path): void {
+    if (!\is_dir($path) && !@\mkdir($path, 0755, true) && !\is_dir($path)) {
+      throw LocalStorageException::unableToCreateDirectory($path);
+    }
   }
 
   private function serverRoot(): string {

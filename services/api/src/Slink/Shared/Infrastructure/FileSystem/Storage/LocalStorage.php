@@ -7,6 +7,7 @@ namespace Slink\Shared\Infrastructure\FileSystem\Storage;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\Enum\StorageProvider;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
+use Slink\Shared\Infrastructure\Exception\Storage\LocalStorageException;
 use Slink\Shared\Infrastructure\FileSystem\FileSource;
 use Slink\Shared\Infrastructure\FileSystem\FileStream;
 use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\DirectoryStorageInterface;
@@ -36,10 +37,8 @@ final class LocalStorage extends AbstractStorage implements DirectoryStorageInte
       throw new NotFoundException();
     }
     
-    if (!is_dir($path)) {
-      $this->mkdir($path);
-    }
-    
+    $this->mkdir($path);
+
     $file->move($path, $fileName);
   }
   
@@ -133,7 +132,9 @@ final class LocalStorage extends AbstractStorage implements DirectoryStorageInte
   }
   
   public function mkdir(string $path): void {
-    mkdir($path, 0755, true);
+    if (!is_dir($path) && !@mkdir($path, 0755, true) && !is_dir($path)) {
+      throw LocalStorageException::unableToCreateDirectory($path);
+    }
   }
   
   /**

@@ -9,7 +9,10 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use ReflectionClass;
 use Slink\Shared\Infrastructure\FileSystem\Ownership\OwnershipApplier;
+use Slink\Shared\Infrastructure\FileSystem\Ownership\OwnershipEntry;
+use Slink\Shared\Infrastructure\FileSystem\Ownership\OwnershipException;
 use Slink\Shared\Infrastructure\FileSystem\Ownership\OwnershipPlan;
 
 final class OwnershipApplierTest extends TestCase {
@@ -31,6 +34,29 @@ final class OwnershipApplierTest extends TestCase {
     self::assertSame(0o2770, $this->permsOf($this->appDir() . '/slink/images'));
     self::assertSame(0o770, $this->permsOf($this->appDir() . '/var/data'));
     self::assertSame(0o750, $this->permsOf($this->appDir() . '/var/data/keys'));
+  }
+
+  #[Test]
+  public function itDoesNotChmodThroughASymlinkAndReportsTheAnomaly(): void {
+    $keys = $this->appDir() . '/var/data/keys';
+    $target = $this->_scratch . '/secret-target';
+    \file_put_contents($target, "secret\n");
+    \chmod($target, 0o600);
+    $modeBefore = $this->permsOf($target);
+
+    $this->removeTree($keys);
+    \symlink($target, $keys);
+
+    try {
+      (new OwnershipApplier())->apply($this->plan());
+      self::fail('Expected OwnershipException to be thrown for the symlinked path.');
+    } catch (OwnershipException $e) {
+      self::assertStringContainsString($keys, $e->getMessage());
+    } finally {
+      \unlink($keys);
+    }
+
+    self::assertSame($modeBefore, $this->permsOf($target));
   }
 
   #[Test]
@@ -83,19 +109,36 @@ final class OwnershipApplierTest extends TestCase {
   }
 
   #[Test]
-  public function itAppliesTheWholeTreeAndReturnsVoid(): void {
+  public function itAppliesCleanlyWithoutThrowingWhenEveryModeTargetIsOwned(): void {
     (new OwnershipApplier())->apply($this->plan());
 
-    $this->expectNotToPerformAssertions();
+    self::assertSame(0o2770, $this->permsOf($this->appDir() . '/slink/images'));
+    self::assertSame(0o750, $this->permsOf($this->appDir() . '/var/data/keys'));
   }
 
   private function plan(): OwnershipPlan {
-    return OwnershipPlan::fromStoragePaths(
-      $this->appDir(),
-      $this->_scratch . '/services/api/var',
-      $this->_scratch . '/data',
-      $this->_scratch . '/run',
-    );
+    return $this->planOf([
+      new OwnershipEntry(path: $this->appDir(), recursive: true),
+      new OwnershipEntry(path: $this->appDir() . '/var/data', mode: 0o770),
+      new OwnershipEntry(path: $this->appDir() . '/slink/images', mode: 0o2770),
+      new OwnershipEntry(path: $this->appDir() . '/slink/cache', mode: 0o2770, optional: true),
+      new OwnershipEntry(path: $this->appDir() . '/var/data/keys', mode: 0o750),
+      new OwnershipEntry(path: $this->appDir() . '/var/data/keys/private.pem', mode: 0o640, optional: true),
+      new OwnershipEntry(path: $this->appDir() . '/var/data/keys/passphrase', mode: 0o640, optional: true),
+      new OwnershipEntry(path: $this->appDir() . '/var/data/*.db', optional: true, glob: true),
+    ]);
+  }
+
+  /**
+   * @param list<OwnershipEntry> $entries
+   */
+  private function planOf(array $entries): OwnershipPlan {
+    $plan = (new ReflectionClass(OwnershipPlan::class))->newInstanceWithoutConstructor();
+
+    $property = new \ReflectionProperty(OwnershipPlan::class, 'entries');
+    $property->setValue($plan, $entries);
+
+    return $plan;
   }
 
   private function appDir(): string {

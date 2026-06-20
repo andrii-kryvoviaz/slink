@@ -10,6 +10,8 @@ use PHPUnit\Framework\TestCase;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Slink\Shared\Infrastructure\FileSystem\Ownership\OwnershipApplier;
+use Slink\Shared\Infrastructure\FileSystem\Ownership\OwnershipException;
+use Slink\Shared\Infrastructure\FileSystem\Ownership\OwnershipPlan;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 use UI\Console\Command\Storage\FixOwnershipCommand;
@@ -33,7 +35,8 @@ final class FixOwnershipCommandTest extends TestCase {
 
   #[Test]
   public function itAppliesOwnershipFromExplicitOptions(): void {
-    $tester = new CommandTester(new FixOwnershipCommand(new OwnershipApplier()));
+    $applier = $this->capturingApplier();
+    $tester = new CommandTester(new FixOwnershipCommand($applier));
 
     $exitCode = $tester->execute([
       '--app-dir' => $this->appDir(),
@@ -43,8 +46,29 @@ final class FixOwnershipCommandTest extends TestCase {
     ]);
 
     self::assertSame(Command::SUCCESS, $exitCode);
-    self::assertSame(0o2770, $this->permsOf($this->appDir() . '/slink/images'));
-    self::assertSame(0o750, $this->permsOf($this->appDir() . '/var/data/keys'));
+    self::assertTrue($this->planTargets($applier->plan, $this->appDir() . '/slink/images'));
+    self::assertTrue($this->planTargets($applier->plan, $this->appDir() . '/var/data/keys'));
+  }
+
+  #[Test]
+  public function itFailsWhenTheApplierReportsFailures(): void {
+    $applier = new class extends OwnershipApplier {
+      public function apply(OwnershipPlan $plan): void {
+        throw OwnershipException::ownerFailed('/app/slink/images', 'www-data');
+      }
+    };
+
+    $tester = new CommandTester(new FixOwnershipCommand($applier));
+
+    $exitCode = $tester->execute([
+      '--app-dir' => $this->appDir(),
+      '--api-var-dir' => $this->_scratch . '/services/api/var',
+      '--data-dir' => $this->_scratch . '/data',
+      '--run-dir' => $this->_scratch . '/run',
+    ]);
+
+    self::assertSame(Command::FAILURE, $exitCode);
+    self::assertStringContainsString('lchown failed', $tester->getDisplay());
   }
 
   #[Test]
@@ -54,12 +78,13 @@ final class FixOwnershipCommandTest extends TestCase {
     \putenv('SLINK_DATA_DIR=' . $this->_scratch . '/data');
     \putenv('SLINK_RUN_DIR=' . $this->_scratch . '/run');
 
-    $tester = new CommandTester(new FixOwnershipCommand(new OwnershipApplier()));
+    $applier = $this->capturingApplier();
+    $tester = new CommandTester(new FixOwnershipCommand($applier));
 
     $exitCode = $tester->execute([]);
 
     self::assertSame(Command::SUCCESS, $exitCode);
-    self::assertSame(0o2770, $this->permsOf($this->appDir() . '/slink/images'));
+    self::assertTrue($this->planTargets($applier->plan, $this->appDir() . '/slink/images'));
   }
 
   private function appDir(): string {
@@ -82,10 +107,22 @@ final class FixOwnershipCommandTest extends TestCase {
     }
   }
 
-  private function permsOf(string $path): int {
-    \clearstatcache(true, $path);
+  private function capturingApplier(): CapturingOwnershipApplier {
+    return new CapturingOwnershipApplier();
+  }
 
-    return \fileperms($path) & 0o7777;
+  private function planTargets(?OwnershipPlan $plan, string $path): bool {
+    if ($plan === null) {
+      return false;
+    }
+
+    foreach ($plan->getEntries() as $entry) {
+      if ($entry->getPath() === $path) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   private function removeTree(string $path): void {
@@ -113,5 +150,13 @@ final class FixOwnershipCommandTest extends TestCase {
     }
 
     \unlink($path);
+  }
+}
+
+final class CapturingOwnershipApplier extends OwnershipApplier {
+  public ?OwnershipPlan $plan = null;
+
+  public function apply(OwnershipPlan $plan): void {
+    $this->plan = $plan;
   }
 }

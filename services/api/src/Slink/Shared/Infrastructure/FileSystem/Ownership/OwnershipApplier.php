@@ -8,7 +8,7 @@ use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
-final class OwnershipApplier {
+class OwnershipApplier {
   public function apply(OwnershipPlan $plan): void {
     foreach ($plan->getEntries() as $entry) {
       $this->applyEntry($entry);
@@ -17,7 +17,7 @@ final class OwnershipApplier {
 
   private function applyEntry(OwnershipEntry $entry): void {
     foreach ($this->resolvePaths($entry) as $path) {
-      if (!\file_exists($path)) {
+      if (!\file_exists($path) && !\is_link($path)) {
         continue;
       }
 
@@ -90,12 +90,12 @@ final class OwnershipApplier {
   }
 
   private function chown(string $path, ?string $owner, ?string $group): void {
-    if ($owner !== null) {
-      @\lchown($path, $owner);
+    if ($owner !== null && !@\lchown($path, $owner)) {
+      throw OwnershipException::ownerFailed($path, $owner);
     }
 
-    if ($group !== null) {
-      @\lchgrp($path, $group);
+    if ($group !== null && !@\lchgrp($path, $group)) {
+      throw OwnershipException::groupFailed($path, $group);
     }
   }
 
@@ -106,6 +106,12 @@ final class OwnershipApplier {
       return;
     }
 
-    @\chmod($path, $mode);
+    if (\is_link($path)) {
+      throw OwnershipException::symlinkRefused($path);
+    }
+
+    if (!@\chmod($path, $mode)) {
+      throw OwnershipException::modeFailed($path, $mode);
+    }
   }
 }

@@ -1,0 +1,28 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use Slink\Shared\Infrastructure\FileSystem\Ownership\OwnershipApplier;
+use Slink\Shared\Infrastructure\FileSystem\Ownership\OwnershipException;
+use Slink\Shared\Infrastructure\FileSystem\Ownership\OwnershipPlan;
+
+$autoload = '/services/api/vendor/autoload.php';
+
+if (!is_file($autoload)) {
+  fwrite(STDERR, "[fix-ownership] FATAL: autoloader missing at {$autoload}\n");
+  exit(1);
+}
+
+require $autoload;
+
+$plan = OwnershipPlan::fromStoragePaths('/app', '/services/api/var', '/data', '/run');
+
+try {
+  (new OwnershipApplier())->apply($plan);
+} catch (OwnershipException | \Throwable $e) {
+  fwrite(STDERR, "[fix-ownership] {$e->getMessage()}\n");
+  exit(1);
+}
+
+exit(0);

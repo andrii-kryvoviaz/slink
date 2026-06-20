@@ -25,17 +25,31 @@ final class OwnershipPlanTest extends TestCase {
       ['path' => '/data/redis', 'owner' => 'redis', 'group' => 'slink', 'mode' => null, 'recursive' => true, 'optional' => false, 'glob' => false],
       ['path' => '/app/slink/images', 'owner' => 'www-data', 'group' => 'slink', 'mode' => null, 'recursive' => true, 'optional' => false, 'glob' => false],
       ['path' => '/app/slink/cache', 'owner' => 'www-data', 'group' => 'slink', 'mode' => null, 'recursive' => true, 'optional' => true, 'glob' => false],
+      ['path' => '/app/slink/chunks', 'owner' => 'www-data', 'group' => 'slink', 'mode' => null, 'recursive' => true, 'optional' => true, 'glob' => false],
       ['path' => '/app/var/data', 'owner' => null, 'group' => null, 'mode' => 0o770, 'recursive' => false, 'optional' => false, 'glob' => false],
       ['path' => '/app/slink/images', 'owner' => null, 'group' => null, 'mode' => 0o2770, 'recursive' => false, 'optional' => false, 'glob' => false],
       ['path' => '/app/slink/cache', 'owner' => null, 'group' => null, 'mode' => 0o2770, 'recursive' => false, 'optional' => true, 'glob' => false],
+      ['path' => '/app/slink/chunks', 'owner' => null, 'group' => null, 'mode' => 0o2770, 'recursive' => false, 'optional' => true, 'glob' => false],
+      ['path' => '/services/api/var/cache/prod', 'owner' => null, 'group' => null, 'mode' => 0o2770, 'recursive' => false, 'optional' => true, 'glob' => false],
       ['path' => '/app/var/data/keys', 'owner' => null, 'group' => null, 'mode' => 0o750, 'recursive' => false, 'optional' => false, 'glob' => false],
       ['path' => '/app/var/data/keys/private.pem', 'owner' => null, 'group' => null, 'mode' => 0o640, 'recursive' => false, 'optional' => true, 'glob' => false],
       ['path' => '/app/var/data/keys/passphrase', 'owner' => null, 'group' => null, 'mode' => 0o640, 'recursive' => false, 'optional' => true, 'glob' => false],
       ['path' => '/run', 'owner' => 'root', 'group' => 'root', 'mode' => null, 'recursive' => false, 'optional' => false, 'glob' => false],
     ];
 
-    self::assertCount(15, $plan->getEntries());
+    self::assertCount(18, $plan->getEntries());
     self::assertSame($expected, $actual);
+  }
+
+  #[Test]
+  public function prodCacheDirIsGroupWritableWithSetgidAndOptional(): void {
+    $plan = OwnershipPlan::fromStoragePaths('/app', '/services/api/var', '/data', '/run');
+
+    $mode = $this->modeEntryFor($plan, '/services/api/var/cache/prod');
+
+    self::assertSame(0o2770, $mode->getMode());
+    self::assertTrue($mode->isOptional());
+    self::assertFalse($mode->isRecursive());
   }
 
   #[Test]
@@ -51,10 +65,10 @@ final class OwnershipPlanTest extends TestCase {
   }
 
   #[Test]
-  public function imagesAndCacheAreWwwDataOwnedRecursivelyWithSetgid(): void {
+  public function imagesCacheAndChunksAreWwwDataOwnedRecursivelyWithSetgid(): void {
     $plan = OwnershipPlan::fromStoragePaths('/app', '/services/api/var', '/data', '/run');
 
-    foreach (['/app/slink/images', '/app/slink/cache'] as $leaf) {
+    foreach (['/app/slink/images', '/app/slink/cache', '/app/slink/chunks'] as $leaf) {
       $ownership = $this->ownershipEntryFor($plan, $leaf);
       $mode = $this->modeEntryFor($plan, $leaf);
 

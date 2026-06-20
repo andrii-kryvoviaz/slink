@@ -9,6 +9,7 @@ use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
+use Slink\Shared\Infrastructure\Exception\Storage\LocalStorageException;
 use Slink\Shared\Infrastructure\FileSystem\Storage\LocalStorage;
 use Symfony\Component\HttpFoundation\File\File;
 
@@ -238,6 +239,26 @@ final class LocalStorageTest extends TestCase {
     $files = glob(sys_get_temp_dir() . '/slink_src_*');
 
     return $files === false ? 0 : count($files);
+  }
+
+  #[Test]
+  public function itCreatesDirectoryIdempotentlyOnRepeatedCalls(): void {
+    $path = $this->testDir . '/slink/images/nested';
+
+    $this->storage->mkdir($path);
+    $this->storage->mkdir($path);
+
+    $this->assertDirectoryExists($path);
+  }
+
+  #[Test]
+  public function itThrowsWhenDirectoryCannotBeCreatedBecauseParentIsAFile(): void {
+    $parent = $this->testDir . '/regular-file';
+    file_put_contents($parent, 'content');
+
+    $this->expectException(LocalStorageException::class);
+
+    $this->storage->mkdir($parent . '/child');
   }
 
   #[Test]

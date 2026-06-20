@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace UI\Console\Command\Storage;
 
 use Slink\Shared\Infrastructure\FileSystem\Ownership\OwnershipApplier;
+use Slink\Shared\Infrastructure\FileSystem\Ownership\OwnershipException;
 use Slink\Shared\Infrastructure\FileSystem\Ownership\OwnershipPlan;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -39,9 +40,16 @@ final class FixOwnershipCommand extends Command {
       (string) $input->getOption('run-dir'),
     );
 
-    $this->applier->apply($plan);
-
     $io = new SymfonyStyle($input, $output);
+
+    try {
+      $this->applier->apply($plan);
+    } catch (OwnershipException $e) {
+      $io->error($e->getMessage());
+
+      return Command::FAILURE;
+    }
+
     $io->success('Storage ownership applied.');
 
     return Command::SUCCESS;

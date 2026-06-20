@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Image\Infrastructure\ChunkedUpload\Storage\FilesystemChunkStorage;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
+use Slink\Shared\Infrastructure\Exception\Storage\LocalStorageException;
 
 final class FilesystemChunkStorageTest extends TestCase {
   private string $root;
@@ -97,6 +98,33 @@ final class FilesystemChunkStorageTest extends TestCase {
     self::assertSame('aabb', \file_get_contents($assembled->getPathname()));
 
     \unlink($assembled->getPathname());
+  }
+
+  #[Test]
+  public function itEnsuresUploadDirectoryIdempotentlyAcrossRepeatedWrites(): void {
+    $storage = $this->storage();
+
+    $storage->writeChunk('upload-6', 0, 'aa');
+    $storage->writeChunk('upload-6', 1, 'bb');
+
+    self::assertSame([0, 1], $storage->listChunkIndexes('upload-6'));
+  }
+
+  #[Test]
+  public function itThrowsWhenUploadDirectoryCannotBeCreated(): void {
+    $blockingFile = $this->root . '/blocking-root';
+    \file_put_contents($blockingFile, 'content');
+
+    $configurationProvider = $this->createStub(ConfigurationProviderInterface::class);
+    $configurationProvider
+      ->method('get')
+      ->willReturn($blockingFile);
+
+    $storage = new FilesystemChunkStorage($configurationProvider);
+
+    $this->expectException(LocalStorageException::class);
+
+    $storage->writeChunk('upload-7', 0, 'aa');
   }
 
   private function removeRecursively(string $path): void {
