@@ -22,13 +22,15 @@ final readonly class StorageSettings extends AbstractSettingsValueObject {
    */
   #[\Override]
   public function toPayload(): array {
+    $adapter = array_filter([
+      StorageProvider::Local->value => $this->localStorageSettings?->toPayload(),
+      StorageProvider::SmbShare->value => $this->smbStorageSettings?->toPayload(),
+      StorageProvider::AmazonS3->value => $this->awsS3StorageSettings?->toPayload(),
+    ], static fn (?array $value): bool => $value !== null);
+
     return [
       'provider' => $this->provider->value,
-      'adapter' => [
-        StorageProvider::Local->value => $this->localStorageSettings?->toPayload(),
-        StorageProvider::SmbShare->value => $this->smbStorageSettings?->toPayload(),
-        StorageProvider::AmazonS3->value => $this->awsS3StorageSettings?->toPayload(),
-      ]
+      'adapter' => $adapter,
     ];
   }
   
@@ -38,30 +40,23 @@ final readonly class StorageSettings extends AbstractSettingsValueObject {
    */
   #[\Override]
   public static function fromPayload(array $payload): static {
-    $storageProvider = StorageProvider::from($payload['provider']);
-    
-    $localStorageSettingsPayload = $payload['adapter'][StorageProvider::Local->value] ?? null;
-    $smbStorageSettingsPayload = $payload['adapter'][StorageProvider::SmbShare->value] ?? null;
-    $awsS3StorageSettingsPayload = $payload['adapter'][StorageProvider::AmazonS3->value] ?? null;
-    
-    $localStorageSettings = $localStorageSettingsPayload
-      ? LocalStorageSettings::fromPayload($localStorageSettingsPayload)
-      : null;
-    
-    $smbStorageSettings = $smbStorageSettingsPayload
-      ? SmbStorageSettings::fromPayload($smbStorageSettingsPayload)
-      : null;
-    
-    $awsS3StorageSettings = $awsS3StorageSettingsPayload
-      ? AmazonS3StorageSettings::fromPayload($awsS3StorageSettingsPayload)
-      : null;
-    
-    return new self(
-      $storageProvider,
-      $localStorageSettings,
-      $smbStorageSettings,
-      $awsS3StorageSettings
-    );
+    $provider = StorageProvider::from($payload['provider']);
+    $config = $payload['adapter'][$provider->value] ?? null;
+
+    return match ($provider) {
+      StorageProvider::Local => new self(
+        $provider,
+        localStorageSettings: $config ? LocalStorageSettings::fromPayload($config) : null,
+      ),
+      StorageProvider::SmbShare => new self(
+        $provider,
+        smbStorageSettings: $config ? SmbStorageSettings::fromPayload($config) : null,
+      ),
+      StorageProvider::AmazonS3 => new self(
+        $provider,
+        awsS3StorageSettings: $config ? AmazonS3StorageSettings::fromPayload($config) : null,
+      ),
+    };
   }
   
   /**

@@ -11,7 +11,11 @@ use Slink\Settings\Application\Command\SaveSettings\SaveSettingsHandler;
 use Slink\Settings\Domain\Enum\SettingCategory;
 use Slink\Settings\Domain\Repository\SettingStoreRepositoryInterface;
 use Slink\Settings\Domain\Settings;
+use Slink\Settings\Domain\ValueObject\Storage\StorageSettings;
 use Slink\Settings\Domain\ValueObject\User\UserSettings;
+use Slink\Shared\Domain\Enum\StorageProvider;
+use Slink\Shared\Infrastructure\Encryption\EncryptionRegistry;
+use Slink\Shared\Infrastructure\Encryption\EncryptionService;
 
 final class SaveSettingsHandlerTest extends TestCase {
 
@@ -90,46 +94,31 @@ final class SaveSettingsHandlerTest extends TestCase {
     }
 
     #[Test]
-    public function itShouldSaveStorageSettings(): void {
-        $settingsData = [
-            'provider' => 's3',
-            'adapter' => [
-                'local' => null,
-                'smb_share' => null,
-                'amazon_s3' => [
-                    'region' => 'us-east-1',
-                    'bucket' => 'my-bucket',
-                    'key' => 'access-key',
-                    'secret' => 'secret-key'
-                ]
-            ]
-        ];
+    public function itPersistsStorageSettingsThroughCommandPath(): void {
+        EncryptionRegistry::setService(new EncryptionService('test-secret-key'));
+
+        $settingsData = ['provider' => 's3', 'adapter' => [
+            'local' => null,
+            'smb' => null,
+            's3' => ['region' => 'us-east-1', 'bucket' => 'my-bucket', 'key' => 'access-key', 'secret' => 'secret-key', 'useCustomProvider' => false],
+        ]];
 
         $command = new SaveSettingsCommand('storage', $settingsData);
 
-        $settings = $this->createMock(Settings::class);
-        $store = $this->createMock(SettingStoreRepositoryInterface::class);
+        $captured = null;
+        $settings = $this->createStub(Settings::class);
+        $settings->method('setSettings')->willReturnCallback(function ($value) use (&$captured) {
+            $captured = $value;
+        });
 
-        $store
-            ->expects($this->once())
-            ->method('get')
-            ->willReturn($settings);
+        $store = $this->createStub(SettingStoreRepositoryInterface::class);
+        $store->method('get')->willReturn($settings);
 
-        $settings
-            ->expects($this->once())
-            ->method('setSettings')
-            ->with($this->callback(function ($s) {
-                return $s instanceof \Slink\Settings\Domain\ValueObject\Storage\StorageSettings
-                    && $s->getSettingsCategory() === SettingCategory::Storage;
-            }));
+        (new SaveSettingsHandler($store))->__invoke($command);
 
-        $store
-            ->expects($this->once())
-            ->method('store')
-            ->with($settings);
-
-        $handler = new SaveSettingsHandler($store);
-        $handler->__invoke($command);
+        $this->assertInstanceOf(StorageSettings::class, $captured);
+        $this->assertSame(SettingCategory::Storage, $captured->getSettingsCategory());
+        $this->assertSame(StorageProvider::AmazonS3->value, $captured->toPayload()['provider']);
     }
 
     #[Test]

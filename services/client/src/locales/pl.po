@@ -5006,3 +5006,11 @@ msgstr "Ten obraz został już przesłany {0}."
 #: src/ui/components/sonner/toasts/DuplicateImageToast.svelte
 msgid "View image"
 msgstr "Zobacz obraz"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "SMB host is required."
+msgstr "Host SMB jest wymagany."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "SMB share is required."
+msgstr "Udział SMB jest wymagany."

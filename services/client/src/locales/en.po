@@ -4990,3 +4990,11 @@ msgstr "This image was already uploaded {0}."
 #: src/ui/components/sonner/toasts/DuplicateImageToast.svelte
 msgid "View image"
 msgstr "View image"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "SMB host is required."
+msgstr "SMB host is required."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "SMB share is required."
+msgstr "SMB share is required."

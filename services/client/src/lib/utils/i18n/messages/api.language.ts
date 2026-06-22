@@ -252,6 +252,14 @@ function errors(): ApiError[] {
       translate: () => localize('SMB configuration is incomplete.'),
     },
     {
+      match: /* @wc-ignore */ 'SMB host is required.',
+      translate: () => localize('SMB host is required.'),
+    },
+    {
+      match: /* @wc-ignore */ 'SMB share is required.',
+      translate: () => localize('SMB share is required.'),
+    },
+    {
       match:
         /* @wc-ignore */ 'Storage usage metrics are disabled for this provider',
       translate: () =>

@@ -4984,3 +4984,11 @@ msgstr "此图片{0}已上传。"
 #: src/ui/components/sonner/toasts/DuplicateImageToast.svelte
 msgid "View image"
 msgstr "查看图片"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "SMB host is required."
+msgstr "必须填写 SMB 主机。"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "SMB share is required."
+msgstr "必须填写 SMB 共享。"

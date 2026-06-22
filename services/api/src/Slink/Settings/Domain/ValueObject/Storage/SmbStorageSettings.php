@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Slink\Settings\Domain\ValueObject\Storage;
 
+use Slink\Settings\Domain\Exception\SmbHostNotConfiguredException;
+use Slink\Settings\Domain\Exception\SmbShareNotConfiguredException;
 use Slink\Shared\Domain\ValueObject\AbstractCompoundValueObject;
 use Slink\Shared\Infrastructure\Encryption\EncryptionRegistry;
 
@@ -69,11 +71,22 @@ final readonly class SmbStorageSettings extends AbstractCompoundValueObject {
    */
   #[\Override]
   public static function fromPayload(array $payload): static {
+    $host = trim((string) ($payload['host'] ?? ''));
+    $share = trim((string) ($payload['share'] ?? ''));
+
+    if (empty($host)) {
+      throw new SmbHostNotConfiguredException();
+    }
+
+    if (empty($share)) {
+      throw new SmbShareNotConfiguredException();
+    }
+
     return new self(
-      $payload['host'],
-      $payload['username'],
-      EncryptionRegistry::decrypt($payload['password']),
-      $payload['share'],
+      $host,
+      (string) ($payload['username'] ?? ''),
+      EncryptionRegistry::decrypt((string) ($payload['password'] ?? '')),
+      $share,
     );
   }
 }
