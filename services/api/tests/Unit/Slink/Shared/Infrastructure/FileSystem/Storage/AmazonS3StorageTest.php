@@ -203,6 +203,72 @@ final class AmazonS3StorageTest extends TestCase {
     $this->assertSame($bytes, stream_get_contents($source->getStream()->resource()));
   }
 
+  #[Test]
+  public function itDerivesDeletePrefixFromFullStemForMultiDotNames(): void {
+    $capturedPrefix = null;
+    $client = $this->createPrefixCapturingClient($capturedPrefix);
+    $storage = $this->createStorageWithClient($client);
+
+    $storage->delete('img.2024-06-24.avif');
+
+    $this->assertSame('img.2024-06-24', $capturedPrefix);
+  }
+
+  #[Test]
+  public function itDerivesDeletePrefixForExtensionlessFileName(): void {
+    $capturedPrefix = null;
+    $client = $this->createPrefixCapturingClient($capturedPrefix);
+    $storage = $this->createStorageWithClient($client);
+
+    set_error_handler(function(int $errno, string $errstr): bool {
+      throw new \ErrorException($errstr, 0, $errno);
+    }, E_WARNING | E_DEPRECATED);
+
+    try {
+      $storage->delete('nodotname');
+    } finally {
+      restore_error_handler();
+    }
+
+    $this->assertSame('nodotname', $capturedPrefix);
+  }
+
+  private function createPrefixCapturingClient(?string &$capturedPrefix): S3Client {
+    return new class($capturedPrefix) extends S3Client {
+      /** @var \Closure(array<string, mixed>): void */
+      private \Closure $capture;
+
+      public function __construct(?string &$capturedPrefix) {
+        $this->capture = static function(array $args) use (&$capturedPrefix): void {
+          $capturedPrefix = $args['Prefix'] ?? null;
+        };
+      }
+
+      /**
+       * @param array<string, mixed> $args
+       * @return Result<int|string, mixed>
+       */
+      public function listObjectsV2(array $args = []): Result {
+        ($this->capture)($args);
+
+        return new Result(['Contents' => []]);
+      }
+    };
+  }
+
+  private function createStorageWithClient(S3Client $client): AmazonS3Storage {
+    $settings = $this->createStub(AmazonS3StorageSettings::class);
+    $settings->method('getBucket')->willReturn('my-bucket');
+
+    $reflection = new \ReflectionClass(AmazonS3Storage::class);
+    $storage = $reflection->newInstanceWithoutConstructor();
+
+    $reflection->getProperty('client')->setValue($storage, $client);
+    $reflection->getProperty('settings')->setValue($storage, $settings);
+
+    return $storage;
+  }
+
   private function createStorageWithObjectBytes(string $bytes): AmazonS3Storage {
     $client = new class($bytes) extends S3Client {
       public function __construct(private readonly string $bytes) {

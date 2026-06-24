@@ -13,6 +13,7 @@ use Icewind\SMB\IShare;
 use Icewind\SMB\ServerFactory;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\Enum\StorageProvider;
+use Slink\Shared\Domain\ValueObject\BaseFileName;
 use Slink\Shared\Infrastructure\Exception\NotFoundException as StorageNotFoundException;
 use Slink\Shared\Infrastructure\FileSystem\FileStream;
 use Slink\Shared\Infrastructure\FileSystem\Storage\Contract\DirectoryStorageInterface;
@@ -79,8 +80,12 @@ final class SmbStorage extends AbstractStorage implements DirectoryStorageInterf
    */
   public function write(string $path, string $content): void {
     $stream = $this->share->write($path);
-    
-    fwrite($stream, $content);
+
+    try {
+      fwrite($stream, $content);
+    } finally {
+      fclose($stream);
+    }
   }
   
   /**
@@ -129,7 +134,7 @@ final class SmbStorage extends AbstractStorage implements DirectoryStorageInterf
     } catch (NotFoundException) {
     }
     
-    [$name, $_] = explode('.', $fileName);
+    $name = BaseFileName::fromFileName($fileName)->toString();
     $this->deleteCacheFiles($name);
   }
 

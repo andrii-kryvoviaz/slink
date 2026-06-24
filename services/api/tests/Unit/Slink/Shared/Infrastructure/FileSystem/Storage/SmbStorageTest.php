@@ -258,6 +258,186 @@ final class SmbStorageTest extends TestCase {
     $this->assertSame('slink/cache/' . $fileName, $this->storage->cachePath($fileName));
   }
 
+  #[Test]
+  public function itClosesTheWriteStreamAfterWriting(): void {
+    $resource = fopen('php://temp', 'r+');
+
+    if ($resource === false) {
+      $this->fail('Unable to create in-memory stream.');
+    }
+
+    $this->share->expects($this->once())
+      ->method('write')
+      ->with('slink/images/x.txt')
+      ->willReturn($resource);
+
+    $this->storage->write('slink/images/x.txt', 'payload');
+
+    $this->assertFalse(is_resource($resource));
+  }
+
+  #[Test]
+  public function itDerivesCachePrefixFromFullStemForMultiDotNames(): void {
+    $fileName = 'img.2024-06-24.avif';
+
+    $cacheFile1 = $this->createFileInfo('img.2024-06-24-w350.avif', false);
+    $cacheFile2 = $this->createFileInfo('img.2024-06-24-w500.avif', false);
+    $otherFile = $this->createFileInfo('other.avif', false);
+
+    $this->share->expects($this->exactly(3))
+      ->method('del')
+      ->willReturnCallback(function(string $path) use ($fileName): bool {
+        if (str_contains($path, $fileName)) {
+          return true;
+        }
+
+        if (str_contains($path, 'img.2024-06-24-w')) {
+          return true;
+        }
+
+        $this->fail("Should not delete file: $path");
+      });
+
+    $this->share->expects($this->once())
+      ->method('dir')
+      ->willReturn([$cacheFile1, $cacheFile2, $otherFile]);
+
+    $this->storage->delete($fileName);
+  }
+
+  #[Test]
+  public function itHandlesDeletionForExtensionlessFileName(): void {
+    $fileName = 'nodotname';
+
+    $cacheFile1 = $this->createFileInfo('nodotname-w350.avif', false);
+    $cacheFile2 = $this->createFileInfo('nodotname-w500.avif', false);
+    $otherFile = $this->createFileInfo('other-w350.avif', false);
+
+    $this->share->expects($this->exactly(3))
+      ->method('del')
+      ->willReturnCallback(function(string $path) use ($fileName): bool {
+        if (str_contains($path, $fileName . '/') || str_ends_with($path, '/' . $fileName)) {
+          return true;
+        }
+
+        if (str_contains($path, 'nodotname-w')) {
+          return true;
+        }
+
+        $this->fail("Should not delete file: $path");
+      });
+
+    $this->share->expects($this->once())
+      ->method('dir')
+      ->willReturn([$cacheFile1, $cacheFile2, $otherFile]);
+
+    set_error_handler(function(int $errno, string $errstr): bool {
+      throw new \ErrorException($errstr, 0, $errno);
+    }, E_WARNING | E_DEPRECATED);
+
+    try {
+      $this->storage->delete($fileName);
+    } finally {
+      restore_error_handler();
+    }
+  }
+
+  #[Test]
+  public function itReturnsNullWhenReadThrowsNotFound(): void {
+    $fileName = 'missing.jpg';
+
+    $this->share->expects($this->once())
+      ->method('read')
+      ->with($fileName)
+      ->willThrowException(new NotFoundException());
+
+    $this->assertNull($this->storage->read($fileName));
+  }
+
+  #[Test]
+  public function itReturnsContentWhenReadStreamYieldsString(): void {
+    $fileName = 'present.jpg';
+    $bytes = 'cached bytes';
+
+    $this->share->expects($this->once())
+      ->method('read')
+      ->with($fileName)
+      ->willReturn($this->createStreamFromString($bytes));
+
+    $this->assertSame($bytes, $this->storage->read($fileName));
+  }
+
+  #[Test]
+  public function itCountsOnlyFilesSkippingDirectoriesInClearCache(): void {
+    $cacheFile1 = $this->createFileInfo('a-w350.jpg', false);
+    $cacheFile2 = $this->createFileInfo('b-w500.jpg', false);
+    $directory = $this->createFileInfo('nested', true);
+
+    $this->share->expects($this->exactly(2))
+      ->method('del')
+      ->willReturn(true);
+
+    $this->share->expects($this->once())
+      ->method('dir')
+      ->with('slink/cache')
+      ->willReturn([$cacheFile1, $cacheFile2, $directory]);
+
+    $this->assertSame(2, $this->storage->clearCache());
+  }
+
+  #[Test]
+  public function itReturnsZeroFromClearCacheWhenCacheDirectoryIsEmpty(): void {
+    $this->share->expects($this->never())
+      ->method('del');
+
+    $this->share->expects($this->once())
+      ->method('dir')
+      ->with('slink/cache')
+      ->willReturn([]);
+
+    $this->assertSame(0, $this->storage->clearCache());
+  }
+
+  #[Test]
+  public function itReportsExistsTrueWhenStatSucceeds(): void {
+    $this->share->expects($this->once())
+      ->method('stat')
+      ->with('slink/images/some-file.jpg')
+      ->willReturn($this->createStub(IFileInfo::class));
+
+    $this->assertTrue($this->storage->exists('slink/images/some-file.jpg'));
+  }
+
+  #[Test]
+  public function itReportsExistsFalseWhenStatThrowsNotFound(): void {
+    $this->share->expects($this->once())
+      ->method('stat')
+      ->with('slink/images/some-file.jpg')
+      ->willThrowException(new NotFoundException());
+
+    $this->assertFalse($this->storage->exists('slink/images/some-file.jpg'));
+  }
+
+  #[Test]
+  public function itReportsDirExistsTrueWhenStatSucceeds(): void {
+    $this->share->expects($this->once())
+      ->method('stat')
+      ->with('slink/images')
+      ->willReturn($this->createStub(IFileInfo::class));
+
+    $this->assertTrue($this->storage->dirExists('slink/images'));
+  }
+
+  #[Test]
+  public function itReportsDirExistsFalseWhenStatThrowsNotFound(): void {
+    $this->share->expects($this->once())
+      ->method('stat')
+      ->with('slink/images')
+      ->willThrowException(new NotFoundException());
+
+    $this->assertFalse($this->storage->dirExists('slink/images'));
+  }
+
   /**
    * @return resource
    */

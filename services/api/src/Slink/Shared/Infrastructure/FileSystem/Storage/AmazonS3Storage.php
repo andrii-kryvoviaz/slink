@@ -9,6 +9,7 @@ use GuzzleHttp\Psr7\StreamWrapper;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Settings\Domain\ValueObject\Storage\AmazonS3StorageSettings;
 use Slink\Shared\Domain\Enum\StorageProvider;
+use Slink\Shared\Domain\ValueObject\BaseFileName;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\Exception\Storage\AmazonS3Exception;
 use Slink\Shared\Infrastructure\FileSystem\FileStream;
@@ -42,8 +43,8 @@ final class AmazonS3Storage extends AbstractStorage implements ObjectStorageInte
   }
   
   public function delete(string $fileName): void {
-    [$name, $_] = explode('.', $fileName);
-    
+    $name = BaseFileName::fromFileName($fileName)->toString();
+
     $this->deleteByPrefix($name);
   }
   

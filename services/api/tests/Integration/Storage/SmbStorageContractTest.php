@@ -8,8 +8,11 @@ use Icewind\SMB\Native\NativeServer;
 use Icewind\SMB\System;
 use Icewind\SMB\Wrapped\Server;
 use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
+use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Infrastructure\FileSystem\Storage\AbstractStorage;
 use Slink\Shared\Infrastructure\FileSystem\Storage\SmbStorage;
+use Symfony\Component\HttpFoundation\File\File;
 
 #[Group('storage-integration')]
 final class SmbStorageContractTest extends StorageContractTestCase {
@@ -38,13 +41,64 @@ final class SmbStorageContractTest extends StorageContractTestCase {
 
   #[\Override]
   protected static function createStorage(): AbstractStorage {
-    return new SmbStorage(self::createConfigurationProvider([
+    return new SmbStorage(self::smbConfigurationProvider());
+  }
+
+  #[Test]
+  public function itUploadsToAFreshUnpreparedNestedPrefix(): void {
+    $freshImageDir = 'images-fresh-' . bin2hex(random_bytes(6));
+    $storage = self::createStorageWithImageDir($freshImageDir);
+
+    self::assertFalse(
+      $storage->exists('slink/' . $freshImageDir),
+      'precondition: the fresh nested prefix slink/' . $freshImageDir . ' must not exist before upload',
+    );
+
+    $fileName = 'fresh-prefix-' . bin2hex(random_bytes(4)) . '.jpg';
+    $imagePath = 'slink/' . $freshImageDir . '/' . $fileName;
+
+    try {
+      $storage->upload(new File(self::sampleFixturePath()), $fileName);
+
+      self::assertTrue(
+        $storage->exists($imagePath),
+        'upload() must create the fresh nested prefix and store the file at ' . $imagePath,
+      );
+      self::assertSame(
+        (string) file_get_contents(self::sampleFixturePath()),
+        $storage->readImage($fileName),
+        'readImage() must return the exact fixture bytes stored under the fresh prefix',
+      );
+    } finally {
+      try {
+        $storage->delete($fileName);
+      } catch (\Throwable) {
+      }
+    }
+  }
+
+  private static function smbConfigurationProvider(): ConfigurationProviderInterface {
+    return self::createConfigurationProvider([
       'storage.adapter.smb' => [
         'host' => StorageTestEnvironment::smbHost(),
         'share' => StorageTestEnvironment::smbShare(),
         'username' => StorageTestEnvironment::smbUsername(),
         'password' => StorageTestEnvironment::smbPassword(),
+        'workgroup' => StorageTestEnvironment::smbWorkgroup(),
       ],
-    ]));
+    ]);
+  }
+
+  private static function createStorageWithImageDir(string $imageDir): SmbStorage {
+    $storage = new SmbStorage(self::smbConfigurationProvider());
+
+    $imageDirProperty = new \ReflectionProperty(AbstractStorage::class, 'imageDir');
+    $imageDirProperty->setValue($storage, $imageDir);
+
+    return $storage;
+  }
+
+  private static function sampleFixturePath(): string {
+    return \dirname(__DIR__, 2) . '/fixtures/test.jpg';
   }
 }

@@ -102,6 +102,22 @@ abstract class StorageContractTestCase extends TestCase {
   }
 
   #[Test]
+  public function itWritesAndReadsBackLargeMultiMegabyteContent(): void {
+    $fileName = $this->uniqueFileName('large', 'bin');
+    $path = $this->imagePath($fileName);
+    $content = $this->deterministicBytes(3 * 1024 * 1024);
+
+    $this->storage()->write($path, $content);
+    self::$uploadedFileNames[] = $fileName;
+
+    self::assertSame(
+      $content,
+      static::createStorage()->read($path),
+      $this->describe('a second storage instance must read back the exact ' . \strlen($content) . ' bytes written to ' . $path),
+    );
+  }
+
+  #[Test]
   public function itReportsExistenceOnlyForStoredFiles(): void {
     $fileName = $this->uniqueFileName('exists', 'txt');
     $path = $this->imagePath($fileName);
@@ -346,6 +362,16 @@ abstract class StorageContractTestCase extends TestCase {
         $storage->mkdir($directory);
       }
     }
+  }
+
+  protected function deterministicBytes(int $length): string {
+    $pattern = '';
+
+    for ($byte = 0; $byte < 256; $byte++) {
+      $pattern .= \chr($byte);
+    }
+
+    return substr(str_repeat($pattern, intdiv($length, 256) + 1), 0, $length);
   }
 
   private static function fixturePath(): string {

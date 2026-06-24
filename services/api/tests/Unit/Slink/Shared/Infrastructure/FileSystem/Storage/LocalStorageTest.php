@@ -262,6 +262,82 @@ final class LocalStorageTest extends TestCase {
   }
 
   #[Test]
+  public function itDerivesCachePrefixFromFullStemForMultiDotNames(): void {
+    $fileName = 'img.2024-06-24.avif';
+    $imagePrefix = 'img.2024-06-24';
+
+    $imagePath = $this->testDir . '/slink/images/' . $fileName;
+    $cachePath = $this->testDir . '/slink/cache';
+
+    mkdir(dirname($imagePath), 0755, true);
+    mkdir($cachePath, 0755, true);
+    file_put_contents($imagePath, 'original image');
+
+    $matchingFiles = [
+      $imagePrefix . '-w350.avif',
+      $imagePrefix . '-w500.avif',
+    ];
+    $otherFile = 'img-w350.avif';
+
+    foreach ($matchingFiles as $cacheFile) {
+      file_put_contents($cachePath . '/' . $cacheFile, 'cached content');
+    }
+    file_put_contents($cachePath . '/' . $otherFile, 'other content');
+
+    $this->storage->delete($fileName);
+
+    $this->assertFileDoesNotExist($imagePath);
+
+    foreach ($matchingFiles as $cacheFile) {
+      $this->assertFileDoesNotExist($cachePath . '/' . $cacheFile, "Cache file {$cacheFile} should be deleted");
+    }
+
+    $this->assertFileExists($cachePath . '/' . $otherFile, 'Non-matching prefix cache should remain');
+  }
+
+  #[Test]
+  public function itHandlesDeletionForExtensionlessFileName(): void {
+    $fileName = 'nodotname';
+    $imagePrefix = 'nodotname';
+
+    $imagePath = $this->testDir . '/slink/images/' . $fileName;
+    $cachePath = $this->testDir . '/slink/cache';
+
+    mkdir(dirname($imagePath), 0755, true);
+    mkdir($cachePath, 0755, true);
+    file_put_contents($imagePath, 'original image');
+
+    $matchingFiles = [
+      $imagePrefix . '-w350.avif',
+      $imagePrefix . '-w500.avif',
+    ];
+    $otherFile = 'other-w350.avif';
+
+    foreach ($matchingFiles as $cacheFile) {
+      file_put_contents($cachePath . '/' . $cacheFile, 'cached content');
+    }
+    file_put_contents($cachePath . '/' . $otherFile, 'other content');
+
+    set_error_handler(function(int $errno, string $errstr): bool {
+      throw new \ErrorException($errstr, 0, $errno);
+    }, E_WARNING | E_DEPRECATED);
+
+    try {
+      $this->storage->delete($fileName);
+    } finally {
+      restore_error_handler();
+    }
+
+    $this->assertFileDoesNotExist($imagePath);
+
+    foreach ($matchingFiles as $cacheFile) {
+      $this->assertFileDoesNotExist($cachePath . '/' . $cacheFile, "Cache file {$cacheFile} should be deleted");
+    }
+
+    $this->assertFileExists($cachePath . '/' . $otherFile, 'Non-matching prefix cache should remain');
+  }
+
+  #[Test]
   public function itDeletesCacheFilesWithComplexNames(): void {
     $fileName = '05af7939-9731-4f41-907e-4e64662df51e.avif';
     $imagePrefix = '05af7939-9731-4f41-907e-4e64662df51e';

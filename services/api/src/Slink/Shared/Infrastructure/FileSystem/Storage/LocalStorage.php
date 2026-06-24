@@ -6,6 +6,7 @@ namespace Slink\Shared\Infrastructure\FileSystem\Storage;
 
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\Enum\StorageProvider;
+use Slink\Shared\Domain\ValueObject\BaseFileName;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\Exception\Storage\LocalStorageException;
 use Slink\Shared\Infrastructure\FileSystem\FileSource;
@@ -97,7 +98,7 @@ final class LocalStorage extends AbstractStorage implements DirectoryStorageInte
       unlink($imagePath);
     }
     
-    [$name, $_] = explode('.', $fileName);
+    $name = BaseFileName::fromFileName($fileName)->toString();
     $this->deleteCacheFiles($name);
   }
 

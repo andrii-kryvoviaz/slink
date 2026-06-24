@@ -90,7 +90,8 @@ final readonly class ImageOptions extends AbstractCompoundValueObject {
    * @return string
    */
   public function getCacheFileName(): string {
-    [$name, $originalExtension] = explode('.', $this->fileName);
+    $name = BaseFileName::fromFileName($this->fileName)->toString();
+    $originalExtension = pathinfo($this->fileName, PATHINFO_EXTENSION);
     $extension = $this->format ?? $originalExtension;
 
     $reflection = new \ReflectionClass($this);
