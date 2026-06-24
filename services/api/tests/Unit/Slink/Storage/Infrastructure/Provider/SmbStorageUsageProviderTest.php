@@ -4,11 +4,16 @@ declare(strict_types=1);
 
 namespace Unit\Slink\Storage\Infrastructure\Provider;
 
+use Icewind\SMB\Exception\AuthenticationException;
+use Icewind\SMB\Exception\ConnectException;
+use Icewind\SMB\Exception\ConnectionRefusedException;
+use Icewind\SMB\IShare;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\Enum\StorageProvider;
 use Slink\Storage\Domain\Exception\SmbConfigurationIncompleteException;
+use Slink\Storage\Infrastructure\Provider\SmbShareFactoryInterface;
 use Slink\Storage\Infrastructure\Provider\SmbStorageUsageProvider;
 
 final class SmbStorageUsageProviderTest extends TestCase {
@@ -109,5 +114,53 @@ final class SmbStorageUsageProviderTest extends TestCase {
         $this->expectException(SmbConfigurationIncompleteException::class);
 
         $provider->getUsage();
+    }
+
+    #[Test]
+    public function itMapsAuthenticationFailureToConfigurationError(): void {
+        $provider = $this->providerForFailingShare(
+            new AuthenticationException('Authentication failed')
+        );
+
+        $this->expectException(SmbConfigurationIncompleteException::class);
+
+        $provider->getUsage();
+    }
+
+    #[Test]
+    public function itMapsConnectFailureToConfigurationError(): void {
+        $provider = $this->providerForFailingShare(
+            new ConnectionRefusedException('Connection refused')
+        );
+
+        $this->expectException(SmbConfigurationIncompleteException::class);
+
+        $provider->getUsage();
+    }
+
+    private function providerForFailingShare(ConnectException $failure): SmbStorageUsageProvider {
+        $config = [
+            'host' => 'smb.example.test',
+            'share' => 'slink',
+            'username' => 'user',
+            'password' => 'password',
+        ];
+
+        $configurationProvider = $this->createStub(ConfigurationProviderInterface::class);
+        $configurationProvider
+            ->method('get')
+            ->willReturnMap([
+                ['storage.adapter.smb', $config],
+                ['storage.adapter.path', 'slink'],
+            ]);
+
+        $share = $this->createStub(IShare::class);
+        $share->method('stat')->willThrowException($failure);
+        $share->method('dir')->willThrowException($failure);
+
+        $shareFactory = $this->createStub(SmbShareFactoryInterface::class);
+        $shareFactory->method('create')->willReturn($share);
+
+        return new SmbStorageUsageProvider($configurationProvider, $shareFactory);
     }
 }

@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Slink\Storage\Infrastructure\Provider;
 
-use Icewind\SMB\BasicAuth;
+use Icewind\SMB\Exception\ConnectException;
 use Icewind\SMB\Exception\DependencyException;
 use Icewind\SMB\Exception\NotFoundException;
 use Icewind\SMB\IShare;
-use Icewind\SMB\ServerFactory;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\Enum\StorageProvider;
 use Slink\Storage\Domain\Exception\SmbConfigurationIncompleteException;
@@ -17,7 +16,8 @@ use Slink\Storage\Domain\ValueObject\StorageUsage;
 
 final readonly class SmbStorageUsageProvider implements StorageUsageProviderInterface {
   public function __construct(
-    private ConfigurationProviderInterface $configurationProvider
+    private ConfigurationProviderInterface $configurationProvider,
+    private SmbShareFactoryInterface $shareFactory = new SmbShareFactory()
   ) {
   }
   
@@ -29,7 +29,7 @@ final readonly class SmbStorageUsageProvider implements StorageUsageProviderInte
     }
     
     try {
-      $share = $this->createSmbShare($config);
+      $share = $this->shareFactory->create($config);
       $slinkPath = $this->configurationProvider->get('storage.adapter.path') ?? 'slink';
       
       if (!$this->directoryExists($share, $slinkPath)) {
@@ -60,6 +60,8 @@ final readonly class SmbStorageUsageProvider implements StorageUsageProviderInte
       );
     } catch (DependencyException $e) {
       throw new SmbConfigurationIncompleteException('SMB client dependency error: ' . $e->getMessage());
+    } catch (ConnectException $e) {
+      throw new SmbConfigurationIncompleteException('SMB connection failed: ' . $e->getMessage());
     }
   }
   public function supports(StorageProvider $provider): bool {
@@ -68,20 +70,6 @@ final readonly class SmbStorageUsageProvider implements StorageUsageProviderInte
   
   public static function getAlias(): string {
     return StorageProvider::SmbShare->value;
-  }
-  
-  /**
-   * @param array<string, mixed> $config
-   */
-  private function createSmbShare(array $config): IShare {
-    $basicAuth = new BasicAuth(
-      username: $config['username'],
-      workgroup: $config['workgroup'] ?? 'workgroup',
-      password: $config['password']
-    );
-    
-    $smbClientServer = (new ServerFactory())->createServer($config['host'], $basicAuth);
-    return $smbClientServer->getShare($config['share']);
   }
   
   private function directoryExists(IShare $share, string $path): bool {
