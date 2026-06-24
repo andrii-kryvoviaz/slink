@@ -15,6 +15,7 @@ import { SharePage } from '../pages/SharePage';
 import { SharesPage } from '../pages/SharesPage';
 import { SignupPage } from '../pages/SignupPage';
 import { SsoSettingsPage } from '../pages/SsoSettingsPage';
+import { StorageSettingsPage } from '../pages/StorageSettingsPage';
 import { UploadPage } from '../pages/UploadPage';
 import { accountForWorker, test as base, expect } from './worker-auth.fixture';
 
@@ -58,6 +59,7 @@ type AuthFixtures = {
   preferencesPage: PreferencesPage;
   adminSettingsPage: AdminSettingsPage;
   ssoSettingsPage: SsoSettingsPage;
+  storageSettingsPage: StorageSettingsPage;
   layoutControls: LayoutControls;
   api: ApiClient;
   actor: (label?: string) => Promise<ApiClient>;
@@ -122,6 +124,10 @@ export const test = base.extend<AuthFixtures>({
 
   ssoSettingsPage: async ({ page }, use) => {
     await use(new SsoSettingsPage(page));
+  },
+
+  storageSettingsPage: async ({ page }, use) => {
+    await use(new StorageSettingsPage(page));
   },
 
   layoutControls: async ({ page }, use) => {

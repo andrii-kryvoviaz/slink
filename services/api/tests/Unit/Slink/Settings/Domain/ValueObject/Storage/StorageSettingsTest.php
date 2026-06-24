@@ -153,4 +153,18 @@ final class StorageSettingsTest extends TestCase {
     $this->assertArrayNotHasKey('storage.adapter.s3', $normalized);
     $this->assertArrayNotHasKey('storage.adapter.local', $normalized);
   }
+
+  #[Test]
+  public function itPreservesSmbWorkgroupThroughStorageSettingsRoundTrip(): void {
+    $payload = StorageSettings::fromPayload([
+      'provider' => 'smb',
+      'adapter' => [
+        'local' => null,
+        'smb' => ['host' => 'smb.example.com', 'share' => 'uploads', 'username' => 'user', 'password' => 'pass', 'workgroup' => 'CORP'],
+        's3' => null,
+      ],
+    ])->toPayload();
+
+    $this->assertSame('CORP', $payload['adapter']['smb']['workgroup']);
+  }
 }

@@ -5,6 +5,7 @@ services:
     environment:
       - ACCOUNT_test=test
       - UID_test=1000
+      - SAMBA_CONF_WORKGROUP=SLINKTEST
       - "SAMBA_VOLUME_CONFIG_slink=[slink]; path = /shares/slink; valid users = test; guest ok = no; read only = no; browseable = yes"
     ports:
       - "445:445"

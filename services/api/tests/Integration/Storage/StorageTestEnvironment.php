@@ -39,6 +39,10 @@ final class StorageTestEnvironment {
     return self::env('STORAGE_TEST_SMB_PASSWORD', 'test');
   }
 
+  public static function smbWorkgroup(): string {
+    return self::env('STORAGE_TEST_SMB_WORKGROUP', 'SLINKTEST');
+  }
+
   public static function s3Endpoint(): string {
     return self::env('STORAGE_TEST_S3_ENDPOINT', 'http://localhost:8333');
   }

@@ -16,12 +16,14 @@ final readonly class SmbStorageSettings extends AbstractCompoundValueObject {
    * @param string $username
    * @param string $password
    * @param string $share
+   * @param string $workgroup
    */
   private function __construct(
     private string $host,
     private string $username,
     private string $password,
     private string $share,
+    private string $workgroup,
   ) {}
   
   /**
@@ -51,7 +53,14 @@ final readonly class SmbStorageSettings extends AbstractCompoundValueObject {
   public function getShare(): string {
     return $this->share;
   }
-  
+
+  /**
+   * @return string
+   */
+  public function getWorkgroup(): string {
+    return $this->workgroup;
+  }
+
   /**
    * @return array<string, mixed>
    */
@@ -62,6 +71,7 @@ final readonly class SmbStorageSettings extends AbstractCompoundValueObject {
       'username' => $this->username,
       'password' => EncryptionRegistry::encrypt($this->password),
       'share' => $this->share,
+      'workgroup' => $this->workgroup,
     ];
   }
   
@@ -73,6 +83,7 @@ final readonly class SmbStorageSettings extends AbstractCompoundValueObject {
   public static function fromPayload(array $payload): static {
     $host = trim((string) ($payload['host'] ?? ''));
     $share = trim((string) ($payload['share'] ?? ''));
+    $workgroup = trim((string) ($payload['workgroup'] ?? ''));
 
     if (empty($host)) {
       throw new SmbHostNotConfiguredException();
@@ -87,6 +98,7 @@ final readonly class SmbStorageSettings extends AbstractCompoundValueObject {
       (string) ($payload['username'] ?? ''),
       EncryptionRegistry::decrypt((string) ($payload['password'] ?? '')),
       $share,
+      $workgroup,
     );
   }
 }
