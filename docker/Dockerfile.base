@@ -111,6 +111,7 @@ ARG GROUP_ID
 
 ENV API_URL=http://localhost:8080 \
     ORIGIN=http://localhost:3000 \
+    SESSION_TTL_SECONDS=2592000 \
     TZ=UTC \
     GOMEMLIMIT=${MEMORY_LIMIT}MiB \
     GOMAXPROCS=8 \

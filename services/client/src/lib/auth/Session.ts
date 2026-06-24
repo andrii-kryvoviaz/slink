@@ -1,3 +1,4 @@
+import { env } from '$env/dynamic/private';
 import type { Cookies } from '@sveltejs/kit';
 
 import { browser } from '$app/environment';
@@ -54,9 +55,14 @@ class SessionManager {
 
     const sessionId = crypto.randomUUID();
 
-    await this._provider.create(sessionId, ttl);
+    const lifetime = ttl ?? Number(env.SESSION_TTL_SECONDS);
 
-    cookieManager.setCookie(cookies, 'sessionId', sessionId);
+    await this._provider.create(sessionId, lifetime);
+
+    cookieManager.setCookie(cookies, 'sessionId', sessionId, {
+      maxAge: lifetime,
+      httpOnly: true,
+    });
 
     return sessionId;
   }
@@ -91,7 +97,11 @@ class SessionManager {
 
     session.data = { ...session.data, ...data };
 
-    await this._provider.set(sessionId, session, ttl);
+    await this._provider.set(
+      sessionId,
+      session,
+      ttl ?? Number(env.SESSION_TTL_SECONDS),
+    );
   }
 
   public async destroy(cookies: Cookies, cookieManager: CookieManager) {

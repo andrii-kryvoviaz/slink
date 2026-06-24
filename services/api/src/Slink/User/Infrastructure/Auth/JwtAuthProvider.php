@@ -11,15 +11,19 @@ use Slink\User\Domain\Contracts\AuthProviderInterface;
 use Slink\User\Domain\Contracts\UserInterface;
 use Slink\User\Domain\ValueObject\Auth\TokenPair;
 use Slink\User\Domain\ValueObject\Auth\TokenParams;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 final readonly class JwtAuthProvider implements AuthProviderInterface {
-  
+
   /**
    * @param JWTTokenManagerInterface $jwtManager
+   * @param int $refreshTokenTtl
    */
   public function __construct(
-    private readonly JWTTokenManagerInterface $jwtManager
+    private readonly JWTTokenManagerInterface $jwtManager,
+    #[Autowire('%env(int:SESSION_TTL_SECONDS)%')]
+    private readonly int $refreshTokenTtl
   ) {}
   
   /**
@@ -56,7 +60,7 @@ final readonly class JwtAuthProvider implements AuthProviderInterface {
   #[\Override]
   public function generateTokenPair(UserInterface $user, ?TokenParams $params = null): TokenPair {
     if(!$params) {
-      $params = TokenParams::create();
+      $params = TokenParams::create([], $this->refreshTokenTtl);
     }
     
     $accessToken = $this->generateAccessToken($user, $params->getPayload());

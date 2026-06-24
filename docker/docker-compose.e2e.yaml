@@ -7,3 +7,4 @@ services:
       - "8180:8080"
     environment:
       - ORIGIN=http://localhost:3100
+      - SESSION_TTL_SECONDS=1209600

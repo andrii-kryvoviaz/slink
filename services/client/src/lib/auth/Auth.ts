@@ -1,3 +1,4 @@
+import { env } from '$env/dynamic/private';
 import type { Cookies } from '@sveltejs/kit';
 
 import { type ApiClientType, createApiClient } from '@slink/api/Client';
@@ -30,7 +31,10 @@ export class Auth {
     }: TokenPair & Omit<AuthDependencies, 'fetch'>,
     api: Pick<ApiClientType, 'user'>,
   ) {
-    cookieManager.setCookie(cookies, 'refreshToken', refreshToken);
+    cookieManager.setCookie(cookies, 'refreshToken', refreshToken, {
+      maxAge: Number(env.SESSION_TTL_SECONDS),
+      httpOnly: true,
+    });
 
     const response = await api.user.getCurrentUser(accessToken);
     const claims = parseJwt<{ roles: string[] }>(accessToken);
@@ -55,7 +59,10 @@ export class Auth {
     cookies,
     cookieManager,
   }: TokenPair & Omit<AuthDependencies, 'fetch'>) {
-    cookieManager.setCookie(cookies, 'refreshToken', refreshToken);
+    cookieManager.setCookie(cookies, 'refreshToken', refreshToken, {
+      maxAge: Number(env.SESSION_TTL_SECONDS),
+      httpOnly: true,
+    });
 
     const sessionId = await Session.create(cookies, cookieManager);
     await Session.set(sessionId, { accessToken });
