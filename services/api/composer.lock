@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2720b45cfb210fa709daa8ccf0a44594",
+    "content-hash": "86b493b5c929257d40b05c1504856758",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -8540,70 +8540,37 @@
             "time": "2026-05-30T17:09:26+00:00"
         },
         {
-            "name": "web-token/jwt-framework",
+            "name": "web-token/jwt-bundle",
             "version": "4.1.7",
             "source": {
                 "type": "git",
-                "url": "https://github.com/web-token/jwt-framework.git",
-                "reference": "a63c5521df18570ff195d21e6896ffb629042134"
+                "url": "https://github.com/web-token/jwt-bundle.git",
+                "reference": "b6d6b906878762ddc8634d97bdcab66186f035b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/web-token/jwt-framework/zipball/a63c5521df18570ff195d21e6896ffb629042134",
-                "reference": "a63c5521df18570ff195d21e6896ffb629042134",
+                "url": "https://api.github.com/repos/web-token/jwt-bundle/zipball/b6d6b906878762ddc8634d97bdcab66186f035b4",
+                "reference": "b6d6b906878762ddc8634d97bdcab66186f035b4",
                 "shasum": ""
             },
             "require": {
-                "brick/math": "^0.12|^0.13|^0.14|^0.15|^0.16|^0.17",
-                "ext-openssl": "*",
                 "php": ">=8.2",
-                "psr/clock": "^1.0",
                 "psr/event-dispatcher": "^1.0",
-                "spomky-labs/pki-framework": "^1.2.1",
                 "symfony/config": "^7.0|^8.0",
                 "symfony/console": "^7.0|^8.0",
                 "symfony/dependency-injection": "^7.0|^8.0",
                 "symfony/event-dispatcher": "^7.0|^8.0",
                 "symfony/http-client-contracts": "^3.4",
-                "symfony/http-kernel": "^7.0|^8.0"
-            },
-            "conflict": {
-                "spomky-labs/jose": "*"
-            },
-            "replace": {
-                "web-token/jwt-bundle": "self.version",
-                "web-token/jwt-experimental": "self.version",
-                "web-token/jwt-library": "self.version"
-            },
-            "require-dev": {
-                "ext-curl": "*",
-                "ext-gmp": "*",
-                "ext-sodium": "*",
-                "matthiasnoback/symfony-config-test": "^6.0",
-                "paragonie/sodium_compat": "^1.20|^2.0",
-                "phpbench/phpbench": "^1.2",
-                "roave/security-advisories": "dev-latest",
-                "spomky-labs/aes-key-wrap": "^7.0|^8.0",
-                "symfony/browser-kit": "^7.0|^8.0",
-                "symfony/clock": "^7.0|^8.0",
-                "symfony/finder": "^7.0|^8.0",
-                "symfony/framework-bundle": "^7.0|^8.0",
-                "symfony/http-client": "^7.0|^8.0",
-                "symfony/serializer": "^7.0|^8.0",
-                "symfony/var-dumper": "^7.0|^8.0",
-                "symfony/yaml": "^7.0|^8.0"
+                "symfony/http-kernel": "^7.0|^8.0",
+                "web-token/jwt-library": "^4.0"
             },
             "suggest": {
-                "spomky-labs/aes-key-wrap": "To enable AES Key Wrap algorithm.",
-                "symfony/serializer": "Use the Symfony serializer to serialize/unserialize JWS and JWE tokens.",
-                "symfony/var-dumper": "Used to show data on the debug toolbar."
+                "symfony/serializer": "Use the Symfony serializer to serialize/unserialize JWS and JWE tokens."
             },
             "type": "symfony-bundle",
             "autoload": {
                 "psr-4": {
-                    "Jose\\Component\\": "src/Library/",
-                    "Jose\\Experimental\\": "src/Experimental/",
-                    "Jose\\Bundle\\JoseFramework\\": "src/Bundle/"
+                    "Jose\\Bundle\\JoseFramework\\": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -8620,8 +8587,8 @@
                     "homepage": "https://github.com/web-token/jwt-bundle/contributors"
                 }
             ],
-            "description": "JSON Object Signing and Encryption library for PHP and Symfony Bundle.",
-            "homepage": "https://github.com/web-token/jwt-framework",
+            "description": "JWT Bundle of the JWT Framework.",
+            "homepage": "https://github.com/web-token",
             "keywords": [
                 "JOSE",
                 "JWE",
@@ -8641,8 +8608,7 @@
                 "symfony"
             ],
             "support": {
-                "issues": "https://github.com/web-token/jwt-framework/issues",
-                "source": "https://github.com/web-token/jwt-framework/tree/4.1.7"
+                "source": "https://github.com/web-token/jwt-bundle/tree/4.1.7"
             },
             "funding": [
                 {
@@ -8654,7 +8620,96 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2026-06-06T18:19:13+00:00"
+            "time": "2026-06-06T18:12:39+00:00"
+        },
+        {
+            "name": "web-token/jwt-library",
+            "version": "4.1.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/web-token/jwt-library.git",
+                "reference": "fbcbf2c276d04d8b056f5c2957815abd5dfb704d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/web-token/jwt-library/zipball/fbcbf2c276d04d8b056f5c2957815abd5dfb704d",
+                "reference": "fbcbf2c276d04d8b056f5c2957815abd5dfb704d",
+                "shasum": ""
+            },
+            "require": {
+                "brick/math": "^0.12|^0.13|^0.14|^0.15|^0.16|^0.17",
+                "php": ">=8.2",
+                "psr/clock": "^1.0",
+                "spomky-labs/pki-framework": "^1.2.1"
+            },
+            "conflict": {
+                "spomky-labs/jose": "*"
+            },
+            "suggest": {
+                "ext-bcmath": "GMP or BCMath is highly recommended to improve the library performance",
+                "ext-gmp": "GMP or BCMath is highly recommended to improve the library performance",
+                "ext-openssl": "For key management (creation, optimization, etc.) and some algorithms (AES, RSA, ECDSA, etc.)",
+                "ext-sodium": "Sodium is required for OKP key creation, EdDSA signature algorithm and ECDH-ES key encryption with OKP keys",
+                "paragonie/sodium_compat": "Sodium is required for OKP key creation, EdDSA signature algorithm and ECDH-ES key encryption with OKP keys",
+                "spomky-labs/aes-key-wrap": "For all Key Wrapping algorithms (AxxxKW, AxxxGCMKW, PBES2-HSxxx+AyyyKW...)",
+                "symfony/console": "Needed to use console commands",
+                "symfony/http-client": "To enable JKU/X5U support."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Jose\\Component\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Florent Morselli",
+                    "homepage": "https://github.com/Spomky"
+                },
+                {
+                    "name": "All contributors",
+                    "homepage": "https://github.com/web-token/jwt-framework/contributors"
+                }
+            ],
+            "description": "JWT library",
+            "homepage": "https://github.com/web-token",
+            "keywords": [
+                "JOSE",
+                "JWE",
+                "JWK",
+                "JWKSet",
+                "JWS",
+                "Jot",
+                "RFC7515",
+                "RFC7516",
+                "RFC7517",
+                "RFC7518",
+                "RFC7519",
+                "RFC7520",
+                "bundle",
+                "jwa",
+                "jwt",
+                "symfony"
+            ],
+            "support": {
+                "issues": "https://github.com/web-token/jwt-library/issues",
+                "source": "https://github.com/web-token/jwt-library/tree/4.1.7"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/Spomky",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/FlorentMorselli",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2026-06-06T18:12:39+00:00"
         }
     ],
     "packages-dev": [

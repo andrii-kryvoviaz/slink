@@ -42,7 +42,8 @@
         "symfony/twig-bundle": "^8.1",
         "symfony/validator": "^8.1",
         "symfony/yaml": "^8.1",
-        "web-token/jwt-framework": "^4.1"
+        "web-token/jwt-bundle": "^4.1",
+        "web-token/jwt-library": "^4.1"
     },
     "require-dev": {
         "dg/bypass-finals": "dev-master",
