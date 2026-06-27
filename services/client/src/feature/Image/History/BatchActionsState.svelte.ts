@@ -1,4 +1,5 @@
-import type { ImageListingItem } from '@slink/api/Response';
+import type { Tag } from '@slink/api/Resources/TagResource';
+import type { CollectionResponse, ImageListingItem } from '@slink/api/Response';
 
 import type { ImageSelectionState } from '@slink/lib/state/ImageSelectionState.svelte';
 import type { PendingMultiSelection } from '@slink/lib/state/PendingSelectionState.svelte';
@@ -36,10 +37,12 @@ export class BatchActionsState {
     updateVisibility(this._ctx, isPublic);
   download = () => download(this._ctx);
   delete = (preserveOnDisk: boolean) => batchDelete(this._ctx, preserveOnDisk);
-  reassignTags = (selection: PendingMultiSelection) =>
-    reassignTags(this._ctx, selection);
-  reassignCollections = (selection: PendingMultiSelection) =>
-    reassignCollections(this._ctx, selection);
+  reassignTags = (selection: PendingMultiSelection, pickerItems: Tag[]) =>
+    reassignTags(this._ctx, selection, pickerItems);
+  reassignCollections = (
+    selection: PendingMultiSelection,
+    pickerItems: CollectionResponse[],
+  ) => reassignCollections(this._ctx, selection, pickerItems);
 }
 
 export const createBatchActionsState = (

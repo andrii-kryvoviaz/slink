@@ -26,12 +26,15 @@ interface BatchPickerDeps<TItem> {
   addItem: (item: TItem) => void;
   getCounts: () => Map<string, number>;
   getTotal: () => number;
-  applyChanges: (selection: PendingMultiSelection) => Promise<void>;
+  applyChanges: (
+    selection: PendingMultiSelection,
+    pickerItems: TItem[],
+  ) => Promise<void>;
 }
 
 class BatchPickerState<
   TItem,
-  TPicker extends { load(): void },
+  TPicker extends { load(): void; items: TItem[] },
   TModal extends {
     open(onSuccess?: (item: TItem) => void, onClose?: () => void): void;
   },
@@ -43,7 +46,10 @@ class BatchPickerState<
   readonly selection: PendingMultiSelection;
 
   private _addItem: (item: TItem) => void;
-  private _applyChanges: (selection: PendingMultiSelection) => Promise<void>;
+  private _applyChanges: (
+    selection: PendingMultiSelection,
+    pickerItems: TItem[],
+  ) => Promise<void>;
 
   constructor(picker: TPicker, modal: TModal, deps: BatchPickerDeps<TItem>) {
     this.picker = picker;
@@ -75,7 +81,7 @@ class BatchPickerState<
 
   apply = async () => {
     if (!this.selection.hasChanges) return;
-    await this._applyChanges(this.selection);
+    await this._applyChanges(this.selection, this.picker.items);
     this.selection.reset();
   };
 }
@@ -93,7 +99,7 @@ export const createBatchCollectionPickerState = (
     addItem: (collection) => picker.addItem(collection),
     getCounts: () => batchActions.collectionAssignmentCounts,
     getTotal: () => batchActions.selectedItemCount,
-    applyChanges: (s) => batchActions.reassignCollections(s),
+    applyChanges: (s, items) => batchActions.reassignCollections(s, items),
   });
 };
 
@@ -107,7 +113,7 @@ export const createBatchTagPickerState = (batchActions: BatchActionsState) => {
       addItem: (tag) => picker.addItem(tag),
       getCounts: () => batchActions.tagAssignmentCounts,
       getTotal: () => batchActions.selectedItemCount,
-      applyChanges: (s) => batchActions.reassignTags(s),
+      applyChanges: (s, items) => batchActions.reassignTags(s, items),
     },
   );
 };
