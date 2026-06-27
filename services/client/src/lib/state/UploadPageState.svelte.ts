@@ -207,8 +207,6 @@ class UploadPageState {
   }
 
   handleGoBackToUploadForm() {
-    this._selectedTags = [];
-    this._selectedCollections = [];
     this._resetMultiUpload();
   }
 
