@@ -8,11 +8,10 @@
 
   import type { Tag } from '@slink/api/Resources/TagResource';
 
-  import { createCreateTagModalState } from '@slink/lib/state/CreateTagModalState.svelte';
-  import { createTagSelectionState } from '@slink/lib/state/TagSelectionState.svelte';
   import { getTagLastSegment } from '@slink/lib/utils/tag';
 
   import { UploadOptionsPopoverTheme } from './Options.theme';
+  import { createUploadTagPicker } from './UploadPickerState.svelte';
 
   interface Props {
     selectedTags?: Tag[];
@@ -21,51 +20,17 @@
   }
 
   let { selectedTags = [], onTagsChange, disabled = false }: Props = $props();
-  let isOpen = $state(false);
 
-  const selectionState = createTagSelectionState();
-  const createModalState = createCreateTagModalState();
+  const picker = createUploadTagPicker({
+    selected: () => selectedTags,
+    onChange: (tags) => onTagsChange?.(tags),
+  });
 
   const selectedIds = $derived(selectedTags.map((t) => t.id));
   const buttonLabel = $derived(selectedTags.length > 0 ? 'Add more' : 'Tags');
-
-  const handleToggle = (tag: Tag) => {
-    if (disabled) return;
-
-    const isSelected = selectedIds.includes(tag.id);
-    const newSelections = isSelected
-      ? selectedTags.filter((t) => t.id !== tag.id)
-      : [...selectedTags, tag];
-
-    onTagsChange?.(newSelections);
-  };
-
-  const handleRemove = (tagId: string) => {
-    if (disabled) return;
-    onTagsChange?.(selectedTags.filter((t) => t.id !== tagId));
-  };
-
-  const handleCreateNew = () => {
-    isOpen = false;
-    createModalState.open(
-      (tag) => {
-        selectionState.addTag(tag);
-        onTagsChange?.([...selectedTags, tag]);
-      },
-      () => {
-        isOpen = true;
-      },
-    );
-  };
-
-  $effect(() => {
-    if (isOpen) {
-      selectionState.load();
-    }
-  });
 </script>
 
-<Popover.Root bind:open={isOpen}>
+<Popover.Root open={picker.open} onOpenChange={picker.setOpen}>
   <Popover.Trigger {disabled}>
     {#snippet child({ props })}
       <Button
@@ -88,13 +53,13 @@
     onpaste={(e: ClipboardEvent) => e.stopPropagation()}
   >
     <TagPickerList
-      tags={selectionState.tags}
+      tags={picker.catalog.items}
       {selectedIds}
-      isLoading={selectionState.isLoading}
+      isLoading={picker.catalog.isLoading}
       {disabled}
       variant="glass"
-      onToggle={handleToggle}
-      onCreateNew={handleCreateNew}
+      onToggle={picker.toggle}
+      create={picker.create}
     />
   </Popover.Content>
 </Popover.Root>
@@ -105,8 +70,8 @@
     icon="ph:tag-fill"
     variant="blue"
     {disabled}
-    onRemove={() => handleRemove(tag.id)}
+    onRemove={() => picker.detach(tag.id)}
   />
 {/each}
 
-<CreateTagDialog modalState={createModalState} />
+<CreateTagDialog modalState={picker.modal} />

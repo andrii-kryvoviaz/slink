@@ -36,6 +36,6 @@
   <span
     class="font-medium text-gray-900 dark:text-white truncate text-sm group-hover/name:text-blue-600 dark:group-hover/name:text-blue-400 transition-colors"
   >
-    {@html collection.name}
+    {collection.name}
   </span>
 </a>

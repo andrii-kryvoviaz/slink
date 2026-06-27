@@ -119,6 +119,8 @@ msgstr "用户"
 #: src/routes/explore/+page.svelte
 #: src/ui/components/dropzone/dropzone-input.svelte
 #: src/ui/components/filter/filter-search.svelte
+#: src/ui/components/picker/picker-create-row.svelte
+#: src/ui/components/picker/picker-list.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "Enter"
 msgstr "回车"
@@ -221,6 +223,8 @@ msgstr "删除"
 msgid "[deleted]"
 msgstr "[已删除]"
 
+#: src/feature/Collection/CollectionList/CollectionPickerList.svelte
+#: src/feature/Tag/TagPicker/TagPickerList.svelte
 #: src/routes/admin/settings/sso/+page.svelte
 #: src/routes/collections/+page.svelte
 #: src/routes/integrations/+page.svelte
@@ -2194,20 +2198,8 @@ msgid "No tags assigned to this image."
 msgstr "这张图片还没有分配任何标签。"
 
 #: src/feature/Collection/CollectionList/CollectionPickerList.svelte
-msgid "Search collections"
-msgstr "搜索合集"
-
-#: src/feature/Collection/CollectionList/CollectionPickerList.svelte
 msgid "No collections yet"
 msgstr "暂无合集"
-
-#: src/feature/Collection/CollectionList/CollectionPickerList.svelte
-msgid "Create your first collection"
-msgstr "创建你的第一个合集"
-
-#: src/feature/Collection/CollectionList/CollectionPickerList.svelte
-msgid "New collection"
-msgstr "新建合集"
 
 #. 0: tag.name
 #: src/feature/Tag/TagBadge/TagBadge.svelte
@@ -2296,18 +2288,6 @@ msgstr "<0/> — 提供方及其配置将被移除"
 #: src/feature/Tag/TagFilter/TagFilter.svelte
 msgid "Search and select tags"
 msgstr "搜索并选择标签"
-
-#: src/feature/Tag/TagPicker/TagPickerList.svelte
-msgid "Search tags"
-msgstr "搜索标签"
-
-#: src/feature/Tag/TagPicker/TagPickerList.svelte
-msgid "Create your first tag"
-msgstr "创建你的第一个标签"
-
-#: src/feature/Tag/TagPicker/TagPickerList.svelte
-msgid "New tag"
-msgstr "新建标签"
 
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
 msgid "Root"
@@ -4525,7 +4505,9 @@ msgstr "复制图片链接"
 msgid "Copy the share link"
 msgstr "复制分享链接"
 
+#: src/feature/Collection/CollectionList/CollectionPickerList.svelte
 #: src/feature/Search/SearchBar.svelte
+#: src/feature/Tag/TagPicker/TagPickerList.svelte
 msgid "Search"
 msgstr "搜索"
 
@@ -4992,3 +4974,27 @@ msgstr "必须填写 SMB 主机。"
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "SMB share is required."
 msgstr "必须填写 SMB 共享。"
+
+#: src/lib/state/CollectionSelectionState.svelte.ts
+msgid "Could not create collection"
+msgstr "无法创建合集"
+
+#: src/lib/state/TagSelectionState.svelte.ts
+msgid "Could not create tag"
+msgstr "无法创建标签"
+
+#: src/ui/components/picker/picker-create-row.svelte
+msgid "Create <0/>"
+msgstr "创建 <0/>"
+
+#: src/feature/Collection/CollectionList/CollectionPickerList.svelte
+msgid "Organize uploads into named groups"
+msgstr "将图片整理到命名合集中"
+
+#: src/feature/Tag/TagPicker/TagPickerList.svelte
+msgid "Label uploads to find them later"
+msgstr "为图片添加标签方便稍后查找"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Failed to create collection"
+msgstr "创建合集失败"

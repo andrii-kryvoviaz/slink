@@ -13,11 +13,18 @@
     onSubmit: (data: { name: string; parentId?: string }) => void;
     onCancel: () => void;
     errors?: Record<string, string>;
+    initialData?: { name?: string };
   }
 
-  let { isCreating, onSubmit, onCancel, errors = {} }: Props = $props();
+  let {
+    isCreating,
+    onSubmit,
+    onCancel,
+    errors = {},
+    initialData,
+  }: Props = $props();
 
-  let name = $state('');
+  let name = $state(initialData?.name ?? '');
   let selectedParentTagId = $state('');
 
   const tagList = TagListState.create();

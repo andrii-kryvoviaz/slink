@@ -26,6 +26,7 @@
   {#snippet children()}
     <CreateCollectionForm
       isSubmitting={modalState.isSubmitting}
+      initialData={{ name: modalState.initialName }}
       errors={modalState.errors}
       onSubmit={(data) => modalState.submit(data)}
       onCancel={() => modalState.close()}

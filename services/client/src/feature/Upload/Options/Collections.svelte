@@ -11,10 +11,8 @@
 
   import type { CollectionResponse } from '@slink/api/Response';
 
-  import { createCollectionSelectionState } from '@slink/lib/state/CollectionSelectionState.svelte';
-  import { createCreateCollectionModalState } from '@slink/lib/state/CreateCollectionModalState.svelte';
-
   import { UploadOptionsPopoverTheme } from './Options.theme';
+  import { createUploadCollectionPicker } from './UploadPickerState.svelte';
 
   interface Props {
     selectedCollections?: CollectionResponse[];
@@ -28,55 +26,18 @@
     disabled = false,
   }: Props = $props();
 
-  let isOpen = $state(false);
-
-  const selectionState = createCollectionSelectionState();
-  const createModalState = createCreateCollectionModalState();
+  const picker = createUploadCollectionPicker({
+    selected: () => selectedCollections,
+    onChange: (collections) => onCollectionsChange?.(collections),
+  });
 
   const selectedIds = $derived(selectedCollections.map((c) => c.id));
   const buttonLabel = $derived(
     selectedCollections.length > 0 ? 'Add more' : 'Collections',
   );
-
-  const handleToggle = (collection: CollectionResponse) => {
-    if (disabled) return;
-
-    const isSelected = selectedIds.includes(collection.id);
-    const newSelections = isSelected
-      ? selectedCollections.filter((c) => c.id !== collection.id)
-      : [...selectedCollections, collection];
-
-    onCollectionsChange?.(newSelections);
-  };
-
-  const handleRemove = (collectionId: string) => {
-    if (disabled) return;
-    onCollectionsChange?.(
-      selectedCollections.filter((c) => c.id !== collectionId),
-    );
-  };
-
-  const handleCreateNew = () => {
-    isOpen = false;
-    createModalState.open(
-      (collection) => {
-        selectionState.addCollection(collection);
-        onCollectionsChange?.([...selectedCollections, collection]);
-      },
-      () => {
-        isOpen = true;
-      },
-    );
-  };
-
-  $effect(() => {
-    if (isOpen) {
-      selectionState.load();
-    }
-  });
 </script>
 
-<Popover.Root bind:open={isOpen}>
+<Popover.Root open={picker.open} onOpenChange={picker.setOpen}>
   <Popover.Trigger {disabled}>
     {#snippet child({ props })}
       <Button
@@ -99,13 +60,13 @@
     onpaste={(e: ClipboardEvent) => e.stopPropagation()}
   >
     <CollectionPickerList
-      collections={selectionState.collections}
+      collections={picker.catalog.items}
       {selectedIds}
-      isLoading={selectionState.isLoading}
+      isLoading={picker.catalog.isLoading}
       {disabled}
       variant="glass"
-      onToggle={handleToggle}
-      onCreateNew={handleCreateNew}
+      onToggle={picker.toggle}
+      create={picker.create}
     />
   </Popover.Content>
 </Popover.Root>
@@ -116,8 +77,8 @@
     icon="ph:folder-simple-fill"
     variant="indigo"
     {disabled}
-    onRemove={() => handleRemove(collection.id)}
+    onRemove={() => picker.detach(collection.id)}
   />
 {/each}
 
-<CreateCollectionDialog modalState={createModalState} />
+<CreateCollectionDialog modalState={picker.modal} />

@@ -5,47 +5,45 @@ import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
 import type { Tag } from '@slink/api/Resources/TagResource';
 import type { CollectionResponse } from '@slink/api/Response';
 
+import {
+  PickerCatalog,
+  createCollection,
+  createTag,
+} from '@slink/lib/state/PickerCatalog.svelte';
 import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
 interface ImagePickerDeps<TItem extends { id: string }> {
   load: () => Promise<TItem[]>;
+  create: (name: string) => Promise<TItem>;
   assign: (imageId: string, itemId: string) => Promise<void>;
   unassign: (imageId: string, itemId: string) => Promise<void>;
   onError: (action: 'load' | 'assign' | 'unassign') => void;
 }
 
-export class ImagePickerState<TItem extends { id: string }> {
+export class ImagePickerState<
+  TItem extends { id: string },
+> extends PickerCatalog<TItem> {
   private _imageId: string = $state('');
   private _assignedIds: string[] = $state([]);
-  private _items: TItem[] = $state([]);
-  private _isLoading: boolean = $state(false);
   private _actionLoadingId: string | null = $state(null);
-  private _isLoaded: boolean = $state(false);
 
-  private _deps: ImagePickerDeps<TItem>;
+  private _assign: (imageId: string, itemId: string) => Promise<void>;
+  private _unassign: (imageId: string, itemId: string) => Promise<void>;
+  private _onError: (action: 'load' | 'assign' | 'unassign') => void;
 
   constructor(deps: ImagePickerDeps<TItem>) {
-    this._deps = deps;
-  }
-
-  get items() {
-    return this._items;
-  }
-
-  get isLoading() {
-    return this._isLoading;
+    super({
+      fetch: deps.load,
+      create: deps.create,
+      onLoadError: () => deps.onError('load'),
+    });
+    this._assign = deps.assign;
+    this._unassign = deps.unassign;
+    this._onError = deps.onError;
   }
 
   get actionLoadingId() {
     return this._actionLoadingId;
-  }
-
-  get isEmpty() {
-    return this._items.length === 0;
-  }
-
-  get isLoaded() {
-    return this._isLoaded;
   }
 
   setImage(imageId: string, assignedIds: string[] = []) {
@@ -64,20 +62,6 @@ export class ImagePickerState<TItem extends { id: string }> {
     return this._actionLoadingId === itemId;
   }
 
-  async load() {
-    if (this._isLoaded) return;
-
-    this._isLoading = true;
-    try {
-      this._items = await this._deps.load();
-      this._isLoaded = true;
-    } catch {
-      this._deps.onError('load');
-    } finally {
-      this._isLoading = false;
-    }
-  }
-
   async toggle(
     item: TItem,
   ): Promise<{ added: boolean; itemId: string } | null> {
@@ -88,39 +72,34 @@ export class ImagePickerState<TItem extends { id: string }> {
 
     try {
       if (isAssigned) {
-        await this._deps.unassign(this._imageId, item.id);
+        await this._unassign(this._imageId, item.id);
         this._assignedIds = this._assignedIds.filter((id) => id !== item.id);
         return { added: false, itemId: item.id };
       } else {
-        await this._deps.assign(this._imageId, item.id);
+        await this._assign(this._imageId, item.id);
         this._assignedIds = [...this._assignedIds, item.id];
         return { added: true, itemId: item.id };
       }
     } catch {
-      this._deps.onError(isAssigned ? 'unassign' : 'assign');
+      this._onError(isAssigned ? 'unassign' : 'assign');
       return null;
     } finally {
       this._actionLoadingId = null;
     }
   }
 
-  addItem(item: TItem) {
-    this._items = [item, ...this._items];
-  }
-
   reset() {
+    super.reset();
     this._imageId = '';
     this._assignedIds = [];
-    this._items = [];
-    this._isLoading = false;
     this._actionLoadingId = null;
-    this._isLoaded = false;
   }
 }
 
 export function createCollectionPickerState(): ImagePickerState<CollectionResponse> {
   return new ImagePickerState<CollectionResponse>({
     load: () => ApiClient.collection.getList(50).then((r) => r.data),
+    create: (name) => createCollection({ name }),
     assign: (imageId, itemId) => ApiClient.collection.addItem(itemId, imageId),
     unassign: (imageId, itemId) =>
       ApiClient.collection.removeItem(itemId, imageId),
@@ -146,6 +125,7 @@ export function createImageTagPickerState(): ImagePickerState<Tag> {
           includeChildren: true,
         })
         .then((r) => r.data),
+    create: (name) => createTag(name),
     assign: (imageId, itemId) => ApiClient.tag.tagImage(imageId, itemId),
     unassign: (imageId, itemId) => ApiClient.tag.untagImage(imageId, itemId),
     onError: (action) =>

@@ -119,6 +119,8 @@ msgstr "Benutzer"
 #: src/routes/explore/+page.svelte
 #: src/ui/components/dropzone/dropzone-input.svelte
 #: src/ui/components/filter/filter-search.svelte
+#: src/ui/components/picker/picker-create-row.svelte
+#: src/ui/components/picker/picker-list.svelte
 #: src/ui/components/picker/picker-list.svelte
 msgid "Enter"
 msgstr "Enter"
@@ -221,6 +223,8 @@ msgstr "Löschen"
 msgid "[deleted]"
 msgstr "[gelöscht]"
 
+#: src/feature/Collection/CollectionList/CollectionPickerList.svelte
+#: src/feature/Tag/TagPicker/TagPickerList.svelte
 #: src/routes/admin/settings/sso/+page.svelte
 #: src/routes/collections/+page.svelte
 #: src/routes/integrations/+page.svelte
@@ -2194,20 +2198,8 @@ msgid "No tags assigned to this image."
 msgstr "Diesem Bild sind keine Tags zugewiesen."
 
 #: src/feature/Collection/CollectionList/CollectionPickerList.svelte
-msgid "Search collections"
-msgstr "Sammlungen durchsuchen"
-
-#: src/feature/Collection/CollectionList/CollectionPickerList.svelte
 msgid "No collections yet"
 msgstr "Noch keine Sammlungen"
-
-#: src/feature/Collection/CollectionList/CollectionPickerList.svelte
-msgid "Create your first collection"
-msgstr "Erstellen Sie Ihre erste Sammlung"
-
-#: src/feature/Collection/CollectionList/CollectionPickerList.svelte
-msgid "New collection"
-msgstr "Neue Sammlung"
 
 #. 0: tag.name
 #: src/feature/Tag/TagBadge/TagBadge.svelte
@@ -2296,18 +2288,6 @@ msgstr "<0/> — Anbieter und seine Konfiguration werden entfernt"
 #: src/feature/Tag/TagFilter/TagFilter.svelte
 msgid "Search and select tags"
 msgstr "Tags suchen und auswählen"
-
-#: src/feature/Tag/TagPicker/TagPickerList.svelte
-msgid "Search tags"
-msgstr "Tags durchsuchen"
-
-#: src/feature/Tag/TagPicker/TagPickerList.svelte
-msgid "Create your first tag"
-msgstr "Erstellen Sie Ihren ersten Tag"
-
-#: src/feature/Tag/TagPicker/TagPickerList.svelte
-msgid "New tag"
-msgstr "Neuer Tag"
 
 #: src/feature/Tag/TagPicker/TagPickerList.svelte
 msgid "Root"
@@ -4531,7 +4511,9 @@ msgstr "Bildlink kopieren"
 msgid "Copy the share link"
 msgstr "Freigabelink kopieren"
 
+#: src/feature/Collection/CollectionList/CollectionPickerList.svelte
 #: src/feature/Search/SearchBar.svelte
+#: src/feature/Tag/TagPicker/TagPickerList.svelte
 msgid "Search"
 msgstr "Suchen"
 
@@ -4998,3 +4980,27 @@ msgstr "SMB-Host ist erforderlich."
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "SMB share is required."
 msgstr "SMB-Freigabe ist erforderlich."
+
+#: src/lib/state/CollectionSelectionState.svelte.ts
+msgid "Could not create collection"
+msgstr "Sammlung konnte nicht erstellt werden"
+
+#: src/lib/state/TagSelectionState.svelte.ts
+msgid "Could not create tag"
+msgstr "Tag konnte nicht erstellt werden"
+
+#: src/ui/components/picker/picker-create-row.svelte
+msgid "Create <0/>"
+msgstr "<0/> erstellen"
+
+#: src/feature/Collection/CollectionList/CollectionPickerList.svelte
+msgid "Organize uploads into named groups"
+msgstr "Uploads in benannten Sammlungen organisieren"
+
+#: src/feature/Tag/TagPicker/TagPickerList.svelte
+msgid "Label uploads to find them later"
+msgstr "Uploads kennzeichnen, um sie später wiederzufinden"
+
+#: src/lib/utils/i18n/messages/toast.language.ts
+msgid "Failed to create collection"
+msgstr "Sammlung konnte nicht erstellt werden"

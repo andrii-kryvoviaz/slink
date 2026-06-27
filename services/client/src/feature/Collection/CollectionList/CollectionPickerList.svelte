@@ -1,5 +1,6 @@
 <script lang="ts">
   import {
+    type PickerCreate,
     PickerItem,
     PickerList,
     type PickerVariant,
@@ -21,7 +22,7 @@
     showSearch?: boolean;
     getItemState?: (id: string) => SelectionState;
     onToggle?: (collection: CollectionResponse) => void;
-    onCreateNew?: () => void;
+    create?: PickerCreate;
   }
 
   let {
@@ -34,7 +35,7 @@
     getItemState,
     showSearch,
     onToggle,
-    onCreateNew,
+    create,
   }: Props = $props();
 
   const resolveSelected = $derived(
@@ -54,23 +55,15 @@
   color="indigo"
   {isLoading}
   {showSearch}
-  searchPlaceholder="Search collections"
+  searchPlaceholder="Search"
   filterFn={filterCollection}
-  {onCreateNew}
+  {create}
 >
   {#snippet emptyIcon()}
-    <Icon
-      icon="ph:folder-simple-duotone"
-      class="w-5 h-5 text-gray-400 dark:text-gray-500"
-    />
+    <Icon icon="ph:folder-simple-duotone" class="h-[18px] w-[18px]" />
   {/snippet}
   {#snippet emptyMessage()}No collections yet{/snippet}
-  {#snippet emptyAction()}
-    {#if onCreateNew}Create your first collection{/if}
-  {/snippet}
-  {#snippet createFooter()}
-    {#if onCreateNew}New collection{/if}
-  {/snippet}
+  {#snippet emptyDescription()}Organize uploads into named groups{/snippet}
   {#snippet children({ item, highlighted })}
     {@const collection = item as CollectionResponse}
     <PickerItem
@@ -82,7 +75,7 @@
       {highlighted}
       onclick={() => onToggle?.(collection)}
     >
-      {#snippet children()}{@html collection.name}{/snippet}
+      {#snippet children()}{collection.name}{/snippet}
     </PickerItem>
   {/snippet}
 </PickerList>

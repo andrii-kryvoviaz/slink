@@ -1,5 +1,6 @@
 <script lang="ts">
   import {
+    type PickerCreate,
     PickerItem,
     PickerList,
     type PickerVariant,
@@ -23,7 +24,7 @@
     showSearch?: boolean;
     getItemState?: (id: string) => SelectionState;
     onToggle?: (tag: Tag) => void;
-    onCreateNew?: () => void;
+    create?: PickerCreate;
   }
 
   let {
@@ -36,7 +37,7 @@
     getItemState,
     showSearch,
     onToggle,
-    onCreateNew,
+    create,
   }: Props = $props();
 
   const resolveSelected = $derived(
@@ -54,20 +55,15 @@
   color="blue"
   {isLoading}
   {showSearch}
-  searchPlaceholder="Search tags"
+  searchPlaceholder="Search"
   filterFn={filterTag}
-  {onCreateNew}
+  {create}
 >
   {#snippet emptyIcon()}
-    <Icon icon="ph:tag" class="w-5 h-5 text-gray-400 dark:text-gray-500" />
+    <Icon icon="ph:tag" class="h-[18px] w-[18px]" />
   {/snippet}
   {#snippet emptyMessage()}No tags yet{/snippet}
-  {#snippet emptyAction()}
-    {#if onCreateNew}Create your first tag{/if}
-  {/snippet}
-  {#snippet createFooter()}
-    {#if onCreateNew}New tag{/if}
-  {/snippet}
+  {#snippet emptyDescription()}Label uploads to find them later{/snippet}
   {#snippet children({ item, highlighted })}
     {@const tag = item as Tag}
     <PickerItem
@@ -79,9 +75,9 @@
       {highlighted}
       onclick={() => onToggle?.(tag)}
     >
-      {#snippet children()}{@html getTagLastSegment(tag)}{/snippet}
+      {#snippet children()}{getTagLastSegment(tag)}{/snippet}
       {#snippet subtext()}
-        {@html getTagParentPath(tag) || 'Root'}
+        {getTagParentPath(tag) || 'Root'}
       {/snippet}
     </PickerItem>
   {/snippet}

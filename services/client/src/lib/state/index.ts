@@ -1,6 +1,14 @@
 export { useCollectionItemsFeed } from './CollectionItemsFeed.svelte';
 export { useCollectionListFeed } from './CollectionListFeed.svelte';
 export {
+  PickerCatalog,
+  type PickerCatalogDeps,
+  createTagCatalog,
+  createCollectionCatalog,
+  createTag,
+  createCollection,
+} from './PickerCatalog.svelte';
+export {
   ImagePickerState,
   type CollectionImagePickerState,
   createCollectionPickerState,

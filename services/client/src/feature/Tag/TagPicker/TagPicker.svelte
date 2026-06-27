@@ -51,7 +51,7 @@
       {togglingId}
       variant={v}
       onToggle={toggle}
-      {onCreateNew}
+      create={{ detailed: onCreateNew }}
     />
   {/snippet}
 </ImageItemPicker>

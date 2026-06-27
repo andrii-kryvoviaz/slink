@@ -24,13 +24,8 @@
   }: Props = $props();
 
   let formData = $state({
-    name: '',
-    description: '',
-  });
-
-  $effect(() => {
-    formData.name = initialData?.name?.decodeHtmlEntities() ?? '';
-    formData.description = initialData?.description?.decodeHtmlEntities() ?? '';
+    name: initialData?.name ?? '',
+    description: initialData?.description ?? '',
   });
 
   function handleSubmit(event: Event) {
@@ -52,14 +47,20 @@
 <div class="space-y-6">
   <Modal.Header>
     {#snippet icon()}
-      <Icon icon={mode === 'edit' ? 'lucide:pencil' : 'lucide:folder-plus'} />
+      {#if mode === 'edit'}
+        <Icon icon="lucide:pencil" />
+      {:else}
+        <Icon icon="lucide:folder-plus" />
+      {/if}
     {/snippet}
     {#snippet title()}{#if mode === 'edit'}Edit Collection{:else}Create
         Collection{/if}{/snippet}
     {#snippet description()}
-      {mode === 'edit'
-        ? 'Update your collection details'
-        : 'Organize your images into a shareable collection'}
+      {#if mode === 'edit'}
+        Update your collection details
+      {:else}
+        Organize your images into a shareable collection
+      {/if}
     {/snippet}
   </Modal.Header>
 

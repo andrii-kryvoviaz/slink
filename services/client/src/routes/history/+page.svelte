@@ -388,7 +388,7 @@
           getItemState={(id) => batchCollectionPicker.selection.getState(id)}
           onToggle={(collection) =>
             batchCollectionPicker.selection.toggle(collection.id)}
-          onCreateNew={batchCollectionPicker.handleCreateNew}
+          create={{ detailed: batchCollectionPicker.handleCreateNew }}
         />
       </BatchPickerAction>
       <BatchPickerAction
@@ -409,7 +409,7 @@
           showSearch
           getItemState={(id) => batchTagPicker.selection.getState(id)}
           onToggle={(tag) => batchTagPicker.selection.toggle(tag.id)}
-          onCreateNew={batchTagPicker.handleCreateNew}
+          create={{ detailed: batchTagPicker.handleCreateNew }}
         />
       </BatchPickerAction>
       <DownloadAction

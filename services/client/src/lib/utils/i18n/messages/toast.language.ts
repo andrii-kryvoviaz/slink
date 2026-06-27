@@ -32,6 +32,9 @@ export const messages = {
     get updated() {
       return localize('Collection updated successfully');
     },
+    get failedToCreate() {
+      return localize('Failed to create collection');
+    },
     get failedToUpdate() {
       return localize('Failed to update collection');
     },
