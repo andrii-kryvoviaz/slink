@@ -111,16 +111,32 @@
     };
   });
 
+  let previousMode: ViewMode | undefined;
+
   $effect(() => {
+    const activeMode = mode;
+
     if (feed.isCursorBased) {
       feed.setMode(resolvedConfig.appendMode);
     }
-    untrack(() => feed.setPageSize(tableSettings.pageSize));
 
-    const skipLoad = onBeforeLoad?.();
-    if (!skipLoad && untrack(() => feed.needsLoad)) {
-      feed.load();
-    }
+    untrack(() => {
+      feed.setPageSize(tableSettings.pageSize);
+
+      const switchedMode =
+        previousMode !== undefined && previousMode !== activeMode;
+      previousMode = activeMode;
+
+      if (switchedMode) {
+        feed.reload();
+        return;
+      }
+
+      const skipLoad = onBeforeLoad?.();
+      if (!skipLoad && feed.needsLoad) {
+        feed.load();
+      }
+    });
   });
 
   const handlePageSizeChange = async (size: number) => {
