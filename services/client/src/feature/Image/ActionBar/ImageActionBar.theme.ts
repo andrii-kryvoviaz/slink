@@ -115,10 +115,5 @@ export const downloadLabelVariants = cva('font-medium truncate', {
 });
 
 export type ActionButton =
-  | 'download'
-  | 'visibility'
-  | 'delete'
-  | 'copy'
-  | 'collection'
-  | 'tag';
+  'download' | 'visibility' | 'delete' | 'copy' | 'collection' | 'tag';
 export type ActionLayout = 'default' | 'hero';

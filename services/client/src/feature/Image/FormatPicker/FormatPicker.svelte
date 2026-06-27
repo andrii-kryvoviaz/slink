@@ -26,15 +26,13 @@
       if (opt.value === 'original') return true;
       if (!originalFormat) return true;
       return !isSameFormat(opt.extension, originalFormat);
-    }).map(
-      (opt): ToggleGroupOption<ImageOutputFormat> => ({
-        value: opt.value,
-        label:
-          opt.value === 'original' && originalFormat
-            ? `${opt.label} (${originalFormat.toUpperCase()})`
-            : opt.label,
-      }),
-    );
+    }).map((opt): ToggleGroupOption<ImageOutputFormat> => ({
+      value: opt.value,
+      label:
+        opt.value === 'original' && originalFormat
+          ? `${opt.label} (${originalFormat.toUpperCase()})`
+          : opt.label,
+    }));
   });
 
   const showAnimationWarning = $derived.by(() => {

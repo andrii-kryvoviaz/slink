@@ -4,8 +4,7 @@ import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 type ResolveResult =
-  | { kind: 'redirect'; location: string }
-  | { kind: 'unavailable' };
+  { kind: 'redirect'; location: string } | { kind: 'unavailable' };
 
 async function resolveShortCode(
   code: string,

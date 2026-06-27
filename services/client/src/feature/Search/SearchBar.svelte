@@ -70,8 +70,7 @@
   let dropdownOpen = $state(false);
   let expanded = $state(false);
   let searchRef:
-    | { focus: () => void; blur: () => void; clear: () => void }
-    | undefined;
+    { focus: () => void; blur: () => void; clear: () => void } | undefined;
 
   $effect(() => {
     if (hasHashtags(searchTerm) && searchBy !== 'hashtag') {

@@ -23,9 +23,7 @@ export type ShareExpirationDescription =
   | { kind: 'in-future'; phrase: string };
 
 export type ShareExpirationShort =
-  | { kind: 'expired' }
-  | { kind: 'today' }
-  | { kind: 'unit'; label: string };
+  { kind: 'expired' } | { kind: 'today' } | { kind: 'unit'; label: string };
 
 export class ShareExpirationState {
   static readonly PRESET_DAYS = [1, 7, 30] as const;

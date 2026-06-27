@@ -2,12 +2,7 @@ import { cva } from 'class-variance-authority';
 import type { VariantProps } from 'class-variance-authority';
 
 export type ModalVariant =
-  | 'blue'
-  | 'green'
-  | 'purple'
-  | 'amber'
-  | 'neutral'
-  | 'danger';
+  'blue' | 'green' | 'purple' | 'amber' | 'neutral' | 'danger';
 export type ModalBackdrop = 'enabled' | 'subtle' | 'disabled';
 export type ModalAnimation = 'fade' | 'slide' | 'none';
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl';

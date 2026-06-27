@@ -3,9 +3,7 @@ import { type Locator, type Page, expect } from '@playwright/test';
 import { BasePage } from './BasePage';
 
 export type StorageProviderLabel =
-  | 'Local Storage'
-  | 'Network Storage (SMB)'
-  | 'Amazon S3';
+  'Local Storage' | 'Network Storage (SMB)' | 'Amazon S3';
 
 export type SmbCredentials = {
   host: string;

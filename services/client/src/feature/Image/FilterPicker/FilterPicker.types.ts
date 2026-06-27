@@ -1,12 +1,5 @@
 export type ImageFilter =
-  | 'none'
-  | 'dramatic'
-  | 'noir'
-  | 'sepia'
-  | 'warm'
-  | 'cool'
-  | 'vivid'
-  | 'fade';
+  'none' | 'dramatic' | 'noir' | 'sepia' | 'warm' | 'cool' | 'vivid' | 'fade';
 
 export type FilterOption = {
   value: ImageFilter;

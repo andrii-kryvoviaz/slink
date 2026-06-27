@@ -81,9 +81,7 @@
       <SearchBar
         searchTerm={publicImagesFeed.searchTerm}
         searchBy={publicImagesFeed.searchBy as
-          | 'user'
-          | 'description'
-          | 'hashtag'}
+          'user' | 'description' | 'hashtag'}
         placeholder="Search images..."
         onsearch={handleSearch}
         onclear={handleClearSearch}

@@ -33,8 +33,7 @@ export interface TableModeConfig<
 }
 
 export type ModeConfig<TData extends RowData = any> =
-  | BaseModeConfig
-  | TableModeConfig<TData>;
+  BaseModeConfig | TableModeConfig<TData>;
 
 export function isTableMode(config: ModeConfig): config is TableModeConfig {
   return 'columns' in config;
