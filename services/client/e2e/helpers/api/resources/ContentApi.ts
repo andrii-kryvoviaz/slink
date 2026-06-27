@@ -69,6 +69,20 @@ export class ContentApi {
     };
   }
 
+  async getImageVisibility(imageId: string): Promise<boolean> {
+    const data = await this.http.request('GET', `/api/image/${imageId}/detail`);
+    const payload = data?.data ?? data;
+
+    return Boolean(payload.isPublic);
+  }
+
+  async getImageTagIds(imageId: string): Promise<string[]> {
+    const data = await this.http.request('GET', `/api/images/${imageId}/tags`);
+    const items = (data?.data ?? data ?? []) as Array<{ id: unknown }>;
+
+    return items.map((item) => String(item.id));
+  }
+
   async uploadImage(
     options: { isPublic?: boolean; file?: Blob; fileName?: string } = {},
   ): Promise<string> {
@@ -99,6 +113,16 @@ export class ContentApi {
     });
 
     return data?.id ?? data?.data?.id ?? data;
+  }
+
+  async createTag(name: string): Promise<string> {
+    const data = await this.http.request('POST', '/api/tags', { name });
+
+    return data?.id ?? data?.data?.id ?? data;
+  }
+
+  async tagImage(imageId: string, tagId: string): Promise<void> {
+    await this.http.request('POST', `/api/images/${imageId}/tags/${tagId}`);
   }
 
   async addImageToCollection(

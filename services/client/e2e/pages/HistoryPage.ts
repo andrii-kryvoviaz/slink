@@ -1,4 +1,4 @@
-import { type Page, expect } from '@playwright/test';
+import { type Locator, type Page, expect } from '@playwright/test';
 
 import { BasePage } from './BasePage';
 
@@ -178,5 +178,102 @@ export class HistoryPage extends BasePage {
         timeout: 1000,
       });
     }).toPass({ timeout: 15000 });
+  }
+
+  get nextTablePageButton() {
+    return this.page.locator('button[title="Next page"]');
+  }
+
+  get prevTablePageButton() {
+    return this.page.locator('button[title="Previous page"]');
+  }
+
+  get currentTablePageButton() {
+    return this.page.locator('button[aria-label^="Current page "]');
+  }
+
+  async tableCurrentPageNumber(): Promise<number> {
+    const label = await this.currentTablePageButton.getAttribute('aria-label');
+    return Number((label ?? '').replace('Current page ', '').trim());
+  }
+
+  async goToNextTablePage() {
+    const [firstBefore] = await this.visibleTableImageIds();
+    await this.nextTablePageButton.click();
+    await expect
+      .poll(async () => (await this.visibleTableImageIds())[0], {
+        timeout: 15000,
+      })
+      .not.toBe(firstBefore);
+  }
+
+  async selectTableRows(ids: string[]) {
+    for (const id of ids) {
+      await this.tableRowFor(id).getByRole('checkbox').click();
+    }
+    await expect(
+      this.actionBar.getByText(`${ids.length} selected`, { exact: true }),
+    ).toBeVisible();
+  }
+
+  private pickerOverlay(title: string) {
+    return this.page
+      .locator('[data-slot="popover-content"]')
+      .filter({ hasText: title });
+  }
+
+  private popoverTrigger(name: string) {
+    return this.actionBar
+      .locator('[data-slot="popover-trigger"]')
+      .filter({ hasText: name });
+  }
+
+  private async applyPicker(
+    triggerName: string,
+    overlayTitle: string,
+    itemName: string,
+  ) {
+    await this.popoverTrigger(triggerName).click();
+
+    const overlay = this.pickerOverlay(overlayTitle);
+    await expect(overlay).toBeVisible();
+
+    const item = overlay.getByRole('button', { name: itemName });
+    const apply = overlay.getByRole('button', { name: 'Apply' });
+
+    await expect(async () => {
+      await item.click();
+      await expect(apply).toBeEnabled({ timeout: 1000 });
+    }).toPass({ timeout: 15000 });
+
+    await apply.click();
+    await expect(overlay).toBeHidden({ timeout: 15000 });
+  }
+
+  async reassignCollection(name: string) {
+    await this.applyPicker('Collection', 'Add to Collection', name);
+  }
+
+  async reassignTag(name: string) {
+    await this.applyPicker('Tag', 'Assign Tags', name);
+  }
+
+  async setVisibility(target: 'public' | 'private') {
+    await this.popoverTrigger('Visibility').click();
+
+    const overlay = this.pickerOverlay('Change Visibility');
+    await expect(overlay).toBeVisible();
+
+    const label = target === 'public' ? 'Make Public' : 'Make Private';
+    await overlay.getByRole('button', { name: label }).click();
+    await expect(overlay).toBeHidden({ timeout: 15000 });
+  }
+
+  collectionBadgeIn(scope: Locator, collectionId: string) {
+    return scope.locator(`a[href="/collection/${collectionId}"]`);
+  }
+
+  tagBadgeIn(scope: Locator, tagName: string) {
+    return scope.locator('a[href*="tagIds="]').filter({ hasText: tagName });
   }
 }
