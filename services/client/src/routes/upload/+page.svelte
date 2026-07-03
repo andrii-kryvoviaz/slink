@@ -216,6 +216,7 @@
             <Uploader.Root
               disabled={uploadState.disabled}
               allowMultiple={true}
+              allowedMimeTypes={data.uploadPolicy.allowedMimeTypes}
               onchange={(files) => uploadState.handleUpload(files)}
             >
               <Uploader.Idle />

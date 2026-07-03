@@ -6,12 +6,12 @@ namespace UI\Http\Rest\Controller\Image\ChunkedUpload;
 
 use Slink\Image\Infrastructure\ChunkedUpload\UploadToken;
 use Slink\Image\Infrastructure\ChunkedUpload\UploadTokenCodec;
+use Slink\Media\Domain\Enum\MediaFormat;
 use Slink\Settings\Application\Service\SettingsService;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Security\Voter\GuestAccessVoter;
 use Slink\User\Domain\Contracts\UserInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -32,7 +32,6 @@ final readonly class InitController {
   public function __construct(
     private UploadTokenCodec $tokenCodec,
     private ConfigurationProviderInterface $configurationProvider,
-    private ParameterBagInterface $parameterBag,
   ) {
   }
 
@@ -46,8 +45,7 @@ final readonly class InitController {
       throw new HttpException(Response::HTTP_REQUEST_ENTITY_TOO_LARGE, 'The uploaded file exceeds the maximum allowed size.');
     }
 
-    /** @var array<string> $supportedFormats */
-    $supportedFormats = (array) $this->parameterBag->get('supported_image_formats');
+    $supportedFormats = MediaFormat::resolveMimeTypes((array) $this->configurationProvider->get('image.allowedFormats'));
 
     if (!\in_array($request->mimeType, $supportedFormats, true)) {
       throw new HttpException(Response::HTTP_UNPROCESSABLE_ENTITY, \sprintf('The mime type %s is not supported.', $request->mimeType));

@@ -19,6 +19,7 @@
     disabled?: boolean;
     onchange?: (files: File[]) => void;
     allowMultiple?: boolean;
+    allowedMimeTypes?: string[];
     children?: Snippet;
   }
 
@@ -26,13 +27,27 @@
     disabled = false,
     onchange,
     allowMultiple = false,
+    allowedMimeTypes = [],
     children,
   }: Props = $props();
 
-  const isImage = (file: File): boolean => {
-    if (!file?.type) return true;
-    return file.type.startsWith('image/');
+  const isGenericMedia = (type: string): boolean => {
+    return type.startsWith('image/') || type.startsWith('video/');
   };
+
+  const isAcceptedMedia = (file: File): boolean => {
+    if (!file?.type) return true;
+
+    if (allowedMimeTypes.length > 0) {
+      return allowedMimeTypes.includes(file.type);
+    }
+
+    return isGenericMedia(file.type);
+  };
+
+  const acceptAttribute = $derived(
+    allowedMimeTypes.length > 0 ? allowedMimeTypes.join(',') : 'image/*',
+  );
 
   const handleReject = (reason: Dropzone.FileDropRejectReason) => {
     if (reason === 'none') {
@@ -53,7 +68,7 @@
   const fileDrop = Dropzone.createFileDropState({
     disabled: () => disabled,
     multiple: () => allowMultiple,
-    accept: isImage,
+    accept: isAcceptedMedia,
     onFiles: (files) => onchange?.(files),
     onReject: handleReject,
   });
@@ -73,7 +88,7 @@
 
     <Dropzone.Root state={fileDrop}>
       <Dropzone.Input
-        accept="image/*"
+        accept={acceptAttribute}
         class={cn(
           'relative w-full cursor-pointer transition-all duration-500',
           disabled && 'pointer-events-none opacity-60',

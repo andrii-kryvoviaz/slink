@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace Slink\Settings\Domain\ValueObject\Public;
 
+use Slink\Media\Domain\Enum\MediaFormat;
 use Slink\Shared\Infrastructure\Attribute\Groups;
 
 #[Groups(['public'])]
 final readonly class PublicImageSettings {
+  /**
+   * @param list<string> $allowedMimeTypes
+   */
   public function __construct(
     #[Groups(['public'])]
     public bool $enableLicensing = false,
@@ -20,6 +24,9 @@ final readonly class PublicImageSettings {
 
     #[Groups(['public'])]
     public string $chunkSize = '2M',
+
+    #[Groups(['public'])]
+    public array $allowedMimeTypes = [],
   ) {}
 
   /**
@@ -31,6 +38,7 @@ final readonly class PublicImageSettings {
       $settings['allowOnlyPublicImages'] ?? false,
       $settings['stripExifMetadata'] ?? true,
       $settings['chunkSize'] ?? '2M',
+      MediaFormat::resolveMimeTypes((array) ($settings['allowedFormats'] ?? MediaFormat::allValues())),
     );
   }
 }

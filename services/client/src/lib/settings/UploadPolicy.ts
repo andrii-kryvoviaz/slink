@@ -5,6 +5,7 @@ import type { GlobalSettings } from '@slink/lib/settings/Type/GlobalSettings';
 export interface UploadPolicy {
   stripExif: boolean;
   allowOnlyPublicImages: boolean;
+  allowedMimeTypes: string[];
   defaultVisibility: UserPreferencesResponse['image.defaultVisibility'];
 }
 
@@ -28,5 +29,6 @@ export const resolveUploadPolicy = (
 ): UploadPolicy => ({
   stripExif: resolveStripExif(globalSettings, userPreferences),
   allowOnlyPublicImages: globalSettings?.image?.allowOnlyPublicImages ?? false,
+  allowedMimeTypes: globalSettings?.image?.allowedMimeTypes ?? [],
   defaultVisibility: userPreferences?.['image.defaultVisibility'] ?? null,
 });

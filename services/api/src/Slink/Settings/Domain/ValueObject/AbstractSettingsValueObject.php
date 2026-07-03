@@ -20,8 +20,9 @@ abstract readonly class AbstractSettingsValueObject extends AbstractCompoundValu
     $flatten = function ($array, $prefix = '') use (&$flatten) {
       $result = [];
       foreach ($array as $key => $value) {
-        $normalizedKey = implode('.', array_filter([$prefix, $key]));
-        
+        $segments = $prefix === '' ? [$key] : [$prefix, $key];
+        $normalizedKey = implode('.', $segments);
+
         if (is_array($value)) {
           $result = array_merge($result, $flatten($value, $normalizedKey));
         } else {

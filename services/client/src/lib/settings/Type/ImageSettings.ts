@@ -9,4 +9,6 @@ export type ImageSettings = {
   forceFormatConversion: boolean;
   targetFormat: string | null;
   convertAnimatedImages: boolean;
+  allowedFormats: string[];
+  allowedMimeTypes: string[];
 };

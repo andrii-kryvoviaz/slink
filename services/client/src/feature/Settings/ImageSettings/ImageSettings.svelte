@@ -1,9 +1,12 @@
 <script lang="ts">
   import { SettingItem, SettingsPane } from '@slink/feature/Settings';
   import { Notice } from '@slink/feature/Text';
+  import { EnhancedSelect } from '@slink/ui/components/enhanced-select';
   import { FileSizeInput, NumberInput } from '@slink/ui/components/input';
   import { Select } from '@slink/ui/components/select';
   import { Switch } from '@slink/ui/components/switch';
+
+  import { MEDIA_FORMAT_OPTIONS } from '$lib/constants/media';
 
   import type { SettingCategory } from '@slink/lib/settings/Type/GlobalSettings';
   import type { ImageSettings as ImageSettingsType } from '@slink/lib/settings/Type/ImageSettings';
@@ -161,6 +164,29 @@
       min={1}
       max={100}
       step={1}
+    />
+  </SettingItem>
+
+  <SettingItem
+    defaultValue={defaultSettings?.allowedFormats}
+    currentValue={settings.allowedFormats}
+    reset={(value) => {
+      settings.allowedFormats = value;
+    }}
+  >
+    {#snippet label()}
+      Allowed Upload Formats
+    {/snippet}
+    {#snippet hint()}
+      Choose which media formats users may upload. At least one format is
+      required.
+    {/snippet}
+    <EnhancedSelect
+      type="multiple"
+      items={[...MEDIA_FORMAT_OPTIONS]}
+      bind:value={settings.allowedFormats}
+      placeholder="Select formats"
+      class="w-64"
     />
   </SettingItem>
 

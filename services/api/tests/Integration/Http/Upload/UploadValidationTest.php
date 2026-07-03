@@ -89,6 +89,19 @@ final class UploadValidationTest extends HttpTestCase {
       . \pack('N', \crc32($type . $data));
   }
 
+  private function sampleGif(): UploadedFile {
+    $temp = (string) \tempnam(\sys_get_temp_dir(), 'slink_upload_') . '.gif';
+
+    $image = \imagecreatetruecolor(2, 2);
+    if ($image === false) {
+      throw new \RuntimeException('Unable to allocate test gif image.');
+    }
+
+    \imagegif($image, $temp);
+
+    return new UploadedFile($temp, 'sample.gif', 'image/gif', null, true);
+  }
+
   #[Test]
   public function nonImageFileIsRejected(): void {
     $this->bootUser();
@@ -111,5 +124,21 @@ final class UploadValidationTest extends HttpTestCase {
     self::assertGreaterThan(5 * 1024 * 1024, (int) $file->getSize());
 
     self::assertSame(422, $this->upload($file));
+  }
+
+  #[Test]
+  public function disallowedFormatIsRejectedWhenAllowedFormatsRestricted(): void {
+    $this->bootUser();
+    $this->saveSettings('image', ['maxSize' => '5M', 'allowedFormats' => ['png']]);
+
+    self::assertSame(422, $this->upload($this->sampleGif()));
+  }
+
+  #[Test]
+  public function allowedFormatPassesWhenAllowedFormatsRestricted(): void {
+    $this->bootUser();
+    $this->saveSettings('image', ['maxSize' => '5M', 'allowedFormats' => ['png']]);
+
+    self::assertContains($this->upload($this->sampleImage()), [200, 201]);
   }
 }
