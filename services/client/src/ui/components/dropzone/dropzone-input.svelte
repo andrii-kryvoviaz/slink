@@ -34,13 +34,10 @@
 </script>
 
 <button
+  data-slot="dropzone-input"
   class={cn(dropzoneInputTheme(), className)}
   onkeydown={keydown}
   onclick={onClick}
-  ondragenter={dropzone.handleDragEnter}
-  ondragleave={dropzone.handleDragLeave}
-  ondragover={dropzone.handleDragOver}
-  ondrop={dropzone.handleDrop}
   type="button"
 >
   {@render children?.()}

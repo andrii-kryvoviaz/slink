@@ -20,6 +20,7 @@ export {
 } from './context.svelte.js';
 
 export type {
+  DragHandlers,
   FileDropOptions,
   FileDropRejectReason,
 } from './context.svelte.js';

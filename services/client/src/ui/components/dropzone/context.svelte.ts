@@ -10,6 +10,13 @@ export interface FileDropOptions {
   onReject?: (reason: FileDropRejectReason, file?: File) => void;
 }
 
+export interface DragHandlers {
+  ondragenter: (event: DragEvent) => void;
+  ondragleave: (event: DragEvent) => void;
+  ondragover: (event: DragEvent) => void;
+  ondrop: (event: DragEvent) => void;
+}
+
 export class FileDropState {
   private _isDragOver: boolean = $state(false);
 
@@ -31,6 +38,15 @@ export class FileDropState {
     return this._options.multiple();
   }
 
+  get dragHandlers(): DragHandlers {
+    return {
+      ondragenter: this.handleDragEnter,
+      ondragleave: this.handleDragLeave,
+      ondragover: this.handleDragOver,
+      ondrop: this.handleDrop,
+    };
+  }
+
   handlePaste = (event: ClipboardEvent) => {
     if (this._options.disabled()) return;
     if (!event.clipboardData?.files?.length) return;
@@ -40,9 +56,11 @@ export class FileDropState {
   };
 
   handleDrop = (event: DragEvent) => {
-    if (this._options.disabled()) return;
     event.preventDefault();
     this._isDragOver = false;
+
+    if (this._options.disabled()) return;
+
     this._processFiles(event.dataTransfer?.files);
   };
 
@@ -63,15 +81,26 @@ export class FileDropState {
 
   handleDragLeave = (event: DragEvent) => {
     event.preventDefault();
-    const target = event.currentTarget as HTMLElement;
-    const relatedTarget = event.relatedTarget as HTMLElement;
-    if (target && relatedTarget && !target.contains(relatedTarget)) {
-      this._isDragOver = false;
-    }
+
+    const zone = event.currentTarget as HTMLElement | null;
+    const nextTarget = event.relatedTarget as Node | null;
+
+    if (zone?.contains(nextTarget)) return;
+
+    this._isDragOver = false;
   };
 
   handleDragOver = (event: DragEvent) => {
     event.preventDefault();
+
+    if (!event.dataTransfer) return;
+
+    if (this._options.disabled()) {
+      event.dataTransfer.dropEffect = 'none';
+      return;
+    }
+
+    event.dataTransfer.dropEffect = 'copy';
   };
 
   private _processFiles(fileList: FileList | null | undefined) {

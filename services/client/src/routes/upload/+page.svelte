@@ -217,10 +217,11 @@
               disabled={uploadState.disabled}
               allowMultiple={true}
               allowedMimeTypes={data.uploadPolicy.allowedMimeTypes}
+              allowedFormats={data.uploadPolicy.allowedFormatLabels}
+              maxSize={data.uploadPolicy.maxSize}
               onchange={(files) => uploadState.handleUpload(files)}
             >
               <Uploader.Idle />
-              <Uploader.DragOverlay />
             </Uploader.Root>
 
             <Uploader.Toolbar

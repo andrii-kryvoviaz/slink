@@ -12,14 +12,19 @@
   import {
     type UploaderContainerState,
     UploaderContainerTheme,
-    UploaderPatternTheme,
+    UploaderHeroTheme,
+    UploaderSurfaceTheme,
   } from './Uploader.theme';
+  import UploaderConstraints from './UploaderConstraints.svelte';
+  import UploaderDragOverlay from './UploaderDragOverlay.svelte';
 
   interface Props {
     disabled?: boolean;
     onchange?: (files: File[]) => void;
     allowMultiple?: boolean;
     allowedMimeTypes?: string[];
+    allowedFormats?: string[];
+    maxSize?: string | null;
     children?: Snippet;
   }
 
@@ -28,6 +33,8 @@
     onchange,
     allowMultiple = false,
     allowedMimeTypes = [],
+    allowedFormats = [],
+    maxSize = null,
     children,
   }: Props = $props();
 
@@ -82,20 +89,24 @@
 
 <svelte:document onpaste={fileDrop.handlePaste} />
 
-<div class={UploaderContainerTheme({ state: containerState })}>
-  <div class={cn(cardTheme(), 'transition-all duration-300')}>
-    <div class={UploaderPatternTheme()}></div>
+<div
+  class={UploaderContainerTheme({ state: containerState })}
+  {...fileDrop.dragHandlers}
+>
+  <Dropzone.Root state={fileDrop}>
+    <div class={cn(cardTheme(), 'isolate transition-all duration-300')}>
+      <div class={UploaderSurfaceTheme()}>
+        <Dropzone.Input
+          accept={acceptAttribute}
+          class={UploaderHeroTheme({ disabled })}
+        >
+          {@render children?.()}
+        </Dropzone.Input>
 
-    <Dropzone.Root state={fileDrop}>
-      <Dropzone.Input
-        accept={acceptAttribute}
-        class={cn(
-          'relative w-full cursor-pointer transition-all duration-500',
-          disabled && 'pointer-events-none opacity-60',
-        )}
-      >
-        {@render children?.()}
-      </Dropzone.Input>
-    </Dropzone.Root>
-  </div>
+        <UploaderConstraints {allowedFormats} {maxSize} />
+      </div>
+
+      <UploaderDragOverlay />
+    </div>
+  </Dropzone.Root>
 </div>

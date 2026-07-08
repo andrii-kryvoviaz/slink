@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 
 export const dropzoneInputTheme = cva(
-  'relative overflow-hidden flex flex-col justify-center items-center w-full bg-card-primary cursor-pointer hover:bg-card-secondary',
+  'relative overflow-hidden flex flex-col justify-center items-center w-full cursor-pointer',
 );
 
 export const dropzoneOverlayTheme = cva('', {

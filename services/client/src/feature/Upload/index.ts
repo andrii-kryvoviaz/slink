@@ -20,7 +20,6 @@ export { default as ProgressValue } from './Progress/ProgressValue.svelte';
 export * from './Progress/context.svelte';
 export { default as Success } from './Success/Success.svelte';
 export * from './Uploader/Uploader.theme';
-export { default as UploaderDragOverlay } from './Uploader/UploaderDragOverlay.svelte';
 export { default as UploaderIdle } from './Uploader/UploaderIdle.svelte';
 export { default as UploaderRoot } from './Uploader/UploaderRoot.svelte';
 export { default as UploaderToolbar } from './Uploader/UploaderToolbar.svelte';

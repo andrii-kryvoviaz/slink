@@ -6,6 +6,8 @@ export interface UploadPolicy {
   stripExif: boolean;
   allowOnlyPublicImages: boolean;
   allowedMimeTypes: string[];
+  allowedFormatLabels: string[];
+  maxSize: string | null;
   defaultVisibility: UserPreferencesResponse['image.defaultVisibility'];
 }
 
@@ -30,5 +32,7 @@ export const resolveUploadPolicy = (
   stripExif: resolveStripExif(globalSettings, userPreferences),
   allowOnlyPublicImages: globalSettings?.image?.allowOnlyPublicImages ?? false,
   allowedMimeTypes: globalSettings?.image?.allowedMimeTypes ?? [],
+  allowedFormatLabels: globalSettings?.image?.allowedFormatLabels ?? [],
+  maxSize: globalSettings?.image?.maxSize ?? null,
   defaultVisibility: userPreferences?.['image.defaultVisibility'] ?? null,
 });
