@@ -12,7 +12,7 @@ abstract readonly class AbstractSettingsValueObject extends AbstractCompoundValu
    * @return SettingCategory
    */
   abstract function getSettingsCategory(): SettingCategory;
-  
+
   /**
    * @return array<string, mixed>
    */

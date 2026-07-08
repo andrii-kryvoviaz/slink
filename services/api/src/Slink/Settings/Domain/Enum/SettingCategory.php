@@ -35,7 +35,7 @@ enum SettingCategory: string {
    */
   public function createSettingsCategoryRoot(array $payload): AbstractSettingsValueObject {
     $class = $this->getSettingsCategoryRootClass();
-    
+
     return $class::fromPayload($payload);
   }
 }

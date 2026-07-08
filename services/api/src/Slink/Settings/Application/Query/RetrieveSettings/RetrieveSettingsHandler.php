@@ -30,7 +30,7 @@ final readonly class RetrieveSettingsHandler implements QueryHandlerInterface {
     }
     
     $service = $this->configurationLocator->get($configurationProvider);
-    
+
     return $service->all();
   }
 }

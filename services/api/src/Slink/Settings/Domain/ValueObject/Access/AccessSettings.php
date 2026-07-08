@@ -9,11 +9,11 @@ use Slink\Settings\Domain\ValueObject\AbstractSettingsValueObject;
 
 final readonly class AccessSettings extends AbstractSettingsValueObject {
   private function __construct(
-    private bool $allowGuestUploads = false,
-    private bool $allowUnauthenticatedAccess = false,
-    private bool $requireSsl = false,
-    private bool $requireAuthForMediaShares = false,
-    private bool $requireAuthForCollectionShares = false,
+    private bool $allowGuestUploads,
+    private bool $allowUnauthenticatedAccess,
+    private bool $requireSsl,
+    private bool $requireAuthForMediaShares,
+    private bool $requireAuthForCollectionShares,
   ) {}
 
   #[\Override]

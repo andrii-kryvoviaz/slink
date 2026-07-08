@@ -13,8 +13,8 @@ final readonly class ShareSettings extends AbstractSettingsValueObject {
   public const int MAX_SHORT_URL_LENGTH = 32;
 
   private function __construct(
-    private bool $enableUrlShortening = true,
-    private int $shortUrlLength = self::DEFAULT_SHORT_URL_LENGTH,
+    private bool $enableUrlShortening,
+    private int $shortUrlLength,
   ) {}
 
   #[\Override]
