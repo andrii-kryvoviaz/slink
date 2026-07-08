@@ -57,7 +57,6 @@ export const themeIcons: string[] = [
   'ph:envelope-simple',
   'ph:user-plus',
   'ph:check-circle',
-  'ph:info-circle',
   'heroicons:x-mark',
   'clarity:block-line',
   'ph:upload-simple',
@@ -244,4 +243,5 @@ export const themeIcons: string[] = [
   'lucide:user-plus',
   'lucide:user-x',
   'lucide:user-check',
+  'tabler:link',
 ];
