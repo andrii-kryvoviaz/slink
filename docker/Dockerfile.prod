@@ -46,8 +46,6 @@ RUN composer install \
 
 FROM common AS prod
 
-RUN rm -rf /sbin/apk /etc/apk /lib/apk /usr/share/apk /var/cache/apk
-
 ARG UPLOAD_MAX_FILESIZE_IN_BYTES
 
 COPY --link --chmod=755 ./docker/config/s6-overlay/s6-rc.d/prod/ /etc/s6-overlay/s6-rc.d/

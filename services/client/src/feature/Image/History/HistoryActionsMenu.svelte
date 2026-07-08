@@ -7,19 +7,24 @@
     ImageDeletePopover,
     createImageActionsState,
     historyActionBarButtons,
+    shareFormats,
   } from '@slink/feature/Image';
   import { CreateTagDialog, TagPicker } from '@slink/feature/Tag';
   import {
     ActionsMenu,
     DropdownSimpleGroup,
     DropdownSimpleItem,
+    DropdownSimpleSub,
   } from '@slink/ui/components';
   import { Overlay } from '@slink/ui/components/popover';
 
+  import { page } from '$app/state';
   import Icon from '@iconify/svelte';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
   import type { CollectionReference } from '@slink/api/Response/Collection/CollectionResponse';
+
+  import type { ShareFormat } from '@slink/lib/settings';
 
   interface Props {
     image: {
@@ -40,6 +45,8 @@
   }
 
   let { image = $bindable(), on }: Props = $props();
+
+  const { settings } = page.data;
 
   let menuOpen = $state(false);
   let anchor = $state<HTMLElement>();
@@ -71,6 +78,11 @@
     menuOpen = false;
     actions.popover.delete = true;
   };
+
+  const copyWithFormat = (format: ShareFormat) => {
+    settings.share = { format };
+    actions.handleCopy(format);
+  };
 </script>
 
 <div class="flex items-center justify-end" bind:this={anchor}>
@@ -94,12 +106,27 @@
         {/snippet}
         <span>Manage tags</span>
       </DropdownSimpleItem>
-      <DropdownSimpleItem on={{ click: actions.handleCopy }}>
+      <DropdownSimpleSub>
         {#snippet icon()}
-          <Icon icon="lucide:link" class="h-4 w-4" />
+          <Icon icon="tabler:link" class="h-4 w-4" />
         {/snippet}
-        <span>Copy link</span>
-      </DropdownSimpleItem>
+        {#snippet label()}
+          <span>Copy link</span>
+        {/snippet}
+        {#each shareFormats as format (format.id)}
+          <DropdownSimpleItem on={{ click: () => copyWithFormat(format.id) }}>
+            {#snippet icon()}
+              <Icon icon={format.icon} class="h-4 w-4" />
+            {/snippet}
+            <span class="flex items-center justify-between gap-2">
+              <span>{format.label}</span>
+              {#if settings.share.format === format.id}
+                <Icon icon="lucide:check" class="h-4 w-4 shrink-0" />
+              {/if}
+            </span>
+          </DropdownSimpleItem>
+        {/each}
+      </DropdownSimpleSub>
       {#if visibleButtons.includes('visibility')}
         <DropdownSimpleItem on={{ click: actions.handleVisibilityChange }}>
           {#snippet icon()}

@@ -7,7 +7,6 @@ import { downloadByLink } from '$lib/utils/http/downloadByLink';
 import { createExclusiveToggle } from '$lib/utils/state/createExclusiveToggle.svelte';
 import { bindRequestState } from '$lib/utils/store/bindRequestState.svelte';
 import { useAutoReset } from '$lib/utils/time/useAutoReset.svelte';
-import { copyText } from '$lib/utils/ui/clipboard';
 import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
 import { routes } from '$lib/utils/url/routes';
 
@@ -16,6 +15,7 @@ import type { Tag } from '@slink/api/Resources/TagResource';
 import type { ShareResponse } from '@slink/api/Response';
 import type { CollectionReference } from '@slink/api/Response/Collection/CollectionResponse';
 
+import type { ShareFormat } from '@slink/lib/settings';
 import { createCreateCollectionModalState } from '@slink/lib/state/CreateCollectionModalState.svelte';
 import { createCreateTagModalState } from '@slink/lib/state/CreateTagModalState.svelte';
 import {
@@ -24,6 +24,7 @@ import {
 } from '@slink/lib/state/ImagePickerState.svelte';
 import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
+import { getShareFormat } from '../ShareFormat/shareFormats.language';
 import type { ActionButton } from './ImageActionBar.theme';
 
 export interface ImageActionsConfig {
@@ -196,16 +197,33 @@ export class ImageActionsState {
     });
   };
 
-  handleCopy = async (): Promise<void> => {
-    const image = this._config.getImage();
-    await this._share.run(image.id);
+  private _resolveShareUrl = async (imageId: string): Promise<string> => {
+    await this._share.run(imageId);
     if (this._share.error || !this._share.data) {
       toast.error(messages.image.failedToGenerateShareLink);
-      return;
+      throw new Error('Failed to generate share link');
     }
     await ApiClient.image.publishShare(this._share.data.shareId);
-    await copyText(routes.share.fromResponse(this._share.data));
-    this._isCopied.trigger();
+    return routes.share.fromResponse(this._share.data);
+  };
+
+  handleCopy = async (format: ShareFormat): Promise<void> => {
+    const image = this._config.getImage();
+    const descriptor = getShareFormat(format);
+    const source = {
+      content: () => routes.image.view(image.fileName, { absolute: true }),
+      share: () => this._resolveShareUrl(image.id),
+    };
+
+    try {
+      if (await descriptor.copy(source, image.fileName)) {
+        this._isCopied.trigger();
+        return;
+      }
+      toast.error(messages.general.somethingWentWrong);
+    } catch {
+      return;
+    }
   };
 
   handleCollectionToggle = ({

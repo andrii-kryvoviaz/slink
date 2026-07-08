@@ -7,7 +7,6 @@
   import { type WithElementRef, cn } from '@slink/utils/ui';
 
   import {
-    type ButtonGroupItemPosition,
     type ButtonGroupItemVariant,
     type ButtonGroupSize,
     buttonGroupItemVariants,
@@ -16,7 +15,6 @@
   type Props = WithElementRef<HTMLButtonAttributes> & {
     variant?: ButtonGroupItemVariant;
     size?: ButtonGroupSize;
-    position?: ButtonGroupItemPosition;
     active?: boolean;
     tooltip?: string;
     disableTooltip?: boolean;
@@ -27,7 +25,6 @@
     class: customClass,
     variant = 'default',
     size = 'md',
-    position = 'middle',
     active = false,
     tooltip,
     disableTooltip,
@@ -42,14 +39,14 @@
     side="bottom"
     sideOffset={8}
     withArrow={false}
-    triggerProps={{ class: 'flex flex-1' }}
+    triggerProps={{ class: 'flex' }}
   >
     {#snippet trigger()}
       <button
         bind:this={ref}
         type="button"
         class={cn(
-          buttonGroupItemVariants({ variant, size, position, active }),
+          buttonGroupItemVariants({ variant, size, active }),
           customClass,
         )}
         {...restProps}
@@ -63,10 +60,7 @@
   <button
     bind:this={ref}
     type="button"
-    class={cn(
-      buttonGroupItemVariants({ variant, size, position, active }),
-      customClass,
-    )}
+    class={cn(buttonGroupItemVariants({ variant, size, active }), customClass)}
     {...restProps}
   >
     {@render children?.()}

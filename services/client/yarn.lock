@@ -2020,12 +2020,12 @@
     tinyglobby "^0.2.9"
     vite-plugin-pwa "^1.2.0"
 
-"@wuchale/svelte@^0.20.2":
-  version "0.20.2"
-  resolved "https://registry.yarnpkg.com/@wuchale/svelte/-/svelte-0.20.2.tgz#bebf45f11b6a861a81128d4347ec1a93744d649b"
-  integrity sha512-dn2n5CoqaB6vQG2olrlpstO5ukqLr7g2H+gnh/LKatkKXDOnJ8uL6oLBYiY2zDKJ8y5crYR5dD4nk2nv3x4+VA==
+"@wuchale/svelte@0.20.0":
+  version "0.20.0"
+  resolved "https://registry.yarnpkg.com/@wuchale/svelte/-/svelte-0.20.0.tgz#c835f5c1ac256b7d8a3609c73ddba9993a1efb84"
+  integrity sha512-FIKvV9+hRQmFMxumDXv0TTSGB2NU5OWFg67AW1nWYDJ0+rb5SSM0UrPd9k5yroJv38lKMQqq8JgrvdWXF3SpIA==
   dependencies:
-    wuchale "^0.25.3"
+    wuchale "^0.24.0"
 
 acorn-jsx@^5.3.2:
   version "5.3.2"
@@ -5134,10 +5134,10 @@ wrap-ansi@^9.0.0:
     string-width "^7.0.0"
     strip-ansi "^7.1.0"
 
-wuchale@^0.25.3:
-  version "0.25.3"
-  resolved "https://registry.yarnpkg.com/wuchale/-/wuchale-0.25.3.tgz#357989e3600dfe4fe3d59fe60f7e1401bacaf9ce"
-  integrity sha512-4G5eV5bY/n1N6a7aGA+JTouyj9zavBCdQdcegP28NfOzYJshhpGhQkQXH1SHhxDMegPfGjWcipA9bn3+g2SbKw==
+wuchale@0.24.2, wuchale@^0.24.0:
+  version "0.24.2"
+  resolved "https://registry.yarnpkg.com/wuchale/-/wuchale-0.24.2.tgz#d0c71698e720a68c156361bba39d57324a592c9f"
+  integrity sha512-iNXbccUY+0QUY7jptsjGobfYwnj5sKjcrKQgcFvV6PYUBkjOzxQSqc/LLYhALjXZxfneDs+Gm/cl1SnViEtM2A==
   dependencies:
     "@sveltejs/acorn-typescript" "^1.0.10"
     acorn "^8.17.0"

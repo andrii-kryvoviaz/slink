@@ -5,7 +5,6 @@ import ButtonGroup, {
 } from './button-group.svelte';
 import type {
   ButtonGroupGap,
-  ButtonGroupItemPosition,
   ButtonGroupItemVariant,
   ButtonGroupProps,
   ButtonGroupRounded,
@@ -24,5 +23,4 @@ export {
   type ButtonGroupRounded,
   type ButtonGroupGap,
   type ButtonGroupItemVariant,
-  type ButtonGroupItemPosition,
 };

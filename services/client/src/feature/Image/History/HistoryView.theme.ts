@@ -7,9 +7,9 @@ import type { ActionButton } from '../ActionBar/ImageActionBar.theme';
 
 export const historyActionBarButtons: ActionButton[] = [
   'download',
+  'copy',
   'collection',
   'tag',
-  'copy',
   'visibility',
   'delete',
 ];

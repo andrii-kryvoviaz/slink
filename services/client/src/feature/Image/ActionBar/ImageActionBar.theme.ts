@@ -1,75 +1,74 @@
 import { cva } from 'class-variance-authority';
+import { tv } from 'tailwind-variants';
 
-export const actionBarContainerVariants = cva('flex items-center', {
+export const actionButtonVariants = cva('rounded-full', {
   variants: {
     layout: {
       default: '',
-      hero: 'gap-3',
-    },
-  },
-  defaultVariants: {
-    layout: 'default',
-  },
-});
-
-export const actionBarSecondaryGroupVariants = cva('flex items-center', {
-  variants: {
-    layout: {
-      default: '',
-      hero: 'gap-1',
-    },
-  },
-  defaultVariants: {
-    layout: 'default',
-  },
-});
-
-export const actionButtonVariants = cva('', {
-  variants: {
-    layout: {
-      default: '',
-      hero: 'h-auto min-w-0 rounded-lg',
+      hero: 'h-auto min-w-0 flex-1',
     },
     variant: {
       default: '',
-      primary: '',
-      secondary: '',
-      destructive: '',
+      destructive:
+        'text-red-600 dark:text-red-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30',
     },
   },
   compoundVariants: [
     {
       layout: 'hero',
-      variant: ['default', 'secondary'],
+      variant: 'default',
       class:
         'p-2 bg-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800',
     },
     {
       layout: 'hero',
-      variant: 'primary',
-      class:
-        'px-5 py-2.5 gap-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-medium text-sm shadow-sm hover:shadow-md',
-    },
-    {
-      layout: 'hero',
       variant: 'destructive',
-      class:
-        'p-2 bg-transparent text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20',
-    },
-    {
-      layout: 'default',
-      variant: 'primary',
-      class: 'gap-1.5 px-3 min-w-fit flex-3',
-    },
-    {
-      layout: 'default',
-      variant: 'secondary',
-      class: 'gap-1.5 px-2.5',
+      class: 'p-2 bg-transparent',
     },
   ],
   defaultVariants: {
     layout: 'default',
     variant: 'default',
+  },
+});
+
+export const shareCapsuleVariants = tv({
+  slots: {
+    capsule: 'flex items-stretch overflow-hidden rounded-full',
+    download:
+      'h-full rounded-none bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 focus-visible:ring-inset focus-visible:ring-offset-0',
+    copy: 'h-full rounded-none focus-visible:ring-inset focus-visible:ring-offset-0',
+    caret:
+      'h-full w-6 min-w-0 flex-none rounded-none border-l-[0.5px] border-gray-300 px-0 dark:border-gray-600 focus-visible:ring-inset focus-visible:ring-offset-0',
+    downloadIcon: 'shrink-0',
+    label: 'font-medium truncate',
+  },
+  variants: {
+    layout: {
+      default: {
+        capsule: 'h-8',
+        download: 'gap-1.5 px-3',
+        copy: 'gap-1.5 px-2.5',
+        label: 'text-xs',
+      },
+      hero: {
+        capsule:
+          'flex-1 rounded-xl shadow-sm transition-shadow hover:shadow-md',
+        download: 'h-auto min-w-0 flex-1 gap-2 px-5 py-2.5 text-sm',
+        copy: 'h-auto gap-2 px-4 py-2.5 text-sm',
+        downloadIcon: 'h-5 w-5',
+      },
+    },
+  },
+  compoundSlots: [
+    {
+      slots: ['copy', 'caret'],
+      class:
+        'bg-gray-200/75 text-gray-700 hover:bg-gray-200 dark:bg-gray-700/55 dark:text-gray-300 dark:hover:bg-gray-700/75',
+    },
+  ],
+  defaultVariants: {
+    layout: 'default',
   },
 });
 
@@ -83,30 +82,6 @@ export const iconSizeVariants = cva('', {
       sm: 'h-3.5 w-3.5',
       md: 'h-4 w-4',
       lg: 'h-5 w-5',
-    },
-  },
-  defaultVariants: {
-    layout: 'default',
-  },
-});
-
-export const downloadIconVariants = cva('shrink-0', {
-  variants: {
-    layout: {
-      default: '',
-      hero: 'h-5 w-5',
-    },
-  },
-  defaultVariants: {
-    layout: 'default',
-  },
-});
-
-export const downloadLabelVariants = cva('font-medium truncate', {
-  variants: {
-    layout: {
-      default: 'text-xs',
-      hero: '',
     },
   },
   defaultVariants: {

@@ -223,12 +223,11 @@ msgstr "Видалити"
 msgid "[deleted]"
 msgstr "[видалено]"
 
-#: src/feature/Collection/CollectionList/CollectionPickerList.svelte
-#: src/feature/Tag/TagPicker/TagPickerList.svelte
 #: src/routes/admin/settings/sso/+page.svelte
 #: src/routes/collections/+page.svelte
 #: src/routes/integrations/+page.svelte
 #: src/routes/tags/+page.svelte
+#: src/ui/components/picker/picker-list.svelte
 msgid "Create"
 msgstr "Створити"
 
@@ -1170,7 +1169,7 @@ msgid "Scale to {0}"
 msgstr "Масштабувати до {0}"
 
 #: src/feature/Image/History/Actions/DeleteAction.svelte
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Share/Type/ShareTypeBadge.svelte
 #: src/routes/admin/settings/image/+page.svelte
@@ -1296,29 +1295,25 @@ msgstr "Наступний допис"
 msgid "<0/> {0} views"
 msgstr "<0/> {0} переглядів"
 
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
 msgid "Direct Link"
 msgstr "Пряме посилання"
 
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
 msgid "Link"
 msgstr "Посилання"
 
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
 msgid "Markdown"
 msgstr "Markdown"
 
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
 msgid "BBCode"
 msgstr "BBCode"
 
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
 msgid "Image Content"
 msgstr "Вміст зображення"
-
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
-msgid "Failed to convert"
-msgstr "Не вдалося конвертувати"
 
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 msgid "Copying..."
@@ -4989,14 +4984,6 @@ msgstr "Потрібно вказати хост SMB."
 msgid "SMB share is required."
 msgstr "Потрібно вказати ресурс SMB."
 
-#: src/lib/state/CollectionSelectionState.svelte.ts
-msgid "Could not create collection"
-msgstr "Не вдалося створити колекцію"
-
-#: src/lib/state/TagSelectionState.svelte.ts
-msgid "Could not create tag"
-msgstr "Не вдалося створити тег"
-
 #: src/ui/components/picker/picker-create-row.svelte
 msgid "Create <0/>"
 msgstr "Створити <0/>"
@@ -5012,3 +4999,20 @@ msgstr "Позначайте завантаження, щоб знайти їх 
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to create collection"
 msgstr "Не вдалося створити колекцію"
+
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
+msgid "MD"
+msgstr ""
+
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
+msgid "BB"
+msgstr ""
+
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
+msgid "HTML"
+msgstr ""
+
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+msgid "Copy link options"
+msgstr ""

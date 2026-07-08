@@ -223,12 +223,11 @@ msgstr "Elimina"
 msgid "[deleted]"
 msgstr "[eliminato]"
 
-#: src/feature/Collection/CollectionList/CollectionPickerList.svelte
-#: src/feature/Tag/TagPicker/TagPickerList.svelte
 #: src/routes/admin/settings/sso/+page.svelte
 #: src/routes/collections/+page.svelte
 #: src/routes/integrations/+page.svelte
 #: src/routes/tags/+page.svelte
+#: src/ui/components/picker/picker-list.svelte
 msgid "Create"
 msgstr "Crea"
 
@@ -1170,7 +1169,7 @@ msgid "Scale to {0}"
 msgstr "Scala a {0}"
 
 #: src/feature/Image/History/Actions/DeleteAction.svelte
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Share/Type/ShareTypeBadge.svelte
 #: src/routes/admin/settings/image/+page.svelte
@@ -1296,29 +1295,25 @@ msgstr "Post successivo"
 msgid "<0/> {0} views"
 msgstr "<0/> {0} visualizzazioni"
 
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
 msgid "Direct Link"
 msgstr "Link diretto"
 
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
 msgid "Link"
 msgstr "Link"
 
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
 msgid "Markdown"
 msgstr "Markdown"
 
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
 msgid "BBCode"
 msgstr "BBCode"
 
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
 msgid "Image Content"
 msgstr "Contenuto immagine"
-
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
-msgid "Failed to convert"
-msgstr "Conversione non riuscita"
 
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 msgid "Copying..."
@@ -4981,14 +4976,6 @@ msgstr "L'host SMB è obbligatorio."
 msgid "SMB share is required."
 msgstr "La condivisione SMB è obbligatoria."
 
-#: src/lib/state/CollectionSelectionState.svelte.ts
-msgid "Could not create collection"
-msgstr "Impossibile creare la raccolta"
-
-#: src/lib/state/TagSelectionState.svelte.ts
-msgid "Could not create tag"
-msgstr "Impossibile creare il tag"
-
 #: src/ui/components/picker/picker-create-row.svelte
 msgid "Create <0/>"
 msgstr "Crea <0/>"
@@ -5004,3 +4991,20 @@ msgstr "Etichetta i caricamenti per ritrovarli in seguito"
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to create collection"
 msgstr "Creazione della raccolta non riuscita"
+
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
+msgid "MD"
+msgstr ""
+
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
+msgid "BB"
+msgstr ""
+
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
+msgid "HTML"
+msgstr ""
+
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+msgid "Copy link options"
+msgstr ""

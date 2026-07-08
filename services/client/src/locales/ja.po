@@ -223,12 +223,11 @@ msgstr "削除"
 msgid "[deleted]"
 msgstr "[削除済み]"
 
-#: src/feature/Collection/CollectionList/CollectionPickerList.svelte
-#: src/feature/Tag/TagPicker/TagPickerList.svelte
 #: src/routes/admin/settings/sso/+page.svelte
 #: src/routes/collections/+page.svelte
 #: src/routes/integrations/+page.svelte
 #: src/routes/tags/+page.svelte
+#: src/ui/components/picker/picker-list.svelte
 msgid "Create"
 msgstr "作成"
 
@@ -1170,7 +1169,7 @@ msgid "Scale to {0}"
 msgstr "{0}に拡大縮小"
 
 #: src/feature/Image/History/Actions/DeleteAction.svelte
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Share/Type/ShareTypeBadge.svelte
 #: src/routes/admin/settings/image/+page.svelte
@@ -1296,29 +1295,25 @@ msgstr "次の投稿"
 msgid "<0/> {0} views"
 msgstr "<0/> {0}回表示"
 
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
 msgid "Direct Link"
 msgstr "直接リンク"
 
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
 msgid "Link"
 msgstr "リンク"
 
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
 msgid "Markdown"
 msgstr "Markdown"
 
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
 msgid "BBCode"
 msgstr "BBCode"
 
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
 msgid "Image Content"
 msgstr "画像コンテンツ"
-
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
-msgid "Failed to convert"
-msgstr "変換に失敗しました"
 
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 msgid "Copying..."
@@ -4981,14 +4976,6 @@ msgstr "SMBホストは必須です。"
 msgid "SMB share is required."
 msgstr "SMB共有は必須です。"
 
-#: src/lib/state/CollectionSelectionState.svelte.ts
-msgid "Could not create collection"
-msgstr "コレクションを作成できませんでした"
-
-#: src/lib/state/TagSelectionState.svelte.ts
-msgid "Could not create tag"
-msgstr "タグを作成できませんでした"
-
 #: src/ui/components/picker/picker-create-row.svelte
 msgid "Create <0/>"
 msgstr "<0/>を作成"
@@ -5004,3 +4991,20 @@ msgstr "アップロードにラベルを付けて後で見つけやすくしま
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to create collection"
 msgstr "コレクションの作成に失敗しました"
+
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
+msgid "MD"
+msgstr ""
+
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
+msgid "BB"
+msgstr ""
+
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
+msgid "HTML"
+msgstr ""
+
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+msgid "Copy link options"
+msgstr ""

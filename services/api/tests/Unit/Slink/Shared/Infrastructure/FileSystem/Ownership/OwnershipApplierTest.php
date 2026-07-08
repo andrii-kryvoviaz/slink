@@ -116,6 +116,91 @@ final class OwnershipApplierTest extends TestCase {
     self::assertSame(0o750, $this->permsOf($this->appDir() . '/var/data/keys'));
   }
 
+  #[Test]
+  public function itAppliesDirModeAndFileModeAcrossARecursiveTree(): void {
+    $images = $this->appDir() . '/slink/images';
+    \mkdir($images . '/nested/deep', 0o700, true);
+    \file_put_contents($images . '/nested/deep/photo.png', "img\n");
+    \chmod($images . '/nested/deep/photo.png', 0o644);
+
+    (new OwnershipApplier())->apply($this->planOf([
+      new OwnershipEntry(path: $images, mode: 0o2770, fileMode: 0o660, recursive: true),
+    ]));
+
+    self::assertSame(0o2770, $this->permsOf($images));
+    self::assertSame(0o2770, $this->permsOf($images . '/nested'));
+    self::assertSame(0o2770, $this->permsOf($images . '/nested/deep'));
+    self::assertSame(0o660, $this->permsOf($images . '/nested/deep/photo.png'));
+  }
+
+  #[Test]
+  public function itSkipsSymlinksEncounteredInsideARecursivelyWalkedTree(): void {
+    $images = $this->appDir() . '/slink/images';
+    $target = $this->_scratch . '/link-target';
+    \file_put_contents($target, "secret\n");
+    \chmod($target, 0o600);
+    \symlink($target, $images . '/link');
+
+    (new OwnershipApplier())->apply($this->planOf([
+      new OwnershipEntry(path: $images, mode: 0o2770, fileMode: 0o660, recursive: true),
+    ]));
+
+    self::assertSame(0o600, $this->permsOf($target));
+    self::assertSame(0o2770, $this->permsOf($images));
+  }
+
+  #[Test]
+  public function itRefusesARecursiveEntryWhoseTopLevelPathIsASymlink(): void {
+    $images = $this->appDir() . '/slink/images';
+    $target = $this->_scratch . '/dir-target';
+    \mkdir($target, 0o700);
+    $this->removeTree($images);
+    \symlink($target, $images);
+
+    try {
+      (new OwnershipApplier())->apply($this->planOf([
+        new OwnershipEntry(path: $images, mode: 0o2770, fileMode: 0o660, recursive: true),
+      ]));
+      self::fail('Expected OwnershipException to be thrown for the symlinked path.');
+    } catch (OwnershipException $e) {
+      self::assertStringContainsString($images, $e->getMessage());
+    } finally {
+      \unlink($images);
+    }
+
+    self::assertSame(0o700, $this->permsOf($target));
+  }
+
+  #[Test]
+  public function itChmodsGlobMatchedFiles(): void {
+    $data = $this->appDir() . '/var/data';
+    \file_put_contents($data . '/gallery.db', '');
+    \file_put_contents($data . '/gallery.db-wal', '');
+    \chmod($data . '/gallery.db', 0o644);
+    \chmod($data . '/gallery.db-wal', 0o644);
+
+    (new OwnershipApplier())->apply($this->planOf([
+      new OwnershipEntry(path: $data . '/*.db*', mode: 0o660, optional: true, glob: true),
+    ]));
+
+    self::assertSame(0o660, $this->permsOf($data . '/gallery.db'));
+    self::assertSame(0o660, $this->permsOf($data . '/gallery.db-wal'));
+  }
+
+  #[Test]
+  public function itSkipsChmodWhenPermissionsAlreadyConverge(): void {
+    $images = $this->appDir() . '/slink/images';
+    \chmod($images, 0o2770);
+    $before = $this->changeTimeOf($images);
+    $this->waitForNextSecond($before);
+
+    (new OwnershipApplier())->apply($this->planOf([
+      new OwnershipEntry(path: $images, mode: 0o2770),
+    ]));
+
+    self::assertSame($before, $this->changeTimeOf($images));
+  }
+
   private function plan(): OwnershipPlan {
     return $this->planOf([
       new OwnershipEntry(path: $this->appDir(), recursive: true),
@@ -165,6 +250,18 @@ final class OwnershipApplierTest extends TestCase {
     \clearstatcache(true, $path);
 
     return \fileperms($path) & 0o7777;
+  }
+
+  private function changeTimeOf(string $path): int {
+    \clearstatcache(true, $path);
+
+    return (int) \filectime($path);
+  }
+
+  private function waitForNextSecond(int $reference): void {
+    while (\time() <= $reference) {
+      \usleep(50_000);
+    }
   }
 
   private function removeTree(string $path): void {

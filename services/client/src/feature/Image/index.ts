@@ -72,6 +72,8 @@ export { default as PostViewerNavigation } from './PostViewer/PostViewerNavigati
 export { default as PostViewerSidebar } from './PostViewer/PostViewerSidebar.svelte';
 export { default as Card } from './Share/Card.svelte';
 export * from './Share/CardState.svelte';
+export { default as ShareFormatMenu } from './ShareFormat/ShareFormatMenu.svelte';
+export * from './ShareFormat/shareFormats.language';
 export { default as ShareLinkCopy } from './ShareLinkCopy/ShareLinkCopy.svelte';
 export { default as ImageSizePicker } from './SizePicker/ImageSizePicker.svelte';
 export * from './SizePicker/ImageSizePicker.theme';

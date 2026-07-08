@@ -100,9 +100,7 @@ class OwnershipApplier {
   }
 
   private function applyMode(OwnershipEntry $entry, string $path): void {
-    $mode = $entry->getMode();
-
-    if ($mode === null) {
+    if ($entry->getMode() === null && $entry->getFileMode() === null) {
       return;
     }
 
@@ -110,8 +108,59 @@ class OwnershipApplier {
       throw OwnershipException::symlinkRefused($path);
     }
 
+    if (!$entry->isRecursive()) {
+      $this->chmodPath($path, $entry->getMode());
+
+      return;
+    }
+
+    $this->applyModeToTree($entry, $path);
+  }
+
+  private function applyModeToTree(OwnershipEntry $entry, string $root): void {
+    foreach ($this->collectPaths($root) as $target) {
+      if (\is_link($target)) {
+        continue;
+      }
+
+      $this->chmodPath($target, $this->modeFor($entry, $target));
+    }
+  }
+
+  private function modeFor(OwnershipEntry $entry, string $path): ?int {
+    if (\is_dir($path)) {
+      return $entry->getMode();
+    }
+
+    if (\is_file($path)) {
+      return $entry->getFileMode();
+    }
+
+    return null;
+  }
+
+  private function chmodPath(string $path, ?int $mode): void {
+    if ($mode === null) {
+      return;
+    }
+
+    if ($this->currentMode($path) === $mode) {
+      return;
+    }
+
     if (!@\chmod($path, $mode)) {
       throw OwnershipException::modeFailed($path, $mode);
     }
+  }
+
+  private function currentMode(string $path): ?int {
+    \clearstatcache(true, $path);
+    $perms = @\fileperms($path);
+
+    if ($perms === false) {
+      return null;
+    }
+
+    return $perms & 0o7777;
   }
 }

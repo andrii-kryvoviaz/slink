@@ -28,34 +28,45 @@ RUN install-php-extensions \
         curl intl mbstring exif ffi redis vips && \
     rm -rf /tmp/* /var/cache/apk/*
 
-# ToDo: migrate to dhi.io/alpine-base:${ALPINE_VERSION} (requires manual dependencies installation)    
-FROM dhi.io/alpine-base:${ALPINE_VERSION}-dev AS common
+FROM dhi.io/alpine-base:${ALPINE_VERSION} AS runtime-base
 
+FROM dhi.io/alpine-base:${ALPINE_VERSION}-dev AS staging
 ARG ALPINE_VERSION
+RUN mkdir -p /apk-config/keys \
+        && cp /etc/apk/keys/*.pub /apk-config/keys/
+RUN cat > /apk-config/repositories <<-REPOS
+https://dhi.io/apk/alpine/v${ALPINE_VERSION}/main
+@alpine https://dl-cdn.alpinelinux.org/alpine/v${ALPINE_VERSION}/main
+@alpine https://dl-cdn.alpinelinux.org/alpine/v${ALPINE_VERSION}/community
+REPOS
+
+FROM staging AS rootfs
+
 ARG USER_ID
 ARG GROUP_ID
 
-RUN --mount=type=cache,target=/var/cache/apk \
-    printf '\nhttps://dl-cdn.alpinelinux.org/alpine/v%s/main\nhttps://dl-cdn.alpinelinux.org/alpine/v%s/community\n' \
-        "${ALPINE_VERSION}" "${ALPINE_VERSION}" >> /etc/apk/repositories && \
-    apk add \
-        s6-overlay \
-        redis \
-        libmcrypt \
+COPY --from=runtime-base / /rootfs
+
+RUN cp -r /apk-config/. /rootfs/etc/apk/
+
+RUN apk add --root /rootfs --no-cache \
+        s6-overlay@alpine \
+        redis@alpine \
+        libmcrypt@alpine \
         libcurl \
         icu-libs \
         libsmbclient \
         samba-client \
-        imagemagick \
-        vips \
-        libheif \
-        libheif-aom \
-        libheif-dav1d \
-        libheif-x265 \
-        libheif-libde265 \
+        imagemagick@alpine \
+        vips@alpine \
+        libheif@alpine \
+        libheif-aom@alpine \
+        libheif-dav1d@alpine \
+        libheif-x265@alpine \
+        libheif-libde265@alpine \
         tzdata \
         libffi \
-        libexif \
+        libexif@alpine \
         openssl \
         readline \
         gnu-libiconv-libs \
@@ -64,12 +75,20 @@ RUN --mount=type=cache,target=/var/cache/apk \
         argon2-libs \
         libsodium
 
-RUN addgroup -g 33 www-data && \
-    adduser -D -u 33 -G www-data -H -s /sbin/nologin www-data && \
-    addgroup -g ${GROUP_ID} slink && \
-    adduser -D -u ${USER_ID} -G slink slink && \
-    addgroup www-data slink && \
-    addgroup redis slink
+RUN chroot /rootfs /bin/sh -e <<EOF
+    addgroup -g 0 root
+    adduser -D -H -h /root -s /bin/sh -G root -g root -u 0 root
+    addgroup -g 33 www-data
+    adduser -D -u 33 -G www-data -H -s /sbin/nologin www-data
+    addgroup -g ${GROUP_ID} slink
+    adduser -D -u ${USER_ID} -G slink slink
+    addgroup www-data slink
+    addgroup slink www-data
+EOF
+
+FROM runtime-base AS common
+
+COPY --link --from=rootfs /rootfs/ /
 
 USER root
 
@@ -105,7 +124,6 @@ COPY --chmod=755 ./docker/scripts/slink ./docker/scripts/init-secrets ./docker/s
 
 WORKDIR /services
 
-ARG MEMORY_LIMIT
 ARG USER_ID
 ARG GROUP_ID
 

@@ -1,12 +1,29 @@
+# check=skip=InvalidDefaultArgInFrom
+ARG ALPINE_VERSION
+ARG COMPOSER_VERSION
+
+FROM staging AS test-rootfs
+
+RUN mkdir -p /rootfs/etc/apk && cp -r /apk-config/. /rootfs/etc/apk/
+
+RUN apk add --root /rootfs --initdb --no-cache \
+        git \
+        unzip \
+        exiftool@alpine
+
+RUN rm -rf /rootfs/lib/apk /rootfs/etc/apk /rootfs/var/cache/apk /rootfs/var/run /rootfs/var/lock
+
+FROM composer:${COMPOSER_VERSION} AS composer
+
 FROM common AS test
 
 ARG MEMORY_LIMIT
 
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 WORKDIR /services/api
 
-RUN apk add --no-cache git unzip exiftool
+COPY --from=test-rootfs /rootfs/ /
 
 COPY services/api/composer.json services/api/composer.lock ./
 RUN composer install --ignore-platform-reqs --no-interaction --no-scripts

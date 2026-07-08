@@ -54,7 +54,7 @@
   });
 
   export const buttonGroupItemVariants = tv({
-    base: 'relative flex flex-1 items-center justify-center transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-blue-500/50 focus-visible:z-10 disabled:pointer-events-none disabled:opacity-50',
+    base: 'relative flex items-center justify-center rounded-md transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-blue-500/50 focus-visible:z-10 disabled:pointer-events-none disabled:opacity-50',
     variants: {
       variant: {
         default:
@@ -76,33 +76,14 @@
         lg: 'h-9 min-w-9 px-3 text-sm',
         xl: 'h-10 min-w-10 px-3.5 text-base',
       },
-      position: {
-        first: 'rounded-l-md',
-        middle: 'rounded-none',
-        last: 'rounded-r-md',
-        only: 'rounded-md',
-      },
       active: {
         true: 'bg-gray-100 dark:bg-gray-700',
         false: '',
       },
     },
-    compoundVariants: [
-      {
-        variant: 'primary',
-        position: 'first',
-        class: 'rounded-l-md',
-      },
-      {
-        variant: 'primary',
-        position: 'last',
-        class: 'rounded-r-md',
-      },
-    ],
     defaultVariants: {
       variant: 'default',
       size: 'md',
-      position: 'middle',
       active: false,
     },
   });
@@ -124,9 +105,6 @@
   export type ButtonGroupItemVariant = VariantProps<
     typeof buttonGroupItemVariants
   >['variant'];
-  export type ButtonGroupItemPosition = VariantProps<
-    typeof buttonGroupItemVariants
-  >['position'];
 
   export type ButtonGroupProps = WithElementRef<
     HTMLAttributes<HTMLDivElement>

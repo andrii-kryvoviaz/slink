@@ -38,18 +38,32 @@ target "_frankenphp" {
   target   = "frankenphp"
 }
 
+target "_staging" {
+  inherits = ["_base"]
+  target   = "staging"
+}
+
 target "_contexts" {
   contexts = {
     node         = "target:_node"
     common       = "target:_common"
     frankenphp   = "target:_frankenphp"
+    staging      = "target:_staging"
+  }
+}
+
+target "_prod-base" {
+  dockerfile = "docker/Dockerfile.prod"
+  target     = "prod"
+  args = {
+    ALPINE_VERSION               = ALPINE_VERSION
+    COMPOSER_VERSION             = COMPOSER_VERSION
+    UPLOAD_MAX_FILESIZE_IN_BYTES = UPLOAD_MAX_FILESIZE_IN_BYTES
   }
 }
 
 target "prod" {
-  inherits   = ["_contexts"]
-  dockerfile = "docker/Dockerfile.prod"
-  target     = "prod"
+  inherits   = ["_contexts", "_prod-base"]
   tags       = ["anirdev/slink:${TAG}"]
   labels = {
     "org.opencontainers.image.title"       = "Slink"
@@ -63,11 +77,6 @@ target "prod" {
     "type=provenance,mode=max",
     "type=sbom"
   ]
-  args = {
-    ALPINE_VERSION               = ALPINE_VERSION
-    COMPOSER_VERSION             = COMPOSER_VERSION
-    UPLOAD_MAX_FILESIZE_IN_BYTES = UPLOAD_MAX_FILESIZE_IN_BYTES
-  }
 }
 
 target "dev" {
@@ -83,20 +92,15 @@ target "test" {
   target     = "test"
   tags       = ["slink:test"]
   args = {
-    MEMORY_LIMIT = MEMORY_LIMIT
+    ALPINE_VERSION   = ALPINE_VERSION
+    COMPOSER_VERSION = COMPOSER_VERSION
+    MEMORY_LIMIT     = MEMORY_LIMIT
   }
 }
 
 target "e2e" {
-  inherits   = ["_contexts"]
-  dockerfile = "docker/Dockerfile.prod"
-  target     = "prod"
+  inherits   = ["_contexts", "_prod-base"]
   tags       = ["slink:e2e"]
-  args = {
-    ALPINE_VERSION               = ALPINE_VERSION
-    COMPOSER_VERSION             = COMPOSER_VERSION
-    UPLOAD_MAX_FILESIZE_IN_BYTES = UPLOAD_MAX_FILESIZE_IN_BYTES
-  }
 }
 
 target "permissions-test" {
@@ -105,10 +109,7 @@ target "permissions-test" {
   target     = "permissions-test"
   tags       = ["slink:permissions-test"]
   contexts = {
-    node         = "target:_node"
-    common       = "target:_common"
-    frankenphp   = "target:_frankenphp"
-    test         = "target:test"
+    test = "target:test"
   }
   args = {
     ALPINE_VERSION = ALPINE_VERSION

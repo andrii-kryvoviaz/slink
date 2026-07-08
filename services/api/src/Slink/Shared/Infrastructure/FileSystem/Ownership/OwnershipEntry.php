@@ -10,6 +10,7 @@ final readonly class OwnershipEntry {
     private ?string $owner = null,
     private ?string $group = null,
     private ?int $mode = null,
+    private ?int $fileMode = null,
     private bool $recursive = false,
     private bool $optional = false,
     private bool $glob = false,
@@ -30,6 +31,10 @@ final readonly class OwnershipEntry {
 
   public function getMode(): ?int {
     return $this->mode;
+  }
+
+  public function getFileMode(): ?int {
+    return $this->fileMode;
   }
 
   public function isRecursive(): bool {

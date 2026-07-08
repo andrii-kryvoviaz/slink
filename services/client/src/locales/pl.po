@@ -223,12 +223,11 @@ msgstr "Usuń"
 msgid "[deleted]"
 msgstr "[usunięto]"
 
-#: src/feature/Collection/CollectionList/CollectionPickerList.svelte
-#: src/feature/Tag/TagPicker/TagPickerList.svelte
 #: src/routes/admin/settings/sso/+page.svelte
 #: src/routes/collections/+page.svelte
 #: src/routes/integrations/+page.svelte
 #: src/routes/tags/+page.svelte
+#: src/ui/components/picker/picker-list.svelte
 msgid "Create"
 msgstr "Utwórz"
 
@@ -1170,7 +1169,7 @@ msgid "Scale to {0}"
 msgstr "Skaluj do {0}"
 
 #: src/feature/Image/History/Actions/DeleteAction.svelte
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Share/Type/ShareTypeBadge.svelte
 #: src/routes/admin/settings/image/+page.svelte
@@ -1296,29 +1295,25 @@ msgstr "Następny post"
 msgid "<0/> {0} views"
 msgstr "<0/> {0} wyświetleń"
 
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
 msgid "Direct Link"
 msgstr "Bezpośredni link"
 
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
 msgid "Link"
 msgstr "Link"
 
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
 msgid "Markdown"
 msgstr "Markdown"
 
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
 msgid "BBCode"
 msgstr "BBCode"
 
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
 msgid "Image Content"
 msgstr "Zawartość obrazu"
-
-#: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
-msgid "Failed to convert"
-msgstr "Konwersja nie powiodła się"
 
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 msgid "Copying..."
@@ -4997,14 +4992,6 @@ msgstr "Host SMB jest wymagany."
 msgid "SMB share is required."
 msgstr "Udział SMB jest wymagany."
 
-#: src/lib/state/CollectionSelectionState.svelte.ts
-msgid "Could not create collection"
-msgstr "Nie udało się utworzyć kolekcji"
-
-#: src/lib/state/TagSelectionState.svelte.ts
-msgid "Could not create tag"
-msgstr "Nie udało się utworzyć tagu"
-
 #: src/ui/components/picker/picker-create-row.svelte
 msgid "Create <0/>"
 msgstr "Utwórz <0/>"
@@ -5020,3 +5007,20 @@ msgstr "Oznaczaj przesłane pliki, aby łatwo je odnaleźć"
 #: src/lib/utils/i18n/messages/toast.language.ts
 msgid "Failed to create collection"
 msgstr "Nie udało się utworzyć kolekcji"
+
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
+msgid "MD"
+msgstr ""
+
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
+msgid "BB"
+msgstr ""
+
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
+#: src/feature/Image/ShareFormat/shareFormats.language.ts
+msgid "HTML"
+msgstr ""
+
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
+msgid "Copy link options"
+msgstr ""

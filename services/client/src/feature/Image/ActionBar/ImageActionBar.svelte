@@ -7,9 +7,11 @@
   import { Loader } from '@slink/feature/Layout';
   import { CreateTagDialog, TagPicker } from '@slink/feature/Tag';
   import { ButtonGroup, ButtonGroupItem } from '@slink/ui/components';
+  import * as DropdownMenu from '@slink/ui/components/dropdown-menu/index.js';
   import { Overlay } from '@slink/ui/components/popover';
   import { TooltipProvider } from '@slink/ui/components/tooltip';
 
+  import { page } from '$app/state';
   import Icon from '@iconify/svelte';
   import { cubicOut } from 'svelte/easing';
   import { scale } from 'svelte/transition';
@@ -17,20 +19,18 @@
   import type { Tag } from '@slink/api/Resources/TagResource';
   import type { CollectionReference } from '@slink/api/Response/Collection/CollectionResponse';
 
+  import type { ShareFormat } from '@slink/lib/settings';
+
   import { cn } from '@slink/utils/ui';
 
+  import ShareFormatMenu from '../ShareFormat/ShareFormatMenu.svelte';
   import type { ActionButton, ActionLayout } from './ImageActionBar.theme';
   import {
-    actionBarContainerVariants,
-    actionBarSecondaryGroupVariants,
     actionButtonVariants,
-    downloadIconVariants,
-    downloadLabelVariants,
     iconSizeVariants,
+    shareCapsuleVariants,
   } from './ImageActionBar.theme';
   import { createImageActionsState } from './ImageActionsState.svelte';
-
-  type ButtonPosition = 'first' | 'middle' | 'last' | 'only';
 
   interface Props {
     image: {
@@ -55,7 +55,7 @@
 
   let {
     image = $bindable(),
-    buttons = ['download', 'collection', 'copy', 'visibility', 'delete'],
+    buttons = ['download', 'copy', 'collection', 'visibility', 'delete'],
     compact = false,
     layout = 'default',
     on,
@@ -63,6 +63,10 @@
 
   const isHero = $derived(layout === 'hero');
   const iconClass = $derived(iconSizeVariants({ layout }));
+  const capsule = $derived(shareCapsuleVariants({ layout }));
+
+  const { settings } = page.data;
+  const selectedFormat = $derived(settings.share.format);
 
   const actions = createImageActionsState({
     getImage: () => image,
@@ -73,6 +77,20 @@
   });
 
   const visibleButtons = $derived(actions.filterVisibleButtons(buttons));
+  const hasDownload = $derived(visibleButtons.includes('download'));
+  const hasCopy = $derived(visibleButtons.includes('copy'));
+  const hasShareCapsule = $derived(hasDownload || hasCopy);
+  const hasDelete = $derived(visibleButtons.includes('delete'));
+  const middleButtons = $derived(
+    visibleButtons.filter(
+      (button) =>
+        button !== 'download' && button !== 'copy' && button !== 'delete',
+    ),
+  );
+  const showCapsuleLabels = $derived(isHero || !compact);
+  const copyDisabled = $derived(
+    actions.shareIsLoading || actions.isCopied.active,
+  );
 
   const copyTooltip = $derived.by(() => {
     if (actions.shareIsLoading) return 'Generating...';
@@ -85,11 +103,9 @@
     return 'Make public';
   });
 
-  const getPosition = (index: number, total: number): ButtonPosition => {
-    if (total === 1) return 'only';
-    if (index === 0) return 'first';
-    if (index === total - 1) return 'last';
-    return 'middle';
+  const handleCopyFormatSelect = (format: ShareFormat) => {
+    settings.share = { format };
+    actions.handleCopy(format);
   };
 </script>
 
@@ -116,7 +132,7 @@
       />
     </div>
   {:else}
-    <Icon icon="lucide:link" class={iconClass} />
+    <Icon icon="tabler:link" class={iconClass} />
   {/if}
 {/snippet}
 
@@ -129,36 +145,79 @@
   />
 {/snippet}
 
-{#snippet downloadButton(position: ButtonPosition)}
+{#snippet downloadZone()}
   <ButtonGroupItem
     variant="primary"
     size="md"
-    position={isHero ? 'only' : position}
-    class={actionButtonVariants({
-      layout,
-      variant: compact ? 'default' : 'primary',
-    })}
+    class={capsule.download()}
     onclick={actions.handleDownload}
     disabled={actions.downloadIsLoading}
     aria-label="Download image"
-    tooltip={compact && !isHero ? 'Download' : undefined}
+    tooltip={showCapsuleLabels ? undefined : 'Download'}
   >
     {@render loaderOrIcon(
       'lucide:download',
       actions.downloadIsLoading,
-      downloadIconVariants({ layout }),
+      capsule.downloadIcon(),
     )}
-    {#if isHero || !compact}
-      <span class={downloadLabelVariants({ layout })}>Download</span>
+    {#if showCapsuleLabels}
+      <span class={capsule.label()}>Download</span>
     {/if}
   </ButtonGroupItem>
 {/snippet}
 
-{#snippet visibilityButton(position: ButtonPosition)}
+{#snippet copyZone()}
+  <ButtonGroupItem
+    variant="secondary"
+    size="md"
+    class={capsule.copy()}
+    onclick={() => actions.handleCopy(selectedFormat)}
+    disabled={copyDisabled}
+    aria-label="Copy image link"
+    tooltip={copyTooltip}
+  >
+    {@render copyIconContent()}
+    {#if showCapsuleLabels}
+      <span class={capsule.label()}>Copy</span>
+    {/if}
+  </ButtonGroupItem>
+  <DropdownMenu.Root>
+    <DropdownMenu.Trigger disabled={copyDisabled}>
+      {#snippet child({ props })}
+        <ButtonGroupItem
+          {...props}
+          variant="secondary"
+          size="md"
+          class={capsule.caret()}
+          disabled={copyDisabled}
+          aria-label="Copy link options"
+        >
+          <Icon icon="ph:caret-down" class="h-2.5 w-2.5" />
+        </ButtonGroupItem>
+      {/snippet}
+    </DropdownMenu.Trigger>
+    <ShareFormatMenu
+      selected={selectedFormat}
+      onSelect={handleCopyFormatSelect}
+    />
+  </DropdownMenu.Root>
+{/snippet}
+
+{#snippet shareCapsule()}
+  <div class={capsule.capsule()}>
+    {#if hasDownload}
+      {@render downloadZone()}
+    {/if}
+    {#if hasCopy}
+      {@render copyZone()}
+    {/if}
+  </div>
+{/snippet}
+
+{#snippet visibilityButton()}
   <ButtonGroupItem
     variant="default"
     size="md"
-    position={isHero ? 'only' : position}
     class={actionButtonVariants({ layout })}
     onclick={actions.handleVisibilityChange}
     disabled={actions.visibilityIsLoading}
@@ -170,33 +229,16 @@
   </ButtonGroupItem>
 {/snippet}
 
-{#snippet copyButton(position: ButtonPosition)}
-  <ButtonGroupItem
-    variant={isHero ? 'default' : 'secondary'}
-    size="md"
-    position={isHero ? 'only' : position}
-    class={actionButtonVariants({ layout, variant: 'secondary' })}
-    onclick={actions.handleCopy}
-    disabled={actions.shareIsLoading || actions.isCopied.active}
-    aria-label="Copy image link"
-    tooltip={copyTooltip}
-  >
-    {@render copyIconContent()}
-  </ButtonGroupItem>
-{/snippet}
-
-{#snippet deleteButton(position: ButtonPosition)}
+{#snippet deleteButton()}
   <Overlay
     bind:open={actions.popover.delete}
     variant="floating"
     contentProps={{ align: 'end' }}
-    triggerClass={isHero ? '' : 'flex-1'}
   >
     {#snippet trigger()}
       <ButtonGroupItem
         variant="destructive"
         size="md"
-        position={isHero ? 'only' : position}
         class={actionButtonVariants({ layout, variant: 'destructive' })}
         aria-label="Delete image"
         disabled={actions.deleteIsLoading}
@@ -210,19 +252,24 @@
   </Overlay>
 {/snippet}
 
-{#snippet collectionButton(position: ButtonPosition)}
+{#snippet deleteSection()}
+  {#if hasDelete}
+    <div class="w-px h-[18px] bg-gray-200 dark:bg-gray-700 mx-0.5"></div>
+    {@render deleteButton()}
+  {/if}
+{/snippet}
+
+{#snippet collectionButton()}
   <Overlay
     bind:open={actions.popover.collection}
     variant="floating"
     size="none"
     contentProps={{ align: 'end' }}
-    triggerClass={isHero ? '' : 'flex-1'}
   >
     {#snippet trigger()}
       <ButtonGroupItem
         variant="default"
         size="md"
-        position={isHero ? 'only' : position}
         class={actionButtonVariants({ layout })}
         aria-label="Add to collection"
         tooltip="Add to collection"
@@ -242,19 +289,17 @@
   </Overlay>
 {/snippet}
 
-{#snippet tagButton(position: ButtonPosition)}
+{#snippet tagButton()}
   <Overlay
     bind:open={actions.popover.tag}
     variant="floating"
     size="none"
     contentProps={{ align: 'end' }}
-    triggerClass={isHero ? '' : 'flex-1'}
   >
     {#snippet trigger()}
       <ButtonGroupItem
         variant="default"
         size="md"
-        position={isHero ? 'only' : position}
         class={actionButtonVariants({ layout })}
         aria-label="Manage tags"
         tooltip="Manage tags"
@@ -274,61 +319,50 @@
   </Overlay>
 {/snippet}
 
-{#snippet renderButton(button: ActionButton, position: ButtonPosition)}
-  {#if button === 'download'}
-    {@render downloadButton(position)}
-  {:else if button === 'visibility'}
-    {@render visibilityButton(position)}
-  {:else if button === 'copy'}
-    {@render copyButton(position)}
-  {:else if button === 'delete'}
-    {@render deleteButton(position)}
+{#snippet renderButton(button: ActionButton)}
+  {#if button === 'visibility'}
+    {@render visibilityButton()}
   {:else if button === 'collection'}
-    {@render collectionButton(position)}
+    {@render collectionButton()}
   {:else if button === 'tag'}
-    {@render tagButton(position)}
+    {@render tagButton()}
   {/if}
 {/snippet}
 
 <TooltipProvider delayDuration={300}>
   {#if isHero}
     <div
-      class={actionBarContainerVariants({ layout })}
+      class="flex items-center gap-3"
       role="toolbar"
       aria-label="Image actions"
     >
-      {#each visibleButtons as button, i (button)}
-        {@const position = getPosition(i, visibleButtons.length)}
-        {#if button === 'download'}
-          {@render renderButton(button, position)}
-        {/if}
-      {/each}
-      <div class={actionBarSecondaryGroupVariants({ layout })}>
-        {#each visibleButtons as button}
-          {#if button !== 'download' && button !== 'delete'}
-            {@render renderButton(button, 'only')}
-          {/if}
+      {#if hasShareCapsule}
+        {@render shareCapsule()}
+      {/if}
+      <div class="flex items-center gap-1">
+        {#each middleButtons as button (button)}
+          {@render renderButton(button)}
         {/each}
-        <div class="w-px h-5 bg-gray-200 dark:bg-gray-700 mx-1"></div>
-        {#if visibleButtons.includes('delete')}
-          {@render renderButton('delete', 'only')}
-        {/if}
+        {@render deleteSection()}
       </div>
     </div>
   {:else}
     <ButtonGroup
       variant="glass"
-      rounded="lg"
       size="md"
-      gap="none"
-      padding="none"
+      gap="xs"
+      padding="sm"
+      class="rounded-full"
       role="toolbar"
       aria-label="Image actions"
     >
-      {#each visibleButtons as button, i (button)}
-        {@const position = getPosition(i, visibleButtons.length)}
-        {@render renderButton(button, position)}
+      {#if hasShareCapsule}
+        {@render shareCapsule()}
+      {/if}
+      {#each middleButtons as button (button)}
+        {@render renderButton(button)}
       {/each}
+      {@render deleteSection()}
     </ButtonGroup>
   {/if}
 </TooltipProvider>

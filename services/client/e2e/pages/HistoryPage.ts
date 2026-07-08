@@ -128,6 +128,34 @@ export class HistoryPage extends BasePage {
     await confirm.click();
   }
 
+  async copyImageContent(id: string) {
+    const card = this.cardFor(id);
+    await card.waitFor({ state: 'visible' });
+    await card.hover();
+
+    const trigger = card
+      .getByRole('toolbar', { name: 'Image actions' })
+      .locator('button[aria-haspopup="menu"]')
+      .first();
+    const formatItem = this.page.getByRole('menuitem', {
+      name: 'Image Content',
+    });
+
+    await expect(async () => {
+      await trigger.click();
+      await expect(formatItem).toBeVisible({ timeout: 1000 });
+    }).toPass({ timeout: 15000 });
+
+    await formatItem.click();
+  }
+
+  async clipboardImageTypes(): Promise<string[]> {
+    return this.page.evaluate(async () => {
+      const items = await navigator.clipboard.read();
+      return items.flatMap((item) => [...item.types]);
+    });
+  }
+
   get tableRows() {
     return this.page.getByRole('table').locator('tbody tr');
   }

@@ -1,8 +1,8 @@
-FROM test AS permissions-test
+ARG ALPINE_VERSION
 
-ENV SLINK_PERMTEST_SANDBOX=1
+FROM staging AS perms-rootfs
 
-ARG ALPINE_VERSION=3.24
+RUN mkdir -p /rootfs/etc/apk && cp -r /apk-config/. /rootfs/etc/apk/
 
 # Install OS tooling on top of the slink:test stage (PHP + composer + app + the
 # common users www-data uid 33 / slink uid 1000) so the PHPUnit permission
@@ -13,16 +13,23 @@ ARG ALPINE_VERSION=3.24
 #   dosfstools  — mkfs.vfat (B2 loop/FAT rows)
 #   fuse3       — FUSE kernel interface (B1 bindfs rows)
 #   bindfs      — FUSE-based bind mount (alpine edge/testing)
-RUN --mount=type=cache,target=/var/cache/apk \
-    apk add --no-cache \
+RUN apk add --root /rootfs --initdb --no-cache \
         util-linux \
         acl \
         attr \
         dosfstools \
         fuse3 && \
-    apk add --no-cache \
+    apk add --root /rootfs --no-cache \
         -X https://dl-cdn.alpinelinux.org/alpine/edge/testing \
         bindfs
+
+RUN rm -rf /rootfs/lib/apk /rootfs/etc/apk /rootfs/var/cache/apk /rootfs/var/run /rootfs/var/lock
+
+FROM test AS permissions-test
+
+ENV SLINK_PERMTEST_SANDBOX=1
+
+COPY --from=perms-rootfs /rootfs/ /
 
 # Allow user-space FUSE mounts inside the container (needed for bindfs rows).
 RUN echo "user_allow_other" >> /etc/fuse.conf
