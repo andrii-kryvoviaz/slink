@@ -102,14 +102,16 @@ final class ImageSettingsTest extends TestCase {
   }
 
   #[Test]
-  public function itRoundTripsAllowedFormatsThroughPayload(): void {
+  public function itRoundTripsAllowedFormatsMaskThroughPayload(): void {
+    $mask = MediaFormat::Png->bit() | MediaFormat::Jpeg->bit();
+
     $settings = ImageSettings::fromPayload([
       'maxSize' => '5M',
-      'allowedFormats' => ['png', 'jpeg'],
+      'allowedFormats' => $mask,
     ]);
 
     $this->assertSame(['png', 'jpeg'], $settings->getAllowedFormats());
-    $this->assertSame(['png', 'jpeg'], $settings->toPayload()['allowedFormats']);
+    $this->assertSame($mask, $settings->toPayload()['allowedFormats']);
   }
 
   #[Test]
@@ -119,13 +121,24 @@ final class ImageSettingsTest extends TestCase {
     ]);
 
     $this->assertSame(MediaFormat::allValues(), $settings->getAllowedFormats());
+    $this->assertSame(-1, $settings->toPayload()['allowedFormats']);
   }
 
   #[Test]
-  public function itResolvesAllowedMimeTypesFromSelectedFormats(): void {
+  public function itResolvesAllMediaFormatsFromFullMask(): void {
     $settings = ImageSettings::fromPayload([
       'maxSize' => '5M',
-      'allowedFormats' => ['jpeg', 'svg'],
+      'allowedFormats' => -1,
+    ]);
+
+    $this->assertSame(MediaFormat::allValues(), $settings->getAllowedFormats());
+  }
+
+  #[Test]
+  public function itResolvesAllowedMimeTypesFromMask(): void {
+    $settings = ImageSettings::fromPayload([
+      'maxSize' => '5M',
+      'allowedFormats' => MediaFormat::Jpeg->bit() | MediaFormat::Svg->bit(),
     ]);
 
     $this->assertSame(
@@ -135,22 +148,32 @@ final class ImageSettingsTest extends TestCase {
   }
 
   #[Test]
-  public function itRejectsEmptyAllowedFormats(): void {
+  public function itIgnoresUnknownBitsInAllowedFormatsMask(): void {
+    $settings = ImageSettings::fromPayload([
+      'maxSize' => '5M',
+      'allowedFormats' => (1 << 30) | MediaFormat::Png->bit(),
+    ]);
+
+    $this->assertSame(['png'], $settings->getAllowedFormats());
+  }
+
+  #[Test]
+  public function itRejectsZeroAllowedFormatsMask(): void {
     $this->expectException(InvalidAllowedFormatsException::class);
 
     ImageSettings::fromPayload([
       'maxSize' => '5M',
-      'allowedFormats' => [],
+      'allowedFormats' => 0,
     ]);
   }
 
   #[Test]
-  public function itRejectsUnknownAllowedFormatValue(): void {
+  public function itRejectsMaskWithOnlyUnknownBits(): void {
     $this->expectException(InvalidAllowedFormatsException::class);
 
     ImageSettings::fromPayload([
       'maxSize' => '5M',
-      'allowedFormats' => ['png', 'mp4'],
+      'allowedFormats' => 1 << 30,
     ]);
   }
 
@@ -161,7 +184,7 @@ final class ImageSettingsTest extends TestCase {
     try {
       ImageSettings::fromPayload([
         'maxSize' => '5M',
-        'allowedFormats' => [],
+        'allowedFormats' => 0,
       ]);
     } catch (InvalidAllowedFormatsException $exception) {
       $this->assertSame('image.allowedFormats', $exception->getProperty());

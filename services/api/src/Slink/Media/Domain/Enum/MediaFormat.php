@@ -17,6 +17,22 @@ enum MediaFormat: string {
   case Heic = 'heic';
   case Tiff = 'tiff';
 
+  public function bit(): int {
+    return match ($this) {
+      self::Png => 1 << 0,
+      self::Jpeg => 1 << 1,
+      self::Gif => 1 << 2,
+      self::Webp => 1 << 3,
+      self::Avif => 1 << 4,
+      self::Svg => 1 << 5,
+      self::Bmp => 1 << 6,
+      self::Ico => 1 << 7,
+      self::Tga => 1 << 8,
+      self::Heic => 1 << 9,
+      self::Tiff => 1 << 10,
+    };
+  }
+
   public function label(): string {
     return match ($this) {
       self::Png => 'PNG',
@@ -64,40 +80,26 @@ enum MediaFormat: string {
   }
 
   /**
-   * Resolves format values to a de-duplicated list of MIME types.
-   *
-   * Unknown values are skipped silently; an empty input falls back to the MIME
-   * union of every known format so resolution never yields an empty allow-list.
-   *
-   * @param array<array-key, mixed> $formatValues
+   * @return list<self>
+   */
+  public static function fromMask(int $mask): array {
+    return array_values(array_filter(
+      self::cases(),
+      static fn (self $format): bool => ($mask & $format->bit()) !== 0,
+    ));
+  }
+
+  /**
    * @return list<string>
    */
-  public static function resolveMimeTypes(array $formatValues): array {
-    $formats = $formatValues === [] ? self::cases() : self::fromValues($formatValues);
-
+  public static function resolveMimeTypes(int $mask): array {
     $mimeTypes = [];
-    foreach ($formats as $format) {
+    foreach (self::fromMask($mask) as $format) {
       foreach ($format->mimeTypes() as $mimeType) {
         $mimeTypes[$mimeType] = true;
       }
     }
 
     return array_keys($mimeTypes);
-  }
-
-  /**
-   * @param array<array-key, mixed> $formatValues
-   * @return list<self>
-   */
-  private static function fromValues(array $formatValues): array {
-    $formats = [];
-    foreach ($formatValues as $value) {
-      $format = \is_string($value) ? self::tryFrom($value) : null;
-      if ($format !== null) {
-        $formats[] = $format;
-      }
-    }
-
-    return $formats;
   }
 }

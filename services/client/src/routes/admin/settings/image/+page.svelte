@@ -37,6 +37,7 @@
   <ImageSettings
     bind:settings={page.settings.image}
     defaultSettings={defaultSettings?.image}
+    mediaFormats={data.adminSettings?.meta?.mediaFormats ?? []}
     loading={imageLoading}
     onSave={page.handleSave}
   />

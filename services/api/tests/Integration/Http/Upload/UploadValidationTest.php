@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Integration\Http\Upload;
 
 use PHPUnit\Framework\Attributes\Test;
+use Slink\Media\Domain\Enum\MediaFormat;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Tests\Integration\Http\HttpTestCase;
 
@@ -129,7 +130,7 @@ final class UploadValidationTest extends HttpTestCase {
   #[Test]
   public function disallowedFormatIsRejectedWhenAllowedFormatsRestricted(): void {
     $this->bootUser();
-    $this->saveSettings('image', ['maxSize' => '5M', 'allowedFormats' => ['png']]);
+    $this->saveSettings('image', ['maxSize' => '5M', 'allowedFormats' => MediaFormat::Png->bit()]);
 
     self::assertSame(422, $this->upload($this->sampleGif()));
   }
@@ -137,7 +138,7 @@ final class UploadValidationTest extends HttpTestCase {
   #[Test]
   public function allowedFormatPassesWhenAllowedFormatsRestricted(): void {
     $this->bootUser();
-    $this->saveSettings('image', ['maxSize' => '5M', 'allowedFormats' => ['png']]);
+    $this->saveSettings('image', ['maxSize' => '5M', 'allowedFormats' => MediaFormat::Png->bit()]);
 
     self::assertContains($this->upload($this->sampleImage()), [200, 201]);
   }

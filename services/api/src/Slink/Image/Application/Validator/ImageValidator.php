@@ -30,7 +30,7 @@ final class ImageValidator extends BaseImageValidator {
   #[\Override]
   public function validate(mixed $value, Constraint $constraint): void {
     $constraint->maxSize = $this->configurationProvider->get('image.maxSize');
-    $constraint->mimeTypes = MediaFormat::resolveMimeTypes((array) $this->configurationProvider->get('image.allowedFormats'));
+    $constraint->mimeTypes = MediaFormat::resolveMimeTypes((int) ($this->configurationProvider->get('image.allowedFormats') ?? -1));
 
     parent::validate($value, $constraint);
   }

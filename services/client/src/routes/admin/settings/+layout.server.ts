@@ -1,4 +1,14 @@
+import type { ImageSettings } from '@slink/lib/settings/Type/ImageSettings';
+
 import type { LayoutServerLoad } from './$types';
+
+const ensureAllowedFormats = (image?: Partial<ImageSettings>): void => {
+  if (!image) {
+    return;
+  }
+
+  image.allowedFormats ??= -1;
+};
 
 export const load: LayoutServerLoad = async ({ parent, locals, depends }) => {
   await parent();
@@ -10,6 +20,9 @@ export const load: LayoutServerLoad = async ({ parent, locals, depends }) => {
     api.setting.getGlobalSettings(),
     api.setting.getSettings({ provider: 'default' }),
   ]);
+
+  ensureAllowedFormats(adminSettings.image);
+  ensureAllowedFormats(defaultSettings.image);
 
   return {
     adminSettings,

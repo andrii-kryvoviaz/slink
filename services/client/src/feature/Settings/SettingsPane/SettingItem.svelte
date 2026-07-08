@@ -2,6 +2,7 @@
   import { Button } from '@slink/ui/components/button';
   import { Tooltip } from '@slink/ui/components/tooltip';
   import type { Snippet } from 'svelte';
+  import { type VariantProps, tv } from 'tailwind-variants';
 
   import {
     parseFileSize,
@@ -9,8 +10,34 @@
   } from '$lib/utils/string/parseFileSize';
   import Icon from '@iconify/svelte';
 
-  interface Props {
+  const settingItem = tv({
+    slots: {
+      container: 'px-4 py-4 flex-1 min-w-0',
+      labelArea: 'min-w-0',
+      control: '',
+    },
+    variants: {
+      layout: {
+        row: {
+          container: 'flex items-center justify-between gap-4 sm:gap-6',
+          labelArea: 'flex-1',
+          control: 'shrink-0',
+        },
+        stacked: {
+          container: 'flex flex-col items-stretch gap-3',
+          labelArea: 'w-full',
+          control: 'w-full',
+        },
+      },
+    },
+    defaultVariants: {
+      layout: 'row',
+    },
+  });
+
+  interface Props extends VariantProps<typeof settingItem> {
     defaultValue?: any;
+    defaultLabel?: string;
     currentValue?: any;
     reset?: (value: any) => void;
     label?: Snippet;
@@ -22,14 +49,18 @@
 
   let {
     defaultValue = null,
+    defaultLabel,
     currentValue = null,
     reset = () => {},
+    layout,
     label,
     hint,
     header,
     footer,
     children,
   }: Props = $props();
+
+  const { container, labelArea, control } = $derived(settingItem({ layout }));
 
   let triggerRef: HTMLButtonElement | undefined = $state();
   let showConfirm = $state(false);
@@ -57,7 +88,7 @@
     showConfirm = false;
   };
 
-  let displayValue = $derived(formatValue(defaultValue));
+  let displayValue = $derived(defaultLabel ?? formatValue(defaultValue));
   let shouldShowResetButton = $derived(
     displayValue && currentValue !== null && currentValue !== defaultValue,
   );
@@ -78,10 +109,8 @@
     {@render header?.()}
   {/if}
 
-  <div
-    class="flex items-center justify-between gap-4 sm:gap-6 px-4 py-4 flex-1 min-w-0"
-  >
-    <div class="flex-1 min-w-0">
+  <div class={container()}>
+    <div class={labelArea()}>
       {#if label}
         <div class="flex items-center gap-2">
           <h3 class="text-sm font-medium text-gray-900 dark:text-white">
@@ -117,7 +146,7 @@
       {/if}
     </div>
 
-    <div class="shrink-0">
+    <div class={control()}>
       {#if children}
         {@render children()}
       {/if}

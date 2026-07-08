@@ -18,7 +18,7 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
   /**
    * @param string $maxSize
    * @param string $chunkSize
-   * @param list<string> $allowedFormats
+   * @param int $allowedFormats
    * @param string|null $targetFormat
    * @param bool $stripExifMetadata
    * @param int $compressionQuality
@@ -30,25 +30,25 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
    */
   private function __construct(
     private string $maxSize,
-    private string $chunkSize = '2M',
-    private array $allowedFormats = [],
-    private ?string $targetFormat = null,
-    private bool $stripExifMetadata = true,
-    private int $compressionQuality = 80,
-    private bool $allowOnlyPublicImages = false,
-    private bool $enableDeduplication = true,
-    private bool $enableLicensing = false,
-    private bool $forceFormatConversion = false,
-    private bool $convertAnimatedImages = false,
+    private string $chunkSize,
+    private int $allowedFormats,
+    private ?string $targetFormat,
+    private bool $stripExifMetadata,
+    private int $compressionQuality,
+    private bool $allowOnlyPublicImages,
+    private bool $enableDeduplication,
+    private bool $enableLicensing,
+    private bool $forceFormatConversion,
+    private bool $convertAnimatedImages,
   ) {
     if (!preg_match('/^(\d+)([kM])$/', $maxSize)) {
       throw new InvalidImageMaxSizeException();
     }
-    
+
     if ((int) $maxSize < 0) {
       throw new InvalidImageMaxSizeException('Max size cannot be less than 0');
     }
-    
+
     if ((int) $maxSize > 1000) {
       throw new InvalidImageMaxSizeException('Max size cannot be greater than 1000');
     }
@@ -67,17 +67,11 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
       throw new InvalidChunkSizeException('Chunk size cannot be greater than 25M');
     }
 
-    if ($allowedFormats === []) {
+    if (MediaFormat::fromMask($allowedFormats) === []) {
       throw new InvalidAllowedFormatsException('At least one allowed format is required');
     }
-
-    foreach ($allowedFormats as $format) {
-      if (MediaFormat::tryFrom($format) === null) {
-        throw new InvalidAllowedFormatsException(sprintf('Unsupported format "%s"', $format));
-      }
-    }
   }
-  
+
   /**
    * @inheritDoc
    */
@@ -96,7 +90,7 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
       'convertAnimatedImages' => $this->convertAnimatedImages,
     ];
   }
-  
+
   /**
    * @inheritDoc
    */
@@ -104,7 +98,7 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
     return new self(
       $payload['maxSize'],
       $payload['chunkSize'] ?? '2M',
-      $payload['allowedFormats'] ?? MediaFormat::allValues(),
+      $payload['allowedFormats'] ?? -1,
       $payload['targetFormat'] ?? null,
       $payload['stripExifMetadata'] ?? true,
       $payload['compressionQuality'] ?? 80,
@@ -115,14 +109,14 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
       $payload['convertAnimatedImages'] ?? false,
     );
   }
-  
+
   /**
    * @inheritDoc
    */
   function getSettingsCategory(): SettingCategory {
     return SettingCategory::Image;
   }
-  
+
   /**
    * @return string
    */
@@ -141,7 +135,10 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
    * @return list<string>
    */
   public function getAllowedFormats(): array {
-    return $this->allowedFormats;
+    return array_map(
+      static fn (MediaFormat $format): string => $format->value,
+      MediaFormat::fromMask($this->allowedFormats),
+    );
   }
 
   /**
@@ -157,14 +154,14 @@ final readonly class ImageSettings extends AbstractSettingsValueObject {
   public function isStripExifMetadata(): bool {
     return $this->stripExifMetadata;
   }
-  
+
   /**
    * @return int
    */
   public function getCompressionQuality(): int {
     return $this->compressionQuality;
   }
-  
+
   /**
    * @return bool
    */

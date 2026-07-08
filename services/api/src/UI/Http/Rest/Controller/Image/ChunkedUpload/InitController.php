@@ -45,7 +45,7 @@ final readonly class InitController {
       throw new HttpException(Response::HTTP_REQUEST_ENTITY_TOO_LARGE, 'The uploaded file exceeds the maximum allowed size.');
     }
 
-    $supportedFormats = MediaFormat::resolveMimeTypes((array) $this->configurationProvider->get('image.allowedFormats'));
+    $supportedFormats = MediaFormat::resolveMimeTypes((int) ($this->configurationProvider->get('image.allowedFormats') ?? -1));
 
     if (!\in_array($request->mimeType, $supportedFormats, true)) {
       throw new HttpException(Response::HTTP_UNPROCESSABLE_ENTITY, \sprintf('The mime type %s is not supported.', $request->mimeType));

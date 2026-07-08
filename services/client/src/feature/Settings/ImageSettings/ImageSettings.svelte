@@ -1,19 +1,21 @@
 <script lang="ts">
   import { SettingItem, SettingsPane } from '@slink/feature/Settings';
   import { Notice } from '@slink/feature/Text';
-  import { EnhancedSelect } from '@slink/ui/components/enhanced-select';
   import { FileSizeInput, NumberInput } from '@slink/ui/components/input';
   import { Select } from '@slink/ui/components/select';
   import { Switch } from '@slink/ui/components/switch';
-
-  import { MEDIA_FORMAT_OPTIONS } from '$lib/constants/media';
+  import { TogglePills } from '@slink/ui/components/toggle-pills';
 
   import type { SettingCategory } from '@slink/lib/settings/Type/GlobalSettings';
   import type { ImageSettings as ImageSettingsType } from '@slink/lib/settings/Type/ImageSettings';
+  import type { MediaFormatOption } from '@slink/lib/settings/Type/MediaFormat';
+
+  import { MediaFormatSelection } from './MediaFormatSelection';
 
   interface Props {
     settings: ImageSettingsType;
     defaultSettings?: ImageSettingsType;
+    mediaFormats?: MediaFormatOption[];
     loading?: boolean;
     onSave: (event: {
       category: SettingCategory;
@@ -24,6 +26,7 @@
   let {
     settings = $bindable(),
     defaultSettings,
+    mediaFormats = [],
     loading = false,
     onSave,
   }: Props = $props();
@@ -35,6 +38,14 @@
   ];
 
   let targetFormat = $derived.by(() => settings.targetFormat ?? 'webp');
+
+  const mediaFormatSelection = new MediaFormatSelection(
+    mediaFormats,
+    () => settings.allowedFormats,
+    (mask) => {
+      settings.allowedFormats = mask;
+    },
+  );
 </script>
 
 <SettingsPane category="image" {loading} on={{ save: onSave }}>
@@ -169,7 +180,9 @@
 
   <SettingItem
     defaultValue={defaultSettings?.allowedFormats}
+    defaultLabel="Default"
     currentValue={settings.allowedFormats}
+    layout="stacked"
     reset={(value) => {
       settings.allowedFormats = value;
     }}
@@ -181,12 +194,11 @@
       Choose which media formats users may upload. At least one format is
       required.
     {/snippet}
-    <EnhancedSelect
-      type="multiple"
-      items={[...MEDIA_FORMAT_OPTIONS]}
-      bind:value={settings.allowedFormats}
-      placeholder="Select formats"
-      class="w-64"
+    <TogglePills
+      options={mediaFormatSelection.options}
+      bind:value={mediaFormatSelection.values}
+      minItems={1}
+      aria-label="Allowed upload formats"
     />
   </SettingItem>
 
