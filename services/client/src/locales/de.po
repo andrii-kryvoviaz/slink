@@ -406,10 +406,6 @@ msgstr "Nur eine Datei gleichzeitig erlaubt"
 msgid "or click to browse from your device"
 msgstr "oder klicken Sie, um auf Ihrem Gerät zu suchen"
 
-#: src/feature/Upload/Uploader/UploaderIdle.svelte
-msgid "View all supported formats"
-msgstr "Alle unterstützten Formate anzeigen"
-
 #: src/feature/Upload/Uploader/UploaderDragOverlay.svelte
 msgid "Drop to upload"
 msgstr "Zum Hochladen ablegen"
@@ -1329,6 +1325,7 @@ msgstr "Wird signiert..."
 msgid "Copied"
 msgstr "Kopiert"
 
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Text/CopyContainer/CopyContainer.svelte
 msgid "Copy"
@@ -2692,7 +2689,6 @@ msgstr "Datum wählen"
 msgid "Submit"
 msgstr "Absenden"
 
-#: src/ui/components/enhanced-select/enhanced-select.svelte
 #: src/ui/components/select/select.svelte
 msgid "Select an option"
 msgstr "Option auswählen"
@@ -2861,6 +2857,7 @@ msgstr "Speicheranbieter und Cache-Verwaltung konfigurieren"
 msgid "Visibility Options"
 msgstr "Sichtbarkeitsoptionen"
 
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
 #: src/routes/help/faq/+page.svelte
 msgid "Default"
 msgstr "Standard"
@@ -4952,9 +4949,7 @@ msgstr "Erbt die globale Genehmigungseinstellung."
 msgid "{0} options"
 msgstr "{0} Optionen"
 
-#. 0: selectedItems.length
 #. 0: selectedCount
-#: src/ui/components/enhanced-select/enhanced-select.svelte
 #: src/ui/components/select/select.svelte
 msgid "{0} items selected"
 msgstr "{0} Elemente ausgewählt"
@@ -4994,17 +4989,48 @@ msgstr "Sammlung konnte nicht erstellt werden"
 
 #: src/feature/Image/ShareFormat/shareFormats.language.ts
 msgid "MD"
-msgstr ""
+msgstr "MD"
 
 #: src/feature/Image/ShareFormat/shareFormats.language.ts
 msgid "BB"
-msgstr ""
+msgstr "BB"
 
 #: src/feature/Image/ShareFormat/shareFormats.language.ts
 #: src/feature/Image/ShareFormat/shareFormats.language.ts
 msgid "HTML"
-msgstr ""
+msgstr "HTML"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 msgid "Copy link options"
-msgstr ""
+msgstr "Link-Kopieroptionen"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Allowed Upload Formats"
+msgstr "Erlaubte Upload-Formate"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Choose which media formats users may upload. At least one format is required."
+msgstr "Wählen Sie aus, welche Medienformate Benutzer hochladen dürfen. Mindestens ein Format ist erforderlich."
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Allowed upload formats"
+msgstr "Erlaubte Upload-Formate"
+
+#: src/feature/Upload/Uploader/UploaderConstraints.svelte
+msgid "show less"
+msgstr "weniger anzeigen"
+
+#. 0: maxSizeLabel
+#: src/feature/Upload/Uploader/UploaderConstraints.svelte
+msgid "Max {0}"
+msgstr "Max. {0}"
+
+#: src/feature/Upload/Uploader/UploaderConstraints.svelte
+msgid "Supported formats"
+msgstr "Unterstützte Formate"
+
+#: src/feature/Upload/Uploader/UploaderConstraints.svelte
+msgid "Show # more format"
+msgid_plural "Show # more formats"
+msgstr[0] "# weiteres Format anzeigen"
+msgstr[1] "# weitere Formate anzeigen"

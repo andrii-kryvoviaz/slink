@@ -406,10 +406,6 @@ msgstr "Un seul fichier autorisé à la fois"
 msgid "or click to browse from your device"
 msgstr "ou cliquez pour parcourir vos fichiers"
 
-#: src/feature/Upload/Uploader/UploaderIdle.svelte
-msgid "View all supported formats"
-msgstr "Voir tous les formats supportés"
-
 #: src/feature/Upload/Uploader/UploaderDragOverlay.svelte
 msgid "Drop to upload"
 msgstr "Déposer pour téléverser"
@@ -1329,6 +1325,7 @@ msgstr "Signature en cours..."
 msgid "Copied"
 msgstr "Copié"
 
+#: src/feature/Image/ActionBar/ImageActionBar.svelte
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Text/CopyContainer/CopyContainer.svelte
 msgid "Copy"
@@ -2692,7 +2689,6 @@ msgstr "Choisir une date"
 msgid "Submit"
 msgstr "Soumettre"
 
-#: src/ui/components/enhanced-select/enhanced-select.svelte
 #: src/ui/components/select/select.svelte
 msgid "Select an option"
 msgstr "Sélectionner une option"
@@ -2861,6 +2857,7 @@ msgstr "Configurer les fournisseurs de stockage et la gestion du cache"
 msgid "Visibility Options"
 msgstr "Options de visibilité"
 
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
 #: src/routes/help/faq/+page.svelte
 msgid "Default"
 msgstr "Par défaut"
@@ -4952,9 +4949,7 @@ msgstr "Hérite du paramètre global d'approbation."
 msgid "{0} options"
 msgstr "Options de {0}"
 
-#. 0: selectedItems.length
 #. 0: selectedCount
-#: src/ui/components/enhanced-select/enhanced-select.svelte
 #: src/ui/components/select/select.svelte
 msgid "{0} items selected"
 msgstr "{0} éléments sélectionnés"
@@ -4994,17 +4989,48 @@ msgstr "Échec de la création de la collection"
 
 #: src/feature/Image/ShareFormat/shareFormats.language.ts
 msgid "MD"
-msgstr ""
+msgstr "MD"
 
 #: src/feature/Image/ShareFormat/shareFormats.language.ts
 msgid "BB"
-msgstr ""
+msgstr "BB"
 
 #: src/feature/Image/ShareFormat/shareFormats.language.ts
 #: src/feature/Image/ShareFormat/shareFormats.language.ts
 msgid "HTML"
-msgstr ""
+msgstr "HTML"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
 msgid "Copy link options"
-msgstr ""
+msgstr "Options de copie du lien"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Allowed Upload Formats"
+msgstr "Formats de téléversement autorisés"
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Choose which media formats users may upload. At least one format is required."
+msgstr "Choisissez les formats de médias que les utilisateurs peuvent téléverser. Au moins un format est requis."
+
+#: src/feature/Settings/ImageSettings/ImageSettings.svelte
+msgid "Allowed upload formats"
+msgstr "Formats de téléversement autorisés"
+
+#: src/feature/Upload/Uploader/UploaderConstraints.svelte
+msgid "show less"
+msgstr "voir moins"
+
+#. 0: maxSizeLabel
+#: src/feature/Upload/Uploader/UploaderConstraints.svelte
+msgid "Max {0}"
+msgstr "Max. {0}"
+
+#: src/feature/Upload/Uploader/UploaderConstraints.svelte
+msgid "Supported formats"
+msgstr "Formats pris en charge"
+
+#: src/feature/Upload/Uploader/UploaderConstraints.svelte
+msgid "Show # more format"
+msgid_plural "Show # more formats"
+msgstr[0] "Afficher # format de plus"
+msgstr[1] "Afficher # formats de plus"
