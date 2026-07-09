@@ -5016,46 +5016,17 @@ msgstr "Wählen Sie aus, welche Medienformate Benutzer hochladen dürfen. Mindes
 msgid "Allowed upload formats"
 msgstr "Erlaubte Upload-Formate"
 
-#~ msgid "show less"
-#~ msgstr "weniger anzeigen"
-
-#~ msgid "Max {0}"
-#~ msgstr "Max. {0}"
-
 #: src/feature/Upload/Uploader/UploaderConstraints.svelte
 msgid "Supported formats"
 msgstr "Unterstützte Formate"
-
-#~ msgid "Show # more format"
-#~ msgid_plural "Show # more formats"
-#~ msgstr[0] "# weiteres Format anzeigen"
-#~ msgstr[1] "# weitere Formate anzeigen"
-
-#~ msgid "Supported formats: {0}"
-#~ msgstr ""
-
-#~ msgid "# more format"
-#~ msgid_plural "# more formats"
-#~ msgstr[0] ""
-#~ msgstr[1] ""
 
 #: src/feature/Upload/Uploader/UploaderConstraints.svelte
 msgid "Show less"
 msgstr "Weniger anzeigen"
 
-#~ msgid "and # more"
-#~ msgid_plural "and # more"
-#~ msgstr[0] ""
-#~ msgstr[1] ""
-
-#~ msgid "up to {0}"
-#~ msgstr ""
-
-#~ msgid "and {0} more"
-#~ msgstr ""
-
-#~ msgid "up to <0/>"
-#~ msgstr ""
+#: src/feature/Upload/Uploader/UploaderConstraints.svelte
+msgid "up to <0/>"
+msgstr "bis zu <0/>"
 
 #. 0: hiddenFormats.length
 #: src/feature/Upload/Uploader/UploaderConstraints.svelte

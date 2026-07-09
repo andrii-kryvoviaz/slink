@@ -5024,47 +5024,17 @@ msgstr "Оберіть, які формати медіа можуть заван
 msgid "Allowed upload formats"
 msgstr "Дозволені формати завантаження"
 
-#~ msgid "show less"
-#~ msgstr "показати менше"
-
-#~ msgid "Max {0}"
-#~ msgstr "Макс. {0}"
-
 #: src/feature/Upload/Uploader/UploaderConstraints.svelte
 msgid "Supported formats"
 msgstr "Підтримувані формати"
-
-#~ msgid "Show # more format"
-#~ msgid_plural "Show # more formats"
-#~ msgstr[0] "Показати ще # формат"
-#~ msgstr[1] "Показати ще # формати"
-#~ msgstr[2] "Показати ще # форматів"
-
-#~ msgid "Supported formats: {0}"
-#~ msgstr ""
-
-#~ msgid "# more format"
-#~ msgid_plural "# more formats"
-#~ msgstr[0] ""
-#~ msgstr[1] ""
 
 #: src/feature/Upload/Uploader/UploaderConstraints.svelte
 msgid "Show less"
 msgstr "Показати менше"
 
-#~ msgid "and # more"
-#~ msgid_plural "and # more"
-#~ msgstr[0] ""
-#~ msgstr[1] ""
-
-#~ msgid "up to {0}"
-#~ msgstr ""
-
-#~ msgid "and {0} more"
-#~ msgstr ""
-
-#~ msgid "up to <0/>"
-#~ msgstr ""
+#: src/feature/Upload/Uploader/UploaderConstraints.svelte
+msgid "up to <0/>"
+msgstr "до <0/>"
 
 #. 0: hiddenFormats.length
 #: src/feature/Upload/Uploader/UploaderConstraints.svelte

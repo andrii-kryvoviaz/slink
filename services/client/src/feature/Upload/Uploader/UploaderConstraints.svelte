@@ -33,11 +33,7 @@
     return orderedFormats.slice(0, VISIBLE_FORMAT_COUNT);
   });
 
-  const formatList = $derived.by(() => {
-    const list = displayedFormats.join(', ');
-    if (hiddenFormats.length > 0 && !expanded) return `${list},`;
-    return list;
-  });
+  const formatList = $derived(displayedFormats.join(' '));
 
   const maxSizeLabel = $derived.by(() => {
     if (!maxSize) return null;
@@ -53,11 +49,14 @@
   const {
     base,
     column,
+    labelRow,
     label,
     formats,
+    formatText,
     toggle,
+    inlineSize,
+    sizeValue,
     maxSizeColumn,
-    maxSize: maxSizeSlot,
   } = UploaderConstraintsTheme();
 
   const toggleFormats = (event: MouseEvent) => {
@@ -70,9 +69,17 @@
   <div class={base()}>
     {#if orderedFormats.length > 0}
       <div class={column()}>
-        <span class={label()}>Supported formats</span>
+        <div class={labelRow()}>
+          <span class={label()}>Supported formats</span>
+          {#if maxSizeLabel}
+            <span class={inlineSize()}
+              >up to <span class={sizeValue()}>{maxSizeLabel}</span></span
+            >
+          {/if}
+        </div>
         <p class={formats()}>
-          <span>{formatList}</span>{#if hiddenFormats.length > 0}<button
+          <span class={formatText()}>{formatList}</span
+          >{#if hiddenFormats.length > 0}<button
               type="button"
               class={toggle()}
               aria-expanded={expanded}
@@ -86,7 +93,7 @@
     {#if maxSizeLabel}
       <div class={maxSizeColumn()}>
         <span class={label()}>Max size</span>
-        <p class={maxSizeSlot()}>{maxSizeLabel}</p>
+        <p class={sizeValue()}>{maxSizeLabel}</p>
       </div>
     {/if}
   </div>

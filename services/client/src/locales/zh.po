@@ -5010,45 +5010,17 @@ msgstr "选择用户可上传的媒体格式。至少需要一种格式。"
 msgid "Allowed upload formats"
 msgstr "允许的上传格式"
 
-#~ msgid "show less"
-#~ msgstr "收起"
-
-#~ msgid "Max {0}"
-#~ msgstr "最大 {0}"
-
 #: src/feature/Upload/Uploader/UploaderConstraints.svelte
 msgid "Supported formats"
 msgstr "支持的格式"
-
-#~ msgid "Show # more format"
-#~ msgid_plural "Show # more formats"
-#~ msgstr[0] "显示其他 # 种格式"
-
-#~ msgid "Supported formats: {0}"
-#~ msgstr ""
-
-#~ msgid "# more format"
-#~ msgid_plural "# more formats"
-#~ msgstr[0] ""
-#~ msgstr[1] ""
 
 #: src/feature/Upload/Uploader/UploaderConstraints.svelte
 msgid "Show less"
 msgstr "收起"
 
-#~ msgid "and # more"
-#~ msgid_plural "and # more"
-#~ msgstr[0] ""
-#~ msgstr[1] ""
-
-#~ msgid "up to {0}"
-#~ msgstr ""
-
-#~ msgid "and {0} more"
-#~ msgstr ""
-
-#~ msgid "up to <0/>"
-#~ msgstr ""
+#: src/feature/Upload/Uploader/UploaderConstraints.svelte
+msgid "up to <0/>"
+msgstr "最大 <0/>"
 
 #. 0: hiddenFormats.length
 #: src/feature/Upload/Uploader/UploaderConstraints.svelte

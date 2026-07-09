@@ -47,15 +47,19 @@ export const UploaderDragOverlayTheme = cva(
 
 export const UploaderConstraintsTheme = tv({
   slots: {
-    base: 'flex w-full items-start justify-between gap-x-6 border-t border-slate-200/60 pt-[22px] text-left dark:border-white/[0.06]',
-    column: 'flex min-w-0 flex-col gap-y-[7px]',
+    base: 'flex w-full flex-col items-start gap-x-6 border-t border-slate-200/60 pt-[22px] text-left dark:border-white/[0.06] sm:flex-row sm:justify-between',
+    column: 'flex w-full min-w-0 flex-col gap-y-[7px] sm:w-auto',
+    labelRow: 'flex w-full items-baseline justify-between gap-x-3',
     label: 'text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500',
     formats:
       'text-[15px] font-medium leading-relaxed text-slate-600 dark:text-slate-400',
+    formatText: '[word-spacing:0.2em]',
     toggle:
-      'ml-1 cursor-pointer font-semibold text-violet-600 underline decoration-dotted decoration-violet-400/60 underline-offset-[3px] transition-colors hover:text-violet-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/50 dark:text-violet-400 dark:hover:text-violet-300',
+      'ml-[0.45em] cursor-pointer font-medium text-slate-500 underline decoration-dotted decoration-slate-400/70 underline-offset-[3px] transition-colors hover:text-violet-600 hover:decoration-violet-400/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/50 dark:text-slate-500 dark:decoration-slate-500/70 dark:hover:text-violet-400 dark:hover:decoration-violet-400/60',
+    inlineSize:
+      'whitespace-nowrap text-[15px] font-medium text-slate-600 dark:text-slate-400 sm:hidden',
+    sizeValue: 'text-[15px] font-semibold text-slate-900 dark:text-slate-100',
     maxSizeColumn:
-      'flex flex-shrink-0 flex-col items-end gap-y-[7px] text-right',
-    maxSize: 'text-[15px] font-semibold text-slate-900 dark:text-slate-100',
+      'hidden flex-shrink-0 flex-col items-end gap-y-[7px] text-right sm:flex',
   },
 });
