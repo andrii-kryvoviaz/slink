@@ -93,12 +93,12 @@ final class UploadValidationTest extends HttpTestCase {
   private function sampleGif(): UploadedFile {
     $temp = (string) \tempnam(\sys_get_temp_dir(), 'slink_upload_') . '.gif';
 
-    $image = \imagecreatetruecolor(2, 2);
-    if ($image === false) {
-      throw new \RuntimeException('Unable to allocate test gif image.');
+    $gif = \base64_decode('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', true);
+    if ($gif === false) {
+      throw new \RuntimeException('Unable to decode test gif image.');
     }
 
-    \imagegif($image, $temp);
+    \file_put_contents($temp, $gif);
 
     return new UploadedFile($temp, 'sample.gif', 'image/gif', null, true);
   }
