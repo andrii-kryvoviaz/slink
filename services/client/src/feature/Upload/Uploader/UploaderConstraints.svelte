@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { plural } from '$lib/utils/i18n';
-
   import { parseFileSize } from '@slink/utils/string/parseFileSize';
 
   import { UploaderConstraintsTheme } from './Uploader.theme';
@@ -26,15 +24,19 @@
     [...allowedFormats].sort((a, b) => formatRank(a) - formatRank(b)),
   );
 
-  const hiddenCount = $derived(
-    Math.max(orderedFormats.length - VISIBLE_FORMAT_COUNT, 0),
-  );
+  const hiddenFormats = $derived(orderedFormats.slice(VISIBLE_FORMAT_COUNT));
 
   let expanded = $state(false);
 
   const displayedFormats = $derived.by(() => {
-    if (expanded || hiddenCount === 0) return orderedFormats;
+    if (expanded || hiddenFormats.length === 0) return orderedFormats;
     return orderedFormats.slice(0, VISIBLE_FORMAT_COUNT);
+  });
+
+  const formatList = $derived.by(() => {
+    const list = displayedFormats.join(', ');
+    if (hiddenFormats.length > 0 && !expanded) return `${list},`;
+    return list;
   });
 
   const maxSizeLabel = $derived.by(() => {
@@ -50,44 +52,42 @@
 
   const {
     base,
+    column,
+    label,
     formats,
-    separator,
     toggle,
+    maxSizeColumn,
     maxSize: maxSizeSlot,
   } = UploaderConstraintsTheme();
+
+  const toggleFormats = (event: MouseEvent) => {
+    event.stopPropagation();
+    expanded = !expanded;
+  };
 </script>
 
 {#if orderedFormats.length > 0 || maxSizeLabel}
   <div class={base()}>
     {#if orderedFormats.length > 0}
-      <span class={formats()}>
-        <span class="sr-only">Supported formats</span>
-        <span>{displayedFormats.join(', ')}</span>
-        {#if hiddenCount > 0}
-          <button
-            type="button"
-            aria-expanded={expanded}
-            aria-label={expanded
-              ? undefined
-              : plural(hiddenCount, [
-                  'Show # more format',
-                  'Show # more formats',
-                ])}
-            onclick={() => (expanded = !expanded)}
-            class={toggle()}
-          >
-            {#if expanded}show less{:else}{`+${hiddenCount}`}{/if}
-          </button>
-        {/if}
-      </span>
-    {/if}
-
-    {#if orderedFormats.length > 0 && maxSizeLabel}
-      <span class={separator()} aria-hidden="true"></span>
+      <div class={column()}>
+        <span class={label()}>Supported formats</span>
+        <p class={formats()}>
+          <span>{formatList}</span>{#if hiddenFormats.length > 0}<button
+              type="button"
+              class={toggle()}
+              aria-expanded={expanded}
+              onclick={toggleFormats}
+              >{#if expanded}Show less{:else}+{hiddenFormats.length} more{/if}</button
+            >{/if}
+        </p>
+      </div>
     {/if}
 
     {#if maxSizeLabel}
-      <span class={maxSizeSlot()}>Max {maxSizeLabel}</span>
+      <div class={maxSizeColumn()}>
+        <span class={label()}>Max size</span>
+        <p class={maxSizeSlot()}>{maxSizeLabel}</p>
+      </div>
     {/if}
   </div>
 {/if}

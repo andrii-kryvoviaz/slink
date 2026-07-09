@@ -4532,7 +4532,7 @@ msgstr "Zamknij wyszukiwanie"
 msgid "View mode"
 msgstr "Tryb widoku"
 
-#: src/feature/Upload/Uploader/UploaderIdle.svelte
+#: src/feature/Upload/Uploader/UploaderQuickPaste.svelte
 msgid "Quick paste"
 msgstr "Szybkie wklejanie"
 
@@ -5032,23 +5032,54 @@ msgstr "Wybierz, jakie formaty multimediów mogą przesyłać użytkownicy. Wyma
 msgid "Allowed upload formats"
 msgstr "Dozwolone formaty przesyłania"
 
-#: src/feature/Upload/Uploader/UploaderConstraints.svelte
-msgid "show less"
-msgstr "pokaż mniej"
+#~ msgid "show less"
+#~ msgstr "pokaż mniej"
 
-#. 0: maxSizeLabel
-#: src/feature/Upload/Uploader/UploaderConstraints.svelte
-msgid "Max {0}"
-msgstr "Maks. {0}"
+#~ msgid "Max {0}"
+#~ msgstr "Maks. {0}"
 
 #: src/feature/Upload/Uploader/UploaderConstraints.svelte
 msgid "Supported formats"
 msgstr "Obsługiwane formaty"
 
+#~ msgid "Show # more format"
+#~ msgid_plural "Show # more formats"
+#~ msgstr[0] "Pokaż jeszcze # format"
+#~ msgstr[1] "Pokaż jeszcze # formaty"
+#~ msgstr[2] "Pokaż jeszcze # formatów"
+#~ msgstr[3] "Pokaż jeszcze # formatów"
+
+#~ msgid "Supported formats: {0}"
+#~ msgstr ""
+
+#~ msgid "# more format"
+#~ msgid_plural "# more formats"
+#~ msgstr[0] ""
+#~ msgstr[1] ""
+
 #: src/feature/Upload/Uploader/UploaderConstraints.svelte
-msgid "Show # more format"
-msgid_plural "Show # more formats"
-msgstr[0] "Pokaż jeszcze # format"
-msgstr[1] "Pokaż jeszcze # formaty"
-msgstr[2] "Pokaż jeszcze # formatów"
-msgstr[3] "Pokaż jeszcze # formatów"
+msgid "Show less"
+msgstr "Pokaż mniej"
+
+#~ msgid "and # more"
+#~ msgid_plural "and # more"
+#~ msgstr[0] ""
+#~ msgstr[1] ""
+
+#~ msgid "up to {0}"
+#~ msgstr ""
+
+#~ msgid "and {0} more"
+#~ msgstr ""
+
+#~ msgid "up to <0/>"
+#~ msgstr ""
+
+#. 0: hiddenFormats.length
+#: src/feature/Upload/Uploader/UploaderConstraints.svelte
+msgid "+{0} more"
+msgstr "+{0} więcej"
+
+#: src/feature/Upload/Uploader/UploaderConstraints.svelte
+msgid "Max size"
+msgstr "Maksymalny rozmiar"

@@ -17,31 +17,29 @@
   let input: HTMLInputElement | undefined = $state();
 
   function keydown(ev: KeyboardEvent) {
-    if (!input) return;
+    if (ev.target !== ev.currentTarget) return;
+    if (![' ', 'Enter'].includes(ev.key)) return;
 
-    if ([' ', 'Enter'].includes(ev.key)) {
-      ev.preventDefault();
-      input.click();
-    }
+    ev.preventDefault();
+    input?.click();
   }
 
-  function onClick(event: MouseEvent) {
-    if (!input) return;
-
-    event.preventDefault();
-    input.click();
+  function onClick() {
+    input?.click();
   }
 </script>
 
-<button
+<div
   data-slot="dropzone-input"
   class={cn(dropzoneInputTheme(), className)}
+  role="button"
+  tabindex={dropzone.disabled ? -1 : 0}
+  aria-disabled={dropzone.disabled}
   onkeydown={keydown}
   onclick={onClick}
-  type="button"
 >
   {@render children?.()}
-</button>
+</div>
 <label class="hidden">
   <input
     {...restProps}

@@ -47,12 +47,15 @@ export const UploaderDragOverlayTheme = cva(
 
 export const UploaderConstraintsTheme = tv({
   slots: {
-    base: 'relative z-10 flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1 px-4 pt-3 pb-4 text-[11px] text-slate-400 sm:pt-2 sm:pb-5 sm:text-xs dark:text-slate-500',
+    base: 'flex w-full items-start justify-between gap-x-6 border-t border-slate-200/60 pt-[22px] text-left dark:border-white/[0.06]',
+    column: 'flex min-w-0 flex-col gap-y-[7px]',
+    label: 'text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500',
     formats:
-      'flex flex-wrap items-center justify-center gap-x-1.5 gap-y-0.5 text-slate-500 dark:text-slate-400',
-    separator: 'h-3 w-px shrink-0 bg-slate-300/70 dark:bg-slate-600/60',
+      'text-[15px] font-medium leading-relaxed text-slate-600 dark:text-slate-400',
     toggle:
-      'cursor-pointer rounded font-medium text-blue-600 transition-colors hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/50 dark:text-blue-300 dark:hover:text-blue-200',
-    maxSize: 'shrink-0 whitespace-nowrap',
+      'ml-1 cursor-pointer font-semibold text-violet-600 underline decoration-dotted decoration-violet-400/60 underline-offset-[3px] transition-colors hover:text-violet-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/50 dark:text-violet-400 dark:hover:text-violet-300',
+    maxSizeColumn:
+      'flex flex-shrink-0 flex-col items-end gap-y-[7px] text-right',
+    maxSize: 'text-[15px] font-semibold text-slate-900 dark:text-slate-100',
   },
 });

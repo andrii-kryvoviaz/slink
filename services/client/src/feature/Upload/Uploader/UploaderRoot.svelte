@@ -17,6 +17,7 @@
   } from './Uploader.theme';
   import UploaderConstraints from './UploaderConstraints.svelte';
   import UploaderDragOverlay from './UploaderDragOverlay.svelte';
+  import UploaderQuickPaste from './UploaderQuickPaste.svelte';
 
   interface Props {
     disabled?: boolean;
@@ -98,12 +99,21 @@
       <div class={UploaderSurfaceTheme()}>
         <Dropzone.Input
           accept={acceptAttribute}
-          class={UploaderHeroTheme({ disabled })}
+          class={cn(
+            UploaderHeroTheme({ disabled }),
+            'flex flex-col items-center px-4 pt-8 pb-4 text-center sm:px-5 sm:pt-10 sm:pb-4',
+          )}
         >
           {@render children?.()}
-        </Dropzone.Input>
 
-        <UploaderConstraints {allowedFormats} {maxSize} />
+          <div class="mt-8 hidden sm:block">
+            <UploaderQuickPaste />
+          </div>
+
+          <div class="mt-3 w-full sm:mt-8">
+            <UploaderConstraints {allowedFormats} {maxSize} />
+          </div>
+        </Dropzone.Input>
       </div>
 
       <UploaderDragOverlay />
