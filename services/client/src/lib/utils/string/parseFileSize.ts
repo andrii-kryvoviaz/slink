@@ -41,6 +41,11 @@ export const formatFileSize = (fileSize?: string | null): string | null => {
 
   try {
     const { size, unit } = parseFileSize(fileSize);
+
+    if (!size || !unit || Number.isNaN(Number(size))) {
+      return null;
+    }
+
     return `${size} ${unit}`;
   } catch {
     return null;
