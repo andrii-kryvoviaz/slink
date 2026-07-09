@@ -41,7 +41,7 @@
 
   const mediaFormatSelection = new MediaFormatSelection(
     mediaFormats,
-    () => settings.allowedFormats,
+    () => settings.allowedFormats ?? -1,
     (mask) => {
       settings.allowedFormats = mask;
     },
