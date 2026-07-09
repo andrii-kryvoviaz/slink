@@ -5028,7 +5028,7 @@ msgstr "折りたたむ"
 msgid "up to <0/>"
 msgstr "最大 <0/>"
 
-#. 0: hiddenFormats.length
+#. 0: formats.hiddenCount
 #: src/feature/Upload/Uploader/UploaderConstraints.svelte
 msgid "+{0} more"
 msgstr "他{0}件"

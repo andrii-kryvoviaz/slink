@@ -5028,7 +5028,7 @@ msgstr "Mostrar menos"
 msgid "up to <0/>"
 msgstr "hasta <0/>"
 
-#. 0: hiddenFormats.length
+#. 0: formats.hiddenCount
 #: src/feature/Upload/Uploader/UploaderConstraints.svelte
 msgid "+{0} more"
 msgstr "+{0} más"

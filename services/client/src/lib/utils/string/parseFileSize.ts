@@ -35,3 +35,14 @@ export const parseFileSize = (
     unitValue: SizeUnit as SizeUnitValue,
   };
 };
+
+export const formatFileSize = (fileSize?: string | null): string | null => {
+  if (!fileSize) return null;
+
+  try {
+    const { size, unit } = parseFileSize(fileSize);
+    return `${size} ${unit}`;
+  } catch {
+    return null;
+  }
+};

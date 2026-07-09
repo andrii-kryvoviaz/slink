@@ -5,7 +5,7 @@
   import { type VariantProps, tv } from 'tailwind-variants';
 
   import {
-    parseFileSize,
+    formatFileSize,
     sizeMatchingRegex,
   } from '$lib/utils/string/parseFileSize';
   import Icon from '@iconify/svelte';
@@ -71,8 +71,7 @@
     }
 
     if (typeof value === 'string' && value.match(sizeMatchingRegex)) {
-      const { size, unit } = parseFileSize(value);
-      return `${size} ${unit}`;
+      return formatFileSize(value) ?? value;
     }
 
     return value;
