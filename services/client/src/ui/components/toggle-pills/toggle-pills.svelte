@@ -5,7 +5,6 @@
 
   import { className } from '@slink/utils/ui/className';
 
-  import type { ToggleGroupOption } from '../toggle-group/toggle-group.types';
   import {
     togglePillsIconTheme,
     togglePillsItemTheme,
@@ -28,17 +27,11 @@
   }: Props = $props();
 
   const atMinimum = $derived(value.length <= minItems);
+  const lockedValues = $derived(new Set<T>(atMinimum ? value : []));
 
   const handleValueChange = (next: string[]) => {
     value = next as T[];
     onValueChange?.(value);
-  };
-
-  const isItemDisabled = (option: ToggleGroupOption<T>): boolean => {
-    if (option.disabled) {
-      return true;
-    }
-    return atMinimum && value.includes(option.value);
   };
 </script>
 
@@ -52,7 +45,7 @@
   {#each options as option (option.value)}
     <ToggleGroupPrimitive.Item
       value={option.value}
-      disabled={isItemDisabled(option)}
+      disabled={option.disabled || lockedValues.has(option.value)}
       class={togglePillsItemTheme({ size })}
     >
       {#snippet children({ pressed })}
