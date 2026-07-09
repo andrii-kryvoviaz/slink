@@ -1,7 +1,6 @@
 <script lang="ts">
   import { InfoCard } from '@slink/feature/Feedback/InfoCard';
   import { Subtitle, Title } from '@slink/feature/Text';
-  import Badge from '@slink/feature/Text/Badge/Badge.svelte';
   import { type Snippet, onMount } from 'svelte';
 
   import { browser } from '$app/environment';
@@ -9,23 +8,6 @@
   import { GITHUB } from '$lib/constants/app';
   import Icon from '@iconify/svelte';
   import { fade, slide } from 'svelte/transition';
-
-  const imageFormats = [
-    'image/bmp',
-    'image/png',
-    'image/jpeg',
-    'image/jpg',
-    'image/gif',
-    'image/webp',
-    'image/svg+xml',
-    'image/svg',
-    'image/x-icon',
-    'image/vnd.microsoft.icon',
-    'image/x-tga',
-    'image/avif',
-  ];
-
-  const convertedFormats = ['image/heic *', 'image/tiff *', 'image/tif *'];
 
   let openedQuestion: string | undefined = $state();
 
@@ -135,29 +117,6 @@
     </div>
 
     <div class="space-y-4">
-      {#snippet formatsContent()}
-        <p>Slink supports the following mime types:</p>
-
-        <div class="mt-2 w-full flex flex-wrap gap-2">
-          {#each imageFormats as format}
-            <Badge variant="blue" outline>
-              {format}
-            </Badge>
-          {/each}
-          {#each convertedFormats as format}
-            <Badge variant="amber" outline>
-              {format}
-            </Badge>
-          {/each}
-        </div>
-
-        <p class="mt-4 text-xs">
-          <span class="font-light"
-            >* These formats are automatically converted to JPEG on upload.</span
-          >
-        </p>
-      {/snippet}
-
       {#snippet visibilityContent()}
         <div class="space-y-6">
           <p class="text-slate-700 dark:text-slate-300">
@@ -450,11 +409,6 @@
         </div>
       {/snippet}
 
-      {@render faqItem(
-        'supported-image-formats',
-        'What image formats Slink supports?',
-        formatsContent,
-      )}
       {@render faqItem(
         'image-visibility',
         'Who can see my images?',
