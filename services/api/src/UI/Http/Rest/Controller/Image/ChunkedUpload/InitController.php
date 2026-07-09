@@ -39,19 +39,19 @@ final readonly class InitController {
     #[MapRequestPayload] InitUploadRequest $request,
     #[CurrentUser] ?UserInterface $user,
   ): ApiResponse {
-    $maxSize = convertSizeToBytes((string) $this->configurationProvider->get('image.maxSize'));
+    $maxSize = convertSizeToBytes($this->configurationProvider->get('image.maxSize'));
 
     if ($request->totalSize > $maxSize) {
       throw new HttpException(Response::HTTP_REQUEST_ENTITY_TOO_LARGE, 'The uploaded file exceeds the maximum allowed size.');
     }
 
-    $supportedFormats = MediaFormat::resolveMimeTypes((int) ($this->configurationProvider->get('image.allowedFormats') ?? -1));
+    $supportedFormats = MediaFormat::resolveMimeTypes((int) $this->configurationProvider->get('image.allowedFormats'));
 
     if (!\in_array($request->mimeType, $supportedFormats, true)) {
       throw new HttpException(Response::HTTP_UNPROCESSABLE_ENTITY, \sprintf('The mime type %s is not supported.', $request->mimeType));
     }
 
-    $chunkSize = convertSizeToBytes((string) $this->configurationProvider->get('image.chunkSize'));
+    $chunkSize = convertSizeToBytes($this->configurationProvider->get('image.chunkSize'));
     $totalChunks = \max(1, (int) \ceil($request->totalSize / $chunkSize));
 
     $token = UploadToken::create(

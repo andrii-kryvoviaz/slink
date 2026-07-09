@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Slink\Settings\Domain\ValueObject\Public;
 
 use Slink\Media\Domain\Enum\MediaFormat;
+use Slink\Settings\Domain\ValueObject\Image\ImageSettings;
 use Slink\Shared\Infrastructure\Attribute\Groups;
 
 #[Groups(['public'])]
@@ -40,7 +41,7 @@ final readonly class PublicImageSettings {
    * @param array<string, mixed> $settings
    */
   public static function fromArray(array $settings): self {
-    $allowedFormatsMask = (int) ($settings['allowedFormats'] ?? -1);
+    $imageSettings = ImageSettings::fromPayload($settings);
 
     return new self(
       $settings['enableLicensing'] ?? false,
@@ -48,10 +49,10 @@ final readonly class PublicImageSettings {
       $settings['stripExifMetadata'] ?? true,
       $settings['maxSize'] ?? '15M',
       $settings['chunkSize'] ?? '2M',
-      MediaFormat::resolveMimeTypes($allowedFormatsMask),
+      $imageSettings->getAllowedMimeTypes(),
       array_map(
-        static fn (MediaFormat $format): string => $format->label(),
-        MediaFormat::fromMask($allowedFormatsMask),
+        static fn (string $format): string => MediaFormat::from($format)->label(),
+        $imageSettings->getAllowedFormats(),
       ),
     );
   }
