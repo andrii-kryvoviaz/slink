@@ -8,6 +8,7 @@ export const scrollAreaViewportTheme = cva(
         none: '',
         sm: 'max-h-60',
         md: 'max-h-64',
+        lg: 'max-h-[32.5rem]',
       },
     },
     defaultVariants: {

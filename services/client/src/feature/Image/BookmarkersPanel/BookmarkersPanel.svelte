@@ -1,10 +1,12 @@
 <script lang="ts">
   import { ApiClient } from '@slink/api';
-  import { UserAvatar } from '@slink/feature/User';
+  import { AvatarStack, UserAvatar } from '@slink/feature/User';
+  import { ScrollArea } from '@slink/ui/components/scroll-area';
+  import { StatDisclosure } from '@slink/ui/components/stat-disclosure';
+  import { onMount } from 'svelte';
 
   import { plural } from '$lib/utils/i18n';
   import Icon from '@iconify/svelte';
-  import { slide } from 'svelte/transition';
 
   import { ReactiveState } from '@slink/api/ReactiveState';
   import type {
@@ -15,18 +17,13 @@
   import { formatDate } from '@slink/lib/utils/date.svelte';
 
   import {
-    bookmarkersPanelChevronTheme,
-    bookmarkersPanelContainerTheme,
     bookmarkersPanelEmptyTheme,
-    bookmarkersPanelHeaderTheme,
-    bookmarkersPanelIconTheme,
-    bookmarkersPanelIconWrapperTheme,
+    bookmarkersPanelErrorTheme,
     bookmarkersPanelItemDateTheme,
     bookmarkersPanelItemNameTheme,
     bookmarkersPanelItemTheme,
-    bookmarkersPanelLabelTheme,
     bookmarkersPanelListTheme,
-    bookmarkersPanelValueTheme,
+    bookmarkersPanelMoreTheme,
   } from './BookmarkersPanel.theme';
 
   interface Props {
@@ -38,15 +35,12 @@
 
   let { imageId, count }: Props = $props();
 
-  let isExpanded = $state(false);
-  let pages = $state<Map<number, BookmarkerItem[]>>(new Map());
-  let currentPage = $state(1);
-  let totalPages = $state(1);
+  let items = $state<BookmarkerItem[]>([]);
+  let total = $state<number | undefined>(undefined);
   let cursor = $state<string | undefined>(undefined);
 
-  const currentPageItems = $derived(pages.get(currentPage) ?? []);
-  const hasPrev = $derived(currentPage > 1);
-  const hasNext = $derived(currentPage < totalPages);
+  const displayCount = $derived(total ?? count);
+  const remaining = $derived(total === undefined ? 0 : total - items.length);
 
   const {
     isLoading,
@@ -64,115 +58,50 @@
     { minExecutionTime: 200 },
   );
 
-  const handleToggle = async () => {
-    isExpanded = !isExpanded;
+  const loadMore = async () => {
+    await fetchBookmarkers(cursor);
 
-    if (isExpanded && pages.size === 0) {
-      await loadPage(1);
-    }
+    if (!$response) return;
+
+    items = [...items, ...$response.data];
+    total = $response.meta.total;
+    cursor = $response.meta.nextCursor;
   };
 
-  const loadPage = async (page: number) => {
-    if (pages.has(page)) return;
-
-    await fetchBookmarkers(page === 1 ? undefined : cursor);
-
-    if ($response) {
-      pages.set(page, $response.data);
-      pages = new Map(pages);
-      totalPages = Math.ceil($response.meta.total / ITEMS_PER_PAGE);
-      cursor = $response.meta.nextCursor;
-    }
-  };
-
-  const handlePrev = () => {
-    if (!hasPrev || $isLoading) return;
-    currentPage -= 1;
-  };
-
-  const handleNext = async () => {
-    if (!hasNext || $isLoading) return;
-    currentPage += 1;
-    await loadPage(currentPage);
-  };
+  onMount(() => {
+    if (count > 0) loadMore();
+  });
 </script>
 
-{#if count > 0}
-  <div class={bookmarkersPanelContainerTheme()}>
-    <button
-      type="button"
-      class={bookmarkersPanelHeaderTheme()}
-      onclick={handleToggle}
-      aria-expanded={isExpanded}
-    >
-      <div class={bookmarkersPanelIconWrapperTheme()}>
-        <Icon
-          icon="ph:bookmark-simple-fill"
-          class={bookmarkersPanelIconTheme()}
-        />
-      </div>
-      <div class="flex flex-col min-w-0 flex-1 text-left">
-        <span class={bookmarkersPanelLabelTheme()}>Bookmarked</span>
-        <span class={bookmarkersPanelValueTheme()}
-          >{plural(count, ['# time', '# times'])}</span
-        >
-      </div>
-      {#if $isLoading && pages.size === 0}
-        <Icon
-          icon="svg-spinners:ring-resize"
-          class="w-5 h-5 text-indigo-500 dark:text-indigo-400"
-        />
-      {:else}
-        <Icon
-          icon="lucide:chevron-right"
-          class={bookmarkersPanelChevronTheme()}
-          style="transform: rotate({isExpanded ? 90 : 0}deg)"
+{#if displayCount > 0}
+  <StatDisclosure
+    icon="ph:bookmark-simple-fill"
+    label="Bookmarked"
+    value={plural(displayCount, ['By # person', 'By # people'])}
+  >
+    {#snippet trailing()}
+      {#if items.length > 0}
+        <AvatarStack
+          users={items}
+          ringClass="ring-indigo-50 dark:ring-indigo-950"
         />
       {/if}
-    </button>
+    {/snippet}
 
-    {#if isExpanded}
-      <div
-        class={bookmarkersPanelListTheme()}
-        transition:slide={{ duration: 200 }}
-      >
-        {#if currentPageItems.length === 0 && !$isLoading}
+    <ScrollArea maxHeight="lg" orientation="vertical" type="scroll">
+      <div class={bookmarkersPanelListTheme()}>
+        {#if $error}
+          <div class={bookmarkersPanelErrorTheme()}>
+            Failed to load bookmarks
+          </div>
+        {:else if $isLoading && items.length === 0}
+          <div class={bookmarkersPanelEmptyTheme()}>
+            <Icon icon="svg-spinners:ring-resize" class="w-4 h-4 inline" />
+          </div>
+        {:else if items.length === 0}
           <div class={bookmarkersPanelEmptyTheme()}>No bookmarks yet</div>
         {:else}
-          {#if totalPages > 1}
-            <div
-              class="flex items-center justify-between px-4 py-2 border-b border-indigo-100/50 dark:border-indigo-500/10"
-            >
-              <button
-                type="button"
-                class="p-1.5 rounded-md text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:text-indigo-400 dark:hover:bg-indigo-900/30 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-                onclick={handlePrev}
-                disabled={!hasPrev || $isLoading}
-              >
-                <Icon icon="lucide:chevron-left" class="w-4 h-4" />
-              </button>
-              <span class="text-xs text-gray-500 dark:text-gray-400">
-                {#if $isLoading}
-                  <Icon
-                    icon="svg-spinners:ring-resize"
-                    class="w-3 h-3 inline"
-                  />
-                {:else}
-                  {currentPage} / {totalPages}
-                {/if}
-              </span>
-              <button
-                type="button"
-                class="p-1.5 rounded-md text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:text-indigo-400 dark:hover:bg-indigo-900/30 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-                onclick={handleNext}
-                disabled={!hasNext || $isLoading}
-              >
-                <Icon icon="lucide:chevron-right" class="w-4 h-4" />
-              </button>
-            </div>
-          {/if}
-
-          {#each currentPageItems as bookmarker (bookmarker.id)}
+          {#each items as bookmarker (bookmarker.id)}
             <div class={bookmarkersPanelItemTheme()}>
               <UserAvatar
                 user={{
@@ -191,14 +120,22 @@
               </div>
             </div>
           {/each}
-        {/if}
-
-        {#if $error}
-          <div class="px-4 py-3 text-sm text-red-500 dark:text-red-400">
-            Failed to load bookmarks
-          </div>
+          {#if remaining > 0}
+            <button
+              type="button"
+              class={bookmarkersPanelMoreTheme()}
+              onclick={loadMore}
+              disabled={$isLoading}
+            >
+              {#if $isLoading}
+                <Icon icon="svg-spinners:ring-resize" class="w-4 h-4" />
+              {:else}
+                Show {remaining} more
+              {/if}
+            </button>
+          {/if}
         {/if}
       </div>
-    {/if}
-  </div>
+    </ScrollArea>
+  </StatDisclosure>
 {/if}

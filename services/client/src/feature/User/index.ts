@@ -9,6 +9,8 @@ export { default as CreateApiKeyForm } from './ApiKey/CreateApiKeyForm.svelte';
 export { default as CreatedKeyDisplay } from './ApiKey/CreatedKeyDisplay.svelte';
 export * from './ApiKey/apiKey.language';
 export * from './ApiKey/types';
+export { default as AvatarStack } from './AvatarStack/AvatarStack.svelte';
+export * from './AvatarStack/AvatarStack.theme';
 export { default as UserActions } from './UserActions/UserActions.svelte';
 export { default as UserAvatar } from './UserAvatar/UserAvatar.svelte';
 export * from './UserAvatar/UserAvatar.theme';

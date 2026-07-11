@@ -1052,7 +1052,6 @@ msgstr "No puedes guardar en favoritos tu propia imagen"
 msgid "Save"
 msgstr "Guardar"
 
-#: src/feature/Image/BookmarkStat/BookmarkStat.svelte
 #: src/feature/Image/BookmarkersPanel/BookmarkersPanel.svelte
 msgid "Bookmarked"
 msgstr "En favoritos"
@@ -1460,25 +1459,9 @@ msgstr "Amazon S3"
 msgid "SMB Share"
 msgstr "Recurso compartido SMB"
 
-#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
-msgid "Storage Usage"
-msgstr "Uso de almacenamiento"
-
 #: src/feature/Settings/OAuthSettings/OAuthProviderForm.svelte
-#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
 msgid "Provider"
 msgstr "Proveedor"
-
-#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
-msgid "Total Usage"
-msgstr "Uso total"
-
-#. 0: data.fileCount.toLocaleString()
-#. 0: data.cacheFileCount.toLocaleString()
-#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
-#: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
-msgid "{0} files"
-msgstr "{0} archivos"
 
 #: src/feature/Storage/StorageUsageWidget/StorageUsageDisplay.svelte
 msgid "Cache"
@@ -1751,14 +1734,6 @@ msgstr "Proveedor eliminado"
 #: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
 msgid "No SSO providers configured yet"
 msgstr "Aún no hay proveedores SSO configurados"
-
-#: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
-msgid "Move Up"
-msgstr "Mover arriba"
-
-#: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
-msgid "Move Down"
-msgstr "Mover abajo"
 
 #: src/feature/Settings/SettingsPane/SettingItem.svelte
 msgid "Disabled"
@@ -3885,12 +3860,6 @@ msgstr "Atribución-NoComercial-SinDerivadas"
 msgid "You may copy and distribute this work non-commercially, but not adapt it, as long as you credit the creator."
 msgstr "Puede copiar y distribuir esta obra de forma no comercial, pero no adaptarla, siempre que acredite al creador."
 
-#: src/feature/Image/BookmarkersPanel/BookmarkersPanel.svelte
-msgid "# time"
-msgid_plural "# times"
-msgstr[0] "# vez"
-msgstr[1] "# veces"
-
 #: src/feature/Share/Controls/ExpirationDetail.svelte
 #: src/feature/Share/Controls/List.svelte
 msgid "Expiration"
@@ -5033,3 +5002,18 @@ msgstr[1] "# marcadores"
 #: src/routes/notifications/+page.svelte
 msgid "Activity on your images will show up here."
 msgstr "La actividad de tus imágenes aparecerá aquí."
+
+#: src/feature/Image/BookmarkersPanel/BookmarkersPanel.svelte
+msgid "By # person"
+msgid_plural "By # people"
+msgstr[0] "De # persona"
+msgstr[1] "De # personas"
+
+#. 0: remaining
+#: src/feature/Image/BookmarkersPanel/BookmarkersPanel.svelte
+msgid "Show {0} more"
+msgstr "Mostrar {0} más"
+
+#: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
+msgid "Drag to reorder"
+msgstr "Arrastra para reordenar"
