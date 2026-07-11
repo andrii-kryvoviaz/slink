@@ -11,6 +11,7 @@ use Slink\Shared\Application\Http\Collection;
 use Slink\Shared\Application\Http\Item;
 use Slink\Shared\Application\Query\QueryHandlerInterface;
 use Slink\Shared\Domain\Exception\ForbiddenException;
+use Slink\Shared\Domain\ValueObject\CursorPaginatorResult;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\Pagination\CursorPaginationTrait;
 use Slink\Shared\Infrastructure\Pagination\CursorPaginator;
@@ -43,15 +44,15 @@ final readonly class GetImageBookmarkersHandler implements QueryHandlerInterface
 
     $total = $this->bookmarkRepository->countByImageId($query->imageId);
 
+    $paginator = $this->cursorPaginator->paginate($bookmarks->getIterator(), $query->getLimit());
+
     $items = iterator_map(
-      $bookmarks,
+      $paginator->items ?? [],
       fn(BookmarkView $bookmark) => Item::fromEntity($bookmark, groups: ['bookmarkers'])
     );
 
-    $paginator = $this->cursorPaginator->paginate($items, $query->getLimit());
-
     return Collection::fromCursorPaginator(
-      $paginator,
+      $paginator === null ? null : new CursorPaginatorResult($items, $paginator->nextCursor, $paginator->previousCursor),
       limit: $query->getLimit(),
       total: $total
     );

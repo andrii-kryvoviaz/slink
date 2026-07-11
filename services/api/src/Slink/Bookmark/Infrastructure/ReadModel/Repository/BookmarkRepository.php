@@ -69,6 +69,9 @@ final class BookmarkRepository extends AbstractRepository implements BookmarkRep
       ->getOneOrNullResult();
   }
 
+  /**
+   * @return Paginator<BookmarkView>
+   */
   #[Override]
   public function findByUserId(string $userId, int $limit, ?string $cursor = null): Paginator {
     $qb = $this->createQueryBuilder('b')
@@ -76,8 +79,9 @@ final class BookmarkRepository extends AbstractRepository implements BookmarkRep
       ->leftJoin('b.image', 'i')
       ->where('u.uuid = :userId')
       ->setParameter('userId', $userId)
-      ->orderBy('b.createdAt', 'DESC')
       ->setMaxResults($limit + 1);
+
+    $this->applyCursorOrder($qb, 'createdAt', 'desc', 'uuid', 'b');
 
     if ($cursor !== null) {
       $this->applyCursorPagination($qb, $cursor, 'createdAt', 'desc', 'uuid', 'b');
@@ -162,6 +166,9 @@ final class BookmarkRepository extends AbstractRepository implements BookmarkRep
     return array_column($results, 'uuid');
   }
 
+  /**
+   * @return Paginator<BookmarkView>
+   */
   #[Override]
   public function findByImageId(string $imageId, int $limit, ?string $cursor = null): Paginator {
     $qb = $this->createQueryBuilder('b')
@@ -169,8 +176,9 @@ final class BookmarkRepository extends AbstractRepository implements BookmarkRep
       ->leftJoin('b.user', 'u')
       ->where('i.uuid = :imageId')
       ->setParameter('imageId', $imageId)
-      ->orderBy('b.createdAt', 'DESC')
       ->setMaxResults($limit + 1);
+
+    $this->applyCursorOrder($qb, 'createdAt', 'desc', 'uuid', 'b');
 
     if ($cursor !== null) {
       $this->applyCursorPagination($qb, $cursor, 'createdAt', 'desc', 'uuid', 'b');

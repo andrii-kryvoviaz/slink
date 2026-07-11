@@ -35,9 +35,12 @@ if (!function_exists('convertSizeToBytes')) {
 
 if (!function_exists('iterator_map')) {
   /**
-   * @param iterable<mixed> $iterator
-   * @param callable $callback
-   * @return iterable<mixed>
+   * @template TKey
+   * @template TValue
+   * @template TResult
+   * @param iterable<TKey, TValue> $iterator
+   * @param callable(TValue, TKey): TResult $callback
+   * @return iterable<TKey, TResult>
    */
   function iterator_map(iterable $iterator, callable $callback): iterable {
     foreach ($iterator as $key => $value) {

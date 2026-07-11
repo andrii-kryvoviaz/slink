@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Slink\Shared\Domain\ValueObject;
 
-use Slink\Shared\Application\Http\Item;
-
+/**
+ * @template T
+ */
 final readonly class CursorPaginatorResult {
   /**
-   * @param iterable<int, Item> $items
+   * @param iterable<int, T> $items
    * @param Cursor|null $nextCursor
    * @param Cursor|null $previousCursor
    */

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Slink\Shared\Infrastructure\Pagination;
 
-use Slink\Shared\Application\Http\Item;
+use Slink\Shared\Domain\Contract\CursorAwareInterface;
 use Slink\Shared\Domain\ValueObject\CursorPaginatorResult;
 
 final readonly class CursorPaginator {
@@ -13,9 +13,10 @@ final readonly class CursorPaginator {
   /**
    * Paginate entities and return a subset based on the limit.
    *
-   * @param iterable<Item> $entities The collection of entities to paginate.
+   * @template T of CursorAwareInterface
+   * @param iterable<T> $entities The collection of entities to paginate.
    * @param int $limit The maximum number of entities to return.
-   * @return CursorPaginatorResult|null A CursorPaginatorResult object or null if no items.
+   * @return CursorPaginatorResult<T>|null A CursorPaginatorResult object or null if no items.
    * @throws \Exception
    */
   public function paginate(iterable $entities, int $limit): ?CursorPaginatorResult {

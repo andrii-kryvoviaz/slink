@@ -63,6 +63,25 @@ trait CursorPaginationTrait {
   }
 
   /**
+   * @param QueryBuilder $qb
+   * @param string $orderByField
+   * @param string $order
+   * @param string $idField
+   * @param string $entityAlias
+   * @return void
+   */
+  protected function applyCursorOrder(
+    QueryBuilder $qb,
+    string       $orderByField,
+    string       $order = 'desc',
+    string       $idField = 'uuid',
+    string       $entityAlias = 'entity'
+  ): void {
+    $qb->orderBy("{$entityAlias}.{$orderByField}", $order)
+      ->addOrderBy("{$entityAlias}.{$idField}", $order);
+  }
+
+  /**
    * @param CursorAwareInterface $lastEntity
    * @return Cursor|null
    */

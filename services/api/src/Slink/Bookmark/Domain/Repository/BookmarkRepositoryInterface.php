@@ -20,6 +20,9 @@ interface BookmarkRepositoryInterface extends ServiceEntityRepositoryInterface {
 
   public function findByUserIdAndImageId(string $userId, string $imageId): ?BookmarkView;
 
+  /**
+   * @return Paginator<BookmarkView>
+   */
   public function findByUserId(string $userId, int $limit, ?string $cursor = null): Paginator;
 
   public function countByUserId(string $userId): int;
@@ -38,5 +41,8 @@ interface BookmarkRepositoryInterface extends ServiceEntityRepositoryInterface {
    */
   public function getBookmarkedImageIds(string $userId, array $imageIds): array;
 
+  /**
+   * @return Paginator<BookmarkView>
+   */
   public function findByImageId(string $imageId, int $limit, ?string $cursor = null): Paginator;
 }
