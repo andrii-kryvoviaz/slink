@@ -5,12 +5,14 @@
 
   import type { SettingCategory } from '$lib/settings/Type/GlobalSettings';
 
+  import { useSettingsPage } from '@slink/lib/state/SettingsPage.svelte';
+
   interface Props {
     category: SettingCategory;
     loading?: boolean;
     title?: Snippet;
     description?: Snippet;
-    children?: Snippet;
+    children?: Snippet<[Record<string, string>]>;
     actions?: Snippet;
     on?: {
       save: (event: {
@@ -28,6 +30,8 @@
     actions,
     on,
   }: Props = $props();
+
+  const settingsPage = useSettingsPage();
 
   const handleSubmit = (event: SubmitEvent) => {
     event.preventDefault();
@@ -56,7 +60,7 @@
     <div
       class="divide-y divide-gray-100 dark:divide-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 overflow-hidden"
     >
-      {@render children?.()}
+      {@render children?.(settingsPage.errors)}
     </div>
 
     <div class="flex items-center justify-end gap-3 pt-4">

@@ -33,100 +33,106 @@
     Control user registration, authentication, and security requirements
   {/snippet}
 
-  <SettingItem
-    defaultValue={defaultSettings?.allowRegistration}
-    currentValue={settings.allowRegistration}
-    reset={(value) => {
-      settings.allowRegistration = value;
-    }}
-  >
-    {#snippet label()}
-      User Registration
-    {/snippet}
-    {#snippet hint()}
-      Allow new users to create accounts
-    {/snippet}
-    <Switch
-      name="allowRegistration"
-      bind:checked={settings.allowRegistration}
-    />
-  </SettingItem>
-
-  <SettingItem
-    defaultValue={defaultSettings?.approvalRequired}
-    currentValue={settings.approvalRequired}
-    reset={(value) => {
-      settings.approvalRequired = value;
-    }}
-  >
-    {#snippet label()}
-      Require Admin Approval
-    {/snippet}
-    {#snippet hint()}
-      New users must be approved before accessing the app
-    {/snippet}
-    <Switch name="approvalRequired" bind:checked={settings.approvalRequired} />
-  </SettingItem>
-
-  {#if settings.allowRegistration}
+  {#snippet children(errors)}
     <SettingItem
-      defaultValue={defaultSettings?.password.minLength}
-      currentValue={settings.password.minLength}
+      defaultValue={defaultSettings?.allowRegistration}
+      currentValue={settings.allowRegistration}
       reset={(value) => {
-        settings.password.minLength = value;
+        settings.allowRegistration = value;
       }}
     >
       {#snippet label()}
-        Minimum Password Length
+        User Registration
       {/snippet}
       {#snippet hint()}
-        Minimum characters required
+        Allow new users to create accounts
       {/snippet}
-      <NumberInput
-        name="passwordLength"
-        min={6}
-        bind:value={settings.password.minLength}
-        variant="input"
-        size="md"
+      <Switch
+        name="allowRegistration"
+        bind:checked={settings.allowRegistration}
       />
     </SettingItem>
 
     <SettingItem
-      defaultValue={defaultSettings?.password.requirements}
-      currentValue={settings.password.requirements}
+      defaultValue={defaultSettings?.approvalRequired}
+      currentValue={settings.approvalRequired}
       reset={(value) => {
-        settings.password.requirements = value;
+        settings.approvalRequired = value;
       }}
     >
       {#snippet label()}
-        Password Requirements
+        Require Admin Approval
       {/snippet}
       {#snippet hint()}
-        Required character types
+        New users must be approved before accessing the app
       {/snippet}
-      <Select
-        type="bitmask"
-        class="w-full max-w-md"
-        items={[
-          { value: '1', label: 'Numbers (0-9)', icon: 'ph:number-nine-thin' },
-          {
-            value: '2',
-            label: 'Lowercase (a-z)',
-            icon: 'material-symbols-light:lowercase-rounded',
-          },
-          {
-            value: '4',
-            label: 'Uppercase (A-Z)',
-            icon: 'material-symbols-light:uppercase-rounded',
-          },
-          {
-            value: '8',
-            label: 'Special (!@#$)',
-            icon: 'material-symbols-light:asterisk-rounded',
-          },
-        ]}
-        bind:value={settings.password.requirements}
+      <Switch
+        name="approvalRequired"
+        bind:checked={settings.approvalRequired}
       />
     </SettingItem>
-  {/if}
+
+    {#if settings.allowRegistration}
+      <SettingItem
+        defaultValue={defaultSettings?.password.minLength}
+        currentValue={settings.password.minLength}
+        reset={(value) => {
+          settings.password.minLength = value;
+        }}
+      >
+        {#snippet label()}
+          Minimum Password Length
+        {/snippet}
+        {#snippet hint()}
+          Minimum characters required
+        {/snippet}
+        <NumberInput
+          name="passwordLength"
+          min={6}
+          bind:value={settings.password.minLength}
+          error={errors['password.minLength']}
+          variant="input"
+          size="md"
+        />
+      </SettingItem>
+
+      <SettingItem
+        defaultValue={defaultSettings?.password.requirements}
+        currentValue={settings.password.requirements}
+        reset={(value) => {
+          settings.password.requirements = value;
+        }}
+      >
+        {#snippet label()}
+          Password Requirements
+        {/snippet}
+        {#snippet hint()}
+          Required character types
+        {/snippet}
+        <Select
+          type="bitmask"
+          class="w-full max-w-md"
+          items={[
+            { value: '1', label: 'Numbers (0-9)', icon: 'ph:number-nine-thin' },
+            {
+              value: '2',
+              label: 'Lowercase (a-z)',
+              icon: 'material-symbols-light:lowercase-rounded',
+            },
+            {
+              value: '4',
+              label: 'Uppercase (A-Z)',
+              icon: 'material-symbols-light:uppercase-rounded',
+            },
+            {
+              value: '8',
+              label: 'Special (!@#$)',
+              icon: 'material-symbols-light:asterisk-rounded',
+            },
+          ]}
+          bind:value={settings.password.requirements}
+        />
+      </SettingItem>
+    {/if}
+  {/snippet}
 </SettingsPane>

@@ -10,6 +10,7 @@
   import { enhance } from '$app/forms';
   import { page } from '$app/state';
   import Icon from '@iconify/svelte';
+  import { writable } from 'svelte/store';
   import { fade } from 'svelte/transition';
 
   import type { UserPreferencesResponse } from '@slink/api/Response';
@@ -88,6 +89,8 @@
     false,
   );
 
+  const formError = writable<string | null>(null);
+
   const licenseOptions = $derived(
     licenses.map((license) => ({
       value: license.id,
@@ -117,16 +120,24 @@
     action="?/updatePreferences"
     method="POST"
     use:enhance={withLoadingState(isPreferencesFormLoading, {
+      onSubmit: () => {
+        formError.set(null);
+      },
       onSuccess: async () => {
         await state.commit();
         toast.success(messages.preferences.updated);
       },
       onError: (data) => {
         const errors = data?.errors as Record<string, string> | undefined;
-        toast.error(errors?.message ?? messages.general.somethingWentWrong);
+        formError.set(errors?.message ?? messages.general.somethingWentWrong);
       },
     })}
   >
+    {#if $formError}
+      <Notice variant="error" class="mb-5">
+        {$formError}
+      </Notice>
+    {/if}
     <div class="space-y-8">
       <section class="space-y-1">
         <div class="flex items-center justify-between gap-4 pb-3">

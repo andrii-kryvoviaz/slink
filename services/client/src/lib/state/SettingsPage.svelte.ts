@@ -2,6 +2,7 @@ import { ApiClient } from '@slink/api';
 
 import { invalidate } from '$app/navigation';
 
+import { ValidationException } from '@slink/api/Exceptions';
 import { ReactiveState } from '@slink/api/ReactiveState';
 import type { EmptyResponse } from '@slink/api/Response';
 
@@ -27,9 +28,14 @@ class SettingsPageState {
   );
 
   private _request = bindRequestState(this._reactiveState);
+  private _validationErrors = $state<Record<string, string>>({});
 
   get error() {
     return this._request.error;
+  }
+
+  get errors() {
+    return this._validationErrors;
   }
 
   initialize(settings: GlobalSettings): void {
@@ -61,8 +67,23 @@ class SettingsPageState {
   handleSave = async ({ category }: { category: SettingCategory }) => {
     const { [category]: categoryData } = this.settings;
     this._categoryBeingSaved = category;
+    this._validationErrors = {};
 
     await this._reactiveState.run(category, categoryData);
+  };
+
+  handleError = (error: Error) => {
+    if (error instanceof ValidationException) {
+      this._validationErrors = Object.fromEntries(
+        error.violations.map((violation) => [
+          violation.property,
+          violation.message,
+        ]),
+      );
+      return;
+    }
+
+    printErrorsAsToastMessage(error);
   };
 }
 
@@ -81,7 +102,7 @@ export function useSettingsPage(
   if (initialSettings) {
     $effect(() => {
       const err = settingsPageInstance!.error;
-      if (err) printErrorsAsToastMessage(err);
+      if (err) settingsPageInstance!.handleError(err);
     });
   }
 

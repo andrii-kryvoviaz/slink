@@ -56,252 +56,264 @@
     Configure image upload limits and processing options
   {/snippet}
 
-  <SettingItem
-    defaultValue={defaultSettings?.maxSize}
-    currentValue={settings.maxSize}
-    reset={(value) => {
-      settings.maxSize = value;
-    }}
-  >
-    {#snippet label()}
-      Maximum Image Size
-    {/snippet}
-    {#snippet hint()}
-      Set the maximum size limit for image uploads
-    {/snippet}
-    <FileSizeInput name="imageMaxSize" bind:value={settings.maxSize} />
-  </SettingItem>
-
-  <SettingItem
-    defaultValue={defaultSettings?.chunkSize}
-    currentValue={settings.chunkSize}
-    reset={(value) => {
-      settings.chunkSize = value;
-    }}
-  >
-    {#snippet label()}
-      Upload Chunk Size
-    {/snippet}
-    {#snippet hint()}
-      Size of each upload chunk. Smaller chunks improve resumability on slow
-      connections
-    {/snippet}
-    <FileSizeInput name="imageChunkSize" bind:value={settings.chunkSize} />
-  </SettingItem>
-
-  <SettingItem
-    defaultValue={defaultSettings?.stripExifMetadata}
-    currentValue={settings.stripExifMetadata}
-    reset={(value) => {
-      settings.stripExifMetadata = value;
-    }}
-  >
-    {#snippet label()}
-      Strip EXIF Metadata
-    {/snippet}
-    {#snippet hint()}
-      Automatically remove metadata from uploaded images for privacy
-    {/snippet}
-    <Switch
-      name="imageStripExifMetadata"
-      bind:checked={settings.stripExifMetadata}
-    />
-  </SettingItem>
-
-  <SettingItem
-    defaultValue={defaultSettings?.allowOnlyPublicImages}
-    currentValue={settings.allowOnlyPublicImages}
-    reset={(value) => {
-      settings.allowOnlyPublicImages = value;
-    }}
-  >
-    {#snippet label()}
-      Allow Only Public Images
-    {/snippet}
-    {#snippet hint()}
-      When enabled, all images are automatically set to public and visibility
-      cannot be changed
-    {/snippet}
-    <Switch
-      name="imageAllowOnlyPublicImages"
-      bind:checked={settings.allowOnlyPublicImages}
-    />
-  </SettingItem>
-
-  <SettingItem
-    defaultValue={defaultSettings?.enableDeduplication}
-    currentValue={settings.enableDeduplication}
-    reset={(value) => {
-      settings.enableDeduplication = value;
-    }}
-  >
-    {#snippet label()}
-      Enable Image Deduplication
-    {/snippet}
-    {#snippet hint()}
-      Detect and reject duplicate images during upload
-    {/snippet}
-    <Switch
-      name="imageEnableDeduplication"
-      bind:checked={settings.enableDeduplication}
-    />
-
-    {#snippet footer()}
-      {#if settings.enableDeduplication}
-        <Notice variant="info" appearance="subtle" size="sm" class="px-4">
-          Only applies to new uploads. Existing images are not affected.
-        </Notice>
-      {/if}
-    {/snippet}
-  </SettingItem>
-
-  <SettingItem
-    defaultValue={defaultSettings?.compressionQuality}
-    currentValue={settings.compressionQuality}
-    reset={(value) => {
-      settings.compressionQuality = value;
-    }}
-  >
-    {#snippet label()}
-      Compression Quality
-    {/snippet}
-    {#snippet hint()}
-      Quality level for lossy image compression (1-100). Used during format
-      conversion if target format supports it
-    {/snippet}
-    <NumberInput
-      name="imageCompressionQuality"
-      bind:value={settings.compressionQuality}
-      min={1}
-      max={100}
-      step={1}
-    />
-  </SettingItem>
-
-  <SettingItem
-    defaultValue={defaultSettings?.allowedFormats}
-    defaultLabel="Default"
-    currentValue={settings.allowedFormats}
-    layout="stacked"
-    reset={(value) => {
-      settings.allowedFormats = value;
-    }}
-  >
-    {#snippet label()}
-      Allowed Upload Formats
-    {/snippet}
-    {#snippet hint()}
-      Choose which media formats users may upload. At least one format is
-      required.
-    {/snippet}
-    <TogglePills
-      options={mediaFormatSelection.options}
-      bind:value={mediaFormatSelection.values}
-      minItems={1}
-      aria-label="Allowed upload formats"
-    />
-  </SettingItem>
-
-  <SettingItem
-    defaultValue={defaultSettings?.forceFormatConversion}
-    currentValue={settings.forceFormatConversion}
-    reset={(value) => {
-      settings.forceFormatConversion = value;
-    }}
-  >
-    {#snippet label()}
-      Force Format Conversion
-    {/snippet}
-    {#snippet hint()}
-      Automatically convert all uploaded images to a specific format
-    {/snippet}
-    <Switch
-      name="imageForceFormatConversion"
-      bind:checked={settings.forceFormatConversion}
-    />
-  </SettingItem>
-
-  {#if settings.forceFormatConversion}
+  {#snippet children(errors)}
     <SettingItem
-      defaultValue={defaultSettings?.targetFormat}
-      currentValue={settings.targetFormat}
+      defaultValue={defaultSettings?.maxSize}
+      currentValue={settings.maxSize}
       reset={(value) => {
-        settings.targetFormat = value;
+        settings.maxSize = value;
       }}
     >
       {#snippet label()}
-        Target Format
+        Maximum Image Size
       {/snippet}
       {#snippet hint()}
-        Format to convert uploaded images to
+        Set the maximum size limit for image uploads
       {/snippet}
-      <Select
-        items={targetFormatOptions}
-        value={targetFormat}
-        onValueChange={(value: string) => {
-          settings.targetFormat = value;
-        }}
-        placeholder="Select format"
+      <FileSizeInput
+        name="imageMaxSize"
+        bind:value={settings.maxSize}
+        error={errors['image.maxSize']}
       />
     </SettingItem>
 
     <SettingItem
-      defaultValue={defaultSettings?.convertAnimatedImages}
-      currentValue={settings.convertAnimatedImages}
+      defaultValue={defaultSettings?.chunkSize}
+      currentValue={settings.chunkSize}
       reset={(value) => {
-        settings.convertAnimatedImages = value;
+        settings.chunkSize = value;
       }}
     >
       {#snippet label()}
-        Convert Animated Images
+        Upload Chunk Size
       {/snippet}
       {#snippet hint()}
-        Include animated images (GIF, animated WebP/AVIF) in conversion
+        Size of each upload chunk. Smaller chunks improve resumability on slow
+        connections
+      {/snippet}
+      <FileSizeInput
+        name="imageChunkSize"
+        bind:value={settings.chunkSize}
+        error={errors['image.chunkSize']}
+      />
+    </SettingItem>
+
+    <SettingItem
+      defaultValue={defaultSettings?.stripExifMetadata}
+      currentValue={settings.stripExifMetadata}
+      reset={(value) => {
+        settings.stripExifMetadata = value;
+      }}
+    >
+      {#snippet label()}
+        Strip EXIF Metadata
+      {/snippet}
+      {#snippet hint()}
+        Automatically remove metadata from uploaded images for privacy
       {/snippet}
       <Switch
-        name="imageConvertAnimatedImages"
-        bind:checked={settings.convertAnimatedImages}
+        name="imageStripExifMetadata"
+        bind:checked={settings.stripExifMetadata}
+      />
+    </SettingItem>
+
+    <SettingItem
+      defaultValue={defaultSettings?.allowOnlyPublicImages}
+      currentValue={settings.allowOnlyPublicImages}
+      reset={(value) => {
+        settings.allowOnlyPublicImages = value;
+      }}
+    >
+      {#snippet label()}
+        Allow Only Public Images
+      {/snippet}
+      {#snippet hint()}
+        When enabled, all images are automatically set to public and visibility
+        cannot be changed
+      {/snippet}
+      <Switch
+        name="imageAllowOnlyPublicImages"
+        bind:checked={settings.allowOnlyPublicImages}
+      />
+    </SettingItem>
+
+    <SettingItem
+      defaultValue={defaultSettings?.enableDeduplication}
+      currentValue={settings.enableDeduplication}
+      reset={(value) => {
+        settings.enableDeduplication = value;
+      }}
+    >
+      {#snippet label()}
+        Enable Image Deduplication
+      {/snippet}
+      {#snippet hint()}
+        Detect and reject duplicate images during upload
+      {/snippet}
+      <Switch
+        name="imageEnableDeduplication"
+        bind:checked={settings.enableDeduplication}
       />
 
       {#snippet footer()}
-        <Notice variant="warning" appearance="subtle" size="sm" class="px-4">
-          Processing animated images is CPU-intensive and may slow down uploads.
-        </Notice>
-        {#if settings.convertAnimatedImages}
-          {#if settings.targetFormat !== 'webp'}
-            <Notice
-              variant="warning"
-              appearance="subtle"
-              size="sm"
-              class="px-4"
-            >
-              Converting to {settings.targetFormat?.toUpperCase()} will result in
-              loss of animation.
-            </Notice>
-          {/if}
+        {#if settings.enableDeduplication}
+          <Notice variant="info" appearance="subtle" size="sm" class="px-4">
+            Only applies to new uploads. Existing images are not affected.
+          </Notice>
         {/if}
       {/snippet}
     </SettingItem>
-  {/if}
 
-  <SettingItem
-    defaultValue={defaultSettings?.enableLicensing}
-    currentValue={settings.enableLicensing}
-    reset={(value) => {
-      settings.enableLicensing = value;
-    }}
-  >
-    {#snippet label()}
-      Enable Licensing
-    {/snippet}
-    {#snippet hint()}
-      Allow users to set licenses on their images (Creative Commons, etc.)
-    {/snippet}
-    <div class="flex justify-end">
-      <Switch
-        name="imageEnableLicensing"
-        bind:checked={settings.enableLicensing}
+    <SettingItem
+      defaultValue={defaultSettings?.compressionQuality}
+      currentValue={settings.compressionQuality}
+      reset={(value) => {
+        settings.compressionQuality = value;
+      }}
+    >
+      {#snippet label()}
+        Compression Quality
+      {/snippet}
+      {#snippet hint()}
+        Quality level for lossy image compression (1-100). Used during format
+        conversion if target format supports it
+      {/snippet}
+      <NumberInput
+        name="imageCompressionQuality"
+        bind:value={settings.compressionQuality}
+        error={errors['image.compressionQuality']}
+        min={1}
+        max={100}
+        step={1}
       />
-    </div>
-  </SettingItem>
+    </SettingItem>
+
+    <SettingItem
+      defaultValue={defaultSettings?.allowedFormats}
+      defaultLabel="Default"
+      currentValue={settings.allowedFormats}
+      layout="stacked"
+      reset={(value) => {
+        settings.allowedFormats = value;
+      }}
+    >
+      {#snippet label()}
+        Allowed Upload Formats
+      {/snippet}
+      {#snippet hint()}
+        Choose which media formats users may upload. At least one format is
+        required.
+      {/snippet}
+      <TogglePills
+        options={mediaFormatSelection.options}
+        bind:value={mediaFormatSelection.values}
+        minItems={1}
+        aria-label="Allowed upload formats"
+      />
+    </SettingItem>
+
+    <SettingItem
+      defaultValue={defaultSettings?.forceFormatConversion}
+      currentValue={settings.forceFormatConversion}
+      reset={(value) => {
+        settings.forceFormatConversion = value;
+      }}
+    >
+      {#snippet label()}
+        Force Format Conversion
+      {/snippet}
+      {#snippet hint()}
+        Automatically convert all uploaded images to a specific format
+      {/snippet}
+      <Switch
+        name="imageForceFormatConversion"
+        bind:checked={settings.forceFormatConversion}
+      />
+    </SettingItem>
+
+    {#if settings.forceFormatConversion}
+      <SettingItem
+        defaultValue={defaultSettings?.targetFormat}
+        currentValue={settings.targetFormat}
+        reset={(value) => {
+          settings.targetFormat = value;
+        }}
+      >
+        {#snippet label()}
+          Target Format
+        {/snippet}
+        {#snippet hint()}
+          Format to convert uploaded images to
+        {/snippet}
+        <Select
+          items={targetFormatOptions}
+          value={targetFormat}
+          onValueChange={(value: string) => {
+            settings.targetFormat = value;
+          }}
+          placeholder="Select format"
+        />
+      </SettingItem>
+
+      <SettingItem
+        defaultValue={defaultSettings?.convertAnimatedImages}
+        currentValue={settings.convertAnimatedImages}
+        reset={(value) => {
+          settings.convertAnimatedImages = value;
+        }}
+      >
+        {#snippet label()}
+          Convert Animated Images
+        {/snippet}
+        {#snippet hint()}
+          Include animated images (GIF, animated WebP/AVIF) in conversion
+        {/snippet}
+        <Switch
+          name="imageConvertAnimatedImages"
+          bind:checked={settings.convertAnimatedImages}
+        />
+
+        {#snippet footer()}
+          <Notice variant="warning" appearance="subtle" size="sm" class="px-4">
+            Processing animated images is CPU-intensive and may slow down
+            uploads.
+          </Notice>
+          {#if settings.convertAnimatedImages}
+            {#if settings.targetFormat !== 'webp'}
+              <Notice
+                variant="warning"
+                appearance="subtle"
+                size="sm"
+                class="px-4"
+              >
+                Converting to {settings.targetFormat?.toUpperCase()} will result in
+                loss of animation.
+              </Notice>
+            {/if}
+          {/if}
+        {/snippet}
+      </SettingItem>
+    {/if}
+
+    <SettingItem
+      defaultValue={defaultSettings?.enableLicensing}
+      currentValue={settings.enableLicensing}
+      reset={(value) => {
+        settings.enableLicensing = value;
+      }}
+    >
+      {#snippet label()}
+        Enable Licensing
+      {/snippet}
+      {#snippet hint()}
+        Allow users to set licenses on their images (Creative Commons, etc.)
+      {/snippet}
+      <div class="flex justify-end">
+        <Switch
+          name="imageEnableLicensing"
+          bind:checked={settings.enableLicensing}
+        />
+      </div>
+    </SettingItem>
+  {/snippet}
 </SettingsPane>

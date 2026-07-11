@@ -1,6 +1,7 @@
 <script lang="ts">
   import Icon from '@iconify/svelte';
   import type { HTMLInputAttributes } from 'svelte/elements';
+  import { slide } from 'svelte/transition';
 
   import { cn } from '@slink/utils/ui/index.js';
 
@@ -30,6 +31,7 @@
     size?: NumberInputSize;
     variant?: NumberInputVariant;
     hasError?: boolean;
+    error?: string;
     class?: string;
     inputRef?: HTMLInputElement;
     onchange?: (value: number) => void;
@@ -44,6 +46,7 @@
     size = 'md',
     variant = 'default',
     hasError = false,
+    error = undefined,
     disabled = false,
     readonly = false,
     class: className,
@@ -164,7 +167,11 @@
     value={displayValue}
     {disabled}
     {readonly}
-    class={numberInputFieldVariants({ variant, size, hasError })}
+    class={numberInputFieldVariants({
+      variant,
+      size,
+      hasError: hasError || !!error,
+    })}
     oninput={handleInputChange}
     onblur={handleBlur}
     onkeydown={handleKeyDown}
@@ -207,3 +214,12 @@
     </button>
   </div>
 </div>
+
+{#if error}
+  <div
+    class="mt-1.5 text-xs text-input-error"
+    transition:slide={{ duration: 150 }}
+  >
+    {error}
+  </div>
+{/if}

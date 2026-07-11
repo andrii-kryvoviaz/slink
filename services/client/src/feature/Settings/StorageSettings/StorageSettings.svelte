@@ -34,367 +34,380 @@
     Choose how and where your data is stored
   {/snippet}
 
-  <SettingItem
-    defaultValue={defaultSettings?.provider}
-    currentValue={settings.provider}
-    reset={(value) => {
-      settings.provider = value;
-    }}
-  >
-    {#snippet label()}
-      Storage Provider
-    {/snippet}
-    {#snippet hint()}
-      Select your preferred storage backend
-    {/snippet}
-    <Select
-      class="w-full max-w-md"
-      type="single"
-      items={[
-        { value: 'local', label: 'Local Storage' },
-        { value: 'smb', label: 'Network Storage (SMB)' },
-        { value: 's3', label: 'Amazon S3' },
-      ]}
-      bind:value={settings.provider}
-    />
-  </SettingItem>
-
-  {#if settings.provider === 'smb'}
+  {#snippet children(errors)}
     <SettingItem
-      defaultValue={defaultSettings?.adapter.smb.host}
-      currentValue={settings.adapter.smb.host}
+      defaultValue={defaultSettings?.provider}
+      currentValue={settings.provider}
       reset={(value) => {
-        settings.adapter.smb.host = value;
+        settings.provider = value;
       }}
     >
       {#snippet label()}
-        Server Host
+        Storage Provider
       {/snippet}
       {#snippet hint()}
-        IP address or hostname of your SMB server
+        Select your preferred storage backend
       {/snippet}
-      <Input
-        name="smbHost"
-        placeholder="192.168.1.100 or server.local"
-        bind:value={settings.adapter.smb.host}
-        size="md"
+      <Select
+        class="w-full max-w-md"
+        type="single"
+        items={[
+          { value: 'local', label: 'Local Storage' },
+          { value: 'smb', label: 'Network Storage (SMB)' },
+          { value: 's3', label: 'Amazon S3' },
+        ]}
+        bind:value={settings.provider}
       />
     </SettingItem>
 
-    <SettingItem
-      defaultValue={defaultSettings?.adapter.smb.share}
-      currentValue={settings.adapter.smb.share}
-      reset={(value) => {
-        settings.adapter.smb.share = value;
-      }}
-    >
-      {#snippet label()}
-        Share Name
-      {/snippet}
-      {#snippet hint()}
-        The name of the shared folder
-      {/snippet}
-      <Input
-        name="smbShare"
-        placeholder="uploads"
-        bind:value={settings.adapter.smb.share}
-        size="md"
-      />
-    </SettingItem>
-
-    <SettingItem
-      defaultValue={defaultSettings?.adapter.smb.workgroup}
-      currentValue={settings.adapter.smb.workgroup}
-      reset={(value) => {
-        settings.adapter.smb.workgroup = value;
-      }}
-    >
-      {#snippet label()}
-        Workgroup
-      {/snippet}
-      {#snippet hint()}
-        SMB workgroup name (optional)
-      {/snippet}
-      <Input
-        name="smbWorkgroup"
-        placeholder="WORKGROUP"
-        bind:value={settings.adapter.smb.workgroup}
-        size="md"
-      />
-    </SettingItem>
-
-    <SettingItem
-      defaultValue={defaultSettings?.adapter.smb.username}
-      currentValue={settings.adapter.smb.username}
-      reset={(value) => {
-        settings.adapter.smb.username = value;
-      }}
-    >
-      {#snippet label()}
-        Username
-      {/snippet}
-      {#snippet hint()}
-        Authentication username
-      {/snippet}
-      <Input
-        name="smbUsername"
-        bind:value={settings.adapter.smb.username}
-        size="md"
-      />
-    </SettingItem>
-
-    <SettingItem
-      defaultValue={defaultSettings?.adapter.smb.password}
-      currentValue={settings.adapter.smb.password}
-      reset={(value) => {
-        settings.adapter.smb.password = value;
-      }}
-    >
-      {#snippet label()}
-        Password
-      {/snippet}
-      {#snippet hint()}
-        Authentication password for SMB server
-      {/snippet}
-      <Input
-        type="password"
-        name="smbPassword"
-        bind:value={settings.adapter.smb.password}
-        size="md"
-      />
-    </SettingItem>
-  {/if}
-
-  {#if settings.provider === 's3'}
-    <SettingItem
-      defaultValue={defaultSettings?.adapter.s3.useCustomProvider}
-      currentValue={settings.adapter.s3.useCustomProvider}
-      reset={(value) => {
-        settings.adapter.s3.useCustomProvider = value;
-      }}
-    >
-      {#snippet label()}
-        Custom S3 Provider
-      {/snippet}
-      {#snippet hint()}
-        Enable for S3-compatible services like MinIO, Cloudflare R2, or Wasabi.
-        This unlocks custom endpoint and path-style options.
-      {/snippet}
-      <Switch
-        name="s3UseCustomProvider"
-        bind:checked={settings.adapter.s3.useCustomProvider}
-      />
-    </SettingItem>
-
-    {#if !settings.adapter.s3.useCustomProvider}
-      <Notice variant="warning" appearance="subtle" size="sm" class="px-4">
-        Amazon S3 usage may incur charges.
-        <a
-          href="https://aws.amazon.com/s3/pricing/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="underline hover:text-amber-700 dark:hover:text-amber-300"
-          >Review pricing</a
-        >
-      </Notice>
-    {/if}
-
-    {#if settings.adapter.s3.useCustomProvider}
+    {#if settings.provider === 'smb'}
       <SettingItem
-        defaultValue={defaultSettings?.adapter.s3.endpoint}
-        currentValue={settings.adapter.s3.endpoint}
+        defaultValue={defaultSettings?.adapter.smb.host}
+        currentValue={settings.adapter.smb.host}
         reset={(value) => {
-          settings.adapter.s3.endpoint = value;
+          settings.adapter.smb.host = value;
         }}
       >
         {#snippet label()}
-          Custom Endpoint
+          Server Host
         {/snippet}
         {#snippet hint()}
-          Custom S3 endpoint URL for your provider
+          IP address or hostname of your SMB server
         {/snippet}
         <Input
-          name="s3Endpoint"
-          placeholder="http://localhost:9000"
-          bind:value={settings.adapter.s3.endpoint}
+          name="smbHost"
+          placeholder="192.168.1.100 or server.local"
+          bind:value={settings.adapter.smb.host}
+          error={errors['storage.adapter.smb.host']}
           size="md"
         />
       </SettingItem>
 
       <SettingItem
-        defaultValue={defaultSettings?.adapter.s3.region}
-        currentValue={settings.adapter.s3.region}
+        defaultValue={defaultSettings?.adapter.smb.share}
+        currentValue={settings.adapter.smb.share}
         reset={(value) => {
-          settings.adapter.s3.region = value;
+          settings.adapter.smb.share = value;
         }}
       >
         {#snippet label()}
-          Region (Optional)
+          Share Name
         {/snippet}
         {#snippet hint()}
-          Most S3-compatible providers don't require a region. Leave empty for
-          Cloudflare R2 or providers that auto-detect. Use "auto" or a specific
-          region if required by your provider.
+          The name of the shared folder
         {/snippet}
         <Input
-          name="s3Region"
-          placeholder="auto"
-          bind:value={settings.adapter.s3.region}
+          name="smbShare"
+          placeholder="uploads"
+          bind:value={settings.adapter.smb.share}
+          error={errors['storage.adapter.smb.share']}
           size="md"
         />
       </SettingItem>
 
       <SettingItem
-        defaultValue={defaultSettings?.adapter.s3.forcePathStyle}
-        currentValue={settings.adapter.s3.forcePathStyle}
+        defaultValue={defaultSettings?.adapter.smb.workgroup}
+        currentValue={settings.adapter.smb.workgroup}
         reset={(value) => {
-          settings.adapter.s3.forcePathStyle = value;
+          settings.adapter.smb.workgroup = value;
         }}
       >
         {#snippet label()}
-          Force Path-Style URLs
+          Workgroup
         {/snippet}
         {#snippet hint()}
-          Enable if your provider requires path-style buckets
-          (http://host/bucket/key). Common for MinIO and self-hosted solutions.
-        {/snippet}
-        <Switch
-          name="s3ForcePathStyle"
-          bind:checked={settings.adapter.s3.forcePathStyle}
-        />
-      </SettingItem>
-    {:else}
-      <SettingItem
-        defaultValue={defaultSettings?.adapter.s3.region}
-        currentValue={settings.adapter.s3.region}
-        reset={(value) => {
-          settings.adapter.s3.region = value;
-        }}
-      >
-        {#snippet label()}
-          Region
-        {/snippet}
-        {#snippet hint()}
-          AWS region where your bucket is located (e.g., us-east-1).
-          <a
-            href="https://docs.aws.amazon.com/general/latest/gr/s3.html"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-blue-600 dark:text-blue-400 hover:underline"
-          >
-            View available regions
-          </a>
+          SMB workgroup name (optional)
         {/snippet}
         <Input
-          name="s3Region"
-          placeholder="us-east-1"
-          bind:value={settings.adapter.s3.region}
-          size="md"
-        />
-      </SettingItem>
-    {/if}
-
-    <SettingItem
-      defaultValue={defaultSettings?.adapter.s3.bucket}
-      currentValue={settings.adapter.s3.bucket}
-      reset={(value) => {
-        settings.adapter.s3.bucket = value;
-      }}
-    >
-      {#snippet label()}
-        Bucket Name
-      {/snippet}
-      {#snippet hint()}
-        Your S3 bucket name.
-        <a
-          href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingBucket.html#general-purpose-buckets-overview"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-blue-600 dark:text-blue-400 hover:underline"
-        >
-          Learn about bucket naming
-        </a>
-      {/snippet}
-      <Input
-        name="s3Bucket"
-        placeholder="my-slink-bucket"
-        bind:value={settings.adapter.s3.bucket}
-        size="md"
-      />
-    </SettingItem>
-
-    {#if !settings.adapter.s3.useCustomProvider}
-      <SettingItem
-        defaultValue={defaultSettings?.adapter.s3.useIamRole}
-        currentValue={settings.adapter.s3.useIamRole}
-        reset={(value) => {
-          settings.adapter.s3.useIamRole = value;
-        }}
-      >
-        {#snippet label()}
-          Use IAM Role
-        {/snippet}
-        {#snippet hint()}
-          Use the instance's IAM role or AWS default credential chain (IRSA,
-          environment variables) instead of static access keys. Recommended when
-          running on EC2, ECS, or EKS.
-        {/snippet}
-        <Switch
-          name="s3UseIamRole"
-          bind:checked={settings.adapter.s3.useIamRole}
-        />
-      </SettingItem>
-    {/if}
-
-    {#if !settings.adapter.s3.useIamRole}
-      <SettingItem
-        defaultValue={defaultSettings?.adapter.s3.key}
-        currentValue={settings.adapter.s3.key}
-        reset={(value) => {
-          settings.adapter.s3.key = value;
-        }}
-      >
-        {#snippet label()}
-          Access Key ID
-        {/snippet}
-        {#snippet hint()}
-          Your AWS Access Key ID.
-          <a
-            href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access-key-self-managed.html#Using_CreateAccessKey"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-blue-600 dark:text-blue-400 hover:underline"
-          >
-            How to create access keys
-          </a>
-        {/snippet}
-        <Input
-          name="s3AccessKey"
-          bind:value={settings.adapter.s3.key}
+          name="smbWorkgroup"
+          placeholder="WORKGROUP"
+          bind:value={settings.adapter.smb.workgroup}
           size="md"
         />
       </SettingItem>
 
       <SettingItem
-        defaultValue={defaultSettings?.adapter.s3.secret}
-        currentValue={settings.adapter.s3.secret}
+        defaultValue={defaultSettings?.adapter.smb.username}
+        currentValue={settings.adapter.smb.username}
         reset={(value) => {
-          settings.adapter.s3.secret = value;
+          settings.adapter.smb.username = value;
         }}
       >
         {#snippet label()}
-          Secret Access Key
+          Username
         {/snippet}
         {#snippet hint()}
-          Your AWS Secret Access Key
+          Authentication username
+        {/snippet}
+        <Input
+          name="smbUsername"
+          bind:value={settings.adapter.smb.username}
+          error={errors['storage.adapter.smb.username']}
+          size="md"
+        />
+      </SettingItem>
+
+      <SettingItem
+        defaultValue={defaultSettings?.adapter.smb.password}
+        currentValue={settings.adapter.smb.password}
+        reset={(value) => {
+          settings.adapter.smb.password = value;
+        }}
+      >
+        {#snippet label()}
+          Password
+        {/snippet}
+        {#snippet hint()}
+          Authentication password for SMB server
         {/snippet}
         <Input
           type="password"
-          name="s3SecretKey"
-          bind:value={settings.adapter.s3.secret}
+          name="smbPassword"
+          bind:value={settings.adapter.smb.password}
+          error={errors['storage.adapter.smb.password']}
           size="md"
         />
       </SettingItem>
     {/if}
-  {/if}
+
+    {#if settings.provider === 's3'}
+      <SettingItem
+        defaultValue={defaultSettings?.adapter.s3.useCustomProvider}
+        currentValue={settings.adapter.s3.useCustomProvider}
+        reset={(value) => {
+          settings.adapter.s3.useCustomProvider = value;
+        }}
+      >
+        {#snippet label()}
+          Custom S3 Provider
+        {/snippet}
+        {#snippet hint()}
+          Enable for S3-compatible services like MinIO, Cloudflare R2, or
+          Wasabi. This unlocks custom endpoint and path-style options.
+        {/snippet}
+        <Switch
+          name="s3UseCustomProvider"
+          bind:checked={settings.adapter.s3.useCustomProvider}
+        />
+      </SettingItem>
+
+      {#if !settings.adapter.s3.useCustomProvider}
+        <Notice variant="warning" appearance="subtle" size="sm" class="px-4">
+          Amazon S3 usage may incur charges.
+          <a
+            href="https://aws.amazon.com/s3/pricing/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="underline hover:text-amber-700 dark:hover:text-amber-300"
+            >Review pricing</a
+          >
+        </Notice>
+      {/if}
+
+      {#if settings.adapter.s3.useCustomProvider}
+        <SettingItem
+          defaultValue={defaultSettings?.adapter.s3.endpoint}
+          currentValue={settings.adapter.s3.endpoint}
+          reset={(value) => {
+            settings.adapter.s3.endpoint = value;
+          }}
+        >
+          {#snippet label()}
+            Custom Endpoint
+          {/snippet}
+          {#snippet hint()}
+            Custom S3 endpoint URL for your provider
+          {/snippet}
+          <Input
+            name="s3Endpoint"
+            placeholder="http://localhost:9000"
+            bind:value={settings.adapter.s3.endpoint}
+            error={errors['storage.adapter.s3.endpoint']}
+            size="md"
+          />
+        </SettingItem>
+
+        <SettingItem
+          defaultValue={defaultSettings?.adapter.s3.region}
+          currentValue={settings.adapter.s3.region}
+          reset={(value) => {
+            settings.adapter.s3.region = value;
+          }}
+        >
+          {#snippet label()}
+            Region (Optional)
+          {/snippet}
+          {#snippet hint()}
+            Most S3-compatible providers don't require a region. Leave empty for
+            Cloudflare R2 or providers that auto-detect. Use "auto" or a
+            specific region if required by your provider.
+          {/snippet}
+          <Input
+            name="s3Region"
+            placeholder="auto"
+            bind:value={settings.adapter.s3.region}
+            error={errors['storage.adapter.s3.region']}
+            size="md"
+          />
+        </SettingItem>
+
+        <SettingItem
+          defaultValue={defaultSettings?.adapter.s3.forcePathStyle}
+          currentValue={settings.adapter.s3.forcePathStyle}
+          reset={(value) => {
+            settings.adapter.s3.forcePathStyle = value;
+          }}
+        >
+          {#snippet label()}
+            Force Path-Style URLs
+          {/snippet}
+          {#snippet hint()}
+            Enable if your provider requires path-style buckets
+            (http://host/bucket/key). Common for MinIO and self-hosted
+            solutions.
+          {/snippet}
+          <Switch
+            name="s3ForcePathStyle"
+            bind:checked={settings.adapter.s3.forcePathStyle}
+          />
+        </SettingItem>
+      {:else}
+        <SettingItem
+          defaultValue={defaultSettings?.adapter.s3.region}
+          currentValue={settings.adapter.s3.region}
+          reset={(value) => {
+            settings.adapter.s3.region = value;
+          }}
+        >
+          {#snippet label()}
+            Region
+          {/snippet}
+          {#snippet hint()}
+            AWS region where your bucket is located (e.g., us-east-1).
+            <a
+              href="https://docs.aws.amazon.com/general/latest/gr/s3.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-blue-600 dark:text-blue-400 hover:underline"
+            >
+              View available regions
+            </a>
+          {/snippet}
+          <Input
+            name="s3Region"
+            placeholder="us-east-1"
+            bind:value={settings.adapter.s3.region}
+            error={errors['storage.adapter.s3.region']}
+            size="md"
+          />
+        </SettingItem>
+      {/if}
+
+      <SettingItem
+        defaultValue={defaultSettings?.adapter.s3.bucket}
+        currentValue={settings.adapter.s3.bucket}
+        reset={(value) => {
+          settings.adapter.s3.bucket = value;
+        }}
+      >
+        {#snippet label()}
+          Bucket Name
+        {/snippet}
+        {#snippet hint()}
+          Your S3 bucket name.
+          <a
+            href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingBucket.html#general-purpose-buckets-overview"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-blue-600 dark:text-blue-400 hover:underline"
+          >
+            Learn about bucket naming
+          </a>
+        {/snippet}
+        <Input
+          name="s3Bucket"
+          placeholder="my-slink-bucket"
+          bind:value={settings.adapter.s3.bucket}
+          error={errors['storage.adapter.s3.bucket']}
+          size="md"
+        />
+      </SettingItem>
+
+      {#if !settings.adapter.s3.useCustomProvider}
+        <SettingItem
+          defaultValue={defaultSettings?.adapter.s3.useIamRole}
+          currentValue={settings.adapter.s3.useIamRole}
+          reset={(value) => {
+            settings.adapter.s3.useIamRole = value;
+          }}
+        >
+          {#snippet label()}
+            Use IAM Role
+          {/snippet}
+          {#snippet hint()}
+            Use the instance's IAM role or AWS default credential chain (IRSA,
+            environment variables) instead of static access keys. Recommended
+            when running on EC2, ECS, or EKS.
+          {/snippet}
+          <Switch
+            name="s3UseIamRole"
+            bind:checked={settings.adapter.s3.useIamRole}
+          />
+        </SettingItem>
+      {/if}
+
+      {#if !settings.adapter.s3.useIamRole}
+        <SettingItem
+          defaultValue={defaultSettings?.adapter.s3.key}
+          currentValue={settings.adapter.s3.key}
+          reset={(value) => {
+            settings.adapter.s3.key = value;
+          }}
+        >
+          {#snippet label()}
+            Access Key ID
+          {/snippet}
+          {#snippet hint()}
+            Your AWS Access Key ID.
+            <a
+              href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access-key-self-managed.html#Using_CreateAccessKey"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-blue-600 dark:text-blue-400 hover:underline"
+            >
+              How to create access keys
+            </a>
+          {/snippet}
+          <Input
+            name="s3AccessKey"
+            bind:value={settings.adapter.s3.key}
+            error={errors['storage.adapter.s3.key']}
+            size="md"
+          />
+        </SettingItem>
+
+        <SettingItem
+          defaultValue={defaultSettings?.adapter.s3.secret}
+          currentValue={settings.adapter.s3.secret}
+          reset={(value) => {
+            settings.adapter.s3.secret = value;
+          }}
+        >
+          {#snippet label()}
+            Secret Access Key
+          {/snippet}
+          {#snippet hint()}
+            Your AWS Secret Access Key
+          {/snippet}
+          <Input
+            type="password"
+            name="s3SecretKey"
+            bind:value={settings.adapter.s3.secret}
+            error={errors['storage.adapter.s3.secret']}
+            size="md"
+          />
+        </SettingItem>
+      {/if}
+    {/if}
+  {/snippet}
 </SettingsPane>

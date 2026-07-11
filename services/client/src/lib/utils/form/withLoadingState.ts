@@ -5,6 +5,7 @@ import type { Writable } from 'svelte/store';
 
 type WithLoadingStateOptions = {
   invalidate?: boolean;
+  onSubmit?: () => void;
   onSuccess?: (data: Record<string, unknown>) => void | Promise<void>;
   onError?: (data: Record<string, unknown>) => void | Promise<void>;
 };
@@ -15,6 +16,7 @@ export function withLoadingState(
 ) {
   return () => {
     loading.set(true);
+    options.onSubmit?.();
 
     return async ({
       result,

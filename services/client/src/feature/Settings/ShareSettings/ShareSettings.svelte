@@ -32,47 +32,50 @@
     Configure URL sharing behavior
   {/snippet}
 
-  <SettingItem
-    defaultValue={defaultSettings?.enableUrlShortening}
-    currentValue={settings.enableUrlShortening}
-    reset={(value) => {
-      settings.enableUrlShortening = value;
-    }}
-  >
-    {#snippet label()}
-      URL Shortening
-    {/snippet}
-    {#snippet hint()}
-      Generate short URLs when copying image links
-    {/snippet}
-    <Switch
-      name="shareEnableUrlShortening"
-      bind:checked={settings.enableUrlShortening}
-    />
-  </SettingItem>
-
-  {#if settings.enableUrlShortening}
+  {#snippet children(errors)}
     <SettingItem
-      defaultValue={defaultSettings?.shortUrlLength}
-      currentValue={settings.shortUrlLength}
+      defaultValue={defaultSettings?.enableUrlShortening}
+      currentValue={settings.enableUrlShortening}
       reset={(value) => {
-        settings.shortUrlLength = value;
+        settings.enableUrlShortening = value;
       }}
     >
       {#snippet label()}
-        Short URL Length
+        URL Shortening
       {/snippet}
       {#snippet hint()}
-        Number of characters in generated short codes (4 to 32)
+        Generate short URLs when copying image links
       {/snippet}
-      <NumberInput
-        name="shareShortUrlLength"
-        min={4}
-        max={32}
-        bind:value={settings.shortUrlLength}
-        variant="input"
-        size="md"
+      <Switch
+        name="shareEnableUrlShortening"
+        bind:checked={settings.enableUrlShortening}
       />
     </SettingItem>
-  {/if}
+
+    {#if settings.enableUrlShortening}
+      <SettingItem
+        defaultValue={defaultSettings?.shortUrlLength}
+        currentValue={settings.shortUrlLength}
+        reset={(value) => {
+          settings.shortUrlLength = value;
+        }}
+      >
+        {#snippet label()}
+          Short URL Length
+        {/snippet}
+        {#snippet hint()}
+          Number of characters in generated short codes (4 to 32)
+        {/snippet}
+        <NumberInput
+          name="shareShortUrlLength"
+          min={4}
+          max={32}
+          bind:value={settings.shortUrlLength}
+          error={errors['share.shortUrlLength']}
+          variant="input"
+          size="md"
+        />
+      </SettingItem>
+    {/if}
+  {/snippet}
 </SettingsPane>

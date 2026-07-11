@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Loader } from '@slink/feature/Layout';
   import { SettingItem } from '@slink/feature/Settings';
-  import { Subtitle, Title } from '@slink/feature/Text';
+  import { Notice, Subtitle, Title } from '@slink/feature/Text';
   import { UserAvatar } from '@slink/feature/User';
   import { Button } from '@slink/ui/components/button';
   import { Input } from '@slink/ui/components/input';
@@ -35,6 +35,14 @@
     false,
   );
 
+  let profileError = $state<string | null>(null);
+  let passwordError = $state<string | null>(null);
+
+  const readErrorMessage = (data: Record<string, unknown>): string | null => {
+    const errors = data?.errors as Record<string, string> | undefined;
+    return errors?.message ?? null;
+  };
+
   $effect(() => {
     if (form?.passwordWasChanged) {
       toast.success(messages.profile.passwordChanged);
@@ -44,12 +52,6 @@
   $effect(() => {
     if (form?.profileWasUpdated) {
       toast.success(messages.profile.updated);
-    }
-  });
-
-  $effect(() => {
-    if (form?.errors?.message) {
-      toast.error(form.errors.message);
     }
   });
 </script>
@@ -77,6 +79,12 @@
         </h2>
       </div>
 
+      {#if profileError}
+        <Notice variant="error" class="mb-3">
+          {profileError}
+        </Notice>
+      {/if}
+
       <div
         class="divide-y divide-gray-100 dark:divide-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 overflow-hidden"
       >
@@ -98,7 +106,14 @@
           id="profile-form"
           action="?/updateProfile"
           method="POST"
-          use:enhance={withLoadingState(isProfileFormLoading)}
+          use:enhance={withLoadingState(isProfileFormLoading, {
+            onSubmit: () => {
+              profileError = null;
+            },
+            onError: (data) => {
+              profileError = readErrorMessage(data);
+            },
+          })}
         >
           <SettingItem>
             {#snippet label()}
@@ -149,6 +164,12 @@
         </h2>
       </div>
 
+      {#if passwordError}
+        <Notice variant="error" class="mb-3">
+          {passwordError}
+        </Notice>
+      {/if}
+
       <div
         class="divide-y divide-gray-100 dark:divide-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 overflow-hidden"
       >
@@ -156,7 +177,14 @@
           id="password-form"
           action="?/changePassword"
           method="POST"
-          use:enhance={withLoadingState(isPasswordFormLoading)}
+          use:enhance={withLoadingState(isPasswordFormLoading, {
+            onSubmit: () => {
+              passwordError = null;
+            },
+            onError: (data) => {
+              passwordError = readErrorMessage(data);
+            },
+          })}
         >
           <SettingItem>
             {#snippet label()}
