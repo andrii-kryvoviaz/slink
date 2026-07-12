@@ -81,9 +81,15 @@
           onOpenUnpublish={onUnpublish ? () => (view = 'unpublish') : undefined}
         />
       {:else if view === 'expiration'}
-        <ExpirationDetail onBack={() => (view = 'list')} />
+        <ExpirationDetail
+          onBack={() => (view = 'list')}
+          onApply={() => (view = 'list')}
+        />
       {:else if view === 'password'}
-        <PasswordDetail onBack={() => (view = 'list')} />
+        <PasswordDetail
+          onBack={() => (view = 'list')}
+          onApply={() => (view = 'list')}
+        />
       {:else if view === 'unpublish'}
         <UnpublishDetail
           onBack={() => (view = 'list')}

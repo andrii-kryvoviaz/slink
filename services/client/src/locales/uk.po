@@ -1752,8 +1752,8 @@ msgstr "Скинути до {0}"
 msgid "Reset to <0/>"
 msgstr "Скинути до <0/>"
 
+#: src/feature/Image/Share/Card.svelte
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
-#: src/feature/Share/Options/Toolbar.svelte
 #: src/routes/collection/[id]/+page.svelte
 msgid "Share"
 msgstr "Опублікувати"
@@ -2534,12 +2534,9 @@ msgstr "Змінити розмір"
 msgid "Adjust dimensions for the shared link"
 msgstr "Налаштуйте розміри зображення для цього посилання"
 
-#: src/feature/Image/FilterPicker/FilterPicker.svelte
+#: src/feature/Image/FilterChip/FilterChip.svelte
 msgid "Filter"
 msgstr "Фільтр"
-
-#~ msgid "Apply a color filter to the shared link"
-#~ msgstr "Застосуйте кольоровий фільтр до цього посилання"
 
 #: src/feature/Image/Share/Card.svelte
 msgid "Select option to copy"
@@ -2570,7 +2567,7 @@ msgstr "<0/> Ліміт {0} <1/>"
 msgid "Select a date"
 msgstr "Оберіть дату"
 
-#: src/feature/Share/Controls/ExpirationDetail.svelte
+#: src/feature/Share/Controls/ExpirationPicker/ExpirationPicker.svelte
 #: src/ui/components/date-picker/date-picker.svelte
 msgid "Pick a date"
 msgstr "Виберіть дату"
@@ -3916,7 +3913,7 @@ msgstr "До опцій"
 msgid "Manage share link"
 msgstr "Керувати посиланням"
 
-#: src/feature/Share/Controls/ExpirationDetail.svelte
+#: src/feature/Share/Controls/ExpirationPicker/ExpirationPicker.svelte
 msgid "Custom"
 msgstr "Інше"
 
@@ -3942,10 +3939,6 @@ msgid "Expires today"
 msgstr "Спливає сьогодні"
 
 #: src/feature/Image/Share/Card.svelte
-msgid "Resize, filter, and format changes create a new share link and reset its options (e.g. expiration). The original image remains unchanged."
-msgstr "Зміна розміру, фільтру та формату створює нове посилання та скидає його налаштування (наприклад, термін дії). Оригінальне зображення не змінюється."
-
-#: src/feature/Image/Share/Card.svelte
 msgid "Format"
 msgstr "Формат"
 
@@ -3957,7 +3950,7 @@ msgstr "Збереження терміну"
 msgid "Failed to save expiration"
 msgstr "Не вдалося зберегти термін"
 
-#: src/feature/Share/Controls/ExpirationDetail.svelte
+#: src/feature/Share/Controls/ExpirationPicker/ExpirationPicker.svelte
 msgid "# day"
 msgid_plural "# days"
 msgstr[0] "# день"
@@ -3975,7 +3968,8 @@ msgstr "Збереження пароля"
 msgid "Failed to save password"
 msgstr "Не вдалося зберегти пароль"
 
-#: src/feature/Share/Controls/PasswordDetail.svelte
+#: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
+#: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
 msgid "Enter a password"
 msgstr "Введіть пароль"
 
@@ -3983,7 +3977,7 @@ msgstr "Введіть пароль"
 msgid "Anyone with the link will need this password to view"
 msgstr "Кожен, хто має посилання, потребуватиме цей пароль для перегляду"
 
-#: src/feature/Share/Controls/PasswordDetail.svelte
+#: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
 msgid "Replace password"
 msgstr "Змінити пароль"
 
@@ -3993,7 +3987,7 @@ msgstr "Змінити пароль"
 msgid "Protected"
 msgstr "Захищено"
 
-#: src/feature/Share/Controls/PasswordDetail.svelte
+#: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
 msgid "Set password"
 msgstr "Встановити пароль"
 
@@ -4022,6 +4016,7 @@ msgstr "Введіть пароль нижче, щоб розблокувати 
 msgid "Expires {0}"
 msgstr "Спливає {0}"
 
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
 #: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "# character"
 msgid_plural "# characters"
@@ -5037,4 +5032,25 @@ msgstr ""
 
 #: src/feature/Share/Chips/ShareAttributeChips.svelte
 msgid "Remove password"
+msgstr ""
+
+#: src/feature/Image/FilterChip/FilterChip.svelte
+msgid "Remove filter"
+msgstr ""
+
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
+msgid "Link expires <0/>"
+msgstr ""
+
+#. 0: plural(share.password.minLength, [ '# character', '# characters', ])
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
+msgid "At least {0}"
+msgstr ""
+
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
+msgid "Anyone with the link needs this password"
+msgstr ""
+
+#: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
+msgid "Set"
 msgstr ""

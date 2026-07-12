@@ -1,15 +1,20 @@
 import { cva } from 'class-variance-authority';
 
 export const passwordToggleVariants = cva(
-  'flex items-center pr-4 transition-colors',
+  'flex items-center transition-colors',
   {
     variants: {
       variant: {
         default: 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300',
       },
+      inline: {
+        true: '',
+        false: 'pr-4',
+      },
     },
     defaultVariants: {
       variant: 'default',
+      inline: false,
     },
   },
 );

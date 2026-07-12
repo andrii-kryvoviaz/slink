@@ -104,7 +104,7 @@
     <Icon icon="ph:lock-simple" class={list.icon()} />
     <div class={list.labels()}>
       <span class={list.label()}>Password</span>
-      {#if share.password.enabled}
+      {#if share.password.isProtected}
         <span class={list.sublabel()}>Protected</span>
       {:else}
         <span class={list.sublabel()}>Require a password to view</span>

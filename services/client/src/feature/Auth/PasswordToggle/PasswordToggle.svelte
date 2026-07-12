@@ -15,13 +15,20 @@
     visible: boolean;
     onclick: () => void;
     size?: IconSize;
+    inline?: boolean;
     class?: string;
   }
 
-  let { visible, onclick, size = 'md', class: className }: Props = $props();
+  let {
+    visible,
+    onclick,
+    size = 'md',
+    inline = false,
+    class: className,
+  }: Props = $props();
 </script>
 
-<div class="absolute inset-y-0 right-0 flex items-center">
+{#snippet toggle()}
   <Tooltip
     variant="subtle"
     size="xs"
@@ -34,7 +41,7 @@
       <button
         type="button"
         {onclick}
-        class="{passwordToggleVariants()} {className}"
+        class="{passwordToggleVariants({ inline })} {className}"
       >
         {#if visible}
           <Icon
@@ -53,4 +60,12 @@
       Show password
     {/if}
   </Tooltip>
-</div>
+{/snippet}
+
+{#if inline}
+  {@render toggle()}
+{:else}
+  <div class="absolute inset-y-0 right-0 flex items-center">
+    {@render toggle()}
+  </div>
+{/if}

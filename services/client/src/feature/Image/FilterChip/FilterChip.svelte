@@ -33,7 +33,7 @@
   label={isSet ? FILTER_MAP[value].label : 'Filter'}
   removeLabel="Remove filter"
   onRemove={() => on?.change('none')}
-  contentClass="w-80 p-3"
+  contentClass="w-max max-w-[var(--bits-popover-content-available-width)] p-3"
 >
   {#snippet leading()}
     <img

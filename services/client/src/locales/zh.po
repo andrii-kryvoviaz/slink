@@ -1752,8 +1752,8 @@ msgstr "重置为 {0}"
 msgid "Reset to <0/>"
 msgstr "重置为 <0/>"
 
+#: src/feature/Image/Share/Card.svelte
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
-#: src/feature/Share/Options/Toolbar.svelte
 #: src/routes/collection/[id]/+page.svelte
 msgid "Share"
 msgstr "发布"
@@ -2534,12 +2534,9 @@ msgstr "尺寸调整"
 msgid "Adjust dimensions for the shared link"
 msgstr "调整此链接的尺寸"
 
-#: src/feature/Image/FilterPicker/FilterPicker.svelte
+#: src/feature/Image/FilterChip/FilterChip.svelte
 msgid "Filter"
 msgstr "滤镜"
-
-#~ msgid "Apply a color filter to the shared link"
-#~ msgstr "为此链接应用颜色滤镜"
 
 #: src/feature/Image/Share/Card.svelte
 msgid "Select option to copy"
@@ -2570,7 +2567,7 @@ msgstr "<0/> 条/页 {0} <1/>"
 msgid "Select a date"
 msgstr "选择日期"
 
-#: src/feature/Share/Controls/ExpirationDetail.svelte
+#: src/feature/Share/Controls/ExpirationPicker/ExpirationPicker.svelte
 #: src/ui/components/date-picker/date-picker.svelte
 msgid "Pick a date"
 msgstr "挑选日期"
@@ -3912,7 +3909,7 @@ msgstr "返回选项"
 msgid "Manage share link"
 msgstr "管理分享链接"
 
-#: src/feature/Share/Controls/ExpirationDetail.svelte
+#: src/feature/Share/Controls/ExpirationPicker/ExpirationPicker.svelte
 msgid "Custom"
 msgstr "自定义"
 
@@ -3938,10 +3935,6 @@ msgid "Expires today"
 msgstr "今天过期"
 
 #: src/feature/Image/Share/Card.svelte
-msgid "Resize, filter, and format changes create a new share link and reset its options (e.g. expiration). The original image remains unchanged."
-msgstr "调整尺寸、滤镜和格式会生成新的分享链接并重置其选项（如过期时间）。原始图片不会改变。"
-
-#: src/feature/Image/Share/Card.svelte
 msgid "Format"
 msgstr "格式"
 
@@ -3953,7 +3946,7 @@ msgstr "正在保存过期时间"
 msgid "Failed to save expiration"
 msgstr "保存过期时间失败"
 
-#: src/feature/Share/Controls/ExpirationDetail.svelte
+#: src/feature/Share/Controls/ExpirationPicker/ExpirationPicker.svelte
 msgid "# day"
 msgid_plural "# days"
 msgstr[0] "# 天"
@@ -3971,7 +3964,8 @@ msgstr "正在保存密码"
 msgid "Failed to save password"
 msgstr "保存密码失败"
 
-#: src/feature/Share/Controls/PasswordDetail.svelte
+#: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
+#: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
 msgid "Enter a password"
 msgstr "输入密码"
 
@@ -3979,7 +3973,7 @@ msgstr "输入密码"
 msgid "Anyone with the link will need this password to view"
 msgstr "任何拥有该链接的人都需要此密码才能查看"
 
-#: src/feature/Share/Controls/PasswordDetail.svelte
+#: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
 msgid "Replace password"
 msgstr "更换密码"
 
@@ -3989,7 +3983,7 @@ msgstr "更换密码"
 msgid "Protected"
 msgstr "已保护"
 
-#: src/feature/Share/Controls/PasswordDetail.svelte
+#: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
 msgid "Set password"
 msgstr "设置密码"
 
@@ -4018,6 +4012,7 @@ msgstr "请在下方输入密码以解锁分享的内容。"
 msgid "Expires {0}"
 msgstr "{0}过期"
 
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
 #: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "# character"
 msgid_plural "# characters"
@@ -5022,4 +5017,25 @@ msgstr ""
 
 #: src/feature/Share/Chips/ShareAttributeChips.svelte
 msgid "Remove password"
+msgstr ""
+
+#: src/feature/Image/FilterChip/FilterChip.svelte
+msgid "Remove filter"
+msgstr ""
+
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
+msgid "Link expires <0/>"
+msgstr ""
+
+#. 0: plural(share.password.minLength, [ '# character', '# characters', ])
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
+msgid "At least {0}"
+msgstr ""
+
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
+msgid "Anyone with the link needs this password"
+msgstr ""
+
+#: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
+msgid "Set"
 msgstr ""

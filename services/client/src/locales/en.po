@@ -1752,8 +1752,8 @@ msgstr "Reset to {0}"
 msgid "Reset to <0/>"
 msgstr "Reset to <0/>"
 
+#: src/feature/Image/Share/Card.svelte
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
-#: src/feature/Share/Options/Toolbar.svelte
 #: src/routes/collection/[id]/+page.svelte
 msgid "Share"
 msgstr "Share"
@@ -2534,12 +2534,9 @@ msgstr "Resize"
 msgid "Adjust dimensions for the shared link"
 msgstr "Adjust dimensions for the shared link"
 
-#: src/feature/Image/FilterPicker/FilterPicker.svelte
+#: src/feature/Image/FilterChip/FilterChip.svelte
 msgid "Filter"
 msgstr "Filter"
-
-#~ msgid "Apply a color filter to the shared link"
-#~ msgstr "Apply a color filter to the shared link"
 
 #: src/feature/Image/Share/Card.svelte
 msgid "Select option to copy"
@@ -2570,7 +2567,7 @@ msgstr "<0/> Limit {0} <1/>"
 msgid "Select a date"
 msgstr "Select a date"
 
-#: src/feature/Share/Controls/ExpirationDetail.svelte
+#: src/feature/Share/Controls/ExpirationPicker/ExpirationPicker.svelte
 #: src/ui/components/date-picker/date-picker.svelte
 msgid "Pick a date"
 msgstr "Pick a date"
@@ -3914,7 +3911,7 @@ msgstr "Back to options"
 msgid "Manage share link"
 msgstr "Manage share link"
 
-#: src/feature/Share/Controls/ExpirationDetail.svelte
+#: src/feature/Share/Controls/ExpirationPicker/ExpirationPicker.svelte
 msgid "Custom"
 msgstr "Custom"
 
@@ -3940,10 +3937,6 @@ msgid "Expires today"
 msgstr "Expires today"
 
 #: src/feature/Image/Share/Card.svelte
-msgid "Resize, filter, and format changes create a new share link and reset its options (e.g. expiration). The original image remains unchanged."
-msgstr "Resize, filter, and format changes create a new share link and reset its options (e.g. expiration). The original image remains unchanged."
-
-#: src/feature/Image/Share/Card.svelte
 msgid "Format"
 msgstr "Format"
 
@@ -3955,7 +3948,7 @@ msgstr "Saving expiration"
 msgid "Failed to save expiration"
 msgstr "Failed to save expiration"
 
-#: src/feature/Share/Controls/ExpirationDetail.svelte
+#: src/feature/Share/Controls/ExpirationPicker/ExpirationPicker.svelte
 msgid "# day"
 msgid_plural "# days"
 msgstr[0] "# day"
@@ -3973,7 +3966,8 @@ msgstr "Saving password"
 msgid "Failed to save password"
 msgstr "Failed to save password"
 
-#: src/feature/Share/Controls/PasswordDetail.svelte
+#: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
+#: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
 msgid "Enter a password"
 msgstr "Enter a password"
 
@@ -3981,7 +3975,7 @@ msgstr "Enter a password"
 msgid "Anyone with the link will need this password to view"
 msgstr "Anyone with the link will need this password to view"
 
-#: src/feature/Share/Controls/PasswordDetail.svelte
+#: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
 msgid "Replace password"
 msgstr "Replace password"
 
@@ -3991,7 +3985,7 @@ msgstr "Replace password"
 msgid "Protected"
 msgstr "Protected"
 
-#: src/feature/Share/Controls/PasswordDetail.svelte
+#: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
 msgid "Set password"
 msgstr "Set password"
 
@@ -4020,6 +4014,7 @@ msgstr "Enter the password below to unlock the shared content."
 msgid "Expires {0}"
 msgstr "Expires {0}"
 
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
 #: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "# character"
 msgid_plural "# characters"
@@ -5029,3 +5024,24 @@ msgstr "Remove expiration"
 #: src/feature/Share/Chips/ShareAttributeChips.svelte
 msgid "Remove password"
 msgstr "Remove password"
+
+#: src/feature/Image/FilterChip/FilterChip.svelte
+msgid "Remove filter"
+msgstr "Remove filter"
+
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
+msgid "Link expires <0/>"
+msgstr "Link expires <0/>"
+
+#. 0: plural(share.password.minLength, [ '# character', '# characters', ])
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
+msgid "At least {0}"
+msgstr "At least {0}"
+
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
+msgid "Anyone with the link needs this password"
+msgstr "Anyone with the link needs this password"
+
+#: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
+msgid "Set"
+msgstr "Set"

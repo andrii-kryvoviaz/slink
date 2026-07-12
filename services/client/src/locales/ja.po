@@ -1752,8 +1752,8 @@ msgstr "{0}にリセット"
 msgid "Reset to <0/>"
 msgstr "<0/>にリセット"
 
+#: src/feature/Image/Share/Card.svelte
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
-#: src/feature/Share/Options/Toolbar.svelte
 #: src/routes/collection/[id]/+page.svelte
 msgid "Share"
 msgstr "公開"
@@ -2534,12 +2534,9 @@ msgstr "リサイズ"
 msgid "Adjust dimensions for the shared link"
 msgstr "このリンクのサイズを調整"
 
-#: src/feature/Image/FilterPicker/FilterPicker.svelte
+#: src/feature/Image/FilterChip/FilterChip.svelte
 msgid "Filter"
 msgstr "フィルター"
-
-#~ msgid "Apply a color filter to the shared link"
-#~ msgstr "このリンクにカラーフィルターを適用"
 
 #: src/feature/Image/Share/Card.svelte
 msgid "Select option to copy"
@@ -2570,7 +2567,7 @@ msgstr "<0/> 表示件数 {0} <1/>"
 msgid "Select a date"
 msgstr "日付を選択"
 
-#: src/feature/Share/Controls/ExpirationDetail.svelte
+#: src/feature/Share/Controls/ExpirationPicker/ExpirationPicker.svelte
 #: src/ui/components/date-picker/date-picker.svelte
 msgid "Pick a date"
 msgstr "日付を選択してください"
@@ -3914,7 +3911,7 @@ msgstr "オプションに戻る"
 msgid "Manage share link"
 msgstr "共有リンクを管理"
 
-#: src/feature/Share/Controls/ExpirationDetail.svelte
+#: src/feature/Share/Controls/ExpirationPicker/ExpirationPicker.svelte
 msgid "Custom"
 msgstr "カスタム"
 
@@ -3940,10 +3937,6 @@ msgid "Expires today"
 msgstr "今日で期限切れ"
 
 #: src/feature/Image/Share/Card.svelte
-msgid "Resize, filter, and format changes create a new share link and reset its options (e.g. expiration). The original image remains unchanged."
-msgstr "サイズ・フィルタ・フォーマットを変更すると、新しい共有リンクが作成され、有効期限などのオプションはリセットされます。元の画像は変更されません。"
-
-#: src/feature/Image/Share/Card.svelte
 msgid "Format"
 msgstr "フォーマット"
 
@@ -3955,7 +3948,7 @@ msgstr "有効期限を保存中"
 msgid "Failed to save expiration"
 msgstr "有効期限を保存できませんでした"
 
-#: src/feature/Share/Controls/ExpirationDetail.svelte
+#: src/feature/Share/Controls/ExpirationPicker/ExpirationPicker.svelte
 msgid "# day"
 msgid_plural "# days"
 msgstr[0] "#日"
@@ -3973,7 +3966,8 @@ msgstr "パスワードを保存中"
 msgid "Failed to save password"
 msgstr "パスワードの保存に失敗しました"
 
-#: src/feature/Share/Controls/PasswordDetail.svelte
+#: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
+#: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
 msgid "Enter a password"
 msgstr "パスワードを入力してください"
 
@@ -3981,7 +3975,7 @@ msgstr "パスワードを入力してください"
 msgid "Anyone with the link will need this password to view"
 msgstr "リンクを持っている人は、表示にこのパスワードが必要です"
 
-#: src/feature/Share/Controls/PasswordDetail.svelte
+#: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
 msgid "Replace password"
 msgstr "パスワードを変更"
 
@@ -3991,7 +3985,7 @@ msgstr "パスワードを変更"
 msgid "Protected"
 msgstr "保護済み"
 
-#: src/feature/Share/Controls/PasswordDetail.svelte
+#: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
 msgid "Set password"
 msgstr "パスワードを設定"
 
@@ -4020,6 +4014,7 @@ msgstr "下のパスワードを入力して、共有されたコンテンツの
 msgid "Expires {0}"
 msgstr "{0}に期限切れ"
 
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
 #: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "# character"
 msgid_plural "# characters"
@@ -5027,4 +5022,25 @@ msgstr ""
 
 #: src/feature/Share/Chips/ShareAttributeChips.svelte
 msgid "Remove password"
+msgstr ""
+
+#: src/feature/Image/FilterChip/FilterChip.svelte
+msgid "Remove filter"
+msgstr ""
+
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
+msgid "Link expires <0/>"
+msgstr ""
+
+#. 0: plural(share.password.minLength, [ '# character', '# characters', ])
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
+msgid "At least {0}"
+msgstr ""
+
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
+msgid "Anyone with the link needs this password"
+msgstr ""
+
+#: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
+msgid "Set"
 msgstr ""

@@ -13,7 +13,7 @@
   let { previewUrl, value, on }: Props = $props();
 </script>
 
-<div class="grid grid-cols-4 gap-3">
+<div class="grid grid-cols-4 gap-2">
   {#each FILTER_OPTIONS as option}
     {@const selected = value === option.value}
     <button
@@ -26,7 +26,7 @@
         alt={option.label}
         decoding="async"
         loading="lazy"
-        class="w-full aspect-square object-cover rounded-md"
+        class="h-16 w-16 object-cover rounded-md"
         style:filter={option.cssFilter}
       />
       <span class={filterLabelTheme({ selected })}>

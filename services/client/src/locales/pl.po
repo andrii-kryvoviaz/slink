@@ -1752,8 +1752,8 @@ msgstr "Resetuj do {0}"
 msgid "Reset to <0/>"
 msgstr "Resetuj do <0/>"
 
+#: src/feature/Image/Share/Card.svelte
 #: src/feature/Settings/ShareSettings/ShareSettings.svelte
-#: src/feature/Share/Options/Toolbar.svelte
 #: src/routes/collection/[id]/+page.svelte
 msgid "Share"
 msgstr "Opublikuj"
@@ -2534,12 +2534,9 @@ msgstr "Zmień rozmiar"
 msgid "Adjust dimensions for the shared link"
 msgstr "Dostosuj wymiary dla tego linku"
 
-#: src/feature/Image/FilterPicker/FilterPicker.svelte
+#: src/feature/Image/FilterChip/FilterChip.svelte
 msgid "Filter"
 msgstr "Filtr"
-
-#~ msgid "Apply a color filter to the shared link"
-#~ msgstr "Zastosuj filtr kolorów do tego linku"
 
 #: src/feature/Image/Share/Card.svelte
 msgid "Select option to copy"
@@ -2570,7 +2567,7 @@ msgstr "<0/> Limit {0} <1/>"
 msgid "Select a date"
 msgstr "Wybierz datę"
 
-#: src/feature/Share/Controls/ExpirationDetail.svelte
+#: src/feature/Share/Controls/ExpirationPicker/ExpirationPicker.svelte
 #: src/ui/components/date-picker/date-picker.svelte
 msgid "Pick a date"
 msgstr "Wybierz datę"
@@ -3918,7 +3915,7 @@ msgstr "Wróć do opcji"
 msgid "Manage share link"
 msgstr "Zarządzaj linkiem udostępniania"
 
-#: src/feature/Share/Controls/ExpirationDetail.svelte
+#: src/feature/Share/Controls/ExpirationPicker/ExpirationPicker.svelte
 msgid "Custom"
 msgstr "Niestandardowo"
 
@@ -3944,10 +3941,6 @@ msgid "Expires today"
 msgstr "Wygasa dziś"
 
 #: src/feature/Image/Share/Card.svelte
-msgid "Resize, filter, and format changes create a new share link and reset its options (e.g. expiration). The original image remains unchanged."
-msgstr "Zmiany rozmiaru, filtra i formatu tworzą nowy link i resetują jego opcje (np. wygaśnięcie). Oryginalny obraz pozostaje bez zmian."
-
-#: src/feature/Image/Share/Card.svelte
 msgid "Format"
 msgstr "Format"
 
@@ -3959,7 +3952,7 @@ msgstr "Zapisywanie wygaśnięcia"
 msgid "Failed to save expiration"
 msgstr "Nie udało się zapisać wygaśnięcia"
 
-#: src/feature/Share/Controls/ExpirationDetail.svelte
+#: src/feature/Share/Controls/ExpirationPicker/ExpirationPicker.svelte
 msgid "# day"
 msgid_plural "# days"
 msgstr[0] "# dzień"
@@ -3977,7 +3970,8 @@ msgstr "Zapisywanie hasła"
 msgid "Failed to save password"
 msgstr "Nie udało się zapisać hasła"
 
-#: src/feature/Share/Controls/PasswordDetail.svelte
+#: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
+#: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
 msgid "Enter a password"
 msgstr "Wprowadź hasło"
 
@@ -3985,7 +3979,7 @@ msgstr "Wprowadź hasło"
 msgid "Anyone with the link will need this password to view"
 msgstr "Każdy z linkiem będzie potrzebował tego hasła, aby zobaczyć"
 
-#: src/feature/Share/Controls/PasswordDetail.svelte
+#: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
 msgid "Replace password"
 msgstr "Zmień hasło"
 
@@ -3995,7 +3989,7 @@ msgstr "Zmień hasło"
 msgid "Protected"
 msgstr "Chronione"
 
-#: src/feature/Share/Controls/PasswordDetail.svelte
+#: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
 msgid "Set password"
 msgstr "Ustaw hasło"
 
@@ -4024,6 +4018,7 @@ msgstr "Wprowadź hasło poniżej, aby odblokować udostępnioną zawartość."
 msgid "Expires {0}"
 msgstr "Wygasa {0}"
 
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
 #: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "# character"
 msgid_plural "# characters"
@@ -5045,4 +5040,25 @@ msgstr ""
 
 #: src/feature/Share/Chips/ShareAttributeChips.svelte
 msgid "Remove password"
+msgstr ""
+
+#: src/feature/Image/FilterChip/FilterChip.svelte
+msgid "Remove filter"
+msgstr ""
+
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
+msgid "Link expires <0/>"
+msgstr ""
+
+#. 0: plural(share.password.minLength, [ '# character', '# characters', ])
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
+msgid "At least {0}"
+msgstr ""
+
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
+msgid "Anyone with the link needs this password"
+msgstr ""
+
+#: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
+msgid "Set"
 msgstr ""

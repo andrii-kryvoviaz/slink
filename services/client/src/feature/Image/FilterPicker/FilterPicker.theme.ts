@@ -15,7 +15,7 @@ export const filterTileTheme = cva(
   },
 );
 
-export const filterLabelTheme = cva('text-xs', {
+export const filterLabelTheme = cva('w-16 truncate text-center text-xs', {
   variants: {
     selected: {
       true: 'text-violet-700 dark:text-violet-300 font-medium',
