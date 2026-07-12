@@ -68,7 +68,7 @@
   <div class="flex flex-col lg:flex-row gap-8">
     <div
       class={cn(
-        'w-full relative group',
+        'w-full min-w-0 relative group',
         'lg:sticky lg:top-8 lg:self-start',
         state.maxWidthClass,
       )}
@@ -125,7 +125,7 @@
       {/if}
     </div>
 
-    <div class="grow max-w-md min-w-0 space-y-8">
+    <div class="grow lg:basis-md lg:shrink-0 max-w-md min-w-0 space-y-8">
       <BookmarkersPanel
         imageId={state.image.id}
         count={state.image.bookmarkCount}
