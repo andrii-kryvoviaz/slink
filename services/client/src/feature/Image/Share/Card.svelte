@@ -1,12 +1,12 @@
 <script lang="ts">
   import {
+    FilterChip,
     FormatPicker,
     type ImageFilter,
     type ImageParams,
     ShareLinkCopy,
   } from '@slink/feature/Image';
   import * as Share from '@slink/feature/Share';
-  import { getShareStateRegistry } from '@slink/feature/Share';
   import { Notice } from '@slink/feature/Text';
   import { Shortcut } from '@slink/ui/components';
 
@@ -17,6 +17,8 @@
   interface Props {
     image: ShareCardImage;
     filter?: ImageFilter;
+    previewUrl?: string;
+    onFilterChange?: (filter: ImageFilter) => void;
     resizeParams?: Partial<ImageParams>;
     onPublished?: (shareId: string) => void | Promise<void>;
   }
@@ -24,6 +26,8 @@
   let {
     image,
     filter = 'none',
+    previewUrl,
+    onFilterChange,
     resizeParams = {},
     onPublished,
   }: Props = $props();
@@ -33,7 +37,6 @@
     getFilter: () => filter,
     getResizeParams: () => resizeParams,
     onPublished: (shareId) => onPublished?.(shareId),
-    registry: getShareStateRegistry(),
   });
 </script>
 
@@ -53,14 +56,23 @@
       </div>
     {/if}
 
-    <div class="mb-3">
-      <Share.Toolbar />
-    </div>
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+      Share
+    </h2>
 
-    <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">
-      Resize, filter, and format changes create a new share link and reset its
-      options (e.g. expiration). The original image remains unchanged.
-    </p>
+    <div class="mb-4">
+      <Share.AttributeChips>
+        {#snippet prepend()}
+          {#if previewUrl && onFilterChange}
+            <FilterChip
+              {previewUrl}
+              value={filter}
+              on={{ change: onFilterChange }}
+            />
+          {/if}
+        {/snippet}
+      </Share.AttributeChips>
+    </div>
 
     <Notice variant="info" size="xs" class="mb-4">
       <span class="flex items-center justify-between">

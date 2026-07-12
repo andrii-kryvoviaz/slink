@@ -1,3 +1,4 @@
+export * from './attribute-chip';
 export { DatePicker, DatePickerField } from './date-picker';
 export * from './select';
 export * from './combobox';

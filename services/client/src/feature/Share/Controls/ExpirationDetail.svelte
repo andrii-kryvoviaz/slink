@@ -13,7 +13,7 @@
   import { controls } from './Popover.theme';
 
   interface Props {
-    onBack: () => void;
+    onBack?: () => void;
   }
 
   let { onBack }: Props = $props();
@@ -66,14 +66,16 @@
 
 <div in:fly|local={{ x: 6, duration: 120 }} class={detail.root()}>
   <div class={detail.header()}>
-    <button
-      type="button"
-      class={detail.back()}
-      onclick={onBack}
-      aria-label="Back to options"
-    >
-      <Icon icon="ph:caret-left" class={detail.backIcon()} />
-    </button>
+    {#if onBack}
+      <button
+        type="button"
+        class={detail.back()}
+        onclick={onBack}
+        aria-label="Back to options"
+      >
+        <Icon icon="ph:caret-left" class={detail.backIcon()} />
+      </button>
+    {/if}
 
     <div class={detail.labels()}>
       <div class={detail.titleRow()}>

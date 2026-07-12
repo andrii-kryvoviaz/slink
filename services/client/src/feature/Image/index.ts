@@ -11,6 +11,7 @@ export { default as DimensionsBadge } from './DimensionsBadge/DimensionsBadge.sv
 export * from './DimensionsBadge/DimensionsBadge.theme';
 export { default as DownloadButton } from './DownloadButton/DownloadButton.svelte';
 export * from './DownloadButton/DownloadButton.theme';
+export { default as FilterChip } from './FilterChip/FilterChip.svelte';
 export { default as FilterPicker } from './FilterPicker/FilterPicker.svelte';
 export * from './FilterPicker/FilterPicker.theme';
 export * from './FilterPicker/FilterPicker.types';

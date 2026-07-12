@@ -1827,6 +1827,7 @@ msgid "Authentication username"
 msgstr "Authentication username"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
 #: src/feature/Share/Controls/List.svelte
 #: src/feature/Share/Controls/PasswordDetail.svelte
 #: src/feature/Share/Locked/PasswordPrompt.svelte
@@ -2533,13 +2534,12 @@ msgstr "Resize"
 msgid "Adjust dimensions for the shared link"
 msgstr "Adjust dimensions for the shared link"
 
-#: src/routes/info/[id]/+page.svelte
+#: src/feature/Image/FilterPicker/FilterPicker.svelte
 msgid "Filter"
 msgstr "Filter"
 
-#: src/routes/info/[id]/+page.svelte
-msgid "Apply a color filter to the shared link"
-msgstr "Apply a color filter to the shared link"
+#~ msgid "Apply a color filter to the shared link"
+#~ msgstr "Apply a color filter to the shared link"
 
 #: src/feature/Image/Share/Card.svelte
 msgid "Select option to copy"
@@ -3860,6 +3860,7 @@ msgstr "Attribution-NonCommercial-NoDerivs"
 msgid "You may copy and distribute this work non-commercially, but not adapt it, as long as you credit the creator."
 msgstr "You may copy and distribute this work non-commercially, but not adapt it, as long as you credit the creator."
 
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
 #: src/feature/Share/Controls/ExpirationDetail.svelte
 #: src/feature/Share/Controls/List.svelte
 msgid "Expiration"
@@ -3883,6 +3884,7 @@ msgid "Saved"
 msgstr "Saved"
 
 #: src/feature/Share/Attributes/ShareAttributes.svelte
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
 #: src/feature/Share/Controls/List.svelte
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 #: src/feature/User/ApiKey/apiKey.language.ts
@@ -3984,6 +3986,7 @@ msgid "Replace password"
 msgstr "Replace password"
 
 #: src/feature/Share/Attributes/ShareAttributes.svelte
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
 #: src/feature/Share/Controls/List.svelte
 msgid "Protected"
 msgstr "Protected"
@@ -4239,6 +4242,7 @@ msgid "A separate, controlled link generated on top of any image, public or priv
 msgstr "A separate, controlled link generated on top of any image, public or private. Add a password, set an expiration, or revoke it at any time without affecting the image. Use it when you want to hand someone a specific link you can pull back later."
 
 #: src/feature/Analytics/analytics.language.ts
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
 msgid "Today"
 msgstr "Today"
 
@@ -5017,3 +5021,11 @@ msgstr "Show {0} more"
 #: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
 msgid "Drag to reorder"
 msgstr "Drag to reorder"
+
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
+msgid "Remove expiration"
+msgstr "Remove expiration"
+
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
+msgid "Remove password"
+msgstr "Remove password"

@@ -21,6 +21,11 @@ test.describe('Share publish roundtrip', () => {
     await imageInfoPage.goto(imageId);
     await shareLoaded;
 
+    const shareLinkPattern = /\/i\/[^/?#]+/;
+
+    const linkInput = page.locator('input[readonly]');
+    await expect(linkInput).toHaveValue(shareLinkPattern);
+
     const copyButton = page.getByRole('button', { name: 'Copy', exact: true });
     await expect(copyButton).toBeVisible();
     await expect(copyButton).toBeEnabled();
@@ -30,10 +35,12 @@ test.describe('Share publish roundtrip', () => {
       page.getByRole('button', { name: 'Copied' }),
     );
 
+    await expect(linkInput).toHaveValue(shareLinkPattern);
+
     const clipboardUrl = await page.evaluate(() =>
       navigator.clipboard.readText(),
     );
-    expect(clipboardUrl).toMatch(/\/i\/[^/?#]+/);
+    expect(clipboardUrl).toMatch(shareLinkPattern);
 
     const context = await browser.newContext({ storageState: undefined });
     const visitor = await context.newPage();

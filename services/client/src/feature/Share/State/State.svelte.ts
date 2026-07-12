@@ -19,6 +19,10 @@ export interface ShareStateConfig {
   onUnpublished?: (shareId: string) => Promise<void> | void;
   initial?: ShareResponse | null;
   registry?: ShareStateRegistry | null;
+  attributes?: {
+    expiration: ShareExpirationState;
+    password: SharePasswordState;
+  };
 }
 
 export class ShareState {
@@ -30,19 +34,23 @@ export class ShareState {
   private _request = bindRequestState<ShareResponse>(
     ReactiveState<ShareResponse>(() => this._config.fetchShare(), {
       minExecutionTime: 200,
-      debounce: 300,
     }),
   );
 
-  private _expiration: ShareExpirationState = $state.raw(
-    new ShareExpirationState({ getShareId: () => this._shareId }),
-  );
-  private _password: SharePasswordState = $state.raw(
-    new SharePasswordState({ getShareId: () => this._shareId }),
-  );
+  private _expiration: ShareExpirationState;
+  private _password: SharePasswordState;
 
   constructor(config: ShareStateConfig) {
     this._config = config;
+
+    this._expiration = $state.raw(
+      config.attributes?.expiration ??
+        new ShareExpirationState({ getShareId: () => this._shareId }),
+    );
+    this._password = $state.raw(
+      config.attributes?.password ??
+        new SharePasswordState({ getShareId: () => this._shareId }),
+    );
 
     $effect(() => {
       if (this._request.data) {
@@ -67,6 +75,10 @@ export class ShareState {
     const expiresAt = response.expiresAt ? new Date(response.expiresAt) : null;
     this._shareId = response.shareId;
     this._shareUrl = routes.share.fromResponse(response);
+
+    if (this._config.attributes) {
+      return;
+    }
 
     const registry = this._config.registry;
 

@@ -1,6 +1,6 @@
 import type { ShareListItemResponse } from '@slink/api/Response/Share/ShareListItemResponse';
 
-import { buildQueryString } from '@slink/utils/url/routing';
+import { type RouteOptions, buildQueryString } from '@slink/utils/url/routing';
 
 import { imageRoutes } from '../routes/image';
 
@@ -10,11 +10,16 @@ export type PreviewParams = {
   crop?: boolean;
   quality?: number;
   format?: string;
+  filter?: string;
 };
 
 export class PreviewUrl {
-  static image(fileName: string, params: PreviewParams): string {
-    return this._resize(imageRoutes.view(fileName), params);
+  static image(
+    fileName: string,
+    params: PreviewParams,
+    options?: RouteOptions,
+  ): string {
+    return this._resize(imageRoutes.view(fileName, options), params);
   }
 
   static shareable(

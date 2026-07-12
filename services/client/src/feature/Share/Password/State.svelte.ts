@@ -8,6 +8,7 @@ import type { ShareStatusKind } from '../share.theme';
 
 export interface SharePasswordConfig {
   getShareId: () => string | null;
+  intent?: boolean;
 }
 
 export class SharePasswordState {
@@ -17,6 +18,7 @@ export class SharePasswordState {
 
   private _enabled: boolean = $state(false);
   private _password: string = $state('');
+  private _pending: string | null = $state(null);
   private _initialEnabled: boolean = $state(false);
   private _wasSaving: boolean = $state.raw(false);
   private _hasSavedOnce: boolean = $state(false);
@@ -67,8 +69,16 @@ export class SharePasswordState {
     return this._enabled;
   }
 
+  get isProtected(): boolean {
+    return this._initialEnabled;
+  }
+
   get password(): string {
     return this._password;
+  }
+
+  get pendingPassword(): string | null {
+    return this._pending;
   }
 
   get hasExistingPassword(): boolean {
@@ -120,6 +130,13 @@ export class SharePasswordState {
       return;
     }
 
+    if (this._config.intent) {
+      this._pending = this._password;
+      this._initialEnabled = true;
+      this._password = '';
+      return;
+    }
+
     const shareId = this._config.getShareId();
 
     if (shareId === null) {
@@ -144,6 +161,12 @@ export class SharePasswordState {
     this._password = '';
 
     if (!this._initialEnabled) {
+      return;
+    }
+
+    if (this._config.intent) {
+      this._pending = null;
+      this._initialEnabled = false;
       return;
     }
 

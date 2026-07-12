@@ -1827,6 +1827,7 @@ msgid "Authentication username"
 msgstr "認証ユーザー名"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
 #: src/feature/Share/Controls/List.svelte
 #: src/feature/Share/Controls/PasswordDetail.svelte
 #: src/feature/Share/Locked/PasswordPrompt.svelte
@@ -2533,13 +2534,12 @@ msgstr "リサイズ"
 msgid "Adjust dimensions for the shared link"
 msgstr "このリンクのサイズを調整"
 
-#: src/routes/info/[id]/+page.svelte
+#: src/feature/Image/FilterPicker/FilterPicker.svelte
 msgid "Filter"
 msgstr "フィルター"
 
-#: src/routes/info/[id]/+page.svelte
-msgid "Apply a color filter to the shared link"
-msgstr "このリンクにカラーフィルターを適用"
+#~ msgid "Apply a color filter to the shared link"
+#~ msgstr "このリンクにカラーフィルターを適用"
 
 #: src/feature/Image/Share/Card.svelte
 msgid "Select option to copy"
@@ -3860,6 +3860,7 @@ msgstr "表示-非営利-改変禁止"
 msgid "You may copy and distribute this work non-commercially, but not adapt it, as long as you credit the creator."
 msgstr "作成者のクレジットを表示する限り、非営利目的でこの作品をコピーして配布できますが、改変することはできません。"
 
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
 #: src/feature/Share/Controls/ExpirationDetail.svelte
 #: src/feature/Share/Controls/List.svelte
 msgid "Expiration"
@@ -3883,6 +3884,7 @@ msgid "Saved"
 msgstr "保存しました"
 
 #: src/feature/Share/Attributes/ShareAttributes.svelte
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
 #: src/feature/Share/Controls/List.svelte
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 #: src/feature/User/ApiKey/apiKey.language.ts
@@ -3984,6 +3986,7 @@ msgid "Replace password"
 msgstr "パスワードを変更"
 
 #: src/feature/Share/Attributes/ShareAttributes.svelte
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
 #: src/feature/Share/Controls/List.svelte
 msgid "Protected"
 msgstr "保護済み"
@@ -4239,6 +4242,7 @@ msgid "A separate, controlled link generated on top of any image, public or priv
 msgstr "公開・非公開を問わず、どんな画像にも作成できる、個別に管理できる専用リンクです。パスワードを付けたり、有効期限を設けたり、いつでも取り消したりできますが、元の画像には影響しません。特定のリンクを相手に渡し、あとで取り消せるようにしたいときに使います。"
 
 #: src/feature/Analytics/analytics.language.ts
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
 msgid "Today"
 msgstr "今日"
 
@@ -5016,3 +5020,11 @@ msgstr "あと{0}人を表示"
 #: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
 msgid "Drag to reorder"
 msgstr "ドラッグして並べ替え"
+
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
+msgid "Remove expiration"
+msgstr ""
+
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
+msgid "Remove password"
+msgstr ""

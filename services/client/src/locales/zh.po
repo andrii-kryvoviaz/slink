@@ -1827,6 +1827,7 @@ msgid "Authentication username"
 msgstr "认证用户名"
 
 #: src/feature/Settings/StorageSettings/StorageSettings.svelte
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
 #: src/feature/Share/Controls/List.svelte
 #: src/feature/Share/Controls/PasswordDetail.svelte
 #: src/feature/Share/Locked/PasswordPrompt.svelte
@@ -2533,13 +2534,12 @@ msgstr "尺寸调整"
 msgid "Adjust dimensions for the shared link"
 msgstr "调整此链接的尺寸"
 
-#: src/routes/info/[id]/+page.svelte
+#: src/feature/Image/FilterPicker/FilterPicker.svelte
 msgid "Filter"
 msgstr "滤镜"
 
-#: src/routes/info/[id]/+page.svelte
-msgid "Apply a color filter to the shared link"
-msgstr "为此链接应用颜色滤镜"
+#~ msgid "Apply a color filter to the shared link"
+#~ msgstr "为此链接应用颜色滤镜"
 
 #: src/feature/Image/Share/Card.svelte
 msgid "Select option to copy"
@@ -3858,6 +3858,7 @@ msgstr "署名-非商业性使用-禁止演绎"
 msgid "You may copy and distribute this work non-commercially, but not adapt it, as long as you credit the creator."
 msgstr "您可以以非商业方式复制和分发本作品，但不得修改，只需署名作者。"
 
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
 #: src/feature/Share/Controls/ExpirationDetail.svelte
 #: src/feature/Share/Controls/List.svelte
 msgid "Expiration"
@@ -3881,6 +3882,7 @@ msgid "Saved"
 msgstr "已保存"
 
 #: src/feature/Share/Attributes/ShareAttributes.svelte
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
 #: src/feature/Share/Controls/List.svelte
 #: src/feature/Share/MyShares/SharesFilterBar/SharesFilterBar.svelte
 #: src/feature/User/ApiKey/apiKey.language.ts
@@ -3982,6 +3984,7 @@ msgid "Replace password"
 msgstr "更换密码"
 
 #: src/feature/Share/Attributes/ShareAttributes.svelte
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
 #: src/feature/Share/Controls/List.svelte
 msgid "Protected"
 msgstr "已保护"
@@ -4235,6 +4238,7 @@ msgid "A separate, controlled link generated on top of any image, public or priv
 msgstr "在任何图片（公开或私密）之上生成的独立、可控链接。可以添加密码、设置有效期，也可以随时撤销，且不会影响图片本身。当你希望给某人一个特定链接并保留收回能力时使用。"
 
 #: src/feature/Analytics/analytics.language.ts
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
 msgid "Today"
 msgstr "今天"
 
@@ -5011,3 +5015,11 @@ msgstr "显示更多{0}位"
 #: src/feature/Settings/OAuthSettings/OAuthProviderList.svelte
 msgid "Drag to reorder"
 msgstr "拖拽排序"
+
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
+msgid "Remove expiration"
+msgstr ""
+
+#: src/feature/Share/Chips/ShareAttributeChips.svelte
+msgid "Remove password"
+msgstr ""

@@ -49,12 +49,17 @@
     getShareFormat(selectedFormat);
 
   const resolveUrl = async (): Promise<string> => {
-    if (onBeforeCopy) {
-      const result = await onBeforeCopy();
-      if (result) return result;
+    if (!onBeforeCopy) {
+      return shareUrl ?? value;
     }
-    if (shareUrl) return shareUrl;
-    return value;
+
+    const result = await onBeforeCopy();
+
+    if (result) {
+      return result;
+    }
+
+    throw new Error('Share link is not available');
   };
 
   const handleCopy = async () => {
@@ -62,10 +67,9 @@
 
     isCopying = true;
     try {
-      const success = await format.copy(
-        { content: () => value, share: () => resolveUrl() },
-        imageAlt,
-      );
+      const success = await format
+        .copy({ content: () => value, share: () => resolveUrl() }, imageAlt)
+        .catch(() => false);
       if (!success) return;
       isCopiedState.trigger();
     } finally {
@@ -74,66 +78,67 @@
   };
 </script>
 
+{#snippet actions(loading: boolean)}
+  <div class="inline-flex items-stretch">
+    <Button
+      class="transition-all duration-200 text-sm rounded-r-none! border-r border-white/20"
+      variant="primary"
+      size="xs"
+      rounded="sm"
+      disabled={isCopiedState.active || loading || isCopying}
+      onclick={() => handleCopy()}
+    >
+      {#if loading || isCopying}
+        <div
+          class="flex items-center gap-1.5"
+          in:scale={{ duration: 150, easing: cubicOut }}
+        >
+          <Icon icon="lucide:loader-2" class="h-3.5 w-3.5 animate-spin" />
+          <span>{isCopying ? 'Copying...' : 'Signing...'}</span>
+        </div>
+      {:else if isCopiedState.active}
+        <div
+          class="flex items-center gap-1.5"
+          in:scale={{ duration: 150, easing: cubicOut }}
+        >
+          <Icon icon="lucide:check" class="h-3.5 w-3.5" />
+          <span>Copied</span>
+        </div>
+      {:else}
+        <div class="flex items-center gap-1.5">
+          <Icon icon="lucide:copy" class="h-3.5 w-3.5" />
+          <span>Copy</span>
+        </div>
+      {/if}
+    </Button>
+
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger
+        disabled={loading || isCopying || isCopiedState.active}
+      >
+        {#snippet child({ props })}
+          <Button
+            {...props}
+            class="rounded-l-none! px-2!"
+            variant="primary"
+            size="xs"
+            rounded="sm"
+            disabled={loading || isCopying || isCopiedState.active}
+          >
+            <span class="text-xs">{getSelectedFormat().short}</span>
+            <Icon icon="ph:caret-down" class="h-3 w-3" />
+          </Button>
+        {/snippet}
+      </DropdownMenu.Trigger>
+
+      <ShareFormatMenu selected={selectedFormat} onSelect={setSelectedFormat} />
+    </DropdownMenu.Root>
+  </div>
+{/snippet}
+
 <CopyContainer value={displayValue} {isLoading} {onBeforeCopy}>
   {#snippet actionSlot(state)}
-    <div class="inline-flex items-stretch">
-      <Button
-        class="transition-all duration-200 text-sm rounded-r-none! border-r border-white/20"
-        variant="primary"
-        size="xs"
-        rounded="sm"
-        disabled={isCopiedState.active || state.isLoading || isCopying}
-        onclick={() => handleCopy()}
-      >
-        {#if state.isLoading || isCopying}
-          <div
-            class="flex items-center gap-1.5"
-            in:scale={{ duration: 150, easing: cubicOut }}
-          >
-            <Icon icon="lucide:loader-2" class="h-3.5 w-3.5 animate-spin" />
-            <span>{isCopying ? 'Copying...' : 'Signing...'}</span>
-          </div>
-        {:else if isCopiedState.active}
-          <div
-            class="flex items-center gap-1.5"
-            in:scale={{ duration: 150, easing: cubicOut }}
-          >
-            <Icon icon="lucide:check" class="h-3.5 w-3.5" />
-            <span>Copied</span>
-          </div>
-        {:else}
-          <div class="flex items-center gap-1.5">
-            <Icon icon="lucide:copy" class="h-3.5 w-3.5" />
-            <span>Copy</span>
-          </div>
-        {/if}
-      </Button>
-
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger
-          disabled={state.isLoading || isCopying || isCopiedState.active}
-        >
-          {#snippet child({ props })}
-            <Button
-              {...props}
-              class="rounded-l-none! px-2!"
-              variant="primary"
-              size="xs"
-              rounded="sm"
-              disabled={state.isLoading || isCopying || isCopiedState.active}
-            >
-              <span class="text-xs">{getSelectedFormat().short}</span>
-              <Icon icon="ph:caret-down" class="h-3 w-3" />
-            </Button>
-          {/snippet}
-        </DropdownMenu.Trigger>
-
-        <ShareFormatMenu
-          selected={selectedFormat}
-          onSelect={setSelectedFormat}
-        />
-      </DropdownMenu.Root>
-    </div>
+    {@render actions(state.isLoading)}
   {/snippet}
 </CopyContainer>
 

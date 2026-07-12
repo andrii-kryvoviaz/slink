@@ -2,7 +2,6 @@
   import { ImageCollectionList } from '@slink/feature/Collection';
   import {
     BookmarkersPanel,
-    FilterPicker,
     ImageActionBar,
     ImageDescription,
     ImagePlaceholder,
@@ -164,25 +163,13 @@
         </div>
       {/if}
 
-      {#if state.image.supportsResize}
-        <div>
-          <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-            Filter
-          </h2>
-          <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">
-            Apply a color filter to the shared link
-          </p>
-          <FilterPicker
-            previewUrl={state.thumbnailPreview}
-            value={state.selectedFilter}
-            on={{ change: state.handleFilterChange }}
-          />
-        </div>
-      {/if}
-
       <ShareCard
         image={state.image}
         filter={state.selectedFilter}
+        previewUrl={state.thumbnailPreview}
+        onFilterChange={state.image.supportsResize
+          ? state.handleFilterChange
+          : undefined}
         resizeParams={state.unsignedParams}
         onPublished={handleSharePublished}
       />

@@ -70,7 +70,7 @@
   const expiresAtIso = $derived(
     shareState.expiration.date?.toISOString() ?? null,
   );
-  const requiresPassword = $derived(shareState.password.enabled);
+  const requiresPassword = $derived(shareState.password.isProtected);
   const isExpired = $derived(shareState.expiration.isExpired);
   const hasAttributes = $derived(requiresPassword || expiresAtIso !== null);
 

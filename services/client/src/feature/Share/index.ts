@@ -3,6 +3,8 @@ export * from './AccentIcon/AccentIcon.theme';
 export { default as ShareAttributes } from './Attributes/ShareAttributes.svelte';
 export { default as ShareVariantBadges } from './Attributes/ShareVariantBadges.svelte';
 export * from './Attributes/hasVariantParams';
+export { default as ChipPopover } from './Chips/ChipPopover.svelte';
+export { default as AttributeChips } from './Chips/ShareAttributeChips.svelte';
 export { default as ExpirationDetail } from './Controls/ExpirationDetail.svelte';
 export { default as List } from './Controls/List.svelte';
 export { default as PasswordDetail } from './Controls/PasswordDetail.svelte';
@@ -17,9 +19,6 @@ export { default as ActionsCell } from './MyShares/SharesDataTable/cells/Actions
 export { default as AttributesCell } from './MyShares/SharesDataTable/cells/AttributesCell.svelte';
 export { default as ShareableCell } from './MyShares/SharesDataTable/cells/ShareableCell.svelte';
 export { default as SharesFilterBar } from './MyShares/SharesFilterBar/SharesFilterBar.svelte';
-export { default as Indicators } from './Options/Indicators.svelte';
-export { default as Toolbar } from './Options/Toolbar.svelte';
-export * from './Options/Toolbar.theme';
 export { default as Panel } from './Panel/Panel.svelte';
 export * from './Panel/Panel.theme';
 export * from './Password/State.svelte';
