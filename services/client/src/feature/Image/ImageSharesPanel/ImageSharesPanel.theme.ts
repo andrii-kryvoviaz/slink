@@ -2,12 +2,13 @@ import { tv } from 'tailwind-variants';
 
 export const publishedLinks = tv({
   slots: {
+    header: 'mb-4 flex items-start justify-between gap-4',
     title: [
       'text-lg font-semibold tracking-tight',
       'text-gray-900 dark:text-white',
       'mb-1',
     ],
-    subtitle: 'text-xs text-gray-500 dark:text-gray-400 mb-4',
+    subtitle: 'text-xs text-gray-500 dark:text-gray-400',
     list: [
       'rounded-lg overflow-hidden',
       'border border-gray-200/70 dark:border-gray-700/50',
@@ -51,5 +52,6 @@ export const publishedLinks = tv({
       'opacity-70 group-hover:opacity-100',
       'transition-all duration-150',
     ],
+    pagination: 'flex-shrink-0 flex justify-end [&>div]:justify-end',
   },
 });

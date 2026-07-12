@@ -9,16 +9,43 @@
 
   import Icon from '@iconify/svelte';
 
-  const pageInputTheme = tv({
-    base: 'h-7 w-8 text-xs font-medium text-center bg-gray-100/80 dark:bg-gray-800/80 rounded-md border outline-none transition-all duration-200 focus:outline-none hover:border-gray-300 dark:hover:border-gray-600',
+  const containerTheme = tv({
+    base: 'flex items-center gap-1 rounded-lg border',
     variants: {
+      variant: {
+        default:
+          'bg-white/80 dark:bg-gray-900/80 border-gray-200/60 dark:border-gray-700/60',
+        neutral:
+          'bg-white/50 dark:bg-gray-900/20 border-gray-200/70 dark:border-gray-700/50',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+    },
+  });
+
+  const pageInputTheme = tv({
+    base: 'h-7 w-8 text-xs font-medium text-center rounded-md border outline-none transition-all duration-200 focus:outline-none hover:border-gray-300 dark:hover:border-gray-600',
+    variants: {
+      variant: {
+        default: 'bg-gray-100/80 dark:bg-gray-800/80',
+        neutral: 'bg-gray-100/70 dark:bg-gray-800/50',
+      },
       status: {
         default:
           'border-gray-200/60 dark:border-gray-700/60 text-foreground placeholder:text-gray-400 dark:placeholder:text-gray-500',
         error: 'border-red-500 text-red-600 placeholder:text-red-400',
       },
     },
+    compoundVariants: [
+      {
+        variant: 'neutral',
+        status: 'default',
+        class: 'border-gray-200/70 dark:border-gray-700/50',
+      },
+    ],
     defaultVariants: {
+      variant: 'default',
       status: 'default',
     },
   });
@@ -26,18 +53,39 @@
   const pageButtonTheme = tv({
     base: 'text-xs sm:text-sm font-medium transition-all duration-200 w-8 h-7 flex items-center justify-center rounded-md tabular-nums',
     variants: {
+      variant: {
+        default: '',
+        neutral: '',
+      },
       status: {
         interactive:
           'cursor-pointer hover:bg-gray-100/80 dark:hover:bg-gray-700/60 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 active:scale-95 transform',
         static: 'cursor-default text-gray-400 dark:text-gray-500',
       },
     },
+    compoundVariants: [
+      {
+        variant: 'neutral',
+        status: 'interactive',
+        class:
+          'hover:bg-gray-100/80 dark:hover:bg-gray-800/40 focus:ring-gray-400/40 dark:focus:ring-gray-500/40',
+      },
+      {
+        variant: 'neutral',
+        status: 'static',
+        class: 'text-gray-500 dark:text-gray-400',
+      },
+    ],
     defaultVariants: {
+      variant: 'default',
       status: 'static',
     },
   });
 
+  type TablePaginationVariant = 'default' | 'neutral';
+
   interface Props {
+    variant?: TablePaginationVariant;
     currentPageIndex: number;
     totalPages: number;
     canPreviousPage: boolean;
@@ -51,6 +99,7 @@
   }
 
   let {
+    variant = 'default',
     currentPageIndex,
     totalPages,
     canPreviousPage,
@@ -101,10 +150,28 @@
     return 'static';
   });
 
-  const inputClass = $derived(pageInputTheme({ status: inputStatus }));
+  const inputClass = $derived(pageInputTheme({ variant, status: inputStatus }));
   const pageButtonClass = $derived(
-    pageButtonTheme({ status: pageButtonStatus }),
+    pageButtonTheme({ variant, status: pageButtonStatus }),
   );
+  const containerClass = $derived(containerTheme({ variant }));
+
+  const navButtonVariant = $derived.by<'transparent' | 'ghost'>(() => {
+    if (variant === 'neutral') return 'ghost';
+    return 'transparent';
+  });
+
+  const navButtonClass = $derived.by(() => {
+    if (variant === 'neutral') {
+      return 'h-8 px-2 text-xs border-0 hover:bg-gray-100/80 dark:hover:bg-gray-800/40';
+    }
+    return 'h-8 px-2 text-xs border-0';
+  });
+
+  const hoverCardVariant = $derived.by<'glass' | 'default'>(() => {
+    if (variant === 'neutral') return 'default';
+    return 'glass';
+  });
 
   const pageButtonTitle = $derived.by(() => {
     if (!isPageEditable) return undefined;
@@ -217,17 +284,13 @@
   <HoverCard>
     <HoverCardTrigger>
       {#snippet child({ props })}
-        <div
-          {...props}
-          bind:clientWidth={triggerWidth}
-          class="flex items-center gap-1 rounded-lg bg-white/80 dark:bg-gray-900/80 border border-gray-200/60 dark:border-gray-700/60"
-        >
+        <div {...props} bind:clientWidth={triggerWidth} class={containerClass}>
           <Button
-            variant="transparent"
+            variant={navButtonVariant}
             size="sm"
             onclick={handlePreviousPage}
             disabled={!canPreviousPage || loading}
-            class="h-8 px-2 text-xs rounded-l-lg rounded-r-none border-0"
+            class="{navButtonClass} rounded-l-lg rounded-r-none"
             title="Previous page"
           >
             <Icon icon="heroicons:chevron-left" class="h-4 w-4" />
@@ -297,11 +360,11 @@
           </div>
 
           <Button
-            variant="transparent"
+            variant={navButtonVariant}
             size="sm"
             onclick={handleNextPage}
             disabled={!canNextPage || loading}
-            class="h-8 px-2 text-xs rounded-r-lg rounded-l-none border-0"
+            class="{navButtonClass} rounded-r-lg rounded-l-none"
             title="Next page"
           >
             <Icon icon="heroicons:chevron-right" class="h-4 w-4" />
@@ -311,7 +374,7 @@
     </HoverCardTrigger>
     {#if hasItems}
       <HoverCardContent
-        variant="glass"
+        variant={hoverCardVariant}
         size="sm"
         rounded="lg"
         width="auto"
