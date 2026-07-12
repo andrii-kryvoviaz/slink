@@ -54,9 +54,20 @@
     {/if}
 
     <div class={detail.labels()}>
-      <div class={detail.titleGroup()}>
-        <span class={detail.title()}>Password</span>
-        <StatusIndicator kind={statusKind} title={statusTitle} />
+      <div class={detail.titleRow()}>
+        <div class={detail.titleGroup()}>
+          <span class={detail.title()}>Password</span>
+          <StatusIndicator kind={statusKind} title={statusTitle} />
+        </div>
+        {#if passwordState.isProtected}
+          <button
+            type="button"
+            class={detail.removeAction()}
+            onclick={handleRemove}
+          >
+            Remove
+          </button>
+        {/if}
       </div>
     </div>
   </div>
@@ -71,10 +82,4 @@
       </p>
     {/snippet}
   </PasswordPicker>
-
-  {#if passwordState.isProtected}
-    <button type="button" class={detail.removeAction()} onclick={handleRemove}>
-      Remove password
-    </button>
-  {/if}
 </div>

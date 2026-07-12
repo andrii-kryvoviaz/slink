@@ -20,7 +20,9 @@
 
   const isCustomActive = $derived(
     customRevealed ||
-      (expiration.date !== null && expiration.activePresetDays === null),
+      (expiration.enabled &&
+        expiration.date !== null &&
+        expiration.activePresetDays === null),
   );
 
   const handlePreset = (days: number): void => {
@@ -55,7 +57,8 @@
         type="button"
         class={controls
           .detail({
-            chipActive: expiration.activePresetDays === days,
+            chipActive:
+              expiration.enabled && expiration.activePresetDays === days,
           })
           .chip()}
         onclick={() => handlePreset(days)}

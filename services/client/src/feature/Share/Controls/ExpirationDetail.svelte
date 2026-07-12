@@ -1,9 +1,8 @@
 <script lang="ts">
   import { FormattedDate } from '@slink/feature/Text';
-  import { Switch } from '@slink/ui/components/switch';
 
   import Icon from '@iconify/svelte';
-  import { fly, slide } from 'svelte/transition';
+  import { fly } from 'svelte/transition';
 
   import { getShareControls } from '../State/Context';
   import StatusIndicator from '../StatusIndicator/StatusIndicator.svelte';
@@ -44,8 +43,9 @@
     return Math.floor(date.getTime() / 1000);
   });
 
-  const handleToggle = (checked: boolean): void => {
-    expiration.toggle(checked);
+  const handleRemove = (): void => {
+    expiration.toggle(false);
+    onApply?.();
   };
 
   const detail = controls.detail();
@@ -70,23 +70,26 @@
           <span class={detail.title()}>Expiration</span>
           <StatusIndicator kind={statusKind} title={statusTitle} />
         </div>
-        <Switch checked={expiration.enabled} onCheckedChange={handleToggle} />
+        {#if expiration.enabled}
+          <button
+            type="button"
+            class={detail.removeAction()}
+            onclick={handleRemove}
+          >
+            Remove
+          </button>
+        {/if}
       </div>
     </div>
   </div>
 
-  {#if expiration.enabled}
-    <div transition:slide|local={{ duration: 180 }} class={detail.body()}>
-      <ExpirationPicker {onApply} />
+  <div class={detail.body()}>
+    <ExpirationPicker {onApply} />
 
-      {#if expiresTimestamp !== null}
-        <p class={detail.footerHint()}>
-          Link expires <FormattedDate
-            date={expiresTimestamp}
-            showTime={false}
-          />
-        </p>
-      {/if}
-    </div>
-  {/if}
+    {#if expiresTimestamp !== null}
+      <p class={detail.footerHint()}>
+        Link expires <FormattedDate date={expiresTimestamp} showTime={false} />
+      </p>
+    {/if}
+  </div>
 </div>
