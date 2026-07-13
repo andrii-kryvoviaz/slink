@@ -74,7 +74,15 @@
       </Share.AttributeChips>
     </div>
 
-    <Notice variant="info" size="xs" class="mb-4">
+    <ShareLinkCopy
+      value={state.directLink}
+      shareUrl={state.shareUrl}
+      imageAlt={image.id}
+      isLoading={state.isLoading}
+      onBeforeCopy={state.ensurePublished}
+    />
+
+    <Notice variant="info" size="xs" class="mt-4">
       <span class="flex items-center justify-between">
         <span class="flex items-center gap-2">
           <Icon icon="lucide:clipboard-copy" class="h-3.5 w-3.5 shrink-0" />
@@ -90,13 +98,5 @@
         </span>
       </span>
     </Notice>
-
-    <ShareLinkCopy
-      value={state.directLink}
-      shareUrl={state.shareUrl}
-      imageAlt={image.id}
-      isLoading={state.isLoading}
-      onBeforeCopy={state.ensurePublished}
-    />
   {/snippet}
 </Share.Panel>
