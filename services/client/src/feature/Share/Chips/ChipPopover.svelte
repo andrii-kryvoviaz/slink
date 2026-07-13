@@ -12,6 +12,13 @@
 
   import { browser } from '$app/environment';
 
+  import { cn } from '@slink/utils/ui/index.js';
+
+  import {
+    ChipPopoverSurface,
+    type ChipPopoverVariant,
+  } from './ChipPopover.theme';
+
   interface Props {
     open?: boolean;
     state?: AttributeChipState;
@@ -20,6 +27,7 @@
     disabled?: boolean;
     onRemove?: () => void;
     leading?: Snippet;
+    variant?: ChipPopoverVariant;
     contentClass?: string;
     children: Snippet;
   }
@@ -32,6 +40,7 @@
     disabled = false,
     onRemove,
     leading,
+    variant = 'dark',
     contentClass = 'w-max min-w-72 max-w-[22rem] p-2',
     children,
   }: Props = $props();
@@ -65,7 +74,7 @@
       side="bottom"
       align="start"
       sideOffset={8}
-      class={contentClass}
+      class={cn(ChipPopoverSurface({ variant }), contentClass)}
     >
       {@render children()}
     </PopoverContent>
