@@ -5,7 +5,9 @@ import { BasePage } from './BasePage';
 export class HistoryPage extends BasePage {
   static readonly URL = '/history';
 
-  readonly gridCards = this.page.locator('article[role="button"]');
+  readonly gridCards = this.page
+    .locator('article')
+    .filter({ has: this.page.locator('a[href^="/info/"]') });
   readonly selectCheckboxes = this.page.getByRole('button', {
     name: 'Select image',
   });
@@ -65,12 +67,14 @@ export class HistoryPage extends BasePage {
     await this.gridCards.first().waitFor({ state: 'visible' });
     for (let index = 0; index < count; index++) {
       const card = this.gridCards.nth(index);
-      const checkbox = card.getByRole('button', {
-        name: /^(Select image|Deselect image)$/,
-      });
+      const checkbox = card
+        .getByRole('button', {
+          name: /^(Select image|Deselect image)$/,
+        })
+        .first();
 
       await expect(async () => {
-        await card.click();
+        await checkbox.click();
         await expect(checkbox).toHaveAttribute('aria-label', 'Deselect image', {
           timeout: 1000,
         });
@@ -97,52 +101,69 @@ export class HistoryPage extends BasePage {
         links.map((link) => link.getAttribute('href') ?? ''),
       );
 
-    return hrefs.map((href) => href.replace('/info/', ''));
+    return [...new Set(hrefs.map((href) => href.replace('/info/', '')))];
   }
 
   infoLink(id: string) {
-    return this.page.locator(`a[href="/info/${id}"]`);
+    return this.page.locator(`a[href="/info/${id}"]`).first();
   }
 
   cardFor(id: string) {
-    return this.infoLink(id).locator(
-      'xpath=ancestor::article[@role="button"][1]',
-    );
+    return this.infoLink(id).locator('xpath=ancestor::article[1]');
   }
 
   async deleteSingle(id: string) {
     const card = this.cardFor(id);
     await card.waitFor({ state: 'visible' });
-    await card.hover();
 
-    const trigger = card.locator('button[aria-label="Delete image"]');
     const confirm = this.page
       .getByRole('button', { name: 'Delete Image', exact: true })
       .last();
 
     await expect(async () => {
-      await trigger.click();
+      await this.openDeleteMenu(card);
       await expect(confirm).toBeVisible({ timeout: 1000 });
     }).toPass({ timeout: 15000 });
 
     await confirm.click();
   }
 
+  private async openDeleteMenu(card: Locator) {
+    await card.hover();
+
+    const directDelete = card.locator(
+      'button[aria-label="Delete image"]:visible',
+    );
+    if ((await directDelete.count()) > 0) {
+      await directDelete.first().click();
+      return;
+    }
+
+    await card
+      .locator('button[aria-label="Image actions"]:visible')
+      .first()
+      .click();
+    await this.page
+      .getByRole('menuitem', { name: 'Delete image' })
+      .first()
+      .click();
+  }
+
   async copyImageContent(id: string) {
     const card = this.cardFor(id);
     await card.waitFor({ state: 'visible' });
-    await card.hover();
 
-    const trigger = card
-      .getByRole('toolbar', { name: 'Image actions' })
-      .locator('button[aria-haspopup="menu"]')
+    const caret = card
+      .locator('button[aria-label="Copy link options"]:visible')
       .first();
-    const formatItem = this.page.getByRole('menuitem', {
-      name: 'Image Content',
-    });
+    const formatItem = this.page
+      .getByRole('menuitem', { name: 'Image Content' })
+      .filter({ visible: true })
+      .first();
 
     await expect(async () => {
-      await trigger.click();
+      await card.hover();
+      await caret.click();
       await expect(formatItem).toBeVisible({ timeout: 1000 });
     }).toPass({ timeout: 15000 });
 
@@ -181,13 +202,12 @@ export class HistoryPage extends BasePage {
     const row = this.tableRowFor(id);
     await row.waitFor({ state: 'visible' });
 
-    const trigger = row.locator('button[aria-label="Delete image"]');
     const confirm = this.page
       .getByRole('button', { name: 'Delete Image', exact: true })
       .last();
 
     await expect(async () => {
-      await trigger.click();
+      await this.openDeleteMenu(row);
       await expect(confirm).toBeVisible({ timeout: 1000 });
     }).toPass({ timeout: 15000 });
 

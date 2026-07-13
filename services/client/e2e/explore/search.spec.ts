@@ -20,6 +20,8 @@ test.describe('Explore search', () => {
     await explorePage.search('zzznonexistentqueryzzz');
 
     await expect(explorePage.feedItems).toHaveCount(0);
-    await expect(page.getByText(/No images match your search/i)).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'No images found' }),
+    ).toBeVisible();
   });
 });

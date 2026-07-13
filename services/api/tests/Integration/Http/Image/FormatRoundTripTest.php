@@ -44,7 +44,7 @@ final class FormatRoundTripTest extends HttpTestCase {
    * @return array<int, array{0: string}>
    */
   public static function forcedConversionProvider(): array {
-    return [['heic'], ['tiff']];
+    return [['heic'], ['tiff'], ['tga']];
   }
 
   /**
@@ -58,7 +58,7 @@ final class FormatRoundTripTest extends HttpTestCase {
    * @return array<int, array{0: string}>
    */
   public static function passThroughFormatProvider(): array {
-    return [['svg'], ['ico'], ['tga']];
+    return [['svg'], ['ico']];
   }
 
   private function bootOwner(): void {

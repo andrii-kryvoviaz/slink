@@ -7,8 +7,8 @@ import { signInContext } from './helpers/session';
 
 test.describe('First-run empty states', () => {
   const cases = [
-    { path: '/history', title: 'No history yet' },
-    { path: '/collections', title: 'No collections found' },
+    { path: '/history', title: 'No uploads yet' },
+    { path: '/collections', title: 'No collections yet' },
     { path: '/bookmarks', title: 'No bookmarks yet' },
     { path: '/shares', title: 'No shares yet' },
   ];
@@ -40,8 +40,10 @@ test.describe('Explore empty state', { tag: '@anonymous' }, () => {
   }) => {
     await page.goto('/explore');
 
-    const emptyHeading = page.getByRole('heading', { name: 'No images yet' });
-    const cta = page.getByRole('link', { name: 'Upload First Image' });
+    const emptyHeading = page.getByRole('heading', {
+      name: 'Nothing shared yet',
+    });
+    const cta = page.getByRole('link', { name: 'Upload an image' });
     const feedItems = page.locator('main [role="button"][tabindex="0"]');
 
     await expect
