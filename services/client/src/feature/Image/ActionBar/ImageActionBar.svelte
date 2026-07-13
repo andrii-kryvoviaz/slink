@@ -211,7 +211,7 @@
   </ButtonGroupItem>
 {/snippet}
 
-{#snippet copyZone()}
+{#snippet copyZone(active: boolean)}
   <ButtonGroupItem
     variant="secondary"
     size="md"
@@ -226,35 +226,37 @@
       <span class={capsule.label()}>Copy</span>
     {/if}
   </ButtonGroupItem>
-  <DropdownMenu.Root bind:open={actions.overlays.copyFormats}>
-    <DropdownMenu.Trigger disabled={copyDisabled}>
-      {#snippet child({ props })}
-        <ButtonGroupItem
-          {...props}
-          variant="secondary"
-          size="md"
-          class={capsule.caret()}
-          disabled={copyDisabled}
-          aria-label="Copy link options"
-        >
-          <Icon icon="ph:caret-down" class="h-2.5 w-2.5" />
-        </ButtonGroupItem>
-      {/snippet}
-    </DropdownMenu.Trigger>
-    <ShareFormatMenu
-      selected={selectedFormat}
-      onSelect={handleCopyFormatSelect}
-    />
-  </DropdownMenu.Root>
+  {#if active}
+    <DropdownMenu.Root bind:open={actions.overlays.copyFormats}>
+      <DropdownMenu.Trigger disabled={copyDisabled}>
+        {#snippet child({ props })}
+          <ButtonGroupItem
+            {...props}
+            variant="secondary"
+            size="md"
+            class={capsule.caret()}
+            disabled={copyDisabled}
+            aria-label="Copy link options"
+          >
+            <Icon icon="ph:caret-down" class="h-2.5 w-2.5" />
+          </ButtonGroupItem>
+        {/snippet}
+      </DropdownMenu.Trigger>
+      <ShareFormatMenu
+        selected={selectedFormat}
+        onSelect={handleCopyFormatSelect}
+      />
+    </DropdownMenu.Root>
+  {/if}
 {/snippet}
 
-{#snippet shareCapsule()}
+{#snippet shareCapsule(active: boolean)}
   <div class={capsule.capsule()}>
     {#if hasDownload}
       {@render downloadZone()}
     {/if}
     {#if hasCopy}
-      {@render copyZone()}
+      {@render copyZone(active)}
     {/if}
   </div>
 {/snippet}
@@ -439,7 +441,7 @@
   </DropdownSimple>
 {/snippet}
 
-{#snippet fullBar()}
+{#snippet fullBar(active: boolean)}
   <ButtonGroup
     variant="glass"
     size="md"
@@ -450,7 +452,7 @@
     aria-label="Image actions"
   >
     {#if hasShareCapsule}
-      {@render shareCapsule()}
+      {@render shareCapsule(active)}
     {/if}
     {#each middleButtons as button (button)}
       {@render renderButton(button)}
@@ -459,7 +461,7 @@
   </ButtonGroup>
 {/snippet}
 
-{#snippet compactBar()}
+{#snippet compactBar(active: boolean)}
   <ButtonGroup
     variant="glass"
     size="md"
@@ -470,7 +472,7 @@
     aria-label="Image actions"
   >
     {#if hasShareCapsule}
-      {@render shareCapsule()}
+      {@render shareCapsule(active)}
     {/if}
     {#if hasOverflowItems}
       {@render overflowMenu()}
@@ -486,7 +488,7 @@
       aria-label="Image actions"
     >
       {#if hasShareCapsule}
-        {@render shareCapsule()}
+        {@render shareCapsule(true)}
       {/if}
       <div class="flex items-center gap-1">
         {#each middleButtons as button (button)}
@@ -498,14 +500,14 @@
   {:else if responsive}
     <div>
       <div class={tiers.full()}>
-        {@render fullBar()}
+        {@render fullBar(!compactTierActive)}
       </div>
       <div class={tiers.compact()} bind:this={responsiveAnchor}>
-        {@render compactBar()}
+        {@render compactBar(compactTierActive)}
       </div>
     </div>
   {:else}
-    {@render fullBar()}
+    {@render fullBar(true)}
   {/if}
 </TooltipProvider>
 
