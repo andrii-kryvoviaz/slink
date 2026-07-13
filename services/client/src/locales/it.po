@@ -3676,6 +3676,8 @@ msgid "Collection and its settings will be permanently removed"
 msgstr "La collezione e le sue impostazioni verranno rimosse definitivamente"
 
 #: src/feature/Collection/RemoveFromCollectionPopover/RemoveFromCollectionPopover.svelte
+#: src/feature/Share/Controls/ExpirationDetail.svelte
+#: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "Remove"
 msgstr "Rimuovi"
 
@@ -3863,10 +3865,6 @@ msgstr "Puoi copiare e distribuire quest'opera non commercialmente, ma non adatt
 msgid "Expiration"
 msgstr "Scadenza"
 
-#: src/feature/Share/Controls/ExpirationDetail.svelte
-msgid "Restrict link availability after the chosen date"
-msgstr "Limita la disponibilità del link dopo la data scelta"
-
 #: src/feature/Share/Unavailable/Unavailable.svelte
 msgid "The link you followed is no longer available or does not exist."
 msgstr "Il link che hai aperto non è più disponibile o non esiste."
@@ -3897,7 +3895,6 @@ msgid "Not set"
 msgstr "Non impostato"
 
 #: src/feature/Share/Controls/List.svelte
-#: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "Require a password to view"
 msgstr "Richiedi password per visualizzare"
 
@@ -3967,13 +3964,8 @@ msgid "Failed to save password"
 msgstr "Impossibile salvare la password"
 
 #: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
-#: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
 msgid "Enter a password"
 msgstr "Inserisci una password"
-
-#: src/feature/Share/Controls/PasswordDetail.svelte
-msgid "Anyone with the link will need this password to view"
-msgstr "Chiunque abbia il link avrà bisogno di questa password per visualizzare"
 
 #: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
 msgid "Replace password"
@@ -3984,10 +3976,6 @@ msgstr "Sostituisci password"
 #: src/feature/Share/Controls/List.svelte
 msgid "Protected"
 msgstr "Protetto"
-
-#: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
-msgid "Set password"
-msgstr "Imposta password"
 
 #: src/feature/Share/Locked/PasswordPrompt.svelte
 msgid "Continue"
@@ -4020,11 +4008,6 @@ msgid "# character"
 msgid_plural "# characters"
 msgstr[0] "# carattere"
 msgstr[1] "# caratteri"
-
-#. 0: plural(passwordState.minLength, [ '# character', '# characters', ])
-#: src/feature/Share/Controls/PasswordDetail.svelte
-msgid "Use at least {0}"
-msgstr "Usa almeno {0}"
 
 #: src/routes/shares/+page.svelte
 msgid "My Shares"
@@ -5019,29 +5002,28 @@ msgstr "Trascina per riordinare"
 
 #: src/feature/Share/Chips/ShareAttributeChips.svelte
 msgid "Remove expiration"
-msgstr ""
+msgstr "Rimuovi scadenza"
 
 #: src/feature/Share/Chips/ShareAttributeChips.svelte
 msgid "Remove password"
-msgstr ""
+msgstr "Rimuovi password"
 
 #: src/feature/Image/FilterChip/FilterChip.svelte
 msgid "Remove filter"
-msgstr ""
+msgstr "Rimuovi filtro"
 
 #: src/feature/Share/Chips/ShareAttributeChips.svelte
+#: src/feature/Share/Controls/ExpirationDetail.svelte
 msgid "Link expires <0/>"
-msgstr ""
+msgstr "Il link scade <0/>"
 
 #. 0: plural(share.password.minLength, [ '# character', '# characters', ])
+#. 0: plural(passwordState.minLength, [ '# character', '# characters', ])
 #: src/feature/Share/Chips/ShareAttributeChips.svelte
+#: src/feature/Share/Controls/PasswordDetail.svelte
 msgid "At least {0}"
-msgstr ""
-
-#: src/feature/Share/Chips/ShareAttributeChips.svelte
-msgid "Anyone with the link needs this password"
-msgstr ""
+msgstr "Almeno {0}"
 
 #: src/feature/Share/Controls/PasswordPicker/PasswordPicker.svelte
 msgid "Set"
-msgstr ""
+msgstr "Imposta"
