@@ -16,6 +16,7 @@ enum SettingCategory: string {
   case Access = 'access';
   case Share = 'share';
   case Demo = 'demo';
+  case Customization = 'customization';
   
   public function getCategoryKey(): string {
     return $this->value;

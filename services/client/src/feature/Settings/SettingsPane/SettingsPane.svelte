@@ -26,6 +26,7 @@
     category,
     loading = false,
     title,
+    description,
     children,
     actions,
     on,
@@ -52,6 +53,11 @@
         >
           {@render title?.()}
         </h2>
+      {/if}
+      {#if description}
+        <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">
+          {@render description?.()}
+        </p>
       {/if}
     </div>
   </div>

@@ -1,4 +1,5 @@
 import type { AccessSettings } from '@slink/lib/settings/Type/AccessSettings';
+import type { CustomizationSettings } from '@slink/lib/settings/Type/CustomizationSettings';
 import type { DemoSettings } from '@slink/lib/settings/Type/DemoSettings';
 import type { ImageSettings } from '@slink/lib/settings/Type/ImageSettings';
 import type { ShareSettings } from '@slink/lib/settings/Type/ShareSettings';
@@ -12,6 +13,7 @@ export type GlobalSettings = {
   access: AccessSettings;
   share: ShareSettings;
   demo: DemoSettings;
+  customization: CustomizationSettings;
 };
 
 export type SettingCategory = keyof GlobalSettings;

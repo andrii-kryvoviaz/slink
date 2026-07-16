@@ -75,7 +75,9 @@
 </script>
 
 <svelte:head>
-  <title>Sign In | Slink</title>
+  <title
+    >Sign In | {data.globalSettings?.customization?.siteName || 'Slink'}</title
+  >
 </svelte:head>
 
 <div
@@ -86,7 +88,11 @@
     <div
       class="w-12 h-12 rounded-xl bg-linear-to-br from-primary/10 to-primary/5 border border-primary/10 flex items-center justify-center shadow-sm"
     >
-      <img class="h-6 w-6" src="/favicon.png" alt="Slink" />
+      <img
+        class="h-6 w-6"
+        src={data.globalSettings?.customization?.faviconUrl || '/favicon.png'}
+        alt={data.globalSettings?.customization?.siteName || 'Slink'}
+      />
     </div>
     <div class="text-left">
       <h1
@@ -95,7 +101,8 @@
         Welcome back
       </h1>
       <p class="text-gray-500 dark:text-gray-400 text-sm mt-0.5">
-        Sign in to continue to Slink
+        Sign in to continue to {data.globalSettings?.customization?.siteName ||
+          'Slink'}
       </p>
     </div>
   </div>

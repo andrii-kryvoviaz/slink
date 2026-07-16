@@ -134,6 +134,12 @@ export const createAppSidebarItems = (options?: {
               icon: 'solar:key-linear',
               href: '/admin/settings/sso',
             },
+            {
+              id: 'settings-customization',
+              title: 'Customization',
+              icon: 'ph:paint-brush',
+              href: '/admin/settings/customization',
+            },
           ],
         },
       ],

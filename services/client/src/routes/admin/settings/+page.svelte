@@ -41,6 +41,15 @@
       iconBg: 'bg-indigo-100 dark:bg-indigo-900/30',
       iconColor: 'text-indigo-600 dark:text-indigo-400',
     },
+    {
+      title: 'Customization',
+      description:
+        'Customize the site name, description, favicon, and branding',
+      href: '/admin/settings/customization',
+      icon: 'ph:paint-brush',
+      iconBg: 'bg-amber-100 dark:bg-amber-900/30',
+      iconColor: 'text-amber-600 dark:text-amber-400',
+    },
   ];
 </script>
 

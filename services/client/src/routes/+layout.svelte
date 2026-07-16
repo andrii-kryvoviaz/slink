@@ -44,8 +44,29 @@
     settings.sidebar = { expanded: sidebarOpen };
   });
 
+  const siteName = $derived(
+    data.globalSettings?.customization?.siteName || 'Slink',
+  );
+  const siteDescription = $derived(
+    data.globalSettings?.customization?.siteDescription ||
+      'Fast and secure image sharing service',
+  );
+  const faviconUrl = $derived(
+    data.globalSettings?.customization?.faviconUrl || '/favicon.png',
+  );
+
   initResponsiveStore();
 </script>
+
+<svelte:head>
+  <title>{siteName}: Image Sharing Service</title>
+  <meta name="description" content={siteDescription} />
+  <meta name="apple-mobile-web-app-title" content={siteName} />
+  {#if faviconUrl !== '/favicon.png'}
+    <link rel="icon" href={faviconUrl} />
+    <link rel="apple-touch-icon" href={faviconUrl} />
+  {/if}
+</svelte:head>
 
 <div class="relative flex h-screen" use:theme={settings.theme.current}>
   <Sidebar.Provider bind:open={sidebarOpen}>
@@ -58,6 +79,7 @@
           showSystemItems: true,
           showUploadItem:
             !!user || !!data.globalSettings?.access?.allowGuestUploads,
+          customization: data.globalSettings?.customization,
         }}
       />
     {/if}
@@ -80,6 +102,7 @@
           showLoginButton={!user}
           showUploadButton={!!user ||
             !!data.globalSettings?.access?.allowGuestUploads}
+          customization={data.globalSettings?.customization}
         >
           {#snippet themeSwitch()}
             <ThemeSwitch
