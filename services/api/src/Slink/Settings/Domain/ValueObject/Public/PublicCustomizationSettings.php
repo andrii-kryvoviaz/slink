@@ -17,6 +17,9 @@ final readonly class PublicCustomizationSettings {
 
     #[Groups(['public'])]
     public string $faviconUrl = '',
+
+    #[Groups(['public'])]
+    public string $customCss = '',
   ) {}
 
   public static function fromArray(array $settings): self {
@@ -24,6 +27,7 @@ final readonly class PublicCustomizationSettings {
       siteName: $settings['siteName'] ?? 'Slink',
       siteDescription: $settings['siteDescription'] ?? 'Fast and secure image sharing service',
       faviconUrl: $settings['faviconUrl'] ?? '',
+      customCss: $settings['customCss'] ?? '',
     );
   }
 }

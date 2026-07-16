@@ -54,6 +54,9 @@
   const faviconUrl = $derived(
     data.globalSettings?.customization?.faviconUrl || '/favicon.png',
   );
+  const customCss = $derived(
+    data.globalSettings?.customization?.customCss || '',
+  );
 
   initResponsiveStore();
 </script>
@@ -65,6 +68,9 @@
   {#if faviconUrl !== '/favicon.png'}
     <link rel="icon" href={faviconUrl} />
     <link rel="apple-touch-icon" href={faviconUrl} />
+  {/if}
+  {#if customCss}
+    {@html `<style>${customCss}</style>`}
   {/if}
 </svelte:head>
 

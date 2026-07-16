@@ -56,6 +56,7 @@ parameters:
     siteName: '%env(string:default::CUSTOMIZATION_SITE_NAME)%'
     siteDescription: '%env(string:default::CUSTOMIZATION_SITE_DESCRIPTION)%'
     faviconUrl: '%env(string:default::CUSTOMIZATION_FAVICON_URL)%'
+    customCss: '%env(string:default::CUSTOMIZATION_CUSTOM_CSS)%'
 
 when@prod:
   parameters:
