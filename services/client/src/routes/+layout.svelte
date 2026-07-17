@@ -51,8 +51,8 @@
     data.globalSettings?.customization?.siteDescription ||
       'Fast and secure image sharing service',
   );
-  const faviconUrl = $derived(
-    data.globalSettings?.customization?.faviconUrl || '/favicon.png',
+  const logoUrl = $derived(
+    data.globalSettings?.customization?.logoUrl || '/favicon.png',
   );
   const customCss = $derived(
     data.globalSettings?.customization?.customCss || '',
@@ -65,9 +65,9 @@
   <title>{siteName}: Image Sharing Service</title>
   <meta name="description" content={siteDescription} />
   <meta name="apple-mobile-web-app-title" content={siteName} />
-  {#if faviconUrl !== '/favicon.png'}
-    <link rel="icon" href={faviconUrl} />
-    <link rel="apple-touch-icon" href={faviconUrl} />
+  {#if logoUrl !== '/favicon.png'}
+    <link rel="icon" href={logoUrl} />
+    <link rel="apple-touch-icon" href={logoUrl} />
   {/if}
   {#if customCss}
     {@html `<style>${customCss}</style>`}

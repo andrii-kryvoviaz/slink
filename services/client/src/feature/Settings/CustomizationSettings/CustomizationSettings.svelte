@@ -77,26 +77,26 @@
 
     <SettingItem
       layout="stacked"
-      defaultValue={defaultSettings?.faviconUrl}
-      currentValue={settings.faviconUrl}
+      defaultValue={defaultSettings?.logoUrl}
+      currentValue={settings.logoUrl}
       reset={(value) => {
-        settings.faviconUrl = value;
+        settings.logoUrl = value;
       }}
     >
       {#snippet label()}
-        Favicon URL
+        Logo URL
       {/snippet}
       {#snippet hint()}
-        URL to a custom favicon image (leave empty for default)
+        URL to a custom logo image (leave empty for default)
       {/snippet}
       <Input
-        name="customizationFaviconUrl"
-        bind:value={settings.faviconUrl}
-        placeholder="https://example.com/favicon.png"
+        name="customizationLogoUrl"
+        bind:value={settings.logoUrl}
+        placeholder="https://example.com/logo.png"
         variant="modern"
         size="md"
         rounded="lg"
-        error={errors['customization.faviconUrl']}
+        error={errors['customization.logoUrl']}
       />
     </SettingItem>
 

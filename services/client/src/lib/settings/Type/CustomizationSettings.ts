@@ -1,6 +1,6 @@
 export type CustomizationSettings = {
   siteName: string;
   siteDescription: string;
-  faviconUrl: string;
+  logoUrl: string;
   customCss: string;
 };

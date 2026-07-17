@@ -14,7 +14,7 @@ final readonly class CustomizationSettings extends AbstractSettingsValueObject {
   private function __construct(
     private string $siteName,
     private string $siteDescription,
-    private string $faviconUrl,
+    private string $logoUrl,
     private string $customCss = '',
   ) {}
 
@@ -23,7 +23,7 @@ final readonly class CustomizationSettings extends AbstractSettingsValueObject {
     return [
       'siteName' => $this->siteName,
       'siteDescription' => $this->siteDescription,
-      'faviconUrl' => $this->faviconUrl,
+      'logoUrl' => $this->logoUrl,
       'customCss' => $this->customCss,
     ];
   }
@@ -33,7 +33,7 @@ final readonly class CustomizationSettings extends AbstractSettingsValueObject {
     return new self(
       $payload['siteName'] ?? self::DEFAULT_SITE_NAME,
       $payload['siteDescription'] ?? self::DEFAULT_SITE_DESCRIPTION,
-      $payload['faviconUrl'] ?? '',
+      $payload['logoUrl'] ?? '',
       $payload['customCss'] ?? '',
     );
   }
@@ -55,7 +55,7 @@ final readonly class CustomizationSettings extends AbstractSettingsValueObject {
     return $this->siteDescription;
   }
 
-  public function getFaviconUrl(): string {
-    return $this->faviconUrl;
+  public function getLogoUrl(): string {
+    return $this->logoUrl;
   }
 }

@@ -16,7 +16,7 @@ final readonly class PublicCustomizationSettings {
     public string $siteDescription = 'Fast and secure image sharing service',
 
     #[Groups(['public'])]
-    public string $faviconUrl = '',
+    public string $logoUrl = '',
 
     #[Groups(['public'])]
     public string $customCss = '',
@@ -29,7 +29,7 @@ final readonly class PublicCustomizationSettings {
     return new self(
       siteName: $settings['siteName'] ?? 'Slink',
       siteDescription: $settings['siteDescription'] ?? 'Fast and secure image sharing service',
-      faviconUrl: $settings['faviconUrl'] ?? '',
+      logoUrl: $settings['logoUrl'] ?? '',
       customCss: $settings['customCss'] ?? '',
     );
   }

@@ -43,8 +43,7 @@
     },
     {
       title: 'Customization',
-      description:
-        'Customize the site name, description, favicon, and branding',
+      description: 'Customize the site name, description, logo, and branding',
       href: '/admin/settings/customization',
       icon: 'ph:paint-brush',
       iconBg: 'bg-amber-100 dark:bg-amber-900/30',

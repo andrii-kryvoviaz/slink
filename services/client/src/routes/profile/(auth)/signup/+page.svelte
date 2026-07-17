@@ -56,7 +56,7 @@
     >
       <img
         class="h-6 w-6"
-        src={data.globalSettings?.customization?.faviconUrl || '/favicon.png'}
+        src={data.globalSettings?.customization?.logoUrl || '/favicon.png'}
         alt={data.globalSettings?.customization?.siteName || 'Slink'}
       />
     </div>
