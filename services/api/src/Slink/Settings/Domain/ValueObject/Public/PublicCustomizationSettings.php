@@ -22,6 +22,9 @@ final readonly class PublicCustomizationSettings {
     public string $customCss = '',
   ) {}
 
+  /**
+   * @param array<string, mixed> $settings
+   */
   public static function fromArray(array $settings): self {
     return new self(
       siteName: $settings['siteName'] ?? 'Slink',
