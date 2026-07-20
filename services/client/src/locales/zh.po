@@ -220,6 +220,11 @@ msgstr "编辑"
 msgid "Delete"
 msgstr "删除"
 
+#: src/feature/Comment/CommentInput.svelte
+#: src/feature/Comment/CommentInput.svelte
+#: src/feature/Comment/CommentListItem.svelte
+#: src/feature/Comment/CommentListItem.svelte
+#: src/feature/Comment/CommentListItem.svelte
 #: src/feature/Comment/CommentListItem.svelte
 msgid "[deleted]"
 msgstr "[已删除]"
@@ -5042,3 +5047,15 @@ msgstr "取消选择项目"
 #: src/feature/Upload/Progress/ProgressSummary.svelte
 msgid "{0} of {1} files uploaded"
 msgstr "已上传 {1} 个文件中的 {0} 个"
+
+#: src/feature/Comment/CommentInput.svelte
+msgid "Reply..."
+msgstr ""
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Permanently delete all data"
+msgstr ""
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Removes all images, collections and account data. Cannot be undone."
+msgstr ""

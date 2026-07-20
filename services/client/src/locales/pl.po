@@ -220,6 +220,11 @@ msgstr "Edytuj"
 msgid "Delete"
 msgstr "Usuń"
 
+#: src/feature/Comment/CommentInput.svelte
+#: src/feature/Comment/CommentInput.svelte
+#: src/feature/Comment/CommentListItem.svelte
+#: src/feature/Comment/CommentListItem.svelte
+#: src/feature/Comment/CommentListItem.svelte
 #: src/feature/Comment/CommentListItem.svelte
 msgid "[deleted]"
 msgstr "[usunięto]"
@@ -5067,3 +5072,15 @@ msgstr "Odznacz element"
 #: src/feature/Upload/Progress/ProgressSummary.svelte
 msgid "{0} of {1} files uploaded"
 msgstr "{0} z {1} plików przesłanych"
+
+#: src/feature/Comment/CommentInput.svelte
+msgid "Reply..."
+msgstr ""
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Permanently delete all data"
+msgstr ""
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Removes all images, collections and account data. Cannot be undone."
+msgstr ""

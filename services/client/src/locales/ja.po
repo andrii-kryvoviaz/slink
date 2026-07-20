@@ -220,6 +220,11 @@ msgstr "編集"
 msgid "Delete"
 msgstr "削除"
 
+#: src/feature/Comment/CommentInput.svelte
+#: src/feature/Comment/CommentInput.svelte
+#: src/feature/Comment/CommentListItem.svelte
+#: src/feature/Comment/CommentListItem.svelte
+#: src/feature/Comment/CommentListItem.svelte
 #: src/feature/Comment/CommentListItem.svelte
 msgid "[deleted]"
 msgstr "[削除済み]"
@@ -5047,3 +5052,15 @@ msgstr "項目の選択を解除"
 #: src/feature/Upload/Progress/ProgressSummary.svelte
 msgid "{0} of {1} files uploaded"
 msgstr "{1} 件中 {0} 件アップロード完了"
+
+#: src/feature/Comment/CommentInput.svelte
+msgid "Reply..."
+msgstr ""
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Permanently delete all data"
+msgstr ""
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Removes all images, collections and account data. Cannot be undone."
+msgstr ""
