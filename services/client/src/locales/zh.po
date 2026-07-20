@@ -373,6 +373,7 @@ msgstr "<0/> 取消"
 msgid "Overall Progress"
 msgstr "总体进度"
 
+#: src/feature/Settings/CustomizationSettings/customizationSettings.language.ts
 #: src/feature/Upload/Progress/ProgressItem.svelte
 msgid "Upload failed"
 msgstr "上传失败"
@@ -1326,6 +1327,7 @@ msgid "Slink"
 msgstr "Slink"
 
 #: src/feature/Navigation/Navbar/Navbar.svelte
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
 msgid "<0/> Upload"
 msgstr "<0/> 上传"
 
@@ -5105,3 +5107,11 @@ msgstr "无法加载此图片"
 #: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
 msgid "Logo preview"
 msgstr "徽标预览"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "The file is too large. Allowed maximum size is {limit}."
+msgstr "文件过大。允许的最大值为 {limit}。"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "An empty file is not allowed."
+msgstr "不允许上传空文件。"

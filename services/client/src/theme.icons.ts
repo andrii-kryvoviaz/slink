@@ -234,4 +234,5 @@ export const themeIcons: string[] = [
   'tabler:link',
   'ph:dots-six-vertical',
   'lucide:upload',
+  'solar:palette-linear',
 ];

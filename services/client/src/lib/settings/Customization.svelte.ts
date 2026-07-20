@@ -8,7 +8,6 @@ class Customization {
     this._settings?.siteDescription || 'Fast and secure image sharing service',
   );
   logoUrl = $derived(this._settings?.logoUrl || '/favicon.png');
-  hasCustomLogo = $derived(!!this._settings?.logoUrl);
 }
 
 export const customization = new Customization();

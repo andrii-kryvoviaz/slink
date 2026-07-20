@@ -1,12 +1,14 @@
 <script lang="ts">
   import { SettingItem, SettingsPane } from '@slink/feature/Settings';
+  import { FilePickerButton } from '@slink/ui/components/file-picker-button';
   import { Input } from '@slink/ui/components/input';
 
   import Icon from '@iconify/svelte';
 
   import type { CustomizationSettings as CustomizationSettingsType } from '@slink/lib/settings/Type/CustomizationSettings';
   import type { SettingCategory } from '@slink/lib/settings/Type/GlobalSettings';
-  import { debounce } from '@slink/lib/utils/time/debounce';
+
+  import { LogoUpload } from './LogoUpload.svelte';
 
   interface Props {
     settings: CustomizationSettingsType;
@@ -27,17 +29,18 @@
 
   const defaultLogoUrl = '/favicon.png';
 
-  let previewUrl = $state(defaultLogoUrl);
-  let previewError = $state(false);
+  const logoUpload = new LogoUpload(settings.logoUrl || defaultLogoUrl);
 
-  const schedulePreview = debounce((url: string) => {
-    previewUrl = url || defaultLogoUrl;
-  }, 500);
+  const handlePick = async (file: File) => {
+    const url = await logoUpload.upload(file);
+
+    if (url) {
+      settings.logoUrl = url;
+    }
+  };
 
   $effect(() => {
-    const url = settings.logoUrl;
-    previewError = false;
-    schedulePreview(url);
+    logoUpload.schedulePreview(settings.logoUrl || defaultLogoUrl);
   });
 </script>
 
@@ -116,21 +119,35 @@
       {#snippet hint()}
         Link to your own logo image. Leave empty to use the default.
       {/snippet}
-      <div class="flex items-center gap-3">
+      <div class="flex items-start gap-3">
         <div class="flex-1">
           <Input
             name="customizationLogoUrl"
-            type="url"
             inputmode="url"
             bind:value={settings.logoUrl}
             placeholder="https://example.com/logo.png"
             variant="modern"
             size="md"
             rounded="lg"
-            error={errors['customization.logoUrl']}
-          />
+            class="pr-24"
+            error={logoUpload.error || errors['customization.logoUrl']}
+          >
+            <div class="absolute inset-y-0 right-1 flex items-center">
+              <FilePickerButton
+                variant="ghost"
+                size="xs"
+                rounded="md"
+                accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml"
+                disabled={logoUpload.uploading}
+                onPick={handlePick}
+              >
+                <Icon icon="ph:upload-simple" class="h-4 w-4" />
+                Upload
+              </FilePickerButton>
+            </div>
+          </Input>
         </div>
-        {#if previewError}
+        {#if logoUpload.previewError && !logoUpload.showLoader}
           <div
             class="flex h-9 shrink-0 items-center gap-1.5 rounded-lg border border-border bg-background px-3 text-xs text-muted-foreground"
           >
@@ -138,14 +155,25 @@
             <span>Couldn't load this image</span>
           </div>
         {:else}
-          <img
-            src={previewUrl}
-            alt="Logo preview"
-            class="h-9 w-9 shrink-0 rounded-lg border border-border bg-background object-contain p-1"
-            onerror={() => {
-              previewError = true;
-            }}
-          />
+          <div class="relative h-9 w-9 shrink-0">
+            <img
+              src={logoUpload.previewUrl}
+              alt="Logo preview"
+              class="h-9 w-9 rounded-lg border border-border bg-background object-contain p-1"
+              onload={() => logoUpload.onPreviewLoaded()}
+              onerror={() => logoUpload.onPreviewError()}
+            />
+            {#if logoUpload.showLoader}
+              <div
+                class="absolute inset-0 flex items-center justify-center rounded-lg border border-border bg-background"
+              >
+                <Icon
+                  icon="lucide:loader-2"
+                  class="h-4 w-4 animate-spin text-muted-foreground"
+                />
+              </div>
+            {/if}
+          </div>
         {/if}
       </div>
     </SettingItem>

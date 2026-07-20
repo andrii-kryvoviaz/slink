@@ -462,6 +462,17 @@ function errors(): ApiError[] {
         ),
     },
     {
+      match: /^The file is too large\. Allowed maximum size is (.+)\.$/,
+      translate: (m) =>
+        localize('The file is too large. Allowed maximum size is {limit}.', {
+          limit: m[1],
+        }),
+    },
+    {
+      match: /* @wc-ignore */ 'An empty file is not allowed.',
+      translate: () => localize('An empty file is not allowed.'),
+    },
+    {
       match: /^The mime type (.+) is not supported\./,
       translate: (m) =>
         localize('The mime type {type} is not supported.', { type: m[1] }),

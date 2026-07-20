@@ -52,10 +52,7 @@
   <title>{customization.siteName}: Image Sharing Service</title>
   <meta name="description" content={customization.siteDescription} />
   <meta name="apple-mobile-web-app-title" content={customization.siteName} />
-  {#if customization.hasCustomLogo}
-    <link rel="icon" href={customization.logoUrl} />
-    <link rel="apple-touch-icon" href={customization.logoUrl} />
-  {/if}
+  <link rel="icon" href={customization.logoUrl} />
 </svelte:head>
 
 <div class="relative flex h-screen" use:theme={settings.theme.current}>

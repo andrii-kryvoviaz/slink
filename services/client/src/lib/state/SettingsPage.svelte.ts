@@ -1,5 +1,6 @@
 import { ApiClient } from '@slink/api';
 
+import { browser } from '$app/environment';
 import { invalidate } from '$app/navigation';
 
 import { ValidationException } from '@slink/api/Exceptions';
@@ -44,7 +45,7 @@ class SettingsPageState {
   }
 
   initialize(settings: GlobalSettings): void {
-    if (!this._settings) {
+    if (!browser || !this._settings) {
       this._settings = settings;
     }
   }
