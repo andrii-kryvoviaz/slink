@@ -7,9 +7,11 @@ namespace Slink\User\Infrastructure\ReadModel\Projection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\NonUniqueResultException;
+use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractProjection;
 use Slink\User\Application\Service\UserRoleManagerInterface;
+use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\Event\Role\UserGrantedRole;
 use Slink\User\Domain\Event\Role\UserRevokedRole;
 use Slink\User\Domain\Event\UserDisplayNameWasChanged;
@@ -18,8 +20,15 @@ use Slink\User\Domain\Event\UserPasswordWasReset;
 use Slink\User\Domain\Event\UserPreferencesWasUpdated;
 use Slink\User\Domain\Event\UserStatusWasChanged;
 use Slink\User\Domain\Event\UserWasCreated;
+use Slink\User\Domain\Event\UserWasPurged;
+use Slink\User\Domain\Repository\ApiKeyRepositoryInterface;
+use Slink\User\Domain\Repository\OAuthLinkRepositoryInterface;
+use Slink\User\Domain\Repository\RefreshTokenRepositoryInterface;
+use Slink\User\Domain\Repository\UserPreferencesRepositoryInterface;
 use Slink\User\Domain\Repository\UserRepositoryInterface;
-use Slink\User\Infrastructure\ReadModel\Repository\UserPreferencesRepository;
+use Slink\User\Domain\ValueObject\Auth\HashedPassword;
+use Slink\User\Domain\ValueObject\Email;
+use Slink\User\Domain\ValueObject\Username;
 use Slink\User\Infrastructure\ReadModel\View\UserPreferencesView;
 use Slink\User\Infrastructure\ReadModel\View\UserRoleView;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
@@ -29,7 +38,10 @@ final class UserProjection extends AbstractProjection {
     private readonly UserRepositoryInterface $repository,
     private readonly UserRoleManagerInterface $userRoleManager,
     private readonly EntityManagerInterface $entityManager,
-    private readonly UserPreferencesRepository $preferencesRepository,
+    private readonly UserPreferencesRepositoryInterface $preferencesRepository,
+    private readonly RefreshTokenRepositoryInterface $refreshTokenRepository,
+    private readonly ApiKeyRepositoryInterface $apiKeyRepository,
+    private readonly OAuthLinkRepositoryInterface $oauthLinkRepository,
   ) {
   }
   
@@ -76,6 +88,10 @@ final class UserProjection extends AbstractProjection {
   public function handleUserStatusWasChanged(UserStatusWasChanged $event): void {
     $user = $this->repository->one($event->id);
     $user->setStatus($event->status);
+
+    if ($event->status === UserStatus::Deleted) {
+      $this->scrub($user, $event->id);
+    }
 
     $this->repository->save($user);
   }
@@ -137,6 +153,36 @@ final class UserProjection extends AbstractProjection {
     $this->userRoleManager->storePermissionsVersion($event->id->toString(), time());
   }
   
+  /**
+   * @param UserWasPurged $event
+   * @return void
+   */
+  public function handleUserWasPurged(UserWasPurged $event): void {
+    $this->preferencesRepository->deleteByUserId($event->id->toString());
+  }
+
+  /**
+   * @param UserView $user
+   * @param ID $id
+   * @return void
+   */
+  private function scrub(UserView $user, ID $id): void {
+    $userId = $id->toString();
+
+    $this->refreshTokenRepository->deleteByUserId($userId);
+    $this->apiKeyRepository->deleteByUserId($id);
+    $this->oauthLinkRepository->deleteByUserId($userId);
+
+    $user->clearRoles();
+    $user->scrub(
+      Email::fromString(sprintf('purged-%s@purged.local', $userId)),
+      Username::fromString(sprintf('purged_%s', substr(str_replace('-', '', $userId), 0, 23))),
+      HashedPassword::encode(bin2hex(random_bytes(16))),
+    );
+
+    $this->userRoleManager->storePermissionsVersion($userId, time());
+  }
+
   /**
    * @throws NonUniqueResultException
    * @throws NotFoundException

@@ -20,4 +20,8 @@ interface NotificationRepositoryInterface extends ServiceEntityRepositoryInterfa
   public function existsByUserId(string $userId): bool;
 
   public function markAllAsReadByUserId(string $userId): void;
+
+  public function deleteByUserId(string $userId): void;
+
+  public function detachActor(string $actorId): void;
 }

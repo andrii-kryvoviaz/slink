@@ -30,4 +30,14 @@ final class UserPreferencesRepository extends AbstractRepository implements User
     $em->persist($preferences);
     $em->flush();
   }
+
+  public function deleteByUserId(string $userId): void {
+    $this->getEntityManager()
+      ->createQueryBuilder()
+      ->delete(UserPreferencesView::class, 'prefs')
+      ->where('prefs.userId = :userId')
+      ->setParameter('userId', $userId)
+      ->getQuery()
+      ->execute();
+  }
 }

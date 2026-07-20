@@ -75,12 +75,16 @@ class CommentView extends AbstractView {
     return $this->image->getUuid();
   }
 
-  public function getUser(): UserView {
+  public function getUser(): ?UserView {
+    if ($this->user->isDeleted()) {
+      return null;
+    }
+
     return $this->user;
   }
 
-  public function getUserId(): string {
-    return $this->user->getUuid();
+  public function getUserId(): ?string {
+    return $this->getUser()?->getUuid();
   }
 
   public function getReferencedComment(): ?CommentView {
@@ -97,11 +101,13 @@ class CommentView extends AbstractView {
       return null;
     }
 
+    $author = $this->referencedComment->getUser();
+
     return [
       'id' => $this->referencedComment->getId(),
-      'author' => [
-        'id' => $this->referencedComment->getUser()->getUuid(),
-        'displayName' => $this->referencedComment->getUser()->getDisplayName(),
+      'author' => $author === null ? null : [
+        'id' => $author->getUuid(),
+        'displayName' => $author->getDisplayName(),
       ],
       'isDeleted' => $this->referencedComment->isDeleted(),
       'displayContent' => $this->referencedComment->getDisplayContent(),

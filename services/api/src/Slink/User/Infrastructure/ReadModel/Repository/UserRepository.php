@@ -181,6 +181,21 @@ final class UserRepository extends AbstractRepository implements
   }
   
   /**
+   * @param UserStatus $status
+   * @return array<int, UserView>
+   */
+  public function findByStatus(UserStatus $status): array {
+    return $this->getEntityManager()
+      ->createQueryBuilder()
+      ->from(UserView::class, 'user')
+      ->select('user')
+      ->where('user.status = :status')
+      ->setParameter('status', $status)
+      ->getQuery()
+      ->getResult();
+  }
+
+  /**
    * @param UserView $userView
    * @return void
    */
@@ -188,7 +203,7 @@ final class UserRepository extends AbstractRepository implements
     $this->getEntityManager()->persist($userView);
     $this->getEntityManager()->flush();
   }
-  
+
   /**
    * @param Email $email
    * @return array<int, mixed>

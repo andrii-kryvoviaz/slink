@@ -28,6 +28,16 @@ final class TagRepository extends AbstractRepository implements TagRepositoryInt
     $this->getEntityManager()->persist($tag);
   }
 
+  public function deleteByUserId(ID $userId): void {
+    $this->getEntityManager()
+      ->createQueryBuilder()
+      ->delete(TagView::class, 't')
+      ->where('t.userId = :userId')
+      ->setParameter('userId', $userId->toString())
+      ->getQuery()
+      ->execute();
+  }
+
   public function remove(TagView $tag): void {
     $this->getEntityManager()->remove($tag);
   }

@@ -9,4 +9,5 @@ use Slink\User\Infrastructure\ReadModel\View\UserPreferencesView;
 interface UserPreferencesRepositoryInterface {
   public function findByUserId(string $userId): ?UserPreferencesView;
   public function save(UserPreferencesView $preferences): void;
+  public function deleteByUserId(string $userId): void;
 }

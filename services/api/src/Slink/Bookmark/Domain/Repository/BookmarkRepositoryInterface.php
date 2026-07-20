@@ -14,6 +14,10 @@ interface BookmarkRepositoryInterface extends ServiceEntityRepositoryInterface {
 
   public function remove(BookmarkView $bookmark): void;
 
+  public function deleteByUserId(string $userId): void;
+
+  public function deleteByImageId(string $imageId): void;
+
   public function oneById(string $id): BookmarkView;
 
   public function findById(string $id): ?BookmarkView;

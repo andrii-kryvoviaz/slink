@@ -22,9 +22,20 @@ final class RefreshTokenRepository extends AbstractRepository implements Refresh
   #[\Override]
   public function remove(string $hashedRefreshToken): void {
     $record = $this->getEntityManager()->find(RefreshTokenView::class, $hashedRefreshToken);
-    
+
     if ($record) {
       $this->getEntityManager()->remove($record);
     }
+  }
+
+  #[\Override]
+  public function deleteByUserId(string $userUuid): void {
+    $this->getEntityManager()
+      ->createQueryBuilder()
+      ->delete(RefreshTokenView::class, 'rt')
+      ->where('rt.userUuid = :userUuid')
+      ->setParameter('userUuid', $userUuid)
+      ->getQuery()
+      ->execute();
   }
 }

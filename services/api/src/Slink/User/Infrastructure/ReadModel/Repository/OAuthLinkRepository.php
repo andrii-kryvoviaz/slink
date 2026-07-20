@@ -48,6 +48,16 @@ class OAuthLinkRepository extends ServiceEntityRepository implements OAuthLinkRe
     $this->getEntityManager()->remove($link);
   }
 
+  public function deleteByUserId(string $userId): void {
+    $this->getEntityManager()
+      ->createQueryBuilder()
+      ->delete(OAuthLinkView::class, 'l')
+      ->where('l.userId = :userId')
+      ->setParameter('userId', $userId)
+      ->getQuery()
+      ->execute();
+  }
+
   public function deleteByProviderSlug(ProviderSlug $slug): void {
     $this->getEntityManager()
       ->createQueryBuilder()

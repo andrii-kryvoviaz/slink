@@ -30,7 +30,7 @@ class UserView extends AbstractView {
    * @param string $uuid
    * @param Email $email
    * @param Username $username
-   * @param DisplayName $displayName
+   * @param DisplayName|null $displayName
    * @param HashedPassword $password
    * @param DateTime $createdAt
    * @param DateTime|null $updatedAt
@@ -56,7 +56,7 @@ class UserView extends AbstractView {
     #[ORM\Column(type: 'display_name', unique: true, nullable: true)]
     #[Groups(['public', 'internal'])]
     #[Sanitize]
-    private DisplayName $displayName,
+    private ?DisplayName $displayName,
 
     #[ORM\Column(type: 'hashed_password')]
     private HashedPassword $password,
@@ -107,7 +107,7 @@ class UserView extends AbstractView {
    * @return string
    */
   public function getDisplayName(): string {
-    return $this->displayName->toString();
+    return $this->displayName?->toString() ?? '';
   }
   
   /**
@@ -137,6 +137,13 @@ class UserView extends AbstractView {
   public function getStatus(): string {
     return $this->status->value;
   }
+
+  /**
+   * @return bool
+   */
+  public function isDeleted(): bool {
+    return $this->status->isDeleted();
+  }
   
   /**
    * @param UserStatus $status
@@ -163,6 +170,13 @@ class UserView extends AbstractView {
   }
   
   /**
+   * @return void
+   */
+  public function clearRoles(): void {
+    $this->roles?->clear();
+  }
+
+  /**
    * @return array<string>
    */
   public function getRoles(): array {
@@ -183,5 +197,18 @@ class UserView extends AbstractView {
    */
   public function setDisplayName(DisplayName $displayName): void {
     $this->displayName = $displayName;
+  }
+
+  /**
+   * @param Email $email
+   * @param Username $username
+   * @param HashedPassword $password
+   * @return void
+   */
+  public function scrub(Email $email, Username $username, HashedPassword $password): void {
+    $this->email = $email;
+    $this->username = $username;
+    $this->displayName = null;
+    $this->password = $password;
   }
 }

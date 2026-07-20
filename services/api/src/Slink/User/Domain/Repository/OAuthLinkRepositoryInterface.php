@@ -22,5 +22,7 @@ interface OAuthLinkRepositoryInterface {
 
   public function delete(OAuthLinkView $link): void;
 
+  public function deleteByUserId(string $userId): void;
+
   public function deleteByProviderSlug(ProviderSlug $slug): void;
 }

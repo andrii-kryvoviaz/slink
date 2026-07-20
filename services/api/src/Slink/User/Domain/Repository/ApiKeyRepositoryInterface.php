@@ -20,4 +20,6 @@ interface ApiKeyRepositoryInterface {
   public function findById(string $keyId): ?ApiKeyView;
   
   public function delete(ApiKeyView $apiKey): void;
+
+  public function deleteByUserId(ID $userId): void;
 }
