@@ -22,6 +22,11 @@ class SettingsPageState {
     async (category: SettingCategory, data: SettingCategoryData) => {
       const response = await ApiClient.setting.updateSettings(category, data);
       await invalidate('app:settings');
+
+      if (category === 'customization') {
+        window.location.reload();
+      }
+
       return response;
     },
     { debounce: 300, minExecutionTime: 500 },

@@ -137,7 +137,7 @@ export const createAppSidebarItems = (options?: {
             {
               id: 'settings-customization',
               title: 'Customization',
-              icon: 'ph:paint-brush',
+              icon: 'solar:palette-linear',
               href: '/admin/settings/customization',
             },
           ],

@@ -45,9 +45,9 @@
       title: 'Customization',
       description: 'Customize the site name, description, logo, and branding',
       href: '/admin/settings/customization',
-      icon: 'ph:paint-brush',
-      iconBg: 'bg-amber-100 dark:bg-amber-900/30',
-      iconColor: 'text-amber-600 dark:text-amber-400',
+      icon: 'solar:palette-linear',
+      iconBg: 'bg-rose-100 dark:bg-rose-900/30',
+      iconColor: 'text-rose-600 dark:text-rose-400',
     },
   ];
 </script>
