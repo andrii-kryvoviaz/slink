@@ -51,6 +51,10 @@ final class LocalStorage extends AbstractStorage implements DirectoryStorageInte
    * @throws NotFoundException
    */
   public function read(string $path): ?string {
+    if (!is_file($path)) {
+      return null;
+    }
+
     try {
       $content = file_get_contents($path);
       return $content === false ? null : $content;
