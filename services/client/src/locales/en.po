@@ -1321,16 +1321,7 @@ msgstr "This image is publicly visible"
 msgid "This image is private"
 msgstr "This image is private"
 
-#: src/feature/Navigation/Navbar/Navbar.svelte
-#: src/feature/Navigation/Sidebar/AppSidebar.svelte
 #: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
-#: src/routes/+layout.svelte
-#: src/routes/profile/(auth)/login/+page.svelte
-#: src/routes/profile/(auth)/login/+page.svelte
-#: src/routes/profile/(auth)/login/+page.svelte
-#: src/routes/profile/(auth)/signup/+page.svelte
-#: src/routes/profile/(auth)/signup/+page.svelte
-#: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Slink"
 msgstr "Slink"
 
@@ -5038,11 +5029,10 @@ msgid "{0} of {1} files uploaded"
 msgstr "{0} of {1} files uploaded"
 
 #: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
-#: src/routes/+layout.svelte
 msgid "Fast and secure image sharing service"
 msgstr "Fast and secure image sharing service"
 
-#. 0: siteName
+#. 0: customization.siteName
 #: src/routes/+layout.svelte
 msgid "{0}: Image Sharing Service"
 msgstr "{0}: Image Sharing Service"
@@ -5054,7 +5044,6 @@ msgstr "{0}: Image Sharing Service"
 msgid "Customization"
 msgstr "Customization"
 
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
 #: src/routes/admin/settings/customization/+page.svelte
 msgid "Customize the appearance and branding of your application"
 msgstr "Customize the appearance and branding of your application"
@@ -5064,57 +5053,61 @@ msgid "Site Name"
 msgstr "Site Name"
 
 #: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
-msgid "The name displayed in the browser tab, sidebar, and navigation"
-msgstr "The name displayed in the browser tab, sidebar, and navigation"
-
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
 msgid "Site Description"
 msgstr "Site Description"
-
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
-msgid "A short description shown in the browser tab and meta tags"
-msgstr "A short description shown in the browser tab and meta tags"
-
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
-msgid "Favicon URL"
-msgstr "Favicon URL"
-
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
-msgid "URL to a custom favicon image (leave empty for default)"
-msgstr "URL to a custom favicon image (leave empty for default)"
-
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
-msgid "Custom CSS"
-msgstr "Custom CSS"
-
-#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
-msgid "Override the application CSS entirely. Use standard CSS syntax. Leave empty for default styling."
-msgstr "Override the application CSS entirely. Use standard CSS syntax. Leave empty for default styling."
-
-#: src/routes/admin/settings/+page.svelte
-msgid "Customize the site name, description, favicon, and branding"
-msgstr "Customize the site name, description, favicon, and branding"
 
 #: src/routes/admin/settings/customization/+page.svelte
 msgid "Customization Settings | Slink"
 msgstr "Customization Settings | Slink"
 
-#. 0: data.globalSettings?.customization?.siteName || 'Slink'
+#. 0: customization.siteName
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Sign In | {0}"
 msgstr "Sign In | {0}"
 
-#. 0: data.globalSettings?.customization?.siteName || 'Slink'
+#. 0: customization.siteName
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Sign in to continue to {0}"
 msgstr "Sign in to continue to {0}"
 
-#. 0: data.globalSettings?.customization?.siteName || 'Slink'
+#. 0: customization.siteName
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Create Account | {0}"
 msgstr "Create Account | {0}"
 
-#. 0: data.globalSettings?.customization?.siteName || 'Slink'
+#. 0: customization.siteName
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Join {0} to start sharing your images"
 msgstr "Join {0} to start sharing your images"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Logo URL"
+msgstr "Logo URL"
+
+#: src/routes/admin/settings/+page.svelte
+msgid "Customize the site name, description, logo, and branding"
+msgstr "Customize the site name, description, logo, and branding"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Name and brand your Slink instance."
+msgstr "Name and brand your Slink instance."
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "The public name of your instance."
+msgstr "The public name of your instance."
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "A short tagline describing your instance."
+msgstr "A short tagline describing your instance."
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Link to your own logo image. Leave empty to use the default."
+msgstr "Link to your own logo image. Leave empty to use the default."
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Couldn't load this image"
+msgstr "Couldn't load this image"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Logo preview"
+msgstr "Logo preview"

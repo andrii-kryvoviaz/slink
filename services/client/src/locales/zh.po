@@ -1321,12 +1321,7 @@ msgstr "该图片公开可见"
 msgid "This image is private"
 msgstr "该图片为私密"
 
-#: src/feature/Navigation/Navbar/Navbar.svelte
-#: src/feature/Navigation/Navbar/Navbar.svelte
-#: src/feature/Navigation/Sidebar/AppSidebar.svelte
-#: src/feature/Navigation/Sidebar/AppSidebar.svelte
-#: src/routes/profile/(auth)/login/+page.svelte
-#: src/routes/profile/(auth)/signup/+page.svelte
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
 msgid "Slink"
 msgstr "Slink"
 
@@ -2865,16 +2860,8 @@ msgid "Sign in to access all platform features"
 msgstr "登录以访问全部平台功能"
 
 #: src/routes/profile/(auth)/login/+page.svelte
-msgid "Sign In | Slink"
-msgstr "登录 | Slink"
-
-#: src/routes/profile/(auth)/login/+page.svelte
 msgid "Welcome back"
 msgstr "欢迎回来"
-
-#: src/routes/profile/(auth)/login/+page.svelte
-msgid "Sign in to continue to Slink"
-msgstr "登录以继续使用 Slink"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Email or Username"
@@ -2921,17 +2908,9 @@ msgid "Sign Up"
 msgstr "注册"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
-msgid "Create Account | Slink"
-msgstr "创建账号 | Slink"
-
-#: src/routes/profile/(auth)/signup/+page.svelte
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Create Account"
 msgstr "创建账号"
-
-#: src/routes/profile/(auth)/signup/+page.svelte
-msgid "Join Slink to start sharing your images"
-msgstr "加入 Slink，开始分享你的图片"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Choose a username"
@@ -5042,3 +5021,87 @@ msgstr "取消选择项目"
 #: src/feature/Upload/Progress/ProgressSummary.svelte
 msgid "{0} of {1} files uploaded"
 msgstr "已上传 {1} 个文件中的 {0} 个"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Fast and secure image sharing service"
+msgstr "快速、安全的图片分享服务"
+
+#. 0: customization.siteName
+#: src/routes/+layout.svelte
+msgid "{0}: Image Sharing Service"
+msgstr "{0}：图片分享服务"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+#: src/routes/admin/settings/+page.svelte
+#: src/routes/admin/settings/customization/+page.svelte
+msgid "Customization"
+msgstr "自定义"
+
+#: src/routes/admin/settings/customization/+page.svelte
+msgid "Customize the appearance and branding of your application"
+msgstr "自定义应用程序的外观和品牌"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Site Name"
+msgstr "站点名称"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Site Description"
+msgstr "站点描述"
+
+#: src/routes/admin/settings/customization/+page.svelte
+msgid "Customization Settings | Slink"
+msgstr "自定义设置 | Slink"
+
+#. 0: customization.siteName
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Sign In | {0}"
+msgstr "登录 | {0}"
+
+#. 0: customization.siteName
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Sign in to continue to {0}"
+msgstr "登录以继续使用 {0}"
+
+#. 0: customization.siteName
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Create Account | {0}"
+msgstr "创建账号 | {0}"
+
+#. 0: customization.siteName
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Join {0} to start sharing your images"
+msgstr "加入 {0}，开始分享你的图片"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Logo URL"
+msgstr "徽标 URL"
+
+#: src/routes/admin/settings/+page.svelte
+msgid "Customize the site name, description, logo, and branding"
+msgstr "自定义站点名称、描述、徽标和品牌"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Name and brand your Slink instance."
+msgstr "为您的 Slink 实例命名并设置品牌。"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "The public name of your instance."
+msgstr "实例的公开名称。"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "A short tagline describing your instance."
+msgstr "描述实例的简短标语。"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Link to your own logo image. Leave empty to use the default."
+msgstr "指向您自己徽标图片的链接。留空则使用默认徽标。"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Couldn't load this image"
+msgstr "无法加载此图片"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Logo preview"
+msgstr "徽标预览"

@@ -1321,12 +1321,7 @@ msgstr "Questa immagine è visibile pubblicamente"
 msgid "This image is private"
 msgstr "Questa immagine è privata"
 
-#: src/feature/Navigation/Navbar/Navbar.svelte
-#: src/feature/Navigation/Navbar/Navbar.svelte
-#: src/feature/Navigation/Sidebar/AppSidebar.svelte
-#: src/feature/Navigation/Sidebar/AppSidebar.svelte
-#: src/routes/profile/(auth)/login/+page.svelte
-#: src/routes/profile/(auth)/signup/+page.svelte
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
 msgid "Slink"
 msgstr "Slink"
 
@@ -2865,16 +2860,8 @@ msgid "Sign in to access all platform features"
 msgstr "Accedi per utilizzare tutte le funzionalità della piattaforma"
 
 #: src/routes/profile/(auth)/login/+page.svelte
-msgid "Sign In | Slink"
-msgstr "Accedi | Slink"
-
-#: src/routes/profile/(auth)/login/+page.svelte
 msgid "Welcome back"
 msgstr "Bentornato"
-
-#: src/routes/profile/(auth)/login/+page.svelte
-msgid "Sign in to continue to Slink"
-msgstr "Accedi per continuare su Slink"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Email or Username"
@@ -2921,17 +2908,9 @@ msgid "Sign Up"
 msgstr "Registrati"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
-msgid "Create Account | Slink"
-msgstr "Crea account | Slink"
-
-#: src/routes/profile/(auth)/signup/+page.svelte
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Create Account"
 msgstr "Crea account"
-
-#: src/routes/profile/(auth)/signup/+page.svelte
-msgid "Join Slink to start sharing your images"
-msgstr "Unisciti a Slink per iniziare a condividere le tue immagini"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Choose a username"
@@ -5048,3 +5027,87 @@ msgstr "Deseleziona elemento"
 #: src/feature/Upload/Progress/ProgressSummary.svelte
 msgid "{0} of {1} files uploaded"
 msgstr "{0} di {1} file caricati"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Fast and secure image sharing service"
+msgstr "Servizio di condivisione immagini veloce e sicuro"
+
+#. 0: customization.siteName
+#: src/routes/+layout.svelte
+msgid "{0}: Image Sharing Service"
+msgstr "{0}: Servizio di condivisione immagini"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+#: src/routes/admin/settings/+page.svelte
+#: src/routes/admin/settings/customization/+page.svelte
+msgid "Customization"
+msgstr "Personalizzazione"
+
+#: src/routes/admin/settings/customization/+page.svelte
+msgid "Customize the appearance and branding of your application"
+msgstr "Personalizza l'aspetto e il branding della tua applicazione"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Site Name"
+msgstr "Nome del sito"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Site Description"
+msgstr "Descrizione del sito"
+
+#: src/routes/admin/settings/customization/+page.svelte
+msgid "Customization Settings | Slink"
+msgstr "Impostazioni di personalizzazione | Slink"
+
+#. 0: customization.siteName
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Sign In | {0}"
+msgstr "Accedi | {0}"
+
+#. 0: customization.siteName
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Sign in to continue to {0}"
+msgstr "Accedi per continuare su {0}"
+
+#. 0: customization.siteName
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Create Account | {0}"
+msgstr "Crea account | {0}"
+
+#. 0: customization.siteName
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Join {0} to start sharing your images"
+msgstr "Unisciti a {0} per iniziare a condividere le tue immagini"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Logo URL"
+msgstr "URL del logo"
+
+#: src/routes/admin/settings/+page.svelte
+msgid "Customize the site name, description, logo, and branding"
+msgstr "Personalizza il nome del sito, la descrizione, il logo e il branding"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Name and brand your Slink instance."
+msgstr "Dai un nome e un'identità alla tua istanza Slink."
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "The public name of your instance."
+msgstr "Il nome pubblico della tua istanza."
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "A short tagline describing your instance."
+msgstr "Un breve slogan che descrive la tua istanza."
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Link to your own logo image. Leave empty to use the default."
+msgstr "Link alla tua immagine del logo. Lascia vuoto per usare quello predefinito."
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Couldn't load this image"
+msgstr "Impossibile caricare questa immagine"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Logo preview"
+msgstr "Anteprima del logo"
