@@ -20,6 +20,7 @@ use Slink\User\Domain\Event\UserPasswordWasReset;
 use Slink\User\Domain\Event\UserSignedIn;
 use Slink\User\Domain\Event\UserStatusWasChanged;
 use Slink\User\Domain\Event\UserWasCreated;
+use Slink\User\Domain\Event\UserWasPurged;
 use Slink\User\Domain\Exception\DisplayNameAlreadyExistException;
 use Slink\User\Domain\Exception\EmailAlreadyExistException;
 use Slink\User\Domain\Exception\InvalidCredentialsException;
@@ -354,6 +355,43 @@ final class UserTest extends TestCase {
     $context = $this->createUserCreationContext(usernameUnique: false);
 
     User::create($id, $credentials, $displayName, $status, $context);
+  }
+
+  #[Test]
+  public function itRecordsStatusChangeAndPurgeWhenPurgingNonDeletedUser(): void {
+    $user = $this->createUser();
+
+    $user->purge();
+
+    $events = $user->releaseEvents();
+    $this->assertCount(2, $events);
+    $this->assertInstanceOf(UserStatusWasChanged::class, $events[0]);
+    $this->assertSame(UserStatus::Deleted, $events[0]->status);
+    $this->assertInstanceOf(UserWasPurged::class, $events[1]);
+  }
+
+  #[Test]
+  public function itRecordsOnlyPurgeWhenPurgingDeletedUser(): void {
+    $user = $this->createUser();
+    $user->changeStatus(UserStatus::Deleted, $this->createCurrentUserSpecification(false));
+    $user->releaseEvents();
+
+    $user->purge();
+
+    $events = $user->releaseEvents();
+    $this->assertCount(1, $events);
+    $this->assertInstanceOf(UserWasPurged::class, $events[0]);
+  }
+
+  #[Test]
+  public function itDoesNotRecordPurgeWhenAlreadyPurged(): void {
+    $user = $this->createUser();
+    $user->purge();
+    $user->releaseEvents();
+
+    $user->purge();
+
+    $this->assertCount(0, $user->releaseEvents());
   }
 
   #[Test]
