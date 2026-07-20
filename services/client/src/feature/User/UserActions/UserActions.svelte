@@ -14,6 +14,7 @@
   import Icon from '@iconify/svelte';
 
   import { ReactiveState } from '@slink/api/ReactiveState';
+  import type { EmptyResponse } from '@slink/api/Response';
   import type { SingleUserResponse } from '@slink/api/Response/User/SingleUserResponse';
 
   interface Props {
@@ -50,6 +51,17 @@
     () => {
       statusToChange = UserStatusEnum.Deleted;
       return ApiClient.user.changeUserStatus(user.id, statusToChange);
+    },
+    { minExecutionTime: 300 },
+  );
+
+  const {
+    isLoading: userPurgeLoading,
+    error: userPurgeError,
+    run: purgeUser,
+  } = ReactiveState<EmptyResponse>(
+    () => {
+      return ApiClient.user.purgeUser(user.id);
     },
     { minExecutionTime: 300 },
   );
@@ -95,15 +107,22 @@
     showDeleteConfirmation = true;
   };
 
-  const confirmUserDeletion = async () => {
-    await deleteUser();
+  const confirmUserDeletion = async (purge: boolean) => {
+    if (!purge) {
+      await deleteUser();
+      showDeleteConfirmation = false;
+      return;
+    }
+
+    await purgeUser();
     showDeleteConfirmation = false;
 
-    if (userDeleteError) {
+    if ($userPurgeError) {
       return;
     }
 
     onDelete?.(user.id);
+    closeDropdown();
   };
 
   const cancelUserDeletion = () => {
@@ -186,6 +205,7 @@
 
   $effect(() => errorHandler($statusError));
   $effect(() => errorHandler($userDeleteError));
+  $effect(() => errorHandler($userPurgeError));
   $effect(() => errorHandler($grantRoleError));
   $effect(() => errorHandler($revokeRoleError));
 </script>
@@ -268,7 +288,7 @@
         {:else}
           <UserDeleteConfirmation
             {user}
-            loading={$userDeleteLoading}
+            loading={$userDeleteLoading || $userPurgeLoading}
             onConfirm={confirmUserDeletion}
             onCancel={cancelUserDeletion}
           />

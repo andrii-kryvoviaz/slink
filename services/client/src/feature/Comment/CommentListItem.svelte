@@ -40,7 +40,7 @@
 
   let isEditing = $derived(editingCommentId === comment.id);
   let isAuthor = $derived(
-    currentUserId !== null && comment.author.id === currentUserId,
+    currentUserId !== null && comment.author?.id === currentUserId,
   );
   let canEdit = $derived(
     isAuthor &&
@@ -50,7 +50,7 @@
   let canDelete = $derived(
     currentUserId !== null &&
       !comment.isDeleted &&
-      (comment.author.id === currentUserId || imageOwnerId === currentUserId),
+      (comment.author?.id === currentUserId || imageOwnerId === currentUserId),
   );
 
   let deleteConfirmOpen = $state(false);
@@ -84,8 +84,8 @@
       <UserAvatar
         size="sm"
         user={{
-          displayName: comment.author.displayName,
-          email: comment.author.email,
+          displayName: comment.author?.displayName ?? '',
+          email: comment.author?.email ?? '',
         }}
       />
     </HoverCard.Trigger>
@@ -94,13 +94,17 @@
         <UserAvatar
           size="md"
           user={{
-            displayName: comment.author.displayName,
-            email: comment.author.email,
+            displayName: comment.author?.displayName ?? '',
+            email: comment.author?.email ?? '',
           }}
         />
         <div class="flex-1 min-w-0">
           <p class="font-medium text-sm text-white">
-            {comment.author.displayName}
+            {#if comment.author}
+              {comment.author.displayName}
+            {:else}
+              [deleted]
+            {/if}
           </p>
         </div>
       </div>
@@ -110,7 +114,11 @@
   <div class="flex-1 min-w-0">
     <div class="flex items-center gap-2 mb-1">
       <span class="text-sm font-medium text-white/90 truncate">
-        {comment.author.displayName}
+        {#if comment.author}
+          {comment.author.displayName}
+        {:else}
+          [deleted]
+        {/if}
       </span>
       <span class="text-xs text-white/40 shrink-0">
         <FormattedDate date={comment.createdAt.timestamp} />
@@ -186,9 +194,13 @@
 
     {#if comment.referencedComment}
       <div class="mb-2 pl-2 border-l-2 border-white/20 text-xs text-white/50">
-        <span class="font-medium"
-          >@{comment.referencedComment.author.displayName}</span
-        >
+        <span class="font-medium">
+          {#if comment.referencedComment.author}
+            @{comment.referencedComment.author.displayName}
+          {:else}
+            [deleted]
+          {/if}
+        </span>
         {#if comment.referencedComment.isDeleted}
           <span class="ml-1 italic">[deleted]</span>
         {:else}

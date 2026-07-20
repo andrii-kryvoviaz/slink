@@ -89,13 +89,21 @@
       <div class="flex items-center justify-between mb-1">
         <span class="text-xs text-white/60">
           {#if isEditing}
-            Editing reply to <span class="font-medium text-white/80"
-              >@{activeRef.author.displayName}</span
-            >
+            Editing reply to <span class="font-medium text-white/80">
+              {#if activeRef.author}
+                @{activeRef.author.displayName}
+              {:else}
+                [deleted]
+              {/if}
+            </span>
           {:else}
-            Replying to <span class="font-medium text-white/80"
-              >@{activeRef.author.displayName}</span
-            >
+            Replying to <span class="font-medium text-white/80">
+              {#if activeRef.author}
+                @{activeRef.author.displayName}
+              {:else}
+                [deleted]
+              {/if}
+            </span>
           {/if}
         </span>
         <button
@@ -123,7 +131,9 @@
       placeholder={isEditing
         ? 'Edit your comment...'
         : activeRef
-          ? `Reply to @${activeRef.author.displayName}...`
+          ? activeRef.author
+            ? `Reply to @${activeRef.author.displayName}...`
+            : 'Reply...'
           : 'Write a comment...'}
       disabled={isSubmitting}></textarea>
     <div class="absolute right-1.5 flex items-center gap-1">

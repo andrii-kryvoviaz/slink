@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Button } from '@slink/ui/components/button';
+  import { Switch } from '@slink/ui/components/switch';
 
   import type { User } from '$lib/auth/Type/User';
   import Icon from '@iconify/svelte';
@@ -7,11 +8,13 @@
   interface Props {
     user: User;
     loading: boolean;
-    onConfirm: () => void;
+    onConfirm: (purge: boolean) => void;
     onCancel: () => void;
   }
 
   let { user, loading, onConfirm, onCancel }: Props = $props();
+
+  let purge = $state(false);
 </script>
 
 <div class="w-full max-w-sm p-2 space-y-4">
@@ -46,6 +49,23 @@
     </div>
   </div>
 
+  <div class="space-y-2">
+    <div class="flex items-center justify-between gap-3">
+      <label
+        for="purge-all-data"
+        class="text-xs font-medium text-gray-900 dark:text-white cursor-pointer"
+      >
+        Permanently delete all data
+      </label>
+      <Switch id="purge-all-data" bind:checked={purge} disabled={loading} />
+    </div>
+    {#if purge}
+      <p class="text-xs text-red-600 dark:text-red-400">
+        Removes all images, collections and account data. Cannot be undone.
+      </p>
+    {/if}
+  </div>
+
   <div class="flex gap-3 pt-2">
     <Button
       variant="glass"
@@ -61,7 +81,7 @@
       variant="danger"
       rounded="full"
       size="sm"
-      onclick={onConfirm}
+      onclick={() => onConfirm(purge)}
       justify="center"
       class="flex-1 font-medium shadow-lg hover:shadow-xl transition-all duration-200"
       {loading}
