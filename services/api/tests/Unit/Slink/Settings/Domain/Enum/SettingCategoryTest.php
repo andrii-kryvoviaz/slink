@@ -168,7 +168,6 @@ final class SettingCategoryTest extends TestCase {
                     'siteName' => 'Slink',
                     'siteDescription' => 'Fast and secure image sharing service',
                     'logoUrl' => '',
-                    'customCss' => '',
                 ],
                 CustomizationSettings::class
             ],

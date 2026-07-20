@@ -56,7 +56,6 @@ parameters:
     siteName: '%env(string:default::CUSTOMIZATION_SITE_NAME)%'
     siteDescription: '%env(string:default::CUSTOMIZATION_SITE_DESCRIPTION)%'
     logoUrl: '%env(string:default::CUSTOMIZATION_LOGO_URL)%'
-    customCss: '%env(string:default::CUSTOMIZATION_CUSTOM_CSS)%'
 
 when@prod:
   parameters:

@@ -54,10 +54,6 @@
   const logoUrl = $derived(
     data.globalSettings?.customization?.logoUrl || '/favicon.png',
   );
-  const customCss = $derived(
-    data.globalSettings?.customization?.customCss || '',
-  );
-
   initResponsiveStore();
 </script>
 
@@ -68,9 +64,6 @@
   {#if logoUrl !== '/favicon.png'}
     <link rel="icon" href={logoUrl} />
     <link rel="apple-touch-icon" href={logoUrl} />
-  {/if}
-  {#if customCss}
-    {@html `<style>${customCss}</style>`}
   {/if}
 </svelte:head>
 
@@ -85,7 +78,6 @@
           showSystemItems: true,
           showUploadItem:
             !!user || !!data.globalSettings?.access?.allowGuestUploads,
-          customization: data.globalSettings?.customization,
         }}
       />
     {/if}
@@ -108,7 +100,6 @@
           showLoginButton={!user}
           showUploadButton={!!user ||
             !!data.globalSettings?.access?.allowGuestUploads}
-          customization={data.globalSettings?.customization}
         >
           {#snippet themeSwitch()}
             <ThemeSwitch

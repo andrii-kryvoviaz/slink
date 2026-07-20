@@ -17,9 +17,6 @@ final readonly class PublicCustomizationSettings {
 
     #[Groups(['public'])]
     public string $logoUrl = '',
-
-    #[Groups(['public'])]
-    public string $customCss = '',
   ) {}
 
   /**
@@ -30,7 +27,6 @@ final readonly class PublicCustomizationSettings {
       siteName: $settings['siteName'] ?? 'Slink',
       siteDescription: $settings['siteDescription'] ?? 'Fast and secure image sharing service',
       logoUrl: $settings['logoUrl'] ?? '',
-      customCss: $settings['customCss'] ?? '',
     );
   }
 }

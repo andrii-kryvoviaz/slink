@@ -15,7 +15,6 @@ final readonly class CustomizationSettings extends AbstractSettingsValueObject {
     private string $siteName,
     private string $siteDescription,
     private string $logoUrl,
-    private string $customCss = '',
   ) {}
 
   #[\Override]
@@ -24,7 +23,6 @@ final readonly class CustomizationSettings extends AbstractSettingsValueObject {
       'siteName' => $this->siteName,
       'siteDescription' => $this->siteDescription,
       'logoUrl' => $this->logoUrl,
-      'customCss' => $this->customCss,
     ];
   }
 
@@ -34,12 +32,7 @@ final readonly class CustomizationSettings extends AbstractSettingsValueObject {
       $payload['siteName'] ?? self::DEFAULT_SITE_NAME,
       $payload['siteDescription'] ?? self::DEFAULT_SITE_DESCRIPTION,
       $payload['logoUrl'] ?? '',
-      $payload['customCss'] ?? '',
     );
-  }
-
-  public function getCustomCss(): string {
-    return $this->customCss;
   }
 
   #[\Override]

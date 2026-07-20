@@ -99,33 +99,5 @@
         error={errors['customization.logoUrl']}
       />
     </SettingItem>
-
-    <SettingItem
-      layout="stacked"
-      defaultValue={defaultSettings?.customCss}
-      currentValue={settings.customCss}
-      reset={(value) => {
-        settings.customCss = value;
-      }}
-    >
-      {#snippet label()}
-        Custom CSS
-      {/snippet}
-      {#snippet hint()}
-        Override the application CSS entirely. Use standard CSS syntax. Leave
-        empty for default styling.
-      {/snippet}
-      <textarea
-        name="customizationCustomCss"
-        bind:value={settings.customCss}
-        placeholder="/* Your custom CSS rules here */"
-        class="bg-bg-secondary border border-bc-input rounded-lg px-4 py-3 text-sm text-text-primary placeholder:text-text-secondary/50 w-full min-h-[200px] font-mono resize-y focus:outline-none focus:ring-2 focus:ring-accent"
-        class:border-destructive={errors['customization.customCss']}></textarea>
-      {#if errors['customization.customCss']}
-        <p class="text-destructive text-xs mt-1">
-          {errors['customization.customCss']}
-        </p>
-      {/if}
-    </SettingItem>
   {/snippet}
 </SettingsPane>
