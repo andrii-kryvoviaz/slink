@@ -15,6 +15,7 @@
 
   import { theme } from '@slink/lib/actions/theme';
   import { isAdmin } from '@slink/lib/auth/utils';
+  import { customization } from '@slink/lib/settings';
   import { initResponsiveStore } from '@slink/lib/stores/responsive.svelte';
 
   const { settings } = page.data;
@@ -44,26 +45,16 @@
     settings.sidebar = { expanded: sidebarOpen };
   });
 
-  const siteName = $derived(
-    data.globalSettings?.customization?.siteName || 'Slink',
-  );
-  const siteDescription = $derived(
-    data.globalSettings?.customization?.siteDescription ||
-      'Fast and secure image sharing service',
-  );
-  const logoUrl = $derived(
-    data.globalSettings?.customization?.logoUrl || '/favicon.png',
-  );
   initResponsiveStore();
 </script>
 
 <svelte:head>
-  <title>{siteName}: Image Sharing Service</title>
-  <meta name="description" content={siteDescription} />
-  <meta name="apple-mobile-web-app-title" content={siteName} />
-  {#if logoUrl !== '/favicon.png'}
-    <link rel="icon" href={logoUrl} />
-    <link rel="apple-touch-icon" href={logoUrl} />
+  <title>{customization.siteName}: Image Sharing Service</title>
+  <meta name="description" content={customization.siteDescription} />
+  <meta name="apple-mobile-web-app-title" content={customization.siteName} />
+  {#if customization.hasCustomLogo}
+    <link rel="icon" href={customization.logoUrl} />
+    <link rel="apple-touch-icon" href={customization.logoUrl} />
   {/if}
 </svelte:head>
 

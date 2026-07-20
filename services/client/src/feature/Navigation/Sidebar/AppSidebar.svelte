@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { BrandLogo } from '@slink/feature/Layout';
   import type { SidebarConfig } from '@slink/feature/Navigation';
   import { NavGroup, NavUser } from '@slink/feature/Navigation';
   import type { AppSidebarGroup } from '@slink/feature/Navigation/Sidebar/types';
@@ -6,14 +7,13 @@
   import type { ComponentProps } from 'svelte';
 
   import type { User } from '@slink/lib/auth/Type/User';
-  import type { CustomizationSettings } from '@slink/lib/settings/Type/CustomizationSettings';
+  import { customization } from '@slink/lib/settings';
 
   import SidebarStorageUsage from './SidebarStorageUsage.svelte';
 
   interface ExtendedSidebarConfig extends SidebarConfig {
     user?: Partial<User>;
     groups?: AppSidebarGroup[];
-    customization?: CustomizationSettings;
   }
 
   interface Props extends ComponentProps<typeof Sidebar.Root> {
@@ -35,12 +35,8 @@
 
   const user = $derived(createUser(config.user));
   const groups = $derived(config.groups || []);
-  const customization = $derived(config.customization);
 
   const sidebar = Sidebar.useSidebar();
-
-  const siteName = $derived(customization?.siteName || 'Slink');
-  const logoUrl = $derived(customization?.logoUrl || '/favicon.png');
 
   function handleNavigate() {
     if (sidebar.isMobile) {
@@ -61,16 +57,14 @@
         href="/"
         class="relative w-8 h-8 rounded-lg bg-gradient-to-br from-sidebar-accent/30 via-sidebar-accent/40 to-sidebar-accent/20 border border-sidebar-border/60 flex items-center justify-center hover:border-sidebar-border/80 transition-all duration-300 hover:scale-105 group dark:from-sidebar-primary/15 dark:via-sidebar-accent/20 dark:to-sidebar-primary/10 dark:border-sidebar-border/40 dark:hover:border-sidebar-border/60"
       >
-        <img
-          src={logoUrl}
-          alt={siteName}
+        <BrandLogo
           class="size-5 object-contain drop-shadow-sm transition-transform duration-300 group-hover:scale-110"
         />
       </a>
       <a
         href="/"
         class="relative font-semibold text-sidebar-foreground/90 tracking-tight group-data-[collapsible=icon]:hidden hover:text-sidebar-foreground transition-colors"
-        >{siteName}</a
+        >{customization.siteName}</a
       >
     </div>
   </Sidebar.Header>
