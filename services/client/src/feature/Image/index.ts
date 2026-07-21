@@ -6,6 +6,9 @@ export { default as BookmarkButton } from './BookmarkButton/BookmarkButton.svelt
 export * from './BookmarkButton/BookmarkButton.theme';
 export { default as BookmarkersPanel } from './BookmarkersPanel/BookmarkersPanel.svelte';
 export * from './BookmarkersPanel/BookmarkersPanel.theme';
+export { default as CardActionsOverlay } from './CardActionsOverlay/CardActionsOverlay.svelte';
+export { default as CopyLinkButton } from './CopyLinkButton/CopyLinkButton.svelte';
+export * from './CopyLinkButton/CopyLinkButton.theme';
 export { default as ImageDescription } from './Description/ImageDescription.svelte';
 export { default as DimensionsBadge } from './DimensionsBadge/DimensionsBadge.svelte';
 export * from './DimensionsBadge/DimensionsBadge.theme';

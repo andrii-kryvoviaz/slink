@@ -1,6 +1,7 @@
 <script lang="ts">
   import { CommentList } from '@slink/feature/Comment';
   import BookmarkButton from '@slink/feature/Image/BookmarkButton/BookmarkButton.svelte';
+  import CopyLinkButton from '@slink/feature/Image/CopyLinkButton/CopyLinkButton.svelte';
   import DownloadButton from '@slink/feature/Image/DownloadButton/DownloadButton.svelte';
   import LicenseInfo from '@slink/feature/Image/License/LicenseInfo.svelte';
   import { Badge, FormattedDate } from '@slink/feature/Text';
@@ -71,32 +72,47 @@
 
     <div class="hidden lg:flex items-center justify-between mt-4">
       <div class="flex items-center gap-2">
-        <Badge variant="glass" size="sm">
+        <Badge variant="glass" size="sm" class="whitespace-nowrap">
           <Icon icon="heroicons:eye" class="w-3.5 h-3.5 mr-1.5" />
           {image.attributes.views} views
         </Badge>
-        <Badge variant="glass" size="sm">
+        <Badge variant="glass" size="sm" class="whitespace-nowrap">
           <Icon icon="heroicons:photo" class="w-3.5 h-3.5 mr-1.5" />
           {image.metadata.width}×{image.metadata.height}
         </Badge>
       </div>
-      <div class="flex items-center gap-2">
-        <DownloadButton
-          imageUrl={image.url}
-          fileName={image.attributes.fileName}
-          size="md"
-          tooltipVariant="dark"
-        />
-        {#if image.attributes.isPublic}
-          <BookmarkButton
-            imageId={image.id}
-            imageOwnerId={image.owner.id}
-            isBookmarked={image.isBookmarked}
-            bookmarkCount={image.bookmarkCount}
+      <div class="flex items-center gap-2 shrink-0">
+        <span
+          class="flex h-7 w-7 items-center justify-center [&>button]:flex [&>button]:h-full [&>button]:w-full [&>button]:items-center [&>button]:justify-center"
+        >
+          <DownloadButton
+            imageUrl={image.url}
+            fileName={image.attributes.fileName}
             size="md"
             tooltipVariant="dark"
-            onBookmarkChange={handleBookmarkChange}
           />
+        </span>
+        {#if currentUser?.id === image.owner.id}
+          <CopyLinkButton
+            image={{ id: image.id, fileName: image.attributes.fileName }}
+            size="md"
+            variant="glass"
+            tooltipVariant="dark"
+          />
+        {:else if image.attributes.isPublic}
+          <span
+            class="flex h-7 w-7 items-center justify-center [&>button]:flex [&>button]:h-full [&>button]:w-full [&>button]:items-center [&>button]:justify-center"
+          >
+            <BookmarkButton
+              imageId={image.id}
+              imageOwnerId={image.owner.id}
+              isBookmarked={image.isBookmarked}
+              bookmarkCount={image.bookmarkCount}
+              size="md"
+              tooltipVariant="dark"
+              onBookmarkChange={handleBookmarkChange}
+            />
+          </span>
         {/if}
       </div>
     </div>

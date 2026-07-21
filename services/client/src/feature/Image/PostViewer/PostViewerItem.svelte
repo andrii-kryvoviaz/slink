@@ -26,7 +26,7 @@
       class="h-full w-full max-w-7xl flex flex-col lg:flex-row gap-4 lg:gap-8"
     >
       <div
-        class="shrink-0 lg:flex-1 lg:h-full flex items-start lg:items-center justify-center min-w-0 overflow-hidden h-[35%] lg:max-h-none lg:min-h-0 lg:@container-[size]"
+        class="shrink-0 lg:flex-1 lg:h-full flex items-center justify-center min-w-0 overflow-hidden h-[35%] lg:max-h-none lg:min-h-0 lg:@container-[size]"
       >
         <ImagePlaceholder
           src={image.url}

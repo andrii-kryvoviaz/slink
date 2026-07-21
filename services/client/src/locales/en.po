@@ -4030,6 +4030,8 @@ msgid "Share actions"
 msgstr "Share actions"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
+#: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 #: src/feature/Share/Controls/List.svelte
 msgid "Copy link"
@@ -5048,3 +5050,7 @@ msgstr "Deselect item"
 #: src/feature/Upload/Progress/ProgressSummary.svelte
 msgid "{0} of {1} files uploaded"
 msgstr "{0} of {1} files uploaded"
+
+#: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
+msgid "Copy link format"
+msgstr "Copy link format"

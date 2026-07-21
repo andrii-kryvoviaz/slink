@@ -4033,6 +4033,8 @@ msgid "Share actions"
 msgstr "Дії з публікацією"
 
 #: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
+#: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 #: src/feature/Share/Controls/List.svelte
 msgid "Copy link"
@@ -5058,3 +5060,7 @@ msgstr "Скасувати вибір елемента"
 #: src/feature/Upload/Progress/ProgressSummary.svelte
 msgid "{0} of {1} files uploaded"
 msgstr "{0} з {1} файлів завантажено"
+
+#: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
+msgid "Copy link format"
+msgstr ""
