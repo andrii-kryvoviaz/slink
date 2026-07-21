@@ -35,6 +35,26 @@ export const bookmarkButtonTheme = cva(
   },
 );
 
+export const bookmarkTriggerTheme = cva('group/bookmark', {
+  variants: {
+    size: {
+      sm: 'gap-1',
+      md: 'gap-1.5',
+      lg: 'gap-2',
+    },
+    variant: {
+      default: '',
+      subtle: '',
+      overlay: 'min-w-7',
+      toolbar: '',
+    },
+  },
+  defaultVariants: {
+    size: 'md',
+    variant: 'default',
+  },
+});
+
 export const bookmarkIconTheme = tv({
   base: 'transition-all duration-200',
   variants: {

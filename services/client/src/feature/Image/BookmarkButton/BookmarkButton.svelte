@@ -10,14 +10,13 @@
 
   import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
-  import { cn } from '@slink/utils/ui/index.js';
-
   import {
     type BookmarkButtonSize,
     type BookmarkButtonVariant,
     bookmarkButtonTheme,
     bookmarkCountTheme,
     bookmarkIconTheme,
+    bookmarkTriggerTheme,
   } from './BookmarkButton.theme';
 
   interface Props {
@@ -43,12 +42,6 @@
     tooltipVariant = 'subtle',
     onBookmarkChange,
   }: Props = $props();
-
-  const gapBySize: Record<BookmarkButtonSize, string> = {
-    sm: 'gap-1',
-    md: 'gap-1.5',
-    lg: 'gap-2',
-  };
 
   const currentUser = $derived(page.data.user ?? null);
   const isOwnImage = $derived(currentUser?.id === imageOwnerId);
@@ -148,11 +141,7 @@
     {#snippet triggerChild({ props })}
       <Toolbar.Button
         {...mergeProps(props, { onclick: handleClick })}
-        class={cn(
-          'group/bookmark',
-          gapBySize[size],
-          variant === 'overlay' && 'min-w-7',
-        )}
+        class={bookmarkTriggerTheme({ size, variant })}
         loading={isLoading}
         disabled={isLoading}
         aria-label={tooltipText}

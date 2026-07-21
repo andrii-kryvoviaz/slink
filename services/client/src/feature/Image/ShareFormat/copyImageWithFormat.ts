@@ -22,10 +22,11 @@ async function createShareUrl(id: string): Promise<string> {
 export async function copyImageWithFormat(
   image: { id: string; fileName: string },
   format: ShareFormat,
+  resolveShare: (id: string) => Promise<string> = createShareUrl,
 ): Promise<boolean> {
   const source = {
     content: () => routes.image.view(image.fileName, { absolute: true }),
-    share: () => createShareUrl(image.id),
+    share: () => resolveShare(image.id),
   };
 
   return getShareFormat(format).copy(source, image.fileName);
