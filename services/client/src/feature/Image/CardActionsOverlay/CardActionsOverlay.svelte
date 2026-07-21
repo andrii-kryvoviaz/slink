@@ -26,7 +26,7 @@
 </script>
 
 <div
-  class="absolute top-2 right-2 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 has-[[data-state=open]]:opacity-100 transition-opacity duration-200"
+  class="absolute top-2 right-2 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 focus-within:opacity-100 pointer-coarse:opacity-100 has-[[data-state=open]]:opacity-100 transition-opacity duration-200"
 >
   <StopPropagation>
     <DownloadButton

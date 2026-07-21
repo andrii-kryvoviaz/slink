@@ -1231,6 +1231,8 @@ msgstr "コピー中..."
 msgid "Signing..."
 msgstr "署名中..."
 
+#: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
+#: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Text/CopyContainer/CopyContainer.svelte
 msgid "Copied"

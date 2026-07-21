@@ -1231,6 +1231,8 @@ msgstr "Wird kopiert..."
 msgid "Signing..."
 msgstr "Wird signiert..."
 
+#: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
+#: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Text/CopyContainer/CopyContainer.svelte
 msgid "Copied"

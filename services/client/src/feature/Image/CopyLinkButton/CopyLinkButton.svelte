@@ -30,7 +30,7 @@
   let {
     image,
     size = 'md',
-    variant = 'glass',
+    variant = 'toolbar',
     tooltipVariant = 'subtle',
   }: Props = $props();
 
@@ -44,6 +44,7 @@
   const classes = $derived(
     copyLinkCapsuleVariants({ size, variant, copied: copiedState.active }),
   );
+  const menuTone = $derived(variant === 'toolbar' ? 'dark' : 'default');
 
   const resolveShareUrl = async (): Promise<string> => {
     try {
@@ -84,6 +85,7 @@
     <Tooltip
       side="top"
       sideOffset={6}
+      collisionPadding={8}
       variant={tooltipVariant}
       triggerProps={{ class: classes.trigger() }}
     >
@@ -92,7 +94,8 @@
           class={classes.copy()}
           disabled={isDisabled}
           onclick={() => handleSelect(selectedFormat)}
-          aria-label="Copy link"
+          aria-label={copiedState.active ? 'Copied' : 'Copy link'}
+          aria-live="polite"
         >
           {#if copiedState.active}
             <Icon icon="lucide:check" class={classes.icon()} />
@@ -101,15 +104,15 @@
           {/if}
         </button>
       {/snippet}
-      Copy link
+      {#if copiedState.active}Copied{:else}Copy link{/if}
     </Tooltip>
 
-    <DropdownMenu.Trigger disabled={isDisabled}>
+    <DropdownMenu.Trigger disabled={isCopying}>
       {#snippet child({ props })}
         <button
           {...props}
           class={classes.caret()}
-          disabled={isDisabled}
+          disabled={isCopying}
           aria-label="Copy link format"
         >
           <Icon icon="ph:caret-down" class={classes.caretIcon()} />
@@ -118,5 +121,9 @@
     </DropdownMenu.Trigger>
   </div>
 
-  <ShareFormatMenu selected={selectedFormat} onSelect={handleSelect} />
+  <ShareFormatMenu
+    tone={menuTone}
+    selected={selectedFormat}
+    onSelect={handleSelect}
+  />
 </DropdownMenu.Root>

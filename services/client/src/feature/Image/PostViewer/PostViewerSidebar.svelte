@@ -7,6 +7,10 @@
   import { Badge, FormattedDate } from '@slink/feature/Text';
   import { UserAvatar } from '@slink/feature/User';
   import * as Collapsible from '@slink/ui/components/collapsible';
+  import {
+    GlassToolbar,
+    GlassToolbarDivider,
+  } from '@slink/ui/components/glass-toolbar';
 
   import { page } from '$app/state';
   import Icon from '@iconify/svelte';
@@ -82,38 +86,36 @@
         </Badge>
       </div>
       <div class="flex items-center gap-2 shrink-0">
-        <span
-          class="flex h-7 w-7 items-center justify-center [&>button]:flex [&>button]:h-full [&>button]:w-full [&>button]:items-center [&>button]:justify-center"
-        >
+        <GlassToolbar>
           <DownloadButton
             imageUrl={image.url}
             fileName={image.attributes.fileName}
             size="md"
+            variant="toolbar"
             tooltipVariant="dark"
           />
-        </span>
-        {#if currentUser?.id === image.owner.id}
-          <CopyLinkButton
-            image={{ id: image.id, fileName: image.attributes.fileName }}
-            size="md"
-            variant="glass"
-            tooltipVariant="dark"
-          />
-        {:else if image.attributes.isPublic}
-          <span
-            class="flex h-7 w-7 items-center justify-center [&>button]:flex [&>button]:h-full [&>button]:w-full [&>button]:items-center [&>button]:justify-center"
-          >
+          {#if currentUser?.id === image.owner.id}
+            <GlassToolbarDivider />
+            <CopyLinkButton
+              image={{ id: image.id, fileName: image.attributes.fileName }}
+              size="md"
+              variant="toolbar"
+              tooltipVariant="dark"
+            />
+          {:else if image.attributes.isPublic}
+            <GlassToolbarDivider />
             <BookmarkButton
               imageId={image.id}
               imageOwnerId={image.owner.id}
               isBookmarked={image.isBookmarked}
               bookmarkCount={image.bookmarkCount}
               size="md"
+              variant="toolbar"
               tooltipVariant="dark"
               onBookmarkChange={handleBookmarkChange}
             />
-          </span>
-        {/if}
+          {/if}
+        </GlassToolbar>
       </div>
     </div>
 

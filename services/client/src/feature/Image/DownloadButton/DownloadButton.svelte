@@ -42,7 +42,12 @@
   };
 </script>
 
-<Tooltip side="top" sideOffset={6} variant={tooltipVariant}>
+<Tooltip
+  side="top"
+  sideOffset={6}
+  collisionPadding={8}
+  variant={tooltipVariant}
+>
   {#snippet trigger()}
     <button
       class={downloadButtonTheme({
