@@ -41,26 +41,10 @@ export const copyLinkCapsuleVariants = tv({
       },
     },
     copied: {
-      true: {},
+      true: { copy: 'bg-white/22 text-white' },
       false: {},
     },
   },
-  compoundVariants: [
-    {
-      variant: 'toolbar',
-      copied: true,
-      class: {
-        copy: 'bg-white/22 text-white',
-      },
-    },
-    {
-      variant: 'overlay',
-      copied: true,
-      class: {
-        copy: 'bg-white/22 text-white',
-      },
-    },
-  ],
   defaultVariants: {
     size: 'md',
     variant: 'toolbar',

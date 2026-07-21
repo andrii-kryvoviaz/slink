@@ -234,5 +234,4 @@ export const themeIcons: string[] = [
   'tabler:link',
   'ph:dots-six-vertical',
   'lucide:upload',
-  'group-hover:scale-110',
 ];

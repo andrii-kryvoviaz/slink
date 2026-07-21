@@ -1,19 +1,17 @@
 <script lang="ts">
-  import { ApiClient } from '@slink/api';
   import * as DropdownMenu from '@slink/ui/components/dropdown-menu/index.js';
   import { Tooltip, type TooltipVariant } from '@slink/ui/components/tooltip';
 
   import { page } from '$app/state';
   import { useAutoReset } from '$lib/utils/time/useAutoReset.svelte';
   import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
-  import { routes } from '$lib/utils/url/routes';
   import Icon from '@iconify/svelte';
 
   import type { ShareFormat } from '@slink/lib/settings';
   import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
   import ShareFormatMenu from '../ShareFormat/ShareFormatMenu.svelte';
-  import { getShareFormat } from '../ShareFormat/shareFormats.language';
+  import { copyImageWithFormat } from '../ShareFormat/copyImageWithFormat';
   import {
     type CopyLinkButtonSize,
     type CopyLinkButtonVariant,
@@ -46,28 +44,12 @@
   );
   const menuTone = $derived(variant === 'toolbar' ? 'dark' : 'default');
 
-  const resolveShareUrl = async (): Promise<string> => {
-    try {
-      const share = await ApiClient.image.shareImage(image.id, {});
-      await ApiClient.image.publishShare(share.shareId);
-      return routes.share.fromResponse(share);
-    } catch (error) {
-      toast.error(messages.image.failedToGenerateShareLink);
-      throw error;
-    }
-  };
-
   const handleSelect = async (format: ShareFormat) => {
     settings.share = { format };
 
-    const source = {
-      content: () => routes.image.view(image.fileName, { absolute: true }),
-      share: () => resolveShareUrl(),
-    };
-
     isCopying = true;
     try {
-      if (await getShareFormat(format).copy(source, image.fileName)) {
+      if (await copyImageWithFormat(image, format)) {
         copiedState.trigger();
         return;
       }
