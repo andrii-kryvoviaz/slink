@@ -14,10 +14,8 @@ export const bookmarkButtonTheme = cva(
         default: '',
         subtle:
           'rounded-md px-2 py-1 hover:bg-indigo-50/50 dark:hover:bg-indigo-900/20',
-        overlay:
-          'h-7 min-w-7 justify-center rounded-full px-2.5 bg-black/60 backdrop-blur-sm shadow-lg hover:bg-neutral-700/70',
-        toolbar:
-          'h-full w-9 justify-center rounded-none text-white/70 hover:bg-white/12 hover:text-white',
+        overlay: '',
+        toolbar: '',
       },
       active: {
         true: '',

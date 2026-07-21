@@ -40,7 +40,6 @@
     <StopPropagation>
       <CopyLinkButton
         image={{ id: image.id, fileName: image.fileName }}
-        size="sm"
         variant="overlay"
       />
     </StopPropagation>

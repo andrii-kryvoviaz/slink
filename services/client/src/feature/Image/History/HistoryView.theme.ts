@@ -3,17 +3,6 @@ import { tv } from 'tailwind-variants';
 
 import type { ImageListingItem } from '@slink/api/Response';
 
-import type { ActionButton } from '../ActionBar/ImageActionBar.theme';
-
-export const historyActionBarButtons: ActionButton[] = [
-  'download',
-  'copy',
-  'collection',
-  'tag',
-  'visibility',
-  'delete',
-];
-
 export function createActionBarImage(item: ImageListingItem) {
   return {
     id: item.id,

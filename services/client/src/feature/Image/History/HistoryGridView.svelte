@@ -1,7 +1,7 @@
 <script lang="ts">
   import { StopPropagation } from '@slink/feature/Action';
   import {
-    ImageActionBar,
+    HistoryActionsToolbar,
     ImagePlaceholder,
     ViewCountBadge,
     VisibilityBadge,
@@ -21,7 +21,6 @@
   import {
     actionBarVisibilityVariants,
     createActionBarImage,
-    historyActionBarButtons,
     historyCardVariants,
   } from './HistoryView.theme';
   import type { HistoryViewProps } from './HistoryView.types';
@@ -96,12 +95,9 @@
               selectionMode: isSelectionMode,
             })}
           >
-            <ImageActionBar
+            <HistoryActionsToolbar
               image={createActionBarImage(item)}
-              buttons={historyActionBarButtons}
               on={actionHandlers}
-              compact
-              responsive
             />
           </div>
         </StopPropagation>

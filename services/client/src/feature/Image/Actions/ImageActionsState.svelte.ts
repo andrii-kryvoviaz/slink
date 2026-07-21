@@ -25,7 +25,6 @@ import {
 import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
 import { getShareFormat } from '../ShareFormat/shareFormats.language';
-import type { ActionButton } from './ImageActionBar.theme';
 
 export interface ImageActionsConfig {
   getImage: () => {
@@ -171,12 +170,9 @@ export class ImageActionsState {
     return this._createTagModalState;
   }
 
-  filterVisibleButtons = (buttons: ActionButton[]): ActionButton[] => {
-    return buttons.filter((button) => {
-      if (button === 'visibility' && this._allowOnlyPublicImages) return false;
-      return true;
-    });
-  };
+  get visibilityAllowed(): boolean {
+    return !this._allowOnlyPublicImages;
+  }
 
   handleDownload = (): void => {
     this._overlays.close();

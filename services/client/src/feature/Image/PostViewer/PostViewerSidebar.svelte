@@ -7,10 +7,7 @@
   import { Badge, FormattedDate } from '@slink/feature/Text';
   import { UserAvatar } from '@slink/feature/User';
   import * as Collapsible from '@slink/ui/components/collapsible';
-  import {
-    GlassToolbar,
-    GlassToolbarDivider,
-  } from '@slink/ui/components/glass-toolbar';
+  import * as Toolbar from '@slink/ui/components/toolbar';
 
   import { page } from '$app/state';
   import Icon from '@iconify/svelte';
@@ -86,7 +83,7 @@
         </Badge>
       </div>
       <div class="flex items-center gap-2 shrink-0">
-        <GlassToolbar>
+        <Toolbar.Root>
           <DownloadButton
             imageUrl={image.url}
             fileName={image.attributes.fileName}
@@ -95,15 +92,14 @@
             tooltipVariant="dark"
           />
           {#if currentUser?.id === image.owner.id}
-            <GlassToolbarDivider />
+            <Toolbar.Separator />
             <CopyLinkButton
               image={{ id: image.id, fileName: image.attributes.fileName }}
-              size="md"
               variant="toolbar"
               tooltipVariant="dark"
             />
           {:else if image.attributes.isPublic}
-            <GlassToolbarDivider />
+            <Toolbar.Separator />
             <BookmarkButton
               imageId={image.id}
               imageOwnerId={image.owner.id}
@@ -115,7 +111,7 @@
               onBookmarkChange={handleBookmarkChange}
             />
           {/if}
-        </GlassToolbar>
+        </Toolbar.Root>
       </div>
     </div>
 
