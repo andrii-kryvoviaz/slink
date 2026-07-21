@@ -9,10 +9,10 @@ test.describe('Explore card copy link', () => {
     api,
     explorePage,
   }) => {
-    await api.content.uploadImage({ isPublic: true });
+    const imageId = await api.content.uploadImage({ isPublic: true });
 
     await explorePage.goto();
-    const card = explorePage.feedItems.first();
+    const card = explorePage.cardFor(imageId);
     await card.waitFor({ state: 'visible' });
     await card.hover();
 
@@ -27,10 +27,10 @@ test.describe('Explore card copy link', () => {
     actor,
   }) => {
     const owner = await actor('owner');
-    await owner.content.uploadImage({ isPublic: true });
+    const imageId = await owner.content.uploadImage({ isPublic: true });
 
     await explorePage.goto();
-    const card = explorePage.feedItems.first();
+    const card = explorePage.cardFor(imageId);
     await card.waitFor({ state: 'visible' });
     await card.hover();
 
@@ -48,7 +48,7 @@ test.describe('Explore card copy link', () => {
     const imageId = await api.content.uploadImage({ isPublic: true });
 
     await explorePage.goto();
-    const card = explorePage.feedItems.first();
+    const card = explorePage.cardFor(imageId);
     await card.waitFor({ state: 'visible' });
     await card.hover();
 
@@ -76,7 +76,7 @@ test.describe('Explore card copy link', () => {
     await shared;
     await published;
 
-    await expect(copyButton).toHaveAttribute('aria-label', 'Copied');
+    await expect(card.getByRole('button', { name: 'Copied' })).toBeVisible();
 
     const clipboardText = await page.evaluate(() =>
       navigator.clipboard.readText(),

@@ -29,7 +29,7 @@ test.describe('Post viewer copy link', () => {
     await expect(markdownItem).toBeVisible();
     await markdownItem.click();
 
-    await expect(copyButton).toHaveAttribute('aria-label', 'Copied');
+    await expect(item.getByRole('button', { name: 'Copied' })).toBeVisible();
 
     const clipboardText = await page.evaluate(() =>
       navigator.clipboard.readText(),

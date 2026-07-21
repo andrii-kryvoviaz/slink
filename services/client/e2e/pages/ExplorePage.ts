@@ -55,6 +55,12 @@ export class ExplorePage extends BasePage {
     await item.click();
   }
 
+  cardFor(imageId: string) {
+    return this.feedItems.filter({
+      has: this.page.locator(`img[src*="${imageId}"]`),
+    });
+  }
+
   async openFirstItem() {
     const first = this.feedItems.first();
     await first.waitFor({ state: 'visible' });
