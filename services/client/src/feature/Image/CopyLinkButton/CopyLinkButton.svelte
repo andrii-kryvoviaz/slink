@@ -35,7 +35,6 @@
   const isDisabled = $derived(isCopying || copiedState.active);
 
   const classes = $derived(copyLinkIconVariants({ variant }));
-  const menuTone = $derived(variant === 'toolbar' ? 'dark' : 'default');
 
   const handleCopy = async (format: ShareFormat) => {
     isCopying = true;
@@ -54,11 +53,7 @@
 </script>
 
 <Toolbar.Group>
-  <SplitCopyControl
-    tone={menuTone}
-    caretDisabled={isCopying}
-    onCopy={handleCopy}
-  >
+  <SplitCopyControl tone="dark" caretDisabled={isCopying} onCopy={handleCopy}>
     {#snippet main({ selectedFormat, select })}
       <Tooltip
         side="top"
