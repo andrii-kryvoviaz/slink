@@ -892,10 +892,10 @@ msgid "Only own images can be added"
 msgstr "Można dodawać tylko własne obrazy"
 
 #: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/ImageCollectionAction/ImageCollectionAction.svelte
+#: src/feature/Image/Actions/ImageCollectionAction/ImageCollectionAction.svelte
+#: src/feature/Image/Actions/ImageCollectionAction/ImageCollectionAction.svelte
+#: src/feature/Image/Actions/ImageCollectionAction/ImageCollectionAction.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 msgid "Add to collection"
@@ -943,62 +943,64 @@ msgstr "Potwierdź"
 msgid "Image will remain in your library"
 msgstr "Obraz pozostanie w Twojej bibliotece"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/DownloadZoneAction/DownloadZoneAction.svelte
+#: src/feature/Image/DownloadButton/DownloadButton.svelte
 #: src/feature/Image/DownloadButton/DownloadButton.svelte
 msgid "Download image"
 msgstr "Pobierz obraz"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/DownloadZoneAction/DownloadZoneAction.svelte
+#: src/feature/Image/Actions/DownloadZoneAction/DownloadZoneAction.svelte
+#: src/feature/Image/DownloadButton/DownloadButton.svelte
 #: src/feature/Image/DownloadButton/DownloadButton.svelte
 #: src/feature/Image/History/Actions/DownloadAction.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 msgid "Download"
 msgstr "Pobierz"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/ImageDeleteAction/ImageDeleteAction.svelte
+#: src/feature/Image/Actions/ImageDeleteAction/ImageDeleteAction.svelte
+#: src/feature/Image/Actions/ImageDeleteAction/ImageDeleteAction.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 msgid "Delete image"
 msgstr "Usuń obraz"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/ImageTagAction/ImageTagAction.svelte
+#: src/feature/Image/Actions/ImageTagAction/ImageTagAction.svelte
+#: src/feature/Image/Actions/ImageTagAction/ImageTagAction.svelte
+#: src/feature/Image/Actions/ImageTagAction/ImageTagAction.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 msgid "Manage tags"
 msgstr "Zarządzaj tagami"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/HistoryActionsToolbar/HistoryActionsToolbar.svelte
+#: src/feature/Image/Actions/HistoryActionsToolbar/HistoryActionsToolbar.svelte
+#: src/feature/Image/Actions/ImageOverflowAction/ImageOverflowAction.svelte
 #: src/feature/Image/AdminImageDropdown/AdminImageDropdown.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
+#: src/routes/info/[id]/+page.svelte
 msgid "Image actions"
 msgstr "Akcje obrazu"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/CopyZoneAction/CopyZoneAction.svelte
 msgid "Generating..."
 msgstr "Generowanie..."
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/CopyZoneAction/CopyZoneAction.svelte
 #: src/feature/Text/CopyableText/CopyableText.svelte
 #: src/feature/Text/CopyableText/CopyableText.svelte
 msgid "Copied!"
 msgstr "Skopiowano!"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/ImageVisibilityAction/ImageVisibilityAction.svelte
+#: src/feature/Image/Actions/ImageVisibilityAction/ImageVisibilityAction.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 msgid "Make private"
 msgstr "Ustaw jako prywatny"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/ImageVisibilityAction/ImageVisibilityAction.svelte
+#: src/feature/Image/Actions/ImageVisibilityAction/ImageVisibilityAction.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 msgid "Make public"
 msgstr "Ustaw jako publiczny"
@@ -1232,12 +1234,14 @@ msgstr "Kopiowanie..."
 msgid "Signing..."
 msgstr "Podpisywanie..."
 
+#: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
+#: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Text/CopyContainer/CopyContainer.svelte
 msgid "Copied"
 msgstr "Skopiowano"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/CopyZoneAction/CopyZoneAction.svelte
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Text/CopyContainer/CopyContainer.svelte
 msgid "Copy"
@@ -4016,7 +4020,9 @@ msgstr "Publikacje"
 msgid "Share actions"
 msgstr "Akcje publikacji"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/CopyZoneAction/CopyZoneAction.svelte
+#: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
+#: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 #: src/feature/Share/Controls/List.svelte
 msgid "Copy link"
@@ -4309,7 +4315,7 @@ msgstr "dodał(a) do zakładek"
 msgid "interacted"
 msgstr "wszedł(a) w interakcję"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/CopyZoneAction/CopyZoneAction.svelte
 msgid "Copy image link"
 msgstr "Kopiuj link do obrazu"
 
@@ -4808,7 +4814,7 @@ msgstr "BB"
 msgid "HTML"
 msgstr "HTML"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/CopyZoneAction/CopyZoneAction.svelte
 msgid "Copy link options"
 msgstr "Opcje kopiowania linku"
 
@@ -5140,3 +5146,6 @@ msgstr "Plik jest zbyt duży. Dozwolony maksymalny rozmiar to {limit}."
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "An empty file is not allowed."
 msgstr "Pusty plik jest niedozwolony."
+#: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
+msgid "Copy link format"
+msgstr "Wybierz format linku"

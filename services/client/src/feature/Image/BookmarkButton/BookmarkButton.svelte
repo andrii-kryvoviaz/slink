@@ -1,6 +1,8 @@
 <script lang="ts">
   import { ApiClient } from '@slink/api';
+  import * as Toolbar from '@slink/ui/components/toolbar';
   import { Tooltip, type TooltipVariant } from '@slink/ui/components/tooltip';
+  import { mergeProps } from 'bits-ui';
 
   import { page } from '$app/state';
   import { toast } from '$lib/utils/ui/toast-sonner.svelte.js';
@@ -14,6 +16,7 @@
     bookmarkButtonTheme,
     bookmarkCountTheme,
     bookmarkIconTheme,
+    bookmarkTriggerTheme,
   } from './BookmarkButton.theme';
 
   interface Props {
@@ -102,51 +105,71 @@
   );
 </script>
 
-<Tooltip side="top" sideOffset={6} variant={tooltipVariant}>
-  {#snippet trigger()}
-    <button
-      class={bookmarkButtonTheme({
-        size,
-        variant,
-        active: isBookmarked,
-        loading: isLoading,
-      })}
-      onclick={handleClick}
-      disabled={isLoading}
-      aria-label={tooltipText}
-      aria-pressed={isBookmarked}
-    >
-      <span class="relative flex items-center justify-center">
-        {#if isBookmarked}
-          <Icon
-            icon="ph:bookmark-simple-fill"
-            class={bookmarkIconTheme({
-              size,
-              variant,
-              active: true,
-              loading: isLoading,
-            })}
-          />
-        {:else}
-          <Icon
-            icon="ph:bookmark-simple"
-            class={bookmarkIconTheme({
-              size,
-              variant,
-              active: false,
-              loading: isLoading,
-            })}
-          />
-        {/if}
-      </span>
-      {#if showCount && bookmarkCount > 0}
-        <span
-          class={bookmarkCountTheme({ size, variant, active: isBookmarked })}
-        >
-          {bookmarkCount}
-        </span>
-      {/if}
-    </button>
-  {/snippet}
-  {tooltipText}
-</Tooltip>
+{#snippet content()}
+  <span class="relative flex items-center justify-center">
+    {#if isBookmarked}
+      <Icon
+        icon="ph:bookmark-simple-fill"
+        class={bookmarkIconTheme({
+          size,
+          variant,
+          active: true,
+          loading: isLoading,
+        })}
+      />
+    {:else}
+      <Icon
+        icon="ph:bookmark-simple"
+        class={bookmarkIconTheme({
+          size,
+          variant,
+          active: false,
+          loading: isLoading,
+        })}
+      />
+    {/if}
+  </span>
+  {#if showCount && bookmarkCount > 0}
+    <span class={bookmarkCountTheme({ size, variant, active: isBookmarked })}>
+      {bookmarkCount}
+    </span>
+  {/if}
+{/snippet}
+
+{#if variant === 'toolbar' || variant === 'overlay'}
+  <Tooltip side="top" sideOffset={6} variant={tooltipVariant}>
+    {#snippet triggerChild({ props })}
+      <Toolbar.Button
+        {...mergeProps(props, { onclick: handleClick })}
+        class={bookmarkTriggerTheme({ size, variant })}
+        loading={isLoading}
+        disabled={isLoading}
+        aria-label={tooltipText}
+        aria-pressed={isBookmarked}
+      >
+        {@render content()}
+      </Toolbar.Button>
+    {/snippet}
+    {tooltipText}
+  </Tooltip>
+{:else}
+  <Tooltip side="top" sideOffset={6} variant={tooltipVariant}>
+    {#snippet trigger()}
+      <button
+        class={bookmarkButtonTheme({
+          size,
+          variant,
+          active: isBookmarked,
+          loading: isLoading,
+        })}
+        onclick={handleClick}
+        disabled={isLoading}
+        aria-label={tooltipText}
+        aria-pressed={isBookmarked}
+      >
+        {@render content()}
+      </button>
+    {/snippet}
+    {tooltipText}
+  </Tooltip>
+{/if}

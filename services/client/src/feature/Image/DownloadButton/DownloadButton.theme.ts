@@ -1,7 +1,8 @@
 import { cva } from 'class-variance-authority';
+import { tv } from 'tailwind-variants';
 
 export const downloadButtonTheme = cva(
-  'group/download relative inline-flex items-center select-none transition-all duration-200',
+  'group/download relative inline-flex items-center select-none transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-slate-400/70',
   {
     variants: {
       size: {
@@ -13,25 +14,14 @@ export const downloadButtonTheme = cva(
         default: '',
         subtle:
           'rounded-md px-2 py-1 hover:bg-indigo-50/50 dark:hover:bg-indigo-900/20',
-        overlay: 'rounded-full px-2.5 py-1 backdrop-blur-sm shadow-lg',
+        overlay: '',
+        toolbar: '',
       },
       loading: {
         true: 'pointer-events-none opacity-70',
         false: 'cursor-pointer',
       },
     },
-    compoundVariants: [
-      {
-        variant: 'overlay',
-        loading: false,
-        class: 'bg-black/60 hover:bg-indigo-600/80 dark:hover:bg-indigo-500/80',
-      },
-      {
-        variant: 'overlay',
-        loading: true,
-        class: 'bg-black/60',
-      },
-    ],
     defaultVariants: {
       size: 'md',
       variant: 'default',
@@ -40,7 +30,8 @@ export const downloadButtonTheme = cva(
   },
 );
 
-export const downloadIconTheme = cva('transition-all duration-200', {
+export const downloadIconTheme = tv({
+  base: 'transition-all duration-200',
   variants: {
     size: {
       sm: 'w-4 h-4',
@@ -51,10 +42,11 @@ export const downloadIconTheme = cva('transition-all duration-200', {
       default: '',
       subtle: '',
       overlay: '',
+      toolbar: 'h-4 w-4',
     },
     loading: {
       true: '',
-      false: 'group-hover/download:scale-110',
+      false: '',
     },
   },
   compoundVariants: [
@@ -62,18 +54,19 @@ export const downloadIconTheme = cva('transition-all duration-200', {
       variant: 'default',
       loading: false,
       class:
-        'text-gray-400 dark:text-gray-500 group-hover/download:text-indigo-500 dark:group-hover/download:text-indigo-400',
+        'group-hover/download:scale-110 text-gray-400 dark:text-gray-500 group-hover/download:text-indigo-500 dark:group-hover/download:text-indigo-400',
     },
     {
       variant: 'subtle',
       loading: false,
       class:
-        'text-gray-400 dark:text-gray-500 group-hover/download:text-indigo-500 dark:group-hover/download:text-indigo-400',
+        'group-hover/download:scale-110 text-gray-400 dark:text-gray-500 group-hover/download:text-indigo-500 dark:group-hover/download:text-indigo-400',
     },
     {
       variant: 'overlay',
       loading: false,
-      class: 'text-white/80 group-hover/download:text-white',
+      class:
+        'group-hover/download:scale-110 text-white/80 group-hover/download:text-white',
     },
     {
       variant: 'default',
@@ -99,4 +92,5 @@ export const downloadIconTheme = cva('transition-all duration-200', {
 });
 
 export type DownloadButtonSize = 'sm' | 'md' | 'lg';
-export type DownloadButtonVariant = 'default' | 'subtle' | 'overlay';
+export type DownloadButtonVariant =
+  'default' | 'subtle' | 'overlay' | 'toolbar';

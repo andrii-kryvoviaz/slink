@@ -2,14 +2,13 @@
   import { LoadMoreButton, StopPropagation } from '@slink/feature/Action';
   import {
     AdminImageDropdown,
+    CardActionsOverlay,
     DimensionsBadge,
-    DownloadButton,
     ImagePlaceholder,
     LicenseInfo,
     PostViewer,
     ViewCountBadge,
   } from '@slink/feature/Image';
-  import BookmarkButton from '@slink/feature/Image/BookmarkButton/BookmarkButton.svelte';
   import { calculateImageCardWeight } from '@slink/feature/Image/utils/calculateImageCardWeight';
   import { Masonry } from '@slink/feature/Layout';
   import { EmptyState, GhostGrid } from '@slink/feature/Layout';
@@ -212,37 +211,24 @@
                 </div>
               {/if}
 
-              <div
-                class="absolute top-2 right-2 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-              >
-                <StopPropagation>
-                  <DownloadButton
-                    imageUrl={image.url}
-                    fileName={image.attributes.fileName}
-                    size="sm"
-                    variant="overlay"
-                  />
-                </StopPropagation>
-                <StopPropagation>
-                  <BookmarkButton
-                    imageId={image.id}
-                    imageOwnerId={image.owner.id}
-                    isBookmarked={image.isBookmarked}
-                    bookmarkCount={image.bookmarkCount}
-                    size="sm"
-                    variant="overlay"
-                    onBookmarkChange={(
-                      newIsBookmarked: boolean,
-                      count: number,
-                    ) => {
-                      publicFeedState.updateItem(image, {
-                        isBookmarked: newIsBookmarked,
-                        bookmarkCount: count,
-                      });
-                    }}
-                  />
-                </StopPropagation>
-              </div>
+              <CardActionsOverlay
+                image={{
+                  id: image.id,
+                  fileName: image.attributes.fileName,
+                  url: image.url,
+                  ownerId: image.owner.id,
+                }}
+                bookmark={{
+                  isBookmarked: image.isBookmarked,
+                  count: image.bookmarkCount,
+                  onChange: (isBookmarked, count) => {
+                    publicFeedState.updateItem(image, {
+                      isBookmarked,
+                      bookmarkCount: count,
+                    });
+                  },
+                }}
+              />
             </div>
 
             <div class="p-3">

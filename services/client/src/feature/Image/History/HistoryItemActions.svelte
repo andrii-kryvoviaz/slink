@@ -1,6 +1,6 @@
 <script lang="ts">
   import { StopPropagation } from '@slink/feature/Action';
-  import { ImageActionBar } from '@slink/feature/Image';
+  import { HistoryActionsToolbar } from '@slink/feature/Image';
 
   import type { Tag } from '@slink/api/Resources/TagResource';
   import type { ImageListingItem } from '@slink/api/Response';
@@ -9,7 +9,6 @@
   import HistoryActionsMenu from './HistoryActionsMenu.svelte';
   import {
     createActionBarImage,
-    historyActionBarButtons,
     historyItemActionsVariants,
   } from './HistoryView.theme';
 
@@ -44,13 +43,7 @@
 
 <StopPropagation>
   <div class={theme.bar()}>
-    <ImageActionBar
-      {image}
-      buttons={historyActionBarButtons}
-      {on}
-      compact
-      responsive={layout === 'table'}
-    />
+    <HistoryActionsToolbar {image} {on} responsive={layout === 'table'} />
   </div>
   {#if layout === 'list'}
     <div class={theme.menu()}>

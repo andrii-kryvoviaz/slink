@@ -24,8 +24,7 @@ import {
 } from '@slink/lib/state/ImagePickerState.svelte';
 import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
-import { getShareFormat } from '../ShareFormat/shareFormats.language';
-import type { ActionButton } from './ImageActionBar.theme';
+import { copyImageWithFormat } from '../ShareFormat/copyImageWithFormat';
 
 export interface ImageActionsConfig {
   getImage: () => {
@@ -171,12 +170,9 @@ export class ImageActionsState {
     return this._createTagModalState;
   }
 
-  filterVisibleButtons = (buttons: ActionButton[]): ActionButton[] => {
-    return buttons.filter((button) => {
-      if (button === 'visibility' && this._allowOnlyPublicImages) return false;
-      return true;
-    });
-  };
+  get visibilityAllowed(): boolean {
+    return !this._allowOnlyPublicImages;
+  }
 
   handleDownload = (): void => {
     this._overlays.close();
@@ -217,14 +213,9 @@ export class ImageActionsState {
   handleCopy = async (format: ShareFormat): Promise<void> => {
     this._overlays.close();
     const image = this._config.getImage();
-    const descriptor = getShareFormat(format);
-    const source = {
-      content: () => routes.image.view(image.fileName, { absolute: true }),
-      share: () => this._resolveShareUrl(image.id),
-    };
 
     try {
-      if (await descriptor.copy(source, image.fileName)) {
+      if (await copyImageWithFormat(image, format, this._resolveShareUrl)) {
         this._isCopied.trigger();
         return;
       }

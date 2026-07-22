@@ -1,7 +1,8 @@
 import { cva } from 'class-variance-authority';
+import { tv } from 'tailwind-variants';
 
 export const bookmarkButtonTheme = cva(
-  'group/bookmark relative inline-flex items-center select-none transition-all duration-200',
+  'group/bookmark relative inline-flex items-center select-none transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-slate-400/70',
   {
     variants: {
       size: {
@@ -13,7 +14,8 @@ export const bookmarkButtonTheme = cva(
         default: '',
         subtle:
           'rounded-md px-2 py-1 hover:bg-indigo-50/50 dark:hover:bg-indigo-900/20',
-        overlay: 'rounded-full px-2.5 py-1 backdrop-blur-sm shadow-lg',
+        overlay: '',
+        toolbar: '',
       },
       active: {
         true: '',
@@ -24,19 +26,6 @@ export const bookmarkButtonTheme = cva(
         false: 'cursor-pointer',
       },
     },
-    compoundVariants: [
-      {
-        variant: 'overlay',
-        active: true,
-        class:
-          'bg-indigo-600/80 hover:bg-indigo-600/90 dark:bg-indigo-500/80 dark:hover:bg-indigo-500/90',
-      },
-      {
-        variant: 'overlay',
-        active: false,
-        class: 'bg-black/60 hover:bg-black/70',
-      },
-    ],
     defaultVariants: {
       size: 'md',
       variant: 'default',
@@ -46,7 +35,28 @@ export const bookmarkButtonTheme = cva(
   },
 );
 
-export const bookmarkIconTheme = cva('transition-all duration-200', {
+export const bookmarkTriggerTheme = cva('group/bookmark', {
+  variants: {
+    size: {
+      sm: 'gap-1',
+      md: 'gap-1.5',
+      lg: 'gap-2',
+    },
+    variant: {
+      default: '',
+      subtle: '',
+      overlay: 'min-w-7',
+      toolbar: '',
+    },
+  },
+  defaultVariants: {
+    size: 'md',
+    variant: 'default',
+  },
+});
+
+export const bookmarkIconTheme = tv({
+  base: 'transition-all duration-200',
   variants: {
     size: {
       sm: 'w-4 h-4',
@@ -57,6 +67,7 @@ export const bookmarkIconTheme = cva('transition-all duration-200', {
       default: '',
       subtle: '',
       overlay: '',
+      toolbar: 'h-4 w-4',
     },
     active: {
       true: '',
@@ -64,10 +75,25 @@ export const bookmarkIconTheme = cva('transition-all duration-200', {
     },
     loading: {
       true: '',
-      false: 'group-hover/bookmark:scale-110',
+      false: '',
     },
   },
   compoundVariants: [
+    {
+      variant: 'default',
+      loading: false,
+      class: 'group-hover/bookmark:scale-110',
+    },
+    {
+      variant: 'subtle',
+      loading: false,
+      class: 'group-hover/bookmark:scale-110',
+    },
+    {
+      variant: 'overlay',
+      loading: false,
+      class: 'group-hover/bookmark:scale-110',
+    },
     {
       variant: 'default',
       active: true,
@@ -94,7 +120,7 @@ export const bookmarkIconTheme = cva('transition-all duration-200', {
     {
       variant: 'overlay',
       active: false,
-      class: 'text-white/80 group-hover/bookmark:text-white',
+      class: 'text-white/80 group-hover/bookmark:text-indigo-400',
     },
   ],
   defaultVariants: {
@@ -118,6 +144,7 @@ export const bookmarkCountTheme = cva(
         default: '',
         subtle: '',
         overlay: '',
+        toolbar: '',
       },
       active: {
         true: '',
@@ -157,4 +184,5 @@ export const bookmarkCountTheme = cva(
 );
 
 export type BookmarkButtonSize = 'sm' | 'md' | 'lg';
-export type BookmarkButtonVariant = 'default' | 'subtle' | 'overlay';
+export type BookmarkButtonVariant =
+  'default' | 'subtle' | 'overlay' | 'toolbar';

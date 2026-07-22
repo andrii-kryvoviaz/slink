@@ -55,7 +55,6 @@ export const shareCapsuleVariants = tv({
         capsule:
           'flex-1 rounded-xl shadow-sm transition-shadow hover:shadow-md',
         download: 'h-auto min-w-0 flex-1 gap-2 px-5 py-2.5 text-sm',
-        copy: 'h-auto gap-2 px-4 py-2.5 text-sm',
         downloadIcon: 'h-5 w-5',
       },
     },
@@ -72,23 +71,11 @@ export const shareCapsuleVariants = tv({
   },
 });
 
-export const responsiveTierVariants = tv({
-  slots: {
-    full: '@max-[20rem]:hidden',
-    compact: '@[20rem]:hidden',
-  },
-});
-
 export const iconSizeVariants = cva('', {
   variants: {
     layout: {
       default: 'h-3.5 w-3.5',
       hero: 'h-4 w-4',
-    },
-    size: {
-      sm: 'h-3.5 w-3.5',
-      md: 'h-4 w-4',
-      lg: 'h-5 w-5',
     },
   },
   defaultVariants: {
@@ -96,6 +83,4 @@ export const iconSizeVariants = cva('', {
   },
 });
 
-export type ActionButton =
-  'download' | 'visibility' | 'delete' | 'copy' | 'collection' | 'tag';
 export type ActionLayout = 'default' | 'hero';

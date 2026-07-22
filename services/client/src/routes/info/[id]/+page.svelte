@@ -2,11 +2,17 @@
   import { ImageCollectionList } from '@slink/feature/Collection';
   import {
     BookmarkersPanel,
-    ImageActionBar,
+    DownloadZoneAction,
+    ImageActions,
+    ImageCollectionAction,
+    ImageDeleteAction,
     ImageDescription,
     ImagePlaceholder,
     ImageSharesPanel,
     ImageSizePicker,
+    ImageTagAction,
+    ImageVisibilityAction,
+    ShareCapsule,
     ViewCountBadge,
     VisibilityBadge,
   } from '@slink/feature/Image';
@@ -92,15 +98,33 @@
         </div>
       </div>
       <div class="mt-4">
-        <ImageActionBar
+        <ImageActions
           bind:image={state.actionBarImage}
-          buttons={['download', 'collection', 'tag', 'visibility', 'delete']}
           layout="hero"
           on={{
             tagChange: state.handleTagChange,
             collectionChange: state.handleCollectionChange,
           }}
-        />
+        >
+          <div
+            class="flex items-center gap-3"
+            role="toolbar"
+            aria-label="Image actions"
+          >
+            <ShareCapsule>
+              <DownloadZoneAction />
+            </ShareCapsule>
+            <div class="flex items-center gap-1">
+              <ImageCollectionAction />
+              <ImageTagAction />
+              <ImageVisibilityAction />
+              <div
+                class="w-px h-[18px] bg-gray-200 dark:bg-gray-700 mx-0.5"
+              ></div>
+              <ImageDeleteAction />
+            </div>
+          </div>
+        </ImageActions>
       </div>
       {#if state.imageTags.length > 0 || state.imageCollections.length > 0}
         <div class="mt-4 flex flex-col gap-2">

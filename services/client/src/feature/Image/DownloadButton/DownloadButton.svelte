@@ -1,5 +1,7 @@
 <script lang="ts">
+  import * as Toolbar from '@slink/ui/components/toolbar';
   import { Tooltip, type TooltipVariant } from '@slink/ui/components/tooltip';
+  import { mergeProps } from 'bits-ui';
 
   import { downloadByLink } from '$lib/utils/http/downloadByLink';
   import { useAutoReset } from '$lib/utils/time/useAutoReset.svelte';
@@ -42,29 +44,60 @@
   };
 </script>
 
-<Tooltip side="top" sideOffset={6} variant={tooltipVariant}>
-  {#snippet trigger()}
-    <button
-      class={downloadButtonTheme({
+{#snippet content()}
+  <span class="relative flex items-center justify-center">
+    <Icon
+      icon="ph:download-simple"
+      class={downloadIconTheme({
         size,
         variant,
         loading: loadingState.active,
       })}
-      onclick={handleClick}
-      disabled={loadingState.active}
-      aria-label="Download image"
-    >
-      <span class="relative flex items-center justify-center">
-        <Icon
-          icon="ph:download-simple"
-          class={downloadIconTheme({
-            size,
-            variant,
-            loading: loadingState.active,
-          })}
-        />
-      </span>
-    </button>
-  {/snippet}
-  Download
-</Tooltip>
+    />
+  </span>
+{/snippet}
+
+{#if variant === 'toolbar' || variant === 'overlay'}
+  <Tooltip
+    side="top"
+    sideOffset={6}
+    collisionPadding={8}
+    variant={tooltipVariant}
+  >
+    {#snippet triggerChild({ props })}
+      <Toolbar.Button
+        {...mergeProps(props, { onclick: handleClick })}
+        class="group/download"
+        loading={loadingState.active}
+        disabled={loadingState.active}
+        aria-label="Download image"
+      >
+        {@render content()}
+      </Toolbar.Button>
+    {/snippet}
+    Download
+  </Tooltip>
+{:else}
+  <Tooltip
+    side="top"
+    sideOffset={6}
+    collisionPadding={8}
+    variant={tooltipVariant}
+  >
+    {#snippet trigger()}
+      <button
+        class={downloadButtonTheme({
+          size,
+          variant,
+          loading: loadingState.active,
+        })}
+        onclick={handleClick}
+        disabled={loadingState.active}
+        aria-label="Download image"
+      >
+        {@render content()}
+      </button>
+    {/snippet}
+    Download
+  </Tooltip>
+{/if}

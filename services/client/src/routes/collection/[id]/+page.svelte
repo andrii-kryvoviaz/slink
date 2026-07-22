@@ -1,13 +1,13 @@
 <script lang="ts">
   import { ApiClient } from '@slink/api';
-  import { LoadMoreButton, StopPropagation } from '@slink/feature/Action';
+  import { LoadMoreButton } from '@slink/feature/Action';
   import {
     CollectionItemDropdown,
     CollectionViewPreferences,
   } from '@slink/feature/Collection';
   import {
+    CardActionsOverlay,
     DimensionsBadge,
-    DownloadButton,
     ImagePlaceholder,
     LicenseInfo,
     PostViewer,
@@ -423,19 +423,14 @@
                   </div>
                 {/if}
 
-                <div
-                  class="absolute top-2 right-2 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                >
-                  <StopPropagation>
-                    <DownloadButton
-                      imageUrl={item.url ??
-                        `/image/${image.attributes.fileName}`}
-                      fileName={image.attributes.fileName}
-                      size="sm"
-                      variant="overlay"
-                    />
-                  </StopPropagation>
-                </div>
+                <CardActionsOverlay
+                  image={{
+                    id: image.id,
+                    fileName: image.attributes.fileName,
+                    url: item.url ?? `/image/${image.attributes.fileName}`,
+                    ownerId: image.owner.id,
+                  }}
+                />
               </div>
 
               <div class="p-3">
