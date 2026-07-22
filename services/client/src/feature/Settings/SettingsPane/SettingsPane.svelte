@@ -62,7 +62,7 @@
     </div>
   </div>
 
-  <form onsubmit={handleSubmit}>
+  <form method="POST" onsubmit={handleSubmit}>
     <div
       class="divide-y divide-gray-100 dark:divide-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 overflow-hidden"
     >
