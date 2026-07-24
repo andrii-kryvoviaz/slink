@@ -51,7 +51,6 @@
 
 <svelte:head>
   <title>Users | Slink Admin</title>
-  <meta name="description" content="Manage user accounts and permissions" />
 </svelte:head>
 
 <div class="min-h-full p-6 w-full" use:skeleton={{ feed: userFeedState }}>

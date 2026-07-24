@@ -95,10 +95,6 @@
 
 <svelte:head>
   <title>FAQ | Slink</title>
-  <meta
-    name="description"
-    content="Frequently asked questions about Slink - image sharing platform"
-  />
 </svelte:head>
 
 <div class="min-h-full">

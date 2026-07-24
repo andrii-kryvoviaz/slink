@@ -8,6 +8,9 @@ class Customization {
     this._settings?.siteDescription || 'Fast and secure image sharing service',
   );
   logoUrl = $derived(this._settings?.logoUrl || '/favicon.png');
+  appleTouchIconUrl = $derived(
+    this._settings?.logoUrl || '/icons/icon-192x192.png',
+  );
 }
 
 export const customization = new Customization();

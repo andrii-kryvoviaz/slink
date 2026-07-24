@@ -53,6 +53,7 @@
   <meta name="description" content={customization.siteDescription} />
   <meta name="apple-mobile-web-app-title" content={customization.siteName} />
   <link rel="icon" href={customization.logoUrl} />
+  <link rel="apple-touch-icon" href={customization.appleTouchIconUrl} />
 </svelte:head>
 
 <div class="relative flex h-screen" use:theme={settings.theme.current}>
