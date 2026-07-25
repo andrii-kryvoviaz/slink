@@ -28,6 +28,59 @@ export class CollectionsPage extends BasePage {
     return this.page.getByRole('heading', { name: 'Collections', exact: true });
   }
 
+  get deleteMenuItem() {
+    return this.page.getByRole('menuitem', { name: 'Delete', exact: true });
+  }
+
+  get deleteConfirmationHeading() {
+    return this.page.getByRole('heading', {
+      name: 'Delete Collection',
+      exact: true,
+    });
+  }
+
+  get deleteImagesSwitch() {
+    return this.page
+      .locator('label', { hasText: 'Also delete images' })
+      .getByRole('switch');
+  }
+
+  get confirmDeleteButton() {
+    return this.page.getByRole('button', { name: 'Delete', exact: true });
+  }
+
+  rowFor(collectionId: string) {
+    return this.page.getByRole('row').filter({
+      has: this.page.locator(`a[href="/collection/${collectionId}"]`),
+    });
+  }
+
+  actionsTrigger(collectionId: string) {
+    return this.rowFor(collectionId).getByLabel('Collection actions');
+  }
+
+  async openDeleteConfirmation(collectionId: string) {
+    await this.clickUntil(
+      this.actionsTrigger(collectionId),
+      this.deleteMenuItem,
+    );
+    await this.deleteMenuItem.click();
+    await expect(this.deleteConfirmationHeading).toBeVisible();
+  }
+
+  async confirmDelete() {
+    const deleted = this.page.waitForResponse(
+      (response) =>
+        response.request().method() === 'DELETE' &&
+        response.url().includes('/api/collection'),
+    );
+
+    await this.confirmDeleteButton.click();
+    const response = await deleted;
+
+    expect(response.ok()).toBe(true);
+  }
+
   async goto() {
     await this.page.goto(CollectionsPage.URL);
   }
@@ -41,13 +94,19 @@ export class CollectionsPage extends BasePage {
         .fill(description);
     }
 
-    const submit = this.createDialog.getByRole('button', {
-      name: 'Create Collection',
-    });
-    await expect(async () => {
-      await submit.click();
-      await expect(this.createDialog).toBeHidden({ timeout: 1000 });
-    }).toPass({ timeout: 15000 });
+    const created = this.page.waitForResponse(
+      (response) =>
+        response.request().method() === 'POST' &&
+        response.url().includes('/api/collection'),
+    );
+
+    await this.createDialog
+      .getByRole('button', { name: 'Create Collection' })
+      .click();
+    const response = await created;
+
+    expect(response.ok()).toBe(true);
+    await expect(this.createDialog).toBeHidden();
   }
 
   async setViewMode(mode: 'grid' | 'table') {
