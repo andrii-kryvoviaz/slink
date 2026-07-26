@@ -3,7 +3,6 @@ import type { ListingMetadata } from '@slink/api/Response/Common/ListingMetadata
 export interface CommentAuthor {
   id: string;
   displayName: string;
-  email: string;
 }
 
 export interface ReferencedComment {

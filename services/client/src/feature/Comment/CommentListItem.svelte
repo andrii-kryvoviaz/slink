@@ -85,7 +85,6 @@
         size="sm"
         user={{
           displayName: comment.author?.displayName ?? '',
-          email: comment.author?.email ?? '',
         }}
       />
     </HoverCard.Trigger>
@@ -95,7 +94,6 @@
           size="md"
           user={{
             displayName: comment.author?.displayName ?? '',
-            email: comment.author?.email ?? '',
           }}
         />
         <div class="flex-1 min-w-0">

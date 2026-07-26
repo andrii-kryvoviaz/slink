@@ -5,8 +5,6 @@ export type NotificationType =
 
 export interface NotificationActor {
   id: string;
-  email: string;
-  username: string;
   displayName: string;
 }
 

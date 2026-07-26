@@ -104,10 +104,7 @@
           {#each items as bookmarker (bookmarker.id)}
             <div class={bookmarkersPanelItemTheme()}>
               <UserAvatar
-                user={{
-                  displayName: bookmarker.displayName,
-                  email: bookmarker.email,
-                }}
+                user={{ displayName: bookmarker.displayName }}
                 size="sm"
               />
               <div class="flex flex-col min-w-0 flex-1">
