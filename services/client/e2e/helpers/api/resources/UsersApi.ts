@@ -18,4 +18,8 @@ export class UsersApi {
   async changeUserStatus(id: string, status: string) {
     return this.http.request('PATCH', '/api/user/status', { id, status });
   }
+
+  async purgeUser(id: string) {
+    return this.http.request('DELETE', `/api/user/${id}`);
+  }
 }
