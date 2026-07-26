@@ -122,12 +122,6 @@ class BookmarkView extends AbstractView implements CursorAwareInterface {
   }
 
   #[Groups(['bookmarkers'])]
-  #[SerializedName('email')]
-  public function getBookmarkerEmail(): string {
-    return $this->user->getEmail();
-  }
-
-  #[Groups(['bookmarkers'])]
   #[SerializedName('bookmarkedAt')]
   public function getBookmarkedAt(): DateTime {
     return $this->createdAt;

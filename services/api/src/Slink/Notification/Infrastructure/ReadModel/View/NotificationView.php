@@ -97,8 +97,6 @@ class NotificationView extends AbstractView {
 
     return [
       'id' => $this->actor->getUuid(),
-      'email' => $this->actor->getEmail(),
-      'username' => $this->actor->getUsername(),
       'displayName' => $this->actor->getDisplayName(),
     ];
   }
