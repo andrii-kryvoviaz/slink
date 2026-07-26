@@ -18,18 +18,12 @@ final readonly class JWTDecodedListener {
   public function onTokenDecoded(JWTDecodedEvent $event): void
   {
     ['iat' => $iat, 'uuid' => $uuid] = $event->getPayload();
-    
-    if ($iat === null) {
+
+    if (!\is_int($iat)) {
       return;
     }
-    
-    $permissionsVersion = $this->userRoleManager->getPermissionsVersion($uuid);
-    
-    if ($permissionsVersion === null) {
-      return;
-    }
-    
-    if ($permissionsVersion > $iat) {
+
+    if ($this->userRoleManager->getPermissionsVersion($uuid)->invalidates($iat)) {
       $event->markAsInvalid();
     }
   }

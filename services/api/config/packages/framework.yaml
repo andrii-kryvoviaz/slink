@@ -22,3 +22,7 @@ when@test:
     test: true
     session:
       storage_factory_id: session.storage.factory.mock_file
+    cache:
+      pools:
+        user_permissions_version:
+          adapter: cache.adapter.filesystem

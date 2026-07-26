@@ -144,6 +144,13 @@ class UserView extends AbstractView {
   public function isDeleted(): bool {
     return $this->status->isDeleted();
   }
+
+  /**
+   * @return bool
+   */
+  public function isRestricted(): bool {
+    return $this->status->isRestricted();
+  }
   
   /**
    * @param UserStatus $status

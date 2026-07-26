@@ -26,6 +26,7 @@ use Slink\User\Domain\Repository\OAuthLinkRepositoryInterface;
 use Slink\User\Domain\Repository\RefreshTokenRepositoryInterface;
 use Slink\User\Domain\Repository\UserPreferencesRepositoryInterface;
 use Slink\User\Domain\Repository\UserRepositoryInterface;
+use Slink\User\Domain\ValueObject\Auth\PermissionsVersion;
 use Slink\User\Infrastructure\ReadModel\View\UserPreferencesView;
 use Slink\User\Infrastructure\ReadModel\View\UserRoleView;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
@@ -88,6 +89,8 @@ final class UserProjection extends AbstractProjection {
 
     if ($event->status === UserStatus::Deleted) {
       $this->revokeAccess($user, $event->id);
+    } else {
+      $this->userRoleManager->storePermissionsVersion($event->id->toString(), PermissionsVersion::bumpedAt(time()));
     }
 
     $this->repository->save($user);
@@ -124,7 +127,7 @@ final class UserProjection extends AbstractProjection {
     $user->addRole($roleReference);
     $this->repository->save($user);
     
-    $this->userRoleManager->storePermissionsVersion($event->id->toString(), time());
+    $this->userRoleManager->storePermissionsVersion($event->id->toString(), PermissionsVersion::bumpedAt(time()));
   }
   
   /**
@@ -147,7 +150,7 @@ final class UserProjection extends AbstractProjection {
     $user->removeRole($roleReference);
     $this->repository->save($user);
     
-    $this->userRoleManager->storePermissionsVersion($event->id->toString(), time());
+    $this->userRoleManager->storePermissionsVersion($event->id->toString(), PermissionsVersion::bumpedAt(time()));
   }
   
   /**
@@ -180,7 +183,7 @@ final class UserProjection extends AbstractProjection {
     $user->clearRoles();
     $user->revokeIdentity();
 
-    $this->userRoleManager->storePermissionsVersion($userId, time());
+    $this->userRoleManager->storePermissionsVersion($userId, PermissionsVersion::terminal());
   }
 
   /**

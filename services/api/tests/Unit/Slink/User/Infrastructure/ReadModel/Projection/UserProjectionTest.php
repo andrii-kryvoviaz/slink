@@ -21,6 +21,7 @@ use Slink\User\Domain\Repository\RefreshTokenRepositoryInterface;
 use Slink\User\Domain\Repository\UserPreferencesRepositoryInterface;
 use Slink\User\Domain\Repository\UserRepositoryInterface;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;
+use Slink\User\Domain\ValueObject\Auth\PermissionsVersion;
 use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Email;
 use Slink\User\Domain\ValueObject\Username;
@@ -61,15 +62,18 @@ final class UserProjectionTest extends TestCase {
     $this->refreshTokenRepository->expects($this->once())->method('deleteByUserId')->with($userId);
     $this->apiKeyRepository->expects($this->once())->method('deleteByUserId')->with($id);
     $this->oauthLinkRepository->expects($this->once())->method('deleteByUserId')->with($userId);
-    $this->userRoleManager->expects($this->once())->method('storePermissionsVersion')->with($userId);
+    $this->userRoleManager->expects($this->once())
+      ->method('storePermissionsVersion')
+      ->with($userId, PermissionsVersion::terminal());
     $this->preferencesRepository->expects($this->never())->method('deleteByUserId');
 
     $this->createProjection()->handleUserStatusWasChanged(new UserStatusWasChanged($id, UserStatus::Deleted));
   }
 
   #[Test]
-  public function itDoesNotRevokeAccessOnNonDeletedStatus(): void {
+  public function itBumpsPermissionsVersionWithoutRevokingAccessOnNonDeletedStatus(): void {
     $id = ID::generate();
+    $now = time();
 
     $user = $this->createMock(UserView::class);
     $user->expects($this->once())->method('setStatus')->with(UserStatus::Suspended);
@@ -83,7 +87,15 @@ final class UserProjectionTest extends TestCase {
     $this->apiKeyRepository->expects($this->never())->method('deleteByUserId');
     $this->oauthLinkRepository->expects($this->never())->method('deleteByUserId');
     $this->preferencesRepository->expects($this->never())->method('deleteByUserId');
-    $this->userRoleManager->expects($this->never())->method('storePermissionsVersion');
+    $this->userRoleManager->expects($this->once())
+      ->method('storePermissionsVersion')
+      ->with(
+        $id->toString(),
+        $this->callback(
+          static fn (PermissionsVersion $version): bool => $version->invalidates($now - 1)
+            && !$version->invalidates($now + 3600),
+        ),
+      );
 
     $this->createProjection()->handleUserStatusWasChanged(new UserStatusWasChanged($id, UserStatus::Suspended));
   }
@@ -104,7 +116,9 @@ final class UserProjectionTest extends TestCase {
     $this->refreshTokenRepository->expects($this->once())->method('deleteByUserId')->with($userId);
     $this->apiKeyRepository->expects($this->once())->method('deleteByUserId')->with($id);
     $this->oauthLinkRepository->expects($this->once())->method('deleteByUserId')->with($userId);
-    $this->userRoleManager->expects($this->once())->method('storePermissionsVersion')->with($userId);
+    $this->userRoleManager->expects($this->once())
+      ->method('storePermissionsVersion')
+      ->with($userId, PermissionsVersion::terminal());
 
     $this->preferencesRepository->expects($this->once())
       ->method('deleteByUserId')
@@ -125,7 +139,9 @@ final class UserProjectionTest extends TestCase {
     $this->refreshTokenRepository->expects($this->exactly(3))->method('deleteByUserId')->with($userId);
     $this->apiKeyRepository->expects($this->exactly(3))->method('deleteByUserId')->with($id);
     $this->oauthLinkRepository->expects($this->exactly(3))->method('deleteByUserId')->with($userId);
-    $this->userRoleManager->expects($this->exactly(3))->method('storePermissionsVersion')->with($userId);
+    $this->userRoleManager->expects($this->exactly(3))
+      ->method('storePermissionsVersion')
+      ->with($userId, PermissionsVersion::terminal());
 
     $projection = $this->createProjection();
 
