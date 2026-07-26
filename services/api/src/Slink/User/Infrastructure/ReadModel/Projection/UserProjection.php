@@ -26,9 +26,6 @@ use Slink\User\Domain\Repository\OAuthLinkRepositoryInterface;
 use Slink\User\Domain\Repository\RefreshTokenRepositoryInterface;
 use Slink\User\Domain\Repository\UserPreferencesRepositoryInterface;
 use Slink\User\Domain\Repository\UserRepositoryInterface;
-use Slink\User\Domain\ValueObject\Auth\HashedPassword;
-use Slink\User\Domain\ValueObject\Email;
-use Slink\User\Domain\ValueObject\Username;
 use Slink\User\Infrastructure\ReadModel\View\UserPreferencesView;
 use Slink\User\Infrastructure\ReadModel\View\UserRoleView;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
@@ -90,7 +87,7 @@ final class UserProjection extends AbstractProjection {
     $user->setStatus($event->status);
 
     if ($event->status === UserStatus::Deleted) {
-      $this->scrub($user, $event->id);
+      $this->revokeAccess($user, $event->id);
     }
 
     $this->repository->save($user);
@@ -156,8 +153,15 @@ final class UserProjection extends AbstractProjection {
   /**
    * @param UserWasPurged $event
    * @return void
+   * @throws NonUniqueResultException
+   * @throws NotFoundException
    */
   public function handleUserWasPurged(UserWasPurged $event): void {
+    $user = $this->repository->one($event->id);
+
+    $this->revokeAccess($user, $event->id);
+    $this->repository->save($user);
+
     $this->preferencesRepository->deleteByUserId($event->id->toString());
   }
 
@@ -166,7 +170,7 @@ final class UserProjection extends AbstractProjection {
    * @param ID $id
    * @return void
    */
-  private function scrub(UserView $user, ID $id): void {
+  private function revokeAccess(UserView $user, ID $id): void {
     $userId = $id->toString();
 
     $this->refreshTokenRepository->deleteByUserId($userId);
@@ -174,11 +178,7 @@ final class UserProjection extends AbstractProjection {
     $this->oauthLinkRepository->deleteByUserId($userId);
 
     $user->clearRoles();
-    $user->scrub(
-      Email::fromString(sprintf('purged-%s@purged.local', $userId)),
-      Username::fromString(sprintf('purged_%s', substr(str_replace('-', '', $userId), 0, 23))),
-      HashedPassword::encode(bin2hex(random_bytes(16))),
-    );
+    $user->revokeIdentity();
 
     $this->userRoleManager->storePermissionsVersion($userId, time());
   }

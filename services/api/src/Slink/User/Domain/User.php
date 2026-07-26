@@ -8,6 +8,7 @@ use EventSauce\EventSourcing\AggregateRootId;
 use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
+use Slink\Shared\Domain\Exception\InvalidArgumentException;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Context\ChangeUserRoleContext;
@@ -278,6 +279,10 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   ): void {
     if($currentUserSpecification->isSatisfiedBy($this->aggregateRootId())) {
       throw new SelfUserStatusChangeException();
+    }
+    
+    if($this->status->isDeleted()) {
+      throw new InvalidArgumentException('Deleted user status cannot be changed.', 'status');
     }
     
     $this->recordThat(new UserStatusWasChanged($this->aggregateRootId(), $status));

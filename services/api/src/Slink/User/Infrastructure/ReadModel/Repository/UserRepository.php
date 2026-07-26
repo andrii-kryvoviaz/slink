@@ -79,7 +79,9 @@ final class UserRepository extends AbstractRepository implements
       ->from(UserView::class, 'user')
       ->select('user.uuid')
       ->where('user.displayName = :displayName')
+      ->andWhere('user.status != :status')
       ->setParameter('displayName', $displayName->toString())
+      ->setParameter('status', UserStatus::Deleted)
       ->getQuery()
       ->getOneOrNullResult();
     

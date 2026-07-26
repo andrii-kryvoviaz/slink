@@ -28,8 +28,8 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 class UserView extends AbstractView {
   /**
    * @param string $uuid
-   * @param Email $email
-   * @param Username $username
+   * @param Email|null $email
+   * @param Username|null $username
    * @param DisplayName|null $displayName
    * @param HashedPassword $password
    * @param DateTime $createdAt
@@ -44,16 +44,16 @@ class UserView extends AbstractView {
     #[SerializedName('id')]
     private string $uuid,
 
-    #[ORM\Column(type: 'email', unique: true)]
+    #[ORM\Column(type: 'email', unique: true, nullable: true)]
     #[Groups(['internal'])]
-    private Email $email,
+    private ?Email $email,
     
-    #[ORM\Column(type: 'username', unique: true)]
+    #[ORM\Column(type: 'username', unique: true, nullable: true)]
     #[Groups(['internal'])]
     #[Sanitize]
-    private Username $username,
+    private ?Username $username,
     
-    #[ORM\Column(type: 'display_name', unique: true, nullable: true)]
+    #[ORM\Column(type: 'display_name', nullable: true)]
     #[Groups(['public', 'internal'])]
     #[Sanitize]
     private ?DisplayName $displayName,
@@ -90,17 +90,17 @@ class UserView extends AbstractView {
   }
   
   /**
-   * @return string
+   * @return string|null
    */
-  public function getEmail(): string {
-    return $this->email->toString();
+  public function getEmail(): ?string {
+    return $this->email?->toString();
   }
   
   /**
-   * @return string
+   * @return string|null
    */
-  public function getUsername(): string {
-    return $this->username->toString();
+  public function getUsername(): ?string {
+    return $this->username?->toString();
   }
   
   /**
@@ -200,15 +200,10 @@ class UserView extends AbstractView {
   }
 
   /**
-   * @param Email $email
-   * @param Username $username
-   * @param HashedPassword $password
    * @return void
    */
-  public function scrub(Email $email, Username $username, HashedPassword $password): void {
-    $this->email = $email;
-    $this->username = $username;
-    $this->displayName = null;
-    $this->password = $password;
+  public function revokeIdentity(): void {
+    $this->email = null;
+    $this->username = null;
   }
 }

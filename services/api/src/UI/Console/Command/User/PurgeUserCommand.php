@@ -65,7 +65,7 @@ final class PurgeUserCommand extends Command {
     if ($user->getStatus() !== UserStatus::Deleted->value && !$input->getOption('force')) {
       $output->writeln(sprintf(
         '<error>User `%s` is not soft-deleted. Use --force to purge anyway.</error>',
-        $user->getEmail()
+        $this->label($user)
       ));
       return Command::FAILURE;
     }
@@ -77,7 +77,7 @@ final class PurgeUserCommand extends Command {
 
     $question = sprintf(
       'Purge user `%s` (%s)? This permanently removes the account and all owned content.',
-      $user->getEmail(),
+      $this->label($user),
       $user->getUuid()
     );
 
@@ -87,7 +87,7 @@ final class PurgeUserCommand extends Command {
 
     $this->handle(new PurgeUser($user->getUuid()));
 
-    $output->writeln(sprintf('<info>User `%s` has been purged ✓</info>', $user->getEmail()));
+    $output->writeln(sprintf('<info>User `%s` has been purged ✓</info>', $this->label($user)));
 
     return Command::SUCCESS;
   }
@@ -111,10 +111,14 @@ final class PurgeUserCommand extends Command {
 
     foreach ($users as $user) {
       $this->handle(new PurgeUser($user->getUuid()));
-      $output->writeln(sprintf('<info>User `%s` has been purged ✓</info>', $user->getEmail()));
+      $output->writeln(sprintf('<info>User `%s` has been purged ✓</info>', $this->label($user)));
     }
 
     return Command::SUCCESS;
+  }
+
+  private function label(UserView $user): string {
+    return $user->getEmail() ?? $user->getUuid();
   }
 
   private function resolveUser(string $identifier): UserView {
