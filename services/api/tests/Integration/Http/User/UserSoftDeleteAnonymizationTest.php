@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Http\User;
 
+use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Slink\User\Application\Command\CreateOAuthProvider\CreateOAuthProviderCommand;
@@ -105,6 +106,76 @@ final class UserSoftDeleteAnonymizationTest extends HttpTestCase {
     $payload = \json_decode((string) $this->client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
     return $payload['data'];
+  }
+
+  private function countRowsByUserId(string $table, string $userId, string $column = 'user_id'): int {
+    /** @var EntityManagerInterface $entityManager */
+    $entityManager = static::getContainer()->get(EntityManagerInterface::class);
+
+    return (int) $entityManager->getConnection()->fetchOne(
+      \sprintf('SELECT COUNT(*) FROM "%s" WHERE %s = :userId', $table, $column),
+      ['userId' => $userId],
+    );
+  }
+
+  private function createTag(string $token, string $name): void {
+    $status = $this->apiRequest(
+      'POST',
+      '/api/tags',
+      $token,
+      ['CONTENT_TYPE' => 'application/json'],
+      \json_encode(['name' => $name], JSON_THROW_ON_ERROR),
+    );
+
+    self::assertContains($status, [200, 201], 'Create tag failed: ' . (string) $this->client->getResponse()->getContent());
+  }
+
+  /**
+   * @return array<int, string>
+   */
+  private function listExploreImageIds(): array {
+    $status = $this->apiRequest('GET', '/api/images?limit=50');
+    self::assertSame(200, $status, 'Image list failed: ' . (string) $this->client->getResponse()->getContent());
+
+    /** @var array{data: array<int, array{id: string}>} $payload */
+    $payload = \json_decode((string) $this->client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+    return \array_map(static fn(array $row): string => $row['id'], $payload['data']);
+  }
+
+  /**
+   * @return array{access_token: string, refresh_token: string}
+   */
+  private function authenticateWithRefreshToken(string $username, string $password): array {
+    $this->client->request(
+      'POST',
+      '/api/auth/login',
+      [],
+      [],
+      ['CONTENT_TYPE' => 'application/json'],
+      \json_encode(['username' => $username, 'password' => $password], JSON_THROW_ON_ERROR),
+    );
+
+    $response = $this->client->getResponse();
+    self::assertSame(200, $response->getStatusCode(), 'Login failed: ' . (string) $response->getContent());
+
+    /** @var array{access_token: string, refresh_token: string} $payload */
+    $payload = \json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+    return $payload;
+  }
+
+  private function refreshStatus(string $refreshToken): int {
+    $this->client->request(
+      'POST',
+      '/api/auth/refresh',
+      [],
+      [],
+      ['CONTENT_TYPE' => 'application/json'],
+      \json_encode(['refresh_token' => $refreshToken], JSON_THROW_ON_ERROR),
+    );
+
+    return $this->client->getResponse()->getStatusCode();
   }
 
   private function allowRegistration(): void {
@@ -390,5 +461,132 @@ final class UserSoftDeleteAnonymizationTest extends HttpTestCase {
 
     self::assertIsString($freshUserId);
     self::assertNotSame($memberId, $freshUserId);
+  }
+
+  #[Test]
+  public function softDeletePreservesOwnedContentAcrossImageCollectionAndTag(): void {
+    $this->setAccessSettings([]);
+    $adminToken = $this->bootAdmin();
+    $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
+    $memberToken = $this->login('memberuser', self::PASSWORD);
+
+    $memberImage = $this->uploadImage($memberToken, true);
+    $imageShare = $this->createImageShare($memberToken, $memberImage);
+    $this->publishShare($memberToken, $imageShare);
+    $memberCollection = $this->createCollection($memberToken);
+    $this->addImageToCollection($memberToken, $memberCollection, $memberImage);
+    $this->createTag($memberToken, 'member-tag');
+
+    $this->softDelete($adminToken, $memberId);
+
+    self::assertSame(200, $this->apiRequest('GET', \sprintf('/api/image/%s.png', $memberImage)));
+    self::assertSame(1, $this->countRowsByUserId('image', $memberId));
+    self::assertSame(1, $this->countRowsByUserId('collection', $memberId));
+    self::assertSame(1, $this->countRowsByUserId('tag', $memberId));
+  }
+
+  #[Test]
+  public function directLinksAndPublishedSharesSurviveSoftDeleteWhileBrowsingSurfacesHideThem(): void {
+    $this->setAccessSettings(['allowUnauthenticatedAccess' => true]);
+    $adminToken = $this->bootAdmin();
+    $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
+    $memberToken = $this->login('memberuser', self::PASSWORD);
+
+    $memberImage = $this->uploadImage($memberToken, true);
+    $imageShare = $this->createImageShare($memberToken, $memberImage);
+    $this->publishShare($memberToken, $imageShare);
+
+    $memberCollection = $this->createCollection($memberToken);
+    $this->addImageToCollection($memberToken, $memberCollection, $memberImage);
+    $collectionShare = $this->createCollectionShare($memberToken, $memberCollection);
+    $this->publishShare($memberToken, $collectionShare);
+
+    self::assertSame(200, $this->apiRequest('GET', \sprintf('/api/image/%s.png', $memberImage)));
+    self::assertSame(200, $this->apiRequest('GET', \sprintf('/api/collection/%s', $memberCollection)));
+    self::assertContains($memberImage, $this->listExploreImageIds());
+
+    $this->softDelete($adminToken, $memberId);
+
+    self::assertSame(200, $this->apiRequest('GET', \sprintf('/api/image/%s.png', $memberImage)));
+    self::assertSame(200, $this->apiRequest('GET', \sprintf('/api/collection/%s', $memberCollection)));
+    self::assertNotContains($memberImage, $this->listExploreImageIds());
+  }
+
+  #[Test]
+  public function refreshTokenIssuedBeforeSoftDeleteIsRejectedAfterward(): void {
+    $adminToken = $this->bootAdmin();
+    $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
+    $tokens = $this->authenticateWithRefreshToken('memberuser', self::PASSWORD);
+
+    $this->softDelete($adminToken, $memberId);
+
+    self::assertSame(400, $this->refreshStatus($tokens['refresh_token']));
+  }
+
+  #[Test]
+  public function ssoSignInReplayingAPreviouslyLinkedIdentityOfASoftDeletedUserCreatesFreshAccount(): void {
+    $this->allowRegistration();
+    $adminToken = $this->bootAdmin();
+
+    $this->commandBus()->handleSync(new CreateOAuthProviderCommand(
+      name: 'Acme SSO',
+      slug: 'acme',
+      clientId: 'client-id-123',
+      discoveryUrl: 'https://sso.local.test/.well-known/openid-configuration',
+      clientSecret: 'client-secret-456',
+      enabled: true,
+      registrationPolicy: 'allowed',
+      approvalPolicy: 'none',
+    ));
+
+    StubOAuthAdapter::setIdentity(new OAuthIdentity(
+      OAuthSubject::fromPrimitives('acme', 'subject-linked-member'),
+      Email::fromString('linked-member@local.test'),
+      DisplayName::fromString('Linked Member'),
+      true,
+    ));
+
+    $registrationStatus = $this->apiRequest(
+      'POST',
+      '/api/auth/sso/token',
+      null,
+      ['CONTENT_TYPE' => 'application/json'],
+      \json_encode(['code' => 'auth-code-123', 'state' => 'state-123'], JSON_THROW_ON_ERROR),
+    );
+    self::assertSame(200, $registrationStatus, 'SSO registration failed: ' . (string) $this->client->getResponse()->getContent());
+
+    $registrationPayload = $this->responsePayload();
+    $originalAccessToken = $registrationPayload['accessToken'] ?? $registrationPayload['access_token'] ?? '';
+    self::assertNotSame('', $originalAccessToken);
+
+    self::assertSame(200, $this->apiRequest('GET', '/api/user', (string) $originalAccessToken));
+    $originalUser = $this->responsePayload();
+    $originalUserId = $originalUser['data']['id'] ?? $originalUser['id'] ?? null;
+    self::assertIsString($originalUserId);
+    self::assertSame(1, $this->countRowsByUserId('oauth_link', $originalUserId));
+
+    $this->softDelete($adminToken, $originalUserId);
+
+    $status = $this->apiRequest(
+      'POST',
+      '/api/auth/sso/token',
+      null,
+      ['CONTENT_TYPE' => 'application/json'],
+      \json_encode(['code' => 'auth-code-123', 'state' => 'state-123'], JSON_THROW_ON_ERROR),
+    );
+
+    self::assertSame(200, $status, 'SSO sign-in failed: ' . (string) $this->client->getResponse()->getContent());
+
+    $payload = $this->responsePayload();
+    $accessToken = $payload['accessToken'] ?? $payload['access_token'] ?? '';
+    self::assertNotSame('', $accessToken);
+
+    self::assertSame(200, $this->apiRequest('GET', '/api/user', (string) $accessToken));
+
+    $user = $this->responsePayload();
+    $freshUserId = $user['data']['id'] ?? $user['id'] ?? null;
+
+    self::assertIsString($freshUserId);
+    self::assertNotSame($originalUserId, $freshUserId);
   }
 }

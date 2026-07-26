@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Integration\Http\User;
 
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\User\Application\Command\CreateApiKey\CreateApiKeyCommand;
@@ -184,6 +185,41 @@ final class UserPurgeTest extends HttpTestCase {
         'requirements' => 0,
       ],
     ]);
+  }
+
+  /**
+   * @return array{access_token: string, refresh_token: string}
+   */
+  private function authenticateWithRefreshToken(string $username, string $password): array {
+    $this->client->request(
+      'POST',
+      '/api/auth/login',
+      [],
+      [],
+      ['CONTENT_TYPE' => 'application/json'],
+      \json_encode(['username' => $username, 'password' => $password], JSON_THROW_ON_ERROR),
+    );
+
+    $response = $this->client->getResponse();
+    self::assertSame(200, $response->getStatusCode(), 'Login failed: ' . (string) $response->getContent());
+
+    /** @var array{access_token: string, refresh_token: string} $payload */
+    $payload = \json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+    return $payload;
+  }
+
+  private function refreshStatus(string $refreshToken): int {
+    $this->client->request(
+      'POST',
+      '/api/auth/refresh',
+      [],
+      [],
+      ['CONTENT_TYPE' => 'application/json'],
+      \json_encode(['refresh_token' => $refreshToken], JSON_THROW_ON_ERROR),
+    );
+
+    return $this->client->getResponse()->getStatusCode();
   }
 
   private function signUp(string $email, string $username): int {
@@ -610,8 +646,19 @@ final class UserPurgeTest extends HttpTestCase {
     $this->commandBus()->handleSync(new ResetPasswordCommand('member@local.test', 'NewPassword456!'));
   }
 
+  /**
+   * @return array<string, array{0: UserStatus}>
+   */
+  public static function nonDeletedTargetStatusProvider(): array {
+    return [
+      'suspended' => [UserStatus::Suspended],
+      'active' => [UserStatus::Active],
+    ];
+  }
+
   #[Test]
-  public function changingStatusOfAlreadyDeletedUserIsRejected(): void {
+  #[DataProvider('nonDeletedTargetStatusProvider')]
+  public function changingStatusOfAlreadyDeletedUserIsRejected(UserStatus $targetStatus): void {
     $this->bootAdmin();
     $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
 
@@ -629,8 +676,86 @@ final class UserPurgeTest extends HttpTestCase {
       '/api/user/status',
       $this->adminToken,
       ['CONTENT_TYPE' => 'application/json'],
-      \json_encode(['id' => $memberId, 'status' => UserStatus::Suspended->value], JSON_THROW_ON_ERROR),
+      \json_encode(['id' => $memberId, 'status' => $targetStatus->value], JSON_THROW_ON_ERROR),
     );
     self::assertSame(400, $secondChange, (string) $this->client->getResponse()->getContent());
+  }
+
+  #[Test]
+  public function refreshTokenIssuedBeforePurgeIsRejectedAfterward(): void {
+    $this->bootAdmin();
+    $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
+    $tokens = $this->authenticateWithRefreshToken('memberuser', self::PASSWORD);
+
+    self::assertSame(204, $this->purge($this->adminToken, $memberId));
+
+    self::assertSame(400, $this->refreshStatus($tokens['refresh_token']));
+  }
+
+  #[Test]
+  public function ssoSignInReplayingAPreviouslyLinkedIdentityOfAPurgedUserCreatesFreshAccount(): void {
+    $this->allowRegistration();
+    $this->bootAdmin();
+
+    $this->commandBus()->handleSync(new CreateOAuthProviderCommand(
+      name: 'Acme SSO',
+      slug: 'acme',
+      clientId: 'client-id-123',
+      discoveryUrl: 'https://sso.local.test/.well-known/openid-configuration',
+      clientSecret: 'client-secret-456',
+      enabled: true,
+      registrationPolicy: 'allowed',
+      approvalPolicy: 'none',
+    ));
+
+    StubOAuthAdapter::setIdentity(new OAuthIdentity(
+      OAuthSubject::fromPrimitives('acme', 'subject-linked-member'),
+      Email::fromString('linked-member@local.test'),
+      DisplayName::fromString('Linked Member'),
+      true,
+    ));
+
+    $registrationStatus = $this->apiRequest(
+      'POST',
+      '/api/auth/sso/token',
+      null,
+      ['CONTENT_TYPE' => 'application/json'],
+      \json_encode(['code' => 'auth-code-123', 'state' => 'state-123'], JSON_THROW_ON_ERROR),
+    );
+    self::assertSame(200, $registrationStatus, 'SSO registration failed: ' . (string) $this->client->getResponse()->getContent());
+
+    $registrationPayload = $this->responsePayload();
+    $originalAccessToken = $registrationPayload['accessToken'] ?? $registrationPayload['access_token'] ?? '';
+    self::assertNotSame('', $originalAccessToken);
+
+    self::assertSame(200, $this->apiRequest('GET', '/api/user', (string) $originalAccessToken));
+    $originalUser = $this->responsePayload();
+    $originalUserId = $originalUser['data']['id'] ?? $originalUser['id'] ?? null;
+    self::assertIsString($originalUserId);
+    self::assertSame(1, $this->countRowsByUserId('oauth_link', $originalUserId));
+
+    self::assertSame(204, $this->purge($this->adminToken, $originalUserId));
+
+    $status = $this->apiRequest(
+      'POST',
+      '/api/auth/sso/token',
+      null,
+      ['CONTENT_TYPE' => 'application/json'],
+      \json_encode(['code' => 'auth-code-123', 'state' => 'state-123'], JSON_THROW_ON_ERROR),
+    );
+
+    self::assertSame(200, $status, 'SSO sign-in failed: ' . (string) $this->client->getResponse()->getContent());
+
+    $payload = $this->responsePayload();
+    $accessToken = $payload['accessToken'] ?? $payload['access_token'] ?? '';
+    self::assertNotSame('', $accessToken);
+
+    self::assertSame(200, $this->apiRequest('GET', '/api/user', (string) $accessToken));
+
+    $user = $this->responsePayload();
+    $freshUserId = $user['data']['id'] ?? $user['id'] ?? null;
+
+    self::assertIsString($freshUserId);
+    self::assertNotSame($originalUserId, $freshUserId);
   }
 }
