@@ -7,6 +7,7 @@ namespace Unit\Slink\User\Domain;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Slink\Shared\Domain\Exception\InvalidArgumentException;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Context\ChangeUserRoleContext;
 use Slink\User\Domain\Context\UserCreationContext;
@@ -75,6 +76,19 @@ final class UserTest extends TestCase {
     ];
   }
 
+  /**
+   * @return array<string, array{UserStatus}>
+   */
+  public static function provideAllUserStatusData(): array {
+    return [
+      'Active status' => [UserStatus::Active],
+      'Inactive status' => [UserStatus::Inactive],
+      'Suspended status' => [UserStatus::Suspended],
+      'Banned status' => [UserStatus::Banned],
+      'Deleted status' => [UserStatus::Deleted],
+    ];
+  }
+
   #[Test]
   public function itChangesDisplayNameSuccessfully(): void {
     $user = $this->createUser();
@@ -124,6 +138,20 @@ final class UserTest extends TestCase {
     $this->assertCount(1, $events);
     $this->assertInstanceOf(UserStatusWasChanged::class, $events[0]);
     $this->assertSame($newStatus, $user->getStatus());
+  }
+
+  #[Test]
+  #[DataProvider('provideAllUserStatusData')]
+  public function itThrowsWhenChangingStatusOfAlreadyDeletedUser(UserStatus $targetStatus): void {
+    $user = $this->createUser();
+    $currentUserSpec = $this->createCurrentUserSpecification(false);
+    $user->changeStatus(UserStatus::Deleted, $currentUserSpec);
+    $user->releaseEvents();
+
+    $this->expectException(InvalidArgumentException::class);
+    $this->expectExceptionMessage('Deleted user status cannot be changed.');
+
+    $user->changeStatus($targetStatus, $currentUserSpec);
   }
 
   #[Test]

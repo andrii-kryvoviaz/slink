@@ -20,10 +20,10 @@ final class PurgeUserCommandTest extends TestCase {
   private const string USER_ID = '11111111-2222-3333-4444-555555555555';
   private const string OTHER_USER_ID = '66666666-7777-8888-9999-aaaaaaaaaaaa';
 
-  private function userView(string $uuid, UserStatus $status): UserView {
+  private function userView(string $uuid, UserStatus $status, ?string $email = 'member@local.test'): UserView {
     $user = $this->createStub(UserView::class);
     $user->method('getUuid')->willReturn($uuid);
-    $user->method('getEmail')->willReturn('member@local.test');
+    $user->method('getEmail')->willReturn($email);
     $user->method('getStatus')->willReturn($status->value);
 
     return $user;
@@ -85,6 +85,21 @@ final class PurgeUserCommandTest extends TestCase {
   }
 
   #[Test]
+  public function itFallsBackToUuidInSuccessMessageWhenEmailIsNull(): void {
+    $repository = $this->createStub(UserRepositoryInterface::class);
+    $repository->method('one')->willReturn($this->userView(self::USER_ID, UserStatus::Active, null));
+
+    $bus = $this->createMock(CommandBusInterface::class);
+    $bus->expects(self::once())->method('handle');
+
+    $tester = $this->tester($repository, $bus);
+    $exitCode = $tester->execute(['user' => self::USER_ID, '--force' => true], ['interactive' => false]);
+
+    self::assertSame(Command::SUCCESS, $exitCode);
+    self::assertStringContainsString(self::USER_ID, $tester->getDisplay());
+  }
+
+  #[Test]
   public function itPurgesEveryDeletedUserWithAllDeleted(): void {
     $repository = $this->createStub(UserRepositoryInterface::class);
     $repository->method('findByStatus')->willReturn([
@@ -106,5 +121,22 @@ final class PurgeUserCommandTest extends TestCase {
 
     self::assertSame(Command::SUCCESS, $exitCode);
     self::assertSame([self::USER_ID, self::OTHER_USER_ID], $purgedIds);
+  }
+
+  #[Test]
+  public function itFallsBackToUuidInAllDeletedLoopWhenEmailIsNull(): void {
+    $repository = $this->createStub(UserRepositoryInterface::class);
+    $repository->method('findByStatus')->willReturn([
+      $this->userView(self::USER_ID, UserStatus::Deleted, null),
+    ]);
+
+    $bus = $this->createMock(CommandBusInterface::class);
+    $bus->expects(self::once())->method('handle');
+
+    $tester = $this->tester($repository, $bus);
+    $exitCode = $tester->execute(['--all-deleted' => true], ['interactive' => false]);
+
+    self::assertSame(Command::SUCCESS, $exitCode);
+    self::assertStringContainsString(self::USER_ID, $tester->getDisplay());
   }
 }

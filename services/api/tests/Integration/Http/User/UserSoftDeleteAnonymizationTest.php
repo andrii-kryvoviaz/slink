@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Http\User;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Slink\User\Application\Command\CreateOAuthProvider\CreateOAuthProviderCommand;
+use Slink\User\Application\Command\CreateUser\CreateUserCommand;
 use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Email;
@@ -44,6 +46,18 @@ final class UserSoftDeleteAnonymizationTest extends HttpTestCase {
     );
 
     self::assertSame(200, $status, 'Soft delete failed: ' . (string) $this->client->getResponse()->getContent());
+  }
+
+  private function changeStatus(string $adminToken, string $userId, UserStatus $status): void {
+    $result = $this->apiRequest(
+      'PATCH',
+      '/api/user/status',
+      $adminToken,
+      ['CONTENT_TYPE' => 'application/json'],
+      \json_encode(['id' => $userId, 'status' => $status->value], JSON_THROW_ON_ERROR),
+    );
+
+    self::assertSame(200, $result, 'Status change failed: ' . (string) $this->client->getResponse()->getContent());
   }
 
   private function loginStatus(string $username, string $password): int {
@@ -119,6 +133,23 @@ final class UserSoftDeleteAnonymizationTest extends HttpTestCase {
     );
   }
 
+  private function createUserWithDisplayName(string $email, string $username, string $displayName): string {
+    $command = new CreateUserCommand($email, self::PASSWORD, $username, $displayName);
+    $this->commandBus()->handle($command);
+
+    return $command->getId()->toString();
+  }
+
+  private function updateDisplayName(string $token, string $displayName): int {
+    return $this->apiRequest(
+      'PATCH',
+      '/api/user/profile',
+      $token,
+      ['CONTENT_TYPE' => 'application/json'],
+      \json_encode(['display_name' => $displayName], JSON_THROW_ON_ERROR),
+    );
+  }
+
   /**
    * @return array<string, mixed>
    */
@@ -132,6 +163,32 @@ final class UserSoftDeleteAnonymizationTest extends HttpTestCase {
     ) ?: [];
 
     return $payload;
+  }
+
+  private function assertDisplayNameAlreadyExistsResponse(): void {
+    $payload = $this->responsePayload();
+
+    self::assertSame(
+      'Slink.User.Domain.Exception.DisplayNameAlreadyExistException',
+      $payload['error']['title'] ?? null,
+      (string) $this->client->getResponse()->getContent(),
+    );
+    self::assertSame(
+      'display_name',
+      $payload['error']['violations'][0]['property'] ?? null,
+      (string) $this->client->getResponse()->getContent(),
+    );
+  }
+
+  /**
+   * @return array<string, array{0: UserStatus}>
+   */
+  public static function nonDeletedRestrictedStatusProvider(): array {
+    return [
+      'inactive' => [UserStatus::Inactive],
+      'suspended' => [UserStatus::Suspended],
+      'banned' => [UserStatus::Banned],
+    ];
   }
 
   #[Test]
@@ -159,7 +216,131 @@ final class UserSoftDeleteAnonymizationTest extends HttpTestCase {
 
     $this->allowRegistration();
     self::assertContains($this->signUp('member@local.test', 'memberuser'), [200, 201, 204]);
-    self::assertSame(200, $this->loginStatus('memberuser', self::PASSWORD));
+    $freshToken = $this->login('memberuser', self::PASSWORD);
+
+    self::assertSame(200, $this->apiRequest('GET', '/api/user', $freshToken));
+    $freshUser = $this->responsePayload();
+    $freshUserId = $freshUser['data']['id'] ?? $freshUser['id'] ?? null;
+    self::assertIsString($freshUserId);
+    self::assertNotSame($memberId, $freshUserId);
+
+    self::assertSame(200, $this->apiRequest('GET', '/api/user/api-keys', $freshToken));
+    $apiKeys = $this->responsePayload();
+    self::assertSame([], $apiKeys['data'] ?? null);
+  }
+
+  #[Test]
+  public function reRegistrationWithTheHandleOfASoftDeletedUserSucceeds(): void {
+    $this->setAccessSettings([]);
+    $adminToken = $this->bootAdmin();
+    $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
+
+    $this->softDelete($adminToken, $memberId);
+
+    $this->allowRegistration();
+    self::assertContains($this->signUp('member@local.test', 'memberuser'), [200, 201, 204]);
+  }
+
+  #[Test]
+  public function signUpIsRejectedWhenTheDisplayNameBelongsToAnActiveUser(): void {
+    $this->createUserWithDisplayName('holder@local.test', 'holderuser', 'sharedname');
+
+    $this->allowRegistration();
+    self::assertSame(400, $this->signUp('other@local.test', 'sharedname'));
+    $this->assertDisplayNameAlreadyExistsResponse();
+  }
+
+  #[Test]
+  #[DataProvider('nonDeletedRestrictedStatusProvider')]
+  public function signUpIsRejectedWhenTheDisplayNameBelongsToARestrictedUser(UserStatus $status): void {
+    $adminToken = $this->bootAdmin();
+    $holderId = $this->createUserWithDisplayName('holder@local.test', 'holderuser', 'sharedname');
+    $this->changeStatus($adminToken, $holderId, $status);
+
+    $this->allowRegistration();
+    self::assertSame(400, $this->signUp('other@local.test', 'sharedname'));
+    $this->assertDisplayNameAlreadyExistsResponse();
+  }
+
+  #[Test]
+  public function profileUpdateIsRejectedWhenTheDisplayNameBelongsToAnActiveUser(): void {
+    $this->createUserWithDisplayName('holder@local.test', 'holderuser', 'sharedname');
+    $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
+    $memberToken = $this->login('memberuser', self::PASSWORD);
+
+    self::assertSame(400, $this->updateDisplayName($memberToken, 'sharedname'));
+    $this->assertDisplayNameAlreadyExistsResponse();
+  }
+
+  #[Test]
+  #[DataProvider('nonDeletedRestrictedStatusProvider')]
+  public function profileUpdateIsRejectedWhenTheDisplayNameBelongsToARestrictedUser(UserStatus $status): void {
+    $adminToken = $this->bootAdmin();
+    $holderId = $this->createUserWithDisplayName('holder@local.test', 'holderuser', 'sharedname');
+    $this->changeStatus($adminToken, $holderId, $status);
+
+    $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
+    $memberToken = $this->login('memberuser', self::PASSWORD);
+
+    self::assertSame(400, $this->updateDisplayName($memberToken, 'sharedname'));
+    $this->assertDisplayNameAlreadyExistsResponse();
+  }
+
+  #[Test]
+  public function profileUpdateCanReuseTheDisplayNameOfASoftDeletedUser(): void {
+    $adminToken = $this->bootAdmin();
+    $holderId = $this->createUserWithDisplayName('holder@local.test', 'holderuser', 'sharedname');
+    $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
+    $memberToken = $this->login('memberuser', self::PASSWORD);
+
+    $this->softDelete($adminToken, $holderId);
+
+    self::assertContains(
+      $this->updateDisplayName($memberToken, 'sharedname'),
+      [200, 204],
+      'Profile update failed: ' . (string) $this->client->getResponse()->getContent(),
+    );
+
+    self::assertSame(200, $this->apiRequest('GET', '/api/user', $memberToken));
+    $member = $this->responsePayload();
+    self::assertSame('sharedname', $member['data']['displayName'] ?? null);
+  }
+
+  #[Test]
+  public function ssoSignInWithProviderDisplayNameOfASoftDeletedUserSucceeds(): void {
+    $this->allowRegistration();
+    $adminToken = $this->bootAdmin();
+    $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
+
+    $this->commandBus()->handleSync(new CreateOAuthProviderCommand(
+      name: 'Acme SSO',
+      slug: 'acme',
+      clientId: 'client-id-123',
+      discoveryUrl: 'https://sso.local.test/.well-known/openid-configuration',
+      clientSecret: 'client-secret-456',
+      enabled: true,
+      registrationPolicy: 'allowed',
+      approvalPolicy: 'none',
+    ));
+
+    $this->softDelete($adminToken, $memberId);
+
+    StubOAuthAdapter::setIdentity(new OAuthIdentity(
+      OAuthSubject::fromPrimitives('acme', 'subject-returning-member'),
+      Email::fromString('member.reborn@local.test'),
+      DisplayName::fromString('memberuser'),
+      true,
+    ));
+
+    $status = $this->apiRequest(
+      'POST',
+      '/api/auth/sso/token',
+      null,
+      ['CONTENT_TYPE' => 'application/json'],
+      \json_encode(['code' => 'auth-code-123', 'state' => 'state-123'], JSON_THROW_ON_ERROR),
+    );
+
+    self::assertSame(200, $status, 'SSO sign-in failed: ' . (string) $this->client->getResponse()->getContent());
   }
 
   #[Test]

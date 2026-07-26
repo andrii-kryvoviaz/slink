@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Unit\Slink\User\Infrastructure\ReadModel\Projection;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Application\Service\UserRoleManagerInterface;
 use Slink\User\Domain\Enum\UserStatus;
@@ -19,9 +21,11 @@ use Slink\User\Domain\Repository\RefreshTokenRepositoryInterface;
 use Slink\User\Domain\Repository\UserPreferencesRepositoryInterface;
 use Slink\User\Domain\Repository\UserRepositoryInterface;
 use Slink\User\Domain\ValueObject\Auth\HashedPassword;
+use Slink\User\Domain\ValueObject\DisplayName;
 use Slink\User\Domain\ValueObject\Email;
 use Slink\User\Domain\ValueObject\Username;
 use Slink\User\Infrastructure\ReadModel\Projection\UserProjection;
+use Slink\User\Infrastructure\ReadModel\View\UserRoleView;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
 
 final class UserProjectionTest extends TestCase {
@@ -42,21 +46,14 @@ final class UserProjectionTest extends TestCase {
   }
 
   #[Test]
-  public function itScrubsUserOnDeletedStatus(): void {
+  public function itRevokesAccessOnDeletedStatus(): void {
     $id = ID::generate();
     $userId = $id->toString();
-    $expectedUsername = sprintf('purged_%s', substr(str_replace('-', '', $userId), 0, 23));
 
     $user = $this->createMock(UserView::class);
     $user->expects($this->once())->method('setStatus')->with(UserStatus::Deleted);
     $user->expects($this->once())->method('clearRoles');
-    $user->expects($this->once())
-      ->method('scrub')
-      ->with(
-        $this->callback(fn(Email $email) => $email->toString() === sprintf('purged-%s@purged.local', $userId)),
-        $this->callback(fn(Username $username) => $username->toString() === $expectedUsername),
-        $this->isInstanceOf(HashedPassword::class),
-      );
+    $user->expects($this->once())->method('revokeIdentity');
 
     $this->repository->expects($this->once())->method('one')->with($id)->willReturn($user);
     $this->repository->expects($this->once())->method('save')->with($user);
@@ -71,13 +68,13 @@ final class UserProjectionTest extends TestCase {
   }
 
   #[Test]
-  public function itDoesNotScrubUserOnNonDeletedStatus(): void {
+  public function itDoesNotRevokeAccessOnNonDeletedStatus(): void {
     $id = ID::generate();
 
     $user = $this->createMock(UserView::class);
     $user->expects($this->once())->method('setStatus')->with(UserStatus::Suspended);
     $user->expects($this->never())->method('clearRoles');
-    $user->expects($this->never())->method('scrub');
+    $user->expects($this->never())->method('revokeIdentity');
 
     $this->repository->expects($this->once())->method('one')->with($id)->willReturn($user);
     $this->repository->expects($this->once())->method('save')->with($user);
@@ -92,21 +89,70 @@ final class UserProjectionTest extends TestCase {
   }
 
   #[Test]
-  public function itDeletesPreferencesOnUserPurged(): void {
+  public function itRevokesAccessAndDeletesPreferencesOnUserPurged(): void {
     $id = ID::generate();
+    $userId = $id->toString();
+
+    $user = $this->createMock(UserView::class);
+    $user->expects($this->never())->method('setStatus');
+    $user->expects($this->once())->method('clearRoles');
+    $user->expects($this->once())->method('revokeIdentity');
+
+    $this->repository->expects($this->once())->method('one')->with($id)->willReturn($user);
+    $this->repository->expects($this->once())->method('save')->with($user);
+
+    $this->refreshTokenRepository->expects($this->once())->method('deleteByUserId')->with($userId);
+    $this->apiKeyRepository->expects($this->once())->method('deleteByUserId')->with($id);
+    $this->oauthLinkRepository->expects($this->once())->method('deleteByUserId')->with($userId);
+    $this->userRoleManager->expects($this->once())->method('storePermissionsVersion')->with($userId);
 
     $this->preferencesRepository->expects($this->once())
       ->method('deleteByUserId')
-      ->with($id->toString());
-
-    $this->repository->expects($this->never())->method('one');
-    $this->repository->expects($this->never())->method('save');
-    $this->refreshTokenRepository->expects($this->never())->method('deleteByUserId');
-    $this->apiKeyRepository->expects($this->never())->method('deleteByUserId');
-    $this->oauthLinkRepository->expects($this->never())->method('deleteByUserId');
-    $this->userRoleManager->expects($this->never())->method('storePermissionsVersion');
+      ->with($userId);
 
     $this->createProjection()->handleUserWasPurged(new UserWasPurged($id));
+  }
+
+  #[Test]
+  public function itRevokesAccessIdempotentlyAcrossStatusChangeAndRepeatedPurge(): void {
+    $id = ID::generate();
+    $userId = $id->toString();
+    $user = $this->createRealUser($id);
+
+    $this->repository->expects($this->exactly(3))->method('one')->with($id)->willReturn($user);
+    $this->repository->expects($this->exactly(3))->method('save')->with($user);
+    $this->preferencesRepository->expects($this->exactly(2))->method('deleteByUserId')->with($userId);
+    $this->refreshTokenRepository->expects($this->exactly(3))->method('deleteByUserId')->with($userId);
+    $this->apiKeyRepository->expects($this->exactly(3))->method('deleteByUserId')->with($id);
+    $this->oauthLinkRepository->expects($this->exactly(3))->method('deleteByUserId')->with($userId);
+    $this->userRoleManager->expects($this->exactly(3))->method('storePermissionsVersion')->with($userId);
+
+    $projection = $this->createProjection();
+
+    $projection->handleUserStatusWasChanged(new UserStatusWasChanged($id, UserStatus::Deleted));
+    $projection->handleUserWasPurged(new UserWasPurged($id));
+    $projection->handleUserWasPurged(new UserWasPurged($id));
+
+    self::assertNull($user->getEmail());
+    self::assertNull($user->getUsername());
+    self::assertSame('Member', $user->getDisplayName());
+    self::assertSame([], $user->getRoles());
+  }
+
+  private function createRealUser(ID $id): UserView {
+    $role = new UserRoleView('ROLE_USER', 'User');
+
+    return new UserView(
+      $id->toString(),
+      Email::fromString('member@example.com'),
+      Username::fromString('member'),
+      DisplayName::fromString('Member'),
+      HashedPassword::encode('password123'),
+      DateTime::now(),
+      null,
+      UserStatus::Active,
+      new ArrayCollection([$role]),
+    );
   }
 
   private function createProjection(): UserProjection {

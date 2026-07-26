@@ -6,11 +6,34 @@ namespace Tests\Integration\Http\User;
 
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\Test;
+use Slink\Shared\Infrastructure\Exception\NotFoundException;
+use Slink\User\Application\Command\CreateApiKey\CreateApiKeyCommand;
+use Slink\User\Application\Command\CreateOAuthProvider\CreateOAuthProviderCommand;
+use Slink\User\Application\Command\CreateUser\CreateUserCommand;
+use Slink\User\Application\Command\ResetPassword\ResetPasswordCommand;
+use Slink\User\Domain\Enum\UserStatus;
+use Slink\User\Domain\ValueObject\DisplayName;
+use Slink\User\Domain\ValueObject\Email;
+use Slink\User\Domain\ValueObject\OAuth\OAuthIdentity;
+use Slink\User\Domain\ValueObject\OAuth\OAuthSubject;
+use Tests\Integration\Http\Double\StubOAuthAdapter;
 use Tests\Integration\Http\HttpTestCase;
 
 final class UserPurgeTest extends HttpTestCase {
   private string $adminId = '';
   private string $adminToken = '';
+
+  protected function setUp(): void {
+    parent::setUp();
+
+    StubOAuthAdapter::reset();
+  }
+
+  protected function tearDown(): void {
+    parent::tearDown();
+
+    StubOAuthAdapter::reset();
+  }
 
   private function bootAdmin(): void {
     $this->adminId = $this->createUser('admin@local.test', 'adminuser', self::PASSWORD);
@@ -109,14 +132,47 @@ final class UserPurgeTest extends HttpTestCase {
     return $ids;
   }
 
-  private function countRowsByUserId(string $table, string $userId): int {
+  private function countRowsByUserId(string $table, string $userId, string $column = 'user_id'): int {
     /** @var EntityManagerInterface $entityManager */
     $entityManager = static::getContainer()->get(EntityManagerInterface::class);
 
     return (int) $entityManager->getConnection()->fetchOne(
-      \sprintf('SELECT COUNT(*) FROM "%s" WHERE user_id = :userId', $table),
+      \sprintf('SELECT COUNT(*) FROM "%s" WHERE %s = :userId', $table, $column),
       ['userId' => $userId],
     );
+  }
+
+  /**
+   * @return array{email: string|null, username: string|null}
+   */
+  private function fetchIdentityColumns(string $userId): array {
+    /** @var EntityManagerInterface $entityManager */
+    $entityManager = static::getContainer()->get(EntityManagerInterface::class);
+
+    /** @var array{email: string|null, username: string|null}|false $row */
+    $row = $entityManager->getConnection()->fetchAssociative(
+      'SELECT email, username FROM "user" WHERE uuid = :userId',
+      ['userId' => $userId],
+    );
+
+    self::assertIsArray($row, 'Expected the purged user row to still exist.');
+
+    return $row;
+  }
+
+  /**
+   * @return array<string, mixed>
+   */
+  private function responsePayload(): array {
+    /** @var array<string, mixed> $payload */
+    $payload = \json_decode(
+      (string) $this->client->getResponse()->getContent(),
+      true,
+      512,
+      JSON_THROW_ON_ERROR,
+    ) ?: [];
+
+    return $payload;
   }
 
   private function allowRegistration(): void {
@@ -142,6 +198,23 @@ final class UserPurgeTest extends HttpTestCase {
         'password' => self::PASSWORD,
         'confirm' => self::PASSWORD,
       ], JSON_THROW_ON_ERROR),
+    );
+  }
+
+  private function createUserWithDisplayName(string $email, string $username, string $displayName): string {
+    $command = new CreateUserCommand($email, self::PASSWORD, $username, $displayName);
+    $this->commandBus()->handle($command);
+
+    return $command->getId()->toString();
+  }
+
+  private function updateDisplayName(string $token, string $displayName): int {
+    return $this->apiRequest(
+      'PATCH',
+      '/api/user/profile',
+      $token,
+      ['CONTENT_TYPE' => 'application/json'],
+      \json_encode(['display_name' => $displayName], JSON_THROW_ON_ERROR),
     );
   }
 
@@ -287,5 +360,277 @@ final class UserPurgeTest extends HttpTestCase {
 
     $this->allowRegistration();
     self::assertContains($this->signUp('member@local.test', 'memberuser'), [200, 201, 204]);
+    $freshToken = $this->login('memberuser', self::PASSWORD);
+
+    self::assertSame(200, $this->apiRequest('GET', '/api/user', $freshToken));
+    $freshUser = $this->responsePayload();
+    $freshUserId = $freshUser['data']['id'] ?? $freshUser['id'] ?? null;
+    self::assertIsString($freshUserId);
+    self::assertNotSame($memberId, $freshUserId);
+  }
+
+  #[Test]
+  public function reRegistrationAfterPurgeWithTheSameHandleSucceeds(): void {
+    $this->setAccessSettings([]);
+    $this->bootAdmin();
+    $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
+
+    self::assertSame(204, $this->purge($this->adminToken, $memberId));
+
+    $this->allowRegistration();
+    self::assertContains($this->signUp('member@local.test', 'memberuser'), [200, 201, 204]);
+  }
+
+  #[Test]
+  public function profileUpdateCanReuseTheDisplayNameOfAPurgedUser(): void {
+    $this->bootAdmin();
+    $holderId = $this->createUserWithDisplayName('holder@local.test', 'holderuser', 'sharedname');
+    $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
+    $memberToken = $this->login('memberuser', self::PASSWORD);
+
+    self::assertSame(204, $this->purge($this->adminToken, $holderId));
+
+    self::assertContains(
+      $this->updateDisplayName($memberToken, 'sharedname'),
+      [200, 204],
+      'Profile update failed: ' . (string) $this->client->getResponse()->getContent(),
+    );
+
+    self::assertSame(200, $this->apiRequest('GET', '/api/user', $memberToken));
+    $member = $this->responsePayload();
+    self::assertSame('sharedname', $member['data']['displayName'] ?? null);
+  }
+
+  #[Test]
+  public function purgingAlreadySoftDeletedUserRevokesCredentialsCreatedAfterSoftDelete(): void {
+    $this->bootAdmin();
+    $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
+    $memberToken = $this->login('memberuser', self::PASSWORD);
+    $this->createApiKey($memberToken);
+
+    $statusChange = $this->apiRequest(
+      'PATCH',
+      '/api/user/status',
+      $this->adminToken,
+      ['CONTENT_TYPE' => 'application/json'],
+      \json_encode(['id' => $memberId, 'status' => UserStatus::Deleted->value], JSON_THROW_ON_ERROR),
+    );
+    self::assertSame(200, $statusChange, 'Soft delete failed: ' . (string) $this->client->getResponse()->getContent());
+
+    self::assertSame(0, $this->countRowsByUserId('api_key', $memberId));
+    self::assertSame(0, $this->countRowsByUserId('refresh_token', $memberId, 'user_uuid'));
+
+    $identity = $this->fetchIdentityColumns($memberId);
+    self::assertNull($identity['email']);
+    self::assertNull($identity['username']);
+
+    $this->commandBus()->handleSync(
+      (new CreateApiKeyCommand('key-created-after-soft-delete'))->withContext(['userId' => $memberId]),
+    );
+    self::assertSame(1, $this->countRowsByUserId('api_key', $memberId));
+
+    self::assertSame(204, $this->purge($this->adminToken, $memberId));
+
+    self::assertSame(0, $this->countRowsByUserId('api_key', $memberId));
+    self::assertSame(0, $this->countRowsByUserId('refresh_token', $memberId, 'user_uuid'));
+    self::assertSame(0, $this->countRowsByUserId('oauth_link', $memberId));
+  }
+
+  #[Test]
+  public function purgingAnAlreadyPurgedUserIsIdempotent(): void {
+    $this->bootAdmin();
+    $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
+    $memberToken = $this->login('memberuser', self::PASSWORD);
+    $this->createApiKey($memberToken);
+
+    self::assertSame(204, $this->purge($this->adminToken, $memberId));
+    self::assertSame(0, $this->countRowsByUserId('api_key', $memberId));
+    self::assertSame(0, $this->countRowsByUserId('refresh_token', $memberId, 'user_uuid'));
+
+    self::assertSame(204, $this->purge($this->adminToken, $memberId));
+
+    self::assertSame(0, $this->countRowsByUserId('api_key', $memberId));
+    self::assertSame(0, $this->countRowsByUserId('refresh_token', $memberId, 'user_uuid'));
+    self::assertNotContains($memberId, $this->listUserIds($this->adminToken));
+  }
+
+  #[Test]
+  public function independentlyDeletedUsersCoexistWithFreedIdentityAtPersistenceLevel(): void {
+    $this->bootAdmin();
+    $firstId = $this->createUser('first@local.test', 'firstuser', self::PASSWORD);
+    $secondId = $this->createUser('second@local.test', 'seconduser', self::PASSWORD);
+
+    foreach ([$firstId, $secondId] as $userId) {
+      $status = $this->apiRequest(
+        'PATCH',
+        '/api/user/status',
+        $this->adminToken,
+        ['CONTENT_TYPE' => 'application/json'],
+        \json_encode(['id' => $userId, 'status' => UserStatus::Deleted->value], JSON_THROW_ON_ERROR),
+      );
+      self::assertSame(200, $status, 'Soft delete failed: ' . (string) $this->client->getResponse()->getContent());
+    }
+
+    $firstIdentity = $this->fetchIdentityColumns($firstId);
+    $secondIdentity = $this->fetchIdentityColumns($secondId);
+
+    self::assertNull($firstIdentity['email']);
+    self::assertNull($firstIdentity['username']);
+    self::assertNull($secondIdentity['email']);
+    self::assertNull($secondIdentity['username']);
+  }
+
+  #[Test]
+  public function reRegistrationAfterPurgeStartsCompletelyFresh(): void {
+    $this->setAccessSettings([]);
+    $this->bootAdmin();
+    $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
+    $memberToken = $this->login('memberuser', self::PASSWORD);
+
+    $adminImage = $this->uploadImage($this->adminToken, true);
+    $memberImage = $this->uploadImage($memberToken, true);
+
+    self::assertContains(
+      $this->apiRequest('POST', \sprintf('/api/image/%s/bookmark', $adminImage), $memberToken),
+      [200, 201],
+    );
+    $this->postComment($this->adminToken, $memberImage, 'admin comment on member image');
+    $this->createApiKey($memberToken);
+    $this->createCollection($memberToken);
+
+    $preferencesUpdate = $this->apiRequest(
+      'PATCH',
+      '/api/user/preferences',
+      $memberToken,
+      ['CONTENT_TYPE' => 'application/json'],
+      \json_encode(['image.defaultVisibility' => 'private'], JSON_THROW_ON_ERROR),
+    );
+    self::assertContains($preferencesUpdate, [200, 204], 'Update preferences failed: ' . (string) $this->client->getResponse()->getContent());
+
+    self::assertGreaterThan(0, $this->countRowsByUserId('bookmark', $memberId));
+    self::assertGreaterThan(0, $this->countRowsByUserId('notification', $memberId));
+
+    self::assertSame(204, $this->purge($this->adminToken, $memberId));
+
+    $this->allowRegistration();
+    self::assertContains($this->signUp('member@local.test', 'memberreborn'), [200, 201, 204]);
+    $freshToken = $this->login('memberreborn', self::PASSWORD);
+
+    self::assertSame(200, $this->apiRequest('GET', '/api/user', $freshToken));
+    $freshUser = $this->responsePayload();
+    $freshUserId = $freshUser['data']['id'] ?? null;
+    self::assertIsString($freshUserId);
+    self::assertNotSame($memberId, $freshUserId);
+
+    self::assertSame([], $this->listBookmarkedImageIds($freshToken));
+
+    self::assertSame(200, $this->apiRequest('GET', '/api/notifications/unread-count', $freshToken));
+    $unread = $this->responsePayload();
+    self::assertSame(0, $unread['count'] ?? null);
+
+    self::assertSame(200, $this->apiRequest('GET', '/api/user/api-keys', $freshToken));
+    $apiKeys = $this->responsePayload();
+    self::assertSame([], $apiKeys['data'] ?? null);
+
+    self::assertSame(200, $this->apiRequest('GET', '/api/collections', $freshToken));
+    $collections = $this->responsePayload();
+    self::assertSame([], $collections['data'] ?? null);
+
+    self::assertSame(200, $this->apiRequest('GET', '/api/user/preferences', $freshToken));
+    $preferences = $this->responsePayload();
+    self::assertArrayNotHasKey('image.defaultVisibility', $preferences['data'] ?? []);
+  }
+
+  #[Test]
+  public function ssoSignInWithEmailOfPurgedUserCreatesFreshAccount(): void {
+    $this->setAccessSettings([]);
+    $this->bootAdmin();
+    $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
+
+    $this->commandBus()->handleSync(new CreateOAuthProviderCommand(
+      name: 'Acme SSO',
+      slug: 'acme',
+      clientId: 'client-id-123',
+      discoveryUrl: 'https://sso.local.test/.well-known/openid-configuration',
+      clientSecret: 'client-secret-456',
+      enabled: true,
+      registrationPolicy: 'allowed',
+      approvalPolicy: 'none',
+    ));
+
+    StubOAuthAdapter::setIdentity(new OAuthIdentity(
+      OAuthSubject::fromPrimitives('acme', 'subject-member'),
+      Email::fromString('member@local.test'),
+      DisplayName::fromString('Sso Member'),
+      true,
+    ));
+
+    self::assertSame(204, $this->purge($this->adminToken, $memberId));
+
+    $status = $this->apiRequest(
+      'POST',
+      '/api/auth/sso/token',
+      null,
+      ['CONTENT_TYPE' => 'application/json'],
+      \json_encode(['code' => 'auth-code-123', 'state' => 'state-123'], JSON_THROW_ON_ERROR),
+    );
+
+    self::assertSame(200, $status, 'SSO sign-in failed: ' . (string) $this->client->getResponse()->getContent());
+
+    $payload = $this->responsePayload();
+    $accessToken = $payload['accessToken'] ?? $payload['access_token'] ?? '';
+    self::assertNotSame('', $accessToken);
+
+    self::assertSame(200, $this->apiRequest('GET', '/api/user', (string) $accessToken));
+
+    $user = $this->responsePayload();
+    $freshUserId = $user['data']['id'] ?? null;
+
+    self::assertIsString($freshUserId);
+    self::assertNotSame($memberId, $freshUserId);
+  }
+
+  #[Test]
+  public function authLookupsCannotFindPurgedUsersByTheirFormerIdentity(): void {
+    $this->bootAdmin();
+    $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
+
+    self::assertSame(204, $this->purge($this->adminToken, $memberId));
+
+    $loginStatus = $this->apiRequest(
+      'POST',
+      '/api/auth/login',
+      null,
+      ['CONTENT_TYPE' => 'application/json'],
+      \json_encode(['username' => 'memberuser', 'password' => self::PASSWORD], JSON_THROW_ON_ERROR),
+    );
+    self::assertContains($loginStatus, [400, 401, 403]);
+
+    $this->expectException(NotFoundException::class);
+    $this->commandBus()->handleSync(new ResetPasswordCommand('member@local.test', 'NewPassword456!'));
+  }
+
+  #[Test]
+  public function changingStatusOfAlreadyDeletedUserIsRejected(): void {
+    $this->bootAdmin();
+    $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
+
+    $firstChange = $this->apiRequest(
+      'PATCH',
+      '/api/user/status',
+      $this->adminToken,
+      ['CONTENT_TYPE' => 'application/json'],
+      \json_encode(['id' => $memberId, 'status' => UserStatus::Deleted->value], JSON_THROW_ON_ERROR),
+    );
+    self::assertSame(200, $firstChange, 'Soft delete failed: ' . (string) $this->client->getResponse()->getContent());
+
+    $secondChange = $this->apiRequest(
+      'PATCH',
+      '/api/user/status',
+      $this->adminToken,
+      ['CONTENT_TYPE' => 'application/json'],
+      \json_encode(['id' => $memberId, 'status' => UserStatus::Suspended->value], JSON_THROW_ON_ERROR),
+    );
+    self::assertSame(400, $secondChange, (string) $this->client->getResponse()->getContent());
   }
 }
