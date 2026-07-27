@@ -32,7 +32,7 @@ export function createUserColumns(
       accessorKey: 'username',
       header: () => 'Username',
       cell: ({ row }) => {
-        const username = row.getValue('username') as string;
+        const username = row.getValue('username') as string | null;
         return renderComponent(UserUsernameCell, { username });
       },
     },

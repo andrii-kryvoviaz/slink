@@ -18,7 +18,7 @@
       {user.displayName}
     </div>
     <div class="text-sm text-gray-500 dark:text-gray-400 truncate">
-      <CopyableText text={user.email ?? ''} />
+      <CopyableText text={user.email} />
     </div>
   </div>
 </div>
