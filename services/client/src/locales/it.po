@@ -5055,13 +5055,13 @@ msgid "Permanently delete all data"
 msgstr "Elimina definitivamente tutti i dati"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Removes all images, collections and account data. Cannot be undone."
-msgstr "Rimuove tutte le immagini, le raccolte e i dati dell'account. Questa azione non può essere annullata."
+msgid "Permanently disables the account. This cannot be undone."
+msgstr "Disabilita definitivamente l'account. Questa azione non può essere annullata."
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Account will be disabled and access revoked"
-msgstr "L'account verrà disabilitato e l'accesso revocato"
+msgid "Removes all images and collections. Comments remain, shown as deleted."
+msgstr "Rimuove tutte le immagini e le raccolte. I commenti vengono conservati e mostrati come eliminati."
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Keeps all images, collections and comments."
-msgstr "Mantiene tutte le immagini, le raccolte e i commenti."
+msgid "Keeps all images, collections and comments. Frees the email and username."
+msgstr "Mantiene tutte le immagini, le raccolte e i commenti. Libera l'email e il nome utente."

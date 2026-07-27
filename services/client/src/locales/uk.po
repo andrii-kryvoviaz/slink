@@ -5065,13 +5065,13 @@ msgid "Permanently delete all data"
 msgstr "Назавжди видалити всі дані"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Removes all images, collections and account data. Cannot be undone."
-msgstr "Видаляє всі зображення, колекції та дані облікового запису. Цю дію неможливо скасувати."
+msgid "Permanently disables the account. This cannot be undone."
+msgstr "Назавжди вимикає обліковий запис. Цю дію неможливо скасувати."
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Account will be disabled and access revoked"
-msgstr "Обліковий запис буде вимкнено, а доступ відкликано"
+msgid "Removes all images and collections. Comments remain, shown as deleted."
+msgstr "Видаляє всі зображення та колекції. Коментарі залишаються та позначаються як видалені."
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Keeps all images, collections and comments."
-msgstr "Зберігає всі зображення, колекції та коментарі."
+msgid "Keeps all images, collections and comments. Frees the email and username."
+msgstr "Зберігає всі зображення, колекції та коментарі. Звільняє email та ім'я користувача."

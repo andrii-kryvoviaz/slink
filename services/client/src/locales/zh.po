@@ -5049,13 +5049,13 @@ msgid "Permanently delete all data"
 msgstr "永久删除所有数据"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Removes all images, collections and account data. Cannot be undone."
-msgstr "将删除所有图片、合集和账号数据。此操作不可撤销。"
+msgid "Permanently disables the account. This cannot be undone."
+msgstr "永久禁用该账号。此操作不可撤销。"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Account will be disabled and access revoked"
-msgstr "账号将被禁用，访问权限将被撤销"
+msgid "Removes all images and collections. Comments remain, shown as deleted."
+msgstr "删除所有图片和合集。评论将保留，并显示为已删除。"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Keeps all images, collections and comments."
-msgstr "保留所有图片、合集和评论。"
+msgid "Keeps all images, collections and comments. Frees the email and username."
+msgstr "保留所有图片、合集和评论。释放该邮箱和用户名。"
