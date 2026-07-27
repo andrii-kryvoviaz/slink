@@ -23,7 +23,7 @@ const createTarget = async (
 };
 
 test.describe('Admin user deletion', { tag: '@serial' }, () => {
-  test('soft deletes in place and drops the row on reload', async ({
+  test('soft delete removes the row immediately and it stays gone after reload', async ({
     page,
     api,
     adminUsersPage,
@@ -47,8 +47,7 @@ test.describe('Admin user deletion', { tag: '@serial' }, () => {
 
     await adminUsersPage.confirmDeletion();
 
-    await expect(adminUsersPage.statusBadgeIn(row, 'Deleted')).toBeVisible();
-    await expect(row.getByText(target.account.email)).toHaveCount(0);
+    await expect(row).toHaveCount(0);
 
     await page.reload();
     await adminUsersPage.waitForFullList();
@@ -83,10 +82,12 @@ test.describe('Admin user deletion', { tag: '@serial' }, () => {
 
     await adminUsersPage.openDeleteConfirmation(row);
 
+    await expect(adminUsersPage.disableNotice).toBeVisible();
     await expect(adminUsersPage.retentionNotice).toBeVisible();
     await expect(adminUsersPage.purgeWarning).toBeHidden();
 
     await adminUsersPage.setPurge(true);
+    await expect(adminUsersPage.disableNotice).toBeVisible();
     await expect(adminUsersPage.purgeWarning).toBeVisible();
     await expect(adminUsersPage.retentionNotice).toBeHidden();
 

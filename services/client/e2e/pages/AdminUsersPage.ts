@@ -26,9 +26,15 @@ export class AdminUsersPage extends BasePage {
     return this.menu.getByRole('button', { name: 'Delete User' });
   }
 
+  get disableNotice(): Locator {
+    return this.menu.getByText(
+      'Permanently disables the account. This cannot be undone.',
+    );
+  }
+
   get purgeWarning(): Locator {
     return this.menu.getByText(
-      'Removes all images, collections and account data. Cannot be undone.',
+      'Removes all images and collections. Comments remain, shown as deleted.',
     );
   }
 
@@ -38,10 +44,6 @@ export class AdminUsersPage extends BasePage {
 
   rowFor(displayName: string): Locator {
     return this.rows.filter({ hasText: displayName });
-  }
-
-  statusBadgeIn(row: Locator, status: string): Locator {
-    return row.getByText(status, { exact: true });
   }
 
   async goto() {
