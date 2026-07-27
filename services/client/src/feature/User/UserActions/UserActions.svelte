@@ -44,13 +44,11 @@
 
   const {
     isLoading: userDeleteLoading,
-    data: userDeleteResponse,
     error: userDeleteError,
     run: deleteUser,
   } = ReactiveState<SingleUserResponse>(
     () => {
-      statusToChange = UserStatusEnum.Deleted;
-      return ApiClient.user.changeUserStatus(user.id, statusToChange);
+      return ApiClient.user.changeUserStatus(user.id, UserStatusEnum.Deleted);
     },
     { minExecutionTime: 300 },
   );
@@ -108,16 +106,19 @@
   };
 
   const confirmUserDeletion = async (purge: boolean) => {
-    if (!purge) {
+    let error: Error | null;
+
+    if (purge) {
+      await purgeUser();
+      error = $userPurgeError;
+    } else {
       await deleteUser();
-      showDeleteConfirmation = false;
-      return;
+      error = $userDeleteError;
     }
 
-    await purgeUser();
     showDeleteConfirmation = false;
 
-    if ($userPurgeError) {
+    if (error) {
       return;
     }
 
@@ -169,16 +170,6 @@
       if (!handledResponseIds.has(responseId)) {
         handledResponseIds.add(responseId);
         successHandler($userResponse);
-      }
-    }
-  });
-
-  $effect(() => {
-    if ($userDeleteResponse) {
-      const responseId = getResponseId($userDeleteResponse);
-      if (!handledResponseIds.has(responseId)) {
-        handledResponseIds.add(responseId);
-        successHandler($userDeleteResponse);
       }
     }
   });
