@@ -12,6 +12,7 @@ use Slink\User\Application\Command\PurgeUser\PurgeUserCommand as PurgeUser;
 use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\Exception\InvalidEmailException;
 use Slink\User\Domain\Repository\UserRepositoryInterface;
+use Slink\User\Domain\Repository\UserStoreRepositoryInterface;
 use Slink\User\Domain\ValueObject\Email;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -32,6 +33,7 @@ final class PurgeUserCommand extends Command {
 
   public function __construct(
     private readonly UserRepositoryInterface $userRepository,
+    private readonly UserStoreRepositoryInterface $userStore,
   ) {
     parent::__construct();
   }
@@ -60,6 +62,11 @@ final class PurgeUserCommand extends Command {
     } catch (NotFoundException | InvalidEmailException) {
       $output->writeln(sprintf('<error>User `%s` was not found</error>', $identifier));
       return Command::FAILURE;
+    }
+
+    if ($this->isPurged($user)) {
+      $output->writeln(sprintf('<comment>User `%s` is already purged.</comment>', $this->label($user)));
+      return Command::SUCCESS;
     }
 
     if ($user->getStatus() !== UserStatus::Deleted->value && !$input->getOption('force')) {
@@ -93,10 +100,13 @@ final class PurgeUserCommand extends Command {
   }
 
   private function purgeAllDeleted(InputInterface $input, OutputInterface $output): int {
-    $users = $this->userRepository->findByStatus(UserStatus::Deleted);
+    $users = array_values(array_filter(
+      $this->userRepository->findByStatus(UserStatus::Deleted),
+      fn (UserView $user) => !$this->isPurged($user)
+    ));
 
     if (!$users) {
-      $output->writeln('<comment>No soft-deleted users found.</comment>');
+      $output->writeln('<comment>No soft-deleted users left to purge.</comment>');
       return Command::SUCCESS;
     }
 
@@ -115,6 +125,10 @@ final class PurgeUserCommand extends Command {
     }
 
     return Command::SUCCESS;
+  }
+
+  private function isPurged(UserView $user): bool {
+    return $this->userStore->get(ID::fromString($user->getUuid()))->isPurged();
   }
 
   private function label(UserView $user): string {

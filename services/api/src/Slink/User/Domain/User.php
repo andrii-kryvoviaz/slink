@@ -322,7 +322,11 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   public function applyUserWasPurged(UserWasPurged $event): void {
     $this->purged = true;
   }
-  
+
+  public function isPurged(): bool {
+    return $this->purged;
+  }
+
   public function changeDisplayName(DisplayName $displayName, UniqueDisplayNameSpecificationInterface $uniqueDisplayNameSpecification): void {
     if(!$uniqueDisplayNameSpecification->isUnique($displayName)) {
       throw new DisplayNameAlreadyExistException();
