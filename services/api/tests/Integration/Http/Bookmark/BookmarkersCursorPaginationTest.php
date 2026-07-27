@@ -74,6 +74,9 @@ final class BookmarkersCursorPaginationTest extends HttpTestCase {
     /** @var array{data?: array<int, array{id?: string}>, meta?: array{nextCursor?: string}} $payload */
     $payload = \json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
+    $keys = \array_keys($payload['data'][0] ?? []);
+    self::assertSame(['id', 'displayName', 'bookmarkedAt'], $keys, 'Bookmarkers payload must expose no other fields.');
+
     $ids = [];
     foreach ($payload['data'] ?? [] as $item) {
       if (\is_string($item['id'] ?? null)) {
