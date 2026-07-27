@@ -2248,10 +2248,6 @@ msgstr "Admin entfernen"
 msgid "Delete User"
 msgstr "Benutzer löschen"
 
-#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "User account and all associated data will be removed"
-msgstr "Benutzerkonto und alle zugehörigen Daten werden entfernt"
-
 #: src/feature/User/UserDataTable/data-table-email-button.svelte
 msgid "Email <0/>"
 msgstr "E-Mail <0/>"
@@ -3686,10 +3682,6 @@ msgstr "Schlüssel widerrufen"
 msgid "Download ShareX Config"
 msgstr "ShareX-Konfiguration herunterladen"
 
-#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Account and all associated data will be removed"
-msgstr "Konto und alle zugehörigen Daten werden entfernt"
-
 #: src/feature/Image/History/BatchContext.svelte.ts
 msgid "Successfully updated # image"
 msgid_plural "Successfully updated # images"
@@ -5056,12 +5048,20 @@ msgstr "{0} von {1} Dateien hochgeladen"
 
 #: src/feature/Comment/CommentInput.svelte
 msgid "Reply..."
-msgstr ""
+msgstr "Antworten..."
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "Permanently delete all data"
-msgstr ""
+msgstr "Alle Daten dauerhaft löschen"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "Removes all images, collections and account data. Cannot be undone."
-msgstr ""
+msgstr "Entfernt alle Bilder, Sammlungen und Kontodaten. Kann nicht rückgängig gemacht werden."
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Account will be disabled and access revoked"
+msgstr "Konto wird deaktiviert und der Zugriff widerrufen"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Keeps all images, collections and comments."
+msgstr "Behält alle Bilder, Sammlungen und Kommentare."

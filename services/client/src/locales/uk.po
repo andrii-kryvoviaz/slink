@@ -2248,10 +2248,6 @@ msgstr "Зняти права адміністратора"
 msgid "Delete User"
 msgstr "Видалити користувача"
 
-#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "User account and all associated data will be removed"
-msgstr "Обліковий запис та всі пов'язані дані буде видалено"
-
 #: src/feature/User/UserDataTable/data-table-email-button.svelte
 msgid "Email <0/>"
 msgstr "Email <0/>"
@@ -3688,10 +3684,6 @@ msgstr "Відкликати ключ"
 msgid "Download ShareX Config"
 msgstr "Завантажити конфігурацію ShareX"
 
-#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Account and all associated data will be removed"
-msgstr "Обліковий запис та всі пов'язані дані буде видалено"
-
 #: src/feature/Image/History/BatchContext.svelte.ts
 msgid "Successfully updated # image"
 msgid_plural "Successfully updated # images"
@@ -5066,12 +5058,20 @@ msgstr "{0} з {1} файлів завантажено"
 
 #: src/feature/Comment/CommentInput.svelte
 msgid "Reply..."
-msgstr ""
+msgstr "Відповісти..."
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "Permanently delete all data"
-msgstr ""
+msgstr "Назавжди видалити всі дані"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "Removes all images, collections and account data. Cannot be undone."
-msgstr ""
+msgstr "Видаляє всі зображення, колекції та дані облікового запису. Цю дію неможливо скасувати."
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Account will be disabled and access revoked"
+msgstr "Обліковий запис буде вимкнено, а доступ відкликано"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Keeps all images, collections and comments."
+msgstr "Зберігає всі зображення, колекції та коментарі."

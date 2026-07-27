@@ -2248,10 +2248,6 @@ msgstr "管理者権限を解除"
 msgid "Delete User"
 msgstr "ユーザーを削除"
 
-#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "User account and all associated data will be removed"
-msgstr "ユーザーアカウントと関連するすべてのデータが削除されます"
-
 #: src/feature/User/UserDataTable/data-table-email-button.svelte
 msgid "Email <0/>"
 msgstr "メール <0/>"
@@ -3686,10 +3682,6 @@ msgstr "キーを無効化"
 msgid "Download ShareX Config"
 msgstr "ShareX設定をダウンロード"
 
-#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Account and all associated data will be removed"
-msgstr "アカウントと関連するすべてのデータが削除されます"
-
 #: src/feature/Image/History/BatchContext.svelte.ts
 msgid "Successfully updated # image"
 msgid_plural "Successfully updated # images"
@@ -5055,12 +5047,20 @@ msgstr "{1} 件中 {0} 件アップロード完了"
 
 #: src/feature/Comment/CommentInput.svelte
 msgid "Reply..."
-msgstr ""
+msgstr "返信..."
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "Permanently delete all data"
-msgstr ""
+msgstr "すべてのデータを完全に削除する"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "Removes all images, collections and account data. Cannot be undone."
-msgstr ""
+msgstr "すべての画像、コレクション、アカウントデータを削除します。この操作は取り消せません。"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Account will be disabled and access revoked"
+msgstr "アカウントは無効化され、アクセスは取り消されます"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Keeps all images, collections and comments."
+msgstr "画像、コレクション、コメントはすべて保持されます。"

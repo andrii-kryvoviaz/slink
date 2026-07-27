@@ -2248,10 +2248,6 @@ msgstr "Remove Admin"
 msgid "Delete User"
 msgstr "Delete User"
 
-#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "User account and all associated data will be removed"
-msgstr "User account and all associated data will be removed"
-
 #: src/feature/User/UserDataTable/data-table-email-button.svelte
 msgid "Email <0/>"
 msgstr "Email <0/>"
@@ -3686,10 +3682,6 @@ msgstr "Revoke Key"
 msgid "Download ShareX Config"
 msgstr "Download ShareX Config"
 
-#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Account and all associated data will be removed"
-msgstr "Account and all associated data will be removed"
-
 #: src/feature/Image/History/BatchContext.svelte.ts
 msgid "Successfully updated # image"
 msgid_plural "Successfully updated # images"
@@ -5065,3 +5057,11 @@ msgstr "Permanently delete all data"
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "Removes all images, collections and account data. Cannot be undone."
 msgstr "Removes all images, collections and account data. Cannot be undone."
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Account will be disabled and access revoked"
+msgstr "Account will be disabled and access revoked"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Keeps all images, collections and comments."
+msgstr "Keeps all images, collections and comments."

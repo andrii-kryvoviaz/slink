@@ -2248,10 +2248,6 @@ msgstr "移除管理员"
 msgid "Delete User"
 msgstr "删除用户"
 
-#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "User account and all associated data will be removed"
-msgstr "该用户账号及其所有关联数据将被移除"
-
 #: src/feature/User/UserDataTable/data-table-email-button.svelte
 msgid "Email <0/>"
 msgstr "邮箱 <0/>"
@@ -3684,10 +3680,6 @@ msgstr "撤销密钥"
 msgid "Download ShareX Config"
 msgstr "下载 ShareX 配置"
 
-#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Account and all associated data will be removed"
-msgstr "账户及所有关联数据将被删除"
-
 #: src/feature/Image/History/BatchContext.svelte.ts
 msgid "Successfully updated # image"
 msgid_plural "Successfully updated # images"
@@ -5050,12 +5042,20 @@ msgstr "已上传 {1} 个文件中的 {0} 个"
 
 #: src/feature/Comment/CommentInput.svelte
 msgid "Reply..."
-msgstr ""
+msgstr "回复..."
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "Permanently delete all data"
-msgstr ""
+msgstr "永久删除所有数据"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "Removes all images, collections and account data. Cannot be undone."
-msgstr ""
+msgstr "将删除所有图片、合集和账号数据。此操作不可撤销。"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Account will be disabled and access revoked"
+msgstr "账号将被禁用，访问权限将被撤销"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Keeps all images, collections and comments."
+msgstr "保留所有图片、合集和评论。"
