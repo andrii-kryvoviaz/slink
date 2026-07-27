@@ -4,71 +4,20 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Http\User;
 
-use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Integration\Http\HttpTestCase;
 
 final class PurgeCommentIntegrityTest extends HttpTestCase {
-  private string $adminId = '';
   private string $adminToken = '';
-
-  private function bootAdmin(): void {
-    $this->adminId = $this->createUser('admin@local.test', 'adminuser', self::PASSWORD);
-    $this->grantAdmin($this->adminId);
-    $this->adminToken = $this->login('adminuser', self::PASSWORD);
-  }
 
   private function purge(string $userId): int {
     return $this->apiRequest('DELETE', '/api/user/' . $userId, $this->adminToken);
   }
 
-  private function postComment(string $token, string $imageId, string $content, ?string $referencedCommentId = null): string {
-    $body = ['content' => $content];
-
-    if ($referencedCommentId !== null) {
-      $body['referencedCommentId'] = $referencedCommentId;
-    }
-
-    $status = $this->apiRequest(
-      'POST',
-      \sprintf('/api/image/%s/comments', $imageId),
-      $token,
-      ['CONTENT_TYPE' => 'application/json'],
-      \json_encode($body, JSON_THROW_ON_ERROR),
-    );
-
-    self::assertSame(201, $status, 'Post comment failed: ' . (string) $this->client->getResponse()->getContent());
-
-    return $this->extractId((string) $this->client->getResponse()->getContent());
-  }
-
-  /**
-   * @return array<int, array<string, mixed>>
-   */
-  private function fetchComments(string $imageId, string $token): array {
-    $status = $this->apiRequest('GET', \sprintf('/api/image/%s/comments', $imageId), $token);
-    self::assertSame(200, $status, 'Fetch comments failed: ' . (string) $this->client->getResponse()->getContent());
-
-    /** @var array{data: array<int, array<string, mixed>>} $payload */
-    $payload = \json_decode((string) $this->client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
-
-    return $payload['data'];
-  }
-
-  private function countRowsByColumn(string $table, string $column, string $value): int {
-    /** @var EntityManagerInterface $entityManager */
-    $entityManager = static::getContainer()->get(EntityManagerInterface::class);
-
-    return (int) $entityManager->getConnection()->fetchOne(
-      \sprintf('SELECT COUNT(*) FROM "%s" WHERE %s = :value', $table, $column),
-      ['value' => $value],
-    );
-  }
-
   #[Test]
   public function referencedCommentAuthorIsNullAfterPurgeButTheReplyAndOriginalTextRemain(): void {
     $this->setAccessSettings([]);
-    $this->bootAdmin();
+    $this->adminToken = $this->bootAdmin();
     $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
     $nonOwnerId = $this->createUser('nonowner@local.test', 'nonowneruser', self::PASSWORD);
     $memberToken = $this->login('memberuser', self::PASSWORD);
@@ -100,7 +49,7 @@ final class PurgeCommentIntegrityTest extends HttpTestCase {
   #[Test]
   public function commentOnAPurgedUsersImageIsOrphanedButUnreachableRatherThanErroring(): void {
     $this->setAccessSettings([]);
-    $this->bootAdmin();
+    $this->adminToken = $this->bootAdmin();
     $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
     $this->createUser('nonowner@local.test', 'nonowneruser', self::PASSWORD);
     $memberToken = $this->login('memberuser', self::PASSWORD);

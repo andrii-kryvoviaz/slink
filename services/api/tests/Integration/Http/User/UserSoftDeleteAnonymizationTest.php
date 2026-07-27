@@ -30,25 +30,6 @@ final class UserSoftDeleteAnonymizationTest extends HttpTestCase {
     StubOAuthAdapter::reset();
   }
 
-  private function bootAdmin(): string {
-    $adminId = $this->createUser('admin@local.test', 'adminuser', self::PASSWORD);
-    $this->grantAdmin($adminId);
-
-    return $this->login('adminuser', self::PASSWORD);
-  }
-
-  private function softDelete(string $adminToken, string $userId): void {
-    $status = $this->apiRequest(
-      'PATCH',
-      '/api/user/status',
-      $adminToken,
-      ['CONTENT_TYPE' => 'application/json'],
-      \json_encode(['id' => $userId, 'status' => UserStatus::Deleted->value], JSON_THROW_ON_ERROR),
-    );
-
-    self::assertSame(200, $status, 'Soft delete failed: ' . (string) $this->client->getResponse()->getContent());
-  }
-
   private function changeStatus(string $adminToken, string $userId, UserStatus $status): void {
     $result = $this->apiRequest(
       'PATCH',
@@ -83,41 +64,6 @@ final class UserSoftDeleteAnonymizationTest extends HttpTestCase {
     return $this->client->getResponse()->getStatusCode();
   }
 
-  private function postComment(string $token, string $imageId, string $content): void {
-    $status = $this->apiRequest(
-      'POST',
-      \sprintf('/api/image/%s/comments', $imageId),
-      $token,
-      ['CONTENT_TYPE' => 'application/json'],
-      \json_encode(['content' => $content], JSON_THROW_ON_ERROR),
-    );
-
-    self::assertSame(201, $status, 'Post comment failed: ' . (string) $this->client->getResponse()->getContent());
-  }
-
-  /**
-   * @return array<int, array<string, mixed>>
-   */
-  private function fetchComments(string $imageId, string $token): array {
-    $status = $this->apiRequest('GET', \sprintf('/api/image/%s/comments', $imageId), $token);
-    self::assertSame(200, $status, 'Fetch comments failed: ' . (string) $this->client->getResponse()->getContent());
-
-    /** @var array{data: array<int, array<string, mixed>>} $payload */
-    $payload = \json_decode((string) $this->client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
-
-    return $payload['data'];
-  }
-
-  private function countRowsByUserId(string $table, string $userId, string $column = 'user_id'): int {
-    /** @var EntityManagerInterface $entityManager */
-    $entityManager = static::getContainer()->get(EntityManagerInterface::class);
-
-    return (int) $entityManager->getConnection()->fetchOne(
-      \sprintf('SELECT COUNT(*) FROM "%s" WHERE %s = :userId', $table, $column),
-      ['userId' => $userId],
-    );
-  }
-
   private function createTag(string $token, string $name): void {
     $status = $this->apiRequest(
       'POST',
@@ -141,99 +87,6 @@ final class UserSoftDeleteAnonymizationTest extends HttpTestCase {
     $payload = \json_decode((string) $this->client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
     return \array_map(static fn(array $row): string => $row['id'], $payload['data']);
-  }
-
-  /**
-   * @return array{access_token: string, refresh_token: string}
-   */
-  private function authenticateWithRefreshToken(string $username, string $password): array {
-    $this->client->request(
-      'POST',
-      '/api/auth/login',
-      [],
-      [],
-      ['CONTENT_TYPE' => 'application/json'],
-      \json_encode(['username' => $username, 'password' => $password], JSON_THROW_ON_ERROR),
-    );
-
-    $response = $this->client->getResponse();
-    self::assertSame(200, $response->getStatusCode(), 'Login failed: ' . (string) $response->getContent());
-
-    /** @var array{access_token: string, refresh_token: string} $payload */
-    $payload = \json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
-
-    return $payload;
-  }
-
-  private function refreshStatus(string $refreshToken): int {
-    $this->client->request(
-      'POST',
-      '/api/auth/refresh',
-      [],
-      [],
-      ['CONTENT_TYPE' => 'application/json'],
-      \json_encode(['refresh_token' => $refreshToken], JSON_THROW_ON_ERROR),
-    );
-
-    return $this->client->getResponse()->getStatusCode();
-  }
-
-  private function allowRegistration(): void {
-    $this->saveSettings('user', [
-      'approvalRequired' => false,
-      'allowRegistration' => true,
-      'password' => [
-        'minLength' => 8,
-        'requirements' => 0,
-      ],
-    ]);
-  }
-
-  private function signUp(string $email, string $username): int {
-    return $this->apiRequest(
-      'POST',
-      '/api/auth/signup',
-      null,
-      ['CONTENT_TYPE' => 'application/json'],
-      \json_encode([
-        'email' => $email,
-        'username' => $username,
-        'password' => self::PASSWORD,
-        'confirm' => self::PASSWORD,
-      ], JSON_THROW_ON_ERROR),
-    );
-  }
-
-  private function createUserWithDisplayName(string $email, string $username, string $displayName): string {
-    $command = new CreateUserCommand($email, self::PASSWORD, $username, $displayName);
-    $this->commandBus()->handle($command);
-
-    return $command->getId()->toString();
-  }
-
-  private function updateDisplayName(string $token, string $displayName): int {
-    return $this->apiRequest(
-      'PATCH',
-      '/api/user/profile',
-      $token,
-      ['CONTENT_TYPE' => 'application/json'],
-      \json_encode(['display_name' => $displayName], JSON_THROW_ON_ERROR),
-    );
-  }
-
-  /**
-   * @return array<string, mixed>
-   */
-  private function responsePayload(): array {
-    /** @var array<string, mixed> $payload */
-    $payload = \json_decode(
-      (string) $this->client->getResponse()->getContent(),
-      true,
-      512,
-      JSON_THROW_ON_ERROR,
-    ) ?: [];
-
-    return $payload;
   }
 
   private function assertDisplayNameAlreadyExistsResponse(): void {
@@ -480,9 +333,9 @@ final class UserSoftDeleteAnonymizationTest extends HttpTestCase {
     $this->softDelete($adminToken, $memberId);
 
     self::assertSame(200, $this->apiRequest('GET', \sprintf('/api/image/%s.png', $memberImage)));
-    self::assertSame(1, $this->countRowsByUserId('image', $memberId));
-    self::assertSame(1, $this->countRowsByUserId('collection', $memberId));
-    self::assertSame(1, $this->countRowsByUserId('tag', $memberId));
+    self::assertSame(1, $this->countRowsByColumn('image', 'user_id', $memberId));
+    self::assertSame(1, $this->countRowsByColumn('collection', 'user_id', $memberId));
+    self::assertSame(1, $this->countRowsByColumn('tag', 'user_id', $memberId));
   }
 
   #[Test]
@@ -563,7 +416,7 @@ final class UserSoftDeleteAnonymizationTest extends HttpTestCase {
     $originalUser = $this->responsePayload();
     $originalUserId = $originalUser['data']['id'] ?? $originalUser['id'] ?? null;
     self::assertIsString($originalUserId);
-    self::assertSame(1, $this->countRowsByUserId('oauth_link', $originalUserId));
+    self::assertSame(1, $this->countRowsByColumn('oauth_link', 'user_id', $originalUserId));
 
     $this->softDelete($adminToken, $originalUserId);
 

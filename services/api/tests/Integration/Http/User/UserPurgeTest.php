@@ -21,7 +21,6 @@ use Tests\Integration\Http\Double\StubOAuthAdapter;
 use Tests\Integration\Http\HttpTestCase;
 
 final class UserPurgeTest extends HttpTestCase {
-  private string $adminId = '';
   private string $adminToken = '';
 
   protected function setUp(): void {
@@ -36,39 +35,8 @@ final class UserPurgeTest extends HttpTestCase {
     StubOAuthAdapter::reset();
   }
 
-  private function bootAdmin(): void {
-    $this->adminId = $this->createUser('admin@local.test', 'adminuser', self::PASSWORD);
-    $this->grantAdmin($this->adminId);
-    $this->adminToken = $this->login('adminuser', self::PASSWORD);
-  }
-
   private function purge(?string $token, string $userId): int {
     return $this->apiRequest('DELETE', '/api/user/' . $userId, $token);
-  }
-
-  private function postComment(string $token, string $imageId, string $content): void {
-    $status = $this->apiRequest(
-      'POST',
-      \sprintf('/api/image/%s/comments', $imageId),
-      $token,
-      ['CONTENT_TYPE' => 'application/json'],
-      \json_encode(['content' => $content], JSON_THROW_ON_ERROR),
-    );
-
-    self::assertSame(201, $status, 'Post comment failed: ' . (string) $this->client->getResponse()->getContent());
-  }
-
-  /**
-   * @return array<int, array<string, mixed>>
-   */
-  private function fetchComments(string $imageId, string $token): array {
-    $status = $this->apiRequest('GET', \sprintf('/api/image/%s/comments', $imageId), $token);
-    self::assertSame(200, $status, 'Fetch comments failed: ' . (string) $this->client->getResponse()->getContent());
-
-    /** @var array{data: array<int, array<string, mixed>>} $payload */
-    $payload = \json_decode((string) $this->client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
-
-    return $payload['data'];
   }
 
   private function publishImageInOwnCollection(string $token, string $imageId): string {
@@ -133,16 +101,6 @@ final class UserPurgeTest extends HttpTestCase {
     return $ids;
   }
 
-  private function countRowsByUserId(string $table, string $userId, string $column = 'user_id'): int {
-    /** @var EntityManagerInterface $entityManager */
-    $entityManager = static::getContainer()->get(EntityManagerInterface::class);
-
-    return (int) $entityManager->getConnection()->fetchOne(
-      \sprintf('SELECT COUNT(*) FROM "%s" WHERE %s = :userId', $table, $column),
-      ['userId' => $userId],
-    );
-  }
-
   /**
    * @return array{email: string|null, username: string|null}
    */
@@ -159,99 +117,6 @@ final class UserPurgeTest extends HttpTestCase {
     self::assertIsArray($row, 'Expected the purged user row to still exist.');
 
     return $row;
-  }
-
-  /**
-   * @return array<string, mixed>
-   */
-  private function responsePayload(): array {
-    /** @var array<string, mixed> $payload */
-    $payload = \json_decode(
-      (string) $this->client->getResponse()->getContent(),
-      true,
-      512,
-      JSON_THROW_ON_ERROR,
-    ) ?: [];
-
-    return $payload;
-  }
-
-  private function allowRegistration(): void {
-    $this->saveSettings('user', [
-      'approvalRequired' => false,
-      'allowRegistration' => true,
-      'password' => [
-        'minLength' => 8,
-        'requirements' => 0,
-      ],
-    ]);
-  }
-
-  /**
-   * @return array{access_token: string, refresh_token: string}
-   */
-  private function authenticateWithRefreshToken(string $username, string $password): array {
-    $this->client->request(
-      'POST',
-      '/api/auth/login',
-      [],
-      [],
-      ['CONTENT_TYPE' => 'application/json'],
-      \json_encode(['username' => $username, 'password' => $password], JSON_THROW_ON_ERROR),
-    );
-
-    $response = $this->client->getResponse();
-    self::assertSame(200, $response->getStatusCode(), 'Login failed: ' . (string) $response->getContent());
-
-    /** @var array{access_token: string, refresh_token: string} $payload */
-    $payload = \json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
-
-    return $payload;
-  }
-
-  private function refreshStatus(string $refreshToken): int {
-    $this->client->request(
-      'POST',
-      '/api/auth/refresh',
-      [],
-      [],
-      ['CONTENT_TYPE' => 'application/json'],
-      \json_encode(['refresh_token' => $refreshToken], JSON_THROW_ON_ERROR),
-    );
-
-    return $this->client->getResponse()->getStatusCode();
-  }
-
-  private function signUp(string $email, string $username): int {
-    return $this->apiRequest(
-      'POST',
-      '/api/auth/signup',
-      null,
-      ['CONTENT_TYPE' => 'application/json'],
-      \json_encode([
-        'email' => $email,
-        'username' => $username,
-        'password' => self::PASSWORD,
-        'confirm' => self::PASSWORD,
-      ], JSON_THROW_ON_ERROR),
-    );
-  }
-
-  private function createUserWithDisplayName(string $email, string $username, string $displayName): string {
-    $command = new CreateUserCommand($email, self::PASSWORD, $username, $displayName);
-    $this->commandBus()->handle($command);
-
-    return $command->getId()->toString();
-  }
-
-  private function updateDisplayName(string $token, string $displayName): int {
-    return $this->apiRequest(
-      'PATCH',
-      '/api/user/profile',
-      $token,
-      ['CONTENT_TYPE' => 'application/json'],
-      \json_encode(['display_name' => $displayName], JSON_THROW_ON_ERROR),
-    );
   }
 
   #[Test]
@@ -272,21 +137,23 @@ final class UserPurgeTest extends HttpTestCase {
 
   #[Test]
   public function adminPurgeOfUnknownUserReturnsNotFound(): void {
-    $this->bootAdmin();
+    $this->adminToken = $this->bootAdmin();
 
     self::assertSame(404, $this->purge($this->adminToken, '11111111-2222-3333-4444-555555555555'));
   }
 
   #[Test]
   public function adminCannotPurgeOwnAccount(): void {
-    $this->bootAdmin();
+    $adminId = $this->createUser('admin@local.test', 'adminuser', self::PASSWORD);
+    $this->grantAdmin($adminId);
+    $this->adminToken = $this->login('adminuser', self::PASSWORD);
 
-    self::assertSame(400, $this->purge($this->adminToken, $this->adminId));
+    self::assertSame(400, $this->purge($this->adminToken, $adminId));
   }
 
   #[Test]
   public function nonUuidIdDoesNotMatchPurgeRoute(): void {
-    $this->bootAdmin();
+    $this->adminToken = $this->bootAdmin();
 
     self::assertSame(422, $this->purge($this->adminToken, 'role'));
   }
@@ -294,7 +161,7 @@ final class UserPurgeTest extends HttpTestCase {
   #[Test]
   public function purgeCascadesAcrossOwnedContentAndIsIdempotent(): void {
     $this->setAccessSettings([]);
-    $this->bootAdmin();
+    $this->adminToken = $this->bootAdmin();
     $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
     $this->createUser('nonowner@local.test', 'nonowneruser', self::PASSWORD);
     $memberToken = $this->login('memberuser', self::PASSWORD);
@@ -315,17 +182,17 @@ final class UserPurgeTest extends HttpTestCase {
     $this->postComment($nonOwnerToken, $memberImage, 'nonowner comment on member image');
 
     self::assertSame(200, $this->apiRequest('GET', \sprintf('/api/image/%s.png', $memberImage)));
-    self::assertSame(1, $this->countRowsByUserId('bookmark', $memberId));
-    self::assertSame(1, $this->countRowsByUserId('tag', $memberId));
-    self::assertGreaterThan(0, $this->countRowsByUserId('notification', $memberId));
+    self::assertSame(1, $this->countRowsByColumn('bookmark', 'user_id', $memberId));
+    self::assertSame(1, $this->countRowsByColumn('tag', 'user_id', $memberId));
+    self::assertGreaterThan(0, $this->countRowsByColumn('notification', 'user_id', $memberId));
 
     $purgeStatus = $this->purge($this->adminToken, $memberId);
     self::assertSame(204, $purgeStatus, 'Purge failed: ' . (string) $this->client->getResponse()->getContent());
 
     self::assertSame(404, $this->apiRequest('GET', \sprintf('/api/image/%s.png', $memberImage)));
-    self::assertSame(0, $this->countRowsByUserId('bookmark', $memberId));
-    self::assertSame(0, $this->countRowsByUserId('tag', $memberId));
-    self::assertSame(0, $this->countRowsByUserId('notification', $memberId));
+    self::assertSame(0, $this->countRowsByColumn('bookmark', 'user_id', $memberId));
+    self::assertSame(0, $this->countRowsByColumn('tag', 'user_id', $memberId));
+    self::assertSame(0, $this->countRowsByColumn('notification', 'user_id', $memberId));
     self::assertNotContains($memberId, $this->listUserIds($this->adminToken));
     self::assertSame(401, $this->apiRequest('GET', '/api/user', $memberToken));
 
@@ -344,7 +211,7 @@ final class UserPurgeTest extends HttpTestCase {
   #[Test]
   public function purgeRemovesOtherUsersBookmarksOfPurgedImages(): void {
     $this->setAccessSettings([]);
-    $this->bootAdmin();
+    $this->adminToken = $this->bootAdmin();
     $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
     $this->createUser('nonowner@local.test', 'nonowneruser', self::PASSWORD);
     $memberToken = $this->login('memberuser', self::PASSWORD);
@@ -362,7 +229,7 @@ final class UserPurgeTest extends HttpTestCase {
   #[Test]
   public function purgeDeletesOwnedCollections(): void {
     $this->setAccessSettings([]);
-    $this->bootAdmin();
+    $this->adminToken = $this->bootAdmin();
     $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
     $memberToken = $this->login('memberuser', self::PASSWORD);
 
@@ -380,7 +247,7 @@ final class UserPurgeTest extends HttpTestCase {
   #[Test]
   public function purgeOfActiveUserAnonymizesCommentsAndFreesIdentity(): void {
     $this->setAccessSettings([]);
-    $this->bootAdmin();
+    $this->adminToken = $this->bootAdmin();
     $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
     $memberToken = $this->login('memberuser', self::PASSWORD);
 
@@ -408,7 +275,7 @@ final class UserPurgeTest extends HttpTestCase {
   #[Test]
   public function reRegistrationAfterPurgeWithTheSameHandleSucceeds(): void {
     $this->setAccessSettings([]);
-    $this->bootAdmin();
+    $this->adminToken = $this->bootAdmin();
     $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
 
     self::assertSame(204, $this->purge($this->adminToken, $memberId));
@@ -419,7 +286,7 @@ final class UserPurgeTest extends HttpTestCase {
 
   #[Test]
   public function profileUpdateCanReuseTheDisplayNameOfAPurgedUser(): void {
-    $this->bootAdmin();
+    $this->adminToken = $this->bootAdmin();
     $holderId = $this->createUserWithDisplayName('holder@local.test', 'holderuser', 'sharedname');
     $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
     $memberToken = $this->login('memberuser', self::PASSWORD);
@@ -439,7 +306,7 @@ final class UserPurgeTest extends HttpTestCase {
 
   #[Test]
   public function purgingAlreadySoftDeletedUserRevokesCredentialsCreatedAfterSoftDelete(): void {
-    $this->bootAdmin();
+    $this->adminToken = $this->bootAdmin();
     $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
     $memberToken = $this->login('memberuser', self::PASSWORD);
     $this->createApiKey($memberToken);
@@ -453,8 +320,8 @@ final class UserPurgeTest extends HttpTestCase {
     );
     self::assertSame(200, $statusChange, 'Soft delete failed: ' . (string) $this->client->getResponse()->getContent());
 
-    self::assertSame(0, $this->countRowsByUserId('api_key', $memberId));
-    self::assertSame(0, $this->countRowsByUserId('refresh_token', $memberId, 'user_uuid'));
+    self::assertSame(0, $this->countRowsByColumn('api_key', 'user_id', $memberId));
+    self::assertSame(0, $this->countRowsByColumn('refresh_token', 'user_uuid', $memberId));
 
     $identity = $this->fetchIdentityColumns($memberId);
     self::assertNull($identity['email']);
@@ -463,36 +330,36 @@ final class UserPurgeTest extends HttpTestCase {
     $this->commandBus()->handleSync(
       (new CreateApiKeyCommand('key-created-after-soft-delete'))->withContext(['userId' => $memberId]),
     );
-    self::assertSame(1, $this->countRowsByUserId('api_key', $memberId));
+    self::assertSame(1, $this->countRowsByColumn('api_key', 'user_id', $memberId));
 
     self::assertSame(204, $this->purge($this->adminToken, $memberId));
 
-    self::assertSame(0, $this->countRowsByUserId('api_key', $memberId));
-    self::assertSame(0, $this->countRowsByUserId('refresh_token', $memberId, 'user_uuid'));
-    self::assertSame(0, $this->countRowsByUserId('oauth_link', $memberId));
+    self::assertSame(0, $this->countRowsByColumn('api_key', 'user_id', $memberId));
+    self::assertSame(0, $this->countRowsByColumn('refresh_token', 'user_uuid', $memberId));
+    self::assertSame(0, $this->countRowsByColumn('oauth_link', 'user_id', $memberId));
   }
 
   #[Test]
   public function purgingAnAlreadyPurgedUserIsIdempotent(): void {
-    $this->bootAdmin();
+    $this->adminToken = $this->bootAdmin();
     $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
     $memberToken = $this->login('memberuser', self::PASSWORD);
     $this->createApiKey($memberToken);
 
     self::assertSame(204, $this->purge($this->adminToken, $memberId));
-    self::assertSame(0, $this->countRowsByUserId('api_key', $memberId));
-    self::assertSame(0, $this->countRowsByUserId('refresh_token', $memberId, 'user_uuid'));
+    self::assertSame(0, $this->countRowsByColumn('api_key', 'user_id', $memberId));
+    self::assertSame(0, $this->countRowsByColumn('refresh_token', 'user_uuid', $memberId));
 
     self::assertSame(204, $this->purge($this->adminToken, $memberId));
 
-    self::assertSame(0, $this->countRowsByUserId('api_key', $memberId));
-    self::assertSame(0, $this->countRowsByUserId('refresh_token', $memberId, 'user_uuid'));
+    self::assertSame(0, $this->countRowsByColumn('api_key', 'user_id', $memberId));
+    self::assertSame(0, $this->countRowsByColumn('refresh_token', 'user_uuid', $memberId));
     self::assertNotContains($memberId, $this->listUserIds($this->adminToken));
   }
 
   #[Test]
   public function independentlyDeletedUsersCoexistWithFreedIdentityAtPersistenceLevel(): void {
-    $this->bootAdmin();
+    $this->adminToken = $this->bootAdmin();
     $firstId = $this->createUser('first@local.test', 'firstuser', self::PASSWORD);
     $secondId = $this->createUser('second@local.test', 'seconduser', self::PASSWORD);
 
@@ -519,7 +386,7 @@ final class UserPurgeTest extends HttpTestCase {
   #[Test]
   public function reRegistrationAfterPurgeStartsCompletelyFresh(): void {
     $this->setAccessSettings([]);
-    $this->bootAdmin();
+    $this->adminToken = $this->bootAdmin();
     $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
     $memberToken = $this->login('memberuser', self::PASSWORD);
 
@@ -543,8 +410,8 @@ final class UserPurgeTest extends HttpTestCase {
     );
     self::assertContains($preferencesUpdate, [200, 204], 'Update preferences failed: ' . (string) $this->client->getResponse()->getContent());
 
-    self::assertGreaterThan(0, $this->countRowsByUserId('bookmark', $memberId));
-    self::assertGreaterThan(0, $this->countRowsByUserId('notification', $memberId));
+    self::assertGreaterThan(0, $this->countRowsByColumn('bookmark', 'user_id', $memberId));
+    self::assertGreaterThan(0, $this->countRowsByColumn('notification', 'user_id', $memberId));
 
     self::assertSame(204, $this->purge($this->adminToken, $memberId));
 
@@ -580,7 +447,7 @@ final class UserPurgeTest extends HttpTestCase {
   #[Test]
   public function ssoSignInWithEmailOfPurgedUserCreatesFreshAccount(): void {
     $this->setAccessSettings([]);
-    $this->bootAdmin();
+    $this->adminToken = $this->bootAdmin();
     $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
 
     $this->commandBus()->handleSync(new CreateOAuthProviderCommand(
@@ -628,7 +495,7 @@ final class UserPurgeTest extends HttpTestCase {
 
   #[Test]
   public function authLookupsCannotFindPurgedUsersByTheirFormerIdentity(): void {
-    $this->bootAdmin();
+    $this->adminToken = $this->bootAdmin();
     $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
 
     self::assertSame(204, $this->purge($this->adminToken, $memberId));
@@ -659,7 +526,7 @@ final class UserPurgeTest extends HttpTestCase {
   #[Test]
   #[DataProvider('nonDeletedTargetStatusProvider')]
   public function changingStatusOfAlreadyDeletedUserIsRejected(UserStatus $targetStatus): void {
-    $this->bootAdmin();
+    $this->adminToken = $this->bootAdmin();
     $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
 
     $firstChange = $this->apiRequest(
@@ -683,7 +550,7 @@ final class UserPurgeTest extends HttpTestCase {
 
   #[Test]
   public function refreshTokenIssuedBeforePurgeIsRejectedAfterward(): void {
-    $this->bootAdmin();
+    $this->adminToken = $this->bootAdmin();
     $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
     $tokens = $this->authenticateWithRefreshToken('memberuser', self::PASSWORD);
 
@@ -695,7 +562,7 @@ final class UserPurgeTest extends HttpTestCase {
   #[Test]
   public function ssoSignInReplayingAPreviouslyLinkedIdentityOfAPurgedUserCreatesFreshAccount(): void {
     $this->allowRegistration();
-    $this->bootAdmin();
+    $this->adminToken = $this->bootAdmin();
 
     $this->commandBus()->handleSync(new CreateOAuthProviderCommand(
       name: 'Acme SSO',
@@ -732,7 +599,7 @@ final class UserPurgeTest extends HttpTestCase {
     $originalUser = $this->responsePayload();
     $originalUserId = $originalUser['data']['id'] ?? $originalUser['id'] ?? null;
     self::assertIsString($originalUserId);
-    self::assertSame(1, $this->countRowsByUserId('oauth_link', $originalUserId));
+    self::assertSame(1, $this->countRowsByColumn('oauth_link', 'user_id', $originalUserId));
 
     self::assertSame(204, $this->purge($this->adminToken, $originalUserId));
 

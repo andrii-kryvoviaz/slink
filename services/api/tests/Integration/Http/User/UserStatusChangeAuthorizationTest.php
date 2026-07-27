@@ -9,13 +9,6 @@ use Slink\User\Domain\Enum\UserStatus;
 use Tests\Integration\Http\HttpTestCase;
 
 final class UserStatusChangeAuthorizationTest extends HttpTestCase {
-  private function bootAdmin(): string {
-    $adminId = $this->createUser('admin@local.test', 'adminuser', self::PASSWORD);
-    $this->grantAdmin($adminId);
-
-    return $this->login('adminuser', self::PASSWORD);
-  }
-
   private function changeStatus(?string $token, string $userId, string $status): int {
     return $this->apiRequest(
       'PATCH',

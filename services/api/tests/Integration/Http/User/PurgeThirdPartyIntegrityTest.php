@@ -9,37 +9,10 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\Integration\Http\HttpTestCase;
 
 final class PurgeThirdPartyIntegrityTest extends HttpTestCase {
-  private string $adminId = '';
   private string $adminToken = '';
-
-  private function bootAdmin(): void {
-    $this->adminId = $this->createUser('admin@local.test', 'adminuser', self::PASSWORD);
-    $this->grantAdmin($this->adminId);
-    $this->adminToken = $this->login('adminuser', self::PASSWORD);
-  }
 
   private function purge(string $userId): int {
     return $this->apiRequest('DELETE', '/api/user/' . $userId, $this->adminToken);
-  }
-
-  private function postComment(string $token, string $imageId, string $content, ?string $referencedCommentId = null): string {
-    $body = ['content' => $content];
-
-    if ($referencedCommentId !== null) {
-      $body['referencedCommentId'] = $referencedCommentId;
-    }
-
-    $status = $this->apiRequest(
-      'POST',
-      \sprintf('/api/image/%s/comments', $imageId),
-      $token,
-      ['CONTENT_TYPE' => 'application/json'],
-      \json_encode($body, JSON_THROW_ON_ERROR),
-    );
-
-    self::assertSame(201, $status, 'Post comment failed: ' . (string) $this->client->getResponse()->getContent());
-
-    return $this->extractId((string) $this->client->getResponse()->getContent());
   }
 
   /**
@@ -91,7 +64,7 @@ final class PurgeThirdPartyIntegrityTest extends HttpTestCase {
   #[Test]
   public function nonOwnersReplyNotificationIsRemovedWhenPurgeDeletesTheRepliedToImage(): void {
     $this->setAccessSettings([]);
-    $this->bootAdmin();
+    $this->adminToken = $this->bootAdmin();
     $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
     $nonOwnerId = $this->createUser('nonowner@local.test', 'nonowneruser', self::PASSWORD);
     $memberToken = $this->login('memberuser', self::PASSWORD);
@@ -134,7 +107,7 @@ final class PurgeThirdPartyIntegrityTest extends HttpTestCase {
   #[Test]
   public function nonOwnersCollectionContainingAPurgedUsersImageStaysUsable(): void {
     $this->setAccessSettings([]);
-    $this->bootAdmin();
+    $this->adminToken = $this->bootAdmin();
     $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
     $this->createUser('nonowner@local.test', 'nonowneruser', self::PASSWORD);
     $memberToken = $this->login('memberuser', self::PASSWORD);

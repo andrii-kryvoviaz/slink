@@ -31,7 +31,7 @@ final class CommentAccessTest extends HttpTestCase {
     return $this->apiRequest('GET', $this->commentsUrl($imageId), $token);
   }
 
-  private function postComment(string $imageId, ?string $token = null): int {
+  private function attemptPostComment(string $imageId, ?string $token = null): int {
     return $this->apiRequest(
       'POST',
       $this->commentsUrl($imageId),
@@ -169,7 +169,7 @@ final class CommentAccessTest extends HttpTestCase {
     $this->bootActors();
     $imageId = $this->uploadImage($this->ownerToken, false);
 
-    self::assertSame(201, $this->postComment($imageId, $this->ownerToken));
+    self::assertSame(201, $this->attemptPostComment($imageId, $this->ownerToken));
   }
 
   #[Test]
@@ -178,7 +178,7 @@ final class CommentAccessTest extends HttpTestCase {
     $this->bootActors();
     $imageId = $this->uploadImage($this->ownerToken, true);
 
-    self::assertSame(201, $this->postComment($imageId, $this->nonOwnerToken));
+    self::assertSame(201, $this->attemptPostComment($imageId, $this->nonOwnerToken));
   }
 
   #[Test]
@@ -187,7 +187,7 @@ final class CommentAccessTest extends HttpTestCase {
     $this->bootActors();
     $imageId = $this->uploadImage($this->ownerToken, true);
 
-    self::assertSame(401, $this->postComment($imageId));
+    self::assertSame(401, $this->attemptPostComment($imageId));
   }
 
   #[Test]
@@ -196,7 +196,7 @@ final class CommentAccessTest extends HttpTestCase {
     $this->bootActors();
     $imageId = $this->uploadImage($this->ownerToken, false);
 
-    self::assertSame(404, $this->postComment($imageId, $this->nonOwnerToken));
+    self::assertSame(404, $this->attemptPostComment($imageId, $this->nonOwnerToken));
   }
 
   #[Test]
@@ -205,7 +205,7 @@ final class CommentAccessTest extends HttpTestCase {
     $this->bootActors();
     [$imageId] = $this->privateImageInPublishedCollection();
 
-    self::assertSame(201, $this->postComment($imageId, $this->shareViewerToken));
+    self::assertSame(201, $this->attemptPostComment($imageId, $this->shareViewerToken));
   }
 
   #[Test]

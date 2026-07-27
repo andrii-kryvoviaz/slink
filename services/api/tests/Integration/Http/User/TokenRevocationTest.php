@@ -12,13 +12,6 @@ use Slink\User\Domain\Enum\UserStatus;
 use Tests\Integration\Http\HttpTestCase;
 
 final class TokenRevocationTest extends HttpTestCase {
-  private function bootAdmin(): string {
-    $adminId = $this->createUser('admin@local.test', 'adminuser', self::PASSWORD);
-    $this->grantAdmin($adminId);
-
-    return $this->login('adminuser', self::PASSWORD);
-  }
-
   private function changeStatus(string $adminToken, string $userId, UserStatus $status): void {
     $responseStatus = $this->apiRequest(
       'PATCH',
