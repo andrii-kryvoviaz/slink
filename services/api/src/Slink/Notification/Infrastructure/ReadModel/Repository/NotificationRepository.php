@@ -106,6 +106,17 @@ final class NotificationRepository extends AbstractRepository implements Notific
   }
 
   #[Override]
+  public function deleteByImageId(string $imageId): void {
+    $this->getEntityManager()
+      ->createQueryBuilder()
+      ->delete(NotificationView::class, 'n')
+      ->where('n.reference = :imageId')
+      ->setParameter('imageId', $imageId)
+      ->getQuery()
+      ->execute();
+  }
+
+  #[Override]
   public function detachActor(string $actorId): void {
     $this->createQueryBuilder('n')
       ->update()

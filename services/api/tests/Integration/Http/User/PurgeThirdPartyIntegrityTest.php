@@ -89,7 +89,7 @@ final class PurgeThirdPartyIntegrityTest extends HttpTestCase {
   }
 
   #[Test]
-  public function nonOwnersReplyNotificationSurvivesPurgeOfTheRepliedToImageOwner(): void {
+  public function nonOwnersReplyNotificationIsRemovedWhenPurgeDeletesTheRepliedToImage(): void {
     $this->setAccessSettings([]);
     $this->bootAdmin();
     $memberId = $this->createUser('member@local.test', 'memberuser', self::PASSWORD);
@@ -116,12 +116,19 @@ final class PurgeThirdPartyIntegrityTest extends HttpTestCase {
     self::assertSame(204, $this->purge($memberId), 'Purge failed: ' . (string) $this->client->getResponse()->getContent());
 
     self::assertSame(
-      1,
+      0,
       $this->countNotificationsForUserReferencingImage($nonOwnerId, $memberImage),
-      'Expected the reply notification row to survive the purge, now pointing at a deleted image.',
+      'Expected the reply notification row to be removed along with the image it references.',
     );
 
-    $this->fetchNotifications($nonOwnerToken);
+    $after = $this->fetchNotifications($nonOwnerToken);
+    self::assertSame(
+      [],
+      \array_values(\array_filter(
+        $after,
+        static fn(array $notification): bool => ($notification['reference']['id'] ?? null) === $memberImage,
+      )),
+    );
   }
 
   #[Test]
