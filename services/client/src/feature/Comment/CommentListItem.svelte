@@ -73,6 +73,14 @@
   );
 </script>
 
+{#snippet authorName()}
+  {#if comment.author}
+    {comment.author.displayName}
+  {:else}
+    [deleted]
+  {/if}
+{/snippet}
+
 <div
   class={commentListItemTheme({
     deleted: comment.isDeleted,
@@ -98,11 +106,7 @@
         />
         <div class="flex-1 min-w-0">
           <p class="font-medium text-sm text-white">
-            {#if comment.author}
-              {comment.author.displayName}
-            {:else}
-              [deleted]
-            {/if}
+            {@render authorName()}
           </p>
         </div>
       </div>
@@ -112,11 +116,7 @@
   <div class="flex-1 min-w-0">
     <div class="flex items-center gap-2 mb-1">
       <span class="text-sm font-medium text-white/90 truncate">
-        {#if comment.author}
-          {comment.author.displayName}
-        {:else}
-          [deleted]
-        {/if}
+        {@render authorName()}
       </span>
       <span class="text-xs text-white/40 shrink-0">
         <FormattedDate date={comment.createdAt.timestamp} />

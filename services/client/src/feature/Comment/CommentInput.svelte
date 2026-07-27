@@ -83,6 +83,14 @@
   });
 </script>
 
+{#snippet refAuthorName()}
+  {#if activeRef?.author}
+    @{activeRef.author.displayName}
+  {:else}
+    [deleted]
+  {/if}
+{/snippet}
+
 <div class="mt-4 pt-4 border-t border-white/10">
   {#if activeRef}
     <div class="mb-2 px-3 py-2 bg-white/5 rounded-lg">
@@ -90,19 +98,11 @@
         <span class="text-xs text-white/60">
           {#if isEditing}
             Editing reply to <span class="font-medium text-white/80">
-              {#if activeRef.author}
-                @{activeRef.author.displayName}
-              {:else}
-                [deleted]
-              {/if}
+              {@render refAuthorName()}
             </span>
           {:else}
             Replying to <span class="font-medium text-white/80">
-              {#if activeRef.author}
-                @{activeRef.author.displayName}
-              {:else}
-                [deleted]
-              {/if}
+              {@render refAuthorName()}
             </span>
           {/if}
         </span>

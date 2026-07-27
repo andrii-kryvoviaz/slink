@@ -221,8 +221,6 @@ msgid "Delete"
 msgstr "削除"
 
 #: src/feature/Comment/CommentInput.svelte
-#: src/feature/Comment/CommentInput.svelte
-#: src/feature/Comment/CommentListItem.svelte
 #: src/feature/Comment/CommentListItem.svelte
 #: src/feature/Comment/CommentListItem.svelte
 #: src/feature/Comment/CommentListItem.svelte
