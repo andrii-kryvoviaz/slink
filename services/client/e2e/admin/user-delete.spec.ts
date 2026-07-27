@@ -72,7 +72,7 @@ test.describe('Admin user deletion', { tag: '@serial' }, () => {
     await expect(adminUsersPage.rows.first()).toBeVisible();
   });
 
-  test('warns about irreversible data loss only while purge is enabled', async ({
+  test('describes retention while purge is off and data loss while it is on', async ({
     api,
     adminUsersPage,
   }) => {
@@ -83,12 +83,15 @@ test.describe('Admin user deletion', { tag: '@serial' }, () => {
 
     await adminUsersPage.openDeleteConfirmation(row);
 
+    await expect(adminUsersPage.retentionNotice).toBeVisible();
     await expect(adminUsersPage.purgeWarning).toBeHidden();
 
     await adminUsersPage.setPurge(true);
     await expect(adminUsersPage.purgeWarning).toBeVisible();
+    await expect(adminUsersPage.retentionNotice).toBeHidden();
 
     await adminUsersPage.setPurge(false);
+    await expect(adminUsersPage.retentionNotice).toBeVisible();
     await expect(adminUsersPage.purgeWarning).toBeHidden();
 
     await api.users.purgeUser(target.id);

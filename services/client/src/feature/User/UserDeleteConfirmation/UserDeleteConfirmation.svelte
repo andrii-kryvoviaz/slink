@@ -29,7 +29,7 @@
         Delete User
       </h3>
       <p class="text-xs text-gray-500 dark:text-gray-400">
-        Account and all associated data will be removed
+        Account will be disabled and access revoked
       </p>
     </div>
   </div>
@@ -42,9 +42,6 @@
         <span class="text-sm font-medium text-gray-900 dark:text-white">
           {user.email}
         </span>
-        <p class="text-xs text-gray-500 dark:text-gray-400">
-          User account and all associated data will be removed
-        </p>
       </div>
     </div>
   </div>
@@ -62,6 +59,10 @@
     {#if purge}
       <p class="text-xs text-red-600 dark:text-red-400">
         Removes all images, collections and account data. Cannot be undone.
+      </p>
+    {:else}
+      <p class="text-xs text-gray-500 dark:text-gray-400">
+        Keeps all images, collections and comments.
       </p>
     {/if}
   </div>

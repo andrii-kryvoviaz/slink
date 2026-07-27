@@ -32,6 +32,10 @@ export class AdminUsersPage extends BasePage {
     );
   }
 
+  get retentionNotice(): Locator {
+    return this.menu.getByText('Keeps all images, collections and comments.');
+  }
+
   rowFor(displayName: string): Locator {
     return this.rows.filter({ hasText: displayName });
   }
