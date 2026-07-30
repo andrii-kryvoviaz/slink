@@ -40,9 +40,9 @@ test.describe('Admin user deletion', { tag: '@serial' }, () => {
     await expect(
       adminUsersPage.menu.getByText(target.account.email),
     ).toBeVisible();
-    await expect(adminUsersPage.purgeSwitch).toHaveAttribute(
+    await expect(adminUsersPage.disableOption).toHaveAttribute(
       'aria-checked',
-      'false',
+      'true',
     );
 
     await adminUsersPage.confirmDeletion();
@@ -71,7 +71,7 @@ test.describe('Admin user deletion', { tag: '@serial' }, () => {
     await expect(adminUsersPage.rows.first()).toBeVisible();
   });
 
-  test('describes retention while purge is off and data loss while it is on', async ({
+  test('offers both outcomes at once with wording that never changes on selection', async ({
     api,
     adminUsersPage,
   }) => {
@@ -82,18 +82,58 @@ test.describe('Admin user deletion', { tag: '@serial' }, () => {
 
     await adminUsersPage.openDeleteConfirmation(row);
 
-    await expect(adminUsersPage.disableNotice).toBeVisible();
-    await expect(adminUsersPage.retentionNotice).toBeVisible();
-    await expect(adminUsersPage.purgeWarning).toBeHidden();
+    await expect(adminUsersPage.undoNotice).toBeVisible();
+    await expect(adminUsersPage.disableOption).toBeVisible();
+    await expect(adminUsersPage.purgeOption).toBeVisible();
+    await expect(adminUsersPage.disableOption).toContainText(
+      'Keeps their uploads and content',
+    );
+    await expect(adminUsersPage.purgeOption).toContainText(
+      'Deletes their images, collections, and bookmarks by others. Comments stay, shown as deleted.',
+    );
+    await expect(adminUsersPage.disableOption).toHaveAttribute(
+      'aria-checked',
+      'true',
+    );
+    await expect(adminUsersPage.purgeOption).toHaveAttribute(
+      'aria-checked',
+      'false',
+    );
+
+    const before = await adminUsersPage.optionTexts();
 
     await adminUsersPage.setPurge(true);
-    await expect(adminUsersPage.disableNotice).toBeVisible();
-    await expect(adminUsersPage.purgeWarning).toBeVisible();
-    await expect(adminUsersPage.retentionNotice).toBeHidden();
+    await expect(adminUsersPage.disableOption).toHaveAttribute(
+      'aria-checked',
+      'false',
+    );
+    expect(await adminUsersPage.optionTexts()).toEqual(before);
 
     await adminUsersPage.setPurge(false);
-    await expect(adminUsersPage.retentionNotice).toBeVisible();
-    await expect(adminUsersPage.purgeWarning).toBeHidden();
+    expect(await adminUsersPage.optionTexts()).toEqual(before);
+
+    await api.users.purgeUser(target.id);
+  });
+
+  test('keeps the confirmation layout static while the outcome is switched', async ({
+    api,
+    adminUsersPage,
+  }) => {
+    const target = await createTarget(api, 'stbl');
+
+    await adminUsersPage.goto();
+    const row = await adminUsersPage.findRow(target.account.username);
+
+    await adminUsersPage.openDeleteConfirmation(row);
+    await expect(adminUsersPage.purgeOption).toBeVisible();
+
+    const before = await adminUsersPage.confirmDeleteButton.boundingBox();
+
+    await adminUsersPage.setPurge(true);
+
+    const after = await adminUsersPage.confirmDeleteButton.boundingBox();
+
+    expect(after).toEqual(before);
 
     await api.users.purgeUser(target.id);
   });

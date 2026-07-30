@@ -18,28 +18,20 @@ export class AdminUsersPage extends BasePage {
     super(page);
   }
 
-  get purgeSwitch(): Locator {
-    return this.menu.getByRole('switch');
+  get disableOption(): Locator {
+    return this.menu.getByRole('radio', { name: 'Disable the account' });
+  }
+
+  get purgeOption(): Locator {
+    return this.menu.getByRole('radio', { name: 'Disable and delete content' });
   }
 
   get confirmDeleteButton(): Locator {
     return this.menu.getByRole('button', { name: 'Delete User' });
   }
 
-  get disableNotice(): Locator {
-    return this.menu.getByText(
-      'Permanently disables the account. This cannot be undone.',
-    );
-  }
-
-  get purgeWarning(): Locator {
-    return this.menu.getByText(
-      'Removes all images and collections. Comments remain, shown as deleted.',
-    );
-  }
-
-  get retentionNotice(): Locator {
-    return this.menu.getByText('Keeps all images, collections and comments.');
+  get undoNotice(): Locator {
+    return this.menu.getByText('This cannot be undone.');
   }
 
   rowFor(displayName: string): Locator {
@@ -82,19 +74,21 @@ export class AdminUsersPage extends BasePage {
   }
 
   async setPurge(checked: boolean) {
-    const toggle = this.purgeSwitch;
-    const current = await toggle.getAttribute('aria-checked');
-
-    if (current === String(checked)) {
-      return;
-    }
+    const option = checked ? this.purgeOption : this.disableOption;
 
     await expect(async () => {
-      await toggle.click();
-      await expect(toggle).toHaveAttribute('aria-checked', String(checked), {
+      await option.click();
+      await expect(option).toHaveAttribute('aria-checked', 'true', {
         timeout: 1000,
       });
     }).toPass({ timeout: 15000 });
+  }
+
+  async optionTexts(): Promise<string[]> {
+    return [
+      await this.disableOption.innerText(),
+      await this.purgeOption.innerText(),
+    ];
   }
 
   async confirmDeletion() {
