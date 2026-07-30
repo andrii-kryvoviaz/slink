@@ -85,7 +85,7 @@ jobs:
           coverage: none
 
       - name: Install smbclient
-        run: sudo apt-get install -y smbclient
+        run: sudo apt-get update && sudo apt-get install -y smbclient
 
       - name: Cache Composer dependencies
         uses: actions/cache@v5
