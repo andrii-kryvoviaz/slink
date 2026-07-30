@@ -5049,17 +5049,21 @@ msgid "Reply..."
 msgstr "Reply..."
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Permanently delete all data"
-msgstr "Permanently delete all data"
+msgid "This cannot be undone."
+msgstr "This cannot be undone."
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Permanently disables the account. This cannot be undone."
-msgstr "Permanently disables the account. This cannot be undone."
+msgid "Disable the account"
+msgstr "Disable the account"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Removes all images and collections. Comments remain, shown as deleted."
-msgstr "Removes all images and collections. Comments remain, shown as deleted."
+msgid "Disable and delete content"
+msgstr "Disable and delete content"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Keeps all images, collections and comments. Frees the email and username."
-msgstr "Keeps all images, collections and comments. Frees the email and username."
+msgid "Keeps their uploads and content"
+msgstr "Keeps their uploads and content"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Deletes their images, collections, and bookmarks by others. Comments stay, shown as deleted."
+msgstr "Deletes their images, collections, and bookmarks by others. Comments stay, shown as deleted."

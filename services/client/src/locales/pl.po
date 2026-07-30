@@ -3688,37 +3688,49 @@ msgstr "Pobierz konfigurację ShareX"
 msgid "Successfully updated # image"
 msgid_plural "Successfully updated # images"
 msgstr[0] "Pomyślnie zaktualizowano # obraz"
-msgstr[1] "Pomyślnie zaktualizowano # obrazów"
+msgstr[1] "Pomyślnie zaktualizowano # obrazy"
+msgstr[2] "Pomyślnie zaktualizowano # obrazów"
+msgstr[3] "Pomyślnie zaktualizowano # obrazów"
 
 #: src/feature/Image/History/BatchContext.svelte.ts
 msgid "Failed to update # image"
 msgid_plural "Failed to update # images"
 msgstr[0] "Nie udało się zaktualizować # obrazu"
 msgstr[1] "Nie udało się zaktualizować # obrazów"
+msgstr[2] "Nie udało się zaktualizować # obrazów"
+msgstr[3] "Nie udało się zaktualizować # obrazów"
 
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "Delete # child tag"
 msgid_plural "Delete # child tags"
 msgstr[0] "Usuń # tag podrzędny"
-msgstr[1] "Usuń # tagów podrzędnych"
+msgstr[1] "Usuń # tagi podrzędne"
+msgstr[2] "Usuń # tagów podrzędnych"
+msgstr[3] "Usuń # tagów podrzędnych"
 
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "Remove tag from # image"
 msgid_plural "Remove tag from # images"
 msgstr[0] "Usuń tag z # obrazu"
 msgstr[1] "Usuń tag z # obrazów"
+msgstr[2] "Usuń tag z # obrazów"
+msgstr[3] "Usuń tag z # obrazów"
 
 #: src/feature/Collection/ImageCollectionList/ImageCollectionList.svelte
 msgid "# more collection"
 msgid_plural "# more collections"
 msgstr[0] "# kolejna kolekcja"
-msgstr[1] "# kolejnych kolekcji"
+msgstr[1] "# kolejne kolekcje"
+msgstr[2] "# kolejnych kolekcji"
+msgstr[3] "# kolejnych kolekcji"
 
 #: src/feature/Tag/ImageTagList/ImageTagList.svelte
 msgid "# more tag"
 msgid_plural "# more tags"
 msgstr[0] "# kolejny tag"
-msgstr[1] "# kolejnych tagów"
+msgstr[1] "# kolejne tagi"
+msgstr[2] "# kolejnych tagów"
+msgstr[3] "# kolejnych tagów"
 
 #: src/routes/preferences/+page.svelte
 msgid "日本語"
@@ -3920,6 +3932,8 @@ msgid "# day"
 msgid_plural "# days"
 msgstr[0] "# dzień"
 msgstr[1] "# dni"
+msgstr[2] "# dni"
+msgstr[3] "# dni"
 
 #: src/feature/Share/Unavailable/Unavailable.svelte
 msgid "Share unavailable"
@@ -4255,7 +4269,9 @@ msgstr "Łącznie"
 msgid "# User"
 msgid_plural "# Users"
 msgstr[0] "# użytkownik"
-msgstr[1] "# użytkowników"
+msgstr[1] "# użytkownicy"
+msgstr[2] "# użytkowników"
+msgstr[3] "# użytkowników"
 
 #: src/feature/User/UserStatus/userStatus.language.ts
 msgid "Banned"
@@ -4953,6 +4969,7 @@ msgid_plural "# bookmarks"
 msgstr[0] "# zakładka"
 msgstr[1] "# zakładki"
 msgstr[2] "# zakładek"
+msgstr[3] "# zakładek"
 
 #: src/routes/notifications/+page.svelte
 msgid "Activity on your images will show up here."
@@ -5068,17 +5085,21 @@ msgid "Reply..."
 msgstr "Odpowiedz..."
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Permanently delete all data"
-msgstr "Trwale usuń wszystkie dane"
+msgid "This cannot be undone."
+msgstr "Tego nie można cofnąć."
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Permanently disables the account. This cannot be undone."
-msgstr "Trwale wyłącza konto. Tej operacji nie można cofnąć."
+msgid "Disable the account"
+msgstr "Wyłącz konto"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Removes all images and collections. Comments remain, shown as deleted."
-msgstr "Usuwa wszystkie obrazy i kolekcje. Komentarze pozostają i są oznaczone jako usunięte."
+msgid "Disable and delete content"
+msgstr "Wyłącz i usuń treści"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Keeps all images, collections and comments. Frees the email and username."
-msgstr "Zachowuje wszystkie obrazy, kolekcje i komentarze. Zwalnia adres e-mail i nazwę użytkownika."
+msgid "Keeps their uploads and content"
+msgstr "Zachowuje przesłane pliki i treści użytkownika"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Deletes their images, collections, and bookmarks by others. Comments stay, shown as deleted."
+msgstr "Usuwa obrazy i kolekcje użytkownika oraz zakładki innych użytkowników do tych obrazów. Komentarze pozostają, wyświetlane jako usunięte."

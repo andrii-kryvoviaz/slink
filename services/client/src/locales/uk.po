@@ -3686,37 +3686,43 @@ msgstr "Завантажити конфігурацію ShareX"
 msgid "Successfully updated # image"
 msgid_plural "Successfully updated # images"
 msgstr[0] "Успішно оновлено # зображення"
-msgstr[1] "Успішно оновлено # зображень"
+msgstr[1] "Успішно оновлено # зображення"
+msgstr[2] "Успішно оновлено # зображень"
 
 #: src/feature/Image/History/BatchContext.svelte.ts
 msgid "Failed to update # image"
 msgid_plural "Failed to update # images"
 msgstr[0] "Не вдалося оновити # зображення"
-msgstr[1] "Не вдалося оновити # зображень"
+msgstr[1] "Не вдалося оновити # зображення"
+msgstr[2] "Не вдалося оновити # зображень"
 
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "Delete # child tag"
 msgid_plural "Delete # child tags"
 msgstr[0] "Видалити # дочірній тег"
-msgstr[1] "Видалити # дочірніх тегів"
+msgstr[1] "Видалити # дочірні теги"
+msgstr[2] "Видалити # дочірніх тегів"
 
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "Remove tag from # image"
 msgid_plural "Remove tag from # images"
 msgstr[0] "Видалити тег з # зображення"
 msgstr[1] "Видалити тег з # зображень"
+msgstr[2] "Видалити тег з # зображень"
 
 #: src/feature/Collection/ImageCollectionList/ImageCollectionList.svelte
 msgid "# more collection"
 msgid_plural "# more collections"
 msgstr[0] "Ще # колекція"
-msgstr[1] "Ще # колекцій"
+msgstr[1] "Ще # колекції"
+msgstr[2] "Ще # колекцій"
 
 #: src/feature/Tag/ImageTagList/ImageTagList.svelte
 msgid "# more tag"
 msgid_plural "# more tags"
 msgstr[0] "Ще # тег"
-msgstr[1] "Ще # тегів"
+msgstr[1] "Ще # теги"
+msgstr[2] "Ще # тегів"
 
 #: src/routes/preferences/+page.svelte
 msgid "日本語"
@@ -3917,7 +3923,8 @@ msgstr "Не вдалося зберегти термін"
 msgid "# day"
 msgid_plural "# days"
 msgstr[0] "# день"
-msgstr[1] "# днів"
+msgstr[1] "# дні"
+msgstr[2] "# днів"
 
 #: src/feature/Share/Unavailable/Unavailable.svelte
 msgid "Share unavailable"
@@ -4252,6 +4259,7 @@ msgid "# User"
 msgid_plural "# Users"
 msgstr[0] "# користувач"
 msgstr[1] "# користувачі"
+msgstr[2] "# користувачів"
 
 #: src/feature/User/UserStatus/userStatus.language.ts
 msgid "Banned"
@@ -5059,17 +5067,21 @@ msgid "Reply..."
 msgstr "Відповісти..."
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Permanently delete all data"
-msgstr "Назавжди видалити всі дані"
+msgid "This cannot be undone."
+msgstr "Цю дію неможливо скасувати."
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Permanently disables the account. This cannot be undone."
-msgstr "Назавжди вимикає обліковий запис. Цю дію неможливо скасувати."
+msgid "Disable the account"
+msgstr "Вимкнути обліковий запис"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Removes all images and collections. Comments remain, shown as deleted."
-msgstr "Видаляє всі зображення та колекції. Коментарі залишаються та позначаються як видалені."
+msgid "Disable and delete content"
+msgstr "Вимкнути та видалити контент"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Keeps all images, collections and comments. Frees the email and username."
-msgstr "Зберігає всі зображення, колекції та коментарі. Звільняє email та ім'я користувача."
+msgid "Keeps their uploads and content"
+msgstr "Зберігає завантаження та контент користувача"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Deletes their images, collections, and bookmarks by others. Comments stay, shown as deleted."
+msgstr "Видаляє зображення й колекції користувача та закладки інших користувачів на ці зображення. Коментарі залишаються, показані як видалені."

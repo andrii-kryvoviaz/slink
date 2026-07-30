@@ -3458,7 +3458,6 @@ msgstr "もっと見る"
 msgid "# image"
 msgid_plural "# images"
 msgstr[0] "#件の画像"
-msgstr[1] "#件の画像"
 
 #: src/routes/help/faq/+page.svelte
 msgid "I found an issue, how can I report it?"
@@ -3546,7 +3545,6 @@ msgstr "タグ / コレクション"
 msgid "Delete # image"
 msgid_plural "Delete # images"
 msgstr[0] "#件の画像を削除"
-msgstr[1] "#件の画像を削除"
 
 #: src/routes/preferences/+page.svelte
 msgid "Deutsch"
@@ -3684,37 +3682,31 @@ msgstr "ShareX設定をダウンロード"
 msgid "Successfully updated # image"
 msgid_plural "Successfully updated # images"
 msgstr[0] "#件の画像を更新しました"
-msgstr[1] "#件の画像を更新しました"
 
 #: src/feature/Image/History/BatchContext.svelte.ts
 msgid "Failed to update # image"
 msgid_plural "Failed to update # images"
 msgstr[0] "#件の画像の更新に失敗しました"
-msgstr[1] "#件の画像の更新に失敗しました"
 
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "Delete # child tag"
 msgid_plural "Delete # child tags"
 msgstr[0] "#件の子タグを削除"
-msgstr[1] "#件の子タグを削除"
 
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "Remove tag from # image"
 msgid_plural "Remove tag from # images"
 msgstr[0] "#件の画像からタグを削除"
-msgstr[1] "#件の画像からタグを削除"
 
 #: src/feature/Collection/ImageCollectionList/ImageCollectionList.svelte
 msgid "# more collection"
 msgid_plural "# more collections"
 msgstr[0] "他#件のコレクション"
-msgstr[1] "他#件のコレクション"
 
 #: src/feature/Tag/ImageTagList/ImageTagList.svelte
 msgid "# more tag"
 msgid_plural "# more tags"
 msgstr[0] "他#件のタグ"
-msgstr[1] "他#件のタグ"
 
 #: src/routes/preferences/+page.svelte
 msgid "日本語"
@@ -3915,7 +3907,6 @@ msgstr "有効期限を保存できませんでした"
 msgid "# day"
 msgid_plural "# days"
 msgstr[0] "#日"
-msgstr[1] "#日"
 
 #: src/feature/Share/Unavailable/Unavailable.svelte
 msgid "Share unavailable"
@@ -3973,7 +3964,6 @@ msgstr "{0}に期限切れ"
 msgid "# character"
 msgid_plural "# characters"
 msgstr[0] "# 文字"
-msgstr[1] "# 文字"
 
 #: src/routes/shares/+page.svelte
 msgid "My Shares"
@@ -4079,7 +4069,6 @@ msgstr "この画像の{0}"
 msgid "# active link"
 msgid_plural "# active links"
 msgstr[0] "# 個のアクティブなリンク"
-msgstr[1] "# 個のアクティブなリンク"
 
 #: src/feature/Image/ImageSharesPanel/ImageSharesPanel.svelte
 msgid "Published Links"
@@ -4247,7 +4236,6 @@ msgstr "合計"
 msgid "# User"
 msgid_plural "# Users"
 msgstr[0] "#人のユーザー"
-msgstr[1] "#人のユーザー"
 
 #: src/feature/User/UserStatus/userStatus.language.ts
 msgid "Banned"
@@ -4279,13 +4267,11 @@ msgstr "無期限"
 msgid "# filter"
 msgid_plural "# filters"
 msgstr[0] "# 件のフィルター"
-msgstr[1] "# 件のフィルター"
 
 #: src/routes/history/+page.svelte
 msgid "# tag"
 msgid_plural "# tags"
 msgstr[0] "# 件のタグ"
-msgstr[1] "# 件のタグ"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Tag name cannot contain a slash"
@@ -4575,8 +4561,7 @@ msgstr "<0/> コレクションを作成"
 #: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "Optionally group this # image into a collection to view and share them as one."
 msgid_plural "Optionally group these # images into a collection to view and share them as one."
-msgstr[0] "この # 枚の画像をコレクションにまとめて、ひとつとして表示・共有することもできます。"
-msgstr[1] "これら # 枚の画像をコレクションにまとめて、ひとつとして表示・共有することもできます。"
+msgstr[0] "こちらの # 枚の画像をコレクションにまとめて、ひとつとして表示・共有することもできます。"
 
 #: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "Anyone with this link can view the collection."
@@ -4946,7 +4931,6 @@ msgstr "画像に関するアクティビティがここに表示されます。
 msgid "By # person"
 msgid_plural "By # people"
 msgstr[0] "#人がブックマーク"
-msgstr[1] ""
 
 #. 0: remaining
 #: src/feature/Image/BookmarkersPanel/BookmarkersPanel.svelte
@@ -5027,7 +5011,6 @@ msgstr "親タグ"
 msgid "# more comment"
 msgid_plural "# more comments"
 msgstr[0] "他に#件のコメント"
-msgstr[1] "他に#件のコメント"
 
 #: src/lib/state/SelectionState.svelte.ts
 #: src/ui/components/checkbox/selection-checkbox.svelte
@@ -5048,17 +5031,21 @@ msgid "Reply..."
 msgstr "返信..."
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Permanently delete all data"
-msgstr "すべてのデータを完全に削除する"
+msgid "This cannot be undone."
+msgstr "この操作は取り消せません。"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Permanently disables the account. This cannot be undone."
-msgstr "アカウントを完全に無効化します。この操作は取り消せません。"
+msgid "Disable the account"
+msgstr "アカウントを無効化"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Removes all images and collections. Comments remain, shown as deleted."
-msgstr "すべての画像とコレクションを削除します。コメントは残り、削除済みとして表示されます。"
+msgid "Disable and delete content"
+msgstr "無効化してコンテンツを削除"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Keeps all images, collections and comments. Frees the email and username."
-msgstr "すべての画像、コレクション、コメントを保持します。メールアドレスとユーザー名は解放されます。"
+msgid "Keeps their uploads and content"
+msgstr "このユーザーのアップロードとコンテンツは保持されます"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Deletes their images, collections, and bookmarks by others. Comments stay, shown as deleted."
+msgstr "このユーザーの画像とコレクション、および他のユーザーがそれらの画像に付けたブックマークを削除します。コメントは残り、削除済みとして表示されます。"

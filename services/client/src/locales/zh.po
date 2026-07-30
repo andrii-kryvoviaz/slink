@@ -3682,37 +3682,31 @@ msgstr "下载 ShareX 配置"
 msgid "Successfully updated # image"
 msgid_plural "Successfully updated # images"
 msgstr[0] "成功更新 # 张图片"
-msgstr[1] "成功更新 # 张图片"
 
 #: src/feature/Image/History/BatchContext.svelte.ts
 msgid "Failed to update # image"
 msgid_plural "Failed to update # images"
 msgstr[0] "更新 # 张图片失败"
-msgstr[1] "更新 # 张图片失败"
 
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "Delete # child tag"
 msgid_plural "Delete # child tags"
 msgstr[0] "删除 # 个子标签"
-msgstr[1] "删除 # 个子标签"
 
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "Remove tag from # image"
 msgid_plural "Remove tag from # images"
 msgstr[0] "从 # 张图片中移除标签"
-msgstr[1] "从 # 张图片中移除标签"
 
 #: src/feature/Collection/ImageCollectionList/ImageCollectionList.svelte
 msgid "# more collection"
 msgid_plural "# more collections"
 msgstr[0] "还有 # 个收藏夹"
-msgstr[1] "还有 # 个收藏夹"
 
 #: src/feature/Tag/ImageTagList/ImageTagList.svelte
 msgid "# more tag"
 msgid_plural "# more tags"
 msgstr[0] "还有 # 个标签"
-msgstr[1] "还有 # 个标签"
 
 #: src/routes/preferences/+page.svelte
 msgid "日本語"
@@ -3913,7 +3907,6 @@ msgstr "保存过期时间失败"
 msgid "# day"
 msgid_plural "# days"
 msgstr[0] "# 天"
-msgstr[1] "# 天"
 
 #: src/feature/Share/Unavailable/Unavailable.svelte
 msgid "Share unavailable"
@@ -4243,7 +4236,6 @@ msgstr "合计"
 msgid "# User"
 msgid_plural "# Users"
 msgstr[0] "# 位用户"
-msgstr[1] "# 位用户"
 
 #: src/feature/User/UserStatus/userStatus.language.ts
 msgid "Banned"
@@ -4280,7 +4272,6 @@ msgstr[0] "# 个筛选条件"
 msgid "# tag"
 msgid_plural "# tags"
 msgstr[0] "# 个标签"
-msgstr[1] "# 个标签"
 
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "Tag name cannot contain a slash"
@@ -4571,7 +4562,6 @@ msgstr "<0/> 创建合集"
 msgid "Optionally group this # image into a collection to view and share them as one."
 msgid_plural "Optionally group these # images into a collection to view and share them as one."
 msgstr[0] "可将这 # 张图片归入一个合集，作为整体查看和分享（可选）。"
-msgstr[1] "可将这 # 张图片归入一个合集，作为整体查看和分享（可选）。"
 
 #: src/feature/Upload/CollectionPrompt/CollectionPrompt.svelte
 msgid "Anyone with this link can view the collection."
@@ -4941,7 +4931,6 @@ msgstr "你的图片相关动态会显示在这里。"
 msgid "By # person"
 msgid_plural "By # people"
 msgstr[0] "#人收藏"
-msgstr[1] ""
 
 #. 0: remaining
 #: src/feature/Image/BookmarkersPanel/BookmarkersPanel.svelte
@@ -5022,7 +5011,6 @@ msgstr "父标签"
 msgid "# more comment"
 msgid_plural "# more comments"
 msgstr[0] "还有#条评论"
-msgstr[1] "还有#条评论"
 
 #: src/lib/state/SelectionState.svelte.ts
 #: src/ui/components/checkbox/selection-checkbox.svelte
@@ -5043,17 +5031,21 @@ msgid "Reply..."
 msgstr "回复..."
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Permanently delete all data"
-msgstr "永久删除所有数据"
+msgid "This cannot be undone."
+msgstr "此操作不可撤销。"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Permanently disables the account. This cannot be undone."
-msgstr "永久禁用该账号。此操作不可撤销。"
+msgid "Disable the account"
+msgstr "禁用账号"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Removes all images and collections. Comments remain, shown as deleted."
-msgstr "删除所有图片和合集。评论将保留，并显示为已删除。"
+msgid "Disable and delete content"
+msgstr "禁用账号并删除内容"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Keeps all images, collections and comments. Frees the email and username."
-msgstr "保留所有图片、合集和评论。释放该邮箱和用户名。"
+msgid "Keeps their uploads and content"
+msgstr "保留该用户上传的图片和其他内容"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Deletes their images, collections, and bookmarks by others. Comments stay, shown as deleted."
+msgstr "删除该用户的图片、合集，以及其他用户对这些图片的收藏。评论会保留，显示为已删除。"
