@@ -2,7 +2,7 @@
   import CopyableText from '@slink/feature/Text/CopyableText/CopyableText.svelte';
 
   interface Props {
-    username: string;
+    username: string | null;
   }
 
   let { username }: Props = $props();

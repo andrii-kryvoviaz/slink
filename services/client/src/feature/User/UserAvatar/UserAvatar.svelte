@@ -14,7 +14,7 @@
     size = 'md',
     class: className = '',
   }: {
-    user: { displayName: string; email: string; avatar?: string };
+    user: { displayName: string; avatar?: string };
     size?: UserAvatarSize;
     class?: string;
   } = $props();

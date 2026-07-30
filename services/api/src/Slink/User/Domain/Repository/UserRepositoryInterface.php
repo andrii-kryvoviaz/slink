@@ -9,6 +9,7 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
+use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\Filter\UserListFilter;
 use Slink\User\Domain\ValueObject\Email;
 use Slink\User\Domain\ValueObject\Username;
@@ -39,6 +40,12 @@ interface UserRepositoryInterface extends ServiceEntityRepositoryInterface {
    * @return Paginator<UserView>
    */
   public function getUserList(int $page, UserListFilter $filter): Paginator;
-  
+
+  /**
+   * @param UserStatus $status
+   * @return array<int, UserView>
+   */
+  public function findByStatus(UserStatus $status): array;
+
   public function save(UserView $userView): void;
 }

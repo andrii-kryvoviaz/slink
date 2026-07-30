@@ -23,7 +23,7 @@ final class SignupRulesTest extends HttpTestCase {
     ]);
   }
 
-  private function signUp(string $email, string $username, string $password): int {
+  private function signUpWithPassword(string $email, string $username, string $password): int {
     $this->client->request(
       'POST',
       '/api/auth/signup',
@@ -49,7 +49,7 @@ final class SignupRulesTest extends HttpTestCase {
   public function signupIsBlockedWhenRegistrationIsDisabled(): void {
     $this->configureUserSettings(['allowRegistration' => false]);
 
-    $status = $this->signUp('blocked@local.test', 'blockeduser', 'Password123!');
+    $status = $this->signUpWithPassword('blocked@local.test', 'blockeduser', 'Password123!');
 
     self::assertSame(400, $status);
     self::assertStringContainsStringIgnoringCase('registration', $this->responseBody());
@@ -59,7 +59,7 @@ final class SignupRulesTest extends HttpTestCase {
   public function newlyRegisteredUserIsPendingWhenApprovalRequired(): void {
     $this->configureUserSettings(['approvalRequired' => true]);
 
-    $status = $this->signUp('pending@local.test', 'pendinguser', 'Password123!');
+    $status = $this->signUpWithPassword('pending@local.test', 'pendinguser', 'Password123!');
     self::assertContains($status, [200, 201, 202, 204]);
 
     $loginStatus = $this->apiRequest(
@@ -78,7 +78,7 @@ final class SignupRulesTest extends HttpTestCase {
   public function approvedFlowCreatesAuthenticatableUser(): void {
     $this->configureUserSettings(['approvalRequired' => false]);
 
-    $status = $this->signUp('approved@local.test', 'approveduser', 'Password123!');
+    $status = $this->signUpWithPassword('approved@local.test', 'approveduser', 'Password123!');
     self::assertContains($status, [200, 201, 202, 204]);
 
     $token = $this->login('approveduser', 'Password123!');
@@ -89,7 +89,7 @@ final class SignupRulesTest extends HttpTestCase {
   public function signupRejectsPasswordShorterThanConfiguredMinimum(): void {
     $this->configureUserSettings(['minLength' => 12]);
 
-    $status = $this->signUp('short@local.test', 'shortuser', 'Abc1!xy');
+    $status = $this->signUpWithPassword('short@local.test', 'shortuser', 'Abc1!xy');
 
     self::assertContains($status, [400, 422]);
     self::assertStringContainsStringIgnoringCase('password', $this->responseBody());

@@ -34,8 +34,40 @@ class UserListFeed extends AbstractPaginatedFeed<UserListingItem> {
     return item.id;
   }
 
-  public removeUser(id: string): void {
-    this._items = this._items.filter((item) => item.id !== id);
+  public override async removeItems(
+    ids: string[],
+    options?: Parameters<typeof this.fetch>[2],
+  ): Promise<void> {
+    const previousCount = this.items.length;
+
+    await super.removeItems(ids, options);
+
+    if (this.items.length === previousCount) {
+      return;
+    }
+
+    await this._refetchWindow();
+  }
+
+  private async _refetchWindow(): Promise<void> {
+    const size = this._meta.size;
+    const page = this.currentPage;
+
+    this.invalidate();
+
+    if (this.items.length >= size) {
+      await this.load({ page: 1, limit: page * size });
+      this._meta = { ...this._meta, page, size };
+      return;
+    }
+
+    await this.loadPage(page, false, size);
+
+    if (this.hasItems || page === 1) {
+      return;
+    }
+
+    await this.loadPage(page - 1, false, size);
   }
 
   public setAppendMode(mode: 'auto' | 'always' | 'never'): void {

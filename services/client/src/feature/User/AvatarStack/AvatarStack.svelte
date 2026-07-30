@@ -6,7 +6,7 @@
   import { avatarStackTheme } from './AvatarStack.theme';
 
   interface Props {
-    users: { displayName: string; email: string; avatar?: string }[];
+    users: { displayName: string; avatar?: string }[];
     max?: number;
     size?: UserAvatarSize;
     ringClass?: string;

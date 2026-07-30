@@ -16,6 +16,7 @@ use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\Pagination\CursorPaginationTrait;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractRepository;
+use Slink\User\Domain\Enum\UserStatus;
 
 final class ImageRepository extends AbstractRepository implements ImageRepositoryInterface {
   use CursorPaginationTrait;
@@ -83,7 +84,9 @@ final class ImageRepository extends AbstractRepository implements ImageRepositor
       ->leftJoin('image.user', 'user')
       ->addSelect('user')
       ->leftJoin('image.license', 'license')
-      ->addSelect('license');
+      ->addSelect('license')
+      ->andWhere('(image.user IS NULL OR user.status != :ownerStatus)')
+      ->setParameter('ownerStatus', UserStatus::Deleted);
 
     if (($isPublic = $imageListFilter->getIsPublic()) !== null) {
       $qb->andWhere('image.attributes.isPublic = :isPublic')

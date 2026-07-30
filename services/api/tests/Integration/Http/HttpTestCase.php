@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration\Http;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Slink\Settings\Application\Command\SaveSettings\SaveSettingsCommand;
 use Slink\Shared\Application\Command\CommandBusInterface;
 use Slink\User\Application\Command\CreateUser\CreateUserCommand;
@@ -237,6 +238,161 @@ abstract class HttpTestCase extends WebTestCase {
     $payload = \json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
     return $payload['access_token'] ?? $payload['accessToken'] ?? $payload['token'] ?? '';
+  }
+
+  protected function bootAdmin(): string {
+    $adminId = $this->createUser('admin@local.test', 'adminuser', self::PASSWORD);
+    $this->grantAdmin($adminId);
+
+    return $this->login('adminuser', self::PASSWORD);
+  }
+
+  /**
+   * @return array{access_token: string, refresh_token: string}
+   */
+  protected function authenticateWithRefreshToken(string $username, string $password): array {
+    $this->client->request(
+      'POST',
+      '/api/auth/login',
+      [],
+      [],
+      ['CONTENT_TYPE' => 'application/json'],
+      \json_encode(['username' => $username, 'password' => $password], JSON_THROW_ON_ERROR),
+    );
+
+    $response = $this->client->getResponse();
+    self::assertSame(200, $response->getStatusCode(), 'Login failed: ' . (string) $response->getContent());
+
+    /** @var array{access_token: string, refresh_token: string} $payload */
+    $payload = \json_decode((string) $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+    return $payload;
+  }
+
+  protected function refreshStatus(string $refreshToken): int {
+    $this->client->request(
+      'POST',
+      '/api/auth/refresh',
+      [],
+      [],
+      ['CONTENT_TYPE' => 'application/json'],
+      \json_encode(['refresh_token' => $refreshToken], JSON_THROW_ON_ERROR),
+    );
+
+    return $this->client->getResponse()->getStatusCode();
+  }
+
+  protected function allowRegistration(): void {
+    $this->saveSettings('user', [
+      'approvalRequired' => false,
+      'allowRegistration' => true,
+      'password' => [
+        'minLength' => 8,
+        'requirements' => 0,
+      ],
+    ]);
+  }
+
+  protected function signUp(string $email, string $username): int {
+    return $this->apiRequest(
+      'POST',
+      '/api/auth/signup',
+      null,
+      ['CONTENT_TYPE' => 'application/json'],
+      \json_encode([
+        'email' => $email,
+        'username' => $username,
+        'password' => self::PASSWORD,
+        'confirm' => self::PASSWORD,
+      ], JSON_THROW_ON_ERROR),
+    );
+  }
+
+  protected function createUserWithDisplayName(string $email, string $username, string $displayName): string {
+    $command = new CreateUserCommand($email, self::PASSWORD, $username, $displayName);
+    $this->commandBus()->handle($command);
+
+    return $command->getId()->toString();
+  }
+
+  protected function updateDisplayName(string $token, string $displayName): int {
+    return $this->apiRequest(
+      'PATCH',
+      '/api/user/profile',
+      $token,
+      ['CONTENT_TYPE' => 'application/json'],
+      \json_encode(['display_name' => $displayName], JSON_THROW_ON_ERROR),
+    );
+  }
+
+  /**
+   * @return array<string, mixed>
+   */
+  protected function responsePayload(): array {
+    /** @var array<string, mixed> $payload */
+    $payload = \json_decode(
+      (string) $this->client->getResponse()->getContent(),
+      true,
+      512,
+      JSON_THROW_ON_ERROR,
+    ) ?: [];
+
+    return $payload;
+  }
+
+  protected function postComment(string $token, string $imageId, string $content, ?string $referencedCommentId = null): string {
+    $body = ['content' => $content];
+
+    if ($referencedCommentId !== null) {
+      $body['referencedCommentId'] = $referencedCommentId;
+    }
+
+    $status = $this->apiRequest(
+      'POST',
+      \sprintf('/api/image/%s/comments', $imageId),
+      $token,
+      ['CONTENT_TYPE' => 'application/json'],
+      \json_encode($body, JSON_THROW_ON_ERROR),
+    );
+
+    self::assertSame(201, $status, 'Post comment failed: ' . (string) $this->client->getResponse()->getContent());
+
+    return $this->extractId((string) $this->client->getResponse()->getContent());
+  }
+
+  /**
+   * @return array<int, array<string, mixed>>
+   */
+  protected function fetchComments(string $imageId, string $token): array {
+    $status = $this->apiRequest('GET', \sprintf('/api/image/%s/comments', $imageId), $token);
+    self::assertSame(200, $status, 'Fetch comments failed: ' . (string) $this->client->getResponse()->getContent());
+
+    /** @var array{data: array<int, array<string, mixed>>} $payload */
+    $payload = \json_decode((string) $this->client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+    return $payload['data'];
+  }
+
+  protected function softDelete(string $adminToken, string $userId): void {
+    $status = $this->apiRequest(
+      'PATCH',
+      '/api/user/status',
+      $adminToken,
+      ['CONTENT_TYPE' => 'application/json'],
+      \json_encode(['id' => $userId, 'status' => UserStatus::Deleted->value], JSON_THROW_ON_ERROR),
+    );
+
+    self::assertSame(200, $status, 'Soft delete failed: ' . (string) $this->client->getResponse()->getContent());
+  }
+
+  protected function countRowsByColumn(string $table, string $column, string $value): int {
+    /** @var EntityManagerInterface $entityManager */
+    $entityManager = static::getContainer()->get(EntityManagerInterface::class);
+
+    return (int) $entityManager->getConnection()->fetchOne(
+      \sprintf('SELECT COUNT(*) FROM "%s" WHERE %s = :value', $table, $column),
+      ['value' => $value],
+    );
   }
 
   /**

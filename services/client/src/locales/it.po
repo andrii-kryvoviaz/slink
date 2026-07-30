@@ -220,6 +220,9 @@ msgstr "Modifica"
 msgid "Delete"
 msgstr "Elimina"
 
+#: src/feature/Comment/CommentInput.svelte
+#: src/feature/Comment/CommentListItem.svelte
+#: src/feature/Comment/CommentListItem.svelte
 #: src/feature/Comment/CommentListItem.svelte
 msgid "[deleted]"
 msgstr "[eliminato]"
@@ -894,8 +897,6 @@ msgstr "È possibile aggiungere solo le proprie immagini"
 #: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
 #: src/feature/Image/Actions/ImageCollectionAction/ImageCollectionAction.svelte
 #: src/feature/Image/Actions/ImageCollectionAction/ImageCollectionAction.svelte
-#: src/feature/Image/Actions/ImageCollectionAction/ImageCollectionAction.svelte
-#: src/feature/Image/Actions/ImageCollectionAction/ImageCollectionAction.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 msgid "Add to collection"
@@ -959,14 +960,10 @@ msgid "Download"
 msgstr "Scarica"
 
 #: src/feature/Image/Actions/ImageDeleteAction/ImageDeleteAction.svelte
-#: src/feature/Image/Actions/ImageDeleteAction/ImageDeleteAction.svelte
-#: src/feature/Image/Actions/ImageDeleteAction/ImageDeleteAction.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 msgid "Delete image"
 msgstr "Elimina immagine"
 
-#: src/feature/Image/Actions/ImageTagAction/ImageTagAction.svelte
-#: src/feature/Image/Actions/ImageTagAction/ImageTagAction.svelte
 #: src/feature/Image/Actions/ImageTagAction/ImageTagAction.svelte
 #: src/feature/Image/Actions/ImageTagAction/ImageTagAction.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
@@ -2244,10 +2241,6 @@ msgstr "Rimuovi amministratore"
 msgid "Delete User"
 msgstr "Elimina utente"
 
-#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "User account and all associated data will be removed"
-msgstr "L'account utente e tutti i dati associati verranno rimossi"
-
 #: src/feature/User/UserDataTable/data-table-email-button.svelte
 msgid "Email <0/>"
 msgstr "Email <0/>"
@@ -2325,7 +2318,6 @@ msgstr "Configura le preferenze dell'applicazione e gestisci il comportamento de
 msgid "Users | Slink Admin"
 msgstr "Utenti | Slink Admin"
 
-#: src/routes/admin/user/+page.svelte
 #: src/routes/admin/user/+page.svelte
 msgid "Manage user accounts and permissions"
 msgstr "Gestisci gli account utente e i permessi"
@@ -2457,10 +2449,6 @@ msgstr "Nessun elemento in questa raccolta ancora."
 #: src/routes/help/faq/+page.svelte
 msgid "FAQ | Slink"
 msgstr "FAQ | Slink"
-
-#: src/routes/help/faq/+page.svelte
-msgid "Frequently asked questions about Slink - image sharing platform"
-msgstr "Domande frequenti su Slink - piattaforma di condivisione immagini"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Frequently Asked Questions"
@@ -3665,10 +3653,6 @@ msgstr "Revoca chiave"
 #: src/feature/User/ApiKey/CreatedKeyDisplay.svelte
 msgid "Download ShareX Config"
 msgstr "Scarica configurazione ShareX"
-
-#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Account and all associated data will be removed"
-msgstr "L'account e tutti i dati associati verranno rimossi"
 
 #: src/feature/Image/History/BatchContext.svelte.ts
 msgid "Successfully updated # image"
@@ -5127,6 +5111,31 @@ msgstr "Il file è troppo grande. La dimensione massima consentita è {limit}."
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "An empty file is not allowed."
 msgstr "Un file vuoto non è consentito."
+
 #: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
 msgid "Copy link format"
 msgstr "Scegli formato del link"
+
+#: src/feature/Comment/CommentInput.svelte
+msgid "Reply..."
+msgstr "Rispondi..."
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "This cannot be undone."
+msgstr "Questa azione non può essere annullata."
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Disable the account"
+msgstr "Disabilita l'account"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Keeps their uploads and content"
+msgstr "Mantiene i suoi caricamenti e i suoi contenuti"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Disable and delete content"
+msgstr "Disabilita ed elimina i contenuti"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Deletes their images, collections, and bookmarks by others. Comments stay, shown as deleted."
+msgstr "Elimina le sue immagini, le sue raccolte e i preferiti che altri hanno aggiunto alle sue immagini. I commenti restano, mostrati come eliminati."

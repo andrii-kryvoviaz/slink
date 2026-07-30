@@ -31,7 +31,6 @@ export interface BookmarkStatusResponse {
 export interface BookmarkerItem {
   id: string;
   displayName: string;
-  email: string;
   bookmarkedAt: {
     formattedDate: string;
     timestamp: number;

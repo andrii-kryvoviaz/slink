@@ -8,6 +8,7 @@ use EventSauce\EventSourcing\AggregateRootId;
 use EventSauce\EventSourcing\Snapshotting\AggregateRootWithSnapshotting;
 use Slink\Shared\Domain\AbstractAggregateRoot;
 use Slink\Shared\Domain\Exception\Date\DateTimeException;
+use Slink\Shared\Domain\Exception\InvalidArgumentException;
 use Slink\Shared\Domain\ValueObject\Date\DateTime;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Context\ChangeUserRoleContext;
@@ -24,6 +25,7 @@ use Slink\User\Domain\Event\UserPreferencesWasUpdated;
 use Slink\User\Domain\Event\UserSignedIn;
 use Slink\User\Domain\Event\UserStatusWasChanged;
 use Slink\User\Domain\Event\UserWasCreated;
+use Slink\User\Domain\Event\UserWasPurged;
 use Slink\User\Domain\Event\ApiKeyWasCreated;
 use Slink\User\Domain\Event\ApiKeyWasRevoked;
 use Slink\User\Domain\Event\OAuth\OAuthAccountWasLinked;
@@ -37,6 +39,7 @@ use Slink\User\Domain\Specification\UniqueDisplayNameSpecificationInterface;
 use Slink\User\Domain\Exception\InvalidUserRole;
 use Slink\User\Domain\Exception\SelfUserRoleChangeException;
 use Slink\User\Domain\Exception\SelfUserStatusChangeException;
+use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\User\Domain\Specification\CurrentUserSpecificationInterface;
 use Slink\User\Domain\ValueObject\Auth\Credentials;
 use Slink\User\Domain\ValueObject\Auth\HashedApiKey;
@@ -60,6 +63,7 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   private DisplayName $displayName;
   private HashedPassword $hashedPassword;
   private UserStatus $status;
+  private bool $purged = false;
   
   private RoleSet $roles;
   private OAuthSubjectSet $linkedOAuthSubjects;
@@ -277,6 +281,10 @@ final class User extends AbstractAggregateRoot implements UserInterface {
       throw new SelfUserStatusChangeException();
     }
     
+    if($this->status->isDeleted()) {
+      throw new InvalidArgumentException('Deleted user status cannot be changed.', 'status');
+    }
+    
     $this->recordThat(new UserStatusWasChanged($this->aggregateRootId(), $status));
   }
   
@@ -287,7 +295,38 @@ final class User extends AbstractAggregateRoot implements UserInterface {
   public function applyUserStatusWasChanged(UserStatusWasChanged $event): void {
     $this->setStatus($event->status);
   }
-  
+
+  /**
+   * @return void
+   */
+  public function purge(): void {
+    if (!$this->aggregateRootVersion()) {
+      throw new NotFoundException();
+    }
+
+    if ($this->purged) {
+      return;
+    }
+
+    if (!$this->status->isDeleted()) {
+      $this->recordThat(new UserStatusWasChanged($this->aggregateRootId(), UserStatus::Deleted));
+    }
+
+    $this->recordThat(new UserWasPurged($this->aggregateRootId()));
+  }
+
+  /**
+   * @param UserWasPurged $event
+   * @return void
+   */
+  public function applyUserWasPurged(UserWasPurged $event): void {
+    $this->purged = true;
+  }
+
+  public function isPurged(): bool {
+    return $this->purged;
+  }
+
   public function changeDisplayName(DisplayName $displayName, UniqueDisplayNameSpecificationInterface $uniqueDisplayNameSpecification): void {
     if(!$uniqueDisplayNameSpecification->isUnique($displayName)) {
       throw new DisplayNameAlreadyExistException();
@@ -447,6 +486,7 @@ final class User extends AbstractAggregateRoot implements UserInterface {
       'displayName' => $this->displayName->toString(),
       'hashedPassword' => $this->hashedPassword->toString(),
       'status' => $this->status->value,
+      'purged' => $this->purged,
       'roles' => $this->roles->toArray(),
       'linkedOAuthSubjects' => $this->linkedOAuthSubjects->toArray(),
       'preferences' => $this->preferences->toPayload(),
@@ -464,7 +504,8 @@ final class User extends AbstractAggregateRoot implements UserInterface {
     $user->displayName = DisplayName::fromString($state['displayName']);
     $user->hashedPassword = HashedPassword::fromHash($state['hashedPassword']);
     $user->status = UserStatus::from($state['status']);
-    
+    $user->purged = $state['purged'] ?? false;
+
     $roles = array_map(fn(string $roleString) => Role::fromString($roleString), $state['roles']);
     $user->roles = RoleSet::create($roles);
     

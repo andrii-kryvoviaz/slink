@@ -3,6 +3,7 @@ import { type Account, unique } from '../helpers/accounts';
 import { ApiClient } from '../helpers/api';
 import { provisionUser } from '../helpers/provisioning';
 import { AdminSettingsPage } from '../pages/AdminSettingsPage';
+import { AdminUsersPage } from '../pages/AdminUsersPage';
 import { AwaitingApprovalPage } from '../pages/AwaitingApprovalPage';
 import { CollectionsPage } from '../pages/CollectionsPage';
 import { ExplorePage } from '../pages/ExplorePage';
@@ -58,6 +59,7 @@ type AuthFixtures = {
   collectionsPage: CollectionsPage;
   preferencesPage: PreferencesPage;
   adminSettingsPage: AdminSettingsPage;
+  adminUsersPage: AdminUsersPage;
   ssoSettingsPage: SsoSettingsPage;
   storageSettingsPage: StorageSettingsPage;
   layoutControls: LayoutControls;
@@ -120,6 +122,10 @@ export const test = base.extend<AuthFixtures>({
 
   adminSettingsPage: async ({ page }, use) => {
     await use(new AdminSettingsPage(page));
+  },
+
+  adminUsersPage: async ({ page }, use) => {
+    await use(new AdminUsersPage(page));
   },
 
   ssoSettingsPage: async ({ page }, use) => {

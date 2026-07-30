@@ -7,9 +7,11 @@ namespace Slink\User\Infrastructure\ReadModel\Projection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\NonUniqueResultException;
+use Slink\Shared\Domain\ValueObject\ID;
 use Slink\Shared\Infrastructure\Exception\NotFoundException;
 use Slink\Shared\Infrastructure\Persistence\ReadModel\AbstractProjection;
 use Slink\User\Application\Service\UserRoleManagerInterface;
+use Slink\User\Domain\Enum\UserStatus;
 use Slink\User\Domain\Event\Role\UserGrantedRole;
 use Slink\User\Domain\Event\Role\UserRevokedRole;
 use Slink\User\Domain\Event\UserDisplayNameWasChanged;
@@ -18,8 +20,13 @@ use Slink\User\Domain\Event\UserPasswordWasReset;
 use Slink\User\Domain\Event\UserPreferencesWasUpdated;
 use Slink\User\Domain\Event\UserStatusWasChanged;
 use Slink\User\Domain\Event\UserWasCreated;
+use Slink\User\Domain\Event\UserWasPurged;
+use Slink\User\Domain\Repository\ApiKeyRepositoryInterface;
+use Slink\User\Domain\Repository\OAuthLinkRepositoryInterface;
+use Slink\User\Domain\Repository\RefreshTokenRepositoryInterface;
+use Slink\User\Domain\Repository\UserPreferencesRepositoryInterface;
 use Slink\User\Domain\Repository\UserRepositoryInterface;
-use Slink\User\Infrastructure\ReadModel\Repository\UserPreferencesRepository;
+use Slink\User\Domain\ValueObject\Auth\PermissionsVersion;
 use Slink\User\Infrastructure\ReadModel\View\UserPreferencesView;
 use Slink\User\Infrastructure\ReadModel\View\UserRoleView;
 use Slink\User\Infrastructure\ReadModel\View\UserView;
@@ -29,7 +36,10 @@ final class UserProjection extends AbstractProjection {
     private readonly UserRepositoryInterface $repository,
     private readonly UserRoleManagerInterface $userRoleManager,
     private readonly EntityManagerInterface $entityManager,
-    private readonly UserPreferencesRepository $preferencesRepository,
+    private readonly UserPreferencesRepositoryInterface $preferencesRepository,
+    private readonly RefreshTokenRepositoryInterface $refreshTokenRepository,
+    private readonly ApiKeyRepositoryInterface $apiKeyRepository,
+    private readonly OAuthLinkRepositoryInterface $oauthLinkRepository,
   ) {
   }
   
@@ -77,6 +87,12 @@ final class UserProjection extends AbstractProjection {
     $user = $this->repository->one($event->id);
     $user->setStatus($event->status);
 
+    if ($event->status === UserStatus::Deleted) {
+      $this->revokeAccess($user, $event->id);
+    } else {
+      $this->userRoleManager->storePermissionsVersion($event->id->toString(), PermissionsVersion::bumpedAt(time()));
+    }
+
     $this->repository->save($user);
   }
   
@@ -111,7 +127,7 @@ final class UserProjection extends AbstractProjection {
     $user->addRole($roleReference);
     $this->repository->save($user);
     
-    $this->userRoleManager->storePermissionsVersion($event->id->toString(), time());
+    $this->userRoleManager->storePermissionsVersion($event->id->toString(), PermissionsVersion::bumpedAt(time()));
   }
   
   /**
@@ -134,9 +150,42 @@ final class UserProjection extends AbstractProjection {
     $user->removeRole($roleReference);
     $this->repository->save($user);
     
-    $this->userRoleManager->storePermissionsVersion($event->id->toString(), time());
+    $this->userRoleManager->storePermissionsVersion($event->id->toString(), PermissionsVersion::bumpedAt(time()));
   }
   
+  /**
+   * @param UserWasPurged $event
+   * @return void
+   * @throws NonUniqueResultException
+   * @throws NotFoundException
+   */
+  public function handleUserWasPurged(UserWasPurged $event): void {
+    $user = $this->repository->one($event->id);
+
+    $this->revokeAccess($user, $event->id);
+    $this->repository->save($user);
+
+    $this->preferencesRepository->deleteByUserId($event->id->toString());
+  }
+
+  /**
+   * @param UserView $user
+   * @param ID $id
+   * @return void
+   */
+  private function revokeAccess(UserView $user, ID $id): void {
+    $userId = $id->toString();
+
+    $this->refreshTokenRepository->deleteByUserId($userId);
+    $this->apiKeyRepository->deleteByUserId($id);
+    $this->oauthLinkRepository->deleteByUserId($userId);
+
+    $user->clearRoles();
+    $user->revokeIdentity();
+
+    $this->userRoleManager->storePermissionsVersion($userId, PermissionsVersion::terminal());
+  }
+
   /**
    * @throws NonUniqueResultException
    * @throws NotFoundException

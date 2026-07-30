@@ -28,9 +28,9 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 class UserView extends AbstractView {
   /**
    * @param string $uuid
-   * @param Email $email
-   * @param Username $username
-   * @param DisplayName $displayName
+   * @param Email|null $email
+   * @param Username|null $username
+   * @param DisplayName|null $displayName
    * @param HashedPassword $password
    * @param DateTime $createdAt
    * @param DateTime|null $updatedAt
@@ -44,19 +44,19 @@ class UserView extends AbstractView {
     #[SerializedName('id')]
     private string $uuid,
 
-    #[ORM\Column(type: 'email', unique: true)]
+    #[ORM\Column(type: 'email', unique: true, nullable: true)]
     #[Groups(['internal'])]
-    private Email $email,
+    private ?Email $email,
     
-    #[ORM\Column(type: 'username', unique: true)]
+    #[ORM\Column(type: 'username', unique: true, nullable: true)]
     #[Groups(['internal'])]
     #[Sanitize]
-    private Username $username,
+    private ?Username $username,
     
-    #[ORM\Column(type: 'display_name', unique: true, nullable: true)]
+    #[ORM\Column(type: 'display_name', nullable: true)]
     #[Groups(['public', 'internal'])]
     #[Sanitize]
-    private DisplayName $displayName,
+    private ?DisplayName $displayName,
 
     #[ORM\Column(type: 'hashed_password')]
     private HashedPassword $password,
@@ -90,24 +90,24 @@ class UserView extends AbstractView {
   }
   
   /**
-   * @return string
+   * @return string|null
    */
-  public function getEmail(): string {
-    return $this->email->toString();
+  public function getEmail(): ?string {
+    return $this->email?->toString();
   }
   
   /**
-   * @return string
+   * @return string|null
    */
-  public function getUsername(): string {
-    return $this->username->toString();
+  public function getUsername(): ?string {
+    return $this->username?->toString();
   }
   
   /**
    * @return string
    */
   public function getDisplayName(): string {
-    return $this->displayName->toString();
+    return $this->displayName?->toString() ?? '';
   }
   
   /**
@@ -137,6 +137,20 @@ class UserView extends AbstractView {
   public function getStatus(): string {
     return $this->status->value;
   }
+
+  /**
+   * @return bool
+   */
+  public function isDeleted(): bool {
+    return $this->status->isDeleted();
+  }
+
+  /**
+   * @return bool
+   */
+  public function isRestricted(): bool {
+    return $this->status->isRestricted();
+  }
   
   /**
    * @param UserStatus $status
@@ -163,6 +177,13 @@ class UserView extends AbstractView {
   }
   
   /**
+   * @return void
+   */
+  public function clearRoles(): void {
+    $this->roles?->clear();
+  }
+
+  /**
    * @return array<string>
    */
   public function getRoles(): array {
@@ -183,5 +204,13 @@ class UserView extends AbstractView {
    */
   public function setDisplayName(DisplayName $displayName): void {
     $this->displayName = $displayName;
+  }
+
+  /**
+   * @return void
+   */
+  public function revokeIdentity(): void {
+    $this->email = null;
+    $this->username = null;
   }
 }

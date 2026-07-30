@@ -11,7 +11,7 @@ final class CommentPayloadTest extends HttpTestCase {
   /**
    * @return array<int, array<string, mixed>>
    */
-  private function fetchComments(string $imageId, ?string $token = null): array {
+  protected function fetchComments(string $imageId, ?string $token = null): array {
     $status = $this->apiRequest('GET', \sprintf('/api/image/%s/comments', $imageId), $token);
     self::assertSame(200, $status, 'Fetch comments failed: ' . (string) $this->client->getResponse()->getContent());
 

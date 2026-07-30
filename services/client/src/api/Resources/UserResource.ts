@@ -60,6 +60,10 @@ export class UserResource extends AbstractResource {
     return this.patch(`/user/status`, { json: { id, status } });
   }
 
+  public async purgeUser(id: string): Promise<EmptyResponse> {
+    return this.delete(`/user/${id}`);
+  }
+
   public async grantRole(
     id: string,
     role: UserRole,

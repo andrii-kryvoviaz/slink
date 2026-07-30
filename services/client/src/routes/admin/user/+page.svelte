@@ -28,7 +28,7 @@
   const userFeedState = useUserListFeed();
 
   const onDelete = (id: string) => {
-    userFeedState.removeUser(id);
+    userFeedState.removeItems([id]);
   };
 
   let userUpdates = $state<Record<string, User>>({});

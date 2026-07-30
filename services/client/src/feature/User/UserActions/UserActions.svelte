@@ -14,6 +14,7 @@
   import Icon from '@iconify/svelte';
 
   import { ReactiveState } from '@slink/api/ReactiveState';
+  import type { EmptyResponse } from '@slink/api/Response';
   import type { SingleUserResponse } from '@slink/api/Response/User/SingleUserResponse';
 
   interface Props {
@@ -43,13 +44,22 @@
 
   const {
     isLoading: userDeleteLoading,
-    data: userDeleteResponse,
     error: userDeleteError,
     run: deleteUser,
   } = ReactiveState<SingleUserResponse>(
     () => {
-      statusToChange = UserStatusEnum.Deleted;
-      return ApiClient.user.changeUserStatus(user.id, statusToChange);
+      return ApiClient.user.changeUserStatus(user.id, UserStatusEnum.Deleted);
+    },
+    { minExecutionTime: 300 },
+  );
+
+  const {
+    isLoading: userPurgeLoading,
+    error: userPurgeError,
+    run: purgeUser,
+  } = ReactiveState<EmptyResponse>(
+    () => {
+      return ApiClient.user.purgeUser(user.id);
     },
     { minExecutionTime: 300 },
   );
@@ -95,15 +105,25 @@
     showDeleteConfirmation = true;
   };
 
-  const confirmUserDeletion = async () => {
-    await deleteUser();
+  const confirmUserDeletion = async (purge: boolean) => {
+    let error: Error | null;
+
+    if (purge) {
+      await purgeUser();
+      error = $userPurgeError;
+    } else {
+      await deleteUser();
+      error = $userDeleteError;
+    }
+
     showDeleteConfirmation = false;
 
-    if (userDeleteError) {
+    if (error) {
       return;
     }
 
     onDelete?.(user.id);
+    closeDropdown();
   };
 
   const cancelUserDeletion = () => {
@@ -155,16 +175,6 @@
   });
 
   $effect(() => {
-    if ($userDeleteResponse) {
-      const responseId = getResponseId($userDeleteResponse);
-      if (!handledResponseIds.has(responseId)) {
-        handledResponseIds.add(responseId);
-        successHandler($userDeleteResponse);
-      }
-    }
-  });
-
-  $effect(() => {
     if ($grantRoleResponse) {
       const responseId = getResponseId($grantRoleResponse);
       if (!handledResponseIds.has(responseId)) {
@@ -186,6 +196,7 @@
 
   $effect(() => errorHandler($statusError));
   $effect(() => errorHandler($userDeleteError));
+  $effect(() => errorHandler($userPurgeError));
   $effect(() => errorHandler($grantRoleError));
   $effect(() => errorHandler($revokeRoleError));
 </script>
@@ -268,7 +279,7 @@
         {:else}
           <UserDeleteConfirmation
             {user}
-            loading={$userDeleteLoading}
+            loading={$userDeleteLoading || $userPurgeLoading}
             onConfirm={confirmUserDeletion}
             onCancel={cancelUserDeletion}
           />

@@ -12,9 +12,9 @@ export enum UserRole {
 
 export type User = {
   id: string;
-  email: string;
+  email: string | null;
   displayName: string;
-  username: string;
+  username: string | null;
   roles: string[];
   status?: UserStatus;
 };

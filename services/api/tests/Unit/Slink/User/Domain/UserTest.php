@@ -7,6 +7,7 @@ namespace Unit\Slink\User\Domain;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Slink\Shared\Domain\Exception\InvalidArgumentException;
 use Slink\Shared\Domain\ValueObject\ID;
 use Slink\User\Domain\Context\ChangeUserRoleContext;
 use Slink\User\Domain\Context\UserCreationContext;
@@ -20,6 +21,7 @@ use Slink\User\Domain\Event\UserPasswordWasReset;
 use Slink\User\Domain\Event\UserSignedIn;
 use Slink\User\Domain\Event\UserStatusWasChanged;
 use Slink\User\Domain\Event\UserWasCreated;
+use Slink\User\Domain\Event\UserWasPurged;
 use Slink\User\Domain\Exception\DisplayNameAlreadyExistException;
 use Slink\User\Domain\Exception\EmailAlreadyExistException;
 use Slink\User\Domain\Exception\InvalidCredentialsException;
@@ -74,6 +76,19 @@ final class UserTest extends TestCase {
     ];
   }
 
+  /**
+   * @return array<string, array{UserStatus}>
+   */
+  public static function provideAllUserStatusData(): array {
+    return [
+      'Active status' => [UserStatus::Active],
+      'Inactive status' => [UserStatus::Inactive],
+      'Suspended status' => [UserStatus::Suspended],
+      'Banned status' => [UserStatus::Banned],
+      'Deleted status' => [UserStatus::Deleted],
+    ];
+  }
+
   #[Test]
   public function itChangesDisplayNameSuccessfully(): void {
     $user = $this->createUser();
@@ -123,6 +138,20 @@ final class UserTest extends TestCase {
     $this->assertCount(1, $events);
     $this->assertInstanceOf(UserStatusWasChanged::class, $events[0]);
     $this->assertSame($newStatus, $user->getStatus());
+  }
+
+  #[Test]
+  #[DataProvider('provideAllUserStatusData')]
+  public function itThrowsWhenChangingStatusOfAlreadyDeletedUser(UserStatus $targetStatus): void {
+    $user = $this->createUser();
+    $currentUserSpec = $this->createCurrentUserSpecification(false);
+    $user->changeStatus(UserStatus::Deleted, $currentUserSpec);
+    $user->releaseEvents();
+
+    $this->expectException(InvalidArgumentException::class);
+    $this->expectExceptionMessage('Deleted user status cannot be changed.');
+
+    $user->changeStatus($targetStatus, $currentUserSpec);
   }
 
   #[Test]
@@ -354,6 +383,43 @@ final class UserTest extends TestCase {
     $context = $this->createUserCreationContext(usernameUnique: false);
 
     User::create($id, $credentials, $displayName, $status, $context);
+  }
+
+  #[Test]
+  public function itRecordsStatusChangeAndPurgeWhenPurgingNonDeletedUser(): void {
+    $user = $this->createUser();
+
+    $user->purge();
+
+    $events = $user->releaseEvents();
+    $this->assertCount(2, $events);
+    $this->assertInstanceOf(UserStatusWasChanged::class, $events[0]);
+    $this->assertSame(UserStatus::Deleted, $events[0]->status);
+    $this->assertInstanceOf(UserWasPurged::class, $events[1]);
+  }
+
+  #[Test]
+  public function itRecordsOnlyPurgeWhenPurgingDeletedUser(): void {
+    $user = $this->createUser();
+    $user->changeStatus(UserStatus::Deleted, $this->createCurrentUserSpecification(false));
+    $user->releaseEvents();
+
+    $user->purge();
+
+    $events = $user->releaseEvents();
+    $this->assertCount(1, $events);
+    $this->assertInstanceOf(UserWasPurged::class, $events[0]);
+  }
+
+  #[Test]
+  public function itDoesNotRecordPurgeWhenAlreadyPurged(): void {
+    $user = $this->createUser();
+    $user->purge();
+    $user->releaseEvents();
+
+    $user->purge();
+
+    $this->assertCount(0, $user->releaseEvents());
   }
 
   #[Test]

@@ -45,4 +45,14 @@ class ApiKeyRepository extends ServiceEntityRepository implements ApiKeyReposito
   public function delete(ApiKeyView $apiKey): void {
     $this->getEntityManager()->remove($apiKey);
   }
+
+  public function deleteByUserId(ID $userId): void {
+    $this->getEntityManager()
+      ->createQueryBuilder()
+      ->delete(ApiKeyView::class, 'k')
+      ->where('k.userId = :userId')
+      ->setParameter('userId', $userId->toString())
+      ->getQuery()
+      ->execute();
+  }
 }

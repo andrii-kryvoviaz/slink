@@ -2,11 +2,11 @@ import { type Locator, type Page, expect } from '@playwright/test';
 
 import { BasePage } from './BasePage';
 
-const MAX_PAGE_SIZE = 96;
 const MAX_PAGES_TO_WALK = 25;
 
 export class AdminUsersPage extends BasePage {
   static readonly URL = '/admin/user';
+  static readonly PAGE_SIZE = 96;
 
   readonly heading = this.page.getByRole('heading', {
     name: 'Users',
@@ -23,13 +23,48 @@ export class AdminUsersPage extends BasePage {
   readonly currentPageButton = this.page.locator(
     'button[aria-label^="Current page "]',
   );
-  readonly rows = this.page.locator('tbody tr');
+  readonly rows = this.page.getByRole('table').locator('tbody tr');
+  readonly menu = this.page.getByRole('menu');
+  readonly deleteMenuItem = this.page.getByRole('menuitem', {
+    name: 'Delete',
+    exact: true,
+  });
 
   constructor(page: Page) {
     super(page);
   }
 
+  get disableOption(): Locator {
+    return this.menu.getByRole('radio', { name: 'Disable the account' });
+  }
+
+  get purgeOption(): Locator {
+    return this.menu.getByRole('radio', { name: 'Disable and delete content' });
+  }
+
+  get confirmDeleteButton(): Locator {
+    return this.menu.getByRole('button', { name: 'Delete User' });
+  }
+
+  get undoNotice(): Locator {
+    return this.menu.getByText('This cannot be undone.');
+  }
+
+  rowFor(displayName: string): Locator {
+    return this.rows.filter({ hasText: displayName });
+  }
+
   async goto() {
+    await this.page.context().addCookies([
+      {
+        name: 'settings.table',
+        value: JSON.stringify({
+          users: { pageSize: AdminUsersPage.PAGE_SIZE },
+        }),
+        url: process.env.E2E_BASE_URL ?? 'http://localhost:3100',
+      },
+    ]);
+
     await this.page.goto(AdminUsersPage.URL);
     await expect(this.heading).toBeVisible();
     await this.useListView();
@@ -45,13 +80,13 @@ export class AdminUsersPage extends BasePage {
   async useMaxPageSize() {
     await expect(this.pageSizeButton).toBeVisible({ timeout: 15000 });
 
-    const label = `Limit ${MAX_PAGE_SIZE}`;
+    const label = `Limit ${AdminUsersPage.PAGE_SIZE}`;
     if ((await this.pageSizeButton.innerText()).trim() === label) {
       return;
     }
 
     const option = this.page.getByRole('option', {
-      name: String(MAX_PAGE_SIZE),
+      name: String(AdminUsersPage.PAGE_SIZE),
       exact: true,
     });
     await this.clickUntil(this.pageSizeButton, option);
@@ -59,7 +94,7 @@ export class AdminUsersPage extends BasePage {
     const listed = this.page.waitForResponse(
       (response) =>
         response.url().includes('/users/') &&
-        response.url().includes(`limit=${MAX_PAGE_SIZE}`),
+        response.url().includes(`limit=${AdminUsersPage.PAGE_SIZE}`),
     );
     await option.click();
     const { data } = await (await listed).json();
@@ -68,11 +103,16 @@ export class AdminUsersPage extends BasePage {
     await expect(this.rows).toHaveCount(data.length, { timeout: 15000 });
   }
 
+  async waitForFullList() {
+    await expect(this.rows.first()).toBeVisible({ timeout: 20000 });
+    await expect(this.nextPageButton).toBeDisabled();
+  }
+
   async rowByUsername(username: string): Promise<Locator> {
     await this.useMaxPageSize();
     await this.goToFirstPage();
 
-    const row = this.rows.filter({ hasText: username });
+    const row = this.rowFor(username);
 
     for (let visited = 0; visited < MAX_PAGES_TO_WALK; visited++) {
       await expect(this.rows.first()).toBeVisible({ timeout: 15000 });
@@ -132,6 +172,10 @@ export class AdminUsersPage extends BasePage {
     });
   }
 
+  private actionsTrigger(row: Locator): Locator {
+    return row.getByRole('button', { name: 'Actions' });
+  }
+
   async badgeInRow(username: string, label: string): Promise<Locator> {
     const row = await this.rowByUsername(username);
     return row.getByText(label, { exact: true });
@@ -144,8 +188,35 @@ export class AdminUsersPage extends BasePage {
     const row = await this.rowByUsername(username);
 
     const item = this.page.getByRole('menuitem', { name: action, exact: true });
-    await this.clickUntil(row.getByLabel('Actions'), item);
+    await this.clickUntil(this.actionsTrigger(row), item);
     await item.click();
     await expect(item).toBeHidden({ timeout: 15000 });
+  }
+
+  async openDeleteConfirmation(row: Locator) {
+    await this.clickUntil(this.actionsTrigger(row), this.deleteMenuItem);
+    await this.clickUntil(this.deleteMenuItem, this.confirmDeleteButton);
+  }
+
+  async setPurge(checked: boolean) {
+    const option = checked ? this.purgeOption : this.disableOption;
+
+    await expect(async () => {
+      await option.click();
+      await expect(option).toHaveAttribute('aria-checked', 'true', {
+        timeout: 1000,
+      });
+    }).toPass({ timeout: 15000 });
+  }
+
+  async optionTexts(): Promise<string[]> {
+    return [
+      await this.disableOption.innerText(),
+      await this.purgeOption.innerText(),
+    ];
+  }
+
+  async confirmDeletion() {
+    await this.confirmDeleteButton.click();
   }
 }

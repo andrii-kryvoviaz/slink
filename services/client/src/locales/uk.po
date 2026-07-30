@@ -220,6 +220,9 @@ msgstr "Редагувати"
 msgid "Delete"
 msgstr "Видалити"
 
+#: src/feature/Comment/CommentInput.svelte
+#: src/feature/Comment/CommentListItem.svelte
+#: src/feature/Comment/CommentListItem.svelte
 #: src/feature/Comment/CommentListItem.svelte
 msgid "[deleted]"
 msgstr "[видалено]"
@@ -894,8 +897,6 @@ msgstr "Можна додавати лише власні зображення"
 #: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
 #: src/feature/Image/Actions/ImageCollectionAction/ImageCollectionAction.svelte
 #: src/feature/Image/Actions/ImageCollectionAction/ImageCollectionAction.svelte
-#: src/feature/Image/Actions/ImageCollectionAction/ImageCollectionAction.svelte
-#: src/feature/Image/Actions/ImageCollectionAction/ImageCollectionAction.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 msgid "Add to collection"
@@ -959,14 +960,10 @@ msgid "Download"
 msgstr "Завантажити"
 
 #: src/feature/Image/Actions/ImageDeleteAction/ImageDeleteAction.svelte
-#: src/feature/Image/Actions/ImageDeleteAction/ImageDeleteAction.svelte
-#: src/feature/Image/Actions/ImageDeleteAction/ImageDeleteAction.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 msgid "Delete image"
 msgstr "Видалити зображення"
 
-#: src/feature/Image/Actions/ImageTagAction/ImageTagAction.svelte
-#: src/feature/Image/Actions/ImageTagAction/ImageTagAction.svelte
 #: src/feature/Image/Actions/ImageTagAction/ImageTagAction.svelte
 #: src/feature/Image/Actions/ImageTagAction/ImageTagAction.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
@@ -2244,10 +2241,6 @@ msgstr "Зняти права адміністратора"
 msgid "Delete User"
 msgstr "Видалити користувача"
 
-#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "User account and all associated data will be removed"
-msgstr "Обліковий запис та всі пов'язані дані буде видалено"
-
 #: src/feature/User/UserDataTable/data-table-email-button.svelte
 msgid "Email <0/>"
 msgstr "Email <0/>"
@@ -2325,7 +2318,6 @@ msgstr "Налаштуйте параметри застосунку та кер
 msgid "Users | Slink Admin"
 msgstr "Користувачі | Slink Адмін"
 
-#: src/routes/admin/user/+page.svelte
 #: src/routes/admin/user/+page.svelte
 msgid "Manage user accounts and permissions"
 msgstr "Керуйте обліковими записами та дозволами"
@@ -2457,10 +2449,6 @@ msgstr "У цій колекції ще немає елементів."
 #: src/routes/help/faq/+page.svelte
 msgid "FAQ | Slink"
 msgstr "FAQ | Slink"
-
-#: src/routes/help/faq/+page.svelte
-msgid "Frequently asked questions about Slink - image sharing platform"
-msgstr "Часті запитання про Slink — платформу для обміну зображеннями"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Frequently Asked Questions"
@@ -3668,45 +3656,47 @@ msgstr "Відкликати ключ"
 msgid "Download ShareX Config"
 msgstr "Завантажити конфігурацію ShareX"
 
-#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Account and all associated data will be removed"
-msgstr "Обліковий запис та всі пов'язані дані буде видалено"
-
 #: src/feature/Image/History/BatchContext.svelte.ts
 msgid "Successfully updated # image"
 msgid_plural "Successfully updated # images"
 msgstr[0] "Успішно оновлено # зображення"
-msgstr[1] "Успішно оновлено # зображень"
+msgstr[1] "Успішно оновлено # зображення"
+msgstr[2] "Успішно оновлено # зображень"
 
 #: src/feature/Image/History/BatchContext.svelte.ts
 msgid "Failed to update # image"
 msgid_plural "Failed to update # images"
 msgstr[0] "Не вдалося оновити # зображення"
-msgstr[1] "Не вдалося оновити # зображень"
+msgstr[1] "Не вдалося оновити # зображення"
+msgstr[2] "Не вдалося оновити # зображень"
 
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "Delete # child tag"
 msgid_plural "Delete # child tags"
 msgstr[0] "Видалити # дочірній тег"
-msgstr[1] "Видалити # дочірніх тегів"
+msgstr[1] "Видалити # дочірні теги"
+msgstr[2] "Видалити # дочірніх тегів"
 
 #: src/feature/Tag/TagDeleteConfirmation/TagDeletePopover.svelte
 msgid "Remove tag from # image"
 msgid_plural "Remove tag from # images"
 msgstr[0] "Видалити тег з # зображення"
 msgstr[1] "Видалити тег з # зображень"
+msgstr[2] "Видалити тег з # зображень"
 
 #: src/feature/Collection/ImageCollectionList/ImageCollectionList.svelte
 msgid "# more collection"
 msgid_plural "# more collections"
 msgstr[0] "Ще # колекція"
-msgstr[1] "Ще # колекцій"
+msgstr[1] "Ще # колекції"
+msgstr[2] "Ще # колекцій"
 
 #: src/feature/Tag/ImageTagList/ImageTagList.svelte
 msgid "# more tag"
 msgid_plural "# more tags"
 msgstr[0] "Ще # тег"
-msgstr[1] "Ще # тегів"
+msgstr[1] "Ще # теги"
+msgstr[2] "Ще # тегів"
 
 #: src/routes/preferences/+page.svelte
 msgid "日本語"
@@ -3907,7 +3897,8 @@ msgstr "Не вдалося зберегти термін"
 msgid "# day"
 msgid_plural "# days"
 msgstr[0] "# день"
-msgstr[1] "# днів"
+msgstr[1] "# дні"
+msgstr[2] "# днів"
 
 #: src/feature/Share/Unavailable/Unavailable.svelte
 msgid "Share unavailable"
@@ -4244,6 +4235,7 @@ msgid "# User"
 msgid_plural "# Users"
 msgstr[0] "# користувач"
 msgstr[1] "# користувачі"
+msgstr[2] "# користувачів"
 
 #: src/feature/User/UserStatus/userStatus.language.ts
 msgid "Banned"
@@ -5137,6 +5129,31 @@ msgstr "Файл занадто великий. Максимально допу�
 #: src/lib/utils/i18n/messages/api.language.ts
 msgid "An empty file is not allowed."
 msgstr "Порожній файл не дозволено."
+
 #: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
 msgid "Copy link format"
 msgstr "Вибрати формат посилання"
+
+#: src/feature/Comment/CommentInput.svelte
+msgid "Reply..."
+msgstr "Відповісти..."
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "This cannot be undone."
+msgstr "Цю дію неможливо скасувати."
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Disable the account"
+msgstr "Вимкнути обліковий запис"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Keeps their uploads and content"
+msgstr "Зберігає завантаження та контент користувача"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Disable and delete content"
+msgstr "Вимкнути та видалити контент"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Deletes their images, collections, and bookmarks by others. Comments stay, shown as deleted."
+msgstr "Видаляє зображення й колекції користувача та закладки інших користувачів на ці зображення. Коментарі залишаються, показані як видалені."

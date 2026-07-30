@@ -18,6 +18,8 @@ interface TagRepositoryInterface extends ServiceEntityRepositoryInterface {
 
   public function remove(TagView $tag): void;
 
+  public function deleteByUserId(ID $userId): void;
+
   /**
    * @param ID $id
    * @return TagView

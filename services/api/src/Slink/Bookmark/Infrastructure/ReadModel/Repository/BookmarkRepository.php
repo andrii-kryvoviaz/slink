@@ -32,6 +32,28 @@ final class BookmarkRepository extends AbstractRepository implements BookmarkRep
     $this->getEntityManager()->remove($bookmark);
   }
 
+  #[Override]
+  public function deleteByUserId(string $userId): void {
+    $this->getEntityManager()
+      ->createQueryBuilder()
+      ->delete(BookmarkView::class, 'b')
+      ->where('b.user = :userId')
+      ->setParameter('userId', $userId)
+      ->getQuery()
+      ->execute();
+  }
+
+  #[Override]
+  public function deleteByImageId(string $imageId): void {
+    $this->getEntityManager()
+      ->createQueryBuilder()
+      ->delete(BookmarkView::class, 'b')
+      ->where('b.image = :imageId')
+      ->setParameter('imageId', $imageId)
+      ->getQuery()
+      ->execute();
+  }
+
   /**
    * @throws NotFoundException
    * @throws NonUniqueResultException

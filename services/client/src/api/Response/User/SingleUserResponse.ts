@@ -3,8 +3,8 @@ import type { UserRole } from '@slink/lib/auth/Type/UserRole';
 
 export type SingleUserResponse = {
   id: string;
-  email: string;
-  username: string;
+  email: string | null;
+  username: string | null;
   displayName: string;
   createdAt: {
     formattedDate: string;

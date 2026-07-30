@@ -83,19 +83,27 @@
   });
 </script>
 
+{#snippet refAuthorName()}
+  {#if activeRef?.author}
+    @{activeRef.author.displayName}
+  {:else}
+    [deleted]
+  {/if}
+{/snippet}
+
 <div class="mt-4 pt-4 border-t border-white/10">
   {#if activeRef}
     <div class="mb-2 px-3 py-2 bg-white/5 rounded-lg">
       <div class="flex items-center justify-between mb-1">
         <span class="text-xs text-white/60">
           {#if isEditing}
-            Editing reply to <span class="font-medium text-white/80"
-              >@{activeRef.author.displayName}</span
-            >
+            Editing reply to <span class="font-medium text-white/80">
+              {@render refAuthorName()}
+            </span>
           {:else}
-            Replying to <span class="font-medium text-white/80"
-              >@{activeRef.author.displayName}</span
-            >
+            Replying to <span class="font-medium text-white/80">
+              {@render refAuthorName()}
+            </span>
           {/if}
         </span>
         <button
@@ -123,7 +131,9 @@
       placeholder={isEditing
         ? 'Edit your comment...'
         : activeRef
-          ? `Reply to @${activeRef.author.displayName}...`
+          ? activeRef.author
+            ? `Reply to @${activeRef.author.displayName}...`
+            : 'Reply...'
           : 'Write a comment...'}
       disabled={isSubmitting}></textarea>
     <div class="absolute right-1.5 flex items-center gap-1">
