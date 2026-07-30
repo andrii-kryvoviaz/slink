@@ -167,6 +167,8 @@ final class UserRepository extends AbstractRepository implements
       ->createQueryBuilder()
       ->from(UserView::class, 'user')
       ->select('user')
+      ->leftJoin('user.roles', 'role')
+      ->addSelect('role')
       ->where('user.status != :status')
       ->setParameter('status', UserStatus::Deleted)
       ->orderBy('user.' . $filter->getOrderBy(), $filter->getOrder())
