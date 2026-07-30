@@ -26,6 +26,7 @@
     category,
     loading = false,
     title,
+    description,
     children,
     actions,
     on,
@@ -53,10 +54,15 @@
           {@render title?.()}
         </h2>
       {/if}
+      {#if description}
+        <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">
+          {@render description?.()}
+        </p>
+      {/if}
     </div>
   </div>
 
-  <form onsubmit={handleSubmit}>
+  <form method="POST" onsubmit={handleSubmit}>
     <div
       class="divide-y divide-gray-100 dark:divide-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 overflow-hidden"
     >

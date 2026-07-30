@@ -7,6 +7,10 @@ export class SettingsApi {
     return this.http.request('GET', '/api/settings/global');
   }
 
+  async getDefaultSettings() {
+    return this.http.request('GET', '/api/settings?provider=default');
+  }
+
   async updateSettings(category: string, settings: object) {
     return this.http.request('POST', '/api/settings', { category, settings });
   }

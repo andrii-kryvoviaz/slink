@@ -165,7 +165,7 @@ export const test = base.extend<AuthFixtures>({
       },
     });
 
-    for (const { category, settings } of pending) {
+    for (const { category, settings } of pending.reverse()) {
       await api.settings.updateSettings(category, settings);
     }
   },

@@ -12,6 +12,7 @@ use Slink\Settings\Domain\ValueObject\Access\AccessSettings;
 use Slink\Settings\Domain\ValueObject\Demo\DemoSettings;
 use Slink\Settings\Domain\ValueObject\User\UserSettings;
 use Slink\Settings\Domain\ValueObject\Image\ImageSettings;
+use Slink\Settings\Domain\ValueObject\Customization\CustomizationSettings;
 use Slink\Settings\Domain\ValueObject\Storage\StorageSettings;
 
 final class SettingCategoryTest extends TestCase {
@@ -43,7 +44,7 @@ final class SettingCategoryTest extends TestCase {
 
     #[Test]
     public function itShouldHaveAllExpectedCases(): void {
-        $expectedCases = ['User', 'Image', 'Storage', 'Access', 'Share', 'Demo'];
+        $expectedCases = ['User', 'Image', 'Storage', 'Access', 'Share', 'Demo', 'Customization'];
         $actualCases = array_map(fn($case) => $case->name, SettingCategory::cases());
         
         $this->assertSame($expectedCases, $actualCases);
@@ -91,6 +92,7 @@ final class SettingCategoryTest extends TestCase {
             [SettingCategory::Storage, 'storage'],
             [SettingCategory::Access, 'access'],
             [SettingCategory::Demo, 'demo'],
+            [SettingCategory::Customization, 'customization'],
         ];
     }
 
@@ -105,6 +107,7 @@ final class SettingCategoryTest extends TestCase {
             [SettingCategory::Storage, StorageSettings::class],
             [SettingCategory::Access, AccessSettings::class],
             [SettingCategory::Demo, DemoSettings::class],
+            [SettingCategory::Customization, CustomizationSettings::class],
         ];
     }
 
@@ -158,6 +161,15 @@ final class SettingCategoryTest extends TestCase {
                     'requireSsl' => false,
                 ],
                 \Slink\Settings\Domain\ValueObject\Access\AccessSettings::class
+            ],
+            [
+                SettingCategory::Customization,
+                [
+                    'siteName' => 'Slink',
+                    'siteDescription' => 'Fast and secure image sharing service',
+                    'logoUrl' => '',
+                ],
+                CustomizationSettings::class
             ],
         ];
     }

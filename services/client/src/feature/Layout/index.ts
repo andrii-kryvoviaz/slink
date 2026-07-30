@@ -6,6 +6,7 @@ export { default as BannerContainer } from './Banner/BannerContainer.svelte';
 export { default as BannerContent } from './Banner/BannerContent.svelte';
 export { default as BannerFooter } from './Banner/BannerFooter.svelte';
 export { default as BannerIcon } from './Banner/BannerIcon.svelte';
+export { default as BrandLogo } from './BrandLogo/BrandLogo.svelte';
 export { default as Card } from './Card/Card.svelte';
 export * from './Card/Card.theme';
 export * from './Card/Card.types';

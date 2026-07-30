@@ -3,7 +3,10 @@
   import type { Snippet } from 'svelte';
   import { twMerge } from 'tailwind-merge';
 
-  import type { HTMLInputAttributes } from 'svelte/elements';
+  import type {
+    HTMLInputAttributes,
+    HTMLInputTypeAttribute,
+  } from 'svelte/elements';
   import { slide } from 'svelte/transition';
 
   import type { ErrorList } from '@slink/api/Exceptions';
@@ -17,10 +20,10 @@
 
   interface Props
     extends
-      Omit<HTMLInputAttributes, 'size'>,
+      Omit<HTMLInputAttributes, 'size' | 'type' | 'files'>,
       Pick<InputVariants, 'size' | 'variant' | 'rounded'> {
     ref?: HTMLInputElement | null;
-    key?: string;
+    type?: Exclude<HTMLInputTypeAttribute, 'file'>;
     label?: string;
     debounce?: number;
     leftIcon?: Snippet<[]>;
@@ -32,6 +35,7 @@
   let {
     ref = $bindable(null),
     value = $bindable(),
+    type,
     label,
     size = 'md',
     variant = 'modern',
@@ -98,21 +102,9 @@
     {/if}
 
     <BaseInput
-      type={props.type || 'text'}
-      id={props.id}
-      name={props.name}
-      placeholder={props.placeholder}
-      disabled={props.disabled}
-      readonly={props.readonly}
-      required={props.required}
-      autocomplete={props.autocomplete}
+      {...props}
+      type={type || 'text'}
       oninput={inputHandler}
-      onchange={props.onchange}
-      onblur={props.onblur}
-      onfocus={props.onfocus}
-      onkeydown={props.onkeydown}
-      onkeyup={props.onkeyup}
-      onkeypress={props.onkeypress}
       bind:ref
       bind:value
       class={twMerge(combinedClasses)}

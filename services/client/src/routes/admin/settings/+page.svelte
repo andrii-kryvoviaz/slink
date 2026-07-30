@@ -41,6 +41,14 @@
       iconBg: 'bg-indigo-100 dark:bg-indigo-900/30',
       iconColor: 'text-indigo-600 dark:text-indigo-400',
     },
+    {
+      title: 'Customization',
+      description: 'Customize the site name, description, logo, and branding',
+      href: '/admin/settings/customization',
+      icon: 'solar:palette-linear',
+      iconBg: 'bg-rose-100 dark:bg-rose-900/30',
+      iconColor: 'text-rose-600 dark:text-rose-400',
+    },
   ];
 </script>
 

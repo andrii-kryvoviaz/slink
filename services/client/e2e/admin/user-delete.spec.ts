@@ -31,7 +31,7 @@ test.describe('Admin user deletion', { tag: '@serial' }, () => {
     const target = await createTarget(api, 'sdel');
 
     await adminUsersPage.goto();
-    const row = await adminUsersPage.findRow(target.account.username);
+    const row = await adminUsersPage.rowByUsername(target.account.username);
 
     await expect(row.getByText(target.account.email)).toBeVisible();
 
@@ -61,7 +61,7 @@ test.describe('Admin user deletion', { tag: '@serial' }, () => {
     const target = await createTarget(api, 'prow');
 
     await adminUsersPage.goto();
-    const row = await adminUsersPage.findRow(target.account.username);
+    const row = await adminUsersPage.rowByUsername(target.account.username);
 
     await adminUsersPage.openDeleteConfirmation(row);
     await adminUsersPage.setPurge(true);
@@ -78,7 +78,7 @@ test.describe('Admin user deletion', { tag: '@serial' }, () => {
     const target = await createTarget(api, 'warn');
 
     await adminUsersPage.goto();
-    const row = await adminUsersPage.findRow(target.account.username);
+    const row = await adminUsersPage.rowByUsername(target.account.username);
 
     await adminUsersPage.openDeleteConfirmation(row);
 
@@ -122,7 +122,7 @@ test.describe('Admin user deletion', { tag: '@serial' }, () => {
     const target = await createTarget(api, 'stbl');
 
     await adminUsersPage.goto();
-    const row = await adminUsersPage.findRow(target.account.username);
+    const row = await adminUsersPage.rowByUsername(target.account.username);
 
     await adminUsersPage.openDeleteConfirmation(row);
     await expect(adminUsersPage.purgeOption).toBeVisible();

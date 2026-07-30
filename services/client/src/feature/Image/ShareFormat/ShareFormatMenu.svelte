@@ -6,19 +6,29 @@
 
   import type { ShareFormat } from '@slink/lib/settings';
 
+  import {
+    type ShareFormatMenuTone,
+    shareFormatMenuTheme,
+  } from './ShareFormatMenu.theme';
   import { shareFormats } from './shareFormats.language';
 
   interface Props {
     selected: ShareFormat;
     onSelect: (format: ShareFormat) => void;
+    tone?: ShareFormatMenuTone;
   }
 
-  let { selected, onSelect }: Props = $props();
+  let { selected, onSelect, tone = 'default' }: Props = $props();
+
+  const classes = $derived(shareFormatMenuTheme({ tone }));
 </script>
 
-<DropdownMenu.Content align="end" sideOffset={8} class="min-w-[180px]">
+<DropdownMenu.Content align="end" sideOffset={8} class={classes.content()}>
   {#each shareFormats as format (format.id)}
-    <DropdownMenu.Item class="pl-8!" onSelect={() => onSelect(format.id)}>
+    <DropdownMenu.Item
+      class={classes.item()}
+      onSelect={() => onSelect(format.id)}
+    >
       <span
         class="pointer-events-none absolute left-2 flex size-3.5 items-center justify-center"
       >

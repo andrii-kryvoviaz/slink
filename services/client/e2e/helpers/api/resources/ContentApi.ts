@@ -58,6 +58,10 @@ export class ContentApi {
     return items.map((item) => String(item.id));
   }
 
+  async getImage(imageId: string): Promise<{ status: number; data: unknown }> {
+    return this.http.requestRaw('GET', `/api/image/${imageId}/detail`);
+  }
+
   async getImageDetail(imageId: string): Promise<ImageDetail> {
     const data = await this.http.request('GET', `/api/image/${imageId}/detail`);
     const payload = data?.data ?? data;
@@ -113,6 +117,15 @@ export class ContentApi {
     });
 
     return data?.id ?? data?.data?.id ?? data;
+  }
+
+  async deleteCollection(
+    id: string,
+    options: { deleteImages?: boolean } = {},
+  ): Promise<void> {
+    const { deleteImages = false } = options;
+
+    await this.http.request('DELETE', '/api/collection', { id, deleteImages });
   }
 
   async createTag(name: string): Promise<string> {

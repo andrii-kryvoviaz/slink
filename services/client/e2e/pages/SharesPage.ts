@@ -1,4 +1,4 @@
-import { type Page, expect } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
 
 import { BasePage } from './BasePage';
 
@@ -10,6 +10,13 @@ export class SharesPage extends BasePage {
   });
   readonly emptyHeading = this.page.getByRole('heading', {
     name: 'No shares yet',
+  });
+  readonly unpublishMenuItem = this.page.getByRole('button', {
+    name: 'Stop sharing this link',
+  });
+  readonly unpublishConfirm = this.page.getByRole('button', {
+    name: 'Unpublish',
+    exact: true,
   });
 
   constructor(page: Page) {
@@ -28,17 +35,18 @@ export class SharesPage extends BasePage {
     return this.page.getByRole('row').filter({ hasText: name });
   }
 
-  async unpublishFirst() {
-    const unpublishOption = this.page
-      .getByRole('button', { name: 'Unpublish' })
-      .first();
-    await this.clickUntil(this.actionsTrigger.first(), unpublishOption);
-    await unpublishOption.click();
+  rowForImage(imageId: string) {
+    return this.page.getByRole('row').filter({
+      has: this.page.locator(`a[href="/info/${imageId}"]`),
+    });
+  }
 
-    const confirmButton = this.page
-      .getByRole('button', { name: 'Unpublish' })
-      .last();
-    await confirmButton.waitFor({ state: 'visible' });
-    await confirmButton.click();
+  async unpublishRow(row: Locator) {
+    await this.clickUntil(
+      row.getByRole('button', { name: 'Share actions' }).first(),
+      this.unpublishMenuItem,
+    );
+    await this.unpublishMenuItem.click();
+    await this.unpublishConfirm.click();
   }
 }

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { BrandLogo } from '@slink/feature/Layout';
   import { SearchBar } from '@slink/feature/Search';
   import { Shortcut } from '@slink/ui/components';
   import { Button } from '@slink/ui/components/button';
@@ -10,6 +11,8 @@
   import type { User } from '$lib/auth/Type/User';
   import { usePublicImagesFeed } from '$lib/state/PublicImagesFeed.svelte.js';
   import Icon from '@iconify/svelte';
+
+  import { customization } from '@slink/lib/settings';
 
   interface Props {
     user?: Partial<User>;
@@ -63,12 +66,12 @@
         <div
           class="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10 group-hover:border-primary/20 group-hover:scale-105 transition-all duration-200"
         >
-          <img class="h-5 w-5" src="/favicon.png" alt="Slink" />
+          <BrandLogo class="h-5 w-5" />
         </div>
         <span
           class="font-semibold text-foreground tracking-tight text-lg hidden sm:inline-block"
         >
-          Slink</span
+          {customization.siteName}</span
         >
       </a>
     {/if}

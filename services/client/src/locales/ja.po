@@ -376,6 +376,7 @@ msgstr "<0/> キャンセル"
 msgid "Overall Progress"
 msgstr "全体の進捗"
 
+#: src/feature/Settings/CustomizationSettings/customizationSettings.language.ts
 #: src/feature/Upload/Progress/ProgressItem.svelte
 msgid "Upload failed"
 msgstr "アップロードに失敗しました"
@@ -894,10 +895,8 @@ msgid "Only own images can be added"
 msgstr "自分の画像のみ追加できます"
 
 #: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/ImageCollectionAction/ImageCollectionAction.svelte
+#: src/feature/Image/Actions/ImageCollectionAction/ImageCollectionAction.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 msgid "Add to collection"
@@ -945,62 +944,60 @@ msgstr "確認"
 msgid "Image will remain in your library"
 msgstr "画像はライブラリに残ります"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/DownloadZoneAction/DownloadZoneAction.svelte
+#: src/feature/Image/DownloadButton/DownloadButton.svelte
 #: src/feature/Image/DownloadButton/DownloadButton.svelte
 msgid "Download image"
 msgstr "画像をダウンロード"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/DownloadZoneAction/DownloadZoneAction.svelte
+#: src/feature/Image/Actions/DownloadZoneAction/DownloadZoneAction.svelte
+#: src/feature/Image/DownloadButton/DownloadButton.svelte
 #: src/feature/Image/DownloadButton/DownloadButton.svelte
 #: src/feature/Image/History/Actions/DownloadAction.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 msgid "Download"
 msgstr "ダウンロード"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/ImageDeleteAction/ImageDeleteAction.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 msgid "Delete image"
 msgstr "画像を削除"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/ImageTagAction/ImageTagAction.svelte
+#: src/feature/Image/Actions/ImageTagAction/ImageTagAction.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 msgid "Manage tags"
 msgstr "タグを管理"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/HistoryActionsToolbar/HistoryActionsToolbar.svelte
+#: src/feature/Image/Actions/HistoryActionsToolbar/HistoryActionsToolbar.svelte
+#: src/feature/Image/Actions/ImageOverflowAction/ImageOverflowAction.svelte
 #: src/feature/Image/AdminImageDropdown/AdminImageDropdown.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
+#: src/routes/info/[id]/+page.svelte
 msgid "Image actions"
 msgstr "画像の操作"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/CopyZoneAction/CopyZoneAction.svelte
 msgid "Generating..."
 msgstr "生成中..."
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/CopyZoneAction/CopyZoneAction.svelte
 #: src/feature/Text/CopyableText/CopyableText.svelte
 #: src/feature/Text/CopyableText/CopyableText.svelte
 msgid "Copied!"
 msgstr "コピーしました！"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/ImageVisibilityAction/ImageVisibilityAction.svelte
+#: src/feature/Image/Actions/ImageVisibilityAction/ImageVisibilityAction.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 msgid "Make private"
 msgstr "非公開にする"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/ImageVisibilityAction/ImageVisibilityAction.svelte
+#: src/feature/Image/Actions/ImageVisibilityAction/ImageVisibilityAction.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 msgid "Make public"
 msgstr "公開にする"
@@ -1234,12 +1231,14 @@ msgstr "コピー中..."
 msgid "Signing..."
 msgstr "署名中..."
 
+#: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
+#: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Text/CopyContainer/CopyContainer.svelte
 msgid "Copied"
 msgstr "コピー済み"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/CopyZoneAction/CopyZoneAction.svelte
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Text/CopyContainer/CopyContainer.svelte
 msgid "Copy"
@@ -1324,16 +1323,12 @@ msgstr "この画像は公開されています"
 msgid "This image is private"
 msgstr "この画像は非公開です"
 
-#: src/feature/Navigation/Navbar/Navbar.svelte
-#: src/feature/Navigation/Navbar/Navbar.svelte
-#: src/feature/Navigation/Sidebar/AppSidebar.svelte
-#: src/feature/Navigation/Sidebar/AppSidebar.svelte
-#: src/routes/profile/(auth)/login/+page.svelte
-#: src/routes/profile/(auth)/signup/+page.svelte
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
 msgid "Slink"
 msgstr "Slink"
 
 #: src/feature/Navigation/Navbar/Navbar.svelte
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
 msgid "<0/> Upload"
 msgstr "<0/> アップロード"
 
@@ -2324,7 +2319,6 @@ msgid "Users | Slink Admin"
 msgstr "ユーザー | Slink管理"
 
 #: src/routes/admin/user/+page.svelte
-#: src/routes/admin/user/+page.svelte
 msgid "Manage user accounts and permissions"
 msgstr "ユーザーアカウントと権限を管理"
 
@@ -2455,10 +2449,6 @@ msgstr "このコレクションにはまだアイテムがありません。"
 #: src/routes/help/faq/+page.svelte
 msgid "FAQ | Slink"
 msgstr "よくある質問 | Slink"
-
-#: src/routes/help/faq/+page.svelte
-msgid "Frequently asked questions about Slink - image sharing platform"
-msgstr "画像共有プラットフォームSlinkについてのよくある質問"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Frequently Asked Questions"
@@ -2864,16 +2854,8 @@ msgid "Sign in to access all platform features"
 msgstr "サインインしてすべての機能にアクセス"
 
 #: src/routes/profile/(auth)/login/+page.svelte
-msgid "Sign In | Slink"
-msgstr "サインイン | Slink"
-
-#: src/routes/profile/(auth)/login/+page.svelte
 msgid "Welcome back"
 msgstr "おかえりなさい"
-
-#: src/routes/profile/(auth)/login/+page.svelte
-msgid "Sign in to continue to Slink"
-msgstr "Slinkにサインインして続ける"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Email or Username"
@@ -2920,17 +2902,9 @@ msgid "Sign Up"
 msgstr "新規登録"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
-msgid "Create Account | Slink"
-msgstr "アカウント作成 | Slink"
-
-#: src/routes/profile/(auth)/signup/+page.svelte
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Create Account"
 msgstr "アカウント作成"
-
-#: src/routes/profile/(auth)/signup/+page.svelte
-msgid "Join Slink to start sharing your images"
-msgstr "Slinkに参加して画像の共有を始めましょう"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Choose a username"
@@ -4014,7 +3988,9 @@ msgstr "公開"
 msgid "Share actions"
 msgstr "公開アクション"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/CopyZoneAction/CopyZoneAction.svelte
+#: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
+#: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 #: src/feature/Share/Controls/List.svelte
 msgid "Copy link"
@@ -4297,7 +4273,7 @@ msgstr "がブックマークに追加しました"
 msgid "interacted"
 msgstr "が反応しました"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/CopyZoneAction/CopyZoneAction.svelte
 msgid "Copy image link"
 msgstr "画像リンクをコピー"
 
@@ -4793,7 +4769,7 @@ msgstr "BB"
 msgid "HTML"
 msgstr "HTML"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/CopyZoneAction/CopyZoneAction.svelte
 msgid "Copy link options"
 msgstr "リンクコピーのオプション"
 
@@ -5026,6 +5002,102 @@ msgstr "項目の選択を解除"
 msgid "{0} of {1} files uploaded"
 msgstr "{1} 件中 {0} 件アップロード完了"
 
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Fast and secure image sharing service"
+msgstr "高速で安全な画像共有サービス"
+
+#. 0: customization.siteName
+#: src/routes/+layout.svelte
+msgid "{0}: Image Sharing Service"
+msgstr "{0}: 画像共有サービス"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+#: src/routes/admin/settings/+page.svelte
+#: src/routes/admin/settings/customization/+page.svelte
+msgid "Customization"
+msgstr "カスタマイズ"
+
+#: src/routes/admin/settings/customization/+page.svelte
+msgid "Customize the appearance and branding of your application"
+msgstr "アプリケーションの外観とブランディングをカスタマイズします"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Site Name"
+msgstr "サイト名"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Site Description"
+msgstr "サイトの説明"
+
+#: src/routes/admin/settings/customization/+page.svelte
+msgid "Customization Settings | Slink"
+msgstr "カスタマイズ設定 | Slink"
+
+#. 0: customization.siteName
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Sign In | {0}"
+msgstr "サインイン | {0}"
+
+#. 0: customization.siteName
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Sign in to continue to {0}"
+msgstr "{0}にサインインして続ける"
+
+#. 0: customization.siteName
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Create Account | {0}"
+msgstr "アカウント作成 | {0}"
+
+#. 0: customization.siteName
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Join {0} to start sharing your images"
+msgstr "{0}に参加して画像の共有を始めましょう"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Logo URL"
+msgstr "ロゴURL"
+
+#: src/routes/admin/settings/+page.svelte
+msgid "Customize the site name, description, logo, and branding"
+msgstr "サイト名、説明、ロゴ、ブランディングをカスタマイズ"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Name and brand your Slink instance."
+msgstr "Slinkインスタンスの名前とブランドを設定します。"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "The public name of your instance."
+msgstr "インスタンスの公開名です。"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "A short tagline describing your instance."
+msgstr "インスタンスを説明する短いキャッチフレーズです。"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Link to your own logo image. Leave empty to use the default."
+msgstr "独自のロゴ画像へのリンクです。空欄の場合はデフォルトが使用されます。"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Couldn't load this image"
+msgstr "この画像を読み込めませんでした"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Logo preview"
+msgstr "ロゴのプレビュー"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "The file is too large. Allowed maximum size is {limit}."
+msgstr "ファイルが大きすぎます。許可される最大サイズは{limit}です。"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "An empty file is not allowed."
+msgstr "空のファイルは許可されていません。"
+
+#: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
+msgid "Copy link format"
+msgstr "リンク形式を選択"
+
 #: src/feature/Comment/CommentInput.svelte
 msgid "Reply..."
 msgstr "返信..."
@@ -5039,12 +5111,12 @@ msgid "Disable the account"
 msgstr "アカウントを無効化"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Disable and delete content"
-msgstr "無効化してコンテンツを削除"
-
-#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "Keeps their uploads and content"
 msgstr "このユーザーのアップロードとコンテンツは保持されます"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Disable and delete content"
+msgstr "無効化してコンテンツを削除"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "Deletes their images, collections, and bookmarks by others. Comments stay, shown as deleted."

@@ -6,7 +6,6 @@
   import {
     ImageDeletePopover,
     createImageActionsState,
-    historyActionBarButtons,
     shareFormats,
   } from '@slink/feature/Image';
   import { CreateTagDialog, TagPicker } from '@slink/feature/Tag';
@@ -58,10 +57,6 @@
       on?.collectionChange?.(id, collections),
     onTagChange: (id, tags) => on?.tagChange?.(id, tags),
   });
-
-  const visibleButtons = $derived(
-    actions.filterVisibleButtons(historyActionBarButtons),
-  );
 
   const openCollectionPicker = () => {
     actions.overlays.collection = true;
@@ -127,7 +122,7 @@
           </DropdownSimpleItem>
         {/each}
       </DropdownSimpleSub>
-      {#if visibleButtons.includes('visibility')}
+      {#if actions.visibilityAllowed}
         <DropdownSimpleItem on={{ click: actions.handleVisibilityChange }}>
           {#snippet icon()}
             <Icon icon={actions.visibilityIcon} class="h-4 w-4" />

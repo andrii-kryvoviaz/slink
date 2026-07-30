@@ -1,5 +1,6 @@
 export { default as AccessSettings } from './AccessSettings/AccessSettings.svelte';
 export { default as CacheSettings } from './CacheSettings/CacheSettings.svelte';
+export { default as CustomizationSettings } from './CustomizationSettings/CustomizationSettings.svelte';
 export { default as ImageSettings } from './ImageSettings/ImageSettings.svelte';
 export { default as OAuthProviderDeleteConfirmation } from './OAuthSettings/OAuthProviderDeleteConfirmation.svelte';
 export { default as OAuthProviderForm } from './OAuthSettings/OAuthProviderForm.svelte';

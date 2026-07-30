@@ -376,6 +376,7 @@ msgstr "<0/> Annulla"
 msgid "Overall Progress"
 msgstr "Avanzamento totale"
 
+#: src/feature/Settings/CustomizationSettings/customizationSettings.language.ts
 #: src/feature/Upload/Progress/ProgressItem.svelte
 msgid "Upload failed"
 msgstr "Caricamento fallito"
@@ -894,10 +895,8 @@ msgid "Only own images can be added"
 msgstr "È possibile aggiungere solo le proprie immagini"
 
 #: src/feature/Collection/AddToCollectionButton/AddToCollectionButton.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/ImageCollectionAction/ImageCollectionAction.svelte
+#: src/feature/Image/Actions/ImageCollectionAction/ImageCollectionAction.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 msgid "Add to collection"
@@ -945,62 +944,60 @@ msgstr "Conferma"
 msgid "Image will remain in your library"
 msgstr "L'immagine rimarrà nella tua libreria"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/DownloadZoneAction/DownloadZoneAction.svelte
+#: src/feature/Image/DownloadButton/DownloadButton.svelte
 #: src/feature/Image/DownloadButton/DownloadButton.svelte
 msgid "Download image"
 msgstr "Scarica immagine"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/DownloadZoneAction/DownloadZoneAction.svelte
+#: src/feature/Image/Actions/DownloadZoneAction/DownloadZoneAction.svelte
+#: src/feature/Image/DownloadButton/DownloadButton.svelte
 #: src/feature/Image/DownloadButton/DownloadButton.svelte
 #: src/feature/Image/History/Actions/DownloadAction.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 msgid "Download"
 msgstr "Scarica"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/ImageDeleteAction/ImageDeleteAction.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 msgid "Delete image"
 msgstr "Elimina immagine"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/ImageTagAction/ImageTagAction.svelte
+#: src/feature/Image/Actions/ImageTagAction/ImageTagAction.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 msgid "Manage tags"
 msgstr "Gestisci tag"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/HistoryActionsToolbar/HistoryActionsToolbar.svelte
+#: src/feature/Image/Actions/HistoryActionsToolbar/HistoryActionsToolbar.svelte
+#: src/feature/Image/Actions/ImageOverflowAction/ImageOverflowAction.svelte
 #: src/feature/Image/AdminImageDropdown/AdminImageDropdown.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
+#: src/routes/info/[id]/+page.svelte
 msgid "Image actions"
 msgstr "Azioni immagine"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/CopyZoneAction/CopyZoneAction.svelte
 msgid "Generating..."
 msgstr "Generazione in corso..."
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/CopyZoneAction/CopyZoneAction.svelte
 #: src/feature/Text/CopyableText/CopyableText.svelte
 #: src/feature/Text/CopyableText/CopyableText.svelte
 msgid "Copied!"
 msgstr "Copiato!"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/ImageVisibilityAction/ImageVisibilityAction.svelte
+#: src/feature/Image/Actions/ImageVisibilityAction/ImageVisibilityAction.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 msgid "Make private"
 msgstr "Rendi privata"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/ImageVisibilityAction/ImageVisibilityAction.svelte
+#: src/feature/Image/Actions/ImageVisibilityAction/ImageVisibilityAction.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 msgid "Make public"
 msgstr "Rendi pubblica"
@@ -1234,12 +1231,14 @@ msgstr "Copia in corso..."
 msgid "Signing..."
 msgstr "Firma in corso..."
 
+#: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
+#: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Text/CopyContainer/CopyContainer.svelte
 msgid "Copied"
 msgstr "Copiato"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/CopyZoneAction/CopyZoneAction.svelte
 #: src/feature/Image/ShareLinkCopy/ShareLinkCopy.svelte
 #: src/feature/Text/CopyContainer/CopyContainer.svelte
 msgid "Copy"
@@ -1324,16 +1323,12 @@ msgstr "Questa immagine è visibile pubblicamente"
 msgid "This image is private"
 msgstr "Questa immagine è privata"
 
-#: src/feature/Navigation/Navbar/Navbar.svelte
-#: src/feature/Navigation/Navbar/Navbar.svelte
-#: src/feature/Navigation/Sidebar/AppSidebar.svelte
-#: src/feature/Navigation/Sidebar/AppSidebar.svelte
-#: src/routes/profile/(auth)/login/+page.svelte
-#: src/routes/profile/(auth)/signup/+page.svelte
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
 msgid "Slink"
 msgstr "Slink"
 
 #: src/feature/Navigation/Navbar/Navbar.svelte
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
 msgid "<0/> Upload"
 msgstr "<0/> Carica"
 
@@ -2324,7 +2319,6 @@ msgid "Users | Slink Admin"
 msgstr "Utenti | Slink Admin"
 
 #: src/routes/admin/user/+page.svelte
-#: src/routes/admin/user/+page.svelte
 msgid "Manage user accounts and permissions"
 msgstr "Gestisci gli account utente e i permessi"
 
@@ -2455,10 +2449,6 @@ msgstr "Nessun elemento in questa raccolta ancora."
 #: src/routes/help/faq/+page.svelte
 msgid "FAQ | Slink"
 msgstr "FAQ | Slink"
-
-#: src/routes/help/faq/+page.svelte
-msgid "Frequently asked questions about Slink - image sharing platform"
-msgstr "Domande frequenti su Slink - piattaforma di condivisione immagini"
 
 #: src/routes/help/faq/+page.svelte
 msgid "Frequently Asked Questions"
@@ -2864,16 +2854,8 @@ msgid "Sign in to access all platform features"
 msgstr "Accedi per utilizzare tutte le funzionalità della piattaforma"
 
 #: src/routes/profile/(auth)/login/+page.svelte
-msgid "Sign In | Slink"
-msgstr "Accedi | Slink"
-
-#: src/routes/profile/(auth)/login/+page.svelte
 msgid "Welcome back"
 msgstr "Bentornato"
-
-#: src/routes/profile/(auth)/login/+page.svelte
-msgid "Sign in to continue to Slink"
-msgstr "Accedi per continuare su Slink"
 
 #: src/routes/profile/(auth)/login/+page.svelte
 msgid "Email or Username"
@@ -2920,17 +2902,9 @@ msgid "Sign Up"
 msgstr "Registrati"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
-msgid "Create Account | Slink"
-msgstr "Crea account | Slink"
-
-#: src/routes/profile/(auth)/signup/+page.svelte
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Create Account"
 msgstr "Crea account"
-
-#: src/routes/profile/(auth)/signup/+page.svelte
-msgid "Join Slink to start sharing your images"
-msgstr "Unisciti a Slink per iniziare a condividere le tue immagini"
 
 #: src/routes/profile/(auth)/signup/+page.svelte
 msgid "Choose a username"
@@ -4024,7 +3998,9 @@ msgstr "Pubblicazioni"
 msgid "Share actions"
 msgstr "Azioni di pubblicazione"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/CopyZoneAction/CopyZoneAction.svelte
+#: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
+#: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
 #: src/feature/Image/History/HistoryActionsMenu.svelte
 #: src/feature/Share/Controls/List.svelte
 msgid "Copy link"
@@ -4311,7 +4287,7 @@ msgstr "ha aggiunto ai segnalibri"
 msgid "interacted"
 msgstr "ha interagito"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/CopyZoneAction/CopyZoneAction.svelte
 msgid "Copy image link"
 msgstr "Copia link immagine"
 
@@ -4808,7 +4784,7 @@ msgstr "BB"
 msgid "HTML"
 msgstr "HTML"
 
-#: src/feature/Image/ActionBar/ImageActionBar.svelte
+#: src/feature/Image/Actions/CopyZoneAction/CopyZoneAction.svelte
 msgid "Copy link options"
 msgstr "Opzioni di copia del link"
 
@@ -5044,6 +5020,102 @@ msgstr "Deseleziona elemento"
 msgid "{0} of {1} files uploaded"
 msgstr "{0} di {1} file caricati"
 
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Fast and secure image sharing service"
+msgstr "Servizio di condivisione immagini veloce e sicuro"
+
+#. 0: customization.siteName
+#: src/routes/+layout.svelte
+msgid "{0}: Image Sharing Service"
+msgstr "{0}: Servizio di condivisione immagini"
+
+#: src/feature/Navigation/Sidebar/config.svelte.ts
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+#: src/routes/admin/settings/+page.svelte
+#: src/routes/admin/settings/customization/+page.svelte
+msgid "Customization"
+msgstr "Personalizzazione"
+
+#: src/routes/admin/settings/customization/+page.svelte
+msgid "Customize the appearance and branding of your application"
+msgstr "Personalizza l'aspetto e il branding della tua applicazione"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Site Name"
+msgstr "Nome del sito"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Site Description"
+msgstr "Descrizione del sito"
+
+#: src/routes/admin/settings/customization/+page.svelte
+msgid "Customization Settings | Slink"
+msgstr "Impostazioni di personalizzazione | Slink"
+
+#. 0: customization.siteName
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Sign In | {0}"
+msgstr "Accedi | {0}"
+
+#. 0: customization.siteName
+#: src/routes/profile/(auth)/login/+page.svelte
+msgid "Sign in to continue to {0}"
+msgstr "Accedi per continuare su {0}"
+
+#. 0: customization.siteName
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Create Account | {0}"
+msgstr "Crea account | {0}"
+
+#. 0: customization.siteName
+#: src/routes/profile/(auth)/signup/+page.svelte
+msgid "Join {0} to start sharing your images"
+msgstr "Unisciti a {0} per iniziare a condividere le tue immagini"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Logo URL"
+msgstr "URL del logo"
+
+#: src/routes/admin/settings/+page.svelte
+msgid "Customize the site name, description, logo, and branding"
+msgstr "Personalizza il nome del sito, la descrizione, il logo e il branding"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Name and brand your Slink instance."
+msgstr "Dai un nome e un'identità alla tua istanza Slink."
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "The public name of your instance."
+msgstr "Il nome pubblico della tua istanza."
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "A short tagline describing your instance."
+msgstr "Un breve slogan che descrive la tua istanza."
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Link to your own logo image. Leave empty to use the default."
+msgstr "Link alla tua immagine del logo. Lascia vuoto per usare quello predefinito."
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Couldn't load this image"
+msgstr "Impossibile caricare questa immagine"
+
+#: src/feature/Settings/CustomizationSettings/CustomizationSettings.svelte
+msgid "Logo preview"
+msgstr "Anteprima del logo"
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "The file is too large. Allowed maximum size is {limit}."
+msgstr "Il file è troppo grande. La dimensione massima consentita è {limit}."
+
+#: src/lib/utils/i18n/messages/api.language.ts
+msgid "An empty file is not allowed."
+msgstr "Un file vuoto non è consentito."
+
+#: src/feature/Image/CopyLinkButton/CopyLinkButton.svelte
+msgid "Copy link format"
+msgstr "Scegli formato del link"
+
 #: src/feature/Comment/CommentInput.svelte
 msgid "Reply..."
 msgstr "Rispondi..."
@@ -5057,12 +5129,12 @@ msgid "Disable the account"
 msgstr "Disabilita l'account"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
-msgid "Disable and delete content"
-msgstr "Disabilita ed elimina i contenuti"
-
-#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "Keeps their uploads and content"
 msgstr "Mantiene i suoi caricamenti e i suoi contenuti"
+
+#: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
+msgid "Disable and delete content"
+msgstr "Disabilita ed elimina i contenuti"
 
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "Deletes their images, collections, and bookmarks by others. Comments stay, shown as deleted."

@@ -15,6 +15,7 @@
 
   import { theme } from '@slink/lib/actions/theme';
   import { isAdmin } from '@slink/lib/auth/utils';
+  import { customization } from '@slink/lib/settings';
   import { initResponsiveStore } from '@slink/lib/stores/responsive.svelte';
 
   const { settings } = page.data;
@@ -46,6 +47,14 @@
 
   initResponsiveStore();
 </script>
+
+<svelte:head>
+  <title>{customization.siteName}: Image Sharing Service</title>
+  <meta name="description" content={customization.siteDescription} />
+  <meta name="apple-mobile-web-app-title" content={customization.siteName} />
+  <link rel="icon" href={customization.logoUrl} />
+  <link rel="apple-touch-icon" href={customization.appleTouchIconUrl} />
+</svelte:head>
 
 <div class="relative flex h-screen" use:theme={settings.theme.current}>
   <Sidebar.Provider bind:open={sidebarOpen}>

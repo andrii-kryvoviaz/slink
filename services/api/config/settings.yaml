@@ -52,6 +52,10 @@ parameters:
     demoPassword: '%env(DEMO_PASSWORD)%'
     demoEmail: '%env(DEMO_EMAIL)%'
     demoDisplayName: '%env(DEMO_DISPLAY_NAME)%'
+  customization:
+    siteName: '%env(string:default::CUSTOMIZATION_SITE_NAME)%'
+    siteDescription: '%env(string:default::CUSTOMIZATION_SITE_DESCRIPTION)%'
+    logoUrl: '%env(string:default::CUSTOMIZATION_LOGO_URL)%'
 
 when@prod:
   parameters:

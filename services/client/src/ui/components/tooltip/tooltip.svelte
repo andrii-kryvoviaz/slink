@@ -12,7 +12,8 @@
   } from './tooltip.theme.js';
 
   interface Props {
-    trigger: Snippet;
+    trigger?: Snippet;
+    triggerChild?: Snippet<[{ props: Record<string, unknown> }]>;
     children?: Snippet;
     open?: boolean;
     side?: 'top' | 'right' | 'bottom' | 'left';
@@ -31,6 +32,7 @@
 
   let {
     trigger,
+    triggerChild,
     children,
     open = $bindable(false),
     side = 'top',
@@ -49,12 +51,24 @@
 </script>
 
 {#if !browser}
-  {@render trigger()}
+  {#if triggerChild}
+    {@render triggerChild({ props: {} })}
+  {:else}
+    {@render trigger?.()}
+  {/if}
 {:else}
   <TooltipPrimitive.Root bind:open>
-    <TooltipPrimitive.Trigger {...triggerProps}>
-      {@render trigger()}
-    </TooltipPrimitive.Trigger>
+    {#if triggerChild}
+      <TooltipPrimitive.Trigger {...triggerProps}>
+        {#snippet child({ props })}
+          {@render triggerChild({ props })}
+        {/snippet}
+      </TooltipPrimitive.Trigger>
+    {:else}
+      <TooltipPrimitive.Trigger {...triggerProps}>
+        {@render trigger?.()}
+      </TooltipPrimitive.Trigger>
+    {/if}
     <TooltipPrimitive.Content
       {side}
       {sideOffset}

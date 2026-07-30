@@ -7,6 +7,7 @@
     BannerContent,
     BannerFooter,
     BannerIcon,
+    BrandLogo,
   } from '@slink/feature/Layout';
   import { Notice } from '@slink/feature/Text';
   import { Button } from '@slink/ui/components/button';
@@ -17,6 +18,7 @@
   import { fade, fly } from 'svelte/transition';
 
   import { OAuthProviderConfig } from '@slink/lib/auth/oauth';
+  import { customization } from '@slink/lib/settings';
 
   import { withLoadingState } from '@slink/utils/form/withLoadingState';
   import { useWritable } from '@slink/utils/store/contextAwareStore';
@@ -75,7 +77,7 @@
 </script>
 
 <svelte:head>
-  <title>Sign In | Slink</title>
+  <title>Sign In | {customization.siteName}</title>
 </svelte:head>
 
 <div
@@ -86,7 +88,7 @@
     <div
       class="w-12 h-12 rounded-xl bg-linear-to-br from-primary/10 to-primary/5 border border-primary/10 flex items-center justify-center shadow-sm"
     >
-      <img class="h-6 w-6" src="/favicon.png" alt="Slink" />
+      <BrandLogo class="h-6 w-6" />
     </div>
     <div class="text-left">
       <h1
@@ -95,7 +97,7 @@
         Welcome back
       </h1>
       <p class="text-gray-500 dark:text-gray-400 text-sm mt-0.5">
-        Sign in to continue to Slink
+        Sign in to continue to {customization.siteName}
       </p>
     </div>
   </div>

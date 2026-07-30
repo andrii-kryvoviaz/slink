@@ -22,6 +22,13 @@ export class SettingResource extends AbstractResource {
     return this.get('/settings', { query: request });
   }
 
+  public async uploadCustomizationLogo(file: File): Promise<{ url: string }> {
+    const body = new FormData();
+    body.append('file', file);
+
+    return this.post('/settings/customization/logo', { body });
+  }
+
   public async updateSettings(
     category: SettingCategory,
     settings: Partial<SettingCategoryData>,

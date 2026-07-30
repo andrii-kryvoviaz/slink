@@ -1,3 +1,4 @@
+export { customization } from './Customization.svelte';
 export * from './Settings.enums';
 export * from './UploadPolicy';
 export {

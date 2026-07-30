@@ -23,6 +23,9 @@ final readonly class PublicApplicationSettings {
     
     #[Groups(['public'])]
     public ?PublicImageSettings $image = null,
+    
+    #[Groups(['public'])]
+    public ?PublicCustomizationSettings $customization = null,
   ) {}
   
   /**
@@ -35,6 +38,7 @@ final readonly class PublicApplicationSettings {
       isset($settings['share']) ? PublicShareSettings::fromArray($settings['share']) : null,
       isset($settings['demo']) ? PublicDemoSettings::fromArray($settings['demo']) : null,
       isset($settings['image']) ? PublicImageSettings::fromArray($settings['image']) : null,
+      isset($settings['customization']) ? PublicCustomizationSettings::fromArray($settings['customization']) : null,
     );
   }
 }

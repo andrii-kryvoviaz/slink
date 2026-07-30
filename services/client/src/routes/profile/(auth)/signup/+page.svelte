@@ -6,6 +6,7 @@
     BannerContainer,
     BannerContent,
     BannerIcon,
+    BrandLogo,
   } from '@slink/feature/Layout';
   import { Button } from '@slink/ui/components/button';
   import { Input } from '@slink/ui/components/input';
@@ -14,12 +15,17 @@
   import Icon from '@iconify/svelte';
   import { fade, fly } from 'svelte/transition';
 
+  import { customization } from '@slink/lib/settings';
+
   import { withLoadingState } from '@slink/utils/form/withLoadingState';
   import { useWritable } from '@slink/utils/store/contextAwareStore';
   import { toast } from '@slink/utils/ui/toast-sonner.svelte';
 
+  import type { PageData } from './$types';
+
   interface Props {
     form: any;
+    data: PageData;
   }
 
   let { form }: Props = $props();
@@ -37,7 +43,7 @@
 </script>
 
 <svelte:head>
-  <title>Create Account | Slink</title>
+  <title>Create Account | {customization.siteName}</title>
 </svelte:head>
 
 <div
@@ -48,7 +54,7 @@
     <div
       class="w-12 h-12 rounded-xl bg-linear-to-br from-primary/10 to-primary/5 border border-primary/10 flex items-center justify-center shadow-sm"
     >
-      <img class="h-6 w-6" src="/favicon.png" alt="Slink" />
+      <BrandLogo class="h-6 w-6" />
     </div>
     <div class="text-left">
       <h1
@@ -57,7 +63,7 @@
         Create Account
       </h1>
       <p class="text-gray-500 dark:text-gray-400 text-sm mt-0.5">
-        Join Slink to start sharing your images
+        Join {customization.siteName} to start sharing your images
       </p>
     </div>
   </div>

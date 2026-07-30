@@ -10,6 +10,7 @@ use Slink\Settings\Domain\Event\SettingsChanged;
 use Slink\Settings\Domain\Exception\InvalidSettingsException;
 use Slink\Settings\Domain\ValueObject\AbstractSettingsValueObject;
 use Slink\Settings\Domain\ValueObject\Access\AccessSettings;
+use Slink\Settings\Domain\ValueObject\Customization\CustomizationSettings;
 use Slink\Settings\Domain\ValueObject\Image\ImageSettings;
 use Slink\Settings\Domain\ValueObject\Share\ShareSettings;
 use Slink\Settings\Domain\ValueObject\Storage\StorageSettings;
@@ -43,6 +44,7 @@ final class Settings extends AbstractAggregateRoot {
   private ?ImageSettings $image = null;
   private ?AccessSettings $access = null;
   private ?ShareSettings $share = null;
+  private ?CustomizationSettings $customization = null;
   
   /**
    * @param array<int, ?AbstractSettingsValueObject> $data
@@ -111,6 +113,7 @@ final class Settings extends AbstractAggregateRoot {
       'image' => $this->image?->toPayload(),
       'access' => $this->access?->toPayload(),
       'share' => $this->share?->toPayload(),
+      'customization' => $this->customization?->toPayload(),
     ];
   }
 
@@ -125,6 +128,7 @@ final class Settings extends AbstractAggregateRoot {
     $settings->image = isset($state['image']) ? ImageSettings::fromPayload($state['image']) : null;
     $settings->access = isset($state['access']) ? AccessSettings::fromPayload($state['access']) : null;
     $settings->share = isset($state['share']) ? ShareSettings::fromPayload($state['share']) : null;
+    $settings->customization = isset($state['customization']) ? CustomizationSettings::fromPayload($state['customization']) : null;
 
     return $settings;
   }
