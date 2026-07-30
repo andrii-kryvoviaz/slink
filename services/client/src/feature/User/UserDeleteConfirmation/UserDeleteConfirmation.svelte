@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Button } from '@slink/ui/components/button';
-  import { Switch } from '@slink/ui/components/switch';
+  import { RadioGroup, RadioGroupCard } from '@slink/ui/components/radio-group';
 
   import type { User } from '$lib/auth/Type/User';
   import Icon from '@iconify/svelte';
@@ -14,58 +14,51 @@
 
   let { user, loading, onConfirm, onCancel }: Props = $props();
 
-  let purge = $state(false);
+  let outcome = $state('disable');
+
+  const purge = $derived(outcome === 'purge');
 </script>
 
-<div class="w-full max-w-sm p-2 space-y-4">
+<div class="w-80 p-2 space-y-4">
   <div class="flex items-center gap-3">
     <div
       class="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 border border-red-200/40 dark:border-red-800/30 shadow-sm flex-shrink-0"
     >
       <Icon icon="ph:user" class="h-5 w-5 text-red-600 dark:text-red-400" />
     </div>
-    <div>
+    <div class="min-w-0 flex-1">
       <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
         Delete User
       </h3>
       <p class="text-xs text-gray-500 dark:text-gray-400">
-        Permanently disables the account. This cannot be undone.
+        This cannot be undone.
+      </p>
+      <p class="text-xs font-medium text-gray-900 dark:text-white truncate">
+        {user.email}
       </p>
     </div>
   </div>
 
-  <div
-    class="bg-gray-50/80 dark:bg-gray-800/50 rounded-xl p-4 border border-gray-200/50 dark:border-gray-700/30"
-  >
-    <div class="flex items-center gap-3">
-      <div class="min-w-0 flex-1">
-        <span class="text-sm font-medium text-gray-900 dark:text-white">
-          {user.email}
-        </span>
-      </div>
-    </div>
-  </div>
-
-  <div class="space-y-2">
-    <div class="flex items-center justify-between gap-3">
-      <label
-        for="purge-all-data"
-        class="text-xs font-medium text-gray-900 dark:text-white cursor-pointer"
-      >
-        Permanently delete all data
-      </label>
-      <Switch id="purge-all-data" bind:checked={purge} disabled={loading} />
-    </div>
-    {#if purge}
-      <p class="text-xs text-red-600 dark:text-red-400">
-        Removes all images and collections. Comments remain, shown as deleted.
-      </p>
-    {:else}
-      <p class="text-xs text-gray-500 dark:text-gray-400">
-        Keeps all images, collections and comments. Frees the email and
-        username.
-      </p>
-    {/if}
+  <div class="space-y-3">
+    <RadioGroup bind:value={outcome} disabled={loading} class="gap-2">
+      <RadioGroupCard value="disable">
+        {#snippet title()}
+          Disable the account
+        {/snippet}
+        {#snippet description()}
+          Keeps their uploads and content
+        {/snippet}
+      </RadioGroupCard>
+      <RadioGroupCard value="purge" tone="danger">
+        {#snippet title()}
+          Disable and delete content
+        {/snippet}
+        {#snippet description()}
+          Deletes their images, collections, and bookmarks by others. Comments
+          stay, shown as deleted.
+        {/snippet}
+      </RadioGroupCard>
+    </RadioGroup>
   </div>
 
   <div class="flex gap-3 pt-2">
