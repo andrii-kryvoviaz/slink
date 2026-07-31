@@ -24,6 +24,10 @@ export class AdminUsersPage extends BasePage {
     'button[aria-label^="Current page "]',
   );
   readonly rows = this.page.getByRole('table').locator('tbody tr');
+  readonly usernameHeader = this.page.getByRole('columnheader', {
+    name: 'Username',
+    exact: true,
+  });
   readonly menu = this.page.getByRole('menu');
   readonly deleteMenuItem = this.page.getByRole('menuitem', {
     name: 'Delete',
@@ -68,6 +72,11 @@ export class AdminUsersPage extends BasePage {
     await this.page.goto(AdminUsersPage.URL);
     await expect(this.heading).toBeVisible();
     await this.useListView();
+    await this.waitForLoadedList();
+  }
+
+  async waitForLoadedList() {
+    await expect(this.usernameHeader).toBeVisible({ timeout: 20000 });
   }
 
   async useListView() {
@@ -104,6 +113,7 @@ export class AdminUsersPage extends BasePage {
   }
 
   async waitForFullList() {
+    await this.waitForLoadedList();
     await expect(this.rows.first()).toBeVisible({ timeout: 20000 });
     await expect(this.nextPageButton).toBeDisabled();
   }
