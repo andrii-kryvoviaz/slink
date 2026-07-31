@@ -29,7 +29,7 @@ final class PublicImageByIdAccessTest extends HttpTestCase {
   }
 
   #[Test]
-  public function anonymousReadsPublishedShareMetadataWhenGuestViewEnabled(): void {
+  public function anonymousCannotReadPublishedShareMetadataWhenGuestViewEnabled(): void {
     $this->setAccessSettings([
       'allowUnauthenticatedAccess' => true,
       'requireAuthForMediaShares' => false,
@@ -37,13 +37,11 @@ final class PublicImageByIdAccessTest extends HttpTestCase {
     $this->bootActors();
     $image = $this->sharedImage();
 
-    $status = $this->apiRequest('GET', $this->url($image));
-
-    self::markTestIncomplete(\sprintf('sc-234: expected 200, got %d for anonymous metadata read until share-scoped access is decided', $status));
+    self::assertSame(404, $this->apiRequest('GET', $this->url($image)));
   }
 
   #[Test]
-  public function anonymousReadsPublishedShareMetadataWhenGuestViewDisabled(): void {
+  public function anonymousCannotReadPublishedShareMetadataWhenGuestViewDisabled(): void {
     $this->setAccessSettings([
       'allowUnauthenticatedAccess' => false,
       'requireAuthForMediaShares' => false,
@@ -51,9 +49,7 @@ final class PublicImageByIdAccessTest extends HttpTestCase {
     $this->bootActors();
     $image = $this->sharedImage();
 
-    $status = $this->apiRequest('GET', $this->url($image));
-
-    self::markTestIncomplete(\sprintf('sc-234: expected 200, got %d for anonymous metadata read until share-scoped access is decided', $status));
+    self::assertSame(401, $this->apiRequest('GET', $this->url($image)));
   }
 
   #[Test]
