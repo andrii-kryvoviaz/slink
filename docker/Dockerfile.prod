@@ -36,14 +36,13 @@ RUN chmod -R g+r /source
 FROM composer:${COMPOSER_VERSION} AS vendor
 WORKDIR /dependencies
 COPY services/api/composer.json services/api/composer.lock ./
-RUN composer install \
+RUN --mount=type=cache,target=/tmp/cache composer install \
     --ignore-platform-reqs \
     --no-dev \
     --no-interaction \
     --prefer-dist \
     --optimize-autoloader \
-    --no-scripts && \
-    composer clear-cache
+    --no-scripts
 
 FROM common AS prod
 

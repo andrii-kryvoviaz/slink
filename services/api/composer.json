@@ -66,8 +66,21 @@
             "symfony/flex": true,
             "symfony/runtime": true
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "gitea-domains": [
+            "codeberg.org"
+        ]
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://codeberg.org/icewind/SMB"
+        },
+        {
+            "type": "vcs",
+            "url": "https://codeberg.org/icewind/streams"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "Slink\\": "src/Slink",

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "86b493b5c929257d40b05c1504856758",
+    "content-hash": "4f1cd85a15ba69fe2ac3af531f33cb2d",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2144,8 +2144,14 @@
             "version": "3.8.1",
             "source": {
                 "type": "git",
-                "url": "https://codeberg.org/icewind/SMB",
+                "url": "https://codeberg.org/icewind/SMB.git",
                 "reference": "97063a63b44edc6554966f6121679506b8d85103"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://codeberg.org/api/v1/repos/icewind/SMB/archive/97063a63b44edc6554966f6121679506b8d85103.zip",
+                "reference": "97063a63b44edc6554966f6121679506b8d85103",
+                "shasum": ""
             },
             "require": {
                 "icewind/streams": ">=0.7.3",
@@ -2163,7 +2169,25 @@
                     "Icewind\\SMB\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Icewind\\SMB\\Test\\": "tests/"
+                }
+            },
+            "scripts": {
+                "lint": [
+                    "parallel-lint --exclude src --exclude vendor --exclude target --exclude build ."
+                ],
+                "cs:check": [
+                    "php-cs-fixer fix --dry-run --diff"
+                ],
+                "cs:fix": [
+                    "php-cs-fixer fix"
+                ],
+                "psalm": [
+                    "psalm.phar"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -2174,15 +2198,25 @@
                 }
             ],
             "description": "php wrapper for smbclient and libsmbclient-php",
-            "time": "2025-11-13T16:17:19+00:00"
+            "support": {
+                "source": "https://codeberg.org/icewind/SMB/tag/3.8.1",
+                "issues": "https://codeberg.org/icewind/SMB/issues"
+            },
+            "time": "2025-11-13T17:18:18+01:00"
         },
         {
             "name": "icewind/streams",
             "version": "v0.7.8",
             "source": {
                 "type": "git",
-                "url": "https://codeberg.org/icewind/streams",
+                "url": "https://codeberg.org/icewind/streams.git",
                 "reference": "cb2bd3ed41b516efb97e06e8da35a12ef58ba48b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://codeberg.org/api/v1/repos/icewind/streams/archive/cb2bd3ed41b516efb97e06e8da35a12ef58ba48b.zip",
+                "reference": "cb2bd3ed41b516efb97e06e8da35a12ef58ba48b",
+                "shasum": ""
             },
             "require": {
                 "php": ">=7.1"
@@ -2198,7 +2232,11 @@
                     "Icewind\\Streams\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Icewind\\Streams\\Tests\\": "tests/"
+                }
+            },
             "license": [
                 "MIT"
             ],
@@ -2209,7 +2247,11 @@
                 }
             ],
             "description": "A set of generic stream wrappers",
-            "time": "2024-12-05T14:36:22+00:00"
+            "support": {
+                "source": "https://codeberg.org/icewind/streams/tag/v0.7.8",
+                "issues": "https://codeberg.org/icewind/streams/issues"
+            },
+            "time": "2024-12-05T15:36:22+01:00"
         },
         {
             "name": "jcupitt/vips",
