@@ -32,7 +32,7 @@ runs:
       id: playwright-version
       shell: bash
       working-directory: services/client
-      run: echo "version=$(yarn playwright --version | tail -n1)" >> $GITHUB_OUTPUT
+      run: echo "version=$(yarn --silent playwright --version)" >> $GITHUB_OUTPUT
 
     - name: Cache Playwright browsers
       uses: actions/cache@v5
