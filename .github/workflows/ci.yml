@@ -8,6 +8,7 @@ on:
       - "services/**"
       - "docker/**"
       - "docker-bake.hcl"
+      - ".github/**"
 
   pull_request:
     branches: [main, develop]
@@ -15,6 +16,7 @@ on:
       - "services/**"
       - "docker/**"
       - "docker-bake.hcl"
+      - ".github/**"
 
 permissions:
   contents: read
@@ -39,9 +41,12 @@ jobs:
           filters: |
             backend:
               - 'services/api/**'
-              - 'docker/docker-compose.storage-test.yaml'
+              - 'docker/**'
+              - 'docker-bake.hcl'
+              - '.github/**'
             frontend:
               - 'services/client/**'
+              - '.github/**'
 
   backend-lint:
     name: Backend Lint
