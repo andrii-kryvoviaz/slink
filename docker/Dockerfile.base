@@ -1,6 +1,9 @@
 # check=skip=InvalidDefaultArgInFrom
 ARG NODE_VERSION
 ARG PHP_VERSION
+ARG FRANKENPHP_VERSION
+ARG MERCURE_VERSION
+ARG GRPC_VERSION
 ARG ALPINE_VERSION
 ARG MEMORY_LIMIT
 ARG UPLOAD_MAX_FILESIZE_IN_BYTES
@@ -19,8 +22,23 @@ RUN rm -rf /usr/src/php* \
         /usr/local/lib/php/build \
         /usr/local/bin/phpdbg \
         /usr/local/bin/php-cgi \
-        /tmp/* /var/cache/apk/* \
-    && setcap -r /usr/local/bin/frankenphp
+        /usr/local/bin/frankenphp \
+        /tmp/* /var/cache/apk/*
+
+FROM dunglas/frankenphp:${FRANKENPHP_VERSION}-builder-php${PHP_VERSION}-alpine AS frankenphp-build
+ARG MERCURE_VERSION
+ARG GRPC_VERSION
+COPY --from=caddy:builder /usr/bin/xcaddy /usr/bin/xcaddy
+RUN CGO_ENABLED=1 \
+        XCADDY_GO_BUILD_FLAGS="-ldflags '-w -s -extldflags \"-Wl,-z,stack-size=0x80000\"' -tags=nobadger,nomysql,nopgx" \
+        CGO_CFLAGS=$(php-config --includes) \
+        CGO_LDFLAGS="$(php-config --ldflags) $(php-config --libs)" \
+    xcaddy build \
+        --output /usr/local/bin/frankenphp \
+        --with github.com/dunglas/frankenphp=./ \
+        --with github.com/dunglas/frankenphp/caddy=./caddy/ \
+        --with github.com/dunglas/mercure/caddy@v${MERCURE_VERSION} \
+        --replace google.golang.org/grpc=google.golang.org/grpc@v${GRPC_VERSION}
 
 FROM frankenphp-upstream AS php-extensions
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
@@ -95,7 +113,8 @@ USER root
 COPY --from=php-extensions /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
 COPY --from=php-extensions /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
 
-COPY --link --from=frankenphp /usr/local/bin/frankenphp /usr/local/bin/php /usr/local/bin/
+COPY --link --from=frankenphp-build /usr/local/bin/frankenphp /usr/local/bin/frankenphp
+COPY --link --from=frankenphp /usr/local/bin/php /usr/local/bin/php
 COPY --link --from=frankenphp /usr/local/lib/ /usr/local/lib/
 
 ARG MEMORY_LIMIT

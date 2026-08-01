@@ -1,5 +1,8 @@
 variable "NODE_VERSION"                  { default = "24.18.1" }
 variable "PHP_VERSION"                   { default = "8.5.9" }
+variable "FRANKENPHP_VERSION"            { default = "1.12.6" }
+variable "MERCURE_VERSION"               { default = "0.24.2" }
+variable "GRPC_VERSION"                  { default = "1.82.1" }
 variable "ALPINE_VERSION"                { default = "3.24" }
 variable "COMPOSER_VERSION"              { default = "2" }
 variable "MEMORY_LIMIT"                  { default = "512" }
@@ -15,6 +18,9 @@ target "_base" {
   args = {
     NODE_VERSION                 = NODE_VERSION
     PHP_VERSION                  = PHP_VERSION
+    FRANKENPHP_VERSION           = FRANKENPHP_VERSION
+    MERCURE_VERSION              = MERCURE_VERSION
+    GRPC_VERSION                 = GRPC_VERSION
     ALPINE_VERSION               = ALPINE_VERSION
     MEMORY_LIMIT                 = MEMORY_LIMIT
     UPLOAD_MAX_FILESIZE_IN_BYTES = UPLOAD_MAX_FILESIZE_IN_BYTES
