@@ -1,6 +1,6 @@
 import { cva } from 'class-variance-authority';
 
-export const HeadingText = cva(`capitalize text-gray-800 dark:text-white`, {
+export const HeadingText = cva(`capitalize text-foreground`, {
   variants: {
     fontWeight: {
       light: 'font-light',
@@ -9,7 +9,7 @@ export const HeadingText = cva(`capitalize text-gray-800 dark:text-white`, {
       bold: 'font-bold',
     },
     size: {
-      xs: 'text-md lg:text-lg',
+      xs: 'text-base lg:text-lg',
       sm: 'text-lg lg:text-xl',
       md: 'text-2xl lg:text-3xl mb-2',
       lg: 'text-4xl lg:text-5xl mb-2',
@@ -20,8 +20,8 @@ export const HeadingText = cva(`capitalize text-gray-800 dark:text-white`, {
 export const HeadingDecoration = cva(`rounded-full inline-block`, {
   variants: {
     variant: {
-      default: 'bg-gray-200 dark:bg-gray-800',
-      primary: 'bg-indigo-500',
+      default: 'bg-muted',
+      primary: 'bg-accent',
     },
     size: {
       xs: 'h-0.5',
