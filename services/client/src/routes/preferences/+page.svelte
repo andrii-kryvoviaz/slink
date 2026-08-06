@@ -1,6 +1,6 @@
 <script lang="ts">
   import { getLicenseLabels } from '@slink/feature/Image';
-  import { Loader } from '@slink/feature/Layout';
+  import { Loader, ThemePicker } from '@slink/feature/Layout';
   import { SettingItem } from '@slink/feature/Settings';
   import { Notice, Subtitle, Title } from '@slink/feature/Text';
   import { Select } from '@slink/ui/components';
@@ -20,6 +20,7 @@
   import type { License } from '@slink/lib/enum/License';
   import { Locale } from '@slink/lib/settings/Settings.enums';
   import type { UploadPolicy } from '@slink/lib/settings/UploadPolicy';
+  import { themes } from '@slink/lib/settings/themes.language';
   import { applyLocale } from '@slink/lib/utils/i18n';
   import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
@@ -142,14 +143,14 @@
       <section class="space-y-1">
         <div class="flex items-center justify-between gap-4 pb-3">
           <h2
-            class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+            class="text-sm font-medium text-muted-foreground uppercase tracking-wider"
           >
             Language
           </h2>
         </div>
 
         <div
-          class="divide-y divide-gray-100 dark:divide-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 overflow-hidden"
+          class="divide-y divide-muted rounded-xl bg-muted-subtle/50 dark:bg-muted-subtle/30 border border-muted overflow-hidden"
         >
           <SettingItem>
             {#snippet label()}
@@ -171,14 +172,38 @@
       <section class="space-y-1">
         <div class="flex items-center justify-between gap-4 pb-3">
           <h2
-            class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+            class="text-sm font-medium text-muted-foreground uppercase tracking-wider"
+          >
+            Appearance
+          </h2>
+        </div>
+
+        <div
+          class="divide-y divide-muted rounded-xl bg-muted-subtle/50 dark:bg-muted-subtle/30 border border-muted overflow-hidden"
+        >
+          <SettingItem>
+            {#snippet label()}
+              Theme
+            {/snippet}
+            {#snippet hint()}
+              Applies to this browser as soon as you pick it
+            {/snippet}
+            <ThemePicker {themes} bind:value={settings.theme.current} />
+          </SettingItem>
+        </div>
+      </section>
+
+      <section class="space-y-1">
+        <div class="flex items-center justify-between gap-4 pb-3">
+          <h2
+            class="text-sm font-medium text-muted-foreground uppercase tracking-wider"
           >
             Navigation
           </h2>
         </div>
 
         <div
-          class="divide-y divide-gray-100 dark:divide-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 overflow-hidden"
+          class="divide-y divide-muted rounded-xl bg-muted-subtle/50 dark:bg-muted-subtle/30 border border-muted overflow-hidden"
         >
           <SettingItem>
             {#snippet label()}
@@ -205,13 +230,13 @@
         <section class="space-y-1">
           <div class="flex items-center justify-between gap-4 pb-3">
             <h2
-              class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+              class="text-sm font-medium text-muted-foreground uppercase tracking-wider"
             >
               Image Uploads
             </h2>
           </div>
           <div
-            class="divide-y divide-gray-100 dark:divide-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 overflow-hidden"
+            class="divide-y divide-muted rounded-xl bg-muted-subtle/50 dark:bg-muted-subtle/30 border border-muted overflow-hidden"
           >
             <SettingItem>
               {#snippet label()}
@@ -272,13 +297,13 @@
         <section class="space-y-1">
           <div class="flex items-center justify-between gap-4 pb-3">
             <h2
-              class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+              class="text-sm font-medium text-muted-foreground uppercase tracking-wider"
             >
               Image Licensing
             </h2>
           </div>
           <div
-            class="divide-y divide-gray-100 dark:divide-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 overflow-hidden"
+            class="divide-y divide-muted rounded-xl bg-muted-subtle/50 dark:bg-muted-subtle/30 border border-muted overflow-hidden"
           >
             <SettingItem>
               {#snippet label()}
@@ -353,9 +378,7 @@
 
     <div class="flex items-center justify-end gap-3 pt-4">
       {#if $isPreferencesFormLoading}
-        <div
-          class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
-        >
+        <div class="flex items-center gap-2 text-sm text-muted-foreground">
           <Loader variant="minimal" size="xs" />
           <span>Saving...</span>
         </div>

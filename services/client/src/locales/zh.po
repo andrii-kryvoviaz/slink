@@ -1411,11 +1411,11 @@ msgstr "设为私密"
 msgid "Make Public"
 msgstr "设为公开"
 
-#: src/feature/Layout/ThemeSwitch/ThemeSwitch.svelte
+#: src/feature/Layout/ModeSwitch/ModeSwitch.svelte
 msgid "Switch to light mode"
 msgstr "切换到浅色模式"
 
-#: src/feature/Layout/ThemeSwitch/ThemeSwitch.svelte
+#: src/feature/Layout/ModeSwitch/ModeSwitch.svelte
 msgid "Switch to dark mode"
 msgstr "切换到深色模式"
 
@@ -2705,6 +2705,7 @@ msgid "Visibility Options"
 msgstr "可见性选项"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
+#: src/lib/settings/themes.language.ts
 #: src/routes/help/faq/+page.svelte
 msgid "Default"
 msgstr "默认"
@@ -5121,3 +5122,19 @@ msgstr "禁用账号并删除内容"
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "Deletes their images, collections, and bookmarks by others. Comments stay, shown as deleted."
 msgstr "删除该用户的图片、合集，以及其他用户对这些图片的收藏。评论会保留，显示为已删除。"
+
+#: src/routes/preferences/+page.svelte
+msgid "Appearance"
+msgstr ""
+
+#: src/routes/preferences/+page.svelte
+msgid "Theme"
+msgstr ""
+
+#: src/routes/preferences/+page.svelte
+msgid "Applies to this browser as soon as you pick it"
+msgstr ""
+
+#: src/lib/settings/themes.language.ts
+msgid "Nord"
+msgstr ""

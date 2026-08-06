@@ -3,7 +3,7 @@ import { type Page, expect } from '@playwright/test';
 import { BasePage } from './BasePage';
 
 export class LayoutControls extends BasePage {
-  readonly themeToggle = this.page
+  readonly modeToggle = this.page
     .getByRole('button', { name: /Switch to (dark|light) mode/ })
     .last();
   readonly sidebarTrigger = this.page.locator('[data-sidebar="trigger"]');
@@ -12,10 +12,10 @@ export class LayoutControls extends BasePage {
     super(page);
   }
 
-  async toggleTheme() {
+  async toggleMode() {
     const before = await this.isDark();
     await expect(async () => {
-      await this.themeToggle.click();
+      await this.modeToggle.click();
       expect(await this.isDark()).not.toBe(before);
     }).toPass({ timeout: 15000 });
   }

@@ -1411,11 +1411,11 @@ msgstr "Зробити приватним"
 msgid "Make Public"
 msgstr "Зробити публічним"
 
-#: src/feature/Layout/ThemeSwitch/ThemeSwitch.svelte
+#: src/feature/Layout/ModeSwitch/ModeSwitch.svelte
 msgid "Switch to light mode"
 msgstr "Увімкнути світлу тему"
 
-#: src/feature/Layout/ThemeSwitch/ThemeSwitch.svelte
+#: src/feature/Layout/ModeSwitch/ModeSwitch.svelte
 msgid "Switch to dark mode"
 msgstr "Увімкнути темну тему"
 
@@ -2705,6 +2705,7 @@ msgid "Visibility Options"
 msgstr "Параметри видимості"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
+#: src/lib/settings/themes.language.ts
 #: src/routes/help/faq/+page.svelte
 msgid "Default"
 msgstr "За замовчуванням"
@@ -5157,3 +5158,19 @@ msgstr "Вимкнути та видалити контент"
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "Deletes their images, collections, and bookmarks by others. Comments stay, shown as deleted."
 msgstr "Видаляє зображення й колекції користувача та закладки інших користувачів на ці зображення. Коментарі залишаються, показані як видалені."
+
+#: src/routes/preferences/+page.svelte
+msgid "Appearance"
+msgstr ""
+
+#: src/routes/preferences/+page.svelte
+msgid "Theme"
+msgstr ""
+
+#: src/routes/preferences/+page.svelte
+msgid "Applies to this browser as soon as you pick it"
+msgstr ""
+
+#: src/lib/settings/themes.language.ts
+msgid "Nord"
+msgstr ""

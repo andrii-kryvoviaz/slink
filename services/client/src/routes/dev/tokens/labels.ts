@@ -1,0 +1,18 @@
+export const labels = {
+  title: 'Token contract preview',
+  tokens: 'Tokens',
+  recipes: 'Component variants',
+  components: 'Component gallery',
+  light: 'Light',
+  dark: 'Dark',
+  split: 'Split',
+  button: 'button',
+  input: 'input',
+  controls: 'label, switch, checkbox',
+  feedback: 'separator, skeleton, progress',
+  identity: 'avatar, pill, attribute chip',
+  surfaces: 'card, markdown alert',
+  sample: 'Sample',
+  initials: 'AB',
+  placeholder: 'Placeholder',
+} as const;

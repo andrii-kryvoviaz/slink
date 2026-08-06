@@ -20,7 +20,7 @@
     showLoginButton?: boolean;
     showUploadButton?: boolean;
     sidebarWidth?: number;
-    themeSwitch?: Snippet;
+    modeSwitch?: Snippet;
     children?: Snippet;
   }
 
@@ -28,7 +28,7 @@
     showLogo = true,
     showLoginButton = false,
     showUploadButton = true,
-    themeSwitch,
+    modeSwitch,
     children,
   }: Props = $props();
 
@@ -120,10 +120,7 @@
         >
           <div class="flex flex-col gap-2">
             <div class="flex items-center gap-2">
-              <Icon
-                icon="ph:cloud-arrow-up"
-                class="h-4 w-4 text-blue-500 dark:text-blue-400"
-              />
+              <Icon icon="ph:cloud-arrow-up" class="h-4 w-4 text-info" />
               <span class="text-sm font-semibold">Upload Image</span>
             </div>
             <p class="text-xs text-muted-foreground leading-relaxed">
@@ -131,7 +128,7 @@
               into collections.
             </p>
             <div
-              class="flex items-center justify-between pt-1.5 border-t border-slate-200/30 dark:border-slate-700/30"
+              class="flex items-center justify-between pt-1.5 border-t border-border/30"
             >
               <span
                 class="text-[10px] uppercase tracking-wider text-muted-foreground/60 font-medium"
@@ -165,11 +162,11 @@
       </Button>
     {/if}
 
-    {#if themeSwitch}
+    {#if modeSwitch}
       <HoverCard.Root openDelay={1000} closeDelay={200}>
         <HoverCard.Trigger>
           <div class="flex items-center">
-            {@render themeSwitch?.()}
+            {@render modeSwitch?.()}
           </div>
         </HoverCard.Trigger>
         <HoverCard.Content
@@ -184,10 +181,7 @@
         >
           <div class="flex flex-col gap-2">
             <div class="flex items-center gap-2">
-              <Icon
-                icon="ph:palette"
-                class="h-4 w-4 text-blue-500 dark:text-blue-400"
-              />
+              <Icon icon="ph:palette" class="h-4 w-4 text-info" />
               <span class="text-sm font-semibold">Toggle Theme</span>
             </div>
             <p class="text-xs text-muted-foreground leading-relaxed">

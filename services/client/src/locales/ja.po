@@ -1411,11 +1411,11 @@ msgstr "非公開にする"
 msgid "Make Public"
 msgstr "公開にする"
 
-#: src/feature/Layout/ThemeSwitch/ThemeSwitch.svelte
+#: src/feature/Layout/ModeSwitch/ModeSwitch.svelte
 msgid "Switch to light mode"
 msgstr "ライトモードに切り替え"
 
-#: src/feature/Layout/ThemeSwitch/ThemeSwitch.svelte
+#: src/feature/Layout/ModeSwitch/ModeSwitch.svelte
 msgid "Switch to dark mode"
 msgstr "ダークモードに切り替え"
 
@@ -2705,6 +2705,7 @@ msgid "Visibility Options"
 msgstr "公開設定オプション"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
+#: src/lib/settings/themes.language.ts
 #: src/routes/help/faq/+page.svelte
 msgid "Default"
 msgstr "デフォルト"
@@ -5121,3 +5122,19 @@ msgstr "無効化してコンテンツを削除"
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "Deletes their images, collections, and bookmarks by others. Comments stay, shown as deleted."
 msgstr "このユーザーの画像とコレクション、および他のユーザーがそれらの画像に付けたブックマークを削除します。コメントは残り、削除済みとして表示されます。"
+
+#: src/routes/preferences/+page.svelte
+msgid "Appearance"
+msgstr ""
+
+#: src/routes/preferences/+page.svelte
+msgid "Theme"
+msgstr ""
+
+#: src/routes/preferences/+page.svelte
+msgid "Applies to this browser as soon as you pick it"
+msgstr ""
+
+#: src/lib/settings/themes.language.ts
+msgid "Nord"
+msgstr ""

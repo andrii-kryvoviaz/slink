@@ -1,7 +1,12 @@
 import { browser } from '$app/environment';
 
 import { SortOrder } from '@slink/lib/enum/SortOrder';
-import { Locale, Theme } from '@slink/lib/settings/Settings.enums';
+import {
+  Locale,
+  Mode,
+  Theme,
+  resolveTheme,
+} from '@slink/lib/settings/Settings.enums';
 
 import { cookie } from '@slink/utils/http/cookie';
 import { deepMerge } from '@slink/utils/object/deepMerge';
@@ -38,6 +43,7 @@ export type UploadOptionsState = { expanded: boolean };
 export type BannersState = { hideExifKeptNotice: boolean };
 
 export type SettingsKey =
+  | 'mode'
   | 'theme'
   | 'locale'
   | 'sidebar'
@@ -55,6 +61,7 @@ export type SettingsKey =
 export type CookieSettings = { [K in SettingsKey]?: unknown };
 
 export const settingsKeys: SettingsKey[] = [
+  'mode',
   'theme',
   'locale',
   'sidebar',
@@ -71,7 +78,8 @@ export const settingsKeys: SettingsKey[] = [
 ];
 
 export const defaultSettings: Record<SettingsKey, unknown> = {
-  theme: Theme.DARK,
+  mode: Mode.DARK,
+  theme: Theme.DEFAULT,
   locale: Locale.EN,
   sidebar: { expanded: true },
   navigation: { expandedGroups: {} },
@@ -142,8 +150,33 @@ function persist(key: string, value: unknown): void {
   cookie.set(`settings.${key}`, cookieValue, 31536000);
 }
 
+class ModeState {
+  _value = $state<Mode>(Mode.DARK);
+
+  get current(): Mode {
+    return this._value;
+  }
+
+  set current(v: Mode) {
+    this._value = v;
+    persist('mode', v);
+  }
+
+  get isDark(): boolean {
+    return this._value === Mode.DARK;
+  }
+
+  get isLight(): boolean {
+    return this._value === Mode.LIGHT;
+  }
+
+  hydrate(v: Mode) {
+    this._value = v;
+  }
+}
+
 class ThemeState {
-  _value = $state<Theme>(Theme.DARK);
+  _value = $state<Theme>(Theme.DEFAULT);
 
   get current(): Theme {
     return this._value;
@@ -154,16 +187,8 @@ class ThemeState {
     persist('theme', v);
   }
 
-  get isDark(): boolean {
-    return this._value === Theme.DARK;
-  }
-
-  get isLight(): boolean {
-    return this._value === Theme.LIGHT;
-  }
-
-  hydrate(v: Theme) {
-    this._value = v;
+  hydrate(v: unknown) {
+    this._value = resolveTheme(v);
   }
 }
 
@@ -187,6 +212,7 @@ class LocaleState {
 export class UserSettings {
   [USER_SETTINGS_BRAND] = true;
 
+  readonly mode = new ModeState();
   readonly theme = new ThemeState();
   readonly locale = new LocaleState();
 

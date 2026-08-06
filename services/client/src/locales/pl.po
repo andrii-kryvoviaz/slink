@@ -1411,11 +1411,11 @@ msgstr "Ustaw jako prywatny"
 msgid "Make Public"
 msgstr "Ustaw jako publiczny"
 
-#: src/feature/Layout/ThemeSwitch/ThemeSwitch.svelte
+#: src/feature/Layout/ModeSwitch/ModeSwitch.svelte
 msgid "Switch to light mode"
 msgstr "Przełącz na tryb jasny"
 
-#: src/feature/Layout/ThemeSwitch/ThemeSwitch.svelte
+#: src/feature/Layout/ModeSwitch/ModeSwitch.svelte
 msgid "Switch to dark mode"
 msgstr "Przełącz na tryb ciemny"
 
@@ -2705,6 +2705,7 @@ msgid "Visibility Options"
 msgstr "Opcje widoczności"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
+#: src/lib/settings/themes.language.ts
 #: src/routes/help/faq/+page.svelte
 msgid "Default"
 msgstr "Domyślny"
@@ -5175,3 +5176,19 @@ msgstr "Wyłącz i usuń treści"
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "Deletes their images, collections, and bookmarks by others. Comments stay, shown as deleted."
 msgstr "Usuwa obrazy i kolekcje użytkownika oraz zakładki innych użytkowników do tych obrazów. Komentarze pozostają, wyświetlane jako usunięte."
+
+#: src/routes/preferences/+page.svelte
+msgid "Appearance"
+msgstr ""
+
+#: src/routes/preferences/+page.svelte
+msgid "Theme"
+msgstr ""
+
+#: src/routes/preferences/+page.svelte
+msgid "Applies to this browser as soon as you pick it"
+msgstr ""
+
+#: src/lib/settings/themes.language.ts
+msgid "Nord"
+msgstr ""

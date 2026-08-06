@@ -1,5 +1,6 @@
 export { customization } from './Customization.svelte';
 export * from './Settings.enums';
+export { themes, type ThemeDescriptor } from './themes.language';
 export * from './UploadPolicy';
 export {
   UserSettings,

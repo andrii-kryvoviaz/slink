@@ -1411,11 +1411,11 @@ msgstr "Rendi privata"
 msgid "Make Public"
 msgstr "Rendi pubblica"
 
-#: src/feature/Layout/ThemeSwitch/ThemeSwitch.svelte
+#: src/feature/Layout/ModeSwitch/ModeSwitch.svelte
 msgid "Switch to light mode"
 msgstr "Passa alla modalità chiara"
 
-#: src/feature/Layout/ThemeSwitch/ThemeSwitch.svelte
+#: src/feature/Layout/ModeSwitch/ModeSwitch.svelte
 msgid "Switch to dark mode"
 msgstr "Passa alla modalità scura"
 
@@ -2705,6 +2705,7 @@ msgid "Visibility Options"
 msgstr "Opzioni di visibilità"
 
 #: src/feature/Settings/ImageSettings/ImageSettings.svelte
+#: src/lib/settings/themes.language.ts
 #: src/routes/help/faq/+page.svelte
 msgid "Default"
 msgstr "Predefinito"
@@ -5139,3 +5140,19 @@ msgstr "Disabilita ed elimina i contenuti"
 #: src/feature/User/UserDeleteConfirmation/UserDeleteConfirmation.svelte
 msgid "Deletes their images, collections, and bookmarks by others. Comments stay, shown as deleted."
 msgstr "Elimina le sue immagini, le sue raccolte e i preferiti che altri hanno aggiunto alle sue immagini. I commenti restano, mostrati come eliminati."
+
+#: src/routes/preferences/+page.svelte
+msgid "Appearance"
+msgstr ""
+
+#: src/routes/preferences/+page.svelte
+msgid "Theme"
+msgstr ""
+
+#: src/routes/preferences/+page.svelte
+msgid "Applies to this browser as soon as you pick it"
+msgstr ""
+
+#: src/lib/settings/themes.language.ts
+msgid "Nord"
+msgstr ""
