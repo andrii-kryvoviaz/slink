@@ -1,0 +1,11 @@
+@import './presets/default.css';
+@import './presets/nord.css';
+
+@import './core/radius.css';
+@import './core/surface.css';
+@import './core/accent.css';
+@import './core/decor.css';
+@import './core/series.css';
+@import './core/status.css';
+
+@import './recipes.css';

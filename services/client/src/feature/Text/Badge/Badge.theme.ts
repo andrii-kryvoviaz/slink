@@ -6,43 +6,44 @@ export const BadgeTheme = cva(
     variants: {
       variant: {
         default:
-          'border-slate-500/20 bg-slate-500/10 text-slate-700 [a&]:hover:bg-slate-500/15 focus-visible:ring-slate-500/20 dark:border-slate-400/30 dark:bg-slate-400/10 dark:text-slate-300 dark:[a&]:hover:bg-slate-400/15',
-        blue: 'border-blue-500/20 bg-blue-500/10 text-blue-700 [a&]:hover:bg-blue-500/15 focus-visible:ring-blue-500/20 dark:border-blue-400/30 dark:bg-blue-400/10 dark:text-blue-300 dark:[a&]:hover:bg-blue-400/15',
+          'border-muted-foreground/20 bg-muted-foreground/10 text-foreground-soft [a&]:hover:bg-muted-foreground/15 focus-visible:ring-border-stronger/20 dark:border-muted-foreground/30',
+        blue: 'border-info/20 bg-info/10 text-info-subtle-foreground [a&]:hover:bg-info/15 focus-visible:ring-info/20 dark:border-info/30',
         emerald:
-          'border-emerald-500/20 bg-emerald-500/10 text-emerald-700 [a&]:hover:bg-emerald-500/15 focus-visible:ring-emerald-500/20 dark:border-emerald-400/30 dark:bg-emerald-400/10 dark:text-emerald-300 dark:[a&]:hover:bg-emerald-400/15',
+          'border-decor-emerald/20 bg-decor-emerald/10 text-decor-emerald-subtle-foreground [a&]:hover:bg-decor-emerald/15 focus-visible:ring-decor-emerald/20 dark:border-decor-emerald/30',
         slate:
-          'border-slate-500/20 bg-slate-500/10 text-slate-700 [a&]:hover:bg-slate-500/15 focus-visible:ring-slate-500/20 dark:border-slate-400/30 dark:bg-slate-400/10 dark:text-slate-300 dark:[a&]:hover:bg-slate-400/15',
+          'border-muted-foreground/20 bg-muted-foreground/10 text-foreground-soft [a&]:hover:bg-muted-foreground/15 focus-visible:ring-border-stronger/20 dark:border-muted-foreground/30',
         purple:
-          'border-purple-500/20 bg-purple-500/10 text-purple-700 [a&]:hover:bg-purple-500/15 focus-visible:ring-purple-500/20 dark:border-purple-400/30 dark:bg-purple-400/10 dark:text-purple-300 dark:[a&]:hover:bg-purple-400/15',
+          'border-accent/20 bg-accent/10 text-accent-subtle-foreground [a&]:hover:bg-accent/15 focus-visible:ring-accent/20 dark:border-accent/30',
         amber:
-          'border-amber-500/20 bg-amber-500/10 text-amber-700 [a&]:hover:bg-amber-500/15 focus-visible:ring-amber-500/20 dark:border-amber-400/30 dark:bg-amber-400/10 dark:text-amber-300 dark:[a&]:hover:bg-amber-400/15',
+          'border-warning/20 bg-warning/10 text-warning-subtle-foreground [a&]:hover:bg-warning/15 focus-visible:ring-warning/20 dark:border-warning/30',
         orange:
-          'border-orange-500/20 bg-orange-500/10 text-orange-700 [a&]:hover:bg-orange-500/15 focus-visible:ring-orange-500/20 dark:border-orange-400/30 dark:bg-orange-400/10 dark:text-orange-300 dark:[a&]:hover:bg-orange-400/15',
-        red: 'border-red-500/20 bg-red-500/10 text-red-700 [a&]:hover:bg-red-500/15 focus-visible:ring-red-500/20 dark:border-red-400/30 dark:bg-red-400/10 dark:text-red-300 dark:[a&]:hover:bg-red-400/15',
+          'border-decor-orange/20 bg-decor-orange/10 text-decor-orange-subtle-foreground [a&]:hover:bg-decor-orange/15 focus-visible:ring-decor-orange/20 dark:border-decor-orange/30',
+        red: 'border-danger/20 bg-danger/10 text-danger-subtle-foreground [a&]:hover:bg-danger/15 focus-visible:ring-danger/20 dark:border-danger/30',
         success:
-          'border-teal-500/20 bg-teal-500/10 text-teal-700 [a&]:hover:bg-teal-500/15 focus-visible:ring-teal-500/20 dark:border-teal-400/30 dark:bg-teal-400/10 dark:text-teal-300 dark:[a&]:hover:bg-teal-400/15',
+          'border-success/20 bg-success/10 text-success-subtle-foreground [a&]:hover:bg-success/15 focus-visible:ring-success/20 dark:border-success/30',
         destructive:
-          'border-red-500/20 bg-red-500/10 text-red-700 [a&]:hover:bg-red-500/15 focus-visible:ring-red-500/20 dark:border-red-400/30 dark:bg-red-400/10 dark:text-red-300 dark:[a&]:hover:bg-red-400/15',
+          'border-danger/20 bg-danger/10 text-danger-subtle-foreground [a&]:hover:bg-danger/15 focus-visible:ring-danger/20 dark:border-danger/30',
         warning:
-          'border-yellow-500/20 bg-yellow-500/10 text-yellow-700 [a&]:hover:bg-yellow-500/15 focus-visible:ring-yellow-500/20 dark:border-yellow-400/30 dark:bg-yellow-400/10 dark:text-yellow-300 dark:[a&]:hover:bg-yellow-400/15',
-        info: 'border-cyan-500/20 bg-cyan-500/10 text-cyan-700 [a&]:hover:bg-cyan-500/15 focus-visible:ring-cyan-500/20 dark:border-cyan-400/30 dark:bg-cyan-400/10 dark:text-cyan-300 dark:[a&]:hover:bg-cyan-400/15',
+          'border-warning/20 bg-warning/10 text-warning-subtle-foreground [a&]:hover:bg-warning/15 focus-visible:ring-warning/20 dark:border-warning/30',
+        info: 'border-info/20 bg-info/10 text-info-subtle-foreground [a&]:hover:bg-info/15 focus-visible:ring-info/20 dark:border-info/30',
         indigo:
-          'border-indigo-500/20 bg-indigo-500/10 text-indigo-700 [a&]:hover:bg-indigo-500/15 focus-visible:ring-indigo-500/20 dark:border-indigo-400/30 dark:bg-indigo-400/10 dark:text-indigo-300 dark:[a&]:hover:bg-indigo-400/15',
-        pink: 'border-pink-500/20 bg-pink-500/10 text-pink-700 [a&]:hover:bg-pink-500/15 focus-visible:ring-pink-500/20 dark:border-pink-400/30 dark:bg-pink-400/10 dark:text-pink-300 dark:[a&]:hover:bg-pink-400/15',
+          'border-accent/20 bg-accent/10 text-accent-subtle-foreground [a&]:hover:bg-accent/15 focus-visible:ring-accent/20 dark:border-accent/30',
+        pink: 'border-decor-pink/20 bg-decor-pink/10 text-decor-pink-subtle-foreground [a&]:hover:bg-decor-pink/15 focus-visible:ring-decor-pink/20 dark:border-decor-pink/30',
         neutral:
-          'border-gray-500/20 bg-gray-500/10 text-gray-700 [a&]:hover:bg-gray-500/15 focus-visible:ring-gray-500/20 dark:border-gray-400/30 dark:bg-gray-400/10 dark:text-gray-300 dark:[a&]:hover:bg-gray-400/15',
+          'border-muted-foreground/20 bg-muted-foreground/10 text-foreground-soft [a&]:hover:bg-muted-foreground/15 focus-visible:ring-border-stronger/20 dark:border-muted-foreground/30',
         gradient:
-          'border-0 bg-gradient-to-br from-blue-500 to-purple-600 text-white font-semibold [a&]:hover:from-blue-600 [a&]:hover:to-purple-700 focus-visible:ring-blue-500/20',
+          'border-0 bg-gradient-to-br from-info-fill to-accent-strong text-accent-foreground font-semibold [a&]:hover:from-info-strong [a&]:hover:to-accent focus-visible:ring-info/20',
         neon: [
-          'bg-blue-100 dark:bg-blue-800/40 text-blue-600 dark:text-blue-300',
-          'border border-blue-500/20 dark:border-blue-400/30',
-          'hover:bg-blue-200 dark:hover:bg-blue-800/50',
-          'focus-within:ring-2 focus-within:ring-blue-500/30 focus-within:ring-offset-2',
+          'bg-info-fill/20 text-info dark:text-info-subtle-foreground',
+          'border border-info/20 dark:border-info/30',
+          'hover:bg-info-fill/30',
+          'focus-within:ring-2 focus-within:ring-info/30 focus-within:ring-offset-2',
           'transition-all duration-200 cursor-pointer',
         ],
         minimal:
-          'bg-slate-50 text-slate-600 border border-slate-100 dark:bg-slate-800/60 dark:text-slate-300 dark:border-slate-700',
-        glass: 'border-transparent bg-white/5 text-white/70 backdrop-blur-sm',
+          'bg-muted-subtle text-foreground-soft border border-muted dark:border-muted-foreground/30',
+        glass:
+          'border-transparent bg-surface-inverse-foreground/5 text-surface-inverse-foreground/70 backdrop-blur-sm',
       },
       size: {
         xs: 'px-1.5 py-0.5 text-[10px]',

@@ -31,7 +31,7 @@
 </script>
 
 <div
-  class="relative rounded-lg border border-gray-200 dark:border-gray-800 p-4 bg-white dark:bg-gray-900/60 transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-700/80 group"
+  class="relative rounded-lg border border-border p-4 bg-card transition-all duration-200 hover:border-border-strong group"
   transition:fade={{ duration: 200 }}
 >
   <div class="flex items-center gap-4">
@@ -41,29 +41,27 @@
 
     <div class="min-w-0 flex-1">
       <div class="flex items-center gap-2">
-        <h5 class="font-medium text-gray-900 dark:text-white truncate text-sm">
+        <h5 class="font-medium text-foreground truncate text-sm">
           {apiKey.name}
         </h5>
-        <span class="text-xs text-gray-400 dark:text-gray-500">
+        <span class="text-xs text-foreground-subtle">
           · {getApiKeyStatusLabel(status)}
         </span>
       </div>
-      <div
-        class="flex items-center gap-2 mt-1 text-xs text-gray-500 dark:text-gray-400"
-      >
+      <div class="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
         <span class="flex items-center gap-1">
           <Icon icon="lucide:calendar" class="h-3 w-3" />
           {formatDate(apiKey.createdAt)}
         </span>
         {#if apiKey.expiresAt}
-          <span class="text-gray-300 dark:text-gray-600">·</span>
+          <span class="text-border-strong">·</span>
           <span class="flex items-center gap-1">
             <Icon icon="lucide:clock" class="h-3 w-3" />
             {formatDate(apiKey.expiresAt)}
           </span>
         {/if}
         {#if apiKey.lastUsedAt}
-          <span class="text-gray-300 dark:text-gray-600">·</span>
+          <span class="text-border-strong">·</span>
           <span class="flex items-center gap-1">
             <Icon icon="lucide:activity" class="h-3 w-3" />
             {formatDate(apiKey.lastUsedAt)}
@@ -81,7 +79,7 @@
         <button
           type="button"
           title="Revoke API Key"
-          class="opacity-0 group-hover:opacity-100 w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 focus:opacity-100 focus:outline-none"
+          class="opacity-0 group-hover:opacity-100 w-8 h-8 flex items-center justify-center rounded-lg text-foreground-subtle dark:text-muted-foreground hover:text-danger hover:bg-danger/8 transition-all duration-200 focus:opacity-100 focus:outline-none"
           disabled={isRevoking}
         >
           <Icon icon="lucide:x" class="h-4 w-4" />

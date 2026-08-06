@@ -1,0 +1,36 @@
+@theme {
+  --color-popover: var(--color-card);
+  --color-popover-foreground: var(--color-foreground);
+  --color-foreground-subtle: oklch(
+    from var(--color-muted-foreground) calc(l + 0.156) calc(c * 0.8148)
+      calc(h - 3.039)
+  );
+  --color-ghost-hover: color-mix(
+    in oklab,
+    var(--color-foreground) 8%,
+    transparent
+  );
+  --color-surface-inverse-foreground: oklch(
+    from var(--color-surface-inverse) clamp(0, (0.85 - l) * 100, 1) 0 h
+  );
+  --color-surface-raised: oklch(
+    from var(--color-card) clamp(0, l + 0.162, 1) c h
+  );
+  --color-surface-inverse-danger: color-mix(
+    in oklab,
+    var(--color-danger) 65%,
+    oklch(from var(--color-surface-inverse) clamp(0, (0.85 - l) * 100, 1) 0 h)
+  );
+}
+
+:root {
+  --modal-overlay-tint: oklch(0.3 0.01 270 / 0.35);
+}
+
+.dark {
+  --color-foreground-subtle: oklch(
+    from var(--color-muted-foreground) calc(l - 0.156) calc(c * 1.2273)
+      calc(h + 3.039)
+  );
+  --modal-overlay-tint: oklch(0.08 0.01 270 / 0.6);
+}

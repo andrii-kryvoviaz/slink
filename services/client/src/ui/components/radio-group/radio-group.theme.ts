@@ -7,25 +7,25 @@ export const RadioGroupCardTheme = cva(
     'flex items-start gap-3 rounded-lg border p-3',
     'outline-none transition-colors duration-150',
     'focus-visible:ring-2 focus-visible:ring-offset-1',
-    'dark:focus-visible:ring-offset-gray-900',
+    'focus-visible:ring-offset-card',
     'disabled:cursor-not-allowed disabled:opacity-50',
-    'data-[state=unchecked]:hover:bg-gray-50 dark:data-[state=unchecked]:hover:bg-gray-800/40',
-    'data-[state=unchecked]:hover:border-gray-300 dark:data-[state=unchecked]:hover:border-gray-600',
+    'data-[state=unchecked]:hover:bg-ghost-hover/40',
+    'data-[state=unchecked]:hover:border-border-strong',
   ],
   {
     variants: {
       tone: {
         default: [
-          'border-gray-200/70 dark:border-gray-700/60',
-          'focus-visible:ring-gray-400/40',
-          'data-[state=checked]:border-gray-400 dark:data-[state=checked]:border-gray-500',
-          'data-[state=checked]:bg-gray-100 dark:data-[state=checked]:bg-gray-800/70',
+          'border-border/70',
+          'focus-visible:ring-ring/40',
+          'data-[state=checked]:border-ring',
+          'data-[state=checked]:bg-muted',
         ],
         danger: [
-          'border-gray-200/70 dark:border-gray-700/60',
-          'focus-visible:ring-red-500/40',
-          'data-[state=checked]:border-red-200/40 dark:data-[state=checked]:border-red-800/30',
-          'data-[state=checked]:bg-red-100 dark:data-[state=checked]:bg-red-900/30',
+          'border-border/70',
+          'focus-visible:ring-danger/40',
+          'data-[state=checked]:border-danger-border/40',
+          'data-[state=checked]:bg-danger-subtle',
         ],
       },
     },
@@ -44,12 +44,12 @@ export const RadioGroupCardIndicatorTheme = cva(
     variants: {
       tone: {
         default: [
-          'border-gray-300 dark:border-gray-600',
-          'group-data-[state=checked]:border-gray-900 dark:group-data-[state=checked]:border-white',
+          'border-border-strong',
+          'group-data-[state=checked]:border-foreground',
         ],
         danger: [
-          'border-gray-300 dark:border-gray-600',
-          'group-data-[state=checked]:border-red-600 dark:group-data-[state=checked]:border-red-400',
+          'border-border-strong',
+          'group-data-[state=checked]:border-danger',
         ],
       },
     },
@@ -62,8 +62,8 @@ export const RadioGroupCardIndicatorTheme = cva(
 export const RadioGroupCardDotTheme = cva('size-2 fill-current', {
   variants: {
     tone: {
-      default: 'text-gray-900 dark:text-white',
-      danger: 'text-red-600 dark:text-red-400',
+      default: 'text-foreground',
+      danger: 'text-danger',
     },
   },
   defaultVariants: {
@@ -76,11 +76,8 @@ export const RadioGroupCardBodyTheme = cva('min-w-0 flex-1 space-y-0.5');
 export const RadioGroupCardTitleTheme = cva('block text-xs font-medium', {
   variants: {
     tone: {
-      default: 'text-gray-900 dark:text-white',
-      danger: [
-        'text-gray-900 dark:text-white',
-        'group-data-[state=checked]:text-red-600 dark:group-data-[state=checked]:text-red-400',
-      ],
+      default: 'text-foreground',
+      danger: ['text-foreground', 'group-data-[state=checked]:text-danger'],
     },
   },
   defaultVariants: {
@@ -89,7 +86,7 @@ export const RadioGroupCardTitleTheme = cva('block text-xs font-medium', {
 });
 
 export const RadioGroupCardDescriptionTheme = cva(
-  'block text-xs text-gray-500 dark:text-gray-400',
+  'block text-xs text-muted-foreground',
 );
 
 export type RadioGroupCardTone = NonNullable<

@@ -31,7 +31,7 @@
 
 {#if appearance === 'plain'}
   <p
-    class="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400/70 [&>svg]:h-3.5 [&>svg]:w-3.5 [&>svg]:shrink-0"
+    class="flex items-center gap-1.5 text-xs text-muted-foreground dark:text-muted-foreground/70 [&>svg]:h-3.5 [&>svg]:w-3.5 [&>svg]:shrink-0"
   >
     {@render icon()}
     {#if message}

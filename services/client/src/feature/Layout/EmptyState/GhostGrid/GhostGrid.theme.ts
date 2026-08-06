@@ -5,5 +5,5 @@ export const ghostGridVariants = cva(
 );
 
 export const ghostTileVariants = cva(
-  'aspect-[4/3] rounded-xl border border-slate-200/80 bg-slate-100 dark:border-slate-700/50 dark:bg-slate-800/50',
+  'aspect-[4/3] rounded-xl border border-border/80 dark:border-border-strong/50 bg-muted dark:bg-muted/50',
 );

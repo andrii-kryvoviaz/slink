@@ -15,8 +15,8 @@
     {
       variants: {
         variant: {
-          default: 'bg-slate-900 dark:bg-slate-100',
-          accent: 'bg-blue-600 dark:bg-blue-500',
+          default: 'bg-foreground',
+          accent: 'bg-info-strong',
         },
       },
       defaultVariants: {
@@ -30,8 +30,8 @@
     {
       variants: {
         variant: {
-          default: 'text-white dark:text-slate-900',
-          accent: 'text-white',
+          default: 'text-card',
+          accent: 'text-info-foreground',
         },
       },
       defaultVariants: {

@@ -2,7 +2,7 @@ import { cva } from 'class-variance-authority';
 import { tv } from 'tailwind-variants';
 
 export const downloadButtonTheme = cva(
-  'group/download relative inline-flex items-center select-none transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-slate-400/70',
+  'group/download relative inline-flex items-center select-none transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/85',
   {
     variants: {
       size: {
@@ -12,8 +12,7 @@ export const downloadButtonTheme = cva(
       },
       variant: {
         default: '',
-        subtle:
-          'rounded-md px-2 py-1 hover:bg-indigo-50/50 dark:hover:bg-indigo-900/20',
+        subtle: 'rounded-md px-2 py-1 hover:bg-accent-subtle/50',
         overlay: '',
         toolbar: '',
       },
@@ -54,34 +53,34 @@ export const downloadIconTheme = tv({
       variant: 'default',
       loading: false,
       class:
-        'group-hover/download:scale-110 text-gray-400 dark:text-gray-500 group-hover/download:text-indigo-500 dark:group-hover/download:text-indigo-400',
+        'group-hover/download:scale-110 text-foreground-subtle group-hover/download:text-accent',
     },
     {
       variant: 'subtle',
       loading: false,
       class:
-        'group-hover/download:scale-110 text-gray-400 dark:text-gray-500 group-hover/download:text-indigo-500 dark:group-hover/download:text-indigo-400',
+        'group-hover/download:scale-110 text-foreground-subtle group-hover/download:text-accent',
     },
     {
       variant: 'overlay',
       loading: false,
       class:
-        'group-hover/download:scale-110 text-white/80 group-hover/download:text-white',
+        'group-hover/download:scale-110 text-surface-inverse-foreground/80 group-hover/download:text-surface-inverse-foreground',
     },
     {
       variant: 'default',
       loading: true,
-      class: 'text-gray-400 dark:text-gray-500',
+      class: 'text-foreground-subtle',
     },
     {
       variant: 'subtle',
       loading: true,
-      class: 'text-gray-400 dark:text-gray-500',
+      class: 'text-foreground-subtle',
     },
     {
       variant: 'overlay',
       loading: true,
-      class: 'text-white/80',
+      class: 'text-surface-inverse-foreground/80',
     },
   ],
   defaultVariants: {

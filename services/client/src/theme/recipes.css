@@ -1,0 +1,54 @@
+@keyframes shimmer {
+  from {
+    background-position: -200% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
+}
+
+@utility sidebar-integrated {
+  backdrop-filter: blur(var(--blur-glass));
+  -webkit-backdrop-filter: blur(var(--blur-glass));
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      var(--color-bg-start) 0%,
+      transparent 20%,
+      transparent 80%,
+      var(--color-bg-end) 100%
+    );
+    opacity: 0.8;
+    z-index: -1;
+  }
+}
+
+@utility popover-panel {
+  @apply border-border/80 shadow-scrim/10 dark:shadow-scrim/25 z-50 rounded-xl border shadow-xl backdrop-blur-sm;
+  @apply data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2;
+}
+
+@utility filter-glass {
+  @apply bg-card dark:bg-card/60 backdrop-blur-sm;
+}
+
+@utility filter-glass-popover {
+  @apply bg-popover rounded-xl backdrop-blur-md;
+}
+
+@utility filter-clear-neutral {
+  @apply text-foreground-subtle hover:bg-ghost-hover hover:text-foreground-soft dark:text-muted-foreground;
+}
+
+@utility filter-item-info {
+  @apply text-foreground-soft hover:bg-info-fill/20 hover:text-info-subtle-foreground aria-selected:bg-info-fill/20 aria-selected:text-info-subtle-foreground aria-selected:shadow-info-border/40 dark:text-foreground aria-selected:shadow-sm;
+}
+
+@utility filter-item-count-info {
+  @apply border-border/50 bg-muted/80 text-muted-foreground group-hover:border-info/30 group-hover:bg-info-fill/20 group-hover:text-info-subtle-foreground group-aria-selected:border-info/30 group-aria-selected:bg-info-fill/20 group-aria-selected:text-info-subtle-foreground border;
+}

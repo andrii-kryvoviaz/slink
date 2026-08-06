@@ -143,7 +143,7 @@
       <Combobox.Content
         sideOffset={4}
         class={cn(
-          'bg-white dark:bg-gray-900/95 text-gray-900 dark:text-gray-100 backdrop-blur-sm border border-gray-200/80 dark:border-gray-700/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 max-h-[var(--bits-combobox-content-available-height)] origin-[var(--bits-combobox-content-transform-origin)] relative z-50 min-w-[8rem] w-[var(--bits-combobox-anchor-width)] overflow-y-auto overflow-x-hidden rounded-xl shadow-xl shadow-black/10 dark:shadow-black/25 data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',
+          'popover-panel bg-popover text-popover-foreground max-h-[var(--bits-combobox-content-available-height)] origin-[var(--bits-combobox-content-transform-origin)] relative min-w-[8rem] w-[var(--bits-combobox-anchor-width)] overflow-y-auto overflow-x-hidden data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',
         )}
       >
         <Combobox.Viewport class="p-1">
@@ -153,7 +153,7 @@
               label={item.label}
               disabled={item.disabled}
               class={cn(
-                'data-highlighted:bg-blue-100 dark:data-highlighted:bg-blue-800/40 data-highlighted:text-blue-600 dark:data-highlighted:text-blue-300 outline-hidden relative flex w-full cursor-default select-none items-center gap-2 rounded-lg py-2.5 pl-3 pr-8 text-sm font-medium text-gray-700 dark:text-gray-200 transition-all duration-150 hover:bg-blue-100 dark:hover:bg-blue-800/40 hover:text-blue-600 dark:hover:text-blue-300 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+                'data-highlighted:bg-info-subtle data-highlighted:text-info-subtle-foreground outline-hidden relative flex w-full cursor-default select-none items-center gap-2 rounded-lg py-2.5 pl-3 pr-8 text-sm font-medium text-foreground-soft transition-all duration-150 hover:bg-info-subtle hover:text-info-subtle-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
               )}
             >
               {#snippet children({ selected })}
@@ -161,9 +161,7 @@
                   class="absolute right-2 flex size-3.5 items-center justify-center"
                 >
                   {#if selected}
-                    <CheckIcon
-                      class="size-4 text-blue-600 dark:text-blue-400"
-                    />
+                    <CheckIcon class="size-4 text-info" />
                   {/if}
                 </span>
                 {#if itemRenderer}
@@ -171,9 +169,7 @@
                 {:else}
                   <span class="truncate">{item.label}</span>
                   {#if item.description}
-                    <span
-                      class="text-xs text-gray-400 dark:text-gray-500 truncate ml-1"
-                    >
+                    <span class="text-xs text-foreground-subtle truncate ml-1">
                       ({item.description})
                     </span>
                   {/if}
@@ -181,7 +177,7 @@
               {/snippet}
             </Combobox.Item>
           {:else}
-            <div class="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">
+            <div class="px-3 py-2 text-sm text-muted-foreground">
               {emptyMessage}
             </div>
           {/each}
@@ -191,7 +187,7 @@
   </Combobox.Root>
 
   {#if error}
-    <p class="text-sm text-red-600 dark:text-red-400 mt-1">
+    <p class="text-sm text-danger mt-1">
       {error}
     </p>
   {/if}

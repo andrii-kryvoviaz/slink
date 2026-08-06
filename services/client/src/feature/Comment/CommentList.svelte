@@ -95,21 +95,23 @@
   {#if isLoadingMore}
     {#each Array(2) as _}
       <div class="flex gap-3">
-        <Skeleton class="w-8 h-8 rounded-full shrink-0 bg-white/10" />
+        <Skeleton
+          class="w-8 h-8 rounded-full shrink-0 bg-surface-inverse-foreground/10"
+        />
         <div class="flex-1 space-y-2">
-          <Skeleton class="h-3 w-24 bg-white/10" />
-          <Skeleton class="h-3 w-3/4 bg-white/10" />
+          <Skeleton class="h-3 w-24 bg-surface-inverse-foreground/10" />
+          <Skeleton class="h-3 w-3/4 bg-surface-inverse-foreground/10" />
         </div>
       </div>
     {/each}
   {:else}
     <button
       onclick={() => state?.loadMore()}
-      class="flex w-full items-center gap-3 py-1 rounded text-[11.5px] text-white/45 hover:text-white/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
+      class="flex w-full items-center gap-3 py-1 rounded text-[11.5px] text-surface-inverse-foreground/45 hover:text-surface-inverse-foreground/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-surface-inverse-foreground/30"
     >
-      <span class="h-px flex-1 bg-white/12"></span>
+      <span class="h-px flex-1 bg-surface-inverse-foreground/12"></span>
       <span>{plural(remaining, ['# more comment', '# more comments'])}</span>
-      <span class="h-px flex-1 bg-white/12"></span>
+      <span class="h-px flex-1 bg-surface-inverse-foreground/12"></span>
     </button>
   {/if}
 {/snippet}
@@ -118,23 +120,25 @@
   <CommentsSkeleton />
 {:else}
   <div
-    class="flex flex-col w-full h-full bg-white/5 backdrop-blur-sm rounded-2xl p-4"
+    class="flex flex-col w-full h-full bg-surface-inverse-foreground/5 backdrop-blur-sm rounded-2xl p-4"
   >
     <div class="flex items-center justify-between mb-4">
-      <h3 class="text-sm font-medium text-white/80">Comments</h3>
+      <h3 class="text-sm font-medium text-surface-inverse-foreground/80">
+        Comments
+      </h3>
       <div class="flex items-center gap-1">
         {#if count > 0}
           <Tooltip side="bottom" size="xs" variant="dark">
             {#snippet trigger()}
               <button
                 onclick={handleToggleSortOrder}
-                class="flex items-center justify-center w-6 h-6 rounded hover:bg-white/10 transition-colors"
+                class="flex items-center justify-center w-6 h-6 rounded hover:bg-surface-inverse-foreground/10 transition-colors"
               >
                 <Icon
                   icon={settings.comment.sortOrder === SortOrder.Asc
                     ? 'heroicons:bars-arrow-up'
                     : 'heroicons:bars-arrow-down'}
-                  class="w-4 h-4 text-white/40 hover:text-white/60"
+                  class="w-4 h-4 text-surface-inverse-foreground/40 hover:text-surface-inverse-foreground/60"
                 />
               </button>
             {/snippet}
@@ -142,24 +146,26 @@
               ? 'Oldest first'
               : 'Newest first'}
           </Tooltip>
-          <span class="text-xs text-white/40 leading-6">{count}</span>
+          <span class="text-xs text-surface-inverse-foreground/40 leading-6"
+            >{count}</span
+          >
         {/if}
       </div>
     </div>
 
     <ScrollArea
-      class="flex-1 min-h-0"
+      class="flex-1 min-h-0 [&_[data-slot=scroll-area-thumb]]:bg-surface-inverse-foreground/20"
       orientation="vertical"
       type="scroll"
       onwheel={(e) => e.stopPropagation()}
     >
       {#if isEmpty}
         <div
-          class="flex flex-col items-center justify-center py-8 text-white/40"
+          class="flex flex-col items-center justify-center py-8 text-surface-inverse-foreground/40"
         >
           <Icon
             icon="heroicons:chat-bubble-left-right"
-            class="w-10 h-10 mb-3 text-white/20"
+            class="w-10 h-10 mb-3 text-surface-inverse-foreground/20"
           />
           <p class="text-sm">No comments yet</p>
           <p class="text-xs mt-1">Be the first to comment</p>
@@ -199,8 +205,12 @@
         onCancelEdit={() => state!.cancelEdit()}
       />
     {:else}
-      <div class="mt-4 pt-4 border-t border-white/10 text-center">
-        <p class="text-sm text-white/50">Sign in to comment</p>
+      <div
+        class="mt-4 pt-4 border-t border-surface-inverse-foreground/10 text-center"
+      >
+        <p class="text-sm text-surface-inverse-foreground/50">
+          Sign in to comment
+        </p>
       </div>
     {/if}
   </div>

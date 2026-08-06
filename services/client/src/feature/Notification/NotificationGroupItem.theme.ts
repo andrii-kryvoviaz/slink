@@ -6,8 +6,9 @@ export const notificationCardVariants = cva(
   {
     variants: {
       read: {
-        true: 'bg-gray-50 dark:bg-white/2',
-        false: 'bg-white dark:bg-white/4 shadow-sm dark:shadow-none',
+        true: 'bg-muted-subtle',
+        false:
+          'bg-card dark:bg-surface-inverse-foreground/5 shadow-sm dark:shadow-none',
       },
     },
     defaultVariants: {
@@ -21,8 +22,8 @@ export const notificationButtonVariants = cva(
   {
     variants: {
       read: {
-        true: 'hover:bg-gray-100 dark:hover:bg-white/4',
-        false: 'hover:bg-gray-50 dark:hover:bg-white/6',
+        true: 'hover:bg-ghost-hover',
+        false: 'hover:bg-ghost-hover/60',
       },
     },
     defaultVariants: {
@@ -36,10 +37,10 @@ export const notificationIconVariants = cva(
   {
     variants: {
       type: {
-        comment: 'bg-blue-500/10 dark:bg-blue-500/20',
-        comment_reply: 'bg-violet-500/10 dark:bg-violet-500/20',
-        added_to_favorite: 'bg-rose-500/10 dark:bg-rose-500/20',
-        added_to_bookmarks: 'bg-indigo-500/10 dark:bg-indigo-500/20',
+        comment: 'bg-info-fill/10 dark:bg-info-fill/20',
+        comment_reply: 'bg-decor-violet/10 dark:bg-decor-violet/20',
+        added_to_favorite: 'bg-decor-rose/10 dark:bg-decor-rose/20',
+        added_to_bookmarks: 'bg-accent/10 dark:bg-accent/20',
       },
     },
     defaultVariants: {
@@ -51,10 +52,10 @@ export const notificationIconVariants = cva(
 export const notificationIconColorVariants = cva('w-5 h-5', {
   variants: {
     type: {
-      comment: 'text-blue-500',
-      comment_reply: 'text-violet-500',
-      added_to_favorite: 'text-rose-500',
-      added_to_bookmarks: 'text-indigo-500',
+      comment: 'text-info',
+      comment_reply: 'text-decor-violet',
+      added_to_favorite: 'text-decor-rose',
+      added_to_bookmarks: 'text-accent',
     },
   },
   defaultVariants: {
@@ -63,7 +64,7 @@ export const notificationIconColorVariants = cva('w-5 h-5', {
 });
 
 export const caretVariants = cva(
-  'w-4 h-4 text-gray-400 transition-transform duration-200',
+  'w-4 h-4 text-muted-foreground transition-transform duration-200',
   {
     variants: {
       expanded: {

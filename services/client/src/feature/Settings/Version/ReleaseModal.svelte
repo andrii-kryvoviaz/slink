@@ -87,29 +87,22 @@
 
     <div class="space-y-4">
       <div
-        class="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-lg"
+        class="flex items-center justify-between p-4 bg-surface-inverse-foreground/5 border border-surface-inverse-foreground/10 rounded-lg"
       >
         <div>
           <div class="text-sm text-muted-foreground">Current Version</div>
           <div class="font-mono font-medium">v{currentVersion}</div>
         </div>
         {#if hasUpdate}
-          <Icon
-            icon="ph:arrow-right"
-            class="h-4 w-4 text-slate-400 dark:text-slate-500"
-          />
+          <Icon icon="ph:arrow-right" class="h-4 w-4 text-foreground-subtle" />
           <div>
             <div class="text-sm text-muted-foreground">Latest Version</div>
-            <div
-              class="font-mono font-medium text-green-600 dark:text-green-400"
-            >
+            <div class="font-mono font-medium text-success">
               {release.tag_name}
             </div>
           </div>
         {:else}
-          <div
-            class="flex items-center gap-2 text-green-600 dark:text-green-400"
-          >
+          <div class="flex items-center gap-2 text-success">
             <Icon icon="ph:check-circle" class="h-4 w-4" />
             <span class="text-sm font-medium">Up to date</span>
           </div>

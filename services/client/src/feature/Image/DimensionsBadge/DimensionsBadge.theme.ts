@@ -7,9 +7,8 @@ export const dimensionsBadgeContainerTheme = cva(
     variants: {
       variant: {
         overlay:
-          'gap-1.5 rounded-full px-2.5 py-1 bg-white/95 border-gray-300/50 dark:bg-black/60 backdrop-blur-md shadow-lg border dark:border-white/10',
-        compact:
-          'gap-1.5 rounded-md px-2 py-1 bg-gray-50/50 dark:bg-gray-800/30',
+          'gap-1.5 rounded-full px-2.5 py-1 bg-card/95 border-border-strong/50 dark:bg-scrim/60 dark:border-border/50 backdrop-blur-md shadow-lg border',
+        compact: 'gap-1.5 rounded-md px-2 py-1 bg-muted/30',
       },
     },
     defaultVariants: {
@@ -21,8 +20,8 @@ export const dimensionsBadgeContainerTheme = cva(
 export const dimensionsBadgeIconTheme = cva('shrink-0', {
   variants: {
     variant: {
-      overlay: 'h-3 w-3 text-gray-600 dark:text-gray-300',
-      compact: 'h-3 w-3 text-gray-500 dark:text-gray-400',
+      overlay: 'h-3 w-3 text-foreground-soft',
+      compact: 'h-3 w-3 text-muted-foreground',
     },
   },
   defaultVariants: {
@@ -33,8 +32,8 @@ export const dimensionsBadgeIconTheme = cva('shrink-0', {
 export const dimensionsBadgeValueTheme = cva('font-medium', {
   variants: {
     variant: {
-      overlay: 'text-[11px] text-gray-700 dark:text-gray-200',
-      compact: 'text-xs text-gray-600 dark:text-gray-300',
+      overlay: 'text-[11px] text-foreground-soft',
+      compact: 'text-xs text-foreground-soft',
     },
   },
   defaultVariants: {

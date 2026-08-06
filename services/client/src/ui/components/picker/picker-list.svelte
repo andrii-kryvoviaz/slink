@@ -166,14 +166,14 @@
           {:else}
             <div class="flex flex-col items-center gap-2 py-4">
               <div
-                class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center"
+                class="bg-muted flex h-10 w-10 items-center justify-center rounded-full"
               >
                 <Icon
                   icon="ph:magnifying-glass"
-                  class="w-5 h-5 text-gray-400 dark:text-gray-500"
+                  class="text-foreground-subtle h-5 w-5"
                 />
               </div>
-              <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+              <p class="text-muted-foreground text-sm font-medium">
                 No matches found
               </p>
             </div>

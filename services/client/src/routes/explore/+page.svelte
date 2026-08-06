@@ -159,7 +159,7 @@
           )}
           <div
             in:fly={{ y: 20, duration: 300, delay: Math.random() * 100 }}
-            class="group break-inside-avoid overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/60 transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-700/80 hover:shadow-md dark:hover:shadow-gray-900/50 cursor-pointer"
+            class="group break-inside-avoid overflow-hidden rounded-lg border border-border bg-card/60 transition-all duration-200 hover:border-border-strong hover:shadow-md dark:hover:shadow-surface-inverse/50 cursor-pointer"
             onclick={() => openPostViewer(index)}
             onkeydown={(e) => e.key === 'Enter' && openPostViewer(index)}
             role="button"
@@ -176,16 +176,19 @@
               />
 
               <div
-                class="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                class="absolute inset-0 bg-linear-to-t from-scrim/60 via-scrim/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200"
               ></div>
 
               <div
                 class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
               >
                 <div
-                  class="w-14 h-14 rounded-full bg-black/50 flex items-center justify-center"
+                  class="w-14 h-14 rounded-full bg-scrim/50 flex items-center justify-center"
                 >
-                  <Icon icon="ph:arrows-out" class="w-7 h-7 text-white" />
+                  <Icon
+                    icon="ph:arrows-out"
+                    class="w-7 h-7 text-surface-inverse-foreground"
+                  />
                 </div>
               </div>
 
@@ -236,11 +239,11 @@
                 <UserAvatar size="sm" user={image.owner} />
                 <div class="flex-1 min-w-0">
                   <p
-                    class="font-medium text-gray-900 dark:text-gray-100 text-sm leading-tight truncate"
+                    class="font-medium text-foreground text-sm leading-tight truncate"
                   >
                     {image.owner.displayName}
                   </p>
-                  <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                  <div class="text-xs text-muted-foreground mt-0.5">
                     <FormattedDate
                       date={image.attributes.createdAt.timestamp}
                     />
@@ -260,9 +263,7 @@
               </div>
 
               {#if image.attributes.description?.trim()}
-                <p
-                  class="mt-3 text-sm text-gray-600 dark:text-gray-400 leading-relaxed"
-                >
+                <p class="mt-3 text-sm text-muted-foreground leading-relaxed">
                   <ExpandableText
                     maxLines={2}
                     text={image.attributes.description}

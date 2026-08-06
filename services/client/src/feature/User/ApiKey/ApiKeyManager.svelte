@@ -67,13 +67,11 @@
 
 <div class="mb-6 flex justify-between items-start">
   <div>
-    <h3
-      class="text-lg font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-2"
-    >
-      <Icon icon="ph:key" class="h-5 w-5 text-slate-500 dark:text-slate-400" />
+    <h3 class="text-lg font-semibold text-foreground flex items-center gap-2">
+      <Icon icon="ph:key" class="h-5 w-5 text-muted-foreground" />
       API Keys
     </h3>
-    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+    <p class="mt-1 text-sm text-muted-foreground">
       Create API keys for ShareX and other third-party integrations
     </p>
   </div>

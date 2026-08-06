@@ -1,0 +1,107 @@
+@theme {
+  --radius: 0.625rem;
+
+  --color-background: var(--color-white);
+  --color-foreground: var(--color-gray-900);
+  --color-foreground-body: var(--color-gray-800);
+  --color-foreground-soft: var(--color-gray-700);
+  --color-card: oklch(1 0 0);
+  --color-primary: var(--color-zinc-900);
+  --color-primary-foreground: var(--color-zinc-50);
+  --color-accent: var(--color-indigo-500);
+  --color-muted: var(--color-gray-100);
+  --color-muted-subtle: var(--color-gray-50);
+  --color-muted-foreground: var(--color-gray-500);
+  --color-muted-foreground-strong: var(--color-gray-600);
+  --color-border: var(--color-gray-200);
+  --color-border-strong: var(--color-gray-300);
+  --color-border-stronger: var(--color-gray-500);
+  --color-input: var(--color-white);
+  --color-ring: var(--color-zinc-400);
+
+  --color-success: var(--color-green-500);
+  --color-warning: var(--color-amber-500);
+  --color-danger: var(--color-red-600);
+  --color-info: var(--color-blue-500);
+
+  --color-scrim: var(--color-black);
+  --color-overlay: var(--color-white);
+  --color-surface-inverse: var(--color-neutral-900);
+
+  --color-bg-start: var(--color-white);
+  --color-bg-end: var(--color-gray-100);
+
+  --color-switch-unchecked: oklch(
+    from var(--color-zinc-300) calc(l - 0.021) calc(c * 1.3333) calc(h + 0.034)
+  );
+
+  --color-sidebar: oklch(from var(--color-zinc-50) l c h / 0.7);
+  --color-sidebar-foreground: var(--color-zinc-950);
+  --color-sidebar-primary: var(--color-zinc-900);
+  --color-sidebar-accent: oklch(from var(--color-zinc-100) l c h / 0.8);
+  --color-sidebar-accent-foreground: var(--color-zinc-900);
+  --color-sidebar-border: oklch(from var(--color-zinc-200) l c h / 0.2);
+  --color-sidebar-ring: var(--color-zinc-400);
+
+  --shadow-raised:
+    0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-overlay:
+    0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --blur-glass: 20px;
+
+  --animate-shimmer: shimmer 2s infinite linear;
+  --animation-spin-slow: spin 2s linear infinite;
+
+  --breakpoint-xs: 480px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+  --breakpoint-3xl: 1920px;
+}
+
+.dark {
+  --color-background: var(--color-zinc-950);
+  --color-foreground: var(--color-zinc-50);
+  --color-foreground-body: var(--color-gray-200);
+  --color-foreground-soft: var(--color-gray-300);
+  --color-card: var(--color-gray-900);
+  --color-primary: var(--color-zinc-200);
+  --color-primary-foreground: var(--color-zinc-900);
+  --color-accent: var(--color-indigo-400);
+  --color-muted: var(--color-gray-800);
+  --color-muted-subtle: var(--color-gray-900);
+  --color-muted-foreground: var(--color-gray-400);
+  --color-muted-foreground-strong: var(--color-gray-400);
+  --color-border: oklch(1 0 0 / 0.1);
+  --color-border-strong: var(--color-gray-700);
+  --color-border-stronger: var(--color-gray-600);
+  --color-input: var(--color-gray-800);
+  --color-ring: var(--color-zinc-500);
+
+  --color-success: var(--color-green-400);
+  --color-warning: var(--color-amber-400);
+  --color-danger: var(--color-red-400);
+  --color-info: var(--color-blue-400);
+
+  --color-overlay: var(--color-gray-900);
+
+  --shadow-raised:
+    0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.2);
+  --shadow-overlay:
+    0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+
+  --color-switch-unchecked: oklch(1 0 0 / 20%);
+
+  --color-sidebar: oklch(from var(--color-zinc-900) l c h / 0.95);
+  --color-sidebar-foreground: var(--color-zinc-50);
+  --color-sidebar-primary: var(--color-blue-700);
+  --color-sidebar-accent: oklch(from var(--color-zinc-800) l c h / 0.8);
+  --color-sidebar-accent-foreground: var(--color-zinc-50);
+  --color-sidebar-border: oklch(1 0 0 / 0.1);
+  --color-sidebar-ring: var(--color-zinc-500);
+
+  --color-bg-start: var(--color-slate-900);
+  --color-bg-end: var(--color-black);
+}

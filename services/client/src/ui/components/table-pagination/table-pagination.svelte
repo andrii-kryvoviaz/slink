@@ -13,10 +13,8 @@
     base: 'flex items-center gap-1 rounded-lg border',
     variants: {
       variant: {
-        default:
-          'bg-white/80 dark:bg-gray-900/80 border-gray-200/60 dark:border-gray-700/60',
-        neutral:
-          'bg-white/50 dark:bg-gray-900/20 border-gray-200/70 dark:border-gray-700/50',
+        default: 'bg-card/80 border-border/60',
+        neutral: 'bg-card/50 dark:bg-card/20 border-border/70',
       },
     },
     defaultVariants: {
@@ -25,23 +23,23 @@
   });
 
   const pageInputTheme = tv({
-    base: 'h-7 w-8 text-xs font-medium text-center rounded-md border outline-none transition-all duration-200 focus:outline-none hover:border-gray-300 dark:hover:border-gray-600',
+    base: 'h-7 w-8 text-xs font-medium text-center rounded-md border outline-none transition-all duration-200 focus:outline-none hover:border-border-strong',
     variants: {
       variant: {
-        default: 'bg-gray-100/80 dark:bg-gray-800/80',
-        neutral: 'bg-gray-100/70 dark:bg-gray-800/50',
+        default: 'bg-muted/80',
+        neutral: 'bg-muted/70 dark:bg-muted/50',
       },
       status: {
         default:
-          'border-gray-200/60 dark:border-gray-700/60 text-foreground placeholder:text-gray-400 dark:placeholder:text-gray-500',
-        error: 'border-red-500 text-red-600 placeholder:text-red-400',
+          'border-border/60 text-foreground placeholder:text-foreground-subtle',
+        error: 'border-danger text-danger placeholder:text-danger/70',
       },
     },
     compoundVariants: [
       {
         variant: 'neutral',
         status: 'default',
-        class: 'border-gray-200/70 dark:border-gray-700/50',
+        class: 'border-border/70',
       },
     ],
     defaultVariants: {
@@ -59,21 +57,20 @@
       },
       status: {
         interactive:
-          'cursor-pointer hover:bg-gray-100/80 dark:hover:bg-gray-700/60 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 active:scale-95 transform',
-        static: 'cursor-default text-gray-400 dark:text-gray-500',
+          'cursor-pointer hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 active:scale-95 transform',
+        static: 'cursor-default text-foreground-subtle',
       },
     },
     compoundVariants: [
       {
         variant: 'neutral',
         status: 'interactive',
-        class:
-          'hover:bg-gray-100/80 dark:hover:bg-gray-800/40 focus:ring-gray-400/40 dark:focus:ring-gray-500/40',
+        class: 'hover:bg-muted-subtle/80 focus:ring-ring/40',
       },
       {
         variant: 'neutral',
         status: 'static',
-        class: 'text-gray-500 dark:text-gray-400',
+        class: 'text-muted-foreground',
       },
     ],
     defaultVariants: {
@@ -163,7 +160,7 @@
 
   const navButtonClass = $derived.by(() => {
     if (variant === 'neutral') {
-      return 'h-8 px-2 text-xs border-0 hover:bg-gray-100/80 dark:hover:bg-gray-800/40';
+      return 'h-8 px-2 text-xs border-0 hover:bg-muted-subtle/80';
     }
     return 'h-8 px-2 text-xs border-0';
   });
@@ -318,19 +315,16 @@
                   />
                   {#if hasError}
                     <div
-                      class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-red-500 whitespace-nowrap animate-in fade-in-0 slide-in-from-top-1 duration-200"
+                      class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-danger whitespace-nowrap animate-in fade-in-0 slide-in-from-top-1 duration-200"
                     >
                       1-{totalPages}
                     </div>
                   {/if}
                 </div>
                 {#if totalPages > 1}
+                  <span class="text-xs sm:text-sm text-border-strong">/</span>
                   <span
-                    class="text-xs sm:text-sm text-gray-300 dark:text-gray-600"
-                    >/</span
-                  >
-                  <span
-                    class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 tabular-nums w-8 text-center"
+                    class="text-xs sm:text-sm text-muted-foreground tabular-nums w-8 text-center"
                     >{totalPages}</span
                   >
                 {/if}
@@ -347,12 +341,9 @@
                 {currentPage}
               </button>
               {#if totalPages > 1}
+                <span class="text-xs sm:text-sm text-border-strong">/</span>
                 <span
-                  class="text-xs sm:text-sm text-gray-300 dark:text-gray-600"
-                  >/</span
-                >
-                <span
-                  class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 tabular-nums w-8 text-center"
+                  class="text-xs sm:text-sm text-muted-foreground tabular-nums w-8 text-center"
                   >{totalPages}</span
                 >
               {/if}
@@ -385,27 +376,23 @@
       >
         <div class="flex flex-col gap-2">
           <div class="flex items-center justify-between tabular-nums">
-            <span class="text-xs text-gray-600 dark:text-gray-300">
+            <span class="text-xs text-foreground-soft">
               {startItem}–{endItem}
-              <span class="text-gray-400 dark:text-gray-500">of</span>
+              <span class="text-foreground-subtle">of</span>
               {totalItems} items
             </span>
-            <span class="text-xs text-gray-400 dark:text-gray-500"
-              >{progress}%</span
-            >
+            <span class="text-xs text-foreground-subtle">{progress}%</span>
           </div>
           <div
-            class="h-1 rounded-full bg-gray-200/60 dark:bg-gray-700/40 overflow-hidden"
+            class="h-1 rounded-full bg-muted/60 dark:bg-muted/40 overflow-hidden"
           >
             <div
-              class="h-full rounded-full bg-gray-400 dark:bg-gray-500 transition-all duration-300 ease-out"
+              class="h-full rounded-full bg-foreground-subtle transition-all duration-300 ease-out"
               style="width: {progress}%"
             ></div>
           </div>
           {#if additionalInfo}
-            <span class="text-xs text-gray-400 dark:text-gray-500"
-              >{additionalInfo}</span
-            >
+            <span class="text-xs text-foreground-subtle">{additionalInfo}</span>
           {/if}
         </div>
       </HoverCardContent>

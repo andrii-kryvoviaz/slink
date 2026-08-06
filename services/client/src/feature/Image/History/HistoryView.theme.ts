@@ -14,13 +14,12 @@ export function createActionBarImage(item: ImageListingItem) {
 }
 
 export const historyCardVariants = cva(
-  'group break-inside-avoid overflow-hidden rounded-lg border bg-white dark:bg-gray-900/60 transition-all duration-200 hover:shadow-md dark:hover:shadow-gray-900/50',
+  'group break-inside-avoid overflow-hidden rounded-lg border bg-card dark:bg-card/60 transition-all duration-200 hover:shadow-md dark:hover:shadow-surface-inverse/50',
   {
     variants: {
       selected: {
-        true: 'ring-2 ring-blue-500 border-blue-400 dark:border-blue-500',
-        false:
-          'border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700/80',
+        true: 'ring-2 ring-info-fill border-info-fill',
+        false: 'border-foreground-subtle/25 hover:border-foreground-subtle/45',
       },
     },
     defaultVariants: {
@@ -30,13 +29,12 @@ export const historyCardVariants = cva(
 );
 
 export const historyListRowVariants = cva(
-  'group relative flex flex-col @xl:flex-row w-full overflow-hidden rounded-lg border bg-white dark:bg-gray-900/60 transition-all duration-200 hover:shadow-md dark:hover:shadow-gray-900/50',
+  'group relative flex flex-col @xl:flex-row w-full overflow-hidden rounded-lg border bg-card dark:bg-card/60 transition-all duration-200 hover:shadow-md dark:hover:shadow-surface-inverse/50',
   {
     variants: {
       selected: {
-        true: 'bg-blue-50/80 dark:bg-blue-500/10 border-blue-300 dark:border-blue-500 ring-2 ring-blue-500',
-        false:
-          'border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700',
+        true: 'bg-info-fill/8 border-info-border dark:border-info-fill ring-2 ring-info-fill',
+        false: 'border-foreground-subtle/25 hover:border-foreground-subtle/50',
       },
       selectionMode: {
         true: 'cursor-pointer',

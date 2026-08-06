@@ -143,7 +143,7 @@
       onValueChange={handleValueChange}
     >
       <DatePickerPrimitive.Calendar
-        class="bg-white dark:bg-gray-900/95 text-gray-900 dark:text-gray-100 backdrop-blur-sm border border-gray-200/40 dark:border-gray-700/40 rounded-xl shadow-xl shadow-black/10 dark:shadow-black/25 p-4"
+        class="bg-popover text-foreground backdrop-blur-sm border border-border/40 rounded-xl shadow-xl shadow-scrim/10 dark:shadow-scrim/25 p-4"
       >
         {#snippet children({ months, weekdays })}
           <DatePickerPrimitive.Header
@@ -152,18 +152,18 @@
             <DatePickerPrimitive.PrevButton
               class={cn(
                 'inline-flex h-9 w-9 items-center justify-center rounded-lg transition-colors text-muted-foreground',
-                'hover:bg-gray-100 dark:hover:bg-gray-800/50 hover:text-gray-900 dark:hover:text-gray-100 focus:bg-gray-100 dark:focus:bg-gray-800/50 outline-none',
+                'hover:bg-ghost-hover/50 hover:text-foreground focus:bg-ghost-hover/50 outline-none',
               )}
             >
               <Icon icon="lucide:chevron-left" class="h-4 w-4" />
             </DatePickerPrimitive.PrevButton>
             <DatePickerPrimitive.Heading
-              class="text-sm font-semibold text-gray-900 dark:text-gray-100"
+              class="text-sm font-semibold text-foreground"
             />
             <DatePickerPrimitive.NextButton
               class={cn(
                 'inline-flex h-9 w-9 items-center justify-center rounded-lg transition-colors text-muted-foreground',
-                'hover:bg-gray-100 dark:hover:bg-gray-800/50 hover:text-gray-900 dark:hover:text-gray-100 focus:bg-gray-100 dark:focus:bg-gray-800/50 outline-none',
+                'hover:bg-ghost-hover/50 hover:text-foreground focus:bg-ghost-hover/50 outline-none',
               )}
             >
               <Icon icon="lucide:chevron-right" class="h-4 w-4" />
@@ -199,9 +199,9 @@
                         <DatePickerPrimitive.Day
                           class={cn(
                             'relative inline-flex h-9 w-9 items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200',
-                            'hover:bg-gray-100 dark:hover:bg-gray-800/50 hover:text-gray-900 dark:hover:text-gray-100',
-                            'data-[selected]:bg-blue-600 dark:data-[selected]:bg-blue-500 data-[selected]:text-white data-[selected]:hover:bg-blue-700 dark:data-[selected]:hover:bg-blue-600 data-[selected]:shadow-sm',
-                            'data-[today]:bg-blue-50 dark:data-[today]:bg-blue-900/20 data-[today]:text-blue-600 dark:data-[today]:text-blue-400 data-[today]:font-semibold data-[today]:ring-1 data-[today]:ring-blue-200 dark:data-[today]:ring-blue-800',
+                            'hover:bg-ghost-hover/50 hover:text-foreground',
+                            'data-[selected]:bg-info-surface data-[selected]:text-info-foreground data-[selected]:hover:bg-info-surface-strong data-[selected]:shadow-sm',
+                            'data-[today]:bg-info-subtle data-[today]:text-info data-[today]:font-semibold data-[today]:ring-1 data-[today]:ring-info-border',
                             'data-[outside-month]:text-muted-foreground data-[outside-month]:opacity-40',
                             'data-[disabled]:text-muted-foreground data-[disabled]:opacity-40 data-[disabled]:cursor-not-allowed',
                             'data-[unavailable]:line-through',

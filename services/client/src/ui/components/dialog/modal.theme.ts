@@ -14,7 +14,7 @@ export const modalOverlayVariants = cva(
     variants: {
       backdrop: {
         enabled: 'bg-[var(--modal-overlay-tint)]',
-        subtle: 'bg-black/10 backdrop-blur-[2px]',
+        subtle: 'bg-scrim/40 backdrop-blur-[2px]',
         disabled: 'bg-transparent backdrop-blur-none',
       },
       animation: {
@@ -32,7 +32,6 @@ export const modalContentVariants = cva(
   [
     'group fixed left-[50%] top-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 p-6',
     'rounded-3xl',
-    'modal-glass-highlight',
   ],
   {
     variants: {
@@ -63,15 +62,18 @@ export const modalContentVariants = cva(
           'backdrop-blur-[28px] backdrop-saturate-[1.6]',
           'bg-card/65',
           'shadow-2xl',
-          'border border-border/15 ring-1 ring-white/[0.05]',
+          'border border-border/15 ring-1 ring-surface-inverse-foreground/[0.05]',
         ],
         frosted: [
           'backdrop-blur-[28px] backdrop-saturate-[1.6]',
           'bg-background/70',
           'shadow-2xl',
-          'border border-border/15 ring-1 ring-white/[0.05]',
+          'border border-border/15 ring-1 ring-surface-inverse-foreground/[0.05]',
         ],
-        solid: ['bg-black/90 backdrop-blur-xl', 'border border-white/10'],
+        solid: [
+          'bg-scrim/90 backdrop-blur-xl',
+          'border border-surface-inverse-foreground/10',
+        ],
       },
     },
     defaultVariants: { size: 'md', animation: 'fade', background: 'frosted' },
@@ -99,17 +101,17 @@ export const modalHeaderIconContainerVariants = cva(
   [
     'w-10 h-10 rounded-xl flex items-center justify-center',
     'flex-shrink-0',
-    'backdrop-blur-sm ring-1 ring-white/[0.08]',
+    'backdrop-blur-sm ring-1 ring-surface-inverse-foreground/[0.08]',
   ],
   {
     variants: {
       variant: {
-        blue: 'bg-blue-500/10 dark:bg-blue-400/10',
-        green: 'bg-green-500/10 dark:bg-green-400/10',
-        purple: 'bg-indigo-500/10 dark:bg-indigo-400/10',
-        amber: 'bg-amber-500/10 dark:bg-amber-400/10',
-        neutral: 'bg-slate-500/10 dark:bg-slate-400/10',
-        danger: 'bg-red-500/10 dark:bg-red-400/10',
+        blue: 'bg-info/10',
+        green: 'bg-success/10',
+        purple: 'bg-accent/10',
+        amber: 'bg-warning/10',
+        neutral: 'bg-muted-foreground/10',
+        danger: 'bg-danger/10',
       },
     },
     defaultVariants: { variant: 'blue' },
@@ -119,12 +121,12 @@ export const modalHeaderIconContainerVariants = cva(
 export const modalHeaderIconVariants = cva(['[&>svg]:h-5 [&>svg]:w-5'], {
   variants: {
     variant: {
-      blue: 'text-blue-600 dark:text-blue-400',
-      green: 'text-green-600 dark:text-green-400',
-      purple: 'text-indigo-600 dark:text-indigo-400',
-      amber: 'text-amber-600 dark:text-amber-400',
-      neutral: 'text-slate-600 dark:text-slate-400',
-      danger: 'text-red-600 dark:text-red-400',
+      blue: 'text-info',
+      green: 'text-success',
+      purple: 'text-accent',
+      amber: 'text-warning',
+      neutral: 'text-muted-foreground',
+      danger: 'text-danger',
     },
   },
   defaultVariants: {

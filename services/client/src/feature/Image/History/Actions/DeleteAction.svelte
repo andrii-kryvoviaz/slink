@@ -54,16 +54,14 @@
     {#snippet confirmText()}Delete {selectedCount === 1
         ? 'Image'
         : 'Images'}{/snippet}
-    <div
-      class="bg-gray-50/80 dark:bg-gray-800/50 rounded-xl p-4 border border-gray-200/50 dark:border-gray-700/30"
-    >
+    <div class="bg-muted/50 rounded-xl p-4 border border-border/50">
       <label class="flex items-center justify-between cursor-pointer">
         <div class="flex items-center gap-3">
           <div>
-            <span class="text-sm font-medium text-gray-900 dark:text-white">
+            <span class="text-sm font-medium text-foreground">
               Remove from storage
             </span>
-            <p class="text-xs text-gray-500 dark:text-gray-400">
+            <p class="text-xs text-muted-foreground">
               Permanently delete the files from storage
             </p>
           </div>

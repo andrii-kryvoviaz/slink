@@ -3,10 +3,10 @@ import { type VariantProps, tv } from 'tailwind-variants';
 export const splitButtonVariants = tv({
   slots: {
     wrapper:
-      'flex items-center overflow-hidden duration-200 bg-transparent dark:bg-transparent text-slate-700 dark:text-white group-hover:bg-slate-100 dark:group-hover:bg-slate-800',
+      'flex items-center overflow-hidden duration-200 bg-transparent dark:bg-transparent text-foreground-soft dark:text-foreground group-hover:bg-ghost-hover',
     label: 'flex items-center font-medium transition-colors',
     aside:
-      'flex items-center justify-center transition-all duration-200 bg-slate-300 dark:bg-slate-700 text-slate-700 dark:text-slate-200 group-hover:bg-slate-300 dark:group-hover:bg-slate-600',
+      'flex items-center justify-center transition-all duration-200 bg-border-strong dark:bg-muted text-foreground-soft dark:group-hover:bg-border-strong',
   },
   variants: {
     asidePosition: {

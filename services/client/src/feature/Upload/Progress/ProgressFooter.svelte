@@ -15,15 +15,15 @@
 
 {#if progress.isCompleted && onViewAll}
   <div
-    class="mt-3 pt-3 flex items-center justify-between border-t border-slate-200/50 dark:border-slate-700/50"
+    class="mt-3 pt-3 flex items-center justify-between border-t border-border/50"
   >
-    <span class="text-xs text-slate-500 dark:text-slate-400">
+    <span class="text-xs text-muted-foreground">
       {bytesToSize(progress.totalBytes)}
     </span>
     <button
       type="button"
       onclick={onViewAll}
-      class="group/link inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded"
+      class="group/link inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded"
     >
       View all
       <Icon

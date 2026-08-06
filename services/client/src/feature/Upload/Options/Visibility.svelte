@@ -24,7 +24,7 @@
     {
       variants: {
         active: {
-          true: 'bg-slate-100/70 dark:bg-slate-800/60',
+          true: 'bg-muted/70',
           false: '',
         },
       },
@@ -35,7 +35,7 @@
 
 {#snippet currentBadge()}
   <span
-    class="inline-flex items-center px-1.5 py-px rounded-full text-[10px] font-semibold uppercase tracking-wider bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300"
+    class="inline-flex items-center px-1.5 py-px rounded-full text-[10px] font-semibold uppercase tracking-wider bg-success/15 text-success-subtle-foreground"
   >
     Current
   </span>
@@ -70,17 +70,15 @@
   <HoverCard.Content variant="glass" width="md" rounded="xl" size="sm">
     <div class="space-y-3">
       <div class="flex items-center justify-between gap-2">
-        <h4 class="text-sm font-semibold text-slate-900 dark:text-slate-100">
-          Image visibility
-        </h4>
+        <h4 class="text-sm font-semibold text-foreground">Image visibility</h4>
         <span
-          class="text-[10px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400"
+          class="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground"
         >
           {#if preference.isPublic}Public{:else}Private{/if}
         </span>
       </div>
 
-      <p class="text-xs leading-relaxed text-slate-600 dark:text-slate-400">
+      <p class="text-xs leading-relaxed text-muted-foreground">
         Choose who can find this image. You can change it any time from the
         image page.
       </p>
@@ -88,24 +86,16 @@
       <div class="space-y-1">
         <div class={visibilityRow({ active: preference.isPublic })}>
           <div class="flex-shrink-0 mt-0.5">
-            <Icon
-              icon="lucide:globe"
-              class="w-4 h-4 text-emerald-600 dark:text-emerald-400"
-            />
+            <Icon icon="lucide:globe" class="w-4 h-4 text-success-strong" />
           </div>
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-1.5 mb-0.5">
-              <span
-                class="text-sm font-semibold text-slate-900 dark:text-slate-100"
-                >Public</span
-              >
+              <span class="text-sm font-semibold text-foreground">Public</span>
               {#if preference.isPublic}
                 {@render currentBadge()}
               {/if}
             </div>
-            <p
-              class="text-xs leading-relaxed text-slate-600 dark:text-slate-400"
-            >
+            <p class="text-xs leading-relaxed text-muted-foreground">
               Listed on the explore page. Anyone with the direct link can open
               it.
             </p>
@@ -114,24 +104,16 @@
 
         <div class={visibilityRow({ active: !preference.isPublic })}>
           <div class="flex-shrink-0 mt-0.5">
-            <Icon
-              icon="lucide:lock"
-              class="w-4 h-4 text-slate-500 dark:text-slate-400"
-            />
+            <Icon icon="lucide:lock" class="w-4 h-4 text-muted-foreground" />
           </div>
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-1.5 mb-0.5">
-              <span
-                class="text-sm font-semibold text-slate-900 dark:text-slate-100"
-                >Private</span
-              >
+              <span class="text-sm font-semibold text-foreground">Private</span>
               {#if !preference.isPublic}
                 {@render currentBadge()}
               {/if}
             </div>
-            <p
-              class="text-xs leading-relaxed text-slate-600 dark:text-slate-400"
-            >
+            <p class="text-xs leading-relaxed text-muted-foreground">
               Hidden from explore. Only you can open the direct link, unless you
               publish a share.
             </p>
@@ -140,16 +122,16 @@
       </div>
 
       <div
-        class="flex items-center justify-between pt-2 border-t border-slate-200/60 dark:border-slate-700/50"
+        class="flex items-center justify-between pt-2 border-t border-border/60"
       >
-        <span class="text-[11px] text-slate-500 dark:text-slate-400">
+        <span class="text-[11px] text-muted-foreground">
           Click the badge to switch
         </span>
         <a
           href="/help/faq#image-visibility"
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-1 text-[11px] font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors"
+          class="inline-flex items-center gap-1 text-[11px] font-medium text-accent hover:text-accent-subtle-foreground transition-colors"
         >
           Learn more
           <Icon icon="heroicons:arrow-top-right-on-square" class="w-3 h-3" />

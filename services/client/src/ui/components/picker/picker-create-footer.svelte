@@ -24,9 +24,7 @@
   New item
 {/snippet}
 
-<div
-  class="px-1.5 py-1.5 border-t border-gray-100/60 dark:border-gray-800/30 shrink-0"
->
+<div class="border-border/60 shrink-0 border-t px-1.5 py-1.5">
   <button
     type="button"
     {onclick}

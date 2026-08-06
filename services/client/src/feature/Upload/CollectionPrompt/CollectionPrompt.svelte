@@ -81,18 +81,12 @@
   <div class={cn(cardTheme({ elevation: 'flat' }), 'p-5 space-y-4', className)}>
     <div class="flex items-start gap-4">
       <div
-        class="w-10 h-10 rounded-xl bg-slate-100/70 dark:bg-slate-700/40 flex items-center justify-center shrink-0 border border-slate-200/50 dark:border-slate-600/30"
+        class="w-10 h-10 rounded-xl bg-muted/70 flex items-center justify-center shrink-0 border border-border/50"
       >
         {#if step === 'published'}
-          <Icon
-            icon="ph:link-simple"
-            class="w-5 h-5 text-slate-600 dark:text-slate-400"
-          />
+          <Icon icon="ph:link-simple" class="w-5 h-5 text-muted-foreground" />
         {:else}
-          <Icon
-            icon="ph:folder-simple"
-            class="w-5 h-5 text-slate-600 dark:text-slate-400"
-          />
+          <Icon icon="ph:folder-simple" class="w-5 h-5 text-muted-foreground" />
         {/if}
       </div>
 
@@ -101,9 +95,7 @@
           <span class={cardTitleTheme({ size: 'md' })}>
             Combine into a collection
           </span>
-          <span
-            class="block text-sm leading-snug text-slate-500 dark:text-slate-400"
-          >
+          <span class="block text-sm leading-snug text-muted-foreground">
             {plural(count, [
               'Optionally group this # image into a collection to view and share them as one.',
               'Optionally group these # images into a collection to view and share them as one.',
@@ -113,16 +105,12 @@
           <span class={cardTitleTheme({ size: 'md' })}>
             Collection created
           </span>
-          <span
-            class="block truncate text-sm text-slate-500 dark:text-slate-400"
-          >
+          <span class="block truncate text-sm text-muted-foreground">
             {created?.name ?? 'Unnamed'}
           </span>
         {:else}
           <span class={cardTitleTheme({ size: 'md' })}> Ready to share </span>
-          <span
-            class="block text-sm leading-snug text-slate-500 dark:text-slate-400"
-          >
+          <span class="block text-sm leading-snug text-muted-foreground">
             Anyone with this link can view the collection.
           </span>
         {/if}
@@ -130,7 +118,7 @@
 
       <button
         type="button"
-        class="shrink-0 -mr-1 -mt-1 rounded-md p-1 text-slate-400 transition-colors hover:bg-slate-500/10 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500/30 dark:text-slate-500 dark:hover:bg-slate-400/10 dark:hover:text-slate-300"
+        class="shrink-0 -mr-1 -mt-1 rounded-md p-1 text-foreground-subtle transition-colors hover:bg-ghost-hover hover:text-foreground-soft focus:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
         title="Maybe later"
         aria-label="Maybe later"
         onclick={() => (dismissed = true)}

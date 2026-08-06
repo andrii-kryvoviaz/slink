@@ -9,12 +9,12 @@
   let { message = '', oncloseToast }: Props = $props();
 </script>
 
-<BaseToast variant="purple" icon="clarity:block-line" {oncloseToast}>
+<BaseToast variant="accent" icon="clarity:block-line" {oncloseToast}>
   <div class="flex flex-col gap-2">
-    <div class="text-sm font-medium text-purple-800 dark:text-purple-200">
+    <div class="text-sm font-medium text-accent-subtle-foreground">
       Unsupported file format
     </div>
-    <p class="text-sm text-purple-700 dark:text-purple-300/90">
+    <p class="text-sm text-accent-subtle-foreground">
       {#if message}
         {@html message}
       {:else}

@@ -97,7 +97,7 @@
           <div class="space-y-3">
             <label
               for="new-parent-tag"
-              class="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3 block"
+              class="text-sm font-medium text-foreground-soft mb-3 block"
             >
               New Parent Tag
             </label>
@@ -110,7 +110,7 @@
               clearable={true}
               emptyMessage="No matching tags found."
             />
-            <p class="text-xs text-slate-500 dark:text-slate-400">
+            <p class="text-xs text-muted-foreground">
               Leave empty to move to root level
             </p>
           </div>

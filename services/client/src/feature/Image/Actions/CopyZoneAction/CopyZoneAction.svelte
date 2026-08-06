@@ -57,10 +57,7 @@
         </div>
       {:else if actions.isCopied.active}
         <div in:scale={{ duration: 300, easing: cubicOut }}>
-          <Icon
-            icon="lucide:check"
-            class={cn(iconClass, 'text-green-600 dark:text-green-400')}
-          />
+          <Icon icon="lucide:check" class={cn(iconClass, 'text-success')} />
         </div>
       {:else}
         <Icon icon="tabler:link" class={iconClass} />

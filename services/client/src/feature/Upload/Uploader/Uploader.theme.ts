@@ -6,8 +6,7 @@ export const UploaderContainerTheme = cva(
   {
     variants: {
       state: {
-        dragOver:
-          'border-dashed border-violet-400/50 dark:border-violet-400/50 scale-[1.01]',
+        dragOver: 'border-dashed border-accent/50 scale-[1.01]',
         disabled: 'border-transparent opacity-60',
         default: 'border-transparent',
       },
@@ -23,7 +22,7 @@ export type UploaderContainerState = NonNullable<
 >['state'];
 
 export const UploaderSurfaceTheme = cva(
-  'relative bg-card-primary transition-colors duration-500 has-[[data-slot=dropzone-input]:hover]:bg-card-secondary',
+  'relative bg-card transition-colors duration-500 has-[[data-slot=dropzone-input]:hover]:bg-muted',
 );
 
 export const UploaderHeroTheme = cva(
@@ -42,23 +41,23 @@ export const UploaderHeroTheme = cva(
 );
 
 export const UploaderDragOverlayTheme = cva(
-  'absolute inset-0 bg-gradient-to-br z-20 from-indigo-500/20 to-purple-500/20 rounded-xl transition-opacity duration-200 flex items-center justify-center backdrop-blur-md pointer-events-none',
+  'absolute inset-0 bg-gradient-to-br z-20 from-accent/20 to-accent-strong/20 rounded-xl transition-opacity duration-200 flex items-center justify-center backdrop-blur-md pointer-events-none',
 );
 
 export const UploaderConstraintsTheme = tv({
   slots: {
-    base: 'flex w-full flex-col items-start gap-x-6 border-t border-slate-200/60 pt-3.5 text-left dark:border-white/[0.06] sm:flex-row sm:justify-between',
+    base: 'flex w-full flex-col items-start gap-x-6 border-t border-border/60 pt-3.5 text-left dark:border-border/30 sm:flex-row sm:justify-between',
     column: 'flex w-full min-w-0 flex-col gap-y-[7px] sm:w-auto',
     labelRow: 'flex w-full items-baseline justify-between gap-x-3',
     label:
-      'text-[10px] font-semibold uppercase tracking-[0.09em] text-slate-500 dark:text-slate-600',
-    formats:
-      'text-[13px] font-medium leading-relaxed text-slate-500 dark:text-slate-400',
+      'text-[10px] font-semibold uppercase tracking-[0.09em] text-muted-foreground dark:text-foreground-subtle',
+    formats: 'text-[13px] font-medium leading-relaxed text-muted-foreground',
     toggle:
-      'ml-[0.45em] cursor-pointer font-medium text-slate-500 underline decoration-dotted decoration-slate-400/70 underline-offset-[3px] transition-colors hover:text-violet-600 hover:decoration-violet-400/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/50 dark:text-slate-500 dark:decoration-slate-500/70 dark:hover:text-violet-400 dark:hover:decoration-violet-400/60',
+      'ml-[0.45em] cursor-pointer font-medium text-muted-foreground underline decoration-dotted decoration-ring/70 underline-offset-[3px] transition-colors hover:text-accent hover:decoration-accent/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 dark:text-foreground-subtle',
     inlineSize:
-      'whitespace-nowrap text-[13px] font-medium text-slate-500 dark:text-slate-400 sm:hidden',
-    sizeValue: 'text-[13px] font-semibold text-slate-900 dark:text-slate-300',
+      'whitespace-nowrap text-[13px] font-medium text-muted-foreground sm:hidden',
+    sizeValue:
+      'text-[13px] font-semibold text-foreground dark:text-foreground-soft',
     maxSizeColumn:
       'hidden flex-shrink-0 flex-col items-end gap-y-[7px] text-right sm:flex',
   },

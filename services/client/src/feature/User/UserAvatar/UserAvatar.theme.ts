@@ -17,7 +17,7 @@ export const userAvatarVariants = cva('rounded-xl', {
 });
 
 export const userAvatarFallbackVariants = cva(
-  'rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 text-white font-semibold flex items-center justify-center',
+  'rounded-xl bg-gradient-to-br from-info-fill to-accent-strong dark:to-decor-violet-strong text-surface-inverse-foreground font-semibold flex items-center justify-center',
   {
     variants: {
       size: {

@@ -2,23 +2,13 @@
 
 @import 'tw-animate-css';
 
-@custom-variant dark (&:is(.dark *));
-
-@import './theme/theme.default.css' layer(theme);
-@import './theme/theme.dark.css' layer(theme);
-@import './theme/theme.sidebar.css' layer(theme);
-@import './theme/theme.modal.css' layer(theme);
-@import './theme/theme.filter.css' layer(theme);
+@import './theme/index.css';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 @source inline('{,}grid-cols-{1..12}');
 @source inline('{,}gap-{0..12}');
 @source inline('{,}line-clamp-{1..6}');
-
-@utility text-* {
-  color: --value(--color-* -text) !important;
-}
 
 @layer base {
   * {
@@ -56,21 +46,6 @@
     word-break: break-word;
     overflow-anchor: none;
 
-    @apply from-bg-start to-bg-end overflow-hidden bg-linear-to-b text-[var(--color-text-primary)] antialiased;
-  }
-}
-
-@layer theme {
-  @keyframes shimmer {
-    from {
-      background-position: -200% 0;
-    }
-    to {
-      background-position: 200% 0;
-    }
-  }
-
-  .animate-shimmer {
-    animation: shimmer 2s infinite linear;
+    @apply from-bg-start to-bg-end text-foreground-body overflow-hidden bg-linear-to-b antialiased;
   }
 }

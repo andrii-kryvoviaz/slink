@@ -81,7 +81,7 @@
 {#snippet actions(loading: boolean)}
   <div class="inline-flex items-stretch">
     <Button
-      class="transition-all duration-200 text-sm rounded-r-none! border-r border-white/20"
+      class="transition-all duration-200 text-sm rounded-r-none! border-r border-info-foreground/20"
       variant="primary"
       size="xs"
       rounded="sm"

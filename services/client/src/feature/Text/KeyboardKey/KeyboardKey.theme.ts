@@ -5,16 +5,12 @@ export const KeyboardKeyTheme = cva(
   {
     variants: {
       variant: {
-        default:
-          'border-gray-300 bg-gray-100 text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-white',
-        subtle:
-          'border-gray-200 bg-gray-50 text-gray-700 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300',
+        default: 'border-border-strong bg-muted text-foreground',
+        subtle: 'border-border bg-muted-subtle text-foreground-soft',
         modern:
-          'border-gray-300 bg-white text-gray-900 shadow-sm hover:shadow-md dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-750',
-        glass:
-          'border-gray-200/50 bg-white/80 text-gray-900 backdrop-blur-sm dark:border-gray-600/50 dark:bg-gray-800/80 dark:text-white',
-        minimal:
-          'border-gray-200 bg-transparent text-gray-700 dark:border-gray-700 dark:text-gray-300',
+          'border-border-strong bg-card text-foreground shadow-sm hover:shadow-md',
+        glass: 'border-border/50 bg-card/80 text-foreground backdrop-blur-sm',
+        minimal: 'border-border bg-transparent text-foreground-soft',
       },
       size: {
         xs: 'px-2 h-6 min-w-[1.5rem] text-xs',

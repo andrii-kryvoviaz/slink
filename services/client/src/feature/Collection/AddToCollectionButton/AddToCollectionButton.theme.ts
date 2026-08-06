@@ -14,8 +14,7 @@ export const addToCollectionButtonTheme = cva(
       },
       variant: {
         default: '',
-        subtle:
-          'rounded-md px-2 py-1 hover:bg-blue-50/50 dark:hover:bg-blue-900/20',
+        subtle: 'rounded-md px-2 py-1 hover:bg-info-fill/5',
         overlay: 'rounded-full px-2.5 py-1 backdrop-blur-sm shadow-lg',
       },
       active: {
@@ -31,13 +30,12 @@ export const addToCollectionButtonTheme = cva(
       {
         variant: 'overlay',
         active: true,
-        class:
-          'bg-blue-600/80 hover:bg-blue-600/90 dark:bg-blue-500/80 dark:hover:bg-blue-500/90',
+        class: 'bg-info-strong/80 hover:bg-info-strong/90',
       },
       {
         variant: 'overlay',
         active: false,
-        class: 'bg-black/60 hover:bg-black/70',
+        class: 'bg-scrim/60 hover:bg-scrim/70',
       },
     ],
     defaultVariants: {
@@ -74,34 +72,33 @@ export const addToCollectionIconTheme = cva('transition-all duration-200', {
     {
       variant: 'default',
       active: false,
-      class:
-        'text-gray-400 group-hover/collection:text-blue-500 dark:text-gray-500 dark:group-hover/collection:text-blue-400',
+      class: 'text-foreground-subtle group-hover/collection:text-info',
     },
     {
       variant: 'default',
       active: true,
-      class: 'text-blue-500 dark:text-blue-400',
+      class: 'text-info',
     },
     {
       variant: 'subtle',
+      active: false,
+      class: 'text-muted-foreground group-hover/collection:text-info',
+    },
+    {
+      variant: 'subtle',
+      active: true,
+      class: 'text-info',
+    },
+    {
+      variant: 'overlay',
       active: false,
       class:
-        'text-gray-500 group-hover/collection:text-blue-600 dark:text-gray-400 dark:group-hover/collection:text-blue-400',
-    },
-    {
-      variant: 'subtle',
-      active: true,
-      class: 'text-blue-600 dark:text-blue-400',
-    },
-    {
-      variant: 'overlay',
-      active: false,
-      class: 'text-white/90 group-hover/collection:text-white',
+        'text-surface-inverse-foreground/90 group-hover/collection:text-surface-inverse-foreground',
     },
     {
       variant: 'overlay',
       active: true,
-      class: 'text-white',
+      class: 'text-surface-inverse-foreground',
     },
   ],
   defaultVariants: {

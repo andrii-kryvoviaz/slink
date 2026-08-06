@@ -137,7 +137,7 @@
     <PopoverPrimitive.Content
       sideOffset={8}
       align="end"
-      class="z-50 rounded-xl border border-gray-200/70 dark:border-gray-700/50 bg-white/95 dark:bg-gray-900/95 shadow-xl shadow-black/10 dark:shadow-black/30 overflow-hidden backdrop-blur-sm animate-in fade-in-0 zoom-in-95"
+      class="z-50 rounded-xl border border-border/70 bg-popover/95 shadow-xl shadow-scrim/10 dark:shadow-scrim/30 overflow-hidden backdrop-blur-sm animate-in fade-in-0 zoom-in-95"
     >
       <CollectionPicker
         pickerState={picker}

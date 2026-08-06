@@ -60,7 +60,7 @@
 <section class="space-y-1">
   <div class="flex items-center justify-between gap-4 pb-3">
     <h2
-      class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+      class="text-sm font-medium text-muted-foreground uppercase tracking-wider"
     >
       Configuration
     </h2>
@@ -74,7 +74,7 @@
     }}
   >
     <div
-      class="divide-y divide-gray-100 dark:divide-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 overflow-hidden"
+      class="divide-y divide-muted rounded-xl bg-muted-subtle/50 dark:bg-muted-subtle/30 border border-muted overflow-hidden"
     >
       {#if formState.provider.slug}
         <SettingItem>
@@ -82,13 +82,11 @@
           {#snippet hint()}Selected authentication provider{/snippet}
           <div class="flex items-center gap-2 text-sm">
             <ProviderIcon provider={formState.provider} class="w-4 h-4" />
-            <span class="text-gray-700 dark:text-gray-300"
-              >{formState.provider.name}</span
-            >
+            <span class="text-foreground-soft">{formState.provider.name}</span>
             {#if onChangeProvider}
               <button
                 type="button"
-                class="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300"
+                class="text-info hover:text-info-subtle-foreground"
                 onclick={onChangeProvider}
               >
                 Change
@@ -172,14 +170,14 @@
 
     <div class="flex items-center justify-between gap-4 pb-3 pt-6">
       <h2
-        class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+        class="text-sm font-medium text-muted-foreground uppercase tracking-wider"
       >
         Registration
       </h2>
     </div>
 
     <div
-      class="divide-y divide-gray-100 dark:divide-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 overflow-hidden"
+      class="divide-y divide-muted rounded-xl bg-muted-subtle/50 dark:bg-muted-subtle/30 border border-muted overflow-hidden"
     >
       <SettingItem>
         {#snippet label()}
@@ -193,7 +191,7 @@
                 {#snippet icon()}
                   <Icon
                     icon="lucide:globe"
-                    class="w-4 h-4 text-slate-500 dark:text-slate-400"
+                    class="w-4 h-4 text-muted-foreground"
                   />
                 {/snippet}
                 {#snippet label()}Inherit{/snippet}
@@ -203,7 +201,7 @@
                 {#snippet icon()}
                   <Icon
                     icon="lucide:user-plus"
-                    class="w-4 h-4 text-slate-500 dark:text-slate-400"
+                    class="w-4 h-4 text-muted-foreground"
                   />
                 {/snippet}
                 {#snippet label()}Allowed{/snippet}
@@ -213,7 +211,7 @@
                 {#snippet icon()}
                   <Icon
                     icon="lucide:user-x"
-                    class="w-4 h-4 text-slate-500 dark:text-slate-400"
+                    class="w-4 h-4 text-muted-foreground"
                   />
                 {/snippet}
                 {#snippet label()}Blocked{/snippet}
@@ -253,7 +251,7 @@
                 {#snippet icon()}
                   <Icon
                     icon="lucide:globe"
-                    class="w-4 h-4 text-slate-500 dark:text-slate-400"
+                    class="w-4 h-4 text-muted-foreground"
                   />
                 {/snippet}
                 {#snippet label()}Inherit{/snippet}
@@ -263,7 +261,7 @@
                 {#snippet icon()}
                   <Icon
                     icon="lucide:clock"
-                    class="w-4 h-4 text-slate-500 dark:text-slate-400"
+                    class="w-4 h-4 text-muted-foreground"
                   />
                 {/snippet}
                 {#snippet label()}Required{/snippet}
@@ -273,7 +271,7 @@
                 {#snippet icon()}
                   <Icon
                     icon="lucide:user-check"
-                    class="w-4 h-4 text-slate-500 dark:text-slate-400"
+                    class="w-4 h-4 text-muted-foreground"
                   />
                 {/snippet}
                 {#snippet label()}Auto-approve{/snippet}
@@ -300,9 +298,7 @@
 
     <div class="flex items-center justify-end gap-3 pt-4">
       {#if formState.isSubmitting}
-        <div
-          class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
-        >
+        <div class="flex items-center gap-2 text-sm text-muted-foreground">
           <Loader variant="minimal" size="xs" />
           <span>Saving...</span>
         </div>

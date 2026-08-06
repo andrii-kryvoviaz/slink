@@ -5,7 +5,7 @@ export const ChipPopoverSurface = cva('', {
   variants: {
     variant: {
       default: '',
-      dark: 'dark:bg-gray-950/95 dark:border-gray-800/80',
+      dark: 'dark:bg-background/95 dark:border-border/80',
     },
   },
   defaultVariants: {

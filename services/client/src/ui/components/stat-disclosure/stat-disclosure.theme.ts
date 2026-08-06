@@ -4,9 +4,8 @@ export const statDisclosureContainerTheme = cva(['rounded-lg', 'border'], {
   variants: {
     variant: {
       indigo: [
-        'border-indigo-200/50 dark:border-indigo-500/20',
-        'bg-gradient-to-br from-indigo-50/80 via-violet-50/60 to-purple-50/50',
-        'dark:from-indigo-950/30 dark:via-violet-950/20 dark:to-purple-950/10',
+        'border-accent-border/50',
+        'bg-gradient-to-br from-accent-subtle/80 via-accent-subtle-strong/60 to-accent-subtle/50',
       ],
     },
   },
@@ -27,7 +26,7 @@ export const statDisclosureTriggerTheme = cva(
   {
     variants: {
       variant: {
-        indigo: ['hover:bg-indigo-100/50 dark:hover:bg-indigo-900/20'],
+        indigo: ['hover:bg-accent-subtle/50'],
       },
     },
     defaultVariants: {
@@ -47,8 +46,8 @@ export const statDisclosureIconTileTheme = cva(
     variants: {
       variant: {
         indigo: [
-          'bg-gradient-to-br from-indigo-500 to-violet-500',
-          'shadow-indigo-500/20 dark:shadow-indigo-500/10',
+          'bg-gradient-to-br from-accent to-accent-strong',
+          'shadow-accent/20 dark:shadow-accent/10',
         ],
       },
     },
@@ -58,14 +57,14 @@ export const statDisclosureIconTileTheme = cva(
   },
 );
 
-export const statDisclosureIconTheme = cva(['w-5 h-5 text-white']);
+export const statDisclosureIconTheme = cva(['w-5 h-5 text-accent-foreground']);
 
 export const statDisclosureLabelTheme = cva(
   ['text-xs font-medium uppercase tracking-wide'],
   {
     variants: {
       variant: {
-        indigo: ['text-indigo-600/70 dark:text-indigo-400/70'],
+        indigo: ['text-accent/70'],
       },
     },
     defaultVariants: {
@@ -76,12 +75,12 @@ export const statDisclosureLabelTheme = cva(
 
 export const statDisclosureValueTheme = cva([
   'text-sm font-semibold',
-  'text-gray-900 dark:text-white',
+  'text-foreground',
 ]);
 
 export const statDisclosureChevronTheme = cva([
   'w-5 h-5 flex-shrink-0',
-  'text-gray-400 dark:text-gray-500',
+  'text-foreground-subtle',
   'transition-transform duration-200',
   'group-data-[state=open]:rotate-180',
 ]);

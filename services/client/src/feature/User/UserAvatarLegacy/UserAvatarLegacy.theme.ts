@@ -6,7 +6,7 @@ export const UserAvatarThemeLegacy = cva(
     variants: {
       variant: {
         default: '',
-        ring: 'ring-3 ring-indigo-300 dark:ring-indigo-500',
+        ring: 'ring-3 ring-accent/50 dark:ring-accent',
       },
       size: {
         xs: 'w-5 h-5 text-[0.5rem]',

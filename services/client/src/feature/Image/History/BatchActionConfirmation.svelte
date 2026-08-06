@@ -11,9 +11,8 @@
     {
       variants: {
         variant: {
-          blue: 'bg-blue-100 dark:bg-blue-900/30 border-blue-200/40 dark:border-blue-800/30',
-          danger:
-            'bg-red-100 dark:bg-red-900/30 border-red-200/40 dark:border-red-800/30',
+          blue: 'bg-info-fill/15 border-info-border/40',
+          danger: 'bg-danger/15 border-danger-border/40',
         },
       },
     },
@@ -22,8 +21,8 @@
   const iconVariants = cva('h-5 w-5', {
     variants: {
       variant: {
-        blue: 'text-blue-600 dark:text-blue-400',
-        danger: 'text-red-600 dark:text-red-400',
+        blue: 'text-info',
+        danger: 'text-danger',
       },
     },
   });
@@ -65,11 +64,11 @@
       <Icon {icon} class={iconVariants({ variant })} />
     </div>
     <div>
-      <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
+      <h3 class="text-sm font-semibold text-foreground">
         {@render title()} ({plural(count, ['# image', '# images'])})
       </h3>
       {#if description}
-        <p class="text-xs text-gray-500 dark:text-gray-400">
+        <p class="text-xs text-muted-foreground">
           {@render description()}
         </p>
       {/if}

@@ -78,14 +78,14 @@
         onkeydown={handleKeydown}
       >
         {#snippet leftIcon()}
-          <Icon icon="lucide:folder" class="h-4 w-4 text-slate-400" />
+          <Icon icon="lucide:folder" class="h-4 w-4 text-foreground-subtle" />
         {/snippet}
       </Input>
 
       <div>
         <div class="flex items-baseline justify-between mb-3">
           <Label>Description</Label>
-          <span class="text-xs font-normal text-slate-400 dark:text-slate-500"
+          <span class="text-xs font-normal text-foreground-subtle"
             >Optional</span
           >
         </div>
@@ -97,7 +97,7 @@
           class="border-border bg-background dark:bg-input/30 placeholder:text-muted-foreground shadow-xs flex w-full min-w-0 rounded-lg border px-4 py-2.5 text-base outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] resize-none md:text-sm"
           aria-invalid={errors?.description ? true : undefined}></textarea>
         {#if errors?.description}
-          <p class="mt-1.5 text-xs text-input-error">{errors.description}</p>
+          <p class="mt-1.5 text-xs text-accent-strong">{errors.description}</p>
         {/if}
       </div>
     </div>

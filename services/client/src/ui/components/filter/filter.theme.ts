@@ -9,44 +9,44 @@ export const filterContainerVariants = cva(
       variant: {
         default: [
           'filter-glass',
-          'border border-gray-200/80 dark:border-white/10',
-          'hover:bg-gray-50 dark:hover:bg-gray-900/70',
-          'focus-within:border-gray-300 dark:focus-within:border-white/20',
-          'focus-within:bg-white dark:focus-within:bg-gray-900/80',
+          'border border-border/80',
+          'hover:bg-ghost-hover',
+          'focus-within:border-border-strong dark:focus-within:border-border',
+          'focus-within:bg-card',
         ],
         neon: [
           'filter-glass',
-          'border border-gray-200/60 dark:border-white/10',
+          'border border-border/60',
           'shadow-sm',
-          'hover:border-blue-300/40 dark:hover:border-blue-500/25',
-          'hover:shadow-sm hover:shadow-blue-200/20 dark:hover:shadow-blue-900/10',
-          'hover:bg-blue-50/15 dark:hover:bg-blue-500/6',
-          'focus-within:border-blue-400/60 dark:focus-within:border-blue-500/40',
-          'focus-within:shadow-md focus-within:shadow-blue-200/30 dark:focus-within:shadow-blue-900/20',
-          'focus-within:bg-blue-50/25 dark:focus-within:bg-blue-500/10',
-          'focus-within:ring-1 focus-within:ring-blue-300/20 dark:focus-within:ring-blue-500/15',
+          'hover:border-info/25',
+          'hover:shadow-info-border/20 hover:shadow-sm',
+          'hover:bg-info-fill/6',
+          'focus-within:border-info/40',
+          'focus-within:shadow-info-border/30 focus-within:shadow-md',
+          'focus-within:bg-info-fill/10',
+          'focus-within:ring-info/15 focus-within:ring-1',
         ],
         minimal: [
           'filter-glass',
-          'border border-gray-200/60 dark:border-white/10',
-          'hover:bg-gray-50/80 dark:hover:bg-gray-900/70',
-          'focus-within:border-gray-300/80 dark:focus-within:border-white/20',
+          'border border-border/60',
+          'hover:bg-ghost-hover',
+          'focus-within:border-border-strong/80 dark:focus-within:border-border',
         ],
         subtle: [
-          'bg-gray-50/50 dark:bg-gray-900/60 backdrop-blur-sm',
-          'border border-gray-200/60 dark:border-white/8',
-          'hover:bg-gray-100/50 dark:hover:bg-gray-900/70',
-          'focus-within:border-gray-300 dark:focus-within:border-white/15',
-          'focus-within:bg-white dark:focus-within:bg-gray-900/80',
+          'bg-muted-subtle backdrop-blur-sm',
+          'border border-border/60',
+          'hover:bg-ghost-hover',
+          'focus-within:border-border-strong dark:focus-within:border-border',
+          'focus-within:bg-card',
         ],
         pill: [
-          'bg-white/80 dark:bg-gray-900/80',
-          'border border-gray-200/60 dark:border-gray-700/60',
-          'text-gray-600 dark:text-gray-400 shadow-sm',
-          'hover:text-gray-900 dark:hover:text-gray-100',
-          'hover:bg-white dark:hover:bg-gray-800',
-          'hover:border-gray-300 dark:hover:border-gray-600',
-          'hover:shadow-lg hover:shadow-gray-200/40 dark:hover:shadow-gray-900/40',
+          'bg-card/80',
+          'border border-border/60',
+          'text-muted-foreground shadow-sm',
+          'hover:text-foreground',
+          'hover:bg-card',
+          'hover:border-border-strong',
+          'hover:shadow-border/40 hover:shadow-lg dark:hover:shadow-scrim/40',
         ],
       },
       size: {
@@ -81,8 +81,7 @@ export const filterContainerVariants = cva(
       {
         variant: 'pill',
         open: true,
-        class:
-          'ring-2 ring-blue-500/20 border-blue-300/60 shadow-md dark:border-blue-500/40',
+        class: 'ring-info/20 border-info/40 shadow-md ring-2',
       },
     ],
     defaultVariants: {
@@ -102,24 +101,11 @@ export const filterIconBoxVariants = cva(
   {
     variants: {
       variant: {
-        default: [
-          'bg-gray-100 dark:bg-white/10',
-          'text-gray-500 dark:text-white/60',
-        ],
-        neon: [
-          'bg-blue-50 dark:bg-blue-500/20',
-          'border border-blue-200/50 dark:border-blue-500/30',
-          'text-blue-600 dark:text-blue-400',
-        ],
-        minimal: [
-          'bg-gray-100/80 dark:bg-white/10',
-          'text-gray-500 dark:text-white/60',
-        ],
-        subtle: ['bg-transparent', 'text-gray-400 dark:text-white/50'],
-        pill: [
-          'bg-gray-100 dark:bg-white/10',
-          'text-gray-500 dark:text-white/60',
-        ],
+        default: ['bg-muted', 'text-muted-foreground'],
+        neon: ['bg-info-fill/20', 'border border-info/30', 'text-info'],
+        minimal: ['bg-muted/80', 'text-muted-foreground'],
+        subtle: ['bg-transparent', 'text-foreground-subtle'],
+        pill: ['bg-muted', 'text-muted-foreground'],
       },
     },
     defaultVariants: {
@@ -131,11 +117,11 @@ export const filterIconBoxVariants = cva(
 export const filterIconGlyphVariants = cva('h-3.5 w-3.5 transition-colors', {
   variants: {
     variant: {
-      default: 'text-gray-500 dark:text-white/60',
-      neon: 'text-blue-600 dark:text-blue-400',
-      minimal: 'text-gray-500 dark:text-white/60',
-      subtle: 'text-gray-400 dark:text-white/50',
-      pill: 'text-gray-500 dark:text-white/60',
+      default: 'text-muted-foreground',
+      neon: 'text-info',
+      minimal: 'text-muted-foreground',
+      subtle: 'text-foreground-subtle',
+      pill: 'text-muted-foreground',
     },
   },
   defaultVariants: {
@@ -146,11 +132,11 @@ export const filterIconGlyphVariants = cva('h-3.5 w-3.5 transition-colors', {
 export const filterLeadingIconVariants = cva('shrink-0 transition-colors', {
   variants: {
     variant: {
-      default: 'text-gray-500 dark:text-white/60',
-      neon: 'text-blue-600 dark:text-blue-400',
-      minimal: 'text-gray-500 dark:text-white/60',
-      subtle: 'text-gray-400 dark:text-white/50',
-      pill: 'text-gray-400 dark:text-gray-500',
+      default: 'text-muted-foreground',
+      neon: 'text-info',
+      minimal: 'text-muted-foreground',
+      subtle: 'text-foreground-subtle',
+      pill: 'text-foreground-subtle',
     },
     size: {
       sm: 'w-3.5 h-3.5',
@@ -165,7 +151,7 @@ export const filterLeadingIconVariants = cva('shrink-0 transition-colors', {
 });
 
 export const filterFieldVariants = cva(
-  'flex-1 bg-transparent border-0 outline-none min-w-0 text-gray-700 dark:text-white placeholder:text-gray-400 dark:placeholder:text-white/40 placeholder:transition-colors',
+  'flex-1 bg-transparent border-0 outline-none min-w-0 text-foreground-soft dark:text-foreground placeholder:text-foreground-subtle placeholder:transition-colors',
   {
     variants: {
       size: {
@@ -176,9 +162,10 @@ export const filterFieldVariants = cva(
       variant: {
         default: '',
         neon: '',
-        minimal: 'placeholder:text-gray-500',
+        minimal:
+          'placeholder:text-muted-foreground dark:placeholder:text-foreground-subtle',
         subtle: '',
-        pill: 'text-gray-700 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500',
+        pill: 'text-foreground-soft placeholder:text-foreground-subtle',
       },
     },
     defaultVariants: {
@@ -199,10 +186,10 @@ export const filterClearButtonVariants = cva(
       },
       variant: {
         default: 'filter-clear-neutral',
-        neon: 'text-blue-500/70 hover:text-blue-600 hover:bg-blue-50 dark:text-blue-400/70 dark:hover:text-blue-300 dark:hover:bg-blue-500/10',
+        neon: 'text-info/70 hover:text-info-subtle-foreground hover:bg-info-fill/10',
         minimal: 'filter-clear-neutral',
         subtle: 'filter-clear-neutral',
-        pill: 'text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:text-gray-300 dark:hover:bg-gray-700',
+        pill: 'text-foreground-subtle hover:text-foreground-soft hover:bg-ghost-hover dark:text-muted-foreground',
       },
     },
     defaultVariants: {
@@ -212,20 +199,17 @@ export const filterClearButtonVariants = cva(
   },
 );
 
-export const filterDividerVariants = cva(
-  'shrink-0 bg-gray-200 dark:bg-gray-700',
-  {
-    variants: {
-      orientation: {
-        vertical: 'w-px h-4',
-        horizontal: 'h-px w-full',
-      },
-    },
-    defaultVariants: {
-      orientation: 'vertical',
+export const filterDividerVariants = cva('shrink-0 bg-border', {
+  variants: {
+    orientation: {
+      vertical: 'w-px h-4',
+      horizontal: 'h-px w-full',
     },
   },
-);
+  defaultVariants: {
+    orientation: 'vertical',
+  },
+});
 
 export const filterGroupVariants = cva('flex min-w-0', {
   variants: {
@@ -288,8 +272,8 @@ export const filterChipVariants = cva(
   {
     variants: {
       tone: {
-        muted: 'text-slate-500 dark:text-slate-400',
-        accent: 'text-blue-600 dark:text-blue-400',
+        muted: 'text-muted-foreground',
+        accent: 'text-info',
       },
     },
     defaultVariants: {
@@ -299,7 +283,7 @@ export const filterChipVariants = cva(
 );
 
 export const filterChipValueVariants = cva(
-  'truncate font-medium text-slate-700 dark:text-slate-200',
+  'truncate font-medium text-foreground-soft',
   {
     variants: {
       maxWidth: {
@@ -328,13 +312,13 @@ export const filterContentVariants = cva(
     variants: {
       variant: {
         default:
-          'border border-gray-200/80 dark:border-white/10 shadow-xl shadow-gray-200/50 dark:shadow-black/60',
-        neon: 'border border-gray-200/60 dark:border-white/10 shadow-2xl shadow-gray-500/5 dark:shadow-black/50 ring-1 ring-gray-100/20 dark:ring-white/5',
+          'border-border/80 shadow-border/50 dark:shadow-scrim/60 border shadow-xl',
+        neon: 'border-border/60 shadow-muted-foreground/5 ring-muted/20 dark:shadow-scrim/50 dark:ring-border/50 border shadow-2xl ring-1',
         minimal:
-          'border border-gray-200/60 dark:border-white/10 shadow-lg shadow-gray-200/40 dark:shadow-black/50',
+          'border-border/60 shadow-border/40 dark:shadow-scrim/50 border shadow-lg',
         subtle:
-          'border border-gray-200/60 dark:border-white/10 shadow-xl shadow-gray-200/50 dark:shadow-black/60',
-        pill: 'border border-gray-200/60 dark:border-gray-700/60 shadow-xl shadow-gray-200/50 dark:shadow-black/60',
+          'border-border/60 shadow-border/50 dark:shadow-scrim/60 border shadow-xl',
+        pill: 'border-border/60 shadow-border/50 dark:shadow-scrim/60 border shadow-xl',
       },
     },
     defaultVariants: {
@@ -348,20 +332,20 @@ export const filterItemVariants = cva(
   {
     variants: {
       variant: {
-        default: 'filter-item-blue',
-        neon: 'filter-item-blue',
+        default: 'filter-item-info',
+        neon: 'filter-item-info',
         minimal: [
-          'text-gray-700 dark:text-white',
-          'hover:bg-gray-100 dark:hover:bg-white/10',
-          'aria-selected:bg-gray-100 dark:aria-selected:bg-white/10',
-          'aria-selected:text-gray-900 dark:aria-selected:text-white',
+          'text-foreground-soft dark:text-foreground',
+          'hover:bg-ghost-hover',
+          'aria-selected:bg-ghost-hover',
+          'aria-selected:text-foreground',
         ],
         subtle: [
-          'text-gray-700 dark:text-white',
-          'hover:bg-gray-50 dark:hover:bg-white/8',
-          'aria-selected:bg-gray-50 dark:aria-selected:bg-white/8',
+          'text-foreground-soft dark:text-foreground',
+          'hover:bg-ghost-hover',
+          'aria-selected:bg-ghost-hover',
         ],
-        pill: 'filter-item-blue',
+        pill: 'filter-item-info',
       },
     },
     defaultVariants: {
@@ -373,11 +357,11 @@ export const filterItemVariants = cva(
 export const filterItemIconVariants = cva('h-4 w-4 shrink-0', {
   variants: {
     variant: {
-      default: 'text-gray-500 dark:text-white/60',
-      neon: 'text-blue-500 dark:text-blue-400 group-hover:text-blue-600 dark:group-hover:text-blue-300 group-aria-selected:text-blue-600 dark:group-aria-selected:text-blue-300',
-      minimal: 'text-gray-500 dark:text-white/60',
-      subtle: 'text-gray-400 dark:text-white/50',
-      pill: 'text-gray-500 dark:text-white/60',
+      default: 'text-muted-foreground',
+      neon: 'text-info group-hover:text-info-subtle-foreground group-aria-selected:text-info-subtle-foreground',
+      minimal: 'text-muted-foreground',
+      subtle: 'text-foreground-subtle',
+      pill: 'text-muted-foreground',
     },
   },
   defaultVariants: {
@@ -390,14 +374,14 @@ export const filterItemCountVariants = cva(
   {
     variants: {
       variant: {
-        default: 'filter-item-count-blue',
-        neon: 'filter-item-count-blue',
+        default: 'filter-item-count-info',
+        neon: 'filter-item-count-info',
         minimal: [
-          'text-gray-600 bg-gray-100/80 dark:text-white/70 dark:bg-white/10',
-          'border border-gray-200/50 dark:border-white/10',
+          'text-muted-foreground bg-muted/80',
+          'border border-border/50',
         ],
-        subtle: ['text-gray-400 dark:text-white/50'],
-        pill: 'filter-item-count-blue',
+        subtle: ['text-foreground-subtle'],
+        pill: 'filter-item-count-info',
       },
     },
     defaultVariants: {
@@ -410,15 +394,12 @@ export const filterScrollVariants = cva(
   [
     'overflow-y-auto overflow-x-hidden',
     '[scrollbar-width:thin]',
-    '[scrollbar-color:theme(colors.gray.300)_transparent]',
-    'dark:[scrollbar-color:theme(colors.gray.600)_transparent]',
+    '[scrollbar-color:var(--color-border-strong)_transparent]',
     '[&::-webkit-scrollbar]:w-1.5',
     '[&::-webkit-scrollbar-track]:bg-transparent',
     '[&::-webkit-scrollbar-thumb]:rounded-full',
-    '[&::-webkit-scrollbar-thumb]:bg-gray-300',
-    'dark:[&::-webkit-scrollbar-thumb]:bg-gray-600',
-    'hover:[&::-webkit-scrollbar-thumb]:bg-gray-400',
-    'dark:hover:[&::-webkit-scrollbar-thumb]:bg-gray-500',
+    '[&::-webkit-scrollbar-thumb]:bg-border-strong',
+    'hover:[&::-webkit-scrollbar-thumb]:bg-ring',
   ],
   {
     variants: {
@@ -441,21 +422,21 @@ export const filterSummaryVariants = tv({
       'mx-auto w-[calc(100%-1.5rem)]',
       'flex flex-wrap items-center gap-x-2 gap-y-1.5',
       'px-3 py-2 rounded-b-lg',
-      'bg-white dark:bg-gray-900/60',
-      'border border-t-0 border-gray-200/60 dark:border-white/10',
+      'bg-card',
+      'border border-t-0 border-border/60',
       'shadow-sm text-sm',
     ],
-    leadIcon: 'w-3.5 h-3.5 text-blue-500 dark:text-blue-400 shrink-0',
-    summary: 'text-slate-600 dark:text-slate-300',
+    leadIcon: 'w-3.5 h-3.5 text-info shrink-0',
+    summary: 'text-foreground-soft',
     summaryLabel: 'hidden sm:inline',
-    summaryCount: 'font-semibold text-blue-600 dark:text-blue-400',
+    summaryCount: 'font-semibold text-info',
     clearButton: [
       'ml-auto inline-flex items-center gap-1',
       'px-2 py-0.5 rounded-md',
       'text-xs font-medium',
-      'text-slate-400 dark:text-slate-500',
-      'hover:text-red-600 dark:hover:text-red-400',
-      'hover:bg-red-50 dark:hover:bg-red-950/30',
+      'text-foreground-subtle',
+      'hover:text-danger',
+      'hover:bg-danger-subtle',
       'transition-all duration-200',
       'disabled:opacity-50 disabled:cursor-not-allowed',
     ],

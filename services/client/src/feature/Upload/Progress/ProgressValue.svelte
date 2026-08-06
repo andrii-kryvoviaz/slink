@@ -46,9 +46,7 @@
     {/if}
   </span>
   {#if caption}
-    <span
-      class="text-[10px] uppercase tracking-widest text-slate-400 dark:text-slate-500"
-    >
+    <span class="text-[10px] uppercase tracking-widest text-foreground-subtle">
       {@render caption()}
     </span>
   {/if}

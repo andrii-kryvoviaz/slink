@@ -20,7 +20,7 @@
 
 <div
   class={cn(
-    'flex items-center gap-3 p-3 rounded-lg bg-slate-50/80 dark:bg-slate-700/30 border border-slate-200/50 dark:border-slate-600/30 backdrop-blur-sm',
+    'flex items-center gap-3 p-3 rounded-lg bg-muted/50 border border-border/50 backdrop-blur-sm',
     className,
   )}
 >
@@ -52,12 +52,10 @@
 
   <div class="flex-1 min-w-0">
     <div class="flex items-center justify-between">
-      <p
-        class="text-sm font-medium text-slate-900 dark:text-slate-100 truncate"
-      >
+      <p class="text-sm font-medium text-foreground truncate">
         {item.file.name}
       </p>
-      <span class="text-xs text-slate-500 dark:text-slate-400 ml-2">
+      <span class="text-xs text-muted-foreground ml-2">
         {bytesToSize(item.file.size)}
       </span>
     </div>
@@ -67,11 +65,11 @@
         <Progress value={item.progress} size="sm" variant="subtle" />
       </div>
     {:else if item.status === 'error'}
-      <p class="text-xs text-red-500/80 dark:text-red-400/80 mt-1 break-words">
+      <p class="text-xs text-danger/80 mt-1 break-words">
         {#if item.error}{item.error}{:else}Upload failed{/if}
       </p>
     {:else if item.status === 'cancelled'}
-      <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 break-words">
+      <p class="text-xs text-foreground-subtle mt-1 break-words">
         {#if item.error}{item.error}{:else}Upload cancelled{/if}
       </p>
     {/if}

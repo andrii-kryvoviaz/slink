@@ -59,7 +59,7 @@
             in:scale|local={{ duration: 150, easing: cubicOut }}
             class="inline-flex"
           >
-            <Icon icon="ph:check" class="h-5 w-5 text-emerald-500" />
+            <Icon icon="ph:check" class="h-5 w-5 text-success-strong" />
           </span>
         {:else}
           <span

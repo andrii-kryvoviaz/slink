@@ -22,18 +22,14 @@
 <div class="w-80 p-2 space-y-4">
   <div class="flex items-center gap-3">
     <div
-      class="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 border border-red-200/40 dark:border-red-800/30 shadow-sm flex-shrink-0"
+      class="flex h-10 w-10 items-center justify-center rounded-full bg-danger/12 border border-danger-border/40 shadow-sm flex-shrink-0"
     >
-      <Icon icon="ph:user" class="h-5 w-5 text-red-600 dark:text-red-400" />
+      <Icon icon="ph:user" class="h-5 w-5 text-danger" />
     </div>
     <div class="min-w-0 flex-1">
-      <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
-        Delete User
-      </h3>
-      <p class="text-xs text-gray-500 dark:text-gray-400">
-        This cannot be undone.
-      </p>
-      <p class="text-xs font-medium text-gray-900 dark:text-white truncate">
+      <h3 class="text-sm font-semibold text-foreground">Delete User</h3>
+      <p class="text-xs text-muted-foreground">This cannot be undone.</p>
+      <p class="text-xs font-medium text-foreground truncate">
         {user.email}
       </p>
     </div>

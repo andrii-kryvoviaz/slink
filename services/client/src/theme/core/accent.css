@@ -1,0 +1,47 @@
+@theme {
+  --color-accent-foreground: oklch(
+    from var(--color-accent) clamp(0, (0.85 - l) * 100, 1) 0 h
+  );
+  --color-accent-strong: oklch(
+    from var(--color-accent) calc(l - 0.027) calc(c * 1.2361) calc(h + 25.204)
+  );
+  --color-accent-subtle: oklch(
+    from var(--color-accent) calc(l + 0.377) calc(c * 0.0773) calc(h - 4.803)
+  );
+  --color-accent-subtle-strong: oklch(
+    from var(--color-accent) calc(l + 0.392) calc(c * 0.0601) calc(h + 31.182)
+  );
+  --color-accent-subtle-foreground: oklch(
+    from var(--color-accent) calc(l - 0.128) calc(c * 1.03) calc(h - 0.094)
+  );
+  --color-accent-deep-foreground: oklch(
+    from var(--color-accent) calc(l - 0.226) calc(c * 0.618) calc(h + 1.58)
+  );
+  --color-accent-border: oklch(
+    from var(--color-accent) calc(l + 0.285) calc(c * 0.279) calc(h - 3.078)
+  );
+}
+
+.dark {
+  --color-accent-strong: oklch(
+    from var(--color-accent) calc(l + 0.041) calc(c * 1.1154) calc(h + 28.569)
+  );
+  --color-accent-subtle: oklch(
+    from var(--color-accent) calc(l - 0.314) calc(c * 0.7912) calc(h + 1.762) /
+      0.2
+  );
+  --color-accent-subtle-strong: oklch(
+    from var(--color-accent) calc(l - 0.292) calc(c * 0.967) calc(h + 28.052) /
+      0.2
+  );
+  --color-accent-subtle-foreground: oklch(
+    from var(--color-accent) calc(l + 0.112) calc(c * 0.6319) calc(h - 2.222)
+  );
+  --color-accent-deep-foreground: oklch(
+    from var(--color-accent) calc(l + 0.257) calc(c * 0.1868) calc(h - 4.147)
+  );
+  --color-accent-border: oklch(
+    from var(--color-accent) calc(l - 0.275) calc(c * 1.0714) calc(h + 0.431) /
+      0.3
+  );
+}

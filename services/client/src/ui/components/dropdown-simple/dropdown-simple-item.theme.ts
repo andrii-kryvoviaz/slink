@@ -6,8 +6,8 @@ export const dropdownSimpleContentTheme = cva(
     variants: {
       variant: {
         default:
-          'bg-white dark:bg-gray-900 shadow-black/10 dark:shadow-black/25 border border-gray-200/80 dark:border-gray-700/80',
-        dark: 'bg-neutral-900 shadow-black/30 border border-white/10',
+          'bg-popover shadow-scrim/10 dark:shadow-scrim/25 border border-border/80',
+        dark: 'bg-surface-inverse shadow-scrim/30 border border-surface-inverse-foreground/10',
       },
     },
     defaultVariants: {
@@ -21,8 +21,8 @@ export const dropdownSimpleItemTheme = cva(
   {
     variants: {
       variant: {
-        default: 'text-gray-700 dark:text-gray-200',
-        dark: 'text-white/80',
+        default: 'text-foreground-soft',
+        dark: 'text-surface-inverse-foreground/80',
       },
       danger: {
         true: '',
@@ -41,24 +41,23 @@ export const dropdownSimpleItemTheme = cva(
       {
         variant: 'default',
         danger: false,
-        class:
-          'hover:bg-blue-100 dark:hover:bg-blue-800/40 hover:text-blue-600 dark:hover:text-blue-300',
+        class: 'hover:bg-info-subtle hover:text-info-subtle-foreground',
       },
       {
         variant: 'default',
         danger: true,
-        class:
-          'hover:bg-red-100 dark:hover:bg-red-900/60 hover:text-red-600 dark:hover:text-red-300',
+        class: 'hover:bg-danger-subtle hover:text-danger-subtle-foreground',
       },
       {
         variant: 'dark',
         danger: false,
-        class: 'hover:bg-white/10 hover:text-white',
+        class:
+          'hover:bg-surface-inverse-foreground/10 hover:text-surface-inverse-foreground',
       },
       {
         variant: 'dark',
         danger: true,
-        class: 'hover:bg-red-500/20 hover:text-red-400',
+        class: 'hover:bg-danger/20 hover:text-surface-inverse-danger',
       },
     ],
     defaultVariants: {

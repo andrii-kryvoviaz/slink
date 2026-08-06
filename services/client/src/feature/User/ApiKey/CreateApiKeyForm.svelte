@@ -47,7 +47,10 @@
         rounded="lg"
       >
         {#snippet leftIcon()}
-          <Icon icon="ph:tag" class="h-4 w-4 text-slate-400" />
+          <Icon
+            icon="ph:tag"
+            class="h-4 w-4 text-foreground-subtle dark:text-muted-foreground"
+          />
         {/snippet}
       </Input>
 

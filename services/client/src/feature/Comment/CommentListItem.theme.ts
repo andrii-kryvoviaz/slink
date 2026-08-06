@@ -10,8 +10,8 @@ export const commentListItemTheme = cva(
         false: '',
       },
       editing: {
-        true: 'bg-white/5 border-l-2 border-white/40',
-        false: 'hover:bg-white/5 rounded-lg',
+        true: 'bg-surface-inverse-foreground/5 border-l-2 border-surface-inverse-foreground/40',
+        false: 'hover:bg-surface-inverse-foreground/5 rounded-lg',
       },
     },
     defaultVariants: {

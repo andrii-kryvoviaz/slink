@@ -9,8 +9,7 @@ export const actionButtonVariants = cva('rounded-full', {
     },
     variant: {
       default: '',
-      destructive:
-        'text-red-600 dark:text-red-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30',
+      destructive: 'text-danger hover:text-danger hover:bg-danger-subtle',
     },
   },
   compoundVariants: [
@@ -18,7 +17,7 @@ export const actionButtonVariants = cva('rounded-full', {
       layout: 'hero',
       variant: 'default',
       class:
-        'p-2 bg-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800',
+        'p-2 bg-transparent text-muted-foreground hover:text-foreground-soft hover:bg-ghost-hover',
     },
     {
       layout: 'hero',
@@ -36,10 +35,10 @@ export const shareCapsuleVariants = tv({
   slots: {
     capsule: 'flex items-stretch overflow-hidden rounded-full',
     download:
-      'h-full rounded-none bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 focus-visible:ring-inset focus-visible:ring-offset-0',
+      'h-full rounded-none bg-info-surface text-info-foreground hover:bg-info-surface-strong focus-visible:ring-inset focus-visible:ring-offset-0',
     copy: 'h-full rounded-none focus-visible:ring-inset focus-visible:ring-offset-0',
     caret:
-      'h-full w-6 min-w-0 flex-none rounded-none border-l-[0.5px] border-gray-300 px-0 dark:border-gray-600 focus-visible:ring-inset focus-visible:ring-offset-0',
+      'h-full w-6 min-w-0 flex-none rounded-none border-l-[0.5px] border-border-strong px-0 focus-visible:ring-inset focus-visible:ring-offset-0',
     downloadIcon: 'shrink-0',
     label: 'font-medium truncate',
   },
@@ -63,7 +62,7 @@ export const shareCapsuleVariants = tv({
     {
       slots: ['copy', 'caret'],
       class:
-        'bg-gray-200/75 text-gray-700 hover:bg-gray-200 dark:bg-gray-700/55 dark:text-gray-300 dark:hover:bg-gray-700/75',
+        'bg-border/75 text-foreground-soft hover:bg-border dark:bg-border-strong/55 dark:hover:bg-border-strong/75',
     },
   ],
   defaultVariants: {

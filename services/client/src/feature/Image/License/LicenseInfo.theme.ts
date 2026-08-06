@@ -6,9 +6,9 @@ export const licenseInfoContainerTheme = cva(
     variants: {
       variant: {
         overlay:
-          'gap-1.5 rounded-full px-2.5 py-1 bg-white/95 border-gray-300/50 dark:bg-black/60 backdrop-blur-md shadow-lg border dark:border-white/10',
+          'gap-1.5 rounded-full px-2.5 py-1 bg-card/95 border-border-strong/50 dark:bg-scrim/60 dark:border-border/50 backdrop-blur-md shadow-lg border',
         badge:
-          'gap-1.5 px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm',
+          'gap-1.5 px-2 py-1 rounded-lg bg-surface-inverse-foreground/10 hover:bg-surface-inverse-foreground/20 backdrop-blur-sm',
         inline: 'gap-2',
         text: '',
       },
@@ -22,9 +22,9 @@ export const licenseInfoContainerTheme = cva(
 export const licenseInfoIconTheme = cva('shrink-0', {
   variants: {
     variant: {
-      overlay: 'h-3 w-3 text-gray-600 dark:text-gray-300',
+      overlay: 'h-3 w-3 text-foreground-soft',
       badge: '',
-      inline: 'text-slate-500 dark:text-slate-400 mt-0.5',
+      inline: 'text-muted-foreground mt-0.5',
       text: '',
     },
     size: {
@@ -48,9 +48,9 @@ export const licenseInfoIconTheme = cva('shrink-0', {
 export const licenseInfoLabelTheme = cva('font-medium', {
   variants: {
     variant: {
-      overlay: 'text-[11px] text-gray-700 dark:text-gray-200',
+      overlay: 'text-[11px] text-foreground-soft',
       badge: '',
-      inline: 'text-slate-900 dark:text-slate-100',
+      inline: 'text-foreground',
       text: '',
     },
     size: {
@@ -75,9 +75,9 @@ export const licenseInfoPopoverTheme = cva('rounded-xl shadow-xl', {
   variants: {
     variant: {
       overlay: '',
-      badge: 'w-80 p-4 bg-slate-900 border border-slate-700',
-      inline:
-        'w-80 p-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700',
+      badge:
+        'w-80 p-4 bg-surface-inverse border border-surface-inverse-foreground/20',
+      inline: 'w-80 p-4 bg-input border border-border',
       text: '',
     },
   },

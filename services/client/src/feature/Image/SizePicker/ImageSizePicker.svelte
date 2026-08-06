@@ -114,7 +114,7 @@
     <div class="flex-1">
       <label
         for="width-input"
-        class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1"
+        class="block text-xs font-medium text-foreground-soft mb-1"
       >
         Width
       </label>
@@ -150,7 +150,7 @@
     <div class="flex-1">
       <label
         for="height-input"
-        class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1"
+        class="block text-xs font-medium text-foreground-soft mb-1"
       >
         Height
       </label>
@@ -180,7 +180,7 @@
   />
 
   <div
-    class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 h-6"
+    class="flex items-center justify-between text-xs text-muted-foreground h-6"
   >
     <div class="flex items-center gap-2">
       <span>
@@ -190,7 +190,7 @@
         onclick={resetValues}
         class="{visibilityTheme({
           visible: hasChanges,
-        })} inline-flex items-center gap-1 px-2 py-1 text-xs text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+        })} inline-flex items-center gap-1 px-2 py-1 text-xs text-muted-foreground hover:text-foreground hover:bg-ghost-hover rounded"
         aria-label="Reset to original dimensions"
         tabindex={hasChanges ? 0 : -1}
       >

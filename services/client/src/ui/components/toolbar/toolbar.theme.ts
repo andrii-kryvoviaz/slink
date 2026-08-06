@@ -5,7 +5,7 @@ export const toolbarVariants = tv({
   base: 'inline-flex h-8 items-stretch overflow-hidden rounded-full',
   variants: {
     tone: {
-      dark: 'bg-white/8',
+      dark: 'bg-surface-inverse-foreground/8',
     },
   },
   defaultVariants: {
@@ -17,7 +17,7 @@ export const toolbarSeparatorVariants = tv({
   base: 'self-center h-[18px] w-px',
   variants: {
     tone: {
-      dark: 'bg-white/8',
+      dark: 'bg-surface-inverse-foreground/8',
     },
   },
   defaultVariants: {
@@ -31,7 +31,7 @@ export const toolbarGroupVariants = tv({
     surface: {
       toolbar: 'h-full',
       floating:
-        'h-7 overflow-hidden rounded-full bg-black/60 backdrop-blur-sm shadow-lg',
+        'h-7 overflow-hidden rounded-full bg-scrim/60 backdrop-blur-sm shadow-lg',
     },
   },
   defaultVariants: {
@@ -40,7 +40,7 @@ export const toolbarGroupVariants = tv({
 });
 
 export const toolbarButtonVariants = tv({
-  base: 'relative inline-flex cursor-pointer items-center justify-center select-none transition-all duration-200 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-slate-400/70',
+  base: 'relative inline-flex cursor-pointer items-center justify-center select-none transition-all duration-200 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-surface-inverse-foreground/45',
   variants: {
     shape: {
       segment: 'h-full w-9 rounded-none',
@@ -67,23 +67,26 @@ export const toolbarButtonVariants = tv({
       shape: 'segment',
       surface: 'toolbar',
       tone: 'dark',
-      class: 'text-white/70 hover:bg-white/12 hover:text-white',
+      class:
+        'text-surface-inverse-foreground/70 hover:bg-surface-inverse-foreground/12 hover:text-surface-inverse-foreground',
     },
     {
       shape: 'segment',
       surface: 'floating',
       tone: 'dark',
-      class: 'text-white/80 hover:bg-white/18 hover:text-white',
+      class:
+        'text-surface-inverse-foreground/80 hover:bg-surface-inverse-foreground/18 hover:text-surface-inverse-foreground',
     },
     {
       shape: 'pill',
       tone: 'dark',
-      class: 'bg-black/60 backdrop-blur-sm shadow-lg hover:bg-neutral-700/70',
+      class:
+        'bg-scrim/60 backdrop-blur-sm shadow-lg hover:bg-surface-inverse/70',
     },
     {
       active: true,
       tone: 'dark',
-      class: 'bg-white/22 text-white',
+      class: 'bg-surface-inverse-foreground/22 text-surface-inverse-foreground',
     },
   ],
   defaultVariants: {

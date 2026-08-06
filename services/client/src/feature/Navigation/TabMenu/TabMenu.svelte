@@ -164,7 +164,7 @@
   <div class="absolute inset-1 pointer-events-none overflow-hidden">
     <div
       bind:this={marker}
-      class="absolute rounded-lg bg-white dark:bg-gray-700 shadow-sm shadow-black/10 dark:shadow-black/25 border border-gray-200/50 dark:border-gray-600/50 transition-all duration-200 ease-out"
+      class="absolute rounded-lg bg-surface-raised shadow-sm shadow-scrim/10 dark:shadow-scrim/25 border border-border/70 transition-all duration-200 ease-out"
     ></div>
   </div>
 

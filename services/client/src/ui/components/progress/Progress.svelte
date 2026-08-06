@@ -21,24 +21,16 @@
     showPercentage = false,
   }: Props = $props();
 
-  const progressVariants = cva('w-full rounded-full overflow-hidden', {
+  const progressVariants = cva('w-full rounded-full overflow-hidden bg-muted', {
     variants: {
       size: {
         sm: 'h-1',
         md: 'h-2',
         lg: 'h-3',
       },
-      variant: {
-        default: 'bg-gray-200 dark:bg-gray-700',
-        success: 'bg-gray-200 dark:bg-gray-700',
-        error: 'bg-gray-200 dark:bg-gray-700',
-        warning: 'bg-gray-200 dark:bg-gray-700',
-        subtle: 'bg-slate-200/60 dark:bg-slate-700/40',
-      },
     },
     defaultVariants: {
       size: 'md',
-      variant: 'default',
     },
   });
 
@@ -47,11 +39,11 @@
     {
       variants: {
         variant: {
-          default: 'bg-blue-500',
-          success: 'bg-green-500',
-          error: 'bg-red-500',
-          warning: 'bg-yellow-500',
-          subtle: 'bg-slate-600 dark:bg-slate-300',
+          default: 'bg-info-fill',
+          success: 'bg-success',
+          error: 'bg-danger',
+          warning: 'bg-warning',
+          subtle: 'bg-foreground-soft',
         },
       },
       defaultVariants: {
@@ -63,7 +55,7 @@
   let percentage = $derived(Math.min(Math.max((value / max) * 100, 0), 100));
 </script>
 
-<div class={cn(progressVariants({ size, variant }), className)}>
+<div class={cn(progressVariants({ size }), className)}>
   <div
     class={progressBarVariants({ variant })}
     style="width: {percentage}%"
@@ -75,7 +67,7 @@
 </div>
 
 {#if showPercentage}
-  <div class="text-xs text-gray-500 dark:text-gray-400 mt-1 text-center">
+  <div class="text-xs text-muted-foreground mt-1 text-center">
     {percentage.toFixed(0)}%
   </div>
 {/if}

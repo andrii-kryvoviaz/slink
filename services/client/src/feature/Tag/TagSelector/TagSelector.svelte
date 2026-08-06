@@ -175,14 +175,14 @@
       {:else if searchTerm.trim()}
         <div class="flex flex-col items-center gap-2 py-4">
           <div
-            class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center"
+            class="w-10 h-10 rounded-full bg-muted flex items-center justify-center"
           >
             <Icon
               icon="ph:magnifying-glass"
-              class="w-5 h-5 text-gray-400 dark:text-gray-500"
+              class="w-5 h-5 text-foreground-subtle"
             />
           </div>
-          <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+          <p class="text-sm font-medium text-muted-foreground">
             No tags matching "{searchTerm}"
           </p>
         </div>

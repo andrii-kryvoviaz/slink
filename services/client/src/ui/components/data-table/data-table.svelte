@@ -24,11 +24,11 @@
   });
 
   const tableHeadVariants = tv({
-    base: 'first:pl-4 first:text-left last:pr-4 last:text-right bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 text-xs font-medium uppercase tracking-wider',
+    base: 'first:pl-4 first:text-left last:pr-4 last:text-right bg-muted-subtle text-muted-foreground-strong text-xs font-medium uppercase tracking-wider',
   });
 
   const tableCellVariants = tv({
-    base: 'first:pl-4 first:text-left last:pr-4 last:text-right text-slate-700 dark:text-slate-300',
+    base: 'first:pl-4 first:text-left last:pr-4 last:text-right text-foreground-soft',
   });
 
   interface Props {
@@ -47,14 +47,14 @@
 </script>
 
 <div
-  class="flex-1 overflow-hidden rounded-xl border border-slate-200/60 dark:border-slate-700/40 bg-white dark:bg-slate-800/30"
+  class="flex-1 overflow-hidden rounded-xl border border-border/60 bg-card dark:bg-muted/30"
 >
   <div class="@container overflow-x-auto">
     <Table.Root>
       <Table.Header>
         {#each dataTable.getHeaderGroups() as headerGroup (headerGroup.id)}
           <Table.Row
-            class="border-slate-200/60 dark:border-slate-700/40 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-transparent"
+            class="border-border/60 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-transparent"
           >
             {#each headerGroup.headers as header (header.id)}
               <Table.Head
@@ -82,7 +82,7 @@
           {#each dataTable.getRowModel().rows as row (row.id)}
             <Table.Row
               class={cn(
-                'group/row border-slate-200/60 dark:border-slate-700/40 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-slate-50 dark:hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-slate-700/30 transition-colors duration-200',
+                'group/row border-border/60 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-muted-subtle transition-colors duration-200',
                 onRowClick && 'cursor-pointer',
               )}
               onclick={onRowClick ? () => onRowClick(row.original) : undefined}

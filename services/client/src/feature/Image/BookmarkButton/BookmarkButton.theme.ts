@@ -2,7 +2,7 @@ import { cva } from 'class-variance-authority';
 import { tv } from 'tailwind-variants';
 
 export const bookmarkButtonTheme = cva(
-  'group/bookmark relative inline-flex items-center select-none transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-slate-400/70',
+  'group/bookmark relative inline-flex items-center select-none transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/85',
   {
     variants: {
       size: {
@@ -12,8 +12,7 @@ export const bookmarkButtonTheme = cva(
       },
       variant: {
         default: '',
-        subtle:
-          'rounded-md px-2 py-1 hover:bg-indigo-50/50 dark:hover:bg-indigo-900/20',
+        subtle: 'rounded-md px-2 py-1 hover:bg-accent-subtle/50',
         overlay: '',
         toolbar: '',
       },
@@ -97,30 +96,33 @@ export const bookmarkIconTheme = tv({
     {
       variant: 'default',
       active: true,
-      class: 'text-indigo-600 dark:text-indigo-400',
+      class: 'text-accent',
     },
     {
       variant: 'default',
       active: false,
-      class:
-        'text-gray-400 dark:text-gray-500 group-hover/bookmark:text-indigo-500 dark:group-hover/bookmark:text-indigo-400',
+      class: 'text-foreground-subtle group-hover/bookmark:text-accent',
     },
     {
       variant: 'subtle',
       active: true,
-      class: 'text-indigo-600 dark:text-indigo-400',
+      class: 'text-accent',
     },
     {
       variant: 'subtle',
       active: false,
-      class:
-        'text-gray-400 dark:text-gray-500 group-hover/bookmark:text-indigo-500 dark:group-hover/bookmark:text-indigo-400',
+      class: 'text-foreground-subtle group-hover/bookmark:text-accent',
     },
-    { variant: 'overlay', active: true, class: 'text-white drop-shadow-sm' },
+    {
+      variant: 'overlay',
+      active: true,
+      class: 'text-surface-inverse-foreground drop-shadow-sm',
+    },
     {
       variant: 'overlay',
       active: false,
-      class: 'text-white/80 group-hover/bookmark:text-indigo-400',
+      class:
+        'text-surface-inverse-foreground/80 group-hover/bookmark:text-accent',
     },
   ],
   defaultVariants: {
@@ -155,25 +157,33 @@ export const bookmarkCountTheme = cva(
       {
         variant: 'default',
         active: true,
-        class: 'text-indigo-600 dark:text-indigo-400',
+        class: 'text-accent',
       },
       {
         variant: 'default',
         active: false,
-        class: 'text-gray-500 dark:text-gray-400',
+        class: 'text-muted-foreground',
       },
       {
         variant: 'subtle',
         active: true,
-        class: 'text-indigo-600 dark:text-indigo-400',
+        class: 'text-accent',
       },
       {
         variant: 'subtle',
         active: false,
-        class: 'text-gray-500 dark:text-gray-400',
+        class: 'text-muted-foreground',
       },
-      { variant: 'overlay', active: true, class: 'text-white drop-shadow-sm' },
-      { variant: 'overlay', active: false, class: 'text-white/80' },
+      {
+        variant: 'overlay',
+        active: true,
+        class: 'text-surface-inverse-foreground drop-shadow-sm',
+      },
+      {
+        variant: 'overlay',
+        active: false,
+        class: 'text-surface-inverse-foreground/80',
+      },
     ],
     defaultVariants: {
       size: 'md',

@@ -12,7 +12,7 @@
       variants: {
         variant: {
           warning:
-            'bg-amber-50 border-amber-200 text-amber-800 dark:bg-amber-950/50 dark:border-amber-800 dark:text-amber-200',
+            'bg-warning-subtle border-warning-border text-warning-deep-foreground',
         },
       },
       defaultVariants: {

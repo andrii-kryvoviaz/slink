@@ -14,7 +14,7 @@
 <div class="columns-1 md:columns-2 xl:columns-3 gap-4 {customClass}">
   {#each Array(count) as _, index}
     <div
-      class="break-inside-avoid rounded-xl overflow-hidden mb-4 bg-white dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50"
+      class="break-inside-avoid rounded-xl overflow-hidden mb-4 bg-card dark:bg-card/80 backdrop-blur-sm border border-border/50"
       style="animation-delay: {index * 80}ms"
     >
       <div class="relative">
@@ -43,9 +43,7 @@
         </div>
 
         {#if index % 3 === 0}
-          <div
-            class="mt-2.5 pt-2.5 border-t border-gray-100 dark:border-gray-800"
-          >
+          <div class="mt-2.5 pt-2.5 border-t border-border">
             <Skeleton width="100%" height="12px" class="mb-1" />
             <Skeleton width="75%" height="12px" />
           </div>

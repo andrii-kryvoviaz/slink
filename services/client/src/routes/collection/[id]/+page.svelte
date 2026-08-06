@@ -179,11 +179,11 @@
           <div class="min-w-0 flex-1">
             <div class="flex items-center gap-3">
               <div
-                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gray-100 dark:bg-gray-800"
+                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-muted"
               >
                 <Icon
                   icon="ph:folder-simple-duotone"
-                  class="h-5 w-5 text-gray-600 dark:text-gray-400"
+                  class="h-5 w-5 text-muted-foreground"
                 />
               </div>
               <div class="min-w-0 flex-1">
@@ -195,23 +195,21 @@
                     emptyText="Add a name..."
                     isLoading={isSavingName}
                     showActions={false}
-                    class="[&_button]:py-1 [&_button]:px-2 [&_button]:-mx-2 [&_input]:py-1 [&_input]:px-2 [&_input]:text-lg [&_input]:font-semibold [&_span]:text-lg [&_span]:font-semibold [&_span]:text-gray-900 [&_span]:dark:text-white"
+                    class="[&_button]:py-1 [&_button]:px-2 [&_button]:-mx-2 [&_input]:py-1 [&_input]:px-2 [&_input]:text-lg [&_input]:font-semibold [&_span]:text-lg [&_span]:font-semibold [&_span]:text-foreground"
                     on={{ change: handleUpdateName }}
                   />
                 {:else}
-                  <h1
-                    class="text-lg font-semibold text-gray-900 dark:text-white truncate"
-                  >
+                  <h1 class="text-lg font-semibold text-foreground truncate">
                     {itemsFeed.collection.name}
                   </h1>
                 {/if}
                 <div
-                  class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
+                  class="flex items-center gap-2 text-sm text-muted-foreground"
                 >
                   <span
                     >{itemsFeed.collection.itemCount ?? itemsFeed.items.length} items</span
                   >
-                  <span class="text-gray-300 dark:text-gray-600">·</span>
+                  <span class="text-border-strong">·</span>
                   <FormattedDate
                     date={itemsFeed.collection.createdAt.timestamp}
                   />
@@ -229,7 +227,7 @@
                 on={{ change: handleUpdateDescription }}
               />
             {:else if itemsFeed.collection.description}
-              <p class="text-sm text-gray-500 dark:text-gray-400 mt-3 ml-13">
+              <p class="text-sm text-muted-foreground mt-3 ml-13">
                 {itemsFeed.collection.description}
               </p>
             {/if}
@@ -367,7 +365,7 @@
             {@const image = item.item}
             <div
               in:fly={{ y: 20, duration: 300, delay: Math.random() * 100 }}
-              class="group break-inside-avoid overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/60 transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-700/80 hover:shadow-md dark:hover:shadow-gray-900/50 cursor-pointer"
+              class="group break-inside-avoid overflow-hidden rounded-lg border border-border bg-card/60 transition-all duration-200 hover:border-border-strong hover:shadow-md dark:hover:shadow-surface-inverse/50 cursor-pointer"
               onclick={() => openPostViewer(image.id)}
               onkeydown={(e) => e.key === 'Enter' && openPostViewer(image.id)}
               role="button"
@@ -388,16 +386,19 @@
                 />
 
                 <div
-                  class="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                  class="absolute inset-0 bg-linear-to-t from-scrim/60 via-scrim/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                 ></div>
 
                 <div
                   class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
                 >
                   <div
-                    class="w-14 h-14 rounded-full bg-black/50 flex items-center justify-center"
+                    class="w-14 h-14 rounded-full bg-scrim/50 flex items-center justify-center"
                   >
-                    <Icon icon="ph:arrows-out" class="w-7 h-7 text-white" />
+                    <Icon
+                      icon="ph:arrows-out"
+                      class="w-7 h-7 text-surface-inverse-foreground"
+                    />
                   </div>
                 </div>
 
@@ -438,13 +439,11 @@
                   <UserAvatar size="sm" user={image.owner} />
                   <div class="flex-1 min-w-0">
                     <p
-                      class="font-medium text-gray-900 dark:text-gray-100 text-sm leading-tight truncate"
+                      class="font-medium text-foreground text-sm leading-tight truncate"
                     >
                       {image.owner.displayName}
                     </p>
-                    <div
-                      class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"
-                    >
+                    <div class="text-xs text-muted-foreground mt-0.5">
                       <FormattedDate
                         date={image.attributes.createdAt.timestamp}
                       />
@@ -459,9 +458,7 @@
                 </div>
 
                 {#if image.attributes.description?.trim()}
-                  <p
-                    class="mt-3 text-sm text-gray-600 dark:text-gray-400 leading-relaxed"
-                  >
+                  <p class="mt-3 text-sm text-muted-foreground leading-relaxed">
                     <ExpandableText
                       maxLines={2}
                       text={image.attributes.description}
@@ -485,7 +482,7 @@
           >
             {#if itemsFeed.isLoading}
               <div
-                class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
+                class="flex items-center gap-2 text-sm text-muted-foreground"
               >
                 <Icon icon="ph:circle-notch" class="h-4 w-4 animate-spin" />
                 <span>Loading more</span>

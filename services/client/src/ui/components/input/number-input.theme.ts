@@ -37,12 +37,12 @@ export const numberInputFieldVariants = cva(
     variants: {
       variant: {
         default: [
-          'text-gray-900 dark:text-gray-100',
-          'placeholder:text-gray-400 dark:placeholder:text-gray-500',
-          'bg-gray-50/80 dark:bg-gray-800/50',
-          'border border-gray-200/50 dark:border-gray-700/30',
-          'focus:ring-2 focus:ring-blue-500/20 focus:border-gray-200/50 dark:focus:border-gray-700/30',
-          'hover:bg-gray-100/50 dark:hover:bg-gray-800/70',
+          'text-foreground',
+          'placeholder:text-foreground-subtle',
+          'bg-muted/50',
+          'border border-border/50',
+          'focus:ring-2 focus:ring-ring/20 focus:border-border/50',
+          'hover:bg-ghost-hover/50',
           'transition-all duration-200',
         ],
         input: [
@@ -73,7 +73,7 @@ export const numberInputFieldVariants = cva(
       {
         variant: 'default',
         hasError: true,
-        class: 'border-red-300 dark:border-red-700/50 focus:ring-red-500/20',
+        class: 'border-danger-border focus:ring-danger/20',
       },
       {
         variant: 'input',
@@ -124,10 +124,10 @@ export const numberInputButtonVariants = cva(
     variants: {
       variant: {
         default: [
-          'text-gray-500 dark:text-gray-400',
-          'hover:text-gray-700 dark:hover:text-gray-200',
-          'hover:bg-gray-100 dark:hover:bg-gray-700/50',
-          'active:bg-gray-200 dark:active:bg-gray-700',
+          'text-muted-foreground',
+          'hover:text-foreground-soft',
+          'hover:bg-ghost-hover',
+          'active:bg-muted',
         ],
         input: [
           'text-muted-foreground',

@@ -132,10 +132,10 @@
 
   {#if !isLoaded && !isSvg}
     <div
-      class="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-800 animate-pulse"
+      class="absolute inset-0 flex items-center justify-center bg-muted animate-pulse"
     >
       <svg
-        class="h-6 w-6 @[6rem]:h-8 @[6rem]:w-8 @[12rem]:h-12 @[12rem]:w-12 text-gray-400"
+        class="h-6 w-6 @[6rem]:h-8 @[6rem]:w-8 @[12rem]:h-12 @[12rem]:w-12 text-muted-foreground"
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
         fill="currentColor"
@@ -150,35 +150,33 @@
 
   {#if hasError}
     <div
-      class="absolute inset-0 flex flex-col items-center justify-center bg-slate-100 dark:bg-slate-900"
+      class="absolute inset-0 flex flex-col items-center justify-center bg-muted-subtle"
       in:fade={{ duration: 200 }}
     >
       <div
         class="flex flex-col items-center gap-1 @[12rem]:gap-4 px-2 @[12rem]:px-6 text-center"
       >
         <div
-          class="relative flex h-8 w-8 @[6rem]:h-12 @[6rem]:w-12 @[12rem]:h-16 @[12rem]:w-16 items-center justify-center rounded-xl @[12rem]:rounded-2xl bg-slate-200 dark:bg-slate-800 shadow-sm"
+          class="relative flex h-8 w-8 @[6rem]:h-12 @[6rem]:w-12 @[12rem]:h-16 @[12rem]:w-16 items-center justify-center rounded-xl @[12rem]:rounded-2xl bg-muted shadow-sm"
         >
           <Icon
             icon="ph:image-broken"
-            class="h-4 w-4 @[6rem]:h-6 @[6rem]:w-6 @[12rem]:h-8 @[12rem]:w-8 text-slate-400 dark:text-slate-500"
+            class="h-4 w-4 @[6rem]:h-6 @[6rem]:w-6 @[12rem]:h-8 @[12rem]:w-8 text-ring"
           />
           <div
-            class="absolute -bottom-1 -right-1 flex h-4 w-4 @[6rem]:h-5 @[6rem]:w-5 @[12rem]:h-6 @[12rem]:w-6 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/50 ring-1 @[6rem]:ring-2 ring-white dark:ring-slate-900"
+            class="absolute -bottom-1 -right-1 flex h-4 w-4 @[6rem]:h-5 @[6rem]:w-5 @[12rem]:h-6 @[12rem]:w-6 items-center justify-center rounded-full bg-warning/18 ring-1 @[6rem]:ring-2 ring-card"
           >
             <Icon
               icon="ph:warning-fill"
-              class="h-2.5 w-2.5 @[6rem]:h-3 @[6rem]:w-3 @[12rem]:h-3.5 @[12rem]:w-3.5 text-amber-500 dark:text-amber-400"
+              class="h-2.5 w-2.5 @[6rem]:h-3 @[6rem]:w-3 @[12rem]:h-3.5 @[12rem]:w-3.5 text-warning"
             />
           </div>
         </div>
         <div class="hidden @[12rem]:block space-y-1.5">
-          <p class="text-sm font-medium text-slate-700 dark:text-slate-300">
+          <p class="text-sm font-medium text-foreground-soft">
             Image unavailable
           </p>
-          <p
-            class="text-xs text-slate-500 dark:text-slate-400 max-w-50 leading-relaxed"
-          >
+          <p class="text-xs text-muted-foreground max-w-50 leading-relaxed">
             This image may have been removed or is temporarily inaccessible
           </p>
         </div>
@@ -193,13 +191,13 @@
         target="_blank"
         rel="noopener noreferrer"
         onclick={(e) => e.stopPropagation()}
-        class="group/link absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-lg bg-black/20 backdrop-blur-sm opacity-0 transition-all duration-200 group-hover:opacity-100 hover:bg-black/40 hover:scale-110"
+        class="group/link absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-lg bg-scrim/20 backdrop-blur-sm opacity-0 transition-all duration-200 group-hover:opacity-100 hover:bg-scrim/40 hover:scale-110"
       >
         <Tooltip size="xs" side="left" sideOffset={12}>
           {#snippet trigger()}
             <Icon
               icon="heroicons:arrow-top-right-on-square"
-              class="h-4 w-4 text-white/80 transition-colors duration-200 group-hover/link:text-white"
+              class="h-4 w-4 text-surface-inverse-foreground/80 transition-colors duration-200 group-hover/link:text-surface-inverse-foreground"
             />
           {/snippet}
           Open in new tab
@@ -209,14 +207,14 @@
 
     {#if metadata && showMetadata}
       <div
-        class="absolute bottom-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2 bg-black/40 dark:bg-black/60 backdrop-blur-md rounded-lg px-3 py-2 text-xs text-white/90"
+        class="absolute bottom-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2 bg-scrim/40 dark:bg-scrim/60 backdrop-blur-md rounded-lg px-3 py-2 text-xs text-surface-inverse-foreground/90"
         in:fade={{ duration: 200, delay: 100 }}
       >
         <div class="flex flex-wrap items-center gap-2 min-w-0">
           <div class="flex items-center gap-1 whitespace-nowrap">
             <Icon
               icon="heroicons:photo"
-              class="w-3 h-3 text-white/70 shrink-0"
+              class="w-3 h-3 text-surface-inverse-foreground/70 shrink-0"
             />
             <span class="font-medium">{metadata.width}×{metadata.height}</span>
           </div>
@@ -224,7 +222,7 @@
             <div class="flex items-center gap-1 whitespace-nowrap">
               <Icon
                 icon="heroicons:document"
-                class="w-3 h-3 text-white/70 shrink-0"
+                class="w-3 h-3 text-surface-inverse-foreground/70 shrink-0"
               />
               <span class="uppercase font-medium"
                 >{metadata.mimeType.split('/')[1] || metadata.mimeType}</span
@@ -237,7 +235,7 @@
           <div class="flex items-center gap-1 whitespace-nowrap">
             <Icon
               icon="heroicons:arrow-down-tray"
-              class="w-3 h-3 text-white/70 shrink-0"
+              class="w-3 h-3 text-surface-inverse-foreground/70 shrink-0"
             />
             <span class="font-medium">{bytesToSize(metadata.size)}</span>
           </div>

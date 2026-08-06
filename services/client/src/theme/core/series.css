@@ -1,0 +1,17 @@
+@theme {
+  --color-series-1: oklch(
+    from var(--color-accent) calc(l - 0.08) calc(c * 0.9109) calc(h - 14.225)
+  );
+  --color-series-2: oklch(
+    from var(--color-accent) calc(l - 0.054) calc(c * 1.1938) calc(h + 10.269)
+  );
+  --color-series-3: oklch(
+    from var(--color-accent) calc(l + 0.206) calc(c * 0.5441) calc(h - 43.745)
+  );
+  --color-series-4: oklch(
+    from var(--color-accent) calc(l + 0.167) calc(c * 0.9535) calc(h - 140.504)
+  );
+  --color-series-5: oklch(
+    from var(--color-accent) calc(l + 0.259) calc(c * 0.7389) calc(h + 167.817)
+  );
+}

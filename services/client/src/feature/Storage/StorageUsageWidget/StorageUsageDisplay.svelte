@@ -30,7 +30,7 @@
   class="bg-sidebar-accent/10 border border-sidebar-border rounded-lg p-4 space-y-3"
 >
   {#if error}
-    <div class="flex items-center gap-2 text-red-500 text-sm">
+    <div class="flex items-center gap-2 text-danger text-sm">
       <Icon icon="heroicons:exclamation-triangle" class="h-4 w-4" />
       <span>Failed to load storage usage</span>
     </div>
@@ -57,20 +57,20 @@
           {@const imagesPercent = (data.usedBytes / totalBytes) * 100}
           {@const cachePercent = (data.cacheBytes / totalBytes) * 100}
           <div
-            class="min-w-1.5 rounded-full bg-blue-500 transition-all duration-300"
+            class="min-w-1.5 rounded-full bg-info-fill transition-all duration-300"
             style="width: {imagesPercent}%"
           ></div>
           <div
-            class="min-w-1.5 rounded-full bg-purple-500 transition-all duration-300"
+            class="min-w-1.5 rounded-full bg-decor-violet-strong transition-all duration-300"
             style="width: {cachePercent}%"
           ></div>
         {:else if data.usedBytes > 0}
           <div
-            class="w-full rounded-full bg-blue-500 transition-all duration-300"
+            class="w-full rounded-full bg-info-fill transition-all duration-300"
           ></div>
         {:else}
           <div
-            class="w-full rounded-full bg-purple-500 transition-all duration-300"
+            class="w-full rounded-full bg-decor-violet-strong transition-all duration-300"
           ></div>
         {/if}
       </div>
@@ -79,7 +79,7 @@
     <div class="space-y-2">
       <div class="flex items-center justify-between gap-x-2 text-xs">
         <div class="flex items-center gap-1.5 min-w-0">
-          <div class="w-2 h-2 rounded-full bg-blue-500 shrink-0"></div>
+          <div class="w-2 h-2 rounded-full bg-info-fill shrink-0"></div>
           <span class="text-sidebar-foreground/60 truncate">Images</span>
           <span class="text-sidebar-foreground/40 tabular-nums">
             {data.fileCount.toLocaleString()}
@@ -94,7 +94,9 @@
       {#if data.cacheBytes > 0}
         <div class="flex items-center justify-between gap-x-2 text-xs">
           <div class="flex items-center gap-1.5 min-w-0">
-            <div class="w-2 h-2 rounded-full bg-purple-500 shrink-0"></div>
+            <div
+              class="w-2 h-2 rounded-full bg-decor-violet-strong shrink-0"
+            ></div>
             <span class="text-sidebar-foreground/60 truncate">Cache</span>
             <span class="text-sidebar-foreground/40 tabular-nums">
               {data.cacheFileCount.toLocaleString()}

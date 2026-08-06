@@ -28,14 +28,14 @@
 </script>
 
 <div
-  class="group relative bg-white dark:bg-gray-900/60 rounded-xl border border-gray-200 dark:border-gray-800 p-5 hover:shadow-lg hover:shadow-gray-200/50 dark:hover:shadow-gray-900/50 transition-all duration-300 hover:border-gray-300 dark:hover:border-gray-700/80"
+  class="group relative bg-card rounded-xl border border-border p-5 hover:shadow-lg hover:shadow-border/50 dark:hover:shadow-surface-inverse/50 transition-all duration-300 hover:border-border-strong"
 >
   <div class="flex items-start space-x-4">
     <div class="relative">
       <UserAvatar
         {user}
         size="lg"
-        class="flex-shrink-0 ring-2 ring-gray-100 dark:ring-gray-700"
+        class="flex-shrink-0 ring-2 ring-surface-raised"
       />
     </div>
 
@@ -44,11 +44,11 @@
         <div class="flex-1 min-w-0">
           <div class="mb-3">
             <h3
-              class="text-base font-semibold text-gray-900 dark:text-white truncate leading-tight"
+              class="text-base font-semibold text-foreground truncate leading-tight"
             >
               {user.displayName}
             </h3>
-            <p class="text-sm text-gray-500 dark:text-gray-400 truncate mt-1">
+            <p class="text-sm text-muted-foreground truncate mt-1">
               {user.email}
             </p>
           </div>

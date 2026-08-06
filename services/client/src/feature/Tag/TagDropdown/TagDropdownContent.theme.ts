@@ -7,33 +7,33 @@ export const tagDropdownContentVariants = cva(
     variants: {
       variant: {
         default: [
-          'bg-white dark:bg-gray-900/95',
+          'bg-popover',
           'backdrop-blur-md',
-          'border border-gray-200/80 dark:border-white/10',
+          'border border-border/80 dark:border-border/50',
           'rounded-xl',
-          'shadow-xl shadow-gray-200/50 dark:shadow-black/60',
+          'shadow-xl shadow-border/50 dark:shadow-scrim/60',
         ],
         neon: [
-          'bg-white dark:bg-gray-900/95',
+          'bg-popover',
           'backdrop-blur-md',
-          'border border-gray-200/60 dark:border-white/10',
+          'border border-border/60 dark:border-border/50',
           'rounded-xl',
-          'shadow-2xl shadow-gray-500/5 dark:shadow-black/50',
-          'ring-1 ring-gray-100/20 dark:ring-white/5',
+          'shadow-2xl shadow-muted-foreground/5 dark:shadow-scrim/50',
+          'ring-1 ring-muted/20 dark:ring-border/25',
         ],
         minimal: [
-          'bg-white dark:bg-gray-900/95',
+          'bg-popover',
           'backdrop-blur-md',
-          'border border-gray-200/60 dark:border-white/10',
+          'border border-border/60 dark:border-border/50',
           'rounded-xl',
-          'shadow-lg shadow-gray-200/40 dark:shadow-black/50',
+          'shadow-lg shadow-border/40 dark:shadow-scrim/50',
         ],
         subtle: [
-          'bg-white dark:bg-gray-900/95',
+          'bg-popover',
           'backdrop-blur-md',
-          'border border-gray-200/60 dark:border-white/10',
+          'border border-border/60 dark:border-border/50',
           'rounded-xl',
-          'shadow-xl shadow-gray-200/50 dark:shadow-black/60',
+          'shadow-xl shadow-border/50 dark:shadow-scrim/60',
         ],
       },
     },
@@ -46,10 +46,10 @@ export const tagDropdownContentVariants = cva(
 export const tagDropdownDividerVariants = cva('mx-3 my-1.5', {
   variants: {
     variant: {
-      default: 'border-t border-gray-200/30 dark:border-white/10',
-      neon: 'border-t border-gray-200/20 dark:border-white/10',
-      minimal: 'border-t border-gray-200/25 dark:border-white/10',
-      subtle: 'border-t border-gray-100 dark:border-white/10',
+      default: 'border-t border-border/30 dark:border-border/50',
+      neon: 'border-t border-border/20 dark:border-border/50',
+      minimal: 'border-t border-border/25 dark:border-border/50',
+      subtle: 'border-t border-muted dark:border-border/50',
     },
   },
   defaultVariants: {

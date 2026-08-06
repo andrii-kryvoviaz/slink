@@ -5,7 +5,7 @@ export const ghostChipsVariants = cva(
 );
 
 export const ghostChipVariants = cva(
-  'h-7 rounded-full border border-slate-200/80 bg-slate-100 dark:border-slate-700/50 dark:bg-slate-800/50',
+  'h-7 rounded-full border border-border/80 dark:border-border-strong/50 bg-muted dark:bg-muted/50',
   {
     variants: {
       width: {

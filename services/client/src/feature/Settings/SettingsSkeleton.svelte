@@ -17,7 +17,7 @@
       </div>
 
       <div
-        class="rounded-xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-800 divide-y divide-gray-100 dark:divide-gray-800"
+        class="rounded-xl bg-muted-subtle/50 dark:bg-muted-subtle/30 border border-muted divide-y divide-muted"
       >
         {#each Array(itemsPerSection) as _}
           <div class="flex items-center justify-between gap-6 px-4 py-4">

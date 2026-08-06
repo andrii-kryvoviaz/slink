@@ -6,9 +6,9 @@ export const notificationItemVariants = cva(
   {
     variants: {
       read: {
-        true: 'bg-white/30 dark:bg-gray-800/30 hover:bg-white/50 dark:hover:bg-gray-800/50',
+        true: 'bg-card/30 hover:bg-card/50',
         false:
-          'bg-indigo-50/80 dark:bg-indigo-950/30 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 border-l-2 border-indigo-500',
+          'bg-accent-subtle/80 hover:bg-accent-subtle border-l-2 border-accent',
       },
     },
     defaultVariants: {
@@ -22,10 +22,10 @@ export const notificationItemIconWrapperVariants = cva(
   {
     variants: {
       type: {
-        comment: 'bg-blue-100 dark:bg-blue-900/30',
-        comment_reply: 'bg-indigo-100 dark:bg-indigo-900/30',
-        added_to_favorite: 'bg-pink-100 dark:bg-pink-900/30',
-        added_to_bookmarks: 'bg-indigo-100 dark:bg-indigo-900/30',
+        comment: 'bg-info-fill/12',
+        comment_reply: 'bg-accent/12',
+        added_to_favorite: 'bg-decor-pink/12',
+        added_to_bookmarks: 'bg-accent/12',
       },
     },
     defaultVariants: {
@@ -37,10 +37,10 @@ export const notificationItemIconWrapperVariants = cva(
 export const notificationItemIconVariants = cva('w-5 h-5', {
   variants: {
     type: {
-      comment: 'text-blue-500',
-      comment_reply: 'text-indigo-500',
-      added_to_favorite: 'text-pink-500',
-      added_to_bookmarks: 'text-indigo-500',
+      comment: 'text-info',
+      comment_reply: 'text-accent',
+      added_to_favorite: 'text-decor-pink',
+      added_to_bookmarks: 'text-accent',
     },
   },
   defaultVariants: {

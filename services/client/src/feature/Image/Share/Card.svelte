@@ -44,9 +44,7 @@
   {#snippet body()}
     {#if image.supportsFormatConversion}
       <div class="mb-8">
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-          Format
-        </h2>
+        <h2 class="text-lg font-semibold text-foreground mb-3">Format</h2>
         <FormatPicker
           value={state.selectedFormat}
           originalFormat={state.originalFormat}
@@ -56,9 +54,7 @@
       </div>
     {/if}
 
-    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-      Share
-    </h2>
+    <h2 class="text-lg font-semibold text-foreground mb-3">Share</h2>
 
     <div class="mb-4">
       <Share.AttributeChips>
@@ -89,7 +85,7 @@
           <span>Select option to copy</span>
         </span>
         <span
-          class="flex items-center gap-1.5 pl-3 border-l border-violet-300 dark:border-violet-600"
+          class="flex items-center gap-1.5 pl-3 border-l border-accent-border dark:border-accent"
         >
           <span class="text-[10px] uppercase tracking-wide opacity-60"
             >Quick</span

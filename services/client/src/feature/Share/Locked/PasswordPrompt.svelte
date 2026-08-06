@@ -43,7 +43,7 @@
     in:fade={{ duration: 600, delay: 100 }}
   >
     <div
-      class="relative w-20 h-20 mb-8 rounded-3xl flex items-center justify-center border backdrop-blur-sm shadow-lg bg-gradient-to-br from-slate-100/80 to-slate-200/60 dark:from-slate-800/60 dark:to-slate-700/40 border-slate-200/50 dark:border-slate-700/30 shadow-slate-200/20 dark:shadow-slate-900/40"
+      class="relative w-20 h-20 mb-8 rounded-3xl flex items-center justify-center border backdrop-blur-sm shadow-lg bg-gradient-to-br from-muted-subtle to-muted/70 border-border/50 shadow-border/20 dark:shadow-surface-inverse/40"
       in:fly={{ y: -20, duration: 500, delay: 200 }}
     >
       <div
@@ -52,7 +52,7 @@
 
       <Icon
         icon="ph:lock-key-duotone"
-        class="relative z-10 w-10 h-10 text-slate-600 dark:text-slate-400"
+        class="relative z-10 w-10 h-10 text-muted-foreground"
       />
 
       <div
@@ -62,12 +62,12 @@
 
     <div class="space-y-3 mb-8" in:fly={{ y: 20, duration: 500, delay: 300 }}>
       <h2
-        class="text-xl font-semibold bg-gradient-to-r bg-clip-text text-transparent from-slate-800 to-slate-600 dark:from-slate-200 dark:to-slate-400"
+        class="text-xl font-semibold bg-gradient-to-r bg-clip-text text-transparent from-foreground to-muted-foreground"
       >
         This share is protected
       </h2>
       <p
-        class="text-base text-slate-600 dark:text-slate-400 max-w-md mx-auto leading-relaxed"
+        class="text-base text-muted-foreground max-w-md mx-auto leading-relaxed"
       >
         Enter the password below to unlock the shared content.
       </p>
@@ -90,10 +90,7 @@
         rounded="lg"
       >
         {#snippet leftIcon()}
-          <Icon
-            icon="ph:lock-simple"
-            class="text-gray-400 dark:text-gray-500"
-          />
+          <Icon icon="ph:lock-simple" class="text-foreground-subtle" />
         {/snippet}
         <PasswordToggle
           visible={unlock.revealed}
