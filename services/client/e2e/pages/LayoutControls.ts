@@ -42,6 +42,31 @@ export class LayoutControls extends BasePage {
     return Boolean(JSON.parse(cookie).expanded);
   }
 
+  async readTheme(): Promise<string | null> {
+    return this.page.evaluate(
+      () => document.documentElement.dataset.theme ?? null,
+    );
+  }
+
+  async readSurfaceBackground(): Promise<string> {
+    return this.page.evaluate(() => {
+      const { backgroundColor, backgroundImage } = getComputedStyle(
+        document.body,
+      );
+      return `${backgroundColor} ${backgroundImage}`;
+    });
+  }
+
+  async setThemeCookie(value: string) {
+    await this.page.context().addCookies([
+      {
+        name: 'settings.theme',
+        value,
+        url: process.env.E2E_BASE_URL ?? 'http://localhost:3100',
+      },
+    ]);
+  }
+
   async readSettingCookie(key: string) {
     const cookies = await this.page.context().cookies();
     const match = cookies.find((cookie) => cookie.name === `settings.${key}`);
