@@ -18,6 +18,16 @@ export const resolveTheme = (value: unknown): Theme => {
   return Theme.DEFAULT;
 };
 
+export const resolveMode = (value: unknown): Mode => {
+  const modes: string[] = Object.values(Mode);
+
+  if (typeof value === 'string' && modes.includes(value)) {
+    return value as Mode;
+  }
+
+  return Mode.DARK;
+};
+
 export enum Locale {
   EN = 'en',
   DE = 'de',
