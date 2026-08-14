@@ -7,9 +7,9 @@ export const LoaderTheme = cva(`rounded-full`, {
         'border-accent border-2 border-r-transparent border-r-transparent',
       simple:
         'block w-full h-full border-2 border-transparent border-[inherit] border-t-transparent',
-      subtle: 'border-2 border-border border-t-info-strong',
+      subtle: 'border-2 border-border border-t-accent',
       minimal: 'border border-border-strong/50 border-t-foreground-soft',
-      modern: 'border-2 border-muted border-t-info-strong shadow-sm',
+      modern: 'border-2 border-muted border-t-accent shadow-sm',
     },
     size: {
       xs: 'h-4 w-4 border',

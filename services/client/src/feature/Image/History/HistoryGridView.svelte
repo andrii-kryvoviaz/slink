@@ -106,7 +106,7 @@
       <div class="p-3 flex flex-col gap-2">
         <Link
           href={`/info/${item.id}`}
-          class="font-mono text-xs font-medium text-foreground hover:text-info-strong transition-colors truncate block"
+          class="font-mono text-xs font-medium text-foreground hover:text-accent transition-colors truncate block"
           title={item.attributes.fileName}
         >
           {item.attributes.fileName}

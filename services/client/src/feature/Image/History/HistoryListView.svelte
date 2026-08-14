@@ -95,7 +95,7 @@
           <div class="flex items-start justify-between gap-3">
             <Link
               href={`/info/${item.id}`}
-              class="font-mono text-sm font-medium text-foreground hover:text-info-strong transition-colors truncate"
+              class="font-mono text-sm font-medium text-foreground hover:text-accent transition-colors truncate"
               title={item.attributes.fileName}
             >
               {item.attributes.fileName}
