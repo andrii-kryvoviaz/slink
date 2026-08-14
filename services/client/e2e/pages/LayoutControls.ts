@@ -42,6 +42,12 @@ export class LayoutControls extends BasePage {
     return Boolean(JSON.parse(cookie).expanded);
   }
 
+  async readColorScheme(): Promise<string> {
+    return this.page.evaluate(
+      () => getComputedStyle(document.documentElement).colorScheme,
+    );
+  }
+
   async readTheme(): Promise<string | null> {
     return this.page.evaluate(
       () => document.documentElement.dataset.theme ?? null,

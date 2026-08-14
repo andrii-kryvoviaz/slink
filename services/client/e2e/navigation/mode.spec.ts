@@ -23,4 +23,24 @@ test.describe('Mode', () => {
     expect(await layoutControls.isDark()).toBe(!before);
     expect(await layoutControls.readSettingCookie('mode')).toBe(expectedMode);
   });
+
+  test('the document color scheme follows the mode in both modes', async ({
+    page,
+    layoutControls,
+  }) => {
+    await page.goto('/');
+    await layoutControls.modeToggle.waitFor({ state: 'visible' });
+
+    const before = await layoutControls.isDark();
+    expect(await layoutControls.readColorScheme()).toBe(
+      before ? 'dark' : 'light',
+    );
+
+    await layoutControls.toggleMode();
+    await expect.poll(() => layoutControls.isDark()).toBe(!before);
+
+    expect(await layoutControls.readColorScheme()).toBe(
+      before ? 'light' : 'dark',
+    );
+  });
 });

@@ -24,6 +24,14 @@
     @apply h-full min-h-full;
   }
 
+  :root {
+    color-scheme: light;
+  }
+
+  :root.dark {
+    color-scheme: dark;
+  }
+
   body {
     --sat: env(safe-area-inset-top);
     --sar: env(safe-area-inset-right);
@@ -33,8 +41,6 @@
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;
     font-weight: 400;
-
-    color-scheme: light dark;
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
