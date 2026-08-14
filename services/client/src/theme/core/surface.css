@@ -1,4 +1,57 @@
 @theme {
+  --color-card: oklch(
+    from var(--color-background) calc(l + 0.0183) calc(c * 0.7115)
+      calc(h - 1.06)
+  );
+  --color-input: var(--color-card);
+  --color-overlay: var(--color-card);
+  --color-bg-start: var(--color-card);
+  --color-bg-end: var(--color-muted);
+
+  --color-muted: oklch(
+    from var(--color-background) calc(l - 0.0337) calc(c * 1.5769)
+      calc(h + 0.96)
+  );
+  --color-muted-subtle: var(--color-background);
+  --color-border: var(--color-muted);
+  --color-border-strong: oklch(
+    from var(--color-background) calc(l - 0.0674) calc(c * 2.1) calc(h + 1.9)
+  );
+  --color-border-stronger: oklch(
+    from var(--color-background) calc(l - 0.4807) calc(c * 3.3846)
+      calc(h + 2.34)
+  );
+  --color-switch-unchecked: var(--color-muted);
+
+  --color-foreground-body: oklch(
+    from var(--color-foreground) calc(l + 0.0548) calc(c * 1.2664)
+      calc(h + 2.29)
+  );
+  --color-foreground-soft: oklch(
+    from var(--color-foreground) calc(l + 0.0913) calc(c * 1.4148)
+      calc(h - 0.05)
+  );
+  --color-muted-foreground: oklch(
+    from var(--color-foreground) calc(l + 0.1279) calc(c * 1.5371)
+      calc(h - 0.05)
+  );
+  --color-muted-foreground-strong: var(--color-foreground-soft);
+
+  --color-primary: var(--color-foreground);
+  --color-primary-foreground: var(--color-card);
+  --color-surface-inverse: var(--color-foreground);
+  --color-ring: oklch(
+    from var(--color-accent) calc(l + 0.1021) calc(c * 0.7655) calc(h - 5.34)
+  );
+
+  --color-sidebar: oklch(from var(--color-card) l c h / 0.7);
+  --color-sidebar-foreground: var(--color-foreground);
+  --color-sidebar-primary: var(--color-primary);
+  --color-sidebar-accent: oklch(from var(--color-muted-subtle) l c h / 0.8);
+  --color-sidebar-accent-foreground: var(--color-foreground);
+  --color-sidebar-border: var(--color-border);
+  --color-sidebar-ring: var(--color-ring);
+
   --color-popover: var(--color-card);
   --color-popover-foreground: var(--color-foreground);
   --color-foreground-subtle: oklch(
@@ -28,6 +81,55 @@
 }
 
 .dark {
+  --color-card: oklch(
+    from var(--color-background) calc(l + 0.069) calc(c * 1.4049) h
+  );
+  --color-input: var(--color-muted);
+  --color-bg-start: var(--color-background);
+  --color-bg-end: oklch(
+    from var(--color-background) calc(l - 0.0569) calc(c * 0.6687) h
+  );
+
+  --color-muted: oklch(
+    from var(--color-background) calc(l + 0.1238) calc(c * 1.7791)
+      calc(h + 2.29)
+  );
+  --color-muted-subtle: var(--color-card);
+  --color-border-strong: oklch(
+    from var(--color-background) calc(l + 0.1603) calc(c * 1.9877)
+      calc(h - 0.05)
+  );
+  --color-border-stronger: oklch(
+    from var(--color-background) calc(l + 0.1969) calc(c * 2.1595)
+      calc(h - 0.05)
+  );
+  --color-switch-unchecked: oklch(from var(--color-foreground) l c h / 0.2);
+
+  --color-foreground-body: oklch(
+    from var(--color-foreground) calc(l - 0.0183) calc(c * 1.4054)
+      calc(h + 1.06)
+  );
+  --color-foreground-soft: oklch(
+    from var(--color-foreground) calc(l - 0.052) calc(c * 2.2162) calc(h + 2.02)
+  );
+  --color-muted-foreground: oklch(
+    from var(--color-foreground) calc(l - 0.1013) calc(c * 2.5) calc(h + 2.17)
+  );
+  --color-muted-foreground-strong: var(--color-muted-foreground);
+
+  --color-primary: var(--color-foreground-soft);
+  --color-surface-inverse: var(--color-card);
+  --color-ring: oklch(
+    from var(--color-accent) calc(l + 0.0781) calc(c * 1.0525) h
+  );
+
+  --color-sidebar: oklch(from var(--color-card) l c h / 0.95);
+  --color-sidebar-primary: oklch(
+    from var(--color-accent) calc(l - 0.1021) calc(c * 1.3063) calc(h + 5.34)
+  );
+  --color-sidebar-accent: oklch(from var(--color-muted) l c h / 0.8);
+  --color-sidebar-border: var(--color-border-strong);
+
   --color-foreground-subtle: oklch(
     from var(--color-muted-foreground) calc(l - 0.156) calc(c * 1.2273)
       calc(h + 3.039)
