@@ -41,7 +41,7 @@
         variant: {
           default: 'bg-info-fill',
           success: 'bg-success',
-          error: 'bg-danger',
+          error: 'bg-danger-fill',
           warning: 'bg-warning',
           subtle: 'bg-foreground-soft',
         },

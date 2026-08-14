@@ -21,6 +21,9 @@
   --color-danger-strong: oklch(
     from var(--color-danger) calc(l + 0.009) calc(c * 1.0327) calc(h - 9.74)
   );
+  --color-danger-fill: oklch(
+    from var(--color-danger) calc(l - 0.063) calc(c * 0.9061) calc(h - 10.39)
+  );
   --color-info-foreground: oklch(
     from var(--color-info) clamp(0, (0.85 - l) * 100, 1) 0 h
   );
@@ -108,6 +111,9 @@
   );
   --color-danger-strong: oklch(
     from var(--color-danger) calc(l + 0.008) calc(c * 1.0157) calc(h - 8.788)
+  );
+  --color-danger-fill: oklch(
+    from var(--color-danger) calc(l - 0.19) calc(c * 1.1623) calc(h - 5.281)
   );
   --color-info-strong: oklch(
     from var(--color-info) calc(l - 0.034) calc(c * 1.103) calc(h + 22.311)

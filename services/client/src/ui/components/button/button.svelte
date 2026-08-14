@@ -24,7 +24,7 @@
         outline: 'border border-muted hover:bg-surface-raised',
         link: 'bg-transparent dark:bg-transparent hover:bg-transparent',
         danger:
-          'bg-danger/80 hover:bg-danger focus:ring-3 focus:ring-danger/40',
+          'bg-danger-fill/80 hover:bg-danger-fill focus:ring-3 focus:ring-danger/40',
         modern:
           'bg-card border border-border rounded-full shadow-sm hover:shadow-md transition-all duration-200',
         glass:
