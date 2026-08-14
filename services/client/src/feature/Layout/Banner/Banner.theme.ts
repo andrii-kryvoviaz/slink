@@ -56,7 +56,7 @@ export const BannerIconColorTheme = cva('h-5 w-5', {
       warning: 'text-warning-foreground',
       info: 'text-info-foreground',
       success: 'text-success-foreground',
-      error: 'text-danger-foreground',
+      error: 'text-danger-strong-foreground',
       purple: 'text-decor-violet-foreground',
       violet: 'text-decor-violet-foreground',
     },

@@ -2,7 +2,7 @@
   import { tv } from 'tailwind-variants';
 
   export const ssoButtonVariants = tv({
-    base: 'relative w-full inline-flex items-center justify-center select-none cursor-pointer rounded-xl transition-colors duration-200 bg-gray-600 hover:bg-gray-500 dark:bg-gray-700 dark:hover:bg-gray-600',
+    base: 'relative w-full inline-flex items-center justify-center select-none cursor-pointer rounded-xl transition-colors duration-200 bg-surface-inverse hover:bg-surface-inverse/90',
     variants: {
       provider: {
         google:

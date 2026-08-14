@@ -34,6 +34,31 @@ test.describe('Theme preference', () => {
     );
   });
 
+  test('picking a theme repaints the surface in dark mode', async ({
+    preferencesPage,
+    layoutControls,
+  }) => {
+    await preferencesPage.goto();
+    await expect(preferencesPage.heading).toBeVisible();
+
+    if (!(await layoutControls.isDark())) {
+      await layoutControls.toggleMode();
+    }
+
+    expect(await layoutControls.readColorScheme()).toBe('dark');
+    expect(await layoutControls.readTheme()).toBe('default');
+    const backgroundBefore = await layoutControls.readSurfaceBackground();
+
+    await preferencesPage.selectTheme('nord');
+
+    await expect.poll(() => layoutControls.readTheme()).toBe('nord');
+    await expect
+      .poll(() => layoutControls.readSurfaceBackground())
+      .not.toBe(backgroundBefore);
+
+    expect(await layoutControls.isDark()).toBe(true);
+  });
+
   test('an unrecognised theme cookie falls back to the default theme', async ({
     page,
     layoutControls,

@@ -1,9 +1,11 @@
-@import './core/radius.css';
-@import './core/surface.css';
-@import './core/accent.css';
-@import './core/decor.css';
-@import './core/series.css';
-@import './core/status.css';
+@layer core, presets;
+
+@import './core/radius.css' layer(core);
+@import './core/surface.css' layer(core);
+@import './core/accent.css' layer(core);
+@import './core/decor.css' layer(core);
+@import './core/series.css' layer(core);
+@import './core/status.css' layer(core);
 
 @import './presets/default.css';
 @import './presets/nord.css';

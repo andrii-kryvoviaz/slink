@@ -1,4 +1,4 @@
-@theme {
+@theme static {
   --color-series-1: oklch(
     from var(--color-accent) calc(l - 0.08) calc(c * 0.9109) calc(h - 14.225)
   );
