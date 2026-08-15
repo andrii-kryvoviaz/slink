@@ -7,7 +7,7 @@
       variants: {
         variant: {
           indigo:
-            'bg-accent-subtle text-accent-subtle-foreground hover:bg-accent/30',
+            'bg-accent-subtle text-accent-subtle-foreground hover:bg-accent-fill/30',
           blue: 'bg-info-subtle text-info-subtle-foreground hover:bg-info-fill/30',
           emerald:
             'bg-success-subtle text-success-subtle-foreground hover:bg-success/30',

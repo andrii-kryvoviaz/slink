@@ -9,8 +9,8 @@
 
   const viewButton = cva([
     'group inline-flex w-fit items-center gap-1.5 self-start rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors duration-200',
-    'text-accent-subtle-foreground bg-accent-subtle/60 hover:bg-accent-border/70',
-    'dark:bg-accent-border/40 dark:hover:bg-accent-border/70',
+    'text-accent-subtle-foreground bg-accent/15 hover:bg-accent-border/70',
+    'dark:hover:bg-accent-border/70',
     'focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/30',
   ]);
 

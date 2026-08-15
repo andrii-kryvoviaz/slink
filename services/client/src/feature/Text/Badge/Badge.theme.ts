@@ -27,7 +27,7 @@ export const BadgeTheme = cva(
           'border-warning/20 bg-warning/10 text-warning-subtle-foreground [a&]:hover:bg-warning/15 focus-visible:ring-warning/20 dark:border-warning/30',
         info: 'border-info/20 bg-info/10 text-info-subtle-foreground [a&]:hover:bg-info/15 focus-visible:ring-info/20 dark:border-info/30',
         indigo:
-          'border-accent/20 bg-accent/10 text-accent-subtle-foreground [a&]:hover:bg-accent/15 focus-visible:ring-accent/20 dark:border-accent/30',
+          'border-accent/20 bg-accent-fill/10 text-accent-subtle-foreground [a&]:hover:bg-accent-fill/15 focus-visible:ring-accent/20 dark:border-accent/30',
         pink: 'border-decor-pink/20 bg-decor-pink/10 text-decor-pink-subtle-foreground [a&]:hover:bg-decor-pink/15 focus-visible:ring-decor-pink/20 dark:border-decor-pink/30',
         neutral:
           'border-muted-foreground/20 bg-muted-foreground/10 text-foreground-soft [a&]:hover:bg-muted-foreground/15 focus-visible:ring-border-stronger/20 dark:border-muted-foreground/30',

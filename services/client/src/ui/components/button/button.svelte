@@ -36,7 +36,7 @@
         'soft-violet':
           'text-decor-violet-subtle-foreground bg-decor-violet/10 dark:bg-decor-violet/15 hover:bg-decor-violet/20 dark:hover:bg-decor-violet/25 border border-decor-violet/20 hover:border-decor-violet/30 transition-all duration-200',
         'soft-indigo':
-          'text-accent-subtle-foreground bg-accent/10 dark:bg-accent/15 hover:bg-accent/20 dark:hover:bg-accent/25 border border-accent/20 hover:border-accent/30 transition-all duration-200',
+          'text-accent-subtle-foreground bg-accent-fill/10 dark:bg-accent-fill/15 hover:bg-accent-fill/20 dark:hover:bg-accent-fill/25 border border-accent/20 hover:border-accent/30 transition-all duration-200',
         'soft-blue':
           'text-info-subtle-foreground bg-info-fill/10 dark:bg-info-fill/15 hover:bg-info-fill/20 dark:hover:bg-info-fill/25 border border-info/20 hover:border-info/30 transition-all duration-200',
         'soft-green':
@@ -130,8 +130,8 @@
       variant: {
         default:
           'bg-transparent dark:text-foreground-soft dark:hover:text-foreground',
-        primary: 'bg-transparent text-info-foreground',
-        secondary: 'bg-transparent hover:text-info-foreground',
+        primary: 'bg-transparent text-info-fill-foreground',
+        secondary: 'bg-transparent hover:text-info-fill-foreground',
         dark: 'bg-transparent text-surface-inverse-foreground',
         accent: 'bg-transparent text-surface-inverse-foreground',
         invisible: 'bg-transparent',
@@ -143,7 +143,7 @@
         glass:
           'bg-transparent text-muted-foreground-strong hover:text-foreground',
         'glass-dark': 'bg-transparent text-surface-inverse-foreground',
-        'primary-dark': 'bg-transparent text-info-foreground',
+        'primary-dark': 'bg-transparent text-info-fill-foreground',
         'soft-violet': 'bg-transparent',
         'soft-indigo': 'bg-transparent',
         'soft-blue': 'bg-transparent',
@@ -191,7 +191,7 @@
       {
         variant: 'primary-dark',
         status: 'disabled',
-        class: 'text-info-foreground/30',
+        class: 'text-info-fill-foreground/30',
       },
       {
         variant: 'toggle',

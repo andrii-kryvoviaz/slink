@@ -10,6 +10,12 @@
       from var(--color-accent) calc(l + 0.041) calc(c * 1.1154) calc(h + 28.569)
     )
   );
+  --color-accent-fill: light-dark(
+    oklch(from var(--color-accent) l c h),
+    oklch(
+      from var(--color-accent) calc(l - 0.088) calc(c * 1.2802) calc(h + 0.182)
+    )
+  );
   --color-accent-subtle: light-dark(
     oklch(
       from var(--color-accent) calc(l + 0.377) calc(c * 0.0773) calc(h - 4.803)

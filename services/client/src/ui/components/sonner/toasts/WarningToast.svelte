@@ -14,10 +14,10 @@
 </script>
 
 <div
-  class="flex items-center gap-3 p-4 text-warning-subtle-foreground border border-warning-border/20 shadow-md shadow-warning/4 backdrop-blur-xl dark:bg-warning-subtle/50 rounded-xl"
+  class="flex items-center gap-3 p-4 text-warning-subtle-foreground border border-warning-border/20 shadow-md shadow-warning/4 backdrop-blur-xl bg-warning-subtle rounded-xl"
 >
   <div
-    class="flex h-8 w-8 items-center justify-center rounded-full bg-warning-subtle/60 shrink-0"
+    class="flex h-8 w-8 items-center justify-center rounded-full bg-warning/15 shrink-0"
   >
     <Icon icon="heroicons:exclamation-triangle" class="h-4 w-4 text-warning" />
   </div>
@@ -28,7 +28,7 @@
   </div>
   <button
     type="button"
-    class="shrink-0 flex h-8 w-8 items-center justify-center rounded-full text-warning hover:bg-warning-subtle/60 focus:outline-none focus:ring-2 focus:ring-warning/20 transition-colors duration-200"
+    class="shrink-0 flex h-8 w-8 items-center justify-center rounded-full text-warning hover:bg-warning/15 focus:outline-none focus:ring-2 focus:ring-warning/20 transition-colors duration-200"
     aria-label="Close notification"
     onclick={handleClose}
   >

@@ -14,10 +14,10 @@
 </script>
 
 <div
-  class="flex items-center gap-3 p-4 text-info-subtle-foreground border border-info-border/20 shadow-md shadow-info/4 backdrop-blur-xl dark:bg-info-subtle/50 rounded-xl"
+  class="flex items-center gap-3 p-4 text-info-subtle-foreground border border-info-border/20 shadow-md shadow-info/4 backdrop-blur-xl bg-info-subtle rounded-xl"
 >
   <div
-    class="flex h-8 w-8 items-center justify-center rounded-full bg-info-subtle/60 shrink-0"
+    class="flex h-8 w-8 items-center justify-center rounded-full bg-info/15 shrink-0"
   >
     <Icon icon="heroicons:information-circle" class="h-4 w-4 text-info" />
   </div>
@@ -28,7 +28,7 @@
   </div>
   <button
     type="button"
-    class="shrink-0 flex h-8 w-8 items-center justify-center rounded-full text-info hover:bg-info-subtle/60 focus:outline-none focus:ring-2 focus:ring-info/20 transition-colors duration-200"
+    class="shrink-0 flex h-8 w-8 items-center justify-center rounded-full text-info hover:bg-info/15 focus:outline-none focus:ring-2 focus:ring-info/20 transition-colors duration-200"
     aria-label="Close notification"
     onclick={handleClose}
   >

@@ -35,7 +35,7 @@ export const shareCapsuleVariants = tv({
   slots: {
     capsule: 'flex items-stretch overflow-hidden rounded-full',
     download:
-      'h-full rounded-none bg-info-surface text-info-foreground hover:bg-info-surface-strong focus-visible:ring-inset focus-visible:ring-offset-0',
+      'h-full rounded-none bg-info-surface text-info-surface-foreground hover:bg-info-surface-strong focus-visible:ring-inset focus-visible:ring-offset-0',
     copy: 'h-full rounded-none focus-visible:ring-inset focus-visible:ring-offset-0',
     caret:
       'h-full w-6 min-w-0 flex-none rounded-none border-l-[0.5px] border-border-strong px-0 focus-visible:ring-inset focus-visible:ring-offset-0',

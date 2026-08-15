@@ -59,14 +59,14 @@
         default:
           'text-muted-foreground hover:text-foreground hover:bg-ghost-hover-strong',
         primary:
-          'bg-accent/80 text-accent-foreground hover:bg-accent/90 active:bg-accent',
+          'bg-info-fill/80 text-info-fill-foreground hover:bg-info-fill/90 active:bg-info-fill',
         'primary-outline':
-          'border border-accent text-accent-subtle-foreground hover:bg-accent/90 hover:text-accent-foreground active:bg-accent',
+          'border border-info text-info-subtle-foreground hover:bg-info-fill/90 hover:text-info-fill-foreground active:bg-info-fill',
         secondary: 'text-foreground-soft hover:bg-ghost-hover-strong',
         ghost:
           'text-muted-foreground hover:text-foreground hover:bg-ghost-hover-strong/80',
         destructive:
-          'text-muted-foreground hover:text-danger-subtle-foreground hover:bg-danger-subtle dark:hover:bg-danger-subtle/30',
+          'text-muted-foreground hover:text-danger-subtle-foreground hover:bg-danger-subtle',
       },
       size: {
         sm: 'h-7 min-w-7 px-2 text-xs',
