@@ -56,7 +56,6 @@
     "globals": "17.8.0",
     "husky": "^9.1.7",
     "lint-staged": "17.2.0",
-    "mode-watcher": "^1.1.0",
     "prettier": "^3.9.6",
     "prettier-plugin-svelte": "4.1.1",
     "prettier-plugin-tailwindcss": "^0.8.1",
