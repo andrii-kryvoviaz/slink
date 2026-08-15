@@ -189,7 +189,7 @@ export const filterClearButtonVariants = cva(
         neon: 'text-info/70 hover:text-info-subtle-foreground hover:bg-info-fill/10',
         minimal: 'filter-clear-neutral',
         subtle: 'filter-clear-neutral',
-        pill: 'text-foreground-subtle hover:text-foreground-soft hover:bg-ghost-hover dark:text-muted-foreground',
+        pill: 'text-foreground-subtle hover:text-foreground-soft hover:bg-ghost-hover-strong dark:text-muted-foreground',
       },
     },
     defaultVariants: {

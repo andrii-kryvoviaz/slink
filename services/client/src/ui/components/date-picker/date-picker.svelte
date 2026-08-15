@@ -200,7 +200,7 @@
                           class={cn(
                             'relative inline-flex h-9 w-9 items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200',
                             'hover:bg-ghost-hover/50 hover:text-foreground',
-                            'data-[selected]:bg-info-surface data-[selected]:text-info-foreground data-[selected]:hover:bg-info-surface-strong data-[selected]:shadow-sm',
+                            'data-[selected]:bg-info-surface data-[selected]:text-info-surface-foreground data-[selected]:hover:bg-info-surface-strong data-[selected]:shadow-sm',
                             'data-[today]:bg-info-subtle data-[today]:text-info data-[today]:font-semibold data-[today]:ring-1 data-[today]:ring-info-border',
                             'data-[outside-month]:text-muted-foreground data-[outside-month]:opacity-40',
                             'data-[disabled]:text-muted-foreground data-[disabled]:opacity-40 data-[disabled]:cursor-not-allowed',

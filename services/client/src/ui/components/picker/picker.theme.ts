@@ -124,7 +124,8 @@ export const pickerCheckboxTheme = cva(
       {
         color: 'blue',
         selected: true,
-        class: 'bg-info-surface border-info-surface text-info-foreground',
+        class:
+          'bg-info-surface border-info-surface text-info-surface-foreground',
       },
       {
         color: 'indigo',
@@ -140,7 +141,7 @@ export const pickerCheckboxTheme = cva(
   },
 );
 
-export const pickerCheckIconTheme = cva('text-info-foreground', {
+export const pickerCheckIconTheme = cva('text-info-surface-foreground', {
   variants: {
     variant: {
       popover: 'w-2.5 h-2.5',

@@ -82,7 +82,7 @@ export const controls = {
           chip: 'bg-foreground text-background',
         },
         false: {
-          chip: 'bg-muted text-muted-foreground hover:bg-ghost-hover hover:text-foreground',
+          chip: 'bg-muted text-muted-foreground hover:bg-ghost-hover-strong hover:text-foreground',
         },
       },
       setEnabled: {

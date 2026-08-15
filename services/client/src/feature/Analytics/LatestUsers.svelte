@@ -180,7 +180,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {#each users as user, index (user.id)}
             <div
-              class="group flex items-center gap-3 p-3 rounded-lg bg-muted-subtle/50 dark:bg-muted/30 hover:bg-ghost-hover transition-all duration-200"
+              class="group flex items-center gap-3 p-3 rounded-lg bg-muted-subtle/50 dark:bg-muted/30 hover:bg-muted/80 dark:hover:bg-muted/60 transition-all duration-200"
               in:fly={{ y: 10, duration: 200, delay: index * 30 }}
             >
               <div class="shrink-0">
@@ -225,7 +225,7 @@
           <div class="pt-4 mt-4 border-t border-border/60 dark:border-border">
             <a
               href="/admin/user"
-              class="flex items-center justify-between px-3 py-2 -mx-1 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-ghost-hover transition-all duration-200 group/link"
+              class="flex items-center justify-between px-3 py-2 -mx-1 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted-subtle dark:hover:bg-muted/50 transition-all duration-200 group/link"
             >
               <span class="font-medium">View all users</span>
               <div class="flex items-center gap-2">

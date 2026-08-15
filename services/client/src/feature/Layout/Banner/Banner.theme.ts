@@ -54,7 +54,7 @@ export const BannerIconColorTheme = cva('h-5 w-5', {
       default: 'text-background',
       neutral: 'text-background',
       warning: 'text-warning-foreground',
-      info: 'text-info-foreground',
+      info: 'text-info-fill-foreground',
       success: 'text-success-foreground',
       error: 'text-danger-strong-foreground',
       purple: 'text-decor-violet-foreground',
@@ -67,9 +67,9 @@ export const BannerActionTheme = cva('border transition-colors duration-200', {
   variants: {
     variant: {
       default:
-        'bg-muted/80 hover:bg-ghost-hover/80 border-border hover:border-border-strong dark:hover:border-border-stronger text-foreground-soft',
+        'bg-accent-subtle/80 hover:bg-accent-subtle border-accent-border hover:border-accent text-accent-subtle-foreground',
       neutral:
-        'bg-muted/80 hover:bg-ghost-hover/80 border-border hover:border-border-strong dark:hover:border-border-stronger text-foreground-soft',
+        'bg-muted/80 hover:bg-ghost-hover-strong border-border hover:border-border-strong dark:hover:border-border-stronger text-foreground-soft',
       warning:
         'bg-warning-subtle/90 hover:bg-warning-subtle border-warning-border hover:border-warning text-warning-subtle-foreground',
       info: 'bg-info-subtle/80 hover:bg-info-subtle border-info-border hover:border-info text-info-subtle-foreground',

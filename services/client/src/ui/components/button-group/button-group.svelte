@@ -57,14 +57,14 @@
     variants: {
       variant: {
         default:
-          'text-muted-foreground hover:text-foreground hover:bg-ghost-hover',
+          'text-muted-foreground hover:text-foreground hover:bg-ghost-hover-strong',
         primary:
           'bg-accent/80 text-accent-foreground hover:bg-accent/90 active:bg-accent',
         'primary-outline':
           'border border-accent text-accent-subtle-foreground hover:bg-accent/90 hover:text-accent-foreground active:bg-accent',
-        secondary: 'text-foreground-soft hover:bg-ghost-hover',
+        secondary: 'text-foreground-soft hover:bg-ghost-hover-strong',
         ghost:
-          'text-muted-foreground hover:text-foreground hover:bg-ghost-hover/80',
+          'text-muted-foreground hover:text-foreground hover:bg-ghost-hover-strong/80',
         destructive:
           'text-muted-foreground hover:text-danger-subtle-foreground hover:bg-danger-subtle dark:hover:bg-danger-subtle/30',
       },

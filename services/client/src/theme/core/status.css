@@ -92,6 +92,14 @@
       from var(--color-info) calc(l - 0.161) calc(c * 1.4848) calc(h + 8.257)
     )
   );
+  --color-info-fill-foreground: oklch(
+    from var(--color-info-fill) clamp(0, (var(--on-color-flip) - l) * 100, 1) 0
+      h
+  );
+  --color-info-surface-foreground: oklch(
+    from var(--color-info-surface) clamp(0, (var(--on-color-flip) - l) * 100, 1)
+      0 h
+  );
   --color-danger-subtle: light-dark(
     oklch(
       from var(--color-danger) calc(l + 0.394) calc(c * 0.0531) calc(h - 9.945)

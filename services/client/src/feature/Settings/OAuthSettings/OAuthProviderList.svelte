@@ -49,7 +49,7 @@
     {#snippet row({ item: provider, handle })}
       {@const preset = OAuthProviderConfig.resolve(provider.slug)}
       <div
-        class="flex items-center justify-between gap-4 px-4 py-3.5 hover:bg-ghost-hover transition-colors duration-150"
+        class="flex items-center justify-between gap-4 px-4 py-3.5 hover:bg-muted/50 dark:hover:bg-muted/30 transition-colors duration-150"
       >
         <div class="flex items-center gap-3 min-w-0">
           {#if listState.providers.length > 1}

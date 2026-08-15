@@ -190,7 +190,7 @@
         onclick={resetValues}
         class="{visibilityTheme({
           visible: hasChanges,
-        })} inline-flex items-center gap-1 px-2 py-1 text-xs text-muted-foreground hover:text-foreground hover:bg-ghost-hover rounded"
+        })} inline-flex items-center gap-1 px-2 py-1 text-xs text-muted-foreground hover:text-foreground hover:bg-ghost-hover-strong rounded"
         aria-label="Reset to original dimensions"
         tabindex={hasChanges ? 0 : -1}
       >

@@ -50,6 +50,6 @@
 
 <div class={cn(overlayCheckboxVariants({ selected, size }), className)}>
   {#if selected}
-    <Icon icon="heroicons:check" class="{iconSize} text-info-foreground" />
+    <Icon icon="heroicons:check" class="{iconSize} text-info-fill-foreground" />
   {/if}
 </div>

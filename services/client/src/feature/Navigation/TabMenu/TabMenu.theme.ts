@@ -45,7 +45,7 @@ export const TabMenuItemTheme = cva(
       variant: {
         default: '',
         minimal: 'rounded-none px-3',
-        pills: 'rounded-full bg-muted hover:bg-ghost-hover',
+        pills: 'rounded-full bg-muted hover:bg-ghost-hover-strong',
         underline: 'rounded-none border-b-2 border-transparent px-3 pb-3',
       },
       active: {
