@@ -50,7 +50,7 @@
 
       {#if note}
         <div class="pt-2 border-t border-border/60">
-          <p class="text-[11px] text-muted-foreground">
+          <p class="text-[11px] text-foreground-muted">
             {@render note()}
           </p>
         </div>

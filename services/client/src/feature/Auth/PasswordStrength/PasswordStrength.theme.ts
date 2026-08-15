@@ -5,7 +5,7 @@ export const passwordStrengthBarVariants = cva(
   {
     variants: {
       strength: {
-        weak: 'bg-danger-fill',
+        weak: 'bg-danger-solid',
         fair: 'bg-warning-strong',
         good: 'bg-warning',
         strong: 'bg-success',

@@ -14,7 +14,7 @@
   variant="ghost"
   size="sm"
   {onclick}
-  class="h-8 data-[state=open]:bg-info-fill/8 data-[state=open]:text-info-deep-foreground"
+  class="h-8 data-[state=open]:bg-primary-solid/8 data-[state=open]:text-info-text-strong"
 >
   Email
   <Icon icon="heroicons:chevron-up-down" class="ml-2 size-4" />

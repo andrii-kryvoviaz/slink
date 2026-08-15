@@ -84,9 +84,9 @@
         class="w-10 h-10 rounded-xl bg-muted/70 flex items-center justify-center shrink-0 border border-border/50"
       >
         {#if step === 'published'}
-          <Icon icon="ph:link-simple" class="w-5 h-5 text-muted-foreground" />
+          <Icon icon="ph:link-simple" class="w-5 h-5 text-foreground-muted" />
         {:else}
-          <Icon icon="ph:folder-simple" class="w-5 h-5 text-muted-foreground" />
+          <Icon icon="ph:folder-simple" class="w-5 h-5 text-foreground-muted" />
         {/if}
       </div>
 
@@ -95,7 +95,7 @@
           <span class={cardTitleTheme({ size: 'md' })}>
             Combine into a collection
           </span>
-          <span class="block text-sm leading-snug text-muted-foreground">
+          <span class="block text-sm leading-snug text-foreground-muted">
             {plural(count, [
               'Optionally group this # image into a collection to view and share them as one.',
               'Optionally group these # images into a collection to view and share them as one.',
@@ -105,12 +105,12 @@
           <span class={cardTitleTheme({ size: 'md' })}>
             Collection created
           </span>
-          <span class="block truncate text-sm text-muted-foreground">
+          <span class="block truncate text-sm text-foreground-muted">
             {created?.name ?? 'Unnamed'}
           </span>
         {:else}
           <span class={cardTitleTheme({ size: 'md' })}> Ready to share </span>
-          <span class="block text-sm leading-snug text-muted-foreground">
+          <span class="block text-sm leading-snug text-foreground-muted">
             Anyone with this link can view the collection.
           </span>
         {/if}
@@ -118,7 +118,7 @@
 
       <button
         type="button"
-        class="shrink-0 -mr-1 -mt-1 rounded-md p-1 text-foreground-subtle transition-colors hover:bg-ghost-hover hover:text-foreground-soft focus:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
+        class="shrink-0 -mr-1 -mt-1 rounded-md p-1 text-foreground-subtle transition-colors hover:bg-hover hover:text-foreground-soft focus:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
         title="Maybe later"
         aria-label="Maybe later"
         onclick={() => (dismissed = true)}

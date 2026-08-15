@@ -190,8 +190,8 @@
             {...triggerProps}
             class={cn(
               'flex items-center gap-1 px-1.5 sm:px-2 py-0.5 text-xs font-medium',
-              'text-muted-foreground hover:text-foreground',
-              'hover:bg-ghost-hover rounded-r-full transition-colors duration-150',
+              'text-foreground-muted hover:text-foreground',
+              'hover:bg-hover rounded-r-full transition-colors duration-150',
               'whitespace-nowrap shrink-0',
             )}
             type="button"

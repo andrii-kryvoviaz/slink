@@ -6,9 +6,8 @@ export const hoverCardVariants = cva(
   {
     variants: {
       variant: {
-        default:
-          'bg-popover text-popover-foreground border border-border shadow-md',
-        dark: 'bg-surface-inverse text-surface-inverse-foreground border border-surface-inverse-foreground/10 shadow-xl',
+        default: 'bg-popover text-on-popover border border-border shadow-md',
+        dark: 'bg-surface-inverse text-on-surface-inverse border border-on-surface-inverse/10 shadow-xl',
         glass:
           'bg-card/80 text-foreground border border-border/30 shadow-lg backdrop-blur-md backdrop-saturate-150',
       },

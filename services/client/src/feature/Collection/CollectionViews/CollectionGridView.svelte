@@ -46,13 +46,13 @@
             {#snippet placeholder()}
               <Icon
                 icon="ph:folder-simple-duotone"
-                class="w-12 h-12 text-foreground-subtle group-hover:text-muted-foreground transition-colors"
+                class="w-12 h-12 text-foreground-subtle group-hover:text-foreground-muted transition-colors"
               />
             {/snippet}
           </LazyImage>
           <div class="absolute bottom-2 left-2">
             <span
-              class="flex items-center gap-1 px-2 py-1 rounded-full bg-scrim/40 backdrop-blur-md text-surface-inverse-foreground text-xs"
+              class="flex items-center gap-1 px-2 py-1 rounded-full bg-scrim/40 backdrop-blur-md text-on-surface-inverse text-xs"
             >
               <Icon icon="ph:images" class="w-3.5 h-3.5" />
               {collection.itemCount ?? 0}
@@ -60,7 +60,7 @@
           </div>
           <div class="absolute bottom-2 right-2">
             <span
-              class="flex items-center gap-1 px-2 py-1 rounded-full bg-scrim/40 backdrop-blur-md text-surface-inverse-foreground text-xs"
+              class="flex items-center gap-1 px-2 py-1 rounded-full bg-scrim/40 backdrop-blur-md text-on-surface-inverse text-xs"
             >
               <FormattedDate date={collection.createdAt.timestamp} />
             </span>
@@ -73,7 +73,7 @@
             {collection.name}
           </h3>
           {#if collection.description}
-            <p class="text-xs text-muted-foreground mt-1 line-clamp-2">
+            <p class="text-xs text-foreground-muted mt-1 line-clamp-2">
               {collection.description}
             </p>
           {/if}

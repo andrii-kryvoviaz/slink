@@ -32,7 +32,7 @@
       type: 'radialBar',
       height: '95%',
     },
-    seriesClasses: ['text-info', 'text-series-2', 'text-muted-foreground'],
+    seriesClasses: ['text-info', 'text-chart-2', 'text-foreground-muted'],
     series: [0],
     labels: ['No Data'],
   });

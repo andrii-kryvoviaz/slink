@@ -36,7 +36,7 @@ export const fractionPickerItemTheme = cva(
       variant: {
         active: 'bg-border-strong text-foreground',
         inactive:
-          'text-muted-foreground hover:text-foreground-soft hover:bg-border-strong/45',
+          'text-foreground-muted hover:text-foreground-soft hover:bg-border-strong/45',
       },
       size: {
         sm: 'px-2 py-0.5 text-xs',

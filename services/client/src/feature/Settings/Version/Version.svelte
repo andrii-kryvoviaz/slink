@@ -83,7 +83,7 @@
             <Badge
               variant="default"
               size="xs"
-              class="bg-accent-subtle text-accent-subtle-foreground border-accent-border hover:bg-accent/25 transition-colors"
+              class="bg-accent-wash dark:bg-accent-wash/20 text-accent-text border-accent-border dark:border-accent-border/30 hover:bg-accent/25 transition-colors"
             >
               Update Available
             </Badge>
@@ -91,7 +91,7 @@
             <Badge
               variant="default"
               size="xs"
-              class="bg-success-subtle text-success-subtle-foreground border-success/30"
+              class="bg-success-wash dark:bg-success-wash/20 text-success-text border-success/30"
             >
               Latest
             </Badge>

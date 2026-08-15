@@ -46,7 +46,7 @@
         <Icon icon="ph:key" class="h-8 w-8 text-foreground-subtle" />
       </div>
       <p class="text-foreground font-medium">No API keys yet</p>
-      <p class="text-sm text-muted-foreground mt-1 max-w-xs">
+      <p class="text-sm text-foreground-muted mt-1 max-w-xs">
         Create an API key to integrate with ShareX and other tools
       </p>
     </div>

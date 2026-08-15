@@ -4,7 +4,7 @@ export const publishedLinks = tv({
   slots: {
     header: 'mb-4 flex items-start justify-between gap-4',
     title: ['text-lg font-semibold tracking-tight', 'text-foreground', 'mb-1'],
-    subtitle: 'text-xs text-muted-foreground',
+    subtitle: 'text-xs text-foreground-muted',
     list: [
       'rounded-lg overflow-hidden',
       'border border-border/60',
@@ -28,11 +28,11 @@ export const publishedLinks = tv({
     ],
     modifierFilter: [
       'text-[10px] font-medium uppercase tracking-wider',
-      'text-muted-foreground',
+      'text-foreground-muted',
     ],
     modifierFormat: [
       'text-[10px] font-mono uppercase tracking-wider',
-      'text-muted-foreground',
+      'text-foreground-muted',
     ],
     date: ['flex-shrink-0', 'text-[11px] tabular-nums', 'text-ring'],
     actions: ['flex-shrink-0 self-center', 'flex items-center'],

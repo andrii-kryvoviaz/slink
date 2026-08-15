@@ -37,14 +37,14 @@
     >
       <Icon icon="ph:key" class="w-6 h-6 text-foreground-subtle" />
     </div>
-    <p class="text-sm text-muted-foreground">No SSO providers configured yet</p>
+    <p class="text-sm text-foreground-muted">No SSO providers configured yet</p>
   </div>
 {:else}
   <SortableList
     items={listState.providers}
     key={(provider) => provider.id}
     onReorder={(id, index) => listState.reorder(id, index)}
-    class="divide-y divide-muted rounded-xl bg-muted-subtle/50 dark:bg-muted-subtle/30 border border-muted overflow-hidden"
+    class="divide-y divide-muted rounded-xl bg-muted-soft/50 dark:bg-muted-soft/30 border border-muted overflow-hidden"
   >
     {#snippet row({ item: provider, handle })}
       {@const preset = OAuthProviderConfig.resolve(provider.slug)}

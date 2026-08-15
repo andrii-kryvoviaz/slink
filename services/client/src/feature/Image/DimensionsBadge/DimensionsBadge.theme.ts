@@ -21,7 +21,7 @@ export const dimensionsBadgeIconTheme = cva('shrink-0', {
   variants: {
     variant: {
       overlay: 'h-3 w-3 text-foreground-soft',
-      compact: 'h-3 w-3 text-muted-foreground',
+      compact: 'h-3 w-3 text-foreground-muted',
     },
   },
   defaultVariants: {

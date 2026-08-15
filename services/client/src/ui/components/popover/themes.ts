@@ -62,9 +62,9 @@ export const PopoverTriggerTheme = cva(
       variant: {
         default: '',
         button:
-          'bg-card border border-border rounded-lg px-3 py-2 text-sm font-medium text-foreground-soft hover:bg-ghost-hover hover:text-foreground',
+          'bg-card border border-border rounded-lg px-3 py-2 text-sm font-medium text-foreground-soft hover:bg-hover hover:text-foreground',
         ghost:
-          'text-muted-foreground hover:text-foreground-soft hover:bg-ghost-hover/60 rounded-md p-1',
+          'text-foreground-muted hover:text-foreground-soft hover:bg-hover/60 rounded-md p-1',
         minimal: 'hover:opacity-75',
       },
     },

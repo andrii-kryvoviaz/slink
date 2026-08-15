@@ -14,7 +14,7 @@ export const addToCollectionButtonTheme = cva(
       },
       variant: {
         default: '',
-        subtle: 'rounded-md px-2 py-1 hover:bg-info-fill/5',
+        subtle: 'rounded-md px-2 py-1 hover:bg-primary-solid/5',
         overlay: 'rounded-full px-2.5 py-1 backdrop-blur-sm shadow-lg',
       },
       active: {
@@ -82,7 +82,7 @@ export const addToCollectionIconTheme = cva('transition-all duration-200', {
     {
       variant: 'subtle',
       active: false,
-      class: 'text-muted-foreground group-hover/collection:text-info',
+      class: 'text-foreground-muted group-hover/collection:text-info',
     },
     {
       variant: 'subtle',
@@ -93,12 +93,12 @@ export const addToCollectionIconTheme = cva('transition-all duration-200', {
       variant: 'overlay',
       active: false,
       class:
-        'text-surface-inverse-foreground/90 group-hover/collection:text-surface-inverse-foreground',
+        'text-on-surface-inverse/90 group-hover/collection:text-on-surface-inverse',
     },
     {
       variant: 'overlay',
       active: true,
-      class: 'text-surface-inverse-foreground',
+      class: 'text-on-surface-inverse',
     },
   ],
   defaultVariants: {

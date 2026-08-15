@@ -12,7 +12,8 @@ export const downloadButtonTheme = cva(
       },
       variant: {
         default: '',
-        subtle: 'rounded-md px-2 py-1 hover:bg-accent-subtle/50',
+        subtle:
+          'rounded-md px-2 py-1 hover:bg-accent-wash/50 dark:hover:bg-accent-wash/10',
         overlay: '',
         toolbar: '',
       },
@@ -65,7 +66,7 @@ export const downloadIconTheme = tv({
       variant: 'overlay',
       loading: false,
       class:
-        'group-hover/download:scale-110 text-surface-inverse-foreground/80 group-hover/download:text-surface-inverse-foreground',
+        'group-hover/download:scale-110 text-on-surface-inverse/80 group-hover/download:text-on-surface-inverse',
     },
     {
       variant: 'default',
@@ -80,7 +81,7 @@ export const downloadIconTheme = tv({
     {
       variant: 'overlay',
       loading: true,
-      class: 'text-surface-inverse-foreground/80',
+      class: 'text-on-surface-inverse/80',
     },
   ],
   defaultVariants: {

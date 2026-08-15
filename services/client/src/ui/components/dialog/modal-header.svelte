@@ -37,7 +37,7 @@
     </Dialog.Title>
     {#if description}
       <Dialog.Description
-        class="text-sm text-muted-foreground dark:text-muted-foreground/80 mt-1"
+        class="text-sm text-foreground-muted dark:text-foreground-muted/80 mt-1"
       >
         {@render description()}
       </Dialog.Description>

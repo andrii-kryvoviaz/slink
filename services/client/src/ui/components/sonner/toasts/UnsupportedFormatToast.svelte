@@ -11,10 +11,10 @@
 
 <BaseToast variant="accent" icon="clarity:block-line" {oncloseToast}>
   <div class="flex flex-col gap-2">
-    <div class="text-sm font-medium text-accent-subtle-foreground">
+    <div class="text-sm font-medium text-accent-text">
       Unsupported file format
     </div>
-    <p class="text-sm text-accent-subtle-foreground">
+    <p class="text-sm text-accent-text">
       {#if message}
         {@html message}
       {:else}

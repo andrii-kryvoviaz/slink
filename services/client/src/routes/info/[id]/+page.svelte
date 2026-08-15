@@ -172,7 +172,7 @@
           <div class="flex items-center gap-2 mb-4">
             <h2 class="text-lg font-semibold text-foreground">Resize</h2>
           </div>
-          <p class="text-xs text-muted-foreground mb-4">
+          <p class="text-xs text-foreground-muted mb-4">
             Adjust dimensions for the shared link
           </p>
           <ImageSizePicker

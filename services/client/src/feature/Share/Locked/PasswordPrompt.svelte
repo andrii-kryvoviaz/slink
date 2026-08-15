@@ -43,7 +43,7 @@
     in:fade={{ duration: 600, delay: 100 }}
   >
     <div
-      class="relative w-20 h-20 mb-8 rounded-3xl flex items-center justify-center border backdrop-blur-sm shadow-lg bg-gradient-to-br from-muted-subtle to-muted/70 border-border/50 shadow-border/20 dark:shadow-surface-inverse/40"
+      class="relative w-20 h-20 mb-8 rounded-3xl flex items-center justify-center border backdrop-blur-sm shadow-lg bg-gradient-to-br from-muted-soft to-muted/70 border-border/50 shadow-border/20 dark:shadow-surface-inverse/40"
       in:fly={{ y: -20, duration: 500, delay: 200 }}
     >
       <div
@@ -52,7 +52,7 @@
 
       <Icon
         icon="ph:lock-key-duotone"
-        class="relative z-10 w-10 h-10 text-muted-foreground"
+        class="relative z-10 w-10 h-10 text-foreground-muted"
       />
 
       <div
@@ -62,12 +62,12 @@
 
     <div class="space-y-3 mb-8" in:fly={{ y: 20, duration: 500, delay: 300 }}>
       <h2
-        class="text-xl font-semibold bg-gradient-to-r bg-clip-text text-transparent from-foreground to-muted-foreground"
+        class="text-xl font-semibold bg-gradient-to-r bg-clip-text text-transparent from-foreground to-foreground-muted"
       >
         This share is protected
       </h2>
       <p
-        class="text-base text-muted-foreground max-w-md mx-auto leading-relaxed"
+        class="text-base text-foreground-muted max-w-md mx-auto leading-relaxed"
       >
         Enter the password below to unlock the shared content.
       </p>
@@ -99,7 +99,7 @@
       </Input>
 
       <Button
-        variant="accent"
+        variant="cta"
         size="lg"
         class="w-full mt-2 group"
         type="submit"

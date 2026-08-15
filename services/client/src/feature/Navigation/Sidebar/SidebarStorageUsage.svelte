@@ -37,7 +37,7 @@
   <div class="hidden group-data-[collapsible=icon]:block">
     <HoverCard.Root openDelay={200} closeDelay={100}>
       <HoverCard.Trigger
-        class="flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm transition-all duration-300 ease-out text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground justify-center size-8"
+        class="flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm transition-all duration-300 ease-out text-foreground-muted hover:bg-sidebar-hover hover:text-on-sidebar-hover justify-center size-8"
       >
         <Icon icon="heroicons:server" class="size-4 shrink-0" />
       </HoverCard.Trigger>

@@ -4,13 +4,13 @@
 
 <div class="group/shortcut">
   <div
-    class="flex items-center gap-4 rounded-full py-[9px] pl-5 pr-2.5 bg-muted/70 dark:bg-muted-foreground/5 border border-border/60 dark:border-border/30 transition-colors duration-200"
+    class="flex items-center gap-4 rounded-full py-[9px] pl-5 pr-2.5 bg-muted/70 dark:bg-foreground-muted/5 border border-border/60 dark:border-border/30 transition-colors duration-200"
   >
     <span
-      class="text-[10.5px] font-semibold uppercase tracking-[0.18em] text-muted-foreground dark:text-foreground-subtle"
+      class="text-[10.5px] font-semibold uppercase tracking-[0.18em] text-foreground-muted dark:text-foreground-subtle"
       >Quick paste</span
     >
-    <span class="w-px h-[18px] bg-border-stronger/20" aria-hidden="true"></span>
+    <span class="w-px h-[18px] bg-border-bold/20" aria-hidden="true"></span>
     <Shortcut
       control={true}
       key="v"

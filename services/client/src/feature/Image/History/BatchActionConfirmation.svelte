@@ -11,8 +11,9 @@
     {
       variants: {
         variant: {
-          blue: 'bg-info-fill/15 border-info-border/40',
-          danger: 'bg-danger/15 border-danger-border/40',
+          blue: 'bg-info-solid/15 border-info-border/40 dark:border-info-border/12',
+          danger:
+            'bg-danger/15 border-danger-border/40 dark:border-danger-border/12',
         },
       },
     },
@@ -68,7 +69,7 @@
         {@render title()} ({plural(count, ['# image', '# images'])})
       </h3>
       {#if description}
-        <p class="text-xs text-muted-foreground">
+        <p class="text-xs text-foreground-muted">
           {@render description()}
         </p>
       {/if}

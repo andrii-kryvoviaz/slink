@@ -7,13 +7,13 @@
       variants: {
         variant: {
           indigo:
-            'bg-accent-subtle text-accent-subtle-foreground hover:bg-accent-fill/30',
-          blue: 'bg-info-subtle text-info-subtle-foreground hover:bg-info-fill/30',
+            'bg-accent-wash dark:bg-accent-wash/20 text-accent-text hover:bg-accent-solid/30',
+          blue: 'bg-info-wash dark:bg-info-wash/20 text-info-text hover:bg-primary-solid/30',
           emerald:
-            'bg-success-subtle text-success-subtle-foreground hover:bg-success/30',
+            'bg-success-wash dark:bg-success-wash/20 text-success-text hover:bg-success/30',
           amber:
-            'bg-warning-subtle text-warning-subtle-foreground hover:bg-warning/30',
-          rose: 'bg-danger-subtle text-danger-subtle-foreground hover:bg-danger/30',
+            'bg-warning-wash dark:bg-warning-wash/20 text-warning-text hover:bg-warning/30',
+          rose: 'bg-danger-wash dark:bg-danger-wash/20 text-danger-text hover:bg-danger/30',
           slate: 'bg-muted text-foreground-soft hover:bg-border',
         },
       },

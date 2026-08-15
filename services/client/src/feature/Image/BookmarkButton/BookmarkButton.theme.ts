@@ -12,7 +12,8 @@ export const bookmarkButtonTheme = cva(
       },
       variant: {
         default: '',
-        subtle: 'rounded-md px-2 py-1 hover:bg-accent-subtle/50',
+        subtle:
+          'rounded-md px-2 py-1 hover:bg-accent-wash/50 dark:hover:bg-accent-wash/10',
         overlay: '',
         toolbar: '',
       },
@@ -116,13 +117,12 @@ export const bookmarkIconTheme = tv({
     {
       variant: 'overlay',
       active: true,
-      class: 'text-surface-inverse-foreground drop-shadow-sm',
+      class: 'text-on-surface-inverse drop-shadow-sm',
     },
     {
       variant: 'overlay',
       active: false,
-      class:
-        'text-surface-inverse-foreground/80 group-hover/bookmark:text-accent',
+      class: 'text-on-surface-inverse/80 group-hover/bookmark:text-accent',
     },
   ],
   defaultVariants: {
@@ -162,7 +162,7 @@ export const bookmarkCountTheme = cva(
       {
         variant: 'default',
         active: false,
-        class: 'text-muted-foreground',
+        class: 'text-foreground-muted',
       },
       {
         variant: 'subtle',
@@ -172,17 +172,17 @@ export const bookmarkCountTheme = cva(
       {
         variant: 'subtle',
         active: false,
-        class: 'text-muted-foreground',
+        class: 'text-foreground-muted',
       },
       {
         variant: 'overlay',
         active: true,
-        class: 'text-surface-inverse-foreground drop-shadow-sm',
+        class: 'text-on-surface-inverse drop-shadow-sm',
       },
       {
         variant: 'overlay',
         active: false,
-        class: 'text-surface-inverse-foreground/80',
+        class: 'text-on-surface-inverse/80',
       },
     ],
     defaultVariants: {

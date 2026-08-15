@@ -57,16 +57,16 @@
     variants: {
       variant: {
         default:
-          'text-muted-foreground hover:text-foreground hover:bg-ghost-hover-strong',
+          'text-foreground-muted hover:text-foreground hover:bg-hover-strong',
         primary:
-          'bg-info-fill/80 text-info-fill-foreground hover:bg-info-fill/90 active:bg-info-fill',
+          'bg-primary-solid/80 text-on-primary-solid hover:bg-primary-solid/90 active:bg-primary-solid',
         'primary-outline':
-          'border border-info text-info-subtle-foreground hover:bg-info-fill/90 hover:text-info-fill-foreground active:bg-info-fill',
-        secondary: 'text-foreground-soft hover:bg-ghost-hover-strong',
+          'border border-info text-info-text hover:bg-primary-solid/90 hover:text-on-primary-solid active:bg-primary-solid',
+        secondary: 'text-foreground-soft hover:bg-hover-strong',
         ghost:
-          'text-muted-foreground hover:text-foreground hover:bg-ghost-hover-strong/80',
+          'text-foreground-muted hover:text-foreground hover:bg-hover-strong/80',
         destructive:
-          'text-muted-foreground hover:text-danger-subtle-foreground hover:bg-danger-subtle',
+          'text-foreground-muted hover:text-danger-text hover:bg-danger-wash dark:hover:bg-danger-wash/20',
       },
       size: {
         sm: 'h-7 min-w-7 px-2 text-xs',

@@ -182,7 +182,7 @@
               class="w-5 h-5 text-foreground-subtle"
             />
           </div>
-          <p class="text-sm font-medium text-muted-foreground">
+          <p class="text-sm font-medium text-foreground-muted">
             No tags matching "{searchTerm}"
           </p>
         </div>

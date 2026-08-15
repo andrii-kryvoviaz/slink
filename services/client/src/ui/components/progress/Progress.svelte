@@ -39,9 +39,9 @@
     {
       variants: {
         variant: {
-          default: 'bg-info-fill',
+          default: 'bg-primary-solid',
           success: 'bg-success',
-          error: 'bg-danger-fill',
+          error: 'bg-danger-solid',
           warning: 'bg-warning',
           subtle: 'bg-foreground-soft',
         },
@@ -67,7 +67,7 @@
 </div>
 
 {#if showPercentage}
-  <div class="text-xs text-muted-foreground mt-1 text-center">
+  <div class="text-xs text-foreground-muted mt-1 text-center">
     {percentage.toFixed(0)}%
   </div>
 {/if}

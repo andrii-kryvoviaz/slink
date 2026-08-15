@@ -109,7 +109,7 @@
         />
       </div>
       <h3 class="text-base font-medium text-foreground mb-1">No uploads yet</h3>
-      <p class="text-sm text-muted-foreground max-w-xs">
+      <p class="text-sm text-foreground-muted max-w-xs">
         Upload data will appear here once images are added
       </p>
     </div>

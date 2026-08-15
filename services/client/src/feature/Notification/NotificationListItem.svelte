@@ -84,12 +84,12 @@
         {timeAgo}
       </span>
     </div>
-    <p class="text-sm text-muted-foreground">
+    <p class="text-sm text-foreground-muted">
       {notification.message}
     </p>
     {#if hasCommentPreview}
       <p
-        class="mt-2 text-sm text-muted-foreground bg-muted rounded-lg px-3 py-2 line-clamp-2 italic"
+        class="mt-2 text-sm text-foreground-muted bg-muted rounded-lg px-3 py-2 line-clamp-2 italic"
       >
         {notification.relatedComment?.content}
       </p>

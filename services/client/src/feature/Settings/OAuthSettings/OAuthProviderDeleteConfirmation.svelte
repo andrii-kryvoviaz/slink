@@ -22,26 +22,26 @@
 <div class="w-full max-w-sm p-2 space-y-4">
   <div class="flex items-center gap-3">
     <div
-      class="flex h-10 w-10 items-center justify-center rounded-full bg-danger-subtle border border-danger-border/40 shadow-sm flex-shrink-0"
+      class="flex h-10 w-10 items-center justify-center rounded-full bg-danger-wash dark:bg-danger-wash/20 border border-danger-border/40 dark:border-danger-border/12 shadow-sm flex-shrink-0"
     >
       <Icon icon="ph:shield-check" class="h-5 w-5 text-danger" />
     </div>
     <div>
       <h3 class="text-sm font-semibold text-foreground">Delete Provider</h3>
-      <p class="text-xs text-muted-foreground">
+      <p class="text-xs text-foreground-muted">
         Provider and its configuration will be removed
       </p>
     </div>
   </div>
 
-  <div class="bg-muted-subtle/80 rounded-xl p-4 border border-border/50">
+  <div class="bg-muted-soft/80 rounded-xl p-4 border border-border/50">
     <div class="flex items-center gap-3">
       <ProviderIcon provider={preset} class="h-5 w-5 flex-shrink-0" />
       <div class="min-w-0 flex-1">
         <span class="text-sm font-medium text-foreground">
           {provider.name}
         </span>
-        <p class="text-xs text-muted-foreground">
+        <p class="text-xs text-foreground-muted">
           <code class="font-mono">{provider.slug}</code> &mdash; Provider and its
           configuration will be removed
         </p>

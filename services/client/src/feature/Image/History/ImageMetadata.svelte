@@ -20,7 +20,7 @@
 </script>
 
 <div class={metadataContainerTheme({ gap })}>
-  <span class="font-semibold text-muted-foreground">
+  <span class="font-semibold text-foreground-muted">
     {formatMimeType(item.metadata.mimeType)}
   </span>
   <span>{item.metadata.width}×{item.metadata.height}</span>

@@ -52,7 +52,7 @@
 >
   <div class="flex items-center justify-start gap-4 mb-8">
     <div
-      class="w-12 h-12 rounded-xl bg-linear-to-br from-primary/10 to-primary/5 border border-primary/10 flex items-center justify-center shadow-sm"
+      class="w-12 h-12 rounded-xl bg-linear-to-br from-foreground-solid/10 to-foreground-solid/5 border border-foreground-solid/10 flex items-center justify-center shadow-sm"
     >
       <BrandLogo class="h-6 w-6" />
     </div>
@@ -60,7 +60,7 @@
       <h1 class="text-2xl font-semibold text-foreground tracking-tight">
         Create Account
       </h1>
-      <p class="text-muted-foreground text-sm mt-0.5">
+      <p class="text-foreground-muted text-sm mt-0.5">
         Join {customization.siteName} to start sharing your images
       </p>
     </div>
@@ -157,7 +157,7 @@
       </Input>
 
       <Button
-        variant="accent"
+        variant="cta"
         size="lg"
         class="w-full mt-2 group"
         type="submit"

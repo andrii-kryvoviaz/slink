@@ -52,7 +52,7 @@
 </script>
 
 <div
-  class="space-y-6 p-6 bg-gradient-to-br from-muted-subtle to-muted/50 dark:to-muted/30 border border-border/50 dark:border-border/30 rounded-2xl shadow-lg backdrop-blur-sm"
+  class="space-y-6 p-6 bg-gradient-to-br from-muted-soft to-muted/50 dark:to-muted/30 border border-border/50 dark:border-border/30 rounded-2xl shadow-lg backdrop-blur-sm"
 >
   <div class="flex items-start gap-6">
     <div
@@ -72,7 +72,7 @@
       </h3>
 
       {#if message}
-        <p class="mt-2 text-base text-muted-foreground leading-relaxed">
+        <p class="mt-2 text-base text-foreground-muted leading-relaxed">
           {message}
         </p>
       {/if}

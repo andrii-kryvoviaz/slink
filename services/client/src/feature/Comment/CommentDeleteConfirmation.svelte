@@ -23,10 +23,10 @@
       />
     </div>
     <div>
-      <h3 class="text-sm font-semibold text-surface-inverse-foreground">
+      <h3 class="text-sm font-semibold text-on-surface-inverse">
         Delete Comment
       </h3>
-      <p class="text-xs text-surface-inverse-foreground/50">
+      <p class="text-xs text-on-surface-inverse/50">
         Comment will be permanently removed
       </p>
     </div>

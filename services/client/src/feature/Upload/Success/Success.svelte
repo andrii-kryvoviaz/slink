@@ -18,26 +18,28 @@
 >
   <div class="mb-6">
     <div
-      class="inline-flex items-center justify-center w-16 h-16 bg-success-subtle rounded-full mb-4"
+      class="inline-flex items-center justify-center w-16 h-16 bg-success-wash dark:bg-success-wash/20 rounded-full mb-4"
     >
       <Icon icon="ph:check-circle" class="h-8 w-8 text-success" />
     </div>
 
     <h2 class="text-2xl font-bold text-foreground mb-2">Upload Successful!</h2>
 
-    <p class="text-lg text-muted-foreground mb-4">
+    <p class="text-lg text-foreground-muted mb-4">
       Your image has been successfully uploaded to Slink.
     </p>
 
     {#if isGuestUser}
-      <div class="bg-info-subtle border border-info-border rounded-lg p-4 mb-6">
+      <div
+        class="bg-info-wash dark:bg-info-wash/20 border border-info-border dark:border-info-border/30 rounded-lg p-4 mb-6"
+      >
         <div class="flex items-start">
           <Icon icon="ph:info" class="h-5 w-5 text-info mt-0.5 mr-3 shrink-0" />
           <div class="text-left text-sm">
-            <h3 class="font-medium text-info-deep-foreground mb-1">
+            <h3 class="font-medium text-info-text-strong mb-1">
               Guest Upload Notice
             </h3>
-            <p class="text-info-subtle-foreground">
+            <p class="text-info-text">
               To manage your images and access additional features, consider
               creating an account.
             </p>

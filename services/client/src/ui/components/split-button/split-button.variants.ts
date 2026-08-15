@@ -3,7 +3,7 @@ import { type VariantProps, tv } from 'tailwind-variants';
 export const splitButtonVariants = tv({
   slots: {
     wrapper:
-      'flex items-center overflow-hidden duration-200 bg-transparent dark:bg-transparent text-foreground-soft dark:text-foreground group-hover:bg-ghost-hover',
+      'flex items-center overflow-hidden duration-200 bg-transparent dark:bg-transparent text-foreground-soft dark:text-foreground group-hover:bg-hover',
     label: 'flex items-center font-medium transition-colors',
     aside:
       'flex items-center justify-center transition-all duration-200 bg-border-strong dark:bg-muted text-foreground-soft dark:group-hover:bg-border-strong',

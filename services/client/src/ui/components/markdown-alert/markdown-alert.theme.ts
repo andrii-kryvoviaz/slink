@@ -13,7 +13,7 @@ export type AlertType = (typeof ALERT_TYPES)[number];
 export const alertContainer = cva(
   [
     'relative rounded-xl p-4 my-3',
-    'backdrop-blur-sm ring-1 ring-surface-inverse-foreground/[0.08]',
+    'backdrop-blur-sm ring-1 ring-on-surface-inverse/[0.08]',
   ],
   {
     variants: {
@@ -34,7 +34,7 @@ export const alertContainer = cva(
 export const alertIconContainer = cva(
   [
     'w-8 h-8 rounded-lg flex items-center justify-center',
-    'backdrop-blur-sm ring-1 ring-surface-inverse-foreground/[0.08]',
+    'backdrop-blur-sm ring-1 ring-on-surface-inverse/[0.08]',
   ],
   {
     variants: {
@@ -70,11 +70,11 @@ export const alertIcon = cva(['[&>svg]:h-4 [&>svg]:w-4'], {
 export const alertTitle = cva(['text-sm font-semibold leading-tight mb-1'], {
   variants: {
     type: {
-      note: 'text-info-subtle-foreground',
-      tip: 'text-success-subtle-foreground',
-      important: 'text-accent-subtle-foreground',
-      warning: 'text-warning-subtle-foreground',
-      caution: 'text-danger-subtle-foreground',
+      note: 'text-info-text',
+      tip: 'text-success-text',
+      important: 'text-accent-text',
+      warning: 'text-warning-text',
+      caution: 'text-danger-text',
     },
   },
   defaultVariants: {
@@ -85,14 +85,11 @@ export const alertTitle = cva(['text-sm font-semibold leading-tight mb-1'], {
 export const alertText = cva(['text-sm leading-relaxed whitespace-pre-line'], {
   variants: {
     type: {
-      note: 'text-info-subtle-foreground/80 dark:text-info-subtle-foreground/70',
-      tip: 'text-success-subtle-foreground/80 dark:text-success-subtle-foreground/70',
-      important:
-        'text-accent-subtle-foreground/80 dark:text-accent-subtle-foreground/70',
-      warning:
-        'text-warning-subtle-foreground/80 dark:text-warning-subtle-foreground/70',
-      caution:
-        'text-danger-subtle-foreground/80 dark:text-danger-subtle-foreground/70',
+      note: 'text-info-text/80 dark:text-info-text/70',
+      tip: 'text-success-text/80 dark:text-success-text/70',
+      important: 'text-accent-text/80 dark:text-accent-text/70',
+      warning: 'text-warning-text/80 dark:text-warning-text/70',
+      caution: 'text-danger-text/80 dark:text-danger-text/70',
     },
   },
   defaultVariants: {

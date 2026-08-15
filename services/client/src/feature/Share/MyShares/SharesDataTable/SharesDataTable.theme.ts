@@ -7,7 +7,7 @@ export const shareableCell = tv({
       'shrink-0 overflow-hidden rounded-md bg-muted flex items-center justify-center',
     thumbIcon: 'text-foreground-subtle',
     name: 'font-medium text-foreground truncate text-sm group-hover/shareable:text-info transition-colors',
-    meta: 'text-xs text-muted-foreground',
+    meta: 'text-xs text-foreground-muted',
   },
   variants: {
     size: {

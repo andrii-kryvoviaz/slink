@@ -22,13 +22,13 @@
 <div class="w-xs max-w-screen space-y-4">
   <div class="flex items-center gap-3">
     <div
-      class="flex h-10 w-10 items-center justify-center rounded-full bg-danger/12 border border-danger-border/40 shadow-sm shrink-0"
+      class="flex h-10 w-10 items-center justify-center rounded-full bg-danger/12 border border-danger-border/40 dark:border-danger-border/12 shadow-sm shrink-0"
     >
       <Icon icon="ph:key" class="h-5 w-5 text-danger" />
     </div>
     <div>
       <h3 class="text-sm font-semibold text-foreground">Revoke API Key</h3>
-      <p class="text-xs text-muted-foreground">
+      <p class="text-xs text-foreground-muted">
         Key will be permanently revoked
       </p>
     </div>
@@ -40,7 +40,7 @@
         <span class="text-sm font-medium text-foreground">
           {apiKey.name}
         </span>
-        <p class="text-xs text-muted-foreground">
+        <p class="text-xs text-foreground-muted">
           This API key will be permanently revoked and cannot be recovered
         </p>
       </div>

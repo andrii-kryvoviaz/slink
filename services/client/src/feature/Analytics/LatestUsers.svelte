@@ -92,7 +92,7 @@
     >
       <div>
         <h2 class="text-lg font-semibold text-foreground">Latest Users</h2>
-        <p class="text-sm text-muted-foreground mt-0.5">
+        <p class="text-sm text-foreground-muted mt-0.5">
           Recently joined members
         </p>
       </div>
@@ -124,7 +124,7 @@
             <button
               type="button"
               onclick={clearSearch}
-              class="absolute inset-y-0 right-0 flex items-center pr-2.5 text-foreground-subtle hover:text-muted-foreground dark:hover:text-foreground-soft transition-colors"
+              class="absolute inset-y-0 right-0 flex items-center pr-2.5 text-foreground-subtle hover:text-foreground-muted dark:hover:text-foreground-soft transition-colors"
               aria-label="Clear search"
             >
               <Icon icon="heroicons:x-mark" class="w-3.5 h-3.5" />
@@ -139,7 +139,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {#each Array(6) as _, index}
             <div
-              class="flex items-center gap-3 p-3 rounded-lg bg-muted-subtle/50 dark:bg-muted/30 animate-pulse"
+              class="flex items-center gap-3 p-3 rounded-lg bg-muted-soft/50 dark:bg-muted/30 animate-pulse"
               style="animation-delay: {index * 50}ms"
             >
               <div class="shrink-0 w-10 h-10 rounded-full bg-muted"></div>
@@ -170,7 +170,7 @@
           <h3 class="text-base font-medium text-foreground mb-1">
             No users found
           </h3>
-          <p class="text-sm text-muted-foreground max-w-xs">
+          <p class="text-sm text-foreground-muted max-w-xs">
             {filterParams.searchTerm
               ? 'Try adjusting your search terms'
               : 'Users will appear here once they join'}
@@ -180,7 +180,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {#each users as user, index (user.id)}
             <div
-              class="group flex items-center gap-3 p-3 rounded-lg bg-muted-subtle/50 dark:bg-muted/30 hover:bg-muted/80 dark:hover:bg-muted/60 transition-all duration-200"
+              class="group flex items-center gap-3 p-3 rounded-lg bg-muted-soft/50 dark:bg-muted/30 hover:bg-muted/80 dark:hover:bg-muted/60 transition-all duration-200"
               in:fly={{ y: 10, duration: 200, delay: index * 30 }}
             >
               <div class="shrink-0">
@@ -225,7 +225,7 @@
           <div class="pt-4 mt-4 border-t border-border/60 dark:border-border">
             <a
               href="/admin/user"
-              class="flex items-center justify-between px-3 py-2 -mx-1 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted-subtle dark:hover:bg-muted/50 transition-all duration-200 group/link"
+              class="flex items-center justify-between px-3 py-2 -mx-1 rounded-lg text-sm text-foreground-muted hover:text-foreground hover:bg-muted-soft dark:hover:bg-muted/50 transition-all duration-200 group/link"
             >
               <span class="font-medium">View all users</span>
               <div class="flex items-center gap-2">

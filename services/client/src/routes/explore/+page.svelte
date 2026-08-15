@@ -187,7 +187,7 @@
                 >
                   <Icon
                     icon="ph:arrows-out"
-                    class="w-7 h-7 text-surface-inverse-foreground"
+                    class="w-7 h-7 text-on-surface-inverse"
                   />
                 </div>
               </div>
@@ -243,7 +243,7 @@
                   >
                     {image.owner.displayName}
                   </p>
-                  <div class="text-xs text-muted-foreground mt-0.5">
+                  <div class="text-xs text-foreground-muted mt-0.5">
                     <FormattedDate
                       date={image.attributes.createdAt.timestamp}
                     />
@@ -263,7 +263,7 @@
               </div>
 
               {#if image.attributes.description?.trim()}
-                <p class="mt-3 text-sm text-muted-foreground leading-relaxed">
+                <p class="mt-3 text-sm text-foreground-muted leading-relaxed">
                   <ExpandableText
                     maxLines={2}
                     text={image.attributes.description}

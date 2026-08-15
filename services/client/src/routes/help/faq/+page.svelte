@@ -64,7 +64,7 @@
               ? 'rotate-45'
               : ''}"
           >
-            <Icon icon="ph:plus" class="h-5 w-5 text-muted-foreground" />
+            <Icon icon="ph:plus" class="h-5 w-5 text-foreground-muted" />
           </div>
         </div>
       </div>
@@ -130,12 +130,12 @@
                       >Public</span
                     >
                   </div>
-                  <p class="text-sm text-muted-foreground">
+                  <p class="text-sm text-foreground-muted">
                     Shown on the
                     <a
                       href="/explore"
                       target="_blank"
-                      class="text-accent hover:text-accent-subtle-foreground underline underline-offset-2 font-medium transition-colors"
+                      class="text-accent hover:text-accent-text underline underline-offset-2 font-medium transition-colors"
                     >
                       explore page
                     </a>. Anyone with the direct link can open it.
@@ -147,7 +147,7 @@
                 <div class="flex-shrink-0 mt-0.5">
                   <Icon
                     icon="lucide:lock"
-                    class="w-5 h-5 text-muted-foreground"
+                    class="w-5 h-5 text-foreground-muted"
                   />
                 </div>
                 <div class="flex-1 min-w-0">
@@ -161,7 +161,7 @@
                       Default
                     </span>
                   </div>
-                  <p class="text-sm text-muted-foreground">
+                  <p class="text-sm text-foreground-muted">
                     Hidden from the explore page. The direct link only works for
                     you, unless you share it with a published link.
                   </p>
@@ -180,7 +180,7 @@
             Manage every link from the
             <a
               href="/shares"
-              class="text-accent hover:text-accent-subtle-foreground underline underline-offset-2 font-medium transition-colors"
+              class="text-accent hover:text-accent-text underline underline-offset-2 font-medium transition-colors"
             >
               Publications
             </a>
@@ -278,7 +278,7 @@
                       >Public image</span
                     >
                   </div>
-                  <p class="text-sm text-muted-foreground">
+                  <p class="text-sm text-foreground-muted">
                     Open access on the image itself. It appears on the explore
                     page, and the direct URL works for anyone. Use it when you
                     want the image out in the open.
@@ -299,7 +299,7 @@
                       >Shared link</span
                     >
                   </div>
-                  <p class="text-sm text-muted-foreground">
+                  <p class="text-sm text-foreground-muted">
                     A separate, controlled link generated on top of any image,
                     public or private. Add a password, set an expiration, or
                     revoke it at any time without affecting the image. Use it
@@ -378,7 +378,7 @@
               href="https://github.com/{GITHUB.REPO_OWNER}/{GITHUB.REPO_NAME}/issues/new"
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 px-3 py-2 bg-info-surface hover:bg-info-surface-strong text-info-foreground text-sm font-medium rounded-lg transition-colors"
+              class="inline-flex items-center gap-2 px-3 py-2 bg-info-surface hover:bg-info-surface-strong text-on-info text-sm font-medium rounded-lg transition-colors"
             >
               <Icon icon="ph:plus" class="w-4 h-4" />
               Create New Issue
@@ -427,7 +427,7 @@
         <h3 class="text-xl font-semibold text-foreground mb-2">
           Still have questions?
         </h3>
-        <p class="text-muted-foreground-strong mb-6">
+        <p class="text-foreground-muted mb-6">
           Can't find the answer you're looking for? Please get in touch with us
           for further assistance.
         </p>

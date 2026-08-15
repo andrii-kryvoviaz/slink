@@ -14,7 +14,7 @@
 </script>
 
 <div
-  class="flex items-center gap-3 p-4 text-danger-subtle-foreground border border-danger-border/20 shadow-md shadow-danger/4 backdrop-blur-xl bg-danger-subtle rounded-xl"
+  class="flex items-center gap-3 p-4 text-danger-text border border-danger-border/20 dark:border-danger-border/6 shadow-md shadow-danger/4 backdrop-blur-xl bg-danger-wash dark:bg-danger-wash/20 rounded-xl"
 >
   <div
     class="flex h-8 w-8 items-center justify-center rounded-full bg-danger/15 shrink-0"

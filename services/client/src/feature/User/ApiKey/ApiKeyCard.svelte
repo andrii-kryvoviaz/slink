@@ -48,7 +48,7 @@
           · {getApiKeyStatusLabel(status)}
         </span>
       </div>
-      <div class="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
+      <div class="flex items-center gap-2 mt-1 text-xs text-foreground-muted">
         <span class="flex items-center gap-1">
           <Icon icon="lucide:calendar" class="h-3 w-3" />
           {formatDate(apiKey.createdAt)}
@@ -79,7 +79,7 @@
         <button
           type="button"
           title="Revoke API Key"
-          class="opacity-0 group-hover:opacity-100 w-8 h-8 flex items-center justify-center rounded-lg text-foreground-subtle dark:text-muted-foreground hover:text-danger hover:bg-danger/8 transition-all duration-200 focus:opacity-100 focus:outline-none"
+          class="opacity-0 group-hover:opacity-100 w-8 h-8 flex items-center justify-center rounded-lg text-foreground-subtle dark:text-foreground-muted hover:text-danger hover:bg-danger/8 transition-all duration-200 focus:opacity-100 focus:outline-none"
           disabled={isRevoking}
         >
           <Icon icon="lucide:x" class="h-4 w-4" />

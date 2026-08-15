@@ -101,13 +101,13 @@
     <button
       type="button"
       class={cn(
-        'border-border bg-background selection:bg-primary dark:bg-input/30 selection:text-primary-foreground ring-offset-background placeholder:text-muted-foreground shadow-xs flex h-11 w-full min-w-0 rounded-md border px-4 py-2.5 text-sm outline-none transition-[color,box-shadow] disabled:cursor-not-allowed disabled:opacity-50',
+        'border-border bg-background selection:bg-foreground-solid dark:bg-input/30 selection:text-on-foreground-solid ring-offset-background placeholder:text-foreground-muted shadow-xs flex h-11 w-full min-w-0 rounded-md border px-4 py-2.5 text-sm outline-none transition-[color,box-shadow] disabled:cursor-not-allowed disabled:opacity-50',
         'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] focus-visible:ring-offset-2 focus-visible:ring-offset-background',
         open && 'border-ring ring-ring/50 ring-[3px]',
         ariaInvalid &&
-          'aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive',
+          'aria-invalid:ring-danger/20 dark:aria-invalid:ring-danger/40 aria-invalid:border-danger',
         'justify-start items-center text-left font-normal cursor-pointer hover:bg-input/50 dark:hover:bg-input/50',
-        !calendarValue && 'text-muted-foreground',
+        !calendarValue && 'text-foreground-muted',
         className,
       )}
       {disabled}
@@ -116,13 +116,13 @@
       {...restProps}
     >
       {#if leftIcon}
-        <span class="mr-2 text-muted-foreground flex-shrink-0">
+        <span class="mr-2 text-foreground-muted flex-shrink-0">
           {@render leftIcon()}
         </span>
       {:else}
         <Icon
           icon="lucide:calendar"
-          class="mr-2 h-4 w-4 text-muted-foreground flex-shrink-0"
+          class="mr-2 h-4 w-4 text-foreground-muted flex-shrink-0"
         />
       {/if}
       <span class="truncate">
@@ -151,8 +151,8 @@
           >
             <DatePickerPrimitive.PrevButton
               class={cn(
-                'inline-flex h-9 w-9 items-center justify-center rounded-lg transition-colors text-muted-foreground',
-                'hover:bg-ghost-hover/50 hover:text-foreground focus:bg-ghost-hover/50 outline-none',
+                'inline-flex h-9 w-9 items-center justify-center rounded-lg transition-colors text-foreground-muted',
+                'hover:bg-hover/50 hover:text-foreground focus:bg-hover/50 outline-none',
               )}
             >
               <Icon icon="lucide:chevron-left" class="h-4 w-4" />
@@ -162,8 +162,8 @@
             />
             <DatePickerPrimitive.NextButton
               class={cn(
-                'inline-flex h-9 w-9 items-center justify-center rounded-lg transition-colors text-muted-foreground',
-                'hover:bg-ghost-hover/50 hover:text-foreground focus:bg-ghost-hover/50 outline-none',
+                'inline-flex h-9 w-9 items-center justify-center rounded-lg transition-colors text-foreground-muted',
+                'hover:bg-hover/50 hover:text-foreground focus:bg-hover/50 outline-none',
               )}
             >
               <Icon icon="lucide:chevron-right" class="h-4 w-4" />
@@ -180,7 +180,7 @@
                 >
                   {#each weekdays as day (day)}
                     <DatePickerPrimitive.HeadCell
-                      class="text-muted-foreground font-medium w-9 rounded-md text-xs text-center uppercase tracking-wider"
+                      class="text-foreground-muted font-medium w-9 rounded-md text-xs text-center uppercase tracking-wider"
                     >
                       <div>{day.slice(0, 2)}</div>
                     </DatePickerPrimitive.HeadCell>
@@ -199,11 +199,11 @@
                         <DatePickerPrimitive.Day
                           class={cn(
                             'relative inline-flex h-9 w-9 items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200',
-                            'hover:bg-ghost-hover/50 hover:text-foreground',
-                            'data-[selected]:bg-info-surface data-[selected]:text-info-surface-foreground data-[selected]:hover:bg-info-surface-strong data-[selected]:shadow-sm',
-                            'data-[today]:bg-info-subtle data-[today]:text-info data-[today]:font-semibold data-[today]:ring-1 data-[today]:ring-info-border',
-                            'data-[outside-month]:text-muted-foreground data-[outside-month]:opacity-40',
-                            'data-[disabled]:text-muted-foreground data-[disabled]:opacity-40 data-[disabled]:cursor-not-allowed',
+                            'hover:bg-hover/50 hover:text-foreground',
+                            'data-[selected]:bg-primary-surface data-[selected]:text-on-primary-surface data-[selected]:hover:bg-primary-surface-strong data-[selected]:shadow-sm',
+                            'data-[today]:bg-info-wash dark:data-[today]:bg-info-wash/20 data-[today]:text-info data-[today]:font-semibold data-[today]:ring-1 data-[today]:ring-info-border dark:data-[today]:ring-info-border/30',
+                            'data-[outside-month]:text-foreground-muted data-[outside-month]:opacity-40',
+                            'data-[disabled]:text-foreground-muted data-[disabled]:opacity-40 data-[disabled]:cursor-not-allowed',
                             'data-[unavailable]:line-through',
                           )}
                         >

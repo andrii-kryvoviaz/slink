@@ -8,7 +8,7 @@ export const notificationItemVariants = cva(
       read: {
         true: 'bg-card/30 hover:bg-card/50',
         false:
-          'bg-accent-subtle/80 hover:bg-accent-subtle border-l-2 border-accent',
+          'bg-accent-wash/80 dark:bg-accent-wash/16 hover:bg-accent-wash dark:hover:bg-accent-wash/20 border-l-2 border-accent',
       },
     },
     defaultVariants: {
@@ -22,7 +22,7 @@ export const notificationItemIconWrapperVariants = cva(
   {
     variants: {
       type: {
-        comment: 'bg-info-fill/12',
+        comment: 'bg-info-solid/12',
         comment_reply: 'bg-accent/12',
         added_to_favorite: 'bg-decor-pink/12',
         added_to_bookmarks: 'bg-accent/12',

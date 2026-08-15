@@ -110,7 +110,7 @@
               clearable={true}
               emptyMessage="No matching tags found."
             />
-            <p class="text-xs text-muted-foreground">
+            <p class="text-xs text-foreground-muted">
               Leave empty to move to root level
             </p>
           </div>

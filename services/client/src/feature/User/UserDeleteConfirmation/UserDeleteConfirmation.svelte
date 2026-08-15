@@ -22,13 +22,13 @@
 <div class="w-80 p-2 space-y-4">
   <div class="flex items-center gap-3">
     <div
-      class="flex h-10 w-10 items-center justify-center rounded-full bg-danger/12 border border-danger-border/40 shadow-sm flex-shrink-0"
+      class="flex h-10 w-10 items-center justify-center rounded-full bg-danger/12 border border-danger-border/40 dark:border-danger-border/12 shadow-sm flex-shrink-0"
     >
       <Icon icon="ph:user" class="h-5 w-5 text-danger" />
     </div>
     <div class="min-w-0 flex-1">
       <h3 class="text-sm font-semibold text-foreground">Delete User</h3>
-      <p class="text-xs text-muted-foreground">This cannot be undone.</p>
+      <p class="text-xs text-foreground-muted">This cannot be undone.</p>
       <p class="text-xs font-medium text-foreground truncate">
         {user.email}
       </p>

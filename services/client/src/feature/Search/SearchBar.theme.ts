@@ -28,7 +28,7 @@ export const searchBarField = cva(
   {
     variants: {
       focused: {
-        true: 'ring-2 ring-info/20 border-info-border/60 shadow-md',
+        true: 'ring-2 ring-info/20 border-info-border/60 dark:border-info-border/18 shadow-md',
       },
     },
     defaultVariants: {

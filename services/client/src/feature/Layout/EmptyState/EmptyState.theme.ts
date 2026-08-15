@@ -38,11 +38,11 @@ export const titleVariants = cva('font-semibold text-foreground', {
   },
 });
 
-export const descriptionVariants = cva('text-muted-foreground', {
+export const descriptionVariants = cva('text-foreground-muted', {
   variants: {
     kind: {
       'first-use':
-        'mt-2 max-w-md text-sm leading-relaxed text-muted-foreground-strong',
+        'mt-2 max-w-md text-sm leading-relaxed text-foreground-muted',
       'no-results': 'mt-0.5 text-xs',
     },
   },
@@ -58,11 +58,11 @@ export const actionVariants = cva('', {
 });
 
 export const hintVariants = cva(
-  'mt-[18px] inline-flex items-center gap-2 text-xs text-muted-foreground',
+  'mt-[18px] inline-flex items-center gap-2 text-xs text-foreground-muted',
 );
 
 export const hintIconVariants = cva(
-  'flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-info-fill/8 text-info',
+  'flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-info-solid/8 text-info',
 );
 
 export const iconVariants = cva(
@@ -70,8 +70,8 @@ export const iconVariants = cva(
   {
     variants: {
       tone: {
-        default: 'bg-muted text-muted-foreground',
-        danger: 'bg-danger-subtle text-danger',
+        default: 'bg-muted text-foreground-muted',
+        danger: 'bg-danger-wash dark:bg-danger-wash/20 text-danger',
       },
     },
     defaultVariants: {

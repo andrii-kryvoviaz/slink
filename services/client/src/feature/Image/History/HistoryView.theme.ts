@@ -18,7 +18,7 @@ export const historyCardVariants = cva(
   {
     variants: {
       selected: {
-        true: 'ring-2 ring-info-fill border-info-fill',
+        true: 'ring-2 ring-primary-solid border-primary-solid',
         false: 'border-foreground-subtle/25 hover:border-foreground-subtle/45',
       },
     },
@@ -33,7 +33,7 @@ export const historyListRowVariants = cva(
   {
     variants: {
       selected: {
-        true: 'bg-info-fill/8 border-info-border dark:border-info-fill ring-2 ring-info-fill',
+        true: 'bg-primary-solid/8 border-info-border dark:border-primary-solid ring-2 ring-primary-solid',
         false: 'border-foreground-subtle/25 hover:border-foreground-subtle/50',
       },
       selectionMode: {

@@ -4,30 +4,31 @@ export const CardTheme = cva(`flex flex-col border w-full`, {
   variants: {
     variant: {
       gray: 'bg-muted text-foreground-soft border-border-strong divide-border-strong',
-      red: 'bg-danger-subtle text-danger-subtle-foreground border-danger-border divide-danger-border',
+      red: 'bg-danger-wash dark:bg-danger-wash/20 text-danger-text border-danger-border dark:border-danger-border/30 divide-danger-border dark:divide-danger-border/30',
       yellow:
-        'bg-decor-yellow-subtle text-decor-yellow-subtle-foreground border-decor-yellow-border divide-decor-yellow-border',
+        'bg-decor-yellow-wash dark:bg-decor-yellow-wash/20 text-decor-yellow-text border-decor-yellow-border divide-decor-yellow-border',
       green:
-        'bg-success-subtle text-success-subtle-foreground border-success-border divide-success-border',
+        'bg-success-wash dark:bg-success-wash/20 text-success-text border-success-border dark:border-success-border/30 divide-success-border dark:divide-success-border/30',
       indigo: 'bg-accent/10 text-accent border-accent/40 divide-accent/40',
       purple: 'bg-accent/10 text-accent border-accent/40 divide-accent/40',
-      pink: 'bg-decor-pink-subtle text-decor-pink-subtle-foreground border-decor-pink-border divide-decor-pink-border',
-      blue: 'bg-info-subtle text-info-subtle-foreground border-info-border divide-info-border',
+      pink: 'bg-decor-pink-wash dark:bg-decor-pink-wash/20 text-decor-pink-text border-decor-pink-border divide-decor-pink-border',
+      blue: 'bg-info-wash dark:bg-info-wash/20 text-info-text border-info-border dark:border-info-border/30 divide-info-border dark:divide-info-border/30',
       light:
-        'bg-surface-raised text-foreground-soft border-border-stronger divide-border-stronger',
-      dark: 'bg-muted text-foreground-soft border-border-stronger divide-border-stronger',
+        'bg-surface-raised text-foreground-soft border-border-bold divide-border-bold',
+      dark: 'bg-muted text-foreground-soft border-border-bold divide-border-bold',
       default:
-        'bg-card dark:bg-card/60 text-muted-foreground border-border divide-border',
+        'bg-card dark:bg-card/60 text-foreground-muted border-border divide-border',
       enhanced:
-        'bg-card dark:bg-card/60 text-muted-foreground border-border divide-border',
+        'bg-card dark:bg-card/60 text-foreground-muted border-border divide-border',
       dropdown:
         'bg-surface-raised text-foreground-soft border-border divide-border',
       navbar: 'bg-card text-foreground-soft border-border divide-border',
       navbarUl: 'bg-muted text-foreground-soft border-border divide-border',
       form: 'bg-surface-raised text-foreground border-border-strong divide-border-strong',
-      primary: 'bg-primary/5 text-primary border-primary/30 divide-primary/30',
+      primary:
+        'bg-foreground-solid/5 text-foreground-solid border-foreground-solid/30 divide-foreground-solid/30',
       orange:
-        'bg-decor-orange-subtle text-decor-orange-subtle-foreground border-decor-orange-border divide-decor-orange-border',
+        'bg-decor-orange-wash dark:bg-decor-orange-wash/20 text-decor-orange-text border-decor-orange-border divide-decor-orange-border',
       none: '',
     },
     size: {

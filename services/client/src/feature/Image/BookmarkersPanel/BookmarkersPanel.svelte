@@ -81,7 +81,10 @@
   >
     {#snippet trailing()}
       {#if items.length > 0}
-        <AvatarStack users={items} ringClass="ring-accent-border/45" />
+        <AvatarStack
+          users={items}
+          ringClass="ring-accent-border/45 dark:ring-accent-border/14"
+        />
       {/if}
     {/snippet}
 

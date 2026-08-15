@@ -42,14 +42,14 @@ export const numberInputFieldVariants = cva(
           'bg-muted/50',
           'border border-border/50',
           'focus:ring-2 focus:ring-ring/20 focus:border-border/50',
-          'hover:bg-ghost-hover/50',
+          'hover:bg-hover/50',
           'transition-all duration-200',
         ],
         input: [
           'border border-border',
           'bg-background dark:bg-input/30',
           'ring-offset-background',
-          'placeholder:text-muted-foreground',
+          'placeholder:text-foreground-muted',
           'shadow-xs',
           'text-base md:text-sm font-medium',
           'transition-[color,box-shadow]',
@@ -73,13 +73,13 @@ export const numberInputFieldVariants = cva(
       {
         variant: 'default',
         hasError: true,
-        class: 'border-danger-border focus:ring-danger/20',
+        class:
+          'border-danger-border dark:border-danger-border/30 focus:ring-danger/20',
       },
       {
         variant: 'input',
         hasError: true,
-        class:
-          'border-destructive ring-destructive/20 dark:ring-destructive/40',
+        class: 'border-danger ring-danger/20 dark:ring-danger/40',
       },
     ],
     defaultVariants: {
@@ -124,13 +124,13 @@ export const numberInputButtonVariants = cva(
     variants: {
       variant: {
         default: [
-          'text-muted-foreground',
+          'text-foreground-muted',
           'hover:text-foreground-soft',
-          'hover:bg-ghost-hover',
+          'hover:bg-hover',
           'active:bg-muted',
         ],
         input: [
-          'text-muted-foreground',
+          'text-foreground-muted',
           'hover:text-foreground',
           'hover:bg-muted/50 dark:hover:bg-muted/30',
           'active:bg-muted/70 dark:active:bg-muted/50',

@@ -4,8 +4,8 @@ export const statDisclosureContainerTheme = cva(['rounded-lg', 'border'], {
   variants: {
     variant: {
       indigo: [
-        'border-accent-border/50',
-        'bg-gradient-to-br from-accent-subtle/80 via-accent-subtle-strong/60 to-accent-subtle/50',
+        'border-accent-border/50 dark:border-accent-border/15',
+        'bg-gradient-to-br from-accent-wash/80 dark:from-accent-wash/16 via-accent-wash-strong/60 dark:via-accent-wash-strong/12 to-accent-wash/50 dark:to-accent-wash/10',
       ],
     },
   },
@@ -26,7 +26,7 @@ export const statDisclosureTriggerTheme = cva(
   {
     variants: {
       variant: {
-        indigo: ['hover:bg-accent-subtle/50'],
+        indigo: ['hover:bg-accent-wash/50 dark:hover:bg-accent-wash/10'],
       },
     },
     defaultVariants: {
@@ -57,7 +57,7 @@ export const statDisclosureIconTileTheme = cva(
   },
 );
 
-export const statDisclosureIconTheme = cva(['w-5 h-5 text-accent-foreground']);
+export const statDisclosureIconTheme = cva(['w-5 h-5 text-on-accent']);
 
 export const statDisclosureLabelTheme = cva(
   ['text-xs font-medium uppercase tracking-wide'],

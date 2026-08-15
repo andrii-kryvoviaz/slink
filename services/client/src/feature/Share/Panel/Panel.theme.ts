@@ -7,7 +7,7 @@ export const panel = tv({
     titleBlock: 'flex min-w-0 items-start gap-3',
     textBlock: 'flex min-w-0 flex-col',
     titleRow: 'font-semibold text-foreground leading-tight',
-    description: 'text-xs text-muted-foreground leading-snug',
+    description: 'text-xs text-foreground-muted leading-snug',
     optionsSlot: 'flex shrink-0 items-center',
     body: '',
     footer: 'flex items-center gap-3',

@@ -59,11 +59,11 @@
     <span
       class="{licenseInfoLabelTheme({
         size,
-      })} text-surface-inverse-foreground/60"
+      })} text-on-surface-inverse/60"
     >
       Licensed under
       <span
-        class="underline underline-offset-2 decoration-surface-inverse-foreground/40 hover:decoration-surface-inverse-foreground/80 hover:text-surface-inverse-foreground/80 transition-colors cursor-pointer"
+        class="underline underline-offset-2 decoration-on-surface-inverse/40 hover:decoration-on-surface-inverse/80 hover:text-on-surface-inverse/80 transition-colors cursor-pointer"
       >
         {labels.title}
       </span>

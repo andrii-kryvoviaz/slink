@@ -73,7 +73,7 @@
     <section class="space-y-1">
       <div class="flex items-center justify-between gap-4 pb-3">
         <h2
-          class="text-sm font-medium text-muted-foreground uppercase tracking-wider"
+          class="text-sm font-medium text-foreground-muted uppercase tracking-wider"
         >
           Profile Information
         </h2>
@@ -86,7 +86,7 @@
       {/if}
 
       <div
-        class="divide-y divide-muted rounded-xl bg-muted-subtle/50 dark:bg-muted-subtle/30 border border-muted overflow-hidden"
+        class="divide-y divide-muted rounded-xl bg-muted-soft/50 dark:bg-muted-soft/30 border border-muted overflow-hidden"
       >
         <div class="flex items-center gap-4 px-4 py-4">
           <UserAvatar size="lg" {user} />
@@ -94,7 +94,7 @@
             <p class="text-sm font-medium text-foreground truncate">
               {user.username ?? user.displayName}
             </p>
-            <p class="text-xs text-muted-foreground truncate">
+            <p class="text-xs text-foreground-muted truncate">
               {user.email}
             </p>
           </div>
@@ -132,7 +132,7 @@
 
       <div class="flex items-center justify-end gap-3 pt-4">
         {#if $isProfileFormLoading}
-          <div class="flex items-center gap-2 text-sm text-muted-foreground">
+          <div class="flex items-center gap-2 text-sm text-foreground-muted">
             <Loader variant="minimal" size="xs" />
             <span>Saving...</span>
           </div>
@@ -154,7 +154,7 @@
     <section class="space-y-1">
       <div class="flex items-center justify-between gap-4 pb-3">
         <h2
-          class="text-sm font-medium text-muted-foreground uppercase tracking-wider"
+          class="text-sm font-medium text-foreground-muted uppercase tracking-wider"
         >
           Security
         </h2>
@@ -167,7 +167,7 @@
       {/if}
 
       <div
-        class="divide-y divide-muted rounded-xl bg-muted-subtle/50 dark:bg-muted-subtle/30 border border-muted overflow-hidden"
+        class="divide-y divide-muted rounded-xl bg-muted-soft/50 dark:bg-muted-soft/30 border border-muted overflow-hidden"
       >
         <form
           id="password-form"
@@ -234,7 +234,7 @@
 
       <div class="flex items-center justify-end gap-3 pt-4">
         {#if $isPasswordFormLoading}
-          <div class="flex items-center gap-2 text-sm text-muted-foreground">
+          <div class="flex items-center gap-2 text-sm text-foreground-muted">
             <Loader variant="minimal" size="xs" />
             <span>Updating...</span>
           </div>

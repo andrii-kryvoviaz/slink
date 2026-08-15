@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 
 export const toggleGroupTheme = cva(
-  'inline-flex items-center bg-gradient-to-br from-muted-subtle to-muted/50 border border-border',
+  'inline-flex items-center bg-gradient-to-br from-muted-soft to-muted/50 border border-border',
   {
     variants: {
       size: {
@@ -58,7 +58,7 @@ export const toggleGroupItemTheme = cva(
       variant: {
         active: 'bg-muted text-foreground',
         inactive:
-          'text-muted-foreground hover:text-foreground-soft hover:bg-ghost-hover',
+          'text-foreground-muted hover:text-foreground-soft hover:bg-hover',
       },
       size: {
         sm: 'px-2 py-0.5 text-xs',

@@ -6,14 +6,14 @@ export const ModeSwitchTheme = cva(
     variants: {
       variant: {
         default:
-          'bg-card/80 border border-border/60 text-muted-foreground hover:text-foreground hover:bg-ghost-hover hover:border-border-strong hover:shadow-lg hover:shadow-border/40 dark:hover:shadow-card/40 focus-visible:ring-ring/20',
+          'bg-card/80 border border-border/60 text-foreground-muted hover:text-foreground hover:bg-hover hover:border-border-strong hover:shadow-lg hover:shadow-border/40 dark:hover:shadow-card/40 focus-visible:ring-ring/20',
         minimal:
-          'bg-transparent hover:bg-ghost-hover/60 text-muted-foreground hover:text-foreground-soft focus-visible:ring-ring/20',
+          'bg-transparent hover:bg-hover/60 text-foreground-muted hover:text-foreground-soft focus-visible:ring-ring/20',
         glass:
-          'bg-overlay/10 backdrop-blur-md border border-surface-inverse-foreground/20 dark:border-surface-inverse-foreground/10 text-foreground-soft hover:bg-overlay/20 hover:border-surface-inverse-foreground/30 dark:hover:border-surface-inverse-foreground/20 focus-visible:ring-surface-inverse-foreground/30',
+          'bg-overlay/10 backdrop-blur-md border border-on-surface-inverse/20 dark:border-on-surface-inverse/10 text-foreground-soft hover:bg-overlay/20 hover:border-on-surface-inverse/30 dark:hover:border-on-surface-inverse/20 focus-visible:ring-on-surface-inverse/30',
         floating:
-          'bg-card border border-border text-muted-foreground hover:text-foreground shadow-sm hover:shadow-xl hover:shadow-border/30 dark:hover:shadow-card/30 hover:-translate-y-0.5 focus-visible:ring-ring/20',
-        pill: 'bg-muted text-muted-foreground hover:bg-ghost-hover hover:text-foreground focus-visible:ring-ring/20',
+          'bg-card border border-border text-foreground-muted hover:text-foreground shadow-sm hover:shadow-xl hover:shadow-border/30 dark:hover:shadow-card/30 hover:-translate-y-0.5 focus-visible:ring-ring/20',
+        pill: 'bg-muted text-foreground-muted hover:bg-hover hover:text-foreground focus-visible:ring-ring/20',
       },
       size: {
         sm: 'h-8 w-8',

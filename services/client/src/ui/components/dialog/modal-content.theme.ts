@@ -11,10 +11,19 @@ export const modalIconContainer = cva(
   {
     variants: {
       variant: {
-        blue: ['bg-info-subtle/80', 'border-info-border/60'],
-        green: ['bg-success-subtle/80', 'border-success-border/60'],
+        blue: [
+          'bg-info-wash/80 dark:bg-info-wash/16',
+          'border-info-border/60 dark:border-info-border/18',
+        ],
+        green: [
+          'bg-success-wash/80 dark:bg-success-wash/16',
+          'border-success-border/60 dark:border-success-border/18',
+        ],
         purple: ['bg-accent/12', 'border-accent/32 dark:border-accent/45'],
-        amber: ['bg-warning-subtle/80', 'border-warning-border/60'],
+        amber: [
+          'bg-warning-wash/80 dark:bg-warning-wash/16',
+          'border-warning-border/60 dark:border-warning-border/18',
+        ],
       },
     },
     defaultVariants: {
@@ -40,7 +49,7 @@ export const modalIcon = cva(['[&>svg]:h-5 [&>svg]:w-5'], {
 export const noticeContainer = cva(
   [
     'relative rounded-xl p-4',
-    'backdrop-blur-sm ring-1 ring-surface-inverse-foreground/[0.08]',
+    'backdrop-blur-sm ring-1 ring-on-surface-inverse/[0.08]',
   ],
   {
     variants: {
@@ -72,7 +81,7 @@ export const noticeOverlay = cva(['hidden'], {
 export const noticeIconContainer = cva(
   [
     'w-8 h-8 rounded-lg flex items-center justify-center',
-    'backdrop-blur-sm ring-1 ring-surface-inverse-foreground/[0.08]',
+    'backdrop-blur-sm ring-1 ring-on-surface-inverse/[0.08]',
   ],
   {
     variants: {
@@ -104,9 +113,9 @@ export const noticeIcon = cva(['[&>svg]:h-4 [&>svg]:w-4'], {
 export const noticeTitle = cva(['text-sm font-semibold leading-tight mb-1'], {
   variants: {
     variant: {
-      info: 'text-info-subtle-foreground',
-      warning: 'text-warning-subtle-foreground',
-      success: 'text-success-subtle-foreground',
+      info: 'text-info-text',
+      warning: 'text-warning-text',
+      success: 'text-success-text',
     },
   },
   defaultVariants: {
@@ -117,11 +126,9 @@ export const noticeTitle = cva(['text-sm font-semibold leading-tight mb-1'], {
 export const noticeText = cva(['text-sm leading-relaxed'], {
   variants: {
     variant: {
-      info: 'text-info-subtle-foreground/80 dark:text-info-subtle-foreground/70',
-      warning:
-        'text-warning-subtle-foreground/80 dark:text-warning-subtle-foreground/70',
-      success:
-        'text-success-subtle-foreground/80 dark:text-success-subtle-foreground/70',
+      info: 'text-info-text/80 dark:text-info-text/70',
+      warning: 'text-warning-text/80 dark:text-warning-text/70',
+      success: 'text-success-text/80 dark:text-success-text/70',
     },
   },
   defaultVariants: {
@@ -132,6 +139,6 @@ export const noticeText = cva(['text-sm leading-relaxed'], {
 export const buttonVariantMap: Record<ModalVariant, string> = {
   blue: 'outline-blue',
   green: 'outline-green',
-  purple: 'outline-purple',
+  purple: 'outline-accent',
   amber: 'outline-amber',
 };

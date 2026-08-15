@@ -48,7 +48,7 @@
             >
               {user.displayName}
             </h3>
-            <p class="text-sm text-muted-foreground truncate mt-1">
+            <p class="text-sm text-foreground-muted truncate mt-1">
               {user.email}
             </p>
           </div>

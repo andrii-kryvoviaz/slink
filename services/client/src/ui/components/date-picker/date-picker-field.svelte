@@ -38,7 +38,7 @@
     <label for={id} class="block text-sm font-medium text-foreground mb-3">
       {label}
       {#if required}
-        <span class="text-destructive ml-1">*</span>
+        <span class="text-danger ml-1">*</span>
       {/if}
     </label>
   {/if}
@@ -61,7 +61,7 @@
       {leftIcon}
       class={cn(
         leftIcon && 'pl-12',
-        error && 'border-destructive focus-visible:ring-destructive/20',
+        error && 'border-danger focus-visible:ring-danger/20',
         classNameProp,
       )}
       aria-describedby={error ? `${id}-error` : undefined}
@@ -71,10 +71,7 @@
   </div>
 
   {#if error}
-    <p
-      id={error ? `${id}-error` : undefined}
-      class="text-sm text-destructive mt-2"
-    >
+    <p id={error ? `${id}-error` : undefined} class="text-sm text-danger mt-2">
       {error}
     </p>
   {/if}

@@ -6,9 +6,9 @@ export const InputGroupShell = cva(
     variants: {
       variant: {
         default:
-          'border-border/50 bg-muted/50 hover:bg-ghost-hover/50 focus-within:border-border/50',
+          'border-border/50 bg-muted/50 hover:bg-hover/50 focus-within:border-border/50',
         success:
-          'border-success-border/50 bg-success-subtle/80 hover:bg-success-subtle/50 focus-within:border-success-border/50 focus-within:ring-success/20',
+          'border-success-border/50 dark:border-success-border/15 bg-success-wash/80 dark:bg-success-wash/16 hover:bg-success-wash/50 dark:hover:bg-success-wash/10 focus-within:border-success-border/50 dark:focus-within:border-success-border/15 focus-within:ring-success/20',
       },
       size: {
         sm: 'max-w-xs text-xs',
@@ -29,12 +29,12 @@ export const InputGroupShell = cva(
 );
 
 export const InputGroupField = cva(
-  'w-full bg-transparent border-0 focus:outline-none focus:ring-0 placeholder-foreground-subtle dark:placeholder-muted-foreground',
+  'w-full bg-transparent border-0 focus:outline-none focus:ring-0 placeholder-foreground-subtle dark:placeholder-foreground-muted',
   {
     variants: {
       variant: {
         default: 'text-foreground-soft',
-        success: 'text-success-subtle-foreground',
+        success: 'text-success-text',
       },
       size: {
         sm: 'px-3 py-2 text-xs',

@@ -45,13 +45,13 @@ export const TabMenuItemTheme = cva(
       variant: {
         default: '',
         minimal: 'rounded-none px-3',
-        pills: 'rounded-full bg-muted hover:bg-ghost-hover-strong',
+        pills: 'rounded-full bg-muted hover:bg-hover-strong',
         underline: 'rounded-none border-b-2 border-transparent px-3 pb-3',
       },
       active: {
         true: 'text-foreground font-semibold',
         false:
-          'text-muted-foreground hover:text-foreground hover:bg-surface-raised/30',
+          'text-foreground-muted hover:text-foreground hover:bg-surface-raised/30',
       },
     },
     compoundVariants: [
@@ -63,7 +63,7 @@ export const TabMenuItemTheme = cva(
       {
         variant: 'pills',
         active: true,
-        class: 'bg-accent/12 text-accent-subtle-foreground',
+        class: 'bg-accent/12 text-accent-text',
       },
     ],
     defaultVariants: {

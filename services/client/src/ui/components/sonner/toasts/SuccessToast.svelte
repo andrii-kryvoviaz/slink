@@ -14,7 +14,7 @@
 </script>
 
 <div
-  class="flex items-center gap-3 p-4 text-success-subtle-foreground border border-success-border/20 shadow-md shadow-success/4 backdrop-blur-xl bg-success-subtle rounded-xl"
+  class="flex items-center gap-3 p-4 text-success-text border border-success-border/20 dark:border-success-border/6 shadow-md shadow-success/4 backdrop-blur-xl bg-success-wash dark:bg-success-wash/20 rounded-xl"
 >
   <div
     class="flex h-8 w-8 items-center justify-center rounded-full bg-success/15 shrink-0"

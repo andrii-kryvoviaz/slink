@@ -88,7 +88,7 @@
             Someone
           {/if}
         </span>
-        <span class="text-muted-foreground text-sm">
+        <span class="text-foreground-muted text-sm">
           {#if group.type === 'comment'}
             commented
           {:else if group.type === 'comment_reply'}
@@ -123,7 +123,7 @@
     <div class="shrink-0 self-center flex items-center gap-2">
       {#if isGrouped && !hasPerItemContent}
         <span
-          class="text-xs font-medium text-muted-foreground px-2 py-0.5 rounded-full bg-muted"
+          class="text-xs font-medium text-foreground-muted px-2 py-0.5 rounded-full bg-muted"
         >
           {group.items.length}
         </span>
@@ -147,7 +147,7 @@
       {#each group.items as item (item.id)}
         <button
           onclick={() => onItemClick(item)}
-          class="w-full text-left flex items-start gap-3 px-4 py-3 hover:bg-ghost-hover transition-colors border-b border-border/10 last:border-b-0"
+          class="w-full text-left flex items-start gap-3 px-4 py-3 hover:bg-hover transition-colors border-b border-border/10 last:border-b-0"
         >
           <div class="shrink-0 w-10 h-10 flex items-center justify-center">
             <Icon

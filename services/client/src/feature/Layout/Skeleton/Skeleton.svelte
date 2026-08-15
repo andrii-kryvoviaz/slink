@@ -29,7 +29,7 @@
 
   const animationClasses = {
     pulse: 'animate-pulse',
-    wave: 'animate-shimmer bg-gradient-to-r from-muted via-muted-foreground/30 to-muted bg-[length:200%_100%]',
+    wave: 'animate-shimmer bg-gradient-to-r from-muted via-foreground-muted/30 to-muted bg-[length:200%_100%]',
     none: '',
   };
 

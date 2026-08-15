@@ -51,7 +51,7 @@
     <div class="overflow-x-auto">
       <table class="w-full">
         <thead>
-          <tr class="bg-muted-subtle border-b border-border">
+          <tr class="bg-muted-soft border-b border-border">
             <th class="h-10 px-4 text-left">
               <Skeleton width="40px" height="10px" />
             </th>

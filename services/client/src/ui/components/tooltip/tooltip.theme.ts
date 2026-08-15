@@ -6,7 +6,7 @@ export const tooltipVariants = cva(
     variants: {
       variant: {
         default:
-          'bg-muted-subtle text-foreground border border-border shadow-sm backdrop-blur-sm',
+          'bg-muted-soft text-foreground border border-border shadow-sm backdrop-blur-sm',
         subtle:
           'bg-muted/95 text-foreground border border-border/50 shadow-sm backdrop-blur-sm',
         glass:
@@ -14,19 +14,19 @@ export const tooltipVariants = cva(
         contrast:
           'bg-foreground text-background border-0 shadow-lg font-medium',
         floating:
-          'bg-card text-foreground border border-border shadow-lg ring-1 ring-ghost-hover',
+          'bg-card text-foreground border border-border shadow-lg ring-1 ring-hover',
         minimal:
-          'bg-muted-subtle/90 text-muted-foreground border-0 shadow-sm backdrop-blur-sm',
+          'bg-muted-soft/90 text-foreground-muted border-0 shadow-sm backdrop-blur-sm',
         success:
-          'bg-success-subtle text-success-deep-foreground border border-success-border shadow-sm',
+          'bg-success-wash dark:bg-success-wash/20 text-success-text-strong border border-success-border dark:border-success-border/30 shadow-sm',
         destructive:
-          'bg-danger-subtle text-danger-deep-foreground border border-danger-border shadow-sm',
-        info: 'bg-info-subtle text-info-deep-foreground border border-info-border shadow-sm',
+          'bg-danger-wash dark:bg-danger-wash/20 text-danger-text-strong border border-danger-border dark:border-danger-border/30 shadow-sm',
+        info: 'bg-info-wash dark:bg-info-wash/20 text-info-text-strong border border-info-border dark:border-info-border/30 shadow-sm',
         warning:
-          'bg-warning-subtle text-warning-deep-foreground border border-warning-border shadow-sm',
-        primary: 'bg-accent text-accent-foreground border-0 shadow-md',
+          'bg-warning-wash dark:bg-warning-wash/20 text-warning-text-strong border border-warning-border dark:border-warning-border/30 shadow-sm',
+        primary: 'bg-accent text-on-accent border-0 shadow-md',
         secondary: 'bg-muted text-foreground border border-border shadow-sm',
-        dark: 'bg-surface-inverse text-surface-inverse-foreground/90 border border-surface-inverse-foreground/10 shadow-lg backdrop-blur-sm',
+        dark: 'bg-surface-inverse text-on-surface-inverse/90 border border-on-surface-inverse/10 shadow-lg backdrop-blur-sm',
       },
       size: {
         xs: 'text-xs px-2 py-1 max-w-48',
@@ -67,19 +67,22 @@ export const tooltipVariants = cva(
 export const tooltipArrowVariants = cva('z-50 size-2.5', {
   variants: {
     variant: {
-      default: 'bg-muted-subtle border-l border-t border-border',
+      default: 'bg-muted-soft border-l border-t border-border',
       subtle: 'bg-muted border-l border-t border-border/50',
       glass: 'bg-card/80 border-l border-t border-border/30',
       contrast: 'bg-foreground border-0',
       floating: 'bg-card border-l border-t border-border',
-      minimal: 'bg-muted-subtle/90 border-0',
-      success: 'bg-success-subtle border-l border-t border-success-border',
-      destructive: 'bg-danger-subtle border-l border-t border-danger-border',
-      info: 'bg-info-subtle border-l border-t border-info-border',
-      warning: 'bg-warning-subtle border-l border-t border-warning-border',
+      minimal: 'bg-muted-soft/90 border-0',
+      success:
+        'bg-success-wash dark:bg-success-wash/20 border-l border-t border-success-border dark:border-success-border/30',
+      destructive:
+        'bg-danger-wash dark:bg-danger-wash/20 border-l border-t border-danger-border dark:border-danger-border/30',
+      info: 'bg-info-wash dark:bg-info-wash/20 border-l border-t border-info-border dark:border-info-border/30',
+      warning:
+        'bg-warning-wash dark:bg-warning-wash/20 border-l border-t border-warning-border dark:border-warning-border/30',
       primary: 'bg-accent border-0',
       secondary: 'bg-muted border-l border-t border-border',
-      dark: 'bg-surface-inverse border-l border-t border-surface-inverse-foreground/10',
+      dark: 'bg-surface-inverse border-l border-t border-on-surface-inverse/10',
     },
     rounded: {
       none: 'rounded-none',

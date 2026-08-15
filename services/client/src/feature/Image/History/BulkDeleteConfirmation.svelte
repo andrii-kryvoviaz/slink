@@ -24,7 +24,7 @@
 <div class="w-xs max-w-screen space-y-4">
   <div class="flex items-center gap-3">
     <div
-      class="flex h-10 w-10 items-center justify-center rounded-full bg-danger/15 border border-danger-border/40 shadow-sm flex-shrink-0"
+      class="flex h-10 w-10 items-center justify-center rounded-full bg-danger/15 border border-danger-border/40 dark:border-danger-border/12 shadow-sm flex-shrink-0"
     >
       <Icon icon="ph:images" class="h-5 w-5 text-danger" />
     </div>
@@ -32,7 +32,7 @@
       <h3 class="text-sm font-semibold text-foreground">
         {plural(count, ['Delete # image', 'Delete # images'])}
       </h3>
-      <p class="text-xs text-muted-foreground">
+      <p class="text-xs text-foreground-muted">
         Selected images will be permanently removed
       </p>
     </div>
@@ -45,7 +45,7 @@
           <span class="text-sm font-medium text-foreground">
             Remove from storage
           </span>
-          <p class="text-xs text-muted-foreground">
+          <p class="text-xs text-foreground-muted">
             Permanently delete the files from storage
           </p>
         </div>

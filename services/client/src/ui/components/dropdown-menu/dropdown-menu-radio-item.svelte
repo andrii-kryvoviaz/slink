@@ -16,7 +16,7 @@
   bind:ref
   data-slot="dropdown-menu-radio-item"
   class={cn(
-    "focus:bg-info-subtle focus:text-info-subtle-foreground outline-hidden relative flex cursor-default select-none items-center gap-2 rounded-lg py-2.5 pl-8 pr-3 text-sm font-medium text-foreground-soft transition-all duration-150 hover:bg-info-subtle hover:text-info-subtle-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+    "focus:bg-info-wash dark:focus:bg-info-wash/20 focus:text-info-text outline-hidden relative flex cursor-default select-none items-center gap-2 rounded-lg py-2.5 pl-8 pr-3 text-sm font-medium text-foreground-soft transition-all duration-150 hover:bg-info-wash dark:hover:bg-info-wash/20 hover:text-info-text data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
     className,
   )}
   {...restProps}

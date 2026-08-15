@@ -23,7 +23,7 @@
   <div class="inline-flex items-center gap-2 {className}">
     <button
       onclick={handleCopy}
-      class="underline underline-offset-2 decoration-dotted decoration-muted-foreground hover:decoration-solid transition-all duration-200 cursor-pointer"
+      class="underline underline-offset-2 decoration-dotted decoration-foreground-muted hover:decoration-solid transition-all duration-200 cursor-pointer"
       title={copiedState.active ? 'Copied!' : 'Click to copy'}
     >
       {text}
@@ -31,8 +31,8 @@
     <button
       onclick={handleCopy}
       class="p-1 rounded-md transition-all duration-200 {copiedState.active
-        ? 'text-success-subtle-foreground bg-success/15'
-        : 'text-muted-foreground hover:text-foreground-soft hover:bg-muted'}"
+        ? 'text-success-text bg-success/15'
+        : 'text-foreground-muted hover:text-foreground-soft hover:bg-muted'}"
       title={copiedState.active ? 'Copied!' : 'Copy to clipboard'}
     >
       <Icon

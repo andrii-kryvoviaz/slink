@@ -24,7 +24,7 @@
   });
 
   const tableHeadVariants = tv({
-    base: 'first:pl-4 first:text-left last:pr-4 last:text-right bg-muted-subtle text-muted-foreground-strong text-xs font-medium uppercase tracking-wider',
+    base: 'first:pl-4 first:text-left last:pr-4 last:text-right bg-muted-soft text-foreground-muted text-xs font-medium uppercase tracking-wider',
   });
 
   const tableCellVariants = tv({
@@ -82,7 +82,7 @@
           {#each dataTable.getRowModel().rows as row (row.id)}
             <Table.Row
               class={cn(
-                'group/row border-border/60 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-muted-subtle transition-colors duration-200',
+                'group/row border-border/60 hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-muted-soft transition-colors duration-200',
                 onRowClick && 'cursor-pointer',
               )}
               onclick={onRowClick ? () => onRowClick(row.original) : undefined}

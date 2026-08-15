@@ -3,7 +3,7 @@ import { cva } from 'class-variance-authority';
 export const togglePillsTheme = cva('inline-flex flex-wrap gap-2');
 
 export const togglePillsItemTheme = cva(
-  'inline-flex cursor-pointer items-center rounded-full border font-medium transition-colors duration-200 border-border bg-transparent text-muted-foreground data-[state=off]:hover:text-foreground-soft data-[state=off]:hover:bg-ghost-hover/60 data-[state=on]:border-info-border data-[state=on]:bg-info-subtle data-[state=on]:text-info-subtle-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex cursor-pointer items-center rounded-full border font-medium transition-colors duration-200 border-border bg-transparent text-foreground-muted data-[state=off]:hover:text-foreground-soft data-[state=off]:hover:bg-hover/60 data-[state=on]:border-info-border dark:data-[state=on]:border-info-border/30 data-[state=on]:bg-info-wash dark:data-[state=on]:bg-info-wash/20 data-[state=on]:text-info-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       size: {

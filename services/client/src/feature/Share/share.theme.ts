@@ -9,8 +9,8 @@ export const status = tv({
   },
   variants: {
     kind: {
-      saving: { line: 'text-muted-foreground' },
-      saved: { line: 'text-success-subtle-foreground' },
+      saving: { line: 'text-foreground-muted' },
+      saved: { line: 'text-success-text' },
       error: { line: 'text-danger' },
     },
     spinning: {

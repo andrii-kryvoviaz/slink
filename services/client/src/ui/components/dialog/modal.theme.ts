@@ -62,17 +62,17 @@ export const modalContentVariants = cva(
           'backdrop-blur-[28px] backdrop-saturate-[1.6]',
           'bg-card/65',
           'shadow-2xl',
-          'border border-border/15 ring-1 ring-surface-inverse-foreground/[0.05]',
+          'border border-border/15 ring-1 ring-on-surface-inverse/[0.05]',
         ],
         frosted: [
           'backdrop-blur-[28px] backdrop-saturate-[1.6]',
           'bg-background/70',
           'shadow-2xl',
-          'border border-border/15 ring-1 ring-surface-inverse-foreground/[0.05]',
+          'border border-border/15 ring-1 ring-on-surface-inverse/[0.05]',
         ],
         solid: [
           'bg-scrim/90 backdrop-blur-xl',
-          'border border-surface-inverse-foreground/10',
+          'border border-on-surface-inverse/10',
         ],
       },
     },
@@ -101,7 +101,7 @@ export const modalHeaderIconContainerVariants = cva(
   [
     'w-10 h-10 rounded-xl flex items-center justify-center',
     'flex-shrink-0',
-    'backdrop-blur-sm ring-1 ring-surface-inverse-foreground/[0.08]',
+    'backdrop-blur-sm ring-1 ring-on-surface-inverse/[0.08]',
   ],
   {
     variants: {
@@ -110,7 +110,7 @@ export const modalHeaderIconContainerVariants = cva(
         green: 'bg-success/10',
         purple: 'bg-accent/10',
         amber: 'bg-warning/10',
-        neutral: 'bg-muted-foreground/10',
+        neutral: 'bg-foreground-muted/10',
         danger: 'bg-danger/10',
       },
     },
@@ -125,7 +125,7 @@ export const modalHeaderIconVariants = cva(['[&>svg]:h-5 [&>svg]:w-5'], {
       green: 'text-success',
       purple: 'text-accent',
       amber: 'text-warning',
-      neutral: 'text-muted-foreground',
+      neutral: 'text-foreground-muted',
       danger: 'text-danger',
     },
   },
@@ -149,7 +149,7 @@ export const modalFooterSubmitVariants = cva(['flex-1'], {
 export const buttonVariantMap: Record<ModalVariant, string> = {
   blue: 'outline-blue',
   green: 'outline-green',
-  purple: 'outline-purple',
+  purple: 'outline-accent',
   amber: 'outline-amber',
   neutral: 'outline-blue',
   danger: 'outline-danger',

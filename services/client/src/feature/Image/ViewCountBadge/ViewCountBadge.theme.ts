@@ -38,10 +38,10 @@ export const viewCountBadgeIconWrapperTheme = cva(
 export const viewCountBadgeIconTheme = cva('shrink-0', {
   variants: {
     variant: {
-      card: 'h-4 w-4 text-muted-foreground',
-      compact: 'h-3 w-3 text-muted-foreground',
+      card: 'h-4 w-4 text-foreground-muted',
+      compact: 'h-3 w-3 text-foreground-muted',
       overlay: 'h-3 w-3 text-foreground-soft',
-      badge: 'h-4 w-4 text-muted-foreground',
+      badge: 'h-4 w-4 text-foreground-muted',
     },
   },
   defaultVariants: {
@@ -50,7 +50,7 @@ export const viewCountBadgeIconTheme = cva('shrink-0', {
 });
 
 export const viewCountBadgeLabelTheme = cva(
-  'font-medium text-muted-foreground',
+  'font-medium text-foreground-muted',
   {
     variants: {
       variant: {

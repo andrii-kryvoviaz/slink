@@ -126,7 +126,7 @@
                 <button
                   type="button"
                   onclick={() => (showConfirm = true)}
-                  class="inline-flex items-center justify-center w-5 h-5 rounded text-foreground-subtle hover:text-foreground-soft hover:bg-ghost-hover transition-colors duration-150"
+                  class="inline-flex items-center justify-center w-5 h-5 rounded text-foreground-subtle hover:text-foreground-soft hover:bg-hover transition-colors duration-150"
                   aria-label="Reset to default value"
                 >
                   <Icon icon="lucide:rotate-ccw" class="w-3 h-3" />
@@ -138,7 +138,7 @@
         </div>
 
         {#if hint}
-          <p class="text-xs text-muted-foreground mt-0.5">
+          <p class="text-xs text-foreground-muted mt-0.5">
             {@render hint?.()}
           </p>
         {/if}
@@ -160,7 +160,7 @@
     <div
       class="absolute inset-0 flex items-center justify-between gap-3 px-4 bg-card animate-in fade-in duration-100 z-10"
     >
-      <div class="flex items-center gap-2 text-sm text-muted-foreground">
+      <div class="flex items-center gap-2 text-sm text-foreground-muted">
         <Icon icon="lucide:rotate-ccw" class="w-4 h-4 text-foreground-subtle" />
         <span>
           Reset to <span class="font-medium text-foreground"

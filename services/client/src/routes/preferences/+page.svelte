@@ -143,14 +143,14 @@
       <section class="space-y-1">
         <div class="flex items-center justify-between gap-4 pb-3">
           <h2
-            class="text-sm font-medium text-muted-foreground uppercase tracking-wider"
+            class="text-sm font-medium text-foreground-muted uppercase tracking-wider"
           >
             Language
           </h2>
         </div>
 
         <div
-          class="divide-y divide-muted rounded-xl bg-muted-subtle/50 dark:bg-muted-subtle/30 border border-muted overflow-hidden"
+          class="divide-y divide-muted rounded-xl bg-muted-soft/50 dark:bg-muted-soft/30 border border-muted overflow-hidden"
         >
           <SettingItem>
             {#snippet label()}
@@ -172,14 +172,14 @@
       <section class="space-y-1">
         <div class="flex items-center justify-between gap-4 pb-3">
           <h2
-            class="text-sm font-medium text-muted-foreground uppercase tracking-wider"
+            class="text-sm font-medium text-foreground-muted uppercase tracking-wider"
           >
             Appearance
           </h2>
         </div>
 
         <div
-          class="divide-y divide-muted rounded-xl bg-muted-subtle/50 dark:bg-muted-subtle/30 border border-muted overflow-hidden"
+          class="divide-y divide-muted rounded-xl bg-muted-soft/50 dark:bg-muted-soft/30 border border-muted overflow-hidden"
         >
           <SettingItem>
             {#snippet label()}
@@ -196,14 +196,14 @@
       <section class="space-y-1">
         <div class="flex items-center justify-between gap-4 pb-3">
           <h2
-            class="text-sm font-medium text-muted-foreground uppercase tracking-wider"
+            class="text-sm font-medium text-foreground-muted uppercase tracking-wider"
           >
             Navigation
           </h2>
         </div>
 
         <div
-          class="divide-y divide-muted rounded-xl bg-muted-subtle/50 dark:bg-muted-subtle/30 border border-muted overflow-hidden"
+          class="divide-y divide-muted rounded-xl bg-muted-soft/50 dark:bg-muted-soft/30 border border-muted overflow-hidden"
         >
           <SettingItem>
             {#snippet label()}
@@ -230,13 +230,13 @@
         <section class="space-y-1">
           <div class="flex items-center justify-between gap-4 pb-3">
             <h2
-              class="text-sm font-medium text-muted-foreground uppercase tracking-wider"
+              class="text-sm font-medium text-foreground-muted uppercase tracking-wider"
             >
               Image Uploads
             </h2>
           </div>
           <div
-            class="divide-y divide-muted rounded-xl bg-muted-subtle/50 dark:bg-muted-subtle/30 border border-muted overflow-hidden"
+            class="divide-y divide-muted rounded-xl bg-muted-soft/50 dark:bg-muted-soft/30 border border-muted overflow-hidden"
           >
             <SettingItem>
               {#snippet label()}
@@ -297,13 +297,13 @@
         <section class="space-y-1">
           <div class="flex items-center justify-between gap-4 pb-3">
             <h2
-              class="text-sm font-medium text-muted-foreground uppercase tracking-wider"
+              class="text-sm font-medium text-foreground-muted uppercase tracking-wider"
             >
               Image Licensing
             </h2>
           </div>
           <div
-            class="divide-y divide-muted rounded-xl bg-muted-subtle/50 dark:bg-muted-subtle/30 border border-muted overflow-hidden"
+            class="divide-y divide-muted rounded-xl bg-muted-soft/50 dark:bg-muted-soft/30 border border-muted overflow-hidden"
           >
             <SettingItem>
               {#snippet label()}
@@ -378,7 +378,7 @@
 
     <div class="flex items-center justify-end gap-3 pt-4">
       {#if $isPreferencesFormLoading}
-        <div class="flex items-center gap-2 text-sm text-muted-foreground">
+        <div class="flex items-center gap-2 text-sm text-foreground-muted">
           <Loader variant="minimal" size="xs" />
           <span>Saving...</span>
         </div>

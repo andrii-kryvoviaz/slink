@@ -17,7 +17,7 @@
     <div class="font-medium text-foreground truncate">
       {user.displayName}
     </div>
-    <div class="text-sm text-muted-foreground truncate">
+    <div class="text-sm text-foreground-muted truncate">
       <CopyableText text={user.email} />
     </div>
   </div>

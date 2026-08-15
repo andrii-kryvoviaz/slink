@@ -6,9 +6,9 @@ export const contextMenuItemTheme = cva(
     variants: {
       variant: {
         default:
-          'text-foreground-soft data-highlighted:bg-info-subtle data-highlighted:text-info-subtle-foreground hover:bg-info-subtle hover:text-info-subtle-foreground',
+          'text-foreground-soft data-highlighted:bg-info-wash dark:data-highlighted:bg-info-wash/20 data-highlighted:text-info-text hover:bg-info-wash dark:hover:bg-info-wash/20 hover:text-info-text',
         destructive:
-          'text-foreground-soft data-highlighted:bg-danger-subtle data-highlighted:text-danger-subtle-foreground hover:bg-danger-subtle hover:text-danger-subtle-foreground data-[variant=destructive]:*:[svg]:!text-danger-subtle-foreground',
+          'text-foreground-soft data-highlighted:bg-danger-wash dark:data-highlighted:bg-danger-wash/20 data-highlighted:text-danger-text hover:bg-danger-wash dark:hover:bg-danger-wash/20 hover:text-danger-text data-[variant=destructive]:*:[svg]:!text-danger-text',
       },
       inset: {
         true: 'data-[inset]:pl-8',
@@ -25,9 +25,9 @@ export const contextMenuItemTheme = cva(
 export const contextMenuItemIconTheme = cva('transition-colors duration-150', {
   variants: {
     variant: {
-      default: 'text-muted-foreground',
+      default: 'text-foreground-muted',
       destructive:
-        'text-muted-foreground group-hover:text-danger-subtle-foreground group-data-[highlighted]:text-danger-subtle-foreground',
+        'text-foreground-muted group-hover:text-danger-text group-data-[highlighted]:text-danger-text',
     },
   },
   defaultVariants: {

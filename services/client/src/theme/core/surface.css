@@ -26,7 +26,7 @@
         calc(h + 2.29)
     )
   );
-  --color-muted-subtle: light-dark(var(--color-background), var(--color-card));
+  --color-muted-soft: light-dark(var(--color-background), var(--color-card));
   --color-border: var(--color-muted);
   --color-border-strong: light-dark(
     oklch(
@@ -37,7 +37,7 @@
         calc(h - 0.05)
     )
   );
-  --color-border-stronger: light-dark(
+  --color-border-bold: light-dark(
     oklch(
       from var(--color-background) calc(l - 0.4807) calc(c * 3.3846)
         calc(h + 2.34)
@@ -72,7 +72,7 @@
         calc(h + 2.02)
     )
   );
-  --color-muted-foreground: light-dark(
+  --color-foreground-muted: light-dark(
     oklch(
       from var(--color-foreground) calc(l + 0.1279) calc(c * 1.5371)
         calc(h - 0.05)
@@ -81,16 +81,11 @@
       from var(--color-foreground) calc(l - 0.1013) calc(c * 2.5) calc(h + 2.17)
     )
   );
-  --color-muted-foreground-strong: light-dark(
-    var(--color-foreground-soft),
-    var(--color-muted-foreground)
-  );
-
-  --color-primary: light-dark(
+  --color-foreground-solid: light-dark(
     var(--color-foreground),
     var(--color-foreground-soft)
   );
-  --color-primary-foreground: var(--color-card);
+  --color-on-foreground-solid: var(--color-card);
   --color-surface-inverse: light-dark(
     var(--color-foreground),
     var(--color-card)
@@ -106,18 +101,18 @@
     oklch(from var(--color-card) l c h / 0.7),
     oklch(from var(--color-card) l c h / 0.95)
   );
-  --color-sidebar-foreground: var(--color-foreground);
+  --color-on-sidebar: var(--color-foreground);
   --color-sidebar-primary: light-dark(
-    var(--color-primary),
+    var(--color-foreground-solid),
     oklch(
       from var(--color-accent) calc(l - 0.1021) calc(c * 1.3063) calc(h + 5.34)
     )
   );
-  --color-sidebar-accent: light-dark(
-    oklch(from var(--color-muted-subtle) l c h / 0.8),
+  --color-sidebar-hover: light-dark(
+    oklch(from var(--color-muted-soft) l c h / 0.8),
     oklch(from var(--color-muted) l c h / 0.8)
   );
-  --color-sidebar-accent-foreground: var(--color-foreground);
+  --color-on-sidebar-hover: var(--color-foreground);
   --color-sidebar-border: light-dark(
     var(--color-border),
     var(--color-border-strong)
@@ -125,27 +120,23 @@
   --color-sidebar-ring: var(--color-ring);
 
   --color-popover: var(--color-card);
-  --color-popover-foreground: var(--color-foreground);
+  --color-on-popover: var(--color-foreground);
   --color-foreground-subtle: light-dark(
     oklch(
-      from var(--color-muted-foreground) calc(l + 0.156) calc(c * 0.8148)
+      from var(--color-foreground-muted) calc(l + 0.156) calc(c * 0.8148)
         calc(h - 3.039)
     ),
     oklch(
-      from var(--color-muted-foreground) calc(l - 0.156) calc(c * 1.2273)
+      from var(--color-foreground-muted) calc(l - 0.156) calc(c * 1.2273)
         calc(h + 3.039)
     )
   );
-  --color-ghost-hover: color-mix(
-    in oklab,
-    var(--color-foreground) 8%,
-    transparent
-  );
-  --color-ghost-hover-strong: light-dark(
+  --color-hover: color-mix(in oklab, var(--color-foreground) 8%, transparent);
+  --color-hover-strong: light-dark(
     color-mix(in oklab, var(--color-foreground) 8%, transparent),
     color-mix(in oklab, var(--color-foreground) 20%, transparent)
   );
-  --color-surface-inverse-foreground: oklch(
+  --color-on-surface-inverse: oklch(
     from var(--color-surface-inverse)
       clamp(0, (var(--on-color-flip) - l) * 100, 1) 0 h
   );

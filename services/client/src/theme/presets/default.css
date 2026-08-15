@@ -40,6 +40,12 @@
   initial-value: blue;
 }
 
+@property --color-primary {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: blue;
+}
+
 @property --color-scrim {
   syntax: '<color>';
   inherits: true;
@@ -57,6 +63,7 @@
   --color-warning: light-dark(var(--color-amber-500), var(--color-amber-400));
   --color-danger: light-dark(var(--color-red-600), var(--color-red-400));
   --color-info: light-dark(var(--color-blue-500), var(--color-blue-400));
+  --color-primary: light-dark(var(--color-blue-500), var(--color-blue-400));
 
   --color-scrim: var(--color-black);
 
@@ -102,27 +109,26 @@
       ),
       var(--color-gray-900)
     );
-    --color-primary: light-dark(var(--color-zinc-900), var(--color-zinc-200));
-    --color-primary-foreground: light-dark(
+    --color-foreground-solid: light-dark(
+      var(--color-zinc-900),
+      var(--color-zinc-200)
+    );
+    --color-on-foreground-solid: light-dark(
       var(--color-zinc-50),
       var(--color-zinc-900)
     );
     --color-muted: light-dark(var(--color-gray-100), var(--color-gray-800));
-    --color-muted-subtle: light-dark(var(--color-gray-50), var(--color-card));
-    --color-muted-foreground: light-dark(
+    --color-muted-soft: light-dark(var(--color-gray-50), var(--color-card));
+    --color-foreground-muted: light-dark(
       var(--color-gray-500),
       var(--color-gray-400)
-    );
-    --color-muted-foreground-strong: light-dark(
-      var(--color-gray-600),
-      var(--color-muted-foreground)
     );
     --color-border: light-dark(var(--color-gray-200), oklch(1 0 0 / 0.1));
     --color-border-strong: light-dark(
       var(--color-gray-300),
       var(--color-gray-700)
     );
-    --color-border-stronger: light-dark(
+    --color-border-bold: light-dark(
       var(--color-gray-500),
       var(--color-gray-600)
     );
@@ -141,19 +147,19 @@
       oklch(from var(--color-zinc-50) l c h / 0.7),
       oklch(from var(--color-zinc-900) l c h / 0.95)
     );
-    --color-sidebar-foreground: light-dark(
+    --color-on-sidebar: light-dark(
       var(--color-zinc-950),
       var(--color-foreground)
     );
     --color-sidebar-primary: light-dark(
-      var(--color-primary),
+      var(--color-foreground-solid),
       var(--color-blue-700)
     );
-    --color-sidebar-accent: light-dark(
+    --color-sidebar-hover: light-dark(
       oklch(from var(--color-zinc-100) l c h / 0.8),
       oklch(from var(--color-zinc-800) l c h / 0.8)
     );
-    --color-sidebar-accent-foreground: light-dark(
+    --color-on-sidebar-hover: light-dark(
       var(--color-zinc-900),
       var(--color-foreground)
     );

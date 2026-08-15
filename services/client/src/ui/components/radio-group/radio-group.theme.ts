@@ -9,7 +9,7 @@ export const RadioGroupCardTheme = cva(
     'focus-visible:ring-2 focus-visible:ring-offset-1',
     'focus-visible:ring-offset-card',
     'disabled:cursor-not-allowed disabled:opacity-50',
-    'data-[state=unchecked]:hover:bg-ghost-hover/40',
+    'data-[state=unchecked]:hover:bg-hover/40',
     'data-[state=unchecked]:hover:border-border-strong',
   ],
   {
@@ -24,8 +24,8 @@ export const RadioGroupCardTheme = cva(
         danger: [
           'border-border/70',
           'focus-visible:ring-danger/40',
-          'data-[state=checked]:border-danger-border/40',
-          'data-[state=checked]:bg-danger-subtle',
+          'data-[state=checked]:border-danger-border/40 dark:data-[state=checked]:border-danger-border/12',
+          'data-[state=checked]:bg-danger-wash dark:data-[state=checked]:bg-danger-wash/20',
         ],
       },
     },
@@ -86,7 +86,7 @@ export const RadioGroupCardTitleTheme = cva('block text-xs font-medium', {
 });
 
 export const RadioGroupCardDescriptionTheme = cva(
-  'block text-xs text-muted-foreground',
+  'block text-xs text-foreground-muted',
 );
 
 export type RadioGroupCardTone = NonNullable<

@@ -36,10 +36,10 @@
     <div class="flex items-center gap-2 mb-2">
       <h2 class="text-lg font-semibold text-foreground">License</h2>
       {#if state.isLoading}
-        <span class="text-xs text-muted-foreground">Saving...</span>
+        <span class="text-xs text-foreground-muted">Saving...</span>
       {/if}
     </div>
-    <p class="text-xs text-muted-foreground mb-3">
+    <p class="text-xs text-foreground-muted mb-3">
       Choose how others can use this image
     </p>
     <Select

@@ -113,7 +113,7 @@
   });
 
   const inputClasses =
-    'w-full resize-none rounded-lg bg-muted-subtle text-sm text-foreground placeholder-muted-foreground border border-border focus:border-info focus:ring-1 focus:ring-info/20 focus:outline-none transition-all py-2.5 px-3';
+    'w-full resize-none rounded-lg bg-muted-soft text-sm text-foreground placeholder-foreground-muted border border-border focus:border-info focus:ring-1 focus:ring-info/20 focus:outline-none transition-all py-2.5 px-3';
 </script>
 
 <div class={className}>
@@ -153,11 +153,11 @@
           </button>
           <button
             onclick={cancel}
-            class="text-muted-foreground hover:text-foreground-soft transition-colors"
+            class="text-foreground-muted hover:text-foreground-soft transition-colors"
           >
             Cancel
           </button>
-          <span class="text-muted-foreground ml-auto">
+          <span class="text-foreground-muted ml-auto">
             {type === 'input' ? 'Enter' : '⌘ + Enter'}
           </span>
         </div>
@@ -166,7 +166,7 @@
   {:else}
     <button
       onclick={startEditing}
-      class="w-full text-left rounded-lg py-2.5 px-3 -mx-3 transition-all duration-150 hover:bg-muted-subtle group cursor-text flex items-center gap-2"
+      class="w-full text-left rounded-lg py-2.5 px-3 -mx-3 transition-all duration-150 hover:bg-muted-soft group cursor-text flex items-center gap-2"
     >
       {#if value}
         <span
@@ -180,7 +180,7 @@
         </span>
       {:else}
         <span
-          class="text-sm text-muted-foreground group-hover:text-foreground-subtle transition-colors"
+          class="text-sm text-foreground-muted group-hover:text-foreground-subtle transition-colors"
         >
           {emptyText}
         </span>
@@ -188,7 +188,7 @@
       {#if isLoading && !header}
         <Icon
           icon="lucide:loader-2"
-          class="h-3.5 w-3.5 text-muted-foreground animate-spin shrink-0"
+          class="h-3.5 w-3.5 text-foreground-muted animate-spin shrink-0"
         />
       {/if}
     </button>

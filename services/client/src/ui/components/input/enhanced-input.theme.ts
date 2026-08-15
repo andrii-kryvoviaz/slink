@@ -2,7 +2,7 @@ import { cva } from 'class-variance-authority';
 import type { VariantProps } from 'class-variance-authority';
 
 export const inputVariants = cva(
-  'aria-invalid:border-accent-border aria-invalid:focus-visible:border-accent-strong/50 aria-invalid:focus-visible:ring-accent-strong/20 dark:aria-invalid:bg-accent-subtle aria-invalid:hover:bg-accent-subtle/40 transition-all duration-200',
+  'aria-invalid:border-accent-border dark:aria-invalid:border-accent-border/30 aria-invalid:focus-visible:border-accent-strong/50 aria-invalid:focus-visible:ring-accent-strong/20 dark:aria-invalid:bg-accent-wash/20 aria-invalid:hover:bg-accent-wash/40 dark:aria-invalid:hover:bg-accent-wash/8 transition-all duration-200',
   {
     variants: {
       variant: {

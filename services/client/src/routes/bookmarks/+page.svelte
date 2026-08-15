@@ -97,7 +97,7 @@
                 icon="ph:image-broken"
                 class="w-12 h-12 mx-auto text-ring mb-3"
               />
-              <p class="text-muted-foreground text-sm">
+              <p class="text-foreground-muted text-sm">
                 Image no longer available
               </p>
               <button
@@ -139,13 +139,13 @@
                   class="absolute top-3 left-3 flex items-center gap-2 opacity-0 group-hover/card:opacity-100 transition-all duration-300 translate-y-1 group-hover/card:translate-y-0"
                 >
                   <div
-                    class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-scrim/40 backdrop-blur-md text-surface-inverse-foreground text-xs"
+                    class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-scrim/40 backdrop-blur-md text-on-surface-inverse text-xs"
                   >
                     <Icon icon="ph:eye" class="w-3.5 h-3.5" />
                     <span>{image.attributes?.views}</span>
                   </div>
                   <div
-                    class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-scrim/40 backdrop-blur-md text-surface-inverse-foreground text-xs"
+                    class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-scrim/40 backdrop-blur-md text-on-surface-inverse text-xs"
                   >
                     <Icon icon="ph:frame-corners" class="w-3.5 h-3.5" />
                     <span>{image.metadata?.width}×{image.metadata?.height}</span
@@ -157,7 +157,7 @@
                   class="absolute bottom-3 left-3 opacity-0 group-hover/card:opacity-100 transition-all duration-300 translate-y-1 group-hover/card:translate-y-0"
                 >
                   <div
-                    class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-scrim/40 backdrop-blur-md text-surface-inverse-foreground text-xs"
+                    class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-scrim/40 backdrop-blur-md text-on-surface-inverse text-xs"
                   >
                     <Icon icon="ph:bookmark-simple-fill" class="w-3.5 h-3.5" />
                     <span
@@ -172,11 +172,11 @@
                   class="absolute inset-0 flex items-center justify-center opacity-0 group-hover/card:opacity-100 transition-all duration-300 pointer-events-none"
                 >
                   <div
-                    class="w-12 h-12 rounded-full bg-surface-inverse-foreground/20 backdrop-blur-sm flex items-center justify-center transform scale-75 group-hover/card:scale-100 transition-transform duration-300"
+                    class="w-12 h-12 rounded-full bg-on-surface-inverse/20 backdrop-blur-sm flex items-center justify-center transform scale-75 group-hover/card:scale-100 transition-transform duration-300"
                   >
                     <Icon
                       icon="ph:arrows-out"
-                      class="w-6 h-6 text-surface-inverse-foreground drop-shadow-lg"
+                      class="w-6 h-6 text-on-surface-inverse drop-shadow-lg"
                     />
                   </div>
                 </div>
@@ -207,7 +207,7 @@
                     >
                       {image.owner?.displayName}
                     </p>
-                    <div class="text-xs text-muted-foreground mt-0.5">
+                    <div class="text-xs text-foreground-muted mt-0.5">
                       {#if image.attributes?.createdAt?.timestamp}
                         <FormattedDate
                           date={image.attributes.createdAt.timestamp}
@@ -219,7 +219,7 @@
 
                 {#if image.attributes?.description?.trim()}
                   <p
-                    class="mt-3 text-sm text-muted-foreground leading-relaxed line-clamp-2"
+                    class="mt-3 text-sm text-foreground-muted leading-relaxed line-clamp-2"
                   >
                     {image.attributes.description}
                   </p>

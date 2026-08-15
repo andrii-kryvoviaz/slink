@@ -4,7 +4,7 @@
   const progress = useUploadProgress();
 </script>
 
-<p class="text-sm text-muted-foreground">
+<p class="text-sm text-foreground-muted">
   <span>{progress.completedCount} of {progress.totalCount} files uploaded</span>
   {#if progress.hasErrors}
     <span>• {progress.failedCount} failed</span>

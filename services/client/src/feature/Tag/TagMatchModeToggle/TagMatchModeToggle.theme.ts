@@ -11,7 +11,7 @@ export const activeFilterToggleButtonVariants = cva(
       },
       disabled: {
         true: 'opacity-50 cursor-not-allowed',
-        false: 'cursor-pointer hover:bg-info-fill/12',
+        false: 'cursor-pointer hover:bg-primary-solid/12',
       },
     },
     defaultVariants: {
@@ -27,7 +27,7 @@ export const activeFilterTooltipIconWrapperVariants = cva(
     variants: {
       matchMode: {
         all: 'bg-decor-violet/12',
-        any: 'bg-info-fill/12',
+        any: 'bg-primary-solid/12',
       },
     },
     defaultVariants: {

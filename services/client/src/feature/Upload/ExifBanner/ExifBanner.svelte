@@ -23,7 +23,7 @@
           <span class="mt-1 block">
             <Link
               href="/preferences"
-              class="font-medium text-info underline decoration-info/40 underline-offset-2 transition-colors hover:text-info-subtle-foreground hover:decoration-info/80"
+              class="font-medium text-info underline decoration-info/40 underline-offset-2 transition-colors hover:text-info-text hover:decoration-info/80"
               >Adjust in preferences</Link
             >
           </span>

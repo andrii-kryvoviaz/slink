@@ -1,6 +1,5 @@
 @theme static {
-  --color-destructive: var(--color-danger);
-  --color-success-foreground: oklch(
+  --color-on-success: oklch(
     from var(--color-success) clamp(0, (var(--on-color-flip) - l) * 100, 1) 0 h
   );
   --color-success-strong: light-dark(
@@ -13,7 +12,7 @@
         calc(h + 11.512)
     )
   );
-  --color-success-fill: light-dark(
+  --color-success-solid: light-dark(
     oklch(
       from var(--color-success) calc(l - 0.027) calc(c * 0.7763)
         calc(h + 12.901)
@@ -23,7 +22,19 @@
         calc(h + 10.769)
     )
   );
-  --color-warning-foreground: oklch(
+  --color-success-surface: light-dark(
+    oklch(
+      from var(--color-success) calc(l - 0.096) calc(c * 0.8858) calc(h - 0.365)
+    ),
+    oklch(
+      from var(--color-success) calc(l - 0.069) calc(c * 1.0478) calc(h - 2.132)
+    )
+  );
+  --color-on-success-surface: oklch(
+    from var(--color-success-surface)
+      clamp(0, (var(--on-color-flip) - l) * 100, 1) 0 h
+  );
+  --color-on-warning: oklch(
     from var(--color-warning) clamp(0, (var(--on-color-flip) - l) * 100, 1) 0 h
   );
   --color-warning-strong: light-dark(
@@ -35,8 +46,36 @@
         calc(h - 28.495)
     )
   );
-  --color-danger-foreground: oklch(
-    from var(--color-danger-fill) clamp(0, (var(--on-color-flip) - l) * 100, 1)
+  --color-warning-solid: light-dark(
+    oklch(from var(--color-warning) l c h),
+    oklch(
+      from var(--color-warning) calc(l - 0.059) calc(c * 0.9947)
+        calc(h - 14.349)
+    )
+  );
+  --color-on-warning-solid: oklch(
+    from var(--color-warning-solid)
+      clamp(0, (var(--on-color-flip) - l) * 100, 1) 0 h
+  );
+  --color-warning-surface: light-dark(
+    oklch(
+      from var(--color-warning) calc(l - 0.103) calc(c * 0.9521)
+        calc(h - 11.762)
+    ),
+    oklch(
+      from var(--color-warning) calc(l - 0.059) calc(c * 0.9947)
+        calc(h - 14.349)
+    )
+  );
+  --color-on-warning-surface: oklch(
+    from var(--color-warning-surface)
+      clamp(0, (var(--on-color-flip) - l) * 100, 1) 0 h
+  );
+  --color-on-danger: oklch(
+    from var(--color-danger) clamp(0, (var(--on-color-flip) - l) * 100, 1) 0 h
+  );
+  --color-on-danger-solid: oklch(
+    from var(--color-danger-solid) clamp(0, (var(--on-color-flip) - l) * 100, 1)
       0 h
   );
   --color-danger-strong: light-dark(
@@ -47,11 +86,7 @@
       from var(--color-danger) calc(l + 0.008) calc(c * 1.0157) calc(h - 8.788)
     )
   );
-  --color-danger-strong-foreground: oklch(
-    from var(--color-danger-strong)
-      clamp(0, (var(--on-color-flip) - l) * 100, 1) 0 h
-  );
-  --color-danger-fill: light-dark(
+  --color-danger-solid: light-dark(
     oklch(
       from var(--color-danger) calc(l - 0.063) calc(c * 0.9061) calc(h - 10.39)
     ),
@@ -59,7 +94,19 @@
       from var(--color-danger) calc(l - 0.19) calc(c * 1.1623) calc(h - 5.281)
     )
   );
-  --color-info-foreground: oklch(
+  --color-danger-surface: light-dark(
+    oklch(
+      from var(--color-danger) calc(l - 0.072) calc(c * 0.8694) calc(h + 0.193)
+    ),
+    oklch(
+      from var(--color-danger) calc(l - 0.067) calc(c * 1.2408) calc(h + 3.115)
+    )
+  );
+  --color-on-danger-surface: oklch(
+    from var(--color-danger-surface)
+      clamp(0, (var(--on-color-flip) - l) * 100, 1) 0 h
+  );
+  --color-on-info: oklch(
     from var(--color-info) clamp(0, (var(--on-color-flip) - l) * 100, 1) 0 h
   );
   --color-info-strong: light-dark(
@@ -70,7 +117,7 @@
       from var(--color-info) calc(l - 0.034) calc(c * 1.103) calc(h + 22.311)
     )
   );
-  --color-info-fill: light-dark(
+  --color-info-solid: light-dark(
     oklch(from var(--color-info) l c h),
     oklch(
       from var(--color-info) calc(l - 0.084) calc(c * 1.297) calc(h + 5.191)
@@ -92,33 +139,31 @@
       from var(--color-info) calc(l - 0.161) calc(c * 1.4848) calc(h + 8.257)
     )
   );
-  --color-info-fill-foreground: oklch(
-    from var(--color-info-fill) clamp(0, (var(--on-color-flip) - l) * 100, 1) 0
+  --color-on-info-solid: oklch(
+    from var(--color-info-solid) clamp(0, (var(--on-color-flip) - l) * 100, 1) 0
       h
   );
-  --color-info-surface-foreground: oklch(
+  --color-on-info-surface: oklch(
     from var(--color-info-surface) clamp(0, (var(--on-color-flip) - l) * 100, 1)
       0 h
   );
-  --color-danger-subtle: light-dark(
+  --color-danger-wash: light-dark(
     oklch(
       from var(--color-danger) calc(l + 0.394) calc(c * 0.0531) calc(h - 9.945)
     ),
     oklch(
-      from var(--color-danger) calc(l - 0.308) calc(c * 0.7382)
-        calc(h + 3.507) / 0.2
+      from var(--color-danger) calc(l - 0.308) calc(c * 0.7382) calc(h + 3.507)
     )
   );
-  --color-danger-subtle-strong: light-dark(
+  --color-danger-wash-strong: light-dark(
     oklch(
       from var(--color-danger) calc(l + 0.392) calc(c * 0.0612) calc(h - 14.903)
     ),
     oklch(
-      from var(--color-danger) calc(l - 0.294) calc(c * 0.8325)
-        calc(h - 11.944) / 0.2
+      from var(--color-danger) calc(l - 0.294) calc(c * 0.8325) calc(h - 11.944)
     )
   );
-  --color-danger-subtle-foreground: light-dark(
+  --color-danger-text: light-dark(
     oklch(
       from var(--color-danger) calc(l - 0.072) calc(c * 0.8694) calc(h + 0.193)
     ),
@@ -126,7 +171,7 @@
       from var(--color-danger) calc(l + 0.104) calc(c * 0.5969) calc(h - 2.645)
     )
   );
-  --color-danger-deep-foreground: light-dark(
+  --color-danger-text-strong: light-dark(
     oklch(
       from var(--color-danger) calc(l - 0.181) calc(c * 0.5755) calc(h - 1.602)
     ),
@@ -139,30 +184,28 @@
       from var(--color-danger) calc(l + 0.308) calc(c * 0.2531) calc(h - 8.991)
     ),
     oklch(
-      from var(--color-danger) calc(l - 0.26) calc(c * 0.9267) calc(h + 4.683) /
-        0.3
+      from var(--color-danger) calc(l - 0.26) calc(c * 0.9267) calc(h + 4.683)
     )
   );
-  --color-success-subtle: light-dark(
+  --color-success-wash: light-dark(
     oklch(
       from var(--color-success) calc(l + 0.259) calc(c * 0.0822) calc(h + 6.247)
     ),
     oklch(
-      from var(--color-success) calc(l - 0.399) calc(c * 0.4545)
-        calc(h + 0.824) / 0.2
+      from var(--color-success) calc(l - 0.399) calc(c * 0.4545) calc(h + 0.824)
     )
   );
-  --color-success-subtle-strong: light-dark(
+  --color-success-wash-strong: light-dark(
     oklch(
       from var(--color-success) calc(l + 0.256) calc(c * 0.0959)
         calc(h + 16.534)
     ),
     oklch(
       from var(--color-success) calc(l - 0.414) calc(c * 0.3684)
-        calc(h + 17.229) / 0.2
+        calc(h + 17.229)
     )
   );
-  --color-success-subtle-foreground: light-dark(
+  --color-success-text: light-dark(
     oklch(
       from var(--color-success) calc(l - 0.196) calc(c * 0.7032) calc(h + 0.49)
     ),
@@ -170,7 +213,7 @@
       from var(--color-success) calc(l + 0.079) calc(c * 0.7177) calc(h + 2.738)
     )
   );
-  --color-success-deep-foreground: light-dark(
+  --color-success-text-strong: light-dark(
     oklch(
       from var(--color-success) calc(l - 0.33) calc(c * 0.4338) calc(h + 2.956)
     ),
@@ -183,29 +226,27 @@
       from var(--color-success) calc(l + 0.202) calc(c * 0.3836) calc(h + 6.416)
     ),
     oklch(
-      from var(--color-success) calc(l - 0.344) calc(c * 0.5694)
-        calc(h - 0.383) / 0.3
+      from var(--color-success) calc(l - 0.344) calc(c * 0.5694) calc(h - 0.383)
     )
   );
-  --color-warning-subtle: light-dark(
+  --color-warning-wash: light-dark(
     oklch(
       from var(--color-warning) calc(l + 0.218) calc(c * 0.117) calc(h + 25.197)
     ),
     oklch(
       from var(--color-warning) calc(l - 0.414) calc(c * 0.5926)
-        calc(h - 38.525) / 0.2
+        calc(h - 38.525)
     )
   );
-  --color-warning-subtle-strong: light-dark(
+  --color-warning-wash-strong: light-dark(
     oklch(
       from var(--color-warning) calc(l + 0.211) calc(c * 0.0851) calc(h + 3.604)
     ),
     oklch(
-      from var(--color-warning) calc(l - 0.42) calc(c * 0.6508)
-        calc(h - 46.257) / 0.2
+      from var(--color-warning) calc(l - 0.42) calc(c * 0.6508) calc(h - 46.257)
     )
   );
-  --color-warning-subtle-foreground: light-dark(
+  --color-warning-text: light-dark(
     oklch(
       from var(--color-warning) calc(l - 0.214) calc(c * 0.867) calc(h - 21.082)
     ),
@@ -213,7 +254,7 @@
       from var(--color-warning) calc(l + 0.051) calc(c * 0.8942) calc(h + 7.176)
     )
   );
-  --color-warning-deep-foreground: light-dark(
+  --color-warning-text-strong: light-dark(
     oklch(
       from var(--color-warning) calc(l - 0.355) calc(c * 0.5957)
         calc(h - 24.176)
@@ -230,28 +271,26 @@
     ),
     oklch(
       from var(--color-warning) calc(l - 0.355) calc(c * 0.7249)
-        calc(h - 38.228) / 0.3
+        calc(h - 38.228)
     )
   );
-  --color-info-subtle: light-dark(
+  --color-info-wash: light-dark(
     oklch(
       from var(--color-info) calc(l + 0.347) calc(c * 0.0654) calc(h - 5.211)
     ),
     oklch(
-      from var(--color-info) calc(l - 0.328) calc(c * 0.8848) calc(h + 10.898) /
-        0.2
+      from var(--color-info) calc(l - 0.328) calc(c * 0.8848) calc(h + 10.898)
     )
   );
-  --color-info-subtle-strong: light-dark(
+  --color-info-wash-strong: light-dark(
     oklch(
       from var(--color-info) calc(l + 0.339) calc(c * 0.0841) calc(h + 12.499)
     ),
     oklch(
-      from var(--color-info) calc(l - 0.348) calc(c * 0.8727) calc(h + 24.073) /
-        0.2
+      from var(--color-info) calc(l - 0.348) calc(c * 0.8727) calc(h + 24.073)
     )
   );
-  --color-info-subtle-foreground: light-dark(
+  --color-info-text: light-dark(
     oklch(
       from var(--color-info) calc(l - 0.135) calc(c * 1.1355) calc(h + 4.561)
     ),
@@ -259,7 +298,7 @@
       from var(--color-info) calc(l + 0.102) calc(c * 0.6364) calc(h - 2.811)
     )
   );
-  --color-info-deep-foreground: light-dark(
+  --color-info-text-strong: light-dark(
     oklch(
       from var(--color-info) calc(l - 0.244) calc(c * 0.6822) calc(h + 5.707)
     ),
@@ -272,8 +311,7 @@
       from var(--color-info) calc(l + 0.259) calc(c * 0.2757) calc(h - 5.687)
     ),
     oklch(
-      from var(--color-info) calc(l - 0.283) calc(c * 1.2061) calc(h + 11.014) /
-        0.3
+      from var(--color-info) calc(l - 0.283) calc(c * 1.2061) calc(h + 11.014)
     )
   );
 }

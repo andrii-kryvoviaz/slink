@@ -9,6 +9,6 @@
   let { text = '', onClose }: Props = $props();
 </script>
 
-<div class="text-sm text-surface-inverse-foreground/80 leading-relaxed">
+<div class="text-sm text-on-surface-inverse/80 leading-relaxed">
   <HashtagText {text} variant="glass" onBeforeNavigate={onClose} />
 </div>

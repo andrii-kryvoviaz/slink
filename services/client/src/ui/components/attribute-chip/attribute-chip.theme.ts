@@ -13,11 +13,11 @@ export const attributeChip = tv({
   variants: {
     state: {
       ghost: {
-        root: 'border border-dashed border-border-strong text-muted-foreground hover:border-foreground-subtle hover:bg-foreground/5 hover:text-foreground-soft',
+        root: 'border border-dashed border-border-strong text-foreground-muted hover:border-foreground-subtle hover:bg-foreground/5 hover:text-foreground-soft',
         body: 'px-3',
       },
       set: {
-        root: 'bg-accent-subtle text-accent-subtle-foreground',
+        root: 'bg-accent-wash dark:bg-accent-wash/20 text-accent-text',
         body: 'pl-2.5 pr-1.5 hover:text-foreground-soft',
       },
     },

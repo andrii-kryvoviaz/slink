@@ -5,7 +5,7 @@ export const providerIconVariants = cva('', {
     provider: {
       google: '',
       authentik: 'text-[#fd4b2d]',
-      keycloak: 'text-muted-foreground-strong',
+      keycloak: 'text-foreground-muted',
       authelia: 'text-[#0065BF]',
       pocketid: 'text-[#e11d48]',
     },

@@ -10,7 +10,7 @@
     {
       variants: {
         selected: {
-          true: 'bg-info-fill border-info-fill',
+          true: 'bg-primary-solid border-primary-solid',
           false: 'bg-card/90 border-card dark:border-border',
         },
         size: {
@@ -50,6 +50,6 @@
 
 <div class={cn(overlayCheckboxVariants({ selected, size }), className)}>
   {#if selected}
-    <Icon icon="heroicons:check" class="{iconSize} text-info-fill-foreground" />
+    <Icon icon="heroicons:check" class="{iconSize} text-on-primary-solid" />
   {/if}
 </div>

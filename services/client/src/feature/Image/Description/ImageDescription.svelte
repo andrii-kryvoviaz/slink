@@ -27,7 +27,7 @@
       {#if isLoading}
         <Icon
           icon="lucide:loader-2"
-          class="h-3.5 w-3.5 text-muted-foreground animate-spin"
+          class="h-3.5 w-3.5 text-foreground-muted animate-spin"
         />
       {/if}
     </div>

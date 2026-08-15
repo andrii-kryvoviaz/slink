@@ -61,7 +61,7 @@
             <span class="text-sm font-medium text-foreground">
               Remove from storage
             </span>
-            <p class="text-xs text-muted-foreground">
+            <p class="text-xs text-foreground-muted">
               Permanently delete the files from storage
             </p>
           </div>

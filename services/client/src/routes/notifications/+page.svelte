@@ -67,7 +67,7 @@
         <div>
           <Title size="md">Notifications</Title>
           {#if notificationFeed.unreadCount > 0}
-            <p class="mt-1 text-sm text-muted-foreground">
+            <p class="mt-1 text-sm text-foreground-muted">
               {notificationFeed.unreadCount} unread
             </p>
           {/if}

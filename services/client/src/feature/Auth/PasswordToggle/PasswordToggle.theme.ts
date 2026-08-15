@@ -5,7 +5,7 @@ export const passwordToggleVariants = cva(
   {
     variants: {
       variant: {
-        default: 'text-muted-foreground hover:text-foreground-soft',
+        default: 'text-foreground-muted hover:text-foreground-soft',
       },
       inline: {
         true: '',

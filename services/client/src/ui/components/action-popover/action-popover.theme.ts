@@ -23,13 +23,13 @@ export const ActionPopoverContentTheme = cva(
         success: [
           'bg-card dark:bg-card/95',
           'text-foreground',
-          'border-success-border/80 dark:border-success-border/70',
+          'border-success-border/80 dark:border-success-border/21',
           'backdrop-blur-sm shadow-scrim/10 dark:shadow-scrim/25',
         ],
         danger: [
           'bg-card dark:bg-card/95',
           'text-foreground',
-          'border-danger-border/80 dark:border-danger-border/70',
+          'border-danger-border/80 dark:border-danger-border/21',
           'backdrop-blur-sm shadow-scrim/10 dark:shadow-scrim/25',
         ],
       },
@@ -59,11 +59,11 @@ export const ActionPopoverIconBoxTheme = cva(
     variants: {
       tone: {
         default:
-          'bg-info-subtle border border-info-border/40 dark:border-info-border/30 text-info',
+          'bg-info-wash dark:bg-info-wash/20 border border-info-border/40 dark:border-info-border/9 text-info',
         success:
-          'bg-success-subtle border border-success-border/40 dark:border-success-border/30 text-success',
+          'bg-success-wash dark:bg-success-wash/20 border border-success-border/40 dark:border-success-border/9 text-success',
         danger:
-          'bg-danger-subtle border border-danger-border/40 dark:border-danger-border/30 text-danger',
+          'bg-danger-wash dark:bg-danger-wash/20 border border-danger-border/40 dark:border-danger-border/9 text-danger',
       },
     },
     defaultVariants: {
@@ -79,7 +79,7 @@ export const ActionPopoverTitleTheme = cva(
 );
 
 export const ActionPopoverDescriptionTheme = cva(
-  'text-xs text-muted-foreground',
+  'text-xs text-foreground-muted',
 );
 
 export const ActionPopoverActionsTheme = cva(
@@ -87,7 +87,7 @@ export const ActionPopoverActionsTheme = cva(
 );
 
 export const ActionPopoverCloseTheme = cva(
-  'inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-ghost-hover hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 cursor-pointer',
+  'inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-foreground-muted transition-colors hover:bg-hover hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 cursor-pointer',
 );
 
 export const ActionPopoverBodyTheme = cva('', {

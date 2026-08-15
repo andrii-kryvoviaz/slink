@@ -9,8 +9,8 @@
 
   const viewButton = cva([
     'group inline-flex w-fit items-center gap-1.5 self-start rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors duration-200',
-    'text-accent-subtle-foreground bg-accent/15 hover:bg-accent-border/70',
-    'dark:hover:bg-accent-border/70',
+    'text-accent-text bg-accent/15 hover:bg-accent-border/70',
+    'dark:hover:bg-accent-border/21',
     'focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/30',
   ]);
 
@@ -45,11 +45,11 @@
 <BaseToast variant="accent" icon="heroicons:document-duplicate" {oncloseToast}>
   <div class="flex flex-col gap-3">
     <div class="flex items-center gap-2">
-      <span class="text-sm font-medium text-accent-subtle-foreground">
+      <span class="text-sm font-medium text-accent-text">
         Image Already Exists
       </span>
       <span
-        class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-accent-subtle text-accent-subtle-foreground dark:bg-accent-border/60"
+        class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-accent-wash text-accent-text dark:bg-accent-border/18"
       >
         Duplicate
       </span>
@@ -57,7 +57,7 @@
 
     {#if duplicateImageData}
       <div
-        class="flex flex-wrap items-center gap-x-2 gap-y-1.5 text-sm text-accent-subtle-foreground"
+        class="flex flex-wrap items-center gap-x-2 gap-y-1.5 text-sm text-accent-text"
       >
         <span>This image was already uploaded {uploadedDate}.</span>
         {#if duplicateImageData.existingImageUrl}
@@ -75,7 +75,7 @@
         {/if}
       </div>
     {:else}
-      <p class="text-sm text-accent-subtle-foreground">
+      <p class="text-sm text-accent-text">
         {@html message}
       </p>
     {/if}

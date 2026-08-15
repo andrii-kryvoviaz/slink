@@ -10,7 +10,7 @@ export const filterContainerVariants = cva(
         default: [
           'filter-glass',
           'border border-border/80',
-          'hover:bg-ghost-hover',
+          'hover:bg-hover',
           'focus-within:border-border-strong dark:focus-within:border-border',
           'focus-within:bg-card',
         ],
@@ -19,30 +19,30 @@ export const filterContainerVariants = cva(
           'border border-border/60',
           'shadow-sm',
           'hover:border-info/25',
-          'hover:shadow-info-border/20 hover:shadow-sm',
-          'hover:bg-info-fill/6',
+          'hover:shadow-info-border/20 dark:hover:shadow-info-border/6 hover:shadow-sm',
+          'hover:bg-primary-solid/6',
           'focus-within:border-info/40',
-          'focus-within:shadow-info-border/30 focus-within:shadow-md',
-          'focus-within:bg-info-fill/10',
+          'focus-within:shadow-info-border/30 dark:focus-within:shadow-info-border/9 focus-within:shadow-md',
+          'focus-within:bg-primary-solid/10',
           'focus-within:ring-info/15 focus-within:ring-1',
         ],
         minimal: [
           'filter-glass',
           'border border-border/60',
-          'hover:bg-ghost-hover',
+          'hover:bg-hover',
           'focus-within:border-border-strong/80 dark:focus-within:border-border',
         ],
         subtle: [
-          'bg-muted-subtle backdrop-blur-sm',
+          'bg-muted-soft backdrop-blur-sm',
           'border border-border/60',
-          'hover:bg-ghost-hover',
+          'hover:bg-hover',
           'focus-within:border-border-strong dark:focus-within:border-border',
           'focus-within:bg-card',
         ],
         pill: [
           'bg-card/80',
           'border border-border/60',
-          'text-muted-foreground shadow-sm',
+          'text-foreground-muted shadow-sm',
           'hover:text-foreground',
           'hover:bg-card',
           'hover:border-border-strong',
@@ -101,11 +101,11 @@ export const filterIconBoxVariants = cva(
   {
     variants: {
       variant: {
-        default: ['bg-muted', 'text-muted-foreground'],
-        neon: ['bg-info-fill/20', 'border border-info/30', 'text-info'],
-        minimal: ['bg-muted/80', 'text-muted-foreground'],
+        default: ['bg-muted', 'text-foreground-muted'],
+        neon: ['bg-primary-solid/20', 'border border-info/30', 'text-info'],
+        minimal: ['bg-muted/80', 'text-foreground-muted'],
         subtle: ['bg-transparent', 'text-foreground-subtle'],
-        pill: ['bg-muted', 'text-muted-foreground'],
+        pill: ['bg-muted', 'text-foreground-muted'],
       },
     },
     defaultVariants: {
@@ -117,11 +117,11 @@ export const filterIconBoxVariants = cva(
 export const filterIconGlyphVariants = cva('h-3.5 w-3.5 transition-colors', {
   variants: {
     variant: {
-      default: 'text-muted-foreground',
+      default: 'text-foreground-muted',
       neon: 'text-info',
-      minimal: 'text-muted-foreground',
+      minimal: 'text-foreground-muted',
       subtle: 'text-foreground-subtle',
-      pill: 'text-muted-foreground',
+      pill: 'text-foreground-muted',
     },
   },
   defaultVariants: {
@@ -132,9 +132,9 @@ export const filterIconGlyphVariants = cva('h-3.5 w-3.5 transition-colors', {
 export const filterLeadingIconVariants = cva('shrink-0 transition-colors', {
   variants: {
     variant: {
-      default: 'text-muted-foreground',
+      default: 'text-foreground-muted',
       neon: 'text-info',
-      minimal: 'text-muted-foreground',
+      minimal: 'text-foreground-muted',
       subtle: 'text-foreground-subtle',
       pill: 'text-foreground-subtle',
     },
@@ -163,7 +163,7 @@ export const filterFieldVariants = cva(
         default: '',
         neon: '',
         minimal:
-          'placeholder:text-muted-foreground dark:placeholder:text-foreground-subtle',
+          'placeholder:text-foreground-muted dark:placeholder:text-foreground-subtle',
         subtle: '',
         pill: 'text-foreground-soft placeholder:text-foreground-subtle',
       },
@@ -186,10 +186,10 @@ export const filterClearButtonVariants = cva(
       },
       variant: {
         default: 'filter-clear-neutral',
-        neon: 'text-info/70 hover:text-info-subtle-foreground hover:bg-info-fill/10',
+        neon: 'text-info/70 hover:text-info-text hover:bg-primary-solid/10',
         minimal: 'filter-clear-neutral',
         subtle: 'filter-clear-neutral',
-        pill: 'text-foreground-subtle hover:text-foreground-soft hover:bg-ghost-hover-strong dark:text-muted-foreground',
+        pill: 'text-foreground-subtle hover:text-foreground-soft hover:bg-hover-strong dark:text-foreground-muted',
       },
     },
     defaultVariants: {
@@ -272,7 +272,7 @@ export const filterChipVariants = cva(
   {
     variants: {
       tone: {
-        muted: 'text-muted-foreground',
+        muted: 'text-foreground-muted',
         accent: 'text-info',
       },
     },
@@ -313,7 +313,7 @@ export const filterContentVariants = cva(
       variant: {
         default:
           'border-border/80 shadow-border/50 dark:shadow-scrim/60 border shadow-xl',
-        neon: 'border-border/60 shadow-muted-foreground/5 ring-muted/20 dark:shadow-scrim/50 dark:ring-border/50 border shadow-2xl ring-1',
+        neon: 'border-border/60 shadow-foreground-muted/5 ring-muted/20 dark:shadow-scrim/50 dark:ring-border/50 border shadow-2xl ring-1',
         minimal:
           'border-border/60 shadow-border/40 dark:shadow-scrim/50 border shadow-lg',
         subtle:
@@ -336,14 +336,14 @@ export const filterItemVariants = cva(
         neon: 'filter-item-info',
         minimal: [
           'text-foreground-soft dark:text-foreground',
-          'hover:bg-ghost-hover',
-          'aria-selected:bg-ghost-hover',
+          'hover:bg-hover',
+          'aria-selected:bg-hover',
           'aria-selected:text-foreground',
         ],
         subtle: [
           'text-foreground-soft dark:text-foreground',
-          'hover:bg-ghost-hover',
-          'aria-selected:bg-ghost-hover',
+          'hover:bg-hover',
+          'aria-selected:bg-hover',
         ],
         pill: 'filter-item-info',
       },
@@ -357,11 +357,11 @@ export const filterItemVariants = cva(
 export const filterItemIconVariants = cva('h-4 w-4 shrink-0', {
   variants: {
     variant: {
-      default: 'text-muted-foreground',
-      neon: 'text-info group-hover:text-info-subtle-foreground group-aria-selected:text-info-subtle-foreground',
-      minimal: 'text-muted-foreground',
+      default: 'text-foreground-muted',
+      neon: 'text-info group-hover:text-info-text group-aria-selected:text-info-text',
+      minimal: 'text-foreground-muted',
       subtle: 'text-foreground-subtle',
-      pill: 'text-muted-foreground',
+      pill: 'text-foreground-muted',
     },
   },
   defaultVariants: {
@@ -377,7 +377,7 @@ export const filterItemCountVariants = cva(
         default: 'filter-item-count-info',
         neon: 'filter-item-count-info',
         minimal: [
-          'text-muted-foreground bg-muted/80',
+          'text-foreground-muted bg-muted/80',
           'border border-border/50',
         ],
         subtle: ['text-foreground-subtle'],
@@ -436,7 +436,7 @@ export const filterSummaryVariants = tv({
       'text-xs font-medium',
       'text-foreground-subtle',
       'hover:text-danger',
-      'hover:bg-danger-subtle',
+      'hover:bg-danger-wash dark:hover:bg-danger-wash/20',
       'transition-all duration-200',
       'disabled:opacity-50 disabled:cursor-not-allowed',
     ],

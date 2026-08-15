@@ -24,7 +24,7 @@
     {sideOffset}
     data-slot="select-content"
     class={cn(
-      'popover-panel bg-popover text-popover-foreground max-h-(--bits-select-content-available-height) origin-(--bits-select-content-transform-origin) relative min-w-[8rem] overflow-y-auto overflow-x-hidden data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',
+      'popover-panel bg-popover text-on-popover max-h-(--bits-select-content-available-height) origin-(--bits-select-content-transform-origin) relative min-w-[8rem] overflow-y-auto overflow-x-hidden data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',
       className,
     )}
     {...restProps}

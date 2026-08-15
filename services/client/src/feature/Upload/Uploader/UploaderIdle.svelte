@@ -20,9 +20,9 @@
         class="h-[26px] w-[26px] text-accent dark:text-accent-strong"
       />
       <div
-        class="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-success-fill flex items-center justify-center ring-[3px] ring-card"
+        class="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-success-solid flex items-center justify-center ring-[3px] ring-card"
       >
-        <Icon icon="ph:plus-bold" class="h-3 w-3 text-success-foreground" />
+        <Icon icon="ph:plus-bold" class="h-3 w-3 text-on-success" />
       </div>
     </div>
   </div>
@@ -32,7 +32,7 @@
       {#if allowMultiple}Drop your images here{:else}Drop your image here{/if}
     </h2>
     <p
-      class="text-muted-foreground text-base sm:text-lg font-light max-w-xs sm:max-w-md mx-auto"
+      class="text-foreground-muted text-base sm:text-lg font-light max-w-xs sm:max-w-md mx-auto"
     >
       or click to browse from your device
     </p>

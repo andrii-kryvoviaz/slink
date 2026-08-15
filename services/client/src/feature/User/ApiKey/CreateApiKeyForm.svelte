@@ -49,7 +49,7 @@
         {#snippet leftIcon()}
           <Icon
             icon="ph:tag"
-            class="h-4 w-4 text-foreground-subtle dark:text-muted-foreground"
+            class="h-4 w-4 text-foreground-subtle dark:text-foreground-muted"
           />
         {/snippet}
       </Input>

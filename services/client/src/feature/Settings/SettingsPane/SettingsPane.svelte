@@ -49,7 +49,7 @@
     <div>
       {#if title}
         <h2
-          class="text-sm font-medium text-muted-foreground uppercase tracking-wider"
+          class="text-sm font-medium text-foreground-muted uppercase tracking-wider"
         >
           {@render title?.()}
         </h2>
@@ -64,14 +64,14 @@
 
   <form method="POST" onsubmit={handleSubmit}>
     <div
-      class="divide-y divide-muted rounded-xl bg-muted-subtle/50 dark:bg-muted-subtle/30 border border-muted overflow-hidden"
+      class="divide-y divide-muted rounded-xl bg-muted-soft/50 dark:bg-muted-soft/30 border border-muted overflow-hidden"
     >
       {@render children?.(settingsPage.errors)}
     </div>
 
     <div class="flex items-center justify-end gap-3 pt-4">
       {#if loading}
-        <div class="flex items-center gap-2 text-sm text-muted-foreground">
+        <div class="flex items-center gap-2 text-sm text-foreground-muted">
           <Loader variant="minimal" size="xs" />
           <span>Saving...</span>
         </div>

@@ -94,7 +94,7 @@
           placeholder="What's this collection about?"
           maxlength={500}
           rows={3}
-          class="border-border bg-background dark:bg-input/30 placeholder:text-muted-foreground shadow-xs flex w-full min-w-0 rounded-lg border px-4 py-2.5 text-base outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] resize-none md:text-sm"
+          class="border-border bg-background dark:bg-input/30 placeholder:text-foreground-muted shadow-xs flex w-full min-w-0 rounded-lg border px-4 py-2.5 text-base outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] resize-none md:text-sm"
           aria-invalid={errors?.description ? true : undefined}></textarea>
         {#if errors?.description}
           <p class="mt-1.5 text-xs text-accent-strong">{errors.description}</p>

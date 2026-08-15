@@ -55,7 +55,7 @@
       <p class="text-sm font-medium text-foreground truncate">
         {item.file.name}
       </p>
-      <span class="text-xs text-muted-foreground ml-2">
+      <span class="text-xs text-foreground-muted ml-2">
         {bytesToSize(item.file.size)}
       </span>
     </div>

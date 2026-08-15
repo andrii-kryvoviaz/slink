@@ -65,12 +65,12 @@
       {
         variant: 'neutral',
         status: 'interactive',
-        class: 'hover:bg-muted-subtle/80 focus:ring-ring/40',
+        class: 'hover:bg-muted-soft/80 focus:ring-ring/40',
       },
       {
         variant: 'neutral',
         status: 'static',
-        class: 'text-muted-foreground',
+        class: 'text-foreground-muted',
       },
     ],
     defaultVariants: {
@@ -160,7 +160,7 @@
 
   const navButtonClass = $derived.by(() => {
     if (variant === 'neutral') {
-      return 'h-8 px-2 text-xs border-0 hover:bg-muted-subtle/80';
+      return 'h-8 px-2 text-xs border-0 hover:bg-muted-soft/80';
     }
     return 'h-8 px-2 text-xs border-0';
   });
@@ -324,7 +324,7 @@
                 {#if totalPages > 1}
                   <span class="text-xs sm:text-sm text-border-strong">/</span>
                   <span
-                    class="text-xs sm:text-sm text-muted-foreground tabular-nums w-8 text-center"
+                    class="text-xs sm:text-sm text-foreground-muted tabular-nums w-8 text-center"
                     >{totalPages}</span
                   >
                 {/if}
@@ -343,7 +343,7 @@
               {#if totalPages > 1}
                 <span class="text-xs sm:text-sm text-border-strong">/</span>
                 <span
-                  class="text-xs sm:text-sm text-muted-foreground tabular-nums w-8 text-center"
+                  class="text-xs sm:text-sm text-foreground-muted tabular-nums w-8 text-center"
                   >{totalPages}</span
                 >
               {/if}

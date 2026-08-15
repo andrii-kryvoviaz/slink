@@ -36,7 +36,7 @@
         <Badge variant="default" size="sm">+{overflowCount}</Badge>
       </HoverCard.Trigger>
       <HoverCard.Content side="bottom" align="start" variant="glass" size="sm">
-        <p class="text-xs text-muted-foreground mb-2">
+        <p class="text-xs text-foreground-muted mb-2">
           {overflowLabel(overflowCount)}
         </p>
         <div class="flex flex-wrap gap-2">

@@ -6,7 +6,7 @@ export const KeyboardKeyTheme = cva(
     variants: {
       variant: {
         default: 'border-border-strong bg-muted text-foreground',
-        subtle: 'border-border bg-muted-subtle text-foreground-soft',
+        subtle: 'border-border bg-muted-soft text-foreground-soft',
         modern:
           'border-border-strong bg-card text-foreground shadow-sm hover:shadow-md',
         glass: 'border-border/50 bg-card/80 text-foreground backdrop-blur-sm',

@@ -14,7 +14,7 @@
   bind:ref
   data-slot="dropdown-menu-sub-content"
   class={cn(
-    'popover-panel bg-popover text-popover-foreground origin-(--bits-dropdown-menu-content-transform-origin) min-w-[8rem] overflow-hidden p-1',
+    'popover-panel bg-popover text-on-popover origin-(--bits-dropdown-menu-content-transform-origin) min-w-[8rem] overflow-hidden p-1',
     className,
   )}
   {...restProps}

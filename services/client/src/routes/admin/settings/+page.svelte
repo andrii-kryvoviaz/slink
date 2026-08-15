@@ -11,7 +11,7 @@
         'Configure image uploads, processing options, and URL sharing preferences',
       href: '/admin/settings/image',
       icon: 'solar:gallery-linear',
-      iconBg: 'bg-info-fill/15',
+      iconBg: 'bg-info-solid/15',
       iconColor: 'text-info',
     },
     {
@@ -86,7 +86,7 @@
           {category.title}
         </h3>
 
-        <p class="text-sm text-muted-foreground leading-relaxed">
+        <p class="text-sm text-foreground-muted leading-relaxed">
           {category.description}
         </p>
       </a>

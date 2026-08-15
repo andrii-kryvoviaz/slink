@@ -7,7 +7,7 @@
 </script>
 
 <div
-  class="animate-pulse divide-y divide-muted rounded-xl bg-muted-subtle/50 dark:bg-muted-subtle/30 border border-muted overflow-hidden"
+  class="animate-pulse divide-y divide-muted rounded-xl bg-muted-soft/50 dark:bg-muted-soft/30 border border-muted overflow-hidden"
 >
   {#each { length: items } as _}
     <div class="flex items-center justify-between gap-4 px-4 py-3.5">

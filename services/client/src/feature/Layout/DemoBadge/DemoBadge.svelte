@@ -31,7 +31,7 @@
       variants: {
         variant: {
           default: 'text-card',
-          accent: 'text-info-foreground',
+          accent: 'text-on-info',
         },
       },
       defaultVariants: {

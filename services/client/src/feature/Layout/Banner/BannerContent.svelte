@@ -14,7 +14,7 @@
   <h3 class="text-sm font-semibold text-foreground">
     {title}
   </h3>
-  <p class="text-xs text-muted-foreground">
+  <p class="text-xs text-foreground-muted">
     {#if children}{@render children()}{:else}{description}{/if}
   </p>
 </div>

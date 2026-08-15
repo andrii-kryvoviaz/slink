@@ -20,17 +20,17 @@ export const visibilityBadgeContainerTheme = cva(
       {
         status: 'public',
         variant: 'default',
-        class: 'bg-success-strong/20 text-success-subtle-foreground',
+        class: 'bg-success-strong/20 text-success-text',
       },
       {
         status: 'public',
         variant: 'compact',
-        class: 'bg-success-strong/15 text-success-subtle-foreground',
+        class: 'bg-success-strong/15 text-success-text',
       },
       {
         status: 'public',
         variant: 'pill',
-        class: 'bg-success-strong/20 text-success-subtle-foreground',
+        class: 'bg-success-strong/20 text-success-text',
       },
       {
         status: 'public',
@@ -41,17 +41,17 @@ export const visibilityBadgeContainerTheme = cva(
       {
         status: 'private',
         variant: 'default',
-        class: 'bg-warning-strong/20 text-warning-subtle-foreground',
+        class: 'bg-warning-strong/20 text-warning-text',
       },
       {
         status: 'private',
         variant: 'compact',
-        class: 'bg-warning-strong/15 text-warning-subtle-foreground',
+        class: 'bg-warning-strong/15 text-warning-text',
       },
       {
         status: 'private',
         variant: 'pill',
-        class: 'bg-warning-strong/20 text-warning-subtle-foreground',
+        class: 'bg-warning-strong/20 text-warning-text',
       },
       {
         status: 'private',

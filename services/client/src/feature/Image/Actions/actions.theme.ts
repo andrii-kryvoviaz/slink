@@ -9,7 +9,8 @@ export const actionButtonVariants = cva('rounded-full', {
     },
     variant: {
       default: '',
-      destructive: 'text-danger hover:text-danger hover:bg-danger-subtle',
+      destructive:
+        'text-danger hover:text-danger hover:bg-danger-wash dark:hover:bg-danger-wash/20',
     },
   },
   compoundVariants: [
@@ -17,7 +18,7 @@ export const actionButtonVariants = cva('rounded-full', {
       layout: 'hero',
       variant: 'default',
       class:
-        'p-2 bg-transparent text-muted-foreground hover:text-foreground-soft hover:bg-ghost-hover',
+        'p-2 bg-transparent text-foreground-muted hover:text-foreground-soft hover:bg-hover',
     },
     {
       layout: 'hero',
@@ -35,7 +36,7 @@ export const shareCapsuleVariants = tv({
   slots: {
     capsule: 'flex items-stretch overflow-hidden rounded-full',
     download:
-      'h-full rounded-none bg-info-surface text-info-surface-foreground hover:bg-info-surface-strong focus-visible:ring-inset focus-visible:ring-offset-0',
+      'h-full rounded-none bg-primary-surface text-on-primary-surface hover:bg-primary-surface-strong focus-visible:ring-inset focus-visible:ring-offset-0',
     copy: 'h-full rounded-none focus-visible:ring-inset focus-visible:ring-offset-0',
     caret:
       'h-full w-6 min-w-0 flex-none rounded-none border-l-[0.5px] border-border-strong px-0 focus-visible:ring-inset focus-visible:ring-offset-0',

@@ -17,7 +17,7 @@ export const cardTheme = cva(
 );
 
 export const cardTitleTheme = cva(
-  'font-semibold bg-gradient-to-r from-foreground-soft to-foreground dark:to-muted-foreground bg-clip-text text-transparent',
+  'font-semibold bg-gradient-to-r from-foreground-soft to-foreground dark:to-foreground-muted bg-clip-text text-transparent',
   {
     variants: {
       size: {

@@ -12,8 +12,8 @@
       variants: {
         state: {
           none: 'bg-input border-border-strong',
-          indeterminate: 'bg-info-fill border-info-fill',
-          all: 'bg-info-fill border-info-fill',
+          indeterminate: 'bg-primary-solid border-primary-solid',
+          all: 'bg-primary-solid border-primary-solid',
         },
       },
       defaultVariants: {
@@ -73,20 +73,14 @@
     <button
       type="button"
       onclick={handleCheckboxChange}
-      class="flex items-center gap-2 hover:bg-ghost-hover rounded-lg px-1 sm:px-2 py-1 transition-colors"
+      class="flex items-center gap-2 hover:bg-hover rounded-lg px-1 sm:px-2 py-1 transition-colors"
       aria-label={isAllSelected ? 'Deselect all' : 'Select all'}
     >
       <div class={selectAllCheckboxVariants({ state: checkboxState })}>
         {#if isAllSelected}
-          <Icon
-            icon="heroicons:check"
-            class="w-3.5 h-3.5 text-info-foreground"
-          />
+          <Icon icon="heroicons:check" class="w-3.5 h-3.5 text-on-info" />
         {:else if isIndeterminate}
-          <Icon
-            icon="heroicons:minus"
-            class="w-3.5 h-3.5 text-info-foreground"
-          />
+          <Icon icon="heroicons:minus" class="w-3.5 h-3.5 text-on-info" />
         {/if}
       </div>
     </button>
@@ -106,7 +100,7 @@
       size="sm"
       rounded="full"
       onclick={onCancel}
-      class="text-muted-foreground"
+      class="text-foreground-muted"
     >
       <Icon icon="lucide:x" class="w-4 h-4 sm:hidden" />
       <span class="hidden sm:inline">Cancel</span>

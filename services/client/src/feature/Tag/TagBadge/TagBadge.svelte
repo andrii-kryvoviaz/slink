@@ -93,7 +93,7 @@
 
       {#if showCount && tag.imageCount > 0}
         <span
-          class="min-w-5 px-1.5 py-0.5 rounded-md text-[10px] font-bold text-center bg-info-fill text-info-foreground"
+          class="min-w-5 px-1.5 py-0.5 rounded-md text-[10px] font-bold text-center bg-info-solid text-on-info"
         >
           {tag.imageCount}
         </span>

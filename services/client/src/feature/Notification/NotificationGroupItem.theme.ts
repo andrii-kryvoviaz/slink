@@ -6,9 +6,9 @@ export const notificationCardVariants = cva(
   {
     variants: {
       read: {
-        true: 'bg-muted-subtle',
+        true: 'bg-muted-soft',
         false:
-          'bg-card dark:bg-surface-inverse-foreground/5 shadow-sm dark:shadow-none',
+          'bg-card dark:bg-on-surface-inverse/5 shadow-sm dark:shadow-none',
       },
     },
     defaultVariants: {
@@ -22,8 +22,8 @@ export const notificationButtonVariants = cva(
   {
     variants: {
       read: {
-        true: 'hover:bg-ghost-hover',
-        false: 'hover:bg-ghost-hover/60',
+        true: 'hover:bg-hover',
+        false: 'hover:bg-hover/60',
       },
     },
     defaultVariants: {
@@ -37,7 +37,7 @@ export const notificationIconVariants = cva(
   {
     variants: {
       type: {
-        comment: 'bg-info-fill/10 dark:bg-info-fill/20',
+        comment: 'bg-info-solid/10 dark:bg-info-solid/20',
         comment_reply: 'bg-decor-violet/10 dark:bg-decor-violet/20',
         added_to_favorite: 'bg-decor-rose/10 dark:bg-decor-rose/20',
         added_to_bookmarks: 'bg-accent/10 dark:bg-accent/20',
@@ -64,7 +64,7 @@ export const notificationIconColorVariants = cva('w-5 h-5', {
 });
 
 export const caretVariants = cva(
-  'w-4 h-4 text-muted-foreground transition-transform duration-200',
+  'w-4 h-4 text-foreground-muted transition-transform duration-200',
   {
     variants: {
       expanded: {

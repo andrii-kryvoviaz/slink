@@ -5,7 +5,7 @@ export const toolbarVariants = tv({
   base: 'inline-flex h-8 items-stretch overflow-hidden rounded-full',
   variants: {
     tone: {
-      dark: 'bg-surface-inverse-foreground/8',
+      dark: 'bg-on-surface-inverse/8',
     },
   },
   defaultVariants: {
@@ -17,7 +17,7 @@ export const toolbarSeparatorVariants = tv({
   base: 'self-center h-[18px] w-px',
   variants: {
     tone: {
-      dark: 'bg-surface-inverse-foreground/8',
+      dark: 'bg-on-surface-inverse/8',
     },
   },
   defaultVariants: {
@@ -40,7 +40,7 @@ export const toolbarGroupVariants = tv({
 });
 
 export const toolbarButtonVariants = tv({
-  base: 'relative inline-flex cursor-pointer items-center justify-center select-none transition-all duration-200 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-surface-inverse-foreground/45',
+  base: 'relative inline-flex cursor-pointer items-center justify-center select-none transition-all duration-200 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-on-surface-inverse/45',
   variants: {
     shape: {
       segment: 'h-full w-9 rounded-none',
@@ -68,14 +68,14 @@ export const toolbarButtonVariants = tv({
       surface: 'toolbar',
       tone: 'dark',
       class:
-        'text-surface-inverse-foreground/70 hover:bg-surface-inverse-foreground/12 hover:text-surface-inverse-foreground',
+        'text-on-surface-inverse/70 hover:bg-on-surface-inverse/12 hover:text-on-surface-inverse',
     },
     {
       shape: 'segment',
       surface: 'floating',
       tone: 'dark',
       class:
-        'text-surface-inverse-foreground/80 hover:bg-surface-inverse-foreground/18 hover:text-surface-inverse-foreground',
+        'text-on-surface-inverse/80 hover:bg-on-surface-inverse/18 hover:text-on-surface-inverse',
     },
     {
       shape: 'pill',
@@ -86,7 +86,7 @@ export const toolbarButtonVariants = tv({
     {
       active: true,
       tone: 'dark',
-      class: 'bg-surface-inverse-foreground/22 text-surface-inverse-foreground',
+      class: 'bg-on-surface-inverse/22 text-on-surface-inverse',
     },
   ],
   defaultVariants: {

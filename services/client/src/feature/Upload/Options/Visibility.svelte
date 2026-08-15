@@ -35,7 +35,7 @@
 
 {#snippet currentBadge()}
   <span
-    class="inline-flex items-center px-1.5 py-px rounded-full text-[10px] font-semibold uppercase tracking-wider bg-success/15 text-success-subtle-foreground"
+    class="inline-flex items-center px-1.5 py-px rounded-full text-[10px] font-semibold uppercase tracking-wider bg-success/15 text-success-text"
   >
     Current
   </span>
@@ -72,13 +72,13 @@
       <div class="flex items-center justify-between gap-2">
         <h4 class="text-sm font-semibold text-foreground">Image visibility</h4>
         <span
-          class="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground"
+          class="text-[10px] font-semibold uppercase tracking-wider text-foreground-muted"
         >
           {#if preference.isPublic}Public{:else}Private{/if}
         </span>
       </div>
 
-      <p class="text-xs leading-relaxed text-muted-foreground">
+      <p class="text-xs leading-relaxed text-foreground-muted">
         Choose who can find this image. You can change it any time from the
         image page.
       </p>
@@ -95,7 +95,7 @@
                 {@render currentBadge()}
               {/if}
             </div>
-            <p class="text-xs leading-relaxed text-muted-foreground">
+            <p class="text-xs leading-relaxed text-foreground-muted">
               Listed on the explore page. Anyone with the direct link can open
               it.
             </p>
@@ -104,7 +104,7 @@
 
         <div class={visibilityRow({ active: !preference.isPublic })}>
           <div class="flex-shrink-0 mt-0.5">
-            <Icon icon="lucide:lock" class="w-4 h-4 text-muted-foreground" />
+            <Icon icon="lucide:lock" class="w-4 h-4 text-foreground-muted" />
           </div>
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-1.5 mb-0.5">
@@ -113,7 +113,7 @@
                 {@render currentBadge()}
               {/if}
             </div>
-            <p class="text-xs leading-relaxed text-muted-foreground">
+            <p class="text-xs leading-relaxed text-foreground-muted">
               Hidden from explore. Only you can open the direct link, unless you
               publish a share.
             </p>
@@ -124,14 +124,14 @@
       <div
         class="flex items-center justify-between pt-2 border-t border-border/60"
       >
-        <span class="text-[11px] text-muted-foreground">
+        <span class="text-[11px] text-foreground-muted">
           Click the badge to switch
         </span>
         <a
           href="/help/faq#image-visibility"
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-1 text-[11px] font-medium text-accent hover:text-accent-subtle-foreground transition-colors"
+          class="inline-flex items-center gap-1 text-[11px] font-medium text-accent hover:text-accent-text transition-colors"
         >
           Learn more
           <Icon icon="heroicons:arrow-top-right-on-square" class="w-3 h-3" />

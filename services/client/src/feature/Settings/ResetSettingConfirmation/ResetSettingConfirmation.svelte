@@ -30,7 +30,7 @@
         </p>
 
         <p
-          class="text-sm text-warning-subtle-foreground bg-warning-subtle/80 border border-warning-border/50 rounded-lg px-3 py-2"
+          class="text-sm text-warning-text bg-warning-wash/80 dark:bg-warning-wash/16 border border-warning-border/50 dark:border-warning-border/15 rounded-lg px-3 py-2"
         >
           This action cannot be undone. Your current setting will be lost.
         </p>
@@ -40,7 +40,7 @@
         <div class="text-sm font-medium text-foreground-soft">
           Current Value:
         </div>
-        <div class="p-4 rounded-xl bg-muted-subtle border border-border/60">
+        <div class="p-4 rounded-xl bg-muted-soft border border-border/60">
           <code class="font-mono text-sm text-foreground break-all">
             {displayValue}
           </code>

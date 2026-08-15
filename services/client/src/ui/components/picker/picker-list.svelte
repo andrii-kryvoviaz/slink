@@ -173,7 +173,7 @@
                   class="text-foreground-subtle h-5 w-5"
                 />
               </div>
-              <p class="text-muted-foreground text-sm font-medium">
+              <p class="text-foreground-muted text-sm font-medium">
                 No matches found
               </p>
             </div>

@@ -15,7 +15,7 @@
 <div class="w-full max-w-sm p-2 space-y-4">
   <div class="flex items-center gap-3">
     <div
-      class="flex h-10 w-10 items-center justify-center rounded-full bg-danger/12 border border-danger-border/40 shadow-sm shrink-0"
+      class="flex h-10 w-10 items-center justify-center rounded-full bg-danger/12 border border-danger-border/40 dark:border-danger-border/12 shadow-sm shrink-0"
     >
       <Icon icon="ph:folder-open" class="h-5 w-5 text-danger" />
     </div>
@@ -23,7 +23,7 @@
       <h3 class="text-sm font-semibold text-foreground">
         Remove from Collection
       </h3>
-      <p class="text-xs text-muted-foreground">
+      <p class="text-xs text-foreground-muted">
         Image will remain in your library
       </p>
     </div>

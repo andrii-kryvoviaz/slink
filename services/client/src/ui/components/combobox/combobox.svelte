@@ -114,7 +114,7 @@
         {placeholder}
         data-size={size}
         class={cn(
-          "border-border data-[placeholder]:text-muted-foreground [&_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 shadow-xs flex w-full select-none items-center justify-between gap-2 whitespace-nowrap rounded-lg border bg-transparent pr-12 text-sm outline-none transition-[color,box-shadow] focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=sm]:h-8 data-[size=sm]:px-3 data-[size=md]:h-9 data-[size=md]:px-3 data-[size=lg]:h-11 data-[size=lg]:px-4",
+          "border-border data-[placeholder]:text-foreground-muted [&_svg:not([class*='text-'])]:text-foreground-muted focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-danger/20 dark:aria-invalid:ring-danger/40 aria-invalid:border-danger dark:bg-input/30 dark:hover:bg-input/50 shadow-xs flex w-full select-none items-center justify-between gap-2 whitespace-nowrap rounded-lg border bg-transparent pr-12 text-sm outline-none transition-[color,box-shadow] focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=sm]:h-8 data-[size=sm]:px-3 data-[size=md]:h-9 data-[size=md]:px-3 data-[size=lg]:h-11 data-[size=lg]:px-4",
         )}
       />
       <div
@@ -143,7 +143,7 @@
       <Combobox.Content
         sideOffset={4}
         class={cn(
-          'popover-panel bg-popover text-popover-foreground max-h-[var(--bits-combobox-content-available-height)] origin-[var(--bits-combobox-content-transform-origin)] relative min-w-[8rem] w-[var(--bits-combobox-anchor-width)] overflow-y-auto overflow-x-hidden data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',
+          'popover-panel bg-popover text-on-popover max-h-[var(--bits-combobox-content-available-height)] origin-[var(--bits-combobox-content-transform-origin)] relative min-w-[8rem] w-[var(--bits-combobox-anchor-width)] overflow-y-auto overflow-x-hidden data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',
         )}
       >
         <Combobox.Viewport class="p-1">
@@ -153,7 +153,7 @@
               label={item.label}
               disabled={item.disabled}
               class={cn(
-                'data-highlighted:bg-info-subtle data-highlighted:text-info-subtle-foreground outline-hidden relative flex w-full cursor-default select-none items-center gap-2 rounded-lg py-2.5 pl-3 pr-8 text-sm font-medium text-foreground-soft transition-all duration-150 hover:bg-info-subtle hover:text-info-subtle-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+                'data-highlighted:bg-info-wash dark:data-highlighted:bg-info-wash/20 data-highlighted:text-info-text outline-hidden relative flex w-full cursor-default select-none items-center gap-2 rounded-lg py-2.5 pl-3 pr-8 text-sm font-medium text-foreground-soft transition-all duration-150 hover:bg-info-wash dark:hover:bg-info-wash/20 hover:text-info-text data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
               )}
             >
               {#snippet children({ selected })}
@@ -177,7 +177,7 @@
               {/snippet}
             </Combobox.Item>
           {:else}
-            <div class="px-3 py-2 text-sm text-muted-foreground">
+            <div class="px-3 py-2 text-sm text-foreground-muted">
               {emptyMessage}
             </div>
           {/each}

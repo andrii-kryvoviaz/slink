@@ -87,16 +87,16 @@
 
     <div class="space-y-4">
       <div
-        class="flex items-center justify-between p-4 bg-surface-inverse-foreground/5 border border-surface-inverse-foreground/10 rounded-lg"
+        class="flex items-center justify-between p-4 bg-on-surface-inverse/5 border border-on-surface-inverse/10 rounded-lg"
       >
         <div>
-          <div class="text-sm text-muted-foreground">Current Version</div>
+          <div class="text-sm text-foreground-muted">Current Version</div>
           <div class="font-mono font-medium">v{currentVersion}</div>
         </div>
         {#if hasUpdate}
           <Icon icon="ph:arrow-right" class="h-4 w-4 text-foreground-subtle" />
           <div>
-            <div class="text-sm text-muted-foreground">Latest Version</div>
+            <div class="text-sm text-foreground-muted">Latest Version</div>
             <div class="font-mono font-medium text-success">
               {release.tag_name}
             </div>
@@ -112,7 +112,7 @@
       <div class="space-y-2">
         <div class="flex items-center justify-between">
           <h3 class="text-lg font-semibold">{release.name}</h3>
-          <div class="text-sm text-muted-foreground">
+          <div class="text-sm text-foreground-muted">
             Released {formatReleaseDate(release.published_at)}
           </div>
         </div>

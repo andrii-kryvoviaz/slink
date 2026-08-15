@@ -42,7 +42,7 @@
         <h1 class="text-3xl font-bold text-foreground tracking-tight mb-2">
           Review in Progress
         </h1>
-        <p class="text-muted-foreground text-base">
+        <p class="text-foreground-muted text-base">
           Your account is currently under review
         </p>
       </div>
@@ -55,7 +55,7 @@
       >
         <div class="flex items-start gap-4">
           <div
-            class="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-info-fill/15 to-info-fill/8 shadow-md shadow-info/10 mt-1"
+            class="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-info-solid/15 to-info-solid/8 shadow-md shadow-info/10 mt-1"
           >
             <Icon icon="lucide:clock" class="h-7 w-7 text-info" />
           </div>
@@ -65,7 +65,7 @@
             >
               What happens next?
             </h3>
-            <p class="text-muted-foreground leading-relaxed text-base">
+            <p class="text-foreground-muted leading-relaxed text-base">
               Your account is being reviewed and will be activated once
               approved. Please check back later for updates on your account
               status.
@@ -93,7 +93,7 @@
             >
               Need help?
             </h3>
-            <p class="text-muted-foreground mb-4 leading-relaxed text-base">
+            <p class="text-foreground-muted mb-4 leading-relaxed text-base">
               Contact the administrator if you have questions about your account
               or the review process.
             </p>
@@ -158,7 +158,7 @@
         <h1 class="text-3xl font-bold text-foreground tracking-tight mb-2">
           Welcome Aboard
         </h1>
-        <p class="text-muted-foreground text-base">
+        <p class="text-foreground-muted text-base">
           Your account has been approved and activated
         </p>
       </div>
@@ -181,7 +181,7 @@
             >
               All Features Unlocked
             </h3>
-            <p class="text-muted-foreground leading-relaxed text-base">
+            <p class="text-foreground-muted leading-relaxed text-base">
               Upload, share, and manage your content with full access to all
               platform features. Start creating and sharing your content.
             </p>
@@ -195,7 +195,7 @@
       >
         <div class="flex items-start gap-4">
           <div
-            class="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-info-fill/15 to-info-fill/8 shadow-md shadow-info/10 mt-1"
+            class="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-info-solid/15 to-info-solid/8 shadow-md shadow-info/10 mt-1"
           >
             <Icon icon="lucide:rocket" class="h-7 w-7 text-info" />
           </div>
@@ -205,7 +205,7 @@
             >
               Ready to get started?
             </h3>
-            <p class="text-muted-foreground leading-relaxed text-base">
+            <p class="text-foreground-muted leading-relaxed text-base">
               Sign in to your account to begin using all the platform features
               or explore the public gallery to see what others are sharing.
             </p>

@@ -50,12 +50,12 @@ export const UploaderConstraintsTheme = tv({
     column: 'flex w-full min-w-0 flex-col gap-y-[7px] sm:w-auto',
     labelRow: 'flex w-full items-baseline justify-between gap-x-3',
     label:
-      'text-[10px] font-semibold uppercase tracking-[0.09em] text-muted-foreground dark:text-foreground-subtle',
-    formats: 'text-[13px] font-medium leading-relaxed text-muted-foreground',
+      'text-[10px] font-semibold uppercase tracking-[0.09em] text-foreground-muted dark:text-foreground-subtle',
+    formats: 'text-[13px] font-medium leading-relaxed text-foreground-muted',
     toggle:
-      'ml-[0.45em] cursor-pointer font-medium text-muted-foreground underline decoration-dotted decoration-ring/70 underline-offset-[3px] transition-colors hover:text-accent hover:decoration-accent/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 dark:text-foreground-subtle',
+      'ml-[0.45em] cursor-pointer font-medium text-foreground-muted underline decoration-dotted decoration-ring/70 underline-offset-[3px] transition-colors hover:text-accent hover:decoration-accent/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 dark:text-foreground-subtle',
     inlineSize:
-      'whitespace-nowrap text-[13px] font-medium text-muted-foreground sm:hidden',
+      'whitespace-nowrap text-[13px] font-medium text-foreground-muted sm:hidden',
     sizeValue:
       'text-[13px] font-semibold text-foreground dark:text-foreground-soft',
     maxSizeColumn:

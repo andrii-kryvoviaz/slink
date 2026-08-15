@@ -8,7 +8,7 @@ export const licenseInfoContainerTheme = cva(
         overlay:
           'gap-1.5 rounded-full px-2.5 py-1 bg-card/95 border-border-strong/50 dark:bg-scrim/60 dark:border-border/50 backdrop-blur-md shadow-lg border',
         badge:
-          'gap-1.5 px-2 py-1 rounded-lg bg-surface-inverse-foreground/10 hover:bg-surface-inverse-foreground/20 backdrop-blur-sm',
+          'gap-1.5 px-2 py-1 rounded-lg bg-on-surface-inverse/10 hover:bg-on-surface-inverse/20 backdrop-blur-sm',
         inline: 'gap-2',
         text: '',
       },
@@ -24,7 +24,7 @@ export const licenseInfoIconTheme = cva('shrink-0', {
     variant: {
       overlay: 'h-3 w-3 text-foreground-soft',
       badge: '',
-      inline: 'text-muted-foreground mt-0.5',
+      inline: 'text-foreground-muted mt-0.5',
       text: '',
     },
     size: {
@@ -75,8 +75,7 @@ export const licenseInfoPopoverTheme = cva('rounded-xl shadow-xl', {
   variants: {
     variant: {
       overlay: '',
-      badge:
-        'w-80 p-4 bg-surface-inverse border border-surface-inverse-foreground/20',
+      badge: 'w-80 p-4 bg-surface-inverse border border-on-surface-inverse/20',
       inline: 'w-80 p-4 bg-input border border-border',
       text: '',
     },

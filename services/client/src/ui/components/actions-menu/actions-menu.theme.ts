@@ -6,7 +6,7 @@ export const actionsMenuTriggerTheme = tv({
     tone: {
       ghost:
         'p-1.5 text-foreground-subtle hover:text-foreground-soft hover:bg-muted',
-      dark: 'p-1 text-surface-inverse-foreground/40 hover:text-surface-inverse-foreground/70 hover:bg-surface-inverse-foreground/5 focus-visible:ring-surface-inverse-foreground/30 focus-visible:ring-offset-transparent',
+      dark: 'p-1 text-on-surface-inverse/40 hover:text-on-surface-inverse/70 hover:bg-on-surface-inverse/5 focus-visible:ring-on-surface-inverse/30 focus-visible:ring-offset-transparent',
     },
   },
   defaultVariants: {

@@ -71,7 +71,7 @@
       <span class="text-xs font-semibold text-foreground">
         {#if requireAllTags}Match All{:else}Match Any{/if}
       </span>
-      <span class="text-[11px] leading-relaxed text-muted-foreground">
+      <span class="text-[11px] leading-relaxed text-foreground-muted">
         {#if requireAllTags}
           Images must have every selected tag to appear in results.
         {:else}

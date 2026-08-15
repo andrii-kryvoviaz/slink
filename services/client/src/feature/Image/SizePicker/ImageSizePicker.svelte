@@ -180,7 +180,7 @@
   />
 
   <div
-    class="flex items-center justify-between text-xs text-muted-foreground h-6"
+    class="flex items-center justify-between text-xs text-foreground-muted h-6"
   >
     <div class="flex items-center gap-2">
       <span>
@@ -190,7 +190,7 @@
         onclick={resetValues}
         class="{visibilityTheme({
           visible: hasChanges,
-        })} inline-flex items-center gap-1 px-2 py-1 text-xs text-muted-foreground hover:text-foreground hover:bg-ghost-hover-strong rounded"
+        })} inline-flex items-center gap-1 px-2 py-1 text-xs text-foreground-muted hover:text-foreground hover:bg-hover-strong rounded"
         aria-label="Reset to original dimensions"
         tabindex={hasChanges ? 0 : -1}
       >

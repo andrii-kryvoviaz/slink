@@ -105,7 +105,7 @@
           }}
         />
         <div class="flex-1 min-w-0">
-          <p class="font-medium text-sm text-surface-inverse-foreground">
+          <p class="font-medium text-sm text-on-surface-inverse">
             {@render authorName()}
           </p>
         </div>
@@ -115,17 +115,14 @@
 
   <div class="flex-1 min-w-0">
     <div class="flex items-center gap-2 mb-1">
-      <span
-        class="text-sm font-medium text-surface-inverse-foreground/90 truncate"
-      >
+      <span class="text-sm font-medium text-on-surface-inverse/90 truncate">
         {@render authorName()}
       </span>
-      <span class="text-xs text-surface-inverse-foreground/40 shrink-0">
+      <span class="text-xs text-on-surface-inverse/40 shrink-0">
         <FormattedDate date={comment.createdAt.timestamp} />
       </span>
       {#if comment.isEdited}
-        <span class="text-xs text-surface-inverse-foreground/30 shrink-0"
-          >(edited)</span
+        <span class="text-xs text-on-surface-inverse/30 shrink-0">(edited)</span
         >
       {/if}
 
@@ -135,7 +132,7 @@
             {#snippet trigger()}
               <button
                 onclick={onReply}
-                class="p-1 text-surface-inverse-foreground/40 hover:text-surface-inverse-foreground/70 rounded transition-colors"
+                class="p-1 text-on-surface-inverse/40 hover:text-on-surface-inverse/70 rounded transition-colors"
               >
                 <Icon icon="ph:arrow-bend-up-left" class="w-4 h-4" />
               </button>
@@ -196,7 +193,7 @@
 
     {#if comment.referencedComment}
       <div
-        class="mb-2 pl-2 border-l-2 border-surface-inverse-foreground/20 text-xs text-surface-inverse-foreground/50"
+        class="mb-2 pl-2 border-l-2 border-on-surface-inverse/20 text-xs text-on-surface-inverse/50"
       >
         <span class="font-medium">
           {#if comment.referencedComment.author}
@@ -221,18 +218,18 @@
     {/if}
 
     {#if comment.isDeleted}
-      <p class="text-sm text-surface-inverse-foreground/80">
+      <p class="text-sm text-on-surface-inverse/80">
         <CommentText
           content={comment.displayContent}
           isDeleted={true}
           variant="glass"
           size="sm"
-          deletedClass="text-surface-inverse-foreground/40 italic"
+          deletedClass="text-on-surface-inverse/40 italic"
         />
       </p>
     {:else}
       <p
-        class="text-sm text-surface-inverse-foreground/80 whitespace-pre-wrap wrap-break-word"
+        class="text-sm text-on-surface-inverse/80 whitespace-pre-wrap wrap-break-word"
       >
         <CommentText
           content={comment.displayContent}

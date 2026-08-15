@@ -97,11 +97,11 @@
   };
 
   const SERIES_UTILITIES = [
-    'text-series-1',
-    'text-series-2',
-    'text-series-3',
-    'text-series-4',
-    'text-series-5',
+    'text-chart-1',
+    'text-chart-2',
+    'text-chart-3',
+    'text-chart-4',
+    'text-chart-5',
   ];
 
   const toHex = (context: CanvasRenderingContext2D, color: string): string => {

@@ -198,8 +198,7 @@
             href="https://aws.amazon.com/s3/pricing/"
             target="_blank"
             rel="noopener noreferrer"
-            class="underline hover:text-warning-subtle-foreground"
-            >Review pricing</a
+            class="underline hover:text-warning-text">Review pricing</a
           >
         </Notice>
       {/if}

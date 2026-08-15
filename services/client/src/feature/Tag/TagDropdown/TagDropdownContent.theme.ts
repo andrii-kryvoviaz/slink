@@ -18,7 +18,7 @@ export const tagDropdownContentVariants = cva(
           'backdrop-blur-md',
           'border border-border/60 dark:border-border/50',
           'rounded-xl',
-          'shadow-2xl shadow-muted-foreground/5 dark:shadow-scrim/50',
+          'shadow-2xl shadow-foreground-muted/5 dark:shadow-scrim/50',
           'ring-1 ring-muted/20 dark:ring-border/25',
         ],
         minimal: [

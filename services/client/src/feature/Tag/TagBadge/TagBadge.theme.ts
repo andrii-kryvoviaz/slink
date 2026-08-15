@@ -7,37 +7,37 @@ export const tagBadgeCloseButtonVariants = cva(
     variants: {
       variant: {
         default:
-          'text-foreground-soft hover:text-foreground hover:bg-muted-foreground/20',
-        blue: 'text-info-subtle-foreground hover:text-info-deep-foreground hover:bg-info/20',
+          'text-foreground-soft hover:text-foreground hover:bg-foreground-muted/20',
+        blue: 'text-info-text hover:text-info-text-strong hover:bg-info/20',
         emerald:
-          'text-decor-emerald-subtle-foreground hover:text-decor-emerald-deep-foreground hover:bg-decor-emerald/20',
+          'text-decor-emerald-text hover:text-decor-emerald-text-strong hover:bg-decor-emerald/20',
         slate:
-          'text-foreground-soft hover:text-foreground hover:bg-muted-foreground/20',
+          'text-foreground-soft hover:text-foreground hover:bg-foreground-muted/20',
         purple:
-          'text-accent-subtle-foreground hover:text-accent-deep-foreground hover:bg-accent/20',
+          'text-accent-text hover:text-accent-text-strong hover:bg-accent/20',
         amber:
-          'text-warning-subtle-foreground hover:text-warning-deep-foreground hover:bg-warning/20',
+          'text-warning-text hover:text-warning-text-strong hover:bg-warning/20',
         orange:
-          'text-decor-orange-subtle-foreground hover:text-decor-orange-deep-foreground hover:bg-decor-orange/20',
-        red: 'text-danger-subtle-foreground hover:text-danger-deep-foreground hover:bg-danger/20',
+          'text-decor-orange-text hover:text-decor-orange-text-strong hover:bg-decor-orange/20',
+        red: 'text-danger-text hover:text-danger-text-strong hover:bg-danger/20',
         success:
-          'text-success-subtle-foreground hover:text-success-deep-foreground hover:bg-success/20',
+          'text-success-text hover:text-success-text-strong hover:bg-success/20',
         destructive:
-          'text-danger-subtle-foreground hover:text-danger-deep-foreground hover:bg-danger/20',
+          'text-danger-text hover:text-danger-text-strong hover:bg-danger/20',
         warning:
-          'text-warning-subtle-foreground hover:text-warning-deep-foreground hover:bg-warning/20',
-        info: 'text-info-subtle-foreground hover:text-info-deep-foreground hover:bg-info/20',
+          'text-warning-text hover:text-warning-text-strong hover:bg-warning/20',
+        info: 'text-info-text hover:text-info-text-strong hover:bg-info/20',
         indigo:
-          'text-accent-subtle-foreground hover:text-accent-deep-foreground hover:bg-accent/20',
-        pink: 'text-decor-pink-subtle-foreground hover:text-decor-pink-deep-foreground hover:bg-decor-pink/20',
+          'text-accent-text hover:text-accent-text-strong hover:bg-accent/20',
+        pink: 'text-decor-pink-text hover:text-decor-pink-text-strong hover:bg-decor-pink/20',
         neutral:
-          'text-foreground-soft hover:text-foreground hover:bg-muted-foreground/20',
-        gradient: 'text-accent-foreground hover:bg-accent-foreground/20',
-        neon: 'text-info dark:text-info-subtle-foreground hover:text-info-subtle-foreground dark:hover:text-info-deep-foreground hover:bg-info/20',
+          'text-foreground-soft hover:text-foreground hover:bg-foreground-muted/20',
+        gradient: 'text-on-accent hover:bg-on-accent/20',
+        neon: 'text-info dark:text-info-text hover:text-info-text dark:hover:text-info-text-strong hover:bg-info/20',
         minimal:
-          'text-muted-foreground hover:text-foreground hover:bg-muted-foreground/20',
+          'text-foreground-muted hover:text-foreground hover:bg-foreground-muted/20',
         glass:
-          'text-surface-inverse-foreground/70 hover:text-surface-inverse-foreground hover:bg-surface-inverse-foreground/10',
+          'text-on-surface-inverse/70 hover:text-on-surface-inverse hover:bg-on-surface-inverse/10',
       },
     },
     defaultVariants: {

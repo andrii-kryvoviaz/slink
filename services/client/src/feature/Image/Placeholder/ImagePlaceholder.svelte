@@ -135,7 +135,7 @@
       class="absolute inset-0 flex items-center justify-center bg-muted animate-pulse"
     >
       <svg
-        class="h-6 w-6 @[6rem]:h-8 @[6rem]:w-8 @[12rem]:h-12 @[12rem]:w-12 text-muted-foreground"
+        class="h-6 w-6 @[6rem]:h-8 @[6rem]:w-8 @[12rem]:h-12 @[12rem]:w-12 text-foreground-muted"
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
         fill="currentColor"
@@ -150,7 +150,7 @@
 
   {#if hasError}
     <div
-      class="absolute inset-0 flex flex-col items-center justify-center bg-muted-subtle"
+      class="absolute inset-0 flex flex-col items-center justify-center bg-muted-soft"
       in:fade={{ duration: 200 }}
     >
       <div
@@ -176,7 +176,7 @@
           <p class="text-sm font-medium text-foreground-soft">
             Image unavailable
           </p>
-          <p class="text-xs text-muted-foreground max-w-50 leading-relaxed">
+          <p class="text-xs text-foreground-muted max-w-50 leading-relaxed">
             This image may have been removed or is temporarily inaccessible
           </p>
         </div>
@@ -197,7 +197,7 @@
           {#snippet trigger()}
             <Icon
               icon="heroicons:arrow-top-right-on-square"
-              class="h-4 w-4 text-surface-inverse-foreground/80 transition-colors duration-200 group-hover/link:text-surface-inverse-foreground"
+              class="h-4 w-4 text-on-surface-inverse/80 transition-colors duration-200 group-hover/link:text-on-surface-inverse"
             />
           {/snippet}
           Open in new tab
@@ -207,14 +207,14 @@
 
     {#if metadata && showMetadata}
       <div
-        class="absolute bottom-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2 bg-scrim/40 dark:bg-scrim/60 backdrop-blur-md rounded-lg px-3 py-2 text-xs text-surface-inverse-foreground/90"
+        class="absolute bottom-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2 bg-scrim/40 dark:bg-scrim/60 backdrop-blur-md rounded-lg px-3 py-2 text-xs text-on-surface-inverse/90"
         in:fade={{ duration: 200, delay: 100 }}
       >
         <div class="flex flex-wrap items-center gap-2 min-w-0">
           <div class="flex items-center gap-1 whitespace-nowrap">
             <Icon
               icon="heroicons:photo"
-              class="w-3 h-3 text-surface-inverse-foreground/70 shrink-0"
+              class="w-3 h-3 text-on-surface-inverse/70 shrink-0"
             />
             <span class="font-medium">{metadata.width}×{metadata.height}</span>
           </div>
@@ -222,7 +222,7 @@
             <div class="flex items-center gap-1 whitespace-nowrap">
               <Icon
                 icon="heroicons:document"
-                class="w-3 h-3 text-surface-inverse-foreground/70 shrink-0"
+                class="w-3 h-3 text-on-surface-inverse/70 shrink-0"
               />
               <span class="uppercase font-medium"
                 >{metadata.mimeType.split('/')[1] || metadata.mimeType}</span
@@ -235,7 +235,7 @@
           <div class="flex items-center gap-1 whitespace-nowrap">
             <Icon
               icon="heroicons:arrow-down-tray"
-              class="w-3 h-3 text-surface-inverse-foreground/70 shrink-0"
+              class="w-3 h-3 text-on-surface-inverse/70 shrink-0"
             />
             <span class="font-medium">{bytesToSize(metadata.size)}</span>
           </div>

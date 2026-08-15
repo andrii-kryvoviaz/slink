@@ -42,13 +42,13 @@
 }
 
 @utility filter-clear-neutral {
-  @apply text-foreground-subtle hover:bg-ghost-hover hover:text-foreground-soft dark:text-muted-foreground;
+  @apply text-foreground-subtle hover:bg-hover hover:text-foreground-soft dark:text-foreground-muted;
 }
 
 @utility filter-item-info {
-  @apply text-foreground-soft hover:bg-info-fill/20 hover:text-info-subtle-foreground aria-selected:bg-info-fill/20 aria-selected:text-info-subtle-foreground aria-selected:shadow-info-border/40 dark:text-foreground aria-selected:shadow-sm;
+  @apply text-foreground-soft hover:bg-info-solid/20 hover:text-info-text aria-selected:bg-info-solid/20 aria-selected:text-info-text aria-selected:shadow-info-border/40 dark:text-foreground aria-selected:shadow-sm;
 }
 
 @utility filter-item-count-info {
-  @apply border-border/50 bg-muted/80 text-muted-foreground group-hover:border-info/30 group-hover:bg-info-fill/20 group-hover:text-info-subtle-foreground group-aria-selected:border-info/30 group-aria-selected:bg-info-fill/20 group-aria-selected:text-info-subtle-foreground border;
+  @apply border-border/50 bg-muted/80 text-foreground-muted group-hover:border-info/30 group-hover:bg-info-solid/20 group-hover:text-info-text group-aria-selected:border-info/30 group-aria-selected:bg-info-solid/20 group-aria-selected:text-info-text border;
 }

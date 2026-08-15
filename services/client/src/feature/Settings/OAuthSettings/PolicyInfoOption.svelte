@@ -41,13 +41,13 @@
       </span>
       {#if isActive}
         <span
-          class="inline-flex items-center px-1.5 py-px rounded-full text-[10px] font-semibold uppercase tracking-wider bg-success-subtle text-success-subtle-foreground"
+          class="inline-flex items-center px-1.5 py-px rounded-full text-[10px] font-semibold uppercase tracking-wider bg-success-wash dark:bg-success-wash/20 text-success-text"
         >
           Current
         </span>
       {/if}
     </div>
-    <p class="text-xs leading-relaxed text-muted-foreground">
+    <p class="text-xs leading-relaxed text-foreground-muted">
       {@render children()}
     </p>
   </div>

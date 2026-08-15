@@ -10,14 +10,14 @@
       variants: {
         variant: {
           accent:
-            'text-accent-subtle-foreground border-accent-border/20 shadow-accent/4 bg-accent-subtle',
+            'text-accent-text border-accent-border/20 dark:border-accent-border/6 shadow-accent/4 bg-accent-wash dark:bg-accent-wash/20',
           success:
-            'text-success-subtle-foreground border-success-border/20 shadow-success/4 bg-success-subtle',
+            'text-success-text border-success-border/20 dark:border-success-border/6 shadow-success/4 bg-success-wash dark:bg-success-wash/20',
           warning:
-            'text-warning-subtle-foreground border-warning-border/20 shadow-warning/4 bg-warning-subtle',
+            'text-warning-text border-warning-border/20 dark:border-warning-border/6 shadow-warning/4 bg-warning-wash dark:bg-warning-wash/20',
           danger:
-            'text-danger-subtle-foreground border-danger-border/20 shadow-danger/4 bg-danger-subtle',
-          info: 'text-info-subtle-foreground border-info-border/20 shadow-info/4 bg-info-subtle',
+            'text-danger-text border-danger-border/20 dark:border-danger-border/6 shadow-danger/4 bg-danger-wash dark:bg-danger-wash/20',
+          info: 'text-info-text border-info-border/20 dark:border-info-border/6 shadow-info/4 bg-info-wash dark:bg-info-wash/20',
         },
       },
       defaultVariants: {

@@ -64,7 +64,7 @@
         class="flex items-center gap-3 hover:opacity-80 transition-opacity duration-200 group"
       >
         <div
-          class="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/10 group-hover:border-primary/20 group-hover:scale-105 transition-all duration-200"
+          class="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-foreground-solid/10 to-foreground-solid/5 border border-foreground-solid/10 group-hover:border-foreground-solid/20 group-hover:scale-105 transition-all duration-200"
         >
           <BrandLogo class="h-5 w-5" />
         </div>
@@ -123,7 +123,7 @@
               <Icon icon="ph:cloud-arrow-up" class="h-4 w-4 text-info" />
               <span class="text-sm font-semibold">Upload Image</span>
             </div>
-            <p class="text-xs text-muted-foreground leading-relaxed">
+            <p class="text-xs text-foreground-muted leading-relaxed">
               Share your media with others by uploading them and organizing them
               into collections.
             </p>
@@ -131,7 +131,7 @@
               class="flex items-center justify-between pt-1.5 border-t border-border/30"
             >
               <span
-                class="text-[10px] uppercase tracking-wider text-muted-foreground/60 font-medium"
+                class="text-[10px] uppercase tracking-wider text-foreground-muted/60 font-medium"
               >
                 Shortcut
               </span>
@@ -184,7 +184,7 @@
               <Icon icon="ph:palette" class="h-4 w-4 text-info" />
               <span class="text-sm font-semibold">Toggle Theme</span>
             </div>
-            <p class="text-xs text-muted-foreground leading-relaxed">
+            <p class="text-xs text-foreground-muted leading-relaxed">
               Switch between light and dark mode.
             </p>
           </div>
