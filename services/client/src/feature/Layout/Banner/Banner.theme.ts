@@ -53,10 +53,10 @@ export const BannerIconColorTheme = cva('h-5 w-5', {
     variant: {
       default: 'text-background',
       neutral: 'text-background',
-      warning: 'text-warning-foreground',
-      info: 'text-info-fill-foreground',
-      success: 'text-success-foreground',
-      error: 'text-danger-strong-foreground',
+      warning: 'text-white',
+      info: 'text-white',
+      success: 'text-white',
+      error: 'text-white',
       purple: 'text-decor-violet-foreground',
       violet: 'text-decor-violet-foreground',
     },
@@ -71,16 +71,16 @@ export const BannerActionTheme = cva('border transition-colors duration-200', {
       neutral:
         'bg-muted/80 hover:bg-ghost-hover-strong border-border hover:border-border-strong dark:hover:border-border-stronger text-foreground-soft',
       warning:
-        'bg-warning-subtle/90 hover:bg-warning-subtle border-warning-border hover:border-warning text-warning-subtle-foreground',
-      info: 'bg-info-subtle/80 hover:bg-info-subtle border-info-border hover:border-info text-info-subtle-foreground',
+        'bg-warning-subtle/90 hover:bg-warning-subtle dark:bg-warning-strong/25 dark:hover:bg-warning-strong/40 border-warning-border hover:border-warning text-warning-subtle-foreground',
+      info: 'bg-info-subtle/80 hover:bg-info-subtle dark:bg-info-fill/30 dark:hover:bg-info-fill/45 border-info-border hover:border-info text-info-subtle-foreground',
       success:
-        'bg-success-subtle/80 hover:bg-success-subtle border-success-border hover:border-success text-success-subtle-foreground',
+        'bg-success-subtle/80 hover:bg-success-subtle dark:bg-success-fill/30 dark:hover:bg-success-fill/45 border-success-border hover:border-success text-success-subtle-foreground',
       error:
-        'bg-danger-subtle/80 hover:bg-danger-subtle border-danger-border hover:border-danger text-danger-subtle-foreground',
+        'bg-danger-subtle/80 hover:bg-danger-subtle dark:bg-danger-fill/30 dark:hover:bg-danger-fill/45 border-danger-border hover:border-danger text-danger-subtle-foreground',
       purple:
-        'bg-decor-violet/10 hover:bg-decor-violet/20 border-decor-violet/40 hover:border-decor-violet text-decor-violet',
+        'bg-decor-violet/10 hover:bg-decor-violet/20 dark:bg-decor-violet/30 dark:hover:bg-decor-violet/45 border-decor-violet/40 hover:border-decor-violet text-decor-violet',
       violet:
-        'bg-decor-violet/10 hover:bg-decor-violet/20 border-decor-violet/40 hover:border-decor-violet text-decor-violet',
+        'bg-decor-violet/10 hover:bg-decor-violet/20 dark:bg-decor-violet/30 dark:hover:bg-decor-violet/45 border-decor-violet/40 hover:border-decor-violet text-decor-violet',
     },
   },
 });
