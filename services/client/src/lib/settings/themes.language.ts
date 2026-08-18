@@ -6,17 +6,14 @@ export interface ThemeDescriptor {
   label: string;
 }
 
-export const themes: ThemeDescriptor[] = [
-  {
-    name: Theme.DEFAULT,
-    get label() {
-      return localize('Default');
-    },
+const themeLabels: Record<Theme, () => string> = {
+  [Theme.DEFAULT]: () => localize('Default'),
+  [Theme.NORD]: () => localize('Nord'),
+};
+
+export const themes: ThemeDescriptor[] = Object.values(Theme).map((name) => ({
+  name,
+  get label() {
+    return themeLabels[name]();
   },
-  {
-    name: Theme.NORD,
-    get label() {
-      return localize('Nord');
-    },
-  },
-];
+}));
