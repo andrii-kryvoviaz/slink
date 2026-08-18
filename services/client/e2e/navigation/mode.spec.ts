@@ -31,16 +31,28 @@ test.describe('Mode', () => {
     await page.goto('/');
     await layoutControls.modeToggle.waitFor({ state: 'visible' });
 
-    const before = await layoutControls.isDark();
-    expect(await layoutControls.readColorScheme()).toBe(
-      before ? 'dark' : 'light',
-    );
+    await layoutControls.setMode('light');
+    await expect.poll(() => layoutControls.readColorScheme()).toBe('light');
+
+    await layoutControls.setMode('dark');
+    await expect.poll(() => layoutControls.readColorScheme()).toBe('dark');
+  });
+
+  test('defaults to system mode without a cookie and switches to an explicit mode on toggle', async ({
+    page,
+    layoutControls,
+  }) => {
+    await page.context().clearCookies({ name: 'settings.mode' });
+    await page.goto('/');
+    await layoutControls.modeToggle.waitFor({ state: 'visible' });
+
+    expect(await layoutControls.readModeClass()).toBe('system');
+    expect(await layoutControls.readColorScheme()).toBe('light dark');
 
     await layoutControls.toggleMode();
-    await expect.poll(() => layoutControls.isDark()).toBe(!before);
-
-    expect(await layoutControls.readColorScheme()).toBe(
-      before ? 'light' : 'dark',
-    );
+    await expect.poll(() => layoutControls.readModeClass()).toBe('dark');
+    await expect
+      .poll(() => layoutControls.readSettingCookie('mode'))
+      .toBe('dark');
   });
 });

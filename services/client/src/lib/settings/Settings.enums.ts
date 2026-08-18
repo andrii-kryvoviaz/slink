@@ -1,6 +1,7 @@
 export enum Mode {
   LIGHT = 'light',
   DARK = 'dark',
+  SYSTEM = 'system',
 }
 
 export enum Theme {
@@ -25,7 +26,7 @@ export const resolveMode = (value: unknown): Mode => {
     return value as Mode;
   }
 
-  return Mode.DARK;
+  return Mode.SYSTEM;
 };
 
 export enum Locale {

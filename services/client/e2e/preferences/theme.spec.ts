@@ -41,9 +41,7 @@ test.describe('Theme preference', () => {
     await preferencesPage.goto();
     await expect(preferencesPage.heading).toBeVisible();
 
-    if (!(await layoutControls.isDark())) {
-      await layoutControls.toggleMode();
-    }
+    await layoutControls.setMode('dark');
 
     expect(await layoutControls.readColorScheme()).toBe('dark');
     expect(await layoutControls.readTheme()).toBe('default');

@@ -20,6 +20,25 @@ export class LayoutControls extends BasePage {
     }).toPass({ timeout: 15000 });
   }
 
+  async setMode(mode: 'light' | 'dark') {
+    await expect(async () => {
+      if ((await this.readModeClass()) !== mode) {
+        await this.modeToggle.click();
+      }
+      expect(await this.readModeClass()).toBe(mode);
+    }).toPass({ timeout: 15000 });
+  }
+
+  async readModeClass(): Promise<string | null> {
+    return this.page.evaluate(() => {
+      const modes = ['light', 'dark', 'system'];
+      const found = modes.find((mode) =>
+        document.documentElement.classList.contains(mode),
+      );
+      return found ?? null;
+    });
+  }
+
   async isDark() {
     return this.page.evaluate(() =>
       document.documentElement.classList.contains('dark'),

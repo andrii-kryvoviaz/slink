@@ -78,7 +78,7 @@ export const settingsKeys: SettingsKey[] = [
 ];
 
 export const defaultSettings: Record<SettingsKey, unknown> = {
-  mode: Mode.DARK,
+  mode: Mode.SYSTEM,
   theme: Theme.DEFAULT,
   locale: Locale.EN,
   sidebar: { expanded: true },
@@ -151,7 +151,7 @@ function persist(key: string, value: unknown): void {
 }
 
 class ModeState {
-  _value = $state<Mode>(Mode.DARK);
+  _value = $state<Mode>(Mode.SYSTEM);
 
   get current(): Mode {
     return this._value;
