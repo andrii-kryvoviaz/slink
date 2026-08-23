@@ -6,10 +6,11 @@ namespace Slink\User\Application\Query\User\GetUserList;
 
 use Slink\Shared\Application\Query\QueryInterface;
 use Slink\Shared\Infrastructure\MessageBus\EnvelopedMessage;
+use Symfony\Component\Validator\Constraints as Assert;
 
 final readonly class GetUserListQuery implements QueryInterface {
   use EnvelopedMessage;
-  
+
   /**
    * @param int $limit
    * @param string $orderBy
@@ -18,7 +19,9 @@ final readonly class GetUserListQuery implements QueryInterface {
    */
   public function __construct(
     private int $limit = 10,
+    #[Assert\Choice(choices: ['createdAt', 'updatedAt', 'username', 'displayName', 'email', 'status'])]
     private string $orderBy = 'createdAt',
+    #[Assert\Choice(choices: ['asc', 'desc'])]
     private string $order = 'desc',
     private ?string $search = null
   ) {
