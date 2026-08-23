@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Slink\Settings\Domain\Exception\S3BucketNotConfiguredException;
 use Slink\Settings\Domain\Exception\S3CredentialsNotConfiguredException;
+use Slink\Settings\Domain\Exception\S3EndpointNotValidException;
 use Slink\Settings\Domain\Exception\S3RegionNotConfiguredException;
 use Slink\Settings\Domain\Provider\ConfigurationProviderInterface;
 use Slink\Settings\Domain\ValueObject\Storage\AmazonS3StorageSettings;
@@ -366,5 +367,116 @@ final class AmazonS3StorageSettingsTest extends TestCase {
     $this->expectException(S3CredentialsNotConfiguredException::class);
 
     AmazonS3StorageSettings::fromPayload($payloadWithoutCredentials);
+  }
+
+  #[Test]
+  public function itPrefixesSchemelessEndpointWithHttps(): void {
+    $payload = [
+      'region' => 'us-east-005',
+      'bucket' => 'test-bucket',
+      'key' => 'access-key',
+      'secret' => 'secret-key',
+      'endpoint' => 's3.us-east-005.backblazeb2.com',
+    ];
+
+    $settings = AmazonS3StorageSettings::fromPayload($payload);
+
+    $this->assertSame('https://s3.us-east-005.backblazeb2.com', $settings->getEndpoint());
+    $this->assertTrue($settings->usesCustomProvider());
+  }
+
+  #[Test]
+  public function itKeepsEndpointWithExplicitScheme(): void {
+    $payload = [
+      'region' => 'us-east-1',
+      'bucket' => 'test-bucket',
+      'key' => 'access-key',
+      'secret' => 'secret-key',
+      'endpoint' => 'http://localhost:9000',
+    ];
+
+    $settings = AmazonS3StorageSettings::fromPayload($payload);
+
+    $this->assertSame('http://localhost:9000', $settings->getEndpoint());
+  }
+
+  #[Test]
+  public function itTrimsEndpointWhitespace(): void {
+    $payload = [
+      'region' => 'us-east-1',
+      'bucket' => 'test-bucket',
+      'key' => 'access-key',
+      'secret' => 'secret-key',
+      'endpoint' => '  http://localhost:9000  ',
+    ];
+
+    $settings = AmazonS3StorageSettings::fromPayload($payload);
+
+    $this->assertSame('http://localhost:9000', $settings->getEndpoint());
+  }
+
+  #[Test]
+  public function itTreatsEmptyEndpointAsNull(): void {
+    $payload = [
+      'region' => 'us-east-1',
+      'bucket' => 'test-bucket',
+      'key' => 'access-key',
+      'secret' => 'secret-key',
+      'endpoint' => '   ',
+    ];
+
+    $settings = AmazonS3StorageSettings::fromPayload($payload);
+
+    $this->assertNull($settings->getEndpoint());
+    $this->assertFalse($settings->usesCustomProvider());
+  }
+
+  #[Test]
+  public function itTreatsAbsentEndpointAsNull(): void {
+    $payload = [
+      'region' => 'us-east-1',
+      'bucket' => 'test-bucket',
+      'key' => 'access-key',
+      'secret' => 'secret-key',
+    ];
+
+    $settings = AmazonS3StorageSettings::fromPayload($payload);
+
+    $this->assertNull($settings->getEndpoint());
+  }
+
+  #[Test]
+  public function itThrowsExceptionWhenEndpointIsNotAValidUrl(): void {
+    $payload = [
+      'region' => 'us-east-1',
+      'bucket' => 'test-bucket',
+      'key' => 'access-key',
+      'secret' => 'secret-key',
+      'endpoint' => 'not a url',
+    ];
+
+    $this->expectException(S3EndpointNotValidException::class);
+
+    AmazonS3StorageSettings::fromPayload($payload);
+  }
+
+  #[Test]
+  public function itNormalizesSchemelessEndpointFromConfigurationProvider(): void {
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
+    $configProvider->method('get')
+      ->willReturnMap([
+        ['storage.adapter.s3.region', 'us-east-005'],
+        ['storage.adapter.s3.bucket', 'my-bucket'],
+        ['storage.adapter.s3.key', 'my-key'],
+        ['storage.adapter.s3.secret', 'my-secret'],
+        ['storage.adapter.s3.endpoint', 's3.us-east-005.backblazeb2.com'],
+        ['storage.adapter.s3.useCustomProvider', true],
+        ['storage.adapter.s3.forcePathStyle', false],
+      ]);
+
+    $settings = AmazonS3StorageSettings::fromConfig($configProvider);
+
+    $this->assertSame('https://s3.us-east-005.backblazeb2.com', $settings->getEndpoint());
+    $this->assertSame('https://s3.us-east-005.backblazeb2.com', $settings->toClientConfig()['endpoint']);
   }
 }
