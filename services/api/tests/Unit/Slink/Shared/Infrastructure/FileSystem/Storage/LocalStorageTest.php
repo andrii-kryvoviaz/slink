@@ -367,4 +367,29 @@ final class LocalStorageTest extends TestCase {
       $this->assertFileDoesNotExist($cachePath . '/' . $cacheFile);
     }
   }
+
+  #[Test]
+  public function itAppliesConfigurationChangesOnReset(): void {
+    $updatedDir = sys_get_temp_dir() . '/slink_test_' . uniqid();
+    mkdir($updatedDir, 0755, true);
+
+    $dir = $this->testDir;
+
+    $configProvider = $this->createStub(ConfigurationProviderInterface::class);
+    $configProvider->method('get')
+      ->willReturnCallback(static function () use (&$dir): string {
+        return $dir;
+      });
+
+    $storage = new LocalStorage($configProvider);
+
+    $this->assertSame($this->testDir . '/slink/cache/file.jpg', $storage->cachePath('file.jpg'));
+
+    $dir = $updatedDir;
+    $storage->reset();
+
+    $this->assertSame($updatedDir . '/slink/cache/file.jpg', $storage->cachePath('file.jpg'));
+
+    $this->recursiveRemoveDirectory($updatedDir);
+  }
 }
