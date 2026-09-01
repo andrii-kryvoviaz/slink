@@ -37,7 +37,7 @@ const defaultAction: Action = async ({ request, cookies, locals }) => {
 
     const { id, headers } = response;
 
-    locals.cookieManager.setCookie(cookies, 'createdUserId', id);
+    locals.cookies.setCookie(cookies, 'createdUserId', id);
 
     redirectUrl = headers.get('location');
   } catch (e) {

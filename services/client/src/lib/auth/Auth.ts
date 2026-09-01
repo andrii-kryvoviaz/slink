@@ -7,6 +7,7 @@ import type { CookieManager } from '@slink/lib/auth/CookieManager';
 import { Session } from '@slink/lib/auth/Session';
 import type { TokenPair } from '@slink/lib/auth/Type/TokenPair';
 import { parseJwt } from '@slink/lib/auth/parseJwt';
+import { settingsPolicy } from '@slink/lib/settings/SettingsPolicy';
 
 type Credentials = {
   username: string;
@@ -149,6 +150,8 @@ export class Auth {
     }
 
     cookieManager.deleteCookie(cookies, 'refreshToken');
+
+    cookieManager.use(settingsPolicy).clear();
 
     if (sessionId) {
       await Session.destroy(cookies, cookieManager);

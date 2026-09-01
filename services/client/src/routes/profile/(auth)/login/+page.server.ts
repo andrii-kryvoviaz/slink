@@ -46,7 +46,7 @@ export const actions: Actions = {
     try {
       await Auth.login(
         { username, password },
-        { cookies, cookieManager: locals.cookieManager, fetch },
+        { cookies, cookieManager: locals.cookies, fetch },
       );
     } catch (e) {
       if (e instanceof HttpException) {

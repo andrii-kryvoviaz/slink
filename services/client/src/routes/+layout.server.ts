@@ -38,6 +38,5 @@ export const load: LayoutServerLoad = async ({ locals, request }) => {
     userPreferences,
     userAgent,
     sidebarGroups,
-    locale: locals.locale,
   };
 };

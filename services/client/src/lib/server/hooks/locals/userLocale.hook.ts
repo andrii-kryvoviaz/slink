@@ -1,17 +1,15 @@
+import { resolveLocale } from '@slink/lib/settings/Settings.enums';
+
 import { defineHook } from '../define';
 
 export default defineHook({
   init: (event) => {
-    const userLocale = event.locals.userPreferences?.['display.language'];
-    if (userLocale) {
-      event.locals.locale = userLocale;
-      event.cookies.set('settings.locale', userLocale, {
-        path: '/',
-        maxAge: 31536000,
-        httpOnly: false,
-        secure: false,
-        sameSite: 'strict',
-      });
+    if (!event.locals.user) {
+      return;
     }
+
+    const userLocale = event.locals.userPreferences?.['display.language'];
+
+    event.locals.cookies.settings.set('locale', resolveLocale(userLocale));
   },
 });

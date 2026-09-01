@@ -51,7 +51,7 @@ export const ApiProxy = (options: ApiOptions): Handle => {
 
     if (response.status === 401 && sessionId) {
       if (!refreshToken) {
-        await Session.destroy(cookies, locals.cookieManager);
+        await Session.destroy(cookies, locals.cookies);
 
         return getResponseWithCookies({
           response,
@@ -64,7 +64,7 @@ export const ApiProxy = (options: ApiOptions): Handle => {
       try {
         const result = await tokenManager.handleTokenRefresh(
           sessionId,
-          { cookies, cookieManager: locals.cookieManager, fetch },
+          { cookies, cookieManager: locals.cookies, fetch },
           makeRequest,
         );
         response = result.response;
@@ -72,8 +72,8 @@ export const ApiProxy = (options: ApiOptions): Handle => {
       } catch (error) {
         console.warn('Token refresh failed:', error);
 
-        locals.cookieManager.deleteCookie(cookies, 'refreshToken');
-        await Session.destroy(cookies, locals.cookieManager);
+        locals.cookies.deleteCookie(cookies, 'refreshToken');
+        await Session.destroy(cookies, locals.cookies);
 
         return getResponseWithCookies({
           response: new Response(null, {

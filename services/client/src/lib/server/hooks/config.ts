@@ -8,8 +8,7 @@ export interface HookSettings {
 export const hookSettings: Record<HookId, HookSettings> = {
   'request/wellKnown': { order: 10 },
   'request/responseHeaders': { order: 20 },
-  'locals/cookieManager': { order: 10 },
-  'locals/locale': { order: 20 },
+  'locals/cookies': { order: 10 },
   'locals/apiClient': { order: 30 },
   'locals/apiProxy': { order: 40 },
   'locals/globalSettings': { order: 50 },
@@ -17,7 +16,7 @@ export const hookSettings: Record<HookId, HookSettings> = {
   'locals/uploadPolicy': { order: 70 },
   'locals/userLocale': { order: 80 },
   'locals/userTheme': { order: 85 },
-  'locals/cookieSettings': { order: 90 },
+  'locals/settings': { order: 90 },
   'render/shell': { order: 10 },
   'render/locale': { order: 20 },
   'response/linkHeader': { order: 10 },
