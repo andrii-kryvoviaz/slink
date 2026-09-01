@@ -151,7 +151,7 @@ export class Auth {
 
     cookieManager.deleteCookie(cookies, 'refreshToken');
 
-    cookieManager.use(settingsPolicy).clear();
+    cookieManager.use({ ...settingsPolicy, keys: ['theme', 'locale'] }).clear();
 
     if (sessionId) {
       await Session.destroy(cookies, cookieManager);
