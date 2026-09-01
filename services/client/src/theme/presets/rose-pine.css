@@ -1,5 +1,5 @@
 @layer presets {
-  :root[data-theme='rose-pine'] {
+  [data-theme='rose-pine'] {
     --color-background: light-dark(
       oklch(0.9699 0.0113 71.9),
       oklch(0.2134 0.0255 291.13)

@@ -8,6 +8,7 @@ use Slink\Image\Domain\Enum\License;
 use Slink\Shared\Domain\ValueObject\AbstractCompoundValueObject;
 use Slink\User\Domain\Enum\DefaultVisibility;
 use Slink\User\Domain\Enum\DisplayLanguage;
+use Slink\User\Domain\Enum\DisplayTheme;
 use Slink\User\Domain\Enum\ExifMetadataPreference;
 use Slink\User\Domain\Enum\LandingPage;
 
@@ -19,12 +20,13 @@ final readonly class UserPreferences extends AbstractCompoundValueObject {
     private array $data = [],
   ) {}
 
-  public static function create(?License $defaultLicense = null, ?LandingPage $defaultLandingPage = null, ?DefaultVisibility $defaultVisibility = null, ?DisplayLanguage $displayLanguage = null, ?bool $externalUploadAutoPublish = null, ?ExifMetadataPreference $exifMetadataPreference = null): self {
+  public static function create(?License $defaultLicense = null, ?LandingPage $defaultLandingPage = null, ?DefaultVisibility $defaultVisibility = null, ?DisplayLanguage $displayLanguage = null, ?DisplayTheme $displayTheme = null, ?bool $externalUploadAutoPublish = null, ?ExifMetadataPreference $exifMetadataPreference = null): self {
     return new self([
       'license.default' => $defaultLicense?->value,
       'navigation.landingPage' => $defaultLandingPage?->value,
       'image.defaultVisibility' => $defaultVisibility?->value,
       'display.language' => $displayLanguage?->value,
+      'display.theme' => $displayTheme?->value,
       'image.externalUploadAutoPublish' => $externalUploadAutoPublish,
       'image.stripExifMetadataOverride' => $exifMetadataPreference?->value,
     ]);
@@ -76,6 +78,16 @@ final readonly class UserPreferences extends AbstractCompoundValueObject {
 
   public function withDisplayLanguage(?DisplayLanguage $language): self {
     return new self([...$this->data, 'display.language' => $language?->value]);
+  }
+
+  public function getDisplayTheme(): ?DisplayTheme {
+    return isset($this->data['display.theme']) && is_string($this->data['display.theme'])
+      ? DisplayTheme::tryFrom($this->data['display.theme'])
+      : null;
+  }
+
+  public function withDisplayTheme(?DisplayTheme $theme): self {
+    return new self([...$this->data, 'display.theme' => $theme?->value]);
   }
 
   public function getExternalUploadAutoPublish(): bool {

@@ -16,6 +16,7 @@ export const hookSettings: Record<HookId, HookSettings> = {
   'locals/userPreferences': { order: 60 },
   'locals/uploadPolicy': { order: 70 },
   'locals/userLocale': { order: 80 },
+  'locals/userTheme': { order: 85 },
   'locals/cookieSettings': { order: 90 },
   'render/shell': { order: 10 },
   'render/locale': { order: 20 },

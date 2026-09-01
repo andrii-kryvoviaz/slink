@@ -1,6 +1,6 @@
 <script lang="ts">
   import { getLicenseLabels } from '@slink/feature/Image';
-  import { Loader, ThemePicker } from '@slink/feature/Layout';
+  import { Loader, ThemePicker, ThemeSwatch } from '@slink/feature/Layout';
   import { SettingItem } from '@slink/feature/Settings';
   import { Notice, Subtitle, Title } from '@slink/feature/Text';
   import { Select } from '@slink/ui/components';
@@ -18,7 +18,7 @@
   import type { User } from '@slink/lib/auth/Type/User';
   import { LandingPage } from '@slink/lib/enum/LandingPage';
   import type { License } from '@slink/lib/enum/License';
-  import { Locale } from '@slink/lib/settings/Settings.enums';
+  import { Locale, resolveTheme } from '@slink/lib/settings/Settings.enums';
   import type { UploadPolicy } from '@slink/lib/settings/UploadPolicy';
   import { themes } from '@slink/lib/settings/themes.language';
   import { applyLocale } from '@slink/lib/utils/i18n';
@@ -126,6 +126,7 @@
       },
       onSuccess: async () => {
         await state.commit();
+        settings.theme.current = resolveTheme(state.theme);
         toast.success(messages.preferences.updated);
       },
       onError: (data) => {
@@ -186,9 +187,15 @@
               Theme
             {/snippet}
             {#snippet hint()}
-              Applies to this browser as soon as you pick it
+              Applies to your account on every device
             {/snippet}
-            <ThemePicker {themes} bind:value={settings.theme.current} />
+            {#snippet footer()}
+              <div class="px-4 pb-4">
+                <ThemeSwatch theme={state.theme} />
+              </div>
+            {/snippet}
+            <ThemePicker {themes} bind:value={state.theme} />
+            <input type="hidden" name="displayTheme" value={state.theme} />
           </SettingItem>
         </div>
       </section>

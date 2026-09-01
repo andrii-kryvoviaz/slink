@@ -1,5 +1,5 @@
 @layer presets {
-  :root[data-theme='tokyo-night'] {
+  [data-theme='tokyo-night'] {
     --color-background: light-dark(
       oklch(0.9135 0.0068 277.16),
       oklch(0.2263 0.0214 280.49)

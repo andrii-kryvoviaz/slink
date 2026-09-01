@@ -1,5 +1,5 @@
 @layer presets {
-  :root[data-theme='monochrome'] {
+  [data-theme='monochrome'] {
     --color-background: light-dark(oklch(0.9761 0 0), oklch(0.1822 0 0));
     --color-foreground: light-dark(oklch(0.2046 0 0), oklch(0.9431 0 0));
     --color-accent: light-dark(oklch(0.2046 0 0), oklch(0.9431 0 0));

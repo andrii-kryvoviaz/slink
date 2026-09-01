@@ -9,6 +9,7 @@ use Slink\Shared\Application\Command\CommandInterface;
 use Slink\Shared\Infrastructure\MessageBus\EnvelopedMessage;
 use Slink\User\Domain\Enum\DefaultVisibility;
 use Slink\User\Domain\Enum\DisplayLanguage;
+use Slink\User\Domain\Enum\DisplayTheme;
 use Slink\User\Domain\Enum\ExifMetadataPreference;
 use Slink\User\Domain\Enum\LandingPage;
 use Slink\User\Domain\ValueObject\UserPreferences;
@@ -33,6 +34,9 @@ final readonly class UpdateUserPreferencesCommand implements CommandInterface {
     #[SerializedName('display.language')]
     #[Assert\Choice(callback: [DisplayLanguage::class, 'values'], message: 'Invalid display language.')]
     private ?string $displayLanguage = null,
+    #[SerializedName('display.theme')]
+    #[Assert\Choice(callback: [DisplayTheme::class, 'values'], message: 'Invalid display theme.')]
+    private ?string $displayTheme = null,
     #[SerializedName('image.externalUploadAutoPublish')]
     private ?bool $externalUploadAutoPublish = null,
     #[SerializedName('image.stripExifMetadataOverride')]
@@ -47,6 +51,7 @@ final readonly class UpdateUserPreferencesCommand implements CommandInterface {
       defaultLandingPage: $this->getDefaultLandingPage(),
       defaultVisibility: $this->getDefaultVisibility(),
       displayLanguage: $this->getDisplayLanguage(),
+      displayTheme: $this->getDisplayTheme(),
       externalUploadAutoPublish: $this->externalUploadAutoPublish,
       exifMetadataPreference: $this->getExifMetadataPreference(),
     );
@@ -61,6 +66,7 @@ final readonly class UpdateUserPreferencesCommand implements CommandInterface {
       'navigation.landingPage' => $this->defaultLandingPage,
       'image.defaultVisibility' => $this->defaultVisibility,
       'display.language' => $this->displayLanguage,
+      'display.theme' => $this->displayTheme,
       'image.externalUploadAutoPublish' => $this->externalUploadAutoPublish,
       'image.stripExifMetadataOverride' => $this->exifMetadataPreference,
     ];
@@ -80,6 +86,10 @@ final readonly class UpdateUserPreferencesCommand implements CommandInterface {
 
   public function getDisplayLanguage(): ?DisplayLanguage {
     return $this->displayLanguage ? DisplayLanguage::tryFrom($this->displayLanguage) : null;
+  }
+
+  public function getDisplayTheme(): ?DisplayTheme {
+    return $this->displayTheme ? DisplayTheme::tryFrom($this->displayTheme) : null;
   }
 
   public function getExifMetadataPreference(): ?ExifMetadataPreference {

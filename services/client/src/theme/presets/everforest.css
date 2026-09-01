@@ -1,5 +1,5 @@
 @layer presets {
-  :root[data-theme='everforest'] {
+  [data-theme='everforest'] {
     --color-background: light-dark(
       oklch(0.9735 0.0261 90.1),
       oklch(0.3239 0.0153 240.42)

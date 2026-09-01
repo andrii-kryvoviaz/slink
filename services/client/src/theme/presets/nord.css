@@ -1,5 +1,5 @@
 @layer presets {
-  :root[data-theme='nord'] {
+  [data-theme='nord'] {
     --color-danger: oklch(0.6061 0.1206 15.34);
     --color-warning: oklch(0.8549 0.0892 84.09);
     --color-success: oklch(0.7683 0.0749 131.06);

@@ -3,6 +3,14 @@ import { expect, test } from '../fixtures/auth.fixture';
 const BOGUS_THEMES = ['solarized', '"><script>alert(1)</script>'];
 
 test.describe('Theme preference', () => {
+  test.beforeEach(async ({ api }) => {
+    await api.preferences.updatePreferences({ 'display.theme': 'default' });
+  });
+
+  test.afterEach(async ({ api }) => {
+    await api.preferences.updatePreferences({ 'display.theme': 'default' });
+  });
+
   test('picking a theme repaints the surface and persists across reload', async ({
     page,
     preferencesPage,
@@ -15,6 +23,7 @@ test.describe('Theme preference', () => {
     const backgroundBefore = await layoutControls.readSurfaceBackground();
 
     await preferencesPage.selectTheme('nord');
+    await preferencesPage.save();
 
     await expect.poll(() => layoutControls.readTheme()).toBe('nord');
     await expect
@@ -48,6 +57,7 @@ test.describe('Theme preference', () => {
     const backgroundBefore = await layoutControls.readSurfaceBackground();
 
     await preferencesPage.selectTheme('nord');
+    await preferencesPage.save();
 
     await expect.poll(() => layoutControls.readTheme()).toBe('nord');
     await expect

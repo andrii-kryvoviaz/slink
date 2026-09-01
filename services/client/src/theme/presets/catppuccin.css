@@ -1,5 +1,5 @@
 @layer presets {
-  :root[data-theme='catppuccin'] {
+  [data-theme='catppuccin'] {
     --color-background: light-dark(
       oklch(0.9578 0.0058 264.53),
       oklch(0.2429 0.0304 283.91)

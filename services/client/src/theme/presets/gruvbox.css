@@ -1,5 +1,5 @@
 @layer presets {
-  :root[data-theme='gruvbox'] {
+  [data-theme='gruvbox'] {
     --color-background: light-dark(
       oklch(0.9555 0.0555 96.15),
       oklch(0.2768 0 0)

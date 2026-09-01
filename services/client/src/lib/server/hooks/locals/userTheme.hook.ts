@@ -1,11 +1,12 @@
+import { resolveTheme } from '@slink/lib/settings/Settings.enums';
+
 import { defineHook } from '../define';
 
 export default defineHook({
   init: (event) => {
-    const userLocale = event.locals.userPreferences?.['display.language'];
-    if (userLocale) {
-      event.locals.locale = userLocale;
-      event.cookies.set('settings.locale', userLocale, {
+    const userTheme = event.locals.userPreferences?.['display.theme'];
+    if (userTheme) {
+      event.cookies.set('settings.theme', resolveTheme(userTheme), {
         path: '/',
         maxAge: 31536000,
         httpOnly: false,

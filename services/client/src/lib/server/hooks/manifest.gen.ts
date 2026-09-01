@@ -9,6 +9,7 @@ export type HookId =
   | 'locals/uploadPolicy'
   | 'locals/userLocale'
   | 'locals/userPreferences'
+  | 'locals/userTheme'
   | 'render/locale'
   | 'render/shell'
   | 'request/responseHeaders'

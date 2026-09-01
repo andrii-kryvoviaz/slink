@@ -7,4 +7,5 @@ export type UserPreferencesResponse = {
   'image.stripExifMetadataOverride': 'default' | 'strip' | 'keep' | null;
   'image.externalUploadAutoPublish': boolean | null;
   'display.language': string | null;
+  'display.theme': string | null;
 };
