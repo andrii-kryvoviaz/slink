@@ -16,7 +16,7 @@
     )
   );
   --color-on-decor-violet: oklch(
-    from var(--color-accent) clamp(0, (var(--on-color-flip) - l) * 100, 1) 0
+    from var(--color-accent) clamp(0, (var(--on-color-flip) - l) * 1000, 1) 0
       calc(h + 15.892)
   );
   --color-decor-violet-wash: light-dark(

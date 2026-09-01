@@ -5,8 +5,9 @@ export const viewCountBadgeContainerTheme = cva(
   {
     variants: {
       variant: {
-        card: 'gap-3 rounded-md px-3 py-2 bg-muted/25 hover:bg-border/30',
-        compact: 'gap-2 rounded-md px-2 py-1.5 bg-muted/30 hover:bg-border/35',
+        card: 'gap-3 rounded-md px-3 py-2 bg-muted/25 hover:bg-muted-hover/30 dark:hover:bg-muted-hover/45',
+        compact:
+          'gap-2 rounded-md px-2 py-1.5 bg-muted/30 hover:bg-muted-hover/30 dark:hover:bg-muted-hover/55',
         overlay:
           'gap-1.5 rounded-full px-2.5 py-1 bg-card/95 border-border-strong/50 dark:bg-scrim/60 dark:border-border/50 backdrop-blur-md shadow-lg border',
         badge: 'gap-2 rounded-md bg-muted/50 px-3 py-2 border border-border',

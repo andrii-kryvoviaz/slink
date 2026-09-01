@@ -23,7 +23,7 @@ export const notificationButtonVariants = cva(
     variants: {
       read: {
         true: 'hover:bg-hover',
-        false: 'hover:bg-hover/60',
+        false: 'hover:bg-hover/75',
       },
     },
     defaultVariants: {

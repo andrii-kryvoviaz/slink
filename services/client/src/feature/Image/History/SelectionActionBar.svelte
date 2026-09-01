@@ -78,9 +78,15 @@
     >
       <div class={selectAllCheckboxVariants({ state: checkboxState })}>
         {#if isAllSelected}
-          <Icon icon="heroicons:check" class="w-3.5 h-3.5 text-on-info" />
+          <Icon
+            icon="heroicons:check"
+            class="w-3.5 h-3.5 text-on-primary-solid"
+          />
         {:else if isIndeterminate}
-          <Icon icon="heroicons:minus" class="w-3.5 h-3.5 text-on-info" />
+          <Icon
+            icon="heroicons:minus"
+            class="w-3.5 h-3.5 text-on-primary-solid"
+          />
         {/if}
       </div>
     </button>

@@ -46,7 +46,7 @@ export const UploaderDragOverlayTheme = cva(
 
 export const UploaderConstraintsTheme = tv({
   slots: {
-    base: 'flex w-full flex-col items-start gap-x-6 border-t border-border/60 pt-3.5 text-left dark:border-border/30 sm:flex-row sm:justify-between',
+    base: 'flex w-full flex-col items-start gap-x-6 border-t border-border/60 pt-3.5 text-left dark:border-border/60 sm:flex-row sm:justify-between',
     column: 'flex w-full min-w-0 flex-col gap-y-[7px] sm:w-auto',
     labelRow: 'flex w-full items-baseline justify-between gap-x-3',
     label:

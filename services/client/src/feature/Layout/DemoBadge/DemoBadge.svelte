@@ -16,7 +16,7 @@
       variants: {
         variant: {
           default: 'bg-foreground',
-          accent: 'bg-info-strong',
+          accent: 'bg-info-surface',
         },
       },
       defaultVariants: {
@@ -31,7 +31,7 @@
       variants: {
         variant: {
           default: 'text-card',
-          accent: 'text-on-info',
+          accent: 'text-on-info-surface',
         },
       },
       defaultVariants: {

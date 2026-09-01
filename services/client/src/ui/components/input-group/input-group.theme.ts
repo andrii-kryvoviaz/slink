@@ -6,7 +6,7 @@ export const InputGroupShell = cva(
     variants: {
       variant: {
         default:
-          'border-border/50 bg-muted/50 hover:bg-hover/50 focus-within:border-border/50',
+          'border-border/50 bg-muted/50 hover:bg-muted/70 focus-within:border-border/50',
         success:
           'border-success-border/50 dark:border-success-border/15 bg-success-wash/80 dark:bg-success-wash/16 hover:bg-success-wash/50 dark:hover:bg-success-wash/10 focus-within:border-success-border/50 dark:focus-within:border-success-border/15 focus-within:ring-success/20',
       },

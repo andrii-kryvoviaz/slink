@@ -80,8 +80,7 @@ export const toolbarButtonVariants = tv({
     {
       shape: 'pill',
       tone: 'dark',
-      class:
-        'bg-scrim/60 backdrop-blur-sm shadow-lg hover:bg-surface-inverse/70',
+      class: 'bg-scrim/60 backdrop-blur-sm shadow-lg hover:bg-scrim-raised/70',
     },
     {
       active: true,

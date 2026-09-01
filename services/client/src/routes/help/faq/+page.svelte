@@ -378,7 +378,7 @@
               href="https://github.com/{GITHUB.REPO_OWNER}/{GITHUB.REPO_NAME}/issues/new"
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 px-3 py-2 bg-info-surface hover:bg-info-surface-strong text-on-info text-sm font-medium rounded-lg transition-colors"
+              class="inline-flex items-center gap-2 px-3 py-2 bg-info-surface hover:bg-info-surface-strong text-on-info-surface text-sm font-medium rounded-lg transition-colors"
             >
               <Icon icon="ph:plus" class="w-4 h-4" />
               Create New Issue

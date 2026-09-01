@@ -9,8 +9,7 @@
 
   const viewButton = cva([
     'group inline-flex w-fit items-center gap-1.5 self-start rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors duration-200',
-    'text-accent-text bg-accent/15 hover:bg-accent-border/70',
-    'dark:hover:bg-accent-border/21',
+    'text-accent-text bg-accent/15 hover:bg-accent/25',
     'focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/30',
   ]);
 
@@ -49,7 +48,7 @@
         Image Already Exists
       </span>
       <span
-        class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-accent-wash text-accent-text dark:bg-accent-border/18"
+        class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-accent-wash text-accent-text dark:bg-accent-wash/60"
       >
         Duplicate
       </span>

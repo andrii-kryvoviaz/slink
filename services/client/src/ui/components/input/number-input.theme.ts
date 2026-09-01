@@ -42,7 +42,7 @@ export const numberInputFieldVariants = cva(
           'bg-muted/50',
           'border border-border/50',
           'focus:ring-2 focus:ring-ring/20 focus:border-border/50',
-          'hover:bg-hover/50',
+          'hover:bg-muted/70',
           'transition-all duration-200',
         ],
         input: [

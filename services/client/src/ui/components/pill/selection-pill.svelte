@@ -14,7 +14,7 @@
           amber:
             'bg-warning-wash dark:bg-warning-wash/20 text-warning-text hover:bg-warning/30',
           rose: 'bg-danger-wash dark:bg-danger-wash/20 text-danger-text hover:bg-danger/30',
-          slate: 'bg-muted text-foreground-soft hover:bg-border',
+          slate: 'bg-muted text-foreground-soft hover:bg-muted-hover',
         },
       },
       defaultVariants: {

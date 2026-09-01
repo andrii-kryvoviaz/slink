@@ -5,7 +5,7 @@ export const filterTileTheme = cva(
   {
     variants: {
       selected: {
-        true: 'ring-2 ring-accent bg-accent-border/22 dark:bg-accent-border/7',
+        true: 'ring-2 ring-accent bg-accent-wash dark:bg-accent-wash/30',
         false: 'hover:bg-hover hover:scale-105',
       },
     },
