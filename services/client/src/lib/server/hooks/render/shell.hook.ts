@@ -16,7 +16,7 @@ const applyShell: Handle = async ({ event, resolve }) => {
 
   return resolve(event, {
     transformPageChunk: ({ html }) =>
-      html.replace(/%app\.(\w+)%/g, (_, key) => values[key] ?? ''),
+      html.replace(/%app\.(\w+)%/g, (match, key) => values[key] ?? match),
   });
 };
 

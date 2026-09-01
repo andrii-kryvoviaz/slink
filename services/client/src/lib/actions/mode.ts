@@ -2,18 +2,15 @@ import type { Action } from 'svelte/action';
 
 import { Mode } from '@slink/lib/settings';
 
-export const mode: Action<HTMLElement, string> = (node: HTMLElement) => {
-  if (node !== document.documentElement) {
-    node = document.documentElement;
-  }
+export const mode: Action<HTMLElement, string> = (_, initial) => {
+  const root = document.documentElement;
 
   const update = (m: string) => {
-    if (!node.classList.contains(m)) {
-      node.classList.remove(...Object.values(Mode));
-    }
-
-    node.classList.add(m);
+    root.classList.remove(...Object.values(Mode));
+    root.classList.add(m);
   };
+
+  update(initial);
 
   return {
     update,
