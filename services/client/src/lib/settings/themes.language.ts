@@ -9,6 +9,12 @@ export interface ThemeDescriptor {
 const themeLabels: Record<Theme, () => string> = {
   [Theme.DEFAULT]: () => localize('Default'),
   [Theme.NORD]: () => localize('Nord'),
+  [Theme.CATPPUCCIN]: () => localize('Catppuccin'),
+  [Theme.GRUVBOX]: () => localize('Gruvbox'),
+  [Theme.ROSE_PINE]: () => localize('Rosé Pine'),
+  [Theme.TOKYO_NIGHT]: () => localize('Tokyo Night'),
+  [Theme.EVERFOREST]: () => localize('Everforest'),
+  [Theme.MONOCHROME]: () => localize('Monochrome'),
 };
 
 export const themes: ThemeDescriptor[] = Object.values(Theme).map((name) => ({

@@ -1,0 +1,24 @@
+@layer presets {
+  :root[data-theme='monochrome'] {
+    --color-background: light-dark(oklch(0.9761 0 0), oklch(0.1822 0 0));
+    --color-foreground: light-dark(oklch(0.2046 0 0), oklch(0.9431 0 0));
+    --color-accent: light-dark(oklch(0.2046 0 0), oklch(0.9431 0 0));
+    --color-primary: light-dark(oklch(0.3867 0 0), oklch(0.7921 0 0));
+    --color-success: light-dark(
+      oklch(0.5011 0.0747 152.97),
+      oklch(0.73 0.0701 153.03)
+    );
+    --color-warning: light-dark(
+      oklch(0.5521 0.0769 79.72),
+      oklch(0.7789 0.0645 83.4)
+    );
+    --color-danger: light-dark(
+      oklch(0.5126 0.1098 21.67),
+      oklch(0.7133 0.0782 19.18)
+    );
+    --color-info: light-dark(
+      oklch(0.5019 0.0523 240.35),
+      oklch(0.7504 0.0472 238.29)
+    );
+  }
+}

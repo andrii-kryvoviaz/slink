@@ -10,5 +10,11 @@
 
 @import './presets/default.css';
 @import './presets/nord.css';
+@import './presets/catppuccin.css';
+@import './presets/gruvbox.css';
+@import './presets/rose-pine.css';
+@import './presets/tokyo-night.css';
+@import './presets/everforest.css';
+@import './presets/monochrome.css';
 
 @import './recipes.css';

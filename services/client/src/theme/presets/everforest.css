@@ -1,0 +1,36 @@
+@layer presets {
+  :root[data-theme='everforest'] {
+    --color-background: light-dark(
+      oklch(0.9735 0.0261 90.1),
+      oklch(0.3239 0.0153 240.42)
+    );
+    --color-foreground: light-dark(
+      oklch(0.4174 0.0212 232.87),
+      oklch(0.8299 0.0405 86.05)
+    );
+    --color-accent: light-dark(
+      oklch(0.6697 0.156 118.23),
+      oklch(0.7732 0.0906 125.78)
+    );
+    --color-primary: light-dark(
+      oklch(0.6343 0.1118 236.35),
+      oklch(0.7487 0.0631 185.49)
+    );
+    --color-success: light-dark(
+      oklch(0.6535 0.1208 163.88),
+      oklch(0.7536 0.0912 151.45)
+    );
+    --color-warning: light-dark(
+      oklch(0.7466 0.1545 80.27),
+      oklch(0.8081 0.0863 83.7)
+    );
+    --color-danger: light-dark(
+      oklch(0.6707 0.1996 25.2),
+      oklch(0.7086 0.1285 19.62)
+    );
+    --color-info: light-dark(
+      oklch(0.6343 0.1118 236.35),
+      oklch(0.7487 0.0631 185.49)
+    );
+  }
+}

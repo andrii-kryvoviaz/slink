@@ -7,6 +7,12 @@ export enum Mode {
 export enum Theme {
   DEFAULT = 'default',
   NORD = 'nord',
+  CATPPUCCIN = 'catppuccin',
+  GRUVBOX = 'gruvbox',
+  ROSE_PINE = 'rose-pine',
+  TOKYO_NIGHT = 'tokyo-night',
+  EVERFOREST = 'everforest',
+  MONOCHROME = 'monochrome',
 }
 
 export const resolveTheme = (value: unknown): Theme => {
