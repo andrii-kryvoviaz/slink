@@ -170,7 +170,7 @@
         </div>
       </section>
 
-      <section class="space-y-1">
+      <section id="appearance" class="space-y-1 scroll-mt-20">
         <div class="flex items-center justify-between gap-4 pb-3">
           <h2
             class="text-sm font-medium text-foreground-muted uppercase tracking-wider"

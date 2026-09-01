@@ -1344,14 +1344,6 @@ msgstr "Condividi i tuoi file multimediali con gli altri caricandoli e organizza
 msgid "Shortcut"
 msgstr "Scorciatoia"
 
-#: src/feature/Navigation/Navbar/Navbar.svelte
-msgid "Toggle Theme"
-msgstr "Cambia tema"
-
-#: src/feature/Navigation/Navbar/Navbar.svelte
-msgid "Switch between light and dark mode."
-msgstr "Passa dalla modalità chiara a quella scura."
-
 #: src/feature/Navigation/Sidebar/NavProjects.svelte
 msgid "Projects"
 msgstr "Progetti"
@@ -5180,3 +5172,15 @@ msgstr "Everforest"
 #: src/lib/settings/themes.language.ts
 msgid "Monochrome"
 msgstr "Monocromatico"
+
+#: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
+msgid "Toggle light and dark mode."
+msgstr "Passa dalla modalità chiara a quella scura."
+
+#: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
+msgid "Theme: {0}"
+msgstr "Tema: {0}"
+
+#: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
+msgid "Customize"
+msgstr "Personalizza"

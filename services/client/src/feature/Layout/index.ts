@@ -29,6 +29,7 @@ export * from './Loader/Loader.theme';
 export * from './Loader/Loader.types';
 export { default as Masonry } from './Masonry/Masonry.svelte';
 export { default as ModeSwitch } from './ModeSwitch/ModeSwitch.svelte';
+export { default as ModeSwitchHoverCard } from './ModeSwitch/ModeSwitchHoverCard.svelte';
 export * from './ModeSwitch/ModeSwitch.theme';
 export * from './ModeSwitch/ModeSwitch.types';
 export { default as OverflowBadgeList } from './OverflowBadgeList/OverflowBadgeList.svelte';

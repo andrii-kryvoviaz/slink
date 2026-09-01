@@ -1344,14 +1344,6 @@ msgstr "上传并整理成合集，与他人分享你的内容。"
 msgid "Shortcut"
 msgstr "快捷键"
 
-#: src/feature/Navigation/Navbar/Navbar.svelte
-msgid "Toggle Theme"
-msgstr "切换主题"
-
-#: src/feature/Navigation/Navbar/Navbar.svelte
-msgid "Switch between light and dark mode."
-msgstr "切换浅色/深色模式"
-
 #: src/feature/Navigation/Sidebar/NavProjects.svelte
 msgid "Projects"
 msgstr "项目"
@@ -5162,3 +5154,15 @@ msgstr "Everforest"
 #: src/lib/settings/themes.language.ts
 msgid "Monochrome"
 msgstr "单色"
+
+#: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
+msgid "Toggle light and dark mode."
+msgstr "切换浅色和深色模式。"
+
+#: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
+msgid "Theme: {0}"
+msgstr "主题：{0}"
+
+#: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
+msgid "Customize"
+msgstr "自定义"

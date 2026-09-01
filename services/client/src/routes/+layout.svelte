@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { DemoNotice, ModeSwitch } from '@slink/feature/Layout';
+  import {
+    DemoNotice,
+    ModeSwitch,
+    ModeSwitchHoverCard,
+  } from '@slink/feature/Layout';
   import { AppFooter } from '@slink/feature/Layout/Footer';
   import { Navbar } from '@slink/feature/Navigation';
   import AppSidebar from '@slink/feature/Navigation/Sidebar/AppSidebar.svelte';
@@ -96,12 +100,14 @@
             !!data.globalSettings?.access?.allowGuestUploads}
         >
           {#snippet modeSwitch()}
-            <ModeSwitch
-              checked={settings.mode.isDark}
-              variant="default"
-              animation="none"
-              on={{ change: (mode) => (settings.mode.current = mode) }}
-            />
+            <ModeSwitchHoverCard showPreferencesLink={!!user}>
+              <ModeSwitch
+                checked={settings.mode.isDark}
+                variant="default"
+                animation="none"
+                on={{ change: (mode) => (settings.mode.current = mode) }}
+              />
+            </ModeSwitchHoverCard>
           {/snippet}
         </Navbar>
       </header>

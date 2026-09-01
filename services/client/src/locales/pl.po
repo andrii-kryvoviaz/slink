@@ -1344,14 +1344,6 @@ msgstr "Udostępniaj swoje pliki innym, przesyłając je i organizując w kolekc
 msgid "Shortcut"
 msgstr "Skrót"
 
-#: src/feature/Navigation/Navbar/Navbar.svelte
-msgid "Toggle Theme"
-msgstr "Przełącz motyw"
-
-#: src/feature/Navigation/Navbar/Navbar.svelte
-msgid "Switch between light and dark mode."
-msgstr "Przełącz między trybem jasnym a ciemnym."
-
 #: src/feature/Navigation/Sidebar/NavProjects.svelte
 msgid "Projects"
 msgstr "Projekty"
@@ -5216,3 +5208,15 @@ msgstr "Everforest"
 #: src/lib/settings/themes.language.ts
 msgid "Monochrome"
 msgstr "Monochromatyczny"
+
+#: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
+msgid "Toggle light and dark mode."
+msgstr "Przełącz między jasnym a ciemnym trybem."
+
+#: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
+msgid "Theme: {0}"
+msgstr "Motyw: {0}"
+
+#: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
+msgid "Customize"
+msgstr "Dostosuj"

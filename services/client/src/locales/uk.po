@@ -1344,14 +1344,6 @@ msgstr "Діліться медіафайлами з іншими, завант�
 msgid "Shortcut"
 msgstr "Гарячі клавіші"
 
-#: src/feature/Navigation/Navbar/Navbar.svelte
-msgid "Toggle Theme"
-msgstr "Змінити тему"
-
-#: src/feature/Navigation/Navbar/Navbar.svelte
-msgid "Switch between light and dark mode."
-msgstr "Перемикання між світлою та темною темами."
-
 #: src/feature/Navigation/Sidebar/NavProjects.svelte
 msgid "Projects"
 msgstr "Проєкти"
@@ -5197,4 +5189,16 @@ msgstr "Everforest"
 
 #: src/lib/settings/themes.language.ts
 msgid "Monochrome"
-msgstr "Монохромний"
+msgstr "Монохромна"
+
+#: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
+msgid "Toggle light and dark mode."
+msgstr "Перемикання між світлим і темним режимом."
+
+#: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
+msgid "Theme: {0}"
+msgstr "Тема: {0}"
+
+#: src/feature/Layout/ModeSwitch/ModeSwitchHoverCard.svelte
+msgid "Customize"
+msgstr "Налаштувати"

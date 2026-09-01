@@ -163,33 +163,7 @@
     {/if}
 
     {#if modeSwitch}
-      <HoverCard.Root openDelay={1000} closeDelay={200}>
-        <HoverCard.Trigger>
-          <div class="flex items-center">
-            {@render modeSwitch?.()}
-          </div>
-        </HoverCard.Trigger>
-        <HoverCard.Content
-          variant="glass"
-          size="sm"
-          rounded="xl"
-          width="auto"
-          side="bottom"
-          sideOffset={8}
-          align="end"
-          class="min-w-52"
-        >
-          <div class="flex flex-col gap-2">
-            <div class="flex items-center gap-2">
-              <Icon icon="ph:palette" class="h-4 w-4 text-info" />
-              <span class="text-sm font-semibold">Toggle Theme</span>
-            </div>
-            <p class="text-xs text-foreground-muted leading-relaxed">
-              Switch between light and dark mode.
-            </p>
-          </div>
-        </HoverCard.Content>
-      </HoverCard.Root>
+      {@render modeSwitch()}
     {/if}
   </div>
 </nav>
