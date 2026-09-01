@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Select } from '@slink/ui/components';
 
-  import type { ThemeDescriptor } from '@slink/lib/settings/themes.language';
+  import type { ThemeDescriptor } from '@slink/lib/settings/themes.svelte';
 
   type ThemeName = ThemeDescriptor['name'];
 

@@ -20,7 +20,7 @@
   import type { License } from '@slink/lib/enum/License';
   import { Locale, resolveTheme } from '@slink/lib/settings/Settings.enums';
   import type { UploadPolicy } from '@slink/lib/settings/UploadPolicy';
-  import { themes } from '@slink/lib/settings/themes.language';
+  import { themes } from '@slink/lib/settings/themes.svelte';
   import { applyLocale } from '@slink/lib/utils/i18n';
   import { messages } from '@slink/lib/utils/i18n/messages/toast.language';
 
