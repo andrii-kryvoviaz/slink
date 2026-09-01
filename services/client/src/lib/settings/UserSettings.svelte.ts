@@ -1,10 +1,13 @@
 import { browser } from '$app/environment';
+import { MediaQuery } from 'svelte/reactivity';
 
 import { SortOrder } from '@slink/lib/enum/SortOrder';
 import {
   Locale,
   Mode,
   Theme,
+  resolveLocale,
+  resolveMode,
   resolveTheme,
 } from '@slink/lib/settings/Settings.enums';
 
@@ -152,6 +155,7 @@ function persist(key: string, value: unknown): void {
 
 class ModeState {
   _value = $state<Mode>(Mode.SYSTEM);
+  private readonly _systemDark = new MediaQuery('prefers-color-scheme: dark');
 
   get current(): Mode {
     return this._value;
@@ -163,15 +167,19 @@ class ModeState {
   }
 
   get isDark(): boolean {
+    if (this._value === Mode.SYSTEM) {
+      return this._systemDark.current;
+    }
+
     return this._value === Mode.DARK;
   }
 
   get isLight(): boolean {
-    return this._value === Mode.LIGHT;
+    return !this.isDark;
   }
 
-  hydrate(v: Mode) {
-    this._value = v;
+  hydrate(v: unknown) {
+    this._value = resolveMode(v);
   }
 }
 
@@ -204,8 +212,8 @@ class LocaleState {
     persist('locale', v);
   }
 
-  hydrate(v: Locale) {
-    this._value = v;
+  hydrate(v: unknown) {
+    this._value = resolveLocale(v);
   }
 }
 

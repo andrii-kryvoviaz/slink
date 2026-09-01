@@ -15,26 +15,6 @@ export enum Theme {
   MONOCHROME = 'monochrome',
 }
 
-export const resolveTheme = (value: unknown): Theme => {
-  const themes: string[] = Object.values(Theme);
-
-  if (typeof value === 'string' && themes.includes(value)) {
-    return value as Theme;
-  }
-
-  return Theme.DEFAULT;
-};
-
-export const resolveMode = (value: unknown): Mode => {
-  const modes: string[] = Object.values(Mode);
-
-  if (typeof value === 'string' && modes.includes(value)) {
-    return value as Mode;
-  }
-
-  return Mode.SYSTEM;
-};
-
 export enum Locale {
   EN = 'en',
   DE = 'de',
@@ -46,3 +26,24 @@ export enum Locale {
   JA = 'ja',
   ZH = 'zh',
 }
+
+const resolveEnum = <T extends Record<string, string>>(
+  values: T,
+  value: unknown,
+  fallback: T[keyof T],
+): T[keyof T] => {
+  if (typeof value === 'string' && Object.values(values).includes(value)) {
+    return value as T[keyof T];
+  }
+
+  return fallback;
+};
+
+export const resolveTheme = (value: unknown): Theme =>
+  resolveEnum(Theme, value, Theme.DEFAULT);
+
+export const resolveMode = (value: unknown): Mode =>
+  resolveEnum(Mode, value, Mode.SYSTEM);
+
+export const resolveLocale = (value: unknown): Locale =>
+  resolveEnum(Locale, value, Locale.EN);

@@ -5,9 +5,7 @@
   import type ApexCharts from 'apexcharts';
   import { twMerge } from 'tailwind-merge';
 
-  import { browser } from '$app/environment';
   import { page } from '$app/state';
-  import { Mode } from '$lib/settings';
   import { deepMerge } from '$lib/utils/object/deepMerge';
 
   interface Props {
@@ -187,15 +185,8 @@
     return chartOptions;
   };
 
-  const isDarkMode = (): boolean => {
-    if (browser && settings.mode.current === Mode.SYSTEM) {
-      return window.matchMedia('(prefers-color-scheme: dark)').matches;
-    }
-    return settings.mode.isDark;
-  };
-
   let chartOptions = $derived(
-    handleOptionsChange(options, isDarkMode() ? 'dark' : 'light'),
+    handleOptionsChange(options, settings.mode.isDark ? 'dark' : 'light'),
   );
 </script>
 
