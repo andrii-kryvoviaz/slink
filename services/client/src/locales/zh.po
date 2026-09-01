@@ -5125,16 +5125,40 @@ msgstr "删除该用户的图片、合集，以及其他用户对这些图片的
 
 #: src/routes/preferences/+page.svelte
 msgid "Appearance"
-msgstr ""
+msgstr "外观"
 
 #: src/routes/preferences/+page.svelte
 msgid "Theme"
-msgstr ""
+msgstr "主题"
 
 #: src/routes/preferences/+page.svelte
 msgid "Applies to this browser as soon as you pick it"
-msgstr ""
+msgstr "选择后立即应用于此浏览器"
 
 #: src/lib/settings/themes.language.ts
 msgid "Nord"
-msgstr ""
+msgstr "Nord"
+
+#: src/lib/settings/themes.language.ts
+msgid "Catppuccin"
+msgstr "Catppuccin"
+
+#: src/lib/settings/themes.language.ts
+msgid "Gruvbox"
+msgstr "Gruvbox"
+
+#: src/lib/settings/themes.language.ts
+msgid "Rosé Pine"
+msgstr "Rosé Pine"
+
+#: src/lib/settings/themes.language.ts
+msgid "Tokyo Night"
+msgstr "Tokyo Night"
+
+#: src/lib/settings/themes.language.ts
+msgid "Everforest"
+msgstr "Everforest"
+
+#: src/lib/settings/themes.language.ts
+msgid "Monochrome"
+msgstr "单色"

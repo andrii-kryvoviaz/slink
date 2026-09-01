@@ -5161,16 +5161,40 @@ msgstr "Видаляє зображення й колекції користув
 
 #: src/routes/preferences/+page.svelte
 msgid "Appearance"
-msgstr ""
+msgstr "Зовнішній вигляд"
 
 #: src/routes/preferences/+page.svelte
 msgid "Theme"
-msgstr ""
+msgstr "Тема"
 
 #: src/routes/preferences/+page.svelte
 msgid "Applies to this browser as soon as you pick it"
-msgstr ""
+msgstr "Застосовується в цьому браузері одразу після вибору"
 
 #: src/lib/settings/themes.language.ts
 msgid "Nord"
-msgstr ""
+msgstr "Nord"
+
+#: src/lib/settings/themes.language.ts
+msgid "Catppuccin"
+msgstr "Catppuccin"
+
+#: src/lib/settings/themes.language.ts
+msgid "Gruvbox"
+msgstr "Gruvbox"
+
+#: src/lib/settings/themes.language.ts
+msgid "Rosé Pine"
+msgstr "Rosé Pine"
+
+#: src/lib/settings/themes.language.ts
+msgid "Tokyo Night"
+msgstr "Tokyo Night"
+
+#: src/lib/settings/themes.language.ts
+msgid "Everforest"
+msgstr "Everforest"
+
+#: src/lib/settings/themes.language.ts
+msgid "Monochrome"
+msgstr "Монохромний"

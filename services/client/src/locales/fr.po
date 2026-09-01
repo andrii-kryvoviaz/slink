@@ -5143,16 +5143,40 @@ msgstr "Supprime ses images, ses collections et les favoris que d'autres ont ajo
 
 #: src/routes/preferences/+page.svelte
 msgid "Appearance"
-msgstr ""
+msgstr "Apparence"
 
 #: src/routes/preferences/+page.svelte
 msgid "Theme"
-msgstr ""
+msgstr "Thème"
 
 #: src/routes/preferences/+page.svelte
 msgid "Applies to this browser as soon as you pick it"
-msgstr ""
+msgstr "S'applique à ce navigateur dès que vous le sélectionnez"
 
 #: src/lib/settings/themes.language.ts
 msgid "Nord"
-msgstr ""
+msgstr "Nord"
+
+#: src/lib/settings/themes.language.ts
+msgid "Catppuccin"
+msgstr "Catppuccin"
+
+#: src/lib/settings/themes.language.ts
+msgid "Gruvbox"
+msgstr "Gruvbox"
+
+#: src/lib/settings/themes.language.ts
+msgid "Rosé Pine"
+msgstr "Rosé Pine"
+
+#: src/lib/settings/themes.language.ts
+msgid "Tokyo Night"
+msgstr "Tokyo Night"
+
+#: src/lib/settings/themes.language.ts
+msgid "Everforest"
+msgstr "Everforest"
+
+#: src/lib/settings/themes.language.ts
+msgid "Monochrome"
+msgstr "Monochrome"

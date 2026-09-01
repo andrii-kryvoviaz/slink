@@ -5143,16 +5143,40 @@ msgstr "Elimina sus imágenes, sus colecciones y los marcadores que otros crearo
 
 #: src/routes/preferences/+page.svelte
 msgid "Appearance"
-msgstr ""
+msgstr "Apariencia"
 
 #: src/routes/preferences/+page.svelte
 msgid "Theme"
-msgstr ""
+msgstr "Tema"
 
 #: src/routes/preferences/+page.svelte
 msgid "Applies to this browser as soon as you pick it"
-msgstr ""
+msgstr "Se aplica a este navegador en cuanto lo seleccionas"
 
 #: src/lib/settings/themes.language.ts
 msgid "Nord"
-msgstr ""
+msgstr "Nord"
+
+#: src/lib/settings/themes.language.ts
+msgid "Catppuccin"
+msgstr "Catppuccin"
+
+#: src/lib/settings/themes.language.ts
+msgid "Gruvbox"
+msgstr "Gruvbox"
+
+#: src/lib/settings/themes.language.ts
+msgid "Rosé Pine"
+msgstr "Rosé Pine"
+
+#: src/lib/settings/themes.language.ts
+msgid "Tokyo Night"
+msgstr "Tokyo Night"
+
+#: src/lib/settings/themes.language.ts
+msgid "Everforest"
+msgstr "Everforest"
+
+#: src/lib/settings/themes.language.ts
+msgid "Monochrome"
+msgstr "Monocromo"
