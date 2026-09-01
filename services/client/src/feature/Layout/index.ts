@@ -39,7 +39,7 @@ export { default as HistorySkeleton } from './Skeleton/HistorySkeleton.svelte';
 export { default as ShareSkeleton } from './Skeleton/ShareSkeleton.svelte';
 export { default as Skeleton } from './Skeleton/Skeleton.svelte';
 export { default as ThemePicker } from './ThemePicker/ThemePicker.svelte';
-export { default as ThemeSwatch } from './ThemePicker/ThemeSwatch.svelte';
+export { default as ThemePreview } from './ThemePicker/ThemePreview.svelte';
 export { default as ViewModeToggle } from './ViewModeToggle/ViewModeToggle.svelte';
 export * from './ViewModeToggle/ViewModeToggle.theme';
 export * from './ViewModeToggle/ViewModeToggle.types.svelte';

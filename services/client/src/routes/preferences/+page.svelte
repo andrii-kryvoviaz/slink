@@ -1,6 +1,6 @@
 <script lang="ts">
   import { getLicenseLabels } from '@slink/feature/Image';
-  import { Loader, ThemePicker, ThemeSwatch } from '@slink/feature/Layout';
+  import { Loader, ThemePicker, ThemePreview } from '@slink/feature/Layout';
   import { SettingItem } from '@slink/feature/Settings';
   import { Notice, Subtitle, Title } from '@slink/feature/Text';
   import { Select } from '@slink/ui/components';
@@ -191,7 +191,7 @@
             {/snippet}
             {#snippet footer()}
               <div class="px-4 pb-4">
-                <ThemeSwatch theme={state.theme} />
+                <ThemePreview theme={state.theme} />
               </div>
             {/snippet}
             <ThemePicker {themes} bind:value={state.theme} />
