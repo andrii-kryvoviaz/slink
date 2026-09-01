@@ -44,9 +44,9 @@ export const filterContainerVariants = cva(
           'border border-border/60',
           'text-foreground-muted shadow-sm',
           'hover:text-foreground',
-          'hover:bg-card',
+          'hover:bg-card dark:hover:bg-muted',
           'hover:border-border-strong',
-          'hover:shadow-border/40 hover:shadow-lg dark:hover:shadow-scrim/40',
+          'hover:shadow-border/40 hover:shadow-lg dark:hover:shadow-card/40',
         ],
       },
       size: {
