@@ -187,7 +187,7 @@
               Theme
             {/snippet}
             {#snippet hint()}
-              Applies to your account on every device
+              Choose your preferred color theme for the interface
             {/snippet}
             {#snippet footer()}
               <div class="px-4 pb-4">

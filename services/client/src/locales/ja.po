@@ -5132,8 +5132,8 @@ msgid "Theme"
 msgstr "テーマ"
 
 #: src/routes/preferences/+page.svelte
-msgid "Applies to this browser as soon as you pick it"
-msgstr "選択するとすぐにこのブラウザーに適用されます"
+msgid "Choose your preferred color theme for the interface"
+msgstr "インターフェースのカラーテーマを選択してください"
 
 #: src/lib/settings/themes.language.ts
 msgid "Nord"
