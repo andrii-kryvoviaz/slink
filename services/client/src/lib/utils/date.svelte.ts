@@ -68,8 +68,6 @@ function unitFromDays(
 }
 
 export function narrowFromDays(days: number): string {
-  if (days < 0) return 'expired';
-  if (days === 0) return 'today';
   const bucket = unitFromDays(days);
   if (bucket) return narrowUnit(bucket.value, bucket.unit);
   return narrowUnit(Math.floor(days / 365), 'year');
